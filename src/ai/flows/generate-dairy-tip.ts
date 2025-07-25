@@ -22,11 +22,15 @@ export async function generateDairyTip(): Promise<DairyTipOutput> {
   return generateDairyTipFlow({});
 }
 
-const generateDairyTipPrompt = ai.definePrompt({
-  name: 'generateDairyTipPrompt',
-  input: {schema: DairyTipInputSchema},
-  output: {schema: DairyTipOutputSchema},
-  prompt: `You are a dairy science expert. Generate one interesting, scientific, and surprising question and its answer related to the dairy or food industry.
+const generateDairyTipFlow = ai.defineFlow(
+  {
+    name: 'generateDairyTipFlow',
+    inputSchema: DairyTipInputSchema,
+    outputSchema: DairyTipOutputSchema,
+  },
+  async () => {
+    const { text } = await ai.generate({
+      prompt: `You are a dairy science expert. Generate one interesting, scientific, and surprising question and its answer related to the dairy or food industry.
 The tone should be like a "Did you know?" fact.
 You MUST respond in Hinglish (a mix of Hindi and English).
 Make it easy for a common person to understand.
@@ -35,16 +39,7 @@ Example Question: Doodh ubalne par upar kyu aata hai?
 Example Answer: Doodh mein protein aur fat ek layer bana lete hain. Jab paani bhaap banta hai, to steam uss layer ko upar utha deti hai, isliye doodh ubal jaata hai.
 
 Generate a new, different fact.`,
-});
-
-const generateDairyTipFlow = ai.defineFlow(
-  {
-    name: 'generateDairyTipFlow',
-    inputSchema: DairyTipInputSchema,
-    outputSchema: DairyTipOutputSchema,
-  },
-  async () => {
-    const {text} = await generateDairyTipPrompt({});
-    return text!;
+    });
+    return text ?? "Doodh ubalne par upar kyu aata hai? Doodh mein protein aur fat ek layer bana lete hain. Jab paani bhaap banta hai, to steam uss layer ko upar utha deti hai, isliye doodh ubal jaata hai.";
   }
 );
