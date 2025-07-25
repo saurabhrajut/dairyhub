@@ -15,6 +15,7 @@ import {
   Utensils,
   Search,
 } from "lucide-react";
+import { PaneerIcon } from "@/components/icons";
 import { Input } from "@/components/ui/input";
 import { DairyIndustryModal } from "./info-modals/dairy-industry-modal";
 import { MilkChemistryModal } from "./info-modals/milk-chemistry-modal";
@@ -22,6 +23,7 @@ import { AdulterationModal } from "./info-modals/adulteration-modal";
 import { StandardizationIModal } from "./calculators/standardization-i-modal";
 import { StandardizationIIModal } from "./calculators/standardization-ii-modal";
 import { SolutionsPrepModal } from "./calculators/solutions-prep-modal";
+import { PaneerProductionModal } from "./info-modals/paneer-production-modal";
 
 const topics = [
   { id: 'industry', title: 'Dairy Industry', description: 'Overview & Trends', category: 'industry', icon: Factory, badge: 'New', modal: DairyIndustryModal },
@@ -30,6 +32,7 @@ const topics = [
   { id: 'adulteration', title: 'Adulteration', description: 'Detection & Prevention', category: 'milk', icon: Biohazard, badge: 'Updated', modal: AdulterationModal },
   { id: 'std1', title: 'Standardization I', description: 'Basic Principles', category: 'milk', icon: Scale, modal: StandardizationIModal },
   { id: 'std2', title: 'Standardization II', description: 'Advanced Blending', category: 'milk', icon: Calculator, modal: StandardizationIIModal },
+  { id: 'paneer-production', title: 'Paneer Production', description: 'Process & Yield', category: 'science', icon: PaneerIcon, modal: PaneerProductionModal },
   { id: 'processing', title: 'Dairy Processing', description: 'Techniques & Machinery', category: 'industry', icon: Settings, modal: null },
   { id: 'food-tech', title: 'Food Technology', description: 'Product Development', category: 'science', icon: Utensils, modal: null },
 ];
