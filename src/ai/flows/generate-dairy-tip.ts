@@ -1,4 +1,5 @@
-// 'use server';
+
+'use server';
 /**
  * @fileOverview This file defines a Genkit flow for generating a daily dairy tip.
  *
@@ -7,8 +8,6 @@
  * - `DairyTipInput`: The input type for the generateDairyTip function (empty).
  * - `DairyTipOutput`: The output type for the generateDairyTip function (string).
  */
-
-'use server';
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
@@ -27,7 +26,15 @@ const generateDairyTipPrompt = ai.definePrompt({
   name: 'generateDairyTipPrompt',
   input: {schema: DairyTipInputSchema},
   output: {schema: DairyTipOutputSchema},
-  prompt: `Give me one short, interesting, and fun fact about dairy science, milk, or the Indian dairy industry. The fact should be easy to understand for a farmer. Respond in Hinglish.`,
+  prompt: `You are a dairy science expert. Generate one interesting, scientific, and surprising question and its answer related to the dairy or food industry.
+The tone should be like a "Did you know?" fact.
+You MUST respond in Hinglish (a mix of Hindi and English).
+Make it easy for a common person to understand.
+
+Example Question: Doodh ubalne par upar kyu aata hai?
+Example Answer: Doodh mein protein aur fat ek layer bana lete hain. Jab paani bhaap banta hai, to steam uss layer ko upar utha deti hai, isliye doodh ubal jaata hai.
+
+Generate a new, different fact.`,
 });
 
 const generateDairyTipFlow = ai.defineFlow(
