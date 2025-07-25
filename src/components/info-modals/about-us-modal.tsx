@@ -1,0 +1,115 @@
+
+"use client";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import Image from "next/image";
+import { GraduationCap, FlaskConical, Rocket } from "lucide-react";
+
+
+export function AboutUsModal({
+  isOpen,
+  setIsOpen,
+}: {
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
+}) {
+  return (
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogContent className="max-w-5xl h-[90vh]">
+        <DialogHeader>
+            <DialogTitle className="text-3xl sm:text-4xl font-extrabold text-cyan-900 text-center mt-6 mb-2 font-headline">
+                Dairy Hub Ke Peeche Ka Chehra
+            </DialogTitle>
+            <DialogDescription className="text-center text-gray-600 text-lg mb-4">
+                Aapke apne trusted digital dairy partner ki kahani
+            </DialogDescription>
+        </DialogHeader>
+        <ScrollArea className="h-full pr-6">
+            <div className="text-center">
+                <Image
+                    src="https://placehold.co/144x144.png"
+                    data-ai-hint="profile photo"
+                    alt="Saurabh Rajput"
+                    width={144}
+                    height={144}
+                    className="w-36 h-36 rounded-full object-cover mx-auto ring-4 ring-offset-4 ring-cyan-600 shadow-lg"
+                />
+            </div>
+            
+             <div className="bg-cyan-50 border-l-4 border-cyan-500 text-cyan-800 p-6 rounded-r-lg my-8">
+                <p className="text-lg">
+                  <span className="font-bold">Welcome to Dairy Hub!</span> Humara maksad dairy industry se judi har zaroori jaankari ko aap tak <strong className="font-semibold">saral, sateek aur scientific</strong> tarike se pahuchana hai. Yeh platform un sabhi ke liye hai jo is sector mein seekhna aur aage badhna chahte hain.
+                </p>
+            </div>
+
+            <div className="mb-12">
+                <h2 className="text-3xl font-bold text-gray-800 text-center mb-8 font-headline">Mera Safar: Dairy Technology Ke Pratishtha Tak</h2>
+                <div className="flex flex-col md:flex-row items-center gap-8">
+                    <div className="md:w-2/3 space-y-4 text-gray-700 text-base leading-relaxed">
+                        <p>Mera naam <strong>Saurabh Rajput</strong> hai, aur Dairy Hub mera ek sapna hai jise maine aap sab ke liye hakikat banaya hai.</p>
+                        <p>Food aur Dairy Technology ke kshetra mein meri ruchi hamesha se rahi hai. Apni padhai ke dauran, maine mehsoos kiya ki is industry mein practical aur aasaani se samajh aane wali scientific knowledge ki kami hai, khaaskar digital platforms par. Isi kami ko pura karne ke liye maine Dairy Hub ki neev rakhi.</p>
+                        <p>Mera lakshya ek aisa digital ecosystem banana hai jahan students, professionals, aur kisan bhai aasani se dairy se judi har technical jaankari prapt kar sakein aur apne kaam mein behtar decision le sakein.</p>
+                    </div>
+                    <div className="w-full md:w-1/3 bg-gray-50 p-6 rounded-lg shadow-inner">
+                        <h3 className="text-xl font-bold text-cyan-800 mb-4 font-headline">Shiksha Aur Anubhav</h3>
+                        <ul className="space-y-4">
+                            <li className="flex items-start">
+                                <GraduationCap className="text-cyan-600 mt-1 mr-3 shrink-0"/>
+                                <div>
+                                    <strong className="block text-gray-800">B.Tech, Food Technology</strong>
+                                    <span className="text-sm text-gray-500">Ch. Devi Lal State Institute, Sirsa (Pursuing)</span>
+                                </div>
+                            </li>
+                            <li className="flex items-start">
+                                <FlaskConical className="text-cyan-600 mt-1 mr-3 shrink-0"/>
+                                <div>
+                                    <strong className="block text-gray-800">Diploma, Dairy Technology</strong>
+                                    <span className="text-sm text-gray-500">IGNOU</span>
+                                </div>
+                            </li>
+                             <li className="flex items-start">
+                                <GraduationCap className="text-cyan-600 mt-1 mr-3 shrink-0"/>
+                                <div>
+                                    <strong className="block text-gray-800">Diploma, Food Technology</strong>
+                                    <span className="text-sm text-gray-500">Govt. Polytechnic, Bhiwani</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
+              <div className="bg-white p-6 rounded-lg border border-gray-200">
+                <h2 className="text-2xl font-bold text-cyan-800 mb-4 flex items-center gap-3 font-headline">Humara Mission</h2>
+                <p className="text-gray-600">Har user tak <strong>sahi, scientific aur practical dairy knowledge</strong> pahuchana – bina kisi confusion ke.</p>
+              </div>
+              <div className="bg-white p-6 rounded-lg border border-gray-200">
+                <h2 className="text-2xl font-bold text-cyan-800 mb-2 flex items-center gap-3 font-headline">Humara Vision</h2>
+                <p className="text-gray-600">India ke dairy sector ko digital support dena, jisse naye learners aur professionals smart decisions le sakein.</p>
+              </div>
+            </div>
+            
+            <div className="text-center mt-16 border-t border-gray-200 pt-10">
+              <h2 className="text-3xl font-bold text-gray-800 font-headline">Aaiye, Saath Milkar Aage Badhein</h2>
+              <p className="text-gray-600 mt-3 max-w-2xl mx-auto">Aapka feedback humare liye anmol hai. Agar aapko app pasand aaye, to please share karein, review karein, aur hume behtar banne mein madad karein.</p>
+            </div>
+            
+            <footer className="text-center mt-12 py-4 border-t border-gray-200">
+                <p className="text-sm text-gray-500">
+                  Made with ❤️ by Saurabh Rajput | DhenuGuide App
+                </p>
+            </footer>
+        </ScrollArea>
+      </DialogContent>
+    </Dialog>
+  );
+}
+    

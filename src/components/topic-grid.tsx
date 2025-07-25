@@ -14,6 +14,7 @@ import {
   Settings,
   Utensils,
   Search,
+  Users,
 } from "lucide-react";
 import { PaneerIcon } from "@/components/icons";
 import { Input } from "@/components/ui/input";
@@ -25,6 +26,7 @@ import { StandardizationIIModal } from "./calculators/standardization-ii-modal";
 import { SolutionsPrepModal } from "./calculators/solutions-prep-modal";
 import { PaneerProductionModal } from "./info-modals/paneer-production-modal";
 import { DairyProcessingModal } from "./info-modals/dairy-processing-modal";
+import { AboutUsModal } from "./info-modals/about-us-modal";
 
 const topics = [
   { id: 'industry', title: 'Dairy Industry', description: 'Overview & Trends', category: 'industry', icon: Factory, badge: 'New', modal: DairyIndustryModal },
@@ -36,6 +38,7 @@ const topics = [
   { id: 'paneer-production', title: 'Paneer Production', description: 'Process & Yield', category: 'science', icon: PaneerIcon, modal: PaneerProductionModal },
   { id: 'processing', title: 'Dairy Processing', description: 'Techniques & Machinery', category: 'industry', icon: Settings, modal: DairyProcessingModal },
   { id: 'food-tech', title: 'Food Technology', description: 'Product Development', category: 'science', icon: Utensils, modal: null },
+  { id: 'about-us', title: 'About Us', description: 'Our Mission & Vision', category: 'industry', icon: Users, modal: AboutUsModal },
 ];
 
 const filters = [
@@ -117,3 +120,5 @@ export function TopicGrid() {
     </>
   );
 }
+
+    
