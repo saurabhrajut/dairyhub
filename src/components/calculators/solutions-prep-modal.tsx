@@ -1,7 +1,8 @@
+
 "use client";
 
 import { useState, Fragment } from "react";
-import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
@@ -30,6 +31,7 @@ export function SolutionsPrepModal({ isOpen, setIsOpen }: { isOpen: boolean; set
       <DialogContent className="max-w-5xl h-[95vh] flex flex-col p-0">
           <Tabs defaultValue="acid-solution" className="w-full flex-1 flex flex-col">
             <DialogHeader className="p-4 bg-primary text-primary-foreground rounded-t-lg">
+                <DialogTitle className="text-center font-headline text-2xl">Solution Preparation Calculators</DialogTitle>
                 <TabsList className="bg-primary/50 grid h-auto w-full grid-cols-3 sm:grid-cols-5 lg:grid-cols-9">
                   {TABS.map((tab) => (
                     <TabsTrigger key={tab.value} value={tab.value} className="flex-col h-16 gap-1 p-1 data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-lg text-primary-foreground">
@@ -246,3 +248,5 @@ const DilutionCalc = () => {
         </form>
     );
 };
+
+    
