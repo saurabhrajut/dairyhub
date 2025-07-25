@@ -97,3 +97,11 @@ export const PaneerIcon = (props: SVGProps<SVGSVGElement>) => (
         <path d="M12 8v8"/>
     </svg>
 );
+
+export const IceCreamIcon = (props: SVGProps<SVGSVGElement>) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+        <path d="M16.44 10.28c-.34-.98-.8-1.85-1.44-2.58a5.5 5.5 0 0 0-7.64 1.25 3.49 3.49 0 0 0-1.2 5.92 5.5 5.5 0 0 0 6.74 6.3Z"/>
+        <path d="M8.21 10.55a3.5 3.5 0 0 1 5.46-3.77 5.5 5.5 0 0 1 4.28 2.62.5.5 0 0 0 .9-.41 6.5 6.5 0 0 0-12.02-3.1 4.5 4.5 0 0 0-1.47 7.73.5.5 0 0 0 .78.61 4.5 4.5 0 0 1 2.07-3.68Z"/>
+        <path d="M12 22a7.07 7.07 0 0 0 5-2.24L12 14l-5 5.76A7.07 7.07 0 0 0 12 22Z"/>
+    </svg>
+);

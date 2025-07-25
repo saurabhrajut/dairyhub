@@ -16,7 +16,7 @@ import {
   Search,
   Users,
 } from "lucide-react";
-import { PaneerIcon } from "@/components/icons";
+import { PaneerIcon, IceCreamIcon } from "@/components/icons";
 import { Input } from "@/components/ui/input";
 import { DairyIndustryModal } from "./info-modals/dairy-industry-modal";
 import { MilkChemistryModal } from "./info-modals/milk-chemistry-modal";
@@ -27,6 +27,7 @@ import { SolutionsPrepModal } from "./calculators/solutions-prep-modal";
 import { PaneerProductionModal } from "./info-modals/paneer-production-modal";
 import { DairyProcessingModal } from "./info-modals/dairy-processing-modal";
 import { AboutUsModal } from "./info-modals/about-us-modal";
+import { IceCreamCalculationsModal } from "./info-modals/ice-cream-calculations-modal";
 
 const topics = [
   { id: 'industry', title: 'Dairy Industry', description: 'Overview & Trends', category: 'industry', icon: Factory, badge: 'New', modal: DairyIndustryModal },
@@ -36,6 +37,7 @@ const topics = [
   { id: 'std1', title: 'Standardization I', description: 'Basic Principles', category: 'milk', icon: Scale, modal: StandardizationIModal },
   { id: 'std2', title: 'Standardization II', description: 'Advanced Blending', category: 'milk', icon: Calculator, modal: StandardizationIIModal },
   { id: 'paneer-production', title: 'Paneer Production', description: 'Process & Yield', category: 'science', icon: PaneerIcon, modal: PaneerProductionModal },
+  { id: 'ice-cream-calc', title: 'Ice Cream Calc', description: 'Overrun & Mix', category: 'science', icon: IceCreamIcon, modal: IceCreamCalculationsModal },
   { id: 'processing', title: 'Dairy Processing', description: 'Techniques & Machinery', category: 'industry', icon: Settings, modal: DairyProcessingModal },
   { id: 'food-tech', title: 'Food Technology', description: 'Product Development', category: 'science', icon: Utensils, modal: null },
   { id: 'about-us', title: 'About Us', description: 'Our Mission & Vision', category: 'industry', icon: Users, modal: AboutUsModal },
