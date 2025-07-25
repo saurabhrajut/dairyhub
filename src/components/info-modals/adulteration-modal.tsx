@@ -1,5 +1,7 @@
+
 "use client"
 
+import { useState } from "react"
 import {
   Dialog,
   DialogContent,
@@ -15,6 +17,9 @@ import {
 } from "@/components/ui/accordion"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { adulterantsData, preservativesData } from "@/lib/data"
+import { Button } from "@/components/ui/button"
+import { FlaskConical } from "lucide-react"
+import { SolutionsPrepModal } from "../calculators/solutions-prep-modal"
 
 export function AdulterationModal({
   isOpen,
@@ -23,7 +28,10 @@ export function AdulterationModal({
   isOpen: boolean
   setIsOpen: (open: boolean) => void
 }) {
+  const [isReagentModalOpen, setIsReagentModalOpen] = useState(false);
+
   return (
+    <>
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="max-w-4xl h-[90vh]">
         <DialogHeader>
@@ -66,8 +74,17 @@ export function AdulterationModal({
                     ))}
                 </Accordion>
             </section>
+            
+            <div className="my-8 text-center">
+                <Button onClick={() => setIsReagentModalOpen(true)}>
+                    <FlaskConical className="mr-2 h-4 w-4" />
+                    Test ke liye Reagent Banayein
+                </Button>
+            </div>
         </ScrollArea>
       </DialogContent>
     </Dialog>
+    {isReagentModalOpen && <SolutionsPrepModal isOpen={isReagentModalOpen} setIsOpen={setIsReagentModalOpen} />}
+    </>
   )
 }

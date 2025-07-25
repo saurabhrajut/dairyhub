@@ -1,3 +1,4 @@
+
 "use client";
 
 import {
@@ -15,6 +16,7 @@ import {
 } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { funFacts } from "@/lib/data";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 const milkChemistryTabs = [
     { value: "composition", label: "Composition" },
@@ -23,6 +25,16 @@ const milkChemistryTabs = [
     { value: "properties", label: "Properties" },
     { value: "processing", label: "Processing" },
     { value: "fun-facts", label: "Fun Facts" },
+];
+
+const physicalProperties = [
+    { property: "Density (at 20°C)", value: "Cow: 1.028-1.032 g/mL, Buffalo: 1.030-1.034 g/mL", details: "Milk is denser than water due to its solid content (SNF). Higher fat content slightly lowers density." },
+    { property: "Viscosity (at 20°C)", value: "~2.0 cP", details: "About twice as viscous as water. Depends on temperature and composition (fat, protein)." },
+    { property: "Freezing Point", value: "-0.522 to -0.565 °C", details: "Lower than water due to dissolved lactose and minerals. Used to detect added water." },
+    { property: "Boiling Point", value: "~100.17 °C", details: "Slightly higher than water due to dissolved solids." },
+    { property: "Acidity (Titratable)", value: "Cow: 0.14-0.16% LA, Buffalo: 0.17-0.18% LA", details: "Natural acidity is due to casein, phosphates, citrates, etc. Not due to lactic acid in fresh milk." },
+    { property: "pH", value: "6.6 - 6.8", details: "Slightly acidic. Lower pH suggests bacterial action (souring)." },
+    { property: "Refractive Index", value: "1.3440 - 1.3485", details: "Used for quick estimation of total solids content." },
 ];
 
 export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
@@ -101,8 +113,59 @@ export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; set
                     </div>
                  </div>
             </TabsContent>
-            <TabsContent value="properties"><p>Physical properties content coming soon.</p></TabsContent>
-            <TabsContent value="processing"><p>Thermal processing content coming soon.</p></TabsContent>
+            <TabsContent value="properties">
+                <div className="space-y-4 text-gray-700 text-sm leading-relaxed">
+                    <h4 className="text-lg font-bold text-primary mb-2 font-headline">Physical Properties of Milk</h4>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-[150px]">Property</TableHead>
+                                <TableHead>Value</TableHead>
+                                <TableHead>Significance</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {physicalProperties.map(prop => (
+                                <TableRow key={prop.property}>
+                                    <TableCell className="font-medium">{prop.property}</TableCell>
+                                    <TableCell>{prop.value}</TableCell>
+                                    <TableCell>{prop.details}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </div>
+            </TabsContent>
+            <TabsContent value="processing">
+                <div className="space-y-4 text-gray-700 text-sm leading-relaxed prose max-w-none">
+                     <h4 className="text-lg font-bold text-primary mb-2 font-headline">Effect of Thermal Processing on Milk</h4>
+                     <p>Garam karne se doodh mein kai badlav aate hain jo uski suraksha, shelf-life, aur gunon ko prabhavit karte hain.</p>
+                     
+                     <div className="p-4 bg-gray-50 rounded-lg border">
+                         <h5 className="font-bold font-headline text-gray-800 mb-2">Pasteurization (LTLT/HTST)</h5>
+                         <ul className="list-disc list-inside mt-2">
+                             <li><strong>Benefits:</strong> Destroys pathogenic bacteria (like TB, Brucella), inactivates enzymes (lipase), increases shelf life.</li>
+                             <li><strong>Changes:</strong> Minimal changes to nutritional value. Slight loss of Vitamin C and B-group vitamins. Whey proteins may slightly denature.</li>
+                         </ul>
+                     </div>
+
+                     <div className="p-4 bg-gray-50 rounded-lg border">
+                         <h5 className="font-bold font-headline text-gray-800 mb-2">UHT (Ultra-High Temperature) Processing</h5>
+                         <ul className="list-disc list-inside mt-2">
+                             <li><strong>Benefits:</strong> Makes milk commercially sterile, allowing for long-term storage at room temperature.</li>
+                             <li><strong>Changes:</strong> More pronounced changes. Maillard browning (reaction between lactose and protein) can cause a slightly "cooked" flavor and browning. Significant denaturation of whey proteins. More vitamin loss than pasteurization.</li>
+                         </ul>
+                     </div>
+
+                     <div className="p-4 bg-gray-50 rounded-lg border">
+                         <h5 className="font-bold font-headline text-gray-800 mb-2">Sterilization</h5>
+                         <ul className="list-disc list-inside mt-2">
+                             <li><strong>Benefits:</strong> Complete destruction of all microorganisms and spores.</li>
+                             <li><strong>Changes:</strong> Severe heat treatment. Causes significant browning, cooked flavor, and substantial nutritional loss, especially of heat-sensitive vitamins. Major protein denaturation and changes in mineral balance.</li>
+                         </ul>
+                     </div>
+                </div>
+            </TabsContent>
             <TabsContent value="fun-facts">
                 <div className="space-y-4 prose max-w-none">
                     {funFacts.map((fact, index) => (
