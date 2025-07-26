@@ -19,10 +19,16 @@ import { Mic, Send, Bot, Paperclip, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface Message {
-  id: string;
-  sender: "user" | "assistant";
-  text: string;
-  lang?: string;
+  role: "user" | "model";
+  content: { text: string }[];
+}
+
+// Separate UI message type to handle local IDs
+interface UIMessage {
+    id: string;
+    sender: "user" | "assistant";
+    text: string;
+    lang?: string;
 }
 
 export function ChatPanel({
@@ -32,13 +38,14 @@ export function ChatPanel({
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
 }) {
-  const [messages, setMessages] = useState<Message[]>([
+  const [messages, setMessages] = useState<UIMessage[]>([
     {
       id: "initial",
       sender: "assistant",
       text: "Ram Ram Sa mere dost! 🙏 Main hu aapka Sarathi. Apne dairy ke sawal pucho, ya fir neeche resume paste karke interview ki taiyari karo!",
     },
   ]);
+  const [history, setHistory] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [resumeText, setResumeText] = useState("");
   const [showResumeInput, setShowResumeInput] = useState(false);
@@ -62,12 +69,17 @@ export function ChatPanel({
     if (isLoading) return;
 
     const userMessageText = showResumeInput ? `Please analyze my resume.` : query;
-    const userMessage: Message = {
+    const userMessage: UIMessage = {
       id: Date.now().toString(),
       sender: "user",
       text: userMessageText,
     };
     setMessages((prev) => [...prev, userMessage]);
+    
+    // Add user message to Genkit history
+    const newHistory: Message[] = [...history, { role: 'user', content: [{ text: userMessageText }] }];
+    setHistory(newHistory);
+
     setInput("");
     setIsLoading(true);
 
@@ -76,17 +88,22 @@ export function ChatPanel({
         question: query,
         language: language,
         resumeText: resumeQuery || undefined,
+        history: newHistory,
       });
-      const assistantMessage: Message = {
+      const assistantMessage: UIMessage = {
         id: Date.now().toString() + "-ai",
         sender: "assistant",
         text: response.answer,
         lang: language,
       };
       setMessages((prev) => [...prev, assistantMessage]);
+
+      // Add assistant message to Genkit history
+      setHistory(prev => [...prev, { role: 'model', content: [{ text: response.answer }] }]);
+
     } catch (error) {
       console.error(error);
-      const errorMessage: Message = {
+      const errorMessage: UIMessage = {
         id: Date.now().toString() + "-error",
         sender: "assistant",
         text: "Maaf karna, kuch gadbad ho gayi. Fir se try karein.",
@@ -157,10 +174,8 @@ export function ChatPanel({
             <div className="self-start flex gap-3 items-center">
               <div className="bg-muted p-2 rounded-full h-fit"><Bot className="w-5 h-5 text-foreground" /></div>
               <div className="bg-muted p-3 rounded-2xl rounded-bl-none">
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <div className="h-2 w-2 bg-primary rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-                    <div className="h-2 w-2 bg-primary rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                    <div className="h-2 w-2 bg-primary rounded-full animate-bounce"></div>
+                <div className="flex items-center gap-2 text-sm text-muted-foreground animate-pulse">
+                  रुको जरा, सबर करो...
                 </div>
               </div>
             </div>
