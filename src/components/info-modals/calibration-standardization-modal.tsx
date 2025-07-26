@@ -88,8 +88,40 @@ export function CalibrationStandardizationModal({ isOpen, setIsOpen }: { isOpen:
                 </Section>
                 
                 <Section title="Butyrometer ka Calibration" id="butyrometer">
-                     <p>Butyrometer ko is siddhant par calibrate kiya jaata hai ki har 1% fat mark <strong>0.125 ml</strong> ke internal volume ke barabar hota hai. Iski jaanch aam taur par shuddh mercury (paara) ya distilled water se ki jaati hai.</p>
-                     
+                     <SubHeading>Siddhant (Principle)</SubHeading>
+                     <p>Butyrometer calibration ka mukhya siddhant yeh hai ki uske stem (patli nali) par bane nishaan ek nishchit volume ko darshate hain. <strong>Milk butyrometer</strong> ke liye, har <strong>1% fat mark 0.125 ml</strong> ke internal volume ke barabar hota hai. Isliye, 0 se 10% tak ki poori scale ka volume 1.25 ml hona chahiye. Calibration mein hum isi volume ko jaanchte hain. Iske liye aam taur par shuddh mercury (paara) ka istemal kiya jaata hai kyunki woh kaanch se chipakta nahi hai aur uski density bahut zyada hoti hai.</p>
+
+                    <SubHeading>Calibration ke Alag-Alag Tarike</SubHeading>
+                    
+                    <h4 className="text-lg font-semibold text-gray-700 mt-4 mb-2">1. Tulna Vidhi (Comparison Method)</h4>
+                    <p>Yeh sabse aasan tarika hai. Ismein ek hi doodh ke sample ka fat do alag-alag butyrometers mein test kiya jaata hai:</p>
+                    <ul className="list-disc list-inside mt-2 space-y-1">
+                        <li>Ek pehle se calibrate kiya hua (standard) butyrometer.</li>
+                        <li>Ek naya butyrometer jise calibrate karna hai.</li>
+                    </ul>
+                    <p>Agar dono butyrometers mein fat ki reading same aati hai, to naye butyrometer ko sahi maan liya jaata hai. Lekin yeh method bahut sateek nahi hai kyunki ho sakta hai ki purana (standard) butyrometer bhi sahi na ho.</p>
+
+                    <h4 className="text-lg font-semibold text-gray-700 mt-4 mb-2">2. BIS Vidhi (Mercury Pipette Method)</h4>
+                    <p>Yeh ek zyada sateek aur standard tarika hai. Ismein ek khaas tarah ki automatic mercury pipette ka istemal hota hai jo ek baar mein theek <strong>0.3125 ml</strong> mercury dispense karti hai. Yeh volume butyrometer ke <strong>2.5% fat scale</strong> ke barabar hota hai.</p>
+                    <ol className="list-decimal list-inside space-y-2 mt-2">
+                        <li>Butyrometer ko saaf karke sukha lein.</li>
+                        <li>Butyrometer ko 10% mark tak mercury se bhar lein. Isko hum base (zero) point maante hain.</li>
+                        <li>Mercury pipette se 0.3125 ml mercury butyrometer mein daalein. Mercury ka level 10% se 7.5% tak aa jaana chahiye.</li>
+                        <li>Is process ko 3 baar aur repeat karein. Har baar mercury 2.5% scale ko bharega (7.5% -> 5.0% -> 2.5% -> 0%).</li>
+                        <li>Agar 4 baar mercury daalne par butyrometer ki scale 0 se 10% tak poori tarah sahi-sahi bhar jaati hai, to butyrometer calibrate maana jaata hai.</li>
+                    </ol>
+                    
+                    <h4 className="text-lg font-semibold text-gray-700 mt-4 mb-2">3. Gravimetric Vidhi (Mercury Tolekar)</h4>
+                    <p>Yeh sabse sateek (accurate) tarika hai. Ismein alag-alag marks ke beech mercury ka vajan (weight) karke volume nikala jaata hai.</p>
+                    <ol className="list-decimal list-inside space-y-2 mt-2">
+                        <li>Ek saaf, sukhe butyrometer ko tolein.</li>
+                        <li>Usmein 10% mark tak mercury bharein aur dobara tolein.</li>
+                        <li>Ab 9% mark tak mercury bharein aur phir tolein. Dono vajan ke antar se 9% aur 10% ke beech mercury ka vajan pata chalega.</li>
+                        <li>Mercury ki density (jo taapman par nirbhar karti hai) ka istemal karke, is vajan ko volume mein convert karein: <code className="bg-muted p-1 rounded">Volume = Mass / Density</code>.</li>
+                        <li>Yeh volume <strong>0.125 ± 0.001 ml</strong> ke beech hona chahiye (1% fat ke liye).</li>
+                        <li>Isi prakar, butyrometer ke scale par 2-3 alag-alag points (jaise 5-6% aur 1-2%) par is test ko repeat karein taaki poori scale ki accuracy check ho sake.</li>
+                    </ol>
+
                      <Table>
                         <TableCaption>Table 6.1: Alag-alag products ke liye Butyrometer ke types</TableCaption>
                         <TableHeader>
