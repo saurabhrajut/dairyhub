@@ -107,6 +107,42 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                         </ul>
                     </div>
                 </InfoCard>
+                <InfoCard>
+                    <h3 className="text-xl font-semibold mb-2">Phosphatase Test</h3>
+                    <p>Alkaline phosphatase doodh mein naturally paaya jaata hai. Jab doodh ko pasteurization temperature ya usse zyada temperature par rakha jaata hai toh yeh apni activity kho deta hai. Isliye, is enzyme ko pasteurization ki efficiency ke index ke roop mein apnaya jaata hai. Agar enzyme active hoga, toh ek peela (yellow) rang ka compound banega.</p>
+                    <h4 className="font-semibold mt-4 mb-2">Prakriya (Procedure)</h4>
+                    <ProcedureList>
+                        <ProcedureListItem>Ek test tube mein 5 ml buffer substrate (disodium p-nitrophenyl phosphate) solution daalein.</ProcedureListItem>
+                        <ProcedureListItem>Tube ko stopper se band karein aur 37°C ke water bath mein rakhein.</ProcedureListItem>
+                        <ProcedureListItem>Usme 1 ml doodh ka sample daalein aur 37°C par 2 ghante ke liye incubate karein.</ProcedureListItem>
+                        <ProcedureListItem>Saath hi, uble hue (sahi se pasteurized) doodh ke saath ek blank sample taiyar karein aur yahi steps repeat karein.</ProcedureListItem>
+                        <ProcedureListItem>Dono test tubes ke rang ko Lovibond comparator mein compare karein.</ProcedureListItem>
+                        <ProcedureListItem>Test reading ko record karein.</ProcedureListItem>
+                    </ProcedureList>
+                     <div className="mt-4 p-4 bg-yellow-50 border-l-4 border-yellow-400 text-yellow-800 rounded-r-lg">
+                        <h4 className="font-bold mb-2">Interpretation:</h4>
+                        <ul className="list-disc list-inside">
+                           <li><strong>Disk Reading 0–3:</strong> Properly pasteurized</li>
+                           <li><strong>Disk Reading 2–6:</strong> Doubtful</li>
+                           <li><strong>Disk Reading 10 aur usse zyada:</strong> Under pasteurized</li>
+                        </ul>
+                    </div>
+                </InfoCard>
+                 <InfoCard>
+                    <h3 className="text-xl font-semibold mb-2">Ash Content</h3>
+                    <p>Ash doodh ke organic matter ko 500-550°C par jalane (incineration) ke baad bacha hua inorganic residue hai. Yeh doodh ke mineral content ko darshata hai.</p>
+                    <h4 className="font-semibold mt-4 mb-2">Prakriya (Procedure)</h4>
+                    <ProcedureList>
+                        <ProcedureListItem>Ek khaali silica crucible ko tolein (Weight W).</ProcedureListItem>
+                        <ProcedureListItem>Usme 5 g doodh ka sample tolein (Weight W1).</ProcedureListItem>
+                        <ProcedureListItem>Sample ko hot plate par sukha lein.</ProcedureListItem>
+                        <ProcedureListItem>Crucible ko muffle furnace mein 550°C par 4 ghante ya ash ke carbon-free hone tak rakhein.</ProcedureListItem>
+                        <ProcedureListItem>Crucible ko desiccator mein thanda karein.</ProcedureListItem>
+                        <ProcedureListItem>Ash ke saath crucible ko tolein (Weight W2).</ProcedureListItem>
+                        <ProcedureListItem>Heating aur cooling ko constant weight aane tak repeat karein.</ProcedureListItem>
+                    </ProcedureList>
+                    <pre className="mt-4 p-4 bg-muted rounded-lg font-mono text-sm"><code>% Ash = [ (W2 - W) / (W1 - W) ] * 100</code></pre>
+                </InfoCard>
                  <InfoCard>
                     <h3 className="text-xl font-semibold mb-2">Titratable Acidity</h3>
                     <p>Doodh ki kul acidity (natural + developed) ko ek standard alkali solution (NaOH) ke saath titrate karke maapa jaata hai.</p>
@@ -119,6 +155,26 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                        <ProcedureListItem>Istemaal hue alkali ka volume note karein.</ProcedureListItem>
                     </ProcedureList>
                     <pre className="mt-4 p-4 bg-muted rounded-lg font-mono text-sm"><code>% Acidity = (9 * V * N) / W</code></pre>
+                </InfoCard>
+                <InfoCard>
+                    <h3 className="text-xl font-semibold mb-2">Protein Content (Kjeldahl Method)</h3>
+                    <p>Protein content nirdharit karne ke liye sabse zyada istemal hone wala method Kjeldahl method hai. Is method mein, protein ke nitrogen ko pehle concentrated sulfuric acid ka istemal karke ammonium sulfate mein convert kiya jaata hai. Fir isse ammonia gas nikalkar use titrate kiya jaata hai, jisse nitrogen ki matra pata chalti hai. Is nitrogen ki matra ko ek factor (doodh ke liye 6.38) se guna karke crude protein content nikala jaata hai.</p>
+                    <h4 className="font-semibold mt-4 mb-2">Prakriya (Procedure)</h4>
+                    <ProcedureList>
+                        <ProcedureListItem><strong>Digestion:</strong> 5 g doodh ko ek saaf Kjeldahl flask mein tolein. 25 ml concentrated sulfuric acid, 0.2 g copper sulfate, aur 10 g potassium sulfate (catalyst mixture) daalein. Flask ko halke se garam karein jab tak contents saaf na ho jaayein. Digestion ko 2 ghante aur continue karein.</ProcedureListItem>
+                        <ProcedureListItem><strong>Dilution:</strong> Liquid ko thanda hone dein aur 300-500 ml distilled water se dilute karein.</ProcedureListItem>
+                        <ProcedureListItem><strong>Neutralization & Distillation:</strong> Digestion assembly fit karein. 75 ml 50% NaOH daalein. Flask ko distillation assembly se connect karein jiska tip 50 ml boric acid solution (indicator ke saath) mein dooba ho. Garam karna shuru karein.</ProcedureListItem>
+                        <ProcedureListItem>Jab distillate 150 ml tak pahunch jaaye to distillation rok dein.</ProcedureListItem>
+                        <ProcedureListItem><strong>Titration:</strong> Boric acid solution jisme ammonia trap hui hai, use std. HCl solution (0.1 N) se titrate karein jab tak gulabi rang na aa jaaye. Reading note karein.</ProcedureListItem>
+                        <ProcedureListItem>Ek blank test bhi karein.</ProcedureListItem>
+                    </ProcedureList>
+                    <pre className="mt-4 p-4 bg-muted rounded-lg font-mono text-sm">
+                        <code>
+                            % Total Nitrogen = [ 1.4007 * (Vs - Vb) * N ] / W
+                            <br />
+                            % Crude Protein = % Nitrogen * 6.38
+                        </code>
+                    </pre>
                 </InfoCard>
             </section>
 
@@ -160,10 +216,28 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                     </ProcedureList>
                     <pre className="mt-4 p-4 bg-muted rounded-lg font-mono text-sm"><code>% Acidity = (9 * A * N) / W</code></pre>
                 </InfoCard>
+                 <InfoCard>
+                    <h3 className="text-xl font-semibold mb-2">Diacetyl Content</h3>
+                    <p>Diacetyl ek khas flavor compound hai jo fermentation ke dauran banta hai. Iski matra spectrophotometrically 570 nm par maapi jaati hai.</p>
+                </InfoCard>
             </section>
             
             <section id="ice-cream">
                 <SectionTitle id="ice-cream">Ice Cream</SectionTitle>
+                 <InfoCard>
+                    <h3 className="text-xl font-semibold mb-2">Fat Content (Rose-Gottlieb method)</h3>
+                     <ProcedureList>
+                        <ProcedureListItem>4-5 g sample ko Mojonnier tube mein tolein.</ProcedureListItem>
+                        <ProcedureListItem>10 ml distilled water daalkar mix karein.</ProcedureListItem>
+                        <ProcedureListItem>2 ml ammonia daalein, mix karein aur 60°C ke water bath mein 20 min garam karein.</ProcedureListItem>
+                        <ProcedureListItem>Thanda karein aur 10 ml ethanol, 25 ml diethyl ether daalkar mix karein.</ProcedureListItem>
+                        <ProcedureListItem>Fir 25 ml petroleum ether daalkar mix karein.</ProcedureListItem>
+                        <ProcedureListItem>Layers alag hone dein, ya centrifuge karein.</ProcedureListItem>
+                        <ProcedureListItem>Ethereal layer ko tole gaye vessel mein nikaalein.</ProcedureListItem>
+                        <ProcedureListItem>Extraction do baar repeat karein.</ProcedureListItem>
+                        <ProcedureListItem>Ether ko evaporate karein aur residue ko 102 ± 2°C par 3 ghante sukhaayein.</ProcedureListItem>
+                    </ProcedureList>
+                </InfoCard>
                 <InfoCard>
                     <h3 className="text-xl font-semibold mb-2">Overrun in Ice Cream</h3>
                     <p>Overrun ice cream ka woh volume hai jo mix ke volume se zyada hota hai. Yeh freezing ke dauran hawa ke incorporation ke kaaran hota hai.</p>
