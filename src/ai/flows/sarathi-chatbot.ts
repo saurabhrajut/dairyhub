@@ -1,9 +1,9 @@
 'use server';
 
 /**
- * @fileOverview AI chatbot flow for dairy farming questions.
+ * @fileOverview AI chatbot flow for dairy farming questions and resume-based interview preparation.
  *
- * - sarathiChatbot - A function that handles user questions about dairy farming and provides helpful, funny, and relatable responses in the user's local language.
+ * - sarathiChatbot - A function that handles user questions about dairy farming and provides helpful, funny, and relatable responses in the user's local language. It can also analyze resume text to generate interview questions and answers.
  * - SarathiChatbotInput - The input type for the sarathiChatbot function.
  * - SarathiChatbotOutput - The return type for the sarathiChatbot function.
  */
@@ -14,8 +14,9 @@ import {z} from 'genkit';
 const SarathiChatbotInputSchema = z.object({
   language: z
     .string()    
-    .describe('The language in which the user is asking the question.'),
+    .describe('The language in which the user is asking the question (e.g., hi-IN, pa-IN).'),
   question: z.string().describe('The user question about dairy farming.'),
+  resumeText: z.string().optional().describe('Optional. The full text of a user\'s resume or CV.'),
 });
 export type SarathiChatbotInput = z.infer<typeof SarathiChatbotInputSchema>;
 
@@ -33,17 +34,32 @@ const prompt = ai.definePrompt({
   input: {schema: SarathiChatbotInputSchema},
   output: {schema: SarathiChatbotOutputSchema},
   prompt: `You are 'Sarathi', a super-smart, friendly, and funny personal AI assistant in a dairy app.
-Your personality is like a wise, quick-witted, and mischievous friend from a village who knows everything about dairy. You are here to help farmers with their questions.
-You are an expert in dairy science, animal husbandry, and the dairy business.
+Your personality is like a wise, quick-witted, and mischievous friend from a village who knows everything about dairy. You are an expert in dairy science, animal husbandry, and the dairy business. You also act as a brilliant career coach.
 
 ALWAYS follow these rules:
 1.  **Detect Language:** You are given a language code (e.g., 'hi-IN' for Hinglish, 'pa-IN' for Punjabi). You MUST respond in that exact language and dialect. Be extremely authentic. For example, for Haryanvi, use words like "ke haal hai" or "ib ke karega?". For Punjabi, use "ki haal aa" or "hun ki karna?".
 2.  **Be Smart & Friendly:** Give accurate, helpful, and simple answers. But don't be boring! Add a touch of humor, a friendly joke, or a relatable village-style example. Make the user feel like they are talking to a knowledgeable and fun friend.
-3.  **Persona:** Maintain your persona as a mischievous but caring village friend. Use idioms and a folksy tone. Start your first response with a warm greeting like "Ram Ram Sa!" or "Sat Sri Akal ji!".
+3.  **Persona:** Maintain your persona as a mischievous but caring village friend. Start your first response with a warm greeting like "Ram Ram Sa!" or "Sat Sri Akal ji!".
 
-Here is the user's question. Give a smart and friendly answer in the requested language.
+Here is the user's request. Respond in the requested language.
 Language Code: {{{language}}}
-Question: {{{question}}}`,
+Question: {{{question}}}
+
+{{#if resumeText}}
+**Resume Analysis Task:**
+The user has provided their resume text below. Your task is to act as an expert HR manager and career coach for the dairy industry.
+1.  Thoroughly analyze the provided resume.
+2.  Based on the resume, generate 3-5 insightful and relevant interview questions.
+3.  For each question, provide a detailed, long-form sample answer that the user could give. The answer should be well-structured and demonstrate their skills and experience from the resume.
+4.  Present the questions and answers clearly, for example, using "Q1:" and "A1:".
+5.  Frame your entire response within your 'Sarathi' persona (friendly, folksy, Hinglish/selected language). For example, "Arey wah! Ye le, tere resume ke hisaab se kuch zaroori sawaal aur unke jawaab."
+
+Resume Text:
+---
+{{{resumeText}}}
+---
+{{/if}}
+`,
 });
 
 const sarathiChatbotFlow = ai.defineFlow(

@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -12,7 +13,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { getSarathiChatbotResponse } from "@/app/actions";
-import { Mic, Send, Bot } from "lucide-react";
+import { Mic, Send, Bot, Paperclip, X } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface Message {
   id: string;
@@ -32,13 +34,16 @@ export function ChatPanel({
     {
       id: "initial",
       sender: "assistant",
-      text: "Ram Ram Sa mere dost! 🙏 Main hu aapka Sarathi. Jo bhi sawal ho bs bta dena.",
+      text: "Ram Ram Sa mere dost! 🙏 Main hu aapka Sarathi. Apne dairy ke sawal pucho, ya fir neeche resume paste karke interview ki taiyari karo!",
     },
   ]);
   const [input, setInput] = useState("");
+  const [resumeText, setResumeText] = useState("");
+  const [showResumeInput, setShowResumeInput] = useState(false);
   const [language, setLanguage] = useState("hi-IN");
   const [isLoading, setIsLoading] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const { toast } = useToast();
 
   useEffect(() => {
     if (scrollAreaRef.current) {
@@ -48,12 +53,17 @@ export function ChatPanel({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim() || isLoading) return;
+    const query = input.trim();
+    const resumeQuery = resumeText.trim();
 
+    if (!query && !resumeQuery) return;
+    if (isLoading) return;
+
+    const userMessageText = showResumeInput ? `Please analyze my resume.` : query;
     const userMessage: Message = {
       id: Date.now().toString(),
       sender: "user",
-      text: input,
+      text: userMessageText,
     };
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
@@ -61,8 +71,9 @@ export function ChatPanel({
 
     try {
       const response = await getSarathiChatbotResponse({
-        question: input,
+        question: query,
         language: language,
+        resumeText: resumeQuery || undefined,
       });
       const assistantMessage: Message = {
         id: Date.now().toString() + "-ai",
@@ -72,6 +83,7 @@ export function ChatPanel({
       };
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
+      console.error(error);
       const errorMessage: Message = {
         id: Date.now().toString() + "-error",
         sender: "assistant",
@@ -80,8 +92,17 @@ export function ChatPanel({
       setMessages((prev) => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
+      setResumeText("");
+      setShowResumeInput(false);
     }
   };
+
+  const handleAttachClick = () => {
+    if (showResumeInput) {
+        setResumeText("");
+    }
+    setShowResumeInput(!showResumeInput);
+  }
 
   return (
     <div
@@ -118,15 +139,15 @@ export function ChatPanel({
                 msg.sender === "user" ? "self-end" : "self-start"
               }`}
             >
-              {msg.sender === 'assistant' && <div className="bg-muted p-2 rounded-full h-fit"><Bot className="w-5 h-5 text-foreground" /></div>}
+              {msg.sender === 'assistant' && <div className="bg-muted p-2 rounded-full h-fit shrink-0"><Bot className="w-5 h-5 text-foreground" /></div>}
               <div
-                className={`flex-1 p-3 rounded-2xl ${
+                className={`flex-1 p-3 rounded-2xl break-words ${
                   msg.sender === "user"
                     ? "bg-primary/90 text-primary-foreground rounded-br-none"
                     : "bg-muted text-muted-foreground rounded-bl-none"
                 }`}
               >
-                <p className="text-sm">{msg.text.replace(/\n/g, '<br />')}</p>
+                <p className="text-sm" dangerouslySetInnerHTML={{__html: msg.text.replace(/\n/g, '<br />')}}></p>
               </div>
             </div>
           ))}
@@ -144,19 +165,33 @@ export function ChatPanel({
           )}
         </div>
       </ScrollArea>
+      
+      {showResumeInput && (
+        <div className="p-2 border-t bg-amber-50">
+            <Label htmlFor="resume-input" className="text-xs text-amber-800 px-2">Paste your resume below for analysis</Label>
+            <Textarea 
+                id="resume-input"
+                value={resumeText}
+                onChange={(e) => setResumeText(e.target.value)}
+                placeholder="Apna resume yahan paste karein..."
+                className="w-full text-xs h-24 bg-white border-amber-200 focus-visible:ring-amber-500"
+                disabled={isLoading}
+            />
+        </div>
+      )}
 
       <form
         onSubmit={handleSubmit}
         className="p-4 border-t bg-background flex items-center gap-2"
       >
-        <Button type="button" size="icon" variant="ghost" className="text-muted-foreground" disabled>
-            <Mic className="h-4 w-4" />
+        <Button type="button" size="icon" variant="ghost" className="text-muted-foreground shrink-0" onClick={handleAttachClick} disabled={isLoading}>
+            <Paperclip className="h-4 w-4" />
         </Button>
         <Input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Ask a question..."
+          placeholder={showResumeInput ? "e.g., Ask questions based on this" : "Ask a question..."}
           className="flex-grow rounded-full focus-visible:ring-primary"
           disabled={isLoading}
         />
