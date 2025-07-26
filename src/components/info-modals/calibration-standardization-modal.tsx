@@ -14,7 +14,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableCap
 const Section = ({ title, id, children }: { title: string, id: string, children: React.ReactNode }) => (
     <section id={id} className="mb-10">
         <h2 className="text-2xl font-bold text-primary mb-4 border-b-2 border-primary/20 pb-2 scroll-mt-24 font-headline">{title}</h2>
-        {children}
+        <div className="space-y-4">{children}</div>
     </section>
 );
 
@@ -35,12 +35,10 @@ export function CalibrationStandardizationModal({ isOpen, setIsOpen }: { isOpen:
         </DialogHeader>
 
         <ScrollArea className="h-full pr-6 mt-4">
-            <div className="prose max-w-none text-gray-700 text-sm leading-relaxed">
-                <section className="mb-8">
-                    <p>Calibration ka matlab hai maapne wale upkaran (measuring equipment) ki measurement uncertainty ko sthapit karna aur record karna. Ismein adjustment shamil nahi hai, lekin yeh adjustment ki zaroorat ko dikha sakta hai. Saral shabdon mein, calibration ek takneek hai jismein ek device se ki gayi jaani maap (known magnitude) ki tulna, doosre device se usi tarah se ki gayi maap se ki jaati hai.</p>
-                    <p>Dairy plant mein, doodh ki composition aur quality jaise kai factors ka vishleshan kiya jaata hai. Yeh product ki sahi keemat, processing ke liye uski upyuktta, aur kanooni manakon (legal standards) ko poora karne ke liye zaroori hai. Isliye, analysis mein istemal hone se pehle glassware ka calibration bahut zaroori hai, taaki galat results se bacha ja sake.</p>
-                    <p>Dairy lab mein aam taur par istemal hone wale glassware hain: butyrometer, lactometer, milk pipette, volumetric flask, measuring cylinder, beaker, thermometer, aadi.</p>
-                    <p>Results ki vishvasniyata (reliability) sirf glassware par hi nahi, balki chemicals par bhi nirbhar karti hai. Isliye, taiyar kiye gaye solutions ki shuddhta sunishchit karne ke liye, unhe primary standard padartho jaise oxalic acid, sodium carbonate, aadi ka istemal karke standardize karna zaroori hai. Iske liye normality, molarity, aur molality jaise terms ki basic jaankari hona anivarya hai.</p>
+            <div className="prose max-w-none text-gray-700 text-base leading-relaxed">
+                <section className="mb-8 space-y-4">
+                    <p><strong>Calibration</strong> ka matlab hai kisi maapne wale upkaran (measuring equipment) ki tulna ek standard upkaran se karna jiska measurement pehle se hi sahi mana gaya ho. Isse yeh pata chalta hai ki humara upkaran kitna sateek (accurate) hai. Ismein adjustment shamil nahi hota, lekin yeh adjustment ki zaroorat ko dikha sakta hai.</p>
+                    <p>Dairy plant mein, doodh ki composition (fat, SNF, etc.) aur quality ko reception se lekar dispatch tak kai baar analyze kiya jaata hai. Yeh product ki sahi keemat, processing ke liye uski upyuktta, aur kanooni manakon (legal standards) ko poora karne ke liye zaroori hai. Isliye, analysis mein istemal hone se pehle glassware (butyrometer, pipette, etc.) aur chemicals ka calibration aur standardization bahut zaroori hai, taaki galat results se bacha ja sake.</p>
                 </section>
                 
                 <Section title="Mukhya Paribhashayein (Key Definitions)" id="definitions">
@@ -49,53 +47,53 @@ export function CalibrationStandardizationModal({ isOpen, setIsOpen }: { isOpen:
                     
                     <SubHeading>Solution (Ghol)</SubHeading>
                     <p>Solution do ya do se adhik padartho ka ek homogeneous mishran hai. Jismein ek solute (jo kam matra mein ho) aur ek solvent (jo adhik matra mein ho) hota hai.</p>
-                    <ul className="list-disc list-inside mt-2">
+                    <ul className="list-disc list-inside mt-2 space-y-1">
                         <li><strong>Dilute Solution:</strong> Jismein solute ki matra kam ho.</li>
                         <li><strong>Concentrated Solution:</strong> Jismein solute ki matra zyada ho.</li>
                         <li><strong>Saturated Solution:</strong> Jismein ek nishchit taapman par aur solute na ghul sake.</li>
                     </ul>
 
                     <SubHeading>Standard Solution</SubHeading>
-                    <p>Ek aisa solution jiski strength ya concentration pata ho.</p>
+                    <p>Ek aisa solution jiski strength ya concentration bilkul sahi pata ho.</p>
                     
-                    <SubHeading>Normal Solution (Normality)</SubHeading>
-                    <p>Yeh 1 liter solution mein ghule hue solute ke gram equivalents ki sankhya hai (N se darshaya jaata hai). N = gram equivalent of solute / volume of solution (L).</p>
-                    <p>Gram equivalent weight = Molar mass / n-factor (Valency/replaceable ions).</p>
+                    <SubHeading>Normal Solution (Normality - N)</SubHeading>
+                    <p>Yeh 1 liter solution mein ghule hue solute ke gram equivalents ki sankhya hai. <code className="bg-muted p-1 rounded">N = gram equivalent of solute / volume of solution (L)</code>.</p>
+                    <p>Gram equivalent weight = <code className="bg-muted p-1 rounded">Molar mass / n-factor</code>. (n-factor acid ke liye H+ ions ki sankhya aur base ke liye OH- ions ki sankhya hoti hai).</p>
 
-                    <SubHeading>Molarity</SubHeading>
-                    <p>1 liter solution mein ghule hue solute ke moles ki sankhya (M se darshaya jaata hai). M = moles of solute / volume of solution (L).</p>
+                    <SubHeading>Molar Solution (Molarity - M)</SubHeading>
+                    <p>Yeh 1 liter solution mein ghule hue solute ke moles ki sankhya hai. <code className="bg-muted p-1 rounded">M = moles of solute / volume of solution (L)</code>.</p>
                     
-                    <SubHeading>Molality</SubHeading>
-                    <p>1000g (1 kg) solvent mein ghule hue solute ke moles ki sankhya (m se darshaya jaata hai). m = No. of moles of solute / weight of solvent (kg).</p>
+                    <SubHeading>Molal Solution (Molality - m)</SubHeading>
+                    <p>Yeh 1000g (1 kg) solvent mein ghule hue solute ke moles ki sankhya hai. <code className="bg-muted p-1 rounded">m = No. of moles of solute / weight of solvent (kg)</code>.</p>
                     <p className="font-semibold mt-2">Note: Normality aur Molarity taapman par nirbhar karte hain kyunki volume taapman ke saath badalta hai, jabki Molality taapman se swatantra hai.</p>
                 </Section>
                 
                 <Section title="Milk Pipette ka Calibration" id="pipette">
                      <SubHeading>(a) Tulna Vidhi (Comparison Method)</SubHeading>
-                     <p>Nayi pipette se nikale gaye doodh ke fat ki tulna ek purani, calibrated pipette se nikale gaye fat se ki jaati hai. Agar result same hai, to nayi pipette स्वीकार kar li jaati hai.</p>
+                     <p>Is vidhi mein, ek nayi pipette se doodh ka fat test karke uski tulna ek purani, pehle se calibrate ki hui pipette ke result se ki jaati hai. Agar dono ka result same aata hai, to nayi pipette sahi maani jaati hai. Yeh sabse aasan par kam sateek tarika hai.</p>
                      
-                     <SubHeading>(b) BIS Vidhi (BIS Method)</SubHeading>
-                     <p>Yeh vidhi yeh jaanchti hai ki pipette 27°C par 10.75 ± 0.03 ml distilled water dispense karti hai ya nahi.</p>
-                     <ol className="list-decimal list-inside space-y-1">
+                     <SubHeading>(b) BIS Vidhi (Gravimetric Method)</SubHeading>
+                     <p>Yeh sabse sateek vidhi hai. Ismein yeh jaancha jaata hai ki pipette 27°C par <strong>10.75 ± 0.03 ml</strong> distilled water dispense karti hai ya nahi.</p>
+                     <ol className="list-decimal list-inside space-y-2 mt-2">
                          <li>Pipette ko saaf karke 27°C distilled water se mark ke upar tak bharein.</li>
                          <li>Meniscus ko mark par adjust karein.</li>
-                         <li>Paani ko ek pehle se tole hue beaker mein dispense karein.</li>
-                         <li>Paani ke saath beaker ko tolein aur paani ka mass nikaalein.</li>
-                         <li>Volume calculate karein: Volume = Mass / Density (27°C par paani ka density 0.99654 g/mL hota hai).</li>
-                         <li>Agar volume tolerance ke andar hai to pipette स्वीकार karein.</li>
+                         <li>Paani ko ek pehle se tole hue (weighed) beaker mein dispense karein.</li>
+                         <li>Paani ke saath beaker ko tolein aur paani ka vajan (mass) nikaalein.</li>
+                         <li>Volume calculate karein: <code className="bg-muted p-1 rounded">Volume = Mass / Density</code>. 27°C par paani ki density 0.99654 g/mL hoti hai.</li>
+                         <li>Agar nikala gaya volume 10.72 ml se 10.78 ml ke beech hai, to pipette sahi hai.</li>
                      </ol>
                      
                      <SubHeading>(c) Ganitiya Vidhi (Mathematical Method)</SubHeading>
-                     <p>Is vidhi mein pipette stem ke per unit length ka volume calculate kiya jaata hai aur phir do temporary points ke maapan ke आधार par 10.75 ml ka sahi point nirdharit kiya jaata hai.</p>
+                     <p>Is vidhi mein pipette ke stem ke per unit length ka volume calculate kiya jaata hai aur phir do temporary points ke maapan ke आधार par 10.75 ml ka sahi point nirdharit karke ek permanent mark lagaya jaata hai.</p>
                 </Section>
                 
                 <Section title="Butyrometer ka Calibration" id="butyrometer">
-                     <p>Butyrometer ko is siddhant par calibrate kiya jaata hai ki har 1% fat mark 0.125 ml ke internal volume ke barabar hota hai. Iski jaanch aam taur par shuddh mercury (paara) se ki jaati hai.</p>
+                     <p>Butyrometer ko is siddhant par calibrate kiya jaata hai ki har 1% fat mark <strong>0.125 ml</strong> ke internal volume ke barabar hota hai. Iski jaanch aam taur par shuddh mercury (paara) ya distilled water se ki jaati hai.</p>
                      
                      <Table>
-                        <TableCaption>Table 6.1: BIS ke anusaar Butyrometer ka vargikaran</TableCaption>
+                        <TableCaption>Table 6.1: Alag-alag products ke liye Butyrometer ke types</TableCaption>
                         <TableHeader>
-                            <TableRow><TableHead>Scale (%)</TableHead><TableHead>Product</TableHead></TableRow>
+                            <TableRow><TableHead>Scale Range (%)</TableHead><TableHead>Product</TableHead></TableRow>
                         </TableHeader>
                         <TableBody>
                             <TableRow><TableCell>0–0.5</TableCell><TableCell>Skim milk</TableCell></TableRow>
@@ -111,22 +109,27 @@ export function CalibrationStandardizationModal({ isOpen, setIsOpen }: { isOpen:
 
                 <Section title="Lactometer ka Calibration" id="lactometer">
                      <p>Lactometers ko jyat specific gravity wale solutions ka istemal karke calibrate kiya jaata hai, aam taur par anhydrous sodium carbonate ya sodium chloride solutions. Lactometer reading ko in standard solutions ki jyat specific gravity ke saath ek nishchit taapman par (jaise BIS lactometer ke liye 27°C) check kiya jaata hai.</p>
+                     <p>Ek standard lactometer (BIS) mein 1.020 se 1.035 tak specific gravity range hoti hai, jise 20 se 35 ke roop mein darshaya jaata hai.</p>
                 </Section>
                 
                 <Section title="Anya Glassware ka Calibration" id="other-glassware">
-                    <p>Volumetric flasks, measuring cylinders, aur beakers ko unmein aane wale distilled water ke volume ko ek nishchit taapman (jaise 27°C) par tolekar calibrate kiya jaata hai aur uski tulna uski nirdharit capacity se ki jaati hai, yeh sunishchit karte hue ki yeh uske class (Class A ya Class B) ke tolerance limits ke andar ho.</p>
+                    <p>Volumetric flasks, measuring cylinders, aur beakers ko unmein aane wale distilled water ke volume ko ek nishchit taapman (jaise 27°C) par tolekar calibrate kiya jaata hai aur uski tulna uski nirdharit capacity se ki jaati hai. Ismein Class A (more accurate) aur Class B (less accurate) glassware ke tolerance limits ka dhyan rakha jaata hai.</p>
                 </Section>
                 
                 <Section title="Thermometer ka Calibration" id="thermometer">
-                    <p>Thermometers ko fixed points par calibrate kiya jaata hai. Ek 0-100°C thermometer ke liye, yeh ice point (0°C) par barf-paani ke mishran ka istemal karke aur boiling point (100°C, atmospheric pressure ke liye adjust kiya gaya) par ubalte hue distilled water ka istemal karke kiya jaata hai.</p>
+                    <p>Thermometers ko do fixed points par calibrate kiya jaata hai:</p>
+                    <ol className="list-decimal list-inside space-y-2 mt-2">
+                        <li><strong>Ice Point (0°C):</strong> Shuddh pighalti hui barf (ice-water mixture) ka istemal karke 0°C ka point check kiya jaata hai.</li>
+                        <li><strong>Boiling Point (100°C):</strong> Ubalte hue shuddh paani (boiling distilled water) ka istemal karke 100°C ka point check kiya jaata hai. Ismein atmospheric pressure ka dhyan rakhna zaroori hai.</li>
+                    </ol>
                 </Section>
                 
                 <Section title="Weighing Balance ka Calibration" id="balance">
-                    <p>Weighing balance ko teen mukhya tests ka istemal karke calibrate kiya jaata hai:</p>
-                    <ul className="list-disc list-inside">
-                        <li><strong>Eccentric Test:</strong> Jab weight ko platform par alag-alag jagahon par rakha jaata hai to accuracy jaanchta hai.</li>
-                        <li><strong>Repeatability Test:</strong> Jaanchta hai ki balance ek hi weight ke liye baar-baar same reading deta hai ya nahi.</li>
-                        <li><strong>Linearity Test:</strong> Balance ki poori measuring range mein accuracy jaanchta hai.</li>
+                    <p>Weighing balance ko standard, certified weights ka istemal karke calibrate kiya jaata hai. Iske liye teen mukhya tests kiye jaate hain:</p>
+                    <ul className="list-disc list-inside space-y-2 mt-2">
+                        <li><strong>Eccentricity Test:</strong> Ismein standard weight ko weighing pan ke alag-alag kono par rakh kar dekha jaata hai ki reading badal to nahi rahi.</li>
+                        <li><strong>Repeatability Test:</strong> Ismein ek hi weight ko baar-baar rakh kar check kiya jaata hai ki balance har baar same reading de raha hai ya nahi.</li>
+                        <li><strong>Linearity Test:</strong> Ismein balance ki poori measuring range (e.g., 0g se 200g) mein alag-alag standard weights (e.g., 20g, 50g, 100g, 150g) rakh kar accuracy jaanchi jaati hai.</li>
                     </ul>
                 </Section>
             </div>
