@@ -34,7 +34,7 @@ export function AboutUsModal({
         <ScrollArea className="h-full pr-6">
             <div className="text-center">
                 <Image
-                    src="https://placehold.co/144x144.png"
+                    src="https://firebasestudio.app/assets/images/DhenuGuide_Saurabh_Rajput.jpeg"
                     data-ai-hint="profile photo"
                     alt="Saurabh Rajput"
                     width={144}
