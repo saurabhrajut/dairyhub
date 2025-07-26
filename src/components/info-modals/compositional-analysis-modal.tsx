@@ -154,7 +154,7 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                        <ProcedureListItem>Jab halka gulabi rang aa jaaye (end point), to titration rok dein.</ProcedureListItem>
                        <ProcedureListItem>Istemaal hue alkali ka volume note karein.</ProcedureListItem>
                     </ProcedureList>
-                    <pre className="mt-4 p-4 bg-muted rounded-lg font-mono text-sm"><code>% Acidity = (9 * V * N) / W</code></pre>
+                    <pre className="mt-4 p-4 bg-muted rounded-lg font-mono text-sm"><code>% Acidity (% Lactic Acid) = (9 * V * N) / W</code></pre>
                 </InfoCard>
                 <InfoCard>
                     <h3 className="text-xl font-semibold mb-2">Protein Content (Kjeldahl Method)</h3>
@@ -214,7 +214,7 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                         <ProcedureListItem>10 ml distilled water daalkar paste banayein.</ProcedureListItem>
                         <ProcedureListItem>Kuch boondein phenolphthalein indicator ki daalein aur 0.1 N NaOH se titrate karein jab tak halka gulabi rang na aa jaaye.</ProcedureListItem>
                     </ProcedureList>
-                    <pre className="mt-4 p-4 bg-muted rounded-lg font-mono text-sm"><code>% Acidity = (9 * A * N) / W</code></pre>
+                    <pre className="mt-4 p-4 bg-muted rounded-lg font-mono text-sm"><code>% Acidity (% Lactic Acid) = (9 * A * N) / W</code></pre>
                 </InfoCard>
                  <InfoCard>
                     <h3 className="text-xl font-semibold mb-2">Diacetyl Content</h3>
@@ -280,6 +280,13 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                         <ProcedureListItem><strong>RM Value Titration:</strong> 100 ml filtrate ko 0.1 N NaOH se titrate karein.</ProcedureListItem>
                         <ProcedureListItem><strong>Polenske Value Titration:</strong> Condenser aur filter paper ko teen baar 15 ml neutralized ethanol se dhoyein. Washings ko 0.1 N NaOH se titrate karein.</ProcedureListItem>
                     </ProcedureList>
+                    <pre className="mt-4 p-4 bg-muted rounded-lg font-mono text-sm">
+                        <code>
+                            RM Value = 1.1 * (Titration_Sample - Titration_Blank)
+                            <br/>
+                            Polenske Value = Titration_Insoluble_Acids - Titration_Blank_Insoluble
+                        </code>
+                    </pre>
                 </InfoCard>
             </section>
             
@@ -308,7 +315,13 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                         <ProcedureListItem>Dish ko tolein aur weight note karein (Weight W2).</ProcedureListItem>
                         <ProcedureListItem>Heating aur cooling ko tab tak repeat karein jab tak constant weight na mil jaaye.</ProcedureListItem>
                     </ProcedureList>
-                    <pre className="mt-4 p-4 bg-muted rounded-lg font-mono text-sm"><code>% Moisture = 100 - ( [ (W2 - W) / (W1 - W) ] * 100 )</code></pre>
+                    <pre className="mt-4 p-4 bg-muted rounded-lg font-mono text-sm">
+                        <code>
+                            % Total Solids = [ (W2 - W) / (W1 - W) ] * 100
+                            <br />
+                            % Moisture = 100 - % Total Solids
+                        </code>
+                    </pre>
                 </InfoCard>
             </section>
         </ScrollArea>
@@ -316,5 +329,3 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
     </Dialog>
   );
 }
-
-    
