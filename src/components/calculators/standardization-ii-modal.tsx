@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState } from "react"
@@ -346,7 +347,7 @@ function FatSnfAdjustmentCalc() {
     return (
         <div>
             <p className="text-center text-sm text-gray-500 mb-4">Calculate how much Cream and Skim Milk Powder (SMP) to add to standardize both Fat and SNF upwards.</p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mb-4">
                 <div className="bg-muted/50 p-4 rounded-lg space-y-3">
                      <h3 className="font-semibold text-gray-700 mb-2 font-headline">Initial Milk</h3>
                     <div><Label>Milk Quantity (kg)</Label><Input type="number" value={milkQty} onChange={e => setMilkQty(e.target.value)} /></div>
@@ -372,4 +373,3 @@ function FatSnfAdjustmentCalc() {
         </div>
     )
 }
-    

@@ -170,7 +170,7 @@ export function ChatPanel({
       
       {showResumeInput && (
         <div className="p-2 border-t bg-amber-50">
-            <Label htmlFor="resume-input" className="text-xs text-amber-800 px-2">Paste your resume below for analysis</Label>
+            <Label htmlFor="resume-input" className="text-xs text-amber-800 px-2 font-semibold">Paste your resume below for interview analysis</Label>
             <Textarea 
                 id="resume-input"
                 value={resumeText}
@@ -186,7 +186,7 @@ export function ChatPanel({
         onSubmit={handleSubmit}
         className="p-4 border-t bg-background flex items-center gap-2"
       >
-        <Button type="button" size="icon" variant="ghost" className="text-muted-foreground shrink-0" onClick={handleAttachClick} disabled={isLoading}>
+        <Button type="button" size="icon" variant="ghost" className="text-muted-foreground shrink-0" onClick={handleAttachClick} disabled={isLoading} title="Analyze Resume">
             <Paperclip className="h-4 w-4" />
         </Button>
         <Input

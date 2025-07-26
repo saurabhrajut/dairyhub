@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview A Genkit flow to fetch the latest data about the Indian Dairy Industry.
@@ -32,12 +33,13 @@ export async function getLatestDairyIndustryData(): Promise<DairyIndustryData> {
 const prompt = ai.definePrompt({
   name: 'getLatestDairyIndustryDataPrompt',
   output: { schema: DairyIndustryDataSchema },
-  prompt: `You are a dairy industry analyst. Your task is to provide the most up-to-date information about the Indian Dairy Industry.
-Search for the latest available data (from the last 12 months if possible) and provide the information in Hinglish.
+  prompt: `You are a dairy industry analyst. Your task is to provide the most up-to-date and comprehensive information about the Indian Dairy Industry.
+Search for the latest available data (from the last 12 months if possible) and provide all information in Hinglish.
 Format numbers and statistics clearly. For example, use "INR 20,000 billion" or "250 million tonnes".
-Structure the output according to the provided schema. For lists, provide at least 3-5 bullet points.
-Highlight key statistics and names by wrapping them in <strong> tags. For example: <strong>250 million tonnes</strong>.
+Structure the output according to the provided schema. For all lists, provide at least 3-5 detailed bullet points.
+Highlight key statistics and names by wrapping them in <strong> tags. For example: <strong>250 million tonnes</strong> or <strong>Amul</strong>.
 Set the 'lastUpdated' field to today's date.
+Provide deep, insightful information for all fields.
 `,
 });
 
