@@ -140,8 +140,29 @@ export function CalibrationStandardizationModal({ isOpen, setIsOpen }: { isOpen:
                 </Section>
 
                 <Section title="Lactometer ka Calibration" id="lactometer">
-                     <p>Lactometers ko jyat specific gravity wale solutions ka istemal karke calibrate kiya jaata hai, aam taur par anhydrous sodium carbonate ya sodium chloride solutions. Lactometer reading ko in standard solutions ki jyat specific gravity ke saath ek nishchit taapman par (jaise BIS lactometer ke liye 27°C) check kiya jaata hai.</p>
-                     <p>Ek standard lactometer (BIS) mein 1.020 se 1.035 tak specific gravity range hoti hai, jise 20 se 35 ke roop mein darshaya jaata hai.</p>
+                    <SubHeading>Siddhant (Principle)</SubHeading>
+                    <p>Lactometer <strong>Archimedes ke siddhant</strong> par kaam karte hain: koi bhi vastu jab kisi liquid mein duboyi jaati hai, to us par upar ki taraf ek bal lagta hai jo us vastu dwara hataye gaye liquid ke bhar ke barabar hota hai. Lactometer liquid ki specific gravity (vishesh gurutva) maapta hai. Doodh jitna gaadha hoga (zyada SNF), lactometer utna hi kam dubega aur reading zyada aayegi. Paani milane par doodh patla ho jaata hai, jisse lactometer zyada dubta hai aur reading kam aati hai.</p>
+                    <p>Aam taur par 3 prakaar ke lactometers istemal hote hain, jo alag-alag taapman par calibrate kiye jaate hain:</p>
+                    <ul className="list-disc list-inside mt-2 space-y-1">
+                        <li><strong>Quevenne’s Lactometer:</strong> 15.5°C par calibrate hota hai.</li>
+                        <li><strong>BIS Lactometer:</strong> 27°C par calibrate hota hai.</li>
+                        <li><strong>Zeal Lactometer:</strong> 29.4°C par calibrate hota hai.</li>
+                    </ul>
+                    <p>Ek standard BIS lactometer mein 1.020 se 1.035 tak specific gravity range hoti hai, jise scale par 20 se 35 ke roop mein darshaya jaata hai.</p>
+
+                    <SubHeading>Calibration ke Alag-Alag Tarike</SubHeading>
+                    <h4 className="text-lg font-semibold text-gray-700 mt-4 mb-2">1. Tulna Vidhi (Comparison Method)</h4>
+                    <p>Yeh sabse aasan tarika hai. Ismein ek hi doodh ke sample mein do lactometers (ek naya aur ek pehle se calibrate kiya hua standard lactometer) ek saath duboye jaate hain. Agar dono ki reading same aati hai, to naye lactometer ko sahi maan liya jaata hai.</p>
+
+                    <h4 className="text-lg font-semibold text-gray-700 mt-4 mb-2">2. BIS Vidhi (Standard Solution Method)</h4>
+                    <p>Yeh ek sateek (accurate) tarika hai jismein pehle se jyat specific gravity wale solutions ka istemal hota hai. Aam taur par, <strong>anhydrous sodium carbonate</strong> ya <strong>sodium chloride</strong> ke solutions banaye jaate hain.</p>
+                    <ol className="list-decimal list-inside space-y-2 mt-2">
+                        <li>Table ke anusar, alag-alag specific gravity (jaise 1.025, 1.030) ke liye nirdharit matra mein anhydrous sodium carbonate ko distilled water mein gholein.</li>
+                        <li>Is solution ka surface tension doodh ke barabar laane ke liye thoda ethyl alcohol milayein.</li>
+                        <li>Solution ko lactometer jar mein daalein aur taapman ko lactometer ke calibration temperature (jaise BIS ke liye 27°C) par laayein.</li>
+                        <li>Lactometer ko dheere se solution mein duboye aur sthir hone dein.</li>
+                        <li>Reading note karein. Aapki reading standard solution ki specific gravity se match karni chahiye. BIS ke anusar, 0.0005 se zyada ka antar nahi hona chahiye.</li>
+                    </ol>
                 </Section>
                 
                 <Section title="Anya Glassware ka Calibration" id="other-glassware">
@@ -170,3 +191,6 @@ export function CalibrationStandardizationModal({ isOpen, setIsOpen }: { isOpen:
     </Dialog>
   );
 }
+
+
+    
