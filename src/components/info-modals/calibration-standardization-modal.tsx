@@ -183,10 +183,23 @@ export function CalibrationStandardizationModal({ isOpen, setIsOpen }: { isOpen:
                 </Section>
                 
                 <Section title="Thermometer ka Calibration" id="thermometer">
-                    <p>Thermometers ko do fixed points par calibrate kiya jaata hai:</p>
+                    <p>Thermometers ko do fixed points par calibrate kiya jaata hai, jisse unki accuracy sunishchit ho sake:</p>
+                    <SubHeading>1. Ice Point (0°C) - Barf ka Bindu</SubHeading>
                     <ol className="list-decimal list-inside space-y-2 mt-2">
-                        <li><strong>Ice Point (0°C):</strong> Shuddh pighalti hui barf (ice-water mixture) ka istemal karke 0°C ka point check kiya jaata hai.</li>
-                        <li><strong>Boiling Point (100°C):</strong> Ubalte hue shuddh paani (boiling distilled water) ka istemal karke 100°C ka point check kiya jaata hai. Ismein atmospheric pressure ka dhyan rakhna zaroori hai.</li>
+                        <li>Ek beaker mein shuddh, pisi hui barf (crushed pure ice) bharein.</li>
+                        <li>Usmein thoda thanda, distilled water daalein taaki barf poori tarah geeli ho jaaye, lekin taire nahi.</li>
+                        <li>Is ice-water mixture ko achhe se milayein.</li>
+                        <li>Jis thermometer ko calibrate karna hai, use is mixture mein daalein. Dhyan rahe ki thermometer ka bulb beaker ke neeche ya kinare se na takraye.</li>
+                        <li>Thermometer ko sthir (stable) hone tak intezar karein (lagbhag 3-4 minute).</li>
+                        <li>Reading note karein. Sahi calibrated thermometer par yeh <strong>0°C</strong> dikhana chahiye. Agar koi antar hai, to use error ke roop mein note kar lein.</li>
+                    </ol>
+                    <SubHeading>2. Boiling Point (100°C) - Ubalne ka Bindu</SubHeading>
+                     <ol className="list-decimal list-inside space-y-2 mt-2">
+                        <li>Ek flask mein distilled water lein aur use ubalna shuru karein.</li>
+                        <li>Thermometer ko flask mein is tarah rakhein ki uska bulb ubalte hue paani ke theek upar, bhaap (steam) mein rahe, paani ko na chhue.</li>
+                        <li>Jab thermometer ki reading sthir ho jaaye, to use note karein.</li>
+                        <li>Standard atmospheric pressure (760 mm Hg) par, paani <strong>100°C</strong> par ubalta hai. Agar pressure alag hai, to correction ki zaroorat pad sakti hai.</li>
+                        <li>Agar reading 100°C se alag hai, to us antar ko error ke roop mein note karein.</li>
                     </ol>
                 </Section>
                 
@@ -204,3 +217,5 @@ export function CalibrationStandardizationModal({ isOpen, setIsOpen }: { isOpen:
     </Dialog>
   );
 }
+
+    
