@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -12,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 import { getSarathiChatbotResponse } from "@/app/actions";
 import { Mic, Send, Bot, Paperclip, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
