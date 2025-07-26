@@ -166,7 +166,20 @@ export function CalibrationStandardizationModal({ isOpen, setIsOpen }: { isOpen:
                 </Section>
                 
                 <Section title="Anya Glassware ka Calibration" id="other-glassware">
-                    <p>Volumetric flasks, measuring cylinders, aur beakers ko unmein aane wale distilled water ke volume ko ek nishchit taapman (jaise 27°C) par tolekar calibrate kiya jaata hai aur uski tulna uski nirdharit capacity se ki jaati hai. Ismein Class A (more accurate) aur Class B (less accurate) glassware ke tolerance limits ka dhyan rakha jaata hai.</p>
+                    <p>Volumetric flasks, measuring cylinders, aur beakers jaise glassware ko calibrate karna bhi utna hi zaroori hai jitna pipettes aur butyrometers ko. Inka calibration bhi <strong>Gravimetric Method</strong> (vajan maap kar) se kiya jaata hai.</p>
+                    <SubHeading>Siddhant (Principle)</SubHeading>
+                    <p>Is vidhi ka siddhant bahut saral hai: hum glassware mein aane wale distilled water ke vajan (mass) ko ek nishchit taapman par tolekar uske volume ka pata lagate hain, kyunki har taapman par paani ki density jyat hoti hai (<code className="bg-muted p-1 rounded">Volume = Mass / Density</code>). Is nikale gaye volume ki tulna glassware par likhi hui capacity se ki jaati hai.</p>
+                    
+                    <SubHeading>Volumetric Flask/Measuring Cylinder/Beaker ki Calibration Vidhi</SubHeading>
+                    <ol className="list-decimal list-inside space-y-2 mt-2">
+                        <li>Ek saaf aur poori tarah se sukhe hue volumetric flask (ya cylinder/beaker) ko ek sateek (accurate) weighing balance par tolein. Is vajan ko <strong>W1</strong> ke roop mein note karein.</li>
+                        <li>Ab, us flask mein nishchit taapman (aam taur par 27°C) wala distilled water uske graduation mark tak dheere-dheere bharein. Meniscus ka nichla hissa mark par hona chahiye.</li>
+                        <li>Paani se bhare hue flask ko dobara tolein. Is vajan ko <strong>W2</strong> ke roop mein note karein.</li>
+                        <li>Paani ka vajan (mass) nikaalein: <strong>Mass of Water = W2 - W1</strong>.</li>
+                        <li>Ab is vajan se paani ka volume calculate karein: <strong>Volume (ml) = Mass of Water (g) / Density of Water at 27°C (0.99654 g/ml)</strong>.</li>
+                        <li>Calculate kiye gaye volume ki tulna flask par likhi hui capacity (jaise 100 ml, 250 ml) se karein.</li>
+                        <li>Har glassware ki ek tolerance limit hoti hai (Class A ke liye kam, Class B ke liye zyada). Agar calculate kiya gaya volume is limit ke andar hai, to glassware sahi hai, varna use reject kar diya jaata hai.</li>
+                    </ol>
                 </Section>
                 
                 <Section title="Thermometer ka Calibration" id="thermometer">
@@ -191,6 +204,3 @@ export function CalibrationStandardizationModal({ isOpen, setIsOpen }: { isOpen:
     </Dialog>
   );
 }
-
-
-    
