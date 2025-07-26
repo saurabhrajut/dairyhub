@@ -9,6 +9,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const navLinks = [
     { href: "#processed-milk", text: "Processed Milk" },
@@ -84,6 +85,21 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                         <ProcedureListItem>Butyrometer ko phir se 65°C par maintain kiye gaye water bath mein 2 minute ke liye rakhein.</ProcedureListItem>
                         <ProcedureListItem>Butyrometer stem par bane nishano ki madad se fat content padhein.</ProcedureListItem>
                     </ProcedureList>
+                    <Alert className="mt-6 bg-blue-50 border-blue-200">
+                        <AlertTitle className="font-bold text-blue-800">Gerber Method mein 10.75 ml Doodh Kyun Liya Jaata Hai?</AlertTitle>
+                        <AlertDescription className="text-blue-700 prose-sm max-w-none">
+                            <p>Butyrometer par 1% ka nishan 0.125 ml volume ke barabar hota hai. Doodh ke fat ki density 0.9 g/ml hoti hai.</p>
+                            <ul className="list-disc list-inside mt-2 space-y-1">
+                                <li>1% fat ka mass = 0.125 ml × 0.9 g/ml = 0.1125 g.</li>
+                                <li>Is hisab se 100% fat ke liye 11.25 g doodh lena chahiye.</li>
+                                <li>Lekin, amyl alcohol mein ashuddhiyon ke kaaran fat ki reading 2.5-3% zyada aati hai.</li>
+                                <li>Isliye, asli doodh ki matra 11.25 g se thodi kam, yani lagbhag 10.95 g honi chahiye.</li>
+                                <li>10.95 g doodh ka volume (1.028 density par) lagbhag 10.65 ml hota hai.</li>
+                                <li>Pipette mein lagbhag 0.1 ml doodh chipak jaata hai.</li>
+                                <li>Isliye, poora volume 10.65 ml + 0.1 ml = <strong>10.75 ml</strong> liya jaata hai.</li>
+                            </ul>
+                        </AlertDescription>
+                    </Alert>
                 </InfoCard>
 
                 <InfoCard>
@@ -329,3 +345,5 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
     </Dialog>
   );
 }
+
+    
