@@ -15,7 +15,9 @@ const navLinks = [
     { href: "#cheese-paneer", text: "Cheese/Paneer/Khoa" },
     { href: "#dahi-yoghurt", text: "Dahi/Yoghurt" },
     { href: "#ice-cream", text: "Ice Cream" },
+    { href: "#condensed-milk", text: "Condensed Milk" },
     { href: "#ghee-butter-oil", text: "Ghee/Butter Oil" },
+    { href: "#butter", text: "Butter" },
     { href: "#milk-powder", text: "Milk Powder" },
 ];
 
@@ -176,6 +178,20 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                     <pre className="mt-4 p-4 bg-muted rounded-lg font-mono text-sm"><code>% Overrun = [ (W3 - W2) / (W2 - W1) ] * 100</code></pre>
                 </InfoCard>
             </section>
+            
+            <section id="condensed-milk">
+                 <SectionTitle id="condensed-milk">Condensed Milk</SectionTitle>
+                 <InfoCard>
+                     <h3 className="text-xl font-semibold mb-2">Total Solids Content</h3>
+                     <ProcedureList>
+                         <ProcedureListItem>1.5-2.0 g sample ko ek tole huye dish mein lein.</ProcedureListItem>
+                         <ProcedureListItem>Usme 3-5 ml distilled water daalkar paste banayein.</ProcedureListItem>
+                         <ProcedureListItem>Sample ko ubalte huye water bath par 20-30 min tak sukhaayein.</ProcedureListItem>
+                         <ProcedureListItem>Dish ko hot air oven mein 100 ± 2°C par 2 ghante ke liye rakhein.</ProcedureListItem>
+                         <ProcedureListItem>Thanda karke tolein aur constant weight aane tak repeat karein.</ProcedureListItem>
+                     </ProcedureList>
+                 </InfoCard>
+            </section>
 
             <section id="ghee-butter-oil">
                 <SectionTitle id="ghee-butter-oil">Ghee & Butter Oil</SectionTitle>
@@ -191,6 +207,19 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                         <ProcedureListItem><strong>Polenske Value Titration:</strong> Condenser aur filter paper ko teen baar 15 ml neutralized ethanol se dhoyein. Washings ko 0.1 N NaOH se titrate karein.</ProcedureListItem>
                     </ProcedureList>
                 </InfoCard>
+            </section>
+            
+             <section id="butter">
+                <SectionTitle id="butter">Butter</SectionTitle>
+                 <InfoCard>
+                     <h3 className="text-xl font-semibold mb-2">Moisture Content</h3>
+                     <ProcedureList>
+                         <ProcedureListItem>Ek saaf, sukhi dish ko tolein.</ProcedureListItem>
+                         <ProcedureListItem>Usme 5-10 g butter ka sample tolein.</ProcedureListItem>
+                         <ProcedureListItem>Dish ko 100°C par garam karein, jisse paani evaporate ho jaaye.</ProcedureListItem>
+                         <ProcedureListItem>Constant weight aane tak thanda karein aur tolein.</ProcedureListItem>
+                     </ProcedureList>
+                 </InfoCard>
             </section>
 
             <section id="milk-powder">
@@ -213,3 +242,5 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
     </Dialog>
   );
 }
+
+    
