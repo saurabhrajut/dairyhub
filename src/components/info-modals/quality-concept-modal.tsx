@@ -116,6 +116,64 @@ export function QualityConceptModal({ isOpen, setIsOpen }: { isOpen: boolean; se
                     </ul>
                     <p>Juran ke anusaar, quality ke mudde ka mukhya karan badlav ka virodh aur manav sambandh ki samasyayein thi.</p>
                 </Section>
+                 <Section title="HACCP - Khatre ka Vishleshan aur Mahatvapurna Niyantran Bindu">
+                    <p>HACCP (Hazard Analysis and Critical Control Points) ek systematic aur preventive tareeka hai food safety ke liye. Ismein production process mein hone wale biological (jaise bacteria), chemical (jaise chemicals), aur physical (jaise kaanch) khatron ko pehchana jaata hai, jo final product ko unsafe bana sakte hain. Phir in risks ko safe level tak kam karne ke liye measures banaye jaate hain.</p>
+                    <SubHeading>HACCP ke Saat Siddhant</SubHeading>
+                    <ol className="list-decimal list-inside space-y-3">
+                        <li><strong>Khatre ka Vishleshan Karein (Conduct a Hazard Analysis):</strong> Dairy production ke har step ka gehra vishleshan karna, raw milk se lekar packaging tak. Har step par potential biological (Listeria, Salmonella), chemical (antibiotics, cleaning agents), aur physical (metal, glass) khatron ko pehchana jaata hai.</li>
+                        <li><strong>Mahatvapurna Niyantran Bindu Nirdharit Karein (Determine CCPs):</strong> CCPs woh points hain jahan control lagakar food safety hazard ko roka, khatam, ya ek acceptable level tak kam kiya jaa sakta hai. Jaise, pasteurization ek CCP hai.</li>
+                        <li><strong>Critical Limits Nirdharit Karein (Establish Critical Limits):</strong> Har CCP ke liye measurable limits set karna, jaise temperature (≥72°C), time (≥15 seconds), pH (≤4.6). Yeh limits safe aur unsafe conditions ke beech ki boundary hote hain.</li>
+                        <li><strong>Monitoring Procedures Banayein (Establish Monitoring Procedures):</strong> Yeh observations ya measurements ka ek planned sequence hai, jisse yeh assess kiya ja sake ki ek CCP control mein hai ya nahi. Ismein specify hota hai ki kya, kaise, kab, aur kaun monitor karega.</li>
+                        <li><strong>Sudharak Karyavahiyan Nirdharit Karein (Establish Corrective Actions):</strong> Yeh pehle se tay ki gayi karyavahiyan hain jo tab ki jaati hain jab monitoring se pata chalta hai ki critical limit se deviation ho gaya hai. Ismein product ko isolate karna aur aage ki karrawai karna shamil hai.</li>
+                        <li><strong>Satyapan Procedures Banayein (Establish Verification Procedures):</strong> Yeh activities is baat ki pushti karti hain ki HACCP system sahi tarah se kaam kar raha hai. Ismein HACCP plan ka audit, equipment ka calibration, aur testing shamil hai.</li>
+                        <li><strong>Record-Keeping aur Documentation Procedures Banayein (Establish Record-Keeping Procedures):</strong> Sahi aur poora documentation HACCP system ke prabhavi karyanvayan ke liye bahut zaroori hai. Ismein hazard analysis, monitoring logs, corrective actions, aur verification activities ke records shamil hote hain.</li>
+                    </ol>
+                </Section>
+
+                <Section title="PRPs aur OPRPs">
+                    <p>Yeh karyakram ek prabhavi HACCP system ki neev hain.</p>
+                    <SubHeading>Prerequisite Programs (PRPs): Food Safety ki Neev</SubHeading>
+                    <p>PRPs woh fundamental programs aur practices hain jo safe food produce karne ke liye zaroori basic environmental aur operational conditions banate hain. Inka prabhavi karyanvayan food chain mein khatron ke pravesh ki sambhavna ko kam karta hai.</p>
+                    <ul className="list-disc list-inside space-y-2">
+                        <li><strong>Good Manufacturing Practices (GMPs):</strong> Personnel practices, facility design, aur general operational procedures.</li>
+                        <li><strong>Sanitation Standard Operating Procedures (SSOPs):</strong> Equipment ko saaf aur sanitize karne ke liye likhit procedures.</li>
+                        <li><strong>Pest Control:</strong> Pests (keede, chuhe) ko rokne aur khatam karne ke upay.</li>
+                        <li><strong>Personnel Hygiene and Training:</strong> Karmachariyon ke swasthya, swachhata, aur food safety par prashikshan.</li>
+                        <li><strong>Supplier Approval Programs:</strong> Raw material ke liye approved suppliers ka upyog.</li>
+                        <li><strong>Traceability and Recall Procedures:</strong> Zaroorat padne par products ko track aur recall karne ki pranali.</li>
+                    </ul>
+
+                    <SubHeading>Operational Prerequisite Programs (OPRPs): Targeted Control</SubHeading>
+                    <p>OPRPs woh PRPs hain jinhe hazard analysis ne food safety hazards ko control karne ke liye bahut zaroori maana hai. Yeh CCPs se alag hain lekin inmein bhi specific monitoring aur corrective actions ki zaroorat hoti hai.</p>
+                    <ul className="list-disc list-inside space-y-2">
+                        <li><strong>Allergen Control Procedures:</strong> Cross-contamination ko rokne ke liye cleaning procedures.</li>
+                        <li><strong>Raw Milk Storage Temperature Monitoring:</strong> Pasteurization se pehle milk mein microbial growth ko rokne ke liye.</li>
+                        <li><strong>Cleaning-in-Place (CIP) Effectiveness Verification:</strong> CIP cycles ke parameters ko monitor karna.</li>
+                        <li><strong>Environmental Monitoring Program (EMP):</strong> Processing environment mein pathogens ki jaanch karna.</li>
+                    </ul>
+                </Section>
+
+                <Section title="Dairy Industry mein Mahatvapurna Niyantran Bindu (CCPs)">
+                    <p>CCPs dairy processing chain mein specific, measurable points hain jahan food safety hazard ko roka ja sakta hai, khatam kiya ja sakta hai, ya ek acceptable level tak kam kiya ja sakta hai. In par control final product ki safety ke liye anivarya hai.</p>
+                     <ol className="list-decimal list-inside space-y-3">
+                        <li>
+                            <strong>Pasteurization (Thermal Processing):</strong>
+                            <p className="ml-4">Yeh sabse mahatvapurna CCP hai. Doodh ko ek nishchit taapman (jaise HTST ke liye ≥72°C) par ek nishchit samay (≥15 seconds) ke liye garam kiya jaata hai taaki sabhi pathogenic bacteria nasht ho jayein.</p>
+                        </li>
+                         <li>
+                            <strong>Cooling of Pasteurized Product:</strong>
+                            <p className="ml-4">Pasteurization ke baad, doodh ko jaldi se kam taapman (≤4°C) tak thanda karna zaroori hai taaki bache hue bacteria ki growth ko roka ja sake.</p>
+                        </li>
+                         <li>
+                            <strong>Metal Detection/X-ray Inspection:</strong>
+                            <p className="ml-4">Packaging se pehle, metal ke tukde ya anya bhautik khatron ka pata lagane ke liye iska upyog kiya jaata hai.</p>
+                        </li>
+                         <li>
+                            <strong>pH Control (for Fermented Products):</strong>
+                            <p className="ml-4">Dahi aur paneer jaise products ke liye, fermentation ke baad ek nishchit pH (jaise ≤4.6) tak pahunchna zaroori hai, jo anavashyak bacteria ki growth ko rokta hai.</p>
+                        </li>
+                    </ol>
+                </Section>
 
             </div>
         </ScrollArea>
@@ -123,3 +181,5 @@ export function QualityConceptModal({ isOpen, setIsOpen }: { isOpen: boolean; se
     </Dialog>
   );
 }
+
+    
