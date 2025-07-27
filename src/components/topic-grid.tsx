@@ -17,6 +17,7 @@ import {
   Users,
   TestTube,
   ClipboardCheck,
+  CheckSquare,
 } from "lucide-react";
 import { PaneerIcon, IceCreamIcon } from "@/components/icons";
 import { Input } from "@/components/ui/input";
@@ -32,6 +33,7 @@ import { AboutUsModal } from "./info-modals/about-us-modal";
 import { IceCreamCalculationsModal } from "./info-modals/ice-cream-calculations-modal";
 import { CompositionalAnalysisModal } from "./info-modals/compositional-analysis-modal";
 import { CalibrationStandardizationModal } from "./info-modals/calibration-standardization-modal";
+import { QualityConceptModal } from "./info-modals/quality-concept-modal";
 
 const topics = [
   { id: 'industry', title: 'Dairy Industry', description: 'Overview & Trends', category: 'industry', icon: Factory, badge: 'New', modal: DairyIndustryModal },
@@ -44,6 +46,7 @@ const topics = [
   { id: 'ice-cream-calc', title: 'Ice Cream Calc', description: 'Overrun & Mix', category: 'science', icon: IceCreamIcon, modal: IceCreamCalculationsModal },
   { id: 'compositional-analysis', title: 'Compositional Analysis', description: 'Chemical tests for products', category: 'science', icon: TestTube, modal: CompositionalAnalysisModal },
   { id: 'calibration', title: 'Calibration', description: 'Glassware & Reagents', category: 'science', icon: ClipboardCheck, modal: CalibrationStandardizationModal },
+  { id: 'quality-concept', title: 'Quality Concepts', description: 'HACCP, TQM, ISO', category: 'industry', icon: CheckSquare, modal: QualityConceptModal },
   { id: 'processing', title: 'Dairy Processing', description: 'Techniques & Machinery', category: 'industry', icon: Settings, modal: DairyProcessingModal },
   { id: 'food-tech', title: 'Food Technology', description: 'Product Development', category: 'science', icon: Utensils, modal: null },
   { id: 'about-us', title: 'About Us', description: 'Our Mission & Vision', category: 'industry', icon: Users, modal: AboutUsModal },
