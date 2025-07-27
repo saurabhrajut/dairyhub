@@ -47,9 +47,9 @@ export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; set
         </DialogHeader>
         <Tabs defaultValue="composition" className="flex flex-col h-full">
             <div className="flex justify-center">
-                <TabsList className="grid w-full grid-cols-3 sm:grid-cols-6 mb-4">
+                <TabsList className="grid w-full grid-cols-3 sm:grid-cols-6 mb-4 h-auto">
                     {milkChemistryTabs.map(tab => (
-                        <TabsTrigger key={tab.value} value={tab.value}>{tab.label}</TabsTrigger>
+                        <TabsTrigger key={tab.value} value={tab.value} className="text-xs sm:text-sm">{tab.label}</TabsTrigger>
                     ))}
                 </TabsList>
             </div>
@@ -58,13 +58,18 @@ export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; set
             <TabsContent value="composition">
                 <div className="space-y-6 text-gray-700 text-sm leading-relaxed prose max-w-none">
                     <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
-                        <h4 className="text-lg font-bold text-primary mb-2 font-headline">What is Milk?</h4>
-                        <p><strong>FSSAI Definition:</strong> “Milk means the normal mammary secretion derived from complete milking of a healthy milch animal, without addition or extraction, intended for consumption as liquid milk or for further processing.”</p>
-                        <p className="mt-2"><strong>Codex Alimentarius Definition:</strong> “Milk is the normal mammary secretion of milking animals, free from colostrum, intended for direct consumption or further processing.”</p>
+                        <h4 className="text-lg font-bold text-primary mb-2 font-headline">What is Milk? (Doodh Kya Hai?)</h4>
+                        <p><strong>FSSAI Definition:</strong> “Doodh ka matlab hai ek swasth doodh dene wale pashu se poori tarah se doodh nikalne se prapt सामान्य mammary srav, jismein koi milavat ya nikasi na ki gayi ho, jo liquid doodh ke roop mein upbhog ke liye ya aage ki processing ke liye ho.”</p>
+                        <p className="mt-2"><strong>Codex Alimentarius Definition:</strong> “Doodh doodh dene wale pashuon ka normal mammary srav hai, jo colostrum se mukt ho, seedhe upbhog ya aage ki processing ke liye ho.”</p>
                     </div>
                     <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
-                        <h4 className="text-lg font-bold text-primary mb-2 font-headline">Milk Constituents</h4>
-                        <p>Doodh ek complex colloidal system hai jo multiple components ka mixture hota hai. Isme water, fat, protein, lactose, minerals, vitamins, aur enzymes shamil hote hain. Har constituent milk ki nutritional aur functional properties ko define karta hai.</p>
+                        <h4 className="text-lg font-bold text-primary mb-2 font-headline">Milk Constituents (Doodh ke Ghatak)</h4>
+                        <p>Doodh ek complex colloidal system hai jismein paani, fat, protein, lactose, minerals, vitamins, aur enzymes shamil hote hain. Doodh ko teen alag-alag phases mein dekha ja sakta hai:</p>
+                         <ul className="list-disc list-inside mt-2 space-y-1">
+                          <li><strong>Emulsion:</strong> Fat globules paani mein bikhre rehte hain.</li>
+                          <li><strong>Colloidal Suspension:</strong> Casein protein micelles paani mein suspended rehte hain.</li>
+                          <li><strong>True Solution:</strong> Lactose, whey proteins, minerals, aur vitamins paani mein poori tarah ghule rehte hain.</li>
+                        </ul>
                     </div>
                 </div>
             </TabsContent>
@@ -72,26 +77,26 @@ export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; set
                 <div className="space-y-6 text-gray-700 text-sm leading-relaxed prose max-w-none">
                     <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
                         <h4 className="text-lg font-bold text-primary mb-2 font-headline">Milk Proteins (~3.5%)</h4>
-                        <p>Milk proteins do major categories me aate hain: <strong>Casein</strong> aur <strong>Whey (Serum) Proteins</strong>. Ye milk ke nutritional value aur physical properties ke liye bahut important hain.</p>
+                        <p>Doodh ke proteins do mukhya shreniyon mein aate hain: <strong>Casein</strong> aur <strong>Whey (Serum) Proteins</strong>. Yeh doodh ke poshan aur bhautik gunon ke liye bahut mahatvapurna hain.</p>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="p-4 bg-gray-50 rounded-lg border">
                             <h5 className="font-bold font-headline text-gray-800 mb-2">1. Casein (~80%)</h5>
-                            <p>Casein milk ka primary protein hai. Yeh paneer aur dahi banane ke liye responsible hai.</p>
+                            <p>Casein doodh ka mukhya protein hai. Yeh paneer aur dahi banane ke liye zimmedar hai.</p>
                             <ul className="list-disc list-inside space-y-2 mt-2">
-                                <li><strong>Structure:</strong> Casein 'micelles' naam ke complex structures banata hai.</li>
-                                <li><strong>Fractions:</strong> αs1, αs2, β, aur κ-casein (Kappa-casein).</li>
-                                <li><strong>Acid Coagulation:</strong> pH 4.6 par dahi/paneer banata hai.</li>
-                                <li><strong>Rennet Coagulation:</strong> Rennet enzyme (chymosin) κ-casein ko todkar cheese banata hai.</li>
+                                <li><strong>Structure:</strong> Casein 'micelles' naam ke complex, spherical structures banata hai jo doodh mein suspended rehte hain.</li>
+                                <li><strong>Fractions:</strong> Iske mukhya fractions hain: αs1-casein, αs2-casein, β-casein, aur κ-casein (Kappa-casein). κ-casein micelle ki satah par rehta hai aur use sthir (stable) banata hai.</li>
+                                <li><strong>Acid Coagulation:</strong> Jab doodh ka pH 4.6 tak kam hota hai (lactic acid fermentation se), toh casein micelles apna charge kho dete hain aur aapas mein judkar ek gel banate hain. Yahi dahi jamne ka siddhant hai.</li>
+                                <li><strong>Rennet Coagulation:</strong> Rennet enzyme (chymosin) khaas taur par κ-casein ko todta hai, jisse micelles unstable ho jaate hain aur calcium ki maujoodgi mein judkar ek thos curd (dahi) banate hain. Yahi cheese banane ka siddhant hai.</li>
                             </ul>
                         </div>
                         <div className="p-4 bg-gray-50 rounded-lg border">
                             <h5 className="font-bold font-headline text-gray-800 mb-2">2. Whey Proteins (~20%)</h5>
-                            <p>Paneer banne ke baad bache hue liquid me yeh proteins hote hain.</p>
+                            <p>Paneer ya cheese banne ke baad bache hue liquid (whey) mein yeh proteins hote hain. Inhe serum proteins bhi kehte hain.</p>
                             <ul className="list-disc list-inside space-y-2 mt-2">
-                                <li><strong>Major Types:</strong> β-Lactoglobulin, α-Lactalbumin, BSA, Immunoglobulins.</li>
-                                <li><strong>Solubility:</strong> Acid me soluble hote hain (pH 4.6 par precipitate nahi hote).</li>
-                                <li><strong>Heat Sensitivity:</strong> Garam karne par 'denature' ho jaate hain.</li>
+                                <li><strong>Major Types:</strong> β-Lactoglobulin (sabse zyada), α-Lactalbumin, Bovine Serum Albumin (BSA), aur Immunoglobulins.</li>
+                                <li><strong>Solubility:</strong> Yeh proteins acid mein ghulansheel hote hain, yaani pH 4.6 par precipitate nahi hote.</li>
+                                <li><strong>Heat Sensitivity:</strong> Garam karne par yeh 'denature' (apna natural structure kho dena) ho jaate hain. Whey protein denaturation paneer ki yield badhane mein madad karta hai.</li>
                             </ul>
                         </div>
                     </div>
@@ -101,21 +106,21 @@ export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; set
                  <div className="space-y-4 text-gray-700 text-sm leading-relaxed prose max-w-none">
                     <div className="p-4 bg-green-50 rounded-lg border border-green-200">
                         <h5 className="font-bold font-headline text-green-800 mb-2">Lactose (~4.8%)</h5>
-                        <p>Lactose milk ka main carbohydrate hai, jise 'milk sugar' bhi kehte hain. Yeh milk ko meetha swaad deta hai.</p>
+                        <p>Lactose doodh ka mukhya carbohydrate hai, jise 'milk sugar' bhi kehte hain. Yeh ek disaccharide hai jo glucose aur galactose se bana hota hai. Yeh doodh ko halka meetha swaad deta hai. Bacteria is lactose ko ferment karke lactic acid banate hain, jo dahi jaise fermented products banane ke liye zaroori hai.</p>
                     </div>
                     <div className="p-4 bg-yellow-50 rounded-lg border border-yellow-200">
                         <h5 className="font-bold font-headline text-yellow-800 mb-2">Milk Fat (~3.9%)</h5>
-                        <p>Milk fat 'fat globules' ke roop me hota hai. Har globule ke chaaron taraf ek protective layer (MFGM) hoti hai.</p>
+                        <p>Milk fat 'fat globules' ke roop mein hota hai. Har globule ke chaaron taraf ek protective layer (membrane) hoti hai jise <strong>Milk Fat Globule Membrane (MFGM)</strong> kehte hain. Yeh membrane fat ko paani mein emulsified rakhti hai. Homogenization process is membrane ko todkar fat globules ko chota kar deta hai.</p>
                     </div>
                     <div className="p-4 bg-purple-50 rounded-lg border border-purple-200">
                         <h5 className="font-bold font-headline text-purple-800 mb-2">Minerals (Ash) (~0.7%)</h5>
-                        <p>Milk minerals ka ek accha source hai, jaise Calcium, Phosphorus, Potassium.</p>
+                        <p>Doodh minerals ka ek accha source hai, jismein Calcium (Ca), Phosphorus (P), Potassium (K), aur Magnesium (Mg) shamil hain. Calcium aur phosphorus haddiyon ke liye bahut zaroori hain. Doodh ke minerals uski stability aur pH ko maintain karne mein bhi madad karte hain.</p>
                     </div>
                  </div>
             </TabsContent>
             <TabsContent value="properties">
                 <div className="space-y-4 text-gray-700 text-sm leading-relaxed">
-                    <h4 className="text-lg font-bold text-primary mb-2 font-headline">Physical Properties of Milk</h4>
+                    <h4 className="text-lg font-bold text-primary mb-2 font-headline">Physical Properties of Milk (Doodh ke Bhautik Gun)</h4>
                     <Table>
                         <TableHeader>
                             <TableRow>
@@ -138,30 +143,30 @@ export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; set
             </TabsContent>
             <TabsContent value="processing">
                 <div className="space-y-4 text-gray-700 text-sm leading-relaxed prose max-w-none">
-                     <h4 className="text-lg font-bold text-primary mb-2 font-headline">Effect of Thermal Processing on Milk</h4>
+                     <h4 className="text-lg font-bold text-primary mb-2 font-headline">Effect of Thermal Processing on Milk (Doodh par Garmi ka Prabhav)</h4>
                      <p>Garam karne se doodh mein kai badlav aate hain jo uski suraksha, shelf-life, aur gunon ko prabhavit karte hain.</p>
                      
                      <div className="p-4 bg-gray-50 rounded-lg border">
                          <h5 className="font-bold font-headline text-gray-800 mb-2">Pasteurization (LTLT/HTST)</h5>
                          <ul className="list-disc list-inside mt-2">
-                             <li><strong>Benefits:</strong> Destroys pathogenic bacteria (like TB, Brucella), inactivates enzymes (lipase), increases shelf life.</li>
-                             <li><strong>Changes:</strong> Minimal changes to nutritional value. Slight loss of Vitamin C and B-group vitamins. Whey proteins may slightly denature.</li>
+                             <li><strong>Benefits:</strong> Hanikarak bacteria (pathogens) jaise TB aur Brucella ko nasht karta hai, lipase jaise enzymes ko nishkriya karta hai, aur shelf life badhata hai.</li>
+                             <li><strong>Changes:</strong> Poshan mein na ke barabar badlav. Vitamin C aur B-group vitamins ka halka nuksan. Whey proteins thode denature ho sakte hain.</li>
                          </ul>
                      </div>
 
                      <div className="p-4 bg-gray-50 rounded-lg border">
                          <h5 className="font-bold font-headline text-gray-800 mb-2">UHT (Ultra-High Temperature) Processing</h5>
                          <ul className="list-disc list-inside mt-2">
-                             <li><strong>Benefits:</strong> Makes milk commercially sterile, allowing for long-term storage at room temperature.</li>
-                             <li><strong>Changes:</strong> More pronounced changes. Maillard browning (reaction between lactose and protein) can cause a slightly "cooked" flavor and browning. Significant denaturation of whey proteins. More vitamin loss than pasteurization.</li>
+                             <li><strong>Benefits:</strong> Doodh ko commercially sterile banata hai, jisse kamre ke taapman par lambe samay tak store kiya ja sakta hai.</li>
+                             <li><strong>Changes:</strong> Zyada badlav. Maillard browning (lactose aur protein ke beech reaction) se halka "paka hua" swaad aur rang aa sakta hai. Whey proteins kaafi had tak denature ho jaate hain. Pasteurization se zyada vitamin ka nuksan hota hai.</li>
                          </ul>
                      </div>
 
                      <div className="p-4 bg-gray-50 rounded-lg border">
                          <h5 className="font-bold font-headline text-gray-800 mb-2">Sterilization</h5>
                          <ul className="list-disc list-inside mt-2">
-                             <li><strong>Benefits:</strong> Complete destruction of all microorganisms and spores.</li>
-                             <li><strong>Changes:</strong> Severe heat treatment. Causes significant browning, cooked flavor, and substantial nutritional loss, especially of heat-sensitive vitamins. Major protein denaturation and changes in mineral balance.</li>
+                             <li><strong>Benefits:</strong> Sabhi microorganisms aur unke spores ka poorn vinash.</li>
+                             <li><strong>Changes:</strong> Bahut zyada heat treatment. Kaafi browning, paka hua swaad, aur poshan mein, khaaskar heat-sensitive vitamins mein, bada nuksan hota hai. Protein ka major denaturation aur mineral balance mein badlav hota hai.</li>
                          </ul>
                      </div>
                 </div>
@@ -183,3 +188,5 @@ export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; set
     </Dialog>
   );
 }
+
+    
