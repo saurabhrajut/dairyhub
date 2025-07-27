@@ -14,7 +14,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { funFacts } from "@/lib/data";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
@@ -46,12 +46,15 @@ export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; set
           <DialogDescription className="text-center">A deep dive into the science of milk.</DialogDescription>
         </DialogHeader>
         <Tabs defaultValue="composition" className="flex flex-col h-full">
-            <div className="flex justify-center">
-                <TabsList className="grid w-full grid-cols-3 sm:grid-cols-6 mb-4 h-auto">
-                    {milkChemistryTabs.map(tab => (
-                        <TabsTrigger key={tab.value} value={tab.value} className="text-xs sm:text-sm">{tab.label}</TabsTrigger>
-                    ))}
-                </TabsList>
+            <div className="w-full">
+                <ScrollArea className="w-full whitespace-nowrap rounded-md pb-4">
+                    <TabsList className="inline-flex h-auto">
+                        {milkChemistryTabs.map(tab => (
+                            <TabsTrigger key={tab.value} value={tab.value} className="text-xs sm:text-sm">{tab.label}</TabsTrigger>
+                        ))}
+                    </TabsList>
+                    <ScrollBar orientation="horizontal" />
+                </ScrollArea>
             </div>
             <div className="flex-1 overflow-auto">
             <ScrollArea className="h-full pr-4">
@@ -188,5 +191,3 @@ export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; set
     </Dialog>
   );
 }
-
-    
