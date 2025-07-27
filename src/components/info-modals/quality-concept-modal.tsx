@@ -116,17 +116,82 @@ export function QualityConceptModal({ isOpen, setIsOpen }: { isOpen: boolean; se
                     </ul>
                     <p>Juran ke anusaar, quality ke mudde ka mukhya karan badlav ka virodh aur manav sambandh ki samasyayein thi.</p>
                 </Section>
+
+                <Section title="Total Quality Management (TQM)">
+                    <p>TQM ek management philosophy hai jiska uddeshya customer satisfaction ke madhyam se long-term success prapt karna hai. TQM mein, ek organization ke sabhi sadasya processes, products, services, aur jis culture mein ve kaam karte hain, usmein lagatar sudhar karne mein bhaag lete hain. Yeh QC aur QA se aage badhkar poore organization ko quality ke prati zimmedar banata hai.</p>
+                    <SubHeading>TQM ke Mukhya Siddhant</SubHeading>
+                    <ul className="list-disc list-inside mt-2 space-y-2">
+                        <li><strong>Customer-Focused:</strong> Customer ant mein quality ke level ko nirdharit karta hai. Unki zarooraton ko samajhna aur poora karna TQM ka mool hai.</li>
+                        <li><strong>Total Employee Involvement:</strong> Sabhi employees, management se lekar shop floor workers tak, ek common goal ke liye kaam karte hain. Har koi quality ke liye zimmedar hai.</li>
+                        <li><strong>Process-Centered:</strong> TQM process thinking par dhyan kendrit karta hai. Ek process steps ka ek series hai jo inputs ko lekar outputs banata hai. Process ko define karna aur uski performance ko monitor karna zaroori hai.</li>
+                        <li><strong>Integrated System:</strong> Ek organization mein alag-alag departments ko ek saath milkar kaam karna chahiye. Horizontal processes jo departments ko jodte hain, TQM ke liye mahatvapurna hain.</li>
+                        <li><strong>Strategic and Systematic Approach:</strong> Quality ko ek strategic management ka anivarya hissa maana jaata hai. Ek strategic plan banaya jaata hai jismein quality ko mool tatva ke roop mein shamil kiya jaata hai.</li>
+                        <li><strong>Continuous Improvement (Kaizen):</strong> TQM lagatar sudhar (continuous improvement) par jor deta hai. Yeh ek "zero defects" ki taraf badhne ka prayas hai.</li>
+                        <li><strong>Fact-Based Decision Making:</strong> Decisions data aur facts par aadharit hone chahiye, na ki anumanon par. Performance ko track karne ke liye data ka upyog kiya jaata hai.</li>
+                        <li><strong>Communications:</strong> Effective communication TQM ka ek mahatvapurna hissa hai, jo morale banaye rakhta hai aur employees ko motivate karta hai.</li>
+                    </ul>
+                </Section>
+                
+                 <Section title="ISO Standards">
+                    <p>ISO (International Organization for Standardization) ek vishvavyapi sangathan hai jo alag-alag industries ke liye standards banata hai. Dairy industry ke liye, ISO 9001 aur ISO 22000 sabse mahatvapurna hain.</p>
+                    
+                    <SubHeading>ISO 9001: Quality Management Systems (QMS)</SubHeading>
+                    <p>ISO 9001 ek standard hai jo ek Quality Management System (QMS) ke liye avashyakataon ko nirdharit karta hai. Yeh is baat par kendrit hai ki ek organization lagatar aise products aur services pradan kare jo customer aur regulatory zarooraton ko poora karte hain. Yeh product ki quality par focus karta hai, na ki food safety par.</p>
+                    <p><strong>Mukhya Tatva:</strong></p>
+                    <ul className="list-disc list-inside mt-2 space-y-2">
+                        <li><strong>Customer Focus:</strong> Customer ki zarooraton ko samajhna aur unhein poora karne ka prayas karna.</li>
+                        <li><strong>Leadership:</strong> Top management quality ke prati pratibaddh hona chahiye aur ek clear vision pradan karna chahiye.</li>
+                        <li><strong>Engagement of People:</strong> Sabhi levels ke employees ko quality sudhar mein shamil karna.</li>
+                        <li><strong>Process Approach:</strong> Gatividhiyon ko ek-doosre se jude processes ke roop mein samajhna aur manage karna.</li>
+                        <li><strong>Improvement:</strong> Lagatar sudhar ko ek sthayi lakshya banana.</li>
+                        <li><strong>Evidence-based Decision Making:</strong> Data aur information ke vishleshan par aadharit nirnay lena.</li>
+                        <li><strong>Relationship Management:</strong> Suppliers jaise interested parties ke saath sambandhon ko manage karna.</li>
+                    </ul>
+
+                    <SubHeading>ISO 22000: Food Safety Management Systems (FSMS)</SubHeading>
+                    <p>ISO 22000 ek food-specific standard hai jo ek Food Safety Management System (FSMS) ke liye avashyakataon ko batata hai. Yeh ISO 9001 ke management principles ko HACCP ke food safety principles ke saath jodta hai. Yeh "farm to fork" tak food chain ke sabhi sangathanon ke liye design kiya gaya hai.</p>
+                    <p><strong>Mukhya Tatva:</strong></p>
+                     <ul className="list-disc list-inside space-y-2">
+                        <li><strong>Interactive Communication:</strong> Food chain ke sabhi staron par (suppliers, customers, regulators) communication bahut zaroori hai.</li>
+                        <li><strong>System Management:</strong> Ek structured management system (jaise ISO 9001) ki zaroorat.</li>
+                        <li><strong>Prerequisite Programs (PRPs):</strong> Ek saaf, hygienic environment banaye rakhne ke liye buniyadi shartein aur gatividhiyan.</li>
+                        <li><strong>HACCP Principles:</strong> Food safety hazards ko control karne ke liye HACCP ke saat siddhanto ko shamil karna.</li>
+                    </ul>
+                    <p className="mt-4">Ek dairy plant ke liye, ISO 22000 certification yeh darshata hai ki unke paas food safety ke liye ek majboot aur vishvavyapi roop se maanyata prapt system hai, jo HACCP aur PRPs ko ek formal management framework mein ekatrit karta hai.</p>
+                </Section>
+
                  <Section title="HACCP - Khatre ka Vishleshan aur Mahatvapurna Niyantran Bindu">
                     <p>HACCP (Hazard Analysis and Critical Control Points) ek systematic aur preventive tareeka hai food safety ke liye. Ismein production process mein hone wale biological (jaise bacteria), chemical (jaise chemicals), aur physical (jaise kaanch) khatron ko pehchana jaata hai, jo final product ko unsafe bana sakte hain. Phir in risks ko safe level tak kam karne ke liye measures banaye jaate hain.</p>
                     <SubHeading>HACCP ke Saat Siddhant</SubHeading>
                     <ol className="list-decimal list-inside space-y-3">
-                        <li><strong>Khatre ka Vishleshan Karein (Conduct a Hazard Analysis):</strong> Dairy production ke har step ka gehra vishleshan karna, raw milk se lekar packaging tak. Har step par potential biological (Listeria, Salmonella), chemical (antibiotics, cleaning agents), aur physical (metal, glass) khatron ko pehchana jaata hai.</li>
-                        <li><strong>Mahatvapurna Niyantran Bindu Nirdharit Karein (Determine CCPs):</strong> CCPs woh points hain jahan control lagakar food safety hazard ko roka, khatam, ya ek acceptable level tak kam kiya jaa sakta hai. Jaise, pasteurization ek CCP hai.</li>
-                        <li><strong>Critical Limits Nirdharit Karein (Establish Critical Limits):</strong> Har CCP ke liye measurable limits set karna, jaise temperature (≥72°C), time (≥15 seconds), pH (≤4.6). Yeh limits safe aur unsafe conditions ke beech ki boundary hote hain.</li>
-                        <li><strong>Monitoring Procedures Banayein (Establish Monitoring Procedures):</strong> Yeh observations ya measurements ka ek planned sequence hai, jisse yeh assess kiya ja sake ki ek CCP control mein hai ya nahi. Ismein specify hota hai ki kya, kaise, kab, aur kaun monitor karega.</li>
-                        <li><strong>Sudharak Karyavahiyan Nirdharit Karein (Establish Corrective Actions):</strong> Yeh pehle se tay ki gayi karyavahiyan hain jo tab ki jaati hain jab monitoring se pata chalta hai ki critical limit se deviation ho gaya hai. Ismein product ko isolate karna aur aage ki karrawai karna shamil hai.</li>
-                        <li><strong>Satyapan Procedures Banayein (Establish Verification Procedures):</strong> Yeh activities is baat ki pushti karti hain ki HACCP system sahi tarah se kaam kar raha hai. Ismein HACCP plan ka audit, equipment ka calibration, aur testing shamil hai.</li>
-                        <li><strong>Record-Keeping aur Documentation Procedures Banayein (Establish Record-Keeping Procedures):</strong> Sahi aur poora documentation HACCP system ke prabhavi karyanvayan ke liye bahut zaroori hai. Ismein hazard analysis, monitoring logs, corrective actions, aur verification activities ke records shamil hote hain.</li>
+                        <li>
+                            <strong className="text-blue-600">Khatre ka Vishleshan Karein (Conduct a Hazard Analysis):</strong>
+                            <p className="ml-4">Dairy production ke har step ka gehra vishleshan karna, raw milk se lekar packaging tak. Har step par potential biological (Listeria, Salmonella), chemical (antibiotics, cleaning agents), aur physical (metal, glass) khatron ko pehchana jaata hai.</p>
+                        </li>
+                        <li>
+                            <strong className="text-blue-600">Mahatvapurna Niyantran Bindu Nirdharit Karein (Determine CCPs):</strong>
+                            <p className="ml-4">CCPs woh points hain jahan control lagakar food safety hazard ko roka, khatam, ya ek acceptable level tak kam kiya jaa sakta hai. Jaise, pasteurization ek CCP hai.</p>
+                        </li>
+                        <li>
+                            <strong className="text-blue-600">Critical Limits Nirdharit Karein (Establish Critical Limits):</strong>
+                            <p className="ml-4">Har CCP ke liye measurable limits set karna, jaise temperature (≥72°C), time (≥15 seconds), pH (≤4.6). Yeh limits safe aur unsafe conditions ke beech ki boundary hote hain.</p>
+                        </li>
+                        <li>
+                            <strong className="text-blue-600">Monitoring Procedures Banayein (Establish Monitoring Procedures):</strong>
+                            <p className="ml-4">Yeh observations ya measurements ka ek planned sequence hai, jisse yeh assess kiya ja sake ki ek CCP control mein hai ya nahi. Ismein specify hota hai ki kya, kaise, kab, aur kaun monitor karega.</p>
+                        </li>
+                        <li>
+                            <strong className="text-blue-600">Sudharak Karyavahiyan Nirdharit Karein (Establish Corrective Actions):</strong>
+                            <p className="ml-4">Yeh pehle se tay ki gayi karyavahiyan hain jo tab ki jaati hain jab monitoring se pata chalta hai ki critical limit se deviation ho gaya hai. Ismein product ko isolate karna aur aage ki karrawai karna shamil hai.</p>
+                        </li>
+                        <li>
+                            <strong className="text-blue-600">Satyapan Procedures Banayein (Establish Verification Procedures):</strong>
+                            <p className="ml-4">Yeh activities is baat ki pushti karti hain ki HACCP system sahi tarah se kaam kar raha hai. Ismein HACCP plan ka audit, equipment ka calibration, aur testing shamil hai.</p>
+                        </li>
+                        <li>
+                            <strong className="text-blue-600">Record-Keeping aur Documentation Procedures Banayein (Establish Record-Keeping Procedures):</strong>
+                            <p className="ml-4">Sahi aur poora documentation HACCP system ke prabhavi karyanvayan ke liye bahut zaroori hai. Ismein hazard analysis, monitoring logs, corrective actions, aur verification activities ke records shamil hote hain.</p>
+                        </li>
                     </ol>
                 </Section>
 
