@@ -38,6 +38,8 @@ export default function LoginPage() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
+      age: undefined,
+      gender: undefined,
     },
   });
 
@@ -84,7 +86,7 @@ export default function LoginPage() {
                             <FormItem>
                             <FormLabel>Age</FormLabel>
                             <FormControl>
-                                <Input type="number" placeholder="25" {...field} />
+                                <Input type="number" placeholder="25" {...field} value={field.value ?? ""} />
                             </FormControl>
                             <FormMessage />
                             </FormItem>
