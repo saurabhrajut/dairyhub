@@ -1,11 +1,13 @@
+
 "use client";
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { MessageCircle, X } from "lucide-react";
 import { ChatPanel } from "./chat-panel";
+import type { UserProfile } from "@/app/page";
 
-export function ChatWidget() {
+export function ChatWidget({ user }: { user: UserProfile }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -19,7 +21,7 @@ export function ChatWidget() {
           {isOpen ? <X className="h-8 w-8" /> : <MessageCircle className="h-8 w-8" />}
         </Button>
       </div>
-      <ChatPanel isOpen={isOpen} setIsOpen={setIsOpen} />
+      <ChatPanel isOpen={isOpen} setIsOpen={setIsOpen} user={user} />
     </>
   );
 }

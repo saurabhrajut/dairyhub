@@ -16,7 +16,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { getSarathiChatbotResponse } from "@/app/actions";
 import { Mic, Send, Bot, Paperclip, X } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import type { UserProfile } from "@/app/page";
 
 interface Message {
   role: "user" | "model";
@@ -34,15 +34,17 @@ interface UIMessage {
 export function ChatPanel({
   isOpen,
   setIsOpen,
+  user
 }: {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
+  user: UserProfile;
 }) {
   const [messages, setMessages] = useState<UIMessage[]>([
     {
       id: "initial",
       sender: "assistant",
-      text: "Ram Ram Sa mere dost! 🙏 Main hu aapka Sarathi. Apne dairy ke sawal pucho, ya fir neeche resume paste karke interview ki taiyari karo!",
+      text: `Ram Ram Sa ${user.name}! 🙏 Main hu aapka Sarathi. Apne dairy ke sawal pucho, ya fir neeche resume paste karke interview ki taiyari karo!`,
     },
   ]);
   const [history, setHistory] = useState<Message[]>([]);
@@ -52,7 +54,6 @@ export function ChatPanel({
   const [language, setLanguage] = useState("hi-IN");
   const [isLoading, setIsLoading] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
-  const { toast } = useToast();
 
   useEffect(() => {
     if (scrollAreaRef.current) {
@@ -76,15 +77,17 @@ export function ChatPanel({
     };
     setMessages((prev) => [...prev, userMessage]);
     
-    // Add user message to Genkit history
     const newHistory: Message[] = [...history, { role: 'user', content: [{ text: userMessageText }] }];
-    setHistory(newHistory);
-
+    
     setInput("");
     setIsLoading(true);
 
     try {
       const response = await getSarathiChatbotResponse({
+        // Pass user details to the chatbot
+        name: user.name,
+        age: user.age,
+        gender: user.gender,
         question: query,
         language: language,
         resumeText: resumeQuery || undefined,
@@ -97,9 +100,7 @@ export function ChatPanel({
         lang: language,
       };
       setMessages((prev) => [...prev, assistantMessage]);
-
-      // Add assistant message to Genkit history
-      setHistory(prev => [...prev, { role: 'model', content: [{ text: response.answer }] }]);
+      setHistory([...newHistory, { role: 'model', content: [{ text: response.answer }] }]);
 
     } catch (error) {
       console.error(error);
