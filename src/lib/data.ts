@@ -390,6 +390,24 @@ export const reagentRecipes = {
         components: [ { name: 'Bromothymol Blue', amount: 0.5, unit: 'g' } ],
         instructions: 'Bromothymol blue ko distilled water mein gholkar final volume poora karein.'
     },
+    'buffer_sol_ph10': {
+        name: 'Buffer Solution (pH 10, Hardness)',
+        type: 'complex',
+        components: [
+            { name: 'Ammonium Chloride (NH4Cl)', amount: 67.5, unit: 'g'},
+            { name: 'Ammonium Hydroxide (NH4OH, sp. gr. 0.88)', amount: 570, unit: 'ml'}
+        ],
+        instructions: '67.5g Ammonium Chloride ko 570ml Ammonium Hydroxide me gholein, aur phir distilled water se 1 litre tak poora karein.'
+    },
+    'buffer_substrate_phos': {
+        name: 'Buffer Substrate (Phosphatase Test)',
+        type: 'complex',
+        components: [
+            { name: 'Buffer (Sodium Carbonate/Bicarbonate)', amount: 1000, unit: 'ml' },
+            { name: 'Disodium p-nitrophenyl phosphate', amount: 1.5, unit: 'g' },
+        ],
+        instructions: '1.5g Disodium p-nitrophenyl phosphate ko Carbonate-Bicarbonate buffer mein gholkar 1 litre banayein. Stable rehta hai agar 4°C par rakha jaaye. Brown hone par discard karein.'
+    },
     'chromotropic_acid': {
         name: 'Chromotropic Acid Reagent',
         type: 'w/v_in_acid',
@@ -427,6 +445,16 @@ export const reagentRecipes = {
         type: 'w/v',
         components: [ { name: 'Alpha Glucoamylase Enzyme', amount: 0.2, unit: 'g' } ],
         instructions: 'Enzyme ko distilled water mein gholkar final volume poora karein.'
+    },
+    'erichrome_black_t': {
+        name: 'Erichrome Black T Indicator',
+        type: 'complex',
+        components: [
+            { name: 'Erichrome Black T', amount: 0.4, unit: 'g'},
+            { name: 'Hydroxylamine HCl', amount: 4.5, unit: 'g'},
+            { name: 'Ethyl Alcohol (95%)', amount: 100, unit: 'ml'}
+        ],
+        instructions: 'Chemicals ko ethyl alcohol me gholkar 100ml banayein.'
     },
     'ethanolic_koh_05': {
         name: 'Ethanolic KOH (0.5 N)',
@@ -476,6 +504,11 @@ export const reagentRecipes = {
         type: 'v/v',
         components: [ { name: 'Concentrated Lactic Acid', amount: 10, unit: 'ml' } ],
         instructions: 'Concentrated Lactic Acid ko volumetric flask mein lein aur distilled water se final volume poora karein.'
+    },
+    'mbrt_solution': {
+        name: 'MBRT Solution',
+        type: 'fixed',
+        instructions: 'Standard Methylene Blue Thiocyanate tablet (jaise R-58) ko 200ml sterile ubalte hue distilled water mein gholein. Thanda hone ke baad, sterile distilled water se volume 800ml tak poora karein. Solution ko andhere, thande sthan par rakhein.'
     },
     'methylene_blue': {
         name: 'Methylene Blue Solution',
@@ -540,5 +573,15 @@ export const reagentRecipes = {
         type: 'w/v',
         components: [ { name: 'Urease Enzyme', amount: 2, unit: 'g' } ],
         instructions: 'Urease enzyme ko distilled water mein gholkar final volume poora karein.'
+    },
+    'zinc_copper_precipitant': {
+        name: 'Zinc-Copper Precipitant (Phosphatase)',
+        type: 'complex',
+        components: [
+            { name: 'Zinc Sulphate (ZnSO4.7H2O)', amount: 25, unit: 'g'},
+            { name: 'Copper Sulphate (CuSO4.5H2O)', amount: 6, unit: 'g'}
+        ],
+        instructions: 'Dono chemicals ko distilled water me gholkar 100ml banayein.'
     }
 };
+
