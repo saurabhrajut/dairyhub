@@ -152,33 +152,33 @@ export const qualityContent = {
         title: "Good Manufacturing Practices (GMPs)",
         p1: "GMPs woh niyam aur disha-nirdesh hain jo yeh sunishchit karte hain ki products lagatar quality standards ke anusaar banaye aur control kiye ja rahe hain. Dairy industry mein, GMPs har cheez ko cover karte hain - personnel hygiene se lekar equipment maintenance tak.",
         list: [
-            { title: "Personnel:", description: "Sabhi karmachariyon ko hygiene aur apni zimmedariyon ke liye aavashyak training milni chahiye." },
-            { title: "Premises & Equipment:", description: "Building aur equipment is tarah se design aur maintain kiye jaane chahiye ki contamination ko roka ja sake aur safai aasan ho." },
-            { title: "Production:", description: "Har process ke liye likhit procedures (SOPs) hone chahiye. Critical steps ko define aur control kiya jaana chahiye." },
-            { title: "Quality Control:", description: "Raw material, intermediate, aur final products ke liye testing procedures hone chahiye." },
-            { title: "Documentation:", description: "Har batch ka record rakha jaana chahiye taaki traceability sunishchit ho sake." },
+            { title: "Personnel", description: "Sabhi karmachariyon ko hygiene aur apni zimmedariyon ke liye aavashyak training milni chahiye." },
+            { title: "Premises & Equipment", description: "Building aur equipment is tarah se design aur maintain kiye jaane chahiye ki contamination ko roka ja sake aur safai aasan ho." },
+            { title: "Production", description: "Har process ke liye likhit procedures (SOPs) hone chahiye. Critical steps ko define aur control kiya jaana chahiye." },
+            { title: "Quality Control", description: "Raw material, intermediate, aur final products ke liye testing procedures hone chahiye." },
+            { title: "Documentation", description: "Har batch ka record rakha jaana chahiye taaki traceability sunishchit ho sake." },
         ]
       },
       ghp: {
         title: "Good Hygiene Practices (GHPs)",
         p1: "GHP, GMP ka ek anivarya hissa hai, jo food ko contamination se bachane ke liye zaroori sabhi practices ko cover karta hai. Iska mukhya uddeshya ek hygienic environment banaye rakhna hai.",
         list: [
-          { title: "Personal Hygiene:", description: "Haath dhona, saaf kapde pehenna, aur bimar hone par kaam na karna." },
-          { title: "Cleaning and Sanitation:", description: "Equipment aur premises ki niyamit aur prabhavi safai aur sanitization." },
-          { title: "Pest Control:", description: "Keede-makodon ko plant mein aane se rokna aur unhein khatam karna." },
-          { title: "Waste Management:", description: "Waste ko sahi tarike se store aur dispose karna taaki woh contamination ka source na bane." }
+          { title: "Personal Hygiene", description: "Haath dhona, saaf kapde pehenna, aur bimar hone par kaam na karna." },
+          { title: "Cleaning and Sanitation", description: "Equipment aur premises ki niyamit aur prabhavi safai aur sanitization." },
+          { title: "Pest Control", description: "Keede-makodon ko plant mein aane se rokna aur unhein khatam karna." },
+          { title: "Waste Management", description: "Waste ko sahi tarike se store aur dispose karna taaki woh contamination ka source na bane." }
         ]
       },
       glp: {
         title: "Good Laboratory Practices (GLPs)",
         p1: "GLP un principles ka ek set hai jo non-clinical health aur environmental safety studies ke planning, performance, monitoring, recording, reporting, aur archiving ko govern karta hai. Dairy QC lab ke liye, iska matlab hai ki test results reliable, repeatable, aur auditable hain.",
         list: [
-          { title: "Organization and Personnel:", description: "Har vyakti ki zimmedariyan saaf honi chahiye aur unke paas paryapt training honi chahiye." },
-          { title: "Apparatus, Material, and Reagents:", description: "Sabhi equipment aavashyaktanusar calibrated aur maintain kiye jaane chahiye. Reagents ko aavashyaktanusar label aur store kiya jaana chahiye." },
-          { title: "Test Systems:", description: "Testing ke liye use hone wale physical ya chemical systems ko aavashyaktanusar define aur control kiya jaana chahiye." },
-          { title: "Standard Operating Procedures (SOPs):", description: "Har routine procedure ke liye likhit, approved SOPs hone chahiye." },
-          { title: "Reporting of Results:", description: "Results ko saaf, sateek, aur poori tarah se report kiya jaana chahiye, jismein test conditions aur koi bhi deviations shamil ho." },
-          { title: "Storage and Retention of Records:", description: "Sabhi raw data, reports, aur samples ko ek nishchit avadhi ke liye aavashyaktanusar archive kiya jaana chahiye." }
+          { title: "Organization and Personnel", description: "Har vyakti ki zimmedariyan saaf honi chahiye aur unke paas paryapt training honi chahiye." },
+          { title: "Apparatus, Material, and Reagents", description: "Sabhi equipment aavashyaktanusar calibrated aur maintain kiye jaane chahiye. Reagents ko aavashyaktanusar label aur store kiya jaana chahiye." },
+          { title: "Test Systems", description: "Testing ke liye use hone wale physical ya chemical systems ko aavashyaktanusar define aur control kiya jaana chahiye." },
+          { title: "Standard Operating Procedures (SOPs)", description: "Har routine procedure ke liye likhit, approved SOPs hone chahiye." },
+          { title: "Reporting of Results", description: "Results ko saaf, sateek, aur poori tarah se report kiya jaana chahiye, jismein test conditions aur koi bhi deviations shamil ho." },
+          { title: "Storage and Retention of Records", description: "Sabhi raw data, reports, aur samples ko ek nishchit avadhi ke liye aavashyaktanusar archive kiya jaana chahiye." }
         ]
       }
     },
@@ -189,10 +189,10 @@ export const qualityContent = {
         title: "FSSAI ki Sanrachna",
         p1: "FSSAI mein ek Chairperson aur 22 sadasya hote hain. Iski sanrachna is prakaar hai:",
         list: [
-          { title: "Authority:", description: "Yeh mukhya body hai jo regulations banati hai. Ismein alag-alag ministries aur departments ke pratinidhi shamil hote hain." },
-          { title: "Scientific Committees and Panels:", description: "Yeh FSSAI ko alag-alag food categories ke liye scientific advice aur recommendations dete hain. Inmein scientists aur experts hote hain." },
-          { title: "Central Advisory Committee (CAC):", description: "Yeh committee FSSAI ko regulations banate samay stakeholders (consumers, industry, etc.) ke vicharon ko shamil karne mein madad karti hai." },
-          { title: "State Food Safety Authorities:", description: "Har rajya mein Food Safety Commissioners hote hain jo apne rajya mein FSS Act ko lagoo karte hain." }
+          { title: "Authority", description: "Yeh mukhya body hai jo regulations banati hai. Ismein alag-alag ministries aur departments ke pratinidhi shamil hote hain." },
+          { title: "Scientific Committees and Panels", description: "Yeh FSSAI ko alag-alag food categories ke liye scientific advice aur recommendations dete hain. Inmein scientists aur experts hote hain." },
+          { title: "Central Advisory Committee (CAC)", description: "Yeh committee FSSAI ko regulations banate samay stakeholders (consumers, industry, etc.) ke vicharon ko shamil karne mein madad karti hai." },
+          { title: "State Food Safety Authorities", description: "Har rajya mein Food Safety Commissioners hote hain jo apne rajya mein FSS Act ko lagoo karte hain." }
         ]
       },
       functions: {
@@ -216,10 +216,10 @@ export const qualityContent = {
         title: "Codex ka Karya aur Sanrachna",
         p1: "Codex standards scientific research aur risk analysis par aadharit hote hain. Iski sanrachna mein shamil hain:",
         list: [
-          { title: "The Commission:", description: "Yeh mukhya body hai jo standards ko antim roop deti hai. Iski baithak saal mein ek baar hoti hai." },
-          { title: "Codex Committees:", description: "Alag-alag vishayon par kaam karne ke liye committees hain, jaise 'Codex Committee on Milk and Milk Products', 'Codex Committee on Food Hygiene', etc. Yeh committees standards ke draft taiyar karti hain." },
-          { title: "Scientific Advice:", description: "Codex ko FAO/WHO ke expert bodies se scientific advice milta hai, jaise JECFA (Joint Expert Committee on Food Additives) aur JEMRA (Joint Expert Meetings on Microbiological Risk Assessment)." },
-          { title: "WTO Connection:", description: "World Trade Organization (WTO) ke Sanitary and Phytosanitary (SPS) Agreement ke tahat, Codex standards ko international trade disputes mein reference ke roop mein istemal kiya jaata hai." }
+          { title: "The Commission", description: "Yeh mukhya body hai jo standards ko antim roop deti hai. Iski baithak saal mein ek baar hoti hai." },
+          { title: "Codex Committees", description: "Alag-alag vishayon par kaam karne ke liye committees hain, jaise 'Codex Committee on Milk and Milk Products', 'Codex Committee on Food Hygiene', etc. Yeh committees standards ke draft taiyar karti hain." },
+          { title: "Scientific Advice", description: "Codex ko FAO/WHO ke expert bodies se scientific advice milta hai, jaise JECFA (Joint Expert Committee on Food Additives) aur JEMRA (Joint Expert Meetings on Microbiological Risk Assessment)." },
+          { title: "WTO Connection", description: "World Trade Organization (WTO) ke Sanitary and Phytosanitary (SPS) Agreement ke tahat, Codex standards ko international trade disputes mein reference ke roop mein istemal kiya jaata hai." }
         ]
       }
     }
@@ -376,33 +376,33 @@ export const qualityContent = {
         title: "Good Manufacturing Practices (GMPs)",
         p1: "GMPs are the rules and guidelines that ensure products are consistently produced and controlled according to quality standards. In the dairy industry, GMPs cover everything from personnel hygiene to equipment maintenance.",
         list: [
-            { title: "Personnel:", description: "All employees must receive the necessary training for hygiene and their responsibilities." },
-            { title: "Premises & Equipment:", description: "The building and equipment must be designed and maintained to prevent contamination and facilitate cleaning." },
-            { title: "Production:", description: "There must be written procedures (SOPs) for every process. Critical steps must be defined and controlled." },
-            { title: "Quality Control:", description: "There must be testing procedures for raw materials, intermediate, and final products." },
-            { title: "Documentation:", description: "A record of each batch must be kept to ensure traceability." },
+            { title: "Personnel", description: "All employees must receive the necessary training for hygiene and their responsibilities." },
+            { title: "Premises & Equipment", description: "The building and equipment must be designed and maintained to prevent contamination and facilitate cleaning." },
+            { title: "Production", description: "There must be written procedures (SOPs) for every process. Critical steps must be defined and controlled." },
+            { title: "Quality Control", description: "There must be testing procedures for raw materials, intermediate, and final products." },
+            { title: "Documentation", description: "A record of each batch must be kept to ensure traceability." },
         ]
       },
       ghp: {
         title: "Good Hygiene Practices (GHPs)",
         p1: "GHP is an essential part of GMP, covering all practices necessary to protect food from contamination. Its main purpose is to maintain a hygienic environment.",
         list: [
-          { title: "Personal Hygiene:", description: "Hand washing, wearing clean clothes, and not working when sick." },
-          { title: "Cleaning and Sanitation:", description: "Regular and effective cleaning and sanitization of equipment and premises." },
-          { title: "Pest Control:", description: "Preventing and eliminating pests from the plant." },
-          { title: "Waste Management:", description: "Properly storing and disposing of waste so it does not become a source of contamination." }
+          { title: "Personal Hygiene", description: "Hand washing, wearing clean clothes, and not working when sick." },
+          { title: "Cleaning and Sanitation", description: "Regular and effective cleaning and sanitization of equipment and premises." },
+          { title: "Pest Control", description: "Preventing and eliminating pests from the plant." },
+          { title: "Waste Management", description: "Properly storing and disposing of waste so it does not become a source of contamination." }
         ]
       },
       glp: {
         title: "Good Laboratory Practices (GLPs)",
         p1: "GLP is a set of principles that governs the planning, performance, monitoring, recording, reporting, and archiving of non-clinical health and environmental safety studies. For a dairy QC lab, it means that test results are reliable, repeatable, and auditable.",
         list: [
-          { title: "Organization and Personnel:", description: "Responsibilities of each person must be clear, and they must have adequate training." },
-          { title: "Apparatus, Material, and Reagents:", description: "All equipment must be calibrated and maintained as required. Reagents must be labeled and stored as required." },
-          { title: "Test Systems:", description: "The physical or chemical systems used for testing must be defined and controlled as required." },
-          { title: "Standard Operating Procedures (SOPs):", description: "There must be written, approved SOPs for every routine procedure." },
-          { title: "Reporting of Results:", description: "Results must be reported clearly, accurately, and completely, including test conditions and any deviations." },
-          { title: "Storage and Retention of Records:", description: "All raw data, reports, and samples must be archived as required for a specified period." }
+          { title: "Organization and Personnel", description: "Responsibilities of each person must be clear, and they must have adequate training." },
+          { title: "Apparatus, Material, and Reagents", description: "All equipment must be calibrated and maintained as required. Reagents must be labeled and stored as required." },
+          { title: "Test Systems", description: "The physical or chemical systems used for testing must be defined and controlled as required." },
+          { title: "Standard Operating Procedures (SOPs)", description: "There must be written, approved SOPs for every routine procedure." },
+          { title: "Reporting of Results", description: "Results must be reported clearly, accurately, and completely, including test conditions and any deviations." },
+          { title: "Storage and Retention of Records", description: "All raw data, reports, and samples must be archived as required for a specified period." }
         ]
       }
     },
@@ -413,10 +413,10 @@ export const qualityContent = {
         title: "Structure of FSSAI",
         p1: "FSSAI consists of a Chairperson and 22 members. Its structure is as follows:",
         list: [
-          { title: "The Authority:", description: "This is the main body that makes regulations. It includes representatives from various ministries and departments." },
-          { title: "Scientific Committees and Panels:", description: "They provide scientific advice and recommendations to FSSAI for different food categories. They consist of scientists and experts." },
-          { title: "Central Advisory Committee (CAC):", description: "This committee helps FSSAI to include the views of stakeholders (consumers, industry, etc.) while making regulations." },
-          { title: "State Food Safety Authorities:", description: "Each state has Food Safety Commissioners who implement the FSS Act in their state." }
+          { title: "The Authority", description: "This is the main body that makes regulations. It includes representatives from various ministries and departments." },
+          { title: "Scientific Committees and Panels", description: "They provide scientific advice and recommendations to FSSAI for different food categories. They consist of scientists and experts." },
+          { title: "Central Advisory Committee (CAC)", description: "This committee helps FSSAI to include the views of stakeholders (consumers, industry, etc.) while making regulations." },
+          { title: "State Food Safety Authorities", description: "Each state has Food Safety Commissioners who implement the FSS Act in their state." }
         ]
       },
       functions: {
@@ -440,12 +440,12 @@ export const qualityContent = {
         title: "Function and Structure of Codex",
         p1: "Codex standards are based on scientific research and risk analysis. Its structure includes:",
         list: [
-          { title: "The Commission:", description: "This is the main body that finalizes the standards. Its meeting is held once a year." },
-          { title: "Codex Committees:", description: "There are committees to work on different subjects, such as the 'Codex Committee on Milk and Milk Products', 'Codex Committee on Food Hygiene', etc. These committees prepare the draft standards." },
-          { title: "Scientific Advice:", description: "Codex receives scientific advice from expert bodies of FAO/WHO, such as JECFA (Joint Expert Committee on Food Additives) and JEMRA (Joint Expert Meetings on Microbiological Risk Assessment)." },
-          { title: "WTO Connection:", description: "Under the Sanitary and Phytosanitary (SPS) Agreement of the World Trade Organization (WTO), Codex standards are used as a reference in international trade disputes." }
+          { title: "The Commission", description: "This is the main body that finalizes the standards. Its meeting is held once a year." },
+          { title: "Codex Committees", description: "There are committees to work on different subjects, such as the 'Codex Committee on Milk and Milk Products', 'Codex Committee on Food Hygiene', etc. These committees prepare the draft standards." },
+          { title: "Scientific Advice", description: "Codex receives scientific advice from expert bodies of FAO/WHO, such as JECFA (Joint Expert Committee on Food Additives) and JEMRA (Joint Expert Meetings on Microbiological Risk Assessment)." },
+          { title: "WTO Connection", description: "Under the Sanitary and Phytosanitary (SPS) Agreement of the World Trade Organization (WTO), Codex standards are used as a reference in international trade disputes." }
         ]
       }
     }
   }
-};
+}

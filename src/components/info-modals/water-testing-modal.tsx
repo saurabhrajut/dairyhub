@@ -19,14 +19,14 @@ const Formula = ({ children }: { children: React.ReactNode }) => (
 
 const WaterTestSection = ({ title, intro, procedure, calculation }: { title: string, intro: string, procedure: string[], calculation: string }) => {
     return (
-        <section className="mb-8 p-6 bg-blue-50 rounded-lg">
+        <section className="mb-8 p-6 bg-blue-50/60 border border-blue-200 rounded-lg">
             <h2 className="text-2xl font-bold text-blue-800 font-headline">{title}</h2>
-            <p>{intro}</p>
-            <h3 className="text-xl font-semibold mt-4">Procedure</h3>
-            <ol className="list-decimal list-inside space-y-2 mt-2">
-                {procedure.map((step, i) => <li key={i}>{step}</li>)}
+            <p className="mt-2 text-gray-600">{intro}</p>
+            <h3 className="text-lg font-semibold mt-4 mb-2 text-gray-700">Prakriya (Procedure)</h3>
+            <ol className="list-decimal list-inside space-y-2 mt-2 text-gray-600">
+                {procedure.map((step, i) => <li key={i} dangerouslySetInnerHTML={{__html: step}}/>)}
             </ol>
-            <h3 className="text-xl font-semibold mt-4">Calculation</h3>
+            <h3 className="text-lg font-semibold mt-4 mb-2 text-gray-700">Ganana (Calculation)</h3>
             <Formula>{calculation}</Formula>
         </section>
     );
