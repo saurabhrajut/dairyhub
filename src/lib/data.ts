@@ -384,6 +384,16 @@ export const reagentRecipes = {
         type: 'fixed',
         instructions: 'Ise banane ke liye, 24g cupric acetate ko 450ml ubalte hue distilled water mein gholein. Turant 25ml 8.5% lactic acid garam solution mein milayein. Thanda karke, distilled water se volume 500ml tak poora karein. Is calculator se iski matra scale nahi ki ja sakti.'
     },
+    'benedict': {
+        name: "Benedict's Reagent",
+        type: 'complex',
+        components: [
+            { name: 'Sodium Citrate', amount: 173, unit: 'g' },
+            { name: 'Sodium Carbonate (Anhydrous)', amount: 100, unit: 'g' },
+            { name: 'Copper Sulfate (CuSO₄·5H₂O)', amount: 17.3, unit: 'g' }
+        ],
+        instructions: 'Sodium citrate aur sodium carbonate ko 800ml garam paani mein gholein. Alag se, copper sulfate ko 100ml paani mein gholein. Dheere-dheere copper solution ko carbonate-citrate solution mein milayein aur paani se 1 litre tak poora karein.'
+    },
     'bromothymol_blue_05': {
         name: 'Bromothymol Blue Solution (0.5%)',
         type: 'w/v',
@@ -424,6 +434,17 @@ export const reagentRecipes = {
         ],
         instructions: 'Diye gaye anupaat (ratio) mein teeno cheezon ko mix karein.'
     },
+    'crystal_violet': {
+        name: "Gram's Crystal Violet",
+        type: 'complex',
+        components: [
+            { name: 'Crystal Violet (90% dye content)', amount: 2, unit: 'g' },
+            { name: 'Ethyl Alcohol (95%)', amount: 20, unit: 'ml' },
+            { name: 'Ammonium Oxalate', amount: 0.8, unit: 'g' },
+            { name: 'Distilled Water (for oxalate)', amount: 80, unit: 'ml' }
+        ],
+        instructions: 'Crystal violet ko alcohol mein gholein. Ammonium oxalate ko paani mein gholein. Dono solutions ko mix karein.'
+    },
     'diphenylamine_2': {
         name: 'Diphenylamine Solution (2% w/v)',
         type: 'w/v_in_acid',
@@ -462,6 +483,21 @@ export const reagentRecipes = {
         components: [ { name: 'Potassium Hydroxide (KOH)', amount: 2.8, unit: 'g' } ],
         instructions: '2.8g KOH ko thode 95% ethanol mein gholein aur phir ethanol se final volume 100ml tak poora karein.'
     },
+    'fehlings_a': {
+        name: "Fehling's Solution A",
+        type: 'w/v',
+        components: [{ name: 'Copper(II) sulfate pentahydrate (CuSO₄·5H₂O)', amount: 6.928, unit: 'g' }],
+        instructions: '6.928g Copper sulfate ko distilled water mein gholkar 100ml banayein.'
+    },
+    'fehlings_b': {
+        name: "Fehling's Solution B",
+        type: 'complex',
+        components: [
+            { name: 'Potassium sodium tartrate (Rochelle salt)', amount: 34.6, unit: 'g' },
+            { name: 'Sodium Hydroxide (NaOH)', amount: 10, unit: 'g' }
+        ],
+        instructions: 'Dono chemicals ko distilled water mein gholkar 100ml banayein.'
+    },
     'ferric_chloride_10': {
         name: 'Ferric Chloride Solution (10% w/v)',
         type: 'w/v',
@@ -475,6 +511,16 @@ export const reagentRecipes = {
         type: 'v/v',
         components: [ { name: 'Furfural', amount: 2, unit: 'ml' } ],
         instructions: 'Furfural ko Ethyl Alcohol mein milakar final volume poora karein.'
+    },
+    'grams_iodine': {
+        name: "Gram's Iodine",
+        type: 'complex',
+        components: [
+            { name: 'Iodine', amount: 1, unit: 'g' },
+            { name: 'Potassium Iodide (KI)', amount: 2, unit: 'g' },
+            { name: 'Distilled Water', amount: 300, unit: 'ml' }
+        ],
+        instructions: 'Iodine aur Potassium Iodide ko paani mein gholein.'
     },
     'hcl_1_3': {
         name: 'Diluted HCl (1:3)',
@@ -498,6 +544,12 @@ export const reagentRecipes = {
             { name: 'Iodine Crystal', amount: 1, unit: 'g' }
         ],
         instructions: 'Potassium Iodide aur Iodine ko thode distilled water mein gholein aur phir paani milakar final volume poora karein.'
+    },
+    'kmno4_01n': {
+        name: 'Potassium Permanganate (0.1 N)',
+        type: 'w/v',
+        components: [{ name: 'Potassium Permanganate (KMnO₄)', amount: 3.16, unit: 'g' }],
+        instructions: '3.16g Potassium Permanganate ko distilled water mein gholkar 100ml banayein.'
     },
     'lactic_acid_10': {
         name: 'Lactic Acid Solution (10%)',
@@ -530,6 +582,12 @@ export const reagentRecipes = {
         components: [ { name: 'Sodium Hydroxide (NaOH)', amount: 10, unit: 'g' } ],
         instructions: 'NaOH pellets ko dhyan se distilled water mein gholein aur final volume poora karein. Solution garam ho sakta hai.'
     },
+    'na_thio_01n': {
+        name: 'Sodium Thiosulfate (0.1 N)',
+        type: 'w/v',
+        components: [{ name: 'Sodium Thiosulfate (Na₂S₂O₃·5H₂O)', amount: 24.8, unit: 'g' }],
+        instructions: '24.8g Sodium Thiosulfate ko uble hue thande distilled water mein gholkar 100ml banayein. Stability ke liye thoda chloroform ya NaOH daalein.'
+    },
     'para_phenylenediamine_2': {
         name: 'Para-phenylenediamine Solution (2% w/v)',
         type: 'w/v',
@@ -551,6 +609,15 @@ export const reagentRecipes = {
             { name: 'Ethyl Alcohol (95%)', amount: 30, unit: 'ml' }
         ],
         instructions: 'Rosolic acid ko ethyl alcohol mein gholein aur phir distilled water milakar final volume poora karein.'
+    },
+    'safranin': {
+        name: "Gram's Safranin",
+        type: 'complex',
+        components: [
+            { name: 'Safranin O (2.5% solution in 95% ethanol)', amount: 10, unit: 'ml' },
+            { name: 'Distilled Water', amount: 100, unit: 'ml' }
+        ],
+        instructions: 'Dono ko mix karein.'
     },
     'seliwanoff': {
         name: 'Seliwanoff’s Reagent',
@@ -584,4 +651,3 @@ export const reagentRecipes = {
         instructions: 'Dono chemicals ko distilled water me gholkar 100ml banayein.'
     }
 };
-
