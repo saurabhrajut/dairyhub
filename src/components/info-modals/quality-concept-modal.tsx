@@ -58,6 +58,28 @@ export function QualityConceptModal({ isOpen, setIsOpen }: { isOpen: boolean; se
                     <p>{content.whatIsQuality.p3}</p>
                     <p>{content.whatIsQuality.p4}</p>
                 </Section>
+                
+                <Section title={content.prps.title} id="prps">
+                    <p>{content.prps.p1}</p>
+                    <SubHeading>{content.prps.gmp.title}</SubHeading>
+                    <p>{content.prps.gmp.p1}</p>
+                    <ul className="list-disc list-inside space-y-2">
+                        {content.prps.gmp.list.map((item, index) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
+                    </ul>
+
+                    <SubHeading>{content.prps.ghp.title}</SubHeading>
+                    <p>{content.prps.ghp.p1}</p>
+                     <ul className="list-disc list-inside space-y-2">
+                        {content.prps.ghp.list.map((item, index) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
+                    </ul>
+
+                    <SubHeading>{content.prps.glp.title}</SubHeading>
+                    <p>{content.prps.glp.p1}</p>
+                     <ul className="list-disc list-inside space-y-2">
+                        {content.prps.glp.list.map((item, index) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
+                    </ul>
+                </Section>
+
 
                 <Section title={content.qc.title} id="qc">
                     <p>{content.qc.p1}</p>
@@ -115,9 +137,23 @@ export function QualityConceptModal({ isOpen, setIsOpen }: { isOpen: boolean; se
                         {content.tqm.principles.list.map((item, index) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
                     </ul>
                 </Section>
-                
-                 <Section title={content.iso.title} id="iso">
+
+                 <Section title={content.haccp.title} id="haccp">
+                    <p>{content.haccp.p1}</p>
+                    <SubHeading>{content.haccp.principles.title}</SubHeading>
+                    <ol className="list-decimal list-inside space-y-3">
+                        {content.haccp.principles.list.map((item, index) => (
+                             <li key={index}>
+                                <strong className="text-blue-600">{item.title}</strong>
+                                <p className="ml-4">{item.description}</p>
+                            </li>
+                        ))}
+                    </ol>
+                </Section>
+
+                <Section title={content.iso.title} id="iso">
                     <p>{content.iso.p1}</p>
+                    <p>{content.iso.p2}</p>
                     
                     <SubHeading>{content.iso.qms.title}</SubHeading>
                     <p>{content.iso.qms.p1}</p>
@@ -135,44 +171,28 @@ export function QualityConceptModal({ isOpen, setIsOpen }: { isOpen: boolean; se
                     <p className="mt-4">{content.iso.fsms.p2}</p>
                 </Section>
 
-                 <Section title={content.haccp.title} id="haccp">
-                    <p>{content.haccp.p1}</p>
-                    <SubHeading>{content.haccp.principles.title}</SubHeading>
-                    <ol className="list-decimal list-inside space-y-3">
-                        {content.haccp.principles.list.map((item, index) => (
-                             <li key={index}>
-                                <strong className="text-blue-600">{item.title}</strong>
-                                <p className="ml-4">{item.description}</p>
-                            </li>
-                        ))}
-                    </ol>
-                </Section>
-
-                <Section title={content.prps.title} id="prps">
-                    <p>{content.prps.p1}</p>
-                    <SubHeading>{content.prps.prp.title}</SubHeading>
-                    <p>{content.prps.prp.p1}</p>
+                 <Section title={content.fssai.title} id="fssai">
+                    <p>{content.fssai.p1}</p>
+                    <SubHeading>{content.fssai.structure.title}</SubHeading>
+                    <p>{content.fssai.structure.p1}</p>
                     <ul className="list-disc list-inside space-y-2">
-                        {content.prps.prp.list.map((item, index) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
+                        {content.fssai.structure.list.map((item, index) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
                     </ul>
-
-                    <SubHeading>{content.prps.oprp.title}</SubHeading>
-                    <p>{content.prps.oprp.p1}</p>
+                     <SubHeading>{content.fssai.functions.title}</SubHeading>
+                    <p>{content.fssai.functions.p1}</p>
                     <ul className="list-disc list-inside space-y-2">
-                         {content.prps.oprp.list.map((item, index) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
+                        {content.fssai.functions.list.map((item, index) => <li key={index}>{item}</li>)}
                     </ul>
                 </Section>
-
-                <Section title={content.ccps.title} id="ccps">
-                    <p>{content.ccps.p1}</p>
-                     <ol className="list-decimal list-inside space-y-3">
-                        {content.ccps.list.map((item, index) => (
-                            <li key={index}>
-                                <strong>{item.title}</strong>
-                                <p className="ml-4">{item.description}</p>
-                            </li>
-                        ))}
-                    </ol>
+                
+                <Section title={content.codex.title} id="codex">
+                    <p>{content.codex.p1}</p>
+                    <p>{content.codex.p2}</p>
+                    <SubHeading>{content.codex.structure.title}</SubHeading>
+                    <p>{content.codex.structure.p1}</p>
+                    <ul className="list-disc list-inside space-y-2">
+                        {content.codex.structure.list.map((item, index) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
+                    </ul>
                 </Section>
 
             </div>
@@ -181,5 +201,3 @@ export function QualityConceptModal({ isOpen, setIsOpen }: { isOpen: boolean; se
     </Dialog>
   );
 }
-
-    

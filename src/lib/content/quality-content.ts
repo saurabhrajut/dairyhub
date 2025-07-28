@@ -1,3 +1,4 @@
+
 export const qualityContent = {
   hi: {
     title: "Quality Concepts",
@@ -99,7 +100,8 @@ export const qualityContent = {
     },
     iso: {
       title: "ISO Standards",
-      p1: "ISO (International Organization for Standardization) ek vishvavyapi sangathan hai jo alag-alag industries ke liye standards banata hai. Dairy industry ke liye, ISO 9001 aur ISO 22000 sabse mahatvapurna hain.",
+      p1: "ISO (International Organization for Standardization) ek vishvavyapi sangathan hai jo alag-alag industries ke liye standards banata hai. Yeh ek non-governmental organization hai jo 160 se zyada deshon ke national standards bodies ka network hai. Iska mukhya uddeshya products, services, aur systems ke liye voluntary international standards develop karna hai, taaki quality, safety, aur efficiency sunishchit ho sake.",
+      p2: "Dairy industry ke liye, ISO 9001 aur ISO 22000 sabse mahatvapurna hain.",
       qms: {
         title: "ISO 9001: Quality Management Systems (QMS)",
         p1: "ISO 9001 ek standard hai jo ek Quality Management System (QMS) ke liye avashyakataon ko nirdharit karta hai. Yeh is baat par kendrit hai ki ek organization lagatar aise products aur services pradan kare jo customer aur regulatory zarooraton ko poora karte hain. Yeh product ki quality par focus karta hai, na ki food safety par.",
@@ -144,40 +146,82 @@ export const qualityContent = {
       }
     },
     prps: {
-      title: "PRPs aur OPRPs",
-      p1: "Yeh karyakram ek prabhavi HACCP system ki neev hain.",
-      prp: {
-        title: "Prerequisite Programs (PRPs): Food Safety ki Neev",
-        p1: "PRPs woh fundamental programs aur practices hain jo safe food produce karne ke liye zaroori basic environmental aur operational conditions banate hain. Inka prabhavi karyanvayan food chain mein khatron ke pravesh ki sambhavna ko kam karta hai.",
+      title: "Prerequisite Programs (PRPs)",
+      p1: "Yeh karyakram ek prabhavi HACCP system ki neev hain. Inka prabhavi karyanvayan food chain mein khatron ke pravesh ki sambhavna ko kam karta hai.",
+      gmp: {
+        title: "Good Manufacturing Practices (GMPs)",
+        p1: "GMPs woh niyam aur disha-nirdesh hain jo yeh sunishchit karte hain ki products lagatar quality standards ke anusaar banaye aur control kiye ja rahe hain. Dairy industry mein, GMPs har cheez ko cover karte hain - personnel hygiene se lekar equipment maintenance tak.",
         list: [
-          { title: "Good Manufacturing Practices (GMPs):", description: "Personnel practices, facility design, aur general operational procedures." },
-          { title: "Sanitation Standard Operating Procedures (SSOPs):", description: "Equipment ko saaf aur sanitize karne ke liye likhit procedures." },
-          { title: "Pest Control:", description: "Pests (keede, chuhe) ko rokne aur khatam karne ke upay." },
-          { title: "Personnel Hygiene and Training:", description: "Karmachariyon ke swasthya, swachhata, aur food safety par prashikshan." },
-          { title: "Supplier Approval Programs:", description: "Raw material ke liye approved suppliers ka upyog." },
-          { title: "Traceability and Recall Procedures:", description: "Zaroorat padne par products ko track aur recall karne ki pranali." }
+            { title: "Personnel:", description: "Sabhi karmachariyon ko hygiene aur apni zimmedariyon ke liye aavashyak training milni chahiye." },
+            { title: "Premises & Equipment:", description: "Building aur equipment is tarah se design aur maintain kiye jaane chahiye ki contamination ko roka ja sake aur safai aasan ho." },
+            { title: "Production:", description: "Har process ke liye likhit procedures (SOPs) hone chahiye. Critical steps ko define aur control kiya jaana chahiye." },
+            { title: "Quality Control:", description: "Raw material, intermediate, aur final products ke liye testing procedures hone chahiye." },
+            { title: "Documentation:", description: "Har batch ka record rakha jaana chahiye taaki traceability sunishchit ho sake." },
         ]
       },
-      oprp: {
-        title: "Operational Prerequisite Programs (OPRPs): Targeted Control",
-        p1: "OPRPs woh PRPs hain jinhe hazard analysis ne food safety hazards ko control karne ke liye bahut zaroori maana hai. Yeh CCPs se alag hain lekin inmein bhi specific monitoring aur corrective actions ki zaroorat hoti hai.",
+      ghp: {
+        title: "Good Hygiene Practices (GHPs)",
+        p1: "GHP, GMP ka ek anivarya hissa hai, jo food ko contamination se bachane ke liye zaroori sabhi practices ko cover karta hai. Iska mukhya uddeshya ek hygienic environment banaye rakhna hai.",
         list: [
-          { title: "Allergen Control Procedures:", description: "Cross-contamination ko rokne ke liye cleaning procedures." },
-          { title: "Raw Milk Storage Temperature Monitoring:", description: "Pasteurization se pehle milk mein microbial growth ko rokne ke liye." },
-          { title: "Cleaning-in-Place (CIP) Effectiveness Verification:", description: "CIP cycles ke parameters ko monitor karna." },
-          { title: "Environmental Monitoring Program (EMP):", description: "Processing environment mein pathogens ki jaanch karna." }
+          { title: "Personal Hygiene:", description: "Haath dhona, saaf kapde pehenna, aur bimar hone par kaam na karna." },
+          { title: "Cleaning and Sanitation:", description: "Equipment aur premises ki niyamit aur prabhavi safai aur sanitization." },
+          { title: "Pest Control:", description: "Keede-makodon ko plant mein aane se rokna aur unhein khatam karna." },
+          { title: "Waste Management:", description: "Waste ko sahi tarike se store aur dispose karna taaki woh contamination ka source na bane." }
+        ]
+      },
+      glp: {
+        title: "Good Laboratory Practices (GLPs)",
+        p1: "GLP un principles ka ek set hai jo non-clinical health aur environmental safety studies ke planning, performance, monitoring, recording, reporting, aur archiving ko govern karta hai. Dairy QC lab ke liye, iska matlab hai ki test results reliable, repeatable, aur auditable hain.",
+        list: [
+          { title: "Organization and Personnel:", description: "Har vyakti ki zimmedariyan saaf honi chahiye aur unke paas paryapt training honi chahiye." },
+          { title: "Apparatus, Material, and Reagents:", description: "Sabhi equipment aavashyaktanusar calibrated aur maintain kiye jaane chahiye. Reagents ko aavashyaktanusar label aur store kiya jaana chahiye." },
+          { title: "Test Systems:", description: "Testing ke liye use hone wale physical ya chemical systems ko aavashyaktanusar define aur control kiya jaana chahiye." },
+          { title: "Standard Operating Procedures (SOPs):", description: "Har routine procedure ke liye likhit, approved SOPs hone chahiye." },
+          { title: "Reporting of Results:", description: "Results ko saaf, sateek, aur poori tarah se report kiya jaana chahiye, jismein test conditions aur koi bhi deviations shamil ho." },
+          { title: "Storage and Retention of Records:", description: "Sabhi raw data, reports, aur samples ko ek nishchit avadhi ke liye aavashyaktanusar archive kiya jaana chahiye." }
         ]
       }
     },
-    ccps: {
-      title: "Dairy Industry mein Mahatvapurna Niyantran Bindu (CCPs)",
-      p1: "CCPs dairy processing chain mein specific, measurable points hain jahan food safety hazard ko roka ja sakta hai, khatam kiya ja sakta hai, ya ek acceptable level tak kam kiya ja sakta hai. In par control final product ki safety ke liye anivarya hai.",
-      list: [
-        { title: "Pasteurization (Thermal Processing):", description: "Yeh sabse mahatvapurna CCP hai. Doodh ko ek nishchit taapman (jaise HTST ke liye ≥72°C) par ek nishchit samay (≥15 seconds) ke liye garam kiya jaata hai taaki sabhi pathogenic bacteria nasht ho jayein." },
-        { title: "Cooling of Pasteurized Product:", description: "Pasteurization ke baad, doodh ko jaldi se kam taapman (≤4°C) tak thanda karna zaroori hai taaki bache hue bacteria ki growth ko roka ja sake." },
-        { title: "Metal Detection/X-ray Inspection:", description: "Packaging se pehle, metal ke tukde ya anya bhautik khatron ka pata lagane ke liye iska upyog kiya jaata hai." },
-        { title: "pH Control (for Fermented Products):", description: "Dahi aur paneer jaise products ke liye, fermentation ke baad ek nishchit pH (jaise ≤4.6) tak pahunchna zaroori hai, jo anavashyak bacteria ki growth ko rokta hai." }
-      ]
+    fssai: {
+      title: "Food Safety and Standards Authority of India (FSSAI)",
+      p1: "FSSAI Bharat mein food safety aur regulation ke liye sthapit ek autonomous body hai. Ise Food Safety and Standards Act, 2006 ke tahat sthapit kiya gaya tha. Iska mukhya uddeshya food articles ke liye science-based standards banana aur unke manufacturing, storage, distribution, sale, aur import ko regulate karna hai, taaki human consumption ke liye safe aur wholesome food ki uplabdhta sunishchit ho sake.",
+      structure: {
+        title: "FSSAI ki Sanrachna",
+        p1: "FSSAI mein ek Chairperson aur 22 sadasya hote hain. Iski sanrachna is prakaar hai:",
+        list: [
+          { title: "Authority:", description: "Yeh mukhya body hai jo regulations banati hai. Ismein alag-alag ministries aur departments ke pratinidhi shamil hote hain." },
+          { title: "Scientific Committees and Panels:", description: "Yeh FSSAI ko alag-alag food categories ke liye scientific advice aur recommendations dete hain. Inmein scientists aur experts hote hain." },
+          { title: "Central Advisory Committee (CAC):", description: "Yeh committee FSSAI ko regulations banate samay stakeholders (consumers, industry, etc.) ke vicharon ko shamil karne mein madad karti hai." },
+          { title: "State Food Safety Authorities:", description: "Har rajya mein Food Safety Commissioners hote hain jo apne rajya mein FSS Act ko lagoo karte hain." }
+        ]
+      },
+      functions: {
+        title: "FSSAI ke Mukhya Karya",
+        p1: "FSSAI ke kai mahatvapurna karya hain:",
+        list: [
+          "Food products ke liye standards aur guidelines banana.",
+          "Food businesses ke liye FSSAI license ya registration anivarya karna.",
+          "State Food Safety Authorities ke madhyam se FSS Act ka palan sunishchit karna.",
+          "Food testing ke liye accredited labs ka network sthapit karna aur unhein notify karna.",
+          "Food businesses aur regulatory staff ke liye training programs aayojit karna.",
+          "Food safety aur nutrition par janta ko jaagruk karna."
+        ]
+      }
+    },
+    codex: {
+      title: "Codex Alimentarius Commission (CAC)",
+      p1: "Codex Alimentarius Commission, ya CAC, ek antarrashtriya sanstha hai jise Food and Agriculture Organization (FAO) aur World Health Organization (WHO) ne milkar 1963 mein sthapit kiya tha. Iska mukhya uddeshya consumers ke swasthya ki raksha karna aur food trade mein fair practices ko badhava dena hai.",
+      p2: "'Codex Alimentarius' ek Latin shabd hai jiska matlab 'Food Code' hota hai. Yeh ek sangrah hai jismein antarrashtriya star par maanyata prapt standards, codes of practice, guidelines, aur anya recommendations shamil hain jo food production aur safety se sambandhit hain.",
+      structure: {
+        title: "Codex ka Karya aur Sanrachna",
+        p1: "Codex standards scientific research aur risk analysis par aadharit hote hain. Iski sanrachna mein shamil hain:",
+        list: [
+          { title: "The Commission:", description: "Yeh mukhya body hai jo standards ko antim roop deti hai. Iski baithak saal mein ek baar hoti hai." },
+          { title: "Codex Committees:", description: "Alag-alag vishayon par kaam karne ke liye committees hain, jaise 'Codex Committee on Milk and Milk Products', 'Codex Committee on Food Hygiene', etc. Yeh committees standards ke draft taiyar karti hain." },
+          { title: "Scientific Advice:", description: "Codex ko FAO/WHO ke expert bodies se scientific advice milta hai, jaise JECFA (Joint Expert Committee on Food Additives) aur JEMRA (Joint Expert Meetings on Microbiological Risk Assessment)." },
+          { title: "WTO Connection:", description: "World Trade Organization (WTO) ke Sanitary and Phytosanitary (SPS) Agreement ke tahat, Codex standards ko international trade disputes mein reference ke roop mein istemal kiya jaata hai." }
+        ]
+      }
     }
   },
   en: {
@@ -280,7 +324,8 @@ export const qualityContent = {
     },
     iso: {
       title: "ISO Standards",
-      p1: "ISO (International Organization for Standardization) is a worldwide federation that develops standards for various industries. For the dairy industry, ISO 9001 and ISO 22000 are the most important.",
+      p1: "ISO (International Organization for Standardization) is a worldwide federation that develops standards for various industries. It is a non-governmental organization that is a network of national standards bodies from over 160 countries. Its main purpose is to develop voluntary international standards for products, services, and systems to ensure quality, safety, and efficiency.",
+      p2: "For the dairy industry, ISO 9001 and ISO 22000 are the most important.",
       qms: {
         title: "ISO 9001: Quality Management Systems (QMS)",
         p1: "ISO 9001 is a standard that sets out the requirements for a Quality Management System (QMS). It focuses on an organization's ability to consistently provide products and services that meet customer and regulatory requirements. It focuses on product quality, not food safety.",
@@ -324,41 +369,83 @@ export const qualityContent = {
         ]
       }
     },
-    prps: {
-      title: "PRPs and OPRPs",
-      p1: "These programs are the foundation of an effective HACCP system.",
-      prp: {
-        title: "Prerequisite Programs (PRPs): The Foundation of Food Safety",
-        p1: "PRPs are the fundamental programs and practices that create the basic environmental and operational conditions necessary to produce safe food. Their effective implementation reduces the likelihood of hazards entering the food chain.",
+     prps: {
+      title: "Prerequisite Programs (PRPs)",
+      p1: "These programs are the foundation of an effective HACCP system. Their effective implementation reduces the likelihood of hazards entering the food chain.",
+      gmp: {
+        title: "Good Manufacturing Practices (GMPs)",
+        p1: "GMPs are the rules and guidelines that ensure products are consistently produced and controlled according to quality standards. In the dairy industry, GMPs cover everything from personnel hygiene to equipment maintenance.",
         list: [
-          { title: "Good Manufacturing Practices (GMPs):", description: "Personnel practices, facility design, and general operational procedures." },
-          { title: "Sanitation Standard Operating Procedures (SSOPs):", description: "Written procedures for cleaning and sanitizing equipment." },
-          { title: "Pest Control:", description: "Measures to prevent and eliminate pests (insects, rodents)." },
-          { title: "Personnel Hygiene and Training:", description: "Training on employee health, hygiene, and food safety." },
-          { title: "Supplier Approval Programs:", description: "Using approved suppliers for raw materials." },
-          { title: "Traceability and Recall Procedures:", description: "Systems to track and recall products if necessary." }
+            { title: "Personnel:", description: "All employees must receive the necessary training for hygiene and their responsibilities." },
+            { title: "Premises & Equipment:", description: "The building and equipment must be designed and maintained to prevent contamination and facilitate cleaning." },
+            { title: "Production:", description: "There must be written procedures (SOPs) for every process. Critical steps must be defined and controlled." },
+            { title: "Quality Control:", description: "There must be testing procedures for raw materials, intermediate, and final products." },
+            { title: "Documentation:", description: "A record of each batch must be kept to ensure traceability." },
         ]
       },
-      oprp: {
-        title: "Operational Prerequisite Programs (OPRPs): Targeted Control",
-        p1: "OPRPs are PRPs that hazard analysis has identified as essential to control food safety hazards. They are different from CCPs but also require specific monitoring and corrective actions.",
+      ghp: {
+        title: "Good Hygiene Practices (GHPs)",
+        p1: "GHP is an essential part of GMP, covering all practices necessary to protect food from contamination. Its main purpose is to maintain a hygienic environment.",
         list: [
-          { title: "Allergen Control Procedures:", description: "Cleaning procedures to prevent cross-contamination." },
-          { title: "Raw Milk Storage Temperature Monitoring:", description: "To prevent microbial growth in milk before pasteurization." },
-          { title: "Cleaning-in-Place (CIP) Effectiveness Verification:", description: "Monitoring the parameters of CIP cycles." },
-          { title: "Environmental Monitoring Program (EMP):", description: "Testing the processing environment for pathogens." }
+          { title: "Personal Hygiene:", description: "Hand washing, wearing clean clothes, and not working when sick." },
+          { title: "Cleaning and Sanitation:", description: "Regular and effective cleaning and sanitization of equipment and premises." },
+          { title: "Pest Control:", description: "Preventing and eliminating pests from the plant." },
+          { title: "Waste Management:", description: "Properly storing and disposing of waste so it does not become a source of contamination." }
+        ]
+      },
+      glp: {
+        title: "Good Laboratory Practices (GLPs)",
+        p1: "GLP is a set of principles that governs the planning, performance, monitoring, recording, reporting, and archiving of non-clinical health and environmental safety studies. For a dairy QC lab, it means that test results are reliable, repeatable, and auditable.",
+        list: [
+          { title: "Organization and Personnel:", description: "Responsibilities of each person must be clear, and they must have adequate training." },
+          { title: "Apparatus, Material, and Reagents:", description: "All equipment must be calibrated and maintained as required. Reagents must be labeled and stored as required." },
+          { title: "Test Systems:", description: "The physical or chemical systems used for testing must be defined and controlled as required." },
+          { title: "Standard Operating Procedures (SOPs):", description: "There must be written, approved SOPs for every routine procedure." },
+          { title: "Reporting of Results:", description: "Results must be reported clearly, accurately, and completely, including test conditions and any deviations." },
+          { title: "Storage and Retention of Records:", description: "All raw data, reports, and samples must be archived as required for a specified period." }
         ]
       }
     },
-    ccps: {
-      title: "Critical Control Points (CCPs) in the Dairy Industry",
-      p1: "CCPs are specific, measurable points in the dairy processing chain where a food safety hazard can be prevented, eliminated, or reduced to an acceptable level. Control at these points is mandatory for the safety of the final product.",
-      list: [
-        { title: "Pasteurization (Thermal Processing):", description: "This is the most critical CCP. Milk is heated to a specific temperature (e.g., ≥72°C for HTST) for a specific time (≥15 seconds) to destroy all pathogenic bacteria." },
-        { title: "Cooling of Pasteurized Product:", description: "After pasteurization, milk must be quickly cooled to a low temperature (≤4°C) to prevent the growth of remaining bacteria." },
-        { title: "Metal Detection/X-ray Inspection:", description: "Used before packaging to detect physical hazards like metal fragments." },
-        { title: "pH Control (for Fermented Products):", description: "For products like yogurt and cheese, reaching a specific pH (e.g., ≤4.6) after fermentation is necessary to inhibit the growth of unwanted bacteria." }
-      ]
+    fssai: {
+      title: "Food Safety and Standards Authority of India (FSSAI)",
+      p1: "FSSAI is an autonomous body established for food safety and regulation in India. It was established under the Food Safety and Standards Act, 2006. Its main objective is to create science-based standards for food articles and regulate their manufacturing, storage, distribution, sale, and import to ensure the availability of safe and wholesome food for human consumption.",
+      structure: {
+        title: "Structure of FSSAI",
+        p1: "FSSAI consists of a Chairperson and 22 members. Its structure is as follows:",
+        list: [
+          { title: "The Authority:", description: "This is the main body that makes regulations. It includes representatives from various ministries and departments." },
+          { title: "Scientific Committees and Panels:", description: "They provide scientific advice and recommendations to FSSAI for different food categories. They consist of scientists and experts." },
+          { title: "Central Advisory Committee (CAC):", description: "This committee helps FSSAI to include the views of stakeholders (consumers, industry, etc.) while making regulations." },
+          { title: "State Food Safety Authorities:", description: "Each state has Food Safety Commissioners who implement the FSS Act in their state." }
+        ]
+      },
+      functions: {
+        title: "Main Functions of FSSAI",
+        p1: "FSSAI has several important functions:",
+        list: [
+          "Framing of Regulations and Standards: To create standards and guidelines for food products.",
+          "Licensing and Registration: To make FSSAI license or registration mandatory for food businesses.",
+          "Enforcement: To ensure compliance with the FSS Act through State Food Safety Authorities.",
+          "Food Testing: To establish and notify a network of accredited labs for food testing.",
+          "Training and Capacity Building: To organize training programs for food businesses and regulatory staff.",
+          "Consumer Awareness: To educate the public on food safety and nutrition."
+        ]
+      }
+    },
+    codex: {
+      title: "Codex Alimentarius Commission (CAC)",
+      p1: "The Codex Alimentarius Commission, or CAC, is an international body established jointly by the Food and Agriculture Organization (FAO) and the World Health Organization (WHO) in 1963. Its main objective is to protect consumer health and promote fair practices in food trade.",
+      p2: "'Codex Alimentarius' is a Latin term meaning 'Food Code'. It is a collection of internationally recognized standards, codes of practice, guidelines, and other recommendations related to food production and safety.",
+      structure: {
+        title: "Function and Structure of Codex",
+        p1: "Codex standards are based on scientific research and risk analysis. Its structure includes:",
+        list: [
+          { title: "The Commission:", description: "This is the main body that finalizes the standards. Its meeting is held once a year." },
+          { title: "Codex Committees:", description: "There are committees to work on different subjects, such as the 'Codex Committee on Milk and Milk Products', 'Codex Committee on Food Hygiene', etc. These committees prepare the draft standards." },
+          { title: "Scientific Advice:", description: "Codex receives scientific advice from expert bodies of FAO/WHO, such as JECFA (Joint Expert Committee on Food Additives) and JEMRA (Joint Expert Meetings on Microbiological Risk Assessment)." },
+          { title: "WTO Connection:", description: "Under the Sanitary and Phytosanitary (SPS) Agreement of the World Trade Organization (WTO), Codex standards are used as a reference in international trade disputes." }
+        ]
+      }
     }
   }
 };
