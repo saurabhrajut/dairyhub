@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
+import { useLanguage } from "@/context/language-context"
 
 export function SettingsPanel({
   isOpen,
@@ -27,6 +28,7 @@ export function SettingsPanel({
   setIsOpen: (open: boolean) => void
 }) {
   const { toast } = useToast()
+  const { language, setLanguage } = useLanguage();
 
   const handleSave = () => {
     toast({
@@ -47,6 +49,20 @@ export function SettingsPanel({
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="language-select" className="text-right">
+              Language
+            </Label>
+            <Select value={language} onValueChange={(value) => setLanguage(value as 'hi' | 'en')}>
+              <SelectTrigger id="language-select" className="col-span-3">
+                <SelectValue placeholder="Select a language" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="hi">Hinglish</SelectItem>
+                <SelectItem value="en">English</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="voice-gender" className="text-right">
               Voice Gender
             </Label>
@@ -57,20 +73,6 @@ export function SettingsPanel({
               <SelectContent>
                 <SelectItem value="female">Female</SelectItem>
                 <SelectItem value="male">Male</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="chat-mode" className="text-right">
-              Chat Mode
-            </Label>
-            <Select defaultValue="online">
-              <SelectTrigger id="chat-mode" className="col-span-3">
-                <SelectValue placeholder="Select a mode" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="online">Online (AI)</SelectItem>
-                <SelectItem value="offline">Offline (Basic)</SelectItem>
               </SelectContent>
             </Select>
           </div>
