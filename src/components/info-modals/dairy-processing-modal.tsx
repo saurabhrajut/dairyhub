@@ -18,36 +18,30 @@ import {
 import {
   CheckCircle,
   Thermometer,
-  Scale,
-  Package,
-  Warehouse,
-  TestTube,
-  Wind,
-  Layers,
-  Percent,
-  Atom,
   Settings,
   Filter,
-  RefreshCw,
-  Droplet
+  Droplet,
+  Wind,
+  Layers
 } from "lucide-react";
 
-const Section = ({ title, icon: Icon, children, defaultOpen = false }: { title: string, icon: React.ElementType, children: React.ReactNode, defaultOpen?: boolean }) => (
-    <AccordionItem value={title}>
-        <AccordionTrigger className="text-xl font-bold hover:no-underline font-headline">
-            <div className="flex items-center gap-3">
-                <Icon className="w-6 h-6 text-primary" />
-                <span>{title}</span>
-            </div>
-        </AccordionTrigger>
-        <AccordionContent>
-            <div className="prose prose-sm max-w-none text-gray-700 leading-relaxed pl-9">
-                {children}
-            </div>
-        </AccordionContent>
-    </AccordionItem>
-);
-
+function Section({ title, icon: Icon, children }: { title: string, icon: React.ElementType, children: React.ReactNode }) {
+    return (
+        <AccordionItem value={title}>
+            <AccordionTrigger className="text-xl font-bold hover:no-underline font-headline">
+                <div className="flex items-center gap-3">
+                    <Icon className="w-6 h-6 text-primary" />
+                    <span>{title}</span>
+                </div>
+            </AccordionTrigger>
+            <AccordionContent>
+                <div className="prose prose-sm max-w-none text-gray-700 leading-relaxed pl-9">
+                    {children}
+                </div>
+            </AccordionContent>
+        </AccordionItem>
+    );
+}
 
 export function DairyProcessingModal({
   isOpen,
@@ -69,7 +63,7 @@ export function DairyProcessingModal({
         </DialogHeader>
         <ScrollArea className="h-full pr-6 mt-4">
             <Accordion type="single" collapsible className="w-full" defaultValue="Pasteurization">
-                <Section title="Workflow Overview" icon={Settings} defaultOpen>
+                <Section title="Workflow Overview" icon={Settings}>
                     <p>Dairy processing ek sequence of operations hai jismein raw milk ko safe, high-quality, aur shelf-stable products mein badla jaata hai. Har step ka ek specific purpose hota hai.</p>
                     <ol className="list-decimal pl-5 mt-4 space-y-2">
                         <li><strong>Reception & Testing:</strong> Plant mein aane wale doodh ki quality (Fat, SNF, Acidity, Adulterants) jaanchi jaati hai.</li>
