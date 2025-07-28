@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -57,6 +56,7 @@ export function SubscriptionModal({
                         height={180}
                         className="mx-auto rounded-md border-4 border-white shadow-lg"
                     />
+                    <p className="mt-2 text-sm font-semibold text-gray-800 bg-gray-200 p-2 rounded-md inline-block">9119005734-2@axl</p>
                     <p className="text-xs text-muted-foreground mt-3">After payment, send a screenshot to our support team to activate your plan.</p>
                 </div>
             </div>
