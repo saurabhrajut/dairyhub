@@ -50,9 +50,9 @@ export function SubscriptionModal({
                     <h4 className="font-semibold text-gray-700">Pay using any UPI App</h4>
                     <p className="text-xs text-muted-foreground mb-3">Scan the QR code to complete your payment.</p>
                     <Image 
-                        src="https://placehold.co/200x200.png"
+                        src="https://firebasestudio.app/assets/images/dhenu-guide-upi-qr.png"
                         data-ai-hint="QR code"
-                        alt="UPI QR Code"
+                        alt="UPI QR Code for Saurabh Kumar"
                         width={180}
                         height={180}
                         className="mx-auto rounded-md border-4 border-white shadow-lg"
