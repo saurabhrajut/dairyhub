@@ -109,7 +109,7 @@ export function DairyProcessingModal({
                      <h4>Siddhant (Principle)</h4>
                      <p>Homogenization ek mechanical process hai jiska uddeshya doodh mein maujood bade fat globules ko chote, uniform size ke globules mein todna hai. Isse doodh mein ek sthir emulsion banta hai, jisse fat upar aakar malai ki parat (cream layer) nahi banata.</p>
                      <h4 className="mt-4">Kaise Kaam Karta Hai?</h4>
-                     <p>Doodh ko ek high-pressure pump ke zariye ek homogenizer valve (ek bahut choti si jagah) se force kiya jaata hai. Jab doodh is valve se bahut tezi se guzarta hai, toh turbulence, shear, aur cavitation forces milkar bade fat globules (average size 3-6 microns) ko chote globules (size <2 microns) mein tod dete hain. Homogenization aam taur par pasteurization se pehle kiya jaata hai.</p>
+                     <p>Doodh ko ek high-pressure pump ke zariye ek homogenizer valve (ek bahut choti si jagah) se force kiya jaata hai. Jab doodh is valve se bahut tezi se guzarta hai, toh turbulence, shear, aur cavitation forces milkar bade fat globules (average size 3-6 microns) ko chote globules (size &lt;2 microns) mein tod dete hain. Homogenization aam taur par pasteurization se pehle kiya jaata hai.</p>
                      <h4 className="mt-4">Prabhav (Effects)</h4>
                      <ul className="list-disc pl-5 space-y-2">
                         <li><strong>Cream Layer Rokna:</strong> Sabse mukhya prabhav.</li>
@@ -151,3 +151,5 @@ export function DairyProcessingModal({
     </Dialog>
   );
 }
+
+    
