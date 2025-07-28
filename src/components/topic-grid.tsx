@@ -20,6 +20,7 @@ import {
   CheckSquare,
   Droplet,
   PackageCheck,
+  Lock,
 } from "lucide-react";
 import { PaneerIcon, IceCreamIcon } from "@/components/icons";
 import { Input } from "@/components/ui/input";
@@ -38,24 +39,26 @@ import { CalibrationStandardizationModal } from "./info-modals/calibration-stand
 import { QualityConceptModal } from "./info-modals/quality-concept-modal";
 import { WaterTestingModal } from "./info-modals/water-testing-modal";
 import { PackagingMaterialTestingModal } from "./info-modals/packaging-material-testing-modal";
+import { useSubscription } from "@/context/subscription-context";
+import { SubscriptionModal } from "./subscription-modal";
 
 const topics = [
-  { id: 'industry', title: 'Dairy Industry', description: 'Overview & Trends', category: 'industry', icon: Factory, badge: 'New', modal: DairyIndustryModal },
-  { id: 'milk-chemistry', title: 'Milk Chemistry', description: 'Composition & Properties', category: 'science', icon: FlaskConical, modal: MilkChemistryModal },
-  { id: 'solutions-prep', title: 'Solutions Preparation', description: 'Testing Methods', category: 'science', icon: Beaker, modal: SolutionsPrepModal },
-  { id: 'adulteration', title: 'Adulteration', description: 'Detection & Prevention', category: 'milk', icon: Biohazard, badge: 'Updated', modal: AdulterationModal },
-  { id: 'std1', title: 'Standardization I', description: 'Basic Principles', category: 'milk', icon: Scale, modal: StandardizationIModal },
-  { id: 'std2', title: 'Standardization II', description: 'Advanced Blending', category: 'milk', icon: Calculator, modal: StandardizationIIModal },
-  { id: 'paneer-production', title: 'Paneer Production', description: 'Process & Yield', category: 'science', icon: PaneerIcon, modal: PaneerProductionModal },
-  { id: 'ice-cream-calc', title: 'Ice Cream Calc', description: 'Overrun & Mix', category: 'science', icon: IceCreamIcon, modal: IceCreamCalculationsModal },
-  { id: 'compositional-analysis', title: 'Compositional Analysis', description: 'Chemical tests for products', category: 'science', icon: TestTube, modal: CompositionalAnalysisModal },
-  { id: 'calibration', title: 'Calibration', description: 'Glassware & Reagents', category: 'science', icon: ClipboardCheck, modal: CalibrationStandardizationModal },
-  { id: 'quality-concept', title: 'Quality Concepts', description: 'HACCP, TQM, ISO', category: 'industry', icon: CheckSquare, modal: QualityConceptModal },
-  { id: 'water-testing', title: 'Water Testing', description: 'WTP/ETP Analysis', category: 'industry', icon: Droplet, modal: WaterTestingModal },
-  { id: 'packaging-testing', title: 'Packaging Testing', description: 'Quality tests for materials', category: 'industry', icon: PackageCheck, modal: PackagingMaterialTestingModal },
-  { id: 'processing', title: 'Dairy Processing', description: 'Techniques & Machinery', category: 'industry', icon: Settings, modal: DairyProcessingModal },
-  { id: 'food-tech', title: 'Food Technology', description: 'Product Development', category: 'science', icon: Utensils, modal: null },
-  { id: 'about-us', title: 'About Us', description: 'Our Mission & Vision', category: 'industry', icon: Users, modal: AboutUsModal },
+  { id: 'industry', title: 'Dairy Industry', description: 'Overview & Trends', category: 'industry', icon: Factory, badge: 'New', modal: DairyIndustryModal, isPro: true },
+  { id: 'milk-chemistry', title: 'Milk Chemistry', description: 'Composition & Properties', category: 'science', icon: FlaskConical, modal: MilkChemistryModal, isPro: true },
+  { id: 'solutions-prep', title: 'Solutions Preparation', description: 'Testing Methods', category: 'science', icon: Beaker, modal: SolutionsPrepModal, isPro: true },
+  { id: 'adulteration', title: 'Adulteration', description: 'Detection & Prevention', category: 'milk', icon: Biohazard, badge: 'Updated', modal: AdulterationModal, isPro: true },
+  { id: 'std1', title: 'Standardization I', description: 'Basic Principles', category: 'milk', icon: Scale, modal: StandardizationIModal, isPro: false },
+  { id: 'std2', title: 'Standardization II', description: 'Advanced Blending', category: 'milk', icon: Calculator, modal: StandardizationIIModal, isPro: true },
+  { id: 'paneer-production', title: 'Paneer Production', description: 'Process & Yield', category: 'science', icon: PaneerIcon, modal: PaneerProductionModal, isPro: true },
+  { id: 'ice-cream-calc', title: 'Ice Cream Calc', description: 'Overrun & Mix', category: 'science', icon: IceCreamIcon, modal: IceCreamCalculationsModal, isPro: true },
+  { id: 'compositional-analysis', title: 'Compositional Analysis', description: 'Chemical tests for products', category: 'science', icon: TestTube, modal: CompositionalAnalysisModal, isPro: true },
+  { id: 'calibration', title: 'Calibration', description: 'Glassware & Reagents', category: 'science', icon: ClipboardCheck, modal: CalibrationStandardizationModal, isPro: true },
+  { id: 'quality-concept', title: 'Quality Concepts', description: 'HACCP, TQM, ISO', category: 'industry', icon: CheckSquare, modal: QualityConceptModal, isPro: true },
+  { id: 'water-testing', title: 'Water Testing', description: 'WTP/ETP Analysis', category: 'industry', icon: Droplet, modal: WaterTestingModal, isPro: true },
+  { id: 'packaging-testing', title: 'Packaging Testing', description: 'Quality tests for materials', category: 'industry', icon: PackageCheck, modal: PackagingMaterialTestingModal, isPro: true },
+  { id: 'processing', title: 'Dairy Processing', description: 'Techniques & Machinery', category: 'industry', icon: Settings, modal: DairyProcessingModal, isPro: true },
+  { id: 'food-tech', title: 'Food Technology', description: 'Product Development', category: 'science', icon: Utensils, modal: null, isPro: true },
+  { id: 'about-us', title: 'About Us', description: 'Our Mission & Vision', category: 'industry', icon: Users, modal: AboutUsModal, isPro: false },
 ];
 
 const filters = [
@@ -69,6 +72,8 @@ export function TopicGrid() {
   const [activeFilter, setActiveFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [activeModal, setActiveModal] = useState<string | null>(null);
+  const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState(false);
+  const { isPro } = useSubscription();
 
   const filteredTopics = topics.filter((topic) => {
     const matchesFilter = activeFilter === "all" || topic.category === activeFilter;
@@ -78,10 +83,17 @@ export function TopicGrid() {
 
   const openModal = (id: string) => {
       const topic = topics.find(t => t.id === id);
+      if (!topic) return;
+
+      if (topic.isPro && !isPro) {
+        setIsSubscriptionModalOpen(true);
+        return;
+      }
+      
       if(topic && topic.modal) {
         setActiveModal(id);
       } else {
-        alert("This section is coming soon!");
+        setIsSubscriptionModalOpen(true); // Or show a coming soon toast
       }
   };
 
@@ -113,20 +125,24 @@ export function TopicGrid() {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-        {filteredTopics.map((topic) => (
-          <div
-            key={topic.id}
-            onClick={() => openModal(topic.id)}
-            className="bg-card p-6 rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-2 transition-all duration-300 cursor-pointer text-center relative overflow-hidden group"
-          >
-            {topic.badge && <Badge variant="destructive" className="absolute top-3 right-3 animate-pulse">{topic.badge}</Badge>}
-            <div className="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center bg-gradient-to-br from-primary/10 to-accent/20">
-              <topic.icon className="w-10 h-10 text-primary" />
+        {filteredTopics.map((topic) => {
+          const isLocked = topic.isPro && !isPro;
+          return (
+            <div
+              key={topic.id}
+              onClick={() => openModal(topic.id)}
+              className={`bg-card p-6 rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-2 transition-all duration-300 cursor-pointer text-center relative overflow-hidden group ${isLocked ? 'opacity-70' : ''}`}
+            >
+              {isLocked && <div className="absolute inset-0 bg-black/30 flex items-center justify-center"><Lock className="w-8 h-8 text-white" /></div>}
+              {topic.badge && <Badge variant="destructive" className="absolute top-3 right-3 animate-pulse">{topic.badge}</Badge>}
+              <div className="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center bg-gradient-to-br from-primary/10 to-accent/20">
+                <topic.icon className="w-10 h-10 text-primary" />
+              </div>
+              <h3 className="font-headline font-semibold text-card-foreground text-md">{topic.title}</h3>
+              <p className="text-xs text-muted-foreground">{topic.description}</p>
             </div>
-            <h3 className="font-headline font-semibold text-card-foreground text-md">{topic.title}</h3>
-            <p className="text-xs text-muted-foreground">{topic.description}</p>
-          </div>
-        ))}
+          )
+        })}
       </div>
       
       {topics.map(topic => {
@@ -134,6 +150,7 @@ export function TopicGrid() {
           if (!ModalComponent) return null;
           return <ModalComponent key={`${topic.id}-modal`} isOpen={activeModal === topic.id} setIsOpen={() => setActiveModal(null)} />
       })}
+      <SubscriptionModal isOpen={isSubscriptionModalOpen} setIsOpen={setIsSubscriptionModalOpen} />
     </>
   );
 }
