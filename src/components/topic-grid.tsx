@@ -19,6 +19,7 @@ import {
   ClipboardCheck,
   CheckSquare,
   Droplet,
+  PackageCheck,
 } from "lucide-react";
 import { PaneerIcon, IceCreamIcon } from "@/components/icons";
 import { Input } from "@/components/ui/input";
@@ -36,6 +37,7 @@ import { CompositionalAnalysisModal } from "./info-modals/compositional-analysis
 import { CalibrationStandardizationModal } from "./info-modals/calibration-standardization-modal";
 import { QualityConceptModal } from "./info-modals/quality-concept-modal";
 import { WaterTestingModal } from "./info-modals/water-testing-modal";
+import { PackagingMaterialTestingModal } from "./info-modals/packaging-material-testing-modal";
 
 const topics = [
   { id: 'industry', title: 'Dairy Industry', description: 'Overview & Trends', category: 'industry', icon: Factory, badge: 'New', modal: DairyIndustryModal },
@@ -50,6 +52,7 @@ const topics = [
   { id: 'calibration', title: 'Calibration', description: 'Glassware & Reagents', category: 'science', icon: ClipboardCheck, modal: CalibrationStandardizationModal },
   { id: 'quality-concept', title: 'Quality Concepts', description: 'HACCP, TQM, ISO', category: 'industry', icon: CheckSquare, modal: QualityConceptModal },
   { id: 'water-testing', title: 'Water Testing', description: 'WTP/ETP Analysis', category: 'industry', icon: Droplet, modal: WaterTestingModal },
+  { id: 'packaging-testing', title: 'Packaging Testing', description: 'Quality tests for materials', category: 'industry', icon: PackageCheck, modal: PackagingMaterialTestingModal },
   { id: 'processing', title: 'Dairy Processing', description: 'Techniques & Machinery', category: 'industry', icon: Settings, modal: DairyProcessingModal },
   { id: 'food-tech', title: 'Food Technology', description: 'Product Development', category: 'science', icon: Utensils, modal: null },
   { id: 'about-us', title: 'About Us', description: 'Our Mission & Vision', category: 'industry', icon: Users, modal: AboutUsModal },
