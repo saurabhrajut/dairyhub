@@ -22,7 +22,7 @@ export default function Home() {
 
   useEffect(() => {
     try {
-      const storedUser = localStorage.getItem("dhenu-guide-user");
+      const storedUser = localStorage.getItem("dairy-hub-user");
       if (storedUser) {
         setUser(JSON.parse(storedUser));
       } else {

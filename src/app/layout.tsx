@@ -5,7 +5,7 @@ import { LanguageProvider } from '@/context/language-context';
 import { SubscriptionProvider } from '@/context/subscription-context';
 
 export const metadata: Metadata = {
-  title: 'DhenuGuide',
+  title: 'Dairy Hub',
   description: 'Your complete guide to dairy science and industry.',
 };
 

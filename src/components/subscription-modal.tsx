@@ -67,7 +67,7 @@ export function SubscriptionModal({
                     </div>
                     <DialogTitle className="text-3xl text-center font-extrabold text-gray-800 font-headline">Go Pro!</DialogTitle>
                     <DialogDescription className="text-muted-foreground text-center">
-                        Unlock powerful features and support DhenuGuide's development.
+                        Unlock powerful features and support Dairy Hub's development.
                     </DialogDescription>
                 </DialogHeader>
                 <div className="mt-6 space-y-3">

@@ -104,7 +104,7 @@ export function AboutUsModal({
             
             <footer className="text-center mt-12 py-4 border-t border-gray-200">
                 <p className="text-sm text-gray-500">
-                  Made with ❤️ by Saurabh Rajput | DhenuGuide App
+                  Made with ❤️ by Saurabh Rajput | Dairy Hub App
                 </p>
             </footer>
         </ScrollArea>

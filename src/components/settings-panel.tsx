@@ -44,7 +44,7 @@ export function SettingsPanel({
         <DialogHeader>
           <DialogTitle className="font-headline">Settings</DialogTitle>
           <DialogDescription>
-            Customize your DhenuGuide experience.
+            Customize your Dairy Hub experience.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">

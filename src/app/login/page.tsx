@@ -45,7 +45,7 @@ export default function LoginPage() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-        localStorage.setItem("dhenu-guide-user", JSON.stringify(values));
+        localStorage.setItem("dairy-hub-user", JSON.stringify(values));
         router.push("/");
     } catch (error) {
         console.error("Failed to save user data to localStorage", error);
@@ -60,7 +60,7 @@ export default function LoginPage() {
                 <div className="mx-auto bg-primary/10 p-3 rounded-full w-fit mb-2">
                     <Milk className="w-8 h-8 text-primary" />
                 </div>
-                <CardTitle className="font-headline text-3xl">Welcome to DhenuGuide</CardTitle>
+                <CardTitle className="font-headline text-3xl">Welcome to Dairy Hub</CardTitle>
                 <CardDescription>Please enter your details to continue</CardDescription>
             </CardHeader>
             <CardContent>

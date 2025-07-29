@@ -23,7 +23,7 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
 
   const checkSubscription = useCallback(() => {
     try {
-      const storedSub = localStorage.getItem('dhenu-guide-subscription');
+      const storedSub = localStorage.getItem('dairy-hub-subscription');
       if (storedSub) {
         const subData: Subscription = JSON.parse(storedSub);
         if (subData.plan === 'lifetime' || (subData.expiryDate && subData.expiryDate > Date.now())) {
@@ -67,7 +67,7 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
 
     const newSubscription: Subscription = { plan, expiryDate };
     try {
-        localStorage.setItem('dhenu-guide-subscription', JSON.stringify(newSubscription));
+        localStorage.setItem('dairy-hub-subscription', JSON.stringify(newSubscription));
         setSubscription(newSubscription);
         setIsPro(true);
     } catch (error) {

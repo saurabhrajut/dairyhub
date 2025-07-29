@@ -16,7 +16,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguageState] = useState<Language>('hi'); // Default to Hinglish
 
   useEffect(() => {
-    const storedLang = localStorage.getItem('dhenu-guide-language') as Language | null;
+    const storedLang = localStorage.getItem('dairy-hub-language') as Language | null;
     if (storedLang && ['en', 'hi'].includes(storedLang)) {
       setLanguageState(storedLang);
     }
@@ -25,7 +25,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const setLanguage = (lang: Language) => {
     if (['en', 'hi'].includes(lang)) {
         setLanguageState(lang);
-        localStorage.setItem('dhenu-guide-language', lang);
+        localStorage.setItem('dairy-hub-language', lang);
     }
   };
 

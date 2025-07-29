@@ -16,7 +16,7 @@ export function Header({ user, setUser }: { user: UserProfile; setUser: (user: U
     const router = useRouter();
 
     const handleLogout = () => {
-        localStorage.removeItem("dhenu-guide-user");
+        localStorage.removeItem("dairy-hub-user");
         setUser(null);
         router.push("/login");
     }
