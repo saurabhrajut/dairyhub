@@ -56,10 +56,10 @@ export function AboutUsModal({
                     <div className="md:w-2/3 space-y-4 text-gray-700 text-base leading-relaxed">
                         <p>Mera naam <strong>Saurabh Rajput</strong> hai, aur Dairy Hub mera ek sapna hai jise maine aap sab ke liye hakikat banaya hai.</p>
                         <p>Food aur Dairy Technology ke kshetra mein meri ruchi hamesha se rahi hai. Apni study and internships ke dauran, maine mehsoos kiya ki is industry mein practical aur aasaani se samajh aane wali scientific knowledge ki kami hai, khaaskar digital platforms par. Isi kami ko pura karne ke liye maine Dairy Hub ki neev rakhi.</p>
-                        <p>Mera lakshya ek aisa digital ecosystem banana hai jahan students, professionals, aur kisan bhai aasani se dairy se judi har technical jaankari prapt kar sakein aur apne kaam mein behtar decision le sakein.</p>
+                        <p>Mera lakshya ek aisa digital ecosystem banana hai jahan students, professionals, aur dairy enthusiasts aasani se dairy se judi har technical jaankari prapt kar sakein aur apne kaam mein behtar decision le sakein.</p>
                     </div>
                     <div className="w-full md:w-1/3 bg-gray-50 p-6 rounded-lg shadow-inner">
-                        <h3 className="text-xl font-bold text-cyan-800 mb-4 font-headline">Analyst & Technicals</h3>
+                        <h3 className="text-xl font-bold text-cyan-800 mb-4 font-headline">Academic Information</h3>
                         <ul className="space-y-4">
                             <li className="flex items-start">
                                 <GraduationCap className="text-cyan-600 mt-1 mr-3 shrink-0"/>
