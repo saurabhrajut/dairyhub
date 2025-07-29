@@ -298,11 +298,6 @@ function FatSnfAdjustmentCalc() {
             return;
         }
 
-        if (Ft < Fm) {
-            setError("Target Fat must be higher than Milk Fat for this calculation.");
-            return;
-        }
-
         // Equations:
         // 1. M*Fm + C*Fc + P*Fp = (M+C+P)*Ft  (Fat balance)
         // 2. M*Sm + C*Sc + P*Sp = (M+C+P)*St  (SNF balance)
@@ -327,7 +322,7 @@ function FatSnfAdjustmentCalc() {
         const C = (K1 * B2 - K2 * B1) / det;
         const P = (K2 * A1 - K1 * A2) / det;
 
-        if (C < 0 || P < 0) {
+        if (C < 0 && P < 0) {
             setError("Calculation resulted in negative values. Please check your inputs. This might happen if target SNF is lower than initial SNF after fat adjustment.");
             return;
         }
