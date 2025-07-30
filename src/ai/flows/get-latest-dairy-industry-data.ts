@@ -33,13 +33,13 @@ export async function getLatestDairyIndustryData(): Promise<DairyIndustryData> {
 const prompt = ai.definePrompt({
   name: 'getLatestDairyIndustryDataPrompt',
   output: { schema: DairyIndustryDataSchema },
-  prompt: `You are a dairy industry analyst. Your task is to provide the most up-to-date and comprehensive information about the Indian Dairy Industry.
-Search for the latest available data (from the last 12 months if possible) and provide all information in Hinglish.
+  prompt: `You are a dairy industry analyst. Your task is to provide the most up-to-date and comprehensive information about the Indian Dairy Industry as of July 29, 2025.
+Search for the latest available data and projections to provide a forward-looking analysis. Provide all information in Hinglish.
 Format numbers and statistics clearly. For example, use "INR 20,000 billion" or "250 million tonnes".
 Structure the output according to the provided schema. For all lists, provide at least 3-5 detailed bullet points.
 Highlight key statistics and names by wrapping them in <strong> tags. For example: <strong>250 million tonnes</strong> or <strong>Amul</strong>.
-Set the 'lastUpdated' field to today's date.
-Provide deep, insightful information for all fields.
+Set the 'lastUpdated' field to '29 July 2025'.
+Provide deep, insightful, and scientific information for all fields.
 `,
 });
 

@@ -28,7 +28,7 @@ export function SettingsPanel({
   setIsOpen: (open: boolean) => void
 }) {
   const { toast } = useToast()
-  const { language, setLanguage } = useLanguage();
+  const { language, setLanguage, voiceGender, setVoiceGender } = useLanguage();
 
   const handleSave = () => {
     toast({
@@ -66,7 +66,7 @@ export function SettingsPanel({
             <Label htmlFor="voice-gender" className="text-right">
               Voice Gender
             </Label>
-            <Select defaultValue="female">
+            <Select value={voiceGender} onValueChange={(value) => setVoiceGender(value as 'female' | 'male')}>
               <SelectTrigger id="voice-gender" className="col-span-3">
                 <SelectValue placeholder="Select a gender" />
               </SelectTrigger>

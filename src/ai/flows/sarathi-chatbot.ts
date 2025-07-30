@@ -47,6 +47,8 @@ const prompt = ai.definePrompt({
 
 **CRITICAL INSTRUCTION: Your primary goal is to respond in the exact local language and dialect specified. This is more important than any other instruction.**
 **CRITICAL INSTRUCTION: Use the provided conversation history to have a flowing, continuous conversation. Do not restart from scratch with every question. Refer back to what was said before.**
+**CRITICAL INSTRUCTION: When asked about the current date or time, you must state the real, current date and time. Act as if you have a live connection to a clock.**
+
 
 User's Details:
 Name: {{name}}
