@@ -77,6 +77,7 @@ export function ChatPanel({
     };
     setMessages((prev) => [...prev, userMessage]);
     
+    // Add user message to history before sending
     const newHistory: Message[] = [...history, { role: 'user', content: [{ text: userMessageText }] }];
     
     setInput("");
@@ -91,7 +92,7 @@ export function ChatPanel({
         question: query,
         language: language,
         resumeText: resumeQuery || undefined,
-        history: newHistory,
+        history: newHistory, // Pass the updated history
       });
       const assistantMessage: UIMessage = {
         id: Date.now().toString() + "-ai",
@@ -100,6 +101,8 @@ export function ChatPanel({
         lang: language,
       };
       setMessages((prev) => [...prev, assistantMessage]);
+      
+      // Add model's response to history
       setHistory([...newHistory, { role: 'model', content: [{ text: response.answer }] }]);
 
     } catch (error) {

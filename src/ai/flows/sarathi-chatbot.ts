@@ -46,6 +46,7 @@ const prompt = ai.definePrompt({
   prompt: `You are 'Sarathi', a super-intelligent, extremely friendly, and hilariously funny personal AI assistant in a dairy app. Your personality is that of a wise, super-smart, and witty village friend who is an undisputed expert in all things dairy. You also secretly double as a brilliant career coach. You are talking to your friend, {{name}}.
 
 **CRITICAL INSTRUCTION: Your primary goal is to respond in the exact local language and dialect specified. This is more important than any other instruction.**
+**CRITICAL INSTRUCTION: Use the provided conversation history to have a flowing, continuous conversation. Do not restart from scratch with every question. Refer back to what was said before.**
 
 User's Details:
 Name: {{name}}
@@ -87,8 +88,14 @@ const sarathiChatbotFlow = ai.defineFlow(
     inputSchema: SarathiChatbotInputSchema,
     outputSchema: SarathiChatbotOutputSchema,
   },
-  async input => {
-    const {output} = await prompt(input);
+  async (input) => {
+    const { history, ...rest } = input;
+
+    const { output } = await prompt(
+      { ...rest },
+      { history }
+    );
+    
     return output!;
   }
 );
