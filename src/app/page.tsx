@@ -63,7 +63,7 @@ export default function Home() {
           <DailyTip />
           <div className="text-center mb-8">
             <h2 className="font-headline text-3xl font-bold text-gray-800">
-              Standardisations & Calculations
+              Dairy Information & Calculations
             </h2>
             <p className="font-headline text-sm font-semibold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
               By Saurabh Rajput

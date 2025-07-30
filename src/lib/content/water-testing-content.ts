@@ -11,8 +11,8 @@ export const waterTestingContent = {
                 intro: 'Alkalinity paani ki acids ko neutralize karne ki capacity ko measure karti hai. Yeh mainly bicarbonate, carbonate, aur hydroxide ions ki wajah se hoti hai.',
                 procedure: [
                     'Ek clean conical flask mein paani sample ka ek fixed volume (jaise 100 mL) lein.',
-                    '2-3 drops phenolphthalein indicator daalein. Agar solution pink ho jaaye, toh standard acid solution (jaise 0.02 N H₂SO₄) se titrate karein jab tak pink color gayab na ho jaaye. Acid ka volume (P) note karein.',
-                    'Ussi solution mein 2-3 drops methyl orange indicator daalein.',
+                    '2-3 drops <strong>phenolphthalein indicator</strong> daalein. Agar solution pink ho jaaye, toh standard acid solution (jaise <strong>0.02 N H₂SO₄</strong>) se titrate karein jab tak pink color gayab na ho jaaye. Acid ka volume (P) note karein.',
+                    'Ussi solution mein 2-3 drops <strong>methyl orange indicator</strong> daalein.',
                     'Standard acid solution se titrate karna continue karein jab tak color yellow se orange/red na ho jaaye. Kul istemaal hue acid ka volume (T) note karein.',
                 ],
                 calculation: 'Total Alkalinity (mg/L as CaCO₃) = (T &times; Normality of Acid &times; 50000) / Volume of Sample (mL)'
@@ -24,7 +24,7 @@ export const waterTestingContent = {
                 procedure: [
                     'BOD dilution water ka istemal karke paani ke sample ki alag-alag dilutions banayein.',
                     'Har dilution ke liye do BOD bottles bharein: ek initial DO ke liye aur ek incubation ke liye.',
-                    'Pehli bottle mein turant Dissolved Oxygen (DO₁) maapein.',
+                    'Pehli bottle mein turant Dissolved Oxygen (DO₁) maapein (Winkler method se).',
                     'Doosri bottles ko 5 din ke liye 20°C par andhere mein incubate karein.',
                     '5 din baad, doosri bottles mein Dissolved Oxygen (DO₅) maapein.',
                     'Ek blank sample (sirf dilution water) ke liye bhi yahi process repeat karein (B₁ aur B₅).',
@@ -38,8 +38,8 @@ export const waterTestingContent = {
                 procedure: [
                     'Ek conical flask mein paani sample (jaise 50 mL) lein.',
                     'pH ko 7 se 10 ke beech adjust karein.',
-                    '1 mL potassium chromate indicator daalein.',
-                    'Standard silver nitrate (AgNO₃) solution se titrate karein jab tak ek persistent reddish-brown precipitate na ban jaaye. Volume (V_sample) note karein.',
+                    '1 mL <strong>potassium chromate indicator</strong> daalein.',
+                    'Standard <strong>silver nitrate (AgNO₃)</strong> solution se titrate karein jab tak ek persistent reddish-brown precipitate na ban jaaye. Volume (V_sample) note karein.',
                     'Distilled water ke saath ek blank titration bhi karein (V_blank).',
                 ],
                 calculation: 'Chloride (mg/L) = [ (V_sample - V_blank) &times; N of AgNO₃ &times; 35.45 &times; 1000 ] / Volume of Sample (mL)'
@@ -50,9 +50,9 @@ export const waterTestingContent = {
                 intro: 'COD organic aur inorganic pollutants ko ek strong chemical oxidant (potassium dichromate) se oxidize karne ke liye zaruri oxygen ki kul matra ko maapta hai. Yeh BOD se zyada tezi se result deta hai.',
                 procedure: [
                     'Sample ko ek digestion flask mein lein.',
-                    'Usmein potassium dichromate solution aur sulfuric acid reagent (silver sulfate ke saath) daalein.',
+                    'Usmein <strong>potassium dichromate solution</strong> aur <strong>sulfuric acid reagent</strong> (silver sulfate ke saath) daalein.',
                     'Sample ko COD reactor mein 150°C par 2 ghante ke liye reflux (digest) karein.',
-                    'Thanda hone ke baad, bache hue unreacted dichromate ko standard Ferrous Ammonium Sulfate (FAS) solution se titrate karein. Volume (V_sample) note karein.',
+                    'Thanda hone ke baad, bache hue unreacted dichromate ko standard <strong>Ferrous Ammonium Sulfate (FAS)</strong> solution se titrate karein. Volume (V_sample) note karein.',
                     'Ek blank titration (bina sample ke) bhi karein (V_blank).',
                 ],
                 calculation: 'COD (mg/L) = [ (V_blank - V_sample) &times; Normality of FAS &times; 8000 ] / Volume of Sample (mL)'
@@ -63,11 +63,11 @@ export const waterTestingContent = {
                 intro: 'Dissolved oxygen aquatic life ke liye bahut zaruri hai aur paani ki quality ka ek mukhya indicator hai. Iska test Winkler method se kiya jaata hai.',
                 procedure: [
                     'Ek 300 mL BOD bottle ko paani se carefully bharein, air bubbles na aane dein.',
-                    '2 mL manganese sulfate solution, phir 2 mL alkali-iodide-azide reagent daalein. Bottle band karke mix karein.',
+                    '2 mL <strong>manganese sulfate solution</strong>, phir 2 mL <strong>alkali-iodide-azide reagent</strong> daalein. Bottle band karke mix karein.',
                     'Bane hue precipitate ko settle hone dein.',
-                    '2 mL concentrated sulfuric acid daalein aur poori tarah dissolve hone tak mix karein.',
-                    'Ek nishchit volume (jaise 200 mL) ko standard sodium thiosulfate (0.025N) se titrate karein jab tak pale straw color na reh jaaye.',
-                    '1-2 mL starch indicator daalein (solution neela ho jaayega).',
+                    '2 mL <strong>concentrated sulfuric acid</strong> daalein aur poori tarah dissolve hone tak mix karein.',
+                    'Ek nishchit volume (jaise 200 mL) ko standard <strong>sodium thiosulfate (0.025N)</strong> se titrate karein jab tak pale straw color na reh jaaye.',
+                    '1-2 mL <strong>starch indicator</strong> daalein (solution neela ho jaayega).',
                     'Titrate karna continue karein jab tak neela rang poori tarah gayab na ho jaaye. Volume (V) note karein.',
                 ],
                 calculation: 'DO (mg/L) = (V of Titrant &times; N of Titrant &times; 8 &times; 1000) / Volume of Sample Titrated (mL)'
@@ -78,9 +78,9 @@ export const waterTestingContent = {
                 intro: 'Paani ki hardness mainly calcium aur magnesium ions ki wajah se hoti hai. Iska test EDTA titration method se kiya jaata hai.',
                 procedure: [
                     'Ek conical flask mein paani sample (jaise 50 mL) lein.',
-                    '1-2 mL ammonia buffer solution daal kar pH ko 10 par set karein.',
-                    'Ek chutki Eriochrome Black T (EBT) indicator daalein (solution wine red ho jaayega).',
-                    'Standard EDTA solution (0.01M) se titrate karein jab tak wine red color sky blue mein change na ho jaaye. Volume (V) note karein.',
+                    '1-2 mL <strong>ammonia buffer solution</strong> daal kar pH ko 10 par set karein.',
+                    'Ek chutki <strong>Eriochrome Black T (EBT) indicator</strong> daalein (solution wine red ho jaayega).',
+                    'Standard <strong>EDTA solution (0.01M)</strong> se titrate karein jab tak wine red color sky blue mein change na ho jaaye. Volume (V) note karein.',
                 ],
                 calculation: 'Total Hardness (mg/L as CaCO₃) = (V of EDTA &times; Molarity of EDTA &times; 100.086 &times; 1000) / Volume of Sample (mL)'
             },
@@ -126,8 +126,8 @@ export const waterTestingContent = {
                 intro: 'Alkalinity measures the capacity of water to neutralize acids. It is mainly due to bicarbonate, carbonate, and hydroxide ions.',
                 procedure: [
                     'Take a fixed volume of water sample (e.g., 100 mL) in a clean conical flask.',
-                    'Add 2-3 drops of phenolphthalein indicator. If the solution turns pink, titrate with a standard acid solution (e.g., 0.02 N H₂SO₄) until the pink color disappears. Note the volume of acid (P).',
-                    'Add 2-3 drops of methyl orange indicator to the same solution.',
+                    'Add 2-3 drops of <strong>phenolphthalein indicator</strong>. If the solution turns pink, titrate with a standard acid solution (e.g., <strong>0.02 N H₂SO₄</strong>) until the pink color disappears. Note the volume of acid (P).',
+                    'Add 2-3 drops of <strong>methyl orange indicator</strong> to the same solution.',
                     'Continue titrating with the standard acid solution until the color changes from yellow to orange/red. Note the total volume of acid used (T).',
                 ],
                 calculation: 'Total Alkalinity (mg/L as CaCO₃) = (T &times; Normality of Acid &times; 50000) / Volume of Sample (mL)'
@@ -139,7 +139,7 @@ export const waterTestingContent = {
                 procedure: [
                     'Prepare various dilutions of the water sample using BOD dilution water.',
                     'Fill two BOD bottles for each dilution: one for initial DO and one for incubation.',
-                    'Measure the Initial Dissolved Oxygen (DO₁) in the first bottle immediately.',
+                    'Measure the Initial Dissolved Oxygen (DO₁) in the first bottle immediately (using Winkler method).',
                     'Incubate the second set of bottles in the dark at 20°C for 5 days.',
                     'After 5 days, measure the Final Dissolved Oxygen (DO₅) in the second set of bottles.',
                     'Repeat the same process for a blank sample (only dilution water) to find its initial (B₁) and final (B₅) DO values.',
@@ -153,8 +153,8 @@ export const waterTestingContent = {
                 procedure: [
                     'Take a water sample (e.g., 50 mL) in a conical flask.',
                     'Adjust the pH to between 7 and 10.',
-                    'Add 1 mL of potassium chromate indicator.',
-                    'Titrate with a standard silver nitrate (AgNO₃) solution until a persistent reddish-brown precipitate forms. Note the volume (V_sample).',
+                    'Add 1 mL of <strong>potassium chromate indicator</strong>.',
+                    'Titrate with a standard <strong>silver nitrate (AgNO₃)</strong> solution until a persistent reddish-brown precipitate forms. Note the volume (V_sample).',
                     'Also, perform a blank titration with distilled water (V_blank).',
                 ],
                 calculation: 'Chloride (mg/L) = [ (V_sample - V_blank) &times; N of AgNO₃ &times; 35.45 &times; 1000 ] / Volume of Sample (mL)'
@@ -165,9 +165,9 @@ export const waterTestingContent = {
                 intro: 'COD measures the total amount of oxygen required to oxidize both organic and inorganic pollutants using a strong chemical oxidant (potassium dichromate). It provides faster results than BOD.',
                 procedure: [
                     'Take the sample in a digestion flask.',
-                    'Add potassium dichromate solution and a sulfuric acid reagent (containing silver sulfate).',
+                    'Add <strong>potassium dichromate solution</strong> and a <strong>sulfuric acid reagent</strong> (containing silver sulfate).',
                     'Reflux (digest) the sample in a COD reactor at 150°C for 2 hours.',
-                    'After cooling, titrate the excess unreacted dichromate with a standard Ferrous Ammonium Sulfate (FAS) solution. Note the volume (V_sample).',
+                    'After cooling, titrate the excess unreacted dichromate with a standard <strong>Ferrous Ammonium Sulfate (FAS)</strong> solution. Note the volume (V_sample).',
                     'Also, perform a blank titration (without the sample) (V_blank).',
                 ],
                 calculation: 'COD (mg/L) = [ (V_blank - V_sample) &times; Normality of FAS &times; 8000 ] / Volume of Sample (mL)'
@@ -178,11 +178,11 @@ export const waterTestingContent = {
                 intro: 'Dissolved oxygen is essential for aquatic life and is a key indicator of water quality. It is tested using the Winkler method.',
                 procedure: [
                     'Carefully fill a 300 mL BOD bottle with water, avoiding air bubbles.',
-                    'Add 2 mL of manganese sulfate solution, then 2 mL of alkali-iodide-azide reagent. Stopper and mix.',
+                    'Add 2 mL of <strong>manganese sulfate solution</strong>, then 2 mL of <strong>alkali-iodide-azide reagent</strong>. Stopper and mix.',
                     'Allow the precipitate to settle.',
-                    'Add 2 mL of concentrated sulfuric acid and mix until completely dissolved.',
-                    'Titrate a specific volume (e.g., 200 mL) with standard sodium thiosulfate (0.025N) until a pale straw color remains.',
-                    'Add 1-2 mL of starch indicator (the solution will turn blue).',
+                    'Add 2 mL of <strong>concentrated sulfuric acid</strong> and mix until completely dissolved.',
+                    'Titrate a specific volume (e.g., 200 mL) with standard <strong>sodium thiosulfate (0.025N)</strong> until a pale straw color remains.',
+                    'Add 1-2 mL of <strong>starch indicator</strong> (the solution will turn blue).',
                     'Continue titrating until the blue color disappears completely. Note the volume (V).',
                 ],
                 calculation: 'DO (mg/L) = (V of Titrant &times; N of Titrant &times; 8 &times; 1000) / Volume of Sample Titrated (mL)'
@@ -193,9 +193,9 @@ export const waterTestingContent = {
                 intro: 'Water hardness is mainly due to calcium and magnesium ions. It is tested using the EDTA titration method.',
                 procedure: [
                     'Take a water sample (e.g., 50 mL) in a conical flask.',
-                    'Add 1-2 mL of ammonia buffer solution to set the pH at 10.',
-                    'Add a pinch of Eriochrome Black T (EBT) indicator (the solution will turn wine red).',
-                    'Titrate with a standard EDTA solution (0.01M) until the wine red color changes to sky blue. Note the volume (V).',
+                    'Add 1-2 mL of <strong>ammonia buffer solution</strong> to set the pH at 10.',
+                    'Add a pinch of <strong>Eriochrome Black T (EBT) indicator</strong> (the solution will turn wine red).',
+                    'Titrate with a standard <strong>EDTA solution (0.01M)</strong> until the wine red color changes to sky blue. Note the volume (V).',
                 ],
                 calculation: 'Total Hardness (mg/L as CaCO₃) = (V of EDTA &times; Molarity of EDTA &times; 100.086 &times; 1000) / Volume of Sample (mL)'
             },

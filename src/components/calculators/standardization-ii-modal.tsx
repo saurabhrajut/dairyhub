@@ -23,6 +23,7 @@ import { componentProps } from "@/lib/data"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 const TABS = [
     { value: "fat-blending", label: "Fat Blending" },
@@ -31,6 +32,7 @@ const TABS = [
     { value: "clr-correction", label: "CLR Correction" },
     { value: "component-qty", label: "Component Qty" },
     { value: "snf", label: "SNF Calculator" },
+    { value: "formulas", label: "Formulas & Factors" },
 ]
 
 export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
@@ -42,7 +44,7 @@ export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean;
           <DialogDescription className="text-center">Advanced calculators for precise dairy processing.</DialogDescription>
         </DialogHeader>
         <Tabs defaultValue="fat-blending" className="w-full flex flex-col flex-1 min-h-0">
-          <TabsList className="grid w-full h-auto grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
+          <TabsList className="grid w-full h-auto grid-cols-2 sm:grid-cols-4 lg:grid-cols-7">
             {TABS.map(tab => (
                 <TabsTrigger key={tab.value} value={tab.value} className="text-xs sm:text-sm">{tab.label}</TabsTrigger>
             ))}
@@ -54,6 +56,7 @@ export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean;
             <TabsContent value="clr-correction" className="mt-0"><ClrCorrectionCalc /></TabsContent>
             <TabsContent value="component-qty" className="mt-0"><ComponentQtyCalc /></TabsContent>
             <TabsContent value="snf" className="mt-0"><SnfCalc /></TabsContent>
+            <TabsContent value="formulas" className="mt-0"><FormulasTab /></TabsContent>
           </ScrollArea>
         </Tabs>
       </DialogContent>
@@ -108,18 +111,18 @@ const PearsonSquareCalc = ({ unit, calcType }: { unit: string, calcType: 'Fat' |
             <p className="text-center text-sm text-gray-500 mb-4">Do alag {calcType} % wale doodh ko milakar naya product banayein.</p>
              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                 <div className="bg-muted/50 p-4 rounded-lg">
-                    <h3 className="font-semibold text-gray-700 mb-2 font-headline">Source Milk 1 (High {calcType})</h3>
+                    <h3 className="font-semibold text-gray-700 mb-2 font-headline">Source Milk 1 (High ${calcType})</h3>
                     <div><Label className="text-xs">{calcType} {unit}</Label><Input type="number" value={high} onChange={e => setHigh(e.target.value)} placeholder="e.g., 5.0" /></div>
                 </div>
                 <div className="bg-muted/50 p-4 rounded-lg">
-                    <h3 className="font-semibold text-gray-700 mb-2 font-headline">Source Milk 2 (Low {calcType})</h3>
+                    <h3 className="font-semibold text-gray-700 mb-2 font-headline">Source Milk 2 (Low ${calcType})</h3>
                     <div><Label className="text-xs">{calcType} {unit}</Label><Input type="number" value={low} onChange={e => setLow(e.target.value)} placeholder="e.g., 0.5" /></div>
                 </div>
             </div>
              <div className="bg-primary/10 p-4 rounded-lg mb-4">
                  <h3 className="font-semibold text-gray-700 mb-2 font-headline">Target Product</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div><Label className="text-xs">Target {calcType} {unit}</Label><Input type="number" value={target} onChange={e => setTarget(e.target.value)} placeholder="e.g., 3.0" /></div>
+                    <div><Label className="text-xs">Target ${calcType} {unit}</Label><Input type="number" value={target} onChange={e => setTarget(e.target.value)} placeholder="e.g., 3.0" /></div>
                     <div><Label className="text-xs">Target Batch Qty (Kg/Ltr)</Label><Input type="number" value={qty} onChange={e => setQty(e.target.value)} placeholder="e.g., 100" /></div>
                 </div>
             </div>
@@ -363,6 +366,45 @@ function FatSnfAdjustmentCalc() {
             <Button onClick={calculate} className="w-full mt-4">Calculate Adjustment</Button>
             {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
             {result && <Alert className="mt-4"><AlertTitle>Result</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
+        </div>
+    )
+}
+
+function FormulasTab() {
+    return (
+        <div className="space-y-6">
+            <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
+                <h3 className="font-bold text-blue-800 font-headline">SNF Calculation (Richmond's Formula)</h3>
+                <p className="font-mono text-sm text-blue-900 mt-2">SNF % = (CLR / 4) + (0.25 * Fat %) + Correction_Factor</p>
+                <p className="text-xs mt-2">Correction Factor: Cow Milk = 0.72, Buffalo Milk = 0.85</p>
+            </div>
+             <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg">
+                <h3 className="font-bold text-green-800 font-headline">CLR Correction Formula</h3>
+                <p className="font-mono text-sm text-green-900 mt-2">Corrected CLR = Observed_LR + (Milk_Temp_°C - 27) * 0.2</p>
+            </div>
+             <div className="bg-purple-50 border-l-4 border-purple-500 p-4 rounded-r-lg">
+                <h3 className="font-bold text-purple-800 font-headline">Pearson Square (Blending)</h3>
+                <p className="font-mono text-sm text-purple-900 mt-2">Parts_High = Target - Low</p>
+                <p className="font-mono text-sm text-purple-900">Parts_Low = High - Target</p>
+                <p className="text-xs mt-2">Qty_High = (Total_Qty * Parts_High) / (Parts_High + Parts_Low)</p>
+            </div>
+             <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-r-lg">
+                <h3 className="font-bold text-yellow-800 font-headline">Component Quantity Calculation</h3>
+                <p className="font-mono text-sm text-yellow-900 mt-2">Milk Weight (Kg) = Milk_Liters * 1.03</p>
+                <p className="font-mono text-sm text-yellow-900">Fat_Kg = Milk_Weight * (Fat % / 100)</p>
+                 <p className="font-mono text-sm text-yellow-900">SNF_Kg = Milk_Weight * (SNF % / 100)</p>
+            </div>
+             <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg">
+                <h3 className="font-bold text-red-800 font-headline">Common Conversion Factors</h3>
+                 <Table className="mt-2 text-sm">
+                     <TableBody>
+                        <TableRow><TableCell className="font-medium">1 Liter Milk</TableCell><TableCell>approx. 1.03 Kg</TableCell></TableRow>
+                        <TableRow><TableCell className="font-medium">1 Kg Milk</TableCell><TableCell>approx. 0.97 Liters</TableCell></TableRow>
+                        <TableRow><TableCell className="font-medium">Kg to Grams</TableCell><TableCell>Multiply by 1000</TableCell></TableRow>
+                        <TableRow><TableCell className="font-medium">Liters to Milliliters</TableCell><TableCell>Multiply by 1000</TableCell></TableRow>
+                    </TableBody>
+                </Table>
+            </div>
         </div>
     )
 }
