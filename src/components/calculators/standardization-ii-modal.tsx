@@ -211,12 +211,13 @@ function ComponentQtyCalc() {
 function SnfCalc() {
     const [fat, setFat] = useState("4.5");
     const [clr, setClr] = useState("28.0");
+    const [targetSnf, setTargetSnf] = useState("");
     const [factor, setFactor] = useState("0.72");
     const [manualFactor, setManualFactor] = useState("");
     const [isManual, setIsManual] = useState(false);
     const [result, setResult] = useState<string | null>(null);
 
-    const handleCalc = () => {
+    const handleCalcSnf = () => {
         const fatNum = parseFloat(fat);
         const clrNum = parseFloat(clr);
         const finalFactor = isManual ? parseFloat(manualFactor) : parseFloat(factor);
@@ -224,7 +225,20 @@ function SnfCalc() {
         if (isNaN(fatNum) || isNaN(clrNum) || isNaN(finalFactor)) {
             setResult("Invalid Input"); return;
         }
-        setResult(getSnf(fatNum, clrNum, finalFactor).toFixed(2) + " %");
+        setResult(`Calculated SNF: ${getSnf(fatNum, clrNum, finalFactor).toFixed(2)} %`);
+    }
+
+    const handleCalcClr = () => {
+        const fatNum = parseFloat(fat);
+        const snfNum = parseFloat(targetSnf);
+        const finalFactor = isManual ? parseFloat(manualFactor) : parseFloat(factor);
+
+        if (isNaN(fatNum) || isNaN(snfNum) || isNaN(finalFactor)) {
+            setResult("Invalid Input"); return;
+        }
+
+        const calculatedClr = (snfNum - (0.25 * fatNum) - finalFactor) * 4;
+        setResult(`Required CLR: ${calculatedClr.toFixed(2)}`);
     }
     
     const handleSelectChange = (value: string) => {
@@ -238,14 +252,12 @@ function SnfCalc() {
         }
     }
 
-
     return (
         <div>
-            <p className="text-center text-sm text-gray-500 mb-4">SNF ko Richmond formula aur correction factor se calculate karein.</p>
+            <p className="text-center text-sm text-gray-500 mb-4">SNF/CLR ko Richmond formula aur correction factor se calculate karein.</p>
             <div className="bg-muted/50 p-4 rounded-lg space-y-3">
                 <div><Label>Fat %</Label><Input type="number" value={fat} onChange={e => setFat(e.target.value)} placeholder="4.5" /></div>
-                <div><Label>CLR</Label><Input type="number" value={clr} onChange={e => setClr(e.target.value)} placeholder="28.0" /></div>
-                <div>
+                 <div>
                     <Label>Milk Type (Correction Factor)</Label>
                     <Select value={factor} onValueChange={handleSelectChange}>
                         <SelectTrigger><SelectValue/></SelectTrigger>
@@ -262,9 +274,21 @@ function SnfCalc() {
                         <Input type="number" value={manualFactor} onChange={e => setManualFactor(e.target.value)} placeholder="e.g., 0.75" />
                     </div>
                 )}
+                <div className="grid grid-cols-2 gap-4 items-end">
+                    <div>
+                        <Label>CLR</Label>
+                        <Input type="number" value={clr} onChange={e => setClr(e.target.value)} placeholder="28.0" />
+                        <Button onClick={handleCalcSnf} className="w-full mt-2">Calculate SNF</Button>
+                    </div>
+                    <div>
+                        <Label>Target SNF %</Label>
+                        <Input type="number" value={targetSnf} onChange={e => setTargetSnf(e.target.value)} placeholder="8.5" />
+                        <Button onClick={handleCalcClr} className="w-full mt-2">Calculate CLR</Button>
+                    </div>
+                </div>
             </div>
-            <Button onClick={handleCalc} className="w-full mt-4">Calculate SNF</Button>
-            {result && <div className="mt-4 text-center"><p className="text-gray-600">Calculated SNF:</p><p className="text-3xl font-bold text-green-700">{result}</p></div>}
+            
+            {result && <div className="mt-4 text-center"><p className="text-3xl font-bold text-green-700">{result}</p></div>}
         </div>
     )
 }

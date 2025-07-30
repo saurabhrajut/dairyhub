@@ -128,19 +128,30 @@ const BaseSolutionCalc = () => <SolutionCalculator chemType="bases" title="Prepa
 
 const IndicatorCalc = () => {
     const [result, setResult] = useState<string | null>(null);
+    const [volume, setVolume] = useState('100');
+    const [error, setError] = useState<string | null>(null);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setResult(null);
+        setError(null);
         const formData = new FormData(e.currentTarget);
         const key = formData.get('indicator-select') as string;
+        const vol = parseFloat(formData.get('indicator-volume') as string);
+        
+        if (!key || isNaN(vol) || vol <= 0) {
+            setError("Please select an indicator and enter a valid volume.");
+            return;
+        }
+
         const indicator = chemicals.indicators[key as keyof typeof chemicals.indicators];
 
         let resultText = "";
         if (indicator.type === 'mixed') {
             resultText = indicator.note || 'No specific instructions available.';
         } else {
-            resultText = `Dissolve 1g of ${indicator.name} in 100mL of ${indicator.solvent}.`;
+            const weight = vol / 100;
+            resultText = `To make ${vol} mL of solution, dissolve <code class="font-bold bg-green-100 p-1 rounded">${weight.toFixed(2)} g</code> of ${indicator.name} in <code class="font-bold">${vol} mL</code> of ${indicator.solvent}.`;
         }
         setResult(resultText);
     }
@@ -148,8 +159,8 @@ const IndicatorCalc = () => {
     return (
         <form onSubmit={handleSubmit}>
             <h2 className="text-2xl font-bold text-primary mb-6 font-headline">Prepare Indicator Solution</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
-                <div className="md:col-span-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-end">
+                <div className="lg:col-span-2">
                     <Label htmlFor="indicator-select">Select Indicator</Label>
                     <Select name="indicator-select" required>
                         <SelectTrigger><SelectValue placeholder="Select an indicator" /></SelectTrigger>
@@ -160,9 +171,14 @@ const IndicatorCalc = () => {
                         </SelectContent>
                     </Select>
                 </div>
+                <div>
+                    <Label htmlFor="indicator-volume">Final Volume (mL)</Label>
+                    <Input type="number" name="indicator-volume" value={volume} onChange={e => setVolume(e.target.value)} step="any" required />
+                </div>
                 <Button type="submit" className="w-full">Get Instructions</Button>
             </div>
-            {result && <Alert className="mt-8"><AlertTitle>Preparation</AlertTitle><AlertDescription>{result}</AlertDescription></Alert>}
+            {error && <Alert variant="destructive" className="mt-8"><AlertDescription>{error}</AlertDescription></Alert>}
+            {result && <Alert className="mt-8"><AlertTitle>Preparation</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
         </form>
     );
 };
