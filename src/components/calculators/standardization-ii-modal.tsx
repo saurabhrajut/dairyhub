@@ -36,26 +36,24 @@ const TABS = [
 export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-4xl h-[90vh]">
+      <DialogContent className="max-w-4xl h-[90vh] flex flex-col">
         <DialogHeader>
           <DialogTitle className="font-headline text-2xl text-center">Advanced Standardization</DialogTitle>
           <DialogDescription className="text-center">Advanced calculators for precise dairy processing.</DialogDescription>
         </DialogHeader>
-        <Tabs defaultValue="fat-blending" className="w-full flex flex-col h-full">
-          <div className="flex justify-center">
-            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 h-auto">
-              {TABS.map(tab => (
-                  <TabsTrigger key={tab.value} value={tab.value} className="text-xs sm:text-sm">{tab.label}</TabsTrigger>
-              ))}
-            </TabsList>
-          </div>
-          <ScrollArea className="flex-1 mt-4 pr-2">
-            <TabsContent value="fat-blending"><FatBlendingCalc /></TabsContent>
-            <TabsContent value="fat-adjustment"><FatSnfAdjustmentCalc /></TabsContent>
-            <TabsContent value="clr-blending"><ClrBlendingCalc /></TabsContent>
-            <TabsContent value="clr-correction"><ClrCorrectionCalc /></TabsContent>
-            <TabsContent value="component-qty"><ComponentQtyCalc /></TabsContent>
-            <TabsContent value="snf"><SnfCalc /></TabsContent>
+        <Tabs defaultValue="fat-blending" className="w-full flex flex-col flex-1 min-h-0">
+          <TabsList className="grid w-full h-auto grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
+            {TABS.map(tab => (
+                <TabsTrigger key={tab.value} value={tab.value} className="text-xs sm:text-sm">{tab.label}</TabsTrigger>
+            ))}
+          </TabsList>
+          <ScrollArea className="flex-1 mt-4 pr-4">
+            <TabsContent value="fat-blending" className="mt-0"><FatBlendingCalc /></TabsContent>
+            <TabsContent value="fat-adjustment" className="mt-0"><FatSnfAdjustmentCalc /></TabsContent>
+            <TabsContent value="clr-blending" className="mt-0"><ClrBlendingCalc /></TabsContent>
+            <TabsContent value="clr-correction" className="mt-0"><ClrCorrectionCalc /></TabsContent>
+            <TabsContent value="component-qty" className="mt-0"><ComponentQtyCalc /></TabsContent>
+            <TabsContent value="snf" className="mt-0"><SnfCalc /></TabsContent>
           </ScrollArea>
         </Tabs>
       </DialogContent>

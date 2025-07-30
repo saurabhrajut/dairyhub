@@ -14,7 +14,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { funFacts } from "@/lib/data";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
@@ -50,24 +50,19 @@ const InfoBlock = ({ title, children }: { title: string, children: React.ReactNo
 export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-5xl h-[90vh]">
+      <DialogContent className="max-w-5xl h-[90vh] flex flex-col">
         <DialogHeader>
           <DialogTitle className="font-headline text-2xl text-center">Chemistry of Milk</DialogTitle>
           <DialogDescription className="text-center">A deep dive into the science of milk.</DialogDescription>
         </DialogHeader>
-        <Tabs defaultValue="composition" className="flex flex-col h-full">
-            <div className="w-full">
-                <ScrollArea className="w-full whitespace-nowrap rounded-md pb-4">
-                    <TabsList className="inline-flex h-auto">
-                        {milkChemistryTabs.map(tab => (
-                            <TabsTrigger key={tab.value} value={tab.value} className="text-xs sm:text-sm">{tab.label}</TabsTrigger>
-                        ))}
-                    </TabsList>
-                    <ScrollBar orientation="horizontal" />
-                </ScrollArea>
-            </div>
-            <ScrollArea className="h-full pr-4 flex-1">
-                <TabsContent value="composition">
+        <Tabs defaultValue="composition" className="flex flex-col flex-1 min-h-0">
+            <TabsList className="grid w-full h-auto grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
+                {milkChemistryTabs.map(tab => (
+                    <TabsTrigger key={tab.value} value={tab.value} className="text-xs sm:text-sm">{tab.label}</TabsTrigger>
+                ))}
+            </TabsList>
+            <ScrollArea className="flex-1 mt-4 pr-4">
+                <TabsContent value="composition" className="mt-0">
                     <div className="space-y-6 text-gray-700 text-sm leading-relaxed prose max-w-none">
                         <InfoBlock title="What is Milk? (Doodh Kya Hai?)">
                             <p><strong>Scientific Definition:</strong> “Milk is the normal secretion of the mammary glands of mammals, obtained without any colostrum, and is composed of water, fat, proteins, lactose, minerals, and vitamins in a naturally balanced form.”</p>
@@ -122,7 +117,7 @@ export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; set
                         </InfoBlock>
                     </div>
                 </TabsContent>
-                <TabsContent value="proteins">
+                <TabsContent value="proteins" className="mt-0">
                     <div className="space-y-6 text-gray-700 text-sm leading-relaxed prose max-w-none">
                         <InfoBlock title="Casein (~80% of Milk Protein)">
                             <p>Casein doodh ka mukhya protein hai jo 'micelles' naam ke complex, spherical structures banata hai. Yeh paneer aur dahi banane ke liye zimmedar hai. Iska isoelectric point 4.6 pH hota hai.</p>
@@ -155,7 +150,7 @@ export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; set
                         </InfoBlock>
                     </div>
                 </TabsContent>
-                <TabsContent value="properties">
+                <TabsContent value="properties" className="mt-0">
                     <div className="space-y-4 text-gray-700 text-sm leading-relaxed">
                         <h4 className="text-lg font-bold text-primary mb-2 font-headline">Physical Properties of Milk</h4>
                         <Table>
@@ -178,7 +173,7 @@ export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; set
                         </Table>
                     </div>
                 </TabsContent>
-                <TabsContent value="processing">
+                <TabsContent value="processing" className="mt-0">
                     <div className="space-y-4 text-gray-700 text-sm leading-relaxed prose max-w-none">
                         <InfoBlock title="Factors Affecting Milk Product Quality">
                             <p>Milk products ki quality milk ke inherent properties aur processing techniques par depend karti hai.</p>
@@ -229,7 +224,7 @@ export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; set
 
                     </div>
                 </TabsContent>
-                <TabsContent value="cultures">
+                <TabsContent value="cultures" className="mt-0">
                     <div className="space-y-4 text-gray-700 text-sm leading-relaxed prose max-w-none">
                         <InfoBlock title="Lactic Acid Bacteria (LAB) Cultures">
                             <p>Lactic acid bacteria (LAB) dairy products ke fermentation process mein ek important role play karti hain. Ye bacteria lactose ko lactic acid me convert karte hain. Inhe unke optimal growth temperature ke basis par categorize kiya jata hai:</p>
@@ -262,7 +257,7 @@ export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; set
                         </InfoBlock>
                     </div>
                 </TabsContent>
-                <TabsContent value="fun-facts">
+                <TabsContent value="fun-facts" className="mt-0">
                     <div className="space-y-4 prose max-w-none">
                         {funFacts.map((fact, index) => (
                             <div key={index} className="p-4 bg-amber-100/60 rounded-lg not-prose">
