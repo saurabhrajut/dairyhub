@@ -89,17 +89,19 @@ const sarathiChatbotFlow = ai.defineFlow(
     outputSchema: SarathiChatbotOutputSchema,
   },
   async (input) => {
-    const { history, question, ...rest } = input;
+    const { history, ...rest } = input;
 
     const { output } = await ai.generate({
-        prompt: { ...rest, question: question || '' },
-        history: history,
-        model: prompt.model,
-        config: prompt.config,
-        output: {
-          schema: SarathiChatbotOutputSchema,
-        },
-      });
+      prompt: prompt.prompt,
+      system: prompt.system,
+      input: rest,
+      history: history,
+      model: prompt.model,
+      config: prompt.config,
+      output: {
+        schema: SarathiChatbotOutputSchema,
+      },
+    });
 
     return output!;
   }
