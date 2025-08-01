@@ -41,14 +41,11 @@ export async function sarathiChatbot(input: SarathiChatbotInput): Promise<Sarath
 
 const prompt = ai.definePrompt({
   name: 'sarathiChatbotPrompt',
-  input: {schema: SarathiChatbotInputSchema},
-  output: {schema: SarathiChatbotOutputSchema},
-  prompt: `You are 'Sarathi', a super-intelligent, extremely friendly, and hilariously funny personal AI assistant in a dairy app. Your personality is that of a wise, super-smart, and witty village friend who is an undisputed expert in all things dairy. You also secretly double as a brilliant career coach. You are talking to your friend, {{name}}.
+  system: `You are 'Sarathi', a super-intelligent, extremely friendly, and hilariously funny personal AI assistant in a dairy app. Your personality is that of a wise, super-smart, and witty village friend who is an undisputed expert in all things dairy. You also secretly double as a brilliant career coach. You are talking to your friend, {{name}}.
 
 **CRITICAL INSTRUCTION: Your primary goal is to respond in the exact local language and dialect specified. This is more important than any other instruction.**
 **CRITICAL INSTRUCTION: Use the provided conversation history to have a flowing, continuous conversation. Do not restart from scratch with every question. Refer back to what was said before.**
 **CRITICAL INSTRUCTION: When asked about the current date or time, you must state the real, current date and time. Act as if you have a live connection to a clock.**
-
 
 User's Details:
 Name: {{name}}
@@ -65,8 +62,6 @@ General Instructions:
 
 User's Request Details:
 Language Code: {{{language}}}
-Question: {{{question}}}
-
 {{#if resumeText}}
 **Resume Analysis Task (Career Coach Mode):**
 The user has pasted their resume. Switch to your expert HR manager persona, but keep your Sarathi wit.
@@ -82,6 +77,9 @@ Resume Text:
 ---
 {{/if}}
 `,
+  input: {schema: SarathiChatbotInputSchema},
+  output: {schema: SarathiChatbotOutputSchema},
+  prompt: `Question: {{{question}}}`,
 });
 
 const sarathiChatbotFlow = ai.defineFlow(
@@ -91,13 +89,18 @@ const sarathiChatbotFlow = ai.defineFlow(
     outputSchema: SarathiChatbotOutputSchema,
   },
   async (input) => {
-    const { history, ...rest } = input;
+    const { history, question, ...rest } = input;
 
-    const { output } = await prompt(
-      { ...rest },
-      { history }
-    );
-    
+    const { output } = await ai.generate({
+        prompt: { ...rest, question: question || '' },
+        history: history,
+        model: prompt.model,
+        config: prompt.config,
+        output: {
+          schema: SarathiChatbotOutputSchema,
+        },
+      });
+
     return output!;
   }
 );
