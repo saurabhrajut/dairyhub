@@ -59,7 +59,7 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
 
         <div className="flex-1 flex flex-col min-h-0">
             <div className="bg-background/80 backdrop-blur-sm z-10 p-2 -mx-6 mb-4 sticky top-0">
-                <div className="flex flex-wrap gap-2 justify-center">
+                <div className="flex flex-wrap items-center justify-center gap-2">
                     {navLinks.map(link => (
                         <a key={link.href} href={link.href} className="px-3 py-1.5 bg-muted hover:bg-primary/10 text-muted-foreground hover:text-primary rounded-full text-xs sm:text-sm font-medium transition-colors">
                             {link.text}
