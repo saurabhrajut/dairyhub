@@ -29,7 +29,7 @@ export function SolutionsPrepModal({ isOpen, setIsOpen }: { isOpen: boolean; set
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="max-w-5xl h-[95vh] flex flex-col p-0">
-          <Tabs defaultValue="acid-solution" className="w-full flex-1 flex flex-col">
+          <Tabs defaultValue="acid-solution" className="w-full flex-1 flex flex-col min-h-0">
             <DialogHeader className="p-4 bg-primary text-primary-foreground rounded-t-lg">
                 <DialogTitle className="text-center font-headline text-2xl">Solution Preparation Calculators</DialogTitle>
                 <TabsList className="bg-primary/50 grid h-auto w-full grid-cols-3 sm:grid-cols-5 lg:grid-cols-9">
@@ -41,16 +41,18 @@ export function SolutionsPrepModal({ isOpen, setIsOpen }: { isOpen: boolean; set
                   ))}
                 </TabsList>
             </DialogHeader>
-            <ScrollArea className="flex-1 bg-muted/30 p-6">
-                <TabsContent value="acid-solution"><AcidSolutionCalc /></TabsContent>
-                <TabsContent value="base-solution"><BaseSolutionCalc /></TabsContent>
-                <TabsContent value="indicator-solution"><IndicatorCalc /></TabsContent>
-                <TabsContent value="percentage-solution"><PercentageSolutionCalc /></TabsContent>
-                <TabsContent value="stock-solution"><DilutionCalc /></TabsContent>
-                <TabsContent value="standardization"><StandardizationCalc /></TabsContent>
-                <TabsContent value="strength-calculator"><StrengthCalc /></TabsContent>
-                <TabsContent value="spirit-solution"><SpiritSolutionCalc /></TabsContent>
-                <TabsContent value="normality-adjustment"><NormalityAdjustmentCalc /></TabsContent>
+            <ScrollArea className="flex-1 bg-muted/30">
+              <div className="p-6">
+                <TabsContent value="acid-solution" className="mt-0"><AcidSolutionCalc /></TabsContent>
+                <TabsContent value="base-solution" className="mt-0"><BaseSolutionCalc /></TabsContent>
+                <TabsContent value="indicator-solution" className="mt-0"><IndicatorCalc /></TabsContent>
+                <TabsContent value="percentage-solution" className="mt-0"><PercentageSolutionCalc /></TabsContent>
+                <TabsContent value="stock-solution" className="mt-0"><DilutionCalc /></TabsContent>
+                <TabsContent value="standardization" className="mt-0"><StandardizationCalc /></TabsContent>
+                <TabsContent value="strength-calculator" className="mt-0"><StrengthCalc /></TabsContent>
+                <TabsContent value="spirit-solution" className="mt-0"><SpiritSolutionCalc /></TabsContent>
+                <TabsContent value="normality-adjustment" className="mt-0"><NormalityAdjustmentCalc /></TabsContent>
+              </div>
             </ScrollArea>
           </Tabs>
       </DialogContent>
