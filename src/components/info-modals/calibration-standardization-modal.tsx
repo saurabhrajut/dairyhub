@@ -26,7 +26,7 @@ const SubHeading = ({ children }: { children: React.ReactNode }) => (
 export function CalibrationStandardizationModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-5xl h-[90vh]">
+      <DialogContent className="max-w-5xl h-[90vh] flex flex-col">
         <DialogHeader>
           <DialogTitle className="text-3xl font-bold text-center text-gray-800 font-headline">Calibration aur Standardization</DialogTitle>
           <DialogDescription className="text-center text-lg text-gray-500">
@@ -34,7 +34,7 @@ export function CalibrationStandardizationModal({ isOpen, setIsOpen }: { isOpen:
           </DialogDescription>
         </DialogHeader>
 
-        <ScrollArea className="h-full pr-6 mt-4">
+        <ScrollArea className="flex-1 mt-4 pr-6">
             <div className="prose max-w-none text-gray-700 text-base leading-relaxed">
                 <section className="mb-8 space-y-4">
                     <p><strong>Calibration</strong> ka matlab hai kisi maapne wale upkaran (measuring equipment) ki tulna ek standard upkaran se karna jiska measurement pehle se hi sahi mana gaya ho. Isse yeh pata chalta hai ki humara upkaran kitna sateek (accurate) hai. Ismein adjustment shamil nahi hota, lekin yeh adjustment ki zaroorat ko dikha sakta hai.</p>
@@ -217,5 +217,3 @@ export function CalibrationStandardizationModal({ isOpen, setIsOpen }: { isOpen:
     </Dialog>
   );
 }
-
-    

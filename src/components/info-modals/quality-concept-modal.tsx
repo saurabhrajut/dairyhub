@@ -32,7 +32,7 @@ export function QualityConceptModal({ isOpen, setIsOpen }: { isOpen: boolean; se
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-5xl h-[90vh]">
+      <DialogContent className="max-w-5xl h-[90vh] flex flex-col">
         <DialogHeader>
           <DialogTitle className="text-3xl font-bold text-center text-gray-800 font-headline">{content.title}</DialogTitle>
           <DialogDescription className="text-center text-lg text-gray-500">
@@ -40,7 +40,7 @@ export function QualityConceptModal({ isOpen, setIsOpen }: { isOpen: boolean; se
           </DialogDescription>
         </DialogHeader>
 
-        <ScrollArea className="h-full pr-6 mt-4">
+        <ScrollArea className="flex-1 mt-4 pr-6">
             <div className="prose max-w-none text-gray-700 text-base leading-relaxed">
                 <p>{content.intro1}</p>
                 <p>{content.intro2}</p>

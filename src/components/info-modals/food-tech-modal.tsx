@@ -254,7 +254,7 @@ const foodTechTopics = [
         title: "Technology of Traditional Foods",
         content: `
             <p><strong>Scientific Definition:</strong> This is a field that applies modern food science and technology principles to study, standardize, and improve the production of traditional and ethnic foods, with the goal of preserving cultural heritage while ensuring safety, consistency, and scalability.</p>
-            <p><strong>In-depth Introduction:</strong> Many traditional foods are produced using age-old methods passed down through generations. While this imparts unique character, it can also lead to inconsistent quality and safety. This field works to understand the science behind traditional processes (e.g., the specific microbial consortia in a traditional fermented product). It then aims to standardize the process by controlling critical parameters, developing appropriate packaging to extend shelf life, and adapting the production for a larger, industrial scale without losing the food's authentic character.</p>
+            <p><strong>In-depth Introduction:</strong> Many traditional foods are produced using age-old methods passed down through generations. While this imparts unique character, it can also lead to inconsistent quality and safety. This field works to understand the science behind a traditional processes (e.g., the specific microbial consortia in a traditional fermented product). It then aims to standardize the process by controlling critical parameters, developing appropriate packaging to extend shelf life, and adapting the production for a larger, industrial scale without losing the food's authentic character.</p>
         `
     },
     {
@@ -270,7 +270,7 @@ const foodTechTopics = [
 export function FoodTechModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-5xl h-[90vh]">
+      <DialogContent className="max-w-5xl h-[90vh] flex flex-col">
         <DialogHeader>
           <DialogTitle className="text-3xl font-bold text-center text-gray-800 font-headline">
             Foundations of Food Technology
@@ -279,7 +279,7 @@ export function FoodTechModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpe
             An in-depth guide to the core concepts of food science and technology.
           </DialogDescription>
         </DialogHeader>
-        <ScrollArea className="h-full pr-6 mt-4">
+        <ScrollArea className="flex-1 mt-4 pr-6">
             <Accordion type="single" collapsible className="w-full">
                 {foodTechTopics.map((topic) => (
                      <AccordionItem key={topic.id} value={topic.id}>

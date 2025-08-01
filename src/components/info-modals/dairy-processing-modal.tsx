@@ -52,7 +52,7 @@ export function DairyProcessingModal({
 }) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-5xl h-[90vh]">
+      <DialogContent className="max-w-5xl h-[90vh] flex flex-col">
         <DialogHeader>
           <DialogTitle className="text-3xl font-bold text-center text-gray-800 font-headline">
             The Science of Dairy Processing
@@ -61,7 +61,7 @@ export function DairyProcessingModal({
             A deep-dive into the core technologies that transform raw milk.
           </DialogDescription>
         </DialogHeader>
-        <ScrollArea className="h-full pr-6 mt-4">
+        <ScrollArea className="flex-1 mt-4 pr-6">
             <Accordion type="single" collapsible className="w-full" defaultValue="Pasteurization">
                 <Section title="Workflow Overview" icon={Settings}>
                     <p>Dairy processing ek sequence of operations hai jismein raw milk ko safe, high-quality, aur shelf-stable products mein badla jaata hai. Har step ka ek specific purpose hota hai.</p>
@@ -151,5 +151,3 @@ export function DairyProcessingModal({
     </Dialog>
   );
 }
-
-    

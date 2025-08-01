@@ -44,7 +44,7 @@ const TestProcedure = ({ title, procedure, calculation }: { title: string, proce
 export function PackagingMaterialTestingModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-5xl h-[90vh]">
+      <DialogContent className="max-w-5xl h-[90vh] flex flex-col">
         <DialogHeader>
           <DialogTitle className="text-3xl font-bold text-center text-gray-800 font-headline">Packaging Material Testing</DialogTitle>
           <DialogDescription className="text-center text-lg text-gray-500">
@@ -52,7 +52,7 @@ export function PackagingMaterialTestingModal({ isOpen, setIsOpen }: { isOpen: b
           </DialogDescription>
         </DialogHeader>
 
-        <ScrollArea className="h-full pr-6 mt-4">
+        <ScrollArea className="flex-1 mt-4 pr-6">
           <Section title="13.1 Introduction (Parichay)">
             <p>Packaging food product ki suraksha aur quality banaye rakhne mein ek mahatvapurna bhumika nibhata hai. Dairy products, jo jaldi kharab ho sakte hain, unke liye sahi packaging material chunna aur uski quality jaanchna bahut zaroori hai. Packaging material testing yeh sunishchit karta hai ki material product ko physical, chemical, aur microbial contamination se bachayega aur uski shelf-life tak uski integrity banaye rakhega.</p>
           </Section>
