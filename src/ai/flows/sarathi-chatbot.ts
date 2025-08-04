@@ -91,6 +91,11 @@ const sarathiChatbotFlow = ai.defineFlow(
   async (input) => {
     const { history, ...restOfInput } = input;
     
+    // If there is resume text but no question, provide a default question.
+    if (restOfInput.resumeText && !restOfInput.question) {
+        restOfInput.question = "Please analyze my resume and ask me interview questions.";
+    }
+
     const { output } = await prompt(restOfInput, { history });
 
     return output!;
