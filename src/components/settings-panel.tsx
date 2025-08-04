@@ -28,7 +28,7 @@ export function SettingsPanel({
   setIsOpen: (open: boolean) => void
 }) {
   const { toast } = useToast()
-  const { language, setLanguage, voiceGender, setVoiceGender } = useLanguage();
+  const { language, setLanguage } = useLanguage();
 
   const handleSave = () => {
     toast({
@@ -59,20 +59,6 @@ export function SettingsPanel({
               <SelectContent>
                 <SelectItem value="hi">Hinglish</SelectItem>
                 <SelectItem value="en">English</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="voice-gender" className="text-right">
-              Voice Gender
-            </Label>
-            <Select value={voiceGender} onValueChange={(value) => setVoiceGender(value as 'female' | 'male')}>
-              <SelectTrigger id="voice-gender" className="col-span-3">
-                <SelectValue placeholder="Select a gender" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="female">Female</SelectItem>
-                <SelectItem value="male">Male</SelectItem>
               </SelectContent>
             </Select>
           </div>
