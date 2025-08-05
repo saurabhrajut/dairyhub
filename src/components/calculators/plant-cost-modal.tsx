@@ -1,0 +1,195 @@
+
+"use client";
+
+import { useState, useMemo } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { PlusCircle, XCircle } from "lucide-react";
+
+interface RevenueItem {
+  id: number;
+  name: string;
+  quantity: string;
+  price: string;
+}
+
+interface ExpenseItem {
+  id: number;
+  name: string;
+  cost: string;
+}
+
+export function PlantCostModal({
+  isOpen,
+  setIsOpen,
+}: {
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
+}) {
+  const [period, setPeriod] = useState("daily");
+  
+  const [revenues, setRevenues] = useState<RevenueItem[]>([
+    { id: 1, name: "Milk Sale", quantity: "", price: "" },
+    { id: 2, name: "Paneer Sale", quantity: "", price: "" },
+  ]);
+  const [variableExpenses, setVariableExpenses] = useState<ExpenseItem[]>([
+    { id: 1, name: "Raw Milk Purchase", cost: "" },
+    { id: 2, name: "Packaging", cost: "" },
+    { id: 3, name: "Electricity/Fuel", cost: "" },
+  ]);
+  const [fixedExpenses, setFixedExpenses] = useState<ExpenseItem[]>([
+    { id: 1, name: "Salaries", cost: "" },
+    { id: 2, name: "Rent", cost: "" },
+  ]);
+
+  const handleAddItem = (type: "revenue" | "variable" | "fixed") => {
+    const newItem = { id: Date.now(), name: "", cost: "", quantity: "", price: "" };
+    if (type === "revenue") setRevenues([...revenues, newItem]);
+    else if (type === "variable") setVariableExpenses([...variableExpenses, newItem]);
+    else setFixedExpenses([...fixedExpenses, newItem]);
+  };
+
+  const handleRemoveItem = (id: number, type: "revenue" | "variable" | "fixed") => {
+    if (type === "revenue") setRevenues(revenues.filter(item => item.id !== id));
+    else if (type === "variable") setVariableExpenses(variableExpenses.filter(item => item.id !== id));
+    else setFixedExpenses(fixedExpenses.filter(item => item.id !== id));
+  };
+  
+  const handleRevenueChange = (id: number, field: keyof RevenueItem, value: string) => {
+    setRevenues(revenues.map(item => (item.id === id ? { ...item, [field]: value } : item)));
+  };
+
+  const handleExpenseChange = (id: number, type: "variable" | "fixed", value: string) => {
+      const list = type === 'variable' ? variableExpenses : fixedExpenses;
+      const setList = type === 'variable' ? setVariableExpenses : setFixedExpenses;
+      setList(list.map(item => item.id === id ? {...item, cost: value} : item));
+  };
+
+  const { totalRevenue, totalExpenses, profitOrLoss, periodMultiplier } = useMemo(() => {
+    const periodMultiplier = period === "daily" ? 1 : 30;
+
+    const totalRevenue = revenues.reduce((sum, item) => {
+        const quantity = parseFloat(item.quantity) || 0;
+        const price = parseFloat(item.price) || 0;
+        return sum + (quantity * price);
+    }, 0);
+
+    const totalVariableCost = variableExpenses.reduce((sum, item) => sum + (parseFloat(item.cost) || 0), 0);
+    const totalFixedCost = fixedExpenses.reduce((sum, item) => sum + (parseFloat(item.cost) || 0), 0);
+    
+    const totalExpenses = totalVariableCost + (totalFixedCost / (period === 'monthly' ? 1 : 30));
+
+    const profitOrLoss = totalRevenue - totalExpenses;
+
+    return { totalRevenue, totalExpenses, profitOrLoss, periodMultiplier };
+  }, [revenues, variableExpenses, fixedExpenses, period]);
+  
+
+  const Section = ({ title, children }: { title: string, children: React.ReactNode }) => (
+      <div className="bg-card p-4 rounded-lg border mt-6">
+          <h3 className="text-lg font-bold text-primary font-headline mb-4">{title}</h3>
+          {children}
+      </div>
+  );
+
+  return (
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogContent className="max-w-4xl h-[90vh]">
+        <DialogHeader>
+          <DialogTitle className="text-3xl font-bold text-center text-gray-800 font-headline">Plant Profit & Loss Calculator</DialogTitle>
+          <DialogDescription className="text-center text-lg text-gray-500">Calculate your dairy plant's financial health.</DialogDescription>
+        </DialogHeader>
+        <ScrollArea className="h-full pr-6 mt-4">
+            <div className="bg-muted/50 p-4 rounded-lg mb-6">
+                <Label htmlFor="period-select">Select Calculation Period</Label>
+                <Select value={period} onValueChange={setPeriod}>
+                    <SelectTrigger id="period-select"><SelectValue/></SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="daily">Daily</SelectItem>
+                        <SelectItem value="monthly">Monthly</SelectItem>
+                    </SelectContent>
+                </Select>
+                 <p className="text-xs text-muted-foreground mt-2">Note: Fixed costs are always entered as monthly, and will be auto-adjusted for daily calculations.</p>
+            </div>
+
+            <Section title={`Total Revenue (${period === 'daily' ? 'Per Day' : 'Per Month'})`}>
+                 <div className="space-y-3">
+                    {revenues.map((item, index) => (
+                        <div key={item.id} className="grid grid-cols-1 sm:grid-cols-11 gap-2 items-center">
+                            <Input className="sm:col-span-4" placeholder="Revenue Source (e.g., Milk Sale)" value={item.name} onChange={(e) => handleRevenueChange(item.id, 'name', e.target.value)} />
+                            <Input className="sm:col-span-3" type="number" placeholder="Quantity (Ltr/Kg)" value={item.quantity} onChange={(e) => handleRevenueChange(item.id, 'quantity', e.target.value)} />
+                            <Input className="sm:col-span-3" type="number" placeholder="Price per unit" value={item.price} onChange={(e) => handleRevenueChange(item.id, 'price', e.target.value)} />
+                            <Button variant="ghost" size="icon" className="text-destructive sm:col-span-1" onClick={() => handleRemoveItem(item.id, 'revenue')}><XCircle /></Button>
+                        </div>
+                    ))}
+                </div>
+                <Button variant="outline" size="sm" onClick={() => handleAddItem('revenue')} className="mt-4"><PlusCircle className="mr-2"/> Add Revenue Item</Button>
+            </Section>
+
+            <Section title={`Total Variable Expenses (${period === 'daily' ? 'Per Day' : 'Per Month'})`}>
+                <div className="space-y-3">
+                    {variableExpenses.map((item) => (
+                         <div key={item.id} className="grid grid-cols-1 sm:grid-cols-3 gap-2 items-center">
+                            <Input className="sm:col-span-2" placeholder="Expense (e.g., Raw Milk)" value={item.name} onChange={(e) => handleExpenseChange(item.id, 'variable', e.target.value)} />
+                            <div className="flex items-center gap-2">
+                                <Input type="number" placeholder="Cost" value={item.cost} onChange={(e) => handleExpenseChange(item.id, 'variable', e.target.value)} />
+                                <Button variant="ghost" size="icon" className="text-destructive" onClick={() => handleRemoveItem(item.id, 'variable')}><XCircle /></Button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+                <Button variant="outline" size="sm" onClick={() => handleAddItem('variable')} className="mt-4"><PlusCircle className="mr-2"/> Add Variable Expense</Button>
+            </Section>
+
+            <Section title="Total Fixed Expenses (Per Month)">
+                 <div className="space-y-3">
+                    {fixedExpenses.map((item) => (
+                         <div key={item.id} className="grid grid-cols-1 sm:grid-cols-3 gap-2 items-center">
+                            <Input className="sm:col-span-2" placeholder="Expense (e.g., Salaries)" value={item.name} onChange={(e) => handleExpenseChange(item.id, 'fixed', e.target.value)} />
+                            <div className="flex items-center gap-2">
+                                <Input type="number" placeholder="Cost" value={item.cost} onChange={(e) => handleExpenseChange(item.id, 'fixed', e.target.value)} />
+                                <Button variant="ghost" size="icon" className="text-destructive" onClick={() => handleRemoveItem(item.id, 'fixed')}><XCircle /></Button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+                <Button variant="outline" size="sm" onClick={() => handleAddItem('fixed')} className="mt-4"><PlusCircle className="mr-2"/> Add Fixed Expense</Button>
+            </Section>
+            
+            <Alert className={`mt-8 ${profitOrLoss >= 0 ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
+                <AlertTitle className="text-xl font-bold">Summary ({period === 'daily' ? 'Daily' : 'Monthly'})</AlertTitle>
+                <AlertDescription>
+                    <div className="grid grid-cols-2 gap-2 mt-2">
+                        <p>Total Revenue:</p> <p className="font-bold text-right">₹ {(totalRevenue * periodMultiplier).toFixed(2)}</p>
+                        <p>Total Expenses:</p> <p className="font-bold text-right">₹ {(totalExpenses * periodMultiplier).toFixed(2)}</p>
+                        <hr className="col-span-2 my-1" />
+                        <p className="font-bold text-lg">{profitOrLoss >= 0 ? 'Profit' : 'Loss'}:</p>
+                        <p className={`font-bold text-lg text-right ${profitOrLoss >= 0 ? 'text-green-700' : 'text-red-700'}`}>
+                            ₹ {(profitOrLoss * periodMultiplier).toFixed(2)}
+                        </p>
+                    </div>
+                </AlertDescription>
+            </Alert>
+            <div className="h-12"></div>
+        </ScrollArea>
+      </DialogContent>
+    </Dialog>
+  );
+}

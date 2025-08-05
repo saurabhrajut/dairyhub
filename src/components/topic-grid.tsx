@@ -21,6 +21,7 @@ import {
   Droplet,
   PackageCheck,
   Lock,
+  DollarSign,
 } from "lucide-react";
 import { PaneerIcon, IceCreamIcon } from "@/components/icons";
 import { Input } from "@/components/ui/input";
@@ -40,6 +41,7 @@ import { QualityConceptModal } from "./info-modals/quality-concept-modal";
 import { WaterTestingModal } from "./info-modals/water-testing-modal";
 import { PackagingMaterialTestingModal } from "./info-modals/packaging-material-testing-modal";
 import { FoodTechModal } from "./info-modals/food-tech-modal";
+import { PlantCostModal } from "./calculators/plant-cost-modal";
 import { useSubscription } from "@/context/subscription-context";
 import { SubscriptionModal } from "./subscription-modal";
 
@@ -52,6 +54,7 @@ const topics = [
   { id: 'std2', title: 'Standardization II', description: 'Advanced Blending', category: 'milk', icon: Calculator, modal: StandardizationIIModal, isPro: true },
   { id: 'paneer-production', title: 'Paneer Production', description: 'Process & Yield', category: 'science', icon: PaneerIcon, modal: PaneerProductionModal, isPro: true },
   { id: 'ice-cream-calc', title: 'Ice Cream Calc', description: 'Overrun & Mix', category: 'science', icon: IceCreamIcon, modal: IceCreamCalculationsModal, isPro: true },
+  { id: 'plant-cost', title: 'Plant Cost', description: 'Profit & Loss Calc', category: 'industry', icon: DollarSign, badge: 'Pro', modal: PlantCostModal, isPro: true },
   { id: 'compositional-analysis', title: 'Compositional Analysis', description: 'Chemical tests for products', category: 'science', icon: TestTube, modal: CompositionalAnalysisModal, isPro: true },
   { id: 'calibration', title: 'Calibration', description: 'Glassware & Reagents', category: 'science', icon: ClipboardCheck, modal: CalibrationStandardizationModal, isPro: true },
   { id: 'quality-concept', title: 'Quality Concepts', description: 'HACCP, TQM, ISO', category: 'industry', icon: CheckSquare, modal: QualityConceptModal, isPro: true },
@@ -137,7 +140,7 @@ export function TopicGrid() {
               className={`bg-card p-6 rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-2 transition-all duration-300 cursor-pointer text-center relative overflow-hidden group ${isLocked ? 'opacity-70' : ''}`}
             >
               {isLocked && <div className="absolute inset-0 bg-black/30 flex items-center justify-center"><Lock className="w-8 h-8 text-white" /></div>}
-              {topic.badge && <Badge variant="destructive" className="absolute top-3 right-3 animate-pulse">{topic.badge}</Badge>}
+              {topic.badge && <Badge variant={topic.badge === 'Pro' ? 'default' : 'destructive'} className="absolute top-3 right-3 animate-pulse">{topic.badge}</Badge>}
               <div className="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center bg-gradient-to-br from-primary/10 to-accent/20">
                 <topic.icon className="w-10 h-10 text-primary" />
               </div>
