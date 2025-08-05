@@ -32,6 +32,7 @@ const TABS = [
     { value: "clr-correction", label: "CLR Correction" },
     { value: "component-qty", label: "Component Qty" },
     { value: "snf", label: "SNF Calculator" },
+    { value: "gravimetric", label: "Gravimetric Analysis"},
     { value: "formulas", label: "Formulas & Factors" },
 ]
 
@@ -44,7 +45,7 @@ export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean;
           <DialogDescription className="text-center">Advanced calculators for precise dairy processing.</DialogDescription>
         </DialogHeader>
         <Tabs defaultValue="fat-blending" className="w-full flex flex-col flex-1 min-h-0">
-          <TabsList className="grid w-full h-auto grid-cols-2 sm:grid-cols-4 lg:grid-cols-7">
+          <TabsList className="grid w-full h-auto grid-cols-2 sm:grid-cols-4 lg:grid-cols-8">
             {TABS.map(tab => (
                 <TabsTrigger key={tab.value} value={tab.value} className="text-xs sm:text-sm">{tab.label}</TabsTrigger>
             ))}
@@ -56,6 +57,7 @@ export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean;
             <TabsContent value="clr-correction" className="mt-0"><ClrCorrectionCalc /></TabsContent>
             <TabsContent value="component-qty" className="mt-0"><ComponentQtyCalc /></TabsContent>
             <TabsContent value="snf" className="mt-0"><SnfCalc /></TabsContent>
+            <TabsContent value="gravimetric" className="mt-0"><GravimetricAnalysisCalc /></TabsContent>
             <TabsContent value="formulas" className="mt-0"><FormulasTab /></TabsContent>
           </ScrollArea>
         </Tabs>
@@ -394,6 +396,113 @@ function FatSnfAdjustmentCalc() {
     )
 }
 
+function GravimetricAnalysisCalc() {
+    const [dishWeight, setDishWeight] = useState('');
+    const [dishSampleWeight, setDishSampleWeight] = useState('');
+    const [dishDriedWeight, setDishDriedWeight] = useState('');
+    const [dishAshWeight, setDishAshWeight] = useState('');
+    const [results, setResults] = useState<{ moisture: number; ts: number; ash?: number } | null>(null);
+    const [error, setError] = useState<string | null>(null);
+
+    const handleCalculate = () => {
+        const w1 = parseFloat(dishWeight); // Dish
+        const w2 = parseFloat(dishSampleWeight); // Dish + Sample
+        const w3 = parseFloat(dishDriedWeight); // Dish + Dried
+        const w4 = parseFloat(dishAshWeight); // Dish + Ash
+
+        setError(null);
+        setResults(null);
+
+        if (isNaN(w1) || isNaN(w2) || w2 <= w1) {
+            setError("Please enter valid weights for the dish and sample.");
+            return;
+        }
+
+        const sampleWeight = w2 - w1;
+        let moisture = NaN, ts = NaN, ash;
+
+        if (!isNaN(w3) && w3 >= w1) {
+            const moistureWeight = w2 - w3;
+            moisture = (moistureWeight / sampleWeight) * 100;
+            ts = 100 - moisture;
+        }
+
+        if (!isNaN(w4) && w4 >= w1) {
+            const ashWeight = w4 - w1;
+            ash = (ashWeight / sampleWeight) * 100;
+        }
+        
+        if (isNaN(moisture) && ash === undefined) {
+             setError("Please enter weight for either dried sample or ashed sample to calculate.");
+             return;
+        }
+
+        setResults({
+            moisture: !isNaN(moisture) ? moisture : 100 - ts,
+            ts: !isNaN(ts) ? ts : 100 - moisture,
+            ash: ash
+        });
+    }
+
+    return (
+        <div>
+            <p className="text-center text-sm text-gray-500 mb-4">Calculate Moisture, Total Solids (TS), and Ash % using gravimetric weights.</p>
+            <div className="bg-muted/50 p-4 rounded-lg space-y-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <Label>Empty Dish Weight (g)</Label>
+                        <Input type="number" value={dishWeight} onChange={e => setDishWeight(e.target.value)} placeholder="e.g., 25.1234" />
+                    </div>
+                    <div>
+                        <Label>Dish + Sample Weight (g)</Label>
+                        <Input type="number" value={dishSampleWeight} onChange={e => setDishSampleWeight(e.target.value)} placeholder="e.g., 30.1234" />
+                    </div>
+                    <div>
+                        <Label>Dish + Dried Sample Weight (g)</Label>
+                        <Input type="number" value={dishDriedWeight} onChange={e => setDishDriedWeight(e.target.value)} placeholder="For Moisture/TS" />
+                    </div>
+                     <div>
+                        <Label>Dish + Ash Weight (g)</Label>
+                        <Input type="number" value={dishAshWeight} onChange={e => setDishAshWeight(e.target.value)} placeholder="For Ash" />
+                    </div>
+                </div>
+            </div>
+            <Button onClick={handleCalculate} className="w-full mt-4">Calculate Analysis</Button>
+            {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
+            {results && (
+                <Alert className="mt-4">
+                    <AlertTitle>Analysis Results</AlertTitle>
+                    <AlertDescription>
+                        <Table>
+                            <TableBody>
+                                {!isNaN(results.moisture) && (
+                                    <TableRow>
+                                        <TableCell className="font-medium">Moisture</TableCell>
+                                        <TableCell className="text-right font-bold">{results.moisture.toFixed(2)} %</TableCell>
+                                    </TableRow>
+                                )}
+                                {!isNaN(results.ts) && (
+                                     <TableRow>
+                                        <TableCell className="font-medium">Total Solids (TS)</TableCell>
+                                        <TableCell className="text-right font-bold">{results.ts.toFixed(2)} %</TableCell>
+                                    </TableRow>
+                                )}
+                                {results.ash !== undefined && (
+                                     <TableRow>
+                                        <TableCell className="font-medium">Ash</TableCell>
+                                        <TableCell className="text-right font-bold">{results.ash.toFixed(2)} %</TableCell>
+                                    </TableRow>
+                                )}
+                            </TableBody>
+                        </Table>
+                    </AlertDescription>
+                </Alert>
+            )}
+        </div>
+    )
+}
+
+
 function FormulasTab() {
     return (
         <div className="space-y-6">
@@ -432,3 +541,5 @@ function FormulasTab() {
         </div>
     )
 }
+
+    
