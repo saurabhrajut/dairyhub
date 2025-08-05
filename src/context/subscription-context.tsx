@@ -2,7 +2,7 @@
 
 import { createContext, useState, useContext, ReactNode, useEffect, useCallback } from 'react';
 
-type SubscriptionPlan = '7-days' | '1-month' | '6-months' | 'yearly' | 'lifetime';
+export type SubscriptionPlan = '7-days' | '1-month' | '6-months' | 'yearly' | 'lifetime';
 
 interface Subscription {
   plan: SubscriptionPlan;
