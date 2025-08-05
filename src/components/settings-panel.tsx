@@ -1,3 +1,4 @@
+
 "use client"
 
 import {
@@ -62,6 +63,7 @@ export function SettingsPanel({
               </SelectContent>
             </Select>
           </div>
+           <p className="text-xs text-muted-foreground text-center col-span-4 px-4">This setting changes the language for all informational guides and text content within the app.</p>
         </div>
         <DialogFooter>
           <Button onClick={handleSave}>Save changes</Button>
@@ -70,3 +72,5 @@ export function SettingsPanel({
     </Dialog>
   )
 }
+
+    

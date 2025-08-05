@@ -115,51 +115,53 @@ export function PaneerProductionModal({
             <section id="raw-material" className="mb-12">
                 <h2 className="text-2xl font-bold text-blue-700 bg-blue-50 p-4 rounded-lg mt-6 mb-6 border-l-4 border-blue-700 font-headline">1. Raw Material & Quality Control</h2>
                 <p className="text-gray-600 leading-relaxed mb-6">The quality of paneer is directly dependent on the quality of the incoming milk. In a dairy industry setting, milk is first tested for critical parameters before being accepted for processing.</p>
-                
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Parameter</TableHead>
-                            <TableHead>Ideal Range (Buffalo Milk)</TableHead>
-                            <TableHead>Ideal Range (Cow Milk)</TableHead>
-                            <TableHead>Importance</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {qualityParams.map(item => (
-                            <TableRow key={item.param}>
-                                <TableCell className="font-medium">{item.param}</TableCell>
-                                <TableCell>{item.buffalo}</TableCell>
-                                <TableCell>{item.cow}</TableCell>
-                                <TableCell>{item.importance}</TableCell>
+                <div className="overflow-x-auto">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Parameter</TableHead>
+                                <TableHead>Ideal Range (Buffalo Milk)</TableHead>
+                                <TableHead>Ideal Range (Cow Milk)</TableHead>
+                                <TableHead>Importance</TableHead>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+                        </TableHeader>
+                        <TableBody>
+                            {qualityParams.map(item => (
+                                <TableRow key={item.param}>
+                                    <TableCell className="font-medium">{item.param}</TableCell>
+                                    <TableCell>{item.buffalo}</TableCell>
+                                    <TableCell>{item.cow}</TableCell>
+                                    <TableCell>{item.importance}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </div>
             </section>
 
             <section id="production-process" className="mb-12">
                 <h2 className="text-2xl font-bold text-blue-700 bg-blue-50 p-4 rounded-lg mt-6 mb-6 border-l-4 border-blue-700 font-headline">2. Step-by-Step Production Process</h2>
                 <p className="text-gray-600 leading-relaxed mb-6">The following table outlines the standardized procedure for manufacturing paneer at an industrial scale.</p>
-                
-                 <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Step No.</TableHead>
-                            <TableHead>Process Stage</TableHead>
-                            <TableHead>Key Parameters & Procedure</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {processSteps.map(item => (
-                            <TableRow key={item.step}>
-                                <TableCell>{item.step}</TableCell>
-                                <TableCell className="font-medium">{item.stage}</TableCell>
-                                <TableCell dangerouslySetInnerHTML={{__html: item.params}} />
+                <div className="overflow-x-auto">
+                     <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Step No.</TableHead>
+                                <TableHead>Process Stage</TableHead>
+                                <TableHead>Key Parameters & Procedure</TableHead>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+                        </TableHeader>
+                        <TableBody>
+                            {processSteps.map(item => (
+                                <TableRow key={item.step}>
+                                    <TableCell>{item.step}</TableCell>
+                                    <TableCell className="font-medium">{item.stage}</TableCell>
+                                    <TableCell dangerouslySetInnerHTML={{__html: item.params}} />
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </div>
             </section>
 
             <section id="yield-calculator" className="mb-12">
@@ -228,23 +230,27 @@ export function PaneerProductionModal({
 
                 <h3 className="text-xl font-semibold text-gray-700 mt-8 mb-4 font-headline">4.4 Paneer Texture Explained: Hard, Soft, and Fluffy</h3>
                 <p className="text-gray-600 leading-relaxed mb-4">The final texture of paneer is a result of several factors throughout the production process.</p>
-                 <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Texture</TableHead>
-                            <TableHead>Primary Causes</TableHead>
-                            <TableHead>Result</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        <TableRow><TableCell className="font-medium text-red-600">Hard / Rubbery</TableCell><TableCell>Low fat content in milk, over-pressing, high coagulation temperature, excessive cooking.</TableCell><TableCell>Chewy, dry, and does not absorb flavors well. Low moisture content.</TableCell></TableRow>
-                        <TableRow><TableCell className="font-medium text-green-600">Soft / Spongy (Ideal)</TableCell><TableCell>Standardized milk (6% fat), correct coagulation temp (70-75°C), controlled pressing, proper chilling.</TableCell><TableCell>Holds its shape, has a smooth bite, and absorbs gravies. This is the desired texture for high-quality paneer.</TableCell></TableRow>
-                        <TableRow><TableCell className="font-medium text-yellow-600">Fluffy / Crumbly</TableCell><TableCell>High acidity in milk, coagulation at too low a temperature, insufficient pressing.</TableCell><TableCell>Breaks apart easily, difficult to cut into cubes, may taste overly acidic.</TableCell></TableRow>
-                    </TableBody>
-                </Table>
+                <div className="overflow-x-auto">
+                     <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Texture</TableHead>
+                                <TableHead>Primary Causes</TableHead>
+                                <TableHead>Result</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            <TableRow><TableCell className="font-medium text-red-600">Hard / Rubbery</TableCell><TableCell>Low fat content in milk, over-pressing, high coagulation temperature, excessive cooking.</TableCell><TableCell>Chewy, dry, and does not absorb flavors well. Low moisture content.</TableCell></TableRow>
+                            <TableRow><TableCell className="font-medium text-green-600">Soft / Spongy (Ideal)</TableCell><TableCell>Standardized milk (6% fat), correct coagulation temp (70-75°C), controlled pressing, proper chilling.</TableCell><TableCell>Holds its shape, has a smooth bite, and absorbs gravies. This is the desired texture for high-quality paneer.</TableCell></TableRow>
+                            <TableRow><TableCell className="font-medium text-yellow-600">Fluffy / Crumbly</TableCell><TableCell>High acidity in milk, coagulation at too low a temperature, insufficient pressing.</TableCell><TableCell>Breaks apart easily, difficult to cut into cubes, may taste overly acidic.</TableCell></TableRow>
+                        </TableBody>
+                    </Table>
+                </div>
             </section>
         </ScrollArea>
       </DialogContent>
     </Dialog>
   );
 }
+
+    

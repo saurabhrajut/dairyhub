@@ -52,7 +52,7 @@ export function QualityConceptModal({ isOpen, setIsOpen }: { isOpen: boolean; se
                 <Section title={content.whatIsQuality.title} id="quality">
                     <p>{content.whatIsQuality.p1}</p>
                     <blockquote className="border-l-4 border-primary bg-muted p-4 my-4">
-                        Quality $\propto$ 1 / {content.whatIsQuality.variability}
+                        Quality &prop; 1 / {content.whatIsQuality.variability}
                     </blockquote>
                     <p>{content.whatIsQuality.p2}</p>
                     <p>{content.whatIsQuality.p3}</p>
@@ -94,18 +94,19 @@ export function QualityConceptModal({ isOpen, setIsOpen }: { isOpen: boolean; se
                 <Section title={content.qa.title} id="qa">
                      <p>{content.qa.p1}</p>
                      <p>{content.qa.p2}</p>
-
-                    <Table>
-                        <TableCaption>{content.qa.table.caption}</TableCaption>
-                        <TableHeader>
-                            <TableRow><TableHead>{content.qa.table.header1}</TableHead><TableHead>{content.qa.table.header2}</TableHead></TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {content.qa.table.rows.map((row, index) => (
-                                <TableRow key={index}><TableCell>{row.qc}</TableCell><TableCell>{row.qa}</TableCell></TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+                     <div className="overflow-x-auto">
+                        <Table>
+                            <TableCaption>{content.qa.table.caption}</TableCaption>
+                            <TableHeader>
+                                <TableRow><TableHead>{content.qa.table.header1}</TableHead><TableHead>{content.qa.table.header2}</TableHead></TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {content.qa.table.rows.map((row, index) => (
+                                    <TableRow key={index}><TableCell>{row.qc}</TableCell><TableCell>{row.qa}</TableCell></TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                     </div>
                 </Section>
                 
                 <Section title={content.deming.title} id="deming">
@@ -201,3 +202,5 @@ export function QualityConceptModal({ isOpen, setIsOpen }: { isOpen: boolean; se
     </Dialog>
   );
 }
+
+    
