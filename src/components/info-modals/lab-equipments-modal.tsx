@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/accordion";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
-import Image from 'next/image';
 import { useLanguage } from "@/context/language-context";
 import { labEquipmentsContent } from "@/lib/content/lab-equipments-content";
 
@@ -63,35 +62,23 @@ export function LabEquipmentsModal({ isOpen, setIsOpen }: { isOpen: boolean; set
                            {equip.name}
                         </AccordionTrigger>
                         <AccordionContent>
-                            <div className="prose prose-sm max-w-none text-gray-700 leading-relaxed grid grid-cols-1 md:grid-cols-3 gap-6">
-                                <div className="md:col-span-1">
-                                    <Image 
-                                        src={`https://placehold.co/400x300.png`}
-                                        data-ai-hint={equip.imageHint}
-                                        alt={equip.name}
-                                        width={400}
-                                        height={300}
-                                        className="rounded-lg shadow-md object-cover"
-                                    />
-                                </div>
-                                <div className="md:col-span-2">
-                                    <h4 className="font-bold text-lg not-prose">{content.purposeTitle}</h4>
-                                    <p>{equip.purpose}</p>
+                            <div className="prose prose-sm max-w-none text-gray-700 leading-relaxed">
+                                <h4 className="font-bold text-lg not-prose">{content.purposeTitle}</h4>
+                                <p>{equip.purpose}</p>
 
-                                    <h4 className="font-bold text-lg mt-4 not-prose">{content.principleTitle}</h4>
-                                    <p dangerouslySetInnerHTML={{ __html: equip.principle }} />
+                                <h4 className="font-bold text-lg mt-4 not-prose">{content.principleTitle}</h4>
+                                <p dangerouslySetInnerHTML={{ __html: equip.principle }} />
 
-                                    {equip.parts && equip.parts.length > 0 && (
-                                        <>
-                                            <h4 className="font-bold text-lg mt-4 not-prose">{content.partsTitle}</h4>
-                                            <ul className="list-disc list-inside">
-                                                {equip.parts.map((part, index) => (
-                                                    <li key={index}><strong>{part.name}:</strong> {part.description}</li>
-                                                ))}
-                                            </ul>
-                                        </>
-                                    )}
-                                </div>
+                                {equip.parts && equip.parts.length > 0 && (
+                                    <>
+                                        <h4 className="font-bold text-lg mt-4 not-prose">{content.partsTitle}</h4>
+                                        <ul className="list-disc list-inside">
+                                            {equip.parts.map((part, index) => (
+                                                <li key={index}><strong>{part.name}:</strong> {part.description}</li>
+                                            ))}
+                                        </ul>
+                                    </>
+                                )}
                             </div>
                         </AccordionContent>
                     </AccordionItem>
