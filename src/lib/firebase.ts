@@ -1,5 +1,5 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { getAuth } from "firebase/auth/web-extension";
+import { getAuth } from "firebase/auth";
 import { firebaseConfig } from "./firebase-config";
 
 // Initialize Firebase
