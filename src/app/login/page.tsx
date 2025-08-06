@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { auth } from '@/lib/firebase';
 import { signInWithPopup, GoogleAuthProvider, RecaptchaVerifier, signInWithPhoneNumber, type ConfirmationResult } from 'firebase/auth';
@@ -29,19 +29,20 @@ export default function LoginPage() {
   const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
   const [otpSent, setOtpSent] = useState(false);
 
-  const setupRecaptcha = () => {
+  useEffect(() => {
+    // This effect ensures the reCAPTCHA verifier is ready when the component mounts.
     if (!window.recaptchaVerifier) {
       window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
         'size': 'invisible',
         'callback': () => {
-            // reCAPTCHA solved, allow signInWithPhoneNumber.
+          // reCAPTCHA solved, allow signInWithPhoneNumber.
         },
         'expired-callback': () => {
-            // Response expired. Ask user to solve reCAPTCHA again.
+          toast({ variant: 'destructive', title: 'reCAPTCHA Expired', description: 'Please try signing in again.' });
         }
       });
     }
-  };
+  }, [toast]);
 
   const handleGoogleSignIn = async () => {
     setLoading('google');
@@ -61,7 +62,6 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading('phone');
     try {
-      setupRecaptcha();
       const appVerifier = window.recaptchaVerifier;
       const result = await signInWithPhoneNumber(auth, `+91${phone}`, appVerifier);
       setConfirmationResult(result);
