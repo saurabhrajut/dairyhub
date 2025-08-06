@@ -3,6 +3,7 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { LanguageProvider } from '@/context/language-context';
 import { SubscriptionProvider } from '@/context/subscription-context';
+import { AuthProvider } from '@/context/auth-context';
 import Script from 'next/script';
 
 export const metadata: Metadata = {
@@ -23,11 +24,13 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Source+Code+Pro&family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased">
-        <SubscriptionProvider>
-          <LanguageProvider>
-            {children}
-          </LanguageProvider>
-        </SubscriptionProvider>
+        <AuthProvider>
+          <SubscriptionProvider>
+            <LanguageProvider>
+              {children}
+            </LanguageProvider>
+          </SubscriptionProvider>
+        </AuthProvider>
         <Toaster />
         <Script id="razorpay-checkout-js" src="https://checkout.razorpay.com/v1/checkout.js" />
       </body>

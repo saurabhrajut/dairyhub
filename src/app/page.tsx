@@ -1,40 +1,27 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/auth-context";
 import { DailyTip } from "@/components/daily-tip";
 import { Header } from "@/components/header";
 import { TopicGrid } from "@/components/topic-grid";
 import { ChatWidget } from "@/components/chat-widget";
 import { Skeleton } from "@/components/ui/skeleton";
+import { type User } from "firebase/auth";
 
-export interface UserProfile {
-  name: string;
-  age: number;
-  gender: 'male' | 'female' | 'other';
-}
+export interface UserProfile extends User {}
 
 export default function Home() {
-  const [user, setUser] = useState<UserProfile | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { user, loading, setUserData } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    try {
-      const storedUser = localStorage.getItem("dairy-hub-user");
-      if (storedUser) {
-        setUser(JSON.parse(storedUser));
-      } else {
-        router.replace("/login");
-      }
-    } catch (error) {
-        console.error("Could not parse user from localStorage", error);
-        router.replace("/login");
-    } finally {
-        setLoading(false);
+    if (!loading && !user) {
+      router.replace("/login");
     }
-  }, [router]);
+  }, [loading, user, router]);
 
   if (loading || !user) {
     return (
@@ -55,10 +42,17 @@ export default function Home() {
     );
   }
 
+  // A mock user profile for the components that need it
+  const mockUserProfile: { name: string; age: number; gender: 'male' | 'female' | 'other' } = {
+    name: user.displayName || 'Friend',
+    age: 30, // Default age
+    gender: 'other', // Default gender
+  };
+
   return (
     <>
       <div className="max-w-7xl mx-auto p-4 sm:p-6">
-        <Header user={user} setUser={setUser} />
+        <Header user={user} />
         <main>
           <DailyTip />
           <div className="text-center mb-8">
@@ -72,7 +66,9 @@ export default function Home() {
           <TopicGrid />
         </main>
       </div>
-      <ChatWidget user={user} />
+      {/* The ChatWidget needs a specific profile structure, we provide a mock one for now. */}
+      {/* You could expand AuthContext to store this profile info if needed. */}
+      <ChatWidget user={mockUserProfile} />
     </>
   );
 }

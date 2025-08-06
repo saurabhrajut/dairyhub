@@ -5,14 +5,15 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { MessageCircle, X, Crown } from "lucide-react";
 import { ChatPanel } from "./chat-panel";
-import type { UserProfile } from "@/app/page";
+import { useAuth } from "@/context/auth-context";
 import { useSubscription } from "@/context/subscription-context";
 import { SubscriptionModal } from "./subscription-modal";
 
-export function ChatWidget({ user }: { user: UserProfile }) {
+export function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState(false);
   const { isPro } = useSubscription();
+  const { user } = useAuth();
 
   const handleWidgetClick = () => {
     if (isPro) {
@@ -20,6 +21,18 @@ export function ChatWidget({ user }: { user: UserProfile }) {
     } else {
       setIsSubscriptionModalOpen(true);
     }
+  };
+  
+  if (!user) {
+    return null; // Don't show the widget if user is not logged in
+  }
+  
+  // A mock user profile for the ChatPanel which expects a different structure
+  // This can be enhanced in the future by storing this info in AuthContext or a user profile DB
+  const mockUserProfile = {
+    name: user.displayName || 'Friend',
+    age: 30,
+    gender: 'other' as const
   };
 
   return (
@@ -38,7 +51,7 @@ export function ChatWidget({ user }: { user: UserProfile }) {
           )}
         </Button>
       </div>
-      {isPro && <ChatPanel isOpen={isOpen} setIsOpen={setIsOpen} user={user} />}
+      {isPro && <ChatPanel isOpen={isOpen} setIsOpen={setIsOpen} user={mockUserProfile} />}
       <SubscriptionModal isOpen={isSubscriptionModalOpen} setIsOpen={setIsSubscriptionModalOpen} />
     </>
   );
