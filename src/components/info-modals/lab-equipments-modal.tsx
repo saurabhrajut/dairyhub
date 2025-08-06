@@ -66,7 +66,7 @@ export function LabEquipmentsModal({ isOpen, setIsOpen }: { isOpen: boolean; set
                             <div className="prose prose-sm max-w-none text-gray-700 leading-relaxed grid grid-cols-1 md:grid-cols-3 gap-6">
                                 <div className="md:col-span-1">
                                     <Image 
-                                        src={`https://placehold.co/400x300.png`} 
+                                        src={`https://placehold.co/400x300.png`}
                                         data-ai-hint={equip.imageHint}
                                         alt={equip.name}
                                         width={400}
