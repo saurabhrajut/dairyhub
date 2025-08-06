@@ -16,6 +16,7 @@ import { useToast } from "@/hooks/use-toast";
 import { ScrollArea } from "./ui/scroll-area";
 import { createRazorpayOrder, verifyRazorpayPayment } from "@/app/actions";
 
+
 const proFeatures = [
     "Unlock all premium calculators & guides",
     "Full access to Sarathi AI Chatbot",
@@ -65,7 +66,7 @@ export function SubscriptionModal({
     }
 
     const options = {
-      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // Ensure you have this in your .env.local
+      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
       amount: orderResponse.order.amount,
       currency: orderResponse.order.currency,
       name: "DhenuGuide Pro",
