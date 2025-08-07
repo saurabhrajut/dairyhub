@@ -10,11 +10,9 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Crown, CheckCircle2, Zap, Loader2 } from "lucide-react";
-import Image from "next/image";
 import { useSubscription, type SubscriptionPlan } from "@/context/subscription-context";
 import { useToast } from "@/hooks/use-toast";
 import { ScrollArea } from "./ui/scroll-area";
-import { createRazorpayOrder, verifyRazorpayPayment } from "@/app/actions";
 
 
 const proFeatures = [
@@ -45,78 +43,19 @@ export function SubscriptionModal({
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState<SubscriptionPlan | null>(null);
 
-  const handlePayment = async (planKey: SubscriptionPlan) => {
+  const handleSubscription = (planKey: SubscriptionPlan) => {
     setIsLoading(planKey);
-    const plan = plans[planKey];
-    if (!plan) {
-        setIsLoading(null);
-        return;
-    }
-
-    const orderResponse = await createRazorpayOrder(plan.price);
-
-    if (!orderResponse.success || !orderResponse.order) {
-      toast({
-        variant: "destructive",
-        title: "Payment Error",
-        description: "Could not initiate payment. Please try again.",
-      });
-      setIsLoading(null);
-      return;
-    }
-
-    const options = {
-      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-      amount: orderResponse.order.amount,
-      currency: orderResponse.order.currency,
-      name: "DhenuGuide Pro",
-      description: `Subscription for ${plan.title}`,
-      image: "https://firebasestudio.app/assets/images/DhenuGuide_Saurabh_Rajput.jpeg",
-      order_id: orderResponse.order.id,
-      handler: async function (response: any) {
-        const verificationResponse = await verifyRazorpayPayment({
-          orderId: response.razorpay_order_id,
-          razorpayPaymentId: response.razorpay_payment_id,
-          razorpaySignature: response.razorpay_signature,
-        });
-
-        if (verificationResponse.success) {
-          subscribe(planKey);
-          setIsOpen(false);
-          toast({
+    
+    // Simulate a short delay
+    setTimeout(() => {
+        subscribe(planKey);
+        setIsOpen(false);
+        toast({
             title: "Subscribed! 🎉",
             description: "Welcome to Pro! All features are now unlocked.",
-          });
-        } else {
-          toast({
-            variant: "destructive",
-            title: "Payment Failed",
-            description: "Payment verification failed. Please contact support.",
-          });
-        }
+        });
         setIsLoading(null);
-      },
-      prefill: {
-        name: "Dairy Hub User",
-        email: "user@example.com",
-        contact: "9999999999",
-      },
-      notes: {
-        address: "DhenuGuide Corporate Office",
-      },
-      theme: {
-        color: "#4F46E5",
-      },
-      modal: {
-          ondismiss: function() {
-              setIsLoading(null);
-          }
-      }
-    };
-    
-    // @ts-ignore
-    const rzp = new window.Razorpay(options);
-    rzp.open();
+    }, 500);
   };
 
   const PlanCard = ({ planKey, popular = false }: { planKey: SubscriptionPlan, popular?: boolean }) => {
@@ -129,7 +68,7 @@ export function SubscriptionModal({
             <p className="text-4xl font-extrabold text-center text-gray-800 mb-4">
                 ₹{plan.price}
             </p>
-            <Button onClick={() => handlePayment(planKey)} className={`w-full ${popular ? 'bg-gradient-to-r from-primary to-indigo-500 text-white shadow-md' : ''}`} variant={popular ? 'default' : 'outline'} disabled={!!isLoading}>
+            <Button onClick={() => handleSubscription(planKey)} className={`w-full ${popular ? 'bg-gradient-to-r from-primary to-indigo-500 text-white shadow-md' : ''}`} variant={popular ? 'default' : 'outline'} disabled={!!isLoading}>
                 {isLoading === planKey ? <Loader2 className="animate-spin" /> : 'Choose Plan'}
             </Button>
         </div>
@@ -162,7 +101,7 @@ export function SubscriptionModal({
                       ))}
                   </div>
                    <div className="mt-8 bg-gray-50 p-4 rounded-lg text-center border">
-                      <p className="text-xs text-muted-foreground">All payments are securely processed by Razorpay.</p>
+                      <p className="text-xs text-muted-foreground">This is a demo. No payment will be processed.</p>
                   </div>
               </div>
               <div className="bg-primary/5 p-8 order-1 md:order-2 flex flex-col justify-center">

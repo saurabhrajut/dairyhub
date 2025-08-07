@@ -4,7 +4,6 @@ import { Toaster } from "@/components/ui/toaster";
 import { LanguageProvider } from '@/context/language-context';
 import { SubscriptionProvider } from '@/context/subscription-context';
 import { AuthProvider } from '@/context/auth-context';
-import Script from 'next/script';
 
 export const metadata: Metadata = {
   title: 'Dairy Hub',
@@ -32,7 +31,6 @@ export default function RootLayout({
           </SubscriptionProvider>
         </AuthProvider>
         <Toaster />
-        <Script id="razorpay-checkout-js" src="https://checkout.razorpay.com/v1/checkout.js" />
       </body>
     </html>
   );
