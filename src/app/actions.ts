@@ -1,6 +1,7 @@
 
 "use server";
 
+import "dotenv/config";
 import crypto from 'crypto';
 import Razorpay from 'razorpay';
 import { generateDairyTip } from "@/ai/flows/generate-dairy-tip";
