@@ -23,6 +23,7 @@ import {
   Lock,
   DollarSign,
   Microscope,
+  Recycle,
 } from "lucide-react";
 import { PaneerIcon, IceCreamIcon } from "@/components/icons";
 import { Input } from "@/components/ui/input";
@@ -46,6 +47,7 @@ import { PlantCostModal } from "./calculators/plant-cost-modal";
 import { LabEquipmentsModal } from "./info-modals/lab-equipments-modal";
 import { useSubscription } from "@/context/subscription-context";
 import { SubscriptionModal } from "./subscription-modal";
+import { CipProcessModal } from "./info-modals/cip-process-modal";
 
 const topics = [
   { id: 'industry', title: 'Dairy Industry', description: 'Overview & Trends', category: 'industry', icon: Factory, badge: 'New', modal: DairyIndustryModal, isPro: true },
@@ -54,6 +56,7 @@ const topics = [
   { id: 'adulteration', title: 'Adulteration', description: 'Detection & Prevention', category: 'milk', icon: Biohazard, badge: 'Updated', modal: AdulterationModal, isPro: true },
   { id: 'std1', title: 'Standardization I', description: 'Basic Principles', category: 'milk', icon: Scale, modal: StandardizationIModal, isPro: false },
   { id: 'std2', title: 'Standardization II', description: 'Advanced Blending', category: 'milk', icon: Calculator, modal: StandardizationIIModal, isPro: true },
+  { id: 'cip-process', title: 'CIP Process', description: 'Cleaning-In-Place Guide', category: 'industry', icon: Recycle, badge: 'New', modal: CipProcessModal, isPro: true },
   { id: 'paneer-production', title: 'Paneer Production', description: 'Process & Yield', category: 'science', icon: PaneerIcon, modal: PaneerProductionModal, isPro: true },
   { id: 'ice-cream-calc', title: 'Ice Cream Calc', description: 'Overrun & Mix', category: 'science', icon: IceCreamIcon, modal: IceCreamCalculationsModal, isPro: true },
   { id: 'lab-equipments', title: 'Lab Equipments', description: 'Principles & Working', category: 'science', icon: Microscope, badge: 'Pro', modal: LabEquipmentsModal, isPro: true },
