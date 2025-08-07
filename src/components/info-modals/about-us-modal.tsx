@@ -35,7 +35,7 @@ export function AboutUsModal({
         <ScrollArea className="h-full pr-6">
             <div className="text-center">
                 <Image
-                    src="https://firebasestudio.app/assets/images/DhenuGuide_Saurabh_Rajput.jpeg"
+                    src="https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/IMG_6535.jpeg?alt=media&token=ef1eb6fa-e4f8-4d68-a9a6-5aab8538d8ab"
                     data-ai-hint="profile photo"
                     alt="Saurabh Rajput"
                     width={144}
