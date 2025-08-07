@@ -3,13 +3,21 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { auth } from '@/lib/firebase';
-import { signInWithPopup, GoogleAuthProvider, RecaptchaVerifier, signInWithPhoneNumber, type ConfirmationResult } from 'firebase/auth';
+import { 
+  signInWithPopup, 
+  GoogleAuthProvider, 
+  RecaptchaVerifier, 
+  signInWithPhoneNumber, 
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  type ConfirmationResult 
+} from 'firebase/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Milk, Smartphone, Mail, Key } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import Image from 'next/image';
 
 const GoogleIcon = () => (
     <svg className="w-5 h-5" viewBox="0 0 48 48">
@@ -24,6 +32,10 @@ export default function LoginPage() {
   const router = useRouter();
   const { toast } = useToast();
   const [loading, setLoading] = useState<string | null>(null);
+  
+  // States for different auth methods
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [phone, setPhone] = useState('');
   const [otp, setOtp] = useState('');
   const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
@@ -31,7 +43,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     // This effect ensures the reCAPTCHA verifier is ready when the component mounts.
-    if (!window.recaptchaVerifier) {
+    if (typeof window !== 'undefined' && !window.recaptchaVerifier) {
       window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
         'size': 'invisible',
         'callback': () => {
@@ -54,7 +66,8 @@ export default function LoginPage() {
     } catch (error) {
       console.error('Google Sign-In Error:', error);
       toast({ variant: 'destructive', title: 'Error', description: "Could not sign in with Google. Please try again." });
-      setLoading(null);
+    } finally {
+        setLoading(null);
     }
   };
 
@@ -90,6 +103,36 @@ export default function LoginPage() {
       setLoading(null);
     }
   };
+  
+  const handleEmailSignIn = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading('email_signin');
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      toast({ title: 'Success', description: 'Signed in successfully!' });
+      router.push('/');
+    } catch (error: any) {
+      console.error("Email Sign-In Error:", error);
+      toast({ variant: 'destructive', title: 'Sign-in Failed', description: error.message });
+    } finally {
+        setLoading(null);
+    }
+  };
+
+  const handleEmailSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading('email_signup');
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      toast({ title: 'Success', description: 'Account created successfully! Please sign in.' });
+    } catch (error: any) {
+      console.error("Email Sign-Up Error:", error);
+      toast({ variant: 'destructive', title: 'Sign-up Failed', description: error.message });
+    } finally {
+        setLoading(null);
+    }
+  };
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
@@ -102,62 +145,72 @@ export default function LoginPage() {
                 <CardDescription>Sign in to continue</CardDescription>
             </CardHeader>
         </div>
-        <CardContent className="p-6 space-y-4">
-          {!otpSent ? (
-            <>
-              <form onSubmit={handlePhoneSignIn} className="space-y-4">
+        <CardContent className="p-6">
+          <Tabs defaultValue="email" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="email">Email</TabsTrigger>
+              <TabsTrigger value="phone">Phone</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="email" className="space-y-4 pt-4">
+              <form onSubmit={handleEmailSignIn} className="space-y-4">
                 <div className='relative'>
-                    <Smartphone className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                    <Input 
-                        type="tel" 
-                        value={phone} 
-                        onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))} 
-                        placeholder="10-digit mobile number" 
-                        className="pl-10"
-                        required
-                    />
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                    <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email address" className="pl-10" required />
                 </div>
-                <Button type="submit" className="w-full" disabled={!!loading || phone.length !== 10}>
-                  {loading === 'phone' ? 'Sending OTP...' : 'Sign in with Phone'}
-                </Button>
+                <div className='relative'>
+                    <Key className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                    <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" className="pl-10" required />
+                </div>
+                <div className="flex gap-2">
+                    <Button type="submit" className="w-full" disabled={!!loading}>
+                        {loading === 'email_signin' ? 'Signing in...' : 'Sign In'}
+                    </Button>
+                    <Button type="button" variant="secondary" onClick={handleEmailSignUp} className="w-full" disabled={!!loading}>
+                        {loading === 'email_signup' ? 'Signing up...' : 'Sign Up'}
+                    </Button>
+                </div>
               </form>
-
-              <div className="relative my-4">
-                  <div className="absolute inset-0 flex items-center">
-                      <span className="w-full border-t" />
+            </TabsContent>
+            
+            <TabsContent value="phone" className="pt-4">
+              {!otpSent ? (
+                <form onSubmit={handlePhoneSignIn} className="space-y-4">
+                  <div className='relative'>
+                      <Smartphone className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                      <Input type="tel" value={phone} onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))} placeholder="10-digit mobile number" className="pl-10" required />
                   </div>
-                  <div className="relative flex justify-center text-xs uppercase">
-                      <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
+                  <Button type="submit" className="w-full" disabled={!!loading || phone.length !== 10}>
+                    {loading === 'phone' ? 'Sending OTP...' : 'Send OTP'}
+                  </Button>
+                </form>
+              ) : (
+                <form onSubmit={handleOtpVerify} className="space-y-4">
+                  <p className="text-sm text-center text-muted-foreground">Enter the OTP sent to +91 {phone}</p>
+                  <div className='relative'>
+                    <Key className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                    <Input type="text" value={otp} onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))} placeholder="6-digit OTP" className="pl-10 text-center tracking-[0.5em]" maxLength={6} required />
                   </div>
-              </div>
+                  <Button type="submit" className="w-full" disabled={!!loading || otp.length !== 6}>
+                    {loading === 'otp' ? 'Verifying...' : 'Verify OTP'}
+                  </Button>
+                  <Button variant="link" size="sm" onClick={() => setOtpSent(false)} className="w-full text-muted-foreground">
+                    Change phone number
+                  </Button>
+                </form>
+              )}
+            </TabsContent>
+          </Tabs>
 
-              <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={!!loading}>
-                {loading === 'google' ? 'Signing in...' : <><GoogleIcon /> Sign in with Google</>}
-              </Button>
-            </>
-          ) : (
-            <form onSubmit={handleOtpVerify} className="space-y-4">
-              <p className="text-sm text-center text-muted-foreground">Enter the OTP sent to +91 {phone}</p>
-              <div className='relative'>
-                <Key className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                <Input 
-                    type="text" 
-                    value={otp} 
-                    onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))} 
-                    placeholder="6-digit OTP" 
-                    className="pl-10 text-center tracking-[0.5em]"
-                    maxLength={6}
-                    required
-                />
-              </div>
-              <Button type="submit" className="w-full" disabled={!!loading || otp.length !== 6}>
-                {loading === 'otp' ? 'Verifying...' : 'Verify OTP'}
-              </Button>
-              <Button variant="link" size="sm" onClick={() => setOtpSent(false)} className="w-full text-muted-foreground">
-                Change phone number
-              </Button>
-            </form>
-          )}
+          <div className="relative my-4">
+              <div className="absolute inset-0 flex items-center"><span className="w-full border-t" /></div>
+              <div className="relative flex justify-center text-xs uppercase"><span className="bg-background px-2 text-muted-foreground">Or continue with</span></div>
+          </div>
+
+          <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={!!loading}>
+            {loading === 'google' ? 'Signing in...' : <><GoogleIcon /> Sign in with Google</>}
+          </Button>
+
         </CardContent>
       </Card>
     </div>
