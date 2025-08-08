@@ -19,6 +19,22 @@ import { useLanguage } from "@/context/language-context";
 import { microbiologyContent } from "@/lib/content/microbiology-content";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 
+const TestProcedure = ({ test }: { test: any }) => (
+    <AccordionItem value={test.id}>
+        <AccordionTrigger className="text-left font-semibold text-lg hover:no-underline">{test.title}</AccordionTrigger>
+        <AccordionContent>
+            <div className="prose prose-sm max-w-none">
+                <h4 className="font-bold">Siddhant (Principle):</h4>
+                <p>{test.principle}</p>
+                <h4 className="font-bold mt-4">Prakriya (Procedure):</h4>
+                <div dangerouslySetInnerHTML={{ __html: test.procedure }} />
+                <h4 className="font-bold mt-4">Ganana (Calculation):</h4>
+                <pre className="bg-muted p-3 rounded-lg font-mono text-sm text-primary" dangerouslySetInnerHTML={{ __html: test.calculation }}/>
+            </div>
+        </AccordionContent>
+    </AccordionItem>
+);
+
 export function MicrobiologyTestingModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
   const { t } = useLanguage();
   const content = t(microbiologyContent);
@@ -69,11 +85,11 @@ export function MicrobiologyTestingModal({ isOpen, setIsOpen }: { isOpen: boolea
                 <h2 className="text-2xl font-bold text-primary mb-4 border-b-2 border-primary/20 pb-2 font-headline">{content.testMethods.title}</h2>
                 <div className="prose prose-sm max-w-none text-gray-700 leading-relaxed">
                      <p>{content.testMethods.intro}</p>
-                     <ol className="list-decimal list-inside space-y-1 mt-4">
-                         {content.testMethods.tests.map((test, index) => (
-                             <li key={index}>{test}</li>
-                         ))}
-                     </ol>
+                     <Accordion type="single" collapsible className="w-full mt-4">
+                        {content.testMethods.tests.map((test, index) => (
+                           <TestProcedure key={index} test={test} />
+                        ))}
+                    </Accordion>
                 </div>
             </section>
         </ScrollArea>

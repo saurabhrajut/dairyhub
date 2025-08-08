@@ -68,24 +68,121 @@ export const microbiologyContent = {
       title: "Common Microbiological Test Methods",
       intro: "Dairy products ki suraksha aur gunavatta sunishchit karne ke liye kai standard microbiological tests kiye jaate hain. Yahan kuch pramukh test methods ki overview di gayi hai:",
       tests: [
-        "Aerobic Mesophilic Plate count",
-        "Aciduric Flat Sour Spore-formers",
-        "Bacillus cereus",
-        "Detection and Determination of Anaerobic Mesophilic Spore Formers in Foods (Clostridium perfringens)",
-        "Detection and Determination of Coliforms, Faecal coliforms and E.coli in Foods and Beverages.",
-        "Direct Microscopic Count for Sauces, Tomato Puree and Pastes",
-        "Fermentation Test (Incubation test).",
-        "Rope Producing Spores in Foods",
-        "Detection and Confirmation of Salmonella species in Foods",
-        "Detection and Confirmation of Shigella species in Foods",
-        "Detection, Determination and Confirmation of Staphylococcus aureus in Foods",
-        "Detection and Confirmation of Sulfide Spoilage Sporeformers in Processed Foods",
-        "Detection and Determination of Thermophilic Flat Sour Spore formers in Foods",
-        "Detection and Confirmation of Pathogenic Vibrios in Foods",
-        "Estimation of Yeasts and Moulds in Foods",
-        "Detection and Confirmation of Listeria monocytogenes in Foods",
-        "Bacteriological Examination of water for various pathogens (Coliforms, E. coli, Salmonella, etc.)",
-        "Detailed guides on Culture Media, Lab Equipment, and Biochemical Tests."
+        {
+          id: 'tpc',
+          title: 'Aerobic Mesophilic Plate Count (Total Plate Count)',
+          principle: 'Yeh test sample mein maujood kul viable (jeevit) bacteria aur fungi ki sankhya maapta hai jo aam (mesophilic) taapman par oxygen ki maujoodgi mein grow kar sakte hain. Ise Standard Plate Count (SPC) ya Total Viable Count (TVC) bhi kehte hain.',
+          procedure: `
+            <ol class='list-decimal list-inside space-y-2 mt-2'>
+              <li><strong>Sample Preparation:</strong> 10g ya 10ml sample ko 90ml sterile diluent (jaise peptone water) mein milakar 1:10 ka dilution banayein.</li>
+              <li><strong>Serial Dilutions:</strong> Isse aage ke serial dilutions (1:100, 1:1000, etc.) banayein.</li>
+              <li><strong>Plating:</strong> Har dilution se 1ml sample ko do sterile Petri plates mein transfer karein (Pour Plate Method).</li>
+              <li><strong>Media:</strong> Plates mein 15-20ml pighla hua Plate Count Agar (PCA) daalein, jo 45°C par ho. Dheere se ghumakar mix karein.</li>
+              <li><strong>Incubation:</strong> Plates ko solidified hone ke baad ulta karke 35-37°C par 24-48 ghante ke liye incubate karein.</li>
+              <li><strong>Counting:</strong> Un plates ko chunein jin par 25 se 250 ke beech colonies hain. Ek colony counter ka istemal karke colonies ginein.</li>
+            </ol>`,
+          calculation: '<code>CFU/g (ya ml) = (Average no. of colonies × Dilution factor) / Volume of sample plated (ml)</code>'
+        },
+        {
+          id: 'coliforms',
+          title: 'Coliforms, Faecal Coliforms aur E.coli ka Pata Lagana',
+          principle: 'Coliforms lactose ko ferment karke acid aur gas banate hain. Unki ginti Violet Red Bile Agar (VRBA) par ki jaati hai. E.coli ek faecal coliform hai jo specific biochemical tests se confirm hota hai.',
+          procedure: `
+            <ol class='list-decimal list-inside space-y-2 mt-2'>
+              <li><strong>Sample & Dilutions:</strong> Upar diye gaye TPC method ki tarah serial dilutions banayein.</li>
+              <li><strong>Plating:</strong> Har dilution se 1ml sample ko sterile Petri plates mein daalein.</li>
+              <li><strong>Media:</strong> Plates mein 15-20ml pighla hua VRBA daalein aur mix karein. Solidify hone ke baad, upar ek aur layer VRBA ki daalein (overlay).</li>
+              <li><strong>Incubation:</strong> Plates ko 35-37°C par 18-24 ghante ke liye incubate karein.</li>
+              <li><strong>Counting:</strong> Laal-baingani (red-purple) colonies (0.5mm ya zyada diameter) ko coliforms ke roop mein ginein.</li>
+              <li><strong>Confirmation (E.coli):</strong> Suspected colonies ko Brilliant Green Lactose Bile (BGLB) broth mein inoculate karein aur 44.5°C par incubate karein. Gas production E.coli ki maujoodgi batata hai. Aage ke confirmation ke liye IMViC tests kiye jaate hain.</li>
+            </ol>`,
+          calculation: '<code>Coliforms/g (ya ml) = Average no. of characteristic colonies × Dilution factor</code>'
+        },
+        {
+          id: 'yeast_mould',
+          title: 'Yeast aur Mould ki Ginti',
+          principle: 'Yeast aur mould acidic environment mein grow kar sakte hain, isliye unki ginti ke liye ek acidic medium (jaise Potato Dextrose Agar, PDA) ka istemal kiya jaata hai.',
+          procedure: `
+             <ol class='list-decimal list-inside space-y-2 mt-2'>
+              <li><strong>Sample & Dilutions:</strong> TPC method ki tarah serial dilutions banayein.</li>
+              <li><strong>Plating:</strong> Har dilution se 1ml sample ko sterile Petri plates mein transfer karein (Spread Plate method behtar hai).</li>
+              <li><strong>Media:</strong> Plates mein pehle se taiyar Potato Dextrose Agar (PDA) ho, jiska pH ~3.5 tak adjust kiya gaya ho (tartaric acid se) taaki bacteria ki growth ruk jaaye.</li>
+              <li><strong>Incubation:</strong> Plates ko 22-25°C par 5 din tak incubate karein.</li>
+              <li><strong>Counting:</strong> Yeasts (aam taur par chamakdar, gol) aur moulds (rooi jaisi, faili hui) ki colonies ko alag-alag ginein.</li>
+            </ol>`,
+          calculation: '<code>Yeast/Mould Count/g (ya ml) = Average no. of colonies × Dilution factor</code>'
+        },
+        {
+          id: 'staph_aureus',
+          title: 'Staphylococcus aureus ka Pata Lagana',
+          principle: 'S. aureus Baird-Parker Agar par grow karne par characteristic black colonies banata hai, jinke aas paas ek saaf (clear) zone hota hai. Coagulase test se iski confirmation hoti hai.',
+          procedure: `
+            <ol class='list-decimal list-inside space-y-2 mt-2'>
+              <li><strong>Sample & Dilutions:</strong> TPC method ki tarah serial dilutions banayein.</li>
+              <li><strong>Plating (Spread Plate):</strong> Har dilution se 0.1ml sample ko Baird-Parker Agar plates par spread karein.</li>
+              <li><strong>Incubation:</strong> Plates ko 35-37°C par 24-48 ghante ke liye incubate karein.</li>
+              <li><strong>Observation:</strong> Black, shiny, convex colonies jinke aas paas ek opaque zone ho, unhein ginein.</li>
+              <li><strong>Confirmation (Coagulase Test):</strong> Ek characteristic colony ko Brain Heart Infusion (BHI) broth mein inoculate karein, incubate karein, aur phir rabbit plasma ke saath mix karke 37°C par incubate karein. Agar 4-6 ghante mein plasma jam jaata hai (clot formation), toh yeh S. aureus hai.</li>
+            </ol>`,
+          calculation: '<code>S. aureus/g (ya ml) = Average no. of confirmed colonies × Dilution factor</code>'
+        },
+         {
+          id: 'salmonella_detection',
+          title: 'Salmonella ka Pata Lagana (Qualitative)',
+          principle: 'Yeh ek multi-step process hai jismein pre-enrichment, selective enrichment, selective plating, aur biochemical/serological confirmation shamil hai.',
+          procedure: `
+            <ol class='list-decimal list-inside space-y-2 mt-2'>
+              <li><strong>Pre-enrichment:</strong> 25g sample ko 225ml Buffered Peptone Water mein daalein aur 37°C par 18-24 ghante incubate karein.</li>
+              <li><strong>Selective Enrichment:</strong> Pre-enriched culture se 1ml ko Rappaport-Vassiliadis (RV) broth aur 0.1ml ko Tetrathionate (TT) broth mein transfer karein. RV ko 42°C aur TT ko 37°C par 24 ghante incubate karein.</li>
+              <li><strong>Selective Plating:</strong> Dono enrichment broths se Xylose Lysine Deoxycholate (XLD) Agar aur Hektoen Enteric (HE) Agar par streak karein. Plates ko 37°C par 24 ghante incubate karein.</li>
+              <li><strong>Observation:</strong> XLD par laal colonies (black center ke saath ya bina), aur HE par neeli-hari colonies (black center ke saath ya bina) suspect colonies maani jaati hain.</li>
+              <li><strong>Confirmation:</strong> Suspect colonies ko Triple Sugar Iron (TSI) agar aur Lysine Iron Agar (LIA) slants par inoculate karein. Aage ke biochemical (urease, indole) aur serological tests se confirm karein.</li>
+            </ol>`,
+          calculation: 'Result ko "Detected" ya "Not Detected" in 25g/ml ke roop mein report kiya jaata hai.'
+        },
+        {
+          id: 'listeria_detection',
+          title: 'Listeria monocytogenes ka Pata Lagana (Qualitative)',
+          principle: 'Yeh bhi ek multi-step process hai jismein selective enrichment aur plating shamil hai.',
+          procedure: `
+             <ol class='list-decimal list-inside space-y-2 mt-2'>
+              <li><strong>Primary Enrichment:</strong> 25g sample ko 225ml Listeria Enrichment Broth (LEB) mein daalein aur 30°C par 24-48 ghante incubate karein.</li>
+              <li><strong>Selective Plating:</strong> Enriched culture se Oxford Agar ya PALCAM Agar par streak karein. Plates ko 35-37°C par 24-48 ghante incubate karein.</li>
+              <li><strong>Observation:</strong> Oxford Agar par, Listeria ki colonies greyish-green hoti hain jinke aas paas ek black halo hota hai.</li>
+              <li><strong>Confirmation:</strong> Suspect colonies ko aage ke tests (Gram stain, motility, catalase, CAMP test) se confirm karein.</li>
+            </ol>`,
+          calculation: 'Result ko "Detected" ya "Not Detected" in 25g/ml ke roop mein report kiya jaata hai.'
+        },
+        {
+          id: 'bacillus_cereus',
+          title: 'Bacillus cereus ki Ginti',
+          principle: 'B. cereus ko Mannitol Egg Yolk Polymyxin (MYP) Agar par grow kiya jaata hai, jahan woh mannitol ferment nahi karta aur lecithinase enzyme produce karta hai.',
+          procedure: `
+            <ol class='list-decimal list-inside space-y-2 mt-2'>
+              <li><strong>Sample & Dilutions:</strong> TPC method ki tarah serial dilutions banayein.</li>
+              <li><strong>Plating (Spread Plate):</strong> Har dilution se 0.1ml sample ko MYP Agar plates par spread karein.</li>
+              <li><strong>Incubation:</strong> Plates ko 30-35°C par 18-24 ghante ke liye incubate karein.</li>
+              <li><strong>Observation:</strong> Pink-red colonies jinke aas paas ek opaque zone (lecithinase activity) ho, unhein ginein.</li>
+              <li><strong>Confirmation:</strong> Suspect colonies ko aage ke biochemical tests (glucose fermentation, Voges-Proskauer test) se confirm karein.</li>
+            </ol>`,
+          calculation: '<code>B. cereus/g (ya ml) = Average no. of confirmed colonies × Dilution factor</code>'
+        },
+        {
+          id: 'other_tests',
+          title: 'Anya Test aur Unke Overview',
+          principle: 'Yahan bache hue tests ka sankshipt overview diya gaya hai, kyonki unke detailed procedures bahut vishisht ho sakte hain.',
+          procedure: `
+            <ul class='list-disc list-inside space-y-2 mt-2'>
+              <li><strong>Aciduric Flat Sour Spores:</strong> Canned foods mein spoilage karne wale thermophilic bacteria ka test. Sample ko Dextrose Tryptone Agar par incubate karke kiya jaata hai.</li>
+              <li><strong>Anaerobic Spore Formers (Clostridium):</strong> Anaerobic conditions mein (jaise anaerobic jar mein) special media (jaise SPS agar) par grow karke kiya jaata hai.</li>
+              <li><strong>Direct Microscopic Count (DMC):</strong> Doodh ya tomato products ki ek nishchit matra ko slide par failakar, stain karke, aur microscope ke neeche bacteria ko seedhe ginkar kiya jaata hai. Yeh ek tez, anumanit test hai.</li>
+              <li><strong>Fermentation Test:</strong> Doodh ko incubate karke usmein gas production, curd type, aur odor dekhkar uski quality ka anuman lagaya jaata hai.</li>
+              <li><strong>Rope Producing Spores:</strong> Bread ya anya products mein "rope" (chipchipa, dhaage jaisa spoilage) paida karne wale Bacillus spores ka test.</li>
+              <li><strong>Water Testing:</strong> Paani ke samples ke liye bhi upar diye gaye methods (jaise coliforms, E.coli, Salmonella) ka istemal kiya jaata hai, aam taur par Membrane Filtration technique ke saath.</li>
+              <li><strong>Culture Media, Equipments, Biochemical Tests:</strong> Yeh vishay bahut vishal hain. Culture media (jaise PCA, VRBA, PDA) bacteria ko grow karne ke liye "bhojan" hain. Equipments (jaise Autoclave, Incubator) testing ke liye zaroori vatavaran pradan karte hain. Biochemical tests (jaise IMViC, Catalase, Oxidase) bacteria ki pehchan karne ke liye unke specific enzyme reactions ka istemal karte hain.</li>
+            </ul>`,
+          calculation: 'In tests ke results aam taur par "Present/Absent" ya cfu/g (ml) mein report kiye jaate hain, jo test par nirbhar karta hai.'
+        }
       ]
     }
   },
@@ -157,24 +254,121 @@ export const microbiologyContent = {
       title: "Common Microbiological Test Methods",
       intro: "Several standard microbiological tests are performed to ensure the safety and quality of dairy products. Here is an overview of some key test methods:",
       tests: [
-        "Aerobic Mesophilic Plate count",
-        "Aciduric Flat Sour Spore-formers",
-        "Bacillus cereus",
-        "Detection and Determination of Anaerobic Mesophilic Spore Formers in Foods (Clostridium perfringens)",
-        "Detection and Determination of Coliforms, Faecal coliforms and E.coli in Foods and Beverages.",
-        "Direct Microscopic Count for Sauces, Tomato Puree and Pastes",
-        "Fermentation Test (Incubation test).",
-        "Rope Producing Spores in Foods",
-        "Detection and Confirmation of Salmonella species in Foods",
-        "Detection and Confirmation of Shigella species in Foods",
-        "Detection, Determination and Confirmation of Staphylococcus aureus in Foods",
-        "Detection and Confirmation of Sulfide Spoilage Sporeformers in Processed Foods",
-        "Detection and Determination of Thermophilic Flat Sour Spore formers in Foods",
-        "Detection and Confirmation of Pathogenic Vibrios in Foods",
-        "Estimation of Yeasts and Moulds in Foods",
-        "Detection and Confirmation of Listeria monocytogenes in Foods",
-        "Bacteriological Examination of water for various pathogens (Coliforms, E. coli, Salmonella, etc.)",
-        "Detailed guides on Culture Media, Lab Equipment, and Biochemical Tests."
+        {
+          id: 'tpc',
+          title: 'Aerobic Mesophilic Plate Count (Total Plate Count)',
+          principle: 'This test measures the total number of viable bacteria and fungi in a sample that can grow at moderate (mesophilic) temperatures in the presence of oxygen. It is also known as Standard Plate Count (SPC) or Total Viable Count (TVC).',
+          procedure: `
+            <ol class='list-decimal list-inside space-y-2 mt-2'>
+              <li><strong>Sample Preparation:</strong> Mix 10g or 10ml of the sample with 90ml of sterile diluent (e.g., peptone water) to make a 1:10 dilution.</li>
+              <li><strong>Serial Dilutions:</strong> Prepare further serial dilutions (1:100, 1:1000, etc.) from this.</li>
+              <li><strong>Plating:</strong> Transfer 1ml of each dilution into two sterile Petri plates (Pour Plate Method).</li>
+              <li><strong>Media:</strong> Pour 15-20ml of molten Plate Count Agar (PCA), which is at 45°C, into the plates. Mix gently by rotating.</li>
+              <li><strong>Incubation:</strong> After the plates have solidified, incubate them inverted at 35-37°C for 24-48 hours.</li>
+              <li><strong>Counting:</strong> Select plates that have between 25 and 250 colonies. Count the colonies using a colony counter.</li>
+            </ol>`,
+          calculation: '<code>CFU/g (or ml) = (Average no. of colonies × Dilution factor) / Volume of sample plated (ml)</code>'
+        },
+        {
+          id: 'coliforms',
+          title: 'Detection of Coliforms, Faecal Coliforms, and E. coli',
+          principle: 'Coliforms ferment lactose to produce acid and gas. They are enumerated on Violet Red Bile Agar (VRBA). E. coli is a faecal coliform confirmed by specific biochemical tests.',
+          procedure: `
+            <ol class='list-decimal list-inside space-y-2 mt-2'>
+              <li><strong>Sample & Dilutions:</strong> Prepare serial dilutions as in the TPC method.</li>
+              <li><strong>Plating:</strong> Pipette 1ml from each dilution into sterile Petri plates.</li>
+              <li><strong>Media:</strong> Pour 15-20ml of molten VRBA and mix. After solidification, pour another layer of VRBA on top (overlay).</li>
+              <li><strong>Incubation:</strong> Incubate the plates at 35-37°C for 18-24 hours.</li>
+              <li><strong>Counting:</strong> Count red-purple colonies (0.5mm or larger in diameter) as coliforms.</li>
+              <li><strong>Confirmation (E. coli):</strong> Inoculate suspected colonies into Brilliant Green Lactose Bile (BGLB) broth and incubate at 44.5°C. Gas production indicates the presence of E. coli. Further IMViC tests are performed for confirmation.</li>
+            </ol>`,
+          calculation: '<code>Coliforms/g (or ml) = Average no. of characteristic colonies × Dilution factor</code>'
+        },
+        {
+          id: 'yeast_mould',
+          title: 'Yeast and Mould Count',
+          principle: 'Yeasts and moulds can grow in acidic environments, so an acidic medium (like Potato Dextrose Agar, PDA) is used for their enumeration.',
+          procedure: `
+             <ol class='list-decimal list-inside space-y-2 mt-2'>
+              <li><strong>Sample & Dilutions:</strong> Prepare serial dilutions as in the TPC method.</li>
+              <li><strong>Plating:</strong> Transfer 1ml from each dilution to sterile Petri plates (Spread Plate method is better).</li>
+              <li><strong>Media:</strong> The plates should contain pre-prepared Potato Dextrose Agar (PDA), with its pH adjusted to ~3.5 (with tartaric acid) to inhibit bacterial growth.</li>
+              <li><strong>Incubation:</strong> Incubate the plates at 22-25°C for 5 days.</li>
+              <li><strong>Counting:</strong> Count colonies of yeasts (typically shiny, round) and moulds (fuzzy, spreading) separately.</li>
+            </ol>`,
+          calculation: '<code>Yeast/Mould Count/g (or ml) = Average no. of colonies × Dilution factor</code>'
+        },
+        {
+          id: 'staph_aureus',
+          title: 'Detection of Staphylococcus aureus',
+          principle: 'S. aureus produces characteristic black colonies with a clear zone around them when grown on Baird-Parker Agar. It is confirmed by the Coagulase test.',
+          procedure: `
+            <ol class='list-decimal list-inside space-y-2 mt-2'>
+              <li><strong>Sample & Dilutions:</strong> Prepare serial dilutions as in the TPC method.</li>
+              <li><strong>Plating (Spread Plate):</strong> Spread 0.1ml from each dilution onto Baird-Parker Agar plates.</li>
+              <li><strong>Incubation:</strong> Incubate the plates at 35-37°C for 24-48 hours.</li>
+              <li><strong>Observation:</strong> Count black, shiny, convex colonies surrounded by an opaque zone.</li>
+              <li><strong>Confirmation (Coagulase Test):</strong> Inoculate a characteristic colony into Brain Heart Infusion (BHI) broth, incubate, and then mix with rabbit plasma and incubate at 37°C. If the plasma clots within 4-6 hours, it is S. aureus.</li>
+            </ol>`,
+          calculation: '<code>S. aureus/g (or ml) = Average no. of confirmed colonies × Dilution factor</code>'
+        },
+         {
+          id: 'salmonella_detection',
+          title: 'Detection of Salmonella (Qualitative)',
+          principle: 'This is a multi-step process involving pre-enrichment, selective enrichment, selective plating, and biochemical/serological confirmation.',
+          procedure: `
+            <ol class='list-decimal list-inside space-y-2 mt-2'>
+              <li><strong>Pre-enrichment:</strong> Add 25g of sample to 225ml of Buffered Peptone Water and incubate at 37°C for 18-24 hours.</li>
+              <li><strong>Selective Enrichment:</strong> Transfer 1ml of the pre-enriched culture to Rappaport-Vassiliadis (RV) broth and 0.1ml to Tetrathionate (TT) broth. Incubate RV at 42°C and TT at 37°C for 24 hours.</li>
+              <li><strong>Selective Plating:</strong> Streak from both enrichment broths onto Xylose Lysine Deoxycholate (XLD) Agar and Hektoen Enteric (HE) Agar. Incubate plates at 37°C for 24 hours.</li>
+              <li><strong>Observation:</strong> On XLD, red colonies (with or without black centers), and on HE, blue-green colonies (with or without black centers) are considered suspect colonies.</li>
+              <li><strong>Confirmation:</strong> Inoculate suspect colonies onto Triple Sugar Iron (TSI) agar and Lysine Iron Agar (LIA) slants. Confirm with further biochemical (urease, indole) and serological tests.</li>
+            </ol>`,
+          calculation: 'The result is reported as "Detected" or "Not Detected" in 25g/ml.'
+        },
+        {
+          id: 'listeria_detection',
+          title: 'Detection of Listeria monocytogenes (Qualitative)',
+          principle: 'This is also a multi-step process involving selective enrichment and plating.',
+          procedure: `
+             <ol class='list-decimal list-inside space-y-2 mt-2'>
+              <li><strong>Primary Enrichment:</strong> Add 25g of sample to 225ml of Listeria Enrichment Broth (LEB) and incubate at 30°C for 24-48 hours.</li>
+              <li><strong>Selective Plating:</strong> Streak from the enriched culture onto Oxford Agar or PALCAM Agar. Incubate plates at 35-37°C for 24-48 hours.</li>
+              <li><strong>Observation:</strong> On Oxford Agar, Listeria colonies are greyish-green with a black halo around them.</li>
+              <li><strong>Confirmation:</strong> Confirm suspect colonies with further tests (Gram stain, motility, catalase, CAMP test).</li>
+            </ol>`,
+          calculation: 'The result is reported as "Detected" or "Not Detected" in 25g/ml.'
+        },
+        {
+          id: 'bacillus_cereus',
+          title: 'Enumeration of Bacillus cereus',
+          principle: 'B. cereus is grown on Mannitol Egg Yolk Polymyxin (MYP) Agar, where it does not ferment mannitol and produces the enzyme lecithinase.',
+          procedure: `
+            <ol class='list-decimal list-inside space-y-2 mt-2'>
+              <li><strong>Sample & Dilutions:</strong> Prepare serial dilutions as in the TPC method.</li>
+              <li><strong>Plating (Spread Plate):</strong> Spread 0.1ml from each dilution onto MYP Agar plates.</li>
+              <li><strong>Incubation:</strong> Incubate the plates at 30-35°C for 18-24 hours.</li>
+              <li><strong>Observation:</strong> Count pink-red colonies surrounded by an opaque zone (lecithinase activity).</li>
+              <li><strong>Confirmation:</strong> Confirm suspect colonies with further biochemical tests (glucose fermentation, Voges-Proskauer test).</li>
+            </ol>`,
+          calculation: '<code>B. cereus/g (or ml) = Average no. of confirmed colonies × Dilution factor</code>'
+        },
+        {
+          id: 'other_tests',
+          title: 'Overview of Other Tests',
+          principle: 'A brief overview of the remaining tests is provided here, as their detailed procedures can be very specific.',
+          procedure: `
+            <ul class='list-disc list-inside space-y-2 mt-2'>
+              <li><strong>Aciduric Flat Sour Spores:</strong> Test for thermophilic bacteria that cause spoilage in canned foods. It is done by incubating the sample on Dextrose Tryptone Agar.</li>
+              <li><strong>Anaerobic Spore Formers (Clostridium):</strong> Done by growing in anaerobic conditions (like in an anaerobic jar) on special media (like SPS agar).</li>
+              <li><strong>Direct Microscopic Count (DMC):</strong> Done by spreading a known amount of milk or tomato product on a slide, staining it, and directly counting the bacteria under a microscope. It is a rapid, estimation test.</li>
+              <li><strong>Fermentation Test:</strong> The quality of milk is estimated by incubating it and observing gas production, curd type, and odor.</li>
+              <li><strong>Rope Producing Spores:</strong> Test for Bacillus spores that cause "rope" (sticky, thread-like spoilage) in bread or other products.</li>
+              <li><strong>Water Testing:</strong> The methods mentioned above (like for coliforms, E. coli, Salmonella) are also used for water samples, often with the Membrane Filtration technique.</li>
+              <li><strong>Culture Media, Equipments, Biochemical Tests:</strong> These topics are vast. Culture media (like PCA, VRBA, PDA) are the "food" for growing bacteria. Equipments (like Autoclave, Incubator) provide the necessary environment for testing. Biochemical tests (like IMViC, Catalase, Oxidase) use the specific enzyme reactions of bacteria to identify them.</li>
+            </ul>`,
+          calculation: 'The results of these tests are usually reported as "Present/Absent" or cfu/g (ml), depending on the test.'
+        }
       ]
     }
   }
