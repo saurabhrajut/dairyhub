@@ -8,7 +8,6 @@ import {
   Factory,
   FlaskConical,
   Beaker,
-  Biohazard,
   Scale,
   Calculator,
   Settings,
@@ -24,6 +23,7 @@ import {
   DollarSign,
   Microscope,
   Recycle,
+  Bug,
 } from "lucide-react";
 import { PaneerIcon, IceCreamIcon } from "@/components/icons";
 import { Input } from "@/components/ui/input";
@@ -48,12 +48,14 @@ import { LabEquipmentsModal } from "./info-modals/lab-equipments-modal";
 import { useSubscription } from "@/context/subscription-context";
 import { SubscriptionModal } from "./subscription-modal";
 import { CipProcessModal } from "./info-modals/cip-process-modal";
+import { MicrobiologyTestingModal } from "./info-modals/microbiology-testing-modal";
 
 const topics = [
   { id: 'industry', title: 'Dairy Industry', description: 'Overview & Trends', category: 'industry', icon: Factory, badge: 'New', modal: DairyIndustryModal, isPro: true },
   { id: 'milk-chemistry', title: 'Milk Chemistry', description: 'Composition & Properties', category: 'science', icon: FlaskConical, modal: MilkChemistryModal, isPro: true },
   { id: 'solutions-prep', title: 'Solutions Preparation', description: 'Testing Methods', category: 'science', icon: Beaker, modal: SolutionsPrepModal, isPro: true },
-  { id: 'adulteration', title: 'Adulteration', description: 'Detection & Prevention', category: 'milk', icon: Biohazard, badge: 'Updated', modal: AdulterationModal, isPro: true },
+  { id: 'microbiology', title: 'Microbiology', description: 'Testing & Pathogens', category: 'science', icon: Bug, badge: 'New', modal: MicrobiologyTestingModal, isPro: true },
+  { id: 'adulteration', title: 'Adulteration', description: 'Detection & Prevention', category: 'milk', icon: TestTube, badge: 'Updated', modal: AdulterationModal, isPro: true },
   { id: 'std1', title: 'Standardization I', description: 'Basic Principles', category: 'milk', icon: Scale, modal: StandardizationIModal, isPro: false },
   { id: 'std2', title: 'Standardization II', description: 'Advanced Blending', category: 'milk', icon: Calculator, modal: StandardizationIIModal, isPro: true },
   { id: 'cip-process', title: 'CIP Process', description: 'Cleaning-In-Place Guide', category: 'industry', icon: Recycle, badge: 'New', modal: CipProcessModal, isPro: true },
