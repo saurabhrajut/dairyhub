@@ -1,3 +1,4 @@
+
 export const milkStandards = {
   toned: { name: "Toned Milk", fat: 3.0, snf: 8.5 },
   double_toned: { name: "Double Toned Milk", fat: 1.5, snf: 9.0 },
@@ -393,6 +394,14 @@ export const adulterantsData = [
 ];
 
 export const reagentRecipes = {
+    'alcohol_alizarin': {
+        name: 'Alcohol Alizarin Reagent (0.2%)',
+        type: 'w/v',
+        components: [
+            { name: 'Alizarin', amount: 0.2, unit: 'g'}
+        ],
+        instructions: '0.2g Alizarin ko 100ml 68% Ethyl Alcohol mein gholein. Iska istemal COB test mein hota hai.'
+    },
     'barfoed': {
         name: 'Barfoed’s Reagent',
         type: 'fixed',
@@ -408,11 +417,11 @@ export const reagentRecipes = {
         ],
         instructions: 'Sodium citrate aur sodium carbonate ko 800ml garam paani mein gholein. Alag se, copper sulfate ko 100ml paani mein gholein. Dheere-dheere copper solution ko carbonate-citrate solution mein milayein aur paani se 1 litre tak poora karein.'
     },
-    'bromothymol_blue_05': {
-        name: 'Bromothymol Blue Solution (0.5%)',
+    'bromothymol_blue_02': {
+        name: 'Bromothymol Blue Solution (0.2%)',
         type: 'w/v',
-        components: [ { name: 'Bromothymol Blue', amount: 0.5, unit: 'g' } ],
-        instructions: 'Bromothymol blue ko distilled water mein gholkar final volume poora karein.'
+        components: [ { name: 'Bromothymol Blue', amount: 0.2, unit: 'g' } ],
+        instructions: '0.2g Bromothymol Blue ko 20ml 95% Ethanol mein gholein aur phir distilled water se volume 100ml tak poora karein.'
     },
     'buffer_sol_ph10': {
         name: 'Buffer Solution (pH 10, Hardness)',
@@ -423,14 +432,23 @@ export const reagentRecipes = {
         ],
         instructions: '67.5g Ammonium Chloride ko 570ml Ammonium Hydroxide me gholein, aur phir distilled water se 1 litre tak poora karein.'
     },
+    'buffer_carbonate_bicarbonate': {
+        name: 'Buffer (Sodium Carbonate/Bicarbonate)',
+        type: 'complex',
+        components: [
+            { name: 'Sodium Carbonate (anhydrous)', amount: 3.5, unit: 'g'},
+            { name: 'Sodium Bicarbonate', amount: 1.5, unit: 'g'}
+        ],
+        instructions: '3.5g Sodium Carbonate aur 1.5g Sodium Bicarbonate ko distilled water me gholkar 1 litre banayein. pH 9.8 hona chahiye.'
+    },
     'buffer_substrate_phos': {
         name: 'Buffer Substrate (Phosphatase Test)',
         type: 'complex',
         components: [
-            { name: 'Buffer (Sodium Carbonate/Bicarbonate)', amount: 1000, unit: 'ml' },
+            { name: 'Carbonate/Bicarbonate Buffer', amount: 1000, unit: 'ml' },
             { name: 'Disodium p-nitrophenyl phosphate', amount: 1.5, unit: 'g' },
         ],
-        instructions: '1.5g Disodium p-nitrophenyl phosphate ko Carbonate-Bicarbonate buffer mein gholkar 1 litre banayein. Stable rehta hai agar 4°C par rakha jaaye. Brown hone par discard karein.'
+        instructions: 'Pehle Carbonate/Bicarbonate Buffer banayein. Phir 1.5g Disodium p-nitrophenyl phosphate ko us buffer mein gholkar 1 litre banayein. Stable rehta hai agar 4°C par rakha jaaye. Brown hone par discard karein.'
     },
     'chromotropic_acid': {
         name: 'Chromotropic Acid Reagent',
@@ -642,6 +660,12 @@ export const reagentRecipes = {
             { name: 'Concentrated HCl', amount: 35, unit: 'ml' }
         ],
         instructions: 'Resorcinol ko 40ml distilled water mein gholein, phir 35ml concentrated HCl milayein. Ant mein, distilled water se final volume poora karein.'
+    },
+    'silver_nitrate_sol': {
+        name: 'Silver Nitrate Solution (1.7% w/v)',
+        type: 'w/v',
+        components: [ { name: 'Silver Nitrate (AgNO₃)', amount: 1.7, unit: 'g'} ],
+        instructions: '1.7g Silver Nitrate ko distilled water mein gholkar 100ml banayein. Brown bottle mein store karein.'
     },
     'stannous_chloride_0025': {
         name: 'Stannous Chloride Solution (0.025% w/v)',
