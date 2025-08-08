@@ -28,6 +28,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 const TABS = [
     { value: "fat-blending", label: "Fat Blending" },
     { value: "fat-adjustment", label: "Fat & SNF Adjustment" },
+    { value: "reconstituted-milk", label: "Reconstituted Milk" },
+    { value: "recombined-milk", label: "Recombined Milk" },
     { value: "clr-blending", label: "CLR Blending" },
     { value: "clr-correction", label: "CLR Correction" },
     { value: "component-qty", label: "Component Qty" },
@@ -45,7 +47,7 @@ export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean;
           <DialogDescription className="text-center">Advanced calculators for precise dairy processing.</DialogDescription>
         </DialogHeader>
         <Tabs defaultValue="fat-blending" className="w-full flex flex-col flex-1 min-h-0">
-          <TabsList className="grid w-full h-auto grid-cols-2 sm:grid-cols-4 lg:grid-cols-8">
+          <TabsList className="grid w-full h-auto grid-cols-2 sm:grid-cols-5 lg:grid-cols-10">
             {TABS.map(tab => (
                 <TabsTrigger key={tab.value} value={tab.value} className="text-xs sm:text-sm">{tab.label}</TabsTrigger>
             ))}
@@ -53,6 +55,8 @@ export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean;
           <ScrollArea className="flex-1 mt-4 pr-4">
             <TabsContent value="fat-blending" className="mt-0"><FatBlendingCalc /></TabsContent>
             <TabsContent value="fat-adjustment" className="mt-0"><FatSnfAdjustmentCalc /></TabsContent>
+            <TabsContent value="reconstituted-milk" className="mt-0"><ReconstitutedMilkCalc /></TabsContent>
+            <TabsContent value="recombined-milk" className="mt-0"><RecombinedMilkCalc /></TabsContent>
             <TabsContent value="clr-blending" className="mt-0"><ClrBlendingCalc /></TabsContent>
             <TabsContent value="clr-correction" className="mt-0"><ClrCorrectionCalc /></TabsContent>
             <TabsContent value="component-qty" className="mt-0"><ComponentQtyCalc /></TabsContent>
@@ -137,7 +141,6 @@ const PearsonSquareCalc = ({ unit, calcType }: { unit: string, calcType: 'Fat' |
 
 function FatBlendingCalc() { return <PearsonSquareCalc unit="%" calcType="Fat" /> }
 function ClrBlendingCalc() { return <PearsonSquareCalc unit="" calcType="CLR" /> }
-
 
 function ClrCorrectionCalc() {
     const [result, setResult] = useState<string | null>(null);
@@ -325,11 +328,6 @@ function FatSnfAdjustmentCalc() {
             return;
         }
 
-        // Equations:
-        // 1. M*Fm + C*Fc + P*Fp = (M+C+P)*Ft  (Fat balance)
-        // 2. M*Sm + C*Sc + P*Sp = (M+C+P)*St  (SNF balance)
-        // Solve for C (Cream) and P (Powder)
-        
         const K1 = M * (Ft - Fm);
         const K2 = M * (St - Sm);
         
@@ -502,6 +500,122 @@ function GravimetricAnalysisCalc() {
     )
 }
 
+function ReconstitutedMilkCalc() {
+    const [batchQty, setBatchQty] = useState('100');
+    const [targetTS, setTargetTS] = useState('12.5');
+    const [powderTS, setPowderTS] = useState('96');
+    const [result, setResult] = useState<string | null>(null);
+    const [error, setError] = useState<string | null>(null);
+
+    const calculate = () => {
+        setResult(null);
+        setError(null);
+        const qty = parseFloat(batchQty);
+        const tTS = parseFloat(targetTS) / 100;
+        const pTS = parseFloat(powderTS) / 100;
+
+        if ([qty, tTS, pTS].some(isNaN) || qty <= 0 || tTS <= 0 || pTS <= 0) {
+            setError("Please fill all fields with valid positive numbers.");
+            return;
+        }
+
+        const totalSolidsNeeded = qty * tTS;
+        const powderNeeded = totalSolidsNeeded / pTS;
+        const waterNeeded = qty - powderNeeded;
+
+        if (waterNeeded < 0) {
+            setError("Powder TS% cannot be less than Target TS%. Please check your inputs.");
+            return;
+        }
+
+        setResult(`To make <strong>${qty} kg</strong> of milk with <strong>${targetTS}% TS</strong>, you need:<br/>- <strong class='text-green-700'>${powderNeeded.toFixed(3)} kg</strong> of Milk Powder (${powderTS}%)<br/>- <strong class='text-green-700'>${waterNeeded.toFixed(3)} kg</strong> of Water`);
+    };
+
+    return (
+        <div>
+            <p className="text-center text-sm text-gray-500 mb-4">Calculate how much Milk Powder and Water are needed to create milk of a specific Total Solids (TS) content.</p>
+            <div className="bg-muted/50 p-4 rounded-lg space-y-3">
+                <div><Label>Target Batch Quantity (kg)</Label><Input type="number" value={batchQty} onChange={e => setBatchQty(e.target.value)} /></div>
+                <div><Label>Target Total Solids (TS) %</Label><Input type="number" value={targetTS} onChange={e => setTargetTS(e.target.value)} /></div>
+                <div><Label>Milk Powder Total Solids (TS) %</Label><Input type="number" value={powderTS} onChange={e => setPowderTS(e.target.value)} /></div>
+            </div>
+            <Button onClick={calculate} className="w-full mt-4">Calculate</Button>
+            {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
+            {result && <Alert className="mt-4"><AlertTitle>Result</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
+        </div>
+    );
+}
+
+function RecombinedMilkCalc() {
+    const [batchQty, setBatchQty] = useState('100');
+    const [targetFat, setTargetFat] = useState('3.5');
+    const [targetSNF, setTargetSNF] = useState('8.5');
+    const [smpFat, setSmpFat] = useState('1.0');
+    const [smpSNF, setSmpSNF] = useState('95.0');
+    const [fatSourceFat, setFatSourceFat] = useState('99.8');
+    const [result, setResult] = useState<string | null>(null);
+    const [error, setError] = useState<string | null>(null);
+
+    const calculate = () => {
+        setResult(null);
+        setError(null);
+        
+        const Q = parseFloat(batchQty);
+        const Ft = parseFloat(targetFat) / 100;
+        const St = parseFloat(targetSNF) / 100;
+        const Fp = parseFloat(smpFat) / 100;
+        const Sp = parseFloat(smpSNF) / 100;
+        const Fb = parseFloat(fatSourceFat) / 100;
+
+        if ([Q, Ft, St, Fp, Sp, Fb].some(isNaN) || Q <= 0) {
+            setError("Please fill all fields with valid numbers.");
+            return;
+        }
+
+        // Equations:
+        // P*Sp = Q*St => P = Q*St / Sp
+        // B*Fb + P*Fp = Q*Ft
+        // B*Fb = Q*Ft - P*Fp
+        // B = (Q*Ft - P*Fp) / Fb
+
+        const P = (Q * St) / Sp; // Powder needed
+        const B = (Q * Ft - P * Fp) / Fb; // Butter oil needed
+        const W = Q - P - B; // Water needed
+
+        if (P < 0 || B < 0 || W < 0) {
+            setError("Calculation resulted in negative values. Please check your inputs. This can happen if ingredient compositions are not logical (e.g., SMP fat is higher than target fat).");
+            return;
+        }
+
+        setResult(`To make <strong>${Q} kg</strong> of milk with <strong>${targetFat}% Fat</strong> and <strong>${targetSNF}% SNF</strong>, you need:<br/>
+        - <strong class='text-green-700'>${P.toFixed(3)} kg</strong> of Skim Milk Powder<br/>
+        - <strong class='text-green-700'>${B.toFixed(3)} kg</strong> of Butter Oil/AMF<br/>
+        - <strong class='text-green-700'>${W.toFixed(3)} kg</strong> of Water`);
+    };
+
+    return (
+        <div>
+             <p className="text-center text-sm text-gray-500 mb-4">Calculate the required Skim Milk Powder (SMP), Butter Oil (or other fat source), and Water to create milk of a desired composition.</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mb-4">
+                <div className="bg-muted/50 p-4 rounded-lg space-y-3">
+                     <h3 className="font-semibold text-gray-700 mb-2 font-headline">Target Milk</h3>
+                    <div><Label>Target Batch Quantity (kg)</Label><Input type="number" value={batchQty} onChange={e => setBatchQty(e.target.value)} /></div>
+                    <div><Label>Target Fat %</Label><Input type="number" value={targetFat} onChange={e => setTargetFat(e.target.value)} /></div>
+                    <div><Label>Target SNF %</Label><Input type="number" value={targetSNF} onChange={e => setTargetSNF(e.target.value)} /></div>
+                </div>
+                 <div className="bg-primary/10 p-4 rounded-lg space-y-3">
+                     <h3 className="font-semibold text-gray-700 mb-2 font-headline">Ingredients Composition</h3>
+                     <div><Label>Skim Milk Powder (SMP) Fat %</Label><Input type="number" value={smpFat} onChange={e => setSmpFat(e.target.value)} /></div>
+                     <div><Label>Skim Milk Powder (SMP) SNF %</Label><Input type="number" value={smpSNF} onChange={e => setSmpSNF(e.target.value)} /></div>
+                     <div><Label>Fat Source (e.g., Butter Oil) Fat %</Label><Input type="number" value={fatSourceFat} onChange={e => setFatSourceFat(e.target.value)} /></div>
+                </div>
+            </div>
+            <Button onClick={calculate} className="w-full mt-4">Calculate Recombined Milk</Button>
+            {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
+            {result && <Alert className="mt-4"><AlertTitle>Result</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
+        </div>
+    );
+}
 
 function FormulasTab() {
     return (
@@ -541,5 +655,3 @@ function FormulasTab() {
         </div>
     )
 }
-
-    
