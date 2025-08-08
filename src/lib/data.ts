@@ -17,9 +17,9 @@ export const chemicals = {
   acids: {
     h2so4: { name: "Sulphuric Acid (H₂SO₄)", molarMass: 98.07, nFactor: 2, type: "liquid", purity: 98, density: 1.84 },
     hcl: { name: "Hydrochloric Acid (HCl)", molarMass: 36.46, nFactor: 1, type: "liquid", purity: 37, density: 1.18 },
+    nitric: { name: 'Nitric Acid (HNO₃)', molarMass: 63.01, nFactor: 1, type: 'liquid', purity: 70, density: 1.42 },
     lactic: { name: "Lactic Acid (C₃H₆O₃)", molarMass: 90.08, nFactor: 1, type: "liquid", purity: 88, density: 1.2 },
     acetic: { name: "Acetic Acid (CH₃COOH)", molarMass: 60.05, nFactor: 1, type: "liquid", purity: 99.8, density: 1.05 },
-    nitric: { name: 'Nitric Acid (HNO₃)', molarMass: 63.01, nFactor: 1, type: 'liquid', purity: 70, density: 1.42 },
     phosphoric: { name: 'Phosphoric Acid (H₃PO₄)', molarMass: 98.00, nFactor: 3, type: 'liquid', purity: 85, density: 1.69 },
     formic: { name: 'Formic Acid (CH₂O₂)', molarMass: 46.03, nFactor: 1, type: 'liquid', purity: 85, density: 1.18 },
     perchloric: { name: 'Perchloric Acid (HClO₄)', molarMass: 100.46, nFactor: 1, type: 'liquid', purity: 70, density: 1.67 },
@@ -31,7 +31,9 @@ export const chemicals = {
     sulfamic: { name: 'Sulfamic Acid (H₃NSO₃)', molarMass: 97.09, nFactor: 1, type: 'solid' },
     benzoic: { name: 'Benzoic Acid (C₇H₆O₂)', molarMass: 122.12, nFactor: 1, type: 'solid' },
     succinic: { name: 'Succinic Acid (C₄H₆O₄)', molarMass: 118.09, nFactor: 2, type: 'solid' },
-    ascorbic: { name: 'Ascorbic Acid (C₆H₈O₆)', molarMass: 176.12, nFactor: 1, type: 'solid' },
+    ascorbic: { name: 'Ascorbic Acid (C₆H₈O₆)', molarMass: 176.12, nFactor: 2, type: 'solid' }, // Note: nFactor can be complex, using 2 for titrations
+    potassium_dichromate: { name: 'Potassium Dichromate (K₂Cr₂O₇)', molarMass: 294.18, nFactor: 6, type: 'solid' }, // Used in redox titrations
+    potassium_permanganate: { name: 'Potassium Permanganate (KMnO₄)', molarMass: 158.03, nFactor: 5, type: 'solid' }, // Used in redox titrations
   },
   bases: {
     naoh: { name: "Sodium Hydroxide (NaOH)", molarMass: 40.0, nFactor: 1, type: "solid" },
@@ -43,6 +45,16 @@ export const chemicals = {
     tris: { name: 'Tris(hydroxymethyl)aminomethane', molarMass: 121.14, nFactor: 1, type: 'solid' },
     na_borate: { name: 'Sodium Borate (Borax)', molarMass: 381.37, nFactor: 2, type: 'solid' },
     na_phosphate_di: { name: 'Disodium Phosphate (Na₂HPO₄)', molarMass: 141.96, nFactor: 2, type: 'solid' },
+    na_phosphate_tri: { name: 'Trisodium Phosphate (Na₃PO₄)', molarMass: 163.94, nFactor: 3, type: 'solid' },
+    lithium_hydroxide: { name: 'Lithium Hydroxide (LiOH)', molarMass: 23.95, nFactor: 1, type: 'solid' },
+    barium_hydroxide: { name: 'Barium Hydroxide (Ba(OH)₂)', molarMass: 171.34, nFactor: 2, type: 'solid' },
+    sodium_silicate: { name: 'Sodium Silicate (Na₂SiO₃)', molarMass: 122.06, nFactor: 2, type: 'solid' },
+    potassium_carbonate: { name: 'Potassium Carbonate (K₂CO₃)', molarMass: 138.21, nFactor: 2, type: 'solid' },
+  },
+  other_reagents: {
+    sodium_thiosulphate: { name: 'Sodium Thiosulphate (Na₂S₂O₃·5H₂O)', molarMass: 248.18, nFactor: 1, type: 'solid' },
+    silver_nitrate: { name: 'Silver Nitrate (AgNO₃)', molarMass: 169.87, nFactor: 1, type: 'solid' },
+    edta: { name: 'EDTA Disodium Salt', molarMass: 372.24, nFactor: 2, type: 'solid' },
   },
   indicators: {
     phenolphthalein: { name: "Phenolphthalein", solvent: "ethanol (95%)", type: "w/v" },
@@ -54,7 +66,9 @@ export const chemicals = {
   },
   primaryStandards: {
     khp: { name: "Potassium Hydrogen Phthalate (KHP)", molarMass: 204.22, nFactor: 1 },
-    na2co3_std: { name: "Sodium Carbonate (Na₂CO₃)", molarMass: 105.99, nFactor: 2 },
+    na2co3_std: { name: "Anhydrous Sodium Carbonate (Na₂CO₃)", molarMass: 105.99, nFactor: 2 },
+    oxalic_acid_std: { name: "Oxalic Acid (H₂C₂O₄·2H₂O)", molarMass: 126.07, nFactor: 2 },
+    k2cr2o7_std: { name: "Potassium Dichromate (K₂Cr₂O₇)", molarMass: 294.18, nFactor: 6 },
   },
   spirits: {
     ethanol: { name: "Ethanol (Ethyl Alcohol)", stockPurity: 95 },

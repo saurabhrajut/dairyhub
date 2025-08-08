@@ -60,7 +60,7 @@ export function SolutionsPrepModal({ isOpen, setIsOpen }: { isOpen: boolean; set
   );
 }
 
-const SolutionCalculator = ({ chemType, title, idPrefix }: { chemType: 'acids' | 'bases'; title: string; idPrefix: string; }) => {
+const SolutionCalculator = ({ chemType, title, idPrefix }: { chemType: 'acids' | 'bases' | 'other_reagents'; title: string; idPrefix: string; }) => {
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
@@ -78,7 +78,7 @@ const SolutionCalculator = ({ chemType, title, idPrefix }: { chemType: 'acids' |
             return;
         }
         
-        const chemical = chemicals[chemType][key];
+        const chemical = (chemicals as any)[chemType][key];
         let resultText = '';
 
         if (chemical.type === 'solid') {
@@ -101,9 +101,9 @@ const SolutionCalculator = ({ chemType, title, idPrefix }: { chemType: 'acids' |
                 <div>
                     <Label htmlFor={`${idPrefix}-select`}>Select Chemical</Label>
                     <Select name={`${idPrefix}-select`} required>
-                        <SelectTrigger><SelectValue placeholder={`Select an ${chemType.slice(0, -1)}`} /></SelectTrigger>
+                        <SelectTrigger><SelectValue placeholder={`Select a chemical`} /></SelectTrigger>
                         <SelectContent>
-                            {Object.entries(chemicals[chemType]).map(([key, value]) => (
+                            {Object.entries((chemicals as any)[chemType]).map(([key, value]: [string, any]) => (
                                 <SelectItem key={key} value={key}>{value.name}</SelectItem>
                             ))}
                         </SelectContent>
@@ -188,22 +188,33 @@ const IndicatorCalc = () => {
 const StandardizationCalc = () => {
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const [primaryStd, setPrimaryStd] = useState<string>("");
+    const [v1, setV1] = useState(""); // Primary std volume
+    const [w1, setW1] = useState(""); // Primary std weight
+    const [v2, setV2] = useState(""); // Titrant volume
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setResult(null);
         setError(null);
-        const formData = new FormData(e.currentTarget);
-        const v1 = parseFloat(formData.get('std-v1') as string); // Primary std volume
-        const n1 = parseFloat(formData.get('std-n1') as string); // Primary std normality
-        const v2 = parseFloat(formData.get('std-v2') as string); // Titrant volume
+        
+        const primaryStdKey = primaryStd;
+        const vol1 = parseFloat(v1);
+        const weight1 = parseFloat(w1);
+        const vol2 = parseFloat(v2);
 
-        if (isNaN(v1) || isNaN(n1) || isNaN(v2) || v1 <= 0 || n1 <= 0 || v2 <= 0) {
+        if (!primaryStdKey || isNaN(weight1) || isNaN(vol1) || isNaN(vol2) || vol1 <= 0 || weight1 <= 0 || vol2 <= 0) {
             setError('Please enter valid positive numbers in all fields.');
             return;
         }
+        
+        const std = chemicals.primaryStandards[primaryStdKey as keyof typeof chemicals.primaryStandards];
+        const equivalentWeight = std.molarMass / std.nFactor;
 
-        const n2 = (n1 * v1) / v2;
+        // N1 = (Weight of Primary Std * 1000) / (Eq. Wt. * Volume of solution in ml)
+        const n1 = (weight1 * 1000) / (equivalentWeight * vol1);
+        const n2 = (n1 * 10) / vol2; // Assuming 10ml of primary std is taken for titration
+
         setResult(`The normality of the secondary standard solution is <code class="font-bold bg-green-100 p-1 rounded">${n2.toFixed(4)} N</code>.`);
     }
 
@@ -211,18 +222,35 @@ const StandardizationCalc = () => {
         <form onSubmit={handleSubmit}>
             <h2 className="text-2xl font-bold text-primary mb-6 font-headline">Standardize a Solution (Titration)</h2>
             <p className="text-muted-foreground mb-4">Use the formula: <code className="bg-primary/10 text-primary font-mono p-1 rounded-md">N₁V₁ = N₂V₂</code> to find the exact normality (N₂) of your prepared solution.</p>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-end">
+            
+            <h3 className="font-bold text-lg mb-2 text-gray-700">1. Prepare Primary Standard</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end p-4 bg-muted rounded-lg">
                 <div>
-                    <Label htmlFor="std-v1">Primary Std. Volume (V₁)</Label>
-                    <Input type="number" name="std-v1" placeholder="e.g., 20" step="any" required />
+                    <Label htmlFor="std-select">Select Primary Standard</Label>
+                    <Select value={primaryStd} onValueChange={setPrimaryStd} required>
+                        <SelectTrigger><SelectValue placeholder="Select a standard" /></SelectTrigger>
+                        <SelectContent>
+                            {Object.entries(chemicals.primaryStandards).map(([key, value]) => (
+                                <SelectItem key={key} value={key}>{value.name}</SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </div>
+                 <div>
+                    <Label htmlFor="std-weight">Weight taken (g)</Label>
+                    <Input type="number" name="std-weight" value={w1} onChange={e => setW1(e.target.value)} placeholder="e.g., 0.53" step="any" required />
                 </div>
                 <div>
-                    <Label htmlFor="std-n1">Primary Std. Normality (N₁)</Label>
-                    <Input type="number" name="std-n1" placeholder="e.g., 0.1" step="any" required />
+                    <Label htmlFor="std-vol1">Final Volume made (ml)</Label>
+                    <Input type="number" name="std-vol1" value={v1} onChange={e => setV1(e.target.value)} placeholder="e.g., 100" step="any" required />
                 </div>
-                <div>
-                    <Label htmlFor="std-v2">Titrant Volume used (V₂)</Label>
-                    <Input type="number" name="std-v2" placeholder="e.g., 19.5" step="any" required />
+            </div>
+
+            <h3 className="font-bold text-lg mt-6 mb-2 text-gray-700">2. Titration</h3>
+             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end p-4 bg-muted rounded-lg">
+                <div className="md:col-span-2">
+                    <Label htmlFor="std-v2">Titrant Volume used for 10ml Primary Std (V₂)</Label>
+                    <Input type="number" name="std-v2" value={v2} onChange={e => setV2(e.target.value)} placeholder="e.g., 9.8" step="any" required />
                 </div>
                 <Button type="submit" className="w-full">Calculate Normality (N₂)</Button>
             </div>
@@ -235,6 +263,7 @@ const StandardizationCalc = () => {
 const StrengthCalc = () => {
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const allChemicals = {...chemicals.acids, ...chemicals.bases, ...chemicals.other_reagents};
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -249,7 +278,6 @@ const StrengthCalc = () => {
             return;
         }
         
-        const allChemicals = {...chemicals.acids, ...chemicals.bases};
         const chemical = allChemicals[key as keyof typeof allChemicals];
         const equivalentWeight = chemical.molarMass / chemical.nFactor;
         const strength = normality * equivalentWeight;
@@ -275,6 +303,12 @@ const StrengthCalc = () => {
                              <SelectGroup>
                                 <Label className="px-2 text-xs font-semibold text-muted-foreground">Bases</Label>
                                 {Object.entries(chemicals.bases).map(([key, value]) => (
+                                    <SelectItem key={key} value={key}>{value.name}</SelectItem>
+                                ))}
+                            </SelectGroup>
+                            <SelectGroup>
+                                <Label className="px-2 text-xs font-semibold text-muted-foreground">Other Reagents</Label>
+                                {Object.entries(chemicals.other_reagents).map(([key, value]) => (
                                     <SelectItem key={key} value={key}>{value.name}</SelectItem>
                                 ))}
                             </SelectGroup>
@@ -407,7 +441,7 @@ const NormalityAdjustmentCalc = () => {
 const PercentageSolutionCalc = () => {
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
-    const allChemicals = {...chemicals.acids, ...chemicals.bases};
+    const allChemicals = {...chemicals.acids, ...chemicals.bases, ...chemicals.other_reagents};
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -456,6 +490,12 @@ const PercentageSolutionCalc = () => {
                              <SelectGroup>
                                 <Label className="px-2 text-xs font-semibold text-muted-foreground">Bases</Label>
                                 {Object.entries(chemicals.bases).map(([key, value]) => (
+                                    <SelectItem key={key} value={key}>{value.name}</SelectItem>
+                                ))}
+                            </SelectGroup>
+                            <SelectGroup>
+                                <Label className="px-2 text-xs font-semibold text-muted-foreground">Other Reagents</Label>
+                                {Object.entries(chemicals.other_reagents).map(([key, value]) => (
                                     <SelectItem key={key} value={key}>{value.name}</SelectItem>
                                 ))}
                             </SelectGroup>
