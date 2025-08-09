@@ -105,3 +105,5 @@ export const IceCreamIcon = (props: SVGProps<SVGSVGElement>) => (
         <path d="M12 22a7.07 7.07 0 0 0 5-2.24L12 14l-5 5.76A7.07 7.07 0 0 0 12 22Z"/>
     </svg>
 );
+
+    

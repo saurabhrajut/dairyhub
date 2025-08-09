@@ -22,12 +22,14 @@ import {
   Filter,
   Droplet,
   Wind,
-  Layers
+  Layers,
+  Archive,
+  RotateCw
 } from "lucide-react";
 
-function Section({ title, icon: Icon, children }: { title: string, icon: React.ElementType, children: React.ReactNode }) {
+function Section({ title, icon: Icon, children, value }: { title: string, icon: React.ElementType, children: React.ReactNode, value: string }) {
     return (
-        <AccordionItem value={title}>
+        <AccordionItem value={value}>
             <AccordionTrigger className="text-xl font-bold hover:no-underline font-headline">
                 <div className="flex items-center gap-3">
                     <Icon className="w-6 h-6 text-primary" />
@@ -63,11 +65,12 @@ export function DairyProcessingModal({
         </DialogHeader>
         <ScrollArea className="flex-1 mt-4 pr-6">
             <Accordion type="single" collapsible className="w-full" defaultValue="Pasteurization">
-                <Section title="Workflow Overview" icon={Settings}>
+                <Section value="workflow" title="Workflow Overview" icon={Settings}>
                     <p>Dairy processing ek sequence of operations hai jismein raw milk ko safe, high-quality, aur shelf-stable products mein badla jaata hai. Har step ka ek specific purpose hota hai.</p>
                     <ol className="list-decimal pl-5 mt-4 space-y-2">
                         <li><strong>Reception & Testing:</strong> Plant mein aane wale doodh ki quality (Fat, SNF, Acidity, Adulterants) jaanchi jaati hai.</li>
                         <li><strong>Chilling:</strong> Doodh ko turant 4-5°C tak thanda kiya jaata hai taaki bacteria ki growth ruk jaaye.</li>
+                        <li><strong>Filtration/Clarification:</strong> Doodh se visible dirt aur foreign matter ko hataya jaata hai.</li>
                         <li><strong>Standardization:</strong> Fat aur SNF content ko product (toned, double toned, etc.) ke hisaab se adjust kiya jaata hai.</li>
                         <li><strong>Homogenization:</strong> Fat globules ko todkar doodh ko uniform banaya jaata hai.</li>
                         <li><strong>Pasteurization/Sterilization:</strong> Doodh ko heat-treat karke harmful bacteria ko khatam kiya jaata hai.</li>
@@ -75,8 +78,34 @@ export function DairyProcessingModal({
                         <li><strong>Storage & Despatch:</strong> Final products ko cold storage mein rakha jaata hai aur market mein bheja jaata hai.</li>
                     </ol>
                 </Section>
-                
-                <Section title="Pasteurization" icon={Thermometer}>
+                 <Section value="filtration" title="Filtration and Clarification" icon={Filter}>
+                    <h4>Parichay (Introduction)</h4>
+                    <p>Doodh ke handling aur transportation ke dauran, kuch dikhne wale kan aur gandagi doodh mein aa sakti hai, jise filtration ya centrifugal clarification se hataya jaa sakta hai. Garam doodh ki taralta (fluidity) zyada hone ke kaaran, iska separation process adhik prabhavi hota hai. Isliye doodh ko lagbhag 35-40°C tak pre-heat kiya jaata hai.</p>
+                    <h4 className="mt-4">Filtration</h4>
+                    <p>Filtration doodh se dikhne wale sediment (foreign matter) ko straining process se hatata hai. Iske fayde hain ki preheating zaroori nahi hai aur ghulansheel gandagi ke ghulne ki sambhavna kam hoti hai, lekin doodh ka flow dheema hota hai. Filter material mein 25-100 µm ke pores hone chahiye.</p>
+                     <h4 className="mt-4">Clarification</h4>
+                    <p>Clarification filtration se zyada prabhavi hai. Yeh centrifugal force ka istemal karke leucocytes, udder tissues, aur anya fine dirt ko hatata hai. Clarifier cream separator ke saman hota hai lekin isme sirf ek inlet aur ek outlet hota hai aur sludge ke liye zyada jagah hoti hai.</p>
+                    <p><strong>Factors Affecting Clarification:</strong> Viscosity, Temperature (garam doodh behtar), Bowl Speed, aur Microbial Load. Dhyan den ki clarification se doodh ki keeping quality nahi badhti hai.</p>
+                </Section>
+                <Section value="separation" title="Cream Separation" icon={Droplet}>
+                    <h4>Siddhant (Principles)</h4>
+                    <p>Cream separation doodh se fat ko alag karne ki prakriya hai. Yeh fat (density ~0.93 g/mL) aur skim milk (density ~1.036 g/mL) ke घनत्व (density) ke antar par aadharit hai.</p>
+                    <p><strong>Gravity Separation:</strong> Stoke's Law ke anusaar, kam घनत्व wale fat globules dheere-dheere upar uthkar ek parat banate hain. Yeh ek dheema process hai.</p>
+                    <p><strong>Centrifugal Separation:</strong> Doodh ko tezi se ghumakar centrifugal force paida ki jaati hai. Bhaari skim milk bahar ki taraf phenk diya jaata hai aur halki cream kendra (center) mein ikatthi ho jaati hai. Yeh process bahut tez aur prabhavi hai.</p>
+                    <h4 className="mt-4">Cream Separator ke Mukhya Bhaag</h4>
+                    <ul className="list-disc pl-5 space-y-2">
+                        <li><strong>Bowl and Disc Assembly:</strong> Separator ka mukhya hissa, jismein ek ke upar ek kai saare cone-shaped discs hote hain. In discs ke beech ki choti jagah (separation channels) mein doodh patli paraton mein behta hai, jisse fat aur skim milk alag hote hain.</li>
+                        <li><strong>Inlet/Outlet:</strong> Doodh bowl ke neeche se enter karta hai aur alag hone ke baad cream aur skim milk ke liye alag-alag outlets se bahar nikalta hai.</li>
+                        <li><strong>Cream Regulating Screw:</strong> Is screw ko adjust karke cream ke outlet ke size ko badla jaa sakta hai, jisse cream mein fat ka percentage control kiya jaata hai.</li>
+                    </ul>
+                </Section>
+                 <Section value="bactofugation" title="Bactofugation" icon={RotateCw}>
+                    <h4>Parichay (Introduction)</h4>
+                    <p>Bactofugation centrifugal force ka upyog karke doodh se microorganisms, khaaskar heat-resistant spores (jaise Bacillus/Clostridia), ko hatane ki prakriya hai. Iska mukhya uddeshya doodh ki hygienic quality ko sudharna hai, taaki use kam temperature-time combination par sterilize kiya jaa sake. Yeh khaaskar un products ke liye mahatvapurna hai jinki shelf-life lambi hoti hai, jaise hard cheese aur UHT milk.</p>
+                     <h4 className="mt-4">Bactotherm Process</h4>
+                     <p>Is process mein, doodh ko 60-75°C tak garam kiya jaata hai aur phir ek special high-efficiency centrifuge (Bactofuge) mein bheja jaata hai. Yahan, bacteria (jinki density doodh se zyada hoti hai) alag hokar ek concentrate ke roop mein nikalte hain, jise 'bactofugate' kehte hain. Is bactofugate ko alag se UHT treat (130-140°C par 3-4 seconds) karke wapas doodh mein mix kar diya jaata hai. Isse doodh ke solids ka nuksan nahi hota aur bacterial load bhi bahut kam ho jaata hai.</p>
+                </Section>
+                <Section value="Pasteurization" title="Pasteurization" icon={Thermometer}>
                     <h4>Siddhant (Principle)</h4>
                     <p>Pasteurization ek heat treatment process hai jiska uddeshya doodh mein maujood sabhi pathogenic (bimari failane wale) microorganisms ko nasht karna hai aur spoilage karne wale microorganisms ki sankhya ko kam karna hai, taaki doodh peene ke liye surakshit ho jaaye aur uski shelf life badh jaaye. Yeh doodh ke nutritional aur sensory qualities ko kam se kam nuksan pahunchata hai. Sabse common method <strong>High-Temperature Short-Time (HTST)</strong> hai.</p>
                     
@@ -96,7 +125,7 @@ export function DairyProcessingModal({
                     <p><strong>Example:</strong> Agar raw milk 5°C par enter karta hai, regeneration ke baad 65°C tak pahunchta hai, aur pasteurization temperature 72°C hai, toh efficiency hogi: <br/><code>[(65 - 5) / (72 - 5)] * 100 = (60 / 67) * 100 ≈ 89.5%</code>. Ek achhe pasteurizer ki efficiency 90-95% tak ho sakti hai.</p>
                 </Section>
                 
-                <Section title="Sterilization & UHT" icon={CheckCircle}>
+                <Section value="sterilization" title="Sterilization & UHT" icon={CheckCircle}>
                     <p>Sterilization ka matlab hai doodh se sabhi prakaar ke microorganisms, including unke spores ko, poori tarah se khatam karna. Isse doodh commercially sterile ho jaata hai aur bina refrigeration ke mahino tak store kiya jaa sakta hai.</p>
                     <h4 className="mt-4">In-Container Sterilization</h4>
                     <p>Is method mein doodh ko pehle bottles ya cans mein bhara jaata hai aur phir unhein seal karke ek retort (bada pressure cooker) mein rakha jaata hai. Yahan unhein <strong>115-121°C par 15-30 minutes</strong> tak garam kiya jaata hai. Is process se doodh ka rang thoda bhura ho jaata hai aur usmein "cooked" flavor aa jaata hai. Yeh ek batch process hai.</p>
@@ -105,7 +134,7 @@ export function DairyProcessingModal({
                     <p>Yeh ek continuous process hai jismein doodh ko bahut tezi se bahut adhik taapman tak garam kiya jaata hai aur phir turant thanda kiya jaata hai. Aam taur par, doodh ko <strong>135-150°C par 1-4 seconds</strong> ke liye treat kiya jaata hai. Iske baad, doodh ko ek sterile (aseptic) environment mein pre-sterilized cartons (jaise Tetra Pak) mein bhara jaata hai. UHT processing se doodh ki nutritional quality aur flavor par sterilization ki tulna mein kam asar padta hai.</p>
                 </Section>
                 
-                <Section title="Homogenization" icon={Layers}>
+                <Section value="homogenization" title="Homogenization" icon={Layers}>
                      <h4>Siddhant (Principle)</h4>
                      <p>Homogenization ek mechanical process hai jiska uddeshya doodh mein maujood bade fat globules ko chote, uniform size ke globules mein todna hai. Isse doodh mein ek sthir emulsion banta hai, jisse fat upar aakar malai ki parat (cream layer) nahi banata.</p>
                      <h4 className="mt-4">Kaise Kaam Karta Hai?</h4>
@@ -118,17 +147,8 @@ export function DairyProcessingModal({
                         <li><strong>Protein Denaturation:</strong> Naye bane chote fat globules ki satah badh jaati hai. Is nayi satah ko cover karne ke liye casein aur whey proteins use hote hain, jisse unke structure mein badlav aata hai.</li>
                      </ul>
                 </Section>
-
-                <Section title="Cream Separation & Butter" icon={Droplet}>
-                    <h4>Cream Separation</h4>
-                    <p>Yeh ek centrifugal process hai jismein doodh se fat (cream) ko alag kiya jaata hai. Doodh aur fat ki density mein antar hota hai (doodh ~1.032 g/mL, fat ~0.93 g/mL). Cream separator machine doodh ko bahut tezi se ghumati hai. Centrifugal force ke kaaran, bhaari skim milk bahar ki taraf chala jaata hai aur halki cream beech mein ikatthi ho jaati hai, jinhein alag-alag outlets se nikal liya jaata hai.</p>
-                    <h4 className="mt-4">Types of Cream</h4>
-                    <p>Cream ko uske fat content ke aadhar par classify kiya jaata hai: Table cream (18-25% fat), Whipping cream (30-40% fat), Plastic cream (65-85% fat).</p>
-                    <h4 className="mt-4">Butter Making Process</h4>
-                    <p>Butter banane ke liye, pehle cream ko pasteurize kiya jaata hai, phir thanda karke 'age' kiya jaata hai taaki fat crystallize ho sake. Iske baad, cream ko ek churner mein daalkar tezi se hilaya jaata hai. Is 'churning' process se fat globules aapas mein judkar butter grains banate hain aur liquid (buttermilk) alag ho jaata hai. Buttermilk ko nikalne ke baad, butter grains ko dhoya jaata hai aur phir 'work' kiya jaata hai (gunda jaata hai) taaki usmein se bacha hua paani nikal jaaye aur ek uniform texture ban jaaye. Ant mein namak milakar use pack kiya jaata hai.</p>
-                </Section>
                 
-                <Section title="Milk Drying" icon={Wind}>
+                <Section value="drying" title="Milk Drying" icon={Wind}>
                     <p>Milk drying ka mukhya uddeshya doodh se paani hatakar ek powder banana hai, jisse uski shelf life bahut badh jaati hai aur transport karna aasan ho jaata hai. Do mukhya methods hain:</p>
                     <h4 className="mt-4">Spray Drying</h4>
                     <p>Yeh sabse aam method hai. Ismein, concentrated doodh ko ek bade drying chamber ke upar lage atomizer (nozzle) ke zariye choti-choti boondon (spray) mein convert kiya jaata hai. Chamber mein neeche se garam hawa (150-220°C) bheji jaati hai. Jaise hi doodh ki boondein garam hawa ke sampark mein aati hain, unmein se paani turant evaporate ho jaata hai aur sookha milk powder neeche ikattha ho jaata hai. Yeh process bahut tezi se hota hai, isliye powder ki quality achhi rehti hai.</p>
@@ -136,7 +156,7 @@ export function DairyProcessingModal({
                     <p>Is method mein, do internally heated metal drums (rollers) dheere-dheere ek doosre ki taraf ghoomte hain. Unke beech doodh ki ek patli film lagayi jaati hai. Garam drum ke sampark mein aane se paani evaporate ho jaata hai aur sookhi doodh ki ek sheet ban jaati hai, jise scraper blades se khurach kar alag kar liya jaata hai aur phir pees kar powder banaya jaata hai. Is method mein doodh zyada heat ke sampark mein aata hai, isliye powder ki solubility aur flavor spray-dried powder se thodi kamतर ho sakti hai.</p>
                 </Section>
 
-                <Section title="Membrane Filtration" icon={Filter}>
+                <Section value="membrane" title="Membrane Filtration" icon={Archive}>
                     <p>Yeh ek modern technology hai jo doodh ke alag-alag components ko bina heat ka istemal kiye unke size ke aadhar par alag karti hai. Ismein ek semi-permeable membrane ka upyog hota hai jo kuch cheezon ko paar jaane deti hai aur kuch ko rok leti hai.</p>
                     <ul className="list-disc pl-5 space-y-3">
                         <li><strong>Microfiltration (MF):</strong> Iske pores sabse bade hote hain. Yeh bacteria aur fat globules ko rokta hai, jabki proteins, lactose, aur minerals ko paar jaane deta hai. Iska upyog doodh ko 'cold pasteurize' karne aur whey se casein alag karne mein hota hai.</li>
@@ -151,3 +171,5 @@ export function DairyProcessingModal({
     </Dialog>
   );
 }
+
+    
