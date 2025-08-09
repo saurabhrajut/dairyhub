@@ -137,33 +137,73 @@ export const cipProcessContent = {
                 }
             ]
         },
+        teepol_detergent: {
+            title: "लिक्विड डिटर्जेंट (टीपोल) बनाना और जांचना",
+            htmlContent: `
+                <p>डेयरी और खाद्य उद्योग में, हाथ से बर्तनों और छोटे उपकरणों की सफाई के लिए न्यूट्रल लिक्विड डिटर्जेंट (जैसे टीपोल) का व्यापक रूप से उपयोग किया जाता है।</p>
+                <h4 class="font-bold mt-4">लिक्विड डिटर्जेंट कैसे बनाएं (उदाहरण):</h4>
+                <p>यह एक सामान्य फॉर्मूलेशन है। औद्योगिक उत्पादन अधिक जटिल हो सकता है।</p>
+                <ol class="list-decimal list-inside space-y-1 mt-2">
+                    <li><strong>सामग्री:</strong> एसिड स्लरी (LABSA - 90%), कास्टिक सोडा (NaOH), यूरिया, पानी, रंग, और सुगंध।</li>
+                    <li><strong>प्रक्रिया:</strong></li>
+                    <ul class="list-disc list-inside ml-4">
+                        <li>एक प्लास्टिक कंटेनर में आवश्यक मात्रा में पानी लें।</li>
+                        <li>धीरे-धीरे एसिड स्लरी (LABSA) डालें और लगातार हिलाते रहें।</li>
+                        <li>अलग से, कास्टिक सोडा को थोड़े पानी में घोलकर एक घोल बनाएं (यह एक एक्सोथर्मिक प्रतिक्रिया है, इसलिए सावधानी बरतें)।</li>
+                        <li>कास्टिक सोडा के घोल को धीरे-धीरे एसिड स्लरी वाले मिश्रण में डालें जब तक कि मिश्रण का pH 7 (न्यूट्रल) न हो जाए। pH पेपर से जांचें।</li>
+                        <li>गाढ़ापन बढ़ाने के लिए यूरिया या नमक डालें और अच्छी तरह मिलाएं।</li>
+                        <li>अंत में, रंग और सुगंध मिलाएं।</li>
+                    </ul>
+                </ol>
+                <h4 class="font-bold mt-4">लिक्विड डिटर्जेंट की शक्ति कैसे जांचें (Active Matter %):</h4>
+                <p>डिटर्जेंट की शक्ति को उसमें मौजूद "एक्टिव मैटर" (सर्फेक्टेंट की मात्रा) से मापा जाता है। इसकी जाँच के लिए एक मानक विधि टू-फेज टाइट्रेशन है।</p>
+                <ol class="list-decimal list-inside space-y-1 mt-2">
+                    <li><strong>सिद्धांत:</strong> एक cationic surfactant (जैसे Hyamine 1622) एक anionic surfactant (आपके डिटर्जेंट में एक्टिव मैटर) के साथ प्रतिक्रिया करता है। एक इंडिकेटर (जैसे मेथिलीन ब्लू) का उपयोग करके एंडपॉइंट का पता लगाया जाता है।</li>
+                    <li><strong>प्रक्रिया:</strong></li>
+                     <ul class="list-disc list-inside ml-4">
+                        <li>डिटर्जेंट का एक ज्ञात वजन (जैसे 1 ग्राम) लें और उसे 100 मिली पानी में घोलें।</li>
+                        <li>इस घोल का एक निश्चित आयतन (जैसे 10 मिली) एक कोनिकल फ्लास्क में लें।</li>
+                        <li>क्लोरोफॉर्म और एक एसिडिक मेथिलीन ब्लू इंडिकेटर घोल डालें।</li>
+                        <li>इसे एक मानक Hyamine 1622 घोल के साथ तब तक टाइट्रेट करें जब तक कि क्लोरोफॉर्म परत का रंग पानी की परत से अधिक गहरा न हो जाए।</li>
+                        <li>उपयोग किए गए Hyamine के आयतन से एक्टिव मैटर की गणना की जाती है।</li>
+                    </ul>
+                </ol>
+                <p class="mt-2 text-sm"><strong>नोट:</strong> यह एक जटिल लैब प्रक्रिया है और इसके लिए विशिष्ट रसायनों और विशेषज्ञता की आवश्यकता होती है।</p>
+            `
+        },
         solution_strength: {
-            title: "घोल की शक्ति का परीक्षण",
-            intro: "वाशिंग घोल की शक्ति आमतौर पर NaOH के संदर्भ में व्यक्त की जाती है क्योंकि यह अक्सर ऐसे ही या डिसोडियम फॉस्फेट और सोडियम मेटासिलिकेट आदि के संयोजन में उपयोग किया जाता है। कांच की बोतलों के लिए आमतौर पर 1.5% NaOH के बराबर क्षार और कैन धोने के लिए 0.5% का उपयोग किया जाता है। स्वचालित मशीनों में वाशिंग घोल का बार-बार उपयोग करने से यह आमतौर पर पतला हो जाता है। कुशल सफाई और कीटाणुनाशक प्रभावों के लिए डिटर्जेंट घोल की उचित क्षारीयता बनाए रखना महत्वपूर्ण है।",
+            title: "CIP घोल की शक्ति का परीक्षण",
+            intro: "कुशल सफाई और कीटाणुनाशक प्रभावों के लिए डिटर्जेंट घोल की उचित शक्ति बनाए रखना महत्वपूर्ण है। शक्ति को आमतौर पर % कंसंट्रेशन या ppm (क्लोरीन के लिए) में मापा जाता है।",
             calculators: {
-                alkalinity: {
-                    qualitative_title: "गुणात्मक परीक्षण (Qualitative Test)",
-                    detergent_label: "डिटर्जेंट घोल (ml)",
-                    hcl_label: "N/10 HCl (ml)",
-                    qualitative_button: "क्षारीयता जांचें",
-                    qualitative_result: "यदि मिश्रण लाल हो जाता है, तो यह 0.5% से अधिक कास्टिक सोडा के रूप में क्षारीयता दर्शाता है, जो पर्याप्त है।",
-                    direct_title: "मात्रात्मक परीक्षण (प्रत्यक्ष विधि)",
-                    direct_label: "उपयोग किया गया 2.5 N सल्फ्यूरिक एसिड (ml)",
-                    direct_button: "NaOH % की गणना करें",
-                    direct_result_prefix: "क्षार % (NaOH के रूप में):",
-                    lab_title: "मात्रात्मक परीक्षण (प्रयोगशाला विधि)",
-                    lab_label_a: "कुल टाइट्रेशन रीडिंग (ml)",
-                    lab_label_b: "पहली टाइट्रेशन रीडिंग (ml)",
-                    lab_note: "नोट: यहाँ 'A' कुल एसिड उपयोग है और 'B' केवल फिनोल्फथेलिन एंडपॉइंट तक का उपयोग है।",
-                    lab_button: "क्षारीयता की गणना करें",
-                    lab_result_free: "मुक्त कास्टिक % =",
-                    lab_result_total: "कुल क्षार % ="
+                error_title: "त्रुटि",
+                success_title: "सफलतापूर्वक गणना की गई",
+                error_invalid_titre: "कृपया एक मान्य टाइट्रे मान दर्ज करें।",
+                naoh: {
+                    title: "NaOH (%)",
+                    description: "10ml CIP घोल के सैंपल को 0.1 N एसिड (जैसे HCl) के साथ फिनोल्फथेलिन इंडिकेटर का उपयोग करके टाइट्रेट करें।",
+                    label: "0.1 N एसिड का उपयोग (ml)",
+                    button: "NaOH % की गणना करें",
+                    result_prefix: "कास्टिक सोडा (NaOH):"
                 },
-                chlorine: {
-                    title: "उपलब्ध क्लोरीन परीक्षण",
-                    label: "N/10 सोडियम थायोसल्फेट का उपयोग किया गया (V) ml",
-                    note: "यह ब्लैंक रीडिंग घटाने के बाद अंतिम टाइट्रे मान है।",
-                    button: "उपलब्ध क्लोरीन % की गणना करें",
+                hno3: {
+                    title: "HNO₃ (%)",
+                    description: "10ml CIP घोल के सैंपल को 0.1 N बेस (जैसे NaOH) के साथ फिनोल्फथेलिन इंडिकेटर का उपयोग करके टाइट्रेट करें।",
+                    label: "0.1 N बेस का उपयोग (ml)",
+                    button: "HNO₃ % की गणना करें",
+                    result_prefix: "नाइट्रिक एसिड (HNO₃):"
+                },
+                h3po4: {
+                    title: "H₃PO₄ (%)",
+                    description: "10ml CIP घोल के सैंपल को 0.1 N बेस (जैसे NaOH) के साथ फिनोल्फथेलिन इंडिकेटर का उपयोग करके टाइट्रेट करें।",
+                    label: "0.1 N बेस का उपयोग (ml)",
+                    button: "H₃PO₄ % की गणना करें",
+                    result_prefix: "फॉस्फोरिक एसिड (H₃PO₄):"
+                },
+                 chlorine: {
+                    title: "Chlorine (ppm)",
+                    description: "100ml CIP घोल के सैंपल को 0.01 N सोडियम थायोसल्फेट के साथ आयोडोमेट्रिक टाइट्रेशन विधि का उपयोग करके टाइट्रेट करें।",
+                    label: "0.01 N सोडियम थायोसल्फेट का उपयोग (ml)",
+                    button: "Chlorine (ppm) की गणना करें",
                     result_prefix: "उपलब्ध क्लोरीन:"
                 }
             }
@@ -306,38 +346,76 @@ export const cipProcessContent = {
                 }
             ]
         },
+        teepol_detergent: {
+            title: "Making and Testing Liquid Detergent (Teepol)",
+            htmlContent: `
+                <p>Neutral liquid detergents (like Teepol) are widely used in the dairy and food industry for manual cleaning of utensils and small equipment.</p>
+                <h4 class="font-bold mt-4">How to Make a Liquid Detergent (Example):</h4>
+                <p>This is a general formulation. Industrial production can be more complex.</p>
+                <ol class="list-decimal list-inside space-y-1 mt-2">
+                    <li><strong>Ingredients:</strong> Acid Slurry (LABSA - 90%), Caustic Soda (NaOH), Urea, Water, Color, and Perfume.</li>
+                    <li><strong>Process:</strong></li>
+                    <ul class="list-disc list-inside ml-4">
+                        <li>Take the required amount of water in a plastic container.</li>
+                        <li>Slowly add the Acid Slurry (LABSA) while stirring continuously.</li>
+                        <li>Separately, dissolve caustic soda in a small amount of water to make a solution (this is an exothermic reaction, so be careful).</li>
+                        <li>Slowly add the caustic soda solution to the acid slurry mixture until the pH of the mixture becomes 7 (neutral). Check with pH paper.</li>
+                        <li>Add urea or salt to increase viscosity and mix well.</li>
+                        <li>Finally, add color and perfume.</li>
+                    </ul>
+                </ol>
+                <h4 class="font-bold mt-4">How to Check the Strength of Liquid Detergent (Active Matter %):</h4>
+                <p>The strength of a detergent is measured by its "Active Matter" (the amount of surfactant). A standard method for checking this is the two-phase titration.</p>
+                <ol class="list-decimal list-inside space-y-1 mt-2">
+                    <li><strong>Principle:</strong> A cationic surfactant (e.g., Hyamine 1622) reacts with an anionic surfactant (the active matter in your detergent). The endpoint is detected using an indicator (like methylene blue).</li>
+                    <li><strong>Procedure:</strong></li>
+                     <ul class="list-disc list-inside ml-4">
+                        <li>Take a known weight of the detergent (e.g., 1 gram) and dissolve it in 100 ml of water.</li>
+                        <li>Take a fixed volume of this solution (e.g., 10 ml) in a conical flask.</li>
+                        <li>Add chloroform and an acidic methylene blue indicator solution.</li>
+                        <li>Titrate this against a standard Hyamine 1622 solution until the color of the chloroform layer becomes more intense than the aqueous layer.</li>
+                        <li>The active matter is calculated from the volume of Hyamine used.</li>
+                    </ul>
+                </ol>
+                <p class="mt-2 text-sm"><strong>Note:</strong> This is a complex lab procedure and requires specific chemicals and expertise.</p>
+            `
+        },
         solution_strength: {
-            title: "Testing of Solution Strength",
-            intro: "The strength of washing solution is generally expressed in terms of NaOH as it is often used as such or in combination with disodium phosphate and sodium metasilicate etc. An alkali equivalent to 1.5% NaOH is generally used for glass bottles and 0.5% for can washing. Repeated usage of washing solutions in automatic machines generally gets diluted. It is important to maintain the proper alkalinity of detergent solution for efficient cleaning and germicidal effects.",
+            title: "Testing of CIP Solution Strength",
+            intro: "It is important to maintain the proper strength of the detergent solution for efficient cleaning and germicidal effects. Strength is usually measured in % concentration or ppm (for chlorine).",
             calculators: {
-                alkalinity: {
-                    qualitative_title: "Qualitative Test",
-                    detergent_label: "Detergent Solution (ml)",
-                    hcl_label: "N/10 HCl (ml)",
-                    qualitative_button: "Check Alkalinity",
-                    qualitative_result: "If the mixture turns red it indicates alkalinity greater than 0.5% as caustic soda, which is sufficient.",
-                    direct_title: "Quantitative Test (Direct Method)",
-                    direct_label: "2.5 N Sulphuric Acid Used (ml)",
-                    direct_button: "Calculate NaOH %",
-                    direct_result_prefix: "Alkali % (as NaOH):",
-                    lab_title: "Quantitative Test (Laboratory Method)",
-                    lab_label_a: "Total Titration Reading (ml)",
-                    lab_label_b: "First Titration Reading (ml)",
-                    lab_note: "Note: Here 'A' is the total acid used and 'B' is the usage up to the phenolphthalein endpoint only.",
-                    lab_button: "Calculate Alkalinity",
-                    lab_result_free: "% free caustic =",
-                    lab_result_total: "% total alkali ="
+                error_title: "Error",
+                success_title: "Calculated Successfully",
+                error_invalid_titre: "Please enter a valid titre value.",
+                naoh: {
+                    title: "NaOH (%)",
+                    description: "Titrate a 10ml sample of the CIP solution with 0.1 N acid (e.g., HCl) using phenolphthalein indicator.",
+                    label: "0.1 N Acid Used (ml)",
+                    button: "Calculate NaOH %",
+                    result_prefix: "Caustic Soda (NaOH):"
                 },
-                chlorine: {
-                    title: "Available Chlorine Test",
-                    label: "N/10 Sodium Thiosulphate Used (V) ml",
-                    note: "This is the final titre value after deducting the blank reading.",
-                    button: "Calculate Available Chlorine %",
+                hno3: {
+                    title: "HNO₃ (%)",
+                    description: "Titrate a 10ml sample of the CIP solution with 0.1 N base (e.g., NaOH) using phenolphthalein indicator.",
+                    label: "0.1 N Base Used (ml)",
+                    button: "Calculate HNO₃ %",
+                    result_prefix: "Nitric Acid (HNO₃):"
+                },
+                h3po4: {
+                    title: "H₃PO₄ (%)",
+                    description: "Titrate a 10ml sample of the CIP solution with 0.1 N base (e.g., NaOH) using phenolphthalein indicator.",
+                    label: "0.1 N Base Used (ml)",
+                    button: "Calculate H₃PO₄ %",
+                    result_prefix: "Phosphoric Acid (H₃PO₄):"
+                },
+                 chlorine: {
+                    title: "Chlorine (ppm)",
+                    description: "Titrate a 100ml sample of the CIP solution using the iodometric titration method with 0.01 N Sodium Thiosulphate.",
+                    label: "0.01 N Sodium Thiosulphate Used (ml)",
+                    button: "Calculate Chlorine (ppm)",
                     result_prefix: "Available Chlorine:"
                 }
             }
         }
     }
 }
-
-    
