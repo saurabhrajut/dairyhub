@@ -21,10 +21,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 const milkChemistryTabs = [
     { value: "composition", label: "Composition" },
     { value: "proteins", label: "Proteins" },
+    { value: "fat", label: "Fat" },
+    { value: "lactose", label: "Lactose" },
+    { value: "minerals", label: "Minerals" },
+    { value: "vitamins", label: "Vitamins" },
     { value: "properties", label: "Properties" },
-    { value: "processing", label: "Processing & Fermentation" },
-    { value: "cultures", label: "Cultures" },
-    { value: "fun-facts", label: "Fun Facts" },
 ];
 
 const physicalProperties = [
@@ -50,13 +51,13 @@ const InfoBlock = ({ title, children }: { title: string, children: React.ReactNo
 export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-5xl h-[90vh] flex flex-col">
+      <DialogContent className="max-w-6xl h-[90vh] flex flex-col">
         <DialogHeader>
           <DialogTitle className="font-headline text-2xl text-center">Chemistry of Milk</DialogTitle>
           <DialogDescription className="text-center">A deep dive into the science of milk.</DialogDescription>
         </DialogHeader>
         <Tabs defaultValue="composition" className="flex flex-col flex-1 min-h-0">
-            <TabsList className="grid w-full h-auto grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
+            <TabsList className="grid w-full h-auto grid-cols-3 sm:grid-cols-4 lg:grid-cols-7">
                 {milkChemistryTabs.map(tab => (
                     <TabsTrigger key={tab.value} value={tab.value} className="text-xs sm:text-sm">{tab.label}</TabsTrigger>
                 ))}
@@ -84,16 +85,7 @@ export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; set
 
                             <h5 className="font-bold mt-4">2. Fat (Lipids) – 3-6%</h5>
                             <p>Milk fat ek emulsion (fat droplets dispersed in water) ki tarah hota hai. Ye doodh ka sabse energy-rich component hai (9 kcal/g) aur flavor, texture aur fat-soluble vitamins (A, D, E, K) provide karta hai.</p>
-                            <div className="overflow-x-auto">
-                                <Table className="my-2">
-                                    <TableHeader><TableRow><TableHead>Type of Milk</TableHead><TableHead>Fat % (Approx)</TableHead></TableRow></TableHeader>
-                                    <TableBody>
-                                        <TableRow><TableCell>Cow Milk</TableCell><TableCell>3.5-4.5%</TableCell></TableRow>
-                                        <TableRow><TableCell>Buffalo Milk</TableCell><TableCell>6-7%</TableCell></TableRow>
-                                    </TableBody>
-                                </Table>
-                            </div>
-
+                           
                             <h5 className="font-bold mt-4">3. Protein – 3-4%</h5>
                             <p>Milk protein high biological value ka hota hai aur essential amino acids provide karta hai. Yeh do prakar ke hote hain: Casein (~80%) aur Whey (~20%).</p>
                             
@@ -102,17 +94,7 @@ export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; set
 
                             <h5 className="font-bold mt-4">5. Minerals & Salts (Ash) – 0.7-0.9%</h5>
                             <p>Doodh minerals ka ek accha source hai, jismein Calcium (Ca) aur Phosphorus (P) pramukh hain. Yeh milk ki stability aur pH ko maintain karne mein bhi madad karte hain.</p>
-                            <div className="overflow-x-auto">
-                                <Table className="my-2">
-                                    <TableHeader><TableRow><TableHead>Mineral</TableHead><TableHead>Quantity (mg per 100g milk)</TableHead></TableRow></TableHeader>
-                                    <TableBody>
-                                        <TableRow><TableCell>Calcium</TableCell><TableCell>120-130 mg</TableCell></TableRow>
-                                        <TableRow><TableCell>Phosphorus</TableCell><TableCell>90-100 mg</TableCell></TableRow>
-                                        <TableRow><TableCell>Potassium</TableCell><TableCell>140-150 mg</TableCell></TableRow>
-                                    </TableBody>
-                                </Table>
-                            </div>
-                            
+                           
                             <h5 className="font-bold mt-4">6. Vitamins</h5>
                             <p><strong>Fat-Soluble:</strong> A, D, E, K. <strong>Water-Soluble:</strong> B-Complex (B1, B2, B12) and C.</p>
 
@@ -123,34 +105,68 @@ export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; set
                 </TabsContent>
                 <TabsContent value="proteins" className="mt-0">
                     <div className="space-y-6 text-gray-700 text-sm leading-relaxed prose max-w-none">
+                       <InfoBlock title="Milk Proteins Overview">
+                            <p>The caseins, whey proteins and non-protein nitrogen (NPN) make up the nitrogen content of milk (76%, 18% and 6% respectively). The Rowland fraction method facilitates the separation of caseins, whey proteins and NPN. Casein precipitates at pH 4.6 and is thus separated from whey nitrogen. Total proteins may be separated from whey NPN at pH 5 with sodium acetate and acetic acid.</p>
+                        </InfoBlock>
+
                         <InfoBlock title="Casein (~80% of Milk Protein)">
-                            <p>Casein doodh ka mukhya protein hai jo 'micelles' naam ke complex, spherical structures banata hai. Yeh paneer aur dahi banane ke liye zimmedar hai. Iska isoelectric point 4.6 pH hota hai.</p>
+                            <p>Casein constitutes about 80% of the total proteins present in milk. In fresh milk, casein is held in colloidal suspension. Casein contributes in a big way to the viscosity and white colour of milk. Free casein is almost insoluble in water but is rapidly dissolved by dilute alkalies. Casein in milk can be precipitated with dilute acids, salts or rennet. All caseins precipitate at pH 4.6. Casein particles are termed as ‘casein micelles’. Biologically, casein serves as a carrier for calcium and phosphate to nurture the young calf and form a clot in the stomach to aid easier digestion. The micelle also contains citrate, minor ions, lipase and plasmin enzymes, and entrapped milk serum.</p>
                             
                             <h5 className="font-bold mt-4">Casein Fractions</h5>
-                            <ul className="list-disc list-inside space-y-2">
-                            <li><strong>αS1-Casein (~40-45%):</strong> Sabse abundant, calcium-sensitive, aur cheese me firm gel banata hai.</li>
-                            <li><strong>αS2-Casein (~10-15%):</strong> More hydrophilic, water-holding capacity badhata hai.</li>
-                            <li><strong>β-Casein (~25-35%):</strong> Micelle ko stable rakhta hai. Iske A1 aur A2 variants hote hain.</li>
-                            <li><strong>κ-Casein (~10-15%):</strong> Micelle ki satah par rehta hai aur use sthir (stable) banata hai. Rennet (chymosin) enzyme isiko todta hai.</li>
-                            </ul>
+                            <p>Caseins can be further classified into three major groups as alpha (α), beta (β) and kappa (κ). Alpha casein is further sub-divided into αs1 and αs2 fractions.</p>
 
                             <h5 className="font-bold mt-4">Casein Coagulation (Curd Formation)</h5>
                             <ul className="list-disc list-inside space-y-2">
-                            <li><strong>Acid Coagulation:</strong> Jab doodh ka pH 4.6 tak kam hota hai, toh casein micelles apna charge kho dete hain aur judkar gel banate hain (e.g., Paneer, Yogurt).</li>
-                            <li><strong>Enzymatic Coagulation:</strong> Rennet enzyme κ-casein ko todta hai, jisse micelles unstable ho jaate hain aur calcium ki maujoodgi mein judkar curd banate hain (e.g., Cheese).</li>
+                                <li><strong>Acid Coagulation:</strong> Jab doodh ka pH 4.6 tak kam hota hai, toh casein micelles apna charge kho dete hain aur judkar gel banate hain (e.g., Paneer, Yogurt).</li>
+                                <li><strong>Enzymatic Coagulation:</strong> Rennet enzyme κ-casein ko todta hai, jisse micelles unstable ho jaate hain aur calcium ki maujoodgi mein judkar curd banate hain (e.g., Cheese).</li>
                             </ul>
                         </InfoBlock>
 
                         <InfoBlock title="Whey Proteins (~20% of Milk Protein)">
-                            <p>Paneer ya cheese banne ke baad bache hue liquid (whey) mein yeh proteins hote hain. Yeh fast-digesting aur high nutritional value wale hote hain.</p>
+                            <p>The greenish-yellow clear liquid that separates out of milk after precipitation of caseins at pH 4.6 is called whey and the proteins contained therein are whey proteins. These globular proteins are more water soluble than caseins and are prone to heat denaturation. Denaturation increases their water holding capacity. Native whey proteins have good gelling and whipping properties.</p>
                             <h5 className="font-bold mt-4">Whey Protein Fractions</h5>
-                            <ul className="list-disc list-inside space-y-2">
-                            <li><strong>β-Lactoglobulin (~50-55%):</strong> Sabse zyada, heat-sensitive, foaming aur gelation mein madad karta hai.</li>
-                            <li><strong>α-Lactalbumin (~20-25%):</strong> Lactose synthesis ke liye zaroori, infant formula me use hota hai.</li>
-                            <li><strong>Serum Albumin (BSA) (~5-10%):</strong> Antioxidant properties.</li>
-                            <li><strong>Immunoglobulins (Ig) (~8-10%):</strong> Immune system support.</li>
-                            <li><strong>Lactoferrin (~1-2%):</strong> Iron-binding, antimicrobial properties.</li>
-                            </ul>
+                            <p><strong>Beta–lactoglobulins</strong> comprises approximately half the total whey proteins. It is coagulated by heat, which is why colostrum curdles when heated. It binds fat-soluble vitamins making them more available to the body and provides an excellent source of essential and branched chain amino acids. These help prevent muscle breakdown and spare glycogen during exercise. Beta–lactoglobulins may also be helpful in controlling certain liver conditions such as cirrhosis.</p>
+                            <p><strong>Alpha lactalbumin</strong> is not coagulated by rennet or acids but is precipitated by heat. The extent of coagulation depends on temperature of holding, salt concentration and pH of milk. It is the primary protein found in human breast milk and is a good source of essential amino acids (particularly tryptophan) and branched chain amino acids. This is the only whey protein component capable of binding calcium.</p>
+                            <p>The <strong>immunoglobulins</strong> provide protective effect to the offspring against enteropathogenic micro-organisms. It is the predominant whey protein component found in colostrum. Bovine milk contains only traces of IgA. <strong>Bovine serum albumin</strong> is a large sized protein with a good essential amino acid profile and fat binding properties.</p>
+                        </InfoBlock>
+                         <InfoBlock title="Milk Enzymes and Non-Protein Nitrogenous (NPN) Substances">
+                            <p>Some indigenous enzymes that have been isolated from milk are lipase, aryl esterase, alkaline phosphatase, acid phosphatase, xanthine oxidase, peroxidase, protease, amylase, catalase and lactase. The most significant group is the hydrolases, comprising of lipoprotein lipase, plasmin and alkaline phosphatase. Milk contains some NPN substances that constitute about 5 percent of the total nitrogen in milk. Some examples of this group are amino acids, creatine, urea, uric acid, creatinine and hipuric acid.</p>
+                            <p><strong>Lactoferrin (LF)</strong> is a single-chain, metal-binding glycoprotein. It is a red coloured iron-binding protein and may also mediate some effects of inflammation and have a role in regulating various components of the immune system. It has antibacterial, antifungal, anti-endotoxin, and antiviral activities. It inhibits enteropathogenic organisms due to its ability to bind iron, as iron is an essential nutrient often required for bacterial growth. It promotes the growth of beneficial bacteria such as bifidobacteria.</p>
+                            <p><strong>Lactoperoxidase</strong> is an oxido-reductase enzyme that occurs in milk, saliva, tears, cervical mucus. It is a relatively heat resistant enzyme whose activity remains sufficient even after pasteurization. Cow milk has 1.4 units/ml of lactoperoxidase, whereas buffalo milk has 0.9 units/ml. The thermal stability of buffalo milk lactoperoxidase is higher than that of cow milk. Lactoperoxidase has been widely researched for its ability to preserve raw milk.</p>
+                            <p><strong>Lysozyme</strong> is an enzyme that is abundantly present in the mucosal membranes that line the human nasal cavity and tear ducts. It can also be found in high concentration in egg white. Lysozyme destroys bacterial cell walls by hydrolyzing the polysaccharide component of the cell wall. Human milk contains 0.4 g/L of lysozyme, an enzyme that contributes to antibacterial activity in human milk.</p>
+                        </InfoBlock>
+                    </div>
+                </TabsContent>
+                <TabsContent value="fat" className="mt-0">
+                    <div className="space-y-4 text-gray-700 text-sm leading-relaxed prose max-w-none">
+                        <InfoBlock title="Milk Fat">
+                            <p>Fat is the most commercially significant and most variable constituent of milk. Fat content varies from breed to breed and also among individuals of the same breed, the variation being caused by many factors. Most of the (> 95%) milk fat exists in the form of globules of 0.1-15 µ diameter (cow milk fat – ~ 3-8 µ, buffalo milk fat – ~ 4-10 µ). A thin membrane (8-10 nm thick) covers these liquid fat droplets. The properties of this membrane are vastly different from both milk fat and plasma. The fat globule membrane is rich in phospholipids and also contains lipoproteins and other glycerides. These phospholipids are involved in the oxidation of milk. The membrane decreases the lipid-serum interface to very low values, 1-2.5 mN/m, preventing the globules from immediate flocculation and coalescence, as well as protecting them from enzymatic action. Fat comprises of different glycerides of low melting point. The composition of fat varies with the feed plan, nutrition, stage of lactation, breed and species, the first being the most important.</p>
+                            <p>The size and number of fat globules vary depending on the breed of the animal and method of milking. The globules become smaller and more numerous as lactation advances. Machine milking produces fat globules of more uniform size than hand milking. Homogenization reduces the fat globules to a small size and reduces the tendency of separation during storage. The larger the size of the globules, the quicker they rise as cream to the top of the milk and easier it is to churn such cream into butter. For this reason buffalo milk fat is more easily churned into butter than cow milk fat. The milk of animals in advance lactation is less suitable for being churned into butter. Milk containing small globules is, however, more suitable for cheese making, since less fat is lost in whey. Milk fat is quite bland in taste and imparts smoothness and palatability to fat-containing dairy products.</p>
+                            <p>In milk fat, butyric, caproic, caprylic and capric acids, present in high proportions, are characterized by strong odours and flavour. These volatile acids are not present in such high proportion in other naturally occurring fats. The fatty acid content of milk fat can also be influenced by the amount and type of feeds consumed, stage of lactation and breed of the animal. Milk fat also contains cholesterol, thus differentiating it from vegetable fats, which contain phytosterols. Milk contains 0.1 to 0.23% phospholipids, viz. lecithin, phosphatidyl serine, sphingomyelin, inositol, cerebrosides etc. Some of these phospholipids serve as antioxidants in prolonging the shelf-life of ghee.</p>
+                            <p>The colour of fat depends upon its carotene content and varies with the species, breed and feed of the animal. The yellow colour of cow milk is due to the carotene. Buffalo milk does not contain carotene. Ghee from cow fed on an abundant green fodder is more yellow than when fed on dry food. Similarly some breeds such as Jersey and Guernsey may produce milk deep yellow in colour.</p>
+                            <p>Saturated fatty acids (no double bonds), such as myristic, palmitic and stearic constitute two thirds of milk fatty acids. Oleic acid is the most abundant unsaturated fatty acid in milk with one double bond.</p>
+                        </InfoBlock>
+                    </div>
+                </TabsContent>
+                <TabsContent value="lactose" className="mt-0">
+                    <div className="space-y-4 text-gray-700 text-sm leading-relaxed prose max-w-none">
+                        <InfoBlock title="Lactose (Milk Sugar)">
+                           <p>Lactose is the major milk sugar or carbohydrate. Fresh milk also contains other carbohydrates in small amounts, including glucose, galactose, and oligosaccharides. Lactose is present in true solution and, therefore, goes into whey when caseins are separated. Lactose constitutes 4.8 to 5.2% of milk, 52% of milk SNF, and 70% of whey solids. Lactose can be quickly fermented by micro-organisms to lactic acid and is, therefore, essential in the manufacture of cultured dairy products like cheese, dahi and butter-milk. It contributes to the nutritive value of milk and milk products, and is responsible for the texture and miscibility of some milk products. Lactose imparts colour and flavour to dairy products heated to high temperatures. Sucrose is six times sweeter than lactose.</p>
+                           <p>Lactose is a disaccharide made up of two monosaccharides, glucose and galactose. Lactose is hydrolyzed by the enzyme µ-galactosidase (lactase), the results being the two monosaccharides, increased sweetness and depressed freezing point. People suffering from lactose intolerance lack this enzyme and therefore, cannot digest lactose. This sugar crystallizes in an alpha form and results in the defect called sandiness in ice cream.</p>
+                        </InfoBlock>
+                    </div>
+                </TabsContent>
+                <TabsContent value="minerals" className="mt-0">
+                     <div className="space-y-4 text-gray-700 text-sm leading-relaxed prose max-w-none">
+                        <InfoBlock title="Minerals & Salts (Ash)">
+                           <p>All 22 minerals considered essential to the human diet are present in milk. Milk is an important source of dietary calcium, magnesium, phosphorus, potassium, selenium, and zinc. In milk, approximately 67% of the calcium, 35% of the magnesium, and 44% of the phosphate are bound to salts within the casein micelle and the rest are soluble in the serum phase. Milk contains very small amounts of copper, iron, manganese and sodium. Other minerals such as aluminium, boron, zinc, cobalt, iodine, fluorine, molybdenum, nickel, lithium, barium, strontium and silica are also present in milk, but in minute amounts.</p>
+                        </InfoBlock>
+                    </div>
+                </TabsContent>
+                <TabsContent value="vitamins" className="mt-0">
+                     <div className="space-y-4 text-gray-700 text-sm leading-relaxed prose max-w-none">
+                        <InfoBlock title="Vitamins">
+                            <p>Vitamins are organic substances that are essential to normal life processes, but cannot be synthesized by the body. They occur in very small concentrations in both plants and animals. Milk is a good source of vitamins. Milk contains the fat soluble vitamins A, D, E, and K. As milk fat is an important dietary source of vitamin A, low fat products are normally supplemented with this vitamin. The content of Vitamin D, which also aids in the absorption of calcium, is influenced by the feed of the animals. Milk is a fair source of vitamin E. It is also a fairly good source of water soluble B vitamins such as thiamine (B1), riboflavin (B2), niacin (B3), pantothenic acid (B5), pyridoxine (B6) and cyanocobalamin (B12). Milk is, however, a poor source of vitamin C (ascorbic acid). The little quantity of vitamin C that is present in raw milk is very heat-labile and easily destroyed by pasteurization.</p>
                         </InfoBlock>
                     </div>
                 </TabsContent>
@@ -179,103 +195,11 @@ export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; set
                         </div>
                     </div>
                 </TabsContent>
-                <TabsContent value="processing" className="mt-0">
-                    <div className="space-y-4 text-gray-700 text-sm leading-relaxed prose max-w-none">
-                        <InfoBlock title="Factors Affecting Milk Product Quality">
-                            <p>Milk products ki quality milk ke inherent properties aur processing techniques par depend karti hai.</p>
-                            <h5 className="font-bold mt-3">A) Milk Quality</h5>
-                            <ul className="list-disc list-inside space-y-1">
-                                <li><strong>Protein & Fat Content:</strong> Directly impact texture, viscosity, flavor aur nutritional value.</li>
-                                <li><strong>Inhibitors:</strong> Antibiotics ya natural inhibitors fermentation process ko disturb kar sakte hain.</li>
-                            </ul>
-                            <h5 className="font-bold mt-3">B) Milk Processing</h5>
-                            <ul className="list-disc list-inside space-y-1">
-                                <li><strong>Standardization:</strong> Fat aur protein content ko adjust karna consistency ke liye zaroori hai.</li>
-                                <li><strong>Homogenization:</strong> Fat globules ko break karke cream separation ko rokta hai.</li>
-                                <li><strong>Heat Treatment:</strong> Pasteurization aur UHT jaise process shelf life badhane aur safety ensure karne me madad karte hain.</li>
-                            </ul>
-                        </InfoBlock>
-                        
-                        <InfoBlock title="Thermal Processing of Milk">
-                            <p>Thermal processing doodh ki safety aur shelf life badhane ke liye zaroori hai.</p>
-                            <h5 className="font-bold mt-3">1. Pasteurization</h5>
-                            <p>A mild heat treatment to kill pathogens. The most common method is High-Temperature Short-Time (HTST): 72°C (161°F) for 15 seconds.</p>
-                            <h5 className="font-bold mt-3">2. Ultra-High-Temperature (UHT) Processing</h5>
-                            <p>Milk is heated to 135°C - 150°C for a few seconds, making it commercially sterile with a long shelf life at room temperature.</p>
-                            <h5 className="font-bold mt-3">3. Sterilization</h5>
-                            <p>A more intense heat treatment (e.g., 116°C for 15 min) that kills all microorganisms, including spores.</p>
-                        </InfoBlock>
-
-                        <InfoBlock title="Heat Induced Changes in Milk">
-                            <p>Heating milk causes several physical and chemical changes:</p>
-                            <ul className="list-disc list-inside space-y-1">
-                                <li>Protein denaturation (especially whey proteins).</li>
-                                <li>Maillard reaction (browning) between lactose and proteins.</li>
-                                <li>Precipitation of some milk salts.</li>
-                                <li>Release of SH groups, leading to a "cooked" flavor.</li>
-                                <li>Reduction of some heat-sensitive vitamins.</li>
-                            </ul>
-                        </InfoBlock>
-                        
-                        <InfoBlock title="Popular Fermented Dairy Products">
-                            <p>Fermented dairy products India ke traditional food culture ka ek important hissa hain.</p>
-                            <ol className="list-decimal list-inside space-y-2">
-                                <li><strong>Dahi (Curd):</strong> Traditional Indian fermented milk product.</li>
-                                <li><strong>Yogurt & Flavored Dahi:</strong> Similar to dahi, often with added flavors.</li>
-                                <li><strong>Lassi – Sweet ya Salted:</strong> A yogurt-based drink blended with water and spices/sugar.</li>
-                                <li><strong>Buttermilk/Chhach:</strong> The liquid left after churning butter, often spiced.</li>
-                                <li><strong>Probiotic Drinks:</strong> Functional beverages enriched with live beneficial bacteria.</li>
-                            </ol>
-                        </InfoBlock>
-
-                    </div>
-                </TabsContent>
-                <TabsContent value="cultures" className="mt-0">
-                    <div className="space-y-4 text-gray-700 text-sm leading-relaxed prose max-w-none">
-                        <InfoBlock title="Lactic Acid Bacteria (LAB) Cultures">
-                            <p>Lactic acid bacteria (LAB) dairy products ke fermentation process mein ek important role play karti hain. Ye bacteria lactose ko lactic acid me convert karte hain. Inhe unke optimal growth temperature ke basis par categorize kiya jata hai:</p>
-                            
-                            <h5 className="font-bold mt-3">1. Mesophilic Cultures</h5>
-                            <p><strong>Optimal Growth Temperature:</strong> Below 30°C</p>
-                            <p><strong>Function:</strong> Inka mukhya kaam lactic acid banana hai. Yeh diacetyl jaise flavor compounds bhi banate hain (buttery aroma) aur pH kam karke harmful bacteria ko rokte hain.</p>
-
-                            <h5 className="font-bold mt-3">2. Thermophilic Cultures</h5>
-                            <p><strong>Optimal Growth Temperature:</strong> Above 37°C</p>
-                            <p><strong>Function:</strong> Yeh tezi se acid banate hain, jo high-temperature cooking wale cheese ke liye zaroori hai. Yeh bhi specific flavor profiles banate hain.</p>
-                        </InfoBlock>
-                        <InfoBlock title="Factors in Culture Selection">
-                            <p>Sahi microbial culture ka chunaav product ki quality, taste, texture aur shelf life ko સીਧે taur par prabhavit karta hai.</p>
-                            <ol className="list-decimal list-inside space-y-2">
-                                <li><strong>Type of Product:</strong> Har product (Yogurt, Lassi, Buttermilk) ke liye specific strains (e.g., <em>Lactobacillus bulgaricus</em>, <em>Streptococcus thermophilus</em>) use hote hain.</li>
-                                <li><strong>Flavor & Texture:</strong> Kuch strains (<em>Lactococcus lactis</em>) tangy flavor dete hain, jabki kuch (<em>Leuconostoc</em>) buttery flavor dete hain. Exopolysaccharide (EPS) producing bacteria thickness badhate hain.</li>
-                                <li><strong>Regulatory Requirements:</strong> Cultures FSSAI/FDA dwara approved (GRAS) hone chahiye.</li>
-                                <li><strong>Manufacturing Constraints:</strong> Fast-fermenting strains processing time kam karte hain. Incubation temperature (mesophilic/thermophilic) bhi ek factor hai.</li>
-                                <li><strong>Phage Resistance:</strong> Bacteriophages (viruses) fermentation fail kar sakte hain. Isliye, phage-resistant cultures ka istemal aur strains ka rotation karna zaroori hai.</li>
-                            </ol>
-                        </InfoBlock>
-                        <InfoBlock title="Important Parameters in Yogurt Manufacturing">
-                            <ol className="list-decimal list-inside space-y-2">
-                                <li><strong>Heat Treatment:</strong> Doodh ko 85–95°C tak 5–10 minutes ke liye garam kiya jata hai. Isse whey proteins denature hokar yogurt ki texture aur viscosity ko enhance karte hain.</li>
-                                <li><strong>Inoculation (Culture Addition):</strong> Doodh ko 43°C tak thanda karke starter culture add kiya jata hai.</li>
-                                <li><strong>Incubation (Fermentation):</strong> Containers ko 42–43°C par 4 se 6 ghante tak incubate kiya jata hai, jab tak desired acidity (pH ~4.6) achieve na ho jaye.</li>
-                                <li><strong>Cooling:</strong> Fermentation rokne ke liye yogurt ko 5°C tak thanda kiya jata hai. Gradual cooling syneresis (whey separation) ko rokta hai.</li>
-                            </ol>
-                        </InfoBlock>
-                    </div>
-                </TabsContent>
-                <TabsContent value="fun-facts" className="mt-0">
-                    <div className="space-y-4 prose max-w-none">
-                        {funFacts.map((fact, index) => (
-                            <div key={index} className="p-4 bg-amber-100/60 rounded-lg not-prose">
-                                <p className="font-semibold text-amber-900 font-headline">Q: {fact.q}</p>
-                                <p className="mt-2 text-gray-700"><strong className="text-amber-800">A:</strong> {fact.a}</p>
-                            </div>
-                        ))}
-                    </div>
-                </TabsContent>
             </ScrollArea>
         </Tabs>
       </DialogContent>
     </Dialog>
   );
 }
+
+    
