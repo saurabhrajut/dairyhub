@@ -24,10 +24,10 @@ import { cipProcessContent } from "@/lib/content/cip-process-content";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 
-const Section = ({ title, children, defaultOpen = false }: { title: string, children: React.ReactNode, defaultOpen?: boolean }) => (
-    <Accordion type="single" collapsible className="w-full mb-6" defaultValue={defaultOpen ? title : undefined}>
-        <AccordionItem value={title}>
-            <AccordionTrigger className="text-2xl font-bold text-blue-700 bg-blue-50 p-4 rounded-lg mt-6 border-l-4 border-blue-700 font-headline hover:no-underline">
+const Section = ({ title, id, children, defaultOpen = false }: { title: string, id: string, children: React.ReactNode, defaultOpen?: boolean }) => (
+    <Accordion type="single" collapsible className="w-full mb-6" defaultValue={defaultOpen ? "item-1" : undefined}>
+        <AccordionItem value="item-1">
+            <AccordionTrigger className="text-2xl font-bold text-blue-700 bg-blue-50 p-4 rounded-lg mt-6 border-l-4 border-blue-700 font-headline hover:no-underline text-left">
                 {title}
             </AccordionTrigger>
             <AccordionContent>
@@ -39,16 +39,19 @@ const Section = ({ title, children, defaultOpen = false }: { title: string, chil
     </Accordion>
 );
 
+
 const AlkalinityTestCalc = ({ content }: { content: any }) => {
     const { toast } = useToast();
-    const [qualitativeResult, setQualitativeResult] = useState<string | null>(null);
-    const [quantitativeDirectResult, setQuantitativeDirectResult] = useState<string | null>(null);
-    const [quantitativeLabResult, setQuantitativeLabResult] = useState<{freeCaustic: string, totalAlkali: string} | null>(null);
     const [detergentSolution, setDetergentSolution] = useState("10");
     const [hclForQualitative, setHclForQualitative] = useState("12.5");
-    const [acidForDirect, setAcidForDirect] = useState("");
-    const [acidForLabA, setAcidForLabA] = useState("");
-    const [acidForLabB, setAcidForLabB] = useState("");
+    const [qualitativeResult, setQualitativeResult] = useState<string | null>(null);
+
+    const [directTitre, setDirectTitre] = useState("");
+    const [directResult, setDirectResult] = useState<string | null>(null);
+
+    const [labTitreA, setLabTitreA] = useState("");
+    const [labTitreB, setLabTitreB] = useState("");
+    const [labResult, setLabResult] = useState<{ freeCaustic: string, totalAlkali: string } | null>(null);
 
     const handleQualitativeCheck = () => {
         const detMl = parseFloat(detergentSolution);
@@ -59,28 +62,33 @@ const AlkalinityTestCalc = ({ content }: { content: any }) => {
         }
         setQualitativeResult(content.calculators.alkalinity.qualitative_result);
     }
-    
+
     const handleDirectCalc = () => {
-        const acidUsed = parseFloat(acidForDirect);
+        const acidUsed = parseFloat(directTitre);
         if(isNaN(acidUsed) || acidUsed < 0){
              toast({ variant: 'destructive', title: 'Error', description: 'Please enter a valid acid volume.' });
             return;
         }
-        setQuantitativeDirectResult(`${content.calculators.alkalinity.direct_result_prefix} ${acidUsed.toFixed(2)}%`);
+        setDirectResult(`${content.calculators.alkalinity.direct_result_prefix} ${acidUsed.toFixed(2)}%`);
     }
 
     const handleLabCalc = () => {
-        const readingA = parseFloat(acidForLabA);
-        const readingB = parseFloat(acidForLabB);
-        if(isNaN(readingA) || isNaN(readingB) || readingA < readingB) {
-            toast({ variant: 'destructive', title: 'Error', description: 'Please enter valid readings. Reading A must be greater than or equal to Reading B.' });
+        const readingA = parseFloat(labTitreA);
+        const readingB = parseFloat(labTitreB);
+
+        if (isNaN(readingA) || isNaN(readingB) || readingA < 0 || readingB < 0) {
+            toast({ variant: 'destructive', title: 'Error', description: 'Please enter valid, positive titre values.' });
             return;
         }
-        const freeCaustic = (readingA - readingB) * 0.4;
-        const totalAlkali = (readingA + readingB) * 0.4;
-        setQuantitativeLabResult({
-            freeCaustic: `${content.calculators.alkalinity.lab_result_free} ${freeCaustic.toFixed(2)}%`,
-            totalAlkali: `${content.calculators.alkalinity.lab_result_total} ${totalAlkali.toFixed(2)}%`
+        
+        // This calculation is based on the new lab procedure provided.
+        // A is the first titration, B is the second part. The total acid used is A.
+        const freeCaustic = (2 * readingB - readingA) * 0.4;
+        const totalAlkali = readingA * 0.4;
+        
+        setLabResult({
+            freeCaustic: `${content.calculators.alkalinity.lab_result_free} ${freeCaustic > 0 ? freeCaustic.toFixed(3) : '0.000'}%`,
+            totalAlkali: `${content.calculators.alkalinity.lab_result_total} ${totalAlkali.toFixed(3)}%`
         });
     }
 
@@ -101,25 +109,26 @@ const AlkalinityTestCalc = ({ content }: { content: any }) => {
             <div>
                 <h4 className="font-bold text-lg mb-2">{content.calculators.alkalinity.direct_title}</h4>
                  <div className="space-y-4">
-                    <div><Label>{content.calculators.alkalinity.direct_label}</Label><Input type="number" value={acidForDirect} onChange={e => setAcidForDirect(e.target.value)} placeholder="e.g., 0.5"/></div>
+                    <div><Label>{content.calculators.alkalinity.direct_label}</Label><Input type="number" value={directTitre} onChange={e => setDirectTitre(e.target.value)} placeholder="e.g., 0.5"/></div>
                 </div>
                 <Button onClick={handleDirectCalc} className="w-full mt-4">{content.calculators.alkalinity.direct_button}</Button>
-                {quantitativeDirectResult && <Alert className="mt-4"><AlertDescription className="font-bold">{quantitativeDirectResult}</AlertDescription></Alert>}
+                {directResult && <Alert className="mt-4"><AlertDescription className="font-bold">{directResult}</AlertDescription></Alert>}
             </div>
 
             {/* Quantitative Lab Method */}
             <div>
                 <h4 className="font-bold text-lg mb-2">{content.calculators.alkalinity.lab_title}</h4>
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div><Label>{content.calculators.alkalinity.lab_label_a}</Label><Input type="number" value={acidForLabA} onChange={e => setAcidForLabA(e.target.value)} placeholder="e.g., 2.5"/></div>
-                    <div><Label>{content.calculators.alkalinity.lab_label_b}</Label><Input type="number" value={acidForLabB} onChange={e => setAcidForLabB(e.target.value)} placeholder="e.g., 0.5"/></div>
+                    <div><Label>{content.calculators.alkalinity.lab_label_a}</Label><Input type="number" value={labTitreA} onChange={e => setLabTitreA(e.target.value)} placeholder="e.g., 2.5"/></div>
+                    <div><Label>{content.calculators.alkalinity.lab_label_b}</Label><Input type="number" value={labTitreB} onChange={e => setLabTitreB(e.target.value)} placeholder="e.g., 0.5"/></div>
                 </div>
+                 <p className="text-xs text-muted-foreground mt-2">{content.calculators.alkalinity.lab_note}</p>
                 <Button onClick={handleLabCalc} className="w-full mt-4">{content.calculators.alkalinity.lab_button}</Button>
-                 {quantitativeLabResult && (
+                 {labResult && (
                     <Alert className="mt-4">
                         <AlertDescription>
-                            <p className="font-bold">{quantitativeLabResult.freeCaustic}</p>
-                            <p className="font-bold mt-2">{quantitativeLabResult.totalAlkali}</p>
+                            <p className="font-bold">{labResult.freeCaustic}</p>
+                            <p className="font-bold mt-2">{labResult.totalAlkali}</p>
                         </AlertDescription>
                     </Alert>
                 )}
@@ -185,14 +194,33 @@ export function CipProcessModal({
           </DialogDescription>
         </DialogHeader>
         <ScrollArea className="h-full pr-6">
-          <Section title={content.intro.title} defaultOpen>
-              <p>{content.intro.p1}</p>
-              <h4 className="font-bold mt-4">{content.intro.milkstone_title}</h4>
-              <p>{content.intro.milkstone_desc}</p>
-              <p><strong>{content.intro.composition_title}:</strong> {content.intro.composition_desc}</p>
+          <Section id="intro" title={content.intro.title} defaultOpen>
+              <div dangerouslySetInnerHTML={{ __html: content.intro.htmlContent }} />
           </Section>
 
-          <Section title={content.cleaning_procedures.title}>
+          <Section id="cip-cycle" title={content.cip_cycle.title}>
+            <p>{content.cip_cycle.intro}</p>
+            <ol className="list-decimal list-outside pl-5 mt-4 space-y-4">
+                {content.cip_cycle.steps.map((step: any, index: number) => (
+                    <li key={index}>
+                        <strong className="text-gray-800">{step.title}</strong>
+                        <div className="pl-2" dangerouslySetInnerHTML={{ __html: step.details }} />
+                    </li>
+                ))}
+            </ol>
+          </Section>
+
+          <Section id="chemicals" title={content.chemicals.title}>
+              <p>{content.chemicals.intro}</p>
+              {content.chemicals.types.map((type: any, index: number) => (
+                  <div key={index} className="mt-4">
+                      <h3 className="text-xl font-semibold mb-2 text-gray-800">{type.title}</h3>
+                      <div dangerouslySetInnerHTML={{ __html: type.details }} />
+                  </div>
+              ))}
+          </Section>
+
+          <Section id="cleaning-procedures" title={content.cleaning_procedures.title}>
               {content.cleaning_procedures.sections.map((sec: any, index: number) => (
                   <div key={index} className="mb-6">
                       <h3 className="text-xl font-semibold mb-2 text-gray-800">{sec.title}</h3>
@@ -201,7 +229,7 @@ export function CipProcessModal({
               ))}
           </Section>
 
-          <Section title={content.solution_strength.title}>
+          <Section id="solution-strength" title={content.solution_strength.title}>
             <p>{content.solution_strength.intro}</p>
             <AlkalinityTestCalc content={content.solution_strength} />
             <ChlorineTestCalc content={content.solution_strength} />
@@ -211,3 +239,5 @@ export function CipProcessModal({
     </Dialog>
   );
 }
+
+    
