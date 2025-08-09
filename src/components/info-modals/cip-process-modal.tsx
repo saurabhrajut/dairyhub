@@ -18,7 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useLanguage } from "@/context/language-context";
 import { cipProcessContent } from "@/lib/content/cip-process-content";
 import { useState } from "react";
@@ -196,6 +196,7 @@ export function CipProcessModal({
 
           <Section id="solution-strength" title={content.solution_strength.title}>
             <p>{content.solution_strength.intro}</p>
+            <div className="mt-4 p-4 bg-blue-50 border-l-4 border-blue-400" dangerouslySetInnerHTML={{ __html: content.solution_strength.alkalinity_test.content }} />
             <SolutionStrengthCalc content={content.solution_strength} />
           </Section>
         </ScrollArea>
@@ -203,3 +204,5 @@ export function CipProcessModal({
     </Dialog>
   );
 }
+
+    

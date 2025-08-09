@@ -138,42 +138,84 @@ export const cipProcessContent = {
             ]
         },
         teepol_detergent: {
-            title: "लिक्विड डिटर्जेंट (टीपोल) बनाना और जांचना",
+            title: "लिक्विड डिटर्जेंट बनाना और जांचना",
             htmlContent: `
                 <p>डेयरी और खाद्य उद्योग में, हाथ से बर्तनों और छोटे उपकरणों की सफाई के लिए न्यूट्रल लिक्विड डिटर्जेंट (जैसे टीपोल) का व्यापक रूप से उपयोग किया जाता है।</p>
-                <h4 class="font-bold mt-4">लिक्विड डिटर्जेंट कैसे बनाएं (उदाहरण):</h4>
+                <h4 class="font-bold mt-4">1. सामान्य प्रयोजन लिक्विड डिटर्जेंट कैसे बनाएं (1000 लीटर बैच):</h4>
                 <p>यह एक सामान्य फॉर्मूलेशन है। औद्योगिक उत्पादन अधिक जटिल हो सकता है।</p>
+                <div class="overflow-x-auto my-4"><table class="w-full"><thead><tr class="bg-muted"><th class="p-2 text-left">घटक (Ingredient)</th><th class="p-2 text-left">मात्रा (Kg)</th><th class="p-2 text-left">%</th><th class="p-2 text-left">उद्देश्य</th></tr></thead><tbody>
+                <tr><td class="p-2 border-b">पानी (Water)</td><td class="p-2 border-b">820 - 840 Kg</td><td class="p-2 border-b">82-84%</td><td class="p-2 border-b">मुख्य विलायक (Solvent)</td></tr>
+                <tr><td class="p-2 border-b">एसिड स्लरी (Acid Slurry - LABSA 90%)</td><td class="p-2 border-b">100 Kg</td><td class="p-2 border-b">10%</td><td class="p-2 border-b">मुख्य सफाई एजेंट (Anionic Surfactant)</td></tr>
+                <tr><td class="p-2 border-b">कास्टिक सोडा (Caustic Soda - NaOH)</td><td class="p-2 border-b">~15 Kg</td><td class="p-2 border-b">~1.5%</td><td class="p-2 border-b">स्लरी को न्यूट्रलाइज करने के लिए (pH 7 तक)</td></tr>
+                <tr><td class="p-2 border-b">यूरिया (Urea) या नमक (Salt)</td><td class="p-2 border-b">20 - 40 Kg</td><td class="p-2 border-b">2-4%</td><td class="p-2 border-b">गाढ़ापन बढ़ाने वाला (Viscosity Enhancer)</td></tr>
+                <tr><td class="p-2 border-b">रंग और सुगंध (Color & Perfume)</td><td class="p-2 border-b">आवश्यकतानुसार</td><td class="p-2 border-b">-</td><td class="p-2 border-b">सौंदर्यशास्त्र के लिए</td></tr>
+                <tr class="bg-muted"><td class="p-2 font-bold">कुल</td><td class="p-2 font-bold">1000 Kg</td><td class="p-2 font-bold">100%</td><td class="p-2 font-bold"></td></tr>
+                </tbody></table></div>
+                <p class="font-semibold">प्रक्रिया:</p>
                 <ol class="list-decimal list-inside space-y-1 mt-2">
-                    <li><strong>सामग्री:</strong> एसिड स्लरी (LABSA - 90%), कास्टिक सोडा (NaOH), यूरिया, पानी, रंग, और सुगंध।</li>
-                    <li><strong>प्रक्रिया:</strong></li>
-                    <ul class="list-disc list-inside ml-4">
-                        <li>एक प्लास्टिक कंटेनर में आवश्यक मात्रा में पानी लें।</li>
-                        <li>धीरे-धीरे एसिड स्लरी (LABSA) डालें और लगातार हिलाते रहें।</li>
-                        <li>अलग से, कास्टिक सोडा को थोड़े पानी में घोलकर एक घोल बनाएं (यह एक एक्सोथर्मिक प्रतिक्रिया है, इसलिए सावधानी बरतें)।</li>
-                        <li>कास्टिक सोडा के घोल को धीरे-धीरे एसिड स्लरी वाले मिश्रण में डालें जब तक कि मिश्रण का pH 7 (न्यूट्रल) न हो जाए। pH पेपर से जांचें।</li>
-                        <li>गाढ़ापन बढ़ाने के लिए यूरिया या नमक डालें और अच्छी तरह मिलाएं।</li>
-                        <li>अंत में, रंग और सुगंध मिलाएं।</li>
-                    </ul>
+                    <li>एक बड़े टैंक में पानी लें। धीरे-धीरे एसिड स्लरी डालें और लगातार हिलाते रहें।</li>
+                    <li>अलग से, कास्टिक सोडा को थोड़े पानी में घोलें (सावधानी बरतें, यह गर्म होता है)।</li>
+                    <li>कास्टिक सोडा के घोल को धीरे-धीरे स्लरी वाले मिश्रण में डालें जब तक कि मिश्रण का pH 7 (न्यूट्रल) न हो जाए।</li>
+                    <li>गाढ़ापन बढ़ाने के लिए यूरिया या नमक डालें और अच्छी तरह मिलाएं। अंत में, रंग और सुगंध मिलाएं।</li>
                 </ol>
-                <h4 class="font-bold mt-4">लिक्विड डिटर्जेंट की शक्ति कैसे जांचें (Active Matter %):</h4>
-                <p>डिटर्जेंट की शक्ति को उसमें मौजूद "एक्टिव मैटर" (सर्फेक्टेंट की मात्रा) से मापा जाता है। इसकी जाँच के लिए एक मानक विधि टू-फेज टाइट्रेशन है।</p>
+
+                <h4 class="font-bold mt-6">2. एसिडिक क्लीनर कैसे बनाएं (1000 लीटर बैच):</h4>
+                <p>यह एक मजबूत एसिड-आधारित क्लीनर है जो मिल्क स्टोन और अन्य खनिज जमा को हटाने के लिए उपयोग किया जाता है। <strong>चेतावनी: मजबूत एसिड खतरनाक होते हैं, हमेशा उचित सुरक्षा उपकरण (PPE) पहनें।</strong></p>
+                 <div class="overflow-x-auto my-4"><table class="w-full"><thead><tr class="bg-muted"><th class="p-2 text-left">घटक (Ingredient)</th><th class="p-2 text-left">मात्रा (Kg)</th><th class="p-2 text-left">%</th><th class="p-2 text-left">उद्देश्य</th></tr></thead><tbody>
+                <tr><td class="p-2 border-b">पानी (Water)</td><td class="p-2 border-b">880 Kg</td><td class="p-2 border-b">88%</td><td class="p-2 border-b">विलायक (Solvent)</td></tr>
+                <tr><td class="p-2 border-b">हाइड्रोक्लोरिक एसिड (HCl - 33%)</td><td class="p-2 border-b">100 Kg</td><td class="p-2 border-b">10%</td><td class="p-2 border-b">मुख्य सफाई एजेंट (Descaling)</td></tr>
+                <tr><td class="p-2 border-b">नॉन-आयोनिक सर्फेक्टेंट</td><td class="p-2 border-b">20 Kg</td><td class="p-2 border-b">2%</td><td class="p-2 border-b">सतह को गीला करने और गंदगी हटाने में मदद करता है</td></tr>
+                </tbody></table></div>
+                <p class="font-semibold">प्रक्रिया:</p>
                 <ol class="list-decimal list-inside space-y-1 mt-2">
-                    <li><strong>सिद्धांत:</strong> एक cationic surfactant (जैसे Hyamine 1622) एक anionic surfactant (आपके डिटर्जेंट में एक्टिव मैटर) के साथ प्रतिक्रिया करता है। एक इंडिकेटर (जैसे मेथिलीन ब्लू) का उपयोग करके एंडपॉइंट का पता लगाया जाता है।</li>
-                    <li><strong>प्रक्रिया:</strong></li>
-                     <ul class="list-disc list-inside ml-4">
-                        <li>डिटर्जेंट का एक ज्ञात वजन (जैसे 1 ग्राम) लें और उसे 100 मिली पानी में घोलें।</li>
-                        <li>इस घोल का एक निश्चित आयतन (जैसे 10 मिली) एक कोनिकल फ्लास्क में लें।</li>
-                        <li>क्लोरोफॉर्म और एक एसिडिक मेथिलीन ब्लू इंडिकेटर घोल डालें।</li>
-                        <li>इसे एक मानक Hyamine 1622 घोल के साथ तब तक टाइट्रेट करें जब तक कि क्लोरोफॉर्म परत का रंग पानी की परत से अधिक गहरा न हो जाए।</li>
-                        <li>उपयोग किए गए Hyamine के आयतन से एक्टिव मैटर की गणना की जाती है।</li>
-                    </ul>
+                    <li>एक एसिड-प्रतिरोधी टैंक में पानी लें।</li>
+                    <li><strong>हमेशा एसिड को पानी में धीरे-धीरे डालें, कभी भी पानी को एसिड में न डालें।</strong> हाइड्रोक्लोरिक एसिड को पानी में डालें और मिलाएं।</li>
+                    <li>अंत में, नॉन-आयोनिक सर्फेक्टेंट डालें और अच्छी तरह मिलाएं।</li>
                 </ol>
-                <p class="mt-2 text-sm"><strong>नोट:</strong> यह एक जटिल लैब प्रक्रिया है और इसके लिए विशिष्ट रसायनों और विशेषज्ञता की आवश्यकता होती है।</p>
+                
+                <h4 class="font-bold mt-6">लिक्विड डिटर्जेंट की शक्ति कैसे जांचें (Active Matter %):</h4>
+                <p>डिटर्जेंट की शक्ति को उसमें मौजूद "एक्टिव मैटर" (सर्फेक्टेंट की मात्रा) से मापा जाता है। इसकी जाँच के लिए एक मानक विधि टू-फेज टाइट्रेशन है, जो एक जटिल लैब प्रक्रिया है और इसके लिए विशिष्ट रसायनों और विशेषज्ञता की आवश्यकता होती है।</p>
             `
         },
         solution_strength: {
             title: "CIP घोल की शक्ति का परीक्षण",
             intro: "कुशल सफाई और कीटाणुनाशक प्रभावों के लिए डिटर्जेंट घोल की उचित शक्ति बनाए रखना महत्वपूर्ण है। शक्ति को आमतौर पर % कंसंट्रेशन या ppm (क्लोरीन के लिए) में मापा जाता है।",
+            alkalinity_test: {
+                title: "धुलाई के घोल की शक्ति का निर्धारण (क्षारीयता परीक्षण)",
+                content: `
+                    <p>धुलाई के घोल की शक्ति को आम तौर पर NaOH के संदर्भ में व्यक्त किया जाता है क्योंकि यह अक्सर अकेले या डाइसोडियम फॉस्फेट और सोडियम मेटासिलिकेट आदि के साथ संयोजन में उपयोग किया जाता है। कांच की बोतलों के लिए आम तौर पर 1.5% NaOH के बराबर क्षार और कैन की धुलाई के लिए 0.5% का उपयोग किया जाता है। स्वचालित मशीनों में धुलाई के घोल का बार-बार उपयोग करने से यह आम तौर पर पतला हो जाता है। कुशल सफाई और कीटाणुनाशक प्रभावों के लिए डिटर्जेंट घोल की उचित क्षारीयता बनाए रखना महत्वपूर्ण है।</p>
+                    <h5 class="font-bold mt-4">आवश्यकताएँ:</h5>
+                    <p>कोनिकल फ्लास्क, पिपेट, ब्यूरेट, वॉल्यूमेट्रिक फ्लास्क, 2.5 N सल्फ्यूरिक एसिड, हाइड्रोक्लोरिक एसिड (0.1N), फेनोल्फथेलिन इंडिकेटर (0.5%)</p>
+
+                    <h5 class="font-bold mt-4">गुणात्मक परीक्षण (Qualitative Test):</h5>
+                    <ol class="list-decimal list-inside space-y-1 mt-2">
+                        <li>एक कोनिकल फ्लास्क में 10 ml डिटर्जेंट घोल लें।</li>
+                        <li>12.5 ml N/10 HCl और 5 बूँदें 0.5% फेनोल्फथेलिन इंडिकेटर डालें।</li>
+                        <li>यदि मिश्रण लाल हो जाता है, तो यह 0.5% से अधिक कास्टिक सोडा के रूप में क्षारीयता को इंगित करता है, जो पर्याप्त है।</li>
+                    </ol>
+
+                    <h5 class="font-bold mt-4">मात्रात्मक परीक्षण (Quantitative Test) - सीधी पठन विधि:</h5>
+                     <ol class="list-decimal list-inside space-y-1 mt-2">
+                        <li>100 ml कोनिकल फ्लास्क में 10 ml सैंपल मापें।</li>
+                        <li>5 बूँदें फेनोल्फथेलिन इंडिकेटर डालें।</li>
+                        <li>2.5 N सल्फ्यूरिक एसिड के साथ तब तक टाइट्रेट करें जब तक घोल रंगहीन न हो जाए।</li>
+                        <li>उपयोग किए गए एसिड के मिलीलीटर को नोट करें।</li>
+                        <li>उपयोग किया गया एसिड NaOH के रूप में प्रतिशत क्षार का सीधा संकेतक है।</li>
+                    </ol>
+
+                     <h5 class="font-bold mt-4">प्रयोगशाला विधि (Laboratory Method):</h5>
+                     <ol class="list-decimal list-inside space-y-1 mt-2">
+                        <li>250 ml वॉल्यूमेट्रिक फ्लास्क में 5 ml धुलाई का घोल लें।</li>
+                        <li>डिस्टिल्ड वॉटर से वॉल्यूम पूरा करें और अच्छी तरह मिलाएं।</li>
+                        <li>इस घोल के 50 ml को 100 ml कोनिकल फ्लास्क में ट्रांसफर करें।</li>
+                        <li>कुछ बूँदें फेनोल्फथेलिन इंडिकेटर डालें।</li>
+                        <li>0.1 N सल्फ्यूरिक एसिड के साथ घोल को रंगहीन होने तक टाइट्रेट करें। उपयोग किए गए एसिड के ml को "A" के रूप में रिकॉर्ड करें।</li>
+                        <li>कुछ बूँदें मिथाइल ऑरेंज इंडिकेटर डालें।</li>
+                        <li>हल्का गुलाबी रंग आने तक टाइट्रेशन जारी रखें। उपयोग किए गए एसिड के ml को "B" के रूप में नोट करें।</li>
+                    </ol>
+                    <p class="mt-2"><strong>गणना:</strong><br/>% मुक्त कास्टिक (Free Caustic) = (A - B) × 0.4<br/>% कुल क्षार (Total Alkali) = (A + B) × 0.4</p>
+                `
+            },
             calculators: {
                 error_title: "त्रुटि",
                 success_title: "सफलतापूर्वक गणना की गई",
@@ -215,7 +257,7 @@ export const cipProcessContent = {
         intro: {
             title: "Introduction: CIP and Milk Stone",
             htmlContent: `
-                <p>Milk remaining on the surface of dairy equipment and containers provides an excellent medium for microbial growth. Therefore, it is necessary to clean and sanitize dairy equipment properly.</p>
+                <p>Milk remaining on the surface of dairy equipment and containers provides an excellent medium for microbial growth. It is therefore, necessary to clean and sanitize dairy equipment properly.</p>
                 <h4 class="font-bold mt-4">What is CIP/CAC?</h4>
                 <p><strong>CIP (Cleaning-In-Place):</strong> This is an automated method for cleaning pipelines, tanks, and other equipment without disassembling them. It involves pumping cleaning and sanitizing solutions through the pipes and equipment in a specific sequence.</p>
                 <p><strong>CAC (Cleaning-Out-of-Place):</strong> In this method, smaller parts or equipment are disassembled and taken to a dedicated area for cleaning, where they are soaked in tanks or cleaned manually.</p>
@@ -347,42 +389,84 @@ export const cipProcessContent = {
             ]
         },
         teepol_detergent: {
-            title: "Making and Testing Liquid Detergent (Teepol)",
+            title: "Making and Testing Liquid Detergent",
             htmlContent: `
                 <p>Neutral liquid detergents (like Teepol) are widely used in the dairy and food industry for manual cleaning of utensils and small equipment.</p>
-                <h4 class="font-bold mt-4">How to Make a Liquid Detergent (Example):</h4>
+                <h4 class="font-bold mt-4">1. How to Make a General Purpose Liquid Detergent (1000 Litre Batch):</h4>
                 <p>This is a general formulation. Industrial production can be more complex.</p>
+                <div class="overflow-x-auto my-4"><table class="w-full"><thead><tr class="bg-muted"><th class="p-2 text-left">Ingredient</th><th class="p-2 text-left">Quantity (Kg)</th><th class="p-2 text-left">%</th><th class="p-2 text-left">Purpose</th></tr></thead><tbody>
+                <tr><td class="p-2 border-b">Water</td><td class="p-2 border-b">820 - 840 Kg</td><td class="p-2 border-b">82-84%</td><td class="p-2 border-b">Main Solvent</td></tr>
+                <tr><td class="p-2 border-b">Acid Slurry (LABSA 90%)</td><td class="p-2 border-b">100 Kg</td><td class="p-2 border-b">10%</td><td class="p-2 border-b">Main Cleaning Agent (Anionic Surfactant)</td></tr>
+                <tr><td class="p-2 border-b">Caustic Soda (NaOH)</td><td class="p-2 border-b">~15 Kg</td><td class="p-2 border-b">~1.5%</td><td class="p-2 border-b">To neutralize the slurry (to pH 7)</td></tr>
+                <tr><td class="p-2 border-b">Urea or Salt</td><td class="p-2 border-b">20 - 40 Kg</td><td class="p-2 border-b">2-4%</td><td class="p-2 border-b">Viscosity Enhancer</td></tr>
+                <tr><td class="p-2 border-b">Color & Perfume</td><td class="p-2 border-b">As required</td><td class="p-2 border-b">-</td><td class="p-2 border-b">For aesthetics</td></tr>
+                <tr class="bg-muted"><td class="p-2 font-bold">Total</td><td class="p-2 font-bold">1000 Kg</td><td class="p-2 font-bold">100%</td><td class="p-2 font-bold"></td></tr>
+                </tbody></table></div>
+                <p class="font-semibold">Process:</p>
                 <ol class="list-decimal list-inside space-y-1 mt-2">
-                    <li><strong>Ingredients:</strong> Acid Slurry (LABSA - 90%), Caustic Soda (NaOH), Urea, Water, Color, and Perfume.</li>
-                    <li><strong>Process:</strong></li>
-                    <ul class="list-disc list-inside ml-4">
-                        <li>Take the required amount of water in a plastic container.</li>
-                        <li>Slowly add the Acid Slurry (LABSA) while stirring continuously.</li>
-                        <li>Separately, dissolve caustic soda in a small amount of water to make a solution (this is an exothermic reaction, so be careful).</li>
-                        <li>Slowly add the caustic soda solution to the acid slurry mixture until the pH of the mixture becomes 7 (neutral). Check with pH paper.</li>
-                        <li>Add urea or salt to increase viscosity and mix well.</li>
-                        <li>Finally, add color and perfume.</li>
-                    </ul>
+                    <li>Take water in a large tank. Slowly add Acid Slurry while stirring continuously.</li>
+                    <li>Separately, dissolve Caustic Soda in a small amount of water (be careful, it gets hot).</li>
+                    <li>Slowly add the caustic solution to the slurry mixture until the pH of the mixture becomes 7 (neutral).</li>
+                    <li>Add urea or salt to increase viscosity and mix well. Finally, add color and perfume.</li>
                 </ol>
-                <h4 class="font-bold mt-4">How to Check the Strength of Liquid Detergent (Active Matter %):</h4>
-                <p>The strength of a detergent is measured by its "Active Matter" (the amount of surfactant). A standard method for checking this is the two-phase titration.</p>
+
+                <h4 class="font-bold mt-6">2. How to Make an Acidic Cleaner (1000 Litre Batch):</h4>
+                <p>This is a strong acid-based cleaner used for descaling milk stone and other mineral deposits. <strong>Warning: Strong acids are dangerous, always wear appropriate Personal Protective Equipment (PPE).</strong></p>
+                 <div class="overflow-x-auto my-4"><table class="w-full"><thead><tr class="bg-muted"><th class="p-2 text-left">Ingredient</th><th class="p-2 text-left">Quantity (Kg)</th><th class="p-2 text-left">%</th><th class="p-2 text-left">Purpose</th></tr></thead><tbody>
+                <tr><td class="p-2 border-b">Water</td><td class="p-2 border-b">880 Kg</td><td class="p-2 border-b">88%</td><td class="p-2 border-b">Solvent</td></tr>
+                <tr><td class="p-2 border-b">Hydrochloric Acid (HCl - 33%)</td><td class="p-2 border-b">100 Kg</td><td class="p-2 border-b">10%</td><td class="p-2 border-b">Main Cleaning Agent (Descaling)</td></tr>
+                <tr><td class="p-2 border-b">Non-ionic Surfactant</td><td class="p-2 border-b">20 Kg</td><td class="p-2 border-b">2%</td><td class="p-2 border-b">Aids in wetting and soil removal</td></tr>
+                </tbody></table></div>
+                <p class="font-semibold">Process:</p>
                 <ol class="list-decimal list-inside space-y-1 mt-2">
-                    <li><strong>Principle:</strong> A cationic surfactant (e.g., Hyamine 1622) reacts with an anionic surfactant (the active matter in your detergent). The endpoint is detected using an indicator (like methylene blue).</li>
-                    <li><strong>Procedure:</strong></li>
-                     <ul class="list-disc list-inside ml-4">
-                        <li>Take a known weight of the detergent (e.g., 1 gram) and dissolve it in 100 ml of water.</li>
-                        <li>Take a fixed volume of this solution (e.g., 10 ml) in a conical flask.</li>
-                        <li>Add chloroform and an acidic methylene blue indicator solution.</li>
-                        <li>Titrate this against a standard Hyamine 1622 solution until the color of the chloroform layer becomes more intense than the aqueous layer.</li>
-                        <li>The active matter is calculated from the volume of Hyamine used.</li>
-                    </ul>
+                    <li>Take water in an acid-resistant tank.</li>
+                    <li><strong>Always add acid slowly to water, never water to acid.</strong> Add Hydrochloric Acid to the water and mix.</li>
+                    <li>Finally, add the non-ionic surfactant and mix well.</li>
                 </ol>
-                <p class="mt-2 text-sm"><strong>Note:</strong> This is a complex lab procedure and requires specific chemicals and expertise.</p>
+                
+                <h4 class="font-bold mt-6">How to Check the Strength of Liquid Detergent (Active Matter %):</h4>
+                <p>The strength of a detergent is measured by its "Active Matter" (the amount of surfactant). A standard method for checking this is the two-phase titration, which is a complex lab procedure and requires specific chemicals and expertise.</p>
             `
         },
         solution_strength: {
             title: "Testing of CIP Solution Strength",
             intro: "It is important to maintain the proper strength of the detergent solution for efficient cleaning and germicidal effects. Strength is usually measured in % concentration or ppm (for chlorine).",
+            alkalinity_test: {
+                title: "Determining strength of washing solution (Alkalinity test)",
+                content: `
+                    <p>The strength of washing solution is generally expressed in terms of NaOH as it is often used as such or in combination with disodium phosphate and sodium metasilicate etc. An alkali equivalent to 1.5% NaOH is generally used for glass bottles and 0.5% for can washing. Repeated usage of washing solutions in automatic machines generally gets diluted. It is important to maintain the proper alkalinity of detergent solution for efficient cleaning and germicidal effects.</p>
+                    <h5 class="font-bold mt-4">Requirements:</h5>
+                    <p>Conical flask, pipettes, burette, volumetric flask, 2.5 N sulphuric acid, hydrochloric acid (0.1N), phenolphthalein indicator (0.5 %).</p>
+
+                    <h5 class="font-bold mt-4">Qualitative test:</h5>
+                    <ol class="list-decimal list-inside space-y-1 mt-2">
+                        <li>Take 10 ml of detergent solution in conical flask.</li>
+                        <li>Add 12.5 ml of N/10 HCL and 5 drops of 0.5% phenolphthalein indicator.</li>
+                        <li>If the mixture turns red it indicates alkalinity greater than 0.5 % as caustic soda, which is sufficient.</li>
+                    </ol>
+
+                    <h5 class="font-bold mt-4">Quantitative test (Direct reading method):</h5>
+                     <ol class="list-decimal list-inside space-y-1 mt-2">
+                        <li>Measure 10 ml of sample in 100 ml conical flask.</li>
+                        <li>Add 5 drops of phenolphthalein indicator.</li>
+                        <li>Titrate with 2.5 N sulphuric acid until solution becomes colourless.</li>
+                        <li>Note millilitres of acid used for titration.</li>
+                        <li>The acid used is the direct indicator of percent alkali as NaOH.</li>
+                    </ol>
+
+                     <h5 class="font-bold mt-4">Laboratory method:</h5>
+                     <ol class="list-decimal list-inside space-y-1 mt-2">
+                        <li>Take 5 ml of washing solution in 250 ml volumetric flask.</li>
+                        <li>Makeup the volume with distilled water and mix well.</li>
+                        <li>Transfer 50 ml of this solution in 100 ml conical flask.</li>
+                        <li>Add few drops of phenolphthalein indicator.</li>
+                        <li>Titrate the contents with 0.1 N sulphuric acid to colourless solution. Record ml of acid used as "A".</li>
+                        <li>Add few drops of methyl orange indicator.</li>
+                        <li>Continue titration until slight pink colour appears. Note ml of acid used as "B".</li>
+                    </ol>
+                    <p class="mt-2"><strong>Calculation:</strong><br/>% free caustic = (A - B) × 0.4<br/>% total alkali = (A + B) × 0.4</p>
+                `
+            },
             calculators: {
                 error_title: "Error",
                 success_title: "Calculated Successfully",
@@ -419,3 +503,5 @@ export const cipProcessContent = {
         }
     }
 }
+
+    
