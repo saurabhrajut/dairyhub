@@ -4,6 +4,41 @@ export const microbiologyContent = {
     title: "Milk Microbiology & Testing",
     description: "Dairy products mein paaye jaane wale mukhya sookshmajeevon (microorganisms) aur unke testing ke baare mein jaankari.",
     sections: [
+       {
+        id: "intro",
+        title: "Introduction to Milk Microbiology",
+        content: "<p>Microorganisms sookshmadarshi (microscopic), zyadatar ek-koshika jeev hain jo uchit vikas ki sthitiyon mein tezi se prajanan karne mein saksham hain. Unmein se kuch sahayak hote hain aur upyogi karyon ki seva karte hain jaise ki rasayanik parivartan utpann karna jo kiण्वित (fermented) dairy products jaise cheese aur yogurt ke utpadan mein vanchhaneey hain. Anya doodh aur uske utpadon ko kharab kar sakte hain aur unhein akhadya bana sakte hain, is prakar dairy udyog ko bhari nuksan pahunchate hain. Pathogens kahe jaane wale sookshmajeev swasthya ke liye hanikarak ho sakte hain aur suraksha aur sarvajanik swasthya ke drishtikon se mahatvapurna hain.</p><p>Mammary gland mein doodh aam taur par sterile hota hai, halanki अस्वस्थ pashuon ke mammary glands mein bacteria maujood hote hain. Ek baar jab doodh ayan (udder) se nikalta hai, to ayan ke bahari hisse, pashu ke coat, vatavaran, bartan aur karyakartaon se microflora aasani se doodh mein pravesh kar jaate hain. Isliye, atyadhik saaf suthri sthitiyon mein bhi, taaje nikale gaye doodh mein kuch hajar bacteria ho sakte hain. Bhandaran ki sthitiyan, poorv-prasanskaran gatividhiyan aur aswachh prathaen bacterial load ko aur badha sakti hain. Doodh ki microbial samagri utpadan ki swachhata gunavatta aur sthitiyon ka ek bahut achha soochak hai.</p>"
+      },
+      {
+        id: "thermophilic",
+        title: "Thermophilic Bacteria",
+        content: "<p>Thermophilic bacteria unche taapman (55°C ya adhik), pasteurization taapman sahit, par rakhe doodh mein vikas kar sakte hain. Uchch taapman mein vikas karne wali prajatiyon mein Bacillus prajatiyan shamil hain jo farm par vibhinn sroton se ya processing plant mein kharab saaf kiye gaye upkaranon se doodh mein pravesh karti hain. Jab doodh ko lambe samay tak unche taapman par rakha jaata hai, to ye bacteria tezi se sankhya mein badh jaate hain aur swad mein dosh, dahi jamna ya kanooni maanakon se sambandhit samasyaen paida kar sakte hain. Thermophilic bacteria ko 55°C par plate incubation ke saath Standard Plate Count dwara gina jaata hai.</p>"
+      },
+      {
+        id: "thermoduric",
+        title: "Thermoduric Bacteria",
+        content: "<p>Thermoduric bacteria apne vikas ke liye adhikatam taapman se kafi unche taapman ke sampark mein aane par jeevit rah sakte hain. Dairy udyog mein, yah shabd un jeevon par lagoo hota hai jo pasteurization taapman par jeevit rahte hain, lekin vikas nahin karte. Unmein aam taur par Micrococcus, Streptococcus, Lactobacillus, Bacillus ki prajatiyan aur kabhi-kabhi kuch gram-negative rods shamil hote hain. Contamination ke srot farm aur processing plants mein kharab saaf aur sanitized bartan aur upkaran hain. Ye bacteria pasteurized doodh par kafi adhik Standard Plate Count mein yogdan dete hain. Dairy udyog mein thermoduric count ka upyog mukhya roop se swachhata prathaon aur sanitary sthitiyon ke परीक्षण ke roop mein kiya gaya hai. Yah utpadon mein contamination ke sroton ka pata lagane ka bhi ek sadhan hai.</p>"
+      },
+      {
+        id: "psychrotrophic",
+        title: "Psychrotrophic Bacteria",
+        content: "<p>Psychrotrophic ya psychrophilic shabd ka arth 'thanda-premi' hai aur kam taapman wale vatavaran mein jaivik prakriyaon mein mahatvapurna bhoomika nibhane wale sookshmajeev is samooh ke antargat vargikrit kiye jaate hain. Psychrophilic prajatiyan jaise Pseudomonas, Flavobacterium, Alcaligenes, Acinetobacter, aur Bacillus 7°C aur usse neeche tezi se vikas kar sakti hain. Ve aam taur par gair-rogajanak hote hain aur shayad hi ayan mein maujood hote hain. Ve dairy utpadon mein off-flavours (falyukt, basi, kadwa, sada hua, durgandhyukt) paida kar sakte hain. Doodh mein in bacteria ki ginti utpadan ke dauran prachalit swachhata sthitiyon aur processing se pehle doodh bhandaran ke samay-taapman sanyojan par nirbhar karti hai. Pasteurized doodh ke shelf life par psychrotrophic bacteria ka prabhav mukhya roop se packaging ke baad maujood sankhya, vikas ki dar, bhandaran avadhi aur jeevon ki jaiv-rasayanik gatividhi par nirbhar karta hai.</p>"
+      },
+      {
+        id: "lab",
+        title: "Lactic Acid Bacteria (LAB)",
+        content: "<p>Jab doodh ko sadharan taapman par rakha jaata hai, to yah kuch hi ghanton mein bacteria ke tezi se vikas ke kaaran jam jaata hai ya sad jaata hai. Lactic acid banane wale bacteria (jo lactose ko lactic acid mein ferment karte hain) mahatvapurna hain kyonki ve doodh ko khatta karte hain. Kuch acid banane wale bacteria upyogi ho sakte hain, jaise ki dahi, yogurt aur cheese jaise sanskrtik dairy utpadon mein starter culture ke roop mein upyog kiye jaane wale, aur kuch hanikarak, jaise doodh ke jamne aur kharab hone ka kaaran banne wale.</p>"
+      },
+      {
+        id: "spoilage",
+        title: "Spoilage Organisms",
+        content: "<p>Doodh ka microbial spoilage sookshmajeevon aur/ya unke enzymes dwara protein, carbohydrates, aur vasa ke vighatan ko darshata hai. Coliforms (jaise Escherichia coli) facultative anaerobes hain jo 37°C par anukoolatam roop se vikas karte hain. Ve doodh ka tezi se kharab hona bhi paida kar sakte hain kyonki ve acid aur gas ke utpadan ke saath lactose ko ferment karne mein saksham hain, aur doodh ke proteins ko vighatit karne mein saksham hain. Kyonki ve pasteurization upchar se nasht ho jaate hain, isliye processed doodh mein unki upasthiti post-pasteurization contamination ka sanket hai. Psychotropic jeev doodh ke kharab hone mein ek pramukh bhoomika nibhate hain. Halanki adhikansh psychrotrophs pasteurization se nasht ho jaate hain, kuch jaise Pseudomonas sp. Alcaligenes aarthik mahatva ke hain, kyonki ve bhandaran ke dauran ek uchch bacterial count utpann karte hain aur ropy milk ki sthiti bhi paida kar sakte hain. Pseudomonas fluorescens, Pseudomonas fragi proteolytic aur lipolytic extracellular enzymes utpann kar sakte hain jo garmi sthir hote hain aur kharabi paida karne mein saksham hote hain. Ve garmi pratirodhi proteases aur lipases utpann karne mein saksham hain, jo UHT processing se bhi bachne mein saksham hain. Kuch jeev jo pasteurization taapman se bach sakte hain aur refrigeration taapman par vikas kar sakte hain, ve hain Bacillus, Clostridium, Corynebacterium, Arthrobacter, Lactobacillus, Microbacterium, Micrococcus aur Streptococcus. In jeevon ko unki vishesh aakrti ya refrigeration taapman par incubate kiye gaye plate count dwara pahchana ja sakta hai.</p>"
+      },
+      {
+        id: "pathogens",
+        title: "Pathogenic Organisms",
+        content: "<p>Swachh doodh utpadan prathaen, doodh ka swachhata se prabandhan aur bhandaran, pasteurization jaise thermal processing prathaon ne doodh se hone wali bimariyon jaise tuberculosis, brucellosis aur typhoid fever ki ghatnaon ko kam kar diya hai. Doodh ko mukhya roop se kisi bhi maujood rogajanak jeev ko samapt karne ke liye pasteurize kiya jaata hai taaki ise manav upbhog ke liye surakshit banaya ja sake. Halanki, Bacillus cereus, Listeria monocytogenes, Yersinia enterocolitica, Salmonella spp., Escherichia coli O157:H7 aur Campylobacter jejuni jaise rogajanak pasteurization se bachne ke liye jaane jaate hain. Molds (Aspergillus, Fusarium aur Penicillium) mycotoxins utpann kar sakte hain jo swasthya ke liye khatra ho sakte hain. Ye jeev ek sankramit pashu se ya vibhinn sroton jaise sankramit food handlers se contamination se doodh mein pravesh kar sakte hain.</p>"
+      },
       {
         id: "enterobacteriaceae",
         title: "Enterobacteriaceae",
@@ -191,6 +226,41 @@ export const microbiologyContent = {
     description: "Information about the main microorganisms found in dairy products and their testing.",
     sections: [
       {
+        id: "intro",
+        title: "Introduction to Milk Microbiology",
+        content: "<p>Microorganisms are microscopic, mostly single-celled organisms capable of rapid reproduction under proper growth conditions. Some of them are helpful and serve useful functions such as producing chemical changes that are desirable in the production of fermented dairy products such as cheese and yogurt. Others can cause milk and its products to spoil and make them inedible, thus causing the dairy industry great losses. Microorganisms termed as pathogens can be harmful to health and are important from the safety and public health point of view.</p><p>Milk in the mammary gland is normally sterile though bacteria are present in mammary glands of unhealthy animals. Once the milk leaves the udder, microflora from the exterior of the udder, coat of the animal, atmosphere, utensils and workers easily pass into the milk. Therefore, even under extremely clean conditions, freshly drawn milk may have a few thousand bacteria. Conditions of storage, pre-processing activities and unhygienic practices may further add to the bacterial load. The microbial content of milk is a very good indicator of the sanitary quality and conditions of production.</p>"
+      },
+      {
+        id: "thermophilic",
+        title: "Thermophilic Bacteria",
+        content: "<p>Thermophilic bacteria can grow in milk held at elevated temperatures (55°C or higher), including pasteurization temperatures. The species that grow in higher temperatures include Bacillus species which enter milk from various sources in the farm, or from poorly cleaned equipment in the processing plant. When the milk is held at high temperatures for long periods, these bacteria rapidly increase in numbers and may cause flavour defects, curdling or problems related to legal standards for microbiology. Thermophilic bacteria are enumerated by Standard Plate Count with plate incubation at 55°C.</p>"
+      },
+      {
+        id: "thermoduric",
+        title: "Thermoduric Bacteria",
+        content: "<p>Thermoduric bacteria can survive exposure to temperatures considerably above their maximal temperature for growth. In the dairy industry, the term is applied to those organisms which survive, but do not grow, at pasteurization temperature. They usually include species of Micrococcus, Streptococcus, Lactobacillus, Bacillus and occasionally some gram-negative rods. The sources of contamination are poorly cleaned and sanitized utensils and equipment on farm and processing plants. These bacteria contribute to significantly higher Standard Plate Count on pasteurized milk. The thermoduric count has been used in the dairy industry primarily as a test of hygienic practices and sanitary conditions maintained. It is also a means for detecting sources of contamination in products.</p>"
+      },
+      {
+        id: "psychrotrophic",
+        title: "Psychrotrophic Bacteria",
+        content: "<p>The terms psychrotrophic or psychrophilic mean ‘cold-loving’ and microorganisms which play a significant role in biological processes in low-temperature environments are classified under this group. Psychrophilic species such as Pseudomonas, Flavovacterium,Alcaligenes, Acinetobacter, and Bacillus can grow rapidly at 7°C and below. They are generally non-pathogens and are rarely present in the udder. They can cause off-flavours (fruity, stale, bitter, putrid, rancid) in dairy products. The counts of these bacteria in milk depend upon sanitary conditions prevailing during production and the time-temperature combination of milk storage before processing. The effect of psychotropic bacteria on the shelf life of pasteurized milk is largely dependent on number present after packaging, the rate of growth, the storage period, and the biochemical activity of the organisms.</p>"
+      },
+      {
+        id: "lab",
+        title: "Lactic Acid Bacteria (LAB)",
+        content: "<p>When milk is held at ordinary temperature, it curdles or putrefies within a few hours owing to the rapid growth of bacteria. The lactic acid forming bacteria (those fermenting lactose into lactic acid) are important because they sour the milk. Some acid-forming bacteria maybe useful, such as those used as starter cultures in cultured dairy products such as dahi, yogurt and cheese and some harmful, such as those causing curdling and spoilage of milk.</p>"
+      },
+      {
+        id: "spoilage",
+        title: "Spoilage Organisms",
+        content: "<p>Microbial spoilage of milk denotes the degradation of protein, carbohydrates, and fats by microorganisms and/or their enzymes. Coliforms (e.g. Escherichia coli) are facultative anaerobes that grow optimally at 37°C. They also can cause rapid spoilage of milk because they are able to ferment lactose with the production of acid and gas, and are able to degrade milk proteins. As they are destroyed by pasteurization treatment, their presence in processed milk is indicative of post-pasteurization contamination. Psychotropic organisms play a major role in the spoilage if milk. Although most psychrotrophs are destroyed by pasteurization, some likePseudomanas sp. Alcaligenes are of economic value, since they produce a high bacterial count during storage and may also create a ropy milk condition. Pseudomonas fluorescens, Pseudomonas fragi can produce proteolytic and lipolytic extracellular enzymes which are heat stable and capable of causing spoilage. They are capable of producing heat resistant proteases and lipases, which are capable of surviving even UHT processing. Some organisms that can survive pasteurization temperatures and grow at refrigeration temperatures are Bacillus, Clostridium, Corynebacterium, Arthrobacter, Lactobacillus, Microbacterium, Micrococcus andStreptococcus. These organisms may be detected by their characteristic morphology or by plate count incubated at refrigeration temperatures.</p>"
+      },
+      {
+        id: "pathogens",
+        title: "Pathogenic Organisms",
+        content: "<p>Clean milk production practices, hygienic handling and storage of milk, thermal processing practices such as pasteurization have decreased the incidence of milkborne diseases such as tuberculosis, brucellosis and typhoid fever. Milk is pasteurized primarily to eliminate any pathogenic organism which may be present so as to make it safe for human consumption. However, pathogens such asBacillus cereus, Listeria monocytogenes, Yersinia enterocolitica, Salmonella spp., Escherichia coli O157:H7 and Campylobacter jejuni are known to survive pasteurization. Molds (Aspergillus, Fusarium and Penicillium) may produce mycotoxins which can be a health hazard. These organisms may enter into milk from an infected animal or by contamination from various sources such as infected food handlers.</p>"
+      },
+      {
         id: "enterobacteriaceae",
         title: "Enterobacteriaceae",
         content: "<p>Enterobacteriaceae are intestinal bacteria which can be found in dairy products from contamination of food, insufficient pasteurization and sterilization or recontamination due to inadequate hygiene standards. We offer diverse media and tests, like oxidase tests, for the detection and enumeration of Enterobacteriaceae.</p>"
@@ -252,124 +322,126 @@ export const microbiologyContent = {
     ],
     testMethods: {
       title: "Common Microbiological Test Methods",
-      intro: "Several standard microbiological tests are performed to ensure the safety and quality of dairy products. Here is an overview of some key test methods:",
+      intro: "Dairy products ki suraksha aur gunavatta sunishchit karne ke liye kai standard microbiological tests kiye jaate hain. Yahan kuch pramukh test methods ki overview di gayi hai:",
       tests: [
         {
           id: 'tpc',
           title: 'Aerobic Mesophilic Plate Count (Total Plate Count)',
-          principle: 'This test measures the total number of viable bacteria and fungi in a sample that can grow at moderate (mesophilic) temperatures in the presence of oxygen. It is also known as Standard Plate Count (SPC) or Total Viable Count (TVC).',
+          principle: 'Yeh test sample mein maujood kul viable (jeevit) bacteria aur fungi ki sankhya maapta hai jo aam (mesophilic) taapman par oxygen ki maujoodgi mein grow kar sakte hain. Ise Standard Plate Count (SPC) ya Total Viable Count (TVC) bhi kehte hain.',
           procedure: `
             <ol class='list-decimal list-inside space-y-2 mt-2'>
-              <li><strong>Sample Preparation:</strong> Mix 10g or 10ml of the sample with 90ml of sterile diluent (e.g., peptone water) to make a 1:10 dilution.</li>
-              <li><strong>Serial Dilutions:</strong> Prepare further serial dilutions (1:100, 1:1000, etc.) from this.</li>
-              <li><strong>Plating:</strong> Transfer 1ml of each dilution into two sterile Petri plates (Pour Plate Method).</li>
-              <li><strong>Media:</strong> Pour 15-20ml of molten Plate Count Agar (PCA), which is at 45°C, into the plates. Mix gently by rotating.</li>
-              <li><strong>Incubation:</strong> After the plates have solidified, incubate them inverted at 35-37°C for 24-48 hours.</li>
-              <li><strong>Counting:</strong> Select plates that have between 25 and 250 colonies. Count the colonies using a colony counter.</li>
+              <li><strong>Sample Preparation:</strong> 10g ya 10ml sample ko 90ml sterile diluent (jaise peptone water) mein milakar 1:10 ka dilution banayein.</li>
+              <li><strong>Serial Dilutions:</strong> Isse aage ke serial dilutions (1:100, 1:1000, etc.) banayein.</li>
+              <li><strong>Plating:</strong> Har dilution se 1ml sample ko do sterile Petri plates mein transfer karein (Pour Plate Method).</li>
+              <li><strong>Media:</strong> Plates mein 15-20ml pighla hua Plate Count Agar (PCA) daalein, jo 45°C par ho. Dheere se ghumakar mix karein.</li>
+              <li><strong>Incubation:</strong> Plates ko solidified hone ke baad ulta karke 35-37°C par 24-48 ghante ke liye incubate karein.</li>
+              <li><strong>Counting:</strong> Un plates ko chunein jin par 25 se 250 ke beech colonies hain. Ek colony counter ka istemal karke colonies ginein.</li>
             </ol>`,
-          calculation: '<code>CFU/g (or ml) = (Average no. of colonies × Dilution factor) / Volume of sample plated (ml)</code>'
+          calculation: '<code>CFU/g (ya ml) = (Average no. of colonies × Dilution factor) / Volume of sample plated (ml)</code>'
         },
         {
           id: 'coliforms',
-          title: 'Detection of Coliforms, Faecal Coliforms, and E. coli',
-          principle: 'Coliforms ferment lactose to produce acid and gas. They are enumerated on Violet Red Bile Agar (VRBA). E. coli is a faecal coliform confirmed by specific biochemical tests.',
+          title: 'Coliforms, Faecal Coliforms aur E.coli ka Pata Lagana',
+          principle: 'Coliforms lactose ko ferment karke acid aur gas banate hain. Unki ginti Violet Red Bile Agar (VRBA) par ki jaati hai. E.coli ek faecal coliform hai jo specific biochemical tests se confirm hota hai.',
           procedure: `
             <ol class='list-decimal list-inside space-y-2 mt-2'>
-              <li><strong>Sample & Dilutions:</strong> Prepare serial dilutions as in the TPC method.</li>
-              <li><strong>Plating:</strong> Pipette 1ml from each dilution into sterile Petri plates.</li>
-              <li><strong>Media:</strong> Pour 15-20ml of molten VRBA and mix. After solidification, pour another layer of VRBA on top (overlay).</li>
-              <li><strong>Incubation:</strong> Incubate the plates at 35-37°C for 18-24 hours.</li>
-              <li><strong>Counting:</strong> Count red-purple colonies (0.5mm or larger in diameter) as coliforms.</li>
-              <li><strong>Confirmation (E. coli):</strong> Inoculate suspected colonies into Brilliant Green Lactose Bile (BGLB) broth and incubate at 44.5°C. Gas production indicates the presence of E. coli. Further IMViC tests are performed for confirmation.</li>
+              <li><strong>Sample & Dilutions:</strong> Upar diye gaye TPC method ki tarah serial dilutions banayein.</li>
+              <li><strong>Plating:</strong> Har dilution se 1ml sample ko sterile Petri plates mein daalein.</li>
+              <li><strong>Media:</strong> Plates mein 15-20ml pighla hua VRBA daalein aur mix karein. Solidify hone ke baad, upar ek aur layer VRBA ki daalein (overlay).</li>
+              <li><strong>Incubation:</strong> Plates ko 35-37°C par 18-24 ghante ke liye incubate karein.</li>
+              <li><strong>Counting:</strong> Laal-baingani (red-purple) colonies (0.5mm ya zyada diameter) ko coliforms ke roop mein ginein.</li>
+              <li><strong>Confirmation (E.coli):</strong> Suspected colonies ko Brilliant Green Lactose Bile (BGLB) broth mein inoculate karein aur 44.5°C par incubate karein. Gas production E.coli ki maujoodgi batata hai. Aage ke confirmation ke liye IMViC tests kiye jaate hain.</li>
             </ol>`,
-          calculation: '<code>Coliforms/g (or ml) = Average no. of characteristic colonies × Dilution factor</code>'
+          calculation: '<code>Coliforms/g (ya ml) = Average no. of characteristic colonies × Dilution factor</code>'
         },
         {
           id: 'yeast_mould',
-          title: 'Yeast and Mould Count',
-          principle: 'Yeasts and moulds can grow in acidic environments, so an acidic medium (like Potato Dextrose Agar, PDA) is used for their enumeration.',
+          title: 'Yeast aur Mould ki Ginti',
+          principle: 'Yeast aur mould acidic environment mein grow kar sakte hain, isliye unki ginti ke liye ek acidic medium (jaise Potato Dextrose Agar, PDA) ka istemal kiya jaata hai.',
           procedure: `
              <ol class='list-decimal list-inside space-y-2 mt-2'>
-              <li><strong>Sample & Dilutions:</strong> Prepare serial dilutions as in the TPC method.</li>
-              <li><strong>Plating:</strong> Transfer 1ml from each dilution to sterile Petri plates (Spread Plate method is better).</li>
-              <li><strong>Media:</strong> The plates should contain pre-prepared Potato Dextrose Agar (PDA), with its pH adjusted to ~3.5 (with tartaric acid) to inhibit bacterial growth.</li>
-              <li><strong>Incubation:</strong> Incubate the plates at 22-25°C for 5 days.</li>
-              <li><strong>Counting:</strong> Count colonies of yeasts (typically shiny, round) and moulds (fuzzy, spreading) separately.</li>
+              <li><strong>Sample & Dilutions:</strong> TPC method ki tarah serial dilutions banayein.</li>
+              <li><strong>Plating:</strong> Har dilution se 1ml sample ko sterile Petri plates mein transfer karein (Spread Plate method behtar hai).</li>
+              <li><strong>Media:</strong> Plates mein pehle se taiyar Potato Dextrose Agar (PDA) ho, jiska pH ~3.5 tak adjust kiya gaya ho (tartaric acid se) taaki bacteria ki growth ruk jaaye.</li>
+              <li><strong>Incubation:</strong> Plates ko 22-25°C par 5 din tak incubate karein.</li>
+              <li><strong>Counting:</strong> Yeasts (aam taur par chamakdar, gol) aur moulds (rooi jaisi, faili hui) ki colonies ko alag-alag ginein.</li>
             </ol>`,
-          calculation: '<code>Yeast/Mould Count/g (or ml) = Average no. of colonies × Dilution factor</code>'
+          calculation: '<code>Yeast/Mould Count/g (ya ml) = Average no. of colonies × Dilution factor</code>'
         },
         {
           id: 'staph_aureus',
-          title: 'Detection of Staphylococcus aureus',
-          principle: 'S. aureus produces characteristic black colonies with a clear zone around them when grown on Baird-Parker Agar. It is confirmed by the Coagulase test.',
+          title: 'Staphylococcus aureus ka Pata Lagana',
+          principle: 'S. aureus Baird-Parker Agar par grow karne par characteristic black colonies banata hai, jinke aas paas ek saaf (clear) zone hota hai. Coagulase test se iski confirmation hoti hai.',
           procedure: `
             <ol class='list-decimal list-inside space-y-2 mt-2'>
-              <li><strong>Sample & Dilutions:</strong> Prepare serial dilutions as in the TPC method.</li>
-              <li><strong>Plating (Spread Plate):</strong> Spread 0.1ml from each dilution onto Baird-Parker Agar plates.</li>
-              <li><strong>Incubation:</strong> Incubate the plates at 35-37°C for 24-48 hours.</li>
-              <li><strong>Observation:</strong> Count black, shiny, convex colonies surrounded by an opaque zone.</li>
-              <li><strong>Confirmation (Coagulase Test):</strong> Inoculate a characteristic colony into Brain Heart Infusion (BHI) broth, incubate, and then mix with rabbit plasma and incubate at 37°C. If the plasma clots within 4-6 hours, it is S. aureus.</li>
+              <li><strong>Sample & Dilutions:</strong> TPC method ki tarah serial dilutions banayein.</li>
+              <li><strong>Plating (Spread Plate):</strong> Har dilution se 0.1ml sample ko Baird-Parker Agar plates par spread karein.</li>
+              <li><strong>Incubation:</strong> Plates ko 35-37°C par 24-48 ghante ke liye incubate karein.</li>
+              <li><strong>Observation:</strong> Black, shiny, convex colonies jinke aas paas ek opaque zone ho, unhein ginein.</li>
+              <li><strong>Confirmation (Coagulase Test):</strong> Ek characteristic colony ko Brain Heart Infusion (BHI) broth mein inoculate karein, incubate karein, aur phir rabbit plasma ke saath mix karke 37°C par incubate karein. Agar 4-6 ghante mein plasma jam jaata hai (clot formation), toh yeh S. aureus hai.</li>
             </ol>`,
-          calculation: '<code>S. aureus/g (or ml) = Average no. of confirmed colonies × Dilution factor</code>'
+          calculation: '<code>S. aureus/g (ya ml) = Average no. of confirmed colonies × Dilution factor</code>'
         },
          {
           id: 'salmonella_detection',
-          title: 'Detection of Salmonella (Qualitative)',
-          principle: 'This is a multi-step process involving pre-enrichment, selective enrichment, selective plating, and biochemical/serological confirmation.',
+          title: 'Salmonella ka Pata Lagana (Qualitative)',
+          principle: 'Yeh ek multi-step process hai jismein pre-enrichment, selective enrichment, selective plating, aur biochemical/serological confirmation shamil hai.',
           procedure: `
             <ol class='list-decimal list-inside space-y-2 mt-2'>
-              <li><strong>Pre-enrichment:</strong> Add 25g of sample to 225ml of Buffered Peptone Water and incubate at 37°C for 18-24 hours.</li>
-              <li><strong>Selective Enrichment:</strong> Transfer 1ml of the pre-enriched culture to Rappaport-Vassiliadis (RV) broth and 0.1ml to Tetrathionate (TT) broth. Incubate RV at 42°C and TT at 37°C for 24 hours.</li>
-              <li><strong>Selective Plating:</strong> Streak from both enrichment broths onto Xylose Lysine Deoxycholate (XLD) Agar and Hektoen Enteric (HE) Agar. Incubate plates at 37°C for 24 hours.</li>
-              <li><strong>Observation:</strong> On XLD, red colonies (with or without black centers), and on HE, blue-green colonies (with or without black centers) are considered suspect colonies.</li>
-              <li><strong>Confirmation:</strong> Inoculate suspect colonies onto Triple Sugar Iron (TSI) agar and Lysine Iron Agar (LIA) slants. Confirm with further biochemical (urease, indole) and serological tests.</li>
+              <li><strong>Pre-enrichment:</strong> 25g sample ko 225ml Buffered Peptone Water mein daalein aur 37°C par 18-24 ghante incubate karein.</li>
+              <li><strong>Selective Enrichment:</strong> Pre-enriched culture se 1ml ko Rappaport-Vassiliadis (RV) broth aur 0.1ml ko Tetrathionate (TT) broth mein transfer karein. RV ko 42°C aur TT ko 37°C par 24 ghante incubate karein.</li>
+              <li><strong>Selective Plating:</strong> Dono enrichment broths se Xylose Lysine Deoxycholate (XLD) Agar aur Hektoen Enteric (HE) Agar par streak karein. Plates ko 37°C par 24 ghante incubate karein.</li>
+              <li><strong>Observation:</strong> XLD par laal colonies (black center ke saath ya bina), aur HE par neeli-hari colonies (black center ke saath ya bina) suspect colonies maani jaati hain.</li>
+              <li><strong>Confirmation:</strong> Suspect colonies ko Triple Sugar Iron (TSI) agar aur Lysine Iron Agar (LIA) slants par inoculate karein. Aage ke biochemical (urease, indole) aur serological tests se confirm karein.</li>
             </ol>`,
-          calculation: 'The result is reported as "Detected" or "Not Detected" in 25g/ml.'
+          calculation: 'Result ko "Detected" ya "Not Detected" in 25g/ml ke roop mein report kiya jaata hai.'
         },
         {
           id: 'listeria_detection',
-          title: 'Detection of Listeria monocytogenes (Qualitative)',
-          principle: 'This is also a multi-step process involving selective enrichment and plating.',
+          title: 'Listeria monocytogenes ka Pata Lagana (Qualitative)',
+          principle: 'Yeh bhi ek multi-step process hai jismein selective enrichment aur plating shamil hai.',
           procedure: `
              <ol class='list-decimal list-inside space-y-2 mt-2'>
-              <li><strong>Primary Enrichment:</strong> Add 25g of sample to 225ml of Listeria Enrichment Broth (LEB) and incubate at 30°C for 24-48 hours.</li>
-              <li><strong>Selective Plating:</strong> Streak from the enriched culture onto Oxford Agar or PALCAM Agar. Incubate plates at 35-37°C for 24-48 hours.</li>
-              <li><strong>Observation:</strong> On Oxford Agar, Listeria colonies are greyish-green with a black halo around them.</li>
-              <li><strong>Confirmation:</strong> Confirm suspect colonies with further tests (Gram stain, motility, catalase, CAMP test).</li>
+              <li><strong>Primary Enrichment:</strong> 25g sample ko 225ml Listeria Enrichment Broth (LEB) mein daalein aur 30°C par 24-48 ghante incubate karein.</li>
+              <li><strong>Selective Plating:</strong> Enriched culture se Oxford Agar ya PALCAM Agar par streak karein. Plates ko 35-37°C par 24-48 ghante incubate karein.</li>
+              <li><strong>Observation:</strong> Oxford Agar par, Listeria ki colonies greyish-green hoti hain jinke aas paas ek black halo hota hai.</li>
+              <li><strong>Confirmation:</strong> Suspect colonies ko aage ke tests (Gram stain, motility, catalase, CAMP test) se confirm karein.</li>
             </ol>`,
-          calculation: 'The result is reported as "Detected" or "Not Detected" in 25g/ml.'
+          calculation: 'Result ko "Detected" ya "Not Detected" in 25g/ml ke roop mein report kiya jaata hai.'
         },
         {
           id: 'bacillus_cereus',
-          title: 'Enumeration of Bacillus cereus',
-          principle: 'B. cereus is grown on Mannitol Egg Yolk Polymyxin (MYP) Agar, where it does not ferment mannitol and produces the enzyme lecithinase.',
+          title: 'Bacillus cereus ki Ginti',
+          principle: 'B. cereus ko Mannitol Egg Yolk Polymyxin (MYP) Agar par grow kiya jaata hai, jahan woh mannitol ferment nahi karta aur lecithinase enzyme produce karta hai.',
           procedure: `
             <ol class='list-decimal list-inside space-y-2 mt-2'>
-              <li><strong>Sample & Dilutions:</strong> Prepare serial dilutions as in the TPC method.</li>
-              <li><strong>Plating (Spread Plate):</strong> Spread 0.1ml from each dilution onto MYP Agar plates.</li>
-              <li><strong>Incubation:</strong> Incubate the plates at 30-35°C for 18-24 hours.</li>
-              <li><strong>Observation:</strong> Count pink-red colonies surrounded by an opaque zone (lecithinase activity).</li>
-              <li><strong>Confirmation:</strong> Confirm suspect colonies with further biochemical tests (glucose fermentation, Voges-Proskauer test).</li>
+              <li><strong>Sample & Dilutions:</strong> TPC method ki tarah serial dilutions banayein.</li>
+              <li><strong>Plating (Spread Plate):</strong> Har dilution se 0.1ml sample ko MYP Agar plates par spread karein.</li>
+              <li><strong>Incubation:</strong> Plates ko 30-35°C par 18-24 ghante ke liye incubate karein.</li>
+              <li><strong>Observation:</strong> Pink-red colonies jinke aas paas ek opaque zone (lecithinase activity) ho, unhein ginein.</li>
+              <li><strong>Confirmation:</strong> Suspect colonies ko aage ke biochemical tests (glucose fermentation, Voges-Proskauer test) se confirm karein.</li>
             </ol>`,
-          calculation: '<code>B. cereus/g (or ml) = Average no. of confirmed colonies × Dilution factor</code>'
+          calculation: '<code>B. cereus/g (ya ml) = Average no. of confirmed colonies × Dilution factor</code>'
         },
         {
           id: 'other_tests',
-          title: 'Overview of Other Tests',
-          principle: 'A brief overview of the remaining tests is provided here, as their detailed procedures can be very specific.',
+          title: 'Anya Test aur Unke Overview',
+          principle: 'Yahan bache hue tests ka sankshipt overview diya gaya hai, kyonki unke detailed procedures bahut vishisht ho sakte hain.',
           procedure: `
             <ul class='list-disc list-inside space-y-2 mt-2'>
-              <li><strong>Aciduric Flat Sour Spores:</strong> Test for thermophilic bacteria that cause spoilage in canned foods. It is done by incubating the sample on Dextrose Tryptone Agar.</li>
-              <li><strong>Anaerobic Spore Formers (Clostridium):</strong> Done by growing in anaerobic conditions (like in an anaerobic jar) on special media (like SPS agar).</li>
-              <li><strong>Direct Microscopic Count (DMC):</strong> Done by spreading a known amount of milk or tomato product on a slide, staining it, and directly counting the bacteria under a microscope. It is a rapid, estimation test.</li>
-              <li><strong>Fermentation Test:</strong> The quality of milk is estimated by incubating it and observing gas production, curd type, and odor.</li>
-              <li><strong>Rope Producing Spores:</strong> Test for Bacillus spores that cause "rope" (sticky, thread-like spoilage) in bread or other products.</li>
-              <li><strong>Water Testing:</strong> The methods mentioned above (like for coliforms, E. coli, Salmonella) are also used for water samples, often with the Membrane Filtration technique.</li>
-              <li><strong>Culture Media, Equipments, Biochemical Tests:</strong> These topics are vast. Culture media (like PCA, VRBA, PDA) are the "food" for growing bacteria. Equipments (like Autoclave, Incubator) provide the necessary environment for testing. Biochemical tests (like IMViC, Catalase, Oxidase) use the specific enzyme reactions of bacteria to identify them.</li>
+              <li><strong>Aciduric Flat Sour Spores:</strong> Canned foods mein spoilage karne wale thermophilic bacteria ka test. Sample ko Dextrose Tryptone Agar par incubate karke kiya jaata hai.</li>
+              <li><strong>Anaerobic Spore Formers (Clostridium):</strong> Anaerobic conditions mein (jaise anaerobic jar mein) special media (jaise SPS agar) par grow karke kiya jaata hai.</li>
+              <li><strong>Direct Microscopic Count (DMC):</strong> Doodh ya tomato products ki ek nishchit matra ko slide par failakar, stain karke, aur microscope ke neeche bacteria ko seedhe ginkar kiya jaata hai. Yeh ek tez, anumanit test hai.</li>
+              <li><strong>Fermentation Test:</strong> Doodh ko incubate karke usmein gas production, curd type, aur odor dekhkar uski quality ka anuman lagaya jaata hai.</li>
+              <li><strong>Rope Producing Spores:</strong> Bread ya anya products mein "rope" (chipchipa, dhaage jaisa spoilage) paida karne wale Bacillus spores ka test.</li>
+              <li><strong>Water Testing:</strong> Paani ke samples ke liye bhi upar diye gaye methods (jaise coliforms, E.coli, Salmonella) ka istemal kiya jaata hai, aam taur par Membrane Filtration technique ke saath.</li>
+              <li><strong>Culture Media, Equipments, Biochemical Tests:</strong> Yeh vishay bahut vishal hain. Culture media (jaise PCA, VRBA, PDA) bacteria ko grow karne ke liye "bhojan" hain. Equipments (jaise Autoclave, Incubator) testing ke liye zaroori vatavaran pradan karte hain. Biochemical tests (jaise IMViC, Catalase, Oxidase) bacteria ki pehchan karne ke liye unke specific enzyme reactions ka istemal karte hain.</li>
             </ul>`,
-          calculation: 'The results of these tests are usually reported as "Present/Absent" or cfu/g (ml), depending on the test.'
+          calculation: 'In tests ke results aam taur par "Present/Absent" ya cfu/g (ml) mein report kiye jaate hain, jo test par nirbhar karta hai.'
         }
       ]
     }
   }
 }
+
+    
