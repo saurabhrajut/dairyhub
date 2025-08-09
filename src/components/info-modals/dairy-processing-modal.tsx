@@ -25,7 +25,9 @@ import {
   Layers,
   Archive,
   RotateCw,
-  Scaling
+  Scaling,
+  Zap,
+  Clock
 } from "lucide-react";
 
 function Section({ title, icon: Icon, children, value }: { title: string, icon: React.ElementType, children: React.ReactNode, value: string }) {
@@ -65,7 +67,7 @@ export function DairyProcessingModal({
           </DialogDescription>
         </DialogHeader>
         <ScrollArea className="flex-1 mt-4 pr-6">
-            <Accordion type="single" collapsible className="w-full" defaultValue="Pasteurization">
+            <Accordion type="single" collapsible className="w-full" defaultValue="heat-treatment">
                 <Section value="workflow" title="Workflow Overview" icon={Settings}>
                     <p>Dairy processing ek sequence of operations hai jismein raw milk ko safe, high-quality, aur shelf-stable products mein badla jaata hai. Har step ka ek specific purpose hota hai.</p>
                     <ol className="list-decimal pl-5 mt-4 space-y-2">
@@ -122,7 +124,7 @@ export function DairyProcessingModal({
                       <li><strong>Automatic Standardization:</strong> Yeh continuous process ka ek vistar hai jismein ek microprocessor sampler/tester system se juda hota hai aur automatically skim milk ke pravaah ko niyantrit karta hai.</li>
                   </ul>
                   <h4 className="mt-4">Tri-Process Machine</h4>
-                  <p>Tri-process machine ek hi unit mein doodh ko clarify, separate, aur standardize karne ke liye design ki gayi hai. Ismein cream aur skim milk ke discharge lines mein external valves hote hain, jisse standardization process ko aasan banaya jaata hai.</p>
+                  <p>Tri-process machine ek hi unit mein doodh ko clarify, separate, aur standardize karne ke liye design ki gayi hai.</p>
                 </Section>
                 <Section value="homogenization" title="Homogenization" icon={Layers}>
                      <h4>Parichay aur Paribhasha (Introduction and Definition)</h4>
@@ -131,10 +133,6 @@ export function DairyProcessingModal({
                       <p><strong>Fayde:</strong> Cream layer nahi banti, doodh gaadha aur swadisht lagta hai, aur aasani se pach jaata hai. <strong>Nuksan:</strong> Utpadan lagat badh jaati hai aur galat taapman par karne se rancidity (kadwahat) ho sakti hai.</p>
                      <h4 className="mt-4">Siddhant aur Prakriya (Principles and Process)</h4>
                      <p>Doodh ko ek high-pressure pump ke zariye ek homogenizer valve (ek bahut choti si jagah) se force kiya jaata hai. Jab doodh is valve se bahut tezi se guzarta hai, toh turbulence, shear, aur cavitation forces milkar bade fat globules ko chote globules mein tod dete hain. Homogenization aam taur par pasteurization se pehle kiya jaata hai.</p>
-                     <h4 className="mt-4">Homogenization ke Siddhant (Theories of Homogenization)</h4>
-                     <p>Fat globule ke tootne ko samjhane ke liye kai siddhant hain, jaise Shattering & Impact, Explosion, Shearing & Grinding, aur Cavitation.</p>
-                     <h4 className="mt-4">Homogenizer ke Prakar aur Sanchalan (Types and Operation of Homogenizers)</h4>
-                     <p>Homogenizers high-pressure, low-pressure, ya sonic vibrators ho sakte hain. Aam taur par two-stage high-pressure homogenizers ka istemal hota hai (e.g., 2000 psi pehle stage mein aur 500 psi doosre stage mein). Inke sanchalan mein savdhani baratni chahiye, jaise machine ko kabhi sookha na chalana aur pressure ko dheere-dheere badhana.</p>
                       <h4 className="mt-4">Doodh ke Gunon par Prabhav (Effect on Milk Properties)</h4>
                      <ul className="list-disc pl-5 space-y-2">
                         <li><strong>Safed Rang:</strong> Chote fat globules प्रकाश ko zyada bikhherte hain, jisse doodh zyada safed aur apardarshi (opaque) dikhta hai.</li>
@@ -148,24 +146,46 @@ export function DairyProcessingModal({
                      <h4 className="mt-4">Bactotherm Process</h4>
                      <p>Is process mein, doodh ko 60-75°C tak garam kiya jaata hai aur phir ek special high-efficiency centrifuge (Bactofuge) mein bheja jaata hai. Yahan, bacteria (jinki density doodh se zyada hoti hai) alag hokar ek concentrate ke roop mein nikalte hain, jise 'bactofugate' kehte hain. Is bactofugate ko alag se UHT treat (130-140°C par 3-4 seconds) karke wapas doodh mein mix kar diya jaata hai. Isse doodh ke solids ka nuksan nahi hota aur bacterial load bhi bahut kam ho jaata hai.</p>
                 </Section>
-                <Section value="Pasteurization" title="Pasteurization" icon={Thermometer}>
-                    <h4>Siddhant (Principle)</h4>
-                    <p>Pasteurization ek heat treatment process hai jiska uddeshya doodh mein maujood sabhi pathogenic (bimari failane wale) microorganisms ko nasht karna hai aur spoilage karne wale microorganisms ki sankhya ko kam karna hai, taaki doodh peene ke liye surakshit ho jaaye aur uski shelf life badh jaaye. Yeh doodh ke nutritional aur sensory qualities ko kam se kam nuksan pahunchata hai. Sabse common method <strong>High-Temperature Short-Time (HTST)</strong> hai.</p>
-                    
-                    <h4 className="mt-4">HTST Pasteurizer ke Parts aur Working</h4>
+                <Section value="heat-treatment" title="Principles of Heat Treatment" icon={Thermometer}>
+                    <h4>Parichay (Introduction)</h4>
+                    <p>Dairy industry mein, thermal processing ek swikrit shabdavali hai jo doodh ke kharab hone aur bhojan se hone wali bimariyon ke avasaron ko kam karne/samapt karne ke liye avashyak ushma upchar ka varnan karti hai. Pasteurization ek prakar ka thermal processing hai jo ek vishisht rogjanak sukshmajiv ke liye design kiya gaya hai, lekin yah refrigeration ke bina ek shelf-stable utpad pradan nahi karta hai. Ushma upchar doodh mein ushma urja ka sthanantaran hai. Doodh ke aise ushma upchar mein bahut sari urja kharch hoti hai. Ushma upchar ka uddeshya doodh mein maujood sabhi sukshmajivon aur adhikansh enzymes ko poori tarah se nishkriya karna hai.</p>
+                    <h4 className="mt-4">Pasteurization</h4>
+                    <p>Yah ek ushma upchar prakriya hai jiska uddeshya doodh mein maujood sabhi rogjanak (bimari phailane wale) sukshmajivon ko nasht karna hai aur kharab karne wale sukshmajivon ki sankhya ko kam karna hai, taki doodh pine ke liye surakshit ho jaye aur uski shelf life badh jaye. Sabse aam vidhi <strong>High-Temperature Short-Time (HTST)</strong> hai.</p>
+                    <h4 className="mt-4">Doodh ke Ghatakon par Prabhav</h4>
+                    <p>Badhte taapman aur samay ke saath, whey proteins mein parivartan hota hai, ve ghulanshilta kam kar dete hain aur pH 4.6 par casein ke saath jam jate hain. Ushma upchar se 'paka hua swad' (cooked taste) bhi aa sakta hai. Casein samanya pasteurization taapman par lagbhag aparivartit rahta hai.</p>
+                    <h4 className="mt-4">Heat Treatment Processes</h4>
+                     <div className="overflow-x-auto"><table className="w-full text-left border-collapse"><thead><tr className="bg-muted"><th className="p-2 border">Process</th><th className="p-2 border">Temp (°C)</th><th className="p-2 border">Time</th></tr></thead><tbody>
+                        <tr><td className="p-2 border">Thermization</td><td className="p-2 border">63-65</td><td className="p-2 border">15s</td></tr>
+                        <tr><td className="p-2 border">LTLT Pasteurization</td><td className="p-2 border">63</td><td className="p-2 border">30 min</td></tr>
+                        <tr><td className="p-2 border">HTST Pasteurization</td><td className="p-2 border">72-75</td><td className="p-2 border">15-20s</td></tr>
+                        <tr><td className="p-2 border">UHT</td><td className="p-2 border">135-150</td><td className="p-2 border">1-4s</td></tr>
+                        <tr><td className="p-2 border">Sterilization</td><td className="p-2 border">115-121</td><td className="p-2 border">15-30 min</td></tr>
+                    </tbody></table></div>
+                </Section>
+                <Section value="kinetics" title="Kinetic Parameters" icon={Clock}>
+                    <p>Microorganisms ko garmi se nasht kiya jata hai jab unke proteins jam jate hain aur unke metabolism ke liye avashyak enzymes nishkriya ho jate hain. Garmi pratirodh ko darshane ke liye kai shabd istemal kiye jate hain:</p>
                     <ul className="list-disc pl-5 space-y-2">
-                        <li><strong>Balance Tank:</strong> Yeh pasteurizer ko constant doodh supply provide karta hai.</li>
-                        <li><strong>Regeneration Section:</strong> Yeh energy bachane wala sabse important hissa hai. Yahan, thanda raw milk garam pasteurized milk se garmi leta hai. Raw milk pre-heat hota hai aur pasteurized milk pre-cool hota hai.</li>
-                        <li><strong>Heating Section:</strong> Yahan, pre-heated doodh ko garam paani ya steam ka istemal karke final pasteurization temperature (e.g., 72°C) tak garam kiya jaata hai.</li>
-                        <li><strong>Holding Tube:</strong> Doodh ko is tube mein ek nishchit samay (e.g., 15 seconds) ke liye rakha jaata hai taaki sabhi pathogens khatam ho jaayein.</li>
-                        <li><strong>Flow Diversion Valve (FDV):</strong> Yeh ek safety device hai. Agar doodh ka temperature holding tube ke ant mein aavashyak temperature se kam hai, toh yeh valve automatically doodh ko wapas balance tank mein bhej deta hai re-pasteurization ke liye.</li>
-                        <li><strong>Cooling Section:</strong> Garam pasteurized doodh ko thande paani ya chilled water ka istemal karke 4-5°C tak thanda kiya jaata hai.</li>
+                      <li><strong>D-Value (Decimal Reduction Time):</strong> Ek vishisht taapman par jeevon ki sankhya ko uske moolya ke 1/10 tak kam karne ke liye avashyak samay (minute mein).</li>
+                      <li><strong>Z-Value:</strong> 1/10 samay mein vahi ghatak prabhav prapt karne ke liye avashyak taapman mein vriddhi.</li>
+                      <li><strong>F0 Value:</strong> 121°C par ek jeev ka thermal death time (minute mein). Yah ek thermal process ke microbial kathorta ko mapne ke liye ek kul ekikrit ghatak prabhav hai.</li>
+                      <li><strong>Q10-Value:</strong> Jab taapman 10°C badhaya jata hai to abhikriya ki gati mein vriddhi.</li>
                     </ul>
-                    
-                    <h4 className="mt-4">Regeneration Efficiency</h4>
-                    <p>Yeh pasteurizer ki energy-saving capability ko maapta hai. Yeh batata hai ki raw milk pasteurization temperature tak pahunchne ke liye kitni garmi pasteurized milk se recover karta hai.</p>
-                    <pre className="bg-muted p-3 rounded-lg font-mono text-sm text-primary overflow-x-auto"><code>Efficiency (%) = [(Temp. after Regeneration - Initial Temp.) / (Pasteurization Temp. - Initial Temp.)] * 100</code></pre>
-                    <p><strong>Example:</strong> Agar raw milk 5°C par enter karta hai, regeneration ke baad 65°C tak pahunchta hai, aur pasteurization temperature 72°C hai, toh efficiency hogi: <br/><code>[(65 - 5) / (72 - 5)] * 100 = (60 / 67) * 100 ≈ 89.5%</code>. Ek achhe pasteurizer ki efficiency 90-95% tak ho sakti hai.</p>
+                </Section>
+                <Section value="pasteurization" title="Methods of Pasteurization" icon={Zap}>
+                    <p>Pasteurization ke do mukhya tarike hain:</p>
+                    <h4 className="mt-4">Low-Temperature Long-Time (LTLT) / Batch Pasteurization</h4>
+                    <p>Doodh ko 63°C par kam se kam 30 minute tak garam kiya, roka aur thanda kiya jata hai. Yah chhote volumes ke liye upyukt hai aur aksar multipurpose vats mein kiya jata hai.</p>
+                    <h4 className="mt-4">High-Temperature Short-Time (HTST) Pasteurization</h4>
+                    <p>Yah doodh ko pasteurize karne ka aadhunik tarika hai aur bade volumes ke liye istemal kiya jata hai. HTST pasteurizer doodh ko 72°C par 15 second tak garam karta hai aur phir turant 5°C ya usse kam tak thanda karta hai.</p>
+                     <h5>HTST Pasteurizer ke Mukhya Bhaag</h5>
+                    <ul className="list-disc pl-5 space-y-2">
+                        <li><strong>Balance Tank:</strong> Pasteurizer ko lagatar doodh ki supply deta hai.</li>
+                        <li><strong>Regeneration Section:</strong> Urja bachane wala hissa jahan thanda kachcha doodh garam pasteurized doodh se garmi leta hai.</li>
+                        <li><strong>Heating Section:</strong> Doodh ko antim pasteurization taapman tak garam karta hai.</li>
+                        <li><strong>Holding Tube:</strong> Doodh ko nirdharit samay ke liye nirdharit taapman par rakhta hai.</li>
+                        <li><strong>Flow Diversion Valve (FDV):</strong> Ek suraksha upkaran jo kam garam doodh ko aage jane se rokta hai aur punah-prakriya ke liye wapas bhejta hai.</li>
+                        <li><strong>Cooling Section:</strong> Garam pasteurized doodh ko thanda karta hai.</li>
+                    </ul>
                 </Section>
                 
                 <Section value="sterilization" title="Sterilization & UHT" icon={CheckCircle}>
@@ -200,5 +220,3 @@ export function DairyProcessingModal({
     </Dialog>
   );
 }
-
-    
