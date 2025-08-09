@@ -15,7 +15,6 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { funFacts } from "@/lib/data";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 const milkChemistryTabs = [
@@ -29,16 +28,17 @@ const milkChemistryTabs = [
 ];
 
 const physicalProperties = [
-    { property: "Density (at 20°C)", value: "Cow: 1.028-1.032 g/mL, Buffalo: 1.030-1.034 g/mL", details: "Milk is denser than water due to its solid content (SNF). Higher fat content slightly lowers density. Used to detect water adulteration." },
-    { property: "Viscosity (at 20°C)", value: "~2.0 cP", details: "About twice as viscous as water. Depends on temperature and composition (fat, protein). Homogenization increases viscosity." },
-    { property: "Surface Tension", value: "50-60 mN/m", details: "Lower than water (72 mN/m) due to surfactants like proteins and free fatty acids." },
-    { property: "Refractive Index (at 40°C)", value: "1.3440 - 1.3485", details: "Used for quick estimation of total solids and to detect water adulteration." },
-    { property: "Freezing Point", value: "-0.522 to -0.540 °C", details: "A reliable indicator for detecting added water, as added water raises the freezing point closer to 0°C." },
+    { property: "Colour and optical properties", value: "White to yellow opaque", details: "Opacity is due to light scattering by fat globules and casein micelles. Yellow color is due to carotene from feed." },
+    { property: "Flavour", value: "Pleasant, slightly sweet", details: "Combined effect of components. Off-flavors can develop from feed, bacterial growth, or oxidation." },
+    { property: "Refractive Index (at 20°C)", value: "1.3440 - 1.3485", details: "Used for quick estimation of total solids and to detect water adulteration." },
+    { property: "Density (at 20°C)", value: "Cow: 1.028-1.032 g/mL, Buffalo: 1.030-1.034 g/mL", details: "Milk is denser than water due to its solid content (SNF). Higher fat content slightly lowers density." },
+    { property: "Viscosity (at 25°C)", value: "~2.0 cP", details: "About twice as viscous as water. Depends on temperature and composition (fat, protein). Homogenization increases viscosity." },
+    { property: "Surface Tension (at 20°C)", value: "50 dyne/cm", details: "Lower than water (72 dyne/cm) due to surfactants like proteins and free fatty acids." },
+    { property: "Freezing Point", value: "-0.512 to -0.575 °C", details: "A reliable indicator for detecting added water, as added water raises the freezing point closer to 0°C." },
+    { property: "Boiling Point", value: "100.17 °C", details: "Slightly higher than water due to dissolved solids." },
     { property: "Acidity (Titratable)", value: "Cow: 0.14-0.16% LA, Buffalo: 0.17-0.18% LA", details: "Natural acidity is due to casein, phosphates, citrates, etc. Not due to lactic acid in fresh milk." },
-    { property: "pH", value: "6.4 - 6.8", details: "Slightly acidic. Lower pH suggests bacterial action (souring)." },
-    { property: "Specific Heat", value: "0.9454 kcal/kg·°C", details: "Energy required to raise the temperature by 1°C. Crucial for designing heat treatments." },
-    { property: "Electric Conductivity", value: "0.005 mho/cm at 20°C", details: "Depends on soluble salt concentration. Used to detect mastitis (infection increases EC)." },
-    { property: "Heat Stability", value: "Cow milk is stable at 130°C for 30 mins", details: "Ability to withstand high temperatures without coagulation. Affected by pH, protein, and mineral balance." },
+    { property: "pH", value: "6.5 - 6.7", details: "Slightly acidic. Lower pH suggests bacterial action (souring)." },
+    { property: "Heat Stability", value: "Varies, depends on salt balance", details: "Ability to withstand high temperatures without coagulation. Crucial for sterilized milk products." },
 ];
 
 const InfoBlock = ({ title, children }: { title: string, children: React.ReactNode }) => (
@@ -68,7 +68,6 @@ export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; set
                         <InfoBlock title="What is Milk? (Doodh Kya Hai?)">
                             <p><strong>Scientific Definition:</strong> “Milk is the normal secretion of the mammary glands of mammals, obtained without any colostrum, and is composed of water, fat, proteins, lactose, minerals, and vitamins in a naturally balanced form.”</p>
                             <p><strong>FSSAI Definition:</strong> “Doodh ka matlab hai ek swasth doodh dene wale pashu se poori tarah se doodh nikalne se prapt सामान्य mammary srav, jismein koi milavat ya nikasi na ki gayi ho, jo liquid doodh ke roop mein upbhog ke liye ya aage ki processing ke liye ho.”</p>
-                            <p className="mt-2"><strong>Codex Alimentarius Definition:</strong> “Doodh doodh dene wale pashuon ka normal mammary srav hai, jo colostrum se mukt ho, seedhe upbhog ya aage ki processing ke liye ho.”</p>
                             <p>Doodh ek complex biological fluid hai jo teen alag-alag phases mein dekha ja sakta hai:</p>
                             <ul className="list-disc list-inside mt-2 space-y-1">
                             <li><strong>Emulsion:</strong> Fat globules paani mein bikhre rehte hain.</li>
@@ -130,7 +129,7 @@ export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; set
                             <p>The <strong>immunoglobulins</strong> provide protective effect to the offspring against enteropathogenic micro-organisms. It is the predominant whey protein component found in colostrum. Bovine milk contains only traces of IgA. <strong>Bovine serum albumin</strong> is a large sized protein with a good essential amino acid profile and fat binding properties.</p>
                         </InfoBlock>
                          <InfoBlock title="Milk Enzymes and Non-Protein Nitrogenous (NPN) Substances">
-                            <p>Some indigenous enzymes that have been isolated from milk are lipase, aryl esterase, alkaline phosphatase, acid phosphatase, xanthine oxidase, peroxidase, protease, amylase, catalase and lactase. The most significant group is the hydrolases, comprising of lipoprotein lipase, plasmin and alkaline phosphatase. Milk contains some NPN substances that constitute about 5 percent of the total nitrogen in milk. Some examples of this group are amino acids, creatine, urea, uric acid, creatinine and hipuric acid.</p>
+                             <p>Some indigenous enzymes that have been isolated from milk are lipase, aryl esterase, alkaline phosphatase, acid phosphatase, xanthine oxidase, peroxidase, protease, amylase, catalase and lactase. The most significant group is the hydrolases, comprising of lipoprotein lipase, plasmin and alkaline phosphatase. Milk contains some NPN substances that constitute about 5 percent of the total nitrogen in milk. Some examples of this group are amino acids, creatine, urea, uric acid, creatinine and hipuric acid.</p>
                             <p><strong>Lactoferrin (LF)</strong> is a single-chain, metal-binding glycoprotein. It is a red coloured iron-binding protein and may also mediate some effects of inflammation and have a role in regulating various components of the immune system. It has antibacterial, antifungal, anti-endotoxin, and antiviral activities. It inhibits enteropathogenic organisms due to its ability to bind iron, as iron is an essential nutrient often required for bacterial growth. It promotes the growth of beneficial bacteria such as bifidobacteria.</p>
                             <p><strong>Lactoperoxidase</strong> is an oxido-reductase enzyme that occurs in milk, saliva, tears, cervical mucus. It is a relatively heat resistant enzyme whose activity remains sufficient even after pasteurization. Cow milk has 1.4 units/ml of lactoperoxidase, whereas buffalo milk has 0.9 units/ml. The thermal stability of buffalo milk lactoperoxidase is higher than that of cow milk. Lactoperoxidase has been widely researched for its ability to preserve raw milk.</p>
                             <p><strong>Lysozyme</strong> is an enzyme that is abundantly present in the mucosal membranes that line the human nasal cavity and tear ducts. It can also be found in high concentration in egg white. Lysozyme destroys bacterial cell walls by hydrolyzing the polysaccharide component of the cell wall. Human milk contains 0.4 g/L of lysozyme, an enzyme that contributes to antibacterial activity in human milk.</p>
@@ -171,13 +170,16 @@ export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; set
                     </div>
                 </TabsContent>
                 <TabsContent value="properties" className="mt-0">
-                    <div className="space-y-4 text-gray-700 text-sm leading-relaxed">
-                        <h4 className="text-lg font-bold text-primary mb-2 font-headline">Physical Properties of Milk</h4>
+                    <div className="space-y-6 text-gray-700 text-sm leading-relaxed prose max-w-none">
+                        <InfoBlock title="Introduction to Milk Properties">
+                            <p>Milk is a complex biological fluid consisting of seven main components: water, fat, protein, sugar (lactose), minerals, vitamins and enzymes. It is a white opaque fluid in which fat is present as an emulsion, protein and some mineral matters in colloidal suspension and lactose together with some minerals and soluble proteins in true solution.</p>
+                            <p>The opacity of milk is due to its content of suspended particles of fat, proteins and certain minerals. The colour varies from white to yellow depending on the carotene content of the fat. Milk has a pleasant, slightly sweet taste, and pleasant odour. It is an excellent source of calcium, phosphates and riboflavin.</p>
+                        </InfoBlock>
                         <div className="overflow-x-auto">
                             <Table>
                                 <TableHeader>
                                     <TableRow>
-                                        <TableHead className="w-[150px]">Property</TableHead>
+                                        <TableHead className="w-[200px]">Property</TableHead>
                                         <TableHead>Value</TableHead>
                                         <TableHead>Significance</TableHead>
                                     </TableRow>
@@ -201,5 +203,3 @@ export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; set
     </Dialog>
   );
 }
-
-    
