@@ -6,38 +6,55 @@ export const cipProcessContent = {
         intro: {
             title: "परिचय: CIP और मिल्क स्टोन",
             htmlContent: `
-                <p>डेयरी उपकरणों और कंटेनरों की सतह पर बचा हुआ दूध माइक्रोबियल विकास के लिए उत्कृष्ट माध्यम प्रदान करता है। इसलिए, डेयरी उपकरणों को ठीक से साफ और स्वच्छ करना आवश्यक है।</p>
+                <p>डेयरी उपकरणों और कंटेनरों की सतह पर बचा हुआ दूध माइक्रोबियल विकास के लिए उत्कृष्ट माध्यम प्रदान करता है। इसलिए, डेयरी उपकरणों को ठीक से साफ और स्वच्छ करना आवश्यक है। सफाई और सैनिटाइजेशन पूरक प्रक्रियाएं हैं और अकेले कोई भी अंतिम परिणाम प्राप्त नहीं करता है। सफाई का मतलब दूध के अवशेष (Soil) को हटाना और सतह को इस मिट्टी और व्यवहार्य जीव से मुक्त करना है।</p>
                 <h4 class="font-bold mt-4">CIP/CAC क्या है?</h4>
-                <p><strong>CIP (Cleaning-In-Place):</strong> यह एक स्वचालित विधि है जिसमें पाइपलाइनों, टैंकों और अन्य उपकरणों को बिना खोले (disassemble) साफ किया जाता है। इसमें सफाई और सैनिटाइजिंग घोल को एक निश्चित क्रम में पाइपों और उपकरणों के माध्यम से पंप किया जाता है।</p>
+                <p><strong>CIP (Cleaning-In-Place):</strong> यह एक स्वचालित विधि है जिसमें पाइपलाइनों, टैंकों और अन्य उपकरणों को बिना खोले (disassemble) साफ किया जाता है। इसमें सफाई और सैनिटाइजिंग घोल को एक निश्चित क्रम में पाइपों और उपकरणों के माध्यम से पंप किया जाता है। उच्च वेग प्रवाह यांत्रिक स्क्रबिंग प्रभाव उत्पन्न करता है जो जमा को हटाता है।</p>
                 <p><strong>CAC (Cleaning-Out-of-Place):</strong> इस विधि में, छोटे भागों या उपकरणों को अलग किया जाता है और उन्हें सफाई के लिए एक समर्पित क्षेत्र में ले जाया जाता है, जहाँ उन्हें टैंकों में डुबोकर या मैन्युअल रूप से साफ किया जाता है।</p>
+
+                <h4 class="font-bold mt-4">CIP सिस्टम के प्रकार</h4>
+                <p><strong>Single Pass Systems:</strong> प्रत्येक सफाई चक्र के लिए नया सफाई घोल पेश किया जाता है और फिर नाली में निपटा दिया जाता है। यह अधिकांश मामलों में एक पूर्व-रिंस से शुरू होगा ताकि जितना संभव हो उतना मिट्टी हटाया जा सके, इसके बाद डिटर्जेंट सफाई और अंतिम रिंस होगा।</p>
+                <p><strong>Recirculation Systems:</strong> सफाई के घोल को बाहरी टैंकों में मिलाया जाता है और साफ किए जाने वाले संयंत्र में पेश किया जाता है। उन्हें फिर से प्रसारित किया जाता है और आवश्यकतानुसार टॉप-अप किया जाता है जब तक कि सफाई चक्र पूरा न हो जाए। डिटर्जेंट रिंस के बाद अंतिम रिंस करना सामान्य है। रीसर्कुलेशन सिस्टम को अधिक प्रारंभिक निवेश की आवश्यकता होती है, लेकिन कम पानी और सफाई डिटर्जेंट का उपयोग करते हैं।</p>
+
                 <h4 class="font-bold mt-4">मिल्क स्टोन:</h4>
                 <p>यह गर्म पानी और डिटर्जेंट समाधानों से सूखे दूध के ठोस और लवणों का संचय है। इसमें अघुलनशील कैल्शियम लवण, कैल्शियम फॉस्फेट और दूध प्रोटीन (जमा और अवक्षेपित) होते हैं।</p>
                 <p><strong>संघटन:</strong> इसमें 2.6-8.7% नमी; 3.6-17.6% वसा; 4.4-43.8% प्रोटीन और 42-67% राख होती है।</p>
             `
         },
         cip_cycle: {
-            title: "Standard 5-Step CIP Cycle",
-            intro: "एक विशिष्ट CIP साइकिल में निम्नलिखित 5 चरण होते हैं:",
+            title: "Standard CIP Cleaning Cycle",
+            intro: "एक विशिष्ट CIP साइकिल में निम्नलिखित चरण होते हैं:",
             steps: [
                 {
+                    title: "उत्पाद अवशेषों की रिकवरी",
+                    details: "<p>ड्रेनेज द्वारा उत्पाद के अवशेषों को पुनर्प्राप्त करना।</p>"
+                },
+                {
+                    title: "अवशेषों का निष्कासन",
+                    details: "<p>पानी या संपीड़ित हवा के साथ गैर-पुनर्प्राप्त करने योग्य अवशेषों का निष्कासन।</p>"
+                },
+                {
                     title: "Pre-rinse (प्रारंभिक धुलाई)",
-                    details: "<p><strong>उद्देश्य:</strong> अधिकांश ढीली गंदगी और दूध के अवशेषों को हटाना।<br/><strong>प्रक्रिया:</strong> सिस्टम को गुनगुने पानी (लगभग 40-50°C) से 5-10 मिनट तक धोया जाता है। गर्म पानी का उपयोग नहीं किया जाता है क्योंकि यह प्रोटीन को सतह पर जमा सकता है (denature)।</p>"
+                    details: "<p><strong>उद्देश्य:</strong> अधिकांश ढीली गंदगी और दूध के अवशेषों को हटाना।<br/><strong>प्रक्रिया:</strong> सिस्टम को गुनगुने पानी (50-60°C) से 10 मिनट तक धोया जाता है।</p>"
                 },
                 {
                     title: "Alkali Wash (क्षारीय धुलाई)",
-                    details: "<p><strong>उद्देश्य:</strong> वसा (fat) और प्रोटीन को हटाना।<br/><strong>प्रक्रिया:</strong> 0.5-1.5% कास्टिक सोडा (NaOH) के घोल को 70-80°C पर 15-20 मिनट के लिए प्रसारित किया जाता है। कास्टिक वसा को सैपोनिफाई (साबुन बनाना) और प्रोटीन को हाइड्रोलाइज करता है।</p>"
+                    details: "<p><strong>उद्देश्य:</strong> वसा (fat) और प्रोटीन को हटाना।<br/><strong>प्रक्रिया:</strong> 0.5-1.5% कास्टिक सोडा (NaOH) के घोल को 75°C पर 30 मिनट के लिए प्रसारित किया जाता है।</p>"
                 },
                 {
                     title: "Intermediate Rinse (मध्यवर्ती धुलाई)",
-                    details: "<p><strong>उद्देश्य:</strong> क्षारीय डिटर्जेंट के अवशेषों को हटाना।<br/><strong>प्रक्रिया:</strong> सिस्टम को फिर से गर्म पानी से 5 मिनट के लिए धोया जाता है ताकि अगली एसिड धुलाई के लिए सतह तैयार हो सके।</p>"
+                    details: "<p><strong>उद्देश्य:</strong> क्षारीय डिटर्जेंट के अवशेषों को हटाना।<br/><strong>प्रक्रिया:</strong> सिस्टम को फिर से गर्म पानी (50°C) से 5-8 मिनट के लिए धोया जाता है।</p>"
                 },
                 {
                     title: "Acid Wash (अम्लीय धुलाई)",
-                    details: "<p><strong>उद्देश्य:</strong> खनिज जमा (mineral deposits) जैसे मिल्क स्टोन को हटाना।<br/><strong>प्रक्रिया:</strong> 0.5-1.0% नाइट्रिक एसिड (HNO₃) या फॉस्फोरिक एसिड के घोल को 60-70°C पर 10-15 मिनट के लिए प्रसारित किया जाता है।</p>"
+                    details: "<p><strong>उद्देश्य:</strong> खनिज जमा (mineral deposits) जैसे मिल्क स्टोन को हटाना।<br/><strong>प्रक्रिया:</strong> 0.5-1.0% नाइट्रिक एसिड (HNO₃) के घोल को 75°C पर 20 मिनट के लिए प्रसारित किया जाता है।</p>"
                 },
                 {
                     title: "Final Rinse (अंतिम धुलाई)",
-                    details: "<p><strong>उद्देश्य:</strong> एसिड के अवशेषों को हटाना और सिस्टम को उपयोग के लिए तैयार करना।<br/><strong>प्रक्रिया:</strong> सिस्टम को ठंडे, पीने योग्य पानी से तब तक धोया जाता है जब तक कि निकलने वाले पानी का pH सामान्य न हो जाए। उपयोग से ठीक पहले, सिस्टम को अक्सर एक सैनिटाइज़र (जैसे क्लोरीन या गर्म पानी) से सैनिटाइज किया जाता है।</p>"
+                    details: "<p><strong>उद्देश्य:</strong> एसिड के अवशेषों को हटाना।<br/><strong>प्रक्रिया:</strong> सिस्टम को गर्म पानी (50°C) से 5-8 मिनट के लिए धोया जाता है।</p>"
+                },
+                {
+                    title: "Disinfection (कीटाणुशोधन)",
+                    details: "<p><strong>उद्देश्य:</strong> बचे हुए सूक्ष्मजीवों को मारना।<br/><strong>प्रक्रिया:</strong> थर्मल कीटाणुशोधन (90-95°C पर 10 मिनट) और ठंडा करना, या एक उपयुक्त सैनिटाइज़र के साथ रासायनिक कीटाणुशोधन।</p>"
                 }
             ]
         },
@@ -47,11 +64,11 @@ export const cipProcessContent = {
             types: [
                 {
                     title: "Alkaline Detergents (क्षारीय डिटर्जेंट)",
-                    details: "<p><strong>उदाहरण:</strong> कास्टिक सोडा (NaOH), सोडियम कार्बोनेट।<br/><strong>उद्देश्य:</strong> ये वसा को सैपोनिफाई करते हैं और प्रोटीन को तोड़ते हैं। ये बहुत प्रभावी सफाई एजेंट हैं।</p>"
+                    details: "<p><strong>उदाहरण:</strong> कास्टिक सोडा (NaOH), सोडियम कार्बोनेट, सोडियम मेटासिलिकेट।<br/><strong>उद्देश्य:</strong> ये वसा को सैपोनिफाई करते हैं और प्रोटीन को तोड़ते हैं। ये बहुत प्रभावी सफाई एजेंट हैं।</p>"
                 },
                 {
                     title: "Acid Detergents (अम्लीय डिटर्जेंट)",
-                    details: "<p><strong>उदाहरण:</strong> नाइट्रिक एसिड (HNO₃), फॉस्फोरिक एसिड (H₃PO₄)।<br/><strong>उद्देश्य:</strong> ये मिल्क स्टोन जैसे खनिज जमा को घोलते हैं। नाइट्रिक एसिड स्टेनलेस स्टील की सतहों को पैसिवेट करने में भी मदद करता है, जिससे जंग लगने से बचाव होता है।</p>"
+                    details: "<p><strong>उदाहरण:</strong> नाइट्रिक एसिड (HNO₃), फॉस्फोरिक एसिड (H₃PO₄)।<br/><strong>उद्देश्य:</strong> ये मिल्क स्टोन जैसे खनिज जमा को घोलते हैं।</p>"
                 },
                 {
                     title: "Sanitizers (कीटाणुनाशक)",
@@ -177,6 +194,34 @@ export const cipProcessContent = {
                 <p>डिटर्जेंट की शक्ति को उसमें मौजूद "एक्टिव मैटर" (सर्फेक्टेंट की मात्रा) से मापा जाता है। इसकी जाँच के लिए एक मानक विधि टू-फेज टाइट्रेशन है, जो एक जटिल लैब प्रक्रिया है और इसके लिए विशिष्ट रसायनों और विशेषज्ञता की आवश्यकता होती है।</p>
             `
         },
+        sip: {
+            title: "SIP (Sterilization-In-Place)",
+            intro: "Sterilization-in-place (SIP) एक सतत वाणिज्यिक पैमाने का ऑपरेशन है, जहाँ आवश्यक इकाइयों को स्टरलाइज़ किया जा सकता है। ये डिज़ाइन, इंस्टॉलेशन और ऑपरेशन के मामले में बहुत परिष्कृत हैं और इन्हें उच्च योग्य जनशक्ति की आवश्यकता होती है।",
+            process: `
+                <h5 class="font-bold mt-2">SIP प्रक्रिया:</h5>
+                <ol class="list-decimal list-inside space-y-1 mt-2">
+                   <li>दबाव में भाप को पूरे इंस्टॉलेशन से गुजारा जाता है।</li>
+                   <li>हवा को पाइपिंग या उपकरण पर लगे वेंट के माध्यम से बाहर निकाला जाता है। वेंट बैक्टीरियल फिल्टर द्वारा संरक्षित होते हैं।</li>
+                   <li>एक उपयुक्त अवधि के बाद वेंट बंद हो जाते हैं ताकि भाप का दबाव एक पूर्व निर्धारित स्तर तक बढ़ सके।</li>
+                   <li>दबाव को आवश्यक अवधि तक बनाए रखा जाता है, जिसके बाद भाप को एक कंडेनसर के माध्यम से छोड़ा जाता है।</li>
+                   <li>रिकॉर्ड किया गया दबाव सभी संदूषकों के विनाश के लिए वांछित समय-तापमान संयोजन को प्राप्त करने के लिए पर्याप्त होना चाहिए।</li>
+                </ol>
+            `
+        },
+        advantages: {
+            title: "CIP के फायदे",
+            list: [
+                "गारंटीकृत और दोहराने योग्य गुणवत्ता आश्वासन।",
+                "गुणवत्ता आश्वासन आवश्यकताओं के लिए पूर्ण डेटा लॉगिंग का प्रावधान।",
+                "सफाई समाधानों को पुनर्चक्रित करके सफाई लागत में कमी।",
+                "उपकरण पर दुर्गम क्षेत्रों को साफ करने की संभावना।",
+                "ऑपरेटरों के लिए बेहतर सुरक्षा क्योंकि खतरनाक सफाई सामग्री को संभाला नहीं जाता है।",
+                "दो उत्पादन रनों के बीच समय में कमी।",
+                "श्रम आवश्यकताओं में कमी।",
+                "सफाई सामग्री का अधिक प्रभावी उपयोग और नियंत्रण।",
+                "पानी की खपत में कमी।"
+            ]
+        },
         solution_strength: {
             title: "CIP घोल की शक्ति का परीक्षण",
             intro: "कुशल सफाई और कीटाणुनाशक प्रभावों के लिए डिटर्जेंट घोल की उचित शक्ति बनाए रखना महत्वपूर्ण है। शक्ति को आमतौर पर % कंसंट्रेशन या ppm (क्लोरीन के लिए) में मापा जाता है।",
@@ -257,38 +302,55 @@ export const cipProcessContent = {
         intro: {
             title: "Introduction: CIP and Milk Stone",
             htmlContent: `
-                <p>Milk remaining on the surface of dairy equipment and containers provides an excellent medium for microbial growth. It is therefore, necessary to clean and sanitize dairy equipment properly.</p>
+                <p>Milk remaining on the surface of dairy equipment and containers provides an excellent medium for microbial growth. It is therefore, necessary to clean and sanitize dairy equipment properly. Cleaning and sanitization are complementary processes and alone none achieve the end result. Cleaning means removal of milk residue (Soil) and making the surface free of this soil and viable organism.</p>
                 <h4 class="font-bold mt-4">What is CIP/CAC?</h4>
-                <p><strong>CIP (Cleaning-In-Place):</strong> This is an automated method for cleaning pipelines, tanks, and other equipment without disassembling them. It involves pumping cleaning and sanitizing solutions through the pipes and equipment in a specific sequence.</p>
+                <p><strong>CIP (Cleaning-In-Place):</strong> This is an automated method for cleaning pipelines, tanks, and other equipment without disassembling them. It involves pumping cleaning and sanitizing solutions through the pipes and equipment in a specific sequence. The high velocity flow generates mechanical scrubbing effect that dislodges deposits.</p>
                 <p><strong>CAC (Cleaning-Out-of-Place):</strong> In this method, smaller parts or equipment are disassembled and taken to a dedicated area for cleaning, where they are soaked in tanks or cleaned manually.</p>
+
+                <h4 class="font-bold mt-4">Types of CIP Systems</h4>
+                <p><strong>Single Pass Systems:</strong> New cleaning solution is introduced to the plant to be cleaned for each cleaning cycle and then disposed to drain. It would start, in most cases, with a pre-rinse to remove as much soil as possible, followed by the detergent cleaning and a final rinse.</p>
+                <p><strong>Recirculation Systems:</strong> The cleaning solutions are mixed in external tanks and introduced into the plant to be cleaned. They are recirculated and topped up as required until the cleaning cycle is complete. It is normal to carry out a final rinse after the detergent rinse. Recirculation systems need more initial investment, but use less water and cleaning detergents.</p>
+
                 <h4 class="font-bold mt-4">Milk Stone:</h4>
                 <p>This is an accumulation of dried milk solids and salts from hot water and detergent solutions. It consists of insoluble calcium salts, calcium phosphate, and milk proteins (coagulated & precipitated).</p>
                 <p><strong>Composition:</strong> It contains 2.6-8.7% moisture; 3.6-17.6% fat; 4.4-43.8% proteins and 42-67% ash.</p>
             `
         },
         cip_cycle: {
-            title: "Standard 5-Step CIP Cycle",
-            intro: "A typical CIP cycle consists of the following 5 steps:",
+            title: "Standard CIP Cleaning Cycle",
+            intro: "A typical CIP cycle consists of the following steps:",
             steps: [
                 {
+                    title: "Recovery of Product Residues",
+                    details: "<p>Recovering product residues by drainage.</p>"
+                },
+                {
+                    title: "Expulsion of Residues",
+                    details: "<p>Expulsion of non-retrievable residue with water or compressed air.</p>"
+                },
+                {
                     title: "Pre-rinse",
-                    details: "<p><strong>Purpose:</strong> To remove most of the loose dirt and milk residues.<br/><strong>Process:</strong> The system is rinsed with lukewarm water (around 40-50°C) for 5-10 minutes. Hot water is not used as it can denature proteins, causing them to stick to the surface.</p>"
+                    details: "<p><strong>Purpose:</strong> To remove most of the loose dirt and milk residues.<br/><strong>Process:</strong> The system is rinsed with lukewarm water (50-60°C) for 10 minutes.</p>"
                 },
                 {
                     title: "Alkali Wash",
-                    details: "<p><strong>Purpose:</strong> To remove fat and protein.<br/><strong>Process:</strong> A 0.5-1.5% caustic soda (NaOH) solution is circulated at 70-80°C for 15-20 minutes. The caustic saponifies the fat and hydrolyzes the protein.</p>"
+                    details: "<p><strong>Purpose:</strong> To remove fat and protein.<br/><strong>Process:</strong> A 0.5-1.5% caustic soda (NaOH) solution is circulated at 75°C for 30 minutes.</p>"
                 },
                 {
                     title: "Intermediate Rinse",
-                    details: "<p><strong>Purpose:</strong> To remove residues of the alkaline detergent.<br/><strong>Process:</strong> The system is rinsed again with warm water for 5 minutes to prepare the surface for the next acid wash.</p>"
+                    details: "<p><strong>Purpose:</strong> To remove residues of the alkaline detergent.<br/><strong>Process:</strong> The system is rinsed again with warm water (50°C) for 5-8 minutes.</p>"
                 },
                 {
                     title: "Acid Wash",
-                    details: "<p><strong>Purpose:</strong> To remove mineral deposits like milk stone.<br/><strong>Process:</strong> A 0.5-1.0% solution of nitric acid (HNO₃) or phosphoric acid is circulated at 60-70°C for 10-15 minutes.</p>"
+                    details: "<p><strong>Purpose:</strong> To remove mineral deposits like milk stone.<br/><strong>Process:</strong> A 0.5-1.0% solution of nitric acid (HNO₃) is circulated at 75°C for 20 minutes.</p>"
+                },
+                 {
+                    title: "Final Rinse",
+                    details: "<p><strong>Purpose:</strong> To remove acid residues.<br/><strong>Process:</strong> The system is rinsed with warm water (50°C) for 5-8 minutes.</p>"
                 },
                 {
-                    title: "Final Rinse",
-                    details: "<p><strong>Purpose:</strong> To remove acid residues and prepare the system for use.<br/><strong>Process:</strong> The system is rinsed with cold, potable water until the pH of the effluent water is neutral. Just before use, the system is often sanitized with a sanitizer (like chlorine or hot water).</p>"
+                    title: "Disinfection",
+                    details: "<p><strong>Purpose:</strong> To kill any remaining microorganisms.<br/><strong>Process:</strong> Thermal disinfection (90-95°C for 10 min) and cooling, or chemical disinfection with a suitable sanitizer.</p>"
                 }
             ]
         },
@@ -298,11 +360,11 @@ export const cipProcessContent = {
             types: [
                 {
                     title: "Alkaline Detergents",
-                    details: "<p><strong>Examples:</strong> Caustic soda (NaOH), sodium carbonate.<br/><strong>Purpose:</strong> They saponify fats and break down proteins. They are very effective cleaning agents.</p>"
+                    details: "<p><strong>Examples:</strong> Caustic soda (NaOH), sodium carbonate, sodium metasilicate.<br/><strong>Purpose:</strong> They saponify fats and break down proteins. They are very effective cleaning agents.</p>"
                 },
                 {
                     title: "Acid Detergents",
-                    details: "<p><strong>Examples:</strong> Nitric acid (HNO₃), phosphoric acid (H₃PO₄).<br/><strong>Purpose:</strong> They dissolve mineral deposits like milk stone. Nitric acid also helps in passivating stainless steel surfaces, protecting them from corrosion.</p>"
+                    details: "<p><strong>Examples:</strong> Nitric acid (HNO₃), phosphoric acid (H₃PO₄).<br/><strong>Purpose:</strong> They dissolve mineral deposits like milk stone.</p>"
                 },
                 {
                     title: "Sanitizers",
@@ -427,6 +489,34 @@ export const cipProcessContent = {
                 <h4 class="font-bold mt-6">How to Check the Strength of Liquid Detergent (Active Matter %):</h4>
                 <p>The strength of a detergent is measured by its "Active Matter" (the amount of surfactant). A standard method for checking this is the two-phase titration, which is a complex lab procedure and requires specific chemicals and expertise.</p>
             `
+        },
+         sip: {
+            title: "SIP (Sterilization-In-Place)",
+            intro: "Sterilization-in-place (SIP) refers to a continuous commercial scale operation, where essential units can be sterilized. They are very sophisticated in terms of design, installation and operation and needs highly qualified manpower.",
+            process: `
+                <h5 class="font-bold mt-2">SIP Process:</h5>
+                <ol class="list-decimal list-inside space-y-1 mt-2">
+                   <li>Steam under pressure is passed through the entire installation.</li>
+                   <li>Air is vented out through vents in the piping or on the equipment. The vents are protected by bacterial filters.</li>
+                   <li>The vents are closed after a suitable period of steaming to allow the steam pressure to build up to a predetermined level.</li>
+                   <li>Pressure is maintained for the length of the required period, after which the steam is released through a condenser.</li>
+                   <li>The recorded pressure is enough to and must result in achieving the desired time-temperature combination for destruction of all contaminants.</li>
+                </ol>
+            `
+        },
+        advantages: {
+            title: "Advantages of CIP",
+            list: [
+                "Guaranteed and repeatable quality assurance.",
+                "Provision of full data logging for quality assurance requirements.",
+                "Reduction in cleaning costs by recycling cleaning solutions.",
+                "Possibility to clean inaccessible areas on equipment.",
+                "Better safety to operators because hazardous cleaning materials are not handled.",
+                "Reduction in time between two production runs.",
+                "Reduction in labour requirements.",
+                "More effective use and control of cleaning materials.",
+                "Reduction in water consumption."
+            ]
         },
         solution_strength: {
             title: "Testing of CIP Solution Strength",

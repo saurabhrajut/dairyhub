@@ -181,24 +181,38 @@ export function CipProcessModal({
               ))}
           </Section>
 
+           <Section id="advantages" title={content.advantages.title}>
+              <ul className="list-disc list-inside space-y-2">
+                 {content.advantages.list.map((adv: string, index: number) => (
+                    <li key={index}>{adv}</li>
+                 ))}
+              </ul>
+          </Section>
+
           <Section id="cleaning-procedures" title={content.cleaning_procedures.title}>
               {content.cleaning_procedures.sections.map((sec: any, index: number) => (
                   <div key={index} className="mb-6">
                       <h3 className="text-xl font-semibold mb-2 text-gray-800">{sec.title}</h3>
-                      <div dangerouslySetInnerHTML={{ __html: sec.content }} />
+                      <div className="overflow-x-auto" dangerouslySetInnerHTML={{ __html: sec.content }} />
                   </div>
               ))}
           </Section>
 
           <Section id="teepol-detergent" title={content.teepol_detergent.title}>
-              <div dangerouslySetInnerHTML={{ __html: content.teepol_detergent.htmlContent }} />
+              <div className="overflow-x-auto" dangerouslySetInnerHTML={{ __html: content.teepol_detergent.htmlContent }} />
+          </Section>
+          
+           <Section id="sip" title={content.sip.title}>
+              <p>{content.sip.intro}</p>
+              <div className="mt-4" dangerouslySetInnerHTML={{ __html: content.sip.process }} />
           </Section>
 
           <Section id="solution-strength" title={content.solution_strength.title}>
             <p>{content.solution_strength.intro}</p>
-            <div className="mt-4 p-4 bg-blue-50 border-l-4 border-blue-400" dangerouslySetInnerHTML={{ __html: content.solution_strength.alkalinity_test.content }} />
+            <div className="mt-4 p-4 bg-blue-50 border-l-4 border-blue-400 overflow-x-auto" dangerouslySetInnerHTML={{ __html: content.solution_strength.alkalinity_test.content }} />
             <SolutionStrengthCalc content={content.solution_strength} />
           </Section>
+
         </ScrollArea>
       </DialogContent>
     </Dialog>
