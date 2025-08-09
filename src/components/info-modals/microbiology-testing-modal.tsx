@@ -58,7 +58,7 @@ export function MicrobiologyTestingModal({ isOpen, setIsOpen }: { isOpen: boolea
                            {section.title}
                         </AccordionTrigger>
                         <AccordionContent>
-                            <div className="prose prose-sm max-w-none text-gray-700 leading-relaxed"
+                            <div className="prose prose-sm max-w-none text-gray-700 leading-relaxed break-words"
                                  dangerouslySetInnerHTML={{ __html: section.content }} />
                             {section.table && (
                                 <div className="overflow-x-auto">
@@ -71,7 +71,7 @@ export function MicrobiologyTestingModal({ isOpen, setIsOpen }: { isOpen: boolea
                                         <TableBody>
                                             {section.table.rows.map((row, index) => (
                                                 <TableRow key={index}>
-                                                    {row.map(cell => <TableCell key={cell}>{cell}</TableCell>)}
+                                                    {row.map((cell, cellIndex) => <TableCell key={cellIndex}>{cell}</TableCell>)}
                                                 </TableRow>
                                             ))}
                                         </TableBody>
@@ -85,7 +85,7 @@ export function MicrobiologyTestingModal({ isOpen, setIsOpen }: { isOpen: boolea
             
             <section className="mt-10">
                 <h2 className="text-2xl font-bold text-primary mb-4 border-b-2 border-primary/20 pb-2 font-headline">{content.testMethods.title}</h2>
-                <div className="prose prose-sm max-w-none text-gray-700 leading-relaxed">
+                <div className="prose prose-sm max-w-none text-gray-700 leading-relaxed break-words">
                      <p>{content.testMethods.intro}</p>
                      <Accordion type="single" collapsible className="w-full mt-4">
                         {content.testMethods.tests.map((test, index) => (
