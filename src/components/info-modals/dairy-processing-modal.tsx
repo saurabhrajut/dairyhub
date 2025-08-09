@@ -24,7 +24,8 @@ import {
   Wind,
   Layers,
   Archive,
-  RotateCw
+  RotateCw,
+  Scaling
 } from "lucide-react";
 
 function Section({ title, icon: Icon, children, value }: { title: string, icon: React.ElementType, children: React.ReactNode, value: string }) {
@@ -99,6 +100,48 @@ export function DairyProcessingModal({
                         <li><strong>Cream Regulating Screw:</strong> Is screw ko adjust karke cream ke outlet ke size ko badla jaa sakta hai, jisse cream mein fat ka percentage control kiya jaata hai.</li>
                     </ul>
                 </Section>
+                <Section value="standardization" title="Standardization of Milk" icon={Scaling}>
+                  <h4>Parichay (Introduction)</h4>
+                  <p>Standardization doodh ke ek ya ek se adhik ghatakon (constituents) ko ek nirdharit star par adjust karne ki prakriya hai. Market milk industry mein, iska matlab aam taur par skim milk milakar ya cream nikal kar butterfat content ko kam karna hota hai.</p>
+                  <h4 className="mt-4">Uddeshya (Objectives)</h4>
+                  <ul className="list-disc pl-5 space-y-2">
+                      <li>Vishesh doodh/dairy utpadon ke liye kanooni avashyaktaon ka palan karna.</li>
+                      <li>Upbhokta ko ek saman utpad pradan karna.</li>
+                      <li>Utpadan mein arthikta sunishchit karna.</li>
+                  </ul>
+                  <h4 className="mt-4">Ganana ke Tarike (Methods of Calculation)</h4>
+                  <p>Standardization ke liye aam taur par Pearson's Square method ya algebraic equations ka istemal hota hai.</p>
+                  <h5>Pearson’s Square Method</h5>
+                  <p>Ek square banayein aur uske kendra mein vanchhit fat pratishat rakhein. Square ke baayein kono par milaye jaane wale padarthon ka fat pratishat rakhein. Phir, kendra ke number ko baayein taraf ke bade number se ghatayein aur shesh ko tirche viprit daayein kono par rakhein. Daayein taraf ke number ab un mool padarthon ke hisson ko darshate hain jinhe milana hai.</p>
+                  <h5>Algebraic Equations</h5>
+                  <p>Is vidhi mein, milaye jaane wale utpadon, antim utpad, aur kisi ek utpad ki matra ka pata hona chahiye. Mass balance equations banakar unhe hal kiya jaata hai.</p>
+                  <h4 className="mt-4">Standardization ke Prakar (Methods of Standardization)</h4>
+                   <ul className="list-disc pl-5 space-y-2">
+                      <li><strong>Batch Standardization:</strong> Dairies mein sabse aam prakriya. Ismein doodh ke ek bade batch ka fat content test kiya jaata hai aur phir ganana ke anusar skim milk ya cream milakar use aavashyak star par laya jaata hai.</li>
+                      <li><strong>Continuous Standardization:</strong> Ismein ek inline sampler aur testing device ka upyog hota hai jo lagatar fat content ko maapta hai. Operator is reading ko dekhkar milk line mein skim milk ya cream ke pravaah ko adjust karta hai.</li>
+                      <li><strong>Automatic Standardization:</strong> Yeh continuous process ka ek vistar hai jismein ek microprocessor sampler/tester system se juda hota hai aur automatically skim milk ke pravaah ko niyantrit karta hai.</li>
+                  </ul>
+                  <h4 className="mt-4">Tri-Process Machine</h4>
+                  <p>Tri-process machine ek hi unit mein doodh ko clarify, separate, aur standardize karne ke liye design ki gayi hai. Ismein cream aur skim milk ke discharge lines mein external valves hote hain, jisse standardization process ko aasan banaya jaata hai.</p>
+                </Section>
+                <Section value="homogenization" title="Homogenization" icon={Layers}>
+                     <h4>Parichay aur Paribhasha (Introduction and Definition)</h4>
+                     <p>Homogenization ek mechanical process hai jiska uddeshya doodh mein maujood bade fat globules ko chote, uniform size ke globules (&lt;2 µm) mein todna hai. Isse doodh mein ek sthir emulsion banta hai, jisse fat upar aakar malai ki parat (cream layer) nahi banata.</p>
+                      <h4 className="mt-4">Fayde aur Nuksan (Merits and Demerits)</h4>
+                      <p><strong>Fayde:</strong> Cream layer nahi banti, doodh gaadha aur swadisht lagta hai, aur aasani se pach jaata hai. <strong>Nuksan:</strong> Utpadan lagat badh jaati hai aur galat taapman par karne se rancidity (kadwahat) ho sakti hai.</p>
+                     <h4 className="mt-4">Siddhant aur Prakriya (Principles and Process)</h4>
+                     <p>Doodh ko ek high-pressure pump ke zariye ek homogenizer valve (ek bahut choti si jagah) se force kiya jaata hai. Jab doodh is valve se bahut tezi se guzarta hai, toh turbulence, shear, aur cavitation forces milkar bade fat globules ko chote globules mein tod dete hain. Homogenization aam taur par pasteurization se pehle kiya jaata hai.</p>
+                     <h4 className="mt-4">Homogenization ke Siddhant (Theories of Homogenization)</h4>
+                     <p>Fat globule ke tootne ko samjhane ke liye kai siddhant hain, jaise Shattering & Impact, Explosion, Shearing & Grinding, aur Cavitation.</p>
+                     <h4 className="mt-4">Homogenizer ke Prakar aur Sanchalan (Types and Operation of Homogenizers)</h4>
+                     <p>Homogenizers high-pressure, low-pressure, ya sonic vibrators ho sakte hain. Aam taur par two-stage high-pressure homogenizers ka istemal hota hai (e.g., 2000 psi pehle stage mein aur 500 psi doosre stage mein). Inke sanchalan mein savdhani baratni chahiye, jaise machine ko kabhi sookha na chalana aur pressure ko dheere-dheere badhana.</p>
+                      <h4 className="mt-4">Doodh ke Gunon par Prabhav (Effect on Milk Properties)</h4>
+                     <ul className="list-disc pl-5 space-y-2">
+                        <li><strong>Safed Rang:</strong> Chote fat globules प्रकाश ko zyada bikhherte hain, jisse doodh zyada safed aur apardarshi (opaque) dikhta hai.</li>
+                        <li><strong>Fuller Body & Richer Taste:</strong> Homogenized doodh peene mein zyada gaadha aur swadisht lagta hai.</li>
+                        <li><strong>Lipase ke prati Samvedansheelta:</strong> Agar homogenization se pehle doodh ko theek se garam nahi kiya gaya, to lipase enzyme tezi se fat ko todkar rancid flavor paida kar sakta hai.</li>
+                     </ul>
+                </Section>
                  <Section value="bactofugation" title="Bactofugation" icon={RotateCw}>
                     <h4>Parichay (Introduction)</h4>
                     <p>Bactofugation centrifugal force ka upyog karke doodh se microorganisms, khaaskar heat-resistant spores (jaise Bacillus/Clostridia), ko hatane ki prakriya hai. Iska mukhya uddeshya doodh ki hygienic quality ko sudharna hai, taaki use kam temperature-time combination par sterilize kiya jaa sake. Yeh khaaskar un products ke liye mahatvapurna hai jinki shelf-life lambi hoti hai, jaise hard cheese aur UHT milk.</p>
@@ -133,21 +176,7 @@ export function DairyProcessingModal({
                     <h4 className="mt-4">Ultra-High Temperature (UHT) Processing</h4>
                     <p>Yeh ek continuous process hai jismein doodh ko bahut tezi se bahut adhik taapman tak garam kiya jaata hai aur phir turant thanda kiya jaata hai. Aam taur par, doodh ko <strong>135-150°C par 1-4 seconds</strong> ke liye treat kiya jaata hai. Iske baad, doodh ko ek sterile (aseptic) environment mein pre-sterilized cartons (jaise Tetra Pak) mein bhara jaata hai. UHT processing se doodh ki nutritional quality aur flavor par sterilization ki tulna mein kam asar padta hai.</p>
                 </Section>
-                
-                <Section value="homogenization" title="Homogenization" icon={Layers}>
-                     <h4>Siddhant (Principle)</h4>
-                     <p>Homogenization ek mechanical process hai jiska uddeshya doodh mein maujood bade fat globules ko chote, uniform size ke globules mein todna hai. Isse doodh mein ek sthir emulsion banta hai, jisse fat upar aakar malai ki parat (cream layer) nahi banata.</p>
-                     <h4 className="mt-4">Kaise Kaam Karta Hai?</h4>
-                     <p>Doodh ko ek high-pressure pump ke zariye ek homogenizer valve (ek bahut choti si jagah) se force kiya jaata hai. Jab doodh is valve se bahut tezi se guzarta hai, toh turbulence, shear, aur cavitation forces milkar bade fat globules (average size 3-6 microns) ko chote globules (size &lt;2 microns) mein tod dete hain. Homogenization aam taur par pasteurization se pehle kiya jaata hai.</p>
-                     <h4 className="mt-4">Prabhav (Effects)</h4>
-                     <ul className="list-disc pl-5 space-y-2">
-                        <li><strong>Cream Layer Rokna:</strong> Sabse mukhya prabhav.</li>
-                        <li><strong>Safed Rang:</strong> Chote fat globules प्रकाश ko zyada bikhherte hain, jisse doodh zyada safed aur apardarshi (opaque) dikhta hai.</li>
-                        <li><strong>Fuller Body & Richer Taste:</strong> Homogenized doodh peene mein zyada gaadha aur swadisht lagta hai.</li>
-                        <li><strong>Protein Denaturation:</strong> Naye bane chote fat globules ki satah badh jaati hai. Is nayi satah ko cover karne ke liye casein aur whey proteins use hote hain, jisse unke structure mein badlav aata hai.</li>
-                     </ul>
-                </Section>
-                
+                                
                 <Section value="drying" title="Milk Drying" icon={Wind}>
                     <p>Milk drying ka mukhya uddeshya doodh se paani hatakar ek powder banana hai, jisse uski shelf life bahut badh jaati hai aur transport karna aasan ho jaata hai. Do mukhya methods hain:</p>
                     <h4 className="mt-4">Spray Drying</h4>
