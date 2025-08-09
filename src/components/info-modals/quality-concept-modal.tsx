@@ -171,31 +171,30 @@ export function QualityConceptModal({ isOpen, setIsOpen }: { isOpen: boolean; se
                     </ul>
                     <p className="mt-4">{content.iso.fsms.p2}</p>
                 </Section>
-
-                 <Section title={content.fssai.title} id="fssai">
-                    <p>{content.fssai.p1}</p>
-                    <SubHeading>{content.fssai.structure.title}</SubHeading>
-                    <p>{content.fssai.structure.p1}</p>
-                    <ul className="list-disc list-inside space-y-2">
-                        {content.fssai.structure.list.map((item, index) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
-                    </ul>
-                     <SubHeading>{content.fssai.functions.title}</SubHeading>
-                    <p>{content.fssai.functions.p1}</p>
-                    <ul className="list-disc list-inside space-y-2">
-                        {content.fssai.functions.list.map((item, index) => <li key={index}>{item}</li>)}
-                    </ul>
-                </Section>
                 
-                <Section title={content.codex.title} id="codex">
-                    <p>{content.codex.p1}</p>
-                    <p>{content.codex.p2}</p>
-                    <SubHeading>{content.codex.structure.title}</SubHeading>
-                    <p>{content.codex.structure.p1}</p>
-                    <ul className="list-disc list-inside space-y-2">
-                        {content.codex.structure.list.map((item, index) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
-                    </ul>
+                <Section title={content.wto.title} id="wto">
+                    <p>{content.wto.p1}</p>
+                    <p>{content.wto.p2}</p>
+                    <p>{content.wto.p3}</p>
                 </Section>
 
+                <Section title={content.regulatory_bodies.title} id="regulatory_bodies">
+                    <p>{content.regulatory_bodies.p1}</p>
+                    <SubHeading>{content.regulatory_bodies.fssai.title}</SubHeading>
+                    <p>{content.regulatory_bodies.fssai.p1}</p>
+                    <SubHeading>{content.regulatory_bodies.bis.title}</SubHeading>
+                    <p>{content.regulatory_bodies.bis.p1}</p>
+                    <SubHeading>{content.regulatory_bodies.agmark.title}</SubHeading>
+                    <p>{content.regulatory_bodies.agmark.p1}</p>
+                    <SubHeading>{content.regulatory_bodies.mmpo.title}</SubHeading>
+                    <p>{content.regulatory_bodies.mmpo.p1}</p>
+                    <SubHeading>{content.regulatory_bodies.export_act.title}</SubHeading>
+                    <p>{content.regulatory_bodies.export_act.p1}</p>
+                </Section>
+
+                <Section title={content.harmonization.title} id="harmonization">
+                    <p>{content.harmonization.p1}</p>
+                </Section>
             </div>
         </ScrollArea>
       </DialogContent>

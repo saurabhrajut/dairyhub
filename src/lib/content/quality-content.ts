@@ -182,46 +182,39 @@ export const qualityContent = {
         ]
       }
     },
-    fssai: {
-      title: "Food Safety and Standards Authority of India (FSSAI)",
-      p1: "FSSAI Bharat mein food safety aur regulation ke liye sthapit ek autonomous body hai. Ise Food Safety and Standards Act, 2006 ke tahat sthapit kiya gaya tha. Iska mukhya uddeshya food articles ke liye science-based standards banana aur unke manufacturing, storage, distribution, sale, aur import ko regulate karna hai, taaki human consumption ke liye safe aur wholesome food ki uplabdhta sunishchit ho sake.",
-      structure: {
-        title: "FSSAI ki Sanrachna",
-        p1: "FSSAI mein ek Chairperson aur 22 sadasya hote hain. Iski sanrachna is prakaar hai:",
-        list: [
-          { title: "Authority", description: "Yeh mukhya body hai jo regulations banati hai. Ismein alag-alag ministries aur departments ke pratinidhi shamil hote hain." },
-          { title: "Scientific Committees and Panels", description: "Yeh FSSAI ko alag-alag food categories ke liye scientific advice aur recommendations dete hain. Inmein scientists aur experts hote hain." },
-          { title: "Central Advisory Committee (CAC)", description: "Yeh committee FSSAI ko regulations banate samay stakeholders (consumers, industry, etc.) ke vicharon ko shamil karne mein madad karti hai." },
-          { title: "State Food Safety Authorities", description: "Har rajya mein Food Safety Commissioners hote hain jo apne rajya mein FSS Act ko lagoo karte hain." }
-        ]
-      },
-      functions: {
-        title: "FSSAI ke Mukhya Karya",
-        p1: "FSSAI ke kai mahatvapurna karya hain:",
-        list: [
-          "Food products ke liye standards aur guidelines banana.",
-          "Food businesses ke liye FSSAI license ya registration anivarya karna.",
-          "State Food Safety Authorities ke madhyam se FSS Act ka palan sunishchit karna.",
-          "Food testing ke liye accredited labs ka network sthapit karna aur unhein notify karna.",
-          "Food businesses aur regulatory staff ke liye training programs aayojit karna.",
-          "Food safety aur nutrition par janta ko jaagruk karna."
-        ]
-      }
+    wto: {
+      title: "WTO aur Bharatiya Food Industry",
+      p1: "World Trade Organization (WTO) 1995 mein General Agreement on Tariffs and Trade (GATT) ke sthan par banaya gaya tha. Iska mukhyalay Geneva (Switzerland) mein hai. Yeh rashtron ke beech vyapar ke niyamon se nipatne wala ekmatra vaishvik sangathan hai. Iska uddeshya antarrashtriya vyapar mein badhaon ko kam karna hai.",
+      p2: "Codex Alimentarius Commission (CAC) ko food hygiene standards ke liye antarrashtriya sandarbh ke roop mein sarvabhaumik roop se maanyata prapt hai. GATT/WTO samjhauta, jismein dairy shaamil hai, July 1995 se prabhavi hua. Ismein do mukhya samjhaute hain: 'Technical Barriers to Trade (TBT)' aur 'Sanitary and Phytosanitary (SPS)'.",
+      p3: "Bharat aur anya vikasasheel desh antarrashtriya gunavatta manakon mein shaamil hone ke liye sangharsh kar rahe hain. Swachhata ki kami Bharatiya niryat par pratibandh ka ekamatra karan hai. Gharelu खाद्य manakon ka antarrashtriya manakon ke saath samanjasya antarrashtriya baazaar mein sthan paane ke liye anivarya hai."
     },
-    codex: {
-      title: "Codex Alimentarius Commission (CAC)",
-      p1: "Codex Alimentarius Commission, ya CAC, ek antarrashtriya sanstha hai jise Food and Agriculture Organization (FAO) aur World Health Organization (WHO) ne milkar 1963 mein sthapit kiya tha. Iska mukhya uddeshya consumers ke swasthya ki raksha karna aur food trade mein fair practices ko badhava dena hai.",
-      p2: "'Codex Alimentarius' ek Latin shabd hai jiska matlab 'Food Code' hota hai. Yeh ek sangrah hai jismein antarrashtriya star par maanyata prapt standards, codes of practice, guidelines, aur anya recommendations shamil hain jo food production aur safety se sambandhit hain.",
-      structure: {
-        title: "Codex ka Karya aur Sanrachna",
-        p1: "Codex standards scientific research aur risk analysis par aadharit hote hain. Iski sanrachna mein shamil hain:",
-        list: [
-          { title: "The Commission", description: "Yeh mukhya body hai jo standards ko antim roop deti hai. Iski baithak saal mein ek baar hoti hai." },
-          { title: "Codex Committees", description: "Alag-alag vishayon par kaam karne ke liye committees hain, jaise 'Codex Committee on Milk and Milk Products', 'Codex Committee on Food Hygiene', etc. Yeh committees standards ke draft taiyar karti hain." },
-          { title: "Scientific Advice", description: "Codex ko FAO/WHO ke expert bodies se scientific advice milta hai, jaise JECFA (Joint Expert Committee on Food Additives) aur JEMRA (Joint Expert Meetings on Microbiological Risk Assessment)." },
-          { title: "WTO Connection", description: "World Trade Organization (WTO) ke Sanitary and Phytosanitary (SPS) Agreement ke tahat, Codex standards ko international trade disputes mein reference ke roop mein istemal kiya jaata hai." }
-        ]
-      }
+    regulatory_bodies: {
+        title: "Bharat mein Niyamak Nikay (Regulatory Bodies)",
+        p1: "Bharatiya खाद्य prasanskaran kshetra anivarya kaanoon ke madhyam se apne gunavatta maanakon ko banaye rakhta hai. Dairy udyog mein prachalit teen pramukh Bharatiya maanak FSSR, 2011, Bureau of Indian Standards (BIS), aur Agriculture Produce Grading and Marketing Act (Agmark) hain.",
+        fssai: {
+            title: "Food Safety and Standards Authority of India (FSSAI)",
+            p1: "Food Safety and Standards Rules of India, Prevention of Food Adulteration Act ki jagah leta hai. Food Safety and Standards Rules August, 2011 se prabhavi hue. Yeh anivarya maanak hain jo baazaar mein jaane wale kisi bhi खाद्य utpaad ke liye baadhyakaari hain."
+        },
+        bis: {
+            title: "Bureau of Indian Standards (BIS)",
+            p1: "BIS, jise pehle Indian Standards Institution (ISI) ke naam se jaana jaata tha, 1986 mein ek vaidhaanik nikaay ke roop mein sthapit kiya gaya tha. Prasanskrt खाद्य kshetra mein, taiyaar kiye gaye maanak swaichhik aur trteeya paksh pramaanan pranaaliyon ke madhyam se laagoo kiye jaate hain. In maanakon ka paalan karne wale nirmaata 'ISI' ya 'BIS' pramaanan praapt kar sakte hain."
+        },
+        agmark: {
+            title: "Agmark",
+            p1: "Agriculture Produce Grading and Marketing Act 1937 mein laagoo kiya gaya tha. Iske tahat maanak 'Agmark' maanakon ke roop mein jaane jaate hain. Is adhiniyam ke tahat grading swaichhik hai. Teen dairy utpaad (ghee, makkhan aur dairy spreads) vartamaan mein is yojana ke tahat grade kiye jaate hain."
+        },
+        mmpo: {
+            title: "Milk and Milk Product Order (MMPO)",
+            p1: "Pratidin 10,000 liter se adhik doodh ka prasanskaran karne wale ya prativarsh 500 tan se adhik doodh thos padarthon ko sambhaalne wale sabhi dairy planton ko saksham pradhikari se panjeekaran pramaanapatr praapt karna aavashyak hai. Is aadesh ne milkshed kshetron ko bhi paribhaashit kiya hai."
+        },
+        export_act: {
+            title: "Export (Quality Control and Inspection) Act",
+            p1: "1963 mein laagoo kiya gaya aur Export Inspection Council of India dwara sanchaalit, yah adhiniyam niryat yogy utpaad ke liye utpaadan kendr par nirmaata ke parisar, maanaveeya swachhata, kachche maal ki gunavatta, swachh hygiene abhyaas, gunavatta aashvaasan kaaryakram, packaging aur labeling ke anivarya nirikshan par jor deta hai."
+        }
+    },
+    harmonization: {
+        title: "Bharatiya Manakon ka Antarrashtriya Manakon ke saath Samanjasya",
+        p1: "WTO, Codex dwara taiyaar kiye gaye antarrashtriya खाद्य manakon ko vaishvik खाद्य vyapar ke liye sandarbh bindu ke roop mein sveekaar karta hai. Adhikaansh raashtreeya खाद्य manakon ko Codex ke saath samanjasya sthapit karna hoga. Bharat mein, खाद्य suraksha viniyam, chaahe anivarya ho ya swaichhik, vibhinn agencies/mantralayon/vibhagon dwara laagoo kiye jaate hain. Bahu agencies ka hona jimmedari tay karne mein samasya paida karta hai. Isliye, खाद्य ki gunavatta ko viniyamit karne aur antarrashtriya viniyamon ke saath samanjasya sthapit karne ke liye ek saman aur tarkik drishtikon aavashyak hai."
     }
   },
   en: {
@@ -369,7 +362,7 @@ export const qualityContent = {
         ]
       }
     },
-     prps: {
+    prps: {
       title: "Prerequisite Programs (PRPs)",
       p1: "These programs are the foundation of an effective HACCP system. Their effective implementation reduces the likelihood of hazards entering the food chain.",
       gmp: {
@@ -406,46 +399,256 @@ export const qualityContent = {
         ]
       }
     },
-    fssai: {
-      title: "Food Safety and Standards Authority of India (FSSAI)",
-      p1: "FSSAI is an autonomous body established for food safety and regulation in India. It was established under the Food Safety and Standards Act, 2006. Its main objective is to create science-based standards for food articles and regulate their manufacturing, storage, distribution, sale, and import to ensure the availability of safe and wholesome food for human consumption.",
-      structure: {
-        title: "Structure of FSSAI",
-        p1: "FSSAI consists of a Chairperson and 22 members. Its structure is as follows:",
+    wto: {
+      title: "WTO and Indian Food Industry",
+      p1: "The World Trade Organization (WTO) was formed in 1995 as a replacement for the General Agreement on Tariffs and Trade (GATT). Its Head Quarters is at Geneva (Switzerland). It is the only global international organization dealing with the rules of trade between nations, aiming to reduce obstacles to international trade.",
+      p2: "The Codex Alimentarius Commission (CAC) is universally recognized as the international reference for food hygiene standards. The GATT/WTO agreement concerning dairying came into effect from July, 1995. It has two key agreements: 'Technical Barriers to Trade (TBT)' and 'Sanitary and Phytosanitary (SPS)'.",
+      p3: "India and other developing countries are struggling to join the international milieu of quality standards. Lack of hygiene and sanitation is the sole cause for the rejections and bans on Indian exports. Homogeneity of domestic food standards with the international ones is imperative to gain a place in the international market."
+    },
+    regulatory_bodies: {
+        title: "Regulatory Bodies in India",
+        p1: "The Indian food processing sector maintains its quality parameters through compulsory legislation. The three major Indian standards prevalent in the dairy industry are the FSSR, 2011, Bureau of Indian Standards (BIS), and Agriculture Produce Grading and Marketing Act (Agmark).",
+        fssai: {
+            title: "Food Safety and Standards Authority of India (FSSAI)",
+            p1: "The Food Safety and Standards Rules of India replaces the Prevention of Food Adulteration Act. Food Safety and Standards Rules came into effect from August, 2011. These are compulsory standards that are obligatory for any food product going into the market."
+        },
+        bis: {
+            title: "Bureau of Indian Standards (BIS)",
+            p1: "BIS, formerly the Indian Standards Institution (ISI), was established as a statutory body in 1986. In the processed food sector, the formulated standards are implemented through voluntary and third party certification systems. Manufacturers complying with these standards can obtain ‘ISI’ or ‘BIS’ certification."
+        },
+        agmark: {
+            title: "Agmark",
+            p1: "The Agriculture Produce Grading and Marketing Act was first enacted in 1937. The standards came to be known as Agmark standards. Grading under this act is voluntary. Three dairy products (ghee, butter and dairy spreads) are currently graded under this scheme."
+        },
+        mmpo: {
+            title: "Milk and Milk Product Order (MMPO)",
+            p1: "All dairy plants processing more than 10,000 liters of milk per day or handling more than 500 tonnes of milk solids per annum are now required to obtain registration certificates from the competent authority. This order has also defined milkshed areas."
+        },
+        export_act: {
+            title: "Export (Quality Control and Inspection) Act",
+            p1: "Enacted in 1963 and operated by the Export Inspection Council of India, this act stresses on compulsory inspection of the manufacturers’ premises, hygienic manufacturing practices, and quality assurance programmes for the exportable product."
+        }
+    },
+    harmonization: {
+        title: "Harmonization of Indian Standards With International Standards",
+        p1: "The WTO accepts the international food standards formulated by the codex as the reference points for the global food trade. Most of the national food standards would have to be harmonized with those of codex. The presence of multiple agencies in India to implement multiple laws poses a problem of fixing responsibility. It is, therefore, necessary to have a uniform and logical approach for regulating the quality of food and for harmonizing with the international regulations."
+    }
+  },
+  en: {
+    title: "Quality Concepts",
+    description: "A guide to ensuring quality in the Dairy Industry.",
+    intro1: "With the advent of food safety concepts due to the liberalization of the food industry, the quality of the food products being produced is of utmost importance. The integration of the food supply chains now requires newer approaches to ensure food safety. The dairy industry nowadays is also adopting some of these approaches to ensure the safety of the milk and milk products being produced. Food regulatory bodies have also formulated strict laws and standards for milk and milk products. Food safety is now not only limited to the products being exported but also to the domestic market and consumers. So in response to the food safety concept, the public and the private sector have now modified their production process with adoption of newer technologies and have also applied stringent laws to ensure product safety.",
+    intro2: "Safety and quality of a product must be ensured in the entire chain involved in the production, i.e., from the udder to the consumer or from farm to fork. Milk being a highly perishable commodity and being at a higher risk to get contaminated by either environmental factors or due to poor farm practices demands high care from milk producers and the industrial persons to ensure its safety and quality, especially where the infrastructure is not proper.",
+    intro3: "Considering all these challenges faced by dairy industry, the adoption of quality assurance and certain quality concepts will help the dairy industry in the following ways:",
+    introBenefits: [
+      "Curbing the menace of adulteration which will be subsequently reflected in the quality of milk and milk products.",
+      "It will help in developing the confidence and faith of domestic as well as international consumers toward the quality of milk and milk products produced.",
+      "It will help in generating more revenue to the dairy industry which will, in turn, help the employees and the farmers."
+    ],
+    whatIsQuality: {
+      title: "What Is Quality?",
+      p1: "According to ISO 9001:2005, quality is degree to which a set of inherent characteristics of an object fulfills requirements. It is the totality of the features and characteristics of a product or a service that bears on its ability to satisfy stated or implied needs.",
+      variability: "Variability",
+      p2: "Quality has an inverse relation with variability. As the variability in the characteristics or features of a product or a service is reduced the quality of the product or the service given gets increased.",
+      p3: "Quality embraces many characteristics: Physical, Chemical, Technological, Bacteriological, Nutritional, Aesthetic (Appearance).",
+      p4: "A consumer mainly focuses on the specifications of a product or service and compares the same product available from different manufacturers."
+    },
+    qc: {
+      title: "What Is Quality Control (QC)?",
+      p1: "It is defined as the set of activities which ensure that the products and services meet/fulfill requirements for quality. It was categorized as a laboratory function which aims at end point testing of the finished goods or products by analyzing the samples and making decision to accept or reject them.",
+      p2: "Quality control is a failure detection system that uses a testing technique to identify the flaws and the errors in the products by drawing random samples from a specified lot at regular intervals. It aims at detection rather than prevention.",
+      responsibilities: {
+        title: "Responsibilities of Quality Control Department",
         list: [
-          { title: "The Authority", description: "This is the main body that makes regulations. It includes representatives from various ministries and departments." },
-          { title: "Scientific Committees and Panels", description: "They provide scientific advice and recommendations to FSSAI for different food categories. They consist of scientists and experts." },
-          { title: "Central Advisory Committee (CAC)", description: "This committee helps FSSAI to include the views of stakeholders (consumers, industry, etc.) while making regulations." },
-          { title: "State Food Safety Authorities", description: "Each state has Food Safety Commissioners who implement the FSS Act in their state." }
-        ]
-      },
-      functions: {
-        title: "Main Functions of FSSAI",
-        p1: "FSSAI has several important functions:",
-        list: [
-          "Framing of Regulations and Standards: To create standards and guidelines for food products.",
-          "Licensing and Registration: To make FSSAI license or registration mandatory for food businesses.",
-          "Enforcement: To ensure compliance with the FSS Act through State Food Safety Authorities.",
-          "Food Testing: To establish and notify a network of accredited labs for food testing.",
-          "Training and Capacity Building: To organize training programs for food businesses and regulatory staff.",
-          "Consumer Awareness: To educate the public on food safety and nutrition."
+          "Inspection of the supplies, materials, and raw products.",
+          "Scheduling and verification of production operations.",
+          "Measurement of production and equipment efficiency.",
+          "Chemical, microbial, and sensory analysis of the finished product.",
+          "Controlling storage and shipping.",
+          "Preparation of Standard Operating Procedures (SOPs) and specifications.",
+          "Sanitation inspections.",
+          "Ensuring conformance to legal regulations.",
+          "Controlling waste disposal."
         ]
       }
     },
-    codex: {
-      title: "Codex Alimentarius Commission (CAC)",
-      p1: "The Codex Alimentarius Commission, or CAC, is an international body established jointly by the Food and Agriculture Organization (FAO) and the World Health Organization (WHO) in 1963. Its main objective is to protect consumer health and promote fair practices in food trade.",
-      p2: "'Codex Alimentarius' is a Latin term meaning 'Food Code'. It is a collection of internationally recognized standards, codes of practice, guidelines, and other recommendations related to food production and safety.",
-      structure: {
-        title: "Function and Structure of Codex",
-        p1: "Codex standards are based on scientific research and risk analysis. Its structure includes:",
-        list: [
-          { title: "The Commission", description: "This is the main body that finalizes the standards. Its meeting is held once a year." },
-          { title: "Codex Committees", description: "There are committees to work on different subjects, such as the 'Codex Committee on Milk and Milk Products', 'Codex Committee on Food Hygiene', etc. These committees prepare the draft standards." },
-          { title: "Scientific Advice", description: "Codex receives scientific advice from expert bodies of FAO/WHO, such as JECFA (Joint Expert Committee on Food Additives) and JEMRA (Joint Expert Meetings on Microbiological Risk Assessment)." },
-          { title: "WTO Connection", description: "Under the Sanitary and Phytosanitary (SPS) Agreement of the World Trade Organization (WTO), Codex standards are used as a reference in international trade disputes." }
+    qa: {
+      title: "What Is Quality Assurance (QA)?",
+      p1: "It is defined as a set of activities which ensure that the quality levels of products and services are properly maintained and that the supplier and customer quality issues are properly resolved. Quality assurance is a method to prevent the occurrence of mistakes and defects.",
+      p2: "ISO defines quality assurance as “part of quality management focused on providing confidence that quality requirements will be fulfilled”. It is a proactive approach, not a reactive one. The product is monitored at each step.",
+      table: {
+        caption: "Table 9.1: Quality Control vs. Quality Assurance",
+        header1: "Quality Control",
+        header2: "Quality Assurance",
+        rows: [
+          { qc: "Product oriented", qa: "Process oriented" },
+          { qc: "Reactive approach", qa: "Proactive approach" },
+          { qc: "Corrective action", qa: "Preventive action" },
+          { qc: "Focuses on testing quality", qa: "Focuses on building quality" },
+          { qc: "Detect defects", qa: "Prevent defects" }
         ]
       }
+    },
+    deming: {
+      title: "Deming's Philosophy",
+      p1: "William Edwards Deming was an American professor, statistician, and management consultant. He taught process control in Japan and gave the message that 'by improving quality, companies can decrease their expenses and increase productivity and market share.' His ideas helped companies like Toyota and Sony to achieve success.",
+      cycle: {
+        title: "The Deming Cycle (PDCA Cycle)",
+        p1: "Deming proposed a cycle often called the PDCA cycle. PDCA is a four-step management technique, which stands for Plan-Do-Check-Act. This concept focuses on monitoring the process and eliminating the root cause of failure at each step.",
+        plan: { title: "Plan", description: "Establish the goals of the company. Create strategies to achieve those goals." },
+        do: { title: "Do", description: "Work according to the plan. Use the correct raw materials, additives, and packaging materials." },
+        check: { title: "Check", description: "Regularly check that all protocols are being followed as per the plan. Correct any deviations." },
+        act: { title: "Act", description: "When non-compliance is found, identify its root cause and make a plan to eliminate it." }
+      }
+    },
+    juran: {
+      title: "Juran’s Philosophy",
+      p1: "Joseph Juran was an American engineer and management consultant. He emphasized the importance of a broad organizational-level approach to achieve quality. He stated that quality management starts from the top management and goes down.",
+      trilogy: {
+        title: "The Juran Trilogy",
+        p1: "Juran gave an approach to quality called the Juran Trilogy. This quality concept includes:",
+        list: [
+          { title: "Quality Planning", description: "Designing products and processes that meet customer needs." },
+          { title: "Quality Control", description: "Monitoring the process and comparing performance with standards to correct it." },
+          { title: "Quality Improvement", description: "Creating projects to continuously reach better levels of performance." }
+        ]
+      },
+      p2: "According to Juran, the main cause of quality issues was resistance to change and human relations problems."
+    },
+    tqm: {
+      title: "Total Quality Management (TQM)",
+      p1: "TQM is a management philosophy that aims to achieve long-term success through customer satisfaction. In TQM, all members of an organization participate in continuously improving processes, products, services, and the culture they work in. It goes beyond QC and QA to make the entire organization responsible for quality.",
+      principles: {
+        title: "Key Principles of TQM",
+        list: [
+          { title: "Customer-Focused", description: "The customer ultimately determines the level of quality. Understanding and fulfilling their needs is the core of TQM." },
+          { title: "Total Employee Involvement", description: "All employees, from management to shop floor workers, work towards a common goal. Everyone is responsible for quality." },
+          { title: "Process-Centered", description: "TQM focuses on process thinking. A process is a series of steps that takes inputs and creates outputs. Defining and monitoring the performance of the process is essential." },
+          { title: "Integrated System", description: "Different departments within an organization must work together. Horizontal processes that link departments are crucial for TQM." },
+          { title: "Strategic and Systematic Approach", description: "Quality is considered an integral part of strategic management. A strategic plan is created that includes quality as a core element." },
+          { title: "Continuous Improvement (Kaizen)", description: "TQM emphasizes continuous improvement. It is an effort to move towards 'zero defects'." },
+          { title: "Fact-Based Decision Making", description: "Decisions should be based on data and facts, not on assumptions. Data is used to track performance." },
+          { title: "Communications", description: "Effective communication is a critical part of TQM, which maintains morale and motivates employees." }
+        ]
+      }
+    },
+    iso: {
+      title: "ISO Standards",
+      p1: "ISO (International Organization for Standardization) is a worldwide federation that develops standards for various industries. It is a non-governmental organization that is a network of national standards bodies from over 160 countries. Its main purpose is to develop voluntary international standards for products, services, and systems to ensure quality, safety, and efficiency.",
+      p2: "For the dairy industry, ISO 9001 and ISO 22000 are the most important.",
+      qms: {
+        title: "ISO 9001: Quality Management Systems (QMS)",
+        p1: "ISO 9001 is a standard that sets out the requirements for a Quality Management System (QMS). It focuses on an organization's ability to consistently provide products and services that meet customer and regulatory requirements. It focuses on product quality, not food safety.",
+        elementsTitle: "Key Elements:",
+        list: [
+          { title: "Customer Focus", description: "Understanding customer needs and striving to meet them." },
+          { title: "Leadership", description: "Top management must be committed to quality and provide a clear vision." },
+          { title: "Engagement of People", description: "Involving employees at all levels in quality improvement." },
+          { title: "Process Approach", description: "Understanding and managing activities as interrelated processes." },
+          { title: "Improvement", description: "Making continuous improvement a permanent objective." },
+          { title: "Evidence-based Decision Making", description: "Making decisions based on the analysis of data and information." },
+          { title: "Relationship Management", description: "Managing relationships with interested parties like suppliers." }
+        ]
+      },
+      fsms: {
+        title: "ISO 22000: Food Safety Management Systems (FSMS)",
+        p1: "ISO 22000 is a food-specific standard that specifies the requirements for a Food Safety Management System (FSMS). It combines the management principles of ISO 9001 with the food safety principles of HACCP. It is designed for all organizations in the food chain, from 'farm to fork'.",
+        elementsTitle: "Key Elements:",
+        list: [
+          { title: "Interactive Communication", description: "Communication at all levels of the food chain (suppliers, customers, regulators) is essential." },
+          { title: "System Management", description: "The need for a structured management system (like ISO 9001)." },
+          { title: "Prerequisite Programs (PRPs)", description: "The basic conditions and activities necessary to maintain a clean, hygienic environment." },
+          { title: "HACCP Principles", description: "Incorporating the seven principles of HACCP to control food safety hazards." }
+        ],
+        p2: "For a dairy plant, ISO 22000 certification demonstrates that they have a robust and globally recognized system for food safety, which integrates HACCP and PRPs into a formal management framework."
+      }
+    },
+    haccp: {
+      title: "HACCP - Hazard Analysis and Critical Control Points",
+      p1: "HACCP is a systematic and preventive approach to food safety. It involves identifying biological (e.g., bacteria), chemical (e.g., chemicals), and physical (e.g., glass) hazards in the production process that can make the final product unsafe. Measures are then developed to reduce these risks to a safe level.",
+      principles: {
+        title: "The Seven Principles of HACCP",
+        list: [
+          { title: "Conduct a Hazard Analysis:", description: "In-depth analysis of each step in dairy production, from raw milk to packaging. Identify potential biological (Listeria, Salmonella), chemical (antibiotics, cleaning agents), and physical (metal, glass) hazards at each step." },
+          { title: "Determine Critical Control Points (CCPs):", description: "CCPs are points where control can be applied to prevent, eliminate, or reduce a food safety hazard to an acceptable level. For example, pasteurization is a CCP." },
+          { title: "Establish Critical Limits:", description: "Set measurable limits for each CCP, such as temperature (≥72°C), time (≥15 seconds), pH (≤4.6). These limits are the boundary between safe and unsafe conditions." },
+          { title: "Establish Monitoring Procedures:", description: "A planned sequence of observations or measurements to assess whether a CCP is under control. It specifies what, how, when, and who will monitor." },
+          { title: "Establish Corrective Actions:", description: "Pre-determined actions to be taken when monitoring indicates a deviation from a critical limit. This includes isolating the product and taking further action." },
+          { title: "Establish Verification Procedures:", description: "Activities that confirm the HACCP system is working correctly. This includes auditing the HACCP plan, calibrating equipment, and testing." },
+          { title: "Establish Record-Keeping and Documentation Procedures:", description: "Accurate and complete documentation is essential for the effective implementation of the HACCP system. This includes records of hazard analysis, monitoring logs, corrective actions, and verification activities." }
+        ]
+      }
+    },
+    prps: {
+      title: "Prerequisite Programs (PRPs)",
+      p1: "These programs are the foundation of an effective HACCP system. Their effective implementation reduces the likelihood of hazards entering the food chain.",
+      gmp: {
+        title: "Good Manufacturing Practices (GMPs)",
+        p1: "GMPs are the rules and guidelines that ensure products are consistently produced and controlled according to quality standards. In the dairy industry, GMPs cover everything from personnel hygiene to equipment maintenance.",
+        list: [
+            { title: "Personnel", description: "All employees must receive the necessary training for hygiene and their responsibilities." },
+            { title: "Premises & Equipment", description: "The building and equipment must be designed and maintained to prevent contamination and facilitate cleaning." },
+            { title: "Production", description: "There must be written procedures (SOPs) for every process. Critical steps must be defined and controlled." },
+            { title: "Quality Control", description: "There must be testing procedures for raw materials, intermediate, and final products." },
+            { title: "Documentation", description: "A record of each batch must be kept to ensure traceability." },
+        ]
+      },
+      ghp: {
+        title: "Good Hygiene Practices (GHPs)",
+        p1: "GHP is an essential part of GMP, covering all practices necessary to protect food from contamination. Its main purpose is to maintain a hygienic environment.",
+        list: [
+          { title: "Personal Hygiene", description: "Hand washing, wearing clean clothes, and not working when sick." },
+          { title: "Cleaning and Sanitation", description: "Regular and effective cleaning and sanitization of equipment and premises." },
+          { title: "Pest Control", description: "Preventing and eliminating pests from the plant." },
+          { title: "Waste Management", description: "Properly storing and disposing of waste so it does not become a source of contamination." }
+        ]
+      },
+      glp: {
+        title: "Good Laboratory Practices (GLPs)",
+        p1: "GLP is a set of principles that governs the planning, performance, monitoring, recording, reporting, and archiving of non-clinical health and environmental safety studies. For a dairy QC lab, it means that test results are reliable, repeatable, and auditable.",
+        list: [
+          { title: "Organization and Personnel", description: "Responsibilities of each person must be clear, and they must have adequate training." },
+          { title: "Apparatus, Material, and Reagents", description: "All equipment must be calibrated and maintained as required. Reagents must be labeled and stored as required." },
+          { title: "Test Systems", description: "The physical or chemical systems used for testing must be defined and controlled as required." },
+          { title: "Standard Operating Procedures (SOPs)", description: "There must be written, approved SOPs for every routine procedure." },
+          { title: "Reporting of Results", description: "Results must be reported clearly, accurately, and completely, including test conditions and any deviations." },
+          { title: "Storage and Retention of Records", description: "All raw data, reports, and samples must be archived as required for a specified period." }
+        ]
+      }
+    },
+    wto: {
+      title: "WTO and Indian Food Industry",
+      p1: "The World Trade Organization (WTO) was formed in 1995 as a replacement for the General Agreement on Tariffs and Trade (GATT). Its Head Quarters is at Geneva (Switzerland). It is the only global international organization dealing with the rules of trade between nations, aiming to reduce obstacles to international trade.",
+      p2: "The Codex Alimentarius Commission (CAC) is universally recognized as the international reference for food hygiene standards. The GATT/WTO agreement concerning dairying came into effect from July, 1995. It has two key agreements: 'Technical Barriers to Trade (TBT)' and 'Sanitary and Phytosanitary (SPS)'.",
+      p3: "India and other developing countries are struggling to join the international milieu of quality standards. Lack of hygiene and sanitation is the sole cause for the rejections and bans on Indian exports. Homogeneity of domestic food standards with the international ones is imperative to gain a place in the international market."
+    },
+    regulatory_bodies: {
+        title: "Regulatory Bodies in India",
+        p1: "The Indian food processing sector maintains its quality parameters through compulsory legislation. The three major Indian standards prevalent in the dairy industry are the FSSR, 2011, Bureau of Indian Standards (BIS), and Agriculture Produce Grading and Marketing Act (Agmark).",
+        fssai: {
+            title: "Food Safety and Standards Authority of India (FSSAI)",
+            p1: "The Food Safety and Standards Rules of India replaces the Prevention of Food Adulteration Act. Food Safety and Standards Rules came into effect from August, 2011. These are compulsory standards that are obligatory for any food product going into the market."
+        },
+        bis: {
+            title: "Bureau of Indian Standards (BIS)",
+            p1: "BIS, formerly the Indian Standards Institution (ISI), was established as a statutory body in 1986. In the processed food sector, the formulated standards are implemented through voluntary and third party certification systems. Manufacturers complying with these standards can obtain ‘ISI’ or ‘BIS’ certification."
+        },
+        agmark: {
+            title: "Agmark",
+            p1: "The Agriculture Produce Grading and Marketing Act was first enacted in 1937. The standards came to be known as Agmark standards. Grading under this act is voluntary. Three dairy products (ghee, butter and dairy spreads) are currently graded under this scheme."
+        },
+        mmpo: {
+            title: "Milk and Milk Product Order (MMPO)",
+            p1: "All dairy plants processing more than 10,000 liters of milk per day or handling more than 500 tonnes of milk solids per annum are now required to obtain registration certificates from the competent authority. This order has also defined milkshed areas."
+        },
+        export_act: {
+            title: "Export (Quality Control and Inspection) Act",
+            p1: "Enacted in 1963 and operated by the Export Inspection Council of India, this act stresses on compulsory inspection of the manufacturers’ premises, hygienic manufacturing practices, and quality assurance programmes for the exportable product."
+        }
+    },
+    harmonization: {
+        title: "Harmonization of Indian Standards With International Standards",
+        p1: "The WTO accepts the international food standards formulated by the codex as the reference points for the global food trade. Most of the national food standards would have to be harmonized with those of codex. The presence of multiple agencies in India to implement multiple laws poses a problem of fixing responsibility. It is, therefore, necessary to have a uniform and logical approach for regulating the quality of food and for harmonizing with the international regulations."
     }
   }
 }
