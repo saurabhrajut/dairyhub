@@ -29,7 +29,8 @@ import {
   Zap,
   Clock,
   View,
-  Power
+  Power,
+  ShieldCheck
 } from "lucide-react";
 
 function Section({ title, icon: Icon, children, value }: { title: string, icon: React.ElementType, children: React.ReactNode, value: string }) {
@@ -174,13 +175,7 @@ export function DairyProcessingModal({
                     <h4 className="mt-4">High-Temperature Short-Time (HTST) Pasteurization</h4>
                     <p>This is the modern, continuous method for pasteurizing large volumes of milk. Milk is heated to 72°C for 15 seconds and then immediately cooled to 5°C or below. It is highly efficient due to its regeneration section, where outgoing hot pasteurized milk heats the incoming cold raw milk.</p>
                 </Section>
-                <Section value="heat-exchangers" title="Heat Exchangers - Plate and Tubular Type" icon={View}>
-                    <h4>Plate Heat Exchangers (PHE)</h4>
-                    <p>The PHE is widely used for pasteurization. It consists of a series of thin, corrugated stainless steel plates pressed together in a frame. Gaskets seal the plates and direct the flow of milk and the heating/cooling medium (like hot water or chilled water) through alternate channels. The corrugations create turbulence, ensuring efficient heat transfer. Multiple sections for regeneration, heating, and cooling are combined in one compact unit.</p>
-                    <h4>Tubular Heat Exchangers</h4>
-                    <p>In these exchangers, the product flows through tubes that are heated or cooled externally. They can handle higher pressures and are often used for UHT processing where temperatures exceed 100°C. However, they are more difficult to clean and inspect compared to plate heat exchangers.</p>
-                </Section>
-                <Section value="htst-operation" title="Working of HTST Pasteurizer" icon={Power}>
+                 <Section value="htst-operation" title="Working of HTST Pasteurizer" icon={Power}>
                     <h4>Operation Steps</h4>
                     <ol className="list-decimal pl-5 space-y-2">
                         <li><strong>Startup:</strong> The plant is first sterilized with hot water. Milk flow is then started, which goes to a float-controlled balance tank. A pump pushes the milk through the regeneration section where it is pre-heated by the outgoing pasteurized milk.</li>
@@ -191,11 +186,35 @@ export function DairyProcessingModal({
                     <h4>Efficiency Test</h4>
                     <p>The **Alkaline Phosphatase Test** is used to check the efficiency of pasteurization. This enzyme is naturally present in raw milk and is destroyed at a temperature-time combination slightly higher than that required to kill the most heat-resistant pathogen (Mycobacterium tuberculosis). A negative phosphatase test indicates proper pasteurization.</p>
                 </Section>
-                <Section value="vacuum-pasteurization" title="Vacuum Pasteurization (Vacreation)" icon={Wind}>
+                 <Section value="heat-exchangers" title="Heat Exchangers - Plate and Tubular Type" icon={View}>
+                    <h4>Plate Heat Exchangers (PHE)</h4>
+                    <p>The PHE is widely used for pasteurization. It consists of a series of thin, corrugated stainless steel plates pressed together in a frame. Gaskets seal the plates and direct the flow of milk and the heating/cooling medium (like hot water or chilled water) through alternate channels. The corrugations create turbulence, ensuring efficient heat transfer. Multiple sections for regeneration, heating, and cooling are combined in one compact unit.</p>
+                    <h4>Tubular Heat Exchangers</h4>
+                    <p>In these exchangers, the product flows through tubes that are heated or cooled externally. They can handle higher pressures and are often used for UHT processing where temperatures exceed 100°C. However, they are more difficult to clean and inspect compared to plate heat exchangers.</p>
+                </Section>
+                 <Section value="vacuum-pasteurization" title="Vacuum Pasteurization (Vacreation)" icon={Wind}>
                     <h4>Purpose</h4>
                     <p>Vacreation is a process of heat treatment under vacuum. Its main purposes are to kill bacteria, inactivate enzymes, and, most importantly, remove undesirable feed and weed taints and off-flavors from milk or cream through steam distillation.</p>
                     <h4>Principle & Process</h4>
                     <p>The process involves mixing the product (like cream) with steam under vacuum and then causing it to expand suddenly into a second chamber with a higher vacuum. This flash evaporation and steam distillation process effectively strips out volatile off-flavors. A typical Vacreator has multiple chambers, each with a progressively higher vacuum, to achieve pasteurization, flavor removal, and cooling in a single continuous process.</p>
+                </Section>
+                <Section value="sterilization" title="Sterilization & UHT Processing" icon={ShieldCheck}>
+                    <h4>Introduction to Sterilization</h4>
+                    <p>According to Food Safety and Standards Rules-2011, the term ‘sterilization’ when used in association with milk, means heating milk in sealed container continuously to a temperature of either 115°C for 15 min or at least 130°C for a period of one second or more in a continuous flow and then packed under aseptic condition in hermetically sealed containers to ensure preservation at room temperature for a period not less than 15 days from the date of manufacture.</p>
+                    <h4>In-bottle Sterilization</h4>
+                    <p>In this method, raw milk is filtered, standardized, homogenized, and filled into bottles. The sealed bottles are then heated in batches or continuously (e.g., in a hydrostatic tower sterilizer) to 110-118°C for 15-25 minutes. This process gives a long shelf life but can cause more significant changes to flavor and color compared to UHT.</p>
+                    <h4 className="mt-4">Ultra-High Temperature (UHT) Processing</h4>
+                    <p>UHT is a modern sterilization technique where milk is heated to a very high temperature (135-150°C) for a very short time (a few seconds). This effectively sterilizes the milk with minimal nutritional and sensory damage. The sterile milk is then packed aseptically into sterile containers.</p>
+                    <h5 className="font-bold mt-2">UHT Heating Methods:</h5>
+                     <ul className="list-disc pl-5 space-y-1">
+                        <li><strong>Direct Heating:</strong> Steam is injected directly into the milk (steam injection) or milk is infused into a steam-filled chamber (infusion). This allows for very rapid heating but requires precise control to remove the added water.</li>
+                        <li><strong>Indirect Heating:</strong> Milk is heated through a surface, like in a plate or tubular heat exchanger, without direct contact with the heating medium. This is more common but can lead to more cooked flavors.</li>
+                    </ul>
+                    <h5 className="font-bold mt-2">Advantages of UHT Milk:</h5>
+                     <ul className="list-disc pl-5 space-y-1">
+                        <li>Very long shelf life (several months) without refrigeration.</li>
+                        <li>Minimal flavor and nutritional changes compared to in-bottle sterilization.</li>
+                    </ul>
                 </Section>
             </Accordion>
         </ScrollArea>
@@ -203,5 +222,3 @@ export function DairyProcessingModal({
     </Dialog>
   );
 }
-
-    
