@@ -30,7 +30,8 @@ import {
   Clock,
   View,
   Power,
-  ShieldCheck
+  ShieldCheck,
+  Package
 } from "lucide-react";
 
 function Section({ title, icon: Icon, children, value }: { title: string, icon: React.ElementType, children: React.ReactNode, value: string }) {
@@ -70,6 +71,7 @@ export function DairyProcessingModal({
           </DialogDescription>
         </DialogHeader>
         <ScrollArea className="flex-1 mt-4 pr-6">
+          <div className="overflow-x-auto">
             <Accordion type="single" collapsible className="w-full" defaultValue="heat-treatment">
                 <Section value="workflow" title="Workflow Overview" icon={Settings}>
                     <p>Dairy processing ek sequence of operations hai jismein raw milk ko safe, high-quality, aur shelf-stable products mein badla jaata hai. Har step ka ek specific purpose hota hai.</p>
@@ -198,7 +200,7 @@ export function DairyProcessingModal({
                     <h4>Principle & Process</h4>
                     <p>The process involves mixing the product (like cream) with steam under vacuum and then causing it to expand suddenly into a second chamber with a higher vacuum. This flash evaporation and steam distillation process effectively strips out volatile off-flavors. A typical Vacreator has multiple chambers, each with a progressively higher vacuum, to achieve pasteurization, flavor removal, and cooling in a single continuous process.</p>
                 </Section>
-                <Section value="sterilization" title="Sterilization & UHT Processing" icon={ShieldCheck}>
+                <Section value="sterilization" title="Sterilization, UHT & Packaging" icon={ShieldCheck}>
                     <h4>Introduction to Sterilization</h4>
                     <p>According to Food Safety and Standards Rules-2011, the term ‘sterilization’ when used in association with milk, means heating milk in sealed container continuously to a temperature of either 115°C for 15 min or at least 130°C for a period of one second or more in a continuous flow and then packed under aseptic condition in hermetically sealed containers to ensure preservation at room temperature for a period not less than 15 days from the date of manufacture.</p>
                     <h4>In-bottle Sterilization</h4>
@@ -210,13 +212,21 @@ export function DairyProcessingModal({
                         <li><strong>Direct Heating:</strong> Steam is injected directly into the milk (steam injection) or milk is infused into a steam-filled chamber (infusion). This allows for very rapid heating but requires precise control to remove the added water.</li>
                         <li><strong>Indirect Heating:</strong> Milk is heated through a surface, like in a plate or tubular heat exchanger, without direct contact with the heating medium. This is more common but can lead to more cooked flavors.</li>
                     </ul>
-                    <h5 className="font-bold mt-2">Advantages of UHT Milk:</h5>
+                    <h4 className="mt-4">Homogenization in UHT Processing</h4>
+                    <p>Homogenization can be done before (upstream) or after (downstream) UHT heating. Upstream is simpler as it doesn't require a sterile homogenizer, but downstream homogenization can provide better stability against protein aggregation and sediment formation during storage, especially in direct heating systems.</p>
+                    <h4 className="mt-4">Aseptic Packaging</h4>
+                    <p>Aseptic packaging is critical for UHT products. It involves sterilizing the packaging material (often using hydrogen peroxide), filling the sterile product in a sterile environment, and sealing the container hermetically to prevent recontamination. This allows the product to have a long shelf life without refrigeration.</p>
+                    <h4 className="mt-4">Defects in UHT Milk</h4>
                      <ul className="list-disc pl-5 space-y-1">
-                        <li>Very long shelf life (several months) without refrigeration.</li>
-                        <li>Minimal flavor and nutritional changes compared to in-bottle sterilization.</li>
+                        <li><strong>Flavour:</strong> A "cooked" or "cabbage" flavour is common initially due to sulphur compounds, but it usually disappears after a few days. Oxidized or stale flavours can develop later during storage.</li>
+                        <li><strong>Colour:</strong> Unlike in-bottle sterilization, UHT milk doesn't typically brown during processing. However, some browning can occur during long-term storage.</li>
+                        <li><strong>Texture & Structure:</strong> Inefficient homogenization can lead to fat separation. Sediment can form due to protein aggregation. "Age gelation," where the milk thickens and forms a gel during storage, can also occur, primarily due to enzymatic (protease) activity or physico-chemical changes.</li>
                     </ul>
+                    <h4 className="mt-4">Nutritive Value of UHT Milk</h4>
+                    <p>UHT processing causes some denaturation of whey proteins but has little effect on the nutritional value of casein, lipids, or minerals. There can be some loss of heat-sensitive vitamins, such as folic acid and vitamin C, but fat-soluble vitamins (A, D, E, K) and most B-complex vitamins are largely unaffected.</p>
                 </Section>
             </Accordion>
+          </div>
         </ScrollArea>
       </DialogContent>
     </Dialog>
