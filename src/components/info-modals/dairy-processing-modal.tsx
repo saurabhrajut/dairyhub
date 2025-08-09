@@ -27,7 +27,9 @@ import {
   RotateCw,
   Scaling,
   Zap,
-  Clock
+  Clock,
+  View,
+  Power
 } from "lucide-react";
 
 function Section({ title, icon: Icon, children, value }: { title: string, icon: React.ElementType, children: React.ReactNode, value: string }) {
@@ -83,136 +85,117 @@ export function DairyProcessingModal({
                 </Section>
                  <Section value="filtration" title="Filtration and Clarification" icon={Filter}>
                     <h4>Parichay (Introduction)</h4>
-                    <p>Doodh ke handling aur transportation ke dauran, kuch dikhne wale kan aur gandagi doodh mein aa sakti hai, jise filtration ya centrifugal clarification se hataya jaa sakta hai. Garam doodh ki taralta (fluidity) zyada hone ke kaaran, iska separation process adhik prabhavi hota hai. Isliye doodh ko lagbhag 35-40°C tak pre-heat kiya jaata hai.</p>
+                    <p>During handling of milk on farm and its transportation, certain visible particles and dirt may gain access into the milk which may be removed by either filtration or centrifugal clarification. Filtration/clarification equipment has been designed for both cold and warm milk. Since fluidity of warm milk is more, its separation process is more efficient. However, warming of milk for this purpose requires additional equipment. It also poses the risk of bacterial growth unless handled properly. Handling at higher temperatures may also affect creaming property of the milk besides dissolving some of the extraneous matter.</p>
+                    
+                    <h4 className="mt-4">Pre-heating</h4>
+                    <p>This term refers to heating of milk before the operation which follows immediately. The milk is pre-heated to about 35-40°C using plate or tubular heater for efficient filtration/clarification. Pre-heating becomes essential, if the incoming milk is cold. As the temperature of the milk increases, the viscosity of milk decreases resulting in more efficient filtration/clarification.</p>
+                    
                     <h4 className="mt-4">Filtration</h4>
-                    <p>Filtration doodh se dikhne wale sediment (foreign matter) ko straining process se hatata hai. Iske fayde hain ki preheating zaroori nahi hai aur ghulansheel gandagi ke ghulne ki sambhavna kam hoti hai, lekin doodh ka flow dheema hota hai. Filter material mein 25-100 µm ke pores hone chahiye.</p>
-                     <h4 className="mt-4">Clarification</h4>
-                    <p>Clarification filtration se zyada prabhavi hai. Yeh centrifugal force ka istemal karke leucocytes, udder tissues, aur anya fine dirt ko hatata hai. Clarifier cream separator ke saman hota hai lekin isme sirf ek inlet aur ek outlet hota hai aur sludge ke liye zyada jagah hoti hai.</p>
-                    <p><strong>Factors Affecting Clarification:</strong> Viscosity, Temperature (garam doodh behtar), Bowl Speed, aur Microbial Load. Dhyan den ki clarification se doodh ki keeping quality nahi badhti hai.</p>
+                    <p>Filtration of milk is carried out to remove visible sediment (foreign matter) from the milk to improve the aesthetic quality of milk. While filtration removes suspended foreign particles by straining process, clarification removes the same by centrifugal force. The advantages of filtration are that preheating is not essential and there is less likelihood of soluble dirt going into the solution. However, the major disadvantage is the flow of milk is slow.</p>
+
+                    <h4 className="mt-4">Clarification</h4>
+                    <p>Clarification is more efficient than filtration for the removal of dirt and foreign matter from milk. It removes leucocytes, udder tissues, other large cells and fine dirt. The objective of clarification is to improve the appearance and marketability of milk. A clarifier may be operated depending on the size of the machine, for a period ranging from 2 - 8 h for cold milk (5 - 10°C) and 1-4 h for warm milk (57°C), without cleaning.</p>
                 </Section>
                 <Section value="separation" title="Cream Separation" icon={Droplet}>
                     <h4>Siddhant (Principles)</h4>
-                    <p>Cream separation doodh se fat ko alag karne ki prakriya hai. Yeh fat (density ~0.93 g/mL) aur skim milk (density ~1.036 g/mL) ke घनत्व (density) ke antar par aadharit hai.</p>
-                    <p><strong>Gravity Separation:</strong> Stoke's Law ke anusaar, kam घनत्व wale fat globules dheere-dheere upar uthkar ek parat banate hain. Yeh ek dheema process hai.</p>
-                    <p><strong>Centrifugal Separation:</strong> Doodh ko tezi se ghumakar centrifugal force paida ki jaati hai. Bhaari skim milk bahar ki taraf phenk diya jaata hai aur halki cream kendra (center) mein ikatthi ho jaati hai. Yeh process bahut tez aur prabhavi hai.</p>
-                    <h4 className="mt-4">Cream Separator ke Mukhya Bhaag</h4>
+                    <p>Cream separation is the process of separating milk fat from the non-fat solids portion of milk. It is possible because of the difference in density between fat (~0.93 g/mL) and skim milk (~1.036 g/mL).</p>
+                    <p><strong>Gravity Separation:</strong> According to Stoke's Law, the less dense fat globules slowly rise to the surface to form a cream layer. This is a slow process.</p>
+                    <p><strong>Centrifugal Separation:</strong> Milk is spun rapidly, creating a centrifugal force. The heavier skim milk is thrown to the periphery, while the lighter cream collects in the center. This process is very fast and efficient.</p>
+                    <h4 className="mt-4">Cream Separator Components</h4>
                     <ul className="list-disc pl-5 space-y-2">
-                        <li><strong>Bowl and Disc Assembly:</strong> Separator ka mukhya hissa, jismein ek ke upar ek kai saare cone-shaped discs hote hain. In discs ke beech ki choti jagah (separation channels) mein doodh patli paraton mein behta hai, jisse fat aur skim milk alag hote hain.</li>
-                        <li><strong>Inlet/Outlet:</strong> Doodh bowl ke neeche se enter karta hai aur alag hone ke baad cream aur skim milk ke liye alag-alag outlets se bahar nikalta hai.</li>
-                        <li><strong>Cream Regulating Screw:</strong> Is screw ko adjust karke cream ke outlet ke size ko badla jaa sakta hai, jisse cream mein fat ka percentage control kiya jaata hai.</li>
+                        <li><strong>Bowl and Disc Assembly:</strong> The main part of the separator, containing a stack of cone-shaped discs. The small spaces (separation channels) between these discs cause the milk to flow in thin layers, separating the fat and skim milk.</li>
+                        <li><strong>Inlet/Outlet:</strong> Milk enters from the bottom of the bowl and, after separation, exits through separate outlets for cream and skim milk.</li>
+                        <li><strong>Cream Regulating Screw:</strong> By adjusting this screw, the size of the cream outlet can be changed, thus controlling the fat percentage in the cream.</li>
                     </ul>
                 </Section>
                 <Section value="standardization" title="Standardization of Milk" icon={Scaling}>
                   <h4>Parichay (Introduction)</h4>
-                  <p>Standardization doodh ke ek ya ek se adhik ghatakon (constituents) ko ek nirdharit star par adjust karne ki prakriya hai. Market milk industry mein, iska matlab aam taur par skim milk milakar ya cream nikal kar butterfat content ko kam karna hota hai.</p>
+                  <p>Standardization is the process of adjusting one or more of the milk constituents to a nominated level. In the market milk industry, this normally involves reducing the butterfat content by adding skim milk or by removing cream.</p>
                   <h4 className="mt-4">Uddeshya (Objectives)</h4>
                   <ul className="list-disc pl-5 space-y-2">
-                      <li>Vishesh doodh/dairy utpadon ke liye kanooni avashyaktaon ka palan karna.</li>
-                      <li>Upbhokta ko ek saman utpad pradan karna.</li>
-                      <li>Utpadan mein arthikta sunishchit karna.</li>
+                      <li>To comply with the legal requirements for particular milk/dairy products.</li>
+                      <li>To provide the consumer with a uniform product.</li>
+                      <li>To ensure economics in production.</li>
                   </ul>
-                  <h4 className="mt-4">Ganana ke Tarike (Methods of Calculation)</h4>
-                  <p>Standardization ke liye aam taur par Pearson's Square method ya algebraic equations ka istemal hota hai.</p>
+                  <h4 className="mt-4">Methods of Calculation</h4>
+                  <p>For standardization of milk or cream, the proportions of the various ingredients of known composition to be mixed can be estimated using Pearson's Square method or algebraic equations.</p>
                   <h5>Pearson’s Square Method</h5>
-                  <p>Ek square banayein aur uske kendra mein vanchhit fat pratishat rakhein. Square ke baayein kono par milaye jaane wale padarthon ka fat pratishat rakhein. Phir, kendra ke number ko baayein taraf ke bade number se ghatayein aur shesh ko tirche viprit daayein kono par rakhein. Daayein taraf ke number ab un mool padarthon ke hisson ko darshate hain jinhe milana hai.</p>
+                  <p>Draw a square and place the desired fat percentage in the center. At the left-hand corners, place the fat percentages of the materials to be mixed. Subtract the number in the center from the larger number on the left and place the remainder at the diagonally opposite right-hand corner. Do the same for the other number. The numbers on the right now represent the parts of each of the original materials that must be blended.</p>
                   <h5>Algebraic Equations</h5>
-                  <p>Is vidhi mein, milaye jaane wale utpadon, antim utpad, aur kisi ek utpad ki matra ka pata hona chahiye. Mass balance equations banakar unhe hal kiya jaata hai.</p>
-                  <h4 className="mt-4">Standardization ke Prakar (Methods of Standardization)</h4>
+                  <p>This method involves setting up and solving mass balance equations based on the known compositions and quantities of the products.</p>
+                  <h4 className="mt-4">Methods of Standardization</h4>
                    <ul className="list-disc pl-5 space-y-2">
-                      <li><strong>Batch Standardization:</strong> Dairies mein sabse aam prakriya. Ismein doodh ke ek bade batch ka fat content test kiya jaata hai aur phir ganana ke anusar skim milk ya cream milakar use aavashyak star par laya jaata hai.</li>
-                      <li><strong>Continuous Standardization:</strong> Ismein ek inline sampler aur testing device ka upyog hota hai jo lagatar fat content ko maapta hai. Operator is reading ko dekhkar milk line mein skim milk ya cream ke pravaah ko adjust karta hai.</li>
-                      <li><strong>Automatic Standardization:</strong> Yeh continuous process ka ek vistar hai jismein ek microprocessor sampler/tester system se juda hota hai aur automatically skim milk ke pravaah ko niyantrit karta hai.</li>
+                      <li><strong>Batch Standardization:</strong> This is the most common process in dairies. The fat content of a large batch of milk is tested, and then the required amount of skim milk or cream is added to achieve the desired level.</li>
+                      <li><strong>Continuous Standardization:</strong> This uses an inline sampler and testing device that continuously measures the fat content. An operator adjusts the flow of skim milk or cream into the milk line based on these readings.</li>
+                      <li><strong>Automatic Standardization:</strong> This is an extension of the continuous process where a microprocessor automatically controls the flow of skim milk or cream based on signals from the sampler/tester system.</li>
                   </ul>
-                  <h4 className="mt-4">Tri-Process Machine</h4>
-                  <p>Tri-process machine ek hi unit mein doodh ko clarify, separate, aur standardize karne ke liye design ki gayi hai.</p>
                 </Section>
                 <Section value="homogenization" title="Homogenization" icon={Layers}>
                      <h4>Parichay aur Paribhasha (Introduction and Definition)</h4>
-                     <p>Homogenization ek mechanical process hai jiska uddeshya doodh mein maujood bade fat globules ko chote, uniform size ke globules (&lt;2 µm) mein todna hai. Isse doodh mein ek sthir emulsion banta hai, jisse fat upar aakar malai ki parat (cream layer) nahi banata.</p>
+                     <p>Homogenization is a mechanical process aimed at breaking down the large fat globules in milk into smaller, uniform-sized globules (&lt;2 µm). This creates a stable emulsion in the milk, preventing the fat from rising to form a cream layer.</p>
                       <h4 className="mt-4">Fayde aur Nuksan (Merits and Demerits)</h4>
-                      <p><strong>Fayde:</strong> Cream layer nahi banti, doodh gaadha aur swadisht lagta hai, aur aasani se pach jaata hai. <strong>Nuksan:</strong> Utpadan lagat badh jaati hai aur galat taapman par karne se rancidity (kadwahat) ho sakti hai.</p>
+                      <p><strong>Merits:</strong> No cream layer formation, milk appears thicker and tastes richer, and is more easily digestible. <strong>Demerits:</strong> Increased production cost, and can lead to rancidity if not done at the correct temperature.</p>
                      <h4 className="mt-4">Siddhant aur Prakriya (Principles and Process)</h4>
-                     <p>Doodh ko ek high-pressure pump ke zariye ek homogenizer valve (ek bahut choti si jagah) se force kiya jaata hai. Jab doodh is valve se bahut tezi se guzarta hai, toh turbulence, shear, aur cavitation forces milkar bade fat globules ko chote globules mein tod dete hain. Homogenization aam taur par pasteurization se pehle kiya jaata hai.</p>
+                     <p>Milk is forced through a homogenizer valve (a very small gap) at high pressure. As the milk passes through this valve at high velocity, forces like turbulence, shear, and cavitation combine to break down the large fat globules into smaller ones. Homogenization is typically done before pasteurization.</p>
                       <h4 className="mt-4">Doodh ke Gunon par Prabhav (Effect on Milk Properties)</h4>
                      <ul className="list-disc pl-5 space-y-2">
-                        <li><strong>Safed Rang:</strong> Chote fat globules प्रकाश ko zyada bikhherte hain, jisse doodh zyada safed aur apardarshi (opaque) dikhta hai.</li>
-                        <li><strong>Fuller Body & Richer Taste:</strong> Homogenized doodh peene mein zyada gaadha aur swadisht lagta hai.</li>
-                        <li><strong>Lipase ke prati Samvedansheelta:</strong> Agar homogenization se pehle doodh ko theek se garam nahi kiya gaya, to lipase enzyme tezi se fat ko todkar rancid flavor paida kar sakta hai.</li>
+                        <li><strong>Whiter Color:</strong> Smaller fat globules scatter light more, making the milk appear whiter and more opaque.</li>
+                        <li><strong>Fuller Body & Richer Taste:</strong> Homogenized milk feels thicker and more flavorful in the mouth.</li>
+                        <li><strong>Sensitivity to Lipase:</strong> If the milk is not properly heated before homogenization, the lipase enzyme can rapidly break down the fat, producing a rancid flavor.</li>
                      </ul>
                 </Section>
                  <Section value="bactofugation" title="Bactofugation" icon={RotateCw}>
                     <h4>Parichay (Introduction)</h4>
-                    <p>Bactofugation centrifugal force ka upyog karke doodh se microorganisms, khaaskar heat-resistant spores (jaise Bacillus/Clostridia), ko hatane ki prakriya hai. Iska mukhya uddeshya doodh ki hygienic quality ko sudharna hai, taaki use kam temperature-time combination par sterilize kiya jaa sake. Yeh khaaskar un products ke liye mahatvapurna hai jinki shelf-life lambi hoti hai, jaise hard cheese aur UHT milk.</p>
+                    <p>Bactofugation is the process of removing microorganisms, especially heat-resistant spores (like Bacillus/Clostridia), from milk using centrifugal force. Its main objective is to improve the hygienic quality of milk, allowing it to be sterilized at a lower temperature-time combination. This is particularly important for products with a long shelf-life, such as hard cheese and UHT milk.</p>
                      <h4 className="mt-4">Bactotherm Process</h4>
-                     <p>Is process mein, doodh ko 60-75°C tak garam kiya jaata hai aur phir ek special high-efficiency centrifuge (Bactofuge) mein bheja jaata hai. Yahan, bacteria (jinki density doodh se zyada hoti hai) alag hokar ek concentrate ke roop mein nikalte hain, jise 'bactofugate' kehte hain. Is bactofugate ko alag se UHT treat (130-140°C par 3-4 seconds) karke wapas doodh mein mix kar diya jaata hai. Isse doodh ke solids ka nuksan nahi hota aur bacterial load bhi bahut kam ho jaata hai.</p>
+                     <p>In this process, milk is heated to 60-75°C and then sent to a special high-efficiency centrifuge (Bactofuge). Here, the bacteria (which are denser than milk) are separated and discharged as a concentrate called 'bactofugate'. This bactofugate is separately UHT treated (130-140°C for 3-4 seconds) and then mixed back into the milk. This prevents loss of milk solids while significantly reducing the bacterial load.</p>
                 </Section>
                 <Section value="heat-treatment" title="Principles of Heat Treatment" icon={Thermometer}>
                     <h4>Parichay (Introduction)</h4>
-                    <p>Dairy industry mein, thermal processing ek swikrit shabdavali hai jo doodh ke kharab hone aur bhojan se hone wali bimariyon ke avasaron ko kam karne/samapt karne ke liye avashyak ushma upchar ka varnan karti hai. Pasteurization ek prakar ka thermal processing hai jo ek vishisht rogjanak sukshmajiv ke liye design kiya gaya hai, lekin yah refrigeration ke bina ek shelf-stable utpad pradan nahi karta hai. Ushma upchar doodh mein ushma urja ka sthanantaran hai. Doodh ke aise ushma upchar mein bahut sari urja kharch hoti hai. Ushma upchar ka uddeshya doodh mein maujood sabhi sukshmajivon aur adhikansh enzymes ko poori tarah se nishkriya karna hai.</p>
-                    <h4 className="mt-4">Pasteurization</h4>
-                    <p>Yah ek ushma upchar prakriya hai jiska uddeshya doodh mein maujood sabhi rogjanak (bimari phailane wale) sukshmajivon ko nasht karna hai aur kharab karne wale sukshmajivon ki sankhya ko kam karna hai, taki doodh pine ke liye surakshit ho jaye aur uski shelf life badh jaye. Sabse aam vidhi <strong>High-Temperature Short-Time (HTST)</strong> hai.</p>
-                    <h4 className="mt-4">Doodh ke Ghatakon par Prabhav</h4>
-                    <p>Badhte taapman aur samay ke saath, whey proteins mein parivartan hota hai, ve ghulanshilta kam kar dete hain aur pH 4.6 par casein ke saath jam jate hain. Ushma upchar se 'paka hua swad' (cooked taste) bhi aa sakta hai. Casein samanya pasteurization taapman par lagbhag aparivartit rahta hai.</p>
-                    <h4 className="mt-4">Heat Treatment Processes</h4>
-                     <div className="overflow-x-auto"><table className="w-full text-left border-collapse"><thead><tr className="bg-muted"><th className="p-2 border">Process</th><th className="p-2 border">Temp (°C)</th><th className="p-2 border">Time</th></tr></thead><tbody>
-                        <tr><td className="p-2 border">Thermization</td><td className="p-2 border">63-65</td><td className="p-2 border">15s</td></tr>
-                        <tr><td className="p-2 border">LTLT Pasteurization</td><td className="p-2 border">63</td><td className="p-2 border">30 min</td></tr>
-                        <tr><td className="p-2 border">HTST Pasteurization</td><td className="p-2 border">72-75</td><td className="p-2 border">15-20s</td></tr>
-                        <tr><td className="p-2 border">UHT</td><td className="p-2 border">135-150</td><td className="p-2 border">1-4s</td></tr>
-                        <tr><td className="p-2 border">Sterilization</td><td className="p-2 border">115-121</td><td className="p-2 border">15-30 min</td></tr>
-                    </tbody></table></div>
+                    <p>Thermal processing is a crucial step in the dairy industry to minimize spoilage and eliminate food-borne illnesses. The primary objective of heat treatment is to inactivate all pathogenic microorganisms and most enzymes, thus improving the hygienic quality and shelf life of milk products. Pasteurization is the most common thermal process.</p>
+                    <h4 className="mt-4">Time and Temperature</h4>
+                    <p>There is a logarithmic relationship between temperature and time for inactivating microorganisms. A 10°C increase in temperature can reduce the required time to 1/10th of the original. This relationship is described by the Q10 factor. For chemical reactions, the Q10 is low (2-4), while for bacterial spores, it is very high (around 30). This allows UHT processing (very high temperature for a very short time) to effectively sterilize milk with minimal chemical changes (like browning).</p>
+                    <h4 className="mt-4">Changes in Milk Components</h4>
+                    <p>Heat treatment affects milk components. Whey proteins start to denature above 70°C, which can be beneficial for yogurt making but can affect cheese renneting. The salt equilibrium is also disturbed, and at higher temperatures, calcium can precipitate. Vitamins, especially B-complex and C, are also sensitive to heat.</p>
                 </Section>
-                <Section value="kinetics" title="Kinetic Parameters" icon={Clock}>
-                    <p>Microorganisms ko garmi se nasht kiya jata hai jab unke proteins jam jate hain aur unke metabolism ke liye avashyak enzymes nishkriya ho jate hain. Garmi pratirodh ko darshane ke liye kai shabd istemal kiye jate hain:</p>
+                <Section value="kinetics" title="Kinetic Parameters of Heat Induced Changes" icon={Clock}>
+                    <p>Microorganisms are destroyed by heat when their proteins coagulate and essential enzymes are inactivated. Several terms are used to denote heat resistance:</p>
                     <ul className="list-disc pl-5 space-y-2">
-                      <li><strong>D-Value (Decimal Reduction Time):</strong> Ek vishisht taapman par jeevon ki sankhya ko uske moolya ke 1/10 tak kam karne ke liye avashyak samay (minute mein).</li>
-                      <li><strong>Z-Value:</strong> 1/10 samay mein vahi ghatak prabhav prapt karne ke liye avashyak taapman mein vriddhi.</li>
-                      <li><strong>F0 Value:</strong> 121°C par ek jeev ka thermal death time (minute mein). Yah ek thermal process ke microbial kathorta ko mapne ke liye ek kul ekikrit ghatak prabhav hai.</li>
-                      <li><strong>Q10-Value:</strong> Jab taapman 10°C badhaya jata hai to abhikriya ki gati mein vriddhi.</li>
+                      <li><strong>D-Value (Decimal Reduction Time):</strong> The time in minutes required at a specific temperature to reduce the number of organisms to 1/10th of the original value.</li>
+                      <li><strong>Z-Value:</strong> The increase in temperature necessary to achieve the same lethal action in 1/10th of the time.</li>
+                      <li><strong>F0 Value:</strong> The thermal death time (in minutes) of an organism at 121°C. It is a measure of the total lethal effect of a thermal process.</li>
+                      <li><strong>Q10-Value:</strong> The increase in the rate of a reaction when the temperature is increased by 10°C.</li>
                     </ul>
                 </Section>
                 <Section value="pasteurization" title="Methods of Pasteurization" icon={Zap}>
-                    <p>Pasteurization ke do mukhya tarike hain:</p>
+                    <p>Pasteurization is a heat treatment process designed to kill all pathogenic microorganisms in milk, making it safe for consumption and extending its shelf life. The two main methods are:</p>
                     <h4 className="mt-4">Low-Temperature Long-Time (LTLT) / Batch Pasteurization</h4>
-                    <p>Doodh ko 63°C par kam se kam 30 minute tak garam kiya, roka aur thanda kiya jata hai. Yah chhote volumes ke liye upyukt hai aur aksar multipurpose vats mein kiya jata hai.</p>
+                    <p>Milk is heated to a minimum of 63°C and held at this temperature for at least 30 minutes, then cooled. This method is suitable for smaller volumes and is often done in multi-purpose vats.</p>
                     <h4 className="mt-4">High-Temperature Short-Time (HTST) Pasteurization</h4>
-                    <p>Yah doodh ko pasteurize karne ka aadhunik tarika hai aur bade volumes ke liye istemal kiya jata hai. HTST pasteurizer doodh ko 72°C par 15 second tak garam karta hai aur phir turant 5°C ya usse kam tak thanda karta hai.</p>
-                     <h5>HTST Pasteurizer ke Mukhya Bhaag</h5>
-                    <ul className="list-disc pl-5 space-y-2">
-                        <li><strong>Balance Tank:</strong> Pasteurizer ko lagatar doodh ki supply deta hai.</li>
-                        <li><strong>Regeneration Section:</strong> Urja bachane wala hissa jahan thanda kachcha doodh garam pasteurized doodh se garmi leta hai.</li>
-                        <li><strong>Heating Section:</strong> Doodh ko antim pasteurization taapman tak garam karta hai.</li>
-                        <li><strong>Holding Tube:</strong> Doodh ko nirdharit samay ke liye nirdharit taapman par rakhta hai.</li>
-                        <li><strong>Flow Diversion Valve (FDV):</strong> Ek suraksha upkaran jo kam garam doodh ko aage jane se rokta hai aur punah-prakriya ke liye wapas bhejta hai.</li>
-                        <li><strong>Cooling Section:</strong> Garam pasteurized doodh ko thanda karta hai.</li>
-                    </ul>
+                    <p>This is the modern, continuous method for pasteurizing large volumes of milk. Milk is heated to 72°C for 15 seconds and then immediately cooled to 5°C or below. It is highly efficient due to its regeneration section, where outgoing hot pasteurized milk heats the incoming cold raw milk.</p>
                 </Section>
-                
-                <Section value="sterilization" title="Sterilization & UHT" icon={CheckCircle}>
-                    <p>Sterilization ka matlab hai doodh se sabhi prakaar ke microorganisms, including unke spores ko, poori tarah se khatam karna. Isse doodh commercially sterile ho jaata hai aur bina refrigeration ke mahino tak store kiya jaa sakta hai.</p>
-                    <h4 className="mt-4">In-Container Sterilization</h4>
-                    <p>Is method mein doodh ko pehle bottles ya cans mein bhara jaata hai aur phir unhein seal karke ek retort (bada pressure cooker) mein rakha jaata hai. Yahan unhein <strong>115-121°C par 15-30 minutes</strong> tak garam kiya jaata hai. Is process se doodh ka rang thoda bhura ho jaata hai aur usmein "cooked" flavor aa jaata hai. Yeh ek batch process hai.</p>
-                    
-                    <h4 className="mt-4">Ultra-High Temperature (UHT) Processing</h4>
-                    <p>Yeh ek continuous process hai jismein doodh ko bahut tezi se bahut adhik taapman tak garam kiya jaata hai aur phir turant thanda kiya jaata hai. Aam taur par, doodh ko <strong>135-150°C par 1-4 seconds</strong> ke liye treat kiya jaata hai. Iske baad, doodh ko ek sterile (aseptic) environment mein pre-sterilized cartons (jaise Tetra Pak) mein bhara jaata hai. UHT processing se doodh ki nutritional quality aur flavor par sterilization ki tulna mein kam asar padta hai.</p>
+                <Section value="heat-exchangers" title="Heat Exchangers - Plate and Tubular Type" icon={View}>
+                    <h4>Plate Heat Exchangers (PHE)</h4>
+                    <p>The PHE is widely used for pasteurization. It consists of a series of thin, corrugated stainless steel plates pressed together in a frame. Gaskets seal the plates and direct the flow of milk and the heating/cooling medium (like hot water or chilled water) through alternate channels. The corrugations create turbulence, ensuring efficient heat transfer. Multiple sections for regeneration, heating, and cooling are combined in one compact unit.</p>
+                    <h4>Tubular Heat Exchangers</h4>
+                    <p>In these exchangers, the product flows through tubes that are heated or cooled externally. They can handle higher pressures and are often used for UHT processing where temperatures exceed 100°C. However, they are more difficult to clean and inspect compared to plate heat exchangers.</p>
                 </Section>
-                                
-                <Section value="drying" title="Milk Drying" icon={Wind}>
-                    <p>Milk drying ka mukhya uddeshya doodh se paani hatakar ek powder banana hai, jisse uski shelf life bahut badh jaati hai aur transport karna aasan ho jaata hai. Do mukhya methods hain:</p>
-                    <h4 className="mt-4">Spray Drying</h4>
-                    <p>Yeh sabse aam method hai. Ismein, concentrated doodh ko ek bade drying chamber ke upar lage atomizer (nozzle) ke zariye choti-choti boondon (spray) mein convert kiya jaata hai. Chamber mein neeche se garam hawa (150-220°C) bheji jaati hai. Jaise hi doodh ki boondein garam hawa ke sampark mein aati hain, unmein se paani turant evaporate ho jaata hai aur sookha milk powder neeche ikattha ho jaata hai. Yeh process bahut tezi se hota hai, isliye powder ki quality achhi rehti hai.</p>
-                    <h4 className="mt-4">Drum Drying</h4>
-                    <p>Is method mein, do internally heated metal drums (rollers) dheere-dheere ek doosre ki taraf ghoomte hain. Unke beech doodh ki ek patli film lagayi jaati hai. Garam drum ke sampark mein aane se paani evaporate ho jaata hai aur sookhi doodh ki ek sheet ban jaati hai, jise scraper blades se khurach kar alag kar liya jaata hai aur phir pees kar powder banaya jaata hai. Is method mein doodh zyada heat ke sampark mein aata hai, isliye powder ki solubility aur flavor spray-dried powder se thodi kamतर ho sakti hai.</p>
+                <Section value="htst-operation" title="Working of HTST Pasteurizer" icon={Power}>
+                    <h4>Operation Steps</h4>
+                    <ol className="list-decimal pl-5 space-y-2">
+                        <li><strong>Startup:</strong> The plant is first sterilized with hot water. Milk flow is then started, which goes to a float-controlled balance tank. A pump pushes the milk through the regeneration section where it is pre-heated by the outgoing pasteurized milk.</li>
+                        <li><strong>Heating & Holding:</strong> The pre-heated milk then enters the heating section where hot water brings it to the pasteurization temperature (e.g., 72°C). It then flows through the holding tube, which is sized to ensure the milk is held for the required time (e.g., 15 seconds).</li>
+                        <li><strong>Flow Diversion Valve (FDV):</strong> This is a critical safety device. If the milk does not reach the required temperature, the FDV automatically diverts it back to the balance tank for reprocessing.</li>
+                        <li><strong>Cooling & Exit:</strong> Properly pasteurized milk passes the FDV and goes back through the regeneration section to be cooled by the incoming raw milk. It is then further cooled in the cooling section with chilled water before exiting the system for packaging.</li>
+                    </ol>
+                    <h4>Efficiency Test</h4>
+                    <p>The **Alkaline Phosphatase Test** is used to check the efficiency of pasteurization. This enzyme is naturally present in raw milk and is destroyed at a temperature-time combination slightly higher than that required to kill the most heat-resistant pathogen (Mycobacterium tuberculosis). A negative phosphatase test indicates proper pasteurization.</p>
                 </Section>
-
-                <Section value="membrane" title="Membrane Filtration" icon={Archive}>
-                    <p>Yeh ek modern technology hai jo doodh ke alag-alag components ko bina heat ka istemal kiye unke size ke aadhar par alag karti hai. Ismein ek semi-permeable membrane ka upyog hota hai jo kuch cheezon ko paar jaane deti hai aur kuch ko rok leti hai.</p>
-                    <ul className="list-disc pl-5 space-y-3">
-                        <li><strong>Microfiltration (MF):</strong> Iske pores sabse bade hote hain. Yeh bacteria aur fat globules ko rokta hai, jabki proteins, lactose, aur minerals ko paar jaane deta hai. Iska upyog doodh ko 'cold pasteurize' karne aur whey se casein alag karne mein hota hai.</li>
-                        <li><strong>Ultrafiltration (UF):</strong> Iske pores MF se chote hote hain. Yeh fat aur proteins (casein aur whey dono) ko rokta hai, lekin lactose aur minerals ko paar jaane deta hai. Iska upyog cheese banane (yield badhane ke liye), aur whey protein concentrate (WPC) banane mein hota hai.</li>
-                        <li><strong>Nanofiltration (NF):</strong> Yeh bade ions (jaise Calcium) ko rokta hai, lekin chote ions (jaise Sodium) aur paani ko paar jaane deta hai. Iska upyog whey se minerals hatane (demineralization) mein hota hai.</li>
-                        <li><strong>Reverse Osmosis (RO):</strong> Iske pores sabse chote hote hain. Yeh lagbhag sab kuch rokta hai aur sirf paani ko paar jaane deta hai. Iska upyog doodh ya whey se paani hatakar unhein concentrate karne mein hota hai.</li>
-                    </ul>
+                <Section value="vacuum-pasteurization" title="Vacuum Pasteurization (Vacreation)" icon={Wind}>
+                    <h4>Purpose</h4>
+                    <p>Vacreation is a process of heat treatment under vacuum. Its main purposes are to kill bacteria, inactivate enzymes, and, most importantly, remove undesirable feed and weed taints and off-flavors from milk or cream through steam distillation.</p>
+                    <h4>Principle & Process</h4>
+                    <p>The process involves mixing the product (like cream) with steam under vacuum and then causing it to expand suddenly into a second chamber with a higher vacuum. This flash evaporation and steam distillation process effectively strips out volatile off-flavors. A typical Vacreator has multiple chambers, each with a progressively higher vacuum, to achieve pasteurization, flavor removal, and cooling in a single continuous process.</p>
                 </Section>
             </Accordion>
         </ScrollArea>
@@ -220,3 +203,5 @@ export function DairyProcessingModal({
     </Dialog>
   );
 }
+
+    
