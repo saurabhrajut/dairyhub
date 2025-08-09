@@ -84,13 +84,15 @@ export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; set
 
                             <h5 className="font-bold mt-4">2. Fat (Lipids) – 3-6%</h5>
                             <p>Milk fat ek emulsion (fat droplets dispersed in water) ki tarah hota hai. Ye doodh ka sabse energy-rich component hai (9 kcal/g) aur flavor, texture aur fat-soluble vitamins (A, D, E, K) provide karta hai.</p>
-                            <Table className="my-2">
-                                <TableHeader><TableRow><TableHead>Type of Milk</TableHead><TableHead>Fat % (Approx)</TableHead></TableRow></TableHeader>
-                                <TableBody>
-                                    <TableRow><TableCell>Cow Milk</TableCell><TableCell>3.5-4.5%</TableCell></TableRow>
-                                    <TableRow><TableCell>Buffalo Milk</TableCell><TableCell>6-7%</TableCell></TableRow>
-                                </TableBody>
-                            </Table>
+                            <div className="overflow-x-auto">
+                                <Table className="my-2">
+                                    <TableHeader><TableRow><TableHead>Type of Milk</TableHead><TableHead>Fat % (Approx)</TableHead></TableRow></TableHeader>
+                                    <TableBody>
+                                        <TableRow><TableCell>Cow Milk</TableCell><TableCell>3.5-4.5%</TableCell></TableRow>
+                                        <TableRow><TableCell>Buffalo Milk</TableCell><TableCell>6-7%</TableCell></TableRow>
+                                    </TableBody>
+                                </Table>
+                            </div>
 
                             <h5 className="font-bold mt-4">3. Protein – 3-4%</h5>
                             <p>Milk protein high biological value ka hota hai aur essential amino acids provide karta hai. Yeh do prakar ke hote hain: Casein (~80%) aur Whey (~20%).</p>
@@ -100,14 +102,16 @@ export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; set
 
                             <h5 className="font-bold mt-4">5. Minerals & Salts (Ash) – 0.7-0.9%</h5>
                             <p>Doodh minerals ka ek accha source hai, jismein Calcium (Ca) aur Phosphorus (P) pramukh hain. Yeh milk ki stability aur pH ko maintain karne mein bhi madad karte hain.</p>
-                            <Table className="my-2">
-                                <TableHeader><TableRow><TableHead>Mineral</TableHead><TableHead>Quantity (mg per 100g milk)</TableHead></TableRow></TableHeader>
-                                <TableBody>
-                                    <TableRow><TableCell>Calcium</TableCell><TableCell>120-130 mg</TableCell></TableRow>
-                                    <TableRow><TableCell>Phosphorus</TableCell><TableCell>90-100 mg</TableCell></TableRow>
-                                    <TableRow><TableCell>Potassium</TableCell><TableCell>140-150 mg</TableCell></TableRow>
-                                </TableBody>
-                            </Table>
+                            <div className="overflow-x-auto">
+                                <Table className="my-2">
+                                    <TableHeader><TableRow><TableHead>Mineral</TableHead><TableHead>Quantity (mg per 100g milk)</TableHead></TableRow></TableHeader>
+                                    <TableBody>
+                                        <TableRow><TableCell>Calcium</TableCell><TableCell>120-130 mg</TableCell></TableRow>
+                                        <TableRow><TableCell>Phosphorus</TableCell><TableCell>90-100 mg</TableCell></TableRow>
+                                        <TableRow><TableCell>Potassium</TableCell><TableCell>140-150 mg</TableCell></TableRow>
+                                    </TableBody>
+                                </Table>
+                            </div>
                             
                             <h5 className="font-bold mt-4">6. Vitamins</h5>
                             <p><strong>Fat-Soluble:</strong> A, D, E, K. <strong>Water-Soluble:</strong> B-Complex (B1, B2, B12) and C.</p>
@@ -153,24 +157,26 @@ export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; set
                 <TabsContent value="properties" className="mt-0">
                     <div className="space-y-4 text-gray-700 text-sm leading-relaxed">
                         <h4 className="text-lg font-bold text-primary mb-2 font-headline">Physical Properties of Milk</h4>
-                        <Table>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead className="w-[150px]">Property</TableHead>
-                                    <TableHead>Value</TableHead>
-                                    <TableHead>Significance</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {physicalProperties.map(prop => (
-                                    <TableRow key={prop.property}>
-                                        <TableCell className="font-medium">{prop.property}</TableCell>
-                                        <TableCell>{prop.value}</TableCell>
-                                        <TableCell>{prop.details}</TableCell>
+                        <div className="overflow-x-auto">
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead className="w-[150px]">Property</TableHead>
+                                        <TableHead>Value</TableHead>
+                                        <TableHead>Significance</TableHead>
                                     </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
+                                </TableHeader>
+                                <TableBody>
+                                    {physicalProperties.map(prop => (
+                                        <TableRow key={prop.property}>
+                                            <TableCell className="font-medium">{prop.property}</TableCell>
+                                            <TableCell>{prop.value}</TableCell>
+                                            <TableCell>{prop.details}</TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </div>
                     </div>
                 </TabsContent>
                 <TabsContent value="processing" className="mt-0">

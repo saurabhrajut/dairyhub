@@ -35,7 +35,7 @@ function Section({ title, icon: Icon, children }: { title: string, icon: React.E
                 </div>
             </AccordionTrigger>
             <AccordionContent>
-                <div className="prose prose-sm max-w-none text-gray-700 leading-relaxed pl-9">
+                <div className="prose prose-sm max-w-none text-gray-700 leading-relaxed pl-9 break-words">
                     {children}
                 </div>
             </AccordionContent>
@@ -92,7 +92,7 @@ export function DairyProcessingModal({
                     
                     <h4 className="mt-4">Regeneration Efficiency</h4>
                     <p>Yeh pasteurizer ki energy-saving capability ko maapta hai. Yeh batata hai ki raw milk pasteurization temperature tak pahunchne ke liye kitni garmi pasteurized milk se recover karta hai.</p>
-                    <pre className="bg-muted p-3 rounded-lg font-mono text-sm text-primary"><code>Efficiency (%) = [(Temp. after Regeneration - Initial Temp.) / (Pasteurization Temp. - Initial Temp.)] * 100</code></pre>
+                    <pre className="bg-muted p-3 rounded-lg font-mono text-sm text-primary overflow-x-auto"><code>Efficiency (%) = [(Temp. after Regeneration - Initial Temp.) / (Pasteurization Temp. - Initial Temp.)] * 100</code></pre>
                     <p><strong>Example:</strong> Agar raw milk 5°C par enter karta hai, regeneration ke baad 65°C tak pahunchta hai, aur pasteurization temperature 72°C hai, toh efficiency hogi: <br/><code>[(65 - 5) / (72 - 5)] * 100 = (60 / 67) * 100 ≈ 89.5%</code>. Ek achhe pasteurizer ki efficiency 90-95% tak ho sakti hai.</p>
                 </Section>
                 

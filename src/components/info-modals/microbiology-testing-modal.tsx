@@ -23,13 +23,13 @@ const TestProcedure = ({ test }: { test: any }) => (
     <AccordionItem value={test.id}>
         <AccordionTrigger className="text-left font-semibold text-lg hover:no-underline">{test.title}</AccordionTrigger>
         <AccordionContent>
-            <div className="prose prose-sm max-w-none">
+            <div className="prose prose-sm max-w-none break-words">
                 <h4 className="font-bold">Siddhant (Principle):</h4>
                 <p>{test.principle}</p>
                 <h4 className="font-bold mt-4">Prakriya (Procedure):</h4>
                 <div dangerouslySetInnerHTML={{ __html: test.procedure }} />
                 <h4 className="font-bold mt-4">Ganana (Calculation):</h4>
-                <pre className="bg-muted p-3 rounded-lg font-mono text-sm text-primary" dangerouslySetInnerHTML={{ __html: test.calculation }}/>
+                <pre className="bg-muted p-3 rounded-lg font-mono text-sm text-primary overflow-x-auto" dangerouslySetInnerHTML={{ __html: test.calculation }}/>
             </div>
         </AccordionContent>
     </AccordionItem>
@@ -61,20 +61,22 @@ export function MicrobiologyTestingModal({ isOpen, setIsOpen }: { isOpen: boolea
                             <div className="prose prose-sm max-w-none text-gray-700 leading-relaxed"
                                  dangerouslySetInnerHTML={{ __html: section.content }} />
                             {section.table && (
-                                <Table className="mt-4">
-                                    <TableHeader>
-                                        <TableRow>
-                                            {section.table.headers.map(header => <TableHead key={header}>{header}</TableHead>)}
-                                        </TableRow>
-                                    </TableHeader>
-                                    <TableBody>
-                                        {section.table.rows.map((row, index) => (
-                                            <TableRow key={index}>
-                                                {row.map(cell => <TableCell key={cell}>{cell}</TableCell>)}
+                                <div className="overflow-x-auto">
+                                    <Table className="mt-4">
+                                        <TableHeader>
+                                            <TableRow>
+                                                {section.table.headers.map(header => <TableHead key={header}>{header}</TableHead>)}
                                             </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
+                                        </TableHeader>
+                                        <TableBody>
+                                            {section.table.rows.map((row, index) => (
+                                                <TableRow key={index}>
+                                                    {row.map(cell => <TableCell key={cell}>{cell}</TableCell>)}
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </div>
                             )}
                         </AccordionContent>
                     </AccordionItem>
