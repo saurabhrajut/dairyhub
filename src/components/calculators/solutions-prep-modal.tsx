@@ -97,8 +97,8 @@ const SolutionCalculator = ({ chemType, title, idPrefix }: { chemType: 'acids' |
     return (
         <form onSubmit={handleSubmit}>
             <h2 className="text-2xl font-bold text-primary mb-6 font-headline">{title}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-end">
-                <div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
+                <div className="md:col-span-3 lg:col-span-1">
                     <Label htmlFor={`${idPrefix}-select`}>Select Chemical</Label>
                     <Select name={`${idPrefix}-select`} required>
                         <SelectTrigger><SelectValue placeholder={`Select a chemical`} /></SelectTrigger>
@@ -117,7 +117,9 @@ const SolutionCalculator = ({ chemType, title, idPrefix }: { chemType: 'acids' |
                     <Label htmlFor={`${idPrefix}-volume`}>Final Volume (mL)</Label>
                     <Input type="number" name={`${idPrefix}-volume`} placeholder="e.g., 1000" step="any" required />
                 </div>
-                <Button type="submit" className="w-full">Calculate</Button>
+                <div className="md:col-span-3">
+                    <Button type="submit" className="w-full">Calculate</Button>
+                </div>
             </div>
             {error && <Alert variant="destructive" className="mt-8"><AlertDescription>{error}</AlertDescription></Alert>}
             {result && <Alert className="mt-8"><AlertTitle>Instructions</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
@@ -161,8 +163,8 @@ const IndicatorCalc = () => {
     return (
         <form onSubmit={handleSubmit}>
             <h2 className="text-2xl font-bold text-primary mb-6 font-headline">Prepare Indicator Solution</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-end">
-                <div className="lg:col-span-2">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
+                <div className="md:col-span-3 lg:col-span-1">
                     <Label htmlFor="indicator-select">Select Indicator</Label>
                     <Select name="indicator-select" required>
                         <SelectTrigger><SelectValue placeholder="Select an indicator" /></SelectTrigger>
@@ -177,7 +179,9 @@ const IndicatorCalc = () => {
                     <Label htmlFor="indicator-volume">Final Volume (mL)</Label>
                     <Input type="number" name="indicator-volume" value={volume} onChange={e => setVolume(e.target.value)} step="any" required />
                 </div>
-                <Button type="submit" className="w-full">Get Instructions</Button>
+                <div className="md:col-span-3 lg:col-span-1">
+                  <Button type="submit" className="w-full">Get Instructions</Button>
+                </div>
             </div>
             {error && <Alert variant="destructive" className="mt-8"><AlertDescription>{error}</AlertDescription></Alert>}
             {result && <Alert className="mt-8"><AlertTitle>Preparation</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
@@ -247,8 +251,8 @@ const StandardizationCalc = () => {
             </div>
 
             <h3 className="font-bold text-lg mt-6 mb-2 text-gray-700">2. Titration</h3>
-             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end p-4 bg-muted rounded-lg">
-                <div className="md:col-span-2">
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end p-4 bg-muted rounded-lg">
+                <div>
                     <Label htmlFor="std-v2">Titrant Volume used for 10ml Primary Std (V₂)</Label>
                     <Input type="number" name="std-v2" value={v2} onChange={e => setV2(e.target.value)} placeholder="e.g., 9.8" step="any" required />
                 </div>
@@ -288,7 +292,7 @@ const StrengthCalc = () => {
     return (
         <form onSubmit={handleSubmit}>
             <h2 className="text-2xl font-bold text-primary mb-6 font-headline">Shakti (Strength) Calculator</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
                 <div>
                     <Label htmlFor="strength-chemical">Select Chemical</Label>
                     <Select name="strength-chemical" required>
@@ -319,7 +323,9 @@ const StrengthCalc = () => {
                     <Label htmlFor="strength-normality">Normality (N)</Label>
                     <Input type="number" name="strength-normality" placeholder="e.g., 0.1012" step="any" required />
                 </div>
-                <Button type="submit" className="w-full">Calculate Strength</Button>
+                <div className="md:col-span-2">
+                   <Button type="submit" className="w-full">Calculate Strength</Button>
+                </div>
             </div>
             {error && <Alert variant="destructive" className="mt-8"><AlertDescription>{error}</AlertDescription></Alert>}
             {result && <Alert className="mt-8"><AlertTitle>Result</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
@@ -359,7 +365,7 @@ const SpiritSolutionCalc = () => {
         <form onSubmit={handleSubmit}>
             <h2 className="text-2xl font-bold text-primary mb-6 font-headline">Spirit Solution (Alcohol Dilution)</h2>
             <p className="text-muted-foreground mb-4">Use the formula: <code className="bg-primary/10 text-primary font-mono p-1 rounded-md">C₁V₁ = C₂V₂</code>.</p>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-end">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-end">
                 <div>
                     <Label htmlFor="spirit-select">Select Spirit</Label>
                      <Select name="spirit-select" required>
@@ -379,7 +385,9 @@ const SpiritSolutionCalc = () => {
                     <Label htmlFor="spirit-required-volume">Required Volume (mL)</Label>
                     <Input type="number" name="spirit-required-volume" placeholder="e.g., 1000" step="any" required />
                 </div>
-                <Button type="submit" className="w-full">Calculate</Button>
+                <div className="md:col-span-2 lg:col-span-3">
+                  <Button type="submit" className="w-full">Calculate</Button>
+                </div>
             </div>
             {error && <Alert variant="destructive" className="mt-8"><AlertDescription>{error}</AlertDescription></Alert>}
             {result && <Alert className="mt-8"><AlertTitle>Instructions</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
@@ -417,7 +425,7 @@ const NormalityAdjustmentCalc = () => {
     return (
         <form onSubmit={handleSubmit}>
             <h2 className="text-2xl font-bold text-primary mb-6 font-headline">Normality Adjustment Calculator</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-end">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-end">
                 <div>
                     <Label htmlFor="adj-n-have">Normality you have (N₁)</Label>
                     <Input type="number" name="adj-n-have" placeholder="e.g., 0.1150" step="any" required />
@@ -430,7 +438,9 @@ const NormalityAdjustmentCalc = () => {
                     <Label htmlFor="adj-n-req">Normality you want (N₂)</Label>
                     <Input type="number" name="adj-n-req" placeholder="e.g., 0.1000" step="any" required />
                 </div>
-                <Button type="submit" className="w-full">Calculate</Button>
+                <div className="md:col-span-2 lg:col-span-3">
+                  <Button type="submit" className="w-full">Calculate</Button>
+                </div>
             </div>
             {error && <Alert variant="destructive" className="mt-8"><AlertDescription>{error}</AlertDescription></Alert>}
             {result && <Alert className="mt-8"><AlertTitle>Result</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
@@ -475,7 +485,7 @@ const PercentageSolutionCalc = () => {
     return (
         <form onSubmit={handleSubmit}>
             <h2 className="text-2xl font-bold text-primary mb-6 font-headline">% Solution Calculator (w/v)</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-end">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-end">
                 <div>
                     <Label htmlFor="percentage-chemical-select">Select Chemical</Label>
                     <Select name="percentage-chemical-select" required>
@@ -510,7 +520,9 @@ const PercentageSolutionCalc = () => {
                     <Label htmlFor="percentage-volume">Final Volume (mL)</Label>
                     <Input type="number" name="percentage-volume" placeholder="e.g., 500" step="any" required />
                 </div>
-                <Button type="submit" className="w-full">Calculate</Button>
+                <div className="md:col-span-2 lg:col-span-3">
+                    <Button type="submit" className="w-full">Calculate</Button>
+                </div>
             </div>
             {error && <Alert variant="destructive" className="mt-8"><AlertDescription>{error}</AlertDescription></Alert>}
             {result && <Alert className="mt-8"><AlertTitle>Instructions</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
@@ -549,7 +561,7 @@ const DilutionCalc = () => {
         <form onSubmit={handleSubmit}>
             <h2 className="text-2xl font-bold text-primary mb-6 font-headline">Working with Stock Solutions (Dilution)</h2>
             <p className="text-muted-foreground mb-4">Use the dilution formula: <code className="bg-primary/10 text-primary font-mono p-1 rounded-md">N₁V₁ = N₂V₂</code>. Calculate the initial volume (V₁) needed from a stock solution.</p>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-end">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-end">
                 <div>
                     <Label htmlFor="stock-normality">Stock Normality (N₁)</Label>
                     <Input type="number" name="stock-normality" placeholder="e.g., 1.0" step="any" required />
@@ -562,7 +574,9 @@ const DilutionCalc = () => {
                     <Label htmlFor="final-volume">Final Volume (V₂, mL)</Label>
                     <Input type="number" name="final-volume" placeholder="e.g., 1000" step="any" required />
                 </div>
-                <Button type="submit" className="w-full">Calculate V₁</Button>
+                <div className="md:col-span-2 lg:col-span-3">
+                   <Button type="submit" className="w-full">Calculate V₁</Button>
+                </div>
             </div>
             {error && <Alert variant="destructive" className="mt-8"><AlertDescription>{error}</AlertDescription></Alert>}
             {result && <Alert className="mt-8"><AlertTitle>Instructions</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}

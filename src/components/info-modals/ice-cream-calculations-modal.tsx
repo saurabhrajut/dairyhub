@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { PlusCircle } from "lucide-react"
+import { PlusCircle, XCircle } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 
 interface BatchIngredient {
@@ -83,6 +83,10 @@ function BatchScalingCalc() {
     const addIngredient = () => {
         setIngredients([...ingredients, { id: Date.now(), name: "", amount: "" }]);
     };
+    
+    const removeIngredient = (id: number) => {
+        setIngredients(ingredients.filter(ing => ing.id !== id));
+    };
 
     const handleIngredientChange = (id: number, field: keyof BatchIngredient, value: string) => {
         setIngredients(ingredients.map(ing => ing.id === id ? { ...ing, [field]: value } : ing));
@@ -117,19 +121,22 @@ function BatchScalingCalc() {
         <CalculatorCard title="Batch Scaling Calculator">
             <div className="space-y-4 mb-4">
                 {ingredients.map((ing) => (
-                    <div key={ing.id} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <Input
-                            type="text"
-                            placeholder="Ingredient Name"
-                            value={ing.name}
-                            onChange={(e) => handleIngredientChange(ing.id, 'name', e.target.value)}
-                        />
-                        <Input
-                            type="number"
-                            placeholder="Amount (g)"
-                            value={ing.amount}
-                            onChange={(e) => handleIngredientChange(ing.id, 'amount', e.target.value)}
-                        />
+                    <div key={ing.id} className="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-4 items-center">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                           <Input
+                                type="text"
+                                placeholder="Ingredient Name"
+                                value={ing.name}
+                                onChange={(e) => handleIngredientChange(ing.id, 'name', e.target.value)}
+                            />
+                            <Input
+                                type="number"
+                                placeholder="Amount (g)"
+                                value={ing.amount}
+                                onChange={(e) => handleIngredientChange(ing.id, 'amount', e.target.value)}
+                            />
+                        </div>
+                        <Button variant="ghost" size="icon" className="text-destructive" onClick={() => removeIngredient(ing.id)}><XCircle /></Button>
                     </div>
                 ))}
             </div>
@@ -259,6 +266,10 @@ function MixCompositionCalc() {
     const addIngredient = () => {
         setIngredients([...ingredients, { id: Date.now(), name: "", amount: "", fat: "", msnf: "", sugar: "" }]);
     };
+
+    const removeIngredient = (id: number) => {
+        setIngredients(ingredients.filter(ing => ing.id !== id));
+    };
     
     const handleChange = (id: number, field: keyof MixIngredient, value: string) => {
         setIngredients(ingredients.map(ing => ing.id === id ? { ...ing, [field]: value } : ing));
@@ -295,19 +306,22 @@ function MixCompositionCalc() {
     return (
         <CalculatorCard title="Mix Composition Calculator" description="Enter the weight and composition of each ingredient to find the overall percentages in your mix.">
             <div className="space-y-4 mb-4">
-                <div className="hidden sm:grid grid-cols-5 gap-4">
-                    <Label className="col-span-2">Ingredient Name & Amount (g)</Label>
-                    <Label>Fat (%)</Label>
-                    <Label>MSNF (%)</Label>
-                    <Label>Sugar (%)</Label>
+                <div className="hidden sm:grid grid-cols-[1fr_1fr_0.5fr_0.5fr_0.5fr_auto] gap-4 items-center">
+                    <Label>Ingredient Name</Label>
+                    <Label>Amount (g)</Label>
+                    <Label>Fat %</Label>
+                    <Label>MSNF %</Label>
+                    <Label>Sugar %</Label>
+                    <div/>
                 </div>
                 {ingredients.map(ing => (
-                    <div key={ing.id} className="grid grid-cols-2 sm:grid-cols-5 gap-2 items-center">
-                        <Input className="col-span-2 sm:col-span-1" type="text" placeholder="Name" value={ing.name} onChange={e => handleChange(ing.id, 'name', e.target.value)} />
+                    <div key={ing.id} className="grid grid-cols-2 sm:grid-cols-[1fr_1fr_0.5fr_0.5fr_0.5fr_auto] gap-2 items-center">
+                        <Input type="text" placeholder="Name" value={ing.name} onChange={e => handleChange(ing.id, 'name', e.target.value)} />
                         <Input type="number" placeholder="g" value={ing.amount} onChange={e => handleChange(ing.id, 'amount', e.target.value)} />
                         <Input type="number" placeholder="Fat %" value={ing.fat} onChange={e => handleChange(ing.id, 'fat', e.target.value)} />
                         <Input type="number" placeholder="MSNF %" value={ing.msnf} onChange={e => handleChange(ing.id, 'msnf', e.target.value)} />
                         <Input type="number" placeholder="Sugar %" value={ing.sugar} onChange={e => handleChange(ing.id, 'sugar', e.target.value)} />
+                        <Button variant="ghost" size="icon" className="text-destructive" onClick={() => removeIngredient(ing.id)}><XCircle /></Button>
                     </div>
                 ))}
             </div>

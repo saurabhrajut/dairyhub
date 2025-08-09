@@ -47,9 +47,9 @@ export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean;
           <DialogDescription className="text-center">Advanced calculators for precise dairy processing.</DialogDescription>
         </DialogHeader>
         <Tabs defaultValue="fat-blending" className="w-full flex flex-col flex-1 min-h-0">
-          <TabsList className="grid w-full h-auto grid-cols-2 sm:grid-cols-5 lg:grid-cols-10">
+          <TabsList className="grid w-full h-auto grid-cols-2 sm:grid-cols-5">
             {TABS.map(tab => (
-                <TabsTrigger key={tab.value} value={tab.value} className="text-xs sm:text-sm">{tab.label}</TabsTrigger>
+                <TabsTrigger key={tab.value} value={tab.value} className="text-xs sm:text-sm p-2 h-auto">{tab.label}</TabsTrigger>
             ))}
           </TabsList>
           <ScrollArea className="flex-1 mt-4 pr-4">

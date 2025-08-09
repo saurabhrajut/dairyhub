@@ -31,9 +31,16 @@ interface RevenueItem {
 }
 
 interface ExpenseItem {
-  id: number;
-  name: string;
-  cost: string;
+    id: number;
+    name: string;
+    cost: string;
+}
+  
+interface ExpenseChangeArgs {
+    id: number;
+    type: "variable" | "fixed";
+    field: keyof ExpenseItem;
+    value: string;
 }
 
 export function PlantCostModal({
@@ -62,8 +69,8 @@ export function PlantCostModal({
   const handleAddItem = (type: "revenue" | "variable" | "fixed") => {
     const newItem = { id: Date.now(), name: "", cost: "", quantity: "", price: "" };
     if (type === "revenue") setRevenues([...revenues, newItem]);
-    else if (type === "variable") setVariableExpenses([...variableExpenses, newItem]);
-    else setFixedExpenses([...fixedExpenses, newItem]);
+    else if (type === "variable") setVariableExpenses([...variableExpenses, newItem as ExpenseItem]);
+    else setFixedExpenses([...fixedExpenses, newItem as ExpenseItem]);
   };
 
   const handleRemoveItem = (id: number, type: "revenue" | "variable" | "fixed") => {
@@ -76,10 +83,10 @@ export function PlantCostModal({
     setRevenues(revenues.map(item => (item.id === id ? { ...item, [field]: value } : item)));
   };
 
-  const handleExpenseChange = (id: number, type: "variable" | "fixed", value: string) => {
+  const handleExpenseChange = ({id, type, field, value}: ExpenseChangeArgs) => {
       const list = type === 'variable' ? variableExpenses : fixedExpenses;
       const setList = type === 'variable' ? setVariableExpenses : setFixedExpenses;
-      setList(list.map(item => item.id === id ? {...item, cost: value} : item));
+      setList(list.map(item => item.id === id ? {...item, [field]: value} : item));
   };
 
   const { totalRevenue, totalExpenses, profitOrLoss, periodMultiplier } = useMemo(() => {
@@ -92,9 +99,9 @@ export function PlantCostModal({
     }, 0);
 
     const totalVariableCost = variableExpenses.reduce((sum, item) => sum + (parseFloat(item.cost) || 0), 0);
-    const totalFixedCost = fixedExpenses.reduce((sum, item) => sum + (parseFloat(item.cost) || 0), 0);
+    const totalFixedCostForPeriod = fixedExpenses.reduce((sum, item) => sum + (parseFloat(item.cost) || 0), 0) / (period === "daily" ? 30 : 1);
     
-    const totalExpenses = totalVariableCost + (totalFixedCost / (period === 'monthly' ? 1 : 30));
+    const totalExpenses = totalVariableCost + totalFixedCostForPeriod;
 
     const profitOrLoss = totalRevenue - totalExpenses;
 
@@ -129,27 +136,29 @@ export function PlantCostModal({
                  <p className="text-xs text-muted-foreground mt-2">Note: Fixed costs are always entered as monthly, and will be auto-adjusted for daily calculations.</p>
             </div>
 
-            <Section title={`Total Revenue (${period === 'daily' ? 'Per Day' : 'Per Month'})`}>
+            <Section title={`Total Revenue (${period})`}>
                  <div className="space-y-3">
-                    {revenues.map((item, index) => (
-                        <div key={item.id} className="grid grid-cols-1 sm:grid-cols-11 gap-2 items-center">
-                            <Input className="sm:col-span-4" placeholder="Revenue Source (e.g., Milk Sale)" value={item.name} onChange={(e) => handleRevenueChange(item.id, 'name', e.target.value)} />
-                            <Input className="sm:col-span-3" type="number" placeholder="Quantity (Ltr/Kg)" value={item.quantity} onChange={(e) => handleRevenueChange(item.id, 'quantity', e.target.value)} />
-                            <Input className="sm:col-span-3" type="number" placeholder="Price per unit" value={item.price} onChange={(e) => handleRevenueChange(item.id, 'price', e.target.value)} />
-                            <Button variant="ghost" size="icon" className="text-destructive sm:col-span-1" onClick={() => handleRemoveItem(item.id, 'revenue')}><XCircle /></Button>
+                    {revenues.map((item) => (
+                        <div key={item.id} className="grid grid-cols-1 sm:grid-cols-4 gap-2 items-center">
+                            <Input className="sm:col-span-2" placeholder="Revenue Source (e.g., Milk Sale)" value={item.name} onChange={(e) => handleRevenueChange(item.id, 'name', e.target.value)} />
+                            <Input type="number" placeholder="Quantity (Ltr/Kg)" value={item.quantity} onChange={(e) => handleRevenueChange(item.id, 'quantity', e.target.value)} />
+                            <div className="flex items-center gap-2">
+                                <Input type="number" placeholder="Price per unit" value={item.price} onChange={(e) => handleRevenueChange(item.id, 'price', e.target.value)} />
+                                <Button variant="ghost" size="icon" className="text-destructive" onClick={() => handleRemoveItem(item.id, 'revenue')}><XCircle /></Button>
+                            </div>
                         </div>
                     ))}
                 </div>
                 <Button variant="outline" size="sm" onClick={() => handleAddItem('revenue')} className="mt-4"><PlusCircle className="mr-2"/> Add Revenue Item</Button>
             </Section>
 
-            <Section title={`Total Variable Expenses (${period === 'daily' ? 'Per Day' : 'Per Month'})`}>
+            <Section title={`Total Variable Expenses (${period})`}>
                 <div className="space-y-3">
                     {variableExpenses.map((item) => (
-                         <div key={item.id} className="grid grid-cols-1 sm:grid-cols-3 gap-2 items-center">
-                            <Input className="sm:col-span-2" placeholder="Expense (e.g., Raw Milk)" value={item.name} onChange={(e) => handleExpenseChange(item.id, 'variable', e.target.value)} />
+                         <div key={item.id} className="grid grid-cols-1 sm:grid-cols-2 gap-2 items-center">
+                            <Input placeholder="Expense (e.g., Raw Milk)" value={item.name} onChange={(e) => handleExpenseChange({id: item.id, type: 'variable', field: 'name', value: e.target.value})} />
                             <div className="flex items-center gap-2">
-                                <Input type="number" placeholder="Cost" value={item.cost} onChange={(e) => handleExpenseChange(item.id, 'variable', e.target.value)} />
+                                <Input type="number" placeholder="Cost" value={item.cost} onChange={(e) => handleExpenseChange({id: item.id, type: 'variable', field: 'cost', value: e.target.value})} />
                                 <Button variant="ghost" size="icon" className="text-destructive" onClick={() => handleRemoveItem(item.id, 'variable')}><XCircle /></Button>
                             </div>
                         </div>
@@ -158,13 +167,13 @@ export function PlantCostModal({
                 <Button variant="outline" size="sm" onClick={() => handleAddItem('variable')} className="mt-4"><PlusCircle className="mr-2"/> Add Variable Expense</Button>
             </Section>
 
-            <Section title="Total Fixed Expenses (Per Month)">
+            <Section title="Total Fixed Expenses (Monthly)">
                  <div className="space-y-3">
                     {fixedExpenses.map((item) => (
-                         <div key={item.id} className="grid grid-cols-1 sm:grid-cols-3 gap-2 items-center">
-                            <Input className="sm:col-span-2" placeholder="Expense (e.g., Salaries)" value={item.name} onChange={(e) => handleExpenseChange(item.id, 'fixed', e.target.value)} />
+                         <div key={item.id} className="grid grid-cols-1 sm:grid-cols-2 gap-2 items-center">
+                            <Input placeholder="Expense (e.g., Salaries)" value={item.name} onChange={(e) => handleExpenseChange({id: item.id, type: 'fixed', field: 'name', value: e.target.value})} />
                             <div className="flex items-center gap-2">
-                                <Input type="number" placeholder="Cost" value={item.cost} onChange={(e) => handleExpenseChange(item.id, 'fixed', e.target.value)} />
+                                <Input type="number" placeholder="Cost" value={item.cost} onChange={(e) => handleExpenseChange({id: item.id, type: 'fixed', field: 'cost', value: e.target.value})} />
                                 <Button variant="ghost" size="icon" className="text-destructive" onClick={() => handleRemoveItem(item.id, 'fixed')}><XCircle /></Button>
                             </div>
                         </div>
@@ -174,7 +183,7 @@ export function PlantCostModal({
             </Section>
             
             <Alert className={`mt-8 ${profitOrLoss >= 0 ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
-                <AlertTitle className="text-xl font-bold">Summary ({period === 'daily' ? 'Daily' : 'Monthly'})</AlertTitle>
+                <AlertTitle className="text-xl font-bold">Summary ({period})</AlertTitle>
                 <AlertDescription>
                     <div className="grid grid-cols-2 gap-2 mt-2">
                         <p>Total Revenue:</p> <p className="font-bold text-right">₹ {(totalRevenue * periodMultiplier).toFixed(2)}</p>
