@@ -162,17 +162,17 @@ const platformTests = [
 const preservativesData = [
     {
         title: 'Neutralizers (NaOH, Na₂CO₃, NaHCO₃)',
+        purpose: 'To neutralize developed acidity in sour milk.',
         content: `
-            <p class="mb-4"><strong>Purpose:</strong> To neutralize developed acidity in sour milk. Detected by pH indicators or by measuring the alkalinity of the ash.</p>
             <div class="prose max-w-none prose-blue">
-                <h4>(a) Rosolic Acid Test</h4>
-                <p><strong>Principle:</strong> Rosolic acid is an indicator which gives a red colour in alkaline condition and an orange-brown colour in acidic condition.</p>
+                <h4>Method 1: Rosolic Acid Test</h4>
+                <p><strong>Principle:</strong> Rosolic acid is an indicator which gives a red colour in alkaline condition.</p>
                 <ol>
                     <li>Take 10 ml of milk in a test tube and add an equal volume of ethyl alcohol (95%).</li>
                     <li>Add a few drops of 0.1% rosolic acid solution and mix.</li>
                     <li>Appearance of a <strong>rose-red colour</strong> indicates the presence of neutralizers, whereas pure milk turns brownish.</li>
                 </ol>
-                <h4 class="mt-4">(b) Alkalinity of Ash Test</h4>
+                <h4 class="mt-4">Method 2: Alkalinity of Ash Test</h4>
                 <p><strong>Principle:</strong> If a neutralizer has been added, the ash of the milk will have a higher alkalinity compared to pure milk.</p>
                 <ol>
                     <li>Take 20 ml of milk in a silica crucible.</li>
@@ -186,6 +186,7 @@ const preservativesData = [
     },
     {
         title: 'Boric Acid and Borates',
+        purpose: 'Used as a preservative.',
         content: `
             <div class="prose max-w-none prose-blue">
                 <p><strong>Principle:</strong> Boric acid and its salts give a red colour with turmeric paper.</p>
@@ -203,10 +204,10 @@ const preservativesData = [
     },
     {
         title: 'Formalin (Formaldehyde)',
+        purpose: 'A powerful preservative to extend shelf life illegally.',
         content: `
-            <p class="mb-4"><strong>Purpose:</strong> A powerful preservative to extend shelf life illegally.</p>
             <div class="prose max-w-none prose-blue">
-                <h4>Hehner Test</h4>
+                <h4>Method 1: Hehner Test</h4>
                 <p><strong>Principle:</strong> Formaldehyde gives a violet colour with ferric salts in the presence of concentrated sulfuric acid.</p>
                 <ol>
                     <li>Take 10 ml of milk sample in a test tube.</li>
@@ -216,7 +217,7 @@ const preservativesData = [
                 </ol>
                  <p class="text-xs mt-2"><strong>Ref:</strong> IS 1479 (Part II) 1961 (Reaffirmed 1997)</p>
 
-                <h4 class="mt-4">Chromotropic Acid Test</h4>
+                <h4 class="mt-4">Method 2: Chromotropic Acid Test</h4>
                  <p><strong>Principle:</strong> Formaldehyde reacts with chromotropic acid to form a colored compound.</p>
                 <ol>
                     <li>Take 1 ml of milk in a test tube.</li>
@@ -229,20 +230,37 @@ const preservativesData = [
     },
      {
         title: 'Hydrogen Peroxide (H₂O₂)',
+        purpose: 'Used as a preservative, especially where refrigeration is not available.',
         content: `
             <div class="prose max-w-none prose-blue">
+                <h4>Method 1: Vanadium Pentoxide Test</h4>
+                <ol>
+                    <li>Add 10 to 20 drops of vanadium pentoxide reagent to 10 ml of milk and mix.</li>
+                    <li>Appearance of a <strong>pink or red colour</strong> indicates the presence of hydrogen peroxide.</li>
+                </ol>
+                <p class="text-xs mt-2"><strong>Ref:</strong> A.O.A.C 17th edn, 2000 Official Method 957.08</p>
+                
+                <h4 class="mt-4">Method 2: Para-phenylenediamine Test</h4>
                 <p><strong>Principle:</strong> Hydrogen peroxide oxidizes para-phenylenediamine, changing its colour from yellow to blue.</p>
                 <ol>
-                    <li>Take 2 ml of milk in a test tube and add an equal volume of alcohol.</li>
-                    <li>Add 5 drops of 2% para-phenylenediamine solution and shake well.</li>
-                    <li>Appearance of a <strong>blue colour</strong> confirms the presence of hydrogen peroxide in the milk.</li>
+                    <li>Take 2 ml of milk in a test tube and add an equal volume of raw milk.</li>
+                    <li>Add 2 drops of 2% para-phenylenediamine solution and shake well.</li>
+                    <li>Appearance of a <strong>blue colour</strong> confirms the presence of hydrogen peroxide.</li>
                 </ol>
                 <p class="text-xs mt-2"><strong>Ref:</strong> IS 1479 (Part I) 1961 (Reaffirmed 2003)</p>
+                
+                <h4 class="mt-4">Method 3: Potassium Iodide & Starch Test</h4>
+                <ol>
+                    <li>Take 1 ml of milk and add 1 ml of potassium iodide-starch reagent.</li>
+                    <li>Appearance of a <strong>blue color</strong> indicates the presence of H₂O₂.</li>
+                </ol>
+                <p class="text-xs mt-2"><strong>Ref:</strong> Sharma, R.; Rajput, Y.S. and Naik, N.L. (2012). NDRI Publication No. 88/2012</p>
             </div>
         `
     },
     {
-        title: 'Benzoic Acid & Salicylic Acid',
+        title: 'Salicylic Acid & Benzoic Acid',
+        purpose: 'Used as preservatives.',
         content: `
              <div class="prose max-w-none prose-blue">
                 <p><strong>Principle:</strong> These acids are extracted with ether and then identified with ferric chloride, which produces a characteristic colour.</p>
@@ -258,6 +276,7 @@ const preservativesData = [
     },
     {
         title: 'Hypochlorites & Chloramines',
+        purpose: 'Used as sterilizing agents, but their presence indicates contamination.',
         content: `
             <div class="prose max-w-none prose-blue">
                 <p><strong>Principle:</strong> These compounds liberate iodine from potassium iodide, which then gives a blue colour with starch.</p>
@@ -277,14 +296,15 @@ const preservativesData = [
 const adulterantsData = [
     {
         title: 'Sucrose (Cane Sugar)',
+        purpose: 'To increase the SNF content and density (CLR) of milk, often after adding water.',
         content: `
             <div class="prose max-w-none prose-green">
-                <p><strong>Purpose:</strong> To increase the SNF content and density (CLR) of milk, often after adding water.</p>
-                <p><strong>Principle:</strong> Seliwanoff’s reagent is used. HCl hydrolyzes sucrose into glucose and fructose. Upon heating, fructose reacts with resorcinol to produce a red colour.</p>
+                <h4>Qualitative Method: Modified Seliwanoff’s Method</h4>
+                <p><strong>Principle:</strong> Fructose in cane sugar reacts with resorcinol in HCl to give red colour.</p>
                 <ol>
-                    <li>Take 1 ml of milk sample and add 1 ml of 0.5% resorcinol solution.</li>
-                    <li>Mix and heat the test tube in a boiling water bath for 5 minutes.</li>
-                    <li>If a <strong>deep red colour</strong> is formed, sugar is present in the milk. Pure milk remains white.</li>
+                    <li>Take 1 ml of milk and add 1 ml of 0.5% resorcinol solution.</li>
+                    <li>Heat in a boiling water bath for 5 minutes.</li>
+                    <li>A <strong>deep red colour</strong> indicates the presence of sucrose. Pure milk remains white.</li>
                 </ol>
                 <p class="text-xs mt-2"><strong>Ref:</strong> IS 1479 (Part I) 1961 (Reaffirmed 2003)</p>
             </div>
@@ -292,13 +312,12 @@ const adulterantsData = [
     },
     {
         title: 'Starch & Other Cereal Flours',
+        purpose: 'To increase the SNF content and thickness of milk.',
         content: `
             <div class="prose max-w-none prose-green">
-                <p><strong>Purpose:</strong> To increase the SNF content of milk.</p>
                 <p><strong>Principle:</strong> Starch forms a purple-blue complex with iodine.</p>
                 <ol>
-                    <li>Take 5.0 ml of milk in a test tube and boil it.</li>
-                    <li>Cool the test tube to room temperature.</li>
+                    <li>Boil 5.0 ml of milk and cool to room temperature.</li>
                     <li>Add 1-2 drops of iodine solution. A <strong>blue colour</strong> indicates the presence of starch, which disappears on boiling and reappears on cooling.</li>
                 </ol>
                  <p class="text-xs mt-2"><strong>Ref:</strong> IS 1479 (Part I) 1961 (Reaffirmed 2003)</p>
@@ -306,26 +325,58 @@ const adulterantsData = [
         `
     },
     {
-        title: 'Urea',
+        title: 'Cellulose',
+        purpose: 'To increase the SNF content of milk.',
         content: `
-            <p class="mb-4"><strong>Purpose:</strong> To increase the non-protein nitrogen (NPN) content, which falsely inflates protein estimation and also increases SNF.</p>
             <div class="prose max-w-none prose-green">
-                <h4>1. DMAB Reagent Method</h4>
+                <p><strong>Principle:</strong> Cellulose gives a blue colour with Iodine-Zinc Chloride reagent but not with plain iodine solution.</p>
+                <ol>
+                    <li>Take 10g of milk, add 50ml hot water and stir. Pour on a nylon cloth and wash the residue.</li>
+                    <li>Scrape the residue and place it on a spotting plate.</li>
+                    <li>Stain a part with Iodine-Zinc Chloride reagent and another with iodine solution.</li>
+                    <li>A <strong>blue colour</strong> with the first reagent but not the second confirms cellulose.</li>
+                </ol>
+                 <p class="text-xs mt-2"><strong>Ref:</strong> Manual Methods of Analysis for Adulterants & Contaminants in Foods. I.C.M.R 1990 page 27</p>
+            </div>
+        `
+    },
+    {
+        title: 'Urea',
+        purpose: 'To increase the non-protein nitrogen (NPN) content, which falsely inflates protein estimation and also increases SNF.',
+        content: `
+            <div class="prose max-w-none prose-green">
+                <h4>Method 1: DMAB Reagent Method</h4>
                 <p><strong>Principle:</strong> Urea forms a yellow complex with p-dimethylaminobenzaldehyde (DMAB) in a slightly acidic solution.</p>
                 <ol>
                     <li>Take 1 ml of milk in a test tube.</li>
                     <li>Add 1 ml of 1.6% DMAB reagent.</li>
-                    <li>A <strong>distinct yellow colour</strong> indicates added urea, whereas a slight yellow colour is due to natural urea.</li>
+                    <li>A <strong>distinct yellow colour</strong> indicates added urea, whereas a slight yellow colour is due to natural urea (natural limit ~70mg/100ml).</li>
                 </ol>
                  <p class="text-xs mt-2"><strong>Ref:</strong> Bector, B.S., et al. (1998). Indian Dairyman, 50(4): 59-62</p>
             </div>
         `
     },
     {
+        title: 'Glucose',
+        purpose: 'To increase the SNF of milk.',
+        content: `
+            <div class="prose max-w-none prose-green">
+                <p><strong>Principle:</strong> Using a modified Barfoed's test, glucose reduces cupric ions to cuprous, which then reduces phosphomolybdic acid to form a blue compound.</p>
+                <ol>
+                    <li>Take 1 ml of milk, add 1 ml of modified Barfoed’s reagent.</li>
+                    <li>Heat in a boiling water bath for 3 min, then cool.</li>
+                    <li>Add 1 ml of phosphomolybdic acid reagent.</li>
+                    <li>Immediate formation of a <strong>deep blue color</strong> indicates added glucose.</li>
+                </ol>
+                 <p class="text-xs mt-2"><strong>Ref:</strong> Manual Methods of Analysis for Adulterants and Contaminants in Foods, I.C.M.R 1990, page 28</p>
+            </div>
+        `
+    },
+    {
         title: 'Detergent',
-         content: `
+        purpose: 'Added to emulsify external fat (vegetable oil) into milk to create synthetic milk.',
+        content: `
             <div class="prose max-w-none prose-red">
-                <p><strong>Purpose:</strong> Added to emulsify external fat (vegetable oil) into milk to create synthetic milk.</p>
                 <p><strong>Principle:</strong> Anionic detergents form a complex with the cationic dye methylene blue. This complex is soluble in chloroform.</p>
                 <ol>
                     <li>Take 1 ml of milk, add 1 ml of methylene blue solution and then 2 ml of chloroform.</li>
@@ -338,9 +389,9 @@ const adulterantsData = [
     },
     {
         title: 'Ammonium Compounds (Sulphates)',
+        purpose: 'To increase the lactometer reading by increasing the density of milk.',
         content: `
             <div class="prose max-w-none prose-green">
-                <p><strong>Purpose:</strong> To increase the lactometer reading by increasing the density of milk.</p>
                 <p><strong>Principle:</strong> Sulphates precipitate with Barium Chloride (BaCl₂).</p>
                 <ol>
                     <li>Take 10 ml of milk and add 10 ml of Trichloroacetic acid (TCA) to coagulate it.</li>
@@ -354,8 +405,8 @@ const adulterantsData = [
     },
     {
         title: 'Vegetable/Refined Oil (Foreign Fat)',
+        purpose: 'To replace natural milk fat with cheaper vegetable oil to increase profit.',
         content: `
-            <p class="mb-4"><strong>Purpose:</strong> To replace natural milk fat with cheaper vegetable oil to increase profit.</p>
             <div class="prose max-w-none prose-green">
                  <h4>Butyro-Refractometer (BR) Reading Method</h4>
                  <p><strong>Principle:</strong> Most vegetable oils have a higher refractive index than pure milk fat (ghee).</p>
@@ -365,14 +416,65 @@ const adulterantsData = [
                     <li>Pure milk fat has a BR reading of 40-43. Any reading higher than this range suggests the presence of foreign fat.</li>
                 </ol>
                 <p class="text-xs mt-2"><strong>Ref:</strong> IS 1479 (Part I) – 1960 (Reaffirmed 2003)</p>
+                <h4 class="mt-4">Baudouin Test for Vanaspati</h4>
+                <p><strong>Principle:</strong> Vanaspati is required to contain 5% sesame oil. The sesamol from this oil reacts with furfural to give a red color.</p>
+                <ol>
+                    <li>Extract ghee from the milk sample.</li>
+                    <li>Take 5g of melted fat, add 5ml concentrated HCl and 0.4ml of 2% furfural solution. Vortex for 2 minutes.</li>
+                    <li>A <strong>pink or red color</strong> in the acid layer indicates vanaspati adulteration.</li>
+                </ol>
+            </div>
+        `
+    },
+    {
+        title: 'Mineral Oil',
+        purpose: 'A non-edible oil used as a cheap adulterant.',
+        content: `
+            <div class="prose max-w-none prose-green">
+                <p><strong>Principle:</strong> Mineral oil does not saponify (turn into soap) with alkali, unlike edible fats, causing turbidity.</p>
+                <ol>
+                    <li>Take 1g of clarified fat and add 5ml of 0.5N alcoholic KOH.</li>
+                    <li>Reflux in boiling water for 10 minutes.</li>
+                    <li>Add 5ml of distilled water to the saponified solution.</li>
+                    <li><strong>Turbidity</strong> indicates the presence of mineral oil.</li>
+                </ol>
+            </div>
+        `
+    },
+    {
+        title: 'Animal Body Fat (e.g., Lard)',
+        purpose: 'Used as a cheap adulterant for ghee.',
+        content: `
+            <div class="prose max-w-none prose-green">
+                <p><strong>Principle:</strong> Based on the time taken for ghee to become opaque at a specific temperature.</p>
+                <ol>
+                    <li>Melt 5g of ghee at 50°C.</li>
+                    <li>Transfer to a 23°C water bath and record the time taken for the sample to become opaque.</li>
+                    <li><strong>Result:</strong> Buffalo ghee takes 14-15 min, cow ghee 18-19 min. A shorter time suggests animal body fat, a longer time suggests vegetable oil.</li>
+                </ol>
+            </div>
+        `
+    },
+    {
+        title: 'Pond Water',
+        purpose: 'To increase the volume of milk. Pond water is heavier than tap water.',
+        content: `
+            <div class="prose max-w-none prose-green">
+                <p><strong>Principle:</strong> This method detects nitrates/nitrites present in pond water from agricultural fertilizers.</p>
+                <ol>
+                    <li>Rinse a test tube with the milk sample and drain.</li>
+                    <li>Add 1 or 2 drops of 2% diphenylamine solution along the side of the test tube.</li>
+                    <li>If the sides of the test tube turn <strong>blue</strong>, the milk contains pond water.</li>
+                </ol>
+                <p class="text-xs mt-2"><strong>Ref:</strong> Sharma, R.; Rajput, Y.S. and Naik, N.L. (2012). NDRI Publication No. 88/2012</p>
             </div>
         `
     },
     {
         title: 'Skimmed Milk Powder (SMP) in Natural Milk',
-         content: `
+        purpose: 'To illegally increase the SNF content of natural milk.',
+        content: `
             <div class="prose max-w-none prose-green">
-                <p><strong>Purpose:</strong> To illegally increase the SNF content of natural milk.</p>
                 <p><strong>Principle:</strong> The proteins in reconstituted milk powder contain reducing groups that react with phosphomolybdic acid on boiling to give a blue colour.</p>
                 <ol>
                     <li>Centrifuge 50 ml of milk to separate the cream.</li>
@@ -386,9 +488,9 @@ const adulterantsData = [
     },
     {
         title: 'Gelatine',
-         content: `
+        purpose: 'Added to increase the thickness and SNF content of milk.',
+        content: `
             <div class="prose max-w-none prose-green">
-                <p><strong>Purpose:</strong> Added to increase the thickness and SNF content of milk.</p>
                 <p><strong>Principle:</strong> Gelatine forms a yellow precipitate with picric acid.</p>
                 <ol>
                     <li>Add acid mercuric nitrate solution to 10 ml of milk and filter.</li>
@@ -400,7 +502,6 @@ const adulterantsData = [
         `
     }
 ];
-
 
 export function AdulterationModal({
   isOpen,
@@ -450,6 +551,7 @@ export function AdulterationModal({
                         <AccordionItem key={`preservative-${index}`} value={`item-${index}`}>
                             <AccordionTrigger className="font-semibold text-left">{item.title}</AccordionTrigger>
                             <AccordionContent>
+                                <p className="font-semibold text-gray-600 mb-2">Purpose: {item.purpose}</p>
                                 <div className="prose max-w-none prose-sm" dangerouslySetInnerHTML={{ __html: item.content }} />
                             </AccordionContent>
                         </AccordionItem>
@@ -467,6 +569,7 @@ export function AdulterationModal({
                         <AccordionItem key={`adulterant-${index}`} value={`item-${index}`}>
                             <AccordionTrigger className="font-semibold text-left">{item.title}</AccordionTrigger>
                             <AccordionContent>
+                                <p className="font-semibold text-gray-600 mb-2">Purpose: {item.purpose}</p>
                                 <div className="prose max-w-none prose-sm" dangerouslySetInnerHTML={{ __html: item.content }} />
                             </AccordionContent>
                         </AccordionItem>
@@ -482,5 +585,6 @@ export function AdulterationModal({
     </Dialog>
   )
 }
+    
 
     
