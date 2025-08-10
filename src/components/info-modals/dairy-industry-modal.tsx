@@ -1,4 +1,3 @@
-
 "use client"
 
 import {
@@ -83,18 +82,18 @@ export function DairyIndustryModal({
 
                 <SectionTitle title="Role of Dairy Cooperatives" id="cooperatives" />
                  <SubSection title="Operation Flood and the White Revolution">
-                    <p>'Operation Flood,' launched in 1970 under Dr. Verghese Kurien, revolutionized India's dairy industry, transforming it from a milk-deficient nation into the world's largest producer. A National Milk Grid now links milk producers throughout India with consumers in over 700 towns and cities, reducing seasonal and regional price variations while ensuring that the producer gets fair market prices in a transparent manner.</p>
-                     <h5 class="font-bold mt-2">Objectives:</h5>
-                     <ul class="list-disc pl-5">
+                    <p>The Operation Flood, also known as White Revolution in India was launched in 1970s to make India self dependent in milk production. Dr Verghese Kurien is known as the father of The White Revolution in India. White Revolution is associated with a sharp increase in the milk production. Operation Flood has helped dairy farmers direct their own development, placing control of the resources they create in their own hands. A National Milk Grid links milk producers throughout India with consumers in over 700 towns and cities, reducing seasonal and regional price variations while ensuring that the producer gets fair market prices in a transparent manner on a regular basis.</p>
+                     <h5 className="font-bold mt-2">Objectives:</h5>
+                     <ul className="list-disc pl-5">
                         <li>Increase milk production ("a flood of milk").</li>
                         <li>Augment rural incomes.</li>
-                        <li>Provide reasonable prices for consumers.</li>
+                        <li>Reasonable prices for consumers.</li>
                      </ul>
-                      <h5 class="font-bold mt-2">Phases of Operation Flood:</h5>
-                     <ul class="list-disc pl-5">
-                        <li><strong>Phase I (1970–1980):</strong> Financed by the sale of skimmed milk powder and butter oil donated by the European Union.</li>
-                        <li><strong>Phase II (1981–1985):</strong> Increased the milk-sheds from 18 to 136; urban markets expanded the outlets for milk to 290. By the end of 1985, a self-sustaining system of 43,000 village cooperatives with 4.25 million milk producers was covered.</li>
-                        <li><strong>Phase III (1985–1996):</strong> Enabled dairy cooperatives to expand and strengthen the infrastructure required to procure and market increasing volumes of milk, adding 30,000 new dairy cooperatives.</li>
+                      <h5 className="font-bold mt-2">Phases of Operation Flood:</h5>
+                     <ul className="list-disc pl-5">
+                        <li><strong>Phase I (1970–1980):</strong> Financed by the sale of skimmed milk powder and butter oil donated by the European Union (then the European Economic Community) through the World Food Program.</li>
+                        <li><strong>Phase II (1981–1985):</strong> Increased the milk-sheds from 18 to 136; urban markets expanded the outlets for milk to 290. By the end of 1985, a self-sustaining system of 43,000 village cooperatives with 4.25 million milk producers were covered.</li>
+                        <li><strong>Phase III (1985–1996):</strong> Enabled dairy cooperatives to expand and strengthen the infrastructure required to procure and market increasing volumes of milk. This phase added 30000 new dairy cooperatives which led to 73000.</li>
                      </ul>
                 </SubSection>
                 <SubSection title="The Anand Pattern: Three-Tier Structure">
@@ -132,5 +131,3 @@ export function DairyIndustryModal({
     </Dialog>
   )
 }
-
-    
