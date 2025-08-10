@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -139,18 +140,18 @@ export function TopicGrid() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+      <div className="grid grid-cols-4 gap-4 sm:gap-6">
         {filteredTopics.map((topic) => {
           const isLocked = topic.isPro && !isPro;
           return (
             <div
               key={topic.id}
               onClick={() => openModal(topic.id)}
-              className={`bg-card p-6 rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-2 transition-all duration-300 cursor-pointer text-center relative overflow-hidden group ${isLocked ? 'opacity-70' : ''}`}
+              className={`bg-card p-4 sm:p-6 rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer text-center relative overflow-hidden group ${isLocked ? 'opacity-70' : ''}`}
             >
               {isLocked && <div className="absolute inset-0 bg-black/30 flex items-center justify-center"><Lock className="w-8 h-8 text-white" /></div>}
-              {topic.badge && <Badge variant={topic.badge === 'Pro' ? 'default' : 'destructive'} className="absolute top-3 right-3 animate-pulse">{topic.badge}</Badge>}
-              <div className={`w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center bg-gradient-to-br ${
+              {topic.badge && <Badge variant={topic.badge === 'Pro' ? 'default' : 'destructive'} className="absolute top-2 right-2 sm:top-3 sm:right-3 text-xs px-1.5 py-0.5 h-auto sm:px-2.5 sm:py-0.5 animate-pulse">{topic.badge}</Badge>}
+              <div className={`w-12 h-12 sm:w-20 sm:h-20 mx-auto mb-3 sm:mb-4 rounded-full flex items-center justify-center bg-gradient-to-br ${
                   topic.id === 'industry' ? 'from-blue-100 to-indigo-200' :
                   topic.id === 'milk-chemistry' ? 'from-red-100 to-rose-200' :
                   topic.id === 'solutions-prep' ? 'from-green-100 to-emerald-200' :
@@ -162,10 +163,10 @@ export function TopicGrid() {
                   topic.id === 'lab-equipments' ? 'from-teal-100 to-cyan-200' :
                   'from-primary/10 to-accent/20'
               }`}>
-                <topic.icon className="w-10 h-10 text-primary" />
+                <topic.icon className="w-6 h-6 sm:w-10 sm:h-10 text-primary" />
               </div>
-              <h3 className="font-headline font-semibold text-card-foreground text-md">{topic.title}</h3>
-              <p className="text-xs text-muted-foreground">{topic.description}</p>
+              <h3 className="font-headline font-semibold text-card-foreground text-xs sm:text-md">{topic.title}</h3>
+              <p className="hidden sm:block text-xs text-muted-foreground">{topic.description}</p>
             </div>
           )
         })}
