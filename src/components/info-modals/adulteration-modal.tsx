@@ -15,7 +15,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { adulterantsData, preservativesData } from "@/lib/data"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table"
 
 const platformTests = [
@@ -160,6 +159,249 @@ const platformTests = [
     }
 ];
 
+const preservativesData = [
+    {
+        title: 'Neutralizers (NaOH, Na₂CO₃, NaHCO₃)',
+        content: `
+            <p class="mb-4"><strong>Purpose:</strong> To neutralize developed acidity in sour milk. Detected by pH indicators or by measuring the alkalinity of the ash.</p>
+            <div class="prose max-w-none prose-blue">
+                <h4>(a) Rosolic Acid Test</h4>
+                <p><strong>Principle:</strong> Rosolic acid is an indicator which gives a red colour in alkaline condition and an orange-brown colour in acidic condition.</p>
+                <ol>
+                    <li>Take 10 ml of milk in a test tube and add an equal volume of ethyl alcohol (95%).</li>
+                    <li>Add a few drops of 0.1% rosolic acid solution and mix.</li>
+                    <li>Appearance of a <strong>rose-red colour</strong> indicates the presence of neutralizers, whereas pure milk turns brownish.</li>
+                </ol>
+                <h4 class="mt-4">(b) Alkalinity of Ash Test</h4>
+                <p><strong>Principle:</strong> If a neutralizer has been added, the ash of the milk will have a higher alkalinity compared to pure milk.</p>
+                <ol>
+                    <li>Take 20 ml of milk in a silica crucible.</li>
+                    <li>Evaporate the water and ash the contents in a muffle furnace at 550°C.</li>
+                    <li>Dissolve the ash in 10 ml of distilled water and titrate it against 0.1 N HCl.</li>
+                    <li>A titre value of more than 1.2 ml of 0.1 N HCl indicates the presence of neutralizers.</li>
+                </ol>
+                 <p class="text-xs mt-2"><strong>Ref:</strong> IS 1479 (Part II) 1961 (Reaffirmed 1997)</p>
+            </div>
+        `
+    },
+    {
+        title: 'Boric Acid and Borates',
+        content: `
+            <div class="prose max-w-none prose-blue">
+                <p><strong>Principle:</strong> Boric acid and its salts give a red colour with turmeric paper.</p>
+                <ol>
+                    <li>Take 5 ml of milk in a test tube and add 1 ml of concentrated HCl.</li>
+                    <li>Mix well, then dip a strip of turmeric paper into it.</li>
+                    <li>Dry the paper strip and observe the colour change.</li>
+                    <li>A <strong>red colour</strong> on the paper indicates the presence of boric acid.</li>
+                    <li>Then add a drop of ammonium hydroxide solution.</li>
+                    <li>A change from red to <strong>dark-green</strong> confirms the presence of boric acid.</li>
+                </ol>
+                 <p class="text-xs mt-2"><strong>Ref:</strong> IS 1479 (Part I) 1961 (Reaffirmed 2003)</p>
+            </div>
+        `
+    },
+    {
+        title: 'Formalin (Formaldehyde)',
+        content: `
+            <p class="mb-4"><strong>Purpose:</strong> A powerful preservative to extend shelf life illegally.</p>
+            <div class="prose max-w-none prose-blue">
+                <h4>Hehner Test</h4>
+                <p><strong>Principle:</strong> Formaldehyde gives a violet colour with ferric salts in the presence of concentrated sulfuric acid.</p>
+                <ol>
+                    <li>Take 10 ml of milk sample in a test tube.</li>
+                    <li>Slowly add 0.5 ml of 10% ferric chloride solution.</li>
+                    <li>Add 5 ml of concentrated sulfuric acid down the side of the test tube so that it forms a separate layer at the bottom.</li>
+                    <li>Formation of a <strong>violet to purple ring</strong> at the junction of the two liquids indicates the presence of formalin.</li>
+                </ol>
+                 <p class="text-xs mt-2"><strong>Ref:</strong> IS 1479 (Part II) 1961 (Reaffirmed 1997)</p>
+
+                <h4 class="mt-4">Chromotropic Acid Test</h4>
+                 <p><strong>Principle:</strong> Formaldehyde reacts with chromotropic acid to form a colored compound.</p>
+                <ol>
+                    <li>Take 1 ml of milk in a test tube.</li>
+                    <li>Add 1 ml of chromotropic acid reagent and mix well.</li>
+                    <li>Appearance of a <strong>yellow color</strong> confirms the presence of formalin, whereas the control sample remains white.</li>
+                </ol>
+                 <p class="text-xs mt-2"><strong>Ref:</strong> IS 1479 (Part I) 1961 (Reaffirmed 2003)</p>
+            </div>
+        `
+    },
+     {
+        title: 'Hydrogen Peroxide (H₂O₂)',
+        content: `
+            <div class="prose max-w-none prose-blue">
+                <p><strong>Principle:</strong> Hydrogen peroxide oxidizes para-phenylenediamine, changing its colour from yellow to blue.</p>
+                <ol>
+                    <li>Take 2 ml of milk in a test tube and add an equal volume of alcohol.</li>
+                    <li>Add 5 drops of 2% para-phenylenediamine solution and shake well.</li>
+                    <li>Appearance of a <strong>blue colour</strong> confirms the presence of hydrogen peroxide in the milk.</li>
+                </ol>
+                <p class="text-xs mt-2"><strong>Ref:</strong> IS 1479 (Part I) 1961 (Reaffirmed 2003)</p>
+            </div>
+        `
+    },
+    {
+        title: 'Benzoic Acid & Salicylic Acid',
+        content: `
+             <div class="prose max-w-none prose-blue">
+                <p><strong>Principle:</strong> These acids are extracted with ether and then identified with ferric chloride, which produces a characteristic colour.</p>
+                <ol>
+                    <li>Acidify 10 ml of milk with dilute HCl and extract with 50-100 ml of ethyl ether.</li>
+                    <li>Evaporate the ether layer to get the residue.</li>
+                    <li>Dissolve the residue in warm water and add a few drops of 0.5% neutral ferric chloride solution.</li>
+                    <li>A <strong>buff-colored (salmon) precipitate</strong> indicates Benzoic Acid. A <strong>violet colour</strong> indicates Salicylic Acid.</li>
+                </ol>
+                <p class="text-xs mt-2"><strong>Ref:</strong> A.O.A.C 17th edn, Official method 975.30</p>
+            </div>
+        `
+    },
+    {
+        title: 'Hypochlorites & Chloramines',
+        content: `
+            <div class="prose max-w-none prose-blue">
+                <p><strong>Principle:</strong> These compounds liberate iodine from potassium iodide, which then gives a blue colour with starch.</p>
+                <ol>
+                    <li>To 5 ml of milk, add 1.5 ml of potassium iodide solution.</li>
+                    <li>If there's no change, add 4 ml of dilute HCl and mix.</li>
+                    <li>Place the tube in a water bath at 85°C for 10 minutes. Cool rapidly.</li>
+                    <li>Add 0.5-1.0 ml of starch solution to the liquid below the curd.</li>
+                    <li>A <strong>blue-purple colour</strong> indicates the presence of chlorine compounds. The intensity of the colour can indicate the approximate concentration.</li>
+                </ol>
+                <p class="text-xs mt-2"><strong>Ref:</strong> A.O.A.C 17th edn, 2000, Official Method 922.08</p>
+            </div>
+        `
+    }
+];
+
+const adulterantsData = [
+    {
+        title: 'Sucrose (Cane Sugar)',
+        content: `
+            <div class="prose max-w-none prose-green">
+                <p><strong>Purpose:</strong> To increase the SNF content and density (CLR) of milk, often after adding water.</p>
+                <p><strong>Principle:</strong> Seliwanoff’s reagent is used. HCl hydrolyzes sucrose into glucose and fructose. Upon heating, fructose reacts with resorcinol to produce a red colour.</p>
+                <ol>
+                    <li>Take 1 ml of milk sample and add 1 ml of 0.5% resorcinol solution.</li>
+                    <li>Mix and heat the test tube in a boiling water bath for 5 minutes.</li>
+                    <li>If a <strong>deep red colour</strong> is formed, sugar is present in the milk. Pure milk remains white.</li>
+                </ol>
+                <p class="text-xs mt-2"><strong>Ref:</strong> IS 1479 (Part I) 1961 (Reaffirmed 2003)</p>
+            </div>
+        `
+    },
+    {
+        title: 'Starch & Other Cereal Flours',
+        content: `
+            <div class="prose max-w-none prose-green">
+                <p><strong>Purpose:</strong> To increase the SNF content of milk.</p>
+                <p><strong>Principle:</strong> Starch forms a purple-blue complex with iodine.</p>
+                <ol>
+                    <li>Take 5.0 ml of milk in a test tube and boil it.</li>
+                    <li>Cool the test tube to room temperature.</li>
+                    <li>Add 1-2 drops of iodine solution. A <strong>blue colour</strong> indicates the presence of starch, which disappears on boiling and reappears on cooling.</li>
+                </ol>
+                 <p class="text-xs mt-2"><strong>Ref:</strong> IS 1479 (Part I) 1961 (Reaffirmed 2003)</p>
+            </div>
+        `
+    },
+    {
+        title: 'Urea',
+        content: `
+            <p class="mb-4"><strong>Purpose:</strong> To increase the non-protein nitrogen (NPN) content, which falsely inflates protein estimation and also increases SNF.</p>
+            <div class="prose max-w-none prose-green">
+                <h4>1. DMAB Reagent Method</h4>
+                <p><strong>Principle:</strong> Urea forms a yellow complex with p-dimethylaminobenzaldehyde (DMAB) in a slightly acidic solution.</p>
+                <ol>
+                    <li>Take 1 ml of milk in a test tube.</li>
+                    <li>Add 1 ml of 1.6% DMAB reagent.</li>
+                    <li>A <strong>distinct yellow colour</strong> indicates added urea, whereas a slight yellow colour is due to natural urea.</li>
+                </ol>
+                 <p class="text-xs mt-2"><strong>Ref:</strong> Bector, B.S., et al. (1998). Indian Dairyman, 50(4): 59-62</p>
+            </div>
+        `
+    },
+    {
+        title: 'Detergent',
+         content: `
+            <div class="prose max-w-none prose-red">
+                <p><strong>Purpose:</strong> Added to emulsify external fat (vegetable oil) into milk to create synthetic milk.</p>
+                <p><strong>Principle:</strong> Anionic detergents form a complex with the cationic dye methylene blue. This complex is soluble in chloroform.</p>
+                <ol>
+                    <li>Take 1 ml of milk, add 1 ml of methylene blue solution and then 2 ml of chloroform.</li>
+                    <li>Vortex for 15 seconds and then centrifuge at 1100 rpm for 3 minutes.</li>
+                    <li>A more <strong>intense blue colour in the lower (chloroform) layer</strong> indicates the presence of detergent. If the upper layer is more intense, the detergent is absent.</li>
+                </ol>
+                 <p class="text-xs mt-2"><strong>Ref:</strong> Rajput, Y.S., et al. (2006). Indian Patent Office file no. 1970/Del/2006</p>
+            </div>
+        `
+    },
+    {
+        title: 'Ammonium Compounds (Sulphates)',
+        content: `
+            <div class="prose max-w-none prose-green">
+                <p><strong>Purpose:</strong> To increase the lactometer reading by increasing the density of milk.</p>
+                <p><strong>Principle:</strong> Sulphates precipitate with Barium Chloride (BaCl₂).</p>
+                <ol>
+                    <li>Take 10 ml of milk and add 10 ml of Trichloroacetic acid (TCA) to coagulate it.</li>
+                    <li>Filter the milk and take 5 ml of the clear filtrate.</li>
+                    <li>Add a few drops of 5% BaCl₂ solution.</li>
+                    <li>Formation of a <strong>milky-white precipitate</strong> indicates the presence of added sulphates.</li>
+                </ol>
+                <p class="text-xs mt-2"><strong>Ref:</strong> Sharma, R., et al. (2012). NDRI Publication No. 88/2012</p>
+            </div>
+        `
+    },
+    {
+        title: 'Vegetable/Refined Oil (Foreign Fat)',
+        content: `
+            <p class="mb-4"><strong>Purpose:</strong> To replace natural milk fat with cheaper vegetable oil to increase profit.</p>
+            <div class="prose max-w-none prose-green">
+                 <h4>Butyro-Refractometer (BR) Reading Method</h4>
+                 <p><strong>Principle:</strong> Most vegetable oils have a higher refractive index than pure milk fat (ghee).</p>
+                <ol>
+                    <li>Isolate fat from the milk sample using a modified Gerber butyrometer.</li>
+                    <li>Take the BR reading of the extracted fat at 40°C.</li>
+                    <li>Pure milk fat has a BR reading of 40-43. Any reading higher than this range suggests the presence of foreign fat.</li>
+                </ol>
+                <p class="text-xs mt-2"><strong>Ref:</strong> IS 1479 (Part I) – 1960 (Reaffirmed 2003)</p>
+            </div>
+        `
+    },
+    {
+        title: 'Skimmed Milk Powder (SMP) in Natural Milk',
+         content: `
+            <div class="prose max-w-none prose-green">
+                <p><strong>Purpose:</strong> To illegally increase the SNF content of natural milk.</p>
+                <p><strong>Principle:</strong> The proteins in reconstituted milk powder contain reducing groups that react with phosphomolybdic acid on boiling to give a blue colour.</p>
+                <ol>
+                    <li>Centrifuge 50 ml of milk to separate the cream.</li>
+                    <li>Coagulate the skim milk portion with acetic acid.</li>
+                    <li>Wash the precipitate, then add 2 ml of 1% phosphomolybdic acid and boil for 15 minutes.</li>
+                    <li>The curd from pure milk will be greenish, whereas the curd from a sample containing SMP will be <strong>bluish</strong>.</li>
+                </ol>
+                 <p class="text-xs mt-2"><strong>Ref:</strong> Journal of Food Science and Technology, Vol 22 (1985)</p>
+            </div>
+        `
+    },
+    {
+        title: 'Gelatine',
+         content: `
+            <div class="prose max-w-none prose-green">
+                <p><strong>Purpose:</strong> Added to increase the thickness and SNF content of milk.</p>
+                <p><strong>Principle:</strong> Gelatine forms a yellow precipitate with picric acid.</p>
+                <ol>
+                    <li>Add acid mercuric nitrate solution to 10 ml of milk and filter.</li>
+                    <li>To the filtrate, add an equal volume of saturated aqueous picric acid solution.</li>
+                    <li>A <strong>yellow precipitate</strong> indicates the presence of gelatine.</li>
+                </ol>
+                <p class="text-xs mt-2"><strong>Ref:</strong> A.O.A.C 17th edn, 2000, Official Method - 920.106</p>
+            </div>
+        `
+    }
+];
+
+
 export function AdulterationModal({
   isOpen,
   setIsOpen,
@@ -199,7 +441,7 @@ export function AdulterationModal({
             </section>
             
             <section id="preservatives" className="mb-12">
-                <h2 className="text-xl sm:text-2xl font-bold text-gray-800 border-b-2 border-blue-200 pb-2 mb-6 font-headline">Detecting Preservatives in Milk</h2>
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-800 border-b-2 border-red-200 pb-2 mb-6 font-headline">Detecting Preservatives in Milk</h2>
                 <p className="mb-6 text-gray-700 leading-relaxed">
                     By law, no preservative of any type is permitted in milk. Preservatives are generally added to milk when chilling or transport facilities are inadequate. The common preservatives used are neutralizers, boric acid, formalin, etc.
                 </p>
@@ -240,3 +482,5 @@ export function AdulterationModal({
     </Dialog>
   )
 }
+
+    
