@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -49,9 +48,11 @@ import { useSubscription } from "@/context/subscription-context";
 import { SubscriptionModal } from "./subscription-modal";
 import { CipProcessModal } from "./info-modals/cip-process-modal";
 import { MicrobiologyTestingModal } from "./info-modals/microbiology-testing-modal";
+import { MilkHandlingPreservationModal } from "./info-modals/milk-handling-preservation-modal";
 
 const topics = [
   { id: 'industry', title: 'Dairy Industry', description: 'Overview & Trends', category: 'industry', icon: Factory, badge: 'New', modal: DairyIndustryModal, isPro: true },
+  { id: 'milk-handling', title: 'Milk Handling', description: 'Reception & Preservation', category: 'milk', icon: Droplet, badge: 'New', modal: MilkHandlingPreservationModal, isPro: true },
   { id: 'milk-chemistry', title: 'Milk Chemistry', description: 'Composition & Properties', category: 'science', icon: FlaskConical, modal: MilkChemistryModal, isPro: true },
   { id: 'solutions-prep', title: 'Solutions Preparation', description: 'Testing Methods', category: 'science', icon: Beaker, modal: SolutionsPrepModal, isPro: true },
   { id: 'microbiology', title: 'Microbiology', description: 'Testing & Pathogens', category: 'science', icon: Bug, badge: 'New', modal: MicrobiologyTestingModal, isPro: true },
