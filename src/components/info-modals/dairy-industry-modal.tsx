@@ -58,8 +58,10 @@ export function DairyIndustryModal({
                     <p>India is the world's largest milk producer, accounting for <strong>23-24% of global milk production</strong>. Milk production has seen a Compound Annual Growth Rate of 5.62% from 146.31 million tonnes (MT) in 2014-15 to 239.3 MT in 2023-24. Per capita milk availability has significantly improved, reaching <strong>459 grams per day</strong> in 2022-23, which is considerably higher than the global average of 322 grams per day.</p>
                     <p>Uttar Pradesh is the largest milk-producing state. Buffaloes dominate milk production at 45.32%, but indigenous and non-descript cows have shown a significant increase in production.</p>
                 </SubSection>
-                <SubSection title="Key Driving Factors and Challenges">
-                    <p>Growth is propelled by population growth, rising incomes, and increasing health consciousness. However, challenges include a slowdown in milk production growth, low productivity per animal (India: 987 kg/lactation vs. Global: 2038 kg/lactation), high feed costs, and the impacts of climate change.</p>
+                <SubSection title="Key Driving Factors, Challenges and Opportunities">
+                    <p><strong>Driving Factors:</strong> Growth is propelled by population growth, rising incomes, and increasing health consciousness. Government initiatives like the National Animal Disease Control Program and the Animal Husbandry Infrastructure Development Fund also provide crucial support.</p>
+                    <p><strong>Challenges:</strong> Key challenges include a slowdown in milk production growth, low productivity per animal (India: 987 kg/lactation vs. Global: 2038 kg/lactation), high feed costs, severe fodder shortages, and the impacts of climate change.</p>
+                    <p><strong>Opportunities:</strong> Significant opportunities lie in the value-added products segment (cheese, yogurt, ice cream), the fast-growing A2 milk market, and leveraging technology for efficiency gains. There is also immense potential for organized private players and startups in the D2C space.</p>
                     <div className="overflow-x-auto">
                         <Table>
                             <TableHeader>
@@ -81,7 +83,19 @@ export function DairyIndustryModal({
 
                 <SectionTitle title="Role of Dairy Cooperatives" id="cooperatives" />
                  <SubSection title="Operation Flood and the White Revolution">
-                    <p>'Operation Flood,' launched in 1970 under Dr. Verghese Kurien, revolutionized India's dairy industry, transforming it from a milk-deficient nation into the world's largest producer. It boosted milk production, linked producers directly to consumers, and augmented rural incomes, empowering millions of small and landless farmers.</p>
+                    <p>'Operation Flood,' launched in 1970 under Dr. Verghese Kurien, revolutionized India's dairy industry, transforming it from a milk-deficient nation into the world's largest producer. A National Milk Grid now links milk producers throughout India with consumers in over 700 towns and cities, reducing seasonal and regional price variations while ensuring that the producer gets fair market prices in a transparent manner.</p>
+                     <h5 class="font-bold mt-2">Objectives:</h5>
+                     <ul class="list-disc pl-5">
+                        <li>Increase milk production ("a flood of milk").</li>
+                        <li>Augment rural incomes.</li>
+                        <li>Provide reasonable prices for consumers.</li>
+                     </ul>
+                      <h5 class="font-bold mt-2">Phases of Operation Flood:</h5>
+                     <ul class="list-disc pl-5">
+                        <li><strong>Phase I (1970–1980):</strong> Financed by the sale of skimmed milk powder and butter oil donated by the European Union.</li>
+                        <li><strong>Phase II (1981–1985):</strong> Increased the milk-sheds from 18 to 136; urban markets expanded the outlets for milk to 290. By the end of 1985, a self-sustaining system of 43,000 village cooperatives with 4.25 million milk producers was covered.</li>
+                        <li><strong>Phase III (1985–1996):</strong> Enabled dairy cooperatives to expand and strengthen the infrastructure required to procure and market increasing volumes of milk, adding 30,000 new dairy cooperatives.</li>
+                     </ul>
                 </SubSection>
                 <SubSection title="The Anand Pattern: Three-Tier Structure">
                     <p>The success of Operation Flood is built on the Anand Pattern, a three-tier cooperative structure:</p>
@@ -119,3 +133,4 @@ export function DairyIndustryModal({
   )
 }
 
+    
