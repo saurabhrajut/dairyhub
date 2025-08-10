@@ -21,8 +21,8 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Source+Code+Pro&family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet" />
-        <link rel="apple-touch-icon" href="/Photoroom_20250810_203644.JPG" />
-        <link rel="icon" href="/Photoroom_20250810_203644.JPG" />
+        <link rel="apple-touch-icon" href="https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/Photoroom_20250810_203644.JPG?alt=media&token=6de15eff-8d2a-46ab-95e3-5c2cc76cfc73" />
+        <link rel="icon" href="https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/Photoroom_20250810_203644.JPG?alt=media&token=6de15eff-8d2a-46ab-95e3-5c2cc76cfc73" />
       </head>
       <body className="font-body antialiased">
         <AuthProvider>
