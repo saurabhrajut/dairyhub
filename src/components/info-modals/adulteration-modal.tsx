@@ -137,6 +137,7 @@ const platformTests = [
             </ul>
             <h4 class="font-semibold mt-2">Inference:</h4>
             <p>The different standards for the disc are given in the table below.</p>
+            <div class="overflow-x-auto">
             <Table class="mt-2">
               <TableHeader>
                 <TableRow>
@@ -155,6 +156,7 @@ const platformTests = [
                 <TableRow><TableCell>0</TableCell><TableCell>White</TableCell><TableCell>Very Bad</TableCell></TableRow>
               </TableBody>
             </Table>
+            </div>
         `
     }
 ];
@@ -166,14 +168,14 @@ const preservativesData = [
         content: `
             <div class="prose max-w-none prose-blue">
                 <h4>Method 1: Rosolic Acid Test</h4>
-                <p><strong>Principle:</strong> Rosolic acid is an indicator which gives a red colour in alkaline condition.</p>
+                <p><strong>Siddhant:</strong> Rosolic acid is an indicator which gives a red colour in alkaline condition.</p>
                 <ol>
                     <li>Take 10 ml of milk in a test tube and add an equal volume of ethyl alcohol (95%).</li>
                     <li>Add a few drops of 0.1% rosolic acid solution and mix.</li>
                     <li>Appearance of a <strong>rose-red colour</strong> indicates the presence of neutralizers, whereas pure milk turns brownish.</li>
                 </ol>
                 <h4 class="mt-4">Method 2: Alkalinity of Ash Test</h4>
-                <p><strong>Principle:</strong> If a neutralizer has been added, the ash of the milk will have a higher alkalinity compared to pure milk.</p>
+                <p><strong>Siddhant:</strong> If a neutralizer has been added, the ash of the milk will have a higher alkalinity compared to pure milk.</p>
                 <ol>
                     <li>Take 20 ml of milk in a silica crucible.</li>
                     <li>Evaporate the water and ash the contents in a muffle furnace at 550°C.</li>
@@ -189,7 +191,7 @@ const preservativesData = [
         purpose: 'Used as a preservative.',
         content: `
             <div class="prose max-w-none prose-blue">
-                <p><strong>Principle:</strong> Boric acid and its salts give a red colour with turmeric paper.</p>
+                <p><strong>Siddhant:</strong> Boric acid and its salts give a red colour with turmeric paper.</p>
                 <ol>
                     <li>Take 5 ml of milk in a test tube and add 1 ml of concentrated HCl.</li>
                     <li>Mix well, then dip a strip of turmeric paper into it.</li>
@@ -208,7 +210,7 @@ const preservativesData = [
         content: `
             <div class="prose max-w-none prose-blue">
                 <h4>Method 1: Hehner Test</h4>
-                <p><strong>Principle:</strong> Formaldehyde gives a violet colour with ferric salts in the presence of concentrated sulfuric acid.</p>
+                <p><strong>Siddhant:</strong> Formaldehyde gives a violet colour with ferric salts in the presence of concentrated sulfuric acid.</p>
                 <ol>
                     <li>Take 10 ml of milk sample in a test tube.</li>
                     <li>Slowly add 0.5 ml of 10% ferric chloride solution.</li>
@@ -218,7 +220,7 @@ const preservativesData = [
                  <p class="text-xs mt-2"><strong>Ref:</strong> IS 1479 (Part II) 1961 (Reaffirmed 1997)</p>
 
                 <h4 class="mt-4">Method 2: Chromotropic Acid Test</h4>
-                 <p><strong>Principle:</strong> Formaldehyde reacts with chromotropic acid to form a colored compound.</p>
+                 <p><strong>Siddhant:</strong> Formaldehyde reacts with chromotropic acid to form a colored compound.</p>
                 <ol>
                     <li>Take 1 ml of milk in a test tube.</li>
                     <li>Add 1 ml of chromotropic acid reagent and mix well.</li>
@@ -241,7 +243,7 @@ const preservativesData = [
                 <p class="text-xs mt-2"><strong>Ref:</strong> A.O.A.C 17th edn, 2000 Official Method 957.08</p>
                 
                 <h4 class="mt-4">Method 2: Para-phenylenediamine Test</h4>
-                <p><strong>Principle:</strong> Hydrogen peroxide oxidizes para-phenylenediamine, changing its colour from yellow to blue.</p>
+                <p><strong>Siddhant:</strong> Hydrogen peroxide oxidizes para-phenylenediamine, changing its colour from yellow to blue.</p>
                 <ol>
                     <li>Take 2 ml of milk in a test tube and add an equal volume of raw milk.</li>
                     <li>Add 2 drops of 2% para-phenylenediamine solution and shake well.</li>
@@ -263,7 +265,7 @@ const preservativesData = [
         purpose: 'Used as preservatives.',
         content: `
              <div class="prose max-w-none prose-blue">
-                <p><strong>Principle:</strong> These acids are extracted with ether and then identified with ferric chloride, which produces a characteristic colour.</p>
+                <p><strong>Siddhant:</strong> These acids are extracted with ether and then identified with ferric chloride, which produces a characteristic colour.</p>
                 <ol>
                     <li>Acidify 10 ml of milk with dilute HCl and extract with 50-100 ml of ethyl ether.</li>
                     <li>Evaporate the ether layer to get the residue.</li>
@@ -279,7 +281,7 @@ const preservativesData = [
         purpose: 'Used as sterilizing agents, but their presence indicates contamination.',
         content: `
             <div class="prose max-w-none prose-blue">
-                <p><strong>Principle:</strong> These compounds liberate iodine from potassium iodide, which then gives a blue colour with starch.</p>
+                <p><strong>Siddhant:</strong> These compounds liberate iodine from potassium iodide, which then gives a blue colour with starch.</p>
                 <ol>
                     <li>To 5 ml of milk, add 1.5 ml of potassium iodide solution.</li>
                     <li>If there's no change, add 4 ml of dilute HCl and mix.</li>
@@ -300,7 +302,7 @@ const adulterantsData = [
         content: `
             <div class="prose max-w-none prose-green">
                 <h4>Qualitative Method: Modified Seliwanoff’s Method</h4>
-                <p><strong>Principle:</strong> Fructose in cane sugar reacts with resorcinol in HCl to give red colour.</p>
+                <p><strong>Siddhant:</strong> Fructose in cane sugar reacts with resorcinol in HCl to give red colour.</p>
                 <ol>
                     <li>Take 1 ml of milk and add 1 ml of 0.5% resorcinol solution.</li>
                     <li>Heat in a boiling water bath for 5 minutes.</li>
@@ -315,7 +317,7 @@ const adulterantsData = [
         purpose: 'To increase the SNF content and thickness of milk.',
         content: `
             <div class="prose max-w-none prose-green">
-                <p><strong>Principle:</strong> Starch forms a purple-blue complex with iodine.</p>
+                <p><strong>Siddhant:</strong> Starch forms a purple-blue complex with iodine.</p>
                 <ol>
                     <li>Boil 5.0 ml of milk and cool to room temperature.</li>
                     <li>Add 1-2 drops of iodine solution. A <strong>blue colour</strong> indicates the presence of starch, which disappears on boiling and reappears on cooling.</li>
@@ -329,7 +331,7 @@ const adulterantsData = [
         purpose: 'To increase the SNF content of milk.',
         content: `
             <div class="prose max-w-none prose-green">
-                <p><strong>Principle:</strong> Cellulose gives a blue colour with Iodine-Zinc Chloride reagent but not with plain iodine solution.</p>
+                <p><strong>Siddhant:</strong> Cellulose gives a blue colour with Iodine-Zinc Chloride reagent but not with plain iodine solution.</p>
                 <ol>
                     <li>Take 10g of milk, add 50ml hot water and stir. Pour on a nylon cloth and wash the residue.</li>
                     <li>Scrape the residue and place it on a spotting plate.</li>
@@ -346,13 +348,22 @@ const adulterantsData = [
         content: `
             <div class="prose max-w-none prose-green">
                 <h4>Method 1: DMAB Reagent Method</h4>
-                <p><strong>Principle:</strong> Urea forms a yellow complex with p-dimethylaminobenzaldehyde (DMAB) in a slightly acidic solution.</p>
+                <p><strong>Siddhant:</strong> Urea forms a yellow complex with p-dimethylaminobenzaldehyde (DMAB) in a slightly acidic solution.</p>
                 <ol>
                     <li>Take 1 ml of milk in a test tube.</li>
                     <li>Add 1 ml of 1.6% DMAB reagent.</li>
                     <li>A <strong>distinct yellow colour</strong> indicates added urea, whereas a slight yellow colour is due to natural urea (natural limit ~70mg/100ml).</li>
                 </ol>
                  <p class="text-xs mt-2"><strong>Ref:</strong> Bector, B.S., et al. (1998). Indian Dairyman, 50(4): 59-62</p>
+
+                <h4 class="mt-4">Method 2: Urease Enzyme Method</h4>
+                <p><strong>Siddhant:</strong> Urease enzyme acts on urea to release ammonia, which turns the solution blue in the presence of bromothymol blue indicator.</p>
+                <ol>
+                   <li>Take 5 ml of milk in a test tube.</li>
+                   <li>Add 0.2 ml of urease enzyme solution and shake well at room temperature.</li>
+                   <li>Add 0.1 ml of bromothymol blue solution.</li>
+                   <li>Appearance of a <strong>blue color</strong> after 10-15 minutes indicates the presence of added urea.</li>
+                </ol>
             </div>
         `
     },
@@ -361,7 +372,7 @@ const adulterantsData = [
         purpose: 'To increase the SNF of milk.',
         content: `
             <div class="prose max-w-none prose-green">
-                <p><strong>Principle:</strong> Using a modified Barfoed's test, glucose reduces cupric ions to cuprous, which then reduces phosphomolybdic acid to form a blue compound.</p>
+                <p><strong>Siddhant:</strong> Using a modified Barfoed's test, glucose reduces cupric ions to cuprous, which then reduces phosphomolybdic acid to form a blue compound.</p>
                 <ol>
                     <li>Take 1 ml of milk, add 1 ml of modified Barfoed’s reagent.</li>
                     <li>Heat in a boiling water bath for 3 min, then cool.</li>
@@ -373,11 +384,35 @@ const adulterantsData = [
         `
     },
     {
+        title: 'Maltodextrin',
+        purpose: 'A polysaccharide used as a food additive to increase thickness and SNF.',
+        content: `
+            <div class="prose max-w-none prose-green">
+                <h4>Iodine Method</h4>
+                <ol>
+                   <li>Take 5 ml of milk sample in a test tube.</li>
+                   <li>Add 2 ml of iodine solution (0.05 N) and mix.</li>
+                   <li>Appearance of a <strong>chocolate-like red-brown color</strong> indicates the presence of dextrin/maltodextrin.</li>
+                </ol>
+
+                <h4 class="mt-4">Alternate Method (Enzymatic)</h4>
+                <p><strong>Siddhant:</strong> This test detects the glucose released after enzymatic reaction.</p>
+                <ol>
+                   <li>Take 20 ml of milk and adjust pH to 4.0-4.5 with lactic acid.</li>
+                   <li>Add 1 ml of alpha glucoamylase enzyme solution and keep at 62°C for 5 min.</li>
+                   <li>Cool to room temperature.</li>
+                   <li>Dip a Diastic strip for 30 seconds.</li>
+                   <li>Compare the color change on the strip (green to brown) with the color chart on the bottle.</li>
+                </ol>
+            </div>
+        `
+    },
+    {
         title: 'Detergent',
         purpose: 'Added to emulsify external fat (vegetable oil) into milk to create synthetic milk.',
         content: `
             <div class="prose max-w-none prose-red">
-                <p><strong>Principle:</strong> Anionic detergents form a complex with the cationic dye methylene blue. This complex is soluble in chloroform.</p>
+                <p><strong>Siddhant:</strong> Anionic detergents form a complex with the cationic dye methylene blue. This complex is soluble in chloroform.</p>
                 <ol>
                     <li>Take 1 ml of milk, add 1 ml of methylene blue solution and then 2 ml of chloroform.</li>
                     <li>Vortex for 15 seconds and then centrifuge at 1100 rpm for 3 minutes.</li>
@@ -392,7 +427,7 @@ const adulterantsData = [
         purpose: 'To increase the lactometer reading by increasing the density of milk.',
         content: `
             <div class="prose max-w-none prose-green">
-                <p><strong>Principle:</strong> Sulphates precipitate with Barium Chloride (BaCl₂).</p>
+                <p><strong>Siddhant:</strong> Sulphates precipitate with Barium Chloride (BaCl₂).</p>
                 <ol>
                     <li>Take 10 ml of milk and add 10 ml of Trichloroacetic acid (TCA) to coagulate it.</li>
                     <li>Filter the milk and take 5 ml of the clear filtrate.</li>
@@ -409,7 +444,7 @@ const adulterantsData = [
         content: `
             <div class="prose max-w-none prose-green">
                  <h4>Butyro-Refractometer (BR) Reading Method</h4>
-                 <p><strong>Principle:</strong> Most vegetable oils have a higher refractive index than pure milk fat (ghee).</p>
+                 <p><strong>Siddhant:</strong> Most vegetable oils have a higher refractive index than pure milk fat (ghee).</p>
                 <ol>
                     <li>Isolate fat from the milk sample using a modified Gerber butyrometer.</li>
                     <li>Take the BR reading of the extracted fat at 40°C.</li>
@@ -417,7 +452,7 @@ const adulterantsData = [
                 </ol>
                 <p class="text-xs mt-2"><strong>Ref:</strong> IS 1479 (Part I) – 1960 (Reaffirmed 2003)</p>
                 <h4 class="mt-4">Baudouin Test for Vanaspati</h4>
-                <p><strong>Principle:</strong> Vanaspati is required to contain 5% sesame oil. The sesamol from this oil reacts with furfural to give a red color.</p>
+                <p><strong>Siddhant:</strong> Vanaspati is required to contain 5% sesame oil. The sesamol from this oil reacts with furfural to give a red color.</p>
                 <ol>
                     <li>Extract ghee from the milk sample.</li>
                     <li>Take 5g of melted fat, add 5ml concentrated HCl and 0.4ml of 2% furfural solution. Vortex for 2 minutes.</li>
@@ -431,7 +466,7 @@ const adulterantsData = [
         purpose: 'A non-edible oil used as a cheap adulterant.',
         content: `
             <div class="prose max-w-none prose-green">
-                <p><strong>Principle:</strong> Mineral oil does not saponify (turn into soap) with alkali, unlike edible fats, causing turbidity.</p>
+                <p><strong>Siddhant:</strong> Mineral oil does not saponify (turn into soap) with alkali, unlike edible fats, causing turbidity.</p>
                 <ol>
                     <li>Take 1g of clarified fat and add 5ml of 0.5N alcoholic KOH.</li>
                     <li>Reflux in boiling water for 10 minutes.</li>
@@ -446,7 +481,7 @@ const adulterantsData = [
         purpose: 'Used as a cheap adulterant for ghee.',
         content: `
             <div class="prose max-w-none prose-green">
-                <p><strong>Principle:</strong> Based on the time taken for ghee to become opaque at a specific temperature.</p>
+                <p><strong>Siddhant:</strong> Based on the time taken for ghee to become opaque at a specific temperature.</p>
                 <ol>
                     <li>Melt 5g of ghee at 50°C.</li>
                     <li>Transfer to a 23°C water bath and record the time taken for the sample to become opaque.</li>
@@ -460,7 +495,7 @@ const adulterantsData = [
         purpose: 'To increase the volume of milk. Pond water is heavier than tap water.',
         content: `
             <div class="prose max-w-none prose-green">
-                <p><strong>Principle:</strong> This method detects nitrates/nitrites present in pond water from agricultural fertilizers.</p>
+                <p><strong>Siddhant:</strong> This method detects nitrates/nitrites present in pond water from agricultural fertilizers.</p>
                 <ol>
                     <li>Rinse a test tube with the milk sample and drain.</li>
                     <li>Add 1 or 2 drops of 2% diphenylamine solution along the side of the test tube.</li>
@@ -475,7 +510,7 @@ const adulterantsData = [
         purpose: 'To illegally increase the SNF content of natural milk.',
         content: `
             <div class="prose max-w-none prose-green">
-                <p><strong>Principle:</strong> The proteins in reconstituted milk powder contain reducing groups that react with phosphomolybdic acid on boiling to give a blue colour.</p>
+                <p><strong>Siddhant:</strong> The proteins in reconstituted milk powder contain reducing groups that react with phosphomolybdic acid on boiling to give a blue colour.</p>
                 <ol>
                     <li>Centrifuge 50 ml of milk to separate the cream.</li>
                     <li>Coagulate the skim milk portion with acetic acid.</li>
@@ -491,7 +526,7 @@ const adulterantsData = [
         purpose: 'Added to increase the thickness and SNF content of milk.',
         content: `
             <div class="prose max-w-none prose-green">
-                <p><strong>Principle:</strong> Gelatine forms a yellow precipitate with picric acid.</p>
+                <p><strong>Siddhant:</strong> Gelatine forms a yellow precipitate with picric acid.</p>
                 <ol>
                     <li>Add acid mercuric nitrate solution to 10 ml of milk and filter.</li>
                     <li>To the filtrate, add an equal volume of saturated aqueous picric acid solution.</li>
