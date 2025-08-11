@@ -53,9 +53,9 @@ import { MilkHandlingPreservationModal } from "./info-modals/milk-handling-prese
 
 const topics = [
   { id: 'industry', title: 'Dairy Industry', description: 'Overview & Trends', category: 'industry', icon: Factory, badge: 'New', modal: DairyIndustryModal, isPro: true },
-  { id: 'milk-handling', title: 'Milk Handling', description: 'Reception & Preservation', category: 'milk', icon: Droplet, badge: 'New', modal: MilkHandlingPreservationModal, isPro: true },
+  { id: 'milk-handling', title: 'Milk Handling & preservation', description: 'Reception & Preservation', category: 'milk', icon: Droplet, badge: 'New', modal: MilkHandlingPreservationModal, isPro: true },
   { id: 'milk-chemistry', title: 'Milk Chemistry', description: 'Composition & Properties', category: 'science', icon: FlaskConical, modal: MilkChemistryModal, isPro: true },
-  { id: 'solutions-prep', title: 'Solutions Preparation', description: 'Testing Methods', category: 'science', icon: Beaker, modal: SolutionsPrepModal, isPro: true },
+  { id: 'solutions-prep', title: 'Solutions Preparation', description: 'Reagents & Calculators', category: 'science', icon: Beaker, modal: SolutionsPrepModal, isPro: true },
   { id: 'microbiology', title: 'Microbiology', description: 'Testing & Pathogens', category: 'science', icon: Bug, badge: 'New', modal: MicrobiologyTestingModal, isPro: true },
   { id: 'adulteration', title: 'Adulteration', description: 'Detection & Prevention', category: 'milk', icon: TestTube, badge: 'Updated', modal: AdulterationModal, isPro: true },
   { id: 'std1', title: 'Standardization I', description: 'Basic Principles', category: 'milk', icon: Scale, modal: StandardizationIModal, isPro: false },
@@ -165,7 +165,7 @@ export function TopicGrid() {
               }`}>
                 <topic.icon className="w-6 h-6 sm:w-10 sm:h-10 text-primary" />
               </div>
-              <h3 className="font-headline font-semibold text-card-foreground text-xs sm:text-md">{topic.title}</h3>
+              <h3 className="font-headline font-semibold text-card-foreground text-[10px] sm:text-base leading-tight">{topic.title}</h3>
               <p className="hidden sm:block text-xs text-muted-foreground">{topic.description}</p>
             </div>
           )
@@ -177,7 +177,7 @@ export function TopicGrid() {
           if (!ModalComponent) return null;
           return <ModalComponent key={`${topic.id}-modal`} isOpen={activeModal === topic.id} setIsOpen={() => setActiveModal(null)} />
       })}
-      <SubscriptionModal isOpen={isSubscriptionModalOpen} setIsOpen={setIsSubscriptionModalOpen} />
+      <SubscriptionModal isOpen={isSubscriptionModalOpen} setIsOpen={() => setIsSubscriptionModalOpen(false)} />
     </>
   );
 }
