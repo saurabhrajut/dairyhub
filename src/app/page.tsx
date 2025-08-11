@@ -25,19 +25,15 @@ export default function Home() {
 
   if (loading || !user) {
     return (
-      <div className="max-w-7xl mx-auto p-4 sm:p-6">
-        <div className="mb-8">
-            <Skeleton className="h-24 w-full" />
-        </div>
-        <div className="text-center mb-8">
-            <Skeleton className="h-8 w-64 mx-auto mb-2" />
-            <Skeleton className="h-4 w-48 mx-auto" />
-        </div>
-         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-            {Array.from({ length: 8 }).map((_, i) => (
-                <Skeleton key={i} className="h-48 w-full" />
-            ))}
-        </div>
+      <div className="fixed inset-0 w-full h-full flex items-center justify-center bg-background overflow-hidden">
+        <video
+          src="https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/0f78-5ba2-4b80-8b36-a4f989cc5bd3.mp4?alt=media"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover"
+        />
       </div>
     );
   }

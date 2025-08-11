@@ -21,8 +21,8 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Source+Code+Pro&family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet" />
-        <link rel="apple-touch-icon" href="https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/Untitled.jpg?alt=media&token=bcd4760c-d41b-476b-b6c6-3963ab13025b" />
-        <link rel="icon" href="https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/Untitled.jpg?alt=media&token=bcd4760c-d41b-476b-b6c6-3963ab13025b" />
+        <link rel="apple-touch-icon" href="https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/EF9A49FE-8131-4DD5-9311-7FC058B1FD0E.jpeg?alt=media" />
+        <link rel="icon" href="https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/EF9A49FE-8131-4DD5-9311-7FC058B1FD0E.jpeg?alt=media" />
       </head>
       <body className="font-body antialiased">
         <AuthProvider>
