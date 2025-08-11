@@ -31,7 +31,7 @@ const SectionTitle = ({ children, id }: { children: React.ReactNode, id: string 
     </h3>
 );
 
-const Procedure = ({ title, purpose, reference, children }: { title: string, purpose: string, reference: string, children: React.ReactNode }) => (
+const Procedure = ({ title, purpose, reference, children }: { title: string, purpose: string, reference?: string, children: React.ReactNode }) => (
     <AccordionItem value={title.replace(/\s+/g, '-').toLowerCase()}>
         <AccordionTrigger className="text-left hover:no-underline">
             <div className="flex flex-col text-left">
@@ -42,7 +42,7 @@ const Procedure = ({ title, purpose, reference, children }: { title: string, pur
         <AccordionContent>
             <div className="prose prose-sm max-w-none break-words">
                 {children}
-                <p className="text-xs text-muted-foreground mt-4"><strong>Ref:</strong> {reference}</p>
+                {reference && <p className="text-xs text-muted-foreground mt-4"><strong>Ref:</strong> {reference}</p>}
             </div>
         </AccordionContent>
     </AccordionItem>
@@ -69,7 +69,7 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                     <TabsTrigger value="cream">Cream</TabsTrigger>
                     <TabsTrigger value="butter">Butter</TabsTrigger>
                     <TabsTrigger value="ghee-butter-oil">Ghee</TabsTrigger>
-                    <TabsTrigger value="cheese-paneer">Paneer</TabsTrigger>
+                    <TabsTrigger value="cheese-paneer">Paneer/Chhanna</TabsTrigger>
                     <TabsTrigger value="dahi-yoghurt">Dahi/Yoghurt</TabsTrigger>
                     <TabsTrigger value="ice-cream">Ice Cream</TabsTrigger>
                     <TabsTrigger value="condensed-milk">Condensed Milk</TabsTrigger>
@@ -89,6 +89,18 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                                 >
                                     <h4 className="font-semibold mt-4 mb-2">Principle:</h4>
                                     <p>The milk is mixed with sulphuric acid and iso-amyl alcohol in a special Gerber tube (butyrometer). The acid dissolves the protein and other solids, releasing the fat. The iso-amyl alcohol helps in a clear separation of the fat layer. The tubes are centrifuged, and the fat, being lighter, rises into the calibrated stem of the butyrometer, where its percentage is directly read.</p>
+                                    <h4 className="font-semibold mt-4 mb-2">Why 10.75 ml of Milk is Taken in Gerber Method?</h4>
+                                    <ul className="list-disc list-outside pl-5 space-y-1">
+                                      <li>1% mark on the butyrometer is equivalent to 0.125 ml volume.</li>
+                                      <li>Density of milk fat is 0.9 g/ml.</li>
+                                      <li>Mass of 1% fat = 0.125 ml × 0.9 g/ml = 0.1125 g.</li>
+                                      <li>Therefore, for 100% fat, 11.25 g of milk should be taken.</li>
+                                      <li>However, due to impurities in amyl alcohol, the fat reading is 2.5-3% higher.</li>
+                                      <li>So, the actual amount of milk should be slightly less, about 10.95 g.</li>
+                                      <li>The volume of 10.95 g of milk (at a density of 1.028) is approximately 10.65 ml.</li>
+                                      <li>About 0.1 ml of milk adheres to the pipette.</li>
+                                      <li>Hence, the total volume taken is 10.65 ml + 0.1 ml = 10.75 ml.</li>
+                                    </ul>
                                     <h4 className="font-semibold mt-4 mb-2">Reagents & Apparatus:</h4>
                                     <ul className="list-disc list-outside pl-5 space-y-1">
                                         <li><strong>Sulphuric acid:</strong> 90-91% concentration, sp. gr. 1.807-1.812 at 27°C.</li>
@@ -153,41 +165,28 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                              </Accordion>
                         </InfoCard>
 
-                        <InfoCard>
-                            <SectionTitle id="milk-protein">Determination of Protein in Milk (Kjeldahl Method)</SectionTitle>
+                         <InfoCard>
+                             <SectionTitle id="milk-misc">Other Quality Tests for Liquid Milk</SectionTitle>
                              <Accordion type="single" collapsible className="w-full">
-                                <Procedure 
-                                    title="Kjeldahl Method"
-                                    purpose="The standard reference method for determining the total nitrogen content, which is then converted to crude protein content."
-                                    reference="IDF 20B: 1993; A.O.A.C 17th edn, 2000 Official Method 991.23"
-                                >
+                                <Procedure title="Methylene Blue Reduction Test (MBRT)" purpose="To assess the microbiological quality of raw milk.">
                                     <h4 className="font-semibold mt-4 mb-2">Principle:</h4>
-                                    <p>The method involves three steps:</p>
+                                    <p>Methylene blue is a redox indicator that is blue in its oxidized state and becomes colorless when reduced. Bacteria in milk consume oxygen and lower the oxidation-reduction potential, causing the dye to lose its color. The faster the color disappears, the higher the bacterial load, and thus the poorer the milk quality.</p>
+                                    <h4 className="font-semibold mt-4 mb-2">Procedure:</h4>
                                     <ol className="list-decimal list-outside pl-5 space-y-2">
-                                        <li><strong>Digestion:</strong> The sample is heated with concentrated sulfuric acid and a catalyst (copper sulfate, potassium sulfate). This converts the organic nitrogen into ammonium sulfate.</li>
-                                        <li><strong>Distillation:</strong> The digested sample is made alkaline with NaOH to liberate ammonia gas, which is then distilled and trapped in a boric acid solution.</li>
-                                        <li><strong>Titration:</strong> The trapped ammonia is titrated with a standard acid (HCl). The amount of acid used is proportional to the nitrogen in the original sample.</li>
+                                        <li>Take 10 ml of milk sample in a sterile test tube.</li>
+                                        <li>Add 1 ml of Methylene Blue solution.</li>
+                                        <li>Stopper the tube and gently invert to mix.</li>
+                                        <li>Place the test tube in a water bath maintained at 37°C.</li>
+                                        <li>Check the tube every half hour and note the time when the blue color completely disappears.</li>
                                     </ol>
-                                     <h4 className="font-semibold mt-4 mb-2">Procedure:</h4>
-                                     <ol className="list-decimal list-outside pl-5 space-y-2">
-                                        <li>Accurately weigh about 5g of milk sample into a Kjeldahl flask.</li>
-                                        <li>Add 15g Potassium Sulfate, 1ml Copper Sulfate solution, and 25ml concentrated Sulfuric Acid.</li>
-                                        <li>Digest the mixture by heating until the solution becomes clear and light blue-green. Continue boiling for 1-1.5 hours.</li>
-                                        <li>Cool the digest and carefully dilute with about 300ml of water.</li>
-                                        <li>Add excess NaOH (approx. 75ml of 50% solution) to the flask.</li>
-                                        <li>Immediately connect to the distillation unit and distill the liberated ammonia into 50ml of boric acid solution containing indicator.</li>
-                                        <li>Titrate the distillate with standard 0.1 N HCl until the first trace of pink appears.</li>
-                                     </ol>
-                                     <h4 className="font-semibold mt-4 mb-2">Calculation:</h4>
-                                     <pre><code>% Total Nitrogen = [1.4007 * (V_sample - V_blank) * N_acid] / W_sample</code></pre><br/>
-                                     <pre><code>% Crude Protein = % Nitrogen * 6.38</code></pre>
+                                    <h4 className="font-semibold mt-4 mb-2">Interpretation:</h4>
+                                    <ul className="list-disc list-outside pl-5 space-y-1">
+                                        <li>More than 8 hours: Excellent quality</li>
+                                        <li>6 to 8 hours: Good quality</li>
+                                        <li>2 to 6 hours: Fair quality</li>
+                                        <li>Less than 2 hours: Poor quality</li>
+                                    </ul>
                                 </Procedure>
-                             </Accordion>
-                        </InfoCard>
-
-                        <InfoCard>
-                             <SectionTitle id="milk-misc">Other Tests for Liquid Milk</SectionTitle>
-                             <Accordion type="single" collapsible className="w-full">
                                 <Procedure 
                                     title="Alkaline Phosphatase Test"
                                     purpose="To check the efficiency of pasteurization."
@@ -200,23 +199,70 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                                         <li>Pipette 5 ml of buffer-substrate solution into a test tube and bring to 37°C.</li>
                                         <li>Add 1 ml of the test milk, shake, and incubate at 37°C for 2 hours.</li>
                                         <li>Run a blank with boiled milk alongside.</li>
-                                        <li>After incubation, compare the color with standard discs in a Lovibond comparator. A reading of 10 µg or less of p-nitrophenol/ml of milk is considered satisfactory, indicating proper pasteurization.</li>
+                                        <li>After incubation, compare the color with standard discs in a Lovibond comparator.</li>
                                     </ol>
+                                    <h4 className="font-semibold mt-4 mb-2">Interpretation:</h4>
+                                    <ul className="list-disc list-outside pl-5 space-y-1">
+                                       <li>Disk Reading 0–3: Properly pasteurized</li>
+                                       <li>Disk Reading 2–6: Doubtful</li>
+                                       <li>Disk Reading 10 and above: Under-pasteurized</li>
+                                    </ul>
                                 </Procedure>
                                 <Procedure 
-                                    title="Turbidity Test"
-                                    purpose="To check the efficiency of in-bottle sterilization (not for UHT milk)."
-                                    reference="IS 1479 (Part II) 1961 (Reaffirmed 1997)"
+                                    title="Ash Content"
+                                    purpose="To determine the mineral content of milk."
                                 >
                                     <h4 className="font-semibold mt-4 mb-2">Principle:</h4>
-                                    <p>Proper sterilization denatures all whey proteins, including albumin. If sterilization is incomplete, soluble albumin remains. When the filtrate of the milk (after casein precipitation) is heated, this remaining albumin will cause turbidity.</p>
+                                    <p>Ash is the inorganic residue remaining after the incineration of organic matter from milk at 500-550°C. It represents the mineral content of the milk.</p>
                                     <h4 className="font-semibold mt-4 mb-2">Procedure:</h4>
                                     <ol className="list-decimal list-outside pl-5 space-y-2">
-                                        <li>Pipette 20 ml of milk into a flask, add 4.0g of ammonium sulfate, and shake to dissolve.</li>
-                                        <li>Let it stand for 5 mins and filter through a folded filter paper.</li>
-                                        <li>Heat about 5 ml of the clear filtrate in a boiling water bath for 5 minutes.</li>
-                                        <li>Cool and examine for turbidity. Properly sterilized milk will show no turbidity.</li>
+                                        <li>Weigh an empty silica crucible (Weight W).</li>
+                                        <li>Weigh 5 g of milk sample into the crucible (Weight W1).</li>
+                                        <li>Dry the sample on a hot plate.</li>
+                                        <li>Place the crucible in a muffle furnace at 550°C for 4 hours or until the ash is carbon-free.</li>
+                                        <li>Cool the crucible in a desiccator.</li>
+                                        <li>Weigh the crucible with ash (Weight W2).</li>
+                                        <li>Repeat heating and cooling until a constant weight is achieved.</li>
                                     </ol>
+                                    <h4 className="font-semibold mt-4 mb-2">Calculation:</h4>
+                                    <pre><code>% Ash = [ (W2 - W) / (W1 - W) ] * 100</code></pre>
+                                </Procedure>
+                                <Procedure 
+                                    title="Titratable Acidity"
+                                    purpose="To measure the total acidity (natural + developed) of milk."
+                                >
+                                    <h4 className="font-semibold mt-4 mb-2">Principle:</h4>
+                                    <p>The total acidity of milk is measured by titrating it with a standard alkali solution (NaOH) to a specific endpoint, indicated by a color change with phenolphthalein.</p>
+                                    <h4 className="font-semibold mt-4 mb-2">Procedure:</h4>
+                                    <ol className="list-decimal list-outside pl-5 space-y-2">
+                                        <li>Take 10 ml of milk sample in a porcelain dish.</li>
+                                        <li>Add a few drops of 1% phenolphthalein solution.</li>
+                                        <li>Titrate with 0.1 N NaOH solution.</li>
+                                        <li>Stop the titration when a faint pink color appears (endpoint).</li>
+                                        <li>Note the volume of alkali used.</li>
+                                    </ol>
+                                    <h4 className="font-semibold mt-4 mb-2">Calculation:</h4>
+                                    <pre><code>% Acidity (as Lactic Acid) = (9 * V * N) / W</code></pre>
+                                    <p className="text-xs">Where V = volume of NaOH, N = normality of NaOH, W = weight of milk sample.</p>
+                                </Procedure>
+                                <Procedure 
+                                    title="Protein Content (Kjeldahl Method)"
+                                    purpose="The standard reference method for determining the total nitrogen content, which is then converted to crude protein content."
+                                    reference="IDF 20B: 1993; A.O.A.C 17th edn, 2000 Official Method 991.23"
+                                >
+                                    <h4 className="font-semibold mt-4 mb-2">Principle:</h4>
+                                    <p>The Kjeldahl method is the most widely used for determining protein content. In this method, the nitrogen in the protein is first converted to ammonium sulfate using concentrated sulfuric acid. Then, ammonia gas is released from this and titrated to determine the amount of nitrogen. This amount of nitrogen is multiplied by a factor (6.38 for milk) to calculate the crude protein content.</p>
+                                    <h4 className="font-semibold mt-4 mb-2">Procedure:</h4>
+                                     <ol className="list-decimal list-outside pl-5 space-y-2">
+                                        <li><strong>Digestion:</strong> Weigh 5 g of milk in a clean Kjeldahl flask. Add 25 ml concentrated sulfuric acid, 0.2 g copper sulfate, and 10 g potassium sulfate (catalyst mixture). Heat the flask gently until the contents are clear. Continue digestion for 2 more hours.</li>
+                                        <li><strong>Dilution:</strong> Let the liquid cool and dilute with 300-500 ml distilled water.</li>
+                                        <li><strong>Neutralization & Distillation:</strong> Fit the digestion assembly. Add 75 ml of 50% NaOH. Connect the flask to the distillation assembly whose tip is dipped in 50 ml boric acid solution (with indicator). Start heating. Stop distillation when the distillate reaches 150 ml.</li>
+                                        <li><strong>Titration:</strong> Titrate the boric acid solution, which has trapped the ammonia, with std. HCl solution (0.1 N) until a pink color appears. Note the reading. Also, perform a blank test.</li>
+                                     </ol>
+                                     <h4 className="font-semibold mt-4 mb-2">Calculation:</h4>
+                                     <pre><code>% Total Nitrogen = [ 1.4007 * (Vs - Vb) * N ] / W</code></pre><br/>
+                                     <pre><code>% Crude Protein = % Nitrogen * 6.38</code></pre>
+                                     <p className="text-xs">Vs=Sample Titre, Vb=Blank Titre, N=Normality of HCl, W=Weight of sample</p>
                                 </Procedure>
                              </Accordion>
                         </InfoCard>
@@ -303,20 +349,15 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                                 >
                                     <h4 className="font-semibold mt-4 mb-2">Procedure:</h4>
                                     <ol className="list-decimal list-outside pl-5 space-y-2">
-                                        <li><strong>Saponification:</strong> 5g of ghee is saponified (turned into soap) using glycerol and NaOH.</li>
-                                        <li><strong>Distillation:</strong> The soap is acidified, and the volatile fatty acids are steam-distilled using a Polenske distillation apparatus.</li>
-                                        <li><strong>Titration (RM Value):</strong> The water-soluble part of the distillate is titrated with 0.1 N NaOH.</li>
-                                        <li><strong>Titration (PV Value):</strong> The water-insoluble part is dissolved in alcohol and then titrated.</li>
+                                        <li><strong>Saponification:</strong> 5.00 g of ghee is saponified (turned into soap) using 20g glycerol and 2 ml 50% NaOH. Heat until the liquid is clear.</li>
+                                        <li><strong>Dilution & Acidification:</strong> Add 93 ml of boiled, cooled water, and then 50 ml of dilute sulfuric acid.</li>
+                                        <li><strong>Distillation:</strong> Distill 110 ml of the mixture in 19-21 minutes using a Polenske distillation apparatus.</li>
+                                        <li><strong>RM Value Titration:</strong> Filter the distillate and titrate 100 ml of the filtrate with 0.1 N NaOH.</li>
+                                        <li><strong>Polenske Value Titration:</strong> Wash the condenser and filter paper three times with 15 ml of neutralized ethanol. Titrate the combined washings with 0.1 N NaOH.</li>
                                     </ol>
                                      <h4 className="font-semibold mt-4 mb-2">Calculation:</h4>
-                                     <pre><code>RM Value = 1.10 * (Titre_sample - Titre_blank)</code></pre>
-                                </Procedure>
-                               <Procedure 
-                                    title="Butyro-Refractometer (BR) Reading"
-                                    purpose="A rapid test to detect adulteration with vegetable oils and fats."
-                                    reference="IS 3508 – 1966"
-                                >
-                                    <p>The reading of the filtered fat sample is taken at 40°C. Pure ghee typically has a BR reading between 40-43. Values outside this range suggest adulteration.</p>
+                                     <pre><code>RM Value = 1.1 * (Titration_Sample - Titration_Blank)</code></pre>
+                                     <pre><code>Polenske Value = Titration_Insoluble_Acids - Titration_Blank_Insoluble</code></pre>
                                 </Procedure>
                                <Procedure 
                                     title="Free Fatty Acids (FFA)"
@@ -341,28 +382,44 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                  <TabsContent value="cheese-paneer">
                     <div className="prose prose-sm max-w-none break-words">
                         <InfoCard>
-                            <SectionTitle id="paneer-analysis">Analysis of Paneer / Cheese</SectionTitle>
+                            <SectionTitle id="paneer-analysis">Analysis of Paneer / Chhanna / Cheese</SectionTitle>
                             <Accordion type="single" collapsible className="w-full">
                                <Procedure 
-                                    title="Determination of Moisture"
+                                    title="Determination of Moisture & Total Solids"
                                     purpose="To measure the water content, affecting texture and shelf life."
                                     reference="IS 2785 -1979"
                                 >
-                                    <p>Weigh 3g of grated sample into a pre-weighed dish containing about 20g of dried sand. Mix well, dry on a water bath, and then dry to a constant weight in a hot air oven at 102 ± 1°C. The loss in weight is the moisture content.</p>
+                                  <h4 className="font-semibold mt-4 mb-2">Procedure:</h4>
+                                  <ol className="list-decimal list-outside pl-5 space-y-2">
+                                      <li>Weigh a clean, dry, empty aluminum moisture dish with sand and a glass rod.</li>
+                                      <li>Weigh 3g of grated sample into the dish.</li>
+                                      <li>Add a few drops of distilled water and mix the sample with the sand.</li>
+                                      <li>Evaporate the water by placing the dish on a hot plate.</li>
+                                      <li>Dry the dish in a hot air oven at 102 ± 2°C for 4 hours.</li>
+                                      <li>Cool in a desiccator and weigh. Repeat until a constant weight is achieved.</li>
+                                  </ol>
                                 </Procedure>
                                <Procedure 
-                                    title="Determination of Fat (Acid Digestion)"
+                                    title="Determination of Fat (Acid Digestion - Werner-Schmidt Method)"
                                     purpose="To determine the fat content on a dry matter basis."
                                     reference="IS 2785 -1979"
                                 >
-                                    <p>Weigh 1-2g of prepared sample into a beaker. Add 10ml of conc. HCl and heat on a water bath until all solids dissolve. Cool the solution, transfer to an extraction flask, and then perform fat extraction using the Werner-Schmidt method (as described for liquid milk).</p>
+                                  <h4 className="font-semibold mt-4 mb-2">Procedure:</h4>
+                                  <ol className="list-decimal list-outside pl-5 space-y-2">
+                                      <li>Weigh 1-2g of the prepared sample into a 100 ml beaker.</li>
+                                      <li>Add 10 ml of concentrated HCl and heat on a water bath until all solid particles dissolve.</li>
+                                      <li>Cool the solution, add 10 ml of ethanol, and transfer to a Mojonnier flask.</li>
+                                      <li>Add 25 ml of diethyl ether, shake for 1 minute. Then add 25 ml of petroleum ether and shake again.</li>
+                                      <li>Centrifuge and transfer the ethereal layer to a pre-weighed conical flask.</li>
+                                      <li>Repeat the extraction twice.</li>
+                                      <li>Evaporate the ether and dry the residue in an oven to find the fat content.</li>
+                                  </ol>
                                 </Procedure>
                                 <Procedure 
                                     title="Detection of Starch in Paneer"
                                     purpose="To detect illegal addition of starch as a filler."
-                                    reference="Internal Method"
                                 >
-                                    <p>Macerate 1g of the paneer sample with 1ml of distilled water in a porcelain dish. Then add a drop of iodine solution (2.5g KI + 1g Iodine in 100ml water). A blue color indicates the presence of starch.</p>
+                                    <p>Macerate 1g of the paneer sample with 1ml of distilled water in a porcelain dish. Then add a drop of iodine solution. A blue color indicates the presence of starch.</p>
                                 </Procedure>
                             </Accordion>
                         </InfoCard>
@@ -374,18 +431,23 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                             <SectionTitle id="dahi-analysis">Analysis of Dahi / Yoghurt</SectionTitle>
                             <Accordion type="single" collapsible className="w-full">
                                <Procedure 
-                                    title="Determination of Total Solids"
-                                    purpose="To determine total solids content, accounting for developed acidity."
-                                    reference="IS 12333 – 1997 / I.S.O 6731-1989"
+                                    title="Titratable Acidity"
+                                    purpose="To determine the acidity developed during fermentation."
                                 >
-                                     <p>Since dahi is acidic, the acidity must be neutralized before determining total solids to prevent loss of volatile acids during drying. Weigh 4-5g of sample, neutralize with 0.1 N NaOH using phenolphthalein indicator. Evaporate on a water bath and then dry in an oven at 100 ± 2°C to a constant weight. The weight of added alkali is subtracted from the final residue.</p>
+                                  <ol className="list-decimal list-outside pl-5 space-y-2">
+                                    <li>Weigh 1g of sample in a beaker.</li>
+                                    <li>Add 10 ml of distilled water to make a paste.</li>
+                                    <li>Add a few drops of phenolphthalein indicator and titrate with 0.1 N NaOH until a faint pink color appears.</li>
+                                  </ol>
+                                  <h4 className="font-semibold mt-4 mb-2">Calculation:</h4>
+                                  <pre><code>% Acidity (as Lactic Acid) = (9 * A * N) / W</code></pre>
+                                  <p className="text-xs">Where A = volume of NaOH, N = normality of NaOH, W = weight of sample.</p>
                                 </Procedure>
                                <Procedure 
-                                    title="Determination of Fat"
-                                    purpose="To measure the fat content."
-                                    reference="Rose-Gottlieb Method"
+                                    title="Diacetyl Content"
+                                    purpose="To measure a key flavor compound."
                                 >
-                                    <p>Use the Rose-Gottlieb method as described for liquid milk. Use a 4-5g sample, dilute with warm water and ammonia before extraction.</p>
+                                    <p>Diacetyl is a characteristic flavor compound produced during fermentation. Its quantity is measured spectrophotometrically at 570 nm.</p>
                                 </Procedure>
                             </Accordion>
                         </InfoCard>
@@ -397,37 +459,50 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                             <SectionTitle id="icecream-analysis">Analysis of Ice Cream</SectionTitle>
                              <Accordion type="single" collapsible className="w-full">
                                <Procedure 
-                                    title="Determination of Fat"
+                                    title="Determination of Fat (Rose-Gottlieb method)"
                                     purpose="To determine the fat content, crucial for legal standards and texture."
                                     reference="Pearson’s Composition and analysis of foods 9th edn, 1991 page 604"
                                 >
-                                    <p>Use the Rose-Gottlieb method. Weigh 4-5g of melted and mixed ice cream sample. Dilute with water, add ammonia, and heat at 60°C for 20 min. Cool and then proceed with the standard ether extraction.</p>
+                                  <ol className="list-decimal list-outside pl-5 space-y-2">
+                                    <li>Weigh 4-5 g of sample into a Mojonnier tube.</li>
+                                    <li>Add 10 ml of distilled water and mix.</li>
+                                    <li>Add 2 ml of ammonia, mix, and heat in a 60°C water bath for 20 min.</li>
+                                    <li>Cool, and add 10 ml of ethanol, 25 ml of diethyl ether, and mix.</li>
+                                    <li>Then add 25 ml of petroleum ether and mix.</li>
+                                    <li>Allow the layers to separate, or centrifuge.</li>
+                                    <li>Decant the ethereal layer into a weighed vessel.</li>
+                                    <li>Repeat the extraction twice.</li>
+                                    <li>Evaporate the ether and dry the residue at 102 ± 2°C for 3 hours.</li>
+                                  </ol>
                                 </Procedure>
                                <Procedure 
-                                    title="Determination of Weight per Unit Volume or Overrun"
+                                    title="Determination of Overrun"
                                     purpose="Overrun is the percentage increase in the volume of ice cream over the volume of the mix, due to the incorporation of air during freezing."
                                     reference="IS:2802: 1964"
                                 >
-                                    <p>It is calculated by comparing the weight of a fixed volume of ice cream mix with the weight of the same volume of the finished frozen ice cream.</p>
+                                  <ol className="list-decimal list-outside pl-5 space-y-2">
+                                    <li>Weigh a sample of ice cream (cup or carton).</li>
+                                    <li>Record the weight of a beaker.</li>
+                                    <li>Put the frozen ice cream in the beaker and melt it in a 45°C water bath.</li>
+                                    <li>Add 1-2 drops of amyl alcohol (anti-foaming agent) to remove the air.</li>
+                                    <li>Fill the cup or carton with the melted ice cream (without air).</li>
+                                    <li>Record the weight of the cup or carton.</li>
+                                  </ol>
                                      <h4 className="font-semibold mt-4 mb-2">Calculation:</h4>
-                                     <pre><code>% Overrun = [ (Weight of mix - Weight of ice cream) / Weight of ice cream ] * 100</code></pre>
+                                     <pre><code>% Overrun = [ (W3 - W2) / (W2 - W1) ] * 100</code></pre>
+                                     <p className="text-xs">W1 = Weight of empty container, W2 = Weight of container with ice cream, W3 = Weight of container with melted mix.</p>
                                 </Procedure>
                                <Procedure 
-                                    title="Determination of Protein"
-                                    purpose="To measure the protein content."
-                                    reference="Kjeldahl Method"
+                                    title="Total Solids Content"
+                                    purpose="To determine the total solids in ice cream."
                                 >
-                                    <p>Use the Kjeldahl method as described for liquid milk. Use about 5-8g of sample.</p>
-                                     <h4 className="font-semibold mt-4 mb-2">Calculation:</h4>
-                                     <pre><code>% Milk Protein (in Dairy Ice Cream) = % Nitrogen * 6.38</code></pre><br/>
-                                     <pre><code>% Total Protein (in Frozen Dessert) = % Nitrogen * 6.25</code></pre>
-                                </Procedure>
-                                <Procedure 
-                                    title="Determination of Added Starch"
-                                    purpose="To detect starch used as a stabilizer or filler."
-                                    reference="A.O.A.C 17th edn, 2000, Modified Official method- 925.50"
-                                >
-                                    <p>The sample is defatted, and starch is precipitated with alcohol. The precipitated starch is then hydrolyzed with acid to convert it into reducing sugars, which are determined by the Lane and Eynon method. The result is multiplied by 0.9 to get the starch content.</p>
+                                  <ol className="list-decimal list-outside pl-5 space-y-2">
+                                    <li>Weigh 1.5-2.0 g of sample into a weighed dish.</li>
+                                    <li>Add 3-5 ml of distilled water to make a paste.</li>
+                                    <li>Dry the sample on a boiling water bath for 20-30 min.</li>
+                                    <li>Dry the dish in a hot air oven at 100 ± 2°C for 2 hours.</li>
+                                    <li>Cool and weigh. Repeat until constant weight is achieved.</li>
+                                  </ol>
                                 </Procedure>
                             </Accordion>
                         </InfoCard>
@@ -453,11 +528,11 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                                      <p>Weigh 2-2.5g of sample, reconstitute with warm water and ammonia. Proceed with the Rose-Gottlieb method as for liquid milk.</p>
                                 </Procedure>
                                 <Procedure 
-                                    title="Determination of Sucrose"
+                                    title="Determination of Sucrose (Lane-Eynon Method)"
                                     purpose="To measure the amount of added sugar, a key component in sweetened condensed milk."
                                     reference="IS 4079 – 1967"
                                 >
-                                    <p>This is typically done using the <strong>Lane-Eynon (Volumetric) method</strong> or a <strong>Polarimetric method</strong>. The Lane-Eynon method involves clarifying the sample and determining reducing sugars (lactose) before and after acid inversion (which converts sucrose to reducing sugars). The difference gives the sucrose content.</p>
+                                    <p>The Lane-Eynon method involves clarifying the sample and determining reducing sugars (lactose) before and after acid inversion (which converts sucrose to reducing sugars). The difference gives the sucrose content.</p>
                                      <h4 className="font-semibold mt-4 mb-2">Calculation:</h4>
                                      <pre><code>Sucrose % = (Total Reducing Sugars % - Original Reducing Sugars %) * 0.95</code></pre>
                                 </Procedure>
@@ -471,11 +546,21 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                             <SectionTitle id="powder-analysis">Analysis of Milk Powder</SectionTitle>
                             <Accordion type="single" collapsible className="w-full">
                                 <Procedure 
-                                    title="Determination of Moisture"
+                                    title="Determination of Moisture & Total Solids"
                                     purpose="To determine the free moisture content, critical for shelf life."
                                     reference="IS 16072 : 2012"
                                 >
-                                     <p>Weigh ~1g of powder into a pre-weighed dish. Dry in a hot air oven at 102 ± 2°C for 2 hours, then for 1-hour intervals until a constant weight is achieved. The loss in weight is the moisture content.</p>
+                                   <ol className="list-decimal list-outside pl-5 space-y-2">
+                                      <li>Weigh a clean, dry, empty dish (Weight W).</li>
+                                      <li>Weigh 3 g of sample into it and weigh again (Weight W1).</li>
+                                      <li>Dry the dish in a hot air oven at 102 ± 2°C for 3 hours.</li>
+                                      <li>Cool the dish in a desiccator to room temperature.</li>
+                                      <li>Weigh the dish and note the weight (Weight W2).</li>
+                                      <li>Repeat heating and cooling until a constant weight is obtained.</li>
+                                   </ol>
+                                   <h4 className="font-semibold mt-4 mb-2">Calculation:</h4>
+                                   <pre><code>% Total Solids = [ (W2 - W) / (W1 - W) ] * 100</code></pre>
+                                   <pre><code>% Moisture = 100 - % Total Solids</code></pre>
                                 </Procedure>
                                <Procedure 
                                     title="Determination of Fat"
@@ -508,5 +593,3 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
     </Dialog>
   );
 }
-
-    
