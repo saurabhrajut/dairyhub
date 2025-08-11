@@ -168,6 +168,16 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                                         <li><strong>Distillation:</strong> The digested sample is made alkaline with NaOH to liberate ammonia gas, which is then distilled and trapped in a boric acid solution.</li>
                                         <li><strong>Titration:</strong> The trapped ammonia is titrated with a standard acid (HCl). The amount of acid used is proportional to the nitrogen in the original sample.</li>
                                     </ol>
+                                     <h4 className="font-semibold mt-4 mb-2">Procedure:</h4>
+                                     <ol className="list-decimal list-outside pl-5 space-y-2">
+                                        <li>Accurately weigh about 5g of milk sample into a Kjeldahl flask.</li>
+                                        <li>Add 15g Potassium Sulfate, 1ml Copper Sulfate solution, and 25ml concentrated Sulfuric Acid.</li>
+                                        <li>Digest the mixture by heating until the solution becomes clear and light blue-green. Continue boiling for 1-1.5 hours.</li>
+                                        <li>Cool the digest and carefully dilute with about 300ml of water.</li>
+                                        <li>Add excess NaOH (approx. 75ml of 50% solution) to the flask.</li>
+                                        <li>Immediately connect to the distillation unit and distill the liberated ammonia into 50ml of boric acid solution containing indicator.</li>
+                                        <li>Titrate the distillate with standard 0.1 N HCl until the first trace of pink appears.</li>
+                                     </ol>
                                      <h4 className="font-semibold mt-4 mb-2">Calculation:</h4>
                                      <pre><code>% Total Nitrogen = [1.4007 * (V_sample - V_blank) * N_acid] / W_sample</code></pre><br/>
                                      <pre><code>% Crude Protein = % Nitrogen * 6.38</code></pre>
@@ -190,7 +200,7 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                                         <li>Pipette 5 ml of buffer-substrate solution into a test tube and bring to 37°C.</li>
                                         <li>Add 1 ml of the test milk, shake, and incubate at 37°C for 2 hours.</li>
                                         <li>Run a blank with boiled milk alongside.</li>
-                                        <li>After incubation, compare the color with standard discs in a Lovibond comparator. A reading of 10 µg or less of p-nitrophenol/ml of milk is considered satisfactory.</li>
+                                        <li>After incubation, compare the color with standard discs in a Lovibond comparator. A reading of 10 µg or less of p-nitrophenol/ml of milk is considered satisfactory, indicating proper pasteurization.</li>
                                     </ol>
                                 </Procedure>
                                 <Procedure 
@@ -274,6 +284,8 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                                     reference="IS 3507 – 1966"
                                 >
                                     <p>Use <strong>Mohr's Method</strong>. Weigh 5g of butter, add 100ml boiling water, and cool to 50-55°C. Add potassium chromate indicator and titrate with standard silver nitrate (AgNO₃) solution until a brownish color persists.</p>
+                                     <h4 className="font-semibold mt-4 mb-2">Calculation:</h4>
+                                     <pre><code>NaCl % = [5.844 * N_AgNO3 * (V_sample - V_blank)] / Weight_sample</code></pre>
                                 </Procedure>
                             </Accordion>
                          </InfoCard>
@@ -292,10 +304,12 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                                     <h4 className="font-semibold mt-4 mb-2">Procedure:</h4>
                                     <ol className="list-decimal list-outside pl-5 space-y-2">
                                         <li><strong>Saponification:</strong> 5g of ghee is saponified (turned into soap) using glycerol and NaOH.</li>
-                                        <li><strong>Distillation:</strong> The soap is acidified, and the volatile fatty acids are steam-distilled.</li>
+                                        <li><strong>Distillation:</strong> The soap is acidified, and the volatile fatty acids are steam-distilled using a Polenske distillation apparatus.</li>
                                         <li><strong>Titration (RM Value):</strong> The water-soluble part of the distillate is titrated with 0.1 N NaOH.</li>
                                         <li><strong>Titration (PV Value):</strong> The water-insoluble part is dissolved in alcohol and then titrated.</li>
                                     </ol>
+                                     <h4 className="font-semibold mt-4 mb-2">Calculation:</h4>
+                                     <pre><code>RM Value = 1.10 * (Titre_sample - Titre_blank)</code></pre>
                                 </Procedure>
                                <Procedure 
                                     title="Butyro-Refractometer (BR) Reading"
@@ -309,14 +323,16 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                                     purpose="Measures the extent of fat breakdown (hydrolysis), which indicates freshness. High FFA leads to rancidity."
                                     reference="IS 3508 – 1966"
                                 >
-                                    <p>The sample is dissolved in hot neutralized alcohol and titrated with standard NaOH solution using phenolphthalein indicator. Acidity is usually expressed as % oleic acid.</p>
+                                    <p>The sample is dissolved in hot neutralized alcohol and titrated with standard 0.1 N NaOH solution using phenolphthalein indicator. Acidity is usually expressed as % oleic acid.</p>
+                                     <h4 className="font-semibold mt-4 mb-2">Calculation:</h4>
+                                     <pre><code>% FFA (as Oleic acid) = [Titre * N_NaOH * 28.2] / Weight_sample</code></pre>
                                 </Procedure>
                                <Procedure 
                                     title="Baudouin Test for Vanaspati"
                                     purpose="Detects vanaspati (hydrogenated vegetable oil) in ghee."
                                     reference="IS 3508 – 1966"
                                 >
-                                    <p>Based on the mandatory addition of 5% sesame oil to vanaspati. Melted ghee is shaken with concentrated HCl and furfural solution. A pink or red color in the acid layer indicates the presence of vanaspati.</p>
+                                    <p>Based on the mandatory addition of 5% sesame oil to vanaspati. Melted ghee (5ml) is shaken vigorously for 2 mins with 5ml of concentrated HCl and 0.4ml of 2% furfural solution. A pink or red color in the acid layer indicates the presence of vanaspati.</p>
                                 </Procedure>
                             </Accordion>
                         </InfoCard>
@@ -339,14 +355,14 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                                     purpose="To determine the fat content on a dry matter basis."
                                     reference="IS 2785 -1979"
                                 >
-                                    <p>Weigh 1-2g of prepared sample, dissolve it in concentrated HCl by heating. Cool the solution and then perform fat extraction using the Werner-Schmidt method (as described for liquid milk).</p>
+                                    <p>Weigh 1-2g of prepared sample into a beaker. Add 10ml of conc. HCl and heat on a water bath until all solids dissolve. Cool the solution, transfer to an extraction flask, and then perform fat extraction using the Werner-Schmidt method (as described for liquid milk).</p>
                                 </Procedure>
                                 <Procedure 
                                     title="Detection of Starch in Paneer"
                                     purpose="To detect illegal addition of starch as a filler."
                                     reference="Internal Method"
                                 >
-                                    <p>Macerate 1g of the paneer sample with 1ml of distilled water in a porcelain dish. Then add a drop of iodine solution. A blue color indicates the presence of starch.</p>
+                                    <p>Macerate 1g of the paneer sample with 1ml of distilled water in a porcelain dish. Then add a drop of iodine solution (2.5g KI + 1g Iodine in 100ml water). A blue color indicates the presence of starch.</p>
                                 </Procedure>
                             </Accordion>
                         </InfoCard>
@@ -367,9 +383,9 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                                <Procedure 
                                     title="Determination of Fat"
                                     purpose="To measure the fat content."
-                                    reference="General"
+                                    reference="Rose-Gottlieb Method"
                                 >
-                                    <p>Use the Rose-Gottlieb method as described for liquid milk.</p>
+                                    <p>Use the Rose-Gottlieb method as described for liquid milk. Use a 4-5g sample, dilute with warm water and ammonia before extraction.</p>
                                 </Procedure>
                             </Accordion>
                         </InfoCard>
@@ -399,7 +415,7 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                                <Procedure 
                                     title="Determination of Protein"
                                     purpose="To measure the protein content."
-                                    reference="General Kjeldahl"
+                                    reference="Kjeldahl Method"
                                 >
                                     <p>Use the Kjeldahl method as described for liquid milk. Use about 5-8g of sample.</p>
                                      <h4 className="font-semibold mt-4 mb-2">Calculation:</h4>
@@ -432,7 +448,7 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                                  <Procedure 
                                     title="Determination of Fat"
                                     purpose="To measure the fat content."
-                                    reference="General (Rose-Gottlieb)"
+                                    reference="Rose-Gottlieb Method"
                                 >
                                      <p>Weigh 2-2.5g of sample, reconstitute with warm water and ammonia. Proceed with the Rose-Gottlieb method as for liquid milk.</p>
                                 </Procedure>
@@ -442,6 +458,8 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                                     reference="IS 4079 – 1967"
                                 >
                                     <p>This is typically done using the <strong>Lane-Eynon (Volumetric) method</strong> or a <strong>Polarimetric method</strong>. The Lane-Eynon method involves clarifying the sample and determining reducing sugars (lactose) before and after acid inversion (which converts sucrose to reducing sugars). The difference gives the sucrose content.</p>
+                                     <h4 className="font-semibold mt-4 mb-2">Calculation:</h4>
+                                     <pre><code>Sucrose % = (Total Reducing Sugars % - Original Reducing Sugars %) * 0.95</code></pre>
                                 </Procedure>
                             </Accordion>
                         </InfoCard>
@@ -490,3 +508,5 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
     </Dialog>
   );
 }
+
+    
