@@ -1,3 +1,4 @@
+
 "use client";
 
 import {
@@ -9,7 +10,6 @@ import {
 } from "@/components/ui/dialog";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import {
-  CheckCircle,
   Thermometer,
   Settings,
   Filter,
@@ -31,7 +31,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 
 
-function Section({ title, icon: Icon, children, value }: { title: string, icon: React.ElementType, children: React.ReactNode, value: string }) {
+function Section({ title, icon: Icon, children }: { title: string, icon: React.ElementType, children: React.ReactNode }) {
     return (
         <div>
             <h3 className="text-2xl font-bold text-primary mb-4 flex items-center gap-3 font-headline">
@@ -70,6 +70,26 @@ export function DairyProcessingModal({
 }) {
   const isMobile = useIsMobile();
 
+  const MainLayout = ({ children }: { children: React.ReactNode }) => {
+    if (isMobile) {
+      return <div className="flex flex-col gap-4 h-full">{children}</div>;
+    }
+    return <div className="flex flex-row gap-4 h-full">{children}</div>;
+  };
+
+  const TabListWrapper = ({ children }: { children: React.ReactNode }) => {
+    if (isMobile) {
+      return (
+        <ScrollArea className="w-full whitespace-nowrap flex-shrink-0">
+          {children}
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
+      );
+    }
+    return <div className="w-56 border-r pr-4 flex-shrink-0">{children}</div>;
+  };
+
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="max-w-6xl h-[90vh] flex flex-col">
@@ -81,21 +101,20 @@ export function DairyProcessingModal({
             A deep-dive into the core technologies that transform raw milk.
           </DialogDescription>
         </DialogHeader>
-         <Tabs defaultValue="workflow" orientation={isMobile ? "horizontal" : "vertical"} className="flex-1 flex flex-col md:flex-row gap-4 min-h-0">
-            <div className={cn("flex-shrink-0", isMobile ? "w-full border-b" : "w-56 border-r pr-4")}>
-                <ScrollArea className={cn("w-full h-full", isMobile ? "whitespace-nowrap" : "")}>
-                    <TabsList className={cn("w-full h-auto flex", isMobile ? "flex-row" : "flex-col items-start")}>
-                        {processingTopics.map(topic => (
-                             <TabsTrigger key={topic.value} value={topic.value} className="text-left justify-start w-full md:w-full shrink-0">{topic.title}</TabsTrigger>
-                        ))}
-                    </TabsList>
-                    {isMobile && <ScrollBar orientation="horizontal" />}
-                </ScrollArea>
-            </div>
-            <div className="flex-1 min-w-0">
+         <Tabs defaultValue="workflow" orientation={isMobile ? "horizontal" : "vertical"} className="flex-1 flex flex-col gap-4 min-h-0">
+             <TabListWrapper>
+                <TabsList className={cn("p-0 bg-transparent", isMobile ? "flex-row" : "flex-col items-start h-auto")}>
+                    {processingTopics.map(topic => (
+                         <TabsTrigger key={topic.value} value={topic.value} className="text-left justify-start w-full md:w-full shrink-0 px-4 py-2 data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:shadow-none rounded-lg font-medium">
+                            {topic.title}
+                         </TabsTrigger>
+                    ))}
+                </TabsList>
+            </TabListWrapper>
+            <div className="flex-1 min-h-0">
                 <ScrollArea className="h-full pr-2">
                     <TabsContent value="workflow" className="mt-0">
-                        <Section value="workflow" title="Workflow Overview" icon={Settings}>
+                        <Section title="Workflow Overview" icon={Settings}>
                             <p>Dairy processing ek sequence of operations hai jismein raw milk ko safe, high-quality, aur shelf-stable products mein badla jaata hai. Har step ka ek specific purpose hota hai.</p>
                             <ol className="list-decimal pl-5 mt-4 space-y-2">
                                 <li><strong>Reception & Testing:</strong> Plant mein aane wale doodh ki quality (Fat, SNF, Acidity, Adulterants) jaanchi jaati hai.</li>
@@ -110,7 +129,7 @@ export function DairyProcessingModal({
                         </Section>
                     </TabsContent>
                     <TabsContent value="filtration" className="mt-0">
-                        <Section value="filtration" title="Filtration and Clarification" icon={Filter}>
+                        <Section title="Filtration and Clarification" icon={Filter}>
                             <h4>Parichay (Introduction)</h4>
                             <p>During handling of milk on farm and its transportation, certain visible particles and dirt may gain access into the milk which may be removed by either filtration or centrifugal clarification. Filtration/clarification equipment has been designed for both cold and warm milk. Since fluidity of warm milk is more, its separation process is more efficient. However, warming of milk for this purpose requires additional equipment. It also poses the risk of bacterial growth unless handled properly. Handling at higher temperatures may also affect creaming property of the milk besides dissolving some of the extraneous matter.</p>
                             
@@ -125,7 +144,7 @@ export function DairyProcessingModal({
                         </Section>
                     </TabsContent>
                     <TabsContent value="separation" className="mt-0">
-                        <Section value="separation" title="Cream Separation" icon={Droplet}>
+                        <Section title="Cream Separation" icon={Droplet}>
                             <h4>Siddhant (Principles)</h4>
                             <p>Cream separation is the process of separating milk fat from the non-fat solids portion of milk. It is possible because of the difference in density between fat (~0.93 g/mL) and skim milk (~1.036 g/mL).</p>
                             <p><strong>Gravity Separation:</strong> According to Stoke's Law, the less dense fat globules slowly rise to the surface to form a cream layer. This is a slow process.</p>
@@ -139,7 +158,7 @@ export function DairyProcessingModal({
                         </Section>
                     </TabsContent>
                     <TabsContent value="standardization" className="mt-0">
-                        <Section value="standardization" title="Standardization of Milk" icon={Scaling}>
+                        <Section title="Standardization of Milk" icon={Scaling}>
                             <h4>Parichay (Introduction)</h4>
                             <p>Standardization is the process of adjusting one or more of the milk constituents to a nominated level. In the market milk industry, this normally involves reducing the butterfat content by adding skim milk or by removing cream.</p>
                             <h4 className="mt-4">Uddeshya (Objectives)</h4>
@@ -163,7 +182,7 @@ export function DairyProcessingModal({
                         </Section>
                     </TabsContent>
                     <TabsContent value="homogenization" className="mt-0">
-                        <Section value="homogenization" title="Homogenization" icon={Layers}>
+                        <Section title="Homogenization" icon={Layers}>
                             <h4>Parichay aur Paribhasha (Introduction and Definition)</h4>
                             <p>Homogenization is a mechanical process aimed at breaking down the large fat globules in milk into smaller, uniform-sized globules (&lt;2 µm). This creates a stable emulsion in the milk, preventing the fat from rising to form a cream layer.</p>
                             <h4 className="mt-4">Fayde aur Nuksan (Merits and Demerits)</h4>
@@ -179,7 +198,7 @@ export function DairyProcessingModal({
                         </Section>
                     </TabsContent>
                     <TabsContent value="bactofugation" className="mt-0">
-                        <Section value="bactofugation" title="Bactofugation" icon={RotateCw}>
+                        <Section title="Bactofugation" icon={RotateCw}>
                             <h4>Parichay (Introduction)</h4>
                             <p>Bactofugation is the process of removing microorganisms, especially heat-resistant spores (like Bacillus/Clostridia), from milk using centrifugal force. Its main objective is to improve the hygienic quality of milk, allowing it to be sterilized at a lower temperature-time combination. This is particularly important for products with a long shelf-life, such as hard cheese and UHT milk.</p>
                             <h4 className="mt-4">Bactotherm Process</h4>
@@ -187,7 +206,7 @@ export function DairyProcessingModal({
                         </Section>
                     </TabsContent>
                     <TabsContent value="heat-treatment" className="mt-0">
-                        <Section value="heat-treatment" title="Principles of Heat Treatment" icon={Thermometer}>
+                        <Section title="Principles of Heat Treatment" icon={Thermometer}>
                             <h4>Parichay (Introduction)</h4>
                             <p>Thermal processing is a crucial step in the dairy industry to minimize spoilage and eliminate food-borne illnesses. The primary objective of heat treatment is to inactivate all pathogenic microorganisms and most enzymes, thus improving the hygienic quality and shelf life of milk products. Pasteurization is the most common thermal process.</p>
                             <h4 className="mt-4">Time and Temperature</h4>
@@ -197,7 +216,7 @@ export function DairyProcessingModal({
                         </Section>
                     </TabsContent>
                     <TabsContent value="kinetics" className="mt-0">
-                         <Section value="kinetics" title="Kinetic Parameters of Heat Induced Changes" icon={Clock}>
+                         <Section title="Kinetic Parameters of Heat Induced Changes" icon={Clock}>
                             <p>Microorganisms are destroyed by heat when their proteins coagulate and essential enzymes are inactivated. Several terms are used to denote heat resistance:</p>
                             <ul className="list-disc pl-5 space-y-2">
                             <li><strong>D-Value (Decimal Reduction Time):</strong> The time in minutes required at a specific temperature to reduce the number of organisms to 1/10th of the original value.</li>
@@ -208,7 +227,7 @@ export function DairyProcessingModal({
                         </Section>
                     </TabsContent>
                     <TabsContent value="pasteurization" className="mt-0">
-                        <Section value="pasteurization" title="Methods of Pasteurization" icon={Zap}>
+                        <Section title="Methods of Pasteurization" icon={Zap}>
                             <p>Pasteurization is a heat treatment process designed to kill all pathogenic microorganisms in milk, making it safe for consumption and extending its shelf life. The two main methods are:</p>
                             <h4 className="mt-4">Low-Temperature Long-Time (LTLT) / Batch Pasteurization</h4>
                             <p>Milk is heated to a minimum of 63°C and held at this temperature for at least 30 minutes, then cooled. This method is suitable for smaller volumes and is often done in multi-purpose vats.</p>
@@ -217,7 +236,7 @@ export function DairyProcessingModal({
                         </Section>
                     </TabsContent>
                      <TabsContent value="htst-operation" className="mt-0">
-                        <Section value="htst-operation" title="Working of HTST Pasteurizer" icon={Power}>
+                        <Section title="Working of HTST Pasteurizer" icon={Power}>
                             <h4>Operation Steps</h4>
                             <ol className="list-decimal pl-5 space-y-2">
                                 <li><strong>Startup:</strong> The plant is first sterilized with hot water. Milk flow is then started, which goes to a float-controlled balance tank. A pump pushes the milk through the regeneration section where it is pre-heated by the outgoing pasteurized milk.</li>
@@ -230,7 +249,7 @@ export function DairyProcessingModal({
                         </Section>
                     </TabsContent>
                      <TabsContent value="heat-exchangers" className="mt-0">
-                        <Section value="heat-exchangers" title="Heat Exchangers - Plate and Tubular Type" icon={View}>
+                        <Section title="Heat Exchangers - Plate and Tubular Type" icon={View}>
                             <h4>Plate Heat Exchangers (PHE)</h4>
                             <p>The PHE is widely used for pasteurization. It consists of a series of thin, corrugated stainless steel plates pressed together in a frame. Gaskets seal the plates and direct the flow of milk and the heating/cooling medium (like hot water or chilled water) through alternate channels. The corrugations create turbulence, ensuring efficient heat transfer. Multiple sections for regeneration, heating, and cooling are combined in one compact unit.</p>
                             <h4>Tubular Heat Exchangers</h4>
@@ -238,7 +257,7 @@ export function DairyProcessingModal({
                         </Section>
                     </TabsContent>
                      <TabsContent value="vacuum-pasteurization" className="mt-0">
-                        <Section value="vacuum-pasteurization" title="Vacuum Pasteurization (Vacreation)" icon={Wind}>
+                        <Section title="Vacuum Pasteurization (Vacreation)" icon={Wind}>
                             <h4>Purpose</h4>
                             <p>Vacreation is a process of heat treatment under vacuum. Its main purposes are to kill bacteria, inactivate enzymes, and, most importantly, remove undesirable feed and weed taints and off-flavors from milk or cream through steam distillation.</p>
                             <h4>Principle & Process</h4>
@@ -246,7 +265,7 @@ export function DairyProcessingModal({
                         </Section>
                     </TabsContent>
                     <TabsContent value="sterilization" className="mt-0">
-                        <Section value="sterilization" title="Sterilization, UHT & Packaging" icon={ShieldCheck}>
+                        <Section title="Sterilization, UHT & Packaging" icon={ShieldCheck}>
                             <h4>Introduction to Sterilization</h4>
                             <p>According to Food Safety and Standards Rules-2011, the term ‘sterilization’ when used in association with milk, means heating milk in sealed container continuously to a temperature of either 115°C for 15 min or at least 130°C for a period of one second or more in a continuous flow and then packed under aseptic condition in hermetically sealed containers to ensure preservation at room temperature for a period not less than 15 days from the date of manufacture.</p>
                             <h4>In-bottle Sterilization</h4>
