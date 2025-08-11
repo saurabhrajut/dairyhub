@@ -32,7 +32,7 @@ const SectionTitle = ({ children, id }: { children: React.ReactNode, id: string 
 );
 
 const Procedure = ({ title, purpose, reference, children }: { title: string, purpose: string, reference: string, children: React.ReactNode }) => (
-    <AccordionItem value={title}>
+    <AccordionItem value={title.replace(/\s+/g, '-').toLowerCase()}>
         <AccordionTrigger className="text-left hover:no-underline">
             <div className="flex flex-col text-left">
                 <span className="font-bold text-base sm:text-lg">{title}</span>
@@ -116,7 +116,7 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                                     reference="A.O.A.C 17th edn, 2000 Official method 905.02"
                                 >
                                      <h4 className="font-semibold mt-4 mb-2">Principle:</h4>
-                                     <p>Protein is dissolved with ammonia, and ethanol is added to precipitate the proteins. Fat is then extracted using a mixture of diethyl ether and petroleum ether. The solvent is evaporated, and the remaining fat is weighed.</p>
+                                     <p>Protein is dissolved with ammonia, and ethanol is added to help precipitate the proteins. Fat is then extracted using a mixture of diethyl ether and petroleum ether. The solvent is evaporated, and the remaining fat is weighed.</p>
                                     <h4 className="font-semibold mt-4 mb-2">Procedure:</h4>
                                      <ol className="list-decimal list-outside pl-5 space-y-2">
                                         <li>Weigh accurately about 10 g of milk into a Mojonnier fat extraction flask.</li>
@@ -131,7 +131,7 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                                         <li>Dry the flask in an oven at 102 ± 2°C, cool, and weigh to determine the mass of the fat. A blank determination with reagents is also performed.</li>
                                     </ol>
                                      <h4 className="font-semibold mt-4 mb-2">Calculation:</h4>
-                                     <code>Fat % (w/w) = (Weight of extracted fat / Weight of milk) x 100</code>
+                                     <pre><code>Fat % (w/w) = (Weight of extracted fat / Weight of milk) x 100</code></pre>
                                 </Procedure>
                                 <Procedure 
                                     title="Werner-Schmidt Method (Acid Digestion)"
@@ -142,7 +142,7 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                                      <p>Concentrated HCl digests the protein, freeing the fat, which is then extracted with ethers. This method is not suitable if the sample contains added sugar.</p>
                                     <h4 className="font-semibold mt-4 mb-2">Procedure:</h4>
                                     <ol className="list-decimal list-outside pl-5 space-y-2">
-                                        <li>Weigh ~10 g of milk into a beaker.</li>
+                                        <li>Weigh ~10 g of milk into a small beaker.</li>
                                         <li>Add 10 ml of concentrated HCl and heat until the contents turn dark brown.</li>
                                         <li>Cool and transfer to an extraction flask.</li>
                                         <li>Add 10 ml of ethyl alcohol, then proceed with diethyl ether and petroleum ether extraction as in the Rose-Gottlieb method.</li>
@@ -169,8 +169,8 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                                         <li><strong>Titration:</strong> The trapped ammonia is titrated with a standard acid (HCl). The amount of acid used is proportional to the nitrogen in the original sample.</li>
                                     </ol>
                                      <h4 className="font-semibold mt-4 mb-2">Calculation:</h4>
-                                     <code>% Total Nitrogen = [1.4007 * (V_sample - V_blank) * N_acid] / W_sample</code><br/>
-                                     <code>% Crude Protein = % Nitrogen * 6.38</code>
+                                     <pre><code>% Total Nitrogen = [1.4007 * (V_sample - V_blank) * N_acid] / W_sample</code></pre><br/>
+                                     <pre><code>% Crude Protein = % Nitrogen * 6.38</code></pre>
                                 </Procedure>
                              </Accordion>
                         </InfoCard>
@@ -394,7 +394,7 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                                 >
                                     <p>It is calculated by comparing the weight of a fixed volume of ice cream mix with the weight of the same volume of the finished frozen ice cream.</p>
                                      <h4 className="font-semibold mt-4 mb-2">Calculation:</h4>
-                                     <code>% Overrun = [ (Weight of mix - Weight of ice cream) / Weight of ice cream ] * 100</code>
+                                     <pre><code>% Overrun = [ (Weight of mix - Weight of ice cream) / Weight of ice cream ] * 100</code></pre>
                                 </Procedure>
                                <Procedure 
                                     title="Determination of Protein"
@@ -403,8 +403,8 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                                 >
                                     <p>Use the Kjeldahl method as described for liquid milk. Use about 5-8g of sample.</p>
                                      <h4 className="font-semibold mt-4 mb-2">Calculation:</h4>
-                                     <code>% Milk Protein (in Dairy Ice Cream) = % Nitrogen * 6.38</code><br/>
-                                     <code>% Total Protein (in Frozen Dessert) = % Nitrogen * 6.25</code>
+                                     <pre><code>% Milk Protein (in Dairy Ice Cream) = % Nitrogen * 6.38</code></pre><br/>
+                                     <pre><code>% Total Protein (in Frozen Dessert) = % Nitrogen * 6.25</code></pre>
                                 </Procedure>
                                 <Procedure 
                                     title="Determination of Added Starch"
@@ -490,5 +490,3 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
     </Dialog>
   );
 }
-
-    
