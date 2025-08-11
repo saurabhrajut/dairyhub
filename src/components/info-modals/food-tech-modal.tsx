@@ -8,10 +8,8 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useIsMobile } from "@/hooks/use-mobile";
-import { cn } from "@/lib/utils";
 
 
 const foodTechTopics = [
@@ -46,23 +44,9 @@ const foodTechTopics = [
 
 
 export function FoodTechModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
-  const isMobile = useIsMobile();
-
-  const TabListWrapper = ({ children }: { children: React.ReactNode }) => {
-    if (isMobile) {
-      return (
-        <ScrollArea className="w-full whitespace-nowrap flex-shrink-0">
-          {children}
-          <ScrollBar orientation="horizontal" />
-        </ScrollArea>
-      );
-    }
-    return <div className="w-56 border-r pr-4 flex-shrink-0">{children}</div>;
-  };
-
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-6xl h-[90vh] flex flex-col p-0 sm:p-6">
+      <DialogContent className="max-w-6xl h-[90vh] flex flex-col">
         <DialogHeader>
           <DialogTitle className="text-3xl font-bold text-center text-gray-800 font-headline">
             Foundations of Food Technology
@@ -71,29 +55,22 @@ export function FoodTechModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpe
             A comprehensive guide to the core principles of food science.
           </DialogDescription>
         </DialogHeader>
-         <Tabs defaultValue={foodTechTopics[0].id} orientation={isMobile ? "horizontal" : "vertical"} className="flex-1 flex flex-col gap-4 min-h-0 pt-4">
-            <TabListWrapper>
-              <TabsList className={cn("p-0 bg-transparent", isMobile ? "flex-row" : "flex-col items-start h-auto")}>
-                  {foodTechTopics.map(topic => (
-                       <TabsTrigger key={topic.id} value={topic.id} className="text-left justify-start w-full md:w-full shrink-0 px-4 py-2 data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:shadow-none rounded-lg font-medium">
-                          {topic.title}
-                       </TabsTrigger>
-                  ))}
-              </TabsList>
-            </TabListWrapper>
-
-            <div className="flex-1 min-h-0">
-                <ScrollArea className="h-full pr-2">
-                    {foodTechTopics.map(topic => (
-                         <TabsContent key={topic.id} value={topic.id} className="mt-0">
-                             <div className="p-4 bg-muted/50 rounded-lg">
-                                <h3 className="text-2xl font-bold text-primary mb-4 font-headline">{topic.title}</h3>
-                                <p className="text-gray-600">Content for {topic.title} goes here.</p>
-                            </div>
-                        </TabsContent>
-                    ))}
-                </ScrollArea>
-            </div>
+         <Tabs defaultValue={foodTechTopics[0].id} className="w-full flex-1 flex flex-col min-h-0">
+            <TabsList className="grid w-full h-auto grid-cols-2 sm:grid-cols-4 md:grid-cols-7">
+                {foodTechTopics.map(topic => (
+                     <TabsTrigger key={topic.id} value={topic.id}>{topic.title}</TabsTrigger>
+                ))}
+            </TabsList>
+            <ScrollArea className="flex-1 mt-4 pr-4">
+                {foodTechTopics.map(topic => (
+                     <TabsContent key={topic.id} value={topic.id} className="mt-0">
+                         <div className="p-4 bg-muted/50 rounded-lg">
+                            <h3 className="text-2xl font-bold text-primary mb-4 font-headline">{topic.title}</h3>
+                            <p className="text-gray-600">Content for {topic.title} goes here.</p>
+                        </div>
+                    </TabsContent>
+                ))}
+            </ScrollArea>
           </Tabs>
       </DialogContent>
     </Dialog>
