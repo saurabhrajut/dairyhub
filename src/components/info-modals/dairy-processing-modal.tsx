@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -8,7 +7,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import {
   CheckCircle,
   Thermometer,
@@ -83,13 +82,14 @@ export function DairyProcessingModal({
           </DialogDescription>
         </DialogHeader>
          <Tabs defaultValue="workflow" orientation={isMobile ? "horizontal" : "vertical"} className="flex-1 flex flex-col md:flex-row gap-4 min-h-0">
-            <div className={cn("flex-shrink-0", isMobile ? "w-full" : "w-56 border-r pr-4")}>
-                <ScrollArea className={cn(isMobile ? "w-full" : "h-full")}>
+            <div className={cn("flex-shrink-0", isMobile ? "w-full border-b" : "w-56 border-r pr-4")}>
+                <ScrollArea className={cn("w-full h-full", isMobile ? "whitespace-nowrap" : "")}>
                     <TabsList className={cn("w-full h-auto flex", isMobile ? "flex-row" : "flex-col items-start")}>
                         {processingTopics.map(topic => (
-                             <TabsTrigger key={topic.value} value={topic.value} className="text-left justify-start w-full">{topic.title}</TabsTrigger>
+                             <TabsTrigger key={topic.value} value={topic.value} className="text-left justify-start w-full md:w-full shrink-0">{topic.title}</TabsTrigger>
                         ))}
                     </TabsList>
+                    {isMobile && <ScrollBar orientation="horizontal" />}
                 </ScrollArea>
             </div>
             <div className="flex-1 min-w-0">
