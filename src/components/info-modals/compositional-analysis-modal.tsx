@@ -9,7 +9,6 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Accordion,
@@ -64,16 +63,21 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
 
         <Tabs defaultValue="processed-milk" className="w-full flex-1 flex flex-col min-h-0">
             <ScrollArea className="flex-shrink-0">
-                <TabsList className="grid w-full h-auto grid-cols-3 md:grid-cols-5 lg:grid-cols-9">
+                <TabsList className="grid w-full h-auto grid-cols-3 md:grid-cols-6 lg:grid-cols-12">
                     <TabsTrigger value="processed-milk">Milk</TabsTrigger>
                     <TabsTrigger value="cream">Cream</TabsTrigger>
+                    <TabsTrigger value="cream-powder">Cream Powder</TabsTrigger>
                     <TabsTrigger value="butter">Butter</TabsTrigger>
                     <TabsTrigger value="ghee-butter-oil">Ghee</TabsTrigger>
-                    <TabsTrigger value="cheese-paneer">Paneer/Chhanna</TabsTrigger>
+                    <TabsTrigger value="cheese-paneer">Paneer/Cheese</TabsTrigger>
                     <TabsTrigger value="dahi-yoghurt">Dahi/Yoghurt</TabsTrigger>
+                    <TabsTrigger value="chakka-shrikhand">Chakka</TabsTrigger>
+                    <TabsTrigger value="khoa">Khoa</TabsTrigger>
                     <TabsTrigger value="ice-cream">Ice Cream</TabsTrigger>
                     <TabsTrigger value="condensed-milk">Condensed Milk</TabsTrigger>
                     <TabsTrigger value="milk-powder">Milk Powder</TabsTrigger>
+                    <TabsTrigger value="casein">Casein</TabsTrigger>
+                    <TabsTrigger value="whey-powder">Whey Powder</TabsTrigger>
                 </TabsList>
             </ScrollArea>
             <ScrollArea className="flex-1 mt-4 pr-4">
@@ -160,7 +164,6 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                                         <li>Add 10 ml of ethyl alcohol, then proceed with diethyl ether and petroleum ether extraction as in the Rose-Gottlieb method.</li>
                                         <li>Evaporate the solvent and weigh the extracted fat.</li>
                                     </ol>
-                                    <Alert variant="destructive" className="mt-4"><AlertDescription>Note: This method is not suitable if the sample contains added sugar.</AlertDescription></Alert>
                                 </Procedure>
                              </Accordion>
                         </InfoCard>
@@ -276,7 +279,7 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                                <Procedure 
                                     title="Determination of Fat in Cream"
                                     purpose="To determine the fat content in cream, which is its primary commercial value."
-                                    reference="IS 3509- 1966"
+                                    reference="IS 3509-1966"
                                 >
                                     <p>Use either the <strong>Rose-Gottlieb</strong> or <strong>Werner-Schmidt</strong> method. Weigh accurately 1-2g of cream, disperse it in 9ml of 0.5% NaCl solution (for Rose-Gottlieb) or dissolve it in 10ml concentrated HCl (for Werner-Schmidt), and then proceed with the respective extraction method as described for liquid milk.</p>
                                 </Procedure>
@@ -292,6 +295,36 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                         </InfoCard>
                     </div>
                  </TabsContent>
+                 <TabsContent value="cream-powder">
+                    <div className="prose prose-sm max-w-none break-words">
+                        <InfoCard>
+                            <SectionTitle id="cream-powder-analysis">Analysis of Cream Powder</SectionTitle>
+                             <Accordion type="single" collapsible className="w-full">
+                               <Procedure 
+                                    title="Determination of Moisture"
+                                    purpose="To determine the free moisture content, which is critical for shelf life."
+                                    reference="IS 16072: 2012"
+                                >
+                                    <p>Weigh 1g of sample into a pre-weighed dish. Dry in a hot air oven at 102 ± 2°C for 2 hours. Cool in a desiccator and weigh. Repeat heating for 1-hour intervals until a constant weight is achieved.</p>
+                                </Procedure>
+                                <Procedure 
+                                    title="Determination of Fat"
+                                    purpose="To determine the fat content in cream powder."
+                                    reference="A.O.A.C 932.06"
+                                >
+                                    <p>Weigh ~1g of powder, reconstitute it with 10ml warm water, add 1.25ml ammonia solution, and then extract the fat using the Rose-Gottlieb method as for liquid milk.</p>
+                                </Procedure>
+                                <Procedure 
+                                    title="Determination of Milk Protein"
+                                    purpose="To determine the protein content using the Kjeldahl method."
+                                    reference="A.O.A.C 991.23, 991.20, 991.21"
+                                >
+                                    <p>Determine Total Nitrogen and Non-Protein Nitrogen (NPN) separately using the Kjeldahl method. True milk protein is calculated by subtracting NPN from Total Nitrogen and multiplying the result by the factor 6.38.</p>
+                                </Procedure>
+                            </Accordion>
+                        </InfoCard>
+                    </div>
+                </TabsContent>
                  <TabsContent value="butter">
                      <div className="prose prose-sm max-w-none break-words">
                          <InfoCard>
@@ -309,6 +342,8 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                                         <li>Transfer to a hot air oven at 100 ± 1°C and dry to a constant weight.</li>
                                         <li>The loss in weight represents the moisture content.</li>
                                     </ol>
+                                    <h4 className="font-semibold mt-4 mb-2">Calculation:</h4>
+                                    <pre><code>Moisture % = (Initial Weight - Final Weight) / Initial Weight * 100</code></pre>
                                 </Procedure>
                                <Procedure 
                                     title="Determination of Fat and Curd (MSNF)"
@@ -320,18 +355,22 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                                         <li>Use the residue from the moisture determination.</li>
                                         <li>Extract the fat by repeatedly washing the residue with a fat solvent (petroleum ether).</li>
                                         <li>The remaining residue after extraction is dried and weighed. This gives the weight of Curd + Salt.</li>
-                                        <li>Fat percentage is calculated by difference: 100 - (%Moisture + %Curd&Salt).</li>
                                         <li>To find the curd content, the salt content must be determined separately and subtracted from the Curd + Salt value.</li>
                                     </ol>
+                                    <h4 className="font-semibold mt-4 mb-2">Calculation:</h4>
+                                    <pre><code>Fat % = 100 - (%Moisture + %Curd&Salt)</code></pre>
                                 </Procedure>
                                <Procedure 
                                     title="Determination of Salt (NaCl)"
                                     purpose="To measure the salt content, important for flavor and legal standards."
-                                    reference="IS 3507 – 1966"
                                 >
-                                    <p>Use <strong>Mohr's Method</strong>. Weigh 5g of butter, add 100ml boiling water, and cool to 50-55°C. Add potassium chromate indicator and titrate with standard silver nitrate (AgNO₃) solution until a brownish color persists.</p>
-                                     <h4 className="font-semibold mt-4 mb-2">Calculation:</h4>
-                                     <pre><code>NaCl % = [5.844 * N_AgNO3 * (V_sample - V_blank)] / Weight_sample</code></pre>
+                                    <h4 className="font-semibold mt-4 mb-2">Method 1: Mohr's Method</h4>
+                                    <p>Weigh 5g of butter, add 100ml boiling water, and cool to 50-55°C. Add potassium chromate indicator and titrate with standard silver nitrate (AgNO₃) solution until a brownish color persists.</p>
+                                    <pre><code>NaCl % = [5.844 * N_AgNO3 * (V_sample - V_blank)] / Weight_sample</code></pre>
+                                    
+                                    <h4 className="font-semibold mt-4 mb-2">Method 2: Volhard's Method</h4>
+                                    <p>Extract salt with hot water. Add excess standard silver nitrate to precipitate chlorides. Back-titrate the excess silver nitrate with potassium thiocyanate using ferric alum indicator.</p>
+                                    <pre><code>NaCl % = [23.38 * N_KCNS * (V_blank - V_sample)] / Weight_sample</code></pre>
                                 </Procedure>
                             </Accordion>
                          </InfoCard>
@@ -375,6 +414,27 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                                 >
                                     <p>Based on the mandatory addition of 5% sesame oil to vanaspati. Melted ghee (5ml) is shaken vigorously for 2 mins with 5ml of concentrated HCl and 0.4ml of 2% furfural solution. A pink or red color in the acid layer indicates the presence of vanaspati.</p>
                                 </Procedure>
+                                <Procedure 
+                                    title="Detection of Mineral Oil (Holde's Test)"
+                                    purpose="Detects non-edible mineral oils used as adulterants."
+                                >
+                                    <p>Saponify 1g of fat with 25ml of 4% alcoholic KOH. Add 100ml of hot water. The appearance of turbidity indicates the presence of mineral oil, which does not saponify.</p>
+                                </Procedure>
+                                <Procedure 
+                                    title="Fatty Acid Composition (GLC)"
+                                    purpose="Determines the detailed fatty acid profile to check for authenticity and detect adulteration."
+                                >
+                                    <p>This is an advanced instrumental method. The fatty acids in the ghee are converted to their volatile methyl esters (FAMEs). These FAMEs are then separated and quantified using a Gas-Liquid Chromatograph (GLC) with a Flame Ionization Detector (FID). The resulting profile is compared to standard milk fat profiles.</p>
+                                </Procedure>
+                                <Procedure 
+                                    title="Peroxide Value (PV)"
+                                    purpose="Measures the initial stages of oxidative rancidity."
+                                    reference="A.O.A.C 965.33"
+                                >
+                                    <p>The ghee sample is dissolved in an acetic acid-chloroform mixture. Saturated potassium iodide (KI) solution is added. Peroxides in the fat liberate iodine from KI. The liberated iodine is then titrated with a standard sodium thiosulphate solution using starch as an indicator.</p>
+                                    <pre><code>PV (meq/kg) = (S * N * 1000) / Weight of Sample</code></pre>
+                                    <p className="text-xs">Where S = ml of Na₂S₂O₃ (blank corrected) and N = Normality of Na₂S₂O₃</p>
+                                </Procedure>
                             </Accordion>
                         </InfoCard>
                     </div>
@@ -382,7 +442,7 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                  <TabsContent value="cheese-paneer">
                     <div className="prose prose-sm max-w-none break-words">
                         <InfoCard>
-                            <SectionTitle id="paneer-analysis">Analysis of Paneer / Chhanna / Cheese</SectionTitle>
+                            <SectionTitle id="paneer-analysis">Analysis of Paneer / Cheese</SectionTitle>
                             <Accordion type="single" collapsible className="w-full">
                                <Procedure 
                                     title="Determination of Moisture & Total Solids"
@@ -412,7 +472,7 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                                       <li>Add 25 ml of diethyl ether, shake for 1 minute. Then add 25 ml of petroleum ether and shake again.</li>
                                       <li>Centrifuge and transfer the ethereal layer to a pre-weighed conical flask.</li>
                                       <li>Repeat the extraction twice.</li>
-                                      <li>Evaporate the ether and dry the residue in an oven to find the fat content.</li>
+                                      <li>Evaporate the ether and dry the residue to find the fat content.</li>
                                   </ol>
                                 </Procedure>
                                 <Procedure 
@@ -435,24 +495,80 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                                     purpose="To determine the acidity developed during fermentation."
                                 >
                                   <ol className="list-decimal list-outside pl-5 space-y-2">
-                                    <li>Weigh 1g of sample in a beaker.</li>
+                                    <li>Weigh 10g of sample in a beaker.</li>
                                     <li>Add 10 ml of distilled water to make a paste.</li>
                                     <li>Add a few drops of phenolphthalein indicator and titrate with 0.1 N NaOH until a faint pink color appears.</li>
                                   </ol>
                                   <h4 className="font-semibold mt-4 mb-2">Calculation:</h4>
-                                  <pre><code>% Acidity (as Lactic Acid) = (9 * A * N) / W</code></pre>
-                                  <p className="text-xs">Where A = volume of NaOH, N = normality of NaOH, W = weight of sample.</p>
+                                  <pre><code>% Acidity (as Lactic Acid) = (9 * V * N) / W</code></pre>
+                                  <p className="text-xs">Where V = volume of NaOH, N = normality of NaOH, W = weight of sample.</p>
+                                </Procedure>
+                                <Procedure
+                                    title="Determination of Total Solids"
+                                    purpose="To determine the total solids content, often done after neutralizing acidity."
+                                    reference="IS 12333: 1997 / IDF 151: 1991"
+                                >
+                                    <p><strong>NaOH Method:</strong> Weigh 4-5g of sample, neutralize with 0.1N NaOH, and then dry on a water bath followed by an oven at 100±2°C to a constant weight. The weight of added NaOH is subtracted from the final residue.</p>
+                                    <p><strong>Zinc Oxide Method:</strong> Weigh 1g of sample, mix with 2g of zinc oxide, and dry to a constant weight. The developed lactic acid is determined separately and added to the moisture value to get the correct total solids.</p>
                                 </Procedure>
                                <Procedure 
                                     title="Diacetyl Content"
                                     purpose="To measure a key flavor compound."
                                 >
-                                    <p>Diacetyl is a characteristic flavor compound produced during fermentation. Its quantity is measured spectrophotometrically at 570 nm.</p>
+                                    <p>Diacetyl is a characteristic flavor compound produced during fermentation. Its quantity is measured spectrophotometrically at 570 nm after a series of chemical reactions.</p>
                                 </Procedure>
                             </Accordion>
                         </InfoCard>
                     </div>
                  </TabsContent>
+                 <TabsContent value="chakka-shrikhand">
+                    <div className="prose prose-sm max-w-none break-words">
+                        <InfoCard>
+                            <SectionTitle id="chakka-analysis">Analysis of Chakka / Shrikhand</SectionTitle>
+                            <Accordion type="single" collapsible className="w-full">
+                                <Procedure title="Determination of Milk Solids" purpose="To determine total milk solids.">
+                                    <p>Follow the procedure for Dahi (Section 4.4). For Shrikhand, determine sucrose content separately and subtract it from the total solids to get milk solids.</p>
+                                </Procedure>
+                                <Procedure title="Determination of Fat" purpose="To determine fat content.">
+                                    <p>Follow the procedure for Chhanna/Paneer (Section 5.3).</p>
+                                </Procedure>
+                                <Procedure title="Determination of Protein" purpose="To determine protein content.">
+                                    <p>Follow the procedure for Ice Cream (Section 7.5).</p>
+                                </Procedure>
+                                <Procedure title="Determination of Titratable Acidity" purpose="To determine acidity.">
+                                    <p>Follow the procedure for Condensed Milk (Section 9.5).</p>
+                                </Procedure>
+                                <Procedure title="Determination of Total Ash" purpose="To determine mineral content.">
+                                    <p>Follow the procedure for Milk Powder (Section 10.7).</p>
+                                </Procedure>
+                                <Procedure title="Determination of Sucrose Content" purpose="To determine added sugar.">
+                                    <p>Follow the procedure for Condensed Milk (Section 9.4).</p>
+                                </Procedure>
+                            </Accordion>
+                        </InfoCard>
+                    </div>
+                </TabsContent>
+                 <TabsContent value="khoa">
+                    <div className="prose prose-sm max-w-none break-words">
+                        <InfoCard>
+                            <SectionTitle id="khoa-analysis">Analysis of Khoa</SectionTitle>
+                            <Accordion type="single" collapsible className="w-full">
+                                <Procedure title="Determination of Moisture" purpose="To determine water content.">
+                                    <p>Follow the procedure for Channa/Paneer (Section 5.2).</p>
+                                </Procedure>
+                                <Procedure title="Determination of Fat" purpose="To determine fat content.">
+                                    <p>If the sample contains added sugar, use the Rose-Gottlieb method (Section 1.3.4.2). If no sugar is present, the Werner-Schmidt acid digestion method (Section 5.3) can be used.</p>
+                                </Procedure>
+                                <Procedure title="Detection of Starch" purpose="To detect illegal addition of starch.">
+                                    <p>Disperse 11g of grated khoa in 50ml hot water. Take 5ml of this dispersion, add 0.2ml iodine solution. A blue color indicates starch.</p>
+                                </Procedure>
+                                <Procedure title="Detection of Sucrose" purpose="To detect added sugar.">
+                                    <p>Take 5ml of the prepared khoa dispersion, add 0.5ml conc. HCl and 0.005g resorcinol. Heat in a boiling water bath for 5 mins. A deep red color indicates sucrose.</p>
+                                </Procedure>
+                            </Accordion>
+                        </InfoCard>
+                    </div>
+                </TabsContent>
                  <TabsContent value="ice-cream">
                     <div className="prose prose-sm max-w-none break-words">
                         <InfoCard>
@@ -481,28 +597,38 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                                     reference="IS:2802: 1964"
                                 >
                                   <ol className="list-decimal list-outside pl-5 space-y-2">
-                                    <li>Weigh a sample of ice cream (cup or carton).</li>
-                                    <li>Record the weight of a beaker.</li>
-                                    <li>Put the frozen ice cream in the beaker and melt it in a 45°C water bath.</li>
-                                    <li>Add 1-2 drops of amyl alcohol (anti-foaming agent) to remove the air.</li>
-                                    <li>Fill the cup or carton with the melted ice cream (without air).</li>
-                                    <li>Record the weight of the cup or carton.</li>
+                                    <li>Weigh a unit of ice cream (e.g., a full cup or carton) to get its net weight. Let this be W_icecream.</li>
+                                    <li>Melt the same volume of ice cream completely, removing all air (a drop of amyl alcohol can help).</li>
+                                    <li>Weigh the melted mix. Let this be W_mix.</li>
                                   </ol>
                                      <h4 className="font-semibold mt-4 mb-2">Calculation:</h4>
-                                     <pre><code>% Overrun = [ (W3 - W2) / (W2 - W1) ] * 100</code></pre>
-                                     <p className="text-xs">W1 = Weight of empty container, W2 = Weight of container with ice cream, W3 = Weight of container with melted mix.</p>
+                                     <pre><code>% Overrun = [ (Weight of mix - Weight of ice cream) / Weight of ice cream ] * 100</code></pre>
                                 </Procedure>
                                <Procedure 
                                     title="Total Solids Content"
                                     purpose="To determine the total solids in ice cream."
                                 >
                                   <ol className="list-decimal list-outside pl-5 space-y-2">
-                                    <li>Weigh 1.5-2.0 g of sample into a weighed dish.</li>
-                                    <li>Add 3-5 ml of distilled water to make a paste.</li>
+                                    <li>Weigh 5g of sample into a weighed dish containing sand.</li>
+                                    <li>Add a few drops of water to make a paste.</li>
                                     <li>Dry the sample on a boiling water bath for 20-30 min.</li>
-                                    <li>Dry the dish in a hot air oven at 100 ± 2°C for 2 hours.</li>
+                                    <li>Dry the dish in a hot air oven at 100 ± 2°C for 4 hours.</li>
                                     <li>Cool and weigh. Repeat until constant weight is achieved.</li>
                                   </ol>
+                                </Procedure>
+                                <Procedure 
+                                    title="Determination of Protein (Kjeldahl Method)"
+                                    purpose="To determine protein content."
+                                    reference="Pearson’s Composition and Analysis of Foods,9th edn,1991 page 17"
+                                >
+                                    <p>Weigh 5-8g of sample and determine the total nitrogen content using the Kjeldahl method (as described for liquid milk). The protein content is calculated by multiplying the nitrogen percentage by a factor of 6.38 for dairy ice cream or 6.25 for frozen desserts.</p>
+                                </Procedure>
+                                <Procedure 
+                                    title="Determination of Added Starch"
+                                    purpose="To detect illegal addition of starch."
+                                    reference="A.O.A.C 17th edn,2000 Modified Official method- 925.50"
+                                >
+                                    <p>Defat the sample with petroleum ether. Precipitate starch with alcohol. Hydrolyze the precipitate with acid to convert starch to reducing sugars. Determine the amount of reducing sugars using the Lane-Eynon method and multiply by 0.9 to get the starch content.</p>
                                 </Procedure>
                             </Accordion>
                         </InfoCard>
@@ -528,13 +654,18 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                                      <p>Weigh 2-2.5g of sample, reconstitute with warm water and ammonia. Proceed with the Rose-Gottlieb method as for liquid milk.</p>
                                 </Procedure>
                                 <Procedure 
-                                    title="Determination of Sucrose (Lane-Eynon Method)"
+                                    title="Determination of Sucrose"
                                     purpose="To measure the amount of added sugar, a key component in sweetened condensed milk."
-                                    reference="IS 4079 – 1967"
                                 >
-                                    <p>The Lane-Eynon method involves clarifying the sample and determining reducing sugars (lactose) before and after acid inversion (which converts sucrose to reducing sugars). The difference gives the sucrose content.</p>
-                                     <h4 className="font-semibold mt-4 mb-2">Calculation:</h4>
-                                     <pre><code>Sucrose % = (Total Reducing Sugars % - Original Reducing Sugars %) * 0.95</code></pre>
+                                    <h4 className="font-semibold mt-4 mb-2">Lane-Eynon Method (Volumetric)</h4>
+                                    <p>This method involves clarifying the sample and determining reducing sugars (lactose) before and after acid inversion (which converts sucrose to reducing sugars). The difference gives the sucrose content.</p>
+                                    <pre><code>Sucrose % = (Total Reducing Sugars % - Original Reducing Sugars %) * 0.95</code></pre>
+                                    
+                                    <h4 className="font-semibold mt-4 mb-2">Polarimetric Method</h4>
+                                    <p>This method is based on the change in the optical rotation of a clarified sample solution before and after acid inversion. The change in rotation is proportional to the sucrose content.</p>
+                                </Procedure>
+                                <Procedure title="Determination of Titratable Acidity" purpose="To determine acidity.">
+                                    <p>Weigh 10g of sample, dilute with 30ml warm water, add phenolphthalein indicator, and titrate with 0.1N NaOH.</p>
                                 </Procedure>
                             </Accordion>
                         </InfoCard>
@@ -552,8 +683,8 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                                 >
                                    <ol className="list-decimal list-outside pl-5 space-y-2">
                                       <li>Weigh a clean, dry, empty dish (Weight W).</li>
-                                      <li>Weigh 3 g of sample into it and weigh again (Weight W1).</li>
-                                      <li>Dry the dish in a hot air oven at 102 ± 2°C for 3 hours.</li>
+                                      <li>Weigh 1 g of sample into it and weigh again (Weight W1).</li>
+                                      <li>Dry the dish in a hot air oven at 102 ± 2°C for 2 hours.</li>
                                       <li>Cool the dish in a desiccator to room temperature.</li>
                                       <li>Weigh the dish and note the weight (Weight W2).</li>
                                       <li>Repeat heating and cooling until a constant weight is obtained.</li>
@@ -569,6 +700,9 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                                 >
                                     <p>Weigh ~1g of powder, reconstitute it with 10ml warm water, add ammonia, and then extract the fat using the Rose-Gottlieb method.</p>
                                 </Procedure>
+                                <Procedure title="Determination of Titratable Acidity" purpose="To determine acidity.">
+                                    <p>Reconstitute 10g of powder to 100ml. Titrate 10ml of this reconstituted milk with 0.1N NaOH using phenolphthalein, comparing the endpoint color to a reference standard (rosaniline acetate or cobalt sulphate).</p>
+                                </Procedure>
                                <Procedure 
                                     title="Determination of Solubility Index"
                                     purpose="Measures the amount of undissolved powder after reconstitution, indicating quality."
@@ -583,13 +717,72 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                                 >
                                     <p>Weigh ~3g of powder in a crucible. Heat gently and then strongly in a muffle furnace at 550 ± 20°C until grey ash is obtained. The final constant weight of the residue is the total ash.</p>
                                 </Procedure>
+                                <Procedure title="Determination of Crude Fibre" purpose="For cereal-based weaning foods.">
+                                    <p>The defatted sample is sequentially boiled with dilute acid and then with dilute alkali. The remaining insoluble residue is dried, weighed, ignited, and weighed again. The loss in weight on ignition represents the crude fibre.</p>
+                                </Procedure>
                             </Accordion>
                         </InfoCard>
                     </div>
                  </TabsContent>
+                 <TabsContent value="casein">
+                    <div className="prose prose-sm max-w-none break-words">
+                        <InfoCard>
+                            <SectionTitle id="casein-analysis">Analysis of Edible Casein Products</SectionTitle>
+                            <Accordion type="single" collapsible className="w-full">
+                                <Procedure title="Determination of Moisture" purpose="To determine water content.">
+                                    <p>Follow the procedure for Milk Powder (Section 10.2).</p>
+                                </Procedure>
+                                <Procedure title="Determination of Fat" purpose="To determine fat content.">
+                                    <p>The sample is digested with HCl, and fat is extracted using the Schmid-Bondzynski-Ratzlaff (SBR) principle (similar to Werner-Schmidt method) using diethyl ether and petroleum ether.</p>
+                                </Procedure>
+                                <Procedure title="Determination of Protein" purpose="To determine protein content.">
+                                    <p>Total nitrogen is determined by the Kjeldahl method. For true protein, non-protein nitrogen (NPN) is determined separately from a TCA filtrate and subtracted from the total nitrogen.</p>
+                                </Procedure>
+                                <Procedure title="Determination of Lactose" purpose="To determine residual lactose.">
+                                    <p>Using a photometric method. The casein is precipitated, and the lactose in the filtrate reacts with phenol and sulfuric acid to produce a color, which is measured at 490 nm.</p>
+                                </Procedure>
+                                <Procedure title="Determination of Ash" purpose="To determine mineral content.">
+                                    <p>The sample is incinerated at 825 ± 25°C until all carbon is removed. For fixed ash, magnesium acetate is added before incineration to retain all phosphorus.</p>
+                                </Procedure>
+                                <Procedure title="Determination of Free Acidity & pH" purpose="To determine acidity.">
+                                    <p>An aqueous extract of the sample is titrated with 0.1N NaOH (for free acidity) or measured with a pH meter (for pH).</p>
+                                </Procedure>
+                            </Accordion>
+                        </InfoCard>
+                    </div>
+                </TabsContent>
+                <TabsContent value="whey-powder">
+                    <div className="prose prose-sm max-w-none break-words">
+                        <InfoCard>
+                            <SectionTitle id="whey-powder-analysis">Analysis of Whey Powder</SectionTitle>
+                            <Accordion type="single" collapsible className="w-full">
+                                <Procedure title="Determination of Moisture" purpose="To determine water content.">
+                                    <p>Follow the procedure for Milk Powder (Section 10.2).</p>
+                                </Procedure>
+                                <Procedure title="Determination of Fat" purpose="To determine fat content.">
+                                    <p>Follow the procedure for Milk Powder (Section 10.3).</p>
+                                </Procedure>
+                                <Procedure title="Determination of Protein" purpose="To determine protein content.">
+                                    <p>Follow the Kjeldahl method as for milk powder, using a conversion factor of 6.38.</p>
+                                </Procedure>
+                                <Procedure title="Determination of Total Ash" purpose="To determine mineral content.">
+                                    <p>Follow the procedure for Milk Powder (Section 10.7).</p>
+                                </Procedure>
+                                <Procedure title="Determination of pH" purpose="To determine pH.">
+                                    <p>Prepare a 10% reconstituted solution of the whey powder and measure the pH using a calibrated pH meter.</p>
+                                </Procedure>
+                                <Procedure title="Determination of Lactose" purpose="To determine lactose content.">
+                                    <p>Determine the reducing sugars using the Lane-Eynon method (as for condensed milk, Section 9.4) and calculate as anhydrous lactose.</p>
+                                </Procedure>
+                            </Accordion>
+                        </InfoCard>
+                    </div>
+                </TabsContent>
             </ScrollArea>
         </Tabs>
       </DialogContent>
     </Dialog>
   );
 }
+
+    
