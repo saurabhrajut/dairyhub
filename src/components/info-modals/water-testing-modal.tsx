@@ -17,17 +17,17 @@ const Formula = ({ children }: { children: React.ReactNode }) => (
      dangerouslySetInnerHTML={{ __html: children as string }} />
 );
 
-const WaterTestSection = ({ title, intro, procedure, calculation }: { title: string, intro: string, procedure: string[], calculation: string }) => {
+const WaterTestSection = ({ test }: { test: any }) => {
     return (
         <section className="mb-8 p-6 bg-blue-50/60 border border-blue-200 rounded-lg">
-            <h2 className="text-2xl font-bold text-blue-800 font-headline">{title}</h2>
-            <p className="mt-2 text-gray-600">{intro}</p>
+            <h2 className="text-2xl font-bold text-blue-800 font-headline">{test.title}</h2>
+            <p className="mt-2 text-gray-600">{test.intro}</p>
             <h3 className="text-lg font-semibold mt-4 mb-2 text-gray-700">Prakriya (Procedure)</h3>
             <ol className="list-decimal list-inside space-y-2 mt-2 text-gray-600">
-                {procedure.map((step, i) => <li key={i} dangerouslySetInnerHTML={{__html: step}}/>)}
+                {test.procedure.map((step, i) => <li key={i} dangerouslySetInnerHTML={{__html: step}}/>)}
             </ol>
             <h3 className="text-lg font-semibold mt-4 mb-2 text-gray-700">Ganana (Calculation)</h3>
-            <Formula>{calculation}</Formula>
+            <Formula>{test.calculation}</Formula>
         </section>
     );
 };
@@ -52,13 +52,7 @@ export function WaterTestingModal({ isOpen, setIsOpen }: { isOpen: boolean; setI
                 <p><strong>{content.note_title}:</strong> {content.note_text}</p>
                 
                 {content.tests.map(test => (
-                    <WaterTestSection 
-                        key={test.id}
-                        title={test.title}
-                        intro={test.intro}
-                        procedure={test.procedure}
-                        calculation={test.calculation}
-                    />
+                    <WaterTestSection key={test.id} test={test} />
                 ))}
 
                  <div className="p-4 bg-yellow-100 border-l-4 border-yellow-500 rounded-r-lg">

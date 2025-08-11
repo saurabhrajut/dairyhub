@@ -10,20 +10,11 @@ import {
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-const navLinks = [
-    { href: "#processed-milk", text: "Processed Milk" },
-    { href: "#cheese-paneer", text: "Cheese/Paneer/Khoa" },
-    { href: "#dahi-yoghurt", text: "Dahi/Yoghurt" },
-    { href: "#ice-cream", text: "Ice Cream" },
-    { href: "#condensed-milk", text: "Condensed Milk" },
-    { href: "#ghee-butter-oil", text: "Ghee/Butter Oil" },
-    { href: "#butter", text: "Butter" },
-    { href: "#milk-powder", text: "Milk Powder" },
-];
 
 const InfoCard = ({ children, className }: { children: React.ReactNode, className?: string }) => (
-    <div className={`bg-card p-6 rounded-xl mb-6 shadow-md border hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 ${className}`}>
+    <div className={`bg-card p-6 rounded-xl shadow-md border hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 ${className}`}>
         {children}
     </div>
 );
@@ -57,21 +48,20 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
           </DialogDescription>
         </DialogHeader>
 
-        <div className="flex-1 flex flex-col min-h-0">
-            <div className="bg-background/80 backdrop-blur-sm z-10 p-2 -mx-6 mb-4 sticky top-0">
-                <div className="flex flex-wrap items-center justify-center gap-2">
-                    {navLinks.map(link => (
-                        <a key={link.href} href={link.href} className="px-3 py-1.5 bg-muted hover:bg-primary/10 text-muted-foreground hover:text-primary rounded-full text-xs sm:text-sm font-medium transition-colors">
-                            {link.text}
-                        </a>
-                    ))}
-                </div>
-            </div>
-
-            <ScrollArea className="flex-1 -mx-6 px-6">
-                <div className="prose prose-sm max-w-none break-words">
-                    <section id="processed-milk">
-                        <SectionTitle id="processed-milk">Processed Doodh ke liye Chemical Tests</SectionTitle>
+        <Tabs defaultValue="processed-milk" className="w-full flex-1 flex flex-col min-h-0">
+            <TabsList className="grid w-full h-auto grid-cols-2 md:grid-cols-4 lg:grid-cols-8">
+                <TabsTrigger value="processed-milk">Processed Milk</TabsTrigger>
+                <TabsTrigger value="cheese-paneer">Cheese/Paneer</TabsTrigger>
+                <TabsTrigger value="dahi-yoghurt">Dahi/Yoghurt</TabsTrigger>
+                <TabsTrigger value="ice-cream">Ice Cream</TabsTrigger>
+                <TabsTrigger value="condensed-milk">Condensed Milk</TabsTrigger>
+                <TabsTrigger value="ghee-butter-oil">Ghee/Butter Oil</TabsTrigger>
+                <TabsTrigger value="butter">Butter</TabsTrigger>
+                <TabsTrigger value="milk-powder">Milk Powder</TabsTrigger>
+            </TabsList>
+            <ScrollArea className="flex-1 mt-4 pr-4">
+                 <TabsContent value="processed-milk" className="mt-0">
+                    <div className="prose prose-sm max-w-none break-words">
                         <InfoCard>
                             <h3 className="text-xl font-semibold mb-2">Fat Test (Gerber Method)</h3>
                             <p>Is method ka siddhant yeh hai ki jab doodh mein sulfuric acid (90–91%) milaya jaata hai, toh woh doodh ke proteins ko ghol deta hai jabki fat ke gole (globules) acid se paida hui garmi ke kaaran liquid form mein free rehte hain.</p>
@@ -194,10 +184,10 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                                 </code>
                             </pre>
                         </InfoCard>
-                    </section>
-
-                    <section id="cheese-paneer">
-                        <SectionTitle id="cheese-paneer">Cheese, Paneer, Channa, aur Khoa</SectionTitle>
+                    </div>
+                </TabsContent>
+                 <TabsContent value="cheese-paneer" className="mt-0">
+                    <div className="prose prose-sm max-w-none break-words">
                         <InfoCard>
                             <h3 className="text-xl font-semibold mb-2">Fat Test (SBR Method)</h3>
                             <ProcedureList>
@@ -221,10 +211,10 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                             <ProcedureListItem>Thanda karke tolein. Constant weight aane tak repeat karein.</ProcedureListItem>
                             </ProcedureList>
                         </InfoCard>
-                    </section>
-                    
-                    <section id="dahi-yoghurt">
-                        <SectionTitle id="dahi-yoghurt">Dahi & Yoghurt</SectionTitle>
+                    </div>
+                 </TabsContent>
+                 <TabsContent value="dahi-yoghurt" className="mt-0">
+                    <div className="prose prose-sm max-w-none break-words">
                         <InfoCard>
                             <h3 className="text-xl font-semibold mb-2">Titratable Acidity</h3>
                             <ProcedureList>
@@ -238,10 +228,10 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                             <h3 className="text-xl font-semibold mb-2">Diacetyl Content</h3>
                             <p>Diacetyl ek khas flavor compound hai jo fermentation ke dauran banta hai. Iski matra spectrophotometrically 570 nm par maapi jaati hai.</p>
                         </InfoCard>
-                    </section>
-                    
-                    <section id="ice-cream">
-                        <SectionTitle id="ice-cream">Ice Cream</SectionTitle>
+                    </div>
+                 </TabsContent>
+                 <TabsContent value="ice-cream" className="mt-0">
+                    <div className="prose prose-sm max-w-none break-words">
                         <InfoCard>
                             <h3 className="text-xl font-semibold mb-2">Fat Content (Rose-Gottlieb method)</h3>
                             <ProcedureList>
@@ -269,10 +259,10 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                             </ProcedureList>
                             <pre className="mt-4 p-4 bg-muted rounded-lg font-mono text-sm"><code>% Overrun = [ (W3 - W2) / (W2 - W1) ] * 100</code></pre>
                         </InfoCard>
-                    </section>
-                    
-                    <section id="condensed-milk">
-                        <SectionTitle id="condensed-milk">Condensed Milk</SectionTitle>
+                    </div>
+                 </TabsContent>
+                 <TabsContent value="condensed-milk" className="mt-0">
+                    <div className="prose prose-sm max-w-none break-words">
                         <InfoCard>
                             <h3 className="text-xl font-semibold mb-2">Total Solids Content</h3>
                             <ProcedureList>
@@ -283,10 +273,10 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                                 <ProcedureListItem>Thanda karke tolein aur constant weight aane tak repeat karein.</ProcedureListItem>
                             </ProcedureList>
                         </InfoCard>
-                    </section>
-
-                    <section id="ghee-butter-oil">
-                        <SectionTitle id="ghee-butter-oil">Ghee & Butter Oil</SectionTitle>
+                    </div>
+                 </TabsContent>
+                 <TabsContent value="ghee-butter-oil" className="mt-0">
+                    <div className="prose prose-sm max-w-none break-words">
                         <InfoCard>
                             <h3 className="text-xl font-semibold mb-2">Reichert-Meissel (RM) & Polenske Value</h3>
                             <p><strong>RM Value:</strong> Yeh ghee ki shuddhta ka ek mahatvapurna suchak hai. Shuddh ghee ke liye RM value kam se kam 28 honi chahiye.</p>
@@ -306,10 +296,10 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                                 </code>
                             </pre>
                         </InfoCard>
-                    </section>
-                    
-                    <section id="butter">
-                        <SectionTitle id="butter">Butter</SectionTitle>
+                    </div>
+                 </TabsContent>
+                 <TabsContent value="butter" className="mt-0">
+                    <div className="prose prose-sm max-w-none break-words">
                         <InfoCard>
                             <h3 className="text-xl font-semibold mb-2">Moisture Content</h3>
                             <ProcedureList>
@@ -319,10 +309,10 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                                 <ProcedureListItem>Constant weight aane tak thanda karein aur tolein.</ProcedureListItem>
                             </ProcedureList>
                         </InfoCard>
-                    </section>
-
-                    <section id="milk-powder">
-                        <SectionTitle id="milk-powder">Milk Powder</SectionTitle>
+                    </div>
+                 </TabsContent>
+                 <TabsContent value="milk-powder" className="mt-0">
+                    <div className="prose prose-sm max-w-none break-words">
                         <InfoCard>
                             <h3 className="text-xl font-semibold mb-2">Moisture and Total Solids</h3>
                             <ProcedureList>
@@ -341,10 +331,10 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                                 </code>
                             </pre>
                         </InfoCard>
-                    </section>
-                </div>
+                    </div>
+                 </TabsContent>
             </ScrollArea>
-        </div>
+        </Tabs>
       </DialogContent>
     </Dialog>
   );

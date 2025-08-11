@@ -12,13 +12,13 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableCaption } from "@/components/ui/table";
 import { useLanguage } from "@/context/language-context";
 import { qualityContent } from "@/lib/content/quality-content";
-
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Section = ({ title, id, children }: { title: string, id: string, children: React.ReactNode }) => (
-    <section id={id} className="mb-10">
+    <div id={id} className="prose max-w-none text-gray-700 text-base leading-relaxed">
         <h2 className="text-2xl font-bold text-primary mb-4 border-b-2 border-primary/20 pb-2 scroll-mt-24 font-headline">{title}</h2>
         <div className="space-y-4">{children}</div>
-    </section>
+    </div>
 );
 
 const SubHeading = ({ children }: { children: React.ReactNode }) => (
@@ -39,167 +39,173 @@ export function QualityConceptModal({ isOpen, setIsOpen }: { isOpen: boolean; se
             {content.description}
           </DialogDescription>
         </DialogHeader>
-
-        <ScrollArea className="flex-1 mt-4 pr-6">
-            <div className="prose max-w-none text-gray-700 text-base leading-relaxed">
-                <p>{content.intro1}</p>
-                <p>{content.intro2}</p>
-                <p>{content.intro3}</p>
-                 <ul className="list-disc list-inside mt-2 space-y-1">
-                    {content.introBenefits.map((item, index) => <li key={index}>{item}</li>)}
-                </ul>
-
-                <Section title={content.whatIsQuality.title} id="quality">
-                    <p>{content.whatIsQuality.p1}</p>
-                    <blockquote className="border-l-4 border-primary bg-muted p-4 my-4">
-                        Quality &prop; 1 / {content.whatIsQuality.variability}
-                    </blockquote>
-                    <p>{content.whatIsQuality.p2}</p>
-                    <p>{content.whatIsQuality.p3}</p>
-                    <p>{content.whatIsQuality.p4}</p>
-                </Section>
-                
-                <Section title={content.prps.title} id="prps">
-                    <p>{content.prps.p1}</p>
-                    <SubHeading>{content.prps.gmp.title}</SubHeading>
-                    <p>{content.prps.gmp.p1}</p>
-                    <ul className="list-disc list-inside space-y-2">
-                        {content.prps.gmp.list.map((item, index) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
-                    </ul>
-
-                    <SubHeading>{content.prps.ghp.title}</SubHeading>
-                    <p>{content.prps.ghp.p1}</p>
-                     <ul className="list-disc list-inside space-y-2">
-                        {content.prps.ghp.list.map((item, index) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
-                    </ul>
-
-                    <SubHeading>{content.prps.glp.title}</SubHeading>
-                    <p>{content.prps.glp.p1}</p>
-                     <ul className="list-disc list-inside space-y-2">
-                        {content.prps.glp.list.map((item, index) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
-                    </ul>
-                </Section>
-
-
-                <Section title={content.qc.title} id="qc">
-                    <p>{content.qc.p1}</p>
-                    <p>{content.qc.p2}</p>
+        <Tabs defaultValue="intro" className="w-full flex-1 flex flex-col min-h-0">
+            <TabsList className="grid w-full h-auto grid-cols-2 sm:grid-cols-4 lg:grid-cols-8">
+                 <TabsTrigger value="intro">Introduction</TabsTrigger>
+                 <TabsTrigger value="concepts">Concepts</TabsTrigger>
+                 <TabsTrigger value="prps">PRPs</TabsTrigger>
+                 <TabsTrigger value="philosophy">Philosophies</TabsTrigger>
+                 <TabsTrigger value="tqm">TQM</TabsTrigger>
+                 <TabsTrigger value="haccp">HACCP</TabsTrigger>
+                 <TabsTrigger value="iso">ISO</TabsTrigger>
+                 <TabsTrigger value="bodies">Bodies</TabsTrigger>
+            </TabsList>
+            <ScrollArea className="flex-1 mt-4 pr-6">
+                <TabsContent value="intro" className="mt-0">
+                     <div className="prose max-w-none text-gray-700 text-base leading-relaxed">
+                        <p>{content.intro1}</p>
+                        <p>{content.intro2}</p>
+                        <p>{content.intro3}</p>
+                        <ul className="list-disc list-inside mt-2 space-y-1">
+                            {content.introBenefits.map((item, index) => <li key={index}>{item}</li>)}
+                        </ul>
+                    </div>
+                </TabsContent>
+                <TabsContent value="concepts" className="mt-0">
+                    <Section title={content.whatIsQuality.title} id="quality">
+                        <p>{content.whatIsQuality.p1}</p>
+                        <blockquote className="border-l-4 border-primary bg-muted p-4 my-4">
+                            Quality &prop; 1 / {content.whatIsQuality.variability}
+                        </blockquote>
+                        <p>{content.whatIsQuality.p2}</p>
+                        <p>{content.whatIsQuality.p3}</p>
+                        <p>{content.whatIsQuality.p4}</p>
+                    </Section>
+                    <Section title={content.qc.title} id="qc">
+                        <p>{content.qc.p1}</p>
+                        <p>{content.qc.p2}</p>
+                        
+                        <SubHeading>{content.qc.responsibilities.title}</SubHeading>
+                        <ol className="list-decimal list-inside space-y-2 mt-2">
+                            {content.qc.responsibilities.list.map((item, index) => <li key={index}>{item}</li>)}
+                        </ol>
+                    </Section>
                     
-                    <SubHeading>{content.qc.responsibilities.title}</SubHeading>
-                    <ol className="list-decimal list-inside space-y-2 mt-2">
-                        {content.qc.responsibilities.list.map((item, index) => <li key={index}>{item}</li>)}
-                    </ol>
-                </Section>
-                
-                <Section title={content.qa.title} id="qa">
-                     <p>{content.qa.p1}</p>
-                     <p>{content.qa.p2}</p>
-                     <div className="overflow-x-auto">
-                        <Table>
-                            <TableCaption>{content.qa.table.caption}</TableCaption>
-                            <TableHeader>
-                                <TableRow><TableHead>{content.qa.table.header1}</TableHead><TableHead>{content.qa.table.header2}</TableHead></TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {content.qa.table.rows.map((row, index) => (
-                                    <TableRow key={index}><TableCell>{row.qc}</TableCell><TableCell>{row.qa}</TableCell></TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                     </div>
-                </Section>
-                
-                <Section title={content.deming.title} id="deming">
-                    <p>{content.deming.p1}</p>
-                    <SubHeading>{content.deming.cycle.title}</SubHeading>
-                    <p>{content.deming.cycle.p1}</p>
-                    <ul className="list-disc list-inside mt-2 space-y-2">
-                        <li><strong>{content.deming.cycle.plan.title}:</strong> {content.deming.cycle.plan.description}</li>
-                        <li><strong>{content.deming.cycle.do.title}:</strong> {content.deming.cycle.do.description}</li>
-                        <li><strong>{content.deming.cycle.check.title}:</strong> {content.deming.cycle.check.description}</li>
-                        <li><strong>{content.deming.cycle.act.title}:</strong> {content.deming.cycle.act.description}</li>
-                    </ul>
-                </Section>
+                    <Section title={content.qa.title} id="qa">
+                        <p>{content.qa.p1}</p>
+                        <p>{content.qa.p2}</p>
+                        <div className="overflow-x-auto">
+                            <Table>
+                                <TableCaption>{content.qa.table.caption}</TableCaption>
+                                <TableHeader>
+                                    <TableRow><TableHead>{content.qa.table.header1}</TableHead><TableHead>{content.qa.table.header2}</TableHead></TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {content.qa.table.rows.map((row, index) => (
+                                        <TableRow key={index}><TableCell>{row.qc}</TableCell><TableCell>{row.qa}</TableCell></TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </div>
+                    </Section>
+                </TabsContent>
+                <TabsContent value="prps" className="mt-0">
+                     <Section title={content.prps.title} id="prps">
+                        <p>{content.prps.p1}</p>
+                        <SubHeading>{content.prps.gmp.title}</SubHeading>
+                        <p>{content.prps.gmp.p1}</p>
+                        <ul className="list-disc list-inside space-y-2">
+                            {content.prps.gmp.list.map((item, index) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
+                        </ul>
 
-                <Section title={content.juran.title} id="juran">
-                    <p>{content.juran.p1}</p>
-                     <SubHeading>{content.juran.trilogy.title}</SubHeading>
-                     <p>{content.juran.trilogy.p1}</p>
-                    <ul className="list-disc list-inside mt-2 space-y-1">
-                        {content.juran.trilogy.list.map((item, index) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
-                    </ul>
-                    <p>{content.juran.p2}</p>
-                </Section>
+                        <SubHeading>{content.prps.ghp.title}</SubHeading>
+                        <p>{content.prps.ghp.p1}</p>
+                        <ul className="list-disc list-inside space-y-2">
+                            {content.prps.ghp.list.map((item, index) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
+                        </ul>
 
-                <Section title={content.tqm.title} id="tqm">
-                    <p>{content.tqm.p1}</p>
-                    <SubHeading>{content.tqm.principles.title}</SubHeading>
-                    <ul className="list-disc list-inside mt-2 space-y-2">
-                        {content.tqm.principles.list.map((item, index) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
-                    </ul>
-                </Section>
+                        <SubHeading>{content.prps.glp.title}</SubHeading>
+                        <p>{content.prps.glp.p1}</p>
+                        <ul className="list-disc list-inside space-y-2">
+                            {content.prps.glp.list.map((item, index) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
+                        </ul>
+                    </Section>
+                </TabsContent>
+                <TabsContent value="philosophy" className="mt-0">
+                    <Section title={content.deming.title} id="deming">
+                        <p>{content.deming.p1}</p>
+                        <SubHeading>{content.deming.cycle.title}</SubHeading>
+                        <p>{content.deming.cycle.p1}</p>
+                        <ul className="list-disc list-inside mt-2 space-y-2">
+                            <li><strong>{content.deming.cycle.plan.title}:</strong> {content.deming.cycle.plan.description}</li>
+                            <li><strong>{content.deming.cycle.do.title}:</strong> {content.deming.cycle.do.description}</li>
+                            <li><strong>{content.deming.cycle.check.title}:</strong> {content.deming.cycle.check.description}</li>
+                            <li><strong>{content.deming.cycle.act.title}:</strong> {content.deming.cycle.act.description}</li>
+                        </ul>
+                    </Section>
 
-                 <Section title={content.haccp.title} id="haccp">
-                    <p>{content.haccp.p1}</p>
-                    <SubHeading>{content.haccp.principles.title}</SubHeading>
-                    <ol className="list-decimal list-inside space-y-3">
-                        {content.haccp.principles.list.map((item, index) => (
-                             <li key={index}>
-                                <strong className="text-blue-600">{item.title}</strong>
-                                <p className="ml-4">{item.description}</p>
-                            </li>
-                        ))}
-                    </ol>
-                </Section>
+                    <Section title={content.juran.title} id="juran">
+                        <p>{content.juran.p1}</p>
+                        <SubHeading>{content.juran.trilogy.title}</SubHeading>
+                        <p>{content.juran.trilogy.p1}</p>
+                        <ul className="list-disc list-inside mt-2 space-y-1">
+                            {content.juran.trilogy.list.map((item, index) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
+                        </ul>
+                        <p>{content.juran.p2}</p>
+                    </Section>
+                </TabsContent>
+                <TabsContent value="tqm" className="mt-0">
+                    <Section title={content.tqm.title} id="tqm">
+                        <p>{content.tqm.p1}</p>
+                        <SubHeading>{content.tqm.principles.title}</SubHeading>
+                        <ul className="list-disc list-inside mt-2 space-y-2">
+                            {content.tqm.principles.list.map((item, index) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
+                        </ul>
+                    </Section>
+                </TabsContent>
+                <TabsContent value="haccp" className="mt-0">
+                    <Section title={content.haccp.title} id="haccp">
+                        <p>{content.haccp.p1}</p>
+                        <SubHeading>{content.haccp.principles.title}</SubHeading>
+                        <ol className="list-decimal list-inside space-y-3">
+                            {content.haccp.principles.list.map((item, index) => (
+                                <li key={index}>
+                                    <strong className="text-blue-600">{item.title}</strong>
+                                    <p className="ml-4">{item.description}</p>
+                                </li>
+                            ))}
+                        </ol>
+                    </Section>
+                </TabsContent>
+                <TabsContent value="iso" className="mt-0">
+                    <Section title={content.iso.title} id="iso">
+                        <p>{content.iso.p1}</p>
+                        <p>{content.iso.p2}</p>
+                        
+                        <SubHeading>{content.iso.qms.title}</SubHeading>
+                        <p>{content.iso.qms.p1}</p>
+                        <p><strong>{content.iso.qms.elementsTitle}:</strong></p>
+                        <ul className="list-disc list-inside mt-2 space-y-2">
+                            {content.iso.qms.list.map((item, index) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
+                        </ul>
 
-                <Section title={content.iso.title} id="iso">
-                    <p>{content.iso.p1}</p>
-                    <p>{content.iso.p2}</p>
-                    
-                    <SubHeading>{content.iso.qms.title}</SubHeading>
-                    <p>{content.iso.qms.p1}</p>
-                    <p><strong>{content.iso.qms.elementsTitle}:</strong></p>
-                    <ul className="list-disc list-inside mt-2 space-y-2">
-                        {content.iso.qms.list.map((item, index) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
-                    </ul>
-
-                    <SubHeading>{content.iso.fsms.title}</SubHeading>
-                    <p>{content.iso.fsms.p1}</p>
-                    <p><strong>{content.iso.fsms.elementsTitle}:</strong></p>
-                     <ul className="list-disc list-inside space-y-2">
-                        {content.iso.fsms.list.map((item, index) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
-                    </ul>
-                    <p className="mt-4">{content.iso.fsms.p2}</p>
-                </Section>
-                
-                <Section title={content.wto.title} id="wto">
-                    <p>{content.wto.p1}</p>
-                    <p>{content.wto.p2}</p>
-                    <p>{content.wto.p3}</p>
-                </Section>
-
-                <Section title={content.regulatory_bodies.title} id="regulatory_bodies">
-                    <p>{content.regulatory_bodies.p1}</p>
-                    <SubHeading>{content.regulatory_bodies.fssai.title}</SubHeading>
-                    <p>{content.regulatory_bodies.fssai.p1}</p>
-                    <SubHeading>{content.regulatory_bodies.bis.title}</SubHeading>
-                    <p>{content.regulatory_bodies.bis.p1}</p>
-                    <SubHeading>{content.regulatory_bodies.agmark.title}</SubHeading>
-                    <p>{content.regulatory_bodies.agmark.p1}</p>
-                    <SubHeading>{content.regulatory_bodies.mmpo.title}</SubHeading>
-                    <p>{content.regulatory_bodies.mmpo.p1}</p>
-                    <SubHeading>{content.regulatory_bodies.export_act.title}</SubHeading>
-                    <p>{content.regulatory_bodies.export_act.p1}</p>
-                </Section>
-
-                <Section title={content.harmonization.title} id="harmonization">
-                    <p>{content.harmonization.p1}</p>
-                </Section>
-            </div>
-        </ScrollArea>
+                        <SubHeading>{content.iso.fsms.title}</SubHeading>
+                        <p>{content.iso.fsms.p1}</p>
+                        <p><strong>{content.iso.fsms.elementsTitle}:</strong></p>
+                        <ul className="list-disc list-inside space-y-2">
+                            {content.iso.fsms.list.map((item, index) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
+                        </ul>
+                        <p className="mt-4">{content.iso.fsms.p2}</p>
+                    </Section>
+                </TabsContent>
+                <TabsContent value="bodies" className="mt-0">
+                    <Section title={content.regulatory_bodies.title} id="regulatory_bodies">
+                        <p>{content.regulatory_bodies.p1}</p>
+                        <SubHeading>{content.regulatory_bodies.fssai.title}</SubHeading>
+                        <p>{content.regulatory_bodies.fssai.p1}</p>
+                        <SubHeading>{content.regulatory_bodies.bis.title}</SubHeading>
+                        <p>{content.regulatory_bodies.bis.p1}</p>
+                        <SubHeading>{content.regulatory_bodies.agmark.title}</SubHeading>
+                        <p>{content.regulatory_bodies.agmark.p1}</p>
+                        <SubHeading>{content.regulatory_bodies.mmpo.title}</SubHeading>
+                        <p>{content.regulatory_bodies.mmpo.p1}</p>
+                        <SubHeading>{content.regulatory_bodies.export_act.title}</SubHeading>
+                        <p>{content.regulatory_bodies.export_act.p1}</p>
+                    </Section>
+                </TabsContent>
+            </ScrollArea>
+        </Tabs>
       </DialogContent>
     </Dialog>
   );
 }
-
-    

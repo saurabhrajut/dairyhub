@@ -15,6 +15,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const foodTechTopics = [
     {
@@ -279,21 +280,23 @@ export function FoodTechModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpe
             An in-depth guide to the core concepts of food science and technology.
           </DialogDescription>
         </DialogHeader>
-        <ScrollArea className="flex-1 mt-4 pr-6">
-            <Accordion type="single" collapsible className="w-full">
+        <Tabs defaultValue="intro-food-tech" orientation="vertical" className="w-full flex-1 flex flex-col md:flex-row min-h-0">
+            <ScrollArea className="flex-shrink-0 md:pr-4">
+                <TabsList className="grid w-full h-auto md:w-56">
+                    {foodTechTopics.map((topic) => (
+                        <TabsTrigger key={topic.id} value={topic.id} className="text-left justify-start">{topic.title}</TabsTrigger>
+                    ))}
+                </TabsList>
+            </ScrollArea>
+            <ScrollArea className="flex-1 mt-4 md:mt-0 md:pl-4">
                 {foodTechTopics.map((topic) => (
-                     <AccordionItem key={topic.id} value={topic.id}>
-                        <AccordionTrigger className="text-xl font-bold hover:no-underline font-headline text-left">
-                           {topic.title}
-                        </AccordionTrigger>
-                        <AccordionContent>
-                            <div className="prose prose-sm max-w-none text-gray-700 leading-relaxed"
-                                 dangerouslySetInnerHTML={{ __html: topic.content }} />
-                        </AccordionContent>
-                    </AccordionItem>
+                    <TabsContent key={topic.id} value={topic.id} className="mt-0">
+                        <div className="prose prose-sm max-w-none text-gray-700 leading-relaxed"
+                            dangerouslySetInnerHTML={{ __html: topic.content }} />
+                    </TabsContent>
                 ))}
-            </Accordion>
-        </ScrollArea>
+            </ScrollArea>
+        </Tabs>
       </DialogContent>
     </Dialog>
   );
