@@ -9,12 +9,6 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const foodTechTopics = [
@@ -271,7 +265,7 @@ const foodTechTopics = [
 export function FoodTechModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-5xl h-[90vh] flex flex-col">
+      <DialogContent className="max-w-6xl h-[90vh] flex flex-col">
         <DialogHeader>
           <DialogTitle className="text-3xl font-bold text-center text-gray-800 font-headline">
             Foundations of Food Technology
@@ -281,7 +275,7 @@ export function FoodTechModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpe
           </DialogDescription>
         </DialogHeader>
         <Tabs defaultValue="intro-food-tech" orientation="vertical" className="w-full flex-1 flex flex-col md:flex-row min-h-0">
-            <ScrollArea className="flex-shrink-0 md:pr-4">
+            <ScrollArea className="flex-shrink-0 md:pr-4 -ml-4 pl-4 md:pl-0">
                 <TabsList className="grid w-full h-auto md:w-56">
                     {foodTechTopics.map((topic) => (
                         <TabsTrigger key={topic.id} value={topic.id} className="text-left justify-start">{topic.title}</TabsTrigger>

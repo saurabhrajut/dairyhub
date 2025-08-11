@@ -20,12 +20,12 @@ const TABS = [
   { value: "base-solution", label: "Bases", icon: BaseIcon },
   { value: "indicator-solution", label: "Indicators", icon: IndicatorIcon },
   { value: "reagent-calculator", label: "Reagents", icon: ReagentIcon },
-  { value: "percentage-solution", label: "% Ghol", icon: PercentageSolutionIcon },
+  { value: "percentage-solution", label: "Percentage Solution", icon: PercentageSolutionIcon },
   { value: "stock-solution", label: "Dilution", icon: DilutionIcon },
   { value: "standardization", label: "Standardization", icon: StandardizationIcon },
-  { value: "strength-calculator", label: "Shakti", icon: StrengthIcon },
-  { value: "spirit-solution", label: "Spirit Ghol", icon: SpiritSolutionIcon },
-  { value: "normality-adjustment", label: "Samayojan", icon: NormalityAdjustmentIcon },
+  { value: "strength-calculator", label: "Strength", icon: StrengthIcon },
+  { value: "spirit-solution", label: "Spirit Solution", icon: SpiritSolutionIcon },
+  { value: "normality-adjustment", label: "Normality Adjustment", icon: NormalityAdjustmentIcon },
 ];
 
 export function SolutionsPrepModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
@@ -38,7 +38,7 @@ export function SolutionsPrepModal({ isOpen, setIsOpen }: { isOpen: boolean; set
                 <TabsList className="bg-primary/50 grid h-auto w-full grid-cols-3 sm:grid-cols-5 lg:grid-cols-10">
                   {TABS.map((tab) => (
                     <TabsTrigger key={tab.value} value={tab.value} className="flex-col h-16 gap-1 p-1 data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-lg text-primary-foreground">
-                        <tab.icon className="w-6 h-6" />
+                        <tab.icon className="w-8 h-8" />
                         <span className="text-xs hidden sm:inline">{tab.label}</span>
                     </TabsTrigger>
                   ))}
@@ -205,16 +205,16 @@ function ReagentCalculator() {
 
         const vol = parseFloat(volume);
         if (!selectedReagent) {
-            setError("Kripya pehle ek reagent chunein.");
+            setError("Please select a reagent first.");
             return;
         }
         if (isNaN(vol) || vol <= 0) {
-            setError("Kripya sahi volume (ml mein) daalein.");
+            setError("Please enter a valid volume (in ml).");
             return;
         }
 
         const recipe = reagentRecipes[selectedReagent as keyof typeof reagentRecipes];
-        let resultHTML = `<h4 class="font-bold text-lg mb-2">${vol}ml ${recipe.name} Banane ki Vidhi:</h4>`;
+        let resultHTML = `<h4 class="font-bold text-lg mb-2">To make ${vol}ml of ${recipe.name}:</h4>`;
         
         const factor = vol / 100;
 
@@ -261,13 +261,13 @@ function ReagentCalculator() {
 
     return (
         <div>
-            <h2 className="text-2xl font-bold text-primary mb-6 font-headline">Reagent Banane ka Calculator</h2>
+            <h2 className="text-2xl font-bold text-primary mb-6 font-headline">Reagent Calculator</h2>
             <div className="bg-white p-6 rounded-lg shadow-md border">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
                     <div>
-                        <Label htmlFor="reagent-select">Reagent Chunein:</Label>
+                        <Label htmlFor="reagent-select">Select Reagent:</Label>
                         <Select value={selectedReagent} onValueChange={setSelectedReagent}>
-                            <SelectTrigger id="reagent-select"><SelectValue placeholder="-- Kripya ek reagent chunein --" /></SelectTrigger>
+                            <SelectTrigger id="reagent-select"><SelectValue placeholder="-- Please select a reagent --" /></SelectTrigger>
                             <SelectContent>
                                 {sortedReagentKeys.map(key => (
                                     <SelectItem key={key} value={key}>{reagentRecipes[key as keyof typeof reagentRecipes].name}</SelectItem>
@@ -276,13 +276,13 @@ function ReagentCalculator() {
                         </Select>
                     </div>
                     <div>
-                        <Label htmlFor="reagent-volume">Kitna Volume (ml) Banana Hai?</Label>
+                        <Label htmlFor="reagent-volume">Final Volume (ml)?</Label>
                         <Input type="number" id="reagent-volume" value={volume} onChange={e => setVolume(e.target.value)} placeholder="e.g., 100" />
                     </div>
                 </div>
                 <div className="mt-4 text-center">
                     <Button onClick={handleCalculate} className="w-full md:w-auto">
-                        Calculate Karein
+                        Calculate
                     </Button>
                 </div>
                 {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
@@ -398,7 +398,7 @@ const StrengthCalc = () => {
 
     return (
         <form onSubmit={handleSubmit}>
-            <h2 className="text-2xl font-bold text-primary mb-6 font-headline">Shakti (Strength) Calculator</h2>
+            <h2 className="text-2xl font-bold text-primary mb-6 font-headline">Strength Calculator</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
                 <div>
                     <Label htmlFor="strength-chemical">Select Chemical</Label>
