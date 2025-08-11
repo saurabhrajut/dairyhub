@@ -14,26 +14,32 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 
 const InfoCard = ({ children, className }: { children: React.ReactNode, className?: string }) => (
-    <div className={`bg-card p-6 rounded-xl shadow-md border hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 ${className}`}>
+    <div className={`bg-card p-6 rounded-xl shadow-sm border mt-6 ${className}`}>
         {children}
     </div>
 );
 
 const SectionTitle = ({ children, id }: { children: React.ReactNode, id: string }) => (
-    <h2 id={id} className="text-2xl font-bold text-primary mt-8 mb-6 border-b-2 border-primary/20 pb-2 scroll-mt-24">
+    <h3 id={id} className="text-xl font-semibold mb-2 text-primary scroll-mt-24">
         {children}
-    </h2>
+    </h3>
 );
 
 const ProcedureList = ({ children }: { children: React.ReactNode }) => (
-    <ol className="list-none p-0 counter-reset-list-item">{children}</ol>
+    <ol className="list-decimal list-inside space-y-2 mt-2">{children}</ol>
 );
 
-const ProcedureListItem = ({ children }: { children: React.ReactNode }) => (
-    <li className="relative pl-8 mb-3 leading-relaxed before:content-[counter(list-item)] before:counter-increment-list-item before:absolute before:left-0 before:top-1 before:bg-primary before:text-primary-foreground before:w-6 before:h-6 before:rounded-full before:flex before:items-center before:justify-center before:text-sm before:font-bold">
-        {children}
-    </li>
+const ReagentList = ({ children }: { children: React.ReactNode }) => (
+    <div className="mt-2 space-y-1 text-sm">{children}</div>
 );
+
+const CalculationBox = ({ children }: { children: React.ReactNode }) => (
+     <div className="mt-4 p-4 bg-muted rounded-lg font-mono text-sm text-primary-foreground bg-gray-800 overflow-x-auto">
+        <h4 className="font-sans font-bold text-base text-white mb-2">Calculation</h4>
+        <code>{children}</code>
+    </div>
+);
+
 
 export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
   return (
@@ -49,287 +55,311 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
         </DialogHeader>
 
         <Tabs defaultValue="processed-milk" className="w-full flex-1 flex flex-col min-h-0">
-            <TabsList className="grid w-full h-auto grid-cols-2 md:grid-cols-4 lg:grid-cols-8">
-                <TabsTrigger value="processed-milk">Processed Milk</TabsTrigger>
-                <TabsTrigger value="cheese-paneer">Cheese/Paneer</TabsTrigger>
-                <TabsTrigger value="dahi-yoghurt">Dahi/Yoghurt</TabsTrigger>
-                <TabsTrigger value="ice-cream">Ice Cream</TabsTrigger>
-                <TabsTrigger value="condensed-milk">Condensed Milk</TabsTrigger>
-                <TabsTrigger value="ghee-butter-oil">Ghee/Butter Oil</TabsTrigger>
-                <TabsTrigger value="butter">Butter</TabsTrigger>
-                <TabsTrigger value="milk-powder">Milk Powder</TabsTrigger>
-            </TabsList>
+            <ScrollArea className="flex-shrink-0">
+                <TabsList className="grid w-full h-auto grid-cols-3 md:grid-cols-5 lg:grid-cols-9">
+                    <TabsTrigger value="processed-milk">Milk</TabsTrigger>
+                    <TabsTrigger value="cream">Cream</TabsTrigger>
+                    <TabsTrigger value="butter">Butter</TabsTrigger>
+                    <TabsTrigger value="ghee-butter-oil">Ghee</TabsTrigger>
+                    <TabsTrigger value="cheese-paneer">Cheese/Paneer</TabsTrigger>
+                    <TabsTrigger value="dahi-yoghurt">Dahi/Yoghurt</TabsTrigger>
+                    <TabsTrigger value="ice-cream">Ice Cream</TabsTrigger>
+                    <TabsTrigger value="condensed-milk">Condensed Milk</TabsTrigger>
+                    <TabsTrigger value="milk-powder">Milk Powder</TabsTrigger>
+                </TabsList>
+            </ScrollArea>
             <ScrollArea className="flex-1 mt-4 pr-4">
                  <TabsContent value="processed-milk" className="mt-0">
                     <div className="prose prose-sm max-w-none break-words">
                         <InfoCard>
-                            <h3 className="text-xl font-semibold mb-2">Fat Test (Gerber Method)</h3>
-                            <p>Is method ka siddhant yeh hai ki jab doodh mein sulfuric acid (90–91%) milaya jaata hai, toh woh doodh ke proteins ko ghol deta hai jabki fat ke gole (globules) acid se paida hui garmi ke kaaran liquid form mein free rehte hain.</p>
-                            <h4 className="font-semibold mt-4 mb-2">Prakriya (Procedure)</h4>
-                            <ProcedureList>
-                                <ProcedureListItem>Automatic tilt measure se 10 ml sulfuric acid (Gerber acid) milk butyrometer (range 0–10%) mein daalein.</ProcedureListItem>
-                                <ProcedureListItem>Doodh ke sample ko theek se mix karein aur milk pipette ka istemal karke 10.75 ml doodh butyrometer mein daalein.</ProcedureListItem>
-                                <ProcedureListItem>Doodh ko butyrometer ki deewar ke side se dheere-dheere daalna chahiye taaki charring (jalna) na ho.</ProcedureListItem>
-                                <ProcedureListItem>Automatic tilt measure se 1 ml amyl alcohol daalein.</ProcedureListItem>
-                                <ProcedureListItem>Butyrometer ko lock stopper se band karein aur contents ko theek se mix karein.</ProcedureListItem>
-                                <ProcedureListItem>Butyrometer ko 65°C par maintain kiye gaye water bath mein 5 minute ke liye rakhein.</ProcedureListItem>
-                                <ProcedureListItem>Butyrometer ko Gerber centrifuge mein transfer karein aur 1100–1200 rpm par 5 minute ke liye centrifuge karein.</ProcedureListItem>
-                                <ProcedureListItem>Butyrometer ko phir se 65°C par maintain kiye gaye water bath mein 2 minute ke liye rakhein.</ProcedureListItem>
-                                <ProcedureListItem>Butyrometer stem par bane nishano ki madad se fat content padhein.</ProcedureListItem>
-                            </ProcedureList>
-                            <Alert className="mt-6 bg-blue-50 border-blue-200">
-                                <AlertTitle className="font-bold text-blue-800">Gerber Method mein 10.75 ml Doodh Kyun Liya Jaata Hai?</AlertTitle>
-                                <AlertDescription className="text-blue-700 prose-sm max-w-none">
-                                    <p>Butyrometer par 1% ka nishan 0.125 ml volume ke barabar hota hai. Doodh ke fat ki density 0.9 g/ml hoti hai.</p>
-                                    <ul className="list-disc list-inside mt-2 space-y-1">
-                                        <li>1% fat ka mass = 0.125 ml × 0.9 g/ml = 0.1125 g.</li>
-                                        <li>Is hisab se 100% fat ke liye 11.25 g doodh lena chahiye.</li>
-                                        <li>Lekin, amyl alcohol mein ashuddhiyon ke kaaran fat ki reading 2.5-3% zyada aati hai.</li>
-                                        <li>Isliye, asli doodh ki matra 11.25 g se thodi kam, yani lagbhag 10.95 g honi chahiye.</li>
-                                        <li>10.95 g doodh ka volume (1.028 density par) lagbhag 10.65 ml hota hai.</li>
-                                        <li>Pipette mein lagbhag 0.1 ml doodh chipak jaata hai.</li>
-                                        <li>Isliye, poora volume 10.65 ml + 0.1 ml = <strong>10.75 ml</strong> liya jaata hai.</li>
-                                    </ul>
-                                </AlertDescription>
-                            </Alert>
+                            <SectionTitle id="milk-fat">Determination of Fat in Milk</SectionTitle>
+                            <Tabs defaultValue="gerber" className="w-full mt-4">
+                                <TabsList>
+                                    <TabsTrigger value="gerber">Gerber Method</TabsTrigger>
+                                    <TabsTrigger value="rose-gottlieb">Rose-Gottlieb Method</TabsTrigger>
+                                    <TabsTrigger value="werner-schmidt">Werner-Schmidt Method</TabsTrigger>
+                                </TabsList>
+                                <TabsContent value="gerber">
+                                    <p className="mt-4"><strong>Purpose:</strong> A routine screening test for fat content. The milk is mixed with sulphuric acid and iso-amyl alcohol in a Gerber tube. The acid dissolves the protein, releasing the fat which is then measured after centrifugation.</p>
+                                    <p><strong>Ref:</strong> IS 1479 (Part I) 1961 (Reaffirmed 2003)</p>
+                                    <h4 className="font-semibold mt-4 mb-2">Reagents/Apparatus:</h4>
+                                    <ReagentList>
+                                        <p><strong>A. Sulphuric acid:</strong> 90-91% concentration, density 1.807-1.812 g/ml at 27°C.</p>
+                                        <p><strong>B. Amyl alcohol:</strong> Furfural-free, density 0.808-0.818 g/ml at 27°C.</p>
+                                        <p><strong>C. Gerber Butyrometers:</strong> ISI marked, appropriate range (e.g., 0-10%).</p>
+                                        <p><strong>D. Pipettes:</strong> 10.75 ml for milk, 10 ml for acid, 1 ml for amyl alcohol.</p>
+                                        <p><strong>E. Water Bath:</strong> Maintained at 65 ± 2°C.</p>
+                                        <p><strong>F. Gerber Centrifuge:</strong> Capable of 1100-1200 rpm.</p>
+                                    </ReagentList>
+                                    <h4 className="font-semibold mt-4 mb-2">Procedure:</h4>
+                                    <ProcedureList>
+                                        <li>Measure 10 ml of sulphuric acid into a butyrometer tube without wetting the neck.</li>
+                                        <li>Pipette 10.75 ml of well-mixed milk into the butyrometer along the side wall.</li>
+                                        <li>Add 1 ml of Amyl alcohol.</li>
+                                        <li>Close with a lock stopper, shake until homogeneous, and invert for complete mixing.</li>
+                                        <li>Place in a water bath at 65±2°C for 5 minutes.</li>
+                                        <li>Centrifuge for 4-5 minutes at 1100-1200 rpm.</li>
+                                        <li>Place back in the water bath for 5 minutes.</li>
+                                        <li>Read the percentage of fat from the calibrated stem.</li>
+                                    </ProcedureList>
+                                </TabsContent>
+                                <TabsContent value="rose-gottlieb">
+                                    <p className="mt-4"><strong>Purpose:</strong> A highly accurate reference method. Protein is dissolved with ammonia, and fat is extracted using a mix of diethyl ether and petroleum ether. The solvent is evaporated, and the remaining fat is weighed.</p>
+                                     <p><strong>Ref:</strong> A.O.A.C 17th edn, 2000 Official method 905.02</p>
+                                    <h4 className="font-semibold mt-4 mb-2">Procedure:</h4>
+                                     <ProcedureList>
+                                        <li>Weigh ~10 g of milk into a Mojonnier fat extraction flask.</li>
+                                        <li>Add 1.25 ml of ammonia solution, mix well.</li>
+                                        <li>Add 10 ml of ethyl alcohol, mix again.</li>
+                                        <li>Add 25 ml of diethyl ether, stopper, and shake vigorously for 1 minute.</li>
+                                        <li>Add 25 ml of petroleum ether and shake again for 30 seconds.</li>
+                                        <li>Allow layers to separate (or centrifuge at low speed).</li>
+                                        <li>Decant the top ether layer into a pre-weighed flask.</li>
+                                        <li>Repeat the extraction twice with 15 ml of each ether.</li>
+                                        <li>Evaporate the solvents completely from the collection flask.</li>
+                                        <li>Dry the flask in an oven at 102 ± 2°C, cool, and weigh to determine the mass of the fat.</li>
+                                    </ProcedureList>
+                                </TabsContent>
+                                <TabsContent value="werner-schmidt">
+                                    <p className="mt-4"><strong>Purpose:</strong> An acid digestion method suitable for soured or preserved milk. Concentrated HCl digests the protein, after which fat is extracted with ethers.</p>
+                                    <p><strong>Ref:</strong> Pearson’s Composition and analysis of foods, 9th edn, 1991 page 538</p>
+                                    <h4 className="font-semibold mt-4 mb-2">Procedure:</h4>
+                                    <ProcedureList>
+                                        <li>Weigh ~10 g of milk into a beaker.</li>
+                                        <li>Add 10 ml of concentrated HCl and heat until the contents turn dark brown.</li>
+                                        <li>Cool and transfer to an extraction flask.</li>
+                                        <li>Add 10 ml of ethyl alcohol, then proceed with diethyl ether and petroleum ether extraction as in the Rose-Gottlieb method.</li>
+                                        <li>Evaporate the solvent and weigh the extracted fat.</li>
+                                    </ProcedureList>
+                                    <Alert variant="destructive" className="mt-4"><AlertDescription>Note: This method is not suitable if the sample contains added sugar.</AlertDescription></Alert>
+                                </TabsContent>
+                            </Tabs>
                         </InfoCard>
 
                         <InfoCard>
-                            <h3 className="text-xl font-semibold mb-2">Methylene Blue Reduction Test (MBRT)</h3>
-                            <p>Yeh test doodh ki microbiological quality jaanchne ke liye kiya jaata hai. Jitni jaldi rang udta hai, doodh mein utne hi zyada bacteria hote hain, yaani quality utni hi kharab hoti hai.</p>
-                            <h4 className="font-semibold mt-4 mb-2">Prakriya (Procedure)</h4>
+                            <SectionTitle id="milk-protein">Determination of Protein in Milk (Kjeldahl Method)</SectionTitle>
+                             <p><strong>Purpose:</strong> The Kjeldahl method is the standard reference method for determining the total nitrogen content in a sample. This nitrogen value is then multiplied by a factor (6.38 for milk) to calculate the crude protein content.</p>
+                            <p><strong>Ref:</strong> IDF 20B: 1993; A.O.A.C 17th edn, 2000 Official Method 991.23</p>
+                            <h4 className="font-semibold mt-4 mb-2">Principle:</h4>
+                            <p>The method involves three steps:</p>
                             <ProcedureList>
-                                <ProcedureListItem>Ek sterile (keetanu-rahit) test tube mein 10 ml doodh ka sample lein.</ProcedureListItem>
-                                <ProcedureListItem>Usme 1 ml Methylene Blue solution daalein.</ProcedureListItem>
-                                <ProcedureListItem>Test tube ko stopper se band karein aur dheere se ulta karke mix karein.</ProcedureListItem>
-                                <ProcedureListItem>Test tube ko 37°C par maintain kiye gaye water bath mein rakhein.</ProcedureListItem>
-                                <ProcedureListItem>Har aadhe ghante mein tube ko check karein aur woh samay note karein jab neela rang poori tarah se gayab ho jaata hai.</ProcedureListItem>
+                                <li><strong>Digestion:</strong> The sample is heated with concentrated sulfuric acid and a catalyst (copper sulfate, potassium sulfate). This converts the organic nitrogen into ammonium sulfate.</li>
+                                <li><strong>Distillation:</strong> The digested sample is made alkaline with NaOH to liberate ammonia gas, which is then distilled and trapped in a boric acid solution.</li>
+                                <li><strong>Titration:</strong> The trapped ammonia is titrated with a standard acid (HCl). The amount of acid used is proportional to the nitrogen in the original sample.</li>
                             </ProcedureList>
-                            <div className="mt-4 p-4 bg-yellow-50 border-l-4 border-yellow-400 text-yellow-800 rounded-r-lg">
-                                <h4 className="font-bold mb-2">Interpretation:</h4>
-                                <ul className="list-disc list-inside">
-                                    <li><strong>8 ghante se zyada:</strong> Excellent quality</li>
-                                    <li><strong>6 se 8 ghante:</strong> Good quality</li>
-                                    <li><strong>2 se 6 ghante:</strong> Fair quality</li>
-                                    <li><strong>2 ghante se kam:</strong> Poor quality</li>
-                                </ul>
-                            </div>
+                             <CalculationBox>
+                                % Total Nitrogen = [1.4007 * (V_sample - V_blank) * N_acid] / W_sample
+                                <br />
+                                % Crude Protein = % Nitrogen * 6.38
+                            </CalculationBox>
                         </InfoCard>
+
                         <InfoCard>
-                            <h3 className="text-xl font-semibold mb-2">Phosphatase Test</h3>
-                            <p>Alkaline phosphatase doodh mein naturally paaya jaata hai. Jab doodh ko pasteurization temperature ya usse zyada temperature par rakha jaata hai toh yeh apni activity kho deta hai. Isliye, is enzyme ko pasteurization ki efficiency ke index ke roop mein apnaya jaata hai. Agar enzyme active hoga, toh ek peela (yellow) rang ka compound banega.</p>
-                            <h4 className="font-semibold mt-4 mb-2">Prakriya (Procedure)</h4>
-                            <ProcedureList>
-                                <ProcedureListItem>Ek test tube mein 5 ml buffer substrate (disodium p-nitrophenyl phosphate) solution daalein.</ProcedureListItem>
-                                <ProcedureListItem>Tube ko stopper se band karein aur 37°C ke water bath mein rakhein.</ProcedureListItem>
-                                <ProcedureListItem>Usme 1 ml doodh ka sample daalein aur 37°C par 2 ghante ke liye incubate karein.</ProcedureListItem>
-                                <ProcedureListItem>Saath hi, uble hue (sahi se pasteurized) doodh ke saath ek blank sample taiyar karein aur yahi steps repeat karein.</ProcedureListItem>
-                                <ProcedureListItem>Dono test tubes ke rang ko Lovibond comparator mein compare karein.</ProcedureListItem>
-                                <ProcedureListItem>Test reading ko record karein.</ProcedureListItem>
-                            </ProcedureList>
-                            <div className="mt-4 p-4 bg-yellow-50 border-l-4 border-yellow-400 text-yellow-800 rounded-r-lg">
-                                <h4 className="font-bold mb-2">Interpretation:</h4>
-                                <ul className="list-disc list-inside">
-                                <li><strong>Disk Reading 0–3:</strong> Properly pasteurized</li>
-                                <li><strong>Disk Reading 2–6:</strong> Doubtful</li>
-                                <li><strong>Disk Reading 10 aur usse zyada:</strong> Under pasteurized</li>
-                                </ul>
-                            </div>
-                        </InfoCard>
-                        <InfoCard>
-                            <h3 className="text-xl font-semibold mb-2">Ash Content</h3>
-                            <p>Ash doodh ke organic matter ko 500-550°C par jalane (incineration) ke baad bacha hua inorganic residue hai. Yeh doodh ke mineral content ko darshata hai.</p>
-                            <h4 className="font-semibold mt-4 mb-2">Prakriya (Procedure)</h4>
-                            <ProcedureList>
-                                <ProcedureListItem>Ek khaali silica crucible ko tolein (Weight W).</ProcedureListItem>
-                                <ProcedureListItem>Usme 5 g doodh ka sample tolein (Weight W1).</ProcedureListItem>
-                                <ProcedureListItem>Sample ko hot plate par sukha lein.</ProcedureListItem>
-                                <ProcedureListItem>Crucible ko muffle furnace mein 550°C par 4 ghante ya ash ke carbon-free hone tak rakhein.</ProcedureListItem>
-                                <ProcedureListItem>Crucible ko desiccator mein thanda karein.</ProcedureListItem>
-                                <ProcedureListItem>Ash ke saath crucible ko tolein (Weight W2).</ProcedureListItem>
-                                <ProcedureListItem>Heating aur cooling ko constant weight aane tak repeat karein.</ProcedureListItem>
-                            </ProcedureList>
-                            <pre className="mt-4 p-4 bg-muted rounded-lg font-mono text-sm"><code>% Ash = [ (W2 - W) / (W1 - W) ] * 100</code></pre>
-                        </InfoCard>
-                        <InfoCard>
-                            <h3 className="text-xl font-semibold mb-2">Titratable Acidity</h3>
-                            <p>Doodh ki kul acidity (natural + developed) ko ek standard alkali solution (NaOH) ke saath titrate karke maapa jaata hai.</p>
-                            <h4 className="font-semibold mt-4 mb-2">Prakriya (Procedure)</h4>
-                            <ProcedureList>
-                            <ProcedureListItem>Ek porcelain dish mein 10 ml doodh ka sample lein.</ProcedureListItem>
-                            <ProcedureListItem>Kuch boondein 1% phenolphthalein solution ki daalein.</ProcedureListItem>
-                            <ProcedureListItem>0.1 N NaOH solution ke saath titrate karein.</ProcedureListItem>
-                            <ProcedureListItem>Jab halka gulabi rang aa jaaye (end point), to titration rok dein.</ProcedureListItem>
-                            <ProcedureListItem>Istemaal hue alkali ka volume note karein.</ProcedureListItem>
-                            </ProcedureList>
-                            <pre className="mt-4 p-4 bg-muted rounded-lg font-mono text-sm"><code>% Acidity (% Lactic Acid) = (9 * V * N) / W</code></pre>
-                        </InfoCard>
-                        <InfoCard>
-                            <h3 className="text-xl font-semibold mb-2">Protein Content (Kjeldahl Method)</h3>
-                            <p>Protein content nirdharit karne ke liye sabse zyada istemal hone wala method Kjeldahl method hai. Is method mein, protein ke nitrogen ko pehle concentrated sulfuric acid ka istemal karke ammonium sulfate mein convert kiya jaata hai. Fir isse ammonia gas nikalkar use titrate kiya jaata hai, jisse nitrogen ki matra pata chalti hai. Is nitrogen ki matra ko ek factor (doodh ke liye 6.38) se guna karke crude protein content nikala jaata hai.</p>
-                            <h4 className="font-semibold mt-4 mb-2">Prakriya (Procedure)</h4>
-                            <ProcedureList>
-                                <ProcedureListItem><strong>Digestion:</strong> 5 g doodh ko ek saaf Kjeldahl flask mein tolein. 25 ml concentrated sulfuric acid, 0.2 g copper sulfate, aur 10 g potassium sulfate (catalyst mixture) daalein. Flask ko halke se garam karein jab tak contents saaf na ho jaayein. Digestion ko 2 ghante aur continue karein.</ProcedureListItem>
-                                <ProcedureListItem><strong>Dilution:</strong> Liquid ko thanda hone dein aur 300-500 ml distilled water se dilute karein.</ProcedureListItem>
-                                <ProcedureListItem><strong>Neutralization & Distillation:</strong> Digestion assembly fit karein. 75 ml 50% NaOH daalein. Flask ko distillation assembly se connect karein jiska tip 50 ml boric acid solution (indicator ke saath) mein dooba ho. Garam karna shuru karein.</ProcedureListItem>
-                                <ProcedureListItem>Jab distillate 150 ml tak pahunch jaaye to distillation rok dein.</ProcedureListItem>
-                                <ProcedureListItem><strong>Titration:</strong> Boric acid solution jisme ammonia trap hui hai, use std. HCl solution (0.1 N) se titrate karein jab tak gulabi rang na aa jaaye. Reading note karein.</ProcedureListItem>
-                                <ProcedureListItem>Ek blank test bhi karein.</ProcedureListItem>
-                            </ProcedureList>
-                            <pre className="mt-4 p-4 bg-muted rounded-lg font-mono text-sm">
-                                <code>
-                                    % Total Nitrogen = [ 1.4007 * (Vs - Vb) * N ] / W
-                                    <br />
-                                    % Crude Protein = % Nitrogen * 6.38
-                                </code>
-                            </pre>
+                             <SectionTitle id="milk-misc">Other Tests for Liquid Milk</SectionTitle>
+                             <Tabs defaultValue="phosphatase" className="w-full mt-4">
+                                <TabsList>
+                                    <TabsTrigger value="phosphatase">Alkaline Phosphatase Test</TabsTrigger>
+                                    <TabsTrigger value="turbidity">Turbidity Test</TabsTrigger>
+                                </TabsList>
+                                <TabsContent value="phosphatase">
+                                    <p className="mt-4"><strong>Purpose:</strong> To check the efficiency of pasteurization. The enzyme alkaline phosphatase is naturally present in raw milk and is destroyed at a temperature just above that required to kill pathogenic bacteria. A negative test indicates proper pasteurization.</p>
+                                    <p><strong>Ref:</strong> IS 1479 (Part II) 1961 (Reaffirmed 1997)</p>
+                                    <h4 className="font-semibold mt-4 mb-2">Procedure:</h4>
+                                     <ProcedureList>
+                                        <li>A buffer-substrate solution (disodium p-nitrophenyl phosphate) is incubated with the milk sample at 37°C.</li>
+                                        <li>If the enzyme is active, it liberates p-nitrophenol, which gives an intense yellow color under alkaline conditions.</li>
+                                        <li>The color intensity is measured using a Lovibond comparator and compared to standards.</li>
+                                    </ProcedureList>
+                                </TabsContent>
+                                <TabsContent value="turbidity">
+                                     <p className="mt-4"><strong>Purpose:</strong> To check the efficiency of sterilization. This test is not suitable for UHT milk.</p>
+                                     <p><strong>Principle:</strong> Proper sterilization denatures all whey proteins, including albumin. If sterilization is incomplete, albumin remains soluble and will cause turbidity upon heating the filtrate.</p>
+                                    <p><strong>Ref:</strong> IS 1479 (Part II) 1961 (Reaffirmed 1997)</p>
+                                    <h4 className="font-semibold mt-4 mb-2">Procedure:</h4>
+                                     <ProcedureList>
+                                        <li>Milk is treated with ammonium sulfate to precipitate casein.</li>
+                                        <li>The mixture is filtered.</li>
+                                        <li>The clear filtrate is heated in a boiling water bath.</li>
+                                        <li>If the filtrate remains clear, the milk is properly sterilized. If it becomes turbid, sterilization was inefficient.</li>
+                                    </ProcedureList>
+                                </TabsContent>
+                             </Tabs>
                         </InfoCard>
                     </div>
-                </TabsContent>
+                 </TabsContent>
+                 <TabsContent value="cream">
+                    <div className="prose prose-sm max-w-none break-words">
+                        <InfoCard>
+                             <SectionTitle id="cream-fat">Determination of Fat in Cream</SectionTitle>
+                             <p><strong>Ref:</strong> IS 3509- 1966</p>
+                             <p className="mt-2">Use either the Rose-Gottlieb or Werner-Schmidt method. Weigh accurately 1-2g of cream, disperse it in 9ml of 0.5% NaCl solution (for Rose-Gottlieb) or dissolve it in 10ml concentrated HCl (for Werner-Schmidt), and then proceed with the respective extraction method as described for liquid milk.</p>
+                        </InfoCard>
+                        <InfoCard>
+                             <SectionTitle id="cream-thickeners">Detection of Thickeners in Cream</SectionTitle>
+                              <p className="mt-2"><strong>Starch:</strong> Detected by adding Iodine solution. A blue color indicates the presence of starch.</p>
+                              <p className="mt-2"><strong>Gelatine:</strong> Detected by Stokes Test. Mix 10ml cream, 20ml water, and 20ml of Stokes reagent (acid mercuric nitrate). To the filtrate, add saturated picric acid. A yellow precipitate indicates gelatine.</p>
+                              <p><strong>Ref:</strong> A.O.A.C. Official method 920.106</p>
+                        </InfoCard>
+                    </div>
+                 </TabsContent>
+                 <TabsContent value="butter">
+                     <div className="prose prose-sm max-w-none break-words">
+                         <InfoCard>
+                            <SectionTitle id="butter-moisture">Determination of Moisture in Butter</SectionTitle>
+                            <p><strong>Ref:</strong> IS 3507 – 1966; A.O.A.C 920.116</p>
+                             <h4 className="font-semibold mt-4 mb-2">Procedure:</h4>
+                             <ProcedureList>
+                                 <li>Weigh 3-4 g of prepared butter sample into a pre-weighed flat-bottomed dish.</li>
+                                 <li>Heat the dish on a boiling water-bath for ~20 min, stirring frequently.</li>
+                                 <li>Transfer to a hot air oven at 100 ± 1°C and dry to a constant weight.</li>
+                                 <li>The loss in weight represents the moisture content.</li>
+                             </ProcedureList>
+                         </InfoCard>
+                         <InfoCard>
+                            <SectionTitle id="butter-fat-curd">Determination of Fat and Curd (MSNF)</SectionTitle>
+                            <p><strong>Ref:</strong> IS 3507 – 1966</p>
+                            <h4 className="font-semibold mt-4 mb-2">Procedure:</h4>
+                            <ProcedureList>
+                                <li>Use the residue from the moisture determination.</li>
+                                <li>Extract the fat by repeatedly washing the residue with a fat solvent (petroleum ether).</li>
+                                <li>The remaining residue after extraction is dried and weighed. This gives the weight of Curd + Salt.</li>
+                                <li>Fat percentage is calculated by difference: 100 - (%Moisture + %Curd&Salt).</li>
+                                <li>To find the curd content, the salt content must be determined separately and subtracted from the Curd + Salt value.</li>
+                            </ProcedureList>
+                         </InfoCard>
+                          <InfoCard>
+                            <SectionTitle id="butter-salt">Determination of Salt (NaCl)</SectionTitle>
+                             <p><strong>Ref:</strong> IS 3507 – 1966</p>
+                             <p className="mt-2">Use Mohr's Method. Weigh 5g of butter, add 100ml boiling water, cool to 50-55°C. Add potassium chromate indicator and titrate with standard silver nitrate (AgNO₃) solution until a brownish color persists.</p>
+                         </InfoCard>
+                    </div>
+                 </TabsContent>
+                 <TabsContent value="ghee-butter-oil">
+                    <div className="prose prose-sm max-w-none break-words">
+                        <InfoCard>
+                            <SectionTitle id="ghee-rm-pv">Reichert-Meissel (RM) & Polenske Value (PV)</SectionTitle>
+                             <p><strong>Purpose:</strong> These values are crucial for checking the purity of ghee. The RM value measures short-chain water-soluble fatty acids (like butyric acid), which are characteristic of milk fat. The PV value measures water-insoluble volatile acids, which can indicate adulteration with coconut oil.</p>
+                             <p><strong>Ref:</strong> IS 3508 – 1966</p>
+                            <h4 className="font-semibold mt-4 mb-2">Procedure:</h4>
+                             <ProcedureList>
+                                <li><strong>Saponification:</strong> 5g of ghee is saponified (turned into soap) using glycerol and NaOH.</li>
+                                <li><strong>Distillation:</strong> The soap is acidified, and the volatile fatty acids are steam-distilled.</li>
+                                <li><strong>Titration (RM Value):</strong> The water-soluble part of the distillate is titrated with 0.1 N NaOH.</li>
+                                <li><strong>Titration (PV Value):</strong> The water-insoluble part is dissolved in alcohol and then titrated.</li>
+                             </ProcedureList>
+                              <CalculationBox>
+                                RM Value = 1.10 * (T1 – T2)
+                                <br/>
+                                Polenske Value = T3 – T4
+                            </CalculationBox>
+                        </InfoCard>
+                        <InfoCard>
+                            <SectionTitle id="ghee-br">Butyro-Refractometer (BR) Reading</SectionTitle>
+                             <p><strong>Purpose:</strong> A rapid test to detect adulteration with vegetable oils and fats, which generally have a higher BR reading than pure ghee.</p>
+                             <p><strong>Ref:</strong> IS 3508 – 1966</p>
+                             <p>The reading is taken at 40°C. Pure ghee typically has a BR reading between 40-43. Values outside this range suggest adulteration.</p>
+                        </InfoCard>
+                         <InfoCard>
+                            <SectionTitle id="ghee-ffa">Free Fatty Acids (FFA)</SectionTitle>
+                            <p><strong>Purpose:</strong> Measures the extent of fat breakdown (hydrolysis), which indicates the freshness and quality of ghee. High FFA leads to rancidity.</p>
+                             <p><strong>Ref:</strong> IS 3508 – 1966</p>
+                            <p>The sample is dissolved in hot neutralized alcohol and titrated with standard NaOH solution using phenolphthalein indicator. Acidity is usually expressed as % oleic acid.</p>
+                         </InfoCard>
+                          <InfoCard>
+                            <SectionTitle id="ghee-vanaspati">Baudouin Test for Vanaspati</SectionTitle>
+                            <p><strong>Purpose:</strong> Detects vanaspati (hydrogenated vegetable oil) in ghee, based on the mandatory addition of 5% sesame oil to vanaspati.</p>
+                             <p><strong>Ref:</strong> IS 3508 – 1966</p>
+                             <p>Melted ghee is shaken with concentrated HCl and furfural solution. A pink or red color in the acid layer indicates the presence of vanaspati.</p>
+                         </InfoCard>
+                    </div>
+                 </TabsContent>
                  <TabsContent value="cheese-paneer" className="mt-0">
                     <div className="prose prose-sm max-w-none break-words">
                         <InfoCard>
-                            <h3 className="text-xl font-semibold mb-2">Fat Test (SBR Method)</h3>
-                            <ProcedureList>
-                                <ProcedureListItem>1-2 g sample ko 100 ml beaker mein lein.</ProcedureListItem>
-                                <ProcedureListItem>10 ml concentrated HCl daalein aur garam karke solid particles ko dissolve karein.</ProcedureListItem>
-                                <ProcedureListItem>Thanda karke 10 ml ethanol daalein aur Mojonnier flask mein transfer karein.</ProcedureListItem>
-                                <ProcedureListItem>25 ml diethyl ether daalkar 1 minute tak hilayein. Fir 25 ml petroleum ether daalkar hilayein.</ProcedureListItem>
-                                <ProcedureListItem>Centrifuge karein aur ethereal layer ko conical flask mein transfer karein.</ProcedureListItem>
-                                <ProcedureListItem>Extraction ko do baar repeat karein.</ProcedureListItem>
-                                <ProcedureListItem>Ether ko evaporate karein aur residue ko oven mein sukhaayein.</ProcedureListItem>
-                            </ProcedureList>
+                            <SectionTitle id="cheese-moisture">Determination of Moisture</SectionTitle>
+                            <p><strong>Ref:</strong> IS 2785 -1979</p>
+                             <p>Weigh 3g of grated sample into a pre-weighed dish containing about 20g of dried sand. Mix well, dry on a water bath, and then dry to a constant weight in a hot air oven at 102 ± 1°C. The loss in weight is the moisture content.</p>
                         </InfoCard>
                         <InfoCard>
-                            <h3 className="text-xl font-semibold mb-2">Moisture and Total Solids</h3>
-                            <ProcedureList>
-                            <ProcedureListItem>Ek saaf, sukhi, khaali aluminum moisture dish (jisme sand aur glass rod ho) ko tolein.</ProcedureListItem>
-                            <ProcedureListItem>Usme 3g sample tolein.</ProcedureListItem>
-                            <ProcedureListItem>Kuch boondein distilled water ki daalkar sample ko sand ke saath mix karein.</ProcedureListItem>
-                            <ProcedureListItem>Dish ko hot plate par rakhein taaki paani evaporate ho jaaye.</ProcedureListItem>
-                            <ProcedureListItem>Dish ko hot air oven mein 102 ± 2°C par 4 ghante ke liye rakhein.</ProcedureListItem>
-                            <ProcedureListItem>Thanda karke tolein. Constant weight aane tak repeat karein.</ProcedureListItem>
-                            </ProcedureList>
+                            <SectionTitle id="cheese-fat">Determination of Fat (Acid Digestion)</SectionTitle>
+                            <p><strong>Ref:</strong> IS 2785 -1979</p>
+                            <p>Weigh 1-2g of prepared sample, dissolve it in concentrated HCl by heating. Cool the solution and then perform fat extraction using the Werner-Schmidt method (as described for liquid milk).</p>
                         </InfoCard>
                     </div>
                  </TabsContent>
                  <TabsContent value="dahi-yoghurt" className="mt-0">
                     <div className="prose prose-sm max-w-none break-words">
-                        <InfoCard>
-                            <h3 className="text-xl font-semibold mb-2">Titratable Acidity</h3>
-                            <ProcedureList>
-                                <ProcedureListItem>1 g sample ko beaker mein lein.</ProcedureListItem>
-                                <ProcedureListItem>10 ml distilled water daalkar paste banayein.</ProcedureListItem>
-                                <ProcedureListItem>Kuch boondein phenolphthalein indicator ki daalein aur 0.1 N NaOH se titrate karein jab tak halka gulabi rang na aa jaaye.</ProcedureListItem>
-                            </ProcedureList>
-                            <pre className="mt-4 p-4 bg-muted rounded-lg font-mono text-sm"><code>% Acidity (% Lactic Acid) = (9 * A * N) / W</code></pre>
+                         <InfoCard>
+                            <SectionTitle id="dahi-solids">Determination of Total Solids</SectionTitle>
+                             <p><strong>Purpose:</strong> Since dahi is acidic, the acidity must be neutralized before determining total solids to prevent loss of volatile acids during drying.</p>
+                             <p><strong>Ref:</strong> IS 12333 – 1997 / I.S.O 6731-1989</p>
+                             <p>Weigh 4-5g of sample, neutralize with 0.1 N NaOH using phenolphthalein indicator. Evaporate on a water bath and then dry in an oven at 100 ± 2°C to a constant weight. The weight of added alkali is subtracted from the final residue.</p>
                         </InfoCard>
                         <InfoCard>
-                            <h3 className="text-xl font-semibold mb-2">Diacetyl Content</h3>
-                            <p>Diacetyl ek khas flavor compound hai jo fermentation ke dauran banta hai. Iski matra spectrophotometrically 570 nm par maapi jaati hai.</p>
+                            <SectionTitle id="dahi-fat">Determination of Fat</SectionTitle>
+                             <p>Use the Rose-Gottlieb method as described for liquid milk. (See Section 1.3.4.2).</p>
                         </InfoCard>
                     </div>
                  </TabsContent>
                  <TabsContent value="ice-cream" className="mt-0">
                     <div className="prose prose-sm max-w-none break-words">
                         <InfoCard>
-                            <h3 className="text-xl font-semibold mb-2">Fat Content (Rose-Gottlieb method)</h3>
-                            <ProcedureList>
-                                <ProcedureListItem>4-5 g sample ko Mojonnier tube mein tolein.</ProcedureListItem>
-                                <ProcedureListItem>10 ml distilled water daalkar mix karein.</ProcedureListItem>
-                                <ProcedureListItem>2 ml ammonia daalein, mix karein aur 60°C ke water bath mein 20 min garam karein.</ProcedureListItem>
-                                <ProcedureListItem>Thanda karein aur 10 ml ethanol, 25 ml diethyl ether daalkar mix karein.</ProcedureListItem>
-                                <ProcedureListItem>Fir 25 ml petroleum ether daalkar mix karein.</ProcedureListItem>
-                                <ProcedureListItem>Layers alag hone dein, ya centrifuge karein.</ProcedureListItem>
-                                <ProcedureListItem>Ethereal layer ko tole gaye vessel mein nikaalein.</ProcedureListItem>
-                                <ProcedureListItem>Extraction do baar repeat karein.</ProcedureListItem>
-                                <ProcedureListItem>Ether ko evaporate karein aur residue ko 102 ± 2°C par 3 ghante sukhaayein.</ProcedureListItem>
-                            </ProcedureList>
+                            <SectionTitle id="icecream-fat">Determination of Fat</SectionTitle>
+                            <p><strong>Ref:</strong> Pearson’s Composition and analysis of foods 9th edn, 1991 page 604</p>
+                            <p>Use the Rose-Gottlieb method. Weigh 4-5g of melted and mixed ice cream sample. Dilute with water, add ammonia, and heat at 60°C for 20 min. Cool and then proceed with the standard ether extraction.</p>
                         </InfoCard>
                         <InfoCard>
-                            <h3 className="text-xl font-semibold mb-2">Overrun in Ice Cream</h3>
-                            <p>Overrun ice cream ka woh volume hai jo mix ke volume se zyada hota hai. Yeh freezing ke dauran hawa ke incorporation ke kaaran hota hai.</p>
-                            <ProcedureList>
-                                <ProcedureListItem>Ice cream ke sample (cup ya carton) ko tolein.</ProcedureListItem>
-                                <ProcedureListItem>Ek beaker ka weight record karein.</ProcedureListItem>
-                                <ProcedureListItem>Jami hui ice cream ko beaker mein daalein aur 45°C ke water bath par pighlayein.</ProcedureListItem>
-                                <ProcedureListItem>1-2 boond amyl alcohol (anti-foaming agent) daalkar hawa nikaalein.</ProcedureListItem>
-                                <ProcedureListItem>Cup ya carton ko pighli hui ice cream (bina hawa ke) se bharein.</ProcedureListItem>
-                                <ProcedureListItem>Cup ya carton ka weight record karein.</ProcedureListItem>
-                            </ProcedureList>
-                            <pre className="mt-4 p-4 bg-muted rounded-lg font-mono text-sm"><code>% Overrun = [ (W3 - W2) / (W2 - W1) ] * 100</code></pre>
+                            <SectionTitle id="icecream-overrun">Determination of Weight per Unit Volume or Overrun</SectionTitle>
+                            <p><strong>Purpose:</strong> Overrun is the percentage increase in the volume of ice cream over the volume of the mix, due to the incorporation of air during freezing.</p>
+                            <p><strong>Ref:</strong> IS:2802: 1964</p>
+                            <p>It is calculated by comparing the weight of a fixed volume of ice cream mix with the weight of the same volume of the finished frozen ice cream.</p>
+                            <CalculationBox>
+                                % Overrun = [ (Weight of mix - Weight of ice cream) / Weight of ice cream ] * 100
+                            </CalculationBox>
                         </InfoCard>
+                         <InfoCard>
+                            <SectionTitle id="icecream-protein">Determination of Protein</SectionTitle>
+                            <p>Use the Kjeldahl method as described for liquid milk. Use about 5-8g of sample.</p>
+                             <CalculationBox>
+                                % Milk Protein (in Dairy Ice Cream) = % Nitrogen * 6.38
+                                <br />
+                                % Total Protein (in Frozen Dessert) = % Nitrogen * 6.25
+                            </CalculationBox>
+                         </InfoCard>
                     </div>
                  </TabsContent>
                  <TabsContent value="condensed-milk" className="mt-0">
                     <div className="prose prose-sm max-w-none break-words">
                         <InfoCard>
-                            <h3 className="text-xl font-semibold mb-2">Total Solids Content</h3>
-                            <ProcedureList>
-                                <ProcedureListItem>1.5-2.0 g sample ko ek tole huye dish mein lein.</ProcedureListItem>
-                                <ProcedureListItem>Usme 3-5 ml distilled water daalkar paste banayein.</ProcedureListItem>
-                                <ProcedureListItem>Sample ko ubalte huye water bath par 20-30 min tak sukhaayein.</ProcedureListItem>
-                                <ProcedureListItem>Dish ko hot air oven mein 100 ± 2°C par 2 ghante ke liye rakhein.</ProcedureListItem>
-                                <ProcedureListItem>Thanda karke tolein aur constant weight aane tak repeat karein.</ProcedureListItem>
-                            </ProcedureList>
+                            <SectionTitle id="condensed-solids">Determination of Total Solids</SectionTitle>
+                            <p><strong>Ref:</strong> IS 12333 – 1997 / ISO 6731 -1989</p>
+                             <p>Weigh ~2g of sample into a dish with sand. Add 5ml water and mix to a paste. Dry on a water bath for 30 mins, then dry in an oven at 102 ± 2°C to constant weight.</p>
                         </InfoCard>
-                    </div>
-                 </TabsContent>
-                 <TabsContent value="ghee-butter-oil" className="mt-0">
-                    <div className="prose prose-sm max-w-none break-words">
-                        <InfoCard>
-                            <h3 className="text-xl font-semibold mb-2">Reichert-Meissel (RM) & Polenske Value</h3>
-                            <p><strong>RM Value:</strong> Yeh ghee ki shuddhta ka ek mahatvapurna suchak hai. Shuddh ghee ke liye RM value kam se kam 28 honi chahiye.</p>
-                            <p><strong>Polenske Value:</strong> Yeh steam volatile aur water-insoluble fatty acids ko maapta hai. Iski value badhne ka matlab coconut oil jaisi milavat ho sakti hai.</p>
-                            <ProcedureList>
-                                <ProcedureListItem><strong>Saponification:</strong> 5.00 g ghee ko flask mein tolein. 20 g glycerol aur 2 ml 50% NaOH daalein. Garam karein jab tak saaf na ho.</ProcedureListItem>
-                                <ProcedureListItem><strong>Dilution & Acidification:</strong> 93 ml ubla hua thanda paani aur 50 ml dilute sulfuric acid daalein.</ProcedureListItem>
-                                <ProcedureListItem><strong>Distillation:</strong> 110 ml distillate 19-21 minute mein collect karein.</ProcedureListItem>
-                                <ProcedureListItem><strong>RM Value Titration:</strong> 100 ml filtrate ko 0.1 N NaOH se titrate karein.</ProcedureListItem>
-                                <ProcedureListItem><strong>Polenske Value Titration:</strong> Condenser aur filter paper ko teen baar 15 ml neutralized ethanol se dhoyein. Washings ko 0.1 N NaOH se titrate karein.</ProcedureListItem>
-                            </ProcedureList>
-                            <pre className="mt-4 p-4 bg-muted rounded-lg font-mono text-sm">
-                                <code>
-                                    RM Value = 1.1 * (Titration_Sample - Titration_Blank)
-                                    <br/>
-                                    Polenske Value = Titration_Insoluble_Acids - Titration_Blank_Insoluble
-                                </code>
-                            </pre>
-                        </InfoCard>
-                    </div>
-                 </TabsContent>
-                 <TabsContent value="butter" className="mt-0">
-                    <div className="prose prose-sm max-w-none break-words">
-                        <InfoCard>
-                            <h3 className="text-xl font-semibold mb-2">Moisture Content</h3>
-                            <ProcedureList>
-                                <ProcedureListItem>Ek saaf, sukhi dish ko tolein.</ProcedureListItem>
-                                <ProcedureListItem>Usme 5-10 g butter ka sample tolein.</ProcedureListItem>
-                                <ProcedureListItem>Dish ko 100°C par garam karein, jisse paani evaporate ho jaaye.</ProcedureListItem>
-                                <ProcedureListItem>Constant weight aane tak thanda karein aur tolein.</ProcedureListItem>
-                            </ProcedureList>
+                         <InfoCard>
+                            <SectionTitle id="condensed-sucrose">Determination of Sucrose</SectionTitle>
+                             <p><strong>Purpose:</strong> To measure the amount of added sugar, a key component in sweetened condensed milk.</p>
+                            <p><strong>Ref:</strong> IS 4079 – 1967</p>
+                            <p>This is typically done using the Lane-Eynon (Volumetric) method or a Polarimetric method. The Lane-Eynon method involves clarifying the sample and determining reducing sugars (lactose) before and after acid inversion (which converts sucrose to reducing sugars). The difference gives the sucrose content.</p>
                         </InfoCard>
                     </div>
                  </TabsContent>
                  <TabsContent value="milk-powder" className="mt-0">
                     <div className="prose prose-sm max-w-none break-words">
                         <InfoCard>
-                            <h3 className="text-xl font-semibold mb-2">Moisture and Total Solids</h3>
-                            <ProcedureList>
-                                <ProcedureListItem>Ek saaf, sukhi, pehle se toli hui dish lein (Weight W).</ProcedureListItem>
-                                <ProcedureListItem>Usme 3 g sample tolein aur dobara tolein (Weight W1).</ProcedureListItem>
-                                <ProcedureListItem>Dish ko hot air oven mein 102 ± 2°C par 3 ghante ke liye rakhein.</ProcedureListItem>
-                                <ProcedureListItem>Dish ko desiccator mein room temperature tak thanda karein.</ProcedureListItem>
-                                <ProcedureListItem>Dish ko tolein aur weight note karein (Weight W2).</ProcedureListItem>
-                                <ProcedureListItem>Heating aur cooling ko tab tak repeat karein jab tak constant weight na mil jaaye.</ProcedureListItem>
-                            </ProcedureList>
-                            <pre className="mt-4 p-4 bg-muted rounded-lg font-mono text-sm">
-                                <code>
-                                    % Total Solids = [ (W2 - W) / (W1 - W) ] * 100
-                                    <br />
-                                    % Moisture = 100 - % Total Solids
-                                </code>
-                            </pre>
+                            <SectionTitle id="powder-moisture">Determination of Moisture</SectionTitle>
+                             <p><strong>Ref:</strong> IS 16072 : 2012</p>
+                             <p>Weigh ~1g of powder into a pre-weighed dish. Dry in a hot air oven at 102 ± 2°C for 2 hours, then for 1-hour intervals until a constant weight is achieved. The loss in weight is the moisture content.</p>
+                        </InfoCard>
+                        <InfoCard>
+                             <SectionTitle id="powder-fat">Determination of Fat</SectionTitle>
+                             <p><strong>Ref:</strong> A.O.A.C 17th edn, 2000 Official method 932.06</p>
+                            <p>Weigh ~1g of powder, reconstitute it with 10ml warm water, add ammonia, and then extract the fat using the Rose-Gottlieb method.</p>
+                        </InfoCard>
+                        <InfoCard>
+                            <SectionTitle id="powder-solubility">Determination of Solubility Index</SectionTitle>
+                            <p><strong>Purpose:</strong> Measures the amount of undissolved powder after reconstitution under standard conditions. A low solubility index indicates good quality powder.</p>
+                             <p><strong>Ref:</strong> ISI Hand book of Food Analysis (Part XI) – 1981</p>
+                             <p>A standard solution is prepared and centrifuged. The volume of the sediment is measured in a graduated centrifuge tube and reported as the solubility index in ml.</p>
                         </InfoCard>
                     </div>
                  </TabsContent>
@@ -339,3 +369,5 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
     </Dialog>
   );
 }
+
+
