@@ -42,7 +42,6 @@ import { CalibrationStandardizationModal } from "./info-modals/calibration-stand
 import { QualityConceptModal } from "./info-modals/quality-concept-modal";
 import { WaterTestingModal } from "./info-modals/water-testing-modal";
 import { PackagingMaterialTestingModal } from "./info-modals/packaging-material-testing-modal";
-import { FoodTechModal } from "./info-modals/food-tech-modal";
 import { PlantCostModal } from "./calculators/plant-cost-modal";
 import { LabEquipmentsModal } from "./info-modals/lab-equipments-modal";
 import { useSubscription } from "@/context/subscription-context";
@@ -71,7 +70,6 @@ const topics = [
   { id: 'water-testing', title: 'Water Testing', description: 'WTP/ETP Analysis', category: 'industry', icon: Droplet, modal: WaterTestingModal, isPro: true },
   { id: 'packaging-testing', title: 'Packaging Testing', description: 'Quality tests for materials', category: 'industry', icon: PackageCheck, modal: PackagingMaterialTestingModal, isPro: true },
   { id: 'processing', title: 'Dairy Processing', description: 'Techniques & Machinery', category: 'industry', icon: Settings, modal: DairyProcessingModal, isPro: true },
-  { id: 'food-tech', title: 'Food Technology', description: 'Product Development', category: 'science', icon: Utensils, modal: FoodTechModal, isPro: true },
   { id: 'about-us', title: 'About Us', description: 'Our Mission & Vision', category: 'industry', icon: Users, modal: AboutUsModal, isPro: false },
 ];
 
