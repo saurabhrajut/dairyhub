@@ -24,6 +24,7 @@ import {
   Microscope,
   Recycle,
   Bug,
+  ShieldCheck,
 } from "lucide-react";
 import { PaneerIcon, IceCreamIcon } from "@/components/icons";
 import { Input } from "@/components/ui/input";
@@ -49,10 +50,12 @@ import { SubscriptionModal } from "./subscription-modal";
 import { CipProcessModal } from "./info-modals/cip-process-modal";
 import { MicrobiologyTestingModal } from "./info-modals/microbiology-testing-modal";
 import { MilkHandlingPreservationModal } from "./info-modals/milk-handling-preservation-modal";
+import { FssaiStandardsModal } from "./info-modals/fssai-standards-modal";
 
 const topics = [
   { id: 'industry', title: 'Dairy Industry', description: 'Overview & Trends', category: 'industry', icon: Factory, badge: 'New', modal: DairyIndustryModal, isPro: true },
   { id: 'milk-handling', title: 'Milk Handling & preservation', description: 'Reception & Preservation', category: 'milk', icon: Droplet, badge: 'New', modal: MilkHandlingPreservationModal, isPro: true },
+  { id: 'fssai-standards', title: 'FSSAI Standards', description: 'Official Dairy Standards', category: 'industry', icon: ShieldCheck, badge: 'New', modal: FssaiStandardsModal, isPro: true },
   { id: 'milk-chemistry', title: 'Milk Chemistry', description: 'Composition & Properties', category: 'science', icon: FlaskConical, modal: MilkChemistryModal, isPro: true },
   { id: 'solutions-prep', title: 'Solutions Preparation', description: 'Reagents & Calculators', category: 'science', icon: Beaker, modal: SolutionsPrepModal, isPro: true },
   { id: 'microbiology', title: 'Microbiology', description: 'Testing & Pathogens', category: 'science', icon: Bug, badge: 'New', modal: MicrobiologyTestingModal, isPro: true },
@@ -179,3 +182,5 @@ export function TopicGrid() {
     </>
   );
 }
+
+    
