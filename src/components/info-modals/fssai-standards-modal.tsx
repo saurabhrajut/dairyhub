@@ -34,13 +34,13 @@ const Note = ({ children }: { children: React.ReactNode }) => (
 export function FssaiStandardsModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-6xl h-[90vh]">
+      <DialogContent className="max-w-6xl h-[90vh] flex flex-col">
         <DialogHeader>
           <DialogTitle className="text-3xl sm:text-4xl font-bold text-center text-gray-800 mb-2 font-headline">
             FSSAI Standards for Dairy Products
           </DialogTitle>
         </DialogHeader>
-        <ScrollArea className="h-full pr-6 mt-4">
+        <ScrollArea className="flex-1 mt-4 pr-6">
              <div className="prose prose-sm max-w-none text-gray-700 leading-relaxed">
                 <ProductCard title="2.1.1 General Standards for Milk and Milk Products">
                     <p className="font-medium leading-relaxed">The general standard provides overarching definitions for milk and milk products and guidance on the use of dairy terms in relation to foods to be offered to the consumer or for further processing.</p>
@@ -499,3 +499,5 @@ export function FssaiStandardsModal({ isOpen, setIsOpen }: { isOpen: boolean; se
     </Dialog>
   );
 }
+
+    
