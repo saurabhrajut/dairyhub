@@ -6,3 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const getSnf = (fat: number, clr: number, factor = 0.72) => (clr / 4) + (0.25 * fat) + factor;
+
+export const componentProps = {
+  milkDensity: 1.03,
+};

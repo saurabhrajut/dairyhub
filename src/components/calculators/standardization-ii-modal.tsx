@@ -19,11 +19,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { getSnf } from "@/lib/utils"
-import { componentProps } from "@/lib/data"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 const TABS = [
     { value: "fat-blending", label: "Fat Blending" },
@@ -31,11 +28,6 @@ const TABS = [
     { value: "reconstituted-milk", label: "Reconstituted Milk" },
     { value: "recombined-milk", label: "Recombined Milk" },
     { value: "clr-blending", label: "CLR Blending" },
-    { value: "clr-correction", label: "CLR Correction" },
-    { value: "component-qty", label: "Component Qty" },
-    { value: "snf", label: "SNF Calculator" },
-    { value: "gravimetric", label: "Gravimetric Analysis"},
-    { value: "formulas", label: "Formulas & Factors" },
 ]
 
 export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
@@ -58,11 +50,6 @@ export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean;
             <TabsContent value="reconstituted-milk" className="mt-0"><ReconstitutedMilkCalc /></TabsContent>
             <TabsContent value="recombined-milk" className="mt-0"><RecombinedMilkCalc /></TabsContent>
             <TabsContent value="clr-blending" className="mt-0"><ClrBlendingCalc /></TabsContent>
-            <TabsContent value="clr-correction" className="mt-0"><ClrCorrectionCalc /></TabsContent>
-            <TabsContent value="component-qty" className="mt-0"><ComponentQtyCalc /></TabsContent>
-            <TabsContent value="snf" className="mt-0"><SnfCalc /></TabsContent>
-            <TabsContent value="gravimetric" className="mt-0"><GravimetricAnalysisCalc /></TabsContent>
-            <TabsContent value="formulas" className="mt-0"><FormulasTab /></TabsContent>
           </ScrollArea>
         </Tabs>
       </DialogContent>
@@ -142,161 +129,6 @@ const PearsonSquareCalc = ({ unit, calcType }: { unit: string, calcType: 'Fat' |
 function FatBlendingCalc() { return <PearsonSquareCalc unit="%" calcType="Fat" /> }
 function ClrBlendingCalc() { return <PearsonSquareCalc unit="" calcType="CLR" /> }
 
-function ClrCorrectionCalc() {
-    const [result, setResult] = useState<string | null>(null);
-    const [olr, setOlr] = useState("28.5");
-    const [temp, setTemp] = useState("29");
-
-    const handleCalc = () => {
-        const olrNum = parseFloat(olr);
-        const tempNum = parseFloat(temp);
-        if (isNaN(olrNum) || isNaN(tempNum)) {
-            setResult('Invalid Input'); return;
-        }
-        const clr = olrNum + (tempNum - 27) * 0.2;
-        setResult(clr.toFixed(2));
-    }
-
-    return (
-        <div>
-            <p className="text-center text-sm text-gray-500 mb-4">Temperature ke aadhar par Lactometer Reading ko correct karein.</p>
-            <div className="bg-muted/50 p-4 rounded-lg space-y-3">
-                <div><Label>Observed Lactometer Reading (OLR)</Label><Input type="number" value={olr} onChange={e => setOlr(e.target.value)} placeholder="28.5" /></div>
-                <div><Label>Milk Temperature (°C)</Label><Input type="number" value={temp} onChange={e => setTemp(e.target.value)} placeholder="29" /></div>
-                <p className="text-xs text-gray-500">Note: Standard calibration temperature is 27°C.</p>
-            </div>
-            <Button onClick={handleCalc} className="w-full mt-4">Correct CLR</Button>
-            {result && <div className="mt-4 text-center"><p className="text-gray-600">Corrected Lactometer Reading (CLR):</p><p className="text-3xl font-bold text-green-700">{result}</p></div>}
-        </div>
-    )
-}
-
-function ComponentQtyCalc() {
-    const [liters, setLiters] = useState("");
-    const [fat, setFat] = useState("");
-    const [snf, setSnf] = useState("");
-    const [result, setResult] = useState<string | null>(null);
-    const [error, setError] = useState<string | null>(null);
-
-    const handleCalc = () => {
-        const litersVal = parseFloat(liters);
-        const fatVal = parseFloat(fat);
-        const snfVal = parseFloat(snf);
-
-        setResult(null);
-        setError(null);
-        
-        if(isNaN(litersVal) || isNaN(fatVal) || isNaN(snfVal)) {
-            setError("Please fill all fields with numbers.");
-            return;
-        }
-
-        const milkWeight = litersVal * componentProps.milkDensity;
-        const fatKg = milkWeight * (fatVal / 100);
-        const snfKg = milkWeight * (snfVal / 100);
-
-        setResult(`In ${litersVal} Ltr of milk:<br/>- <strong>Total Fat:</strong> ${fatKg.toFixed(2)} Kg<br/>- <strong>Total SNF (Powder):</strong> ${snfKg.toFixed(2)} Kg`);
-    }
-
-    return (
-        <div>
-            <p className="text-center text-sm text-gray-500 mb-4">Doodh mein Fat aur Powder (SNF) ki matra (Kg mein) pata karein.</p>
-            <div className="bg-muted/50 p-4 rounded-lg space-y-3">
-                <div><Label>Milk Quantity (Liters)</Label><Input type="number" value={liters} onChange={e => setLiters(e.target.value)} placeholder="1000" /></div>
-                <div><Label>Fat %</Label><Input type="number" value={fat} onChange={e => setFat(e.target.value)} placeholder="4.5" /></div>
-                <div><Label>SNF %</Label><Input type="number" value={snf} onChange={e => setSnf(e.target.value)} placeholder="8.5" /></div>
-            </div>
-            <Button onClick={handleCalc} className="w-full mt-4">Calculate Components</Button>
-            {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
-            {result && <Alert className="mt-4"><AlertTitle>Result</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
-        </div>
-    )
-}
-
-function SnfCalc() {
-    const [fat, setFat] = useState("4.5");
-    const [clr, setClr] = useState("28.0");
-    const [targetSnf, setTargetSnf] = useState("");
-    const [factor, setFactor] = useState("0.72");
-    const [manualFactor, setManualFactor] = useState("");
-    const [isManual, setIsManual] = useState(false);
-    const [result, setResult] = useState<string | null>(null);
-
-    const handleCalcSnf = () => {
-        const fatNum = parseFloat(fat);
-        const clrNum = parseFloat(clr);
-        const finalFactor = isManual ? parseFloat(manualFactor) : parseFloat(factor);
-        
-        if (isNaN(fatNum) || isNaN(clrNum) || isNaN(finalFactor)) {
-            setResult("Invalid Input"); return;
-        }
-        setResult(`Calculated SNF: ${getSnf(fatNum, clrNum, finalFactor).toFixed(2)} %`);
-    }
-
-    const handleCalcClr = () => {
-        const fatNum = parseFloat(fat);
-        const snfNum = parseFloat(targetSnf);
-        const finalFactor = isManual ? parseFloat(manualFactor) : parseFloat(factor);
-
-        if (isNaN(fatNum) || isNaN(snfNum) || isNaN(finalFactor)) {
-            setResult("Invalid Input"); return;
-        }
-
-        const calculatedClr = (snfNum - (0.25 * fatNum) - finalFactor) * 4;
-        setResult(`Required CLR: ${calculatedClr.toFixed(2)}`);
-    }
-    
-    const handleSelectChange = (value: string) => {
-        if (value === 'manual') {
-            setIsManual(true);
-            setFactor(value);
-        } else {
-            setIsManual(false);
-            setFactor(value);
-            setManualFactor("");
-        }
-    }
-
-    return (
-        <div>
-            <p className="text-center text-sm text-gray-500 mb-4">SNF/CLR ko Richmond formula aur correction factor se calculate karein.</p>
-            <div className="bg-muted/50 p-4 rounded-lg space-y-3">
-                <div><Label>Fat %</Label><Input type="number" value={fat} onChange={e => setFat(e.target.value)} placeholder="4.5" /></div>
-                 <div>
-                    <Label>Milk Type (Correction Factor)</Label>
-                    <Select value={factor} onValueChange={handleSelectChange}>
-                        <SelectTrigger><SelectValue/></SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="0.72">Cow Milk (Factor: 0.72)</SelectItem>
-                            <SelectItem value="0.85">Buffalo Milk (Factor: 0.85)</SelectItem>
-                            <SelectItem value="manual">Manual Factor</SelectItem>
-                        </SelectContent>
-                    </Select>
-                </div>
-                {isManual && (
-                     <div>
-                        <Label>Manual Correction Factor</Label>
-                        <Input type="number" value={manualFactor} onChange={e => setManualFactor(e.target.value)} placeholder="e.g., 0.75" />
-                    </div>
-                )}
-                <div className="grid grid-cols-2 gap-4 items-end">
-                    <div>
-                        <Label>CLR</Label>
-                        <Input type="number" value={clr} onChange={e => setClr(e.target.value)} placeholder="28.0" />
-                        <Button onClick={handleCalcSnf} className="w-full mt-2">Calculate SNF</Button>
-                    </div>
-                    <div>
-                        <Label>Target SNF %</Label>
-                        <Input type="number" value={targetSnf} onChange={e => setTargetSnf(e.target.value)} placeholder="8.5" />
-                        <Button onClick={handleCalcClr} className="w-full mt-2">Calculate CLR</Button>
-                    </div>
-                </div>
-            </div>
-            
-            {result && <div className="mt-4 text-center"><p className="text-3xl font-bold text-green-700">{result}</p></div>}
-        </div>
-    )
-}
 
 function FatSnfAdjustmentCalc() {
     const [milkQty, setMilkQty] = useState('100');
@@ -390,112 +222,6 @@ function FatSnfAdjustmentCalc() {
             <Button onClick={calculate} className="w-full mt-4">Calculate Adjustment</Button>
             {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
             {result && <Alert className="mt-4"><AlertTitle>Result</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
-        </div>
-    )
-}
-
-function GravimetricAnalysisCalc() {
-    const [dishWeight, setDishWeight] = useState('');
-    const [dishSampleWeight, setDishSampleWeight] = useState('');
-    const [dishDriedWeight, setDishDriedWeight] = useState('');
-    const [dishAshWeight, setDishAshWeight] = useState('');
-    const [results, setResults] = useState<{ moisture: number; ts: number; ash?: number } | null>(null);
-    const [error, setError] = useState<string | null>(null);
-
-    const handleCalculate = () => {
-        const w1 = parseFloat(dishWeight); // Dish
-        const w2 = parseFloat(dishSampleWeight); // Dish + Sample
-        const w3 = parseFloat(dishDriedWeight); // Dish + Dried
-        const w4 = parseFloat(dishAshWeight); // Dish + Ash
-
-        setError(null);
-        setResults(null);
-
-        if (isNaN(w1) || isNaN(w2) || w2 <= w1) {
-            setError("Please enter valid weights for the dish and sample.");
-            return;
-        }
-
-        const sampleWeight = w2 - w1;
-        let moisture = NaN, ts = NaN, ash;
-
-        if (!isNaN(w3) && w3 >= w1) {
-            const moistureWeight = w2 - w3;
-            moisture = (moistureWeight / sampleWeight) * 100;
-            ts = 100 - moisture;
-        }
-
-        if (!isNaN(w4) && w4 >= w1) {
-            const ashWeight = w4 - w1;
-            ash = (ashWeight / sampleWeight) * 100;
-        }
-        
-        if (isNaN(moisture) && ash === undefined) {
-             setError("Please enter weight for either dried sample or ashed sample to calculate.");
-             return;
-        }
-
-        setResults({
-            moisture: !isNaN(moisture) ? moisture : 100 - ts,
-            ts: !isNaN(ts) ? ts : 100 - moisture,
-            ash: ash
-        });
-    }
-
-    return (
-        <div>
-            <p className="text-center text-sm text-gray-500 mb-4">Calculate Moisture, Total Solids (TS), and Ash % using gravimetric weights.</p>
-            <div className="bg-muted/50 p-4 rounded-lg space-y-3">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <Label>Empty Dish Weight (g)</Label>
-                        <Input type="number" value={dishWeight} onChange={e => setDishWeight(e.target.value)} placeholder="e.g., 25.1234" />
-                    </div>
-                    <div>
-                        <Label>Dish + Sample Weight (g)</Label>
-                        <Input type="number" value={dishSampleWeight} onChange={e => setDishSampleWeight(e.target.value)} placeholder="e.g., 30.1234" />
-                    </div>
-                    <div>
-                        <Label>Dish + Dried Sample Weight (g)</Label>
-                        <Input type="number" value={dishDriedWeight} onChange={e => setDishDriedWeight(e.target.value)} placeholder="For Moisture/TS" />
-                    </div>
-                     <div>
-                        <Label>Dish + Ash Weight (g)</Label>
-                        <Input type="number" value={dishAshWeight} onChange={e => setDishAshWeight(e.target.value)} placeholder="For Ash" />
-                    </div>
-                </div>
-            </div>
-            <Button onClick={handleCalculate} className="w-full mt-4">Calculate Analysis</Button>
-            {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
-            {results && (
-                <Alert className="mt-4">
-                    <AlertTitle>Analysis Results</AlertTitle>
-                    <AlertDescription>
-                        <Table>
-                            <TableBody>
-                                {!isNaN(results.moisture) && (
-                                    <TableRow>
-                                        <TableCell className="font-medium">Moisture</TableCell>
-                                        <TableCell className="text-right font-bold">{results.moisture.toFixed(2)} %</TableCell>
-                                    </TableRow>
-                                )}
-                                {!isNaN(results.ts) && (
-                                     <TableRow>
-                                        <TableCell className="font-medium">Total Solids (TS)</TableCell>
-                                        <TableCell className="text-right font-bold">{results.ts.toFixed(2)} %</TableCell>
-                                    </TableRow>
-                                )}
-                                {results.ash !== undefined && (
-                                     <TableRow>
-                                        <TableCell className="font-medium">Ash</TableCell>
-                                        <TableCell className="text-right font-bold">{results.ash.toFixed(2)} %</TableCell>
-                                    </TableRow>
-                                )}
-                            </TableBody>
-                        </Table>
-                    </AlertDescription>
-                </Alert>
-            )}
         </div>
     )
 }
@@ -615,43 +341,4 @@ function RecombinedMilkCalc() {
             {result && <Alert className="mt-4"><AlertTitle>Result</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
         </div>
     );
-}
-
-function FormulasTab() {
-    return (
-        <div className="space-y-6">
-            <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
-                <h3 className="font-bold text-blue-800 font-headline">SNF Calculation (Richmond's Formula)</h3>
-                <p className="font-mono text-sm text-blue-900 mt-2">SNF % = (CLR / 4) + (0.25 * Fat %) + Correction_Factor</p>
-                <p className="text-xs mt-2">Correction Factor: Cow Milk = 0.72, Buffalo Milk = 0.85</p>
-            </div>
-             <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg">
-                <h3 className="font-bold text-green-800 font-headline">CLR Correction Formula</h3>
-                <p className="font-mono text-sm text-green-900 mt-2">Corrected CLR = Observed_LR + (Milk_Temp_°C - 27) * 0.2</p>
-            </div>
-             <div className="bg-purple-50 border-l-4 border-purple-500 p-4 rounded-r-lg">
-                <h3 className="font-bold text-purple-800 font-headline">Pearson Square (Blending)</h3>
-                <p className="font-mono text-sm text-purple-900 mt-2">Parts_High = Target - Low</p>
-                <p className="font-mono text-sm text-purple-900">Parts_Low = High - Target</p>
-                <p className="text-xs mt-2">Qty_High = (Total_Qty * Parts_High) / (Parts_High + Parts_Low)</p>
-            </div>
-             <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-r-lg">
-                <h3 className="font-bold text-yellow-800 font-headline">Component Quantity Calculation</h3>
-                <p className="font-mono text-sm text-yellow-900 mt-2">Milk Weight (Kg) = Milk_Liters * 1.03</p>
-                <p className="font-mono text-sm text-yellow-900">Fat_Kg = Milk_Weight * (Fat % / 100)</p>
-                 <p className="font-mono text-sm text-yellow-900">SNF_Kg = Milk_Weight * (SNF % / 100)</p>
-            </div>
-             <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg">
-                <h3 className="font-bold text-red-800 font-headline">Common Conversion Factors</h3>
-                 <Table className="mt-2 text-sm">
-                     <TableBody>
-                        <TableRow><TableCell className="font-medium">1 Liter Milk</TableCell><TableCell>approx. 1.03 Kg</TableCell></TableRow>
-                        <TableRow><TableCell className="font-medium">1 Kg Milk</TableCell><TableCell>approx. 0.97 Liters</TableCell></TableRow>
-                        <TableRow><TableCell className="font-medium">Kg to Grams</TableCell><TableCell>Multiply by 1000</TableCell></TableRow>
-                        <TableRow><TableCell className="font-medium">Liters to Milliliters</TableCell><TableCell>Multiply by 1000</TableCell></TableRow>
-                    </TableBody>
-                </Table>
-            </div>
-        </div>
-    )
 }
