@@ -158,7 +158,7 @@ export function FssaiStandardsModal({ isOpen, setIsOpen }: { isOpen: boolean; se
                                 <TableRow><td>Baudouin Test</td><td>Negative</td><td>Negative</td><td>Negative</td></TableRow>
                                 <TableRow><td>Iodine Value</td><td>-</td><td>-</td><td>25-38</td></TableRow>
                                 <TableRow><td>Saponification value</td><td>-</td><td>-</td><td>205-235</td></TableRow>
-                                <TableRow><td>Presence of β-sitosterol</td><td>Absent*</td><td>Absent*</td><td>Absent*</td></TableRow>
+                                <TableRow><td>Presence of Beta-sitosterol</td><td>Absent</td><td>Absent</td><td>Absent</td></TableRow>
                             </TableBody>
                         </Table>
                     </div>
@@ -224,7 +224,7 @@ export function FssaiStandardsModal({ isOpen, setIsOpen }: { isOpen: boolean; se
                             </TableHeader>
                             <TableBody>
                                 <TableRow><td>Moisture*, maximum, % (m/m)</td><td>5.0</td><td>5.0</td><td>5.0</td><td>5.0</td></TableRow>
-                                <TableRow><td>Milk fat, % (m/m)</td><td>Min 26.0</td><td>{&gt;1.5 and &lt;26.0}</td><td>1.5 (maximum)</td><td>42.0 (minimum)</td></TableRow>
+                                <TableRow><td>Milk fat, % (m/m)</td><td>Min 26.0</td><td>{">1.5 and <26.0"}</td><td>1.5 (maximum)</td><td>42.0 (minimum)</td></TableRow>
                                 <TableRow><td>Milk protein** in milk solids-not-fat, min, % (m/m)</td><td>34.0</td><td>34.0</td><td>34.0</td><td>34.0</td></TableRow>
                                 <TableRow><td>Insolubility Index, maximum, ml</td><td>2.0</td><td>2.0</td><td>2.0</td><td>-</td></TableRow>
                             </TableBody>
@@ -395,7 +395,7 @@ export function FssaiStandardsModal({ isOpen, setIsOpen }: { isOpen: boolean; se
                                 <TableRow><td>Milk protein*, minimum, % (m/m), dry matter basis</td><td>90.0</td><td>84.0</td><td>88.0</td></TableRow>
                                 <TableRow><td>Casein in protein, minimum, % (m/m)</td><td>95.0</td><td>95.0</td><td>95.0</td></TableRow>
                                 <TableRow><td>Lactose**, maximum, % (m/m)</td><td>1.0</td><td>1.0</td><td>1.0</td></TableRow>
-                                <TableRow><td>Total ash including P₂O₅, % (m/m)</td><td>2.5 (maximum)</td><td>7.5 (minimum)</td><td>-</td></TableRow>
+                                <TableRow><td>Total ash including P2O5, % (m/m)</td><td>2.5 (maximum)</td><td>7.5 (minimum)</td><td>-</td></TableRow>
                             </TableBody>
                         </Table>
                     </div>
