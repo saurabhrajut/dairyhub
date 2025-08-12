@@ -24,6 +24,7 @@ import {
   Bug,
   ShieldCheck,
   FileSpreadsheet,
+  Search,
 } from "lucide-react";
 import { PaneerIcon, IceCreamIcon } from "@/components/icons";
 import { Input } from "@/components/ui/input";
@@ -183,3 +184,5 @@ export function TopicGrid() {
     </>
   );
 }
+
+    
