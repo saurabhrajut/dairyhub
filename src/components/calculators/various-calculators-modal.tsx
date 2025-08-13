@@ -24,6 +24,7 @@ import {
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { componentProps, getSnf } from "@/lib/utils";
+import { CheckCircle, XCircle } from "lucide-react";
 
 
 const stateWiseStandards = {
@@ -96,7 +97,7 @@ export function VariousCalculatorsModal({
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="max-w-4xl h-[90vh]">
         <DialogHeader>
-          <DialogTitle className="text-3xl font-bold text-center font-headline">Various Calculators</DialogTitle>
+          <DialogTitle className="text-3xl font-bold text-center font-headline">Various Calculations</DialogTitle>
           <DialogDescription className="text-center">A collection of useful calculators for dairy processing.</DialogDescription>
         </DialogHeader>
         <Tabs defaultValue="acidity" className="w-full flex-1 flex flex-col min-h-0">
@@ -185,34 +186,74 @@ function StatewiseSNFCalc() {
     const [state, setState] = useState('Delhi');
     const standards = stateWiseStandards[state as keyof typeof stateWiseStandards];
 
-    const [fat, setFat] = useState("4.5");
-    const [clr, setClr] = useState("28.0");
-    const [targetSnf, setTargetSnf] = useState("");
-    const [milkType, setMilkType] = useState("cow");
-    const [result, setResult] = useState<string | null>(null);
+    // For SNF/CLR Calculator
+    const [calcFat, setCalcFat] = useState("4.5");
+    const [calcClr, setCalcClr] = useState("28.0");
+    const [calcTargetSnf, setCalcTargetSnf] = useState("");
+    const [calcFactorType, setCalcFactorType] = useState("cow");
+    const [manualFactor, setManualFactor] = useState("");
+    const [calcResult, setCalcResult] = useState<string | null>(null);
+
+    // For Standard Check Calculator
+    const [checkMilkType, setCheckMilkType] = useState<"Cow" | "Buffalo" | "Mixed">("Cow");
+    const [checkFat, setCheckFat] = useState("");
+    const [checkSnf, setCheckSnf] = useState("");
+    const [checkResult, setCheckResult] = useState<React.ReactNode | null>(null);
 
     const handleCalcSnf = () => {
-        const fatNum = parseFloat(fat);
-        const clrNum = parseFloat(clr);
-        const factor = milkType === 'cow' ? 0.72 : 0.85;
+        const fatNum = parseFloat(calcFat);
+        const clrNum = parseFloat(calcClr);
+        const factor = parseFloat(manualFactor) || (calcFactorType === 'cow' ? 0.72 : 0.85);
         
         if (isNaN(fatNum) || isNaN(clrNum)) {
-            setResult("Invalid Input"); return;
+            setCalcResult("Invalid Input"); return;
         }
-        setResult(`Calculated SNF: ${getSnf(fatNum, clrNum, factor).toFixed(2)} %`);
+        setCalcResult(`Calculated SNF: ${getSnf(fatNum, clrNum, factor).toFixed(2)} %`);
     }
 
     const handleCalcClr = () => {
-        const fatNum = parseFloat(fat);
-        const snfNum = parseFloat(targetSnf);
-        const factor = milkType === 'cow' ? 0.72 : 0.85;
+        const fatNum = parseFloat(calcFat);
+        const snfNum = parseFloat(calcTargetSnf);
+        const factor = parseFloat(manualFactor) || (calcFactorType === 'cow' ? 0.72 : 0.85);
 
         if (isNaN(fatNum) || isNaN(snfNum)) {
-            setResult("Invalid Input"); return;
+            setCalcResult("Invalid Input"); return;
         }
 
         const calculatedClr = (snfNum - (0.25 * fatNum) - factor) * 4;
-        setResult(`Required CLR: ${calculatedClr.toFixed(2)}`);
+        setCalcResult(`Required CLR: ${calculatedClr.toFixed(2)}`);
+    }
+
+    const handleCheckStandards = () => {
+        const fat = parseFloat(checkFat);
+        const snf = parseFloat(checkSnf);
+        const legalStandards = standards[checkMilkType];
+
+        if (isNaN(fat) || isNaN(snf)) {
+            setCheckResult(<p className="text-red-600">Please enter valid Fat and SNF values.</p>);
+            return;
+        }
+        
+        const fatPass = fat >= legalStandards.fat;
+        const snfPass = snf >= legalStandards.snf;
+
+        const resultJsx = (
+            <div>
+                <p className="mb-2">Comparing against <strong>{state}</strong> standards for <strong>{checkMilkType} Milk</strong>:</p>
+                <div className={`flex items-center gap-2 ${fatPass ? 'text-green-600' : 'text-red-600'}`}>
+                    {fatPass ? <CheckCircle className="w-5 h-5"/> : <XCircle className="w-5 h-5"/>}
+                    Fat: Your value is <strong>{fat.toFixed(2)}%</strong>. Legal minimum is <strong>{legalStandards.fat.toFixed(2)}%</strong>.
+                </div>
+                <div className={`flex items-center gap-2 mt-1 ${snfPass ? 'text-green-600' : 'text-red-600'}`}>
+                    {snfPass ? <CheckCircle className="w-5 h-5"/> : <XCircle className="w-5 h-5"/>}
+                    SNF: Your value is <strong>{snf.toFixed(2)}%</strong>. Legal minimum is <strong>{legalStandards.snf.toFixed(2)}%</strong>.
+                </div>
+                 <p className={`mt-3 font-bold text-lg ${fatPass && snfPass ? 'text-green-700' : 'text-red-700'}`}>
+                    Result: Milk {fatPass && snfPass ? "MEETS" : "DOES NOT MEET"} the standards.
+                </p>
+            </div>
+        );
+        setCheckResult(resultJsx);
     }
 
     return (
@@ -245,31 +286,58 @@ function StatewiseSNFCalc() {
 
             <div className="mt-6 bg-muted/50 p-4 rounded-lg space-y-3">
                 <h4 className="font-bold text-lg text-primary">SNF / CLR Calculator</h4>
-                <div>
-                    <Label>Milk Type (for Correction Factor)</Label>
-                    <Select value={milkType} onValueChange={setMilkType}>
-                        <SelectTrigger><SelectValue/></SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="cow">Cow Milk (Factor: 0.72)</SelectItem>
-                            <SelectItem value="buffalo">Buffalo Milk (Factor: 0.85)</SelectItem>
-                        </SelectContent>
-                    </Select>
+                <div className="grid grid-cols-2 gap-4">
+                    <div>
+                        <Label>Milk Type</Label>
+                        <Select value={calcFactorType} onValueChange={setCalcFactorType}>
+                            <SelectTrigger><SelectValue/></SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="cow">Cow Milk (Factor: 0.72)</SelectItem>
+                                <SelectItem value="buffalo">Buffalo Milk (Factor: 0.85)</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <div>
+                        <Label>Manual Correction Factor</Label>
+                        <Input type="number" value={manualFactor} onChange={e => setManualFactor(e.target.value)} placeholder="e.g., 0.75" />
+                    </div>
                 </div>
-                 <div><Label>Fat %</Label><Input type="number" value={fat} onChange={e => setFat(e.target.value)} placeholder="4.5" /></div>
+                 <div><Label>Fat %</Label><Input type="number" value={calcFat} onChange={e => setCalcFat(e.target.value)} placeholder="4.5" /></div>
                 
                 <div className="grid grid-cols-2 gap-4 items-end">
                     <div>
                         <Label>CLR</Label>
-                        <Input type="number" value={clr} onChange={e => setClr(e.target.value)} placeholder="28.0" />
+                        <Input type="number" value={calcClr} onChange={e => setCalcClr(e.target.value)} placeholder="28.0" />
                         <Button onClick={handleCalcSnf} className="w-full mt-2">Calculate SNF</Button>
                     </div>
                     <div>
                         <Label>Target SNF %</Label>
-                        <Input type="number" value={targetSnf} onChange={e => setTargetSnf(e.target.value)} placeholder="8.5" />
+                        <Input type="number" value={calcTargetSnf} onChange={e => setCalcTargetSnf(e.target.value)} placeholder="8.5" />
                         <Button onClick={handleCalcClr} className="w-full mt-2">Calculate CLR</Button>
                     </div>
                 </div>
-                 {result && <div className="mt-4 text-center"><p className="text-xl font-bold text-green-700">{result}</p></div>}
+                 {calcResult && <div className="mt-4 text-center"><p className="text-xl font-bold text-green-700">{calcResult}</p></div>}
+            </div>
+
+            <div className="mt-6 bg-muted/50 p-4 rounded-lg space-y-3">
+                <h4 className="font-bold text-lg text-primary">State-wise Standard Check</h4>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                     <div>
+                        <Label>Milk Type</Label>
+                        <Select value={checkMilkType} onValueChange={(v) => setCheckMilkType(v as any)}>
+                            <SelectTrigger><SelectValue/></SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="Cow">Cow Milk</SelectItem>
+                                <SelectItem value="Buffalo">Buffalo Milk</SelectItem>
+                                <SelectItem value="Mixed">Mixed Milk</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <div><Label>Enter Your Fat %</Label><Input type="number" value={checkFat} onChange={e => setCheckFat(e.target.value)} placeholder="e.g., 3.5"/></div>
+                    <div><Label>Enter Your SNF %</Label><Input type="number" value={checkSnf} onChange={e => setCheckSnf(e.target.value)} placeholder="e.g., 8.5"/></div>
+                </div>
+                 <Button onClick={handleCheckStandards} className="w-full mt-4">Check Compliance</Button>
+                 {checkResult && <Alert className="mt-4"><AlertDescription>{checkResult}</AlertDescription></Alert>}
             </div>
         </CalculatorCard>
     );

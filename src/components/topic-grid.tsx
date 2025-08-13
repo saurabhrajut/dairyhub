@@ -63,7 +63,7 @@ const topics = [
   { id: 'adulteration', title: 'Adulteration', description: 'Detection & Prevention', category: 'milk', icon: TestTube, badge: 'Updated', modal: AdulterationModal, isPro: true },
   { id: 'std1', title: 'Standardization I', description: 'Basic Principles', category: 'milk', icon: Scale, modal: StandardizationIModal, isPro: false },
   { id: 'std2', title: 'Standardization II', description: 'Advanced Blending', category: 'milk', icon: Calculator, modal: StandardizationIIModal, isPro: true },
-  { id: 'various-calculators', title: 'Various Calculators', description: 'Yield, Acidity, Fat etc.', category: 'science', icon: FileSpreadsheet, badge: 'New', modal: VariousCalculatorsModal, isPro: true },
+  { id: 'various-calculators', title: 'Various Calculations', description: 'Yield, Acidity, Fat etc.', category: 'science', icon: FileSpreadsheet, badge: 'New', modal: VariousCalculatorsModal, isPro: true },
   { id: 'cip-process', title: 'CIP Process', description: 'Cleaning-In-Place Guide', category: 'industry', icon: Recycle, badge: 'New', modal: CipProcessModal, isPro: true },
   { id: 'paneer-production', title: 'Paneer Production', description: 'Process & Yield', category: 'science', icon: PaneerIcon, modal: PaneerProductionModal, isPro: true },
   { id: 'ice-cream-calc', title: 'Ice Cream Calc', description: 'Overrun & Mix', category: 'science', icon: IceCreamIcon, modal: IceCreamCalculationsModal, isPro: true },
@@ -184,5 +184,3 @@ export function TopicGrid() {
     </>
   );
 }
-
-    
