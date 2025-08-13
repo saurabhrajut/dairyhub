@@ -52,6 +52,7 @@ import { MicrobiologyTestingModal } from "./info-modals/microbiology-testing-mod
 import { MilkHandlingPreservationModal } from "./info-modals/milk-handling-preservation-modal";
 import { FssaiStandardsModal } from "./info-modals/fssai-standards-modal";
 import { VariousCalculatorsModal } from "./calculators/various-calculators-modal";
+import { FermentedProductsModal } from "./info-modals/fermented-products-modal";
 
 const topics = [
   { id: 'industry', title: 'Dairy Industry', description: 'Overview & Trends', category: 'industry', icon: Factory, badge: 'New', modal: DairyIndustryModal, isPro: true },
@@ -60,6 +61,7 @@ const topics = [
   { id: 'milk-chemistry', title: 'Milk Chemistry', description: 'Composition & Properties', category: 'science', icon: FlaskConical, modal: MilkChemistryModal, isPro: true },
   { id: 'solutions-prep', title: 'Solutions Preparation', description: 'Reagents & Calculators', category: 'science', icon: Beaker, modal: SolutionsPrepModal, isPro: true },
   { id: 'microbiology', title: 'Microbiology', description: 'Testing & Pathogens', category: 'science', icon: Bug, badge: 'New', modal: MicrobiologyTestingModal, isPro: true },
+  { id: 'fermented-products', title: 'Fermented Products', description: 'Yogurt, Dahi & More', category: 'science', icon: TestTube, badge: 'New', modal: FermentedProductsModal, isPro: true },
   { id: 'adulteration', title: 'Adulteration', description: 'Detection & Prevention', category: 'milk', icon: TestTube, badge: 'Updated', modal: AdulterationModal, isPro: true },
   { id: 'std1', title: 'Standardization I', description: 'Basic Principles', category: 'milk', icon: Scale, modal: StandardizationIModal, isPro: false },
   { id: 'std2', title: 'Standardization II', description: 'Advanced Blending', category: 'milk', icon: Calculator, modal: StandardizationIIModal, isPro: true },
