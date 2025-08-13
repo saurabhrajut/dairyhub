@@ -1,3 +1,4 @@
+
 "use client";
 
 import {
@@ -121,6 +122,15 @@ export function EvaporationDryingModal({ isOpen, setIsOpen }: { isOpen: boolean;
                     <SubSection title="Evaporation (Concentration)">
                         <p>Evaporation is the core process for concentrating milk, involving the removal of water molecules by transforming them from a liquid to a vapor state through heating. Operating under vacuum significantly lowers the boiling point of water, allowing it to evaporate at much lower temperatures (40-50°C), which is paramount for preserving the integrity of heat-sensitive milk components. Modern evaporators, especially falling film types, create a thin film of milk over heated surfaces to maximize heat transfer and minimize processing time. Multi-effect evaporator systems are frequently employed in large-scale operations, where multiple stages operate at progressively lower pressures and temperatures. The vapor generated in one effect is used as the heating medium for the subsequent effect, significantly improving overall energy efficiency.</p>
                     </SubSection>
+                     <SubSection title="Types of Evaporators">
+                        <p>Various designs of evaporators are used in the dairy industry, each with its own advantages and disadvantages.</p>
+                        <ul>
+                            <li><strong>Horizontal Tube Evaporators:</strong> In this design, steam is inside the tubes and milk is outside in the shell. While simple, they are less efficient due to poor milk circulation and are difficult to clean.</li>
+                            <li><strong>Vertical Tube Evaporators (Calandria Type):</strong> Here, milk is inside the tubes and steam is outside. This design, especially the short-tube version known as the **Calandria Evaporator**, offers better heat transfer due to natural circulation (thermosyphon effect). They are commonly used for pre-condensing milk.</li>
+                            <li><strong>Falling Film Evaporators:</strong> This is the most widely used type in modern dairies. Milk is fed to the top of long vertical tubes and flows down as a thin film on the inside walls, while steam heats the outside. This provides very efficient heat transfer, short contact time for the milk, and is suitable for heat-sensitive products.</li>
+                            <li><strong>Rising Film Evaporators:</strong> Milk is fed to the bottom of the tubes. As it boils, the vapor bubbles cause the liquid to rise up the tubes as a film. This design is also efficient but can have longer contact times than falling film evaporators.</li>
+                        </ul>
+                    </SubSection>
                     <SubSection title="Sterilization Methods">
                         <h4>In-Can Sterilization (Traditional)</h4>
                         <p>Traditionally, evaporated milk is filled into cans, hermetically sealed, and then subjected to high temperatures (115-118°C for 15 minutes) within retorts. This method can lead to undesirable changes such as darkening, a "cooked" flavor, and potential gelling during storage. Stabilizing salts are often added to mitigate these issues.</p>
@@ -139,6 +149,46 @@ export function EvaporationDryingModal({ isOpen, setIsOpen }: { isOpen: boolean;
                     </ul>
                     <SubSection title="Initial Processing Steps">
                         <p>The process starts with pasteurized milk, which is then separated into skim milk and cream. For WMP, cream is added back to achieve the desired fat content. The standardized milk is then preheated (75-120°C) to denature whey proteins, influencing the final powder's properties. A crucial step is pre-concentration in multi-effect evaporators, where over 85% of the water is removed under vacuum, significantly reducing energy costs for the final drying stage.</p>
+                    </SubSection>
+                     <SubSection title="Composition of Milk Powders">
+                        <div className="overflow-x-auto">
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>Component (%)</TableHead>
+                                        <TableHead>Whole Milk Powder (WMP)</TableHead>
+                                        <TableHead>Skim Milk Powder (SMP)</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    <TableRow>
+                                        <TableCell>Moisture</TableCell>
+                                        <TableCell>2.5 - 4.0</TableCell>
+                                        <TableCell>3.0 - 4.0</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell>Fat</TableCell>
+                                        <TableCell>26.0 - 40.0</TableCell>
+                                        <TableCell>Max 1.5</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell>Protein</TableCell>
+                                        <TableCell>25.0 - 27.0</TableCell>
+                                        <TableCell>34.0 - 37.0</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell>Lactose</TableCell>
+                                        <TableCell>36.0 - 38.0</TableCell>
+                                        <TableCell>49.0 - 52.0</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell>Ash (Minerals)</TableCell>
+                                        <TableCell>5.5 - 6.5</TableCell>
+                                        <TableCell>7.9 - 8.2</TableCell>
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
+                        </div>
                     </SubSection>
                 </Section>
               </TabsContent>
