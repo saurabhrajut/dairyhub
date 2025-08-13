@@ -25,6 +25,7 @@ import {
   ShieldCheck,
   FileSpreadsheet,
   Search,
+  Wind,
 } from "lucide-react";
 import { PaneerIcon, IceCreamIcon } from "@/components/icons";
 import { Input } from "@/components/ui/input";
@@ -53,6 +54,7 @@ import { MilkHandlingPreservationModal } from "./info-modals/milk-handling-prese
 import { FssaiStandardsModal } from "./info-modals/fssai-standards-modal";
 import { VariousCalculatorsModal } from "./calculators/various-calculators-modal";
 import { FermentedProductsModal } from "./info-modals/fermented-products-modal";
+import { EvaporationDryingModal } from "./info-modals/evaporation-drying-modal";
 
 const topics = [
   { id: 'industry', title: 'Dairy Industry', description: 'Overview & Trends', category: 'industry', icon: Factory, badge: 'New', modal: DairyIndustryModal, isPro: true },
@@ -62,6 +64,7 @@ const topics = [
   { id: 'solutions-prep', title: 'Solutions Preparation', description: 'Reagents & Calculators', category: 'science', icon: Beaker, modal: SolutionsPrepModal, isPro: true },
   { id: 'microbiology', title: 'Microbiology', description: 'Testing & Pathogens', category: 'science', icon: Bug, badge: 'New', modal: MicrobiologyTestingModal, isPro: true },
   { id: 'fermented-products', title: 'Fermented Products', description: 'Yogurt, Dahi & More', category: 'science', icon: TestTube, badge: 'New', modal: FermentedProductsModal, isPro: true },
+  { id: 'evaporation-drying', title: 'Evaporation & Drying', description: 'Condensed & Powdered Milk', category: 'science', icon: Wind, badge: 'New', modal: EvaporationDryingModal, isPro: true },
   { id: 'adulteration', title: 'Adulteration', description: 'Detection & Prevention', category: 'milk', icon: TestTube, badge: 'Updated', modal: AdulterationModal, isPro: true },
   { id: 'std1', title: 'Standardization I', description: 'Basic Principles', category: 'milk', icon: Scale, modal: StandardizationIModal, isPro: false },
   { id: 'std2', title: 'Standardization II', description: 'Advanced Blending', category: 'milk', icon: Calculator, modal: StandardizationIIModal, isPro: true },
@@ -186,3 +189,5 @@ export function TopicGrid() {
     </>
   );
 }
+
+    
