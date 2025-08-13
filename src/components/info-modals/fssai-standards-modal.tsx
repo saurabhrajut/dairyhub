@@ -17,7 +17,7 @@ const ProductCard = ({ title, children }: { title: string, children: React.React
         <div className="bg-gray-100 p-4 border-b border-gray-200">
             <h2 className="text-xl font-semibold text-gray-800 font-headline">{title}</h2>
         </div>
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
             {children}
         </div>
     </div>
@@ -225,13 +225,12 @@ export function FssaiStandardsModal({ isOpen, setIsOpen }: { isOpen: boolean; se
                             <TableBody>
                                 <TableRow><td>Moisture*, maximum, % (m/m)</td><td>5.0</td><td>5.0</td><td>5.0</td><td>5.0</td></TableRow>
                                 <TableRow><td>Milk fat, % (m/m)</td><td>Min 26.0</td><td>{">1.5 and <26.0"}</td><td>1.5 (maximum)</td><td>42.0 (minimum)</td></TableRow>
-                                <TableRow><td>Milk protein** in milk solids-not-fat, min, % (m/m)</td><td>34.0</td><td>34.0</td><td>34.0</td><td>34.0</td></TableRow>
+                                <TableRow><td>Milk protein in milk solids-not-fat, min, % (m/m)</td><td>34.0</td><td>34.0</td><td>34.0</td><td>34.0</td></TableRow>
                                 <TableRow><td>Insolubility Index, maximum, ml</td><td>2.0</td><td>2.0</td><td>2.0</td><td>-</td></TableRow>
                             </TableBody>
                         </Table>
                     </div>
-                    <Note>Moisture content does not include water of crystallization of lactose.</Note>
-                    <Note>Protein content is 6.38 multiplied by the total nitrogen determined.</Note>
+                    <Note>Moisture content does not include water of crystallization of lactose. Protein content is 6.38 multiplied by the total nitrogen determined.</Note>
                 </ProductCard>
 
                 <ProductCard title="2.1.13 Standard for Fermented Milk Products">
@@ -295,7 +294,7 @@ export function FssaiStandardsModal({ isOpen, setIsOpen }: { isOpen: boolean; se
                                 <TableRow><td>Total Solids, minimum, % (m/m)</td><td>36.0</td><td>30.0</td><td>26.0</td></TableRow>
                                 <TableRow><td>Weight, minimum, g/l</td><td>525.0</td><td>475.0</td><td>475.0</td></TableRow>
                                 <TableRow><td>Milk Fat, % (m/m)</td><td>10.0 (minimum)</td><td>More than 2.5 and less than 10.0</td><td>2.5 (maximum)</td></TableRow>
-                                <TableRow><td>Milk Protein*, minimum, % (m/m)</td><td>3.5</td><td>3.5</td><td>3.0</td></TableRow>
+                                <TableRow><td>Milk Protein, minimum, % (m/m)</td><td>3.5</td><td>3.5</td><td>3.0</td></TableRow>
                             </TableBody>
                         </Table>
                     </div>
@@ -311,7 +310,7 @@ export function FssaiStandardsModal({ isOpen, setIsOpen }: { isOpen: boolean; se
                             <TableBody>
                                 <TableRow><td>Total Solids, minimum, % (m/m)</td><td>20.0</td></TableRow>
                                 <TableRow><td>Milk Fat, maximum, % (m/m)</td><td>2.0</td></TableRow>
-                                <TableRow><td>Milk Protein*, minimum, % (m/m)</td><td>3.5</td></TableRow>
+                                <TableRow><td>Milk Protein, minimum, % (m/m)</td><td>3.5</td></TableRow>
                             </TableBody>
                         </Table>
                     </div>
@@ -392,15 +391,14 @@ export function FssaiStandardsModal({ isOpen, setIsOpen }: { isOpen: boolean; se
                             <TableBody>
                                 <TableRow><td>Moisture, maximum, % (m/m)</td><td>12.0</td><td>12.0</td><td>8.0</td></TableRow>
                                 <TableRow><td>Milk fat, maximum, % (m/m)</td><td>2.0</td><td>2.0</td><td>2.0</td></TableRow>
-                                <TableRow><td>Milk protein*, minimum, % (m/m), dry matter basis</td><td>90.0</td><td>84.0</td><td>88.0</td></TableRow>
+                                <TableRow><td>Milk protein, minimum, % (m/m), dry matter basis</td><td>90.0</td><td>84.0</td><td>88.0</td></TableRow>
                                 <TableRow><td>Casein in protein, minimum, % (m/m)</td><td>95.0</td><td>95.0</td><td>95.0</td></TableRow>
-                                <TableRow><td>Lactose**, maximum, % (m/m)</td><td>1.0</td><td>1.0</td><td>1.0</td></TableRow>
+                                <TableRow><td>Lactose, maximum, % (m/m)</td><td>1.0</td><td>1.0</td><td>1.0</td></TableRow>
                                 <TableRow><td>Total ash including P2O5, % (m/m)</td><td>2.5 (maximum)</td><td>7.5 (minimum)</td><td>-</td></TableRow>
                             </TableBody>
                         </Table>
                     </div>
-                    <Note>Protein content is 6.38 multiplied by the total nitrogen determined.</Note>
-                    <Note>Lactose content is expressed as anhydrous lactose.</Note>
+                    <Note>Protein content is 6.38 multiplied by the total nitrogen determined. Lactose content is expressed as anhydrous lactose.</Note>
                 </ProductCard>
 
                 <ProductCard title="2.1.20 Standards for Edible Lactose">
@@ -438,7 +436,7 @@ export function FssaiStandardsModal({ isOpen, setIsOpen }: { isOpen: boolean; se
                             </TableHeader>
                             <TableBody>
                                 <TableRow><td>Moisture, maximum, % (m/m)</td><td>6.0</td></TableRow>
-                                <TableRow><td>Milk Protein**, minimum, % (m/m)</td><td>35.0</td></TableRow>
+                                <TableRow><td>Milk Protein, minimum, % (m/m)</td><td>35.0</td></TableRow>
                                 <TableRow><td>Milk Fat, maximum, % (m/m)</td><td>10</td></TableRow>
                                 <TableRow><td>Scorched particles, maximum</td><td>Disc B (15 mg)</td></TableRow>
                             </TableBody>
@@ -465,7 +463,7 @@ export function FssaiStandardsModal({ isOpen, setIsOpen }: { isOpen: boolean; se
                             </TableHeader>
                             <TableBody>
                                 <TableRow><td>Moisture, maximum, % (m/m)</td><td>80.0</td></TableRow>
-                                <TableRow><td>Protein*, minimum, % (m/m)</td><td>7.0</td></TableRow>
+                                <TableRow><td>Protein, minimum, % (m/m)</td><td>7.0</td></TableRow>
                                 <TableRow><td>Fat, minimum, % (m/m)</td><td>4.0</td></TableRow>
                                 <TableRow><td>Immunoglobulins, minimum, % (m/m)</td><td>1.8</td></TableRow>
                                 <TableRow><td>Lactoferrin, minimum, % (m/m)</td><td>0.2</td></TableRow>
@@ -483,7 +481,7 @@ export function FssaiStandardsModal({ isOpen, setIsOpen }: { isOpen: boolean; se
                             </TableHeader>
                             <TableBody>
                                 <TableRow><td>Moisture, maximum, % (m/m)</td><td>4.0</td></TableRow>
-                                <TableRow><td>Protein*, minimum, % (m/m)</td><td>40.0</td></TableRow>
+                                <TableRow><td>Protein, minimum, % (m/m)</td><td>40.0</td></TableRow>
                                 <TableRow><td>Fat, minimum, % (m/m)</td><td>17.5</td></TableRow>
                                 <TableRow><td>Immunoglobulins, minimum, % (m/m)</td><td>12.5</td></TableRow>
                                 <TableRow><td>Lactoferrin, minimum, % (m/m)</td><td>1.2</td></TableRow>
