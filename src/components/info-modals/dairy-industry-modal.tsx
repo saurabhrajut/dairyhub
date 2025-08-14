@@ -70,16 +70,16 @@ export function DairyIndustryModal({
                         <Table>
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead>{content.overview.table.header1}</TableHead>
-                                    <TableHead>{content.overview.table.header2}</TableHead>
+                                    <TableHead>{content.overview.drivers_challenges.table.header1}</TableHead>
+                                    <TableHead>{content.overview.drivers_challenges.table.header2}</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                <TableRow><TableCell>{content.overview.table.row1_col1}</TableCell><TableCell>{content.overview.table.row1_col2}</TableCell></TableRow>
-                                <TableRow><TableCell>{content.overview.table.row2_col1}</TableCell><TableCell>{content.overview.table.row2_col2}</TableCell></TableRow>
-                                <TableRow><TableCell>{content.overview.table.row3_col1}</TableCell><TableCell>{content.overview.table.row3_col2}</TableCell></TableRow>
-                                <TableRow><TableCell>{content.overview.table.row4_col1}</TableCell><TableCell>{content.overview.table.row4_col2}</TableCell></TableRow>
-                                <TableRow><TableCell>{content.overview.table.row5_col1}</TableCell><TableCell>{content.overview.table.row5_col2}</TableCell></TableRow>
+                                <TableRow><TableCell>{content.overview.drivers_challenges.table.row1_col1}</TableCell><TableCell>{content.overview.drivers_challenges.table.row1_col2}</TableCell></TableRow>
+                                <TableRow><TableCell>{content.overview.drivers_challenges.table.row2_col1}</TableCell><TableCell>{content.overview.drivers_challenges.table.row2_col2}</TableCell></TableRow>
+                                <TableRow><TableCell>{content.overview.drivers_challenges.table.row3_col1}</TableCell><TableCell>{content.overview.drivers_challenges.table.row3_col2}</TableCell></TableRow>
+                                <TableRow><TableCell>{content.overview.drivers_challenges.table.row4_col1}</TableCell><TableCell>{content.overview.drivers_challenges.table.row4_col2}</TableCell></TableRow>
+                                <TableRow><TableCell>{content.overview.drivers_challenges.table.row5_col1}</TableCell><TableCell>{content.overview.drivers_challenges.table.row5_col2}</TableCell></TableRow>
                             </TableBody>
                         </Table>
                     </div>
