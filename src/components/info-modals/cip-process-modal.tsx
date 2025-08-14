@@ -147,8 +147,8 @@ export function CipProcessModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-4xl lg:max-w-6xl w-[95vw] max-h-[90vh]">
-        <DialogHeader>
+      <DialogContent className="max-w-4xl lg:max-w-6xl w-[95vw] h-full max-h-[90vh] flex flex-col p-0 sm:p-6">
+        <DialogHeader className="p-4 sm:p-0">
           <DialogTitle className="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-2 font-headline">
             {content.main_title}
           </DialogTitle>
@@ -156,7 +156,7 @@ export function CipProcessModal({
             {content.main_description}
           </DialogDescription>
         </DialogHeader>
-        <ScrollArea className="h-full pr-6">
+        <ScrollArea className="h-full pr-6 p-4 sm:p-0">
           <Section id="intro" title={content.intro.title} defaultOpen>
               <div dangerouslySetInnerHTML={{ __html: content.intro.htmlContent }} />
           </Section>

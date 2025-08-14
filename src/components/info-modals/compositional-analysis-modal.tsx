@@ -51,8 +51,8 @@ const Procedure = ({ title, purpose, reference, children }: { title: string, pur
 export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-6xl h-[95vh] flex flex-col">
-        <DialogHeader>
+      <DialogContent className="max-w-6xl w-[95vw] h-full max-h-[90vh] flex flex-col p-0 sm:p-6">
+        <DialogHeader className="p-4 sm:p-0">
           <DialogTitle className="text-3xl font-bold text-center text-gray-800 font-headline">
             Compositional Analysis of Dairy Products
           </DialogTitle>
@@ -63,7 +63,7 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
 
         <Tabs defaultValue="processed-milk" className="w-full flex-1 flex flex-col min-h-0">
             <ScrollArea className="flex-shrink-0">
-                <TabsList className="grid w-full h-auto grid-cols-3 md:grid-cols-6 lg:grid-cols-12">
+                <TabsList className="grid w-full h-auto grid-cols-3 md:grid-cols-6 lg:grid-cols-12 p-2 sm:p-0">
                     <TabsTrigger value="processed-milk">Milk</TabsTrigger>
                     <TabsTrigger value="cream">Cream</TabsTrigger>
                     <TabsTrigger value="cream-powder">Cream Powder</TabsTrigger>
@@ -80,7 +80,8 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                     <TabsTrigger value="whey-powder">Whey Powder</TabsTrigger>
                 </TabsList>
             </ScrollArea>
-            <ScrollArea className="flex-1 mt-4 pr-4">
+            <ScrollArea className="flex-1 mt-4 sm:pr-4">
+                <div className="p-4 sm:p-0">
                  <TabsContent value="processed-milk" className="mt-0">
                     <div className="prose prose-sm max-w-none break-words">
                         <InfoCard>
@@ -547,7 +548,7 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                             </Accordion>
                         </InfoCard>
                     </div>
-                </TabsContent>
+                 </TabsContent>
                  <TabsContent value="khoa">
                     <div className="prose prose-sm max-w-none break-words">
                         <InfoCard>
@@ -568,7 +569,7 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                             </Accordion>
                         </InfoCard>
                     </div>
-                </TabsContent>
+                 </TabsContent>
                  <TabsContent value="ice-cream">
                     <div className="prose prose-sm max-w-none break-words">
                         <InfoCard>
@@ -778,6 +779,7 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                         </InfoCard>
                     </div>
                 </TabsContent>
+                </div>
             </ScrollArea>
         </Tabs>
       </DialogContent>

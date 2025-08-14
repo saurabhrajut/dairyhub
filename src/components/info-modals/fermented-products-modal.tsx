@@ -41,8 +41,8 @@ export function FermentedProductsModal({ isOpen, setIsOpen }: { isOpen: boolean;
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-4xl lg:max-w-6xl w-[95vw] max-h-[90vh] flex flex-col">
-        <DialogHeader>
+      <DialogContent className="max-w-4xl lg:max-w-6xl w-[95vw] h-full max-h-[90vh] flex flex-col p-0 sm:p-6">
+        <DialogHeader className="p-4 sm:p-0">
           <DialogTitle className="text-2xl md:text-3xl font-bold text-center text-gray-800 font-headline">
             {content.title}
           </DialogTitle>
@@ -52,7 +52,7 @@ export function FermentedProductsModal({ isOpen, setIsOpen }: { isOpen: boolean;
         </DialogHeader>
         <Tabs defaultValue="intro" className="w-full flex-1 flex flex-col min-h-0">
           <ScrollArea className="flex-shrink-0">
-            <TabsList className="grid w-full h-auto grid-cols-2 md:grid-cols-4 lg:grid-cols-7">
+            <TabsList className="grid w-full h-auto grid-cols-2 md:grid-cols-4 lg:grid-cols-7 p-2 sm:p-0">
               <TabsTrigger value="intro">{content.tabs.intro}</TabsTrigger>
               <TabsTrigger value="processing">{content.tabs.processing}</TabsTrigger>
               <TabsTrigger value="quality-control">{content.tabs.quality_control}</TabsTrigger>
@@ -62,8 +62,8 @@ export function FermentedProductsModal({ isOpen, setIsOpen }: { isOpen: boolean;
               <TabsTrigger value="innovations">{content.tabs.innovations}</TabsTrigger>
             </TabsList>
           </ScrollArea>
-          <ScrollArea className="flex-1 mt-4 pr-4">
-            <div className="prose prose-sm max-w-none break-words">
+          <ScrollArea className="flex-1 mt-4 sm:pr-4">
+            <div className="prose prose-sm max-w-none break-words p-4 sm:p-0">
 
               <TabsContent value="intro" className="mt-0">
                 <Section title={content.sections.executive_summary.title}>

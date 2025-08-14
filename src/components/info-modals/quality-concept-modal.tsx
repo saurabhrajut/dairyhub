@@ -15,7 +15,7 @@ import { qualityContent } from "@/lib/content/quality-content";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Section = ({ title, id, children }: { title: string, id: string, children: React.ReactNode }) => (
-    <div id={id} className="prose max-w-none text-gray-700 text-base leading-relaxed">
+    <div id={id} className="prose max-w-none text-gray-700 text-base leading-relaxed break-words">
         <h2 className="text-2xl font-bold text-primary mb-4 border-b-2 border-primary/20 pb-2 scroll-mt-24 font-headline">{title}</h2>
         <div className="space-y-4">{children}</div>
     </div>
@@ -34,8 +34,8 @@ export function QualityConceptModal({ isOpen, setIsOpen }: { isOpen: boolean; se
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-4xl lg:max-w-5xl w-[95vw] max-h-[90vh] flex flex-col">
-        <DialogHeader>
+      <DialogContent className="max-w-4xl lg:max-w-5xl w-[95vw] h-full max-h-[90vh] flex flex-col p-0 sm:p-6">
+        <DialogHeader className="p-4 sm:p-0">
           <DialogTitle className="text-2xl md:text-3xl font-bold text-center text-gray-800 font-headline">{content.title}</DialogTitle>
           <DialogDescription className="text-center text-lg text-gray-500">
             {content.description}
@@ -43,7 +43,7 @@ export function QualityConceptModal({ isOpen, setIsOpen }: { isOpen: boolean; se
         </DialogHeader>
         <Tabs defaultValue="intro" className="w-full flex-1 flex flex-col min-h-0">
           <ScrollArea className="flex-shrink-0">
-            <TabsList className="grid w-full h-auto grid-cols-2 sm:grid-cols-4 lg:grid-cols-8">
+            <TabsList className="grid w-full h-auto grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 p-2 sm:p-0">
                  <TabsTrigger value="intro">Introduction</TabsTrigger>
                  <TabsTrigger value="concepts">Concepts</TabsTrigger>
                  <TabsTrigger value="prps">PRPs</TabsTrigger>
@@ -54,9 +54,10 @@ export function QualityConceptModal({ isOpen, setIsOpen }: { isOpen: boolean; se
                  <TabsTrigger value="bodies">Bodies</TabsTrigger>
             </TabsList>
           </ScrollArea>
-            <ScrollArea className="flex-1 mt-4 pr-6">
+            <ScrollArea className="flex-1 mt-4 sm:pr-4">
+                <div className="p-4 sm:p-0">
                 <TabsContent value="intro" className="mt-0">
-                     <div className="prose max-w-none text-gray-700 text-base leading-relaxed">
+                     <div className="prose max-w-none text-gray-700 text-base leading-relaxed break-words">
                         <p>{content.intro1}</p>
                         <p>{content.intro2}</p>
                         <p>{content.intro3}</p>
@@ -207,6 +208,7 @@ export function QualityConceptModal({ isOpen, setIsOpen }: { isOpen: boolean; se
                         <p>{content.regulatory_bodies.export_act.p1}</p>
                     </Section>
                 </TabsContent>
+                </div>
             </ScrollArea>
         </Tabs>
       </DialogContent>

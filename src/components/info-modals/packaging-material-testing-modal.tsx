@@ -55,8 +55,8 @@ export function PackagingMaterialTestingModal({ isOpen, setIsOpen }: { isOpen: b
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-6xl h-[90vh] flex flex-col">
-        <DialogHeader>
+      <DialogContent className="max-w-6xl w-[95vw] h-full max-h-[90vh] flex flex-col p-0 sm:p-6">
+        <DialogHeader className="p-4 sm:p-0">
           <DialogTitle className="text-3xl font-bold text-center text-gray-800 font-headline">{content.title}</DialogTitle>
           <DialogDescription className="text-center text-lg text-gray-500">
             {content.description}
@@ -64,15 +64,17 @@ export function PackagingMaterialTestingModal({ isOpen, setIsOpen }: { isOpen: b
         </DialogHeader>
 
         <Tabs defaultValue="introduction" className="w-full flex-1 flex flex-col min-h-0">
-            <TabsList className="grid w-full h-auto grid-cols-2 md:grid-cols-4">
+            <TabsList className="grid w-full h-auto grid-cols-2 md:grid-cols-4 p-2 sm:p-0">
                 <TabsTrigger value="introduction">{content.tabs.intro}</TabsTrigger>
                 <TabsTrigger value="materials">{content.tabs.materials}</TabsTrigger>
                 <TabsTrigger value="forms-processes">{content.tabs.forms}</TabsTrigger>
                 <TabsTrigger value="testing">{content.tabs.testing}</TabsTrigger>
             </TabsList>
-            <ScrollArea className="flex-1 mt-4 pr-6">
+            <ScrollArea className="flex-1 mt-4 sm:pr-4">
+                <div className="p-4 sm:p-0">
                  <TabsContent value="introduction" className="mt-0">
                     <Section title={content.introduction.title} id="introduction">
+                        <div className="prose prose-sm max-w-none break-words">
                         <p>{content.introduction.p1}</p>
                         <p>{content.introduction.p2}</p>
                         <h3 className="font-bold mt-4">{content.introduction.purpose_title}</h3>
@@ -80,10 +82,12 @@ export function PackagingMaterialTestingModal({ isOpen, setIsOpen }: { isOpen: b
                            {content.introduction.purposes.map((purpose, index) => <li key={index}>{purpose}</li>)}
                         </ul>
                          <p>{content.introduction.p3}</p>
+                        </div>
                     </Section>
                  </TabsContent>
                  <TabsContent value="materials" className="mt-0">
                     <Section title={content.materials.title} id="materials">
+                        <div className="prose prose-sm max-w-none break-words">
                         <SubHeading id="glass">{content.materials.glass.title}</SubHeading>
                         <p>{content.materials.glass.p1}</p>
                         
@@ -95,10 +99,12 @@ export function PackagingMaterialTestingModal({ isOpen, setIsOpen }: { isOpen: b
 
                         <SubHeading id="laminates">{content.materials.laminates.title}</SubHeading>
                         <p>{content.materials.laminates.p1}</p>
+                        </div>
                     </Section>
                  </TabsContent>
                  <TabsContent value="forms-processes" className="mt-0">
                     <Section title={content.forms.title} id="forms-processes">
+                        <div className="prose prose-sm max-w-none break-words">
                         <p>{content.forms.p1}</p>
                         
                         <SubHeading id="aseptic">{content.forms.aseptic.title}</SubHeading>
@@ -112,17 +118,21 @@ export function PackagingMaterialTestingModal({ isOpen, setIsOpen }: { isOpen: b
 
                         <SubHeading id="retort">{content.forms.retort.title}</SubHeading>
                         <p>{content.forms.retort.p1}</p>
+                        </div>
                     </Section>
                  </TabsContent>
                   <TabsContent value="testing" className="mt-0">
                      <Section title={content.testing.title} id="testing">
+                        <div className="prose prose-sm max-w-none break-words">
                         <p><strong>{content.testing.sampling_title}:</strong> {content.testing.sampling_text}</p>
                         <p><strong>{content.testing.conditioning_title}:</strong> {content.testing.conditioning_text}</p>
                         <Accordion type="single" collapsible className="w-full">
                             {content.testing.tests.map(test => <TestProcedure key={test.title} test={test} />)}
                         </Accordion>
+                        </div>
                     </Section>
                   </TabsContent>
+                </div>
             </ScrollArea>
         </Tabs>
       </DialogContent>
