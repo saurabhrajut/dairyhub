@@ -38,14 +38,24 @@ export function AboutUsModal({
         </DialogHeader>
         <ScrollArea className="flex-1 mt-4 sm:pr-4">
             <div className="p-4 sm:p-0">
-
-                 {/* Developer Info Section - Updated Layout */}
-                <div className="bg-gradient-to-br from-cyan-50 to-blue-100 p-6 sm:p-8 rounded-2xl mb-12 border border-cyan-200">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
-                        <div className="md:col-span-2">
-                             <h3 className="text-2xl font-bold text-gray-800 font-headline">{content.developer.name}</h3>
-                             <div className="mt-4 text-gray-700 text-base leading-relaxed prose prose-sm max-w-none break-words" dangerouslySetInnerHTML={{ __html: content.journey.story }} />
-                             <div className="mt-6 bg-white/70 p-4 rounded-lg shadow-inner inline-block border">
+                {/* Developer Info Section - Updated Layout */}
+                <div className="bg-gradient-to-br from-cyan-50 to-blue-100 p-6 sm:p-8 rounded-2xl mb-8 border border-cyan-200">
+                    <div className="flex flex-col md:flex-row items-center gap-8">
+                        {/* Left Side: Image */}
+                        <div className="flex-shrink-0">
+                            <Image
+                                src={content.developer.image}
+                                data-ai-hint="profile photo"
+                                alt={content.developer.name}
+                                width={240}
+                                height={240}
+                                className="w-48 h-48 sm:w-60 sm:h-60 object-cover rounded-xl shadow-lg ring-4 ring-offset-4 ring-cyan-600"
+                            />
+                        </div>
+                        {/* Right Side: Info */}
+                        <div className="flex-1">
+                             <h3 className="text-2xl font-bold text-gray-800 font-headline mb-4">{content.developer.name}</h3>
+                             <div className="bg-white/70 p-4 rounded-lg shadow-inner inline-block border">
                                 <h4 className="text-md font-bold text-cyan-800 mb-3 font-headline flex items-center gap-2"><GraduationCap className="w-5 h-5"/> {content.developer.academicInfo.title}</h4>
                                 <ul className="space-y-3 text-left">
                                     {content.developer.academicInfo.degrees.map((degree, index) => (
@@ -60,21 +70,14 @@ export function AboutUsModal({
                                 </ul>
                             </div>
                         </div>
-                        <div className="flex justify-center md:justify-end">
-                            <Image
-                                src={content.developer.image}
-                                data-ai-hint="profile photo"
-                                alt={content.developer.name}
-                                width={250}
-                                height={250}
-                                className="w-48 h-48 sm:w-60 sm:h-60 object-cover rounded-xl shadow-lg ring-4 ring-offset-4 ring-cyan-600"
-                            />
-                        </div>
                     </div>
                 </div>
 
                 {/* Welcome Message */}
                 <div className="bg-cyan-50 border-l-4 border-cyan-500 text-cyan-800 p-6 rounded-r-lg my-8 prose prose-lg max-w-none break-words text-center" dangerouslySetInnerHTML={{ __html: content.welcomeMessage }} />
+
+                {/* My Journey */}
+                <div className="my-8 text-gray-700 text-base leading-relaxed prose prose-sm max-w-none break-words" dangerouslySetInnerHTML={{ __html: content.journey.story }} />
                 
                 {/* What's Inside Section */}
                 <div className="mb-12">
