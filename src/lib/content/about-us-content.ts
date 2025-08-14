@@ -1,5 +1,5 @@
 
-import { Bot, Lightbulb, Factory, FlaskConical, Beaker, Scale, Calculator, Settings, TestTube, ClipboardCheck, CheckSquare, Droplet, PackageCheck, Recycle, Bug, ShieldCheck, FileSpreadsheet, Search, Wind, Users, DollarSign, Microscope } from "lucide-react";
+import { Bot, Lightbulb, Factory, FlaskConical, Beaker, Scale, Calculator, Settings, TestTube, ClipboardCheck, CheckSquare, Droplet, PackageCheck, Lock, DollarSign, Microscope, Recycle, Bug, ShieldCheck, FileSpreadsheet, Search, Wind, Users } from "lucide-react";
 import { PaneerIcon, IceCreamIcon, ReagentIcon } from "@/components/icons";
 
 export const aboutUsContent = {
@@ -8,6 +8,7 @@ export const aboutUsContent = {
         description: "आपके भरोसेमंद डिजिटल डेयरी पार्टनर की कहानी",
         developer: {
             name: "सौरभ राजपूत",
+            image: "https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/IMG_6535.HEIC?alt=media&token=5c14e196-79b0-4711-8c69-b532e9bf42fb",
             academicInfo: {
                 title: "शैक्षणिक जानकारी",
                 degrees: [
@@ -21,8 +22,7 @@ export const aboutUsContent = {
         journey: {
             title: "मेरा सफ़र: डेयरी टेक्नोलॉजी के प्रति मेरा जुनून",
             story: `
-                <p>मेरा नाम <strong>सौरभ राजपूत</strong> है, और Dairy Hub मेरा एक सपना है जिसे मैंने आप सबके लिए हकीकत बनाया है।</p>
-                <p>फूड और डेयरी टेक्नोलॉजी के क्षेत्र में मेरी रुचि हमेशा से रही है। अपनी पढ़ाई और इंटर्नशिप के दौरान, मैंने महसूस किया कि इस उद्योग में व्यावहारिक और आसानी से समझ में आने वाली वैज्ञानिक जानकारी की कमी है, खासकर डिजिटल प्लेटफॉर्म पर। इसी कमी को पूरा करने के लिए मैंने Dairy Hub की नींव रखी।</p>
+                <p>डेयरी और खाद्य प्रौद्योगिकी के क्षेत्र में मेरी रुचि हमेशा से रही है। अपनी पढ़ाई और इंटर्नशिप के दौरान, मैंने महसूस किया कि इस उद्योग में व्यावहारिक और आसानी से समझ में आने वाली वैज्ञानिक जानकारी की कमी है, खासकर डिजिटल प्लेटफॉर्म पर। इसी कमी को पूरा करने के लिए मैंने Dairy Hub की नींव रखी।</p>
                 <p>मेरा लक्ष्य एक ऐसा डिजिटल इकोसिस्टम बनाना है जहाँ छात्र, पेशेवर, और डेयरी के प्रति उत्साही लोग आसानी से डेयरी से जुड़ी हर तकनीकी जानकारी प्राप्त कर सकें और अपने काम में बेहतर निर्णय ले सकें।</p>
             `
         },
@@ -74,6 +74,7 @@ export const aboutUsContent = {
         description: "The story of your trusted digital dairy partner",
         developer: {
             name: "Saurabh Rajput",
+            image: "https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/IMG_6535.HEIC?alt=media&token=5c14e196-79b0-4711-8c69-b532e9bf42fb",
             academicInfo: {
                 title: "Academic Information",
                 degrees: [
@@ -87,7 +88,6 @@ export const aboutUsContent = {
         journey: {
             title: "My Journey: A Passion for Dairy Technology",
             story: `
-                <p>My name is <strong>Saurabh Rajput</strong>, and Dairy Hub is a dream that I have turned into reality for all of you.</p>
                 <p>My interest has always been in the field of Food and Dairy Technology. During my studies and internships, I realized there is a lack of practical and easily understandable scientific knowledge in this industry, especially on digital platforms. To fill this gap, I laid the foundation of Dairy Hub.</p>
                 <p>My goal is to create a digital ecosystem where students, professionals, and dairy enthusiasts can easily access every technical detail related to dairy and make better decisions in their work.</p>
             `

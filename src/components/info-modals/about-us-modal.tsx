@@ -39,41 +39,42 @@ export function AboutUsModal({
         <ScrollArea className="flex-1 mt-4 sm:pr-4">
             <div className="p-4 sm:p-0">
 
-                {/* Developer Info Section */}
-                <div className="flex flex-col items-center text-center mb-12">
-                    <Image
-                        src="https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/IMG_6535.jpeg?alt=media&token=ef1eb6fa-e4f8-4d68-a9a6-5aab8538d8ab"
-                        data-ai-hint="profile photo"
-                        alt="Saurabh Rajput"
-                        width={150}
-                        height={150}
-                        className="w-40 h-40 object-cover rounded-xl shadow-lg ring-4 ring-offset-4 ring-cyan-600 mb-4"
-                    />
-                    <h3 className="text-2xl font-bold text-gray-800 font-headline">{content.developer.name}</h3>
-                    <div className="mt-4 bg-gray-50 p-4 rounded-lg shadow-inner inline-block">
-                        <h4 className="text-lg font-bold text-cyan-800 mb-3 font-headline">{content.developer.academicInfo.title}</h4>
-                        <ul className="space-y-3 text-left">
-                            {content.developer.academicInfo.degrees.map((degree, index) => (
-                                <li key={index} className="flex items-start">
-                                    <GraduationCap className="text-cyan-600 mt-1 mr-3 shrink-0"/>
-                                    <div>
-                                        <strong className="block text-gray-800 text-sm">{degree.name}</strong>
-                                        <span className="text-xs text-gray-500">{degree.institution}</span>
-                                    </div>
-                                </li>
-                            ))}
-                        </ul>
+                 {/* Developer Info Section - Updated Layout */}
+                <div className="bg-gradient-to-br from-cyan-50 to-blue-100 p-6 sm:p-8 rounded-2xl mb-12 border border-cyan-200">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+                        <div className="md:col-span-2">
+                             <h3 className="text-2xl font-bold text-gray-800 font-headline">{content.developer.name}</h3>
+                             <div className="mt-4 text-gray-700 text-base leading-relaxed prose prose-sm max-w-none break-words" dangerouslySetInnerHTML={{ __html: content.journey.story }} />
+                             <div className="mt-6 bg-white/70 p-4 rounded-lg shadow-inner inline-block border">
+                                <h4 className="text-md font-bold text-cyan-800 mb-3 font-headline flex items-center gap-2"><GraduationCap className="w-5 h-5"/> {content.developer.academicInfo.title}</h4>
+                                <ul className="space-y-3 text-left">
+                                    {content.developer.academicInfo.degrees.map((degree, index) => (
+                                        <li key={index} className="flex items-start">
+                                            <div className="mt-1 mr-2 text-cyan-600 shrink-0">&bull;</div>
+                                            <div>
+                                                <strong className="block text-gray-800 text-sm">{degree.name}</strong>
+                                                <span className="text-xs text-gray-500">{degree.institution}</span>
+                                            </div>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+                        <div className="flex justify-center md:justify-end">
+                            <Image
+                                src={content.developer.image}
+                                data-ai-hint="profile photo"
+                                alt={content.developer.name}
+                                width={250}
+                                height={250}
+                                className="w-48 h-48 sm:w-60 sm:h-60 object-cover rounded-xl shadow-lg ring-4 ring-offset-4 ring-cyan-600"
+                            />
+                        </div>
                     </div>
                 </div>
 
                 {/* Welcome Message */}
-                <div className="bg-cyan-50 border-l-4 border-cyan-500 text-cyan-800 p-6 rounded-r-lg my-8 prose prose-sm max-w-none break-words" dangerouslySetInnerHTML={{ __html: content.welcomeMessage }} />
-                
-                {/* Journey Section */}
-                <div className="mb-12">
-                    <h2 className="text-3xl font-bold text-gray-800 text-center mb-6 font-headline">{content.journey.title}</h2>
-                    <div className="text-gray-700 text-base leading-relaxed prose prose-sm max-w-none break-words" dangerouslySetInnerHTML={{ __html: content.journey.story }} />
-                </div>
+                <div className="bg-cyan-50 border-l-4 border-cyan-500 text-cyan-800 p-6 rounded-r-lg my-8 prose prose-lg max-w-none break-words text-center" dangerouslySetInnerHTML={{ __html: content.welcomeMessage }} />
                 
                 {/* What's Inside Section */}
                 <div className="mb-12">
