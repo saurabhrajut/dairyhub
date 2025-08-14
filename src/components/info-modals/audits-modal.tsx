@@ -40,7 +40,7 @@ export function AuditsModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen:
           </DialogDescription>
         </DialogHeader>
         <Tabs defaultValue="intro" className="w-full flex-1 flex flex-col min-h-0">
-          <TabsList className="grid w-full h-auto grid-cols-3 sm:grid-cols-4 lg:grid-cols-9">
+          <TabsList className="grid w-full h-auto grid-cols-2 sm:grid-cols-4 lg:grid-cols-8">
             <TabsTrigger value="intro">Intro</TabsTrigger>
             <TabsTrigger value="regulatory">Frameworks</TabsTrigger>
             <TabsTrigger value="internal">Internal Audits</TabsTrigger>
@@ -100,28 +100,30 @@ export function AuditsModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen:
                         </SubSection>
                         <SubSection title="4.2. Step-by-Step Process (PDCA Cycle)">
                             <p>Internal audits typically follow the Plan-Do-Check-Act (PDCA) cycle:</p>
-                            <ul className="list-disc pl-5">
-                                <li><b>Plan:</b> Establish audit objectives, scope, schedule, team, and checklist.</li>
-                                <li><b>Do:</b> Conduct the audit through documentation review and on-site verification.</li>
-                                <li><b>Check:</b> Evaluate findings and report them accurately and unbiasedly.</li>
-                                <li><b>Act:</b> Develop and implement corrective action plans and follow up on their effectiveness.</li>
-                            </ul>
+                            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Plan:</h4>
+                            <p>Establish audit objectives, scope, and schedule. A key part of planning is to integrate all relevant legal compliance requirements into the audit checklist. This includes national laws like FSSAI regulations and international standards like ISO 22000. The checklist must verify adherence to specific legal parameters for processing, packaging, and labeling.</p>
+                            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Do:</h4>
+                            <p>Conduct the audit through documentation review and on-site verification. Auditors must verify that practices not only follow internal SOPs but also comply with all applicable laws and regulations.</p>
+                            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Check:</h4>
+                             <p>Evaluate findings and report them accurately. Any deviation from legal standards must be classified as a major non-conformity and prioritized for immediate action.</p>
+                            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Act:</h4>
+                             <p>Develop and implement corrective action plans and follow up on their effectiveness to ensure both internal and legal compliance.</p>
                         </SubSection>
                     </Section>
                 </TabsContent>
                 <TabsContent value="external">
                     <Section title="5. External Audit Requirements and Process">
-                        <p>External audits provide independent assurance to stakeholders that a dairy plant's food safety system is robust, properly implemented, and effectively controls hazards.</p>
+                        <p>External audits provide independent assurance to stakeholders that a dairy plant's food safety system is robust, properly implemented, and effectively controls hazards. These audits are critical for legal compliance.</p>
                          <SubSection title="5.1. Types of External Audits">
                             <p><b>Second-Party Audits:</b> Conducted by a customer on their supplier.</p>
-                            <p><b>Third-Party Audits:</b> Performed by independent, accredited organizations for certification (e.g., ISO, GFSI) or regulatory compliance.</p>
-                            <p><b>Regulatory Audits:</b> Conducted by government agencies like FSSAI.</p>
+                            <p><b>Third-Party Audits:</b> Performed by independent, accredited organizations for certification (e.g., ISO, GFSI) or for regulatory compliance verification.</p>
+                            <p><b>Regulatory Audits:</b> Conducted by government agencies like FSSAI to enforce legal standards. This is a direct check of legal compliance.</p>
                         </SubSection>
-                         <SubSection title="5.2. The External Audit Process">
-                            <p>The process generally includes application and planning, documentation review, an opening meeting, an on-site verification audit, and a closing meeting where findings are presented.</p>
+                         <SubSection title="5.2. The External Audit Process & Legal Compliance">
+                            <p>The external audit process is fundamentally designed to verify legal compliance. The auditors check if the facility's operations meet all requirements of laws like the Food Safety and Standards Act. This includes checking licenses, product standards, and processing guidelines. The process generally includes application and planning, a thorough documentation review against legal requirements, an on-site verification audit to see the laws in practice, and a closing meeting where any legal non-conformities are presented.</p>
                         </SubSection>
                          <SubSection title="5.3. FSSAI Third-Party Audit System (India Specific)">
-                            <p>FSSAI has a formal system for third-party audits to enhance food safety surveillance. Mandatory audits are required for high-risk categories like dairy. Audit frequency is based on performance scores, incentivizing continuous compliance.</p>
+                            <p>FSSAI's third-party audit system is a formal mechanism to ensure legal compliance. Mandatory audits for high-risk categories like dairy are a legal requirement. The audit frequency itself is determined by the FSSAI based on performance, making continuous compliance a legal and operational necessity.</p>
                              <Table>
                                 <TableHeader><TableRow><TableHead>Audit Score Range</TableHead><TableHead>Recommended Audit Frequency (Dairy)</TableHead></TableRow></TableHeader>
                                 <TableBody>
