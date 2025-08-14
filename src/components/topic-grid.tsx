@@ -57,6 +57,7 @@ import { EvaporationDryingModal } from "./info-modals/evaporation-drying-modal";
 import { AuditsModal } from "./info-modals/audits-modal";
 import { ValidationVerificationModal } from "./info-modals/validation-verification-modal";
 import { EtpModal } from "./info-modals/etp-modal";
+import { IceCreamProductionModal } from "./info-modals/ice-cream-production-modal";
 
 const topics = [
   // Tier 1: Foundational Knowledge
@@ -75,6 +76,7 @@ const topics = [
   { id: 'fermented-products', title: 'Fermented Products', description: 'Yogurt, Dahi & More', category: 'science', icon: ReagentIcon, badge: 'New', modal: FermentedProductsModal, isPro: true, color: 'from-pink-100 to-fuchsia-200' },
   { id: 'evaporation-drying', title: 'Evaporation & Drying', description: 'Condensed & Powdered Milk', category: 'science', icon: Wind, badge: 'New', modal: EvaporationDryingModal, isPro: true, color: 'from-indigo-100 to-blue-200' },
   { id: 'paneer-production', title: 'Paneer Processing', description: 'Process & Yield', category: 'science', icon: PaneerIcon, modal: PaneerProcessingModal, isPro: true, color: 'from-lime-100 to-yellow-200' },
+  { id: 'ice-cream-production', title: 'Ice-Cream Production', description: 'Process & Science', category: 'science', icon: IceCreamIcon, modal: IceCreamProductionModal, isPro: true, color: 'from-rose-100 to-pink-200' },
   
   // Tier 4: Standardization & General Calculators
   { id: 'std1', title: 'Standardization I', description: 'Basic Principles', category: 'milk', icon: Scale, modal: StandardizationIModal, isPro: false, color: 'from-sky-100 to-cyan-200' },
@@ -198,3 +200,5 @@ export function TopicGrid() {
     </>
   );
 }
+
+    
