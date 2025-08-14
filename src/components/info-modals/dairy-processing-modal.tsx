@@ -68,8 +68,8 @@ export function DairyProcessingModal({
 }) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-4xl lg:max-w-6xl w-[95vw] max-h-[90vh]">
-        <DialogHeader>
+      <DialogContent className="max-w-4xl lg:max-w-6xl w-[95vw] h-full max-h-[90vh] flex flex-col p-0 sm:p-6">
+        <DialogHeader className="p-4 sm:p-0 shrink-0">
           <DialogTitle className="text-2xl md:text-3xl font-bold text-center text-gray-800 font-headline">
             The Science of Dairy Processing
           </DialogTitle>
@@ -79,13 +79,14 @@ export function DairyProcessingModal({
         </DialogHeader>
          <Tabs defaultValue="workflow" className="w-full flex-1 flex flex-col min-h-0">
             <ScrollArea className="flex-shrink-0">
-              <TabsList className="grid w-full h-auto grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7">
+              <TabsList className="grid w-full h-auto grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 p-2 sm:p-0">
                   {processingTopics.map(topic => (
                       <TabsTrigger key={topic.value} value={topic.value} className="text-xs sm:text-sm">{topic.title}</TabsTrigger>
                   ))}
               </TabsList>
             </ScrollArea>
-            <ScrollArea className="flex-1 mt-4 pr-4">
+            <ScrollArea className="flex-1 mt-4 sm:pr-4">
+              <div className="p-4 sm:p-0">
                 <TabsContent value="workflow" className="mt-0">
                     <Section title="Workflow Overview" icon={Settings}>
                         <p>Dairy processing ek sequence of operations hai jismein raw milk ko safe, high-quality, aur shelf-stable products mein badla jaata hai. Har step ka ek specific purpose hota hai.</p>
@@ -264,6 +265,7 @@ export function DairyProcessingModal({
                         <p>UHT processing causes some denaturation of whey proteins but has little effect on the nutritional value of casein, lipids, or minerals. There can be some loss of heat-sensitive vitamins, such as folic acid and vitamin C, but fat-soluble vitamins (A, D, E, K) and most B-complex vitamins are largely unaffected.</p>
                     </Section>
                 </TabsContent>
+               </div>
             </ScrollArea>
           </Tabs>
       </DialogContent>

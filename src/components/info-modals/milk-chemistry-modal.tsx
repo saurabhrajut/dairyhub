@@ -51,22 +51,23 @@ const InfoBlock = ({ title, children }: { title: string, children: React.ReactNo
 export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-4xl lg:max-w-6xl w-[95vw] max-h-[90vh] flex flex-col">
-        <DialogHeader>
+      <DialogContent className="max-w-4xl lg:max-w-6xl w-[95vw] h-full max-h-[90vh] flex flex-col p-0 sm:p-6">
+        <DialogHeader className="p-4 sm:p-0 shrink-0">
           <DialogTitle className="font-headline text-2xl md:text-3xl text-center">Chemistry of Milk</DialogTitle>
           <DialogDescription className="text-center">A deep dive into the science of milk.</DialogDescription>
         </DialogHeader>
         <Tabs defaultValue="composition" className="flex flex-col flex-1 min-h-0">
             <ScrollArea className="flex-shrink-0">
-              <TabsList className="grid w-full h-auto grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7">
+              <TabsList className="grid w-full h-auto grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 p-2 sm:p-0">
                   {milkChemistryTabs.map(tab => (
                       <TabsTrigger key={tab.value} value={tab.value} className="text-xs sm:text-sm">{tab.label}</TabsTrigger>
                   ))}
               </TabsList>
             </ScrollArea>
-            <ScrollArea className="flex-1 mt-4 pr-4">
+            <ScrollArea className="flex-1 mt-4 sm:pr-4">
+               <div className="p-4 sm:p-0">
                 <TabsContent value="composition" className="mt-0">
-                    <div className="space-y-6 text-gray-700 text-sm leading-relaxed prose max-w-none">
+                    <div className="space-y-6 text-gray-700 text-sm leading-relaxed prose max-w-none break-words">
                         <InfoBlock title="What is Milk? (Doodh Kya Hai?)">
                             <p><strong>Scientific Definition:</strong> “Milk is the normal secretion of the mammary glands of mammals, obtained without any colostrum, and is composed of water, fat, proteins, lactose, minerals, and vitamins in a naturally balanced form.”</p>
                             <p><strong>FSSAI Definition:</strong> “Doodh ka matlab hai ek swasth doodh dene wale pashu se poori tarah se doodh nikalne se prapt सामान्य mammary srav, jismein koi milavat ya nikasi na ki gayi ho, jo liquid doodh ke roop mein upbhog ke liye ya aage ki processing ke liye ho.”</p>
@@ -105,7 +106,7 @@ export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; set
                     </div>
                 </TabsContent>
                 <TabsContent value="proteins" className="mt-0">
-                    <div className="space-y-6 text-gray-700 text-sm leading-relaxed prose max-w-none">
+                    <div className="space-y-6 text-gray-700 text-sm leading-relaxed prose max-w-none break-words">
                        <InfoBlock title="Milk Proteins Overview">
                             <p>The caseins, whey proteins and non-protein nitrogen (NPN) make up the nitrogen content of milk (76%, 18% and 6% respectively). The Rowland fraction method facilitates the separation of caseins, whey proteins and NPN. Casein precipitates at pH 4.6 and is thus separated from whey nitrogen. Total proteins may be separated from whey NPN at pH 5 with sodium acetate and acetic acid.</p>
                         </InfoBlock>
@@ -139,7 +140,7 @@ export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; set
                     </div>
                 </TabsContent>
                 <TabsContent value="fat" className="mt-0">
-                    <div className="space-y-4 text-gray-700 text-sm leading-relaxed prose max-w-none">
+                    <div className="space-y-4 text-gray-700 text-sm leading-relaxed prose max-w-none break-words">
                         <InfoBlock title="Milk Fat">
                             <p>Fat is the most commercially significant and most variable constituent of milk. Fat content varies from breed to breed and also among individuals of the same breed, the variation being caused by many factors. Most of the (> 95%) milk fat exists in the form of globules of 0.1-15 µ diameter (cow milk fat – ~ 3-8 µ, buffalo milk fat – ~ 4-10 µ). A thin membrane (8-10 nm thick) covers these liquid fat droplets. The properties of this membrane are vastly different from both milk fat and plasma. The fat globule membrane is rich in phospholipids and also contains lipoproteins and other glycerides. These phospholipids are involved in the oxidation of milk. The membrane decreases the lipid-serum interface to very low values, 1-2.5 mN/m, preventing the globules from immediate flocculation and coalescence, as well as protecting them from enzymatic action. Fat comprises of different glycerides of low melting point. The composition of fat varies with the feed plan, nutrition, stage of lactation, breed and species, the first being the most important.</p>
                             <p>The size and number of fat globules vary depending on the breed of the animal and method of milking. The globules become smaller and more numerous as lactation advances. Machine milking produces fat globules of more uniform size than hand milking. Homogenization reduces the fat globules to a small size and reduces the tendency of separation during storage. The larger the size of the globules, the quicker they rise as cream to the top of the milk and easier it is to churn such cream into butter. For this reason buffalo milk fat is more easily churned into butter than cow milk fat. The milk of animals in advance lactation is less suitable for being churned into butter. Milk containing small globules is, however, more suitable for cheese making, since less fat is lost in whey. Milk fat is quite bland in taste and imparts smoothness and palatability to fat-containing dairy products.</p>
@@ -150,7 +151,7 @@ export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; set
                     </div>
                 </TabsContent>
                 <TabsContent value="lactose" className="mt-0">
-                    <div className="space-y-4 text-gray-700 text-sm leading-relaxed prose max-w-none">
+                    <div className="space-y-4 text-gray-700 text-sm leading-relaxed prose max-w-none break-words">
                         <InfoBlock title="Lactose (Milk Sugar)">
                            <p>Lactose is the major milk sugar or carbohydrate. Fresh milk also contains other carbohydrates in small amounts, including glucose, galactose, and oligosaccharides. Lactose is present in true solution and, therefore, goes into whey when caseins are separated. Lactose constitutes 4.8 to 5.2% of milk, 52% of milk SNF, and 70% of whey solids. Lactose can be quickly fermented by micro-organisms to lactic acid and is, therefore, essential in the manufacture of cultured dairy products like cheese, dahi and butter-milk. It contributes to the nutritive value of milk and milk products, and is responsible for the texture and miscibility of some milk products. Lactose imparts colour and flavour to dairy products heated to high temperatures. Sucrose is six times sweeter than lactose.</p>
                            <p>Lactose is a disaccharide made up of two monosaccharides, glucose and galactose. Lactose is hydrolyzed by the enzyme µ-galactosidase (lactase), the results being the two monosaccharides, increased sweetness and depressed freezing point. People suffering from lactose intolerance lack this enzyme and therefore, cannot digest lactose. This sugar crystallizes in an alpha form and results in the defect called sandiness in ice cream.</p>
@@ -158,21 +159,21 @@ export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; set
                     </div>
                 </TabsContent>
                 <TabsContent value="minerals" className="mt-0">
-                     <div className="space-y-4 text-gray-700 text-sm leading-relaxed prose max-w-none">
+                     <div className="space-y-4 text-gray-700 text-sm leading-relaxed prose max-w-none break-words">
                         <InfoBlock title="Minerals & Salts (Ash)">
                            <p>All 22 minerals considered essential to the human diet are present in milk. Milk is an important source of dietary calcium, magnesium, phosphorus, potassium, selenium, and zinc. In milk, approximately 67% of the calcium, 35% of the magnesium, and 44% of the phosphate are bound to salts within the casein micelle and the rest are soluble in the serum phase. Milk contains very small amounts of copper, iron, manganese and sodium. Other minerals such as aluminium, boron, zinc, cobalt, iodine, fluorine, molybdenum, nickel, lithium, barium, strontium and silica are also present in milk, but in minute amounts.</p>
                         </InfoBlock>
                     </div>
                 </TabsContent>
                 <TabsContent value="vitamins" className="mt-0">
-                     <div className="space-y-4 text-gray-700 text-sm leading-relaxed prose max-w-none">
+                     <div className="space-y-4 text-gray-700 text-sm leading-relaxed prose max-w-none break-words">
                         <InfoBlock title="Vitamins">
                             <p>Vitamins are organic substances that are essential to normal life processes, but cannot be synthesized by the body. They occur in very small concentrations in both plants and animals. Milk is a good source of vitamins. Milk contains the fat soluble vitamins A, D, E, and K. As milk fat is an important dietary source of vitamin A, low fat products are normally supplemented with this vitamin. The content of Vitamin D, which also aids in the absorption of calcium, is influenced by the feed of the animals. Milk is a fair source of vitamin E. It is also a fairly good source of water soluble B vitamins such as thiamine (B1), riboflavin (B2), niacin (B3), pantothenic acid (B5), pyridoxine (B6) and cyanocobalamin (B12). Milk is, however, a poor source of vitamin C (ascorbic acid). The little quantity of vitamin C that is present in raw milk is very heat-labile and easily destroyed by pasteurization.</p>
                         </InfoBlock>
                     </div>
                 </TabsContent>
                 <TabsContent value="properties" className="mt-0">
-                    <div className="space-y-6 text-gray-700 text-sm leading-relaxed prose max-w-none">
+                    <div className="space-y-6 text-gray-700 text-sm leading-relaxed prose max-w-none break-words">
                         <InfoBlock title="Introduction to Milk Properties">
                             <p>Milk is a complex biological fluid consisting of seven main components: water, fat, protein, sugar (lactose), minerals, vitamins and enzymes. It is a white opaque fluid in which fat is present as an emulsion, protein and some mineral matters in colloidal suspension and lactose together with some minerals and soluble proteins in true solution.</p>
                             <p>The opacity of milk is due to its content of suspended particles of fat, proteins and certain minerals. The colour varies from white to yellow depending on the carotene content of the fat. Milk has a pleasant, slightly sweet taste, and pleasant odour. It is an excellent source of calcium, phosphates and riboflavin.</p>
@@ -199,6 +200,7 @@ export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; set
                         </div>
                     </div>
                 </TabsContent>
+               </div>
             </ScrollArea>
         </Tabs>
       </DialogContent>

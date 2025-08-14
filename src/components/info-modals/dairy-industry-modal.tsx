@@ -22,7 +22,7 @@ const SectionTitle = ({ title, id }: { title: string, id: string }) => (
 const SubSection = ({ title, children }: { title: string, children: React.ReactNode }) => (
     <div className="p-4 bg-gray-50 rounded-lg border border-gray-200 mt-6">
         <h4 className="text-lg font-bold text-primary mb-2 font-headline">{title}</h4>
-        <div className="space-y-3 text-gray-700 text-sm leading-relaxed prose-sm max-w-none">
+        <div className="space-y-3 text-gray-700 text-sm leading-relaxed prose-sm max-w-none break-words">
             {children}
         </div>
     </div>
@@ -43,13 +43,13 @@ export function DairyIndustryModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-4xl lg:max-w-5xl w-[95vw] max-h-[90vh]">
-        <DialogHeader>
+      <DialogContent className="max-w-4xl lg:max-w-5xl w-[95vw] h-full max-h-[90vh] flex flex-col p-0 sm:p-6">
+        <DialogHeader className="p-4 sm:p-0 shrink-0">
           <DialogTitle className="font-headline text-2xl md:text-3xl text-center">{content.main_title}</DialogTitle>
           <DialogDescription className="text-center">{content.description}</DialogDescription>
         </DialogHeader>
-        <ScrollArea className="h-full pr-6 mt-4">
-             <div className="space-y-6 text-gray-700 text-base leading-relaxed">
+        <ScrollArea className="flex-1 mt-4 sm:pr-4">
+            <div className="p-4 sm:p-0 prose prose-sm max-w-none text-gray-700 leading-relaxed break-words">
                 <p dangerouslySetInnerHTML={{ __html: content.intro1 }} />
                 <p dangerouslySetInnerHTML={{ __html: content.intro2 }} />
 

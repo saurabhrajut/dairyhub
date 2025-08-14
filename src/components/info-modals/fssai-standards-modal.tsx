@@ -34,14 +34,14 @@ const Note = ({ children }: { children: React.ReactNode }) => (
 export function FssaiStandardsModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-4xl lg:max-w-6xl w-[95vw] max-h-[90vh] flex flex-col">
-        <DialogHeader>
+      <DialogContent className="max-w-4xl lg:max-w-6xl w-[95vw] h-full max-h-[90vh] flex flex-col p-0 sm:p-6">
+        <DialogHeader className="p-4 sm:p-0 shrink-0">
           <DialogTitle className="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-2 font-headline">
             FSSAI Standards for Dairy Products
           </DialogTitle>
         </DialogHeader>
-        <ScrollArea className="flex-1 mt-4 pr-6">
-             <div className="prose prose-sm max-w-none text-gray-700 leading-relaxed">
+        <ScrollArea className="flex-1 mt-4 sm:pr-4">
+             <div className="p-4 sm:p-0 prose prose-sm max-w-none text-gray-700 leading-relaxed break-words">
                 <ProductCard title="2.1.1 General Standards for Milk and Milk Products">
                     <p className="font-medium leading-relaxed">The general standard provides overarching definitions for milk and milk products and guidance on the use of dairy terms in relation to foods to be offered to the consumer or for further processing.</p>
                     <SectionTitle>Definitions</SectionTitle>

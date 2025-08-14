@@ -43,8 +43,8 @@ export function MicrobiologyTestingModal({ isOpen, setIsOpen }: { isOpen: boolea
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-4xl lg:max-w-5xl w-[95vw] max-h-[90vh] flex flex-col">
-        <DialogHeader>
+      <DialogContent className="max-w-4xl lg:max-w-5xl w-[95vw] h-full max-h-[90vh] flex flex-col p-0 sm:p-6">
+        <DialogHeader className="p-4 sm:p-0 shrink-0">
           <DialogTitle className="text-2xl md:text-3xl font-bold text-center text-gray-800 font-headline">
             {content.title}
           </DialogTitle>
@@ -52,7 +52,8 @@ export function MicrobiologyTestingModal({ isOpen, setIsOpen }: { isOpen: boolea
             {content.description}
           </DialogDescription>
         </DialogHeader>
-        <ScrollArea className="flex-1 mt-4 pr-6">
+        <ScrollArea className="flex-1 mt-4 sm:pr-4">
+          <div className="p-4 sm:p-0">
             <Accordion type="single" collapsible className="w-full" defaultValue={content.sections[0].id}>
                 {content.sections.map((section) => (
                      <AccordionItem key={section.id} value={section.id}>
@@ -96,6 +97,7 @@ export function MicrobiologyTestingModal({ isOpen, setIsOpen }: { isOpen: boolea
                     </Accordion>
                 </div>
             </section>
+          </div>
         </ScrollArea>
       </DialogContent>
     </Dialog>
