@@ -31,12 +31,14 @@ const SubSection = ({ title, children }: { title: string, children: React.ReactN
 export function IceCreamProductionModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
   const { t } = useLanguage();
   const content = t(iceCreamProductionContent);
+  
+  if (!content) return null;
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-6xl h-[90vh] flex flex-col">
+      <DialogContent className="max-w-4xl lg:max-w-6xl w-[95vw] max-h-[90vh] flex flex-col">
         <DialogHeader>
-          <DialogTitle className="text-3xl font-bold text-center text-gray-800 font-headline">
+          <DialogTitle className="text-2xl md:text-3xl font-bold text-center text-gray-800 font-headline">
             {content.title}
           </DialogTitle>
           <DialogDescription className="text-center text-lg text-gray-500">
@@ -45,7 +47,7 @@ export function IceCreamProductionModal({ isOpen, setIsOpen }: { isOpen: boolean
         </DialogHeader>
         <Tabs defaultValue="intro" className="w-full flex-1 flex flex-col min-h-0">
           <ScrollArea className="flex-shrink-0">
-            <TabsList className="grid w-full h-auto grid-cols-3 sm:grid-cols-5 lg:grid-cols-10">
+            <TabsList className="grid w-full h-auto grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-9">
               <TabsTrigger value="intro">{content.tabs.intro}</TabsTrigger>
               <TabsTrigger value="diff">{content.tabs.diff}</TabsTrigger>
               <TabsTrigger value="process">{content.tabs.process}</TabsTrigger>
@@ -61,13 +63,13 @@ export function IceCreamProductionModal({ isOpen, setIsOpen }: { isOpen: boolean
             <div className="prose prose-sm max-w-none break-words">
                 <TabsContent value="intro" className="mt-0">
                     <Section title={content.summary.title}>
-                        <p>{content.summary.content}</p>
+                        <div dangerouslySetInnerHTML={{ __html: content.summary.content }} />
                     </Section>
                     <Section title={content.introduction.title}>
-                        <p>{content.introduction.p1}</p>
-                        <p>{content.introduction.p2}</p>
-                        <p>{content.introduction.p3}</p>
-                        <p>{content.introduction.p4}</p>
+                        <div dangerouslySetInnerHTML={{ __html: content.introduction.p1 }} />
+                        <div dangerouslySetInnerHTML={{ __html: content.introduction.p2 }} />
+                        <div dangerouslySetInnerHTML={{ __html: content.introduction.p3 }} />
+                        <div dangerouslySetInnerHTML={{ __html: content.introduction.p4 }} />
                         <div className="overflow-x-auto mt-4">
                             <Table>
                                 <TableHeader>
@@ -94,10 +96,10 @@ export function IceCreamProductionModal({ isOpen, setIsOpen }: { isOpen: boolean
                 </TabsContent>
                 <TabsContent value="diff" className="mt-0">
                     <Section title={content.iceCreamVsFrozenDessert.title}>
-                        <p>{content.iceCreamVsFrozenDessert.intro}</p>
+                        <div dangerouslySetInnerHTML={{ __html: content.iceCreamVsFrozenDessert.intro }}/>
                         <SubSection title={content.iceCreamVsFrozenDessert.definitions.title}>
-                           <p><strong>{content.iceCreamVsFrozenDessert.definitions.iceCream.title}:</strong> {content.iceCreamVsFrozenDessert.definitions.iceCream.content}</p>
-                           <p><strong>{content.iceCreamVsFrozenDessert.definitions.frozenDessert.title}:</strong> {content.iceCreamVsFrozenDessert.definitions.frozenDessert.content}</p>
+                           <p><strong>{content.iceCreamVsFrozenDessert.definitions.iceCream.title}:</strong> <span dangerouslySetInnerHTML={{ __html: content.iceCreamVsFrozenDessert.definitions.iceCream.content }}/></p>
+                           <p><strong>{content.iceCreamVsFrozenDessert.definitions.frozenDessert.title}:</strong> <span dangerouslySetInnerHTML={{ __html: content.iceCreamVsFrozenDessert.definitions.frozenDessert.content }}/></p>
                         </SubSection>
                         <SubSection title={content.iceCreamVsFrozenDessert.impact.title}>
                              <div dangerouslySetInnerHTML={{ __html: content.iceCreamVsFrozenDessert.impact.content }} />
@@ -106,13 +108,13 @@ export function IceCreamProductionModal({ isOpen, setIsOpen }: { isOpen: boolean
                 </TabsContent>
                 <TabsContent value="process" className="mt-0">
                     <Section title={content.manufacturingProcess.title}>
-                        <p>{content.manufacturingProcess.intro}</p>
+                        <div dangerouslySetInnerHTML={{ __html: content.manufacturingProcess.intro }} />
                         <div dangerouslySetInnerHTML={{ __html: content.manufacturingProcess.steps }} />
                     </Section>
                 </TabsContent>
                  <TabsContent value="ingredients" className="mt-0">
                     <Section title={content.ingredientFunctionality.title}>
-                        <p>{content.ingredientFunctionality.intro}</p>
+                        <div dangerouslySetInnerHTML={{ __html: content.ingredientFunctionality.intro }} />
                         <SubSection title={content.ingredientFunctionality.stabilizers.title}>
                            <div dangerouslySetInnerHTML={{ __html: content.ingredientFunctionality.stabilizers.content }} />
                         </SubSection>
@@ -123,18 +125,18 @@ export function IceCreamProductionModal({ isOpen, setIsOpen }: { isOpen: boolean
                 </TabsContent>
                 <TabsContent value="factors" className="mt-0">
                      <Section title={content.physicochemicalFactors.title}>
-                        <p>{content.physicochemicalFactors.intro}</p>
+                        <div dangerouslySetInnerHTML={{ __html: content.physicochemicalFactors.intro }} />
                         <SubSection title={content.physicochemicalFactors.fatEmulsion.title}>
                              <div dangerouslySetInnerHTML={{ __html: content.physicochemicalFactors.fatEmulsion.content }} />
                         </SubSection>
                         <SubSection title={content.physicochemicalFactors.waterActivity.title}>
-                           <p>{content.physicochemicalFactors.waterActivity.content}</p>
+                           <div dangerouslySetInnerHTML={{ __html: content.physicochemicalFactors.waterActivity.content }}/>
                         </SubSection>
                     </Section>
                 </TabsContent>
                 <TabsContent value="crystallization" className="mt-0">
                     <Section title={content.crystallization.title}>
-                         <p>{content.crystallization.intro}</p>
+                         <div dangerouslySetInnerHTML={{ __html: content.crystallization.intro }} />
                         <SubSection title={content.crystallization.ice.title}>
                              <div dangerouslySetInnerHTML={{ __html: content.crystallization.ice.content }} />
                         </SubSection>
@@ -145,7 +147,7 @@ export function IceCreamProductionModal({ isOpen, setIsOpen }: { isOpen: boolean
                 </TabsContent>
                 <TabsContent value="other" className="mt-0">
                      <Section title={content.otherFactors.title}>
-                        <p>{content.otherFactors.intro}</p>
+                        <div dangerouslySetInnerHTML={{ __html: content.otherFactors.intro }} />
                          <SubSection title={content.otherFactors.melting.title}>
                            <div dangerouslySetInnerHTML={{ __html: content.otherFactors.melting.content }} />
                         </SubSection>
@@ -162,13 +164,13 @@ export function IceCreamProductionModal({ isOpen, setIsOpen }: { isOpen: boolean
                 </TabsContent>
                 <TabsContent value="implementation" className="mt-0">
                      <Section title={content.implementation.title}>
-                        <p>{content.implementation.intro}</p>
+                        <div dangerouslySetInnerHTML={{ __html: content.implementation.intro }} />
                         <div dangerouslySetInnerHTML={{ __html: content.implementation.strategies }} />
                     </Section>
                 </TabsContent>
                  <TabsContent value="conclusion" className="mt-0">
                      <Section title={content.conclusion.title}>
-                        <p>{content.conclusion.content}</p>
+                        <div dangerouslySetInnerHTML={{ __html: content.conclusion.content }} />
                     </Section>
                 </TabsContent>
             </div>
@@ -178,5 +180,3 @@ export function IceCreamProductionModal({ isOpen, setIsOpen }: { isOpen: boolean
     </Dialog>
   );
 }
-
-    

@@ -142,12 +142,14 @@ export function CipProcessModal({
 }) {
   const { t } = useLanguage();
   const content = t(cipProcessContent);
+  
+  if (!content) return null;
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-6xl h-[95vh]">
+      <DialogContent className="max-w-4xl lg:max-w-6xl w-[95vw] max-h-[90vh]">
         <DialogHeader>
-          <DialogTitle className="text-3xl sm:text-4xl font-bold text-center text-gray-800 mb-2 font-headline">
+          <DialogTitle className="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-2 font-headline">
             {content.main_title}
           </DialogTitle>
           <DialogDescription className="text-center text-lg text-gray-500">
@@ -218,5 +220,3 @@ export function CipProcessModal({
     </Dialog>
   );
 }
-
-    

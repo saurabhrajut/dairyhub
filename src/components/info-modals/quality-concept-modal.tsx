@@ -29,17 +29,20 @@ const SubHeading = ({ children }: { children: React.ReactNode }) => (
 export function QualityConceptModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
   const { t } = useLanguage();
   const content = t(qualityContent);
+  
+  if (!content) return null;
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-5xl h-[90vh] flex flex-col">
+      <DialogContent className="max-w-4xl lg:max-w-5xl w-[95vw] max-h-[90vh] flex flex-col">
         <DialogHeader>
-          <DialogTitle className="text-3xl font-bold text-center text-gray-800 font-headline">{content.title}</DialogTitle>
+          <DialogTitle className="text-2xl md:text-3xl font-bold text-center text-gray-800 font-headline">{content.title}</DialogTitle>
           <DialogDescription className="text-center text-lg text-gray-500">
             {content.description}
           </DialogDescription>
         </DialogHeader>
         <Tabs defaultValue="intro" className="w-full flex-1 flex flex-col min-h-0">
+          <ScrollArea className="flex-shrink-0">
             <TabsList className="grid w-full h-auto grid-cols-2 sm:grid-cols-4 lg:grid-cols-8">
                  <TabsTrigger value="intro">Introduction</TabsTrigger>
                  <TabsTrigger value="concepts">Concepts</TabsTrigger>
@@ -50,6 +53,7 @@ export function QualityConceptModal({ isOpen, setIsOpen }: { isOpen: boolean; se
                  <TabsTrigger value="iso">ISO</TabsTrigger>
                  <TabsTrigger value="bodies">Bodies</TabsTrigger>
             </TabsList>
+          </ScrollArea>
             <ScrollArea className="flex-1 mt-4 pr-6">
                 <TabsContent value="intro" className="mt-0">
                      <div className="prose max-w-none text-gray-700 text-base leading-relaxed">
@@ -77,7 +81,7 @@ export function QualityConceptModal({ isOpen, setIsOpen }: { isOpen: boolean; se
                         
                         <SubHeading>{content.qc.responsibilities.title}</SubHeading>
                         <ol className="list-decimal list-inside space-y-2 mt-2">
-                            {content.qc.responsibilities.list.map((item, index) => <li key={index}>{item}</li>)}
+                            {content.qc.responsibilities.list.map((item: string, index: number) => <li key={index}>{item}</li>)}
                         </ol>
                     </Section>
                     
@@ -91,7 +95,7 @@ export function QualityConceptModal({ isOpen, setIsOpen }: { isOpen: boolean; se
                                     <TableRow><TableHead>{content.qa.table.header1}</TableHead><TableHead>{content.qa.table.header2}</TableHead></TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {content.qa.table.rows.map((row, index) => (
+                                    {content.qa.table.rows.map((row: any, index: number) => (
                                         <TableRow key={index}><TableCell>{row.qc}</TableCell><TableCell>{row.qa}</TableCell></TableRow>
                                     ))}
                                 </TableBody>
@@ -105,19 +109,19 @@ export function QualityConceptModal({ isOpen, setIsOpen }: { isOpen: boolean; se
                         <SubHeading>{content.prps.gmp.title}</SubHeading>
                         <p>{content.prps.gmp.p1}</p>
                         <ul className="list-disc list-inside space-y-2">
-                            {content.prps.gmp.list.map((item, index) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
+                            {content.prps.gmp.list.map((item: any, index: number) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
                         </ul>
 
                         <SubHeading>{content.prps.ghp.title}</SubHeading>
                         <p>{content.prps.ghp.p1}</p>
                         <ul className="list-disc list-inside space-y-2">
-                            {content.prps.ghp.list.map((item, index) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
+                            {content.prps.ghp.list.map((item: any, index: number) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
                         </ul>
 
                         <SubHeading>{content.prps.glp.title}</SubHeading>
                         <p>{content.prps.glp.p1}</p>
                         <ul className="list-disc list-inside space-y-2">
-                            {content.prps.glp.list.map((item, index) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
+                            {content.prps.glp.list.map((item: any, index: number) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
                         </ul>
                     </Section>
                 </TabsContent>
@@ -139,7 +143,7 @@ export function QualityConceptModal({ isOpen, setIsOpen }: { isOpen: boolean; se
                         <SubHeading>{content.juran.trilogy.title}</SubHeading>
                         <p>{content.juran.trilogy.p1}</p>
                         <ul className="list-disc list-inside mt-2 space-y-1">
-                            {content.juran.trilogy.list.map((item, index) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
+                            {content.juran.trilogy.list.map((item: any, index: number) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
                         </ul>
                         <p>{content.juran.p2}</p>
                     </Section>
@@ -149,7 +153,7 @@ export function QualityConceptModal({ isOpen, setIsOpen }: { isOpen: boolean; se
                         <p>{content.tqm.p1}</p>
                         <SubHeading>{content.tqm.principles.title}</SubHeading>
                         <ul className="list-disc list-inside mt-2 space-y-2">
-                            {content.tqm.principles.list.map((item, index) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
+                            {content.tqm.principles.list.map((item: any, index: number) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
                         </ul>
                     </Section>
                 </TabsContent>
@@ -158,7 +162,7 @@ export function QualityConceptModal({ isOpen, setIsOpen }: { isOpen: boolean; se
                         <p>{content.haccp.p1}</p>
                         <SubHeading>{content.haccp.principles.title}</SubHeading>
                         <ol className="list-decimal list-inside space-y-3">
-                            {content.haccp.principles.list.map((item, index) => (
+                            {content.haccp.principles.list.map((item: any, index: number) => (
                                 <li key={index}>
                                     <strong className="text-blue-600">{item.title}</strong>
                                     <p className="ml-4">{item.description}</p>
@@ -176,14 +180,14 @@ export function QualityConceptModal({ isOpen, setIsOpen }: { isOpen: boolean; se
                         <p>{content.iso.qms.p1}</p>
                         <p><strong>{content.iso.qms.elementsTitle}:</strong></p>
                         <ul className="list-disc list-inside mt-2 space-y-2">
-                            {content.iso.qms.list.map((item, index) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
+                            {content.iso.qms.list.map((item: any, index: number) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
                         </ul>
 
                         <SubHeading>{content.iso.fsms.title}</SubHeading>
                         <p>{content.iso.fsms.p1}</p>
                         <p><strong>{content.iso.fsms.elementsTitle}:</strong></p>
                         <ul className="list-disc list-inside space-y-2">
-                            {content.iso.fsms.list.map((item, index) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
+                            {content.iso.fsms.list.map((item: any, index: number) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
                         </ul>
                         <p className="mt-4">{content.iso.fsms.p2}</p>
                     </Section>

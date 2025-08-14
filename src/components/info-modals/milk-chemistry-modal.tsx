@@ -51,17 +51,19 @@ const InfoBlock = ({ title, children }: { title: string, children: React.ReactNo
 export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-6xl h-[90vh] flex flex-col">
+      <DialogContent className="max-w-4xl lg:max-w-6xl w-[95vw] max-h-[90vh] flex flex-col">
         <DialogHeader>
-          <DialogTitle className="font-headline text-2xl text-center">Chemistry of Milk</DialogTitle>
+          <DialogTitle className="font-headline text-2xl md:text-3xl text-center">Chemistry of Milk</DialogTitle>
           <DialogDescription className="text-center">A deep dive into the science of milk.</DialogDescription>
         </DialogHeader>
         <Tabs defaultValue="composition" className="flex flex-col flex-1 min-h-0">
-            <TabsList className="grid w-full h-auto grid-cols-3 sm:grid-cols-4 lg:grid-cols-7">
-                {milkChemistryTabs.map(tab => (
-                    <TabsTrigger key={tab.value} value={tab.value} className="text-xs sm:text-sm">{tab.label}</TabsTrigger>
-                ))}
-            </TabsList>
+            <ScrollArea className="flex-shrink-0">
+              <TabsList className="grid w-full h-auto grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7">
+                  {milkChemistryTabs.map(tab => (
+                      <TabsTrigger key={tab.value} value={tab.value} className="text-xs sm:text-sm">{tab.label}</TabsTrigger>
+                  ))}
+              </TabsList>
+            </ScrollArea>
             <ScrollArea className="flex-1 mt-4 pr-4">
                 <TabsContent value="composition" className="mt-0">
                     <div className="space-y-6 text-gray-700 text-sm leading-relaxed prose max-w-none">

@@ -39,11 +39,13 @@ export function MicrobiologyTestingModal({ isOpen, setIsOpen }: { isOpen: boolea
   const { t } = useLanguage();
   const content = t(microbiologyContent);
 
+  if (!content) return null;
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-5xl h-[90vh] flex flex-col">
+      <DialogContent className="max-w-4xl lg:max-w-5xl w-[95vw] max-h-[90vh] flex flex-col">
         <DialogHeader>
-          <DialogTitle className="text-3xl font-bold text-center text-gray-800 font-headline">
+          <DialogTitle className="text-2xl md:text-3xl font-bold text-center text-gray-800 font-headline">
             {content.title}
           </DialogTitle>
           <DialogDescription className="text-center text-lg text-gray-500">
@@ -65,11 +67,11 @@ export function MicrobiologyTestingModal({ isOpen, setIsOpen }: { isOpen: boolea
                                     <Table className="mt-4">
                                         <TableHeader>
                                             <TableRow>
-                                                {section.table.headers.map(header => <TableHead key={header}>{header}</TableHead>)}
+                                                {section.table.headers.map((header: string) => <TableHead key={header}>{header}</TableHead>)}
                                             </TableRow>
                                         </TableHeader>
                                         <TableBody>
-                                            {section.table.rows.map((row, index) => (
+                                            {section.table.rows.map((row: string[], index: number) => (
                                                 <TableRow key={index}>
                                                     {row.map((cell, cellIndex) => <TableCell key={cellIndex}>{cell}</TableCell>)}
                                                 </TableRow>

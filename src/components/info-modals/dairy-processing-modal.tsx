@@ -68,9 +68,9 @@ export function DairyProcessingModal({
 }) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-6xl h-[90vh]">
+      <DialogContent className="max-w-4xl lg:max-w-6xl w-[95vw] max-h-[90vh]">
         <DialogHeader>
-          <DialogTitle className="text-3xl font-bold text-center text-gray-800 font-headline">
+          <DialogTitle className="text-2xl md:text-3xl font-bold text-center text-gray-800 font-headline">
             The Science of Dairy Processing
           </DialogTitle>
           <DialogDescription className="text-center text-lg text-gray-500">
@@ -78,11 +78,13 @@ export function DairyProcessingModal({
           </DialogDescription>
         </DialogHeader>
          <Tabs defaultValue="workflow" className="w-full flex-1 flex flex-col min-h-0">
-            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 md:grid-cols-7 h-auto">
-                {processingTopics.map(topic => (
-                     <TabsTrigger key={topic.value} value={topic.value}>{topic.title}</TabsTrigger>
-                ))}
-            </TabsList>
+            <ScrollArea className="flex-shrink-0">
+              <TabsList className="grid w-full h-auto grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7">
+                  {processingTopics.map(topic => (
+                      <TabsTrigger key={topic.value} value={topic.value} className="text-xs sm:text-sm">{topic.title}</TabsTrigger>
+                  ))}
+              </TabsList>
+            </ScrollArea>
             <ScrollArea className="flex-1 mt-4 pr-4">
                 <TabsContent value="workflow" className="mt-0">
                     <Section title="Workflow Overview" icon={Settings}>

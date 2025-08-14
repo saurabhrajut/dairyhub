@@ -38,12 +38,14 @@ export function DairyIndustryModal({
 }) {
   const { t } = useLanguage();
   const content = t(dairyIndustryContent);
+  
+  if (!content) return null;
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-5xl h-[90vh]">
+      <DialogContent className="max-w-4xl lg:max-w-5xl w-[95vw] max-h-[90vh]">
         <DialogHeader>
-          <DialogTitle className="font-headline text-3xl text-center">{content.main_title}</DialogTitle>
+          <DialogTitle className="font-headline text-2xl md:text-3xl text-center">{content.main_title}</DialogTitle>
           <DialogDescription className="text-center">{content.description}</DialogDescription>
         </DialogHeader>
         <ScrollArea className="h-full pr-6 mt-4">
@@ -90,17 +92,17 @@ export function DairyIndustryModal({
                     <p dangerouslySetInnerHTML={{ __html: content.cooperatives.operation_flood.text }} />
                      <h5 className="font-bold mt-2">{content.cooperatives.operation_flood.objectives_title}</h5>
                      <ul className="list-disc pl-5">
-                        {content.cooperatives.operation_flood.objectives.map((obj, i) => <li key={i}>{obj}</li>)}
+                        {content.cooperatives.operation_flood.objectives.map((obj: string, i: number) => <li key={i}>{obj}</li>)}
                      </ul>
                       <h5 className="font-bold mt-2">{content.cooperatives.operation_flood.phases_title}</h5>
                      <ul className="list-disc pl-5">
-                         {content.cooperatives.operation_flood.phases.map((phase, i) => <li key={i} dangerouslySetInnerHTML={{ __html: phase }} />)}
+                         {content.cooperatives.operation_flood.phases.map((phase: string, i: number) => <li key={i} dangerouslySetInnerHTML={{ __html: phase }} />)}
                      </ul>
                 </SubSection>
                 <SubSection title={content.cooperatives.anand_pattern.title}>
                     <p>{content.cooperatives.anand_pattern.intro}</p>
                     <ul className="list-disc pl-5">
-                       {content.cooperatives.anand_pattern.tiers.map((tier, i) => <li key={i} dangerouslySetInnerHTML={{ __html: tier }} />)}
+                       {content.cooperatives.anand_pattern.tiers.map((tier: string, i: number) => <li key={i} dangerouslySetInnerHTML={{ __html: tier }} />)}
                     </ul>
                 </SubSection>
                  <SubSection title={content.cooperatives.empowerment.title}>

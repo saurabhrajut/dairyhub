@@ -34,9 +34,9 @@ const Note = ({ children }: { children: React.ReactNode }) => (
 export function FssaiStandardsModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-6xl h-[90vh] flex flex-col">
+      <DialogContent className="max-w-4xl lg:max-w-6xl w-[95vw] max-h-[90vh] flex flex-col">
         <DialogHeader>
-          <DialogTitle className="text-3xl sm:text-4xl font-bold text-center text-gray-800 mb-2 font-headline">
+          <DialogTitle className="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-2 font-headline">
             FSSAI Standards for Dairy Products
           </DialogTitle>
         </DialogHeader>
@@ -497,5 +497,3 @@ export function FssaiStandardsModal({ isOpen, setIsOpen }: { isOpen: boolean; se
     </Dialog>
   );
 }
-
-    
