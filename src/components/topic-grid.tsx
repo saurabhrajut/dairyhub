@@ -56,6 +56,7 @@ import { FermentedProductsModal } from "./info-modals/fermented-products-modal";
 import { EvaporationDryingModal } from "./info-modals/evaporation-drying-modal";
 import { AuditsModal } from "./info-modals/audits-modal";
 import { ValidationVerificationModal } from "./info-modals/validation-verification-modal";
+import { EtpModal } from "./info-modals/etp-modal";
 
 const topics = [
   { id: 'industry', title: 'Dairy Industry', description: 'Overview & Trends', category: 'industry', icon: Factory, badge: 'New', modal: DairyIndustryModal, isPro: true },
@@ -75,6 +76,7 @@ const topics = [
   { id: 'ice-cream-calc', title: 'Ice Cream Calc', description: 'Overrun & Mix', category: 'science', icon: IceCreamIcon, modal: IceCreamCalculationsModal, isPro: true },
   { id: 'lab-equipments', title: 'Lab Equipments', description: 'Principles & Working', category: 'science', icon: Microscope, badge: 'Pro', modal: LabEquipmentsModal, isPro: true },
   { id: 'plant-cost', title: 'Plant Cost', description: 'Profit & Loss Calc', category: 'industry', icon: DollarSign, badge: 'Pro', modal: PlantCostModal, isPro: true },
+  { id: 'etp', title: 'ETP', description: 'Wastewater Treatment', category: 'industry', icon: Recycle, badge: 'New', modal: EtpModal, isPro: true },
   { id: 'audits', title: 'Audits', description: 'Internal & External Audits', category: 'industry', icon: ClipboardCheck, badge: 'New', modal: AuditsModal, isPro: true },
   { id: 'validation-verification', title: 'Validation & Verification', description: 'Food Safety Assurance', category: 'industry', icon: ClipboardCheck, badge: 'New', modal: ValidationVerificationModal, isPro: true },
   { id: 'compositional-analysis', title: 'Compositional Analysis', description: 'Chemical tests for products', category: 'science', icon: TestTube, modal: CompositionalAnalysisModal, isPro: true },
