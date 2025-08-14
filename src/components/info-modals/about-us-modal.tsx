@@ -53,7 +53,7 @@ export function AboutUsModal({
                             />
                         </div>
                         {/* Right Side: Info */}
-                        <div className="flex-1">
+                        <div className="flex-1 text-center md:text-left">
                              <h3 className="text-2xl font-bold text-gray-800 font-headline mb-4">{content.developer.name}</h3>
                              <div className="bg-white/70 p-4 rounded-lg shadow-inner inline-block border">
                                 <h4 className="text-md font-bold text-cyan-800 mb-3 font-headline flex items-center gap-2"><GraduationCap className="w-5 h-5"/> {content.developer.academicInfo.title}</h4>
