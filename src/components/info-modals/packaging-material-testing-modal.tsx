@@ -31,22 +31,26 @@ const SubHeading = ({ children, id }: { children: React.ReactNode, id: string })
     <h3 id={id} className="text-xl font-semibold text-gray-800 mt-6 mb-3 scroll-mt-24 font-headline">{children}</h3>
 );
 
-const TestProcedure = ({ test }: { test: any }) => (
-    <AccordionItem value={test.title.replace(/\s+/g, '-').toLowerCase()}>
-        <AccordionTrigger className="text-left font-semibold text-lg hover:no-underline">{test.title}</AccordionTrigger>
-        <AccordionContent>
-            <div className="prose prose-sm max-w-none">
-                <div className="text-gray-700" dangerouslySetInnerHTML={{ __html: test.procedure }} />
-                {test.calculation && (
-                    <>
-                        <h4 className="font-bold mt-4">{packagingContent.hi.testing.calculation_title}</h4>
-                        <pre className="bg-muted p-3 rounded-lg font-mono text-sm text-primary"><code>{test.calculation}</code></pre>
-                    </>
-                )}
-            </div>
-        </AccordionContent>
-    </AccordionItem>
-);
+const TestProcedure = ({ test }: { test: any }) => {
+    const { t } = useLanguage();
+    const content = t(packagingContent);
+    return (
+        <AccordionItem value={test.title.replace(/\s+/g, '-').toLowerCase()}>
+            <AccordionTrigger className="text-left font-semibold text-lg hover:no-underline">{test.title}</AccordionTrigger>
+            <AccordionContent>
+                <div className="prose prose-sm max-w-none">
+                    <div className="text-gray-700" dangerouslySetInnerHTML={{ __html: test.procedure }} />
+                    {test.calculation && (
+                        <>
+                            <h4 className="font-bold mt-4">{content.testing.calculation_title}</h4>
+                            <pre className="bg-muted p-3 rounded-lg font-mono text-sm text-primary"><code>{test.calculation}</code></pre>
+                        </>
+                    )}
+                </div>
+            </AccordionContent>
+        </AccordionItem>
+    );
+};
 
 
 export function PackagingMaterialTestingModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
@@ -56,7 +60,7 @@ export function PackagingMaterialTestingModal({ isOpen, setIsOpen }: { isOpen: b
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="max-w-6xl w-[95vw] h-full max-h-[90vh] flex flex-col p-0 sm:p-6">
-        <DialogHeader className="p-4 sm:p-0">
+        <DialogHeader className="p-4 sm:p-0 shrink-0">
           <DialogTitle className="text-3xl font-bold text-center text-gray-800 font-headline">{content.title}</DialogTitle>
           <DialogDescription className="text-center text-lg text-gray-500">
             {content.description}
@@ -64,12 +68,14 @@ export function PackagingMaterialTestingModal({ isOpen, setIsOpen }: { isOpen: b
         </DialogHeader>
 
         <Tabs defaultValue="introduction" className="w-full flex-1 flex flex-col min-h-0">
-            <TabsList className="grid w-full h-auto grid-cols-2 md:grid-cols-4 p-2 sm:p-0">
-                <TabsTrigger value="introduction">{content.tabs.intro}</TabsTrigger>
-                <TabsTrigger value="materials">{content.tabs.materials}</TabsTrigger>
-                <TabsTrigger value="forms-processes">{content.tabs.forms}</TabsTrigger>
-                <TabsTrigger value="testing">{content.tabs.testing}</TabsTrigger>
-            </TabsList>
+            <ScrollArea className="flex-shrink-0">
+              <TabsList className="grid w-full h-auto grid-cols-2 md:grid-cols-4 p-2 sm:p-0">
+                  <TabsTrigger value="introduction">{content.tabs.intro}</TabsTrigger>
+                  <TabsTrigger value="materials">{content.tabs.materials}</TabsTrigger>
+                  <TabsTrigger value="forms-processes">{content.tabs.forms}</TabsTrigger>
+                  <TabsTrigger value="testing">{content.tabs.testing}</TabsTrigger>
+              </TabsList>
+            </ScrollArea>
             <ScrollArea className="flex-1 mt-4 sm:pr-4">
                 <div className="p-4 sm:p-0">
                  <TabsContent value="introduction" className="mt-0">

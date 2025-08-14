@@ -38,7 +38,7 @@ export function AuditsModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen:
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="max-w-4xl lg:max-w-6xl w-[95vw] h-full max-h-[90vh] flex flex-col p-0 sm:p-6">
-        <DialogHeader className="p-4 sm:p-0">
+        <DialogHeader className="p-4 sm:p-0 shrink-0">
           <DialogTitle className="text-2xl md:text-3xl font-bold text-center text-gray-800 font-headline">
             {content.title}
           </DialogTitle>
@@ -48,7 +48,7 @@ export function AuditsModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen:
         </DialogHeader>
         <Tabs defaultValue="intro" className="w-full flex-1 flex flex-col min-h-0">
           <ScrollArea className="flex-shrink-0">
-            <TabsList className="grid w-full h-auto grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 p-2 sm:p-0">
+             <TabsList className="grid w-full h-auto grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 p-2 sm:p-0">
               <TabsTrigger value="intro">{content.tabs.intro}</TabsTrigger>
               <TabsTrigger value="regulatory">{content.tabs.regulatory}</TabsTrigger>
               <TabsTrigger value="internal">{content.tabs.internal}</TabsTrigger>

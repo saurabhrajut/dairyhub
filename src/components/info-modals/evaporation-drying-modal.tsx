@@ -38,7 +38,7 @@ export function EvaporationDryingModal({ isOpen, setIsOpen }: { isOpen: boolean;
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="max-w-4xl lg:max-w-6xl w-[95vw] h-full max-h-[90vh] flex flex-col p-0 sm:p-6">
-        <DialogHeader className="p-4 sm:p-0">
+        <DialogHeader className="p-4 sm:p-0 shrink-0">
           <DialogTitle className="text-2xl md:text-3xl font-bold text-center text-gray-800 font-headline">
             {content.title}
           </DialogTitle>
