@@ -6,14 +6,8 @@ export const aboutUsContent = {
     hi: {
         title: "Dairy Hub के पीछे",
         description: "आपके भरोसेमंद डिजिटल डेयरी पार्टनर की कहानी",
-        welcomeMessage: `<p class="text-lg"><span class="font-bold">Dairy Hub में आपका स्वागत है!</span> हमारा मकसद डेयरी उद्योग से जुड़ी हर ज़रूरी जानकारी को आप तक <strong class="font-semibold">सरल, सटीक और वैज्ञानिक</strong> तरीके से पहुंचाना है। यह प्लेटफॉर्म उन सभी के लिए है जो इस क्षेत्र में सीखना और आगे बढ़ना चाहते हैं।</p>`,
-        journey: {
-            title: "मेरा सफ़र: डेयरी टेक्नोलॉजी के प्रति मेरा जुनून",
-            story: `
-                <p>मेरा नाम <strong>सौरabh राजपूत</strong> है, और Dairy Hub मेरा एक सपना है जिसे मैंने आप सबके लिए हकीकत बनाया है।</p>
-                <p>फूड और डेयरी टेक्नोलॉजी के क्षेत्र में मेरी रुचि हमेशा से रही है। अपनी पढ़ाई और इंटर्नशिप के दौरान, मैंने महसूस किया कि इस उद्योग में व्यावहारिक और आसानी से समझ में आने वाली वैज्ञानिक जानकारी की कमी है, खासकर डिजिटल प्लेटफॉर्म पर। इसी कमी को पूरा करने के लिए मैंने Dairy Hub की नींव रखी।</p>
-                <p>मेरा लक्ष्य एक ऐसा डिजिटल इकोसिस्टम बनाना है जहाँ छात्र, पेशेवर, और डेयरी के प्रति उत्साही लोग आसानी से डेयरी से जुड़ी हर तकनीकी जानकारी प्राप्त कर सकें और अपने काम में बेहतर निर्णय ले सकें।</p>
-            `,
+        developer: {
+            name: "सौरभ राजपूत",
             academicInfo: {
                 title: "शैक्षणिक जानकारी",
                 degrees: [
@@ -22,6 +16,15 @@ export const aboutUsContent = {
                     { name: "Diploma, Food Technology", institution: "Govt. Polytechnic, Bhiwani" }
                 ]
             }
+        },
+        welcomeMessage: `<p class="text-lg"><span class="font-bold">Dairy Hub में आपका स्वागत है!</span> हमारा मकसद डेयरी उद्योग से जुड़ी हर ज़रूरी जानकारी को आप तक <strong class="font-semibold">सरल, सटीक और वैज्ञानिक</strong> तरीके से पहुंचाना है। यह प्लेटफॉर्म उन सभी के लिए है जो इस क्षेत्र में सीखना और आगे बढ़ना चाहते हैं।</p>`,
+        journey: {
+            title: "मेरा सफ़र: डेयरी टेक्नोलॉजी के प्रति मेरा जुनून",
+            story: `
+                <p>मेरा नाम <strong>सौरभ राजपूत</strong> है, और Dairy Hub मेरा एक सपना है जिसे मैंने आप सबके लिए हकीकत बनाया है।</p>
+                <p>फूड और डेयरी टेक्नोलॉजी के क्षेत्र में मेरी रुचि हमेशा से रही है। अपनी पढ़ाई और इंटर्नशिप के दौरान, मैंने महसूस किया कि इस उद्योग में व्यावहारिक और आसानी से समझ में आने वाली वैज्ञानिक जानकारी की कमी है, खासकर डिजिटल प्लेटफॉर्म पर। इसी कमी को पूरा करने के लिए मैंने Dairy Hub की नींव रखी।</p>
+                <p>मेरा लक्ष्य एक ऐसा डिजिटल इकोसिस्टम बनाना है जहाँ छात्र, पेशेवर, और डेयरी के प्रति उत्साही लोग आसानी से डेयरी से जुड़ी हर तकनीकी जानकारी प्राप्त कर सकें और अपने काम में बेहतर निर्णय ले सकें।</p>
+            `
         },
         whatsInside: {
             title: "Dairy Hub में क्या है?",
@@ -69,14 +72,8 @@ export const aboutUsContent = {
     en: {
         title: "Behind Dairy Hub",
         description: "The story of your trusted digital dairy partner",
-        welcomeMessage: `<p class="text-lg"><span class="font-bold">Welcome to Dairy Hub!</span> Our purpose is to deliver every essential piece of information related to the dairy industry to you in a <strong class="font-semibold">simple, accurate, and scientific</strong> manner. This platform is for everyone who wants to learn and grow in this sector.</p>`,
-        journey: {
-            title: "My Journey: A Passion for Dairy Technology",
-            story: `
-                <p>My name is <strong>Saurabh Rajput</strong>, and Dairy Hub is a dream that I have turned into reality for all of you.</p>
-                <p>My interest has always been in the field of Food and Dairy Technology. During my studies and internships, I realized there is a lack of practical and easily understandable scientific knowledge in this industry, especially on digital platforms. To fill this gap, I laid the foundation of Dairy Hub.</p>
-                <p>My goal is to create a digital ecosystem where students, professionals, and dairy enthusiasts can easily access every technical detail related to dairy and make better decisions in their work.</p>
-            `,
+        developer: {
+            name: "Saurabh Rajput",
             academicInfo: {
                 title: "Academic Information",
                 degrees: [
@@ -85,6 +82,15 @@ export const aboutUsContent = {
                     { name: "Diploma, Food Technology", institution: "Govt. Polytechnic, Bhiwani" }
                 ]
             }
+        },
+        welcomeMessage: `<p class="text-lg"><span class="font-bold">Welcome to Dairy Hub!</span> Our purpose is to deliver every essential piece of information related to the dairy industry to you in a <strong class="font-semibold">simple, accurate, and scientific</strong> manner. This platform is for everyone who wants to learn and grow in this sector.</p>`,
+        journey: {
+            title: "My Journey: A Passion for Dairy Technology",
+            story: `
+                <p>My name is <strong>Saurabh Rajput</strong>, and Dairy Hub is a dream that I have turned into reality for all of you.</p>
+                <p>My interest has always been in the field of Food and Dairy Technology. During my studies and internships, I realized there is a lack of practical and easily understandable scientific knowledge in this industry, especially on digital platforms. To fill this gap, I laid the foundation of Dairy Hub.</p>
+                <p>My goal is to create a digital ecosystem where students, professionals, and dairy enthusiasts can easily access every technical detail related to dairy and make better decisions in their work.</p>
+            `
         },
         whatsInside: {
             title: "What's Inside Dairy Hub?",
