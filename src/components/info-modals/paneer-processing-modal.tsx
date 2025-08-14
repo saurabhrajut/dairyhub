@@ -18,16 +18,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const qualityParams = [
@@ -46,63 +36,13 @@ const processSteps = [
     { step: 7, stage: "Cutting & Packaging", params: "The chilled paneer block is cut into desired sizes and shapes. It is then vacuum-packed or packed in pouches with brine to maintain freshness and prevent microbial growth. The final product is stored at refrigeration temperatures (< 5°C)." },
 ]
 
-export function PaneerProductionModal({
+export function PaneerProcessingModal({
   isOpen,
   setIsOpen,
 }: {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
 }) {
-    const [milkType, setMilkType] = useState("buffalo");
-    const [milkQty, setMilkQty] = useState("100");
-    const [fatPercent, setFatPercent] = useState("6.0");
-    const [snfPercent, setSnfPercent] = useState("9.0");
-    const [yieldResult, setYieldResult] = useState<string | null>(null);
-    const [error, setError] = useState<string | null>(null);
-
-    useEffect(() => {
-        if(milkType === "buffalo") {
-            setFatPercent("6.0");
-            setSnfPercent("9.0");
-        } else {
-            setFatPercent("4.0");
-            setSnfPercent("8.5");
-        }
-    }, [milkType]);
-
-    const handleCalculate = () => {
-        const qty = parseFloat(milkQty);
-        const fat = parseFloat(fatPercent);
-        const snf = parseFloat(snfPercent);
-
-        if(isNaN(qty) || isNaN(fat) || isNaN(snf) || qty <= 0) {
-            setError("Please enter valid positive numbers for all fields.");
-            setYieldResult(null);
-            return;
-        }
-        setError(null);
-
-        const caseinInSnf = 0.77; 
-        const fatRecovery = 0.85;
-        const caseinRecovery = 0.93;
-        const finalMoisture = 0.55;
-
-        const recoveredFat = fat * fatRecovery;
-        const recoveredCasein = snf * caseinInSnf * caseinRecovery;
-        
-        const totalRecoveredSolidsPercent = recoveredFat + recoveredCasein;
-        const yieldPercent = totalRecoveredSolidsPercent / (1 - finalMoisture);
-        
-        const milkWeightKg = qty * 1.03;
-        const estimatedPaneerKg = (milkWeightKg * yieldPercent) / 100;
-
-        setYieldResult(`
-            <p class="font-bold">Estimated Yield: <span class="text-xl">${estimatedPaneerKg.toFixed(2)} kg</span></p>
-            <p class="text-sm mt-1">From ${qty} litres of milk with ${fat}% fat and ${snf}% SNF.</p>
-            <p class="text-xs mt-2">Note: This is an estimate. Actual yield depends on process efficiency, protein denaturation, and moisture control.</p>
-        `);
-    }
-
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -164,47 +104,10 @@ export function PaneerProductionModal({
                 </div>
             </section>
 
-            <section id="yield-calculator" className="mb-12">
-                <h2 className="text-2xl font-bold text-blue-700 bg-blue-50 p-4 rounded-lg mt-6 mb-6 border-l-4 border-blue-700 font-headline">3. Interactive Paneer Yield Calculator</h2>
-                <div className="bg-muted/50 p-6 rounded-lg">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <Label htmlFor="milkType">Milk Type</Label>
-                            <Select value={milkType} onValueChange={setMilkType}>
-                                <SelectTrigger><SelectValue/></SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="buffalo">Buffalo Milk</SelectItem>
-                                    <SelectItem value="cow">Cow Milk</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
-                        <div>
-                            <Label htmlFor="milkQty">Milk Quantity (in Litres)</Label>
-                            <Input type="number" id="milkQty" value={milkQty} onChange={e => setMilkQty(e.target.value)} />
-                        </div>
-                        <div>
-                            <Label htmlFor="fatPercent">Fat %</Label>
-                            <Input type="number" step="0.1" id="fatPercent" value={fatPercent} onChange={e => setFatPercent(e.target.value)} />
-                        </div>
-                        <div>
-                            <Label htmlFor="snfPercent">SNF %</Label>
-                            <Input type="number" step="0.1" id="snfPercent" value={snfPercent} onChange={e => setSnfPercent(e.target.value)} />
-                        </div>
-                    </div>
-                    <div className="mt-6">
-                        <Button onClick={handleCalculate} className="w-full">
-                            Calculate Estimated Yield
-                        </Button>
-                    </div>
-                     {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
-                     {yieldResult && <Alert className="mt-4" dangerouslySetInnerHTML={{__html: yieldResult}} />}
-                </div>
-            </section>
-
              <section id="advanced-topics" className="mb-12">
-                <h2 className="text-2xl font-bold text-blue-700 bg-blue-50 p-4 rounded-lg mt-6 mb-6 border-l-4 border-blue-700 font-headline">4. Advanced Production Insights</h2>
+                <h2 className="text-2xl font-bold text-blue-700 bg-blue-50 p-4 rounded-lg mt-6 mb-6 border-l-4 border-blue-700 font-headline">3. Advanced Production Insights</h2>
 
-                <h3 className="text-xl font-semibold text-gray-700 mt-8 mb-4 font-headline">4.1 Coagulants: Types and Usage</h3>
+                <h3 className="text-xl font-semibold text-gray-700 mt-8 mb-4 font-headline">3.1 Coagulants: Types and Usage</h3>
                 <p className="text-gray-600 leading-relaxed mb-4">The choice of coagulant affects the texture, flavor, and yield of the paneer.</p>
                 <div className="space-y-4">
                     <div className="p-4 border rounded-lg bg-card"><h4 className="font-bold text-card-foreground">Citric Acid</h4><p className="text-sm text-muted-foreground"><strong>Preparation:</strong> 1-2% solution (10-20g of citric acid powder in 1 litre of hot water at 70°C).<br/><strong>Usage:</strong> Most common industrial coagulant. Provides a clean, acidic flavor and consistent results. Add slowly to hot milk (70-75°C) with gentle stirring until clear whey separates. Over-addition can make paneer sour.</p></div>
@@ -213,7 +116,7 @@ export function PaneerProductionModal({
                     <div className="p-4 border rounded-lg bg-card"><h4 className="font-bold text-card-foreground">Calcium Chloride</h4><p className="text-sm text-muted-foreground"><strong>Preparation:</strong> Often added to milk *before* the acid coagulant.<br/><strong>Usage:</strong> Not a primary coagulant, but added to milk (especially cow milk or pasteurized milk) to improve the coagulation properties and firmness of the curd, which can slightly increase yield by improving moisture retention.</p></div>
                 </div>
 
-                <h3 className="text-xl font-semibold text-gray-700 mt-8 mb-4 font-headline">4.2 How to Increase Paneer Yield</h3>
+                <h3 className="text-xl font-semibold text-gray-700 mt-8 mb-4 font-headline">3.2 How to Increase Paneer Yield</h3>
                 <p className="text-gray-600 leading-relaxed mb-4">Maximizing yield is key to profitability. Here are the most effective methods:</p>
                 <ul className="list-disc list-outside pl-5 space-y-3 text-muted-foreground">
                     <li><strong>Optimal Heating:</strong> Heating milk to 85-90°C denatures whey proteins (like β-lactoglobulin and α-lactalbumin). These proteins then get trapped in the casein curd during coagulation, increasing the total solid recovery and thus the yield.</li>
@@ -222,13 +125,13 @@ export function PaneerProductionModal({
                     <li><strong>Controlled Pressing:</strong> Applying the correct pressure (2-3 kg/cm²) for the right amount of time (15-20 mins) is crucial. Over-pressing squeezes out too much moisture and fat, reducing yield and creating a hard paneer. Under-pressing results in a product with too much moisture, which has a shorter shelf life.</li>
                 </ul>
 
-                <h3 className="text-xl font-semibold text-gray-700 mt-8 mb-4 font-headline">4.3 Safe Yield Increasers for Consumption</h3>
+                <h3 className="text-xl font-semibold text-gray-700 mt-8 mb-4 font-headline">3.3 Safe Yield Increasers for Consumption</h3>
                 <p className="text-gray-600 leading-relaxed mb-4">Certain additives can be used to safely increase the yield and improve the texture of paneer.</p>
                 <Alert variant="default" className="bg-green-50 border-green-500 text-green-800">
                     <AlertDescription><strong>Whey Protein Concentrate (WPC):</strong> Adding WPC powder to milk before heating is a modern technique to boost the protein content. This directly increases the amount of solids available for coagulation, leading to a higher yield and a softer, more nutritious paneer. This is a common and safe practice in the industry.</AlertDescription>
                 </Alert>
 
-                <h3 className="text-xl font-semibold text-gray-700 mt-8 mb-4 font-headline">4.4 Paneer Texture Explained: Hard, Soft, and Fluffy</h3>
+                <h3 className="text-xl font-semibold text-gray-700 mt-8 mb-4 font-headline">3.4 Paneer Texture Explained: Hard, Soft, and Fluffy</h3>
                 <p className="text-gray-600 leading-relaxed mb-4">The final texture of paneer is a result of several factors throughout the production process.</p>
                 <div className="overflow-x-auto">
                      <Table>
@@ -252,5 +155,3 @@ export function PaneerProductionModal({
     </Dialog>
   );
 }
-
-    

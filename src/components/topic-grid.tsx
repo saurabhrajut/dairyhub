@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -34,10 +35,9 @@ import { AdulterationModal } from "./info-modals/adulteration-modal";
 import { StandardizationIModal } from "./calculators/standardization-i-modal";
 import { StandardizationIIModal } from "./calculators/standardization-ii-modal";
 import { SolutionsPrepModal } from "./calculators/solutions-prep-modal";
-import { PaneerProductionModal } from "./info-modals/paneer-production-modal";
+import { PaneerProcessingModal } from "./info-modals/paneer-processing-modal";
 import { DairyProcessingModal } from "./info-modals/dairy-processing-modal";
 import { AboutUsModal } from "./info-modals/about-us-modal";
-import { IceCreamCalculationsModal } from "./info-modals/ice-cream-calculations-modal";
 import { CompositionalAnalysisModal } from "./info-modals/compositional-analysis-modal";
 import { CalibrationStandardizationModal } from "./info-modals/calibration-standardization-modal";
 import { QualityConceptModal } from "./info-modals/quality-concept-modal";
@@ -66,7 +66,7 @@ const topics = [
   { id: 'microbiology', title: 'Microbiology', description: 'Testing & Pathogens', category: 'science', icon: Bug, badge: 'New', modal: MicrobiologyTestingModal, isPro: true, color: 'from-purple-100 to-violet-200' },
   
   // Tier 2: Core Processes & Testing
-  { id: 'milk-handling', title: 'Milk Handling & preservation', description: 'Reception & Preservation', category: 'milk', icon: Droplet, badge: 'New', modal: MilkHandlingPreservationModal, isPro: true, color: 'from-cyan-100 to-sky-200' },
+  { id: 'milk-handling', title: 'Milk Handling', description: 'Reception & Preservation', category: 'milk', icon: Droplet, badge: 'New', modal: MilkHandlingPreservationModal, isPro: true, color: 'from-cyan-100 to-sky-200' },
   { id: 'processing', title: 'Dairy Processing', description: 'Techniques & Machinery', category: 'industry', icon: Settings, modal: DairyProcessingModal, isPro: true, color: 'from-gray-100 to-gray-300' },
   { id: 'adulteration', title: 'Adulteration', description: 'Detection & Prevention', category: 'milk', icon: TestTube, badge: 'Updated', modal: AdulterationModal, isPro: true, color: 'from-yellow-100 to-amber-200' },
   { id: 'solutions-prep', title: 'Solutions Preparation', description: 'Reagents & Calculators', category: 'science', icon: Beaker, modal: SolutionsPrepModal, isPro: true, color: 'from-emerald-100 to-green-200' },
@@ -74,13 +74,12 @@ const topics = [
   // Tier 3: Product Specifics & Advanced Calculations
   { id: 'fermented-products', title: 'Fermented Products', description: 'Yogurt, Dahi & More', category: 'science', icon: ReagentIcon, badge: 'New', modal: FermentedProductsModal, isPro: true, color: 'from-pink-100 to-fuchsia-200' },
   { id: 'evaporation-drying', title: 'Evaporation & Drying', description: 'Condensed & Powdered Milk', category: 'science', icon: Wind, badge: 'New', modal: EvaporationDryingModal, isPro: true, color: 'from-indigo-100 to-blue-200' },
-  { id: 'paneer-production', title: 'Paneer Production', description: 'Process & Yield', category: 'science', icon: PaneerIcon, modal: PaneerProductionModal, isPro: true, color: 'from-lime-100 to-yellow-200' },
-  { id: 'ice-cream-calc', title: 'Ice Cream Calc', description: 'Overrun & Mix', category: 'science', icon: IceCreamIcon, modal: IceCreamCalculationsModal, isPro: true, color: 'from-rose-100 to-pink-200' },
-
+  { id: 'paneer-production', title: 'Paneer Processing', description: 'Process & Yield', category: 'science', icon: PaneerIcon, modal: PaneerProcessingModal, isPro: true, color: 'from-lime-100 to-yellow-200' },
+  
   // Tier 4: Standardization & General Calculators
   { id: 'std1', title: 'Standardization I', description: 'Basic Principles', category: 'milk', icon: Scale, modal: StandardizationIModal, isPro: false, color: 'from-sky-100 to-cyan-200' },
   { id: 'std2', title: 'Standardization II', description: 'Advanced Blending', category: 'milk', icon: Calculator, modal: StandardizationIIModal, isPro: true, color: 'from-fuchsia-100 to-purple-200' },
-  { id: 'various-calculations', title: 'Various Calculations', description: 'Yield, Acidity, etc.', category: 'science', icon: FileSpreadsheet, badge: 'New', modal: VariousCalculatorsModal, isPro: true, color: 'from-orange-100 to-red-200' },
+  { id: 'various-calculations', title: 'Various Calculations', description: 'Yield, Acidity, etc.', category: 'science', icon: FileSpreadsheet, badge: 'Updated', modal: VariousCalculatorsModal, isPro: true, color: 'from-orange-100 to-red-200' },
   { id: 'plant-cost', title: 'Plant Cost', description: 'Profit & Loss Calc', category: 'industry', icon: DollarSign, badge: 'Pro', modal: PlantCostModal, isPro: true, color: 'from-yellow-100 to-green-200' },
   
   // Tier 5: Quality & Systems
@@ -169,22 +168,22 @@ export function TopicGrid() {
         </div>
       </div>
 
-      <div className="grid grid-cols-4 gap-4 sm:gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-4 sm:gap-6">
         {filteredTopics.map((topic) => {
           const isLocked = topic.isPro && !isPro;
           return (
             <div
               key={topic.id}
               onClick={() => openModal(topic.id)}
-              className={`bg-card p-4 sm:p-6 rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer text-center relative overflow-hidden group ${isLocked ? 'opacity-70' : ''}`}
+              className={`bg-card p-4 rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer text-center relative overflow-hidden group ${isLocked ? 'opacity-70' : ''}`}
             >
               {isLocked && <div className="absolute inset-0 bg-black/30 flex items-center justify-center"><Lock className="w-8 h-8 text-white" /></div>}
-              {topic.badge && <Badge variant={topic.badge === 'Pro' ? 'default' : 'destructive'} className="absolute top-2 right-2 sm:top-3 sm:right-3 text-xs px-1.5 py-0.5 h-auto sm:px-2.5 sm:py-0.5 animate-pulse">{topic.badge}</Badge>}
-              <div className={`w-12 h-12 sm:w-20 sm:h-20 mx-auto mb-3 sm:mb-4 rounded-full flex items-center justify-center bg-gradient-to-br ${topic.color}`}>
-                <topic.icon className="w-6 h-6 sm:w-10 sm:h-10 text-primary" />
+              {topic.badge && <Badge variant={topic.badge === 'Pro' ? 'default' : 'destructive'} className="absolute top-2 right-2 text-xs px-1.5 py-0.5 h-auto animate-pulse">{topic.badge}</Badge>}
+              <div className={`w-16 h-16 mx-auto mb-3 rounded-full flex items-center justify-center bg-gradient-to-br ${topic.color}`}>
+                <topic.icon className="w-8 h-8 text-primary" />
               </div>
-              <h3 className="font-headline font-semibold text-card-foreground text-[10px] sm:text-base leading-tight">{topic.title}</h3>
-              <p className="hidden sm:block text-xs text-muted-foreground">{topic.description}</p>
+              <h3 className="font-headline font-semibold text-card-foreground text-sm leading-tight">{topic.title}</h3>
+              <p className="hidden sm:block text-xs text-muted-foreground mt-1">{topic.description}</p>
             </div>
           )
         })}

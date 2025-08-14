@@ -24,7 +24,24 @@ import {
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { componentProps, getSnf } from "@/lib/utils";
-import { CheckCircle, XCircle } from "lucide-react";
+import { CheckCircle, XCircle, PlusCircle, XCircle as XCircleIcon } from "lucide-react";
+import { PaneerIcon, IceCreamIcon } from "../icons";
+import { useToast } from "@/hooks/use-toast";
+
+interface BatchIngredient {
+  id: number;
+  name: string;
+  amount: string;
+}
+
+interface MixIngredient {
+    id: number;
+    name: string;
+    amount: string;
+    fat: string;
+    msnf: string;
+    sugar: string;
+}
 
 
 const stateWiseStandards = {
@@ -76,12 +93,14 @@ const CalculatorCard = ({ title, children, description }: { title: string; child
 
 const TABS = [
   { value: "acidity", label: "Acidity" },
-  { value: "snf-standards", label: "SNF Standards & Calc" },
-  { value: "yield", label: "Yield" },
+  { value: "snf-standards", label: "SNF Standards" },
+  { value: "yield", label: "Yield (Misc)" },
+  { value: "paneer-yield", label: "Paneer Yield" },
+  { value: "ice-cream", label: "Ice Cream" },
   { value: "fat-dry", label: "Fat (Dry Basis)" },
   { value: "clr-correction", label: "CLR Correction" },
   { value: "component-qty", label: "Component Qty" },
-  { value: "gravimetric", label: "Gravimetric Analysis" },
+  { value: "gravimetric", label: "Gravimetric" },
   { value: "formulas", label: "Formulas" },
 ];
 
@@ -95,13 +114,13 @@ export function VariousCalculatorsModal({
 }) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-4xl h-[90vh]">
+      <DialogContent className="max-w-5xl h-[90vh]">
         <DialogHeader>
           <DialogTitle className="text-3xl font-bold text-center font-headline">Various Calculations</DialogTitle>
           <DialogDescription className="text-center">A collection of useful calculators for dairy processing.</DialogDescription>
         </DialogHeader>
         <Tabs defaultValue="acidity" className="w-full flex-1 flex flex-col min-h-0">
-          <TabsList className="grid w-full grid-cols-3 md:grid-cols-4 h-auto">
+          <TabsList className="grid w-full grid-cols-3 md:grid-cols-5 h-auto">
             {TABS.map(tab => <TabsTrigger key={tab.value} value={tab.value} className="text-xs sm:text-sm p-2 h-auto">{tab.label}</TabsTrigger>)}
           </TabsList>
           <ScrollArea className="flex-1 mt-4 pr-4">
@@ -118,6 +137,9 @@ export function VariousCalculatorsModal({
                 <ShrikhandYieldCalc />
                 <PedhaBurfiYieldCalc />
             </TabsContent>
+            <TabsContent value="paneer-yield" className="mt-0">
+              <PaneerYieldCalc />
+            </TabsContent>
              <TabsContent value="fat-dry" className="mt-0">
                 <FatOnDryBasisCalc />
             </TabsContent>
@@ -125,6 +147,9 @@ export function VariousCalculatorsModal({
             <TabsContent value="component-qty" className="mt-0"><ComponentQtyCalc /></TabsContent>
             <TabsContent value="gravimetric" className="mt-0"><GravimetricAnalysisCalc /></TabsContent>
             <TabsContent value="formulas" className="mt-0"><FormulasTab /></TabsContent>
+            <TabsContent value="ice-cream" className="mt-0">
+                <IceCreamCalculators />
+            </TabsContent>
           </ScrollArea>
         </Tabs>
       </DialogContent>
@@ -133,6 +158,106 @@ export function VariousCalculatorsModal({
 }
 
 // Individual Calculator Components
+
+function PaneerYieldCalc() {
+    // State for theoretical calculation
+    const [milkQtyLtr, setMilkQtyLtr] = useState('100');
+    const [fatPercent, setFatPercent] = useState('6.0');
+    const [snfPercent, setSnfPercent] = useState('9.0');
+    const [fatRecovery, setFatRecovery] = useState('90');
+    const [caseinRecovery, setCaseinRecovery] = useState('93');
+    const [finalMoisture, setFinalMoisture] = useState('55');
+    const [theoreticalResult, setTheoreticalResult] = useState<string | null>(null);
+
+    // State for actual calculation
+    const [milkUsed, setMilkUsed] = useState('');
+    const [paneerObtained, setPaneerObtained] = useState('');
+    const [actualResult, setActualResult] = useState<string | null>(null);
+
+    const handleTheoreticalCalc = () => {
+        const qty = parseFloat(milkQtyLtr);
+        const fat = parseFloat(fatPercent);
+        const snf = parseFloat(snfPercent);
+        const fRec = parseFloat(fatRecovery) / 100;
+        const cRec = parseFloat(caseinRecovery) / 100;
+        const moisture = parseFloat(finalMoisture) / 100;
+
+        if ([qty, fat, snf, fRec, cRec, moisture].some(isNaN) || qty <= 0) {
+            setTheoreticalResult('<p class="text-red-500">Please enter valid positive numbers for all fields.</p>');
+            return;
+        }
+
+        const caseinInSnf = 0.77; // Standard factor for casein in milk SNF
+        const milkWeightKg = qty * componentProps.milkDensity;
+
+        const recoveredFatKg = (milkWeightKg * (fat / 100)) * fRec;
+        const recoveredCaseinKg = (milkWeightKg * (snf / 100) * caseinInSnf) * cRec;
+        const totalRecoveredSolidsKg = recoveredFatKg + recoveredCaseinKg;
+        
+        const paneerYieldKg = totalRecoveredSolidsKg / (1 - moisture);
+        const yieldPercentage = (paneerYieldKg / milkWeightKg) * 100;
+
+        setTheoreticalResult(`
+            <p class="font-bold text-lg">Estimated Theoretical Yield: <span class="text-2xl text-green-700">${paneerYieldKg.toFixed(2)} kg</span></p>
+            <p class="text-sm mt-1">This is approximately a <span class="font-bold">${yieldPercentage.toFixed(2)}%</span> yield from ${qty} Litres of milk.</p>
+            <p class="text-xs mt-2">This is a scientific estimate based on solid recovery. Actual yield will vary.</p>
+        `);
+    };
+
+    const handleActualCalc = () => {
+        const milk = parseFloat(milkUsed);
+        const paneer = parseFloat(paneerObtained);
+
+        if (isNaN(milk) || isNaN(paneer) || milk <= 0) {
+            setActualResult('<p class="text-red-500">Please enter valid positive weights.</p>');
+            return;
+        }
+         if (paneer > milk) {
+            setActualResult('<p class="text-red-500">Paneer weight cannot be greater than milk weight.</p>');
+            return;
+        }
+
+        const actualYield = (paneer / milk) * 100;
+        setActualResult(`
+             <p class="font-bold text-lg">Actual Yield: <span class="text-2xl text-blue-700">${actualYield.toFixed(2)}%</span></p>
+             <p class="text-sm mt-1">You obtained ${paneer} kg of paneer from ${milk} kg of milk.</p>
+        `);
+    };
+
+    return (
+        <CalculatorCard title="Industrial Paneer Yield Calculator">
+            <Tabs defaultValue="theoretical" className="w-full">
+                <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="theoretical">Theoretical Yield</TabsTrigger>
+                    <TabsTrigger value="actual">Actual Yield</TabsTrigger>
+                </TabsList>
+                <TabsContent value="theoretical" className="mt-4">
+                     <p className="text-xs text-muted-foreground mb-4">Predict paneer yield based on milk composition before production.</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div><Label>Milk Quantity (Litres)</Label><Input type="number" value={milkQtyLtr} onChange={e => setMilkQtyLtr(e.target.value)} /></div>
+                        <div><Label>Final Paneer Moisture %</Label><Input type="number" value={finalMoisture} onChange={e => setFinalMoisture(e.target.value)} /></div>
+                        <div><Label>Milk Fat %</Label><Input type="number" value={fatPercent} onChange={e => setFatPercent(e.target.value)} /></div>
+                        <div><Label>Fat Recovery %</Label><Input type="number" value={fatRecovery} onChange={e => setFatRecovery(e.target.value)} /></div>
+                        <div><Label>Milk SNF %</Label><Input type="number" value={snfPercent} onChange={e => setSnfPercent(e.target.value)} /></div>
+                        <div><Label>Casein Recovery %</Label><Input type="number" value={caseinRecovery} onChange={e => setCaseinRecovery(e.target.value)} /></div>
+                    </div>
+                    <Button onClick={handleTheoreticalCalc} className="w-full mt-4">Calculate Theoretical Yield</Button>
+                    {theoreticalResult && <Alert className="mt-4" dangerouslySetInnerHTML={{ __html: theoreticalResult }} />}
+                </TabsContent>
+                <TabsContent value="actual" className="mt-4">
+                    <p className="text-xs text-muted-foreground mb-4">Calculate the actual yield achieved after a production batch.</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div><Label>Total Milk Used (kg)</Label><Input type="number" value={milkUsed} onChange={e => setMilkUsed(e.target.value)} placeholder="e.g., 103" /></div>
+                        <div><Label>Paneer Obtained (kg)</Label><Input type="number" value={paneerObtained} onChange={e => setPaneerObtained(e.target.value)} placeholder="e.g., 15.5" /></div>
+                    </div>
+                     <Button onClick={handleActualCalc} className="w-full mt-4">Calculate Actual Yield</Button>
+                    {actualResult && <Alert className="mt-4" dangerouslySetInnerHTML={{ __html: actualResult }} />}
+                </TabsContent>
+            </Tabs>
+        </CalculatorCard>
+    );
+}
+
 
 function ProductAcidityCalc() {
     const [product, setProduct] = useState('milk');
@@ -755,4 +880,299 @@ function FormulasTab() {
             </CalculatorCard>
         </div>
     )
+}
+
+function IceCreamCalculators() {
+  return (
+    <Tabs defaultValue="batch-scaling" className="w-full">
+      <TabsList className="grid w-full grid-cols-2 md:grid-cols-4">
+        <TabsTrigger value="batch-scaling">Batch Scaling</TabsTrigger>
+        <TabsTrigger value="overrun">Overrun</TabsTrigger>
+        <TabsTrigger value="freezing-point">Freezing Point</TabsTrigger>
+        <TabsTrigger value="mix-comp">Mix Composition</TabsTrigger>
+      </TabsList>
+      <TabsContent value="batch-scaling"><BatchScalingCalc /></TabsContent>
+      <TabsContent value="overrun"><OverrunCalc /></TabsContent>
+      <TabsContent value="freezing-point"><FreezingPointCalc /></TabsContent>
+      <TabsContent value="mix-comp"><MixCompositionCalc /></TabsContent>
+    </Tabs>
+  )
+}
+
+function BatchScalingCalc() {
+    const { toast } = useToast();
+    const [ingredients, setIngredients] = useState<BatchIngredient[]>([{ id: 1, name: "Milk", amount: "550" }]);
+    const [finalBatchSize, setFinalBatchSize] = useState("100");
+    const [result, setResult] = useState<any[] | null>(null);
+
+    const addIngredient = () => {
+        setIngredients([...ingredients, { id: Date.now(), name: "", amount: "" }]);
+    };
+    
+    const removeIngredient = (id: number) => {
+        setIngredients(ingredients.filter(ing => ing.id !== id));
+    };
+
+    const handleIngredientChange = (id: number, field: keyof BatchIngredient, value: string) => {
+        setIngredients(ingredients.map(ing => ing.id === id ? { ...ing, [field]: value } : ing));
+    };
+
+    const calculate = () => {
+        const finalSize = parseFloat(finalBatchSize);
+        if (isNaN(finalSize) || finalSize <= 0) {
+            toast({ variant: "destructive", title: "Invalid Input", description: "Please enter a valid final batch size." });
+            return;
+        }
+
+        const validIngredients = ingredients.filter(ing => parseFloat(ing.amount) > 0);
+        if (validIngredients.length === 0) {
+            toast({ variant: "destructive", title: "Invalid Input", description: "Please enter a valid amount for at least one ingredient." });
+            return;
+        }
+
+        const baseTotalWeight = validIngredients.reduce((sum, ing) => sum + parseFloat(ing.amount), 0);
+        if (baseTotalWeight === 0) return;
+
+        const scaledIngredients = validIngredients.map(ing => {
+            const scaledAmount = (parseFloat(ing.amount) / baseTotalWeight) * (finalSize * 1000);
+            return { name: ing.name || `Ingredient`, amount: scaledAmount };
+        });
+
+        setResult(scaledIngredients);
+        toast({ title: "Success", description: "Batch scaling calculated successfully!" });
+    };
+
+    return (
+        <CalculatorCard title="Batch Scaling Calculator">
+            <div className="space-y-4 mb-4">
+                {ingredients.map((ing) => (
+                    <div key={ing.id} className="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-4 items-center">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                           <Input
+                                type="text"
+                                placeholder="Ingredient Name"
+                                value={ing.name}
+                                onChange={(e) => handleIngredientChange(ing.id, 'name', e.target.value)}
+                            />
+                            <Input
+                                type="number"
+                                placeholder="Amount (g)"
+                                value={ing.amount}
+                                onChange={(e) => handleIngredientChange(ing.id, 'amount', e.target.value)}
+                            />
+                        </div>
+                        <Button variant="ghost" size="icon" className="text-destructive" onClick={() => removeIngredient(ing.id)}><XCircleIcon /></Button>
+                    </div>
+                ))}
+            </div>
+            <Button variant="outline" size="sm" onClick={addIngredient}><PlusCircle className="mr-2 h-4 w-4" /> Add Ingredient</Button>
+            <hr className="my-6" />
+            <div>
+                <Label htmlFor="final-batch-size">Final Batch Size (kg)</Label>
+                <Input type="number" id="final-batch-size" value={finalBatchSize} onChange={e => setFinalBatchSize(e.target.value)} />
+            </div>
+            <Button onClick={calculate} className="mt-4 w-full">Calculate Batch</Button>
+            {result && (
+                <Alert className="mt-4">
+                    <AlertTitle>Ingredients for {finalBatchSize} kg Batch</AlertTitle>
+                    <AlertDescription>
+                        <Table>
+                            <TableHeader><TableRow><TableHead>Ingredient</TableHead><TableHead>Required Amount</TableHead></TableRow></TableHeader>
+                            <TableBody>
+                                {result.map((ing, i) => (
+                                    <TableRow key={i}>
+                                        <TableCell>{ing.name}</TableCell>
+                                        <TableCell>{ing.amount.toFixed(2)} g ({(ing.amount / 1000).toFixed(3)} kg)</TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </AlertDescription>
+                </Alert>
+            )}
+        </CalculatorCard>
+    );
+}
+
+function OverrunCalc() {
+    const { toast } = useToast();
+    const [mixWeight, setMixWeight] = useState("1080");
+    const [iceCreamWeight, setIceCreamWeight] = useState("560");
+    const [result, setResult] = useState<string | null>(null);
+
+    const calculate = () => {
+        const mixW = parseFloat(mixWeight);
+        const icW = parseFloat(iceCreamWeight);
+
+        if (isNaN(mixW) || isNaN(icW) || mixW <= 0 || icW <= 0) {
+            toast({ variant: "destructive", title: "Invalid Input", description: "Please enter valid positive weights." });
+            return;
+        }
+        if (mixW < icW) {
+            toast({ variant: "destructive", title: "Invalid Input", description: "Mix weight cannot be less than ice cream weight." });
+            return;
+        }
+
+        const overrun = ((mixW - icW) / icW) * 100;
+        setResult(`Calculated Overrun: ${overrun.toFixed(2)}%`);
+        toast({ title: "Success", description: "Overrun calculated successfully!" });
+    };
+    
+    return (
+        <CalculatorCard title="Overrun Calculator">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div><Label>Weight of Mix (g)</Label><Input type="number" value={mixWeight} onChange={e => setMixWeight(e.target.value)} /></div>
+                <div><Label>Weight of Same Volume of Ice Cream (g)</Label><Input type="number" value={iceCreamWeight} onChange={e => setIceCreamWeight(e.target.value)} /></div>
+            </div>
+            <Button onClick={calculate} className="mt-4 w-full">Calculate Overrun</Button>
+            {result && <Alert className="mt-4"><AlertDescription className="text-lg font-bold">{result}</AlertDescription></Alert>}
+        </CalculatorCard>
+    );
+}
+
+function FreezingPointCalc() {
+    const { toast } = useToast();
+    const [water, setWater] = useState("0.65");
+    const [sucrose, setSucrose] = useState("150");
+    const [dextrose, setDextrose] = useState("25");
+    const [salt, setSalt] = useState("1");
+    const [result, setResult] = useState<string | null>(null);
+
+    const calculate = () => {
+        const waterKg = parseFloat(water);
+        if (isNaN(waterKg) || waterKg <= 0) {
+            toast({ variant: "destructive", title: "Invalid Input", description: "Please enter a valid weight for water in kg." });
+            return;
+        }
+        const sucroseG = parseFloat(sucrose) || 0;
+        const dextroseG = parseFloat(dextrose) || 0;
+        const saltG = parseFloat(salt) || 0;
+
+        const MOLAR_MASS_SUCROSE = 342.3, MOLAR_MASS_DEXTROSE = 180.16, MOLAR_MASS_SALT = 58.44;
+        const KF_WATER = 1.86;
+        const I_SALT = 2, I_SUGAR = 1;
+
+        const molesSucrose = sucroseG / MOLAR_MASS_SUCROSE;
+        const molesDextrose = dextroseG / MOLAR_MASS_DEXTROSE;
+        const molesSalt = saltG / MOLAR_MASS_SALT;
+
+        const totalEffectiveMoles = (molesSucrose * I_SUGAR) + (molesDextrose * I_SUGAR) + (molesSalt * I_SALT);
+        const molality = totalEffectiveMoles / waterKg;
+        const freezingPointDepression = molality * KF_WATER;
+        const finalFreezingPoint = 0 - freezingPointDepression;
+
+        setResult(`Estimated Freezing Point: ${finalFreezingPoint.toFixed(2)} °C`);
+        toast({ title: "Success", description: "Freezing point calculated successfully!" });
+    };
+
+    return (
+        <CalculatorCard title="Freezing Point Calculator" description="Estimates the freezing point based on sugars and salt in your mix.">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div><Label>Total Water in Mix (kg)</Label><Input type="number" value={water} onChange={e => setWater(e.target.value)} /></div>
+                <div><Label>Sucrose (Sugar) (g)</Label><Input type="number" value={sucrose} onChange={e => setSucrose(e.target.value)} /></div>
+                <div><Label>Dextrose/Glucose (g)</Label><Input type="number" value={dextrose} onChange={e => setDextrose(e.target.value)} /></div>
+                <div><Label>Salt (NaCl) (g)</Label><Input type="number" value={salt} onChange={e => setSalt(e.target.value)} /></div>
+            </div>
+            <Button onClick={calculate} className="mt-4 w-full">Calculate Freezing Point</Button>
+            {result && <Alert className="mt-4"><AlertDescription className="text-lg font-bold">{result}</AlertDescription></Alert>}
+        </CalculatorCard>
+    );
+}
+
+function MixCompositionCalc() {
+    const { toast } = useToast();
+    const [ingredients, setIngredients] = useState<MixIngredient[]>([
+        { id: 1, name: "Cream 40%", amount: "250", fat: "40", msnf: "5.5", sugar: "0" },
+        { id: 2, name: "Milk 3.5%", amount: "500", fat: "3.5", msnf: "8.5", sugar: "0" },
+        { id: 3, name: "Sugar", amount: "150", fat: "0", msnf: "0", sugar: "100" },
+    ]);
+    const [result, setResult] = useState<{ total: number; fat: number; msnf: number; sugar: number } | null>(null);
+
+    const addIngredient = () => {
+        setIngredients([...ingredients, { id: Date.now(), name: "", amount: "", fat: "", msnf: "", sugar: "" }]);
+    };
+
+    const removeIngredient = (id: number) => {
+        setIngredients(ingredients.filter(ing => ing.id !== id));
+    };
+    
+    const handleChange = (id: number, field: keyof MixIngredient, value: string) => {
+        setIngredients(ingredients.map(ing => ing.id === id ? { ...ing, [field]: value } : ing));
+    };
+
+    const calculate = () => {
+        const validIngredients = ingredients.filter(ing => parseFloat(ing.amount) > 0);
+        if (validIngredients.length === 0) {
+            toast({ variant: "destructive", title: "Invalid Input", description: "Please provide at least one ingredient with a valid amount." });
+            return;
+        }
+
+        let totalMixWeight = 0, totalFat = 0, totalMSNF = 0, totalSugar = 0;
+
+        validIngredients.forEach(ing => {
+            const amount = parseFloat(ing.amount);
+            totalMixWeight += amount;
+            totalFat += (amount * (parseFloat(ing.fat) || 0)) / 100;
+            totalMSNF += (amount * (parseFloat(ing.msnf) || 0)) / 100;
+            totalSugar += (amount * (parseFloat(ing.sugar) || 0)) / 100;
+        });
+
+        if (totalMixWeight === 0) return;
+
+        setResult({
+            total: totalMixWeight,
+            fat: (totalFat / totalMixWeight) * 100,
+            msnf: (totalMSNF / totalMixWeight) * 100,
+            sugar: (totalSugar / totalMixWeight) * 100,
+        });
+        toast({ title: "Success", description: "Mix composition calculated successfully!" });
+    }
+
+    return (
+        <CalculatorCard title="Mix Composition Calculator" description="Enter the weight and composition of each ingredient to find the overall percentages in your mix.">
+            <div className="space-y-4 mb-4">
+                <div className="hidden sm:grid grid-cols-[1fr_1fr_0.5fr_0.5fr_0.5fr_auto] gap-4 items-center">
+                    <Label>Ingredient Name</Label>
+                    <Label>Amount (g)</Label>
+                    <Label>Fat %</Label>
+                    <Label>MSNF %</Label>
+                    <Label>Sugar %</Label>
+                    <div/>
+                </div>
+                {ingredients.map(ing => (
+                    <div key={ing.id} className="grid grid-cols-2 sm:grid-cols-[1fr_1fr_0.5fr_0.5fr_0.5fr_auto] gap-2 items-center">
+                        <Input type="text" placeholder="Name" value={ing.name} onChange={e => handleChange(ing.id, 'name', e.target.value)} />
+                        <Input type="number" placeholder="g" value={ing.amount} onChange={e => handleChange(ing.id, 'amount', e.target.value)} />
+                        <Input type="number" placeholder="Fat %" value={ing.fat} onChange={e => handleChange(ing.id, 'fat', e.target.value)} />
+                        <Input type="number" placeholder="MSNF %" value={ing.msnf} onChange={e => handleChange(ing.id, 'msnf', e.target.value)} />
+                        <Input type="number" placeholder="Sugar %" value={ing.sugar} onChange={e => handleChange(ing.id, 'sugar', e.target.value)} />
+                        <Button variant="ghost" size="icon" className="text-destructive" onClick={() => removeIngredient(ing.id)}><XCircleIcon /></Button>
+                    </div>
+                ))}
+            </div>
+             <Button variant="outline" size="sm" onClick={addIngredient}><PlusCircle className="mr-2 h-4 w-4" /> Add Mix Ingredient</Button>
+            <Button onClick={calculate} className="mt-4 w-full">Calculate Mix Composition</Button>
+            {result && (
+                 <Alert className="mt-4">
+                    <AlertTitle>Overall Mix Composition</AlertTitle>
+                    <AlertDescription>
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Component</TableHead>
+                                    <TableHead>Value</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                <TableRow><TableCell>Total Mix Weight</TableCell><TableCell>{result.total.toFixed(2)} g</TableCell></TableRow>
+                                <TableRow><TableCell>Fat</TableCell><TableCell>{result.fat.toFixed(2)}%</TableCell></TableRow>
+                                <TableRow><TableCell>Milk Solids Non-Fat (MSNF)</TableCell><TableCell>{result.msnf.toFixed(2)}%</TableCell></TableRow>
+                                <TableRow><TableCell>Sugar</TableCell><TableCell>{result.sugar.toFixed(2)}%</TableCell></TableRow>
+                            </TableBody>
+                        </Table>
+                    </AlertDescription>
+                </Alert>
+            )}
+        </CalculatorCard>
+    );
 }
