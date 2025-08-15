@@ -8,11 +8,11 @@ import { LogOut, Settings, Star, User as UserIcon } from "lucide-react";
 import { SettingsPanel } from './settings-panel';
 import { useRouter } from 'next/navigation';
 import { SubscriptionModal } from './subscription-modal';
-import { useAuth } from '@/context/auth-context';
+import { useAuth, type UserProfile } from '@/context/auth-context';
 import type { User } from 'firebase/auth';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-export function Header({ user }: { user: User }) {
+export function Header({ user, userProfile }: { user: User, userProfile: UserProfile }) {
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [isSubscriptionOpen, setIsSubscriptionOpen] = useState(false);
     const router = useRouter();
@@ -30,11 +30,11 @@ export function Header({ user }: { user: User }) {
                     <CardContent className="p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                         <div className="flex items-center gap-4">
                              <Avatar>
-                                <AvatarImage src={user.photoURL ?? undefined} alt={user.displayName ?? 'User'} />
+                                <AvatarImage src={userProfile.photoURL ?? undefined} alt={userProfile.name ?? 'User'} />
                                 <AvatarFallback><UserIcon /></AvatarFallback>
                             </Avatar>
                             <div>
-                                <h1 className="font-headline text-xl sm:text-2xl font-bold text-gray-800">Welcome, {user.displayName || "Friend"}! 👋</h1>
+                                <h1 className="font-headline text-xl sm:text-2xl font-bold text-gray-800">Welcome, {userProfile.name || "Friend"}! 👋</h1>
                                 <p className="text-sm text-gray-500">Ready to Explore the World of Dairy?</p>
                             </div>
                         </div>

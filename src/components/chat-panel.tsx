@@ -16,7 +16,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { getSarathiChatbotResponse } from "@/app/actions";
 import { Mic, Send, Bot, Paperclip, X } from "lucide-react";
-import type { UserProfile } from "@/app/page";
+import type { ChatUserProfile } from "./chat-widget";
 
 interface Message {
   role: "user" | "model";
@@ -38,7 +38,7 @@ export function ChatPanel({
 }: {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-  user: UserProfile;
+  user: ChatUserProfile;
 }) {
   const [messages, setMessages] = useState<UIMessage[]>([
     {

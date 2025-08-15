@@ -9,7 +9,13 @@ import { useAuth } from "@/context/auth-context";
 import { useSubscription } from "@/context/subscription-context";
 import { SubscriptionModal } from "./subscription-modal";
 
-export function ChatWidget() {
+export interface ChatUserProfile {
+    name: string;
+    age: number;
+    gender: 'male' | 'female' | 'other';
+}
+
+export function ChatWidget({ user: chatUser }: { user: ChatUserProfile }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState(false);
   const { isPro } = useSubscription();
@@ -27,14 +33,6 @@ export function ChatWidget() {
     return null; // Don't show the widget if user is not logged in
   }
   
-  // A mock user profile for the ChatPanel which expects a different structure
-  // This can be enhanced in the future by storing this info in AuthContext or a user profile DB
-  const mockUserProfile = {
-    name: user.displayName || 'Friend',
-    age: 30,
-    gender: 'other' as const
-  };
-
   return (
     <>
       <div className="fixed bottom-8 right-8 z-50">
@@ -51,7 +49,7 @@ export function ChatWidget() {
           )}
         </Button>
       </div>
-      {isPro && <ChatPanel isOpen={isOpen} setIsOpen={setIsOpen} user={mockUserProfile} />}
+      {isPro && <ChatPanel isOpen={isOpen} setIsOpen={setIsOpen} user={chatUser} />}
       <SubscriptionModal isOpen={isSubscriptionModalOpen} setIsOpen={setIsSubscriptionModalOpen} />
     </>
   );

@@ -3,7 +3,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/context/auth-context";
+import { useAuth, type UserProfile } from "@/context/auth-context";
 import { DailyTip } from "@/components/daily-tip";
 import { Header } from "@/components/header";
 import { TopicGrid } from "@/components/topic-grid";
@@ -11,10 +11,8 @@ import { ChatWidget } from "@/components/chat-widget";
 import { Skeleton } from "@/components/ui/skeleton";
 import { type User } from "firebase/auth";
 
-export interface UserProfile extends User {}
-
 export default function Home() {
-  const { user, loading, setUserData } = useAuth();
+  const { user, userProfile, loading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
@@ -23,7 +21,7 @@ export default function Home() {
     }
   }, [loading, user, router]);
 
-  if (loading || !user) {
+  if (loading || !user || !userProfile) {
     return (
       <div className="fixed inset-0 w-full h-full flex items-center justify-center bg-background overflow-hidden">
         <video
@@ -38,17 +36,17 @@ export default function Home() {
     );
   }
 
-  // A mock user profile for the components that need it
-  const mockUserProfile: { name: string; age: number; gender: 'male' | 'female' | 'other' } = {
-    name: user.displayName || 'Friend',
-    age: 30, // Default age
-    gender: 'other', // Default gender
+  // Use the detailed user profile from AuthContext
+  const chatUserProfile = {
+    name: userProfile.name || 'Friend',
+    age: userProfile.age || 30, // Default age if not set
+    gender: userProfile.gender || 'other', // Default gender if not set
   };
 
   return (
     <>
       <div className="max-w-7xl mx-auto p-4 sm:p-6">
-        <Header user={user} />
+        <Header user={user} userProfile={userProfile} />
         <main>
           <DailyTip />
           <div className="text-center mb-8">
@@ -62,9 +60,7 @@ export default function Home() {
           <TopicGrid />
         </main>
       </div>
-      {/* The ChatWidget needs a specific profile structure, we provide a mock one for now. */}
-      {/* You could expand AuthContext to store this profile info if needed. */}
-      <ChatWidget user={mockUserProfile} />
+      <ChatWidget user={chatUserProfile} />
     </>
   );
 }
