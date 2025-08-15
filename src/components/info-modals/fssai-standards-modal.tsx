@@ -55,7 +55,7 @@ export function FssaiStandardsModal({ isOpen, setIsOpen }: { isOpen: boolean; se
                         <li><b>Recombined milk:</b> A product from the combination of milk fat and milk-solids-non-fat in their preserved forms with or without potable water.</li>
                         <li><b>Reconstituted milk:</b> A product from the addition of potable water to the dried or concentrated form of milk.</li>
                         <li><b>Sterilisation:</b> Application of heat at high temperatures (at least 115°C for 15 minutes) to render milk or milk products commercially sterile.</li>
-                        <li><b>Ultra High Temperature (UHT) treatment:</b> Heating milk to at least 135°C for one second or more in a continuous flow and then packing under aseptic conditions.</li>
+                        <li><b>Ultra High Temperature (UHT) treatment:</b> Heating milk to at least 135°C for one second or more in a continuous flow and then packed under aseptic conditions.</li>
                     </ul>
                     <SectionTitle>General Principles</SectionTitle>
                     <p className="font-medium leading-relaxed">Foods must be described or presented in a manner that ensures the correct use of dairy terms, protects consumers from being misled, and ensures fair trade practices.</p>
