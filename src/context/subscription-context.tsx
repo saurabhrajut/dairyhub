@@ -1,3 +1,4 @@
+
 'use client';
 
 import { createContext, useState, useContext, ReactNode, useEffect, useCallback } from 'react';
@@ -12,7 +13,8 @@ interface Subscription {
 
 interface SubscriptionContextType {
   isPro: boolean;
-  subscribe: (plan: SubscriptionPlan) => void; // Made this synchronous
+  subscription: Subscription | null;
+  subscribe: (plan: SubscriptionPlan) => void;
   checkSubscription: () => void;
 }
 
@@ -21,6 +23,7 @@ const SubscriptionContext = createContext<SubscriptionContextType | undefined>(u
 export function SubscriptionProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
   const [isPro, setIsPro] = useState(false);
+  const [subscription, setSubscription] = useState<Subscription | null>(null);
 
   const getSubKey = useCallback(() => {
     if (!user) return null;
@@ -30,12 +33,14 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
   const checkSubscription = useCallback(() => {
     if (!user) {
       setIsPro(false);
+      setSubscription(null);
       return;
     }
     
     const subKey = getSubKey();
     if (!subKey) {
         setIsPro(false);
+        setSubscription(null);
         return;
     }
 
@@ -45,6 +50,7 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
         const subData = JSON.parse(subDataString) as Subscription;
         if (subData.plan === 'lifetime' || (subData.expiryDate && subData.expiryDate > Date.now())) {
           setIsPro(true);
+          setSubscription(subData);
           return;
         }
       }
@@ -52,6 +58,7 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
       console.error("Failed to fetch subscription from localStorage", error);
     }
     setIsPro(false);
+    setSubscription(null);
   }, [user, getSubKey]);
 
   useEffect(() => {
@@ -92,12 +99,13 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
     try {
         localStorage.setItem(subKey, JSON.stringify(newSubscription));
         setIsPro(true);
+        setSubscription(newSubscription);
     } catch (error) {
         console.error("Failed to save subscription to localStorage", error);
     }
   };
 
-  const value = { isPro, subscribe, checkSubscription };
+  const value = { isPro, subscription, subscribe, checkSubscription };
 
   return (
     <SubscriptionContext.Provider value={value}>
