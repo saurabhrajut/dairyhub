@@ -24,7 +24,7 @@ import {
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { componentProps, getSnf } from "@/lib/utils";
-import { CheckCircle, XCircle, PlusCircle, XCircle as XCircleIcon } from "lucide-react";
+import { CheckCircle, XCircle, PlusCircle, XCircle as XCircleIcon, Beaker, Thermometer, Weight, Percent, Scaling, Combine, Calculator, FlaskConical } from "lucide-react";
 import { PaneerIcon, IceCreamIcon } from "../icons";
 import { useToast } from "@/hooks/use-toast";
 
@@ -92,16 +92,16 @@ const CalculatorCard = ({ title, children, description }: { title: string; child
 );
 
 const TABS = [
-  { value: "acidity", label: "Acidity" },
-  { value: "snf-standards", label: "SNF Standards" },
-  { value: "yield", label: "Yield (Misc)" },
-  { value: "paneer-yield", label: "Paneer Yield" },
-  { value: "ice-cream", label: "Ice Cream" },
-  { value: "fat-dry", label: "Fat (Dry Basis)" },
-  { value: "clr-correction", label: "CLR Correction" },
-  { value: "component-qty", label: "Component Qty" },
-  { value: "gravimetric", label: "Gravimetric" },
-  { value: "formulas", label: "Formulas" },
+  { value: "acidity", label: "Acidity", icon: Beaker },
+  { value: "snf-standards", label: "SNF/CLR", icon: Scaling },
+  { value: "yield", label: "Yields", icon: Percent },
+  { value: "paneer-yield", label: "Paneer", icon: PaneerIcon },
+  { value: "ice-cream", label: "Ice Cream", icon: IceCreamIcon },
+  { value: "fat-dry", label: "Fat (Dry)", icon: Percent },
+  { value: "clr-correction", label: "CLR Corr.", icon: Thermometer },
+  { value: "component-qty", label: "Component", icon: Combine },
+  { value: "gravimetric", label: "Gravimetric", icon: Weight },
+  { value: "formulas", label: "Formulas", icon: Calculator },
 ];
 
 
@@ -114,16 +114,21 @@ export function VariousCalculatorsModal({
 }) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-5xl h-[90vh]">
-        <DialogHeader>
+      <DialogContent className="max-w-5xl h-[90vh] p-0 flex flex-col">
+        <DialogHeader className="p-4 sm:p-6 pb-0">
           <DialogTitle className="text-3xl font-bold text-center font-headline">Various Calculations</DialogTitle>
           <DialogDescription className="text-center">A collection of useful calculators for dairy processing.</DialogDescription>
         </DialogHeader>
         <Tabs defaultValue="acidity" className="w-full flex-1 flex flex-col min-h-0">
-          <TabsList className="grid w-full grid-cols-3 md:grid-cols-5 h-auto">
-            {TABS.map(tab => <TabsTrigger key={tab.value} value={tab.value} className="text-xs sm:text-sm p-2 h-auto">{tab.label}</TabsTrigger>)}
+          <TabsList className="grid w-full h-auto grid-cols-2 sm:grid-cols-5 lg:grid-cols-10 mx-auto max-w-full px-4">
+            {TABS.map(tab => (
+                 <TabsTrigger key={tab.value} value={tab.value} className="flex-col h-16 gap-1 p-1 data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-lg">
+                    <tab.icon className="w-6 h-6" />
+                    <span className="text-xs hidden sm:inline">{tab.label}</span>
+                </TabsTrigger>
+            ))}
           </TabsList>
-          <ScrollArea className="flex-1 mt-4 pr-4">
+          <ScrollArea className="flex-1 mt-4 px-6">
             <TabsContent value="acidity" className="mt-0">
                 <ProductAcidityCalc />
             </TabsContent>
@@ -864,7 +869,7 @@ function FormulasTab() {
                 <p className="text-xs mt-2">Qty_High = (Total_Qty * Parts_High) / (Parts_High + Parts_Low)</p>
             </CalculatorCard>
              <CalculatorCard title="Component Quantity Calculation">
-                <p className="font-mono text-sm text-yellow-900 mt-2">Milk Weight (Kg) = Milk_Liters * 1.03</p>
+                 <p className="font-mono text-sm text-yellow-900 mt-2">Milk Weight (Kg) = Milk_Liters * 1.03</p>
                 <p className="font-mono text-sm text-yellow-900">Fat_Kg = Milk_Weight * (Fat % / 100)</p>
                  <p className="font-mono text-sm text-yellow-900">SNF_Kg = Milk_Weight * (SNF % / 100)</p>
             </CalculatorCard>
