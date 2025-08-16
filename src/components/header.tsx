@@ -80,6 +80,10 @@ export function Header({ user, userProfile }: { user: User, userProfile: UserPro
                                             Go Pro
                                         </Button>
                                      )}
+                                     <Button variant="ghost" size="icon" className="text-gray-500 hover:text-primary transition-colors" onClick={() => setIsSettingsOpen(true)}>
+                                        <Settings />
+                                        <span className="sr-only">Settings</span>
+                                    </Button>
                                      <Button variant="ghost" size="icon" className="text-gray-500 hover:text-destructive transition-colors" onClick={handleLogout}>
                                         <LogOut />
                                         <span className="sr-only">Log Out</span>
