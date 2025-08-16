@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useForm, FormProvider } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
@@ -98,10 +98,8 @@ export default function LoginPage() {
       const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
       const user = userCredential.user;
 
-      // Save additional user data to Firestore
+      // Save additional user data
       await setUserData(user, {
-        uid: user.uid,
-        email: values.email,
         name: values.name,
         age: values.age,
         gender: values.gender,
@@ -137,7 +135,7 @@ export default function LoginPage() {
             </TabsList>
             
             <TabsContent value="signin" className="space-y-4 pt-4">
-              <FormProvider {...signInForm}>
+              <Form {...signInForm}>
                 <form onSubmit={signInForm.handleSubmit(onEmailSignIn)} className="space-y-4">
                   <FormField
                     control={signInForm.control}
@@ -169,11 +167,11 @@ export default function LoginPage() {
                       {loading === 'email_signin' ? 'Signing in...' : 'Sign In'}
                   </Button>
                 </form>
-              </FormProvider>
+              </Form>
             </TabsContent>
             
             <TabsContent value="signup" className="pt-4">
-              <FormProvider {...signUpForm}>
+              <Form {...signUpForm}>
                 <form onSubmit={signUpForm.handleSubmit(onEmailSignUp)} className="space-y-4">
                    <FormField control={signUpForm.control} name="name" render={({ field }) => (
                       <FormItem><div className='relative'><UserIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" /><Input placeholder="Full Name" {...field} className="pl-10"/></div><FormMessage /></FormItem>
@@ -206,7 +204,7 @@ export default function LoginPage() {
                     {loading === 'email_signup' ? 'Creating Account...' : 'Sign Up'}
                   </Button>
                 </form>
-              </FormProvider>
+              </Form>
             </TabsContent>
           </Tabs>
 

@@ -2,8 +2,7 @@
 
 import { createContext, useState, useContext, ReactNode, useEffect, useCallback } from 'react';
 import { onAuthStateChanged, signOut, getRedirectResult, type User } from 'firebase/auth';
-import { auth, db } from '@/lib/firebase';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { auth } from '@/lib/firebase';
 
 export interface UserProfile {
   uid: string;
@@ -30,14 +29,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const getProfileKey = useCallback((uid: string) => `userProfile-${uid}`, []);
+
   const fetchUserProfile = useCallback(async (firebaseUser: User) => {
-    const userDocRef = doc(db, "users", firebaseUser.uid);
+    const profileKey = getProfileKey(firebaseUser.uid);
     try {
-      const docSnap = await getDoc(userDocRef);
-      if (docSnap.exists()) {
-        setUserProfile(docSnap.data() as UserProfile);
+      const storedProfile = localStorage.getItem(profileKey);
+      if (storedProfile) {
+        setUserProfile(JSON.parse(storedProfile));
       } else {
-        // If no profile exists (e.g., first Google sign-in), create a basic one
         const newProfile: UserProfile = {
           uid: firebaseUser.uid,
           email: firebaseUser.email,
@@ -47,45 +47,43 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           age: null,
           gender: null,
         };
-        await setDoc(userDocRef, newProfile);
+        localStorage.setItem(profileKey, JSON.stringify(newProfile));
         setUserProfile(newProfile);
       }
     } catch (error) {
-      console.error("Error fetching user profile:", error);
-      // Fallback to a local profile if firestore read fails
-      const localProfile: UserProfile = {
-        uid: firebaseUser.uid,
-        email: firebaseUser.email,
-        displayName: firebaseUser.displayName,
-        photoURL: firebaseUser.photoURL,
-        name: firebaseUser.displayName || 'User',
-        age: null,
-        gender: null,
-      };
-      setUserProfile(localProfile);
+      console.error("Error fetching user profile from localStorage:", error);
+      const fallbackProfile: UserProfile = {
+          uid: firebaseUser.uid,
+          email: firebaseUser.email,
+          name: firebaseUser.displayName || 'User',
+          displayName: firebaseUser.displayName,
+          photoURL: firebaseUser.photoURL,
+          age: null,
+          gender: null,
+        };
+      setUserProfile(fallbackProfile);
     }
-  }, []);
+  }, [getProfileKey]);
 
   const handleRedirectResult = useCallback(async () => {
+    setLoading(true);
     try {
       const result = await getRedirectResult(auth);
       if (result) {
-        // This is the first sign-in after redirect.
-        // A new user might be created here, or an existing user is signed in.
         await fetchUserProfile(result.user);
       }
     } catch (error) {
       console.error("Error handling redirect result:", error);
-    } finally {
-        setLoading(false);
-    }
+    } 
   }, [fetchUserProfile]);
 
 
   useEffect(() => {
+    // Run this only once on initial load to handle redirect
     handleRedirectResult();
 
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      setLoading(true);
       setUser(firebaseUser);
       if (firebaseUser) {
         await fetchUserProfile(firebaseUser);
@@ -96,34 +94,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
 
     return () => unsubscribe();
-  }, [fetchUserProfile, handleRedirectResult]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const logout = async () => {
+    const subKey = user ? `subscription-${user.uid}` : null;
+    const profileKey = user ? getProfileKey(user.uid) : null;
     await signOut(auth);
+    if(subKey) localStorage.removeItem(subKey);
+    if(profileKey) localStorage.removeItem(profileKey);
     setUser(null);
     setUserProfile(null);
   };
   
   const setUserData = async (firebaseUser: User, data: Partial<UserProfile>) => {
     if (!firebaseUser) return;
-    const userDocRef = doc(db, "users", firebaseUser.uid);
+    const profileKey = getProfileKey(firebaseUser.uid);
     try {
-        await setDoc(userDocRef, data, { merge: true });
-        setUserProfile(prevProfile => ({
-          ...(prevProfile as UserProfile),
-          ...data,
-          uid: firebaseUser.uid,
-          email: firebaseUser.email,
-        }));
+        const existingProfileString = localStorage.getItem(profileKey);
+        const existingProfile = existingProfileString ? JSON.parse(existingProfileString) : {};
+        const newProfile = {
+            ...existingProfile,
+            ...data,
+            uid: firebaseUser.uid,
+            email: firebaseUser.email,
+        };
+        localStorage.setItem(profileKey, JSON.stringify(newProfile));
+        setUserProfile(newProfile as UserProfile);
     } catch(error) {
-        console.error("Firestore write error in setUserData:", error);
-        // Even if Firestore fails, update profile locally so UI works
-         setUserProfile(prevProfile => ({
-          ...(prevProfile as UserProfile),
-          ...data,
-          uid: firebaseUser.uid,
-          email: firebaseUser.email,
-        }));
+        console.error("LocalStorage write error in setUserData:", error);
     }
   };
 
