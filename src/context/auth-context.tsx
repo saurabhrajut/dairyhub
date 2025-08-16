@@ -37,23 +37,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return;
     }
     const userDocRef = doc(db, "users", firebaseUser.uid);
-    const userDoc = await getDoc(userDocRef);
+    try {
+      const userDoc = await getDoc(userDocRef);
 
-    if (userDoc.exists()) {
-      setUserProfile(userDoc.data() as UserProfile);
-    } else {
-      // If profile doesn't exist (e.g., Google Sign-In first time), create a basic one
-      const newProfile: UserProfile = {
-        uid: firebaseUser.uid,
-        email: firebaseUser.email,
-        displayName: firebaseUser.displayName,
-        photoURL: firebaseUser.photoURL,
-        name: firebaseUser.displayName || "User",
-        age: null,
-        gender: null,
-      };
-      await setDoc(userDocRef, newProfile);
-      setUserProfile(newProfile);
+      if (userDoc.exists()) {
+        setUserProfile(userDoc.data() as UserProfile);
+      } else {
+        // If profile doesn't exist (e.g., Google Sign-In first time), create a basic one
+        const newProfile: UserProfile = {
+          uid: firebaseUser.uid,
+          email: firebaseUser.email,
+          displayName: firebaseUser.displayName,
+          photoURL: firebaseUser.photoURL,
+          name: firebaseUser.displayName || "User",
+          age: null,
+          gender: null,
+        };
+        await setDoc(userDocRef, newProfile);
+        setUserProfile(newProfile);
+      }
+    } catch (error) {
+        console.error("Firestore read error in fetchUserProfile:", error);
+        // Set user profile to null or handle error state if permission is denied
+        setUserProfile(null); 
     }
   }, []);
 
@@ -78,9 +84,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
   
   const setUserData = async (firebaseUser: User, data: Partial<UserProfile>) => {
+    if (!firebaseUser) return;
     const userDocRef = doc(db, "users", firebaseUser.uid);
-    await setDoc(userDocRef, data, { merge: true });
-    await fetchUserProfile(firebaseUser);
+    try {
+        await setDoc(userDocRef, data, { merge: true });
+        await fetchUserProfile(firebaseUser);
+    } catch(error) {
+        console.error("Firestore write error in setUserData:", error);
+    }
   };
 
   const value = { user, userProfile, loading, logout, setUserData, fetchUserProfile };
