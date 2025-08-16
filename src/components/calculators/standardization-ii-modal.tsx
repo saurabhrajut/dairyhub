@@ -9,53 +9,93 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog"
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { getSnf } from "@/lib/utils"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { ArrowLeft, Blend, Milk, SlidersHorizontal, Combine, Bot } from 'lucide-react'
 
-const TABS = [
-    { value: "fat-blending", label: "Fat Blending" },
-    { value: "fat-adjustment", label: "Fat & SNF Adjustment" },
-    { value: "reconstituted-milk", label: "Reconstituted Milk" },
-    { value: "recombined-milk", label: "Recombined Milk" },
-    { value: "clr-blending", label: "CLR Blending" },
-]
+type CalculatorType = 'fat-blending' | 'fat-snf-adjustment' | 'reconstituted-milk' | 'recombined-milk' | 'clr-blending';
+
+const calculatorsInfo = {
+    'fat-blending': { title: "Fat Blending", icon: Blend, component: FatBlendingCalc },
+    'fat-snf-adjustment': { title: "Fat & SNF Adjustment", icon: SlidersHorizontal, component: FatSnfAdjustmentCalc },
+    'reconstituted-milk': { title: "Reconstituted Milk", icon: Milk, component: ReconstitutedMilkCalc },
+    'recombined-milk': { title: "Recombined Milk", icon: Combine, component: RecombinedMilkCalc },
+    'clr-blending': { title: "CLR Blending", icon: Bot, component: ClrBlendingCalc },
+};
 
 export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
+  const [activeCalculator, setActiveCalculator] = useState<CalculatorType | null>(null);
+
+  const handleBack = () => setActiveCalculator(null);
+
+  const ActiveCalculatorComponent = activeCalculator ? calculatorsInfo[activeCalculator].component : null;
+
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-4xl h-[90vh] flex flex-col">
-        <DialogHeader>
-          <DialogTitle className="font-headline text-2xl text-center">Advanced Standardization</DialogTitle>
-          <DialogDescription className="text-center">Advanced calculators for precise dairy processing.</DialogDescription>
-        </DialogHeader>
-        <Tabs defaultValue="fat-blending" className="w-full flex flex-col flex-1 min-h-0">
-          <TabsList className="grid w-full h-auto grid-cols-2 sm:grid-cols-5">
-            {TABS.map(tab => (
-                <TabsTrigger key={tab.value} value={tab.value} className="text-xs sm:text-sm p-2 h-auto">{tab.label}</TabsTrigger>
-            ))}
-          </TabsList>
-          <ScrollArea className="flex-1 mt-4 pr-4">
-            <TabsContent value="fat-blending" className="mt-0"><FatBlendingCalc /></TabsContent>
-            <TabsContent value="fat-adjustment" className="mt-0"><FatSnfAdjustmentCalc /></TabsContent>
-            <TabsContent value="reconstituted-milk" className="mt-0"><ReconstitutedMilkCalc /></TabsContent>
-            <TabsContent value="recombined-milk" className="mt-0"><RecombinedMilkCalc /></TabsContent>
-            <TabsContent value="clr-blending" className="mt-0"><ClrBlendingCalc /></TabsContent>
-          </ScrollArea>
-        </Tabs>
+    <Dialog open={isOpen} onOpenChange={(open) => {
+        if (!open) {
+            setIsOpen(false);
+            setActiveCalculator(null);
+        } else {
+            setIsOpen(true);
+        }
+    }}>
+      <DialogContent className="max-w-4xl h-[90vh] flex flex-col p-0 sm:p-6">
+        {activeCalculator && ActiveCalculatorComponent ? (
+          <>
+            <DialogHeader className="flex-row items-center space-x-4 pr-6 shrink-0">
+              <Button variant="ghost" size="icon" onClick={handleBack} className="shrink-0">
+                <ArrowLeft className="h-5 w-5" />
+              </Button>
+              <div>
+                <DialogTitle className="text-xl font-bold font-headline">{calculatorsInfo[activeCalculator].title}</DialogTitle>
+                <DialogDescription>Calculate specific dairy parameters.</DialogDescription>
+              </div>
+            </DialogHeader>
+            <ScrollArea className="h-full mt-4 pr-4">
+              <div className="p-4 sm:p-0">
+                <ActiveCalculatorComponent />
+              </div>
+            </ScrollArea>
+          </>
+        ) : (
+          <>
+            <DialogHeader className="p-4 sm:p-0">
+              <DialogTitle className="text-3xl font-bold text-center font-headline">Advanced Standardization</DialogTitle>
+              <DialogDescription className="text-center">Advanced calculators for precise dairy processing.</DialogDescription>
+            </DialogHeader>
+            <ScrollArea className="flex-1 mt-4 pr-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4">
+                {Object.entries(calculatorsInfo).map(([key, { title, icon: Icon }]) => (
+                  <button
+                    key={key}
+                    onClick={() => setActiveCalculator(key as CalculatorType)}
+                    className="flex flex-col items-center justify-center p-6 bg-card hover:bg-primary/10 rounded-xl shadow-sm border text-center aspect-square transition-all duration-200"
+                  >
+                    <Icon className="w-12 h-12 text-primary mb-3" />
+                    <span className="font-semibold font-headline text-card-foreground">{title}</span>
+                  </button>
+                ))}
+              </div>
+            </ScrollArea>
+          </>
+        )}
       </DialogContent>
     </Dialog>
   )
 }
+
+
+const CalculatorCard = ({ title, children, description }: { title: string; children: React.ReactNode; description?: string }) => (
+    <div className="bg-card p-4 rounded-xl shadow-sm border mt-4">
+        <h3 className="text-xl font-bold text-primary mb-2 font-headline">{title}</h3>
+        {description && <p className="text-sm text-muted-foreground mb-4">{description}</p>}
+        {children}
+    </div>
+);
 
 const PearsonSquareCalc = ({ unit, calcType }: { unit: string, calcType: 'Fat' | 'CLR' }) => {
     const [high, setHigh] = useState("");
@@ -100,8 +140,7 @@ const PearsonSquareCalc = ({ unit, calcType }: { unit: string, calcType: 'Fat' |
     }
 
     return (
-         <div>
-            <p className="text-center text-sm text-gray-500 mb-4">Do alag {calcType} % wale doodh ko milakar naya product banayein.</p>
+         <CalculatorCard title={`${calcType} Blending Calculator`} description={`Do alag ${calcType} % wale doodh ko milakar naya product banayein.`}>
              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                 <div className="bg-muted/50 p-4 rounded-lg">
                     <h3 className="font-semibold text-gray-700 mb-2 font-headline">Source Milk 1 (High ${calcType})</h3>
@@ -122,7 +161,7 @@ const PearsonSquareCalc = ({ unit, calcType }: { unit: string, calcType: 'Fat' |
             <Button onClick={handleCalc} className="w-full">Calculate Blend</Button>
             {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
             {result && <Alert className="mt-4"><AlertTitle>Result</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
-        </div>
+        </CalculatorCard>
     )
 }
 
@@ -184,21 +223,20 @@ function FatSnfAdjustmentCalc() {
             return;
         }
         
-        const finalWeight = M + C + P;
+        const finalWeight = M + (C > 0 ? C : 0) + (P > 0 ? P : 0);
         
         setResult(`
             For <strong>${M} kg</strong> of milk, to reach <strong>${targetFat}% Fat</strong> and <strong>${targetSnf}% SNF</strong>, you need to add:
             <ul class='list-disc list-inside mt-2'>
-                <li>Cream (${creamFat}% Fat): <strong class='text-green-700 text-lg'>${C.toFixed(3)} kg</strong></li>
-                <li>SMP (${powderTs}% TS): <strong class='text-green-700 text-lg'>${P.toFixed(3)} kg</strong></li>
+                ${C > 0 ? `<li>Cream (${creamFat}% Fat): <strong class='text-green-700 text-lg'>${C.toFixed(3)} kg</strong></li>` : ''}
+                ${P > 0 ? `<li>SMP (${powderTs}% TS): <strong class='text-green-700 text-lg'>${P.toFixed(3)} kg</strong></li>` : ''}
             </ul>
             <p class='mt-3'>Final Batch Weight will be approximately <strong>${finalWeight.toFixed(3)} kg</strong>.</p>
         `);
     };
 
     return (
-        <div>
-            <p className="text-center text-sm text-gray-500 mb-4">Calculate how much Cream and Skim Milk Powder (SMP) to add to standardize both Fat and SNF upwards.</p>
+        <CalculatorCard title="Fat & SNF Adjustment Calculator" description="Calculate how much Cream and Skim Milk Powder (SMP) to add to standardize both Fat and SNF upwards.">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mb-4">
                 <div className="bg-muted/50 p-4 rounded-lg space-y-3">
                      <h3 className="font-semibold text-gray-700 mb-2 font-headline">Initial Milk</h3>
@@ -222,7 +260,7 @@ function FatSnfAdjustmentCalc() {
             <Button onClick={calculate} className="w-full mt-4">Calculate Adjustment</Button>
             {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
             {result && <Alert className="mt-4"><AlertTitle>Result</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
-        </div>
+        </CalculatorCard>
     )
 }
 
@@ -258,8 +296,7 @@ function ReconstitutedMilkCalc() {
     };
 
     return (
-        <div>
-            <p className="text-center text-sm text-gray-500 mb-4">Calculate how much Milk Powder and Water are needed to create milk of a specific Total Solids (TS) content.</p>
+        <CalculatorCard title="Reconstituted Milk Calculator" description="Calculate how much Milk Powder and Water are needed to create milk of a specific Total Solids (TS) content.">
             <div className="bg-muted/50 p-4 rounded-lg space-y-3">
                 <div><Label>Target Batch Quantity (kg)</Label><Input type="number" value={batchQty} onChange={e => setBatchQty(e.target.value)} /></div>
                 <div><Label>Target Total Solids (TS) %</Label><Input type="number" value={targetTS} onChange={e => setTargetTS(e.target.value)} /></div>
@@ -268,7 +305,7 @@ function ReconstitutedMilkCalc() {
             <Button onClick={calculate} className="w-full mt-4">Calculate</Button>
             {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
             {result && <Alert className="mt-4"><AlertTitle>Result</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
-        </div>
+        </CalculatorCard>
     );
 }
 
@@ -320,8 +357,7 @@ function RecombinedMilkCalc() {
     };
 
     return (
-        <div>
-             <p className="text-center text-sm text-gray-500 mb-4">Calculate the required Skim Milk Powder (SMP), Butter Oil (or other fat source), and Water to create milk of a desired composition.</p>
+        <CalculatorCard title="Recombined Milk Calculator" description="Calculate the required Skim Milk Powder (SMP), Butter Oil (or other fat source), and Water to create milk of a desired composition.">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mb-4">
                 <div className="bg-muted/50 p-4 rounded-lg space-y-3">
                      <h3 className="font-semibold text-gray-700 mb-2 font-headline">Target Milk</h3>
@@ -339,6 +375,6 @@ function RecombinedMilkCalc() {
             <Button onClick={calculate} className="w-full mt-4">Calculate Recombined Milk</Button>
             {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
             {result && <Alert className="mt-4"><AlertTitle>Result</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
-        </div>
+        </CalculatorCard>
     );
 }
