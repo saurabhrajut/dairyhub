@@ -9,7 +9,7 @@ import * as z from "zod";
 import { auth } from '@/lib/firebase';
 import { useAuth } from '@/context/auth-context';
 import { 
-  signInWithPopup, 
+  signInWithRedirect,
   GoogleAuthProvider, 
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -51,7 +51,7 @@ const signUpSchema = z.object({
 export default function LoginPage() {
   const router = useRouter();
   const { toast } = useToast();
-  const { setUserData, fetchUserProfile } = useAuth();
+  const { setUserData } = useAuth();
   const [loading, setLoading] = useState<string | null>(null);
 
   const signInForm = useForm<z.infer<typeof signInSchema>>({
@@ -68,14 +68,12 @@ export default function LoginPage() {
     setLoading('google');
     const provider = new GoogleAuthProvider();
     try {
-      const result = await signInWithPopup(auth, provider);
-      await fetchUserProfile(result.user); // Fetch or create profile in Firestore
-      toast({ title: 'Success', description: "Signed in successfully with Google." });
-      router.push('/');
+      await signInWithRedirect(auth, provider);
+      // The user will be redirected to Google's sign-in page.
+      // The result is handled by onAuthStateChanged in AuthProvider after redirect.
     } catch (error) {
-      console.error('Google Sign-In Error:', error);
-      toast({ variant: 'destructive', title: 'Error', description: "Could not sign in with Google. Please try again." });
-    } finally {
+      console.error('Google Sign-In Redirect Error:', error);
+      toast({ variant: 'destructive', title: 'Error', description: "Could not start Google sign-in. Please try again." });
       setLoading(null);
     }
   };
@@ -112,7 +110,6 @@ export default function LoginPage() {
       });
 
       toast({ title: 'Success', description: 'Account created! Please sign in to continue.' });
-      // Optionally, you can automatically sign them in and redirect, or ask them to sign in.
       // Forcing sign-in reinforces the separation.
     } catch (error: any) {
       console.error("Email Sign-Up Error:", error);
