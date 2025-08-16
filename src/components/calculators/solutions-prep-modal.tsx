@@ -10,12 +10,19 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { chemicals, reagentRecipes } from "@/lib/data";
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, ChevronsUp } from 'lucide-react';
 import { AcidIcon, BaseIcon, DilutionIcon, IndicatorIcon, NormalityAdjustmentIcon, PercentageSolutionIcon, ReagentIcon, SpiritSolutionIcon, StandardizationIcon, StrengthIcon } from "@/components/icons";
 
 const sortedReagentKeys = Object.keys(reagentRecipes).sort((a,b) => reagentRecipes[a as keyof typeof reagentRecipes].name.localeCompare(reagentRecipes[b as keyof typeof reagentRecipes].name));
 
-type CalculatorType = 'acid-solution' | 'base-solution' | 'indicator-solution' | 'reagent-calculator' | 'percentage-solution' | 'stock-solution' | 'standardization' | 'strength-calculator' | 'spirit-solution' | 'normality-adjustment';
+type CalculatorType = 'acid-solution' | 'base-solution' | 'indicator-solution' | 'reagent-calculator' | 'percentage-solution' | 'stock-solution' | 'standardization' | 'strength-calculator' | 'spirit-solution' | 'normality-adjustment' | 'increase-normality';
+
+const IncreaseNormalityIcon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+        <path d="M7 11v-4a1 1 0 0 1 1-1h3"/><path d="M11 11h4a1 1 0 0 0 1-1V7"/><path d="M5 21v-7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v7"/><path d="m16 5-4-4-4 4"/>
+    </svg>
+);
+
 
 const calculatorsInfo = {
   'acid-solution': { title: "Acids", icon: AcidIcon, component: AcidSolutionCalc },
@@ -27,7 +34,8 @@ const calculatorsInfo = {
   'standardization': { title: "Standardization", icon: StandardizationIcon, component: StandardizationCalc },
   'strength-calculator': { title: "Strength", icon: StrengthIcon, component: StrengthCalc },
   'spirit-solution': { title: "Spirit Solution", icon: SpiritSolutionIcon, component: SpiritSolutionCalc },
-  'normality-adjustment': { title: "Normality Adjustment", icon: NormalityAdjustmentIcon, component: NormalityAdjustmentCalc },
+  'normality-adjustment': { title: "Adjust Normality (Dilute)", icon: NormalityAdjustmentIcon, component: NormalityAdjustmentCalc },
+  'increase-normality': { title: "Increase Normality", icon: IncreaseNormalityIcon, component: IncreaseNormalityCalc },
 };
 
 export function SolutionsPrepModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
@@ -562,7 +570,7 @@ function NormalityAdjustmentCalc() {
     }
 
     return (
-        <CalculatorCard title="Normality Adjustment Calculator">
+        <CalculatorCard title="Normality Adjustment (Dilution)" description="Use this to dilute a solution of higher normality to a desired lower normality.">
             <form onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-end">
                     <div>
@@ -587,6 +595,98 @@ function NormalityAdjustmentCalc() {
         </CalculatorCard>
     );
 };
+
+function IncreaseNormalityCalc() {
+    const [result, setResult] = useState<string | null>(null);
+    const [error, setError] = useState<string | null>(null);
+    const allChemicals = {...chemicals.acids, ...chemicals.bases, ...chemicals.other_reagents};
+    
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setResult(null);
+        setError(null);
+        const formData = new FormData(e.currentTarget);
+        const n_have = parseFloat(formData.get('inc-n-have') as string);
+        const v_have = parseFloat(formData.get('inc-v-have') as string);
+        const n_req = parseFloat(formData.get('inc-n-req') as string);
+        const chemicalKey = formData.get('inc-chemical') as string;
+        
+        if (isNaN(n_have) || isNaN(v_have) || isNaN(n_req) || !chemicalKey) {
+            setError('Please fill all fields with valid numbers and select a chemical.');
+            return;
+        }
+
+        if (n_req <= n_have) {
+            setError('Required normality must be higher than the normality you have.');
+            return;
+        }
+        
+        const chemical = allChemicals[chemicalKey as keyof typeof allChemicals];
+        const equivalentsNeeded = n_req * (v_have / 1000);
+        const equivalentsHave = n_have * (v_have / 1000);
+        const equivalentsToAdd = equivalentsNeeded - equivalentsHave;
+
+        let resultText = '';
+        if (chemical.type === 'solid') {
+            const equivalentWeight = chemical.molarMass / chemical.nFactor;
+            const weightToAdd = equivalentsToAdd * equivalentWeight;
+            resultText = `To increase the normality of your ${v_have} mL solution from ${n_have} N to ${n_req} N, you need to add <code class="font-bold bg-green-100 p-1 rounded">${weightToAdd.toFixed(4)} g</code> of <strong>${chemical.name}</strong>.`;
+        } else if (chemical.type === 'liquid') {
+            const stockMolarity = (chemical.purity / 100 * chemical.density * 1000) / chemical.molarMass;
+            const stockNormality = stockMolarity * chemical.nFactor;
+            const volumeToAdd = (equivalentsToAdd / stockNormality) * 1000;
+            resultText = `To increase the normality of your ${v_have} mL solution from ${n_have} N to ${n_req} N, you need to add <code class="font-bold bg-green-100 p-1 rounded">${volumeToAdd.toFixed(3)} mL</code> of concentrated <strong>${chemical.name}</strong>.`;
+        }
+        setResult(resultText);
+    }
+
+    return (
+        <CalculatorCard title="Increase Normality Calculator" description="Calculate how much chemical to add to increase the normality of your solution.">
+            <form onSubmit={handleSubmit}>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 items-end">
+                    <div>
+                        <Label htmlFor="inc-n-have">Normality you have (N₁)</Label>
+                        <Input type="number" name="inc-n-have" placeholder="e.g., 0.0850" step="any" required />
+                    </div>
+                     <div>
+                        <Label htmlFor="inc-v-have">Volume you have (V₁)</Label>
+                        <Input type="number" name="inc-v-have" placeholder="e.g., 900" step="any" required />
+                    </div>
+                     <div>
+                        <Label htmlFor="inc-n-req">Normality you want (N₂)</Label>
+                        <Input type="number" name="inc-n-req" placeholder="e.g., 0.1000" step="any" required />
+                    </div>
+                    <div>
+                        <Label htmlFor="inc-chemical">Chemical to Add</Label>
+                        <Select name="inc-chemical" required>
+                            <SelectTrigger><SelectValue placeholder="Select a chemical" /></SelectTrigger>
+                             <SelectContent>
+                                <SelectGroup>
+                                    <Label className="px-2 text-xs font-semibold text-muted-foreground">Acids</Label>
+                                    {Object.entries(chemicals.acids).map(([key, value]) => (
+                                        <SelectItem key={key} value={key}>{value.name}</SelectItem>
+                                    ))}
+                                </SelectGroup>
+                                <SelectGroup>
+                                    <Label className="px-2 text-xs font-semibold text-muted-foreground">Bases</Label>
+                                    {Object.entries(chemicals.bases).map(([key, value]) => (
+                                        <SelectItem key={key} value={key}>{value.name}</SelectItem>
+                                    ))}
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <div className="lg:col-span-2">
+                        <Button type="submit" className="w-full">Calculate Amount to Add</Button>
+                    </div>
+                </div>
+                 {error && <Alert variant="destructive" className="mt-8"><AlertDescription>{error}</AlertDescription></Alert>}
+                {result && <Alert className="mt-8"><AlertTitle>Instructions</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
+            </form>
+        </CalculatorCard>
+    );
+};
+
 
 function PercentageSolutionCalc() {
     const [result, setResult] = useState<string | null>(null);
