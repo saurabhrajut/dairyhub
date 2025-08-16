@@ -13,7 +13,6 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Select,
   SelectContent,
@@ -24,7 +23,7 @@ import {
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { componentProps, getSnf } from "@/lib/utils";
-import { CheckCircle, XCircle, PlusCircle, XCircle as XCircleIcon, Beaker, Thermometer, Weight, Percent, Scaling, Combine, Calculator, FlaskConical } from "lucide-react";
+import { CheckCircle, XCircle, PlusCircle, XCircle as XCircleIcon, Beaker, Thermometer, Weight, Percent, Scaling, Combine, Calculator, FlaskConical, ArrowLeft } from "lucide-react";
 import { PaneerIcon, IceCreamIcon } from "../icons";
 import { useToast } from "@/hooks/use-toast";
 
@@ -42,7 +41,6 @@ interface MixIngredient {
     msnf: string;
     sugar: string;
 }
-
 
 const stateWiseStandards = {
     'Andaman & Nicobar Islands': { Cow: { fat: 3.2, snf: 8.3 }, Buffalo: { fat: 5.0, snf: 9.0 }, Mixed: { fat: 4.5, snf: 8.5 } },
@@ -91,19 +89,20 @@ const CalculatorCard = ({ title, children, description }: { title: string; child
     </div>
 );
 
-const TABS = [
-  { value: "acidity", label: "Acidity", icon: Beaker },
-  { value: "snf-standards", label: "SNF/CLR", icon: Scaling },
-  { value: "yield", label: "Yields", icon: Percent },
-  { value: "paneer-yield", label: "Paneer", icon: PaneerIcon },
-  { value: "ice-cream", label: "Ice Cream", icon: IceCreamIcon },
-  { value: "fat-dry", label: "Fat (Dry)", icon: Percent },
-  { value: "clr-correction", label: "CLR Corr.", icon: Thermometer },
-  { value: "component-qty", label: "Component", icon: Combine },
-  { value: "gravimetric", label: "Gravimetric", icon: Weight },
-  { value: "formulas", label: "Formulas", icon: Calculator },
-];
+type CalculatorType = 'acidity' | 'snf-standards' | 'yields' | 'paneer-yield' | 'ice-cream' | 'fat-dry' | 'clr-correction' | 'component-qty' | 'gravimetric' | 'formulas';
 
+const calculatorsInfo = {
+    'acidity': { title: "Acidity", icon: Beaker, component: ProductAcidityCalc },
+    'snf-standards': { title: "SNF/CLR", icon: Scaling, component: StatewiseSNFCalc },
+    'yields': { title: "Product Yields", icon: Percent, component: YieldsCalc },
+    'paneer-yield': { title: "Paneer Yield", icon: PaneerIcon, component: PaneerYieldCalc },
+    'ice-cream': { title: "Ice Cream", icon: IceCreamIcon, component: IceCreamCalculators },
+    'fat-dry': { title: "Fat on Dry Basis", icon: FlaskConical, component: FatOnDryBasisCalc },
+    'clr-correction': { title: "CLR Correction", icon: Thermometer, component: ClrCorrectionCalc },
+    'component-qty': { title: "Component Qty", icon: Combine, component: ComponentQtyCalc },
+    'gravimetric': { title: "Gravimetric", icon: Weight, component: GravimetricAnalysisCalc },
+    'formulas': { title: "Common Formulas", icon: Calculator, component: FormulasTab },
+};
 
 export function VariousCalculatorsModal({
   isOpen,
@@ -112,51 +111,59 @@ export function VariousCalculatorsModal({
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
 }) {
+  const [activeCalculator, setActiveCalculator] = useState<CalculatorType | null>(null);
+
+  const handleBack = () => setActiveCalculator(null);
+
+  const ActiveCalculatorComponent = activeCalculator ? calculatorsInfo[activeCalculator].component : null;
+  
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-5xl h-[90vh] p-0 flex flex-col">
-        <DialogHeader className="p-4 sm:p-6 pb-0">
-          <DialogTitle className="text-3xl font-bold text-center font-headline">Various Calculations</DialogTitle>
-          <DialogDescription className="text-center">A collection of useful calculators for dairy processing.</DialogDescription>
-        </DialogHeader>
-        <Tabs defaultValue="acidity" className="w-full flex-1 flex flex-col min-h-0">
-          <TabsList className="grid w-full h-auto grid-cols-2 sm:grid-cols-5 lg:grid-cols-10 mx-auto max-w-full px-4">
-            {TABS.map(tab => (
-                 <TabsTrigger key={tab.value} value={tab.value} className="flex-col h-16 gap-1 p-1 data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-lg">
-                    <tab.icon className="w-6 h-6" />
-                    <span className="text-xs hidden sm:inline">{tab.label}</span>
-                </TabsTrigger>
-            ))}
-          </TabsList>
-          <ScrollArea className="flex-1 mt-4 px-6">
-            <TabsContent value="acidity" className="mt-0">
-                <ProductAcidityCalc />
-            </TabsContent>
-            <TabsContent value="snf-standards" className="mt-0">
-                <StatewiseSNFCalc />
-            </TabsContent>
-            <TabsContent value="yield" className="mt-0 space-y-6">
-                <CreamSeparationCalc />
-                <ButterYieldCalc />
-                <KhoaYieldCalc />
-                <ShrikhandYieldCalc />
-                <PedhaBurfiYieldCalc />
-            </TabsContent>
-            <TabsContent value="paneer-yield" className="mt-0">
-              <PaneerYieldCalc />
-            </TabsContent>
-             <TabsContent value="fat-dry" className="mt-0">
-                <FatOnDryBasisCalc />
-            </TabsContent>
-            <TabsContent value="clr-correction" className="mt-0"><ClrCorrectionCalc /></TabsContent>
-            <TabsContent value="component-qty" className="mt-0"><ComponentQtyCalc /></TabsContent>
-            <TabsContent value="gravimetric" className="mt-0"><GravimetricAnalysisCalc /></TabsContent>
-            <TabsContent value="formulas" className="mt-0"><FormulasTab /></TabsContent>
-            <TabsContent value="ice-cream" className="mt-0">
-                <IceCreamCalculators />
-            </TabsContent>
-          </ScrollArea>
-        </Tabs>
+    <Dialog open={isOpen} onOpenChange={(open) => {
+        if (!open) {
+            setIsOpen(false);
+            setActiveCalculator(null); // Reset on close
+        } else {
+            setIsOpen(true);
+        }
+    }}>
+      <DialogContent className="max-w-4xl w-[95vw] h-full max-h-[90vh] flex flex-col p-0 sm:p-6">
+        {activeCalculator && ActiveCalculatorComponent ? (
+            <>
+                <DialogHeader className="flex-row items-center space-x-4 pr-6">
+                     <Button variant="ghost" size="icon" onClick={handleBack} className="shrink-0">
+                        <ArrowLeft className="h-5 w-5" />
+                     </Button>
+                     <div>
+                        <DialogTitle className="text-xl font-bold font-headline">{calculatorsInfo[activeCalculator].title}</DialogTitle>
+                        <DialogDescription>Calculate specific dairy parameters.</DialogDescription>
+                     </div>
+                </DialogHeader>
+                <ScrollArea className="h-full mt-4 pr-4">
+                    <ActiveCalculatorComponent />
+                </ScrollArea>
+            </>
+        ) : (
+            <>
+                <DialogHeader>
+                    <DialogTitle className="text-3xl font-bold text-center font-headline">Various Calculations</DialogTitle>
+                    <DialogDescription className="text-center">Choose a calculator from the options below.</DialogDescription>
+                </DialogHeader>
+                <ScrollArea className="h-full mt-4 pr-4">
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+                       {Object.entries(calculatorsInfo).map(([key, { title, icon: Icon }]) => (
+                            <button 
+                                key={key} 
+                                onClick={() => setActiveCalculator(key as CalculatorType)}
+                                className="flex flex-col items-center justify-center p-6 bg-card hover:bg-primary/10 rounded-xl shadow-sm border text-center aspect-square transition-all duration-200"
+                            >
+                                <Icon className="w-12 h-12 text-primary mb-3" />
+                                <span className="font-semibold font-headline text-card-foreground">{title}</span>
+                            </button>
+                       ))}
+                    </div>
+                </ScrollArea>
+            </>
+        )}
       </DialogContent>
     </Dialog>
   );
@@ -231,38 +238,32 @@ function PaneerYieldCalc() {
 
     return (
         <CalculatorCard title="Industrial Paneer Yield Calculator">
-            <Tabs defaultValue="theoretical" className="w-full">
-                <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="theoretical">Theoretical Yield</TabsTrigger>
-                    <TabsTrigger value="actual">Actual Yield</TabsTrigger>
-                </TabsList>
-                <TabsContent value="theoretical" className="mt-4">
-                     <p className="text-xs text-muted-foreground mb-4">Predict paneer yield based on milk composition before production.</p>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div><Label>Milk Quantity (Litres)</Label><Input type="number" value={milkQtyLtr} onChange={e => setMilkQtyLtr(e.target.value)} /></div>
-                        <div><Label>Final Paneer Moisture %</Label><Input type="number" value={finalMoisture} onChange={e => setFinalMoisture(e.target.value)} /></div>
-                        <div><Label>Milk Fat %</Label><Input type="number" value={fatPercent} onChange={e => setFatPercent(e.target.value)} /></div>
-                        <div><Label>Fat Recovery %</Label><Input type="number" value={fatRecovery} onChange={e => setFatRecovery(e.target.value)} /></div>
-                        <div><Label>Milk SNF %</Label><Input type="number" value={snfPercent} onChange={e => setSnfPercent(e.target.value)} /></div>
-                        <div><Label>Casein Recovery %</Label><Input type="number" value={caseinRecovery} onChange={e => setCaseinRecovery(e.target.value)} /></div>
-                    </div>
-                    <Button onClick={handleTheoreticalCalc} className="w-full mt-4">Calculate Theoretical Yield</Button>
-                    {theoreticalResult && <Alert className="mt-4" dangerouslySetInnerHTML={{ __html: theoreticalResult }} />}
-                </TabsContent>
-                <TabsContent value="actual" className="mt-4">
-                    <p className="text-xs text-muted-foreground mb-4">Calculate the actual yield achieved after a production batch.</p>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div><Label>Total Milk Used (kg)</Label><Input type="number" value={milkUsed} onChange={e => setMilkUsed(e.target.value)} placeholder="e.g., 103" /></div>
-                        <div><Label>Paneer Obtained (kg)</Label><Input type="number" value={paneerObtained} onChange={e => setPaneerObtained(e.target.value)} placeholder="e.g., 15.5" /></div>
-                    </div>
-                     <Button onClick={handleActualCalc} className="w-full mt-4">Calculate Actual Yield</Button>
-                    {actualResult && <Alert className="mt-4" dangerouslySetInnerHTML={{ __html: actualResult }} />}
-                </TabsContent>
-            </Tabs>
+            <h3 className="font-semibold text-lg text-gray-700 mb-2">Theoretical Yield</h3>
+             <p className="text-xs text-muted-foreground mb-4">Predict paneer yield based on milk composition before production.</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div><Label>Milk Quantity (Litres)</Label><Input type="number" value={milkQtyLtr} onChange={e => setMilkQtyLtr(e.target.value)} /></div>
+                <div><Label>Final Paneer Moisture %</Label><Input type="number" value={finalMoisture} onChange={e => setFinalMoisture(e.target.value)} /></div>
+                <div><Label>Milk Fat %</Label><Input type="number" value={fatPercent} onChange={e => setFatPercent(e.target.value)} /></div>
+                <div><Label>Fat Recovery %</Label><Input type="number" value={fatRecovery} onChange={e => setFatRecovery(e.target.value)} /></div>
+                <div><Label>Milk SNF %</Label><Input type="number" value={snfPercent} onChange={e => setSnfPercent(e.target.value)} /></div>
+                <div><Label>Casein Recovery %</Label><Input type="number" value={caseinRecovery} onChange={e => setCaseinRecovery(e.target.value)} /></div>
+            </div>
+            <Button onClick={handleTheoreticalCalc} className="w-full mt-4">Calculate Theoretical Yield</Button>
+            {theoreticalResult && <Alert className="mt-4" dangerouslySetInnerHTML={{ __html: theoreticalResult }} />}
+            
+            <hr className="my-6"/>
+
+            <h3 className="font-semibold text-lg text-gray-700 mb-2">Actual Yield</h3>
+            <p className="text-xs text-muted-foreground mb-4">Calculate the actual yield achieved after a production batch.</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div><Label>Total Milk Used (kg)</Label><Input type="number" value={milkUsed} onChange={e => setMilkUsed(e.target.value)} placeholder="e.g., 103" /></div>
+                <div><Label>Paneer Obtained (kg)</Label><Input type="number" value={paneerObtained} onChange={e => setPaneerObtained(e.target.value)} placeholder="e.g., 15.5" /></div>
+            </div>
+             <Button onClick={handleActualCalc} className="w-full mt-4">Calculate Actual Yield</Button>
+            {actualResult && <Alert className="mt-4" dangerouslySetInnerHTML={{ __html: actualResult }} />}
         </CalculatorCard>
     );
 }
-
 
 function ProductAcidityCalc() {
     const [product, setProduct] = useState('milk');
@@ -315,16 +316,12 @@ function ProductAcidityCalc() {
 function StatewiseSNFCalc() {
     const [state, setState] = useState('Delhi');
     const standards = stateWiseStandards[state as keyof typeof stateWiseStandards];
-
-    // For SNF/CLR Calculator
     const [calcFat, setCalcFat] = useState("4.5");
     const [calcClr, setCalcClr] = useState("28.0");
     const [calcTargetSnf, setCalcTargetSnf] = useState("");
     const [calcFactorType, setCalcFactorType] = useState("cow");
     const [manualFactor, setManualFactor] = useState("");
     const [calcResult, setCalcResult] = useState<string | null>(null);
-
-    // For Standard Check Calculator
     const [checkMilkType, setCheckMilkType] = useState<"Cow" | "Buffalo" | "Mixed">("Cow");
     const [checkFat, setCheckFat] = useState("");
     const [checkSnf, setCheckSnf] = useState("");
@@ -473,6 +470,17 @@ function StatewiseSNFCalc() {
     );
 }
 
+function YieldsCalc() {
+    return (
+        <div className="space-y-6">
+            <CreamSeparationCalc />
+            <ButterYieldCalc />
+            <KhoaYieldCalc />
+            <ShrikhandYieldCalc />
+            <PedhaBurfiYieldCalc />
+        </div>
+    )
+}
 
 function CreamSeparationCalc() {
     const [milkQty, setMilkQty] = useState('100');
@@ -695,7 +703,7 @@ function ClrCorrectionCalc() {
     }
 
     return (
-        <CalculatorCard title="CLR Correction Calculator" description="Temperature ke aadhar par Lactometer Reading ko correct karein.">
+        <CalculatorCard title="CLR Correction Calculator" description="Correct Lactometer Reading based on temperature.">
             <div className="bg-muted/50 p-4 rounded-lg space-y-3">
                 <div><Label>Observed Lactometer Reading (OLR)</Label><Input type="number" value={olr} onChange={e => setOlr(e.target.value)} placeholder="28.5" /></div>
                 <div><Label>Milk Temperature (°C)</Label><Input type="number" value={temp} onChange={e => setTemp(e.target.value)} placeholder="29" /></div>
@@ -735,7 +743,7 @@ function ComponentQtyCalc() {
     }
 
     return (
-        <CalculatorCard title="Component Quantity Calculator" description="Doodh mein Fat aur Powder (SNF) ki matra (Kg mein) pata karein.">
+        <CalculatorCard title="Component Quantity Calculator" description="Find out the amount (in Kg) of Fat and Powder (SNF) in milk.">
             <div className="bg-muted/50 p-4 rounded-lg space-y-3">
                 <div><Label>Milk Quantity (Liters)</Label><Input type="number" value={liters} onChange={e => setLiters(e.target.value)} placeholder="1000" /></div>
                 <div><Label>Fat %</Label><Input type="number" value={fat} onChange={e => setFat(e.target.value)} placeholder="4.5" /></div>
@@ -888,20 +896,14 @@ function FormulasTab() {
 }
 
 function IceCreamCalculators() {
-  return (
-    <Tabs defaultValue="batch-scaling" className="w-full">
-      <TabsList className="grid w-full grid-cols-2 md:grid-cols-4">
-        <TabsTrigger value="batch-scaling">Batch Scaling</TabsTrigger>
-        <TabsTrigger value="overrun">Overrun</TabsTrigger>
-        <TabsTrigger value="freezing-point">Freezing Point</TabsTrigger>
-        <TabsTrigger value="mix-comp">Mix Composition</TabsTrigger>
-      </TabsList>
-      <TabsContent value="batch-scaling"><BatchScalingCalc /></TabsContent>
-      <TabsContent value="overrun"><OverrunCalc /></TabsContent>
-      <TabsContent value="freezing-point"><FreezingPointCalc /></TabsContent>
-      <TabsContent value="mix-comp"><MixCompositionCalc /></TabsContent>
-    </Tabs>
-  )
+    return (
+        <div className="space-y-6">
+            <BatchScalingCalc />
+            <OverrunCalc />
+            <FreezingPointCalc />
+            <MixCompositionCalc />
+        </div>
+    )
 }
 
 function BatchScalingCalc() {
