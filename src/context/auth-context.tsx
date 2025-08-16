@@ -98,11 +98,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const logout = async () => {
-    const subKey = user ? `subscription-${user.uid}` : null;
-    const profileKey = user ? getProfileKey(user.uid) : null;
     await signOut(auth);
-    if(subKey) localStorage.removeItem(subKey);
-    if(profileKey) localStorage.removeItem(profileKey);
     setUser(null);
     setUserProfile(null);
   };

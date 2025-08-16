@@ -107,8 +107,8 @@ export default function LoginPage() {
         photoURL: null,
       });
 
-      toast({ title: 'Success', description: 'Account created! Please sign in to continue.' });
-      // Forcing sign-in reinforces the separation.
+      toast({ title: `Welcome, ${values.name}!`, description: 'Your account has been created.' });
+      router.push('/');
     } catch (error: any) {
       console.error("Email Sign-Up Error:", error);
       toast({ variant: 'destructive', title: 'Sign-up Failed', description: error.message });

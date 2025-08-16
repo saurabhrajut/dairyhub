@@ -35,7 +35,7 @@ const ProfileDetail = ({ icon: Icon, label, value, loading }: { icon: React.Elem
             </div>
         )
     }
-    if (!value) return null;
+    if (!value && value !== 0) return null;
     return (
          <div className="flex items-center gap-3 text-sm">
             <Icon className="w-5 h-5 text-muted-foreground" />
