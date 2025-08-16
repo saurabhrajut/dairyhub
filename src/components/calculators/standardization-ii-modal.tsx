@@ -46,7 +46,7 @@ export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean;
       <DialogContent className="max-w-4xl h-[90vh] flex flex-col p-0 sm:p-6">
         {activeCalculator && ActiveCalculatorComponent ? (
           <>
-            <DialogHeader className="flex-row items-center space-x-4 pr-6 shrink-0">
+            <DialogHeader className="flex-row items-center space-x-4 pr-6 shrink-0 p-4 sm:p-0">
               <Button variant="ghost" size="icon" onClick={handleBack} className="shrink-0">
                 <ArrowLeft className="h-5 w-5" />
               </Button>
