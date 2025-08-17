@@ -56,10 +56,10 @@ export function PaneerProcessingModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-5xl h-[90vh] flex flex-col">
-        <DialogHeader>
+      <DialogContent className="max-w-5xl h-[90vh] flex flex-col p-0 sm:p-6">
+        <DialogHeader className="p-4 sm:p-0">
           <DialogTitle className="text-3xl sm:text-4xl font-bold text-center text-gray-800 mb-2 font-headline">Industrial Paneer Production</DialogTitle>
-          <DialogDescription className="text-center text-lg text-gray-500">Process, Yield & Quality Control 🧀</DialogDescription>
+          <DialogDescription className="text-center text-lg text-gray-500">Process, Yield &amp; Quality Control 🧀</DialogDescription>
         </DialogHeader>
 
         <Tabs defaultValue="process" className="w-full flex-1 flex flex-col min-h-0">
@@ -68,112 +68,114 @@ export function PaneerProcessingModal({
                     <TabsTrigger value="process">Process</TabsTrigger>
                     <TabsTrigger value="quality-control">Quality Control</TabsTrigger>
                     <TabsTrigger value="coagulants">Coagulants</TabsTrigger>
-                    <TabsTrigger value="yield-texture">Yield & Texture</TabsTrigger>
+                    <TabsTrigger value="yield-texture">Yield &amp; Texture</TabsTrigger>
                 </TabsList>
             </ScrollArea>
-            <ScrollArea className="flex-1 mt-4 pr-4">
-                <TabsContent value="process" className="mt-0">
-                    <Section title="Step-by-Step Production Process">
-                        <p className="text-gray-600 leading-relaxed mb-6">The following table outlines the standardized procedure for manufacturing paneer at an industrial scale.</p>
-                        <div className="overflow-x-auto">
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>Step No.</TableHead>
-                                        <TableHead>Process Stage</TableHead>
-                                        <TableHead>Key Parameters & Procedure</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {processSteps.map(item => (
-                                        <TableRow key={item.step}>
-                                            <TableCell>{item.step}</TableCell>
-                                            <TableCell className="font-medium">{item.stage}</TableCell>
-                                            <TableCell dangerouslySetInnerHTML={{__html: item.params}} />
+            <ScrollArea className="flex-1 mt-4 sm:pr-4">
+                <div className="p-4 sm:p-0">
+                    <TabsContent value="process" className="mt-0">
+                        <Section title="Step-by-Step Production Process">
+                            <p className="text-gray-600 leading-relaxed mb-6">The following table outlines the standardized procedure for manufacturing paneer at an industrial scale.</p>
+                            <div className="overflow-x-auto">
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead>Step No.</TableHead>
+                                            <TableHead>Process Stage</TableHead>
+                                            <TableHead>Key Parameters &amp; Procedure</TableHead>
                                         </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </div>
-                    </Section>
-                </TabsContent>
-                <TabsContent value="quality-control" className="mt-0">
-                    <Section title="Raw Material & Quality Control">
-                        <p className="text-gray-600 leading-relaxed mb-6">The quality of paneer is directly dependent on the quality of the incoming milk. In a dairy industry setting, milk is first tested for critical parameters before being accepted for processing.</p>
-                        <div className="overflow-x-auto">
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>Parameter</TableHead>
-                                        <TableHead>Ideal Range (Buffalo Milk)</TableHead>
-                                        <TableHead>Ideal Range (Cow Milk)</TableHead>
-                                        <TableHead>Importance</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {qualityParams.map(item => (
-                                        <TableRow key={item.param}>
-                                            <TableCell className="font-medium">{item.param}</TableCell>
-                                            <TableCell>{item.buffalo}</TableCell>
-                                            <TableCell>{item.cow}</TableCell>
-                                            <TableCell>{item.importance}</TableCell>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {processSteps.map(item => (
+                                            <TableRow key={item.step}>
+                                                <TableCell>{item.step}</TableCell>
+                                                <TableCell className="font-medium">{item.stage}</TableCell>
+                                                <TableCell dangerouslySetInnerHTML={{__html: item.params}} />
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </div>
+                        </Section>
+                    </TabsContent>
+                    <TabsContent value="quality-control" className="mt-0">
+                        <Section title="Raw Material &amp; Quality Control">
+                            <p className="text-gray-600 leading-relaxed mb-6">The quality of paneer is directly dependent on the quality of the incoming milk. In a dairy industry setting, milk is first tested for critical parameters before being accepted for processing.</p>
+                            <div className="overflow-x-auto">
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead>Parameter</TableHead>
+                                            <TableHead>Ideal Range (Buffalo Milk)</TableHead>
+                                            <TableHead>Ideal Range (Cow Milk)</TableHead>
+                                            <TableHead>Importance</TableHead>
                                         </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </div>
-                    </Section>
-                </TabsContent>
-                <TabsContent value="coagulants" className="mt-0">
-                    <Section title="Coagulants: Types and Usage">
-                        <p className="text-gray-600 leading-relaxed mb-4">The choice of coagulant affects the texture, flavor, and yield of the paneer.</p>
-                        <div className="space-y-4">
-                            <div className="p-4 border rounded-lg bg-card"><h4 className="font-bold text-card-foreground">Citric Acid</h4><p className="text-sm text-muted-foreground"><strong>Preparation:</strong> 1-2% solution (10-20g of citric acid powder in 1 litre of hot water at 70°C).<br/><strong>Usage:</strong> Most common industrial coagulant. Provides a clean, acidic flavor and consistent results. Add slowly to hot milk (70-75°C) with gentle stirring until clear whey separates. Over-addition can make paneer sour.</p></div>
-                            <div className="p-4 border rounded-lg bg-card"><h4 className="font-bold text-card-foreground">Acetic Acid (Vinegar)</h4><p className="text-sm text-muted-foreground"><strong>Preparation:</strong> 1-2% solution (10-20ml of food-grade white vinegar in 1 litre of hot water).<br/><strong>Usage:</strong> A widely available and effective coagulant. It can sometimes impart a slight pungent or vinegar-like flavor, which is why citric acid is often preferred for a more neutral taste profile. Use in the same manner as citric acid solution.</p></div>
-                            <div className="p-4 border rounded-lg bg-card"><h4 className="font-bold text-card-foreground">Sour Whey</h4><p className="text-sm text-muted-foreground"><strong>Preparation:</strong> Use whey from a previous batch, allowed to develop natural acidity (0.8-0.9% lactic acid).<br/><strong>Usage:</strong> A traditional and economical method. Often results in a softer, more traditional-flavored paneer. Can be less consistent than citric acid.</p></div>
-                            <div className="p-4 border rounded-lg bg-card"><h4 className="font-bold text-card-foreground">Calcium Chloride</h4><p className="text-sm text-muted-foreground"><strong>Preparation:</strong> Often added to milk *before* the acid coagulant.<br/><strong>Usage:</strong> Not a primary coagulant, but added to milk (especially cow milk or pasteurized milk) to improve the coagulation properties and firmness of the curd, which can slightly increase yield by improving moisture retention.</p></div>
-                        </div>
-                    </Section>
-                </TabsContent>
-                <TabsContent value="yield-texture" className="mt-0">
-                    <Section title="How to Increase Paneer Yield">
-                        <p className="text-gray-600 leading-relaxed mb-4">Maximizing yield is key to profitability. Here are the most effective methods:</p>
-                        <ul className="list-disc list-outside pl-5 space-y-3 text-muted-foreground">
-                            <li><strong>Optimal Heating:</strong> Heating milk to 85-90°C denatures whey proteins (like β-lactoglobulin and α-lactalbumin). These proteins then get trapped in the casein curd during coagulation, increasing the total solid recovery and thus the yield.</li>
-                            <li><strong>Correct Coagulation pH:</strong> The ideal pH for paneer coagulation is around 5.2. Adding the coagulant correctly to reach this pH ensures maximum protein precipitation without making the paneer too acidic, which would cause it to lose moisture and yield.</li>
-                            <li><strong>Gentle Stirring:</strong> Stirring too vigorously during coagulation breaks the curd into fine particles, which are then lost in the whey. Gentle, slow stirring helps form a firm, consolidated curd mass.</li>
-                            <li><strong>Controlled Pressing:</strong> Applying the correct pressure (2-3 kg/cm²) for the right amount of time (15-20 mins) is crucial. Over-pressing squeezes out too much moisture and fat, reducing yield and creating a hard paneer. Under-pressing results in a product with too much moisture, which has a shorter shelf life.</li>
-                        </ul>
-                    </Section>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {qualityParams.map(item => (
+                                            <TableRow key={item.param}>
+                                                <TableCell className="font-medium">{item.param}</TableCell>
+                                                <TableCell>{item.buffalo}</TableCell>
+                                                <TableCell>{item.cow}</TableCell>
+                                                <TableCell>{item.importance}</TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </div>
+                        </Section>
+                    </TabsContent>
+                    <TabsContent value="coagulants" className="mt-0">
+                        <Section title="Coagulants: Types and Usage">
+                            <p className="text-gray-600 leading-relaxed mb-4">The choice of coagulant affects the texture, flavor, and yield of the paneer.</p>
+                            <div className="space-y-4">
+                                <div className="p-4 border rounded-lg bg-card"><h4 className="font-bold text-card-foreground">Citric Acid</h4><p className="text-sm text-muted-foreground"><strong>Preparation:</strong> 1-2% solution (10-20g of citric acid powder in 1 litre of hot water at 70°C).<br/><strong>Usage:</strong> Most common industrial coagulant. Provides a clean, acidic flavor and consistent results. Add slowly to hot milk (70-75°C) with gentle stirring until clear whey separates. Over-addition can make paneer sour.</p></div>
+                                <div className="p-4 border rounded-lg bg-card"><h4 className="font-bold text-card-foreground">Acetic Acid (Vinegar)</h4><p className="text-sm text-muted-foreground"><strong>Preparation:</strong> 1-2% solution (10-20ml of food-grade white vinegar in 1 litre of hot water).<br/><strong>Usage:</strong> A widely available and effective coagulant. It can sometimes impart a slight pungent or vinegar-like flavor, which is why citric acid is often preferred for a more neutral taste profile. Use in the same manner as citric acid solution.</p></div>
+                                <div className="p-4 border rounded-lg bg-card"><h4 className="font-bold text-card-foreground">Sour Whey</h4><p className="text-sm text-muted-foreground"><strong>Preparation:</strong> Use whey from a previous batch, allowed to develop natural acidity (0.8-0.9% lactic acid).<br/><strong>Usage:</strong> A traditional and economical method. Often results in a softer, more traditional-flavored paneer. Can be less consistent than citric acid.</p></div>
+                                <div className="p-4 border rounded-lg bg-card"><h4 className="font-bold text-card-foreground">Calcium Chloride</h4><p className="text-sm text-muted-foreground"><strong>Preparation:</strong> Often added to milk *before* the acid coagulant.<br/><strong>Usage:</strong> Not a primary coagulant, but added to milk (especially cow milk or pasteurized milk) to improve the coagulation properties and firmness of the curd, which can slightly increase yield by improving moisture retention.</p></div>
+                            </div>
+                        </Section>
+                    </TabsContent>
+                    <TabsContent value="yield-texture" className="mt-0">
+                        <Section title="How to Increase Paneer Yield">
+                            <p className="text-gray-600 leading-relaxed mb-4">Maximizing yield is key to profitability. Here are the most effective methods:</p>
+                            <ul className="list-disc list-outside pl-5 space-y-3 text-muted-foreground">
+                                <li><strong>Optimal Heating:</strong> Heating milk to 85-90°C denatures whey proteins (like β-lactoglobulin and α-lactalbumin). These proteins then get trapped in the casein curd during coagulation, increasing the total solid recovery and thus the yield.</li>
+                                <li><strong>Correct Coagulation pH:</strong> The ideal pH for paneer coagulation is around 5.2. Adding the coagulant correctly to reach this pH ensures maximum protein precipitation without making the paneer too acidic, which would cause it to lose moisture and yield.</li>
+                                <li><strong>Gentle Stirring:</strong> Stirring too vigorously during coagulation breaks the curd into fine particles, which are then lost in the whey. Gentle, slow stirring helps form a firm, consolidated curd mass.</li>
+                                <li><strong>Controlled Pressing:</strong> Applying the correct pressure (2-3 kg/cm²) for the right amount of time (15-20 mins) is crucial. Over-pressing squeezes out too much moisture and fat, reducing yield and creating a hard paneer. Under-pressing results in a product with too much moisture, which has a shorter shelf life.</li>
+                            </ul>
+                        </Section>
 
-                     <Section title="Safe Yield Increasers for Consumption">
-                        <p className="text-gray-600 leading-relaxed mb-4">Certain additives can be used to safely increase the yield and improve the texture of paneer.</p>
-                        <Alert variant="default" className="bg-green-50 border-green-500 text-green-800">
-                            <AlertDescription><strong>Whey Protein Concentrate (WPC):</strong> Adding WPC powder to milk before heating is a modern technique to boost the protein content. This directly increases the amount of solids available for coagulation, leading to a higher yield and a softer, more nutritious paneer. This is a common and safe practice in the industry.</AlertDescription>
-                        </Alert>
-                    </Section>
+                         <Section title="Safe Yield Increasers for Consumption">
+                            <p className="text-gray-600 leading-relaxed mb-4">Certain additives can be used to safely increase the yield and improve the texture of paneer.</p>
+                            <Alert variant="default" className="bg-green-50 border-green-500 text-green-800">
+                                <AlertDescription><strong>Whey Protein Concentrate (WPC):</strong> Adding WPC powder to milk before heating is a modern technique to boost the protein content. This directly increases the amount of solids available for coagulation, leading to a higher yield and a softer, more nutritious paneer. This is a common and safe practice in the industry.</AlertDescription>
+                            </Alert>
+                        </Section>
 
-                     <Section title="Paneer Texture Explained: Hard, Soft, and Fluffy">
-                        <p className="text-gray-600 leading-relaxed mb-4">The final texture of paneer is a result of several factors throughout the production process.</p>
-                        <div className="overflow-x-auto">
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>Texture</TableHead>
-                                        <TableHead>Primary Causes</TableHead>
-                                        <TableHead>Result</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    <TableRow><TableCell className="font-medium text-red-600">Hard / Rubbery</TableCell><TableCell>Low fat content in milk, over-pressing, high coagulation temperature, excessive cooking.</TableCell><TableCell>Chewy, dry, and does not absorb flavors well. Low moisture content.</TableCell></TableRow>
-                                    <TableRow><TableCell className="font-medium text-green-600">Soft / Spongy (Ideal)</TableCell><TableCell>Standardized milk (6% fat), correct coagulation temp (70-75°C), controlled pressing, proper chilling.</TableCell><TableCell>Holds its shape, has a smooth bite, and absorbs gravies. This is the desired texture for high-quality paneer.</TableCell></TableRow>
-                                    <TableRow><TableCell className="font-medium text-yellow-600">Fluffy / Crumbly</TableCell><TableCell>High acidity in milk, coagulation at too low a temperature, insufficient pressing.</TableCell><TableCell>Breaks apart easily, difficult to cut into cubes, may taste overly acidic.</TableCell></TableRow>
-                                </TableBody>
-                            </Table>
-                        </div>
-                    </Section>
+                         <Section title="Paneer Texture Explained: Hard, Soft, and Fluffy">
+                            <p className="text-gray-600 leading-relaxed mb-4">The final texture of paneer is a result of several factors throughout the production process.</p>
+                            <div className="overflow-x-auto">
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead>Texture</TableHead>
+                                            <TableHead>Primary Causes</TableHead>
+                                            <TableHead>Result</TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        <TableRow><TableCell className="font-medium text-red-600">Hard / Rubbery</TableCell><TableCell>Low fat content in milk, over-pressing, high coagulation temperature, excessive cooking.</TableCell><TableCell>Chewy, dry, and does not absorb flavors well. Low moisture content.</TableCell></TableRow>
+                                        <TableRow><TableCell className="font-medium text-green-600">Soft / Spongy (Ideal)</TableCell><TableCell>Standardized milk (6% fat), correct coagulation temp (70-75°C), controlled pressing, proper chilling.</TableCell><TableCell>Holds its shape, has a smooth bite, and absorbs gravies. This is the desired texture for high-quality paneer.</TableCell></TableRow>
+                                        <TableRow><TableCell className="font-medium text-yellow-600">Fluffy / Crumbly</TableCell><TableCell>High acidity in milk, coagulation at too low a temperature, insufficient pressing.</TableCell><TableCell>Breaks apart easily, difficult to cut into cubes, may taste overly acidic.</TableCell></TableRow>
+                                    </TableBody>
+                                </Table>
+                            </div>
+                        </Section>
 
-                </TabsContent>
+                    </TabsContent>
+                </div>
             </ScrollArea>
         </Tabs>
       </DialogContent>
