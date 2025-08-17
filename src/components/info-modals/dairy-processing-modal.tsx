@@ -77,16 +77,24 @@ export function DairyProcessingModal({
             A deep-dive into the core technologies that transform raw milk.
           </DialogDescription>
         </DialogHeader>
-         <Tabs defaultValue="workflow" className="w-full flex-1 flex flex-col min-h-0">
-            <ScrollArea className="flex-shrink-0">
-              <TabsList className="grid w-full h-auto grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 p-2 sm:p-0">
+         <Tabs defaultValue="workflow" orientation="vertical" className="w-full flex-1 flex flex-col sm:flex-row min-h-0 mt-4 gap-6">
+            <ScrollArea className="flex-shrink-0 sm:pr-4 -ml-4 sm:ml-0">
+              <TabsList className="flex flex-row sm:flex-col items-start w-full bg-transparent p-0 sm:w-56">
                   {processingTopics.map(topic => (
-                      <TabsTrigger key={topic.value} value={topic.value} className="text-xs sm:text-sm">{topic.title}</TabsTrigger>
+                      <TabsTrigger 
+                        key={topic.value} 
+                        value={topic.value} 
+                        className="text-xs sm:text-sm w-full justify-start data-[state=active]:bg-primary/10 data-[state=active]:shadow-none data-[state=active]:text-primary font-semibold"
+                      >
+                        <topic.icon className="w-4 h-4 mr-2" />
+                        {topic.title}
+                      </TabsTrigger>
                   ))}
               </TabsList>
             </ScrollArea>
-            <ScrollArea className="flex-1 mt-4 sm:pr-4">
-              <div className="p-4 sm:p-0">
+            <div className="w-px bg-border hidden sm:block"/>
+            <ScrollArea className="flex-1">
+              <div className="p-1">
                 <TabsContent value="workflow" className="mt-0">
                     <Section title="Workflow Overview" icon={Settings}>
                         <p>Dairy processing ek sequence of operations hai jismein raw milk ko safe, high-quality, aur shelf-stable products mein badla jaata hai. Har step ka ek specific purpose hota hai.</p>
