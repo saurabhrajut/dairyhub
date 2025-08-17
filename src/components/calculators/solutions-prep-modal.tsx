@@ -12,17 +12,12 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { chemicals, reagentRecipes } from "@/lib/data";
 import { ArrowLeft, ChevronsUp } from 'lucide-react';
 import { AcidIcon, BaseIcon, DilutionIcon, IndicatorIcon, NormalityAdjustmentIcon, PercentageSolutionIcon, ReagentIcon, SpiritSolutionIcon, StandardizationIcon, StrengthIcon } from "@/components/icons";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 
 const sortedReagentKeys = Object.keys(reagentRecipes).sort((a,b) => reagentRecipes[a as keyof typeof reagentRecipes].name.localeCompare(reagentRecipes[b as keyof typeof reagentRecipes].name));
 
-type CalculatorType = 'acid-solution' | 'base-solution' | 'indicator-solution' | 'reagent-calculator' | 'percentage-solution' | 'stock-solution' | 'standardization' | 'strength-calculator' | 'spirit-solution' | 'normality-adjustment' | 'increase-normality';
-
-const IncreaseNormalityIcon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-        <path d="M7 11v-4a1 1 0 0 1 1-1h3"/><path d="M11 11h4a1 1 0 0 0 1-1V7"/><path d="M5 21v-7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v7"/><path d="m16 5-4-4-4 4"/>
-    </svg>
-);
-
+type CalculatorType = 'acid-solution' | 'base-solution' | 'indicator-solution' | 'reagent-calculator' | 'percentage-solution' | 'stock-solution' | 'standardization' | 'strength-calculator' | 'spirit-solution' | 'normality-adjustment';
 
 const calculatorsInfo = {
   'acid-solution': { title: "Acids", icon: AcidIcon, component: AcidSolutionCalc },
@@ -34,8 +29,7 @@ const calculatorsInfo = {
   'standardization': { title: "Standardization", icon: StandardizationIcon, component: StandardizationCalc },
   'strength-calculator': { title: "Strength", icon: StrengthIcon, component: StrengthCalc },
   'spirit-solution': { title: "Spirit Solution", icon: SpiritSolutionIcon, component: SpiritSolutionCalc },
-  'normality-adjustment': { title: "Adjust Normality (Dilute)", icon: NormalityAdjustmentIcon, component: NormalityAdjustmentCalc },
-  'increase-normality': { title: "Increase Normality", icon: IncreaseNormalityIcon, component: IncreaseNormalityCalc },
+  'normality-adjustment': { title: "Normality Adjustment", icon: NormalityAdjustmentIcon, component: CombinedNormalityAdjustmentCalc },
 };
 
 export function SolutionsPrepModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
@@ -542,6 +536,25 @@ function SpiritSolutionCalc() {
     );
 };
 
+function CombinedNormalityAdjustmentCalc() {
+    return (
+        <CalculatorCard title="Normality Adjustment">
+            <Tabs defaultValue="dilute">
+                <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="dilute">Dilute (Decrease Normality)</TabsTrigger>
+                    <TabsTrigger value="concentrate">Concentrate (Increase Normality)</TabsTrigger>
+                </TabsList>
+                <TabsContent value="dilute" className="pt-4">
+                    <NormalityAdjustmentCalc />
+                </TabsContent>
+                <TabsContent value="concentrate" className="pt-4">
+                    <IncreaseNormalityCalc />
+                </TabsContent>
+            </Tabs>
+        </CalculatorCard>
+    )
+}
+
 function NormalityAdjustmentCalc() {
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -570,7 +583,8 @@ function NormalityAdjustmentCalc() {
     }
 
     return (
-        <CalculatorCard title="Normality Adjustment (Dilution)" description="Use this to dilute a solution of higher normality to a desired lower normality.">
+        <div title="Dilute Solution" description="Use this to dilute a solution of higher normality to a desired lower normality.">
+            <p className="text-sm text-muted-foreground mb-4">Use this to dilute a solution of higher normality to a desired lower normality.</p>
             <form onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-end">
                     <div>
@@ -592,7 +606,7 @@ function NormalityAdjustmentCalc() {
                 {error && <Alert variant="destructive" className="mt-8"><AlertDescription>{error}</AlertDescription></Alert>}
                 {result && <Alert className="mt-8"><AlertTitle>Result</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
             </form>
-        </CalculatorCard>
+        </div>
     );
 };
 
@@ -641,7 +655,8 @@ function IncreaseNormalityCalc() {
     }
 
     return (
-        <CalculatorCard title="Increase Normality Calculator" description="Calculate how much chemical to add to increase the normality of your solution.">
+        <div title="Increase Normality" description="Calculate how much chemical to add to increase the normality of your solution.">
+             <p className="text-sm text-muted-foreground mb-4">Calculate how much chemical to add to increase the normality of your solution.</p>
             <form onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 items-end">
                     <div>
@@ -683,7 +698,7 @@ function IncreaseNormalityCalc() {
                  {error && <Alert variant="destructive" className="mt-8"><AlertDescription>{error}</AlertDescription></Alert>}
                 {result && <Alert className="mt-8"><AlertTitle>Instructions</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
             </form>
-        </CalculatorCard>
+        </div>
     );
 };
 
@@ -824,5 +839,3 @@ function DilutionCalc() {
         </CalculatorCard>
     );
 };
-
-    
