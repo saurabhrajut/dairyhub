@@ -15,15 +15,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useLanguage } from "@/context/language-context";
 import { cipProcessContent } from "@/lib/content/cip-process-content";
-import { useState } from "react";
-import { useToast } from "@/hooks/use-toast";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Section = ({ title, id, children, defaultOpen = false }: { title: string, id: string, children: React.ReactNode, defaultOpen?: boolean }) => (
     <Accordion type="single" collapsible className="w-full mb-6" defaultValue={defaultOpen ? "item-1" : undefined}>
@@ -39,99 +32,6 @@ const Section = ({ title, id, children, defaultOpen = false }: { title: string, 
         </AccordionItem>
     </Accordion>
 );
-
-const SolutionStrengthCalc = ({ content }: { content: any }) => {
-    const { toast } = useToast();
-    const [naohTitre, setNaohTitre] = useState("");
-    const [naohResult, setNaohResult] = useState<string | null>(null);
-
-    const [hno3Titre, setHno3Titre] = useState("");
-    const [hno3Result, setHno3Result] = useState<string | null>(null);
-    
-    const [h3po4Titre, setH3po4Titre] = useState("");
-    const [h3po4Result, setH3po4Result] = useState<string | null>(null);
-
-    const [chlorineTitre, setChlorineTitre] = useState("");
-    const [chlorineResult, setChlorineResult] = useState<string | null>(null);
-
-
-    const handleCalc = (type: 'naoh' | 'hno3' | 'h3po4' | 'chlorine') => {
-        let titre, resultText;
-
-        try {
-            switch(type) {
-                case 'naoh':
-                    titre = parseFloat(naohTitre);
-                    if(isNaN(titre) || titre < 0) throw new Error(content.calculators.error_invalid_titre);
-                    resultText = `${content.calculators.naoh.result_prefix} ${(titre * 0.4).toFixed(3)}%`;
-                    setNaohResult(resultText);
-                    break;
-                case 'hno3':
-                    titre = parseFloat(hno3Titre);
-                     if(isNaN(titre) || titre < 0) throw new Error(content.calculators.error_invalid_titre);
-                    resultText = `${content.calculators.hno3.result_prefix} ${(titre * 0.63).toFixed(3)}%`;
-                    setHno3Result(resultText);
-                    break;
-                case 'h3po4':
-                    titre = parseFloat(h3po4Titre);
-                     if(isNaN(titre) || titre < 0) throw new Error(content.calculators.error_invalid_titre);
-                    // H3PO4 has n-factor of 3, but in titration often only 1 or 2 protons react. Assuming reaction to HPO4(2-), n=2.
-                    // Eq. Wt = 98/2 = 49. Strength % = Titre * N_base * Eq. Wt / (Sample_Vol * 10)
-                    resultText = `${content.calculators.h3po4.result_prefix} ${(titre * 0.49).toFixed(3)}%`;
-                    setH3po4Result(resultText);
-                    break;
-                case 'chlorine':
-                    titre = parseFloat(chlorineTitre);
-                     if(isNaN(titre) || titre < 0) throw new Error(content.calculators.error_invalid_titre);
-                     const ppm = titre * 35.45; // V * N_thio * Eq.Wt_Cl * 1000 / Sample_Vol. For 0.01N Thio & 100ml sample, it simplifies
-                    resultText = `${content.calculators.chlorine.result_prefix} ${ppm.toFixed(2)} ppm`;
-                    setChlorineResult(resultText);
-                    break;
-            }
-            toast({ title: content.calculators.success_title, description: resultText });
-        } catch(e: any) {
-            toast({ variant: 'destructive', title: content.calculators.error_title, description: e.message });
-        }
-    }
-
-
-    return (
-        <div className="bg-muted p-6 rounded-lg border mt-4 space-y-8">
-            <Tabs defaultValue="naoh">
-                <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 h-auto">
-                    <TabsTrigger value="naoh">{content.calculators.naoh.title}</TabsTrigger>
-                    <TabsTrigger value="hno3">{content.calculators.hno3.title}</TabsTrigger>
-                    <TabsTrigger value="h3po4">{content.calculators.h3po4.title}</TabsTrigger>
-                    <TabsTrigger value="chlorine">{content.calculators.chlorine.title}</TabsTrigger>
-                </TabsList>
-                <TabsContent value="naoh" className="pt-4">
-                     <p className="text-sm text-muted-foreground mb-4">{content.calculators.naoh.description}</p>
-                    <div><Label>{content.calculators.naoh.label}</Label><Input type="number" value={naohTitre} onChange={e => setNaohTitre(e.target.value)} placeholder="e.g., 2.5"/></div>
-                    <Button onClick={() => handleCalc('naoh')} className="w-full mt-4">{content.calculators.naoh.button}</Button>
-                    {naohResult && <Alert className="mt-4"><AlertDescription className="font-bold text-center">{naohResult}</AlertDescription></Alert>}
-                </TabsContent>
-                 <TabsContent value="hno3" className="pt-4">
-                     <p className="text-sm text-muted-foreground mb-4">{content.calculators.hno3.description}</p>
-                    <div><Label>{content.calculators.hno3.label}</Label><Input type="number" value={hno3Titre} onChange={e => setHno3Titre(e.target.value)} placeholder="e.g., 1.8"/></div>
-                    <Button onClick={() => handleCalc('hno3')} className="w-full mt-4">{content.calculators.hno3.button}</Button>
-                    {hno3Result && <Alert className="mt-4"><AlertDescription className="font-bold text-center">{hno3Result}</AlertDescription></Alert>}
-                </TabsContent>
-                <TabsContent value="h3po4" className="pt-4">
-                     <p className="text-sm text-muted-foreground mb-4">{content.calculators.h3po4.description}</p>
-                    <div><Label>{content.calculators.h3po4.label}</Label><Input type="number" value={h3po4Titre} onChange={e => setH3po4Titre(e.target.value)} placeholder="e.g., 2.1"/></div>
-                    <Button onClick={() => handleCalc('h3po4')} className="w-full mt-4">{content.calculators.h3po4.button}</Button>
-                    {h3po4Result && <Alert className="mt-4"><AlertDescription className="font-bold text-center">{h3po4Result}</AlertDescription></Alert>}
-                </TabsContent>
-                 <TabsContent value="chlorine" className="pt-4">
-                     <p className="text-sm text-muted-foreground mb-4">{content.calculators.chlorine.description}</p>
-                    <div><Label>{content.calculators.chlorine.label}</Label><Input type="number" value={chlorineTitre} onChange={e => setChlorineTitre(e.target.value)} placeholder="e.g., 4.2"/></div>
-                    <Button onClick={() => handleCalc('chlorine')} className="w-full mt-4">{content.calculators.chlorine.button}</Button>
-                    {chlorineResult && <Alert className="mt-4"><AlertDescription className="font-bold text-center">{chlorineResult}</AlertDescription></Alert>}
-                </TabsContent>
-            </Tabs>
-        </div>
-    )
-}
 
 export function CipProcessModal({
   isOpen,
@@ -212,7 +112,6 @@ export function CipProcessModal({
           <Section id="solution-strength" title={content.solution_strength.title}>
             <p>{content.solution_strength.intro}</p>
             <div className="mt-4 p-4 bg-blue-50 border-l-4 border-blue-400 overflow-x-auto" dangerouslySetInnerHTML={{ __html: content.solution_strength.alkalinity_test.content }} />
-            <SolutionStrengthCalc content={content.solution_strength} />
           </Section>
 
         </ScrollArea>
