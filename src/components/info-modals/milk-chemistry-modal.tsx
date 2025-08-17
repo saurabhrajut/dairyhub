@@ -48,7 +48,6 @@ const Section = ({ title, icon: Icon, children }: { title: string, icon: React.E
     </div>
 );
 
-
 const chemistryTopics = [
     { value: "composition", title: "Composition", icon: BookOpen, content: <CompositionContent /> },
     { value: "proteins", title: "Proteins", icon: Dna, content: <ProteinsContent /> },
