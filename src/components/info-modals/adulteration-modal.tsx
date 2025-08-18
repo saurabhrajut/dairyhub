@@ -1,6 +1,7 @@
 
 "use client"
 
+import { useState } from "react"
 import {
   Dialog,
   DialogContent,
@@ -16,7 +17,8 @@ import {
 } from "@/components/ui/accordion"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Button } from "../ui/button"
+import { FlaskConical, Microscope, Shield, ArrowLeft } from "lucide-react"
 
 const platformTests = [
     {
@@ -539,6 +541,8 @@ const adulterantsData = [
     }
 ];
 
+type AdulterationCategory = 'platform-tests' | 'preservatives' | 'adulterants';
+
 export function AdulterationModal({
   isOpen,
   setIsOpen,
@@ -546,78 +550,86 @@ export function AdulterationModal({
   isOpen: boolean
   setIsOpen: (open: boolean) => void
 }) {
+  const [activeCategory, setActiveCategory] = useState<AdulterationCategory | null>(null);
+
+  const categories = [
+    { id: 'platform-tests', title: 'Platform Tests', description: 'Quick quality checks at milk reception.', data: platformTests, icon: Microscope, intro: "Platform tests are rapid quality assessments performed at the milk reception dock to quickly judge if a batch of milk is acceptable. These tests are crucial for preventing low-quality or adulterated milk from being mixed with good quality supplies." },
+    { id: 'preservatives', title: 'Preservatives', description: 'Detecting illegal preservatives.', data: preservativesData, icon: Shield, intro: "By law, no preservative of any type is permitted in milk. Preservatives are generally added to milk when chilling or transport facilities are inadequate. The common preservatives used are neutralizers, boric acid, formalin, etc." },
+    { id: 'adulterants', title: 'Adulterants', description: 'Detecting common adulterants.', data: adulterantsData, icon: FlaskConical, intro: "Adulterants are substances added to milk to increase its volume or solids-not-fat content to deceive quality tests. Common adulterants include sugar, starch, urea, and vegetable oil." },
+  ];
+
+  const handleOpenChange = (open: boolean) => {
+    if (!open) {
+      setActiveCategory(null);
+    }
+    setIsOpen(open);
+  };
+  
+  const selectedCategory = categories.find(c => c.id === activeCategory);
+
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-5xl h-[90vh]">
-        <DialogHeader>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+      <DialogContent className="max-w-4xl lg:max-w-6xl w-[95vw] h-full max-h-[90vh] flex flex-col p-0 sm:p-6">
+        <DialogHeader className="p-4 sm:p-0 shrink-0">
           <DialogTitle className="font-headline text-2xl sm:text-3xl text-center">Raw Milk Quality & Adulteration</DialogTitle>
-          <DialogDescription className="text-center">
-            A guide to Platform Tests and detecting adulterants in milk.
+          <DialogDescription className="text-center text-lg text-gray-500">
+             {selectedCategory ? selectedCategory.title : "A guide to Platform Tests and detecting adulterants in milk."}
           </DialogDescription>
         </DialogHeader>
-         <Tabs defaultValue="platform-tests" className="w-full flex-1 flex flex-col min-h-0">
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="platform-tests">Platform Tests</TabsTrigger>
-              <TabsTrigger value="preservatives">Preservatives</TabsTrigger>
-              <TabsTrigger value="adulterants">Adulterants</TabsTrigger>
-            </TabsList>
-             <ScrollArea className="flex-1 mt-4">
-                 <TabsContent value="platform-tests" className="mt-0">
-                     <p className="mb-6 text-gray-700 leading-relaxed">
-                        Platform tests are rapid quality assessments performed at the milk reception dock to quickly judge if a batch of milk is acceptable. These tests are crucial for preventing low-quality or adulterated milk from being mixed with good quality supplies.
-                    </p>
-                    <Accordion type="single" collapsible className="w-full">
-                        {platformTests.map((item) => (
-                            <AccordionItem key={item.id} value={item.id}>
-                                <AccordionTrigger className="font-semibold text-left">{item.title}</AccordionTrigger>
-                                <AccordionContent>
-                                    <div className="prose max-w-none prose-sm" dangerouslySetInnerHTML={{ __html: item.content }} />
-                                </AccordionContent>
-                            </AccordionItem>
-                        ))}
-                    </Accordion>
-                    <div className="mt-4 p-4 bg-blue-50/50 rounded-lg">
-                        <h4 className="font-bold text-blue-800">Conclusion on Platform Tests</h4>
-                        <p className="text-sm text-blue-700 mt-2">These tests must be quick, accurate, and dependable because the quality of milk deteriorates over time, hampering the quality of the final product. A milk processor can only be confident in the quality of raw milk if some basic quality tests are performed on each can or container with the objective of detecting milk of inferior quality, in order to prevent it from being mixed with high-grade milk.</p>
+        
+        {selectedCategory ? (
+            <div className="flex-1 flex flex-col min-h-0">
+                <div className="px-4 sm:px-0">
+                  <Button variant="ghost" onClick={() => setActiveCategory(null)}>
+                      <ArrowLeft className="w-4 h-4 mr-2" />
+                      Back to Categories
+                  </Button>
+                </div>
+                <ScrollArea className="flex-1 mt-4 sm:pr-4">
+                    <div className="p-4 pt-0 sm:p-0">
+                        <p className="mb-6 text-gray-700 leading-relaxed">
+                            {selectedCategory.intro}
+                        </p>
+                        <Accordion type="single" collapsible className="w-full">
+                            {selectedCategory.data.map((item, index) => (
+                                <AccordionItem key={item.title} value={`item-${index}`}>
+                                    <AccordionTrigger className="font-semibold text-left">{item.title}</AccordionTrigger>
+                                    <AccordionContent>
+                                        {'purpose' in item && <p className="font-semibold text-gray-600 mb-2">Purpose: {item.purpose}</p>}
+                                        <div className="prose max-w-none prose-sm" dangerouslySetInnerHTML={{ __html: item.content }} />
+                                    </AccordionContent>
+                                </AccordionItem>
+                            ))}
+                        </Accordion>
+                         {selectedCategory.id === 'platform-tests' && (
+                             <div className="mt-4 p-4 bg-blue-50/50 rounded-lg">
+                                <h4 className="font-bold text-blue-800">Conclusion on Platform Tests</h4>
+                                <p className="text-sm text-blue-700 mt-2">These tests must be quick, accurate, and dependable because the quality of milk deteriorates over time, hampering the quality of the final product. A milk processor can only be confident in the quality of raw milk if some basic quality tests are performed on each can or container with the objective of detecting milk of inferior quality, in order to prevent it from being mixed with high-grade milk.</p>
+                            </div>
+                         )}
                     </div>
-                </TabsContent>
-                <TabsContent value="preservatives" className="mt-0">
-                     <p className="mb-6 text-gray-700 leading-relaxed">
-                        By law, no preservative of any type is permitted in milk. Preservatives are generally added to milk when chilling or transport facilities are inadequate. The common preservatives used are neutralizers, boric acid, formalin, etc.
-                    </p>
-                    <Accordion type="single" collapsible className="w-full">
-                        {preservativesData.map((item, index) => (
-                            <AccordionItem key={`preservative-${index}`} value={`item-${index}`}>
-                                <AccordionTrigger className="font-semibold text-left">{item.title}</AccordionTrigger>
-                                <AccordionContent>
-                                    <p className="font-semibold text-gray-600 mb-2">Purpose: {item.purpose}</p>
-                                    <div className="prose max-w-none prose-sm" dangerouslySetInnerHTML={{ __html: item.content }} />
-                                </AccordionContent>
-                            </AccordionItem>
-                        ))}
-                    </Accordion>
-                </TabsContent>
-                 <TabsContent value="adulterants" className="mt-0">
-                     <p className="mb-6 text-gray-700 leading-relaxed">
-                        Adulterants are substances added to milk to increase its volume or solids-not-fat content to deceive quality tests. Common adulterants include sugar, starch, urea, and vegetable oil.
-                    </p>
-                    <Accordion type="single" collapsible className="w-full">
-                        {adulterantsData.map((item, index) => (
-                            <AccordionItem key={`adulterant-${index}`} value={`item-${index}`}>
-                                <AccordionTrigger className="font-semibold text-left">{item.title}</AccordionTrigger>
-                                <AccordionContent>
-                                    <p className="font-semibold text-gray-600 mb-2">Purpose: {item.purpose}</p>
-                                    <div className="prose max-w-none prose-sm" dangerouslySetInnerHTML={{ __html: item.content }} />
-                                </AccordionContent>
-                            </AccordionItem>
-                        ))}
-                    </Accordion>
-                </TabsContent>
+                </ScrollArea>
+                <footer className="text-center mt-4 py-2 border-t border-gray-200 shrink-0">
+                    <p className="text-xs text-gray-500">This guide is for informational purposes only. Always adhere to official laboratory standards and safety protocols.</p>
+                </footer>
+            </div>
+        ) : (
+             <ScrollArea className="flex-1 mt-4 sm:pr-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 sm:p-0">
+                    {categories.map(category => (
+                        <button
+                          key={category.id}
+                          onClick={() => setActiveCategory(category.id as AdulterationCategory)}
+                          className="flex flex-col items-center justify-center p-6 bg-card hover:bg-primary/10 rounded-lg shadow-sm border text-center transition-all duration-200"
+                        >
+                            <category.icon className="w-12 h-12 text-primary mb-3" />
+                            <h3 className="font-semibold font-headline text-card-foreground">{category.title}</h3>
+                            <p className="text-xs text-muted-foreground mt-1">{category.description}</p>
+                        </button>
+                    ))}
+                </div>
             </ScrollArea>
-        </Tabs>
-        <footer className="text-center mt-4 py-2 border-t border-gray-200">
-            <p className="text-xs text-gray-500">This guide is for informational purposes only. Always adhere to official laboratory standards and safety protocols.</p>
-        </footer>
+        )}
       </DialogContent>
     </Dialog>
   )
@@ -625,4 +637,5 @@ export function AdulterationModal({
     
 
     
+
 
