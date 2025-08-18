@@ -1,6 +1,7 @@
 
 "use client";
 
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -9,15 +10,12 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useLanguage } from "@/context/language-context";
 import { fermentedProductsModalContent } from "@/lib/content/fermented-products-modal-content";
+import { Button } from "../ui/button";
+import { ArrowLeft, BookOpen, CheckSquare, BarChart, FlaskConical, Lightbulb, ShieldAlert, Sparkles, SlidersHorizontal, Package, Leaf } from "lucide-react";
+
 
 const Section = ({ title, children }: { title: string, children: React.ReactNode }) => (
     <div className="space-y-4 text-gray-700 leading-relaxed">
@@ -33,39 +31,10 @@ const SubSection = ({ title, children }: { title: string, children: React.ReactN
     </>
 );
 
-export function FermentedProductsModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
-  const { t } = useLanguage();
-  const content = t(fermentedProductsModalContent);
-  
-  if (!content) return null;
-
-  return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-4xl lg:max-w-6xl w-[95vw] h-full max-h-[90vh] flex flex-col p-0 sm:p-6">
-        <DialogHeader className="p-4 sm:p-0">
-          <DialogTitle className="text-2xl md:text-3xl font-bold text-center text-gray-800 font-headline">
-            {content.title}
-          </DialogTitle>
-          <DialogDescription className="text-center text-lg text-gray-500">
-            {content.description}
-          </DialogDescription>
-        </DialogHeader>
-        <Tabs defaultValue="intro" className="w-full flex-1 flex flex-col min-h-0">
-          <ScrollArea className="flex-shrink-0">
-            <TabsList className="grid w-full h-auto grid-cols-2 md:grid-cols-4 lg:grid-cols-7 p-2 sm:p-0">
-              <TabsTrigger value="intro">{content.tabs.intro}</TabsTrigger>
-              <TabsTrigger value="processing">{content.tabs.processing}</TabsTrigger>
-              <TabsTrigger value="quality-control">{content.tabs.quality_control}</TabsTrigger>
-              <TabsTrigger value="defects">{content.tabs.defects}</TabsTrigger>
-              <TabsTrigger value="shelf-life">{content.tabs.shelf_life}</TabsTrigger>
-              <TabsTrigger value="yield">{content.tabs.yield}</TabsTrigger>
-              <TabsTrigger value="innovations">{content.tabs.innovations}</TabsTrigger>
-            </TabsList>
-          </ScrollArea>
-          <ScrollArea className="flex-1 mt-4 sm:pr-4">
-            <div className="prose prose-sm max-w-none break-words p-4 sm:p-0">
-
-              <TabsContent value="intro" className="mt-0">
+const topicComponents = {
+    intro: function Content({ content }: { content: any }) {
+        return (
+            <div className="prose prose-sm max-w-none break-words">
                 <Section title={content.sections.executive_summary.title}>
                     <div dangerouslySetInnerHTML={{ __html: content.sections.executive_summary.content }} />
                 </Section>
@@ -94,9 +63,12 @@ export function FermentedProductsModal({ isOpen, setIsOpen }: { isOpen: boolean;
                         </div>
                     </SubSection>
                 </Section>
-              </TabsContent>
-
-              <TabsContent value="processing" className="mt-0">
+            </div>
+        )
+    },
+    processing: function Content({ content }: { content: any }) {
+        return (
+             <div className="prose prose-sm max-w-none break-words">
                  <Section title={content.sections.processing.title}>
                     <div dangerouslySetInnerHTML={{ __html: content.sections.processing.content }} />
                     <SubSection title={content.sections.processing.subsections.raw_milk_prep.title}>
@@ -115,9 +87,12 @@ export function FermentedProductsModal({ isOpen, setIsOpen }: { isOpen: boolean;
                         <div dangerouslySetInnerHTML={{ __html: content.sections.processing.subsections.packaging.content }} />
                      </SubSection>
                  </Section>
-              </TabsContent>
-              
-              <TabsContent value="quality-control">
+             </div>
+        )
+    },
+    quality_control: function Content({ content }: { content: any }) {
+        return (
+            <div className="prose prose-sm max-w-none break-words">
                   <Section title={content.sections.quality_control.title}>
                         <div dangerouslySetInnerHTML={{ __html: content.sections.quality_control.content }} />
                         <SubSection title={content.sections.quality_control.subsections.assessment.title}>
@@ -127,9 +102,12 @@ export function FermentedProductsModal({ isOpen, setIsOpen }: { isOpen: boolean;
                              <div dangerouslySetInnerHTML={{ __html: content.sections.quality_control.subsections.hygiene.content }} />
                         </SubSection>
                   </Section>
-              </TabsContent>
-
-              <TabsContent value="defects">
+            </div>
+        )
+    },
+    defects: function Content({ content }: { content: any }) {
+        return (
+            <div className="prose prose-sm max-w-none break-words">
                   <Section title={content.sections.defects.title}>
                         <div dangerouslySetInnerHTML={{ __html: content.sections.defects.content }} />
                         <SubSection title={content.sections.defects.subsections.sourness.title}>
@@ -142,10 +120,13 @@ export function FermentedProductsModal({ isOpen, setIsOpen }: { isOpen: boolean;
                             <div dangerouslySetInnerHTML={{ __html: content.sections.defects.subsections.syneresis.content }} />
                         </SubSection>
                   </Section>
-              </TabsContent>
-
-              <TabsContent value="shelf-life">
-                  <Section title={content.sections.shelf_life.title}>
+            </div>
+        )
+    },
+    shelf_life: function Content({ content }: { content: any }) {
+        return (
+            <div className="prose prose-sm max-w-none break-words">
+                <Section title={content.sections.shelf_life.title}>
                         <div dangerouslySetInnerHTML={{ __html: content.sections.shelf_life.content }} />
                          <SubSection title={content.sections.shelf_life.subsections.lactic_acid.title}>
                             <div dangerouslySetInnerHTML={{ __html: content.sections.shelf_life.subsections.lactic_acid.content }} />
@@ -157,9 +138,12 @@ export function FermentedProductsModal({ isOpen, setIsOpen }: { isOpen: boolean;
                             <div dangerouslySetInnerHTML={{ __html: content.sections.shelf_life.subsections.aseptic.content }} />
                         </SubSection>
                   </Section>
-              </TabsContent>
-
-              <TabsContent value="yield">
+            </div>
+        )
+    },
+    yield: function Content({ content }: { content: any }) {
+        return (
+            <div className="prose prose-sm max-w-none break-words">
                   <Section title={content.sections.yield.title}>
                         <div dangerouslySetInnerHTML={{ __html: content.sections.yield.content }} />
                         <SubSection title={content.sections.yield.subsections.composition.title}>
@@ -175,10 +159,13 @@ export function FermentedProductsModal({ isOpen, setIsOpen }: { isOpen: boolean;
                             <div dangerouslySetInnerHTML={{ __html: content.sections.yield.subsections.stabilizers.content }} />
                         </SubSection>
                   </Section>
-              </TabsContent>
-              
-              <TabsContent value="innovations">
-                  <Section title={content.sections.innovations.title}>
+            </div>
+        )
+    },
+    innovations: function Content({ content }: { content: any }) {
+        return (
+            <div className="prose prose-sm max-w-none break-words">
+                 <Section title={content.sections.innovations.title}>
                         <div dangerouslySetInnerHTML={{ __html: content.sections.innovations.content }} />
                         <SubSection title={content.sections.innovations.subsections.techniques.title}>
                             <div dangerouslySetInnerHTML={{ __html: content.sections.innovations.subsections.techniques.content }} />
@@ -193,10 +180,82 @@ export function FermentedProductsModal({ isOpen, setIsOpen }: { isOpen: boolean;
                             <div dangerouslySetInnerHTML={{ __html: content.sections.innovations.subsections.packaging.content }} />
                         </SubSection>
                   </Section>
-              </TabsContent>
+            </div>
+        )
+    }
+}
+
+export function FermentedProductsModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
+  const { t } = useLanguage();
+  const content = t(fermentedProductsModalContent);
+  const [activeTopic, setActiveTopic] = useState<string | null>(null);
+
+  const handleOpenChange = (open: boolean) => {
+    if (!open) {
+      setActiveTopic(null); // Reset when closing
+    }
+    setIsOpen(open);
+  };
+  
+  if (!content) return null;
+
+  const topics = [
+    { value: "intro", title: content.tabs.intro, icon: BookOpen, component: topicComponents.intro },
+    { value: "processing", title: content.tabs.processing, icon: SlidersHorizontal, component: topicComponents.processing },
+    { value: "quality_control", title: content.tabs.quality_control, icon: CheckSquare, component: topicComponents.quality_control },
+    { value: "defects", title: content.tabs.defects, icon: ShieldAlert, component: topicComponents.defects },
+    { value: "shelf_life", title: content.tabs.shelf_life, icon: Package, component: topicComponents.shelf_life },
+    { value: "yield", title: content.tabs.yield, icon: BarChart, component: topicComponents.yield },
+    { value: "innovations", title: content.tabs.innovations, icon: Sparkles, component: topicComponents.innovations }
+  ];
+
+  const selectedTopic = topics.find(t => t.value === activeTopic);
+  const ActiveComponent = selectedTopic ? selectedTopic.component : null;
+
+  return (
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+      <DialogContent className="max-w-4xl lg:max-w-6xl w-[95vw] h-full max-h-[90vh] flex flex-col p-0 sm:p-6">
+        <DialogHeader className="p-4 sm:p-0 shrink-0">
+          <DialogTitle className="text-2xl md:text-3xl font-bold text-center text-gray-800 font-headline">
+            {content.title}
+          </DialogTitle>
+          <DialogDescription className="text-center text-lg text-gray-500">
+            {selectedTopic ? selectedTopic.title : content.description}
+          </DialogDescription>
+        </DialogHeader>
+
+        {selectedTopic && ActiveComponent ? (
+          <div className="flex-1 flex flex-col min-h-0">
+            <div className="px-4 sm:px-0">
+              <Button variant="ghost" onClick={() => setActiveTopic(null)}>
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  Back to Topics
+              </Button>
+            </div>
+            <ScrollArea className="flex-1 mt-4 sm:pr-4">
+              <div className="p-4 pt-0 sm:p-0">
+                <ActiveComponent content={content} />
+              </div>
+            </ScrollArea>
+          </div>
+        ) : (
+          <ScrollArea className="flex-1 mt-4 sm:pr-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4 sm:p-0">
+              {topics.map(topic => (
+                <button
+                  key={topic.value}
+                  onClick={() => setActiveTopic(topic.value)}
+                  className="flex items-center p-4 bg-card hover:bg-primary/10 rounded-lg shadow-sm border text-left transition-all duration-200"
+                >
+                  <topic.icon className="w-8 h-8 text-primary mr-4 shrink-0" />
+                  <div>
+                    <span className="font-semibold font-headline text-card-foreground">{topic.title}</span>
+                  </div>
+                </button>
+              ))}
             </div>
           </ScrollArea>
-        </Tabs>
+        )}
       </DialogContent>
     </Dialog>
   );
