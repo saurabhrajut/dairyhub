@@ -1,6 +1,7 @@
 
 "use client";
 
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -9,10 +10,12 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useLanguage } from "@/context/language-context";
 import { etpModalContent } from "@/lib/content/etp-modal-content";
+import { Button } from "../ui/button";
+import { ArrowLeft, BookOpen, Settings, Award, CheckCircle, AlertTriangle, TrendingUp } from "lucide-react";
+
 
 const Section = ({ title, children }: { title: string, children: React.ReactNode }) => (
     <div className="space-y-4 text-gray-700 leading-relaxed">
@@ -28,38 +31,11 @@ const SubSection = ({ title, children }: { title: string, children: React.ReactN
     </>
 );
 
-export function EtpModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
-  const { t } = useLanguage();
-  const content = t(etpModalContent);
-  
-  if (!content) return null;
 
-  return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-4xl lg:max-w-6xl w-[95vw] h-full max-h-[90vh] flex flex-col p-0 sm:p-6">
-        <DialogHeader className="p-4 sm:p-0">
-          <DialogTitle className="text-2xl md:text-3xl font-bold text-center text-gray-800 font-headline">
-            {content.title}
-          </DialogTitle>
-          <DialogDescription className="text-center text-lg text-gray-500">
-            {content.description}
-          </DialogDescription>
-        </DialogHeader>
-        <Tabs defaultValue="intro" className="w-full flex-1 flex flex-col min-h-0">
-          <ScrollArea className="flex-shrink-0">
-            <TabsList className="grid w-full h-auto grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 p-2 sm:p-0">
-              <TabsTrigger value="intro">{content.tabs.intro}</TabsTrigger>
-              <TabsTrigger value="processes">{content.tabs.processes}</TabsTrigger>
-              <TabsTrigger value="benefits">{content.tabs.benefits}</TabsTrigger>
-              <TabsTrigger value="factors">{content.tabs.factors}</TabsTrigger>
-              <TabsTrigger value="challenges">{content.tabs.challenges}</TabsTrigger>
-              <TabsTrigger value="future">{content.tabs.future}</TabsTrigger>
-            </TabsList>
-          </ScrollArea>
-          <ScrollArea className="flex-1 mt-4 sm:pr-4">
-            <div className="prose prose-sm max-w-none break-words p-4 sm:p-0">
-
-              <TabsContent value="intro" className="mt-0">
+const topicComponents = {
+    intro: function Content({ content }: { content: any }) {
+        return (
+            <div className="prose prose-sm max-w-none break-words">
                 <Section title={content.sections.executive_summary.title}>
                     <div dangerouslySetInnerHTML={{ __html: content.sections.executive_summary.content }} />
                 </Section>
@@ -95,9 +71,12 @@ export function EtpModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (o
                         </div>
                     </SubSection>
                 </Section>
-              </TabsContent>
-
-              <TabsContent value="processes" className="mt-0">
+            </div>
+        )
+    },
+    processes: function Content({ content }: { content: any }) {
+        return (
+            <div className="prose prose-sm max-w-none break-words">
                 <Section title={content.sections.treatment_processes.title}>
                     <div dangerouslySetInnerHTML={{ __html: content.sections.treatment_processes.content }} />
                     <SubSection title={content.sections.treatment_processes.subsections.preliminary.title}>
@@ -113,80 +92,160 @@ export function EtpModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (o
                         <div dangerouslySetInnerHTML={{ __html: content.sections.treatment_processes.subsections.tertiary.content }} />
                     </SubSection>
                 </Section>
-              </TabsContent>
-              
-              <TabsContent value="benefits" className="mt-0">
-                  <Section title={content.sections.benefits.title}>
-                        <div dangerouslySetInnerHTML={{ __html: content.sections.benefits.content }} />
-                        <SubSection title={content.sections.benefits.subsections.environmental.title}>
-                           <div dangerouslySetInnerHTML={{ __html: content.sections.benefits.subsections.environmental.content }} />
-                        </SubSection>
-                         <SubSection title={content.sections.benefits.subsections.economic.title}>
-                           <div dangerouslySetInnerHTML={{ __html: content.sections.benefits.subsections.economic.content }} />
-                        </SubSection>
-                        <SubSection title={content.sections.benefits.subsections.operational.title}>
-                           <div dangerouslySetInnerHTML={{ __html: content.sections.benefits.subsections.operational.content }} />
-                        </SubSection>
-                  </Section>
-              </TabsContent>
-
-              <TabsContent value="factors" className="mt-0">
-                  <Section title={content.sections.key_factors.title}>
-                        <div dangerouslySetInnerHTML={{ __html: content.sections.key_factors.content }} />
-                        <SubSection title={content.sections.key_factors.subsections.characteristics.title}>
-                            <div dangerouslySetInnerHTML={{ __html: content.sections.key_factors.subsections.characteristics.content }} />
-                        </SubSection>
-                        <SubSection title={content.sections.key_factors.subsections.compliance.title}>
-                            <div dangerouslySetInnerHTML={{ __html: content.sections.key_factors.subsections.compliance.content }} />
-                             <div className="overflow-x-auto">
-                                <Table>
-                                    <TableHeader>
-                                        <TableRow>
-                                            <TableHead>{content.sections.key_factors.subsections.compliance.table.header1}</TableHead>
-                                            <TableHead>{content.sections.key_factors.subsections.compliance.table.header2}</TableHead>
-                                        </TableRow>
-                                    </TableHeader>
-                                    <TableBody>
-                                      {content.sections.key_factors.subsections.compliance.table.rows.map((row: any, index: number) => (
-                                        <TableRow key={index}>
-                                          <TableCell>{row.param}</TableCell>
-                                          <TableCell>{row.limit}</TableCell>
-                                        </TableRow>
-                                      ))}
-                                    </TableBody>
-                                </Table>
-                            </div>
-                        </SubSection>
-                        <SubSection title={content.sections.key_factors.subsections.technology.title}>
-                             <div dangerouslySetInnerHTML={{ __html: content.sections.key_factors.subsections.technology.content }} />
-                        </SubSection>
-                  </Section>
-              </TabsContent>
-
-               <TabsContent value="challenges" className="mt-0">
-                  <Section title={content.sections.challenges.title}>
-                        <div dangerouslySetInnerHTML={{ __html: content.sections.challenges.content }} />
-                  </Section>
-              </TabsContent>
-              
-               <TabsContent value="future" className="mt-0">
-                  <Section title={content.sections.future_outlook.title}>
-                    <div dangerouslySetInnerHTML={{ __html: content.sections.future_outlook.content }} />
-                    <SubSection title={content.sections.future_outlook.subsections.innovations.title}>
-                        <div dangerouslySetInnerHTML={{ __html: content.sections.future_outlook.subsections.innovations.content }} />
+            </div>
+        )
+    },
+    benefits: function Content({ content }: { content: any }) {
+        return (
+            <div className="prose prose-sm max-w-none break-words">
+                <Section title={content.sections.benefits.title}>
+                    <div dangerouslySetInnerHTML={{ __html: content.sections.benefits.content }} />
+                    <SubSection title={content.sections.benefits.subsections.environmental.title}>
+                        <div dangerouslySetInnerHTML={{ __html: content.sections.benefits.subsections.environmental.content }} />
                     </SubSection>
-                     <SubSection title={content.sections.future_outlook.subsections.conclusion.title}>
-                        <div dangerouslySetInnerHTML={{ __html: content.sections.future_outlook.subsections.conclusion.content }} />
+                        <SubSection title={content.sections.benefits.subsections.economic.title}>
+                        <div dangerouslySetInnerHTML={{ __html: content.sections.benefits.subsections.economic.content }} />
                     </SubSection>
-                  </Section>
-              </TabsContent>
+                    <SubSection title={content.sections.benefits.subsections.operational.title}>
+                        <div dangerouslySetInnerHTML={{ __html: content.sections.benefits.subsections.operational.content }} />
+                    </SubSection>
+                </Section>
+            </div>
+        )
+    },
+    factors: function Content({ content }: { content: any }) {
+        return (
+            <div className="prose prose-sm max-w-none break-words">
+                <Section title={content.sections.key_factors.title}>
+                    <div dangerouslySetInnerHTML={{ __html: content.sections.key_factors.content }} />
+                    <SubSection title={content.sections.key_factors.subsections.characteristics.title}>
+                        <div dangerouslySetInnerHTML={{ __html: content.sections.key_factors.subsections.characteristics.content }} />
+                    </SubSection>
+                    <SubSection title={content.sections.key_factors.subsections.compliance.title}>
+                        <div dangerouslySetInnerHTML={{ __html: content.sections.key_factors.subsections.compliance.content }} />
+                            <div className="overflow-x-auto">
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>{content.sections.key_factors.subsections.compliance.table.header1}</TableHead>
+                                        <TableHead>{content.sections.key_factors.subsections.compliance.table.header2}</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {content.sections.key_factors.subsections.compliance.table.rows.map((row: any, index: number) => (
+                                    <TableRow key={index}>
+                                        <TableCell>{row.param}</TableCell>
+                                        <TableCell>{row.limit}</TableCell>
+                                    </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </div>
+                    </SubSection>
+                    <SubSection title={content.sections.key_factors.subsections.technology.title}>
+                            <div dangerouslySetInnerHTML={{ __html: content.sections.key_factors.subsections.technology.content }} />
+                    </SubSection>
+                </Section>
+            </div>
+        )
+    },
+    challenges: function Content({ content }: { content: any }) {
+        return (
+            <div className="prose prose-sm max-w-none break-words">
+                 <Section title={content.sections.challenges.title}>
+                    <div dangerouslySetInnerHTML={{ __html: content.sections.challenges.content }} />
+                </Section>
+            </div>
+        )
+    },
+    future: function Content({ content }: { content: any }) {
+        return (
+            <div className="prose prose-sm max-w-none break-words">
+                <Section title={content.sections.future_outlook.title}>
+                <div dangerouslySetInnerHTML={{ __html: content.sections.future_outlook.content }} />
+                <SubSection title={content.sections.future_outlook.subsections.innovations.title}>
+                    <div dangerouslySetInnerHTML={{ __html: content.sections.future_outlook.subsections.innovations.content }} />
+                </SubSection>
+                    <SubSection title={content.sections.future_outlook.subsections.conclusion.title}>
+                    <div dangerouslySetInnerHTML={{ __html: content.sections.future_outlook.subsections.conclusion.content }} />
+                </SubSection>
+                </Section>
+            </div>
+        )
+    },
+}
 
+export function EtpModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
+  const { t } = useLanguage();
+  const content = t(etpModalContent);
+  const [activeTopic, setActiveTopic] = useState<string | null>(null);
+
+  const handleOpenChange = (open: boolean) => {
+    if (!open) {
+      setActiveTopic(null);
+    }
+    setIsOpen(open);
+  };
+  
+  if (!content) return null;
+
+  const topics = [
+    { value: "intro", title: content.tabs.intro, icon: BookOpen, component: topicComponents.intro },
+    { value: "processes", title: content.tabs.processes, icon: Settings, component: topicComponents.processes },
+    { value: "benefits", title: content.tabs.benefits, icon: Award, component: topicComponents.benefits },
+    { value: "factors", title: content.tabs.factors, icon: CheckCircle, component: topicComponents.factors },
+    { value: "challenges", title: content.tabs.challenges, icon: AlertTriangle, component: topicComponents.challenges },
+    { value: "future", title: content.tabs.future, icon: TrendingUp, component: topicComponents.future },
+  ];
+
+  const selectedTopic = topics.find(t => t.value === activeTopic);
+  const ActiveComponent = selectedTopic ? selectedTopic.component : null;
+
+  return (
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+      <DialogContent className="max-w-4xl lg:max-w-6xl w-[95vw] h-full max-h-[90vh] flex flex-col p-0 sm:p-6">
+        <DialogHeader className="p-4 sm:p-0 shrink-0">
+          <DialogTitle className="text-2xl md:text-3xl font-bold text-center text-gray-800 font-headline">
+            {content.title}
+          </DialogTitle>
+          <DialogDescription className="text-center text-lg text-gray-500">
+            {selectedTopic ? selectedTopic.title : content.description}
+          </DialogDescription>
+        </DialogHeader>
+        
+        {selectedTopic && ActiveComponent ? (
+          <div className="flex-1 flex flex-col min-h-0">
+            <div className="px-4 sm:px-0">
+              <Button variant="ghost" onClick={() => setActiveTopic(null)}>
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  Back to Topics
+              </Button>
+            </div>
+            <ScrollArea className="flex-1 mt-4 sm:pr-4">
+              <div className="p-4 pt-0 sm:p-0">
+                <ActiveComponent content={content} />
+              </div>
+            </ScrollArea>
+          </div>
+        ) : (
+          <ScrollArea className="flex-1 mt-4 sm:pr-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4 sm:p-0">
+              {topics.map(topic => (
+                <button
+                  key={topic.value}
+                  onClick={() => setActiveTopic(topic.value)}
+                  className="flex items-center p-4 bg-card hover:bg-primary/10 rounded-lg shadow-sm border text-left transition-all duration-200"
+                >
+                  <topic.icon className="w-8 h-8 text-primary mr-4 shrink-0" />
+                  <div>
+                    <span className="font-semibold font-headline text-card-foreground">{topic.title}</span>
+                  </div>
+                </button>
+              ))}
             </div>
           </ScrollArea>
-        </Tabs>
+        )}
       </DialogContent>
     </Dialog>
   );
 }
-
-    
