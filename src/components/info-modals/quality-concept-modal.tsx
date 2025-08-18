@@ -14,7 +14,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableCap
 import { useLanguage } from "@/context/language-context";
 import { qualityContent } from "@/lib/content/quality-content";
 import { Button } from "../ui/button";
-import { ArrowLeft, Book, Award, ShieldCheck, CheckSquare, Settings, Users, TestTube, ClipboardCheck, Droplet, PackageCheck, Lock, DollarSign, Microscope, Recycle, Bug, FileSpreadsheet, Search, Wind } from "lucide-react";
+import { ArrowLeft, Book, Award, ShieldCheck, CheckSquare, Settings, Users, TestTube, ClipboardCheck, Droplet, PackageCheck, Lock, DollarSign, Microscope, Recycle, Bug, FileSpreadsheet, Search, Wind, Factory } from "lucide-react";
 
 
 const Section = ({ title, id, children }: { title: string, id: string, children: React.ReactNode }) => (
