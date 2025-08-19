@@ -2,7 +2,7 @@
 'use client';
 
 import { createContext, useState, useContext, ReactNode, useEffect, useCallback } from 'react';
-import { onAuthStateChanged, signOut, getRedirectResult, type User } from 'firebase/auth';
+import { onAuthStateChanged, signOut, type User } from 'firebase/auth';
 import { auth, db } from '@/lib/firebase';
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { registerSession, unregisterSession } from '@/app/actions';
@@ -28,7 +28,6 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Helper to get or create a unique device ID
 const getDeviceId = () => {
   if (typeof window === 'undefined') {
     return `ssr-device-${Math.random()}`;
@@ -54,7 +53,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (docSnap.exists()) {
       return docSnap.data() as UserProfile;
     } else {
-      // Create a new profile in Firestore if it doesn't exist
       const newProfile: UserProfile = {
         uid: firebaseUser.uid,
         email: firebaseUser.email,
@@ -68,29 +66,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return newProfile;
     }
   }, []);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      if (firebaseUser) {
+  
+  const handleUserSession = useCallback(async (firebaseUser: User | null) => {
+    if (firebaseUser) {
         const deviceId = getDeviceId();
         const sessionResult = await registerSession(firebaseUser.uid, deviceId);
-
+  
         if (sessionResult.success) {
-          const profile = await fetchOrCreateUserProfile(firebaseUser);
-          setUser(firebaseUser);
-          setUserProfile(profile);
+            const profile = await fetchOrCreateUserProfile(firebaseUser);
+            setUser(firebaseUser);
+            setUserProfile(profile);
         } else {
-          toast({
-            variant: 'destructive',
-            title: 'Device Limit Reached',
-            description: sessionResult.message,
-            duration: 5000,
-          });
-          await signOut(auth);
-          setUser(null);
-          setUserProfile(null);
+            toast({
+              variant: 'destructive',
+              title: 'Device Limit Reached',
+              description: sessionResult.message,
+              duration: 5000,
+            });
+            await signOut(auth); // This will re-trigger onAuthStateChanged with null
         }
-      } else {
+    } else {
         const currentUid = user?.uid;
         if (currentUid) {
           const deviceId = getDeviceId();
@@ -98,15 +93,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
         setUser(null);
         setUserProfile(null);
-      }
-      setLoading(false);
-    });
+    }
+    setLoading(false);
+  }, [fetchOrCreateUserProfile, toast, user?.uid]);
 
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, handleUserSession);
     return () => unsubscribe();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [handleUserSession]);
+
 
   const logout = async () => {
+    setLoading(true);
     if (user) {
         const deviceId = getDeviceId();
         await unregisterSession(user.uid, deviceId);
@@ -114,6 +113,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await signOut(auth);
     setUser(null);
     setUserProfile(null);
+    setLoading(false);
   };
   
   const setUserData = async (firebaseUser: User, data: Partial<Omit<UserProfile, 'uid' | 'email'>>) => {
