@@ -46,113 +46,65 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
-  const [initialAuthCheckComplete, setInitialAuthCheckComplete] = useState(false);
 
-  const fetchUserProfile = useCallback(async (firebaseUser: User) => {
+  const fetchOrCreateUserProfile = useCallback(async (firebaseUser: User): Promise<UserProfile> => {
     const userDocRef = doc(db, 'users', firebaseUser.uid);
-    try {
-      const docSnap = await getDoc(userDocRef);
-      if (docSnap.exists()) {
-        setUserProfile(docSnap.data() as UserProfile);
-      } else {
-        // Create a new profile in Firestore if it doesn't exist from a redirect or first-time login
-        const newProfile: UserProfile = {
-          uid: firebaseUser.uid,
-          email: firebaseUser.email,
-          name: firebaseUser.displayName || 'New User',
-          displayName: firebaseUser.displayName,
-          photoURL: firebaseUser.photoURL,
-          age: null,
-          gender: null,
-        };
-        await setDoc(userDocRef, newProfile, { merge: true }); // Use merge to be safe
-        setUserProfile(newProfile);
-      }
-    } catch (error) {
-      console.error("Error fetching user profile from Firestore:", error);
-      const fallbackProfile: UserProfile = {
-          uid: firebaseUser.uid,
-          email: firebaseUser.email,
-          name: firebaseUser.displayName || 'User',
-          displayName: firebaseUser.displayName,
-          photoURL: firebaseUser.photoURL,
-          age: null,
-          gender: null,
-        };
-      setUserProfile(fallbackProfile);
+    const docSnap = await getDoc(userDocRef);
+
+    if (docSnap.exists()) {
+      return docSnap.data() as UserProfile;
+    } else {
+      // Create a new profile in Firestore if it doesn't exist
+      const newProfile: UserProfile = {
+        uid: firebaseUser.uid,
+        email: firebaseUser.email,
+        name: firebaseUser.displayName || 'New User',
+        displayName: firebaseUser.displayName,
+        photoURL: firebaseUser.photoURL,
+        age: null,
+        gender: null,
+      };
+      await setDoc(userDocRef, newProfile, { merge: true });
+      return newProfile;
     }
   }, []);
 
-  const handleRedirectResult = useCallback(async () => {
-    try {
-        const result = await getRedirectResult(auth);
-        if (result && result.user) {
-            // This case handles when a user signs in for the very first time via Google redirect.
-            // Their profile needs to be created here before the onAuthStateChanged listener runs.
-            const userDocRef = doc(db, 'users', result.user.uid);
-            const docSnap = await getDoc(userDocRef);
-            if (!docSnap.exists()) {
-                const newProfile: UserProfile = {
-                  uid: result.user.uid,
-                  email: result.user.email,
-                  name: result.user.displayName || 'New User',
-                  displayName: result.user.displayName,
-                  photoURL: result.user.photoURL,
-                  age: null,
-                  gender: null,
-                };
-                await setDoc(userDocRef, newProfile, { merge: true });
-            }
-        }
-    } catch (error) {
-        console.error("Error handling redirect result:", error);
-    } finally {
-        setInitialAuthCheckComplete(true);
-    }
-  }, []);
-
-
   useEffect(() => {
-    handleRedirectResult();
-  }, [handleRedirectResult]);
-
-  useEffect(() => {
-    if (!initialAuthCheckComplete) return;
-
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      setLoading(true);
       if (firebaseUser) {
         const deviceId = getDeviceId();
         const sessionResult = await registerSession(firebaseUser.uid, deviceId);
 
         if (sessionResult.success) {
-            setUser(firebaseUser);
-            await fetchUserProfile(firebaseUser);
+          const profile = await fetchOrCreateUserProfile(firebaseUser);
+          setUser(firebaseUser);
+          setUserProfile(profile);
         } else {
-            toast({
-                variant: 'destructive',
-                title: 'Device Limit Reached',
-                description: sessionResult.message,
-                duration: 5000,
-            });
-            await signOut(auth);
-            setUser(null);
-            setUserProfile(null);
+          toast({
+            variant: 'destructive',
+            title: 'Device Limit Reached',
+            description: sessionResult.message,
+            duration: 5000,
+          });
+          await signOut(auth);
+          setUser(null);
+          setUserProfile(null);
         }
       } else {
-         const currentUid = user?.uid;
-         if (currentUid) {
-            const deviceId = getDeviceId();
-            await unregisterSession(currentUid, deviceId);
-         }
-         setUser(null);
-         setUserProfile(null);
+        const currentUid = user?.uid;
+        if (currentUid) {
+          const deviceId = getDeviceId();
+          await unregisterSession(currentUid, deviceId);
+        }
+        setUser(null);
+        setUserProfile(null);
       }
       setLoading(false);
     });
 
     return () => unsubscribe();
-  }, [initialAuthCheckComplete, fetchUserProfile, toast, user?.uid]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const logout = async () => {
     if (user) {
