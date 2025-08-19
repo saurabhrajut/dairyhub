@@ -11,8 +11,6 @@ import { askExpert as askExpertFlow } from "@/ai/flows/expert-support-flow";
 import { gyanAI as gyanAIFlow } from "@/ai/flows/gyan-ai-flow";
 import { refineQuestion as refineQuestionFlow } from "@/ai/flows/refine-question-flow";
 import { textToSpeech as textToSpeechFlow } from "@/ai/flows/text-to-speech-flow";
-import { db } from '@/lib/firebase';
-import { collection, getDocs, query, where, limit, orderBy, deleteDoc, doc, addDoc } from 'firebase/firestore';
 
 import type { 
     SuggestDairyRecipesInput,
@@ -85,38 +83,4 @@ export async function summarizeTopic(input: GyanAIInput) {
 
 export async function textToSpeech(input: TextToSpeechInput) {
     return await textToSpeechFlow(input);
-}
-
-export async function registerSession(uid: string, deviceId: string) {
-    const sessionsRef = collection(db, `users/${uid}/sessions`);
-    const q = query(sessionsRef, where("deviceId", "==", deviceId));
-    const existingSession = await getDocs(q);
-
-    if (!existingSession.empty) {
-        // Session already exists, do nothing
-        return { success: true, message: 'Session already registered.' };
-    }
-
-    const allSessionsQuery = query(sessionsRef, orderBy('timestamp', 'desc'));
-    const allSessionsSnapshot = await getDocs(allSessionsQuery);
-
-    if (allSessionsSnapshot.size >= 2) {
-        // Limit reached, notify user
-        return { success: false, message: 'You have reached the maximum device limit (2). Please log out from another device to continue.' };
-    }
-    
-    // Add new session
-    await addDoc(sessionsRef, { deviceId, timestamp: new Date() });
-    return { success: true, message: 'Session registered successfully.' };
-}
-
-export async function unregisterSession(uid: string, deviceId: string) {
-    if (!uid || !deviceId) return;
-    const sessionsRef = collection(db, `users/${uid}/sessions`);
-    const q = query(sessionsRef, where("deviceId", "==", deviceId));
-    const sessionSnapshot = await getDocs(q);
-    
-    sessionSnapshot.forEach(async (document) => {
-        await deleteDoc(doc(db, `users/${uid}/sessions`, document.id));
-    });
 }
