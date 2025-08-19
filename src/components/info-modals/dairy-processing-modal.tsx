@@ -243,7 +243,7 @@ function ThermalPrinciplesContent() {
             <p>Regardless of the heat treatment method used—HTST, UHT, or Vacreation—the process is always followed by immediate and rapid cooling. For pasteurized products, the milk is cooled to below 4-5°C for refrigerated storage. This critical step inhibits the growth of any thermoduric (heat-resistant) spoilage bacteria that may have survived the pasteurization process, thereby maximizing the product's shelf life and maintaining its quality. For UHT products, the milk is cooled to an ambient filling temperature before being sent to the aseptic packaging line. This cooling is typically accomplished in the final sections of the same heat exchanger used for heating, employing chilled water or a glycol solution as the cooling medium.</p>
              <div className="overflow-x-auto">
                 <Table>
-                    <caption>Table 3: Comparison of Major Heat Treatment Methods in Dairy Processing</caption>
+                    <caption className="mt-4 text-sm text-center text-muted-foreground">Table 1: Comparison of Major Heat Treatment Methods in Dairy Processing</caption>
                     <TableHeader>
                         <TableRow>
                             <TableHead>Method</TableHead>
