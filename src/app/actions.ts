@@ -7,6 +7,10 @@ import { sarathiChatbot, type SarathiChatbotInput } from "@/ai/flows/sarathi-cha
 import { generateAdulterantDetectionInstructions, type GenerateAdulterantDetectionInstructionsInput } from "@/ai/flows/generate-adulterant-detection-instructions";
 import { getLatestDairyIndustryData } from "@/ai/flows/get-latest-dairy-industry-data";
 import Razorpay from "razorpay";
+import { askExpert as askExpertFlow, AskExpertInput } from "@/ai/flows/expert-support-flow";
+import { gyanAI as gyanAIFlow, GyanAIInput } from "@/ai/flows/gyan-ai-flow";
+import { refineQuestion as refineQuestionFlow, RefineQuestionInput } from "@/ai/flows/refine-question-flow";
+import { textToSpeech as textToSpeechFlow, TextToSpeechInput } from "@/ai/flows/text-to-speech-flow";
 
 export async function getDailyTip() {
     return await generateDairyTip();
@@ -47,4 +51,26 @@ export async function createRazorpayOrder(amount: number, currency: string) {
     console.error("Razorpay order creation failed:", error);
     throw new Error("Failed to create payment order.");
   }
+}
+
+export async function askExpert(input: AskExpertInput) {
+    return await askExpertFlow(input);
+}
+
+export async function gyanAI(input: GyanAIInput) {
+    return await gyanAIFlow(input);
+}
+
+export async function refineQuestion(input: RefineQuestionInput) {
+    return await refineQuestionFlow(input);
+}
+
+export async function summarizeTopic(input: GyanAIInput) {
+    // This can reuse the GyanAI flow with a specific prompt modification
+    const summaryPrompt = `Provide a concise summary of the topic "${input.topic}" for a beginner. The summary should be in ${input.language}.`;
+    return await gyanAIFlow({ ...input, question: summaryPrompt });
+}
+
+export async function textToSpeech(input: TextToSpeechInput) {
+    return await textToSpeechFlow(input);
 }

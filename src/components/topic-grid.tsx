@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -26,6 +25,7 @@ import {
   FileSpreadsheet,
   Search,
   Wind,
+  GraduationCap,
 } from "lucide-react";
 import { PaneerIcon, IceCreamIcon, ReagentIcon } from "@/components/icons";
 import { Input } from "@/components/ui/input";
@@ -58,6 +58,7 @@ import { AuditsModal } from "./info-modals/audits-modal";
 import { ValidationVerificationModal } from "./info-modals/validation-verification-modal";
 import { EtpModal } from "./info-modals/etp-modal";
 import { IceCreamProductionModal } from "./info-modals/ice-cream-production-modal";
+import { ExpertSupportModal } from "./info-modals/expert-support-modal";
 
 const topics = [
   // Tier 1: Foundational Knowledge
@@ -100,7 +101,8 @@ const topics = [
   { id: 'audits', title: 'Audits', description: 'Internal & External Audits', category: 'industry', icon: ClipboardCheck, badge: 'New', modal: AuditsModal, isPro: true, color: 'from-rose-100 to-red-200' },
   { id: 'validation-verification', title: 'Validation & Verification', description: 'Food Safety Assurance', category: 'industry', icon: ClipboardCheck, badge: 'New', modal: ValidationVerificationModal, isPro: true, color: 'from-violet-100 to-fuchsia-200' },
   
-  // Tier 8: About
+  // Tier 8: Expert Support & About
+  { id: 'expert-support', title: 'Expert Support', description: 'Ask AI & Real Experts', category: 'industry', icon: GraduationCap, badge: 'Pro', modal: ExpertSupportModal, isPro: true, color: 'from-amber-100 to-orange-200' },
   { id: 'about-us', title: 'About Us', description: 'Our Mission & Vision', category: 'industry', icon: Users, modal: AboutUsModal, isPro: false, color: 'from-slate-100 to-stone-200' },
 ];
 
@@ -137,8 +139,6 @@ export function TopicGrid() {
       if(topic && topic.modal) {
         setActiveModal(id);
       } else {
-        // Fallback for topics without modals yet, though we are adding one now.
-        // You might want to show a "Coming Soon" toast here in the future.
         setIsSubscriptionModalOpen(true); 
       }
   };
@@ -200,5 +200,3 @@ export function TopicGrid() {
     </>
   );
 }
-
-    

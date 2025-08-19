@@ -6,3 +6,7 @@ import '@/ai/flows/generate-dairy-tip.ts';
 import '@/ai/flows/sarathi-chatbot.ts';
 import '@/ai/flows/suggest-dairy-recipes.ts';
 import '@/ai/flows/get-latest-dairy-industry-data.ts';
+import '@/ai/flows/expert-support-flow.ts';
+import '@/ai/flows/gyan-ai-flow.ts';
+import '@/ai/flows/refine-question-flow.ts';
+import '@/ai/flows/text-to-speech-flow.ts';
