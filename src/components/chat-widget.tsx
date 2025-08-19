@@ -17,16 +17,10 @@ export interface ChatUserProfile {
 
 export function ChatWidget({ user: chatUser }: { user: ChatUserProfile }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState(false);
-  const { isPro } = useSubscription();
   const { user } = useAuth();
 
   const handleWidgetClick = () => {
-    if (isPro) {
-      setIsOpen(!isOpen);
-    } else {
-      setIsSubscriptionModalOpen(true);
-    }
+    setIsOpen(!isOpen);
   };
   
   if (!user) {
@@ -42,15 +36,9 @@ export function ChatWidget({ user: chatUser }: { user: ChatUserProfile }) {
           aria-label={isOpen ? "Close chat" : "Open chat"}
         >
           {isOpen ? <X className="h-8 w-8" /> : <MessageCircle className="h-8 w-8" />}
-          {!isPro && (
-            <div className="absolute -top-1 -right-1 bg-amber-400 text-white p-1 rounded-full">
-              <Crown className="w-4 h-4" />
-            </div>
-          )}
         </Button>
       </div>
-      {isPro && <ChatPanel isOpen={isOpen} setIsOpen={setIsOpen} user={chatUser} />}
-      <SubscriptionModal isOpen={isSubscriptionModalOpen} setIsOpen={setIsSubscriptionModalOpen} />
+      <ChatPanel isOpen={isOpen} setIsOpen={setIsOpen} user={chatUser} />
     </>
   );
 }
