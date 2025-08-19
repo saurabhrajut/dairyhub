@@ -133,28 +133,6 @@ function ReceptionContent() {
             <h5 className="font-semibold mt-4">Comparative Effectiveness and Limitations</h5>
             <p>It is crucial to understand the distinct roles and limitations of these two processes. Filtration is a coarse, protective measure, while clarification is a fine, polishing measure. However, a significant limitation of both is their inability to effectively remove the majority of live bacteria. Most bacteria are small enough (0.1 to 5 micrometers) to pass through standard filters, and their density is very similar to that of milk, which prevents their efficient separation by centrifugal force. This is why subsequent heat treatment, such as pasteurization, remains an indispensable step for ensuring microbiological safety.</p>
             <p>Interestingly, clarification can sometimes lead to an apparent increase in the bacterial count when measured by the standard plate count (SPC) method. This is not due to contamination within the clarifier. Instead, the intense agitation and centrifugal forces can break up clumps or chains of bacteria that are naturally present in the milk. While this does not increase the total number of bacterial cells, it results in more individual colony-forming units (CFUs) on a culture plate, leading to a higher measured count.</p>
-            
-            <div className="overflow-x-auto">
-                <Table>
-                    <caption>Table 1: Comparative Analysis of Filtration and Clarification</caption>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Parameter</TableHead>
-                            <TableHead>Filtration</TableHead>
-                            <TableHead>Clarification</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        <TableRow><TableCell>Operating Principle</TableCell><TableCell>Mechanical Sieving / Straining</TableCell><TableCell>Centrifugal Sedimentation</TableCell></TableRow>
-                        <TableRow><TableCell>Primary Objective</TableCell><TableCell>Protection of downstream equipment; removal of coarse debris</TableCell><TableCell>Improvement of hygienic and aesthetic quality; removal of fine sediment</TableCell></TableRow>
-                        <TableRow><TableCell>Target Impurities</TableCell><TableCell>Coarse physical debris (e.g., straw, hair, insects, large dirt particles)</TableCell><TableCell>Fine sediment (e.g., dust, spores), somatic cells, protein aggregates, some bacteria</TableCell></TableRow>
-                        <TableRow><TableCell>Particle Size Range</TableCell><TableCell>&gt;10–50 micrometers (µm)</TableCell><TableCell>0.1–10 micrometers (µm)</TableCell></TableRow>
-                        <TableRow><TableCell>Equipment</TableCell><TableCell>In-line strainers, sock filters, bag filters</TableCell><TableCell>Centrifugal clarifier</TableCell></TableRow>
-                        <TableRow><TableCell>Effect on Bacterial Count</TableCell><TableCell>No significant change</TableCell><TableCell>May cause an apparent increase in plate count due to de-agglomeration of bacterial clumps</TableCell></TableRow>
-                        <TableRow><TableCell>Process Temperature</TableCell><TableCell>Typically performed warm (before chilling) to leverage lower milk viscosity</TableCell><TableCell>Can be performed warm or cold; warm clarification (50-55°C) is more efficient</TableCell></TableRow>
-                    </TableBody>
-                </Table>
-            </div>
         </Section>
     );
 }
@@ -224,23 +202,15 @@ function ThermalPrinciplesContent() {
             <h5 className="font-semibold mt-4">Thermal Death Time (F-value or Lethality)</h5>
             <p>The F-value, or lethality, is the ultimate measure of a thermal process's total killing effect. It represents the equivalent time at a specific reference temperature that would be required to achieve the same level of microbial destruction as the actual, often fluctuating, time-temperature profile of the process. The standard reference temperature for sterilization processes is 121.1°C (250°F), and the lethality at this temperature is denoted as F₀. The F-value integrates the lethal effects over the entire heating and cooling cycle, providing a single value to validate the process's adequacy.</p>
 
-            <div className="overflow-x-auto">
-                <Table>
-                    <caption>Table 2: Kinetic Parameters for Thermal Processing</caption>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Parameter</TableHead>
-                            <TableHead>Definition</TableHead>
-                            <TableHead>Significance in Process Design</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        <TableRow><TableCell>D-value (Decimal Reduction Time)</TableCell><TableCell>Time required at a constant temperature to achieve a 1-log (90%) reduction in a microbial population.</TableCell><TableCell>Determines the holding time needed at a given temperature. A higher D-value means the organism is more heat-resistant.</TableCell></TableRow>
-                        <TableRow><TableCell>Z-value (Thermal Resistance Constant)</TableCell><TableCell>The temperature change required to cause a 10-fold (1-log) change in the D-value.</TableCell><TableCell>Determines the sensitivity of an organism to temperature changes. A smaller Z-value means a small increase in temperature has a large killing effect.</TableCell></TableRow>
-                        <TableRow><TableCell>F-value (Thermal Death Time / Lethality)</TableCell><TableCell>The equivalent time at a reference temperature (typically 121.1°C) required to deliver a specific lethal effect.</TableCell><TableCell>The ultimate measure of a sterilization process's effectiveness. It integrates the entire time-temperature profile to ensure the target log reduction is achieved.</TableCell></TableRow>
-                    </TableBody>
-                </Table>
-            </div>
+            <h4 className="font-bold text-gray-800 text-base">Heat Exchanger Technology: The Engine of Thermal Processing</h4>
+            <p>The plate heat exchanger (PHE) is the unsung hero of modern dairy processing. It is not merely a piece of heating equipment but a multifunctional system that integrates energy management, precise thermal control, and process safety into a single, compact unit. Its development was a prerequisite for the widespread adoption and economic viability of HTST processing.</p>
+            <h5 className="font-semibold mt-4">Plate Heat Exchangers (PHEs)</h5>
+            <p>PHEs are the preferred technology for pasteurization due to their high thermal efficiency and hygienic design.</p>
+            <ul>
+                <li><strong>Design and Function:</strong> A PHE consists of a pack of thin, corrugated stainless steel plates clamped together in a frame. Rubber gaskets are fitted to each plate to create a seal and direct the flow of fluids into alternating channels. The product (milk) flows in one set of channels, while the heating or cooling medium (e.g., hot water or chilled water) flows in the adjacent channels, typically in a counter-current direction. The corrugations on the plates induce turbulence, which, combined with the large surface area, results in very rapid and efficient heat transfer.</li>
+                <li><strong>Regeneration:</strong> The most ingenious feature of a dairy PHE is the regeneration or heat recovery section. In this section, the hot, pasteurized milk leaving the holding tube is used to pre-heat the cold, incoming raw milk. This process can recover 85-90% of the thermal energy, drastically reducing the amount of steam and chilled water needed and thereby lowering operational costs significantly.</li>
+                <li><strong>Hygienic Design and Safety:</strong> A fundamental safety principle is built into the design of the regenerator section. The system must be engineered to maintain the pressure on the pasteurized milk side at least 14 kPa (2 psi) higher than the pressure on the raw milk side. This pressure differential ensures that in the event of a microscopic leak in a plate or gasket, the pasteurized product will leak into the raw stream, not the other way around. This prevents the catastrophic re-contamination of safe, pasteurized milk with raw, potentially pathogenic milk.</li>
+            </ul>
 
             <h4 className="font-bold text-gray-800 text-base mt-6">Pasteurization: Ensuring Public Health</h4>
             <p>Pasteurization is a relatively mild heat treatment with the primary objective of destroying all common pathogenic microorganisms that may be present in raw milk, thereby making it safe for human consumption. The target organism for milk pasteurization is Coxiella burnetii, the most heat-resistant non-spore-forming pathogen known to be associated with milk. The process also significantly reduces the number of spoilage organisms, which extends the product's refrigerated shelf life.</p>
@@ -250,16 +220,6 @@ function ThermalPrinciplesContent() {
                 <li><strong>Process Parameters:</strong> The legally mandated minimum process for standard milk is heating to 72°C (161°F) and holding for 15 seconds, followed by immediate and rapid cooling to 4°C (39°F) or below. For products with higher fat (≥10%) or sugar content, such as cream or chocolate milk, a more intense heat treatment is required to achieve the same lethal effect, due to the protective effect these components have on microorganisms.</li>
                 <li><strong>System Components:</strong> A typical HTST pasteurizer is a skid-mounted modular unit comprising several key components. A constant level tank provides a continuous supply of raw milk to the system. A timing pump controls the flow rate through the system. The heart of the unit is the plate heat exchanger (PHE), which handles heating, cooling, and heat regeneration. A holding tube of a specific length and diameter is installed after the heating section to ensure the milk is held at the pasteurization temperature for the required duration. Finally, a flow diversion device (FDD) acts as a critical safety valve. If the temperature sensor at the end of the holding tube detects that the milk is even slightly below the minimum required temperature, the FDD automatically diverts the flow of under-processed milk back to the constant level tank for reprocessing, ensuring that no unsafe product can proceed to packaging.</li>
                 <li><strong>Validation:</strong> Proper pasteurization is verified using the phosphatase test. Phosphatase is an enzyme naturally present in raw milk that is destroyed by the standard time-temperature combinations of pasteurization. A negative test result (no detectable enzyme activity) confirms that the milk was heated correctly.</li>
-            </ul>
-
-            <h4 className="font-bold text-gray-800 text-base mt-6">Heat Exchanger Technology: The Engine of Thermal Processing</h4>
-            <p>The plate heat exchanger (PHE) is the unsung hero of modern dairy processing. It is not merely a piece of heating equipment but a multifunctional system that integrates energy management, precise thermal control, and process safety into a single, compact unit. Its development was a prerequisite for the widespread adoption and economic viability of HTST processing.</p>
-            <h5 className="font-semibold mt-4">Plate Heat Exchangers (PHEs)</h5>
-            <p>PHEs are the preferred technology for pasteurization due to their high thermal efficiency and hygienic design.</p>
-            <ul>
-                <li><strong>Design and Function:</strong> A PHE consists of a pack of thin, corrugated stainless steel plates clamped together in a frame. Rubber gaskets are fitted to each plate to create a seal and direct the flow of fluids into alternating channels. The product (milk) flows in one set of channels, while the heating or cooling medium (e.g., hot water or chilled water) flows in the adjacent channels, typically in a counter-current direction. The corrugations on the plates induce turbulence, which, combined with the large surface area, results in very rapid and efficient heat transfer.</li>
-                <li><strong>Regeneration:</strong> The most ingenious feature of a dairy PHE is the regeneration or heat recovery section. In this section, the hot, pasteurized milk leaving the holding tube is used to pre-heat the cold, incoming raw milk. This process can recover 85-90% of the thermal energy, drastically reducing the amount of steam and chilled water needed and thereby lowering operational costs significantly.</li>
-                <li><strong>Hygienic Design and Safety:</strong> A fundamental safety principle is built into the design of the regenerator section. The system must be engineered to maintain the pressure on the pasteurized milk side at least 14 kPa (2 psi) higher than the pressure on the raw milk side. This pressure differential ensures that in the event of a microscopic leak in a plate or gasket, the pasteurized product will leak into the raw stream, not the other way around. This prevents the catastrophic re-contamination of safe, pasteurized milk with raw, potentially pathogenic milk.</li>
             </ul>
 
             <h4 className="font-bold text-gray-800 text-base mt-6">Vacreation: Combined Pasteurization and Deodorization</h4>
@@ -397,7 +357,7 @@ const processingTopics = [
     { value: "intro", title: "Workflow & Digitalization", icon: BookOpen, component: <WorkflowContent /> },
     { value: "reception", title: "Reception & Purification", icon: Truck, component: <ReceptionContent /> },
     { value: "centrifugal", title: "Centrifugal & Physical Control", icon: RotateCw, component: <CentrifugalContent /> },
-    { value: "thermal", title: "Thermal Processing Principles", icon: Thermometer, component: <ThermalPrinciplesContent /> },
+    { value: "thermal", title: "Thermal Processing", icon: Thermometer, component: <ThermalPrinciplesContent /> },
     { value: "packaging", title: "Downstream & Packaging", icon: ShieldCheck, component: <PackagingContent /> },
 ];
 
@@ -467,5 +427,3 @@ export function DairyProcessingModal({
     </Dialog>
   );
 }
-
-    
