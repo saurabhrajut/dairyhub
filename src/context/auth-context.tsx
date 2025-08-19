@@ -4,8 +4,7 @@
 import { createContext, useState, useContext, ReactNode, useEffect, useCallback } from 'react';
 import { onAuthStateChanged, signOut, type User } from 'firebase/auth';
 import { auth, db } from '@/lib/firebase';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { registerSession, unregisterSession } from '@/app/actions';
+import { doc, getDoc, setDoc, collection, query, where, getDocs, addDoc, orderBy, deleteDoc } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
 
 export interface UserProfile {
@@ -40,71 +39,112 @@ const getDeviceId = () => {
   return deviceId;
 };
 
+// Moved session management to a separate function for clarity
+async function manageUserSession(uid: string, deviceId: string): Promise<{ success: boolean; message: string }> {
+  const sessionsRef = collection(db, `users/${uid}/sessions`);
+  const q = query(sessionsRef, where("deviceId", "==", deviceId));
+  const existingSession = await getDocs(q);
+
+  if (!existingSession.empty) {
+    return { success: true, message: 'Session already registered.' };
+  }
+
+  const allSessionsQuery = query(sessionsRef, orderBy('timestamp', 'desc'));
+  const allSessionsSnapshot = await getDocs(allSessionsQuery);
+
+  if (allSessionsSnapshot.size >= 2) {
+    return { success: false, message: 'You have reached the maximum device limit (2). Please log out from another device to continue.' };
+  }
+  
+  await addDoc(sessionsRef, { deviceId, timestamp: new Date() });
+  return { success: true, message: 'Session registered successfully.' };
+}
+
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
-  const handleUserSession = useCallback(async (firebaseUser: User | null) => {
-    if (firebaseUser) {
-        const deviceId = getDeviceId();
-        const sessionResult = await registerSession(firebaseUser.uid, deviceId);
-
-        if (sessionResult.success) {
-            const userDocRef = doc(db, 'users', firebaseUser.uid);
-            // Create or update user profile
-            await setDoc(userDocRef, {
-                uid: firebaseUser.uid,
-                email: firebaseUser.email,
-                name: firebaseUser.displayName || 'New User',
-                displayName: firebaseUser.displayName,
-                photoURL: firebaseUser.photoURL,
-            }, { merge: true });
-
-            const docSnap = await getDoc(userDocRef);
-            if (docSnap.exists()) {
-                setUser(firebaseUser);
-                setUserProfile(docSnap.data() as UserProfile);
-            }
-        } else {
-            toast({
-              variant: 'destructive',
-              title: 'Device Limit Reached',
-              description: sessionResult.message,
-              duration: 5000,
-            });
-            await signOut(auth); // This will re-trigger onAuthStateChanged with null
-        }
-    } else {
-        const currentUid = user?.uid;
-        if (currentUid) {
-          const deviceId = getDeviceId();
-          await unregisterSession(currentUid, deviceId);
-        }
-        setUser(null);
-        setUserProfile(null);
+  const fetchAndSetUserProfile = useCallback(async (firebaseUser: User) => {
+    const userDocRef = doc(db, 'users', firebaseUser.uid);
+    try {
+      const docSnap = await getDoc(userDocRef);
+      if (docSnap.exists()) {
+        setUserProfile(docSnap.data() as UserProfile);
+      } else {
+        // Profile doesn't exist, create it
+        const newProfile: UserProfile = {
+          uid: firebaseUser.uid,
+          email: firebaseUser.email,
+          displayName: firebaseUser.displayName,
+          photoURL: firebaseUser.photoURL,
+          name: firebaseUser.displayName || 'New User',
+          age: null,
+          gender: null,
+        };
+        await setDoc(userDocRef, newProfile);
+        setUserProfile(newProfile);
+      }
+    } catch (error) {
+      console.error("Error fetching or creating user profile:", error);
+      toast({
+        variant: "destructive",
+        title: "Profile Error",
+        description: "Could not load your profile. Please try again."
+      });
+      // Logout if profile can't be fetched/created to avoid inconsistent state
+      await signOut(auth);
     }
-    setLoading(false);
-  }, [toast, user?.uid]);
-
+  }, [toast]);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, handleUserSession);
-    return () => unsubscribe();
-  }, [handleUserSession]);
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      setLoading(true);
+      if (firebaseUser) {
+        // First, manage the session
+        const deviceId = getDeviceId();
+        const sessionResult = await manageUserSession(firebaseUser.uid, deviceId);
+        
+        if (sessionResult.success) {
+          // If session is valid, fetch profile and set user
+          await fetchAndSetUserProfile(firebaseUser);
+          setUser(firebaseUser);
+        } else {
+          // If device limit is reached, show toast and sign out
+          toast({
+            variant: 'destructive',
+            title: 'Device Limit Reached',
+            description: sessionResult.message,
+            duration: 5000,
+          });
+          await signOut(auth);
+          setUser(null);
+          setUserProfile(null);
+        }
+      } else {
+        // User is logged out
+        setUser(null);
+        setUserProfile(null);
+      }
+      setLoading(false);
+    });
 
+    return () => unsubscribe();
+  }, [toast, fetchAndSetUserProfile]);
 
   const logout = async () => {
-    setLoading(true);
     if (user) {
         const deviceId = getDeviceId();
-        await unregisterSession(user.uid, deviceId);
+        const sessionsRef = collection(db, `users/${user.uid}/sessions`);
+        const q = query(sessionsRef, where("deviceId", "==", deviceId));
+        const sessionSnapshot = await getDocs(q);
+        sessionSnapshot.forEach(async (document) => {
+            await deleteDoc(doc(db, `users/${user.uid}/sessions`, document.id));
+        });
     }
     await signOut(auth);
-    setUser(null);
-    setUserProfile(null);
-    setLoading(false);
   };
   
   const setUserData = async (firebaseUser: User, data: Partial<Omit<UserProfile, 'uid' | 'email'>>) => {
@@ -112,6 +152,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const userDocRef = doc(db, 'users', firebaseUser.uid);
     try {
         await setDoc(userDocRef, data, { merge: true });
+        // Update local state immediately for better UX
         setUserProfile(prev => prev ? { ...prev, ...data } : null);
     } catch(error) {
         console.error("Firestore write error in setUserData:", error);
@@ -123,7 +164,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider value={value}>
-      {children}
+      {!loading && children}
     </AuthContext.Provider>
   );
 }
