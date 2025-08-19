@@ -1,23 +1,17 @@
 rules_version = '2';
-
 service cloud.firestore {
   match /databases/{database}/documents {
-    
-    // Users can only read and update their own profile.
-    // A new user can create their own profile document.
+    // Users collection
     match /users/{userId} {
-      allow read, update: if request.auth != null && request.auth.uid == userId;
-      allow create: if request.auth != null;
+      // A user can create their own profile document, typically on sign-up
+      allow create: if request.auth != null && request.auth.uid == userId;
 
-      // Users can manage their own session documents.
-      match /sessions/{sessionId} {
-        allow read, write: if request.auth != null && request.auth.uid == userId;
-      }
-      
-      // Users can read their own subscription document.
-      // The 'subscribe' server action handles the write operation securely.
-      match /subscription/{docId} {
-        allow read, write: if request.auth != null && request.auth.uid == userId;
+      // A user can read or update their own profile document
+      allow read, update: if request.auth != null && request.auth.uid == userId;
+			
+			// A user can manage documents in their own subcollections
+			match /{subcollection}/{docId} {
+          allow read, write: if request.auth != null && request.auth.uid == userId;
       }
     }
   }
