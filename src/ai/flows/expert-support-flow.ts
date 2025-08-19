@@ -5,21 +5,8 @@
  */
 
 import { ai } from '@/ai/genkit';
-import { z } from 'genkit';
+import { AskExpertInputSchema, AskExpertOutputSchema, type AskExpertInput } from './types';
 
-export const AskExpertInputSchema = z.object({
-  expertName: z.string().describe("The name of the expert persona to adopt."),
-  experience: z.number().describe("The years of experience of the expert."),
-  specialization: z.string().describe("The specialization of the expert."),
-  question: z.string().describe("The user's question."),
-  language: z.string().describe("The language for the response (e.g., English, Hinglish)."),
-});
-export type AskExpertInput = z.infer<typeof AskExpertInputSchema>;
-
-export const AskExpertOutputSchema = z.object({
-  answer: z.string().describe("The AI-generated expert response."),
-});
-export type AskExpertOutput = z.infer<typeof AskExpertOutputSchema>;
 
 const expertSupportPrompt = ai.definePrompt({
     name: 'expertSupportPrompt',

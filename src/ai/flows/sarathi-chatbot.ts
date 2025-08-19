@@ -3,41 +3,11 @@
 
 /**
  * @fileOverview AI chatbot flow for dairy farming questions and resume-based interview preparation.
- *
- * - sarathiChatbot - A function that handles user questions about dairy farming and provides helpful, funny, and relatable responses in the user's local language. It can also analyze resume text to generate interview questions and answers.
- * - SarathiChatbotInput - The input type for the sarathiChatbot function.
- * - SarathiChatbotOutput - The return type for the sarathiChatbot function.
  */
 
 import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import { SarathiChatbotInputSchema, SarathiChatbotOutputSchema, type SarathiChatbotInput } from './types';
 
-const SarathiChatbotInputSchema = z.object({
-  name: z.string().describe("The user's name."),
-  age: z.number().describe("The user's age."),
-  gender: z.enum(['male', 'female', 'other']).describe("The user's gender."),
-  language: z
-    .string()    
-    .describe('The language in which the user is asking the question (e.g., hi-IN, pa-IN).'),
-  question: z.string().describe('The user question about dairy farming.'),
-  resumeText: z.string().optional().describe('Optional. The full text of a user\'s resume or CV, pasted by the user for analysis.'),
-  history: z.array(z.object({
-    role: z.enum(['user', 'model']),
-    content: z.array(z.object({
-      text: z.string()
-    }))
-  })).optional().describe('The previous conversation history to maintain context.'),
-});
-export type SarathiChatbotInput = z.infer<typeof SarathiChatbotInputSchema>;
-
-const SarathiChatbotOutputSchema = z.object({
-  answer: z.string().describe('The AI chatbot response to the user question.'),
-});
-export type SarathiChatbotOutput = z.infer<typeof SarathiChatbotOutputSchema>;
-
-export async function sarathiChatbot(input: SarathiChatbotInput): Promise<SarathiChatbotOutput> {
-  return sarathiChatbotFlow(input);
-}
 
 const prompt = ai.definePrompt({
   name: 'sarathiChatbotPrompt',
@@ -101,3 +71,8 @@ const sarathiChatbotFlow = ai.defineFlow(
     return output!;
   }
 );
+
+
+export async function sarathiChatbot(input: SarathiChatbotInput) {
+  return sarathiChatbotFlow(input);
+}

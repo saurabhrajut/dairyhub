@@ -2,15 +2,25 @@
 "use server";
 
 import { generateDairyTip } from "@/ai/flows/generate-dairy-tip";
-import { suggestDairyRecipes, type SuggestDairyRecipesInput } from "@/ai/flows/suggest-dairy-recipes";
-import { sarathiChatbot, type SarathiChatbotInput } from "@/ai/flows/sarathi-chatbot";
-import { generateAdulterantDetectionInstructions, type GenerateAdulterantDetectionInstructionsInput } from "@/ai/flows/generate-adulterant-detection-instructions";
+import { suggestDairyRecipes } from "@/ai/flows/suggest-dairy-recipes";
+import { sarathiChatbot } from "@/ai/flows/sarathi-chatbot";
+import { generateAdulterantDetectionInstructions } from "@/ai/flows/generate-adulterant-detection-instructions";
 import { getLatestDairyIndustryData } from "@/ai/flows/get-latest-dairy-industry-data";
 import Razorpay from "razorpay";
-import { askExpert as askExpertFlow, AskExpertInput } from "@/ai/flows/expert-support-flow";
-import { gyanAI as gyanAIFlow, GyanAIInput } from "@/ai/flows/gyan-ai-flow";
-import { refineQuestion as refineQuestionFlow, RefineQuestionInput } from "@/ai/flows/refine-question-flow";
-import { textToSpeech as textToSpeechFlow, TextToSpeechInput } from "@/ai/flows/text-to-speech-flow";
+import { askExpert as askExpertFlow } from "@/ai/flows/expert-support-flow";
+import { gyanAI as gyanAIFlow } from "@/ai/flows/gyan-ai-flow";
+import { refineQuestion as refineQuestionFlow } from "@/ai/flows/refine-question-flow";
+import { textToSpeech as textToSpeechFlow } from "@/ai/flows/text-to-speech-flow";
+
+import type { 
+    SuggestDairyRecipesInput,
+    SarathiChatbotInput,
+    GenerateAdulterantDetectionInstructionsInput,
+    AskExpertInput,
+    GyanAIInput,
+    RefineQuestionInput,
+    TextToSpeechInput
+} from "@/ai/flows/types";
 
 export async function getDailyTip() {
     return await generateDairyTip();

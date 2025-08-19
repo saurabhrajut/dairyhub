@@ -5,17 +5,8 @@
  */
 
 import { ai } from '@/ai/genkit';
-import { z } from 'genkit';
+import { RefineQuestionInputSchema, RefineQuestionOutputSchema, type RefineQuestionInput } from './types';
 
-export const RefineQuestionInputSchema = z.object({
-  question: z.string().describe("The user's original question."),
-});
-export type RefineQuestionInput = z.infer<typeof RefineQuestionInputSchema>;
-
-export const RefineQuestionOutputSchema = z.object({
-  refinedQuestion: z.string().describe("The refined, more professional question."),
-});
-export type RefineQuestionOutput = z.infer<typeof RefineQuestionOutputSchema>;
 
 const refineQuestionPrompt = ai.definePrompt({
     name: 'refineQuestionPrompt',

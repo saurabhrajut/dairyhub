@@ -1,31 +1,13 @@
+
 'use server';
 
 /**
  * @fileOverview Provides recipe suggestions based on the final milk composition.
- *
- * - suggestDairyRecipes - A function that handles the recipe suggestion process.
- * - SuggestDairyRecipesInput - The input type for the suggestDairyRecipes function.
- * - SuggestDairyRecipesOutput - The return type for the suggestDairyRecipes function.
  */
 
 import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import { SuggestDairyRecipesInputSchema, SuggestDairyRecipesOutputSchema, type SuggestDairyRecipesInput } from './types';
 
-const SuggestDairyRecipesInputSchema = z.object({
-  milkType: z.string().describe('The type of milk used.'),
-  fatPercentage: z.number().describe('The fat percentage of the milk.'),
-  snfPercentage: z.number().describe('The solids-not-fat percentage of the milk.'),
-});
-export type SuggestDairyRecipesInput = z.infer<typeof SuggestDairyRecipesInputSchema>;
-
-const SuggestDairyRecipesOutputSchema = z.object({
-  recipeSuggestions: z.string().describe('Recipe suggestions based on the milk composition.'),
-});
-export type SuggestDairyRecipesOutput = z.infer<typeof SuggestDairyRecipesOutputSchema>;
-
-export async function suggestDairyRecipes(input: SuggestDairyRecipesInput): Promise<SuggestDairyRecipesOutput> {
-  return suggestDairyRecipesFlow(input);
-}
 
 const prompt = ai.definePrompt({
   name: 'suggestDairyRecipesPrompt',
@@ -57,3 +39,8 @@ const suggestDairyRecipesFlow = ai.defineFlow(
     return {recipeSuggestions: output!.recipeSuggestions!};
   }
 );
+
+
+export async function suggestDairyRecipes(input: SuggestDairyRecipesInput) {
+  return suggestDairyRecipesFlow(input);
+}
