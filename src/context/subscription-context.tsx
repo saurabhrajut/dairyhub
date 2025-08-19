@@ -18,6 +18,9 @@ interface SubscriptionContextType {
   checkSubscription: () => void;
 }
 
+// Add UIDs of users you want to give free lifetime pro access to.
+const ADMIN_UIDS = ['']; // Example: ['uid1', 'uid2']
+
 const SubscriptionContext = createContext<SubscriptionContextType | undefined>(undefined);
 
 export function SubscriptionProvider({ children }: { children: ReactNode }) {
@@ -36,6 +39,14 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
       setSubscription(null);
       return;
     }
+
+    // Check if the user is an admin first
+    if (ADMIN_UIDS.includes(user.uid)) {
+        const adminSub: Subscription = { plan: 'lifetime', expiryDate: null };
+        setIsPro(true);
+        setSubscription(adminSub);
+        return;
+    }
     
     const subKey = getSubKey();
     if (!subKey) {
@@ -48,6 +59,7 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
       const subDataString = localStorage.getItem(subKey);
       if (subDataString) {
         const subData = JSON.parse(subDataString) as Subscription;
+        // Check for lifetime plan OR if expiryDate is in the future
         if (subData.plan === 'lifetime' || (subData.expiryDate && subData.expiryDate > Date.now())) {
           setIsPro(true);
           setSubscription(subData);
@@ -57,6 +69,8 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
     } catch (error) {
       console.error("Failed to fetch subscription from localStorage", error);
     }
+
+    // If no valid subscription is found, set to false
     setIsPro(false);
     setSubscription(null);
   }, [user, getSubKey]);
@@ -90,8 +104,7 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
         expiryDate = new Date(now.setFullYear(now.getFullYear() + 1)).getTime();
         break;
       case 'lifetime':
-        // Set expiry for 10 years from now
-        expiryDate = new Date(now.setFullYear(now.getFullYear() + 10)).getTime();
+        expiryDate = null; // Lifetime plan
         break;
     }
 

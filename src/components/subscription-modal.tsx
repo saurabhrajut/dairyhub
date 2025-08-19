@@ -13,7 +13,8 @@ import { Crown, CheckCircle2, Zap, Loader2 } from "lucide-react";
 import { useSubscription, type SubscriptionPlan } from "@/context/subscription-context";
 import { useToast } from "@/hooks/use-toast";
 import { ScrollArea } from "./ui/scroll-area";
-
+import { useAuth } from "@/context/auth-context";
+import { createRazorpayOrder } from "@/app/actions";
 
 const proFeatures = [
     "Unlock all premium calculators & guides",
@@ -39,23 +40,65 @@ export function SubscriptionModal({
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
 }) {
+  const { user, userProfile } = useAuth();
   const { subscribe } = useSubscription();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState<SubscriptionPlan | null>(null);
 
-  const handleSubscription = (planKey: SubscriptionPlan) => {
+  const handleSubscription = async (planKey: SubscriptionPlan) => {
     setIsLoading(planKey);
     
-    // Simulate a short delay
-    setTimeout(() => {
-        subscribe(planKey);
-        setIsOpen(false);
-        toast({
-            title: "Subscribed! 🎉",
-            description: "Welcome to Pro! All features are now unlocked.",
-        });
+    if (!user || !userProfile) {
+        toast({ variant: "destructive", title: "Error", description: "You must be logged in to subscribe."});
         setIsLoading(null);
-    }, 500);
+        return;
+    }
+
+    const planDetails = plans[planKey];
+    
+    try {
+        const order = await createRazorpayOrder(planDetails.price, "INR");
+        if (!order || !order.id) {
+            throw new Error("Failed to create payment order.");
+        }
+
+        const options = {
+            key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+            amount: order.amount,
+            currency: order.currency,
+            name: "DhenuGuide Pro",
+            description: `Subscription for ${planDetails.title}`,
+            order_id: order.id,
+            handler: function (response: any) {
+                // On successful payment
+                subscribe(planKey);
+                setIsOpen(false);
+                toast({
+                    title: "Subscribed! 🎉",
+                    description: "Welcome to Pro! All features are now unlocked.",
+                });
+            },
+            prefill: {
+                name: userProfile.name || "Dairy Hub User",
+                email: user.email,
+            },
+            theme: {
+                color: "#4F46E5",
+            },
+            modal: {
+                ondismiss: function() {
+                    setIsLoading(null); // Stop loading if the user closes the modal
+                }
+            }
+        };
+
+        const rzp = new (window as any).Razorpay(options);
+        rzp.open();
+
+    } catch (error: any) {
+        toast({ variant: "destructive", title: "Payment Failed", description: error.message || "Could not initiate payment. Please try again." });
+        setIsLoading(null);
+    }
   };
 
   const PlanCard = ({ planKey, popular = false }: { planKey: SubscriptionPlan, popular?: boolean }) => {
@@ -89,7 +132,7 @@ export function SubscriptionModal({
                       </div>
                       <DialogTitle className="text-3xl text-center font-extrabold text-gray-800 font-headline">Go Pro!</DialogTitle>
                       <DialogDescription className="text-muted-foreground text-center">
-                          Unlock powerful features and support Dairy Hub's development.
+                          Unlock powerful features and support DhenuGuide's development.
                       </DialogDescription>
                   </DialogHeader>
                   <div className="mt-6 space-y-3 flex-1">
@@ -101,7 +144,7 @@ export function SubscriptionModal({
                       ))}
                   </div>
                    <div className="mt-8 bg-gray-50 p-4 rounded-lg text-center border">
-                      <p className="text-xs text-muted-foreground">This is a demo. No payment will be processed.</p>
+                      <p className="text-xs text-muted-foreground">Payment is processed securely by Razorpay.</p>
                   </div>
               </div>
               <div className="bg-primary/5 p-8 order-1 md:order-2 flex flex-col justify-center">
