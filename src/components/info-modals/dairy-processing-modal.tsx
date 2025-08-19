@@ -26,7 +26,8 @@ import {
   ShieldCheck,
   ArrowLeft,
   Truck,
-  BookOpen
+  BookOpen,
+  CheckSquare
 } from "lucide-react";
 
 function Section({ title, icon: Icon, children, id }: { title: string, icon: React.ElementType, children: React.ReactNode, id: string }) {
@@ -42,82 +43,6 @@ function Section({ title, icon: Icon, children, id }: { title: string, icon: Rea
         </section>
     );
 }
-
-const processingTopics = [
-    { value: "intro", title: "Workflow & Digitalization", icon: BookOpen, component: <WorkflowContent /> },
-    { value: "reception", title: "Reception & Purification", icon: Truck, component: <ReceptionContent /> },
-    { value: "centrifugal", title: "Centrifugal & Physical Control", icon: RotateCw, component: <CentrifugalContent /> },
-    { value: "thermal", title: "Thermal Processing Principles", icon: Thermometer, component: <ThermalPrinciplesContent /> },
-    { value: "packaging", title: "Downstream & Packaging", icon: ShieldCheck, component: <PackagingContent /> },
-];
-
-export function DairyProcessingModal({
-  isOpen,
-  setIsOpen,
-}: {
-  isOpen: boolean;
-  setIsOpen: (open: boolean) => void;
-}) {
-  const [activeTopic, setActiveTopic] = useState<string | null>(null);
-
-  const handleOpenChange = (open: boolean) => {
-    if (!open) {
-      setActiveTopic(null); // Reset when closing
-    }
-    setIsOpen(open);
-  };
-
-  const selectedTopic = processingTopics.find(t => t.value === activeTopic);
-
-  return (
-    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogContent className="max-w-4xl lg:max-w-6xl w-[95vw] h-full max-h-[90vh] flex flex-col p-0 sm:p-6">
-        <DialogHeader className="p-4 sm:p-0 shrink-0">
-          <DialogTitle className="text-2xl md:text-3xl font-bold text-center text-gray-800 font-headline">
-            The Science of Dairy Processing
-          </DialogTitle>
-          <DialogDescription className="text-center text-lg text-gray-500">
-            {selectedTopic ? selectedTopic.title : "A deep-dive into the core technologies that transform raw milk."}
-          </DialogDescription>
-        </DialogHeader>
-
-        {selectedTopic ? (
-          <div className="flex-1 flex flex-col min-h-0">
-            <div className="px-4 sm:px-0">
-              <Button variant="ghost" onClick={() => setActiveTopic(null)}>
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Back to Topics
-              </Button>
-            </div>
-            <ScrollArea className="flex-1 mt-4 sm:pr-4">
-              <div className="p-4 pt-0 sm:p-0">
-                {selectedTopic.content}
-              </div>
-            </ScrollArea>
-          </div>
-        ) : (
-          <ScrollArea className="flex-1 mt-4 sm:pr-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4 sm:p-0">
-              {processingTopics.map(topic => (
-                <button
-                  key={topic.value}
-                  onClick={() => setActiveTopic(topic.value)}
-                  className="flex items-center p-4 bg-card hover:bg-primary/10 rounded-lg shadow-sm border text-left transition-all duration-200"
-                >
-                  <topic.icon className="w-8 h-8 text-primary mr-4 shrink-0" />
-                  <div>
-                    <span className="font-semibold font-headline text-card-foreground">{topic.title}</span>
-                  </div>
-                </button>
-              ))}
-            </div>
-          </ScrollArea>
-        )}
-      </DialogContent>
-    </Dialog>
-  );
-}
-
 
 // Content Components
 function WorkflowContent() {
@@ -468,3 +393,79 @@ function PackagingContent() {
     );
 }
 
+const processingTopics = [
+    { value: "intro", title: "Workflow & Digitalization", icon: BookOpen, component: <WorkflowContent /> },
+    { value: "reception", title: "Reception & Purification", icon: Truck, component: <ReceptionContent /> },
+    { value: "centrifugal", title: "Centrifugal & Physical Control", icon: RotateCw, component: <CentrifugalContent /> },
+    { value: "thermal", title: "Thermal Processing Principles", icon: Thermometer, component: <ThermalPrinciplesContent /> },
+    { value: "packaging", title: "Downstream & Packaging", icon: ShieldCheck, component: <PackagingContent /> },
+];
+
+export function DairyProcessingModal({
+  isOpen,
+  setIsOpen,
+}: {
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
+}) {
+  const [activeTopic, setActiveTopic] = useState<string | null>(null);
+
+  const handleOpenChange = (open: boolean) => {
+    if (!open) {
+      setActiveTopic(null); // Reset when closing
+    }
+    setIsOpen(open);
+  };
+
+  const selectedTopic = processingTopics.find(t => t.value === activeTopic);
+
+  return (
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+      <DialogContent className="max-w-4xl lg:max-w-6xl w-[95vw] h-full max-h-[90vh] flex flex-col p-0 sm:p-6">
+        <DialogHeader className="p-4 sm:p-0 shrink-0">
+          <DialogTitle className="text-2xl md:text-3xl font-bold text-center text-gray-800 font-headline">
+            The Science of Dairy Processing
+          </DialogTitle>
+          <DialogDescription className="text-center text-lg text-gray-500">
+            {selectedTopic ? selectedTopic.title : "A deep-dive into the core technologies that transform raw milk."}
+          </DialogDescription>
+        </DialogHeader>
+
+        {selectedTopic ? (
+          <div className="flex-1 flex flex-col min-h-0">
+            <div className="px-4 sm:px-0">
+              <Button variant="ghost" onClick={() => setActiveTopic(null)}>
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  Back to Topics
+              </Button>
+            </div>
+            <ScrollArea className="flex-1 mt-4 sm:pr-4">
+              <div className="p-4 pt-0 sm:p-0">
+                {selectedTopic.component}
+              </div>
+            </ScrollArea>
+          </div>
+        ) : (
+          <ScrollArea className="flex-1 mt-4 sm:pr-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4 sm:p-0">
+              {processingTopics.map(topic => (
+                <button
+                  key={topic.value}
+                  onClick={() => setActiveTopic(topic.value)}
+                  className="flex items-center p-4 bg-card hover:bg-primary/10 rounded-lg shadow-sm border text-left transition-all duration-200"
+                >
+                  <topic.icon className="w-8 h-8 text-primary mr-4 shrink-0" />
+                  <div>
+                    <span className="font-semibold font-headline text-card-foreground">{topic.title}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </ScrollArea>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+    
