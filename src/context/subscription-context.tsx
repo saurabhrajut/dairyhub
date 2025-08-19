@@ -3,6 +3,8 @@
 
 import { createContext, useState, useContext, ReactNode, useEffect, useCallback } from 'react';
 import { useAuth } from './auth-context';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 export type SubscriptionPlan = '7-days' | '1-month' | '6-months' | 'yearly' | 'lifetime';
 
@@ -24,17 +26,18 @@ const ADMIN_UIDS = ['']; // Example: ['uid1', 'uid2']
 const SubscriptionContext = createContext<SubscriptionContextType | undefined>(undefined);
 
 export function SubscriptionProvider({ children }: { children: ReactNode }) {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [isPro, setIsPro] = useState(false);
   const [subscription, setSubscription] = useState<Subscription | null>(null);
 
-  const getSubKey = useCallback(() => {
+  const getSubDocRef = useCallback(() => {
     if (!user) return null;
-    return `subscription-${user.uid}`;
+    // Store subscription as a sub-collection of the user
+    return doc(db, `users/${user.uid}/subscription/current`);
   }, [user]);
 
-  const checkSubscription = useCallback(() => {
-    if (!user) {
+  const checkSubscription = useCallback(async () => {
+    if (authLoading || !user) {
       setIsPro(false);
       setSubscription(null);
       return;
@@ -48,18 +51,17 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
         return;
     }
     
-    const subKey = getSubKey();
-    if (!subKey) {
+    const subDocRef = getSubDocRef();
+    if (!subDocRef) {
         setIsPro(false);
         setSubscription(null);
         return;
     }
 
     try {
-      const subDataString = localStorage.getItem(subKey);
-      if (subDataString) {
-        const subData = JSON.parse(subDataString) as Subscription;
-        // Check for lifetime plan OR if expiryDate is in the future
+      const docSnap = await getDoc(subDocRef);
+      if (docSnap.exists()) {
+        const subData = docSnap.data() as Subscription;
         if (subData.plan === 'lifetime' || (subData.expiryDate && subData.expiryDate > Date.now())) {
           setIsPro(true);
           setSubscription(subData);
@@ -67,25 +69,25 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
         }
       }
     } catch (error) {
-      console.error("Failed to fetch subscription from localStorage", error);
+      console.error("Failed to fetch subscription from Firestore", error);
     }
 
-    // If no valid subscription is found, set to false
+    // If no valid subscription is found
     setIsPro(false);
     setSubscription(null);
-  }, [user, getSubKey]);
+  }, [user, getSubDocRef, authLoading]);
 
   useEffect(() => {
     checkSubscription();
   }, [user, checkSubscription]);
 
-  const subscribe = (plan: SubscriptionPlan) => {
+  const subscribe = async (plan: SubscriptionPlan) => {
     if (!user) {
       throw new Error("User must be logged in to subscribe.");
     }
     
-    const subKey = getSubKey();
-    if (!subKey) return;
+    const subDocRef = getSubDocRef();
+    if (!subDocRef) return;
 
     let expiryDate: number | null = null;
     const now = new Date();
@@ -110,11 +112,11 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
 
     const newSubscription: Subscription = { plan, expiryDate };
     try {
-        localStorage.setItem(subKey, JSON.stringify(newSubscription));
+        await setDoc(subDocRef, newSubscription);
         setIsPro(true);
         setSubscription(newSubscription);
     } catch (error) {
-        console.error("Failed to save subscription to localStorage", error);
+        console.error("Failed to save subscription to Firestore", error);
     }
   };
 

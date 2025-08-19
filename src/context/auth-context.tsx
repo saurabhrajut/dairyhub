@@ -1,8 +1,12 @@
+
 'use client';
 
 import { createContext, useState, useContext, ReactNode, useEffect, useCallback } from 'react';
 import { onAuthStateChanged, signOut, getRedirectResult, type User } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
+import { auth, db } from '@/lib/firebase';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { registerSession, unregisterSession } from '@/app/actions';
+import { useToast } from '@/hooks/use-toast';
 
 export interface UserProfile {
   uid: string;
@@ -19,25 +23,35 @@ interface AuthContextType {
   userProfile: UserProfile | null;
   loading: boolean;
   logout: () => Promise<void>;
-  setUserData: (user: User, data: Partial<UserProfile>) => Promise<void>;
+  setUserData: (user: User, data: Partial<Omit<UserProfile, 'uid' | 'email'>>) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+// Helper to get or create a unique device ID
+const getDeviceId = () => {
+  let deviceId = localStorage.getItem('deviceId');
+  if (!deviceId) {
+    deviceId = crypto.randomUUID();
+    localStorage.setItem('deviceId', deviceId);
+  }
+  return deviceId;
+};
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
-
-  const getProfileKey = useCallback((uid: string) => `userProfile-${uid}`, []);
+  const { toast } = useToast();
 
   const fetchUserProfile = useCallback(async (firebaseUser: User) => {
-    const profileKey = getProfileKey(firebaseUser.uid);
+    const userDocRef = doc(db, 'users', firebaseUser.uid);
     try {
-      const storedProfile = localStorage.getItem(profileKey);
-      if (storedProfile) {
-        setUserProfile(JSON.parse(storedProfile));
+      const docSnap = await getDoc(userDocRef);
+      if (docSnap.exists()) {
+        setUserProfile(docSnap.data() as UserProfile);
       } else {
+        // Create a new profile in Firestore if it doesn't exist
         const newProfile: UserProfile = {
           uid: firebaseUser.uid,
           email: firebaseUser.email,
@@ -47,12 +61,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           age: null,
           gender: null,
         };
-        localStorage.setItem(profileKey, JSON.stringify(newProfile));
+        await setDoc(userDocRef, newProfile);
         setUserProfile(newProfile);
       }
     } catch (error) {
-      console.error("Error fetching user profile from localStorage:", error);
-      const fallbackProfile: UserProfile = {
+      console.error("Error fetching user profile from Firestore:", error);
+      // Fallback profile if firestore fails
+       const fallbackProfile: UserProfile = {
           uid: firebaseUser.uid,
           email: firebaseUser.email,
           name: firebaseUser.displayName || 'User',
@@ -63,62 +78,78 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         };
       setUserProfile(fallbackProfile);
     }
-  }, [getProfileKey]);
+  }, []);
 
   const handleRedirectResult = useCallback(async () => {
-    setLoading(true);
+    // This function can remain to handle initial login from redirect
+    // but the session check will be the main guard.
     try {
-      const result = await getRedirectResult(auth);
-      if (result) {
-        await fetchUserProfile(result.user);
-      }
+      await getRedirectResult(auth);
     } catch (error) {
       console.error("Error handling redirect result:", error);
-    } 
-  }, [fetchUserProfile]);
+    }
+  }, []);
 
 
   useEffect(() => {
-    // Run this only once on initial load to handle redirect
     handleRedirectResult();
 
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       setLoading(true);
-      setUser(firebaseUser);
       if (firebaseUser) {
-        await fetchUserProfile(firebaseUser);
+        const deviceId = getDeviceId();
+        const sessionResult = await registerSession(firebaseUser.uid, deviceId);
+
+        if (sessionResult.success) {
+            setUser(firebaseUser);
+            await fetchUserProfile(firebaseUser);
+        } else {
+            // Session limit reached
+            toast({
+                variant: 'destructive',
+                title: 'Device Limit Reached',
+                description: sessionResult.message,
+                duration: 5000,
+            });
+            await signOut(auth); // Log out the user
+            setUser(null);
+            setUserProfile(null);
+        }
       } else {
+         const deviceId = getDeviceId();
+         if(user?.uid) { // Unregister session only if there was a user
+            await unregisterSession(user.uid, deviceId);
+         }
+         setUser(null);
          setUserProfile(null);
       }
       setLoading(false);
     });
 
     return () => unsubscribe();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const logout = async () => {
+    if (user) {
+        const deviceId = getDeviceId();
+        await unregisterSession(user.uid, deviceId);
+    }
     await signOut(auth);
     setUser(null);
     setUserProfile(null);
   };
   
-  const setUserData = async (firebaseUser: User, data: Partial<UserProfile>) => {
+  const setUserData = async (firebaseUser: User, data: Partial<Omit<UserProfile, 'uid' | 'email'>>) => {
     if (!firebaseUser) return;
-    const profileKey = getProfileKey(firebaseUser.uid);
+    const userDocRef = doc(db, 'users', firebaseUser.uid);
     try {
-        const existingProfileString = localStorage.getItem(profileKey);
-        const existingProfile = existingProfileString ? JSON.parse(existingProfileString) : {};
-        const newProfile = {
-            ...existingProfile,
-            ...data,
-            uid: firebaseUser.uid,
-            email: firebaseUser.email,
-        };
-        localStorage.setItem(profileKey, JSON.stringify(newProfile));
-        setUserProfile(newProfile as UserProfile);
+        await updateDoc(userDocRef, data);
+        // Optimistically update local state
+        setUserProfile(prev => prev ? { ...prev, ...data } : null);
     } catch(error) {
-        console.error("LocalStorage write error in setUserData:", error);
+        console.error("Firestore write error in setUserData:", error);
+        toast({ variant: "destructive", title: "Update Failed", description: "Could not save profile changes." });
     }
   };
 
