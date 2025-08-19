@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -24,7 +25,7 @@ const proFeatures = [
     "Ad-free experience",
 ];
 
-const plans = {
+const plans: Record<SubscriptionPlan, { title: string; price: number; duration: string; popular?: boolean }> = {
     '7-days': { title: "7 Days", price: 99, duration: "Starter Access" },
     '1-month': { title: "1 Month", price: 299, duration: "Full Access" },
     '6-months': { title: "6 Months", price: 599, duration: "Save 33%" },
@@ -57,7 +58,8 @@ export function SubscriptionModal({
     const planDetails = plans[planKey];
     
     try {
-        const order = await createRazorpayOrder(planDetails.price, "INR");
+        const order = await createRazorpayOrder(planDetails.price);
+        
         if (!order || !order.id) {
             throw new Error("Failed to create payment order.");
         }
@@ -94,6 +96,7 @@ export function SubscriptionModal({
 
         const rzp = new (window as any).Razorpay(options);
         rzp.open();
+        // The loading state will be reset in the ondismiss or handler callbacks
 
     } catch (error: any) {
         toast({ variant: "destructive", title: "Payment Failed", description: error.message || "Could not initiate payment. Please try again." });
@@ -101,8 +104,9 @@ export function SubscriptionModal({
     }
   };
 
-  const PlanCard = ({ planKey, popular = false }: { planKey: SubscriptionPlan, popular?: boolean }) => {
+  const PlanCard = ({ planKey }: { planKey: SubscriptionPlan }) => {
     const plan = plans[planKey];
+    const popular = plan.popular || false;
     return (
         <div className={`border bg-white p-5 rounded-xl shadow-sm relative ${popular ? 'border-2 border-primary' : ''}`}>
             {popular && <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-3 py-0.5 rounded-full text-xs font-semibold shadow">Best Value</div>}
@@ -127,7 +131,7 @@ export function SubscriptionModal({
                   <DialogHeader>
                       <div className="flex justify-center mb-2">
                           <div className="bg-amber-100 p-3 rounded-full">
-                              <Zap className="w-8 h-8 text-amber-500" />
+                              <Crown className="w-8 h-8 text-amber-500" />
                           </div>
                       </div>
                       <DialogTitle className="text-3xl text-center font-extrabold text-gray-800 font-headline">Go Pro!</DialogTitle>
@@ -155,7 +159,7 @@ export function SubscriptionModal({
                     <PlanCard planKey="6-months" />
                     <PlanCard planKey="yearly" />
                     <div className="sm:col-span-2">
-                      <PlanCard planKey="lifetime" popular />
+                      <PlanCard planKey="lifetime" />
                     </div>
                   </div>
               </div>

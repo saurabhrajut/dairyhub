@@ -16,7 +16,7 @@ interface Subscription {
 interface SubscriptionContextType {
   isPro: boolean;
   subscription: Subscription | null;
-  subscribe: (plan: SubscriptionPlan) => void;
+  subscribe: (plan: SubscriptionPlan) => Promise<void>;
   checkSubscription: () => void;
 }
 
@@ -117,6 +117,7 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
         setSubscription(newSubscription);
     } catch (error) {
         console.error("Failed to save subscription to Firestore", error);
+        throw error;
     }
   };
 

@@ -12,6 +12,7 @@ import { gyanAI as gyanAIFlow } from "@/ai/flows/gyan-ai-flow";
 import { refineQuestion as refineQuestionFlow } from "@/ai/flows/refine-question-flow";
 import { textToSpeech as textToSpeechFlow } from "@/ai/flows/text-to-speech-flow";
 
+
 import type { 
     SuggestDairyRecipesInput,
     SarathiChatbotInput,
@@ -42,7 +43,7 @@ export async function fetchLatestDairyIndustryData() {
     return await getLatestDairyIndustryData();
 }
 
-export async function createRazorpayOrder(amount: number, currency: string) {
+export async function createRazorpayOrder(amount: number) {
   const instance = new Razorpay({
     key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,
     key_secret: process.env.RAZORPAY_KEY_SECRET!,
@@ -50,12 +51,13 @@ export async function createRazorpayOrder(amount: number, currency: string) {
 
   const options = {
     amount: amount * 100, // amount in the smallest currency unit
-    currency,
+    currency: "INR",
     receipt: `receipt_order_${new Date().getTime()}`,
   };
 
   try {
     const order = await instance.orders.create(options);
+    if (!order) throw new Error("Order creation failed");
     return order;
   } catch (error) {
     console.error("Razorpay order creation failed:", error);
@@ -73,12 +75,6 @@ export async function gyanAI(input: GyanAIInput) {
 
 export async function refineQuestion(input: RefineQuestionInput) {
     return await refineQuestionFlow(input);
-}
-
-export async function summarizeTopic(input: GyanAIInput) {
-    // This can reuse the GyanAI flow with a specific prompt modification
-    const summaryPrompt = `Provide a concise summary of the topic "${input.topic}" for a beginner. The summary should be in ${input.language}.`;
-    return await gyanAIFlow({ ...input, question: summaryPrompt });
 }
 
 export async function textToSpeech(input: TextToSpeechInput) {
