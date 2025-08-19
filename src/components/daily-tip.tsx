@@ -5,12 +5,14 @@ import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { getDailyTip } from "@/app/actions";
-import { Lightbulb, Sparkles, X } from "lucide-react";
+import { Lightbulb, Sparkles, X, Copy } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 export function DailyTip() {
   const [tip, setTip] = useState("SNF = TS - Fat");
   const [isPending, startTransition] = useTransition();
   const [isVisible, setIsVisible] = useState(true);
+  const { toast } = useToast();
 
   const handleNewTip = () => {
     startTransition(async () => {
@@ -26,6 +28,14 @@ export function DailyTip() {
       }
     });
   };
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(tip);
+    toast({
+        title: "Tip Copied!",
+        description: "You can now paste the tip anywhere.",
+    });
+  }
   
   if (!isVisible) {
       return (
@@ -44,11 +54,16 @@ export function DailyTip() {
 
   return (
     <Card className="mb-8 glass-card relative">
-      <Button variant="ghost" size="icon" className="absolute top-1 right-1 w-6 h-6 text-muted-foreground" onClick={() => setIsVisible(false)}>
-        <X className="w-4 h-4"/>
-      </Button>
+      <div className="absolute top-1 right-1 flex items-center">
+         <Button variant="ghost" size="icon" className="w-6 h-6 text-muted-foreground" onClick={handleCopy} title="Copy Tip">
+            <Copy className="w-3 h-3"/>
+        </Button>
+        <Button variant="ghost" size="icon" className="w-6 h-6 text-muted-foreground" onClick={() => setIsVisible(false)} title="Hide Tip">
+            <X className="w-4 h-4"/>
+        </Button>
+      </div>
       <CardContent className="p-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-        <p className="font-semibold text-primary text-center sm:text-left flex items-center gap-2 pr-6">
+        <p className="font-semibold text-primary text-center sm:text-left flex items-center gap-2 pr-16 sm:pr-6">
           <Lightbulb className="w-5 h-5 text-yellow-500 shrink-0" />
           <span className="font-bold font-headline">Did You Know?</span>
           <span className="text-sm">{isPending ? "Soch raha hu..." : tip}</span>

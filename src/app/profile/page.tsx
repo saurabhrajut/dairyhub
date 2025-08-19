@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth, type UserProfile } from "@/context/auth-context";
 import { useSubscription, type SubscriptionPlan } from "@/context/subscription-context";
@@ -10,8 +10,9 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { User as UserIcon, Mail, Cake, VenetianMask, Crown, CalendarClock, ArrowLeft } from 'lucide-react';
+import { User as UserIcon, Mail, Cake, VenetianMask, Crown, CalendarClock, ArrowLeft, Edit, Check, Camera } from 'lucide-react';
 import { format } from "date-fns";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SubscriptionModal } from "@/components/subscription-modal";
@@ -47,18 +48,48 @@ const ProfileDetail = ({ icon: Icon, label, value, loading }: { icon: React.Elem
 
 
 export default function ProfilePage() {
-    const { user, userProfile, loading: authLoading } = useAuth();
+    const { user, userProfile, setUserData, loading: authLoading } = useAuth();
     const { isPro, subscription } = useSubscription();
     const { language, setLanguage } = useLanguage();
     const router = useRouter();
     const { toast } = useToast();
     const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState(false);
+    const [isEditingName, setIsEditingName] = useState(false);
+    const [newName, setNewName] = useState(userProfile?.name || "");
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
 
     useEffect(() => {
         if (!authLoading && !user) {
           router.replace("/login");
         }
-      }, [authLoading, user, router]);
+        if (userProfile) {
+            setNewName(userProfile.name || "");
+        }
+    }, [authLoading, user, userProfile, router]);
+    
+    const handleSaveName = async () => {
+        if (user && newName.trim()) {
+            await setUserData(user, { name: newName.trim(), displayName: newName.trim() });
+            toast({ title: "Name Updated", description: "Your profile name has been successfully updated." });
+            setIsEditingName(false);
+        } else {
+            toast({ variant: "destructive", title: "Error", description: "Name cannot be empty."});
+        }
+    };
+    
+    const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file && user) {
+            const reader = new FileReader();
+            reader.onloadend = async () => {
+                const base64String = reader.result as string;
+                await setUserData(user, { photoURL: base64String });
+                toast({ title: "Profile Photo Updated", description: "Your new photo has been saved." });
+            };
+            reader.readAsDataURL(file);
+        }
+    };
 
     const handleLanguageChange = (lang: string) => {
         setLanguage(lang as 'en' | 'hi');
@@ -83,10 +114,27 @@ export default function ProfilePage() {
                 <Card className="shadow-xl overflow-hidden">
                      <div className="bg-gradient-to-r from-primary to-indigo-500 p-8">
                          <div className="flex items-center gap-6">
-                            <Avatar className="w-24 h-24 border-4 border-white shadow-lg">
-                                <AvatarImage src={userProfile?.photoURL ?? undefined} alt={userProfile?.name ?? 'User'} />
-                                <AvatarFallback><UserIcon className="w-10 h-10" /></AvatarFallback>
-                            </Avatar>
+                            <div className="relative group">
+                                <Avatar className="w-24 h-24 border-4 border-white shadow-lg">
+                                    <AvatarImage src={userProfile?.photoURL ?? undefined} alt={userProfile?.name ?? 'User'} />
+                                    <AvatarFallback><UserIcon className="w-10 h-10" /></AvatarFallback>
+                                </Avatar>
+                                <Button
+                                    size="icon"
+                                    className="absolute bottom-0 right-0 rounded-full h-8 w-8 bg-background text-foreground hover:bg-muted group-hover:opacity-100 opacity-70 transition-opacity"
+                                    onClick={() => fileInputRef.current?.click()}
+                                    aria-label="Change profile picture"
+                                >
+                                    <Camera className="w-4 h-4" />
+                                </Button>
+                                <input
+                                    type="file"
+                                    ref={fileInputRef}
+                                    onChange={handleFileChange}
+                                    className="hidden"
+                                    accept="image/png, image/jpeg"
+                                />
+                            </div>
                             <div>
                                 <h1 className="text-3xl font-bold text-white font-headline">{userProfile?.name}</h1>
                                 <p className="text-primary-foreground/80">{userProfile?.email}</p>
@@ -99,7 +147,26 @@ export default function ProfilePage() {
                         <section>
                             <h3 className="text-lg font-semibold text-primary font-headline mb-4">Profile Information</h3>
                             <div className="space-y-4">
-                                <ProfileDetail icon={UserIcon} label="Name" value={userProfile.name} loading={authLoading} />
+                                <div className="flex items-center gap-3 text-sm">
+                                    <UserIcon className="w-5 h-5 text-muted-foreground" />
+                                    <span className="font-medium text-muted-foreground min-w-[80px]">Name:</span>
+                                    {isEditingName ? (
+                                        <div className="flex items-center gap-2">
+                                            <Input
+                                                value={newName}
+                                                onChange={(e) => setNewName(e.target.value)}
+                                                className="h-8"
+                                                autoFocus
+                                            />
+                                            <Button size="icon" className="h-8 w-8" onClick={handleSaveName}><Check className="w-4 h-4" /></Button>
+                                        </div>
+                                    ) : (
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-foreground font-semibold">{userProfile.name}</span>
+                                            <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => setIsEditingName(true)}><Edit className="w-3 h-3" /></Button>
+                                        </div>
+                                    )}
+                                </div>
                                 <ProfileDetail icon={Mail} label="Email" value={userProfile.email} loading={authLoading} />
                                 <ProfileDetail icon={Cake} label="Age" value={userProfile.age} loading={authLoading} />
                                 <ProfileDetail icon={VenetianMask} label="Gender" value={userProfile.gender} loading={authLoading} />
