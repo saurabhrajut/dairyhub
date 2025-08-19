@@ -4,7 +4,7 @@
 import { createContext, useState, useContext, ReactNode, useEffect, useCallback } from 'react';
 import { onAuthStateChanged, signOut, type User } from 'firebase/auth';
 import { auth, db } from '@/lib/firebase';
-import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { registerSession, unregisterSession } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
 
@@ -46,36 +46,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
-  const fetchOrCreateUserProfile = useCallback(async (firebaseUser: User): Promise<UserProfile> => {
-    const userDocRef = doc(db, 'users', firebaseUser.uid);
-    const docSnap = await getDoc(userDocRef);
-
-    if (docSnap.exists()) {
-      return docSnap.data() as UserProfile;
-    } else {
-      const newProfile: UserProfile = {
-        uid: firebaseUser.uid,
-        email: firebaseUser.email,
-        name: firebaseUser.displayName || 'New User',
-        displayName: firebaseUser.displayName,
-        photoURL: firebaseUser.photoURL,
-        age: null,
-        gender: null,
-      };
-      await setDoc(userDocRef, newProfile, { merge: true });
-      return newProfile;
-    }
-  }, []);
-  
   const handleUserSession = useCallback(async (firebaseUser: User | null) => {
     if (firebaseUser) {
         const deviceId = getDeviceId();
         const sessionResult = await registerSession(firebaseUser.uid, deviceId);
-  
+
         if (sessionResult.success) {
-            const profile = await fetchOrCreateUserProfile(firebaseUser);
-            setUser(firebaseUser);
-            setUserProfile(profile);
+            const userDocRef = doc(db, 'users', firebaseUser.uid);
+            // Create or update user profile
+            await setDoc(userDocRef, {
+                uid: firebaseUser.uid,
+                email: firebaseUser.email,
+                name: firebaseUser.displayName || 'New User',
+                displayName: firebaseUser.displayName,
+                photoURL: firebaseUser.photoURL,
+            }, { merge: true });
+
+            const docSnap = await getDoc(userDocRef);
+            if (docSnap.exists()) {
+                setUser(firebaseUser);
+                setUserProfile(docSnap.data() as UserProfile);
+            }
         } else {
             toast({
               variant: 'destructive',
@@ -95,7 +86,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUserProfile(null);
     }
     setLoading(false);
-  }, [fetchOrCreateUserProfile, toast, user?.uid]);
+  }, [toast, user?.uid]);
 
 
   useEffect(() => {
@@ -120,7 +111,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!firebaseUser) return;
     const userDocRef = doc(db, 'users', firebaseUser.uid);
     try {
-        await updateDoc(userDocRef, data);
+        await setDoc(userDocRef, data, { merge: true });
         setUserProfile(prev => prev ? { ...prev, ...data } : null);
     } catch(error) {
         console.error("Firestore write error in setUserData:", error);
