@@ -35,7 +35,7 @@ const calculatorsInfo = {
 export function SolutionsPrepModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
   const [activeCalculator, setActiveCalculator] = useState<CalculatorType | null>(null);
 
-  const handleBack = () => setActiveCalculator(null);
+  const handleBack = useCallback(() => setActiveCalculator(null), []);
   
   const ActiveCalculatorComponent = activeCalculator ? calculatorsInfo[activeCalculator].component : null;
 
@@ -108,7 +108,7 @@ function SolutionCalculator({ chemType, title, idPrefix }: { chemType: 'acids' |
     const [normality, setNormality] = useState("");
     const [volume, setVolume] = useState("");
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setResult(null);
         setError(null);
@@ -134,7 +134,7 @@ function SolutionCalculator({ chemType, title, idPrefix }: { chemType: 'acids' |
             resultText = `To prepare ${vol} mL of ${norm} N ${chemical.name}, take <code class="font-bold bg-green-100 p-1 rounded">${requiredVolume.toFixed(3)} mL</code> of the concentrated liquid (Purity: ${chemical.purity}%, Density: ${chemical.density} g/mL) and carefully add it to distilled water, then make the final volume up to <code class="font-bold">${vol} mL</code>. <strong class="block mt-2 text-yellow-700 bg-yellow-50 p-2 rounded">⚠️ Always add acid to water!</strong>`;
         }
         setResult(resultText);
-    }
+    }, [chemicalKey, normality, volume, chemType]);
     
     return (
         <CalculatorCard title={title}>
@@ -177,7 +177,7 @@ function IndicatorCalc() {
     const [error, setError] = useState<string | null>(null);
     const [indicatorKey, setIndicatorKey] = useState("");
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setResult(null);
         setError(null);
@@ -199,7 +199,7 @@ function IndicatorCalc() {
             resultText = `To make ${vol} mL of solution, dissolve <code class="font-bold bg-green-100 p-1 rounded">${weight.toFixed(2)} g</code> of ${indicator.name} in <code class="font-bold">${vol} mL</code> of ${indicator.solvent}.`;
         }
         setResult(resultText);
-    }
+    }, [indicatorKey, volume]);
 
     return (
         <CalculatorCard title="Prepare Indicator Solution">
@@ -237,7 +237,7 @@ function ReagentCalculator() {
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
-    const handleCalculate = () => {
+    const handleCalculate = useCallback(() => {
         setError(null);
         setResult(null);
 
@@ -295,7 +295,7 @@ function ReagentCalculator() {
                 break;
         }
         setResult(resultHTML);
-    }
+    }, [selectedReagent, volume]);
 
     return (
         <CalculatorCard title="Reagent Calculator">
@@ -339,7 +339,7 @@ function StandardizationCalc() {
     const [w1, setW1] = useState(""); // Primary std weight
     const [v2, setV2] = useState(""); // Titrant volume
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setResult(null);
         setError(null);
@@ -362,7 +362,7 @@ function StandardizationCalc() {
         const n2 = (n1 * 10) / vol2; // Assuming 10ml of primary std is taken for titration
 
         setResult(`The normality of the secondary standard solution is <code class="font-bold bg-green-100 p-1 rounded">${n2.toFixed(4)} N</code>.`);
-    }
+    }, [primaryStd, v1, w1, v2]);
 
     return (
          <CalculatorCard title="Standardize a Solution (Titration)" description="Use the formula N₁V₁ = N₂V₂ to find the exact normality (N₂) of your prepared solution.">
@@ -412,7 +412,7 @@ function StrengthCalc() {
     const [chemicalKey, setChemicalKey] = useState("");
     const [normality, setNormality] = useState("");
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setResult(null);
         setError(null);
@@ -429,7 +429,7 @@ function StrengthCalc() {
         const strength = norm * equivalentWeight;
         
         setResult(`The strength of ${norm} N ${chemical.name} is <code class="font-bold bg-green-100 p-1 rounded">${strength.toFixed(3)} g/L</code>.`);
-    }
+    }, [chemicalKey, normality, allChemicals]);
 
     return (
         <CalculatorCard title="Strength Calculator">
@@ -483,7 +483,7 @@ function SpiritSolutionCalc() {
     const [reqStrength, setReqStrength] = useState("");
     const [reqVolume, setReqVolume] = useState("");
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setResult(null);
         setError(null);
@@ -504,7 +504,7 @@ function SpiritSolutionCalc() {
 
         const v1 = (requiredStrength * requiredVolume) / spirit.stockPurity;
         setResult(`To prepare ${requiredVolume} mL of ${requiredStrength}% ${spirit.name}, take <code class="font-bold bg-green-100 p-1 rounded">${v1.toFixed(2)} mL</code> of ${spirit.stockPurity}% stock solution and add <code class="font-bold bg-blue-100 p-1 rounded">${(requiredVolume - v1).toFixed(2)} mL</code> of distilled water.`);
-    }
+    }, [spiritKey, reqStrength, reqVolume]);
 
     return (
         <CalculatorCard title="Spirit Solution (Alcohol Dilution)" description="Use the formula C₁V₁ = C₂V₂.">
@@ -567,7 +567,7 @@ function NormalityAdjustmentCalc() {
     const [nReq, setNReq] = useState("");
 
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setResult(null);
         setError(null);
@@ -588,10 +588,10 @@ function NormalityAdjustmentCalc() {
 
         const v_add = v_have * ((n_have / n_req) - 1);
         setResult(`You need to add <code class="font-bold bg-green-100 p-1 rounded">${v_add.toFixed(2)} mL</code> of solvent to your <code class="font-bold">${v_have} mL</code> of <code class="font-bold">${n_have} N</code> solution to get a final normality of <code class="font-bold">${n_req} N</code>.`);
-    }
+    }, [nHave, vHave, nReq]);
 
     return (
-        <div title="Dilute Solution" description="Use this to dilute a solution of higher normality to a desired lower normality.">
+        <div title="Dilute Solution" >
             <p className="text-sm text-muted-foreground mb-4">Use this to dilute a solution of higher normality to a desired lower normality.</p>
             <form onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-end">
@@ -627,7 +627,7 @@ function IncreaseNormalityCalc() {
     const [nReq, setNReq] = useState("");
     const [chemicalKey, setChemicalKey] = useState("");
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setResult(null);
         setError(null);
@@ -663,10 +663,10 @@ function IncreaseNormalityCalc() {
             resultText = `To increase the normality of your ${v_have} mL solution from ${n_have} N to ${n_req} N, you need to add <code class="font-bold bg-green-100 p-1 rounded">${volumeToAdd.toFixed(3)} mL</code> of concentrated <strong>${chemical.name}</strong>.`;
         }
         setResult(resultText);
-    }
+    }, [nHave, vHave, nReq, chemicalKey, allChemicals]);
 
     return (
-        <div title="Increase Normality" description="Calculate how much chemical to add to increase the normality of your solution.">
+        <div>
              <p className="text-sm text-muted-foreground mb-4">Calculate how much chemical to add to increase the normality of your solution.</p>
             <form onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 items-end">
@@ -722,7 +722,7 @@ function PercentageSolutionCalc() {
     const [percentage, setPercentage] = useState("");
     const [volume, setVolume] = useState("");
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setResult(null);
         setError(null);
@@ -748,7 +748,7 @@ function PercentageSolutionCalc() {
             resultText = `To prepare ${vol} mL of ${perc}% w/v ${chemical.name}, take <code class="font-bold bg-green-100 p-1 rounded">${stockVolumeNeeded.toFixed(3)} mL</code> of the concentrated liquid and make the final volume up to <code class="font-bold">${vol} mL</code>.`;
         }
         setResult(resultText);
-    }
+    }, [chemicalKey, percentage, volume, allChemicals]);
     
     return (
         <CalculatorCard title="% Solution Calculator (w/v)">
@@ -806,7 +806,7 @@ function DilutionCalc() {
     const [n2, setN2] = useState("");
     const [v2, setV2] = useState("");
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setResult(null);
         setError(null);
@@ -827,7 +827,7 @@ function DilutionCalc() {
         const v1 = (n2Val * v2Val) / n1Val;
         const resultText = `To prepare <code class="font-bold">${v2Val} mL</code> of <code class="font-bold">${n2Val} N</code> solution, you need to take <code class="font-bold bg-green-100 p-1 rounded">${v1.toFixed(3)} mL</code> of your <code class="font-bold">${n1Val} N</code> stock solution and dilute it with the solvent up to a final volume of <code class="font-bold">${v2Val} mL</code>.`;
         setResult(resultText);
-    }
+    }, [n1, n2, v2]);
 
     return (
         <CalculatorCard title="Working with Stock Solutions (Dilution)" description="Use the dilution formula: N₁V₁ = N₂V₂. Calculate the initial volume (V₁) needed from a stock solution.">

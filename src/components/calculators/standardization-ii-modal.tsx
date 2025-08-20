@@ -102,12 +102,29 @@ const CalculatorCard = ({ title, children, description }: { title: string; child
 );
 
 // Memoized InputField to prevent re-renders
-const MemoizedInputField = memo(function InputField({ label, value, setter, unit }: { label: string, value: string, setter: (val: string) => void, unit: string }) {
+const MemoizedInputField = memo(function InputField({ label, value, setter, unit, onBlur, name }: { label: string, value: string, setter?: (val: string) => void, unit: string, onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void, name: string }) {
+    const [localValue, setLocalValue] = useState(value);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setLocalValue(e.target.value);
+    }
+    
+    // Use onBlur to update parent state to avoid re-renders on every keystroke
+    const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+        if(setter) setter(e.target.value);
+        if(onBlur) onBlur(e);
+    }
+    
+    // Sync local state if parent state changes
+    useState(() => {
+        setLocalValue(value);
+    });
+
     return (
         <div>
             <Label>{label}</Label>
             <div className="flex items-center">
-                <Input type="number" value={value} onChange={e => setter(e.target.value)} className="rounded-r-none" />
+                <Input type="number" name={name} value={localValue} onChange={handleChange} onBlur={handleBlur} className="rounded-r-none" />
                 <span className="p-2 bg-muted border border-l-0 rounded-r-md text-sm">{unit}</span>
             </div>
         </div>
@@ -116,33 +133,27 @@ const MemoizedInputField = memo(function InputField({ label, value, setter, unit
 
 
 function CustomStandardizationCalc() {
-    // Individual state for each input to prevent re-renders
-    const [milkQty, setMilkQty] = useState('1000');
-    const [milkFat, setMilkFat] = useState('3.5');
-    const [milkSnf, setMilkSnf] = useState('8.5');
-    const [creamFat, setCreamFat] = useState('40');
-    const [creamSnf, setCreamSnf] = useState('5.4');
-    const [skimFat, setSkimFat] = useState('0.1');
-    const [skimSnf, setSkimSnf] = useState('8.8');
-    const [smpFat, setSmpFat] = useState('1.0');
-    const [smpSnf, setSmpSnf] = useState('96.0');
-    const [reqFat, setReqFat] = useState('4.5');
-    const [reqSnf, setReqSnf] = useState('8.5');
+    const [inputs, setInputs] = useState({
+        milkQty: '1000', milkFat: '3.5', milkSnf: '8.5',
+        creamFat: '40', creamSnf: '5.4',
+        skimFat: '0.1', skimSnf: '8.8',
+        smpFat: '1.0', smpSnf: '96.0',
+        reqFat: '4.5', reqSnf: '8.5'
+    });
 
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
+
+    const handleInputChange = (e: React.FocusEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setInputs(prev => ({...prev, [name]: value}));
+    }
 
     const calculate = () => {
         setResult(null);
         setError(null);
     
-        const i = {
-            milkQty: parseFloat(milkQty), milkFat: parseFloat(milkFat), milkSnf: parseFloat(milkSnf),
-            creamFat: parseFloat(creamFat), creamSnf: parseFloat(creamSnf),
-            skimFat: parseFloat(skimFat), skimSnf: parseFloat(skimSnf),
-            smpFat: parseFloat(smpFat), smpSnf: parseFloat(smpSnf),
-            reqFat: parseFloat(reqFat), reqSnf: parseFloat(reqSnf),
-        };
+        const i = Object.fromEntries(Object.entries(inputs).map(([key, value]) => [key, parseFloat(value)]));
     
         if (Object.values(i).some(v => isNaN(v))) {
             setError("Please fill all numeric fields correctly.");
@@ -237,9 +248,9 @@ function CustomStandardizationCalc() {
                 
                 <div className="space-y-4 bg-blue-50 p-4 rounded-lg border border-blue-200">
                     <h3 className="font-semibold text-gray-800 font-headline text-lg border-b pb-2">1. Your Milk</h3>
-                    <MemoizedInputField label="Milk Quantity" value={milkQty} setter={setMilkQty} unit="kg" />
-                    <MemoizedInputField label="Fat in Milk" value={milkFat} setter={setMilkFat} unit="%" />
-                    <MemoizedInputField label="SNF in Milk" value={milkSnf} setter={setMilkSnf} unit="%" />
+                    <MemoizedInputField label="Milk Quantity" value={inputs.milkQty} name="milkQty" onBlur={handleInputChange} unit="kg" />
+                    <MemoizedInputField label="Fat in Milk" value={inputs.milkFat} name="milkFat" onBlur={handleInputChange} unit="%" />
+                    <MemoizedInputField label="SNF in Milk" value={inputs.milkSnf} name="milkSnf" onBlur={handleInputChange} unit="%" />
                 </div>
 
                 <div className="space-y-4 bg-yellow-50 p-4 rounded-lg border border-yellow-200 lg:col-span-2">
@@ -247,18 +258,18 @@ function CustomStandardizationCalc() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2 p-2 bg-yellow-100/50 rounded">
                            <p className="font-medium text-sm">Cream</p>
-                           <MemoizedInputField label="Cream Fat" value={creamFat} setter={setCreamFat} unit="%" />
-                           <MemoizedInputField label="Cream SNF" value={creamSnf} setter={setCreamSnf} unit="%" />
+                           <MemoizedInputField label="Cream Fat" value={inputs.creamFat} name="creamFat" onBlur={handleInputChange} unit="%" />
+                           <MemoizedInputField label="Cream SNF" value={inputs.creamSnf} name="creamSnf" onBlur={handleInputChange} unit="%" />
                         </div>
                          <div className="space-y-2 p-2 bg-yellow-100/50 rounded">
                            <p className="font-medium text-sm">Skim Milk</p>
-                           <MemoizedInputField label="Skim Milk Fat" value={skimFat} setter={setSkimFat} unit="%" />
-                           <MemoizedInputField label="Skim Milk SNF" value={skimSnf} setter={setSkimSnf} unit="%" />
+                           <MemoizedInputField label="Skim Milk Fat" value={inputs.skimFat} name="skimFat" onBlur={handleInputChange} unit="%" />
+                           <MemoizedInputField label="Skim Milk SNF" value={inputs.skimSnf} name="skimSnf" onBlur={handleInputChange} unit="%" />
                         </div>
                          <div className="space-y-2 p-2 bg-yellow-100/50 rounded">
                            <p className="font-medium text-sm">Powder (SMP)</p>
-                           <MemoizedInputField label="SMP Fat" value={smpFat} setter={setSmpFat} unit="%" />
-                           <MemoizedInputField label="SMP SNF" value={smpSnf} setter={setSmpSnf} unit="%" />
+                           <MemoizedInputField label="SMP Fat" value={inputs.smpFat} name="smpFat" onBlur={handleInputChange} unit="%" />
+                           <MemoizedInputField label="SMP SNF" value={inputs.smpSnf} name="smpSnf" onBlur={handleInputChange} unit="%" />
                         </div>
                         <div className="space-y-2 p-2 bg-yellow-100/50 rounded">
                             <p className="font-medium text-sm">Water</p>
@@ -269,8 +280,8 @@ function CustomStandardizationCalc() {
 
                 <div className="space-y-4 bg-green-50 p-4 rounded-lg border border-green-200 md:col-span-2 lg:col-span-1">
                     <h3 className="font-semibold text-gray-800 font-headline text-lg border-b pb-2">3. Your Target</h3>
-                    <MemoizedInputField label="Required Fat" value={reqFat} setter={setReqFat} unit="%" />
-                    <MemoizedInputField label="Required SNF" value={reqSnf} setter={setReqSnf} unit="%" />
+                    <MemoizedInputField label="Required Fat" value={inputs.reqFat} name="reqFat" onBlur={handleInputChange} unit="%" />
+                    <MemoizedInputField label="Required SNF" value={inputs.reqSnf} name="reqSnf" onBlur={handleInputChange} unit="%" />
                 </div>
             </div>
             <Button onClick={calculate} className="w-full mt-6 text-lg py-6">➡️ Calculate Standardization</Button>
@@ -281,28 +292,29 @@ function CustomStandardizationCalc() {
 }
 
 // Memoized InputGroup to prevent re-renders
-const MemoizedInputGroup = memo(function InputGroup({ milkNum, values, handler }: { milkNum: 1 | 2; values: {qty: string, fat: string, clr: string}; handler: (milkNum: 1 | 2, field: 'qty' | 'fat' | 'clr', value: string) => void }) {
+const MemoizedInputGroup = memo(function InputGroup({ milkNum, values, handler }: { milkNum: 1 | 2; values: {qty: string, fat: string, clr: string}; handler: (e: React.FocusEvent<HTMLInputElement>, milkNum: 1 | 2) => void }) {
     return (
         <div className="bg-muted/50 p-4 rounded-lg space-y-3">
             <h3 className="font-semibold text-gray-700 font-headline">Milk Source {milkNum}</h3>
-            <div><Label>Quantity (kg/L)</Label><Input type="number" value={values.qty} onChange={e => handler(milkNum, 'qty', e.target.value)} /></div>
-            <div><Label>Fat %</Label><Input type="number" value={values.fat} onChange={e => handler(milkNum, 'fat', e.target.value)} /></div>
-            <div><Label>CLR</Label><Input type="number" value={values.clr} onChange={e => handler(milkNum, 'clr', e.target.value)} /></div>
+            <div><Label>Quantity (kg/L)</Label><Input type="number" name="qty" defaultValue={values.qty} onBlur={(e) => handler(e, milkNum)} /></div>
+            <div><Label>Fat %</Label><Input type="number" name="fat" defaultValue={values.fat} onBlur={(e) => handler(e, milkNum)} /></div>
+            <div><Label>CLR</Label><Input type="number" name="clr" defaultValue={values.clr} onBlur={(e) => handler(e, milkNum)} /></div>
         </div>
     );
 });
 
 
 function MilkBlendingCalc() {
-    const [milk1, setMilk1] = useState({ qty: '', fat: '', clr: '' });
-    const [milk2, setMilk2] = useState({ qty: '', fat: '', clr: '' });
+    const [milk1, setMilk1] = useState({ qty: '500', fat: '6.5', clr: '29' });
+    const [milk2, setMilk2] = useState({ qty: '500', fat: '2.5', clr: '27' });
 
     const [result, setResult] = useState<{ finalQty: number; finalFat: number; finalClr: number } | null>(null);
     const [error, setError] = useState<string | null>(null);
 
-    const handleInputChange = useCallback((milkNum: 1 | 2, field: 'qty' | 'fat' | 'clr', value: string) => {
+    const handleInputChange = useCallback((e: React.FocusEvent<HTMLInputElement>, milkNum: 1 | 2) => {
+        const { name, value } = e.target;
         const setter = milkNum === 1 ? setMilk1 : setMilk2;
-        setter(prev => ({...prev, [field]: value }));
+        setter(prev => ({...prev, [name]: value }));
     }, []);
 
     const calculate = () => {
@@ -747,6 +759,7 @@ function RecombinedMilkCalc() {
         </CalculatorCard>
     );
 }
+
 
 
 

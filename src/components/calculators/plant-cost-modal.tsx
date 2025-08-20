@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useMemo, memo, useCallback } from "react";
+import { useState, useMemo, memo } from "react";
 import {
   Dialog,
   DialogContent,
@@ -23,34 +23,30 @@ import {
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { PlusCircle, XCircle } from "lucide-react";
 
-interface RevenueItem {
+interface Item {
   id: number;
   name: string;
   quantity: string;
   price: string;
-}
-
-interface ExpenseItem {
-    id: number;
-    name: string;
-    cost: string;
-}
-  
-interface ExpenseChangeArgs {
-    id: number;
-    type: "variable" | "fixed";
-    field: keyof ExpenseItem;
-    value: string;
+  cost: string;
 }
 
 // Memoized Revenue Item Row
-const MemoizedRevenueItem = memo(function RevenueItemRow({ item, onChange, onRemove }: { item: RevenueItem, onChange: (id: number, field: keyof RevenueItem, value: string) => void, onRemove: (id: number) => void }) {
+const MemoizedRevenueItem = memo(function RevenueItemRow({ item: initialItem, onChange, onRemove }: { item: Item, onChange: (item: Item) => void, onRemove: (id: number) => void }) {
+    const [item, setItem] = useState(initialItem);
+
+    const handleChange = (field: keyof Item, value: string) => {
+        const updatedItem = { ...item, [field]: value };
+        setItem(updatedItem);
+        onChange(updatedItem);
+    };
+    
     return (
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 items-center">
-            <Input className="sm:col-span-2" placeholder="Revenue Source (e.g., Milk Sale)" value={item.name} onChange={(e) => onChange(item.id, 'name', e.target.value)} />
-            <Input type="number" placeholder="Quantity (Ltr/Kg)" value={item.quantity} onChange={(e) => onChange(item.id, 'quantity', e.target.value)} />
+            <Input className="sm:col-span-2" placeholder="Revenue Source (e.g., Milk Sale)" value={item.name} onChange={(e) => handleChange('name', e.target.value)} />
+            <Input type="number" placeholder="Quantity (Ltr/Kg)" value={item.quantity} onChange={(e) => handleChange('quantity', e.target.value)} />
             <div className="flex items-center gap-2">
-                <Input type="number" placeholder="Price per unit" value={item.price} onChange={(e) => onChange(item.id, 'price', e.target.value)} />
+                <Input type="number" placeholder="Price per unit" value={item.price} onChange={(e) => handleChange( 'price', e.target.value)} />
                 <Button variant="ghost" size="icon" className="text-destructive" onClick={() => onRemove(item.id)}><XCircle /></Button>
             </div>
         </div>
@@ -58,12 +54,20 @@ const MemoizedRevenueItem = memo(function RevenueItemRow({ item, onChange, onRem
 });
 
 // Memoized Expense Item Row
-const MemoizedExpenseItem = memo(function ExpenseItemRow({ item, type, onChange, onRemove }: { item: ExpenseItem, type: "variable" | "fixed", onChange: (args: ExpenseChangeArgs) => void, onRemove: (id: number, type: "variable" | "fixed") => void }) {
+const MemoizedExpenseItem = memo(function ExpenseItemRow({ item: initialItem, onChange, onRemove, type }: { item: Item, onChange: (item: Item) => void, onRemove: (id: number, type: "variable" | "fixed") => void, type: "variable" | "fixed" }) {
+    const [item, setItem] = useState(initialItem);
+    
+    const handleChange = (field: keyof Item, value: string) => {
+        const updatedItem = { ...item, [field]: value };
+        setItem(updatedItem);
+        onChange(updatedItem);
+    };
+
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 items-center">
-            <Input placeholder="Expense (e.g., Raw Milk)" value={item.name} onChange={(e) => onChange({id: item.id, type: type, field: 'name', value: e.target.value})} />
+            <Input placeholder="Expense (e.g., Raw Milk)" value={item.name} onChange={(e) => handleChange('name', e.target.value)} />
             <div className="flex items-center gap-2">
-                <Input type="number" placeholder="Cost" value={item.cost} onChange={(e) => onChange({id: item.id, type: type, field: 'cost', value: e.target.value})} />
+                <Input type="number" placeholder="Cost" value={item.cost} onChange={(e) => handleChange('cost', e.target.value)} />
                 <Button variant="ghost" size="icon" className="text-destructive" onClick={() => onRemove(item.id, type)}><XCircle /></Button>
             </div>
         </div>
@@ -80,41 +84,42 @@ export function PlantCostModal({
 }) {
   const [period, setPeriod] = useState("daily");
   
-  const [revenues, setRevenues] = useState<RevenueItem[]>([
-    { id: 1, name: "Milk Sale", quantity: "", price: "" },
-    { id: 2, name: "Paneer Sale", quantity: "", price: "" },
+  const [revenues, setRevenues] = useState<Item[]>([
+    { id: 1, name: "Milk Sale", quantity: "", price: "", cost: "" },
+    { id: 2, name: "Paneer Sale", quantity: "", price: "", cost: "" },
   ]);
-  const [variableExpenses, setVariableExpenses] = useState<ExpenseItem[]>([
-    { id: 1, name: "Raw Milk Purchase", cost: "" },
-    { id: 2, name: "Packaging", cost: "" },
-    { id: 3, name: "Electricity/Fuel", cost: "" },
+  const [variableExpenses, setVariableExpenses] = useState<Item[]>([
+    { id: 1, name: "Raw Milk Purchase", cost: "", quantity: "", price: "" },
+    { id: 2, name: "Packaging", cost: "", quantity: "", price: "" },
+    { id: 3, name: "Electricity/Fuel", cost: "", quantity: "", price: "" },
   ]);
-  const [fixedExpenses, setFixedExpenses] = useState<ExpenseItem[]>([
-    { id: 1, name: "Salaries", cost: "" },
-    { id: 2, name: "Rent", cost: "" },
+  const [fixedExpenses, setFixedExpenses] = useState<Item[]>([
+    { id: 1, name: "Salaries", cost: "", quantity: "", price: "" },
+    { id: 2, name: "Rent", cost: "", quantity: "", price: "" },
   ]);
 
-  const handleAddItem = useCallback((type: "revenue" | "variable" | "fixed") => {
+  const handleAddItem = (type: "revenue" | "variable" | "fixed") => {
     const newItem = { id: Date.now(), name: "", cost: "", quantity: "", price: "" };
     if (type === "revenue") setRevenues(prev => [...prev, newItem]);
-    else if (type === "variable") setVariableExpenses(prev => [...prev, newItem as ExpenseItem]);
-    else setFixedExpenses(prev => [...prev, newItem as ExpenseItem]);
-  }, []);
+    else if (type === "variable") setVariableExpenses(prev => [...prev, newItem]);
+    else setFixedExpenses(prev => [...prev, newItem]);
+  };
 
-  const handleRemoveItem = useCallback((id: number, type: "revenue" | "variable" | "fixed") => {
+  const handleRemoveItem = (id: number, type: "revenue" | "variable" | "fixed") => {
     if (type === "revenue") setRevenues(prev => prev.filter(item => item.id !== id));
     else if (type === "variable") setVariableExpenses(prev => prev.filter(item => item.id !== id));
     else setFixedExpenses(prev => prev.filter(item => item.id !== id));
-  }, []);
+  };
   
-  const handleRevenueChange = useCallback((id: number, field: keyof RevenueItem, value: string) => {
-    setRevenues(prev => prev.map(item => (item.id === id ? { ...item, [field]: value } : item)));
-  }, []);
+  const handleRevenueChange = (updatedItem: Item) => {
+    setRevenues(prev => prev.map(item => (item.id === updatedItem.id ? updatedItem : item)));
+  };
+  
+  const handleExpenseChange = (updatedItem: Item, type: "variable" | "fixed") => {
+    const setter = type === 'variable' ? setVariableExpenses : setFixedExpenses;
+    setter(prev => prev.map(item => item.id === updatedItem.id ? updatedItem : item));
+  };
 
-  const handleExpenseChange = useCallback(({id, type, field, value}: ExpenseChangeArgs) => {
-      const listSetter = type === 'variable' ? setVariableExpenses : setFixedExpenses;
-      listSetter(prev => prev.map(item => item.id === id ? {...item, [field]: value} : item));
-  }, []);
 
   const { totalRevenue, totalExpenses, profitOrLoss, periodMultiplier } = useMemo(() => {
     const periodMultiplierValue = period === "daily" ? 1 : 30;
@@ -175,7 +180,7 @@ export function PlantCostModal({
                             key={item.id}
                             item={item}
                             onChange={handleRevenueChange}
-                            onRemove={handleRemoveItem}
+                            onRemove={id => handleRemoveItem(id, "revenue")}
                         />
                     ))}
                 </div>
@@ -189,7 +194,7 @@ export function PlantCostModal({
                             key={item.id}
                             item={item}
                             type="variable"
-                            onChange={handleExpenseChange}
+                            onChange={(updated) => handleExpenseChange(updated, "variable")}
                             onRemove={handleRemoveItem}
                         />
                     ))}
@@ -204,7 +209,7 @@ export function PlantCostModal({
                             key={item.id}
                             item={item}
                             type="fixed"
-                            onChange={handleExpenseChange}
+                            onChange={(updated) => handleExpenseChange(updated, "fixed")}
                             onRemove={handleRemoveItem}
                         />
                     ))}
@@ -216,12 +221,12 @@ export function PlantCostModal({
                 <AlertTitle className="text-xl font-bold">Summary ({period})</AlertTitle>
                 <AlertDescription>
                     <div className="grid grid-cols-2 gap-2 mt-2">
-                        <p>Total Revenue:</p> <p className="font-bold text-right">₹ {(totalRevenue * periodMultiplier).toFixed(2)}</p>
-                        <p>Total Expenses:</p> <p className="font-bold text-right">₹ {(totalExpenses * periodMultiplier).toFixed(2)}</p>
+                        <p>Total Revenue:</p> <p className="font-bold text-right">₹ {totalRevenue.toFixed(2)}</p>
+                        <p>Total Expenses:</p> <p className="font-bold text-right">₹ {totalExpenses.toFixed(2)}</p>
                         <hr className="col-span-2 my-1" />
                         <p className="font-bold text-lg">{profitOrLoss >= 0 ? 'Profit' : 'Loss'}:</p>
                         <p className={`font-bold text-lg text-right ${profitOrLoss >= 0 ? 'text-green-700' : 'text-red-700'}`}>
-                            ₹ {(profitOrLoss * periodMultiplier).toFixed(2)}
+                            ₹ {profitOrLoss.toFixed(2)}
                         </p>
                     </div>
                 </AlertDescription>
