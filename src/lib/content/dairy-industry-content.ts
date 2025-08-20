@@ -1,101 +1,101 @@
 
 export const dairyIndustryContent = {
     hi: {
-      main_title: "भारतीय डेयरी उद्योग",
-      description: "एक वैश्विक नेता का व्यापक अवलोकन",
-      intro1: "भारत का डेयरी उद्योग एक महत्वपूर्ण आर्थिक स्तंभ है, जो वैश्विक दूध उत्पादन में अग्रणी भूमिका निभाता है। 2024 में <strong>INR 18.97 ट्रिलियन (USD 135.30 बिलियन)</strong> के अनुमानित बाजार आकार के साथ, यह क्षेत्र 2033 तक <strong>INR 57.00 ट्रिलियन (USD 274.09 बिलियन)</strong> तक पहुंचने का अनुमान है, जो <strong>9.33% से 14.00%</strong> की चक्रवृद्धि वार्षिक वृद्धि दर (CAGR) प्रदर्शित करता है। यह उद्योग राष्ट्रीय सकल घरेलू उत्पाद (GDP) में 4-5% का योगदान देता है और 80 मिलियन से अधिक ग्रामीण परिवारों को आजीविका प्रदान करता है, जिसमें बड़ी संख्या में महिलाएं भी शामिल हैं।",
-      intro2: "इस क्षेत्र की वृद्धि मुख्य रूप से बढ़ती जनसंख्या, बढ़ती आय और बढ़ते स्वास्थ्य चेतना से प्रेरित है, जिससे मूल्य वर्धित उत्पादों की मांग में वृद्धि हुई है। डेयरी सहकारी समितियाँ, विशेष रूप से डॉ. वर्गीज कुरियन के 'ऑपरेशन फ्लड' के दूरदर्शी नेतृत्व में स्थापित आनंद पैटर्न मॉडल, इस उद्योग की रीढ़ रही हैं। ये सहकारी समितियाँ किसानों को सीधे बाजार तक पहुंच, तकनीकी सहायता और आर्थिक सशक्तिकरण प्रदान करती हैं, जिससे ग्रामीण आय में वृद्धि होती है और सामाजिक समानता को बढ़ावा मिलता है।",
+      main_title: "Bhartiya Dairy Udyog",
+      description: "Ek vaishvik neta ka vyaapak avlokan",
+      intro1: "Bharat ka dairy udyog ek mahatvapurna aarthik stambh hai, jo vaishvik doodh utpadan mein agrani bhoomika nibhata hai. 2024 mein <strong>INR 18.97 Trillion (USD 135.30 Billion)</strong> ke anumanit bazaar aakar ke saath, yeh kshetra 2033 tak <strong>INR 57.00 Trillion (USD 274.09 Billion)</strong> tak pahunchne ka anuman hai, jo <strong>9.33% se 14.00%</strong> ki chakravriddhi vaarshik vikas dar (CAGR) pradarshit karta hai. Yeh udyog rashtriya sakal gharelu utpad (GDP) mein 4-5% ka yogdaan deta hai aur 80 million se adhik grameen parivaron ko aajeevika pradan karta hai, jismein badi sankhya mein mahilaayein bhi shaamil hain.",
+      intro2: "Is kshetra ki vridhhi mukhya roop se badhti jansankhya, badhti aay aur badhte swasthya chetna se prerit hai, jisse moolya vardhit utpadon ki maang mein vriddhi hui hai. Dairy sahakari samitiyan, vishesh roop se Dr. Verghese Kurien ke 'Operation Flood' ke durdarshi netritva mein sthapit Anand Pattern model, is udyog ki reedh rahi hain. Yeh sahakari samitiyan kisanon ko seedhe bazaar tak pahunch, takneeki sahayata aur aarthik sashaktikaran pradan karti hain, jisse grameen aay mein vriddhi hoti hai aur samajik samanata ko badhava milta hai.",
       overview: {
-        title: "भारतीय डेयरी उद्योग का अवलोकन",
+        title: "Bhartiya Dairy Udyog ka Avlokan",
         market_size: {
-          title: "बाजार का आकार और विकास पथ",
-          text: "भारतीय डेयरी उद्योग अपनी विशालता और गतिशील विकास के लिए प्रसिद्ध है, जो देश की कृषि अर्थव्यवस्था का एक महत्वपूर्ण घटक है। 2024 में, इस उद्योग का बाजार आकार <strong>INR 18.97 ट्रिलियन</strong> (लगभग USD 135.30 बिलियन) तक पहुंच गया। आगे देखते हुए, उद्योग के 2033 तक <strong>INR 57.00 ट्रिलियन</strong> (लगभग USD 274.09 बिलियन) तक पहुंचने का अनुमान है, जो <strong>9.33% से 14.00%</strong> की उच्च चक्रवृद्धि वार्षिक वृद्धि दर (CAGR) के साथ एक मजबूत विस्तार का अवसर दर्शाता है।"
+          title: "Bazaar ka Aakar aur Vikas Path",
+          text: "Bhartiya dairy udyog apni vishaalta aur gatishil vikas ke liye prasiddh hai, jo desh ki krishi arthavyavastha ka ek mahatvapurna ghatak hai. 2024 mein, is udyog ka bazaar aakar <strong>INR 18.97 Trillion</strong> (lagbhag USD 135.30 Billion) tak pahunch gaya. Aage dekhte hue, udyog ke 2033 tak <strong>INR 57.00 Trillion</strong> (lagbhag USD 274.09 Billion) tak pahunchne ka anuman hai, jo <strong>9.33% se 14.00%</strong> ki uchch chakravriddhi vaarshik vikas dar (CAGR) ke saath ek majboot vistaar ka avsar darshata hai."
         },
         contribution: {
-          title: "राष्ट्रीय अर्थव्यवस्था में योगदान",
-          text: "डेयरी क्षेत्र भारतीय अर्थव्यवस्था में एक महत्वपूर्ण भूमिका निभाता है, जो राष्ट्रीय सकल घरेलू उत्पाद (GDP) में लगभग <strong>4-5%</strong> का योगदान देता है। यह सीधे <strong>80 मिलियन से अधिक ग्रामीण परिवारों</strong> को आजीविका प्रदान करता है, जिनमें से अधिकांश छोटे और सीमांत किसान हैं, और ग्रामीण समुदायों में महिलाओं को महत्वपूर्ण रूप से सशक्त बनाता है।"
+          title: "Rashtriya Arthavyavastha mein Yogdaan",
+          text: "Dairy kshetra Bhartiya arthavyavastha mein ek mahatvapurna bhoomika nibhata hai, jo rashtriya sakal gharelu utpad (GDP) mein lagbhag <strong>4-5%</strong> ka yogdaan deta hai. Yeh seedhe <strong>80 million se adhik grameen parivaron</strong> ko aajeevika pradan karta hai, jinmein se adhikaansh chhote aur seemaant kisan hain, aur grameen samudayon mein mahilaon ko mahatvapurna roop se sashakt banata hai."
         },
         production_trends: {
-          title: "दूध उत्पादन और खपत के रुझान",
-          text1: "भारत दुनिया का सबसे बड़ा दूध उत्पादक है, जो वैश्विक दूध उत्पादन का <strong>23-24%</strong> हिस्सा है। दूध उत्पादन में 2014-15 में 146.31 मिलियन टन (MT) से 2023-24 में 239.3 MT तक 5.62% की CAGR देखी गई है। प्रति व्यक्ति दूध की उपलब्धता में काफी सुधार हुआ है, जो 2022-23 में <strong>459 ग्राम प्रति दिन</strong> तक पहुंच गई है, जो 322 ग्राम प्रति दिन के वैश्विक औसत से काफी अधिक है।",
-          text2: "उत्तर प्रदेश सबसे बड़ा दूध उत्पादक राज्य है। भैंस दूध उत्पादन में 45.32% पर हावी हैं, लेकिन स्वदेशी और गैर-वर्णित गायों के उत्पादन में उल्लेखनीय वृद्धि हुई है।"
+          title: "Doodh Utpadan aur Khapat ke Rujhan",
+          text1: "Bharat duniya ka sabse bada doodh utpadak hai, jo vaishvik doodh utpadan ka <strong>23-24%</strong> hissa hai. Doodh utpadan mein 2014-15 mein 146.31 million tonnes (MT) se 2023-24 mein 239.3 MT tak 5.62% ki CAGR dekhi gayi hai. Prati vyakti doodh ki uplabdhta mein kafi sudhar hua hai, jo 2022-23 mein <strong>459 gram prati din</strong> tak pahunch gayi hai, jo 322 gram prati din ke vaishvik ausat se kafi adhik hai.",
+          text2: "Uttar Pradesh sabse bada doodh utpadak rajya hai. Bhains doodh utpadan mein 45.32% par haavi hain, lekin swadeshi aur gair-varnit gayon ke utpadan mein ullekhaneeya vriddhi hui hai."
         },
         drivers_challenges: {
-          title: "मुख्य प्रेरक कारक, चुनौतियाँ और अवसर",
-          drivers: "<strong>प्रेरक कारक:</strong> विकास जनसंख्या वृद्धि, बढ़ती आय और बढ़ती स्वास्थ्य चेतना से प्रेरित है। राष्ट्रीय पशु रोग नियंत्रण कार्यक्रम और पशुपालन अवसंरचना विकास निधि जैसी सरकारी पहलें भी महत्वपूर्ण सहायता प्रदान करती हैं।",
-          challenges: "<strong>चुनौतियाँ:</strong> मुख्य चुनौतियों में दूध उत्पादन वृद्धि में मंदी, प्रति पशु कम उत्पादकता (भारत: 987 किग्रा/दुग्धकाल बनाम वैश्विक: 2038 किग्रा/दुग्धकाल), उच्च चारा लागत, गंभीर चारा की कमी और जलवायु परिवर्तन के प्रभाव शामिल हैं।",
-          opportunities: "<strong>अवसर:</strong> मूल्य वर्धित उत्पादों (पनीर, दही, आइसक्रीम), तेजी से बढ़ते A2 दूध बाजार और दक्षता लाभ के लिए प्रौद्योगिकी का लाभ उठाने में महत्वपूर्ण अवसर हैं। संगठित निजी खिलाड़ियों और D2C स्पेस में स्टार्टअप के लिए भी अपार संभावनाएं हैं।",
+          title: "Mukhya Prerak Karak, Chunautiyan aur Avsar",
+          drivers: "<strong>Prerak Karak:</strong> Vikas jansankhya vriddhi, badhti aay aur badhti swasthya chetna se prerit hai. Rashtriya Pashu Rog Niyantran Karyakram aur Pashupalan Avsanrachna Vikas Nidhi jaisi sarkaari pehlein bhi mahatvapurna sahayata pradan karti hain.",
+          challenges: "<strong>Chunautiyan:</strong> Mukhya chunautiyon mein doodh utpadan vriddhi mein mandi, prati pashu kam utpadakta (Bharat: 987 kg/dugdhkal vs Vaishvik: 2038 kg/dugdhkal), uchch chara lagat, gambhir chara ki kami aur jalvayu parivartan ke prabhav shaamil hain.",
+          opportunities: "<strong>Avsar:</strong> Moolya vardhit utpadon (paneer, dahi, ice cream), tezi se badhte A2 doodh bazaar aur dakshata laabh ke liye praudyogiki ka labh uthane mein mahatvapurna avsar hain. Sangathit niji khiladiyon aur D2C space mein startups ke liye bhi apaar sambhavnayein hain.",
           table: {
-            header1: "विशेषता",
-            header2: "विवरण",
-            row1_col1: "बाजार का आकार (2024)",
-            row1_col2: "INR 18.97 ट्रिलियन / USD 135.30 बिलियन",
-            row2_col1: "अनुमानित बाजार आकार (2033/2034 तक)",
-            row2_col2: "INR 57.00 ट्रिलियन / USD 274.09 बिलियन",
-            row3_col1: "कुल दूध उत्पादन (2023-24)",
-            row3_col2: "239.3 मिलियन टन",
-            row4_col1: "वैश्विक दूध उत्पादन में भारत का हिस्सा",
-            row4_col2: "23-24% (दुनिया में सबसे बड़ा)",
-            row5_col1: "प्रति व्यक्ति दूध की उपलब्धता (2022-23)",
-            row5_col2: "459 ग्राम प्रति दिन"
+            header1: "Visheshta",
+            header2: "Vivaran",
+            row1_col1: "Bazaar Aakar (2024)",
+            row1_col2: "INR 18.97 Trillion / USD 135.30 Billion",
+            row2_col1: "Anumanit Bazaar Aakar (2033/2034 tak)",
+            row2_col2: "INR 57.00 Trillion / USD 274.09 Billion",
+            row3_col1: "Kul Doodh Utpadan (2023-24)",
+            row3_col2: "239.3 Million Tonnes",
+            row4_col1: "Vaishvik Doodh Utpadan mein Bharat ka Hissa",
+            row4_col2: "23-24% (Duniya mein sabse bada)",
+            row5_col1: "Prati Vyakti Doodh ki Uplabdhta (2022-23)",
+            row5_col2: "459 gram prati din"
           }
         }
       },
       cooperatives: {
-        title: "डेयरी सहकारी समितियों की भूमिका",
+        title: "Dairy Sahakari Samitiyon ki Bhoomika",
         operation_flood: {
-          title: "ऑपरेशन फ्लड और श्वेत क्रांति",
-          text: "भारत में ऑपरेशन फ्लड, जिसे श्वेत क्रांति के रूप में भी जाना जाता है, 1970 के दशक में भारत को दूध उत्पादन में आत्मनिर्भर बनाने के लिए शुरू किया गया था। डॉ. वर्गीज कुरियन को भारत में श्वेत क्रांति का जनक माना जाता है। श्वेत क्रांति दूध उत्पादन में तेज वृद्धि से जुड़ी है। ऑपरेशन फ्लड ने डेयरी किसानों को अपने स्वयं के विकास को निर्देशित करने में मदद की है, जो उनके द्वारा बनाए गए संसाधनों पर नियंत्रण उनके अपने हाथों में रखता है। एक राष्ट्रीय दूध ग्रिड पूरे भारत में दूध उत्पादकों को 700 से अधिक कस्बों और शहरों में उपभोक्ताओं से जोड़ता है, जिससे मौसमी और क्षेत्रीय मूल्य भिन्नताएं कम होती हैं, जबकि यह सुनिश्चित होता है कि उत्पादक को नियमित आधार पर पारदर्शी तरीके से उचित बाजार मूल्य मिले।",
-          objectives_title: "उद्देश्य:",
+          title: "Operation Flood aur Shwet Kranti",
+          text: "Bharat mein Operation Flood, jise Shwet Kranti ke roop mein bhi jaana jaata hai, 1970 ke dashak mein Bharat ko doodh utpadan mein aatmanirbhar banane ke liye shuru kiya gaya tha. Dr. Verghese Kurien ko Bharat mein Shwet Kranti ka janak maana jaata hai. Shwet Kranti doodh utpadan mein tez vriddhi se judi hai. Operation Flood ne dairy kisanon ko apne swayam ke vikas ko nirdeshit karne mein madad ki hai, jo unke dwara banaye gaye sansadhanon par niyantran unke apne haathon mein rakhta hai. Ek rashtriya doodh grid poore Bharat mein doodh utpadakon ko 700 se adhik kasbon aur shaharon mein upbhoktaon se jodta hai, jisse mausami aur kshetriya moolya bhinnataein kam hoti hain, jabki yeh sunishchit hota hai ki utpadak ko niyamit aadhar par pardarshi tareeke se uchit bazaar moolya mile.",
+          objectives_title: "Uddeshya:",
           objectives: [
-            "दूध उत्पादन बढ़ाना ('दूध की बाढ़')",
-            "ग्रामीण आय में वृद्धि",
-            "उपभोक्ताओं के लिए उचित मूल्य"
+            "Doodh utpadan badhana ('doodh ki baadh')",
+            "Grameen aay mein vriddhi",
+            "Upbhoktaon ke liye uchit moolya"
           ],
-          phases_title: "ऑपरेशन फ्लड के चरण:",
+          phases_title: "Operation Flood ke Charan:",
           phases: [
-            "<strong>चरण I (1970-1980):</strong> विश्व खाद्य कार्यक्रम के माध्यम से यूरोपीय संघ (तब यूरोपीय आर्थिक समुदाय) द्वारा दान किए गए स्किम्ड मिल्क पाउडर और बटर ऑयल की बिक्री से वित्तपोषित।",
-            "<strong>चरण II (1981-1985):</strong> मिल्कशेड को 18 से बढ़ाकर 136 किया गया; शहरी बाजारों ने दूध के आउटलेट को 290 तक बढ़ाया। 1985 के अंत तक, 4.25 मिलियन दूध उत्पादकों के साथ 43,000 ग्राम सहकारी समितियों की एक आत्मनिर्भर प्रणाली को कवर किया गया था।",
-            "<strong>चरण III (1985-1996):</strong> डेयरी सहकारी समितियों को दूध की बढ़ती मात्रा की खरीद और विपणन के लिए आवश्यक बुनियादी ढांचे का विस्तार और मजबूती करने में सक्षम बनाया। इस चरण में 30,000 नई डेयरी सहकारी समितियाँ जोड़ी गईं, जिससे 73,000 हो गईं।"
+            "<strong>Charan I (1970-1980):</strong> Vishva Khadya Karyakram ke madhyam se European Union (tab European Economic Community) dwara daan kiye gaye skimmed milk powder aur butter oil ki bikri se vitt poshit.",
+            "<strong>Charan II (1981-1985):</strong> Milkshed ko 18 se badhakar 136 kiya gaya; shahari bazaaron ne doodh ke outlet ko 290 tak badhaya. 1985 ke ant tak, 4.25 million doodh utpadakon ke saath 43,000 gram sahakari samitiyon ki ek aatmanirbhar pranali ko cover kiya gaya tha.",
+            "<strong>Charan III (1985-1996):</strong> Dairy sahakari samitiyon ko doodh ki badhti maatra ki khareed aur vipanan ke liye aavashyak buniyadi dhaanche ka vistaar aur majbooti karne mein saksham banaya. Is charan mein 30,000 nayi dairy sahakari samitiyan jodi gayin, jisse 73,000 ho gayin."
           ]
         },
         anand_pattern: {
-          title: "आनंद पैटर्न: त्रि-स्तरीय संरचना",
-          intro: "ऑपरेशन फ्लड की सफलता आनंद पैटर्न पर बनी है, जो एक त्रि-स्तरीय सहकारी संरचना है:",
+          title: "Anand Pattern: Tri-Stareeya Sanrachna",
+          intro: "Operation Flood ki safalta Anand Pattern par bani hai, jo ek tri-stareeya sahakari sanrachna hai:",
           tiers: [
-            "<strong>ग्राम डेयरी सहकारी समिति (DCS):</strong> आधार इकाई जहाँ किसान दूध बेचते हैं, गुणवत्ता के आधार पर भुगतान के साथ।",
-            "<strong>जिला सहकारी दूध उत्पादक संघ:</strong> DCS के स्वामित्व में, यह दूध उत्पादों का प्रसंस्करण और विपणन करता है।",
-            "<strong>राज्य महासंघ:</strong> एक राज्य में संघों के लिए शीर्ष विपणन निकाय।"
+            "<strong>Gram Dairy Sahakari Samiti (DCS):</strong> Aadhar ikai jahan kisan doodh bechte hain, gunavatta ke aadhar par bhugtaan ke saath.",
+            "<strong>Zila Sahakari Doodh Utpadak Sangh:</strong> DCS ke swamitva mein, yeh doodh utpadon ka prasanskaran aur vipanan karta hai.",
+            "<strong>Rajya Mahasangh:</strong> Ek rajya mein sanghon ke liye sheersh vipanan nikay."
           ]
         },
         empowerment: {
-          title: "किसान सशक्तिकरण और सामाजिक-आर्थिक प्रभाव",
-          text: "सहकारी समितियाँ दूध विपणन प्रणाली में सुधार, सदस्यों के लिए किसानों की आय में औसतन 20% की वृद्धि करने में सबसे महत्वपूर्ण कदम रही हैं। वे पशु चिकित्सा देखभाल, AI और संतुलित चारा जैसी महत्वपूर्ण सहायता प्रदान करते हैं। इस मॉडल ने कई महिला नेतृत्व वाली समितियाँ स्थापित करके महिलाओं को गहराई से सशक्त बनाया है और जाति जैसी सामाजिक बाधाओं को तोड़ने में मदद की है।"
+          title: "Kisan Sashaktikaran aur Samajik-Aarthik Prabhav",
+          text: "Sahakari samitiyan doodh vipanan pranali mein sudhar, sadasyon ke liye kisanon ki aay mein ausatan 20% ki vriddhi karne mein sabse mahatvapurna kadam rahi hain. Ve pashu chikitsa dekhbhal, AI aur santulit chara jaisi mahatvapurna sahayata pradan karte hain. Is model ne kai mahila netritva wali samitiyan sthapit karke mahilaon ko gehrai se sashakt banaya hai aur jaati jaisi samajik badhaon ko todne mein madad ki hai."
         }
       },
       trends: {
-        title: "नए रुझान: आधुनिकीकरण और स्टार्टअप",
+        title: "Naye Rujhan: Aadhunikikaran aur Startups",
         modernization: {
-          title: "आधुनिकीकरण पहल और तकनीकी प्रगति",
-          text: "उद्योग <strong>स्वचालित दुग्ध प्रणाली (AMS)</strong>, पशुधन प्रबंधन के लिए IoT उपकरण (स्मार्ट कॉलर, रूमेन बोलस), और AI-संचालित सटीक पोषण जैसी उन्नत तकनीकों को अपना रहा है। ब्लॉकचेन गुणवत्ता आश्वासन और पता लगाने की क्षमता के लिए उभर रहा है। 'श्वेत क्रांति 2.0' और पशुपालन अवसंरचना विकास निधि (AHIDF) जैसी सरकारी योजनाएं इस परिवर्तन को और आगे बढ़ा रही हैं।"
+          title: "Aadhunikikaran Pehlein aur Takneeki Pragati",
+          text: "Udyog <strong>swachalit dugdh pranali (AMS)</strong>, pashudhan prabandhan ke liye IoT upkaran (smart collar, rumen bolus), aur AI-sanchalit sateek poshan jaisi unnat praudyogikiyon ko apna raha hai. Blockchain gunavatta aashvasan aur pata lagane ki kshamta ke liye ubhar raha hai. 'Shwet Kranti 2.0' aur Pashupalan Avsanrachna Vikas Nidhi (AHIDF) jaisi sarkaari yojanaein is parivartan ko aur aage badha rahi hain."
         },
         startups: {
-          title: "डेयरी स्टार्टअप का उदय और नवाचार",
-          text1: "B2C स्टार्टअप द्वारा सीधे उपभोक्ता तक (D2C) डिलीवरी के लिए डिजिटल प्लेटफॉर्म का लाभ उठाने के साथ एक महत्वपूर्ण बदलाव हो रहा है। ये स्टार्टअप मूल्य वर्धित और आला उत्पादों पर ध्यान केंद्रित करते हैं, जो आधुनिक उपभोक्ताओं की सुविधा और स्वास्थ्य की मांग को पूरा करते हैं।",
-          text2: "प्रमुख स्टार्टअप में <strong>कंट्री डिलाइट, स्टेलएप्स, हैप्पी मिल्क और मिल्क मंत्र</strong> शामिल हैं, जो ग्राहकों को सीधे ताजा, जैविक या विशेष डेयरी उत्पाद देने के लिए अभिनव मॉडल का उपयोग कर रहे हैं।"
+          title: "Dairy Startups ka Uday aur Navachar",
+          text1: "B2C startups dwara seedhe upbhokta tak (D2C) delivery ke liye digital platform ka labh uthane ke saath ek mahatvapurna badlav ho raha hai. Yeh startups moolya vardhit aur aala utpadon par dhyan kendrit karte hain, jo aadhunik upbhoktaon ki suvidha aur swasthya ki maang ko poora karte hain.",
+          text2: "Pramukh startups mein <strong>Country Delight, Stellapps, Happy Milk aur Milk Mantra</strong> shaamil hain, jo grahakon ko seedhe taaza, jaivik ya vishesh dairy utpad dene ke liye abhinav model ka upyog kar rahe hain."
         }
       },
       exports: {
-        title: "डेयरी निर्यात स्थिति",
+        title: "Dairy Niryat Sthiti",
         status: {
-          title: "वर्तमान निर्यात स्थिति और चुनौतियाँ",
-          text1: "सबसे बड़ा उत्पादक होने के बावजूद, वैश्विक डेयरी व्यापार में भारत की हिस्सेदारी 0.25% से भी कम है। वित्त वर्ष 2023-24 में, निर्यात लगभग <strong>INR 2,260.94 करोड़ (USD 272.64 मिलियन)</strong> था। प्राथमिक निर्यात उत्पाद घी और मक्खन (59.32%) हैं, इसके बाद दूध पाउडर और पनीर हैं।",
-          text2: "निर्यात मुख्य रूप से उच्च घरेलू खपत और व्यापार नीतियों के कारण सीमित है जो घरेलू किसानों को विदेशी प्रतिस्पर्धा से बचाती हैं। मुख्य निर्यात बाजार पड़ोसी देश और मध्य पूर्व हैं, जिनमें संयुक्त अरब अमीरात, बांग्लादेश और सऊदी अरब शामिल हैं।"
+          title: "Vartaman Niryat Sthiti aur Chunautiyan",
+          text1: "Sabse bada utpadak hone ke bawajood, vaishvik dairy vyapar mein Bharat ki hissedari 0.25% se bhi kam hai. Vitt varsh 2023-24 mein, niryat lagbhag <strong>INR 2,260.94 crore (USD 272.64 million)</strong> tha. Prathmik niryat utpad ghee aur makkhan (59.32%) hain, iske baad doodh powder aur paneer hain.",
+          text2: "Niryat mukhya roop se uchch gharelu khapat aur vyapar nitiyon ke kaaran seemit hai jo gharelu kisanon ko videshi pratispardha se bachati hain. Mukhya niryat bazaar padosi desh aur madhya purva hain, jinmein sanyukt arab amirat, bangladesh aur saudi arab shaamil hain."
         }
       },
       conclusion: {
-        title: "निष्कर्ष और भविष्य का दृष्टिकोण",
-        text: "भारतीय डेयरी उद्योग में अपार संभावनाएं हैं। भविष्य का विकास प्रति पशु कम उत्पादकता, उच्च चारा लागत और बुनियादी ढांचे की कमी जैसी प्रमुख चुनौतियों को दूर करने पर निर्भर करता है। आनुवंशिक सुधार, टिकाऊ प्रथाओं, तकनीकी अपनाने और कोल्ड चेन को मजबूत करने पर ध्यान केंद्रित करने वाला एक बहु-आयामी दृष्टिकोण आवश्यक है। नवाचार का लाभ उठाकर और इन बाधाओं को दूर करके, भारत एक वैश्विक डेयरी नेता के रूप में अपनी स्थिति को मजबूत कर सकता है, जिससे लाखों लोगों के लिए खाद्य सुरक्षा और आर्थिक समृद्धि सुनिश्चित हो सके।"
+        title: "Nishkarsh aur Bhavishya ka Drishtikon",
+        text: "Bhartiya dairy udyog mein apaar sambhavnayein hain. Bhavishya ka vikas prati pashu kam utpadakta, uchch chara lagat aur buniyadi dhaanche ki kami jaisi pramukh chunautiyon ko door karne par nirbhar karta hai. A anuvanshik sudhar, tikao prathaon, takneeki apnane aur cold chain ko majboot karne par dhyan kendrit karne wala ek bahu-aayami drishtikon aavashyak hai. Navachar ka labh uthakar aur in badhaon ko door karke, Bharat ek vaishvik dairy neta ke roop mein apni sthiti ko majboot kar sakta hai, jisse lakhon logon ke liye khadya suraksha aur aarthik samriddhi sunishchit ho sake."
       }
     },
     en: {
@@ -197,3 +197,4 @@ export const dairyIndustryContent = {
         }
     }
 };
+
