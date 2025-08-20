@@ -18,7 +18,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { ArrowLeft, Blend, Milk, SlidersHorizontal, Combine, Bot, Calculator, Settings } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 
-type CalculatorType = 'fat-snf-clr-ts' | 'fat-blending' | 'fat-snf-adjustment' | 'reconstituted-milk' | 'recombined-milk' | 'clr-blending' | 'custom-calculator';
+type CalculatorType = 'fat-snf-clr-ts' | 'fat-blending' | 'fat-snf-adjustment' | 'reconstituted-milk' | 'recombined-milk' | 'clr-blending' | 'custom-calculator' | 'milk-blending';
 
 const calculatorsInfo = {
     'fat-snf-clr-ts': { title: "Fat, SNF, CLR & TS", icon: Calculator, component: FatSnfClrTsCalc },
@@ -28,6 +28,7 @@ const calculatorsInfo = {
     'reconstituted-milk': { title: "Reconstituted Milk", icon: Milk, component: ReconstitutedMilkCalc },
     'recombined-milk': { title: "Recombined Milk", icon: Combine, component: RecombinedMilkCalc },
     'clr-blending': { title: "CLR Blending", icon: Bot, component: ClrBlendingCalc },
+    'milk-blending': { title: "Milk Blending", icon: Blend, component: MilkBlendingCalc },
 };
 
 export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
@@ -149,7 +150,6 @@ function CustomStandardizationCalc() {
         // SNF Balance: M*mS + C*cS + S*sS + P*pS + W*0 = T*rS
     
         // Simplified approach using a 2x2 matrix for the most common scenario (adding Cream and SMP)
-        // Let's assume we are adding Cream (C) and Powder (P). Skim and Water are 0.
         // We solve the system of linear equations for C and P:
         // C*(cF - rF) + P*(pF - rF) = M*(rF - mF)
         // C*(cS - rS) + P*(pS - rS) = M*(rS - mS)
@@ -293,6 +293,78 @@ function CustomStandardizationCalc() {
             <Button onClick={calculate} className="w-full mt-6 text-lg py-6">➡️ Calculate Standardization</Button>
             {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
             {result && <Alert className="mt-4"><AlertTitle className="text-xl font-bold mb-4">📊 Results</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
+        </CalculatorCard>
+    );
+}
+
+function MilkBlendingCalc() {
+    const [milk1, setMilk1] = useState({ qty: '', fat: '', clr: '' });
+    const [milk2, setMilk2] = useState({ qty: '', fat: '', clr: '' });
+    const [result, setResult] = useState<{ finalQty: number; finalFat: number; finalClr: number } | null>(null);
+    const [error, setError] = useState<string | null>(null);
+
+    const handleInputChange = (milkType: 'milk1' | 'milk2', field: 'qty' | 'fat' | 'clr', value: string) => {
+        const setter = milkType === 'milk1' ? setMilk1 : setMilk2;
+        setter(prev => ({ ...prev, [field]: value }));
+    };
+
+    const calculate = () => {
+        setResult(null);
+        setError(null);
+        
+        const q1 = parseFloat(milk1.qty);
+        const f1 = parseFloat(milk1.fat);
+        const c1 = parseFloat(milk1.clr);
+        const q2 = parseFloat(milk2.qty);
+        const f2 = parseFloat(milk2.fat);
+        const c2 = parseFloat(milk2.clr);
+
+        if ([q1, f1, c1, q2, f2, c2].some(isNaN)) {
+            setError("Please fill all fields with valid numbers.");
+            return;
+        }
+
+        if (q1 <= 0 || q2 <= 0) {
+            setError("Quantities must be positive numbers.");
+            return;
+        }
+
+        const finalQty = q1 + q2;
+        const finalFat = ((q1 * f1) + (q2 * f2)) / finalQty;
+        const finalClr = ((q1 * c1) + (q2 * c2)) / finalQty;
+
+        setResult({ finalQty, finalFat, finalClr });
+    };
+
+    const InputGroup = ({ milkNum, state, handler }: { milkNum: 1 | 2; state: { qty: string, fat: string, clr: string }; handler: (milkType: 'milk1' | 'milk2', field: 'qty' | 'fat' | 'clr', value: string) => void }) => (
+        <div className="bg-muted/50 p-4 rounded-lg space-y-3">
+            <h3 className="font-semibold text-gray-700 font-headline">Milk Source {milkNum}</h3>
+            <div><Label>Quantity (kg/L)</Label><Input type="number" value={state.qty} onChange={e => handler(`milk${milkNum}`, 'qty', e.target.value)} /></div>
+            <div><Label>Fat %</Label><Input type="number" value={state.fat} onChange={e => handler(`milk${milkNum}`, 'fat', e.target.value)} /></div>
+            <div><Label>CLR</Label><Input type="number" value={state.clr} onChange={e => handler(`milk${milkNum}`, 'clr', e.target.value)} /></div>
+        </div>
+    );
+
+    return (
+        <CalculatorCard title="Milk Blending Calculator" description="Calculate the final Fat% and CLR after mixing two different milk sources.">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                <InputGroup milkNum={1} state={milk1} handler={handleInputChange} />
+                <InputGroup milkNum={2} state={milk2} handler={handleInputChange} />
+            </div>
+            <Button onClick={calculate} className="w-full mt-4">Calculate Blend</Button>
+            {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
+            {result && (
+                <Alert className="mt-4">
+                    <AlertTitle>Blend Result</AlertTitle>
+                    <AlertDescription>
+                        <div className="space-y-2 mt-2">
+                           <p><strong>Total Quantity:</strong> {result.finalQty.toFixed(2)} kg/L</p>
+                           <p><strong>Final Fat:</strong> {result.finalFat.toFixed(2)} %</p>
+                           <p><strong>Final CLR:</strong> {result.finalClr.toFixed(2)}</p>
+                        </div>
+                    </AlertDescription>
+                </Alert>
+            )}
         </CalculatorCard>
     );
 }
