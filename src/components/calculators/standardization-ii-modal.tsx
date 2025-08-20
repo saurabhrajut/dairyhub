@@ -102,14 +102,13 @@ const CalculatorCard = ({ title, children, description }: { title: string; child
     </div>
 );
 
-// Memoized InputField to prevent re-renders
-const MemoizedInputField = memo(function InputField({ label, value, setter, unit, name }: { label: string, value: string, setter: (val: string) => void, unit: string, name: string }) {
+const MemoizedInputField = memo(function InputField({ label, value, name, setter, unit, placeholder }: { label: string, value: string, name: string, setter: (name: string, value: string) => void, unit?: string, placeholder?: string }) {
     return (
         <div>
             <Label htmlFor={name}>{label}</Label>
             <div className="flex items-center">
-                <Input type="number" name={name} id={name} value={value} onChange={(e) => setter(e.target.value)} className="rounded-r-none" />
-                <span className="p-2 bg-muted border border-l-0 rounded-r-md text-sm">{unit}</span>
+                <Input type="number" name={name} id={name} value={value} onChange={(e) => setter(e.target.name, e.target.value)} className={unit ? "rounded-r-none" : ""} placeholder={placeholder} />
+                {unit && <span className="p-2 bg-muted border border-l-0 rounded-r-md text-sm">{unit}</span>}
             </div>
         </div>
     );
@@ -121,101 +120,116 @@ function CustomStandardizationCalc() {
         milkQty: '1000', milkFat: '3.5', milkSnf: '8.5',
         creamFat: '40', skimFat: '0.1', skimSnf: '8.8',
         smpFat: '1.0', smpSnf: '96.0',
-        reqFat: '4.5', reqSnf: '8.5'
+        reqFat: '4.5', reqSnf: '8.5',
+        water: '0'
     });
 
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
-
-    const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setInputs(prev => ({...prev, [name]: value}));
+    
+    const handleInputChange = useCallback((name: string, value: string) => {
+        setInputs(prev => ({ ...prev, [name]: value }));
     }, []);
 
-    const calculate = () => {
+    const calculate = useCallback(() => {
         setResult(null);
         setError(null);
     
-        const i = Object.fromEntries(Object.entries(inputs).map(([key, value]) => [key, parseFloat(value)]));
+        const i = Object.fromEntries(Object.entries(inputs).map(([key, value]) => [key, parseFloat(value) || 0]));
     
-        if (Object.values(i).some(v => isNaN(v))) {
-            setError("Please fill all numeric fields correctly.");
-            return;
-        }
-    
-        const M = i.milkQty;
-        const mF = i.milkFat / 100;
-        const mS = i.milkSnf / 100;
-        const rF = i.reqFat / 100;
-        const rS = i.reqSnf / 100;
-    
-        const fat_diff = M * (rF - mF);
-        const snf_diff = M * (rS - mS);
-        
-        // Define coefficients for the linear equations (Additions: C, S, P, W)
-        // Eq1: Fat balance -> a1*C + a2*S + a3*P + a4*W = fat_diff
-        // Eq2: SNF balance -> b1*C + b2*S + b3*P + b4*W = snf_diff
-        const cF = i.creamFat / 100; const cS = getSnf(i.creamFat, 20); // Approx cream SNF
-        const sF = i.skimFat / 100; const sS = i.skimSnf / 100;
-        const pF = i.smpFat / 100; const pS = i.smpSnf / 100;
+        const { milkQty, milkFat, milkSnf, creamFat, skimFat, skimSnf, smpFat, smpSnf, reqFat, reqSnf } = i;
 
-        const a1 = cF - rF, b1 = cS - rS; // Cream
-        const a2 = sF - rF, b2 = sS - rS; // Skim Milk
-        const a3 = pF - rF, b3 = pS - rS; // SMP
-        const a4 = 0 - rF,  b4 = 0 - rS;  // Water
+        // Convert percentages to decimals
+        const mF = milkFat / 100, mS = milkSnf / 100;
+        const cF = creamFat / 100, cS = getSnf(creamFat, 20) / 100; // Approx cream SNF
+        const sF = skimFat / 100, sS = skimSnf / 100;
+        const pF = smpFat / 100, pS = smpSnf / 100;
+        const rF = reqFat / 100, rS = reqSnf / 100;
 
-        let C = 0, S = 0, P = 0, W = 0;
+        // Fat and SNF needed in kg
+        const fat_needed = milkQty * rF;
+        const snf_needed = milkQty * rS;
+
+        // Fat and SNF available in milk in kg
+        const fat_available = milkQty * mF;
+        const snf_available = milkQty * mS;
+
+        // Fat and SNF difference
+        const fat_diff = fat_needed - fat_available;
+        const snf_diff = snf_needed - snf_available;
+
+        // System of linear equations:
+        // C*cF + S*sF + P*pF + W*0 = fat_diff
+        // C*cS + S*sS + P*pS + W*0 = snf_diff
+        // This is a simplified pearson square logic, we need to solve for additions/removals
+        // A more robust method is to use a matrix or solve based on scenarios.
+
+        let C=0, P=0, S=0, W=0;
         let resultText = "<p>To standardize your milk, you need to:</p><ul class='list-disc list-inside mt-2 text-lg'>";
         let operations = [];
 
-        // Scenario Analysis
-        if (fat_diff > 0 && snf_diff > 0) { // Need to add Fat and SNF -> Add Cream and Powder
-            const det = a1 * b3 - a3 * b1;
-            if (Math.abs(det) < 1e-9) { setError("Cannot calculate: Cream and SMP properties are too similar for this target."); return; }
-            C = (fat_diff * b3 - snf_diff * a3) / det;
-            P = (snf_diff * a1 - fat_diff * b1) / det;
-            if (C > 0) operations.push(`Add <strong>Cream:</strong> ${C.toFixed(3)} kg`);
-            if (P > 0) operations.push(`Add <strong>SMP:</strong> ${P.toFixed(3)} kg`);
+        // Scenario 1: Both Fat and SNF need to be increased. Add Cream and SMP.
+        if (fat_diff > 0 && snf_diff > 0) {
+            const det = (cF * pS) - (pF * cS);
+            if (Math.abs(det) < 1e-9) { setError("Cannot solve: Cream and SMP properties are too collinear."); return; }
+            C = (fat_diff * pS - snf_diff * pF) / det;
+            P = (snf_diff * cF - fat_diff * cS) / det;
+             if (C > 0) operations.push(`Add <strong>Cream:</strong> ${C.toFixed(3)} kg`);
+             if (P > 0) operations.push(`Add <strong>SMP:</strong> ${P.toFixed(3)} kg`);
+        }
+        // Scenario 2: Fat needs to be decreased, SNF increased. Add Skim Milk and SMP.
+        else if (fat_diff < 0 && snf_diff > 0) {
+            // We need to calculate how much skim to add to reduce fat, then how much powder for SNF.
+            // Let S be skim milk added. (M*mF + S*sF) / (M+S) = rF => S = M*(mF-rF)/(rF-sF)
+            S = milkQty * (mF - rF) / (rF - sF);
+            if (S < 0) { setError("Cannot reduce fat to target level with available skim milk."); return; }
+            
+            const newTotalMilk = milkQty + S;
+            const snfAfterSkim = (milkQty*mS + S*sS) / newTotalMilk;
+            const snf_diff_after_skim = newTotalMilk * (rS - snfAfterSkim);
+            P = snf_diff_after_skim / pS;
 
-        } else if (fat_diff < 0 && snf_diff < 0) { // Need to remove Fat and SNF -> Add Skim Milk and Water
-             const det = a2 * b4 - a4 * b2;
-             if (Math.abs(det) < 1e-9) { setError("Cannot calculate: Skim Milk and Water properties are too similar for this target."); return; }
-             S = (fat_diff * b4 - snf_diff * a4) / det;
-             W = (snf_diff * a2 - fat_diff * b2) / det;
-             if (S > 0) operations.push(`Add <strong>Skim Milk:</strong> ${S.toFixed(3)} kg`);
-             if (W > 0) operations.push(`Add <strong>Water:</strong> ${W.toFixed(3)} kg`);
-
-        } else if (fat_diff < 0 && snf_diff > 0) { // Need to remove Fat and add SNF -> Add Skim Milk and Powder
-            const det = a2 * b3 - a3 * b2;
-            if (Math.abs(det) < 1e-9) { setError("Cannot calculate: Skim Milk and SMP properties are too similar for this target."); return; }
-            S = (fat_diff * b3 - snf_diff * a3) / det;
-            P = (snf_diff * a2 - fat_diff * b2) / det;
             if (S > 0) operations.push(`Add <strong>Skim Milk:</strong> ${S.toFixed(3)} kg`);
             if (P > 0) operations.push(`Add <strong>SMP:</strong> ${P.toFixed(3)} kg`);
-
-        } else if (fat_diff > 0 && snf_diff < 0) { // Need to add Fat and remove SNF -> Add Cream and Water
-            const det = a1 * b4 - a4 * b1;
-            if (Math.abs(det) < 1e-9) { setError("Cannot calculate: Cream and Water properties are too similar for this target."); return; }
-            C = (fat_diff * b4 - snf_diff * a4) / det;
-            W = (snf_diff * a1 - fat_diff * b1) / det;
-            if (C > 0) operations.push(`Add <strong>Cream:</strong> ${C.toFixed(3)} kg`);
-            if (W > 0) operations.push(`Add <strong>Water:</strong> ${W.toFixed(3)} kg`);
         }
-        
-        if (operations.length === 0) {
-            if (Math.abs(fat_diff) < 1e-3 && Math.abs(snf_diff) < 1e-3) {
+        // Scenario 3: Fat needs to be increased, SNF decreased. Add Cream and Water.
+        else if (fat_diff > 0 && snf_diff < 0) {
+            // Add water to reduce SNF. Let W be water. (M*mS) / (M+W) = rS => W = M*(mS/rS - 1)
+            W = milkQty * (mS / rS - 1);
+            if (W < 0) { setError("Cannot reduce SNF to target level with water."); return; }
+
+            const newTotalMilk = milkQty + W;
+            const fatAfterWater = (milkQty*mF) / newTotalMilk;
+            const fat_diff_after_water = newTotalMilk * (rF - fatAfterWater);
+            C = fat_diff_after_water / cF;
+
+            if (W > 0) operations.push(`Add <strong>Water:</strong> ${W.toFixed(3)} kg`);
+            if (C > 0) operations.push(`Add <strong>Cream:</strong> ${C.toFixed(3)} kg`);
+        }
+        // Scenario 4: Both Fat and SNF need to be decreased. Add Skim Milk and Water.
+        else if (fat_diff < 0 && snf_diff < 0) {
+            setError("This calculator currently doesn't support decreasing both Fat and SNF simultaneously. This usually requires a multi-stage process or blending with a different milk source.");
+            return;
+        } else {
+             if (Math.abs(fat_diff) < 1e-3 && Math.abs(snf_diff) < 1e-3) {
                  operations.push("No addition/removal required. Milk already meets specifications.");
             } else {
-                 operations.push("Calculation resulted in negative values for additions. This scenario is not directly solvable with simple additions. Please check your target values.");
+                 operations.push("This specific scenario is not covered. Please check inputs.");
             }
         }
         
-        operations.forEach(op => resultText += `<li>${op}</li>`);
+        C = Math.max(0, C); P = Math.max(0, P); S = Math.max(0, S); W = Math.max(0, W);
+
+        if (operations.length > 0) {
+             operations.forEach(op => resultText += `<li>${op}</li>`);
+        } else {
+             resultText += "<li>No suitable operation found. Please check inputs.</li>";
+        }
         resultText += "</ul>";
 
-        const finalQty = M + (C > 0 ? C : 0) + (S > 0 ? S : 0) + (P > 0 ? P : 0) + (W > 0 ? W : 0);
-        const finalFatMass = (M * mF) + (C > 0 ? C * cF : 0) + (S > 0 ? S * sF : 0) + (P > 0 ? P * pF : 0);
-        const finalSnfMass = (M * mS) + (C > 0 ? C * cS : 0) + (S > 0 ? S * sS : 0) + (P > 0 ? P * pS : 0);
+        const finalQty = milkQty + C + S + P + W;
+        const finalFatMass = (milkQty * mF) + (C * cF) + (S * sF) + (P * pF);
+        const finalSnfMass = (milkQty * mS) + (C * cS) + (S * sS) + (P * pS);
         
         const finalFatPercent = (finalFatMass / finalQty) * 100;
         const finalSnfPercent = (finalSnfMass / finalQty) * 100;
@@ -228,17 +242,18 @@ function CustomStandardizationCalc() {
         resultText += "</ul>";
     
         setResult(resultText);
-    };
+
+    }, [inputs]);
 
     return (
-        <CalculatorCard title="Multi-Purpose Milk Standardization Calculator" description="A precise tool to adjust Fat and SNF using various sources like Cream, Skim Milk, SMP, and Water. Enter all values, the calculator will determine what to add or remove.">
+        <CalculatorCard title="Multi-Purpose Milk Standardization Calculator" description="A precise tool to adjust Fat and SNF using various sources like Cream, Skim Milk, SMP, and Water. Enter all values; the calculator will determine what to add or remove.">
              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 
                 <div className="space-y-4 bg-blue-50 p-4 rounded-lg border border-blue-200">
                     <h3 className="font-semibold text-gray-800 font-headline text-lg border-b pb-2">1. Your Milk</h3>
-                    <MemoizedInputField label="Milk Quantity" value={inputs.milkQty} name="milkQty" setter={(v) => setInputs(p=>({...p, milkQty:v}))} unit="kg" />
-                    <MemoizedInputField label="Fat in Milk" value={inputs.milkFat} name="milkFat" setter={(v) => setInputs(p=>({...p, milkFat:v}))} unit="%" />
-                    <MemoizedInputField label="SNF in Milk" value={inputs.milkSnf} name="milkSnf" setter={(v) => setInputs(p=>({...p, milkSnf:v}))} unit="%" />
+                    <MemoizedInputField label="Milk Quantity" value={inputs.milkQty} name="milkQty" setter={handleInputChange} unit="kg" />
+                    <MemoizedInputField label="Fat in Milk" value={inputs.milkFat} name="milkFat" setter={handleInputChange} unit="%" />
+                    <MemoizedInputField label="SNF in Milk" value={inputs.milkSnf} name="milkSnf" setter={handleInputChange} unit="%" />
                 </div>
 
                 <div className="space-y-4 bg-yellow-50 p-4 rounded-lg border border-yellow-200 lg:col-span-2">
@@ -246,17 +261,17 @@ function CustomStandardizationCalc() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2 p-2 bg-yellow-100/50 rounded">
                            <p className="font-medium text-sm">Cream</p>
-                           <MemoizedInputField label="Cream Fat" value={inputs.creamFat} name="creamFat" setter={(v) => setInputs(p=>({...p, creamFat:v}))} unit="%" />
+                           <MemoizedInputField label="Cream Fat" value={inputs.creamFat} name="creamFat" setter={handleInputChange} unit="%" />
                         </div>
                          <div className="space-y-2 p-2 bg-yellow-100/50 rounded">
                            <p className="font-medium text-sm">Skim Milk</p>
-                           <MemoizedInputField label="Skim Milk Fat" value={inputs.skimFat} name="skimFat" setter={(v) => setInputs(p=>({...p, skimFat:v}))} unit="%" />
-                           <MemoizedInputField label="Skim Milk SNF" value={inputs.skimSnf} name="skimSnf" setter={(v) => setInputs(p=>({...p, skimSnf:v}))} unit="%" />
+                           <MemoizedInputField label="Skim Milk Fat" value={inputs.skimFat} name="skimFat" setter={handleInputChange} unit="%" />
+                           <MemoizedInputField label="Skim Milk SNF" value={inputs.skimSnf} name="skimSnf" setter={handleInputChange} unit="%" />
                         </div>
                          <div className="space-y-2 p-2 bg-yellow-100/50 rounded">
                            <p className="font-medium text-sm">Powder (SMP)</p>
-                           <MemoizedInputField label="SMP Fat" value={inputs.smpFat} name="smpFat" setter={(v) => setInputs(p=>({...p, smpFat:v}))} unit="%" />
-                           <MemoizedInputField label="SMP SNF" value={inputs.smpSnf} name="smpSnf" setter={(v) => setInputs(p=>({...p, smpSnf:v}))} unit="%" />
+                           <MemoizedInputField label="SMP Fat" value={inputs.smpFat} name="smpFat" setter={handleInputChange} unit="%" />
+                           <MemoizedInputField label="SMP SNF" value={inputs.smpSnf} name="smpSnf" setter={handleInputChange} unit="%" />
                         </div>
                         <div className="space-y-2 p-2 bg-yellow-100/50 rounded">
                             <p className="font-medium text-sm">Water</p>
@@ -267,8 +282,8 @@ function CustomStandardizationCalc() {
 
                 <div className="space-y-4 bg-green-50 p-4 rounded-lg border border-green-200 md:col-span-2 lg:col-span-1">
                     <h3 className="font-semibold text-gray-800 font-headline text-lg border-b pb-2">3. Your Target</h3>
-                    <MemoizedInputField label="Required Fat" value={inputs.reqFat} name="reqFat" setter={(v) => setInputs(p=>({...p, reqFat:v}))} unit="%" />
-                    <MemoizedInputField label="Required SNF" value={inputs.reqSnf} name="reqSnf" setter={(v) => setInputs(p=>({...p, reqSnf:v}))} unit="%" />
+                    <MemoizedInputField label="Required Fat" value={inputs.reqFat} name="reqFat" setter={handleInputChange} unit="%" />
+                    <MemoizedInputField label="Required SNF" value={inputs.reqSnf} name="reqSnf" setter={handleInputChange} unit="%" />
                 </div>
             </div>
             <Button onClick={calculate} className="w-full mt-6 text-lg py-6">➡️ Calculate Standardization</Button>
@@ -278,18 +293,16 @@ function CustomStandardizationCalc() {
     );
 }
 
-// Memoized InputGroup to prevent re-renders
-const MemoizedInputGroup = memo(function InputGroup({ milkNum, values, handler }: { milkNum: 1 | 2; values: {qty: string, fat: string, clr: string}; handler: (e: React.ChangeEvent<HTMLInputElement>, milkNum: 1 | 2) => void }) {
+const MemoizedMilkInputGroup = memo(function MilkInputGroup({ milkNum, values, setter }: { milkNum: 1 | 2; values: { qty: string; fat: string; clr: string; }; setter: (milkNum: 1 | 2, field: string, value: string) => void; }) {
     return (
         <div className="bg-muted/50 p-4 rounded-lg space-y-3">
             <h3 className="font-semibold text-gray-700 font-headline">Milk Source {milkNum}</h3>
-            <div><Label>Quantity (kg/L)</Label><Input type="number" name="qty" defaultValue={values.qty} onChange={(e) => handler(e, milkNum)} /></div>
-            <div><Label>Fat %</Label><Input type="number" name="fat" defaultValue={values.fat} onChange={(e) => handler(e, milkNum)} /></div>
-            <div><Label>CLR</Label><Input type="number" name="clr" defaultValue={values.clr} onChange={(e) => handler(e, milkNum)} /></div>
+            <div><Label>Quantity (kg/L)</Label><Input type="number" value={values.qty} onChange={(e) => setter(milkNum, 'qty', e.target.value)} /></div>
+            <div><Label>Fat %</Label><Input type="number" value={values.fat} onChange={(e) => setter(milkNum, 'fat', e.target.value)} /></div>
+            <div><Label>CLR</Label><Input type="number" value={values.clr} onChange={(e) => setter(milkNum, 'clr', e.target.value)} /></div>
         </div>
     );
 });
-
 
 function MilkBlendingCalc() {
     const [milk1, setMilk1] = useState({ qty: '500', fat: '6.5', clr: '29' });
@@ -298,13 +311,12 @@ function MilkBlendingCalc() {
     const [result, setResult] = useState<{ finalQty: number; finalFat: number; finalClr: number } | null>(null);
     const [error, setError] = useState<string | null>(null);
 
-    const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>, milkNum: 1 | 2) => {
-        const { name, value } = e.target;
+    const handleInputChange = useCallback((milkNum: 1 | 2, field: string, value: string) => {
         const setter = milkNum === 1 ? setMilk1 : setMilk2;
-        setter(prev => ({...prev, [name]: value }));
+        setter(prev => ({ ...prev, [field]: value }));
     }, []);
 
-    const calculate = () => {
+    const calculate = useCallback(() => {
         setResult(null);
         setError(null);
         
@@ -330,20 +342,20 @@ function MilkBlendingCalc() {
         const finalClr = ((q1 * c1) + (q2 * c2)) / finalQty;
 
         setResult({ finalQty, finalFat, finalClr });
-    };
+    }, [milk1, milk2]);
 
     return (
         <CalculatorCard title="Milk Blending Calculator" description="Calculate the final Fat% and CLR after mixing two different milk sources.">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                <MemoizedInputGroup 
+                <MemoizedMilkInputGroup 
                     milkNum={1} 
                     values={milk1}
-                    handler={handleInputChange} 
+                    setter={handleInputChange} 
                 />
-                <MemoizedInputGroup 
+                <MemoizedMilkInputGroup 
                     milkNum={2}
                     values={milk2}
-                    handler={handleInputChange} 
+                    setter={handleInputChange} 
                 />
             </div>
             <Button onClick={calculate} className="w-full mt-4">Calculate Blend</Button>
@@ -365,17 +377,28 @@ function MilkBlendingCalc() {
 }
 
 function FatSnfClrTsCalc() {
-    const [fat, setFat] = useState("4.5");
-    const [clr, setClr] = useState("28.0");
-    const [snf, setSnf] = useState("8.5");
-    const [correctionFactor, setCorrectionFactor] = useState("0.72");
+    const [inputs, setInputs] = useState({
+        fat: "4.5",
+        clr: "28.0",
+        snf: "8.5",
+        correctionFactor: "0.72"
+    });
+
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
-    const handleCalcSnfTs = () => {
-        const fatNum = parseFloat(fat);
-        const clrNum = parseFloat(clr);
-        const factor = parseFloat(correctionFactor);
+    const handleInputChange = useCallback((name: string, value: string) => {
+        setInputs(prev => ({...prev, [name]: value}));
+    }, []);
+
+    const handleSelectChange = useCallback((value: string) => {
+        setInputs(prev => ({...prev, correctionFactor: value}));
+    }, []);
+
+    const handleCalcSnfTs = useCallback(() => {
+        const fatNum = parseFloat(inputs.fat);
+        const clrNum = parseFloat(inputs.clr);
+        const factor = parseFloat(inputs.correctionFactor);
 
         setError(null);
         setResult(null);
@@ -388,12 +411,12 @@ function FatSnfClrTsCalc() {
         const calculatedSnf = getSnf(fatNum, clrNum, factor);
         const calculatedTs = fatNum + calculatedSnf;
         setResult(`Calculated SNF: <strong>${calculatedSnf.toFixed(2)}%</strong><br/>Calculated TS: <strong>${calculatedTs.toFixed(2)}%</strong>`);
-    };
+    }, [inputs]);
 
-    const handleCalcClrTs = () => {
-        const fatNum = parseFloat(fat);
-        const snfNum = parseFloat(snf);
-        const factor = parseFloat(correctionFactor);
+    const handleCalcClrTs = useCallback(() => {
+        const fatNum = parseFloat(inputs.fat);
+        const snfNum = parseFloat(inputs.snf);
+        const factor = parseFloat(inputs.correctionFactor);
 
         setError(null);
         setResult(null);
@@ -406,13 +429,13 @@ function FatSnfClrTsCalc() {
         const calculatedClr = (snfNum - (0.25 * fatNum) - factor) * 4;
         const calculatedTs = fatNum + snfNum;
         setResult(`Calculated CLR: <strong>${calculatedClr.toFixed(2)}</strong><br/>Calculated TS: <strong>${calculatedTs.toFixed(2)}%</strong>`);
-    };
+    }, [inputs]);
 
     return (
         <CalculatorCard title="Fat, SNF, CLR & TS Calculator" description="Richmond's formula ke adhaar par doodh ke components ki aapas mein ganana karein.">
             <div className="bg-muted/50 p-4 rounded-lg mb-6">
                 <Label>Correction Factor</Label>
-                <Select value={correctionFactor} onValueChange={setCorrectionFactor}>
+                <Select value={inputs.correctionFactor} onValueChange={handleSelectChange}>
                     <SelectTrigger>
                         <SelectValue placeholder="Select Correction Factor" />
                     </SelectTrigger>
@@ -424,30 +447,28 @@ function FatSnfClrTsCalc() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Calculator 1: Calculate SNF & TS */}
                 <div className="bg-card p-4 rounded-lg border space-y-4">
                     <h4 className="font-semibold text-gray-700 text-center font-headline">Calculate SNF & TS</h4>
                     <div>
                         <Label htmlFor="fat-for-snf">Fat %</Label>
-                        <Input id="fat-for-snf" type="number" value={fat} onChange={e => setFat(e.target.value)} />
+                        <Input id="fat-for-snf" type="number" value={inputs.fat} onChange={e => handleInputChange('fat', e.target.value)} />
                     </div>
                     <div>
                         <Label htmlFor="clr-for-snf">CLR</Label>
-                        <Input id="clr-for-snf" type="number" value={clr} onChange={e => setClr(e.target.value)} />
+                        <Input id="clr-for-snf" type="number" value={inputs.clr} onChange={e => handleInputChange('clr', e.target.value)} />
                     </div>
                     <Button onClick={handleCalcSnfTs} className="w-full">Calculate SNF & TS</Button>
                 </div>
 
-                {/* Calculator 2: Calculate CLR & TS */}
                 <div className="bg-card p-4 rounded-lg border space-y-4">
                     <h4 className="font-semibold text-gray-700 text-center font-headline">Calculate CLR & TS</h4>
                     <div>
                         <Label htmlFor="fat-for-clr">Fat %</Label>
-                        <Input id="fat-for-clr" type="number" value={fat} onChange={e => setFat(e.target.value)} />
+                        <Input id="fat-for-clr" type="number" value={inputs.fat} onChange={e => handleInputChange('fat', e.target.value)} />
                     </div>
                     <div>
                         <Label htmlFor="snf-for-clr">SNF %</Label>
-                        <Input id="snf-for-clr" type="number" value={snf} onChange={e => setSnf(e.target.value)} />
+                        <Input id="snf-for-clr" type="number" value={inputs.snf} onChange={e => handleInputChange('snf', e.target.value)} />
                     </div>
                     <Button onClick={handleCalcClrTs} className="w-full">Calculate CLR & TS</Button>
                 </div>
@@ -460,21 +481,29 @@ function FatSnfClrTsCalc() {
 }
 
 function ClrIncreaseCalc() {
-    const [initialQty, setInitialQty] = useState('100');
-    const [initialClr, setInitialClr] = useState('27');
-    const [targetClr, setTargetClr] = useState('28.5');
+    const [inputs, setInputs] = useState({
+        initialQty: '100',
+        initialClr: '27',
+        targetClr: '28.5',
+        smpSolids: '96'
+    });
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
+    const handleInputChange = useCallback((name: string, value: string) => {
+        setInputs(prev => ({ ...prev, [name]: value }));
+    }, []);
+
     const calculate = useCallback(() => {
-        const Q1 = parseFloat(initialQty);
-        const CLR1 = parseFloat(initialClr);
-        const CLR_target = parseFloat(targetClr);
+        const Q1 = parseFloat(inputs.initialQty);
+        const CLR1 = parseFloat(inputs.initialClr);
+        const CLR_target = parseFloat(inputs.targetClr);
+        const smpSolids = parseFloat(inputs.smpSolids) / 100;
         
         setError(null);
         setResult(null);
 
-        if (isNaN(Q1) || isNaN(CLR1) || isNaN(CLR_target) || Q1 <= 0) {
+        if (isNaN(Q1) || isNaN(CLR1) || isNaN(CLR_target) || isNaN(smpSolids) || Q1 <= 0 || smpSolids <= 0) {
             setError("Please enter valid positive numbers for all fields.");
             return;
         }
@@ -483,34 +512,27 @@ function ClrIncreaseCalc() {
             setError("Target CLR must be higher than the initial CLR.");
             return;
         }
-        
-        // This is an approximation. The actual effect of SMP on CLR is complex.
-        // A common rule of thumb is that 1 kg of SMP in 100 kg of milk increases CLR by about 1 degree.
-        // Let's use SNF as a proxy for CLR change.
-        // Approx SNF = CLR/4. So change in CLR is approx 4 * change in SNF.
-        // Change in SNF % = (S / (Q1 + S)) * 100 where S is SMP added.
-        // (CLR_target - CLR1) ≈ 4 * [ (S*0.96) / (Q1*1.03 + S) * 100 ]
-        // This is complex. Let's use a simpler, more practical industrial approximation.
-        // Approx. SMP needed (S) for 1 degree CLR rise in 100kg milk is ~1.1 kg.
-        
+
         const clrDifference = CLR_target - CLR1;
-        const smpNeeded = (clrDifference * 1.1 * Q1) / 100;
+        // Formula: SMP Needed = (Milk Qty * Increase in CLR * 0.25) / (TS% of SMP)
+        const smpNeeded = (Q1 * clrDifference * 0.25) / smpSolids;
         
         setResult(`To increase CLR from <strong>${CLR1}</strong> to <strong>${CLR_target}</strong> in <strong>${Q1} kg</strong> of milk, you need to add approximately <strong class='text-green-700 text-lg'>${smpNeeded.toFixed(3)} kg</strong> of SMP.`);
         
-    }, [initialQty, initialClr, targetClr]);
+    }, [inputs]);
 
     return (
-        <CalculatorCard title="CLR Increase Calculator (with SMP)" description="Calculate the amount of Skimmed Milk Powder (SMP) needed to increase the CLR of milk.">
+        <CalculatorCard title="CLR Increase Calculator (with SMP)" description="Calculate the amount of Skimmed Milk Powder (SMP) needed to increase the CLR of milk using the provided formula.">
              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                 <div className="bg-muted/50 p-4 rounded-lg space-y-3">
                     <h3 className="font-semibold text-gray-700 mb-2 font-headline">Initial Milk</h3>
-                    <div><Label>Milk Quantity (kg)</Label><Input type="number" value={initialQty} onChange={e => setInitialQty(e.target.value)} /></div>
-                    <div><Label>Initial CLR</Label><Input type="number" value={initialClr} onChange={e => setInitialClr(e.target.value)} /></div>
+                    <MemoizedInputField label="Milk Quantity (kg)" value={inputs.initialQty} name="initialQty" setter={handleInputChange} />
+                    <MemoizedInputField label="Initial CLR" value={inputs.initialClr} name="initialClr" setter={handleInputChange} />
                 </div>
                  <div className="bg-primary/10 p-4 rounded-lg space-y-3">
-                     <h3 className="font-semibold text-gray-700 mb-2 font-headline">Target</h3>
-                    <div><Label>Target CLR</Label><Input type="number" value={targetClr} onChange={e => setTargetClr(e.target.value)} /></div>
+                     <h3 className="font-semibold text-gray-700 mb-2 font-headline">Target & Ingredient</h3>
+                    <MemoizedInputField label="Target CLR" value={inputs.targetClr} name="targetClr" setter={handleInputChange} />
+                    <MemoizedInputField label="SMP Total Solids (%)" value={inputs.smpSolids} name="smpSolids" setter={handleInputChange} />
                 </div>
             </div>
             <Button onClick={calculate} className="w-full mt-4">Calculate SMP Required</Button>
@@ -807,6 +829,7 @@ function RecombinedMilkCalc() {
         </CalculatorCard>
     );
 }
+
 
 
 
