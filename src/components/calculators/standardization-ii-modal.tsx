@@ -22,13 +22,13 @@ type CalculatorType = 'fat-snf-clr-ts' | 'fat-blending' | 'fat-snf-adjustment' |
 
 const calculatorsInfo = {
     'fat-snf-clr-ts': { title: "Fat, SNF, CLR & TS", icon: Calculator, component: FatSnfClrTsCalc },
-    'fat-blending': { title: "Fat Blending", icon: Blend, component: FatBlendingCalc },
+    'milk-blending': { title: "Milk Blending", icon: Blend, component: MilkBlendingCalc },
     'custom-calculator': { title: 'Custom Calculator', icon: Settings, component: CustomStandardizationCalc },
+    'fat-blending': { title: "Fat Blending (Pearson)", icon: Blend, component: FatBlendingCalc },
     'fat-snf-adjustment': { title: "Fat & SNF Adjustment", icon: SlidersHorizontal, component: FatSnfAdjustmentCalc },
     'reconstituted-milk': { title: "Reconstituted Milk", icon: Milk, component: ReconstitutedMilkCalc },
     'recombined-milk': { title: "Recombined Milk", icon: Combine, component: RecombinedMilkCalc },
-    'clr-blending': { title: "CLR Blending", icon: Bot, component: ClrBlendingCalc },
-    'milk-blending': { title: "Milk Blending", icon: Blend, component: MilkBlendingCalc },
+    'clr-blending': { title: "CLR Blending (Pearson)", icon: Bot, component: ClrBlendingCalc },
 };
 
 export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
@@ -102,35 +102,40 @@ const CalculatorCard = ({ title, children, description }: { title: string; child
 );
 
 function CustomStandardizationCalc() {
-    const [inputs, setInputs] = useState({
-        milkQty: '1000', milkFat: '3.5', milkSnf: '8.5',
-        creamFat: '40', creamSnf: '5.4',
-        skimFat: '0.1', skimSnf: '8.8',
-        smpFat: '1.0', smpSnf: '96.0',
-        reqFat: '4.5', reqSnf: '8.5',
-    });
+    // Individual state for each input to prevent re-renders
+    const [milkQty, setMilkQty] = useState('1000');
+    const [milkFat, setMilkFat] = useState('3.5');
+    const [milkSnf, setMilkSnf] = useState('8.5');
+    const [creamFat, setCreamFat] = useState('40');
+    const [creamSnf, setCreamSnf] = useState('5.4');
+    const [skimFat, setSkimFat] = useState('0.1');
+    const [skimSnf, setSkimSnf] = useState('8.8');
+    const [smpFat, setSmpFat] = useState('1.0');
+    const [smpSnf, setSmpSnf] = useState('96.0');
+    const [reqFat, setReqFat] = useState('4.5');
+    const [reqSnf, setReqSnf] = useState('8.5');
+
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
-
-    const handleInputChange = (field: keyof typeof inputs, value: string) => {
-        setInputs(prev => ({ ...prev, [field]: value }));
-    };
 
     const calculate = () => {
         setResult(null);
         setError(null);
     
-        const i = Object.entries(inputs).reduce((acc, [key, value]) => {
-            acc[key as keyof typeof inputs] = parseFloat(value);
-            return acc;
-        }, {} as Record<keyof typeof inputs, number>);
+        const i = {
+            milkQty: parseFloat(milkQty), milkFat: parseFloat(milkFat), milkSnf: parseFloat(milkSnf),
+            creamFat: parseFloat(creamFat), creamSnf: parseFloat(creamSnf),
+            skimFat: parseFloat(skimFat), skimSnf: parseFloat(skimSnf),
+            smpFat: parseFloat(smpFat), smpSnf: parseFloat(smpSnf),
+            reqFat: parseFloat(reqFat), reqSnf: parseFloat(reqSnf),
+        };
     
         if (Object.values(i).some(v => isNaN(v))) {
             setError("Please fill all numeric fields correctly.");
             return;
         }
     
-        // Convert percentages to decimals for calculation
+        // Convert percentages to decimals
         const M = i.milkQty;
         const mF = i.milkFat / 100;
         const mS = i.milkSnf / 100;
@@ -143,88 +148,65 @@ function CustomStandardizationCalc() {
         const rF = i.reqFat / 100;
         const rS = i.reqSnf / 100;
     
-        // Mass balance equations:
-        // Let C, S, P, W be the quantities of Cream, Skim, SMP, and Water to be added.
-        // Total Mass: T = M + C + S + P + W
-        // Fat Balance: M*mF + C*cF + S*sF + P*pF + W*0 = T*rF
-        // SNF Balance: M*mS + C*cS + S*sS + P*pS + W*0 = T*rS
+        const fat_diff = M * (rF - mF);
+        const snf_diff = M * (rS - mS);
     
-        // Simplified approach using a 2x2 matrix for the most common scenario (adding Cream and SMP)
-        // We solve the system of linear equations for C and P:
-        // C*(cF - rF) + P*(pF - rF) = M*(rF - mF)
-        // C*(cS - rS) + P*(pS - rS) = M*(rS - mS)
-    
-        const fat_diff = M * (rF - mF); // Fat deficit or surplus
-        const snf_diff = M * (rS - mS); // SNF deficit or surplus
-    
-        // Solve for Cream (C) and Powder (P)
-        const det = (cF - rF) * (pS - rS) - (pF - rF) * (cS - rS);
-        
-        if (Math.abs(det) < 1e-9) {
-            setError("Cannot calculate. The properties of Cream and SMP are too similar or linearly dependent for this target. Please check source values.");
-            return;
+        let C = 0, P = 0, S = 0, W = 0;
+        let resultText = "<p>To standardize your milk, you need to:</p><ul class='list-disc list-inside mt-2 text-lg'>";
+        let operations = [];
+
+        // Scenario Analysis
+        if (fat_diff > 0 && snf_diff > 0) { // Need to add Fat and SNF
+            const det = (cF - rF) * (pS - rS) - (pF - rF) * (cS - rS);
+            if (Math.abs(det) < 1e-9) { setError("Cannot calculate: Cream and SMP properties are too similar for this target."); return; }
+            C = ((fat_diff * (pS - rS)) - (snf_diff * (pF - rF))) / det;
+            P = ((snf_diff * (cF - rF)) - (fat_diff * (cS - rS))) / det;
+            if (C > 0) operations.push(`Add <strong>Cream:</strong> ${C.toFixed(3)} kg`);
+            if (P > 0) operations.push(`Add <strong>SMP:</strong> ${P.toFixed(3)} kg`);
+
+        } else if (fat_diff < 0 && snf_diff < 0) { // Need to remove Fat and SNF -> Add Skim and Water
+             const det = (sF - rF) * (-rS) - (-rF) * (sS - rS);
+             if (Math.abs(det) < 1e-9) { setError("Cannot calculate: Skim Milk and Water properties are too similar for this target."); return; }
+             S = ((fat_diff * (-rS)) - (snf_diff * (-rF))) / det;
+             W = ((snf_diff * (sF - rF)) - (fat_diff * (sS - rS))) / det;
+             if (S > 0) operations.push(`Add <strong>Skim Milk:</strong> ${S.toFixed(3)} kg`);
+             if (W > 0) operations.push(`Add <strong>Water:</strong> ${W.toFixed(3)} kg`);
+
+        } else if (fat_diff < 0 && snf_diff > 0) { // Need to remove Fat and add SNF -> Add Skim and Powder
+            const det = (sF - rF) * (pS - rS) - (pF - rF) * (sS - rS);
+            if (Math.abs(det) < 1e-9) { setError("Cannot calculate: Skim Milk and SMP properties are too similar for this target."); return; }
+            S = ((fat_diff * (pS - rS)) - (snf_diff * (pF - rF))) / det;
+            P = ((snf_diff * (sF - rF)) - (fat_diff * (sS - rS))) / det;
+            if (S > 0) operations.push(`Add <strong>Skim Milk:</strong> ${S.toFixed(3)} kg`);
+            if (P > 0) operations.push(`Add <strong>SMP:</strong> ${P.toFixed(3)} kg`);
+
+        } else if (fat_diff > 0 && snf_diff < 0) { // Need to add Fat and remove SNF -> Add Cream and Water
+            const det = (cF - rF) * (-rS) - (-rF) * (cS - rS);
+            if (Math.abs(det) < 1e-9) { setError("Cannot calculate: Cream and Water properties are too similar for this target."); return; }
+            C = ((fat_diff * (-rS)) - (snf_diff * (-rF))) / det;
+            W = ((snf_diff * (cF - rF)) - (fat_diff * (cS - rS))) / det;
+            if (C > 0) operations.push(`Add <strong>Cream:</strong> ${C.toFixed(3)} kg`);
+            if (W > 0) operations.push(`Add <strong>Water:</strong> ${W.toFixed(3)} kg`);
         }
-
-        let C = ((fat_diff * (pS - rS)) - (snf_diff * (pF - rF))) / det;
-        let P = ((snf_diff * (cF - rF)) - (fat_diff * (cS - rS))) / det;
-        let W = 0;
-        let S = 0;
-
-        // Interpret results and handle other scenarios
-        // Case 1: Need to add Cream and Powder (C>0, P>0) - Already calculated
         
-        // Case 2: Need to remove Fat and add SNF (C<0, P>0) -> Use Skim milk instead of Cream
-        if (C < 0 && P >= 0) {
-            const det_SP = (sF - rF) * (pS - rS) - (pF - rF) * (sS - rS);
-            if (Math.abs(det_SP) > 1e-9) {
-                S = ((fat_diff * (pS - rS)) - (snf_diff * (pF - rF))) / det_SP;
-                P = ((snf_diff * (sF - rF)) - (fat_diff * (sS - rS))) / det_SP;
-                C = 0;
+        if (operations.length === 0) {
+            if (Math.abs(fat_diff) < 1e-3 && Math.abs(snf_diff) < 1e-3) {
+                 operations.push("No addition/removal required. Milk already meets specifications.");
+            } else {
+                 operations.push("Calculation resulted in negative values for additions. This scenario (e.g., adding fat while needing to remove it) is not directly solvable with simple additions. Please check your target values.");
             }
         }
-
-        // Case 3: Need to add Fat and remove SNF (C>0, P<0) -> Use Water instead of Powder
-        if (P < 0 && C >= 0) {
-             const det_CW = (cF - rF) * (-rS) - (-rF) * (cS - rS); // Water has 0 fat, 0 snf
-             if(Math.abs(det_CW) > 1e-9) {
-                C = ((fat_diff * (-rS)) - (snf_diff * (-rF))) / det_CW;
-                W = ((snf_diff * (cF - rF)) - (fat_diff * (cS-rS))) / det_CW;
-                P = 0;
-             }
-        }
-
-        // Case 4: Need to remove Fat and SNF (C<0, P<0) -> Use Skim and Water
-        if (C < 0 && P < 0) {
-            const det_SW = (sF - rF) * (-rS) - (-rF) * (sS - rS);
-            if (Math.abs(det_SW) > 1e-9) {
-                S = ((fat_diff * (-rS)) - (snf_diff * (-rF))) / det_SW;
-                W = ((snf_diff * (sF - rF)) - (fat_diff * (sS - rS))) / det_SW;
-                C = 0; P = 0;
-            }
-        }
+        
+        operations.forEach(op => resultText += `<li>${op}</li>`);
+        resultText += "</ul>";
 
         const finalQty = M + (C > 0 ? C : 0) + (S > 0 ? S : 0) + (P > 0 ? P : 0) + (W > 0 ? W : 0);
         const finalFatMass = (M * mF) + (C > 0 ? C * cF : 0) + (S > 0 ? S * sF : 0) + (P > 0 ? P * pF : 0);
         const finalSnfMass = (M * mS) + (C > 0 ? C * cS : 0) + (S > 0 ? S * sS : 0) + (P > 0 ? P * pS : 0);
-
+        
         const finalFatPercent = (finalFatMass / finalQty) * 100;
         const finalSnfPercent = (finalSnfMass / finalQty) * 100;
 
-        let resultText = "<p>To standardize your milk, you need to add:</p><ul class='list-disc list-inside mt-2 text-lg'>";
-        let nothingAdded = true;
-        if (C > 1e-3) { resultText += `<li><strong>Cream:</strong> ${C.toFixed(3)} kg</li>`; nothingAdded = false; }
-        if (S > 1e-3) { resultText += `<li><strong>Skim Milk:</strong> ${S.toFixed(3)} kg</li>`; nothingAdded = false; }
-        if (P > 1e-3) { resultText += `<li><strong>SMP:</strong> ${P.toFixed(3)} kg</li>`; nothingAdded = false; }
-        if (W > 1e-3) { resultText += `<li><strong>Water:</strong> ${W.toFixed(3)} kg</li>`; nothingAdded = false; }
-        if (C < -1e-3) { resultText += `<li><strong class="text-red-500">Remove Fat/Cream:</strong> ${-C.toFixed(3)} kg equivalent</li>`; nothingAdded = false; }
-        if (S < -1e-3) { resultText += `<li><strong class="text-red-500">Remove Skim Milk:</strong> ${-S.toFixed(3)} kg equivalent</li>`; nothingAdded = false; }
-        if (P < -1e-3) { resultText += `<li><strong class="text-red-500">Remove SNF/Powder:</strong> ${-P.toFixed(3)} kg equivalent</li>`; nothingAdded = false; }
-        
-        if (nothingAdded) {
-            resultText += "<li>No addition/removal required. Milk already meets specifications.</li>";
-        }
-        resultText += "</ul>";
-        
         resultText += "<hr class='my-4' />";
         resultText += "<h4 class='font-bold text-md'>Final Batch Summary:</h4><ul class='list-disc list-inside mt-2 text-lg'>";
         resultText += `<li><strong>Final Milk Quantity:</strong> ${finalQty.toFixed(3)} kg</li>`;
@@ -235,11 +217,11 @@ function CustomStandardizationCalc() {
         setResult(resultText);
     };
 
-    const InputField = ({ id, label, value, unit, group }: { id: keyof typeof inputs, label: string, value: string, unit: string, group: string }) => (
+    const InputField = ({ label, value, setter, unit }: { label: string, value: string, setter: (val: string) => void, unit: string }) => (
         <div>
-            <Label htmlFor={`${group}-${id}`}>{label}</Label>
+            <Label>{label}</Label>
             <div className="flex items-center">
-                <Input id={`${group}-${id}`} type="number" value={value} onChange={e => handleInputChange(id, e.target.value)} className="rounded-r-none" />
+                <Input type="number" value={value} onChange={e => setter(e.target.value)} className="rounded-r-none" />
                 <span className="p-2 bg-muted border border-l-0 rounded-r-md text-sm">{unit}</span>
             </div>
         </div>
@@ -249,32 +231,30 @@ function CustomStandardizationCalc() {
         <CalculatorCard title="Multi-Purpose Milk Standardization Calculator" description="A precise tool to adjust Fat and SNF using various sources like Cream, Skim Milk, SMP, and Water. Enter all values, the calculator will determine what to add or remove.">
              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 
-                {/* Initial Milk */}
                 <div className="space-y-4 bg-blue-50 p-4 rounded-lg border border-blue-200">
                     <h3 className="font-semibold text-gray-800 font-headline text-lg border-b pb-2">1. Your Milk</h3>
-                    <InputField group="initial" id="milkQty" label="Milk Quantity" value={inputs.milkQty} unit="kg" />
-                    <InputField group="initial" id="milkFat" label="Fat in Milk" value={inputs.milkFat} unit="%" />
-                    <InputField group="initial" id="milkSnf" label="SNF in Milk" value={inputs.milkSnf} unit="%" />
+                    <InputField label="Milk Quantity" value={milkQty} setter={setMilkQty} unit="kg" />
+                    <InputField label="Fat in Milk" value={milkFat} setter={setMilkFat} unit="%" />
+                    <InputField label="SNF in Milk" value={milkSnf} setter={setMilkSnf} unit="%" />
                 </div>
 
-                {/* Available Sources */}
                 <div className="space-y-4 bg-yellow-50 p-4 rounded-lg border border-yellow-200 lg:col-span-2">
                     <h3 className="font-semibold text-gray-800 font-headline text-lg border-b pb-2">2. Available Sources (for adjustments)</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2 p-2 bg-yellow-100/50 rounded">
                            <p className="font-medium text-sm">Cream</p>
-                           <InputField group="sources" id="creamFat" label="Cream Fat" value={inputs.creamFat} unit="%" />
-                           <InputField group="sources" id="creamSnf" label="Cream SNF" value={inputs.creamSnf} unit="%" />
+                           <InputField label="Cream Fat" value={creamFat} setter={setCreamFat} unit="%" />
+                           <InputField label="Cream SNF" value={creamSnf} setter={setCreamSnf} unit="%" />
                         </div>
                          <div className="space-y-2 p-2 bg-yellow-100/50 rounded">
                            <p className="font-medium text-sm">Skim Milk</p>
-                           <InputField group="sources" id="skimFat" label="Skim Milk Fat" value={inputs.skimFat} unit="%" />
-                           <InputField group="sources" id="skimSnf" label="Skim Milk SNF" value={inputs.skimSnf} unit="%" />
+                           <InputField label="Skim Milk Fat" value={skimFat} setter={setSkimFat} unit="%" />
+                           <InputField label="Skim Milk SNF" value={skimSnf} setter={setSkimSnf} unit="%" />
                         </div>
                          <div className="space-y-2 p-2 bg-yellow-100/50 rounded">
                            <p className="font-medium text-sm">Powder (SMP)</p>
-                           <InputField group="sources" id="smpFat" label="SMP Fat" value={inputs.smpFat} unit="%" />
-                           <InputField group="sources" id="smpSnf" label="SMP SNF" value={inputs.smpSnf} unit="%" />
+                           <InputField label="SMP Fat" value={smpFat} setter={setSmpFat} unit="%" />
+                           <InputField label="SMP SNF" value={smpSnf} setter={setSmpSnf} unit="%" />
                         </div>
                         <div className="space-y-2 p-2 bg-yellow-100/50 rounded">
                             <p className="font-medium text-sm">Water</p>
@@ -283,11 +263,10 @@ function CustomStandardizationCalc() {
                     </div>
                 </div>
 
-                {/* Final Requirement */}
                 <div className="space-y-4 bg-green-50 p-4 rounded-lg border border-green-200 md:col-span-2 lg:col-span-1">
                     <h3 className="font-semibold text-gray-800 font-headline text-lg border-b pb-2">3. Your Target</h3>
-                    <InputField group="final" id="reqFat" label="Required Fat" value={inputs.reqFat} unit="%" />
-                    <InputField group="final" id="reqSnf" label="Required SNF" value={inputs.reqSnf} unit="%" />
+                    <InputField label="Required Fat" value={reqFat} setter={setReqFat} unit="%" />
+                    <InputField label="Required SNF" value={reqSnf} setter={setReqSnf} unit="%" />
                 </div>
             </div>
             <Button onClick={calculate} className="w-full mt-6 text-lg py-6">➡️ Calculate Standardization</Button>
@@ -751,4 +730,5 @@ function RecombinedMilkCalc() {
         </CalculatorCard>
     );
 }
+
 
