@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState } from "react"
@@ -15,11 +14,13 @@ import { Label } from "@/components/ui/label"
 import { getSnf } from "@/lib/utils"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { ArrowLeft, Blend, Milk, SlidersHorizontal, Combine, Bot } from 'lucide-react'
+import { ArrowLeft, Blend, Milk, SlidersHorizontal, Combine, Bot, Calculator } from 'lucide-react'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 
-type CalculatorType = 'fat-blending' | 'fat-snf-adjustment' | 'reconstituted-milk' | 'recombined-milk' | 'clr-blending';
+type CalculatorType = 'fat-blending' | 'fat-snf-adjustment' | 'reconstituted-milk' | 'recombined-milk' | 'clr-blending' | 'fat-snf-clr-ts';
 
 const calculatorsInfo = {
+    'fat-snf-clr-ts': { title: "Fat, SNF, CLR & TS", icon: Calculator, component: FatSnfClrTsCalc },
     'fat-blending': { title: "Fat Blending", icon: Blend, component: FatBlendingCalc },
     'fat-snf-adjustment': { title: "Fat & SNF Adjustment", icon: SlidersHorizontal, component: FatSnfAdjustmentCalc },
     'reconstituted-milk': { title: "Reconstituted Milk", icon: Milk, component: ReconstitutedMilkCalc },
@@ -96,6 +97,102 @@ const CalculatorCard = ({ title, children, description }: { title: string; child
         {children}
     </div>
 );
+
+function FatSnfClrTsCalc() {
+    const [fat, setFat] = useState("4.5");
+    const [clr, setClr] = useState("28.0");
+    const [snf, setSnf] = useState("8.5");
+    const [correctionFactor, setCorrectionFactor] = useState("0.72");
+    const [result, setResult] = useState<string | null>(null);
+    const [error, setError] = useState<string | null>(null);
+
+    const handleCalcSnfTs = () => {
+        const fatNum = parseFloat(fat);
+        const clrNum = parseFloat(clr);
+        const factor = parseFloat(correctionFactor);
+
+        setError(null);
+        setResult(null);
+
+        if (isNaN(fatNum) || isNaN(clrNum)) {
+            setError("Please enter valid Fat and CLR values.");
+            return;
+        }
+
+        const calculatedSnf = getSnf(fatNum, clrNum, factor);
+        const calculatedTs = fatNum + calculatedSnf;
+        setResult(`Calculated SNF: <strong>${calculatedSnf.toFixed(2)}%</strong><br/>Calculated TS: <strong>${calculatedTs.toFixed(2)}%</strong>`);
+    };
+
+    const handleCalcClrTs = () => {
+        const fatNum = parseFloat(fat);
+        const snfNum = parseFloat(snf);
+        const factor = parseFloat(correctionFactor);
+
+        setError(null);
+        setResult(null);
+
+        if (isNaN(fatNum) || isNaN(snfNum)) {
+            setError("Please enter valid Fat and SNF values.");
+            return;
+        }
+
+        const calculatedClr = (snfNum - (0.25 * fatNum) - factor) * 4;
+        const calculatedTs = fatNum + snfNum;
+        setResult(`Calculated CLR: <strong>${calculatedClr.toFixed(2)}</strong><br/>Calculated TS: <strong>${calculatedTs.toFixed(2)}%</strong>`);
+    };
+
+    return (
+        <CalculatorCard title="Fat, SNF, CLR & TS Calculator" description="Richmond's formula ke adhaar par doodh ke components ki aapas mein ganana karein.">
+            <div className="bg-muted/50 p-4 rounded-lg mb-6">
+                <Label>Correction Factor</Label>
+                <Select value={correctionFactor} onValueChange={setCorrectionFactor}>
+                    <SelectTrigger>
+                        <SelectValue placeholder="Select Correction Factor" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="0.72">Cow Milk (0.72)</SelectItem>
+                        <SelectItem value="0.85">Buffalo Milk (0.85)</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Calculator 1: Calculate SNF & TS */}
+                <div className="bg-card p-4 rounded-lg border space-y-4">
+                    <h4 className="font-semibold text-gray-700 text-center font-headline">Calculate SNF & TS</h4>
+                    <div>
+                        <Label htmlFor="fat-for-snf">Fat %</Label>
+                        <Input id="fat-for-snf" type="number" value={fat} onChange={e => setFat(e.target.value)} />
+                    </div>
+                    <div>
+                        <Label htmlFor="clr-for-snf">CLR</Label>
+                        <Input id="clr-for-snf" type="number" value={clr} onChange={e => setClr(e.target.value)} />
+                    </div>
+                    <Button onClick={handleCalcSnfTs} className="w-full">Calculate SNF & TS</Button>
+                </div>
+
+                {/* Calculator 2: Calculate CLR & TS */}
+                <div className="bg-card p-4 rounded-lg border space-y-4">
+                    <h4 className="font-semibold text-gray-700 text-center font-headline">Calculate CLR & TS</h4>
+                    <div>
+                        <Label htmlFor="fat-for-clr">Fat %</Label>
+                        <Input id="fat-for-clr" type="number" value={fat} onChange={e => setFat(e.target.value)} />
+                    </div>
+                    <div>
+                        <Label htmlFor="snf-for-clr">SNF %</Label>
+                        <Input id="snf-for-clr" type="number" value={snf} onChange={e => setSnf(e.target.value)} />
+                    </div>
+                    <Button onClick={handleCalcClrTs} className="w-full">Calculate CLR & TS</Button>
+                </div>
+            </div>
+
+            {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
+            {result && <Alert className="mt-4"><AlertTitle>Result</AlertTitle><AlertDescription dangerouslySetInnerHTML={{ __html: result }} /></Alert>}
+        </CalculatorCard>
+    );
+}
+
 
 const PearsonSquareCalc = ({ unit, calcType }: { unit: string, calcType: 'Fat' | 'CLR' }) => {
     const [high, setHigh] = useState("");
@@ -378,3 +475,4 @@ function RecombinedMilkCalc() {
         </CalculatorCard>
     );
 }
+
