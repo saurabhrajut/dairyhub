@@ -14,14 +14,15 @@ import { Label } from "@/components/ui/label"
 import { getSnf } from "@/lib/utils"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { ArrowLeft, Blend, Milk, SlidersHorizontal, Combine, Bot, Calculator } from 'lucide-react'
+import { ArrowLeft, Blend, Milk, SlidersHorizontal, Combine, Bot, Calculator, Settings } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 
-type CalculatorType = 'fat-blending' | 'fat-snf-adjustment' | 'reconstituted-milk' | 'recombined-milk' | 'clr-blending' | 'fat-snf-clr-ts';
+type CalculatorType = 'fat-snf-clr-ts' | 'fat-blending' | 'fat-snf-adjustment' | 'reconstituted-milk' | 'recombined-milk' | 'clr-blending' | 'custom-calculator';
 
 const calculatorsInfo = {
     'fat-snf-clr-ts': { title: "Fat, SNF, CLR & TS", icon: Calculator, component: FatSnfClrTsCalc },
     'fat-blending': { title: "Fat Blending", icon: Blend, component: FatBlendingCalc },
+    'custom-calculator': { title: 'Custom Calculator', icon: Settings, component: CustomStandardizationCalc },
     'fat-snf-adjustment': { title: "Fat & SNF Adjustment", icon: SlidersHorizontal, component: FatSnfAdjustmentCalc },
     'reconstituted-milk': { title: "Reconstituted Milk", icon: Milk, component: ReconstitutedMilkCalc },
     'recombined-milk': { title: "Recombined Milk", icon: Combine, component: RecombinedMilkCalc },
@@ -97,6 +98,133 @@ const CalculatorCard = ({ title, children, description }: { title: string; child
         {children}
     </div>
 );
+
+function CustomStandardizationCalc() {
+    const [inputs, setInputs] = useState({
+        milkQty: '1000',
+        milkFat: '3.5',
+        milkSnf: '8.5',
+        creamFat: '40',
+        butterFat: '82',
+        smpSnf: '96',
+        reqFat: '4.5',
+        reqSnf: '8.5',
+        fatSource: 'Auto-select'
+    });
+    const [result, setResult] = useState<string | null>(null);
+    const [error, setError] = useState<string | null>(null);
+
+    const handleInputChange = (field: keyof typeof inputs, value: string) => {
+        setInputs(prev => ({ ...prev, [field]: value }));
+    };
+
+    const calculate = () => {
+        setResult(null);
+        setError(null);
+
+        const values = Object.entries(inputs).reduce((acc, [key, value]) => {
+            acc[key as keyof typeof inputs] = parseFloat(value);
+            return acc;
+        }, {} as Record<keyof typeof inputs, number>);
+
+        if (Object.values(values).some(isNaN)) {
+            setError("Please fill all numeric fields correctly.");
+            return;
+        }
+
+        const { milkQty, milkFat, milkSnf, creamFat, butterFat, smpSnf, reqFat, reqSnf } = values;
+
+        const totalFatRequired = milkQty * (reqFat / 100);
+        const totalSnfRequired = milkQty * (reqSnf / 100);
+        const fatInMilk = milkQty * (milkFat / 100);
+        const snfInMilk = milkQty * (milkSnf / 100);
+
+        const fatDeficit = totalFatRequired - fatInMilk;
+        const snfDeficit = totalSnfRequired - snfInMilk;
+        
+        let smpNeeded = 0;
+        if(snfDeficit > 0) {
+            smpNeeded = snfDeficit / (smpSnf / 100);
+        }
+
+        let fatSourceNeeded = 0;
+        let finalQty = milkQty + smpNeeded;
+        let resultText = "";
+
+        if (fatDeficit > 0) {
+            const fatSource = inputs.fatSource === 'Auto-select' 
+                ? (creamFat > 0 ? 'Cream' : 'Butter') 
+                : inputs.fatSource;
+            
+            const sourceFatPercent = fatSource === 'Cream' ? creamFat : butterFat;
+            if (sourceFatPercent <= 0) {
+                setError("Selected fat source has 0% fat. Please provide a valid percentage.");
+                return;
+            }
+            
+            fatSourceNeeded = fatDeficit / (sourceFatPercent / 100);
+            finalQty += fatSourceNeeded;
+            resultText += `<li><strong>${fatSource} Required:</strong> ${fatSourceNeeded.toFixed(3)} kg</li>`;
+        }
+        
+        if(smpNeeded > 0) {
+           resultText += `<li><strong>SMP Required:</strong> ${smpNeeded.toFixed(3)} kg</li>`;
+        }
+
+        if (fatDeficit <= 0 && snfDeficit <= 0) {
+            setResult("No addition required. Initial milk already meets or exceeds target composition.");
+            return;
+        }
+
+        const finalFatPercent = ((fatInMilk + fatDeficit) / finalQty) * 100;
+        const finalSnfPercent = ((snfInMilk + snfDeficit) / finalQty) * 100;
+
+        resultText += `<li><strong>Final Milk Quantity:</strong> ${finalQty.toFixed(3)} kg</li>`;
+        resultText += `<li><strong>Final Fat % Achieved:</strong> ${finalFatPercent.toFixed(2)}%</li>`;
+        resultText += `<li><strong>Final SNF % Achieved:</strong> ${finalSnfPercent.toFixed(2)}%</li>`;
+        
+        setResult(`<ul>${resultText}</ul>`);
+    };
+
+    return (
+        <CalculatorCard title="Custom Standardization Calculator" description="Calculate additions to meet specific fat and SNF targets.">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="bg-muted/50 p-4 rounded-lg space-y-3">
+                    <h3 className="font-semibold text-gray-700 font-headline">🔹 Available Milk</h3>
+                    <div><Label>Milk Quantity (kg/L)</Label><Input type="number" value={inputs.milkQty} onChange={e => handleInputChange('milkQty', e.target.value)} /></div>
+                    <div><Label>Fat in Milk (%)</Label><Input type="number" value={inputs.milkFat} onChange={e => handleInputChange('milkFat', e.target.value)} /></div>
+                    <div><Label>SNF in Milk (%)</Label><Input type="number" value={inputs.milkSnf} onChange={e => handleInputChange('milkSnf', e.target.value)} /></div>
+                </div>
+                <div className="bg-muted/50 p-4 rounded-lg space-y-3">
+                    <h3 className="font-semibold text-gray-700 font-headline">🔹 Available Sources</h3>
+                    <div><Label>Cream Fat (%)</Label><Input type="number" value={inputs.creamFat} onChange={e => handleInputChange('creamFat', e.target.value)} /></div>
+                    <div><Label>Butter Fat (%)</Label><Input type="number" value={inputs.butterFat} onChange={e => handleInputChange('butterFat', e.target.value)} /></div>
+                    <div><Label>SMP SNF (%)</Label><Input type="number" value={inputs.smpSnf} onChange={e => handleInputChange('smpSnf', e.target.value)} /></div>
+                </div>
+                <div className="bg-primary/10 p-4 rounded-lg space-y-3">
+                    <h3 className="font-semibold text-gray-700 font-headline">🔹 Final Requirement</h3>
+                    <div><Label>Required Fat (%)</Label><Input type="number" value={inputs.reqFat} onChange={e => handleInputChange('reqFat', e.target.value)} /></div>
+                    <div><Label>Required SNF (%)</Label><Input type="number" value={inputs.reqSnf} onChange={e => handleInputChange('reqSnf', e.target.value)} /></div>
+                    <div>
+                        <Label>Fat Source</Label>
+                        <Select value={inputs.fatSource} onValueChange={v => handleInputChange('fatSource', v)}>
+                            <SelectTrigger><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="Auto-select">Auto-select</SelectItem>
+                                <SelectItem value="Cream">Cream</SelectItem>
+                                <SelectItem value="Butter">Butter</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </div>
+            </div>
+            <Button onClick={calculate} className="w-full mt-6">➡️ Calculate</Button>
+            {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
+            {result && <Alert className="mt-4"><AlertTitle>📊 Results</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
+        </CalculatorCard>
+    );
+}
+
 
 function FatSnfClrTsCalc() {
     const [fat, setFat] = useState("4.5");
@@ -380,12 +508,17 @@ function ReconstitutedMilkCalc() {
             return;
         }
 
+        if (pTS < tTS) {
+            setError("Powder TS% cannot be less than Target TS%. Please check your inputs.");
+            return;
+        }
+
         const totalSolidsNeeded = qty * tTS;
         const powderNeeded = totalSolidsNeeded / pTS;
         const waterNeeded = qty - powderNeeded;
 
         if (waterNeeded < 0) {
-            setError("Powder TS% cannot be less than Target TS%. Please check your inputs.");
+            setError("Calculation resulted in negative water. Please check your inputs.");
             return;
         }
 
@@ -475,4 +608,3 @@ function RecombinedMilkCalc() {
         </CalculatorCard>
     );
 }
-
