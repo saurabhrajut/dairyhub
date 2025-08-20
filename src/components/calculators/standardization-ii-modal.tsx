@@ -299,11 +299,11 @@ function CustomStandardizationCalc() {
 const MemoizedMilkInputGroup = memo(function MilkInputGroup({ milkNum, onInputChange }: { milkNum: 1 | 2; onInputChange: (milkNum: 1 | 2, field: string, value: string) => void; }) {
     const [values, setValues] = useState({ qty: milkNum === 1 ? '500' : '500', fat: milkNum === 1 ? '6.5' : '2.5', clr: milkNum === 1 ? '29' : '27' });
 
-    const handleChange = (field: string, value: string) => {
+    const handleChange = useCallback((field: string, value: string) => {
         const newValues = { ...values, [field]: value };
         setValues(newValues);
         onInputChange(milkNum, field, value);
-    };
+    }, [values, onInputChange, milkNum]);
 
     return (
         <div className="bg-muted/50 p-4 rounded-lg space-y-3">
@@ -831,6 +831,7 @@ function RecombinedMilkCalc() {
         </CalculatorCard>
     );
 }
+
 
 
 
