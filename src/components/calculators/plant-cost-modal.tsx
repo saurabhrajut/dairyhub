@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, memo } from "react";
 import {
   Dialog,
   DialogContent,
@@ -42,6 +42,34 @@ interface ExpenseChangeArgs {
     field: keyof ExpenseItem;
     value: string;
 }
+
+// Memoized Revenue Item Row
+const MemoizedRevenueItem = memo(function RevenueItemRow({ item, onChange, onRemove }: { item: RevenueItem, onChange: (id: number, field: keyof RevenueItem, value: string) => void, onRemove: (id: number) => void }) {
+    return (
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 items-center">
+            <Input className="sm:col-span-2" placeholder="Revenue Source (e.g., Milk Sale)" value={item.name} onChange={(e) => onChange(item.id, 'name', e.target.value)} />
+            <Input type="number" placeholder="Quantity (Ltr/Kg)" value={item.quantity} onChange={(e) => onChange(item.id, 'quantity', e.target.value)} />
+            <div className="flex items-center gap-2">
+                <Input type="number" placeholder="Price per unit" value={item.price} onChange={(e) => onChange(item.id, 'price', e.target.value)} />
+                <Button variant="ghost" size="icon" className="text-destructive" onClick={() => onRemove(item.id)}><XCircle /></Button>
+            </div>
+        </div>
+    );
+});
+
+// Memoized Expense Item Row
+const MemoizedExpenseItem = memo(function ExpenseItemRow({ item, type, onChange, onRemove }: { item: ExpenseItem, type: "variable" | "fixed", onChange: (args: ExpenseChangeArgs) => void, onRemove: (id: number) => void }) {
+    return (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 items-center">
+            <Input placeholder="Expense (e.g., Raw Milk)" value={item.name} onChange={(e) => onChange({id: item.id, type: type, field: 'name', value: e.target.value})} />
+            <div className="flex items-center gap-2">
+                <Input type="number" placeholder="Cost" value={item.cost} onChange={(e) => onChange({id: item.id, type: type, field: 'cost', value: e.target.value})} />
+                <Button variant="ghost" size="icon" className="text-destructive" onClick={() => onRemove(item.id)}><XCircle /></Button>
+            </div>
+        </div>
+    );
+});
+
 
 export function PlantCostModal({
   isOpen,
@@ -139,14 +167,12 @@ export function PlantCostModal({
             <Section title={`Total Revenue (${period})`}>
                  <div className="space-y-3">
                     {revenues.map((item) => (
-                        <div key={item.id} className="grid grid-cols-1 sm:grid-cols-4 gap-2 items-center">
-                            <Input className="sm:col-span-2" placeholder="Revenue Source (e.g., Milk Sale)" value={item.name} onChange={(e) => handleRevenueChange(item.id, 'name', e.target.value)} />
-                            <Input type="number" placeholder="Quantity (Ltr/Kg)" value={item.quantity} onChange={(e) => handleRevenueChange(item.id, 'quantity', e.target.value)} />
-                            <div className="flex items-center gap-2">
-                                <Input type="number" placeholder="Price per unit" value={item.price} onChange={(e) => handleRevenueChange(item.id, 'price', e.target.value)} />
-                                <Button variant="ghost" size="icon" className="text-destructive" onClick={() => handleRemoveItem(item.id, 'revenue')}><XCircle /></Button>
-                            </div>
-                        </div>
+                        <MemoizedRevenueItem 
+                            key={item.id}
+                            item={item}
+                            onChange={handleRevenueChange}
+                            onRemove={() => handleRemoveItem(item.id, 'revenue')}
+                        />
                     ))}
                 </div>
                 <Button variant="outline" size="sm" onClick={() => handleAddItem('revenue')} className="mt-4"><PlusCircle className="mr-2"/> Add Revenue Item</Button>
@@ -155,13 +181,13 @@ export function PlantCostModal({
             <Section title={`Total Variable Expenses (${period})`}>
                 <div className="space-y-3">
                     {variableExpenses.map((item) => (
-                         <div key={item.id} className="grid grid-cols-1 sm:grid-cols-2 gap-2 items-center">
-                            <Input placeholder="Expense (e.g., Raw Milk)" value={item.name} onChange={(e) => handleExpenseChange({id: item.id, type: 'variable', field: 'name', value: e.target.value})} />
-                            <div className="flex items-center gap-2">
-                                <Input type="number" placeholder="Cost" value={item.cost} onChange={(e) => handleExpenseChange({id: item.id, type: 'variable', field: 'cost', value: e.target.value})} />
-                                <Button variant="ghost" size="icon" className="text-destructive" onClick={() => handleRemoveItem(item.id, 'variable')}><XCircle /></Button>
-                            </div>
-                        </div>
+                        <MemoizedExpenseItem 
+                            key={item.id}
+                            item={item}
+                            type="variable"
+                            onChange={handleExpenseChange}
+                            onRemove={() => handleRemoveItem(item.id, 'variable')}
+                        />
                     ))}
                 </div>
                 <Button variant="outline" size="sm" onClick={() => handleAddItem('variable')} className="mt-4"><PlusCircle className="mr-2"/> Add Variable Expense</Button>
@@ -170,13 +196,13 @@ export function PlantCostModal({
             <Section title="Total Fixed Expenses (Monthly)">
                  <div className="space-y-3">
                     {fixedExpenses.map((item) => (
-                         <div key={item.id} className="grid grid-cols-1 sm:grid-cols-2 gap-2 items-center">
-                            <Input placeholder="Expense (e.g., Salaries)" value={item.name} onChange={(e) => handleExpenseChange({id: item.id, type: 'fixed', field: 'name', value: e.target.value})} />
-                            <div className="flex items-center gap-2">
-                                <Input type="number" placeholder="Cost" value={item.cost} onChange={(e) => handleExpenseChange({id: item.id, type: 'fixed', field: 'cost', value: e.target.value})} />
-                                <Button variant="ghost" size="icon" className="text-destructive" onClick={() => handleRemoveItem(item.id, 'fixed')}><XCircle /></Button>
-                            </div>
-                        </div>
+                        <MemoizedExpenseItem 
+                            key={item.id}
+                            item={item}
+                            type="fixed"
+                            onChange={handleExpenseChange}
+                            onRemove={() => handleRemoveItem(item.id, 'fixed')}
+                        />
                     ))}
                 </div>
                 <Button variant="outline" size="sm" onClick={() => handleAddItem('fixed')} className="mt-4"><PlusCircle className="mr-2"/> Add Fixed Expense</Button>
