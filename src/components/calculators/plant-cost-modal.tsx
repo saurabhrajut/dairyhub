@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useMemo, memo } from "react";
+import { useState, useMemo, memo, useCallback } from "react";
 import {
   Dialog,
   DialogContent,
@@ -58,13 +58,13 @@ const MemoizedRevenueItem = memo(function RevenueItemRow({ item, onChange, onRem
 });
 
 // Memoized Expense Item Row
-const MemoizedExpenseItem = memo(function ExpenseItemRow({ item, type, onChange, onRemove }: { item: ExpenseItem, type: "variable" | "fixed", onChange: (args: ExpenseChangeArgs) => void, onRemove: (id: number) => void }) {
+const MemoizedExpenseItem = memo(function ExpenseItemRow({ item, type, onChange, onRemove }: { item: ExpenseItem, type: "variable" | "fixed", onChange: (args: ExpenseChangeArgs) => void, onRemove: (id: number, type: "variable" | "fixed") => void }) {
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 items-center">
             <Input placeholder="Expense (e.g., Raw Milk)" value={item.name} onChange={(e) => onChange({id: item.id, type: type, field: 'name', value: e.target.value})} />
             <div className="flex items-center gap-2">
                 <Input type="number" placeholder="Cost" value={item.cost} onChange={(e) => onChange({id: item.id, type: type, field: 'cost', value: e.target.value})} />
-                <Button variant="ghost" size="icon" className="text-destructive" onClick={() => onRemove(item.id)}><XCircle /></Button>
+                <Button variant="ghost" size="icon" className="text-destructive" onClick={() => onRemove(item.id, type)}><XCircle /></Button>
             </div>
         </div>
     );
@@ -94,46 +94,50 @@ export function PlantCostModal({
     { id: 2, name: "Rent", cost: "" },
   ]);
 
-  const handleAddItem = (type: "revenue" | "variable" | "fixed") => {
+  const handleAddItem = useCallback((type: "revenue" | "variable" | "fixed") => {
     const newItem = { id: Date.now(), name: "", cost: "", quantity: "", price: "" };
-    if (type === "revenue") setRevenues([...revenues, newItem]);
-    else if (type === "variable") setVariableExpenses([...variableExpenses, newItem as ExpenseItem]);
-    else setFixedExpenses([...fixedExpenses, newItem as ExpenseItem]);
-  };
+    if (type === "revenue") setRevenues(prev => [...prev, newItem]);
+    else if (type === "variable") setVariableExpenses(prev => [...prev, newItem as ExpenseItem]);
+    else setFixedExpenses(prev => [...prev, newItem as ExpenseItem]);
+  }, []);
 
-  const handleRemoveItem = (id: number, type: "revenue" | "variable" | "fixed") => {
-    if (type === "revenue") setRevenues(revenues.filter(item => item.id !== id));
-    else if (type === "variable") setVariableExpenses(variableExpenses.filter(item => item.id !== id));
-    else setFixedExpenses(fixedExpenses.filter(item => item.id !== id));
-  };
+  const handleRemoveItem = useCallback((id: number, type: "revenue" | "variable" | "fixed") => {
+    if (type === "revenue") setRevenues(prev => prev.filter(item => item.id !== id));
+    else if (type === "variable") setVariableExpenses(prev => prev.filter(item => item.id !== id));
+    else setFixedExpenses(prev => prev.filter(item => item.id !== id));
+  }, []);
   
-  const handleRevenueChange = (id: number, field: keyof RevenueItem, value: string) => {
-    setRevenues(revenues.map(item => (item.id === id ? { ...item, [field]: value } : item)));
-  };
+  const handleRevenueChange = useCallback((id: number, field: keyof RevenueItem, value: string) => {
+    setRevenues(prev => prev.map(item => (item.id === id ? { ...item, [field]: value } : item)));
+  }, []);
 
-  const handleExpenseChange = ({id, type, field, value}: ExpenseChangeArgs) => {
-      const list = type === 'variable' ? variableExpenses : fixedExpenses;
-      const setList = type === 'variable' ? setVariableExpenses : setFixedExpenses;
-      setList(list.map(item => item.id === id ? {...item, [field]: value} : item));
-  };
+  const handleExpenseChange = useCallback(({id, type, field, value}: ExpenseChangeArgs) => {
+      const listSetter = type === 'variable' ? setVariableExpenses : setFixedExpenses;
+      listSetter(prev => prev.map(item => item.id === id ? {...item, [field]: value} : item));
+  }, []);
 
   const { totalRevenue, totalExpenses, profitOrLoss, periodMultiplier } = useMemo(() => {
-    const periodMultiplier = period === "daily" ? 1 : 30;
+    const periodMultiplierValue = period === "daily" ? 1 : 30;
 
-    const totalRevenue = revenues.reduce((sum, item) => {
+    const totalRevenueValue = revenues.reduce((sum, item) => {
         const quantity = parseFloat(item.quantity) || 0;
         const price = parseFloat(item.price) || 0;
         return sum + (quantity * price);
     }, 0);
 
-    const totalVariableCost = variableExpenses.reduce((sum, item) => sum + (parseFloat(item.cost) || 0), 0);
-    const totalFixedCostForPeriod = fixedExpenses.reduce((sum, item) => sum + (parseFloat(item.cost) || 0), 0) / (period === "daily" ? 30 : 1);
+    const totalVariableCostValue = variableExpenses.reduce((sum, item) => sum + (parseFloat(item.cost) || 0), 0);
+    const totalFixedCostForPeriodValue = fixedExpenses.reduce((sum, item) => sum + (parseFloat(item.cost) || 0), 0) / (period === "daily" ? 30 : 1);
     
-    const totalExpenses = totalVariableCost + totalFixedCostForPeriod;
+    const totalExpensesValue = totalVariableCostValue + totalFixedCostForPeriodValue;
 
-    const profitOrLoss = totalRevenue - totalExpenses;
+    const profitOrLossValue = totalRevenueValue - totalExpensesValue;
 
-    return { totalRevenue, totalExpenses, profitOrLoss, periodMultiplier };
+    return { 
+        totalRevenue: totalRevenueValue, 
+        totalExpenses: totalExpensesValue, 
+        profitOrLoss: profitOrLossValue, 
+        periodMultiplier: periodMultiplierValue
+    };
   }, [revenues, variableExpenses, fixedExpenses, period]);
   
 
@@ -171,7 +175,7 @@ export function PlantCostModal({
                             key={item.id}
                             item={item}
                             onChange={handleRevenueChange}
-                            onRemove={() => handleRemoveItem(item.id, 'revenue')}
+                            onRemove={handleRemoveItem}
                         />
                     ))}
                 </div>
@@ -186,7 +190,7 @@ export function PlantCostModal({
                             item={item}
                             type="variable"
                             onChange={handleExpenseChange}
-                            onRemove={() => handleRemoveItem(item.id, 'variable')}
+                            onRemove={handleRemoveItem}
                         />
                     ))}
                 </div>
@@ -201,7 +205,7 @@ export function PlantCostModal({
                             item={item}
                             type="fixed"
                             onChange={handleExpenseChange}
-                            onRemove={() => handleRemoveItem(item.id, 'fixed')}
+                            onRemove={handleRemoveItem}
                         />
                     ))}
                 </div>

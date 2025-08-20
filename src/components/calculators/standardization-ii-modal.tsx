@@ -1,7 +1,7 @@
 
 "use client"
 
-import { useState, memo } from "react"
+import { useState, memo, useCallback } from "react"
 import {
   Dialog,
   DialogContent,
@@ -281,52 +281,40 @@ function CustomStandardizationCalc() {
 }
 
 // Memoized InputGroup to prevent re-renders
-const MemoizedInputGroup = memo(function InputGroup({ milkNum, qty, fat, clr, handler }: { milkNum: 1 | 2; qty: string; fat: string; clr: string; handler: (milkType: 'milk1' | 'milk2', field: 'qty' | 'fat' | 'clr', value: string) => void }) {
+const MemoizedInputGroup = memo(function InputGroup({ milkNum, values, handler }: { milkNum: 1 | 2; values: {qty: string, fat: string, clr: string}; handler: (milkNum: 1 | 2, field: 'qty' | 'fat' | 'clr', value: string) => void }) {
     return (
         <div className="bg-muted/50 p-4 rounded-lg space-y-3">
             <h3 className="font-semibold text-gray-700 font-headline">Milk Source {milkNum}</h3>
-            <div><Label>Quantity (kg/L)</Label><Input type="number" value={qty} onChange={e => handler(`milk${milkNum}`, 'qty', e.target.value)} /></div>
-            <div><Label>Fat %</Label><Input type="number" value={fat} onChange={e => handler(`milk${milkNum}`, 'fat', e.target.value)} /></div>
-            <div><Label>CLR</Label><Input type="number" value={clr} onChange={e => handler(`milk${milkNum}`, 'clr', e.target.value)} /></div>
+            <div><Label>Quantity (kg/L)</Label><Input type="number" value={values.qty} onChange={e => handler(milkNum, 'qty', e.target.value)} /></div>
+            <div><Label>Fat %</Label><Input type="number" value={values.fat} onChange={e => handler(milkNum, 'fat', e.target.value)} /></div>
+            <div><Label>CLR</Label><Input type="number" value={values.clr} onChange={e => handler(milkNum, 'clr', e.target.value)} /></div>
         </div>
     );
 });
 
 
 function MilkBlendingCalc() {
-    const [milk1Qty, setMilk1Qty] = useState('');
-    const [milk1Fat, setMilk1Fat] = useState('');
-    const [milk1Clr, setMilk1Clr] = useState('');
-    
-    const [milk2Qty, setMilk2Qty] = useState('');
-    const [milk2Fat, setMilk2Fat] = useState('');
-    const [milk2Clr, setMilk2Clr] = useState('');
+    const [milk1, setMilk1] = useState({ qty: '', fat: '', clr: '' });
+    const [milk2, setMilk2] = useState({ qty: '', fat: '', clr: '' });
 
     const [result, setResult] = useState<{ finalQty: number; finalFat: number; finalClr: number } | null>(null);
     const [error, setError] = useState<string | null>(null);
 
-    const handleInputChange = (milkType: 'milk1' | 'milk2', field: 'qty' | 'fat' | 'clr', value: string) => {
-        if (milkType === 'milk1') {
-            if (field === 'qty') setMilk1Qty(value);
-            if (field === 'fat') setMilk1Fat(value);
-            if (field === 'clr') setMilk1Clr(value);
-        } else {
-            if (field === 'qty') setMilk2Qty(value);
-            if (field === 'fat') setMilk2Fat(value);
-            if (field === 'clr') setMilk2Clr(value);
-        }
-    };
+    const handleInputChange = useCallback((milkNum: 1 | 2, field: 'qty' | 'fat' | 'clr', value: string) => {
+        const setter = milkNum === 1 ? setMilk1 : setMilk2;
+        setter(prev => ({...prev, [field]: value }));
+    }, []);
 
     const calculate = () => {
         setResult(null);
         setError(null);
         
-        const q1 = parseFloat(milk1Qty);
-        const f1 = parseFloat(milk1Fat);
-        const c1 = parseFloat(milk1Clr);
-        const q2 = parseFloat(milk2Qty);
-        const f2 = parseFloat(milk2Fat);
-        const c2 = parseFloat(milk2Clr);
+        const q1 = parseFloat(milk1.qty);
+        const f1 = parseFloat(milk1.fat);
+        const c1 = parseFloat(milk1.clr);
+        const q2 = parseFloat(milk2.qty);
+        const f2 = parseFloat(milk2.fat);
+        const c2 = parseFloat(milk2.clr);
 
         if ([q1, f1, c1, q2, f2, c2].some(isNaN)) {
             setError("Please fill all fields with valid numbers.");
@@ -350,16 +338,12 @@ function MilkBlendingCalc() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                 <MemoizedInputGroup 
                     milkNum={1} 
-                    qty={milk1Qty}
-                    fat={milk1Fat}
-                    clr={milk1Clr}
+                    values={milk1}
                     handler={handleInputChange} 
                 />
                 <MemoizedInputGroup 
                     milkNum={2}
-                    qty={milk2Qty}
-                    fat={milk2Fat}
-                    clr={milk2Clr}
+                    values={milk2}
                     handler={handleInputChange} 
                 />
             </div>
@@ -763,6 +747,7 @@ function RecombinedMilkCalc() {
         </CalculatorCard>
     );
 }
+
 
 
 

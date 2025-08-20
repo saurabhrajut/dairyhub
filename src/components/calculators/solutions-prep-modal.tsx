@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, Fragment } from "react";
+import { useState, Fragment, useCallback, memo } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
@@ -104,33 +104,34 @@ const CalculatorCard = ({ title, children, description }: { title: string; child
 function SolutionCalculator({ chemType, title, idPrefix }: { chemType: 'acids' | 'bases' | 'other_reagents'; title: string; idPrefix: string; }) {
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const [chemicalKey, setChemicalKey] = useState("");
+    const [normality, setNormality] = useState("");
+    const [volume, setVolume] = useState("");
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setResult(null);
         setError(null);
-        const formData = new FormData(e.currentTarget);
-        const key = formData.get(`${idPrefix}-select`) as string;
-        const normality = parseFloat(formData.get(`${idPrefix}-normality`) as string);
-        const volume = parseFloat(formData.get(`${idPrefix}-volume`) as string);
+        const norm = parseFloat(normality);
+        const vol = parseFloat(volume);
 
-        if (!key || isNaN(normality) || isNaN(volume) || normality <= 0 || volume <= 0) {
+        if (!chemicalKey || isNaN(norm) || isNaN(vol) || norm <= 0 || vol <= 0) {
             setError('Please enter valid positive numbers for all fields.');
             return;
         }
         
-        const chemical = (chemicals as any)[chemType][key];
+        const chemical = (chemicals as any)[chemType][chemicalKey];
         let resultText = '';
 
         if (chemical.type === 'solid') {
             const equivalentWeight = chemical.molarMass / chemical.nFactor;
-            const weight = normality * equivalentWeight * (volume / 1000);
-            resultText = `To prepare ${volume} mL of ${normality} N ${chemical.name}, dissolve <code class="font-bold bg-green-100 p-1 rounded">${weight.toFixed(3)} g</code> of the solid in distilled water and make the final volume up to <code class="font-bold">${volume} mL</code>.`;
+            const weight = norm * equivalentWeight * (vol / 1000);
+            resultText = `To prepare ${vol} mL of ${norm} N ${chemical.name}, dissolve <code class="font-bold bg-green-100 p-1 rounded">${weight.toFixed(3)} g</code> of the solid in distilled water and make the final volume up to <code class="font-bold">${vol} mL</code>.`;
         } else if (chemical.type === 'liquid') {
             const stockMolarity = (chemical.purity / 100 * chemical.density * 1000) / chemical.molarMass;
             const stockNormality = stockMolarity * chemical.nFactor;
-            const requiredVolume = (normality * volume) / stockNormality;
-            resultText = `To prepare ${volume} mL of ${normality} N ${chemical.name}, take <code class="font-bold bg-green-100 p-1 rounded">${requiredVolume.toFixed(3)} mL</code> of the concentrated liquid (Purity: ${chemical.purity}%, Density: ${chemical.density} g/mL) and carefully add it to distilled water, then make the final volume up to <code class="font-bold">${volume} mL</code>. <strong class="block mt-2 text-yellow-700 bg-yellow-50 p-2 rounded">⚠️ Always add acid to water!</strong>`;
+            const requiredVolume = (norm * vol) / stockNormality;
+            resultText = `To prepare ${vol} mL of ${norm} N ${chemical.name}, take <code class="font-bold bg-green-100 p-1 rounded">${requiredVolume.toFixed(3)} mL</code> of the concentrated liquid (Purity: ${chemical.purity}%, Density: ${chemical.density} g/mL) and carefully add it to distilled water, then make the final volume up to <code class="font-bold">${vol} mL</code>. <strong class="block mt-2 text-yellow-700 bg-yellow-50 p-2 rounded">⚠️ Always add acid to water!</strong>`;
         }
         setResult(resultText);
     }
@@ -141,7 +142,7 @@ function SolutionCalculator({ chemType, title, idPrefix }: { chemType: 'acids' |
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
                     <div>
                         <Label htmlFor={`${idPrefix}-select`}>Select Chemical</Label>
-                        <Select name={`${idPrefix}-select`} required>
+                        <Select name={`${idPrefix}-select`} value={chemicalKey} onValueChange={setChemicalKey} required>
                             <SelectTrigger><SelectValue placeholder={`Select a chemical`} /></SelectTrigger>
                             <SelectContent>
                                 {Object.entries((chemicals as any)[chemType]).map(([key, value]: [string, any]) => (
@@ -152,11 +153,11 @@ function SolutionCalculator({ chemType, title, idPrefix }: { chemType: 'acids' |
                     </div>
                     <div>
                         <Label htmlFor={`${idPrefix}-normality`}>Required Normality (N)</Label>
-                        <Input type="number" name={`${idPrefix}-normality`} placeholder="e.g., 0.1" step="any" required />
+                        <Input type="number" name={`${idPrefix}-normality`} placeholder="e.g., 0.1" step="any" value={normality} onChange={(e) => setNormality(e.target.value)} required />
                     </div>
                     <div>
                         <Label htmlFor={`${idPrefix}-volume`}>Final Volume (mL)</Label>
-                        <Input type="number" name={`${idPrefix}-volume`} placeholder="e.g., 1000" step="any" required />
+                        <Input type="number" name={`${idPrefix}-volume`} placeholder="e.g., 1000" step="any" value={volume} onChange={(e) => setVolume(e.target.value)} required />
                     </div>
                     <Button type="submit" className="w-full">Calculate</Button>
                 </div>
@@ -174,21 +175,21 @@ function IndicatorCalc() {
     const [result, setResult] = useState<string | null>(null);
     const [volume, setVolume] = useState('100');
     const [error, setError] = useState<string | null>(null);
+    const [indicatorKey, setIndicatorKey] = useState("");
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setResult(null);
         setError(null);
-        const formData = new FormData(e.currentTarget);
-        const key = formData.get('indicator-select') as string;
-        const vol = parseFloat(formData.get('indicator-volume') as string);
         
-        if (!key || isNaN(vol) || vol <= 0) {
+        const vol = parseFloat(volume);
+        
+        if (!indicatorKey || isNaN(vol) || vol <= 0) {
             setError("Please select an indicator and enter a valid volume.");
             return;
         }
 
-        const indicator = chemicals.indicators[key as keyof typeof chemicals.indicators];
+        const indicator = chemicals.indicators[indicatorKey as keyof typeof chemicals.indicators];
 
         let resultText = "";
         if (indicator.type === 'mixed') {
@@ -206,7 +207,7 @@ function IndicatorCalc() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
                     <div>
                         <Label htmlFor="indicator-select">Select Indicator</Label>
-                        <Select name="indicator-select" required>
+                        <Select name="indicator-select" value={indicatorKey} onValueChange={setIndicatorKey} required>
                             <SelectTrigger><SelectValue placeholder="Select an indicator" /></SelectTrigger>
                             <SelectContent>
                                 {Object.entries(chemicals.indicators).map(([key, value]) => (
@@ -408,25 +409,26 @@ function StrengthCalc() {
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     const allChemicals = {...chemicals.acids, ...chemicals.bases, ...chemicals.other_reagents};
+    const [chemicalKey, setChemicalKey] = useState("");
+    const [normality, setNormality] = useState("");
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setResult(null);
         setError(null);
-        const formData = new FormData(e.currentTarget);
-        const key = formData.get('strength-chemical') as string;
-        const normality = parseFloat(formData.get('strength-normality') as string);
         
-        if (!key || isNaN(normality) || normality <= 0) {
+        const norm = parseFloat(normality);
+        
+        if (!chemicalKey || isNaN(norm) || norm <= 0) {
             setError('Please select a chemical and enter a valid normality.');
             return;
         }
         
-        const chemical = allChemicals[key as keyof typeof allChemicals];
+        const chemical = allChemicals[chemicalKey as keyof typeof allChemicals];
         const equivalentWeight = chemical.molarMass / chemical.nFactor;
-        const strength = normality * equivalentWeight;
+        const strength = norm * equivalentWeight;
         
-        setResult(`The strength of ${normality} N ${chemical.name} is <code class="font-bold bg-green-100 p-1 rounded">${strength.toFixed(3)} g/L</code>.`);
+        setResult(`The strength of ${norm} N ${chemical.name} is <code class="font-bold bg-green-100 p-1 rounded">${strength.toFixed(3)} g/L</code>.`);
     }
 
     return (
@@ -435,7 +437,7 @@ function StrengthCalc() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
                     <div>
                         <Label htmlFor="strength-chemical">Select Chemical</Label>
-                        <Select name="strength-chemical" required>
+                        <Select name="strength-chemical" value={chemicalKey} onValueChange={setChemicalKey} required>
                             <SelectTrigger><SelectValue placeholder="Select a chemical" /></SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
@@ -461,7 +463,7 @@ function StrengthCalc() {
                     </div>
                     <div>
                         <Label htmlFor="strength-normality">Normality (N)</Label>
-                        <Input type="number" name="strength-normality" placeholder="e.g., 0.1012" step="any" required />
+                        <Input type="number" name="strength-normality" placeholder="e.g., 0.1012" step="any" value={normality} onChange={e => setNormality(e.target.value)} required />
                     </div>
                     <div className="md:col-span-2">
                     <Button type="submit" className="w-full">Calculate Strength</Button>
@@ -477,22 +479,24 @@ function StrengthCalc() {
 function SpiritSolutionCalc() {
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const [spiritKey, setSpiritKey] = useState("");
+    const [reqStrength, setReqStrength] = useState("");
+    const [reqVolume, setReqVolume] = useState("");
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setResult(null);
         setError(null);
-        const formData = new FormData(e.currentTarget);
-        const key = formData.get('spirit-select') as string;
-        const requiredStrength = parseFloat(formData.get('spirit-required-strength') as string);
-        const requiredVolume = parseFloat(formData.get('spirit-required-volume') as string);
         
-        if (!key || isNaN(requiredStrength) || isNaN(requiredVolume) || requiredStrength <= 0 || requiredVolume <= 0) {
+        const requiredStrength = parseFloat(reqStrength);
+        const requiredVolume = parseFloat(reqVolume);
+        
+        if (!spiritKey || isNaN(requiredStrength) || isNaN(requiredVolume) || requiredStrength <= 0 || requiredVolume <= 0) {
             setError('Please provide valid positive numbers for all fields.');
             return;
         }
 
-        const spirit = chemicals.spirits[key as keyof typeof chemicals.spirits];
+        const spirit = chemicals.spirits[spiritKey as keyof typeof chemicals.spirits];
         if (requiredStrength > spirit.stockPurity) {
             setError(`Required strength cannot be higher than stock purity (${spirit.stockPurity}%).`);
             return;
@@ -508,7 +512,7 @@ function SpiritSolutionCalc() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
                     <div>
                         <Label htmlFor="spirit-select">Select Spirit</Label>
-                        <Select name="spirit-select" required>
+                        <Select name="spirit-select" value={spiritKey} onValueChange={setSpiritKey} required>
                             <SelectTrigger><SelectValue placeholder="Select a spirit" /></SelectTrigger>
                             <SelectContent>
                                 {Object.entries(chemicals.spirits).map(([key, value]) => (
@@ -519,11 +523,11 @@ function SpiritSolutionCalc() {
                     </div>
                     <div>
                         <Label htmlFor="spirit-required-strength">Required Strength (%)</Label>
-                        <Input type="number" name="spirit-required-strength" placeholder="e.g., 70" step="any" required />
+                        <Input type="number" name="spirit-required-strength" placeholder="e.g., 70" step="any" value={reqStrength} onChange={e => setReqStrength(e.target.value)} required />
                     </div>
                     <div>
                         <Label htmlFor="spirit-required-volume">Required Volume (mL)</Label>
-                        <Input type="number" name="spirit-required-volume" placeholder="e.g., 1000" step="any" required />
+                        <Input type="number" name="spirit-required-volume" placeholder="e.g., 1000" step="any" value={reqVolume} onChange={e => setReqVolume(e.target.value)} required />
                     </div>
                     <div className="md:col-span-2">
                         <Button type="submit" className="w-full">Calculate</Button>
@@ -558,15 +562,19 @@ function CombinedNormalityAdjustmentCalc() {
 function NormalityAdjustmentCalc() {
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const [nHave, setNHave] = useState("");
+    const [vHave, setVHave] = useState("");
+    const [nReq, setNReq] = useState("");
+
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setResult(null);
         setError(null);
-        const formData = new FormData(e.currentTarget);
-        const n_have = parseFloat(formData.get('adj-n-have') as string);
-        const v_have = parseFloat(formData.get('adj-v-have') as string);
-        const n_req = parseFloat(formData.get('adj-n-req') as string);
+        
+        const n_have = parseFloat(nHave);
+        const v_have = parseFloat(vHave);
+        const n_req = parseFloat(nReq);
         
         if (isNaN(n_have) || isNaN(v_have) || isNaN(n_req) || n_have <= 0 || v_have <= 0 || n_req <= 0) {
             setError('Please enter valid positive numbers for all fields.');
@@ -589,15 +597,15 @@ function NormalityAdjustmentCalc() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-end">
                     <div>
                         <Label htmlFor="adj-n-have">Normality you have (N₁)</Label>
-                        <Input type="number" name="adj-n-have" placeholder="e.g., 0.1150" step="any" required />
+                        <Input type="number" name="adj-n-have" placeholder="e.g., 0.1150" step="any" value={nHave} onChange={e => setNHave(e.target.value)} required />
                     </div>
                     <div>
                         <Label htmlFor="adj-v-have">Volume you have (V₁)</Label>
-                        <Input type="number" name="adj-v-have" placeholder="e.g., 950" step="any" required />
+                        <Input type="number" name="adj-v-have" placeholder="e.g., 950" step="any" value={vHave} onChange={e => setVHave(e.target.value)} required />
                     </div>
                     <div>
                         <Label htmlFor="adj-n-req">Normality you want (N₂)</Label>
-                        <Input type="number" name="adj-n-req" placeholder="e.g., 0.1000" step="any" required />
+                        <Input type="number" name="adj-n-req" placeholder="e.g., 0.1000" step="any" value={nReq} onChange={e => setNReq(e.target.value)} required />
                     </div>
                     <div className="md:col-span-2 lg:col-span-3">
                     <Button type="submit" className="w-full">Calculate</Button>
@@ -614,16 +622,19 @@ function IncreaseNormalityCalc() {
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     const allChemicals = {...chemicals.acids, ...chemicals.bases, ...chemicals.other_reagents};
-    
+    const [nHave, setNHave] = useState("");
+    const [vHave, setVHave] = useState("");
+    const [nReq, setNReq] = useState("");
+    const [chemicalKey, setChemicalKey] = useState("");
+
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setResult(null);
         setError(null);
-        const formData = new FormData(e.currentTarget);
-        const n_have = parseFloat(formData.get('inc-n-have') as string);
-        const v_have = parseFloat(formData.get('inc-v-have') as string);
-        const n_req = parseFloat(formData.get('inc-n-req') as string);
-        const chemicalKey = formData.get('inc-chemical') as string;
+
+        const n_have = parseFloat(nHave);
+        const v_have = parseFloat(vHave);
+        const n_req = parseFloat(nReq);
         
         if (isNaN(n_have) || isNaN(v_have) || isNaN(n_req) || !chemicalKey) {
             setError('Please fill all fields with valid numbers and select a chemical.');
@@ -661,19 +672,19 @@ function IncreaseNormalityCalc() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 items-end">
                     <div>
                         <Label htmlFor="inc-n-have">Normality you have (N₁)</Label>
-                        <Input type="number" name="inc-n-have" placeholder="e.g., 0.0850" step="any" required />
+                        <Input type="number" name="inc-n-have" placeholder="e.g., 0.0850" step="any" value={nHave} onChange={e => setNHave(e.target.value)} required />
                     </div>
                      <div>
                         <Label htmlFor="inc-v-have">Volume you have (V₁)</Label>
-                        <Input type="number" name="inc-v-have" placeholder="e.g., 900" step="any" required />
+                        <Input type="number" name="inc-v-have" placeholder="e.g., 900" step="any" value={vHave} onChange={e => setVHave(e.target.value)} required />
                     </div>
                      <div>
                         <Label htmlFor="inc-n-req">Normality you want (N₂)</Label>
-                        <Input type="number" name="inc-n-req" placeholder="e.g., 0.1000" step="any" required />
+                        <Input type="number" name="inc-n-req" placeholder="e.g., 0.1000" step="any" value={nReq} onChange={e => setNReq(e.target.value)} required />
                     </div>
                     <div>
                         <Label htmlFor="inc-chemical">Chemical to Add</Label>
-                        <Select name="inc-chemical" required>
+                        <Select name="inc-chemical" value={chemicalKey} onValueChange={setChemicalKey} required>
                             <SelectTrigger><SelectValue placeholder="Select a chemical" /></SelectTrigger>
                              <SelectContent>
                                 <SelectGroup>
@@ -707,32 +718,34 @@ function PercentageSolutionCalc() {
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     const allChemicals = {...chemicals.acids, ...chemicals.bases, ...chemicals.other_reagents};
+    const [chemicalKey, setChemicalKey] = useState("");
+    const [percentage, setPercentage] = useState("");
+    const [volume, setVolume] = useState("");
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setResult(null);
         setError(null);
-        const formData = new FormData(e.currentTarget);
-        const key = formData.get('percentage-chemical-select') as string;
-        const percentage = parseFloat(formData.get('percentage-required') as string);
-        const volume = parseFloat(formData.get('percentage-volume') as string);
+        
+        const perc = parseFloat(percentage);
+        const vol = parseFloat(volume);
 
-        if (!key || isNaN(percentage) || isNaN(volume) || percentage <= 0 || volume <= 0) {
+        if (!chemicalKey || isNaN(perc) || isNaN(vol) || perc <= 0 || vol <= 0) {
             setError('Please enter valid positive numbers for all fields.');
             return;
         }
         
-        const chemical = allChemicals[key as keyof typeof allChemicals];
+        const chemical = allChemicals[chemicalKey as keyof typeof allChemicals];
         let resultText = '';
 
         if (chemical.type === 'solid') {
-            const weight = (percentage / 100) * volume;
-            resultText = `To prepare ${volume} mL of ${percentage}% w/v ${chemical.name}, dissolve <code class="font-bold bg-green-100 p-1 rounded">${weight.toFixed(3)} g</code> of the solid in a solvent and make the final volume up to <code class="font-bold">${volume} mL</code>.`;
+            const weight = (perc / 100) * vol;
+            resultText = `To prepare ${vol} mL of ${perc}% w/v ${chemical.name}, dissolve <code class="font-bold bg-green-100 p-1 rounded">${weight.toFixed(3)} g</code> of the solid in a solvent and make the final volume up to <code class="font-bold">${vol} mL</code>.`;
         } else if (chemical.type === 'liquid') {
-            const pureWeightNeeded = (percentage / 100) * volume;
+            const pureWeightNeeded = (perc / 100) * vol;
             const stockWeightNeeded = pureWeightNeeded / (chemical.purity / 100);
             const stockVolumeNeeded = stockWeightNeeded / chemical.density;
-            resultText = `To prepare ${volume} mL of ${percentage}% w/v ${chemical.name}, take <code class="font-bold bg-green-100 p-1 rounded">${stockVolumeNeeded.toFixed(3)} mL</code> of the concentrated liquid and make the final volume up to <code class="font-bold">${volume} mL</code>.`;
+            resultText = `To prepare ${vol} mL of ${perc}% w/v ${chemical.name}, take <code class="font-bold bg-green-100 p-1 rounded">${stockVolumeNeeded.toFixed(3)} mL</code> of the concentrated liquid and make the final volume up to <code class="font-bold">${vol} mL</code>.`;
         }
         setResult(resultText);
     }
@@ -743,7 +756,7 @@ function PercentageSolutionCalc() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-end">
                     <div>
                         <Label htmlFor="percentage-chemical-select">Select Chemical</Label>
-                        <Select name="percentage-chemical-select" required>
+                        <Select name="percentage-chemical-select" value={chemicalKey} onValueChange={setChemicalKey} required>
                             <SelectTrigger><SelectValue placeholder="Select a chemical" /></SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
@@ -769,11 +782,11 @@ function PercentageSolutionCalc() {
                     </div>
                     <div>
                         <Label htmlFor="percentage-required">Required Percentage (% w/v)</Label>
-                        <Input type="number" name="percentage-required" placeholder="e.g., 10" step="any" required />
+                        <Input type="number" name="percentage-required" placeholder="e.g., 10" step="any" value={percentage} onChange={e => setPercentage(e.target.value)} required />
                     </div>
                     <div>
                         <Label htmlFor="percentage-volume">Final Volume (mL)</Label>
-                        <Input type="number" name="percentage-volume" placeholder="e.g., 500" step="any" required />
+                        <Input type="number" name="percentage-volume" placeholder="e.g., 500" step="any" value={volume} onChange={e => setVolume(e.target.value)} required />
                     </div>
                     <div className="md:col-span-2 lg:col-span-3">
                         <Button type="submit" className="w-full">Calculate</Button>
@@ -789,27 +802,30 @@ function PercentageSolutionCalc() {
 function DilutionCalc() {
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const [n1, setN1] = useState("");
+    const [n2, setN2] = useState("");
+    const [v2, setV2] = useState("");
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setResult(null);
         setError(null);
-        const formData = new FormData(e.currentTarget);
-        const n1 = parseFloat(formData.get('stock-normality') as string);
-        const n2 = parseFloat(formData.get('final-normality') as string);
-        const v2 = parseFloat(formData.get('final-volume') as string);
+        
+        const n1Val = parseFloat(n1);
+        const n2Val = parseFloat(n2);
+        const v2Val = parseFloat(v2);
 
-        if (isNaN(n1) || isNaN(n2) || isNaN(v2) || n1 <= 0 || n2 <= 0 || v2 <= 0) {
+        if (isNaN(n1Val) || isNaN(n2Val) || isNaN(v2Val) || n1Val <= 0 || n2Val <= 0 || v2Val <= 0) {
             setError('Please enter valid positive numbers in all fields.');
             return;
         }
-        if (n2 > n1) {
+        if (n2Val > n1Val) {
             setError('Final normality (N₂) cannot be greater than stock normality (N₁).');
             return;
         }
 
-        const v1 = (n2 * v2) / n1;
-        const resultText = `To prepare <code class="font-bold">${v2} mL</code> of <code class="font-bold">${n2} N</code> solution, you need to take <code class="font-bold bg-green-100 p-1 rounded">${v1.toFixed(3)} mL</code> of your <code class="font-bold">${n1} N</code> stock solution and dilute it with the solvent up to a final volume of <code class="font-bold">${v2} mL</code>.`;
+        const v1 = (n2Val * v2Val) / n1Val;
+        const resultText = `To prepare <code class="font-bold">${v2Val} mL</code> of <code class="font-bold">${n2Val} N</code> solution, you need to take <code class="font-bold bg-green-100 p-1 rounded">${v1.toFixed(3)} mL</code> of your <code class="font-bold">${n1Val} N</code> stock solution and dilute it with the solvent up to a final volume of <code class="font-bold">${v2Val} mL</code>.`;
         setResult(resultText);
     }
 
@@ -819,15 +835,15 @@ function DilutionCalc() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-end">
                     <div>
                         <Label htmlFor="stock-normality">Stock Normality (N₁)</Label>
-                        <Input type="number" name="stock-normality" placeholder="e.g., 1.0" step="any" required />
+                        <Input type="number" name="stock-normality" placeholder="e.g., 1.0" step="any" value={n1} onChange={e => setN1(e.target.value)} required />
                     </div>
                     <div>
                         <Label htmlFor="final-normality">Required Normality (N₂)</Label>
-                        <Input type="number" name="final-normality" placeholder="e.g., 0.1" step="any" required />
+                        <Input type="number" name="final-normality" placeholder="e.g., 0.1" step="any" value={n2} onChange={e => setN2(e.target.value)} required />
                     </div>
                     <div>
                         <Label htmlFor="final-volume">Final Volume (V₂, mL)</Label>
-                        <Input type="number" name="final-volume" placeholder="e.g., 1000" step="any" required />
+                        <Input type="number" name="final-volume" placeholder="e.g., 1000" step="any" value={v2} onChange={e => setV2(e.target.value)} required />
                     </div>
                     <div className="md:col-span-2 lg:col-span-3">
                     <Button type="submit" className="w-full">Calculate V₁</Button>
