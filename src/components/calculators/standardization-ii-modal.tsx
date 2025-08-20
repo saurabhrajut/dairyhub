@@ -35,7 +35,7 @@ const calculatorsInfo = {
 export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
   const [activeCalculator, setActiveCalculator] = useState<CalculatorType | null>(null);
 
-  const handleBack = () => setActiveCalculator(null);
+  const handleBack = useCallback(() => setActiveCalculator(null), []);
 
   const ActiveCalculatorComponent = activeCalculator ? calculatorsInfo[activeCalculator].component : null;
 
@@ -299,7 +299,8 @@ function CustomStandardizationCalc() {
 const MemoizedMilkInputGroup = memo(function MilkInputGroup({ milkNum, onInputChange }: { milkNum: 1 | 2; onInputChange: (milkNum: 1 | 2, field: string, value: string) => void; }) {
     const [values, setValues] = useState({ qty: milkNum === 1 ? '500' : '500', fat: milkNum === 1 ? '6.5' : '2.5', clr: milkNum === 1 ? '29' : '27' });
 
-    const handleChange = useCallback((field: string, value: string) => {
+    const handleChange = useCallback((field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
         const newValues = { ...values, [field]: value };
         setValues(newValues);
         onInputChange(milkNum, field, value);
@@ -308,9 +309,9 @@ const MemoizedMilkInputGroup = memo(function MilkInputGroup({ milkNum, onInputCh
     return (
         <div className="bg-muted/50 p-4 rounded-lg space-y-3">
             <h3 className="font-semibold text-gray-700 font-headline">Milk Source {milkNum}</h3>
-            <div><Label>Quantity (kg/L)</Label><Input type="number" value={values.qty} onChange={(e) => handleChange('qty', e.target.value)} /></div>
-            <div><Label>Fat %</Label><Input type="number" value={values.fat} onChange={(e) => handleChange('fat', e.target.value)} /></div>
-            <div><Label>CLR</Label><Input type="number" value={values.clr} onChange={(e) => handleChange('clr', e.target.value)} /></div>
+            <div><Label>Quantity (kg/L)</Label><Input type="number" value={values.qty} onChange={handleChange('qty')} /></div>
+            <div><Label>Fat %</Label><Input type="number" value={values.fat} onChange={handleChange('fat')} /></div>
+            <div><Label>CLR</Label><Input type="number" value={values.clr} onChange={handleChange('clr')} /></div>
         </div>
     );
 });
@@ -515,9 +516,8 @@ function ClrIncreaseCalc() {
             setError("Target CLR must be higher than the initial CLR.");
             return;
         }
-
-        const clrDifference = CLR_target - CLR1;
-        const smpNeeded = (Q1 * clrDifference * 0.25) / (smpSolidsPercent / 100);
+        
+        const smpNeeded = (Q1 * (CLR_target - CLR1) * 0.25) / (smpSolidsPercent / 100);
         
         setResult(`To increase CLR from <strong>${CLR1}</strong> to <strong>${CLR_target}</strong> in <strong>${Q1} kg</strong> of milk, you need to add approximately <strong class='text-green-700 text-lg'>${smpNeeded.toFixed(3)} kg</strong> of SMP.`);
         
@@ -553,7 +553,7 @@ const PearsonSquareCalc = ({ unit, calcType }: { unit: string, calcType: 'Fat' |
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
-    const handleCalc = () => {
+    const handleCalc = useCallback(() => {
         const highVal = parseFloat(high);
         const lowVal = parseFloat(low);
         const targetVal = parseFloat(target);
@@ -585,7 +585,7 @@ const PearsonSquareCalc = ({ unit, calcType }: { unit: string, calcType: 'Fat' |
         const lowQty = (qtyVal * lowParts) / totalParts;
 
         setResult(`To get ${qtyVal} Kg/Ltr of ${targetVal}${unit} product, you need to mix:<br/><strong class="text-green-700">${highQty.toFixed(2)} Kg/Ltr</strong> of High ${calcType} milk and <strong class="text-green-700">${lowQty.toFixed(2)} Kg/Ltr</strong> of Low ${calcType} milk.`);
-    }
+    }, [high, low, target, qty, unit, calcType]);
 
     return (
          <CalculatorCard title={`${calcType} Blending Calculator`} description={`Do alag ${calcType} % wale doodh ko milakar naya product banayein.`}>
@@ -628,7 +628,7 @@ function FatSnfAdjustmentCalc() {
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
-    const calculate = () => {
+    const calculate = useCallback(() => {
         setResult(null);
         setError(null);
         
@@ -681,7 +681,7 @@ function FatSnfAdjustmentCalc() {
             </ul>
             <p class='mt-3'>Final Batch Weight will be approximately <strong>${finalWeight.toFixed(3)} kg</strong>.</p>
         `);
-    };
+    }, [milkQty, milkFat, milkSnf, targetFat, targetSnf, creamFat, powderTs]);
 
     return (
         <CalculatorCard title="Fat & SNF Adjustment Calculator" description="Calculate how much Cream and Skim Milk Powder (SMP) to add to standardize both Fat and SNF upwards.">
@@ -719,7 +719,7 @@ function ReconstitutedMilkCalc() {
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
-    const calculate = () => {
+    const calculate = useCallback(() => {
         setResult(null);
         setError(null);
         const qty = parseFloat(batchQty);
@@ -746,7 +746,7 @@ function ReconstitutedMilkCalc() {
         }
 
         setResult(`To make <strong>${qty} kg</strong> of milk with <strong>${targetTS}% TS</strong>, you need:<br/>- <strong class='text-green-700'>${powderNeeded.toFixed(3)} kg</strong> of Milk Powder (${powderTS}%)<br/>- <strong class='text-green-700'>${waterNeeded.toFixed(3)} kg</strong> of Water`);
-    };
+    }, [batchQty, targetTS, powderTS]);
 
     return (
         <CalculatorCard title="Reconstituted Milk Calculator" description="Calculate how much Milk Powder and Water are needed to create milk of a specific Total Solids (TS) content.">
@@ -772,7 +772,7 @@ function RecombinedMilkCalc() {
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
-    const calculate = () => {
+    const calculate = useCallback(() => {
         setResult(null);
         setError(null);
         
@@ -807,7 +807,7 @@ function RecombinedMilkCalc() {
         - <strong class='text-green-700'>${P.toFixed(3)} kg</strong> of Skim Milk Powder<br/>
         - <strong class='text-green-700'>${B.toFixed(3)} kg</strong> of Butter Oil/AMF<br/>
         - <strong class='text-green-700'>${W.toFixed(3)} kg</strong> of Water`);
-    };
+    }, [batchQty, targetFat, targetSNF, smpFat, smpSNF, fatSourceFat]);
 
     return (
         <CalculatorCard title="Recombined Milk Calculator" description="Calculate the required Skim Milk Powder (SMP), Butter Oil (or other fat source), and Water to create milk of a desired composition.">
@@ -831,12 +831,4 @@ function RecombinedMilkCalc() {
         </CalculatorCard>
     );
 }
-
-
-
-
-
-
-
-
 
