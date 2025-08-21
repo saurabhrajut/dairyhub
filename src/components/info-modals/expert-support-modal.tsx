@@ -195,12 +195,23 @@ function ChatPage({ expert, onBack }: { expert: typeof initialExperts[0], onBack
         <div className="h-full flex flex-col p-4">
             <Button variant="ghost" onClick={onBack} className="self-start mb-2"><ArrowLeft className="mr-2"/> Back to Experts</Button>
             <div className="flex-1 flex flex-col bg-card border rounded-lg overflow-hidden">
-                <header className="p-4 border-b flex items-center gap-4">
-                    <img className="w-12 h-12 rounded-full object-cover" src={expert.photo} alt={expert.name} />
-                    <div>
-                        <h3 className="font-bold">{expert.name}</h3>
-                        <p className="text-xs text-muted-foreground">{expert.specialization}</p>
+                <header className="p-4 border-b flex items-center justify-between gap-4">
+                    <div className='flex items-center gap-4'>
+                        <img className="w-12 h-12 rounded-full object-cover" src={expert.photo} alt={expert.name} />
+                        <div>
+                            <h3 className="font-bold">{expert.name}</h3>
+                            <p className="text-xs text-muted-foreground">{expert.specialization}</p>
+                        </div>
                     </div>
+                    <Select value={language} onValueChange={setLanguage}>
+                        <SelectTrigger className="w-[120px]">
+                            <SelectValue placeholder="Language" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="English">English</SelectItem>
+                            <SelectItem value="Hinglish">Hinglish</SelectItem>
+                        </SelectContent>
+                    </Select>
                 </header>
                 <ScrollArea className="flex-grow p-4" ref={scrollAreaRef}>
                     <div className="flex flex-col gap-4">
