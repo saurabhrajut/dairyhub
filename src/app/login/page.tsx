@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,7 +10,7 @@ import * as z from "zod";
 import { auth } from '@/lib/firebase';
 import { useAuth } from '@/context/auth-context';
 import { 
-  signInWithRedirect,
+  signInWithPopup,
   GoogleAuthProvider, 
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -71,12 +71,15 @@ export default function LoginPage() {
     setLoading('google');
     const provider = new GoogleAuthProvider();
     try {
-      await signInWithRedirect(auth, provider);
-      // The user will be redirected to Google's sign-in page.
-      // The result is handled by onAuthStateChanged in AuthProvider after redirect.
-    } catch (error) {
-      console.error('Google Sign-In Redirect Error:', error);
-      toast({ variant: 'destructive', title: 'Error', description: "Could not start Google sign-in. Please try again." });
+      // Use signInWithPopup instead of signInWithRedirect
+      const result = await signInWithPopup(auth, provider);
+      // The user object is available immediately in the result
+      toast({ title: 'Success', description: 'Signed in successfully!' });
+      router.push('/');
+    } catch (error: any) {
+      console.error('Google Sign-In Error:', error);
+      toast({ variant: 'destructive', title: 'Error', description: "Could not complete Google sign-in. Please try again." });
+    } finally {
       setLoading(null);
     }
   };
@@ -105,6 +108,9 @@ export default function LoginPage() {
       await updateProfile(user, { displayName: values.name });
 
       // Save additional user data to Firestore via context
+      // Note: setUserData will be called by the AuthProvider's onAuthStateChanged listener
+      // to ensure the profile is created after authentication is fully established.
+      // We can pre-emptively create it here too if needed.
       await setUserData(user, {
         name: values.name,
         age: values.age,

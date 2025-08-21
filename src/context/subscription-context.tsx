@@ -66,7 +66,7 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
   }, [user]);
 
   useEffect(() => {
-    if (!authLoading) {
+    if (!authLoading && user) {
       checkSubscription();
     }
   }, [user, authLoading, checkSubscription]);

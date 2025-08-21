@@ -41,7 +41,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (userDoc.exists()) {
             return userDoc.data() as UserProfile;
         } else {
-            // Create a new profile if one doesn't exist
+            // Create a new profile if one doesn't exist (e.g., for first-time Google sign-in)
             const newProfile: UserProfile = {
                 uid: firebaseUser.uid,
                 email: firebaseUser.email,
@@ -57,6 +57,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
     } catch (error) {
         console.error("Error fetching or creating user profile:", error);
+        toast({ variant: "destructive", title: "Profile Error", description: "Could not load your profile." });
         // Return a default profile structure to avoid app crashes
         return {
             uid: firebaseUser.uid,
@@ -68,7 +69,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             gender: null,
         };
     }
-  }, []);
+  }, [toast]);
 
 
   useEffect(() => {
