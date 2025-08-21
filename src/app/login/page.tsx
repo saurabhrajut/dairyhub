@@ -7,11 +7,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
-import { auth } from '@/lib/firebase';
-import { useAuth } from '@/context/auth-context';
+import { auth, googleProvider } from '@/lib/firebase';
 import { 
-  signInWithPopup,
-  GoogleAuthProvider, 
+  signInWithRedirect,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   getRedirectResult,
@@ -27,6 +25,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Milk, Mail, Key, User as UserIcon, Cake, VenetianMask } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/context/auth-context';
 
 const GoogleIcon = () => (
     <svg className="w-5 h-5 mr-2" viewBox="0 0 48 48">
@@ -66,20 +65,27 @@ export default function LoginPage() {
     resolver: zodResolver(signUpSchema),
     defaultValues: { name: "", age: undefined, gender: undefined, email: "", password: "" },
   });
+  
+   useEffect(() => {
+    getRedirectResult(auth)
+      .then((result) => {
+        if (result) {
+          toast({ title: 'Success', description: 'Signed in successfully with Google!' });
+          router.push('/');
+        }
+      }).catch((error) => {
+        console.error('Google Sign-In Redirect Error:', error);
+        toast({ variant: 'destructive', title: 'Error', description: "Could not complete Google sign-in. Please try again." });
+      });
+  }, [router, toast]);
 
   const handleGoogleSignIn = async () => {
     setLoading('google');
-    const provider = new GoogleAuthProvider();
     try {
-      // Use signInWithPopup instead of signInWithRedirect
-      const result = await signInWithPopup(auth, provider);
-      // The user object is available immediately in the result
-      toast({ title: 'Success', description: 'Signed in successfully!' });
-      router.push('/');
+      await signInWithRedirect(auth, googleProvider);
     } catch (error: any) {
       console.error('Google Sign-In Error:', error);
-      toast({ variant: 'destructive', title: 'Error', description: "Could not complete Google sign-in. Please try again." });
-    } finally {
+      toast({ variant: 'destructive', title: 'Error', description: "Could not start Google sign-in. Please try again." });
       setLoading(null);
     }
   };
@@ -103,20 +109,15 @@ export default function LoginPage() {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
       const user = userCredential.user;
-
-      // Update Firebase Auth profile
+      
+      // Update the user's profile in Auth and Firestore
+      // This is now handled by the onAuthStateChanged listener in AuthProvider
+      // to ensure atomicity and prevent race conditions.
       await updateProfile(user, { displayName: values.name });
-
-      // Save additional user data to Firestore via context
-      // Note: setUserData will be called by the AuthProvider's onAuthStateChanged listener
-      // to ensure the profile is created after authentication is fully established.
-      // We can pre-emptively create it here too if needed.
       await setUserData(user, {
         name: values.name,
         age: values.age,
-        gender: values.gender,
-        displayName: values.name,
-        photoURL: null,
+        gender: values.gender
       });
 
       toast({ title: `Welcome, ${values.name}!`, description: 'Your account has been created.' });
@@ -226,7 +227,7 @@ export default function LoginPage() {
           </div>
 
           <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={!!loading}>
-            {loading === 'google' ? 'Signing in...' : <><GoogleIcon /> Sign in with Google</>}
+            {loading === 'google' ? 'Redirecting...' : <><GoogleIcon /> Sign in with Google</>}
           </Button>
 
         </CardContent>

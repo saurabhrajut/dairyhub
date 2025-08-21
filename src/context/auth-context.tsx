@@ -108,12 +108,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         await updateProfile(firebaseUser, authUpdate);
       }
       
-      // Update Firestore document
       await setDoc(userRef, data, { merge: true });
 
-      // Update local state
       setUserProfile(prev => prev ? { ...prev, ...data } : null);
-      // It's better to refetch the user object or trust the update was successful
+      
       const updatedUser = { ...firebaseUser, ...authUpdate };
       setUser(updatedUser as User);
 
