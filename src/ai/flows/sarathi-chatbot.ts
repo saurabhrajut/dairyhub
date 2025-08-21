@@ -69,7 +69,7 @@ const sarathiChatbotFlow = ai.defineFlow(
     const { output } = await prompt({
         prompt: `Question: {{{question}}}`,
         ...restOfInput
-    }, { history });
+    }, { history: history || [] }); // Ensure history is an array
 
     return output!;
   }
