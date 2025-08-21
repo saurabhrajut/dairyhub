@@ -69,7 +69,7 @@ export function ChatPanel({
     if (!query && !resumeQuery) return;
     if (isLoading) return;
 
-    const userMessageText = showResumeInput ? `Please analyze my resume.` : query;
+    const userMessageText = showResumeInput ? (query || `Please analyze my resume.`) : query;
     const userMessage: UIMessage = {
       id: Date.now().toString(),
       sender: "user",

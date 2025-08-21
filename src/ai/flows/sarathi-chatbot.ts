@@ -50,7 +50,6 @@ Resume Text:
 `,
   input: {schema: SarathiChatbotInputSchema},
   output: {schema: SarathiChatbotOutputSchema},
-  prompt: `Question: {{{question}}}`,
 });
 
 const sarathiChatbotFlow = ai.defineFlow(
@@ -67,7 +66,10 @@ const sarathiChatbotFlow = ai.defineFlow(
         restOfInput.question = "Please analyze my resume and ask me interview questions.";
     }
 
-    const { output } = await prompt(restOfInput, { history });
+    const { output } = await prompt({
+        prompt: `Question: {{{question}}}`,
+        ...restOfInput
+    }, { history });
 
     return output!;
   }
