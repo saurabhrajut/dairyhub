@@ -71,7 +71,8 @@ const sarathiChatbotFlow = ai.defineFlow(
         prompt: `Question: {{{question}}}`,
         ...restOfInput,
       },
-      { history: history || [] }
+      // Ensure history is always an array, even if it's empty.
+      { history: history ? history : [] }
     );
 
     return output!;
