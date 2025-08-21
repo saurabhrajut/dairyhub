@@ -1,16 +1,20 @@
 
 rules_version = '2';
-
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Allow users to read and write only their own user document.
+
+    // users कलेक्शन का ब्लॉक यहाँ से शुरू होता है
     match /users/{userId} {
+
+      // यूजर के खुद के डॉक्यूमेंट के लिए नियम
       allow read, write: if request.auth != null && request.auth.uid == userId;
-      
-      // Allow users to read and write their own subscription document.
+
+      // subscription सब-कलेक्शन का ब्लॉक users ब्लॉक के अंदर है
       match /subscription/{subId} {
         allow read, write: if request.auth != null && request.auth.uid == userId;
       }
-    }
+
+    } // users कलेक्शन का ब्लॉक यहाँ खत्म होता है (subscription के बाद)
+
   }
 }
