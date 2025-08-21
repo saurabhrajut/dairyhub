@@ -53,8 +53,9 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
             const subData = docSnap.data() as Subscription;
             const isStillActive = subData.plan === 'lifetime' || (subData.expiryDate && subData.expiryDate > Date.now());
             setIsPro(isStillActive);
-            setSubscription(subData);
+            setSubscription(isStillActive ? subData : null);
         } else {
+            // No subscription document found, user is not pro.
             setIsPro(false);
             setSubscription(null);
         }
