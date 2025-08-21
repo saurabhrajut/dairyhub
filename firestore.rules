@@ -1,15 +1,15 @@
-
 rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Allow users to read, update, and delete their own profile.
-    // Allow any authenticated user to create their own profile.
     match /users/{userId} {
-      allow read, update, delete: if request.auth != null && request.auth.uid == userId;
+      // Allow user to create their own document
       allow create: if request.auth != null && request.auth.uid == userId;
 
-      // Allow users to manage their own subscription sub-collection.
+      // Allow user to read and update their own document
+      allow read, update: if request.auth != null && request.auth.uid == userId;
+
+      // Rules for the subscription sub-collection
       match /subscription/{subId} {
         allow read, write: if request.auth != null && request.auth.uid == userId;
       }
