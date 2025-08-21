@@ -7,6 +7,7 @@ import { sarathiChatbot } from "@/ai/flows/sarathi-chatbot";
 import { generateAdulterantDetectionInstructions } from "@/ai/flows/generate-adulterant-detection-instructions";
 import { getLatestDairyIndustryData } from "@/ai/flows/get-latest-dairy-industry-data";
 import Razorpay from "razorpay";
+import crypto from "crypto";
 import { askExpert as askExpertFlow } from "@/ai/flows/expert-support-flow";
 import { gyanAI as gyanAIFlow } from "@/ai/flows/gyan-ai-flow";
 import { refineQuestion as refineQuestionFlow } from "@/ai/flows/refine-question-flow";
@@ -64,6 +65,30 @@ export async function createRazorpayOrder(amount: number) {
     throw new Error("Failed to create payment order.");
   }
 }
+
+export async function verifyRazorpayPayment(data: {
+  orderId: string;
+  paymentId: string;
+  signature: string;
+}) {
+  const { orderId, paymentId, signature } = data;
+  const keySecret = process.env.RAZORPAY_KEY_SECRET;
+
+  if (!keySecret) {
+    throw new Error("Razorpay key secret is not configured.");
+  }
+
+  const hmac = crypto.createHmac("sha256", keySecret);
+  hmac.update(`${orderId}|${paymentId}`);
+  const generatedSignature = hmac.digest("hex");
+
+  if (generatedSignature === signature) {
+    return { success: true, message: "Payment verified successfully." };
+  } else {
+    return { success: false, message: "Payment verification failed." };
+  }
+}
+
 
 export async function askExpert(input: AskExpertInput) {
     return await askExpertFlow(input);

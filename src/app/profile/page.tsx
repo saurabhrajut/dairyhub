@@ -41,7 +41,7 @@ const ProfileDetail = ({ icon: Icon, label, value, loading }: { icon: React.Elem
          <div className="flex items-center gap-3 text-sm">
             <Icon className="w-5 h-5 text-muted-foreground" />
             <span className="font-medium text-muted-foreground min-w-[80px]">{label}:</span>
-            <span className="text-foreground font-semibold">{value}</span>
+            <span className="text-foreground font-semibold">{String(value)}</span>
         </div>
     )
 };
@@ -71,7 +71,6 @@ export default function ProfilePage() {
     const handleSaveName = async () => {
         if (user && newName.trim()) {
             await setUserData(user, { name: newName.trim(), displayName: newName.trim() });
-            toast({ title: "Name Updated", description: "Your profile name has been successfully updated." });
             setIsEditingName(false);
         } else {
             toast({ variant: "destructive", title: "Error", description: "Name cannot be empty."});
@@ -81,6 +80,8 @@ export default function ProfilePage() {
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file && user) {
+            // NOTE: This updates the photo in Firebase Auth but not in a permanent storage like Firebase Storage.
+            // For a production app, you would upload the file to Firebase Storage and get the URL.
             const reader = new FileReader();
             reader.onloadend = async () => {
                 const base64String = reader.result as string;

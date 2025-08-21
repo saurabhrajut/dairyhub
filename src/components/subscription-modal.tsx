@@ -15,7 +15,7 @@ import { useSubscription, type SubscriptionPlan } from "@/context/subscription-c
 import { useToast } from "@/hooks/use-toast";
 import { ScrollArea } from "./ui/scroll-area";
 import { useAuth } from "@/context/auth-context";
-import { createRazorpayOrder } from "@/app/actions";
+import { createRazorpayOrder, verifyRazorpayPayment } from "@/app/actions";
 
 const proFeatures = [
     "Unlock all premium calculators & guides",
@@ -68,17 +68,28 @@ export function SubscriptionModal({
             key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
             amount: order.amount,
             currency: order.currency,
-            name: "DhenuGuide Pro",
+            name: "Dairy Hub Pro",
             description: `Subscription for ${planDetails.title}`,
             order_id: order.id,
-            handler: function (response: any) {
-                // On successful payment
-                subscribe(planKey);
-                setIsOpen(false);
-                toast({
-                    title: "Subscribed! 🎉",
-                    description: "Welcome to Pro! All features are now unlocked.",
+            handler: async function (response: any) {
+                // On successful payment, verify it on the server
+                const verificationResult = await verifyRazorpayPayment({
+                    orderId: response.razorpay_order_id,
+                    paymentId: response.razorpay_payment_id,
+                    signature: response.razorpay_signature,
                 });
+
+                if (verificationResult.success) {
+                    await subscribe(planKey); // Subscribe the user in Firestore
+                    setIsOpen(false);
+                    toast({
+                        title: "Subscribed! 🎉",
+                        description: "Welcome to Pro! All features are now unlocked.",
+                    });
+                } else {
+                     toast({ variant: "destructive", title: "Payment Failed", description: verificationResult.message });
+                }
+                setIsLoading(null);
             },
             prefill: {
                 name: userProfile.name || "Dairy Hub User",
@@ -96,7 +107,6 @@ export function SubscriptionModal({
 
         const rzp = new (window as any).Razorpay(options);
         rzp.open();
-        // The loading state will be reset in the ondismiss or handler callbacks
 
     } catch (error: any) {
         toast({ variant: "destructive", title: "Payment Failed", description: error.message || "Could not initiate payment. Please try again." });

@@ -14,6 +14,8 @@ import {
   GoogleAuthProvider, 
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  getRedirectResult,
+  updateProfile,
 } from 'firebase/auth';
 
 import { Button } from '@/components/ui/button';
@@ -99,7 +101,10 @@ export default function LoginPage() {
       const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
       const user = userCredential.user;
 
-      // Save additional user data
+      // Update Firebase Auth profile
+      await updateProfile(user, { displayName: values.name });
+
+      // Save additional user data to Firestore via context
       await setUserData(user, {
         name: values.name,
         age: values.age,
@@ -179,7 +184,7 @@ export default function LoginPage() {
                     )}/>
                     <div className="grid grid-cols-2 gap-4">
                       <FormField control={signUpForm.control} name="age" render={({ field }) => (
-                        <FormItem><div className='relative'><Cake className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" /><Input type="number" placeholder="Age" {...field} onChange={e => field.onChange(parseInt(e.target.value, 10))} className="pl-10"/></div><FormMessage /></FormItem>
+                        <FormItem><div className='relative'><Cake className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" /><Input type="number" placeholder="Age" {...field} onChange={e => field.onChange(parseInt(e.target.value, 10) || null)} className="pl-10"/></div><FormMessage /></FormItem>
                       )}/>
                        <FormField control={signUpForm.control} name="gender" render={({ field }) => (
                         <FormItem className='space-y-2'>
@@ -223,5 +228,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
-    

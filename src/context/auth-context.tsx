@@ -2,8 +2,9 @@
 'use client';
 
 import { createContext, useState, useContext, ReactNode, useEffect, useCallback } from 'react';
-import { onAuthStateChanged, signOut, type User, getRedirectResult, GoogleAuthProvider, updateProfile } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
+import { onAuthStateChanged, signOut, type User, updateProfile } from 'firebase/auth';
+import { auth, db } from '@/lib/firebase';
+import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
 
 export interface UserProfile {
@@ -14,6 +15,7 @@ export interface UserProfile {
   name: string;
   age: number | null;
   gender: 'male' | 'female' | 'other' | null;
+  createdAt?: any;
 }
 
 interface AuthContextType {
@@ -32,21 +34,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
-  const handleUserSetup = useCallback((firebaseUser: User | null) => {
+  const handleUserSetup = useCallback(async (firebaseUser: User | null) => {
     if (firebaseUser) {
-      // Create a local profile object from the Firebase user object.
-      // No Firestore interaction needed.
-      const profile: UserProfile = {
-        uid: firebaseUser.uid,
-        email: firebaseUser.email,
-        displayName: firebaseUser.displayName,
-        photoURL: firebaseUser.photoURL,
-        name: firebaseUser.displayName || 'New User',
-        age: null, // These can be managed in-app if needed, but won't persist
-        gender: null,
-      };
+      const userRef = doc(db, 'users', firebaseUser.uid);
+      const userDoc = await getDoc(userRef);
+
+      if (userDoc.exists()) {
+        setUserProfile(userDoc.data() as UserProfile);
+      } else {
+        // Create new profile in Firestore if it doesn't exist
+        const newProfile: UserProfile = {
+          uid: firebaseUser.uid,
+          email: firebaseUser.email,
+          displayName: firebaseUser.displayName,
+          photoURL: firebaseUser.photoURL,
+          name: firebaseUser.displayName || 'New User',
+          age: null,
+          gender: null,
+          createdAt: serverTimestamp(),
+        };
+        await setDoc(userRef, newProfile);
+        setUserProfile(newProfile);
+      }
       setUser(firebaseUser);
-      setUserProfile(profile);
     } else {
       setUser(null);
       setUserProfile(null);
@@ -57,16 +67,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       handleUserSetup(firebaseUser);
-    });
-
-    // Also handle redirect result on initial load
-    getRedirectResult(auth).then((result) => {
-        if (result && result.user) {
-            handleUserSetup(result.user);
-        }
-    }).catch(error => {
-        console.error("Redirect result error:", error);
-        setLoading(false);
     });
 
     return () => unsubscribe();
@@ -80,30 +80,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const setUserData = async (firebaseUser: User, data: Partial<Omit<UserProfile, 'uid' | 'email'>>) => {
     if (!firebaseUser) return;
+    const userRef = doc(db, 'users', firebaseUser.uid);
 
-    // This updates the local state and Firebase Auth profile, but NOT Firestore.
     try {
-        const authUpdate: { displayName?: string, photoURL?: string } = {};
-        if (data.displayName) authUpdate.displayName = data.displayName;
-        if (data.photoURL) authUpdate.photoURL = data.photoURL;
+      const authUpdate: { displayName?: string, photoURL?: string } = {};
+      if (data.displayName) authUpdate.displayName = data.displayName;
+      if (data.photoURL) authUpdate.photoURL = data.photoURL;
 
-        if (Object.keys(authUpdate).length > 0) {
-            await updateProfile(firebaseUser, authUpdate);
-        }
-       
-        setUserProfile(prev => {
-            if (!prev) return null;
-            // Create a new user object to trigger re-render in consumers
-            const updatedUser = { ...firebaseUser, ...authUpdate };
-            setUser(updatedUser);
-            // Update the local profile state
-            return { ...prev, ...data };
-        });
+      if (Object.keys(authUpdate).length > 0) {
+        await updateProfile(firebaseUser, authUpdate);
+      }
+      
+      // Update Firestore document
+      await setDoc(userRef, data, { merge: true });
 
-        toast({ title: "Profile Updated", description: "Your changes have been saved." });
+      // Update local state
+      setUserProfile(prev => prev ? { ...prev, ...data } : null);
+      setUser(prev => prev ? { ...prev, ...authUpdate } as User : null);
+
+      toast({ title: "Profile Updated", description: "Your changes have been saved." });
     } catch (error) {
-        console.error("Error updating profile:", error);
-        toast({ variant: "destructive", title: "Update Failed", description: "Could not save profile changes." });
+      console.error("Error updating profile:", error);
+      toast({ variant: "destructive", title: "Update Failed", description: "Could not save profile changes." });
     }
   };
 
