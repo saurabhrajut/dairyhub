@@ -45,7 +45,7 @@ function GeneralContent() {
             <p className="font-medium leading-relaxed">{generalContent.p1}</p>
             <SectionTitle>{generalContent.definitions.title}</SectionTitle>
             <ul className="list-disc pl-5 space-y-1">
-                {generalContent.definitions.list.map((item, index) => (
+                {generalContent?.definitions?.list?.map((item, index) => (
                     <li key={index} dangerouslySetInnerHTML={{ __html: item }} />
                 ))}
             </ul>
@@ -63,7 +63,7 @@ function MilkContent() {
         <ProductCard title={milkContent.title}>
             <SectionTitle>{milkContent.description.title}</SectionTitle>
             <ul className="list-disc pl-5 space-y-1">
-                {milkContent.description.list.map((item, index) => (
+                {milkContent?.description?.list?.map((item, index) => (
                     <li key={index}>{item}</li>
                 ))}
             </ul>
@@ -72,15 +72,15 @@ function MilkContent() {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            {milkContent.composition.headers.map((header, index) => (
+                            {milkContent?.composition?.headers?.map((header, index) => (
                                 <TableHead key={index}>{header}</TableHead>
                             ))}
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {milkContent.composition.rows.map((row, rowIndex) => (
+                        {milkContent?.composition?.rows?.map((row, rowIndex) => (
                             <TableRow key={rowIndex}>
-                                {row.map((cell, cellIndex) => (
+                                {row?.map((cell, cellIndex) => (
                                     <TableCell key={cellIndex}>{cell}</TableCell>
                                 ))}
                             </TableRow>
@@ -111,15 +111,15 @@ function KhoaContent() {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            {khoaContent.composition.headers.map((header, index) => (
+                            {khoaContent?.composition?.headers?.map((header, index) => (
                                 <TableHead key={index}>{header}</TableHead>
                             ))}
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {khoaContent.composition.rows.map((row, rowIndex) => (
+                        {khoaContent?.composition?.rows?.map((row, rowIndex) => (
                             <TableRow key={rowIndex}>
-                                {row.map((cell, cellIndex) => (
+                                {row?.map((cell, cellIndex) => (
                                     <TableCell key={cellIndex}>{cell}</TableCell>
                                 ))}
                             </TableRow>
@@ -139,7 +139,7 @@ function CreamContent() {
         <ProductCard title={creamContent.title}>
             <SectionTitle>{creamContent.description.title}</SectionTitle>
             <ul className="list-disc pl-5 space-y-1">
-                {creamContent.description.list.map((item, index) => (
+                {creamContent?.description?.list?.map((item, index) => (
                     <li key={index}>{item}</li>
                 ))}
             </ul>
@@ -164,15 +164,15 @@ function FatProductsContent() {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                           {fatContent.composition.headers.map((header, index) => (
+                           {fatContent?.composition?.headers?.map((header, index) => (
                                 <TableHead key={index}>{header}</TableHead>
                            ))}
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {fatContent.composition.rows.map((row, rowIndex) => (
+                        {fatContent?.composition?.rows?.map((row, rowIndex) => (
                             <TableRow key={rowIndex}>
-                                {row.map((cell, cellIndex) => (
+                                {row?.map((cell, cellIndex) => (
                                     <TableCell key={cellIndex}>{cell}</TableCell>
                                 ))}
                             </TableRow>
@@ -185,15 +185,15 @@ function FatProductsContent() {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                             {fatContent.fattyAcid.headers.map((header, index) => (
+                             {fatContent?.fattyAcid?.headers?.map((header, index) => (
                                 <TableHead key={index}>{header}</TableHead>
                            ))}
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {fatContent.fattyAcid.rows.map((row, rowIndex) => (
+                        {fatContent?.fattyAcid?.rows?.map((row, rowIndex) => (
                             <TableRow key={rowIndex}>
-                                {row.map((cell, cellIndex) => (
+                                {row?.map((cell, cellIndex) => (
                                     <TableCell key={cellIndex}>{cell}</TableCell>
                                 ))}
                             </TableRow>
@@ -219,15 +219,15 @@ function ButterContent() {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                             {butterContent.composition.headers.map((header, index) => (
+                             {butterContent?.composition?.headers?.map((header, index) => (
                                 <TableHead key={index}>{header}</TableHead>
                            ))}
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                         {butterContent.composition.rows.map((row, rowIndex) => (
+                         {butterContent?.composition?.rows?.map((row, rowIndex) => (
                             <TableRow key={rowIndex}>
-                                {row.map((cell, cellIndex) => (
+                                {row?.map((cell, cellIndex) => (
                                     <TableCell key={cellIndex}>{cell}</TableCell>
                                 ))}
                             </TableRow>
@@ -253,15 +253,15 @@ function MilkPowdersContent() {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            {powderContent.composition.headers.map((header, index) => (
+                            {powderContent?.composition?.headers?.map((header, index) => (
                                 <TableHead key={index}>{header}</TableHead>
                             ))}
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {powderContent.composition.rows.map((row, rowIndex) => (
+                        {powderContent?.composition?.rows?.map((row, rowIndex) => (
                             <TableRow key={rowIndex}>
-                                {row.map((cell, cellIndex) => (
+                                {row?.map((cell, cellIndex) => (
                                     <TableCell key={cellIndex}>{cell}</TableCell>
                                 ))}
                             </TableRow>
@@ -282,7 +282,7 @@ function FermentedContent() {
         <ProductCard title={fermentedContent.title}>
             <SectionTitle>{fermentedContent.description.title}</SectionTitle>
             <ul className="list-disc pl-5 space-y-1">
-                 {fermentedContent.description.list.map((item, index) => (
+                 {fermentedContent?.description?.list?.map((item, index) => (
                     <li key={index}>{item}</li>
                 ))}
             </ul>
@@ -291,15 +291,15 @@ function FermentedContent() {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            {fermentedContent.yoghurt.headers.map((header, index) => (
+                            {fermentedContent?.yoghurt?.headers?.map((header, index) => (
                                 <TableHead key={index}>{header}</TableHead>
                             ))}
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {fermentedContent.yoghurt.rows.map((row, rowIndex) => (
+                        {fermentedContent?.yoghurt?.rows?.map((row, rowIndex) => (
                             <TableRow key={rowIndex}>
-                                {row.map((cell, cellIndex) => (
+                                {row?.map((cell, cellIndex) => (
                                     <TableCell key={cellIndex}>{cell}</TableCell>
                                 ))}
                             </TableRow>
@@ -312,15 +312,15 @@ function FermentedContent() {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                           {fermentedContent.chakka.headers.map((header, index) => (
+                           {fermentedContent?.chakka?.headers?.map((header, index) => (
                                 <TableHead key={index}>{header}</TableHead>
                             ))}
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {fermentedContent.chakka.rows.map((row, rowIndex) => (
+                        {fermentedContent?.chakka?.rows?.map((row, rowIndex) => (
                             <TableRow key={rowIndex}>
-                                {row.map((cell, cellIndex) => (
+                                {row?.map((cell, cellIndex) => (
                                     <TableCell key={cellIndex}>{cell}</TableCell>
                                 ))}
                             </TableRow>
@@ -345,15 +345,15 @@ function IceCreamContent() {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            {iceCreamContent.composition.headers.map((header, index) => (
+                            {iceCreamContent?.composition?.headers?.map((header, index) => (
                                 <TableHead key={index}>{header}</TableHead>
                             ))}
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {iceCreamContent.composition.rows.map((row, rowIndex) => (
+                        {iceCreamContent?.composition?.rows?.map((row, rowIndex) => (
                             <TableRow key={rowIndex}>
-                                {row.map((cell, cellIndex) => (
+                                {row?.map((cell, cellIndex) => (
                                     <TableCell key={cellIndex}>{cell}</TableCell>
                                 ))}
                             </TableRow>
@@ -366,15 +366,15 @@ function IceCreamContent() {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                             {iceCreamContent.milkIce.headers.map((header, index) => (
+                             {iceCreamContent?.milkIce?.headers?.map((header, index) => (
                                 <TableHead key={index}>{header}</TableHead>
                             ))}
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                         {iceCreamContent.milkIce.rows.map((row, rowIndex) => (
+                         {iceCreamContent?.milkIce?.rows?.map((row, rowIndex) => (
                             <TableRow key={rowIndex}>
-                                {row.map((cell, cellIndex) => (
+                                {row?.map((cell, cellIndex) => (
                                     <TableCell key={cellIndex}>{cell}</TableCell>
                                 ))}
                             </TableRow>
@@ -400,15 +400,15 @@ function ChhanaPaneerContent() {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            {paneerContent.composition.headers.map((header, index) => (
+                            {paneerContent?.composition?.headers?.map((header, index) => (
                                 <TableHead key={index}>{header}</TableHead>
                             ))}
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {paneerContent.composition.rows.map((row, rowIndex) => (
+                        {paneerContent?.composition?.rows?.map((row, rowIndex) => (
                             <TableRow key={rowIndex}>
-                                {row.map((cell, cellIndex) => (
+                                {row?.map((cell, cellIndex) => (
                                     <TableCell key={cellIndex}>{cell}</TableCell>
                                 ))}
                             </TableRow>
@@ -430,7 +430,7 @@ function CheeseContent() {
         <ProductCard title={cheeseContent.title}>
             <SectionTitle>{cheeseContent.description.title}</SectionTitle>
             <ul className="list-disc pl-5 space-y-1">
-                {cheeseContent.description.list.map((item, index) => (
+                {cheeseContent?.description?.list?.map((item, index) => (
                     <li key={index}>{item}</li>
                 ))}
             </ul>
@@ -439,15 +439,15 @@ function CheeseContent() {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            {cheeseContent.composition.headers.map((header, index) => (
+                            {cheeseContent?.composition?.headers?.map((header, index) => (
                                 <TableHead key={index}>{header}</TableHead>
                             ))}
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {cheeseContent.composition.rows.map((row, rowIndex) => (
+                        {cheeseContent?.composition?.rows?.map((row, rowIndex) => (
                             <TableRow key={rowIndex}>
-                                {row.map((cell, cellIndex) => (
+                                {row?.map((cell, cellIndex) => (
                                     <TableCell key={cellIndex}>{cell}</TableCell>
                                 ))}
                             </TableRow>
@@ -469,7 +469,7 @@ function CaseinContent() {
         <ProductCard title={caseinContent.title}>
             <SectionTitle>{caseinContent.description.title}</SectionTitle>
             <ul className="list-disc pl-5 space-y-1">
-                {caseinContent.description.list.map((item, index) => (
+                {caseinContent?.description?.list?.map((item, index) => (
                     <li key={index}>{item}</li>
                 ))}
             </ul>
@@ -478,15 +478,15 @@ function CaseinContent() {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                             {caseinContent.composition.headers.map((header, index) => (
+                             {caseinContent?.composition?.headers?.map((header, index) => (
                                 <TableHead key={index}>{header}</TableHead>
                             ))}
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {caseinContent.composition.rows.map((row, rowIndex) => (
+                        {caseinContent?.composition?.rows?.map((row, rowIndex) => (
                             <TableRow key={rowIndex}>
-                                {row.map((cell, cellIndex) => (
+                                {row?.map((cell, cellIndex) => (
                                     <TableCell key={cellIndex}>{cell}</TableCell>
                                 ))}
                             </TableRow>
@@ -512,15 +512,15 @@ function LactoseContent() {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                           {lactoseContent.composition.headers.map((header, index) => (
+                           {lactoseContent?.composition?.headers?.map((header, index) => (
                                 <TableHead key={index}>{header}</TableHead>
                             ))}
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                         {lactoseContent.composition.rows.map((row, rowIndex) => (
+                         {lactoseContent?.composition?.rows?.map((row, rowIndex) => (
                             <TableRow key={rowIndex}>
-                                {row.map((cell, cellIndex) => (
+                                {row?.map((cell, cellIndex) => (
                                     <TableCell key={cellIndex}>{cell}</TableCell>
                                 ))}
                             </TableRow>
@@ -545,15 +545,15 @@ function WheyProteinContent() {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            {wheyContent.composition.headers.map((header, index) => (
+                            {wheyContent?.composition?.headers?.map((header, index) => (
                                 <TableHead key={index}>{header}</TableHead>
                             ))}
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {wheyContent.composition.rows.map((row, rowIndex) => (
+                        {wheyContent?.composition?.rows?.map((row, rowIndex) => (
                             <TableRow key={rowIndex}>
-                                {row.map((cell, cellIndex) => (
+                                {row?.map((cell, cellIndex) => (
                                     <TableCell key={cellIndex}>{cell}</TableCell>
                                 ))}
                             </TableRow>
@@ -574,7 +574,7 @@ function ColostrumContent() {
         <ProductCard title={colostrumContent.title}>
             <SectionTitle>{colostrumContent.description.title}</SectionTitle>
             <ul className="list-disc pl-5 space-y-1">
-                {colostrumContent.description.list.map((item, index) => (
+                {colostrumContent?.description?.list?.map((item, index) => (
                     <li key={index}>{item}</li>
                 ))}
             </ul>
@@ -583,15 +583,15 @@ function ColostrumContent() {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            {colostrumContent.compositionColostrum.headers.map((header, index) => (
+                            {colostrumContent?.compositionColostrum?.headers?.map((header, index) => (
                                 <TableHead key={index}>{header}</TableHead>
                             ))}
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {colostrumContent.compositionColostrum.rows.map((row, rowIndex) => (
+                        {colostrumContent?.compositionColostrum?.rows?.map((row, rowIndex) => (
                             <TableRow key={rowIndex}>
-                                {row.map((cell, cellIndex) => (
+                                {row?.map((cell, cellIndex) => (
                                     <TableCell key={cellIndex}>{cell}</TableCell>
                                 ))}
                             </TableRow>
@@ -604,15 +604,15 @@ function ColostrumContent() {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                           {colostrumContent.compositionPowder.headers.map((header, index) => (
+                           {colostrumContent?.compositionPowder?.headers?.map((header, index) => (
                                 <TableHead key={index}>{header}</TableHead>
                             ))}
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {colostrumContent.compositionPowder.rows.map((row, rowIndex) => (
+                        {colostrumContent?.compositionPowder?.rows?.map((row, rowIndex) => (
                             <TableRow key={rowIndex}>
-                                {row.map((cell, cellIndex) => (
+                                {row?.map((cell, cellIndex) => (
                                     <TableCell key={cellIndex}>{cell}</TableCell>
                                 ))}
                             </TableRow>
