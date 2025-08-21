@@ -68,6 +68,7 @@ export default function LoginPage() {
   const handleGoogleSignIn = async () => {
     setLoading('google');
     try {
+      // Use signInWithPopup instead of signInWithRedirect
       await signInWithPopup(auth, googleProvider);
       // The onAuthStateChanged listener in AuthProvider will handle the redirect
       // and profile creation.
@@ -100,12 +101,10 @@ export default function LoginPage() {
       const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
       const user = userCredential.user;
       
-      // The onAuthStateChanged listener in AuthProvider will handle profile creation.
-      // We just need to update the profile display name here.
+      // Update the user's profile in Firebase Auth
       await updateProfile(user, { displayName: values.name });
 
-      // We can also optimistically set the user data in our context
-      // This part can be removed if onAuthStateChanged handles it reliably
+      // Create the user's profile document in Firestore via AuthProvider
       if (setUserData) {
         await setUserData(user, {
             name: values.name,
@@ -221,7 +220,7 @@ export default function LoginPage() {
           </div>
 
           <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={!!loading}>
-            {loading === 'google' ? 'Redirecting...' : <><GoogleIcon /> Sign in with Google</>}
+            {loading === 'google' ? 'Signing in...' : <><GoogleIcon /> Sign in with Google</>}
           </Button>
 
         </CardContent>
