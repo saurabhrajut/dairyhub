@@ -1,20 +1,21 @@
 
 "use client";
 
-import { useState, useTransition, useMemo } from 'react';
+import { useState, useTransition, useMemo, useEffect, useRef } from 'react';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogDescription,
-  DialogFooter,
-  DialogClose,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
+import { Loader2, Sparkles, Lightbulb, UserPlus, Mic, Bot, StopCircle, ArrowLeft, Send } from 'lucide-react';
+import { askExpert, gyanAI, refineQuestion, textToSpeech } from '@/app/actions';
 import {
   Select,
   SelectContent,
@@ -22,30 +23,48 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/hooks/use-toast';
-import { Loader2, Sparkles, Lightbulb, UserPlus, Mic, Bot, StopCircle, ArrowLeft, Send } from 'lucide-react';
 
-import { askExpert, gyanAI, refineQuestion, summarizeTopic, textToSpeech } from '@/app/actions';
 
-// Mock data, can be fetched from a DB
 const initialExperts = [
-    { id: '1', name: "Dr. Ramesh Kumar", experience: 15, specialization: "Dairy Technology", photo: "https://placehold.co/150x150/E2E8F0/4A5568?text=R", fee: 50, type: 'ai' },
-    { id: '2', name: "Sunita Sharma", experience: 12, specialization: "Food Safety and Quality", photo: "https://placehold.co/150x150/E2E8F0/4A5568?text=S", fee: 50, type: 'ai' },
-    { id: '3', name: "Anil Singh", experience: 20, specialization: "Food Processing", photo: "https://placehold.co/150x150/E2E8F0/4A5568?text=A", fee: 75, type: 'ai' }
+    { id: '1', name: "Dr. Ramesh Kumar", experience: 15, specialization: "Dairy Technology", photo: "https://placehold.co/150x150/E2E8F0/4A5568?text=R", type: 'ai' },
+    { id: '2', name: "Sunita Sharma", experience: 12, specialization: "Food Safety and Quality", photo: "https://placehold.co/150x150/E2E8F0/4A5568?text=S", type: 'ai' },
+    { id: '3', name: "Anil Singh", experience: 20, specialization: "Food Processing", photo: "https://placehold.co/150x150/E2E8F0/4A5568?text=A", type: 'ai' }
 ];
+
+interface Message {
+  role: "user" | "model";
+  content: { text: string }[];
+}
+
+interface UIMessage {
+    id: string;
+    sender: "user" | "assistant";
+    text: string;
+    lang?: string;
+}
 
 // Main Component
 export function ExpertSupportModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
     const [activePage, setActivePage] = useState('home'); // 'home', 'gyan-ai', 'register'
+    const [selectedExpert, setSelectedExpert] = useState<typeof initialExperts[0] | null>(null);
+
+    const handleSelectExpert = (expert: typeof initialExperts[0]) => {
+        setSelectedExpert(expert);
+        setActivePage('chat');
+    };
+
+    const handleBackToHome = () => {
+        setActivePage('home');
+        setSelectedExpert(null);
+    }
 
     const renderPage = () => {
         switch (activePage) {
+            case 'chat': return <ChatPage expert={selectedExpert!} onBack={handleBackToHome} />;
             case 'gyan-ai': return <GyanAIPage setActivePage={setActivePage} />;
             case 'register': return <RegisterExpertPage setActivePage={setActivePage} />;
             case 'home':
-            default: return <HomePage setActivePage={setActivePage} />;
+            default: return <HomePage setActivePage={setActivePage} onSelectExpert={handleSelectExpert} />;
         }
     };
 
@@ -66,58 +85,11 @@ export function ExpertSupportModal({ isOpen, setIsOpen }: { isOpen: boolean; set
 }
 
 // Sub-components for each page
-function HomePage({ setActivePage }: { setActivePage: (page: string) => void }) {
+function HomePage({ setActivePage, onSelectExpert }: { setActivePage: (page: string) => void, onSelectExpert: (expert: any) => void }) {
     const [expertType, setExpertType] = useState<'ai' | 'real'>('ai');
     const [experts, setExperts] = useState(initialExperts);
-    const [selectedExpertId, setSelectedExpertId] = useState('');
-    const [question, setQuestion] = useState('');
-    const [userName, setUserName] = useState('');
-    const [language, setLanguage] = useState('English');
-    const [isLoading, startTransition] = useTransition();
-    const [isRefining, startRefineTransition] = useTransition();
-    const [response, setResponse] = useState<{title: string, message: string, textToSpeak: string} | null>(null);
-    const { toast } = useToast();
-
+   
     const filteredExperts = useMemo(() => experts.filter(e => e.type === expertType), [experts, expertType]);
-
-    const handleAsk = () => {
-        if (!selectedExpertId || !question || !userName) {
-            toast({ variant: 'destructive', title: "Please fill all fields." });
-            return;
-        }
-        startTransition(async () => {
-            const expert = experts.find(e => e.id === selectedExpertId);
-            if (!expert) return;
-
-            if (expert.type === 'ai') {
-                try {
-                    const result = await askExpert({
-                        expertName: expert.name,
-                        experience: expert.experience,
-                        specialization: expert.specialization,
-                        question: question,
-                        language: language
-                    });
-                    setResponse({ title: `Response from ${expert.name}:`, message: result.answer.replace(/\n/g, '<br />'), textToSpeak: result.answer });
-                } catch (e) {
-                    setResponse({ title: 'Error', message: 'Could not get response from AI.', textToSpeak: 'Error' });
-                }
-            } else {
-                setResponse({ title: 'Question Sent!', message: `Your question has been sent to ${expert.name}. You will be notified via email.`, textToSpeak: `Your question has been sent to ${expert.name}` });
-            }
-        });
-    };
-
-    const handleRefine = () => {
-        if (!question) {
-            toast({ variant: 'destructive', title: "Please write a question first." });
-            return;
-        }
-        startRefineTransition(async () => {
-            const refinedQ = await refineQuestion({ question });
-            setQuestion(refinedQ.refinedQuestion);
-        });
-    };
 
     return (
         <ScrollArea className="h-full">
@@ -135,52 +107,130 @@ function HomePage({ setActivePage }: { setActivePage: (page: string) => void }) 
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                    {filteredExperts.map(expert => (
-                       <div key={expert.id} className="bg-white rounded-xl shadow-lg p-6 text-center transform hover:-translate-y-1 transition-transform duration-300">
+                       <div key={expert.id} className="bg-white rounded-xl shadow-lg p-6 text-center transform hover:-translate-y-1 transition-transform duration-300 cursor-pointer" onClick={() => onSelectExpert(expert)}>
                            <img className="w-24 h-24 rounded-full object-cover mx-auto mb-4 border-4 border-blue-200" src={expert.photo} alt={expert.name} />
                            <h4 className="text-lg font-semibold text-gray-900">{expert.name}</h4>
                            <p className="text-sm text-gray-600 mt-1">{expert.experience}+ years in {expert.specialization}</p>
-                           <div className="mt-3 bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full inline-block">Fee: ₹{expert.fee}/hour</div>
+                           {expert.type === 'real' && (
+                               <div className="mt-3 bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full inline-block">Fee: ₹{expert.fee}/hour</div>
+                           )}
                        </div>
                    ))}
                 </div>
 
-                <div className="bg-card p-6 rounded-xl shadow-lg max-w-2xl mx-auto border">
-                    <h3 className="text-xl font-bold text-center text-gray-900 mb-6">Ask an Expert</h3>
-                     <div className="space-y-4">
-                        <Input placeholder="Your Name" value={userName} onChange={e => setUserName(e.target.value)} />
-                        <Select onValueChange={setSelectedExpertId} value={selectedExpertId}>
-                            <SelectTrigger><SelectValue placeholder={`Choose a ${expertType} expert`} /></SelectTrigger>
-                            <SelectContent>
-                                {filteredExperts.map(expert => <SelectItem key={expert.id} value={expert.id}>{expert.name} ({expert.specialization})</SelectItem>)}
-                            </SelectContent>
-                        </Select>
-                        <Textarea placeholder="Your Question..." value={question} onChange={e => setQuestion(e.target.value)} rows={5} />
-                        <div className="flex justify-end">
-                            <Button variant="link" onClick={handleRefine} disabled={isRefining}>
-                                {isRefining ? <Loader2 className="animate-spin" /> : <Sparkles className="mr-2" />} Refine Question
-                            </Button>
-                        </div>
-                        {expertType === 'ai' && (
-                            <Select onValueChange={setLanguage} defaultValue="English">
-                                <SelectTrigger><SelectValue placeholder="Response Language" /></SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="English">English</SelectItem>
-                                    <SelectItem value="Hinglish">Hinglish</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        )}
-                        <Button onClick={handleAsk} disabled={isLoading} className="w-full bg-green-600 hover:bg-green-700">
-                           {isLoading ? <Loader2 className="animate-spin" /> : <Send />} Ask Now
-                        </Button>
-                     </div>
-                </div>
                  <div className="text-center mt-8">
                     <Button variant="secondary" onClick={() => setActivePage('gyan-ai')}>Go to Gyan AI <Lightbulb className="ml-2"/></Button>
                     <Button variant="secondary" onClick={() => setActivePage('register')} className="ml-4">Become an Expert <UserPlus className="ml-2" /></Button>
                 </div>
             </div>
-            <ResponseModal response={response} setResponse={setResponse} />
         </ScrollArea>
+    );
+}
+
+function ChatPage({ expert, onBack }: { expert: typeof initialExperts[0], onBack: () => void }) {
+    const [messages, setMessages] = useState<UIMessage[]>([
+        { id: "initial", sender: "assistant", text: `Hello! I am ${expert.name}. Ask me anything about ${expert.specialization}.` }
+    ]);
+    const [history, setHistory] = useState<Message[]>([]);
+    const [input, setInput] = useState("");
+    const [language, setLanguage] = useState("English");
+    const [isLoading, setIsLoading] = useState(false);
+    const scrollAreaRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (scrollAreaRef.current) {
+            scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight;
+        }
+    }, [messages]);
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        const query = input.trim();
+        if (!query || isLoading) return;
+
+        const userMessage: UIMessage = {
+            id: Date.now().toString(),
+            sender: "user",
+            text: query,
+        };
+        setMessages((prev) => [...prev, userMessage]);
+
+        const newHistory: Message[] = [...history, { role: 'user', content: [{ text: query }] }];
+        setInput("");
+        setIsLoading(true);
+
+        try {
+            const response = await askExpert({
+                expertName: expert.name,
+                experience: expert.experience,
+                specialization: expert.specialization,
+                question: query,
+                language: language,
+                history: newHistory,
+            });
+
+            const assistantMessage: UIMessage = {
+                id: Date.now().toString() + "-ai",
+                sender: "assistant",
+                text: response.answer,
+                lang: language,
+            };
+            setMessages((prev) => [...prev, assistantMessage]);
+            setHistory([...newHistory, { role: 'model', content: [{ text: response.answer }] }]);
+
+        } catch (error) {
+            console.error(error);
+            const errorMessage: UIMessage = {
+                id: Date.now().toString() + "-error",
+                sender: "assistant",
+                text: "Sorry, something went wrong. Please try again.",
+            };
+            setMessages((prev) => [...prev, errorMessage]);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    return (
+        <div className="h-full flex flex-col p-4">
+            <Button variant="ghost" onClick={onBack} className="self-start mb-2"><ArrowLeft className="mr-2"/> Back to Experts</Button>
+            <div className="flex-1 flex flex-col bg-card border rounded-lg overflow-hidden">
+                <header className="p-4 border-b flex items-center gap-4">
+                    <img className="w-12 h-12 rounded-full object-cover" src={expert.photo} alt={expert.name} />
+                    <div>
+                        <h3 className="font-bold">{expert.name}</h3>
+                        <p className="text-xs text-muted-foreground">{expert.specialization}</p>
+                    </div>
+                </header>
+                <ScrollArea className="flex-grow p-4" ref={scrollAreaRef}>
+                    <div className="flex flex-col gap-4">
+                        {messages.map((msg) => (
+                            <div key={msg.id} className={`flex gap-3 max-w-[85%] ${msg.sender === "user" ? "self-end" : "self-start"}`}>
+                                {msg.sender === 'assistant' && <div className="bg-muted p-2 rounded-full h-fit shrink-0"><Bot className="w-5 h-5 text-foreground" /></div>}
+                                <div className={`flex-1 p-3 rounded-2xl break-words ${msg.sender === "user" ? "bg-primary/90 text-primary-foreground rounded-br-none" : "bg-muted text-muted-foreground rounded-bl-none"}`}>
+                                    <p className="text-sm" dangerouslySetInnerHTML={{ __html: msg.text.replace(/\n/g, '<br />') }}></p>
+                                </div>
+                            </div>
+                        ))}
+                         {isLoading && (
+                            <div className="self-start flex gap-3 items-center">
+                                <div className="bg-muted p-2 rounded-full h-fit"><Bot className="w-5 h-5 text-foreground" /></div>
+                                <div className="bg-muted p-3 rounded-2xl rounded-bl-none">
+                                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                        <Loader2 className="animate-spin h-4 w-4" />
+                                        Thinking...
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </ScrollArea>
+                <form onSubmit={handleSubmit} className="p-4 border-t bg-background flex items-center gap-2">
+                    <Input type="text" value={input} onChange={(e) => setInput(e.target.value)} placeholder="Ask a follow-up question..." className="flex-grow" disabled={isLoading} />
+                    <Button type="submit" size="icon" className="shrink-0" disabled={isLoading}><Send /></Button>
+                </form>
+            </div>
+        </div>
     );
 }
 

@@ -7,6 +7,12 @@ export const AskExpertInputSchema = z.object({
   specialization: z.string().describe("The specialization of the expert."),
   question: z.string().describe("The user's question."),
   language: z.string().describe("The language for the response (e.g., English, Hinglish)."),
+  history: z.array(z.object({
+    role: z.enum(['user', 'model']),
+    content: z.array(z.object({
+      text: z.string()
+    }))
+  })).optional().describe('The previous conversation history to maintain context.'),
 });
 export type AskExpertInput = z.infer<typeof AskExpertInputSchema>;
 

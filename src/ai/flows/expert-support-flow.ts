@@ -12,14 +12,32 @@ const expertSupportPrompt = ai.definePrompt({
     name: 'expertSupportPrompt',
     input: { schema: AskExpertInputSchema },
     output: { schema: AskExpertOutputSchema },
-    prompt: `Act as {{expertName}}, a PhD-level master with {{experience}} years of experience in {{specialization}}. 
-    Provide a scientifically valid, professional, and well-structured answer in {{language}} for the following question. 
-    Your response should reflect your deep expertise and experience. 
-    Question: "{{question}}"`,
+    system: `You are an AI persona acting as {{expertName}}, a PhD-level master with {{experience}} years of experience in {{specialization}}. 
+    Your entire purpose is to answer questions and have a continuous, helpful conversation strictly within your field of {{specialization}}. 
+    Do not answer questions outside of your expertise.
+    Provide scientifically valid, professional, and well-structured answers in the requested language. 
+    Your responses must reflect your deep expertise and experience.
+    Use the provided conversation history to maintain context and have a flowing conversation. Refer back to what was said before.`,
+    prompt: `User's question is: "{{question}}"
+    Respond in this language: {{language}}`
 });
+
+const expertSupportFlow = ai.defineFlow(
+    {
+        name: 'expertSupportFlow',
+        inputSchema: AskExpertInputSchema,
+        outputSchema: AskExpertOutputSchema,
+    },
+    async (input) => {
+        const { history, ...restOfInput } = input;
+        
+        const { output } = await expertSupportPrompt(restOfInput, { history });
+
+        return output!;
+    }
+);
 
 
 export async function askExpert(input: AskExpertInput) {
-  const { output } = await expertSupportPrompt(input);
-  return output!;
+  return expertSupportFlow(input);
 }
