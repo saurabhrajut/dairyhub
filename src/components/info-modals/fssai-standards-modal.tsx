@@ -1,3 +1,4 @@
+
 "use client";
 import {
   Dialog,
@@ -694,7 +695,7 @@ export function FssaiStandardsModal({ isOpen, setIsOpen }: { isOpen: boolean; se
                         >
                         <topic.icon className="w-8 h-8 text-primary mr-4 shrink-0" />
                         <div>
-                            <span className="font-semibold font-headline text-card-foreground">{content.topics[topic.value as keyof typeof content.topics].title}</span>
+                            <span className="font-semibold font-headline text-card-foreground">{content.topics[topic.value as keyof typeof content.topics]?.title}</span>
                         </div>
                         </button>
                     ))}

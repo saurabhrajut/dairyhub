@@ -46,7 +46,6 @@ import { WaterTestingModal } from "./info-modals/water-testing-modal";
 import { PackagingMaterialTestingModal } from "./info-modals/packaging-material-testing-modal";
 import { PlantCostModal } from "./calculators/plant-cost-modal";
 import { LabEquipmentsModal } from "./info-modals/lab-equipments-modal";
-import { useSubscription } from "@/context/subscription-context";
 import { SubscriptionModal } from "./subscription-modal";
 import { CipProcessModal } from "./info-modals/cip-process-modal";
 import { MicrobiologyTestingModal } from "./info-modals/microbiology-testing-modal";
@@ -120,7 +119,6 @@ export function TopicGrid() {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState(false);
-  const { isPro } = useSubscription();
 
   const filteredTopics = topics.filter((topic) => {
     const matchesFilter = activeFilter === "all" || topic.category === activeFilter;

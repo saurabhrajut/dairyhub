@@ -26,13 +26,13 @@ export default function RootLayout({
         <link rel="icon" href="https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/EF9A49FE-8131-4DD5-9311-7FC058B1FD0E.jpeg?alt=media&token=5b354cf4-00f5-4527-9ff8-7f9cbd4920b0" />
       </head>
       <body className="font-body antialiased">
-        <AuthProvider>
-          <SubscriptionProvider>
-            <LanguageProvider>
+        <LanguageProvider>
+          <AuthProvider>
+            <SubscriptionProvider>
               {children}
-            </LanguageProvider>
-          </SubscriptionProvider>
-        </AuthProvider>
+            </SubscriptionProvider>
+          </AuthProvider>
+        </LanguageProvider>
         <Toaster />
         <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
       </body>

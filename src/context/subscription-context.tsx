@@ -26,76 +26,15 @@ const ADMIN_UIDS = ['25lmjHq0g3SWKzT024sR6TmgNnF2'];
 const SubscriptionContext = createContext<SubscriptionContextType | undefined>(undefined);
 
 export function SubscriptionProvider({ children }: { children: ReactNode }) {
-  const { user, loading: authLoading } = useAuth();
   const [isPro, setIsPro] = useState(false);
   const [subscription, setSubscription] = useState<Subscription | null>(null);
 
-  const checkSubscription = useCallback(async () => {
-    if (!user) {
-      setIsPro(false);
-      setSubscription(null);
-      return;
-    }
-
-    // Grant admin users pro access automatically
-    if (ADMIN_UIDS.includes(user.uid)) {
-      const adminSub: Subscription = { plan: 'lifetime', expiryDate: null, subscribedAt: Date.now() };
-      setIsPro(true);
-      setSubscription(adminSub);
-      return;
-    }
-
-    const subRef = doc(db, 'users', user.uid, 'subscription', 'current');
-    try {
-        const docSnap = await getDoc(subRef);
-
-        if (docSnap.exists()) {
-            const subData = docSnap.data() as Subscription;
-            const isStillActive = subData.plan === 'lifetime' || (subData.expiryDate && subData.expiryDate > Date.now());
-            setIsPro(isStillActive);
-            setSubscription(isStillActive ? subData : null);
-        } else {
-            // No subscription document found, user is not pro.
-            setIsPro(false);
-            setSubscription(null);
-        }
-    } catch (error) {
-        console.error("Failed to check subscription:", error);
-        setIsPro(false);
-        setSubscription(null);
-    }
-  }, [user]);
-
-  useEffect(() => {
-    if (!authLoading && user) {
-      checkSubscription();
-    }
-  }, [user, authLoading, checkSubscription]);
-
   const subscribe = async (plan: SubscriptionPlan) => {
-    if (!user) {
-      throw new Error("User must be logged in to subscribe.");
-    }
-    
-    let expiryDate: number | null = null;
+    // Mock subscription for guest users
     const now = new Date();
-
-    switch (plan) {
-      case '7-days':
-        expiryDate = new Date(now.setDate(now.getDate() + 7)).getTime();
-        break;
-      case '1-month':
-        expiryDate = new Date(now.setMonth(now.getMonth() + 1)).getTime();
-        break;
-      case '6-months':
-        expiryDate = new Date(now.setMonth(now.getMonth() + 6)).getTime();
-        break;
-      case 'yearly':
-        expiryDate = new Date(now.setFullYear(now.getFullYear() + 1)).getTime();
-        break;
-      case 'lifetime':
+    let expiryDate: number | null = new Date(now.setDate(now.getDate() + 365)).getTime(); // 1 year for guests
+    if (plan === 'lifetime') {
         expiryDate = null;
-        break;
     }
 
     const newSubscription: Subscription = { 
@@ -104,10 +43,6 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
       subscribedAt: Date.now()
     };
     
-    const subRef = doc(db, 'users', user.uid, 'subscription', 'current');
-    await setDoc(subRef, newSubscription, { merge: true });
-    
-    // Manually update state after successful subscription
     setIsPro(true);
     setSubscription(newSubscription);
   };

@@ -3,11 +3,8 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { MessageCircle, X, Crown } from "lucide-react";
+import { MessageCircle, X } from "lucide-react";
 import { ChatPanel } from "./chat-panel";
-import { useAuth } from "@/context/auth-context";
-import { useSubscription } from "@/context/subscription-context";
-import { SubscriptionModal } from "./subscription-modal";
 
 export interface ChatUserProfile {
     name: string;
@@ -17,15 +14,10 @@ export interface ChatUserProfile {
 
 export function ChatWidget({ user: chatUser }: { user: ChatUserProfile }) {
   const [isOpen, setIsOpen] = useState(false);
-  const { user } = useAuth();
 
   const handleWidgetClick = () => {
     setIsOpen(!isOpen);
   };
-  
-  if (!user) {
-    return null; // Don't show the widget if user is not logged in
-  }
   
   return (
     <>
