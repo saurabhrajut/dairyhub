@@ -34,43 +34,45 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
-  const handleUserSetup = useCallback(async (firebaseUser: User | null) => {
-    if (firebaseUser) {
-      const userRef = doc(db, 'users', firebaseUser.uid);
-      const userDoc = await getDoc(userRef);
+  const fetchUserProfile = useCallback(async (firebaseUser: User) => {
+    const userRef = doc(db, 'users', firebaseUser.uid);
+    const userDoc = await getDoc(userRef);
 
-      if (userDoc.exists()) {
-        setUserProfile(userDoc.data() as UserProfile);
-      } else {
-        // Create new profile in Firestore if it doesn't exist
-        const newProfile: UserProfile = {
-          uid: firebaseUser.uid,
-          email: firebaseUser.email,
-          displayName: firebaseUser.displayName,
-          photoURL: firebaseUser.photoURL,
-          name: firebaseUser.displayName || 'New User',
-          age: null,
-          gender: null,
-          createdAt: serverTimestamp(),
-        };
-        await setDoc(userRef, newProfile);
-        setUserProfile(newProfile);
-      }
-      setUser(firebaseUser);
+    if (userDoc.exists()) {
+      return userDoc.data() as UserProfile;
     } else {
-      setUser(null);
-      setUserProfile(null);
+      // Create a new profile if one doesn't exist
+      const newProfile: UserProfile = {
+        uid: firebaseUser.uid,
+        email: firebaseUser.email,
+        displayName: firebaseUser.displayName,
+        photoURL: firebaseUser.photoURL,
+        name: firebaseUser.displayName || 'New User',
+        age: null,
+        gender: null,
+        createdAt: serverTimestamp(),
+      };
+      await setDoc(userRef, newProfile);
+      return newProfile;
     }
-    setLoading(false);
   }, []);
 
+
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      handleUserSetup(firebaseUser);
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      if (firebaseUser) {
+        setUser(firebaseUser);
+        const profile = await fetchUserProfile(firebaseUser);
+        setUserProfile(profile);
+      } else {
+        setUser(null);
+        setUserProfile(null);
+      }
+      setLoading(false);
     });
 
     return () => unsubscribe();
-  }, [handleUserSetup]);
+  }, [fetchUserProfile]);
 
   const logout = async () => {
     await signOut(auth);
@@ -96,7 +98,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       // Update local state
       setUserProfile(prev => prev ? { ...prev, ...data } : null);
-      setUser(prev => prev ? { ...prev, ...authUpdate } as User : null);
+      // It's better to refetch the user object or trust the update was successful
+      const updatedUser = { ...firebaseUser, ...authUpdate };
+      setUser(updatedUser as User);
 
       toast({ title: "Profile Updated", description: "Your changes have been saved." });
     } catch (error) {

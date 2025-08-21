@@ -3,8 +3,7 @@
 
 import { createContext, useState, useContext, ReactNode, useEffect, useCallback } from 'react';
 import { useAuth } from './auth-context';
-// onSnapshot को इम्पोर्ट करें
-import { doc, getDoc, setDoc, onSnapshot } from 'firebase/firestore'; 
+import { doc, getDoc, setDoc } from 'firebase/firestore'; 
 import { db } from '@/lib/firebase';
 
 export type SubscriptionPlan = '7-days' | '1-month' | '6-months' | 'yearly' | 'lifetime';
@@ -31,18 +30,14 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
   const [isPro, setIsPro] = useState(false);
   const [subscription, setSubscription] = useState<Subscription | null>(null);
 
-  // हमने getDoc को onSnapshot से बदल दिया है
-  useEffect(() => {
-    if (authLoading) return; // जब तक ऑथेंटिकेशन लोड हो रहा है, प्रतीक्षा करें
-
+  const checkSubscription = useCallback(async () => {
     if (!user) {
-      // अगर यूजर लॉग आउट है, तो सब कुछ रीसेट करें
       setIsPro(false);
       setSubscription(null);
       return;
     }
 
-    // एडमिन यूजर्स के लिए प्रो एक्सेस
+    // Grant admin users pro access automatically
     if (ADMIN_UIDS.includes(user.uid)) {
       const adminSub: Subscription = { plan: 'lifetime', expiryDate: null, subscribedAt: Date.now() };
       setIsPro(true);
@@ -50,37 +45,25 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    // *** यहाँ मुख्य बदलाव है - onSnapshot लिसनर ***
     const subRef = doc(db, 'users', user.uid, 'subscription', 'current');
-    
-    // लिसनर सेट करें
-    const unsubscribe = onSnapshot(subRef, (docSnap) => {
-      if (docSnap.exists()) {
-        const subData = docSnap.data() as Subscription;
-        if (subData.plan === 'lifetime' || (subData.expiryDate && subData.expiryDate > Date.now())) {
-          setIsPro(true);
-          setSubscription(subData);
-        } else {
-          // सब्सक्रिप्शन मौजूद है, लेकिन एक्सपायर हो चुका है
-          setIsPro(false);
-          setSubscription(subData);
-        }
-      } else {
-        // कोई सब्सक्रिप्शन नहीं मिला
-        setIsPro(false);
-        setSubscription(null);
-      }
-    }, (error) => {
-      // एरर को यहाँ हैंडल करें
-      console.error("Error listening to subscription changes:", error);
+    const docSnap = await getDoc(subRef);
+
+    if (docSnap.exists()) {
+      const subData = docSnap.data() as Subscription;
+      const isStillActive = subData.plan === 'lifetime' || (subData.expiryDate && subData.expiryDate > Date.now());
+      setIsPro(isStillActive);
+      setSubscription(subData);
+    } else {
       setIsPro(false);
       setSubscription(null);
-    });
+    }
+  }, [user]);
 
-    // क्लीनअप फंक्शन: जब कंपोनेंट अनमाउंट होता है या यूजर बदलता है, तो लिसनर को हटा दें
-    return () => unsubscribe();
-
-  }, [user, authLoading]); // यह useEffect यूजर या ऑथेंटिकेशन स्टेट बदलने पर चलेगा
+  useEffect(() => {
+    if (!authLoading) {
+      checkSubscription();
+    }
+  }, [user, authLoading, checkSubscription]);
 
   const subscribe = async (plan: SubscriptionPlan) => {
     if (!user) {
@@ -116,7 +99,10 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
     
     const subRef = doc(db, 'users', user.uid, 'subscription', 'current');
     await setDoc(subRef, newSubscription, { merge: true });
-    // हमें यहाँ मैन्युअल रूप से स्टेट सेट करने की आवश्यकता नहीं है, onSnapshot इसे स्वचालित रूप से कर देगा।
+    
+    // Manually update state after successful subscription
+    setIsPro(true);
+    setSubscription(newSubscription);
   };
 
   const value = { isPro, subscription, subscribe };
