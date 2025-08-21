@@ -66,10 +66,13 @@ const sarathiChatbotFlow = ai.defineFlow(
         restOfInput.question = "Please analyze my resume and ask me interview questions.";
     }
 
-    const { output } = await prompt({
+    const { output } = await prompt(
+      {
         prompt: `Question: {{{question}}}`,
-        ...restOfInput
-    }, { history: history || [] }); // Ensure history is an array
+        ...restOfInput,
+      },
+      { history: history || [] }
+    );
 
     return output!;
   }
