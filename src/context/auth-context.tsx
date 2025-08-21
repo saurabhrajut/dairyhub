@@ -34,32 +34,46 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
-  const fetchUserProfile = useCallback(async (firebaseUser: User) => {
+  const fetchUserProfile = useCallback(async (firebaseUser: User): Promise<UserProfile> => {
     const userRef = doc(db, 'users', firebaseUser.uid);
-    const userDoc = await getDoc(userRef);
-
-    if (userDoc.exists()) {
-      return userDoc.data() as UserProfile;
-    } else {
-      // Create a new profile if one doesn't exist
-      const newProfile: UserProfile = {
-        uid: firebaseUser.uid,
-        email: firebaseUser.email,
-        displayName: firebaseUser.displayName,
-        photoURL: firebaseUser.photoURL,
-        name: firebaseUser.displayName || 'New User',
-        age: null,
-        gender: null,
-        createdAt: serverTimestamp(),
-      };
-      await setDoc(userRef, newProfile);
-      return newProfile;
+    try {
+        const userDoc = await getDoc(userRef);
+        if (userDoc.exists()) {
+            return userDoc.data() as UserProfile;
+        } else {
+            // Create a new profile if one doesn't exist
+            const newProfile: UserProfile = {
+                uid: firebaseUser.uid,
+                email: firebaseUser.email,
+                displayName: firebaseUser.displayName,
+                photoURL: firebaseUser.photoURL,
+                name: firebaseUser.displayName || 'New User',
+                age: null,
+                gender: null,
+                createdAt: serverTimestamp(),
+            };
+            await setDoc(userRef, newProfile);
+            return newProfile;
+        }
+    } catch (error) {
+        console.error("Error fetching or creating user profile:", error);
+        // Return a default profile structure to avoid app crashes
+        return {
+            uid: firebaseUser.uid,
+            email: firebaseUser.email,
+            displayName: firebaseUser.displayName,
+            photoURL: firebaseUser.photoURL,
+            name: firebaseUser.displayName || 'Error User',
+            age: null,
+            gender: null,
+        };
     }
   }, []);
 
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      setLoading(true);
       if (firebaseUser) {
         setUser(firebaseUser);
         const profile = await fetchUserProfile(firebaseUser);

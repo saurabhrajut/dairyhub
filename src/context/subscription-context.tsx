@@ -46,16 +46,22 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
     }
 
     const subRef = doc(db, 'users', user.uid, 'subscription', 'current');
-    const docSnap = await getDoc(subRef);
+    try {
+        const docSnap = await getDoc(subRef);
 
-    if (docSnap.exists()) {
-      const subData = docSnap.data() as Subscription;
-      const isStillActive = subData.plan === 'lifetime' || (subData.expiryDate && subData.expiryDate > Date.now());
-      setIsPro(isStillActive);
-      setSubscription(subData);
-    } else {
-      setIsPro(false);
-      setSubscription(null);
+        if (docSnap.exists()) {
+            const subData = docSnap.data() as Subscription;
+            const isStillActive = subData.plan === 'lifetime' || (subData.expiryDate && subData.expiryDate > Date.now());
+            setIsPro(isStillActive);
+            setSubscription(subData);
+        } else {
+            setIsPro(false);
+            setSubscription(null);
+        }
+    } catch (error) {
+        console.error("Failed to check subscription:", error);
+        setIsPro(false);
+        setSubscription(null);
     }
   }, [user]);
 
