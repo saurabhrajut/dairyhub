@@ -1,6 +1,4 @@
 "use client";
-
-import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -16,6 +14,7 @@ import { IceCreamIcon, PaneerIcon } from "../icons";
 import { useLanguage } from "@/context/language-context";
 import { fssaiStandardsContent } from "@/lib/content/fssai-standards-content";
 
+import { useState } from "react";
 const ProductCard = ({ title, children }: { title: string, children: React.ReactNode }) => (
     <div className="bg-white border border-gray-200 rounded-xl shadow-sm mb-6 overflow-hidden">
         <div className="bg-gray-100 p-4 border-b border-gray-200">
