@@ -34,7 +34,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
-  const fetchUserProfile = useCallback(async (firebaseUser: User): Promise<UserProfile> => {
+  const fetchUserProfile = useCallback(async (firebaseUser: User): Promise<UserProfile | null> => {
+    if (!firebaseUser) return null;
     const userRef = doc(db, 'users', firebaseUser.uid);
     try {
         const userDoc = await getDoc(userRef);
@@ -58,16 +59,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch (error) {
         console.error("Error fetching or creating user profile:", error);
         toast({ variant: "destructive", title: "Profile Error", description: "Could not load your profile." });
-        // Return a default profile structure to avoid app crashes
-        return {
-            uid: firebaseUser.uid,
-            email: firebaseUser.email,
-            displayName: firebaseUser.displayName,
-            photoURL: firebaseUser.photoURL,
-            name: firebaseUser.displayName || 'Error User',
-            age: null,
-            gender: null,
-        };
+        return null;
     }
   }, [toast]);
 
@@ -110,8 +102,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       
       await setDoc(userRef, data, { merge: true });
 
+      // Optimistically update local state
       setUserProfile(prev => prev ? { ...prev, ...data } : null);
-      
       const updatedUser = { ...firebaseUser, ...authUpdate };
       setUser(updatedUser as User);
 

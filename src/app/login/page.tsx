@@ -9,10 +9,9 @@ import * as z from "zod";
 
 import { auth, googleProvider } from '@/lib/firebase';
 import { 
-  signInWithRedirect,
+  signInWithPopup,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  getRedirectResult,
   updateProfile,
 } from 'firebase/auth';
 
@@ -66,26 +65,17 @@ export default function LoginPage() {
     defaultValues: { name: "", age: undefined, gender: undefined, email: "", password: "" },
   });
   
-   useEffect(() => {
-    getRedirectResult(auth)
-      .then((result) => {
-        if (result) {
-          toast({ title: 'Success', description: 'Signed in successfully with Google!' });
-          router.push('/');
-        }
-      }).catch((error) => {
-        console.error('Google Sign-In Redirect Error:', error);
-        toast({ variant: 'destructive', title: 'Error', description: "Could not complete Google sign-in. Please try again." });
-      });
-  }, [router, toast]);
-
   const handleGoogleSignIn = async () => {
     setLoading('google');
     try {
-      await signInWithRedirect(auth, googleProvider);
+      await signInWithPopup(auth, googleProvider);
+      // The onAuthStateChanged listener in AuthProvider will handle the redirect
+      // and profile creation.
+      toast({ title: 'Success', description: 'Signed in successfully with Google!' });
+      router.push('/');
     } catch (error: any) {
       console.error('Google Sign-In Error:', error);
-      toast({ variant: 'destructive', title: 'Error', description: "Could not start Google sign-in. Please try again." });
+      toast({ variant: 'destructive', title: 'Error', description: "Could not complete Google sign-in. Please try again." });
       setLoading(null);
     }
   };
@@ -110,15 +100,19 @@ export default function LoginPage() {
       const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
       const user = userCredential.user;
       
-      // Update the user's profile in Auth and Firestore
-      // This is now handled by the onAuthStateChanged listener in AuthProvider
-      // to ensure atomicity and prevent race conditions.
+      // The onAuthStateChanged listener in AuthProvider will handle profile creation.
+      // We just need to update the profile display name here.
       await updateProfile(user, { displayName: values.name });
-      await setUserData(user, {
-        name: values.name,
-        age: values.age,
-        gender: values.gender
-      });
+
+      // We can also optimistically set the user data in our context
+      // This part can be removed if onAuthStateChanged handles it reliably
+      if (setUserData) {
+        await setUserData(user, {
+            name: values.name,
+            age: values.age,
+            gender: values.gender
+        });
+      }
 
       toast({ title: `Welcome, ${values.name}!`, description: 'Your account has been created.' });
       router.push('/');
