@@ -1,13 +1,25 @@
-rules_version = '2';
 
+rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Allow any authenticated user to read and write to the users collection.
-    // This is a simpler, more robust rule to prevent permission errors during sign-up
-    // while still ensuring that only logged-in users can access the database.
-    // The app's logic ensures users can only query their own documents.
+
+    // Users collection: user apna hi document create/read/update/delete kar sakta hai
     match /users/{userId} {
-      allow read, write: if request.auth != null;
+
+      // Create only by the same signed-in user at their UID
+      allow create: if request.auth != null && request.auth.uid == userId;
+
+      // Read/Update/Delete only by the owner
+      allow read, update, delete: if request.auth != null && request.auth.uid == userId;
+
+      // Subcollection: subscription (singular) exactly as in your code/path
+      match /subscription/{subId} {
+        // Owner-only access
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
     }
+
+    // Agar aapke app me aur collections bhi use ho rahe hon,
+    // unke liye alag match blocks add karein yahi pattern follow karke.
   }
 }
