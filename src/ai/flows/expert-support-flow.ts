@@ -30,6 +30,8 @@ const expertSupportFlow = ai.defineFlow(
     async (input) => {
         const { history, ...restOfInput } = input;
         
+        // Correctly call the prompt with input variables as the first argument,
+        // and history in the second configuration argument.
         const { output } = await expertSupportPrompt(
             restOfInput,
             { history: history || [] }

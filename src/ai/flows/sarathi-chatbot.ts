@@ -77,19 +77,19 @@ const sarathiChatbotFlow = ai.defineFlow(
         restOfInput.question = "Please analyze my resume and ask me interview questions.";
     }
 
+    // The first argument to prompt() is the input variables.
+    // The second argument is for streaming and history.
     const { output } = await prompt(
       {
         prompt: `Question: {{{question}}}`,
         ...restOfInput,
       },
-      { history: history || [] }
+      { history: history || [] } // Ensure history is always an array
     );
 
     // Add a check to ensure output is not undefined before returning
     if (output === undefined) {
-      // Handle the case where output is undefined, maybe log an error or return a default response
       console.error("Prompt function returned undefined output");
-      // You might want to return a specific error response here
       throw new Error("Failed to get response from AI prompt.");
     }
 
