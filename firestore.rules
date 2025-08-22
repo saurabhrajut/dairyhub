@@ -3,22 +3,19 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Each user can only access their own document
     match /users/{userId} {
 
-      // Create only your own document at id == UID
-      allow create: if request.auth != null
-                    && request.auth.uid == userId;
+      // Owner can create/update/delete own doc
+      allow create: if request.auth != null && request.auth.uid == userId;
+      allow update, delete: if request.auth != null && request.auth.uid == userId;
 
-      // Read/Update/Delete only your own document
-      allow read, update, delete: if request.auth != null
-                                  && request.auth.uid == userId;
+      // Public read: allow only if document has public == true
+      allow read: if resource.data.public == true
+                  || (request.auth != null && request.auth.uid == userId);
 
-      // Subcollection: subscription (singular)
       match /subscription/{subId} {
-        // Only the owner (same parent userId) can read/write
-        allow read, write: if request.auth != null
-                           && request.auth.uid == userId;
+        // Subscriptions remain private to owner
+        allow read, write: if request.auth != null && request.auth.uid == userId;
       }
     }
   }
