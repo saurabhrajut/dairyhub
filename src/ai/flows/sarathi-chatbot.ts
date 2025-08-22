@@ -73,19 +73,24 @@ const sarathiChatbotFlow = ai.defineFlow(
 
     // Ensure question is never undefined when passed to the prompt
     const question = restOfInput.question || (restOfInput.resumeText ? "Please analyze my resume and ask interview questions." : "Hello");
-
+    
     // The prompt expects history to be passed in the second argument.
-    // Ensure it's always an array.
+    // Ensure it's always an array and correctly formatted.
+    const validHistory = (history || []).map(msg => ({
+      role: msg.role,
+      content: Array.isArray(msg.content) ? msg.content : [{ text: (msg.content as any).text || '' }]
+    }));
+    
     const { output } = await prompt(
       { ...restOfInput, question },
-      { history: history || [] }
+      { history: validHistory }
     );
-
+    
     if (output === undefined) {
       console.error("Prompt returned undefined. Input was:", restOfInput);
       return { answer: "Sorry, I could not process that. Please try again." };
     }
-
+    
     return output;
   }
 );
