@@ -59,7 +59,6 @@ import { ValidationVerificationModal } from "./info-modals/validation-verificati
 import { EtpModal } from "./info-modals/etp-modal";
 import { IceCreamProductionModal } from "./info-modals/ice-cream-production-modal";
 import { ExpertSupportModal } from "./info-modals/expert-support-modal";
-import { useSubscription } from "@/context/subscription-context";
 
 const topics = [
   // Tier 1: Foundational Knowledge
@@ -119,8 +118,6 @@ export function TopicGrid() {
   const [activeFilter, setActiveFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [activeModal, setActiveModal] = useState<string | null>(null);
-  const { isPro } = useSubscription();
-  const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState(false);
 
   const filteredTopics = topics.filter((topic) => {
     const matchesFilter = activeFilter === "all" || topic.category === activeFilter;
@@ -130,11 +127,7 @@ export function TopicGrid() {
 
   const openModal = (id: string) => {
       const topic = topics.find(t => t.id === id);
-      if (!topic) return;
-      
-      if (topic.isPro && !isPro) {
-          setIsSubscriptionModalOpen(true);
-      } else if(topic && topic.modal) {
+      if (topic && topic.modal) {
         setActiveModal(id);
       }
   };
@@ -168,14 +161,12 @@ export function TopicGrid() {
 
       <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-4 sm:gap-6">
         {filteredTopics.map((topic) => {
-          const isLocked = topic.isPro && !isPro;
           return (
             <div
               key={topic.id}
               onClick={() => openModal(topic.id)}
-              className={`bg-card p-4 rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer text-center relative overflow-hidden group ${isLocked ? 'opacity-60' : ''}`}
+              className={`bg-card p-4 rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer text-center relative overflow-hidden group`}
             >
-              {isLocked && <div className="absolute inset-0 bg-black/30 flex items-center justify-center"><Lock className="text-white h-8 w-8" /></div>}
               {topic.badge && <Badge variant={topic.badge === 'Pro' ? 'default' : 'destructive'} className="absolute top-2 right-2 text-xs px-1.5 py-0.5 h-auto animate-pulse">{topic.badge}</Badge>}
               <div className={`w-16 h-16 mx-auto mb-3 rounded-full flex items-center justify-center bg-gradient-to-br ${topic.color}`}>
                 <topic.icon className="w-8 h-8 text-primary" />
@@ -192,7 +183,6 @@ export function TopicGrid() {
           if (!ModalComponent) return null;
           return <ModalComponent key={`${topic.id}-modal`} isOpen={activeModal === topic.id} setIsOpen={() => setActiveModal(null)} />
       })}
-      <SubscriptionModal isOpen={isSubscriptionModalOpen} setIsOpen={() => setIsSubscriptionModalOpen(false)} />
     </>
   );
 }

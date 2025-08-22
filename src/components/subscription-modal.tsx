@@ -14,7 +14,6 @@ import { Crown, CheckCircle2, Zap, Loader2 } from "lucide-react";
 import { useSubscription, type SubscriptionPlan } from "@/context/subscription-context";
 import { useToast } from "@/hooks/use-toast";
 import { ScrollArea } from "./ui/scroll-area";
-import { useAuth } from "@/context/auth-context";
 import { createRazorpayOrder, verifyRazorpayPayment } from "@/app/actions";
 
 const proFeatures = [
@@ -41,75 +40,33 @@ export function SubscriptionModal({
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
 }) {
-  const { user, userProfile } = useAuth();
   const { subscribe } = useSubscription();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState<SubscriptionPlan | null>(null);
 
   const handleSubscription = async (planKey: SubscriptionPlan) => {
     setIsLoading(planKey);
-    
-    if (!user || !userProfile) {
-        toast({ variant: "destructive", title: "Error", description: "You must be logged in to subscribe."});
-        setIsLoading(null);
-        return;
-    }
 
     const planDetails = plans[planKey];
     
     try {
-        const order = await createRazorpayOrder(planDetails.price);
+        // This is a mock payment flow as auth is disabled.
+        // In a real scenario, this would use Razorpay.
+        console.log(`Initiating mock payment for ${planDetails.title}`);
         
-        if (!order || !order.id) {
-            throw new Error("Failed to create payment order.");
-        }
+        // Simulate a successful payment and subscription
+        await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate network delay
 
-        const options = {
-            key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-            amount: order.amount,
-            currency: order.currency,
-            name: "Dairy Hub Pro",
-            description: `Subscription for ${planDetails.title}`,
-            order_id: order.id,
-            handler: async function (response: any) {
-                // On successful payment, verify it on the server
-                const verificationResult = await verifyRazorpayPayment({
-                    orderId: response.razorpay_order_id,
-                    paymentId: response.razorpay_payment_id,
-                    signature: response.razorpay_signature,
-                });
-
-                if (verificationResult.success) {
-                    await subscribe(planKey); // Subscribe the user in Firestore
-                    setIsOpen(false);
-                    toast({
-                        title: "Subscribed! 🎉",
-                        description: "Welcome to Pro! All features are now unlocked.",
-                    });
-                } else {
-                     toast({ variant: "destructive", title: "Payment Failed", description: verificationResult.message });
-                }
-                setIsLoading(null);
-            },
-            prefill: {
-                name: userProfile.name || "Dairy Hub User",
-                email: user.email,
-            },
-            theme: {
-                color: "#4F46E5",
-            },
-            modal: {
-                ondismiss: function() {
-                    setIsLoading(null); // Stop loading if the user closes the modal
-                }
-            }
-        };
-
-        const rzp = new (window as any).Razorpay(options);
-        rzp.open();
+        await subscribe(planKey);
+        setIsOpen(false);
+        toast({
+            title: "Subscribed! 🎉",
+            description: "Welcome to Pro! All features are now unlocked.",
+        });
 
     } catch (error: any) {
-        toast({ variant: "destructive", title: "Payment Failed", description: error.message || "Could not initiate payment. Please try again." });
+        toast({ variant: "destructive", title: "Action Failed", description: error.message || "Could not complete the action. Please try again." });
+    } finally {
         setIsLoading(null);
     }
   };
@@ -158,7 +115,7 @@ export function SubscriptionModal({
                       ))}
                   </div>
                    <div className="mt-8 bg-gray-50 p-4 rounded-lg text-center border">
-                      <p className="text-xs text-muted-foreground">Payment is processed securely by Razorpay.</p>
+                      <p className="text-xs text-muted-foreground">This is a simulated subscription flow.</p>
                   </div>
               </div>
               <div className="bg-primary/5 p-8 order-1 md:order-2 flex flex-col justify-center">

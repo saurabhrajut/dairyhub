@@ -1,16 +1,13 @@
 
 'use client';
 
-import { createContext, useState, useContext, ReactNode, useEffect, useCallback } from 'react';
-import { useAuth } from './auth-context';
-import { doc, getDoc, setDoc } from 'firebase/firestore'; 
-import { db } from '@/lib/firebase';
+import { createContext, useState, useContext, ReactNode } from 'react';
 
 export type SubscriptionPlan = '7-days' | '1-month' | '6-months' | 'yearly' | 'lifetime';
 
 interface Subscription {
   plan: SubscriptionPlan;
-  expiryDate: number | null; // null for lifetime, timestamp for others
+  expiryDate: number | null; 
   subscribedAt: number;
 }
 
@@ -20,29 +17,25 @@ interface SubscriptionContextType {
   subscribe: (plan: SubscriptionPlan) => Promise<void>;
 }
 
-// Add UIDs of users you want to give free lifetime pro access to.
-const ADMIN_UIDS = ['25lmjHq0g3SWKzT024sR6TmgNnF2']; 
-
 const SubscriptionContext = createContext<SubscriptionContextType | undefined>(undefined);
 
 export function SubscriptionProvider({ children }: { children: ReactNode }) {
-  const [isPro, setIsPro] = useState(false);
-  const [subscription, setSubscription] = useState<Subscription | null>(null);
+  // By default, everyone is a "pro" user since auth is disabled.
+  const [isPro, setIsPro] = useState(true);
+  const [subscription, setSubscription] = useState<Subscription | null>({
+      plan: 'lifetime',
+      expiryDate: null,
+      subscribedAt: Date.now()
+  });
 
   const subscribe = async (plan: SubscriptionPlan) => {
-    // Mock subscription for guest users
-    const now = new Date();
-    let expiryDate: number | null = new Date(now.setDate(now.getDate() + 365)).getTime(); // 1 year for guests
-    if (plan === 'lifetime') {
-        expiryDate = null;
-    }
-
+    // This function is now a placeholder as there's no user to subscribe.
+    console.log(`Guest subscription attempt for plan: ${plan}`);
     const newSubscription: Subscription = { 
       plan, 
-      expiryDate, 
+      expiryDate: null, 
       subscribedAt: Date.now()
     };
-    
     setIsPro(true);
     setSubscription(newSubscription);
   };
