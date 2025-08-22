@@ -13,6 +13,13 @@ const inter = Inter({
   display: 'swap',
 });
 
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-poppins',
+  display: 'swap',
+});
+
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
   variable: '--font-space-grotesk',
@@ -48,7 +55,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} ${sourceCodePro.variable} ${notoDevanagari.variable}`}>
+    <html lang="en" className={`${inter.variable} ${poppins.variable} ${spaceGrotesk.variable} ${sourceCodePro.variable} ${notoDevanagari.variable}`}>
       <body className="font-body antialiased">
         <AuthProvider>
           <SubscriptionProvider>
