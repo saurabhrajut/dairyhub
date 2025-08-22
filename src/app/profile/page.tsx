@@ -11,7 +11,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { User as UserIcon, Mail, Cake, VenetianMask, Crown, CalendarClock, ArrowLeft, Edit, Check, Camera, Settings, ChevronRight, LogOut, Bell } from 'lucide-react';
+import { User as UserIcon, Mail, Cake, VenetianMask, Crown, CalendarClock, ArrowLeft, Edit, Check, Camera, Settings, ChevronRight, LogOut, Bell, Loader2 } from 'lucide-react';
 import { format } from "date-fns";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SubscriptionModal } from "@/components/subscription-modal";
@@ -261,3 +261,5 @@ export default function ProfilePage() {
         </div>
     );
 }
+
+    
