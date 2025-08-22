@@ -15,7 +15,6 @@ export interface UserProfile {
   name: string;
   age: number | null;
   gender: 'male' | 'female' | 'other' | null;
-  createdAt?: any;
 }
 
 interface AuthContextType {
@@ -51,7 +50,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 name: firebaseUser.displayName || 'New User',
                 age: null,
                 gender: null,
-                createdAt: serverTimestamp(),
             };
             await setDoc(userRef, newProfile);
             return newProfile;
