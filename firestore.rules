@@ -1,16 +1,8 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /users/{userId} {
-      // Allow create, read, update, delete only by the owner of the document.
-      // This single rule covers all write operations securely.
+    match /users/{userId}/{documents=**} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
-
-      // Subcollection for user's subscription
-      match /subscription/{subId} {
-        // Only the owner can read/write their subscription info
-        allow read, write: if request.auth != null && request.auth.uid == userId;
-      }
     }
   }
 }

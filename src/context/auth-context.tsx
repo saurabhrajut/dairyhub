@@ -4,7 +4,7 @@
 import { createContext, useState, useContext, ReactNode, useEffect, useCallback } from 'react';
 import { onAuthStateChanged, signOut, type User, updateProfile } from 'firebase/auth';
 import { auth, db } from '@/lib/firebase';
-import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
 
 export interface UserProfile {
@@ -41,7 +41,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (userDoc.exists()) {
             return userDoc.data() as UserProfile;
         } else {
-            // Create a new profile if one doesn't exist (e.g., for first-time Google sign-in)
+            // Create a new profile if one doesn't exist (e.g., for first-time sign-in)
             const newProfile: UserProfile = {
                 uid: firebaseUser.uid,
                 email: firebaseUser.email,
