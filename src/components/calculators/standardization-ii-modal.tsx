@@ -15,16 +15,17 @@ import { Label } from "@/components/ui/label"
 import { getSnf } from "@/lib/utils"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { ArrowLeft, Blend, Milk, SlidersHorizontal, Combine, Bot, Calculator, Settings, ChevronsUp } from 'lucide-react'
+import { ArrowLeft, Blend, Milk, SlidersHorizontal, Combine, Bot, Calculator, Settings, ChevronsUp, Target } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 
-type CalculatorType = 'fat-snf-clr-ts' | 'fat-blending' | 'fat-snf-adjustment' | 'reconstituted-milk' | 'recombined-milk' | 'clr-blending' | 'custom-calculator' | 'milk-blending' | 'clr-increase';
+type CalculatorType = 'fat-snf-clr-ts' | 'fat-blending' | 'fat-snf-adjustment' | 'reconstituted-milk' | 'recombined-milk' | 'clr-blending' | 'custom-calculator' | 'milk-blending' | 'clr-increase' | 'fat-clr-maintainer';
 
 const calculatorsInfo = {
     'fat-snf-clr-ts': { title: "Fat, SNF, CLR & TS", icon: Calculator, component: FatSnfClrTsCalc },
     'milk-blending': { title: "Milk Blending", icon: Blend, component: MilkBlendingCalc },
     'custom-calculator': { title: 'Custom Calculator', icon: Settings, component: CustomStandardizationCalc },
     'clr-increase': { title: 'CLR Increase (by SMP)', icon: ChevronsUp, component: ClrIncreaseCalc },
+    'fat-clr-maintainer': { title: 'Fat & CLR Maintainer', icon: Target, component: FatClrMaintainerCalc },
     'fat-blending': { title: "Fat Blending (Pearson)", icon: Blend, component: FatBlendingCalc },
     'fat-snf-adjustment': { title: "Fat & SNF Adjustment", icon: SlidersHorizontal, component: FatSnfAdjustmentCalc },
     'reconstituted-milk': { title: "Reconstituted Milk", icon: Milk, component: ReconstitutedMilkCalc },
@@ -570,6 +571,87 @@ function ClrIncreaseCalc() {
     );
 }
 
+function FatClrMaintainerCalc() {
+    const [inputs, setInputs] = useState({
+        milkQty: '100', milkFat: '3.0', milkClr: '28',
+        creamFat: '40', targetFat: '4.5',
+    });
+    const [result, setResult] = useState<string | null>(null);
+    const [error, setError] = useState<string | null>(null);
+
+    const handleInputChange = useCallback((name: string, value: string) => {
+        setInputs(prev => ({...prev, [name]: value}));
+    }, []);
+
+    const calculate = useCallback(() => {
+        setResult(null);
+        setError(null);
+        
+        const M_milk = parseFloat(inputs.milkQty);
+        const F_milk = parseFloat(inputs.milkFat);
+        const CLR_milk = parseFloat(inputs.milkClr);
+        const F_cream = parseFloat(inputs.creamFat);
+        const F_target = parseFloat(inputs.targetFat);
+
+        if (isNaN(M_milk) || isNaN(F_milk) || isNaN(CLR_milk) || isNaN(F_cream) || isNaN(F_target)) {
+            setError("Please fill all fields with valid numbers."); return;
+        }
+        if (F_target <= F_milk) {
+            setError("Target Fat % must be higher than Initial Fat %."); return;
+        }
+        if (F_cream <= F_target) {
+            setError("Cream Fat % must be higher than Target Fat %."); return;
+        }
+
+        // Step 1: Calculate cream needed
+        const M_cream = M_milk * (F_target - F_milk) / (F_cream - F_target);
+
+        // Step 2: Calculate CLR drop
+        const SNF_milk = getSnf(F_milk, CLR_milk);
+        const SNF_cream = getSnf(F_cream, 20, 0.85); // Approx CLR for cream
+        
+        const total_snf_before_smp = (M_milk * SNF_milk/100) + (M_cream * SNF_cream/100);
+        const total_milk_before_smp = M_milk + M_cream;
+        
+        const CLR_intermediate = ((total_snf_before_smp / total_milk_before_smp * 100) - (0.25 * F_target) - 0.72) * 4;
+        
+        const CLR_drop = CLR_milk - CLR_intermediate;
+
+        // Step 3: Calculate SMP needed to compensate for CLR drop
+        const smpSolidsPercent = 96; // Standard value for SMP total solids
+        const smpNeeded = (total_milk_before_smp * CLR_drop * 0.25) / smpSolidsPercent;
+        
+        setResult(`
+            To increase Fat from <strong>${F_milk}%</strong> to <strong>${F_target}%</strong> and maintain CLR at <strong>${CLR_milk}</strong> for <strong>${M_milk} kg</strong> of milk, you need to add:
+            <ul class='list-disc list-inside mt-2 text-lg'>
+                <li>Cream (${F_cream}% Fat): <strong class='text-green-700'>${M_cream.toFixed(3)} kg</strong></li>
+                <li>SMP (~96% TS): <strong class='text-blue-700'>${smpNeeded.toFixed(3)} kg</strong></li>
+            </ul>
+        `);
+
+    }, [inputs]);
+    
+    return (
+        <CalculatorCard title="Fat & CLR Maintainer Calculator" description="Increase milk Fat % with cream while maintaining the original CLR by adding Skimmed Milk Powder (SMP).">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mb-4">
+                <div className="bg-muted/50 p-4 rounded-lg space-y-3">
+                    <h3 className="font-semibold text-gray-700 mb-2 font-headline">Initial Milk</h3>
+                    <div><Label>Milk Quantity (kg)</Label><Input type="number" value={inputs.milkQty} onChange={e => handleInputChange('milkQty', e.target.value)} /></div>
+                    <div><Label>Milk Fat %</Label><Input type="number" value={inputs.milkFat} onChange={e => handleInputChange('milkFat', e.target.value)} /></div>
+                    <div><Label>Milk CLR</Label><Input type="number" value={inputs.milkClr} onChange={e => handleInputChange('milkClr', e.target.value)} /></div>
+                </div>
+                 <div className="bg-primary/10 p-4 rounded-lg space-y-3">
+                     <h3 className="font-semibold text-gray-700 mb-2 font-headline">Target & Ingredients</h3>
+                    <div><Label>Target Fat %</Label><Input type="number" value={inputs.targetFat} onChange={e => handleInputChange('targetFat', e.target.value)} /></div>
+                    <div><Label>Cream Fat %</Label><Input type="number" value={inputs.creamFat} onChange={e => handleInputChange('creamFat', e.target.value)} /></div>
+                </div>
+            </div>
+             <Button onClick={calculate} className="w-full mt-4">Calculate Cream & SMP</Button>
+            {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
+            {result && <Alert className="mt-4"><AlertTitle>Result</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
+        </CalculatorCard>
+    )
+}
 
 const PearsonSquareCalc = ({ unit, calcType }: { unit: string, calcType: 'Fat' | 'CLR' }) => {
     const [high, setHigh] = useState("");
