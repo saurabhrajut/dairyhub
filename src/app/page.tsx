@@ -1,4 +1,3 @@
-
 "use client";
 
 import { DailyTip } from "@/components/daily-tip";
