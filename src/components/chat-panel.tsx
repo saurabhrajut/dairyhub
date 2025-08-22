@@ -170,7 +170,7 @@ export function ChatPanel({
                     : "bg-muted text-muted-foreground rounded-bl-none"
                 }`}
               >
-                <p className="text-sm" dangerouslySetInnerHTML={{__html: msg.text.replace(/\n/g, '<br />')}}></p>
+                <p className="text-sm" dangerouslySetInnerHTML={{__html: msg.text.replace(/\\n/g, '<br />')}}></p>
               </div>
             </div>
           ))}
