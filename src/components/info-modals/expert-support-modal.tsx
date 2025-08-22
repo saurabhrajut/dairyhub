@@ -8,6 +8,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
+  DialogFooter,
+  DialogClose,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
@@ -101,7 +103,7 @@ function HomePage({ setActivePage, onSelectExpert }: { setActivePage: (page: str
                  <div className="flex justify-center mb-6">
                         <div className="bg-gray-200 rounded-full p-1 flex items-center">
                             <Button onClick={() => setExpertType('ai')} variant={expertType === 'ai' ? 'default' : 'ghost'} className="rounded-full shadow-sm">AI Experts</Button>
-                            <Button onClick={() => setExpertType('real')} variant={expertType === 'real' ? 'default' : 'ghost'} className="rounded-full shadow-sm">Real Experts</Button>
+                            <Button onClick={() => setExpertType('real')} variant={expertType === 'real' ? 'default' : 'ghost'} className="rounded-full shadow-sm" disabled>Real Experts (Coming Soon)</Button>
                         </div>
                     </div>
 
@@ -111,16 +113,13 @@ function HomePage({ setActivePage, onSelectExpert }: { setActivePage: (page: str
                            <img className="w-24 h-24 rounded-full object-cover mx-auto mb-4 border-4 border-blue-200" src={expert.photo} alt={expert.name} />
                            <h4 className="text-lg font-semibold text-gray-900">{expert.name}</h4>
                            <p className="text-sm text-gray-600 mt-1">{expert.experience}+ years in {expert.specialization}</p>
-                           {expert.type === 'real' && (
-                               <div className="mt-3 bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full inline-block">Fee: ₹{expert.fee}/hour</div>
-                           )}
                        </div>
                    ))}
                 </div>
 
-                 <div className="text-center mt-8">
+                 <div className="text-center mt-8 space-x-4">
                     <Button variant="secondary" onClick={() => setActivePage('gyan-ai')}>Go to Gyan AI <Lightbulb className="ml-2"/></Button>
-                    <Button variant="secondary" onClick={() => setActivePage('register')} className="ml-4">Become an Expert <UserPlus className="ml-2" /></Button>
+                    <Button variant="outline" onClick={() => setActivePage('register')}>Become an Expert <UserPlus className="ml-2" /></Button>
                 </div>
             </div>
         </ScrollArea>
