@@ -104,7 +104,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const updatedUser = { ...firebaseUser, ...authUpdate };
       setUser(updatedUser as User);
 
-      toast({ title: "Profile Updated", description: "Your changes have been saved." });
     } catch (error) {
       console.error("Error updating profile:", error);
       toast({ variant: "destructive", title: "Update Failed", description: "Could not save profile changes." });

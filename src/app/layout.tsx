@@ -41,7 +41,7 @@ const notoDevanagari = Noto_Sans_Devanagari({
 
 // Metadata object for SEO and icons
 export const metadata: Metadata = {
-  title: 'Dairy Hub',
+  title: 'DhenuGuide',
   description: 'Your complete guide to dairy science and industry.',
   icons: {
     icon: 'https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/EF9A49FE-8131-4DD5-9311-7FC058B1FD0E.jpeg?alt=media&token=5b354cf4-00f5-4527-9ff8-7f9cbd4920b0',

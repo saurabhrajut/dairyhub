@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -104,7 +104,7 @@ export default function LoginPage() {
         <div className="bg-primary/10 p-6">
             <Milk className="w-12 h-12 text-primary mx-auto" />
             <CardHeader className="text-center p-0 pt-4">
-                <CardTitle className="font-headline text-3xl">Welcome to Dairy Hub</CardTitle>
+                <CardTitle className="font-headline text-3xl">Welcome to DhenuGuide</CardTitle>
                 <CardDescription>Sign in or create an account</CardDescription>
             </CardHeader>
         </div>
