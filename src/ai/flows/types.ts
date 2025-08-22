@@ -72,30 +72,6 @@ export const SuggestDairyRecipesOutputSchema = z.object({
 });
 export type SuggestDairyRecipesOutput = z.infer<typeof SuggestDairyRecipesOutputSchema>;
 
-// Types for sarathi-chatbot.ts
-export const SarathiChatbotInputSchema = z.object({
-  name: z.string().describe("The user's name."),
-  age: z.number().describe("The user's age."),
-  gender: z.enum(['male', 'female', 'other']).describe("The user's gender."),
-  language: z
-    .string()    
-    .describe('The language in which the user is asking the question (e.g., hi-IN, pa-IN).'),
-  question: z.string().describe('The user question about dairy farming.'),
-  resumeText: z.string().optional().describe('Optional. The full text of a user\'s resume or CV, pasted by the user for analysis.'),
-  history: z.array(z.object({
-    role: z.enum(['user', 'model']),
-    content: z.array(z.object({
-      text: z.string()
-    }))
-  })).optional().describe('The previous conversation history to maintain context.'),
-});
-export type SarathiChatbotInput = z.infer<typeof SarathiChatbotInputSchema>;
-
-export const SarathiChatbotOutputSchema = z.object({
-  answer: z.string().describe('The AI chatbot response to the user question.'),
-});
-export type SarathiChatbotOutput = z.infer<typeof SarathiChatbotOutputSchema>;
-
 // Types for generate-adulterant-detection-instructions.ts
 export const GenerateAdulterantDetectionInstructionsInputSchema = z.object({
   adulterant: z.string().describe('The name of the adulterant or preservative to detect.'),

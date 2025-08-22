@@ -3,7 +3,6 @@
 
 import { generateDairyTip } from "@/ai/flows/generate-dairy-tip";
 import { suggestDairyRecipes } from "@/ai/flows/suggest-dairy-recipes";
-import { sarathiChatbot } from "@/ai/flows/sarathi-chatbot";
 import { generateAdulterantDetectionInstructions } from "@/ai/flows/generate-adulterant-detection-instructions";
 import { getLatestDairyIndustryData } from "@/ai/flows/get-latest-dairy-industry-data";
 import Razorpay from "razorpay";
@@ -16,7 +15,6 @@ import { textToSpeech as textToSpeechFlow } from "@/ai/flows/text-to-speech-flow
 
 import type { 
     SuggestDairyRecipesInput,
-    SarathiChatbotInput,
     GenerateAdulterantDetectionInstructionsInput,
     AskExpertInput,
     GyanAIInput,
@@ -30,10 +28,6 @@ export async function getDailyTip() {
 
 export async function getRecipeSuggestions(input: SuggestDairyRecipesInput) {
     return await suggestDairyRecipes(input);
-}
-
-export async function getSarathiChatbotResponse(input: SarathiChatbotInput) {
-    return await sarathiChatbot(input);
 }
 
 export async function getDetectionInstructions(input: GenerateAdulterantDetectionInstructionsInput) {
