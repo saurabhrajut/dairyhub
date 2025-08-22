@@ -21,7 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { PlusCircle, XCircle as XCircleIcon } from "lucide-react";
+import { PlusCircle, XCircle } from "lucide-react";
 
 interface Item {
   id: number;
@@ -47,7 +47,7 @@ const MemoizedRevenueItem = memo(function RevenueItemRow({ item: initialItem, on
             <Input type="number" placeholder="Quantity (Ltr/Kg)" value={item.quantity} onChange={(e) => handleChange('quantity', e.target.value)} />
             <div className="flex items-center gap-2">
                 <Input type="number" placeholder="Price per unit" value={item.price} onChange={(e) => handleChange( 'price', e.target.value)} />
-                <Button variant="ghost" size="icon" className="text-destructive" onClick={() => onRemove(item.id)}><XCircleIcon /></Button>
+                <Button variant="ghost" size="icon" className="text-destructive" onClick={() => onRemove(item.id)}><XCircle /></Button>
             </div>
         </div>
     );
@@ -68,7 +68,7 @@ const MemoizedExpenseItem = memo(function ExpenseItemRow({ item: initialItem, on
             <Input placeholder="Expense (e.g., Raw Milk)" value={item.name} onChange={(e) => handleChange('name', e.target.value)} />
             <div className="flex items-center gap-2">
                 <Input type="number" placeholder="Cost" value={item.cost} onChange={(e) => handleChange('cost', e.target.value)} />
-                <Button variant="ghost" size="icon" className="text-destructive" onClick={() => onRemove(item.id, type)}><XCircleIcon /></Button>
+                <Button variant="ghost" size="icon" className="text-destructive" onClick={() => onRemove(item.id, type)}><XCircle /></Button>
             </div>
         </div>
     );

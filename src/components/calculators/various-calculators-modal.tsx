@@ -23,7 +23,7 @@ import {
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { componentProps, getSnf } from "@/lib/utils";
-import { CheckCircle, PlusCircle, XCircle as XCircleIcon, Beaker, Thermometer, Weight, Percent, Scaling, Combine, Calculator, FlaskConical, ArrowLeft, RotateCw } from "lucide-react";
+import { CheckCircle, PlusCircle, XCircle, Beaker, Thermometer, Weight, Percent, Scaling, Combine, Calculator, FlaskConical, ArrowLeft, RotateCw } from "lucide-react";
 import { PaneerIcon, IceCreamIcon } from "../icons";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -373,11 +373,11 @@ function StatewiseSNFCalc() {
             <div>
                 <p className="mb-2">Comparing against <strong>{state}</strong> standards for <strong>{checkMilkType} Milk</strong>:</p>
                 <div className={`flex items-center gap-2 ${fatPass ? 'text-green-600' : 'text-red-600'}`}>
-                    {fatPass ? <CheckCircle className="w-5 h-5"/> : <XCircleIcon className="w-5 h-5"/>}
+                    {fatPass ? <CheckCircle className="w-5 h-5"/> : <XCircle className="w-5 h-5"/>}
                     Fat: Your value is <strong>{fat.toFixed(2)}%</strong>. Legal minimum is <strong>{legalStandards.fat.toFixed(2)}%</strong>.
                 </div>
                 <div className={`flex items-center gap-2 mt-1 ${snfPass ? 'text-green-600' : 'text-red-600'}`}>
-                    {snfPass ? <CheckCircle className="w-5 h-5"/> : <XCircleIcon className="w-5 h-5"/>}
+                    {snfPass ? <CheckCircle className="w-5 h-5"/> : <XCircle className="w-5 h-5"/>}
                     SNF: Your value is <strong>{snf.toFixed(2)}%</strong>. Legal minimum is <strong>{legalStandards.snf.toFixed(2)}%</strong>.
                 </div>
                  <p className={`mt-3 font-bold text-lg ${fatPass && snfPass ? 'text-green-700' : 'text-red-700'}`}>
@@ -973,7 +973,7 @@ function BatchScalingCalc() {
                                 onChange={(e) => handleIngredientChange(ing.id, 'amount', e.target.value)}
                             />
                         </div>
-                        <Button variant="ghost" size="icon" className="text-destructive" onClick={() => removeIngredient(ing.id)}><XCircleIcon /></Button>
+                        <Button variant="ghost" size="icon" className="text-destructive" onClick={() => removeIngredient(ing.id)}><XCircle /></Button>
                     </div>
                 ))}
             </div>
@@ -1158,7 +1158,7 @@ function MixCompositionCalc() {
                         <Input type="number" placeholder="Fat %" value={ing.fat} onChange={e => handleChange(ing.id, 'fat', e.target.value)} />
                         <Input type="number" placeholder="MSNF %" value={ing.msnf} onChange={e => handleChange(ing.id, 'msnf', e.target.value)} />
                         <Input type="number" placeholder="Sugar %" value={ing.sugar} onChange={e => handleChange(ing.id, 'sugar', e.target.value)} />
-                        <Button variant="ghost" size="icon" className="text-destructive" onClick={() => removeIngredient(ing.id)}><XCircleIcon /></Button>
+                        <Button variant="ghost" size="icon" className="text-destructive" onClick={() => removeIngredient(ing.id)}><XCircle /></Button>
                     </div>
                 ))}
             </div>
