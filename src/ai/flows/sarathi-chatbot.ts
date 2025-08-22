@@ -72,7 +72,7 @@ const sarathiChatbotFlow = ai.defineFlow(
         ...restOfInput,
       },
       // Ensure history is always an array, even if it's empty.
-      { history: history ? history : [] }
+      { history: history || [] }
     );
 
     return output!;
