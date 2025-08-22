@@ -1,4 +1,3 @@
-
 'use server'; // Next.js server action के लिए ऐड करें, अगर client से कॉल हो रहा है
 
 import { ai } from '@/ai/genkit';
@@ -102,7 +101,20 @@ const sarathiChatbotFlow = ai.defineFlow(
         throw new Error("Failed to get response from AI prompt. Please check input or API connection.");
       }
 
-      return output;
+      // Sanitize output to prevent circular references
+      const seen = new WeakSet();
+      const safeOutput = JSON.parse(JSON.stringify(output, (key, value) => {
+        if (typeof value === 'object' && value !== null) {
+          if (seen.has(value)) {
+            return '[Circular]'; // Handle cyclic references
+          }
+          seen.add(value);
+        }
+        return value;
+      }));
+
+      return safeOutput;
+
     } catch (error) {
       // एरर को लॉग करें और wrapped एरर थ्रो करें ताकि caller (जैसे getSarathiChatbotResponse) पकड़ सके
       console.error("Error in sarathiChatbotFlow:", error);
