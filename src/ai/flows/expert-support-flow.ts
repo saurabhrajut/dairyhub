@@ -33,7 +33,7 @@ const expertSupportFlow = ai.defineFlow(
         const { output } = await expertSupportPrompt(
             restOfInput,
             // Ensure history is always an array, even if it's empty.
-            { history: history ? history : [] }
+            { history: history || [] }
         );
 
         return output!;
