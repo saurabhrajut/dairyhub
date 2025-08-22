@@ -1,8 +1,8 @@
 
-'use server';
+'use server'; // Next.js server action के लिए ऐड करें, अगर client से कॉल हो रहा है
 
-import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import { ai } from '@/ai/genkit';
+import { z } from 'genkit';
 import {
   SarathiChatbotInputSchema,
   SarathiChatbotOutputSchema,
@@ -54,7 +54,7 @@ const prompt = ai.definePrompt({
       prompt: z.string(),
     }),
   },
-  output: {schema: SarathiChatbotOutputSchema},
+  output: { schema: SarathiChatbotOutputSchema },
 });
 
 export async function sarathiChatbot(
@@ -70,29 +70,43 @@ const sarathiChatbotFlow = ai.defineFlow(
     outputSchema: SarathiChatbotOutputSchema,
   },
   async (input) => {
-    const { history, ...restOfInput } = input;
-    
-    // If there is resume text but no question, provide a default question.
-    if (restOfInput.resumeText && !restOfInput.question) {
-        restOfInput.question = "Please analyze my resume and ask me interview questions.";
+    try {
+      const { history, ...restOfInput } = input;
+
+      // इनपुट वैलिडेशन: question जरूरी है, नहीं तो डिफॉल्ट सेट करें
+      if (!restOfInput.question) {
+        if (restOfInput.resumeText) {
+          restOfInput.question = "Please analyze my resume and ask me interview questions.";
+        } else {
+          throw new Error("No question provided and no resume text available.");
+        }
+      }
+
+      // हिस्ट्री हमेशा array सुनिश्चित करें
+      const safeHistory = Array.isArray(history) ? history : [];
+
+      // प्रॉम्प्ट कॉल से पहले logging (dev-mode में मददगार)
+      console.log("Generating prompt with input:", { ...restOfInput, historyLength: safeHistory.length });
+
+      const { output } = await prompt(
+        {
+          prompt: `Question: {{{question}}}`,
+          ...restOfInput,
+        },
+        { history: safeHistory }
+      );
+
+      // आउटपुट चेक: undefined तो एरर थ्रो, लेकिन डिटेल्स के साथ
+      if (output === undefined) {
+        console.error("Prompt returned undefined. Input was:", restOfInput);
+        throw new Error("Failed to get response from AI prompt. Please check input or API connection.");
+      }
+
+      return output;
+    } catch (error) {
+      // एरर को लॉग करें और wrapped एरर थ्रो करें ताकि caller (जैसे getSarathiChatbotResponse) पकड़ सके
+      console.error("Error in sarathiChatbotFlow:", error);
+      throw new Error(`SarathiChatbot failed: ${(error as Error).message}`);
     }
-
-    // The first argument to prompt() is the input variables.
-    // The second argument is for streaming and history.
-    const { output } = await prompt(
-      {
-        prompt: `Question: {{{question}}}`,
-        ...restOfInput,
-      },
-      { history: history || [] } // Ensure history is always an array
-    );
-
-    // Add a check to ensure output is not undefined before returning
-    if (output === undefined) {
-      console.error("Prompt function returned undefined output");
-      throw new Error("Failed to get response from AI prompt.");
-    }
-
-    return output;
   }
 );
