@@ -7,11 +7,10 @@ import { TopicGrid } from "@/components/topic-grid";
 import { ChatWidget, type ChatUserProfile } from "@/components/chat-widget";
 
 export default function Home() {
-  // Since authentication is removed, we use a mock user object for the chatbot.
   const mockUser: ChatUserProfile = {
     name: 'Guest',
-    age: 30, // Default age
-    gender: 'other', // Default gender
+    age: 30,
+    gender: 'other',
   };
 
   return (

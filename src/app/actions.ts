@@ -21,7 +21,8 @@ import type {
     GyanAIInput,
     RefineQuestionInput,
     TextToSpeechInput,
-    SarathiChatbotInput
+    SarathiChatbotInput,
+    SarathiChatbotOutput
 } from "@/ai/flows/types";
 
 export async function getDailyTip() {
@@ -102,6 +103,6 @@ export async function textToSpeech(input: TextToSpeechInput) {
     return await textToSpeechFlow(input);
 }
 
-export async function getSarathiChatbotResponse(input: SarathiChatbotInput) {
+export async function getSarathiChatbotResponse(input: SarathiChatbotInput): Promise<SarathiChatbotOutput> {
     return await sarathiChatbot(input);
 }

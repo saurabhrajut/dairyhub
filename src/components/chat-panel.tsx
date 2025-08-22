@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { getSarathiChatbotResponse } from "@/app/actions";
-import { Mic, Send, Bot, Paperclip, X } from "lucide-react";
+import { Mic, Send, Bot, Paperclip, X, Loader2 } from "lucide-react";
 import type { ChatUserProfile } from "./chat-widget";
 
 interface Message {
@@ -23,7 +23,6 @@ interface Message {
   content: { text: string }[];
 }
 
-// Separate UI message type to handle local IDs
 interface UIMessage {
     id: string;
     sender: "user" | "assistant";
@@ -77,7 +76,6 @@ export function ChatPanel({
     };
     setMessages((prev) => [...prev, userMessage]);
     
-    // Add user message to history before sending
     const newHistory: Message[] = [...history, { role: 'user', content: [{ text: userMessageText }] }];
     
     setInput("");
@@ -85,14 +83,13 @@ export function ChatPanel({
 
     try {
       const response = await getSarathiChatbotResponse({
-        // Pass user details to the chatbot
         name: user.name,
         age: user.age,
         gender: user.gender,
         question: query,
         language: language,
         resumeText: resumeQuery || undefined,
-        history: newHistory, // Pass the updated history
+        history: newHistory,
       });
       const assistantMessage: UIMessage = {
         id: Date.now().toString() + "-ai",
@@ -101,8 +98,6 @@ export function ChatPanel({
         lang: language,
       };
       setMessages((prev) => [...prev, assistantMessage]);
-      
-      // Add model's response to history
       setHistory([...newHistory, { role: 'model', content: [{ text: response.answer }] }]);
 
     } catch (error) {
@@ -115,8 +110,10 @@ export function ChatPanel({
       setMessages((prev) => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
-      setResumeText("");
-      setShowResumeInput(false);
+      if (showResumeInput) {
+        setResumeText("");
+        setShowResumeInput(false);
+      }
     }
   };
 
@@ -178,7 +175,8 @@ export function ChatPanel({
             <div className="self-start flex gap-3 items-center">
               <div className="bg-muted p-2 rounded-full h-fit"><Bot className="w-5 h-5 text-foreground" /></div>
               <div className="bg-muted p-3 rounded-2xl rounded-bl-none">
-                <div className="flex items-center gap-2 text-sm text-muted-foreground animate-pulse">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                   <Loader2 className="animate-spin h-4 w-4" />
                   रुको जरा, सबर करो...
                 </div>
               </div>

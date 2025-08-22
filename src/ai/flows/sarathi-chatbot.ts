@@ -50,7 +50,7 @@ const prompt = ai.definePrompt({
   input: {
     schema: z.object({
       ...SarathiChatbotInputSchema.shape,
-      prompt: z.string(),
+      question: z.string(), // Ensure question is always a string here
     }),
   },
   output: { schema: SarathiChatbotOutputSchema },
@@ -69,44 +69,23 @@ const sarathiChatbotFlow = ai.defineFlow(
     outputSchema: SarathiChatbotOutputSchema,
   },
   async (input) => {
-    try {
-      const { history, ...restOfInput } = input;
+    const { history, ...restOfInput } = input;
 
-      if (!restOfInput.question) {
-        if (restOfInput.resumeText) {
-          restOfInput.question = "Please analyze my resume and ask me interview questions.";
-        } else {
-          throw new Error("No question provided and no resume text available.");
-        }
-      }
+    // Ensure question is never undefined when passed to the prompt
+    const question = restOfInput.question || (restOfInput.resumeText ? "Please analyze my resume and ask interview questions." : "Hello");
 
-      const safeHistory = Array.isArray(history) ? history : [];
+    // The prompt expects history to be passed in the second argument.
+    // Ensure it's always an array.
+    const { output } = await prompt(
+      { ...restOfInput, question },
+      { history: history || [] }
+    );
 
-      const { output } = await prompt(
-        {
-          prompt: `Question: {{{question}}}`,
-          ...restOfInput,
-        },
-        { history: safeHistory }
-      );
-
-      if (output === undefined) {
-        console.error("Prompt returned undefined. Input was:", restOfInput);
-        throw new Error("Failed to get response from AI prompt. Please check input or API connection.");
-      }
-      
-      const safeOutput = JSON.parse(JSON.stringify(output, (key, value) => {
-        if (typeof value === 'object' && value !== null) {
-          if (new WeakSet().has(value)) return '[Circular]';
-        }
-        return value;
-      }));
-
-      return safeOutput;
-      
-    } catch (error) {
-      console.error("Error in sarathiChatbotFlow:", error);
-      throw new Error(`SarathiChatbot failed: ${(error as Error).message}`);
+    if (output === undefined) {
+      console.error("Prompt returned undefined. Input was:", restOfInput);
+      return { answer: "Sorry, I could not process that. Please try again." };
     }
+
+    return output;
   }
 );
