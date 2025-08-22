@@ -15,8 +15,11 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { getSarathiChatbotResponse } from "@/app/actions";
-import { Mic, Send, Bot, Paperclip, X, Loader2 } from "lucide-react";
+import { Mic, Send, Bot, Paperclip, X, Loader2, Languages } from "lucide-react";
 import type { ChatUserProfile } from "./chat-widget";
+import { useLanguage } from "@/context/language-context";
+import { useToast } from "@/hooks/use-toast";
+
 
 interface GenkitMessage {
   role: "user" | "model";
@@ -52,12 +55,22 @@ export function ChatPanel({
   const [language, setLanguage] = useState("hi-IN");
   const [isLoading, setIsLoading] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const { language: appLanguage, setLanguage: setAppLanguage } = useLanguage();
+  const { toast } = useToast();
 
   useEffect(() => {
     if (scrollAreaRef.current) {
       scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight;
     }
   }, [messages]);
+
+  const handleAppLanguageChange = (lang: string) => {
+      setAppLanguage(lang as 'en' | 'hi');
+      toast({
+          title: "Language Updated",
+          description: `App language set to ${lang === 'hi' ? 'Hinglish' : 'English'}.`,
+      });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -155,6 +168,18 @@ export function ChatPanel({
               <SelectItem value="hi-Bhoj">Bhojpuri</SelectItem>
             </SelectContent>
           </Select>
+        </div>
+        <div className="flex items-center gap-2">
+             <Languages className="w-4 h-4" />
+              <Select value={appLanguage} onValueChange={handleAppLanguageChange}>
+                  <SelectTrigger className="w-auto bg-primary/50 text-xs border-0 focus:ring-0 h-7 px-2">
+                  <SelectValue placeholder="Language" />
+                  </SelectTrigger>
+                  <SelectContent>
+                      <SelectItem value="hi">Hinglish</SelectItem>
+                      <SelectItem value="en">English</SelectItem>
+                  </SelectContent>
+              </Select>
         </div>
       </header>
 

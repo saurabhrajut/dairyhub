@@ -45,7 +45,6 @@ import { WaterTestingModal } from "./info-modals/water-testing-modal";
 import { PackagingMaterialTestingModal } from "./info-modals/packaging-material-testing-modal";
 import { PlantCostModal } from "./calculators/plant-cost-modal";
 import { LabEquipmentsModal } from "./info-modals/lab-equipments-modal";
-import { SubscriptionModal } from "./subscription-modal";
 import { CipProcessModal } from "./info-modals/cip-process-modal";
 import { MicrobiologyTestingModal } from "./info-modals/microbiology-testing-modal";
 import { MilkHandlingPreservationModal } from "./info-modals/milk-handling-preservation-modal";
@@ -179,7 +178,7 @@ export function TopicGrid() {
       
       {topics.map(topic => {
           const ModalComponent = topic.modal;
-          if (!ModalComponent) return null;
+          if (!ModalComponent || (topic.isPro && topic.id !== 'subscription')) return null;
           return <ModalComponent key={`${topic.id}-modal`} isOpen={activeModal === topic.id} setIsOpen={() => setActiveModal(null)} />
       })}
     </>

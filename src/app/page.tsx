@@ -4,24 +4,13 @@ import { DailyTip } from "@/components/daily-tip";
 import { Header } from "@/components/header";
 import { TopicGrid } from "@/components/topic-grid";
 import { ChatWidget, type ChatUserProfile } from "@/components/chat-widget";
-import { useAuth } from "@/context/auth-context";
-import { Loader2 } from "lucide-react";
 
 export default function Home() {
-  const { user, userProfile, loading } = useAuth();
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-12 w-12 animate-spin text-primary" />
-      </div>
-    );
-  }
 
   const chatUser: ChatUserProfile = {
-    name: userProfile?.name || 'Guest',
-    age: userProfile?.age || 30,
-    gender: userProfile?.gender || 'other',
+    name: 'Guest',
+    age: 30,
+    gender: 'other',
   };
 
   return (
