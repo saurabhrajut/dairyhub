@@ -18,14 +18,14 @@ import { getSarathiChatbotResponse } from "@/app/actions";
 import { Mic, Send, Bot, Paperclip, X, Loader2 } from "lucide-react";
 import type { ChatUserProfile } from "./chat-widget";
 
-interface Message {
+interface GenkitMessage {
   role: "user" | "model";
   content: { text: string }[];
 }
 
 interface UIMessage {
     id: string;
-    sender: "user" | "assistant";
+    role: "user" | "model";
     text: string;
     lang?: string;
 }
@@ -42,11 +42,10 @@ export function ChatPanel({
   const [messages, setMessages] = useState<UIMessage[]>([
     {
       id: "initial",
-      sender: "assistant",
+      role: "model",
       text: `Ram Ram Sa ${user.name}! 🙏 Main hu aapka Sarathi. Apne dairy ke sawal pucho, ya fir neeche resume paste karke interview ki taiyari karo!`,
     },
   ]);
-  const [history, setHistory] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [resumeText, setResumeText] = useState("");
   const [showResumeInput, setShowResumeInput] = useState(false);
@@ -71,12 +70,22 @@ export function ChatPanel({
     const userMessageText = showResumeInput ? (query || `Please analyze my resume.`) : query;
     const userMessage: UIMessage = {
       id: Date.now().toString(),
-      sender: "user",
+      role: "user",
       text: userMessageText,
     };
-    setMessages((prev) => [...prev, userMessage]);
+    const newMessages = [...messages, userMessage];
+    setMessages(newMessages);
     
-    const newHistory: Message[] = [...history, { role: 'user', content: [{ text: userMessageText }] }];
+    // Convert UI messages to Genkit history format
+    const history: GenkitMessage[] = newMessages
+      .filter(msg => msg.id !== 'initial') // Exclude initial prompt
+      .map(msg => ({
+        role: msg.role,
+        content: [{ text: msg.text }]
+      }));
+      
+    // Remove the latest user message from history for the API call
+    const historyForApi = history.slice(0, -1);
     
     setInput("");
     setIsLoading(true);
@@ -89,22 +98,21 @@ export function ChatPanel({
         question: query,
         language: language,
         resumeText: resumeQuery || undefined,
-        history: newHistory,
+        history: historyForApi, // Pass the formatted history
       });
       const assistantMessage: UIMessage = {
         id: Date.now().toString() + "-ai",
-        sender: "assistant",
+        role: "model",
         text: response.answer,
         lang: language,
       };
       setMessages((prev) => [...prev, assistantMessage]);
-      setHistory([...newHistory, { role: 'model', content: [{ text: response.answer }] }]);
 
     } catch (error) {
       console.error(error);
       const errorMessage: UIMessage = {
         id: Date.now().toString() + "-error",
-        sender: "assistant",
+        role: "model",
         text: "Maaf karna, kuch gadbad ho gayi. Fir se try karein.",
       };
       setMessages((prev) => [...prev, errorMessage]);
@@ -156,13 +164,13 @@ export function ChatPanel({
             <div
               key={msg.id}
               className={`flex gap-3 max-w-[85%] ${
-                msg.sender === "user" ? "self-end" : "self-start"
+                msg.role === "user" ? "self-end" : "self-start"
               }`}
             >
-              {msg.sender === 'assistant' && <div className="bg-muted p-2 rounded-full h-fit shrink-0"><Bot className="w-5 h-5 text-foreground" /></div>}
+              {msg.role === 'model' && <div className="bg-muted p-2 rounded-full h-fit shrink-0"><Bot className="w-5 h-5 text-foreground" /></div>}
               <div
                 className={`flex-1 p-3 rounded-2xl break-words ${
-                  msg.sender === "user"
+                  msg.role === "user"
                     ? "bg-primary/90 text-primary-foreground rounded-br-none"
                     : "bg-muted text-muted-foreground rounded-bl-none"
                 }`}
