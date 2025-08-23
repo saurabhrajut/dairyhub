@@ -19,6 +19,16 @@ body {
     background-image: linear-gradient(to right, hsl(var(--primary)), hsl(var(--accent)));
 }
 
+.card-enter {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.card-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 
 @layer base {
   :root {

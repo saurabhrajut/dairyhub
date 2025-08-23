@@ -1,9 +1,10 @@
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
-import { User as UserIcon } from "lucide-react";
+import { User as UserIcon, Settings, ChevronRight } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Skeleton } from "@/components/ui/skeleton";
+import Link from 'next/link';
+import { Button } from "@/components/ui/button";
 
 export function Header() {
     return (
@@ -12,9 +13,11 @@ export function Header() {
                 <Card className="glass-card transition-all">
                     <CardContent className="p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                         <div className="flex items-center gap-4 group w-full">
-                            <Avatar className="w-12 h-12 border-2 border-primary/20 group-hover:ring-4 group-hover:ring-primary/20 transition-all">
-                                <AvatarFallback><UserIcon /></AvatarFallback>
-                            </Avatar>
+                             <Link href="/profile">
+                                <Avatar className="w-12 h-12 border-2 border-primary/20 group-hover:ring-4 group-hover:ring-primary/20 transition-all cursor-pointer">
+                                    <AvatarFallback><UserIcon /></AvatarFallback>
+                                </Avatar>
+                            </Link>
                             
                             <div>
                                 <h1 className="font-headline text-xl sm:text-2xl font-bold text-gray-800">
@@ -23,6 +26,12 @@ export function Header() {
                                 <p className="text-sm text-gray-500">Your digital dairy guide</p>
                             </div>
                         </div>
+                        <Link href="/profile" passHref>
+                             <Button variant="ghost" className="shrink-0">
+                                View Profile
+                                <ChevronRight className="w-4 h-4 ml-2" />
+                            </Button>
+                        </Link>
                     </CardContent>
                 </Card>
             </header>
