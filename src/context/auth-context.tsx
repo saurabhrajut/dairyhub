@@ -70,8 +70,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return userCredential;
   };
 
-  const logout = () => {
-    return signOut(auth);
+  const logout = async () => {
+    await signOut(auth);
+    setUser(null); // Explicitly clear user state
   };
 
   const updateUserProfile = async (profileData: { displayName?: string }) => {
