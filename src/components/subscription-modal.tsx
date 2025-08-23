@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -12,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Crown, CheckCircle2, Zap, Loader2 } from "lucide-react";
 import { useSubscription, type SubscriptionPlan } from "@/context/subscription-context";
+import { useAuth } from "@/context/auth-context";
 import { useToast } from "@/hooks/use-toast";
 import { ScrollArea } from "./ui/scroll-area";
 import { createRazorpayOrder, verifyRazorpayPayment } from "@/app/actions";
@@ -41,23 +41,22 @@ export function SubscriptionModal({
   setIsOpen: (open: boolean) => void;
 }) {
   const { subscribe } = useSubscription();
+  const { user } = useAuth();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState<SubscriptionPlan | null>(null);
 
   const handleSubscription = async (planKey: SubscriptionPlan) => {
+    if (!user) {
+        toast({ variant: "destructive", title: "Not Logged In", description: "You must be logged in to subscribe." });
+        return;
+    }
+
     setIsLoading(planKey);
 
     const planDetails = plans[planKey];
     
     try {
-        // This is a mock payment flow as auth is disabled.
-        // In a real scenario, this would use Razorpay.
-        console.log(`Initiating mock payment for ${planDetails.title}`);
-        
-        // Simulate a successful payment and subscription
-        await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate network delay
-
-        await subscribe(planKey);
+        await subscribe(planKey, user.uid);
         setIsOpen(false);
         toast({
             title: "Subscribed! 🎉",

@@ -1,6 +1,8 @@
 'use client';
 
-import { createContext, useState, useContext, ReactNode, useEffect } from 'react';
+import { createContext, useState, useContext, ReactNode, useEffect, useCallback } from 'react';
+import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 import { add } from 'date-fns';
 
 export type SubscriptionPlan = '7-days' | '1-month' | '6-months' | 'yearly' | 'lifetime';
@@ -8,8 +10,9 @@ export type SubscriptionPlan = '7-days' | '1-month' | '6-months' | 'yearly' | 'l
 interface SubscriptionContextType {
   plan: SubscriptionPlan | null;
   expiryDate: Date | null;
-  subscribe: (plan: SubscriptionPlan) => Promise<void>;
+  subscribe: (plan: SubscriptionPlan, userId: string) => Promise<void>;
   isPro: boolean;
+  loadSubscription: (userId: string) => Promise<void>;
 }
 
 const SubscriptionContext = createContext<SubscriptionContextType | undefined>(undefined);
@@ -18,45 +21,58 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
   const [plan, setPlan] = useState<SubscriptionPlan | null>(null);
   const [expiryDate, setExpiryDate] = useState<Date | null>(null);
 
-  useEffect(() => {
-    // Load subscription status from localStorage on mount
-    const storedPlan = localStorage.getItem('dhenu-subscription-plan') as SubscriptionPlan | null;
-    const storedExpiry = localStorage.getItem('dhenu-subscription-expiry');
-    
-    if (storedPlan) {
-      if(storedExpiry) {
-        const expiry = new Date(storedExpiry);
-        if (expiry > new Date() || storedPlan === 'lifetime') {
-            setPlan(storedPlan);
-            setExpiryDate(expiry);
+  const loadSubscription = useCallback(async (userId: string) => {
+    if (!userId) {
+        setPlan(null);
+        setExpiryDate(null);
+        return;
+    }
+    const subDocRef = doc(db, "users", userId, "subscription", "current");
+    const docSnap = await getDoc(subDocRef);
+
+    if (docSnap.exists()) {
+        const data = docSnap.data();
+        const currentPlan = data.plan as SubscriptionPlan;
+        const expiry = data.expiryDate?.toDate(); // Firestore timestamp to Date
+
+        if (currentPlan === 'lifetime' || (expiry && expiry > new Date())) {
+            setPlan(currentPlan);
+            setExpiryDate(expiry || null);
         } else {
-            // Plan expired
-            localStorage.removeItem('dhenu-subscription-plan');
-            localStorage.removeItem('dhenu-subscription-expiry');
+             // Plan expired
+            setPlan(null);
+            setExpiryDate(null);
         }
-      }
+    } else {
+        setPlan(null);
+        setExpiryDate(null);
     }
   }, []);
 
-  const subscribe = async (newPlan: SubscriptionPlan) => {
+  const subscribe = async (newPlan: SubscriptionPlan, userId: string) => {
     const now = new Date();
     let newExpiryDate: Date | null = null;
+    let durationDays: number | null = null;
 
     switch(newPlan) {
-        case '7-days': newExpiryDate = add(now, { days: 7 }); break;
-        case '1-month': newExpiryDate = add(now, { months: 1 }); break;
-        case '6-months': newExpiryDate = add(now, { months: 6 }); break;
-        case 'yearly': newExpiryDate = add(now, { years: 1 }); break;
-        case 'lifetime': newExpiryDate = null; break; // Lifetime plan does not expire
+        case '7-days': durationDays = 7; break;
+        case '1-month': durationDays = 30; break;
+        case '6-months': durationDays = 180; break;
+        case 'yearly': durationDays = 365; break;
+        case 'lifetime': durationDays = null; break;
+    }
+    
+    if (durationDays) {
+        newExpiryDate = add(now, { days: durationDays });
     }
 
-    // Save to localStorage
-    localStorage.setItem('dhenu-subscription-plan', newPlan);
-    if (newExpiryDate) {
-        localStorage.setItem('dhenu-subscription-expiry', newExpiryDate.toISOString());
-    } else {
-        localStorage.removeItem('dhenu-subscription-expiry');
-    }
+    const subDocRef = doc(db, "users", userId, "subscription", "current");
+    await setDoc(subDocRef, {
+        plan: newPlan,
+        startDate: serverTimestamp(),
+        expiryDate: newExpiryDate,
+        status: 'active'
+    });
 
     setPlan(newPlan);
     setExpiryDate(newExpiryDate);
@@ -65,7 +81,7 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
   const isPro = !!plan;
 
   return (
-    <SubscriptionContext.Provider value={{ plan, expiryDate, subscribe, isPro }}>
+    <SubscriptionContext.Provider value={{ plan, expiryDate, subscribe, isPro, loadSubscription }}>
       {children}
     </SubscriptionContext.Provider>
   );

@@ -1,20 +1,19 @@
-
 "use client";
 
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import Image from 'next/image';
+import { useAuth } from '@/context/auth-context';
 import Link from 'next/link';
-import { useUser } from '@/context/user-context';
+import { useRouter } from 'next/navigation';
+import { useToast } from '@/hooks/use-toast';
+import { useSubscription } from '@/context/subscription-context';
 import { SubscriptionModal } from '@/components/subscription-modal';
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useLanguage } from '@/context/language-context';
-import { useToast } from '@/hooks/use-toast';
-import { Info, Mail, MessageCircle, Crown, ChevronLeft, LogOut, Settings, HelpCircle, User } from 'lucide-react';
-import { useSubscription } from '@/context/subscription-context';
 import { format } from 'date-fns';
+import { Info, Mail, MessageCircle, Crown, ChevronLeft, LogOut, Settings, HelpCircle, User, Loader2 } from 'lucide-react';
 
 const EditIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -32,36 +31,50 @@ const allProFeatures = [
 ];
 
 export default function ProfilePage() {
-    const { user, setUser } = useUser();
+    const { user, loading, logout, updateUserProfile, updateUserPhoto } = useAuth();
     const { language, setLanguage } = useLanguage();
     const { plan, expiryDate, isPro } = useSubscription();
     const { toast } = useToast();
+    const router = useRouter();
 
     const [isMounted, setIsMounted] = useState(false);
     const [isEditingName, setIsEditingName] = useState(false);
-    const [tempName, setTempName] = useState(user.name);
+    const [tempName, setTempName] = useState(user?.displayName || '');
     const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState(false);
 
     useEffect(() => {
         setIsMounted(true);
-        setTempName(user.name);
-    }, [user.name]);
+        if (!loading && !user) {
+            router.push('/login');
+        }
+        if (user) {
+            setTempName(user.displayName || '');
+        }
+    }, [user, loading, router]);
 
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+
+    const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files[0]) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                if (e.target && typeof e.target.result === 'string') {
-                    setUser({ ...user, profilePic: e.target.result });
-                }
-            };
-            reader.readAsDataURL(event.target.files[0]);
+            const file = event.target.files[0];
+            try {
+                await updateUserPhoto(file);
+                toast({ title: "Profile picture updated!" });
+            } catch (error: any) {
+                toast({ variant: "destructive", title: "Upload Failed", description: error.message });
+            }
         }
     };
     
-    const handleSaveName = () => {
-        if (tempName.trim()) {
-            setUser({ ...user, name: tempName.trim() });
+    const handleSaveName = async () => {
+        if (tempName.trim() && user && tempName.trim() !== user.displayName) {
+            try {
+                await updateUserProfile({ displayName: tempName.trim() });
+                setIsEditingName(false);
+                toast({ title: "Name updated successfully!" });
+            } catch (error: any) {
+                toast({ variant: 'destructive', title: "Update failed", description: error.message });
+            }
+        } else {
             setIsEditingName(false);
         }
     }
@@ -72,6 +85,11 @@ export default function ProfilePage() {
             title: "Language Updated",
             description: `App language set to ${lang === 'hi' ? 'Hinglish' : 'English'}.`,
         });
+    }
+
+    const handleLogout = async () => {
+        await logout();
+        router.push('/login');
     }
 
     const getCardClass = (delay: number) => {
@@ -92,6 +110,15 @@ export default function ProfilePage() {
       return names[planKey] || 'Pro Plan';
     }
 
+    if (loading || !user) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-gray-100">
+                <Loader2 className="h-12 w-12 animate-spin text-primary" />
+            </div>
+        );
+    }
+
+
     return (
         <>
         <div className="max-w-md mx-auto min-h-screen bg-white shadow-lg">
@@ -104,12 +131,10 @@ export default function ProfilePage() {
                 <div className="flex flex-col items-center justify-center h-full">
                     {/* Profile Picture */}
                     <div className="relative">
-                        <Image
+                        <img
                             id="profilePic"
-                            src={user.profilePic}
+                            src={user.photoURL || 'https://placehold.co/128x128/E0E0E0/333?text=User'}
                             alt="Profile Picture"
-                            width={112}
-                            height={112}
                             className="w-28 h-28 rounded-full border-4 border-white shadow-lg object-cover"
                         />
                         <label htmlFor="fileInput" className="absolute bottom-0 right-0 bg-white p-1.5 rounded-full shadow-md cursor-pointer hover:bg-gray-200 transition-colors">
@@ -138,8 +163,8 @@ export default function ProfilePage() {
                          </div>
                     ) : (
                          <div className="flex items-center justify-center space-x-2">
-                            <h1 id="userName" className="text-2xl font-bold text-gray-800">{user.name}</h1>
-                            <button onClick={() => { setIsEditingName(true); setTempName(user.name); }} className="text-gray-500 hover:text-blue-600">
+                            <h1 id="userName" className="text-2xl font-bold text-gray-800">{user.displayName}</h1>
+                            <button onClick={() => { setIsEditingName(true); setTempName(user.displayName || ''); }} className="text-gray-500 hover:text-blue-600">
                                <EditIcon />
                             </button>
                         </div>
@@ -156,10 +181,16 @@ export default function ProfilePage() {
                             <p className="text-sm font-medium opacity-80">Subscription Plan</p>
                             <p className="text-2xl font-bold">{getPlanName(plan)}</p>
                         </div>
-                        {isPro && (
+                        {isPro && expiryDate && (
                             <div className="text-right">
                                 <p className="text-sm font-medium opacity-80">Expires on</p>
-                                <p className="font-semibold">{expiryDate ? format(expiryDate, 'dd MMM yyyy') : 'Never'}</p>
+                                <p className="font-semibold">{format(expiryDate, 'dd MMM yyyy')}</p>
+                            </div>
+                        )}
+                        {isPro && !expiryDate && ( // Lifetime plan
+                             <div className="text-right">
+                                <p className="text-sm font-medium opacity-80">Expires</p>
+                                <p className="font-semibold">Never</p>
                             </div>
                         )}
                     </div>
@@ -252,7 +283,7 @@ export default function ProfilePage() {
                         </Dialog>
 
                         {/* Logout */}
-                        <li className="flex justify-between items-center p-3 hover:bg-red-50 rounded-lg cursor-pointer">
+                        <li onClick={handleLogout} className="flex justify-between items-center p-3 hover:bg-red-50 rounded-lg cursor-pointer">
                             <span className="flex items-center gap-3 text-red-500 font-medium"><LogOut/>Logout</span>
                             <ChevronLeft className="h-5 w-5 text-red-500 transform rotate-180" />
                         </li>
@@ -264,4 +295,3 @@ export default function ProfilePage() {
         </>
     );
 }
-

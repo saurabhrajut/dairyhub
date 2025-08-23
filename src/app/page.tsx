@@ -4,15 +4,20 @@ import { DailyTip } from "@/components/daily-tip";
 import { Header } from "@/components/header";
 import { TopicGrid } from "@/components/topic-grid";
 import { ChatWidget, type ChatUserProfile } from "@/components/chat-widget";
-import { useUser } from "@/context/user-context";
+import { useAuth } from "@/context/auth-context";
+import { useEffect } from "react";
 
 export default function Home() {
-  const { user } = useUser();
+  const { user } = useAuth();
 
-  const chatUser: ChatUserProfile = {
-    name: user.name,
+  const chatUser: ChatUserProfile = user ? {
+    name: user.displayName || 'Guest',
     age: 30, // Example age
     gender: 'other', // Example gender
+  } : {
+    name: 'Guest',
+    age: 30,
+    gender: 'other',
   };
 
   return (
