@@ -3,6 +3,8 @@ import { Inter, Poppins, Source_Code_Pro, Space_Grotesk, Noto_Sans_Devanagari } 
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { LanguageProvider } from '@/context/language-context';
+import { UserProvider } from '@/context/user-context';
+import { SubscriptionProvider } from '@/context/subscription-context';
 
 // Font configuration using next/font
 const inter = Inter({
@@ -56,8 +58,12 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} ${poppins.variable} ${spaceGrotesk.variable} ${sourceCodePro.variable} ${notoDevanagari.variable}`}>
       <body className="font-body antialiased">
         <LanguageProvider>
-          {children}
-          <Toaster />
+          <UserProvider>
+            <SubscriptionProvider>
+              {children}
+              <Toaster />
+            </SubscriptionProvider>
+          </UserProvider>
         </LanguageProvider>
       </body>
     </html>

@@ -5,8 +5,11 @@ import { User as UserIcon, Settings, ChevronRight } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from 'next/link';
 import { Button } from "@/components/ui/button";
+import { useUser } from "@/context/user-context";
 
 export function Header() {
+    const { user } = useUser();
+
     return (
         <>
             <header className="mb-8">
@@ -15,13 +18,14 @@ export function Header() {
                         <div className="flex items-center gap-4 group w-full">
                              <Link href="/profile">
                                 <Avatar className="w-12 h-12 border-2 border-primary/20 group-hover:ring-4 group-hover:ring-primary/20 transition-all cursor-pointer">
+                                    <AvatarImage src={user.profilePic} alt={user.name} />
                                     <AvatarFallback><UserIcon /></AvatarFallback>
                                 </Avatar>
                             </Link>
                             
                             <div>
                                 <h1 className="font-headline text-xl sm:text-2xl font-bold text-gray-800">
-                                    Welcome, Guest! 👋
+                                    Welcome, {user.name}! 👋
                                 </h1>
                                 <p className="text-sm text-gray-500">Your digital dairy guide</p>
                             </div>

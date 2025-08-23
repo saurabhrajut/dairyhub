@@ -4,13 +4,15 @@ import { DailyTip } from "@/components/daily-tip";
 import { Header } from "@/components/header";
 import { TopicGrid } from "@/components/topic-grid";
 import { ChatWidget, type ChatUserProfile } from "@/components/chat-widget";
+import { useUser } from "@/context/user-context";
 
 export default function Home() {
+  const { user } = useUser();
 
   const chatUser: ChatUserProfile = {
-    name: 'Guest',
-    age: 30,
-    gender: 'other',
+    name: user.name,
+    age: 30, // Example age
+    gender: 'other', // Example gender
   };
 
   return (
