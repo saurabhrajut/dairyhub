@@ -64,7 +64,7 @@ const sarathiChatbotFlow = ai.defineFlow(
     // Ensure it's always an array and correctly formatted.
     const validHistory = (history || []).map(msg => ({
       role: msg.role,
-      content: Array.isArray(msg.content) ? msg.content : [{ text: (msg.content as any).text || '' }]
+      content: msg.content || [{ text: '' }],
     }));
     
     const { output } = await prompt(
