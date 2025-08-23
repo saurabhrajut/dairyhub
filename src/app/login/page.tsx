@@ -45,7 +45,7 @@ export default function LoginPage() {
             <div className="w-full max-w-md bg-white rounded-xl shadow-2xl p-8 m-4">
                 <div className="text-center mb-8">
                     <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600">Dairy Hub</h1>
-                    <p className="text-gray-500 mt-2">Welcome back! Please log in.</p>
+                    <p className="text-gray-500 mt-2">Log in to your account</p>
                 </div>
 
                 <form onSubmit={handleLogin}>
@@ -57,7 +57,7 @@ export default function LoginPage() {
                             id="email"
                             placeholder="Email Address"
                             required
-                            className="w-full pl-12 pr-4 py-3 bg-gray-50 border-gray-300 rounded-lg focus:ring-pink-500"
+                            className="w-full pl-12 pr-4 py-3 bg-gray-50 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                         />
@@ -70,14 +70,14 @@ export default function LoginPage() {
                             id="password"
                             placeholder="Password"
                             required
-                            className="w-full pl-12 pr-4 py-3 bg-gray-50 border-gray-300 rounded-lg focus:ring-pink-500"
+                            className="w-full pl-12 pr-4 py-3 bg-gray-50 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
                     <div>
                         <Button type="submit"
-                                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 rounded-lg hover:from-purple-700 hover:to-pink-700 transition duration-300 ease-in-out transform hover:scale-105"
+                                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 rounded-lg hover:from-purple-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 transition duration-300 ease-in-out transform hover:scale-105"
                                 disabled={isLoading}>
                             {isLoading ? <Loader2 className="animate-spin" /> : 'Log In'}
                         </Button>
