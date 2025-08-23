@@ -30,6 +30,12 @@ const allProFeatures = [
     "Ad-free experience",
 ];
 
+const guestUser = {
+    displayName: "Guest",
+    email: "guest@example.com",
+    photoURL: "https://placehold.co/128x128/E0E0E0/333?text=Guest"
+}
+
 export default function ProfilePage() {
     const { user, loading, logout, updateUserProfile, updateUserPhoto } = useAuth();
     const { language, setLanguage } = useLanguage();
@@ -39,21 +45,25 @@ export default function ProfilePage() {
 
     const [isMounted, setIsMounted] = useState(false);
     const [isEditingName, setIsEditingName] = useState(false);
-    const [tempName, setTempName] = useState(user?.displayName || '');
+    
+    // Use the logged-in user if available, otherwise fall back to the guest user.
+    const displayUser = user || guestUser;
+    const [tempName, setTempName] = useState(displayUser.displayName || '');
+    
     const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState(false);
 
     useEffect(() => {
         setIsMounted(true);
-        if (!loading && !user) {
-            router.push('/login');
-        }
-        if (user) {
-            setTempName(user.displayName || '');
-        }
-    }, [user, loading, router]);
+        // Authentication check is removed. The page is now accessible to anyone.
+        setTempName(displayUser.displayName || '');
+    }, [displayUser.displayName]);
 
 
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (!user) {
+            toast({ variant: "destructive", title: "Action Not Allowed", description: "Please sign up to change your profile picture." });
+            return;
+        }
         if (event.target.files && event.target.files[0]) {
             const file = event.target.files[0];
             try {
@@ -66,7 +76,12 @@ export default function ProfilePage() {
     };
     
     const handleSaveName = async () => {
-        if (tempName.trim() && user && tempName.trim() !== user.displayName) {
+        if (!user) {
+            toast({ variant: "destructive", title: "Action Not Allowed", description: "Please sign up to change your name." });
+            setIsEditingName(false);
+            return;
+        }
+        if (tempName.trim() && tempName.trim() !== user.displayName) {
             try {
                 await updateUserProfile({ displayName: tempName.trim() });
                 setIsEditingName(false);
@@ -88,7 +103,9 @@ export default function ProfilePage() {
     }
 
     const handleLogout = async () => {
-        await logout();
+        if (user) {
+            await logout();
+        }
         router.push('/login');
     }
 
@@ -110,7 +127,7 @@ export default function ProfilePage() {
       return names[planKey] || 'Pro Plan';
     }
 
-    if (loading || !user) {
+    if (loading && user) { // Only show loader if we are actually waiting for a real user
         return (
             <div className="min-h-screen flex items-center justify-center bg-gray-100">
                 <Loader2 className="h-12 w-12 animate-spin text-primary" />
@@ -133,7 +150,7 @@ export default function ProfilePage() {
                     <div className="relative">
                         <img
                             id="profilePic"
-                            src={user.photoURL || 'https://placehold.co/128x128/E0E0E0/333?text=User'}
+                            src={displayUser.photoURL || 'https://placehold.co/128x128/E0E0E0/333?text=User'}
                             alt="Profile Picture"
                             className="w-28 h-28 rounded-full border-4 border-white shadow-lg object-cover"
                         />
@@ -163,14 +180,14 @@ export default function ProfilePage() {
                          </div>
                     ) : (
                          <div className="flex items-center justify-center space-x-2">
-                            <h1 id="userName" className="text-2xl font-bold text-gray-800">{user.displayName}</h1>
-                            <button onClick={() => { setIsEditingName(true); setTempName(user.displayName || ''); }} className="text-gray-500 hover:text-blue-600">
+                            <h1 id="userName" className="text-2xl font-bold text-gray-800">{displayUser.displayName}</h1>
+                            <button onClick={() => { setIsEditingName(true); setTempName(displayUser.displayName || ''); }} className="text-gray-500 hover:text-blue-600">
                                <EditIcon />
                             </button>
                         </div>
                     )}
                 </div>
-                 <p className="text-gray-500 text-sm">{user.email}</p>
+                 <p className="text-gray-500 text-sm">{displayUser.email}</p>
             </div>
 
             <div className="px-6 pb-6 space-y-6">
@@ -223,7 +240,7 @@ export default function ProfilePage() {
                     <div className="space-y-3">
                         <div className="flex items-center">
                             <div className="bg-blue-100 p-2 rounded-lg"><Mail className="h-5 w-5 text-blue-600"/></div>
-                            <span className="ml-4 text-gray-600">{user.email}</span>
+                            <span className="ml-4 text-gray-600">{displayUser.email}</span>
                         </div>
                         <div className="flex items-center">
                             <div className="bg-gray-100 p-2 rounded-lg"><User className="h-5 w-5 text-gray-400"/></div>

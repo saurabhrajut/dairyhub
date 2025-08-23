@@ -7,7 +7,6 @@ import { Input } from '@/components/ui/input';
 import { Mail, Lock, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/context/auth-context';
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
@@ -15,29 +14,23 @@ export default function LoginPage() {
     const [isLoading, setIsLoading] = useState(false);
     const { toast } = useToast();
     const router = useRouter();
-    const { login } = useAuth();
 
-    const handleLogin = async (e: React.FormEvent) => {
+    const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
 
-        try {
-            await login(email, password);
-            toast({
-                title: 'Login Successful',
-                description: 'Welcome back to Dairy Hub!',
-            });
-            router.push('/profile');
-        } catch (error: any) {
-            console.error(error);
-            toast({
-                variant: 'destructive',
-                title: 'Login Failed',
-                description: error.message || 'Please check your credentials and try again.',
-            });
-        } finally {
+        // Simulate a successful login and navigate to the profile page.
+        toast({
+            title: 'Navigating to Profile',
+            description: 'Bypassing authentication for demo.',
+        });
+        router.push('/profile');
+        
+        // No real authentication call is made.
+        // We keep the loading state simulation for better UX.
+        setTimeout(() => {
             setIsLoading(false);
-        }
+        }, 1000);
     };
 
     return (
@@ -56,7 +49,6 @@ export default function LoginPage() {
                             type="email"
                             id="email"
                             placeholder="Email Address"
-                            required
                             className="w-full pl-12 pr-4 py-3 bg-gray-50 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
@@ -69,7 +61,6 @@ export default function LoginPage() {
                             type="password"
                             id="password"
                             placeholder="Password"
-                            required
                             className="w-full pl-12 pr-4 py-3 bg-gray-50 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
