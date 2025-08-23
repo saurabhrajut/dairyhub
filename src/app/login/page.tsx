@@ -55,7 +55,7 @@ export default function LoginPage() {
                         />
                     </div>
                     <div className="mb-6 relative">
-                        <label for="password" className="sr-only">Password</label>
+                        <label htmlFor="password" className="sr-only">Password</label>
                         <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
                         <Input
                             type="password"
