@@ -16,7 +16,7 @@ import { useToast } from "@/hooks/use-toast";
 import { ScrollArea } from "./ui/scroll-area";
 import { createRazorpayOrder, verifyRazorpayPayment } from "@/app/actions";
 
-const proFeatures = [
+const allProFeatures = [
     "Unlock all premium calculators & guides",
     "Full access to Sarathi AI Chatbot",
     "Access to exclusive industry reports",
@@ -103,11 +103,11 @@ export function SubscriptionModal({
                       </div>
                       <DialogTitle className="text-3xl text-center font-extrabold text-gray-800 font-headline">Go Pro!</DialogTitle>
                       <DialogDescription className="text-muted-foreground text-center">
-                          Unlock powerful features and support DhenuGuide's development.
+                          Unlock powerful features and support Dairy Hub App development.
                       </DialogDescription>
                   </DialogHeader>
                   <div className="mt-6 space-y-3 flex-1">
-                      {proFeatures.map((feature, index) => (
+                      {allProFeatures.map((feature, index) => (
                           <div key={index} className="flex items-start gap-3">
                               <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5 shrink-0" />
                               <span className="text-muted-foreground">{feature}</span>
