@@ -55,12 +55,10 @@ export default function ProfilePage() {
         <div className="max-w-md mx-auto min-h-screen bg-white shadow-lg">
             {/* Header Section with Gradient */}
             <div className="relative bg-gradient-to-br from-cyan-400 to-blue-600 h-60 p-6 rounded-b-3xl text-white">
-                <Link href="/" legacyBehavior>
-                    <a className="absolute top-4 left-4 cursor-pointer">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
-                        </svg>
-                    </a>
+                <Link href="/" className="absolute top-4 left-4 cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+                    </svg>
                 </Link>
                 
                 <div className="flex flex-col items-center justify-center h-full">
