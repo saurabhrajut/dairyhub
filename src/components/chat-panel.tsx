@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { getSarathiChatbotResponse } from "@/app/actions";
-import { Mic, Send, Bot, Paperclip, X, Loader2, Languages } from "lucide-react";
+import { Mic, Send, Bot, Paperclip, X, Loader2, Languages, PlayCircle, StopCircle } from "lucide-react";
 import type { ChatUserProfile } from "./chat-widget";
 import { useLanguage } from "@/context/language-context";
 import { useToast } from "@/hooks/use-toast";
@@ -42,13 +42,7 @@ export function ChatPanel({
   setIsOpen: (isOpen: boolean) => void;
   user: ChatUserProfile;
 }) {
-  const [messages, setMessages] = useState<UIMessage[]>([
-    {
-      id: "initial",
-      role: "model",
-      text: `Ram Ram Sa ${user.name}! 🙏 Main hu aapka Sarathi. Apne dairy ke sawal pucho, ya fir neeche resume paste karke interview ki taiyari karo!`,
-    },
-  ]);
+  const [messages, setMessages] = useState<UIMessage[]>([]);
   const [input, setInput] = useState("");
   const [resumeText, setResumeText] = useState("");
   const [showResumeInput, setShowResumeInput] = useState(false);
@@ -57,12 +51,84 @@ export function ChatPanel({
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const { language: appLanguage, setLanguage: setAppLanguage } = useLanguage();
   const { toast } = useToast();
+  const recognitionRef = useRef<any>(null);
+  const [isListening, setIsListening] = useState(false);
+  const [speakingMessageId, setSpeakingMessageId] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Initialize welcome message only once
+    if (messages.length === 0) {
+      const welcomeMsg = "Ram Ram Sa mere dost! 🙏 Main hu aapka Sarathi — full-on assistant mode mein! To… Jo bhi sawal ho bs bta dena, mai apne dimag ke ghode दोड़ा ke aapko batane ki कोशिश करूँगा, धन्यवाद.😊";
+      const initialMessage: UIMessage = { id: "initial", role: "model", text: welcomeMsg, lang: "hi-IN" };
+      setMessages([initialMessage]);
+    }
+  }, []);
 
   useEffect(() => {
     if (scrollAreaRef.current) {
       scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight;
     }
   }, [messages]);
+
+  // Setup Speech Recognition
+  useEffect(() => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      const recognition = new SpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = false;
+
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        setInput(transcript);
+      };
+
+      recognition.onstart = () => {
+        setIsListening(true);
+      };
+
+      recognition.onend = () => {
+        setIsListening(false);
+      };
+
+      recognition.onerror = (event) => {
+        console.error("Speech recognition error", event.error);
+        if (event.error === 'no-speech') {
+            toast({ variant: 'destructive', title: "No speech detected", description: "Maine kuch suna nahi. Kripya dobara koshish karein." });
+        } else if (event.error === 'not-allowed') {
+            toast({ variant: 'destructive', title: "Permission Denied", description: "Microphone permission nahi hai." });
+        }
+        setIsListening(false);
+      };
+      recognitionRef.current = recognition;
+    } else {
+      console.warn("Speech Recognition not supported by this browser.");
+    }
+
+    // Cleanup speech synthesis on component unmount
+    return () => {
+      speechSynthesis.cancel();
+    };
+  }, [toast]);
+
+  const handleMicClick = () => {
+    if (recognitionRef.current) {
+      if (isListening) {
+        recognitionRef.current.stop();
+      } else {
+        try {
+          recognitionRef.current.lang = language;
+          recognitionRef.current.start();
+        } catch (e) {
+          console.error("Could not start recognition:", e);
+          setIsListening(false);
+        }
+      }
+    } else {
+      toast({ variant: 'destructive', title: "Not Supported", description: "Your browser does not support speech recognition." });
+    }
+  };
+
 
   const handleAppLanguageChange = (lang: string) => {
       setAppLanguage(lang as 'en' | 'hi');
@@ -89,15 +155,13 @@ export function ChatPanel({
     const newMessages = [...messages, userMessage];
     setMessages(newMessages);
     
-    // Convert UI messages to Genkit history format
     const history: GenkitMessage[] = newMessages
-      .filter(msg => msg.id !== 'initial') // Exclude initial prompt
+      .filter(msg => msg.id !== 'initial')
       .map(msg => ({
         role: msg.role,
         content: [{ text: msg.text }]
       }));
       
-    // Remove the latest user message from history for the API call
     const historyForApi = history.slice(0, -1);
     
     setInput("");
@@ -111,7 +175,7 @@ export function ChatPanel({
         question: query,
         language: language,
         resumeText: resumeQuery || undefined,
-        history: historyForApi, // Pass the formatted history
+        history: historyForApi,
       });
       const assistantMessage: UIMessage = {
         id: Date.now().toString() + "-ai",
@@ -137,6 +201,34 @@ export function ChatPanel({
       }
     }
   };
+  
+  const handleSpeak = (messageId: string, text: string, lang: string) => {
+    if (speakingMessageId === messageId) {
+      speechSynthesis.cancel();
+      setSpeakingMessageId(null);
+      return;
+    }
+
+    speechSynthesis.cancel(); // Stop any previous speech
+    const utterance = new SpeechSynthesisUtterance(text);
+    const voices = speechSynthesis.getVoices();
+    utterance.voice = voices.find(v => v.lang.startsWith(lang.split('-')[0])) || voices.find(v => v.lang.startsWith('en'));
+    utterance.lang = lang;
+    utterance.onstart = () => setSpeakingMessageId(messageId);
+    utterance.onend = () => setSpeakingMessageId(null);
+    utterance.onerror = () => setSpeakingMessageId(null);
+    speechSynthesis.speak(utterance);
+  };
+  
+  // Load voices on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
+        speechSynthesis.getVoices(); 
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
+        }
+    }
+  }, []);
 
   const handleAttachClick = () => {
     if (showResumeInput) {
@@ -183,24 +275,29 @@ export function ChatPanel({
         </div>
       </header>
 
-      <ScrollArea className="flex-grow p-4" ref={scrollAreaRef}>
-        <div className="flex flex-col gap-4">
+      <ScrollArea className="flex-grow p-4 bg-gray-50" ref={scrollAreaRef}>
+        <div className="flex flex-col gap-3">
           {messages.map((msg) => (
             <div
               key={msg.id}
-              className={`flex gap-3 max-w-[85%] ${
+              className={`flex gap-2.5 max-w-[85%] ${
                 msg.role === "user" ? "self-end" : "self-start"
               }`}
             >
               {msg.role === 'model' && <div className="bg-muted p-2 rounded-full h-fit shrink-0"><Bot className="w-5 h-5 text-foreground" /></div>}
               <div
-                className={`flex-1 p-3 rounded-2xl break-words ${
+                className={`flex-1 p-3 rounded-xl break-words relative group ${
                   msg.role === "user"
                     ? "bg-primary/90 text-primary-foreground rounded-br-none"
                     : "bg-muted text-muted-foreground rounded-bl-none"
                 }`}
               >
-                <p className="text-sm" dangerouslySetInnerHTML={{__html: msg.text.replace(/\\n/g, '<br />')}}></p>
+                <p className="text-sm" dangerouslySetInnerHTML={{__html: msg.text.replace(/\n/g, '<br />')}}></p>
+                 {msg.role === 'model' && msg.id !== 'initial' && (
+                    <button onClick={() => handleSpeak(msg.id, msg.text, msg.lang || 'hi-IN')} className="absolute -bottom-3 -right-3 bg-white p-1 rounded-full shadow-md text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+                      {speakingMessageId === msg.id ? <StopCircle className="w-4 h-4" /> : <PlayCircle className="w-4 h-4" />}
+                    </button>
+                )}
               </div>
             </div>
           ))}
@@ -210,7 +307,7 @@ export function ChatPanel({
               <div className="bg-muted p-3 rounded-2xl rounded-bl-none">
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                    <Loader2 className="animate-spin h-4 w-4" />
-                  रुको जरा, सबर करो...
+                  Soch raha hu...
                 </div>
               </div>
             </div>
@@ -234,10 +331,13 @@ export function ChatPanel({
 
       <form
         onSubmit={handleSubmit}
-        className="p-4 border-t bg-background flex items-center gap-2"
+        className="p-3 border-t bg-background flex items-center gap-2"
       >
         <Button type="button" size="icon" variant="ghost" className="text-muted-foreground shrink-0" onClick={handleAttachClick} disabled={isLoading} title="Analyze Resume">
-            <Paperclip className="h-4 w-4" />
+            <Paperclip className="h-5 w-5" />
+        </Button>
+         <Button type="button" size="icon" variant="ghost" onClick={handleMicClick} className={`shrink-0 ${isListening ? 'text-red-500 animate-pulse' : 'text-muted-foreground'}`} disabled={!recognitionRef.current} title="Speak">
+            <Mic className="h-5 w-5" />
         </Button>
         <Input
           type="text"
@@ -247,8 +347,8 @@ export function ChatPanel({
           className="flex-grow rounded-full focus-visible:ring-primary"
           disabled={isLoading}
         />
-        <Button type="submit" size="icon" className="rounded-full shrink-0" disabled={isLoading}>
-          <Send className="h-4 w-4" />
+        <Button type="submit" size="icon" className="rounded-full shrink-0" disabled={isLoading || (!input && !resumeText)}>
+          <Send className="h-5 w-5" />
         </Button>
       </form>
     </div>
