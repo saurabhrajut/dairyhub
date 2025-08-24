@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, memo } from "react";
 import {
   Dialog,
   DialogContent,
@@ -31,7 +31,7 @@ interface FixedExpense {
   cost: string;
 }
 
-const FixedExpenseRow = ({ 
+const FixedExpenseRow = memo(function FixedExpenseRow({ 
     item, 
     onChange, 
     onRemove 
@@ -39,7 +39,7 @@ const FixedExpenseRow = ({
     item: FixedExpense, 
     onChange: (id: number, field: keyof FixedExpense, value: string) => void, 
     onRemove: (id: number) => void 
-}) => {
+}) {
     return (
         <div className="grid grid-cols-1 sm:grid-cols-[2fr_1fr_auto] gap-2 items-center">
             <Input 
@@ -58,7 +58,7 @@ const FixedExpenseRow = ({
             </Button>
         </div>
     );
-};
+});
 
 
 export function PlantCostModal({
@@ -106,9 +106,9 @@ export function PlantCostModal({
 
   const handleVariableCostChange = useCallback((field: keyof typeof otherVariableCosts | keyof typeof rawMaterialCosts, value: string) => {
       if (field in otherVariableCosts) {
-          setOtherVariableCosts(prev => ({...prev, [field]: value}));
+          setOtherVariableCosts(prev => ({...prev, [field as keyof typeof otherVariableCosts]: value}));
       } else {
-          setRawMaterialCosts(prev => ({...prev, [field]: value}));
+          setRawMaterialCosts(prev => ({...prev, [field as keyof typeof rawMaterialCosts]: value}));
       }
   }, []);
   
