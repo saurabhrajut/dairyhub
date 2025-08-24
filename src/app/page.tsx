@@ -5,15 +5,15 @@ import { Header } from "@/components/header";
 import { TopicGrid } from "@/components/topic-grid";
 import { ChatWidget, type ChatUserProfile } from "@/components/chat-widget";
 import { useAuth } from "@/context/auth-context";
-import { useEffect } from "react";
 
 export default function Home() {
   const { user } = useAuth();
 
+  // The user will now default to a 'guest' user if not logged in
   const chatUser: ChatUserProfile = user ? {
     name: user.displayName || 'Guest',
-    age: 30, // Example age
-    gender: 'other', // Example gender
+    age: 30, 
+    gender: 'other', 
   } : {
     name: 'Guest',
     age: 30,

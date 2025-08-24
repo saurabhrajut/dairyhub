@@ -48,7 +48,7 @@ export default function SignUpPage() {
             await signup(values.email, values.password, values.username, values.gender);
             toast({
                 title: 'Account Created!',
-                description: "Welcome to Dairy Hub. You can now log in.",
+                description: "This is a demo. No real account was created.",
             });
             router.push('/login');
         } catch (error: any) {

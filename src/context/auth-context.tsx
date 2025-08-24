@@ -1,25 +1,34 @@
 "use client";
 
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
-import { 
-    getAuth, 
-    onAuthStateChanged, 
-    createUserWithEmailAndPassword, 
-    signInWithEmailAndPassword, 
-    signOut,
-    updateProfile,
-    type User 
-} from "firebase/auth";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { doc, setDoc, getDoc } from "firebase/firestore";
-import app, { db } from '@/lib/firebase'; // Ensure db is exported from firebase.ts
+import type { User } from "firebase/auth";
 import { useSubscription } from './subscription-context';
+
+// Create a guest user object that matches the User type shape
+const guestUser: User = {
+    uid: 'guest-12345',
+    email: 'guest@example.com',
+    displayName: 'Guest',
+    photoURL: 'https://placehold.co/128x128/E0E0E0/333?text=Guest',
+    emailVerified: true,
+    isAnonymous: true,
+    metadata: {},
+    providerData: [],
+    providerId: 'guest',
+    tenantId: null,
+    delete: async () => {},
+    getIdToken: async () => '',
+    getIdTokenResult: async () => ({} as any),
+    reload: async () => {},
+    toJSON: () => ({}),
+};
+
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  login: (email: string, password: string) => Promise<any>;
-  signup: (email: string, password: string, displayName: string, gender: string) => Promise<any>;
+  login: (email: string, password: string) => Promise<void>;
+  signup: (email: string, password: string, displayName: string, gender: string) => Promise<void>;
   logout: () => Promise<void>;
   updateUserProfile: (profileData: { displayName?: string }) => Promise<void>;
   updateUserPhoto: (file: File) => Promise<void>;
@@ -27,78 +36,51 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const auth = getAuth(app);
-const storage = getStorage(app);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<User | null>(guestUser);
+  const [loading, setLoading] = useState(false); // Set loading to false initially
   const { loadSubscription } = useSubscription();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      setUser(user);
-      if (user) {
-          await loadSubscription(user.uid);
-      }
-      setLoading(false);
-    });
+    // We are using a guest user, so no need for onAuthStateChanged
+    // If you want to re-enable Firebase auth, uncomment the original useEffect
+    if (user) {
+        loadSubscription(user.uid);
+    }
+  }, [user, loadSubscription]);
 
-    return () => unsubscribe();
-  }, [loadSubscription]);
-
-  const login = (email: string, password: string) => {
-    return signInWithEmailAndPassword(auth, email, password);
+  const login = async (email: string, password: string) => {
+    console.log("Login function called, but is disabled for debugging.", { email });
+    // No actual Firebase call
   };
 
   const signup = async (email: string, password: string, displayName: string, gender: string) => {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
-    
-    // Update Firebase Auth profile
-    await updateProfile(user, { displayName });
-
-    // Create user document in Firestore
-    await setDoc(doc(db, "users", user.uid), {
-        uid: user.uid,
-        displayName,
-        email,
-        gender,
-        createdAt: new Date()
-    });
-
-    return userCredential;
+    console.log("Signup function called, but is disabled for debugging.", { email, displayName });
+     // No actual Firebase call
   };
 
   const logout = async () => {
-    await signOut(auth);
-    setUser(null); // Explicitly clear user state
+    console.log("Logout function called.");
+    setUser(null); // Simple state clear
   };
 
   const updateUserProfile = async (profileData: { displayName?: string }) => {
-    if (auth.currentUser) {
-        await updateProfile(auth.currentUser, profileData);
-        // Also update firestore
-        const userDocRef = doc(db, "users", auth.currentUser.uid);
-        await setDoc(userDocRef, { displayName: profileData.displayName }, { merge: true });
-
-        // Force a refresh of the user object to reflect changes
-        setUser(auth.currentUser); 
+     if (user && profileData.displayName) {
+      const updatedUser = { ...user, displayName: profileData.displayName };
+      setUser(updatedUser as User);
+       console.log("User profile updated (locally).", updatedUser);
     }
   };
 
   const updateUserPhoto = async (file: File) => {
-    if (auth.currentUser) {
-        const storageRef = ref(storage, `profile_pictures/${auth.currentUser.uid}`);
-        await uploadBytes(storageRef, file);
-        const photoURL = await getDownloadURL(storageRef);
-
-        await updateProfile(auth.currentUser, { photoURL });
-
-        const userDocRef = doc(db, "users", auth.currentUser.uid);
-        await setDoc(userDocRef, { photoURL }, { merge: true });
-
-        setUser(auth.currentUser);
+    console.log("Update photo called, but is disabled for debugging.");
+    // Simulate photo update
+    if (user) {
+      const photoURL = URL.createObjectURL(file);
+      const updatedUser = { ...user, photoURL };
+      setUser(updatedUser as User);
+      console.log("User photo updated (locally).");
     }
   };
 
@@ -112,7 +94,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     updateUserPhoto
   };
 
-  return <AuthContext.Provider value={value}>{!loading && children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {

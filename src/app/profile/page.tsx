@@ -30,12 +30,6 @@ const allProFeatures = [
     "Ad-free experience",
 ];
 
-const guestUser = {
-    displayName: "Guest",
-    email: "guest@example.com",
-    photoURL: "https://placehold.co/128x128/E0E0E0/333?text=Guest"
-}
-
 export default function ProfilePage() {
     const { user, loading, logout, updateUserProfile, updateUserPhoto } = useAuth();
     const { language, setLanguage } = useLanguage();
@@ -46,8 +40,8 @@ export default function ProfilePage() {
     const [isMounted, setIsMounted] = useState(false);
     const [isEditingName, setIsEditingName] = useState(false);
     
-    // Use the logged-in user if available, otherwise fall back to the guest user.
-    const displayUser = user || guestUser;
+    // Use the logged-in user if available, otherwise fall back to a guest user.
+    const displayUser = user || { displayName: 'Guest', email: 'guest@example.com', photoURL: 'https://placehold.co/128x128/E0E0E0/333?text=Guest' };
     const [tempName, setTempName] = useState(displayUser.displayName || '');
     
     const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState(false);
@@ -127,7 +121,7 @@ export default function ProfilePage() {
       return names[planKey] || 'Pro Plan';
     }
 
-    if (loading && user) { // Only show loader if we are actually waiting for a real user
+    if (loading) { // Show loader if auth context is loading
         return (
             <div className="min-h-screen flex items-center justify-center bg-gray-100">
                 <Loader2 className="h-12 w-12 animate-spin text-primary" />
