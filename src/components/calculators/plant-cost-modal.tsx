@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useMemo, memo, useCallback } from "react";
+import { useState, useMemo, useCallback } from "react";
 import {
   Dialog,
   DialogContent,
@@ -31,23 +31,34 @@ interface FixedExpense {
   cost: string;
 }
 
-const MemoizedFixedExpense = memo(function FixedExpenseRow({ item, onChange, onRemove }: { item: FixedExpense, onChange: (item: FixedExpense) => void, onRemove: (id: number) => void }) {
-    const [expense, setExpense] = useState(item);
-
-    const handleChange = (field: keyof FixedExpense, value: string) => {
-        const updatedItem = { ...expense, [field]: value };
-        setExpense(updatedItem);
-        onChange(updatedItem);
-    };
-    
+const FixedExpenseRow = ({ 
+    item, 
+    onChange, 
+    onRemove 
+}: { 
+    item: FixedExpense, 
+    onChange: (id: number, field: keyof FixedExpense, value: string) => void, 
+    onRemove: (id: number) => void 
+}) => {
     return (
         <div className="grid grid-cols-1 sm:grid-cols-[2fr_1fr_auto] gap-2 items-center">
-            <Input placeholder="Expense (e.g., Salaries)" value={expense.name} onChange={(e) => handleChange('name', e.target.value)} />
-            <Input type="number" placeholder="Monthly Cost (₹)" value={expense.cost} onChange={(e) => handleChange('cost', e.target.value)} />
-            <Button variant="ghost" size="icon" className="text-destructive" onClick={() => onRemove(item.id)}><XCircle /></Button>
+            <Input 
+                placeholder="Expense (e.g., Salaries)" 
+                value={item.name} 
+                onChange={(e) => onChange(item.id, 'name', e.target.value)} 
+            />
+            <Input 
+                type="number" 
+                placeholder="Monthly Cost (₹)" 
+                value={item.cost} 
+                onChange={(e) => onChange(item.id, 'cost', e.target.value)} 
+            />
+            <Button variant="ghost" size="icon" className="text-destructive" onClick={() => onRemove(item.id)}>
+                <XCircle />
+            </Button>
         </div>
     );
-});
+};
 
 
 export function PlantCostModal({
@@ -82,11 +93,15 @@ export function PlantCostModal({
   const handleAddFixedExpense = () => {
     setFixedExpenses(prev => [...prev, { id: Date.now(), name: "", cost: "" }]);
   };
+  
   const handleRemoveFixedExpense = (id: number) => {
     setFixedExpenses(prev => prev.filter(item => item.id !== id));
   };
-  const handleFixedExpenseChange = useCallback((updatedItem: FixedExpense) => {
-    setFixedExpenses(prev => prev.map(item => (item.id === updatedItem.id ? updatedItem : item)));
+
+  const handleFixedExpenseChange = useCallback((id: number, field: keyof FixedExpense, value: string) => {
+    setFixedExpenses(prev => 
+        prev.map(item => (item.id === id ? { ...item, [field]: value } : item))
+    );
   }, []);
 
   const handleVariableCostChange = useCallback((field: keyof typeof otherVariableCosts | keyof typeof rawMaterialCosts, value: string) => {
@@ -228,7 +243,7 @@ export function PlantCostModal({
                         <p>Expense Name</p><p>Monthly Cost (₹)</p><div />
                     </div>
                     {fixedExpenses.map((item) => (
-                        <MemoizedFixedExpense 
+                        <FixedExpenseRow
                             key={item.id}
                             item={item}
                             onChange={handleFixedExpenseChange}
