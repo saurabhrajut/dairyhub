@@ -6,12 +6,12 @@ import { getFirestore } from "firebase/firestore";
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyC5j0uZv46j4S_YJpBC5T-dB6Haiw1knZY",
-  authDomain: "dhenuguide.web.app",
+  authDomain: "dhenuguide.firebaseapp.com",
   projectId: "dhenuguide",
-  storageBucket: "dhenuguide.appspot.com",
+  storageBucket: "dhenuguide.firebasestorage.app",
   messagingSenderId: "103418941595",
-  appId: "1:103418941595:web:2d00b05538618c0327763e",
-  measurementId: "G-05GNDNEQ7J"
+  appId: "1:103418941595:web:3ee04eba92deb9e827763e",
+  measurementId: "G-KP7TQV8DM8"
 };
 
 
