@@ -8,22 +8,22 @@ export const aboutUsContent = {
         description: "आपके भरोसेमंद डिजिटल डेयरी पार्टनर की कहानी",
         developer: {
             name: "सौरभ राजपूत",
-            image: "https://firebasestorage.googleapis.com/v0/b/dhenuguide.appspot.com/o/profile-image.jpeg?alt=media&token=5b214c7c-5003-4318-86a0-53091934335c",
+            image: "https://firebasestorage.googleapis.com/v0/b/dhenuguide.appspot.com/o/profile-images%2Fprofile-image.jpeg?alt=media&token=5a570c97-6a75-4796-857e-394209587428",
             academicInfo: {
                 title: "शैक्षणिक जानकारी",
                 degrees: [
                     { name: "B.Tech, Food Technology", institution: "Ch. Devi Lal State Institute, Sirsa (Pursuing)" },
-                    { name: "Diploma, Dairy Technology", institution: "IGNOU" },
-                    { name: "Diploma, Food Technology", institution: "Govt. Polytechnic, Bhiwani" }
+                    { name: "Diploma, Dairy Technology", institution: "IGNOU, New Delhi" },
+                    { name: "Diploma, Food Technology", institution: "Ch. Bansi Lal Govt. Polytechnic, Bhiwani" }
                 ]
             }
         },
-        welcomeMessage: `<p class="text-lg"><span class="font-bold">Dairy Hub में आपका स्वागत है!</span> हमारा मकसद डेयरी उद्योग से जुड़ी हर ज़रूरी जानकारी को आप तक <strong class="font-semibold">सरल, सटीक और वैज्ञानिक</strong> तरीके से पहुंचाना है। यह प्लेटफॉर्म उन सभी के लिए है जो इस क्षेत्र में सीखना और आगे बढ़ना चाहते हैं।</p>`,
+        welcomeMessage: `<p class="text-lg"><span class="font-bold">Dairy Hub में आपका स्वागत है!</span> यह सिर्फ एक ऐप नहीं, बल्कि डेयरी विज्ञान और उद्योग की जटिल दुनिया में आपका विश्वसनीय साथी है। हमारा मिशन डेयरी क्षेत्र से जुड़ी हर आवश्यक जानकारी को एक <strong class="font-semibold">सरल, सटीक और वैज्ञानिक</strong> तरीके से आप तक पहुँचाना है, जो छात्रों, पेशेवरों और उत्साही लोगों को समान रूप से सशक्त बनाता है।</p>`,
         journey: {
             title: "मेरा सफ़र: डेयरी टेक्नोलॉजी के प्रति मेरा जुनून",
             story: `
-                <p>डेयरी और खाद्य प्रौद्योगिकी के क्षेत्र में मेरी रुचि हमेशा से रही है। अपनी पढ़ाई और इंटर्नशिप के दौरान, मैंने महसूस किया कि इस उद्योग में व्यावहारिक और आसानी से समझ में आने वाली वैज्ञानिक जानकारी की कमी है, खासकर डिजिटल प्लेटफॉर्म पर। इसी कमी को पूरा करने के लिए मैंने Dairy Hub की नींव रखी।</p>
-                <p>मेरा लक्ष्य एक ऐसा डिजिटल इकोसिस्टम बनाना है जहाँ छात्र, पेशेवर, और डेयरी के प्रति उत्साही लोग आसानी से डेयरी से जुड़ी हर तकनीकी जानकारी प्राप्त कर सकें और अपने काम में बेहतर निर्णय ले सकें।</p>
+                <p>डेयरी और खाद्य प्रौद्योगिकी के क्षेत्र में मेरी यात्रा अकादमिक जिज्ञासा से शुरू हुई और जल्द ही एक जुनून में बदल गई। अपनी पढ़ाई और इंटर्नशिप के दौरान, मैंने उद्योग के पेशेवरों और नए लोगों के बीच एक महत्वपूर्ण अंतर देखा: व्यावहारिक, सुलभ और वैज्ञानिक रूप से मान्य जानकारी की कमी, खासकर डिजिटल क्षेत्र में। जटिल प्रक्रियाओं को समझने से लेकर नवीनतम उद्योग मानकों के साथ अपडेट रहने तक की चुनौतियाँ स्पष्ट थीं।</p>
+                <p>इसी कमी को दूर करने के संकल्प के साथ मैंने Dairy Hub की नींव रखी। मेरा लक्ष्य एक व्यापक डिजिटल पारिस्थितिकी तंत्र बनाना था जो सिर्फ जानकारी प्रदान करने से कहीं आगे जाए। मैं एक ऐसा उपकरण बनाना चाहता था जो जटिल गणनाओं को सरल करे, नवीनतम उद्योग ज्ञान प्रदान करे, और उपयोगकर्ताओं को उनकी उंगलियों पर विशेषज्ञ सहायता प्रदान करे। यह ऐप उस दृष्टिकोण की परिणति है - डेयरी क्षेत्र में सीखने, बढ़ने और उत्कृष्टता प्राप्त करने के इच्छुक किसी भी व्यक्ति के लिए एक वन-स्टॉप समाधान।</p>
             `
         },
         whatsInside: {
@@ -74,22 +74,22 @@ export const aboutUsContent = {
         description: "The story of your trusted digital dairy partner",
         developer: {
             name: "Saurabh Rajput",
-            image: "https://firebasestorage.googleapis.com/v0/b/dhenuguide.appspot.com/o/profile-image.jpeg?alt=media&token=5b214c7c-5003-4318-86a0-53091934335c",
+            image: "https://firebasestorage.googleapis.com/v0/b/dhenuguide.appspot.com/o/profile-images%2Fprofile-image.jpeg?alt=media&token=5a570c97-6a75-4796-857e-394209587428",
             academicInfo: {
                 title: "Academic Information",
                 degrees: [
                     { name: "B.Tech, Food Technology", institution: "Ch. Devi Lal State Institute, Sirsa (Pursuing)" },
-                    { name: "Diploma, Dairy Technology", institution: "IGNOU" },
-                    { name: "Diploma, Food Technology", institution: "Govt. Polytechnic, Bhiwani" }
+                    { name: "Diploma, Dairy Technology", institution: "IGNOU, New Delhi" },
+                    { name: "Diploma, Food Technology", institution: "Ch. Bansi Lal Govt. Polytechnic, Bhiwani" }
                 ]
             }
         },
-        welcomeMessage: `<p class="text-lg"><span class="font-bold">Welcome to Dairy Hub!</span> Our purpose is to deliver every essential piece of information related to the dairy industry to you in a <strong class="font-semibold">simple, accurate, and scientific</strong> manner. This platform is for everyone who wants to learn and grow in this sector.</p>`,
+        welcomeMessage: `<p class="text-lg"><span class="font-bold">Welcome to Dairy Hub!</span> This isn't just an app; it's your trusted companion in the complex world of dairy science and industry. Our mission is to deliver every essential piece of information related to the dairy sector to you in a <strong class="font-semibold">simple, accurate, and scientific</strong> manner, empowering students, professionals, and enthusiasts alike.</p>`,
         journey: {
             title: "My Journey: A Passion for Dairy Technology",
             story: `
-                <p>My interest has always been in the field of Food and Dairy Technology. During my studies and internships, I realized there is a lack of practical and easily understandable scientific knowledge in this industry, especially on digital platforms. To fill this gap, I laid the foundation of Dairy Hub.</p>
-                <p>My goal is to create a digital ecosystem where students, professionals, and dairy enthusiasts can easily access every technical detail related to dairy and make better decisions in their work.</p>
+                <p>My journey into the field of Food and Dairy Technology began with academic curiosity and soon blossomed into a passion. During my studies and internships, I identified a critical gap between industry professionals and newcomers: a lack of practical, accessible, and scientifically-validated information, especially in the digital realm. The challenges, from understanding complex processes to staying updated with the latest industry standards, were evident.</p>
+                <p>It was with the resolve to bridge this gap that I laid the foundation of Dairy Hub. My goal was to create a comprehensive digital ecosystem that goes beyond just providing information. I wanted to build a tool that simplifies complex calculations, provides the latest industry knowledge, and offers expert support at users' fingertips. This app is the culmination of that vision—a one-stop solution for anyone looking to learn, grow, and excel in the dairy sector.</p>
             `
         },
         whatsInside: {
