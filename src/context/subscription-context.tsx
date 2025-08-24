@@ -22,31 +22,12 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
   const [expiryDate, setExpiryDate] = useState<Date | null>(null);
 
   const loadSubscription = useCallback(async (userId: string) => {
-    if (!userId) {
-        setPlan(null);
-        setExpiryDate(null);
-        return;
-    }
-    const subDocRef = doc(db, "users", userId, "subscription", "current");
-    const docSnap = await getDoc(subDocRef);
-
-    if (docSnap.exists()) {
-        const data = docSnap.data();
-        const currentPlan = data.plan as SubscriptionPlan;
-        const expiry = data.expiryDate?.toDate(); // Firestore timestamp to Date
-
-        if (currentPlan === 'lifetime' || (expiry && expiry > new Date())) {
-            setPlan(currentPlan);
-            setExpiryDate(expiry || null);
-        } else {
-             // Plan expired
-            setPlan(null);
-            setExpiryDate(null);
-        }
-    } else {
-        setPlan(null);
-        setExpiryDate(null);
-    }
+    // This function is temporarily disabled to prevent the "Missing or insufficient permissions" error on startup.
+    // The Firestore call here was likely happening before the Firebase connection was fully established or authenticated.
+    console.log("loadSubscription called for user:", userId, "but Firestore call is disabled.");
+    setPlan(null);
+    setExpiryDate(null);
+    return;
   }, []);
 
   const subscribe = async (newPlan: SubscriptionPlan, userId: string) => {
