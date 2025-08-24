@@ -197,12 +197,13 @@ function MammaryGlandContent() {
                 <p><strong>Milk Ejection (Let-down):</strong> This is a reflex action controlled by the hormone oxytocin, which causes the myoepithelial cells to contract and squeeze milk from the alveoli into the ducts. This reflex lasts for about 10 minutes.</p>
             </InfoBlock>
             <InfoBlock title="Milk Precursors" noProse={true}>
-                 <Table>
-                     <TableCaption>Comparison of Blood Plasma and Milk Composition</TableCaption>
-                     <TableHeader>
-                         <TableRow><TableHead>Constituent</TableHead><TableHead>Blood Plasma (%)</TableHead><TableHead>Milk (%)</TableHead></TableRow>
-                     </TableHeader>
-                     <TableBody>
+                <div className="overflow-x-auto">
+                    <Table>
+                        <TableCaption>Comparison of Blood Plasma and Milk Composition</TableCaption>
+                        <TableHeader>
+                            <TableRow><TableHead>Constituent</TableHead><TableHead>Blood Plasma (%)</TableHead><TableHead>Milk (%)</TableHead></TableRow>
+                        </TableHeader>
+                        <TableBody>
                         <TableRow><TableCell>Water</TableCell><TableCell>91.0</TableCell><TableCell>87.0</TableCell></TableRow>
                         <TableRow><TableCell>Glucose</TableCell><TableCell>0.05</TableCell><TableCell>Lactose: 4.8</TableCell></TableRow>
                         <TableRow><TableCell>Serum Albumin</TableCell><TableCell>3.20</TableCell><TableCell>Lactalbumin: 0.52</TableCell></TableRow>
@@ -210,8 +211,9 @@ function MammaryGlandContent() {
                         <TableRow><TableCell>Amino Acids</TableCell><TableCell>0.003</TableCell><TableCell>Casein: 2.9</TableCell></TableRow>
                         <TableRow><TableCell>Neutral Fats</TableCell><TableCell>0.09</TableCell><TableCell>3.8</TableCell></TableRow>
                         <TableRow><TableCell>Calcium</TableCell><TableCell>0.009</TableCell><TableCell>0.12</TableCell></TableRow>
-                     </TableBody>
-                 </Table>
+                        </TableBody>
+                    </Table>
+                </div>
             </InfoBlock>
         </Section>
     );
@@ -370,3 +372,4 @@ function OtherComponentsContent() {
         </Section>
     );
 }
+
