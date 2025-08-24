@@ -1,18 +1,31 @@
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
-
-    // यह नियम किसी को भी 'public_data' कलेक्शन को पढ़ने की अनुमति देता है।
-    // यह उन मामलों के लिए उपयोगी है जहाँ आपको सार्वजनिक जानकारी दिखानी है।
-    match /public_data/{docId} {
-      allow read: if true;
-      allow write: if false; // कोई भी सार्वजनिक डेटा नहीं लिख सकता
-    }
-
-    // यह नियम सुनिश्चित करता है कि केवल प्रमाणित (लॉग-इन) यूज़र ही
-    // अपने खुद के यूज़र दस्तावेज़ को पढ़ और लिख सकता है।
+    
+    // Users can only read and write to their own user document.
     match /users/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // A user can read/write their own subscription document.
+    match /users/{userId}/subscription/{docId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // A user can read/write their own order documents.
+    match /users/{userId}/orders/{orderId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // A user can read/write their own session documents.
+    match /users/{userId}/sessions/{sessionId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Explicitly deny access to any other collections by default.
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }
