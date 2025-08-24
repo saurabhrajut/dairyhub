@@ -44,45 +44,6 @@ interface MixIngredient {
     sugar: string;
 }
 
-const stateWiseStandards = {
-    'Andaman & Nicobar Islands': { Cow: { fat: 3.2, snf: 8.3 }, Buffalo: { fat: 5.0, snf: 9.0 }, Mixed: { fat: 4.5, snf: 8.5 } },
-    'Andhra Pradesh': { Cow: { fat: 3.5, snf: 8.5 }, Buffalo: { fat: 6.0, snf: 9.0 }, Mixed: { fat: 5.0, snf: 8.7 } },
-    'Arunachal Pradesh': { Cow: { fat: 3.5, snf: 8.5 }, Buffalo: { fat: 5.0, snf: 9.0 }, Mixed: { fat: 4.5, snf: 8.5 } },
-    'Assam': { Cow: { fat: 3.5, snf: 8.5 }, Buffalo: { fat: 6.0, snf: 9.0 }, Mixed: { fat: 4.5, snf: 8.5 } },
-    'Bihar': { Cow: { fat: 3.5, snf: 8.5 }, Buffalo: { fat: 6.0, snf: 9.0 }, Mixed: { fat: 5.0, snf: 8.7 } },
-    'Chandigarh': { Cow: { fat: 4.0, snf: 8.5 }, Buffalo: { fat: 6.0, snf: 9.0 }, Mixed: { fat: 5.0, snf: 8.8 } },
-    'Chhattisgarh': { Cow: { fat: 3.5, snf: 8.5 }, Buffalo: { fat: 6.0, snf: 9.0 }, Mixed: { fat: 4.5, snf: 8.5 } },
-    'Dadra & Nagar Haveli': { Cow: { fat: 3.5, snf: 8.5 }, Buffalo: { fat: 5.0, snf: 9.0 }, Mixed: { fat: 4.5, snf: 8.5 } },
-    'Daman & Diu': { Cow: { fat: 3.5, snf: 8.5 }, Buffalo: { fat: 6.0, snf: 9.0 }, Mixed: { fat: 4.5, snf: 8.5 } },
-    'Delhi': { Cow: { fat: 3.5, snf: 8.5 }, Buffalo: { fat: 6.0, snf: 9.0 }, Mixed: { fat: 5.0, snf: 8.8 } },
-    'Goa': { Cow: { fat: 3.5, snf: 8.3 }, Buffalo: { fat: 6.0, snf: 9.0 }, Mixed: { fat: 4.5, snf: 8.5 } },
-    'Gujarat': { Cow: { fat: 3.5, snf: 8.5 }, Buffalo: { fat: 6.0, snf: 9.0 }, Mixed: { fat: 4.5, snf: 8.5 } },
-    'Haryana': { Cow: { fat: 4.0, snf: 8.5 }, Buffalo: { fat: 6.0, snf: 9.0 }, Mixed: { fat: 5.0, snf: 8.8 } },
-    'Himachal Pradesh': { Cow: { fat: 4.0, snf: 8.5 }, Buffalo: { fat: 6.0, snf: 9.0 }, Mixed: { fat: 5.0, snf: 8.8 } },
-    'Jammu & Kashmir': { Cow: { fat: 3.5, snf: 8.5 }, Buffalo: { fat: 6.0, snf: 9.0 }, Mixed: { fat: 4.5, snf: 8.5 } },
-    'Jharkhand': { Cow: { fat: 3.5, snf: 8.5 }, Buffalo: { fat: 6.0, snf: 9.0 }, Mixed: { fat: 5.0, snf: 8.7 } },
-    'Karnataka': { Cow: { fat: 3.5, snf: 8.5 }, Buffalo: { fat: 6.0, snf: 9.0 }, Mixed: { fat: 4.5, snf: 8.5 } },
-    'Kerala': { Cow: { fat: 3.2, snf: 8.3 }, Buffalo: { fat: 5.0, snf: 9.0 }, Mixed: { fat: 4.5, snf: 8.5 } },
-    'Lakshadweep': { Cow: { fat: 3.2, snf: 8.3 }, Buffalo: { fat: 5.0, snf: 9.0 }, Mixed: { fat: 4.5, snf: 8.5 } },
-    'Madhya Pradesh': { Cow: { fat: 3.5, snf: 8.5 }, Buffalo: { fat: 6.0, snf: 9.0 }, Mixed: { fat: 4.5, snf: 8.5 } },
-    'Maharashtra': { Cow: { fat: 3.5, snf: 8.5 }, Buffalo: { fat: 6.0, snf: 9.0 }, Mixed: { fat: 4.5, snf: 8.5 } },
-    'Manipur': { Cow: { fat: 3.5, snf: 8.5 }, Buffalo: { fat: 5.0, snf: 9.0 }, Mixed: { fat: 4.5, snf: 8.5 } },
-    'Meghalaya': { Cow: { fat: 3.5, snf: 8.5 }, Buffalo: { fat: 5.0, snf: 9.0 }, Mixed: { fat: 4.5, snf: 8.5 } },
-    'Mizoram': { Cow: { fat: 3.5, snf: 8.5 }, Buffalo: { fat: 5.0, snf: 9.0 }, Mixed: { fat: 4.5, snf: 8.5 } },
-    'Nagaland': { Cow: { fat: 3.5, snf: 8.5 }, Buffalo: { fat: 5.0, snf: 9.0 }, Mixed: { fat: 4.5, snf: 8.5 } },
-    'Orissa': { Cow: { fat: 3.5, snf: 8.5 }, Buffalo: { fat: 5.0, snf: 9.0 }, Mixed: { fat: 4.5, snf: 8.5 } },
-    'Puducherry': { Cow: { fat: 3.5, snf: 8.5 }, Buffalo: { fat: 5.0, snf: 9.0 }, Mixed: { fat: 4.5, snf: 8.5 } },
-    'Punjab': { Cow: { fat: 4.0, snf: 8.5 }, Buffalo: { fat: 6.0, snf: 9.0 }, Mixed: { fat: 5.0, snf: 8.8 } },
-    'Rajasthan': { Cow: { fat: 3.5, snf: 8.5 }, Buffalo: { fat: 6.0, snf: 9.0 }, Mixed: { fat: 5.0, snf: 8.7 } },
-    'Sikkim': { Cow: { fat: 3.5, snf: 8.5 }, Buffalo: { fat: 5.0, snf: 9.0 }, Mixed: { fat: 4.5, snf: 8.5 } },
-    'Tamil Nadu': { Cow: { fat: 3.2, snf: 8.3 }, Buffalo: { fat: 5.0, snf: 9.0 }, Mixed: { fat: 4.5, snf: 8.5 } },
-    'Telangana': { Cow: { fat: 3.5, snf: 8.5 }, Buffalo: { fat: 6.0, snf: 9.0 }, Mixed: { fat: 5.0, snf: 8.7 } },
-    'Tripura': { Cow: { fat: 3.5, snf: 8.5 }, Buffalo: { fat: 6.0, snf: 9.0 }, Mixed: { fat: 4.5, snf: 8.5 } },
-    'Uttar Pradesh': { Cow: { fat: 3.5, snf: 8.5 }, Buffalo: { fat: 6.0, snf: 9.0 }, Mixed: { fat: 5.0, snf: 8.7 } },
-    'Uttarakhand': { Cow: { fat: 3.5, snf: 8.5 }, Buffalo: { fat: 6.0, snf: 9.0 }, Mixed: { fat: 5.0, snf: 8.7 } },
-    'West Bengal': { Cow: { fat: 3.5, snf: 8.5 }, Buffalo: { fat: 5.0, snf: 9.0 }, Mixed: { fat: 4.5, snf: 8.5 } }
-};
-
 const CalculatorCard = ({ title, children, description }: { title: string; children: React.ReactNode; description?: string }) => (
     <div className="bg-card p-4 rounded-xl shadow-sm border mt-4">
         <h3 className="text-xl font-bold text-primary mb-2 font-headline">{title}</h3>
@@ -91,11 +52,10 @@ const CalculatorCard = ({ title, children, description }: { title: string; child
     </div>
 );
 
-type CalculatorType = 'acidity' | 'snf-standards' | 'yields' | 'paneer-yield' | 'ice-cream' | 'fat-dry' | 'clr-correction' | 'component-qty' | 'gravimetric' | 'formulas' | 'cip-strength';
+type CalculatorType = 'acidity' | 'yields' | 'paneer-yield' | 'ice-cream' | 'fat-dry' | 'clr-correction' | 'component-qty' | 'gravimetric' | 'formulas' | 'cip-strength';
 
 const calculatorsInfo = {
     'acidity': { title: "Acidity", icon: Beaker, component: ProductAcidityCalc },
-    'snf-standards': { title: "SNF/CLR", icon: Scaling, component: StatewiseSNFCalc },
     'yields': { title: "Product Yields", icon: Percent, component: YieldsCalc },
     'paneer-yield': { title: "Paneer Yield", icon: PaneerIcon, component: PaneerYieldCalc },
     'ice-cream': { title: "Ice Cream", icon: IceCreamIcon, component: IceCreamCalculators },
@@ -316,163 +276,6 @@ function ProductAcidityCalc() {
             {result && <Alert className="mt-4"><AlertDescription className="text-lg font-bold text-center">{result}</AlertDescription></Alert>}
         </CalculatorCard>
     )
-}
-
-function StatewiseSNFCalc() {
-    const [state, setState] = useState('Delhi');
-    const standards = stateWiseStandards[state as keyof typeof stateWiseStandards];
-    const [calcFat, setCalcFat] = useState("4.5");
-    const [calcClr, setCalcClr] = useState("28.0");
-    const [calcTargetSnf, setCalcTargetSnf] = useState("");
-    const [calcFactorType, setCalcFactorType] = useState("cow");
-    const [manualFactor, setManualFactor] = useState("");
-    const [calcResult, setCalcResult] = useState<string | null>(null);
-    const [checkMilkType, setCheckMilkType] = useState<"Cow" | "Buffalo" | "Mixed">("Cow");
-    const [checkFat, setCheckFat] = useState("");
-    const [checkSnf, setCheckSnf] = useState("");
-    const [checkResult, setCheckResult] = useState<React.ReactNode | null>(null);
-
-    const handleCalcSnf = () => {
-        const fatNum = parseFloat(calcFat);
-        const clrNum = parseFloat(calcClr);
-        const factor = parseFloat(manualFactor) || (calcFactorType === 'cow' ? 0.72 : 0.85);
-        
-        if (isNaN(fatNum) || isNaN(clrNum)) {
-            setCalcResult("Invalid Input"); return;
-        }
-        setCalcResult(`Calculated SNF: ${getSnf(fatNum, clrNum, factor).toFixed(2)} %`);
-    }
-
-    const handleCalcClr = () => {
-        const fatNum = parseFloat(calcFat);
-        const snfNum = parseFloat(calcTargetSnf);
-        const factor = parseFloat(manualFactor) || (calcFactorType === 'cow' ? 0.72 : 0.85);
-
-        if (isNaN(fatNum) || isNaN(snfNum)) {
-            setCalcResult("Invalid Input"); return;
-        }
-
-        const calculatedClr = (snfNum - (0.25 * fatNum) - factor) * 4;
-        setCalcResult(`Required CLR: ${calculatedClr.toFixed(2)}`);
-    }
-
-    const handleCheckStandards = () => {
-        const fat = parseFloat(checkFat);
-        const snf = parseFloat(checkSnf);
-        const legalStandards = standards[checkMilkType];
-
-        if (isNaN(fat) || isNaN(snf)) {
-            setCheckResult(<p className="text-red-600">Please enter valid Fat and SNF values.</p>);
-            return;
-        }
-        
-        const fatPass = fat >= legalStandards.fat;
-        const snfPass = snf >= legalStandards.snf;
-
-        const resultJsx = (
-            <div>
-                <p className="mb-2">Comparing against <strong>{state}</strong> standards for <strong>{checkMilkType} Milk</strong>:</p>
-                <div className={`flex items-center gap-2 ${fatPass ? 'text-green-600' : 'text-red-600'}`}>
-                    {fatPass ? <CheckCircle className="w-5 h-5"/> : <XCircle className="w-5 h-5"/>}
-                    Fat: Your value is <strong>{fat.toFixed(2)}%</strong>. Legal minimum is <strong>{legalStandards.fat.toFixed(2)}%</strong>.
-                </div>
-                <div className={`flex items-center gap-2 mt-1 ${snfPass ? 'text-green-600' : 'text-red-600'}`}>
-                    {snfPass ? <CheckCircle className="w-5 h-5"/> : <XCircle className="w-5 h-5"/>}
-                    SNF: Your value is <strong>{snf.toFixed(2)}%</strong>. Legal minimum is <strong>{legalStandards.snf.toFixed(2)}%</strong>.
-                </div>
-                 <p className={`mt-3 font-bold text-lg ${fatPass && snfPass ? 'text-green-700' : 'text-red-700'}`}>
-                    Result: Milk {fatPass && snfPass ? "MEETS" : "DOES NOT MEET"} the standards.
-                </p>
-            </div>
-        );
-        setCheckResult(resultJsx);
-    }
-
-    return (
-        <CalculatorCard title="State-wise Standards & SNF Calculator" description="Check legal FSSAI standards for any Indian state and use the integrated calculator.">
-             <div className="mb-4">
-                <Label>Select State / Union Territory</Label>
-                <Select value={state} onValueChange={setState}>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                        {Object.keys(stateWiseStandards).sort().map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
-                    </SelectContent>
-                </Select>
-            </div>
-            {standards && (
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Milk Type</TableHead>
-                            <TableHead>Minimum Fat %</TableHead>
-                            <TableHead>Minimum SNF %</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        <TableRow><TableCell>Cow Milk</TableCell><TableCell>{standards.Cow.fat.toFixed(2)}</TableCell><TableCell>{standards.Cow.snf.toFixed(2)}</TableCell></TableRow>
-                        <TableRow><TableCell>Buffalo Milk</TableCell><TableCell>{standards.Buffalo.fat.toFixed(2)}</TableCell><TableCell>{standards.Buffalo.snf.toFixed(2)}</TableCell></TableRow>
-                        <TableRow><TableCell>Mixed Milk</TableCell><TableCell>{standards.Mixed.fat.toFixed(2)}</TableCell><TableCell>{standards.Mixed.snf.toFixed(2)}</TableCell></TableRow>
-                    </TableBody>
-                </Table>
-            )}
-
-            <div className="mt-6 bg-muted/50 p-4 rounded-lg space-y-3">
-                <h4 className="font-bold text-lg text-primary">SNF / CLR Calculator</h4>
-                <div className="grid grid-cols-2 gap-4">
-                    <div>
-                        <Label>Milk Type</Label>
-                        <Select value={calcFactorType} onValueChange={setCalcFactorType}>
-                            <SelectTrigger><SelectValue/></SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="cow">Cow Milk (Factor: 0.72)</SelectItem>
-                                <SelectItem value="buffalo">Buffalo Milk (Factor: 0.85)</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
-                    <div>
-                        <Label>Manual Correction Factor</Label>
-                        <Input type="number" value={manualFactor} onChange={e => setManualFactor(e.target.value)} placeholder="e.g., 0.75" />
-                    </div>
-                </div>
-                 <div><Label>Fat %</Label><Input type="number" value={calcFat} onChange={e => setCalcFat(e.target.value)} placeholder="4.5" /></div>
-                
-                <div className="grid grid-cols-2 gap-4 items-end">
-                    <div>
-                        <Label>CLR</Label>
-                        <Input type="number" value={calcClr} onChange={e => setCalcClr(e.target.value)} placeholder="28.0" />
-                        <Button onClick={handleCalcSnf} className="w-full mt-2">Calculate SNF</Button>
-                    </div>
-                    <div>
-                        <Label>Target SNF %</Label>
-                        <Input type="number" value={calcTargetSnf} onChange={e => setCalcTargetSnf(e.target.value)} placeholder="8.5" />
-                        <Button onClick={handleCalcClr} className="w-full mt-2">Calculate CLR</Button>
-                    </div>
-                </div>
-                 {calcResult && <div className="mt-4 text-center"><p className="text-xl font-bold text-green-700">{calcResult}</p></div>}
-            </div>
-
-            <div className="mt-6 bg-muted/50 p-4 rounded-lg space-y-3">
-                <h4 className="font-bold text-lg text-primary">State-wise Standard Check</h4>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                     <div>
-                        <Label>Milk Type</Label>
-                        <Select value={checkMilkType} onValueChange={(v) => setCheckMilkType(v as any)}>
-                            <SelectTrigger><SelectValue/></SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="Cow">Cow Milk</SelectItem>
-                                <SelectItem value="Buffalo">Buffalo Milk</SelectItem>
-                                <SelectItem value="Mixed">Mixed Milk</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
-                    <div><Label>Enter Your Fat %</Label><Input type="number" value={checkFat} onChange={e => setCheckFat(e.target.value)} placeholder="e.g., 3.5"/></div>
-                    <div><Label>Enter Your SNF %</Label><Input type="number" value={checkSnf} onChange={e => setCheckSnf(e.target.value)} placeholder="e.g., 8.5"/></div>
-                </div>
-                 <Button onClick={handleCheckStandards} className="w-full mt-4">Check Compliance</Button>
-                 {checkResult && <Alert className="mt-4"><AlertDescription>{checkResult}</AlertDescription></Alert>}
-            </div>
-        </CalculatorCard>
-    );
 }
 
 function YieldsCalc() {
