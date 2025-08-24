@@ -105,18 +105,35 @@ const CalculatorCard = ({ title, children, description }: { title: string; child
 );
 
 const MemoizedInputField = memo(function InputField({ label, value, name, setter, unit, placeholder }: { label: string, value: string, name: string, setter: (name: string, value: string) => void, unit?: string, placeholder?: string }) {
-    const [inputValue, setInputValue] = useState(value);
+    const [internalValue, setInternalValue] = useState(value);
 
+    // Update internal state when props change
+    if (value !== internalValue && document.activeElement?.getAttribute('name') !== name) {
+        setInternalValue(value);
+    }
+    
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setInputValue(e.target.value);
-        setter(e.target.name, e.target.value);
+        setInternalValue(e.target.value);
     };
+
+    const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+        setter(e.target.name, e.target.value);
+    }
     
     return (
         <div>
             <Label htmlFor={name}>{label}</Label>
             <div className="flex items-center">
-                <Input type="number" name={name} id={name} value={inputValue} onChange={handleChange} className={unit ? "rounded-r-none" : ""} placeholder={placeholder} />
+                <Input 
+                    type="number" 
+                    name={name} 
+                    id={name} 
+                    value={internalValue} 
+                    onChange={handleChange} 
+                    onBlur={handleBlur}
+                    className={unit ? "rounded-r-none" : ""} 
+                    placeholder={placeholder} 
+                />
                 {unit && <span className="p-2 bg-muted border border-l-0 rounded-r-md text-sm">{unit}</span>}
             </div>
         </div>
@@ -139,10 +156,18 @@ const CustomCalculatorInput = memo(function CustomCalculatorInput({
 }) {
     const [internalValue, setInternalValue] = useState(value);
 
+     // Update internal state when props change
+    if (value !== internalValue && document.activeElement?.getAttribute('name') !== name) {
+        setInternalValue(value);
+    }
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setInternalValue(e.target.value);
-        onValueChange(e.target.name, e.target.value);
     };
+
+    const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+        onValueChange(e.target.name, e.target.value);
+    }
 
     return (
         <div>
@@ -154,6 +179,7 @@ const CustomCalculatorInput = memo(function CustomCalculatorInput({
                     id={name}
                     value={internalValue}
                     onChange={handleChange}
+                    onBlur={handleBlur}
                     className={unit ? "rounded-r-none" : ""}
                 />
                 {unit && <span className="p-2 bg-muted border border-l-0 rounded-r-md text-sm">{unit}</span>}
@@ -323,21 +349,13 @@ const MemoizedMilkInputGroup = memo(function MilkInputGroup({
     onInputChange: (milkNum: 1 | 2, field: string, value: string) => void;
     initialValues: { qty: string; fat: string; clr: string };
 }) {
-    const [values, setValues] = useState(initialValues);
-
-    const handleChange = useCallback((field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-        const newValues = { ...values, [field]: value };
-        setValues(newValues);
-        onInputChange(milkNum, field, value);
-    }, [values, onInputChange, milkNum]);
 
     return (
         <div className="bg-muted/50 p-4 rounded-lg space-y-3">
             <h3 className="font-semibold text-gray-700 font-headline">Milk Source {milkNum}</h3>
-            <div><Label>Quantity (kg/L)</Label><Input type="number" value={values.qty} onChange={handleChange('qty')} /></div>
-            <div><Label>Fat %</Label><Input type="number" value={values.fat} onChange={handleChange('fat')} /></div>
-            <div><Label>CLR</Label><Input type="number" value={values.clr} onChange={handleChange('clr')} /></div>
+            <MemoizedInputField label="Quantity (kg/L)" value={initialValues.qty} name="qty" setter={(name, val) => onInputChange(milkNum, name, val)} />
+            <MemoizedInputField label="Fat %" value={initialValues.fat} name="fat" setter={(name, val) => onInputChange(milkNum, name, val)} />
+            <MemoizedInputField label="CLR" value={initialValues.clr} name="clr" setter={(name, val) => onInputChange(milkNum, name, val)} />
         </div>
     );
 });
@@ -424,8 +442,8 @@ function TwoMilkBlendingToTargetCalc() {
     const [result, setResult] = useState<{ q1: number, q2: number } | null>(null);
     const [error, setError] = useState<string | null>(null);
 
-    const handleInputChange = useCallback((field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-        setInputs(prev => ({ ...prev, [field]: e.target.value }));
+    const handleInputChange = useCallback((name: string, value: string) => {
+        setInputs(prev => ({ ...prev, [name]: value }));
     }, []);
 
     const calculate = useCallback(() => {
@@ -445,7 +463,7 @@ function TwoMilkBlendingToTargetCalc() {
             return;
         }
         
-        if ( (FT > F1 && FT > F2) || (FT < F1 && FT < F2) || (CT > C1 && CT > C2) || (CT < C1 && CT < C2) ) {
+        if ( (FT > Math.max(F1,F2)) || (FT < Math.min(F1,F2)) || (CT > Math.max(C1,C2)) || (CT < Math.min(C1,C2)) ) {
             setError("The target composition is not achievable. The target Fat and CLR must be between the values of the source milks.");
             return;
         }
@@ -459,11 +477,8 @@ function TwoMilkBlendingToTargetCalc() {
         // Q1*(F1 - F2) = QT*FT - QT*F2
         // Q1 = QT * (FT - F2) / (F1 - F2)
         
-        // This is Pearson Square logic.
-
         let Q1: number;
 
-        // Use fat % for calculation, as it's generally more reliable and has a wider range.
         if (Math.abs(F1 - F2) > 1e-9) { // Check for division by zero
             Q1 = QT * (FT - F2) / (F1 - F2);
         } else if (Math.abs(C1 - C2) > 1e-9) { // If fat is the same, use CLR
@@ -475,12 +490,11 @@ function TwoMilkBlendingToTargetCalc() {
 
         const Q2 = QT - Q1;
 
-        // Final check on results
-        const finalFatCheck = (Q1 * F1 + Q2 * F1) / QT;
+        // Final check on CLR as fat was the primary driver.
         const finalClrCheck = (Q1*C1 + Q2*C2)/QT;
 
         if (Q1 < 0 || Q2 < 0 || Math.abs(finalClrCheck-CT) > 0.1) {
-            setError("The target composition is not achievable with the given milk sources. The ratios required for fat and CLR are conflicting.");
+            setError("The target composition is not achievable with the given milk sources. The ratios required for fat and CLR are conflicting. Try adjusting the target values.");
             return;
         }
 
@@ -493,20 +507,20 @@ function TwoMilkBlendingToTargetCalc() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                 <div className="bg-muted/50 p-4 rounded-lg space-y-3">
                     <h3 className="font-semibold text-gray-700 font-headline">Milk Source 1</h3>
-                    <div><Label>Fat %</Label><Input type="number" value={inputs.f1} onChange={handleInputChange('f1')} /></div>
-                    <div><Label>CLR</Label><Input type="number" value={inputs.c1} onChange={handleInputChange('c1')} /></div>
+                    <MemoizedInputField label="Fat %" value={inputs.f1} name="f1" setter={handleInputChange} />
+                    <MemoizedInputField label="CLR" value={inputs.c1} name="c1" setter={handleInputChange} />
                 </div>
                 <div className="bg-muted/50 p-4 rounded-lg space-y-3">
                     <h3 className="font-semibold text-gray-700 font-headline">Milk Source 2</h3>
-                    <div><Label>Fat %</Label><Input type="number" value={inputs.f2} onChange={handleInputChange('f2')} /></div>
-                    <div><Label>CLR</Label><Input type="number" value={inputs.c2} onChange={handleInputChange('c2')} /></div>
+                    <MemoizedInputField label="Fat %" value={inputs.f2} name="f2" setter={handleInputChange} />
+                    <MemoizedInputField label="CLR" value={inputs.c2} name="c2" setter={handleInputChange} />
                 </div>
                 <div className="bg-primary/10 p-4 rounded-lg space-y-3 md:col-span-2">
                     <h3 className="font-semibold text-gray-700 font-headline">Target Batch</h3>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div><Label>Total Batch Qty (kg/L)</Label><Input type="number" value={inputs.qTotal} onChange={handleInputChange('qTotal')} /></div>
-                        <div><Label>Target Fat %</Label><Input type="number" value={inputs.fTarget} onChange={handleInputChange('fTarget')} /></div>
-                        <div><Label>Target CLR</Label><Input type="number" value={inputs.cTarget} onChange={handleInputChange('cTarget')} /></div>
+                        <MemoizedInputField label="Total Batch Qty (kg/L)" value={inputs.qTotal} name="qTotal" setter={handleInputChange} />
+                        <MemoizedInputField label="Target Fat %" value={inputs.fTarget} name="fTarget" setter={handleInputChange} />
+                        <MemoizedInputField label="Target CLR" value={inputs.cTarget} name="cTarget" setter={handleInputChange} />
                     </div>
                 </div>
             </div>
@@ -544,7 +558,7 @@ function FatSnfClrTsCalc() {
     }, []);
 
     const handleSelectChange = useCallback((value: string) => {
-        setInputs(prev => ({...prev, correctionFactor: value}));
+        setInputs(prev => ({...prev, correctionFactor: value, manualFactor: ''})); // Clear manual when select changes
     }, []);
 
     const getFactor = () => parseFloat(inputs.manualFactor) || parseFloat(inputs.correctionFactor);
@@ -601,35 +615,22 @@ function FatSnfClrTsCalc() {
                     </Select>
                 </div>
                  <div>
-                    <Label>Manual Correction Factor</Label>
-                    <Input id="manual-factor" type="number" placeholder="e.g., 0.75" value={inputs.manualFactor} onChange={e => handleInputChange('manualFactor', e.target.value)} />
+                    <MemoizedInputField label="Manual Correction Factor" value={inputs.manualFactor} name="manualFactor" setter={handleInputChange} placeholder="e.g., 0.75" />
                 </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-card p-4 rounded-lg border space-y-4">
                     <h4 className="font-semibold text-gray-700 text-center font-headline">Calculate SNF & TS</h4>
-                    <div>
-                        <Label htmlFor="fat-for-snf">Fat %</Label>
-                        <Input id="fat-for-snf" type="number" value={inputs.fat} onChange={e => handleInputChange('fat', e.target.value)} />
-                    </div>
-                    <div>
-                        <Label htmlFor="clr-for-snf">CLR</Label>
-                        <Input id="clr-for-snf" type="number" value={inputs.clr} onChange={e => handleInputChange('clr', e.target.value)} />
-                    </div>
+                    <MemoizedInputField label="Fat %" value={inputs.fat} name="fat" setter={handleInputChange} />
+                    <MemoizedInputField label="CLR" value={inputs.clr} name="clr" setter={handleInputChange} />
                     <Button onClick={handleCalcSnfTs} className="w-full">Calculate SNF & TS</Button>
                 </div>
 
                 <div className="bg-card p-4 rounded-lg border space-y-4">
                     <h4 className="font-semibold text-gray-700 text-center font-headline">Calculate CLR & TS</h4>
-                    <div>
-                        <Label htmlFor="fat-for-clr">Fat %</Label>
-                        <Input id="fat-for-clr" type="number" value={inputs.fat} onChange={e => handleInputChange('fat', e.target.value)} />
-                    </div>
-                    <div>
-                        <Label htmlFor="snf-for-clr">SNF %</Label>
-                        <Input id="snf-for-clr" type="number" value={inputs.snf} onChange={e => handleInputChange('snf', e.target.value)} />
-                    </div>
+                    <MemoizedInputField label="Fat %" value={inputs.fat} name="fat" setter={handleInputChange} />
+                    <MemoizedInputField label="SNF %" value={inputs.snf} name="snf" setter={handleInputChange} />
                     <Button onClick={handleCalcClrTs} className="w-full">Calculate CLR & TS</Button>
                 </div>
             </div>
@@ -641,18 +642,24 @@ function FatSnfClrTsCalc() {
 }
 
 function ClrIncreaseCalc() {
-    const [initialQty, setInitialQty] = useState('100');
-    const [initialClr, setInitialClr] = useState('27');
-    const [targetClr, setTargetClr] = useState('28.5');
-    const [smpSolids, setSmpSolids] = useState('96');
+    const [inputs, setInputs] = useState({
+        initialQty: '100',
+        initialClr: '27',
+        targetClr: '28.5',
+        smpSolids: '96'
+    });
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
+    const handleInputChange = useCallback((name: string, value: string) => {
+        setInputs(prev => ({...prev, [name]: value}));
+    }, []);
+
     const calculate = useCallback(() => {
-        const Q1 = parseFloat(initialQty);
-        const CLR1 = parseFloat(initialClr);
-        const CLR_target = parseFloat(targetClr);
-        const smpSolidsPercent = parseFloat(smpSolids);
+        const Q1 = parseFloat(inputs.initialQty);
+        const CLR1 = parseFloat(inputs.initialClr);
+        const CLR_target = parseFloat(inputs.targetClr);
+        const smpSolidsPercent = parseFloat(inputs.smpSolids);
         
         setError(null);
         setResult(null);
@@ -671,20 +678,20 @@ function ClrIncreaseCalc() {
         
         setResult(`To increase CLR from <strong>${CLR1}</strong> to <strong>${CLR_target}</strong> in <strong>${Q1} kg</strong> of milk, you need to add approximately <strong class='text-green-700 text-lg'>${smpNeeded.toFixed(4)} kg</strong> of SMP.`);
         
-    }, [initialQty, initialClr, targetClr, smpSolids]);
+    }, [inputs]);
 
     return (
         <CalculatorCard title="CLR Increase Calculator (with SMP)" description="Calculate the amount of Skimmed Milk Powder (SMP) needed to increase the CLR of milk using the provided formula.">
              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                 <div className="bg-muted/50 p-4 rounded-lg space-y-3">
                     <h3 className="font-semibold text-gray-700 mb-2 font-headline">Initial Milk</h3>
-                    <div><Label>Milk Quantity (kg)</Label><Input type="number" value={initialQty} onChange={e => setInitialQty(e.target.value)} /></div>
-                    <div><Label>Initial CLR</Label><Input type="number" value={initialClr} onChange={e => setInitialClr(e.target.value)} /></div>
+                    <MemoizedInputField label="Milk Quantity (kg)" value={inputs.initialQty} name="initialQty" setter={handleInputChange} />
+                    <MemoizedInputField label="Initial CLR" value={inputs.initialClr} name="initialClr" setter={handleInputChange} />
                 </div>
                  <div className="bg-primary/10 p-4 rounded-lg space-y-3">
                      <h3 className="font-semibold text-gray-700 mb-2 font-headline">Target & Ingredient</h3>
-                    <div><Label>Target CLR</Label><Input type="number" value={targetClr} onChange={e => setTargetClr(e.target.value)} /></div>
-                    <div><Label>SMP Total Solids (%)</Label><Input type="number" value={smpSolids} onChange={e => setSmpSolids(e.target.value)} /></div>
+                    <MemoizedInputField label="Target CLR" value={inputs.targetClr} name="targetClr" setter={handleInputChange} />
+                    <MemoizedInputField label="SMP Total Solids (%)" value={inputs.smpSolids} name="smpSolids" setter={handleInputChange} />
                 </div>
             </div>
             <Button onClick={calculate} className="w-full mt-4">Calculate SMP Required</Button>
@@ -758,14 +765,14 @@ function FatClrMaintainerCalc() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mb-4">
                 <div className="bg-muted/50 p-4 rounded-lg space-y-3">
                     <h3 className="font-semibold text-gray-700 mb-2 font-headline">Initial Milk</h3>
-                    <div><Label>Milk Quantity (kg)</Label><Input type="number" value={inputs.milkQty} onChange={e => handleInputChange('milkQty', e.target.value)} /></div>
-                    <div><Label>Milk Fat %</Label><Input type="number" value={inputs.milkFat} onChange={e => handleInputChange('milkFat', e.target.value)} /></div>
-                    <div><Label>Milk CLR</Label><Input type="number" value={inputs.milkClr} onChange={e => handleInputChange('milkClr', e.target.value)} /></div>
+                    <MemoizedInputField label="Milk Quantity (kg)" value={inputs.milkQty} name="milkQty" setter={handleInputChange} />
+                    <MemoizedInputField label="Milk Fat %" value={inputs.milkFat} name="milkFat" setter={handleInputChange} />
+                    <MemoizedInputField label="Milk CLR" value={inputs.milkClr} name="milkClr" setter={handleInputChange} />
                 </div>
                  <div className="bg-primary/10 p-4 rounded-lg space-y-3">
                      <h3 className="font-semibold text-gray-700 mb-2 font-headline">Target & Ingredients</h3>
-                    <div><Label>Target Fat %</Label><Input type="number" value={inputs.targetFat} onChange={e => handleInputChange('targetFat', e.target.value)} /></div>
-                    <div><Label>Cream Fat %</Label><Input type="number" value={inputs.creamFat} onChange={e => handleInputChange('creamFat', e.target.value)} /></div>
+                    <MemoizedInputField label="Target Fat %" value={inputs.targetFat} name="targetFat" setter={handleInputChange} />
+                    <MemoizedInputField label="Cream Fat %" value={inputs.creamFat} name="creamFat" setter={handleInputChange} />
                 </div>
             </div>
              <Button onClick={calculate} className="w-full mt-4">Calculate Cream & SMP</Button>
@@ -776,18 +783,19 @@ function FatClrMaintainerCalc() {
 }
 
 const PearsonSquareCalc = ({ unit, calcType }: { unit: string, calcType: 'Fat' | 'CLR' }) => {
-    const [high, setHigh] = useState("");
-    const [low, setLow] = useState("");
-    const [target, setTarget] = useState("");
-    const [qty, setQty] = useState("");
+    const [inputs, setInputs] = useState({ high: "", low: "", target: "", qty: "" });
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
+    const handleInputChange = useCallback((name: string, value: string) => {
+        setInputs(prev => ({...prev, [name]: value}));
+    }, []);
+
     const handleCalc = useCallback(() => {
-        const highVal = parseFloat(high);
-        const lowVal = parseFloat(low);
-        const targetVal = parseFloat(target);
-        const qtyVal = parseFloat(qty);
+        const highVal = parseFloat(inputs.high);
+        const lowVal = parseFloat(inputs.low);
+        const targetVal = parseFloat(inputs.target);
+        const qtyVal = parseFloat(inputs.qty);
         
         setResult(null);
         setError(null);
@@ -815,25 +823,25 @@ const PearsonSquareCalc = ({ unit, calcType }: { unit: string, calcType: 'Fat' |
         const lowQty = (qtyVal * lowParts) / totalParts;
 
         setResult(`To get ${qtyVal} Kg/Ltr of ${targetVal}${unit} product, you need to mix:<br/><strong class="text-green-700">${highQty.toFixed(2)} Kg/Ltr</strong> of High ${calcType} milk and <strong class="text-green-700">${lowQty.toFixed(2)} Kg/Ltr</strong> of Low ${calcType} milk.`);
-    }, [high, low, target, qty, unit, calcType]);
+    }, [inputs, unit, calcType]);
 
     return (
          <CalculatorCard title={`${calcType} Blending Calculator`} description={`Do alag ${calcType} % wale doodh ko milakar naya product banayein.`}>
              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                 <div className="bg-muted/50 p-4 rounded-lg">
                     <h3 className="font-semibold text-gray-700 mb-2 font-headline">Source Milk 1 (High ${calcType})</h3>
-                    <div><Label className="text-xs">{calcType} {unit}</Label><Input type="number" value={high} onChange={e => setHigh(e.target.value)} placeholder="e.g., 5.0" /></div>
+                    <MemoizedInputField label={`${calcType} ${unit}`} value={inputs.high} name="high" setter={handleInputChange} placeholder="e.g., 5.0" />
                 </div>
                 <div className="bg-muted/50 p-4 rounded-lg">
                     <h3 className="font-semibold text-gray-700 mb-2 font-headline">Source Milk 2 (Low ${calcType})</h3>
-                    <div><Label className="text-xs">{calcType} {unit}</Label><Input type="number" value={low} onChange={e => setLow(e.target.value)} placeholder="e.g., 0.5" /></div>
+                    <MemoizedInputField label={`${calcType} ${unit}`} value={inputs.low} name="low" setter={handleInputChange} placeholder="e.g., 0.5" />
                 </div>
             </div>
              <div className="bg-primary/10 p-4 rounded-lg mb-4">
                  <h3 className="font-semibold text-gray-700 mb-2 font-headline">Target Product</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div><Label className="text-xs">Target ${calcType} {unit}</Label><Input type="number" value={target} onChange={e => setTarget(e.target.value)} placeholder="e.g., 3.0" /></div>
-                    <div><Label className="text-xs">Target Batch Qty (Kg/Ltr)</Label><Input type="number" value={qty} onChange={e => setQty(e.target.value)} placeholder="e.g., 100" /></div>
+                    <MemoizedInputField label={`Target ${calcType} ${unit}`} value={inputs.target} name="target" setter={handleInputChange} placeholder="e.g., 3.0" />
+                    <MemoizedInputField label="Target Batch Qty (Kg/Ltr)" value={inputs.qty} name="qty" setter={handleInputChange} placeholder="e.g., 100" />
                 </div>
             </div>
             <Button onClick={handleCalc} className="w-full">Calculate Blend</Button>
@@ -848,29 +856,31 @@ function ClrBlendingCalc() { return <PearsonSquareCalc unit="" calcType="CLR" />
 
 
 function FatSnfAdjustmentCalc() {
-    const [milkQty, setMilkQty] = useState('100');
-    const [milkFat, setMilkFat] = useState('3.5');
-    const [milkSnf, setMilkSnf] = useState('8.5');
-    const [targetFat, setTargetFat] = useState('4.5');
-    const [targetSnf, setTargetSnf] = useState('8.5');
-    const [creamFat, setCreamFat] = useState('40');
-    const [powderTs, setPowderTs] = useState('96');
+    const [inputs, setInputs] = useState({
+        milkQty: '100', milkFat: '3.5', milkSnf: '8.5',
+        targetFat: '4.5', targetSnf: '8.5',
+        creamFat: '40', powderTs: '96'
+    });
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
+
+    const handleInputChange = useCallback((name: string, value: string) => {
+        setInputs(prev => ({...prev, [name]: value}));
+    }, []);
 
     const calculate = useCallback(() => {
         setResult(null);
         setError(null);
         
-        const M = parseFloat(milkQty);
-        const Fm = parseFloat(milkFat) / 100;
-        const Sm = parseFloat(milkSnf) / 100;
-        const Ft = parseFloat(targetFat) / 100;
-        const St = parseFloat(targetSnf) / 100;
-        const Fc = parseFloat(creamFat) / 100;
-        const Sc = getSnf(parseFloat(creamFat), 20, 0.72) / 100; // Estimate cream SNF
+        const M = parseFloat(inputs.milkQty);
+        const Fm = parseFloat(inputs.milkFat) / 100;
+        const Sm = parseFloat(inputs.milkSnf) / 100;
+        const Ft = parseFloat(inputs.targetFat) / 100;
+        const St = parseFloat(inputs.targetSnf) / 100;
+        const Fc = parseFloat(inputs.creamFat) / 100;
+        const Sc = getSnf(parseFloat(inputs.creamFat), 20, 0.72) / 100; // Estimate cream SNF
         const Fp = 1 / 100; // Powder fat is ~1%
-        const Sp = parseFloat(powderTs) / 100 - Fp; // Powder SNF
+        const Sp = parseFloat(inputs.powderTs) / 100 - Fp; // Powder SNF
 
         if ([M, Fm, Sm, Ft, St, Fc, Fp, Sp].some(isNaN)) {
             setError("Please fill all fields with valid numbers.");
@@ -904,34 +914,34 @@ function FatSnfAdjustmentCalc() {
         const finalWeight = M + (C > 0 ? C : 0) + (P > 0 ? P : 0);
         
         setResult(`
-            For <strong>${M} kg</strong> of milk, to reach <strong>${targetFat}% Fat</strong> and <strong>${targetSnf}% SNF</strong>, you need to add:
+            For <strong>${M} kg</strong> of milk, to reach <strong>${inputs.targetFat}% Fat</strong> and <strong>${inputs.targetSnf}% SNF</strong>, you need to add:
             <ul class='list-disc list-inside mt-2'>
-                ${C > 0 ? `<li>Cream (${creamFat}% Fat): <strong class='text-green-700 text-lg'>${C.toFixed(3)} kg</strong></li>` : ''}
-                ${P > 0 ? `<li>SMP (${powderTs}% TS): <strong class='text-green-700 text-lg'>${P.toFixed(3)} kg</strong></li>` : ''}
+                ${C > 0 ? `<li>Cream (${inputs.creamFat}% Fat): <strong class='text-green-700 text-lg'>${C.toFixed(3)} kg</strong></li>` : ''}
+                ${P > 0 ? `<li>SMP (${inputs.powderTs}% TS): <strong class='text-green-700 text-lg'>${P.toFixed(3)} kg</strong></li>` : ''}
             </ul>
             <p class='mt-3'>Final Batch Weight will be approximately <strong>${finalWeight.toFixed(3)} kg</strong>.</p>
         `);
-    }, [milkQty, milkFat, milkSnf, targetFat, targetSnf, creamFat, powderTs]);
+    }, [inputs]);
 
     return (
         <CalculatorCard title="Fat & SNF Adjustment Calculator" description="Calculate how much Cream and Skim Milk Powder (SMP) to add to standardize both Fat and SNF upwards.">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mb-4">
                 <div className="bg-muted/50 p-4 rounded-lg space-y-3">
                      <h3 className="font-semibold text-gray-700 mb-2 font-headline">Initial Milk</h3>
-                    <div><Label>Milk Quantity (kg)</Label><Input type="number" value={milkQty} onChange={e => setMilkQty(e.target.value)} /></div>
-                    <div><Label>Milk Fat %</Label><Input type="number" value={milkFat} onChange={e => setMilkFat(e.target.value)} /></div>
-                    <div><Label>Milk SNF %</Label><Input type="number" value={milkSnf} onChange={e => setMilkSnf(e.target.value)} /></div>
+                     <MemoizedInputField label="Milk Quantity (kg)" value={inputs.milkQty} name="milkQty" setter={handleInputChange} />
+                     <MemoizedInputField label="Milk Fat %" value={inputs.milkFat} name="milkFat" setter={handleInputChange} />
+                     <MemoizedInputField label="Milk SNF %" value={inputs.milkSnf} name="milkSnf" setter={handleInputChange} />
                 </div>
                 <div className="bg-muted/50 p-4 rounded-lg space-y-3">
                      <h3 className="font-semibold text-gray-700 mb-2 font-headline">Target Milk</h3>
-                    <div><Label>Target Fat %</Label><Input type="number" value={targetFat} onChange={e => setTargetFat(e.target.value)} /></div>
-                    <div><Label>Target SNF %</Label><Input type="number" value={targetSnf} onChange={e => setTargetSnf(e.target.value)} /></div>
+                     <MemoizedInputField label="Target Fat %" value={inputs.targetFat} name="targetFat" setter={handleInputChange} />
+                     <MemoizedInputField label="Target SNF %" value={inputs.targetSnf} name="targetSnf" setter={handleInputChange} />
                 </div>
                  <div className="bg-primary/10 p-4 rounded-lg space-y-3 md:col-span-2">
                      <h3 className="font-semibold text-gray-700 mb-2 font-headline">Ingredients for Adjustment</h3>
                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                         <div><Label>Cream Fat % (Manual)</Label><Input type="number" value={creamFat} onChange={e => setCreamFat(e.target.value)} /></div>
-                         <div><Label>Powder Total Solids (TS) % (Manual)</Label><Input type="number" value={powderTs} onChange={e => setPowderTs(e.target.value)} /></div>
+                         <MemoizedInputField label="Cream Fat % (Manual)" value={inputs.creamFat} name="creamFat" setter={handleInputChange} />
+                         <MemoizedInputField label="Powder Total Solids (TS) % (Manual)" value={inputs.powderTs} name="powderTs" setter={handleInputChange} />
                      </div>
                 </div>
             </div>
@@ -943,18 +953,20 @@ function FatSnfAdjustmentCalc() {
 }
 
 function ReconstitutedMilkCalc() {
-    const [batchQty, setBatchQty] = useState('100');
-    const [targetTS, setTargetTS] = useState('12.5');
-    const [powderTS, setPowderTS] = useState('96');
+    const [inputs, setInputs] = useState({ batchQty: '100', targetTS: '12.5', powderTS: '96' });
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
+
+    const handleInputChange = useCallback((name: string, value: string) => {
+        setInputs(prev => ({...prev, [name]: value}));
+    }, []);
 
     const calculate = useCallback(() => {
         setResult(null);
         setError(null);
-        const qty = parseFloat(batchQty);
-        const tTS = parseFloat(targetTS) / 100;
-        const pTS = parseFloat(powderTS) / 100;
+        const qty = parseFloat(inputs.batchQty);
+        const tTS = parseFloat(inputs.targetTS) / 100;
+        const pTS = parseFloat(inputs.powderTS) / 100;
 
         if ([qty, tTS, pTS].some(isNaN) || qty <= 0 || tTS <= 0 || pTS <= 0) {
             setError("Please fill all fields with valid positive numbers.");
@@ -975,15 +987,15 @@ function ReconstitutedMilkCalc() {
             return;
         }
 
-        setResult(`To make <strong>${qty} kg</strong> of milk with <strong>${targetTS}% TS</strong>, you need:<br/>- <strong class='text-green-700'>${powderNeeded.toFixed(3)} kg</strong> of Milk Powder (${powderTS}%)<br/>- <strong class='text-green-700'>${waterNeeded.toFixed(3)} kg</strong> of Water`);
-    }, [batchQty, targetTS, powderTS]);
+        setResult(`To make <strong>${qty} kg</strong> of milk with <strong>${inputs.targetTS}% TS</strong>, you need:<br/>- <strong class='text-green-700'>${powderNeeded.toFixed(3)} kg</strong> of Milk Powder (${inputs.powderTS}%)<br/>- <strong class='text-green-700'>${waterNeeded.toFixed(3)} kg</strong> of Water`);
+    }, [inputs]);
 
     return (
         <CalculatorCard title="Reconstituted Milk Calculator" description="Calculate how much Milk Powder and Water are needed to create milk of a specific Total Solids (TS) content.">
             <div className="bg-muted/50 p-4 rounded-lg space-y-3">
-                <div><Label>Target Batch Quantity (kg)</Label><Input type="number" value={batchQty} onChange={e => setBatchQty(e.target.value)} /></div>
-                <div><Label>Target Total Solids (TS) %</Label><Input type="number" value={targetTS} onChange={e => setTargetTS(e.target.value)} /></div>
-                <div><Label>Milk Powder Total Solids (TS) %</Label><Input type="number" value={powderTS} onChange={e => setPowderTS(e.target.value)} /></div>
+                <MemoizedInputField label="Target Batch Quantity (kg)" value={inputs.batchQty} name="batchQty" setter={handleInputChange} />
+                <MemoizedInputField label="Target Total Solids (TS) %" value={inputs.targetTS} name="targetTS" setter={handleInputChange} />
+                <MemoizedInputField label="Milk Powder Total Solids (TS) %" value={inputs.powderTS} name="powderTS" setter={handleInputChange} />
             </div>
             <Button onClick={calculate} className="w-full mt-4">Calculate</Button>
             {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
@@ -993,25 +1005,27 @@ function ReconstitutedMilkCalc() {
 }
 
 function RecombinedMilkCalc() {
-    const [batchQty, setBatchQty] = useState('100');
-    const [targetFat, setTargetFat] = useState('3.5');
-    const [targetSNF, setTargetSNF] = useState('8.5');
-    const [smpFat, setSmpFat] = useState('1.0');
-    const [smpSNF, setSmpSNF] = useState('95.0');
-    const [fatSourceFat, setFatSourceFat] = useState('99.8');
+    const [inputs, setInputs] = useState({
+        batchQty: '100', targetFat: '3.5', targetSNF: '8.5',
+        smpFat: '1.0', smpSNF: '95.0', fatSourceFat: '99.8'
+    });
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
+
+    const handleInputChange = useCallback((name: string, value: string) => {
+        setInputs(prev => ({...prev, [name]: value}));
+    }, []);
 
     const calculate = useCallback(() => {
         setResult(null);
         setError(null);
         
-        const Q = parseFloat(batchQty);
-        const Ft = parseFloat(targetFat) / 100;
-        const St = parseFloat(targetSNF) / 100;
-        const Fp = parseFloat(smpFat) / 100;
-        const Sp = parseFloat(smpSNF) / 100;
-        const Fb = parseFloat(fatSourceFat) / 100;
+        const Q = parseFloat(inputs.batchQty);
+        const Ft = parseFloat(inputs.targetFat) / 100;
+        const St = parseFloat(inputs.targetSNF) / 100;
+        const Fp = parseFloat(inputs.smpFat) / 100;
+        const Sp = parseFloat(inputs.smpSNF) / 100;
+        const Fb = parseFloat(inputs.fatSourceFat) / 100;
 
         if ([Q, Ft, St, Fp, Sp, Fb].some(isNaN) || Q <= 0) {
             setError("Please fill all fields with valid numbers.");
@@ -1033,26 +1047,26 @@ function RecombinedMilkCalc() {
             return;
         }
 
-        setResult(`To make <strong>${Q} kg</strong> of milk with <strong>${targetFat}% Fat</strong> and <strong>${targetSNF}% SNF</strong>, you need:<br/>
+        setResult(`To make <strong>${Q} kg</strong> of milk with <strong>${inputs.targetFat}% Fat</strong> and <strong>${inputs.targetSNF}% SNF</strong>, you need:<br/>
         - <strong class='text-green-700'>${P.toFixed(3)} kg</strong> of Skim Milk Powder<br/>
         - <strong class='text-green-700'>${B.toFixed(3)} kg</strong> of Butter Oil/AMF<br/>
         - <strong class='text-green-700'>${W.toFixed(3)} kg</strong> of Water`);
-    }, [batchQty, targetFat, targetSNF, smpFat, smpSNF, fatSourceFat]);
+    }, [inputs]);
 
     return (
         <CalculatorCard title="Recombined Milk Calculator" description="Calculate the required Skim Milk Powder (SMP), Butter Oil (or other fat source), and Water to create milk of a desired composition.">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mb-4">
                 <div className="bg-muted/50 p-4 rounded-lg space-y-3">
                      <h3 className="font-semibold text-gray-700 mb-2 font-headline">Target Milk</h3>
-                    <div><Label>Target Batch Quantity (kg)</Label><Input type="number" value={batchQty} onChange={e => setBatchQty(e.target.value)} /></div>
-                    <div><Label>Target Fat %</Label><Input type="number" value={targetFat} onChange={e => setTargetFat(e.target.value)} /></div>
-                    <div><Label>Target SNF %</Label><Input type="number" value={targetSNF} onChange={e => setTargetSNF(e.target.value)} /></div>
+                    <MemoizedInputField label="Target Batch Quantity (kg)" value={inputs.batchQty} name="batchQty" setter={handleInputChange} />
+                    <MemoizedInputField label="Target Fat %" value={inputs.targetFat} name="targetFat" setter={handleInputChange} />
+                    <MemoizedInputField label="Target SNF %" value={inputs.targetSNF} name="targetSNF" setter={handleInputChange} />
                 </div>
                  <div className="bg-primary/10 p-4 rounded-lg space-y-3">
                      <h3 className="font-semibold text-gray-700 mb-2 font-headline">Ingredients Composition</h3>
-                     <div><Label>Skim Milk Powder (SMP) Fat %</Label><Input type="number" value={smpFat} onChange={e => setSmpFat(e.target.value)} /></div>
-                     <div><Label>Skim Milk Powder (SMP) SNF %</Label><Input type="number" value={smpSNF} onChange={e => setSmpSNF(e.target.value)} /></div>
-                     <div><Label>Fat Source (e.g., Butter Oil) Fat %</Label><Input type="number" value={fatSourceFat} onChange={e => setFatSourceFat(e.target.value)} /></div>
+                     <MemoizedInputField label="Skim Milk Powder (SMP) Fat %" value={inputs.smpFat} name="smpFat" setter={handleInputChange} />
+                     <MemoizedInputField label="Skim Milk Powder (SMP) SNF %" value={inputs.smpSNF} name="smpSNF" setter={handleInputChange} />
+                     <MemoizedInputField label="Fat Source (e.g., Butter Oil) Fat %" value={inputs.fatSourceFat} name="fatSourceFat" setter={handleInputChange} />
                 </div>
             </div>
             <Button onClick={calculate} className="w-full mt-4">Calculate Recombined Milk</Button>
@@ -1065,5 +1079,6 @@ function RecombinedMilkCalc() {
 
 
     
+
 
 
