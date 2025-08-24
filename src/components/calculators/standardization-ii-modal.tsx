@@ -18,11 +18,12 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { ArrowLeft, Blend, Milk, SlidersHorizontal, Combine, Bot, Calculator, Settings, ChevronsUp, Target } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 
-type CalculatorType = 'fat-snf-clr-ts' | 'fat-blending' | 'fat-snf-adjustment' | 'reconstituted-milk' | 'recombined-milk' | 'clr-blending' | 'custom-calculator' | 'milk-blending' | 'clr-increase' | 'fat-clr-maintainer';
+type CalculatorType = 'fat-snf-clr-ts' | 'fat-blending' | 'fat-snf-adjustment' | 'reconstituted-milk' | 'recombined-milk' | 'clr-blending' | 'custom-calculator' | 'milk-blending' | 'clr-increase' | 'fat-clr-maintainer' | 'two-milk-blending-target';
 
 const calculatorsInfo = {
     'fat-snf-clr-ts': { title: "Fat, SNF, CLR & TS", icon: Calculator, component: FatSnfClrTsCalc },
     'milk-blending': { title: "Milk Blending", icon: Blend, component: MilkBlendingCalc },
+    'two-milk-blending-target': { title: "Two-Milk Blending (to Target)", icon: Target, component: TwoMilkBlendingToTargetCalc },
     'custom-calculator': { title: 'Custom Calculator', icon: Settings, component: CustomStandardizationCalc },
     'clr-increase': { title: 'CLR Increase (by SMP)', icon: ChevronsUp, component: ClrIncreaseCalc },
     'fat-clr-maintainer': { title: 'Fat & CLR Maintainer', icon: Target, component: FatClrMaintainerCalc },
@@ -405,6 +406,95 @@ function MilkBlendingCalc() {
                            <p><strong>Total Quantity:</strong> {result.finalQty.toFixed(2)} kg/L</p>
                            <p><strong>Final Fat:</strong> {result.finalFat.toFixed(2)} %</p>
                            <p><strong>Final CLR:</strong> {result.finalClr.toFixed(2)}</p>
+                        </div>
+                    </AlertDescription>
+                </Alert>
+            )}
+        </CalculatorCard>
+    );
+}
+
+function TwoMilkBlendingToTargetCalc() {
+    const [inputs, setInputs] = useState({
+        f1: '6.5', c1: '29',
+        f2: '2.5', c2: '27',
+        fTarget: '4.5', cTarget: '28',
+        qTotal: '1000'
+    });
+    const [result, setResult] = useState<{ q1: number, q2: number } | null>(null);
+    const [error, setError] = useState<string | null>(null);
+
+    const handleInputChange = useCallback((field: string, value: string) => {
+        setInputs(prev => ({ ...prev, [field]: value }));
+    }, []);
+
+    const calculate = useCallback(() => {
+        setResult(null);
+        setError(null);
+        
+        const F1 = parseFloat(inputs.f1);
+        const C1 = parseFloat(inputs.c1);
+        const F2 = parseFloat(inputs.f2);
+        const C2 = parseFloat(inputs.c2);
+        const FT = parseFloat(inputs.fTarget);
+        const CT = parseFloat(inputs.cTarget);
+        const QT = parseFloat(inputs.qTotal);
+
+        if ([F1, C1, F2, C2, FT, CT, QT].some(isNaN)) {
+            setError("Please fill all fields with valid numbers.");
+            return;
+        }
+
+        const det = (F1 * C2) - (F1 * CT) - (F2 * C1) + (F2 * CT) + (FT * C1) - (FT * C2);
+        
+        if (Math.abs(det) < 1e-9) {
+            setError("Cannot solve. The milk properties might be linearly dependent or the target is unachievable with the given sources.");
+            return;
+        }
+
+        const Q1 = QT * (F2 * C2 - F2 * CT - FT * C2 + FT * CT) / det;
+        const Q2 = QT - Q1;
+
+        if (Q1 < 0 || Q2 < 0 || Q1 > QT || Q2 > QT) {
+             setError("The target composition is not achievable with the given milk sources. The target Fat and CLR must be between the values of the source milks.");
+            return;
+        }
+
+        setResult({ q1: Q1, q2: Q2 });
+
+    }, [inputs]);
+
+    return (
+        <CalculatorCard title="Two-Milk Blending to Target Calculator" description="Calculate the required quantities of two different milk sources to achieve a desired final batch composition (Fat% and CLR).">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                <div className="bg-muted/50 p-4 rounded-lg space-y-3">
+                    <h3 className="font-semibold text-gray-700 font-headline">Milk Source 1</h3>
+                    <div><Label>Fat %</Label><Input type="number" value={inputs.f1} onChange={e => handleInputChange('f1', e.target.value)} /></div>
+                    <div><Label>CLR</Label><Input type="number" value={inputs.c1} onChange={e => handleInputChange('c1', e.target.value)} /></div>
+                </div>
+                <div className="bg-muted/50 p-4 rounded-lg space-y-3">
+                    <h3 className="font-semibold text-gray-700 font-headline">Milk Source 2</h3>
+                    <div><Label>Fat %</Label><Input type="number" value={inputs.f2} onChange={e => handleInputChange('f2', e.target.value)} /></div>
+                    <div><Label>CLR</Label><Input type="number" value={inputs.c2} onChange={e => handleInputChange('c2', e.target.value)} /></div>
+                </div>
+                <div className="bg-primary/10 p-4 rounded-lg space-y-3 md:col-span-2">
+                    <h3 className="font-semibold text-gray-700 font-headline">Target Batch</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div><Label>Total Batch Qty (kg/L)</Label><Input type="number" value={inputs.qTotal} onChange={e => handleInputChange('qTotal', e.target.value)} /></div>
+                        <div><Label>Target Fat %</Label><Input type="number" value={inputs.fTarget} onChange={e => handleInputChange('fTarget', e.target.value)} /></div>
+                        <div><Label>Target CLR</Label><Input type="number" value={inputs.cTarget} onChange={e => handleInputChange('cTarget', e.target.value)} /></div>
+                    </div>
+                </div>
+            </div>
+            <Button onClick={calculate} className="w-full mt-4">Calculate Blend Quantities</Button>
+            {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
+            {result && (
+                 <Alert className="mt-4">
+                    <AlertTitle>Required Quantities for {inputs.qTotal} kg/L Batch</AlertTitle>
+                    <AlertDescription>
+                        <div className="space-y-2 mt-2">
+                           <p><strong>Milk Source 1:</strong> <span className="font-bold text-lg text-green-700">{result.q1.toFixed(3)} kg/L</span></p>
+                           <p><strong>Milk Source 2:</strong> <span className="font-bold text-lg text-green-700">{result.q2.toFixed(3)} kg/L</span></p>
                         </div>
                     </AlertDescription>
                 </Alert>
@@ -951,3 +1041,4 @@ function RecombinedMilkCalc() {
 
 
     
+
