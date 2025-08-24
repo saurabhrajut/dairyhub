@@ -418,7 +418,8 @@ function FatSnfClrTsCalc() {
         fat: "4.5",
         clr: "28.0",
         snf: "8.5",
-        correctionFactor: "0.72"
+        correctionFactor: "0.72",
+        manualFactor: ""
     });
 
     const [result, setResult] = useState<string | null>(null);
@@ -432,10 +433,12 @@ function FatSnfClrTsCalc() {
         setInputs(prev => ({...prev, correctionFactor: value}));
     }, []);
 
+    const getFactor = () => parseFloat(inputs.manualFactor) || parseFloat(inputs.correctionFactor);
+
     const handleCalcSnfTs = useCallback(() => {
         const fatNum = parseFloat(inputs.fat);
         const clrNum = parseFloat(inputs.clr);
-        const factor = parseFloat(inputs.correctionFactor);
+        const factor = getFactor();
 
         setError(null);
         setResult(null);
@@ -453,7 +456,7 @@ function FatSnfClrTsCalc() {
     const handleCalcClrTs = useCallback(() => {
         const fatNum = parseFloat(inputs.fat);
         const snfNum = parseFloat(inputs.snf);
-        const factor = parseFloat(inputs.correctionFactor);
+        const factor = getFactor();
 
         setError(null);
         setResult(null);
@@ -470,17 +473,23 @@ function FatSnfClrTsCalc() {
 
     return (
         <CalculatorCard title="Fat, SNF, CLR & TS Calculator" description="Richmond's formula ke adhaar par doodh ke components ki aapas mein ganana karein.">
-            <div className="bg-muted/50 p-4 rounded-lg mb-6">
-                <Label>Correction Factor</Label>
-                <Select value={inputs.correctionFactor} onValueChange={handleSelectChange}>
-                    <SelectTrigger>
-                        <SelectValue placeholder="Select Correction Factor" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="0.72">Cow Milk (0.72)</SelectItem>
-                        <SelectItem value="0.85">Buffalo Milk (0.85)</SelectItem>
-                    </SelectContent>
-                </Select>
+             <div className="bg-muted/50 p-4 rounded-lg mb-6 grid grid-cols-2 gap-4">
+                <div>
+                    <Label>Milk Type (Correction Factor)</Label>
+                    <Select value={inputs.correctionFactor} onValueChange={handleSelectChange}>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Select Correction Factor" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="0.72">Cow Milk (0.72)</SelectItem>
+                            <SelectItem value="0.85">Buffalo Milk (0.85)</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+                 <div>
+                    <Label>Manual Correction Factor</Label>
+                    <Input id="manual-factor" type="number" placeholder="e.g., 0.75" value={inputs.manualFactor} onChange={e => handleInputChange('manualFactor', e.target.value)} />
+                </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -603,23 +612,22 @@ function FatClrMaintainerCalc() {
             setError("Cream Fat % must be higher than Target Fat %."); return;
         }
 
-        // Step 1: Calculate cream needed
+        // Step 1: Calculate cream needed to raise fat
         const M_cream = M_milk * (F_target - F_milk) / (F_cream - F_target);
 
-        // Step 2: Calculate CLR drop
-        const SNF_milk = getSnf(F_milk, CLR_milk);
-        const SNF_cream = getSnf(F_cream, 20, 0.85); // Approx CLR for cream
+        // Step 2: Calculate the new, lower CLR after adding cream
+        const SNF_milk_percent = getSnf(F_milk, CLR_milk);
+        const SNF_cream_percent = getSnf(F_cream, 20, 0.85); // Approx CLR for cream is ~20
         
-        const total_snf_before_smp = (M_milk * SNF_milk/100) + (M_cream * SNF_cream/100);
-        const total_milk_before_smp = M_milk + M_cream;
+        const total_snf_after_cream = (M_milk * SNF_milk_percent/100) + (M_cream * SNF_cream_percent/100);
+        const total_milk_after_cream = M_milk + M_cream;
+        const SNF_intermediate_percent = (total_snf_after_cream / total_milk_after_cream) * 100;
         
-        const CLR_intermediate = ((total_snf_before_smp / total_milk_before_smp * 100) - (0.25 * F_target) - 0.72) * 4;
-        
-        const CLR_drop = CLR_milk - CLR_intermediate;
+        const CLR_intermediate = (SNF_intermediate_percent - (0.25 * F_target) - 0.72) * 4;
 
-        // Step 3: Calculate SMP needed to compensate for CLR drop
+        // Step 3: Calculate SMP needed to raise CLR back to original
         const smpSolidsPercent = 96; // Standard value for SMP total solids
-        const smpNeeded = (total_milk_before_smp * CLR_drop * 0.25) / smpSolidsPercent;
+        const smpNeeded = (total_milk_after_cream * (CLR_milk - CLR_intermediate) * 0.25) / smpSolidsPercent;
         
         setResult(`
             To increase Fat from <strong>${F_milk}%</strong> to <strong>${F_target}%</strong> and maintain CLR at <strong>${CLR_milk}</strong> for <strong>${M_milk} kg</strong> of milk, you need to add:
