@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -12,7 +11,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, BookOpen, Atom, Droplets, FlaskConical, Gem, Dna, TestTube } from "lucide-react";
+import { ArrowLeft, BookOpen, Atom, Droplets, FlaskConical, Gem, Dna, TestTube, Cpu } from "lucide-react";
 
 
 const physicalProperties = [
@@ -50,12 +49,13 @@ const Section = ({ title, icon: Icon, children }: { title: string, icon: React.E
 
 const chemistryTopics = [
     { value: "composition", title: "Composition", icon: BookOpen, content: <CompositionContent /> },
+    { value: "mammary_gland", title: "Mammary Gland & Secretion", icon: Cpu, content: <MammaryGlandContent /> },
     { value: "proteins", title: "Proteins", icon: Dna, content: <ProteinsContent /> },
     { value: "fat", title: "Fat", icon: Droplets, content: <FatContent /> },
     { value: "lactose", title: "Lactose", icon: Atom, content: <LactoseContent /> },
-    { value: "minerals", title: "Minerals", icon: Gem, content: <MineralsContent /> },
-    { value: "vitamins", title: "Vitamins", icon: FlaskConical, content: <VitaminsContent /> },
-    { value: "properties", title: "Properties", icon: TestTube, content: <PropertiesContent /> },
+    { value: "minerals", title: "Minerals & Salts", icon: Gem, content: <MineralsContent /> },
+    { value: "vitamins_enzymes", title: "Vitamins & Enzymes", icon: FlaskConical, content: <VitaminsEnzymesContent /> },
+    { value: "properties", title: "Physical Properties", icon: TestTube, content: <PropertiesContent /> },
 ];
 
 export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
@@ -121,78 +121,83 @@ export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; set
 // Content Components
 function CompositionContent() {
     return (
-        <Section title="Composition" icon={BookOpen}>
+        <Section title="Composition of Milk" icon={BookOpen}>
             <InfoBlock title="What is Milk? (Doodh Kya Hai?)">
                 <p><strong>Scientific Definition:</strong> “Milk is the normal secretion of the mammary glands of mammals, obtained without any colostrum, and is composed of water, fat, proteins, lactose, minerals, and vitamins in a naturally balanced form.”</p>
-                <p><strong>FSSAI Definition:</strong> “Doodh ka matlab hai ek swasth doodh dene wale pashu se poori tarah se doodh nikalne se prapt सामान्य mammary srav, jismein koi milavat ya nikasi na ki gayi ho, jo liquid doodh ke roop mein upbhog ke liye ya aage ki processing ke liye ho.”</p>
-                <p>Doodh ek complex biological fluid hai jo teen alag-alag phases mein dekha ja sakta hai:</p>
+                <p><strong>FSSAI Definition:</strong> “Milk is the normal mammary secretion derived from complete milking of healthy milch animals, without any addition thereto or extraction therefrom, unless otherwise provided, for consumption as liquid milk or for further processing.”</p>
+                <p>Milk is a complex biological fluid that can be seen in three different phases:</p>
                 <ul className="list-disc list-inside mt-2 space-y-1">
-                <li><strong>Emulsion:</strong> Fat globules paani mein bikhre rehte hain.</li>
-                <li><strong>Colloidal Suspension:</strong> Casein protein micelles paani mein suspended rehte hain.</li>
-                <li><strong>True Solution:</strong> Lactose, whey proteins, minerals, aur vitamins paani mein poori tarah ghule rehte hain.</li>
+                    <li><strong>Emulsion:</strong> Fat globules are dispersed in water.</li>
+                    <li><strong>Colloidal Suspension:</strong> Casein protein micelles are suspended in water.</li>
+                    <li><strong>True Solution:</strong> Lactose, whey proteins, minerals, and vitamins are completely dissolved in water.</li>
                 </ul>
             </InfoBlock>
             
             <InfoBlock title="Milk Constituents (Doodh ke Ghatak)">
-                <p>Doodh ek complex colloidal system hai jo multiple components ka mixture hota hai. Har constituent milk ki nutritional aur functional properties ko define karta hai.</p>
+                <p>Milk is a complex colloidal system that is a mixture of multiple components. Each constituent defines the nutritional and functional properties of milk.</p>
                 
                 <h5 className="font-bold mt-4">1. Water (Paani) – 87-88%</h5>
-                <p>Doodh ka sabse bada hissa paani hota hai, jo milk ko fluid nature deta hai aur baki constituents ke liye solvent ka kaam karta hai.</p>
+                <p>The largest component of milk is water, which gives milk its fluid nature and acts as a solvent for the other constituents.</p>
 
                 <h5 className="font-bold mt-4">2. Fat (Lipids) – 3-6%</h5>
-                <p>Milk fat ek emulsion (fat droplets dispersed in water) ki tarah hota hai. Ye doodh ka sabse energy-rich component hai (9 kcal/g) aur flavor, texture aur fat-soluble vitamins (A, D, E, K) provide karta hai.</p>
+                <p>Milk fat exists as an emulsion (fat droplets dispersed in water). It is the most energy-rich component of milk (9 kcal/g) and provides flavor, texture, and fat-soluble vitamins (A, D, E, K).</p>
                
                 <h5 className="font-bold mt-4">3. Protein – 3-4%</h5>
-                <p>Milk protein high biological value ka hota hai aur essential amino acids provide karta hai. Yeh do prakar ke hote hain: Casein (~80%) aur Whey (~20%).</p>
+                <p>Milk protein is of high biological value and provides essential amino acids. It is of two types: Casein (~80%) and Whey (~20%).</p>
                 
                 <h5 className="font-bold mt-4">4. Lactose (Milk Sugar) – 4.5-5.0%</h5>
-                <p>Yeh doodh ka primary carbohydrate hai (glucose + galactose) jo doodh ko halka meetha swaad deta hai. Bacteria isse ferment karke lactic acid banate hain, jo dahi jaise products ke liye zaroori hai.</p>
+                <p>This is the primary carbohydrate in milk (glucose + galactose) which gives milk its slightly sweet taste. Bacteria ferment it to produce lactic acid, which is essential for products like yogurt.</p>
 
                 <h5 className="font-bold mt-4">5. Minerals & Salts (Ash) – 0.7-0.9%</h5>
-                <p>Doodh minerals ka ek accha source hai, jismein Calcium (Ca) aur Phosphorus (P) pramukh hain. Yeh milk ki stability aur pH ko maintain karne mein bhi madad karte hain.</p>
-               
-                <h5 className="font-bold mt-4">6. Vitamins</h5>
-                <p><strong>Fat-Soluble:</strong> A, D, E, K. <strong>Water-Soluble:</strong> B-Complex (B1, B2, B12) and C.</p>
-
-                <h5 className="font-bold mt-4">7. Enzymes</h5>
-                <p><strong>Lipase</strong> (fat breakdown), <strong>Lactoperoxidase</strong> (natural antimicrobial), <strong>Alkaline Phosphatase</strong> (pasteurization indicator).</p>
+                <p>Milk is a good source of minerals, with Calcium (Ca) and Phosphorus (P) being prominent. They also help in maintaining the stability and pH of milk.</p>
             </InfoBlock>
         </Section>
     )
 }
 
+function MammaryGlandContent() {
+    return (
+        <Section title="The Mammary Gland and Milk Secretion" icon={Cpu}>
+            <InfoBlock title="The Mammary Gland">
+                <p>The mammary gland is made up of secretary and connective tissue. Secretary units are small grape-like objects called "alveoli". A group of alveoli are joined together in a cluster with a common duct, so that they resemble grapes attached to a stem. Each lobule has between 150 to 220 alveoli. Each lobule is surrounded by a connective tissue capsule. A number of lobules together form a lobe, which is drained by a larger duct.</p>
+                <p>The basic component of an alveolus is a single layer of epithelial cells surrounding a central cavity, the lumen. Each alveolus is supplied with small capillaries and is surrounded by myoepithelial cells that are responsible for milk ejection.</p>
+            </InfoBlock>
+            <InfoBlock title="Physiology of Milk Secretion">
+                <p>Milk is synthesized in secretory cells, which comprise the secretory epithelium. The major hormones involved in the development of the mammary gland are estrogen, progesterone, and growth hormone. Insulin promotes cell division of the mammary epithelium, corticosteroids are involved for the developments of the cellular organelles, and prolactin is essential for the initiation and maintenance of lactation.</p>
+                <p>Precursors enter the secretory cells from the blood on the basal side, and milk is secreted from the apical side into the lumen of the alveolus. The hormone oxytocin stimulates contraction of the myoepithelial cells, thus squeezing milk out of the alveoli into the ducts. The biosynthetic processes occur at various sites in the cell. Protein and lipid are synthesized in the endoplasmic reticulum; lactose synthesis and assembly of casein micelles occur in the Golgi apparatus. Mitochondria supply the energy for these synthesis processes.</p>
+            </InfoBlock>
+             <InfoBlock title="Milk Ejection (Let-down)">
+                <p>Milk is secreted more or less continuously between milking periods. At milking time, the cow ejects or lets down her milk. This is a reflex action controlled by sensory nerves that carry a message to the pituitary gland. The pituitary gland then furnishes to the bloodstream a hormone known as oxytocin, which causes the alveoli to contract and squeeze the milk from them into the ducts. Conditions that frighten or anger the cow interfere with this function. The milking operation must be completed before oxytocin's influence is lost, usually within ten minutes.</p>
+            </InfoBlock>
+        </Section>
+    );
+}
+
 function ProteinsContent() {
     return (
-        <Section title="Proteins" icon={Dna}>
-             <InfoBlock title="Milk Proteins Overview">
-                <p>The caseins, whey proteins and non-protein nitrogen (NPN) make up the nitrogen content of milk (76%, 18% and 6% respectively). The Rowland fraction method facilitates the separation of caseins, whey proteins and NPN. Casein precipitates at pH 4.6 and is thus separated from whey nitrogen. Total proteins may be separated from whey NPN at pH 5 with sodium acetate and acetic acid.</p>
+        <Section title="Milk Proteins" icon={Dna}>
+             <InfoBlock title="Overview of Milk Proteins">
+                <p>Protein is one of the most essential nutrients of milk, present at about 3.5%. It contains all essential amino acids. The caseins, whey proteins and non-protein nitrogen (NPN) make up the nitrogen content of milk (76%, 18% and 6% respectively). The Rowland fraction method facilitates the separation of these components.</p>
             </InfoBlock>
 
             <InfoBlock title="Casein (~80% of Milk Protein)">
-                <p>Casein constitutes about 80% of the total proteins present in milk. In fresh milk, casein is held in colloidal suspension. Casein contributes in a big way to the viscosity and white colour of milk. Free casein is almost insoluble in water but is rapidly dissolved by dilute alkalies. Casein in milk can be precipitated with dilute acids, salts or rennet. All caseins precipitate at pH 4.6. Casein particles are termed as ‘casein micelles’. Biologically, casein serves as a carrier for calcium and phosphate to nurture the young calf and form a clot in the stomach to aid easier digestion. The micelle also contains citrate, minor ions, lipase and plasmin enzymes, and entrapped milk serum.</p>
-                
+                <p>Casein is a generic term for a class of phosphoproteins that make up about 80% of the total milk protein content. In milk, casein exists as its calcium salts in distinct globular particles called micelles. The casein system is defined as a glycophosphoprotein, since it contains both carbohydrate and phosphorus. Biologically, casein serves as a carrier for calcium and phosphate. All caseins precipitate at pH 4.6.</p>
                 <h5 className="font-bold mt-4">Casein Fractions</h5>
-                <p>Caseins can be further classified into three major groups as alpha (α), beta (β) and kappa (κ). Alpha casein is further sub-divided into αs1 and αs2 fractions.</p>
-
+                <p>Caseins are classified into four major groups: αs1-casein, αs2-casein, β-casein, and κ-casein.</p>
                 <h5 className="font-bold mt-4">Casein Coagulation (Curd Formation)</h5>
                 <ul className="list-disc list-inside space-y-2">
-                    <li><strong>Acid Coagulation:</strong> Jab doodh ka pH 4.6 tak kam hota hai, toh casein micelles apna charge kho dete hain aur judkar gel banate hain (e.g., Paneer, Yogurt).</li>
-                    <li><strong>Enzymatic Coagulation:</strong> Rennet enzyme κ-casein ko todta hai, jisse micelles unstable ho jaate hain aur calcium ki maujoodgi mein judkar curd banate hain (e.g., Cheese).</li>
+                    <li><strong>Acid Coagulation:</strong> When the pH of milk drops to 4.6, casein micelles lose their charge and aggregate to form a gel (e.g., Paneer, Yogurt).</li>
+                    <li><strong>Enzymatic Coagulation:</strong> The enzyme rennet cleaves κ-casein, destabilizing the micelles and causing them to aggregate in the presence of calcium to form a curd (e.g., Cheese).</li>
                 </ul>
             </InfoBlock>
 
             <InfoBlock title="Whey Proteins (~20% of Milk Protein)">
-                <p>The greenish-yellow clear liquid that separates out of milk after precipitation of caseins at pH 4.6 is called whey and the proteins contained therein are whey proteins. These globular proteins are more water soluble than caseins and are prone to heat denaturation. Denaturation increases their water holding capacity. Native whey proteins have good gelling and whipping properties.</p>
+                <p>The proteins remaining in the whey after casein precipitation are called whey proteins. These globular proteins are more water-soluble than caseins and are prone to heat denaturation.</p>
                 <h5 className="font-bold mt-4">Whey Protein Fractions</h5>
-                <p><strong>Beta–lactoglobulins</strong> comprises approximately half the total whey proteins. It is coagulated by heat, which is why colostrum curdles when heated. It binds fat-soluble vitamins making them more available to the body and provides an excellent source of essential and branched chain amino acids. These help prevent muscle breakdown and spare glycogen during exercise. Beta–lactoglobulins may also be helpful in controlling certain liver conditions such as cirrhosis.</p>
-                <p><strong>Alpha lactalbumin</strong> is not coagulated by rennet or acids but is precipitated by heat. The extent of coagulation depends on temperature of holding, salt concentration and pH of milk. It is the primary protein found in human breast milk and is a good source of essential amino acids (particularly tryptophan) and branched chain amino acids. This is the only whey protein component capable of binding calcium.</p>
-                <p>The <strong>immunoglobulins</strong> provide protective effect to the offspring against enteropathogenic micro-organisms. It is the predominant whey protein component found in colostrum. Bovine milk contains only traces of IgA. <strong>Bovine serum albumin</strong> is a large sized protein with a good essential amino acid profile and fat binding properties.</p>
-            </InfoBlock>
-             <InfoBlock title="Milk Enzymes and Non-Protein Nitrogenous (NPN) Substances">
-                 <p>Some indigenous enzymes that have been isolated from milk are lipase, aryl esterase, alkaline phosphatase, acid phosphatase, xanthine oxidase, peroxidase, protease, amylase, catalase and lactase. The most significant group is the hydrolases, comprising of lipoprotein lipase, plasmin and alkaline phosphatase. Milk contains some NPN substances that constitute about 5 percent of the total nitrogen in milk. Some examples of this group are amino acids, creatine, urea, uric acid, creatinine and hipuric acid.</p>
-                <p><strong>Lactoferrin (LF)</strong> is a single-chain, metal-binding glycoprotein. It is a red coloured iron-binding protein and may also mediate some effects of inflammation and have a role in regulating various components of the immune system. It has antibacterial, antifungal, anti-endotoxin, and antiviral activities. It inhibits enteropathogenic organisms due to its ability to bind iron, as iron is an essential nutrient often required for bacterial growth. It promotes the growth of beneficial bacteria such as bifidobacteria.</p>
-                <p><strong>Lactoperoxidase</strong> is an oxido-reductase enzyme that occurs in milk, saliva, tears, cervical mucus. It is a relatively heat resistant enzyme whose activity remains sufficient even after pasteurization. Cow milk has 1.4 units/ml of lactoperoxidase, whereas buffalo milk has 0.9 units/ml. The thermal stability of buffalo milk lactoperoxidase is higher than that of cow milk. Lactoperoxidase has been widely researched for its ability to preserve raw milk.</p>
-                <p><strong>Lysozyme</strong> is an enzyme that is abundantly present in the mucosal membranes that line the human nasal cavity and tear ducts. It can also be found in high concentration in egg white. Lysozyme destroys bacterial cell walls by hydrolyzing the polysaccharide component of the cell wall. Human milk contains 0.4 g/L of lysozyme, an enzyme that contributes to antibacterial activity in human milk.</p>
+                <p><strong>Beta–lactoglobulin (β-Lg):</strong> Comprises approximately half the total whey proteins. It is coagulated by heat and is an excellent source of essential and branched-chain amino acids.</p>
+                <p><strong>Alpha–lactalbumin (α-La):</strong> It is the primary protein in human breast milk and is a good source of tryptophan. This is the only whey protein component capable of binding calcium.</p>
+                <p><strong>Immunoglobulins (Ig):</strong> Provide protective effects and are predominant in colostrum.</p>
+                <p><strong>Bovine Serum Albumin (BSA):</strong> A large-sized protein with good fat-binding properties.</p>
             </InfoBlock>
         </Section>
     )
@@ -200,13 +205,12 @@ function ProteinsContent() {
 
 function FatContent() {
     return (
-        <Section title="Fat" icon={Droplets}>
-            <InfoBlock title="Milk Fat">
-                <p>Fat is the most commercially significant and most variable constituent of milk. Fat content varies from breed to breed and also among individuals of the same breed, the variation being caused by many factors. Most of the (> 95%) milk fat exists in the form of globules of 0.1-15 µ diameter (cow milk fat – ~ 3-8 µ, buffalo milk fat – ~ 4-10 µ). A thin membrane (8-10 nm thick) covers these liquid fat droplets. The properties of this membrane are vastly different from both milk fat and plasma. The fat globule membrane is rich in phospholipids and also contains lipoproteins and other glycerides. These phospholipids are involved in the oxidation of milk. The membrane decreases the lipid-serum interface to very low values, 1-2.5 mN/m, preventing the globules from immediate flocculation and coalescence, as well as protecting them from enzymatic action. Fat comprises of different glycerides of low melting point. The composition of fat varies with the feed plan, nutrition, stage of lactation, breed and species, the first being the most important.</p>
-                <p>The size and number of fat globules vary depending on the breed of the animal and method of milking. The globules become smaller and more numerous as lactation advances. Machine milking produces fat globules of more uniform size than hand milking. Homogenization reduces the fat globules to a small size and reduces the tendency of separation during storage. The larger the size of the globules, the quicker they rise as cream to the top of the milk and easier it is to churn such cream into butter. For this reason buffalo milk fat is more easily churned into butter than cow milk fat. The milk of animals in advance lactation is less suitable for being churned into butter. Milk containing small globules is, however, more suitable for cheese making, since less fat is lost in whey. Milk fat is quite bland in taste and imparts smoothness and palatability to fat-containing dairy products.</p>
-                <p>In milk fat, butyric, caproic, caprylic and capric acids, present in high proportions, are characterized by strong odours and flavour. These volatile acids are not present in such high proportion in other naturally occurring fats. The fatty acid content of milk fat can also be influenced by the amount and type of feeds consumed, stage of lactation and breed of the animal. Milk fat also contains cholesterol, thus differentiating it from vegetable fats, which contain phytosterols. Milk contains 0.1 to 0.23% phospholipids, viz. lecithin, phosphatidyl serine, sphingomyelin, inositol, cerebrosides etc. Some of these phospholipids serve as antioxidants in prolonging the shelf-life of ghee.</p>
-                <p>The colour of fat depends upon its carotene content and varies with the species, breed and feed of the animal. The yellow colour of cow milk is due to the carotene. Buffalo milk does not contain carotene. Ghee from cow fed on an abundant green fodder is more yellow than when fed on dry food. Similarly some breeds such as Jersey and Guernsey may produce milk deep yellow in colour.</p>
-                <p>Saturated fatty acids (no double bonds), such as myristic, palmitic and stearic constitute two thirds of milk fatty acids. Oleic acid is the most abundant unsaturated fatty acid in milk with one double bond.</p>
+        <Section title="Milk Fat (Lipids)" icon={Droplets}>
+            <InfoBlock title="Milk Fat Characteristics">
+                <p>Fat is the most commercially significant and variable constituent of milk. About 98% of milk fat is a mixture of triglycerides. It exists in the form of globules (0.1-15 µm diameter) covered by a thin membrane rich in phospholipids.</p>
+                <p>The fatty acid composition is very wide, containing a relatively high proportion (15-20 mol%) of short-chain fatty acids (C4-C10), which is typical for ruminant milk. This wide variety of fatty acids gives milk fat a broad melting range (approx. -30°C to +40°C).</p>
+                <h5 className="font-bold mt-4">Fatty Acid Sources</h5>
+                <p>Short-chain fatty acids (up to C14) are synthesized within the mammary gland from acetate and beta-hydroxybutyric acid, which come from rumen fermentation. Long-chain fatty acids (C16, C18) are absorbed from the bloodstream. The yellow color of cow milk fat is due to carotene from feed.</p>
             </InfoBlock>
         </Section>
     )
@@ -214,10 +218,12 @@ function FatContent() {
 
 function LactoseContent() {
     return (
-        <Section title="Lactose" icon={Atom}>
-             <InfoBlock title="Lactose (Milk Sugar)">
-               <p>Lactose is the major milk sugar or carbohydrate. Fresh milk also contains other carbohydrates in small amounts, including glucose, galactose, and oligosaccharides. Lactose is present in true solution and, therefore, goes into whey when caseins are separated. Lactose constitutes 4.8 to 5.2% of milk, 52% of milk SNF, and 70% of whey solids. Lactose can be quickly fermented by micro-organisms to lactic acid and is, therefore, essential in the manufacture of cultured dairy products like cheese, dahi and butter-milk. It contributes to the nutritive value of milk and milk products, and is responsible for the texture and miscibility of some milk products. Lactose imparts colour and flavour to dairy products heated to high temperatures. Sucrose is six times sweeter than lactose.</p>
-               <p>Lactose is a disaccharide made up of two monosaccharides, glucose and galactose. Lactose is hydrolyzed by the enzyme µ-galactosidase (lactase), the results being the two monosaccharides, increased sweetness and depressed freezing point. People suffering from lactose intolerance lack this enzyme and therefore, cannot digest lactose. This sugar crystallizes in an alpha form and results in the defect called sandiness in ice cream.</p>
+        <Section title="Lactose (Milk Sugar)" icon={Atom}>
+             <InfoBlock title="Lactose Properties">
+               <p>Lactose is the major carbohydrate in milk (4.8-5.2%), present in true solution. It is a disaccharide made of glucose and galactose. Lactose is about 1/6th as sweet as cane sugar.</p>
+               <p>It is fermented by microorganisms to produce lactic acid, which is essential for cultured products. When heated, lactose can undergo the Maillard reaction with protein amino groups, leading to browning and a cooked flavor, especially in sterilized milk.</p>
+                <h5 className="font-bold mt-4">Crystallization</h5>
+                <p>Lactose can crystallize in two forms, α-hydrate and β-anhydrous. The α-lactose hydrate is less soluble and can form hard, gritty crystals, causing a "sandiness" defect in products like ice cream and condensed milk if not controlled properly.</p>
             </InfoBlock>
         </Section>
     )
@@ -225,19 +231,29 @@ function LactoseContent() {
 
 function MineralsContent() {
     return (
-        <Section title="Minerals" icon={Gem}>
-             <InfoBlock title="Minerals & Salts (Ash)">
-               <p>All 22 minerals considered essential to the human diet are present in milk. Milk is an important source of dietary calcium, magnesium, phosphorus, potassium, selenium, and zinc. In milk, approximately 67% of the calcium, 35% of the magnesium, and 44% of the phosphate are bound to salts within the casein micelle and the rest are soluble in the serum phase. Milk contains very small amounts of copper, iron, manganese and sodium. Other minerals such as aluminium, boron, zinc, cobalt, iodine, fluorine, molybdenum, nickel, lithium, barium, strontium and silica are also present in milk, but in minute amounts.</p>
+        <Section title="Minerals and Salts" icon={Gem}>
+             <InfoBlock title="Mineral Composition">
+               <p>Milk is an important source of dietary calcium, magnesium, phosphorus, and potassium. About 67% of calcium and 44% of phosphate are bound within the casein micelle as "colloidal calcium phosphate".</p>
+               <p>The dissolved salts in milk serum affect various properties, including protein stability and osmotic pressure. The total ionic strength of milk is about 0.5 M. The salt balance is crucial for the heat stability of milk.</p>
             </InfoBlock>
         </Section>
     )
 }
 
-function VitaminsContent() {
+function VitaminsEnzymesContent() {
     return (
-        <Section title="Vitamins" icon={FlaskConical}>
-             <InfoBlock title="Vitamins">
-                <p>Vitamins are organic substances that are essential to normal life processes, but cannot be synthesized by the body. They occur in very small concentrations in both plants and animals. Milk is a good source of vitamins. Milk contains the fat soluble vitamins A, D, E, and K. As milk fat is an important dietary source of vitamin A, low fat products are normally supplemented with this vitamin. The content of Vitamin D, which also aids in the absorption of calcium, is influenced by the feed of the animals. Milk is a fair source of vitamin E. It is also a fairly good source of water soluble B vitamins such as thiamine (B1), riboflavin (B2), niacin (B3), pantothenic acid (B5), pyridoxine (B6) and cyanocobalamin (B12). Milk is, however, a poor source of vitamin C (ascorbic acid). The little quantity of vitamin C that is present in raw milk is very heat-labile and easily destroyed by pasteurization.</p>
+        <Section title="Vitamins & Enzymes" icon={FlaskConical}>
+             <InfoBlock title="Vitamins in Milk">
+                <p>Milk is a good source of many vitamins. Fat-soluble vitamins include A, D, E, and K. Water-soluble vitamins include the B-complex (Thiamine, Riboflavin, Niacin, etc.) and Vitamin C (though much of it is destroyed by pasteurization).</p>
+            </InfoBlock>
+             <InfoBlock title="Enzymes in Milk">
+                <p>Milk contains several native enzymes. Some important ones include:</p>
+                <ul className="list-disc list-inside space-y-1">
+                    <li><strong>Lipoprotein Lipase:</strong> Can cause rancidity if fat globules are damaged.</li>
+                    <li><strong>Alkaline Phosphatase:</strong> Used as an indicator for proper pasteurization, as it's destroyed by the heat treatment.</li>
+                    <li><strong>Plasmin:</strong> A heat-resistant protease that can cause age gelation in UHT milk.</li>
+                    <li><strong>Lactoperoxidase:</strong> Part of a natural antimicrobial system in raw milk.</li>
+                </ul>
             </InfoBlock>
         </Section>
     )
@@ -245,10 +261,9 @@ function VitaminsContent() {
 
 function PropertiesContent() {
     return (
-        <Section title="Properties" icon={TestTube}>
-             <InfoBlock title="Introduction to Milk Properties">
-                <p>Milk is a complex biological fluid consisting of seven main components: water, fat, protein, sugar (lactose), minerals, vitamins and enzymes. It is a white opaque fluid in which fat is present as an emulsion, protein and some mineral matters in colloidal suspension and lactose together with some minerals and soluble proteins in true solution.</p>
-                <p>The opacity of milk is due to its content of suspended particles of fat, proteins and certain minerals. The colour varies from white to yellow depending on the carotene content of the fat. Milk has a pleasant, slightly sweet taste, and pleasant odour. It is an excellent source of calcium, phosphates and riboflavin.</p>
+        <Section title="Physical Properties" icon={TestTube}>
+             <InfoBlock title="Overview of Physical Properties">
+                <p>The physical properties of milk are determined by its complex composition and are crucial for processing and quality control.</p>
             </InfoBlock>
             <div className="overflow-x-auto">
                 <Table>

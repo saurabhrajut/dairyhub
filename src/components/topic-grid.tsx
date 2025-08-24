@@ -26,6 +26,7 @@ import {
   Search,
   Wind,
   GraduationCap,
+  Atom,
 } from "lucide-react";
 import { PaneerIcon, IceCreamIcon, ReagentIcon } from "@/components/icons";
 import { Input } from "@/components/ui/input";
@@ -62,7 +63,7 @@ const topics = [
   // Tier 1: Foundational Knowledge
   { id: 'industry', title: 'Dairy Industry', description: 'Overview & Trends', category: 'industry', icon: Factory, badge: 'New', modal: DairyIndustryModal, isPro: false, color: 'from-blue-100 to-indigo-200' },
   { id: 'fssai-standards', title: 'FSSAI Standards', description: 'Official Dairy Standards', category: 'industry', icon: ShieldCheck, badge: 'New', modal: FssaiStandardsModal, isPro: false, color: 'from-green-100 to-teal-200' },
-  { id: 'milk-chemistry', title: 'Milk Chemistry', description: 'Composition & Properties', category: 'science', icon: FlaskConical, modal: MilkChemistryModal, isPro: false, color: 'from-red-100 to-rose-200' },
+  { id: 'milk-chemistry', title: 'Milk Chemistry', description: 'Composition & Properties', category: 'science', icon: Atom, modal: MilkChemistryModal, isPro: false, color: 'from-red-100 to-rose-200' },
   { id: 'microbiology', title: 'Microbiology', description: 'Testing & Pathogens', category: 'science', icon: Bug, badge: 'New', modal: MicrobiologyTestingModal, isPro: true, color: 'from-purple-100 to-violet-200' },
   
   // Tier 2: Core Processes & Testing
