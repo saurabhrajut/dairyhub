@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -134,22 +135,36 @@ function CompositionContent() {
             </InfoBlock>
             
             <InfoBlock title="Milk Constituents (Doodh ke Ghatak)">
-                <p>Milk is a complex colloidal system that is a mixture of multiple components. Each constituent defines the nutritional and functional properties of milk.</p>
-                
-                <h5 className="font-bold mt-4">1. Water (Paani) – 87-88%</h5>
-                <p>The largest component of milk is water, which gives milk its fluid nature and acts as a solvent for the other constituents.</p>
+                <div className="overflow-x-auto">
+                    <Table>
+                        <TableHeader>
+                            <TableRow><TableHead>Constituents</TableHead><TableHead>%</TableHead><TableHead>Constituents</TableHead><TableHead>%</TableHead></TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            <TableRow><TableCell>Water</TableCell><TableCell>87.54</TableCell><TableCell>Casein</TableCell><TableCell>2.63</TableCell></TableRow>
+                            <TableRow><TableCell>Fat</TableCell><TableCell>3.71</TableCell><TableCell>Whey protein</TableCell><TableCell>0.42</TableCell></TableRow>
+                            <TableRow><TableCell>Protein</TableCell><TableCell>3.18</TableCell><TableCell>Protease-peptone</TableCell><TableCell>0.13</TableCell></TableRow>
+                            <TableRow><TableCell>Lactose</TableCell><TableCell>4.70</TableCell><TableCell>Other nitrogeneous substances</TableCell><TableCell>0.11</TableCell></TableRow>
+                            <TableRow><TableCell>Ash</TableCell><TableCell>0.76</TableCell><TableCell>Total</TableCell><TableCell>100.0</TableCell></TableRow>
+                        </TableBody>
+                    </Table>
+                </div>
+            </InfoBlock>
 
-                <h5 className="font-bold mt-4">2. Fat (Lipids) – 3-6%</h5>
-                <p>Milk fat exists as an emulsion (fat droplets dispersed in water). It is the most energy-rich component of milk (9 kcal/g) and provides flavor, texture, and fat-soluble vitamins (A, D, E, K).</p>
-               
-                <h5 className="font-bold mt-4">3. Protein – 3-4%</h5>
-                <p>Milk protein is of high biological value and provides essential amino acids. It is of two types: Casein (~80%) and Whey (~20%).</p>
-                
-                <h5 className="font-bold mt-4">4. Lactose (Milk Sugar) – 4.5-5.0%</h5>
-                <p>This is the primary carbohydrate in milk (glucose + galactose) which gives milk its slightly sweet taste. Bacteria ferment it to produce lactic acid, which is essential for products like yogurt.</p>
-
-                <h5 className="font-bold mt-4">5. Minerals & Salts (Ash) – 0.7-0.9%</h5>
-                <p>Milk is a good source of minerals, with Calcium (Ca) and Phosphorus (P) being prominent. They also help in maintaining the stability and pH of milk.</p>
+            <InfoBlock title="Differences in Milk Composition due to Species">
+                 <div className="overflow-x-auto">
+                    <Table>
+                         <TableHeader>
+                            <TableRow><TableHead>Species</TableHead><TableHead>Water (%)</TableHead><TableHead>Fat (%)</TableHead><TableHead>Sugar (%)</TableHead><TableHead>Protein (%)</TableHead><TableHead>Ash (%)</TableHead></TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            <TableRow><TableCell>Cow</TableCell><TableCell>87.54</TableCell><TableCell>3.71</TableCell><TableCell>4.70</TableCell><TableCell>3.31</TableCell><TableCell>0.76</TableCell></TableRow>
+                            <TableRow><TableCell>Goat</TableCell><TableCell>85.58</TableCell><TableCell>4.93</TableCell><TableCell>4.78</TableCell><TableCell>4.11</TableCell><TableCell>0.89</TableCell></TableRow>
+                            <TableRow><TableCell>Buffalo</TableCell><TableCell>82.90</TableCell><TableCell>7.50</TableCell><TableCell>4.70</TableCell><TableCell>4.10</TableCell><TableCell>0.80</TableCell></TableRow>
+                            <TableRow><TableCell>Human</TableCell><TableCell>88.50</TableCell><TableCell>3.30</TableCell><TableCell>6.80</TableCell><TableCell>1.30</TableCell><TableCell>0.20</TableCell></TableRow>
+                        </TableBody>
+                    </Table>
+                </div>
             </InfoBlock>
         </Section>
     )
@@ -158,16 +173,16 @@ function CompositionContent() {
 function MammaryGlandContent() {
     return (
         <Section title="The Mammary Gland and Milk Secretion" icon={Cpu}>
-            <InfoBlock title="The Mammary Gland">
-                <p>The mammary gland is made up of secretary and connective tissue. Secretary units are small grape-like objects called "alveoli". A group of alveoli are joined together in a cluster with a common duct, so that they resemble grapes attached to a stem. Each lobule has between 150 to 220 alveoli. Each lobule is surrounded by a connective tissue capsule. A number of lobules together form a lobe, which is drained by a larger duct.</p>
-                <p>The basic component of an alveolus is a single layer of epithelial cells surrounding a central cavity, the lumen. Each alveolus is supplied with small capillaries and is surrounded by myoepithelial cells that are responsible for milk ejection.</p>
+            <InfoBlock title="The Mammary Gland Structure">
+                <p>The mammary gland is made up of secretary and connective tissue. Secretary units are small grape-like objects called "alveoli". A group of alveoli are joined together in a cluster (lobule) with a common duct. Each lobule has between 150 to 220 alveoli. A number of lobules together form a lobe, which is drained by a larger duct. The basic component of an alveolus is a single layer of epithelial cells surrounding a central cavity, the lumen. Each alveolus is surrounded by myoepithelial cells that are responsible for milk ejection.</p>
+                <p>The cow’s udder consists of 4 distinctly separate glands, known as the quarters. Each quarter is provided with a teat, the hollow interior portion of which is known as the teat cistern. The teat cistern extends upwards into the body of the gland and is connected with the gland cistern. Radiating from the walls of the cistern are numerous tubes or ducts which branch out or divide innumerable times.</p>
             </InfoBlock>
             <InfoBlock title="Physiology of Milk Secretion">
-                <p>Milk is synthesized in secretory cells, which comprise the secretory epithelium. The major hormones involved in the development of the mammary gland are estrogen, progesterone, and growth hormone. Insulin promotes cell division of the mammary epithelium, corticosteroids are involved for the developments of the cellular organelles, and prolactin is essential for the initiation and maintenance of lactation.</p>
-                <p>Precursors enter the secretory cells from the blood on the basal side, and milk is secreted from the apical side into the lumen of the alveolus. The hormone oxytocin stimulates contraction of the myoepithelial cells, thus squeezing milk out of the alveoli into the ducts. The biosynthetic processes occur at various sites in the cell. Protein and lipid are synthesized in the endoplasmic reticulum; lactose synthesis and assembly of casein micelles occur in the Golgi apparatus. Mitochondria supply the energy for these synthesis processes.</p>
+                <p>Milk is synthesized in the epithelial cells of the alveolus under complex hormonal control. The major hormones involved are estrogen, progesterone, and growth hormone for development, insulin for cell division, corticosteroids for organelle development, and prolactin for initiation and maintenance of lactation. Precursors enter the secretory cells from the blood on the basal side, and milk is secreted from the apical side into the lumen. Protein and lipid are synthesized in the endoplasmic reticulum; lactose synthesis and assembly of casein micelles occur in the Golgi apparatus. Mitochondria supply the energy for these processes.</p>
+                <p>For every liter of milk secreted, about 400 litres of blood are required to circulate through the udder.</p>
             </InfoBlock>
              <InfoBlock title="Milk Ejection (Let-down)">
-                <p>Milk is secreted more or less continuously between milking periods. At milking time, the cow ejects or lets down her milk. This is a reflex action controlled by sensory nerves that carry a message to the pituitary gland. The pituitary gland then furnishes to the bloodstream a hormone known as oxytocin, which causes the alveoli to contract and squeeze the milk from them into the ducts. Conditions that frighten or anger the cow interfere with this function. The milking operation must be completed before oxytocin's influence is lost, usually within ten minutes.</p>
+                <p>At milking time, the cow ejects or lets down her milk. This is a reflex action controlled by sensory nerves that carry a message to the pituitary gland. The pituitary gland then releases the hormone oxytocin, which causes the myoepithelial cells to contract and squeeze the milk from the alveoli into the ducts. Conditions that frighten or anger the cow interfere with this function. The milking operation must be completed before oxytocin's influence is lost, usually within ten minutes.</p>
             </InfoBlock>
         </Section>
     );
@@ -177,17 +192,17 @@ function ProteinsContent() {
     return (
         <Section title="Milk Proteins" icon={Dna}>
              <InfoBlock title="Overview of Milk Proteins">
-                <p>Protein is one of the most essential nutrients of milk, present at about 3.5%. It contains all essential amino acids. The caseins, whey proteins and non-protein nitrogen (NPN) make up the nitrogen content of milk (76%, 18% and 6% respectively). The Rowland fraction method facilitates the separation of these components.</p>
+                <p>Protein is one of the most essential nutrients of milk, present at about 3.5%. It contains all essential amino acids. The caseins, whey proteins and non-protein nitrogen (NPN) make up the nitrogen content of milk (80%, 18% and 2% respectively). Proteins are high molecular weight polymers of amino acids covalently linked by the peptide bond.</p>
             </InfoBlock>
 
             <InfoBlock title="Casein (~80% of Milk Protein)">
-                <p>Casein is a generic term for a class of phosphoproteins that make up about 80% of the total milk protein content. In milk, casein exists as its calcium salts in distinct globular particles called micelles. The casein system is defined as a glycophosphoprotein, since it contains both carbohydrate and phosphorus. Biologically, casein serves as a carrier for calcium and phosphate. All caseins precipitate at pH 4.6.</p>
+                <p>Casein is a generic term for a class of phosphoproteins. In milk, casein exists as its calcium salts in distinct globular particles called micelles. The casein system is defined as a glycophosphoprotein, since it contains both carbohydrate and phosphorus. Biologically, casein serves as a carrier for calcium and phosphate. All caseins precipitate at pH 4.6.</p>
                 <h5 className="font-bold mt-4">Casein Fractions</h5>
-                <p>Caseins are classified into four major groups: αs1-casein, αs2-casein, β-casein, and κ-casein.</p>
+                <p>Caseins are classified into four major groups: αs1-casein, αs2-casein, β-casein, and κ-casein. These fractions differ in their charge and composition. αs1 and β-casein are calcium-sensitive, while κ-casein is calcium-insensitive and stabilizes the micelle.</p>
                 <h5 className="font-bold mt-4">Casein Coagulation (Curd Formation)</h5>
                 <ul className="list-disc list-inside space-y-2">
-                    <li><strong>Acid Coagulation:</strong> When the pH of milk drops to 4.6, casein micelles lose their charge and aggregate to form a gel (e.g., Paneer, Yogurt).</li>
-                    <li><strong>Enzymatic Coagulation:</strong> The enzyme rennet cleaves κ-casein, destabilizing the micelles and causing them to aggregate in the presence of calcium to form a curd (e.g., Cheese).</li>
+                    <li><strong>Acid Coagulation:</strong> When the pH of milk drops to 4.6 (isoelectric point), casein micelles lose their negative charge and aggregate to form a gel (e.g., Paneer, Yogurt).</li>
+                    <li><strong>Enzymatic Coagulation:</strong> The enzyme rennet cleaves κ-casein at the 105-106 amino acid bond (phenylalanine-methionine), destabilizing the micelles and causing them to aggregate in the presence of calcium to form a curd (e.g., Cheese).</li>
                 </ul>
             </InfoBlock>
 
@@ -207,10 +222,14 @@ function FatContent() {
     return (
         <Section title="Milk Fat (Lipids)" icon={Droplets}>
             <InfoBlock title="Milk Fat Characteristics">
-                <p>Fat is the most commercially significant and variable constituent of milk. About 98% of milk fat is a mixture of triglycerides. It exists in the form of globules (0.1-15 µm diameter) covered by a thin membrane rich in phospholipids.</p>
+                <p>Fat is the most commercially significant and variable constituent of milk. About 98% of milk fat is a mixture of triglycerides. It exists in the form of globules (0.1-15 µm diameter) covered by a thin protective membrane rich in phospholipids.</p>
                 <p>The fatty acid composition is very wide, containing a relatively high proportion (15-20 mol%) of short-chain fatty acids (C4-C10), which is typical for ruminant milk. This wide variety of fatty acids gives milk fat a broad melting range (approx. -30°C to +40°C).</p>
                 <h5 className="font-bold mt-4">Fatty Acid Sources</h5>
-                <p>Short-chain fatty acids (up to C14) are synthesized within the mammary gland from acetate and beta-hydroxybutyric acid, which come from rumen fermentation. Long-chain fatty acids (C16, C18) are absorbed from the bloodstream. The yellow color of cow milk fat is due to carotene from feed.</p>
+                <p>Short-chain fatty acids (up to C14) are synthesized within the mammary gland from acetate and beta-hydroxybutyric acid from rumen fermentation. Long-chain fatty acids (C16, C18) are absorbed from the bloodstream. The yellow color of cow milk fat is due to carotene from feed.</p>
+            </InfoBlock>
+            <InfoBlock title="Autoxidation and Crystallization">
+                <p><strong>Autoxidation:</strong> Double bonds in fatty acids can oxidize, leading to off-flavors (tallowy, fishy, metallic). This process is catalyzed by factors like heat, light, and metal ions (especially copper). Phospholipids in the fat globule membrane are particularly susceptible.</p>
+                <p><strong>Crystallization:</strong> Milk fat consists of a mix of triglycerides with different melting points. When milk is cooled, the higher melting point triglycerides crystallize. This process is complex and can occur in different polymorphic forms (α, β', β), affecting the texture and stability of products like butter and cream.</p>
             </InfoBlock>
         </Section>
     )
@@ -222,8 +241,8 @@ function LactoseContent() {
              <InfoBlock title="Lactose Properties">
                <p>Lactose is the major carbohydrate in milk (4.8-5.2%), present in true solution. It is a disaccharide made of glucose and galactose. Lactose is about 1/6th as sweet as cane sugar.</p>
                <p>It is fermented by microorganisms to produce lactic acid, which is essential for cultured products. When heated, lactose can undergo the Maillard reaction with protein amino groups, leading to browning and a cooked flavor, especially in sterilized milk.</p>
-                <h5 className="font-bold mt-4">Crystallization</h5>
-                <p>Lactose can crystallize in two forms, α-hydrate and β-anhydrous. The α-lactose hydrate is less soluble and can form hard, gritty crystals, causing a "sandiness" defect in products like ice cream and condensed milk if not controlled properly.</p>
+                <h5 className="font-bold mt-4">Crystallization and Mutarotation</h5>
+                <p>Lactose can crystallize in two forms, α-hydrate and β-anhydrous. When dissolved in water, these forms interconvert until an equilibrium is reached, a process called <strong>mutarotation</strong>. The α-lactose hydrate is less soluble and can form hard, gritty crystals, causing a "sandiness" defect in products like ice cream and condensed milk if not controlled properly.</p>
             </InfoBlock>
         </Section>
     )
@@ -234,7 +253,7 @@ function MineralsContent() {
         <Section title="Minerals and Salts" icon={Gem}>
              <InfoBlock title="Mineral Composition">
                <p>Milk is an important source of dietary calcium, magnesium, phosphorus, and potassium. About 67% of calcium and 44% of phosphate are bound within the casein micelle as "colloidal calcium phosphate".</p>
-               <p>The dissolved salts in milk serum affect various properties, including protein stability and osmotic pressure. The total ionic strength of milk is about 0.5 M. The salt balance is crucial for the heat stability of milk.</p>
+               <p>The dissolved salts in milk serum affect various properties, including protein stability and osmotic pressure. The total ionic strength of milk is about 0.5 M. The salt balance is crucial for the heat stability of milk. Milk also contains numerous trace elements like Zinc, Copper, and Iron.</p>
             </InfoBlock>
         </Section>
     )
@@ -249,10 +268,11 @@ function VitaminsEnzymesContent() {
              <InfoBlock title="Enzymes in Milk">
                 <p>Milk contains several native enzymes. Some important ones include:</p>
                 <ul className="list-disc list-inside space-y-1">
-                    <li><strong>Lipoprotein Lipase:</strong> Can cause rancidity if fat globules are damaged.</li>
+                    <li><strong>Lipoprotein Lipase:</strong> Can cause hydrolytic rancidity if fat globules are damaged.</li>
                     <li><strong>Alkaline Phosphatase:</strong> Used as an indicator for proper pasteurization, as it's destroyed by the heat treatment.</li>
-                    <li><strong>Plasmin:</strong> A heat-resistant protease that can cause age gelation in UHT milk.</li>
+                    <li><strong>Plasmin:</strong> A heat-resistant protease that can cause proteolysis and age gelation in UHT milk.</li>
                     <li><strong>Lactoperoxidase:</strong> Part of a natural antimicrobial system in raw milk.</li>
+                    <li><strong>Xanthine Oxidase:</strong> Associated with the fat globule membrane.</li>
                 </ul>
             </InfoBlock>
         </Section>
