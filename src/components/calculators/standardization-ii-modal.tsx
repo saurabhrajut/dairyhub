@@ -424,8 +424,8 @@ function TwoMilkBlendingToTargetCalc() {
     const [result, setResult] = useState<{ q1: number, q2: number } | null>(null);
     const [error, setError] = useState<string | null>(null);
 
-    const handleInputChange = useCallback((field: string, value: string) => {
-        setInputs(prev => ({ ...prev, [field]: value }));
+    const handleInputChange = useCallback((field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+        setInputs(prev => ({ ...prev, [field]: e.target.value }));
     }, []);
 
     const calculate = useCallback(() => {
@@ -444,19 +444,43 @@ function TwoMilkBlendingToTargetCalc() {
             setError("Please fill all fields with valid numbers.");
             return;
         }
-
-        const det = (F1 * C2) - (F1 * CT) - (F2 * C1) + (F2 * CT) + (FT * C1) - (FT * C2);
         
-        if (Math.abs(det) < 1e-9) {
-            setError("Cannot solve. The milk properties might be linearly dependent or the target is unachievable with the given sources.");
+        if ( (FT > F1 && FT > F2) || (FT < F1 && FT < F2) || (CT > C1 && CT > C2) || (CT < C1 && CT < C2) ) {
+            setError("The target composition is not achievable. The target Fat and CLR must be between the values of the source milks.");
             return;
         }
 
-        const Q1 = QT * (F2 * C2 - F2 * CT - FT * C2 + FT * CT) / det;
+        // We solve the system of linear equations:
+        // Q1 + Q2 = QT
+        // Q1*F1 + Q2*F2 = QT*FT
+        // From first eq: Q2 = QT - Q1. Substitute into second eq:
+        // Q1*F1 + (QT - Q1)*F2 = QT*FT
+        // Q1*F1 + QT*F2 - Q1*F2 = QT*FT
+        // Q1*(F1 - F2) = QT*FT - QT*F2
+        // Q1 = QT * (FT - F2) / (F1 - F2)
+        
+        // This is Pearson Square logic.
+
+        let Q1: number;
+
+        // Use fat % for calculation, as it's generally more reliable and has a wider range.
+        if (Math.abs(F1 - F2) > 1e-9) { // Check for division by zero
+            Q1 = QT * (FT - F2) / (F1 - F2);
+        } else if (Math.abs(C1 - C2) > 1e-9) { // If fat is the same, use CLR
+            Q1 = QT * (CT - C2) / (C1 - C2);
+        } else {
+             setError("Cannot solve. The milk sources have identical properties.");
+             return;
+        }
+
         const Q2 = QT - Q1;
 
-        if (Q1 < 0 || Q2 < 0 || Q1 > QT || Q2 > QT) {
-             setError("The target composition is not achievable with the given milk sources. The target Fat and CLR must be between the values of the source milks.");
+        // Final check on results
+        const finalFatCheck = (Q1 * F1 + Q2 * F1) / QT;
+        const finalClrCheck = (Q1*C1 + Q2*C2)/QT;
+
+        if (Q1 < 0 || Q2 < 0 || Math.abs(finalClrCheck-CT) > 0.1) {
+            setError("The target composition is not achievable with the given milk sources. The ratios required for fat and CLR are conflicting.");
             return;
         }
 
@@ -469,20 +493,20 @@ function TwoMilkBlendingToTargetCalc() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                 <div className="bg-muted/50 p-4 rounded-lg space-y-3">
                     <h3 className="font-semibold text-gray-700 font-headline">Milk Source 1</h3>
-                    <div><Label>Fat %</Label><Input type="number" value={inputs.f1} onChange={e => handleInputChange('f1', e.target.value)} /></div>
-                    <div><Label>CLR</Label><Input type="number" value={inputs.c1} onChange={e => handleInputChange('c1', e.target.value)} /></div>
+                    <div><Label>Fat %</Label><Input type="number" value={inputs.f1} onChange={handleInputChange('f1')} /></div>
+                    <div><Label>CLR</Label><Input type="number" value={inputs.c1} onChange={handleInputChange('c1')} /></div>
                 </div>
                 <div className="bg-muted/50 p-4 rounded-lg space-y-3">
                     <h3 className="font-semibold text-gray-700 font-headline">Milk Source 2</h3>
-                    <div><Label>Fat %</Label><Input type="number" value={inputs.f2} onChange={e => handleInputChange('f2', e.target.value)} /></div>
-                    <div><Label>CLR</Label><Input type="number" value={inputs.c2} onChange={e => handleInputChange('c2', e.target.value)} /></div>
+                    <div><Label>Fat %</Label><Input type="number" value={inputs.f2} onChange={handleInputChange('f2')} /></div>
+                    <div><Label>CLR</Label><Input type="number" value={inputs.c2} onChange={handleInputChange('c2')} /></div>
                 </div>
                 <div className="bg-primary/10 p-4 rounded-lg space-y-3 md:col-span-2">
                     <h3 className="font-semibold text-gray-700 font-headline">Target Batch</h3>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div><Label>Total Batch Qty (kg/L)</Label><Input type="number" value={inputs.qTotal} onChange={e => handleInputChange('qTotal', e.target.value)} /></div>
-                        <div><Label>Target Fat %</Label><Input type="number" value={inputs.fTarget} onChange={e => handleInputChange('fTarget', e.target.value)} /></div>
-                        <div><Label>Target CLR</Label><Input type="number" value={inputs.cTarget} onChange={e => handleInputChange('cTarget', e.target.value)} /></div>
+                        <div><Label>Total Batch Qty (kg/L)</Label><Input type="number" value={inputs.qTotal} onChange={handleInputChange('qTotal')} /></div>
+                        <div><Label>Target Fat %</Label><Input type="number" value={inputs.fTarget} onChange={handleInputChange('fTarget')} /></div>
+                        <div><Label>Target CLR</Label><Input type="number" value={inputs.cTarget} onChange={handleInputChange('cTarget')} /></div>
                     </div>
                 </div>
             </div>
@@ -1041,4 +1065,5 @@ function RecombinedMilkCalc() {
 
 
     
+
 
