@@ -8,7 +8,7 @@ export const aboutUsContent = {
         description: "आपके भरोसेमंद डिजिटल डेयरी पार्टनर की कहानी",
         developer: {
             name: "सौरभ राजपूत",
-            image: "https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/IMG_6535.HEIC?alt=media&token=5c14e196-79b0-4711-8c69-b532e9bf42fb",
+            image: "https://firebasestorage.googleapis.com/v0/b/dhenuguide.appspot.com/o/profile-image.jpeg?alt=media&token=5b214c7c-5003-4318-86a0-53091934335c",
             academicInfo: {
                 title: "शैक्षणिक जानकारी",
                 degrees: [
@@ -74,7 +74,7 @@ export const aboutUsContent = {
         description: "The story of your trusted digital dairy partner",
         developer: {
             name: "Saurabh Rajput",
-            image: "https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/IMG_6535.HEIC?alt=media&token=5c14e196-79b0-4711-8c69-b532e9bf42fb",
+            image: "https://firebasestorage.googleapis.com/v0/b/dhenuguide.appspot.com/o/profile-image.jpeg?alt=media&token=5b214c7c-5003-4318-86a0-53091934335c",
             academicInfo: {
                 title: "Academic Information",
                 degrees: [
