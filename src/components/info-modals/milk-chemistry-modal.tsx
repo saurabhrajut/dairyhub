@@ -178,7 +178,7 @@ function MammaryGlandContent() {
                 <p>The cow’s udder consists of 4 distinctly separate glands, known as the quarters. Each quarter is provided with a teat, the hollow interior portion of which is known as the teat cistern. The teat cistern extends upwards into the body of the gland and is connected with the gland cistern. Radiating from the walls of the cistern are numerous tubes or ducts which branch out or divide innumerable times.</p>
             </InfoBlock>
             <InfoBlock title="Physiology of Milk Secretion">
-                <p>Milk is synthesized in the epithelial cells of the alveolus under complex hormonal control. The major hormones involved are estrogen, progesterone, and growth hormone for development, insulin for cell division, corticosteroids for organelle development, and prolactin for initiation and maintenance of lactation. Precursors enter the secretory cells from the blood on the basal side, and milk is secreted from the apical side into the lumen. Protein and lipid are synthesized in the endoplasmic reticulum; lactose synthesis and assembly of casein micelles occur in the Golgi apparatus. Mitochondria supply the energy for these processes.</p>
+                <p>Milk is synthesized in the epithelial cells of the alveolus under complex hormonal control. The major hormones are estrogen, progesterone, and growth hormone for development, insulin for cell division, corticosteroids for organelle development, and prolactin for initiation and maintenance of lactation. Precursors enter the secretory cells from the blood on the basal side, and milk is secreted from the apical side into the lumen. Protein and lipid are synthesized in the endoplasmic reticulum; lactose synthesis and assembly of casein micelles occur in the Golgi apparatus. Mitochondria supply the energy for these processes.</p>
                 <p>For every liter of milk secreted, about 400 litres of blood are required to circulate through the udder.</p>
             </InfoBlock>
              <InfoBlock title="Milk Ejection (Let-down)">
@@ -198,11 +198,13 @@ function ProteinsContent() {
             <InfoBlock title="Casein (~80% of Milk Protein)">
                 <p>Casein is a generic term for a class of phosphoproteins. In milk, casein exists as its calcium salts in distinct globular particles called micelles. The casein system is defined as a glycophosphoprotein, since it contains both carbohydrate and phosphorus. Biologically, casein serves as a carrier for calcium and phosphate. All caseins precipitate at pH 4.6.</p>
                 <h5 className="font-bold mt-4">Casein Fractions</h5>
-                <p>Caseins are classified into four major groups: αs1-casein, αs2-casein, β-casein, and κ-casein. These fractions differ in their charge and composition. αs1 and β-casein are calcium-sensitive, while κ-casein is calcium-insensitive and stabilizes the micelle.</p>
+                <p>Caseins are classified into four major groups: αs1-casein, αs2-casein, β-casein, and κ-casein. These fractions differ in their charge and composition. αs1 and β-casein are calcium-sensitive, while κ-casein is calcium-insensitive and stabilizes the micelle. Whole casein contains about 75% of α-casein, 22% of β-casein and 3% of γ-casein.</p>
                 <h5 className="font-bold mt-4">Casein Coagulation (Curd Formation)</h5>
                 <ul className="list-disc list-inside space-y-2">
                     <li><strong>Acid Coagulation:</strong> When the pH of milk drops to 4.6 (isoelectric point), casein micelles lose their negative charge and aggregate to form a gel (e.g., Paneer, Yogurt).</li>
                     <li><strong>Enzymatic Coagulation:</strong> The enzyme rennet cleaves κ-casein at the 105-106 amino acid bond (phenylalanine-methionine), destabilizing the micelles and causing them to aggregate in the presence of calcium to form a curd (e.g., Cheese).</li>
+                    <li><strong>Alcohol Precipitation:</strong> Alcohol dehydrates the micelle's protective layer. If milk is acidic (unstable), the proteins will coagulate. This is a quick test for milk freshness.</li>
+                    <li><strong>Heat Precipitation:</strong> Pure casein doesn't easily precipitate with heat, but prolonged heating at high temperatures (e.g., 120°C under pressure) can cause coagulation.</li>
                 </ul>
             </InfoBlock>
 
@@ -227,6 +229,11 @@ function FatContent() {
                 <h5 className="font-bold mt-4">Fatty Acid Sources</h5>
                 <p>Short-chain fatty acids (up to C14) are synthesized within the mammary gland from acetate and beta-hydroxybutyric acid from rumen fermentation. Long-chain fatty acids (C16, C18) are absorbed from the bloodstream. The yellow color of cow milk fat is due to carotene from feed.</p>
             </InfoBlock>
+            <InfoBlock title="Fat Globules and Emulsion Stability">
+                 <p>Fat exists as an emulsion of globules in milk plasma. Each globule is surrounded by a membrane that prevents them from coalescing. When milk is agitated or homogenized, these globules can be disrupted. This is critical for processes like churning butter, where controlled destabilization is desired.</p>
+                 <p><strong>Creaming:</strong> Due to their lower density, fat globules rise to the top, a process called creaming. In raw milk, a protein complex called 'agglutinin' causes globules to clump and rise faster. Homogenization prevents creaming by reducing globule size.</p>
+                 <p><strong>Lipolysis:</strong> The enzyme lipoprotein lipase can break down fat (lipolysis), releasing free fatty acids that cause a soapy-rancid off-flavor. This is usually prevented by the fat globule membrane but can be induced by damage to the globules (e.g., excessive agitation).</p>
+            </InfoBlock>
             <InfoBlock title="Autoxidation and Crystallization">
                 <p><strong>Autoxidation:</strong> Double bonds in fatty acids can oxidize, leading to off-flavors (tallowy, fishy, metallic). This process is catalyzed by factors like heat, light, and metal ions (especially copper). Phospholipids in the fat globule membrane are particularly susceptible.</p>
                 <p><strong>Crystallization:</strong> Milk fat consists of a mix of triglycerides with different melting points. When milk is cooled, the higher melting point triglycerides crystallize. This process is complex and can occur in different polymorphic forms (α, β', β), affecting the texture and stability of products like butter and cream.</p>
@@ -243,6 +250,7 @@ function LactoseContent() {
                <p>It is fermented by microorganisms to produce lactic acid, which is essential for cultured products. When heated, lactose can undergo the Maillard reaction with protein amino groups, leading to browning and a cooked flavor, especially in sterilized milk.</p>
                 <h5 className="font-bold mt-4">Crystallization and Mutarotation</h5>
                 <p>Lactose can crystallize in two forms, α-hydrate and β-anhydrous. When dissolved in water, these forms interconvert until an equilibrium is reached, a process called <strong>mutarotation</strong>. The α-lactose hydrate is less soluble and can form hard, gritty crystals, causing a "sandiness" defect in products like ice cream and condensed milk if not controlled properly.</p>
+                <p>The rate of mutarotation is affected by temperature and pH. At 20°C and pH 6.7, it takes many hours to reach equilibrium, but at 70°C, it takes only a few minutes. This is a critical factor in the production of dairy powders and condensed products.</p>
             </InfoBlock>
         </Section>
     )
@@ -251,10 +259,14 @@ function LactoseContent() {
 function MineralsContent() {
     return (
         <Section title="Minerals and Salts" icon={Gem}>
-             <InfoBlock title="Mineral Composition">
-               <p>Milk is an important source of dietary calcium, magnesium, phosphorus, and potassium. About 67% of calcium and 44% of phosphate are bound within the casein micelle as "colloidal calcium phosphate".</p>
-               <p>The dissolved salts in milk serum affect various properties, including protein stability and osmotic pressure. The total ionic strength of milk is about 0.5 M. The salt balance is crucial for the heat stability of milk. Milk also contains numerous trace elements like Zinc, Copper, and Iron.</p>
+             <InfoBlock title="Mineral Composition and Distribution">
+               <p>Milk is an important source of dietary calcium, magnesium, phosphorus, and potassium. The salts in milk exist in a complex equilibrium between a dissolved (soluble) phase and a colloidal phase associated with the casein micelles.</p>
+               <p>About 67% of calcium and 44% of phosphate are bound within the casein micelle as "colloidal calcium phosphate". This colloidal phosphate is amorphous and also contains magnesium and citrate. It is crucial for maintaining the structure and stability of the casein micelles.</p>
+               <p>The dissolved salts in the milk serum affect various properties, including protein stability, heat stability, and osmotic pressure. The total ionic strength of milk is about 0.5 M. The salt balance, particularly the ratio of calcium and magnesium to phosphate and citrate, is critical for the heat stability of milk during processing like sterilization.</p>
             </InfoBlock>
+             <InfoBlock title="Trace Elements">
+                <p>Milk contains numerous trace elements like Zinc, Copper, and Iron. Some of these are nutritional, while others can be contaminants. For example, Copper (Cu) can act as a catalyst for fat oxidation, leading to off-flavors, even at very low concentrations. Therefore, avoiding contamination from equipment made of copper alloys is important.</p>
+             </InfoBlock>
         </Section>
     )
 }
@@ -263,16 +275,16 @@ function VitaminsEnzymesContent() {
     return (
         <Section title="Vitamins & Enzymes" icon={FlaskConical}>
              <InfoBlock title="Vitamins in Milk">
-                <p>Milk is a good source of many vitamins. Fat-soluble vitamins include A, D, E, and K. Water-soluble vitamins include the B-complex (Thiamine, Riboflavin, Niacin, etc.) and Vitamin C (though much of it is destroyed by pasteurization).</p>
+                <p>Milk is a good source of many vitamins. Fat-soluble vitamins include A, D, E, and K, which are found in the milk fat. Water-soluble vitamins include the B-complex (Thiamine, Riboflavin, Niacin, etc.) and Vitamin C (though much of it is destroyed by pasteurization).</p>
             </InfoBlock>
              <InfoBlock title="Enzymes in Milk">
                 <p>Milk contains several native enzymes. Some important ones include:</p>
                 <ul className="list-disc list-inside space-y-1">
-                    <li><strong>Lipoprotein Lipase:</strong> Can cause hydrolytic rancidity if fat globules are damaged.</li>
-                    <li><strong>Alkaline Phosphatase:</strong> Used as an indicator for proper pasteurization, as it's destroyed by the heat treatment.</li>
-                    <li><strong>Plasmin:</strong> A heat-resistant protease that can cause proteolysis and age gelation in UHT milk.</li>
-                    <li><strong>Lactoperoxidase:</strong> Part of a natural antimicrobial system in raw milk.</li>
-                    <li><strong>Xanthine Oxidase:</strong> Associated with the fat globule membrane.</li>
+                    <li><strong>Lipoprotein Lipase:</strong> Can cause hydrolytic rancidity (soapy flavor) if fat globules are damaged. It is mostly inactivated by pasteurization.</li>
+                    <li><strong>Alkaline Phosphatase:</strong> Used as an indicator for proper pasteurization, as it's destroyed by the heat treatment. A positive test indicates inadequate pasteurization or raw milk contamination.</li>
+                    <li><strong>Plasmin:</strong> A heat-resistant protease that can break down protein and cause proteolysis and age gelation in UHT milk during long storage.</li>
+                    <li><strong>Lactoperoxidase:</strong> Part of a natural antimicrobial system in raw milk. It is more heat-resistant than alkaline phosphatase and a negative test can indicate overheating.</li>
+                    <li><strong>Xanthine Oxidase:</strong> Associated with the fat globule membrane. Its activity is sometimes linked to oxidative processes.</li>
                 </ul>
             </InfoBlock>
         </Section>
