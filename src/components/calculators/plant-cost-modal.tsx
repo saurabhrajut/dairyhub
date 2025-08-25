@@ -31,6 +31,40 @@ interface FixedExpense {
   cost: string;
 }
 
+// Memoized Input Field to prevent re-renders on every keystroke
+const MemoizedInputField = memo(function InputField({ label, value, name, setter, placeholder }: { label: string, value: string, name: string, setter: (name: string, value: string) => void, placeholder?: string }) {
+    const [internalValue, setInternalValue] = useState(value);
+
+    // Update internal state when props change
+    if (value !== internalValue && document.activeElement?.getAttribute('name') !== name) {
+        setInternalValue(value);
+    }
+    
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setInternalValue(e.target.value);
+    };
+
+    const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+        setter(e.target.name, e.target.value);
+    }
+    
+    return (
+        <div>
+            <Label htmlFor={name}>{label}</Label>
+            <Input 
+                type="number" 
+                name={name} 
+                id={name} 
+                value={internalValue} 
+                onChange={handleChange} 
+                onBlur={handleBlur}
+                placeholder={placeholder} 
+            />
+        </div>
+    );
+});
+
+
 const FixedExpenseRow = memo(function FixedExpenseRow({ 
     item, 
     onChange, 
@@ -69,17 +103,13 @@ export function PlantCostModal({
   setIsOpen: (open: boolean) => void;
 }) {
   const [period, setPeriod] = useState("monthly");
-  const [milkProcessed, setMilkProcessed] = useState("30000"); // Liters per period
-  const [totalRevenue, setTotalRevenue] = useState("2100000"); // Rupees per period
-
-  const [rawMaterialCosts, setRawMaterialCosts] = useState({
-      avgMilkPurchaseCost: '45', // per liter
-  });
-
-  const [otherVariableCosts, setOtherVariableCosts] = useState({
+  const [inputs, setInputs] = useState({
+      milkProcessed: "30000",
+      totalRevenue: "2100000",
+      avgMilkPurchaseCost: '45',
       packagingPerLitre: '2.5',
-      ingredientsPerLitre: '1.0', // Other ingredients like cultures, sugar etc.
-      utilitiesPerLitre: '1.5', // Electricity, water etc. per litre processed
+      ingredientsPerLitre: '1.0',
+      utilitiesPerLitre: '1.5',
       distributionPerLitre: '1.0',
   });
   
@@ -89,6 +119,10 @@ export function PlantCostModal({
     { id: 3, name: "Marketing & Admin", cost: "25000" },
     { id: 4, name: "Maintenance & Repairs", cost: "15000" },
   ]);
+
+  const handleInputChange = useCallback((name: string, value: string) => {
+    setInputs(prev => ({...prev, [name]: value}));
+  }, []);
 
   const handleAddFixedExpense = () => {
     setFixedExpenses(prev => [...prev, { id: Date.now(), name: "", cost: "" }]);
@@ -104,49 +138,39 @@ export function PlantCostModal({
     );
   }, []);
 
-  const handleVariableCostChange = useCallback((field: keyof typeof otherVariableCosts | keyof typeof rawMaterialCosts, value: string) => {
-      if (field in otherVariableCosts) {
-          setOtherVariableCosts(prev => ({...prev, [field as keyof typeof otherVariableCosts]: value}));
-      } else {
-          setRawMaterialCosts(prev => ({...prev, [field as keyof typeof rawMaterialCosts]: value}));
-      }
-  }, []);
-  
-
   const results = useMemo(() => {
-    const milkQty = parseFloat(milkProcessed) || 0;
-    const revenue = parseFloat(totalRevenue) || 0;
+    const i = Object.fromEntries(Object.entries(inputs).map(([k, v]) => [k, parseFloat(v) || 0]));
+    const { milkProcessed, totalRevenue, avgMilkPurchaseCost, packagingPerLitre, ingredientsPerLitre, utilitiesPerLitre, distributionPerLitre } = i;
 
     // --- Variable Costs ---
-    const milkPurchaseCostPerLitre = parseFloat(rawMaterialCosts.avgMilkPurchaseCost) || 0;
-    const totalRawMaterialCost = milkPurchaseCostPerLitre * milkQty;
+    const totalRawMaterialCost = avgMilkPurchaseCost * milkProcessed;
 
-    const packagingCost = (parseFloat(otherVariableCosts.packagingPerLitre) || 0) * milkQty;
-    const ingredientsCost = (parseFloat(otherVariableCosts.ingredientsPerLitre) || 0) * milkQty;
-    const utilitiesCost = (parseFloat(otherVariableCosts.utilitiesPerLitre) || 0) * milkQty;
-    const distributionCost = (parseFloat(otherVariableCosts.distributionPerLitre) || 0) * milkQty;
+    const packagingCost = packagingPerLitre * milkProcessed;
+    const ingredientsCost = ingredientsPerLitre * milkProcessed;
+    const utilitiesCost = utilitiesPerLitre * milkProcessed;
+    const distributionCost = distributionPerLitre * milkProcessed;
     
     const totalOtherVariableCosts = packagingCost + ingredientsCost + utilitiesCost + distributionCost;
     const totalVariableCosts = totalRawMaterialCost + totalOtherVariableCosts;
-    const variableCostPerLitre = milkQty > 0 ? totalVariableCosts / milkQty : 0;
+    const variableCostPerLitre = milkProcessed > 0 ? totalVariableCosts / milkProcessed : 0;
 
     // --- Fixed Costs ---
     const monthlyFixedCost = fixedExpenses.reduce((sum, item) => sum + (parseFloat(item.cost) || 0), 0);
     const totalFixedCost = period === 'monthly' ? monthlyFixedCost : monthlyFixedCost / 30; // Prorate for daily
     
     // --- Profitability ---
-    const grossProfit = revenue - totalVariableCosts;
+    const grossProfit = totalRevenue - totalVariableCosts;
     const netProfit = grossProfit - totalFixedCost;
     
-    const grossMargin = revenue > 0 ? (grossProfit / revenue) * 100 : 0;
-    const netMargin = revenue > 0 ? (netProfit / revenue) * 100 : 0;
+    const grossMargin = totalRevenue > 0 ? (grossProfit / totalRevenue) * 100 : 0;
+    const netMargin = totalRevenue > 0 ? (netProfit / totalRevenue) * 100 : 0;
     
     // --- Break-Even Analysis ---
-    const contributionMarginRatio = revenue > 0 ? grossProfit / revenue : 0;
+    const contributionMarginRatio = totalRevenue > 0 ? grossProfit / totalRevenue : 0;
     const breakEvenRevenue = contributionMarginRatio > 0 ? totalFixedCost / contributionMarginRatio : 0;
 
     return {
-        revenue,
+        revenue: totalRevenue,
         totalRawMaterialCost,
         totalOtherVariableCosts,
         totalVariableCosts,
@@ -158,7 +182,7 @@ export function PlantCostModal({
         netMargin,
         breakEvenRevenue
     };
-  }, [milkProcessed, totalRevenue, rawMaterialCosts, otherVariableCosts, fixedExpenses, period]);
+  }, [inputs, fixedExpenses, period]);
   
 
   const Section = ({ title, children, description }: { title: string, children: React.ReactNode, description?: string }) => (
@@ -196,14 +220,8 @@ export function PlantCostModal({
 
             <Section title="1. Production & Revenue Details" description="Define your production volume and total sales for the selected period.">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <Label htmlFor="milk-processed">Total Milk Processed ({period})</Label>
-                        <Input id="milk-processed" type="number" value={milkProcessed} onChange={e => setMilkProcessed(e.target.value)} placeholder="e.g., 30000" />
-                    </div>
-                    <div>
-                        <Label htmlFor="total-revenue">Total Sales Revenue ({period})</Label>
-                        <Input id="total-revenue" type="number" value={totalRevenue} onChange={e => setTotalRevenue(e.target.value)} placeholder="e.g., 2100000"/>
-                    </div>
+                    <MemoizedInputField label={`Total Milk Processed (${period})`} value={inputs.milkProcessed} name="milkProcessed" setter={handleInputChange} placeholder="e.g., 30000" />
+                    <MemoizedInputField label={`Total Sales Revenue (${period})`} value={inputs.totalRevenue} name="totalRevenue" setter={handleInputChange} placeholder="e.g., 2100000" />
                 </div>
             </Section>
 
@@ -211,29 +229,16 @@ export function PlantCostModal({
                 <h4 className="font-semibold text-gray-700">A. Raw Material Cost</h4>
                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
                      <div>
-                        <Label htmlFor="avg-milk-cost">Average Purchase Cost of Milk (₹ per Litre)</Label>
-                        <Input id="avg-milk-cost" type="number" value={rawMaterialCosts.avgMilkPurchaseCost} onChange={e => handleVariableCostChange('avgMilkPurchaseCost', e.target.value)} />
+                        <MemoizedInputField label="Average Purchase Cost of Milk (₹ per Litre)" value={inputs.avgMilkPurchaseCost} name="avgMilkPurchaseCost" setter={handleInputChange} />
                     </div>
                  </div>
 
                  <h4 className="font-semibold text-gray-700 mt-6">B. Other Variable Costs (per Litre of milk processed)</h4>
                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
-                    <div>
-                        <Label htmlFor="packaging-cost">Packaging (₹ per Litre)</Label>
-                        <Input id="packaging-cost" type="number" value={otherVariableCosts.packagingPerLitre} onChange={e => handleVariableCostChange('packagingPerLitre', e.target.value)} />
-                    </div>
-                    <div>
-                        <Label htmlFor="ingredients-cost">Other Ingredients (₹ per Litre)</Label>
-                        <Input id="ingredients-cost" type="number" value={otherVariableCosts.ingredientsPerLitre} onChange={e => handleVariableCostChange('ingredientsPerLitre', e.target.value)} />
-                    </div>
-                    <div>
-                        <Label htmlFor="utilities-cost">Utilities (₹ per Litre)</Label>
-                        <Input id="utilities-cost" type="number" value={otherVariableCosts.utilitiesPerLitre} onChange={e => handleVariableCostChange('utilitiesPerLitre', e.target.value)} />
-                    </div>
-                    <div>
-                        <Label htmlFor="distribution-cost">Distribution (₹ per Litre)</Label>
-                        <Input id="distribution-cost" type="number" value={otherVariableCosts.distributionPerLitre} onChange={e => handleVariableCostChange('distributionPerLitre', e.target.value)} />
-                    </div>
+                    <MemoizedInputField label="Packaging (₹ per Litre)" value={inputs.packagingPerLitre} name="packagingPerLitre" setter={handleInputChange} />
+                    <MemoizedInputField label="Other Ingredients (₹ per Litre)" value={inputs.ingredientsPerLitre} name="ingredientsPerLitre" setter={handleInputChange} />
+                    <MemoizedInputField label="Utilities (₹ per Litre)" value={inputs.utilitiesPerLitre} name="utilitiesPerLitre" setter={handleInputChange} />
+                    <MemoizedInputField label="Distribution (₹ per Litre)" value={inputs.distributionPerLitre} name="distributionPerLitre" setter={handleInputChange} />
                  </div>
             </Section>
 
@@ -287,3 +292,4 @@ export function PlantCostModal({
     </Dialog>
   );
 }
+

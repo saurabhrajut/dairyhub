@@ -107,18 +107,15 @@ const CalculatorCard = ({ title, children, description }: { title: string; child
 const MemoizedInputField = memo(function InputField({ label, value, name, setter, unit, placeholder }: { label: string, value: string, name: string, setter: (name: string, value: string) => void, unit?: string, placeholder?: string }) {
     const [internalValue, setInternalValue] = useState(value);
 
-    // Update internal state when props change
+    // Update internal state when props change, but not if the element has focus
     if (value !== internalValue && document.activeElement?.getAttribute('name') !== name) {
         setInternalValue(value);
     }
     
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setInternalValue(e.target.value);
+        setter(e.target.name, e.target.value); // Update parent state on change
     };
-
-    const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-        setter(e.target.name, e.target.value);
-    }
     
     return (
         <div>
@@ -129,8 +126,7 @@ const MemoizedInputField = memo(function InputField({ label, value, name, setter
                     name={name} 
                     id={name} 
                     value={internalValue} 
-                    onChange={handleChange} 
-                    onBlur={handleBlur}
+                    onChange={handleChange}
                     className={unit ? "rounded-r-none" : ""} 
                     placeholder={placeholder} 
                 />
@@ -245,7 +241,7 @@ function CustomStandardizationCalc() {
             const det = (skF * wS) - (wF * skS);
              if (Math.abs(det) < 1e-9) { setError("Cannot solve: Skim milk and Water properties are too similar."); return; }
              skimToAdd = (fat_diff * wS - snf_diff * wF) / det;
-             waterToAdd = (snf_diff * skF - fat_diff * skS) / det;
+             waterToAdd = (snf_diff * skF - fat_diff * cS) / det;
         } else {
              if (Math.abs(fat_diff) < 1e-3 && Math.abs(snf_diff) < 1e-3) {
                  setResult("<p>No addition/removal required. Milk already meets specifications.</p>");
@@ -521,7 +517,7 @@ function TwoMilkBlendingToTargetCalc() {
             `;
         } else { // If CLR is HIGH and needs to be decreased
             const clrToDecrease = finalClrCheck - CT;
-            const waterNeeded = (clrToDecrease * 20 * QT) / 1000;
+            const waterNeeded = (clrToDecrease * QT) / 50; // Simplified from (clrToDecrease * 20 * QT) / 1000
             resultHTML += `<h4 class='font-bold text-md'>CLR Adjustment Required:</h4>
             To decrease CLR from <strong>${finalClrCheck.toFixed(2)}</strong> to <strong>${CT}</strong>, you need to add:
             <ul class='list-disc list-inside mt-2 text-lg'>
@@ -1108,6 +1104,7 @@ function RecombinedMilkCalc() {
 
 
     
+
 
 
 
