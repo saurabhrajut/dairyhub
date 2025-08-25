@@ -23,7 +23,7 @@ import {
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { componentProps, getSnf } from "@/lib/utils";
-import { CheckCircle, PlusCircle, XCircle, Beaker, Thermometer, Weight, Percent, Scaling, Combine, Calculator, FlaskConical, ArrowLeft, RotateCw } from "lucide-react";
+import { CheckCircle, PlusCircle, XCircle, Beaker, Thermometer, Weight, Percent, Scaling, Combine, Calculator, FlaskConical, ArrowLeft, RotateCw, Dna } from "lucide-react";
 import { PaneerIcon, IceCreamIcon } from "../icons";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -52,10 +52,11 @@ const CalculatorCard = ({ title, children, description }: { title: string; child
     </div>
 );
 
-type CalculatorType = 'acidity' | 'yields' | 'paneer-yield' | 'ice-cream' | 'fat-dry' | 'clr-correction' | 'component-qty' | 'gravimetric' | 'formulas' | 'cip-strength';
+type CalculatorType = 'acidity' | 'yields' | 'paneer-yield' | 'ice-cream' | 'fat-dry' | 'clr-correction' | 'component-qty' | 'gravimetric' | 'formulas' | 'cip-strength' | 'protein-casein';
 
 const calculatorsInfo = {
     'acidity': { title: "Acidity", icon: Beaker, component: ProductAcidityCalc },
+    'protein-casein': { title: "Protein & Casein", icon: Dna, component: ProteinCaseinCalc },
     'yields': { title: "Product Yields", icon: Percent, component: YieldsCalc },
     'paneer-yield': { title: "Paneer Yield", icon: PaneerIcon, component: PaneerYieldCalc },
     'ice-cream': { title: "Ice Cream", icon: IceCreamIcon, component: IceCreamCalculators },
@@ -135,6 +136,136 @@ export function VariousCalculatorsModal({
 }
 
 // Individual Calculator Components
+
+function ProteinCaseinCalc() {
+    return (
+        <div className="space-y-6">
+            <KjeldahlProteinCalc />
+            <FormolTitrationCalc />
+            <CaseinTitrationCalc />
+            <CaseinFromProteinCalc />
+        </div>
+    )
+}
+
+function KjeldahlProteinCalc() {
+    const [sampleWeight, setSampleWeight] = useState('5');
+    const [sampleTitre, setSampleTitre] = useState('');
+    const [blankTitre, setBlankTitre] = useState('0.1');
+    const [acidNormality, setAcidNormality] = useState('0.1');
+    const [result, setResult] = useState<string | null>(null);
+
+    const calculate = () => {
+        const W = parseFloat(sampleWeight);
+        const Vs = parseFloat(sampleTitre);
+        const Vb = parseFloat(blankTitre);
+        const N = parseFloat(acidNormality);
+        if (isNaN(W) || isNaN(Vs) || isNaN(Vb) || isNaN(N) || W <= 0) {
+            setResult("Please enter valid positive numbers for all fields.");
+            return;
+        }
+        const nitrogenPercent = ( (Vs - Vb) * N * 1.4007 ) / W;
+        const proteinPercent = nitrogenPercent * 6.38; // Factor for milk
+        setResult(`Total Nitrogen: <strong>${nitrogenPercent.toFixed(4)}%</strong><br/>Crude Protein: <strong>${proteinPercent.toFixed(2)}%</strong>`);
+    };
+
+    return (
+        <CalculatorCard title="Protein Estimation (Kjeldahl Method)" description="Calculate crude protein by determining the total nitrogen content of the sample.">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div><Label>Sample Weight (g)</Label><Input type="number" value={sampleWeight} onChange={e => setSampleWeight(e.target.value)} /></div>
+                <div><Label>Normality of HCl/H₂SO₄</Label><Input type="number" step="0.01" value={acidNormality} onChange={e => setAcidNormality(e.target.value)} /></div>
+                <div><Label>Sample Titre Value (ml)</Label><Input type="number" value={sampleTitre} onChange={e => setSampleTitre(e.target.value)} placeholder="e.g., 8.5" /></div>
+                <div><Label>Blank Titre Value (ml)</Label><Input type="number" value={blankTitre} onChange={e => setBlankTitre(e.target.value)} placeholder="e.g., 0.1" /></div>
+            </div>
+            <Button onClick={calculate} className="w-full mt-4">Calculate Protein %</Button>
+            {result && <Alert className="mt-4"><AlertDescription className="text-lg font-bold text-center" dangerouslySetInnerHTML={{ __html: result }} /></Alert>}
+        </CalculatorCard>
+    );
+}
+
+function FormolTitrationCalc() {
+    const [initialTitre, setInitialTitre] = useState('');
+    const [finalTitre, setFinalTitre] = useState('');
+    const [factor, setFactor] = useState('1.7');
+    const [result, setResult] = useState<string | null>(null);
+
+    const calculate = () => {
+        const v1 = parseFloat(initialTitre);
+        const v2 = parseFloat(finalTitre);
+        const f = parseFloat(factor);
+        if (isNaN(v1) || isNaN(v2) || isNaN(f)) {
+            setResult("Please enter valid numbers for all fields.");
+            return;
+        }
+        const proteinPercent = (v2 - v1) * f;
+        setResult(`Estimated Protein: <strong>${proteinPercent.toFixed(2)}%</strong>`);
+    };
+    
+    return (
+        <CalculatorCard title="Protein Estimation (Formaldehyde Titration)" description="A rapid method to estimate protein content by titrating before and after adding formaldehyde.">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div><Label>Initial Titre (V₁)</Label><Input type="number" value={initialTitre} onChange={e => setInitialTitre(e.target.value)} placeholder="Titre before formaldehyde" /></div>
+                <div><Label>Final Titre (V₂)</Label><Input type="number" value={finalTitre} onChange={e => setFinalTitre(e.target.value)} placeholder="Titre after formaldehyde" /></div>
+                <div><Label>Formol Factor</Label><Input type="number" value={factor} onChange={e => setFactor(e.target.value)} /></div>
+            </div>
+            <Button onClick={calculate} className="w-full mt-4">Calculate Protein %</Button>
+            {result && <Alert className="mt-4"><AlertDescription className="text-lg font-bold text-center" dangerouslySetInnerHTML={{ __html: result }} /></Alert>}
+        </CalculatorCard>
+    );
+}
+
+function CaseinTitrationCalc() {
+    const [sampleTitre, setSampleTitre] = useState('');
+    const [blankTitre, setBlankTitre] = useState('');
+    const [result, setResult] = useState<string | null>(null);
+
+    const calculate = () => {
+        const vt = parseFloat(sampleTitre);
+        const vb = parseFloat(blankTitre);
+        if (isNaN(vt) || isNaN(vb)) {
+            setResult("Please enter valid titre values.");
+            return;
+        }
+        const caseinPercent = (vt - vb) * 1.08;
+        setResult(`Estimated Casein: <strong>${caseinPercent.toFixed(2)}%</strong>`);
+    };
+
+    return (
+        <CalculatorCard title="Casein Estimation (Titration Method)" description="Calculate casein content by titrating the filtrate of milk coagulated with acetic acid.">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div><Label>Sample Titre Value (ml)</Label><Input type="number" value={sampleTitre} onChange={e => setSampleTitre(e.target.value)} placeholder="e.g., 2.5" /></div>
+                <div><Label>Blank Titre Value (ml)</Label><Input type="number" value={blankTitre} onChange={e => setBlankTitre(e.target.value)} placeholder="e.g., 0.4" /></div>
+            </div>
+            <Button onClick={calculate} className="w-full mt-4">Calculate Casein %</Button>
+            {result && <Alert className="mt-4"><AlertDescription className="text-lg font-bold text-center" dangerouslySetInnerHTML={{ __html: result }} /></Alert>}
+        </CalculatorCard>
+    );
+}
+
+function CaseinFromProteinCalc() {
+    const [protein, setProtein] = useState('');
+    const [result, setResult] = useState<string | null>(null);
+
+    const calculate = () => {
+        const p = parseFloat(protein);
+        if (isNaN(p)) {
+            setResult("Please enter a valid protein percentage.");
+            return;
+        }
+        // On average, casein is about 78-82% of total protein in cow's milk. Using a factor of 0.8.
+        const caseinPercent = p * 0.8;
+        setResult(`Estimated Casein: <strong>~${caseinPercent.toFixed(2)}%</strong>`);
+    };
+
+    return (
+        <CalculatorCard title="Casein Estimation from Total Protein" description="Quickly estimate casein content if you already know the total protein percentage of the milk.">
+            <div><Label>Total Protein %</Label><Input type="number" value={protein} onChange={e => setProtein(e.target.value)} placeholder="e.g., 3.4" /></div>
+            <Button onClick={calculate} className="w-full mt-4">Estimate Casein %</Button>
+            {result && <Alert className="mt-4"><AlertDescription className="text-lg font-bold text-center" dangerouslySetInnerHTML={{ __html: result }} /></Alert>}
+        </CalculatorCard>
+    );
+}
+
 
 function PaneerYieldCalc() {
     // State for theoretical calculation
