@@ -89,310 +89,6 @@ export const funFacts = [
   { q: "CIP (Cleaning-In-Place) me Kaustic (NaOH) ka kya kaam hai? (What is the role of Caustic in CIP?)", a: "Dairy plant me, CIP ke dauran Sodium Hydroxide (NaOH) ek powerful cleaning agent hai. Yeh equipment ki satah (surface) se chipke hue fat (charbi) aur protein ko saponify aur hydrolyze karke nikal deta hai, jisse machine saaf aur sanitized rehti hai." }
 ];
 
-export const preservativesData = [
-    {
-        title: '3.7.1 Neutralizers',
-        content: `
-            <p class="mb-4">Doodh mein acidity ko kam karne ke liye, NaOH, Na2CO3, aur NaHCO3 jaise padarth milaye jaate hain. Inka pata pH indicators ya raakh ki alkalinity maap kar lagaya jaata hai.</p>
-            <div class="prose max-w-none prose-blue">
-                <h4>(a) Rosolic Acid Test</h4>
-                <p><strong>Siddhant:</strong> Rosolic acid ek indicator hai jo alkaline condition mein laal rang aur acidic condition mein narangi-bhoora rang deta hai. Agar neutralization bahut dhyan se kiya gaya ho toh yeh test kaam nahi kar sakta.</p>
-                <ol>
-                    <li>Ek test tube mein 10 ml doodh lein aur utni hi matra mein ethyl alcohol (95%) milayein.</li>
-                    <li>Kuch boondein rosolic acid solution (0.1%) ki daalein aur mix karein.</li>
-                    <li>Agar <strong>gulabi-laal rang</strong> aata hai toh neutralizer maujood hai, jabki shuddh doodh bhoora ho jaata hai.</li>
-                </ol>
-                <h4 class="mt-4">(b) Raakh ki Alkalinity Test</h4>
-                <p><strong>Siddhant:</strong> Agar neutralizer milaya gaya hai, toh doodh ke raakh mein shuddh doodh ke mukable zyada alkalinity hogi.</p>
-                <ol>
-                    <li>Ek silica crucible mein 20 ml doodh lein.</li>
-                    <li>Paani ko sukha dein, phir content ko muffle furnace mein 550°C par raakh bana lein.</li>
-                    <li>Raakh mein 10 ml distilled water daalein aur ise 0.1 N HCl ke khilaaf titrate karein.</li>
-                    <li>Neutralizer wala doodh 1.2 ml se zyada 0.1 N HCl ka upyog karega.</li>
-                </ol>
-            </div>
-        `
-    },
-    {
-        title: '3.7.2 Boric Acid aur Borates',
-        content: `
-            <div class="prose max-w-none prose-blue">
-                <p><strong>Siddhant:</strong> Boric acid aur uske salts haldi paper ke saath laal rang dete hain.</p>
-                <ol>
-                    <li>Ek test tube mein 5 ml doodh lein aur 1 ml concentrated HCl milayein.</li>
-                    <li>Achhe se mix karein, phir haldi paper ki ek strip ko ismein duboye.</li>
-                    <li>Paper strip ko sukhayein aur rang mein badlav dekhein.</li>
-                    <li>Paper par <strong>laal rang</strong> boric acid ki maujoodgi batata hai.</li>
-                    <li>Phir ek boond ammonium hydroxide solution daalein.</li>
-                    <li>Laal se <strong>gehra-hara rang</strong> hona boric acid ki maujoodgi ko confirm karta hai.</li>
-                </ol>
-            </div>
-        `
-    },
-    {
-        title: '3.7.3 Formalin',
-        content: `
-            <p class="mb-4">Formalin (formaldehyde ka 40% solution) ferric salts ke saath baingani rang deta hai.</p>
-            <div class="prose max-w-none prose-blue">
-                <h4>Hehner Test</h4>
-                <ol>
-                    <li>Ek test tube mein 10 ml doodh ka sample lein.</li>
-                    <li>Dheere se 0.5 ml 10% ferric chloride solution daalein.</li>
-                    <li>5 ml concentrated sulfuric acid ko test tube ke kinare se daalein taaki woh doodh ke saath mix na ho aur neeche ek alag layer banaye.</li>
-                    <li>Dono liquids ke jod par <strong>baingani se jaamuni rang ka ring</strong> banna formalin ki maujoodgi batata hai.</li>
-                </ol>
-                <h4 class="mt-4">Leech Test</h4>
-                <ol>
-                    <li>Ek test tube mein lagbhag 5.0 ml doodh lein. Usmein utni hi matra mein concentrated HCl milayein jismein 1 ml 10% ferric chloride solution ho.</li>
-                    <li>Lagbhag 5 minute tak aag par garam karein.</li>
-                    <li>Dahi ko todne ke liye tube ko ghumayein aur rang dekhein. <strong>Baingani rang</strong> ka aana formaldehyde ki maujoodgi batata hai.</li>
-                </ol>
-                <h4 class="mt-4">Chromotropic Acid Test</h4>
-                <ol>
-                    <li>Ek test tube mein 1 ml doodh lein.</li>
-                    <li>Usmein 1 ml chromotropic acid reagent daalein aur achhe se mix karein.</li>
-                    <li><strong>Gray (sleti) rang</strong> ka aana formalin ki maujoodgi ko confirm karta hai; jabki control sample rangheen rehta hai.</li>
-                </ol>
-            </div>
-        `
-    },
-     {
-        title: '3.7.4 Hydrogen Peroxide',
-        content: `
-            <div class="prose max-w-none prose-blue">
-                <p><strong>Siddhant:</strong> Hydrogen peroxide para-phenylenediamine ko oxidize karke uska rang peele se neela kar deta hai.</p>
-                <ol>
-                    <li>Ek test tube mein 2 ml doodh lein aur utni hi matra mein alcohol milayein.</li>
-                    <li>5 boondein 2% para-phenylenediamine solution ki daalein aur achhe se hilayein.</li>
-                    <li><strong>Neela rang</strong> aana confirm karta hai ki doodh mein hydrogen peroxide hai.</li>
-                </ol>
-            </div>
-        `
-    },
-    {
-        title: '3.7.5 Benzoic Acid',
-        content: `
-            <div class="prose max-w-none prose-blue">
-                <ol>
-                    <li>10 ml doodh lein, usmein 5 ml HCl (1:3) milayein aur achhe se mix karein.</li>
-                    <li>Filter karein aur filtrate ko 50-100 ml ethyl ether se extract karein.</li>
-                    <li>Ether layer ko do baar 5 ml paani se dhoyein.</li>
-                    <li>Ether ko water bath par evaporate karein.</li>
-                    <li>Bache hue residue ko garam paani mein ghol lein. Kuch boondein 0.5% neutral ferric chloride solution ki daalein.</li>
-                    <li><strong>Salmon rang ka precipitate</strong> aana benzoic acid ki maujoodgi batata hai.</li>
-                </ol>
-            </div>
-        `
-    },
-    {
-        title: '3.7.6 Salicylic Acid',
-        content: `
-             <div class="prose max-w-none prose-blue">
-                <ol>
-                    <li>10 ml doodh lein, usmein 5 ml HCl (1:3) milayein aur achhe se mix karein.</li>
-                    <li>Filter karein aur filtrate ko 50-100 ml ethyl ether se extract karein.</li>
-                    <li>Ether layer ko do baar 5 ml paani se dhoyein.</li>
-                    <li>Ether ko water bath par evaporate karein.</li>
-                    <li>Residue ko garam paani mein gholein, 2 boondein 10% NaOH solution daalein aur sukha lein.</li>
-                    <li>1-2 boondein 0.5% ferric chloride solution daalein.</li>
-                    <li><strong>Baingani rang</strong> aana salicylic acid ki maujoodgi batata hai.</li>
-                </ol>
-            </div>
-        `
-    },
-    {
-        title: '3.7.7 Hypochlorites',
-        content: `
-            <div class="prose max-w-none prose-blue">
-                <ol>
-                    <li>Ek test tube mein 3 ml doodh lein. Doosri tube mein 3 ml 0.025% stannous chloride solution lein.</li>
-                    <li>Dono tubes ko 3-4 minute ke liye baraf aur namak ke mixture mein rakhein.</li>
-                    <li>Mixture ko centrifuge tube mein daalein aur 2500 rpm par 3-5 minute ke liye centrifuge karein.</li>
-                    <li>Tube mein <strong>peela-hara rang</strong> dekhein.</li>
-                    <li>Ya phir UV light ke neeche dekhein. <strong>Peeli chamak (fluorescence)</strong> hypochlorite ki maujoodgi ko confirm karti hai.</li>
-                </ol>
-            </div>
-        `
-    }
-];
-
-export const adulterantsData = [
-    {
-        title: '3.8.1 Sucrose ya Ganne ki Chini',
-        content: `
-            <div class="prose max-w-none prose-green">
-                <p><strong>Siddhant:</strong> Seliwanoff’s reagent ka istemal hota hai. HCl sucrose ko glucose aur fructose mein tod deta hai. Garam karne par fructose resorcinol ke saath milkar laal rang banata hai.</p>
-                <ol>
-                    <li>1 ml doodh ka sample lein aur usmein 1 ml 0.5% resorcinol solution milayein.</li>
-                    <li>Mix karein aur test tube ko 5 minute tak ubalte paani mein garam karein.</li>
-                    <li>Agar <strong>gulabi-laal rang</strong> banta hai toh doodh mein chini hai. Shuddh doodh safed rehta hai.</li>
-                </ol>
-            </div>
-        `
-    },
-    {
-        title: '3.8.2 Starch ya Doosre Anaaj ke Aate',
-        content: `
-            <div class="prose max-w-none prose-green">
-                <p><strong>Siddhant:</strong> Starch iodine ke saath milkar baingani-neela rang ka complex banata hai.</p>
-                <ol>
-                    <li>Ek test tube mein 5.0 ml doodh lein aur ubaal lein.</li>
-                    <li>Test tube ko kamre ke taapman par thanda karein.</li>
-                    <li>1-2 boondein iodine solution ki daalein. <strong>Neela rang</strong> aana starch ki maujoodgi batata hai, jo ubaalne par gayab ho jaata hai aur thanda karne par wapas aa jaata hai.</li>
-                </ol>
-            </div>
-        `
-    },
-    {
-        title: '3.8.3 Urea',
-        content: `
-            <p class="mb-4">Doodh mein natural urea 200-700 ppm hota hai. Isse zyada hona "milawati urea" batata hai.</p>
-            <div class="prose max-w-none prose-green">
-                <h4>1. DMAB reagent se Urea ka pata lagana</h4>
-                <p><strong>Siddhant:</strong> Urea DMAB ke saath kam acidic solution mein peela complex banata hai.</p>
-                <ol>
-                    <li>Ek test tube mein 5 ml doodh lein.</li>
-                    <li>Usmein 5 ml 1.6% DMAB reagent milayein.</li>
-                    <li><strong>Gehra peela rang</strong> aana milawati urea ki nishani hai, jabki halka peela rang natural urea ke kaaran hota hai.</li>
-                </ol>
-                <h4 class="mt-4">2. Urease enzyme se Urea ka pata lagana</h4>
-                <p><strong>Siddhant:</strong> Urease enzyme urea par kaam karke ammonia nikalta hai, jo bromothymol blue indicator ki maujoodgi mein solution ka rang neela kar deta hai.</p>
-                <ol>
-                   <li>Ek test tube mein 5 ml doodh lein.</li>
-                   <li>0.2 ml urease enzyme solution daalein aur kamre ke taapman par achhe se hilayein.</li>
-                   <li>0.1 ml bromothymol blue solution daalein.</li>
-                   <li>10-15 minute ke baad <strong>neela rang</strong> aana milawati urea ki maujoodgi batata hai.</li>
-                </ol>
-            </div>
-        `
-    },
-    {
-        title: '3.8.4 Glucose',
-        content: `
-            <div class="prose max-w-none prose-green">
-                <p><strong>Siddhant:</strong> Barfoed’s test ka istemal hota hai. Acidic condition mein, glucose cupric ko cuprous mein badal deta hai. Yeh cuprous ions phosphomolybdic acid (rangheen) ko phosphomolybdous acid (neela rang) mein badal dete hain.</p>
-                <ol>
-                    <li>Ek test tube mein 1 ml milawati doodh ka sample lein.</li>
-                    <li>Usmein 1 ml Barfoed’s reagent milayein.</li>
-                    <li>Mixture ko 3 minute tak ubalte paani mein garam karein aur 3 minute tak thanda karein.</li>
-                    <li>1 ml phosphomolybdic acid reagent daalein aur mix karein.</li>
-                    <li><strong>Gehra neela rang</strong> banna glucose ki maujoodgi batata hai.</li>
-                </ol>
-            </div>
-        `
-    },
-    {
-        title: '3.8.5 Maltodextrin',
-        content: `
-             <p class="mb-4">Yeh ek polysaccharide hai jise food additive ke roop mein istemal kiya jaata hai.</p>
-            <div class="prose max-w-none prose-green">
-                <h4>Iodine Method</h4>
-                <ol>
-                   <li>Ek test tube mein 5 ml doodh ka sample lein.</li>
-                   <li>Usmein 2 ml iodine solution (0.05 N) milayein aur mix karein.</li>
-                   <li><strong>Chocolate jaisa laal-bhoora rang</strong> aana dextrin/maltodextrin ki maujoodgi batata hai.</li>
-                </ol>
-                <h4 class="mt-4">Alternate Method (Enzymatic)</h4>
-                <p><strong>Siddhant:</strong> Yeh test enzymatic reaction ke baad nikle glucose ka pata lagata hai.</p>
-                <ol>
-                   <li>20 ml doodh lein aur lactic acid se pH 4.0-4.5 karein.</li>
-                   <li>1 ml alpha glucoamylase enzyme solution daalein aur 62°C par 5 min rakhein.</li>
-                   <li>Kamre ke taapman par thanda karein.</li>
-                   <li>Diastic strip ko 30 second ke liye duboyein.</li>
-                   <li>Strip par rang ke badlav (hare se bhoora) ko bottle ke color chart se milayein.</li>
-                </ol>
-            </div>
-        `
-    },
-    {
-        title: '3.8.6 Talab ka Paani',
-        content: `
-            <div class="prose max-w-none prose-green">
-                <p><strong>Siddhant:</strong> Yeh method talab ke paani mein maujood nitrates/nitrites ka pata lagata hai jo kheti mein istemal hone wale fertilizers se aate hain.</p>
-                <ol>
-                    <li>Test tube ko doodh ke sample se dho lein.</li>
-                    <li>Test tube ke kinare se 1 ya 2 boondein 2% diphenylamine solution ki daalein.</li>
-                    <li>Agar test tube ke kinare <strong>neele</strong> ho jaate hain, toh doodh mein talab ka paani hai.</li>
-                </ol>
-            </div>
-        `
-    },
-    {
-        title: '3.8.7 Vanaspati Tel (Vegetable Fat)',
-        content: `
-            <p class="mb-4">Vanaspati tel doodh ke fat se sasta hota hai, isliye ise milawat ke liye istemal kiya jaata hai.</p>
-            <div class="prose max-w-none prose-green">
-                 <h4>BR Reading Method</h4>
-                <ol>
-                    <li>Doodh ke sample se cream alag karein.</li>
-                    <li>Cream se ghee banayein aur uski ek boond 40°C par butyro-refractometer par daalein.</li>
-                    <li>BR reading note karein. Shuddh doodh ke fat ki reading 40-43 hoti hai. Isse alag reading milawat batati hai.</li>
-                </ol>
-                <h4 class="mt-4">Alternate Method</h4>
-                <ol>
-                    <li>1-2 g pighle hue ghee ko 2-3 ml hexane mein gholein.</li>
-                    <li>1.5-2.0 ml of color developing reagent daalein.</li>
-                    <li>Zor se hilayein aur layers ko alag hone dein.</li>
-                    <li>Upar ki layer mein saaf <strong>narangi rang</strong> aana vanaspati tel ki maujoodgi batata hai.</li>
-                </ol>
-            </div>
-        `
-    },
-    {
-        title: '3.8.8 Baudouin Test (Vanaspati ke liye)',
-        content: `
-            <div class="prose max-w-none prose-green">
-                <p><strong>Siddhant:</strong> Vanaspati mein 5% til ka tel milana anivarya hai. Tel se nikla Sesamol furfural ke saath milkar laal rang banata hai.</p>
-                <ol>
-                    <li>Doodh ke sample se ghee banayein.</li>
-                    <li>Ek test tube mein 5 g pighla hua fat lein, 5 ml concentrated HCl aur 0.4 ml 2% furfural solution daalein. 2 minute tak vortex karein.</li>
-                    <li>Tube ko khada rehne dein. <strong>Gulabi ya laal rang</strong> aana vanaspati ki maujoodgi batata hai.</li>
-                </ol>
-            </div>
-        `
-    },
-    {
-        title: '3.8.9 Mineral Oil',
-        content: `
-            <div class="prose max-w-none prose-green">
-                <p><strong>Siddhant:</strong> Mineral oil (jo khane layak nahi hote) alkali ke saath saponify (saabun mein badalna) nahi hote, jabki khane wale tel ho jaate hain. Isse dhundhlapan (turbidity) paida hota hai.</p>
-                <ol>
-                    <li>Ek test tube mein 1 g saaf fat lein aur 5 ml 0.5 N ethanolic KOH solution daalein.</li>
-                    <li>10 minute tak ubalte paani mein reflux karein.</li>
-                    <li>Saponified solution mein 5 ml distilled water daalein.</li>
-                    <li><strong>Dhundhlapan</strong> aana mineral oil ki maujoodgi batata hai.</li>
-                </ol>
-            </div>
-        `
-    },
-    {
-        title: '3.8.10 Janwaron ki Charbi (Animal Body Fat)',
-         content: `
-            <div class="prose max-w-none prose-green">
-                <p><strong>Siddhant:</strong> Ghee ko ek khaas taapman par apardarshi (opaque) hone mein laga samay milawat ka pata laga sakta hai.</p>
-                <ol>
-                    <li>5 g ghee ko 50°C par pighlayein.</li>
-                    <li>Ise 23°C ke water bath mein transfer karein aur sample ke apardarshi hone ka samay record karein.</li>
-                    <li><strong>Result:</strong> Bhains ke ghee ko 14-15 min, gaay ke ghee ko 18-19 min lagte hain. Kam samay janwaron ki charbi aur zyada samay vanaspati tel ki milawat batata hai.</li>
-                </ol>
-            </div>
-        `
-    },
-     {
-        title: 'Doodh mein Detergent',
-         content: `
-            <div class="prose max-w-none prose-red">
-                <p><strong>Siddhant:</strong> Methylene blue paani mein ghulansheel hai lekin detergent ke saath milkar neela complex banata hai jo chloroform mein ghulansheel hai.</p>
-                <ol>
-                    <li>1 ml doodh lein, 1 ml methylene blue solution aur phir 2 ml chloroform milayein.</li>
-                    <li>15 second tak vortex karein aur phir 3 minute ke liye 1100 rpm par centrifuge karein.</li>
-                    <li>Neeche wali (chloroform) layer mein zyada <strong>gehra neela rang</strong> aana detergent ki maujoodgi batata hai. Agar upar wali layer zyada gehri hai toh detergent nahi hai.</li>
-                </ol>
-            </div>
-        `
-    }
-];
-
 export const reagentRecipes = {
     'alcohol_alizarin': {
         name: 'Alcohol Alizarin Reagent (0.2%)',
@@ -401,6 +97,14 @@ export const reagentRecipes = {
             { name: 'Alizarin', amount: 0.2, unit: 'g'}
         ],
         instructions: '0.2g Alizarin ko 100ml 68% Ethyl Alcohol mein gholein. Iska istemal COB test mein hota hai.'
+    },
+     'barium_chloride_5': {
+        name: 'Barium Chloride Solution (5% w/v)',
+        type: 'w/v',
+        components: [
+            { name: 'Barium Chloride (BaCl₂·2H₂O)', amount: 5, unit: 'g'}
+        ],
+        instructions: '5g Barium Chloride ko distilled water mein gholkar 100ml solution banayein.'
     },
     'barfoed': {
         name: 'Barfoed’s Reagent',
@@ -478,10 +182,10 @@ export const reagentRecipes = {
         instructions: 'Crystal violet ko alcohol mein gholein. Ammonium oxalate ko paani mein gholein. Dono solutions ko mix karein.'
     },
     'diphenylamine_2': {
-        name: 'Diphenylamine Solution (2% w/v)',
+        name: 'Diphenylamine Solution (2% w/v in H₂SO₄)',
         type: 'w/v_in_acid',
         components: [ { name: 'Diphenylamine', amount: 2, unit: 'g' } ],
-        instructions: 'Diphenylamine ko dhyan se Sulfuric Acid mein gholkar final volume poora karein. <strong>Savdhani: Hamesha acid ko paani mein milayein, na ki paani ko acid mein. Suraksha upkaran pehnein.</strong>'
+        instructions: '2g Diphenylamine ko dhyan se 100ml concentrated Sulfuric Acid mein gholein. <strong>Savdhani: Hamesha acid ko paani mein milayein, na ki paani ko acid mein. Suraksha upkaran pehnein.</strong>'
     },
     'dmab': {
         name: 'DMAB Reagent (Urea Test)',
@@ -536,13 +240,13 @@ export const reagentRecipes = {
         components: [
             { name: 'Ferric Chloride (FeCl3)', amount: 10, unit: 'g' }
         ],
-        instructions: 'Ferric Chloride ko thode distilled water mein gholein aur phir paani milakar final volume poora karein.'
+        instructions: '10g Ferric Chloride ko 100ml distilled water me gholein. Ye reagent Leach Test for Formalin me istemal hota hai.'
     },
     'furfural_2': {
         name: 'Furfural Solution (2% v/v)',
         type: 'v/v',
         components: [ { name: 'Furfural', amount: 2, unit: 'ml' } ],
-        instructions: 'Furfural ko Ethyl Alcohol mein milakar final volume poora karein.'
+        instructions: '2ml Furfural ko 98ml Ethyl Alcohol mein milakar 100ml solution banayein.'
     },
     'grams_iodine': {
         name: "Gram's Iodine",
@@ -595,10 +299,20 @@ export const reagentRecipes = {
         instructions: 'Standard Methylene Blue Thiocyanate tablet (jaise R-58) ko 200ml sterile ubalte hue distilled water mein gholein. Thanda hone ke baad, sterile distilled water se volume 800ml tak poora karein. Solution ko andhere, thande sthan par rakhein.'
     },
     'methylene_blue': {
-        name: 'Methylene Blue Solution',
+        name: 'Methylene Blue Solution (Detergent Test)',
         type: 'w/v',
         components: [ { name: 'Methylene Blue', amount: 0.0125, unit: 'g' } ],
-        instructions: '12.5mg (ya 0.0125g) Methylene Blue ko distilled water mein gholkar final volume poora karein.'
+        instructions: '12.5mg (ya 0.0125g) Methylene Blue ko 100ml distilled water mein gholkar solution banayein.'
+    },
+     'nesslers_reagent': {
+        name: 'Nessler’s Reagent (Ammonium Test)',
+        type: 'complex',
+        components: [
+            { name: 'Mercuric Chloride (8g in 150ml water)', amount: 1, unit: 'part' },
+            { name: 'Sodium Hydroxide (60g in 150ml water)', amount: 1, unit: 'part' },
+            { name: 'Potassium Iodide (16g in 150ml water)', amount: 1, unit: 'part' }
+        ],
+        instructions: 'Teen alag solutions banayein. Phir solution A ko B me milayein. Is mixture me solution C milayein. Ant me volume ko 500ml tak distilled water se poora karein aur aaram se upar ka saaf hissa istemal karein.'
     },
     'neutral_ferric_chloride_05': {
         name: 'Neutral Ferric Chloride Solution (0.5% w/v)',
@@ -633,6 +347,12 @@ export const reagentRecipes = {
         type: 'fixed',
         instructions: 'Yeh ek complex recipe hai. 35g ammonium molybdate aur 5g sodium tungstate ko 400ml 5% (w/v) NaOH solution mein gholein. 20-40 min tak zor se ubaalein. Thanda karke volume 350ml tak karein aur 125ml concentrated (85%) phosphoric acid milayein. Ant mein, distilled water se volume 500ml tak poora karein. Iski taiyari ke liye lab manual follow karein.'
     },
+    'potassium_chromate_10': {
+        name: 'Potassium Chromate Solution (10% w/v)',
+        type: 'w/v',
+        components: [ { name: 'Potassium Chromate (K₂CrO₄)', amount: 10, unit: 'g'} ],
+        instructions: '10g Potassium Chromate ko distilled water mein gholkar 100ml solution banayein. Iska istemal chloride test mein indicator ke roop mein hota hai.'
+    },
     'rosolic_acid': {
         name: 'Rosolic Acid Solution (0.1%)',
         type: 'complex',
@@ -661,17 +381,25 @@ export const reagentRecipes = {
         ],
         instructions: 'Resorcinol ko 40ml distilled water mein gholein, phir 35ml concentrated HCl milayein. Ant mein, distilled water se final volume poora karein.'
     },
-    'silver_nitrate_sol': {
-        name: 'Silver Nitrate Solution (1.7% w/v)',
+    'silver_nitrate_01n': {
+        name: 'Silver Nitrate Solution (0.1 N)',
         type: 'w/v',
         components: [ { name: 'Silver Nitrate (AgNO₃)', amount: 1.7, unit: 'g'} ],
-        instructions: '1.7g Silver Nitrate ko distilled water mein gholkar 100ml banayein. Brown bottle mein store karein.'
+        instructions: '1.7g Silver Nitrate ko 100ml distilled water mein gholkar 0.1 N solution banayein. Brown bottle mein store karein.'
     },
     'stannous_chloride_0025': {
         name: 'Stannous Chloride Solution (0.025% w/v)',
         type: 'w/v',
         components: [ { name: 'Stannous Chloride (SnCl2)', amount: 0.025, unit: 'g' } ],
         instructions: 'Stannous Chloride ko distilled water mein gholkar final volume poora karein.'
+    },
+     'tca_24': {
+        name: 'Trichloroacetic Acid (TCA) 24% w/v',
+        type: 'w/v',
+        components: [
+            { name: 'Trichloroacetic Acid', amount: 24, unit: 'g' }
+        ],
+        instructions: '24g Trichloroacetic Acid ko distilled water mein gholkar 100ml solution banayein.'
     },
     'urease_2': {
         name: 'Urease Solution (2% w/v)',
