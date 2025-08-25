@@ -201,10 +201,10 @@ function ProteinCaseinCalc() {
                 <TabsTrigger value="casein-titration">Casein (Titration)</TabsTrigger>
                 <TabsTrigger value="casein-factor">Casein (Factor)</TabsTrigger>
             </TabsList>
-            <TabsContent value="kjeldahl"><KjeldahlProteinCalc /></TabsContent>
-            <TabsContent value="formol"><FormolTitrationCalc /></TabsContent>
-            <TabsContent value="casein-titration"><CaseinTitrationCalc /></TabsContent>
-            <TabsContent value="casein-factor"><CaseinFromProteinCalc /></TabsContent>
+            <TabsContent value="kjeldahl" className="pt-4"><KjeldahlProteinCalc /></TabsContent>
+            <TabsContent value="formol" className="pt-4"><FormolTitrationCalc /></TabsContent>
+            <TabsContent value="casein-titration" className="pt-4"><CaseinTitrationCalc /></TabsContent>
+            <TabsContent value="casein-factor" className="pt-4"><CaseinFromProteinCalc /></TabsContent>
         </Tabs>
     )
 }
@@ -480,11 +480,11 @@ function YieldsCalc() {
                 <TabsTrigger value="shrikhand">Shrikhand Yield</TabsTrigger>
                 <TabsTrigger value="pedha">Pedha/Burfi Yield</TabsTrigger>
             </TabsList>
-            <TabsContent value="cream-sep"><CreamSeparationCalc /></TabsContent>
-            <TabsContent value="butter"><ButterYieldCalc /></TabsContent>
-            <TabsContent value="khoa"><KhoaYieldCalc /></TabsContent>
-            <TabsContent value="shrikhand"><ShrikhandYieldCalc /></TabsContent>
-            <TabsContent value="pedha"><PedhaBurfiYieldCalc /></TabsContent>
+            <TabsContent value="cream-sep" className="pt-4"><CreamSeparationCalc /></TabsContent>
+            <TabsContent value="butter" className="pt-4"><ButterYieldCalc /></TabsContent>
+            <TabsContent value="khoa" className="pt-4"><KhoaYieldCalc /></TabsContent>
+            <TabsContent value="shrikhand" className="pt-4"><ShrikhandYieldCalc /></TabsContent>
+            <TabsContent value="pedha" className="pt-4"><PedhaBurfiYieldCalc /></TabsContent>
         </Tabs>
     )
 }
@@ -911,10 +911,10 @@ function IceCreamCalculators() {
                 <TabsTrigger value="freezing-point">Freezing Point</TabsTrigger>
                 <TabsTrigger value="mix-comp">Mix Composition</TabsTrigger>
             </TabsList>
-            <TabsContent value="batch-scaling"><BatchScalingCalc /></TabsContent>
-            <TabsContent value="overrun"><OverrunCalc /></TabsContent>
-            <TabsContent value="freezing-point"><FreezingPointCalc /></TabsContent>
-            <TabsContent value="mix-comp"><MixCompositionCalc /></TabsContent>
+            <TabsContent value="batch-scaling" className="pt-4"><BatchScalingCalc /></TabsContent>
+            <TabsContent value="overrun" className="pt-4"><OverrunCalc /></TabsContent>
+            <TabsContent value="freezing-point" className="pt-4"><FreezingPointCalc /></TabsContent>
+            <TabsContent value="mix-comp" className="pt-4"><MixCompositionCalc /></TabsContent>
         </Tabs>
     )
 }
