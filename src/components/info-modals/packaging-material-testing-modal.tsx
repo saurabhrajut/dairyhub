@@ -33,9 +33,7 @@ const SubHeading = ({ children, id }: { children: React.ReactNode, id: string })
     <h3 id={id} className="text-xl font-semibold text-gray-800 mt-6 mb-3 scroll-mt-24 font-headline">{children}</h3>
 );
 
-const TestProcedure = ({ test }: { test: any }) => {
-    const { t } = useLanguage();
-    const content = t(packagingContent);
+const TestProcedure = ({ test, content }: { test: any, content: any }) => {
     return (
         <AccordionItem value={test.title.replace(/\s+/g, '-').toLowerCase()}>
             <AccordionTrigger className="text-left font-semibold text-lg hover:no-underline">{test.title}</AccordionTrigger>
@@ -110,7 +108,7 @@ const topicComponents = {
             <p><strong>{content.testing.sampling_title}:</strong> {content.testing.sampling_text}</p>
             <p><strong>{content.testing.conditioning_title}:</strong> {content.testing.conditioning_text}</p>
             <Accordion type="single" collapsible className="w-full">
-                {content.testing.tests.map((test:any) => <TestProcedure key={test.title} test={test} />)}
+                {content.testing.tests.map((test:any) => <TestProcedure key={test.title} test={test} content={content} />)}
             </Accordion>
             </div>
         </Section>
