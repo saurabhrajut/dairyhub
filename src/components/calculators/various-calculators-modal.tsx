@@ -23,7 +23,7 @@ import {
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { componentProps, getSnf } from "@/lib/utils";
-import { CheckCircle, PlusCircle, XCircle, Beaker, Thermometer, Weight, Percent, Scaling, Combine, Calculator, FlaskConical, ArrowLeft, RotateCw, Dna } from "lucide-react";
+import { CheckCircle, PlusCircle, XCircle, Beaker, Thermometer, Weight, Percent, Scaling, Combine, Calculator, FlaskConical, ArrowLeft, RotateCw, Dna, Atom } from "lucide-react";
 import { PaneerIcon, IceCreamIcon } from "../icons";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -52,11 +52,12 @@ const CalculatorCard = ({ title, children, description }: { title: string; child
     </div>
 );
 
-type CalculatorType = 'acidity' | 'yields' | 'paneer-yield' | 'ice-cream' | 'fat-dry' | 'clr-correction' | 'component-qty' | 'gravimetric' | 'formulas' | 'cip-strength' | 'protein-casein';
+type CalculatorType = 'acidity' | 'yields' | 'paneer-yield' | 'ice-cream' | 'fat-dry' | 'clr-correction' | 'component-qty' | 'gravimetric' | 'formulas' | 'cip-strength' | 'protein-casein' | 'minerals';
 
 const calculatorsInfo = {
     'acidity': { title: "Acidity", icon: Beaker, component: ProductAcidityCalc },
     'protein-casein': { title: "Protein & Casein", icon: Dna, component: ProteinCaseinCalc },
+    'minerals': { title: "Minerals (Na/K)", icon: Atom, component: MineralAnalysisCalc },
     'yields': { title: "Product Yields", icon: Percent, component: YieldsCalc },
     'paneer-yield': { title: "Paneer Yield", icon: PaneerIcon, component: PaneerYieldCalc },
     'ice-cream': { title: "Ice Cream", icon: IceCreamIcon, component: IceCreamCalculators },
@@ -137,14 +138,74 @@ export function VariousCalculatorsModal({
 
 // Individual Calculator Components
 
+function MineralAnalysisCalc() {
+    const [mineral, setMineral] = useState<'sodium' | 'potassium'>('sodium');
+    const [stdConc, setStdConc] = useState('10');
+    const [stdReading, setStdReading] = useState('');
+    const [sampleReading, setSampleReading] = useState('');
+    const [result, setResult] = useState<string | null>(null);
+
+    const calculate = () => {
+        const stdC = parseFloat(stdConc);
+        const stdR = parseFloat(stdReading);
+        const sampleR = parseFloat(sampleReading);
+
+        if (isNaN(stdC) || isNaN(stdR) || isNaN(sampleR) || stdR <= 0) {
+            setResult("Please enter valid positive numbers for all fields.");
+            return;
+        }
+
+        const factor = stdC / stdR;
+        const finalConcentration = sampleR * factor;
+
+        setResult(`Estimated ${mineral === 'sodium' ? 'Sodium' : 'Potassium'} Content: <strong>${finalConcentration.toFixed(2)} ppm</strong>`);
+    };
+
+    return (
+        <CalculatorCard title="Sodium & Potassium Analysis (Flame Photometry)" description="Estimate Sodium (Na) and Potassium (K) content in milk using flame photometer readings.">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <Label>Select Mineral</Label>
+                    <Select value={mineral} onValueChange={(val) => setMineral(val as any)}>
+                        <SelectTrigger><SelectValue/></SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="sodium">Sodium (Na)</SelectItem>
+                            <SelectItem value="potassium">Potassium (K)</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+                <div /> 
+                <div className="bg-muted/50 p-4 rounded-lg space-y-3">
+                    <h4 className="font-semibold text-gray-700 font-headline">Standard Calibration</h4>
+                    <div><Label>Standard Concentration (ppm)</Label><Input type="number" value={stdConc} onChange={e => setStdConc(e.target.value)} /></div>
+                    <div><Label>Standard Reading</Label><Input type="number" value={stdReading} onChange={e => setStdReading(e.target.value)} placeholder="e.g., 50"/></div>
+                </div>
+
+                <div className="bg-primary/10 p-4 rounded-lg space-y-3">
+                     <h4 className="font-semibold text-gray-700 font-headline">Milk Sample</h4>
+                    <div><Label>Sample Reading</Label><Input type="number" value={sampleReading} onChange={e => setSampleReading(e.target.value)} placeholder="e.g., 25" /></div>
+                </div>
+            </div>
+             <Button onClick={calculate} className="w-full mt-6">Calculate Mineral Content</Button>
+            {result && <Alert className="mt-4"><AlertDescription className="text-lg font-bold text-center" dangerouslySetInnerHTML={{ __html: result }} /></Alert>}
+        </CalculatorCard>
+    );
+}
+
 function ProteinCaseinCalc() {
     return (
-        <div className="space-y-6">
-            <KjeldahlProteinCalc />
-            <FormolTitrationCalc />
-            <CaseinTitrationCalc />
-            <CaseinFromProteinCalc />
-        </div>
+        <Tabs defaultValue="kjeldahl" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 h-auto">
+                <TabsTrigger value="kjeldahl">Kjeldahl Protein</TabsTrigger>
+                <TabsTrigger value="formol">Formol Protein</TabsTrigger>
+                <TabsTrigger value="casein-titration">Casein (Titration)</TabsTrigger>
+                <TabsTrigger value="casein-factor">Casein (Factor)</TabsTrigger>
+            </TabsList>
+            <TabsContent value="kjeldahl"><KjeldahlProteinCalc /></TabsContent>
+            <TabsContent value="formol"><FormolTitrationCalc /></TabsContent>
+            <TabsContent value="casein-titration"><CaseinTitrationCalc /></TabsContent>
+            <TabsContent value="casein-factor"><CaseinFromProteinCalc /></TabsContent>
+        </Tabs>
     )
 }
 
@@ -411,13 +472,20 @@ function ProductAcidityCalc() {
 
 function YieldsCalc() {
     return (
-        <div className="space-y-6">
-            <CreamSeparationCalc />
-            <ButterYieldCalc />
-            <KhoaYieldCalc />
-            <ShrikhandYieldCalc />
-            <PedhaBurfiYieldCalc />
-        </div>
+         <Tabs defaultValue="cream-sep" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 h-auto">
+                <TabsTrigger value="cream-sep">Cream Separation</TabsTrigger>
+                <TabsTrigger value="butter">Butter Yield</TabsTrigger>
+                <TabsTrigger value="khoa">Khoa Yield</TabsTrigger>
+                <TabsTrigger value="shrikhand">Shrikhand Yield</TabsTrigger>
+                <TabsTrigger value="pedha">Pedha/Burfi Yield</TabsTrigger>
+            </TabsList>
+            <TabsContent value="cream-sep"><CreamSeparationCalc /></TabsContent>
+            <TabsContent value="butter"><ButterYieldCalc /></TabsContent>
+            <TabsContent value="khoa"><KhoaYieldCalc /></TabsContent>
+            <TabsContent value="shrikhand"><ShrikhandYieldCalc /></TabsContent>
+            <TabsContent value="pedha"><PedhaBurfiYieldCalc /></TabsContent>
+        </Tabs>
     )
 }
 
@@ -836,12 +904,18 @@ function FormulasTab() {
 
 function IceCreamCalculators() {
     return (
-        <div className="space-y-6">
-            <BatchScalingCalc />
-            <OverrunCalc />
-            <FreezingPointCalc />
-            <MixCompositionCalc />
-        </div>
+         <Tabs defaultValue="batch-scaling" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 h-auto">
+                <TabsTrigger value="batch-scaling">Batch Scaling</TabsTrigger>
+                <TabsTrigger value="overrun">Overrun</TabsTrigger>
+                <TabsTrigger value="freezing-point">Freezing Point</TabsTrigger>
+                <TabsTrigger value="mix-comp">Mix Composition</TabsTrigger>
+            </TabsList>
+            <TabsContent value="batch-scaling"><BatchScalingCalc /></TabsContent>
+            <TabsContent value="overrun"><OverrunCalc /></TabsContent>
+            <TabsContent value="freezing-point"><FreezingPointCalc /></TabsContent>
+            <TabsContent value="mix-comp"><MixCompositionCalc /></TabsContent>
+        </Tabs>
     )
 }
 
