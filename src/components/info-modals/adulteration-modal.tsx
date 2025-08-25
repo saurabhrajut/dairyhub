@@ -137,6 +137,15 @@ const preservativesData = [
                     <li>Dissolve the ash in 10 ml of distilled water and titrate it against 0.1 N HCl.</li>
                     <li>A titre value of more than 1.2 ml of 0.1 N HCl indicates the presence of neutralizers.</li>
                 </ol>
+                <h4 class="mt-4">Method 3: Determination of true lactic acid/lactate content</h4>
+                <p><strong>Siddhant:</strong> The true lactic acid/lactate content is determined spectrophotometrically. The principle involves removing interfering substances, oxidizing lactic acid to acetaldehyde, which then forms a purple color with p-hydroxydiphenyl. A disturbed relationship between lactic acid content and titratable acidity indicates neutralization.</p>
+                <ol>
+                    <li>Prepare a protein-free filtrate of the milk sample using copper sulfate and calcium hydroxide.</li>
+                    <li>The filtrate is treated with sulfuric acid and copper sulfate to oxidize lactic acid.</li>
+                    <li>p-Hydroxydiphenyl reagent is added, and after incubation, a purple color develops.</li>
+                    <li>The intensity of the color is measured at 570 nm and compared against a standard curve.</li>
+                    <li>If the milk has normal or low titratable acidity but a lactic acid content higher than 30 mg/100 ml, neutralization is suspected.</li>
+                </ol>
                 <p class="text-xs"><strong>Ref:</strong> IS:1479 (1960), BIS (1981)</p>
             </div>
         `
@@ -389,6 +398,21 @@ const adulterantsData = [
             </div>
         `
     },
+     {
+        title: 'Common Salt (NaCl)',
+        content: `
+            <div class="prose max-w-none prose-green">
+                <h4>Silver Nitrate Test</h4>
+                 <p><strong>Siddhant:</strong> Added salt reacts with silver nitrate. Potassium chromate acts as an indicator.</p>
+                <ol>
+                    <li>Take 5 ml of milk in a test tube.</li>
+                    <li>Add 1 ml of 0.1 N silver nitrate solution.</li>
+                    <li>Mix and add 0.5 ml of 10% potassium chromate solution.</li>
+                    <li>Appearance of a <strong>yellow colour</strong> indicates added salt, whereas pure milk gives a brick red color.</li>
+                </ol>
+            </div>
+        `
+    },
     {
         title: 'Vegetable/Refined Oil (Foreign Fat)',
         content: `
@@ -465,6 +489,41 @@ const adulterantsData = [
                     <li>The curd from pure milk will be greenish, whereas the curd from a sample containing SMP will be <strong>bluish</strong>.</li>
                 </ol>
                 <p class="text-xs"><strong>Ref:</strong> Journal of Food Science and Technology, Vol 22 (1985)</p>
+            </div>
+        `
+    },
+     {
+        title: 'Soymilk in Milk',
+        content: `
+            <div class="prose max-w-none prose-green">
+                <p>Soymilk is sometimes added to illegally increase the protein content and SNF reading of milk. Several methods exist for its detection.</p>
+                <h4 class="mt-4">Method I: Polarimeteric method</h4>
+                <p>Based on the different optical rotation of sugars. Soymilk contains sucrose, raffinose, and stachyose, while bovine milk contains lactose. A significant change in the optical rotation of a protein-free filtrate can indicate soymilk addition.</p>
+                <h4 class="mt-4">Method II: Isoelectric precipitation method</h4>
+                <p>Soy proteins precipitate at a higher pH (~5.7) than milk casein (pH 4.6). By adjusting the milk pH to 5.7 and heating, coagulation will occur if soymilk is present.</p>
+                 <h4 class="mt-4">Method III: SDS-PAGE method</h4>
+                <p>This electrophoretic technique separates proteins based on molecular weight. Soy proteins have different molecular weights than milk proteins and will show up as distinct, extra bands on the gel, confirming adulteration.</p>
+                <h4 class="mt-4">Method IV: Immunodiffusion method</h4>
+                <p>Uses antibodies specific to soy proteins. If soy protein is present in the milk, it will react with the antibody to form a visible precipitation line in an agar gel.</p>
+                <h4 class="mt-4">Method V: HPLC based method</h4>
+                <p>High-Performance Liquid Chromatography can separate and quantify the different sugars. The presence of stachyose, a sugar found in soybeans but not milk, is a definitive marker for soymilk adulteration.</p>
+                <h4 class="mt-4">Method VI: Rapid method (Trypsin Inhibition)</h4>
+                <p>Soymilk contains trypsin inhibitors. This test measures the activity of the enzyme trypsin. If soymilk is present, the trypsin will be inhibited, leading to a reduced color change in a specific chemical reaction compared to a pure milk sample.</p>
+            </div>
+        `
+    },
+     {
+        title: 'Cheese Whey in Milk',
+        content: `
+            <div class="prose max-w-none prose-green">
+                <h4>Ninhydrin based spectrophotometric method</h4>
+                <p><strong>Siddhant:</strong> When rennet is used to make cheese, it cleaves a specific part of kappa-casein called glycomacropeptide (GMP), which goes into the whey. This GMP contains sialic acid. The test selectively precipitates GMP from the milk sample and then measures the sialic acid content. A high level of sialic acid indicates the presence of added cheese whey.</p>
+                <ol>
+                    <li>Glycomacropeptide (GMP) is selectively precipitated from the milk sample using Trichloroacetic acid (TCA).</li>
+                    <li>The precipitate is then treated with an acidic ninhydrin reagent and heated.</li>
+                    <li>The sialic acid bound to the GMP produces a stable yellow-brown color, which is measured with a spectrophotometer at 470 nm.</li>
+                    <li>An absorbance value significantly higher than that of pure milk indicates adulteration with cheese whey.</li>
+                </ol>
             </div>
         `
     },
