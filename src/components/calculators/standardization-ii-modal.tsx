@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label"
 import { getSnf } from "@/lib/utils"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { ArrowLeft, Blend, Milk, SlidersHorizontal, Combine, Bot, Calculator, Settings, ChevronsUp, Target } from 'lucide-react'
+import { ArrowLeft, Blend, Milk, SlidersHorizontal, Combine, Bot, Calculator, Settings, ChevronsUp, Target, Droplets, Info } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 
 type CalculatorType = 'fat-snf-clr-ts' | 'fat-blending' | 'fat-snf-adjustment' | 'reconstituted-milk' | 'recombined-milk' | 'clr-blending' | 'custom-calculator' | 'milk-blending' | 'clr-increase' | 'fat-clr-maintainer' | 'two-milk-blending-target';
@@ -436,10 +436,10 @@ function TwoMilkBlendingToTargetCalc() {
     const [inputs, setInputs] = useState({
         f1: '6.5', c1: '29',
         f2: '2.5', c2: '27',
-        fTarget: '4.5', cTarget: '28',
+        fTarget: '4.5', cTarget: '28.5',
         qTotal: '1000'
     });
-    const [result, setResult] = useState<{ q1: number, q2: number } | null>(null);
+    const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     const handleInputChange = useCallback((name: string, value: string) => {
@@ -462,78 +462,107 @@ function TwoMilkBlendingToTargetCalc() {
             setError("Please fill all fields with valid numbers.");
             return;
         }
-        
-        if ( (FT > Math.max(F1,F2)) || (FT < Math.min(F1,F2)) || (CT > Math.max(C1,C2)) || (CT < Math.min(C1,C2)) ) {
-            setError("The target composition is not achievable. The target Fat and CLR must be between the values of the source milks.");
+
+        if (QT <= 0) {
+            setError("Total Batch Quantity must be a positive number.");
             return;
         }
 
-        // We solve the system of linear equations:
-        // Q1 + Q2 = QT
-        // Q1*F1 + Q2*F2 = QT*FT
-        // From first eq: Q2 = QT - Q1. Substitute into second eq:
-        // Q1*F1 + (QT - Q1)*F2 = QT*FT
-        // Q1*F1 + QT*F2 - Q1*F2 = QT*FT
-        // Q1*(F1 - F2) = QT*FT - QT*F2
-        // Q1 = QT * (FT - F2) / (F1 - F2)
-        
-        let Q1: number;
+        if ( (FT > Math.max(F1,F2)) || (FT < Math.min(F1,F2)) ) {
+            setError("The target Fat % is not achievable. It must be between the Fat % of the source milks.");
+            return;
+        }
 
-        if (Math.abs(F1 - F2) > 1e-9) { // Check for division by zero
-            Q1 = QT * (FT - F2) / (F1 - F2);
-        } else if (Math.abs(C1 - C2) > 1e-9) { // If fat is the same, use CLR
-            Q1 = QT * (CT - C2) / (C1 - C2);
+        // --- Step 1: Calculate milk quantities to achieve Target Fat ---
+        let q1, q2;
+
+        if (Math.abs(F1 - F2) < 1e-9) { // If both milks have same fat
+            if (Math.abs(F1 - FT) > 1e-9) { // and it's not the target fat
+                 setError("Cannot achieve target fat as both source milks have the same fat percentage, which is different from the target.");
+                 return;
+            }
+            // If fat is same and matches target, we can't solve for ratio based on fat.
+            // Arbitrarily set q1 to half and check CLR later.
+            q1 = QT / 2;
+            q2 = QT / 2;
         } else {
-             setError("Cannot solve. The milk sources have identical properties.");
+            q1 = QT * (FT - F2) / (F1 - F2);
+            q2 = QT - q1;
+        }
+        
+        if (q1 < 0 || q2 < 0) {
+             setError("Calculation error: Negative milk quantity resulted. This can happen if target fat is outside the range of source milks.");
              return;
         }
 
-        const Q2 = QT - Q1;
+        // --- Step 2: Check the resulting CLR and adjust if necessary ---
+        const finalClrCheck = (q1 * C1 + q2 * C2) / QT;
+        const clrDifference = CT - finalClrCheck;
 
-        // Final check on CLR as fat was the primary driver.
-        const finalClrCheck = (Q1*C1 + Q2*C2)/QT;
+        let resultHTML = `To achieve the target Fat of <strong>${FT}%</strong>, you need to blend:<br/>
+            <ul class='list-disc list-inside mt-2 text-lg'>
+                <li>Milk Source 1: <strong class='text-green-700'>${q1.toFixed(3)} kg/L</strong></li>
+                <li>Milk Source 2: <strong class='text-green-700'>${q2.toFixed(3)} kg/L</strong></li>
+            </ul>
+            <p class='mt-3'>This blend will result in a CLR of approximately <strong>${finalClrCheck.toFixed(2)}</strong>.</p>
+            <hr class='my-4' />
+        `;
 
-        if (Q1 < 0 || Q2 < 0 || Math.abs(finalClrCheck-CT) > 0.1) {
-            setError("The target composition is not achievable with the given milk sources. The ratios required for fat and CLR are conflicting. Try adjusting the target values.");
-            return;
+        if (Math.abs(clrDifference) < 0.05) { // If CLR is already close enough
+            resultHTML += "<h4 class='font-bold text-md text-blue-700'>No CLR adjustment needed.</h4>";
+        } else if (clrDifference > 0) { // If CLR is LOW and needs to be increased
+            const smpSolidsPercent = 96;
+            const smpNeeded = (QT * clrDifference * 0.25) / smpSolidsPercent;
+            resultHTML += `<h4 class='font-bold text-md'>CLR Adjustment Required:</h4>
+            To increase CLR from <strong>${finalClrCheck.toFixed(2)}</strong> to <strong>${CT}</strong>, you need to add:
+            <ul class='list-disc list-inside mt-2 text-lg'>
+                <li>Skimmed Milk Powder (SMP): <strong class='text-blue-700'>${smpNeeded.toFixed(3)} kg</strong></li>
+            </ul>
+            `;
+        } else { // If CLR is HIGH and needs to be decreased
+            const clrToDecrease = finalClrCheck - CT;
+            const waterNeeded = (clrToDecrease * 20 * QT) / 1000;
+            resultHTML += `<h4 class='font-bold text-md'>CLR Adjustment Required:</h4>
+            To decrease CLR from <strong>${finalClrCheck.toFixed(2)}</strong> to <strong>${CT}</strong>, you need to add:
+            <ul class='list-disc list-inside mt-2 text-lg'>
+                <li>Water: <strong class='text-blue-700'>${waterNeeded.toFixed(3)} L</strong></li>
+            </ul>
+            `;
         }
-
-        setResult({ q1: Q1, q2: Q2 });
+        
+        setResult(resultHTML);
 
     }, [inputs]);
 
     return (
-        <CalculatorCard title="Two-Milk Blending to Target Calculator" description="Calculate the required quantities of two different milk sources to achieve a desired final batch composition (Fat% and CLR).">
+        <CalculatorCard title="Advanced Two-Milk Blending to Target" description="Calculate required quantities of two milk sources to hit a target Fat %, with automatic adjustment for CLR using SMP or water.">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                 <div className="bg-muted/50 p-4 rounded-lg space-y-3">
                     <h3 className="font-semibold text-gray-700 font-headline">Milk Source 1</h3>
-                    <MemoizedInputField label="Fat %" value={inputs.f1} name="f1" setter={handleInputChange} />
-                    <MemoizedInputField label="CLR" value={inputs.c1} name="c1" setter={handleInputChange} />
+                    <MemoizedInputField label="Fat % (F₁)" value={inputs.f1} name="f1" setter={handleInputChange} />
+                    <MemoizedInputField label="CLR (C₁)" value={inputs.c1} name="c1" setter={handleInputChange} />
                 </div>
                 <div className="bg-muted/50 p-4 rounded-lg space-y-3">
                     <h3 className="font-semibold text-gray-700 font-headline">Milk Source 2</h3>
-                    <MemoizedInputField label="Fat %" value={inputs.f2} name="f2" setter={handleInputChange} />
-                    <MemoizedInputField label="CLR" value={inputs.c2} name="c2" setter={handleInputChange} />
+                    <MemoizedInputField label="Fat % (F₂)" value={inputs.f2} name="f2" setter={handleInputChange} />
+                    <MemoizedInputField label="CLR (C₂)" value={inputs.c2} name="c2" setter={handleInputChange} />
                 </div>
                 <div className="bg-primary/10 p-4 rounded-lg space-y-3 md:col-span-2">
                     <h3 className="font-semibold text-gray-700 font-headline">Target Batch</h3>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <MemoizedInputField label="Total Batch Qty (kg/L)" value={inputs.qTotal} name="qTotal" setter={handleInputChange} />
-                        <MemoizedInputField label="Target Fat %" value={inputs.fTarget} name="fTarget" setter={handleInputChange} />
-                        <MemoizedInputField label="Target CLR" value={inputs.cTarget} name="cTarget" setter={handleInputChange} />
+                        <MemoizedInputField label="Total Batch Qty (Qᴛ) kg/L" value={inputs.qTotal} name="qTotal" setter={handleInputChange} />
+                        <MemoizedInputField label="Target Fat % (Fᴛ)" value={inputs.fTarget} name="fTarget" setter={handleInputChange} />
+                        <MemoizedInputField label="Target CLR (Cᴛ)" value={inputs.cTarget} name="cTarget" setter={handleInputChange} />
                     </div>
                 </div>
             </div>
-            <Button onClick={calculate} className="w-full mt-4">Calculate Blend Quantities</Button>
+            <Button onClick={calculate} className="w-full mt-4">Calculate Blend & Adjust</Button>
             {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
             {result && (
                  <Alert className="mt-4">
-                    <AlertTitle>Required Quantities for {inputs.qTotal} kg/L Batch</AlertTitle>
+                    <AlertTitle>Blending & Adjustment Plan</AlertTitle>
                     <AlertDescription>
-                        <div className="space-y-2 mt-2">
-                           <p><strong>Milk Source 1:</strong> <span className="font-bold text-lg text-green-700">{result.q1.toFixed(3)} kg/L</span></p>
-                           <p><strong>Milk Source 2:</strong> <span className="font-bold text-lg text-green-700">{result.q2.toFixed(3)} kg/L</span></p>
-                        </div>
+                        <div className="mt-2 prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: result }}/>
                     </AlertDescription>
                 </Alert>
             )}
@@ -1079,6 +1108,7 @@ function RecombinedMilkCalc() {
 
 
     
+
 
 
 
