@@ -207,11 +207,11 @@ export const reagentRecipes = {
         name: 'Erichrome Black T Indicator',
         type: 'complex',
         components: [
-            { name: 'Erichrome Black T', amount: 0.4, unit: 'g'},
+            { name: 'Erichrome Black T', amount: 0.5, unit: 'g'},
             { name: 'Hydroxylamine HCl', amount: 4.5, unit: 'g'},
             { name: 'Ethyl Alcohol (95%)', amount: 100, unit: 'ml'}
         ],
-        instructions: 'Chemicals ko ethyl alcohol me gholkar 100ml banayein.'
+        instructions: '0.5g EBT aur 4.5g Hydroxylamine HCl ko 100ml 95% Ethyl Alcohol mein gholein.'
     },
     'ethanolic_koh_05': {
         name: 'Ethanolic KOH (0.5 N)',
@@ -415,5 +415,77 @@ export const reagentRecipes = {
             { name: 'Copper Sulphate (CuSO4.5H2O)', amount: 6, unit: 'g'}
         ],
         instructions: 'Dono chemicals ko distilled water me gholkar 100ml banayein.'
+    },
+    'na_stock_1000ppm': {
+        name: 'Sodium Stock Standard (1000 ppm)',
+        type: 'w/v',
+        components: [{ name: 'Sodium Chloride (NaCl, dried)', amount: 0.2542, unit: 'g' }],
+        instructions: 'Accurately weigh 0.2542g of dried NaCl and dissolve in distilled water. Make up the volume to 100ml to get a 1000 ppm Sodium (Na) stock solution.'
+    },
+    'k_stock_1000ppm': {
+        name: 'Potassium Stock Standard (1000 ppm)',
+        type: 'w/v',
+        components: [{ name: 'Potassium Chloride (KCl, dried)', amount: 0.1907, unit: 'g' }],
+        instructions: 'Accurately weigh 0.1907g of dried KCl and dissolve in distilled water. Make up the volume to 100ml to get a 1000 ppm Potassium (K) stock solution.'
+    },
+    'cod_dichromate': {
+        name: 'Potassium Dichromate Digestion Soln (0.25N)',
+        type: 'w/v',
+        components: [
+            { name: 'Potassium Dichromate (K₂Cr₂O₇, dried)', amount: 12.259, unit: 'g' },
+            { name: 'Mercuric Sulfate (HgSO₄)', amount: 20, unit: 'g' }
+        ],
+        instructions: '12.259g of dried K₂Cr₂O₇ and 20g of HgSO₄ ko distilled water me gholein aur dhyan se volume 1 litre tak poora karein.'
+    },
+    'cod_acid_reagent': {
+        name: 'Sulfuric Acid Reagent (for COD)',
+        type: 'w/v_in_acid',
+        components: [{ name: 'Silver Sulfate (Ag₂SO₄)', amount: 10, unit: 'g' }],
+        instructions: 'Dhyan se 10g Silver Sulfate (Ag₂SO₄) ko 1 litre concentrated Sulfuric Acid (H₂SO₄) me gholein. 1-2 din tak stir karke poori tarah ghulne dein.'
+    },
+    'bod_phosphate_buffer': {
+        name: 'Phosphate Buffer (for BOD)',
+        type: 'complex',
+        components: [
+            { name: 'KH₂PO₄', amount: 8.5, unit: 'g' },
+            { name: 'K₂HPO₄', amount: 21.75, unit: 'g' },
+            { name: 'Na₂HPO₄·7H₂O', amount: 33.4, unit: 'g' },
+            { name: 'NH₄Cl', amount: 1.7, unit: 'g' }
+        ],
+        instructions: 'Sabhi chemicals ko distilled water me gholkar 1 litre banayein. Is solution ka pH 7.2 hona chahiye.'
+    },
+    'bod_mgso4': {
+        name: 'Magnesium Sulfate Solution (for BOD)',
+        type: 'w/v',
+        components: [{ name: 'MgSO₄·7H₂O', amount: 22.5, unit: 'g' }],
+        instructions: '22.5g Magnesium Sulfate ko distilled water me gholkar 1 litre banayein.'
+    },
+    'bod_cacl2': {
+        name: 'Calcium Chloride Solution (for BOD)',
+        type: 'w/v',
+        components: [{ name: 'CaCl₂', amount: 27.5, unit: 'g' }],
+        instructions: '27.5g anhydrous Calcium Chloride ko distilled water me gholkar 1 litre banayein.'
+    },
+    'bod_fecl3': {
+        name: 'Ferric Chloride Solution (for BOD)',
+        type: 'w/v',
+        components: [{ name: 'FeCl₃·6H₂O', amount: 0.25, unit: 'g' }],
+        instructions: '0.25g Ferric Chloride ko distilled water me gholkar 1 litre banayein.'
+    },
+    'do_manganese_sulfate': {
+        name: 'Manganese Sulfate Solution (for DO)',
+        type: 'w/v',
+        components: [{ name: 'MnSO₄·4H₂O', amount: 48, unit: 'g' }],
+        instructions: '48g Manganese Sulfate ko distilled water me gholkar 100ml banayein.'
+    },
+    'do_alkali_iodide_azide': {
+        name: 'Alkali-Iodide-Azide Reagent (for DO)',
+        type: 'complex',
+        components: [
+            { name: 'Sodium Hydroxide (NaOH)', amount: 50, unit: 'g' },
+            { name: 'Potassium Iodide (KI)', amount: 15, unit: 'g' },
+            { name: 'Sodium Azide (NaN₃)', amount: 1, unit: 'g' }
+        ],
+        instructions: '50g NaOH aur 15g KI ko distilled water me gholein. Phir 1g Sodium Azide ko 40ml distilled water me alag se gholein. Dono solutions ko mix karke final volume 100ml tak poora karein.'
     }
 };
