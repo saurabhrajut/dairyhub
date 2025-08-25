@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useMemo, useCallback, memo } from "react";
+import { useState, useMemo, useCallback, memo, useRef } from "react";
 import {
   Dialog,
   DialogContent,
@@ -21,8 +21,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { PlusCircle, XCircle } from "lucide-react";
+import { PlusCircle, XCircle, FileDown, Loader2 } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 
 interface FixedExpense {
@@ -109,7 +111,8 @@ export function PlantCostModal({
       avgMilkPurchaseCost: '45',
       packagingPerLitre: '2.5',
       ingredientsPerLitre: '1.0',
-      utilitiesPerLitre: '1.5',
+      energyPerLitre: '1.2',
+      waterPerLitre: '0.3',
       distributionPerLitre: '1.0',
   });
   
@@ -118,7 +121,12 @@ export function PlantCostModal({
     { id: 2, name: "Plant Rent/Lease", cost: "50000" },
     { id: 3, name: "Marketing & Admin", cost: "25000" },
     { id: 4, name: "Maintenance & Repairs", cost: "15000" },
+    { id: 5, name: "Depreciation on Assets", cost: "20000" },
+    { id: 6, name: "Interest on Loan", cost: "10000" },
   ]);
+
+  const [isDownloading, setIsDownloading] = useState(false);
+  const reportRef = useRef<HTMLDivElement>(null);
 
   const handleInputChange = useCallback((name: string, value: string) => {
     setInputs(prev => ({...prev, [name]: value}));
@@ -140,17 +148,18 @@ export function PlantCostModal({
 
   const results = useMemo(() => {
     const i = Object.fromEntries(Object.entries(inputs).map(([k, v]) => [k, parseFloat(v) || 0]));
-    const { milkProcessed, totalRevenue, avgMilkPurchaseCost, packagingPerLitre, ingredientsPerLitre, utilitiesPerLitre, distributionPerLitre } = i;
+    const { milkProcessed, totalRevenue, avgMilkPurchaseCost, packagingPerLitre, ingredientsPerLitre, energyPerLitre, waterPerLitre, distributionPerLitre } = i;
 
     // --- Variable Costs ---
     const totalRawMaterialCost = avgMilkPurchaseCost * milkProcessed;
 
     const packagingCost = packagingPerLitre * milkProcessed;
     const ingredientsCost = ingredientsPerLitre * milkProcessed;
-    const utilitiesCost = utilitiesPerLitre * milkProcessed;
+    const energyCost = energyPerLitre * milkProcessed;
+    const waterCost = waterPerLitre * milkProcessed;
     const distributionCost = distributionPerLitre * milkProcessed;
     
-    const totalOtherVariableCosts = packagingCost + ingredientsCost + utilitiesCost + distributionCost;
+    const totalOtherVariableCosts = packagingCost + ingredientsCost + energyCost + waterCost + distributionCost;
     const totalVariableCosts = totalRawMaterialCost + totalOtherVariableCosts;
     const variableCostPerLitre = milkProcessed > 0 ? totalVariableCosts / milkProcessed : 0;
 
@@ -172,6 +181,11 @@ export function PlantCostModal({
     return {
         revenue: totalRevenue,
         totalRawMaterialCost,
+        packagingCost,
+        ingredientsCost,
+        energyCost,
+        waterCost,
+        distributionCost,
         totalOtherVariableCosts,
         totalVariableCosts,
         variableCostPerLitre,
@@ -192,6 +206,52 @@ export function PlantCostModal({
           {children}
       </div>
   );
+
+  const handleDownloadPdf = async () => {
+    const reportElement = reportRef.current;
+    if (!reportElement) return;
+
+    setIsDownloading(true);
+    try {
+        const canvas = await html2canvas(reportElement, {
+            scale: 2, 
+            useCORS: true,
+            backgroundColor: '#ffffff'
+        });
+        const imgData = canvas.toDataURL('image/png');
+        
+        const pdf = new jsPDF({
+            orientation: 'portrait',
+            unit: 'mm',
+            format: 'a4'
+        });
+
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = pdf.internal.pageSize.getHeight();
+        const imgWidth = canvas.width;
+        const imgHeight = canvas.height;
+        const ratio = imgWidth / imgHeight;
+        
+        let finalImgWidth = pdfWidth - 20; // with margin
+        let finalImgHeight = finalImgWidth / ratio;
+        
+        if (finalImgHeight > pdfHeight - 20) {
+            finalImgHeight = pdfHeight - 20;
+            finalImgWidth = finalImgHeight * ratio;
+        }
+
+        const x = (pdfWidth - finalImgWidth) / 2;
+        const y = 10;
+        
+        pdf.addImage(imgData, 'PNG', x, y, finalImgWidth, finalImgHeight);
+        pdf.save(`dairy_plant_report_${period}_${new Date().toISOString().slice(0,10)}.pdf`);
+    } catch (error) {
+        console.error("Failed to generate PDF", error);
+    } finally {
+        setIsDownloading(false);
+    }
+  };
+
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -218,10 +278,10 @@ export function PlantCostModal({
                 </div>
             </div>
 
-            <Section title="1. Production & Revenue Details" description="Define your production volume and total sales for the selected period.">
+            <Section title="1. Production &amp; Revenue Details" description="Define your production volume and total sales for the selected period.">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <MemoizedInputField label={`Total Milk Processed (${period})`} value={inputs.milkProcessed} name="milkProcessed" setter={handleInputChange} placeholder="e.g., 30000" />
-                    <MemoizedInputField label={`Total Sales Revenue (${period})`} value={inputs.totalRevenue} name="totalRevenue" setter={handleInputChange} placeholder="e.g., 2100000" />
+                    <MemoizedInputField label={`Total Milk Processed (${period === 'monthly' ? 'Litres/month' : 'Litres/day'})`} value={inputs.milkProcessed} name="milkProcessed" setter={handleInputChange} placeholder="e.g., 30000" />
+                    <MemoizedInputField label={`Total Sales Revenue (${period === 'monthly' ? '₹/month' : '₹/day'})`} value={inputs.totalRevenue} name="totalRevenue" setter={handleInputChange} placeholder="e.g., 2100000" />
                 </div>
             </Section>
 
@@ -237,12 +297,13 @@ export function PlantCostModal({
                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
                     <MemoizedInputField label="Packaging (₹ per Litre)" value={inputs.packagingPerLitre} name="packagingPerLitre" setter={handleInputChange} />
                     <MemoizedInputField label="Other Ingredients (₹ per Litre)" value={inputs.ingredientsPerLitre} name="ingredientsPerLitre" setter={handleInputChange} />
-                    <MemoizedInputField label="Utilities (₹ per Litre)" value={inputs.utilitiesPerLitre} name="utilitiesPerLitre" setter={handleInputChange} />
-                    <MemoizedInputField label="Distribution (₹ per Litre)" value={inputs.distributionPerLitre} name="distributionPerLitre" setter={handleInputChange} />
+                    <MemoizedInputField label="Energy (Electricity, Fuel) (₹ per Litre)" value={inputs.energyPerLitre} name="energyPerLitre" setter={handleInputChange} />
+                    <MemoizedInputField label="Water / ETP (₹ per Litre)" value={inputs.waterPerLitre} name="waterPerLitre" setter={handleInputChange} />
+                    <MemoizedInputField label="Distribution &amp; Logistics (₹ per Litre)" value={inputs.distributionPerLitre} name="distributionPerLitre" setter={handleInputChange} />
                  </div>
             </Section>
 
-            <Section title="3. Fixed Expenses (Monthly Overhead)" description="Costs that remain constant regardless of production volume.">
+            <Section title="3. Fixed Expenses (Monthly Overhead)" description="Costs that remain constant regardless of production volume. Enter all costs on a monthly basis.">
                  <div className="space-y-3">
                      <div className="grid grid-cols-1 sm:grid-cols-[2fr_1fr_auto] gap-2 items-center text-sm font-medium text-muted-foreground">
                         <p>Expense Name</p><p>Monthly Cost (₹)</p><div />
@@ -259,37 +320,51 @@ export function PlantCostModal({
                 <Button variant="outline" size="sm" onClick={handleAddFixedExpense} className="mt-4"><PlusCircle className="mr-2"/> Add Fixed Expense</Button>
             </Section>
             
-            <Alert className={`mt-8 ${results.netProfit >= 0 ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
-                <AlertTitle className="text-xl font-bold">Financial Summary ({period})</AlertTitle>
-                <AlertDescription>
-                    <div className="mt-4 text-base">
-                        <Table>
-                           <TableBody>
-                             <TableRow><TableCell>Total Revenue</TableCell><TableCell className="text-right font-semibold">₹ {results.revenue.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell></TableRow>
-                             <TableRow><TableCell>Total Variable Costs</TableCell><TableCell className="text-right font-semibold text-red-600">- ₹ {results.totalVariableCosts.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell></TableRow>
-                             <TableRow className="bg-muted/50 text-lg"><TableCell className="font-bold">Gross Profit</TableCell><TableCell className="font-bold text-right">₹ {results.grossProfit.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell></TableRow>
-                             <TableRow><TableCell>Total Fixed Costs</TableCell><TableCell className="text-right font-semibold text-red-600">- ₹ {results.totalFixedCost.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell></TableRow>
-                             <TableRow className={`font-extrabold text-xl ${results.netProfit >= 0 ? 'text-green-700' : 'text-red-700'}`}>
-                                <TableCell>{results.netProfit >= 0 ? 'Net Profit' : 'Net Loss'}</TableCell>
-                                <TableCell className="text-right">₹ {results.netProfit.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell>
-                             </TableRow>
-                           </TableBody>
-                        </Table>
-                         <h4 className="font-semibold mt-6 mb-2 text-center text-gray-600">Key Metrics</h4>
-                         <Table>
-                            <TableBody>
-                                <TableRow><TableCell>Gross Profit Margin</TableCell><TableCell className="font-bold text-right">{results.grossMargin.toFixed(2)} %</TableCell></TableRow>
-                                <TableRow><TableCell>Net Profit Margin</TableCell><TableCell className="font-bold text-right">{results.netMargin.toFixed(2)} %</TableCell></TableRow>
-                                <TableRow><TableCell>Break-Even Revenue</TableCell><TableCell className="font-bold text-right">₹ {results.breakEvenRevenue.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell></TableRow>
-                            </TableBody>
-                         </Table>
-                    </div>
-                </AlertDescription>
-            </Alert>
+            <div ref={reportRef} className="p-1">
+                <Alert className={`mt-8 ${results.netProfit >= 0 ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
+                    <AlertTitle className="text-xl font-bold">Financial Summary ({period})</AlertTitle>
+                    <AlertDescription>
+                        <div className="mt-4 text-base">
+                            <Table>
+                               <TableBody>
+                                 <TableRow><TableCell>A. Total Revenue</TableCell><TableCell className="text-right font-semibold">₹ {results.revenue.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell></TableRow>
+                                 
+                                 <TableRow className="bg-muted/30"><TableCell colSpan={2} className="font-bold text-primary">B. Variable Costs</TableCell></TableRow>
+                                 <TableRow><TableCell className="pl-8">Raw Material (Milk)</TableCell><TableCell className="text-right text-red-600">- ₹ {results.totalRawMaterialCost.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell></TableRow>
+                                 <TableRow><TableCell className="pl-8">Other Variable Costs (Packaging, Energy, etc.)</TableCell><TableCell className="text-right text-red-600">- ₹ {results.totalOtherVariableCosts.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell></TableRow>
+                                 <TableRow><TableCell className="font-semibold pl-4">Total Variable Costs</TableCell><TableCell className="text-right font-semibold text-red-600">- ₹ {results.totalVariableCosts.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell></TableRow>
+
+                                 <TableRow className="bg-muted/50 text-lg"><TableCell className="font-bold">C. Gross Profit (A - B)</TableCell><TableCell className="font-bold text-right">₹ {results.grossProfit.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell></TableRow>
+                                 
+                                 <TableRow><TableCell className="font-bold text-primary">D. Total Fixed Costs</TableCell><TableCell className="text-right font-semibold text-red-600">- ₹ {results.totalFixedCost.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell></TableRow>
+                                 
+                                 <TableRow className={`font-extrabold text-xl ${results.netProfit >= 0 ? 'text-green-700' : 'text-red-700'}`}>
+                                    <TableCell>E. {results.netProfit >= 0 ? 'Net Profit' : 'Net Loss'} (C - D)</TableCell>
+                                    <TableCell className="text-right">₹ {results.netProfit.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell>
+                                 </TableRow>
+                               </TableBody>
+                            </Table>
+                             <h4 className="font-semibold mt-6 mb-2 text-center text-gray-600">Key Metrics</h4>
+                             <Table>
+                                <TableBody>
+                                    <TableRow><TableCell>Gross Profit Margin</TableCell><TableCell className="font-bold text-right">{results.grossMargin.toFixed(2)} %</TableCell></TableRow>
+                                    <TableRow><TableCell>Net Profit Margin</TableCell><TableCell className="font-bold text-right">{results.netMargin.toFixed(2)} %</TableCell></TableRow>
+                                    <TableRow><TableCell>Break-Even Revenue ({period})</TableCell><TableCell className="font-bold text-right">₹ {results.breakEvenRevenue.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell></TableRow>
+                                </TableBody>
+                             </Table>
+                        </div>
+                    </AlertDescription>
+                </Alert>
+            </div>
+            <div className="text-center mt-6">
+                <Button onClick={handleDownloadPdf} disabled={isDownloading}>
+                    {isDownloading ? <Loader2 className="mr-2 animate-spin" /> : <FileDown className="mr-2" />}
+                    Download Report as PDF
+                </Button>
+            </div>
             <div className="h-12"></div>
         </ScrollArea>
       </DialogContent>
     </Dialog>
   );
 }
-
