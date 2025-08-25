@@ -605,9 +605,6 @@ export function AdulterationModal({
                         </Accordion>
                     </div>
                 </ScrollArea>
-                <footer className="text-center mt-4 py-2 border-t border-gray-200 shrink-0">
-                    <p className="text-xs text-gray-500">This guide is for informational purposes only. Always adhere to official laboratory standards and safety protocols.</p>
-                </footer>
             </div>
         ) : (
              <ScrollArea className="flex-1 mt-4 sm:pr-4">
