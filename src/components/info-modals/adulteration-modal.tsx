@@ -16,13 +16,11 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table"
 import { Button } from "../ui/button"
 import { FlaskConical, Microscope, Shield, ArrowLeft } from "lucide-react"
 
 const platformTests = [
     {
-        id: "organoleptic",
         title: "Organoleptic Test (संवेदी परीक्षण)",
         content: `
             <p>The lid of the can is opened as soon as the milk arrives on the dairy platform, and the milk is mixed up with a plunger to check for a pleasant or bad odour. The general appearance, color, consistency, temperature and flavor are next assessed.</p>
@@ -37,7 +35,6 @@ const platformTests = [
         `
     },
     {
-        id: "cob",
         title: "Clot On Boiling (COB) Test",
         content: `
             <p>It is a simple and cheap test for definitive result based on heat stability of the milk.</p>
@@ -53,7 +50,6 @@ const platformTests = [
         `
     },
     {
-        id: "alcohol",
         title: "Alcohol Test",
         content: `
             <p>A simple and quick alcohol coagulation test is available. It's based on the fact that milk proteins have a low stability when exposed to alcohol. When milk has a high quantity of lactic acid, rennet, milk protein, or salt, as in mastitis, the test may fail.</p>
@@ -68,15 +64,65 @@ const platformTests = [
             <p>If any coagulation is formed, then fine particles of curd will be visible inside the test tube. This denotes positive alcohol test and such milk is rejected.</p>
         `
     },
+    {
+        title: "Total Solids (TS) and Solid-Not-Fat (SNF) Test with Lactometer",
+        content: `
+            <p><strong>Principle:</strong> This test uses a lactometer to measure the specific gravity of milk, which is then used with the fat percentage in Richmond's formula to estimate the SNF and TS.</p>
+            <h4 class="font-semibold mt-2">Procedure:</h4>
+            <ul class="list-disc list-inside mt-1">
+                <li>Determine the fat percentage of the milk using the Gerber method.</li>
+                <li>Warm the milk sample to 40°C and then cool it to 27°C.</li>
+                <li>Pour the milk into a lactometer jar and gently insert an ISI-marked lactometer.</li>
+                <li>Record the lactometer reading (LR) at the top of the meniscus.</li>
+                <li>Apply temperature and fat corrections to get the Corrected Lactometer Reading (CLR).</li>
+            </ul>
+            <h4 class="font-semibold mt-2">Calculation:</h4>
+            <pre><code>SNF (%) = (CLR / 4) + (0.25 * Fat %) + 0.72 (for cow milk)</code></pre>
+            <pre><code>Total Solids (TS %) = Fat % + SNF %</code></pre>
+            <p class="text-xs"><strong>Ref:</strong> IS:1479 (1960)</p>
+        `
+    },
+    {
+        title: "Freezing Point Test",
+        content: `
+            <p><strong>Principle:</strong> The freezing point of milk is one of its most constant properties (-0.512 to -0.575 °C). Adding water to milk raises the freezing point closer to 0°C, the freezing point of water.</p>
+            <h4 class="font-semibold mt-2">Procedure:</h4>
+            <p>This test is performed using a specialized instrument called a Cryoscope. The instrument supercools the milk sample and then induces crystallization, accurately measuring the temperature at which it freezes.</p>
+            <h4 class="font-semibold mt-2">Inference:</h4>
+            <p>A freezing point higher than the standard range is a definitive indication of added water.</p>
+        `
+    },
+    {
+        title: "Sedimentation Test",
+        content: `
+            <p><strong>Principle:</strong> This test measures the amount of visible dirt and extraneous matter in milk.</p>
+            <h4 class="font-semibold mt-2">Procedure:</h4>
+            <ul class="list-disc list-inside mt-1">
+                <li>A known volume of milk (e.g., 500 ml) is filtered through a special sediment test disc.</li>
+                <li>The disc is then dried and compared with standard sediment discs to grade the milk.</li>
+            </ul>
+            <h4 class="font-semibold mt-2">Inference:</h4>
+            <p>A high amount of sediment indicates poor hygiene and udder health during milking.</p>
+        `
+    },
+    {
+        title: "Resazurin Test",
+        content: `
+            <p><strong>Principle:</strong> Resazurin is a redox dye that changes color based on the metabolic activity of bacteria in the milk. It provides a quick estimate of the microbiological quality.</p>
+            <h4 class="font-semibold mt-2">Procedure:</h4>
+            <p>A standard solution of resazurin is added to a milk sample, which is then incubated. The color change from blue to pink to white is observed over time.</p>
+            <h4 class="font-semibold mt-2">Inference:</h4>
+            <p>A rapid color change indicates a high bacterial load and poor quality milk.</p>
+        `
+    }
 ];
 
 const preservativesData = [
     {
         title: 'Neutralizers (NaOH, Na₂CO₃, NaHCO₃)',
-        purpose: 'To neutralize developed acidity in sour milk.',
         content: `
             <div class="prose max-w-none prose-blue">
-                <h4>Method 1: Rosolic Acid Test</h4>
+                <h4>Method 1: Rosalic Acid Test</h4>
                 <p><strong>Siddhant:</strong> Rosolic acid is an indicator which gives a red colour in alkaline condition.</p>
                 <ol>
                     <li>Take 10 ml of milk in a test tube and add an equal volume of ethyl alcohol (95%).</li>
@@ -91,12 +137,28 @@ const preservativesData = [
                     <li>Dissolve the ash in 10 ml of distilled water and titrate it against 0.1 N HCl.</li>
                     <li>A titre value of more than 1.2 ml of 0.1 N HCl indicates the presence of neutralizers.</li>
                 </ol>
+                <p class="text-xs"><strong>Ref:</strong> IS:1479 (1960), BIS (1981)</p>
+            </div>
+        `
+    },
+     {
+        title: 'Boric Acid and Borates',
+        content: `
+            <div class="prose max-w-none prose-blue">
+                <p><strong>Siddhant:</strong> Boric acid and its salts give a red colour with turmeric paper.</p>
+                <ol>
+                    <li>Take 5 ml of milk in a test tube and add 1 ml concentrated HCl.</li>
+                    <li>Mix well, then dip a strip of turmeric paper.</li>
+                    <li>Dry the paper strip and observe the color change.</li>
+                    <li>A <strong>red colour</strong> on the paper indicates the presence of boric acid.</li>
+                    <li>Then add a drop of ammonium hydroxide solution.</li>
+                    <li>A change from red to <strong>deep-green</strong> confirms the presence of boric acid.</li>
+                </ol>
             </div>
         `
     },
     {
         title: 'Formalin (Formaldehyde)',
-        purpose: 'A powerful preservative to extend shelf life illegally.',
         content: `
             <div class="prose max-w-none prose-blue">
                 <h4>Method 1: Leach Test</h4>
@@ -114,12 +176,12 @@ const preservativesData = [
                     <li>Add 1 ml of chromotropic acid reagent and mix well.</li>
                     <li>Appearance of a <strong>yellow color</strong> confirms the presence of formalin, whereas the control sample remains white.</li>
                 </ol>
+                <p class="text-xs"><strong>Ref:</strong> IS:1479 (1960)</p>
             </div>
         `
     },
      {
         title: 'Hydrogen Peroxide (H₂O₂)',
-        purpose: 'Used as a preservative, especially where refrigeration is not available.',
         content: `
             <div class="prose max-w-none prose-blue">
                 <h4>Method 1: Para-phenylenediamine Test</h4>
@@ -131,6 +193,7 @@ const preservativesData = [
                 </ol>
                 
                 <h4 class="mt-4">Method 2: Potassium Iodide & Starch Test</h4>
+                 <p><strong>Siddhant:</strong> H₂O₂ oxidizes potassium iodide (KI) to iodine (I₂), which then reacts with starch to form a blue complex.</p>
                 <ol>
                     <li>Take 1 ml of milk and add 1 ml of potassium iodide-starch reagent.</li>
                     <li>Appearance of a <strong>blue color</strong> indicates the presence of H₂O₂.</li>
@@ -138,12 +201,40 @@ const preservativesData = [
             </div>
         `
     },
+    {
+        title: 'Salicylic Acid & Benzoic Acid',
+        content: `
+             <div class="prose max-w-none prose-blue">
+                <p><strong>Siddhant:</strong> These acids are extracted with ether and then react with ferric chloride to produce characteristic colors.</p>
+                <ol>
+                    <li>Acidify 10 ml of milk with HCl and extract with ethyl ether.</li>
+                    <li>Evaporate the ether. Dissolve the residue in water.</li>
+                    <li>Add a few drops of 0.5% neutral ferric chloride solution.</li>
+                    <li><strong>Salicylic Acid:</strong> A violet color indicates its presence.</li>
+                    <li><strong>Benzoic Acid:</strong> A salmon-colored precipitate indicates its presence.</li>
+                </ol>
+            </div>
+        `
+    },
+    {
+        title: 'Hypochlorites & Chloramines',
+        content: `
+            <div class="prose max-w-none prose-blue">
+                <p><strong>Siddhant:</strong> These strong oxidizing agents can be detected by their reaction with potassium iodide and starch.</p>
+                <ol>
+                    <li>Add 5 ml of milk to a test tube.</li>
+                    <li>Add 1.5 ml of 7% potassium iodide solution and mix.</li>
+                    <li>Add 4 ml of dilute HCl and mix.</li>
+                    <li>In the presence of hypochlorite, a <strong>yellowish-brown to deep mauve color</strong> develops.</li>
+                </ol>
+            </div>
+        `
+    }
 ];
 
 const adulterantsData = [
     {
         title: 'Cane Sugar',
-        purpose: 'To increase the SNF content and density (CLR) of milk, often after adding water.',
         content: `
             <div class="prose max-w-none prose-green">
                 <h4>Method 1: Using Seliwanoff’s Reagent</h4>
@@ -162,12 +253,12 @@ const adulterantsData = [
                     <li>Place the tube in boiling water bath for 5 min.</li>
                     <li>A <strong>red colour</strong> indicates the presence of sucrose.</li>
                 </ol>
+                <p class="text-xs"><strong>Ref:</strong> IS:1479 (1960)</p>
             </div>
         `
     },
     {
         title: 'Starch & Other Cereal Flours',
-        purpose: 'To increase the SNF content and thickness of milk.',
         content: `
             <div class="prose max-w-none prose-green">
                 <h4>Method 1: Using Iodine (Without heated milk sample)</h4>
@@ -183,12 +274,26 @@ const adulterantsData = [
                     <li>Boil 3-5 ml of milk and cool to room temperature.</li>
                     <li>Add 1-2 drops of iodine solution. A <strong>blue colour</strong> indicates the presence of starch, which disappears on boiling and reappears on cooling.</li>
                 </ol>
+                <p class="text-xs"><strong>Ref:</strong> IS:1479 (1960)</p>
+            </div>
+        `
+    },
+    {
+        title: 'Cellulose',
+        content: `
+            <div class="prose max-w-none prose-green">
+                <p><strong>Siddhant:</strong> Cellulose is insoluble. It can be detected by its reaction with iodinated zinc chloride.</p>
+                <ol>
+                    <li>Take 10 ml of milk and add 10-15 drops of concentrated nitric acid.</li>
+                    <li>Filter the coagulated mass and wash with water.</li>
+                    <li>Boil the residue with 1-2 ml of iodinated zinc chloride reagent.</li>
+                    <li>Appearance of a <strong>blue or violet color</strong> indicates the presence of cellulose.</li>
+                </ol>
             </div>
         `
     },
     {
         title: 'Urea',
-        purpose: 'To increase the non-protein nitrogen (NPN) content, which falsely inflates protein estimation and also increases SNF.',
         content: `
             <div class="prose max-w-none prose-green">
                 <h4>Method 1: DMAB & TCA Method</h4>
@@ -205,12 +310,12 @@ const adulterantsData = [
                     <li>Add 1 ml of 1.6% DMAB reagent.</li>
                     <li>A <strong>distinct yellow colour</strong> indicates added urea.</li>
                 </ol>
+                <p class="text-xs"><strong>Ref:</strong> IS:1479 (1960), FSSAI 2006 (limit: 70 mg/100ml)</p>
             </div>
         `
     },
     {
         title: 'Glucose',
-        purpose: 'To increase the SNF of milk.',
         content: `
             <div class="prose max-w-none prose-green">
                 <p><strong>Siddhant:</strong> Using a modified Barfoed's test, glucose reduces cupric ions to cuprous, which then reduces phosphomolybdic acid to form a blue compound.</p>
@@ -225,7 +330,6 @@ const adulterantsData = [
     },
     {
         title: 'Maltodextrin',
-        purpose: 'A polysaccharide used as a food additive to increase thickness and SNF.',
         content: `
             <div class="prose max-w-none prose-green">
                 <h4>Method 1: Using Iodine Reagent</h4>
@@ -246,7 +350,6 @@ const adulterantsData = [
     },
     {
         title: 'Detergent',
-        purpose: 'Added to emulsify external fat (vegetable oil) into milk to create synthetic milk.',
         content: `
             <div class="prose max-w-none prose-red">
                 <p><strong>Siddhant:</strong> Anionic detergents form a complex with the cationic dye methylene blue. This complex is soluble in chloroform.</p>
@@ -259,8 +362,7 @@ const adulterantsData = [
         `
     },
     {
-        title: 'Ammonium Salts',
-        purpose: 'To increase the lactometer reading by increasing the density of milk.',
+        title: 'Ammonium Compounds (Sulphates)',
         content: `
             <div class="prose max-w-none prose-green">
                 <h4>Method 1: Nessler’s Reagent Method</h4>
@@ -270,32 +372,25 @@ const adulterantsData = [
                     <li>Appearance of <strong>yellowish or grey colour</strong> confirms the presence of added ammonium salts.</li>
                 </ol>
                 <h4 class="mt-4">Method 2: Turmeric Paper Method</h4>
+                <p><strong>Siddhant:</strong> Ammonium salts release ammonia in alkaline conditions, which turns wet turmeric paper red.</p>
                 <ol>
                     <li>Take 5 ml of milk and add 1 ml of 10% NaOH.</li>
                     <li>Place a wet turmeric paper on the rim of the test tube.</li>
                     <li>Appearance of <strong>pinkish red colour</strong> on the paper confirms the presence of ammonium salt.</li>
                 </ol>
-            </div>
-        `
-    },
-    {
-        title: 'Sulfate Salts',
-        purpose: 'To increase the lactometer reading.',
-        content: `
-            <div class="prose max-w-none prose-green">
+                 <h4 class="mt-4">Method 3: Sulfate Detection (with BaCl₂)</h4>
                 <p><strong>Siddhant:</strong> Sulphates precipitate with Barium Chloride (BaCl₂).</p>
                 <ol>
                     <li>Take 10 ml of milk and add 10 ml of Trichloroacetic acid (TCA) to coagulate it.</li>
                     <li>Filter the milk and take 5 ml of the clear filtrate.</li>
                     <li>Add a few drops of 5% BaCl₂ solution.</li>
-                    <li>Formation of a <strong>milky-white precipitate</strong> indicates the presence of added sulphates.</li>
+                    <li>Formation of a <strong>milky-white precipitate</strong> indicates the presence of added sulphates (like ammonium sulphate).</li>
                 </ol>
             </div>
         `
     },
     {
         title: 'Vegetable/Refined Oil (Foreign Fat)',
-        purpose: 'To replace natural milk fat with cheaper vegetable oil to increase profit.',
         content: `
             <div class="prose max-w-none prose-green">
                  <h4>Butyro-Refractometer (BR) Reading Method</h4>
@@ -312,12 +407,40 @@ const adulterantsData = [
                     <li>Take 5g of melted fat, add 5ml concentrated HCl and 0.4ml of 2% furfural solution. Vortex for 2 minutes.</li>
                     <li>A <strong>pink or red color</strong> in the acid layer indicates vanaspati adulteration.</li>
                 </ol>
+                <p class="text-xs"><strong>Ref:</strong> IS 3508 – 1966</p>
+            </div>
+        `
+    },
+    {
+        title: 'Mineral Oil',
+        content: `
+            <div class="prose max-w-none prose-green">
+                 <h4>Holde's Test</h4>
+                 <p><strong>Siddhant:</strong> Mineral oils are non-saponifiable, meaning they do not form soap with alkali, unlike edible fats.</p>
+                <ol>
+                    <li>Saponify 1g of fat with 25ml of 4% alcoholic KOH.</li>
+                    <li>Add 100ml of hot water.</li>
+                    <li>The appearance of <strong>turbidity</strong> indicates the presence of mineral oil.</li>
+                </ol>
+            </div>
+        `
+    },
+     {
+        title: 'Animal Body Fat (e.g., Lard)',
+        content: `
+            <div class="prose max-w-none prose-green">
+                 <h4>Opacity Test</h4>
+                 <p><strong>Siddhant:</strong> Different fats solidify and become opaque at different rates and temperatures.</p>
+                <ol>
+                    <li>Melt 5g of ghee at 50°C.</li>
+                    <li>Transfer to a water bath at 23°C and record the time it takes for the sample to become opaque.</li>
+                    <li><strong>Result:</strong> Buffalo ghee takes 14-15 min, cow ghee 18-19 min. A shorter time suggests animal body fat adulteration, while a longer time suggests vegetable oil.</li>
+                </ol>
             </div>
         `
     },
     {
         title: 'Pond Water (Nitrates)',
-        purpose: 'To increase the volume of milk. Pond water is heavier than tap water.',
         content: `
             <div class="prose max-w-none prose-green">
                 <p><strong>Siddhant:</strong> This method detects nitrates/nitrites present in pond water from agricultural fertilizers.</p>
@@ -331,9 +454,9 @@ const adulterantsData = [
     },
     {
         title: 'Skimmed Milk Powder (SMP) in Natural Milk',
-        purpose: 'To illegally increase the SNF content of natural milk.',
         content: `
             <div class="prose max-w-none prose-green">
+                <p><strong>Purpose:</strong> To illegally increase the SNF content of natural milk.</p>
                 <p><strong>Siddhant:</strong> The proteins in reconstituted milk powder contain reducing groups that react with phosphomolybdic acid on boiling to give a blue colour.</p>
                 <ol>
                     <li>Centrifuge 50 ml of milk to separate the cream.</li>
@@ -341,9 +464,25 @@ const adulterantsData = [
                     <li>Wash the precipitate, then add 2 ml of 1% phosphomolybdic acid and boil for 15 minutes.</li>
                     <li>The curd from pure milk will be greenish, whereas the curd from a sample containing SMP will be <strong>bluish</strong>.</li>
                 </ol>
+                <p class="text-xs"><strong>Ref:</strong> Journal of Food Science and Technology, Vol 22 (1985)</p>
             </div>
         `
     },
+    {
+        title: 'Gelatine',
+        content: `
+            <div class="prose max-w-none prose-green">
+                <p><strong>Purpose:</strong> To increase the thickness and SNF content of milk.</p>
+                <p><strong>Siddhant:</strong> Gelatine forms a yellow precipitate with picric acid.</p>
+                <ol>
+                    <li>Take 10 ml of milk and add 20 ml of Stokes reagent (acid mercuric nitrate).</li>
+                    <li>Shake well and filter.</li>
+                    <li>To the filtrate, add an equal volume of saturated picric acid solution.</li>
+                    <li>A <strong>yellow precipitate</strong> indicates the presence of gelatine.</li>
+                </ol>
+            </div>
+        `
+    }
 ];
 
 type AdulterationCategory = 'platform-tests' | 'preservatives' | 'adulterants';
@@ -396,11 +535,10 @@ export function AdulterationModal({
                             {selectedCategory.intro}
                         </p>
                         <Accordion type="single" collapsible className="w-full">
-                            {selectedCategory.data.map((item, index) => (
-                                <AccordionItem key={item.title} value={`item-${index}`}>
+                            {selectedCategory.data.map((item) => (
+                                <AccordionItem key={item.title} value={item.title.replace(/\s/g, '-')}>
                                     <AccordionTrigger className="font-semibold text-left">{item.title}</AccordionTrigger>
                                     <AccordionContent>
-                                        {'purpose' in item && <p className="font-semibold text-gray-600 mb-2">Purpose: {item.purpose}</p>}
                                         <div className="prose max-w-none prose-sm" dangerouslySetInnerHTML={{ __html: item.content }} />
                                     </AccordionContent>
                                 </AccordionItem>
@@ -434,8 +572,3 @@ export function AdulterationModal({
   )
 }
     
-
-    
-
-
-
