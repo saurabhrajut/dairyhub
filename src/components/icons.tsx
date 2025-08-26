@@ -116,6 +116,19 @@ export const MilkBottleIcon = (props: SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+export const MilkCanIcon = (props: SVGProps<SVGSVGElement>) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+        <path d="M8 2h8v2a2 2 0 1 1-4 0V2" />
+        <path d="M9 4h6" />
+        <path d="M6 4h.01" />
+        <path d="M17.99 4h.01" />
+        <path d="M7 8h10" />
+        <path d="M5 8h.01" />
+        <path d="M18.99 8h.01" />
+        <path d="M6 22h12c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2Z" />
+    </svg>
+);
 
 export const ReagentIcon = TestTube2;
     
+

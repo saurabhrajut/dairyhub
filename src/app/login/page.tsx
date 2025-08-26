@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Mail, Lock, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
-import { MilkBottleIcon } from '@/components/icons';
+import { MilkCanIcon } from '@/components/icons';
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
@@ -39,7 +39,7 @@ export default function LoginPage() {
         <div className="bg-gray-50 flex items-center justify-center min-h-screen p-4">
             <div className="w-full max-w-sm bg-white rounded-2xl shadow-md p-8 m-4">
                 <div className="text-center mb-10">
-                    <MilkBottleIcon className="w-16 h-16 text-primary mx-auto mb-4" />
+                    <MilkCanIcon className="w-16 h-16 text-primary mx-auto mb-4" />
                     <h1 className="text-3xl font-bold text-gray-800">
                         Welcome to <span className="text-primary">Dairy Hub</span>
                     </h1>
