@@ -1,4 +1,3 @@
-
 "use client";
 import {
   Dialog,
@@ -41,15 +40,17 @@ function GeneralContent() {
     const generalContent = content.topics.general;
     return (
         <ProductCard title={generalContent.title}>
-            <p className="font-medium leading-relaxed">{generalContent.p1}</p>
-            <SectionTitle>{generalContent.definitions.title}</SectionTitle>
-            <ul className="list-disc pl-5 space-y-1">
-                {generalContent?.definitions?.list?.map((item, index) => (
-                    <li key={index} dangerouslySetInnerHTML={{ __html: item }} />
-                ))}
-            </ul>
-            <SectionTitle>{generalContent.principles.title}</SectionTitle>
-            <p className="font-medium leading-relaxed">{generalContent.principles.p1}</p>
+            <div className="prose prose-sm max-w-none break-words">
+                <p className="font-medium leading-relaxed">{generalContent.p1}</p>
+                <SectionTitle>{generalContent.definitions.title}</SectionTitle>
+                <ul className="list-disc pl-5 space-y-1">
+                    {generalContent?.definitions?.list?.map((item, index) => (
+                        <li key={index} dangerouslySetInnerHTML={{ __html: item }} />
+                    ))}
+                </ul>
+                <SectionTitle>{generalContent.principles.title}</SectionTitle>
+                <p className="font-medium leading-relaxed">{generalContent.principles.p1}</p>
+            </div>
         </ProductCard>
     )
 }
@@ -60,13 +61,15 @@ function MilkContent() {
     const milkContent = content.topics.milk;
     return (
         <ProductCard title={milkContent.title}>
-            <SectionTitle>{milkContent.description.title}</SectionTitle>
-            <ul className="list-disc pl-5 space-y-1">
-                {milkContent?.description?.list?.map((item, index) => (
-                    <li key={index}>{item}</li>
-                ))}
-            </ul>
-            <SectionTitle>{milkContent.composition.title}</SectionTitle>
+            <div className="prose prose-sm max-w-none break-words">
+                <SectionTitle>{milkContent.description.title}</SectionTitle>
+                <ul className="list-disc pl-5 space-y-1">
+                    {milkContent?.description?.list?.map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))}
+                </ul>
+                <SectionTitle>{milkContent.composition.title}</SectionTitle>
+            </div>
             <div className="overflow-x-auto">
                 <Table>
                     <TableHeader>
@@ -87,12 +90,14 @@ function MilkContent() {
                     </TableBody>
                 </Table>
             </div>
-            <SectionTitle>{milkContent.additives.title}</SectionTitle>
-            <p className="font-medium leading-relaxed">{milkContent.additives.p1}</p>
-            <SectionTitle>{milkContent.hygiene.title}</SectionTitle>
-            <p className="font-medium leading-relaxed">{milkContent.hygiene.p1}</p>
-            <SectionTitle>{milkContent.labeling.title}</SectionTitle>
-            <p className="font-medium leading-relaxed">{milkContent.labeling.p1}</p>
+            <div className="prose prose-sm max-w-none break-words">
+                <SectionTitle>{milkContent.additives.title}</SectionTitle>
+                <p className="font-medium leading-relaxed">{milkContent.additives.p1}</p>
+                <SectionTitle>{milkContent.hygiene.title}</SectionTitle>
+                <p className="font-medium leading-relaxed">{milkContent.hygiene.p1}</p>
+                <SectionTitle>{milkContent.labeling.title}</SectionTitle>
+                <p className="font-medium leading-relaxed">{milkContent.labeling.p1}</p>
+            </div>
         </ProductCard>
     )
 }
@@ -103,9 +108,11 @@ function KhoaContent() {
     const khoaContent = content.topics.khoa;
     return (
         <ProductCard title={khoaContent.title}>
-            <SectionTitle>{khoaContent.description.title}</SectionTitle>
-            <p className="font-medium leading-relaxed">{khoaContent.description.p1}</p>
-            <SectionTitle>{khoaContent.composition.title}</SectionTitle>
+            <div className="prose prose-sm max-w-none break-words">
+                <SectionTitle>{khoaContent.description.title}</SectionTitle>
+                <p className="font-medium leading-relaxed">{khoaContent.description.p1}</p>
+                <SectionTitle>{khoaContent.composition.title}</SectionTitle>
+            </div>
             <div className="overflow-x-auto">
                 <Table>
                     <TableHeader>
@@ -136,16 +143,18 @@ function CreamContent() {
     const creamContent = content.topics.cream;
     return (
         <ProductCard title={creamContent.title}>
-            <SectionTitle>{creamContent.description.title}</SectionTitle>
-            <ul className="list-disc pl-5 space-y-1">
-                {creamContent?.description?.list?.map((item, index) => (
-                    <li key={index}>{item}</li>
-                ))}
-            </ul>
-            <SectionTitle>{creamContent.composition.title}</SectionTitle>
-            <p className="font-medium leading-relaxed">{creamContent.composition.p1}</p>
-            <SectionTitle>{creamContent.labeling.title}</SectionTitle>
-            <p className="font-medium leading-relaxed">{creamContent.labeling.p1}</p>
+            <div className="prose prose-sm max-w-none break-words">
+                <SectionTitle>{creamContent.description.title}</SectionTitle>
+                <ul className="list-disc pl-5 space-y-1">
+                    {creamContent?.description?.list?.map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))}
+                </ul>
+                <SectionTitle>{creamContent.composition.title}</SectionTitle>
+                <p className="font-medium leading-relaxed">{creamContent.composition.p1}</p>
+                <SectionTitle>{creamContent.labeling.title}</SectionTitle>
+                <p className="font-medium leading-relaxed">{creamContent.labeling.p1}</p>
+            </div>
         </ProductCard>
     )
 }
@@ -156,9 +165,11 @@ function FatProductsContent() {
     const fatContent = content.topics.fatProducts;
     return (
         <ProductCard title={fatContent.title}>
-            <SectionTitle>{fatContent.description.title}</SectionTitle>
-            <p className="font-medium leading-relaxed">{fatContent.description.p1}</p>
-            <SectionTitle>{fatContent.composition.title}</SectionTitle>
+            <div className="prose prose-sm max-w-none break-words">
+                <SectionTitle>{fatContent.description.title}</SectionTitle>
+                <p className="font-medium leading-relaxed">{fatContent.description.p1}</p>
+                <SectionTitle>{fatContent.composition.title}</SectionTitle>
+            </div>
             <div className="overflow-x-auto">
                 <Table>
                     <TableHeader>
@@ -179,7 +190,9 @@ function FatProductsContent() {
                     </TableBody>
                 </Table>
             </div>
-            <SectionTitle>{fatContent.fattyAcid.title}</SectionTitle>
+            <div className="prose prose-sm max-w-none break-words">
+                <SectionTitle>{fatContent.fattyAcid.title}</SectionTitle>
+            </div>
             <div className="overflow-x-auto">
                 <Table>
                     <TableHeader>
@@ -211,9 +224,11 @@ function ButterContent() {
     const butterContent = content.topics.butter;
     return (
         <ProductCard title={butterContent.title}>
-            <SectionTitle>{butterContent.definition.title}</SectionTitle>
-            <p className="font-medium leading-relaxed">{butterContent.definition.p1}</p>
-            <SectionTitle>{butterContent.composition.title}</SectionTitle>
+            <div className="prose prose-sm max-w-none break-words">
+                <SectionTitle>{butterContent.definition.title}</SectionTitle>
+                <p className="font-medium leading-relaxed">{butterContent.definition.p1}</p>
+                <SectionTitle>{butterContent.composition.title}</SectionTitle>
+            </div>
             <div className="overflow-x-auto">
                 <Table>
                     <TableHeader>
@@ -245,9 +260,11 @@ function MilkPowdersContent() {
     const powderContent = content.topics.milkPowders;
     return (
         <ProductCard title={powderContent.title}>
-            <SectionTitle>{powderContent.description.title}</SectionTitle>
-            <p className="font-medium leading-relaxed">{powderContent.description.p1}</p>
-            <SectionTitle>{powderContent.composition.title}</SectionTitle>
+            <div className="prose prose-sm max-w-none break-words">
+                <SectionTitle>{powderContent.description.title}</SectionTitle>
+                <p className="font-medium leading-relaxed">{powderContent.description.p1}</p>
+                <SectionTitle>{powderContent.composition.title}</SectionTitle>
+            </div>
             <div className="overflow-x-auto">
                 <Table>
                     <TableHeader>
@@ -279,13 +296,15 @@ function FermentedContent() {
     const fermentedContent = content.topics.fermented;
     return (
         <ProductCard title={fermentedContent.title}>
-            <SectionTitle>{fermentedContent.description.title}</SectionTitle>
-            <ul className="list-disc pl-5 space-y-1">
-                 {fermentedContent?.description?.list?.map((item, index) => (
-                    <li key={index}>{item}</li>
-                ))}
-            </ul>
-            <SectionTitle>{fermentedContent.yoghurt.title}</SectionTitle>
+            <div className="prose prose-sm max-w-none break-words">
+                <SectionTitle>{fermentedContent.description.title}</SectionTitle>
+                <ul className="list-disc pl-5 space-y-1">
+                     {fermentedContent?.description?.list?.map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))}
+                </ul>
+                <SectionTitle>{fermentedContent.yoghurt.title}</SectionTitle>
+            </div>
             <div className="overflow-x-auto">
                 <Table>
                     <TableHeader>
@@ -306,7 +325,9 @@ function FermentedContent() {
                     </TableBody>
                 </Table>
             </div>
-            <SectionTitle>{fermentedContent.chakka.title}</SectionTitle>
+            <div className="prose prose-sm max-w-none break-words">
+                <SectionTitle>{fermentedContent.chakka.title}</SectionTitle>
+            </div>
             <div className="overflow-x-auto">
                 <Table>
                     <TableHeader>
@@ -337,9 +358,11 @@ function IceCreamContent() {
     const iceCreamContent = content.topics.iceCream;
     return (
         <ProductCard title={iceCreamContent.title}>
-            <SectionTitle>{iceCreamContent.description.title}</SectionTitle>
-            <p className="font-medium leading-relaxed">{iceCreamContent.description.p1}</p>
-            <SectionTitle>{iceCreamContent.composition.title}</SectionTitle>
+            <div className="prose prose-sm max-w-none break-words">
+                <SectionTitle>{iceCreamContent.description.title}</SectionTitle>
+                <p className="font-medium leading-relaxed">{iceCreamContent.description.p1}</p>
+                <SectionTitle>{iceCreamContent.composition.title}</SectionTitle>
+            </div>
             <div className="overflow-x-auto">
                 <Table>
                     <TableHeader>
@@ -360,7 +383,9 @@ function IceCreamContent() {
                     </TableBody>
                 </Table>
             </div>
-            <SectionTitle>{iceCreamContent.milkIce.title}</SectionTitle>
+            <div className="prose prose-sm max-w-none break-words">
+                <SectionTitle>{iceCreamContent.milkIce.title}</SectionTitle>
+            </div>
             <div className="overflow-x-auto">
                 <Table>
                     <TableHeader>
@@ -392,9 +417,11 @@ function ChhanaPaneerContent() {
     const paneerContent = content.topics.chhanaPaneer;
     return (
         <ProductCard title={paneerContent.title}>
-            <SectionTitle>{paneerContent.definition.title}</SectionTitle>
-            <p className="font-medium leading-relaxed">{paneerContent.definition.p1}</p>
-            <SectionTitle>{paneerContent.composition.title}</SectionTitle>
+            <div className="prose prose-sm max-w-none break-words">
+                <SectionTitle>{paneerContent.definition.title}</SectionTitle>
+                <p className="font-medium leading-relaxed">{paneerContent.definition.p1}</p>
+                <SectionTitle>{paneerContent.composition.title}</SectionTitle>
+            </div>
             <div className="overflow-x-auto">
                 <Table>
                     <TableHeader>
@@ -415,8 +442,10 @@ function ChhanaPaneerContent() {
                     </TableBody>
                 </Table>
             </div>
-            <SectionTitle>{paneerContent.labeling.title}</SectionTitle>
-            <p className="font-medium leading-relaxed">{paneerContent.labeling.p1}</p>
+            <div className="prose prose-sm max-w-none break-words">
+                <SectionTitle>{paneerContent.labeling.title}</SectionTitle>
+                <p className="font-medium leading-relaxed">{paneerContent.labeling.p1}</p>
+            </div>
         </ProductCard>
     )
 }
@@ -427,13 +456,15 @@ function CheeseContent() {
     const cheeseContent = content.topics.cheese;
     return (
         <ProductCard title={cheeseContent.title}>
-            <SectionTitle>{cheeseContent.description.title}</SectionTitle>
-            <ul className="list-disc pl-5 space-y-1">
-                {cheeseContent?.description?.list?.map((item, index) => (
-                    <li key={index}>{item}</li>
-                ))}
-            </ul>
-            <SectionTitle>{cheeseContent.composition.title}</SectionTitle>
+            <div className="prose prose-sm max-w-none break-words">
+                <SectionTitle>{cheeseContent.description.title}</SectionTitle>
+                <ul className="list-disc pl-5 space-y-1">
+                    {cheeseContent?.description?.list?.map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))}
+                </ul>
+                <SectionTitle>{cheeseContent.composition.title}</SectionTitle>
+            </div>
             <div className="overflow-x-auto">
                 <Table>
                     <TableHeader>
@@ -454,8 +485,10 @@ function CheeseContent() {
                     </TableBody>
                 </Table>
             </div>
-            <SectionTitle>{cheeseContent.labeling.title}</SectionTitle>
-            <p className="font-medium leading-relaxed" dangerouslySetInnerHTML={{ __html: cheeseContent.labeling.p1 }}></p>
+            <div className="prose prose-sm max-w-none break-words">
+                <SectionTitle>{cheeseContent.labeling.title}</SectionTitle>
+                <p className="font-medium leading-relaxed" dangerouslySetInnerHTML={{ __html: cheeseContent.labeling.p1 }}></p>
+            </div>
         </ProductCard>
     )
 }
@@ -466,13 +499,15 @@ function CaseinContent() {
     const caseinContent = content.topics.casein;
     return (
         <ProductCard title={caseinContent.title}>
-            <SectionTitle>{caseinContent.description.title}</SectionTitle>
-            <ul className="list-disc pl-5 space-y-1">
-                {caseinContent?.description?.list?.map((item, index) => (
-                    <li key={index}>{item}</li>
-                ))}
-            </ul>
-            <SectionTitle>{caseinContent.composition.title}</SectionTitle>
+            <div className="prose prose-sm max-w-none break-words">
+                <SectionTitle>{caseinContent.description.title}</SectionTitle>
+                <ul className="list-disc pl-5 space-y-1">
+                    {caseinContent?.description?.list?.map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))}
+                </ul>
+                <SectionTitle>{caseinContent.composition.title}</SectionTitle>
+            </div>
             <div className="overflow-x-auto">
                 <Table>
                     <TableHeader>
@@ -504,9 +539,11 @@ function LactoseContent() {
     const lactoseContent = content.topics.lactose;
     return (
         <ProductCard title={lactoseContent.title}>
-            <SectionTitle>{lactoseContent.description.title}</SectionTitle>
-            <p className="font-medium leading-relaxed">{lactoseContent.description.p1}</p>
-            <SectionTitle>{lactoseContent.composition.title}</SectionTitle>
+            <div className="prose prose-sm max-w-none break-words">
+                <SectionTitle>{lactoseContent.description.title}</SectionTitle>
+                <p className="font-medium leading-relaxed">{lactoseContent.description.p1}</p>
+                <SectionTitle>{lactoseContent.composition.title}</SectionTitle>
+            </div>
             <div className="overflow-x-auto">
                 <Table>
                     <TableHeader>
@@ -537,9 +574,11 @@ function WheyProteinContent() {
     const wheyContent = content.topics.wheyProtein;
     return (
         <ProductCard title={wheyContent.title}>
-            <SectionTitle>{wheyContent.description.title}</SectionTitle>
-            <p className="font-medium leading-relaxed">{wheyContent.description.p1}</p>
-            <SectionTitle>{wheyContent.composition.title}</SectionTitle>
+            <div className="prose prose-sm max-w-none break-words">
+                <SectionTitle>{wheyContent.description.title}</SectionTitle>
+                <p className="font-medium leading-relaxed">{wheyContent.description.p1}</p>
+                <SectionTitle>{wheyContent.composition.title}</SectionTitle>
+            </div>
             <div className="overflow-x-auto">
                 <Table>
                     <TableHeader>
@@ -571,13 +610,15 @@ function ColostrumContent() {
     const colostrumContent = content.topics.colostrum;
     return (
         <ProductCard title={colostrumContent.title}>
-            <SectionTitle>{colostrumContent.description.title}</SectionTitle>
-            <ul className="list-disc pl-5 space-y-1">
-                {colostrumContent?.description?.list?.map((item, index) => (
-                    <li key={index}>{item}</li>
-                ))}
-            </ul>
-            <SectionTitle>{colostrumContent.compositionColostrum.title}</SectionTitle>
+            <div className="prose prose-sm max-w-none break-words">
+                <SectionTitle>{colostrumContent.description.title}</SectionTitle>
+                <ul className="list-disc pl-5 space-y-1">
+                    {colostrumContent?.description?.list?.map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))}
+                </ul>
+                <SectionTitle>{colostrumContent.compositionColostrum.title}</SectionTitle>
+            </div>
             <div className="overflow-x-auto">
                 <Table>
                     <TableHeader>
@@ -598,7 +639,9 @@ function ColostrumContent() {
                     </TableBody>
                 </Table>
             </div>
-            <SectionTitle>{colostrumContent.compositionPowder.title}</SectionTitle>
+            <div className="prose prose-sm max-w-none break-words">
+                <SectionTitle>{colostrumContent.compositionPowder.title}</SectionTitle>
+            </div>
             <div className="overflow-x-auto">
                 <Table>
                     <TableHeader>
@@ -679,7 +722,7 @@ export function FssaiStandardsModal({ isOpen, setIsOpen }: { isOpen: boolean; se
                     </Button>
                 </div>
                 <ScrollArea className="flex-1 mt-4 sm:pr-4">
-                    <div className="p-4 pt-0 sm:p-0 prose prose-sm max-w-none text-gray-700 leading-relaxed break-words">
+                    <div className="p-4 pt-0 sm:p-0">
                         <ActiveComponent />
                     </div>
                 </ScrollArea>

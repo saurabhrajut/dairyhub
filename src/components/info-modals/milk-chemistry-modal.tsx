@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -46,12 +45,14 @@ function CompositionContent({ content }: { content: any }) {
     return (
         <Section title={content.composition.title} icon={BookOpen}>
             <InfoBlock title={content.composition.whatIsMilk.title}>
-                <p dangerouslySetInnerHTML={{ __html: content.composition.whatIsMilk.fssaiDef }} />
-                <p dangerouslySetInnerHTML={{ __html: content.composition.whatIsMilk.usaDef }} />
-                <p>{content.composition.whatIsMilk.p1}</p>
-                <ul className="list-disc list-inside mt-2 space-y-1">
-                    {content.composition.whatIsMilk.phases.map((phase: string, i: number) => <li key={i}>{phase}</li>)}
-                </ul>
+                <div className="prose prose-sm max-w-none break-words">
+                    <p dangerouslySetInnerHTML={{ __html: content.composition.whatIsMilk.fssaiDef }} />
+                    <p dangerouslySetInnerHTML={{ __html: content.composition.whatIsMilk.usaDef }} />
+                    <p>{content.composition.whatIsMilk.p1}</p>
+                    <ul className="list-disc list-inside mt-2 space-y-1">
+                        {content.composition.whatIsMilk.phases.map((phase: string, i: number) => <li key={i}>{phase}</li>)}
+                    </ul>
+                </div>
             </InfoBlock>
             
             <InfoBlock title={content.composition.generalComposition.title}>
@@ -99,10 +100,12 @@ function CompositionContent({ content }: { content: any }) {
                 </div>
             </InfoBlock>
             <InfoBlock title={content.composition.water.title}>
-                <p>{content.composition.water.p1}</p>
-                <ul className="list-disc list-inside mt-2 space-y-1">
-                     {content.composition.water.forms.map((form: any, i: number) => <li key={i}><strong className="font-semibold">{form.name}:</strong> {form.desc}</li>)}
-                </ul>
+                <div className="prose prose-sm max-w-none break-words">
+                    <p>{content.composition.water.p1}</p>
+                    <ul className="list-disc list-inside mt-2 space-y-1">
+                         {content.composition.water.forms.map((form: any, i: number) => <li key={i}><strong className="font-semibold">{form.name}:</strong> {form.desc}</li>)}
+                    </ul>
+                </div>
             </InfoBlock>
         </Section>
     )
@@ -112,12 +115,16 @@ function MammaryGlandContent({ content }: { content: any }) {
     return (
         <Section title={content.mammaryGland.title} icon={Cpu}>
             <InfoBlock title={content.mammaryGland.structure.title}>
-                <p>{content.mammaryGland.structure.p1}</p>
-                <p>{content.mammaryGland.structure.p2}</p>
+                <div className="prose prose-sm max-w-none break-words">
+                    <p>{content.mammaryGland.structure.p1}</p>
+                    <p>{content.mammaryGland.structure.p2}</p>
+                </div>
             </InfoBlock>
             <InfoBlock title={content.mammaryGland.physiology.title}>
-                <p>{content.mammaryGland.physiology.p1}</p>
-                <p><strong className="font-semibold">{content.mammaryGland.physiology.ejectionTitle}:</strong> {content.mammaryGland.physiology.ejectionText}</p>
+                <div className="prose prose-sm max-w-none break-words">
+                    <p>{content.mammaryGland.physiology.p1}</p>
+                    <p><strong className="font-semibold">{content.mammaryGland.physiology.ejectionTitle}:</strong> {content.mammaryGland.physiology.ejectionText}</p>
+                </div>
             </InfoBlock>
             <InfoBlock title={content.mammaryGland.precursors.title} noProse={true}>
                 <div className="overflow-x-auto">
@@ -150,23 +157,29 @@ function ProteinsContent({ content }: { content: any }) {
     return (
         <Section title={content.proteins.title} icon={Dna}>
              <InfoBlock title={content.proteins.overview.title}>
-                <p>{content.proteins.overview.p1}</p>
+                <div className="prose prose-sm max-w-none break-words">
+                    <p>{content.proteins.overview.p1}</p>
+                </div>
             </InfoBlock>
             <InfoBlock title={content.proteins.casein.title}>
-                <p dangerouslySetInnerHTML={{ __html: content.proteins.casein.p1 }} />
-                <h5 className="font-bold mt-4">{content.proteins.casein.fractionsTitle}</h5>
-                <p>{content.proteins.casein.fractionsText}</p>
-                <h5 className="font-bold mt-4">{content.proteins.casein.coagulationTitle}</h5>
-                <p>{content.proteins.casein.coagulationText}</p>
-                <ul className="list-disc list-inside space-y-2">
-                    {content.proteins.casein.coagulationTypes.map((type: any, i: number) => <li key={i}><strong className="font-semibold">{type.name}:</strong> {type.desc}</li>)}
-                </ul>
+                <div className="prose prose-sm max-w-none break-words">
+                    <p dangerouslySetInnerHTML={{ __html: content.proteins.casein.p1 }} />
+                    <h5 className="font-bold mt-4">{content.proteins.casein.fractionsTitle}</h5>
+                    <p>{content.proteins.casein.fractionsText}</p>
+                    <h5 className="font-bold mt-4">{content.proteins.casein.coagulationTitle}</h5>
+                    <p>{content.proteins.casein.coagulationText}</p>
+                    <ul className="list-disc list-inside space-y-2">
+                        {content.proteins.casein.coagulationTypes.map((type: any, i: number) => <li key={i}><strong className="font-semibold">{type.name}:</strong> {type.desc}</li>)}
+                    </ul>
+                </div>
             </InfoBlock>
 
             <InfoBlock title={content.proteins.whey.title}>
-                <p>{content.proteins.whey.p1}</p>
-                <h5 className="font-bold mt-4">{content.proteins.whey.fractionsTitle}</h5>
-                {content.proteins.whey.fractions.map((frac: any, i: number) => <p key={i}><strong className="font-semibold">{frac.name}:</strong> {frac.desc}</p>)}
+                <div className="prose prose-sm max-w-none break-words">
+                    <p>{content.proteins.whey.p1}</p>
+                    <h5 className="font-bold mt-4">{content.proteins.whey.fractionsTitle}</h5>
+                    {content.proteins.whey.fractions.map((frac: any, i: number) => <p key={i}><strong className="font-semibold">{frac.name}:</strong> {frac.desc}</p>)}
+                </div>
             </InfoBlock>
         </Section>
     )
@@ -176,17 +189,23 @@ function FatContent({ content }: { content: any }) {
     return (
         <Section title={content.fat.title} icon={Droplets}>
             <InfoBlock title={content.fat.characteristics.title}>
-                <p>{content.fat.characteristics.p1}</p>
-                <p>{content.fat.characteristics.p2}</p>
+                <div className="prose prose-sm max-w-none break-words">
+                    <p>{content.fat.characteristics.p1}</p>
+                    <p>{content.fat.characteristics.p2}</p>
+                </div>
             </InfoBlock>
             <InfoBlock title={content.fat.stability.title}>
-                 <p>{content.fat.stability.p1}</p>
-                 <p><strong className="font-semibold">{content.fat.stability.creamingTitle}:</strong> {content.fat.stability.creamingText}</p>
-                 <p><strong className="font-semibold">{content.fat.stability.lipolysisTitle}:</strong> {content.fat.stability.lipolysisText}</p>
+                <div className="prose prose-sm max-w-none break-words">
+                     <p>{content.fat.stability.p1}</p>
+                     <p><strong className="font-semibold">{content.fat.stability.creamingTitle}:</strong> {content.fat.stability.creamingText}</p>
+                     <p><strong className="font-semibold">{content.fat.stability.lipolysisTitle}:</strong> {content.fat.stability.lipolysisText}</p>
+                </div>
             </InfoBlock>
             <InfoBlock title={content.fat.autoxidation.title}>
-                <p><strong className="font-semibold">{content.fat.autoxidation.autoxidationTitle}:</strong> {content.fat.autoxidation.autoxidationText}</p>
-                <p><strong className="font-semibold">{content.fat.autoxidation.crystallizationTitle}:</strong> {content.fat.autoxidation.crystallizationText}</p>
+                <div className="prose prose-sm max-w-none break-words">
+                    <p><strong className="font-semibold">{content.fat.autoxidation.autoxidationTitle}:</strong> {content.fat.autoxidation.autoxidationText}</p>
+                    <p><strong className="font-semibold">{content.fat.autoxidation.crystallizationTitle}:</strong> {content.fat.autoxidation.crystallizationText}</p>
+                </div>
             </InfoBlock>
         </Section>
     )
@@ -196,11 +215,13 @@ function LactoseContent({ content }: { content: any }) {
     return (
         <Section title={content.lactose.title} icon={Atom}>
              <InfoBlock title={content.lactose.properties.title}>
-               <p>{content.lactose.properties.p1}</p>
-               <p>{content.lactose.properties.p2}</p>
-                <h5 className="font-bold mt-4">{content.lactose.properties.crystallizationTitle}</h5>
-                <p>{content.lactose.properties.crystallizationText1}</p>
-                <p>{content.lactose.properties.crystallizationText2}</p>
+                <div className="prose prose-sm max-w-none break-words">
+                   <p>{content.lactose.properties.p1}</p>
+                   <p>{content.lactose.properties.p2}</p>
+                    <h5 className="font-bold mt-4">{content.lactose.properties.crystallizationTitle}</h5>
+                    <p>{content.lactose.properties.crystallizationText1}</p>
+                    <p>{content.lactose.properties.crystallizationText2}</p>
+                </div>
             </InfoBlock>
         </Section>
     )
@@ -210,11 +231,15 @@ function MineralsContent({ content }: { content: any }) {
     return (
         <Section title={content.minerals.title} icon={Gem}>
              <InfoBlock title={content.minerals.composition.title}>
-               <p>{content.minerals.composition.p1}</p>
-               <p>{content.minerals.composition.p2}</p>
+                <div className="prose prose-sm max-w-none break-words">
+                   <p>{content.minerals.composition.p1}</p>
+                   <p>{content.minerals.composition.p2}</p>
+                </div>
             </InfoBlock>
              <InfoBlock title={content.minerals.trace.title}>
-                <p>{content.minerals.trace.p1}</p>
+                <div className="prose prose-sm max-w-none break-words">
+                    <p>{content.minerals.trace.p1}</p>
+                </div>
              </InfoBlock>
         </Section>
     )
@@ -224,13 +249,17 @@ function VitaminsEnzymesContent({ content }: { content: any }) {
     return (
         <Section title={content.vitaminsEnzymes.title} icon={FlaskConical}>
              <InfoBlock title={content.vitaminsEnzymes.vitamins.title}>
-                <p>{content.vitaminsEnzymes.vitamins.p1}</p>
+                <div className="prose prose-sm max-w-none break-words">
+                    <p>{content.vitaminsEnzymes.vitamins.p1}</p>
+                </div>
             </InfoBlock>
              <InfoBlock title={content.vitaminsEnzymes.enzymes.title}>
-                <p>{content.vitaminsEnzymes.enzymes.p1}</p>
-                <ul className="list-disc list-inside space-y-1">
-                    {content.vitaminsEnzymes.enzymes.list.map((enzyme: any, i: number) => <li key={i}><strong className="font-semibold">{enzyme.name}:</strong> {enzyme.desc}</li>)}
-                </ul>
+                <div className="prose prose-sm max-w-none break-words">
+                    <p>{content.vitaminsEnzymes.enzymes.p1}</p>
+                    <ul className="list-disc list-inside space-y-1">
+                        {content.vitaminsEnzymes.enzymes.list.map((enzyme: any, i: number) => <li key={i}><strong className="font-semibold">{enzyme.name}:</strong> {enzyme.desc}</li>)}
+                    </ul>
+                </div>
             </InfoBlock>
         </Section>
     )
@@ -240,7 +269,9 @@ function PropertiesContent({ content }: { content: any }) {
     return (
         <Section title={content.properties.title} icon={TestTube}>
              <InfoBlock title={content.properties.overview.title}>
-                <p>{content.properties.overview.p1}</p>
+                <div className="prose prose-sm max-w-none break-words">
+                    <p>{content.properties.overview.p1}</p>
+                </div>
             </InfoBlock>
             <div className="overflow-x-auto">
                 <Table>
@@ -270,15 +301,19 @@ function OtherComponentsContent({ content }: { content: any }) {
     return (
         <Section title={content.other.title} icon={FlaskConical}>
             <InfoBlock title={content.other.minor.title}>
-                <ul className="list-disc list-inside space-y-2">
-                    {content.other.minor.list.map((item: any, i: number) => <li key={i}><strong className="font-semibold">{item.name}:</strong> {item.desc}</li>)}
-                </ul>
+                <div className="prose prose-sm max-w-none break-words">
+                    <ul className="list-disc list-inside space-y-2">
+                        {content.other.minor.list.map((item: any, i: number) => <li key={i}><strong className="font-semibold">{item.name}:</strong> {item.desc}</li>)}
+                    </ul>
+                </div>
             </InfoBlock>
             <InfoBlock title={content.other.contaminants.title}>
-                <p>{content.other.contaminants.p1}</p>
-                <ul className="list-disc list-inside space-y-2">
-                    {content.other.contaminants.list.map((item: any, i: number) => <li key={i}><strong className="font-semibold">{item.name}:</strong> {item.desc}</li>)}
-                </ul>
+                <div className="prose prose-sm max-w-none break-words">
+                    <p>{content.other.contaminants.p1}</p>
+                    <ul className="list-disc list-inside space-y-2">
+                        {content.other.contaminants.list.map((item: any, i: number) => <li key={i}><strong className="font-semibold">{item.name}:</strong> {item.desc}</li>)}
+                    </ul>
+                </div>
             </InfoBlock>
         </Section>
     );
@@ -370,4 +405,3 @@ export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; set
     </Dialog>
   );
 }
-
