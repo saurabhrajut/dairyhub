@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Mail, Lock, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
+import { MilkBottleIcon } from '@/components/icons';
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
@@ -34,50 +35,59 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="bg-gradient-to-br from-pink-200 via-purple-200 to-indigo-300 flex items-center justify-center min-h-screen">
-            <div className="w-full max-w-md bg-white rounded-xl shadow-2xl p-8 m-4">
-                <div className="text-center mb-8">
-                    <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600">Dairy Hub</h1>
-                    <p className="text-gray-500 mt-2">Log in to your account</p>
+        <div className="bg-gray-50 flex items-center justify-center min-h-screen p-4">
+            <div className="w-full max-w-sm bg-white rounded-2xl shadow-md p-8 m-4">
+                <div className="text-center mb-10">
+                    <MilkBottleIcon className="w-16 h-16 text-primary mx-auto mb-4" />
+                    <h1 className="text-3xl font-bold text-gray-800">
+                        Welcome to <span className="text-primary">Dairy Hub</span>
+                    </h1>
+                    <p className="text-gray-500 mt-2 text-sm">Sign in or create an account</p>
                 </div>
 
-                <form onSubmit={handleLogin}>
-                    <div className="mb-4 relative">
-                        <label htmlFor="email" className="sr-only">Email</label>
-                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
-                        <Input
-                            type="email"
-                            id="email"
-                            placeholder="Email Address"
-                            className="w-full pl-12 pr-4 py-3 bg-gray-50 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
+                <form onSubmit={handleLogin} className="space-y-4">
+                     <div>
+                        <Label htmlFor="email" className="text-sm font-medium text-gray-700">Email Address</Label>
+                        <div className="relative mt-1">
+                            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+                            <Input
+                                type="email"
+                                id="email"
+                                placeholder="you@example.com"
+                                className="w-full pl-10 pr-4 py-2 bg-gray-50 border-gray-300 rounded-lg focus:ring-primary transition"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
+                        </div>
                     </div>
-                    <div className="mb-6 relative">
-                        <label htmlFor="password" className="sr-only">Password</label>
-                        <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
-                        <Input
-                            type="password"
-                            id="password"
-                            placeholder="Password"
-                            className="w-full pl-12 pr-4 py-3 bg-gray-50 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
+                     <div>
+                        <Label htmlFor="password">Password</Label>
+                        <div className="relative mt-1">
+                            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+                            <Input
+                                type="password"
+                                id="password"
+                                placeholder="••••••••"
+                                className="w-full pl-10 pr-4 py-2 bg-gray-50 border-gray-300 rounded-lg focus:ring-primary transition"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                        </div>
                     </div>
                     <div>
                         <Button type="submit"
-                                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 rounded-lg hover:from-purple-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 transition duration-300 ease-in-out transform hover:scale-105"
+                                className="w-full bg-primary text-white font-semibold py-2.5 rounded-lg hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition duration-300 ease-in-out"
                                 disabled={isLoading}>
-                            {isLoading ? <Loader2 className="animate-spin" /> : 'Log In'}
+                            {isLoading ? <Loader2 className="animate-spin" /> : 'Sign In'}
                         </Button>
                     </div>
                 </form>
                 <div className="text-center mt-6">
-                    <p className="text-gray-600">
+                    <p className="text-sm text-gray-600">
                         Don't have an account?
-                        <Link href="/signup" className="text-purple-600 hover:underline font-medium ml-1">
+                        <Link href="/signup" className="text-primary hover:underline font-medium ml-1">
                             Sign Up
                         </Link>
                     </p>

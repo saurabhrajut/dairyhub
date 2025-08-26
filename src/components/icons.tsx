@@ -107,5 +107,15 @@ export const IceCreamIcon = (props: SVGProps<SVGSVGElement>) => (
     </svg>
 );
 
+export const MilkBottleIcon = (props: SVGProps<SVGSVGElement>) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <path d="M8 2h8" />
+    <path d="M9 2v2.34c0 .55.45 1 .91 1 .43 0 .83-.34.9-.77 .08-.5.48-.87.99-.87s.91.37 1 .87c.07.43.47.77.9.77.46 0 .91-.45.91-1V2" />
+    <path d="M17 4h-1.11c-.55 0-1.04-.34-1.18-.83-.17-.6-.63-1-1.21-1-.58-.04-1.09.34-1.18.89-.14.5-.63.94-1.18.94H8.85c-.55 0-1.04-.44-1.18-.94-.09-.55-.6-.93-1.18-.89-.58.05-1.04.5-1.21 1-.14.49-.63.83-1.18.83H4v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4Z" />
+    <path d="M5 12h14" />
+  </svg>
+);
+
+
 export const ReagentIcon = TestTube2;
     
