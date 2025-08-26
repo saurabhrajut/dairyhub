@@ -625,21 +625,21 @@ function ColostrumContent() {
 }
 
 const topics = [
-    { value: "general", label: "General", icon: BookOpen, component: GeneralContent },
-    { value: "milk", label: "Milk", icon: Droplet, component: MilkContent },
-    { value: "khoa", label: "Khoa", icon: Component, component: KhoaContent },
-    { value: "cream", label: "Cream", icon: Droplet, component: CreamContent },
-    { value: "fat-products", label: "Fat Products", icon: FlaskConical, component: FatProductsContent },
-    { value: "butter", label: "Butter", icon: Factory, component: ButterContent },
-    { value: "milk-powders", label: "Milk Powders", icon: Wind, component: MilkPowdersContent },
-    { value: "fermented", label: "Fermented", icon: Beaker, component: FermentedContent },
-    { value: "ice-cream", label: "Ice Cream", icon: IceCreamIcon, component: IceCreamContent },
-    { value: "chhana-paneer", label: "Paneer", icon: PaneerIcon, component: ChhanaPaneerContent },
-    { value: "cheese", label: "Cheese", icon: Thermometer, component: CheeseContent },
-    { value: "casein", label: "Casein", icon: FlaskConical, component: CaseinContent },
-    { value: "lactose", label: "Lactose", icon: Snowflake, component: LactoseContent },
-    { value: "whey-protein", label: "Whey Protein", icon: Archive, component: WheyProteinContent },
-    { value: "colostrum", label: "Colostrum", icon: ShieldCheck, component: ColostrumContent },
+    { value: "general", icon: BookOpen, component: GeneralContent },
+    { value: "milk", icon: Droplet, component: MilkContent },
+    { value: "khoa", icon: Component, component: KhoaContent },
+    { value: "cream", icon: Droplet, component: CreamContent },
+    { value: "fat-products", icon: FlaskConical, component: FatProductsContent },
+    { value: "butter", icon: Factory, component: ButterContent },
+    { value: "milk-powders", icon: Wind, component: MilkPowdersContent },
+    { value: "fermented", icon: Beaker, component: FermentedContent },
+    { value: "ice-cream", icon: IceCreamIcon, component: IceCreamContent },
+    { value: "chhana-paneer", icon: PaneerIcon, component: ChhanaPaneerContent },
+    { value: "cheese", icon: Thermometer, component: CheeseContent },
+    { value: "casein", icon: FlaskConical, component: CaseinContent },
+    { value: "lactose", icon: Snowflake, component: LactoseContent },
+    { value: "whey-protein", icon: Archive, component: WheyProteinContent },
+    { value: "colostrum", icon: ShieldCheck, component: ColostrumContent },
 ];
 
 
@@ -666,7 +666,7 @@ export function FssaiStandardsModal({ isOpen, setIsOpen }: { isOpen: boolean; se
             {content.mainTitle}
           </DialogTitle>
            <DialogDescription className="text-center text-lg text-gray-500">
-            {selectedTopic ? selectedTopic.label : content.description}
+            {selectedTopic ? content.topics[selectedTopic.value as keyof typeof content.topics]?.title : content.description}
           </DialogDescription>
         </DialogHeader>
 
