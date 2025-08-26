@@ -40,17 +40,25 @@ export default function ProfilePage() {
     const [isMounted, setIsMounted] = useState(false);
     const [isEditingName, setIsEditingName] = useState(false);
     
-    // Use the logged-in user if available, otherwise fall back to a guest user.
-    const displayUser = user || { displayName: 'Guest', email: 'guest@example.com', photoURL: 'https://placehold.co/128x128/E0E0E0/333?text=Guest' };
-    const [tempName, setTempName] = useState(displayUser.displayName || '');
+    // The user will be null if not logged in.
+    const displayUser = user;
+    const [tempName, setTempName] = useState(displayUser?.displayName || '');
     
     const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState(false);
 
     useEffect(() => {
         setIsMounted(true);
-        // Authentication check is removed. The page is now accessible to anyone.
-        setTempName(displayUser.displayName || '');
-    }, [displayUser.displayName]);
+        if (!loading && !user) {
+            toast({
+                title: "Please Log In",
+                description: "You need to be logged in to view your profile.",
+                variant: "destructive"
+            });
+            router.push('/login');
+        } else if (user) {
+            setTempName(user.displayName || '');
+        }
+    }, [user, loading, router, toast]);
 
 
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -97,9 +105,7 @@ export default function ProfilePage() {
     }
 
     const handleLogout = async () => {
-        if (user) {
-            await logout();
-        }
+        await logout();
         router.push('/login');
     }
 
@@ -121,7 +127,7 @@ export default function ProfilePage() {
       return names[planKey] || 'Pro Plan';
     }
 
-    if (loading) { // Show loader if auth context is loading
+    if (loading || !displayUser) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gray-100">
                 <Loader2 className="h-12 w-12 animate-spin text-primary" />
@@ -237,8 +243,8 @@ export default function ProfilePage() {
                             <span className="ml-4 text-gray-600">{displayUser.email}</span>
                         </div>
                         <div className="flex items-center">
-                            <div className="bg-gray-100 p-2 rounded-lg"><User className="h-5 w-5 text-gray-400"/></div>
-                            <span className="ml-4 text-gray-500 text-sm italic">Add your address...</span>
+                            <div className="bg-green-100 p-2 rounded-lg"><User className="h-5 w-5 text-green-600"/></div>
+                            <span className="ml-4 text-gray-600 capitalize">{displayUser.gender || 'Not specified'}</span>
                         </div>
                     </div>
                 </div>

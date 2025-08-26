@@ -9,41 +9,48 @@ import { Mail, Lock, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { MilkCanIcon } from '@/components/icons';
+import { useAuth } from '@/context/auth-context';
+
 
 export default function LoginPage() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('guest@example.com');
+    const [password, setPassword] = useState('123456');
     const [isLoading, setIsLoading] = useState(false);
     const { toast } = useToast();
     const router = useRouter();
+    const { login } = useAuth();
 
-    const handleLogin = (e: React.FormEvent) => {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
 
-        // Simulate a successful login and navigate to the profile page.
-        toast({
-            title: 'Navigating to Profile',
-            description: 'Bypassing authentication for demo.',
-        });
-        router.push('/profile');
-        
-        // No real authentication call is made.
-        // We keep the loading state simulation for better UX.
-        setTimeout(() => {
+        try {
+            await login(email, password);
+            toast({
+                title: 'Login Successful!',
+                description: "Welcome back!",
+            });
+            router.push('/profile');
+        } catch (error: any) {
+             toast({
+                variant: "destructive",
+                title: 'Login Failed',
+                description: error.message || "Please check your credentials.",
+            });
+        } finally {
             setIsLoading(false);
-        }, 1000);
+        }
     };
 
     return (
         <div className="bg-gray-50 flex items-center justify-center min-h-screen p-4">
-            <div className="w-full max-w-sm bg-white rounded-2xl shadow-md p-8 m-4">
-                <div className="text-center mb-10">
+            <div className="w-full max-w-sm bg-white rounded-2xl shadow-xl p-8 m-4 border">
+                <div className="text-center mb-8">
                     <MilkCanIcon className="w-16 h-16 text-primary mx-auto mb-4" />
                     <h1 className="text-3xl font-bold text-gray-800">
                         Welcome to <span className="text-primary">Dairy Hub</span>
                     </h1>
-                    <p className="text-gray-500 mt-2 text-sm">Sign in or create an account</p>
+                    <p className="text-gray-500 mt-2 text-sm">Sign in to continue</p>
                 </div>
 
                 <form onSubmit={handleLogin} className="space-y-4">

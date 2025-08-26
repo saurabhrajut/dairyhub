@@ -48,9 +48,9 @@ export default function SignUpPage() {
             await signup(values.email, values.password, values.username, values.gender);
             toast({
                 title: 'Account Created!',
-                description: "This is a demo. No real account was created.",
+                description: "Welcome! You are now logged in.",
             });
-            router.push('/login');
+            router.push('/profile');
         } catch (error: any) {
             toast({
                 variant: 'destructive',
@@ -67,7 +67,7 @@ export default function SignUpPage() {
             <div className="w-full max-w-md bg-white rounded-xl shadow-2xl p-8 m-4">
                 <div className="text-center mb-8">
                     <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600">Dairy Hub</h1>
-                    <p className="text-gray-500 mt-2">Create your colorful account</p>
+                    <p className="text-gray-500 mt-2">Create your account</p>
                 </div>
 
                 <Form {...form}>

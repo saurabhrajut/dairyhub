@@ -9,16 +9,16 @@ import { useAuth } from "@/context/auth-context";
 export default function Home() {
   const { user } = useAuth();
 
-  // The user will now default to a 'guest' user if not logged in
   const chatUser: ChatUserProfile = user ? {
     name: user.displayName || 'Guest',
-    age: 30, 
-    gender: 'other', 
+    age: 30, // This can be customized later
+    gender: user.gender || 'other', 
   } : {
     name: 'Guest',
     age: 30,
     gender: 'other',
   };
+
 
   return (
     <>

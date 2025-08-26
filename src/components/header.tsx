@@ -9,7 +9,6 @@ import { useAuth } from "@/context/auth-context";
 
 export function Header() {
     const { user } = useAuth();
-    // Default to a guest-like object if user is null to prevent errors
     const displayUser = user || { displayName: 'Guest', photoURL: undefined };
 
     return (
