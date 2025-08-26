@@ -152,18 +152,18 @@ export function ChatPanel({
       role: "user",
       text: userMessageText,
     };
-    const newMessages = [...messages, userMessage];
-    setMessages(newMessages);
     
-    const history: GenkitMessage[] = newMessages
-      .filter(msg => msg.id !== 'initial')
+    // Add user message to UI
+    setMessages(prev => [...prev, userMessage]);
+    
+    // Prepare history for API call, filtering out the initial welcome message
+    const historyForApi: GenkitMessage[] = [...messages, userMessage]
+      .filter(msg => msg.id !== 'initial') // Exclude welcome message
       .map(msg => ({
         role: msg.role,
         content: [{ text: msg.text }]
       }));
       
-    const historyForApi = history.slice(0, -1);
-    
     setInput("");
     setIsLoading(true);
 
@@ -175,8 +175,9 @@ export function ChatPanel({
         question: query,
         language: language,
         resumeText: resumeQuery || undefined,
-        history: historyForApi,
+        history: historyForApi.slice(0, -1), // Send history *before* the current message
       });
+
       const assistantMessage: UIMessage = {
         id: Date.now().toString() + "-ai",
         role: "model",

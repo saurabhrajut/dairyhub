@@ -1,14 +1,22 @@
 'use server';
+/**
+ * @fileOverview Sarathi Chatbot Flow
+ *
+ * This file defines the Genkit flow for the Sarathi Chatbot.
+ * It handles user interactions, maintains conversation history, and generates responses
+ * based on a specific persona.
+ */
 
-import { ai } from '@/ai/genkit';
-import { z } from 'zod';
+import {ai} from '@/ai/genkit';
+import {z} from 'zod';
 import {
   SarathiChatbotInputSchema,
   SarathiChatbotOutputSchema,
   type SarathiChatbotInput,
 } from './types';
+import type {Message} from 'genkit';
 
-const systemPrompt = `You are a funny, friendly, and slightly edgy personal assistant named 'Sarathi' for a dairy app. Your persona is like a helpful but mischievous friend from a village.
+const sarathiSystemPrompt = `You are a funny, friendly, and slightly edgy personal assistant named 'Sarathi' for a dairy app. Your persona is like a helpful but mischievous friend from a village.
 RULES:
 1. You MUST reply ONLY in the language specified by the user's 'language' input (e.g., 'pure local authentic Haryanvi'), using the correct script (e.g., 'Devanagari script'). Be extremely authentic to the local dialect and nuances.
 2. Your goal is to be helpful but also make the user laugh.
@@ -30,22 +38,41 @@ User's Resume for Analysis:
 ---
 {{/if}}`;
 
-const prompt = ai.definePrompt({
+const sarathiPrompt = ai.definePrompt({
   name: 'sarathiChatbotPrompt',
-  system: systemPrompt,
+  system: sarathiSystemPrompt,
   input: {
-    schema: z.object({
-      ...SarathiChatbotInputSchema.shape,
-      question: z.string(), // Ensure question is always a string here
-    }),
+    schema: SarathiChatbotInputSchema,
   },
-  output: { schema: SarathiChatbotOutputSchema },
+  output: {schema: SarathiChatbotOutputSchema},
 });
 
-export async function sarathiChatbot(
-  input: SarathiChatbotInput
-): Promise<SarathiChatbotOutputSchema> {
-  return sarathiChatbotFlow(input);
+/**
+ * Ensures that the provided history is in a valid format for the Genkit prompt.
+ * It filters out any malformed or empty messages.
+ * @param history The conversation history from the client.
+ * @returns A validated array of Genkit-compatible messages.
+ */
+function validateHistory(history: Message[] | undefined): Message[] {
+  if (!history) {
+    return [];
+  }
+  return history
+    .filter(
+      msg =>
+        msg &&
+        msg.role &&
+        Array.isArray(msg.content) &&
+        msg.content.length > 0
+    )
+    .map(msg => {
+      const validContent = msg.content.filter(
+        c => c && typeof c.text === 'string' && c.text.trim() !== ''
+      );
+      // Return a message with only valid content parts
+      return {...msg, content: validContent};
+    })
+    .filter(msg => msg.content.length > 0); // Exclude messages that now have empty content
 }
 
 const sarathiChatbotFlow = ai.defineFlow(
@@ -54,35 +81,21 @@ const sarathiChatbotFlow = ai.defineFlow(
     inputSchema: SarathiChatbotInputSchema,
     outputSchema: SarathiChatbotOutputSchema,
   },
-  async (input) => {
-    const { history, ...restOfInput } = input;
+  async input => {
+    const {history, ...restOfInput} = input;
+    const validHistory = validateHistory(history);
 
-    // Ensure question is never undefined when passed to the prompt
-    const question = restOfInput.question || (restOfInput.resumeText ? "Please analyze my resume and ask interview questions." : "Hello");
-    
-    // Robustly handle history to prevent type errors.
-    const validHistory = (history || []).map(msg => {
-        // Ensure msg and msg.content are valid and have the correct shape
-        const content = (msg && Array.isArray(msg.content) && msg.content.length > 0)
-            ? msg.content
-            : [{ text: '' }];
+    const {output} = await sarathiPrompt(restOfInput, {history: validHistory});
 
-        return {
-            role: msg?.role || 'user', // Default to 'user' if role is missing
-            content: content,
-        };
-    }).filter(msg => msg.content[0].text.trim() !== ''); // Filter out empty messages
-    
-    const { output } = await prompt(
-      { ...restOfInput, question },
-      { history: validHistory }
-    );
-    
-    if (output === undefined) {
-      console.error("Prompt returned undefined. Input was:", restOfInput);
-      return { answer: "Sorry, I could not process that. Please try again." };
+    if (!output) {
+      return {answer: 'Sorry, I encountered an issue. Please try again.'};
     }
-    
     return output;
   }
 );
+
+export async function sarathiChatbot(
+  input: SarathiChatbotInput
+): Promise<SarathiChatbotOutputSchema> {
+  return await sarathiChatbotFlow(input);
+}
