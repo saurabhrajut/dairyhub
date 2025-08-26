@@ -12,13 +12,13 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { getSnf } from "@/lib/utils"
+import { getSnf, componentProps } from "@/lib/utils"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { ArrowLeft, Blend, Milk, SlidersHorizontal, Combine, Bot, Calculator, Settings, ChevronsUp, Target, Droplets, Info } from 'lucide-react'
+import { ArrowLeft, Blend, Milk, SlidersHorizontal, Combine, Bot, Calculator, Settings, ChevronsUp, Target, Droplets, Info, Weight, Thermometer } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 
-type CalculatorType = 'fat-snf-clr-ts' | 'fat-blending' | 'fat-snf-adjustment' | 'reconstituted-milk' | 'recombined-milk' | 'clr-blending' | 'custom-calculator' | 'milk-blending' | 'clr-increase' | 'fat-clr-maintainer' | 'two-milk-blending-target';
+type CalculatorType = 'fat-snf-clr-ts' | 'fat-blending' | 'fat-snf-adjustment' | 'reconstituted-milk' | 'recombined-milk' | 'clr-blending' | 'custom-calculator' | 'milk-blending' | 'clr-increase' | 'fat-clr-maintainer' | 'two-milk-blending-target' | 'clr-correction' | 'kg-fat-snf';
 
 const calculatorsInfo = {
     'fat-snf-clr-ts': { title: "Fat, SNF, CLR & TS", icon: Calculator, component: FatSnfClrTsCalc },
@@ -32,6 +32,8 @@ const calculatorsInfo = {
     'reconstituted-milk': { title: "Reconstituted Milk", icon: Milk, component: ReconstitutedMilkCalc },
     'recombined-milk': { title: "Recombined Milk", icon: Combine, component: RecombinedMilkCalc },
     'clr-blending': { title: "CLR Blending (Pearson)", icon: Bot, component: ClrBlendingCalc },
+    'clr-correction': { title: "CLR Correction", icon: Thermometer, component: ClrCorrectionCalc },
+    'kg-fat-snf': { title: "Kg Fat & SNF", icon: Weight, component: KgFatSnfCalc },
 };
 
 export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
@@ -1101,9 +1103,76 @@ function RecombinedMilkCalc() {
     );
 }
 
+function ClrCorrectionCalc() {
+    const [result, setResult] = useState<string | null>(null);
+    const [olr, setOlr] = useState("28.5");
+    const [temp, setTemp] = useState("29");
 
+    const handleCalc = () => {
+        const olrNum = parseFloat(olr);
+        const tempNum = parseFloat(temp);
+        if (isNaN(olrNum) || isNaN(tempNum)) {
+            setResult('Invalid Input'); return;
+        }
+        const clr = olrNum + (tempNum - 27) * 0.2;
+        setResult(clr.toFixed(2));
+    }
 
+    return (
+        <CalculatorCard title="CLR Correction Calculator" description="Correct Lactometer Reading based on temperature.">
+            <div className="bg-muted/50 p-4 rounded-lg space-y-3">
+                <div><Label>Observed Lactometer Reading (OLR)</Label><Input type="number" value={olr} onChange={e => setOlr(e.target.value)} placeholder="28.5" /></div>
+                <div><Label>Milk Temperature (°C)</Label><Input type="number" value={temp} onChange={e => setTemp(e.target.value)} placeholder="29" /></div>
+                <p className="text-xs text-gray-500">Note: Standard calibration temperature is 27°C.</p>
+            </div>
+            <Button onClick={handleCalc} className="w-full mt-4">Correct CLR</Button>
+            {result && <div className="mt-4 text-center"><p className="text-gray-600">Corrected Lactometer Reading (CLR):</p><p className="text-3xl font-bold text-green-700">{result}</p></div>}
+        </CalculatorCard>
+    )
+}
+
+function KgFatSnfCalc() {
+    const [liters, setLiters] = useState("");
+    const [fat, setFat] = useState("");
+    const [snf, setSnf] = useState("");
+    const [result, setResult] = useState<string | null>(null);
+    const [error, setError] = useState<string | null>(null);
+
+    const handleCalc = () => {
+        const litersVal = parseFloat(liters);
+        const fatVal = parseFloat(fat);
+        const snfVal = parseFloat(snf);
+
+        setResult(null);
+        setError(null);
+        
+        if(isNaN(litersVal) || isNaN(fatVal) || isNaN(snfVal)) {
+            setError("Please fill all fields with numbers.");
+            return;
+        }
+
+        const milkWeight = litersVal * componentProps.milkDensity;
+        const fatKg = milkWeight * (fatVal / 100);
+        const snfKg = milkWeight * (snfVal / 100);
+
+        setResult(`In ${litersVal} Ltr of milk:<br/>- <strong>Total Fat:</strong> ${fatKg.toFixed(2)} Kg<br/>- <strong>Total SNF (Powder):</strong> ${snfKg.toFixed(2)} Kg`);
+    }
+
+    return (
+        <CalculatorCard title="Kg Fat & SNF Calculator" description="Find out the amount (in Kg) of Fat and Powder (SNF) in milk from a given volume.">
+            <div className="bg-muted/50 p-4 rounded-lg space-y-3">
+                <div><Label>Milk Quantity (Liters)</Label><Input type="number" value={liters} onChange={e => setLiters(e.target.value)} placeholder="1000" /></div>
+                <div><Label>Fat %</Label><Input type="number" value={fat} onChange={e => setFat(e.target.value)} placeholder="4.5" /></div>
+                <div><Label>SNF %</Label><Input type="number" value={snf} onChange={e => setSnf(e.target.value)} placeholder="8.5" /></div>
+            </div>
+            <Button onClick={handleCalc} className="w-full mt-4">Calculate Components</Button>
+            {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
+            {result && <Alert className="mt-4"><AlertTitle>Result</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
+        </CalculatorCard>
+    )
+}
     
+
 
 
 
