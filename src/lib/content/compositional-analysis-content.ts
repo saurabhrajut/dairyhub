@@ -38,6 +38,47 @@ export const compositionalAnalysisContent = {
                             </ol>
                         `
                     },
+                     {
+                        title: "वसा का निर्धारण (Rose-Gottlieb Method)",
+                        purpose: "वसा निर्धारण के लिए संदर्भ या मानक विधि, बहुत सटीक।",
+                        reference: "IS: 1224 (Part-II)-1977",
+                        procedure: `
+                            <h4 class="font-semibold mt-4 mb-2">सिद्धांत:</h4>
+                            <p>दूध के नमूने का अमोनिया और इथेनॉल के साथ उपचार किया जाता है। अमोनिया कैसिइन को घोलता है और वसा ग्लोब्यूल झिल्ली को बेअसर करता है। इथेनॉल प्रोटीन को अवक्षेपित करता है। वसा को फिर डायथाइल ईथर और पेट्रोलियम ईथर के मिश्रण से निकाला जाता है। सॉल्वैंट्स को वाष्पित कर दिया जाता है, और निकाले गए वसा को तौला जाता है।</p>
+                            <h4 class="font-semibold mt-4 mb-2">प्रक्रिया:</h4>
+                            <ol class="list-decimal list-outside pl-5 space-y-2">
+                                <li>एक Mojonnier निष्कर्षण फ्लास्क में लगभग 10 ग्राम दूध का नमूना सटीक रूप से तौलें।</li>
+                                <li>1.5 मिलीलीटर अमोनिया घोल डालें और अच्छी तरह मिलाएं।</li>
+                                <li>10 मिलीलीटर 95% इथेनॉल डालें और 1 मिनट के लिए हिलाएं।</li>
+                                <li>25 मिलीलीटर डायथाइल ईथर डालें, 1 मिनट के लिए जोर से हिलाएं।</li>
+                                <li>25 मिलीलीटर पेट्रोलियम ईथर डालें और 1 मिनट के लिए फिर से हिलाएं।</li>
+                                <li>मिश्रण को तब तक खड़ा रहने दें जब तक कि ऊपरी ईथर परत साफ न हो जाए, या परतों को अलग करने के लिए अपकेंद्रित करें।</li>
+                                <li>ईथर परत को एक पहले से तौले हुए फ्लास्क में सावधानी से डालें।</li>
+                                <li>जलीय परत के साथ दो बार और निष्कर्षण दोहराएं, प्रत्येक बार 15 मिलीलीटर प्रत्येक ईथर का उपयोग करें।</li>
+                                <li>एक गर्म प्लेट या पानी के स्नान पर सॉल्वैंट्स को वाष्पित करें।</li>
+                                <li>निकाले गए वसा वाले फ्लास्क को 102°C पर एक ओवन में एक स्थिर वजन पर सुखाएं।</li>
+                            </ol>
+                            <h4 class="font-semibold mt-4 mb-2">गणना:</h4>
+                            <pre><code>% वसा = (निकाले गए वसा का वजन / नमूने का वजन) * 100</code></pre>
+                        `
+                    },
+                    {
+                        title: "वसा का निर्धारण (Werner-Schmidt Method)",
+                        purpose: "खट्टे या संरक्षित दूध के लिए उपयुक्त, जहाँ कैसिइन को घोलने के लिए एसिड की आवश्यकता होती है।",
+                        procedure: `
+                            <h4 class="font-semibold mt-4 mb-2">सिद्धांत:</h4>
+                            <p>दूध को केंद्रित हाइड्रोक्लोरिक एसिड के साथ उबाला जाता है, जो प्रोटीन को पचाता है और वसा को मुक्त करता है। वसा को फिर ईथर के साथ निकाला जाता है और तौला जाता है।</p>
+                            <h4 class="font-semibold mt-4 mb-2">प्रक्रिया:</h4>
+                            <ol class="list-decimal list-outside pl-5 space-y-2">
+                                <li>एक उपयुक्त निष्कर्षण ट्यूब में लगभग 10 ग्राम दूध का नमूना सटीक रूप से तौलें।</li>
+                                <li>10 मिलीलीटर केंद्रित HCl डालें और तब तक गरम करें जब तक कि घोल गहरा भूरा न हो जाए।</li>
+                                <li>ठंडा करें, और Rose-Gottlieb विधि में वर्णित अनुसार डायथाइल और पेट्रोलियम ईथर के साथ तीन बार निकालें।</li>
+                                <li>सॉल्वैंट्स को वाष्पित करें, अवशेष को सुखाएं और तौलें।</li>
+                            </ol>
+                             <h4 class="font-semibold mt-4 mb-2">गणना:</h4>
+                            <pre><code>% वसा = (निकाले गए वसा का वजन / नमूने का वजन) * 100</code></pre>
+                        `
+                    },
                     {
                         title: "कुल ठोस पदार्थों का निर्धारण (Gravimetric Method)",
                         purpose: "कुल ठोस सामग्री को सटीक रूप से निर्धारित करने के लिए मानक संदर्भ विधि।",
@@ -111,6 +152,57 @@ export const compositionalAnalysisContent = {
                             <pre><code>% अम्लता (लैक्टिक एसिड के रूप में) = (9 * V * N) / W</code></pre>
                             <p class="text-xs">जहाँ V = NaOH की मात्रा, N = NaOH की नॉर्मलता, W = दूध के नमूने का वजन।</p>
                         `
+                    },
+                    {
+                        title: "कुल राख और क्लोराइड राख का निर्धारण",
+                        purpose: "दूध में कुल खनिज सामग्री का निर्धारण करने के लिए।",
+                        reference: "IS: 1479 (Part-II)-1961",
+                        procedure: `
+                            <h4 class="font-semibold mt-4 mb-2">सिद्धांत:</h4>
+                            <p>दूध के नमूने को तब तक जलाया जाता है जब तक कि सारा कार्बनिक पदार्थ नष्ट न हो जाए, जिससे केवल अकार्बनिक खनिज (राख) रह जाते हैं।</p>
+                            <h4 class="font-semibold mt-4 mb-2">प्रक्रिया:</h4>
+                            <ol class="list-decimal list-outside pl-5 space-y-2">
+                                <li>एक पहले से तौले हुए सिलिका या प्लैटिनम क्रूसिबल (W1) में लगभग 10 ग्राम दूध का नमूना सटीक रूप से तौलें।</li>
+                                <li>नमूने को एक पानी के स्नान पर वाष्पित करें और फिर एक गर्म प्लेट पर तब तक गरम करें जब तक कि यह जलना बंद न कर दे।</li>
+                                <li>क्रूसिबल को 550°C पर एक मफल फर्नेस में तब तक गरम करें जब तक कि एक सफेद या हल्की ग्रे राख प्राप्त न हो जाए।</li>
+                                <li>एक डेसिकेटर में ठंडा करें और तौलें (W2)।</li>
+                            </ol>
+                             <h4 class="font-semibold mt-4 mb-2">गणना:</h4>
+                             <pre><code>% कुल राख = [ (W2 - W1) / नमूने का वजन ] * 100</code></pre>
+                        `
+                    },
+                    {
+                        title: "मेथिलीन ब्लू रिडक्शन टेस्ट (MBRT)",
+                        purpose: "कच्चे दूध की सूक्ष्मजीवविज्ञानी गुणवत्ता का शीघ्रता से आकलन करने के लिए।",
+                        reference: "IS: 1479 (भाग III) – 1977",
+                        procedure: `
+                            <h4 class="font-semibold mt-4 mb-2">सिद्धांत:</h4>
+                            <p>मेथिलीन ब्लू एक नीला रेडॉक्स डाई है। दूध में मौजूद बैक्टीरिया अपने चयापचय के दौरान इस डाई को कम करते हैं, जिससे यह रंगहीन हो जाता है। जितनी तेजी से रंग गायब होता है, दूध में उतने ही अधिक बैक्टीरिया होते हैं।</p>
+                            <h4 class="font-semibold mt-4 mb-2">प्रक्रिया:</h4>
+                            <ol class="list-decimal list-outside pl-5 space-y-2">
+                                <li>एक निष्फल टेस्ट ट्यूब में 10 मिली दूध का नमूना लें।</li>
+                                <li>एक मानक मेथिलीन ब्लू घोल का 1 मिली डालें।</li>
+                                <li>ट्यूब को एक रबर स्टॉपर से बंद करें और इसे एक बार उल्टा करके मिलाएं।</li>
+                                <li>ट्यूब को 37°C पर एक पानी के स्नान में रखें।</li>
+                                <li>समय-समय पर देखें और उस समय को रिकॉर्ड करें जब नीला रंग पूरी तरह से गायब हो जाए (मेथिलीन ब्लू रिडक्शन टाइम)।</li>
+                            </ol>
+                             <h4 class="font-semibold mt-4 mb-2">व्याख्या:</h4>
+                             <p><strong>बहुत अच्छा:</strong> 5 घंटे या उससे अधिक<br><strong>अच्छा:</strong> 2 से 4 घंटे<br><strong>संतोषजनक:</strong> 30 मिनट से 1 घंटा<br><strong>खराब:</strong> 30 मिनट से कम</p>
+                        `
+                    },
+                    {
+                        title: "क्षारीय फॉस्फेट परीक्षण",
+                        purpose: "पाश्चुरीकरण की दक्षता को सत्यापित करने के लिए।",
+                        procedure: `
+                            <h4 class="font-semibold mt-4 mb-2">सिद्धांत:</h4>
+                            <p>फॉस्फेट एक एंजाइम है जो कच्चे दूध में स्वाभाविक रूप से मौजूद होता है और पाश्चुरीकरण के दौरान नष्ट हो जाता है। यदि यह परीक्षण सकारात्मक है, तो इसका मतलब है कि दूध को ठीक से पाश्चुरीकृत नहीं किया गया था या इसे कच्चे दूध से दूषित किया गया था।</p>
+                            <h4 class="font-semibold mt-4 mb-2">प्रक्रिया:</h4>
+                            <ol class="list-decimal list-outside pl-5 space-y-2">
+                                <li>दूध के नमूने को एक बफर-सब्सट्रेट घोल (डाइसोडियम पी-नाइट्रोफेनिल फॉस्फेट) के साथ ऊष्मायन किया जाता है।</li>
+                                <li>यदि फॉस्फेट मौजूद है, तो यह सब्सट्रेट को हाइड्रोलाइज करेगा, जिससे पी-नाइट्रोफेनोल निकलेगा, जो एक क्षारीय घोल में पीला होता है।</li>
+                                <li>रंग की तीव्रता को एक स्पेक्ट्रोफोटोमीटर या तुलनित्र का उपयोग करके मापा जाता है।</li>
+                            </ol>
+                        `
                     }
                 ]
             },
@@ -122,16 +214,15 @@ export const compositionalAnalysisContent = {
                         purpose: "क्रीम में वसा सामग्री का निर्धारण करने के लिए, जो इसका प्राथमिक वाणिज्यिक मूल्य है।",
                         reference: "IS 3509-1966",
                         procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">सिद्धांत:</h4>
-                            <p>क्रीम की उच्च चिपचिपाहट के कारण, Gerber या Rose-Gottlieb/Werner-Schmidt विधियों का उपयोग एक छोटे, सटीक रूप से तौले गए नमूने के साथ किया जाता है।</p>
-                            <h4 class="font-semibold mt-4 mb-2">प्रक्रिया (क्रीम के लिए Gerber विधि):</h4>
+                            <h4 class="font-semibold mt-4 mb-2">विधि 1: Gerber Method (क्रीम के लिए)</h4>
                             <ol class="list-decimal list-outside pl-5 space-y-2">
                                 <li>एक विशेष क्रीम ब्यूटिरोमीटर में सीधे 5 ग्राम अच्छी तरह से मिश्रित क्रीम तौलें।</li>
                                 <li>5 मिली पानी डालें।</li>
                                 <li>10 मिली Gerber का एसिड और 1 मिली एमाइल अल्कोहल डालें।</li>
                                 <li>दूध के लिए Gerber विधि के अनुसार आगे बढ़ें (अपकेंद्रित्र, जल स्नान, पढ़ना)। रीडिंग को ब्यूटिरोमीटर के आधार पर एक कारक से गुणा किया जाता है ताकि वसा प्रतिशत प्राप्त हो सके।</li>
                             </ol>
-                            <p class="mt-2">वैकल्पिक रूप से, उच्च सटीकता के लिए, <strong>Rose-Gottlieb</strong> या <strong>Werner-Schmidt</strong> विधि का उपयोग करें। सटीक रूप से 1-2 ग्राम क्रीम तौलें, इसे 9 मिली 0.5% NaCl घोल (Rose-Gottlieb के लिए) में फैलाएं या इसे 10 मिली केंद्रित HCl (Werner-Schmidt के लिए) में घोलें, और फिर तरल दूध के लिए वर्णित संबंधित निष्कर्षण विधि के साथ आगे बढ़ें।</p>
+                            <h4 class="font-semibold mt-4 mb-2">विधि 2: Werner-Schmidt Method</h4>
+                            <p>खट्टा या संरक्षित क्रीम के लिए उपयुक्त। लगभग 5 ग्राम क्रीम को हाइड्रोक्लोरिक एसिड से पचाया जाता है, और वसा को ईथर से निकाला जाता है और तौला जाता है।</p>
                         `
                     },
                      {
@@ -607,6 +698,47 @@ export const compositionalAnalysisContent = {
                         `
                     },
                     {
+                        title: "Determination of Fat (Rose-Gottlieb Method)",
+                        purpose: "The reference or standard method for fat determination, very accurate.",
+                        reference: "IS: 1224 (Part-II)-1977",
+                        procedure: `
+                            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                            <p>The milk sample is treated with ammonia and ethanol. Ammonia dissolves the casein and neutralizes the fat globule membrane. Ethanol precipitates the protein. The fat is then extracted with a mixture of diethyl ether and petroleum ether. The solvents are evaporated, and the extracted fat is weighed.</p>
+                            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                            <ol class="list-decimal list-outside pl-5 space-y-2">
+                                <li>Accurately weigh about 10g of milk sample into a Mojonnier extraction flask.</li>
+                                <li>Add 1.5 ml of ammonia solution and mix well.</li>
+                                <li>Add 10 ml of 95% ethanol and shake for 1 minute.</li>
+                                <li>Add 25 ml of diethyl ether, shake vigorously for 1 minute.</li>
+                                <li>Add 25 ml of petroleum ether and shake again for 1 minute.</li>
+                                <li>Let the mixture stand until the upper ether layer is clear, or centrifuge to separate the layers.</li>
+                                <li>Carefully decant the ether layer into a pre-weighed flask.</li>
+                                <li>Repeat the extraction twice more with the aqueous layer, using 15 ml of each ether each time.</li>
+                                <li>Evaporate the solvents on a hot plate or water bath.</li>
+                                <li>Dry the flask with the extracted fat in an oven at 102°C to a constant weight.</li>
+                            </ol>
+                            <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                            <pre><code>% Fat = (Weight of extracted fat / Weight of sample) * 100</code></pre>
+                        `
+                    },
+                    {
+                        title: "Determination of Fat (Werner-Schmidt Method)",
+                        purpose: "Suitable for soured or preserved milk, where acid is needed to dissolve the casein.",
+                        procedure: `
+                            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                            <p>The milk is boiled with concentrated hydrochloric acid, which digests the protein and liberates the fat. The fat is then extracted with ether and weighed.</p>
+                            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                            <ol class="list-decimal list-outside pl-5 space-y-2">
+                                <li>Accurately weigh about 10g of milk sample into a suitable extraction tube.</li>
+                                <li>Add 10 ml of concentrated HCl and heat until the solution turns dark brown.</li>
+                                <li>Cool, and extract three times with diethyl and petroleum ether as described in the Rose-Gottlieb method.</li>
+                                <li>Evaporate the solvents, dry the residue, and weigh.</li>
+                            </ol>
+                             <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                            <pre><code>% Fat = (Weight of extracted fat / Weight of sample) * 100</code></pre>
+                        `
+                    },
+                    {
                         title: "Determination of Total Solids (Gravimetric Method)",
                         purpose: "The standard reference method for accurately determining the total solids content.",
                         procedure: `
@@ -679,6 +811,57 @@ export const compositionalAnalysisContent = {
                             <pre><code>% Acidity (as Lactic Acid) = (9 * V * N) / W</code></pre>
                             <p class="text-xs">Where V = volume of NaOH, N = normality of NaOH, W = weight of milk sample.</p>
                         `
+                    },
+                     {
+                        title: "Determination of Total Ash & Chloride Ash",
+                        purpose: "To determine the total mineral content in milk.",
+                        reference: "IS: 1479 (Part-II)-1961",
+                        procedure: `
+                            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                            <p>The milk sample is incinerated until all organic matter is destroyed, leaving only the inorganic minerals (ash).</p>
+                            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                            <ol class="list-decimal list-outside pl-5 space-y-2">
+                                <li>Accurately weigh about 10g of milk sample into a pre-weighed silica or platinum crucible (W1).</li>
+                                <li>Evaporate the sample on a water bath and then heat on a hot plate until it ceases to fume.</li>
+                                <li>Ignite the crucible in a muffle furnace at 550°C until a white or light grey ash is obtained.</li>
+                                <li>Cool in a desiccator and weigh (W2).</li>
+                            </ol>
+                             <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                             <pre><code>% Total Ash = [ (W2 - W1) / Weight of Sample ] * 100</code></pre>
+                        `
+                    },
+                    {
+                        title: "Methylene Blue Reduction Test (MBRT)",
+                        purpose: "To quickly assess the microbiological quality of raw milk.",
+                        reference: "IS: 1479 (Part III) – 1977",
+                        procedure: `
+                            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                            <p>Methylene blue is a blue redox dye. Bacteria present in the milk reduce this dye during their metabolism, causing it to become colorless. The faster the color disappears, the more bacteria are present in the milk.</p>
+                            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                            <ol class="list-decimal list-outside pl-5 space-y-2">
+                                <li>Take 10 ml of milk sample in a sterile test tube.</li>
+                                <li>Add 1 ml of a standard Methylene Blue solution.</li>
+                                <li>Stopper the tube with a rubber stopper and mix by inverting it once.</li>
+                                <li>Place the tube in a water bath at 37°C.</li>
+                                <li>Observe periodically and record the time it takes for the blue color to completely disappear (Methylene Blue Reduction Time).</li>
+                            </ol>
+                             <h4 class="font-semibold mt-4 mb-2">Interpretation:</h4>
+                             <p><strong>Very Good:</strong> 5 hours or more<br><strong>Good:</strong> 2 to 4 hours<br><strong>Satisfactory:</strong> 30 minutes to 1 hour<br><strong>Poor:</strong> Less than 30 minutes</p>
+                        `
+                    },
+                    {
+                        title: "Alkaline Phosphatase Test",
+                        purpose: "To verify the efficiency of pasteurization.",
+                        procedure: `
+                            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                            <p>Phosphatase is an enzyme naturally present in raw milk that is destroyed during pasteurization. If this test is positive, it means the milk was not properly pasteurized or was contaminated with raw milk.</p>
+                            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                            <ol class="list-decimal list-outside pl-5 space-y-2">
+                                <li>The milk sample is incubated with a buffer-substrate solution (disodium p-nitrophenyl phosphate).</li>
+                                <li>If phosphatase is present, it will hydrolyze the substrate, releasing p-nitrophenol, which is yellow in an alkaline solution.</li>
+                                <li>The intensity of the color is measured using a spectrophotometer or a comparator.</li>
+                            </ol>
+                        `
                     }
                 ]
             },
@@ -690,16 +873,15 @@ export const compositionalAnalysisContent = {
                         purpose: "To determine the fat content in cream, which is its primary commercial value.",
                         reference: "IS 3509-1966",
                         procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
-                            <p>Due to the high viscosity of cream, the Gerber or Rose-Gottlieb/Werner-Schmidt methods are used with a smaller, accurately weighed sample.</p>
-                            <h4 class="font-semibold mt-4 mb-2">Procedure (Gerber Method for Cream):</h4>
+                            <h4 class="font-semibold mt-4 mb-2">Method 1: Gerber Method (for Cream)</h4>
                             <ol class="list-decimal list-outside pl-5 space-y-2">
                                 <li>Weigh 5g of well-mixed cream directly into a special cream butyrometer.</li>
                                 <li>Add 5ml of water.</li>
                                 <li>Add 10ml of Gerber's acid and 1ml of amyl alcohol.</li>
                                 <li>Proceed as for the Gerber method for milk (centrifugation, water bath, reading). The reading is multiplied by a factor depending on the butyrometer to get the fat percentage.</li>
                             </ol>
-                            <p class="mt-2">Alternatively, for higher accuracy, use the <strong>Rose-Gottlieb</strong> or <strong>Werner-Schmidt</strong> method. Weigh accurately 1-2g of cream, disperse it in 9ml of 0.5% NaCl solution (for Rose-Gottlieb) or dissolve it in 10ml concentrated HCl (for Werner-Schmidt), and then proceed with the respective extraction method as described for liquid milk.</p>
+                            <h4 class="font-semibold mt-4 mb-2">Method 2: Werner-Schmidt Method</h4>
+                            <p>Suitable for soured or preserved cream. Approximately 5g of cream is digested with hydrochloric acid, and the fat is extracted with ether and weighed.</p>
                         `
                     },
                      {
@@ -755,7 +937,7 @@ export const compositionalAnalysisContent = {
                         procedure: `
                             <h4 class="font-semibold mt-4 mb-2">Procedure (Rose-Gottlieb Method):</h4>
                             <ol class="list-decimal list-outside pl-5 space-y-2">
-                                 <li>Weigh accurately ~1g of powder into an extraction flask.</li>
+                                 <li>Accurately weigh ~1g of powder into an extraction flask.</li>
                                  <li>Add 10ml of warm water and mix well to reconstitute the powder.</li>
                                  <li>Add 1.25ml of ammonia solution and mix.</li>
                                  <li>Proceed with the standard Rose-Gottlieb extraction using diethyl ether and petroleum ether, as described for liquid milk.</li>
