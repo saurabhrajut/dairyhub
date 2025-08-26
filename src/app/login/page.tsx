@@ -13,8 +13,8 @@ import { useAuth } from '@/context/auth-context';
 
 
 export default function LoginPage() {
-    const [email, setEmail] = useState('guest@example.com');
-    const [password, setPassword] = useState('123456');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const { toast } = useToast();
     const router = useRouter();

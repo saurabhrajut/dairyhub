@@ -23,6 +23,8 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+const USERS_STORAGE_KEY = 'dairy-hub-users';
+const CURRENT_USER_STORAGE_KEY = 'dairy-hub-current-user';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AppUser | null>(null);
@@ -31,7 +33,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     try {
-        const storedUser = localStorage.getItem('dairy-hub-user');
+        const storedUser = localStorage.getItem(CURRENT_USER_STORAGE_KEY);
         if (storedUser) {
             const parsedUser = JSON.parse(storedUser);
             setUser(parsedUser);
@@ -39,11 +41,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
     } catch (error) {
         console.error("Failed to parse user from localStorage", error);
-        localStorage.removeItem('dairy-hub-user');
+        localStorage.removeItem(CURRENT_USER_STORAGE_KEY);
     } finally {
         setLoading(false);
     }
   }, [loadSubscription]);
+  
+  const getUsers = (): AppUser[] => {
+      const usersRaw = localStorage.getItem(USERS_STORAGE_KEY);
+      return usersRaw ? JSON.parse(usersRaw) : [];
+  };
+
+  const saveUsers = (users: AppUser[]) => {
+      localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(users));
+  };
 
   const login = async (email: string, password: string) => {
     // Special case for guest login
@@ -55,29 +66,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             photoURL: 'https://placehold.co/128x128/E0E0E0/333?text=G',
             gender: 'other'
         };
-        localStorage.setItem('dairy-hub-user', JSON.stringify(guestUser));
+        localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(guestUser));
         setUser(guestUser);
         loadSubscription(guestUser.uid);
         return;
     }
 
-    // For regular users, check if they exist in localStorage
-    const storedUserRaw = localStorage.getItem('dairy-hub-user');
-    if (storedUserRaw) {
-        const storedUser = JSON.parse(storedUserRaw);
-        // In a real app, you'd check the password too. Here we only check email.
-        if (storedUser.email === email) {
-            setUser(storedUser);
-            loadSubscription(storedUser.uid);
-            return;
-        }
-    }
+    const allUsers = getUsers();
+    const foundUser = allUsers.find(u => u.email === email);
     
-    // If no user found, throw an error
-    throw new Error("User not found. Please check your credentials or sign up.");
+    if (foundUser) {
+        // In a real app, you'd check the hashed password here
+        setUser(foundUser);
+        localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(foundUser));
+        loadSubscription(foundUser.uid);
+    } else {
+        throw new Error("User not found. Please check your credentials or sign up.");
+    }
   };
 
   const signup = async (email: string, password: string, displayName: string, gender: 'male' | 'female' | 'other') => {
+    const allUsers = getUsers();
+    if (allUsers.some(u => u.email === email)) {
+        throw new Error("An account with this email already exists.");
+    }
+
     const newUser: AppUser = {
         uid: 'user-' + Date.now(),
         email,
@@ -86,13 +99,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         photoURL: `https://placehold.co/128x128/E0E0E0/333?text=${displayName.charAt(0).toUpperCase()}`,
     };
     
-    localStorage.setItem('dairy-hub-user', JSON.stringify(newUser));
+    allUsers.push(newUser);
+    saveUsers(allUsers);
+    
+    localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(newUser));
     setUser(newUser);
     loadSubscription(newUser.uid);
   };
 
   const logout = async () => {
-    localStorage.removeItem('dairy-hub-user');
+    localStorage.removeItem(CURRENT_USER_STORAGE_KEY);
     setUser(null);
   };
 
@@ -100,7 +116,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
      if (user && profileData.displayName) {
       const updatedUser = { ...user, displayName: profileData.displayName };
       setUser(updatedUser);
-      localStorage.setItem('dairy-hub-user', JSON.stringify(updatedUser));
+      localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(updatedUser));
+      
+      const allUsers = getUsers();
+      const userIndex = allUsers.findIndex(u => u.uid === user.uid);
+      if (userIndex !== -1) {
+          allUsers[userIndex] = updatedUser;
+          saveUsers(allUsers);
+      }
       console.log("User profile updated.", updatedUser);
     }
   };
@@ -110,7 +133,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const photoURL = URL.createObjectURL(file);
       const updatedUser = { ...user, photoURL };
       setUser(updatedUser);
-       localStorage.setItem('dairy-hub-user', JSON.stringify(updatedUser));
+      localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(updatedUser));
+      
+      const allUsers = getUsers();
+      const userIndex = allUsers.findIndex(u => u.uid === user.uid);
+      if (userIndex !== -1) {
+          allUsers[userIndex] = updatedUser;
+          saveUsers(allUsers);
+      }
       console.log("User photo updated (locally).");
     }
   };
