@@ -706,4 +706,3 @@ export function FssaiStandardsModal({ isOpen, setIsOpen }: { isOpen: boolean; se
     </Dialog>
   );
 }
-
