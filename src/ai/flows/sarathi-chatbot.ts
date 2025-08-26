@@ -57,22 +57,28 @@ function validateHistory(history: Message[] | undefined): Message[] {
   if (!history) {
     return [];
   }
-  return history
-    .filter(
-      msg =>
-        msg &&
-        msg.role &&
-        Array.isArray(msg.content) &&
-        msg.content.length > 0
-    )
+  
+  // Filter out any messages that are malformed or would cause an error.
+  const validHistory = history
     .map(msg => {
-      const validContent = msg.content.filter(
-        c => c && typeof c.text === 'string' && c.text.trim() !== ''
-      );
-      // Return a message with only valid content parts
-      return {...msg, content: validContent};
+      // Ensure content exists and is an array.
+      if (!msg || !msg.content || !Array.isArray(msg.content)) {
+        return null;
+      }
+      // Filter out any empty text parts within the content.
+      const validContent = msg.content.filter(c => c && typeof c.text === 'string' && c.text.trim() !== '');
+      
+      // If after filtering, the content array is empty, this message is invalid.
+      if (validContent.length === 0) {
+        return null;
+      }
+      
+      // Return a message with only valid content parts and a valid role.
+      return { role: msg.role, content: validContent };
     })
-    .filter(msg => msg.content.length > 0); // Exclude messages that now have empty content
+    .filter((msg): msg is Message => msg !== null && (msg.role === 'user' || msg.role === 'model'));
+
+  return validHistory;
 }
 
 const sarathiChatbotFlow = ai.defineFlow(
@@ -88,7 +94,7 @@ const sarathiChatbotFlow = ai.defineFlow(
     const {output} = await sarathiPrompt(restOfInput, {history: validHistory});
 
     if (!output) {
-      return {answer: 'Sorry, I encountered an issue. Please try again.'};
+      return {answer: 'Maaf karna, kuch gadbad ho gayi. Fir se try karein.'};
     }
     return output;
   }
