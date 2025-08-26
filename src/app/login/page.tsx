@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Mail, Lock, Loader2 } from 'lucide-react';
+import { Mail, Lock, Loader2, UserCheck } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { MilkCanIcon } from '@/components/icons';
@@ -35,12 +35,34 @@ export default function LoginPage() {
              toast({
                 variant: "destructive",
                 title: 'Login Failed',
-                description: error.message || "Please check your credentials.",
+                description: error.message || "Please check your credentials or sign up.",
             });
         } finally {
             setIsLoading(false);
         }
     };
+    
+    const handleGuestLogin = async () => {
+        setIsLoading(true);
+        try {
+            // Use a predefined guest user
+            await login('guest@example.com', 'guestpassword');
+            toast({
+                title: 'Logged in as Guest!',
+                description: "Welcome! Explore the app's features.",
+            });
+            router.push('/profile');
+        } catch (error: any) {
+            toast({
+                variant: "destructive",
+                title: 'Guest Login Failed',
+                description: "Could not log in as guest. Please try again.",
+            });
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
 
     return (
         <div className="bg-gray-50 flex items-center justify-center min-h-screen p-4">
@@ -55,7 +77,7 @@ export default function LoginPage() {
 
                 <form onSubmit={handleLogin} className="space-y-4">
                      <div>
-                        <Label htmlFor="email" className="text-sm font-medium text-gray-700">Email Address</Label>
+                        <Label htmlFor="email">Email Address</Label>
                         <div className="relative mt-1">
                             <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
                             <Input
@@ -92,6 +114,26 @@ export default function LoginPage() {
                         </Button>
                     </div>
                 </form>
+
+                 <div className="relative my-6">
+                    <div className="absolute inset-0 flex items-center">
+                        <span className="w-full border-t"></span>
+                    </div>
+                    <div className="relative flex justify-center text-xs uppercase">
+                        <span className="bg-white px-2 text-muted-foreground">Or continue with</span>
+                    </div>
+                </div>
+
+                 <div>
+                    <Button onClick={handleGuestLogin}
+                            variant="outline"
+                            className="w-full"
+                            disabled={isLoading}>
+                        {isLoading ? <Loader2 className="animate-spin" /> : <UserCheck className="mr-2 h-4 w-4" />}
+                        Continue as Guest
+                    </Button>
+                </div>
+                
                 <div className="text-center mt-6">
                     <p className="text-sm text-gray-600">
                         Don't have an account?

@@ -30,7 +30,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const { loadSubscription } = useSubscription();
 
   useEffect(() => {
-    // Check localStorage for a logged-in user on initial load
     try {
         const storedUser = localStorage.getItem('dairy-hub-user');
         if (storedUser) {
@@ -47,33 +46,40 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [loadSubscription]);
 
   const login = async (email: string, password: string) => {
-    // This is a mock login. In a real app, you'd call Firebase Auth.
-    const storedUser = localStorage.getItem('dairy-hub-user');
-    if (storedUser) {
-        const parsedUser = JSON.parse(storedUser);
-        if (parsedUser.email === email) {
-            setUser(parsedUser);
-            loadSubscription(parsedUser.uid);
+    // Special case for guest login
+    if (email === 'guest@example.com' && password === 'guestpassword') {
+        const guestUser: AppUser = {
+            uid: 'guest-' + Date.now(), 
+            email: 'guest@example.com', 
+            displayName: 'Guest User', 
+            photoURL: 'https://placehold.co/128x128/E0E0E0/333?text=G',
+            gender: 'other'
+        };
+        localStorage.setItem('dairy-hub-user', JSON.stringify(guestUser));
+        setUser(guestUser);
+        loadSubscription(guestUser.uid);
+        return;
+    }
+
+    // For regular users, check if they exist in localStorage
+    const storedUserRaw = localStorage.getItem('dairy-hub-user');
+    if (storedUserRaw) {
+        const storedUser = JSON.parse(storedUserRaw);
+        // In a real app, you'd check the password too. Here we only check email.
+        if (storedUser.email === email) {
+            setUser(storedUser);
+            loadSubscription(storedUser.uid);
             return;
         }
     }
-    // For demo, if no user found, login as guest
-    const guestUser = { 
-        uid: 'guest-' + Date.now(), 
-        email, 
-        displayName: email.split('@')[0], 
-        photoURL: 'https://placehold.co/128x128/E0E0E0/333?text=G',
-        gender: 'other' as const
-    };
-    localStorage.setItem('dairy-hub-user', JSON.stringify(guestUser));
-    setUser(guestUser);
-    loadSubscription(guestUser.uid);
+    
+    // If no user found, throw an error
+    throw new Error("User not found. Please check your credentials or sign up.");
   };
 
   const signup = async (email: string, password: string, displayName: string, gender: 'male' | 'female' | 'other') => {
-    // This is a mock signup.
     const newUser: AppUser = {
-        uid: 'user-' + Date.now(), // simple unique ID for demo
+        uid: 'user-' + Date.now(),
         email,
         displayName,
         gender,
@@ -88,7 +94,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = async () => {
     localStorage.removeItem('dairy-hub-user');
     setUser(null);
-    // You might want to also clear subscription state here
   };
 
   const updateUserProfile = async (profileData: { displayName?: string }) => {
@@ -102,7 +107,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const updateUserPhoto = async (file: File) => {
     if (user) {
-      // Simulate photo upload by creating a local URL
       const photoURL = URL.createObjectURL(file);
       const updatedUser = { ...user, photoURL };
       setUser(updatedUser);
