@@ -160,7 +160,7 @@ export const waterTestingContent = {
                 ],
                 calculation: 'Chloride (mg/L) = [ (V_sample - V_blank) &times; N of AgNO₃ &times; 35.45 &times; 1000 ] / Volume of Sample (mL)'
             },
-            {
+             {
                 id: 'cod',
                 title: 'Chemical Oxygen Demand (COD)',
                 intro: 'COD measures the total amount of oxygen required to oxidize both organic and inorganic pollutants using a strong chemical oxidant (potassium dichromate). It provides faster results than BOD.',
@@ -231,5 +231,3 @@ export const waterTestingContent = {
         }
     }
 }
-
-    
