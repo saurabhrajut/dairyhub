@@ -154,7 +154,7 @@ export const compositionalAnalysisContent = {
                         `
                     },
                     {
-                        title: "कुल राख और क्लोराइड राख का निर्धारण",
+                        title: "कुल राख का निर्धारण",
                         purpose: "दूध में कुल खनिज सामग्री का निर्धारण करने के लिए।",
                         reference: "IS: 1479 (Part-II)-1961",
                         procedure: `
@@ -169,6 +169,35 @@ export const compositionalAnalysisContent = {
                             </ol>
                              <h4 class="font-semibold mt-4 mb-2">गणना:</h4>
                              <pre><code>% कुल राख = [ (W2 - W1) / नमूने का वजन ] * 100</code></pre>
+                        `
+                    },
+                    {
+                        title: "खनिजों का निर्धारण (लौ फोटोमेट्री द्वारा)",
+                        purpose: "दूध में कैल्शियम, सोडियम और पोटेशियम की मात्रा का तेजी से और सटीक रूप से निर्धारण करने के लिए।",
+                        reference: "Journal of Dairy Science Vol. 33, No. 6, 1950",
+                        procedure: `
+                            <h4 class="font-semibold mt-4 mb-2">सिद्धांत:</h4>
+                            <p>लौ फोटोमेट्री एक ऐसी तकनीक है जिसमें एक नमूने को एक लौ में जलाया जाता है और उत्सर्जित प्रकाश की तीव्रता को मापा जाता है। प्रत्येक तत्व एक विशिष्ट तरंग दैर्ध्य पर प्रकाश उत्सर्जित करता है, और उत्सर्जित प्रकाश की तीव्रता उस तत्व की सांद्रता के समानुपाती होती है।</p>
+                            <h4 class="font-semibold mt-4 mb-2">नमूना तैयार करना:</h4>
+                            <ol class="list-decimal list-outside pl-5 space-y-2">
+                                <li>एक चीनी मिट्टी के क्रूसिबल में 100 ग्राम दूध का सटीक रूप से वजन करें।</li>
+                                <li>नमूने को 100°C पर 24 घंटे के लिए सुखाएं।</li>
+                                <li>सूखे नमूने को एक मफल फर्नेस में 550°C पर राख करें।</li>
+                                <li>राख को 10 मिली 1:1 HCl और गर्म पानी से निकालें। घोल को छानें।</li>
+                                <li>पूर्ण निष्कर्षण सुनिश्चित करने के लिए राख बनाने और निकालने की प्रक्रिया को दोहराएं।</li>
+                                <li>अंतिम छाने हुए घोल को एक वॉल्यूमेट्रिक फ्लास्क में 500 मिली तक आसुत जल से पतला करें। इस स्टॉक घोल का उपयोग विश्लेषण के लिए किया जाता है।</li>
+                            </ol>
+                             <h4 class="font-semibold mt-4 mb-2">प्रक्रिया:</h4>
+                             <ol class="list-decimal list-outside pl-5 space-y-2">
+                                 <li>स्टॉक घोल का 5-मिलीलीटर भाग लें, इसे 100-मिलीलीटर वॉल्यूमेट्रिक फ्लास्क में डालें, और आसुत जल के साथ निशान तक पतला करें।</li>
+                                 <li>उपकरण (एक लौ फोटोमीटर) को कैल्शियम, सोडियम या पोटेशियम के लिए विशिष्ट तरंग दैर्ध्य पर सेट करें।</li>
+                                 <li>कैल्शियम, पोटेशियम और फास्फोरस के ज्ञात सांद्रता वाले मानक घोल तैयार करें ताकि दूध के नमूने की संरचना की नकल की जा सके, क्योंकि ये आयन एक दूसरे के माप में हस्तक्षेप कर सकते हैं।</li>
+                                 <li>अज्ञात नमूने की लौ की तीव्रता को दो मानकों (एक थोड़ा कम और एक थोड़ा अधिक सांद्रता वाला) की तीव्रता के बीच प्रक्षेपित करें।</li>
+                                 <li>एक सीधी रेखा संबंध मानकर अज्ञात की सांद्रता की गणना करें।</li>
+                             </ol>
+                             <h4 class="font-semibold mt-4 mb-2">गणना:</h4>
+                             <pre><code>C_x = C₁ + (C₂ - C₁) * (I_x - I₁) / (I₂ - I₁)</code></pre>
+                             <p class="text-xs">जहाँ C सांद्रता है, I तीव्रता है, और सबस्क्रिप्ट x, 1, और 2 क्रमशः अज्ञात, निचले मानक और उच्च मानक को दर्शाते हैं।</p>
                         `
                     },
                     {
@@ -812,8 +841,8 @@ export const compositionalAnalysisContent = {
                             <p class="text-xs">Where V = volume of NaOH, N = normality of NaOH, W = weight of milk sample.</p>
                         `
                     },
-                     {
-                        title: "Determination of Total Ash & Chloride Ash",
+                    {
+                        title: "Determination of Total Ash",
                         purpose: "To determine the total mineral content in milk.",
                         reference: "IS: 1479 (Part-II)-1961",
                         procedure: `
@@ -828,6 +857,35 @@ export const compositionalAnalysisContent = {
                             </ol>
                              <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
                              <pre><code>% Total Ash = [ (W2 - W1) / Weight of Sample ] * 100</code></pre>
+                        `
+                    },
+                    {
+                        title: "Determination of Minerals (by Flame Photometry)",
+                        purpose: "For the rapid and accurate determination of calcium, sodium, and potassium in milk.",
+                        reference: "Journal of Dairy Science Vol. 33, No. 6, 1950",
+                        procedure: `
+                            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                            <p>Flame photometry is a technique where a sample is atomized into a flame and the intensity of the light emitted is measured. Each element emits light at a specific wavelength, and the intensity of the light emitted is proportional to the concentration of that element.</p>
+                            <h4 class="font-semibold mt-4 mb-2">Sample Preparation:</h4>
+                            <ol class="list-decimal list-outside pl-5 space-y-2">
+                                <li>Accurately weigh 100g of milk into a porcelain crucible.</li>
+                                <li>Dry the sample at 100°C for 24 hours.</li>
+                                <li>Ash the dried sample in a muffle furnace at 550°C.</li>
+                                <li>Extract the ash with 10 ml of 1:1 HCl and hot water. Filter the solution.</li>
+                                <li>Repeat the ashing and extraction process to ensure complete extraction.</li>
+                                <li>Dilute the final filtered solution to 500 ml with distilled water in a volumetric flask. This stock solution is used for analysis.</li>
+                            </ol>
+                             <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                             <ol class="list-decimal list-outside pl-5 space-y-2">
+                                 <li>Take a 5-ml aliquot of the stock solution, place it in a 100-ml volumetric flask, and dilute to the mark with distilled water.</li>
+                                 <li>Set the instrument (a flame photometer) to the specific wavelength for calcium, sodium, or potassium.</li>
+                                 <li>Prepare standard solutions with known concentrations of Ca, K, and P to mimic the composition of the milk sample, as these ions can interfere with each other's measurement.</li>
+                                 <li>Interpolate the flame intensity of the unknown sample between the intensities of two standards (one of slightly lower and one of slightly higher concentration).</li>
+                                 <li>Calculate the concentration of the unknown assuming a straight-line relationship.</li>
+                             </ol>
+                             <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                             <pre><code>C_x = C₁ + (C₂ - C₁) * (I_x - I₁) / (I₂ - I₁)</code></pre>
+                             <p class="text-xs">Where C is concentration, I is intensity, and the subscripts x, 1, and 2 denote the unknown, lower standard, and higher standard, respectively.</p>
                         `
                     },
                     {
