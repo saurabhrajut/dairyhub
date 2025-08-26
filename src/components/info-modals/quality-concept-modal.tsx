@@ -218,14 +218,14 @@ export function QualityConceptModal({ isOpen, setIsOpen }: { isOpen: boolean; se
   if (!content) return null;
 
   const topics = [
-      { value: "intro", title: "Introduction", icon: Book },
-      { value: "concepts", title: "Concepts", icon: CheckSquare },
-      { value: "prps", title: "PRPs", icon: Settings },
-      { value: "philosophy", title: "Philosophies", icon: Users },
-      { value: "tqm", title: "TQM", icon: Award },
-      { value: "haccp", title: "HACCP", icon: ShieldCheck },
-      { value: "iso", title: "ISO", icon: FileSpreadsheet },
-      { value: "bodies", title: "Bodies", icon: Factory }
+      { value: "intro", title: content.tabs.intro, icon: Book },
+      { value: "concepts", title: content.tabs.concepts, icon: CheckSquare },
+      { value: "prps", title: content.tabs.prps, icon: Settings },
+      { value: "philosophy", title: content.tabs.philosophy, icon: Users },
+      { value: "tqm", title: content.tabs.tqm, icon: Award },
+      { value: "haccp", title: content.tabs.haccp, icon: ShieldCheck },
+      { value: "iso", title: content.tabs.iso, icon: FileSpreadsheet },
+      { value: "bodies", title: content.tabs.bodies, icon: Factory }
   ];
 
   const selectedTopic = topics.find(t => t.value === activeTopic);
