@@ -61,10 +61,10 @@ const sarathiChatbotFlow = ai.defineFlow(
     const question = restOfInput.question || (restOfInput.resumeText ? "Please analyze my resume and ask interview questions." : "Hello");
     
     // The prompt expects history to be passed in the second argument.
-    // Ensure it's always an array and correctly formatted.
+    // Ensure it's always an array and correctly formatted to prevent errors.
     const validHistory = (history || []).map(msg => ({
       role: msg.role,
-      content: (Array.isArray(msg.content) && msg.content.length > 0 && msg.content[0].text) 
+      content: Array.isArray(msg.content) && msg.content.length > 0
         ? msg.content 
         : [{ text: '' }],
     }));
