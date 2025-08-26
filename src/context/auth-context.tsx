@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
@@ -37,7 +38,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (storedUser) {
             const parsedUser = JSON.parse(storedUser);
             setUser(parsedUser);
-            loadSubscription(parsedUser.uid);
+            if (parsedUser?.uid) {
+              loadSubscription(parsedUser.uid);
+            }
         }
     } catch (error) {
         console.error("Failed to parse user from localStorage", error);
@@ -48,8 +51,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [loadSubscription]);
   
   const getUsers = (): AppUser[] => {
-      const usersRaw = localStorage.getItem(USERS_STORAGE_KEY);
-      return usersRaw ? JSON.parse(usersRaw) : [];
+      try {
+        const usersRaw = localStorage.getItem(USERS_STORAGE_KEY);
+        return usersRaw ? JSON.parse(usersRaw) : [];
+      } catch (error) {
+        console.error("Failed to parse users from localStorage", error);
+        return [];
+      }
   };
 
   const saveUsers = (users: AppUser[]) => {
@@ -129,20 +137,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const updateUserPhoto = async (file: File) => {
-    if (user) {
-      const photoURL = URL.createObjectURL(file);
-      const updatedUser = { ...user, photoURL };
-      setUser(updatedUser);
-      localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(updatedUser));
-      
-      const allUsers = getUsers();
-      const userIndex = allUsers.findIndex(u => u.uid === user.uid);
-      if (userIndex !== -1) {
-          allUsers[userIndex] = updatedUser;
-          saveUsers(allUsers);
-      }
-      console.log("User photo updated (locally).");
-    }
+    if (!user) return;
+
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+            const photoURL = reader.result as string;
+            const updatedUser = { ...user, photoURL };
+            setUser(updatedUser);
+            localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(updatedUser));
+            
+            const allUsers = getUsers();
+            const userIndex = allUsers.findIndex(u => u.uid === user.uid);
+            if (userIndex !== -1) {
+                allUsers[userIndex] = updatedUser;
+                saveUsers(allUsers);
+            }
+            console.log("User photo updated and saved to localStorage.");
+            resolve();
+        };
+        reader.onerror = (error) => {
+            console.error("Error reading file:", error);
+            reject(error);
+        };
+    });
   };
 
   const value = {
