@@ -289,7 +289,7 @@ export default function ProfilePage() {
                             <DialogContent>
                                 <DialogHeader><DialogTitle>Contact Support</DialogTitle></DialogHeader>
                                 <div className="py-4 space-y-4">
-                                     <a href="https://wa.me/919111905734" target="_blank" rel="noopener noreferrer" className="block">
+                                     <a href="https://wa.me/9119005734" target="_blank" rel="noopener noreferrer" className="block">
                                         <Button className="w-full" variant="outline"><MessageCircle className="mr-2"/>WhatsApp</Button>
                                     </a>
                                      <a href="mailto:saurabhthakur8080@gmail.com" className="block">
