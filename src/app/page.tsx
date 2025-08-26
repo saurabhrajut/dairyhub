@@ -1,24 +1,43 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { DailyTip } from "@/components/daily-tip";
 import { Header } from "@/components/header";
 import { TopicGrid } from "@/components/topic-grid";
 import { ChatWidget, type ChatUserProfile } from "@/components/chat-widget";
 import { useAuth } from "@/context/auth-context";
+import { Loader2 } from "lucide-react";
 
 export default function Home() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+  const router = useRouter();
+  const [isClient, setIsClient] = useState(false);
 
-  const chatUser: ChatUserProfile = user ? {
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    if (isClient && !loading && !user) {
+      router.push('/login');
+    }
+  }, [user, loading, router, isClient]);
+
+  if (loading || !user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+        <p className="ml-4 text-lg text-gray-600">Loading your Dairy Hub...</p>
+      </div>
+    );
+  }
+
+  const chatUser: ChatUserProfile = {
     name: user.displayName || 'Guest',
     age: 30, // This can be customized later
-    gender: user.gender || 'other', 
-  } : {
-    name: 'Guest',
-    age: 30,
-    gender: 'other',
+    gender: user.gender || 'other',
   };
-
 
   return (
     <>
