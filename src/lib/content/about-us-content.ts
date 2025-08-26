@@ -1,5 +1,5 @@
 
-import { Bot, Lightbulb, Factory, FlaskConical, Beaker, Scale, Calculator, Settings, TestTube, ClipboardCheck, CheckSquare, Droplet, PackageCheck, Lock, DollarSign, Microscope, Recycle, Bug, ShieldCheck, FileSpreadsheet, Search, Wind, Users } from "lucide-react";
+import { Bot, Lightbulb, Factory, FlaskConical, Beaker, Scale, Calculator, Settings, TestTube, ClipboardCheck, CheckSquare, Droplet, PackageCheck, Lock, DollarSign, Microscope, Recycle, Bug, ShieldCheck, FileSpreadsheet, Search, Wind, Users, GraduationCap, Atom } from "lucide-react";
 import { PaneerIcon, IceCreamIcon, ReagentIcon } from "@/components/icons";
 
 export const aboutUsContent = {
@@ -31,7 +31,7 @@ export const aboutUsContent = {
             features: [
                 { icon: Factory, title: "Dairy Industry Insights", description: "भारतीय डेयरी क्षेत्र से नवीनतम रुझान, आँकड़े और अपडेट प्राप्त करें।" },
                 { icon: ShieldCheck, title: "FSSAI Standards", description: "दूध और दूध उत्पादों के लिए आधिकारिक FSSAI मानकों को समझें।" },
-                { icon: FlaskConical, title: "Milk Chemistry", description: "दूध की संरचना, प्रोटीन और गुणों में गहराई से उतरें।" },
+                { icon: Atom, title: "Milk Chemistry", description: "दूध की संरचना, प्रोटीन और गुणों में गहराई से उतरें।" },
                 { icon: Bug, title: "Microbiology", description: "डेयरी में सूक्ष्मजीवों, उनके परीक्षण और सुरक्षा प्रोटोकॉल के बारे में जानें।" },
                 { icon: Droplet, title: "Milk Handling", description: "दूध की प्राप्ति, भंडारण और संरक्षण की सर्वोत्तम प्रथाओं को जानें।" },
                 { icon: Settings, title: "Dairy Processing", description: "पाश्चुरीकरण से लेकर होमोजेनाइजेशन तक, मुख्य डेयरी प्रसंस्करण तकनीकों का अन्वेषण करें।" },
@@ -51,8 +51,8 @@ export const aboutUsContent = {
                 { icon: ClipboardCheck, title: "Calibration", description: "सटीक परिणामों के लिए लैब के कांच के बने पदार्थ और अभिकर्मकों को कैलिब्रेट करें।" },
                 { icon: PackageCheck, title: "Packaging Testing", description: "डेयरी उत्पादों के लिए पैकेजिंग सामग्री के गुणवत्ता परीक्षणों को समझें।" },
                 { icon: Droplet, title: "Water Testing", description: "WTP/ETP विश्लेषण के लिए पानी परीक्षण के महत्व और तरीकों को जानें।" },
-                { icon: Bot, title: "Sarathi AI Chatbot", description: "अपने व्यक्तिगत AI सहायक से तुरंत जवाब और सहायता प्राप्त करें। डेयरी या करियर से संबंधित कोई भी प्रश्न पूछें!" },
-                { icon: Lightbulb, title: "'Did You Know?' Toggle", description: "डेयरी विज्ञान और खाद्य उद्योग के बारे में रोज़ नए और रोचक तथ्य जानें।" }
+                { icon: GraduationCap, title: "Expert Support", description: "AI और वास्तविक विशेषज्ञों से सलाह और उत्तर प्राप्त करें।" },
+                { icon: Bot, title: "Sarathi AI Chatbot", description: "अपने व्यक्तिगत AI सहायक से तुरंत जवाब और सहायता प्राप्त करें। डेयरी या करियर से संबंधित कोई भी प्रश्न पूछें!" }
             ]
         },
         mission: {
@@ -97,7 +97,7 @@ export const aboutUsContent = {
             features: [
                 { icon: Factory, title: "Dairy Industry Insights", description: "Get the latest trends, stats, and updates from the Indian dairy sector." },
                 { icon: ShieldCheck, title: "FSSAI Standards", description: "Understand the official FSSAI standards for milk and milk products." },
-                { icon: FlaskConical, title: "Milk Chemistry", description: "Deep dive into milk composition, proteins, and properties." },
+                { icon: Atom, title: "Milk Chemistry", description: "Deep dive into milk composition, proteins, and properties." },
                 { icon: Bug, title: "Microbiology", description: "Learn about microorganisms in dairy, their testing, and safety protocols." },
                 { icon: Droplet, title: "Milk Handling", description: "Know the best practices for milk reception, storage, and preservation." },
                 { icon: Settings, title: "Dairy Processing", description: "Explore core dairy processing techniques, from pasteurization to homogenization." },
@@ -117,8 +117,8 @@ export const aboutUsContent = {
                 { icon: ClipboardCheck, title: "Calibration", description: "Calibrate lab glassware and reagents for accurate results." },
                 { icon: PackageCheck, title: "Packaging Testing", description: "Understand the quality tests for packaging materials for dairy products." },
                 { icon: Droplet, title: "Water Testing", description: "Learn the importance and methods of water testing for WTP/ETP analysis." },
-                { icon: Bot, title: "Sarathi AI Chatbot", description: "Get instant answers and assistance from your personal AI assistant. Ask any dairy or career-related question!" },
-                { icon: Lightbulb, title: "'Did You Know?' Toggle", description: "Learn new and interesting facts about dairy science and the food industry daily." }
+                { icon: GraduationCap, title: "Expert Support", description: "Get advice and answers from AI and real experts." },
+                { icon: Bot, title: "Sarathi AI Chatbot", description: "Get instant answers and assistance from your personal AI assistant. Ask any dairy or career-related question!" }
             ]
         },
         mission: {
