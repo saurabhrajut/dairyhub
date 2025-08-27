@@ -58,7 +58,7 @@ export function ChatPanel({
   useEffect(() => {
     // Initialize welcome message only once
     if (messages.length === 0) {
-      const welcomeMsg = "Ram Ram Sa mere dost! 🙏 Main hu aapka Sarathi — full-on assistant mode mein! To… Jo bhi sawal ho bs bta dena, mai apne dimag ke ghode दोड़ा ke aapko batane ki कोशिश करूँगा, धन्यवाद.😊";
+      const welcomeMsg = "Ram Ram Sa mere dost! 🙏 Main hu aapka Sarathi — full-on assistant mode mein! To… Jo bhi sawal ho bs bta dena, mai apne dimag ke ghode दौड़ा ke aapko batane ki कोशिश करूँगा, धन्यवाद। 😊";
       const initialMessage: UIMessage = { id: "initial", role: "model", text: welcomeMsg, lang: "hi-IN" };
       setMessages([initialMessage]);
     }
@@ -153,11 +153,12 @@ export function ChatPanel({
       text: userMessageText,
     };
     
-    // Add user message to UI
-    setMessages(prev => [...prev, userMessage]);
+    // Add user message to UI immediately
+    const newMessages = [...messages, userMessage];
+    setMessages(newMessages);
     
-    // Prepare history for API call, filtering out the initial welcome message
-    const historyForApi: GenkitMessage[] = [...messages, userMessage]
+    // Prepare history for API call
+    const historyForApi: GenkitMessage[] = newMessages
       .filter(msg => msg.id !== 'initial') // Exclude welcome message
       .map(msg => ({
         role: msg.role,
@@ -175,7 +176,7 @@ export function ChatPanel({
         question: query,
         language: language,
         resumeText: resumeQuery || undefined,
-        history: historyForApi.slice(0, -1), // Send history *before* the current message
+        history: historyForApi.slice(0, -1), // Send history *before* the current user message
       });
 
       const assistantMessage: UIMessage = {

@@ -58,22 +58,15 @@ function validateHistory(history: Message[] | undefined): Message[] {
     return [];
   }
   
-  // Filter out any messages that are malformed or would cause an error.
   const validHistory = history
     .map(msg => {
-      // Ensure content exists and is an array.
       if (!msg || !msg.content || !Array.isArray(msg.content)) {
         return null;
       }
-      // Filter out any empty text parts within the content.
       const validContent = msg.content.filter(c => c && typeof c.text === 'string' && c.text.trim() !== '');
-      
-      // If after filtering, the content array is empty, this message is invalid.
       if (validContent.length === 0) {
         return null;
       }
-      
-      // Return a message with only valid content parts and a valid role.
       return { role: msg.role, content: validContent };
     })
     .filter((msg): msg is Message => msg !== null && (msg.role === 'user' || msg.role === 'model'));
