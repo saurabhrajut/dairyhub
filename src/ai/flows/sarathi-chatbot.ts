@@ -49,7 +49,7 @@ const sarathiPrompt = ai.definePrompt({
 
 /**
  * Ensures that the provided history is in a valid format for the Genkit prompt.
- * It filters out any malformed or empty messages.
+ * It filters out any malformed, null, or empty messages.
  * @param history The conversation history from the client.
  * @returns A validated array of Genkit-compatible messages.
  */
@@ -58,33 +58,31 @@ function validateHistory(history: Message[] | undefined): Message[] {
     return [];
   }
   
-  const validHistory = history
+  return history
     .map(msg => {
-      // Ensure the message object and its content array are valid before processing
+      // 1. Ensure the message object and its content array are valid.
       if (!msg || !msg.content || !Array.isArray(msg.content)) {
         return null;
       }
       
-      // Filter out any empty or invalid content parts within a message
+      // 2. Filter out any empty or invalid content parts within a message.
       const validContent = msg.content.filter(c => c && typeof c.text === 'string' && c.text.trim() !== '');
       
-      // If there's no valid content left after filtering, discard the entire message
+      // 3. If there's no valid content left, discard the entire message.
       if (validContent.length === 0) {
         return null;
       }
 
-      // Ensure the message has a valid role
-      if (msg.role === 'user' || msg.role === 'model') {
-        // Return a new message object with only the valid content
-        return { role: msg.role, content: validContent };
+      // 4. Ensure the message has a valid role.
+      if (msg.role !== 'user' && msg.role !== 'model') {
+        return null;
       }
       
-      return null;
+      // 5. Return a new, clean message object.
+      return { role: msg.role, content: validContent };
     })
-    // Filter out any null messages that resulted from the mapping/validation
+    // 6. Filter out any null messages that resulted from the validation.
     .filter((msg): msg is Message => msg !== null);
-
-  return validHistory;
 }
 
 
