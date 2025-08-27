@@ -33,6 +33,7 @@ export default function Home() {
     );
   }
 
+  // This ensures that the user object passed to ChatWidget is always up-to-date
   const chatUser: ChatUserProfile = {
     name: user.displayName || 'Guest',
     age: 30, // This can be customized later

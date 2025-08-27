@@ -19,6 +19,7 @@ import { Mic, Send, Bot, Paperclip, X, Loader2, Languages, PlayCircle, StopCircl
 import type { ChatUserProfile } from "./chat-widget";
 import { useLanguage } from "@/context/language-context";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/context/auth-context";
 
 
 interface GenkitMessage {
@@ -36,7 +37,7 @@ interface UIMessage {
 export function ChatPanel({
   isOpen,
   setIsOpen,
-  user
+  user: initialUser
 }: {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
@@ -54,11 +55,12 @@ export function ChatPanel({
   const recognitionRef = useRef<any>(null);
   const [isListening, setIsListening] = useState(false);
   const [speakingMessageId, setSpeakingMessageId] = useState<string | null>(null);
+  const { user } = useAuth(); // Use the auth context to get the most up-to-date user info
 
   useEffect(() => {
     // Initialize welcome message only once
     if (messages.length === 0) {
-      const welcomeMsg = "Ram Ram Sa mere dost! 🙏 Main hu aapka Sarathi — full-on assistant mode mein! To… Jo bhi sawal ho bs bta dena, mai apne dimag ke ghode दौड़ा ke aapko batane ki कोशिश करूँगा, धन्यवाद। 😊";
+      const welcomeMsg = `Ram Ram Sa ${user?.displayName || 'mere dost'}! 🙏 Main hu aapka Sarathi — full-on assistant mode mein! To… Jo bhi sawal ho bs bta dena, mai apne dimag ke ghode दौड़ा ke aapko batane ki कोशिश करूँगा, धन्यवाद। 😊`;
       const initialMessage: UIMessage = { id: "initial", role: "model", text: welcomeMsg, lang: "hi-IN" };
       setMessages([initialMessage]);
     }
@@ -144,7 +146,7 @@ export function ChatPanel({
     const resumeQuery = resumeText.trim();
 
     if (!query && !resumeQuery) return;
-    if (isLoading) return;
+    if (isLoading || !user) return; // Ensure user is available
 
     const userMessageText = showResumeInput ? (query || `Please analyze my resume.`) : query;
     const userMessage: UIMessage = {
@@ -170,9 +172,9 @@ export function ChatPanel({
 
     try {
       const response = await getSarathiChatbotResponse({
-        name: user.name,
-        age: user.age,
-        gender: user.gender,
+        name: user.displayName || 'Guest', // Pass the most current name
+        age: initialUser.age,
+        gender: user.gender || 'other',
         question: query,
         language: language,
         resumeText: resumeQuery || undefined,
