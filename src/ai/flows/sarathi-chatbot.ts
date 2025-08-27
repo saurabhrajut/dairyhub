@@ -54,32 +54,34 @@ const sarathiPrompt = ai.definePrompt({
  * @returns A validated array of Genkit-compatible messages.
  */
 function validateHistory(history: Message[] | undefined): Message[] {
-  if (!history) {
+  if (!history || !Array.isArray(history)) {
     return [];
   }
   
   const validHistory = history
     .map(msg => {
-      // Ensure the message and its content array exist
-      if (!msg || !Array.isArray(msg.content)) {
+      // Ensure the message object and its content array are valid before processing
+      if (!msg || !msg.content || !Array.isArray(msg.content)) {
         return null;
       }
-      // Filter out empty or invalid content parts
+      
+      // Filter out any empty or invalid content parts within a message
       const validContent = msg.content.filter(c => c && typeof c.text === 'string' && c.text.trim() !== '');
       
-      // If there's no valid content left, discard the message
+      // If there's no valid content left after filtering, discard the entire message
       if (validContent.length === 0) {
         return null;
       }
 
-      // Return a valid message object with a valid role
+      // Ensure the message has a valid role
       if (msg.role === 'user' || msg.role === 'model') {
+        // Return a new message object with only the valid content
         return { role: msg.role, content: validContent };
       }
       
       return null;
     })
-    // Filter out any null messages from the map operation
+    // Filter out any null messages that resulted from the mapping/validation
     .filter((msg): msg is Message => msg !== null);
 
   return validHistory;
