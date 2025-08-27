@@ -4,7 +4,7 @@
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { useSubscription } from './subscription-context';
 
-export type Department = 'process-access' | 'production-access' | 'quality-access' | 'all-control-access';
+export type Department = 'process-access' | 'production-access' | 'quality-access' | 'all-control-access' | 'guest';
 
 interface AppUser {
     uid: string;
@@ -76,7 +76,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             displayName: 'Guest User', 
             photoURL: 'https://placehold.co/128x128/E0E0E0/333?text=G',
             gender: 'other',
-            department: 'all-control-access'
+            department: 'guest' // Assign a specific guest department
         };
         localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(guestUser));
         setUser(guestUser);

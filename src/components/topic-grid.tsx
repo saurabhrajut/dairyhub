@@ -60,13 +60,15 @@ import { IceCreamProductionModal } from "./info-modals/ice-cream-production-moda
 import { ExpertSupportModal } from "./info-modals/expert-support-modal";
 import { useAuth } from "@/context/auth-context";
 import type { Department } from "@/context/auth-context";
+import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
-type AccessRole = Department | 'all';
+type AccessRole = Department | 'all' | 'guest';
 
 const topics: { id: string; title: string; description: string; category: string; icon: React.ElementType; badge?: string; modal: React.ElementType; isPro: boolean; color: string; access: AccessRole[] }[] = [
   { id: 'industry', title: 'Dairy Industry', description: 'Overview & Trends', category: 'industry', icon: Factory, badge: 'New', modal: DairyIndustryModal, isPro: false, color: 'from-blue-100 to-indigo-200', access: ['all'] },
   { id: 'fssai-standards', title: 'FSSAI Standards', description: 'Official Dairy Standards', category: 'industry', icon: ShieldCheck, badge: 'New', modal: FssaiStandardsModal, isPro: false, color: 'from-green-100 to-teal-200', access: ['quality-access', 'all-control-access'] },
-  { id: 'milk-chemistry', title: 'Milk Chemistry', description: 'Composition & Properties', category: 'science', icon: Atom, modal: MilkChemistryModal, isPro: false, color: 'from-red-100 to-rose-200', access: ['all'] },
+  { id: 'milk-chemistry', title: 'Milk Chemistry', description: 'Composition & Properties', category: 'science', icon: Atom, modal: MilkChemistryModal, isPro: false, color: 'from-red-100 to-rose-200', access: ['production-access', 'quality-access', 'all-control-access'] },
   { id: 'microbiology', title: 'Microbiology', description: 'Testing & Pathogens', category: 'science', icon: Bug, badge: 'New', modal: MicrobiologyTestingModal, isPro: true, color: 'from-purple-100 to-violet-200', access: ['quality-access', 'all-control-access'] },
   
   { id: 'milk-handling', title: 'Milk Handling', description: 'Reception & Preservation', category: 'milk', icon: Droplet, badge: 'New', modal: MilkHandlingPreservationModal, isPro: false, color: 'from-cyan-100 to-sky-200', access: ['production-access', 'quality-access', 'all-control-access'] },
@@ -110,13 +112,18 @@ const filters = [
 
 export function TopicGrid() {
   const { user } = useAuth();
+  const { toast } = useToast();
+  const router = useRouter();
   const [activeFilter, setActiveFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [activeModal, setActiveModal] = useState<string | null>(null);
 
-  const userDepartment = user?.department || 'all-control-access'; // Default to all access if not specified
+  const userDepartment = user?.department; // Can be undefined
 
   const hasAccess = (topicAccess: AccessRole[]) => {
+    if (!userDepartment || userDepartment === 'guest') {
+      return false; // Lock everything if department is not set or is guest
+    }
     if (topicAccess.includes('all')) return true;
     return topicAccess.includes(userDepartment);
   };
@@ -128,7 +135,24 @@ export function TopicGrid() {
   });
 
   const openModal = (id: string, isAccessible: boolean) => {
-      if (!isAccessible) return; // Do not open if locked
+      if (!isAccessible) {
+          if (user?.department === 'guest') {
+              toast({
+                  title: "Feature Locked for Guests",
+                  description: "Please sign up for an account to access this feature.",
+                  variant: "destructive"
+              });
+              router.push('/signup');
+          } else {
+              toast({
+                  title: "Access Denied",
+                  description: "Please select your department in your profile to unlock features.",
+                  variant: "destructive"
+              });
+              router.push('/profile');
+          }
+          return;
+      }
       const topic = topics.find(t => t.id === id);
       if (topic && topic.modal) {
         setActiveModal(id);
