@@ -1,4 +1,3 @@
-
 "use client";
 
 import type { Metadata } from 'next';
@@ -44,16 +43,6 @@ const notoDevanagari = Noto_Sans_Devanagari({
   display: 'swap',
 });
 
-// Metadata object for SEO and icons - Note: this is static and won't be applied on initial render due to client component
-// export const metadata: Metadata = {
-//   title: 'DhenuGuide',
-//   description: 'Your complete guide to dairy science and industry.',
-//   icons: {
-//     icon: 'https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/EF9A49FE-8131-4DD5-9311-7FC058B1FD0E.jpeg?alt=media&token=5b354cf4-00f5-4527-9ff8-7f9cbd4920b0',
-//     apple: 'https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/EF9A49FE-8131-4DD5-9311-7FC058B1FD0E.jpeg?alt=media&token=5b354cf4-00f5-4527-9ff8-7f9cbd4920b0',
-//   },
-// };
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -63,11 +52,16 @@ export default function RootLayout({
 
   useEffect(() => {
     // Add document metadata here since this is a client component
-    document.title = 'DhenuGuide';
+    document.title = 'Dairy Hub';
   }, []);
 
   return (
     <html lang="en" className={`${inter.variable} ${poppins.variable} ${spaceGrotesk.variable} ${sourceCodePro.variable} ${notoDevanagari.variable}`}>
+      <head>
+        <link rel="manifest" href="/manifest.webmanifest" />
+        <link rel="apple-touch-icon" href="/icon-192x192.png" />
+        <meta name="theme-color" content="#ffffff" />
+      </head>
       <body className="font-body antialiased">
         {showSplash ? (
           <SplashScreen onFinished={() => setShowSplash(false)} />
