@@ -9,7 +9,7 @@ import { LanguageProvider } from '@/context/language-context';
 import { AuthProvider } from '@/context/auth-context';
 import { SubscriptionProvider } from '@/context/subscription-context';
 import { SplashScreen } from '@/components/splash-screen';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 
 // Font configuration using next/font
 const inter = Inter({
@@ -70,8 +70,10 @@ export default function RootLayout({
           <LanguageProvider key="language-provider">
             <SubscriptionProvider>
               <AuthProvider>
-                {children}
-                <Toaster />
+                <Fragment>
+                  {children}
+                  <Toaster />
+                </Fragment>
               </AuthProvider>
             </SubscriptionProvider>
           </LanguageProvider>
