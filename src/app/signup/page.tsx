@@ -14,16 +14,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
-import { User, Mail, Lock, Binary, Loader2 } from 'lucide-react';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { User, Mail, Lock, Binary, Loader2, Building2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/context/auth-context';
+import { useAuth, type Department } from '@/context/auth-context';
 
 const formSchema = z.object({
     username: z.string().min(3, { message: 'Username must be at least 3 characters.' }),
     email: z.string().email({ message: 'Please enter a valid email address.' }),
     gender: z.enum(['male', 'female', 'other'], { required_error: 'Please select a gender.' }),
+    department: z.enum(['process-access', 'production-access', 'quality-access', 'all-control-access'], { required_error: 'Please select a department.' }),
     password: z.string().min(6, { message: 'Password must be at least 6 characters.' }),
 });
 
@@ -45,7 +46,7 @@ export default function SignUpPage() {
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setIsLoading(true);
         try {
-            await signup(values.email, values.password, values.username, values.gender);
+            await signup(values.email, values.password, values.username, values.gender, values.department as Department);
             toast({
                 title: 'Account Created!',
                 description: "Welcome! You are now logged in.",
@@ -102,13 +103,14 @@ export default function SignUpPage() {
                                 </FormItem>
                             )}
                         />
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <FormField
                             control={form.control}
                             name="gender"
                             render={({ field }) => (
                                 <FormItem>
                                      <div className="relative">
-                                        <Binary className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                                        <Binary className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 z-10" />
                                         <FormControl>
                                             <Select onValueChange={field.onChange} defaultValue={field.value}>
                                                 <SelectTrigger className="w-full pl-12 pr-4 py-3 bg-gray-50 border-gray-300 rounded-lg focus:ring-pink-500 transition">
@@ -126,6 +128,32 @@ export default function SignUpPage() {
                                 </FormItem>
                             )}
                         />
+                        <FormField
+                            control={form.control}
+                            name="department"
+                            render={({ field }) => (
+                                <FormItem>
+                                     <div className="relative">
+                                        <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 z-10" />
+                                        <FormControl>
+                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                <SelectTrigger className="w-full pl-12 pr-4 py-3 bg-gray-50 border-gray-300 rounded-lg focus:ring-pink-500 transition">
+                                                    <SelectValue placeholder="Select Department" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="process-access">Process Access</SelectItem>
+                                                    <SelectItem value="production-access">Production Access</SelectItem>
+                                                    <SelectItem value="quality-access">Quality Access</SelectItem>
+                                                    <SelectItem value="all-control-access">All Control Access</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        </FormControl>
+                                    </div>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        </div>
                         <FormField
                             control={form.control}
                             name="password"

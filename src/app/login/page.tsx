@@ -45,7 +45,6 @@ export default function LoginPage() {
     const handleGuestLogin = async () => {
         setIsLoading(true);
         try {
-            // Use a predefined guest user
             await login('guest@example.com', 'guestpassword');
             toast({
                 title: 'Logged in as Guest!',
@@ -77,7 +76,7 @@ export default function LoginPage() {
 
                 <form onSubmit={handleLogin} className="space-y-4">
                      <div>
-                        <Label htmlFor="email">Email Address</Label>
+                        <Label htmlFor="email" className="text-sm font-medium text-gray-700">Email Address</Label>
                         <div className="relative mt-1">
                             <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
                             <Input

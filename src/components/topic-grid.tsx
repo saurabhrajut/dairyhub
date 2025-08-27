@@ -58,53 +58,48 @@ import { ValidationVerificationModal } from "./info-modals/validation-verificati
 import { EtpModal } from "./info-modals/etp-modal";
 import { IceCreamProductionModal } from "./info-modals/ice-cream-production-modal";
 import { ExpertSupportModal } from "./info-modals/expert-support-modal";
+import { useAuth } from "@/context/auth-context";
+import type { Department } from "@/context/auth-context";
 
-const topics = [
-  // Tier 1: Foundational Knowledge
-  { id: 'industry', title: 'Dairy Industry', description: 'Overview & Trends', category: 'industry', icon: Factory, badge: 'New', modal: DairyIndustryModal, isPro: false, color: 'from-blue-100 to-indigo-200' },
-  { id: 'fssai-standards', title: 'FSSAI Standards', description: 'Official Dairy Standards', category: 'industry', icon: ShieldCheck, badge: 'New', modal: FssaiStandardsModal, isPro: false, color: 'from-green-100 to-teal-200' },
-  { id: 'milk-chemistry', title: 'Milk Chemistry', description: 'Composition & Properties', category: 'science', icon: Atom, modal: MilkChemistryModal, isPro: false, color: 'from-red-100 to-rose-200' },
-  { id: 'microbiology', title: 'Microbiology', description: 'Testing & Pathogens', category: 'science', icon: Bug, badge: 'New', modal: MicrobiologyTestingModal, isPro: true, color: 'from-purple-100 to-violet-200' },
-  
-  // Tier 2: Core Processes & Testing
-  { id: 'milk-handling', title: 'Milk Handling', description: 'Reception & Preservation', category: 'milk', icon: Droplet, badge: 'New', modal: MilkHandlingPreservationModal, isPro: false, color: 'from-cyan-100 to-sky-200' },
-  { id: 'processing', title: 'Dairy Processing', description: 'Techniques & Machinery', category: 'industry', icon: Settings, modal: DairyProcessingModal, isPro: false, color: 'from-gray-100 to-gray-300' },
-  { id: 'adulteration', title: 'Adulteration', description: 'Detection & Prevention', category: 'milk', icon: TestTube, badge: 'Updated', modal: AdulterationModal, isPro: false, color: 'from-yellow-100 to-amber-200' },
-  { id: 'solutions-prep', title: 'Solutions Preparation', description: 'Reagents & Calculators', category: 'science', icon: Beaker, modal: SolutionsPrepModal, isPro: false, color: 'from-emerald-100 to-green-200' },
+type AccessRole = Department | 'all';
 
-  // Tier 3: Product Specifics & Advanced Calculations
-  { id: 'fermented-products', title: 'Fermented Products', description: 'Yogurt, Dahi & More', category: 'science', icon: ReagentIcon, badge: 'New', modal: FermentedProductsModal, isPro: true, color: 'from-pink-100 to-fuchsia-200' },
-  { id: 'evaporation-drying', title: 'Evaporation & Drying', description: 'Condensed & Powdered Milk', category: 'science', icon: Wind, badge: 'New', modal: EvaporationDryingModal, isPro: true, color: 'from-indigo-100 to-blue-200' },
-  { id: 'paneer-production', title: 'Paneer Processing', description: 'Process & Yield', category: 'science', icon: PaneerIcon, modal: PaneerProcessingModal, isPro: false, color: 'from-lime-100 to-yellow-200' },
-  { id: 'ice-cream-production', title: 'Ice-Cream Production', description: 'Process & Science', category: 'science', icon: IceCreamIcon, modal: IceCreamProductionModal, isPro: true, color: 'from-rose-100 to-pink-200' },
+const topics: { id: string; title: string; description: string; category: string; icon: React.ElementType; badge?: string; modal: React.ElementType; isPro: boolean; color: string; access: AccessRole[] }[] = [
+  { id: 'industry', title: 'Dairy Industry', description: 'Overview & Trends', category: 'industry', icon: Factory, badge: 'New', modal: DairyIndustryModal, isPro: false, color: 'from-blue-100 to-indigo-200', access: ['all'] },
+  { id: 'fssai-standards', title: 'FSSAI Standards', description: 'Official Dairy Standards', category: 'industry', icon: ShieldCheck, badge: 'New', modal: FssaiStandardsModal, isPro: false, color: 'from-green-100 to-teal-200', access: ['quality-access', 'all-control-access'] },
+  { id: 'milk-chemistry', title: 'Milk Chemistry', description: 'Composition & Properties', category: 'science', icon: Atom, modal: MilkChemistryModal, isPro: false, color: 'from-red-100 to-rose-200', access: ['all'] },
+  { id: 'microbiology', title: 'Microbiology', description: 'Testing & Pathogens', category: 'science', icon: Bug, badge: 'New', modal: MicrobiologyTestingModal, isPro: true, color: 'from-purple-100 to-violet-200', access: ['quality-access', 'all-control-access'] },
   
-  // Tier 4: Standardization & General Calculators
-  { id: 'std1', title: 'Standardization I', description: 'Basic Principles', category: 'milk', icon: Scale, modal: StandardizationIModal, isPro: false, color: 'from-sky-100 to-cyan-200' },
-  { id: 'std2', title: 'Standardization II', description: 'Advanced Blending', category: 'milk', icon: Calculator, modal: StandardizationIIModal, isPro: false, color: 'from-fuchsia-100 to-purple-200' },
-  { id: 'various-calculations', title: 'Various Calculations', description: 'Yield, Acidity, etc.', category: 'science', icon: FileSpreadsheet, badge: 'Updated', modal: VariousCalculatorsModal, isPro: false, color: 'from-orange-100 to-red-200' },
-  { id: 'plant-cost', title: 'Plant Cost', description: 'Profit & Loss Calc', category: 'industry', icon: DollarSign, badge: 'Pro', modal: PlantCostModal, isPro: true, color: 'from-yellow-100 to-green-200' },
-  
-  // Tier 5: Quality & Systems
-  { id: 'quality-concept', title: 'Quality Concepts', description: 'HACCP, TQM, ISO', category: 'industry', icon: CheckSquare, modal: QualityConceptModal, isPro: false, color: 'from-teal-100 to-cyan-200' },
-  { id: 'cip-process', title: 'CIP Process', description: 'Cleaning-In-Place Guide', category: 'industry', icon: Recycle, badge: 'New', modal: CipProcessModal, isPro: true, color: 'from-blue-100 to-cyan-300' },
-  { id: 'etp', title: 'ETP', description: 'Wastewater Treatment', category: 'industry', icon: Recycle, badge: 'New', modal: EtpModal, isPro: true, color: 'from-green-100 to-lime-200' },
-  { id: 'lab-equipments', title: 'Lab Equipments', description: 'Principles & Working', category: 'science', icon: Microscope, badge: 'Pro', modal: LabEquipmentsModal, isPro: true, color: 'from-gray-200 to-blue-200' },
-  
-  // Tier 6: Testing & Analysis
-  { id: 'compositional-analysis', title: 'Compositional Analysis', description: 'Chemical tests for products', category: 'science', icon: TestTube, modal: CompositionalAnalysisModal, isPro: false, color: 'from-indigo-100 to-purple-300' },
-  { id: 'calibration', title: 'Calibration', description: 'Glassware & Reagents', category: 'science', icon: ClipboardCheck, modal: CalibrationStandardizationModal, isPro: false, color: 'from-red-100 to-orange-200' },
-  { id: 'water-testing', title: 'Water Testing', description: 'WTP/ETP Analysis', category: 'industry', icon: Droplet, modal: WaterTestingModal, isPro: true, color: 'from-blue-200 to-sky-300' },
-  { id: 'packaging-testing', title: 'Packaging Testing', description: 'Quality tests for materials', category: 'industry', icon: PackageCheck, modal: PackagingMaterialTestingModal, isPro: true, color: 'from-amber-100 to-yellow-200' },
+  { id: 'milk-handling', title: 'Milk Handling', description: 'Reception & Preservation', category: 'milk', icon: Droplet, badge: 'New', modal: MilkHandlingPreservationModal, isPro: false, color: 'from-cyan-100 to-sky-200', access: ['production-access', 'quality-access', 'all-control-access'] },
+  { id: 'processing', title: 'Dairy Processing', description: 'Techniques & Machinery', category: 'industry', icon: Settings, modal: DairyProcessingModal, isPro: false, color: 'from-gray-100 to-gray-300', access: ['production-access', 'quality-access', 'all-control-access'] },
+  { id: 'adulteration', title: 'Adulteration', description: 'Detection & Prevention', category: 'milk', icon: TestTube, badge: 'Updated', modal: AdulterationModal, isPro: false, color: 'from-yellow-100 to-amber-200', access: ['quality-access', 'all-control-access'] },
+  { id: 'solutions-prep', title: 'Solutions Preparation', description: 'Reagents & Calculators', category: 'science', icon: Beaker, modal: SolutionsPrepModal, isPro: false, color: 'from-emerald-100 to-green-200', access: ['quality-access', 'all-control-access'] },
 
-  // Tier 7: Audits & Verification
-  { id: 'audits', title: 'Audits', description: 'Internal & External Audits', category: 'industry', icon: ClipboardCheck, badge: 'New', modal: AuditsModal, isPro: true, color: 'from-rose-100 to-red-200' },
-  { id: 'validation-verification', title: 'Validation & Verification', description: 'Food Safety Assurance', category: 'industry', icon: ClipboardCheck, badge: 'New', modal: ValidationVerificationModal, isPro: true, color: 'from-violet-100 to-fuchsia-200' },
+  { id: 'fermented-products', title: 'Fermented Products', description: 'Yogurt, Dahi & More', category: 'science', icon: ReagentIcon, badge: 'New', modal: FermentedProductsModal, isPro: true, color: 'from-pink-100 to-fuchsia-200', access: ['production-access', 'all-control-access'] },
+  { id: 'evaporation-drying', title: 'Evaporation & Drying', description: 'Condensed & Powdered Milk', category: 'science', icon: Wind, badge: 'New', modal: EvaporationDryingModal, isPro: true, color: 'from-indigo-100 to-blue-200', access: ['production-access', 'all-control-access'] },
+  { id: 'paneer-production', title: 'Paneer Processing', description: 'Process & Yield', category: 'science', icon: PaneerIcon, modal: PaneerProcessingModal, isPro: false, color: 'from-lime-100 to-yellow-200', access: ['production-access', 'all-control-access'] },
+  { id: 'ice-cream-production', title: 'Ice-Cream Production', description: 'Process & Science', category: 'science', icon: IceCreamIcon, modal: IceCreamProductionModal, isPro: true, color: 'from-rose-100 to-pink-200', access: ['production-access', 'all-control-access'] },
   
-  // Tier 8: Expert Support & About
-  { id: 'expert-support', title: 'Expert Support', description: 'Ask AI & Real Experts', category: 'industry', icon: GraduationCap, badge: 'Pro', modal: ExpertSupportModal, isPro: true, color: 'from-amber-100 to-orange-200' },
-  { id: 'about-us', title: 'About Us', description: 'Our Mission & Vision', category: 'industry', icon: Users, modal: AboutUsModal, isPro: false, color: 'from-slate-100 to-stone-200' },
+  { id: 'std1', title: 'Standardization I', description: 'Basic Principles', category: 'milk', icon: Scale, modal: StandardizationIModal, isPro: false, color: 'from-sky-100 to-cyan-200', access: ['all'] },
+  { id: 'std2', title: 'Standardization II', description: 'Advanced Blending', category: 'milk', icon: Calculator, modal: StandardizationIIModal, isPro: false, color: 'from-fuchsia-100 to-purple-200', access: ['process-access', 'production-access', 'quality-access', 'all-control-access'] },
+  { id: 'various-calculations', title: 'Various Calculations', description: 'Yield, Acidity, etc.', category: 'science', icon: FileSpreadsheet, badge: 'Updated', modal: VariousCalculatorsModal, isPro: false, color: 'from-orange-100 to-red-200', access: ['production-access', 'quality-access', 'all-control-access'] },
+  { id: 'plant-cost', title: 'Plant Cost', description: 'Profit & Loss Calc', category: 'industry', icon: DollarSign, badge: 'Pro', modal: PlantCostModal, isPro: true, color: 'from-yellow-100 to-green-200', access: ['production-access', 'all-control-access'] },
+  
+  { id: 'quality-concept', title: 'Quality Concepts', description: 'HACCP, TQM, ISO', category: 'industry', icon: CheckSquare, modal: QualityConceptModal, isPro: false, color: 'from-teal-100 to-cyan-200', access: ['quality-access', 'all-control-access'] },
+  { id: 'cip-process', title: 'CIP Process', description: 'Cleaning-In-Place Guide', category: 'industry', icon: Recycle, badge: 'New', modal: CipProcessModal, isPro: true, color: 'from-blue-100 to-cyan-300', access: ['process-access', 'production-access', 'quality-access', 'all-control-access'] },
+  { id: 'etp', title: 'ETP', description: 'Wastewater Treatment', category: 'industry', icon: Recycle, badge: 'New', modal: EtpModal, isPro: true, color: 'from-green-100 to-lime-200', access: ['quality-access', 'all-control-access'] },
+  { id: 'lab-equipments', title: 'Lab Equipments', description: 'Principles & Working', category: 'science', icon: Microscope, badge: 'Pro', modal: LabEquipmentsModal, isPro: true, color: 'from-gray-200 to-blue-200', access: ['quality-access', 'all-control-access'] },
+  
+  { id: 'compositional-analysis', title: 'Compositional Analysis', description: 'Chemical tests for products', category: 'science', icon: TestTube, modal: CompositionalAnalysisModal, isPro: false, color: 'from-indigo-100 to-purple-300', access: ['quality-access', 'all-control-access'] },
+  { id: 'calibration', title: 'Calibration', description: 'Glassware & Reagents', category: 'science', icon: ClipboardCheck, modal: CalibrationStandardizationModal, isPro: false, color: 'from-red-100 to-orange-200', access: ['quality-access', 'all-control-access'] },
+  { id: 'water-testing', title: 'Water Testing', description: 'WTP/ETP Analysis', category: 'industry', icon: Droplet, modal: WaterTestingModal, isPro: true, color: 'from-blue-200 to-sky-300', access: ['quality-access', 'all-control-access'] },
+  { id: 'packaging-testing', title: 'Packaging Testing', description: 'Quality tests for materials', category: 'industry', icon: PackageCheck, modal: PackagingMaterialTestingModal, isPro: true, color: 'from-amber-100 to-yellow-200', access: ['quality-access', 'all-control-access'] },
+
+  { id: 'audits', title: 'Audits', description: 'Internal & External Audits', category: 'industry', icon: ClipboardCheck, badge: 'New', modal: AuditsModal, isPro: true, color: 'from-rose-100 to-red-200', access: ['quality-access', 'all-control-access'] },
+  { id: 'validation-verification', title: 'Validation & Verification', description: 'Food Safety Assurance', category: 'industry', icon: ClipboardCheck, badge: 'New', modal: ValidationVerificationModal, isPro: true, color: 'from-violet-100 to-fuchsia-200', access: ['production-access', 'quality-access', 'all-control-access'] },
+  
+  { id: 'expert-support', title: 'Expert Support', description: 'Ask AI & Real Experts', category: 'industry', icon: GraduationCap, badge: 'Pro', modal: ExpertSupportModal, isPro: true, color: 'from-amber-100 to-orange-200', access: ['quality-access', 'all-control-access'] },
+  { id: 'about-us', title: 'About Us', description: 'Our Mission & Vision', category: 'industry', icon: Users, modal: AboutUsModal, isPro: false, color: 'from-slate-100 to-stone-200', access: ['all'] },
 ];
-
 
 const filters = [
   { label: "All", value: "all" },
@@ -114,9 +109,17 @@ const filters = [
 ];
 
 export function TopicGrid() {
+  const { user } = useAuth();
   const [activeFilter, setActiveFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [activeModal, setActiveModal] = useState<string | null>(null);
+
+  const userDepartment = user?.department || 'all-control-access'; // Default to all access if not specified
+
+  const hasAccess = (topicAccess: AccessRole[]) => {
+    if (topicAccess.includes('all')) return true;
+    return topicAccess.includes(userDepartment);
+  };
 
   const filteredTopics = topics.filter((topic) => {
     const matchesFilter = activeFilter === "all" || topic.category === activeFilter;
@@ -124,7 +127,8 @@ export function TopicGrid() {
     return matchesFilter && matchesSearch;
   });
 
-  const openModal = (id: string) => {
+  const openModal = (id: string, isAccessible: boolean) => {
+      if (!isAccessible) return; // Do not open if locked
       const topic = topics.find(t => t.id === id);
       if (topic && topic.modal) {
         setActiveModal(id);
@@ -160,12 +164,18 @@ export function TopicGrid() {
 
       <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-4 sm:gap-6">
         {filteredTopics.map((topic) => {
+          const isAccessible = hasAccess(topic.access);
           return (
             <div
               key={topic.id}
-              onClick={() => openModal(topic.id)}
-              className={`bg-card p-4 rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer text-center relative overflow-hidden group`}
+              onClick={() => openModal(topic.id, isAccessible)}
+              className={`bg-card p-4 rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 text-center relative overflow-hidden group ${isAccessible ? 'cursor-pointer' : 'cursor-not-allowed opacity-60'}`}
             >
+              {!isAccessible && (
+                <div className="absolute inset-0 bg-black/40 flex items-center justify-center z-10">
+                    <Lock className="w-6 h-6 text-white" />
+                </div>
+              )}
               {topic.badge && <Badge variant={topic.badge === 'Pro' ? 'default' : 'destructive'} className="absolute top-2 right-2 text-xs px-1.5 py-0.5 h-auto animate-pulse">{topic.badge}</Badge>}
               <div className={`w-16 h-16 mx-auto mb-3 rounded-full flex items-center justify-center bg-gradient-to-br ${topic.color}`}>
                 <topic.icon className="w-8 h-8 text-primary" />

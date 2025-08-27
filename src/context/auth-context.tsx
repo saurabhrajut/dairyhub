@@ -4,21 +4,24 @@
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { useSubscription } from './subscription-context';
 
+export type Department = 'process-access' | 'production-access' | 'quality-access' | 'all-control-access';
+
 interface AppUser {
     uid: string;
     email: string;
     displayName?: string | null;
     photoURL?: string | null;
     gender?: 'male' | 'female' | 'other';
+    department?: Department;
 }
 
 interface AuthContextType {
   user: AppUser | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  signup: (email: string, password: string, displayName: string, gender: 'male' | 'female' | 'other') => Promise<void>;
+  signup: (email: string, password: string, displayName: string, gender: 'male' | 'female' | 'other', department: Department) => Promise<void>;
   logout: () => Promise<void>;
-  updateUserProfile: (profileData: { displayName?: string }) => Promise<void>;
+  updateUserProfile: (profileData: { displayName?: string; department?: Department }) => Promise<void>;
   updateUserPhoto: (file: File) => Promise<void>;
 }
 
@@ -72,7 +75,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             email: 'guest@example.com', 
             displayName: 'Guest User', 
             photoURL: 'https://placehold.co/128x128/E0E0E0/333?text=G',
-            gender: 'other'
+            gender: 'other',
+            department: 'all-control-access'
         };
         localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(guestUser));
         setUser(guestUser);
@@ -93,7 +97,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const signup = async (email: string, password: string, displayName: string, gender: 'male' | 'female' | 'other') => {
+  const signup = async (email: string, password: string, displayName: string, gender: 'male' | 'female' | 'other', department: Department) => {
     const allUsers = getUsers();
     if (allUsers.some(u => u.email === email)) {
         throw new Error("An account with this email already exists.");
@@ -104,6 +108,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         email,
         displayName,
         gender,
+        department,
         photoURL: `https://placehold.co/128x128/E0E0E0/333?text=${displayName.charAt(0).toUpperCase()}`,
     };
     
@@ -120,9 +125,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   };
 
-  const updateUserProfile = async (profileData: { displayName?: string }) => {
-     if (user && profileData.displayName) {
-      const updatedUser = { ...user, displayName: profileData.displayName };
+  const updateUserProfile = async (profileData: Partial<AppUser>) => {
+     if (user) {
+      const updatedUser = { ...user, ...profileData };
       setUser(updatedUser);
       localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(updatedUser));
       

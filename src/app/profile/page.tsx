@@ -13,7 +13,8 @@ import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, Dialog
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useLanguage } from '@/context/language-context';
 import { format } from 'date-fns';
-import { Info, Mail, MessageCircle, Crown, ChevronLeft, LogOut, Settings, HelpCircle, User, Loader2 } from 'lucide-react';
+import { Info, Mail, MessageCircle, Crown, ChevronLeft, LogOut, Settings, HelpCircle, User, Loader2, Building2 } from 'lucide-react';
+import type { Department } from '@/context/auth-context';
 
 const EditIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -40,7 +41,6 @@ export default function ProfilePage() {
     const [isMounted, setIsMounted] = useState(false);
     const [isEditingName, setIsEditingName] = useState(false);
     
-    // The user will be null if not logged in.
     const displayUser = user;
     const [tempName, setTempName] = useState(displayUser?.displayName || '');
     
@@ -104,6 +104,16 @@ export default function ProfilePage() {
         });
     }
 
+    const handleDepartmentChange = (dept: Department) => {
+        if (user) {
+            updateUserProfile({ department: dept });
+            toast({
+                title: "Department Updated",
+                description: `Your access has been set to ${getDepartmentName(dept)}.`,
+            });
+        }
+    };
+
     const handleLogout = async () => {
         await logout();
         router.push('/login');
@@ -125,6 +135,17 @@ export default function ProfilePage() {
           'lifetime': 'Lifetime Pro'
       }
       return names[planKey] || 'Pro Plan';
+    }
+
+    const getDepartmentName = (deptKey?: Department) => {
+        if (!deptKey) return 'Not specified';
+        const names: Record<Department, string> = {
+            'process-access': 'Process Access',
+            'production-access': 'Production Access',
+            'quality-access': 'Quality Access',
+            'all-control-access': 'All Control Access',
+        }
+        return names[deptKey];
     }
 
     if (loading || !displayUser) {
@@ -246,6 +267,10 @@ export default function ProfilePage() {
                             <div className="bg-green-100 p-2 rounded-lg"><User className="h-5 w-5 text-green-600"/></div>
                             <span className="ml-4 text-gray-600 capitalize">{displayUser.gender || 'Not specified'}</span>
                         </div>
+                         <div className="flex items-center">
+                            <div className="bg-purple-100 p-2 rounded-lg"><Building2 className="h-5 w-5 text-purple-600"/></div>
+                            <span className="ml-4 text-gray-600 capitalize">{getDepartmentName(displayUser.department)}</span>
+                        </div>
                     </div>
                 </div>
 
@@ -265,15 +290,29 @@ export default function ProfilePage() {
                                     <DialogTitle>App Settings</DialogTitle>
                                     <DialogDescription>Change your app preferences here.</DialogDescription>
                                 </DialogHeader>
-                                <div className="py-4">
-                                    <label htmlFor="language-select" className="block text-sm font-medium text-gray-700 mb-2">App Language</label>
-                                    <Select value={language} onValueChange={(value) => handleLanguageChange(value as 'en' | 'hi')}>
-                                        <SelectTrigger id="language-select"><SelectValue/></SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="en">English</SelectItem>
-                                            <SelectItem value="hi">Hinglish</SelectItem>
-                                        </SelectContent>
-                                    </Select>
+                                <div className="py-4 space-y-4">
+                                    <div>
+                                        <label htmlFor="language-select" className="block text-sm font-medium text-gray-700 mb-2">App Language</label>
+                                        <Select value={language} onValueChange={(value) => handleLanguageChange(value as 'en' | 'hi')}>
+                                            <SelectTrigger id="language-select"><SelectValue/></SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="en">English</SelectItem>
+                                                <SelectItem value="hi">Hinglish</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                    <div>
+                                        <label htmlFor="department-select" className="block text-sm font-medium text-gray-700 mb-2">Your Department</label>
+                                        <Select value={user?.department} onValueChange={(value) => handleDepartmentChange(value as Department)}>
+                                            <SelectTrigger id="department-select"><SelectValue placeholder="Select Department"/></SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="process-access">Process Access</SelectItem>
+                                                <SelectItem value="production-access">Production Access</SelectItem>
+                                                <SelectItem value="quality-access">Quality Access</SelectItem>
+                                                <SelectItem value="all-control-access">All Control Access</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
                                 </div>
                             </DialogContent>
                         </Dialog>

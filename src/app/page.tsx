@@ -38,13 +38,17 @@ export default function Home() {
     age: 30, // This can be customized later
     gender: user.gender || 'other',
   };
+  
+  const hasDailyTipAccess = user.department === 'all-control-access' || user.department === 'production-access' || user.department === 'quality-access';
+  const hasChatAccess = user.department === 'all-control-access' || user.department === 'production-access' || user.department === 'quality-access';
+
 
   return (
     <>
       <div className="max-w-7xl mx-auto p-4 sm:p-6">
         <Header />
         <main>
-          <DailyTip />
+          {hasDailyTipAccess && <DailyTip />}
           <div className="text-center mb-8">
             <h2 className="font-headline text-3xl font-bold text-gray-800">
               Dairy Information & Calculations
@@ -56,7 +60,7 @@ export default function Home() {
           <TopicGrid />
         </main>
       </div>
-      <ChatWidget user={chatUser} />
+      {hasChatAccess && <ChatWidget user={chatUser} />}
     </>
   );
 }
