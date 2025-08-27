@@ -1,3 +1,4 @@
+
 "use client";
 
 import type { Metadata } from 'next';
@@ -66,7 +67,7 @@ export default function RootLayout({
         {showSplash ? (
           <SplashScreen onFinished={() => setShowSplash(false)} />
         ) : (
-          <LanguageProvider>
+          <LanguageProvider key="language-provider">
             <SubscriptionProvider>
               <AuthProvider>
                 {children}
