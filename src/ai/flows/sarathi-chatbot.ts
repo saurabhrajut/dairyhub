@@ -60,19 +60,31 @@ function validateHistory(history: Message[] | undefined): Message[] {
   
   const validHistory = history
     .map(msg => {
-      if (!msg || !msg.content || !Array.isArray(msg.content)) {
+      // Ensure the message and its content array exist
+      if (!msg || !Array.isArray(msg.content)) {
         return null;
       }
+      // Filter out empty or invalid content parts
       const validContent = msg.content.filter(c => c && typeof c.text === 'string' && c.text.trim() !== '');
+      
+      // If there's no valid content left, discard the message
       if (validContent.length === 0) {
         return null;
       }
-      return { role: msg.role, content: validContent };
+
+      // Return a valid message object with a valid role
+      if (msg.role === 'user' || msg.role === 'model') {
+        return { role: msg.role, content: validContent };
+      }
+      
+      return null;
     })
-    .filter((msg): msg is Message => msg !== null && (msg.role === 'user' || msg.role === 'model'));
+    // Filter out any null messages from the map operation
+    .filter((msg): msg is Message => msg !== null);
 
   return validHistory;
 }
+
 
 const sarathiChatbotFlow = ai.defineFlow(
   {
