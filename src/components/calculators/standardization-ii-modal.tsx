@@ -132,7 +132,7 @@ const MemoizedInputField = memo(function InputField({ label, value, name, setter
                     id={name} 
                     value={internalValue} 
                     onChange={handleChange}
-                    className={` ${unit ? "rounded-r-none" : ""} ${inputClassName || ''}`}
+                    className={cn(unit ? "rounded-r-none" : "", inputClassName || '')}
                     placeholder={placeholder} 
                     step={step}
                 />
@@ -705,13 +705,25 @@ function FatReductionClrMaintainCalc() {
     );
 }
 
+const snfFormulas: Record<string, { name: string; formulaText: string; calc: (clr: number, fat: number, c?: number) => number; inverse: (snf: number, fat: number, c?: number) => number }> = {
+    'isi': { name: 'ISI / BIS (Official)', formulaText: 'SNF % = (CLR/4) + (0.25 * Fat) + 0.44', calc: (clr, fat) => (clr / 4) + (0.25 * fat) + 0.44, inverse: (snf, fat) => (snf - (0.25 * fat) - 0.44) * 4 },
+    'richmond': { name: 'Richmond’s Formula', formulaText: 'SNF % = (CLR/4) + (0.21 * Fat) + 0.36', calc: (clr, fat) => (clr / 4) + (0.21 * fat) + 0.36, inverse: (snf, fat) => (snf - (0.21 * fat) - 0.36) * 4 },
+    'cooperative': { name: 'Modified ISI / Cooperative', formulaText: 'SNF % = (CLR/4) + (0.25 * Fat) + 0.14', calc: (clr, fat) => (clr / 4) + (0.25 * fat) + 0.14, inverse: (snf, fat) => (snf - (0.25 * fat) - 0.14) * 4 },
+    'dairy_union': { name: 'Simplified Dairy Union', formulaText: 'SNF % = (CLR/4) + (Fat/5) + 0.44', calc: (clr, fat) => (clr / 4) + (fat / 5) + 0.44, inverse: (snf, fat) => (snf - (fat/5) - 0.44) * 4 },
+    'punjab_haryana': { name: 'Punjab / Haryana Variation', formulaText: 'SNF % = (CLR/4) + (0.22 * Fat) + 0.36', calc: (clr, fat) => (clr / 4) + (0.22 * fat) + 0.36, inverse: (snf, fat) => (snf - (0.22 * fat) - 0.36) * 4 },
+    'andhra': { name: 'Andhra Pradesh Practice', formulaText: 'SNF % = (CLR/4) + (0.21 * Fat) + 0.35', calc: (clr, fat) => (clr / 4) + (0.21 * fat) + 0.35, inverse: (snf, fat) => (snf - (0.21 * fat) - 0.35) * 4 },
+    'karnataka_tamil': { name: 'Karnataka / Tamil Nadu Practice', formulaText: 'SNF % = (CLR/4) + (0.25 * Fat) + 0.20', calc: (clr, fat) => (clr / 4) + (0.25 * fat) + 0.20, inverse: (snf, fat) => (snf - (0.25 * fat) - 0.20) * 4 },
+    'general': { name: 'General Shortcut (Variable C)', formulaText: 'SNF % = (CLR/4) + (0.25 * Fat) + C', calc: (clr, fat, c = 0.72) => (clr / 4) + (0.25 * fat) + c, inverse: (snf, fat, c = 0.72) => (snf - (0.25 * fat) - c) * 4 },
+};
+
+
 function FatSnfClrTsCalc() {
     const [inputs, setInputs] = useState({
         fat: "4.5",
         clr: "28.0",
         snf: "8.5",
-        correctionFactor: "0.72",
-        manualFactor: ""
+        formula: "isi",
+        customC: "0.72"
     });
 
     const [result, setResult] = useState<string | null>(null);
@@ -721,16 +733,11 @@ function FatSnfClrTsCalc() {
         setInputs(prev => ({...prev, [name]: value}));
     }, []);
 
-    const handleSelectChange = useCallback((value: string) => {
-        setInputs(prev => ({...prev, correctionFactor: value, manualFactor: ''})); // Clear manual when select changes
-    }, []);
-
-    const getFactor = () => parseFloat(inputs.manualFactor) || parseFloat(inputs.correctionFactor);
-
     const handleCalcSnfTs = useCallback(() => {
         const fatNum = parseFloat(inputs.fat);
         const clrNum = parseFloat(inputs.clr);
-        const factor = getFactor();
+        const formulaKey = inputs.formula as keyof typeof snfFormulas;
+        const c = parseFloat(inputs.customC);
 
         setError(null);
         setResult(null);
@@ -740,7 +747,7 @@ function FatSnfClrTsCalc() {
             return;
         }
 
-        const calculatedSnf = getSnf(fatNum, clrNum, factor);
+        const calculatedSnf = snfFormulas[formulaKey].calc(clrNum, fatNum, c);
         const calculatedTs = fatNum + calculatedSnf;
         setResult(`Calculated SNF: <strong>${calculatedSnf.toFixed(2)}%</strong><br/>Calculated TS: <strong>${calculatedTs.toFixed(2)}%</strong>`);
     }, [inputs]);
@@ -748,7 +755,8 @@ function FatSnfClrTsCalc() {
     const handleCalcClrTs = useCallback(() => {
         const fatNum = parseFloat(inputs.fat);
         const snfNum = parseFloat(inputs.snf);
-        const factor = getFactor();
+        const formulaKey = inputs.formula as keyof typeof snfFormulas;
+        const c = parseFloat(inputs.customC);
 
         setError(null);
         setResult(null);
@@ -757,30 +765,34 @@ function FatSnfClrTsCalc() {
             setError("Please enter valid Fat and SNF values.");
             return;
         }
-
-        const calculatedClr = (snfNum - (0.25 * fatNum) - factor) * 4;
+        
+        const calculatedClr = snfFormulas[formulaKey].inverse(snfNum, fatNum, c);
         const calculatedTs = fatNum + snfNum;
         setResult(`Calculated CLR: <strong>${calculatedClr.toFixed(2)}</strong><br/>Calculated TS: <strong>${calculatedTs.toFixed(2)}%</strong>`);
     }, [inputs]);
 
     return (
-        <CalculatorCard title="Fat, SNF, CLR & TS Calculator" description="Calculate milk components interchangeably based on Richmond's formula.">
-             <div className="bg-muted/50 p-4 rounded-lg mb-6 grid grid-cols-2 gap-4">
-                <div>
-                    <Label>Milk Type (Correction Factor)</Label>
-                    <Select value={inputs.correctionFactor} onValueChange={handleSelectChange}>
-                        <SelectTrigger>
-                            <SelectValue placeholder="Select Correction Factor" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="0.72">Cow Milk (0.72)</SelectItem>
-                            <SelectItem value="0.85">Buffalo Milk (0.85)</SelectItem>
-                        </SelectContent>
-                    </Select>
-                </div>
-                 <div>
-                    <MemoizedInputField label="Manual Correction Factor" value={inputs.manualFactor} name="manualFactor" setter={handleInputChange} placeholder="e.g., 0.75" />
-                </div>
+        <CalculatorCard title="Fat, SNF, CLR & TS Calculator" description="Calculate milk components interchangeably based on various regional and standard formulas.">
+             <div className="bg-muted/50 p-4 rounded-lg mb-6">
+                 <Label>Select SNF Calculation Formula</Label>
+                 <Select value={inputs.formula} onValueChange={(val) => handleInputChange('formula', val)}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                        {Object.entries(snfFormulas).map(([key, {name, formulaText}]) => (
+                            <SelectItem key={key} value={key}>
+                                <div className="flex flex-col">
+                                    <span className="font-semibold">{name}</span>
+                                    <span className="text-xs text-muted-foreground">{formulaText}</span>
+                                </div>
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                 </Select>
+                 {inputs.formula === 'general' && (
+                     <div className="mt-2">
+                        <MemoizedInputField label="Custom Constant (C)" value={inputs.customC} name="customC" setter={handleInputChange} />
+                     </div>
+                 )}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1018,18 +1030,6 @@ const PearsonSquareCalc = ({ unit, calcType }: { unit: string, calcType: 'Fat' |
 function FatBlendingCalc() { return <PearsonSquareCalc unit="%" calcType="Fat" /> }
 function ClrBlendingCalc() { return <PearsonSquareCalc unit="" calcType="CLR" /> }
 
-const snfFormulas: Record<string, { name: string; formulaText: string; calc: (clr: number, fat: number, c?: number) => number }> = {
-    'isi': { name: 'ISI / BIS (Official)', formulaText: 'SNF % = (CLR/4) + (0.25 * Fat) + 0.44', calc: (clr, fat) => (clr / 4) + (0.25 * fat) + 0.44 },
-    'richmond': { name: 'Richmond’s Formula', formulaText: 'SNF % = (CLR/4) + (0.21 * Fat) + 0.36', calc: (clr, fat) => (clr / 4) + (0.21 * fat) + 0.36 },
-    'cooperative': { name: 'Modified ISI / Cooperative', formulaText: 'SNF % = (CLR/4) + (0.25 * Fat) + 0.14', calc: (clr, fat) => (clr / 4) + (0.25 * fat) + 0.14 },
-    'dairy_union': { name: 'Simplified Dairy Union', formulaText: 'SNF % = (CLR/4) + (Fat/5) + 0.44', calc: (clr, fat) => (clr / 4) + (fat / 5) + 0.44 },
-    'punjab_haryana': { name: 'Punjab / Haryana Variation', formulaText: 'SNF % = (CLR/4) + (0.22 * Fat) + 0.36', calc: (clr, fat) => (clr / 4) + (0.22 * fat) + 0.36 },
-    'andhra': { name: 'Andhra Pradesh Practice', formulaText: 'SNF % = (CLR/4) + (0.21 * Fat) + 0.35', calc: (clr, fat) => (clr / 4) + (0.21 * fat) + 0.35 },
-    'karnataka_tamil': { name: 'Karnataka / Tamil Nadu Practice', formulaText: 'SNF % = (CLR/4) + (0.25 * Fat) + 0.20', calc: (clr, fat) => (clr / 4) + (0.25 * fat) + 0.20 },
-    'general': { name: 'General Shortcut (Variable C)', formulaText: 'SNF % = (CLR/4) + (0.25 * Fat) + C', calc: (clr, fat, c = 0.72) => (clr / 4) + (0.25 * fat) + c },
-};
-
-
 function FatSnfAdjustmentCalc() {
     const [inputs, setInputs] = useState({
         milkQty: '100', milkFat: '3.5', milkClr: '28.0',
@@ -1116,7 +1116,7 @@ function FatSnfAdjustmentCalc() {
             </ul>
             <p class='mt-3'>Final Batch Weight will be approximately <strong>${finalWeight.toFixed(3)} kg</strong>.</p>
         `);
-    }, [inputs, milkSnf, targetSnf]);
+    }, [inputs, milkSnf, targetSnf, calculateSnf]);
 
     return (
         <CalculatorCard title="Fat & SNF Adjustment Calculator" description="Calculate how much Cream and Skimmed Milk Powder (SMP) to add to standardize both Fat and SNF upwards.">
@@ -1127,7 +1127,7 @@ function FatSnfAdjustmentCalc() {
                     <SelectContent>
                         {Object.entries(snfFormulas).map(([key, {name, formulaText}]) => (
                             <SelectItem key={key} value={key}>
-                                <div>
+                                <div className="flex flex-col">
                                     <p className="font-semibold">{name}</p>
                                     <p className="text-xs text-muted-foreground">{formulaText}</p>
                                 </div>
@@ -1396,3 +1396,5 @@ function KgFatSnfCalc() {
     
 
     
+
+
