@@ -67,13 +67,13 @@ export default function RootLayout({
         {showSplash ? (
           <SplashScreen onFinished={() => setShowSplash(false)} />
         ) : (
-          <LanguageProvider key="language-provider">
+          <LanguageProvider>
             <SubscriptionProvider>
               <AuthProvider>
-                <Fragment>
+                <div>
                   {children}
                   <Toaster />
-                </Fragment>
+                </div>
               </AuthProvider>
             </SubscriptionProvider>
           </LanguageProvider>
