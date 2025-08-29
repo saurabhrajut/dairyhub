@@ -15,15 +15,16 @@ import { Label } from "@/components/ui/label"
 import { getSnf, componentProps } from "@/lib/utils"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { ArrowLeft, Blend, Milk, SlidersHorizontal, Combine, Bot, Calculator, Settings, ChevronsUp, Target, Droplets, Info, Weight, Thermometer } from 'lucide-react'
+import { ArrowLeft, Blend, Milk, SlidersHorizontal, Combine, Bot, Calculator, Settings, ChevronsUp, Target, Droplets, Info, Weight, Thermometer, ShieldAlert } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 
-type CalculatorType = 'fat-snf-clr-ts' | 'fat-blending' | 'fat-snf-adjustment' | 'reconstituted-milk' | 'recombined-milk' | 'clr-blending' | 'custom-calculator' | 'milk-blending' | 'clr-increase' | 'fat-clr-maintainer' | 'two-milk-blending-target' | 'clr-correction' | 'kg-fat-snf';
+type CalculatorType = 'fat-snf-clr-ts' | 'fat-blending' | 'fat-snf-adjustment' | 'reconstituted-milk' | 'recombined-milk' | 'clr-blending' | 'custom-calculator' | 'milk-blending' | 'clr-increase' | 'fat-clr-maintainer' | 'two-milk-blending-target' | 'clr-correction' | 'kg-fat-snf' | 'fat-reduction-clr-maintain';
 
 const calculatorsInfo = {
     'fat-snf-clr-ts': { title: "Fat, SNF, CLR & TS", icon: Calculator, component: FatSnfClrTsCalc },
     'milk-blending': { title: "Milk Blending", icon: Blend, component: MilkBlendingCalc },
     'two-milk-blending-target': { title: "Two-Milk Blending (to Target)", icon: Target, component: TwoMilkBlendingToTargetCalc },
+    'fat-reduction-clr-maintain': { title: "Fat & CLR Corrector (High Fat)", icon: ShieldAlert, component: FatReductionClrMaintainCalc },
     'custom-calculator': { title: 'Custom Calculator', icon: Settings, component: CustomStandardizationCalc },
     'clr-increase': { title: 'CLR Increase (by SMP)', icon: ChevronsUp, component: ClrIncreaseCalc },
     'fat-clr-maintainer': { title: 'Fat & CLR Maintainer', icon: Target, component: FatClrMaintainerCalc },
@@ -564,6 +565,97 @@ function TwoMilkBlendingToTargetCalc() {
                     </AlertDescription>
                 </Alert>
             )}
+        </CalculatorCard>
+    );
+}
+
+function FatReductionClrMaintainCalc() {
+    const [inputs, setInputs] = useState({
+        initialQty: '1000',
+        initialFat: '6.3',
+        initialClr: '29.5',
+        targetFat: '5.9',
+        skimFat: '0.05',
+        skimClr: '34.5',
+    });
+    const [result, setResult] = useState<string | null>(null);
+    const [error, setError] = useState<string | null>(null);
+
+    const handleInputChange = useCallback((name: string, value: string) => {
+        setInputs(prev => ({...prev, [name]: value}));
+    }, []);
+
+    const calculate = useCallback(() => {
+        setResult(null);
+        setError(null);
+        
+        const Q_initial = parseFloat(inputs.initialQty);
+        const F_initial = parseFloat(inputs.initialFat);
+        const C_initial = parseFloat(inputs.initialClr);
+        const F_target = parseFloat(inputs.targetFat);
+        const F_skim = parseFloat(inputs.skimFat);
+        const C_skim = parseFloat(inputs.skimClr);
+        
+        if ([Q_initial, F_initial, C_initial, F_target, F_skim, C_skim].some(isNaN)) {
+            setError("Please fill all fields with valid numbers.");
+            return;
+        }
+
+        if (F_initial <= F_target) {
+            setError("Initial Fat % must be higher than Target Fat % for this calculation.");
+            return;
+        }
+
+        if (F_target <= F_skim) {
+            setError("Target Fat % must be higher than Skim Milk Fat %.");
+            return;
+        }
+        
+        // Pearson Square Logic for Fat
+        const fat_diff = F_initial - F_target; // Parts of skim milk needed
+        const skim_diff = F_target - F_skim; // Parts of initial milk needed
+
+        const skim_needed = (Q_initial * fat_diff) / skim_diff;
+        
+        // Calculate final CLR
+        const Q_final = Q_initial + skim_needed;
+        const final_clr = ((Q_initial * C_initial) + (skim_needed * C_skim)) / Q_final;
+
+        setResult(`
+            To reduce the fat from <strong>${F_initial}%</strong> to <strong>${F_target}%</strong>, you need to add:
+            <ul class='list-disc list-inside mt-2 text-lg'>
+                <li>Skimmed Milk: <strong class='text-green-700'>${skim_needed.toFixed(3)} kg/L</strong></li>
+            </ul>
+            <hr class='my-4'/>
+            <h4 class='font-bold text-md'>Final Batch Summary:</h4>
+            <ul class='list-disc list-inside mt-2 text-lg'>
+                <li>Total Final Quantity: <strong class='text-blue-700'>${Q_final.toFixed(3)} kg/L</strong></li>
+                <li>Final Fat: <strong class='text-blue-700'>${F_target}%</strong> (Target)</li>
+                <li>Expected Final CLR: <strong class='text-blue-700'>${final_clr.toFixed(2)}</strong></li>
+            </ul>
+            <p class='text-xs mt-2'>Note: Since the CLR of skim milk is higher than the initial milk, the final CLR will increase. To bring it back to the target CLR, a small amount of water might be needed, but this calculator focuses only on fat correction.</p>
+        `);
+    }, [inputs]);
+
+    return (
+        <CalculatorCard title="Fat & CLR Corrector (for High Fat Batch)" description="Calculate how much skimmed milk to add to a high-fat batch to achieve the target fat percentage, and see the impact on CLR.">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                <div className="bg-muted/50 p-4 rounded-lg space-y-3">
+                    <h3 className="font-semibold text-gray-700 font-headline">Your Current Batch</h3>
+                    <MemoizedInputField label="Batch Quantity (kg/L)" value={inputs.initialQty} name="initialQty" setter={handleInputChange} />
+                    <MemoizedInputField label="Actual Fat % in Batch" value={inputs.initialFat} name="initialFat" setter={handleInputChange} />
+                    <MemoizedInputField label="Actual CLR in Batch" value={inputs.initialClr} name="initialClr" setter={handleInputChange} />
+                </div>
+                 <div className="bg-primary/10 p-4 rounded-lg space-y-3">
+                     <h3 className="font-semibold text-gray-700 font-headline">Correction & Target</h3>
+                    <MemoizedInputField label="Target Fat %" value={inputs.targetFat} name="targetFat" setter={handleInputChange} />
+                    <MemoizedInputField label="Skim Milk Fat %" value={inputs.skimFat} name="skimFat" setter={handleInputChange} />
+                    <MemoizedInputField label="Skim Milk CLR" value={inputs.skimClr} name="skimClr" setter={handleInputChange} />
+                </div>
+            </div>
+             <Button onClick={calculate} className="w-full mt-4">Calculate Correction</Button>
+            {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
+            {result && <Alert className="mt-4"><AlertTitle>Correction Plan</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
         </CalculatorCard>
     );
 }
@@ -1178,3 +1270,6 @@ function KgFatSnfCalc() {
 
 
 
+
+
+    
