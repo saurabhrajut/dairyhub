@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, memo, useCallback } from "react"
+import { useState, memo, useCallback, useEffect } from "react"
 import {
   Dialog,
   DialogContent,
@@ -647,7 +647,7 @@ function FatReductionClrMaintainCalc() {
     // Trigger initial calculation
     useEffect(() => {
         calculate(inputs);
-    }, [calculate]);
+    }, [calculate, inputs]);
 
     return (
         <CalculatorCard 
@@ -1306,4 +1306,6 @@ function KgFatSnfCalc() {
         </CalculatorCard>
     )
 }
+    
+
     
