@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, memo, useCallback } from "react"
@@ -12,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { getSnf, componentProps } from "@/lib/utils"
+import { getSnf, componentProps, cn } from "@/lib/utils"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { ArrowLeft, Blend, Milk, SlidersHorizontal, Combine, Bot, Calculator, Settings, ChevronsUp, Target, Droplets, Info, Weight, Thermometer, ShieldAlert } from 'lucide-react'
@@ -584,8 +583,9 @@ function FatReductionClrMaintainCalc() {
     const [error, setError] = useState<string | null>(null);
 
     const handleInputChange = useCallback((name: string, value: string) => {
-        setInputs(prev => ({...prev, [name]: value}));
-        calculate({ ...inputs, [name]: value });
+        const newInputs = { ...inputs, [name]: value };
+        setInputs(newInputs);
+        calculate(newInputs);
     }, [inputs]);
     
     const calculate = useCallback((currentInputs: typeof inputs) => {
@@ -623,9 +623,9 @@ function FatReductionClrMaintainCalc() {
         const y = (a * d2 - d * a2) / D;
 
         if (x < 0 || y < 0) {
-            setError("परिणाम नकारात्मक है। इस केस में स्टैंडर्डाइजेशन संभव नहीं है।");
-            setResults(null);
-            return;
+             setError("परिणाम नकारात्मक है। इस केस में स्टैंडर्डाइजेशन संभव नहीं है।");
+             setResults(null);
+             return;
         }
 
         setError(null);
@@ -645,9 +645,9 @@ function FatReductionClrMaintainCalc() {
     }, []);
 
     // Trigger initial calculation
-    useState(() => {
+    useEffect(() => {
         calculate(inputs);
-    });
+    }, [calculate]);
 
     return (
         <CalculatorCard 
@@ -1086,7 +1086,7 @@ function FatSnfAdjustmentCalc() {
     }, [inputs]);
 
     return (
-        <CalculatorCard title="Fat & SNF Adjustment Calculator" description="Calculate how much Cream and Skim Milk Powder (SMP) to add to standardize both Fat and SNF upwards.">
+        <CalculatorCard title="Fat & SNF Adjustment Calculator" description="Calculate how much Cream and Skimmed Milk Powder (SMP) to add to standardize both Fat and SNF upwards.">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mb-4">
                 <div className="bg-muted/50 p-4 rounded-lg space-y-3">
                      <h3 className="font-semibold text-gray-700 mb-2 font-headline">Initial Milk</h3>
