@@ -70,8 +70,10 @@ export default function RootLayout({
           <LanguageProvider>
             <SubscriptionProvider>
               <AuthProvider>
-                {children}
-                <Toaster />
+                <Fragment>
+                  {children}
+                  <Toaster />
+                </Fragment>
               </AuthProvider>
             </SubscriptionProvider>
           </LanguageProvider>
