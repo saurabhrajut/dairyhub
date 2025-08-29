@@ -585,7 +585,6 @@ function FatReductionClrMaintainCalc() {
     const handleInputChange = useCallback((name: string, value: string) => {
         const newInputs = { ...inputs, [name]: value };
         setInputs(newInputs);
-        calculate(newInputs);
     }, [inputs]);
     
     const calculate = useCallback((currentInputs: typeof inputs) => {
@@ -598,7 +597,7 @@ function FatReductionClrMaintainCalc() {
         const Cs = parseFloat(currentInputs.skimClr);
 
         if ([V0, F0, C0, Ft, Ct, Fs, Cs].some(isNaN)) {
-            setError("कृपया सभी इनपुट बॉक्स में मान्य संख्या दर्ज करें।");
+            setError("Please enter valid numbers in all input boxes.");
             setResults(null);
             return;
         }
@@ -614,7 +613,7 @@ function FatReductionClrMaintainCalc() {
         const D = a * b2 - b * a2;
 
         if (Math.abs(D) < 1e-9) {
-            setError("गणना संभव नहीं है। कृपया इनपुट की जाँच करें।");
+            setError("Calculation is not possible. Please check the inputs.");
             setResults(null);
             return;
         }
@@ -623,7 +622,7 @@ function FatReductionClrMaintainCalc() {
         const y = (a * d2 - d * a2) / D;
 
         if (x < 0 || y < 0) {
-             setError("परिणाम नकारात्मक है। इस केस में स्टैंडर्डाइजेशन संभव नहीं है।");
+             setError("Result is negative. Standardization is not possible in this case.");
              setResults(null);
              return;
         }
@@ -652,46 +651,46 @@ function FatReductionClrMaintainCalc() {
     return (
         <CalculatorCard 
             title="Fat & CLR Corrector"
-            description="अपने बैच को सही fat और CLR पर लाने के लिए skimmed milk और पानी की मात्रा की गणना करें।">
+            description="Calculate the amount of skimmed milk and water needed to correct your batch to the target fat and CLR.">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-blue-50 p-6 rounded-2xl border-2 border-blue-200">
-                    <h2 className="text-xl md:text-lg font-semibold mb-6 text-blue-700">इनपुट (इन पीले बॉक्स में भरें)</h2>
+                    <h2 className="text-xl md:text-lg font-semibold mb-6 text-blue-700">Inputs (Fill in the yellow boxes)</h2>
                     <div className="space-y-4">
-                        <MemoizedInputField label="शुरुआती मात्रा (V₀):" value={inputs.initialVolume} name="initialVolume" setter={handleInputChange} inputClassName="bg-yellow-100 border-yellow-300" />
-                        <MemoizedInputField label="शुरुआती Fat (F₀) %:" value={inputs.initialFat} name="initialFat" setter={handleInputChange} inputClassName="bg-yellow-100 border-yellow-300" />
-                        <MemoizedInputField label="शुरुआती CLR (C₀):" value={inputs.initialClr} name="initialClr" setter={handleInputChange} inputClassName="bg-yellow-100 border-yellow-300" />
-                        <MemoizedInputField label="टारगेट Fat (Ft) %:" value={inputs.targetFat} name="targetFat" setter={handleInputChange} inputClassName="bg-yellow-100 border-yellow-300" />
-                        <MemoizedInputField label="टारगेट CLR (Ct):" value={inputs.targetClr} name="targetClr" setter={handleInputChange} inputClassName="bg-yellow-100 border-yellow-300" />
+                        <MemoizedInputField label="Initial Volume (V₀):" value={inputs.initialVolume} name="initialVolume" setter={handleInputChange} inputClassName="bg-yellow-100 border-yellow-300" />
+                        <MemoizedInputField label="Initial Fat (F₀) %:" value={inputs.initialFat} name="initialFat" setter={handleInputChange} inputClassName="bg-yellow-100 border-yellow-300" />
+                        <MemoizedInputField label="Initial CLR (C₀):" value={inputs.initialClr} name="initialClr" setter={handleInputChange} inputClassName="bg-yellow-100 border-yellow-300" />
+                        <MemoizedInputField label="Target Fat (Ft) %:" value={inputs.targetFat} name="targetFat" setter={handleInputChange} inputClassName="bg-yellow-100 border-yellow-300" />
+                        <MemoizedInputField label="Target CLR (Ct):" value={inputs.targetClr} name="targetClr" setter={handleInputChange} inputClassName="bg-yellow-100 border-yellow-300" />
                         <MemoizedInputField label="Skimmed Milk Fat (Fs) %:" value={inputs.skimFat} name="skimFat" setter={handleInputChange} inputClassName="bg-yellow-100 border-yellow-300" />
                         <MemoizedInputField label="Skimmed Milk CLR (Cs):" value={inputs.skimClr} name="skimClr" setter={handleInputChange} inputClassName="bg-yellow-100 border-yellow-300" />
                     </div>
                 </div>
                  <div className="bg-green-50 p-6 rounded-2xl border-2 border-green-200">
-                    <h2 className="text-xl md:text-lg font-semibold mb-6 text-green-700">आउटपुट (परिणाम)</h2>
+                    <h2 className="text-xl md:text-lg font-semibold mb-6 text-green-700">Outputs (Result)</h2>
                     {error ? (
                         <Alert variant="destructive"><AlertDescription>{error}</AlertDescription></Alert>
                     ) : (
                         <div className="space-y-4">
                             <div className="bg-white p-4 rounded-lg shadow-md border border-green-300">
-                                <p className="text-sm font-medium text-gray-600">Skimmed Milk की मात्रा (x):</p>
+                                <p className="text-sm font-medium text-gray-600">Skimmed Milk to Add (x):</p>
                                 <p className="text-2xl font-bold text-green-800">{results?.skim || '0 L'}</p>
                             </div>
                             <div className="bg-white p-4 rounded-lg shadow-md border border-green-300">
-                                <p className="text-sm font-medium text-gray-600">पानी की मात्रा (y):</p>
+                                <p className="text-sm font-medium text-gray-600">Water to Add (y):</p>
                                 <p className="text-2xl font-bold text-green-800">{results?.water || '0 L'}</p>
                             </div>
                             <div className="bg-white p-4 rounded-lg shadow-md border border-green-300">
-                                <p className="text-sm font-medium text-gray-600">फाइनल मात्रा:</p>
+                                <p className="text-sm font-medium text-gray-600">Final Volume:</p>
                                 <p className="text-2xl font-bold text-green-800">{results?.finalVolume || '0 L'}</p>
                             </div>
                             <div className="mt-6 p-4 bg-yellow-100 rounded-lg border border-yellow-300">
-                                <p className="text-lg font-semibold text-yellow-800">जाँच परिणाम</p>
+                                <p className="text-lg font-semibold text-yellow-800">Check Result</p>
                                 <div className="flex justify-between mt-2">
-                                    <span className="text-gray-700">फाइनल Fat %:</span>
+                                    <span className="text-gray-700">Final Fat %:</span>
                                     <span className="font-bold text-blue-600">{results?.finalFat || '-'}</span>
                                 </div>
                                 <div className="flex justify-between mt-1">
-                                    <span className="text-gray-700">फाइनल CLR:</span>
+                                    <span className="text-gray-700">Final CLR:</span>
                                     <span className="font-bold text-blue-600">{results?.finalClr || '-'}</span>
                                 </div>
                             </div>
@@ -762,7 +761,7 @@ function FatSnfClrTsCalc() {
     }, [inputs]);
 
     return (
-        <CalculatorCard title="Fat, SNF, CLR & TS Calculator" description="Richmond's formula ke adhaar par doodh ke components ki aapas mein ganana karein.">
+        <CalculatorCard title="Fat, SNF, CLR & TS Calculator" description="Calculate milk components interchangeably based on Richmond's formula.">
              <div className="bg-muted/50 p-4 rounded-lg mb-6 grid grid-cols-2 gap-4">
                 <div>
                     <Label>Milk Type (Correction Factor)</Label>
@@ -988,7 +987,7 @@ const PearsonSquareCalc = ({ unit, calcType }: { unit: string, calcType: 'Fat' |
     }, [inputs, unit, calcType]);
 
     return (
-         <CalculatorCard title={`${calcType} Blending Calculator`} description={`Do alag ${calcType} % wale doodh ko milakar naya product banayein.`}>
+         <CalculatorCard title={`${calcType} Blending Calculator`} description={`Blend two milks with different ${calcType}% to create a new product.`}>
              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                 <div className="bg-muted/50 p-4 rounded-lg">
                     <h3 className="font-semibold text-gray-700 mb-2 font-headline">Source Milk 1 (High ${calcType})</h3>
