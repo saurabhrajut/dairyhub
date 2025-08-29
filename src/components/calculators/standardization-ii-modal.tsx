@@ -18,6 +18,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { ArrowLeft, Blend, Milk, SlidersHorizontal, Combine, Bot, Calculator, Settings, ChevronsUp, Target, Droplets, Info, Weight, Thermometer, ShieldAlert } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { cn } from "@/lib/utils"
 
 type CalculatorType = 'fat-snf-clr-ts' | 'fat-blending' | 'fat-snf-adjustment' | 'reconstituted-milk' | 'recombined-milk' | 'clr-blending' | 'custom-calculator' | 'milk-blending' | 'clr-increase' | 'fat-clr-maintainer' | 'two-milk-blending-target' | 'clr-correction' | 'kg-fat-snf' | 'fat-reduction-clr-maintain';
 
@@ -243,7 +244,7 @@ function CustomStandardizationCalc() {
              creamToAdd = (fat_diff * wS - snf_diff * wF) / det;
              waterToAdd = (snf_diff * cF - fat_diff * cS) / det;
         } else if (fat_diff < 0 && snf_diff < 0) { // Add Skim milk and Water
-            const det = (skF * wS) - (wF * skS);
+            const det = (skF * wS) - (wF * cS);
              if (Math.abs(det) < 1e-9) { setError("Cannot solve: Skim milk and Water properties are too similar."); return; }
              skimToAdd = (fat_diff * wS - snf_diff * wF) / det;
              waterToAdd = (snf_diff * skF - fat_diff * cS) / det;
@@ -656,7 +657,7 @@ function FatReductionClrMaintainCalc() {
             description="Calculate the amount of skimmed milk and water needed to correct your batch to the target fat and CLR.">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-blue-50 p-6 rounded-2xl border-2 border-blue-200">
-                    <h2 className="text-xl md:text-lg font-semibold mb-6 text-blue-700">Inputs</h2>
+                    <h2 className="text-xl md:text-lg font-semibold mb-6 text-blue-700">Inputs (Fill in these yellow boxes)</h2>
                     <div className="space-y-4">
                         <MemoizedInputField label="Initial Volume (V₀):" value={inputs.initialVolume} name="initialVolume" setter={handleInputChange} inputClassName="bg-yellow-100 border-yellow-300" unit="L" />
                         <MemoizedInputField label="Initial Fat (F₀) %:" value={inputs.initialFat} name="initialFat" setter={handleInputChange} inputClassName="bg-yellow-100 border-yellow-300" unit="%" />
@@ -668,7 +669,7 @@ function FatReductionClrMaintainCalc() {
                     </div>
                 </div>
                  <div className="bg-green-50 p-6 rounded-2xl border-2 border-green-200">
-                    <h2 className="text-xl md:text-lg font-semibold mb-6 text-green-700">Outputs (Result)</h2>
+                    <h2 className="text-xl md:text-2xl font-semibold mb-6 text-green-700">Outputs (Result)</h2>
                     {error ? (
                         <Alert variant="destructive"><AlertDescription>{error}</AlertDescription></Alert>
                     ) : (
@@ -1017,15 +1018,15 @@ const PearsonSquareCalc = ({ unit, calcType }: { unit: string, calcType: 'Fat' |
 function FatBlendingCalc() { return <PearsonSquareCalc unit="%" calcType="Fat" /> }
 function ClrBlendingCalc() { return <PearsonSquareCalc unit="" calcType="CLR" /> }
 
-const snfFormulas = {
-    'isi': { name: 'ISI / BIS (Official)', calc: (clr: number, fat: number) => (clr / 4) + (0.25 * fat) + 0.44 },
-    'richmond': { name: 'Richmond’s Formula', calc: (clr: number, fat: number) => (clr / 4) + (0.21 * fat) + 0.36 },
-    'cooperative': { name: 'Modified ISI / Cooperative', calc: (clr: number, fat: number) => (clr / 4) + (0.25 * fat) + 0.14 },
-    'dairy_union': { name: 'Simplified Dairy Union', calc: (clr: number, fat: number) => (clr / 4) + (fat / 5) + 0.44 },
-    'punjab_haryana': { name: 'Punjab / Haryana Variation', calc: (clr: number, fat: number) => (clr / 4) + (0.22 * fat) + 0.36 },
-    'andhra': { name: 'Andhra Pradesh Practice', calc: (clr: number, fat: number) => (clr / 4) + (0.21 * fat) + 0.35 },
-    'karnataka_tamil': { name: 'Karnataka / Tamil Nadu Practice', calc: (clr: number, fat: number) => (clr / 4) + (0.25 * fat) + 0.20 },
-    'general': { name: 'General Shortcut (Variable C)', calc: (clr: number, fat: number, c = 0.72) => (clr / 4) + (0.25 * fat) + c },
+const snfFormulas: Record<string, { name: string; formulaText: string; calc: (clr: number, fat: number, c?: number) => number }> = {
+    'isi': { name: 'ISI / BIS (Official)', formulaText: 'SNF % = (CLR/4) + (0.25 * Fat) + 0.44', calc: (clr, fat) => (clr / 4) + (0.25 * fat) + 0.44 },
+    'richmond': { name: 'Richmond’s Formula', formulaText: 'SNF % = (CLR/4) + (0.21 * Fat) + 0.36', calc: (clr, fat) => (clr / 4) + (0.21 * fat) + 0.36 },
+    'cooperative': { name: 'Modified ISI / Cooperative', formulaText: 'SNF % = (CLR/4) + (0.25 * Fat) + 0.14', calc: (clr, fat) => (clr / 4) + (0.25 * fat) + 0.14 },
+    'dairy_union': { name: 'Simplified Dairy Union', formulaText: 'SNF % = (CLR/4) + (Fat/5) + 0.44', calc: (clr, fat) => (clr / 4) + (fat / 5) + 0.44 },
+    'punjab_haryana': { name: 'Punjab / Haryana Variation', formulaText: 'SNF % = (CLR/4) + (0.22 * Fat) + 0.36', calc: (clr, fat) => (clr / 4) + (0.22 * fat) + 0.36 },
+    'andhra': { name: 'Andhra Pradesh Practice', formulaText: 'SNF % = (CLR/4) + (0.21 * Fat) + 0.35', calc: (clr, fat) => (clr / 4) + (0.21 * fat) + 0.35 },
+    'karnataka_tamil': { name: 'Karnataka / Tamil Nadu Practice', formulaText: 'SNF % = (CLR/4) + (0.25 * Fat) + 0.20', calc: (clr, fat) => (clr / 4) + (0.25 * fat) + 0.20 },
+    'general': { name: 'General Shortcut (Variable C)', formulaText: 'SNF % = (CLR/4) + (0.25 * Fat) + C', calc: (clr, fat, c = 0.72) => (clr / 4) + (0.25 * fat) + c },
 };
 
 
@@ -1124,8 +1125,13 @@ function FatSnfAdjustmentCalc() {
                  <Select value={inputs.formula} onValueChange={(val) => handleInputChange('formula', val)}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>
-                        {Object.entries(snfFormulas).map(([key, {name}]) => (
-                            <SelectItem key={key} value={key}>{name}</SelectItem>
+                        {Object.entries(snfFormulas).map(([key, {name, formulaText}]) => (
+                            <SelectItem key={key} value={key}>
+                                <div>
+                                    <p className="font-semibold">{name}</p>
+                                    <p className="text-xs text-muted-foreground">{formulaText}</p>
+                                </div>
+                            </SelectItem>
                         ))}
                     </SelectContent>
                  </Select>
