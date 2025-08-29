@@ -42,13 +42,15 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  webpack: (config, { isServer }) => {
-    // Add server-side packages to externals to prevent them from being bundled on the client.
-    if (!isServer) {
-        config.externals = [...(config.externals || []), '@opentelemetry/sdk-node', '@genkit-ai/firebase'];
-    }
-    return config;
-  },
+  experimental: {
+    webpack: (config, { isServer }) => {
+      // Add server-side packages to externals to prevent them from being bundled on the client.
+      if (!isServer) {
+          config.externals = [...(config.externals || []), '@opentelemetry/sdk-node', '@genkit-ai/firebase'];
+      }
+      return config;
+    },
+  }
 };
 
 export default nextConfig;
