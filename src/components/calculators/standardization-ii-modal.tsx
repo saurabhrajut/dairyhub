@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, memo, useCallback, useEffect } from "react"
@@ -16,6 +17,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { ArrowLeft, Blend, Milk, SlidersHorizontal, Combine, Bot, Calculator, Settings, ChevronsUp, Target, Droplets, Info, Weight, Thermometer, ShieldAlert } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 type CalculatorType = 'fat-snf-clr-ts' | 'fat-blending' | 'fat-snf-adjustment' | 'reconstituted-milk' | 'recombined-milk' | 'clr-blending' | 'custom-calculator' | 'milk-blending' | 'clr-increase' | 'fat-clr-maintainer' | 'two-milk-blending-target' | 'clr-correction' | 'kg-fat-snf' | 'fat-reduction-clr-maintain';
 
@@ -23,7 +25,7 @@ const calculatorsInfo = {
     'fat-snf-clr-ts': { title: "Fat, SNF, CLR & TS", icon: Calculator, component: FatSnfClrTsCalc },
     'milk-blending': { title: "Milk Blending", icon: Blend, component: MilkBlendingCalc },
     'two-milk-blending-target': { title: "Two-Milk Blending (to Target)", icon: Target, component: TwoMilkBlendingToTargetCalc },
-    'fat-reduction-clr-maintain': { title: "Fat & CLR Corrector (High Fat)", icon: ShieldAlert, component: FatReductionClrMaintainCalc },
+    'fat-reduction-clr-maintain': { title: "Fat & CLR Corrector", icon: ShieldAlert, component: FatReductionClrMaintainCalc },
     'custom-calculator': { title: 'Custom Calculator', icon: Settings, component: CustomStandardizationCalc },
     'clr-increase': { title: 'CLR Increase (by SMP)', icon: ChevronsUp, component: ClrIncreaseCalc },
     'fat-clr-maintainer': { title: 'Fat & CLR Maintainer', icon: Target, component: FatClrMaintainerCalc },
@@ -643,10 +645,10 @@ function FatReductionClrMaintainCalc() {
 
     }, []);
 
-    // Trigger initial calculation
+    // Trigger calculation whenever inputs change
     useEffect(() => {
         calculate(inputs);
-    }, [calculate, inputs]);
+    }, [inputs, calculate]);
 
     return (
         <CalculatorCard 
@@ -654,14 +656,14 @@ function FatReductionClrMaintainCalc() {
             description="Calculate the amount of skimmed milk and water needed to correct your batch to the target fat and CLR.">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-blue-50 p-6 rounded-2xl border-2 border-blue-200">
-                    <h2 className="text-xl md:text-lg font-semibold mb-6 text-blue-700">Inputs (Fill in the yellow boxes)</h2>
+                    <h2 className="text-xl md:text-lg font-semibold mb-6 text-blue-700">Inputs</h2>
                     <div className="space-y-4">
-                        <MemoizedInputField label="Initial Volume (V₀):" value={inputs.initialVolume} name="initialVolume" setter={handleInputChange} inputClassName="bg-yellow-100 border-yellow-300" />
-                        <MemoizedInputField label="Initial Fat (F₀) %:" value={inputs.initialFat} name="initialFat" setter={handleInputChange} inputClassName="bg-yellow-100 border-yellow-300" />
+                        <MemoizedInputField label="Initial Volume (V₀):" value={inputs.initialVolume} name="initialVolume" setter={handleInputChange} inputClassName="bg-yellow-100 border-yellow-300" unit="L" />
+                        <MemoizedInputField label="Initial Fat (F₀) %:" value={inputs.initialFat} name="initialFat" setter={handleInputChange} inputClassName="bg-yellow-100 border-yellow-300" unit="%" />
                         <MemoizedInputField label="Initial CLR (C₀):" value={inputs.initialClr} name="initialClr" setter={handleInputChange} inputClassName="bg-yellow-100 border-yellow-300" />
-                        <MemoizedInputField label="Target Fat (Ft) %:" value={inputs.targetFat} name="targetFat" setter={handleInputChange} inputClassName="bg-yellow-100 border-yellow-300" />
+                        <MemoizedInputField label="Target Fat (Ft) %:" value={inputs.targetFat} name="targetFat" setter={handleInputChange} inputClassName="bg-yellow-100 border-yellow-300" unit="%" />
                         <MemoizedInputField label="Target CLR (Ct):" value={inputs.targetClr} name="targetClr" setter={handleInputChange} inputClassName="bg-yellow-100 border-yellow-300" />
-                        <MemoizedInputField label="Skimmed Milk Fat (Fs) %:" value={inputs.skimFat} name="skimFat" setter={handleInputChange} inputClassName="bg-yellow-100 border-yellow-300" />
+                        <MemoizedInputField label="Skimmed Milk Fat (Fs) %:" value={inputs.skimFat} name="skimFat" setter={handleInputChange} inputClassName="bg-yellow-100 border-yellow-300" unit="%" />
                         <MemoizedInputField label="Skimmed Milk CLR (Cs):" value={inputs.skimClr} name="skimClr" setter={handleInputChange} inputClassName="bg-yellow-100 border-yellow-300" />
                     </div>
                 </div>
@@ -1266,40 +1268,71 @@ function ClrCorrectionCalc() {
 }
 
 function KgFatSnfCalc() {
-    const [liters, setLiters] = useState("");
-    const [fat, setFat] = useState("");
-    const [snf, setSnf] = useState("");
+    const [inputs, setInputs] = useState({ literQty: "1000", kgQty: "", fat: "4.5", snf: "8.5" });
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const [activeTab, setActiveTab] = useState("liter");
 
-    const handleCalc = () => {
-        const litersVal = parseFloat(liters);
-        const fatVal = parseFloat(fat);
-        const snfVal = parseFloat(snf);
+    const handleInputChange = useCallback((name: string, value: string) => {
+        setInputs(prev => ({...prev, [name]: value}));
+    }, []);
 
-        setResult(null);
-        setError(null);
-        
-        if(isNaN(litersVal) || isNaN(fatVal) || isNaN(snfVal)) {
-            setError("Please fill all fields with numbers.");
-            return;
+    const calculateByLiter = () => {
+        const litersVal = parseFloat(inputs.literQty);
+        const fatVal = parseFloat(inputs.fat);
+        const snfVal = parseFloat(inputs.snf);
+        setResult(null); setError(null);
+
+        if([litersVal, fatVal, snfVal].some(isNaN)) {
+            setError("Please fill all fields with numbers."); return;
         }
-
+        
         const milkWeight = litersVal * componentProps.milkDensity;
         const fatKg = milkWeight * (fatVal / 100);
         const snfKg = milkWeight * (snfVal / 100);
+        setResult(`In <strong>${litersVal} Ltr</strong> of milk:<br/>- <strong>Total Fat:</strong> ${fatKg.toFixed(2)} Kg<br/>- <strong>Total SNF (Powder):</strong> ${snfKg.toFixed(2)} Kg`);
+    };
 
-        setResult(`In ${litersVal} Ltr of milk:<br/>- <strong>Total Fat:</strong> ${fatKg.toFixed(2)} Kg<br/>- <strong>Total SNF (Powder):</strong> ${snfKg.toFixed(2)} Kg`);
-    }
+    const calculateByKg = () => {
+        const kgVal = parseFloat(inputs.kgQty);
+        const fatVal = parseFloat(inputs.fat);
+        const snfVal = parseFloat(inputs.snf);
+        setResult(null); setError(null);
+
+        if([kgVal, fatVal, snfVal].some(isNaN)) {
+            setError("Please fill all fields with numbers."); return;
+        }
+        
+        const fatKg = kgVal * (fatVal / 100);
+        const snfKg = kgVal * (snfVal / 100);
+        setResult(`In <strong>${kgVal} Kg</strong> of milk:<br/>- <strong>Total Fat:</strong> ${fatKg.toFixed(2)} Kg<br/>- <strong>Total SNF (Powder):</strong> ${snfKg.toFixed(2)} Kg`);
+    };
 
     return (
-        <CalculatorCard title="Kg Fat & SNF Calculator" description="Find out the amount (in Kg) of Fat and Powder (SNF) in milk from a given volume.">
-            <div className="bg-muted/50 p-4 rounded-lg space-y-3">
-                <div><Label>Milk Quantity (Liters)</Label><Input type="number" value={liters} onChange={e => setLiters(e.target.value)} placeholder="1000" /></div>
-                <div><Label>Fat %</Label><Input type="number" value={fat} onChange={e => setFat(e.target.value)} placeholder="4.5" /></div>
-                <div><Label>SNF %</Label><Input type="number" value={snf} onChange={e => setSnf(e.target.value)} placeholder="8.5" /></div>
-            </div>
-            <Button onClick={handleCalc} className="w-full mt-4">Calculate Components</Button>
+        <CalculatorCard title="Kg Fat & SNF Calculator" description="Find out the amount (in Kg) of Fat and Powder (SNF) from a given quantity of milk.">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="liter">Calculate by Liter</TabsTrigger>
+                    <TabsTrigger value="kg">Calculate by Kg</TabsTrigger>
+                </TabsList>
+                <TabsContent value="liter">
+                    <div className="bg-muted/50 p-4 rounded-lg space-y-3 mt-4">
+                        <MemoizedInputField label="Milk Quantity (Liters)" value={inputs.literQty} name="literQty" setter={handleInputChange} placeholder="1000" />
+                        <MemoizedInputField label="Fat %" value={inputs.fat} name="fat" setter={handleInputChange} placeholder="4.5" />
+                        <MemoizedInputField label="SNF %" value={inputs.snf} name="snf" setter={handleInputChange} placeholder="8.5" />
+                    </div>
+                    <Button onClick={calculateByLiter} className="w-full mt-4">Calculate from Liters</Button>
+                </TabsContent>
+                <TabsContent value="kg">
+                     <div className="bg-muted/50 p-4 rounded-lg space-y-3 mt-4">
+                        <MemoizedInputField label="Milk Quantity (Kg)" value={inputs.kgQty} name="kgQty" setter={handleInputChange} placeholder="1030" />
+                        <MemoizedInputField label="Fat %" value={inputs.fat} name="fat" setter={handleInputChange} placeholder="4.5" />
+                        <MemoizedInputField label="SNF %" value={inputs.snf} name="snf" setter={handleInputChange} placeholder="8.5" />
+                    </div>
+                    <Button onClick={calculateByKg} className="w-full mt-4">Calculate from Kg</Button>
+                </TabsContent>
+            </Tabs>
+            
             {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
             {result && <Alert className="mt-4"><AlertTitle>Result</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
         </CalculatorCard>
