@@ -107,7 +107,7 @@ const CalculatorCard = ({ title, children, description }: { title: string; child
     </div>
 );
 
-const MemoizedInputField = memo(function InputField({ label, value, name, setter, unit, placeholder }: { label: string, value: string, name: string, setter: (name: string, value: string) => void, unit?: string, placeholder?: string }) {
+const MemoizedInputField = memo(function InputField({ label, value, name, setter, unit, placeholder, inputClassName }: { label: string, value: string, name: string, setter: (name: string, value: string) => void, unit?: string, placeholder?: string, inputClassName?: string }) {
     const [internalValue, setInternalValue] = useState(value);
 
     // Update internal state when props change, but not if the element has focus
@@ -130,7 +130,7 @@ const MemoizedInputField = memo(function InputField({ label, value, name, setter
                     id={name} 
                     value={internalValue} 
                     onChange={handleChange}
-                    className={unit ? "rounded-r-none" : ""} 
+                    className={cn(unit ? "rounded-r-none" : "", inputClassName)} 
                     placeholder={placeholder} 
                 />
                 {unit && <span className="p-2 bg-muted border border-l-0 rounded-r-md text-sm">{unit}</span>}
@@ -571,91 +571,134 @@ function TwoMilkBlendingToTargetCalc() {
 
 function FatReductionClrMaintainCalc() {
     const [inputs, setInputs] = useState({
-        initialQty: '1000',
+        initialVolume: '1000',
         initialFat: '6.3',
         initialClr: '29.5',
         targetFat: '5.9',
+        targetClr: '29.5',
         skimFat: '0.05',
         skimClr: '34.5',
     });
-    const [result, setResult] = useState<string | null>(null);
+
+    const [results, setResults] = useState<{ skim: string, water: string, finalVolume: string, finalFat: string, finalClr: string } | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     const handleInputChange = useCallback((name: string, value: string) => {
         setInputs(prev => ({...prev, [name]: value}));
+        calculate({ ...inputs, [name]: value });
+    }, [inputs]);
+    
+    const calculate = useCallback((currentInputs: typeof inputs) => {
+        const V0 = parseFloat(currentInputs.initialVolume);
+        const F0 = parseFloat(currentInputs.initialFat);
+        const C0 = parseFloat(currentInputs.initialClr);
+        const Ft = parseFloat(currentInputs.targetFat);
+        const Ct = parseFloat(currentInputs.targetClr);
+        const Fs = parseFloat(currentInputs.skimFat);
+        const Cs = parseFloat(currentInputs.skimClr);
+
+        if ([V0, F0, C0, Ft, Ct, Fs, Cs].some(isNaN)) {
+            setError("कृपया सभी इनपुट बॉक्स में मान्य संख्या दर्ज करें।");
+            setResults(null);
+            return;
+        }
+
+        const a = (Cs - Ct);
+        const b = -Ct;
+        const d = (Ct - C0) * V0;
+        
+        const a2 = (Fs - Ft);
+        const b2 = -Ft;
+        const d2 = (Ft - F0) * V0;
+
+        const D = a * b2 - b * a2;
+
+        if (Math.abs(D) < 1e-9) {
+            setError("गणना संभव नहीं है। कृपया इनपुट की जाँच करें।");
+            setResults(null);
+            return;
+        }
+
+        const x = (d * b2 - b * d2) / D;
+        const y = (a * d2 - d * a2) / D;
+
+        if (x < 0 || y < 0) {
+            setError("परिणाम नकारात्मक है। इस केस में स्टैंडर्डाइजेशन संभव नहीं है।");
+            setResults(null);
+            return;
+        }
+
+        setError(null);
+
+        const finalVolume = V0 + x + y;
+        const finalFatCheck = ((F0 * V0) + (Fs * x)) / finalVolume;
+        const finalClrCheck = ((C0 * V0) + (Cs * x)) / finalVolume;
+
+        setResults({
+            skim: `${x.toFixed(2)} L`,
+            water: `${y.toFixed(2)} L`,
+            finalVolume: `${finalVolume.toFixed(2)} L`,
+            finalFat: `${finalFatCheck.toFixed(2)} %`,
+            finalClr: `${finalClrCheck.toFixed(2)}`
+        });
+
     }, []);
 
-    const calculate = useCallback(() => {
-        setResult(null);
-        setError(null);
-        
-        const Q_initial = parseFloat(inputs.initialQty);
-        const F_initial = parseFloat(inputs.initialFat);
-        const C_initial = parseFloat(inputs.initialClr);
-        const F_target = parseFloat(inputs.targetFat);
-        const F_skim = parseFloat(inputs.skimFat);
-        const C_skim = parseFloat(inputs.skimClr);
-        
-        if ([Q_initial, F_initial, C_initial, F_target, F_skim, C_skim].some(isNaN)) {
-            setError("Please fill all fields with valid numbers.");
-            return;
-        }
-
-        if (F_initial <= F_target) {
-            setError("Initial Fat % must be higher than Target Fat % for this calculation.");
-            return;
-        }
-
-        if (F_target <= F_skim) {
-            setError("Target Fat % must be higher than Skim Milk Fat %.");
-            return;
-        }
-        
-        // Pearson Square Logic for Fat
-        const fat_diff = F_initial - F_target; // Parts of skim milk needed
-        const skim_diff = F_target - F_skim; // Parts of initial milk needed
-
-        const skim_needed = (Q_initial * fat_diff) / skim_diff;
-        
-        // Calculate final CLR
-        const Q_final = Q_initial + skim_needed;
-        const final_clr = ((Q_initial * C_initial) + (skim_needed * C_skim)) / Q_final;
-
-        setResult(`
-            To reduce the fat from <strong>${F_initial}%</strong> to <strong>${F_target}%</strong>, you need to add:
-            <ul class='list-disc list-inside mt-2 text-lg'>
-                <li>Skimmed Milk: <strong class='text-green-700'>${skim_needed.toFixed(3)} kg/L</strong></li>
-            </ul>
-            <hr class='my-4'/>
-            <h4 class='font-bold text-md'>Final Batch Summary:</h4>
-            <ul class='list-disc list-inside mt-2 text-lg'>
-                <li>Total Final Quantity: <strong class='text-blue-700'>${Q_final.toFixed(3)} kg/L</strong></li>
-                <li>Final Fat: <strong class='text-blue-700'>${F_target}%</strong> (Target)</li>
-                <li>Expected Final CLR: <strong class='text-blue-700'>${final_clr.toFixed(2)}</strong></li>
-            </ul>
-            <p class='text-xs mt-2'>Note: Since the CLR of skim milk is higher than the initial milk, the final CLR will increase. To bring it back to the target CLR, a small amount of water might be needed, but this calculator focuses only on fat correction.</p>
-        `);
-    }, [inputs]);
+    // Trigger initial calculation
+    useState(() => {
+        calculate(inputs);
+    });
 
     return (
-        <CalculatorCard title="Fat & CLR Corrector (for High Fat Batch)" description="Calculate how much skimmed milk to add to a high-fat batch to achieve the target fat percentage, and see the impact on CLR.">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                <div className="bg-muted/50 p-4 rounded-lg space-y-3">
-                    <h3 className="font-semibold text-gray-700 font-headline">Your Current Batch</h3>
-                    <MemoizedInputField label="Batch Quantity (kg/L)" value={inputs.initialQty} name="initialQty" setter={handleInputChange} />
-                    <MemoizedInputField label="Actual Fat % in Batch" value={inputs.initialFat} name="initialFat" setter={handleInputChange} />
-                    <MemoizedInputField label="Actual CLR in Batch" value={inputs.initialClr} name="initialClr" setter={handleInputChange} />
+        <CalculatorCard 
+            title="Fat & CLR Corrector"
+            description="अपने बैच को सही fat और CLR पर लाने के लिए skimmed milk और पानी की मात्रा की गणना करें।">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-blue-50 p-6 rounded-2xl border-2 border-blue-200">
+                    <h2 className="text-xl md:text-lg font-semibold mb-6 text-blue-700">इनपुट (इन पीले बॉक्स में भरें)</h2>
+                    <div className="space-y-4">
+                        <MemoizedInputField label="शुरुआती मात्रा (V₀):" value={inputs.initialVolume} name="initialVolume" setter={handleInputChange} inputClassName="bg-yellow-100 border-yellow-300" />
+                        <MemoizedInputField label="शुरुआती Fat (F₀) %:" value={inputs.initialFat} name="initialFat" setter={handleInputChange} inputClassName="bg-yellow-100 border-yellow-300" />
+                        <MemoizedInputField label="शुरुआती CLR (C₀):" value={inputs.initialClr} name="initialClr" setter={handleInputChange} inputClassName="bg-yellow-100 border-yellow-300" />
+                        <MemoizedInputField label="टारगेट Fat (Ft) %:" value={inputs.targetFat} name="targetFat" setter={handleInputChange} inputClassName="bg-yellow-100 border-yellow-300" />
+                        <MemoizedInputField label="टारगेट CLR (Ct):" value={inputs.targetClr} name="targetClr" setter={handleInputChange} inputClassName="bg-yellow-100 border-yellow-300" />
+                        <MemoizedInputField label="Skimmed Milk Fat (Fs) %:" value={inputs.skimFat} name="skimFat" setter={handleInputChange} inputClassName="bg-yellow-100 border-yellow-300" />
+                        <MemoizedInputField label="Skimmed Milk CLR (Cs):" value={inputs.skimClr} name="skimClr" setter={handleInputChange} inputClassName="bg-yellow-100 border-yellow-300" />
+                    </div>
                 </div>
-                 <div className="bg-primary/10 p-4 rounded-lg space-y-3">
-                     <h3 className="font-semibold text-gray-700 font-headline">Correction & Target</h3>
-                    <MemoizedInputField label="Target Fat %" value={inputs.targetFat} name="targetFat" setter={handleInputChange} />
-                    <MemoizedInputField label="Skim Milk Fat %" value={inputs.skimFat} name="skimFat" setter={handleInputChange} />
-                    <MemoizedInputField label="Skim Milk CLR" value={inputs.skimClr} name="skimClr" setter={handleInputChange} />
-                </div>
+                 <div className="bg-green-50 p-6 rounded-2xl border-2 border-green-200">
+                    <h2 className="text-xl md:text-lg font-semibold mb-6 text-green-700">आउटपुट (परिणाम)</h2>
+                    {error ? (
+                        <Alert variant="destructive"><AlertDescription>{error}</AlertDescription></Alert>
+                    ) : (
+                        <div className="space-y-4">
+                            <div className="bg-white p-4 rounded-lg shadow-md border border-green-300">
+                                <p className="text-sm font-medium text-gray-600">Skimmed Milk की मात्रा (x):</p>
+                                <p className="text-2xl font-bold text-green-800">{results?.skim || '0 L'}</p>
+                            </div>
+                            <div className="bg-white p-4 rounded-lg shadow-md border border-green-300">
+                                <p className="text-sm font-medium text-gray-600">पानी की मात्रा (y):</p>
+                                <p className="text-2xl font-bold text-green-800">{results?.water || '0 L'}</p>
+                            </div>
+                            <div className="bg-white p-4 rounded-lg shadow-md border border-green-300">
+                                <p className="text-sm font-medium text-gray-600">फाइनल मात्रा:</p>
+                                <p className="text-2xl font-bold text-green-800">{results?.finalVolume || '0 L'}</p>
+                            </div>
+                            <div className="mt-6 p-4 bg-yellow-100 rounded-lg border border-yellow-300">
+                                <p className="text-lg font-semibold text-yellow-800">जाँच परिणाम</p>
+                                <div className="flex justify-between mt-2">
+                                    <span className="text-gray-700">फाइनल Fat %:</span>
+                                    <span className="font-bold text-blue-600">{results?.finalFat || '-'}</span>
+                                </div>
+                                <div className="flex justify-between mt-1">
+                                    <span className="text-gray-700">फाइनल CLR:</span>
+                                    <span className="font-bold text-blue-600">{results?.finalClr || '-'}</span>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                 </div>
             </div>
-             <Button onClick={calculate} className="w-full mt-4">Calculate Correction</Button>
-            {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
-            {result && <Alert className="mt-4"><AlertTitle>Correction Plan</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
         </CalculatorCard>
     );
 }
@@ -857,7 +900,7 @@ function FatClrMaintainerCalc() {
 
         // Step 2: Calculate the new, lower CLR after adding cream
         const SNF_milk_percent = getSnf(F_milk, CLR_milk);
-        const SNF_cream_percent = getSnf(F_cream, 20, 0.85); // Approx CLR for cream is ~20
+        const SNF_cream_percent = getSnf(F_cream, 20, 0.72); // Approx CLR for cream is ~20
         
         const total_snf_after_cream = (M_milk * SNF_milk_percent/100) + (M_cream * SNF_cream_percent/100);
         const total_milk_after_cream = M_milk + M_cream;
@@ -1263,13 +1306,4 @@ function KgFatSnfCalc() {
         </CalculatorCard>
     )
 }
-    
-
-
-
-
-
-
-
-
     
