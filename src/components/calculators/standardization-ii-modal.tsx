@@ -12,7 +12,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { getSnf, componentProps, cn } from "@/lib/utils"
+import { getSnf, componentProps } from "@/lib/utils"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { ArrowLeft, Blend, Milk, SlidersHorizontal, Combine, Bot, Calculator, Settings, ChevronsUp, Target, Droplets, Info, Weight, Thermometer, ShieldAlert } from 'lucide-react'
@@ -108,7 +108,7 @@ const CalculatorCard = ({ title, children, description }: { title: string; child
     </div>
 );
 
-const MemoizedInputField = memo(function InputField({ label, value, name, setter, unit, placeholder, inputClassName }: { label: string, value: string, name: string, setter: (name: string, value: string) => void, unit?: string, placeholder?: string, inputClassName?: string }) {
+const MemoizedInputField = memo(function InputField({ label, value, name, setter, unit, placeholder, inputClassName, type = "number", step = "any" }: { label: string, value: string, name: string, setter: (name: string, value: string) => void, unit?: string, placeholder?: string, inputClassName?: string, type?: string, step?: string }) {
     const [internalValue, setInternalValue] = useState(value);
 
     // Update internal state when props change, but not if the element has focus
@@ -126,13 +126,14 @@ const MemoizedInputField = memo(function InputField({ label, value, name, setter
             <Label htmlFor={name}>{label}</Label>
             <div className="flex items-center">
                 <Input 
-                    type="number" 
+                    type={type} 
                     name={name} 
                     id={name} 
                     value={internalValue} 
                     onChange={handleChange}
-                    className={cn(unit ? "rounded-r-none" : "", inputClassName)} 
+                    className={` ${unit ? "rounded-r-none" : ""} ${inputClassName || ''}`}
                     placeholder={placeholder} 
+                    step={step}
                 />
                 {unit && <span className="p-2 bg-muted border border-l-0 rounded-r-md text-sm">{unit}</span>}
             </div>
@@ -645,7 +646,6 @@ function FatReductionClrMaintainCalc() {
 
     }, []);
 
-    // Trigger calculation whenever inputs change
     useEffect(() => {
         calculate(inputs);
     }, [inputs, calculate]);
@@ -1017,12 +1017,25 @@ const PearsonSquareCalc = ({ unit, calcType }: { unit: string, calcType: 'Fat' |
 function FatBlendingCalc() { return <PearsonSquareCalc unit="%" calcType="Fat" /> }
 function ClrBlendingCalc() { return <PearsonSquareCalc unit="" calcType="CLR" /> }
 
+const snfFormulas = {
+    'isi': { name: 'ISI / BIS (Official)', calc: (clr: number, fat: number) => (clr / 4) + (0.25 * fat) + 0.44 },
+    'richmond': { name: 'Richmond’s Formula', calc: (clr: number, fat: number) => (clr / 4) + (0.21 * fat) + 0.36 },
+    'cooperative': { name: 'Modified ISI / Cooperative', calc: (clr: number, fat: number) => (clr / 4) + (0.25 * fat) + 0.14 },
+    'dairy_union': { name: 'Simplified Dairy Union', calc: (clr: number, fat: number) => (clr / 4) + (fat / 5) + 0.44 },
+    'punjab_haryana': { name: 'Punjab / Haryana Variation', calc: (clr: number, fat: number) => (clr / 4) + (0.22 * fat) + 0.36 },
+    'andhra': { name: 'Andhra Pradesh Practice', calc: (clr: number, fat: number) => (clr / 4) + (0.21 * fat) + 0.35 },
+    'karnataka_tamil': { name: 'Karnataka / Tamil Nadu Practice', calc: (clr: number, fat: number) => (clr / 4) + (0.25 * fat) + 0.20 },
+    'general': { name: 'General Shortcut (Variable C)', calc: (clr: number, fat: number, c = 0.72) => (clr / 4) + (0.25 * fat) + c },
+};
+
 
 function FatSnfAdjustmentCalc() {
     const [inputs, setInputs] = useState({
-        milkQty: '100', milkFat: '3.5', milkSnf: '8.5',
-        targetFat: '4.5', targetSnf: '8.5',
-        creamFat: '40', powderTs: '96'
+        milkQty: '100', milkFat: '3.5', milkClr: '28.0',
+        targetFat: '4.5', targetClr: '28.5',
+        creamFat: '40', powderTs: '96',
+        formula: 'isi',
+        customC: '0.72'
     });
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -1031,22 +1044,38 @@ function FatSnfAdjustmentCalc() {
         setInputs(prev => ({...prev, [name]: value}));
     }, []);
 
+    const calculateSnf = useCallback((clr: number, fat: number) => {
+        const formulaKey = inputs.formula as keyof typeof snfFormulas;
+        if (formulaKey === 'general') {
+            return snfFormulas.general.calc(clr, fat, parseFloat(inputs.customC));
+        }
+        return snfFormulas[formulaKey].calc(clr, fat);
+    }, [inputs.formula, inputs.customC]);
+
+    const milkSnf = parseFloat(inputs.milkFat) && parseFloat(inputs.milkClr) ? calculateSnf(parseFloat(inputs.milkClr), parseFloat(inputs.milkFat)) : 0;
+    const targetSnf = parseFloat(inputs.targetFat) && parseFloat(inputs.targetClr) ? calculateSnf(parseFloat(inputs.targetClr), parseFloat(inputs.targetFat)) : 0;
+
     const calculate = useCallback(() => {
         setResult(null);
         setError(null);
-        
+
         const M = parseFloat(inputs.milkQty);
         const Fm = parseFloat(inputs.milkFat) / 100;
-        const Sm = parseFloat(inputs.milkSnf) / 100;
         const Ft = parseFloat(inputs.targetFat) / 100;
-        const St = parseFloat(inputs.targetSnf) / 100;
         const Fc = parseFloat(inputs.creamFat) / 100;
-        const Sc = getSnf(parseFloat(inputs.creamFat), 20, 0.72) / 100; // Estimate cream SNF
         const Fp = 1 / 100; // Powder fat is ~1%
-        const Sp = parseFloat(inputs.powderTs) / 100 - Fp; // Powder SNF
+        const Sp = (parseFloat(inputs.powderTs) / 100) - Fp; // Powder SNF
+        
+        const Sm = milkSnf / 100;
+        const St = targetSnf / 100;
 
-        if ([M, Fm, Sm, Ft, St, Fc, Fp, Sp].some(isNaN)) {
-            setError("Please fill all fields with valid numbers.");
+        // Estimate cream SNF
+        const creamSnfFromFat = snfFormulas.isi.calc(20, parseFloat(inputs.creamFat));
+        const Sc = creamSnfFromFat / 100;
+
+
+        if ([M, Fm, Ft, Fc, Fp, Sp, Sm, St].some(isNaN) || M <= 0) {
+            setError("Please fill all fields with valid positive numbers.");
             return;
         }
 
@@ -1069,42 +1098,62 @@ function FatSnfAdjustmentCalc() {
         const C = (K1 * B2 - K2 * B1) / det;
         const P = (K2 * A1 - K1 * A2) / det;
 
-        if (C < 0 && P < 0) {
-            setError("Calculation resulted in negative values. Please check your inputs. This might happen if target SNF is lower than initial SNF after fat adjustment.");
+        if (C < -1e-9 || P < -1e-9) { // Allow for small floating point inaccuracies
+            setError("Calculation resulted in negative values. This standardization is not possible with the given inputs (e.g., you might need to add skim milk instead).");
             return;
         }
         
-        const finalWeight = M + (C > 0 ? C : 0) + (P > 0 ? P : 0);
+        const creamToAdd = Math.max(0, C);
+        const powderToAdd = Math.max(0, P);
+        const finalWeight = M + creamToAdd + powderToAdd;
         
         setResult(`
-            For <strong>${M} kg</strong> of milk, to reach <strong>${inputs.targetFat}% Fat</strong> and <strong>${inputs.targetSnf}% SNF</strong>, you need to add:
+            For <strong>${M} kg</strong> of milk, to reach <strong>${inputs.targetFat}% Fat</strong> and <strong>${targetSnf.toFixed(2)}% SNF</strong>, you need to add:
             <ul class='list-disc list-inside mt-2'>
-                ${C > 0 ? `<li>Cream (${inputs.creamFat}% Fat): <strong class='text-green-700 text-lg'>${C.toFixed(3)} kg</strong></li>` : ''}
-                ${P > 0 ? `<li>SMP (${inputs.powderTs}% TS): <strong class='text-green-700 text-lg'>${P.toFixed(3)} kg</strong></li>` : ''}
+                <li>Cream (${inputs.creamFat}% Fat): <strong class='text-green-700 text-lg'>${creamToAdd.toFixed(3)} kg</strong></li>
+                <li>SMP (${inputs.powderTs}% TS): <strong class='text-green-700 text-lg'>${powderToAdd.toFixed(3)} kg</strong></li>
             </ul>
             <p class='mt-3'>Final Batch Weight will be approximately <strong>${finalWeight.toFixed(3)} kg</strong>.</p>
         `);
-    }, [inputs]);
+    }, [inputs, milkSnf, targetSnf]);
 
     return (
         <CalculatorCard title="Fat & SNF Adjustment Calculator" description="Calculate how much Cream and Skimmed Milk Powder (SMP) to add to standardize both Fat and SNF upwards.">
+            <div className="bg-primary/10 p-4 rounded-lg mb-4">
+                 <h3 className="font-semibold text-gray-700 mb-2 font-headline">SNF Calculation Formula</h3>
+                 <Select value={inputs.formula} onValueChange={(val) => handleInputChange('formula', val)}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                        {Object.entries(snfFormulas).map(([key, {name}]) => (
+                            <SelectItem key={key} value={key}>{name}</SelectItem>
+                        ))}
+                    </SelectContent>
+                 </Select>
+                 {inputs.formula === 'general' && (
+                     <div className="mt-2">
+                        <MemoizedInputField label="Custom Constant (C)" value={inputs.customC} name="customC" setter={handleInputChange} />
+                     </div>
+                 )}
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mb-4">
                 <div className="bg-muted/50 p-4 rounded-lg space-y-3">
                      <h3 className="font-semibold text-gray-700 mb-2 font-headline">Initial Milk</h3>
                      <MemoizedInputField label="Milk Quantity (kg)" value={inputs.milkQty} name="milkQty" setter={handleInputChange} />
                      <MemoizedInputField label="Milk Fat %" value={inputs.milkFat} name="milkFat" setter={handleInputChange} />
-                     <MemoizedInputField label="Milk SNF %" value={inputs.milkSnf} name="milkSnf" setter={handleInputChange} />
+                     <MemoizedInputField label="Milk CLR" value={inputs.milkClr} name="milkClr" setter={handleInputChange} />
+                     <div className="text-sm p-2 bg-blue-100 rounded">Calculated SNF: <strong className="font-bold">{milkSnf.toFixed(2)}%</strong></div>
                 </div>
                 <div className="bg-muted/50 p-4 rounded-lg space-y-3">
                      <h3 className="font-semibold text-gray-700 mb-2 font-headline">Target Milk</h3>
                      <MemoizedInputField label="Target Fat %" value={inputs.targetFat} name="targetFat" setter={handleInputChange} />
-                     <MemoizedInputField label="Target SNF %" value={inputs.targetSnf} name="targetSnf" setter={handleInputChange} />
+                     <MemoizedInputField label="Target CLR" value={inputs.targetClr} name="targetClr" setter={handleInputChange} />
+                      <div className="text-sm p-2 bg-green-100 rounded">Calculated Target SNF: <strong className="font-bold">{targetSnf.toFixed(2)}%</strong></div>
                 </div>
                  <div className="bg-primary/10 p-4 rounded-lg space-y-3 md:col-span-2">
                      <h3 className="font-semibold text-gray-700 mb-2 font-headline">Ingredients for Adjustment</h3>
                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                         <MemoizedInputField label="Cream Fat % (Manual)" value={inputs.creamFat} name="creamFat" setter={handleInputChange} />
-                         <MemoizedInputField label="Powder Total Solids (TS) % (Manual)" value={inputs.powderTs} name="powderTs" setter={handleInputChange} />
+                         <MemoizedInputField label="Cream Fat %" value={inputs.creamFat} name="creamFat" setter={handleInputChange} />
+                         <MemoizedInputField label="Powder Total Solids (TS) %" value={inputs.powderTs} name="powderTs" setter={handleInputChange} />
                      </div>
                 </div>
             </div>
