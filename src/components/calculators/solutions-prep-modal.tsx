@@ -175,33 +175,51 @@ function IndicatorCalc() {
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [indicatorKey, setIndicatorKey] = useState("");
+    const [volume, setVolume] = useState("100");
 
     const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setResult(null);
         setError(null);
         
-        if (!indicatorKey) {
-            setError("Please select an indicator.");
-            return;
-        }
+        if (!indicatorKey) { setError("Please select an indicator."); return; }
+        const vol = parseFloat(volume);
+        if (isNaN(vol) || vol <= 0) { setError("Please enter a valid positive volume."); return; }
 
         const indicator = chemicals.indicators[indicatorKey as keyof typeof chemicals.indicators];
+        let resultText = '';
+        const scaleFactor = vol / indicator.baseVolume;
 
-        let resultText = "";
-        if (indicator.type === 'mixed' || indicator.type === 'complex_liquid') {
-            resultText = indicator.note || 'No specific instructions available.';
-        } else if (indicator.type === 'w/v') {
-            resultText = indicator.note || `No specific instructions available. Generally, this is a weight/volume solution prepared in the specified solvent.`;
+        switch (indicator.type) {
+            case 'w/v':
+                const weight = indicator.weight! * scaleFactor;
+                resultText = `To prepare ${vol}mL of ${indicator.name} indicator, dissolve <code class="font-bold bg-green-100 p-1 rounded">${weight.toFixed(3)}g</code> in ${indicator.solvent} and make up the final volume to <code class="font-bold">${vol}mL</code>.`;
+                break;
+            case 'v/v':
+                const liquidVol = indicator.volume! * scaleFactor;
+                 resultText = `To prepare ${vol}mL of ${indicator.name} indicator, take <code class="font-bold bg-green-100 p-1 rounded">${liquidVol.toFixed(2)}mL</code> of the stock solution and dilute with ${indicator.solvent} to a final volume of <code class="font-bold">${vol}mL</code>.`;
+                break;
+            case 'complex_liquid':
+                const naohVol = indicator.naohVolume! * scaleFactor;
+                const finalWeight = indicator.weight! * scaleFactor;
+                resultText = `To prepare ${vol}mL of ${indicator.name} indicator, weigh <code class="font-bold bg-green-100 p-1 rounded">${finalWeight.toFixed(3)}g</code> of the indicator powder, add <code class="font-bold bg-blue-100 p-1 rounded">${naohVol.toFixed(2)}mL</code> of N/50 sodium hydroxide solution, and dilute with distilled water to a final volume of <code class="font-bold">${vol}mL</code>.`;
+                break;
+            case 'mixed':
+                 resultText = `This is a mixed indicator with a fixed recipe and cannot be scaled easily. Please follow the standard preparation method: <br/>${indicator.note}`;
+                 break;
+            default:
+                 resultText = indicator.note || "No specific instructions available.";
+                 break;
         }
+
         setResult(resultText);
-    }, [indicatorKey]);
+    }, [indicatorKey, volume]);
 
     return (
         <CalculatorCard title="Prepare Indicator Solution">
             <form onSubmit={handleSubmit}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
-                    <div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
+                    <div className="md:col-span-1">
                         <Label htmlFor="indicator-select">Select Indicator</Label>
                         <Select name="indicator-select" value={indicatorKey} onValueChange={setIndicatorKey} required>
                             <SelectTrigger><SelectValue placeholder="Select an indicator" /></SelectTrigger>
@@ -212,12 +230,16 @@ function IndicatorCalc() {
                             </SelectContent>
                         </Select>
                     </div>
+                     <div className="md:col-span-1">
+                        <Label htmlFor="indicator-volume">Final Volume (mL)</Label>
+                        <Input type="number" name="indicator-volume" placeholder="e.g., 100" step="any" value={volume} onChange={e => setVolume(e.target.value)} required />
+                    </div>
                     <div className="md:col-span-1">
                         <Button type="submit" className="w-full">Get Instructions</Button>
                     </div>
                 </div>
                 {error && <Alert variant="destructive" className="mt-8"><AlertDescription>{error}</AlertDescription></Alert>}
-                {result && <Alert className="mt-8"><AlertTitle>Preparation</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
+                {result && <Alert className="mt-8"><AlertTitle>Preparation Instructions</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
             </form>
         </CalculatorCard>
     );
@@ -847,4 +869,5 @@ function DilutionCalc() {
         </CalculatorCard>
     );
 };
+
 

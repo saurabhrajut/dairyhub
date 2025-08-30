@@ -58,21 +58,22 @@ export const chemicals = {
     edta: { name: 'EDTA Disodium Salt', molarMass: 372.24, nFactor: 2, type: 'solid' },
   },
   indicators: {
-    phenolphthalein: { name: "Phenolphthalein", solvent: "ethanol (95%)", type: "w/v", note: 'Weigh 1g, dissolve in 100mL of 95% ethanol.' },
-    'methyl-orange': { name: "Methyl Orange", solvent: "water", type: "w/v", note: 'Weigh 0.1g, dissolve in 100mL of water.' },
-    murexide: { name: 'Murexide', solvent: 'ethylene glycol', type: 'w/v', note: 'Weigh 0.2g, dissolve in 100mL of ethylene glycol. Stable for 6 months.' },
-    'methyl-red': { name: 'Methyl Red', type: 'complex_liquid', note: 'Weigh 0.10 gm, add 18.60 mL of N/50 sodium hydroxide solution and dilute with water to 250 mL' },
-    'bromothymol-blue': { name: 'Bromothymol Blue', type: 'complex_liquid', note: 'Weigh 0.10 gm, add 8.00 mL of N/50 sodium hydroxide solution and dilute with water to 250 mL' },
-    'kjeldahl-mixed': { name: 'Kjeldahl Mixed Indicator', solvent: 'ethanol (95%)', type: 'mixed', note: '0.1g Bromocresol Green + 0.02g Methyl Red ko 100mL solvent me milayein.'},
-    'thymol-blue-acid': { name: 'Thymol Blue (Acid Range)', type: 'complex_liquid', note: 'Weigh 0.10 gm, add 10.75 mL of N/50 sodium hydroxide solution and dilute with water to 250 mL' },
-    'bromophenol-blue': { name: 'Bromophenol Blue', type: 'complex_liquid', note: 'Weigh 0.10 gm, add 7.45 mL of N/50 sodium hydroxide solution and dilute with water to 250 mL' },
-    'bromocresol-green': { name: 'Bromocresol Green', type: 'complex_liquid', note: 'Weigh 0.10 gm, add 7.15 mL of N/50 sodium hydroxide solution and dilute with water to 250 mL' },
-    'bromocresol-purple': { name: 'Bromocresol Purple', type: 'complex_liquid', note: 'Weigh 0.10 gm, add 9.25 mL of N/50 sodium hydroxide solution and dilute with water to 250 mL' },
-    'phenol-red': { name: 'Phenol Red', type: 'complex_liquid', note: 'Weigh 0.10 gm, add 14.20 mL of N/50 sodium hydroxide solution and dilute with water to 250 mL' },
-    'cresol-red': { name: 'Cresol Red', type: 'complex_liquid', note: 'Weigh 0.10 gm, add 13.10 mL of N/50 sodium hydroxide solution and dilute with water to 250 mL' },
-    'thymol-blue-alkaline': { name: 'Thymol Blue (Alkaline Range)', type: 'complex_liquid', note: 'Weigh 0.10 gm, add 10.75 mL of N/50 sodium hydroxide solution and dilute with water to 250 mL' },
-    'thymolphthalein': { name: 'Thymolphthalein', type: 'w/v', solvent: 'rectified spirit', note: 'Dissolve 0.10gm in 100mL of rectified spirit.' },
-    'thymol-violet': { name: 'Thymol Violet', type: 'mixed', note: 'Dissolve 0.10gm of tropaeolin O in 100mL of water. Dissolve 0.04gm of thymolphthalein in a mixture of 50mL of water. Mix one part of tropaeolin O solution with 4 parts of thymolphthalein solution' }
+    phenolphthalein: { name: "Phenolphthalein", type: "w/v", weight: 1, solvent: "95% ethanol", baseVolume: 100, note: 'Weigh 1g, dissolve in 100mL of 95% ethanol.' },
+    'methyl-orange': { name: "Methyl Orange", type: "w/v", weight: 0.1, solvent: "water", baseVolume: 100, note: 'Weigh 0.1g, dissolve in 100mL of water.' },
+    murexide: { name: 'Murexide', type: 'w/v', weight: 0.2, solvent: 'ethylene glycol', baseVolume: 100, note: 'Weigh 0.2g, dissolve in 100mL of ethylene glycol. Stable for 6 months.' },
+    'kjeldahl-mixed': { name: 'Kjeldahl Mixed Indicator', type: 'mixed', solvent: '95% ethanol', note: 'Dissolve 0.1g Bromocresol Green + 0.02g Methyl Red in 100mL of 95% ethanol.'},
+
+    'thymol-blue-acid': { name: 'Thymol Blue (Acid Range)', type: 'complex_liquid', weight: 0.10, naohVolume: 10.75, baseVolume: 250 },
+    'bromophenol-blue': { name: 'Bromophenol Blue', type: 'complex_liquid', weight: 0.10, naohVolume: 7.45, baseVolume: 250 },
+    'bromocresol-green': { name: 'Bromocresol Green', type: 'complex_liquid', weight: 0.10, naohVolume: 7.15, baseVolume: 250 },
+    'methyl-red': { name: 'Methyl Red', type: 'complex_liquid', weight: 0.10, naohVolume: 18.60, baseVolume: 250 },
+    'bromocresol-purple': { name: 'Bromocresol Purple', type: 'complex_liquid', weight: 0.10, naohVolume: 9.25, baseVolume: 250 },
+    'bromothymol-blue': { name: 'Bromothymol Blue', type: 'complex_liquid', weight: 0.10, naohVolume: 8.00, baseVolume: 250 },
+    'phenol-red': { name: 'Phenol Red', type: 'complex_liquid', weight: 0.10, naohVolume: 14.20, baseVolume: 250 },
+    'cresol-red': { name: 'Cresol Red', type: 'complex_liquid', weight: 0.10, naohVolume: 13.10, baseVolume: 250 },
+    'thymol-blue-alkaline': { name: 'Thymol Blue (Alkaline Range)', type: 'complex_liquid', weight: 0.10, naohVolume: 10.75, baseVolume: 250 },
+    'thymolphthalein': { name: 'Thymolphthalein', type: 'w/v', weight: 0.10, solvent: 'rectified spirit', baseVolume: 100, note: 'Dissolve 0.10gm in 100mL of rectified spirit.' },
+    'thymol-violet': { name: 'Thymol Violet', type: 'mixed', note: 'Dissolve 0.10gm of tropaeolin O in 100mL of water. Dissolve 0.04gm of thymolphthalein in 50mL of water. Mix one part of tropaeolin O solution with 4 parts of thymolphthalein solution' }
   },
   primaryStandards: {
     khp: { name: "Potassium Hydrogen Phthalate (KHP)", molarMass: 204.22, nFactor: 1 },
@@ -498,4 +499,5 @@ export const reagentRecipes = {
         instructions: '50g NaOH aur 15g KI ko distilled water me gholein. Phir 1g Sodium Azide ko 40ml distilled water me alag se gholein. Dono solutions ko mix karke final volume 100ml tak poora karein.'
     }
 };
+
 
