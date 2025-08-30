@@ -58,12 +58,21 @@ export const chemicals = {
     edta: { name: 'EDTA Disodium Salt', molarMass: 372.24, nFactor: 2, type: 'solid' },
   },
   indicators: {
-    phenolphthalein: { name: "Phenolphthalein", solvent: "ethanol (95%)", type: "w/v" },
-    "methyl-orange": { name: "Methyl Orange", solvent: "water", type: "w/v" },
-    murexide: { name: 'Murexide', solvent: 'ethylene glycol', type: 'w/v' },
-    'methyl-red': { name: 'Methyl Red', solvent: 'ethanol (95%)', type: 'w/v' },
-    'bromothymol-blue': { name: 'Bromothymol Blue', solvent: 'ethanol (20%)', type: 'w/v' },
-    'kjeldahl-mixed': { name: 'Kjeldahl Mixed Indicator', solvent: 'ethanol (95%)', type: 'mixed', note: '0.1g Bromocresol Green + 0.02g Methyl Red ko 100mL solvent me milayein.'}
+    phenolphthalein: { name: "Phenolphthalein", solvent: "ethanol (95%)", type: "w/v", note: 'Weigh 1g, dissolve in 100mL of 95% ethanol.' },
+    'methyl-orange': { name: "Methyl Orange", solvent: "water", type: "w/v", note: 'Weigh 0.1g, dissolve in 100mL of water.' },
+    murexide: { name: 'Murexide', solvent: 'ethylene glycol', type: 'w/v', note: 'Weigh 0.2g, dissolve in 100mL of ethylene glycol. Stable for 6 months.' },
+    'methyl-red': { name: 'Methyl Red', type: 'complex_liquid', note: 'Weigh 0.10 gm, add 18.60 mL of N/50 sodium hydroxide solution and dilute with water to 250 mL' },
+    'bromothymol-blue': { name: 'Bromothymol Blue', type: 'complex_liquid', note: 'Weigh 0.10 gm, add 8.00 mL of N/50 sodium hydroxide solution and dilute with water to 250 mL' },
+    'kjeldahl-mixed': { name: 'Kjeldahl Mixed Indicator', solvent: 'ethanol (95%)', type: 'mixed', note: '0.1g Bromocresol Green + 0.02g Methyl Red ko 100mL solvent me milayein.'},
+    'thymol-blue-acid': { name: 'Thymol Blue (Acid Range)', type: 'complex_liquid', note: 'Weigh 0.10 gm, add 10.75 mL of N/50 sodium hydroxide solution and dilute with water to 250 mL' },
+    'bromophenol-blue': { name: 'Bromophenol Blue', type: 'complex_liquid', note: 'Weigh 0.10 gm, add 7.45 mL of N/50 sodium hydroxide solution and dilute with water to 250 mL' },
+    'bromocresol-green': { name: 'Bromocresol Green', type: 'complex_liquid', note: 'Weigh 0.10 gm, add 7.15 mL of N/50 sodium hydroxide solution and dilute with water to 250 mL' },
+    'bromocresol-purple': { name: 'Bromocresol Purple', type: 'complex_liquid', note: 'Weigh 0.10 gm, add 9.25 mL of N/50 sodium hydroxide solution and dilute with water to 250 mL' },
+    'phenol-red': { name: 'Phenol Red', type: 'complex_liquid', note: 'Weigh 0.10 gm, add 14.20 mL of N/50 sodium hydroxide solution and dilute with water to 250 mL' },
+    'cresol-red': { name: 'Cresol Red', type: 'complex_liquid', note: 'Weigh 0.10 gm, add 13.10 mL of N/50 sodium hydroxide solution and dilute with water to 250 mL' },
+    'thymol-blue-alkaline': { name: 'Thymol Blue (Alkaline Range)', type: 'complex_liquid', note: 'Weigh 0.10 gm, add 10.75 mL of N/50 sodium hydroxide solution and dilute with water to 250 mL' },
+    'thymolphthalein': { name: 'Thymolphthalein', type: 'w/v', solvent: 'rectified spirit', note: 'Dissolve 0.10gm in 100mL of rectified spirit.' },
+    'thymol-violet': { name: 'Thymol Violet', type: 'mixed', note: 'Dissolve 0.10gm of tropaeolin O in 100mL of water. Dissolve 0.04gm of thymolphthalein in a mixture of 50mL of water. Mix one part of tropaeolin O solution with 4 parts of thymolphthalein solution' }
   },
   primaryStandards: {
     khp: { name: "Potassium Hydrogen Phthalate (KHP)", molarMass: 204.22, nFactor: 1 },
@@ -265,7 +274,7 @@ export const reagentRecipes = {
             { name: 'Concentrated HCl', ratio: 1 },
             { name: 'Distilled Water', ratio: 3 }
         ],
-        instructions: '1 hissa Concentrated HCl ko 3 hisse Distilled Water mein dhyan se milayein. Hamesha acid ko paani mein daalein.'
+        instructions: 'Diye gaye anupaat (ratio) mein teeno cheezon ko mix karein.'
     },
     'iodine_maltodextrin': {
         name: 'Iodine Solution (0.05 N)',
@@ -489,3 +498,4 @@ export const reagentRecipes = {
         instructions: '50g NaOH aur 15g KI ko distilled water me gholein. Phir 1g Sodium Azide ko 40ml distilled water me alag se gholein. Dono solutions ko mix karke final volume 100ml tak poora karein.'
     }
 };
+

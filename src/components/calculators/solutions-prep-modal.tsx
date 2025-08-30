@@ -173,7 +173,6 @@ function BaseSolutionCalc() { return <SolutionCalculator chemType="bases" title=
 
 function IndicatorCalc() {
     const [result, setResult] = useState<string | null>(null);
-    const [volume, setVolume] = useState('100');
     const [error, setError] = useState<string | null>(null);
     const [indicatorKey, setIndicatorKey] = useState("");
 
@@ -182,24 +181,21 @@ function IndicatorCalc() {
         setResult(null);
         setError(null);
         
-        const vol = parseFloat(volume);
-        
-        if (!indicatorKey || isNaN(vol) || vol <= 0) {
-            setError("Please select an indicator and enter a valid volume.");
+        if (!indicatorKey) {
+            setError("Please select an indicator.");
             return;
         }
 
         const indicator = chemicals.indicators[indicatorKey as keyof typeof chemicals.indicators];
 
         let resultText = "";
-        if (indicator.type === 'mixed') {
+        if (indicator.type === 'mixed' || indicator.type === 'complex_liquid') {
             resultText = indicator.note || 'No specific instructions available.';
-        } else {
-            const weight = vol / 100;
-            resultText = `To make ${vol} mL of solution, dissolve <code class="font-bold bg-green-100 p-1 rounded">${weight.toFixed(2)} g</code> of ${indicator.name} in <code class="font-bold">${vol} mL</code> of ${indicator.solvent}.`;
+        } else if (indicator.type === 'w/v') {
+            resultText = indicator.note || `No specific instructions available. Generally, this is a weight/volume solution prepared in the specified solvent.`;
         }
         setResult(resultText);
-    }, [indicatorKey, volume]);
+    }, [indicatorKey]);
 
     return (
         <CalculatorCard title="Prepare Indicator Solution">
@@ -216,11 +212,7 @@ function IndicatorCalc() {
                             </SelectContent>
                         </Select>
                     </div>
-                    <div>
-                        <Label htmlFor="indicator-volume">Final Volume (mL)</Label>
-                        <Input type="number" name="indicator-volume" value={volume} onChange={e => setVolume(e.target.value)} step="any" required />
-                    </div>
-                    <div className="md:col-span-2">
+                    <div className="md:col-span-1">
                         <Button type="submit" className="w-full">Get Instructions</Button>
                     </div>
                 </div>
@@ -855,3 +847,4 @@ function DilutionCalc() {
         </CalculatorCard>
     );
 };
+
