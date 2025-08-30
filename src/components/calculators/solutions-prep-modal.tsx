@@ -557,15 +557,15 @@ function SpiritSolutionCalc() {
 function CombinedNormalityAdjustmentCalc() {
     return (
         <CalculatorCard title="Normality Adjustment">
-            <Tabs defaultValue="dilute">
+            <Tabs defaultValue="decrease">
                 <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="dilute">Dilute (Decrease Normality)</TabsTrigger>
-                    <TabsTrigger value="concentrate">Concentrate (Increase Normality)</TabsTrigger>
+                    <TabsTrigger value="decrease">Decrease Normality</TabsTrigger>
+                    <TabsTrigger value="increase">Increase Normality</TabsTrigger>
                 </TabsList>
-                <TabsContent value="dilute" className="pt-4">
-                    <NormalityAdjustmentCalc />
+                <TabsContent value="decrease" className="pt-4">
+                    <DecreaseNormalityCalc />
                 </TabsContent>
-                <TabsContent value="concentrate" className="pt-4">
+                <TabsContent value="increase" className="pt-4">
                     <IncreaseNormalityCalc />
                 </TabsContent>
             </Tabs>
@@ -573,7 +573,7 @@ function CombinedNormalityAdjustmentCalc() {
     )
 }
 
-function NormalityAdjustmentCalc() {
+function DecreaseNormalityCalc() {
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [nHave, setNHave] = useState("");
@@ -605,7 +605,7 @@ function NormalityAdjustmentCalc() {
     }, [nHave, vHave, nReq]);
 
     return (
-        <div title="Dilute Solution" >
+        <div>
             <p className="text-sm text-muted-foreground mb-4">Use this to dilute a solution of higher normality to a desired lower normality.</p>
             <form onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-end">
@@ -891,3 +891,4 @@ function DilutionCalc() {
         </CalculatorCard>
     );
 };
+
