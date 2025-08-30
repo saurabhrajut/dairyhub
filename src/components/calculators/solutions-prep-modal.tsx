@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, Fragment, useCallback, memo } from "react";
+import { useState, Fragment, useCallback, memo, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
@@ -820,6 +820,19 @@ function DilutionCalc() {
     const [n2, setN2] = useState("");
     const [v2, setV2] = useState("");
     const [chemicalKey, setChemicalKey] = useState("");
+    const allChemicals = {...chemicals.acids, ...chemicals.bases};
+
+    const handleChemChange = useCallback((key: string) => {
+        setChemicalKey(key);
+        const chemical = allChemicals[key as keyof typeof allChemicals];
+        if (chemical && chemical.type === 'liquid') {
+            const stockMolarity = (chemical.purity / 100 * chemical.density * 1000) / chemical.molarMass;
+            const stockNormality = stockMolarity * chemical.nFactor;
+            setN1(stockNormality.toFixed(4));
+        } else {
+            setN1("");
+        }
+    }, [allChemicals]);
 
     const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -851,7 +864,7 @@ function DilutionCalc() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
                     <div>
                         <Label htmlFor="stock-chemical-select">Select Stock Chemical (Optional)</Label>
-                        <Select name="stock-chemical-select" value={chemicalKey} onValueChange={setChemicalKey}>
+                        <Select name="stock-chemical-select" value={chemicalKey} onValueChange={handleChemChange}>
                             <SelectTrigger><SelectValue placeholder="Select an acid or base" /></SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
@@ -891,4 +904,3 @@ function DilutionCalc() {
         </CalculatorCard>
     );
 };
-
