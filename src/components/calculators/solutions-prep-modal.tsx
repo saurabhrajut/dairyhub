@@ -193,7 +193,7 @@ function IndicatorCalc() {
         switch (indicator.type) {
             case 'w/v':
                 const weight = indicator.weight! * scaleFactor;
-                resultText = `To prepare ${vol}mL of ${indicator.name} indicator, dissolve <code class="font-bold bg-green-100 p-1 rounded">${weight.toFixed(3)}g</code> in ${indicator.solvent} and make up the final volume to <code class="font-bold">${vol}mL</code>.`;
+                resultText = `To prepare ${vol}mL of ${indicator.name} indicator, dissolve <code class="font-bold bg-green-100 p-1 rounded">${weight.toFixed(3)}g</code> of the powder in ${vol}mL of ${indicator.solvent}.`;
                 break;
             case 'v/v':
                 const liquidVol = indicator.volume! * scaleFactor;
@@ -816,7 +816,8 @@ function PercentageSolutionCalc() {
 function DilutionCalc() {
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
-    const [n1, setN1] = useState("");
+    const allChemicals = {...chemicals.acids, ...chemicals.bases };
+    const [chemicalKey, setChemicalKey] = useState("");
     const [n2, setN2] = useState("");
     const [v2, setV2] = useState("");
 
@@ -824,32 +825,63 @@ function DilutionCalc() {
         e.preventDefault();
         setResult(null);
         setError(null);
-        
-        const n1Val = parseFloat(n1);
+
+        const chemical = allChemicals[chemicalKey as keyof typeof allChemicals];
+        if (!chemical) {
+            setError('Please select a chemical.');
+            return;
+        }
+
         const n2Val = parseFloat(n2);
         const v2Val = parseFloat(v2);
 
-        if (isNaN(n1Val) || isNaN(n2Val) || isNaN(v2Val) || n1Val <= 0 || n2Val <= 0 || v2Val <= 0) {
-            setError('Please enter valid positive numbers in all fields.');
+        if (isNaN(n2Val) || isNaN(v2Val) || n2Val <= 0 || v2Val <= 0) {
+            setError('Please enter valid positive numbers for required normality and volume.');
             return;
         }
+
+        let n1Val = 0;
+        if (chemical.type === 'liquid') {
+            const stockMolarity = (chemical.purity / 100 * chemical.density * 1000) / chemical.molarMass;
+            n1Val = stockMolarity * chemical.nFactor;
+        } else {
+            setError('Dilution calculation from solid stock is not supported yet. Please prepare a stock solution of known normality first.');
+            return;
+        }
+        
         if (n2Val > n1Val) {
-            setError('Final normality (N₂) cannot be greater than stock normality (N₁).');
+            setError(`Final normality (N₂) cannot be greater than stock normality of ${chemical.name} (~${n1Val.toFixed(2)} N).`);
             return;
         }
 
         const v1 = (n2Val * v2Val) / n1Val;
-        const resultText = `To prepare <code class="font-bold">${v2Val} mL</code> of <code class="font-bold">${n2Val} N</code> solution, you need to take <code class="font-bold bg-green-100 p-1 rounded">${v1.toFixed(3)} mL</code> of your <code class="font-bold">${n1Val} N</code> stock solution and dilute it with the solvent up to a final volume of <code class="font-bold">${v2Val} mL</code>.`;
+        const resultText = `To prepare <code class="font-bold">${v2Val} mL</code> of <code class="font-bold">${n2Val} N</code> ${chemical.name}, you need to take <code class="font-bold bg-green-100 p-1 rounded">${v1.toFixed(3)} mL</code> of your stock solution and dilute it with the solvent up to a final volume of <code class="font-bold">${v2Val} mL</code>.`;
         setResult(resultText);
-    }, [n1, n2, v2]);
+    }, [chemicalKey, n2, v2, allChemicals]);
 
     return (
         <CalculatorCard title="Working with Stock Solutions (Dilution)" description="Use the dilution formula: N₁V₁ = N₂V₂. Calculate the initial volume (V₁) needed from a stock solution.">
             <form onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-end">
                     <div>
-                        <Label htmlFor="stock-normality">Stock Normality (N₁)</Label>
-                        <Input type="number" name="stock-normality" placeholder="e.g., 1.0" step="any" value={n1} onChange={e => setN1(e.target.value)} required />
+                        <Label htmlFor="stock-chemical-select">Select Stock Chemical</Label>
+                        <Select name="stock-chemical-select" value={chemicalKey} onValueChange={setChemicalKey} required>
+                            <SelectTrigger><SelectValue placeholder="Select an acid or base" /></SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    <Label className="px-2 text-xs font-semibold text-muted-foreground">Acids</Label>
+                                    {Object.entries(chemicals.acids).filter(([,chem])=>chem.type === 'liquid').map(([key, value]) => (
+                                        <SelectItem key={key} value={key}>{value.name}</SelectItem>
+                                    ))}
+                                </SelectGroup>
+                                <SelectGroup>
+                                    <Label className="px-2 text-xs font-semibold text-muted-foreground">Bases</Label>
+                                    {Object.entries(chemicals.bases).filter(([,chem])=>chem.type === 'liquid').map(([key, value]) => (
+                                        <SelectItem key={key} value={key}>{value.name}</SelectItem>
+                                    ))}
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
                     </div>
                     <div>
                         <Label htmlFor="final-normality">Required Normality (N₂)</Label>
@@ -869,5 +901,3 @@ function DilutionCalc() {
         </CalculatorCard>
     );
 };
-
-
