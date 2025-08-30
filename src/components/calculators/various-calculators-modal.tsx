@@ -23,7 +23,7 @@ import {
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { componentProps, getSnf } from "@/lib/utils";
-import { CheckCircle, PlusCircle, XCircle, Beaker, Thermometer, Weight, Percent, Scaling, Combine, Calculator, FlaskConical, ArrowLeft, RotateCw, Dna, Atom } from "lucide-react";
+import { CheckCircle, PlusCircle, XCircle, Beaker, Thermometer, Weight, Percent, Scaling, Combine, Calculator, FlaskConical, ArrowLeft, RotateCw, Dna, Atom, Droplet } from "lucide-react";
 import { PaneerIcon, IceCreamIcon } from "../icons";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -52,7 +52,7 @@ const CalculatorCard = ({ title, children, description }: { title: string; child
     </div>
 );
 
-type CalculatorType = 'acidity' | 'yields' | 'paneer-yield' | 'ice-cream' | 'fat-dry' | 'gravimetric' | 'formulas' | 'cip-strength' | 'protein-casein' | 'minerals';
+type CalculatorType = 'acidity' | 'yields' | 'paneer-yield' | 'ice-cream' | 'fat-dry' | 'gravimetric' | 'formulas' | 'cip-strength' | 'protein-casein' | 'minerals' | 'cream';
 
 const calculatorsInfo = {
     'acidity': { title: "Acidity", icon: Beaker, component: ProductAcidityCalc },
@@ -61,6 +61,7 @@ const calculatorsInfo = {
     'yields': { title: "Product Yields", icon: Percent, component: YieldsCalc },
     'paneer-yield': { title: "Paneer Yield", icon: PaneerIcon, component: PaneerYieldCalc },
     'ice-cream': { title: "Ice Cream", icon: IceCreamIcon, component: IceCreamCalculators },
+    'cream': { title: "Cream", icon: Droplet, component: CreamCalculators },
     'fat-dry': { title: "Fat on Dry Basis", icon: FlaskConical, component: FatOnDryBasisCalc },
     'gravimetric': { title: "Gravimetric", icon: Weight, component: GravimetricAnalysisCalc },
     'cip-strength': { title: "CIP Strength", icon: RotateCw, component: SolutionStrengthCalc },
@@ -135,6 +136,113 @@ export function VariousCalculatorsModal({
 }
 
 // Individual Calculator Components
+function CreamCalculators() {
+    return (
+        <Tabs defaultValue="fat-percent" className="w-full">
+            <TabsList className="grid w-full grid-cols-3 h-auto">
+                <TabsTrigger value="fat-percent">Fat %</TabsTrigger>
+                <TabsTrigger value="actual-snf">Actual SNF</TabsTrigger>
+                <TabsTrigger value="diluted-snf">Diluted SNF</TabsTrigger>
+            </TabsList>
+            <TabsContent value="fat-percent" className="pt-4"><CreamFatCalc /></TabsContent>
+            <TabsContent value="actual-snf" className="pt-4"><ActualCreamSnfCalc /></TabsContent>
+            <TabsContent value="diluted-snf" className="pt-4"><DilutedCreamSnfCalc /></TabsContent>
+        </Tabs>
+    );
+}
+
+function CreamFatCalc() {
+    const [reading, setReading] = useState('');
+    const [weight, setWeight] = useState('5');
+    const [result, setResult] = useState<string | null>(null);
+
+    const calculate = () => {
+        const r = parseFloat(reading);
+        const w = parseFloat(weight);
+        if (isNaN(r) || isNaN(w) || w <= 0) {
+            setResult("Please enter valid numbers for reading and weight.");
+            return;
+        }
+        const fatPercent = (r * 11.25) / w;
+        setResult(`Cream Fat: <strong>${fatPercent.toFixed(2)}%</strong>`);
+    };
+
+    return (
+        <CalculatorCard title="Cream Fat % Calculator (by Milk Butyrometer)" description="Calculate the fat percentage of cream using a milk butyrometer reading.">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div><Label>Butyrometer Reading</Label><Input type="number" value={reading} onChange={e => setReading(e.target.value)} placeholder="e.g., 8.0" /></div>
+                <div><Label>Sample Weight (g)</Label><Input type="number" value={weight} onChange={e => setWeight(e.target.value)} placeholder="e.g., 5" /></div>
+            </div>
+            <Button onClick={calculate} className="w-full mt-4">Calculate Fat %</Button>
+            {result && <Alert className="mt-4"><AlertDescription className="text-lg font-bold text-center" dangerouslySetInnerHTML={{ __html: result }} /></Alert>}
+        </CalculatorCard>
+    );
+}
+
+function ActualCreamSnfCalc() {
+    const [ts, setTs] = useState('');
+    const [fat, setFat] = useState('');
+    const [result, setResult] = useState<string | null>(null);
+
+    const calculate = () => {
+        const totalSolids = parseFloat(ts);
+        const fatPercent = parseFloat(fat);
+        if (isNaN(totalSolids) || isNaN(fatPercent)) {
+            setResult("Please enter valid numbers for TS and Fat.");
+            return;
+        }
+        if (fatPercent > totalSolids) {
+            setResult("Fat % cannot be greater than Total Solids %.");
+            return;
+        }
+        const snfPercent = totalSolids - fatPercent;
+        setResult(`Actual Cream SNF: <strong>${snfPercent.toFixed(2)}%</strong>`);
+    };
+    
+    return (
+        <CalculatorCard title="Actual Cream SNF % Calculator" description="Calculate the actual Solids-Not-Fat percentage of your cream.">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div><Label>Total Solids (TS) %</Label><Input type="number" value={ts} onChange={e => setTs(e.target.value)} placeholder="e.g., 45.5" /></div>
+                <div><Label>Fat %</Label><Input type="number" value={fat} onChange={e => setFat(e.target.value)} placeholder="e.g., 40.0" /></div>
+            </div>
+            <Button onClick={calculate} className="w-full mt-4">Calculate SNF %</Button>
+            {result && <Alert className="mt-4"><AlertDescription className="text-lg font-bold text-center" dangerouslySetInnerHTML={{ __html: result }} /></Alert>}
+        </CalculatorCard>
+    );
+}
+
+function DilutedCreamSnfCalc() {
+    const [initialSnf, setInitialSnf] = useState('5.5');
+    const [initialWeight, setInitialWeight] = useState('100');
+    const [waterWeight, setWaterWeight] = useState('');
+    const [result, setResult] = useState<string | null>(null);
+
+    const calculate = () => {
+        const iSnf = parseFloat(initialSnf);
+        const iWeight = parseFloat(initialWeight);
+        const wWeight = parseFloat(waterWeight);
+        if (isNaN(iSnf) || isNaN(iWeight) || isNaN(wWeight) || iWeight <= 0 || wWeight < 0) {
+            setResult("Please enter valid positive numbers for all fields.");
+            return;
+        }
+        const finalWeight = iWeight + wWeight;
+        const finalSnf = (iSnf * iWeight) / finalWeight;
+        setResult(`Final SNF of Diluted Cream: <strong>${finalSnf.toFixed(2)}%</strong>`);
+    };
+
+    return (
+        <CalculatorCard title="Diluted Cream SNF % Calculator" description="Calculate the final SNF percentage after diluting high-fat cream with water.">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div><Label>Initial Cream SNF %</Label><Input type="number" value={initialSnf} onChange={e => setInitialSnf(e.target.value)} placeholder="e.g., 5.5" /></div>
+                <div><Label>Initial Cream Weight (kg)</Label><Input type="number" value={initialWeight} onChange={e => setInitialWeight(e.target.value)} placeholder="e.g., 100" /></div>
+                <div><Label>Water Added (kg)</Label><Input type="number" value={waterWeight} onChange={e => setWaterWeight(e.target.value)} placeholder="e.g., 20" /></div>
+            </div>
+            <Button onClick={calculate} className="w-full mt-4">Calculate Final SNF %</Button>
+            {result && <Alert className="mt-4"><AlertDescription className="text-lg font-bold text-center" dangerouslySetInnerHTML={{ __html: result }} /></Alert>}
+        </CalculatorCard>
+    );
+}
+
 
 function MineralAnalysisCalc() {
     const [mineral, setMineral] = useState<'sodium' | 'potassium'>('sodium');
