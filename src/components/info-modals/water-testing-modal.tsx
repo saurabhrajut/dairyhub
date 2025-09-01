@@ -13,7 +13,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useLanguage } from "@/context/language-context";
 import { waterTestingContent } from "@/lib/content/water-testing-content";
 import { Button } from "../ui/button";
-import { ArrowLeft, Droplet, TestTube } from "lucide-react";
+import { ArrowLeft, TestTube } from "lucide-react";
 
 
 const Formula = ({ children }: { children: React.ReactNode }) => (
@@ -56,7 +56,7 @@ export function WaterTestingModal({ isOpen, setIsOpen }: { isOpen: boolean; setI
       <DialogContent className="max-w-5xl h-[90vh] flex flex-col p-0 sm:p-6">
         <DialogHeader className="p-4 sm:p-0 shrink-0">
           <DialogTitle className="text-3xl sm:text-4xl font-extrabold text-gray-900 text-center font-headline">{content.title}</DialogTitle>
-          <DialogDescription className="text-center">
+          <DialogDescription className="text-center text-lg text-gray-500">
             {selectedTest ? selectedTest.title : content.description}
           </DialogDescription>
         </DialogHeader>
@@ -66,7 +66,7 @@ export function WaterTestingModal({ isOpen, setIsOpen }: { isOpen: boolean; setI
                 <div className="px-4 sm:px-0">
                     <Button variant="ghost" onClick={() => setActiveTestId(null)}>
                         <ArrowLeft className="w-4 h-4 mr-2" />
-                        Back to Topics
+                        {content.backToTopics}
                     </Button>
                 </div>
                 <ScrollArea className="flex-1 mt-4 sm:pr-4">
@@ -78,9 +78,9 @@ export function WaterTestingModal({ isOpen, setIsOpen }: { isOpen: boolean; setI
         ) : (
             <ScrollArea className="flex-1 mt-4 sm:pr-4">
                  <div className="p-4 pt-0 sm:p-0 prose max-w-none text-gray-700 text-base leading-relaxed">
-                    <p className="text-center"><strong>{content.note_title}:</strong> {content.note_text}</p>
+                    <p className="text-center"><strong>{content.important_note.title}</strong> {content.important_note.text}</p>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4 sm:p-0">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4 sm:p-0 mt-4">
                     {content.tests.map(test => (
                         <button
                           key={test.id}
@@ -93,10 +93,6 @@ export function WaterTestingModal({ isOpen, setIsOpen }: { isOpen: boolean; setI
                           </div>
                         </button>
                     ))}
-                </div>
-                 <div className="p-4 mt-6 bg-yellow-100 border-l-4 border-yellow-500 rounded-r-lg">
-                    <p className="font-bold">{content.important_note.title}</p>
-                    <p>{content.important_note.text}</p>
                 </div>
             </ScrollArea>
         )}

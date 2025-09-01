@@ -1,125 +1,128 @@
 
+
 export const waterTestingContent = {
     hi: {
-        title: "Water Testing Guide",
-        description: "Paani ki quality check karne ke common parameters, unke simplified procedures aur calculation methods ke baare mein guide.",
-        note_title: "Dhyan rahe",
-        note_text: "Yeh sirf kuch tests hain. Actual laboratory procedures zyada detailed ho sakte hain aur special equipment aur chemicals ki zaroorat pad sakti hai.",
+        title: "जल परीक्षण गाइड",
+        description: "जल की गुणवत्ता की जांच के लिए सामान्य मापदंडों, उनकी सरलीकृत प्रक्रियाओं और गणना विधियों के लिए एक गाइड।",
+        backToTopics: "विषयों पर वापस जाएं",
+        important_note: {
+            title: "महत्वपूर्ण नोट:",
+            text: "हमेशा सुरक्षा नियमों का पालन करें और लैब में काम करते समय उचित सुरक्षात्मक उपकरण (PPE) पहनें। सटीक परिणामों के लिए, प्रमाणित प्रयोगशालाओं और मानक विधियों का पालन करना बेहतर है।"
+        },
         tests: [
             {
                 id: 'alkalinity',
-                title: 'Alkalinity (Kshaareeyata)',
-                intro: 'Alkalinity paani ki acids ko neutralize karne ki capacity ko measure karti hai. Yeh mainly bicarbonate, carbonate, aur hydroxide ions ki wajah se hoti hai.',
+                title: 'Alkalinity (क्षारीयता)',
+                intro: 'क्षारीयता पानी की अम्ल को उदासीन करने की क्षमता को मापती है। यह मुख्य रूप से बाइकार्बोनेट, कार्बोनेट और हाइड्रॉक्साइड आयनों के कारण होती है।',
                 procedure: [
-                    'Ek clean conical flask mein paani sample ka ek fixed volume (jaise 100 mL) lein.',
-                    '2-3 drops <strong>phenolphthalein indicator</strong> daalein. Agar solution pink ho jaaye, toh standard acid solution (jaise <strong>0.02 N H₂SO₄</strong>) se titrate karein jab tak pink color gayab na ho jaaye. Acid ka volume (P) note karein.',
-                    'Ussi solution mein 2-3 drops <strong>methyl orange indicator</strong> daalein.',
-                    'Standard acid solution se titrate karna continue karein jab tak color yellow se orange/red na ho jaaye. Kul istemaal hue acid ka volume (T) note karein.',
+                    'एक साफ शंक्वाकार फ्लास्क में पानी के नमूने का एक निश्चित आयतन (जैसे 100 एमएल) लें।',
+                    '2-3 बूंदें <strong>फेनोल्फथेलिन इंडिकेटर</strong> डालें। यदि घोल गुलाबी हो जाता है, तो मानक अम्ल घोल (जैसे <strong>0.02 N H₂SO₄</strong>) से तब तक अनुमापन करें जब तक कि गुलाबी रंग गायब न हो जाए। अम्ल का आयतन (P) नोट करें।',
+                    'उसी घोल में 2-3 बूंदें <strong>मिथाइल ऑरेंज इंडिकेटर</strong> डालें।',
+                    'मानक अम्ल घोल से अनुमापन जारी रखें जब तक कि रंग पीले से नारंगी/लाल न हो जाए। उपयोग किए गए अम्ल का कुल आयतन (T) नोट करें।',
                 ],
-                calculation: 'Total Alkalinity (mg/L as CaCO₃) = (T &times; Normality of Acid &times; 50000) / Volume of Sample (mL)'
+                calculation: 'कुल क्षारीयता (mg/L CaCO₃ के रूप में) = (T &times; अम्ल की नॉर्मलता &times; 50000) / नमूने का आयतन (एमएल)'
             },
             {
                 id: 'bod',
                 title: 'Biochemical Oxygen Demand (BOD)',
-                intro: 'BOD paani ke sample mein organic matter ko decompose karne mein microorganisms dwara 5 din mein 20°C par consume ki gayi oxygen ki matra ko maapta hai. Yeh paani ke pollution level ka ek mahatvapurna indicator hai.',
+                intro: 'BOD 20°C पर 5 दिनों में पानी के नमूने में कार्बनिक पदार्थों को विघटित करने में सूक्ष्मजीवों द्वारा खपत की गई ऑक्सीजन की मात्रा को मापता है। यह पानी के प्रदूषण स्तर का एक महत्वपूर्ण संकेतक है।',
                 procedure: [
-                    'BOD dilution water ka istemal karke paani ke sample ki alag-alag dilutions banayein.',
-                    'Har dilution ke liye do BOD bottles bharein: ek initial DO ke liye aur ek incubation ke liye.',
-                    'Pehli bottle mein turant Dissolved Oxygen (DO₁) maapein (Winkler method se).',
-                    'Doosri bottles ko 5 din ke liye 20°C par andhere mein incubate karein.',
-                    '5 din baad, doosri bottles mein Dissolved Oxygen (DO₅) maapein.',
-                    'Ek blank sample (sirf dilution water) ke liye bhi yahi process repeat karein (B₁ aur B₅).',
+                    'BOD तनुकरण पानी का उपयोग करके पानी के नमूने के विभिन्न तनुकरण तैयार करें।',
+                    'प्रत्येक तनुकरण के लिए दो BOD बोतलें भरें: एक प्रारंभिक DO के लिए और एक ऊष्मायन के लिए।',
+                    'पहली बोतल में तुरंत घुलित ऑक्सीजन (DO₁) मापें (विंकलर विधि द्वारा)।',
+                    'दूसरी बोतलों के सेट को 5 दिनों के लिए 20°C पर अंधेरे में ऊष्मायन करें।',
+                    '5 दिनों के बाद, दूसरी बोतलों के सेट में अंतिम घुलित ऑक्सीजन (DO₅) मापें।',
+                    'एक रिक्त नमूने (केवल तनुकरण पानी) के लिए भी यही प्रक्रिया दोहराएं ताकि इसके प्रारंभिक (B₁) और अंतिम (B₅) DO मान मिल सकें।',
                 ],
-                calculation: 'BOD₅ (mg/L) = [ (DO₁ - DO₅) - (B₁ - B₅) ] &times; Dilution Factor'
+                calculation: 'BOD₅ (mg/L) = [ (DO₁ - DO₅) - (B₁ - B₅) ] &times; तनुकरण कारक'
             },
             {
                 id: 'chloride',
                 title: 'Chloride',
-                intro: 'Chloride ions paani mein naturally hote hain lekin inki adhik matra industrial wastes ya sewage se pollution ka sanket de sakti hai. Iska test Mohr\'s method se kiya jaata hai.',
+                intro: 'क्लोराइड आयन पानी में स्वाभाविक रूप से मौजूद होते हैं लेकिन उच्च सांद्रता औद्योगिक कचरे या सीवेज से प्रदूषण का संकेत दे सकती है। इसका परीक्षण मोहर की विधि से किया जाता है।',
                 procedure: [
-                    'Ek conical flask mein paani sample (jaise 50 mL) lein.',
-                    'pH ko 7 se 10 ke beech adjust karein.',
-                    '1 mL <strong>potassium chromate indicator</strong> daalein.',
-                    'Standard <strong>silver nitrate (AgNO₃)</strong> solution se titrate karein jab tak ek persistent reddish-brown precipitate na ban jaaye. Volume (V_sample) note karein.',
-                    'Distilled water ke saath ek blank titration bhi karein (V_blank).',
+                    'एक शंक्वाकार फ्लास्क में पानी का नमूना (जैसे 50 एमएल) लें।',
+                    'पीएच को 7 से 10 के बीच समायोजित करें।',
+                    '1 एमएल <strong>पोटेशियम क्रोमेट इंडिकेटर</strong> डालें।',
+                    'मानक <strong>सिल्वर नाइट्रेट (AgNO₃)</strong> घोल से तब तक अनुमापन करें जब तक कि एक स्थायी लाल-भूरा अवक्षेप न बन जाए। आयतन (V_sample) नोट करें।',
+                    'आसुत जल के साथ एक रिक्त अनुमापन भी करें (V_blank)।',
                 ],
-                calculation: 'Chloride (mg/L) = [ (V_sample - V_blank) &times; N of AgNO₃ &times; 35.45 &times; 1000 ] / Volume of Sample (mL)'
+                calculation: 'क्लोराइड (mg/L) = [ (V_sample - V_blank) &times; AgNO₃ की N &times; 35.45 &times; 1000 ] / नमूने का आयतन (एमएल)'
             },
              {
                 id: 'cod',
                 title: 'Chemical Oxygen Demand (COD)',
-                intro: 'COD organic aur inorganic pollutants ko ek strong chemical oxidant (potassium dichromate) se oxidize karne ke liye zaruri oxygen ki kul matra ko maapta hai. Yeh BOD se zyada tezi se result deta hai.',
+                intro: 'COD कार्बनिक और अकार्बनिक दोनों प्रदूषकों को एक मजबूत रासायनिक ऑक्सीकारक (पोटेशियम डाइक्रोमेट) से ऑक्सीकृत करने के लिए आवश्यक ऑक्सीजन की कुल मात्रा को मापता है। यह BOD से अधिक तेजी से परिणाम देता है।',
                 procedure: [
-                    'Sample ko ek digestion flask mein lein.',
-                    'Usmein <strong>potassium dichromate solution</strong> aur <strong>sulfuric acid reagent</strong> (silver sulfate ke saath) daalein.',
-                    'Sample ko COD reactor mein 150°C par 2 ghante ke liye reflux (digest) karein.',
-                    'Thanda hone ke baad, bache hue unreacted dichromate ko standard <strong>Ferrous Ammonium Sulfate (FAS)</strong> solution se titrate karein. Volume (V_sample) note karein.',
-                    'Ek blank titration (bina sample ke) bhi karein (V_blank).',
+                    'नमूने को एक पाचन फ्लास्क में लें।',
+                    'उसमें <strong>पोटेशियम डाइक्रोमेट घोल</strong> और <strong>सल्फ्यूरिक एसिड अभिकर्मक</strong> (सिल्वर सल्फेट के साथ) डालें।',
+                    'नमूने को COD रिएक्टर में 150°C पर 2 घंटे के लिए रिफ्लक्स (पचाएं) करें।',
+                    'ठंडा होने के बाद, बचे हुए अप्रतिक्रियाशील डाइक्रोमेट को मानक <strong>फेरस अमोनियम सल्फेट (FAS)</strong> घोल से अनुमापित करें। आयतन (V_sample) नोट करें।',
+                    'एक रिक्त अनुमापन (बिना नमूने के) भी करें (V_blank)।',
                 ],
-                calculation: 'COD (mg/L) = [ (V_blank - V_sample) &times; Normality of FAS &times; 8000 ] / Volume of Sample (mL)'
+                calculation: 'COD (mg/L) = [ (V_blank - V_sample) &times; FAS की नॉर्मलता &times; 8000 ] / नमूने का आयतन (एमएल)'
             },
             {
                 id: 'do',
                 title: 'Dissolved Oxygen (DO)',
-                intro: 'Dissolved oxygen aquatic life ke liye bahut zaruri hai aur paani ki quality ka ek mukhya indicator hai. Iska test Winkler method se kiya jaata hai.',
+                intro: 'घुलित ऑक्सीजन जलीय जीवन के लिए आवश्यक है और पानी की गुणवत्ता का एक प्रमुख संकेतक है। इसका परीक्षण विंकलर विधि से किया जाता है।',
                 procedure: [
-                    'Ek 300 mL BOD bottle ko paani se carefully bharein, air bubbles na aane dein.',
-                    '2 mL <strong>manganese sulfate solution</strong>, phir 2 mL <strong>alkali-iodide-azide reagent</strong> daalein. Bottle band karke mix karein.',
-                    'Bane hue precipitate ko settle hone dein.',
-                    '2 mL <strong>concentrated sulfuric acid</strong> daalein aur poori tarah dissolve hone tak mix karein.',
-                    'Ek nishchit volume (jaise 200 mL) ko standard <strong>sodium thiosulfate (0.025N)</strong> se titrate karein jab tak pale straw color na reh jaaye.',
-                    '1-2 mL <strong>starch indicator</strong> daalein (solution neela ho jaayega).',
-                    'Titrate karna continue karein jab tak neela rang poori tarah gayab na ho jaaye. Volume (V) note karein.',
+                    'एक 300 एमएल BOD बोतल को ध्यान से पानी से भरें, हवा के बुलबुले न आने दें।',
+                    '2 एमएल <strong>मैंगनीज सल्फेट घोल</strong>, फिर 2 एमएल <strong>क्षार-आयोडाइड-एजाइड अभिकर्मक</strong> डालें। बोतल बंद करके मिलाएं।',
+                    'बने हुए अवक्षेप को व्यवस्थित होने दें।',
+                    '2 एमएल <strong>सांद्र सल्फ्यूरिक एसिड</strong> डालें और पूरी तरह घुलने तक मिलाएं।',
+                    'एक निश्चित आयतन (जैसे 200 एमएल) को मानक <strong>सोडियम थायोसल्फेट (0.025N)</strong> से तब तक अनुमापित करें जब तक कि हल्का पुआल रंग न रह जाए।',
+                    '1-2 एमएल <strong>स्टार्च इंडिकेटर</strong> डालें (घोल नीला हो जाएगा)।',
+                    'अनुमापन जारी रखें जब तक कि नीला रंग पूरी तरह गायब न हो जाए। आयतन (V) नोट करें।',
                 ],
-                calculation: 'DO (mg/L) = (V of Titrant &times; N of Titrant &times; 8 &times; 1000) / Volume of Sample Titrated (mL)'
+                calculation: 'DO (mg/L) = (अनुमापक का V &times; अनुमापक की N &times; 8 &times; 1000) / अनुमापित नमूने का आयतन (एमएल)'
             },
             {
                 id: 'hardness',
-                title: 'Total Hardness (Kul Kathorta)',
-                intro: 'Paani ki hardness mainly calcium aur magnesium ions ki wajah se hoti hai. Iska test EDTA titration method se kiya jaata hai.',
+                title: 'Total Hardness (कुल कठोरता)',
+                intro: 'पानी की कठोरता मुख्य रूप से कैल्शियम और मैग्नीशियम आयनों के कारण होती है। इसका परीक्षण EDTA अनुमापन विधि से किया जाता है।',
                 procedure: [
-                    'Ek conical flask mein paani sample (jaise 50 mL) lein.',
-                    '1-2 mL <strong>ammonia buffer solution</strong> daal kar pH ko 10 par set karein.',
-                    'Ek chutki <strong>Eriochrome Black T (EBT) indicator</strong> daalein (solution wine red ho jaayega).',
-                    'Standard <strong>EDTA solution (0.01M)</strong> se titrate karein jab tak wine red color sky blue mein change na ho jaaye. Volume (V) note karein.',
+                    'एक शंक्वाकार फ्लास्क में पानी का नमूना (जैसे 50 एमएल) लें।',
+                    '1-2 एमएल <strong>अमोनिया बफर घोल</strong> डालकर पीएच को 10 पर सेट करें।',
+                    'एक चुटकी <strong>एरियोक्रोम ब्लैक टी (EBT) इंडिकेटर</strong> डालें (घोल वाइन रेड हो जाएगा)।',
+                    'मानक <strong>EDTA घोल (0.01M)</strong> से तब तक अनुमापन करें जब तक कि वाइन रेड रंग आसमानी नीले में न बदल जाए। आयतन (V) नोट करें।',
                 ],
-                calculation: 'Total Hardness (mg/L as CaCO₃) = (V of EDTA &times; Molarity of EDTA &times; 100.086 &times; 1000) / Volume of Sample (mL)'
+                calculation: 'कुल कठोरता (mg/L CaCO₃ के रूप में) = (EDTA का V &times; EDTA की मोलरता &times; 100.086 &times; 1000) / नमूने का आयतन (एमएल)'
             },
             {
                 id: 'tds',
                 title: 'Total Dissolved Solids (TDS)',
-                intro: 'TDS paani mein ghule hue sabhi organic aur inorganic solids ki kul matra hai. Iska test gravimetric method se hota hai.',
+                intro: 'TDS पानी में घुले हुए सभी कार्बनिक और अकार्बनिक ठोस पदार्थों की कुल मात्रा है। इसका परीक्षण ग्रेविमेट्रिक विधि से होता है।',
                 procedure: [
-                    'Ek saaf, sukhe, aur pehle se tole hue beaker (W₁) ko lein.',
-                    'Ek nishchit volume (jaise 100 mL) filter kiye hue paani ko beaker mein lein.',
-                    'Beaker ko hot plate ya water bath par rakhein taaki paani poori tarah evaporate ho jaaye.',
-                    'Beaker ko 180°C par hot air oven mein 1 ghante ke liye rakhein.',
-                    'Beaker ko desiccator mein thanda karke dobara tolein (W₂).',
+                    'एक साफ, सूखा और पहले से तौला हुआ बीकर (W₁) लें।',
+                    'एक निश्चित आयतन (जैसे 100 एमएल) फ़िल्टर किए हुए पानी को बीकर में लें।',
+                    'बीकर को हॉट प्लेट या पानी के स्नान पर रखें ताकि पानी पूरी तरह वाष्पित हो जाए।',
+                    'बीकर को 180°C पर हॉट एयर ओवन में 1 घंटे के लिए रखें।',
+                    'बीकर को डेसिकेटर में ठंडा करके दोबारा तौलें (W₂)।',
                 ],
-                calculation: 'TDS (mg/L) = [ (W₂ - W₁) in mg &times; 1000 ] / Volume of Sample (mL)'
+                calculation: 'TDS (mg/L) = [ (W₂ - W₁) मिलीग्राम में &times; 1000 ] / नमूने का आयतन (एमएल)'
             },
             {
                 id: 'tss',
                 title: 'Total Suspended Solids (TSS)',
-                intro: 'TSS paani mein ghule hue solid particles ka measure hai jo filter paper par reh jaate hain.',
+                intro: 'TSS पानी में निलंबित ठोस कणों का माप है जो एक फिल्टर पेपर पर रह जाते हैं।',
                 procedure: [
-                    'Ek pehle se tole hue (weighed) glass fiber filter paper (W₁) se paani ka ek nishchit volume filter karein.',
-                    'Filter paper ko solids ke saath 103-105°C par hot air oven mein 1 ghante ke liye sukhaayein.',
-                    'Desiccator mein thanda karke dobara tolein (W₂).',
+                    'एक पहले से तौले हुए ग्लास फाइबर फिल्टर पेपर (W₁) से पानी का एक निश्चित आयतन फ़िल्टर करें।',
+                    'फिल्टर पेपर को ठोस पदार्थों के साथ 103-105°C पर हॉट एयर ओवन में 1 घंटे के लिए सुखाएं।',
+                    'डेसिकेटर में ठंडा करके दोबारा तौलें (W₂)।',
                 ],
-                calculation: 'TSS (mg/L) = [ (W₂ - W₁) in mg &times; 1000 ] / Volume of Sample (mL)'
+                calculation: 'TSS (mg/L) = [ (W₂ - W₁) मिलीग्राम में &times; 1000 ] / नमूने का आयतन (एमएल)'
             }
-        ],
-        important_note: {
-            title: "Zaruri Baat:",
-            text: "Hamesha safety rules follow karein aur lab mein kaam karte waqt sahi protective gear (PPE) pehnein. Accurate results ke liye, certified labs aur standard methods ko follow karna behtar hai."
-        }
+        ]
     },
     en: {
         title: "Water Testing Guide",
         description: "A guide to common parameters for checking water quality, their simplified procedures, and calculation methods.",
-        note_title: "Please Note",
-        note_text: "These are just a few tests. Actual laboratory procedures may be more detailed and require special equipment and chemicals.",
+        backToTopics: "Back to Topics",
+        important_note: {
+            title: "Important Note:",
+            text: "Always follow safety rules and wear appropriate protective gear (PPE) when working in the lab. For accurate results, it is better to follow certified labs and standard methods."
+        },
         tests: [
             {
                 id: 'alkalinity',
@@ -224,10 +227,6 @@ export const waterTestingContent = {
                 ],
                 calculation: 'TSS (mg/L) = [ (W₂ - W₁) in mg &times; 1000 ] / Volume of Sample (mL)'
             }
-        ],
-        important_note: {
-            title: "Important Note:",
-            text: "Always follow safety rules and wear appropriate protective gear (PPE) when working in the lab. For accurate results, it is better to follow certified labs and standard methods."
-        }
+        ]
     }
 }
