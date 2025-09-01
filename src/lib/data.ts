@@ -497,7 +497,59 @@ export const reagentRecipes = {
             { name: 'Sodium Azide (NaN₃)', amount: 1, unit: 'g' }
         ],
         instructions: '50g NaOH aur 15g KI ko distilled water me gholein. Phir 1g Sodium Azide ko 40ml distilled water me alag se gholein. Dono solutions ko mix karke final volume 100ml tak poora karein.'
+    },
+     'std_na2co3_005n': {
+        name: 'Standard Sodium Carbonate (0.05 N)',
+        type: 'w/v',
+        components: [{ name: 'Anhydrous Sodium Carbonate (Na₂CO₃, dried)', amount: 2.5, unit: 'g' }],
+        instructions: '2.5g dried Na₂CO₃ ko distilled water me gholkar 1 litre banayein.'
+    },
+    'std_h2so4_01n': {
+        name: 'Standard Sulphuric Acid (0.1 N)',
+        type: 'v/v',
+        components: [{ name: 'Concentrated H₂SO₄', amount: 2.8, unit: 'ml' }],
+        instructions: '2.8ml Concentrated H₂SO₄ ko distilled water me milakar 1 litre banayein. Ise 0.05N Na₂CO₃ se standardize karein.'
+    },
+     'cod_fas_025m': {
+        name: 'Standard Ferrous Ammonium Sulphate (0.25M for COD)',
+        type: 'complex',
+        components: [
+            { name: 'Ferrous Ammonium Sulphate', amount: 98, unit: 'g' },
+            { name: 'Concentrated H₂SO₄', amount: 20, unit: 'ml' },
+        ],
+        instructions: '98g Ferrous Ammonium Sulphate ko distilled water me gholein, 20ml concentrated H₂SO₄ milayein, thanda karein aur 1 litre tak poora karein.'
+    },
+    'std_khp_cod': {
+        name: 'Potassium Hydrogen Phthalate Standard (for COD)',
+        type: 'w/v',
+        components: [{ name: 'Potassium Hydrogen Phthalate (KHP, dried)', amount: 0.425, unit: 'g' }],
+        instructions: '425mg (0.425g) dried KHP ko distilled water me gholkar 1 litre banayein. Theoretical COD = 500 µgO₂/mL.'
+    },
+     'std_ag_nitrate_00141n': {
+        name: 'Standard Silver Nitrate Titrant (0.0141N)',
+        type: 'w/v',
+        components: [{ name: 'Silver Nitrate (AgNO₃)', amount: 2.395, unit: 'g' }],
+        instructions: '2.395g AgNO₃ ko distilled water me gholkar 1 litre banayein.'
+    },
+     'std_nacl_00141n': {
+        name: 'Standard Sodium Chloride (0.0141N)',
+        type: 'w/v',
+        components: [{ name: 'Sodium Chloride (NaCl, dried)', amount: 0.824, unit: 'g' }],
+        instructions: '824mg (0.824g) dried NaCl ko distilled water me gholkar 1 litre banayein.'
+    },
+    'std_edta_001m': {
+        name: 'Standard EDTA Titrant (0.01M)',
+        type: 'w/v',
+        components: [{ name: 'EDTA Disodium Salt Dihydrate', amount: 3.723, unit: 'g' }],
+        instructions: '3.723g EDTA disodium salt ko distilled water me gholkar 1 litre banayein.'
+    },
+     'std_calcium_sol': {
+        name: 'Standard Calcium Solution (for Hardness)',
+        type: 'w/v',
+        components: [{ name: 'Anhydrous Calcium Carbonate (CaCO₃)', amount: 1.000, unit: 'g' }],
+        instructions: '1.000g CaCO₃ ko thode 1+1 HCl me gholein, 200ml distilled water milakar ubaalein, thanda karein, aur 1 litre tak poora karein.'
     }
 };
+
 
 
