@@ -90,6 +90,36 @@ export const waterTestingContent = {
                 calculation: 'कैल्शियम (mg/L) = (A &times; B &times; 400.8) / नमूने का आयतन (एमएल)<br/> <p class="text-xs mt-2">जहाँ A = नमूने के लिए अनुमापक का एमएल, B = 1 एमएल EDTA के बराबर CaCO₃ का मिलीग्राम।</p>'
             },
             {
+                id: 'carbonate_bicarbonate',
+                title: 'Carbonate & Bicarbonate',
+                intro: 'कुल और फेनोल्फथेलिन क्षारीयता और पीएच मानों से गणना की जाती है।',
+                procedure: [
+                  'कुल क्षारीयता (Alk-T), फेनोल्फथेलिन क्षारीयता (Alk-P), और पीएच के लिए मान प्राप्त करें।',
+                  'गणना के लिए नीचे दिए गए संबंधों का उपयोग करें।',
+                ],
+                calculation: `
+                <p>जब TDS < 500 mg/L:</p>
+                <code>HCO₃⁻ (mg/L) = [Alk-T - 5.0 x 10^(pH-10)] / [1 + 0.94 x 10^(pH-10)]</code><br/>
+                <code>CO₃²⁻ (mg/L) = [0.94 x 10^(pH-10) x HCO₃⁻]</code>
+                <p class="mt-4">जब TDS > 500 mg/L:</p>
+                <p>कार्बोनेट (mg/L CaCO₃ के रूप में) = 2 &times; Alk-P</p>
+                <p>बाइकार्बोनेट (mg/L CaCO₃ के रूप में) = Alk-T - (2 &times; Alk-P)</p>
+                `
+            },
+            {
+                id: 'cod',
+                title: 'Chemical Oxygen Demand (COD)',
+                intro: 'COD कार्बनिक और अकार्बनिक दोनों प्रदूषकों को एक मजबूत रासायनिक ऑक्सीकारक (पोटेशियम डाइक्रोमेट) से ऑक्सीकृत करने के लिए आवश्यक ऑक्सीजन की कुल मात्रा को मापता है। यह BOD से अधिक तेजी से परिणाम देता है।',
+                procedure: [
+                    'नमूने को एक पाचन फ्लास्क में लें।',
+                    'उसमें <strong>पोटेशियम डाइक्रोमेट घोल</strong> और <strong>सल्फ्यूरिक एसिड अभिकर्मक</strong> (सिल्वर सल्फेट के साथ) डालें।',
+                    'नमूने को COD रिएक्टर में 150°C पर 2 घंटे के लिए रिफ्लक्स (पचाएं) करें।',
+                    'ठंडा होने के बाद, बचे हुए अप्रतिक्रियाशील डाइक्रोमेट को मानक <strong>फेरस अमोनियम सल्फेट (FAS)</strong> घोल से अनुमापित करें। आयतन (V_sample) नोट करें।',
+                    'एक रिक्त अनुमापन (बिना नमूने के) भी करें (V_blank)।',
+                ],
+                calculation: 'COD (mg/L) = [ (V_blank - V_sample) &times; FAS की नॉर्मलता &times; 8000 ] / नमूने का आयतन (एमएल)'
+            },
+            {
                 id: 'chloride',
                 title: 'Chloride (क्लोराइड)',
                 intro: 'क्लोराइड आयन पानी में स्वाभाविक रूप से मौजूद होते हैं लेकिन उच्च सांद्रता औद्योगिक कचरे या सीवेज से प्रदूषण का संकेत दे सकती है। इसका परीक्षण मोहर की विधि से किया जाता है।',
@@ -102,18 +132,24 @@ export const waterTestingContent = {
                 ],
                 calculation: 'क्लोराइड (mg/L) = [ (V_sample - V_blank) &times; AgNO₃ की N &times; 35.45 &times; 1000 ] / नमूने का आयतन (एमएल)'
             },
-             {
-                id: 'cod',
-                title: 'Chemical Oxygen Demand (COD)',
-                intro: 'COD कार्बनिक और अकार्बनिक दोनों प्रदूषकों को एक मजबूत रासायनिक ऑक्सीकारक (पोटेशियम डाइक्रोमेट) से ऑक्सीकृत करने के लिए आवश्यक ऑक्सीजन की कुल मात्रा को मापता है। यह BOD से अधिक तेजी से परिणाम देता है।',
+            {
+                id: 'chlorophyll_a',
+                title: 'Chlorophyll-a',
+                intro: 'एसीटोन निष्कर्षण स्पेक्ट्रोफोटोमेट्रिक विधि।',
                 procedure: [
-                    'नमूने को एक पाचन फ्लास्क में लें।',
-                    'उसमें <strong>पोटेशियम डाइक्रोमेट घोल</strong> और <strong>सल्फ्यूरिक एसिड अभिकर्मक</strong> (सिल्वर सल्फेट के साथ) डालें।',
-                    'नमूने को COD रिएक्टर में 150°C पर 2 घंटे के लिए रिफ्लक्स (पचाएं) करें।',
-                    'ठंडा होने के बाद, बचे हुए अप्रतिक्रियाशील डाइक्रोमेट को मानक <strong>फेरस अमोनियम सल्फेट (FAS)</strong> घोल से अनुमापित करें। आयतन (V_sample) नोट करें।',
-                    'एक रिक्त अनुमापन (बिना नमूने के) भी करें (V_blank)।',
+                  '<h4>उपकरण:</h4> 5 mL की नमूना क्षमता वाली ट्यूबों के साथ टर्नटेबल या रैक प्रकार का फ्लोरोमीटर।',
+                  '<h4>अभिकर्मक:</h4> जलीय एसीटोन घोल (90% एसीटोन + 10% संतृप्त मैग्नीशियम कार्बोनेट घोल)।',
+                  '<h4>प्रक्रिया:</h4>',
+                  '<ol class="list-decimal list-outside pl-5">',
+                  '<li>ग्लास फाइबर फिल्टर (GFF) का उपयोग करके नमूने को फ़िल्टर करें।</li>',
+                  '<li>एक ऊतक ग्राइंडर में फिल्टर को 2-3 mL 90% जलीय एसीटोन घोल के साथ पीसें।</li>',
+                  '<li>एक अपकेंद्रित्र ट्यूब में स्थानांतरित करें, 10 mL तक करें और 4°C पर 2 घंटे के लिए अंधेरे में रखें।</li>',
+                  '<li>20 मिनट के लिए 500g पर अपकेंद्रित्र करें।</li>',
+                  '<li>एक क्यूवेट में 3 mL स्पष्ट अर्क स्थानांतरित करें और 750 और 664 nm पर ऑप्टिकल घनत्व (OD) पढ़ें।</li>',
+                  '<li>0.1N HCl के साथ अर्क को अम्लीकृत करें और 90 सेकंड के बाद 750 और 665 nm पर फिर से पढ़ें।</li>',
+                  '</ol>'
                 ],
-                calculation: 'COD (mg/L) = [ (V_blank - V_sample) &times; FAS की नॉर्मलता &times; 8000 ] / नमूने का आयतन (एमएल)'
+                calculation: 'Chlorophyll-a (mg/m³) = [26.7 &times; (OD₆₆₄b - OD₆₆₅a) &times; V₁] / (V₂ &times; L)<br/><p class="text-xs mt-2">जहाँ V₁=अर्क का आयतन (L), V₂=नमूने का आयतन (m³), L=प्रकाश पथ (cm), b=अम्लीकरण से पहले, a=अम्लीकरण के बाद।</p>'
             },
             {
                 id: 'coliforms',
@@ -131,6 +167,18 @@ export const waterTestingContent = {
                 calculation: 'MPN तालिकाओं का उपयोग करके सकारात्मक ट्यूबों के संयोजन से सबसे संभावित संख्या (MPN) प्रति 100 एमएल निर्धारित करें।'
             },
             {
+                id: 'colour',
+                title: 'Colour (रंग)',
+                intro: 'दृश्य तुलना विधि का उपयोग करके पानी के रंग का निर्धारण।',
+                procedure: [
+                  'एक नेसलर ट्यूब में नमूना को 50 mL के निशान तक डालें।',
+                  'तीन से चार ट्यूबों को रंग मानकों से भरें जो नमूने के रंग से मेल खाते हों।',
+                  'एक सफेद सतह पर ट्यूबों को रखते हुए, ऊपर से नीचे की ओर देखकर नमूने के रंग की तुलना मानकों से करें।',
+                  'यदि नमूने का रंग 70 इकाइयों से अधिक है, तो नमूने को ज्ञात अनुपात में आसुत जल से पतला करें।',
+                ],
+                calculation: 'Colour Units = (A &times; 50) / B<br/><p class="text-xs mt-2">जहाँ A = पतले नमूने का अनुमानित रंग, B = 50 mL पतले नमूने में नमूने का mL।</p>'
+            },
+            {
                 id: 'do',
                 title: 'Dissolved Oxygen (DO)',
                 intro: 'घुलित ऑक्सीजन जलीय जीवन के लिए आवश्यक है और पानी की गुणवत्ता का एक प्रमुख संकेतक है। इसका परीक्षण विंकलर विधि से किया जाता है।',
@@ -146,6 +194,39 @@ export const waterTestingContent = {
                 calculation: 'DO (mg/L) = (अनुमापक का V &times; अनुमापक की N &times; 8 &times; 1000) / अनुमापित नमूने का आयतन (एमएल)'
             },
             {
+                id: 'ec',
+                title: 'Electrical Conductivity (EC)',
+                intro: 'चालकता सेल पोटेंशियोमेट्रिक विधि का उपयोग करके विद्युत चालकता का निर्धारण।',
+                procedure: [
+                  'एक चालकता मीटर और एक प्लेटिनम इलेक्ट्रोड प्रकार की चालकता सेल का उपयोग करें।',
+                  'मानक पोटेशियम क्लोराइड घोल (0.01M KCl) तैयार करें।',
+                  'निर्माता के निर्देशों के अनुसार मीटर को कैलिब्रेट करें।',
+                  'कम से कम तीन भागों 0.01M KCl घोल से चालकता सेल को धोएं। चौथे भाग के प्रतिरोध को मापें और तापमान नोट करें।',
+                  'नमूने को लगभग 25°C पर लाएं और चालकता पढ़ें।',
+                ],
+                calculation: 'EC (µmho/cm) = (मापा गया चालकता &times; सेल स्थिरांक) / तापमान सुधार कारक'
+            },
+            {
+                id: 'fluoride',
+                title: 'Fluoride (फ्लोराइड)',
+                intro: 'आयन चयनात्मक इलेक्ट्रोड विधि या SPADNS स्पेक्ट्रोफोटोमेट्रिक विधि का उपयोग करके फ्लोराइड का निर्धारण।',
+                procedure: [
+                    '<h4>आयन चयनात्मक इलेक्ट्रोड विधि:</h4>',
+                    '<ol class="list-decimal list-outside pl-5">',
+                    '<li>मानकों की एक श्रृंखला तैयार करें (0.5, 1.0, और 2.0 mg F⁻/L)।</li>',
+                    '<li>मानकों और नमूनों में समान मात्रा में बफर मिलाएं।</li>',
+                    '<li>निर्माता के निर्देशों का पालन करते हुए मीटर को कैलिब्रेट करें और नमूना पढ़ें।</li>',
+                    '</ol>',
+                    '<h4 class="mt-4">SPADNS विधि:</h4>',
+                    '<ol class="list-decimal list-outside pl-5">',
+                    '<li>उच्च क्लोराइड वाले नमूनों के लिए आसवन आवश्यक है।</li>',
+                    '<li>मानक वक्र तैयार करें।</li>',
+                    '<li>50 mL नमूने में 10 mL मिश्रित एसिड-जिरकोनिल-SPADNS अभिकर्मक डालें, मिलाएं और 570 nm पर अवशोषण पढ़ें।</li>',
+                    '</ol>'
+                ],
+                calculation: 'कैलिब्रेशन वक्र से फ्लोराइड सांद्रता (mg/L) पढ़ें या मीटर से सीधे पढ़ें।'
+            },
+            {
                 id: 'hardness',
                 title: 'Total Hardness (कुल कठोरता)',
                 intro: 'पानी की कठोरता मुख्य रूप से कैल्शियम और मैग्नीशियम आयनों के कारण होती है। इसका परीक्षण EDTA अनुमापन विधि से किया जाता है।',
@@ -155,79 +236,181 @@ export const waterTestingContent = {
                     'एक चुटकी <strong>एरियोक्रोम ब्लैक टी (EBT) इंडिकेटर</strong> डालें (घोल वाइन रेड हो जाएगा)।',
                     'मानक <strong>EDTA घोल (0.01M)</strong> से तब तक अनुमापन करें जब तक कि वाइन रेड रंग आसमानी नीले में न बदल जाए। आयतन (V) नोट करें।',
                 ],
-                calculation: 'कुल कठोरता (mg/L CaCO₃ के रूप में) = (EDTA का V &times; EDTA की मोलरता &times; 100.086 &times; 1000) / नमूने का आयतन (एमएल)'
+                calculation: 'कुल कठोरता (mg/L CaCO₃ के रूप में) = (EDTA का V &times; B &times; 1000) / नमूने का आयतन (एमएल)<br/><p class="text-xs mt-2">जहाँ B = 1.00 एमएल EDTA अनुमापक के बराबर CaCO₃ का मिलीग्राम।</p>'
             },
             {
-                id: 'nitrate',
-                title: 'Nitrate Nitrogen (नाइट्रेट नाइट्रोजन)',
-                intro: 'UV स्पेक्ट्रोफोटोमेट्रिक स्क्रीनिंग विधि का उपयोग करके नाइट्रेट का निर्धारण।',
+                id: 'iron',
+                title: 'Iron (आयरन)',
+                intro: 'फेनैनथ्रोलाइन स्पेक्ट्रोफोटोमेट्रिक विधि का उपयोग करके आयरन का निर्धारण।',
                 procedure: [
-                    '<h4>उपकरण:</h4> 220 nm और 275 nm पर उपयोग के लिए UV स्पेक्ट्रोफोटोमीटर।',
-                    '<h4>प्रक्रिया:</h4>',
-                    '<ol class="list-decimal list-outside pl-5">',
-                    '<li>50 mL नमूने में 1 mL 1N HCl डालें।</li>',
-                    '<li>220 nm पर अवशोषण पढ़ें (नाइट्रेट के लिए) और 275 nm पर (जैविक पदार्थ के हस्तक्षेप के लिए)।</li>',
-                    '<li>नाइट्रेट के कारण सही अवशोषण की गणना करें: A_corrected = A₂₂₀ - 2 &times; A₂₇₅।</li>',
-                    '<li>कैलिब्रेशन वक्र से सांद्रता निर्धारित करें।</li>',
-                    '</ol>'
+                  '50 mL नमूना लें, 2 mL सांद्र HCl और 1 mL हाइड्रॉक्सिलअमाइन घोल डालें।',
+                  'उबालकर आयतन को 15-20 mL तक कम करें, ठंडा करें और 50 mL वॉल्यूमेट्रिक फ्लास्क में स्थानांतरित करें।',
+                  '10 mL अमोनियम एसीटेट बफर और 4 mL फेनैनथ्रोलाइन घोल डालें, और 50 mL तक करें।',
+                  '10-15 मिनट के बाद 510 nm पर फोटोमेट्रिक रीडिंग लें।',
+                  'मानक आयरन घोल का उपयोग करके एक कैलिब्रेशन वक्र तैयार करें।',
                 ],
-                calculation: 'कैलिब्रेशन वक्र से नाइट्रेट नाइट्रोजन सांद्रता (mg N/L) पढ़ें।'
+                calculation: 'आयरन (mg/L) = (कैलिब्रेशन वक्र से µg Fe &times; 1000) / (नमूने का आयतन, mL)'
             },
             {
-                id: 'phosphorus',
-                title: 'Phosphorus (फॉस्फोरस)',
-                intro: 'एस्कॉर्बिक एसिड विधि का उपयोग करके ऑर्थोफॉस्फेट का स्पेक्ट्रोफोटोमेट्रिक निर्धारण।',
-                procedure: [
-                    '<h4>उपकरण:</h4> 880 nm पर उपयोग के लिए स्पेक्ट्रोफोटोमीटर।',
-                    '<h4>अभिकर्मक:</h4> संयुक्त अभिकर्मक (अमोनियम मोलिब्डेट, पोटेशियम एंटिमोनिल टार्ट्रेट, एस्कॉर्बिक एसिड, सल्फ्यूरिक एसिड)।',
-                    '<h4>प्रक्रिया:</h4>',
-                    '<ol class="list-decimal list-outside pl-5">',
-                    '<li>50 mL नमूने में 8 mL संयुक्त अभिकर्मक डालें।</li>',
-                    '<li>10 से 30 मिनट तक प्रतीक्षा करें।</li>',
-                    '<li>880 nm पर अवशोषण पढ़ें।</li>',
-                    '</ol>'
-                ],
-                calculation: 'कैलिब्रेशन वक्र से फॉस्फोरस सांद्रता (mg P/L) पढ़ें।'
+                id: 'magnesium',
+                title: 'Magnesium (मैग्नीशियम)',
+                intro: 'कुल कठोरता और कैल्शियम कठोरता से गणना की जाती है।',
+                procedure: ['कुल कठोरता (TH) और कैल्शियम कठोरता (CaH) के मान प्राप्त करें।'],
+                calculation: 'मैग्नीशियम (mg/L) = (TH - CaH) &times; 0.243<br/><p class="text-xs mt-2">जहाँ TH और CaH दोनों mg/L CaCO₃ के रूप में हैं।</p>'
             },
             {
-                id: 'sulphate',
-                title: 'Sulphate (सल्फेट)',
-                intro: 'नेफेलोमेट्रिक विधि का उपयोग करके सल्फेट का निर्धारण।',
+                id: 'manganese',
+                title: 'Manganese (मैंगनीज)',
+                intro: 'पर्सल्फेट स्पेक्ट्रोफोटोमेट्रिक विधि का उपयोग करके मैंगनीज का निर्धारण।',
                 procedure: [
-                    '<h4>उपकरण:</h4> नेफेलोमेट्रिक टर्बिडिटी मीटर या 420 nm पर स्पेक्ट्रोफोटोमीटर।',
-                    '<h4>अभिकर्मक:</h4> बफर घोल, बेरियम क्लोराइड (BaCl₂) क्रिस्टल।',
-                    '<h4>प्रक्रिया:</h4>',
-                    '<ol class="list-decimal list-outside pl-5">',
-                    '<li>100 mL नमूने में 20 mL बफर डालें।</li>',
-                    '<li>हिलाते समय BaCl₂ क्रिस्टल का एक चम्मच डालें। 60 सेकंड के लिए हिलाएं।</li>',
-                    '<li>5 मिनट के बाद टर्बिडिटी मापें।</li>',
-                    '</ol>'
+                  'एक उपयुक्त आयतन नमूना लें, 5 mL विशेष अभिकर्मक और एक बूंद H₂O₂ डालें।',
+                  '90 mL तक उबालकर सांद्र करें।',
+                  '1 ग्राम (NH₄)₂S₂O₈ डालें और 1 मिनट के लिए उबालें, फिर ठंडा करें और 100 mL तक करें।',
+                  '525 nm पर एक डिस्टिल्ड वॉटर ब्लैंक के खिलाफ फोटोमेट्रिक माप करें।',
+                  'मानक मैंगनीज घोल का उपयोग करके एक कैलिब्रेशन वक्र तैयार करें।',
                 ],
-                calculation: 'कैलिब्रेशन वक्र से सल्फेट सांद्रता (mg/L) पढ़ें।'
+                calculation: 'मैंगनीज (mg/L) = (कैलिब्रेशन वक्र से µg Mn) / (नमूने का आयतन, mL)'
             },
             {
-                id: 'tds',
-                title: 'Total Dissolved Solids (TDS)',
-                intro: 'TDS पानी में घुले हुए सभी कार्बनिक और अकार्बनिक ठोस पदार्थों की कुल मात्रा है। इसका परीक्षण ग्रेविमेट्रिक विधि से होता है।',
+                id: 'ammonia_nitrogen',
+                title: 'Nitrogen, Ammonia',
+                intro: 'अमोनिया नाइट्रोजन का निर्धारण आसवन, फेनेट, या आयन चयनात्मक इलेक्ट्रोड विधियों द्वारा किया जा सकता है।',
                 procedure: [
-                    'एक साफ, सूखा और पहले से तौला हुआ बीकर (W₁) लें।',
-                    'एक निश्चित आयतन (जैसे 100 एमएल) फ़िल्टर किए हुए पानी को बीकर में लें।',
-                    'बीकर को हॉट प्लेट या पानी के स्नान पर रखें ताकि पानी पूरी तरह वाष्पित हो जाए।',
-                    'बीकर को 180°C पर हॉट एयर ओवन में 1 घंटे के लिए रखें।',
-                    'बीकर को डेसिकेटर में ठंडा करके दोबारा तौलें (W₂)।',
+                  '<h4>आसवन विधि:</h4> <p>नमूने को 9.5 पीएच पर बफर किया जाता है और आसवित किया जाता है। अमोनिया को एक शोषक घोल में एकत्र किया जाता है और अनुमापित किया जाता है।</p>',
+                  '<h4>फेनेट विधि:</h4> <p>अमोनिया फिनोल, हाइपोक्लोराइट और मैंगनीज सल्फेट उत्प्रेरक के साथ प्रतिक्रिया करके नीला रंग बनाता है, जिसे 640 nm पर मापा जाता है।</p>',
+                  '<h4>आयन चयनात्मक इलेक्ट्रोड:</h4> <p>एक अमोनिया-चयनात्मक इलेक्ट्रोड 11 से ऊपर के पीएच पर NH₃ गैस की आंशिक दबाव को मापता है।</p>',
                 ],
-                calculation: 'TDS (mg/L) = [ (W₂ - W₁) मिलीग्राम में &times; 1000 ] / नमूने का आयतन (एमएल)'
+                calculation: 'विधि के आधार पर अनुमापन या कैलिब्रेशन वक्र से गणना की जाती है।'
             },
             {
-                id: 'tss',
-                title: 'Total Suspended Solids (TSS)',
-                intro: 'TSS पानी में निलंबित ठोस कणों का माप है जो एक फिल्टर पेपर पर रह जाते हैं।',
+                id: 'nitrite_nitrogen',
+                title: 'Nitrogen, Nitrite',
+                intro: 'सल्फानिलामाइड स्पेक्ट्रोफोटोमेट्रिक विधि।',
                 procedure: [
-                    'एक पहले से तौले हुए ग्लास फाइबर फिल्टर पेपर (W₁) से पानी का एक निश्चित आयतन फ़िल्टर करें।',
-                    'फिल्टर पेपर को ठोस पदार्थों के साथ 103-105°C पर हॉट एयर ओवन में 1 घंटे के लिए सुखाएं।',
-                    'डेसिकेटर में ठंडा करके दोबारा तौलें (W₂)।',
+                  '50 mL नमूने में 2 mL रंग अभिकर्मक डालें और मिलाएं।',
+                  '10 मिनट से 2 घंटे के बीच 543 nm पर अवशोषण मापें।',
+                  'मानक नाइट्राइट घोल का उपयोग करके एक कैलिब्रेशन वक्र तैयार करें।',
                 ],
-                calculation: 'TSS (mg/L) = [ (W₂ - W₁) मिलीग्राम में &times; 1000 ] / नमूने का आयतन (एमएल)'
+                calculation: 'नाइट्राइट नाइट्रोजन (mg N/L) = (कैलिब्रेशन वक्र से µg N) / (नमूने का आयतन, mL)'
+            },
+            {
+                id: 'organic_nitrogen',
+                title: 'Nitrogen, Organic',
+                intro: 'केल्डाल टाइट्रिमेट्रिक विधि।',
+                procedure: [
+                  'पहले अमोनिया को आसवन द्वारा हटा दें।',
+                  'शेष नमूने को सल्फ्यूरिक एसिड और उत्प्रेरक के साथ पचाएं ताकि कार्बनिक नाइट्रोजन अमोनियम सल्फेट में परिवर्तित हो जाए।',
+                  'अमोनिया को फिर से आसवित करें और अनुमापित करें।',
+                ],
+                calculation: 'कार्बनिक नाइट्रोजन (mg N/L) = (A - B) &times; 280 / (नमूने का आयतन, mL)<br/><p class="text-xs mt-2">जहाँ A = नमूने के लिए H₂SO₄ का एमएल, B = रिक्त के लिए H₂SO₄ का एमएल।</p>'
+            },
+            {
+                id: 'total_oxidised_nitrogen',
+                title: 'Nitrogen, Total Oxidised (NO₂ + NO₃)',
+                intro: 'कैडमियम रिडक्शन विधि।',
+                procedure: [
+                  'नमूने को एक कॉपर-कैडमियम रिडक्शन कॉलम से गुजारें ताकि नाइट्रेट नाइट्राइट में कम हो जाए।',
+                'कुल नाइट्राइट को नाइट्राइट नाइट्रोजन के लिए स्पेक्ट्रोफोटोमेट्रिक विधि का उपयोग करके मापें।',
+                ],
+                calculation: 'कैलिब्रेशन वक्र से कुल ऑक्सीकृत नाइट्रोजन सांद्रता (mg N/L) पढ़ें।'
+            },
+            {
+                id: 'odour',
+                title: 'Odour (गंध)',
+                intro: 'गुणात्मक मानव रिसेप्टर विधि।',
+                procedure: [
+                  'एक साफ, गंधहीन बोतल को नमूने से आधा भरें।',
+                  'जोर से 2-3 सेकंड के लिए हिलाएं और फिर तुरंत गंध का निरीक्षण करें।',
+                  'गंध को गंध मुक्त, सड़े हुए अंडे, जली हुई चीनी, साबुन, मछली, सेप्टिक, सुगंधित, क्लोरिनयुक्त, अल्कोहलिक गंध या किसी अन्य विशिष्ट गंध के रूप में रिपोर्ट करें।',
+                ],
+                calculation: 'गुणात्मक विवरण।'
+            },
+            {
+                id: 'ph',
+                title: 'pH',
+                intro: 'पोटेंशियोमेट्रिक विधि।',
+                procedure: [
+                  'निर्माता के निर्देशों के अनुसार पीएच मीटर को दो बफर घोलों (आमतौर पर पीएच 4 और 7) का उपयोग करके कैलिब्रेट करें।',
+                  'इलेक्ट्रोड को आसुत जल से धोएं, सुखाएं और नमूने में डुबोएं।',
+                  'संतुलन स्थापित होने के बाद पीएच पढ़ें।',
+                ],
+                calculation: 'सीधे मीटर से पढ़ें।'
+            },
+            {
+                id: 'total_phosphorus',
+                title: 'Phosphorus, Total',
+                intro: 'पाचन और एस्कॉर्बिक एसिड स्पेक्ट्रोफोटोमेट्रिक विधि।',
+                procedure: [
+                  'नमूने को सल्फ्यूरिक एसिड और पर्सल्फेट के साथ पचाएं ताकि सभी फॉस्फोरस ऑर्थोफॉस्फेट में परिवर्तित हो जाएं।',
+                  'एस्कॉर्बिक एसिड विधि का उपयोग करके ऑर्थोफॉस्फेट का विश्लेषण करें।',
+                ],
+                calculation: 'कुल फॉस्फोरस (mg P/L) = (कैलिब्रेशन वक्र से mg P &times; 1000) / (नमूने का आयतन, mL)'
+            },
+            {
+                id: 'potassium',
+                title: 'Potassium (पोटेशियम)',
+                intro: 'लौ उत्सर्जन फोटोमेट्रिक विधि।',
+                procedure: [
+                  'निर्माता के निर्देशों का पालन करते हुए लौ फोटोमीटर सेट करें।',
+                  '0-100, 0-10, या 0-1 mg K/L की लागू श्रेणियों में एक रिक्त और पोटेशियम कैलिब्रेशन मानक तैयार करें।',
+                  '766.5 nm पर उत्सर्जन मापें और कैलिब्रेशन वक्र तैयार करें।',
+                  'वक्र से नमूने की पोटेशियम सांद्रता का निर्धारण करें।',
+                ],
+                calculation: 'पोटेशियम (mg/L) = (कैलिब्रेशन वक्र से mg/L) &times; तनुकरण कारक'
+            },
+            {
+                id: 'silicate',
+                title: 'Silicate (सिलिकेट)',
+                intro: 'अमोनियम मोलिब्डेट स्पेक्ट्रोफोटोमेट्रिक विधि।',
+                procedure: [
+                  '50 mL नमूने में, तेजी से 1.0 mL (1+1) HCl और 2 mL अमोनियम मोलिब्डेट अभिकर्मक डालें।',
+                  '5 से 10 मिनट तक प्रतीक्षा करें।',
+                  '2.0 mL ऑक्सालिक एसिड घोल डालें, मिलाएं। 2 से 15 मिनट के बीच प्रतीक्षा करें, 2 mL कम करने वाला एजेंट डालें और अच्छी तरह मिलाएं।',
+                  '5 मिनट के बाद 815 nm पर अवशोषण पढ़ें।',
+                  'मानक सिलिका घोल का उपयोग करके एक कैलिब्रेशन वक्र तैयार करें।',
+                ],
+                calculation: 'कैलिब्रेशन वक्र से सिलिकेट सांद्रता (mg SiO₂/L) पढ़ें।'
+            },
+            {
+                id: 'sodium',
+                title: 'Sodium (सोडियम)',
+                intro: 'लौ उत्सर्जन फोटोमेट्रिक विधि।',
+                procedure: [
+                  'निर्माता के निर्देशों का पालन करते हुए लौ फोटोमीटर सेट करें।',
+                  'लागू श्रेणियों में एक रिक्त और सोडियम कैलिब्रेशन मानक तैयार करें।',
+                  '589 nm पर उत्सर्जन मापें और कैलिब्रेशन वक्र तैयार करें।',
+                  'वक्र से नमूने की सोडियम सांद्रता का निर्धारण करें।',
+                ],
+                calculation: 'सोडियम (mg/L) = (कैलिब्रेशन वक्र से mg/L) &times; तनुकरण कारक'
+            },
+            {
+                id: 'total_solids',
+                title: 'Solids, Total',
+                intro: 'ग्रेविमेट्रिक विधि।',
+                procedure: [
+                  'एक पहले से तौली हुई वाष्पीकरण डिश में एक मापा हुआ आयतन डालें।',
+                  '104 ± 1°C पर एक ओवन में सुखाएं।',
+                  'एक डेसिकेटर में ठंडा करें और तौलें।',
+                ],
+                calculation: 'कुल ठोस (mg/L) = (अवशेष का वजन, mg &times; 1000) / (नमूने का आयतन, mL)'
+            },
+            {
+                id: 'temperature',
+                title: 'Temperature (तापमान)',
+                intro: 'पारा थर्मामीटर विधि।',
+                procedure: ['थर्मामीटर को नमूने में निर्माता द्वारा निर्दिष्ट निशान तक डुबोएं और संतुलन के बाद तापमान पढ़ें।'],
+                calculation: 'सीधे थर्मामीटर से पढ़ें (°C)।'
+            },
+            {
+                id: 'turbidity',
+                title: 'Turbidity (टर्बिडिटी)',
+                intro: 'नेफेलोमेट्रिक विधि।',
+                procedure: [
+                  'निर्माता के निर्देशों के अनुसार नेफेलोमीटर को कैलिब्रेट करें।',
+                  'नमूने को धीरे से हिलाएं। हवा के बुलबुले गायब होने तक प्रतीक्षा करें और नमूने को सेल में डालें।',
+                  'उपकरण प्रदर्शन से सीधे टर्बिडिटी पढ़ें।',
+                ],
+                calculation: 'सीधे मीटर से पढ़ें (NTU)।'
             }
         ]
     },
@@ -319,6 +502,36 @@ export const waterTestingContent = {
                 calculation: 'Calcium (mg/L) = (A &times; B &times; 400.8) / mL of sample<br/> <p class="text-xs mt-2">where A = mL of titrant for sample, B = mg CaCO₃ equivalent to 1 mL EDTA.</p>'
             },
             {
+                id: 'carbonate_bicarbonate',
+                title: 'Carbonate & Bicarbonate',
+                intro: 'Calculated from total and phenolphthalein alkalinity and pH values.',
+                procedure: [
+                  'Obtain values for total alkalinity (Alk-T), phenolphthalein alkalinity (Alk-P), and pH.',
+                  'Use the relationships below for calculation.',
+                ],
+                calculation: `
+                <p>When TDS < 500 mg/L:</p>
+                <code>HCO₃⁻ (mg/L) = [Alk-T - 5.0 x 10^(pH-10)] / [1 + 0.94 x 10^(pH-10)]</code><br/>
+                <code>CO₃²⁻ (mg/L) = [0.94 x 10^(pH-10) x HCO₃⁻]</code>
+                <p class="mt-4">When TDS > 500 mg/L:</p>
+                <p>Carbonate (as mg/L CaCO₃) = 2 &times; Alk-P</p>
+                <p>Bicarbonate (as mg/L CaCO₃) = Alk-T - (2 &times; Alk-P)</p>
+                `
+            },
+            {
+                id: 'cod',
+                title: 'Chemical Oxygen Demand (COD)',
+                intro: 'COD measures the total amount of oxygen required to oxidize both organic and inorganic pollutants using a strong chemical oxidant (potassium dichromate). It provides faster results than BOD.',
+                procedure: [
+                    'Take the sample in a digestion flask.',
+                    'Add <strong>potassium dichromate solution</strong> and a <strong>sulfuric acid reagent</strong> (containing silver sulfate).',
+                    'Reflux (digest) the sample in a COD reactor at 150°C for 2 hours.',
+                    'After cooling, titrate the excess unreacted dichromate with a standard <strong>Ferrous Ammonium Sulfate (FAS)</strong> solution. Note the volume (V_sample).',
+                    'Also, perform a blank titration (without the sample) (V_blank).',
+                ],
+                calculation: 'COD (mg/L) = [ (V_blank - V_sample) &times; Normality of FAS &times; 8000 ] / Volume of Sample (mL)'
+            },
+            {
                 id: 'chloride',
                 title: 'Chloride',
                 intro: 'Chloride ions are naturally present in water but high concentrations can indicate pollution from industrial wastes or sewage. The test is performed using Mohr\'s method.',
@@ -331,18 +544,24 @@ export const waterTestingContent = {
                 ],
                 calculation: 'Chloride (mg/L) = [ (V_sample - V_blank) &times; N of AgNO₃ &times; 35.45 &times; 1000 ] / Volume of Sample (mL)'
             },
-             {
-                id: 'cod',
-                title: 'Chemical Oxygen Demand (COD)',
-                intro: 'COD measures the total amount of oxygen required to oxidize both organic and inorganic pollutants using a strong chemical oxidant (potassium dichromate). It provides faster results than BOD.',
+            {
+                id: 'chlorophyll_a',
+                title: 'Chlorophyll-a',
+                intro: 'Acetone extraction spectrophotometric method.',
                 procedure: [
-                    'Take the sample in a digestion flask.',
-                    'Add <strong>potassium dichromate solution</strong> and a <strong>sulfuric acid reagent</strong> (containing silver sulfate).',
-                    'Reflux (digest) the sample in a COD reactor at 150°C for 2 hours.',
-                    'After cooling, titrate the excess unreacted dichromate with a standard <strong>Ferrous Ammonium Sulfate (FAS)</strong> solution. Note the volume (V_sample).',
-                    'Also, perform a blank titration (without the sample) (V_blank).',
+                  '<h4>Apparatus:</h4> Fluorometer of turntable or rack type with tubes of sample capacity of 5 mL.',
+                  '<h4>Reagents:</h4> Aqueous acetone solution (90% acetone + 10% saturated magnesium carbonate solution).',
+                  '<h4>Procedure:</h4>',
+                  '<ol class="list-decimal list-outside pl-5">',
+                  '<li>Filter sample using glass fibre filter (GFF).</li>',
+                  '<li>Grind the filter with 2-3 mL of 90% aqueous acetone solution in a tissue grinder.</li>',
+                  '<li>Transfer to a centrifuge tube, make up to 10 mL and keep in dark for 2h at 4°C.</li>',
+                  '<li>Centrifuge for 20 min at 500g.</li>',
+                  '<li>Transfer 3 mL of the clear extract to a cuvette and read optical density (OD) at 750 and 664 nm.</li>',
+                  '<li>Acidify the extract with 0.1N HCl and read again at 750 and 665 nm after 90 sec.</li>',
+                  '</ol>'
                 ],
-                calculation: 'COD (mg/L) = [ (V_blank - V_sample) &times; Normality of FAS &times; 8000 ] / Volume of Sample (mL)'
+                calculation: 'Chlorophyll-a (mg/m³) = [26.7 &times; (OD₆₆₄b - OD₆₆₅a) &times; V₁] / (V₂ &times; L)<br/><p class="text-xs mt-2">where V₁=volume of extract(L), V₂=volume of sample (m³), L=light path (cm), b=before acidification, a=after acidification.</p>'
             },
             {
                 id: 'coliforms',
@@ -360,6 +579,18 @@ export const waterTestingContent = {
                 calculation: 'Determine the Most Probable Number (MPN) per 100 mL from the combination of positive tubes using MPN tables.'
             },
             {
+                id: 'colour',
+                title: 'Colour',
+                intro: 'Determination of water color using visual comparison method.',
+                procedure: [
+                  'Pour sample into a Nessler tube up to the 50 mL mark.',
+                  'Fill three to four tubes with color standards that appear to correspond to the sample color.',
+                  'Compare the color of the sample with that of the standards by viewing vertically downwards while the tubes are placed on a white surface.',
+                  'If the sample color exceeds 70 units, dilute the sample with distilled water in known proportions.',
+                ],
+                calculation: 'Colour Units = (A &times; 50) / B<br/><p class="text-xs mt-2">where A = estimated color of diluted sample, B = mL of sample in 50 mL diluted sample.</p>'
+            },
+            {
                 id: 'do',
                 title: 'Dissolved Oxygen (DO)',
                 intro: 'Dissolved oxygen is essential for aquatic life and is a key indicator of water quality. It is tested using the Winkler method.',
@@ -375,6 +606,39 @@ export const waterTestingContent = {
                 calculation: 'DO (mg/L) = (V of Titrant &times; N of Titrant &times; 8 &times; 1000) / Volume of Sample Titrated (mL)'
             },
             {
+                id: 'ec',
+                title: 'Electrical Conductivity (EC)',
+                intro: 'Determination of electrical conductivity using the conductivity cell potentiometric method.',
+                procedure: [
+                  'Use a conductivity meter and a platinum electrode type conductivity cell.',
+                  'Prepare standard potassium chloride solution (0.01M KCl).',
+                  'Calibrate the meter according to manufacturer’s instructions.',
+                  'Rinse conductivity cell with at least three portions of 0.01 M KCl solution. Measure resistance of a fourth portion and note temperature.',
+                  'Bring the sample to about 25°C and read the conductivity.',
+                ],
+                calculation: 'EC (µmho/cm) = (Measured Conductance &times; Cell Constant) / Temperature Correction Factor'
+            },
+            {
+                id: 'fluoride',
+                title: 'Fluoride',
+                intro: 'Determination of fluoride using either the Ion Selective Electrode method or the SPADNS spectrophotometric method.',
+                procedure: [
+                    '<h4>Ion Selective Electrode Method:</h4>',
+                    '<ol class="list-decimal list-outside pl-5">',
+                    '<li>Prepare a series of standards (0.5, 1.0, and 2.0 mg F⁻/L).</li>',
+                    '<li>Add an equal volume of buffer to standards and samples.</li>',
+                    '<li>Calibrate the meter and read the sample following manufacturer’s instructions.</li>',
+                    '</ol>',
+                    '<h4 class="mt-4">SPADNS Method:</h4>',
+                    '<ol class="list-decimal list-outside pl-5">',
+                    '<li>Distillation is necessary for samples with high chloride.</li>',
+                    '<li>Prepare a standard curve.</li>',
+                    '<li>To 50 mL of sample, add 10 mL of mixed acid-zirconyl-SPADNS reagent, mix, and read absorbance at 570 nm.</li>',
+                    '</ol>'
+                ],
+                calculation: 'Read fluoride concentration (mg/L) from the calibration curve or directly from the meter.'
+            },
+            {
                 id: 'hardness',
                 title: 'Total Hardness',
                 intro: 'Water hardness is mainly due to calcium and magnesium ions. It is tested using the EDTA titration method.',
@@ -384,55 +648,181 @@ export const waterTestingContent = {
                     'Add a pinch of <strong>Eriochrome Black T (EBT) indicator</strong> (the solution will turn wine red).',
                     'Titrate with a standard <strong>EDTA solution (0.01M)</strong> until the wine red color changes to sky blue. Note the volume (V).',
                 ],
-                calculation: 'Total Hardness (mg/L as CaCO₃) = (V of EDTA &times; Molarity of EDTA &times; 100.086 &times; 1000) / Volume of Sample (mL)'
+                calculation: 'Total Hardness (mg/L as CaCO₃) = (V of EDTA &times; B &times; 1000) / Volume of Sample (mL)<br/><p class="text-xs mt-2">where B = mg CaCO₃ equivalent to 1.00 mL EDTA titrant.</p>'
             },
             {
-                id: 'nitrate',
-                title: 'Nitrate Nitrogen',
-                intro: 'Determination of nitrate using the UV spectrophotometric screening method.',
+                id: 'iron',
+                title: 'Iron',
+                intro: 'Determination of iron using the phenanthroline spectrophotometric method.',
                 procedure: [
-                    '<h4>Apparatus:</h4> UV Spectrophotometer for use at 220 nm and 275 nm.',
-                    '<h4>Procedure:</h4>',
-                    '<ol class="list-decimal list-outside pl-5">',
-                    '<li>Add 1 mL of 1N HCl to 50 mL of sample.</li>',
-                    '<li>Read absorbance at 220 nm (for nitrate) and 275 nm (for dissolved organic matter interference).</li>',
-                    '<li>Calculate corrected absorbance due to nitrate: A_corrected = A₂₂₀ - 2 &times; A₂₇₅.</li>',
-                    '<li>Determine concentration from the calibration curve.</li>',
-                    '</ol>'
+                  'Take 50 mL sample, add 2 mL conc. HCl and 1 mL hydroxylamine solution.',
+                  'Heat to boil, reducing volume to 15-20 mL, cool, and transfer to a 50 mL volumetric flask.',
+                  'Add 10 mL ammonium acetate buffer and 4 mL phenanthroline solution, and make up to 50 mL.',
+                  'Take photometric readings at 510 nm after 10-15 minutes.',
+                  'Prepare a calibration curve using standard iron solutions.',
                 ],
-                calculation: 'Read nitrate nitrogen concentration (mg N/L) from the calibration curve.'
+                calculation: 'Iron (mg/L) = (µg Fe from calibration curve &times; 1000) / (sample volume, mL)'
             },
             {
-                id: 'phosphorus',
-                title: 'Phosphorus',
-                intro: 'Spectrophotometric determination of orthophosphate using the ascorbic acid method.',
-                procedure: [
-                    '<h4>Apparatus:</h4> Spectrophotometer for use at 880 nm.',
-                    '<h4>Reagents:</h4> Combined reagent (ammonium molybdate, potassium antimonyl tartrate, ascorbic acid, sulfuric acid).',
-                    '<h4>Procedure:</h4>',
-                    '<ol class="list-decimal list-outside pl-5">',
-                    '<li>Add 8 mL of combined reagent to 50 mL of sample.</li>',
-                    '<li>Wait for 10 to 30 minutes.</li>',
-                    '<li>Read absorbance at 880 nm.</li>',
-                    '</ol>'
-                ],
-                calculation: 'Read phosphorus concentration (mg P/L) from the calibration curve.'
+                id: 'magnesium',
+                title: 'Magnesium',
+                intro: 'Calculated from total hardness and calcium hardness.',
+                procedure: ['Obtain values for Total Hardness (TH) and Calcium Hardness (CaH).'],
+                calculation: 'Magnesium (mg/L) = (TH - CaH) &times; 0.243<br/><p class="text-xs mt-2">where TH and CaH are both in mg/L as CaCO₃.</p>'
             },
             {
-                id: 'sulphate',
-                title: 'Sulphate',
-                intro: 'Determination of sulphate using the nephelometric method.',
+                id: 'manganese',
+                title: 'Manganese',
+                intro: 'Determination of manganese using the persulphate spectrophotometric method.',
                 procedure: [
-                    '<h4>Apparatus:</h4> Nephelometric turbidity meter or spectrophotometer at 420 nm.',
-                    '<h4>Reagents:</h4> Buffer solution, Barium chloride (BaCl₂) crystals.',
-                    '<h4>Procedure:</h4>',
-                    '<ol class="list-decimal list-outside pl-5">',
-                    '<li>Add 20 mL of buffer to 100 mL of sample.</li>',
-                    '<li>Add a spoonful of BaCl₂ crystals while stirring. Stir for 60 seconds.</li>',
-                    '<li>Measure turbidity after 5 minutes.</li>',
-                    '</ol>'
+                  'Take a suitable volume of sample, add 5 mL special reagent and one drop of H₂O₂.',
+                  'Concentrate to 90 mL by boiling.',
+                  'Add 1 g (NH₄)₂S₂O₈ and boil for 1 min, then cool and make up to 100 mL.',
+                  'Make photometric measurements of standards and sample at 525 nm against a distilled water blank.',
+                  'Prepare a calibration curve using standard manganese solutions.',
                 ],
-                calculation: 'Read sulphate concentration (mg/L) from the calibration curve.'
+                calculation: 'Manganese (mg/L) = (µg Mn from calibration curve) / (sample volume, mL)'
+            },
+            {
+                id: 'ammonia_nitrogen',
+                title: 'Nitrogen, Ammonia',
+                intro: 'Ammonia nitrogen can be determined by distillation, phenate, or ion selective electrode methods.',
+                procedure: [
+                  '<h4>Distillation Method:</h4> <p>Sample is buffered at pH 9.5 and distilled. Ammonia is collected in an absorbent solution and titrated.</p>',
+                  '<h4>Phenate Method:</h4> <p>Ammonia reacts with phenol, hypochlorite, and manganese sulfate catalyst to form a blue color, measured at 640 nm.</p>',
+                  '<h4>Ion Selective Electrode:</h4> <p>An ammonia-selective electrode measures the partial pressure of NH₃ gas at a pH above 11.</p>',
+                ],
+                calculation: 'Calculated from titration or calibration curve depending on the method.'
+            },
+            {
+                id: 'nitrite_nitrogen',
+                title: 'Nitrogen, Nitrite',
+                intro: 'Sulphanilamide spectrophotometric method.',
+                procedure: [
+                  'Add 2 mL colour reagent to 50 mL of sample and mix.',
+                  'Measure absorbance at 543 nm between 10 min and 2 h after reagent addition.',
+                  'Prepare a calibration curve using standard nitrite solutions.',
+                ],
+                calculation: 'Nitrite Nitrogen (mg N/L) = (µg N from calibration curve) / (sample volume, mL)'
+            },
+            {
+                id: 'organic_nitrogen',
+                title: 'Nitrogen, Organic',
+                intro: 'Kjeldahl titrimetric method.',
+                procedure: [
+                  'Remove ammonia first by distillation.',
+                  'Digest the remaining sample with sulfuric acid and catalyst to convert organic nitrogen to ammonium sulfate.',
+                  'Distill off the ammonia again and titrate.',
+                ],
+                calculation: 'Organic Nitrogen (mg N/L) = (A - B) &times; 280 / (sample volume, mL)<br/><p class="text-xs mt-2">where A = mL of H₂SO₄ for sample, B = mL of H₂SO₄ for blank.</p>'
+            },
+            {
+                id: 'total_oxidised_nitrogen',
+                title: 'Nitrogen, Total Oxidised (NO₂ + NO₃)',
+                intro: 'Cadmium reduction method.',
+                procedure: [
+                  'Pass the sample through a copper-cadmium reduction column to reduce nitrate to nitrite.',
+                  'Measure the total nitrite using the spectrophotometric method for nitrite nitrogen.',
+                ],
+                calculation: 'Read total oxidized nitrogen concentration (mg N/L) from the calibration curve.'
+            },
+            {
+                id: 'odour',
+                title: 'Odour',
+                intro: 'Qualitative human receptor method.',
+                procedure: [
+                  'Fill a cleaned, odourless bottle half-full of sample.',
+                  'Shake vigorously for 2-3 seconds and then quickly observe the odour.',
+                  'Report the odour as odour free, rotten egg, burnt sugar, soapy, fishy, septic, aromatic, chlorinous, alcoholic odour or any other specific odour.',
+                ],
+                calculation: 'Qualitative description.'
+            },
+            {
+                id: 'ph',
+                title: 'pH',
+                intro: 'Potentiometric method.',
+                procedure: [
+                  'Calibrate pH meter using two buffer solutions (typically pH 4 and 7) according to manufacturer’s instructions.',
+                  'Rinse electrodes with distilled water, blot dry, and immerse in the sample.',
+                  'Read the pH after equilibrium is established.',
+                ],
+                calculation: 'Read directly from the meter.'
+            },
+            {
+                id: 'total_phosphorus',
+                title: 'Phosphorus, Total',
+                intro: 'Digestion and ascorbic acid spectrophotometric method.',
+                procedure: [
+                  'Digest the sample with sulfuric acid and persulphate to convert all phosphorus to orthophosphate.',
+                  'Analyze for orthophosphate using the ascorbic acid method.',
+                ],
+                calculation: 'Total Phosphorus (mg P/L) = (mg P from calibration curve &times; 1000) / (sample volume, mL)'
+            },
+            {
+                id: 'potassium',
+                title: 'Potassium',
+                intro: 'Flame emission photometric method.',
+                procedure: [
+                  'Set up flame photometer following manufacturer’s instructions.',
+                  'Prepare a blank and potassium calibration standards in the applicable ranges of 0-100, 0-10, or 0-1 mg K/L.',
+                  'Measure emission at 766.5 nm and prepare a calibration curve.',
+                  'Determine potassium concentration of the sample from the curve.',
+                ],
+                calculation: 'Potassium (mg/L) = (mg/L from calibration curve) &times; Dilution factor'
+            },
+            {
+                id: 'silicate',
+                title: 'Silicate',
+                intro: 'Ammonium molybdate spectrophotometric method.',
+                procedure: [
+                  'To 50 mL sample, add in rapid succession 1.0 mL (1+1) HCl and 2 mL ammonium molybdate reagent.',
+                  'Let stand for 5 to 10 min.',
+                  'Add 2.0 mL oxalic acid solution, mix. Wait at least 2 min but not more than 15 min, add 2 mL reducing agent and mix thoroughly.',
+                  'Read absorbance at 815 nm after 5 min.',
+                  'Prepare a calibration curve using standard silica solutions.',
+                ],
+                calculation: 'Read silicate concentration (mg SiO₂/L) from the calibration curve.'
+            },
+            {
+                id: 'sodium',
+                title: 'Sodium',
+                intro: 'Flame emission photometric method.',
+                procedure: [
+                  'Set up flame photometer following manufacturer’s instructions.',
+                  'Prepare a blank and sodium calibration standards in the applicable ranges.',
+                  'Measure emission at 589 nm and prepare a calibration curve.',
+                  'Determine sodium concentration of the sample from the curve.',
+                ],
+                calculation: 'Sodium (mg/L) = (mg/L from calibration curve) &times; Dilution factor'
+            },
+            {
+                id: 'total_solids',
+                title: 'Solids, Total',
+                intro: 'Gravimetric method.',
+                procedure: [
+                  'Pipette a measured volume into a pre-weighed evaporating dish.',
+                  'Evaporate to dryness in an oven at 104 ± 1°C.',
+                  'Cool in a desiccator and weigh.',
+                ],
+                calculation: 'Total Solids (mg/L) = (Weight of residue, mg &times; 1000) / (Sample volume, mL)'
+            },
+            {
+                id: 'temperature',
+                title: 'Temperature',
+                intro: 'Mercury thermometer method.',
+                procedure: ['Immerse thermometer in the sample up to the mark specified by the manufacturer and read temperature after equilibration.'],
+                calculation: 'Read directly from the thermometer (°C).'
+            },
+            {
+                id: 'turbidity',
+                title: 'Turbidity',
+                intro: 'Nephelometric method.',
+                procedure: [
+                  'Calibrate nephelometer according to manufacturer’s operating instructions.',
+                  'Gently agitate sample. Wait until air bubbles disappear and pour sample into cell.',
+                  'Read turbidity directly from instrument display.',
+                ],
+                calculation: 'Read directly from meter (NTU).'
             },
             {
                 id: 'tds',
@@ -462,3 +852,4 @@ export const waterTestingContent = {
     }
 }
 
+    
