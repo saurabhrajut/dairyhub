@@ -261,7 +261,7 @@ function CustomStandardizationCalc() {
 
 
         if (X < 0 || Y < 0) {
-            setError("Calculation resulted in negative values to be added. This scenario is not supported. Please check inputs.");
+            setError("Calculation resulted in negative values. This scenario is not supported. Please check inputs.");
             return;
         }
 
@@ -716,8 +716,8 @@ function TwoComponentStandardizationCalc() {
     return (
         <Tabs defaultValue="cream">
             <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="cream">Standardize with Water &amp; Cream</TabsTrigger>
-                <TabsTrigger value="richMilk">Standardize with Water &amp; Rich Milk</TabsTrigger>
+                <TabsTrigger value="cream">Water &amp; Cream</TabsTrigger>
+                <TabsTrigger value="richMilk">Water &amp; Rich Milk</TabsTrigger>
             </TabsList>
             <TabsContent value="cream">
                 <StandardizeWithCream />
@@ -1597,6 +1597,7 @@ function KgFatSnfCalc() {
     
 
     
+
 
 
 
