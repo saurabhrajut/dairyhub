@@ -84,15 +84,12 @@ export const waterTestingContent = {
                 id: 'bod',
                 title: 'Biochemical Oxygen Demand (BOD)',
                 intro: 'यह परीक्षण 27°C पर 3 दिनों के लिए बोतल ऊष्मायन विधि पर आधारित है।',
-                apparatus: `
-                    <ul class="list-disc list-outside pl-5 space-y-1">
-                        <li>300 mL की BOD बोतलें, संकीर्ण मुंह, भड़कीला होंठ, टेंपर्ड और नुकीले ग्राउंड ग्लास स्टॉपर्स के साथ।</li>
-                        <li>27 ± 1 °C पर थर्मोस्टेटिक रूप से नियंत्रित एयर इनक्यूबेटर या वॉटर बाथ। प्रकाश संश्लेषण ऑक्सीजन उत्पादन से बचने के लिए प्रकाश प्रवेश को रोका जाना चाहिए।</li>
-                        <li>सहायक उपकरण: प्लास्टिक ट्यूब, स्क्रू-पिन और एक 5-10 L पानी का कंटेनर।</li>
-                    </ul>
-                `,
-                reagents: `
-                    <h4>अभिकर्मक</h4>
+                apparatus: `<ul class="list-disc list-outside pl-5 space-y-1">
+                    <li>300 mL की BOD बोतलें, संकीर्ण मुंह, भड़कीला होंठ, टेंपर्ड और नुकीले ग्राउंड ग्लास स्टॉपर्स के साथ।</li>
+                    <li>27 ± 1 °C पर थर्मोस्टेटिक रूप से नियंत्रित एयर इनक्यूबेटर या वॉटर बाथ। प्रकाश संश्लेषण ऑक्सीजन उत्पादन से बचने के लिए प्रकाश प्रवेश को रोका जाना चाहिए।</li>
+                    <li>सहायक उपकरण: प्लास्टिक ट्यूब, स्क्रू-पिन और एक 5-10 L पानी का कंटेनर।</li>
+                    </ul>`,
+                reagents: `<h4>अभिकर्मक</h4>
                     <ul class="list-disc list-outside pl-5 space-y-1">
                         <li><strong>Phosphate buffer solution:</strong> 8.5 g KH₂PO₄, 21.75 g K₂HPO₄, 33.4 g Na₂HPO₄·7H₂O और 1.7 g NH₄Cl को 1 लीटर आसुत जल में घोलें।</li>
                         <li><strong>Magnesium sulphate solution:</strong> 22.5 g MgSO₄·7H₂O को 1 लीटर आसुत जल में घोलें।</li>
@@ -101,8 +98,7 @@ export const waterTestingContent = {
                         <li><strong>Acid and alkali solution:</strong> 1N NaOH और 1N H₂SO₄। नमूनों को उदासीन करने के लिए उपयोग करें।</li>
                         <li><strong>Glucose-glutamic acid solution (ताजा तैयार करें):</strong> 150 मिलीग्राम सूखे अभिकर्मक ग्रेड ग्लूकोज और 150 मिलीग्राम सूखे अभिकर्मक ग्रेड ग्लूटामिक एसिड को 1 लीटर आसुत जल में घोलें।</li>
                         <li><strong>Sample dilution water:</strong> 1 लीटर आसुत जल में 1 mL प्रत्येक फॉस्फेट बफर, MgSO₄, CaCl₂, और FeCl₃ घोल डालें।</li>
-                    </ul>
-                `,
+                    </ul>`,
                 procedure: [
                     'प्रति नमूना प्रति तनुकरण 1000 से 1200 mL की दर से आवश्यक मात्रा में तनुकरण जल तैयार करें। तनुकरण जल का तापमान 27°C पर लाएं। आंशिक रूप से भरे हुए बोतल में हिलाकर, कार्बनिक मुक्त फ़िल्टर्ड हवा के साथ बुलबुला बनाकर या कपास-प्लग वाली बोतलों में एक दिन के लिए संग्रहीत करके हवा से संतृप्त करें।',
                     'कुछ नमूनों में पर्याप्त माइक्रोबियल आबादी नहीं होती है (उदाहरण के लिए, कुछ औद्योगिक अपशिष्ट, उच्च तापमान वाले अपशिष्ट, या अत्यधिक पीएच मान वाले अपशिष्ट)। ऐसे अपशिष्टों के लिए, तनुकरण जल को अपशिष्ट का प्रसंस्करण करने वाली एक जैविक उपचार प्रणाली से निकलने वाले प्रवाह का उपयोग करके बीजारोपण किया जाता है। जहां यह उपलब्ध नहीं है, कम से कम 1 घंटे लेकिन 36 घंटे से अधिक नहीं बसने के बाद घरेलू अपशिष्ट जल के सतह पर तैरनेवाला का उपयोग करें। अपशिष्ट प्राप्त करने वाले सतह के जल निकाय से बीज भी उपयुक्त हो सकता है। पर्याप्त बीज मात्रा डालें ताकि बीजारोपित तनुकरण जल का डीओ उठाव 0.6 और 1.0 mg/L के बीच हो। घरेलू अपशिष्ट जल बीज के लिए, आमतौर पर 4 से 6 mL बीज/L तनुकरण जल की आवश्यकता होती है। सतह के पानी के नमूनों को आमतौर पर बीजारोपण की आवश्यकता नहीं होती है।',
@@ -173,7 +169,7 @@ export const waterTestingContent = {
                 ],
                 calculation: 'कैल्शियम (mg/L) = (A &times; B &times; 400.8) / नमूने का आयतन (एमएल)<br/> <p class="text-xs mt-2">जहाँ A = नमूने के लिए अनुमापक का एमएल, B = 1 एमएल EDTA के बराबर CaCO₃ का मिलीग्राम।</p>'
             },
-            {
+             {
                 id: 'cod',
                 title: 'Chemical Oxygen Demand (COD)',
                 intro: 'COD कार्बनिक और अकार्बनिक दोनों प्रदूषकों को एक मजबूत रासायनिक ऑक्सीकारक (पोटेशियम डाइक्रोमेट) से ऑक्सीकृत करने के लिए आवश्यक ऑक्सीजन की कुल मात्रा को मापता है।',
@@ -230,20 +226,21 @@ export const waterTestingContent = {
                 id: 'hardness',
                 title: 'Total Hardness (कुल कठोरता)',
                 intro: 'पानी की कठोरता मुख्य रूप से कैल्शियम और मैग्नीशियम आयनों के कारण होती है। इसका परीक्षण EDTA अनुमापन विधि से किया जाता है।',
-                 apparatus: '<p>Standard laboratory glassware.</p>',
-                 reagents: `
-                    <h4>अभिकर्मक</h4>
+                apparatus: '<p>Standard laboratory glassware.</p>',
+                reagents: `<h4>अभिकर्मक</h4>
                     <ul class="list-disc list-outside pl-5 space-y-1">
                         <li><strong>Buffer solution:</strong> 16.9 g NH₄Cl को 143 mL सांद्र NH₄OH में घोलें। 1.25 g मैग्नीशियम EDTA नमक डालें और 250 mL तक पतला करें।</li>
-                        <li><strong>Indicator:</strong> Eriochrome Black T सोडियम नमक।</li>
+                        <li><strong>Indicator:</strong> Eriochrome Black T सोडियम नमक। 0.5 ग्राम डाई को 100 ग्राम NaCl के साथ पीसें।</li>
                         <li><strong>Standard EDTA titrant, 0.01M:</strong> 3.723 g EDTA डाइसोडियम नमक को आसुत जल में घोलें और 1000 मिलीलीटर तक करें।</li>
                         <li><strong>Standard Calcium Solution:</strong> 1.000 g CaCO₃ को HCl में घोलें और 1000 मिलीलीटर तक करें।</li>
                     </ul>
-                `,
+                    <p class="text-xs mt-2"><strong>Note:</strong> यदि मैग्नीशियम EDTA नमक उपलब्ध नहीं है, तो 1.179 ग्राम डाइसोडियम EDTA, 780 मिलीग्राम MgSO₄·7H₂O, 16.9 ग्राम NH₄Cl और 143 मिलीलीटर सांद्र NH₄OH को मिलाकर बफर तैयार करें।</p>`,
                 procedure: [
                     '25 एमएल नमूने को 50 एमएल तक पतला करें।',
                     '1 से 2 एमएल बफर घोल डालें ताकि पीएच 10.0 से 10.1 हो जाए।',
                     '1 से 2 बूंदें संकेतक घोल डालें और EDTA अनुमापक से लाल रंग से नीले रंग में बदलने तक अनुमापन करें।',
+                    'अनुमापन को बफर डालने के 5 मिनट के भीतर पूरा करें।',
+                    'मानक कैल्शियम घोल का उपयोग करके EDTA अनुमापक को मानकीकृत करें।',
                 ],
                 calculation: 'कुल कठोरता (mg/L CaCO₃ के रूप में) = (A &times; B &times; 1000) / नमूने का आयतन (एमएल)<br/><p class="text-xs mt-2">जहाँ A = नमूने के लिए एमएल अनुमापन, B = 1.00 एमएल EDTA अनुमापक के बराबर CaCO₃ का मिलीग्राम।</p>'
             },
@@ -378,41 +375,41 @@ export const waterTestingContent = {
                 apparatus: `
                     <ul class="list-disc list-outside pl-5 space-y-1">
                         <li><strong>Spectrophotometer:</strong> For use at 535 nm with light path of 1 cm or longer.</li>
-                        <li><strong>Glassware:</strong> Treat all glassware with 1+1 warm HCl and rinse with aluminium free distilled water.</li>
+                        <li><strong>Glassware:</strong> Treat all glassware with 1 + 1 warm HCl and rinse with aluminium free distilled water.</li>
                     </ul>
                 `,
                 reagents: `
                     <h4>Reagents</h4>
                     <ul class="list-disc list-outside pl-5 space-y-1">
-                        <li><strong>Stock aluminum solution:</strong> Dissolve 8.791 g aluminum potassium sulphate, AlK(SO₄)₂·12H₂O, in water and dilute to 1 L.</li>
-                        <li><strong>Standard aluminum solution:</strong> Dilute 10 mL stock aluminum solution to 1000 mL; 1.00 mL = 5.00 µg Al. Prepare daily.</li>
+                        <li><strong>Stock aluminum solution:</strong> Dissolve 8.791 g aluminum potassium sulphate, AlK(SO₄)₂.12H₂O, in water and dilute to 1 L.</li>
+                        <li><strong>Standard aluminum solution:</strong> Dilute 10 mL stock aluminum solution to 1000 mL with distilled water; 1.00 mL = 5.00 µg Al. Prepare daily.</li>
                         <li><strong>Sulphuric acid, H₂SO₄, 0.02 N and 6 N.</strong></li>
-                        <li><strong>Ascorbic acid solution:</strong> Dissolve 0.1 g ascorbic acid in water and make up to 100 mL. Prepare fresh daily.</li>
-                        <li><strong>Buffer reagent:</strong> Dissolve 136 g sodium acetate, NaC₂H₃O₂·3H₂O, in water, add 40 mL 1N acetic acid and dilute to 1 L.</li>
-                        <li><strong>Working dye solution (Eriochrome Cyanine R):</strong> Dilute 10.0 mL of stock dye solution to 100 mL.</li>
+                        <li><strong>Ascorbic acid solution:</strong> Dissolve 0.1 g ascorbic acid in water and make up to 100 mL in a volumetric flask. Prepare fresh daily.</li>
+                        <li><strong>Buffer reagent:</strong> Dissolve 136 g sodium acetate, NaC₂H₃O₂.3H₂O, in water, add 40 mL 1N acetic acid and dilute to 1 L.</li>
+                        <li><strong>Working dye solution (Eriochrome Cyanine R):</strong> Dilute 10.0 mL of stock dye solution to 100 mL in a volumetric flask with water. Stable for at least 6 months.</li>
                     </ul>
                 `,
                 procedure: [
-                    'Prepare a series of standards containing 0 to 7 µg of aluminum.',
-                    'To each standard and sample, add 1 mL 0.02N H₂SO₄, 1 mL ascorbic acid, 10 mL buffer, and 5 mL working dye reagent.',
-                    'Make up total volume to 50 mL and read absorbance at 535 nm within 5-15 minutes.',
-                    'Determine sample concentration from the calibration curve.',
+                    'Prepare a series of standards between 0 to 7 µg by taking 0,1.0, 3.0, 5.0 and 7.0 mL standard aluminium solution in 50 mL volumetric flasks and adding water to a total volume of 25 mL.',
+                    'Add 1 mL 0.02 N H₂SO₄ to each standard and mix. Add 1mL ascorbic acid solution and mix.',
+                    'Add 10 mL buffer solution and mix. With a volumetric pipette add 5.00 mL working dye reagent and mix. Immediately make up to 50 mL with distilled water, mix and let stand for 5 to 10 minutes.',
+                    'Read absorbance at 535 nm within 15 min of addition of dye, adjusting instrument to zero absorbance with the standard containing no aluminium. Plot calibration curve between absorbance and aluminium concentration.',
+                    'Place 25 mL sample, or an aliquot diluted to 25 mL, in a flask, add a few drops of bromcresol green and titrate with 0.02 N H₂SO₄ to yellowish end point. Record reading and discard sample.',
+                    'To two similar samples add the same amount of acid used in the titration and add 1 mL in excess.',
+                    'To one sample add 1 mL EDTA to complex any aluminium present. This will serve as blank. To both samples add 1 mL ascorbic acid, 10 mL buffer reagent, 5 mL working dye reagent , make up to 50 mL and read absorbance as in c above.'
                 ],
-                calculation: 'Read aluminum concentration (mg/L) from the calibration curve.'
+                calculation: 'Read aluminium concentration in the sample against its absorbance value from the calibration curve.'
             },
             {
                 id: 'bod',
                 title: 'Biochemical Oxygen Demand (BOD)',
                 intro: 'This test is based on the bottle incubation method for 3 days at 27°C.',
-                apparatus: `
-                    <ul class="list-disc list-outside pl-5 space-y-1">
-                        <li>BOD bottles, 300 mL, narrow mouth, flared lip, with tapered and pointed ground glass stoppers.</li>
-                        <li>Air incubator or water bath, thermostatically controlled at 27 ± 1 °C. Light entry must be prevented in order to avoid photosynthetic oxygen production.</li>
-                        <li>Accessories: plastic tube, screw-pin and a 5-10 L water container.</li>
-                    </ul>
-                `,
-                reagents: `
-                    <h4>Reagents</h4>
+                 apparatus: `<ul class="list-disc list-outside pl-5 space-y-1">
+                    <li>300 mL BOD bottles, narrow mouth, flared lip, with tapered and pointed ground glass stoppers.</li>
+                    <li>Air incubator or water bath, thermostatically controlled at 27 ± 1 °C. Light entry must be prevented in order to avoid photosynthetic oxygen production.</li>
+                    <li>Accessories: plastic tube, screw-pin and a 5-10 L water container.</li>
+                    </ul>`,
+                reagents: `<h4>Reagents</h4>
                     <ul class="list-disc list-outside pl-5 space-y-1">
                         <li><strong>Phosphate buffer solution:</strong> Dissolve 8.5 g KH₂PO₄, 21.75 g K₂HPO₄, 33.4 g Na₂HPO₄·7H₂O and 1.7 g NH₄Cl in 1 L distilled water.</li>
                         <li><strong>Magnesium sulphate solution:</strong> Dissolve 22.5 g MgSO₄·7H₂O in 1 L distilled water.</li>
@@ -421,8 +418,7 @@ export const waterTestingContent = {
                         <li><strong>Acid and alkali solution:</strong> 1N NaOH and 1N H₂SO₄. Use for neutralising samples.</li>
                         <li><strong>Glucose-glutamic acid solution (prepare fresh):</strong> Dissolve 150 mg dry reagent grade glucose and 150 mg dry reagent grade glutamic acid in 1 L distilled water.</li>
                         <li><strong>Sample dilution water:</strong> Add 1 mL each of phosphate buffer, MgSO₄, CaCl₂, and FeCl₃ solutions per litre distilled water.</li>
-                    </ul>
-                `,
+                    </ul>`,
                 procedure: [
                     'Prepare required amount of dilution water at the rate of 1000 to 1200 mL per sample per dilution. Bring the diluted water temperature to 27 °C. Saturate with air by shaking in a partially filled bottle, by bubbling with organic free filtered air or by storing in cotton-plugged bottles for a day.',
                     'Some samples do not contain sufficient microbial population (for example, some industrial wastes, high temperature wastes, or wastes with extreme pH values). For such wastes, the dilution water is seeded using effluent from a biological treatment system processing the waste. Where this is not available, use supernatant from domestic wastewater after settling for at least 1 h but not more than 36 h. Seed from a surface water body receiving the waste may also be suitable. Add enough seed volume such that the DO uptake of the seeded dilution water is between 0.6 and 1.0 mg/L. For domestic wastewater seed, usually 4 to 6 mL seed / L of dilution water is required. Surface water samples usually do not require seeding.',
@@ -509,7 +505,7 @@ export const waterTestingContent = {
                     <ul class="list-disc list-outside pl-5 space-y-1">
                         <li><strong>Standard potassium dichromate solution, 0.0417M (0.25N):</strong> Dissolve 12.259 g K₂Cr₂O₇ (primary standard grade, previously dried at 103 °C for 2 hours) in distilled water and dilute to 1 L.</li>
                         <li><strong>Sulphuric acid reagent:</strong> Add 5.5 g Ag₂SO₄ per kg of conc. H₂SO₄. Let it stand for a day or two to dissolve.</li>
-                        <li><strong>Ferroin indicator solution:</strong> Dissolve 1.485 g 1,10-phenanthroline monohydrate and 695 mg FeSO₄·7H₂O in distilled water and dilute to 100 mL.</li>
+                        <li><strong>Ferroin indicator solution:</strong> Dissolve 1.485 g 1, 10-phenanthroline monohydrate and 695 mg FeSO₄·7H₂O in distilled water and dilute to 100 mL.</li>
                         <li><strong>Standard ferrous ammonium sulphate (FAS), titrant, 0.25M:</strong> Dissolve 98 g Fe(NH₄)₂(SO₄)₂·6H₂O in distilled water, add 20 mL conc. H₂SO₄, cool and dilute to 1 L. Standardise daily.</li>
                         <li><strong>Mercuric Sulphate, HgSO₄, powder.</strong></li>
                         <li><strong>Potassium hydrogen phthalate (KHP) standard:</strong> Weigh 425 mg KHP in distilled water and dilute to 1 L. This solution has a theoretical COD of 500 µgO₂/mL.</li>
@@ -551,19 +547,20 @@ export const waterTestingContent = {
                 title: 'Total Hardness',
                 intro: 'Water hardness is mainly due to calcium and magnesium ions. It is tested using the EDTA titration method.',
                  apparatus: '<p>Standard laboratory glassware.</p>',
-                 reagents: `
-                    <h4>Reagents</h4>
+                 reagents: `<h4>Reagents</h4>
                     <ul class="list-disc list-outside pl-5 space-y-1">
-                        <li><strong>Buffer solution:</strong> Dissolve 16.9 g NH₄Cl in 143 mL conc. NH₄OH. Add 1.25 g magnesium salt of EDTA and dilute to 250 mL.</li>
-                        <li><strong>Indicator:</strong> Eriochrome Black T sodium salt.</li>
+                        <li><strong>Buffer solution:</strong> Dissolve 16.9 g NH₄Cl in 143 mL conc. NH₄OH. Add 1.25 g magnesium salt of EDTA and dilute to 250 mL with distilled water.</li>
+                        <li><strong>Indicator:</strong> Eriochrome Black T sodium salt. Grind 0.5 g dye with 100 g NaCl.</li>
                         <li><strong>Standard EDTA titrant, 0.01M:</strong> Dissolve 3.723 g of disodium salt of EDTA in distilled water and dilute to 1000 mL.</li>
                         <li><strong>Standard Calcium Solution:</strong> Dissolve 1.000 g CaCO₃ in HCl and dilute to 1000 mL.</li>
                     </ul>
-                `,
+                    <p class="text-xs mt-2"><strong>Note:</strong> If the Mg salt of EDTA is unavailable, prepare buffer by mixing 1.179g disodium EDTA, 780mg MgSO₄·7H₂O, 16.9g NH₄Cl, and 143ml conc. NH₄OH.</p>`,
                 procedure: [
                     'Dilute 25 mL sample to 50 mL with distilled water.',
                     'Add 1 to 2 mL buffer solution to give a pH of 10.0 to 10.1.',
                     'Add 1 to 2 drops of indicator solution and titrate with EDTA titrant to change in colour from reddish tinge to blue.',
+                    'Complete titration within 5 min after buffer addition.',
+                    'Standardise the EDTA titrant against standard calcium solution.',
                 ],
                 calculation: 'Total Hardness (as mg/L CaCO₃) = (A &times; B &times; 1000) / mL of sample<br/><p class="text-xs mt-2">where A = mL EDTA titrated for sample, B = mg CaCO₃ equivalent to 1.00 mL EDTA titrant.</p>'
             },
@@ -642,5 +639,3 @@ export const waterTestingContent = {
         ]
     }
 }
-
-    
