@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, memo, useCallback, useEffect } from "react"
@@ -564,11 +563,11 @@ function TwoMilkBlendingToTargetCalc() {
                     </div>
                 </div>
             </div>
-            <Button onClick={calculate} className="w-full mt-4">Calculate Blend & Adjust</Button>
+            <Button onClick={calculate} className="w-full mt-4">Calculate Blend &amp; Adjust</Button>
             {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
             {result && (
                  <Alert className="mt-4">
-                    <AlertTitle>Blending & Adjustment Plan</AlertTitle>
+                    <AlertTitle>Blending &amp; Adjustment Plan</AlertTitle>
                     <AlertDescription>
                         <div className="mt-2 prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: result }}/>
                     </AlertDescription>
@@ -659,7 +658,7 @@ function FatReductionClrMaintainCalc() {
 
     return (
         <CalculatorCard 
-            title="Fat & CLR Corrector"
+            title="Fat &amp; CLR Corrector"
             description="Calculate the amount of skimmed milk and water needed to correct your batch to the target fat and CLR.">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-blue-50 p-6 rounded-2xl border-2 border-blue-200">
@@ -766,7 +765,7 @@ function FatSnfClrTsCalc() {
     }, [inputs]);
 
     return (
-        <CalculatorCard title="Fat, SNF, CLR & TS Calculator" description="Calculate milk components interchangeably based on various regional and standard formulas.">
+        <CalculatorCard title="Fat, SNF, CLR &amp; TS Calculator" description="Calculate milk components interchangeably based on various regional and standard formulas.">
              <div className="bg-muted/50 p-4 rounded-lg mb-6">
                  <Label>Select SNF Calculation Formula</Label>
                  <Select value={inputs.formula} onValueChange={(val) => handleInputChange('formula', val)}>
@@ -791,17 +790,17 @@ function FatSnfClrTsCalc() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-card p-4 rounded-lg border space-y-4">
-                    <h4 className="font-semibold text-gray-700 text-center font-headline">Calculate SNF & TS</h4>
+                    <h4 className="font-semibold text-gray-700 text-center font-headline">Calculate SNF &amp; TS</h4>
                     <MemoizedInputField label="Fat %" value={inputs.fat} name="fat" setter={handleInputChange} />
                     <MemoizedInputField label="CLR" value={inputs.clr} name="clr" setter={handleInputChange} />
-                    <Button onClick={handleCalcSnfTs} className="w-full">Calculate SNF & TS</Button>
+                    <Button onClick={handleCalcSnfTs} className="w-full">Calculate SNF &amp; TS</Button>
                 </div>
 
                 <div className="bg-card p-4 rounded-lg border space-y-4">
-                    <h4 className="font-semibold text-gray-700 text-center font-headline">Calculate CLR & TS</h4>
+                    <h4 className="font-semibold text-gray-700 text-center font-headline">Calculate CLR &amp; TS</h4>
                     <MemoizedInputField label="Fat %" value={inputs.fat} name="fat" setter={handleInputChange} />
                     <MemoizedInputField label="SNF %" value={inputs.snf} name="snf" setter={handleInputChange} />
-                    <Button onClick={handleCalcClrTs} className="w-full">Calculate CLR & TS</Button>
+                    <Button onClick={handleCalcClrTs} className="w-full">Calculate CLR &amp; TS</Button>
                 </div>
             </div>
 
@@ -859,7 +858,7 @@ function ClrIncreaseCalc() {
                     <MemoizedInputField label="Initial CLR" value={inputs.initialClr} name="initialClr" setter={handleInputChange} />
                 </div>
                  <div className="bg-primary/10 p-4 rounded-lg space-y-3">
-                     <h3 className="font-semibold text-gray-700 mb-2 font-headline">Target & Ingredient</h3>
+                     <h3 className="font-semibold text-gray-700 mb-2 font-headline">Target &amp; Ingredient</h3>
                     <MemoizedInputField label="Target CLR" value={inputs.targetClr} name="targetClr" setter={handleInputChange} />
                     <MemoizedInputField label="SMP Total Solids (%)" value={inputs.smpSolids} name="smpSolids" setter={handleInputChange} />
                 </div>
@@ -931,7 +930,7 @@ function FatClrMaintainerCalc() {
     }, [inputs]);
     
     return (
-        <CalculatorCard title="Fat & CLR Maintainer Calculator" description="Increase milk Fat % with cream while maintaining the original CLR by adding Skimmed Milk Powder (SMP).">
+        <CalculatorCard title="Fat &amp; CLR Maintainer Calculator" description="Increase milk Fat % with cream while maintaining the original CLR by adding Skimmed Milk Powder (SMP).">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mb-4">
                 <div className="bg-muted/50 p-4 rounded-lg space-y-3">
                     <h3 className="font-semibold text-gray-700 mb-2 font-headline">Initial Milk</h3>
@@ -940,12 +939,12 @@ function FatClrMaintainerCalc() {
                     <MemoizedInputField label="Milk CLR" value={inputs.milkClr} name="milkClr" setter={handleInputChange} />
                 </div>
                  <div className="bg-primary/10 p-4 rounded-lg space-y-3">
-                     <h3 className="font-semibold text-gray-700 mb-2 font-headline">Target & Ingredients</h3>
+                     <h3 className="font-semibold text-gray-700 mb-2 font-headline">Target &amp; Ingredients</h3>
                     <MemoizedInputField label="Target Fat %" value={inputs.targetFat} name="targetFat" setter={handleInputChange} />
                     <MemoizedInputField label="Cream Fat %" value={inputs.creamFat} name="creamFat" setter={handleInputChange} />
                 </div>
             </div>
-             <Button onClick={calculate} className="w-full mt-4">Calculate Cream & SMP</Button>
+             <Button onClick={calculate} className="w-full mt-4">Calculate Cream &amp; SMP</Button>
             {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
             {result && <Alert className="mt-4"><AlertTitle>Result</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
         </CalculatorCard>
@@ -1113,7 +1112,7 @@ function FatSnfAdjustmentCalc() {
     }, [inputs, milkSnf, targetSnf, calculateSnf]);
 
     return (
-        <CalculatorCard title="Fat & SNF Adjustment Calculator" description="Calculate how much Cream and Skimmed Milk Powder (SMP) to add to standardize both Fat and SNF upwards.">
+        <CalculatorCard title="Fat &amp; SNF Adjustment Calculator" description="Calculate how much Cream and Skimmed Milk Powder (SMP) to add to standardize both Fat and SNF upwards.">
             <div className="bg-primary/10 p-4 rounded-lg mb-4">
                  <h3 className="font-semibold text-gray-700 mb-2 font-headline">SNF Calculation Formula</h3>
                  <Select value={inputs.formula} onValueChange={(val) => handleInputChange('formula', val)}>
@@ -1358,7 +1357,7 @@ function KgFatSnfCalc() {
     };
 
     return (
-        <CalculatorCard title="Kg Fat & SNF Calculator" description="Find out the amount (in Kg) of Fat and Powder (SNF) from a given quantity of milk.">
+        <CalculatorCard title="Kg Fat &amp; SNF Calculator" description="Find out the amount (in Kg) of Fat and Powder (SNF) from a given quantity of milk.">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                 <TabsList className="grid w-full grid-cols-2">
                     <TabsTrigger value="liter">Calculate by Liter</TabsTrigger>
@@ -1390,6 +1389,7 @@ function KgFatSnfCalc() {
     
 
     
+
 
 
 
