@@ -84,10 +84,11 @@ export const waterTestingContent = {
                 id: 'bod',
                 title: 'Biochemical Oxygen Demand (BOD)',
                 intro: 'यह परीक्षण 27°C पर 3 दिनों के लिए बोतल ऊष्मायन विधि पर आधारित है।',
-                 apparatus: `
+                apparatus: `
                     <ul class="list-disc list-outside pl-5 space-y-1">
-                        <li>300 mL की BOD बोतलें।</li>
-                        <li>27 ± 1 °C पर थर्मोस्टेटिक रूप से नियंत्रित एयर इनक्यूबेटर या वॉटर बाथ।</li>
+                        <li>300 mL की BOD बोतलें, संकीर्ण मुंह, भड़कीला होंठ, टेंपर्ड और नुकीले ग्राउंड ग्लास स्टॉपर्स के साथ।</li>
+                        <li>27 ± 1 °C पर थर्मोस्टेटिक रूप से नियंत्रित एयर इनक्यूबेटर या वॉटर बाथ। प्रकाश संश्लेषण ऑक्सीजन उत्पादन से बचने के लिए प्रकाश प्रवेश को रोका जाना चाहिए।</li>
+                        <li>सहायक उपकरण: प्लास्टिक ट्यूब, स्क्रू-पिन और एक 5-10 L पानी का कंटेनर।</li>
                     </ul>
                 `,
                 reagents: `
@@ -97,21 +98,22 @@ export const waterTestingContent = {
                         <li><strong>Magnesium sulphate solution:</strong> 22.5 g MgSO₄·7H₂O को 1 लीटर आसुत जल में घोलें।</li>
                         <li><strong>Calcium chloride solution:</strong> 27.5 g CaCl₂ को 1 लीटर आसुत जल में घोलें।</li>
                         <li><strong>Ferric chloride solution:</strong> 0.25 g FeCl₃·6H₂O को 1 लीटर आसुत जल में घोलें।</li>
-                        <li><strong>Dilution water:</strong> 1 लीटर आसुत जल में 1 mL प्रत्येक फॉस्फेट बफर, MgSO₄, CaCl₂, और FeCl₃ घोल डालें।</li>
+                        <li><strong>Acid and alkali solution:</strong> 1N NaOH और 1N H₂SO₄। नमूनों को उदासीन करने के लिए उपयोग करें।</li>
+                        <li><strong>Glucose-glutamic acid solution (ताजा तैयार करें):</strong> 150 मिलीग्राम सूखे अभिकर्मक ग्रेड ग्लूकोज और 150 मिलीग्राम सूखे अभिकर्मक ग्रेड ग्लूटामिक एसिड को 1 लीटर आसुत जल में घोलें।</li>
+                        <li><strong>Sample dilution water:</strong> 1 लीटर आसुत जल में 1 mL प्रत्येक फॉस्फेट बफर, MgSO₄, CaCl₂, और FeCl₃ घोल डालें।</li>
                     </ul>
                 `,
                 procedure: [
-                  'आवश्यक मात्रा में तनुकरण जल तैयार करें, तापमान 27°C पर लाएं और हवा से संतृप्त करें।',
-                  'आवश्यकतानुसार तनुकरण जल को सीड करें (औद्योगिक अपशिष्ट के लिए)।',
-                  'नमूने का तनुकरण करें ताकि 3 दिनों के ऊष्मायन के बाद कम से कम 1 mg/L की अवशिष्ट DO और कम से कम 2 mg/L की DO खपत हो।',
-                  'तीन BOD बोतलें भरें। एक बोतल में प्रारंभिक DO (D₀) का निर्धारण करें। अन्य दो को 27°C पर 3 दिनों के लिए ऊष्मायन करें।',
-                  '3 दिनों के बाद अंतिम DO (D₃) का निर्धारण करें।',
-                  'एक तनुकरण जल रिक्त (dilution water blank) और एक बीज नियंत्रण (seed control) भी चलाएं।',
+                    'प्रति नमूना प्रति तनुकरण 1000 से 1200 mL की दर से आवश्यक मात्रा में तनुकरण जल तैयार करें। तनुकरण जल का तापमान 27°C पर लाएं। आंशिक रूप से भरे हुए बोतल में हिलाकर, कार्बनिक मुक्त फ़िल्टर्ड हवा के साथ बुलबुला बनाकर या कपास-प्लग वाली बोतलों में एक दिन के लिए संग्रहीत करके हवा से संतृप्त करें।',
+                    'कुछ नमूनों में पर्याप्त माइक्रोबियल आबादी नहीं होती है (उदाहरण के लिए, कुछ औद्योगिक अपशिष्ट, उच्च तापमान वाले अपशिष्ट, या अत्यधिक पीएच मान वाले अपशिष्ट)। ऐसे अपशिष्टों के लिए, तनुकरण जल को अपशिष्ट का प्रसंस्करण करने वाली एक जैविक उपचार प्रणाली से निकलने वाले प्रवाह का उपयोग करके बीजारोपण किया जाता है। जहां यह उपलब्ध नहीं है, कम से कम 1 घंटे लेकिन 36 घंटे से अधिक नहीं बसने के बाद घरेलू अपशिष्ट जल के सतह पर तैरनेवाला का उपयोग करें। अपशिष्ट प्राप्त करने वाले सतह के जल निकाय से बीज भी उपयुक्त हो सकता है। पर्याप्त बीज मात्रा डालें ताकि बीजारोपित तनुकरण जल का डीओ उठाव 0.6 और 1.0 mg/L के बीच हो। घरेलू अपशिष्ट जल बीज के लिए, आमतौर पर 4 से 6 mL बीज/L तनुकरण जल की आवश्यकता होती है। सतह के पानी के नमूनों को आमतौर पर बीजारोपण की आवश्यकता नहीं होती है।',
+                    'नमूने का तनुकरण करें। तनुकरण के परिणामस्वरूप एक नमूना होना चाहिए जिसमें 3 दिनों के ऊष्मायन के बाद कम से कम 1 mg/L की अवशिष्ट DO और कम से कम 2 mg/L की DO खपत हो। तालिका और विशेष नमूना स्रोत के अनुभव का उपयोग करके कई तनुकरण करें। प्रदूषित सतह के पानी में 5 से 25 mg/L BOD हो सकता है।<br/><table class="w-full text-left border-collapse mt-2"><thead><tr><th class="border p-2" colspan="2">प्रतिशत मिश्रण का उपयोग करके</th><th class="border p-2" colspan="2">300mL बोतलों में सीधे पिपेटिंग द्वारा</th></tr><tr><th class="border p-2">BOD की सीमा</th><th class="border p-2">% मिश्रण</th><th class="border p-2">BOD की सीमा</th><th class="border p-2">नमूना एमएल</th></tr></thead><tbody><tr><td class="border p-2">1,000 - 3,500</td><td class="border p-2">0.2</td><td class="border p-2">1,200 - 4,200</td><td class="border p-2">0.5</td></tr><tr><td class="border p-2">400 - 1,400</td><td class="border p-2">0.5</td><td class="border p-2">600 - 2,100</td><td class="border p-2">1.0</td></tr><tr><td class="border p-2">200 - 700</td><td class="border p-2">1.0</td><td class="border p-2">300 - 1,050</td><td class="border p-2">2.0</td></tr><tr><td class="border p-2">100 - 350</td><td class="border p-2">2.0</td><td class="border p-2">120 - 420</td><td class="border p-2">5.0</td></tr><tr><td class="border p-2">40 - 140</td><td class="border p-2">5.0</td><td class="border p-2">60 - 210</td><td class="border p-2">10.0</td></tr><tr><td class="border p-2">20 - 70</td><td class="border p-2">10.0</td><td class="border p-2">30 - 105</td><td class="border p-2">20.0</td></tr><tr><td class="border p-2">10 - 35</td><td class="border p-2">20.0</td><td class="border p-2">12 - 42</td><td class="border p-2">50.0</td></tr><tr><td class="border p-2">4 - 14</td><td class="border p-2">50.0</td><td class="border p-2">6 - 21</td><td class="border p-2">100.0</td></tr><tr><td class="border p-2">0 - 7</td><td class="border p-2">100.0</td><td class="border p-2">0 - 7</td><td class="border p-2">300.0</td></tr></tbody></table>',
+                    'तनुकरण जल रिक्त (dilution water blank) का DO खपत निर्धारित करें। यह 0.2 mg/L से अधिक नहीं होना चाहिए।',
+                    'बीज नियंत्रण (seed control) द्वारा DO उठाव निर्धारित करें।',
                 ],
                 calculation: `
-                  <p><strong>जब तनुकरण जल सीड नहीं किया गया हो:</strong></p>
+                  <p><strong>जब तनुकरण जल बीजारोपित नहीं किया गया हो:</strong></p>
                   <code>BOD₃,₂₇ (mg/L) = (D₀ - D₃) / P</code>
-                  <p class="mt-4"><strong>जब तनुकरण जल सीड किया गया हो:</strong></p>
+                  <p class="mt-4"><strong>जब तनुकरण जल बीजारोपित किया गया हो:</strong></p>
                   <code>BOD₃,₂₇ (mg/L) = [ (D₀ - D₃) - f &times; (B₀ - B₃) ] / P</code>
                   <p class="text-xs mt-2">जहाँ: D₀=प्रारंभिक DO, D₃=3 दिन बाद DO, P=नमूने का दशमलव भिन्न, B₀=बीज नियंत्रण का प्रारंभिक DO, B₃=बीज नियंत्रण का अंतिम DO, f=बीज का अनुपात।</p>
                 `
@@ -167,7 +169,7 @@ export const waterTestingContent = {
             {
                 id: 'cod',
                 title: 'Chemical Oxygen Demand (COD)',
-                intro: 'COD कार्बनिक और अकार्बनिक दोनों प्रदूषकों को एक मजबूत रासायनिक ऑक्सीकारक (पोटेशियम डाइक्रोमेट) से ऑक्सीकृत करने के लिए आवश्यक ऑक्सीजन की कुल मात्रा को मापता है। यह BOD से अधिक तेजी से परिणाम देता है।',
+                intro: 'COD कार्बनिक और अकार्बनिक दोनों प्रदूषकों को एक मजबूत रासायनिक ऑक्सीकारक (पोटेशियम डाइक्रोमेट) से ऑक्सीकृत करने के लिए आवश्यक ऑक्सीजन की कुल मात्रा को मापता है।',
                 apparatus: `
                     <ul class="list-disc list-outside pl-5 space-y-1">
                         <li><strong>Reflux flasks:</strong> 250 mL क्षमता, 24/29 ग्राउंड ग्लास नेक के साथ।</li>
@@ -178,23 +180,24 @@ export const waterTestingContent = {
                 reagents: `
                     <h4>अभिकर्मक</h4>
                     <ul class="list-disc list-outside pl-5 space-y-1">
-                        <li><strong>Standard potassium dichromate solution, 0.0417M (0.25N):</strong> 12.259 g K₂Cr₂O₇ को 1 लीटर तक घोलें।</li>
-                        <li><strong>Sulphuric acid reagent:</strong> 5.5 g Ag₂SO₄ को 1 किलो सांद्र H₂SO₄ में मिलाएं।</li>
-                        <li><strong>Ferroin indicator solution.</strong></li>
-                        <li><strong>Standard ferrous ammonium sulphate (FAS), titrant, 0.25M:</strong> 98 g Fe(NH₄)₂(SO₄)₂·6H₂O को 1 लीटर घोल में घोलें।</li>
+                        <li><strong>Standard potassium dichromate solution, 0.0417M (0.25N):</strong> 12.259 g K₂Cr₂O₇ (प्राथमिक मानक ग्रेड, 103°C पर 2 घंटे सुखाया गया) को आसुत जल में घोलकर 1 लीटर बनाएं।</li>
+                        <li><strong>Sulphuric acid reagent:</strong> 5.5 g Ag₂SO₄ को प्रति किलो सांद्र H₂SO₄ में मिलाएं। घुलने के लिए एक या दो दिन रखें।</li>
+                        <li><strong>Ferroin indicator solution:</strong> 1.485 g 1,10-phenanthroline monohydrate और 695 mg FeSO₄·7H₂O को आसुत जल में घोलकर 100 mL बनाएं।</li>
+                        <li><strong>Standard ferrous ammonium sulphate (FAS), titrant, 0.25M:</strong> 98 g Fe(NH₄)₂(SO₄)₂·6H₂O को आसुत जल में घोलें, 20 mL सांद्र H₂SO₄ डालें, ठंडा करें और 1 लीटर तक पतला करें। प्रतिदिन मानकीकृत करें।</li>
                         <li><strong>Mercuric Sulphate, HgSO₄, powder.</strong></li>
+                        <li><strong>Potassium hydrogen phthalate (KHP) standard:</strong> 425 mg KHP को 1 लीटर आसुत जल में घोलें। इसका सैद्धांतिक COD 500 µgO₂/mL है।</li>
                     </ul>
                 `,
                 procedure: [
-                    'नमूने को एक पाचन फ्लास्क में लें।',
-                    'उसमें 1 ग्राम HgSO₄, कांच के मोती, और 5 मिलीलीटर सल्फ्यूरिक एसिड अभिकर्मक डालें, मिलाएं, ठंडा करें।',
-                    '25 मिलीलीटर पोटेशियम डाइक्रोमेट घोल डालें और मिलाएं।',
-                    'कंडेनसर कनेक्ट करें, और कंडेनसर के खुले सिरे से अतिरिक्त 70 मिलीलीटर सल्फ्यूरिक एसिड अभिकर्मक डालें।',
-                    '2 घंटे के लिए रिफ्लक्स करें; ठंडा करें, कंडेनसर धोएं और आयतन दोगुना करें।',
-                    'फेरोइन संकेतक डालें, और FAS के साथ अनुमापन करें जब तक कि रंग नीला-हरा से लाल-भूरा न हो जाए।',
-                    'एक रिक्त अनुमापन भी करें।',
+                    '500 mL रिफ्लक्सिंग फ्लास्क में 50 mL नमूना या 50 mL तक पतला किया गया एक भाग लें। 1g HgSO₄, कुछ कांच के मोती, और 5 mL सल्फ्यूरिक एसिड अभिकर्मक डालें, मिलाएं, ठंडा करें। 25 mL 0.0417M K₂Cr₂O₇ घोल डालें, मिलाएं।',
+                    'फ्लास्क को कंडेनसर से कनेक्ट करें और कूलिंग वॉटर चालू करें। कंडेनसर के खुले सिरे से अतिरिक्त 70 mL सल्फ्यूरिक एसिड अभिकर्मक डालें, हिलाते और मिलाते हुए।',
+                    '2 घंटे के लिए रिफ्लक्स करें; ठंडा करें, कंडेनसर को आसुत जल से धोएं ताकि सामग्री का आयतन दोगुना हो जाए, ठंडा करें।',
+                    '2 बूंद फेरोइन संकेतक डालें, शेष पोटेशियम डाइक्रोमेट को FAS से तब तक अनुमापित करें जब तक कि रंग नीला-हरा से लाल-भूरा न हो जाए। अभिकर्मकों के साथ एक आसुत जल रिक्त (blank) को भी रिफ्लक्स और अनुमापित करें।',
+                    'बहुत कम COD वाले नमूनों का विश्लेषण करते समय मानक 0.00417M K₂Cr₂O₇, और 0.025M FAS का उपयोग करें।',
+                    'पोटेशियम हाइड्रोजन थैलेट घोल पर परीक्षण करके तकनीक और अभिकर्मकों का मूल्यांकन करें।',
+                    'जाम होने से बचाने के लिए लीबिग जैकेट पर ग्रीस न लगाएं, इसके बजाय पानी का उपयोग करें।',
                 ],
-                calculation: 'COD (mg/L) = [ (A - B) &times; M &times; 8000 ] / नमूने का आयतन (एमएल)<br/><p class="text-xs mt-2">जहाँ A = रिक्त के लिए FAS का एमएल, B = नमूने के लिए FAS का एमएल, M = FAS की मोलरता।</p>'
+                calculation: 'COD (mg/L) = [ (A - B) &times; M &times; 8000 ] / नमूने का आयतन (एमएल)<br/><p class="text-xs mt-2">जहाँ A = रिक्त के लिए FAS का एमएल, B = नमूने के लिए FAS का एमएल, M = FAS की मोलरता।</p><p class="text-sm mt-2"><b>Note:</b> छोटे नमूना संस्करणों के लिए रसायनों की मात्रा को आनुपातिक रूप से कम करें।</p><table class="w-full text-left border-collapse mt-2"><thead><tr><th class="border p-2">नमूना आकार (mL)</th><th class="border p-2">K₂Cr₂O₇ (mL)</th><th class="border p-2">H₂SO₄ (mL)</th><th class="border p-2">HgSO₄ (g)</th><th class="border p-2">FAS (mole/L)</th><th class="border p-2">अंतिम आयतन (mL)</th></tr></thead><tbody><tr><td class="border p-2">10.0</td><td class="border p-2">5.0</td><td class="border p-2">15</td><td class="border p-2">0.2</td><td class="border p-2">0.05</td><td class="border p-2">70</td></tr><tr><td class="border p-2">20.0</td><td class="border p-2">10.0</td><td class="border p-2">30</td><td class="border p-2">0.4</td><td class="border p-2">0.10</td><td class="border p-2">140</td></tr><tr><td class="border p-2">30.0</td><td class="border p-2">15.0</td><td class="border p-2">45</td><td class="border p-2">0.6</td><td class="border p-2">0.15</td><td class="border p-2">210</td></tr><tr><td class="border p-2">40.0</td><td class="border p-2">20.0</td><td class="border p-2">60</td><td class="border p-2">0.8</td><td class="border p-2">0.20</td><td class="border p-2">280</td></tr><tr><td class="border p-2">50.0</td><td class="border p-2">25.0</td><td class="border p-2">75</td><td class="border p-2">1.0</td><td class="border p-2">0.25</td><td class="border p-2">350</td></tr></tbody></table>'
             },
             {
                 id: 'chloride',
@@ -396,8 +399,9 @@ export const waterTestingContent = {
                 intro: 'This test is based on the bottle incubation method for 3 days at 27°C.',
                 apparatus: `
                     <ul class="list-disc list-outside pl-5 space-y-1">
-                        <li>BOD bottles, 300 mL.</li>
-                        <li>Air incubator or water bath, thermostatically controlled at 27 ± 1 °C.</li>
+                        <li>BOD bottles, 300 mL, narrow mouth, flared lip, with tapered and pointed ground glass stoppers.</li>
+                        <li>Air incubator or water bath, thermostatically controlled at 27 ± 1 °C. Light entry must be prevented in order to avoid photosynthetic oxygen production.</li>
+                        <li>Accessories: plastic tube, screw-pin and a 5-10 L water container.</li>
                     </ul>
                 `,
                 reagents: `
@@ -407,16 +411,17 @@ export const waterTestingContent = {
                         <li><strong>Magnesium sulphate solution:</strong> Dissolve 22.5 g MgSO₄·7H₂O in 1 L distilled water.</li>
                         <li><strong>Calcium chloride solution:</strong> Dissolve 27.5 g CaCl₂ in 1 L distilled water.</li>
                         <li><strong>Ferric chloride solution:</strong> Dissolve 0.25 g FeCl₃·6H₂O in 1 L distilled water.</li>
-                        <li><strong>Dilution water:</strong> Add 1 mL each of phosphate buffer, MgSO₄, CaCl₂, and FeCl₃ solutions per litre distilled water.</li>
+                        <li><strong>Acid and alkali solution:</strong> 1N NaOH and 1N H₂SO₄. Use for neutralising samples.</li>
+                        <li><strong>Glucose-glutamic acid solution (prepare fresh):</strong> Dissolve 150 mg dry reagent grade glucose and 150 mg dry reagent grade glutamic acid in 1 L distilled water.</li>
+                        <li><strong>Sample dilution water:</strong> Add 1 mL each of phosphate buffer, MgSO₄, CaCl₂, and FeCl₃ solutions per litre distilled water.</li>
                     </ul>
                 `,
                 procedure: [
-                  'Prepare required amount of dilution water, bring temperature to 27 °C and saturate with air.',
-                  'Seed the dilution water if necessary (for industrial wastes).',
-                  'Make several dilutions of the sample to get a residual DO of at least 1 mg/L and a DO uptake of at least 2 mg/L after 3 days.',
-                  'Fill three BOD bottles. Determine initial DO (D₀) on one bottle. Incubate the other two at 27 °C for 3 days.',
-                  'Determine final DO (D₃) after 3 days.',
-                  'Also run a dilution water blank and a seed control.',
+                    'Prepare required amount of dilution water at the rate of 1000 to 1200 mL per sample per dilution. Bring the diluted water temperature to 27 °C. Saturate with air by shaking in a partially filled bottle, by bubbling with organic free filtered air or by storing in cotton-plugged bottles for a day.',
+                    'Some samples do not contain sufficient microbial population (for example, some industrial wastes, high temperature wastes, or wastes with extreme pH values). For such wastes, the dilution water is seeded using effluent from a biological treatment system processing the waste. Where this is not available, use supernatant from domestic wastewater after settling for at least 1 h but not more than 36 h. Seed from a surface water body receiving the waste may also be suitable. Add enough seed volume such that the DO uptake of the seeded dilution water is between 0.6 and 1.0 mg/L. For domestic wastewater seed, usually 4 to 6 mL seed / L of dilution water is required. Surface water samples usually do not require seeding.',
+                    'Dilution of sample. Dilutions must result in a sample with a residual DO (after 3 days of incubation) of at least 1 mg/L and a DO uptake of at least 2 mg/L. Make several dilutions using the Table and experience with the particular sample source. Polluted surface waters may have 5 to 25 mg/L BOD.<br/><table class="w-full text-left border-collapse mt-2"><thead><tr><th class="border p-2" colspan="2">Using percent mixture</th><th class="border p-2" colspan="2">By direct pipetting into 300mL bottles</th></tr><tr><th class="border p-2">Range of BOD</th><th class="border p-2">% mixture</th><th class="border p-2">Range of BOD</th><th class="border p-2">mL Sample</th></tr></thead><tbody><tr><td class="border p-2">1,000 - 3,500</td><td class="border p-2">0.2</td><td class="border p-2">1,200 - 4,200</td><td class="border p-2">0.5</td></tr><tr><td class="border p-2">400 - 1,400</td><td class="border p-2">0.5</td><td class="border p-2">600 - 2,100</td><td class="border p-2">1.0</td></tr><tr><td class="border p-2">200 - 700</td><td class="border p-2">1.0</td><td class="border p-2">300 - 1,050</td><td class="border p-2">2.0</td></tr><tr><td class="border p-2">100 - 350</td><td class="border p-2">2.0</td><td class="border p-2">120 - 420</td><td class="border p-2">5.0</td></tr><tr><td class="border p-2">40 - 140</td><td class="border p-2">5.0</td><td class="border p-2">60 - 210</td><td class="border p-2">10.0</td></tr><tr><td class="border p-2">20 - 70</td><td class="border p-2">10.0</td><td class="border p-2">30 - 105</td><td class="border p-2">20.0</td></tr><tr><td class="border p-2">10 - 35</td><td class="border p-2">20.0</td><td class="border p-2">12 - 42</td><td class="border p-2">50.0</td></tr><tr><td class="border p-2">4 - 14</td><td class="border p-2">50.0</td><td class="border p-2">6 - 21</td><td class="border p-2">100.0</td></tr><tr><td class="border p-2">0 - 7</td><td class="border p-2">100.0</td><td class="border p-2">0 - 7</td><td class="border p-2">300.0</td></tr></tbody></table>',
+                    'Dilution water blank. Find the DO consumption of unseeded dilution water. It should not be more than 0.2 mg/L.',
+                    'Seed control. Determine the DO uptake by seeding material.',
                 ],
                 calculation: `
                   <p><strong>When dilution water is not seeded:</strong></p>
@@ -441,7 +446,7 @@ export const waterTestingContent = {
                     <h4>Reagents</h4>
                     <ul class="list-disc list-outside pl-5 space-y-1">
                         <li><strong>Stock boron solution:</strong> Dissolve 571.6 mg anhydrous boric acid in distilled water and dilute to 1 L.</li>
-                        <li><strong>Curcumin reagent:</strong> Dissolve 40 mg curcumin and 5 g oxalic acid in 80 mL 95% ethyl alcohol, add 4.2 mL conc. HCl, make up to 100 mL.</li>
+                        <li><strong>Curcumin reagent:</strong> Dissolve 40 mg curcumin and 5 g oxalic acid in 80 mL 95% ethyl alcohol, add 4.2 mL conc. HCl, make to 100 mL.</li>
                         <li><strong>Ethyl alcohol, 95%.</strong></li>
                     </ul>
                 `,
@@ -462,7 +467,7 @@ export const waterTestingContent = {
                     <h4>Reagents</h4>
                     <ul class="list-disc list-outside pl-5 space-y-1">
                         <li><strong>Sodium hydroxide, NaOH, 1N.</strong></li>
-                        <li><strong>Murexide (ammonium purpurate) indicator:</strong> Mix 200 mg of dye with 100 g of solid NaCl.</li>
+                        <li><strong>Murexide (ammonium purpurate) indicator:</strong> Mix 0.2 g of dye with 100 g of solid NaCl.</li>
                         <li><strong>Standard EDTA titrant, 0.01M:</strong> Dissolve 3.723 g of disodium salt of EDTA in distilled water and dilute to 1000 mL.</li>
                         <li><strong>Standard calcium solution:</strong> Dissolve 1.000 g of anhydrous CaCO₃ in 1+1 HCl and dilute to 1000 mL.</li>
                     </ul>
@@ -477,34 +482,35 @@ export const waterTestingContent = {
             {
                 id: 'cod',
                 title: 'Chemical Oxygen Demand (COD)',
-                intro: 'COD measures the total amount of oxygen required to oxidize both organic and inorganic pollutants using a strong chemical oxidant (potassium dichromate). It provides faster results than BOD.',
+                intro: 'COD measures the total amount of oxygen required to oxidize both organic and inorganic pollutants using a strong chemical oxidant (potassium dichromate).',
                 apparatus: `
                     <ul class="list-disc list-outside pl-5 space-y-1">
                         <li><strong>Reflux flasks:</strong> 250 mL capacity, with 24/29 ground glass neck.</li>
-                        <li><strong>Condensers:</strong> Leibig or equivalent.</li>
-                        <li><strong>Hot plate or gas burner.</strong></li>
+                        <li><strong>Condensers:</strong> Leibig or equivalent, with 24/29 ground glass joint.</li>
+                        <li><strong>Hot plate or gas burner</strong> with sufficient heating surface.</li>
                     </ul>
                 `,
                 reagents: `
                     <h4>Reagents</h4>
                     <ul class="list-disc list-outside pl-5 space-y-1">
-                        <li><strong>Standard potassium dichromate solution, 0.0417M (0.25N):</strong> Dissolve 12.259 g K₂Cr₂O₇ to 1 L.</li>
-                        <li><strong>Sulphuric acid reagent:</strong> Add 5.5 g Ag₂SO₄ per kg of conc. H₂SO₄.</li>
-                        <li><strong>Ferroin indicator solution.</strong></li>
-                        <li><strong>Standard ferrous ammonium sulphate (FAS), titrant, 0.25M:</strong> Dissolve 98 g Fe(NH₄)₂(SO₄)₂·6H₂O in 1 L solution.</li>
+                        <li><strong>Standard potassium dichromate solution, 0.0417M (0.25N):</strong> Dissolve 12.259 g K₂Cr₂O₇ (primary standard grade, previously dried at 103 °C for 2 hours) in distilled water and dilute to 1 L.</li>
+                        <li><strong>Sulphuric acid reagent:</strong> Add 5.5 g Ag₂SO₄ (silver sulfate) per kg of conc. H₂SO₄. Let it stand for a day or two to dissolve.</li>
+                        <li><strong>Ferroin indicator solution:</strong> Dissolve 1.485 g 1,10-phenanthroline monohydrate and 695 mg FeSO₄·7H₂O in distilled water and dilute to 100 mL.</li>
+                        <li><strong>Standard ferrous ammonium sulphate (FAS), titrant, 0.25M:</strong> Dissolve 98 g Fe(NH₄)₂(SO₄)₂·6H₂O in distilled water, add 20 mL conc. H₂SO₄, cool and dilute to 1 L. Standardise daily.</li>
                         <li><strong>Mercuric Sulphate, HgSO₄, powder.</strong></li>
+                        <li><strong>Potassium hydrogen phthalate (KHP) standard:</strong> Weigh 425 mg KHP in distilled water and dilute to 1 L. This solution has a theoretical COD of 500 µgO₂/mL.</li>
                     </ul>
                 `,
                 procedure: [
-                    'Take the sample in a digestion flask.',
-                    'Add 1g HgSO₄, glass beads, and 5 mL sulfuric acid reagent, mix, cool.',
-                    'Add 25 mL potassium dichromate solution and mix.',
-                    'Connect condenser, and add an additional 70 mL of sulfuric acid reagent through the open end of condenser.',
-                    'Reflux for 2 hours; cool, wash down condenser and double the volume.',
-                    'Add ferroin indicator, and titrate with FAS until color change from bluish green to reddish brown.',
-                    'Also perform a blank titration.',
+                    'Add 50 mL of sample or an aliquot diluted to 50 mL into a 500 mL refluxing flask. Add 1g HgSO₄, a few glass beads, and 5 mL sulphuric acid reagent. Mix and cool.',
+                    'Add 25 mL of 0.0417M K₂Cr₂O₇ solution and mix. Connect the flask to the condenser and turn on cooling water. Add an additional 70 mL of sulphuric acid reagent through the open end of the condenser with swirling.',
+                    'Reflux for 2 hours. Cool, then wash down the condenser with distilled water to double the volume of contents. Cool again.',
+                    'Add 2 drops of Ferroin indicator and titrate the remaining potassium dichromate with FAS until the color changes from bluish-green to reddish-brown. Also, reflux and titrate a distilled water blank.',
+                    'Use standard 0.00417M K₂Cr₂O₇ and 0.025M FAS when analyzing very low COD samples.',
+                    'Evaluate the technique and reagents by conducting the test on the potassium hydrogen phthalate solution.',
+                    'Do not add grease at the Leibig jacket to prevent jamming; use water instead.',
                 ],
-                calculation: 'COD (mg/L) = [ (A - B) &times; M &times; 8000 ] / mL of sample<br/><p class="text-xs mt-2">where A = mL of FAS for blank, B = mL of FAS for sample, M = Molarity of FAS.</p>'
+                calculation: 'COD (mg/L) = [ (A - B) &times; M &times; 8000 ] / mL of sample<br/><p class="text-xs mt-2">where: A = mL of FAS for blank, B = mL of FAS for sample, M = Molarity of FAS.</p><p class="text-sm mt-2"><b>Note:</b> Use smaller sample volumes and proportionally reduce quantities of chemicals to economize.</p><table class="w-full text-left border-collapse mt-2"><thead><tr><th class="border p-2">Sample size (mL)</th><th class="border p-2">K₂Cr₂O₇ (mL)</th><th class="border p-2">H₂SO₄ (mL)</th><th class="border p-2">HgSO₄ (g)</th><th class="border p-2">FAS (mole/L)</th><th class="border p-2">Final volume (mL)</th></tr></thead><tbody><tr><td class="border p-2">10.0</td><td class="border p-2">5.0</td><td class="border p-2">15</td><td class="border p-2">0.2</td><td class="border p-2">0.05</td><td class="border p-2">70</td></tr><tr><td class="border p-2">20.0</td><td class="border p-2">10.0</td><td class="border p-2">30</td><td class="border p-2">0.4</td><td class="border p-2">0.10</td><td class="border p-2">140</td></tr><tr><td class="border p-2">30.0</td><td class="border p-2">15.0</td><td class="border p-2">45</td><td class="border p-2">0.6</td><td class="border p-2">0.15</td><td class="border p-2">210</td></tr><tr><td class="border p-2">40.0</td><td class="border p-2">20.0</td><td class="border p-2">60</td><td class="border p-2">0.8</td><td class="border p-2">0.20</td><td class="border p-2">280</td></tr><tr><td class="border p-2">50.0</td><td class="border p-2">25.0</td><td class="border p-2">75</td><td class="border p-2">1.0</td><td class="border p-2">0.25</td><td class="border p-2">350</td></tr></tbody></table>'
             },
             {
                 id: 'chloride',
@@ -622,4 +628,5 @@ export const waterTestingContent = {
         ]
     }
 }
+
 
