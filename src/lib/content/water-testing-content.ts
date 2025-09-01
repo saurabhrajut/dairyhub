@@ -25,16 +25,20 @@ export const waterTestingContent = {
             {
                 id: 'bod',
                 title: 'Biochemical Oxygen Demand (BOD)',
-                intro: 'BOD 20°C पर 5 दिनों में पानी के नमूने में कार्बनिक पदार्थों को विघटित करने में सूक्ष्मजीवों द्वारा खपत की गई ऑक्सीजन की मात्रा को मापता है। यह पानी के प्रदूषण स्तर का एक महत्वपूर्ण संकेतक है।',
+                intro: 'यह परीक्षण 27°C पर 3 दिनों के लिए बोतल ऊष्मायन विधि पर आधारित है।',
                 procedure: [
-                    'BOD तनुकरण पानी का उपयोग करके पानी के नमूने के विभिन्न तनुकरण तैयार करें।',
-                    'प्रत्येक तनुकरण के लिए दो BOD बोतलें भरें: एक प्रारंभिक DO के लिए और एक ऊष्मायन के लिए।',
-                    'पहली बोतल में तुरंत घुलित ऑक्सीजन (DO₁) मापें (विंकलर विधि द्वारा)।',
-                    'दूसरी बोतलों के सेट को 5 दिनों के लिए 20°C पर अंधेरे में ऊष्मायन करें।',
-                    '5 दिनों के बाद, दूसरी बोतलों के सेट में अंतिम घुलित ऑक्सीजन (DO₅) मापें।',
-                    'एक रिक्त नमूने (केवल तनुकरण पानी) के लिए भी यही प्रक्रिया दोहराएं ताकि इसके प्रारंभिक (B₁) और अंतिम (B₅) DO मान मिल सकें।',
+                  '<h4>उपकरण (Apparatus)</h4><ul class="list-disc list-outside pl-5"><li>300 mL की BOD बोतलें।</li><li>27 ± 1 °C पर थर्मोस्टेटिक रूप से नियंत्रित एयर इनक्यूबेटर या वॉटर बाथ।</li><li>सहायक उपकरण: प्लास्टिक ट्यूब, स्क्रू-पिन और 5-10 लीटर का पानी का कंटेनर।</li></ul>',
+                  '<h4>अभिकर्मक (Reagents)</h4><ul class="list-disc list-outside pl-5"><li>फॉस्फेट बफर घोल।</li><li>मैग्नीशियम सल्फेट घोल।</li><li>कैल्शियम क्लोराइड घोल।</li><li>फेरिक क्लोराइड घोल।</li><li>अम्ल और क्षार घोल (1N NaOH, 1N H₂SO₄)।</li><li>ग्लूकोज-ग्लूटामिक एसिड घोल (ताजा तैयार करें)।</li><li>नमूना तनुकरण जल: 1 लीटर आसुत जल में 1 mL प्रत्येक फॉस्फेट बफर, MgSO₄, CaCl₂, और FeCl₃ घोल डालें।</li></ul>',
+                  '<h4>प्रक्रिया (Procedure)</h4><ol class="list-decimal list-outside pl-5"><li>आवश्यक मात्रा में तनुकरण जल तैयार करें (लगभग 1000-1200 mL प्रति नमूना)। जल का तापमान 27°C पर लाएं और हवा से संतृप्त करें।</li><li>यदि आवश्यक हो तो तनुकरण जल को सीड करें (औद्योगिक अपशिष्ट के लिए)।</li><li>नमूने का तनुकरण करें ताकि 3 दिनों के ऊष्मायन के बाद कम से कम 1 mg/L की अवशिष्ट DO और कम से कम 2 mg/L की DO खपत हो। नीचे दी गई तालिका का उपयोग करें:<br><div class="overflow-x-auto my-2"><table class="w-full text-sm"><thead><tr class="bg-muted"><th class="p-2 text-left">BOD की रेंज</th><th class="p-2 text-left">% मिश्रण</th><th class="p-2 text-left">BOD की रेंज</th><th class="p-2 text-left">नमूना mL</th></tr></thead><tbody><tr><td class="p-2 border-b">1,000 - 3,500</td><td class="p-2 border-b">0.2</td><td class="p-2 border-b">1,200 - 4,200</td><td class="p-2 border-b">0.5</td></tr><tr><td class="p-2 border-b">400 - 1,400</td><td class="p-2 border-b">0.5</td><td class="p-2 border-b">600 - 2,100</td><td class="p-2 border-b">1.0</td></tr><tr><td class="p-2 border-b">200 - 700</td><td class="p-2 border-b">1.0</td><td class="p-2 border-b">300 - 1,050</td><td class="p-2 border-b">2.0</td></tr><tr><td class="p-2 border-b">100 - 350</td><td class="p-2 border-b">2.0</td><td class="p-2 border-b">120 - 420</td><td class="p-2 border-b">5.0</td></tr><tr><td class="p-2 border-b">40 - 140</td><td class="p-2 border-b">5.0</td><td class="p-2 border-b">60 - 210</td><td class="p-2 border-b">10.0</td></tr><tr><td class="p-2 border-b">20 - 70</td><td class="p-2 border-b">10.0</td><td class="p-2 border-b">30 - 105</td><td class="p-2 border-b">20.0</td></tr><tr><td class="p-2 border-b">10 - 35</td><td class="p-2 border-b">20.0</td><td class="p-2 border-b">12 - 42</td><td class="p-2 border-b">50.0</td></tr><tr><td class="p-2 border-b">4 - 14</td><td class="p-2 border-b">50.0</td><td class="p-2 border-b">6 - 21</td><td class="p-2 border-b">100.0</td></tr><tr><td class="p-2 border-b">0 - 7</td><td class="p-2 border-b">100.0</td><td class="p-2 border-b">0 - 7</td><td class="p-2 border-b">300.0</td></tr></tbody></table></div></li><li>तीन BOD बोतलें भरें। एक बोतल में प्रारंभिक DO (D₀) का निर्धारण करें। अन्य दो को 27°C पर 3 दिनों के लिए ऊष्मायन करें।</li><li>3 दिनों के बाद अंतिम DO (D₃) का निर्धारण करें।</li><li>एक तनुकरण जल रिक्त (dilution water blank) और एक बीज नियंत्रण (seed control) भी चलाएं।</li></ol>',
                 ],
-                calculation: 'BOD₅ (mg/L) = [ (DO₁ - DO₅) - (B₁ - B₅) ] &times; तनुकरण कारक'
+                calculation: `
+                  <p><strong>जब तनुकरण जल सीड नहीं किया गया हो:</strong></p>
+                  <code>BOD₃,₂₇ (mg/L) = (D₀ - D₃) / P</code>
+                  <p class="mt-4"><strong>जब तनुकरण जल सीड किया गया हो:</strong></p>
+                  <code>BOD₃,₂₇ (mg/L) = [ (D₀ - D₃) - f &times; (B₀ - B₃) ] / P</code>
+                  <p class="text-xs mt-2">जहाँ: D₀=प्रारंभिक DO, D₃=3 दिन बाद DO, P=नमूने का दशमलव भिन्न, B₀=बीज नियंत्रण का प्रारंभिक DO, B₃=बीज नियंत्रण का अंतिम DO, f=बीज का अनुपात।</p>
+                  <p class="text-xs mt-2"><strong>नोट्स:</strong> यदि दोनों तनुकरण सही हैं तो डुप्लिकेट के औसत परिणामों की रिपोर्ट करें। तनुकरण जल का BOD 0.2 mg/L से अधिक नहीं होना चाहिए।</p>
+                `
             },
             {
                 id: 'chloride',
@@ -136,19 +140,23 @@ export const waterTestingContent = {
                 ],
                 calculation: 'Total Alkalinity (mg/L as CaCO₃) = (T &times; Normality of Acid &times; 50000) / Volume of Sample (mL)'
             },
-            {
+             {
                 id: 'bod',
                 title: 'Biochemical Oxygen Demand (BOD)',
-                intro: 'BOD measures the amount of oxygen consumed by microorganisms to decompose organic matter in a water sample over 5 days at 20°C. It is a crucial indicator of water pollution.',
+                intro: 'This test is based on the bottle incubation method for 3 days at 27°C.',
                 procedure: [
-                    'Prepare various dilutions of the water sample using BOD dilution water.',
-                    'Fill two BOD bottles for each dilution: one for initial DO and one for incubation.',
-                    'Measure the Initial Dissolved Oxygen (DO₁) in the first bottle immediately (using Winkler method).',
-                    'Incubate the second set of bottles in the dark at 20°C for 5 days.',
-                    'After 5 days, measure the Final Dissolved Oxygen (DO₅) in the second set of bottles.',
-                    'Repeat the same process for a blank sample (only dilution water) to find its initial (B₁) and final (B₅) DO values.',
+                  '<h4>Apparatus</h4><ul class="list-disc list-outside pl-5"><li>BOD bottles, 300 mL.</li><li>Air incubator or water bath, thermostatically controlled at 27 ± 1 °C.</li><li>Accessories: plastic tube, screw-pin and a 5-10 L water container.</li></ul>',
+                  '<h4>Reagents</h4><ul class="list-disc list-outside pl-5"><li>Phosphate buffer solution.</li><li>Magnesium sulphate solution.</li><li>Calcium chloride solution.</li><li>Ferric chloride solution.</li><li>Acid and alkali solution (1N NaOH, 1N H₂SO₄).</li><li>Glucose-glutamic acid solution (prepare fresh).</li><li>Sample dilution water: Add 1 mL each of phosphate buffer, MgSO₄, CaCl₂, and FeCl₃ solutions per litre distilled water.</li></ul>',
+                  '<h4>Procedure</h4><ol class="list-decimal list-outside pl-5"><li>Prepare required amount of dilution water (approx. 1000-1200 mL per sample). Bring water temperature to 27 °C and saturate with air.</li><li>Seed the dilution water if necessary (for industrial wastes).</li><li>Make several dilutions of the sample to get a residual DO of at least 1 mg/L and a DO uptake of at least 2 mg/L after 3 days. Use the table below:<br><div class="overflow-x-auto my-2"><table class="w-full text-sm"><thead><tr class="bg-muted"><th class="p-2 text-left">Range of BOD</th><th class="p-2 text-left">% mixture</th><th class="p-2 text-left">Range of BOD</th><th class="p-2 text-left">mL Sample</th></tr></thead><tbody><tr><td class="p-2 border-b">1,000 - 3,500</td><td class="p-2 border-b">0.2</td><td class="p-2 border-b">1,200 - 4,200</td><td class="p-2 border-b">0.5</td></tr><tr><td class="p-2 border-b">400 - 1,400</td><td class="p-2 border-b">0.5</td><td class="p-2 border-b">600 - 2,100</td><td class="p-2 border-b">1.0</td></tr><tr><td class="p-2 border-b">200 - 700</td><td class="p-2 border-b">1.0</td><td class="p-2 border-b">300 - 1,050</td><td class="p-2 border-b">2.0</td></tr><tr><td class="p-2 border-b">100 - 350</td><td class="p-2 border-b">2.0</td><td class="p-2 border-b">120 - 420</td><td class="p-2 border-b">5.0</td></tr><tr><td class="p-2 border-b">40 - 140</td><td class="p-2 border-b">5.0</td><td class="p-2 border-b">60 - 210</td><td class="p-2 border-b">10.0</td></tr><tr><td class="p-2 border-b">20 - 70</td><td class="p-2 border-b">10.0</td><td class="p-2 border-b">30 - 105</td><td class="p-2 border-b">20.0</td></tr><tr><td class="p-2 border-b">10 - 35</td><td class="p-2 border-b">20.0</td><td class="p-2 border-b">12 - 42</td><td class="p-2 border-b">50.0</td></tr><tr><td class="p-2 border-b">4 - 14</td><td class="p-2 border-b">50.0</td><td class="p-2 border-b">6 - 21</td><td class="p-2 border-b">100.0</td></tr><tr><td class="p-2 border-b">0 - 7</td><td class="p-2 border-b">100.0</td><td class="p-2 border-b">0 - 7</td><td class="p-2 border-b">300.0</td></tr></tbody></table></div></li><li>Fill three BOD bottles. Determine initial DO (D₀) on one bottle. Incubate the other two at 27 °C for 3 days.</li><li>Determine final DO (D₃) after 3 days.</li><li>Also run a dilution water blank and a seed control.</li></ol>',
                 ],
-                calculation: 'BOD₅ (mg/L) = [ (DO₁ - DO₅) - (B₁ - B₅) ] &times; Dilution Factor'
+                calculation: `
+                  <p><strong>When dilution water is not seeded:</strong></p>
+                  <code>BOD₃,₂₇ (mg/L) = (D₀ - D₃) / P</code>
+                  <p class="mt-4"><strong>When dilution water is seeded:</strong></p>
+                  <code>BOD₃,₂₇ (mg/L) = [ (D₀ - D₃) - f &times; (B₀ - B₃) ] / P</code>
+                  <p class="text-xs mt-2">where: D₀=initial DO, D₃=DO after 3 days, P=decimal volumetric fraction of sample, B₀=initial DO of seed, B₃=final DO of seed, f=ratio of seed.</p>
+                  <p class="text-xs mt-2"><strong>Notes:</strong> Report average results of duplicates if both dilutions are correct. BOD of dilution water should not be more than 0.2 mg/L.</p>
+                `
             },
             {
                 id: 'chloride',
