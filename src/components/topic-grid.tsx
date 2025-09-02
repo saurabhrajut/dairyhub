@@ -217,10 +217,6 @@ export function TopicGrid() {
       {topics.map(topic => {
           const ModalComponent = topic.modal;
           if (!ModalComponent) return null;
-          // ExpertSupportModal is the only one that doesn't take isPro
-          if (topic.id === 'expert-support') {
-            return <ModalComponent key={`${topic.id}-modal`} isOpen={activeModal === topic.id} setIsOpen={() => setActiveModal(null)} />
-          }
           return <ModalComponent key={`${topic.id}-modal`} isOpen={activeModal === topic.id} setIsOpen={() => setActiveModal(null)} />
       })}
     </>
