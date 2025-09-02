@@ -74,7 +74,7 @@ export const aboutUsContent = {
         description: "The story of your trusted digital dairy partner",
         developer: {
             name: "Saurabh Rajput",
-            image: "https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/IMG_6535%20(2).jpg?alt=media&token=5843169c-b4d5-4e04-b2be-3ab1a49af457",
+            image: "/IMG_6535 (2).jpg"
             academicInfo: {
                 title: "Academic Information",
                 degrees: [
