@@ -131,12 +131,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(updatedUser);
       localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(updatedUser));
       
-      const allUsers = getUsers();
+      let allUsers = getUsers();
       const userIndex = allUsers.findIndex(u => u.uid === user.uid);
       if (userIndex !== -1) {
           allUsers[userIndex] = updatedUser;
-          saveUsers(allUsers);
+      } else if (user.uid.startsWith('guest-')) {
+          // If it's a guest user who is updating, they might not be in the main list.
+          // This path is unlikely given current UI, but good to handle.
+          allUsers.push(updatedUser);
       }
+      saveUsers(allUsers);
       console.log("User profile updated.", updatedUser);
     }
   };
