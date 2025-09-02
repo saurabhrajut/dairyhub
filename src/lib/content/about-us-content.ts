@@ -8,7 +8,7 @@ export const aboutUsContent = {
         description: "आपके भरोसेमंद डिजिटल डेयरी पार्टनर की कहानी",
         developer: {
             name: "सौरभ राजपूत",
-            image: Image: "/IMG_6535.jpg",
+            image: "/IMG_6535.jpg",
             academicInfo: {
                 title: "शैक्षणिक जानकारी",
                 degrees: [
