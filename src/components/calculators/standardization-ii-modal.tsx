@@ -286,7 +286,7 @@ function CustomStandardizationCalc() {
     
         setResult(resultText);
 
-    }, [inputs, milkSnf, reqSnf]);
+    }, [inputs, milkSnf, reqSnf, calculateSnf]);
 
     return (
         <CalculatorCard title="Multi-Purpose Milk Standardization Calculator" description="A precise tool to adjust Fat and SNF using various sources. Enter all values; the calculator will determine what to add.">
@@ -594,18 +594,17 @@ function FatReductionClrMaintainCalc() {
     const [error, setError] = useState<string | null>(null);
 
     const handleInputChange = useCallback((name: string, value: string) => {
-        const newInputs = { ...inputs, [name]: value };
-        setInputs(newInputs);
-    }, [inputs]);
+        setInputs(prev => ({...prev, [name]: value}));
+    }, []);
     
-    const calculate = useCallback((currentInputs: typeof inputs) => {
-        const V0 = parseFloat(currentInputs.initialVolume);
-        const F0 = parseFloat(currentInputs.initialFat);
-        const C0 = parseFloat(currentInputs.initialClr);
-        const Ft = parseFloat(currentInputs.targetFat);
-        const Ct = parseFloat(currentInputs.targetClr);
-        const Fs = parseFloat(currentInputs.skimFat);
-        const Cs = parseFloat(currentInputs.skimClr);
+    const calculate = useCallback(() => {
+        const V0 = parseFloat(inputs.initialVolume);
+        const F0 = parseFloat(inputs.initialFat);
+        const C0 = parseFloat(inputs.initialClr);
+        const Ft = parseFloat(inputs.targetFat);
+        const Ct = parseFloat(inputs.targetClr);
+        const Fs = parseFloat(inputs.skimFat);
+        const Cs = parseFloat(inputs.skimClr);
 
         if ([V0, F0, C0, Ft, Ct, Fs, Cs].some(isNaN)) {
             setError("Please enter valid numbers in all input boxes.");
@@ -652,11 +651,7 @@ function FatReductionClrMaintainCalc() {
             finalClr: `${finalClrCheck.toFixed(2)}`
         });
 
-    }, []);
-
-    useEffect(() => {
-        calculate(inputs);
-    }, [inputs, calculate]);
+    }, [inputs]);
 
     return (
         <CalculatorCard 
@@ -708,6 +703,7 @@ function FatReductionClrMaintainCalc() {
                     )}
                  </div>
             </div>
+             <Button onClick={calculate} className="w-full mt-6">Calculate</Button>
         </CalculatorCard>
     );
 }
@@ -719,10 +715,10 @@ function TwoComponentStandardizationCalc() {
                 <TabsTrigger value="cream">Water &amp; Cream</TabsTrigger>
                 <TabsTrigger value="richMilk">Water &amp; Rich Milk</TabsTrigger>
             </TabsList>
-            <TabsContent value="cream">
+            <TabsContent value="cream" className="pt-4">
                 <StandardizeWithCream />
             </TabsContent>
-            <TabsContent value="richMilk">
+            <TabsContent value="richMilk" className="pt-4">
                 <StandardizeWithRichMilk />
             </TabsContent>
         </Tabs>
@@ -732,8 +728,16 @@ function TwoComponentStandardizationCalc() {
 const StandardizeWithCream = () => {
     const [inputs, setInputs] = useState({ V0: '700', Fi: '4', CLR0: '31.5', Ft: '4', CLRt: '29', Fc: '40', CLRc: '10' });
     const [results, setResults] = useState<any>(null);
+    const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
+    const handleInputChange = useCallback((name: string, value: string) => {
+        setInputs(prev => ({...prev, [name]: value}));
+    }, []);
+
+    const calculate = useCallback(() => {
+        setResults(null);
+        setError(null);
+
         const V0 = parseFloat(inputs.V0) || 0;
         const Fi = parseFloat(inputs.Fi) || 0;
         const CLR0 = parseFloat(inputs.CLR0) || 0;
@@ -741,6 +745,11 @@ const StandardizeWithCream = () => {
         const CLRt = parseFloat(inputs.CLRt) || 0;
         const Fc = parseFloat(inputs.Fc) || 0;
         const CLRc = parseFloat(inputs.CLRc) || 0;
+
+        if ([V0, Fi, CLR0, Ft, CLRt, Fc, CLRc].some(isNaN)) {
+            setError("Please fill all fields with valid numbers.");
+            return;
+        }
 
         // Using formula: SNF % = CLR/4 + 0.2*Fat + 0.36
         const formula = (clr: number, fat: number) => clr / 4 + 0.2 * fat + 0.36;
@@ -758,12 +767,17 @@ const StandardizeWithCream = () => {
         const D = a1 * b2 - a2 * b1;
         
         if (Math.abs(D) < 1e-9) {
-            setResults(null);
+            setError("Cannot calculate with current inputs. The target values may not be achievable with the given ingredients.");
             return;
         }
 
         const x = (c1 * b2 - c2 * b1) / D; // water
         const y = (a1 * c2 - a2 * c1) / D; // cream
+
+        if (x < 0 || y < 0) {
+             setError("Cannot calculate. Resulting quantities are negative.");
+             return;
+        }
 
         const Vf = V0 + x + y;
         const totalFatKg = (Fi / 100 * V0) + (Fc / 100 * y);
@@ -773,12 +787,7 @@ const StandardizeWithCream = () => {
         const finalClrCheck = 4 * (finalSnfPercent - 0.2 * finalFatPercent - 0.36);
 
         setResults({ x, y, Vf, finalFatPercent, finalSnfPercent, finalClrCheck });
-
     }, [inputs]);
-
-     const handleInputChange = useCallback((name: string, value: string) => {
-        setInputs(prev => ({...prev, [name]: value}));
-    }, []);
 
     return (
         <CalculatorCard title="Standardize with Water & Cream" description="Calculate the amount of water and cream to add to achieve target Fat and CLR.">
@@ -800,8 +809,10 @@ const StandardizeWithCream = () => {
                     <MemoizedInputField label="CLR꜀" value={inputs.CLRc} name="CLRc" setter={handleInputChange} />
                 </div>
             </div>
-            {results && results.x >= 0 && results.y >= 0 && (
-                <Alert>
+            <Button onClick={calculate} className="w-full mt-4">Calculate</Button>
+            {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
+            {results && (
+                <Alert className="mt-4">
                     <AlertTitle>Results</AlertTitle>
                     <AlertDescription>
                         <p><strong>Water to add:</strong> {results.x.toFixed(2)} L</p>
@@ -814,12 +825,6 @@ const StandardizeWithCream = () => {
                     </AlertDescription>
                 </Alert>
             )}
-             {(!results || results.x < 0 || results.y < 0) && (
-                <Alert variant="destructive">
-                    <AlertTitle>Error</AlertTitle>
-                    <AlertDescription>Cannot calculate with current inputs. The target values may not be achievable with the given ingredients.</AlertDescription>
-                </Alert>
-            )}
         </CalculatorCard>
     );
 };
@@ -827,8 +832,16 @@ const StandardizeWithCream = () => {
 const StandardizeWithRichMilk = () => {
     const [inputs, setInputs] = useState({ V0: '700', Fi: '4', CLR0: '31.5', Ft: '4', CLRt: '29', Fr: '6', CLRr: '30' });
     const [results, setResults] = useState<any>(null);
+    const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
+    const handleInputChange = useCallback((name: string, value: string) => {
+        setInputs(prev => ({...prev, [name]: value}));
+    }, []);
+
+    const calculate = useCallback(() => {
+        setResults(null);
+        setError(null);
+
         const V0 = parseFloat(inputs.V0) || 0;
         const Fi = parseFloat(inputs.Fi) || 0;
         const CLR0 = parseFloat(inputs.CLR0) || 0;
@@ -836,6 +849,11 @@ const StandardizeWithRichMilk = () => {
         const CLRt = parseFloat(inputs.CLRt) || 0;
         const Fr = parseFloat(inputs.Fr) || 0;
         const CLRr = parseFloat(inputs.CLRr) || 0;
+
+        if ([V0, Fi, CLR0, Ft, CLRt, Fr, CLRr].some(isNaN)) {
+            setError("Please fill all fields with valid numbers.");
+            return;
+        }
         
         const formula = (clr: number, fat: number) => clr / 4 + 0.2 * fat + 0.36;
 
@@ -852,12 +870,17 @@ const StandardizeWithRichMilk = () => {
         const D = a1 * b2 - a2 * b1;
         
         if (Math.abs(D) < 1e-9) {
-            setResults(null);
+            setError("Cannot calculate with current inputs. The target values may not be achievable with the given ingredients.");
             return;
         }
 
         const x = (c1 * b2 - c2 * b1) / D; // water
         const y = (a1 * c2 - a2 * c1) / D; // rich milk
+        
+        if (x < 0 || y < 0) {
+             setError("Cannot calculate. Resulting quantities are negative.");
+             return;
+        }
 
         const Vf = V0 + x + y;
         const totalFatKg = (Fi / 100 * V0) + (Fr / 100 * y);
@@ -869,10 +892,6 @@ const StandardizeWithRichMilk = () => {
         setResults({ x, y, Vf, finalFatPercent, finalSnfPercent, finalClrCheck });
 
     }, [inputs]);
-
-     const handleInputChange = useCallback((name: string, value: string) => {
-        setInputs(prev => ({...prev, [name]: value}));
-    }, []);
 
     return (
         <CalculatorCard title="Standardize with Water & Rich Milk" description="Calculate the amount of water and rich milk to add to achieve target Fat and CLR.">
@@ -894,8 +913,10 @@ const StandardizeWithRichMilk = () => {
                     <MemoizedInputField label="CLRᵣ" value={inputs.CLRr} name="CLRr" setter={handleInputChange} />
                 </div>
             </div>
-            {results && results.x >= 0 && results.y >= 0 && (
-                <Alert>
+             <Button onClick={calculate} className="w-full mt-4">Calculate</Button>
+            {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
+            {results && (
+                <Alert className="mt-4">
                     <AlertTitle>Results</AlertTitle>
                     <AlertDescription>
                         <p><strong>Water to add:</strong> {results.x.toFixed(2)} L</p>
@@ -906,12 +927,6 @@ const StandardizeWithRichMilk = () => {
                         <p><strong>Final SNF Check:</strong> {results.finalSnfPercent.toFixed(2)}%</p>
                         <p><strong>Final CLR Check:</strong> {results.finalClrCheck.toFixed(2)}</p>
                     </AlertDescription>
-                </Alert>
-            )}
-             {(!results || results.x < 0 || results.y < 0) && (
-                <Alert variant="destructive">
-                    <AlertTitle>Error</AlertTitle>
-                    <AlertDescription>Cannot calculate with current inputs. The target values may not be achievable with the given ingredients.</AlertDescription>
                 </Alert>
             )}
         </CalculatorCard>
@@ -1597,6 +1612,7 @@ function KgFatSnfCalc() {
     
 
     
+
 
 
 
