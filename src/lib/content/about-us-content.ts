@@ -8,7 +8,7 @@ export const aboutUsContent = {
         description: "आपके भरोसेमंद डिजिटल डेयरी पार्टनर की कहानी",
         developer: {
             name: "सौरभ राजपूत",
-            image: "https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/IMG_6535%20(2).jpg?alt=media&token=5843169c-b4d5-4e04-b2be-3ab1a49af457",
+            image: Image: "/IMG_6535.jpg",
             academicInfo: {
                 title: "शैक्षणिक जानकारी",
                 degrees: [
