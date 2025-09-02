@@ -20,7 +20,7 @@ import { useLanguage } from "@/context/language-context";
 import { microbiologyContent } from "@/lib/content/microbiology-content";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import { Button } from "../ui/button";
-import { ArrowLeft, TestTube, Bug, ShieldOff, FlaskConical, Proportions } from "lucide-react";
+import { ArrowLeft, TestTube, Bug, ShieldOff, FlaskConical, Proportions, Dna, Thermometer } from "lucide-react";
 
 
 const TestProcedure = ({ test }: { test: any }) => (
@@ -57,8 +57,33 @@ const topicComponents: { [key: string]: React.FC<{ content: any }> } = {
         if (!section) return null;
         return <Section title={section.title}><div dangerouslySetInnerHTML={{ __html: section.content }} /></Section>;
     },
-    undesirable_microorganisms: function Content({ content }: { content: any }) {
-        const section = content.sections.find((s:any) => s.id === 'undesirable_microorganisms');
+    thermophilic_thermoduric: function Content({ content }: { content: any }) {
+        const section = content.sections.find((s:any) => s.id === 'thermophilic_thermoduric');
+        if (!section) return null;
+        return <Section title={section.title}><div dangerouslySetInnerHTML={{ __html: section.content }} /></Section>;
+    },
+    psychrotrophic: function Content({ content }: { content: any }) {
+        const section = content.sections.find((s:any) => s.id === 'psychrotrophic');
+        if (!section) return null;
+        return <Section title={section.title}><div dangerouslySetInnerHTML={{ __html: section.content }} /></Section>;
+    },
+     lactic_acid_bacteria: function Content({ content }: { content: any }) {
+        const section = content.sections.find((s:any) => s.id === 'lactic_acid_bacteria');
+        if (!section) return null;
+        return <Section title={section.title}><div dangerouslySetInnerHTML={{ __html: section.content }} /></Section>;
+    },
+    spoilage_pathogenic: function Content({ content }: { content: any }) {
+        const section = content.sections.find((s:any) => s.id === 'spoilage_pathogenic');
+        if (!section) return null;
+        return <Section title={section.title}><div dangerouslySetInnerHTML={{ __html: section.content }} /></Section>;
+    },
+    enterobacteriaceae: function Content({ content }: { content: any }) {
+        const section = content.sections.find((s:any) => s.id === 'enterobacteriaceae');
+        if (!section) return null;
+        return <Section title={section.title}><div dangerouslySetInnerHTML={{ __html: section.content }} /></Section>;
+    },
+    cronobacter: function Content({ content }: { content: any }) {
+        const section = content.sections.find((s:any) => s.id === 'cronobacter');
         if (!section) return null;
         return <Section title={section.title}><div dangerouslySetInnerHTML={{ __html: section.content }} /></Section>;
     },
@@ -105,7 +130,12 @@ export function MicrobiologyTestingModal({ isOpen, setIsOpen }: { isOpen: boolea
 
   const topics = [
       { value: "intro", title: "Introduction", icon: Bug },
-      { value: "undesirable_microorganisms", title: "Undesirable Microorganisms", icon: ShieldOff },
+      { value: "thermophilic_thermoduric", title: "Thermophilic & Thermoduric Bacteria", icon: Thermometer },
+      { value: "psychrotrophic", title: "Psychrotrophic Bacteria", icon: Bug },
+      { value: "lactic_acid_bacteria", title: "Lactic Acid Bacteria", icon: Dna },
+      { value: "spoilage_pathogenic", title: "Spoilage & Pathogenic Organisms", icon: ShieldOff },
+      { value: "enterobacteriaceae", title: "Enterobacteriaceae Family", icon: Bug },
+      { value: "cronobacter", title: "Cronobacter", icon: Bug },
       { value: "sources_of_contamination", title: "Sources of Contamination", icon: FlaskConical },
       { value: "hygienic_measures", title: "Hygienic Measures", icon: Proportions },
       { value: "test_methods", title: "Common Test Methods", icon: TestTube }
@@ -162,4 +192,3 @@ export function MicrobiologyTestingModal({ isOpen, setIsOpen }: { isOpen: boolea
     </Dialog>
   );
 }
-

@@ -1,4 +1,5 @@
 
+
 export const microbiologyContent = {
     hi: {
         title: "दूध सूक्ष्म जीव विज्ञान और परीक्षण",
@@ -20,27 +21,51 @@ export const microbiologyContent = {
                 `
             },
             {
-                id: "undesirable_microorganisms",
-                title: "अवांछनीय सूक्ष्मजीव",
+                id: "thermophilic_thermoduric",
+                title: "थर्मोफिलिक और थर्मोड्यूरिक बैक्टीरिया",
                 content: `
-                    <p>अधिकांश सूक्ष्मजीव दूध में अवांछनीय होते हैं क्योंकि वे रोगजनक हो सकते हैं या एंजाइम उत्पन्न कर सकते हैं जो दूध में अवांछनीय परिवर्तन का कारण बनते हैं।</p>
-                    <h4 class="font-bold mt-4">खराब करने वाले सूक्ष्मजीव (Spoilage Microorganisms)</h4>
-                    <ul class="list-disc list-outside pl-5 space-y-2 mt-2">
-                        <li><strong>लैक्टिक एसिड बैक्टीरिया:</strong> ये बैक्टीरिया मुख्य रूप से लैक्टोज जैसे कार्बोहाइड्रेट से लैक्टिक एसिड का उत्पादन करते हैं। वे व्यापक हैं और इसमें लैक्टोकोकस और लैक्टोबैसिलस जैसे जेनेरा शामिल हैं।</li>
-                        <li><strong>कोलीफॉर्म:</strong> एंटरोबैक्टीरियासी से संबंधित हैं और व्यापक हैं, जैसे, पाचन तंत्र में। वे दूध में तेजी से बढ़ते हैं, खासकर 20 डिग्री सेल्सियस से ऊपर, और प्रोटीन और लैक्टोज पर हमला करते हैं, जिसके परिणामस्वरूप गैस बनती है और दूध का स्वाद 'अशुद्ध' हो जाता है।</li>
-                        <li><strong>साइकोट्रोफ्स:</strong> स्यूडोमोनास, एक्रोमोबैक्टर, फ्लेवोबैक्टीरियम, और एल्कालिजेन्स जैसे जेनेरा शामिल हैं। साइकोट्रोफ्स कम तापमान (15 डिग्री सेल्सियस से कम) पर आसानी से बढ़ते हैं; दूध में वे 4 डिग्री सेल्सियस जितने कम तापमान पर भी फैलते हैं। जीव प्रोटीज और लाइपेस का उत्पादन करते हैं, और इस प्रकार प्रोटीन और वसा पर हमला करते हैं, जिससे 'सड़ा हुआ' और बासी ऑफ-फ्लेवर होता है।</li>
-                        <li><strong>गर्मी प्रतिरोधी बैक्टीरिया:</strong> कुछ बैक्टीरिया, जिनमें माइक्रोबैक्टीरियम लैक्टिकम, थर्मोफिलिक स्ट्रेप्टोकोकी और कुछ माइक्रोकोकस प्रजातियां शामिल हैं, बीजाणु नहीं बनाते हैं, लेकिन वनस्पति कोशिकाएं कम पाश्चुरीकरण से बच जाती हैं।</li>
-                        <li><strong>बैक्टीरिया के बीजाणु:</strong> बैसिलस (एरोबिक) और क्लोस्ट्रीडियम (एनारोबिक) जेनेरा बीजाणु बना सकते हैं। इनमें से अधिकांश काफी तीव्र गर्मी उपचार से बच जाते हैं।</li>
-                    </ul>
-                    <h4 class="font-bold mt-4">रोगजनक सूक्ष्मजीव (Pathogenic Microorganisms)</h4>
-                     <ul class="list-disc list-outside pl-5 space-y-2 mt-2">
-                        <li><strong>माइकोबैक्टीरियम ट्यूबरकुलोसिस:</strong> गाय या दूध वाले से उत्पन्न हो सकता है। यह कम पाश्चुरीकरण से मारा जाता है।</li>
-                        <li><strong>स्टैफिलोकोकस ऑरियस:</strong> अक्सर मास्टिटिस वाली गाय के थन में होता है। कुछ उपभेद गर्मी प्रतिरोधी विष बना सकते हैं।</li>
-                        <li><strong>साल्मोनेला और शिगेला एसपीपी.:</strong> प्रकृति में व्यापक रूप से होते हैं, जैसे, गोबर और प्रदूषित पानी में। कम पाश्चुरीकरण उन्हें मारने के लिए पर्याप्त है।</li>
-                        <li><strong>कैम्पिलोबैक्टर जेजुनी:</strong> कई जानवरों के आंतों के मार्ग में हो सकता है। यह बहुत गर्मी के प्रति संवेदनशील है और कम पाश्चुरीकरण से नहीं बचेगा।</li>
-                        <li><strong>लिस्टेरिया मोनोसाइटोजेन्स:</strong> प्रकृति में अक्सर पाया जाता है। यह 5 डिग्री सेल्सियस जितने कम तापमान पर बढ़ सकता है और सामान्य पाश्चुरीकरण द्वारा मारा जाता है।</li>
-                        <li><strong>कॉक्सिएला बर्नेटी:</strong> मनुष्यों में क्यू बुखार का कारण बनता है। यह कम पाश्चुरीकरण से बच सकता है यदि तापमान पर्याप्त न हो।</li>
-                    </ul>
+                    <h4 class="font-bold mt-4">थर्मोफिलिक बैक्टीरिया</h4>
+                    <p>ये बैक्टीरिया उच्च तापमान (45°C से ऊपर) पर पनपते हैं। वे डेयरी प्रसंस्करण में एक चिंता का विषय हैं क्योंकि वे पाश्चुरीकरण से बच सकते हैं यदि तापमान पर्याप्त रूप से नियंत्रित नहीं किया जाता है और उच्च तापमान वाले उपकरणों में बढ़ सकता है। उदाहरणों में बैसिलस और क्लोस्ट्रीडियम की प्रजातियां शामिल हैं।</p>
+                    <h4 class="font-bold mt-4">थर्मोड्यूरिक बैक्टीरिया</h4>
+                    <p>ये जीव पाश्चुरीकरण तापमान से बच सकते हैं लेकिन जरूरी नहीं कि वे उच्च तापमान पर बढ़ें। वे खराब साफ किए गए उपकरणों से उत्पन्न हो सकते हैं और पाश्चुरीकृत दूध की शेल्फ जीवन और गुणवत्ता को प्रभावित कर सकते हैं। उदाहरणों में माइक्रोकोकस, माइक्रोबैक्टीरियम और कुछ बैसिलस बीजाणु शामिल हैं।</p>
+                `
+            },
+            {
+                id: "psychrotrophic",
+                title: "साइकोट्रोफिक बैक्टीरिया",
+                content: `
+                    <p>साइकोट्रोफिक बैक्टीरिया रेफ्रिजरेटर के तापमान (7°C से नीचे) पर बढ़ सकते हैं, जिससे वे प्रशीतित कच्चे और पाश्चुरीकृत दूध के लिए एक बड़ी चिंता का विषय बन जाते हैं। वे गर्मी-स्थिर प्रोटीज और लाइपेस का उत्पादन कर सकते हैं जो पाश्चुरीकरण से बच जाते हैं और भंडारण के दौरान कड़वाहट और बासीपन जैसे ऑफ-फ्लेवर का कारण बनते हैं। स्यूडोमोनास जीनस एक सामान्य अपराधी है।</p>
+                `
+            },
+            {
+                id: "lactic_acid_bacteria",
+                title: "लैक्टिक एसिड बैक्टीरिया (LAB)",
+                content: `
+                    <p>लैक्टिक एसिड बैक्टीरिया (LAB) किण्वित डेयरी उत्पादों जैसे दही, पनीर और छाछ के उत्पादन के लिए आवश्यक हैं। वे लैक्टोज को लैक्टिक एसिड में किण्वित करते हैं, जो इन उत्पादों के संरक्षण और विशिष्ट बनावट और स्वाद के लिए जिम्मेदार है। सामान्य जेनेरा में लैक्टोकोकस, लैक्टोबैसिलस, स्ट्रेप्टोकोकस और ल्यूकोनोस्टोक शामिल हैं। जबकि किण्वित उत्पादों में फायदेमंद है, कच्चे दूध में उनका अनियंत्रित विकास खट्टापन और खराब होने का कारण बनता है।</p>
+                `
+            },
+            {
+                id: "spoilage_pathogenic",
+                title: "खराब करने वाले और रोगजनक जीव",
+                content: `
+                    <h4 class="font-bold mt-4">खराब करने वाले जीव (Spoilage Organisms)</h4>
+                    <p>ये सूक्ष्मजीव रोग का कारण नहीं बनते हैं लेकिन दूध और दूध उत्पादों के स्वाद, गंध और बनावट को नीचा दिखाते हैं, जिससे वे उपभोग के लिए अनुपयुक्त हो जाते हैं। उदाहरणों में स्यूडोमोनास, कुछ बैसिलस प्रजातियां और खमीर और मोल्ड शामिल हैं।</p>
+                    <h4 class="font-bold mt-4">रोगजनक जीव (Pathogenic Organisms)</h4>
+                    <p>ये सूक्ष्मजीव मनुष्यों में बीमारी पैदा करने में सक्षम हैं। दूध साल्मोनेला, लिस्टेरिया मोनोसाइटोजेन्स, कैम्पिलोबैक्टर जेजुनी और ई. कोलाई O157:H7 जैसे रोगजनकों के लिए एक वाहन हो सकता है। पाश्चुरीकरण इन रोगजनकों को प्रभावी ढंग से नष्ट करने के लिए डिज़ाइन किया गया है, जिससे दूध का सेवन सुरक्षित हो जाता है।</p>
+                `
+            },
+            {
+                id: "enterobacteriaceae",
+                title: "एंटरोबैक्टीरियासी (Enterobacteriaceae)",
+                content: `
+                    <p>यह बैक्टीरिया का एक बड़ा परिवार है जिसमें कोलीफॉर्म, ई. कोलाई और साल्मोनेला जैसे कई जेनेरा शामिल हैं। वे अक्सर पर्यावरण और जानवरों की आंतों में पाए जाते हैं। डेयरी उत्पादों में उनकी उपस्थिति आम तौर पर खराब स्वच्छता या अपर्याप्त प्रसंस्करण का संकेत देती है, और इसलिए उन्हें स्वच्छता संकेतक के रूप में उपयोग किया जाता है।</p>
+                `
+            },
+            {
+                id: "cronobacter",
+                title: "क्रोनोबैक्टर (Cronobacter)",
+                content: `
+                    <p>क्रोनोबैक्टर (पूर्व में एंटरोबैक्टर साकाज़ाकी) एक रोगजनक बैक्टीरिया है जो शिशुओं, विशेष रूप से नवजातों में मैनिंजाइटिस और नेक्रोटाइज़िंग एंटरोकोलाइटिस जैसे गंभीर संक्रमणों का कारण बन सकता है। यह पाउडर शिशु फार्मूला (PIF) में एक विशेष चिंता का विषय है क्योंकि यह सूखे वातावरण में जीवित रह सकता है। निर्माण के दौरान कड़े स्वच्छता नियंत्रण इसे रोकने के लिए महत्वपूर्ण हैं।</p>
                 `
             },
             {
@@ -131,39 +156,63 @@ export const microbiologyContent = {
                 id: "intro",
                 title: "Introduction to Milk Microbiology",
                 content: `
-                <p>Milk must have a desirable chemical composition and must be of satisfactory hygienic quality. This is essential in terms of public health, the quality of the products made from milk, and the suitability of milk for processing. Components that are foreign to milk, but enter the milk in the udder or during or after milking, as well as any changes occurring in the milk are often detrimental to its quality. These matters are the subject of milk hygiene. Microbial, chemical, and physical hygiene may be distinguished. Examples are microorganisms that may produce a health hazard (food infection or food poisoning) or that spoil the milk, e.g., because they turn it sour during storage. Light-induced off-flavors, fat oxidation, and fat hydrolysis result from chemical or enzymic transformations. Furthermore, compounds that are potentially harmful to the consumer, such as antibiotics, disinfectants, pesticides, and heavy metals, can enter the milk.</p>
-                <h4 class="font-bold mt-4">General Aspects</h4>
-                <p>Milk is a good source of nutrients and edible energy, not only for mammals but for numerous microorganisms, which thus can grow in milk. It primarily concerns bacteria, but some molds and yeasts can also grow in milk.</p>
-                <h4 class="font-bold mt-4">Growth</h4>
-                <p>Bacteria multiply by division. Every cell division yields two new bacterial cells. The multiplication is a geometrical progression. The various growth phases that can be distinguished are lag phase, exponential phase, stationary phase, and dying-off phase. During the lag phase the bacteria do not multiply, primarily because their enzyme system needs adaptation. During the exponential phase, the growth is at a maximum rate until the stationary phase is reached. In the latter phase, some growth still occurs, together with dying off. The decrease of the growth rate is usually caused by action of inhibitors formed by the bacteria themselves and/or by a lack of available nutrients. Eventually, the stationary phase turns into the dying-off phase, during which the count decreases.</p>
-                <p>Temperature has a large effect on bacterial growth. Lowering of the temperature retards the rate of nearly all processes in the cell, thereby slowing down growth and decreasing fermentation rate (e.g., acid production).</p>
-                <h4 class="font-bold mt-4">Milk as a Substrate</h4>
-                <p>Milk contains such a wide range of nutrients, including all of the vitamins, that numerous species of bacteria find sufficient raw material for fermentation and growth. Milk contains natural inhibitors. An important class of inhibitors is the immunoglobulins, which are antibodies against specific antigens, often bacteria. The most important nonspecific inhibitor of milk is the peroxidase–thiocyanate–H2O2 system.</p>
-                <p>Treatment of milk may profoundly alter its suitability as a substrate for bacteria. The most important is heat treatment, which kills bacteria and may activate sporulation but also alters the milk. Inhibitors are inactivated. Consequently, pasteurization may considerably stimulate growth of bacteria (which have entered the milk afterward).</p>
+                    <p>Milk must have a desirable chemical composition and must be of satisfactory hygienic quality. This is essential in terms of public health, the quality of the products made from milk, and the suitability of milk for processing. Components that are foreign to milk, but enter the milk in the udder or during or after milking, as well as any changes occurring in the milk are often detrimental to its quality. These matters are the subject of milk hygiene. Microbial, chemical, and physical hygiene may be distinguished. Examples are microorganisms that may produce a health hazard (food infection or food poisoning) or that spoil the milk, e.g., because they turn it sour during storage. Light-induced off-flavors, fat oxidation, and fat hydrolysis result from chemical or enzymic transformations. Furthermore, compounds that are potentially harmful to the consumer, such as antibiotics, disinfectants, pesticides, and heavy metals, can enter the milk.</p>
+                    <h4 class="font-bold mt-4">General Aspects</h4>
+                    <p>Milk is a good source of nutrients and edible energy, not only for mammals but for numerous microorganisms, which thus can grow in milk. It primarily concerns bacteria, but some molds and yeasts can also grow in milk.</p>
+                    <h4 class="font-bold mt-4">Growth</h4>
+                    <p>Bacteria multiply by division. Every cell division yields two new bacterial cells. The multiplication is a geometrical progression. The various growth phases that can be distinguished are lag phase, exponential phase, stationary phase, and dying-off phase. During the lag phase the bacteria do not multiply, primarily because their enzyme system needs adaptation. During the exponential phase, the growth is at a maximum rate until the stationary phase is reached. In the latter phase, some growth still occurs, together with dying off. The decrease of the growth rate is usually caused by action of inhibitors formed by the bacteria themselves and/or by a lack of available nutrients. Eventually, the stationary phase turns into the dying-off phase, during which the count decreases.</p>
+                    <p>Temperature has a large effect on bacterial growth. Lowering of the temperature retards the rate of nearly all processes in the cell, thereby slowing down growth and decreasing fermentation rate (e.g., acid production).</p>
+                    <h4 class="font-bold mt-4">Milk as a Substrate</h4>
+                    <p>Milk contains such a wide range of nutrients, including all of the vitamins, that numerous species of bacteria find sufficient raw material for fermentation and growth. Milk contains natural inhibitors. An important class of inhibitors is the immunoglobulins, which are antibodies against specific antigens, often bacteria. The most important nonspecific inhibitor of milk is the peroxidase–thiocyanate–H2O2 system.</p>
+                    <p>Treatment of milk may profoundly alter its suitability as a substrate for bacteria. The most important is heat treatment, which kills bacteria and may activate sporulation but also alters the milk. Inhibitors are inactivated. Consequently, pasteurization may considerably stimulate growth of bacteria (which have entered the milk afterward).</p>
                 `
             },
             {
-                id: "undesirable_microorganisms",
-                title: "Undesirable Microorganisms",
+                id: "thermophilic_thermoduric",
+                title: "Thermophilic and Thermoduric Bacteria",
                 content: `
-                    <p>Most microorganisms are undesirable in milk because they can be pathogenic or produce enzymes that cause undesirable transformations in the milk.</p>
-                    <h4 class="font-bold mt-4">Spoilage Microorganisms</h4>
-                    <ul class="list-disc list-outside pl-5 space-y-2 mt-2">
-                        <li><strong>Lactic acid bacteria:</strong> These bacteria mainly produce lactic acid from carbohydrates such as lactose. They are widespread and include the genera Lactococcus and Lactobacillus.</li>
-                        <li><strong>Coliforms:</strong> Belong to the Enterobacteriaceae and are widespread, e.g., in the digestive tract. They grow rapidly in milk, especially above 20°C, and attack proteins and lactose, as a result of which gas is formed and the flavor of the milk becomes ‘‘unclean.’’</li>
-                        <li><strong>Psychrotrophs:</strong> Include the genera Pseudomonas, Achromobacter, Flavobacterium, and Alcaligenes. Psychrotrophs grow readily at low temperatures (<15°C); in milk they proliferate even at a temperature as low as 4°C. The organisms produce proteases and lipases, and thus attack protein and fat, causing ‘‘putrid’’ and rancid off-flavors.</li>
-                        <li><strong>Heat-resistant bacteria:</strong> Some bacteria, including Microbacterium lacticum, thermophilic streptococci, and certain Micrococcus species do not form spores, but the vegetative cells survive low pasteurization.</li>
-                        <li><strong>Spores of bacteria:</strong> The genera Bacillus (aerobic) and Clostridium (anaerobic) can form spores. Most of these survive fairly intense heat treatment.</li>
-                    </ul>
-                    <h4 class="font-bold mt-4">Pathogenic Microorganisms</h4>
-                     <ul class="list-disc list-outside pl-5 space-y-2 mt-2">
-                        <li><strong>Mycobacterium tuberculosis:</strong> Can originate from the cow or the milker. It is killed by low pasteurization.</li>
-                        <li><strong>Staphylococcus aureus:</strong> Often occurs in the udder of a cow with mastitis. Some strains can form a heat-resistant toxin.</li>
-                        <li><strong>Salmonella and Shigella spp.:</strong> Occur widely in nature, e.g., in dung and polluted water. Low pasteurization is adequate to kill them.</li>
-                        <li><strong>Campylobacter jejuni:</strong> Can occur in the intestinal tract of many animals. It is very heat-sensitive and will not survive low pasteurization.</li>
-                        <li><strong>Listeria monocytogenes:</strong> Often found in nature. It can grow at a temperature as low as 5°C and is killed by usual pasteurization.</li>
-                        <li><strong>Coxiella burnetii:</strong> Causes Q fever in humans. It can survive low pasteurization if the temperature is not adequate.</li>
-                    </ul>
+                    <h4 class="font-bold mt-4">Thermophilic Bacteria</h4>
+                    <p>These bacteria thrive at high temperatures (above 45°C). They are a concern in dairy processing as they can survive pasteurization if temperatures are not adequately controlled and can grow in high-temperature equipment. Examples include species of Bacillus and Clostridium.</p>
+                    <h4 class="font-bold mt-4">Thermoduric Bacteria</h4>
+                    <p>These organisms can survive pasteurization temperatures but do not necessarily grow at high temperatures. They can originate from poorly cleaned equipment and can affect the shelf life and quality of pasteurized milk. Examples include Micrococcus, Microbacterium, and some Bacillus spores.</p>
+                `
+            },
+            {
+                id: "psychrotrophic",
+                title: "Psychrotrophic Bacteria",
+                content: `
+                    <p>Psychrotrophic bacteria can grow at refrigeration temperatures (below 7°C), making them a major concern for refrigerated raw and pasteurized milk. They can produce heat-stable proteases and lipases that survive pasteurization and cause off-flavors like bitterness and rancidity during storage. The genus Pseudomonas is a common culprit.</p>
+                `
+            },
+            {
+                id: "lactic_acid_bacteria",
+                title: "Lactic Acid Bacteria (LAB)",
+                content: `
+                    <p>Lactic Acid Bacteria (LAB) are essential for the production of fermented dairy products like yogurt, cheese, and buttermilk. They ferment lactose into lactic acid, which is responsible for the preservation and characteristic texture and flavor of these products. Common genera include Lactococcus, Lactobacillus, Streptococcus, and Leuconostoc. While beneficial in fermented products, their uncontrolled growth in raw milk leads to souring and spoilage.</p>
+                `
+            },
+            {
+                id: "spoilage_pathogenic",
+                title: "Spoilage and Pathogenic Organisms",
+                content: `
+                    <h4 class="font-bold mt-4">Spoilage Organisms</h4>
+                    <p>These microorganisms do not cause disease but degrade the flavor, odor, and texture of milk and milk products, making them unsuitable for consumption. Examples include Pseudomonas, certain Bacillus species, and yeasts and molds.</p>
+                    <h4 class="font-bold mt-4">Pathogenic Organisms</h4>
+                    <p>These are microorganisms capable of causing illness in humans. Milk can be a vehicle for pathogens like Salmonella, Listeria monocytogenes, Campylobacter jejuni, and E. coli O157:H7. Pasteurization is designed to effectively destroy these pathogens, making milk safe to consume.</p>
+                `
+            },
+            {
+                id: "enterobacteriaceae",
+                title: "Enterobacteriaceae",
+                content: `
+                    <p>This is a large family of bacteria that includes many genera such as Coliforms, E. coli, and Salmonella. They are often found in the environment and the intestinal tracts of animals. Their presence in dairy products generally indicates poor sanitation or inadequate processing, and they are therefore used as hygiene indicators.</p>
+                `
+            },
+            {
+                id: "cronobacter",
+                title: "Cronobacter",
+                content: `
+                    <p>Cronobacter (formerly Enterobacter sakazakii) is a pathogenic bacterium that can cause severe infections in infants, especially neonates, such as meningitis and necrotizing enterocolitis. It is a particular concern in powdered infant formula (PIF) as it can survive in dry environments. Strict hygiene controls during manufacturing are critical to prevent it.</p>
                 `
             },
             {
