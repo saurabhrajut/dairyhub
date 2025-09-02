@@ -74,7 +74,7 @@ export const aboutUsContent = {
         description: "The story of your trusted digital dairy partner",
         developer: {
             name: "Saurabh Rajput",
-            image: "/IMG_6535 (2).jpg"
+            image: "/IMG_6535 (2).jpg",
             academicInfo: {
                 title: "Academic Information",
                 degrees: [
