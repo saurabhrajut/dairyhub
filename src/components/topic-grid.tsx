@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -27,6 +28,8 @@ import {
   Wind,
   GraduationCap,
   Atom,
+  Combine,
+  ShieldAlert,
 } from "lucide-react";
 import { PaneerIcon, IceCreamIcon, ReagentIcon } from "@/components/icons";
 import { Input } from "@/components/ui/input";
