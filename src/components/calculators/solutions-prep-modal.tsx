@@ -867,6 +867,7 @@ function DilutionCalc() {
                         <Select name="stock-chemical-select" value={chemicalKey} onValueChange={handleChemChange}>
                             <SelectTrigger><SelectValue placeholder="Select an acid or base" /></SelectTrigger>
                             <SelectContent>
+                                <ScrollArea className="h-72">
                                 <SelectGroup>
                                     <Label className="px-2 text-xs font-semibold text-muted-foreground">Acids</Label>
                                     {Object.entries(chemicals.acids).filter(([,chem])=>chem.type === 'liquid').map(([key, value]) => (
@@ -879,6 +880,7 @@ function DilutionCalc() {
                                         <SelectItem key={key} value={key}>{value.name}</SelectItem>
                                     ))}
                                 </SelectGroup>
+                                </ScrollArea>
                             </SelectContent>
                         </Select>
                     </div>
@@ -904,3 +906,4 @@ function DilutionCalc() {
         </CalculatorCard>
     );
 };
+
