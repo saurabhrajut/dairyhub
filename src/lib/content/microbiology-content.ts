@@ -1,257 +1,249 @@
 
 export const microbiologyContent = {
-  hi: {
-    title: "Milk Microbiology & Testing",
-    description: "Dairy products mein paaye jaane wale mukhya sookshmajeevon (microorganisms) aur unke testing ke baare mein jaankari.",
-    sections: [
-       {
-        id: "intro",
-        title: "Introduction to Milk Microbiology",
-        content: `
-        <p>Microorganisms sookshmadarshi (microscopic), zyadatar ek-koshika jeev hain jo uchit vikas ki sthitiyon mein tezi se prajanan karne mein saksham hain. Unmein se kuch sahayak hote hain aur upyogi karyon ki seva karte hain jaise ki rasayanik parivartan utpann karna jo kiण्वित (fermented) dairy products jaise cheese aur yogurt ke utpadan mein vanchhaneey hain. Anya doodh aur uske utpadon ko kharab kar sakte hain aur unhein akhadya bana sakte hain, is prakar dairy udyog ko bhari nuksan pahunchate hain. Pathogens kahe jaane wale sookshmajeev swasthya ke liye hanikarak ho sakte hain aur suraksha aur sarvajanik swasthya ke drishtikon se mahatvapurna hain.</p>
-        <p>Mammary gland mein doodh aam taur par sterile hota hai, halanki अस्वस्थ pashuon ke mammary glands mein bacteria maujood hote hain. Ek baar jab doodh ayan (udder) se nikalta hai, to ayan ke bahari hisse, pashu ke coat, vatavaran, bartan aur karyakartaon se microflora aasani se doodh mein pravesh kar jaate hain. Isliye, atyadhik saaf suthri sthitiyon mein bhi, taaje nikale gaye doodh mein kuch hajar bacteria ho sakte hain. Bhandaran ki sthitiyan, poorv-prasanskaran gatividhiyan aur aswachh prathaen bacterial load ko aur badha sakti hain. Doodh ki microbial samagri utpadan ki swachhata gunavatta aur sthitiyon ka ek bahut achha soochak hai.</p>
-        <h4 class="font-bold mt-4">Growth</h4>
-        <p>Bacteria multiply by division. Every cell division yields two new bacterial cells. The multiplication is a geometrical progression 20 → 21 → 22 → 23 . . . → 2n. If a growing bacterial culture contains N0 cells ml-1, the bacterial count N after n divisions is N = N0 * 2^n. The time needed for a full cell division thus determines the growth rate. It is called the generation time g; it can be derived from the number of divisions occurring during a certain time t: g = t/n.</p>
-        <p>The above equations apply to the exponential growth phase of the bacteria (sometimes called logarithmic or log phase). Figure 4.1 illustrates the various growth phases that can be distinguished. During the lag phase the bacteria do not multiply, primarily because their enzyme system needs adaptation, enabling the bacteria to metabolize the nutrients in the medium. The duration of the lag phase closely depends on the physiological state of the bacteria, the temperature, and the properties of the medium. During the exponential phase, the growth is at a maximum rate until the stationary phase is reached. In the latter phase, some growth still occurs, together with dying off. The decrease of the growth rate is usually caused by action of inhibitors formed by the bacteria themselves and/or by a lack of available nutrients. Eventually, the stationary phase turns into the dying-off phase, during which the count decreases.</p>
-        <h4 class="font-bold mt-4">Milk as a Substrate for Bacteria</h4>
-        <p>Milk contains such a wide range of nutrients, including all of the vitamins, that numerous species of bacteria find sufficient raw material for fermentation and growth. But because the bacteria that can grow in milk may have very different properties, we should be cautious in applying general rules. For some bacteria, lactose is not a suitable energy source. Others rely on free amino acids as a nitrogen source, and fresh milk contains only tiny amounts of amino acids. Consequently, such bacteria often start to grow after other bacteria have hydrolyzed proteins, thus providing suitable nutrients.</p>
-        <p>Milk contains natural inhibitors. An important class of inhibitors is the immunoglobulins (IgG, IgA, IgM), which are antibodies against specific bacteria. The most important nonspecific inhibitor of milk is the peroxidase–thiocyanate–H2O2 system, which is also quite active in saliva. The milk enzyme lactoperoxidase catalyzes the oxidation of SCN by H2O2, and one of the intermediates is a powerful bacteria killer.</p>
-        <p>Treatment of milk may profoundly alter its suitability as a substrate for bacteria. The most important is heat treatment, which kills bacteria and may activate sporulation but also alters the milk. Inhibitors are inactivated; this pertains to the immunoglobulins and to the lactoperoxidase system. Consequently, pasteurization may considerably stimulate growth of bacteria (which have entered the milk afterward).</p>
-        `
-      },
-      {
-        id: "thermophilic",
-        title: "Thermophilic Bacteria",
-        content: "<p>Thermophilic bacteria can grow in milk held at elevated temperatures (55°C or higher), including pasteurization temperatures. The species that grow in higher temperatures include Bacillus species which enter milk from various sources in the farm, or from poorly cleaned equipment in the processing plant. When the milk is held at high temperatures for long periods, these bacteria rapidly increase in numbers and may cause flavour defects, curdling or problems related to legal standards for microbiology. Thermophilic bacteria are enumerated by Standard Plate Count with plate incubation at 55°C.</p>"
-      },
-      {
-        id: "thermoduric",
-        title: "Thermoduric Bacteria",
-        content: "<p>Thermoduric bacteria can survive exposure to temperatures considerably above their maximal temperature for growth. In the dairy industry, this term is applied to those organisms which survive, but do not grow, at pasteurization temperature. They usually include species of Micrococcus, Streptococcus, Lactobacillus, Bacillus and occasionally some gram-negative rods. The sources of contamination are poorly cleaned and sanitized utensils and equipment on farm and processing plants. These bacteria contribute to significantly higher Standard Plate Count on pasteurized milk. The thermoduric count has been used in the dairy industry primarily as a test of hygienic practices and sanitary conditions maintained. It is also a means for detecting sources of contamination in products.</p>"
-      },
-      {
-        id: "psychrotrophic",
-        title: "Psychrotrophic Bacteria",
-        content: "<p>The terms psychrotrophic or psychrophilic mean ‘cold-loving’ and microorganisms which play a significant role in biological processes in low-temperature environments are classified under this group. Psychrophilic species such as Pseudomonas, Flavobacterium, Alcaligenes, Acinetobacter, and Bacillus can grow rapidly at 7°C and below. They are generally non-pathogenic and are rarely present in the udder. They can cause off-flavours (fruity, stale, bitter, putrid, rancid) in dairy products. The counts of these bacteria in milk depend upon sanitary conditions prevailing during production and the time-temperature combination of milk storage before processing. The effect of psychotropic bacteria on the shelf life of pasteurized milk is largely dependent on number present after packaging, the rate of growth, the storage period, and the biochemical activity of the organisms.</p>"
-      },
-      {
-        id: "lab",
-        title: "Lactic Acid Bacteria (LAB)",
-        content: "<p>When milk is held at ordinary temperature, it curdles or putrefies within a few hours owing to the rapid growth of bacteria. Lactic acid forming bacteria (those fermenting lactose into lactic acid) are important because they sour the milk. Some acid forming bacteria maybe useful, such as those used as starter cultures in cultured dairy products such as dahi, yogurt and cheese and some harmful, such as those causing curdling and spoilage of milk.</p>"
-      },
-      {
-        id: "spoilage",
-        title: "Spoilage Organisms",
-        content: `
-        <p>Milk is a suitable culture medium for many microorganisms, and an attempt to discuss them all would be beyond the scope of this book. Suffice it to mention some groups of bacteria, often consisting of several genera, that are responsible for a certain type of deterioration or are typical of the source of contamination or of the treatment of milk.</p>
-        <p><strong>Lactic acid bacteria:</strong> These bacteria mainly produce lactic acid from carbohydrates such as lactose. They are widespread and include the genera Lactococcus and Lactobacillus. Lactococcus lactis sspp. lactis and cremoris grow rapidly in milk, especially above 20°C. So milk mostly turns sour if kept uncooled.</p>
-        <p><strong>Coliforms:</strong> belong to the Enterobacteriaceae and are widespread, e.g., in the digestive tract. They include Escherichia coli and Aerobacter aerogenes. They grow rapidly in milk, especially above 20°C, and attack proteins and lactose, as a result of which gas is formed and the flavor of the milk becomes ‘‘unclean.’’</p>
-        <p><strong>Psychrotrophs:</strong> also designated pseudomonads or gram-negative rods, occur widely and include the genera Pseudomonas, Achromobacter, Flavobacterium, and Alcaligenes. Psychrotrophs grow readily at low temperatures ( < 15°C); in milk they proliferate even at a temperature as low as 4°C. The organisms produce proteases and lipases, and thus attack protein and fat, causing ‘‘putrid’’ and rancid off-flavors.</p>
-        <p><strong>Heat-resistant bacteria:</strong> Some bacteria, including Microbacterium lacticum, thermophilic streptococci, and certain Micrococcus species do not form spores, but the vegetative cells survive low pasteurization.</p>
-        <p><strong>Spores of bacteria:</strong> The genera Bacillus (aerobic or facultatively anaerobic) and Clostridium (strictly anaerobic) can form spores. Most of these survive fairly intense heat treatment. They originate especially from soil, dust, and dung, and also from cattle feed. Important species include B. cereus, B. subtilis, B. stearothermophilus, and C. tyrobutyricum.</p>
-        `
-      },
-      {
-        id: "pathogens",
-        title: "Pathogenic Organisms",
-        content: `
-        <p>In food infection, the food acts as a carrier for the microorganism. In food poisoning, the microorganism forms a toxin in the food. Some important pathogens for milk include:</p>
-        <ul class="list-disc list-outside pl-5 space-y-2 mt-2">
-            <li><strong>Mycobacterium tuberculosis:</strong> Can originate from the cow or the milker. It is killed by low pasteurization.</li>
-            <li><strong>Staphylococcus aureus:</strong> Often occurs in the udder of a cow with mastitis. Some strains can form a heat-resistant toxin.</li>
-            <li><strong>Salmonella and Shigella spp.:</strong> Occur widely in nature, e.g., in dung and polluted water. Low pasteurization is adequate to kill them.</li>
-            <li><strong>Campylobacter jejuni:</strong> Can occur in the intestinal tract of many animals. It is very heat-sensitive and will not survive low pasteurization.</li>
-            <li><strong>Listeria monocytogenes:</strong> Often found in nature. It can grow at temperatures as low as 5°C and is killed by usual pasteurization.</li>
-            <li><strong>Coxiella burnetii:</strong> Causes Q fever in humans. It is more heat-resistant than M. tuberculosis.</li>
-            <li><strong>Bacillus cereus:</strong> Spores survive pasteurization. Psychrotrophic strains are occasionally found.</li>
-            <li><strong>Clostridium botulinum:</strong> A dreaded spore-forming bacterium. Milk and dairy products are never the cause of botulism.</li>
-            <li><strong>Clostridium perfringens:</strong> Spores are often present in raw milk. Milk for baby formulas must be heated sufficiently to kill its spores.</li>
-        </ul>
-        `
-      },
-      {
-        id: "enterobacteriaceae",
-        title: "Enterobacteriaceae",
-        content: "<p>Enterobacteriaceae are intestinal bacteria which can be found in dairy products from contamination of food, insufficient pasteurization and sterilization or recontamination due to inadequate hygiene standards. We offer diverse media and tests, like oxidase tests, for the detection and enumeration of Enterobacteriaceae.</p>"
-      },
-      {
-        id: "cronobacter",
-        title: "Cronobacter (Enterobacter sakazakii)",
-        content: "<p>Cronobacter is a Gram-negative, facultative anaerobic, rod-shaped and motile bacterium that belongs to the Enterobacteriaceae family. This microorganism can cause severe neonatal infections: necrotizing enterocolitis, septicaemia and meningitis. The fatality rate following meningitis and other infections is 50%, and the survivors are neurologically damaged for life. Fortunately, infections are rare in infants, but they can occur in all age groups, admittedly with less severe clinical outcomes. Cronobacter spp. can grow over a wide temperature range, between 5.5 °C and 8 °C the multiplication begins. Average generation times of Cronobacter is about five hours at 10 °C and only 40 minutes at 23 °C. The organism is very tolerant of drying steps and can survive for two years desiccated in infant formula and then rapidly grow on reconstitution.</p>"
-      },
-      {
-        id: "ecoli",
-        title: "Escherichia coli & Coliforms",
-        content: "<p>Coliforms are intestinal bacteria that are often present as a result of contamination by feces. They are defined as rod-shaped Gram-negative facultative anaerobic non-spore forming organisms that ferment lactose with the production of acid and gas when incubated at 35-37 °C. In most cases coliforms do not cause illness, but they are used as indicators for other pathogenic organisms of fecal origin that may be present in foods and water. Escherichia coli (E. coli): Is the most famous member of the coliform group bacteria and is an important indicator for fecal contamination, as it is almost exclusively of fecal origin.</p>"
-      },
-      {
-        id: "salmonella",
-        title: "Salmonella",
-        content: "<p>Salmonella contamination is the second leading cause of foodborne illness worldwide. Controlling outbreaks of Salmonella is an important task for the food industry. The Salmonella family includes over 2,300 serotypes of bacteria, but two types, Salmonella Enteritidis and Salmonella Typhimurium, are responsible for about half of all human infections. Most outbreaks of Salmonella are traced back to dairy, poultry and meat products. Salmonella have the necessary tools and mechanisms to spread in the body. Microbiological control in the food industry plays a critical role in preventing Salmonella outbreaks and is probably an important reason for decreasing incidences in recent years. Tests and media used for identification of Salmonella take advantage of unique aspects of Salmonella physiology or biochemistry relative to other genera within the Enterobacteriaceae family. For example, bacteria from the genus Salmonella are mostly facultative anaerobes, oxidase-negative, catalase-positive and Gram-negative rods. Most strains are motile and ferment glucose with production of both acid and gas.</p>"
-      },
-      {
-        id: "listeria",
-        title: "Listeria monocytogenes",
-        content: "<p>In recent years, it has been recognized that Listeria monocytogenes is an important public health problem. Listeriosis primarily affects people of advanced age, pregnant women, newborns, and adults with weakened immune systems. The infection increased over the last few years, most likely because of an increasing variety of food products, the trend for “ready-to-eat” and “ready-to-cook” products plus the demand for longer shelf life. Therefore, it is even more important that the risk foods, like dairy products, are thoroughly checked for contamination.</p>"
-      },
-      {
-        id: "clostridium",
-        title: "Clostridium perfringens",
-        content: "<p>C. perfringens is also a fecal indicator organism but is much more resistant than E. coli and, due to the ability to produce spores, can be found even after treatments like pasteurization. We offer our unique chromogenic CP ChromoSelect agar but also diverse other media and tests to detect this organism.</p>"
-      },
-      {
-        id: "campylobacter",
-        title: "Thermotolerant Campylobacter",
-        content: "<p>Campylobacteriosis is currently one of the most common bacterial infections in humans and is often a foodborne illness. The two species, Campylobacter jejuni and C. coli, are responsible for the majority of human foodborne campylobacteriosis. There are other pathogenic species—C. lari, C. fetus (infect reproductive tract), C. upsaliensis and very seldom C. helveticus—which can also cause diarrheal illness. Campylobacter can occasionally be found in raw milk. They are microaerophilic organisms that require oxygen levels between 2 and 10% for growth. These two species are classed as thermophilic campylobacters as they have an optimum temperature for growth of 42 °C. The current method used for detection of campylobacters from foodstuffs is the EN/ISO 10272-1:2017 method.</p>"
-      },
-      {
-        id: "bacillus",
-        title: "Bacillus cereus",
-        content: "<p>Bacillus cereus is a typically motile soil bacterium which is able to build resistant centrally located endospores. The colonies that grow on most media types are dull and frosted. It is a Gram-positive and a facultative anaerobic organism, but older cells may become Gram-negative as they age. The Bacillus cereus group comprises Bacillus anthracis, Bacillus thuringiensis, Bacillus cytotoxicus and some other species, which share about 3100 genes. Some strains can cause foodborne illness similar to those caused by Clostridium perfringens or Staphylococcus aureus. The minimum infective dose is about 10^6-10^7 bacteria/g, at that range of cell concentration they start to build different toxins which cause both diarrheal and emetic human gastrointestinal syndromes. B. cereus infection for the diarrhea type of infection are UHT milk products. Contamination of raw milk occurs by simple transfer during milking when hygiene conditions are not fully observed. If present in raw milk, spores can survive the pasteurization process and contaminate the finished milk product. In milk products, B. cereus and other bacilli can degrade the casein to peptides which may be further degraded to amino acids which are responsible for alkaline reaction and a bitter taste in milk. The ISO recommends a colony count technique ISO 7932:2004 and an MPN method ISO 21871:2006 to detect and enumerate B. cereus.</p>"
-      },
-      {
-        id: "staphylococci",
-        title: "Coagulase-positive Staphylococci",
-        content: "<p>Coagulase-positive staphylococci comprise Staphylococcus aureus, Staphylococcus hyicus and Staphylococcus intermedius. S. aureus is reported to be the most pathogenic species and is responsible for food poisoning due to the production of several relatively heat stable exotoxins. Enterotoxins are produced if the colony forming units per g sample exceeds 10^5 cfu/g. While in most cases for dairy products for S. aureus cells, a concentration of up to 100 cfu/g is acceptable, the toxin should not be detectable.</p>"
-      },
-      {
-        id: "probiotics",
-        title: "Probiotics",
-        content: "<p>Probiotics are defined as live bacteria with beneficial effects to the health of the host organism. Probiotics take on a key role in the functional food industry. Today, lactic acid bacteria (LAB) and Bifidobacteria are primarily used as probiotics, however certain yeasts and bacilli are also known to have positive effects. In most cases, probiotics are produced directly by fermentation in foods such as yogurt or are supplied through dietary supplements. Bifidobacterium is one of the most important probiotic bacteria used in the dairy industry. Bifidobacteria have a positive effect on the immune system and control intestinal pH. Additionally, they produce bacteriocins and bacteriocin-like inhibitory compounds which inhibit the growth of other bacteria. ISO 22981:2010 describes the enumeration of presumptive Bifidobacteria by the TOS-MUP agar. Our 100043 TOS-MUP agar is in accordance with this ISO standard and is highly selective for Bifidobacteria as it suppresses the growth of Lactobacilli. Our chromogenic Bifidobacteria Selective Media allows for easy and fast quality control of yogurt. Lactobacilli belong to the lactic acid bacteria and comprise the major part of this group. As their name implies, they produce lactic acid. The acid-producing mechanism inhibits growth of other organisms and favors the growth of Lactobacilli that thrive in low pH environments. Some strains of Lactobacilli were shown to produce, like Bifidobacteria, a bacteriocin-like substance and can inhibit a broad range of pathogens.</p>",
-        table: {
-          headers: ["Probiotic Species", "Product Name", "Company"],
-          rows: [
-            ["Bifidobacterium breve", "Yakult Bifiene", "Yakult"],
-            ["Lactobacillus casei DN114-001", "Actimel/DanActive", "Danone"],
-            ["Lactobacillus casei Shirota", "Yakult", "Yakult"],
-            ["Lactobacillus johnsonii La1", "LC1", "Nestlé"]
+    hi: {
+        title: "दूध सूक्ष्म जीव विज्ञान और परीक्षण",
+        description: "डेयरी उत्पादों में पाए जाने वाले मुख्य सूक्ष्मजीवों और उनके परीक्षण के बारे में जानकारी।",
+        sections: [
+            {
+                id: "intro",
+                title: "दूध सूक्ष्म जीव विज्ञान का परिचय",
+                content: `
+                    <p>दूध में वांछनीय रासायनिक संरचना होनी चाहिए और संतोषजनक स्वच्छ गुणवत्ता होनी चाहिए। यह सार्वजनिक स्वास्थ्य, दूध से बने उत्पादों की गुणवत्ता और प्रसंस्करण के लिए दूध की उपयुक्तता के संदर्भ में आवश्यक है। जो घटक दूध के लिए विदेशी हैं, लेकिन दूध में थन में या दूध दुहने के दौरान या बाद में प्रवेश करते हैं, साथ ही दूध में होने वाले कोई भी परिवर्तन अक्सर इसकी गुणवत्ता के लिए हानिकारक होते हैं। ये मामले दूध स्वच्छता के विषय हैं। सूक्ष्म, रासायनिक और भौतिक स्वच्छता को प्रतिष्ठित किया जा सकता है। उदाहरण के लिए, सूक्ष्मजीव जो स्वास्थ्य के लिए खतरा पैदा कर सकते हैं (खाद्य संक्रमण या खाद्य विषाक्तता) या जो दूध को खराब कर देते हैं, जैसे, क्योंकि वे भंडारण के दौरान इसे खट्टा कर देते हैं। प्रकाश-प्रेरित ऑफ-फ्लेवर, वसा ऑक्सीकरण, और वसा हाइड्रोलिसिस रासायनिक या एंजाइमेटिक परिवर्तनों से उत्पन्न होते हैं। इसके अलावा, जो यौगिक उपभोक्ता के लिए संभावित रूप से हानिकारक हो सकते हैं, जैसे कि एंटीबायोटिक्स, कीटाणुनाशक, कीटनाशक और भारी धातुएं, दूध में प्रवेश कर सकते हैं।</p>
+                    <h4 class="font-bold mt-4">सामान्य पहलू</h4>
+                    <p>दूध न केवल स्तनधारियों के लिए बल्कि कई सूक्ष्मजीवों के लिए पोषक तत्वों और खाद्य ऊर्जा का एक अच्छा स्रोत है, जो इस प्रकार दूध में विकसित हो सकते हैं। यह मुख्य रूप से बैक्टीरिया से संबंधित है, लेकिन कुछ मोल्ड और यीस्ट भी दूध में विकसित हो सकते हैं।</p>
+                    <h4 class="font-bold mt-4">वृद्धि (Growth)</h4>
+                    <p>बैक्टीरिया विभाजन द्वारा गुणा करते हैं। प्रत्येक कोशिका विभाजन से दो नए जीवाणु कोशिकाएं उत्पन्न होती हैं। गुणन एक ज्यामितीय प्रगति है। बैक्टीरिया की वृद्धि के विभिन्न चरणों को प्रतिष्ठित किया जा सकता है। लैग चरण के दौरान बैक्टीरिया गुणा नहीं करते हैं, मुख्य रूप से क्योंकि उनके एंजाइम सिस्टम को अनुकूलन की आवश्यकता होती है। घातीय चरण के दौरान, विकास अधिकतम दर पर होता है जब तक कि स्थिर चरण तक नहीं पहुंच जाता। बाद के चरण में, कुछ विकास अभी भी होता है, साथ ही मरना भी होता है। विकास दर में कमी आमतौर पर बैक्टीरिया द्वारा स्वयं बनाए गए अवरोधकों की क्रिया और/या उपलब्ध पोषक तत्वों की कमी के कारण होती है। अंततः, स्थिर चरण मरने वाले चरण में बदल जाता है, जिसके दौरान गिनती कम हो जाती है।</p>
+                    <p>तापमान का जीवाणु वृद्धि पर बड़ा प्रभाव पड़ता है। तापमान कम करने से कोशिका में लगभग सभी प्रक्रियाओं की दर मंद हो जाती है, जिससे विकास धीमा हो जाता है और किण्वन दर (जैसे, एसिड उत्पादन) कम हो जाती है।</p>
+                    <h4 class="font-bold mt-4">दूध एक सब्सट्रेट के रूप में</h4>
+                    <p>दूध में पोषक तत्वों की इतनी विस्तृत श्रृंखला होती है, जिसमें सभी विटामिन शामिल हैं, कि कई प्रजातियों के बैक्टीरिया किण्वन और विकास के लिए पर्याप्त कच्चा माल पाते हैं। दूध में प्राकृतिक अवरोधक होते हैं। अवरोधकों का एक महत्वपूर्ण वर्ग इम्युनोग्लोबुलिन है, जो विशिष्ट एंटीजन, अक्सर बैक्टीरिया के खिलाफ एंटीबॉडी होते हैं। दूध का सबसे महत्वपूर्ण गैर-विशिष्ट अवरोधक परऑक्सीडेज-थायोसाइनेट-H2O2 प्रणाली है।</p>
+                    <p>दूध का उपचार इसकी उपयुक्तता को बैक्टीरिया के लिए एक सब्सट्रेट के रूप में गहरा बदल सकता है। सबसे महत्वपूर्ण गर्मी उपचार है, जो बैक्टीरिया को मारता है और बीजाणु को सक्रिय कर सकता है लेकिन दूध को भी बदलता है। अवरोधक निष्क्रिय हो जाते हैं। नतीजतन, पाश्चुरीकरण बैक्टीरिया के विकास को काफी हद तक उत्तेजित कर सकता है (जो बाद में दूध में प्रवेश कर चुके हैं)।</p>
+                `
+            },
+            {
+                id: "undesirable_microorganisms",
+                title: "अवांछनीय सूक्ष्मजीव",
+                content: `
+                    <p>अधिकांश सूक्ष्मजीव दूध में अवांछनीय होते हैं क्योंकि वे रोगजनक हो सकते हैं या एंजाइम उत्पन्न कर सकते हैं जो दूध में अवांछनीय परिवर्तन का कारण बनते हैं।</p>
+                    <h4 class="font-bold mt-4">खराब करने वाले सूक्ष्मजीव (Spoilage Microorganisms)</h4>
+                    <ul class="list-disc list-outside pl-5 space-y-2 mt-2">
+                        <li><strong>लैक्टिक एसिड बैक्टीरिया:</strong> ये बैक्टीरिया मुख्य रूप से लैक्टोज जैसे कार्बोहाइड्रेट से लैक्टिक एसिड का उत्पादन करते हैं। वे व्यापक हैं और इसमें लैक्टोकोकस और लैक्टोबैसिलस जैसे जेनेरा शामिल हैं।</li>
+                        <li><strong>कोलीफॉर्म:</strong> एंटरोबैक्टीरियासी से संबंधित हैं और व्यापक हैं, जैसे, पाचन तंत्र में। वे दूध में तेजी से बढ़ते हैं, खासकर 20 डिग्री सेल्सियस से ऊपर, और प्रोटीन और लैक्टोज पर हमला करते हैं, जिसके परिणामस्वरूप गैस बनती है और दूध का स्वाद 'अशुद्ध' हो जाता है।</li>
+                        <li><strong>साइकोट्रोफ्स:</strong> स्यूडोमोनास, एक्रोमोबैक्टर, फ्लेवोबैक्टीरियम, और एल्कालिजेन्स जैसे जेनेरा शामिल हैं। साइकोट्रोफ्स कम तापमान (15 डिग्री सेल्सियस से कम) पर आसानी से बढ़ते हैं; दूध में वे 4 डिग्री सेल्सियस जितने कम तापमान पर भी फैलते हैं। जीव प्रोटीज और लाइपेस का उत्पादन करते हैं, और इस प्रकार प्रोटीन और वसा पर हमला करते हैं, जिससे 'सड़ा हुआ' और बासी ऑफ-फ्लेवर होता है।</li>
+                        <li><strong>गर्मी प्रतिरोधी बैक्टीरिया:</strong> कुछ बैक्टीरिया, जिनमें माइक्रोबैक्टीरियम लैक्टिकम, थर्मोफिलिक स्ट्रेप्टोकोकी और कुछ माइक्रोकोकस प्रजातियां शामिल हैं, बीजाणु नहीं बनाते हैं, लेकिन वनस्पति कोशिकाएं कम पाश्चुरीकरण से बच जाती हैं।</li>
+                        <li><strong>बैक्टीरिया के बीजाणु:</strong> बैसिलस (एरोबिक) और क्लोस्ट्रीडियम (एनारोबिक) जेनेरा बीजाणु बना सकते हैं। इनमें से अधिकांश काफी तीव्र गर्मी उपचार से बच जाते हैं।</li>
+                    </ul>
+                    <h4 class="font-bold mt-4">रोगजनक सूक्ष्मजीव (Pathogenic Microorganisms)</h4>
+                     <ul class="list-disc list-outside pl-5 space-y-2 mt-2">
+                        <li><strong>माइकोबैक्टीरियम ट्यूबरकुलोसिस:</strong> गाय या दूध वाले से उत्पन्न हो सकता है। यह कम पाश्चुरीकरण से मारा जाता है।</li>
+                        <li><strong>स्टैफिलोकोकस ऑरियस:</strong> अक्सर मास्टिटिस वाली गाय के थन में होता है। कुछ उपभेद गर्मी प्रतिरोधी विष बना सकते हैं।</li>
+                        <li><strong>साल्मोनेला और शिगेला एसपीपी.:</strong> प्रकृति में व्यापक रूप से होते हैं, जैसे, गोबर और प्रदूषित पानी में। कम पाश्चुरीकरण उन्हें मारने के लिए पर्याप्त है।</li>
+                        <li><strong>कैम्पिलोबैक्टर जेजुनी:</strong> कई जानवरों के आंतों के मार्ग में हो सकता है। यह बहुत गर्मी के प्रति संवेदनशील है और कम पाश्चुरीकरण से नहीं बचेगा।</li>
+                        <li><strong>लिस्टेरिया मोनोसाइटोजेन्स:</strong> प्रकृति में अक्सर पाया जाता है। यह 5 डिग्री सेल्सियस जितने कम तापमान पर बढ़ सकता है और सामान्य पाश्चुरीकरण द्वारा मारा जाता है।</li>
+                        <li><strong>कॉक्सिएला बर्नेटी:</strong> मनुष्यों में क्यू बुखार का कारण बनता है। यह कम पाश्चुरीकरण से बच सकता है यदि तापमान पर्याप्त न हो।</li>
+                    </ul>
+                `
+            },
+            {
+                id: 'sources_of_contamination',
+                title: 'संदूषण के स्रोत',
+                content: `
+                    <h4 class="font-bold mt-4">थन में मौजूद सूक्ष्मजीव</h4>
+                    <p>स्वस्थ गायों में, दूध स्रावी ऊतक में बाँझ होता है, लेकिन निप्पल नहर में बैक्टीरिया मौजूद हो सकते हैं। अस्वस्थ गायों, विशेष रूप से मास्टिटिस वाली, के दूध में रोगजनक जीवों सहित उच्च जीवाणु संख्या हो सकती है।</p>
+                    <h4 class="font-bold mt-4">दूध दुहने के दौरान और बाद में संदूषण</h4>
+                    <ul class="list-disc list-outside pl-5 space-y-2 mt-2">
+                        <li><strong>गाय:</strong> गोबर, मिट्टी या धूल से दूषित निप्पल की त्वचा से सूक्ष्मजीव दूध में प्रवेश कर सकते हैं।</li>
+                        <li><strong>मिट्टी, गोबर, धूल:</strong> ये संदूषक हवा के माध्यम से या सीधे संपर्क से दूध तक पहुंच सकते हैं, जिससे बैक्टीरिया, यीस्ट और मोल्ड के बीजाणु आ सकते हैं।</li>
+                        <li><strong>चारा:</strong> चारे में बड़ी संख्या में सूक्ष्मजीव हो सकते हैं, जिनमें बीजाणु बनाने वाले बैक्टीरिया भी शामिल हैं जो पाचन तंत्र से गुजर सकते हैं और गोबर के माध्यम से दूध को दूषित कर सकते हैं।</li>
+                        <li><strong>दूध दुहने की इकाई:</strong> खराब साफ और कीटाणुरहित दूध दुहने के उपकरण संदूषण का एक प्रमुख स्रोत हैं।</li>
+                        <li><strong>पानी:</strong> सफाई और धोने के लिए इस्तेमाल किया जाने वाला दूषित पानी साइकोट्रोफिक बैक्टीरिया और अन्य रोगजनकों को पेश कर सकता है।</li>
+                        <li><strong>दूध वाला:</strong> दूध वाला अपने हाथों या कपड़ों से सीधे दूध को दूषित कर सकता है, खासकर यदि वे किसी संक्रमण से पीड़ित हों।</li>
+                    </ul>
+                `
+            },
+            {
+                id: 'hygienic_measures',
+                title: 'स्वच्छ उपाय',
+                content: `
+                    <h4 class="font-bold mt-4">उपभोक्ता को रोगजनक सूक्ष्मजीवों से बचाना</h4>
+                    <p>कच्चे दूध में रोगजनकों द्वारा संदूषण को कभी भी खारिज नहीं किया जा सकता है। इसलिए तरल उपभोग या दूध उत्पादों में परिवर्तन के लिए नियत दूध को अक्सर कानून द्वारा इतनी गर्मी तक गर्म करने की आवश्यकता होती है कि आम रोगजनक मारे जाएं; इसका मतलब कम से कम कम पाश्चुरीकरण है। कच्चे दूध का सेवन करने की सलाह नहीं दी जाती है।</p>
+                    <h4 class="font-bold mt-4">खराब करने वाले जीवों के खिलाफ उपाय</h4>
+                    <p>सूक्ष्मजीवों द्वारा कम संदूषण पहला लक्ष्य है। इसे प्राप्त करने के लिए, संदूषण के स्रोतों को जानना चाहिए। दूध दुहने के उपकरणों की सफाई और कीटाणुशोधन आवश्यक है।</p>
+                    <p>दूध में बैक्टीरिया के विकास को धीमा करने का मुख्य साधन शीतलन है। खेत पर प्रशीतित दूध टैंकों का एक संतोषजनक संचालन आवश्यक है। हालांकि, दूध को ठंडा करने से कोई बैक्टीरिया नहीं मरता है और यह असंतोषजनक स्वच्छता का समाधान नहीं कर सकता है।</p>
+                `
+            }
+        ],
+        testMethods: {
+          title: "सामान्य सूक्ष्मजीवविज्ञानी परीक्षण विधियाँ",
+          intro: "डेयरी उत्पादों की सुरक्षा और गुणवत्ता सुनिश्चित करने के लिए कई मानक सूक्ष्मजीवविज्ञानी परीक्षण किए जाते हैं। यहाँ कुछ प्रमुख परीक्षण विधियों का अवलोकन दिया गया है:",
+          tests: [
+            {
+              id: 'tpc',
+              title: 'एरोबिक मेसोफिलिक प्लेट काउंट (कुल प्लेट काउंट)',
+              principle: 'यह परीक्षण एक नमूने में व्यवहार्य (जीवित) बैक्टीरिया और कवक की कुल संख्या को मापता है जो ऑक्सीजन की उपस्थिति में मध्यम (मेसोफिलिक) तापमान पर बढ़ सकते हैं। इसे मानक प्लेट काउंट (SPC) या कुल व्यवहार्य गणना (TVC) के रूप में भी जाना जाता है।',
+              procedure: `
+                <ol class='list-decimal list-inside space-y-2 mt-2'>
+                  <li><strong>नमूना तैयार करना:</strong> 90 मिलीलीटर बाँझ मंदक (जैसे, पेप्टोन पानी) के साथ 10 ग्राम या 10 मिलीलीटर नमूना मिलाकर 1:10 का तनुकरण बनाएं।</li>
+                  <li><strong>क्रमिक तनुकरण:</strong> इससे आगे क्रमिक तनुकरण (1:100, 1:1000, आदि) तैयार करें।</li>
+                  <li><strong>प्लेटिंग:</strong> प्रत्येक तनुकरण से 1 मिलीलीटर को दो बाँझ पेट्री प्लेटों में स्थानांतरित करें (पोर प्लेट विधि)।</li>
+                  <li><strong>मीडिया:</strong> प्लेटों में 15-20 मिलीलीटर पिघला हुआ प्लेट काउंट अगर (PCA), 45 डिग्री सेल्सियस तक ठंडा, डालें। मिलाने के लिए धीरे से घुमाएं।</li>
+                  <li><strong>ऊष्मायन:</strong> प्लेटों को 35-37 डिग्री सेल्सियस पर 24-48 घंटे के लिए उल्टा करके ऊष्मायन करें।</li>
+                  <li><strong>गिनती:</strong> 25 और 250 कॉलोनियों के बीच वाली प्लेटों का चयन करें। एक कॉलोनी काउंटर का उपयोग करके कॉलोनियों की गिनती करें।</li>
+                </ol>`,
+              calculation: '<code>CFU/g (या ml) = (कॉलोनियों की औसत संख्या × तनुकरण कारक) / प्लेट किए गए नमूने का आयतन (ml)</code>'
+            },
+            {
+              id: 'coliforms',
+              title: 'कोलीफॉर्म, मल कोलीफॉर्म और ई. कोलाई का पता लगाना',
+              principle: 'कोलीफॉर्म लैक्टोज को किण्वित करके एसिड और गैस का उत्पादन करते हैं। उन्हें वायलेट रेड बाइल अगर (VRBA) पर गिना जाता है। ई. कोलाई एक मल कोलीफॉर्म है जिसकी पुष्टि विशिष्ट जैव रासायनिक परीक्षणों द्वारा की जाती है।',
+              procedure: `
+                <ol class='list-decimal list-inside space-y-2 mt-2'>
+                  <li><strong>नमूना और तनुकरण:</strong> टीपीसी विधि के अनुसार क्रमिक तनुकरण तैयार करें।</li>
+                  <li><strong>प्लेटिंग:</strong> प्रत्येक तनुकरण से 1 मिलीलीटर को बाँझ पेट्री प्लेटों में पिपेट करें।</li>
+                  <li><strong>मीडिया:</strong> 15-20 मिलीलीटर पिघला हुआ वीआरबीए डालें और मिलाएं। जमने के बाद, ऊपर एक और वीआरबीए की परत डालें (ओवरले)।</li>
+                  <li><strong>ऊष्मायन:</strong> प्लेटों को 35-37 डिग्री सेल्सियस पर 18-24 घंटे के लिए ऊष्मायन करें।</li>
+                  <li><strong>गिनती:</strong> लाल-बैंगनी कॉलोनियों (0.5 मिमी या उससे अधिक व्यास) को कोलीफॉर्म के रूप में गिनें।</li>
+                  <li><strong>पुष्टि (ई. कोलाई):</strong> संदिग्ध कॉलोनियों को ब्रिलियंट ग्रीन लैक्टोज बाइल (BGLB) शोरबा में टीका लगाएं और 44.5 डिग्री सेल्सियस पर ऊष्मायन करें। गैस उत्पादन ई. कोलाई की उपस्थिति को इंगित करता है। आगे की पुष्टि IMViC परीक्षणों द्वारा की जाती है।</li>
+                </ol>`,
+              calculation: '<code>कोलीफॉर्म/जी (या एमएल) = विशिष्ट कॉलोनियों की औसत संख्या × तनुकरण कारक</code>'
+            },
+            {
+              id: 'yeast_mould',
+              title: 'खमीर और मोल्ड गणना',
+              principle: 'खमीर और मोल्ड अम्लीय वातावरण में बढ़ सकते हैं, इसलिए उनकी गणना के लिए एक अम्लीय माध्यम (जैसे पोटैटो डेक्सट्रोज अगर, पीडीए) का उपयोग किया जाता है।',
+              procedure: `
+                 <ol class='list-decimal list-inside space-y-2 mt-2'>
+                  <li><strong>नमूना और तनुकरण:</strong> टीपीसी विधि के अनुसार क्रमिक तनुकरण तैयार करें।</li>
+                  <li><strong>प्लेटिंग:</strong> प्रत्येक तनुकरण से 1 मिलीलीटर को बाँझ पेट्री प्लेटों में स्थानांतरित करें (स्प्रेड प्लेट विधि बेहतर है)।</li>
+                  <li><strong>मीडिया:</strong> प्लेटों में पहले से डाला हुआ पोटैटो डेक्सट्रोज अगर (PDA) होना चाहिए, जिसका पीएच ~3.5 (टार्टरिक एसिड के साथ) पर समायोजित किया गया हो ताकि जीवाणु वृद्धि को रोका जा सके।</li>
+                  <li><strong>ऊष्मायन:</strong> प्लेटों को 22-25 डिग्री सेल्सियस पर 5 दिनों के लिए ऊष्मायन करें।</li>
+                  <li><strong>गिनती:</strong> खमीर (आमतौर पर चमकदार, गोल) और मोल्ड (कपास जैसी, फैलने वाली) की कॉलोनियों को अलग-अलग गिनें।</li>
+                </ol>`,
+              calculation: '<code>खमीर/मोल्ड गणना/जी (या एमएल) = कॉलोनियों की औसत संख्या × तनुकरण कारक</code>'
+            }
           ]
         }
-      }
-    ],
-    testMethods: {
-      title: "Common Microbiological Test Methods",
-      intro: "Dairy products ki suraksha aur gunavatta sunishchit karne ke liye kai standard microbiological tests kiye jaate hain. Yahan kuch pramukh test methods ki overview di gayi hai:",
-      tests: [
-        {
-          id: 'tpc',
-          title: 'Aerobic Mesophilic Plate Count (Total Plate Count)',
-          principle: 'This test measures the total number of viable (living) bacteria and fungi in a sample that can grow in the presence of oxygen at moderate (mesophilic) temperatures. It is also known as Standard Plate Count (SPC) or Total Viable Count (TVC).',
-          procedure: `
-            <ol class='list-decimal list-inside space-y-2 mt-2'>
-              <li><strong>Sample Preparation:</strong> Create a 1:10 dilution by mixing 10g or 10ml of the sample with 90ml of sterile diluent (e.g., peptone water).</li>
-              <li><strong>Serial Dilutions:</strong> Prepare further serial dilutions from this (1:100, 1:1000, etc.).</li>
-              <li><strong>Plating:</strong> Transfer 1ml of each dilution into two sterile Petri plates (Pour Plate Method).</li>
-              <li><strong>Media:</strong> Pour 15-20ml of melted Plate Count Agar (PCA), cooled to 45°C, into the plates. Gently swirl to mix.</li>
-              <li><strong>Incubation:</strong> Incubate the plates inverted at 35-37°C for 24-48 hours.</li>
-              <li><strong>Counting:</strong> Select plates with between 25 and 250 colonies. Count the colonies using a colony counter.</li>
-            </ol>`,
-          calculation: '<code>CFU/g (or ml) = (Average no. of colonies × Dilution factor) / Volume of sample plated (ml)</code>'
-        },
-        {
-          id: 'coliforms',
-          title: 'Detection of Coliforms, Faecal Coliforms & E.coli',
-          principle: 'Coliforms ferment lactose to produce acid and gas. They are enumerated on Violet Red Bile Agar (VRBA). E. coli is a faecal coliform confirmed by specific biochemical tests.',
-          procedure: `
-            <ol class='list-decimal list-inside space-y-2 mt-2'>
-              <li><strong>Sample & Dilutions:</strong> Prepare serial dilutions as in the TPC method.</li>
-              <li><strong>Plating:</strong> Pipette 1ml from each dilution into sterile Petri plates.</li>
-              <li><strong>Media:</strong> Pour 15-20ml of melted VRBA and mix. After solidification, add another layer of VRBA on top (overlay).</li>
-              <li><strong>Incubation:</strong> Incubate the plates at 35-37°C for 18-24 hours.</li>
-              <li><strong>Counting:</strong> Count red-purple colonies (0.5mm or more in diameter) as coliforms.</li>
-              <li><strong>Confirmation (E.coli):</strong> Inoculate suspected colonies into Brilliant Green Lactose Bile (BGLB) broth and incubate at 44.5°C. Gas production indicates the presence of E. coli. Further confirmation is done by IMViC tests.</li>
-            </ol>`,
-          calculation: '<code>Coliforms/g (or ml) = Average no. of characteristic colonies × Dilution factor</code>'
-        },
-        {
-          id: 'yeast_mould',
-          title: 'Yeast and Mould Count',
-          principle: 'Yeasts and moulds can grow in acidic environments, so an acidic medium (like Potato Dextrose Agar, PDA) is used for their enumeration.',
-          procedure: `
-             <ol class='list-decimal list-inside space-y-2 mt-2'>
-              <li><strong>Sample & Dilutions:</strong> Prepare serial dilutions as in the TPC method.</li>
-              <li><strong>Plating:</strong> Transfer 1ml of each dilution to sterile Petri plates (Spread Plate method is better).</li>
-              <li><strong>Media:</strong> Plates should contain pre-poured Potato Dextrose Agar (PDA), with pH adjusted to ~3.5 (with tartaric acid) to inhibit bacterial growth.</li>
-              <li><strong>Incubation:</strong> Incubate plates at 22-25°C for 5 days.</li>
-              <li><strong>Counting:</strong> Count colonies of yeasts (typically shiny, round) and moulds (cotton-like, spreading) separately.</li>
-            </ol>`,
-          calculation: '<code>Yeast/Mould Count/g (or ml) = Average no. of colonies × Dilution factor</code>'
-        },
-        {
-          id: 'staph_aureus',
-          title: 'Detection of Staphylococcus aureus',
-          principle: 'S. aureus produces characteristic black colonies with a clear zone around them when grown on Baird-Parker Agar. The Coagulase test confirms its identity.',
-          procedure: `
-            <ol class='list-decimal list-inside space-y-2 mt-2'>
-              <li><strong>Sample & Dilutions:</strong> Prepare serial dilutions as in the TPC method.</li>
-              <li><strong>Plating (Spread Plate):</strong> Spread 0.1ml from each dilution onto Baird-Parker Agar plates.</li>
-              <li><strong>Incubation:</strong> Incubate plates at 35-37°C for 24-48 hours.</li>
-              <li><strong>Observation:</strong> Count black, shiny, convex colonies with an opaque zone around them.</li>
-              <li><strong>Confirmation (Coagulase Test):</strong> Inoculate a characteristic colony into Brain Heart Infusion (BHI) broth, incubate, and then mix with rabbit plasma and incubate at 37°C. If the plasma coagulates (clot formation) within 4-6 hours, it is S. aureus.</li>
-            </ol>`,
-          calculation: '<code>S. aureus/g (or ml) = Average no. of confirmed colonies × Dilution factor</code>'
-        },
-         {
-          id: 'salmonella_detection',
-          title: 'Detection of Salmonella (Qualitative)',
-          principle: 'This is a multi-step process involving pre-enrichment, selective enrichment, selective plating, and biochemical/serological confirmation.',
-          procedure: `
-            <ol class='list-decimal list-inside space-y-2 mt-2'>
-              <li><strong>Pre-enrichment:</strong> Add 25g of sample to 225ml of Buffered Peptone Water and incubate at 37°C for 18-24 hours.</li>
-              <li><strong>Selective Enrichment:</strong> Transfer 1ml of the pre-enriched culture to Rappaport-Vassiliadis (RV) broth and 0.1ml to Tetrathionate (TT) broth. Incubate RV at 42°C and TT at 37°C for 24 hours.</li>
-              <li><strong>Selective Plating:</strong> Streak from both enrichment broths onto Xylose Lysine Deoxycholate (XLD) Agar and Hektoen Enteric (HE) Agar. Incubate plates at 37°C for 24 hours.</li>
-              <li><strong>Observation:</strong> Red colonies (with or without black centers) on XLD, and blue-green colonies (with or without black centers) on HE are considered suspect colonies.</li>
-              <li><strong>Confirmation:</strong> Inoculate suspect colonies onto Triple Sugar Iron (TSI) agar and Lysine Iron Agar (LIA) slants. Confirm with further biochemical (urease, indole) and serological tests.</li>
-            </ol>`,
-          calculation: 'Result is reported as "Detected" or "Not Detected" in 25g/ml.'
-        },
-        {
-          id: 'listeria_detection',
-          title: 'Detection of Listeria monocytogenes (Qualitative)',
-          principle: 'This is also a multi-step process involving selective enrichment and plating.',
-          procedure: `
-             <ol class='list-decimal list-inside space-y-2 mt-2'>
-              <li><strong>Primary Enrichment:</strong> Add 25g of sample to 225ml of Listeria Enrichment Broth (LEB) and incubate at 30°C for 24-48 hours.</li>
-              <li><strong>Selective Plating:</strong> Streak from the enriched culture onto Oxford Agar or PALCAM Agar. Incubate plates at 35-37°C for 24-48 hours.</li>
-              <li><strong>Observation:</strong> On Oxford Agar, Listeria colonies are greyish-green with a black halo around them.</li>
-              <li><strong>Confirmation:</strong> Confirm suspect colonies with further tests (Gram stain, motility, catalase, CAMP test).</li>
-            </ol>`,
-          calculation: 'Result is reported as "Detected" or "Not Detected" in 25g/ml.'
-        },
-        {
-          id: 'bacillus_cereus',
-          title: 'Enumeration of Bacillus cereus',
-          principle: 'B. cereus is grown on Mannitol Egg Yolk Polymyxin (MYP) Agar, where it does not ferment mannitol and produces the enzyme lecithinase.',
-          procedure: `
-            <ol class='list-decimal list-inside space-y-2 mt-2'>
-              <li><strong>Sample & Dilutions:</strong> Prepare serial dilutions as in the TPC method.</li>
-              <li><strong>Plating (Spread Plate):</strong> Spread 0.1ml from each dilution onto MYP Agar plates.</li>
-              <li><strong>Incubation:</strong> Incubate plates at 30-35°C for 18-24 hours.</li>
-              <li><strong>Observation:</strong> Count pink-red colonies with an opaque zone around them (lecithinase activity).</li>
-              <li><strong>Confirmation:</strong> Confirm suspect colonies with further biochemical tests (glucose fermentation, Voges-Proskauer test).</li>
-            </ol>`,
-          calculation: '<code>B. cereus/g (or ml) = Average no. of confirmed colonies × Dilution factor</code>'
-        },
-        {
-          id: 'other_tests',
-          title: 'Overview of Other Tests',
-          principle: 'Here is a brief overview of the remaining tests, as their detailed procedures can be very specific.',
-          procedure: `
-            <ul class='list-disc list-inside space-y-2 mt-2'>
-              <li><strong>Aciduric Flat Sour Spores:</strong> Test for thermophilic bacteria that cause spoilage in canned foods. Done by incubating the sample on Dextrose Tryptone Agar.</li>
-              <li><strong>Anaerobic Spore Formers (Clostridium):</strong> Done by growing in anaerobic conditions (like in an anaerobic jar) on special media (like SPS agar).</li>
-              <li><strong>Direct Microscopic Count (DMC):</strong> A rapid, estimation test done by spreading a fixed amount of milk or tomato products on a slide, staining, and counting the bacteria directly under a microscope.</li>
-              <li><strong>Fermentation Test:</strong> Estimating the quality of milk by incubating it and observing gas production, curd type, and odor.</li>
-              <li><strong>Rope Producing Spores:</strong> Test for Bacillus spores that cause "rope" (slimy, thread-like spoilage) in bread or other products.</li>
-              <li><strong>Water Testing:</strong> The same methods as above (like for coliforms, E.coli, Salmonella) are also used for water samples, often with the Membrane Filtration technique.</li>
-              <li><strong>Culture Media, Equipments, Biochemical Tests:</strong> These topics are vast. Culture media (like PCA, VRBA, PDA) are the "food" for growing bacteria. Equipments (like Autoclave, Incubator) provide the necessary environment for testing. Biochemical tests (like IMViC, Catalase, Oxidase) use specific enzyme reactions of bacteria to identify them.</li>
-            </ul>`,
-          calculation: 'The results of these tests are usually reported as "Present/Absent" or in cfu/g(ml), depending on the test.'
+    },
+    en: {
+        title: "Milk Microbiology & Testing",
+        description: "A guide to the main microorganisms found in dairy products and their testing.",
+        sections: [
+            {
+                id: "intro",
+                title: "Introduction to Milk Microbiology",
+                content: `
+                <p>Milk must have a desirable chemical composition and must be of satisfactory hygienic quality. This is essential in terms of public health, the quality of the products made from milk, and the suitability of milk for processing. Components that are foreign to milk, but enter the milk in the udder or during or after milking, as well as any changes occurring in the milk are often detrimental to its quality. These matters are the subject of milk hygiene. Microbial, chemical, and physical hygiene may be distinguished. Examples are microorganisms that may produce a health hazard (food infection or food poisoning) or that spoil the milk, e.g., because they turn it sour during storage. Light-induced off-flavors, fat oxidation, and fat hydrolysis result from chemical or enzymic transformations. Furthermore, compounds that are potentially harmful to the consumer, such as antibiotics, disinfectants, pesticides, and heavy metals, can enter the milk.</p>
+                <h4 class="font-bold mt-4">General Aspects</h4>
+                <p>Milk is a good source of nutrients and edible energy, not only for mammals but for numerous microorganisms, which thus can grow in milk. It primarily concerns bacteria, but some molds and yeasts can also grow in milk.</p>
+                <h4 class="font-bold mt-4">Growth</h4>
+                <p>Bacteria multiply by division. Every cell division yields two new bacterial cells. The multiplication is a geometrical progression. The various growth phases that can be distinguished are lag phase, exponential phase, stationary phase, and dying-off phase. During the lag phase the bacteria do not multiply, primarily because their enzyme system needs adaptation. During the exponential phase, the growth is at a maximum rate until the stationary phase is reached. In the latter phase, some growth still occurs, together with dying off. The decrease of the growth rate is usually caused by action of inhibitors formed by the bacteria themselves and/or by a lack of available nutrients. Eventually, the stationary phase turns into the dying-off phase, during which the count decreases.</p>
+                <p>Temperature has a large effect on bacterial growth. Lowering of the temperature retards the rate of nearly all processes in the cell, thereby slowing down growth and decreasing fermentation rate (e.g., acid production).</p>
+                <h4 class="font-bold mt-4">Milk as a Substrate</h4>
+                <p>Milk contains such a wide range of nutrients, including all of the vitamins, that numerous species of bacteria find sufficient raw material for fermentation and growth. Milk contains natural inhibitors. An important class of inhibitors is the immunoglobulins, which are antibodies against specific antigens, often bacteria. The most important nonspecific inhibitor of milk is the peroxidase–thiocyanate–H2O2 system.</p>
+                <p>Treatment of milk may profoundly alter its suitability as a substrate for bacteria. The most important is heat treatment, which kills bacteria and may activate sporulation but also alters the milk. Inhibitors are inactivated. Consequently, pasteurization may considerably stimulate growth of bacteria (which have entered the milk afterward).</p>
+                `
+            },
+            {
+                id: "undesirable_microorganisms",
+                title: "Undesirable Microorganisms",
+                content: `
+                    <p>Most microorganisms are undesirable in milk because they can be pathogenic or produce enzymes that cause undesirable transformations in the milk.</p>
+                    <h4 class="font-bold mt-4">Spoilage Microorganisms</h4>
+                    <ul class="list-disc list-outside pl-5 space-y-2 mt-2">
+                        <li><strong>Lactic acid bacteria:</strong> These bacteria mainly produce lactic acid from carbohydrates such as lactose. They are widespread and include the genera Lactococcus and Lactobacillus.</li>
+                        <li><strong>Coliforms:</strong> Belong to the Enterobacteriaceae and are widespread, e.g., in the digestive tract. They grow rapidly in milk, especially above 20°C, and attack proteins and lactose, as a result of which gas is formed and the flavor of the milk becomes ‘‘unclean.’’</li>
+                        <li><strong>Psychrotrophs:</strong> Include the genera Pseudomonas, Achromobacter, Flavobacterium, and Alcaligenes. Psychrotrophs grow readily at low temperatures (<15°C); in milk they proliferate even at a temperature as low as 4°C. The organisms produce proteases and lipases, and thus attack protein and fat, causing ‘‘putrid’’ and rancid off-flavors.</li>
+                        <li><strong>Heat-resistant bacteria:</strong> Some bacteria, including Microbacterium lacticum, thermophilic streptococci, and certain Micrococcus species do not form spores, but the vegetative cells survive low pasteurization.</li>
+                        <li><strong>Spores of bacteria:</strong> The genera Bacillus (aerobic) and Clostridium (anaerobic) can form spores. Most of these survive fairly intense heat treatment.</li>
+                    </ul>
+                    <h4 class="font-bold mt-4">Pathogenic Microorganisms</h4>
+                     <ul class="list-disc list-outside pl-5 space-y-2 mt-2">
+                        <li><strong>Mycobacterium tuberculosis:</strong> Can originate from the cow or the milker. It is killed by low pasteurization.</li>
+                        <li><strong>Staphylococcus aureus:</strong> Often occurs in the udder of a cow with mastitis. Some strains can form a heat-resistant toxin.</li>
+                        <li><strong>Salmonella and Shigella spp.:</strong> Occur widely in nature, e.g., in dung and polluted water. Low pasteurization is adequate to kill them.</li>
+                        <li><strong>Campylobacter jejuni:</strong> Can occur in the intestinal tract of many animals. It is very heat-sensitive and will not survive low pasteurization.</li>
+                        <li><strong>Listeria monocytogenes:</strong> Often found in nature. It can grow at a temperature as low as 5°C and is killed by usual pasteurization.</li>
+                        <li><strong>Coxiella burnetii:</strong> Causes Q fever in humans. It can survive low pasteurization if the temperature is not adequate.</li>
+                    </ul>
+                `
+            },
+            {
+                id: 'sources_of_contamination',
+                title: 'Sources of Contamination',
+                content: `
+                    <h4 class="font-bold mt-4">Microorganisms Present in the Udder</h4>
+                    <p>In healthy cows, the milk in the secretory tissue is sterile, but bacteria can be present in the teat canal. Unhealthy cows, especially those with mastitis, can have high bacterial counts in their milk, including pathogenic organisms.</p>
+                    <h4 class="font-bold mt-4">Contamination During and After Milking</h4>
+                    <ul class="list-disc list-outside pl-5 space-y-2 mt-2">
+                        <li><strong>The Cow:</strong> Microorganisms from the skin of the teats, contaminated by dung, soil, or dust, can enter the milk.</li>
+                        <li><strong>Soil, Dung, Dust:</strong> These contaminants can reach the milk through the air or by direct contact, introducing spores of bacteria, yeasts, and molds.</li>
+                        <li><strong>The Feed:</strong> Feed can contain large numbers of microorganisms, including spore-forming bacteria that can survive passage through the digestive tract and contaminate milk via dung.</li>
+                        <li><strong>Milking Unit:</strong> Poorly cleaned and disinfected milking equipment is a major source of contamination.</li>
+                        <li><strong>Water:</strong> Contaminated water used for cleaning and rinsing can introduce psychrotrophic bacteria and other pathogens.</li>
+                        <li><strong>The Milker:</strong> The milker can directly contaminate the milk from his hands or clothes, especially if suffering from an infection.</li>
+                    </ul>
+                `
+            },
+            {
+                id: 'hygienic_measures',
+                title: 'Hygienic Measures',
+                content: `
+                    <h4 class="font-bold mt-4">Protection of the Consumer Against Pathogenic Microorganisms</h4>
+                    <p>Contamination of raw milk by pathogens can never be ruled out. Milk intended for liquid consumption or for transformation into milk products is therefore often required by law to be heated to such an extent that the common pathogens are killed; this implies at least low pasteurization. The drinking of raw milk is highly inadvisable.</p>
+                    <h4 class="font-bold mt-4">Measures Against Spoilage Organisms</h4>
+                    <p>A low contamination by microorganisms is the first aim. To achieve this, the sources of contamination should be known. Cleaning and disinfection of the milking equipment is essential.</p>
+                    <p>Cooling is the main means of slowing down the growth of bacteria in milk. A satisfactory operation of refrigerated milk tanks on the farm is essential. However, cooling of milk kills no bacteria and it cannot remedy unsatisfactory hygiene.</p>
+                `
+            }
+        ],
+        testMethods: {
+          title: "Common Microbiological Test Methods",
+          intro: "Several standard microbiological tests are performed to ensure the safety and quality of dairy products. Here is an overview of some key test methods:",
+          tests: [
+            {
+              id: 'tpc',
+              title: 'Aerobic Mesophilic Plate Count (Total Plate Count)',
+              principle: 'This test measures the total number of viable (living) bacteria and fungi in a sample that can grow in the presence of oxygen at moderate (mesophilic) temperatures. It is also known as Standard Plate Count (SPC) or Total Viable Count (TVC).',
+              procedure: `
+                <ol class='list-decimal list-inside space-y-2 mt-2'>
+                  <li><strong>Sample Preparation:</strong> Create a 1:10 dilution by mixing 10g or 10ml of the sample with 90ml of sterile diluent (e.g., peptone water).</li>
+                  <li><strong>Serial Dilutions:</strong> Prepare further serial dilutions from this (1:100, 1:1000, etc.).</li>
+                  <li><strong>Plating:</strong> Transfer 1ml of each dilution into two sterile Petri plates (Pour Plate Method).</li>
+                  <li><strong>Media:</strong> Pour 15-20ml of melted Plate Count Agar (PCA), cooled to 45°C, into the plates. Gently swirl to mix.</li>
+                  <li><strong>Incubation:</strong> Incubate the plates inverted at 35-37°C for 24-48 hours.</li>
+                  <li><strong>Counting:</strong> Select plates with between 25 and 250 colonies. Count the colonies using a colony counter.</li>
+                </ol>`,
+              calculation: '<code>CFU/g (or ml) = (Average no. of colonies × Dilution factor) / Volume of sample plated (ml)</code>'
+            },
+            {
+              id: 'coliforms',
+              title: 'Detection of Coliforms, Faecal Coliforms & E.coli',
+              principle: 'Coliforms ferment lactose to produce acid and gas. They are enumerated on Violet Red Bile Agar (VRBA). E. coli is a faecal coliform confirmed by specific biochemical tests.',
+              procedure: `
+                <ol class='list-decimal list-inside space-y-2 mt-2'>
+                  <li><strong>Sample & Dilutions:</strong> Prepare serial dilutions as in the TPC method.</li>
+                  <li><strong>Plating:</strong> Pipette 1ml from each dilution into sterile Petri plates.</li>
+                  <li><strong>Media:</strong> Pour 15-20ml of melted VRBA and mix. After solidification, add another layer of VRBA on top (overlay).</li>
+                  <li><strong>Incubation:</strong> Incubate the plates at 35-37°C for 18-24 hours.</li>
+                  <li><strong>Counting:</strong> Count red-purple colonies (0.5mm or more in diameter) as coliforms.</li>
+                  <li><strong>Confirmation (E.coli):</strong> Inoculate suspected colonies into Brilliant Green Lactose Bile (BGLB) broth and incubate at 44.5°C. Gas production indicates the presence of E. coli. Further confirmation is done by IMViC tests.</li>
+                </ol>`,
+              calculation: '<code>Coliforms/g (or ml) = Average no. of characteristic colonies × Dilution factor</code>'
+            },
+            {
+              id: 'yeast_mould',
+              title: 'Yeast and Mould Count',
+              principle: 'Yeasts and moulds can grow in acidic environments, so an acidic medium (like Potato Dextrose Agar, PDA) is used for their enumeration.',
+              procedure: `
+                 <ol class='list-decimal list-inside space-y-2 mt-2'>
+                  <li><strong>Sample & Dilutions:</strong> Prepare serial dilutions as in the TPC method.</li>
+                  <li><strong>Plating:</strong> Transfer 1ml of each dilution to sterile Petri plates (Spread Plate method is better).</li>
+                  <li><strong>Media:</strong> Plates should contain pre-poured Potato Dextrose Agar (PDA), with pH adjusted to ~3.5 (with tartaric acid) to inhibit bacterial growth.</li>
+                  <li><strong>Incubation:</strong> Incubate plates at 22-25°C for 5 days.</li>
+                  <li><strong>Counting:</strong> Count colonies of yeasts (typically shiny, round) and moulds (cotton-like, spreading) separately.</li>
+                </ol>`,
+              calculation: '<code>Yeast/Mould Count/g (or ml) = Average no. of colonies × Dilution factor</code>'
+            }
+          ]
         }
-      ]
     }
-  }
 }
-
-    
-    
