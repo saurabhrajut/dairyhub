@@ -85,7 +85,7 @@ const topics: { id: string; title: string; description: string; category: string
   { id: 'ice-cream-production', title: 'Ice-Cream Production', description: 'Process & Science', category: 'science', icon: IceCreamIcon, modal: IceCreamProductionModal, isPro: true, color: 'from-rose-100 to-pink-200', access: ['production-access', 'all-control-access'] },
   
   { id: 'std1', title: 'Standardization I', description: 'Basic Principles', category: 'milk', icon: Scale, modal: StandardizationIModal, isPro: false, color: 'from-sky-100 to-cyan-200', access: ['all'] },
-  { id: 'std2', title: 'Standardization II', description: 'Advanced Blending', category: 'milk', icon: Calculator, modal: StandardizationIIModal, isPro: false, color: 'from-fuchsia-100 to-purple-200', access: ['process-access', 'production-access', 'quality-access', 'all-control-access'] },
+  { id: 'std2', title: 'Advanced Standardization', description: 'Advanced Blending', category: 'milk', icon: Calculator, modal: StandardizationIIModal, isPro: false, color: 'from-fuchsia-100 to-purple-200', access: ['process-access', 'production-access', 'quality-access', 'all-control-access'] },
   { id: 'various-calculations', title: 'Various Calculations', description: 'Yield, Acidity, etc.', category: 'science', icon: FileSpreadsheet, badge: 'Updated', modal: VariousCalculatorsModal, isPro: false, color: 'from-orange-100 to-red-200', access: ['production-access', 'quality-access', 'all-control-access'] },
   { id: 'plant-cost', title: 'Plant Cost', description: 'Profit & Loss Calc', category: 'industry', icon: DollarSign, badge: 'Pro', modal: PlantCostModal, isPro: true, color: 'from-yellow-100 to-green-200', access: ['production-access', 'all-control-access'] },
   
