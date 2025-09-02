@@ -51,99 +51,30 @@ const Section = ({ title, children, icon: Icon }: { title: string, children: Rea
     </div>
 );
 
-const topicComponents = {
+const topicComponents: { [key: string]: React.FC<{ content: any }> } = {
     intro: function Content({ content }: { content: any }) {
         const section = content.sections.find((s:any) => s.id === 'intro');
+        if (!section) return null;
         return <Section title={section.title}><div dangerouslySetInnerHTML={{ __html: section.content }} /></Section>;
     },
-    thermophilic: function Content({ content }: { content: any }) {
-        const section = content.sections.find((s:any) => s.id === 'thermophilic');
+    undesirable_microorganisms: function Content({ content }: { content: any }) {
+        const section = content.sections.find((s:any) => s.id === 'undesirable_microorganisms');
+        if (!section) return null;
         return <Section title={section.title}><div dangerouslySetInnerHTML={{ __html: section.content }} /></Section>;
     },
-    thermoduric: function Content({ content }: { content: any }) {
-        const section = content.sections.find((s:any) => s.id === 'thermoduric');
+    sources_of_contamination: function Content({ content }: { content: any }) {
+        const section = content.sections.find((s:any) => s.id === 'sources_of_contamination');
+        if (!section) return null;
         return <Section title={section.title}><div dangerouslySetInnerHTML={{ __html: section.content }} /></Section>;
     },
-    psychrotrophic: function Content({ content }: { content: any }) {
-        const section = content.sections.find((s:any) => s.id === 'psychrotrophic');
+    hygienic_measures: function Content({ content }: { content: any }) {
+        const section = content.sections.find((s:any) => s.id === 'hygienic_measures');
+        if (!section) return null;
         return <Section title={section.title}><div dangerouslySetInnerHTML={{ __html: section.content }} /></Section>;
-    },
-    lab: function Content({ content }: { content: any }) {
-        const section = content.sections.find((s:any) => s.id === 'lab');
-        return <Section title={section.title}><div dangerouslySetInnerHTML={{ __html: section.content }} /></Section>;
-    },
-    spoilage: function Content({ content }: { content: any }) {
-        const section = content.sections.find((s:any) => s.id === 'spoilage');
-        return <Section title={section.title}><div dangerouslySetInnerHTML={{ __html: section.content }} /></Section>;
-    },
-    pathogens: function Content({ content }: { content: any }) {
-        const section = content.sections.find((s:any) => s.id === 'pathogens');
-        return <Section title={section.title}><div dangerouslySetInnerHTML={{ __html: section.content }} /></Section>;
-    },
-    enterobacteriaceae: function Content({ content }: { content: any }) {
-        const section = content.sections.find((s:any) => s.id === 'enterobacteriaceae');
-        return <Section title={section.title}><div dangerouslySetInnerHTML={{ __html: section.content }} /></Section>;
-    },
-    cronobacter: function Content({ content }: { content: any }) {
-        const section = content.sections.find((s:any) => s.id === 'cronobacter');
-        return <Section title={section.title}><div dangerouslySetInnerHTML={{ __html: section.content }} /></Section>;
-    },
-    ecoli: function Content({ content }: { content: any }) {
-        const section = content.sections.find((s:any) => s.id === 'ecoli');
-        return <Section title={section.title}><div dangerouslySetInnerHTML={{ __html: section.content }} /></Section>;
-    },
-    salmonella: function Content({ content }: { content: any }) {
-        const section = content.sections.find((s:any) => s.id === 'salmonella');
-        return <Section title={section.title}><div dangerouslySetInnerHTML={{ __html: section.content }} /></Section>;
-    },
-    listeria: function Content({ content }: { content: any }) {
-        const section = content.sections.find((s:any) => s.id === 'listeria');
-        return <Section title={section.title}><div dangerouslySetInnerHTML={{ __html: section.content }} /></Section>;
-    },
-    clostridium: function Content({ content }: { content: any }) {
-        const section = content.sections.find((s:any) => s.id === 'clostridium');
-        return <Section title={section.title}><div dangerouslySetInnerHTML={{ __html: section.content }} /></Section>;
-    },
-    campylobacter: function Content({ content }: { content: any }) {
-        const section = content.sections.find((s:any) => s.id === 'campylobacter');
-        return <Section title={section.title}><div dangerouslySetInnerHTML={{ __html: section.content }} /></Section>;
-    },
-    bacillus: function Content({ content }: { content: any }) {
-        const section = content.sections.find((s:any) => s.id === 'bacillus');
-        return <Section title={section.title}><div dangerouslySetInnerHTML={{ __html: section.content }} /></Section>;
-    },
-    staphylococci: function Content({ content }: { content: any }) {
-        const section = content.sections.find((s:any) => s.id === 'staphylococci');
-        return <Section title={section.title}><div dangerouslySetInnerHTML={{ __html: section.content }} /></Section>;
-    },
-    probiotics: function Content({ content }: { content: any }) {
-        const section = content.sections.find((s:any) => s.id === 'probiotics');
-        return (
-            <Section title={section.title}>
-                <div dangerouslySetInnerHTML={{ __html: section.content }} />
-                {section.table && (
-                    <div className="overflow-x-auto">
-                        <Table className="mt-4">
-                            <TableHeader>
-                                <TableRow>
-                                    {section.table.headers.map((header: string) => <TableHead key={header}>{header}</TableHead>)}
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {section.table.rows.map((row: string[], index: number) => (
-                                    <TableRow key={index}>
-                                        {row.map((cell, cellIndex) => <TableCell key={cellIndex}>{cell}</TableCell>)}
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </div>
-                )}
-            </Section>
-        );
     },
     test_methods: function Content({ content }: { content: any }) {
         const section = content.testMethods;
+        if (!section) return null;
         return (
             <Section title={section.title} icon={TestTube}>
                 <p>{section.intro}</p>
@@ -155,7 +86,7 @@ const topicComponents = {
             </Section>
         );
     }
-}
+};
 
 
 export function MicrobiologyTestingModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
@@ -173,24 +104,11 @@ export function MicrobiologyTestingModal({ isOpen, setIsOpen }: { isOpen: boolea
   if (!content) return null;
 
   const topics = [
-    { value: "intro", title: "Introduction", icon: Bug },
-    { value: "thermophilic", title: "Thermophilic Bacteria", icon: Bug },
-    { value: "thermoduric", title: "Thermoduric Bacteria", icon: Bug },
-    { value: "psychrotrophic", title: "Psychrotrophic Bacteria", icon: Bug },
-    { value: "lab", title: "Lactic Acid Bacteria", icon: FlaskConical },
-    { value: "spoilage", title: "Spoilage Organisms", icon: ShieldOff },
-    { value: "pathogens", title: "Pathogenic Organisms", icon: ShieldOff },
-    { value: "enterobacteriaceae", title: "Enterobacteriaceae", icon: Bug },
-    { value: "cronobacter", title: "Cronobacter", icon: Bug },
-    { value: "ecoli", title: "E. coli & Coliforms", icon: Bug },
-    { value: "salmonella", title: "Salmonella", icon: ShieldOff },
-    { value: "listeria", title: "Listeria", icon: ShieldOff },
-    { value: "clostridium", title: "Clostridium perfringens", icon: ShieldOff },
-    { value: "campylobacter", title: "Campylobacter", icon: ShieldOff },
-    { value: "bacillus", title: "Bacillus cereus", icon: Bug },
-    { value: "staphylococci", title: "Staphylococci", icon: ShieldOff },
-    { value: "probiotics", title: "Probiotics", icon: Proportions },
-    { value: "test_methods", title: "Common Test Methods", icon: TestTube }
+      { value: "intro", title: "Introduction", icon: Bug },
+      { value: "undesirable_microorganisms", title: "Undesirable Microorganisms", icon: ShieldOff },
+      { value: "sources_of_contamination", title: "Sources of Contamination", icon: FlaskConical },
+      { value: "hygienic_measures", title: "Hygienic Measures", icon: Proportions },
+      { value: "test_methods", title: "Common Test Methods", icon: TestTube }
   ];
 
   const selectedTopic = topics.find(t => t.value === activeTopic);
@@ -244,3 +162,4 @@ export function MicrobiologyTestingModal({ isOpen, setIsOpen }: { isOpen: boolea
     </Dialog>
   );
 }
+
