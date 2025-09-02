@@ -1094,9 +1094,11 @@ function ClrIncreaseCalc() {
 }
 
 function FatClrMaintainerCalc() {
+    const [fatSourceType, setFatSourceType] = useState<'richMilk' | 'cream'>('richMilk');
     const [inputs, setInputs] = useState({
         milkQty: '1000', milkFat: '3.6', milkClr: '31',
         richMilkFat: '6.25', richMilkClr: '29.75',
+        creamFat: '40.0', creamSnf: '5.4',
         targetFat: '4.0', targetClr: '31',
         smpSolids: '96',
     });
@@ -1104,95 +1106,141 @@ function FatClrMaintainerCalc() {
     const [error, setError] = useState<string | null>(null);
 
     const handleInputChange = useCallback((name: string, value: string) => {
-        setInputs(prev => ({...prev, [name]: value}));
+        setInputs(prev => ({ ...prev, [name]: value }));
     }, []);
 
     const calculate = useCallback(() => {
         setResult(null);
         setError(null);
-        
+
         const M_milk = parseFloat(inputs.milkQty);
-        const F_milk = parseFloat(inputs.milkFat);
+        const F_milk = parseFloat(inputs.milkFat) / 100;
         const CLR_milk = parseFloat(inputs.milkClr);
-        const F_rich = parseFloat(inputs.richMilkFat);
-        const CLR_rich = parseFloat(inputs.richMilkClr);
-        const F_target = parseFloat(inputs.targetFat);
+        const F_target = parseFloat(inputs.targetFat) / 100;
         const CLR_target = parseFloat(inputs.targetClr);
-        const smpSolidsPercent = parseFloat(inputs.smpSolids);
+        const smpSolidsPercent = parseFloat(inputs.smpSolids) / 100;
 
-        if ([M_milk, F_milk, CLR_milk, F_rich, CLR_rich, F_target, CLR_target, smpSolidsPercent].some(isNaN)) {
-            setError("Please fill all fields with valid numbers."); return;
-        }
-        if (F_target <= F_milk) {
-            setError("Target Fat % must be higher than Initial Fat %."); return;
-        }
-        if (F_rich <= F_target) {
-            setError("Rich Milk Fat % must be higher than Target Fat %."); return;
-        }
+        if (fatSourceType === 'richMilk') {
+            const F_rich = parseFloat(inputs.richMilkFat) / 100;
+            const CLR_rich = parseFloat(inputs.richMilkClr);
+            if ([M_milk, F_milk, CLR_milk, F_rich, CLR_rich, F_target, CLR_target, smpSolidsPercent].some(isNaN)) {
+                setError("Please fill all fields with valid numbers."); return;
+            }
+            const M_rich_needed = M_milk * (F_target - F_milk) / (F_rich - F_target);
+            if (M_rich_needed < 0) {
+                 setError("Target fat is not between initial and rich milk fat. Cannot calculate."); return;
+            }
+            const M_total_after_rich = M_milk + M_rich_needed;
+            const CLR_intermediate = ((M_milk * CLR_milk) + (M_rich_needed * CLR_rich)) / M_total_after_rich;
 
-        // Step 1: Calculate rich milk needed to raise fat to target
-        const M_rich = M_milk * (F_target - F_milk) / (F_rich - F_target);
+            if (CLR_intermediate > CLR_target) {
+                setError(`Adding rich milk results in a CLR of ${CLR_intermediate.toFixed(2)}, which is already higher than the target. Cannot maintain CLR by adding SMP.`);
+                return;
+            }
+            
+            const SNF_intermediate = getSnf(F_target*100, CLR_intermediate) / 100;
+            const SNF_target = getSnf(F_target*100, CLR_target) / 100;
+            const SNF_needed_from_smp = (M_total_after_rich * (SNF_target - SNF_intermediate));
+            const M_smp_needed = SNF_needed_from_smp / (smpSolidsPercent - SNF_target);
+            
+            if(M_smp_needed < 0) {
+                setError("Calculated negative SMP. Please check inputs. This can happen if the intermediate CLR is already higher than the target.");
+                return;
+            }
 
-        // Step 2: Calculate the new, intermediate CLR after adding rich milk
-        const CLR_intermediate = ( (M_milk * CLR_milk) + (M_rich * CLR_rich) ) / (M_milk + M_rich);
-
-        // Step 3: Check if CLR needs adjustment and calculate SMP needed
-        let smpNeeded = 0;
-        let finalMessage = "";
-
-        if (CLR_intermediate < CLR_target) {
-            // CLR is low, need to add SMP
-            const totalMilkAfterRich = M_milk + M_rich;
-            smpNeeded = (totalMilkAfterRich * (CLR_target - CLR_intermediate) * 0.25) / smpSolidsPercent;
-            finalMessage = `
-                To standardize <strong>${M_milk} kg</strong> of milk to <strong>${F_target}% Fat</strong> and <strong>${CLR_target} CLR</strong>, you need to add:
+            setResult(`To standardize <strong>${M_milk} kg</strong> of milk, you need to add:
                 <ul class='list-disc list-inside mt-2 text-lg'>
-                    <li>Rich Milk (${F_rich}% Fat): <strong class='text-green-700'>${M_rich.toFixed(3)} kg</strong></li>
-                    <li>SMP (~${smpSolidsPercent}% TS): <strong class='text-blue-700'>${smpNeeded.toFixed(3)} kg</strong></li>
-                </ul>
-                <p class='mt-2 text-sm'>First, add the rich milk to achieve the target fat. Then, add the SMP to raise the CLR to the target level.</p>
-            `;
-        } else {
-            // CLR is already at or above target, no SMP needed. This might happen if rich milk CLR is high.
-             finalMessage = `
-                To standardize <strong>${M_milk} kg</strong> of milk to <strong>${F_target}% Fat</strong>, you need to add:
-                <ul class='list-disc list-inside mt-2 text-lg'>
-                    <li>Rich Milk (${F_rich}% Fat): <strong class='text-green-700'>${M_rich.toFixed(3)} kg</strong></li>
-                </ul>
-                <p class='mt-2 text-sm'>The resulting CLR will be approximately <strong>${CLR_intermediate.toFixed(2)}</strong>, which already meets or exceeds your target CLR of ${CLR_target}. No SMP is needed.</p>
-            `;
-        }
-        
-        setResult(finalMessage);
+                    <li>Rich Milk (${inputs.richMilkFat}% Fat): <strong class='text-green-700'>${M_rich_needed.toFixed(3)} kg</strong></li>
+                    <li>SMP (~${inputs.smpSolids}% TS): <strong class='text-blue-700'>${M_smp_needed.toFixed(3)} kg</strong></li>
+                </ul>`);
+        } else { // Cream
+            const F_cream = parseFloat(inputs.creamFat) / 100;
+            const SNF_cream = parseFloat(inputs.creamSnf) / 100;
+             if ([M_milk, F_milk, CLR_milk, F_cream, SNF_cream, F_target, CLR_target, smpSolidsPercent].some(isNaN)) {
+                setError("Please fill all fields with valid numbers."); return;
+            }
+            const SNF_milk = getSnf(F_milk*100, CLR_milk) / 100;
+            const SNF_target = getSnf(F_target*100, CLR_target) / 100;
 
-    }, [inputs]);
-    
+            const Fp = 0.01; // SMP Fat approx 1%
+            const Sp = smpSolidsPercent - Fp; // SMP SNF
+
+            const K1 = M_milk * (F_target - F_milk);
+            const K2 = M_milk * (SNF_target - SNF_milk);
+
+            const A1 = F_cream - F_target;
+            const B1 = Fp - F_target;
+
+            const A2 = SNF_cream - SNF_target;
+            const B2 = Sp - SNF_target;
+
+            const det = A1 * B2 - B1 * A2;
+
+            if (Math.abs(det) < 1e-9) {
+                setError("Cannot solve. Ingredients properties might be too similar."); return;
+            }
+
+            const M_cream_needed = (K1 * B2 - K2 * B1) / det;
+            const M_smp_needed = (K2 * A1 - K1 * A2) / det;
+            
+             if (M_cream_needed < 0 || M_smp_needed < 0) {
+                setError("Calculation resulted in negative values. This scenario is not possible with the given inputs (e.g., target might be lower than initial values).");
+                return;
+            }
+
+             setResult(`To standardize <strong>${M_milk} kg</strong> of milk, you need to add:
+                <ul class='list-disc list-inside mt-2 text-lg'>
+                    <li>Cream (${inputs.creamFat}% Fat): <strong class='text-green-700'>${M_cream_needed.toFixed(3)} kg</strong></li>
+                    <li>SMP (~${inputs.smpSolids}% TS): <strong class='text-blue-700'>${M_smp_needed.toFixed(3)} kg</strong></li>
+                </ul>`);
+        }
+    }, [inputs, fatSourceType]);
+
     return (
-        <CalculatorCard title="Fat &amp; CLR Maintainer Calculator" description="Increase milk Fat % with a richer milk source while maintaining the original CLR by adding Skimmed Milk Powder (SMP).">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mb-4">
-                <div className="bg-blue-50 p-4 rounded-lg space-y-3">
-                    <h3 className="font-semibold text-gray-700 mb-2 font-headline">Initial Batch</h3>
-                    <MemoizedInputField label="Milk Quantity (kg)" value={inputs.milkQty} name="milkQty" setter={handleInputChange} />
-                    <MemoizedInputField label="Initial Fat %" value={inputs.milkFat} name="milkFat" setter={handleInputChange} />
-                    <MemoizedInputField label="Initial CLR" value={inputs.milkClr} name="milkClr" setter={handleInputChange} />
-                </div>
-                 <div className="bg-yellow-50 p-4 rounded-lg space-y-3">
-                     <h3 className="font-semibold text-gray-700 mb-2 font-headline">Available Rich Milk</h3>
-                    <MemoizedInputField label="Rich Milk Fat %" value={inputs.richMilkFat} name="richMilkFat" setter={handleInputChange} />
-                    <MemoizedInputField label="Rich Milk CLR" value={inputs.richMilkClr} name="richMilkClr" setter={handleInputChange} />
-                </div>
-                 <div className="bg-green-50 p-4 rounded-lg space-y-3 md:col-span-2">
-                     <h3 className="font-semibold text-gray-700 mb-2 font-headline">Target &amp; Other Ingredients</h3>
-                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <MemoizedInputField label="Target Fat %" value={inputs.targetFat} name="targetFat" setter={handleInputChange} />
-                        <MemoizedInputField label="Target CLR" value={inputs.targetClr} name="targetClr" setter={handleInputChange} />
-                        <MemoizedInputField label="SMP Total Solids (%)" value={inputs.smpSolids} name="smpSolids" setter={handleInputChange} />
-                     </div>
-                </div>
-            </div>
-             <Button onClick={calculate} className="w-full mt-4">Calculate Rich Milk &amp; SMP</Button>
-            {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
-            {result && <Alert className="mt-4"><AlertTitle>Standardization Plan</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
+        <CalculatorCard title="Fat &amp; CLR Maintainer Calculator" description="Increase milk Fat % using a fat source (Rich Milk or Cream) while maintaining the original CLR by adding Skimmed Milk Powder (SMP).">
+             <div className="mb-4">
+                 <Label>Select Fat Source</Label>
+                 <Select value={fatSourceType} onValueChange={(val) => setFatSourceType(val as 'richMilk' | 'cream')}>
+                     <SelectTrigger><SelectValue /></SelectTrigger>
+                     <SelectContent>
+                         <SelectItem value="richMilk">Rich Milk</SelectItem>
+                         <SelectItem value="cream">Cream</SelectItem>
+                     </SelectContent>
+                 </Select>
+             </div>
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mb-4">
+                 <div className="bg-blue-50 p-4 rounded-lg space-y-3">
+                     <h3 className="font-semibold text-gray-700 mb-2 font-headline">Initial Batch</h3>
+                     <MemoizedInputField label="Milk Quantity (kg)" value={inputs.milkQty} name="milkQty" setter={handleInputChange} />
+                     <MemoizedInputField label="Initial Fat %" value={inputs.milkFat} name="milkFat" setter={handleInputChange} />
+                     <MemoizedInputField label="Initial CLR" value={inputs.milkClr} name="milkClr" setter={handleInputChange} />
+                 </div>
+                  <div className="bg-yellow-50 p-4 rounded-lg space-y-3">
+                      <h3 className="font-semibold text-gray-700 mb-2 font-headline">Available Fat Source</h3>
+                      {fatSourceType === 'richMilk' ? (
+                          <>
+                              <MemoizedInputField label="Rich Milk Fat %" value={inputs.richMilkFat} name="richMilkFat" setter={handleInputChange} />
+                              <MemoizedInputField label="Rich Milk CLR" value={inputs.richMilkClr} name="richMilkClr" setter={handleInputChange} />
+                          </>
+                      ) : (
+                          <>
+                              <MemoizedInputField label="Cream Fat %" value={inputs.creamFat} name="creamFat" setter={handleInputChange} />
+                              <MemoizedInputField label="Cream SNF %" value={inputs.creamSnf} name="creamSnf" setter={handleInputChange} />
+                          </>
+                      )}
+                 </div>
+                  <div className="bg-green-50 p-4 rounded-lg space-y-3 md:col-span-2">
+                      <h3 className="font-semibold text-gray-700 mb-2 font-headline">Target &amp; Other Ingredients</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                         <MemoizedInputField label="Target Fat %" value={inputs.targetFat} name="targetFat" setter={handleInputChange} />
+                         <MemoizedInputField label="Target CLR" value={inputs.targetClr} name="targetClr" setter={handleInputChange} />
+                         <MemoizedInputField label="SMP Total Solids (%)" value={inputs.smpSolids} name="smpSolids" setter={handleInputChange} />
+                      </div>
+                 </div>
+             </div>
+              <Button onClick={calculate} className="w-full mt-4">Calculate Standardization</Button>
+             {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
+             {result && <Alert className="mt-4"><AlertTitle>Standardization Plan</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
         </CalculatorCard>
     )
 }
@@ -1635,6 +1683,7 @@ function KgFatSnfCalc() {
     
 
     
+
 
 
 
