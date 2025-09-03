@@ -58,37 +58,37 @@ const sarathiPrompt = ai.definePrompt({
  * @param history The conversation history from the client.
  * @returns A validated array of Genkit-compatible messages.
  */
+// <<<<<<<<<<< Is Poore Function ko Copy Karke Replace Karein >>>>>>>>>>>>>
+
 function validateHistory(history: Message[] | undefined): Message[] {
   if (!history || !Array.isArray(history)) {
     return [];
   }
-  
+
   return history
+    // Step 1: Pehle hi array se saari null/undefined entries hata do
+    .filter(Boolean) 
     .map(msg => {
-      // 1. Ensure the message object and its content array are valid.
-      if (!msg || !msg.content || !Array.isArray(msg.content)) {
+      // Step 2: Ab humein pata hai ki 'msg' null nahi hai, to hum safely check kar sakte hain
+      if (!msg.content || !Array.isArray(msg.content)) {
         return null;
       }
       
-      // 2. Filter out any empty or invalid content parts within a message.
       const validContent = msg.content.filter(c => c && typeof c.text === 'string' && c.text.trim() !== '');
       
-      // 3. If there's no valid content left, discard the entire message.
       if (validContent.length === 0) {
         return null;
       }
 
-      // 4. Ensure the message has a valid role.
       if (msg.role !== 'user' && msg.role !== 'assistant' && msg.role !== 'model') {
-  return null;
-}
+        return null;
+      }
       
-      // 5. Return a new, clean message object.
       return { role: msg.role, content: validContent };
     })
-    // 6. Filter out any null messages that resulted from the validation.
     .filter((msg): msg is Message => msg !== null);
 }
+
 
 
 const sarathiChatbotFlow = ai.defineFlow(
