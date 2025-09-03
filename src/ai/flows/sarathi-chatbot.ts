@@ -74,9 +74,9 @@ function validateHistory(history: Message[] | undefined): Message[] {
       }
 
       // 4. Ensure the message has a valid role.
-      if (msg.role !== 'user' && msg.role !== 'model') {
-        return null;
-      }
+      if (msg.role !== 'user' && msg.role !== 'assistant' && msg.role !== 'model') {
+  return null;
+}
       
       // 5. Return a new, clean message object.
       return { role: msg.role, content: validContent };
@@ -97,6 +97,7 @@ const sarathiChatbotFlow = ai.defineFlow(
     const validHistory = validateHistory(history);
 
     const {output} = await sarathiPrompt(restOfInput, {history: validHistory});
+console.log('Sarathi output:', output);
 
     if (!output) {
       return {answer: 'Maaf karna, kuch gadbad ho gayi. Fir se try karein.'};
@@ -107,6 +108,6 @@ const sarathiChatbotFlow = ai.defineFlow(
 
 export async function sarathiChatbot(
   input: SarathiChatbotInput
-): Promise<SarathiChatbotOutputSchema> {
+): Promise<z.infer<typeof SarathiChatbotOutputSchema>> {
   return await sarathiChatbotFlow(input);
 }
