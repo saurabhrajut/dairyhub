@@ -14,7 +14,8 @@ import { useSubscription, type SubscriptionPlan } from "@/context/subscription-c
 import { useAuth, type Department } from "@/context/auth-context";
 import { useToast } from "@/hooks/use-toast";
 import { ScrollArea } from "./ui/scroll-area";
-import { createRazorpayOrder, verifyRazorpayPayment } from "@/app/actions";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
 
 const allProFeatures = [
     "Unlock all premium calculators & guides",
@@ -60,13 +61,13 @@ export function SubscriptionModal({
   setIsOpen: (open: boolean) => void;
 }) {
   const { subscribe } = useSubscription();
-  const { user } = useAuth();
+  const { user, updateUserProfile } = useAuth();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState<any | null>(null);
+  const [selectedDept, setSelectedDept] = useState<Department>(user?.department || 'process-access');
 
-  const userDepartment = user?.department || 'guest';
-  const currentPlans = departmentPlans[userDepartment] || {};
-
+  const currentPlans = departmentPlans[selectedDept] || {};
+  
   const handleSubscription = async (planKey: any) => {
     if (!user) {
         toast({ variant: "destructive", title: "Not Logged In", description: "You must be logged in to subscribe." });
@@ -80,7 +81,18 @@ export function SubscriptionModal({
     setIsLoading(planKey);
     
     try {
+        // First, update the user's department profile
+        if (user.department !== selectedDept) {
+            await updateUserProfile({ department: selectedDept });
+             toast({
+                title: "Department Updated!",
+                description: `Your department has been set to ${getDepartmentName(selectedDept)}.`,
+            });
+        }
+        
+        // Then, process the subscription
         await subscribe(planKey, user.uid);
+        
         setIsOpen(false);
         toast({
             title: "Subscribed! 🎉",
@@ -156,15 +168,29 @@ export function SubscriptionModal({
               </div>
               <div className="bg-primary/5 p-8 order-1 md:order-2 flex flex-col justify-center">
                   <h3 className="text-xl font-bold text-primary font-headline mb-2 text-center">Choose Your Plan</h3>
-                   <p className="text-center text-sm text-muted-foreground mb-6">Showing plans for: <strong>{getDepartmentName(userDepartment)}</strong></p>
+                  <div className="mb-6">
+                      <label htmlFor="dept-select" className="block text-sm font-medium text-gray-700 mb-1 text-center">Select Your Department to See Plans:</label>
+                      <Select value={selectedDept} onValueChange={(val) => setSelectedDept(val as Department)} disabled={user?.department === 'guest'}>
+                          <SelectTrigger id="dept-select" className="w-full max-w-xs mx-auto bg-white">
+                              <SelectValue placeholder="Select Department" />
+                          </SelectTrigger>
+                          <SelectContent>
+                              <SelectItem value="process-access">Process Access</SelectItem>
+                              <SelectItem value="production-access">Production Access</SelectItem>
+                              <SelectItem value="quality-access">Quality Access</SelectItem>
+                              <SelectItem value="all-control-access">All Control Access</SelectItem>
+                          </SelectContent>
+                      </Select>
+                  </div>
+                  
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {Object.keys(currentPlans).map(planKey => (
                        <PlanCard key={planKey} planKey={planKey} />
                     ))}
                      {Object.keys(currentPlans).length === 0 && (
                         <div className="sm:col-span-2 text-center text-muted-foreground bg-white p-6 rounded-lg">
-                            <p>No subscription plans available for your current status.</p>
-                            <p className="text-xs mt-2">Please select a department in your profile to see available plans.</p>
+                            <p>No subscription plans available for Guests.</p>
+                            <p className="text-xs mt-2">Please sign up for an account to subscribe.</p>
                         </div>
                      )}
                   </div>

@@ -126,23 +126,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const updateUserProfile = async (profileData: Partial<AppUser>) => {
-     if (user) {
+     if (!user || user.department === 'guest') {
+       console.log("Update blocked for guest user or no user logged in.");
+       return;
+     }
+      
       const updatedUser = { ...user, ...profileData };
       setUser(updatedUser);
       localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(updatedUser));
       
-      let allUsers = getUsers();
+      const allUsers = getUsers();
       const userIndex = allUsers.findIndex(u => u.uid === user.uid);
       if (userIndex !== -1) {
           allUsers[userIndex] = updatedUser;
-      } else if (user.uid.startsWith('guest-')) {
-          // If it's a guest user who is updating, they might not be in the main list.
-          // This path is unlikely given current UI, but good to handle.
-          allUsers.push(updatedUser);
+          saveUsers(allUsers);
       }
-      saveUsers(allUsers);
       console.log("User profile updated.", updatedUser);
-    }
   };
 
   const updateUserPhoto = async (file: File) => {
@@ -153,7 +152,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         reader.readAsDataURL(file);
         reader.onload = () => {
             const photoURL = reader.result as string;
-            updateUserProfile({ photoURL });
+            if (user) {
+                const updatedUser = { ...user, photoURL };
+                setUser(updatedUser);
+                localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(updatedUser));
+                
+                const allUsers = getUsers();
+                const userIndex = allUsers.findIndex(u => u.uid === user.uid);
+                if (userIndex !== -1) {
+                    allUsers[userIndex] = updatedUser;
+                    saveUsers(allUsers);
+                }
+            }
             resolve();
         };
         reader.onerror = (error) => {

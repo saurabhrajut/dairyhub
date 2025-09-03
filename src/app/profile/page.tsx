@@ -42,8 +42,9 @@ export default function ProfilePage() {
     const [isMounted, setIsMounted] = useState(false);
     const [isEditingName, setIsEditingName] = useState(false);
     
-    const displayUser = user;
-    const [tempName, setTempName] = useState(displayUser?.displayName || '');
+    // Use a local state for user data to ensure it's always up-to-date on this page
+    const [displayUser, setDisplayUser] = useState(user);
+    const [tempName, setTempName] = useState(user?.displayName || '');
     
     const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState(false);
 
@@ -57,6 +58,8 @@ export default function ProfilePage() {
             });
             router.push('/login');
         } else if (user) {
+            // Update local state when context user changes
+            setDisplayUser(user);
             setTempName(user.displayName || '');
         }
     }, [user, loading, router, toast]);
@@ -177,9 +180,11 @@ export default function ProfilePage() {
                             alt="Profile Picture"
                             className="w-28 h-28 rounded-full border-4 border-white shadow-lg object-cover"
                         />
-                        <label htmlFor="fileInput" className="absolute bottom-0 right-0 bg-white p-1.5 rounded-full shadow-md cursor-pointer hover:bg-gray-200 transition-colors">
-                           <EditIcon />
-                        </label>
+                         {user?.department !== 'guest' && (
+                            <label htmlFor="fileInput" className="absolute bottom-0 right-0 bg-white p-1.5 rounded-full shadow-md cursor-pointer hover:bg-gray-200 transition-colors">
+                               <EditIcon />
+                            </label>
+                         )}
                         <input type="file" id="fileInput" accept="image/*" className="hidden" onChange={handleFileChange} />
                     </div>
                 </div>
@@ -204,9 +209,11 @@ export default function ProfilePage() {
                     ) : (
                          <div className="flex items-center justify-center space-x-2">
                             <h1 id="userName" className="text-2xl font-bold text-gray-800">{displayUser.displayName}</h1>
-                            <button onClick={() => { setIsEditingName(true); setTempName(displayUser.displayName || ''); }} className="text-gray-500 hover:text-blue-600">
-                               <EditIcon />
-                            </button>
+                             {user?.department !== 'guest' && (
+                                <button onClick={() => { setIsEditingName(true); setTempName(displayUser.displayName || ''); }} className="text-gray-500 hover:text-blue-600">
+                                   <EditIcon />
+                                </button>
+                             )}
                         </div>
                     )}
                 </div>
