@@ -39,14 +39,18 @@ User's Resume for Analysis:
 {{/if}}`;
 
 
+// <<<<<<<<<<< YEH WALA PURA CODE COPY KARKE REPLACE KAREIN >>>>>>>>>>>>>
+
 const sarathiPrompt = ai.definePrompt({
   name: 'sarathiChatbotPrompt',
   system: sarathiSystemPrompt,
   input: {
     schema: SarathiChatbotInputSchema,
   },
-  output: {schema: SarathiChatbotOutputSchema},
+  // Is line ko humne test karne ke liye comment kar diya hai
+  // output: {schema: SarathiChatbotOutputSchema}, 
 });
+
 
 /**
  * Ensures that the provided history is in a valid format for the Genkit prompt.
