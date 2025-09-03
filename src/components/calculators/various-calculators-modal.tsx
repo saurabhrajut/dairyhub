@@ -249,26 +249,29 @@ function MineralAnalysisCalc() {
     const [stdConc, setStdConc] = useState('10');
     const [stdReading, setStdReading] = useState('');
     const [sampleReading, setSampleReading] = useState('');
+    const [dilutionFactor, setDilutionFactor] = useState('100');
     const [result, setResult] = useState<string | null>(null);
 
     const calculate = () => {
         const stdC = parseFloat(stdConc);
         const stdR = parseFloat(stdReading);
         const sampleR = parseFloat(sampleReading);
+        const dilution = parseFloat(dilutionFactor);
 
-        if (isNaN(stdC) || isNaN(stdR) || isNaN(sampleR) || stdR <= 0) {
+        if (isNaN(stdC) || isNaN(stdR) || isNaN(sampleR) || isNaN(dilution) || stdR <= 0 || dilution <= 0) {
             setResult("Please enter valid positive numbers for all fields.");
             return;
         }
 
         const factor = stdC / stdR;
-        const finalConcentration = sampleR * factor;
+        const dilutedConcentration = sampleR * factor;
+        const finalConcentration = dilutedConcentration * dilution;
 
         setResult(`Estimated ${mineral === 'sodium' ? 'Sodium' : 'Potassium'} Content: <strong>${finalConcentration.toFixed(2)} ppm</strong>`);
     };
 
     return (
-        <CalculatorCard title="Sodium & Potassium Analysis (Flame Photometry)" description="Estimate Sodium (Na) and Potassium (K) content in milk using flame photometer readings.">
+        <CalculatorCard title="Sodium & Potassium Analysis (Flame Photometry)" description="Estimate Sodium (Na) and Potassium (K) content in milk using flame photometer readings. This calculator accounts for sample dilution during preparation.">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <Label>Select Mineral</Label>
@@ -280,7 +283,10 @@ function MineralAnalysisCalc() {
                         </SelectContent>
                     </Select>
                 </div>
-                <div /> 
+                <div>
+                     <Label>Sample Dilution Factor</Label>
+                     <Input type="number" value={dilutionFactor} onChange={e => setDilutionFactor(e.target.value)} placeholder="e.g., 100"/>
+                </div> 
                 <div className="bg-muted/50 p-4 rounded-lg space-y-3">
                     <h4 className="font-semibold text-gray-700 font-headline">Standard Calibration</h4>
                     <div><Label>Standard Concentration (ppm)</Label><Input type="number" value={stdConc} onChange={e => setStdConc(e.target.value)} /></div>
@@ -297,6 +303,7 @@ function MineralAnalysisCalc() {
         </CalculatorCard>
     );
 }
+
 
 function ProteinCaseinCalc() {
     return (
@@ -1188,7 +1195,7 @@ function MixCompositionCalc() {
     return (
         <CalculatorCard title="Mix Composition Calculator" description="Enter the weight and composition of each ingredient to find the overall percentages in your mix.">
             <div className="space-y-4 mb-4">
-                <div className="hidden sm:grid grid-cols-[1fr_1fr_0.5fr_0.5fr_0.5fr_auto] gap-4 items-center">
+                <div className="hidden sm:grid grid-cols-[1fr_1fr_0.5fr_0.5fr_0.5fr_auto] gap-2 items-center">
                     <Label>Ingredient Name</Label>
                     <Label>Amount (g)</Label>
                     <Label>Fat %</Label>
