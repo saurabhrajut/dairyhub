@@ -1143,7 +1143,7 @@ function FatClrMaintainerCalc() {
             const SNF_needed_from_smp = (M_total_after_rich * (SNF_target - SNF_intermediate));
             const M_smp_needed = SNF_needed_from_smp / (smpSolidsPercent - SNF_target);
             
-            if(M_smp_needed < 0) {
+             if(M_smp_needed < 0) {
                 setError("Calculated negative SMP. Please check inputs. This can happen if the intermediate CLR is already higher than the target.");
                 return;
             }
@@ -1683,6 +1683,7 @@ function KgFatSnfCalc() {
     
 
     
+
 
 
 

@@ -66,7 +66,7 @@ import type { Department } from "@/context/auth-context";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 
-type AccessRole = Department | 'all' | 'guest';
+type AccessRole = Department | 'all';
 
 const topics: { id: string; title: string; description: string; category: string; icon: React.ElementType; badge?: string; modal: React.ElementType; isPro: boolean; color: string; access: AccessRole[] }[] = [
   { id: 'industry', title: 'Dairy Industry', description: 'Overview & Trends', category: 'industry', icon: Factory, badge: 'New', modal: DairyIndustryModal, isPro: false, color: 'from-blue-100 to-indigo-200', access: ['all'] },
@@ -121,14 +121,17 @@ export function TopicGrid() {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeModal, setActiveModal] = useState<string | null>(null);
 
-  const userDepartment = user?.department; // Can be undefined
+  const userDepartment = user?.department; // Can be undefined or 'guest'
 
-  const hasAccess = (topicAccess: AccessRole[]) => {
-    if (!userDepartment || userDepartment === 'guest') {
-      return false; // Lock everything if department is not set or is guest
+  const hasAccess = (topic: typeof topics[0]) => {
+    if (userDepartment === 'guest') {
+      return topic.id === 'about-us'; // Guests can only access 'About Us'
     }
-    if (topicAccess.includes('all')) return true;
-    return topicAccess.includes(userDepartment);
+    if (!userDepartment) {
+      return false; // Lock everything if department is not set
+    }
+    if (topic.access.includes('all')) return true;
+    return topic.access.includes(userDepartment);
   };
 
   const filteredTopics = topics.filter((topic) => {
@@ -191,7 +194,7 @@ export function TopicGrid() {
 
       <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-4 sm:gap-6">
         {filteredTopics.map((topic) => {
-          const isAccessible = hasAccess(topic.access);
+          const isAccessible = hasAccess(topic);
           return (
             <div
               key={topic.id}

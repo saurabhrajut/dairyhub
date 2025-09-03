@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -144,6 +145,7 @@ export default function ProfilePage() {
             'production-access': 'Production Access',
             'quality-access': 'Quality Access',
             'all-control-access': 'All Control Access',
+            'guest': 'Guest User'
         }
         return names[deptKey];
     }
@@ -282,7 +284,7 @@ export default function ProfilePage() {
                             <DialogTrigger asChild>
                                 <li className="flex justify-between items-center p-3 hover:bg-gray-100 rounded-lg cursor-pointer">
                                     <span className="flex items-center gap-3 text-gray-700 font-medium"><Settings/>Settings</span>
-                                    <ChevronLeft className="h-5 w-5 text-gray-400 transform rotate-180" />
+                                    <ChevronRight className="h-5 w-5 text-gray-400 transform rotate-180" />
                                 </li>
                             </DialogTrigger>
                             <DialogContent>
@@ -301,18 +303,20 @@ export default function ProfilePage() {
                                             </SelectContent>
                                         </Select>
                                     </div>
-                                    <div>
-                                        <label htmlFor="department-select" className="block text-sm font-medium text-gray-700 mb-2">Your Department</label>
-                                        <Select value={user?.department} onValueChange={(value) => handleDepartmentChange(value as Department)}>
-                                            <SelectTrigger id="department-select"><SelectValue placeholder="Select Department"/></SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="process-access">Process Access</SelectItem>
-                                                <SelectItem value="production-access">Production Access</SelectItem>
-                                                <SelectItem value="quality-access">Quality Access</SelectItem>
-                                                <SelectItem value="all-control-access">All Control Access</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
+                                    {user?.department !== 'guest' && (
+                                        <div>
+                                            <label htmlFor="department-select" className="block text-sm font-medium text-gray-700 mb-2">Your Department</label>
+                                            <Select value={user?.department} onValueChange={(value) => handleDepartmentChange(value as Department)}>
+                                                <SelectTrigger id="department-select"><SelectValue placeholder="Select Department"/></SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="process-access">Process Access</SelectItem>
+                                                    <SelectItem value="production-access">Production Access</SelectItem>
+                                                    <SelectItem value="quality-access">Quality Access</SelectItem>
+                                                    <SelectItem value="all-control-access">All Control Access</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
+                                    )}
                                 </div>
                             </DialogContent>
                         </Dialog>
@@ -322,7 +326,7 @@ export default function ProfilePage() {
                              <DialogTrigger asChild>
                                 <li className="flex justify-between items-center p-3 hover:bg-gray-100 rounded-lg cursor-pointer">
                                     <span className="flex items-center gap-3 text-gray-700 font-medium"><HelpCircle/>Help & Support</span>
-                                    <ChevronLeft className="h-5 w-5 text-gray-400 transform rotate-180" />
+                                    <ChevronRight className="h-5 w-5 text-gray-400 transform rotate-180" />
                                 </li>
                             </DialogTrigger>
                             <DialogContent>
@@ -341,7 +345,7 @@ export default function ProfilePage() {
                         {/* Logout */}
                         <li onClick={handleLogout} className="flex justify-between items-center p-3 hover:bg-red-50 rounded-lg cursor-pointer">
                             <span className="flex items-center gap-3 text-red-500 font-medium"><LogOut/>Logout</span>
-                            <ChevronLeft className="h-5 w-5 text-red-500 transform rotate-180" />
+                            <ChevronRight className="h-5 w-5 text-red-500 transform rotate-180" />
                         </li>
                     </ul>
                 </div>
