@@ -5,7 +5,7 @@ import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { add } from 'date-fns';
 
-export type SubscriptionPlan = '7-days' | '1-month' | '6-months' | 'yearly' | 'lifetime';
+export type SubscriptionPlan = any;
 
 interface SubscriptionContextType {
   plan: SubscriptionPlan | null;
@@ -33,15 +33,14 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
   const subscribe = async (newPlan: SubscriptionPlan, userId: string) => {
     const now = new Date();
     let newExpiryDate: Date | null = null;
+    
+    // Simplified logic, as plan details are now in the modal
     let durationDays: number | null = null;
-
-    switch(newPlan) {
-        case '7-days': durationDays = 7; break;
-        case '1-month': durationDays = 30; break;
-        case '6-months': durationDays = 180; break;
-        case 'yearly': durationDays = 365; break;
-        case 'lifetime': durationDays = null; break;
-    }
+    if (newPlan.includes('7-days')) durationDays = 7;
+    else if (newPlan.includes('1-month')) durationDays = 30;
+    else if (newPlan.includes('6-months')) durationDays = 180;
+    else if (newPlan.includes('yearly')) durationDays = 365;
+    else if (newPlan.includes('lifetime')) durationDays = null;
     
     if (durationDays) {
         newExpiryDate = add(now, { days: durationDays });

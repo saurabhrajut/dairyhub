@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Crown, CheckCircle2, Zap, Loader2 } from "lucide-react";
 import { useSubscription, type SubscriptionPlan } from "@/context/subscription-context";
-import { useAuth } from "@/context/auth-context";
+import { useAuth, type Department } from "@/context/auth-context";
 import { useToast } from "@/hooks/use-toast";
 import { ScrollArea } from "./ui/scroll-area";
 import { createRazorpayOrder, verifyRazorpayPayment } from "@/app/actions";
@@ -24,12 +24,31 @@ const allProFeatures = [
     "Ad-free experience",
 ];
 
-const plans: Record<SubscriptionPlan, { title: string; price: number; duration: string; popular?: boolean }> = {
-    '7-days': { title: "7 Days", price: 99, duration: "Starter Access" },
-    '1-month': { title: "1 Month", price: 299, duration: "Full Access" },
-    '6-months': { title: "6 Months", price: 599, duration: "Save 33%" },
-    'yearly': { title: "Yearly", price: 999, duration: "Best Value" },
-    'lifetime': { title: "Lifetime", price: 1499, duration: "One-Time Purchase", popular: true },
+const departmentPlans: Record<Department, Record<string, { title: string; price: number; duration: string; popular?: boolean }>> = {
+    'process-access': {
+        '1-month': { title: "1 Month", price: 99, duration: "Full Access" },
+        '6-months': { title: "6 Months", price: 299, duration: "Save 45%", popular: true },
+        'yearly': { title: "Yearly", price: 549, duration: "Best Value" },
+    },
+    'production-access': {
+        '7-days': { title: "7 Days", price: 49, duration: "Starter Access" },
+        '1-month': { title: "1 Month", price: 99, duration: "Full Access" },
+        '6-months': { title: "6 Months", price: 399, duration: "Save 33%", popular: true },
+        'yearly': { title: "Yearly", price: 749, duration: "Best Value" },
+    },
+    'quality-access': {
+        '7-days': { title: "7 Days", price: 79, duration: "Starter Access" },
+        '1-month': { title: "1 Month", price: 149, duration: "Full Access" },
+        '6-months': { title: "6 Months", price: 499, duration: "Save 45%", popular: true },
+        'yearly': { title: "Yearly", price: 849, duration: "Best Value" },
+    },
+    'all-control-access': {
+        '1-month': { title: "1 Month Ultimate", price: 499, duration: "All Access Pass" },
+        '6-months': { title: "6 Months Ultimate", price: 999, duration: "Save 50%", popular: true },
+        'yearly': { title: "Yearly Ultimate", price: 1499, duration: "Best Value" },
+        'lifetime': { title: "Lifetime Ultimate", price: 2499, duration: "One-Time Purchase" },
+    },
+    'guest': {} // Guests can't subscribe
 };
 
 
@@ -43,24 +62,29 @@ export function SubscriptionModal({
   const { subscribe } = useSubscription();
   const { user } = useAuth();
   const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState<SubscriptionPlan | null>(null);
+  const [isLoading, setIsLoading] = useState<any | null>(null);
 
-  const handleSubscription = async (planKey: SubscriptionPlan) => {
+  const userDepartment = user?.department || 'guest';
+  const currentPlans = departmentPlans[userDepartment] || {};
+
+  const handleSubscription = async (planKey: any) => {
     if (!user) {
         toast({ variant: "destructive", title: "Not Logged In", description: "You must be logged in to subscribe." });
         return;
     }
+    if (user.department === 'guest') {
+        toast({ variant: "destructive", title: "Action Not Allowed", description: "Guests cannot subscribe. Please sign up for an account." });
+        return;
+    }
 
     setIsLoading(planKey);
-
-    const planDetails = plans[planKey];
     
     try {
         await subscribe(planKey, user.uid);
         setIsOpen(false);
         toast({
             title: "Subscribed! 🎉",
-            description: "Welcome to Pro! All features are now unlocked.",
+            description: "Welcome to Pro! All features for your department are now unlocked.",
         });
 
     } catch (error: any) {
@@ -70,8 +94,21 @@ export function SubscriptionModal({
     }
   };
 
-  const PlanCard = ({ planKey }: { planKey: SubscriptionPlan }) => {
-    const plan = plans[planKey];
+  const getDepartmentName = (deptKey?: Department) => {
+    if (!deptKey) return 'Not specified';
+    const names: Record<Department, string> = {
+        'process-access': 'Process Access',
+        'production-access': 'Production Access',
+        'quality-access': 'Quality Access',
+        'all-control-access': 'All Control Access',
+        'guest': 'Guest'
+    }
+    return names[deptKey];
+  }
+
+  const PlanCard = ({ planKey }: { planKey: string }) => {
+    const plan = currentPlans[planKey];
+    if (!plan) return null;
     const popular = plan.popular || false;
     return (
         <div className={`border bg-white p-5 rounded-xl shadow-sm relative ${popular ? 'border-2 border-primary' : ''}`}>
@@ -118,15 +155,18 @@ export function SubscriptionModal({
                   </div>
               </div>
               <div className="bg-primary/5 p-8 order-1 md:order-2 flex flex-col justify-center">
-                  <h3 className="text-xl font-bold text-primary font-headline mb-6 text-center">Choose Your Plan</h3>
+                  <h3 className="text-xl font-bold text-primary font-headline mb-2 text-center">Choose Your Plan</h3>
+                   <p className="text-center text-sm text-muted-foreground mb-6">Showing plans for: <strong>{getDepartmentName(userDepartment)}</strong></p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <PlanCard planKey="7-days" />
-                    <PlanCard planKey="1-month" />
-                    <PlanCard planKey="6-months" />
-                    <PlanCard planKey="yearly" />
-                    <div className="sm:col-span-2">
-                      <PlanCard planKey="lifetime" />
-                    </div>
+                    {Object.keys(currentPlans).map(planKey => (
+                       <PlanCard key={planKey} planKey={planKey} />
+                    ))}
+                     {Object.keys(currentPlans).length === 0 && (
+                        <div className="sm:col-span-2 text-center text-muted-foreground bg-white p-6 rounded-lg">
+                            <p>No subscription plans available for your current status.</p>
+                            <p className="text-xs mt-2">Please select a department in your profile to see available plans.</p>
+                        </div>
+                     )}
                   </div>
               </div>
           </div>
