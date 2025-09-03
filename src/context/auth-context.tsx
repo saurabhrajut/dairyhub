@@ -153,17 +153,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         reader.readAsDataURL(file);
         reader.onload = () => {
             const photoURL = reader.result as string;
-            const updatedUser = { ...user, photoURL };
-            setUser(updatedUser);
-            localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(updatedUser));
-            
-            const allUsers = getUsers();
-            const userIndex = allUsers.findIndex(u => u.uid === user.uid);
-            if (userIndex !== -1) {
-                allUsers[userIndex] = updatedUser;
-                saveUsers(allUsers);
-            }
-            console.log("User photo updated and saved to localStorage.");
+            updateUserProfile({ photoURL });
             resolve();
         };
         reader.onerror = (error) => {
@@ -183,7 +173,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     updateUserPhoto
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return React.createElement(AuthContext.Provider, { value }, children);
 }
 
 export function useAuth() {
