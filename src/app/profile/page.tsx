@@ -14,7 +14,7 @@ import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, Dialog
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useLanguage } from '@/context/language-context';
 import { format } from 'date-fns';
-import { Info, Mail, MessageCircle, Crown, ChevronLeft, LogOut, Settings, HelpCircle, User, Loader2, Building2 } from 'lucide-react';
+import { Info, Mail, MessageCircle, Crown, ChevronLeft, LogOut, Settings, HelpCircle, User, Loader2, Building2, ChevronRight } from 'lucide-react';
 import type { Department } from '@/context/auth-context';
 
 const EditIcon = () => (
@@ -284,7 +284,7 @@ export default function ProfilePage() {
                             <DialogTrigger asChild>
                                 <li className="flex justify-between items-center p-3 hover:bg-gray-100 rounded-lg cursor-pointer">
                                     <span className="flex items-center gap-3 text-gray-700 font-medium"><Settings/>Settings</span>
-                                    <ChevronRight className="h-5 w-5 text-gray-400 transform rotate-180" />
+                                    <ChevronRight className="h-5 w-5 text-gray-400" />
                                 </li>
                             </DialogTrigger>
                             <DialogContent>
@@ -326,7 +326,7 @@ export default function ProfilePage() {
                              <DialogTrigger asChild>
                                 <li className="flex justify-between items-center p-3 hover:bg-gray-100 rounded-lg cursor-pointer">
                                     <span className="flex items-center gap-3 text-gray-700 font-medium"><HelpCircle/>Help & Support</span>
-                                    <ChevronRight className="h-5 w-5 text-gray-400 transform rotate-180" />
+                                    <ChevronRight className="h-5 w-5 text-gray-400" />
                                 </li>
                             </DialogTrigger>
                             <DialogContent>
@@ -345,7 +345,7 @@ export default function ProfilePage() {
                         {/* Logout */}
                         <li onClick={handleLogout} className="flex justify-between items-center p-3 hover:bg-red-50 rounded-lg cursor-pointer">
                             <span className="flex items-center gap-3 text-red-500 font-medium"><LogOut/>Logout</span>
-                            <ChevronRight className="h-5 w-5 text-red-500 transform rotate-180" />
+                            <ChevronRight className="h-5 w-5 text-red-500" />
                         </li>
                     </ul>
                 </div>
@@ -355,3 +355,4 @@ export default function ProfilePage() {
         </>
     );
 }
+
