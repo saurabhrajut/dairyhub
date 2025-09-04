@@ -55,6 +55,7 @@ const CalculatorCard = ({ title, children, description }: { title: string; child
 type CalculatorType = 'acidity' | 'yields' | 'paneer-yield' | 'ice-cream' | 'fat-dry' | 'gravimetric' | 'formulas' | 'cip-strength' | 'protein-casein' | 'minerals' | 'cream' | 'pricing';
 
 const calculatorsInfo = {
+    'pricing': { title: "Milk Pricing", icon: DollarSign, component: MilkPricingCalculators },
     'acidity': { title: "Acidity", icon: Beaker, component: ProductAcidityCalc },
     'protein-casein': { title: "Protein & Casein", icon: Dna, component: ProteinCaseinCalc },
     'minerals': { title: "Minerals (Na/K)", icon: Atom, component: MineralAnalysisCalc },
@@ -65,7 +66,6 @@ const calculatorsInfo = {
     'fat-dry': { title: "Fat on Dry Basis", icon: FlaskConical, component: FatOnDryBasisCalc },
     'gravimetric': { title: "Gravimetric", icon: Weight, component: GravimetricAnalysisCalc },
     'cip-strength': { title: "CIP Strength", icon: RotateCw, component: SolutionStrengthCalc },
-    'pricing': { title: "Milk Pricing", icon: DollarSign, component: MilkPricingCalc },
     'formulas': { title: "Common Formulas", icon: Calculator, component: FormulasTab },
 };
 
@@ -136,8 +136,25 @@ export function VariousCalculatorsModal({
   );
 }
 
-// Individual Calculator Components
-function MilkPricingCalc() {
+function MilkPricingCalculators() {
+    return (
+        <Tabs defaultValue="two-axis">
+            <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="two-axis">Two-Axis Pricing</TabsTrigger>
+                <TabsTrigger value="point-based">Point-Based Pricing</TabsTrigger>
+            </TabsList>
+            <TabsContent value="two-axis" className="pt-4">
+                <TwoAxisPricingCalc />
+            </TabsContent>
+            <TabsContent value="point-based" className="pt-4">
+                <PointBasedPricingCalc />
+            </TabsContent>
+        </Tabs>
+    )
+}
+
+
+function TwoAxisPricingCalc() {
     const [inputs, setInputs] = useState({
         fatPercent: '4.5',
         clr: '28',
@@ -180,7 +197,7 @@ function MilkPricingCalc() {
                     <div><Label>CLR (Corrected Lactometer Reading)</Label><Input type="number" name="clr" value={inputs.clr} onChange={handleInputChange} placeholder="e.g., 28.0" /></div>
                 </div>
                  <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200 space-y-3">
-                    <h3 className="font-semibold text-gray-700 font-headline">Market Rates</h3>
+                    <h3 className="font-semibold text-gray-700 font-headline">Market Rates (per Kg)</h3>
                     <div><Label>Fat Rate (₹ per Kg)</Label><Input type="number" name="fatRate" value={inputs.fatRate} onChange={handleInputChange} placeholder="e.g., 300" /></div>
                     <div><Label>SNF Rate (₹ per Kg)</Label><Input type="number" name="snfRate" value={inputs.snfRate} onChange={handleInputChange} placeholder="e.g., 200" /></div>
                 </div>
@@ -195,6 +212,73 @@ function MilkPricingCalc() {
                             <hr className="my-2" />
                             <p>Price per Kg: <strong className="text-2xl text-green-700">₹ {results.pricePerKg}</strong></p>
                             <p>Price per Litre: <strong className="text-2xl text-green-700">₹ {results.pricePerLitre}</strong></p>
+                        </div>
+                    </AlertDescription>
+                </Alert>
+            )}
+        </CalculatorCard>
+    );
+}
+
+function PointBasedPricingCalc() {
+    const [inputs, setInputs] = useState({
+        fatPercent: '4.5',
+        clr: '28',
+        ratePerFat: '7.0',
+        ratePerSnf: '3.0'
+    });
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setInputs(prev => ({...prev, [name]: value}));
+    };
+
+    const results = useMemo(() => {
+        const fat = parseFloat(inputs.fatPercent) || 0;
+        const clr = parseFloat(inputs.clr) || 0;
+        const ratePerFat = parseFloat(inputs.ratePerFat) || 0;
+        const ratePerSnf = parseFloat(inputs.ratePerSnf) || 0;
+
+        if (fat <= 0 || clr <= 0 || ratePerFat <= 0 || ratePerSnf <= 0) {
+            return null;
+        }
+
+        const snf = getSnf(fat, clr);
+        const pricePerLitre = (fat * ratePerFat) + (snf * ratePerSnf);
+        const pricePerKg = pricePerLitre / componentProps.milkDensity;
+
+
+        return {
+            snf: snf.toFixed(2),
+            pricePerLitre: pricePerLitre.toFixed(2),
+            pricePerKg: pricePerKg.toFixed(2)
+        };
+    }, [inputs]);
+
+    return (
+        <CalculatorCard title="Milk Pricing Calculator (Point-Based)" description="Calculate milk price based on rates per point of Fat and SNF. This method is common at collection centers.">
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 space-y-3">
+                    <h3 className="font-semibold text-gray-700 font-headline">Milk Composition</h3>
+                    <div><Label>Fat %</Label><Input type="number" name="fatPercent" value={inputs.fatPercent} onChange={handleInputChange} placeholder="e.g., 4.5" /></div>
+                    <div><Label>CLR (Corrected Lactometer Reading)</Label><Input type="number" name="clr" value={inputs.clr} onChange={handleInputChange} placeholder="e.g., 28.0" /></div>
+                </div>
+                 <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200 space-y-3">
+                    <h3 className="font-semibold text-gray-700 font-headline">Point Rates (per Litre)</h3>
+                    <div><Label>Rate per Fat Point (₹)</Label><Input type="number" name="ratePerFat" value={inputs.ratePerFat} onChange={handleInputChange} placeholder="e.g., 7.0" /></div>
+                    <div><Label>Rate per SNF Point (₹)</Label><Input type="number" name="ratePerSnf" value={inputs.ratePerSnf} onChange={handleInputChange} placeholder="e.g., 3.0" /></div>
+                </div>
+            </div>
+            
+            {results && (
+                <Alert className="mt-6 bg-green-50 border-green-200">
+                    <AlertTitle className="text-xl font-bold text-green-800">Calculated Price</AlertTitle>
+                    <AlertDescription>
+                        <div className="mt-2 text-lg space-y-2 text-gray-800">
+                            <p>Calculated SNF: <strong className="text-gray-900">{results.snf}%</strong></p>
+                            <hr className="my-2" />
+                            <p>Price per Litre: <strong className="text-2xl text-green-700">₹ {results.pricePerLitre}</strong></p>
+                             <p>Price per Kg: <strong className="text-2xl text-green-700">₹ {results.pricePerKg}</strong></p>
                         </div>
                     </AlertDescription>
                 </Alert>
