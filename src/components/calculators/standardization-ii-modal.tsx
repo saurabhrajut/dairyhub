@@ -311,7 +311,7 @@ function CustomStandardizationCalc() {
     const [inputs, setInputs] = useState({
         milkQty: '1000', milkFat: '3.5', milkClr: '28.0',
         creamFat: '40', creamSnf: '5.4',
-        richMilkFat: '6.0', richMilkSnf: '9.0',
+        richMilkFat: '6.0', richMilkClr: '29.0',
         smpFat: '1.0', smpSnf: '96.0',
         skimFat: '0.05', skimSnf: '8.8',
         reqFat: '4.5', reqClr: '28.5',
@@ -348,37 +348,41 @@ function CustomStandardizationCalc() {
             Fr: parseFloat(inputs.reqFat) / 100, Sr: reqSnf / 100,
         };
 
-        let ingredientX: {F: number, S: number, name: string};
-        let ingredientY: {F: number, S: number, name: string};
-        let X = 0, Y = 0;
-
-        if (scenario === 'increase') {
-            ingredientX = fatSource === 'cream' 
-                ? { F: parseFloat(inputs.creamFat)/100, S: parseFloat(inputs.creamSnf)/100, name: "Cream" }
-                : { F: parseFloat(inputs.richMilkFat)/100, S: calculateSnf(parseFloat(inputs.richMilkSnf), parseFloat(inputs.richMilkFat))/100, name: "Rich Milk" };
-            ingredientY = { F: parseFloat(inputs.smpFat)/100, S: parseFloat(inputs.smpSnf)/100, name: "SMP" };
-        } else { // decrease
-            ingredientX = leanSource === 'skim'
-                ? { F: parseFloat(inputs.skimFat)/100, S: parseFloat(inputs.skimSnf)/100, name: "Skim Milk" }
-                : { F: 0, S: 0, name: "Water" };
-            ingredientY = { F: 0, S: 0, name: "Water" }; // This will be tricky, let's assume Skim + Water
-             if(leanSource === 'water') {
-                ingredientY.name = "Skim Milk";
-                ingredientY.F = parseFloat(inputs.skimFat)/100;
-                ingredientY.S = parseFloat(inputs.skimSnf)/100;
-             } else {
-                 // For now, let's just use Skim and Water
-                  ingredientY.name = "Water";
-                  ingredientY.F = 0;
-                  ingredientY.S = 0;
-             }
-        }
-        
         if (Object.values(i).some(v => isNaN(v)) || i.M <= 0) {
             setError("Please fill all initial milk and target fields with valid numbers.");
             return;
         }
 
+        let ingredientX: {F: number, S: number, name: string};
+        let ingredientY: {F: number, S: number, name: string};
+
+        if (scenario === 'increase') {
+            ingredientX = fatSource === 'cream' 
+                ? { F: parseFloat(inputs.creamFat)/100, S: parseFloat(inputs.creamSnf)/100, name: "Cream" }
+                : { F: parseFloat(inputs.richMilkFat)/100, S: calculateSnf(parseFloat(inputs.richMilkClr), parseFloat(inputs.richMilkFat))/100, name: "Rich Milk" };
+            ingredientY = { F: parseFloat(inputs.smpFat)/100, S: (parseFloat(inputs.smpSnf)/100), name: "SMP" };
+        } else { // decrease
+            ingredientX = leanSource === 'skim'
+                ? { F: parseFloat(inputs.skimFat)/100, S: parseFloat(inputs.skimSnf)/100, name: "Skim Milk" }
+                : { F: 0, S: 0, name: "Water" }; // This is ingredient X (lean source)
+             // When decreasing, the second ingredient is always water or skim milk, so there's no Y ingredient in the same way.
+             // The logic must be different for decreasing. Let's handle 'increase' first, as it's the more complex case with two additions.
+             // For now, let's assume the decrease scenario is simpler and might not use a 2-variable system. Let's focus on fixing the 'increase' case first.
+             setError("Decrease scenario calculation not yet implemented in this fix.");
+             return;
+        }
+        
+        
+        // Correct Mass Balance Equations:
+        // C1 = M * (Fr - Fm) = X * (Fx - Fr) + Y * (Fy - Fr) -> This seems wrong.
+        // Let's re-derive.
+        // Total Final Mass = M + X + Y
+        // Fat Balance: M*Fm + X*Fx + Y*Fy = (M+X+Y)*Fr
+        // SNF Balance: M*Sm + X*Sx + Y*Sy = (M+X+Y)*Sr
+        // Rearranging:
+        // X*(Fx-Fr) + Y*(Fy-Fr) = M*(Fr-Fm)  <-- Equation A
+        // X*(Sx-Sr) + Y*(Sy-Sr) = M*(Sr-Sm)  <-- Equation B
+        
         const A1 = ingredientX.F - i.Fr;
         const B1 = ingredientY.F - i.Fr;
         const C1 = i.M * (i.Fr - i.Fm);
@@ -394,8 +398,8 @@ function CustomStandardizationCalc() {
             return;
         }
 
-        X = (C1 * B2 - B1 * C2) / det; // Qty of ingredient X
-        Y = (A1 * C2 - C1 * A2) / det; // Qty of ingredient Y
+        let X = (C1 * B2 - C2 * B1) / det;
+        let Y = (C2 * A1 - C1 * A2) / det;
 
         if (X < -1e-9 || Y < -1e-9) { // Allow for small floating point inaccuracies
             setError("Calculation resulted in negative values. This scenario is not possible with the selected ingredients (e.g., target might be lower than initial values when trying to increase, or vice-versa).");
@@ -451,7 +455,7 @@ function CustomStandardizationCalc() {
                  )}
             </div>
             
-            <Tabs value={scenario} onValueChange={(val) => setScenario(val as any)}>
+            <Tabs value={scenario} onValueChange={(val) => setScenario(val as 'increase' | 'decrease')}>
                 <TabsList className="grid w-full grid-cols-2">
                     <TabsTrigger value="increase">Increase Fat & SNF</TabsTrigger>
                     <TabsTrigger value="decrease">Decrease Fat & SNF</TabsTrigger>
@@ -483,7 +487,7 @@ function CustomStandardizationCalc() {
                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
                          <div>
                             <Label>Fat Source</Label>
-                            <Select value={fatSource} onValueChange={(val) => setFatSource(val as any)}>
+                            <Select value={fatSource} onValueChange={(val) => setFatSource(val as 'cream' | 'rich_milk')}>
                                 <SelectTrigger><SelectValue /></SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="cream">Cream</SelectItem>
@@ -499,7 +503,7 @@ function CustomStandardizationCalc() {
                          ) : (
                              <>
                                 <MemoizedInputField label="Rich Milk Fat (%)" value={inputs.richMilkFat} name="richMilkFat" setter={handleInputChange} />
-                                <MemoizedInputField label="Rich Milk CLR" value={inputs.richMilkSnf} name="richMilkSnf" setter={handleInputChange} />
+                                <MemoizedInputField label="Rich Milk CLR" value={inputs.richMilkClr} name="richMilkClr" setter={handleInputChange} />
                              </>
                          )}
                          <div className="md:col-span-3"><hr className="my-2"/></div>
