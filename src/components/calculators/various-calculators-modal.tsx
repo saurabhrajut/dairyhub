@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   Dialog,
   DialogContent,
@@ -23,7 +23,7 @@ import {
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { componentProps, getSnf } from "@/lib/utils";
-import { CheckCircle, PlusCircle, XCircle, Beaker, Thermometer, Weight, Percent, Scaling, Combine, Calculator, FlaskConical, ArrowLeft, RotateCw, Dna, Atom, Droplet } from "lucide-react";
+import { CheckCircle, PlusCircle, XCircle, Beaker, Thermometer, Weight, Percent, Scaling, Combine, Calculator, FlaskConical, ArrowLeft, RotateCw, Dna, Atom, Droplet, DollarSign } from "lucide-react";
 import { PaneerIcon, IceCreamIcon } from "../icons";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -52,7 +52,7 @@ const CalculatorCard = ({ title, children, description }: { title: string; child
     </div>
 );
 
-type CalculatorType = 'acidity' | 'yields' | 'paneer-yield' | 'ice-cream' | 'fat-dry' | 'gravimetric' | 'formulas' | 'cip-strength' | 'protein-casein' | 'minerals' | 'cream';
+type CalculatorType = 'acidity' | 'yields' | 'paneer-yield' | 'ice-cream' | 'fat-dry' | 'gravimetric' | 'formulas' | 'cip-strength' | 'protein-casein' | 'minerals' | 'cream' | 'pricing';
 
 const calculatorsInfo = {
     'acidity': { title: "Acidity", icon: Beaker, component: ProductAcidityCalc },
@@ -65,6 +65,7 @@ const calculatorsInfo = {
     'fat-dry': { title: "Fat on Dry Basis", icon: FlaskConical, component: FatOnDryBasisCalc },
     'gravimetric': { title: "Gravimetric", icon: Weight, component: GravimetricAnalysisCalc },
     'cip-strength': { title: "CIP Strength", icon: RotateCw, component: SolutionStrengthCalc },
+    'pricing': { title: "Milk Pricing", icon: DollarSign, component: MilkPricingCalc },
     'formulas': { title: "Common Formulas", icon: Calculator, component: FormulasTab },
 };
 
@@ -136,6 +137,73 @@ export function VariousCalculatorsModal({
 }
 
 // Individual Calculator Components
+function MilkPricingCalc() {
+    const [inputs, setInputs] = useState({
+        fatPercent: '4.5',
+        clr: '28',
+        fatRate: '300',
+        snfRate: '200'
+    });
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setInputs(prev => ({...prev, [name]: value}));
+    };
+    
+    const results = useMemo(() => {
+        const fat = parseFloat(inputs.fatPercent) || 0;
+        const clr = parseFloat(inputs.clr) || 0;
+        const fatRate = parseFloat(inputs.fatRate) || 0;
+        const snfRate = parseFloat(inputs.snfRate) || 0;
+
+        if (fat <= 0 || clr <= 0 || fatRate <= 0 || snfRate <= 0) {
+            return null;
+        }
+
+        const snf = getSnf(fat, clr);
+        const pricePerKg = ((fat / 100) * fatRate) + ((snf / 100) * snfRate);
+        const pricePerLitre = pricePerKg * componentProps.milkDensity;
+
+        return {
+            snf: snf.toFixed(2),
+            pricePerKg: pricePerKg.toFixed(2),
+            pricePerLitre: pricePerLitre.toFixed(2)
+        };
+    }, [inputs]);
+
+    return (
+        <CalculatorCard title="Milk Pricing Calculator (Two-Axis)" description="Calculate the price of milk based on its Fat and SNF content, a standard industry practice.">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 space-y-3">
+                    <h3 className="font-semibold text-gray-700 font-headline">Milk Composition</h3>
+                    <div><Label>Fat %</Label><Input type="number" name="fatPercent" value={inputs.fatPercent} onChange={handleInputChange} placeholder="e.g., 4.5" /></div>
+                    <div><Label>CLR (Corrected Lactometer Reading)</Label><Input type="number" name="clr" value={inputs.clr} onChange={handleInputChange} placeholder="e.g., 28.0" /></div>
+                </div>
+                 <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200 space-y-3">
+                    <h3 className="font-semibold text-gray-700 font-headline">Market Rates</h3>
+                    <div><Label>Fat Rate (₹ per Kg)</Label><Input type="number" name="fatRate" value={inputs.fatRate} onChange={handleInputChange} placeholder="e.g., 300" /></div>
+                    <div><Label>SNF Rate (₹ per Kg)</Label><Input type="number" name="snfRate" value={inputs.snfRate} onChange={handleInputChange} placeholder="e.g., 200" /></div>
+                </div>
+            </div>
+            
+            {results && (
+                <Alert className="mt-6 bg-green-50 border-green-200">
+                    <AlertTitle className="text-xl font-bold text-green-800">Calculated Price</AlertTitle>
+                    <AlertDescription>
+                        <div className="mt-2 text-lg space-y-2 text-gray-800">
+                            <p>Calculated SNF: <strong className="text-gray-900">{results.snf}%</strong></p>
+                            <hr className="my-2" />
+                            <p>Price per Kg: <strong className="text-2xl text-green-700">₹ {results.pricePerKg}</strong></p>
+                            <p>Price per Litre: <strong className="text-2xl text-green-700">₹ {results.pricePerLitre}</strong></p>
+                        </div>
+                    </AlertDescription>
+                </Alert>
+            )}
+        </CalculatorCard>
+    );
+}
+
+
 function CreamCalculators() {
     return (
         <Tabs defaultValue="fat-percent" className="w-full">
