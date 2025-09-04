@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, memo, useCallback } from "react";
 import {
   Dialog,
   DialogContent,
@@ -137,8 +137,9 @@ export function VariousCalculatorsModal({
 }
 
 function MilkPricingCalculators() {
+    const [activeTab, setActiveTab] = useState("two-axis");
     return (
-        <Tabs defaultValue="two-axis">
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="two-axis">Two-Axis Pricing</TabsTrigger>
                 <TabsTrigger value="point-based">Point-Based Pricing</TabsTrigger>
@@ -225,7 +226,7 @@ function PointBasedPricingCalc() {
         fatPercent: '4.5',
         clr: '28',
         ratePerFat: '7.0',
-        ratePerSnf: '3.0'
+        ratePerClr: '3.0' // Changed from snfRate to clrRate
     });
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -237,16 +238,15 @@ function PointBasedPricingCalc() {
         const fat = parseFloat(inputs.fatPercent) || 0;
         const clr = parseFloat(inputs.clr) || 0;
         const ratePerFat = parseFloat(inputs.ratePerFat) || 0;
-        const ratePerSnf = parseFloat(inputs.ratePerSnf) || 0;
+        const ratePerClr = parseFloat(inputs.ratePerClr) || 0;
 
-        if (fat <= 0 || clr <= 0 || ratePerFat <= 0 || ratePerSnf <= 0) {
+        if (fat <= 0 || clr <= 0 || ratePerFat <= 0 || ratePerClr <= 0) {
             return null;
         }
 
-        const snf = getSnf(fat, clr);
-        const pricePerLitre = (fat * ratePerFat) + (snf * ratePerSnf);
+        const snf = getSnf(fat, clr); // Still useful to show
+        const pricePerLitre = (fat * ratePerFat) + (clr * ratePerClr); // Direct calculation
         const pricePerKg = pricePerLitre / componentProps.milkDensity;
-
 
         return {
             snf: snf.toFixed(2),
@@ -256,7 +256,7 @@ function PointBasedPricingCalc() {
     }, [inputs]);
 
     return (
-        <CalculatorCard title="Milk Pricing Calculator (Point-Based)" description="Calculate milk price based on rates per point of Fat and SNF. This method is common at collection centers.">
+        <CalculatorCard title="Milk Pricing Calculator (Point-Based)" description="Calculate milk price based on rates per point of Fat and CLR. This method is common at collection centers.">
              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 space-y-3">
                     <h3 className="font-semibold text-gray-700 font-headline">Milk Composition</h3>
@@ -266,7 +266,7 @@ function PointBasedPricingCalc() {
                  <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200 space-y-3">
                     <h3 className="font-semibold text-gray-700 font-headline">Point Rates (per Litre)</h3>
                     <div><Label>Rate per Fat Point (₹)</Label><Input type="number" name="ratePerFat" value={inputs.ratePerFat} onChange={handleInputChange} placeholder="e.g., 7.0" /></div>
-                    <div><Label>Rate per SNF Point (₹)</Label><Input type="number" name="ratePerSnf" value={inputs.ratePerSnf} onChange={handleInputChange} placeholder="e.g., 3.0" /></div>
+                    <div><Label>Rate per CLR Point (₹)</Label><Input type="number" name="ratePerClr" value={inputs.ratePerClr} onChange={handleInputChange} placeholder="e.g., 3.0" /></div>
                 </div>
             </div>
             
@@ -275,7 +275,7 @@ function PointBasedPricingCalc() {
                     <AlertTitle className="text-xl font-bold text-green-800">Calculated Price</AlertTitle>
                     <AlertDescription>
                         <div className="mt-2 text-lg space-y-2 text-gray-800">
-                            <p>Calculated SNF: <strong className="text-gray-900">{results.snf}%</strong></p>
+                            <p>Calculated SNF (for reference): <strong className="text-gray-900">{results.snf}%</strong></p>
                             <hr className="my-2" />
                             <p>Price per Litre: <strong className="text-2xl text-green-700">₹ {results.pricePerLitre}</strong></p>
                              <p>Price per Kg: <strong className="text-2xl text-green-700">₹ {results.pricePerKg}</strong></p>
@@ -1100,17 +1100,17 @@ function FormulasTab() {
 
 function IceCreamCalculators() {
     return (
-         <Tabs defaultValue="batch-scaling" className="w-full">
+         <Tabs defaultValue="mix-comp" className="w-full">
             <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 h-auto">
+                <TabsTrigger value="mix-comp">Mix Composition</TabsTrigger>
                 <TabsTrigger value="batch-scaling">Batch Scaling</TabsTrigger>
                 <TabsTrigger value="overrun">Overrun</TabsTrigger>
                 <TabsTrigger value="freezing-point">Freezing Point</TabsTrigger>
-                <TabsTrigger value="mix-comp">Mix Composition</TabsTrigger>
             </TabsList>
+            <TabsContent value="mix-comp" className="pt-4"><MixCompositionCalc /></TabsContent>
             <TabsContent value="batch-scaling" className="pt-4"><BatchScalingCalc /></TabsContent>
             <TabsContent value="overrun" className="pt-4"><OverrunCalc /></TabsContent>
             <TabsContent value="freezing-point" className="pt-4"><FreezingPointCalc /></TabsContent>
-            <TabsContent value="mix-comp" className="pt-4"><MixCompositionCalc /></TabsContent>
         </Tabs>
     )
 }
