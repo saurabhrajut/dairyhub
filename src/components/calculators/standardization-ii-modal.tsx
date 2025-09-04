@@ -20,7 +20,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { cn } from "@/lib/utils"
 
-type CalculatorType = 'fat-snf-clr-ts' | 'fat-blending' | 'fat-snf-adjustment' | 'reconstituted-milk' | 'recombined-milk' | 'clr-blending' | 'custom-calculator' | 'milk-blending' | 'clr-increase' | 'fat-clr-maintainer' | 'two-milk-blending-target' | 'clr-correction' | 'kg-fat-snf' | 'fat-reduction-clr-maintain' | 'two-component-standardization';
+type CalculatorType = 'fat-snf-clr-ts' | 'fat-blending' | 'fat-snf-adjustment' | 'reconstituted-milk' | 'recombined-milk' | 'clr-blending' | 'custom-calculator' | 'milk-blending' | 'clr-increase' | 'fat-clr-maintainer' | 'two-milk-blending-target' | 'clr-correction' | 'kg-fat-snf' | 'fat-reduction-clr-maintain' | 'two-component-standardization' | 'multi-component-batch';
 
 const calculatorsInfo = {
     'fat-snf-clr-ts': { title: "Fat, SNF, CLR & TS", icon: Calculator, component: FatSnfClrTsCalc },
@@ -28,6 +28,7 @@ const calculatorsInfo = {
     'two-milk-blending-target': { title: "Two-Milk Blending (to Target)", icon: Target, component: TwoMilkBlendingToTargetCalc },
     'fat-reduction-clr-maintain': { title: "Fat & CLR Corrector", icon: ShieldAlert, component: FatReductionClrMaintainCalc },
     'two-component-standardization': { title: "Two-Component Standardization", icon: Combine, component: TwoComponentStandardizationCalc },
+    'multi-component-batch': { title: "Multi-Component Batch", icon: Combine, component: MultiComponentBatchCalc },
     'custom-calculator': { title: 'Custom Calculator', icon: Settings, component: CustomStandardizationCalc },
     'clr-increase': { title: 'CLR Increase (by SMP)', icon: ChevronsUp, component: ClrIncreaseCalc },
     'fat-clr-maintainer': { title: 'Fat & CLR Maintainer', icon: Target, component: FatClrMaintainerCalc },
@@ -99,6 +100,154 @@ export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean;
       </DialogContent>
     </Dialog>
   )
+}
+
+function MultiComponentBatchCalc() {
+    const [inputs, setInputs] = useState({
+        // Target Batch
+        targetQty: '800', targetFat: '4.0', targetClr: '31.0',
+        // Fixed Milk
+        fixedQty: '70', fixedFat: '1.1', fixedClr: '31.0',
+        // Available Milk 1 (Skim)
+        avail1Fat: '0.05', avail1Clr: '31.0',
+        // Available Milk 2 (Rich)
+        avail2Fat: '5.8', avail2Clr: '28.0',
+        // Powder for CLR Adjustment
+        smpTs: '96'
+    });
+    const [result, setResult] = useState<string | null>(null);
+    const [error, setError] = useState<string | null>(null);
+
+    const handleInputChange = useCallback((name: string, value: string) => {
+        setInputs(prev => ({ ...prev, [name]: value }));
+    }, []);
+
+    const calculate = useCallback(() => {
+        setResult(null);
+        setError(null);
+
+        const i = {
+            Q_target: parseFloat(inputs.targetQty), F_target: parseFloat(inputs.targetFat), C_target: parseFloat(inputs.targetClr),
+            Q_fixed: parseFloat(inputs.fixedQty), F_fixed: parseFloat(inputs.fixedFat), C_fixed: parseFloat(inputs.fixedClr),
+            F_avail1: parseFloat(inputs.avail1Fat), C_avail1: parseFloat(inputs.avail1Clr),
+            F_avail2: parseFloat(inputs.avail2Fat), C_avail2: parseFloat(inputs.avail2Clr),
+            SMP_TS: parseFloat(inputs.smpTs)
+        };
+
+        if (Object.values(i).some(isNaN)) {
+            setError("Please fill all fields with valid numbers.");
+            return;
+        }
+
+        if (i.Q_fixed >= i.Q_target) {
+            setError("Fixed milk quantity cannot be greater than or equal to the total target quantity.");
+            return;
+        }
+
+        // Step 1: Calculate remaining quantity and required properties
+        const Q_remaining = i.Q_target - i.Q_fixed;
+        const Total_Fat_Needed = i.Q_target * i.F_target;
+        const Fat_From_Fixed = i.Q_fixed * i.F_fixed;
+        const Fat_Needed_In_Remaining = Total_Fat_Needed - Fat_From_Fixed;
+        const F_avg_remaining_needed = (Fat_Needed_In_Remaining / Q_remaining);
+
+        if (F_avg_remaining_needed > i.F_avail2 || F_avg_remaining_needed < i.F_avail1) {
+            setError(`Target fat of ${F_avg_remaining_needed.toFixed(2)}% for the remaining milk is not achievable with the available milks (0.05% and 5.8%).`);
+            return;
+        }
+
+        // Step 2: Use Pearson Square to find quantities of available milks
+        const highParts = F_avg_remaining_needed - i.F_avail1;
+        const lowParts = i.F_avail2 - F_avg_remaining_needed;
+        const totalParts = highParts + lowParts;
+        
+        if(totalParts === 0) {
+            setError("Cannot calculate blend as the fat percentages of available milks are the same.");
+            return;
+        }
+        
+        const Q_avail1 = (Q_remaining * lowParts) / totalParts; // Skim
+        const Q_avail2 = (Q_remaining * highParts) / totalParts; // Rich
+        
+        // Step 3: Check CLR and calculate SMP needed for adjustment
+        const Total_CLR_Kg_Fixed = i.Q_fixed * i.C_fixed;
+        const Total_CLR_Kg_Avail1 = Q_avail1 * i.C_avail1;
+        const Total_CLR_Kg_Avail2 = Q_avail2 * i.C_avail2;
+        const Initial_Blended_CLR = (Total_CLR_Kg_Fixed + Total_CLR_Kg_Avail1 + Total_CLR_Kg_Avail2) / i.Q_target;
+        
+        const CLR_diff = i.C_target - Initial_Blended_CLR;
+        let smpNeeded = 0;
+        let finalMessage = "";
+
+        if (Math.abs(CLR_diff) < 0.05) {
+            finalMessage = "No CLR adjustment needed.";
+        } else if (CLR_diff > 0) { // Need to increase CLR
+            const smpSolidsPercent = i.SMP_TS;
+            smpNeeded = (i.Q_target * CLR_diff * 0.25) / smpSolidsPercent;
+            finalMessage = `The initial blend resulted in a CLR of <strong>${Initial_Blended_CLR.toFixed(2)}</strong>. To reach the target of ${i.C_target}, SMP must be added.`;
+        } else { // CLR is too high, need water
+            finalMessage = `The initial blend resulted in a CLR of <strong>${Initial_Blended_CLR.toFixed(2)}</strong>, which is higher than the target. This scenario requires water addition, which this calculator does not currently support.`;
+            setError(finalMessage);
+            return;
+        }
+
+        let resultHTML = `<h4 class='font-bold text-md'>Blending Plan:</h4>
+            <ul class='list-disc list-inside mt-2 text-lg'>
+                <li>Fixed Milk (1.1% Fat): <strong class='text-gray-700'>${i.Q_fixed.toFixed(2)} Ltr</strong> (Given)</li>
+                <li>Skim Milk (0.05% Fat): <strong class='text-blue-700'>${Q_avail1.toFixed(2)} Ltr</strong></li>
+                <li>Rich Milk (5.8% Fat): <strong class='text-green-700'>${Q_avail2.toFixed(2)} Ltr</strong></li>
+            </ul>
+            <hr class='my-3' />
+            <h4 class='font-bold text-md'>CLR Adjustment:</h4>
+            <p class='text-sm'>${finalMessage}</p>
+            ${smpNeeded > 0 ? `<p class='text-lg mt-2'>Add SMP (~${i.SMP_TS}% TS): <strong class='text-purple-700'>${smpNeeded.toFixed(3)} kg</strong></p>` : ''}
+        `;
+        
+        setResult(resultHTML);
+
+    }, [inputs]);
+
+    return (
+        <CalculatorCard title="Multi-Component Batch Calculator" description="Standardize a batch using a fixed quantity of one milk, and balancing with two other available milks, with CLR adjustment using SMP.">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-4">
+                {/* Target Batch */}
+                <div className="bg-green-50 p-4 rounded-lg space-y-3 border border-green-200">
+                    <h3 className="font-semibold text-gray-700 font-headline">1. Target Batch</h3>
+                    <MemoizedInputField label="Total Quantity (Ltr)" value={inputs.targetQty} name="targetQty" setter={handleInputChange} />
+                    <MemoizedInputField label="Target Fat %" value={inputs.targetFat} name="targetFat" setter={handleInputChange} />
+                    <MemoizedInputField label="Target CLR" value={inputs.targetClr} name="targetClr" setter={handleInputChange} />
+                </div>
+                {/* Fixed Milk */}
+                <div className="bg-yellow-50 p-4 rounded-lg space-y-3 border border-yellow-200">
+                     <h3 className="font-semibold text-gray-700 font-headline">2. Fixed Milk</h3>
+                    <MemoizedInputField label="Quantity (Ltr)" value={inputs.fixedQty} name="fixedQty" setter={handleInputChange} />
+                    <MemoizedInputField label="Fat %" value={inputs.fixedFat} name="fixedFat" setter={handleInputChange} />
+                    <MemoizedInputField label="CLR" value={inputs.fixedClr} name="fixedClr" setter={handleInputChange} />
+                </div>
+                {/* Available Milks & SMP */}
+                <div className="bg-blue-50 p-4 rounded-lg space-y-3 border border-blue-200">
+                     <h3 className="font-semibold text-gray-700 font-headline">3. Available Sources</h3>
+                    <MemoizedInputField label="Skim Milk Fat %" value={inputs.avail1Fat} name="avail1Fat" setter={handleInputChange} />
+                    <MemoizedInputField label="Skim Milk CLR" value={inputs.avail1Clr} name="avail1Clr" setter={handleInputChange} />
+                    <hr/>
+                    <MemoizedInputField label="Rich Milk Fat %" value={inputs.avail2Fat} name="avail2Fat" setter={handleInputChange} />
+                    <MemoizedInputField label="Rich Milk CLR" value={inputs.avail2Clr} name="avail2Clr" setter={handleInputChange} />
+                     <hr/>
+                    <MemoizedInputField label="SMP Total Solids %" value={inputs.smpTs} name="smpTs" setter={handleInputChange} />
+                </div>
+            </div>
+            <Button onClick={calculate} className="w-full mt-4">Calculate Batch</Button>
+            {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
+            {result && (
+                <Alert className="mt-4">
+                    <AlertTitle>Batch Standardization Plan</AlertTitle>
+                    <AlertDescription>
+                        <div className="mt-2 prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: result }}/>
+                    </AlertDescription>
+                </Alert>
+            )}
+        </CalculatorCard>
+    );
 }
 
 
@@ -1242,7 +1391,7 @@ function FatClrMaintainerCalc() {
              {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
              {result && <Alert className="mt-4"><AlertTitle>Standardization Plan</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
         </CalculatorCard>
-    )
+    );
 }
 
 const PearsonSquareCalc = ({ unit, calcType }: { unit: string, calcType: 'Fat' | 'CLR' }) => {
@@ -1311,7 +1460,7 @@ const PearsonSquareCalc = ({ unit, calcType }: { unit: string, calcType: 'Fat' |
             {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
             {result && <Alert className="mt-4"><AlertTitle>Result</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
         </CalculatorCard>
-    )
+    );
 }
 
 function FatBlendingCalc() { return <PearsonSquareCalc unit="%" calcType="Fat" /> }
@@ -1454,7 +1603,7 @@ function FatSnfAdjustmentCalc() {
             {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
             {result && <Alert className="mt-4"><AlertTitle>Result</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
         </CalculatorCard>
-    )
+    );
 }
 
 function ReconstitutedMilkCalc() {
@@ -1606,7 +1755,7 @@ function ClrCorrectionCalc() {
             <Button onClick={handleCalc} className="w-full mt-4">Correct CLR</Button>
             {result && <div className="mt-4 text-center"><p className="text-gray-600">Corrected Lactometer Reading (CLR):</p><p className="text-3xl font-bold text-green-700">{result}</p></div>}
         </CalculatorCard>
-    )
+    );
 }
 
 function KgFatSnfCalc() {
@@ -1678,19 +1827,5 @@ function KgFatSnfCalc() {
             {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
             {result && <Alert className="mt-4"><AlertTitle>Result</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
         </CalculatorCard>
-    )
+    );
 }
-    
-
-    
-
-
-
-
-
-
-
-
-
-
-
