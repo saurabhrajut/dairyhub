@@ -362,26 +362,9 @@ function CustomStandardizationCalc() {
                 : { F: parseFloat(inputs.richMilkFat)/100, S: calculateSnf(parseFloat(inputs.richMilkClr), parseFloat(inputs.richMilkFat))/100, name: "Rich Milk" };
             ingredientY = { F: parseFloat(inputs.smpFat)/100, S: (parseFloat(inputs.smpSnf)/100), name: "SMP" };
         } else { // decrease
-            ingredientX = leanSource === 'skim'
-                ? { F: parseFloat(inputs.skimFat)/100, S: parseFloat(inputs.skimSnf)/100, name: "Skim Milk" }
-                : { F: 0, S: 0, name: "Water" }; // This is ingredient X (lean source)
-             // When decreasing, the second ingredient is always water or skim milk, so there's no Y ingredient in the same way.
-             // The logic must be different for decreasing. Let's handle 'increase' first, as it's the more complex case with two additions.
-             // For now, let's assume the decrease scenario is simpler and might not use a 2-variable system. Let's focus on fixing the 'increase' case first.
              setError("Decrease scenario calculation not yet implemented in this fix.");
              return;
         }
-        
-        
-        // Correct Mass Balance Equations:
-        // C1 = M * (Fr - Fm) = X * (Fx - Fr) + Y * (Fy - Fr) -> This seems wrong.
-        // Let's re-derive.
-        // Total Final Mass = M + X + Y
-        // Fat Balance: M*Fm + X*Fx + Y*Fy = (M+X+Y)*Fr
-        // SNF Balance: M*Sm + X*Sx + Y*Sy = (M+X+Y)*Sr
-        // Rearranging:
-        // X*(Fx-Fr) + Y*(Fy-Fr) = M*(Fr-Fm)  <-- Equation A
-        // X*(Sx-Sr) + Y*(Sy-Sr) = M*(Sr-Sm)  <-- Equation B
         
         const A1 = ingredientX.F - i.Fr;
         const B1 = ingredientY.F - i.Fr;
@@ -1687,8 +1670,14 @@ function ReconstitutedMilkCalc() {
 
 function RecombinedMilkCalc() {
     const [inputs, setInputs] = useState({
-        batchQty: '100', targetFat: '3.5', targetSNF: '8.5',
-        smpFat: '1.0', smpSNF: '95.0', fatSourceFat: '99.8'
+        batchQty: '100',
+        targetFat: '3.5',
+        targetClr: '28.5',
+        smpFat: '1.0',
+        smpSNF: '95.0',
+        fatSourceFat: '99.8',
+        formula: 'isi',
+        customC: '0.72'
     });
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -1697,13 +1686,24 @@ function RecombinedMilkCalc() {
         setInputs(prev => ({...prev, [name]: value}));
     }, []);
 
+    const calculateSnf = useCallback((clr: number, fat: number) => {
+        const formulaKey = inputs.formula as keyof typeof snfFormulas;
+        if (formulaKey === 'general') {
+            return snfFormulas.general.calc(clr, fat, parseFloat(inputs.customC));
+        }
+        return snfFormulas[formulaKey].calc(clr, fat);
+    }, [inputs.formula, inputs.customC]);
+    
+    const targetSnf = parseFloat(inputs.targetFat) && parseFloat(inputs.targetClr) ? calculateSnf(parseFloat(inputs.targetClr), parseFloat(inputs.targetFat)) : 0;
+
+
     const calculate = useCallback(() => {
         setResult(null);
         setError(null);
         
         const Q = parseFloat(inputs.batchQty);
         const Ft = parseFloat(inputs.targetFat) / 100;
-        const St = parseFloat(inputs.targetSNF) / 100;
+        const St = targetSnf / 100; // Calculated SNF
         const Fp = parseFloat(inputs.smpFat) / 100;
         const Sp = parseFloat(inputs.smpSNF) / 100;
         const Fb = parseFloat(inputs.fatSourceFat) / 100;
@@ -1713,11 +1713,10 @@ function RecombinedMilkCalc() {
             return;
         }
 
-        // Equations:
-        // P*Sp = Q*St => P = Q*St / Sp
-        // B*Fb + P*Fp = Q*Ft
-        // B*Fb = Q*Ft - P*Fp
-        // B = (Q*Ft - P*Fp) / Fb
+        if (St <= 0) {
+             setError("Calculated Target SNF is zero or negative. Please check Fat and CLR values.");
+            return;
+        }
 
         const P = (Q * St) / Sp; // Powder needed
         const B = (Q * Ft - P * Fp) / Fb; // Butter oil needed
@@ -1728,22 +1727,44 @@ function RecombinedMilkCalc() {
             return;
         }
 
-        setResult(`To make <strong>${Q} kg</strong> of milk with <strong>${inputs.targetFat}% Fat</strong> and <strong>${inputs.targetSNF}% SNF</strong>, you need:<br/>
+        setResult(`To make <strong>${Q} kg</strong> of milk with <strong>${inputs.targetFat}% Fat</strong> and <strong>${targetSnf.toFixed(2)}% SNF</strong>, you need:<br/>
         - <strong class='text-green-700'>${P.toFixed(3)} kg</strong> of Skim Milk Powder<br/>
         - <strong class='text-green-700'>${B.toFixed(3)} kg</strong> of Butter Oil/AMF<br/>
         - <strong class='text-green-700'>${W.toFixed(3)} kg</strong> of Water`);
-    }, [inputs]);
+    }, [inputs, targetSnf]);
 
     return (
         <CalculatorCard title="Recombined Milk Calculator" description="Calculate the required Skim Milk Powder (SMP), Butter Oil (or other fat source), and Water to create milk of a desired composition.">
+             <div className="bg-muted/50 p-4 rounded-lg mb-4">
+                 <Label>Select SNF Calculation Formula</Label>
+                 <Select value={inputs.formula} onValueChange={(val) => handleInputChange('formula', val)}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                        {Object.entries(snfFormulas).map(([key, {name, formulaText}]) => (
+                            <SelectItem key={key} value={key}>
+                                <div className="flex flex-col">
+                                    <span className="font-semibold">{name}</span>
+                                    <span className="text-xs text-muted-foreground">{formulaText}</span>
+                                </div>
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                 </Select>
+                 {inputs.formula === 'general' && (
+                     <div className="mt-2">
+                        <MemoizedInputField label="Custom Constant (C)" value={inputs.customC} name="customC" setter={handleInputChange} />
+                     </div>
+                 )}
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mb-4">
-                <div className="bg-muted/50 p-4 rounded-lg space-y-3">
+                <div className="bg-primary/10 p-4 rounded-lg space-y-3">
                      <h3 className="font-semibold text-gray-700 mb-2 font-headline">Target Milk</h3>
                     <MemoizedInputField label="Target Batch Quantity (kg)" value={inputs.batchQty} name="batchQty" setter={handleInputChange} />
                     <MemoizedInputField label="Target Fat %" value={inputs.targetFat} name="targetFat" setter={handleInputChange} />
-                    <MemoizedInputField label="Target SNF %" value={inputs.targetSNF} name="targetSNF" setter={handleInputChange} />
+                    <MemoizedInputField label="Target CLR" value={inputs.targetClr} name="targetClr" setter={handleInputChange} />
+                    <div className="text-sm p-2 bg-green-100 rounded">Calculated Target SNF: <strong className="font-bold">{targetSnf > 0 ? targetSnf.toFixed(2) + '%' : '...'}</strong></div>
                 </div>
-                 <div className="bg-primary/10 p-4 rounded-lg space-y-3">
+                 <div className="bg-muted/50 p-4 rounded-lg space-y-3">
                      <h3 className="font-semibold text-gray-700 mb-2 font-headline">Ingredients Composition</h3>
                      <MemoizedInputField label="Skim Milk Powder (SMP) Fat %" value={inputs.smpFat} name="smpFat" setter={handleInputChange} />
                      <MemoizedInputField label="Skim Milk Powder (SMP) SNF %" value={inputs.smpSNF} name="smpSNF" setter={handleInputChange} />
@@ -1856,4 +1877,3 @@ function KgFatSnfCalc() {
         </CalculatorCard>
     );
 }
-
