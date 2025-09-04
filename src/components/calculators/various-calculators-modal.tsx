@@ -23,7 +23,7 @@ import {
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { componentProps, getSnf } from "@/lib/utils";
-import { CheckCircle, PlusCircle, XCircle, Beaker, Thermometer, Weight, Percent, Scaling, Combine, Calculator, FlaskConical, ArrowLeft, RotateCw, Dna, Atom, Droplet, DollarSign } from "lucide-react";
+import { CheckCircle, PlusCircle, XCircle, Beaker, Thermometer, Weight, Percent, Scaling, Combine, Calculator, FlaskConical, ArrowLeft, RotateCw, Dna, Atom, Droplet, DollarSign, Microscope, Recycle, Bug, ShieldCheck, FileSpreadsheet, Search, Wind, Factory } from "lucide-react";
 import { PaneerIcon, IceCreamIcon } from "../icons";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -33,6 +33,8 @@ interface BatchIngredient {
   id: number;
   name: string;
   amount: string;
+  unit: 'g' | 'kg';
+  percentage: string;
 }
 
 interface MixIngredient {
@@ -226,7 +228,7 @@ function PointBasedPricingCalc() {
         fatPercent: '4.5',
         clr: '28',
         ratePerFat: '7.0',
-        ratePerClr: '3.0' // Changed from snfRate to clrRate
+        ratePerClr: '3.0'
     });
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -1117,12 +1119,13 @@ function IceCreamCalculators() {
 
 function BatchScalingCalc() {
     const { toast } = useToast();
-    const [ingredients, setIngredients] = useState<BatchIngredient[]>([{ id: 1, name: "Milk", amount: "550" }]);
+    const [ingredients, setIngredients] = useState<BatchIngredient[]>([{ id: 1, name: "Milk", amount: "55", unit: 'kg', percentage: "55" }]);
     const [finalBatchSize, setFinalBatchSize] = useState("100");
     const [result, setResult] = useState<any[] | null>(null);
+    const [activeTab, setActiveTab] = useState<'by-weight' | 'by-percentage'>('by-weight');
 
     const addIngredient = () => {
-        setIngredients([...ingredients, { id: Date.now(), name: "", amount: "" }]);
+        setIngredients([...ingredients, { id: Date.now(), name: "", amount: "", unit: 'kg', percentage: "" }]);
     };
     
     const removeIngredient = (id: number) => {
@@ -1133,74 +1136,132 @@ function BatchScalingCalc() {
         setIngredients(ingredients.map(ing => ing.id === id ? { ...ing, [field]: value } : ing));
     };
 
-    const calculate = () => {
-        const finalSize = parseFloat(finalBatchSize);
-        if (isNaN(finalSize) || finalSize <= 0) {
-            toast({ variant: "destructive", title: "Invalid Input", description: "Please enter a valid final batch size." });
+    const calculateByWeight = () => {
+        const finalSizeKg = parseFloat(finalBatchSize);
+        if (isNaN(finalSizeKg) || finalSizeKg <= 0) {
+            toast({ variant: "destructive", title: "Invalid Input", description: "Please enter a valid final batch size in kg." });
             return;
         }
 
-        const validIngredients = ingredients.filter(ing => parseFloat(ing.amount) > 0);
+        const validIngredients = ingredients.filter(ing => ing.name && parseFloat(ing.amount) > 0);
         if (validIngredients.length === 0) {
-            toast({ variant: "destructive", title: "Invalid Input", description: "Please enter a valid amount for at least one ingredient." });
+            toast({ variant: "destructive", title: "Invalid Input", description: "Please enter at least one ingredient with a valid amount." });
             return;
         }
 
-        const baseTotalWeight = validIngredients.reduce((sum, ing) => sum + parseFloat(ing.amount), 0);
-        if (baseTotalWeight === 0) return;
+        const baseTotalWeightKg = validIngredients.reduce((sum, ing) => {
+            const amount = parseFloat(ing.amount) || 0;
+            return sum + (ing.unit === 'g' ? amount / 1000 : amount);
+        }, 0);
+
+        if (baseTotalWeightKg === 0) return;
 
         const scaledIngredients = validIngredients.map(ing => {
-            const scaledAmount = (parseFloat(ing.amount) / baseTotalWeight) * (finalSize * 1000);
-            return { name: ing.name || `Ingredient`, amount: scaledAmount };
+            const amountKg = ing.unit === 'g' ? (parseFloat(ing.amount) || 0) / 1000 : (parseFloat(ing.amount) || 0);
+            const scaledAmountKg = (amountKg / baseTotalWeightKg) * finalSizeKg;
+            return { name: ing.name, amount: scaledAmountKg };
         });
 
         setResult(scaledIngredients);
         toast({ title: "Success", description: "Batch scaling calculated successfully!" });
     };
 
+    const calculateByPercentage = () => {
+        const finalSizeKg = parseFloat(finalBatchSize);
+        if (isNaN(finalSizeKg) || finalSizeKg <= 0) {
+            toast({ variant: "destructive", title: "Invalid Input", description: "Please enter a valid final batch size in kg." });
+            return;
+        }
+
+        const validIngredients = ingredients.filter(ing => ing.name && parseFloat(ing.percentage) > 0);
+        if (validIngredients.length === 0) {
+            toast({ variant: "destructive", title: "Invalid Input", description: "Please enter at least one ingredient with a valid percentage." });
+            return;
+        }
+        
+        const totalPercentage = validIngredients.reduce((sum, ing) => sum + (parseFloat(ing.percentage) || 0), 0);
+        if (Math.abs(totalPercentage - 100) > 0.01) {
+            toast({ variant: "destructive", title: "Invalid Percentages", description: `Total percentage must be 100%, but it is ${totalPercentage.toFixed(2)}%.` });
+            return;
+        }
+
+        const scaledIngredients = validIngredients.map(ing => {
+            const scaledAmountKg = (parseFloat(ing.percentage) / 100) * finalSizeKg;
+            return { name: ing.name, amount: scaledAmountKg };
+        });
+        
+        setResult(scaledIngredients);
+        toast({ title: "Success", description: "Batch scaling calculated successfully!" });
+    }
+
     return (
-        <CalculatorCard title="Batch Scaling Calculator">
-            <div className="space-y-4 mb-4">
-                {ingredients.map((ing) => (
-                    <div key={ing.id} className="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-4 items-center">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                           <Input
-                                type="text"
-                                placeholder="Ingredient Name"
-                                value={ing.name}
-                                onChange={(e) => handleIngredientChange(ing.id, 'name', e.target.value)}
-                            />
-                            <Input
-                                type="number"
-                                placeholder="Amount (g)"
-                                value={ing.amount}
-                                onChange={(e) => handleIngredientChange(ing.id, 'amount', e.target.value)}
-                            />
-                        </div>
-                        <Button variant="ghost" size="icon" className="text-destructive" onClick={() => removeIngredient(ing.id)}><XCircle /></Button>
+        <CalculatorCard title="Batch Scaling Calculator (Industrial)">
+             <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as any)}>
+                <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="by-weight">Scale by Weight</TabsTrigger>
+                    <TabsTrigger value="by-percentage">Scale by Percentage</TabsTrigger>
+                </TabsList>
+                <TabsContent value="by-weight">
+                    <p className="text-xs text-muted-foreground my-2">Enter your base recipe ingredients and their weights. Then enter the final batch size you want to make.</p>
+                     <div className="space-y-2 mb-4">
+                        {ingredients.map((ing) => (
+                            <div key={ing.id} className="grid grid-cols-[2fr_1fr_1fr_auto] gap-2 items-center">
+                                <Input type="text" placeholder="Ingredient Name" value={ing.name} onChange={(e) => handleIngredientChange(ing.id, 'name', e.target.value)} />
+                                <Input type="number" placeholder="Amount" value={ing.amount} onChange={(e) => handleIngredientChange(ing.id, 'amount', e.target.value)} />
+                                <Select value={ing.unit} onValueChange={(val) => handleIngredientChange(ing.id, 'unit', val as 'g' | 'kg')}>
+                                    <SelectTrigger><SelectValue/></SelectTrigger>
+                                    <SelectContent><SelectItem value="kg">kg</SelectItem><SelectItem value="g">g</SelectItem></SelectContent>
+                                </Select>
+                                <Button variant="ghost" size="icon" className="text-destructive" onClick={() => removeIngredient(ing.id)}><XCircle /></Button>
+                            </div>
+                        ))}
                     </div>
-                ))}
-            </div>
-            <Button variant="outline" size="sm" onClick={addIngredient}><PlusCircle className="mr-2 h-4 w-4" /> Add Ingredient</Button>
-            <hr className="my-6" />
-            <div>
+                     <Button variant="outline" size="sm" onClick={addIngredient}><PlusCircle className="mr-2 h-4 w-4" /> Add Ingredient</Button>
+                    <hr className="my-4" />
+                    <Button onClick={calculateByWeight} className="mt-4 w-full">Scale Batch by Weight</Button>
+                </TabsContent>
+                <TabsContent value="by-percentage">
+                    <p className="text-xs text-muted-foreground my-2">Enter your recipe as percentages (must add up to 100%).</p>
+                    <div className="space-y-2 mb-4">
+                        {ingredients.map((ing) => (
+                            <div key={ing.id} className="grid grid-cols-[2fr_1fr_auto] gap-2 items-center">
+                                <Input type="text" placeholder="Ingredient Name" value={ing.name} onChange={(e) => handleIngredientChange(ing.id, 'name', e.target.value)} />
+                                <div className="relative">
+                                    <Input type="number" placeholder="%" value={ing.percentage} onChange={(e) => handleIngredientChange(ing.id, 'percentage', e.target.value)} />
+                                    <span className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">%</span>
+                                </div>
+                                <Button variant="ghost" size="icon" className="text-destructive" onClick={() => removeIngredient(ing.id)}><XCircle /></Button>
+                            </div>
+                        ))}
+                    </div>
+                    <Button variant="outline" size="sm" onClick={addIngredient}><PlusCircle className="mr-2 h-4 w-4" /> Add Ingredient</Button>
+                    <hr className="my-4" />
+                    <Button onClick={calculateByPercentage} className="mt-4 w-full">Scale Batch by Percentage</Button>
+                </TabsContent>
+            </Tabs>
+            
+            <div className="mt-4">
                 <Label htmlFor="final-batch-size">Final Batch Size (kg)</Label>
-                <Input type="number" id="final-batch-size" value={finalBatchSize} onChange={e => setFinalBatchSize(e.target.value)} />
+                <Input type="number" id="final-batch-size" value={finalBatchSize} onChange={e => setFinalBatchSize(e.target.value)} placeholder="e.g. 100"/>
             </div>
-            <Button onClick={calculate} className="mt-4 w-full">Calculate Batch</Button>
+
             {result && (
                 <Alert className="mt-4">
                     <AlertTitle>Ingredients for {finalBatchSize} kg Batch</AlertTitle>
                     <AlertDescription>
                         <Table>
-                            <TableHeader><TableRow><TableHead>Ingredient</TableHead><TableHead>Required Amount</TableHead></TableRow></TableHeader>
+                            <TableHeader><TableRow><TableHead>Ingredient</TableHead><TableHead className="text-right">Required Amount</TableHead></TableRow></TableHeader>
                             <TableBody>
                                 {result.map((ing, i) => (
                                     <TableRow key={i}>
                                         <TableCell>{ing.name}</TableCell>
-                                        <TableCell>{ing.amount.toFixed(2)} g ({(ing.amount / 1000).toFixed(3)} kg)</TableCell>
+                                        <TableCell className="text-right font-semibold">{ing.amount.toFixed(3)} kg</TableCell>
                                     </TableRow>
                                 ))}
+                                <TableRow className="font-bold bg-muted">
+                                    <TableCell>Total</TableCell>
+                                    <TableCell className="text-right">{result.reduce((sum, ing) => sum + ing.amount, 0).toFixed(3)} kg</TableCell>
+                                </TableRow>
                             </TableBody>
                         </Table>
                     </AlertDescription>
