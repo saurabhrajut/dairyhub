@@ -985,13 +985,14 @@ function MineralAnalysisCalc() {
 
 
 function ProteinCaseinCalc() {
-    const [activeCalc, setActiveCalc] = useState<'kjeldahl' | 'formol' | 'casein-titration' | 'casein-factor'>('kjeldahl');
+    const [activeCalc, setActiveCalc] = useState<'kjeldahl' | 'formol' | 'casein-titration' | 'casein-factor' | 'protein-factor'>('kjeldahl');
 
     const renderCalculator = () => {
         switch (activeCalc) {
             case 'formol': return <FormolTitrationCalc />;
             case 'casein-titration': return <CaseinTitrationCalc />;
             case 'casein-factor': return <CaseinFromProteinCalc />;
+            case 'protein-factor': return <ProteinFromCaseinCalc />;
             case 'kjeldahl':
             default: return <KjeldahlProteinCalc />;
         }
@@ -1008,6 +1009,7 @@ function ProteinCaseinCalc() {
                         <SelectItem value="formol">Formol Protein</SelectItem>
                         <SelectItem value="casein-titration">Casein (Titration)</SelectItem>
                         <SelectItem value="casein-factor">Casein (from Protein)</SelectItem>
+                        <SelectItem value="protein-factor">Protein (from Casein)</SelectItem>
                     </SelectContent>
                 </Select>
             </div>
@@ -1142,6 +1144,31 @@ function CaseinFromProteinCalc() {
         </div>
     );
 }
+
+function ProteinFromCaseinCalc() {
+    const [casein, setCasein] = useState('');
+    const [result, setResult] = useState<string | null>(null);
+
+    const calculate = () => {
+        const c = parseFloat(casein);
+        if (isNaN(c)) {
+            setResult("Please enter a valid casein percentage.");
+            return;
+        }
+        // Protein = Casein / 0.8 or Casein * 1.25
+        const proteinPercent = c / 0.8;
+        setResult(`Estimated Total Protein: <strong>~${proteinPercent.toFixed(2)}%</strong>`);
+    };
+
+    return (
+        <div>
+            <div><Label>Casein %</Label><Input type="number" value={casein} onChange={e => setCasein(e.target.value)} placeholder="e.g., 2.7" /></div>
+            <Button onClick={calculate} className="w-full mt-4">Estimate Protein %</Button>
+            {result && <Alert className="mt-4"><AlertDescription className="text-lg font-bold text-center" dangerouslySetInnerHTML={{ __html: result }} /></Alert>}
+        </div>
+    );
+}
+
 
 function GravimetricAnalysisCalc() {
     const [activeCalc, setActiveCalc] = useState('moisture-ts');
@@ -1406,3 +1433,4 @@ function SolutionStrengthCalc() {
 
 
     
+
