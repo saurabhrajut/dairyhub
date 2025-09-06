@@ -27,6 +27,7 @@ const allProFeatures = [
 
 const departmentPlans: Record<Department, Record<string, { title: string; price: number; duration: string; popular?: boolean }>> = {
     'process-access': {
+        '7-days': { title: "7 Days", price: 19, duration: "Trial Access" },
         '1-month': { title: "1 Month", price: 99, duration: "Full Access" },
         '6-months': { title: "6 Months", price: 299, duration: "Save 45%", popular: true },
         'yearly': { title: "Yearly", price: 549, duration: "Best Value" },
@@ -44,10 +45,11 @@ const departmentPlans: Record<Department, Record<string, { title: string; price:
         'yearly': { title: "Yearly", price: 849, duration: "Best Value" },
     },
     'all-control-access': {
-        '1-month': { title: "1 Month Ultimate", price: 499, duration: "All Access Pass" },
-        '6-months': { title: "6 Months Ultimate", price: 999, duration: "Save 50%", popular: true },
-        'yearly': { title: "Yearly Ultimate", price: 1499, duration: "Best Value" },
-        'lifetime': { title: "Lifetime Ultimate", price: 2499, duration: "One-Time Purchase" },
+        '7-days': { title: "7 Days Ultimate", price: 89, duration: "All Access Pass" },
+        '1-month': { title: "1 Month Ultimate", price: 199, duration: "All Access Pass" },
+        '6-months': { title: "6 Months Ultimate", price: 499, duration: "Save 58%", popular: true },
+        'yearly': { title: "Yearly Ultimate", price: 999, duration: "Best Value" },
+        'lifetime': { title: "Lifetime Ultimate", price: 1499, duration: "One-Time Purchase" },
     },
     'guest': {} // Guests can't subscribe
 };
@@ -64,7 +66,8 @@ export function SubscriptionModal({
   const { user, updateUserProfile } = useAuth();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState<any | null>(null);
-  const [selectedDept, setSelectedDept] = useState<Department>(user?.department || 'process-access');
+  const [selectedDept, setSelectedDept] = useState<Department>(user?.department && user.department !== 'guest' ? user.department : 'process-access');
+
 
   const currentPlans = departmentPlans[selectedDept] || {};
   
