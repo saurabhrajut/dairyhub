@@ -965,21 +965,37 @@ function MineralAnalysisCalc() {
 
 
 function ProteinCaseinCalc() {
+    const [activeCalc, setActiveCalc] = useState<'kjeldahl' | 'formol' | 'casein-titration' | 'casein-factor'>('kjeldahl');
+
+    const renderCalculator = () => {
+        switch (activeCalc) {
+            case 'formol': return <FormolTitrationCalc />;
+            case 'casein-titration': return <CaseinTitrationCalc />;
+            case 'casein-factor': return <CaseinFromProteinCalc />;
+            case 'kjeldahl':
+            default: return <KjeldahlProteinCalc />;
+        }
+    };
+
     return (
-        <Tabs defaultValue="kjeldahl" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 h-auto">
-                <TabsTrigger value="kjeldahl">Kjeldahl Protein</TabsTrigger>
-                <TabsTrigger value="formol">Formol Protein</TabsTrigger>
-                <TabsTrigger value="casein-titration">Casein (Titration)</TabsTrigger>
-                <TabsTrigger value="casein-factor">Casein (Factor)</TabsTrigger>
-            </TabsList>
-            <TabsContent value="kjeldahl" className="pt-4"><KjeldahlProteinCalc /></TabsContent>
-            <TabsContent value="formol" className="pt-4"><FormolTitrationCalc /></TabsContent>
-            <TabsContent value="casein-titration" className="pt-4"><CaseinTitrationCalc /></TabsContent>
-            <TabsContent value="casein-factor" className="pt-4"><CaseinFromProteinCalc /></TabsContent>
-        </Tabs>
-    )
+        <CalculatorCard title="Protein & Casein Calculators" description="Select a method to estimate protein or casein content.">
+             <div className="mb-6">
+                <Label>Select Calculator</Label>
+                <Select value={activeCalc} onValueChange={(val) => setActiveCalc(val as any)}>
+                    <SelectTrigger><SelectValue/></SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="kjeldahl">Kjeldahl Protein</SelectItem>
+                        <SelectItem value="formol">Formol Protein</SelectItem>
+                        <SelectItem value="casein-titration">Casein (Titration)</SelectItem>
+                        <SelectItem value="casein-factor">Casein (from Protein)</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
+            {renderCalculator()}
+        </CalculatorCard>
+    );
 }
+
 
 function KjeldahlProteinCalc() {
     const [sampleWeight, setSampleWeight] = useState('5');
@@ -1003,7 +1019,7 @@ function KjeldahlProteinCalc() {
     };
 
     return (
-        <CalculatorCard title="Protein Estimation (Kjeldahl Method)" description="Calculate crude protein by determining the total nitrogen content of the sample.">
+        <div title="Protein Estimation (Kjeldahl Method)" description="Calculate crude protein by determining the total nitrogen content of the sample.">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div><Label>Sample Weight (g)</Label><Input type="number" value={sampleWeight} onChange={e => setSampleWeight(e.target.value)} /></div>
                 <div><Label>Normality of HCl/H₂SO₄</Label><Input type="number" step="0.01" value={acidNormality} onChange={e => setAcidNormality(e.target.value)} /></div>
@@ -1012,7 +1028,7 @@ function KjeldahlProteinCalc() {
             </div>
             <Button onClick={calculate} className="w-full mt-4">Calculate Protein %</Button>
             {result && <Alert className="mt-4"><AlertDescription className="text-lg font-bold text-center" dangerouslySetInnerHTML={{ __html: result }} /></Alert>}
-        </CalculatorCard>
+        </div>
     );
 }
 
@@ -1035,7 +1051,7 @@ function FormolTitrationCalc() {
     };
     
     return (
-        <CalculatorCard title="Protein Estimation (Formaldehyde Titration)" description="A rapid method to estimate protein content by titrating before and after adding formaldehyde.">
+        <div title="Protein Estimation (Formaldehyde Titration)" description="A rapid method to estimate protein content by titrating before and after adding formaldehyde.">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div><Label>Initial Titre (V₁)</Label><Input type="number" value={initialTitre} onChange={e => setInitialTitre(e.target.value)} placeholder="Titre before formaldehyde" /></div>
                 <div><Label>Final Titre (V₂)</Label><Input type="number" value={finalTitre} onChange={e => setFinalTitre(e.target.value)} placeholder="Titre after formaldehyde" /></div>
@@ -1043,7 +1059,7 @@ function FormolTitrationCalc() {
             </div>
             <Button onClick={calculate} className="w-full mt-4">Calculate Protein %</Button>
             {result && <Alert className="mt-4"><AlertDescription className="text-lg font-bold text-center" dangerouslySetInnerHTML={{ __html: result }} /></Alert>}
-        </CalculatorCard>
+        </div>
     );
 }
 
@@ -1064,14 +1080,14 @@ function CaseinTitrationCalc() {
     };
 
     return (
-        <CalculatorCard title="Casein Estimation (Titration Method)" description="Calculate casein content by titrating the filtrate of milk coagulated with acetic acid.">
+        <div title="Casein Estimation (Titration Method)" description="Calculate casein content by titrating the filtrate of milk coagulated with acetic acid.">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div><Label>Sample Titre Value (ml)</Label><Input type="number" value={sampleTitre} onChange={e => setSampleTitre(e.target.value)} placeholder="e.g., 2.5" /></div>
                 <div><Label>Blank Titre Value (ml)</Label><Input type="number" value={blankTitre} onChange={e => setBlankTitre(e.target.value)} placeholder="e.g., 0.4" /></div>
             </div>
             <Button onClick={calculate} className="w-full mt-4">Calculate Casein %</Button>
             {result && <Alert className="mt-4"><AlertDescription className="text-lg font-bold text-center" dangerouslySetInnerHTML={{ __html: result }} /></Alert>}
-        </CalculatorCard>
+        </div>
     );
 }
 
@@ -1091,11 +1107,11 @@ function CaseinFromProteinCalc() {
     };
 
     return (
-        <CalculatorCard title="Casein Estimation from Total Protein" description="Quickly estimate casein content if you already know the total protein percentage of the milk.">
+        <div title="Casein Estimation from Total Protein" description="Quickly estimate casein content if you already know the total protein percentage of the milk.">
             <div><Label>Total Protein %</Label><Input type="number" value={protein} onChange={e => setProtein(e.target.value)} placeholder="e.g., 3.4" /></div>
             <Button onClick={calculate} className="w-full mt-4">Estimate Casein %</Button>
             {result && <Alert className="mt-4"><AlertDescription className="text-lg font-bold text-center" dangerouslySetInnerHTML={{ __html: result }} /></Alert>}
-        </CalculatorCard>
+        </div>
     );
 }
 
@@ -1366,5 +1382,6 @@ function SolutionStrengthCalc() {
 
 
     
+
 
 
