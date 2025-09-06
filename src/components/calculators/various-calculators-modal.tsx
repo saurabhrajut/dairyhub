@@ -54,11 +54,15 @@ const CalculatorCard = ({ title, children, description }: { title: string; child
     </div>
 );
 
-type CalculatorType = 'acidity' | 'yields' | 'paneer-yield' | 'ice-cream' | 'fat-dry' | 'gravimetric' | 'formulas' | 'cip-strength' | 'protein-casein' | 'minerals' | 'cream' | 'pricing' | 'rm-pv';
+type CalculatorType = 'acidity' | 'yields' | 'paneer-yield' | 'ice-cream' | 'fat-dry' | 'gravimetric' | 'formulas' | 'cip-strength' | 'protein-casein' | 'minerals' | 'cream' | 'pricing' | 'rm-pv' | 'peroxide-value' | 'salt-percent' | 'ffa-percent' | 'oil-percent';
 
 const calculatorsInfo = {
     'pricing': { title: "Milk Pricing", icon: DollarSign, component: MilkPricingCalculators },
     'rm-pv': { title: "RM & Polenske Value", icon: FlaskConical, component: RMPVCalc },
+    'ffa-percent': { title: "FFA % & Acid Value", icon: FlaskConical, component: FfaPercentCalc },
+    'peroxide-value': { title: "Peroxide Value", icon: FlaskConical, component: PeroxideValueCalc },
+    'salt-percent': { title: "Salt %", icon: FlaskConical, component: SaltPercentCalc },
+    'oil-percent': { title: "Oil % (Soxhlet)", icon: FlaskConical, component: OilPercentCalc },
     'acidity': { title: "Acidity", icon: Beaker, component: ProductAcidityCalc },
     'protein-casein': { title: "Protein & Casein", icon: Dna, component: ProteinCaseinCalc },
     'minerals': { title: "Minerals (Na/K)", icon: Atom, component: MineralAnalysisCalc },
@@ -88,7 +92,6 @@ export function VariousCalculatorsModal({
   return (
     <Dialog open={isOpen} onOpenChange={(open) => {
         if (!open) {
-            setIsOpen(false);
             setActiveCalculator(null); // Reset on close
         } else {
             setIsOpen(true);
@@ -137,6 +140,159 @@ export function VariousCalculatorsModal({
       </DialogContent>
     </Dialog>
   );
+}
+
+function PeroxideValueCalc() {
+    const [sampleWeight, setSampleWeight] = useState('5.0');
+    const [sampleTitre, setSampleTitre] = useState('');
+    const [blankTitre, setBlankTitre] = useState('');
+    const [normality, setNormality] = useState('0.01');
+    const [result, setResult] = useState<string | null>(null);
+
+    const calculate = () => {
+        const W = parseFloat(sampleWeight);
+        const S = parseFloat(sampleTitre);
+        const B = parseFloat(blankTitre);
+        const N = parseFloat(normality);
+        if (isNaN(W) || isNaN(S) || isNaN(B) || isNaN(N) || W <= 0) {
+            setResult("Please enter valid positive numbers for all fields.");
+            return;
+        }
+        const pv = ((S - B) * N * 1000) / W;
+        setResult(`Peroxide Value (PV): <strong>${pv.toFixed(2)} meq/kg</strong>`);
+    };
+
+    return (
+        <CalculatorCard title="Peroxide Value (PV) Calculator" description="Measures the initial stages of oxidative rancidity in fats and oils.">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div><Label>Sample Weight (g)</Label><Input type="number" value={sampleWeight} onChange={e => setSampleWeight(e.target.value)} /></div>
+                <div><Label>Normality of Sodium Thiosulphate</Label><Input type="number" step="0.001" value={normality} onChange={e => setNormality(e.target.value)} /></div>
+                <div><Label>Sample Titration Volume (S)</Label><Input type="number" value={sampleTitre} onChange={e => setSampleTitre(e.target.value)} placeholder="ml" /></div>
+                <div><Label>Blank Titration Volume (B)</Label><Input type="number" value={blankTitre} onChange={e => setBlankTitre(e.target.value)} placeholder="ml" /></div>
+            </div>
+            <Button onClick={calculate} className="w-full mt-4">Calculate Peroxide Value</Button>
+            {result && <Alert className="mt-4"><AlertDescription className="text-lg font-bold text-center" dangerouslySetInnerHTML={{ __html: result }} /></Alert>}
+        </CalculatorCard>
+    );
+}
+
+function SaltPercentCalc() {
+    const [sampleWeight, setSampleWeight] = useState('2.0');
+    const [titrantVolume, setTitrantVolume] = useState('');
+    const [normality, setNormality] = useState('0.1');
+    const [result, setResult] = useState<string | null>(null);
+
+    const calculate = () => {
+        const W = parseFloat(sampleWeight);
+        const V = parseFloat(titrantVolume);
+        const N = parseFloat(normality);
+        if (isNaN(W) || isNaN(V) || isNaN(N) || W <= 0) {
+            setResult("Please enter valid positive numbers for all fields.");
+            return;
+        }
+        const saltPercent = (5.845 * V * N) / W;
+        setResult(`Salt Percentage: <strong>${saltPercent.toFixed(2)}%</strong>`);
+    };
+
+    return (
+        <CalculatorCard title="Salt % Calculator" description="Calculate salt percentage using titration with silver nitrate.">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div><Label>Sample Weight (g)</Label><Input type="number" value={sampleWeight} onChange={e => setSampleWeight(e.target.value)} /></div>
+                <div><Label>Volume of AgNO₃ Used (V)</Label><Input type="number" value={titrantVolume} onChange={e => setTitrantVolume(e.target.value)} placeholder="ml" /></div>
+                <div><Label>Normality of AgNO₃ (N)</Label><Input type="number" step="0.01" value={normality} onChange={e => setNormality(e.target.value)} /></div>
+            </div>
+            <Button onClick={calculate} className="w-full mt-4">Calculate Salt %</Button>
+            {result && <Alert className="mt-4"><AlertDescription className="text-lg font-bold text-center" dangerouslySetInnerHTML={{ __html: result }} /></Alert>}
+        </CalculatorCard>
+    );
+}
+
+function FfaPercentCalc() {
+    const [sampleWeight, setSampleWeight] = useState('15.0');
+    const [titrantVolume, setTitrantVolume] = useState('');
+    const [normality, setNormality] = useState('0.1');
+    const [result, setResult] = useState<{ ffa: string, acidValue: string } | null>(null);
+
+    const calculate = () => {
+        const W = parseFloat(sampleWeight);
+        const V = parseFloat(titrantVolume);
+        const N = parseFloat(normality);
+        if (isNaN(W) || isNaN(V) || isNaN(N) || W <= 0) {
+            setResult(null);
+            alert("Please enter valid positive numbers for all fields.");
+            return;
+        }
+        const ffaPercent = (28.2 * V * N) / W;
+        const acidValue = ffaPercent * 1.99;
+        setResult({
+            ffa: ffaPercent.toFixed(3),
+            acidValue: acidValue.toFixed(3)
+        });
+    };
+
+    return (
+        <CalculatorCard title="Free Fatty Acid (FFA) % Calculator" description="Calculate FFA as oleic acid and the corresponding Acid Value.">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div><Label>Sample Weight (g)</Label><Input type="number" value={sampleWeight} onChange={e => setSampleWeight(e.target.value)} /></div>
+                <div><Label>Volume of NaOH Used (V)</Label><Input type="number" value={titrantVolume} onChange={e => setTitrantVolume(e.target.value)} placeholder="ml" /></div>
+                <div><Label>Normality of NaOH (N)</Label><Input type="number" step="0.01" value={normality} onChange={e => setNormality(e.target.value)} /></div>
+            </div>
+            <Button onClick={calculate} className="w-full mt-4">Calculate FFA %</Button>
+            {result && (
+                <Alert className="mt-4">
+                    <AlertTitle>Results</AlertTitle>
+                    <AlertDescription className="text-lg font-bold text-center space-y-2 mt-2">
+                        <p>FFA as Oleic Acid: <strong>{result.ffa}%</strong></p>
+                        <p>Acid Value: <strong>{result.acidValue}</strong></p>
+                    </AlertDescription>
+                </Alert>
+            )}
+        </CalculatorCard>
+    );
+}
+
+function OilPercentCalc() {
+    const [w1, setW1] = useState(''); // Empty thimble
+    const [w2, setW2] = useState(''); // Thimble + Sample
+    const [w4, setW4] = useState(''); // Empty RBF
+    const [w5, setW5] = useState(''); // RBF + Oil
+    const [result, setResult] = useState<string | null>(null);
+
+    const calculate = () => {
+        const numW1 = parseFloat(w1);
+        const numW2 = parseFloat(w2);
+        const numW4 = parseFloat(w4);
+        const numW5 = parseFloat(w5);
+
+        if ([numW1, numW2, numW4, numW5].some(isNaN)) {
+             setResult("Please enter valid numbers for all weights.");
+            return;
+        }
+
+        const w3 = numW2 - numW1; // Sample Weight
+        const w6 = numW5 - numW4; // Oil Weight
+
+        if (w3 <= 0 || w6 < 0) {
+            setResult("Invalid weights. Please check your inputs.");
+            return;
+        }
+        
+        const fatPercent = (w6 * 100) / w3;
+        setResult(`Oil/Fat Percentage: <strong>${fatPercent.toFixed(2)}%</strong>`);
+    };
+
+    return (
+        <CalculatorCard title="Oil % Calculator (Soxhlet Method)" description="Calculate oil/fat percentage using weights from the Soxhlet extraction method.">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div><Label>Weight of Empty Thimble (W1)</Label><Input type="number" value={w1} onChange={e => setW1(e.target.value)} placeholder="g" /></div>
+                <div><Label>Weight of Thimble + Sample (W2)</Label><Input type="number" value={w2} onChange={e => setW2(e.target.value)} placeholder="g" /></div>
+                <div><Label>Weight of Empty R.B. Flask (W4)</Label><Input type="number" value={w4} onChange={e => setW4(e.target.value)} placeholder="g" /></div>
+                <div><Label>Weight of Flask + Extracted Oil (W5)</Label><Input type="number" value={w5} onChange={e => setW5(e.target.value)} placeholder="g" /></div>
+            </div>
+            <Button onClick={calculate} className="w-full mt-4">Calculate Oil %</Button>
+            {result && <Alert className="mt-4"><AlertDescription className="text-lg font-bold text-center" dangerouslySetInnerHTML={{ __html: result }} /></Alert>}
+        </CalculatorCard>
+    );
 }
 
 function MilkPricingCalculators() {
