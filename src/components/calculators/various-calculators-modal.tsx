@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import { useState, useMemo, memo, useCallback } from "react";
@@ -125,23 +124,37 @@ const CalculatorCard = ({ title, children, description }: { title: string; child
 
 
 function ProductAcidityCalc() {
+    const [activeCalc, setActiveCalc] = useState('check');
+
+    const renderCalculator = () => {
+        switch (activeCalc) {
+            case 'maintenance':
+                return <AcidityMaintenanceCalc />;
+            case 'increase':
+                return <IncreaseAcidityCalc />;
+            case 'check':
+            default:
+                return <AcidityCheckCalc />;
+        }
+    };
+
     return (
-        <Tabs defaultValue="check" className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="check">Acidity Check</TabsTrigger>
-                <TabsTrigger value="maintenance">Acidity Maintenance</TabsTrigger>
-                <TabsTrigger value="increase">Increase Acidity</TabsTrigger>
-            </TabsList>
-            <TabsContent value="check" className="pt-4">
-                <AcidityCheckCalc />
-            </TabsContent>
-            <TabsContent value="maintenance" className="pt-4">
-                <AcidityMaintenanceCalc />
-            </TabsContent>
-            <TabsContent value="increase" className="pt-4">
-                <IncreaseAcidityCalc />
-            </TabsContent>
-        </Tabs>
+        <CalculatorCard title="Acidity Calculators" description="Select a calculator to check, decrease, or increase acidity.">
+             <div className="mb-6">
+                <Label>Select Calculator</Label>
+                <Select value={activeCalc} onValueChange={setActiveCalc}>
+                    <SelectTrigger>
+                        <SelectValue placeholder="Select a calculator" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="check">Acidity Check Calculator</SelectItem>
+                        <SelectItem value="maintenance">Acidity Maintenance Calculator (Decrease)</SelectItem>
+                        <SelectItem value="increase">Increase Acidity Calculator</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
+            {renderCalculator()}
+        </CalculatorCard>
     );
 }
 
@@ -185,7 +198,7 @@ function AcidityCheckCalc() {
     }
     
     return (
-         <CalculatorCard title="Acidity Check Calculator" description="Calculate the titratable acidity of a milk or cream sample.">
+         <div title="Acidity Check Calculator" description="Calculate the titratable acidity of a milk or cream sample.">
              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label>Select Product</Label>
@@ -211,7 +224,7 @@ function AcidityCheckCalc() {
                     <AlertDescription className="text-lg font-bold text-center" dangerouslySetInnerHTML={{ __html: result }} />
                 </Alert>
             )}
-        </CalculatorCard>
+        </div>
     );
 }
 
@@ -263,7 +276,7 @@ function AcidityMaintenanceCalc() {
 
 
     return (
-        <CalculatorCard title="Acidity Maintenance Calculator (Decrease)" description="Calculate the amount of neutralizer needed to decrease the acidity of milk.">
+        <div title="Acidity Maintenance Calculator (Decrease)" description="Calculate the amount of neutralizer needed to decrease the acidity of milk.">
              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div><Label>Milk Quantity (kg)</Label><Input name="milkQty" value={inputs.milkQty} onChange={handleInputChange}/></div>
                 <div><Label>Initial Acidity (% Lactic Acid)</Label><Input name="initialAcidity" value={inputs.initialAcidity} onChange={handleInputChange}/></div>
@@ -284,7 +297,7 @@ function AcidityMaintenanceCalc() {
                     </AlertDescription>
                 </Alert>
             )}
-        </CalculatorCard>
+        </div>
     )
 }
 
@@ -330,7 +343,7 @@ function IncreaseAcidityCalc() {
     }
 
     return (
-        <CalculatorCard title="Increase Acidity Calculator" description="Calculate the amount of acid needed to increase the acidity of milk.">
+        <div title="Increase Acidity Calculator" description="Calculate the amount of acid needed to increase the acidity of milk.">
              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div><Label>Milk Quantity (kg)</Label><Input name="milkQty" value={inputs.milkQty} onChange={handleInputChange}/></div>
                 <div><Label>Initial Acidity (% Lactic Acid)</Label><Input name="initialAcidity" value={inputs.initialAcidity} onChange={handleInputChange}/></div>
@@ -350,7 +363,7 @@ function IncreaseAcidityCalc() {
                     </AlertDescription>
                 </Alert>
             )}
-        </CalculatorCard>
+        </div>
     );
 }
 
@@ -1327,3 +1340,4 @@ function SolutionStrengthCalc() {
 
 
     
+
