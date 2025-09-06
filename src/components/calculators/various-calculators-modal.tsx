@@ -41,8 +41,7 @@ const calculatorsInfo = {
     'protein-casein': { title: "Protein & Casein", icon: Dna, component: ProteinCaseinCalc },
     'minerals': { title: "Minerals (Na/K)", icon: Atom, component: MineralAnalysisCalc },
     'cream': { title: "Cream", icon: Droplet, component: CreamCalculators },
-    'fat-dry': { title: "Fat on Dry Basis", icon: FlaskConical, component: FatOnDryBasisCalc },
-    'gravimetric': { title: "Gravimetric", icon: Weight, component: GravimetricAnalysisCalc },
+    'gravimetric': { title: "Gravimetric Analysis", icon: Weight, component: GravimetricAnalysisCalc },
     'cip-strength': { title: "CIP Strength", icon: RotateCw, component: SolutionStrengthCalc },
     'formulas': { title: "Common Formulas", icon: Calculator, component: FormulasTab },
 };
@@ -198,7 +197,7 @@ function AcidityCheckCalc() {
     }
     
     return (
-         <div title="Acidity Check Calculator" description="Calculate the titratable acidity of a milk or cream sample.">
+         <div>
              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label>Select Product</Label>
@@ -276,7 +275,7 @@ function AcidityMaintenanceCalc() {
 
 
     return (
-        <div title="Acidity Maintenance Calculator (Decrease)" description="Calculate the amount of neutralizer needed to decrease the acidity of milk.">
+        <div>
              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div><Label>Milk Quantity (kg)</Label><Input name="milkQty" value={inputs.milkQty} onChange={handleInputChange}/></div>
                 <div><Label>Initial Acidity (% Lactic Acid)</Label><Input name="initialAcidity" value={inputs.initialAcidity} onChange={handleInputChange}/></div>
@@ -343,7 +342,7 @@ function IncreaseAcidityCalc() {
     }
 
     return (
-        <div title="Increase Acidity Calculator" description="Calculate the amount of acid needed to increase the acidity of milk.">
+        <div>
              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div><Label>Milk Quantity (kg)</Label><Input name="milkQty" value={inputs.milkQty} onChange={handleInputChange}/></div>
                 <div><Label>Initial Acidity (% Lactic Acid)</Label><Input name="initialAcidity" value={inputs.initialAcidity} onChange={handleInputChange}/></div>
@@ -591,7 +590,7 @@ function RMCalcByVolume() {
     };
 
     return (
-        <div title="RM Value Calculation (By Volume)" description="Standard method assuming a 5g sample where 100ml distillate is collected.">
+        <div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div><Label>Titration Reading (ml)</Label><Input type="number" value={reading} onChange={e => setReading(e.target.value)} placeholder="e.g., 28.5" /></div>
                 <div><Label>Blank Reading (ml)</Label><Input type="number" value={blank} onChange={e => setBlank(e.target.value)} /></div>
@@ -621,7 +620,7 @@ function RMCalcByWeight() {
     };
 
     return (
-        <div title="RM Value Calculation (By Weight)" description="Use this method for higher accuracy when your sample weight is not exactly 5g.">
+        <div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div><Label>Titration Reading (ml)</Label><Input type="number" value={reading} onChange={e => setReading(e.target.value)} placeholder="e.g., 28.5" /></div>
                 <div><Label>Blank Reading (ml)</Label><Input type="number" value={blank} onChange={e => setBlank(e.target.value)} /></div>
@@ -650,7 +649,7 @@ function PVCalc() {
     };
 
     return (
-        <div title="Polenske Value (PV) Calculation" description="Measures water-insoluble volatile fatty acids, useful for detecting certain adulterants.">
+        <div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div><Label>Titration Reading (ml)</Label><Input type="number" value={reading} onChange={e => setReading(e.target.value)} placeholder="e.g., 1.5" /></div>
                 <div><Label>Blank Reading (ml)</Label><Input type="number" value={blank} onChange={e => setBlank(e.target.value)} /></div>
@@ -847,7 +846,7 @@ function CreamFatCalc() {
     };
 
     return (
-        <div title="Cream Fat % Calculator (by Milk Butyrometer)" description="Calculate the fat percentage of cream using a milk butyrometer reading.">
+        <div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div><Label>Butyrometer Reading</Label><Input type="number" value={reading} onChange={e => setReading(e.target.value)} placeholder="e.g., 8.0" /></div>
                 <div><Label>Sample Weight (g)</Label><Input type="number" value={weight} onChange={e => setWeight(e.target.value)} placeholder="e.g., 5" /></div>
@@ -879,7 +878,7 @@ function ActualCreamSnfCalc() {
     };
     
     return (
-        <div title="Actual Cream SNF % Calculator" description="Calculate the actual Solids-Not-Fat percentage of your cream.">
+        <div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div><Label>Total Solids (TS) %</Label><Input type="number" value={ts} onChange={e => setTs(e.target.value)} placeholder="e.g., 45.5" /></div>
                 <div><Label>Fat %</Label><Input type="number" value={fat} onChange={e => setFat(e.target.value)} placeholder="e.g., 40.0" /></div>
@@ -910,7 +909,7 @@ function DilutedCreamSnfCalc() {
     };
 
     return (
-        <div title="Diluted Cream SNF % Calculator" description="Calculate the final SNF percentage after diluting high-fat cream with water.">
+        <div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div><Label>Initial Cream SNF %</Label><Input type="number" value={initialSnf} onChange={e => setInitialSnf(e.target.value)} placeholder="e.g., 5.5" /></div>
                 <div><Label>Initial Cream Weight (kg)</Label><Input type="number" value={initialWeight} onChange={e => setInitialWeight(e.target.value)} placeholder="e.g., 100" /></div>
@@ -1039,7 +1038,7 @@ function KjeldahlProteinCalc() {
     };
 
     return (
-        <div title="Protein Estimation (Kjeldahl Method)" description="Calculate crude protein by determining the total nitrogen content of the sample.">
+        <div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div><Label>Sample Weight (g)</Label><Input type="number" value={sampleWeight} onChange={e => setSampleWeight(e.target.value)} /></div>
                 <div><Label>Normality of HCl/H₂SO₄</Label><Input type="number" step="0.01" value={acidNormality} onChange={e => setAcidNormality(e.target.value)} /></div>
@@ -1071,7 +1070,7 @@ function FormolTitrationCalc() {
     };
     
     return (
-        <div title="Protein Estimation (Formaldehyde Titration)" description="A rapid method to estimate protein content by titrating before and after adding formaldehyde.">
+        <div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div><Label>Initial Titre (V₁)</Label><Input type="number" value={initialTitre} onChange={e => setInitialTitre(e.target.value)} placeholder="Titre before formaldehyde" /></div>
                 <div><Label>Final Titre (V₂)</Label><Input type="number" value={finalTitre} onChange={e => setFinalTitre(e.target.value)} placeholder="Titre after formaldehyde" /></div>
@@ -1100,7 +1099,7 @@ function CaseinTitrationCalc() {
     };
 
     return (
-        <div title="Casein Estimation (Titration Method)" description="Calculate casein content by titrating the filtrate of milk coagulated with acetic acid.">
+        <div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div><Label>Sample Titre Value (ml)</Label><Input type="number" value={sampleTitre} onChange={e => setSampleTitre(e.target.value)} placeholder="e.g., 2.5" /></div>
                 <div><Label>Blank Titre Value (ml)</Label><Input type="number" value={blankTitre} onChange={e => setBlankTitre(e.target.value)} placeholder="e.g., 0.4" /></div>
@@ -1127,7 +1126,7 @@ function CaseinFromProteinCalc() {
     };
 
     return (
-        <div title="Casein Estimation from Total Protein" description="Quickly estimate casein content if you already know the total protein percentage of the milk.">
+        <div>
             <div><Label>Total Protein %</Label><Input type="number" value={protein} onChange={e => setProtein(e.target.value)} placeholder="e.g., 3.4" /></div>
             <Button onClick={calculate} className="w-full mt-4">Estimate Casein %</Button>
             {result && <Alert className="mt-4"><AlertDescription className="text-lg font-bold text-center" dangerouslySetInnerHTML={{ __html: result }} /></Alert>}
@@ -1135,40 +1134,39 @@ function CaseinFromProteinCalc() {
     );
 }
 
-function FatOnDryBasisCalc() {
-    const [fatPercent, setFatPercent] = useState('');
-    const [moisturePercent, setMoisturePercent] = useState('');
-    const [result, setResult] = useState<string | null>(null);
-    
-    const calculate = () => {
-        const fat = parseFloat(fatPercent);
-        const moisture = parseFloat(moisturePercent);
-        if (isNaN(fat) || isNaN(moisture)) {
-            setResult("Please enter valid numbers for fat and moisture.");
-            return;
+function GravimetricAnalysisCalc() {
+    const [activeCalc, setActiveCalc] = useState('moisture-ts-ash');
+
+    const renderCalculator = () => {
+        switch (activeCalc) {
+            case 'fat-on-dry-basis':
+                return <FatOnDryBasisCalc />;
+            case 'moisture-ts-ash':
+            default:
+                return <MoistureTsAshCalc />;
         }
-        if (moisture >= 100) {
-            setResult("Moisture content must be less than 100%.");
-            return;
-        }
-        const totalSolids = 100 - moisture;
-        const fatOnDryBasis = (fat / totalSolids) * 100;
-        setResult(`Fat % on Dry Basis: <strong>${fatOnDryBasis.toFixed(2)}%</strong>`);
     };
 
     return (
-         <CalculatorCard title="Fat % on Dry Basis Calculator" description="Calculate the percentage of fat in the total solids of a product, a key FSSAI parameter for products like Paneer and Cheese.">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div><Label>Fat % in Product (as is)</Label><Input type="number" value={fatPercent} onChange={e => setFatPercent(e.target.value)} placeholder="e.g., 25" /></div>
-                <div><Label>Moisture % in Product</Label><Input type="number" value={moisturePercent} onChange={e => setMoisturePercent(e.target.value)} placeholder="e.g., 55" /></div>
+        <CalculatorCard title="Gravimetric Analysis" description="Select a calculator for gravimetric analysis.">
+            <div className="mb-6">
+                <Label>Select Calculator</Label>
+                <Select value={activeCalc} onValueChange={setActiveCalc}>
+                    <SelectTrigger>
+                        <SelectValue placeholder="Select a calculator" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="moisture-ts-ash">Moisture, TS & Ash</SelectItem>
+                        <SelectItem value="fat-on-dry-basis">Fat on Dry Basis</SelectItem>
+                    </SelectContent>
+                </Select>
             </div>
-            <Button onClick={calculate} className="w-full mt-4">Calculate</Button>
-            {result && <Alert className="mt-4"><AlertDescription dangerouslySetInnerHTML={{ __html: result }} /></Alert>}
+            {renderCalculator()}
         </CalculatorCard>
-    )
+    );
 }
 
-function GravimetricAnalysisCalc() {
+function MoistureTsAshCalc() {
     const [dishWeight, setDishWeight] = useState('');
     const [dishSampleWeight, setDishSampleWeight] = useState('');
     const [dishDriedWeight, setDishDriedWeight] = useState('');
@@ -1217,7 +1215,7 @@ function GravimetricAnalysisCalc() {
     }
 
     return (
-        <CalculatorCard title="Gravimetric Analysis Calculator" description="Calculate Moisture, Total Solids (TS), and Ash % using gravimetric weights.">
+        <div>
             <div className="bg-muted/50 p-4 rounded-lg space-y-3">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
@@ -1269,9 +1267,43 @@ function GravimetricAnalysisCalc() {
                     </AlertDescription>
                 </Alert>
             )}
-        </CalculatorCard>
+        </div>
     )
 }
+
+function FatOnDryBasisCalc() {
+    const [fatPercent, setFatPercent] = useState('');
+    const [moisturePercent, setMoisturePercent] = useState('');
+    const [result, setResult] = useState<string | null>(null);
+    
+    const calculate = () => {
+        const fat = parseFloat(fatPercent);
+        const moisture = parseFloat(moisturePercent);
+        if (isNaN(fat) || isNaN(moisture)) {
+            setResult("Please enter valid numbers for fat and moisture.");
+            return;
+        }
+        if (moisture >= 100) {
+            setResult("Moisture content must be less than 100%.");
+            return;
+        }
+        const totalSolids = 100 - moisture;
+        const fatOnDryBasis = (fat / totalSolids) * 100;
+        setResult(`Fat % on Dry Basis: <strong>${fatOnDryBasis.toFixed(2)}%</strong>`);
+    };
+
+    return (
+        <div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div><Label>Fat % in Product (as is)</Label><Input type="number" value={fatPercent} onChange={e => setFatPercent(e.target.value)} placeholder="e.g., 25" /></div>
+                <div><Label>Moisture % in Product</Label><Input type="number" value={moisturePercent} onChange={e => setMoisturePercent(e.target.value)} placeholder="e.g., 55" /></div>
+            </div>
+            <Button onClick={calculate} className="w-full mt-4">Calculate</Button>
+            {result && <Alert className="mt-4"><AlertDescription className="text-lg font-bold text-center" dangerouslySetInnerHTML={{ __html: result }} /></Alert>}
+        </div>
+    )
+}
+
 
 function FormulasTab() {
     return (
@@ -1402,6 +1434,7 @@ function SolutionStrengthCalc() {
 
 
     
+
 
 
 
