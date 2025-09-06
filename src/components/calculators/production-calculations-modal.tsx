@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label"
 import { componentProps } from "@/lib/utils"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { ArrowLeft, Percent, ChevronsUp, Target, Droplets, Info, Weight, Thermometer, ShieldAlert } from 'lucide-react'
+import { ArrowLeft, Percent, ChevronsUp, Target, Droplets, Info, Weight, Thermometer, ShieldAlert, Factory } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { cn } from "@/lib/utils"
@@ -23,6 +23,7 @@ import { PaneerIcon, IceCreamIcon } from "../icons";
 import { useToast } from "@/hooks/use-toast";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { PlusCircle, XCircle } from "lucide-react";
+import { Slider } from "@/components/ui/slider";
 
 interface BatchIngredient {
   id: number;
@@ -42,12 +43,13 @@ interface MixIngredient {
 }
 
 
-type CalculatorType =  'yields' | 'paneer-yield' | 'ice-cream';
+type CalculatorType =  'yields' | 'paneer-yield' | 'ice-cream' | 'plant-efficiency';
 
 const calculatorsInfo = {
     'yields': { title: "Product Yields", icon: Percent, component: YieldsCalc },
     'paneer-yield': { title: "Paneer Yield", icon: PaneerIcon, component: PaneerYieldCalc },
     'ice-cream': { title: "Ice Cream", icon: IceCreamIcon, component: IceCreamCalculators },
+    'plant-efficiency': { title: "Plant Efficiency", icon: Factory, component: PlantEfficiencyCalc },
 };
 
 export function ProductionCalculationsModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
@@ -755,6 +757,134 @@ function MixCompositionCalc() {
                     </AlertDescription>
                 </Alert>
             )}
+        </CalculatorCard>
+    );
+}
+
+function PlantEfficiencyCalc() {
+    const [inputs, setInputs] = useState({
+        actualOutput: '8000',
+        maxCapacity: '10000',
+        stdTime: '10',
+        actualTime: '12',
+        energyConsumed: '1000',
+        totalOutputEnergy: '8000',
+        totalWaste: '500',
+        totalInput: '10000',
+    });
+    
+    const [weights, setWeights] = useState({
+        capacity: 30,
+        processing: 25,
+        energy: 25,
+        waste: 20
+    });
+
+    const handleInputChange = useCallback((field: keyof typeof inputs, value: string) => {
+        setInputs(prev => ({...prev, [field]: value}));
+    }, []);
+    
+    const handleWeightChange = useCallback((field: keyof typeof weights, value: number) => {
+        setWeights(prev => ({...prev, [field]: value}));
+    }, []);
+
+    const results = useMemo(() => {
+        const capacityUtilization = (parseFloat(inputs.actualOutput) / parseFloat(inputs.maxCapacity)) * 100;
+        const processingTimeEfficiency = (parseFloat(inputs.stdTime) / parseFloat(inputs.actualTime)) * 100;
+        const energyConsumption = parseFloat(inputs.energyConsumed) / parseFloat(inputs.totalOutputEnergy);
+        const wasteGeneration = (parseFloat(inputs.totalWaste) / parseFloat(inputs.totalInput)) * 100;
+        
+        // Normalize scores to be on a 0-100 scale where higher is better
+        const capacityScore = isNaN(capacityUtilization) ? 0 : capacityUtilization;
+        const timeScore = isNaN(processingTimeEfficiency) ? 0 : processingTimeEfficiency;
+        const wasteScore = isNaN(wasteGeneration) ? 100 - wasteGeneration : 0;
+        
+        // A simple normalization for energy. Assumes 0.5 kWh/L is a poor score (0) and 0 is perfect (100).
+        const energyScore = isNaN(energyConsumption) ? 0 : Math.max(0, 100 - (energyConsumption * 200));
+
+        const totalWeight = Object.values(weights).reduce((sum, w) => sum + w, 0);
+
+        const overallEfficiency = totalWeight > 0 ? 
+            (
+                (capacityScore * weights.capacity) + 
+                (timeScore * weights.processing) + 
+                (energyScore * weights.energy) + 
+                (wasteScore * weights.waste)
+            ) / totalWeight
+            : 0;
+
+        return {
+            capacityUtilization: capacityScore,
+            processingTimeEfficiency: timeScore,
+            energyConsumption,
+            wasteGeneration,
+            overallEfficiency
+        };
+
+    }, [inputs, weights]);
+    
+
+    return (
+        <CalculatorCard title="Overall Plant Efficiency Calculator" description="Evaluate your plant's performance across key metrics.">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Inputs Section */}
+                <div className="space-y-4">
+                    <div className="p-4 border rounded-lg bg-muted/50">
+                        <h4 className="font-semibold mb-2 text-gray-700">1. Capacity Utilization</h4>
+                        <Input type="number" placeholder="Actual Output (liters)" value={inputs.actualOutput} onChange={e => handleInputChange('actualOutput', e.target.value)} />
+                        <Input type="number" placeholder="Maximum Rated Capacity (liters)" className="mt-2" value={inputs.maxCapacity} onChange={e => handleInputChange('maxCapacity', e.target.value)} />
+                        <p className="text-right mt-2 font-bold text-blue-600">Score: {results.capacityUtilization.toFixed(2)}%</p>
+                    </div>
+                     <div className="p-4 border rounded-lg bg-muted/50">
+                        <h4 className="font-semibold mb-2 text-gray-700">2. Processing Time Efficiency</h4>
+                        <Input type="number" placeholder="Standard Time (minutes)" value={inputs.stdTime} onChange={e => handleInputChange('stdTime', e.target.value)} />
+                        <Input type="number" placeholder="Actual Time (minutes)" className="mt-2" value={inputs.actualTime} onChange={e => handleInputChange('actualTime', e.target.value)} />
+                        <p className="text-right mt-2 font-bold text-blue-600">Score: {results.processingTimeEfficiency.toFixed(2)}%</p>
+                    </div>
+                     <div className="p-4 border rounded-lg bg-muted/50">
+                        <h4 className="font-semibold mb-2 text-gray-700">3. Energy Consumption</h4>
+                        <Input type="number" placeholder="Total Energy Consumed (kWh)" value={inputs.energyConsumed} onChange={e => handleInputChange('energyConsumed', e.target.value)} />
+                        <Input type="number" placeholder="Total Output (liters)" className="mt-2" value={inputs.totalOutputEnergy} onChange={e => handleInputChange('totalOutputEnergy', e.target.value)} />
+                        <p className="text-right mt-2 font-bold text-blue-600">kWh/liter: {isNaN(results.energyConsumption) ? '0.00' : results.energyConsumption.toFixed(3)}</p>
+                    </div>
+                     <div className="p-4 border rounded-lg bg-muted/50">
+                        <h4 className="font-semibold mb-2 text-gray-700">4. Waste Generation</h4>
+                        <Input type="number" placeholder="Total Waste Generated (liters)" value={inputs.totalWaste} onChange={e => handleInputChange('totalWaste', e.target.value)} />
+                        <Input type="number" placeholder="Total Input (liters)" className="mt-2" value={inputs.totalInput} onChange={e => handleInputChange('totalInput', e.target.value)} />
+                         <p className="text-right mt-2 font-bold text-blue-600">Waste: {isNaN(results.wasteGeneration) ? '0.00' : results.wasteGeneration.toFixed(2)}%</p>
+                    </div>
+                </div>
+                 {/* Weights & Results Section */}
+                 <div className="space-y-4">
+                     <div className="p-4 border rounded-lg bg-primary/10">
+                         <h4 className="font-semibold mb-4 text-gray-800">Assign Importance (Weights)</h4>
+                         <div className="space-y-4">
+                             <div>
+                                <Label>Capacity Utilization ({weights.capacity}%)</Label>
+                                <Slider defaultValue={[weights.capacity]} max={100} step={5} onValueChange={(v) => handleWeightChange('capacity', v[0])} />
+                             </div>
+                             <div>
+                                <Label>Processing Time ({weights.processing}%)</Label>
+                                <Slider defaultValue={[weights.processing]} max={100} step={5} onValueChange={(v) => handleWeightChange('processing', v[0])} />
+                             </div>
+                             <div>
+                                <Label>Energy Efficiency ({weights.energy}%)</Label>
+                                <Slider defaultValue={[weights.energy]} max={100} step={5} onValueChange={(v) => handleWeightChange('energy', v[0])} />
+                             </div>
+                             <div>
+                                <Label>Waste Generation ({weights.waste}%)</Label>
+                                <Slider defaultValue={[weights.waste]} max={100} step={5} onValueChange={(v) => handleWeightChange('waste', v[0])} />
+                             </div>
+                         </div>
+                         <Alert className="mt-4 text-center">
+                            <AlertTitle className="text-2xl font-extrabold text-green-700">Overall Plant Efficiency</AlertTitle>
+                            <AlertDescription className="text-4xl font-bold text-green-600 mt-2">
+                                {results.overallEfficiency.toFixed(2)}%
+                            </AlertDescription>
+                         </Alert>
+                     </div>
+                 </div>
+            </div>
         </CalculatorCard>
     );
 }
