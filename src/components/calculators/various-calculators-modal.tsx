@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { useState, useMemo, memo, useCallback } from "react";
@@ -90,7 +91,7 @@ export function VariousCalculatorsModal({
         ) : (
             <>
                 <DialogHeader className="p-4 sm:p-0">
-                    <DialogTitle className="text-3xl font-bold text-center font-headline">Various Calculations</DialogTitle>
+                    <DialogTitle className="text-3xl font-bold text-center font-headline">Lab Calculations</DialogTitle>
                     <DialogDescription className="text-center">Choose a calculator from the options below.</DialogDescription>
                 </DialogHeader>
                 <ScrollArea className="h-full mt-4 pr-4">
@@ -1142,3 +1143,4 @@ function SolutionStrengthCalc() {
         </CalculatorCard>
     )
 }
+

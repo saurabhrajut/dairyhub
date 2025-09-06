@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { useState } from "react";
@@ -65,6 +66,7 @@ import { useAuth } from "@/context/auth-context";
 import type { Department } from "@/context/auth-context";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import { ProductionCalculationsModal } from "./calculators/production-calculations-modal";
 
 type AccessRole = Department | 'all';
 
@@ -86,7 +88,7 @@ const topics: { id: string; title: string; description: string; category: string
   
   { id: 'std1', title: 'Standardization I', description: 'Basic Principles', category: 'milk', icon: Scale, modal: StandardizationIModal, isPro: false, color: 'from-sky-100 to-cyan-200', access: ['all'] },
   { id: 'std2', title: 'Advanced Standardization', description: 'Advanced Blending', category: 'milk', icon: Calculator, modal: StandardizationIIModal, isPro: false, color: 'from-fuchsia-100 to-purple-200', access: ['process-access', 'production-access', 'quality-access', 'all-control-access'] },
-  { id: 'production-calculations', title: 'Production Calculations', description: 'Batch & Yield Calculations', category: 'milk', icon: Combine, modal: StandardizationIIModal, isPro: true, color: 'from-violet-100 to-purple-200', access: ['process-access', 'production-access', 'all-control-access'] },
+  { id: 'production-calculations', title: 'Production Calculations', description: 'Batch & Yield Calculations', category: 'milk', icon: Combine, modal: ProductionCalculationsModal, isPro: true, color: 'from-violet-100 to-purple-200', access: ['process-access', 'production-access', 'all-control-access'] },
   { id: 'lab-calculations', title: 'Lab Calculations', description: 'Yield, Acidity, etc.', category: 'science', icon: FileSpreadsheet, badge: 'Updated', modal: VariousCalculatorsModal, isPro: false, color: 'from-orange-100 to-red-200', access: ['production-access', 'quality-access', 'all-control-access'] },
   { id: 'plant-cost', title: 'Plant Cost', description: 'Profit & Loss Calc', category: 'industry', icon: DollarSign, badge: 'Pro', modal: PlantCostModal, isPro: true, color: 'from-yellow-100 to-green-200', access: ['production-access', 'all-control-access'] },
   
