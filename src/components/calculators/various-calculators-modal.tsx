@@ -539,14 +539,40 @@ function MilkPricingCalculators() {
 }
 
 function RMPVCalc() {
+    const [activeCalc, setActiveCalc] = useState('rm-volume');
+
+    const renderCalculator = () => {
+        switch (activeCalc) {
+            case 'rm-weight':
+                return <RMCalcByWeight />;
+            case 'pv':
+                return <PVCalc />;
+            case 'rm-volume':
+            default:
+                return <RMCalcByVolume />;
+        }
+    };
+
     return (
-        <div className="space-y-6">
-            <RMCalcByVolume />
-            <RMCalcByWeight />
-            <PVCalc />
-        </div>
+        <CalculatorCard title="RM & Polenske Value Calculators" description="Select a calculator to determine RM or Polenske value.">
+             <div className="mb-6">
+                <Label>Select Calculator</Label>
+                <Select value={activeCalc} onValueChange={setActiveCalc}>
+                    <SelectTrigger>
+                        <SelectValue placeholder="Select a calculator" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="rm-volume">RM Value (By Volume)</SelectItem>
+                        <SelectItem value="rm-weight">RM Value (By Weight)</SelectItem>
+                        <SelectItem value="pv">Polenske Value</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
+            {renderCalculator()}
+        </CalculatorCard>
     );
 }
+
 
 function RMCalcByVolume() {
     const [reading, setReading] = useState('');
@@ -565,14 +591,14 @@ function RMCalcByVolume() {
     };
 
     return (
-        <CalculatorCard title="RM Value Calculation (By Volume)" description="Standard method assuming a 5g sample where 100ml distillate is collected.">
+        <div title="RM Value Calculation (By Volume)" description="Standard method assuming a 5g sample where 100ml distillate is collected.">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div><Label>Titration Reading (ml)</Label><Input type="number" value={reading} onChange={e => setReading(e.target.value)} placeholder="e.g., 28.5" /></div>
                 <div><Label>Blank Reading (ml)</Label><Input type="number" value={blank} onChange={e => setBlank(e.target.value)} /></div>
             </div>
             <Button onClick={calculate} className="w-full mt-4">Calculate RM Value</Button>
             {result && <Alert className="mt-4"><AlertDescription className="text-lg font-bold text-center" dangerouslySetInnerHTML={{ __html: result }} /></Alert>}
-        </CalculatorCard>
+        </div>
     );
 }
 
@@ -595,7 +621,7 @@ function RMCalcByWeight() {
     };
 
     return (
-        <CalculatorCard title="RM Value Calculation (By Weight)" description="Use this method for higher accuracy when your sample weight is not exactly 5g.">
+        <div title="RM Value Calculation (By Weight)" description="Use this method for higher accuracy when your sample weight is not exactly 5g.">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div><Label>Titration Reading (ml)</Label><Input type="number" value={reading} onChange={e => setReading(e.target.value)} placeholder="e.g., 28.5" /></div>
                 <div><Label>Blank Reading (ml)</Label><Input type="number" value={blank} onChange={e => setBlank(e.target.value)} /></div>
@@ -603,7 +629,7 @@ function RMCalcByWeight() {
             </div>
             <Button onClick={calculate} className="w-full mt-4">Calculate RM Value</Button>
             {result && <Alert className="mt-4"><AlertDescription className="text-lg font-bold text-center" dangerouslySetInnerHTML={{ __html: result }} /></Alert>}
-        </CalculatorCard>
+        </div>
     );
 }
 
@@ -624,14 +650,14 @@ function PVCalc() {
     };
 
     return (
-        <CalculatorCard title="Polenske Value (PV) Calculation" description="Measures water-insoluble volatile fatty acids, useful for detecting certain adulterants.">
+        <div title="Polenske Value (PV) Calculation" description="Measures water-insoluble volatile fatty acids, useful for detecting certain adulterants.">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div><Label>Titration Reading (ml)</Label><Input type="number" value={reading} onChange={e => setReading(e.target.value)} placeholder="e.g., 1.5" /></div>
                 <div><Label>Blank Reading (ml)</Label><Input type="number" value={blank} onChange={e => setBlank(e.target.value)} /></div>
             </div>
             <Button onClick={calculate} className="w-full mt-4">Calculate Polenske Value</Button>
             {result && <Alert className="mt-4"><AlertDescription className="text-lg font-bold text-center" dangerouslySetInnerHTML={{ __html: result }} /></Alert>}
-        </CalculatorCard>
+        </div>
     );
 }
 
@@ -1340,4 +1366,5 @@ function SolutionStrengthCalc() {
 
 
     
+
 
