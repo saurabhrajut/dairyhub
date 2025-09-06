@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, memo, useCallback, useEffect } from "react"
+import { useState, memo, useCallback, useEffect, useMemo } from "react"
 import {
   Dialog,
   DialogContent,
@@ -161,8 +161,8 @@ function PaneerYieldCalc() {
         const yieldPercentage = (paneerYieldKg / milkWeightKg) * 100;
 
         setTheoreticalResult(`
-            <p class="font-bold text-lg">Estimated Theoretical Yield: <span class="text-2xl text-green-700">${paneerYieldKg.toFixed(2)} kg</span></p>
-            <p class="text-sm mt-1">This is approximately a <span class="font-bold">${yieldPercentage.toFixed(2)}%</span> yield from ${qty} Litres of milk.</p>
+            <p class="font-bold text-lg">Estimated Theoretical Yield: <span class="text-2xl text-green-700">${'paneerYieldKg.toFixed(2)'} kg</span></p>
+            <p class="text-sm mt-1">This is approximately a <span class="font-bold">${'yieldPercentage.toFixed(2)'}%</span> yield from ${qty} Litres of milk.</p>
             <p class="text-xs mt-2">This is a scientific estimate based on solid recovery. Actual yield will vary.</p>
         `);
     };
@@ -182,7 +182,7 @@ function PaneerYieldCalc() {
 
         const actualYield = (paneer / milk) * 100;
         setActualResult(`
-             <p class="font-bold text-lg">Actual Yield: <span class="text-2xl text-blue-700">${actualYield.toFixed(2)}%</span></p>
+             <p class="font-bold text-lg">Actual Yield: <span class="text-2xl text-blue-700">${'actualYield.toFixed(2)'}%</span></p>
              <p class="text-sm mt-1">You obtained ${paneer} kg of paneer from ${milk} kg of milk.</p>
         `);
     };
