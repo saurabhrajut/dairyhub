@@ -1136,15 +1136,14 @@ function CaseinFromProteinCalc() {
 }
 
 function GravimetricAnalysisCalc() {
-    const [activeCalc, setActiveCalc] = useState('moisture-ts-ash');
+    const [activeCalc, setActiveCalc] = useState('moisture-ts');
 
     const renderCalculator = () => {
         switch (activeCalc) {
-            case 'fat-on-dry-basis':
-                return <FatOnDryBasisCalc />;
-            case 'moisture-ts-ash':
-            default:
-                return <MoistureTsAshCalc />;
+            case 'ash': return <AshCalc />;
+            case 'fat-on-dry-basis': return <FatOnDryBasisCalc />;
+            case 'moisture-ts':
+            default: return <MoistureTsCalc />;
         }
     };
 
@@ -1157,7 +1156,8 @@ function GravimetricAnalysisCalc() {
                         <SelectValue placeholder="Select a calculator" />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="moisture-ts-ash">Moisture, TS & Ash</SelectItem>
+                        <SelectItem value="moisture-ts">Moisture & Total Solids (TS)</SelectItem>
+                        <SelectItem value="ash">Ash Percentage</SelectItem>
                         <SelectItem value="fat-on-dry-basis">Fat on Dry Basis</SelectItem>
                     </SelectContent>
                 </Select>
@@ -1167,109 +1167,103 @@ function GravimetricAnalysisCalc() {
     );
 }
 
-function MoistureTsAshCalc() {
-    const [dishWeight, setDishWeight] = useState('');
-    const [dishSampleWeight, setDishSampleWeight] = useState('');
-    const [dishDriedWeight, setDishDriedWeight] = useState('');
-    const [dishAshWeight, setDishAshWeight] = useState('');
-    const [results, setResults] = useState<{ moisture: number; ts: number; ash?: number } | null>(null);
+function MoistureTsCalc() {
+    const [w1, setW1] = useState(''); // Empty Dish
+    const [w2, setW2] = useState(''); // Dish + Sample
+    const [w3, setW3] = useState(''); // Dish + Dried
+    const [results, setResults] = useState<{ moisture: string; ts: string } | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     const handleCalculate = () => {
-        const w1 = parseFloat(dishWeight); // Dish
-        const w2 = parseFloat(dishSampleWeight); // Dish + Sample
-        const w3 = parseFloat(dishDriedWeight); // Dish + Dried
-        const w4 = parseFloat(dishAshWeight); // Dish + Ash
+        const numW1 = parseFloat(w1);
+        const numW2 = parseFloat(w2);
+        const numW3 = parseFloat(w3);
 
         setError(null);
         setResults(null);
-
-        if (isNaN(w1) || isNaN(w2) || w2 <= w1) {
-            setError("Please enter valid weights for the dish and sample.");
+        
+        if ([numW1, numW2, numW3].some(isNaN) || numW2 <= numW1 || numW3 < numW1) {
+            setError("Please enter valid weights. W2 > W1 and W3 >= W1 must be true.");
             return;
         }
 
-        const sampleWeight = w2 - w1;
-        let moisture = NaN, ts = NaN, ash;
+        const sampleWeight = numW2 - numW1;
+        const moistureWeight = numW2 - numW3;
+        const moisture = (moistureWeight / sampleWeight) * 100;
+        const ts = 100 - moisture;
 
-        if (!isNaN(w3) && w3 >= w1) {
-            const moistureWeight = w2 - w3;
-            moisture = (moistureWeight / sampleWeight) * 100;
-            ts = 100 - moisture;
-        }
-
-        if (!isNaN(w4) && w4 >= w1) {
-            const ashWeight = w4 - w1;
-            ash = (ashWeight / sampleWeight) * 100;
-        }
-        
-        if (isNaN(moisture) && ash === undefined) {
-             setError("Please enter weight for either dried sample or ashed sample to calculate.");
-             return;
-        }
-
-        setResults({
-            moisture: !isNaN(moisture) ? moisture : 100 - ts,
-            ts: !isNaN(ts) ? ts : 100 - moisture,
-            ash: ash
-        });
-    }
+        setResults({ moisture: moisture.toFixed(2), ts: ts.toFixed(2) });
+    };
 
     return (
         <div>
             <div className="bg-muted/50 p-4 rounded-lg space-y-3">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <Label>Empty Dish Weight (g)</Label>
-                        <Input type="number" value={dishWeight} onChange={e => setDishWeight(e.target.value)} placeholder="e.g., 25.1234" />
-                    </div>
-                    <div>
-                        <Label>Dish + Sample Weight (g)</Label>
-                        <Input type="number" value={dishSampleWeight} onChange={e => setDishSampleWeight(e.target.value)} placeholder="e.g., 30.1234" />
-                    </div>
-                    <div>
-                        <Label>Dish + Dried Sample Weight (g)</Label>
-                        <Input type="number" value={dishDriedWeight} onChange={e => setDishDriedWeight(e.target.value)} placeholder="For Moisture/TS" />
-                    </div>
-                     <div>
-                        <Label>Dish + Ash Weight (g)</Label>
-                        <Input type="number" value={dishAshWeight} onChange={e => setDishAshWeight(e.target.value)} placeholder="For Ash" />
-                    </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div><Label>Empty Dish Weight (W₁)</Label><Input type="number" value={w1} onChange={e => setW1(e.target.value)} placeholder="g" /></div>
+                    <div><Label>Dish + Sample Weight (W₂)</Label><Input type="number" value={w2} onChange={e => setW2(e.target.value)} placeholder="g" /></div>
+                    <div><Label>Dish + Dried Sample Weight (W₃)</Label><Input type="number" value={w3} onChange={e => setW3(e.target.value)} placeholder="g" /></div>
                 </div>
             </div>
-            <Button onClick={handleCalculate} className="w-full mt-4">Calculate Analysis</Button>
+            <Button onClick={handleCalculate} className="w-full mt-4">Calculate Moisture & TS</Button>
             {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
             {results && (
-                <Alert className="mt-4">
+                 <Alert className="mt-4">
                     <AlertTitle>Analysis Results</AlertTitle>
                     <AlertDescription>
                         <Table>
                             <TableBody>
-                                {!isNaN(results.moisture) && (
-                                    <TableRow>
-                                        <TableCell className="font-medium">Moisture</TableCell>
-                                        <TableCell className="text-right font-bold">{results.moisture.toFixed(2)} %</TableCell>
-                                    </TableRow>
-                                )}
-                                {!isNaN(results.ts) && (
-                                     <TableRow>
-                                        <TableCell className="font-medium">Total Solids (TS)</TableCell>
-                                        <TableCell className="text-right font-bold">{results.ts.toFixed(2)} %</TableCell>
-                                    </TableRow>
-                                )}
-                                {results.ash !== undefined && (
-                                     <TableRow>
-                                        <TableCell className="font-medium">Ash</TableCell>
-                                        <TableCell className="text-right font-bold">{results.ash.toFixed(2)} %</TableCell>
-                                    </TableRow>
-                                )}
+                                 <TableRow><TableCell className="font-medium">Moisture</TableCell><TableCell className="text-right font-bold">{results.moisture} %</TableCell></TableRow>
+                                 <TableRow><TableCell className="font-medium">Total Solids (TS)</TableCell><TableCell className="text-right font-bold">{results.ts} %</TableCell></TableRow>
                             </TableBody>
                         </Table>
                     </AlertDescription>
                 </Alert>
             )}
         </div>
-    )
+    );
+}
+
+function AshCalc() {
+    const [w1, setW1] = useState(''); // Empty Crucible
+    const [w2, setW2] = useState(''); // Crucible + Sample
+    const [w3, setW3] = useState(''); // Crucible + Ash
+    const [result, setResult] = useState<string | null>(null);
+    const [error, setError] = useState<string | null>(null);
+
+    const handleCalculate = () => {
+        const numW1 = parseFloat(w1);
+        const numW2 = parseFloat(w2);
+        const numW3 = parseFloat(w3);
+        
+        setError(null);
+        setResult(null);
+
+        if ([numW1, numW2, numW3].some(isNaN) || numW2 <= numW1 || numW3 < numW1) {
+            setError("Please enter valid weights. W2 > W1 and W3 >= W1 must be true.");
+            return;
+        }
+
+        const sampleWeight = numW2 - numW1;
+        const ashWeight = numW3 - numW1;
+        const ashPercent = (ashWeight / sampleWeight) * 100;
+        
+        setResult(`Ash Percentage: <strong>${ashPercent.toFixed(2)}%</strong>`);
+    };
+
+    return (
+        <div>
+            <div className="bg-muted/50 p-4 rounded-lg space-y-3">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div><Label>Empty Crucible Weight (W₁)</Label><Input type="number" value={w1} onChange={e => setW1(e.target.value)} placeholder="g" /></div>
+                    <div><Label>Crucible + Sample Weight (W₂)</Label><Input type="number" value={w2} onChange={e => setW2(e.target.value)} placeholder="g" /></div>
+                    <div><Label>Crucible + Ash Weight (W₃)</Label><Input type="number" value={w3} onChange={e => setW3(e.target.value)} placeholder="g" /></div>
+                </div>
+            </div>
+            <Button onClick={handleCalculate} className="w-full mt-4">Calculate Ash %</Button>
+            {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
+            {result && <Alert className="mt-4"><AlertDescription className="text-lg font-bold text-center" dangerouslySetInnerHTML={{ __html: result }} /></Alert>}
+        </div>
+    );
 }
 
 function FatOnDryBasisCalc() {
