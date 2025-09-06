@@ -127,9 +127,10 @@ const CalculatorCard = ({ title, children, description }: { title: string; child
 function ProductAcidityCalc() {
     return (
         <Tabs defaultValue="check" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
+            <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="check">Acidity Check</TabsTrigger>
                 <TabsTrigger value="maintenance">Acidity Maintenance</TabsTrigger>
+                <TabsTrigger value="increase">Increase Acidity</TabsTrigger>
             </TabsList>
             <TabsContent value="check" className="pt-4">
                 <AcidityCheckCalc />
@@ -137,17 +138,34 @@ function ProductAcidityCalc() {
             <TabsContent value="maintenance" className="pt-4">
                 <AcidityMaintenanceCalc />
             </TabsContent>
+            <TabsContent value="increase" className="pt-4">
+                <IncreaseAcidityCalc />
+            </TabsContent>
         </Tabs>
     );
 }
 
+const productSampleWeights: Record<string, string> = {
+    'milk': '10.0',
+    'cream': '10.0',
+    'dahi': '10.0',
+    'butter': '10.0',
+    'other': ''
+};
+
 function AcidityCheckCalc() {
+    const [productType, setProductType] = useState('milk');
     const [inputs, setInputs] = useState({
-        sampleWeight: '10',
+        sampleWeight: productSampleWeights.milk,
         titreValue: '',
         naohNormality: '0.1'
     });
     const [result, setResult] = useState<string | null>(null);
+
+    const handleProductChange = (value: string) => {
+        setProductType(value);
+        setInputs(prev => ({...prev, sampleWeight: productSampleWeights[value] || ''}))
+    }
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setInputs(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -168,7 +186,20 @@ function AcidityCheckCalc() {
     
     return (
          <CalculatorCard title="Acidity Check Calculator" description="Calculate the titratable acidity of a milk or cream sample.">
-             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label>Select Product</Label>
+                  <Select value={productType} onValueChange={handleProductChange}>
+                    <SelectTrigger><SelectValue/></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="milk">Milk</SelectItem>
+                      <SelectItem value="cream">Cream</SelectItem>
+                      <SelectItem value="dahi">Dahi / Yoghurt</SelectItem>
+                      <SelectItem value="butter">Butter</SelectItem>
+                      <SelectItem value="other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
                 <div><Label>Sample Weight (g)</Label><Input name="sampleWeight" value={inputs.sampleWeight} onChange={handleInputChange}/></div>
                 <div><Label>Titre Value (ml of NaOH)</Label><Input name="titreValue" value={inputs.titreValue} onChange={handleInputChange}/></div>
                 <div><Label>Normality of NaOH</Label><Input name="naohNormality" value={inputs.naohNormality} onChange={handleInputChange}/></div>
@@ -232,7 +263,7 @@ function AcidityMaintenanceCalc() {
 
 
     return (
-        <CalculatorCard title="Acidity Maintenance Calculator" description="Calculate the amount of neutralizer needed to decrease the acidity of milk.">
+        <CalculatorCard title="Acidity Maintenance Calculator (Decrease)" description="Calculate the amount of neutralizer needed to decrease the acidity of milk.">
              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div><Label>Milk Quantity (kg)</Label><Input name="milkQty" value={inputs.milkQty} onChange={handleInputChange}/></div>
                 <div><Label>Initial Acidity (% Lactic Acid)</Label><Input name="initialAcidity" value={inputs.initialAcidity} onChange={handleInputChange}/></div>
@@ -255,6 +286,72 @@ function AcidityMaintenanceCalc() {
             )}
         </CalculatorCard>
     )
+}
+
+function IncreaseAcidityCalc() {
+    const [inputs, setInputs] = useState({ milkQty: "100", initialAcidity: "0.14", targetAcidity: "0.18" });
+    const [results, setResults] = useState<{ lactic: string, citric: string } | null>(null);
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setInputs(prev => ({...prev, [e.target.name]: e.target.value}));
+    };
+    
+    const calculate = () => {
+        const qty = parseFloat(inputs.milkQty);
+        const initial = parseFloat(inputs.initialAcidity);
+        const target = parseFloat(inputs.targetAcidity);
+
+        if(isNaN(qty) || isNaN(initial) || isNaN(target) || qty <= 0 || initial < 0 || target <= 0) {
+            alert("Please enter valid positive numbers for all fields.");
+            return;
+        }
+
+        if (target <= initial) {
+            alert("Target acidity must be higher than the initial acidity.");
+            return;
+        }
+
+        const acidityToIncrease = target - initial;
+        const totalLacticAcidEquivalentsKg = (acidityToIncrease / 100) * qty;
+
+        // Lactic Acid (MW: 90.08, n-factor: 1)
+        const gramsLacticAcid = totalLacticAcidEquivalentsKg * 1000; // Directly add as it's the reference
+
+        // Citric Acid (MW: 192.12, n-factor: 3)
+        // Equivalent weight of Citric Acid = 192.12 / 3 = 64.04
+        // Equivalent weight of Lactic Acid = 90.08 / 1 = 90.08
+        // Grams of Citric = Grams of Lactic * (Eq. Wt. Citric / Eq. Wt. Lactic)
+        const gramsCitricAcid = gramsLacticAcid * (64.04 / 90.08);
+
+        setResults({
+            lactic: gramsLacticAcid.toFixed(2),
+            citric: gramsCitricAcid.toFixed(2)
+        });
+    }
+
+    return (
+        <CalculatorCard title="Increase Acidity Calculator" description="Calculate the amount of acid needed to increase the acidity of milk.">
+             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div><Label>Milk Quantity (kg)</Label><Input name="milkQty" value={inputs.milkQty} onChange={handleInputChange}/></div>
+                <div><Label>Initial Acidity (% Lactic Acid)</Label><Input name="initialAcidity" value={inputs.initialAcidity} onChange={handleInputChange}/></div>
+                <div><Label>Target Acidity (% Lactic Acid)</Label><Input name="targetAcidity" value={inputs.targetAcidity} onChange={handleInputChange}/></div>
+            </div>
+            <Button onClick={calculate} className="w-full mt-4">Calculate Acid Required</Button>
+            {results && (
+                <Alert className="mt-4">
+                    <AlertTitle>Required Acid (in grams)</AlertTitle>
+                    <AlertDescription>
+                        <Table>
+                            <TableBody>
+                                <TableRow><TableCell>Lactic Acid (C₃H₆O₃)</TableCell><TableCell className="text-right font-bold text-lg">{results.lactic} g</TableCell></TableRow>
+                                <TableRow><TableCell>Citric Acid (C₆H₈O₇)</TableCell><TableCell className="text-right font-bold text-lg">{results.citric} g</TableCell></TableRow>
+                            </TableBody>
+                        </Table>
+                    </AlertDescription>
+                </Alert>
+            )}
+        </CalculatorCard>
+    );
 }
 
 function PeroxideValueCalc() {
