@@ -87,16 +87,17 @@ export function VariousCalculatorsModal({
 
   const handleBack = () => setActiveCalculator(null);
 
+  const handleOpenChange = (open: boolean) => {
+    if (!open) {
+      setActiveCalculator(null); // Reset on close
+    }
+    setIsOpen(open);
+  };
+  
   const ActiveCalculatorComponent = activeCalculator ? calculatorsInfo[activeCalculator].component : null;
   
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => {
-        if (!open) {
-            setActiveCalculator(null); // Reset on close
-        } else {
-            setIsOpen(true);
-        }
-    }}>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogContent className="max-w-4xl w-[95vw] h-full max-h-[90vh] flex flex-col p-0 sm:p-6">
         {activeCalculator && ActiveCalculatorComponent ? (
             <>
@@ -1800,3 +1801,4 @@ function SolutionStrengthCalc() {
         </CalculatorCard>
     )
 }
+
