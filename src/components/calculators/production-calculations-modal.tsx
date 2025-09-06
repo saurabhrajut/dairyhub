@@ -123,6 +123,7 @@ const CalculatorCard = ({ title, children, description }: { title: string; child
 
 
 function PaneerYieldCalc() {
+    const [activeCalc, setActiveCalc] = useState<'theoretical' | 'actual'>('theoretical');
     // State for theoretical calculation
     const [milkQtyLtr, setMilkQtyLtr] = useState('100');
     const [fatPercent, setFatPercent] = useState('6.0');
@@ -161,8 +162,8 @@ function PaneerYieldCalc() {
         const yieldPercentage = (paneerYieldKg / milkWeightKg) * 100;
 
         setTheoreticalResult(`
-            <p class="font-bold text-lg">Estimated Theoretical Yield: <span class="text-2xl text-green-700">${'paneerYieldKg.toFixed(2)'} kg</span></p>
-            <p class="text-sm mt-1">This is approximately a <span class="font-bold">${'yieldPercentage.toFixed(2)'}%</span> yield from ${qty} Litres of milk.</p>
+            <p class="font-bold text-lg">Estimated Theoretical Yield: <span class="text-2xl text-green-700">${paneerYieldKg.toFixed(2)} kg</span></p>
+            <p class="text-sm mt-1">This is approximately a <span class="font-bold">${yieldPercentage.toFixed(2)}%</span> yield from ${qty} Litres of milk.</p>
             <p class="text-xs mt-2">This is a scientific estimate based on solid recovery. Actual yield will vary.</p>
         `);
     };
@@ -182,36 +183,62 @@ function PaneerYieldCalc() {
 
         const actualYield = (paneer / milk) * 100;
         setActualResult(`
-             <p class="font-bold text-lg">Actual Yield: <span class="text-2xl text-blue-700">${'actualYield.toFixed(2)'}%</span></p>
+             <p class="font-bold text-lg">Actual Yield: <span class="text-2xl text-blue-700">${actualYield.toFixed(2)}%</span></p>
              <p class="text-sm mt-1">You obtained ${paneer} kg of paneer from ${milk} kg of milk.</p>
         `);
     };
+    
+    const renderCalculator = () => {
+        if (activeCalc === 'theoretical') {
+            return (
+                 <div>
+                    <h3 className="font-semibold text-lg text-gray-700 mb-2">Theoretical Yield</h3>
+                     <p className="text-xs text-muted-foreground mb-4">Predict paneer yield based on milk composition before production.</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div><Label>Milk Quantity (Litres)</Label><Input type="number" value={milkQtyLtr} onChange={e => setMilkQtyLtr(e.target.value)} /></div>
+                        <div><Label>Final Paneer Moisture %</Label><Input type="number" value={finalMoisture} onChange={e => setFinalMoisture(e.target.value)} /></div>
+                        <div><Label>Milk Fat %</Label><Input type="number" value={fatPercent} onChange={e => setFatPercent(e.target.value)} /></div>
+                        <div><Label>Fat Recovery %</Label><Input type="number" value={fatRecovery} onChange={e => setFatRecovery(e.target.value)} /></div>
+                        <div><Label>Milk SNF %</Label><Input type="number" value={snfPercent} onChange={e => setSnfPercent(e.target.value)} /></div>
+                        <div><Label>Casein Recovery %</Label><Input type="number" value={caseinRecovery} onChange={e => setCaseinRecovery(e.target.value)} /></div>
+                    </div>
+                    <Button onClick={handleTheoreticalCalc} className="w-full mt-4">Calculate Theoretical Yield</Button>
+                    {theoreticalResult && <Alert className="mt-4" dangerouslySetInnerHTML={{ __html: theoreticalResult }} />}
+                 </div>
+            )
+        }
+        if (activeCalc === 'actual') {
+            return (
+                <div>
+                     <h3 className="font-semibold text-lg text-gray-700 mb-2">Actual Yield</h3>
+                    <p className="text-xs text-muted-foreground mb-4">Calculate the actual yield achieved after a production batch.</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div><Label>Total Milk Used (kg)</Label><Input type="number" value={milkUsed} onChange={e => setMilkUsed(e.target.value)} placeholder="e.g., 103" /></div>
+                        <div><Label>Paneer Obtained (kg)</Label><Input type="number" value={paneerObtained} onChange={e => setPaneerObtained(e.target.value)} placeholder="e.g., 15.5" /></div>
+                    </div>
+                     <Button onClick={handleActualCalc} className="w-full mt-4">Calculate Actual Yield</Button>
+                    {actualResult && <Alert className="mt-4" dangerouslySetInnerHTML={{ __html: actualResult }} />}
+                </div>
+            )
+        }
+        return null;
+    }
 
     return (
         <CalculatorCard title="Industrial Paneer Yield Calculator">
-            <h3 className="font-semibold text-lg text-gray-700 mb-2">Theoretical Yield</h3>
-             <p className="text-xs text-muted-foreground mb-4">Predict paneer yield based on milk composition before production.</p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div><Label>Milk Quantity (Litres)</Label><Input type="number" value={milkQtyLtr} onChange={e => setMilkQtyLtr(e.target.value)} /></div>
-                <div><Label>Final Paneer Moisture %</Label><Input type="number" value={finalMoisture} onChange={e => setFinalMoisture(e.target.value)} /></div>
-                <div><Label>Milk Fat %</Label><Input type="number" value={fatPercent} onChange={e => setFatPercent(e.target.value)} /></div>
-                <div><Label>Fat Recovery %</Label><Input type="number" value={fatRecovery} onChange={e => setFatRecovery(e.target.value)} /></div>
-                <div><Label>Milk SNF %</Label><Input type="number" value={snfPercent} onChange={e => setSnfPercent(e.target.value)} /></div>
-                <div><Label>Casein Recovery %</Label><Input type="number" value={caseinRecovery} onChange={e => setCaseinRecovery(e.target.value)} /></div>
+             <div className="mb-4">
+                <Label>Select Yield Type</Label>
+                <Select value={activeCalc} onValueChange={(val) => setActiveCalc(val as any)}>
+                    <SelectTrigger><SelectValue/></SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="theoretical">Theoretical Yield</SelectItem>
+                        <SelectItem value="actual">Actual Yield</SelectItem>
+                    </SelectContent>
+                </Select>
             </div>
-            <Button onClick={handleTheoreticalCalc} className="w-full mt-4">Calculate Theoretical Yield</Button>
-            {theoreticalResult && <Alert className="mt-4" dangerouslySetInnerHTML={{ __html: theoreticalResult }} />}
-            
-            <hr className="my-6"/>
-
-            <h3 className="font-semibold text-lg text-gray-700 mb-2">Actual Yield</h3>
-            <p className="text-xs text-muted-foreground mb-4">Calculate the actual yield achieved after a production batch.</p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div><Label>Total Milk Used (kg)</Label><Input type="number" value={milkUsed} onChange={e => setMilkUsed(e.target.value)} placeholder="e.g., 103" /></div>
-                <div><Label>Paneer Obtained (kg)</Label><Input type="number" value={paneerObtained} onChange={e => setPaneerObtained(e.target.value)} placeholder="e.g., 15.5" /></div>
+            <div className="mt-4 border-t pt-4">
+                {renderCalculator()}
             </div>
-             <Button onClick={handleActualCalc} className="w-full mt-4">Calculate Actual Yield</Button>
-            {actualResult && <Alert className="mt-4" dangerouslySetInnerHTML={{ __html: actualResult }} />}
         </CalculatorCard>
     );
 }
@@ -244,7 +271,9 @@ function YieldsCalc() {
                     </SelectContent>
                 </Select>
             </div>
-            {renderCalculator()}
+             <div className="mt-4 border-t pt-4">
+                {renderCalculator()}
+            </div>
         </CalculatorCard>
     )
 }
@@ -277,7 +306,7 @@ function CreamSeparationCalc() {
     };
 
     return (
-        <div className="mt-4 border-t pt-4">
+        <div>
             <h4 className="font-semibold text-lg text-center mb-2">Cream Separation Calculator</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div><Label>Milk Quantity (kg)</Label><Input type="number" value={milkQty} onChange={e => setMilkQty(e.target.value)} /></div>
@@ -314,7 +343,7 @@ function ButterYieldCalc() {
     };
 
     return (
-        <div className="mt-4 border-t pt-4">
+        <div>
             <h4 className="font-semibold text-lg text-center mb-2">Butter Yield Calculator</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div><Label>Cream Quantity (kg)</Label><Input type="number" value={creamQty} onChange={e => setCreamQty(e.target.value)} /></div>
@@ -347,7 +376,7 @@ function KhoaYieldCalc() {
     };
 
     return (
-        <div className="mt-4 border-t pt-4">
+        <div>
             <h4 className="font-semibold text-lg text-center mb-2">Khoa Yield Calculator</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div><Label>Milk Quantity (kg)</Label><Input type="number" value={milkQty} onChange={e => setMilkQty(e.target.value)} /></div>
@@ -381,7 +410,7 @@ function ShrikhandYieldCalc() {
     };
 
     return (
-        <div className="mt-4 border-t pt-4">
+        <div>
             <h4 className="font-semibold text-lg text-center mb-2">Shrikhand Yield Calculator</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div><Label>Chakka Quantity (kg)</Label><Input type="number" value={chakkaQty} onChange={e => setChakkaQty(e.target.value)} /></div>
@@ -414,7 +443,7 @@ function PedhaBurfiYieldCalc() {
     }
 
     return (
-        <div className="mt-4 border-t pt-4">
+        <div>
             <h4 className="font-semibold text-lg text-center mb-2">Pedha / Burfi Yield Calculator</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div><Label>Khoa Quantity (kg)</Label><Input type="number" value={khoaQty} onChange={e => setKhoaQty(e.target.value)} /></div>
@@ -427,19 +456,36 @@ function PedhaBurfiYieldCalc() {
 }
 
 function IceCreamCalculators() {
+    const [activeCalc, setActiveCalc] = useState('mix-comp');
+    
+    const calculators = {
+        'mix-comp': { title: "Mix Composition", component: <MixCompositionCalc /> },
+        'batch-scaling': { title: "Batch Scaling", component: <BatchScalingCalc /> },
+        'overrun': { title: "Overrun", component: <OverrunCalc /> },
+        'freezing-point': { title: "Freezing Point", component: <FreezingPointCalc /> },
+    };
+    
+    const renderCalculator = () => {
+        return calculators[activeCalc as keyof typeof calculators]?.component || null;
+    }
+
     return (
-         <Tabs defaultValue="mix-comp" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 h-auto">
-                <TabsTrigger value="mix-comp">Mix Composition</TabsTrigger>
-                <TabsTrigger value="batch-scaling">Batch Scaling</TabsTrigger>
-                <TabsTrigger value="overrun">Overrun</TabsTrigger>
-                <TabsTrigger value="freezing-point">Freezing Point</TabsTrigger>
-            </TabsList>
-            <TabsContent value="mix-comp" className="pt-4"><MixCompositionCalc /></TabsContent>
-            <TabsContent value="batch-scaling" className="pt-4"><BatchScalingCalc /></TabsContent>
-            <TabsContent value="overrun" className="pt-4"><OverrunCalc /></TabsContent>
-            <TabsContent value="freezing-point" className="pt-4"><FreezingPointCalc /></TabsContent>
-        </Tabs>
+        <CalculatorCard title="Ice Cream Calculators">
+             <div className="mb-4">
+                <Label>Select Ice Cream Calculator</Label>
+                <Select value={activeCalc} onValueChange={setActiveCalc}>
+                    <SelectTrigger><SelectValue/></SelectTrigger>
+                    <SelectContent>
+                        {Object.entries(calculators).map(([key, { title }]) => (
+                            <SelectItem key={key} value={key}>{title}</SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            </div>
+             <div className="mt-4 border-t pt-4">
+                {renderCalculator()}
+            </div>
+        </CalculatorCard>
     )
 }
 
@@ -521,7 +567,7 @@ function BatchScalingCalc() {
     }
 
     return (
-        <CalculatorCard title="Batch Scaling Calculator (Industrial)">
+        <div>
              <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as any)}>
                 <TabsList className="grid w-full grid-cols-2">
                     <TabsTrigger value="by-weight">Scale by Weight</TabsTrigger>
@@ -593,7 +639,7 @@ function BatchScalingCalc() {
                     </AlertDescription>
                 </Alert>
             )}
-        </CalculatorCard>
+        </div>
     );
 }
 
@@ -622,14 +668,14 @@ function OverrunCalc() {
     };
     
     return (
-        <CalculatorCard title="Overrun Calculator">
+        <div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div><Label>Weight of Mix (g)</Label><Input type="number" value={mixWeight} onChange={e => setMixWeight(e.target.value)} /></div>
                 <div><Label>Weight of Same Volume of Ice Cream (g)</Label><Input type="number" value={iceCreamWeight} onChange={e => setIceCreamWeight(e.target.value)} /></div>
             </div>
             <Button onClick={calculate} className="mt-4 w-full">Calculate Overrun</Button>
             {result && <Alert className="mt-4"><AlertDescription className="text-lg font-bold">{result}</AlertDescription></Alert>}
-        </CalculatorCard>
+        </div>
     );
 }
 
@@ -669,7 +715,7 @@ function FreezingPointCalc() {
     };
 
     return (
-        <CalculatorCard title="Freezing Point Calculator" description="Estimates the freezing point based on sugars and salt in your mix.">
+        <div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div><Label>Total Water in Mix (kg)</Label><Input type="number" value={water} onChange={e => setWater(e.target.value)} /></div>
                 <div><Label>Sucrose (Sugar) (g)</Label><Input type="number" value={sucrose} onChange={e => setSucrose(e.target.value)} /></div>
@@ -678,7 +724,7 @@ function FreezingPointCalc() {
             </div>
             <Button onClick={calculate} className="mt-4 w-full">Calculate Freezing Point</Button>
             {result && <Alert className="mt-4"><AlertDescription className="text-lg font-bold">{result}</AlertDescription></Alert>}
-        </CalculatorCard>
+        </div>
     );
 }
 
@@ -732,7 +778,7 @@ function MixCompositionCalc() {
     }
 
     return (
-        <CalculatorCard title="Mix Composition Calculator" description="Enter the weight and composition of each ingredient to find the overall percentages in your mix.">
+        <div>
             <div className="space-y-4 mb-4">
                 <div className="hidden sm:grid grid-cols-[1fr_1fr_0.5fr_0.5fr_0.5fr_auto] gap-2 items-center">
                     <Label>Ingredient Name</Label>
@@ -776,7 +822,7 @@ function MixCompositionCalc() {
                     </AlertDescription>
                 </Alert>
             )}
-        </CalculatorCard>
+        </div>
     );
 }
 
