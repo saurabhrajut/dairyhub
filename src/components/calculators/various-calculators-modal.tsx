@@ -796,17 +796,37 @@ function PointBasedPricingCalc() {
 
 
 function CreamCalculators() {
+    const [activeCalc, setActiveCalc] = useState('fat-percent');
+
+    const renderCalculator = () => {
+        switch (activeCalc) {
+            case 'actual-snf':
+                return <ActualCreamSnfCalc />;
+            case 'diluted-snf':
+                return <DilutedCreamSnfCalc />;
+            case 'fat-percent':
+            default:
+                return <CreamFatCalc />;
+        }
+    };
+    
     return (
-        <Tabs defaultValue="fat-percent" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 h-auto">
-                <TabsTrigger value="fat-percent">Fat %</TabsTrigger>
-                <TabsTrigger value="actual-snf">Actual SNF</TabsTrigger>
-                <TabsTrigger value="diluted-snf">Diluted SNF</TabsTrigger>
-            </TabsList>
-            <TabsContent value="fat-percent" className="pt-4"><CreamFatCalc /></TabsContent>
-            <TabsContent value="actual-snf" className="pt-4"><ActualCreamSnfCalc /></TabsContent>
-            <TabsContent value="diluted-snf" className="pt-4"><DilutedCreamSnfCalc /></TabsContent>
-        </Tabs>
+        <CalculatorCard title="Cream Calculators" description="Select a calculator for cream-related analysis.">
+            <div className="mb-6">
+                <Label>Select Calculator</Label>
+                <Select value={activeCalc} onValueChange={setActiveCalc}>
+                    <SelectTrigger>
+                        <SelectValue placeholder="Select a calculator" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="fat-percent">Fat %</SelectItem>
+                        <SelectItem value="actual-snf">Actual SNF</SelectItem>
+                        <SelectItem value="diluted-snf">Diluted SNF</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
+            {renderCalculator()}
+        </CalculatorCard>
     );
 }
 
@@ -827,14 +847,14 @@ function CreamFatCalc() {
     };
 
     return (
-        <CalculatorCard title="Cream Fat % Calculator (by Milk Butyrometer)" description="Calculate the fat percentage of cream using a milk butyrometer reading.">
+        <div title="Cream Fat % Calculator (by Milk Butyrometer)" description="Calculate the fat percentage of cream using a milk butyrometer reading.">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div><Label>Butyrometer Reading</Label><Input type="number" value={reading} onChange={e => setReading(e.target.value)} placeholder="e.g., 8.0" /></div>
                 <div><Label>Sample Weight (g)</Label><Input type="number" value={weight} onChange={e => setWeight(e.target.value)} placeholder="e.g., 5" /></div>
             </div>
             <Button onClick={calculate} className="w-full mt-4">Calculate Fat %</Button>
             {result && <Alert className="mt-4"><AlertDescription className="text-lg font-bold text-center" dangerouslySetInnerHTML={{ __html: result }} /></Alert>}
-        </CalculatorCard>
+        </div>
     );
 }
 
@@ -859,14 +879,14 @@ function ActualCreamSnfCalc() {
     };
     
     return (
-        <CalculatorCard title="Actual Cream SNF % Calculator" description="Calculate the actual Solids-Not-Fat percentage of your cream.">
+        <div title="Actual Cream SNF % Calculator" description="Calculate the actual Solids-Not-Fat percentage of your cream.">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div><Label>Total Solids (TS) %</Label><Input type="number" value={ts} onChange={e => setTs(e.target.value)} placeholder="e.g., 45.5" /></div>
                 <div><Label>Fat %</Label><Input type="number" value={fat} onChange={e => setFat(e.target.value)} placeholder="e.g., 40.0" /></div>
             </div>
             <Button onClick={calculate} className="w-full mt-4">Calculate SNF %</Button>
             {result && <Alert className="mt-4"><AlertDescription className="text-lg font-bold text-center" dangerouslySetInnerHTML={{ __html: result }} /></Alert>}
-        </CalculatorCard>
+        </div>
     );
 }
 
@@ -890,7 +910,7 @@ function DilutedCreamSnfCalc() {
     };
 
     return (
-        <CalculatorCard title="Diluted Cream SNF % Calculator" description="Calculate the final SNF percentage after diluting high-fat cream with water.">
+        <div title="Diluted Cream SNF % Calculator" description="Calculate the final SNF percentage after diluting high-fat cream with water.">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div><Label>Initial Cream SNF %</Label><Input type="number" value={initialSnf} onChange={e => setInitialSnf(e.target.value)} placeholder="e.g., 5.5" /></div>
                 <div><Label>Initial Cream Weight (kg)</Label><Input type="number" value={initialWeight} onChange={e => setInitialWeight(e.target.value)} placeholder="e.g., 100" /></div>
@@ -898,7 +918,7 @@ function DilutedCreamSnfCalc() {
             </div>
             <Button onClick={calculate} className="w-full mt-4">Calculate Final SNF %</Button>
             {result && <Alert className="mt-4"><AlertDescription className="text-lg font-bold text-center" dangerouslySetInnerHTML={{ __html: result }} /></Alert>}
-        </CalculatorCard>
+        </div>
     );
 }
 
@@ -1382,6 +1402,7 @@ function SolutionStrengthCalc() {
 
 
     
+
 
 
 
