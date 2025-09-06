@@ -832,49 +832,73 @@ function CaseinFromProteinCalc() {
 
 
 function ProductAcidityCalc() {
-    const [product, setProduct] = useState('milk');
-    const [weight, setWeight] = useState('10');
-    const [titre, setTitre] = useState('');
-    const [normality, setNormality] = useState('0.1');
-    const [result, setResult] = useState<string | null>(null);
+    const [inputs, setInputs] = useState({ milkQty: "100", initialAcidity: "0.14", targetAcidity: "0.13" });
+    const [results, setResults] = useState<{ naoh: string, na2co3: string, nahco3: string } | null>(null);
 
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setInputs(prev => ({...prev, [e.target.name]: e.target.value}));
+    };
+    
     const calculate = () => {
-        const w = parseFloat(weight);
-        const t = parseFloat(titre);
-        const n = parseFloat(normality);
-        if (isNaN(w) || isNaN(t) || isNaN(n) || w <= 0) {
-            setResult("Please enter valid positive numbers.");
+        const qty = parseFloat(inputs.milkQty);
+        const initial = parseFloat(inputs.initialAcidity);
+        const target = parseFloat(inputs.targetAcidity);
+
+        if(isNaN(qty) || isNaN(initial) || isNaN(target) || qty <= 0 || initial <= 0 || target <= 0) {
+            alert("Please enter valid positive numbers for all fields.");
             return;
         }
-        const acidity = (t * n * 9) / w;
-        setResult(`Acidity (% Lactic Acid): ${acidity.toFixed(4)}%`);
-    };
+
+        if (initial <= target) {
+            alert("Initial acidity must be higher than the target acidity.");
+            return;
+        }
+
+        const acidityToNeutralize = initial - target;
+        const totalLacticAcidKg = (acidityToNeutralize / 100) * qty;
+
+        // Molecular weights: Lactic Acid (LA) = 90.08, NaOH = 40.00, Na2CO3 = 105.99, NaHCO3 = 84.01
+        // Reactions:
+        // LA + NaOH -> Na-Lactate + H2O (1:1 molar)
+        // 2LA + Na2CO3 -> 2Na-Lactate + H2CO3 (2:1 molar)
+        // LA + NaHCO3 -> Na-Lactate + H2CO3 (1:1 molar)
+
+        const molesLA = (totalLacticAcidKg * 1000) / 90.08;
+
+        const gramsNaOH = molesLA * 40.00;
+        const gramsNa2CO3 = (molesLA / 2) * 105.99;
+        const gramsNaHCO3 = molesLA * 84.01;
+        
+        setResults({
+            naoh: gramsNaOH.toFixed(2),
+            na2co3: gramsNa2CO3.toFixed(2),
+            nahco3: gramsNaHCO3.toFixed(2),
+        });
+    }
+
 
     return (
-        <CalculatorCard title="Dairy Product Acidity Calculator" description="Calculate the titratable acidity of various dairy products.">
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <Label>Select Product</Label>
-                    <Select value={product} onValueChange={setProduct}>
-                        <SelectTrigger><SelectValue/></SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="milk">Milk</SelectItem>
-                            <SelectItem value="cream">Cream</SelectItem>
-                            <SelectItem value="butter">Butter</SelectItem>
-                            <SelectItem value="ghee">Ghee</SelectItem>
-                            <SelectItem value="paneer">Paneer</SelectItem>
-                            <SelectItem value="dahi">Dahi / Yoghurt</SelectItem>
-                            <SelectItem value="khoa">Khoa</SelectItem>
-                            <SelectItem value="ice_cream">Ice Cream</SelectItem>
-                        </SelectContent>
-                    </Select>
-                </div>
-                 <div><Label>Sample Weight (g or ml)</Label><Input type="number" value={weight} onChange={e => setWeight(e.target.value)} /></div>
-                 <div><Label>Titre Value (ml of NaOH)</Label><Input type="number" value={titre} onChange={e => setTitre(e.target.value)} placeholder="e.g., 1.4" /></div>
-                 <div><Label>Normality of NaOH</Label><Input type="number" step="0.01" value={normality} onChange={e => setNormality(e.target.value)} /></div>
+        <CalculatorCard title="Acidity Maintenance Calculator" description="Calculate the amount of neutralizer needed to decrease the acidity of milk.">
+             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div><Label>Milk Quantity (kg)</Label><Input name="milkQty" value={inputs.milkQty} onChange={handleInputChange}/></div>
+                <div><Label>Initial Acidity (% Lactic Acid)</Label><Input name="initialAcidity" value={inputs.initialAcidity} onChange={handleInputChange}/></div>
+                <div><Label>Target Acidity (% Lactic Acid)</Label><Input name="targetAcidity" value={inputs.targetAcidity} onChange={handleInputChange}/></div>
             </div>
-            <Button onClick={calculate} className="w-full mt-4">Calculate Acidity</Button>
-            {result && <Alert className="mt-4"><AlertDescription className="text-lg font-bold text-center">{result}</AlertDescription></Alert>}
+            <Button onClick={calculate} className="w-full mt-4">Calculate Neutralizer</Button>
+            {results && (
+                <Alert className="mt-4">
+                    <AlertTitle>Required Neutralizer (in grams)</AlertTitle>
+                    <AlertDescription>
+                        <Table>
+                            <TableBody>
+                                <TableRow><TableCell>Sodium Hydroxide (NaOH)</TableCell><TableCell className="text-right font-bold text-lg">{results.naoh} g</TableCell></TableRow>
+                                <TableRow><TableCell>Sodium Carbonate (Na₂CO₃)</TableCell><TableCell className="text-right font-bold text-lg">{results.na2co3} g</TableCell></TableRow>
+                                <TableRow><TableCell>Sodium Bicarbonate (NaHCO₃)</TableCell><TableCell className="text-right font-bold text-lg">{results.nahco3} g</TableCell></TableRow>
+                            </TableBody>
+                        </Table>
+                    </AlertDescription>
+                </Alert>
+            )}
         </CalculatorCard>
     )
 }
