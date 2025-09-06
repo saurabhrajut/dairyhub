@@ -23,7 +23,7 @@ import {
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { componentProps, getSnf } from "@/lib/utils";
-import { CheckCircle, PlusCircle, XCircle, Beaker, Thermometer, Weight, Percent, Scaling, Combine, Calculator, FlaskConical, ArrowLeft, RotateCw, Dna, Atom, Droplet, DollarSign, Microscope, Recycle, Bug, ShieldCheck, FileSpreadsheet, Search, Wind, Factory } from "lucide-react";
+import { CheckCircle, PlusCircle, XCircle, Beaker, Thermometer, Weight, Percent, Scaling, Combine, Calculator, FlaskConical, ArrowLeft, RotateCw, Dna, Atom, Droplet, DollarSign, Microscope, Recycle, Bug, ShieldCheck, FileSpreadsheet, Search, Wind } from "lucide-react";
 import { PaneerIcon, IceCreamIcon } from "../icons";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -54,10 +54,11 @@ const CalculatorCard = ({ title, children, description }: { title: string; child
     </div>
 );
 
-type CalculatorType = 'acidity' | 'yields' | 'paneer-yield' | 'ice-cream' | 'fat-dry' | 'gravimetric' | 'formulas' | 'cip-strength' | 'protein-casein' | 'minerals' | 'cream' | 'pricing';
+type CalculatorType = 'acidity' | 'yields' | 'paneer-yield' | 'ice-cream' | 'fat-dry' | 'gravimetric' | 'formulas' | 'cip-strength' | 'protein-casein' | 'minerals' | 'cream' | 'pricing' | 'rm-pv';
 
 const calculatorsInfo = {
     'pricing': { title: "Milk Pricing", icon: DollarSign, component: MilkPricingCalculators },
+    'rm-pv': { title: "RM & Polenske Value", icon: FlaskConical, component: RMPVCalc },
     'acidity': { title: "Acidity", icon: Beaker, component: ProductAcidityCalc },
     'protein-casein': { title: "Protein & Casein", icon: Dna, component: ProteinCaseinCalc },
     'minerals': { title: "Minerals (Na/K)", icon: Atom, component: MineralAnalysisCalc },
@@ -154,6 +155,103 @@ function MilkPricingCalculators() {
             </TabsContent>
         </Tabs>
     )
+}
+
+function RMPVCalc() {
+    return (
+        <div className="space-y-6">
+            <RMCalcByVolume />
+            <RMCalcByWeight />
+            <PVCalc />
+        </div>
+    );
+}
+
+function RMCalcByVolume() {
+    const [reading, setReading] = useState('');
+    const [blank, setBlank] = useState('0.2');
+    const [result, setResult] = useState<string | null>(null);
+
+    const calculate = () => {
+        const r = parseFloat(reading);
+        const b = parseFloat(blank);
+        if (isNaN(r) || isNaN(b)) {
+            setResult("Please enter valid numbers for reading and blank.");
+            return;
+        }
+        const rmValue = (r - b) * 1.1;
+        setResult(`Reichert-Meissl (RM) Value: <strong>${rmValue.toFixed(2)}</strong>`);
+    };
+
+    return (
+        <CalculatorCard title="RM Value Calculation (By Volume)" description="Standard method assuming a 5g sample where 100ml distillate is collected.">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div><Label>Titration Reading (ml)</Label><Input type="number" value={reading} onChange={e => setReading(e.target.value)} placeholder="e.g., 28.5" /></div>
+                <div><Label>Blank Reading (ml)</Label><Input type="number" value={blank} onChange={e => setBlank(e.target.value)} /></div>
+            </div>
+            <Button onClick={calculate} className="w-full mt-4">Calculate RM Value</Button>
+            {result && <Alert className="mt-4"><AlertDescription className="text-lg font-bold text-center" dangerouslySetInnerHTML={{ __html: result }} /></Alert>}
+        </CalculatorCard>
+    );
+}
+
+function RMCalcByWeight() {
+    const [reading, setReading] = useState('');
+    const [blank, setBlank] = useState('0.2');
+    const [weight, setWeight] = useState('5.0');
+    const [result, setResult] = useState<string | null>(null);
+
+    const calculate = () => {
+        const r = parseFloat(reading);
+        const b = parseFloat(blank);
+        const w = parseFloat(weight);
+        if (isNaN(r) || isNaN(b) || isNaN(w) || w <= 0) {
+            setResult("Please enter valid numbers for all fields.");
+            return;
+        }
+        const rmValue = ((r - b) * 5.5) / w;
+        setResult(`Reichert-Meissl (RM) Value: <strong>${rmValue.toFixed(2)}</strong>`);
+    };
+
+    return (
+        <CalculatorCard title="RM Value Calculation (By Weight)" description="Use this method for higher accuracy when your sample weight is not exactly 5g.">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div><Label>Titration Reading (ml)</Label><Input type="number" value={reading} onChange={e => setReading(e.target.value)} placeholder="e.g., 28.5" /></div>
+                <div><Label>Blank Reading (ml)</Label><Input type="number" value={blank} onChange={e => setBlank(e.target.value)} /></div>
+                <div><Label>Sample Weight (g)</Label><Input type="number" value={weight} onChange={e => setWeight(e.target.value)} /></div>
+            </div>
+            <Button onClick={calculate} className="w-full mt-4">Calculate RM Value</Button>
+            {result && <Alert className="mt-4"><AlertDescription className="text-lg font-bold text-center" dangerouslySetInnerHTML={{ __html: result }} /></Alert>}
+        </CalculatorCard>
+    );
+}
+
+function PVCalc() {
+    const [reading, setReading] = useState('');
+    const [blank, setBlank] = useState('0.1');
+    const [result, setResult] = useState<string | null>(null);
+
+    const calculate = () => {
+        const r = parseFloat(reading);
+        const b = parseFloat(blank);
+        if (isNaN(r) || isNaN(b)) {
+            setResult("Please enter valid numbers for reading and blank.");
+            return;
+        }
+        const pvValue = r - b;
+        setResult(`Polenske Value (PV): <strong>${pvValue.toFixed(2)}</strong>`);
+    };
+
+    return (
+        <CalculatorCard title="Polenske Value (PV) Calculation" description="Measures water-insoluble volatile fatty acids, useful for detecting certain adulterants.">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div><Label>Titration Reading (ml)</Label><Input type="number" value={reading} onChange={e => setReading(e.target.value)} placeholder="e.g., 1.5" /></div>
+                <div><Label>Blank Reading (ml)</Label><Input type="number" value={blank} onChange={e => setBlank(e.target.value)} /></div>
+            </div>
+            <Button onClick={calculate} className="w-full mt-4">Calculate Polenske Value</Button>
+            {result && <Alert className="mt-4"><AlertDescription className="text-lg font-bold text-center" dangerouslySetInnerHTML={{ __html: result }} /></Alert>}
+        </CalculatorCard>
+    );
 }
 
 
