@@ -1,4 +1,5 @@
 
+      
 "use client";
 
 import { useState, useMemo, memo, useCallback } from "react";
@@ -1341,101 +1342,65 @@ function FormulasTab() {
 
 function SolutionStrengthCalc() {
     const { toast } = useToast();
-    const [naohTitre, setNaohTitre] = useState("");
-    const [naohResult, setNaohResult] = useState<string | null>(null);
+    const [activeCalc, setActiveCalc] = useState('naoh');
+    const [titreValue, setTitreValue] = useState("");
+    const [result, setResult] = useState<string | null>(null);
 
-    const [hno3Titre, setHno3Titre] = useState("");
-    const [hno3Result, setHno3Result] = useState<string | null>(null);
+    const calculatorInfo = {
+        naoh: { label: "0.1 N Acid Used (ml)", formula: (titre: number) => `Caustic Soda (NaOH): ${(titre * 0.4).toFixed(3)}%`, description: "Titrate a 10ml sample of the CIP solution with 0.1 N acid (e.g., HCl) using phenolphthalein indicator." },
+        hno3: { label: "0.1 N Base Used (ml)", formula: (titre: number) => `Nitric Acid (HNO₃): ${(titre * 0.63).toFixed(3)}%`, description: "Titrate a 10ml sample of the CIP solution with 0.1 N base (e.g., NaOH) using phenolphthalein indicator." },
+        h3po4: { label: "0.1 N Base Used (ml)", formula: (titre: number) => `Phosphoric Acid (H₃PO₄): ${(titre * 0.49).toFixed(3)}%`, description: "Titrate a 10ml sample of the CIP solution with 0.1 N base (e.g., NaOH) using phenolphthalein indicator." },
+        chlorine: { label: "0.01 N Sodium Thiosulphate Used (ml)", formula: (titre: number) => `Available Chlorine: ${(titre * 35.45).toFixed(2)} ppm`, description: "Titrate a 100ml sample of the CIP solution using the iodometric titration method with 0.01 N Sodium Thiosulphate." }
+    };
     
-    const [h3po4Titre, setH3po4Titre] = useState("");
-    const [h3po4Result, setH3po4Result] = useState<string | null>(null);
+    const currentCalc = calculatorInfo[activeCalc as keyof typeof calculatorInfo];
 
-    const [chlorineTitre, setChlorineTitre] = useState("");
-    const [chlorineResult, setChlorineResult] = useState<string | null>(null);
-
-
-    const handleCalc = (type: 'naoh' | 'hno3' | 'h3po4' | 'chlorine') => {
-        let titre, resultText;
-
-        try {
-            switch(type) {
-                case 'naoh':
-                    titre = parseFloat(naohTitre);
-                    if(isNaN(titre) || titre < 0) throw new Error("Please enter a valid titre value.");
-                    resultText = `Caustic Soda (NaOH): ${(titre * 0.4).toFixed(3)}%`;
-                    setNaohResult(resultText);
-                    break;
-                case 'hno3':
-                    titre = parseFloat(hno3Titre);
-                     if(isNaN(titre) || titre < 0) throw new Error("Please enter a valid titre value.");
-                    resultText = `Nitric Acid (HNO₃): ${(titre * 0.63).toFixed(3)}%`;
-                    setHno3Result(resultText);
-                    break;
-                case 'h3po4':
-                    titre = parseFloat(h3po4Titre);
-                     if(isNaN(titre) || titre < 0) throw new Error("Please enter a valid titre value.");
-                    // H3PO4 has n-factor of 3, but in titration often only 1 or 2 protons react. Assuming reaction to HPO4(2-), n=2.
-                    // Eq. Wt = 98/2 = 49. Strength % = Titre * N_base * Eq. Wt / (Sample_Vol * 10)
-                    resultText = `Phosphoric Acid (H₃PO₄): ${(titre * 0.49).toFixed(3)}%`;
-                    setH3po4Result(resultText);
-                    break;
-                case 'chlorine':
-                    titre = parseFloat(chlorineTitre);
-                     if(isNaN(titre) || titre < 0) throw new Error("Please enter a valid titre value.");
-                     const ppm = titre * 35.45; // V * N_thio * Eq.Wt_Cl * 1000 / Sample_Vol. For 0.01N Thio & 100ml sample, it simplifies
-                    resultText = `Available Chlorine: ${ppm.toFixed(2)} ppm`;
-                    setChlorineResult(resultText);
-                    break;
-            }
-            toast({ title: "Calculated Successfully", description: resultText });
-        } catch(e: any) {
-            toast({ variant: 'destructive', title: "Error", description: e.message });
+    const handleCalc = () => {
+        const titre = parseFloat(titreValue);
+        if (isNaN(titre) || titre < 0) {
+            toast({ variant: 'destructive', title: "Error", description: "Please enter a valid titre value." });
+            setResult(null);
+            return;
         }
+        const calcResult = currentCalc.formula(titre);
+        setResult(calcResult);
+        toast({ title: "Calculated Successfully", description: calcResult });
     }
 
-
+    const handleSelectChange = (value: string) => {
+        setActiveCalc(value);
+        setTitreValue("");
+        setResult(null);
+    }
+    
     return (
         <CalculatorCard title="CIP Solution Strength Calculator" description="Check the strength of common Cleaning-In-Place solutions.">
-             <Tabs defaultValue="naoh">
-                <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 h-auto">
-                    <TabsTrigger value="naoh">NaOH (%)</TabsTrigger>
-                    <TabsTrigger value="hno3">HNO₃ (%)</TabsTrigger>
-                    <TabsTrigger value="h3po4">H₃PO₄ (%)</TabsTrigger>
-                    <TabsTrigger value="chlorine">Chlorine (ppm)</TabsTrigger>
-                </TabsList>
-                <TabsContent value="naoh" className="pt-4">
-                    <p className="text-sm text-muted-foreground mb-4">Titrate a 10ml sample of the CIP solution with 0.1 N acid (e.g., HCl) using phenolphthalein indicator.</p>
-                    <div><Label>0.1 N Acid Used (ml)</Label><Input type="number" value={naohTitre} onChange={e => setNaohTitre(e.target.value)} placeholder="e.g., 2.5"/></div>
-                    <Button onClick={() => handleCalc('naoh')} className="w-full mt-4">Calculate NaOH %</Button>
-                    {naohResult && <Alert className="mt-4"><AlertDescription className="font-bold text-center">{naohResult}</AlertDescription></Alert>}
-                </TabsContent>
-                 <TabsContent value="hno3" className="pt-4">
-                    <p className="text-sm text-muted-foreground mb-4">Titrate a 10ml sample of the CIP solution with 0.1 N base (e.g., NaOH) using phenolphthalein indicator.</p>
-                    <div><Label>0.1 N Base Used (ml)</Label><Input type="number" value={hno3Titre} onChange={e => setHno3Titre(e.target.value)} placeholder="e.g., 1.8"/></div>
-                    <Button onClick={() => handleCalc('hno3')} className="w-full mt-4">Calculate HNO₃ %</Button>
-                    {hno3Result && <Alert className="mt-4"><AlertDescription className="font-bold text-center">{hno3Result}</AlertDescription></Alert>}
-                </TabsContent>
-                <TabsContent value="h3po4" className="pt-4">
-                    <p className="text-sm text-muted-foreground mb-4">Titrate a 10ml sample of the CIP solution with 0.1 N base (e.g., NaOH) using phenolphthalein indicator.</p>
-                    <div><Label>0.1 N Base Used (ml)</Label><Input type="number" value={h3po4Titre} onChange={e => setH3po4Titre(e.target.value)} placeholder="e.g., 2.1"/></div>
-                    <Button onClick={() => handleCalc('h3po4')} className="w-full mt-4">Calculate H₃PO₄ %</Button>
-                    {h3po4Result && <Alert className="mt-4"><AlertDescription className="font-bold text-center">{h3po4Result}</AlertDescription></Alert>}
-                </TabsContent>
-                 <TabsContent value="chlorine" className="pt-4">
-                    <p className="text-sm text-muted-foreground mb-4">Titrate a 100ml sample of the CIP solution using the iodometric titration method with 0.01 N Sodium Thiosulphate.</p>
-                    <div><Label>0.01 N Sodium Thiosulphate Used (ml)</Label><Input type="number" value={chlorineTitre} onChange={e => setChlorineTitre(e.target.value)} placeholder="e.g., 4.2"/></div>
-                    <Button onClick={() => handleCalc('chlorine')} className="w-full mt-4">Calculate Chlorine (ppm)</Button>
-                    {chlorineResult && <Alert className="mt-4"><AlertDescription className="font-bold text-center">{chlorineResult}</AlertDescription></Alert>}
-                </TabsContent>
-            </Tabs>
+             <div className="mb-6">
+                <Label>Select CIP Solution</Label>
+                <Select value={activeCalc} onValueChange={handleSelectChange}>
+                    <SelectTrigger>
+                        <SelectValue placeholder="Select a solution" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="naoh">NaOH (%)</SelectItem>
+                        <SelectItem value="hno3">HNO₃ (%)</SelectItem>
+                        <SelectItem value="h3po4">H₃PO₄ (%)</SelectItem>
+                        <SelectItem value="chlorine">Chlorine (ppm)</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
+
+            {currentCalc && (
+                <div>
+                    <p className="text-sm text-muted-foreground mb-4">{currentCalc.description}</p>
+                    <div><Label>{currentCalc.label}</Label><Input type="number" value={titreValue} onChange={e => setTitreValue(e.target.value)} placeholder="e.g., 2.5"/></div>
+                    <Button onClick={handleCalc} className="w-full mt-4">Calculate Strength</Button>
+                    {result && <Alert className="mt-4"><AlertDescription className="font-bold text-center">{result}</AlertDescription></Alert>}
+                </div>
+            )}
         </CalculatorCard>
-    )
+    );
 }
 
 
     
-
-
-
-
-
