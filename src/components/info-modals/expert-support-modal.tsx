@@ -154,7 +154,7 @@ function ChatPage({ expert, onBack }: { expert: typeof initialExperts[0], onBack
         };
         setMessages((prev) => [...prev, userMessage]);
 
-        const newHistory: Message[] = [...history, { role: 'user', content: [{ text: query }] }];
+        const newHistoryForApi: Message[] = [...history, { role: 'user', content: [{ text: query }] }];
         setInput("");
         setIsLoading(true);
 
@@ -165,7 +165,7 @@ function ChatPage({ expert, onBack }: { expert: typeof initialExperts[0], onBack
                 specialization: expert.specialization,
                 question: query,
                 language: language,
-                history: newHistory,
+                history: newHistoryForApi,
             });
 
             const assistantMessage: UIMessage = {
@@ -175,7 +175,7 @@ function ChatPage({ expert, onBack }: { expert: typeof initialExperts[0], onBack
                 lang: language,
             };
             setMessages((prev) => [...prev, assistantMessage]);
-            setHistory([...newHistory, { role: 'model', content: [{ text: response.answer }] }]);
+            setHistory([...newHistoryForApi, { role: 'model', content: [{ text: response.answer }] }]);
 
         } catch (error) {
             console.error(error);
