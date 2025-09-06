@@ -1084,26 +1084,34 @@ function FormolTitrationCalc() {
 }
 
 function CaseinTitrationCalc() {
+    const [sampleWeight, setSampleWeight] = useState('10');
     const [sampleTitre, setSampleTitre] = useState('');
-    const [blankTitre, setBlankTitre] = useState('');
+    const [blankTitre, setBlankTitre] = useState('0.1');
+    const [acidNormality, setAcidNormality] = useState('0.1');
     const [result, setResult] = useState<string | null>(null);
 
     const calculate = () => {
-        const vt = parseFloat(sampleTitre);
-        const vb = parseFloat(blankTitre);
-        if (isNaN(vt) || isNaN(vb)) {
-            setResult("Please enter valid titre values.");
+        const W = parseFloat(sampleWeight);
+        const Vs = parseFloat(sampleTitre);
+        const Vb = parseFloat(blankTitre);
+        const N = parseFloat(acidNormality);
+        if (isNaN(W) || isNaN(Vs) || isNaN(Vb) || isNaN(N) || W <= 0) {
+            setResult("Please enter valid positive numbers for all fields.");
             return;
         }
-        const caseinPercent = (vt - vb) * 1.08;
+        // Calculation based on Kjeldahl method for nitrogen content of casein precipitate
+        const nitrogenPercent = ( (Vs - Vb) * N * 1.4007 ) / W;
+        const caseinPercent = nitrogenPercent * 6.38;
         setResult(`Estimated Casein: <strong>${caseinPercent.toFixed(2)}%</strong>`);
     };
 
     return (
         <div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div><Label>Sample Weight (g)</Label><Input type="number" value={sampleWeight} onChange={e => setSampleWeight(e.target.value)} placeholder="e.g., 10" /></div>
+                <div><Label>Normality of HCl/H₂SO₄</Label><Input type="number" step="0.01" value={acidNormality} onChange={e => setAcidNormality(e.target.value)} placeholder="e.g., 0.1" /></div>
                 <div><Label>Sample Titre Value (ml)</Label><Input type="number" value={sampleTitre} onChange={e => setSampleTitre(e.target.value)} placeholder="e.g., 2.5" /></div>
-                <div><Label>Blank Titre Value (ml)</Label><Input type="number" value={blankTitre} onChange={e => setBlankTitre(e.target.value)} placeholder="e.g., 0.4" /></div>
+                <div><Label>Blank Titre Value (ml)</Label><Input type="number" value={blankTitre} onChange={e => setBlankTitre(e.target.value)} placeholder="e.g., 0.1" /></div>
             </div>
             <Button onClick={calculate} className="w-full mt-4">Calculate Casein %</Button>
             {result && <Alert className="mt-4"><AlertDescription className="text-lg font-bold text-center" dangerouslySetInnerHTML={{ __html: result }} /></Alert>}
