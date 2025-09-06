@@ -124,6 +124,139 @@ const CalculatorCard = ({ title, children, description }: { title: string; child
 );
 
 
+function ProductAcidityCalc() {
+    return (
+        <Tabs defaultValue="check" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="check">Acidity Check</TabsTrigger>
+                <TabsTrigger value="maintenance">Acidity Maintenance</TabsTrigger>
+            </TabsList>
+            <TabsContent value="check" className="pt-4">
+                <AcidityCheckCalc />
+            </TabsContent>
+            <TabsContent value="maintenance" className="pt-4">
+                <AcidityMaintenanceCalc />
+            </TabsContent>
+        </Tabs>
+    );
+}
+
+function AcidityCheckCalc() {
+    const [inputs, setInputs] = useState({
+        sampleWeight: '10',
+        titreValue: '',
+        naohNormality: '0.1'
+    });
+    const [result, setResult] = useState<string | null>(null);
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setInputs(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    };
+
+    const calculateAcidity = () => {
+        const W = parseFloat(inputs.sampleWeight);
+        const V = parseFloat(inputs.titreValue);
+        const N = parseFloat(inputs.naohNormality);
+        if (isNaN(W) || isNaN(V) || isNaN(N) || W <= 0) {
+            setResult(null);
+            alert("Please enter valid positive numbers for all fields.");
+            return;
+        }
+        const acidity = (9 * V * N) / W;
+        setResult(`Calculated Acidity: <strong>${acidity.toFixed(3)}% Lactic Acid</strong>`);
+    }
+    
+    return (
+         <CalculatorCard title="Acidity Check Calculator" description="Calculate the titratable acidity of a milk or cream sample.">
+             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div><Label>Sample Weight (g)</Label><Input name="sampleWeight" value={inputs.sampleWeight} onChange={handleInputChange}/></div>
+                <div><Label>Titre Value (ml of NaOH)</Label><Input name="titreValue" value={inputs.titreValue} onChange={handleInputChange}/></div>
+                <div><Label>Normality of NaOH</Label><Input name="naohNormality" value={inputs.naohNormality} onChange={handleInputChange}/></div>
+            </div>
+            <Button onClick={calculateAcidity} className="w-full mt-4">Calculate Acidity</Button>
+            {result && (
+                <Alert className="mt-4">
+                    <AlertTitle>Result</AlertTitle>
+                    <AlertDescription className="text-lg font-bold text-center" dangerouslySetInnerHTML={{ __html: result }} />
+                </Alert>
+            )}
+        </CalculatorCard>
+    );
+}
+
+
+function AcidityMaintenanceCalc() {
+    const [inputs, setInputs] = useState({ milkQty: "100", initialAcidity: "0.14", targetAcidity: "0.13" });
+    const [results, setResults] = useState<{ naoh: string, na2co3: string, nahco3: string } | null>(null);
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setInputs(prev => ({...prev, [e.target.name]: e.target.value}));
+    };
+    
+    const calculate = () => {
+        const qty = parseFloat(inputs.milkQty);
+        const initial = parseFloat(inputs.initialAcidity);
+        const target = parseFloat(inputs.targetAcidity);
+
+        if(isNaN(qty) || isNaN(initial) || isNaN(target) || qty <= 0 || initial <= 0 || target <= 0) {
+            alert("Please enter valid positive numbers for all fields.");
+            return;
+        }
+
+        if (initial <= target) {
+            alert("Initial acidity must be higher than the target acidity.");
+            return;
+        }
+
+        const acidityToNeutralize = initial - target;
+        const totalLacticAcidKg = (acidityToNeutralize / 100) * qty;
+
+        // Molecular weights: Lactic Acid (LA) = 90.08, NaOH = 40.00, Na2CO3 = 105.99, NaHCO3 = 84.01
+        // Reactions:
+        // LA + NaOH -> Na-Lactate + H2O (1:1 molar)
+        // 2LA + Na2CO3 -> 2Na-Lactate + H2CO3 (2:1 molar)
+        // LA + NaHCO3 -> Na-Lactate + H2CO3 (1:1 molar)
+
+        const molesLA = (totalLacticAcidKg * 1000) / 90.08;
+
+        const gramsNaOH = molesLA * 40.00;
+        const gramsNa2CO3 = (molesLA / 2) * 105.99;
+        const gramsNaHCO3 = molesLA * 84.01;
+        
+        setResults({
+            naoh: gramsNaOH.toFixed(2),
+            na2co3: gramsNa2CO3.toFixed(2),
+            nahco3: gramsNaHCO3.toFixed(2),
+        });
+    }
+
+
+    return (
+        <CalculatorCard title="Acidity Maintenance Calculator" description="Calculate the amount of neutralizer needed to decrease the acidity of milk.">
+             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div><Label>Milk Quantity (kg)</Label><Input name="milkQty" value={inputs.milkQty} onChange={handleInputChange}/></div>
+                <div><Label>Initial Acidity (% Lactic Acid)</Label><Input name="initialAcidity" value={inputs.initialAcidity} onChange={handleInputChange}/></div>
+                <div><Label>Target Acidity (% Lactic Acid)</Label><Input name="targetAcidity" value={inputs.targetAcidity} onChange={handleInputChange}/></div>
+            </div>
+            <Button onClick={calculate} className="w-full mt-4">Calculate Neutralizer</Button>
+            {results && (
+                <Alert className="mt-4">
+                    <AlertTitle>Required Neutralizer (in grams)</AlertTitle>
+                    <AlertDescription>
+                        <Table>
+                            <TableBody>
+                                <TableRow><TableCell>Sodium Hydroxide (NaOH)</TableCell><TableCell className="text-right font-bold text-lg">{results.naoh} g</TableCell></TableRow>
+                                <TableRow><TableCell>Sodium Carbonate (Na₂CO₃)</TableCell><TableCell className="text-right font-bold text-lg">{results.na2co3} g</TableCell></TableRow>
+                                <TableRow><TableCell>Sodium Bicarbonate (NaHCO₃)</TableCell><TableCell className="text-right font-bold text-lg">{results.nahco3} g</TableCell></TableRow>
+                            </TableBody>
+                        </Table>
+                    </AlertDescription>
+                </Alert>
+            )}
+        </CalculatorCard>
+    )
+}
+
 function PeroxideValueCalc() {
     const [sampleWeight, setSampleWeight] = useState('5.0');
     const [sampleTitre, setSampleTitre] = useState('');
@@ -830,79 +963,6 @@ function CaseinFromProteinCalc() {
     );
 }
 
-
-function ProductAcidityCalc() {
-    const [inputs, setInputs] = useState({ milkQty: "100", initialAcidity: "0.14", targetAcidity: "0.13" });
-    const [results, setResults] = useState<{ naoh: string, na2co3: string, nahco3: string } | null>(null);
-
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setInputs(prev => ({...prev, [e.target.name]: e.target.value}));
-    };
-    
-    const calculate = () => {
-        const qty = parseFloat(inputs.milkQty);
-        const initial = parseFloat(inputs.initialAcidity);
-        const target = parseFloat(inputs.targetAcidity);
-
-        if(isNaN(qty) || isNaN(initial) || isNaN(target) || qty <= 0 || initial <= 0 || target <= 0) {
-            alert("Please enter valid positive numbers for all fields.");
-            return;
-        }
-
-        if (initial <= target) {
-            alert("Initial acidity must be higher than the target acidity.");
-            return;
-        }
-
-        const acidityToNeutralize = initial - target;
-        const totalLacticAcidKg = (acidityToNeutralize / 100) * qty;
-
-        // Molecular weights: Lactic Acid (LA) = 90.08, NaOH = 40.00, Na2CO3 = 105.99, NaHCO3 = 84.01
-        // Reactions:
-        // LA + NaOH -> Na-Lactate + H2O (1:1 molar)
-        // 2LA + Na2CO3 -> 2Na-Lactate + H2CO3 (2:1 molar)
-        // LA + NaHCO3 -> Na-Lactate + H2CO3 (1:1 molar)
-
-        const molesLA = (totalLacticAcidKg * 1000) / 90.08;
-
-        const gramsNaOH = molesLA * 40.00;
-        const gramsNa2CO3 = (molesLA / 2) * 105.99;
-        const gramsNaHCO3 = molesLA * 84.01;
-        
-        setResults({
-            naoh: gramsNaOH.toFixed(2),
-            na2co3: gramsNa2CO3.toFixed(2),
-            nahco3: gramsNaHCO3.toFixed(2),
-        });
-    }
-
-
-    return (
-        <CalculatorCard title="Acidity Maintenance Calculator" description="Calculate the amount of neutralizer needed to decrease the acidity of milk.">
-             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div><Label>Milk Quantity (kg)</Label><Input name="milkQty" value={inputs.milkQty} onChange={handleInputChange}/></div>
-                <div><Label>Initial Acidity (% Lactic Acid)</Label><Input name="initialAcidity" value={inputs.initialAcidity} onChange={handleInputChange}/></div>
-                <div><Label>Target Acidity (% Lactic Acid)</Label><Input name="targetAcidity" value={inputs.targetAcidity} onChange={handleInputChange}/></div>
-            </div>
-            <Button onClick={calculate} className="w-full mt-4">Calculate Neutralizer</Button>
-            {results && (
-                <Alert className="mt-4">
-                    <AlertTitle>Required Neutralizer (in grams)</AlertTitle>
-                    <AlertDescription>
-                        <Table>
-                            <TableBody>
-                                <TableRow><TableCell>Sodium Hydroxide (NaOH)</TableCell><TableCell className="text-right font-bold text-lg">{results.naoh} g</TableCell></TableRow>
-                                <TableRow><TableCell>Sodium Carbonate (Na₂CO₃)</TableCell><TableCell className="text-right font-bold text-lg">{results.na2co3} g</TableCell></TableRow>
-                                <TableRow><TableCell>Sodium Bicarbonate (NaHCO₃)</TableCell><TableCell className="text-right font-bold text-lg">{results.nahco3} g</TableCell></TableRow>
-                            </TableBody>
-                        </Table>
-                    </AlertDescription>
-                </Alert>
-            )}
-        </CalculatorCard>
-    )
-}
-
 function FatOnDryBasisCalc() {
     const [fatPercent, setFatPercent] = useState('');
     const [moisturePercent, setMoisturePercent] = useState('');
@@ -1167,3 +1227,6 @@ function SolutionStrengthCalc() {
         </CalculatorCard>
     )
 }
+
+
+    
