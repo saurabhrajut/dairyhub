@@ -86,7 +86,8 @@ const topics: { id: string; title: string; description: string; category: string
   
   { id: 'std1', title: 'Standardization I', description: 'Basic Principles', category: 'milk', icon: Scale, modal: StandardizationIModal, isPro: false, color: 'from-sky-100 to-cyan-200', access: ['all'] },
   { id: 'std2', title: 'Advanced Standardization', description: 'Advanced Blending', category: 'milk', icon: Calculator, modal: StandardizationIIModal, isPro: false, color: 'from-fuchsia-100 to-purple-200', access: ['process-access', 'production-access', 'quality-access', 'all-control-access'] },
-  { id: 'various-calculations', title: 'Lab Calculations', description: 'Yield, Acidity, etc.', category: 'science', icon: FileSpreadsheet, badge: 'Updated', modal: VariousCalculatorsModal, isPro: false, color: 'from-orange-100 to-red-200', access: ['production-access', 'quality-access', 'all-control-access'] },
+  { id: 'production-calculations', title: 'Production Calculations', description: 'Batch & Yield Calculations', category: 'milk', icon: Combine, modal: StandardizationIIModal, isPro: true, color: 'from-violet-100 to-purple-200', access: ['process-access', 'production-access', 'all-control-access'] },
+  { id: 'lab-calculations', title: 'Lab Calculations', description: 'Yield, Acidity, etc.', category: 'science', icon: FileSpreadsheet, badge: 'Updated', modal: VariousCalculatorsModal, isPro: false, color: 'from-orange-100 to-red-200', access: ['production-access', 'quality-access', 'all-control-access'] },
   { id: 'plant-cost', title: 'Plant Cost', description: 'Profit & Loss Calc', category: 'industry', icon: DollarSign, badge: 'Pro', modal: PlantCostModal, isPro: true, color: 'from-yellow-100 to-green-200', access: ['production-access', 'all-control-access'] },
   
   { id: 'quality-concept', title: 'Quality Concepts', description: 'HACCP, TQM, ISO', category: 'industry', icon: CheckSquare, modal: QualityConceptModal, isPro: false, color: 'from-teal-100 to-cyan-200', access: ['quality-access', 'all-control-access'] },
@@ -102,7 +103,7 @@ const topics: { id: string; title: string; description: string; category: string
   { id: 'audits', title: 'Audits', description: 'Internal & External Audits', category: 'industry', icon: ClipboardCheck, badge: 'New', modal: AuditsModal, isPro: true, color: 'from-rose-100 to-red-200', access: ['quality-access', 'all-control-access'] },
   { id: 'validation-verification', title: 'Validation & Verification', description: 'Food Safety Assurance', category: 'industry', icon: ClipboardCheck, badge: 'New', modal: ValidationVerificationModal, isPro: true, color: 'from-violet-100 to-fuchsia-200', access: ['production-access', 'quality-access', 'all-control-access'] },
   
-  { id: 'expert-support', title: 'Expert Support', description: 'Ask AI & Real Experts', category: 'industry', icon: GraduationCap, badge: 'Pro', modal: ExpertSupportModal, isPro: true, color: 'from-amber-100 to-orange-200', access: ['quality-access', 'all-control-access'] },
+  { id: 'expert-support', title: 'Expert Support', description: 'Ask AI & Real Experts', category: 'industry', icon: GraduationCap, badge: 'Pro', modal: ExpertSupportModal, isPro: true, color: 'from-teal-100 to-emerald-200', access: ['quality-access', 'all-control-access'] },
   { id: 'about-us', title: 'About Us', description: 'Our Mission & Vision', category: 'industry', icon: Users, modal: AboutUsModal, isPro: false, color: 'from-slate-100 to-stone-200', access: ['all'] },
 ];
 
