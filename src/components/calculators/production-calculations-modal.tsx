@@ -217,21 +217,35 @@ function PaneerYieldCalc() {
 }
 
 function YieldsCalc() {
+    const [activeCalc, setActiveCalc] = useState('cream-sep');
+
+    const calculators = {
+        'cream-sep': { title: "Cream Separation", component: <CreamSeparationCalc /> },
+        'butter': { title: "Butter Yield", component: <ButterYieldCalc /> },
+        'khoa': { title: "Khoa Yield", component: <KhoaYieldCalc /> },
+        'shrikhand': { title: "Shrikhand Yield", component: <ShrikhandYieldCalc /> },
+        'pedha': { title: "Pedha/Burfi Yield", component: <PedhaBurfiYieldCalc /> },
+    };
+
+    const renderCalculator = () => {
+        return calculators[activeCalc as keyof typeof calculators]?.component || null;
+    }
+
     return (
-         <Tabs defaultValue="cream-sep" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 h-auto">
-                <TabsTrigger value="cream-sep">Cream Separation</TabsTrigger>
-                <TabsTrigger value="butter">Butter Yield</TabsTrigger>
-                <TabsTrigger value="khoa">Khoa Yield</TabsTrigger>
-                <TabsTrigger value="shrikhand">Shrikhand Yield</TabsTrigger>
-                <TabsTrigger value="pedha">Pedha/Burfi Yield</TabsTrigger>
-            </TabsList>
-            <TabsContent value="cream-sep" className="pt-4"><CreamSeparationCalc /></TabsContent>
-            <TabsContent value="butter" className="pt-4"><ButterYieldCalc /></TabsContent>
-            <TabsContent value="khoa" className="pt-4"><KhoaYieldCalc /></TabsContent>
-            <TabsContent value="shrikhand" className="pt-4"><ShrikhandYieldCalc /></TabsContent>
-            <TabsContent value="pedha" className="pt-4"><PedhaBurfiYieldCalc /></TabsContent>
-        </Tabs>
+        <CalculatorCard title="Product Yield Calculators">
+            <div className="mb-4">
+                <Label>Select Yield Calculator</Label>
+                <Select value={activeCalc} onValueChange={setActiveCalc}>
+                    <SelectTrigger><SelectValue/></SelectTrigger>
+                    <SelectContent>
+                        {Object.entries(calculators).map(([key, { title }]) => (
+                            <SelectItem key={key} value={key}>{title}</SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            </div>
+            {renderCalculator()}
+        </CalculatorCard>
     )
 }
 
@@ -263,7 +277,8 @@ function CreamSeparationCalc() {
     };
 
     return (
-        <CalculatorCard title="Cream Separation Calculator">
+        <div className="mt-4 border-t pt-4">
+            <h4 className="font-semibold text-lg text-center mb-2">Cream Separation Calculator</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div><Label>Milk Quantity (kg)</Label><Input type="number" value={milkQty} onChange={e => setMilkQty(e.target.value)} /></div>
                 <div><Label>Milk Fat %</Label><Input type="number" value={milkFat} onChange={e => setMilkFat(e.target.value)} /></div>
@@ -272,7 +287,7 @@ function CreamSeparationCalc() {
             </div>
             <Button onClick={calculate} className="w-full mt-4">Calculate</Button>
             {result && <Alert className="mt-4"><AlertDescription dangerouslySetInnerHTML={{ __html: result }} /></Alert>}
-        </CalculatorCard>
+        </div>
     )
 }
 
@@ -299,7 +314,8 @@ function ButterYieldCalc() {
     };
 
     return (
-        <CalculatorCard title="Butter Yield Calculator">
+        <div className="mt-4 border-t pt-4">
+            <h4 className="font-semibold text-lg text-center mb-2">Butter Yield Calculator</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div><Label>Cream Quantity (kg)</Label><Input type="number" value={creamQty} onChange={e => setCreamQty(e.target.value)} /></div>
                 <div><Label>Cream Fat %</Label><Input type="number" value={creamFat} onChange={e => setCreamFat(e.target.value)} /></div>
@@ -308,7 +324,7 @@ function ButterYieldCalc() {
             </div>
             <Button onClick={calculate} className="w-full mt-4">Calculate</Button>
             {result && <Alert className="mt-4"><AlertDescription dangerouslySetInnerHTML={{ __html: result }} /></Alert>}
-        </CalculatorCard>
+        </div>
     );
 }
 
@@ -331,7 +347,8 @@ function KhoaYieldCalc() {
     };
 
     return (
-         <CalculatorCard title="Khoa Yield Calculator">
+        <div className="mt-4 border-t pt-4">
+            <h4 className="font-semibold text-lg text-center mb-2">Khoa Yield Calculator</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div><Label>Milk Quantity (kg)</Label><Input type="number" value={milkQty} onChange={e => setMilkQty(e.target.value)} /></div>
                 <div><Label>Milk Total Solids %</Label><Input type="number" value={milkTS} onChange={e => setMilkTS(e.target.value)} /></div>
@@ -339,7 +356,7 @@ function KhoaYieldCalc() {
             </div>
             <Button onClick={calculate} className="w-full mt-4">Calculate</Button>
             {result && <Alert className="mt-4"><AlertDescription dangerouslySetInnerHTML={{ __html: result }} /></Alert>}
-        </CalculatorCard>
+        </div>
     );
 }
 
@@ -364,7 +381,8 @@ function ShrikhandYieldCalc() {
     };
 
     return (
-        <CalculatorCard title="Shrikhand Yield Calculator">
+        <div className="mt-4 border-t pt-4">
+            <h4 className="font-semibold text-lg text-center mb-2">Shrikhand Yield Calculator</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div><Label>Chakka Quantity (kg)</Label><Input type="number" value={chakkaQty} onChange={e => setChakkaQty(e.target.value)} /></div>
                 <div><Label>Chakka Total Solids %</Label><Input type="number" value={chakkaTS} onChange={e => setChakkaTS(e.target.value)} /></div>
@@ -372,7 +390,7 @@ function ShrikhandYieldCalc() {
             </div>
             <Button onClick={calculate} className="w-full mt-4">Calculate</Button>
             {result && <Alert className="mt-4"><AlertDescription dangerouslySetInnerHTML={{ __html: result }} /></Alert>}
-        </CalculatorCard>
+        </div>
     );
 }
 
@@ -396,14 +414,15 @@ function PedhaBurfiYieldCalc() {
     }
 
     return (
-        <CalculatorCard title="Pedha / Burfi Yield Calculator">
+        <div className="mt-4 border-t pt-4">
+            <h4 className="font-semibold text-lg text-center mb-2">Pedha / Burfi Yield Calculator</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div><Label>Khoa Quantity (kg)</Label><Input type="number" value={khoaQty} onChange={e => setKhoaQty(e.target.value)} /></div>
                 <div><Label>Sugar Added (kg)</Label><Input type="number" value={sugarAdded} onChange={e => setSugarAdded(e.target.value)} /></div>
             </div>
             <Button onClick={calculate} className="w-full mt-4">Calculate</Button>
             {result && <Alert className="mt-4"><AlertDescription dangerouslySetInnerHTML={{ __html: result }} /></Alert>}
-        </CalculatorCard>
+        </div>
     );
 }
 
@@ -889,3 +908,6 @@ function PlantEfficiencyCalc() {
     );
 }
 
+
+
+    
