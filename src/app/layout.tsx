@@ -64,12 +64,14 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.webmanifest" />
         <link rel="apple-touch-icon" href="/icon-192x192.png" />
         <meta name="theme-color" content="#ffffff" />
-      </head>
-      <body className="font-body antialiased">
-        <Script
+         <Script
             id="razorpay-checkout"
             src="https://checkout.razorpay.com/v1/checkout.js"
+            strategy="beforeInteractive"
         />
+      </head>
+      <body className="font-body antialiased">
+       
         {showSplash ? (
           <SplashScreen onFinished={() => setShowSplash(false)} />
         ) : (
