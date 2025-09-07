@@ -11,6 +11,7 @@ import { SubscriptionProvider } from '@/context/subscription-context';
 import { SplashScreen } from '@/components/splash-screen';
 import { useState, useEffect, Fragment } from 'react';
 import Script from 'next/script';
+import { Loader2 } from 'lucide-react';
 
 
 // Font configuration using next/font
@@ -51,12 +52,34 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [isClient, setIsClient] = useState(false);
   const [showSplash, setShowSplash] = useState(true);
 
   useEffect(() => {
+    setIsClient(true);
     // Add document metadata here since this is a client component
     document.title = 'Dairy Hub';
   }, []);
+
+  const renderContent = () => {
+    if (!isClient || showSplash) {
+      return <SplashScreen onFinished={() => setShowSplash(false)} />;
+    }
+    
+    return (
+      <LanguageProvider>
+        <SubscriptionProvider>
+          <AuthProvider>
+            <Fragment>
+              {children}
+              <Toaster />
+            </Fragment>
+          </AuthProvider>
+        </SubscriptionProvider>
+      </LanguageProvider>
+    );
+  };
+  
 
   return (
     <html lang="en" className={`${inter.variable} ${poppins.variable} ${spaceGrotesk.variable} ${sourceCodePro.variable} ${notoDevanagari.variable}`}>
@@ -71,21 +94,7 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body antialiased">
-       
-        {showSplash ? (
-          <SplashScreen onFinished={() => setShowSplash(false)} />
-        ) : (
-          <LanguageProvider>
-            <SubscriptionProvider>
-              <AuthProvider>
-                <Fragment>
-                  {children}
-                  <Toaster />
-                </Fragment>
-              </AuthProvider>
-            </SubscriptionProvider>
-          </LanguageProvider>
-        )}
+        {renderContent()}
       </body>
     </html>
   );
