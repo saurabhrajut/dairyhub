@@ -1,3 +1,4 @@
+
 'use client';
 
 import { createContext, useState, useContext, ReactNode, useEffect, useCallback } from 'react';
@@ -10,7 +11,7 @@ export type SubscriptionPlan = any;
 interface SubscriptionContextType {
   plan: SubscriptionPlan | null;
   expiryDate: Date | null;
-  subscribe: (plan: SubscriptionPlan, userId: string) => Promise<void>;
+  subscribe: (plan: SubscriptionPlan, userId: string, paymentId: string) => Promise<void>;
   isPro: boolean;
   loadSubscription: (userId: string) => Promise<void>;
 }
@@ -22,25 +23,28 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
   const [expiryDate, setExpiryDate] = useState<Date | null>(null);
 
   const loadSubscription = useCallback(async (userId: string) => {
-    // This function is temporarily disabled to prevent the "Missing or insufficient permissions" error on startup.
-    // The Firestore call here was likely happening before the Firebase connection was fully established or authenticated.
-    console.log("loadSubscription called for user:", userId, "but Firestore call is disabled.");
-    setPlan(null);
-    setExpiryDate(null);
-    return;
+    const subDocRef = doc(db, "users", userId, "subscription", "current");
+    const subDocSnap = await getDoc(subDocRef);
+    if (subDocSnap.exists()) {
+        const data = subDocSnap.data();
+        setPlan(data.plan);
+        setExpiryDate(data.expiryDate ? data.expiryDate.toDate() : null);
+    } else {
+        setPlan(null);
+        setExpiryDate(null);
+    }
   }, []);
 
-  const subscribe = async (newPlan: SubscriptionPlan, userId: string) => {
+  const subscribe = async (newPlan: SubscriptionPlan, userId: string, paymentId: string) => {
     const now = new Date();
     let newExpiryDate: Date | null = null;
     
-    // Simplified logic, as plan details are now in the modal
     let durationDays: number | null = null;
     if (newPlan.includes('7-days')) durationDays = 7;
     else if (newPlan.includes('1-month')) durationDays = 30;
     else if (newPlan.includes('6-months')) durationDays = 180;
     else if (newPlan.includes('yearly')) durationDays = 365;
-    else if (newPlan.includes('lifetime')) durationDays = null;
+    else if (newPlan.includes('lifetime')) durationDays = null; // Lifetime plan
     
     if (durationDays) {
         newExpiryDate = add(now, { days: durationDays });
@@ -51,14 +55,16 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
         plan: newPlan,
         startDate: serverTimestamp(),
         expiryDate: newExpiryDate,
-        status: 'active'
+        status: 'active',
+        paymentId: paymentId
     });
 
     setPlan(newPlan);
     setExpiryDate(newExpiryDate);
   };
   
-  const isPro = !!plan;
+  const isPro = !!plan && (expiryDate === null || expiryDate > new Date());
+
 
   return (
     <SubscriptionContext.Provider value={{ plan, expiryDate, subscribe, isPro, loadSubscription }}>

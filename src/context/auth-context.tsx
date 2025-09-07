@@ -122,6 +122,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = async () => {
     localStorage.removeItem(CURRENT_USER_STORAGE_KEY);
+    // Also clear subscription data on logout
+    localStorage.removeItem(`subscription-${user?.uid}`);
     setUser(null);
   };
 
@@ -145,7 +147,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const updateUserPhoto = async (file: File) => {
-    if (!user) return;
+    if (!user || user.department === 'guest') return;
 
     return new Promise((resolve, reject) => {
         const reader = new FileReader();

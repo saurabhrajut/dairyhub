@@ -1,3 +1,4 @@
+
 "use server";
 
 import { generateDairyTip } from "@/ai/flows/generate-dairy-tip";
@@ -41,13 +42,17 @@ export async function fetchLatestDairyIndustryData() {
 }
 
 export async function createRazorpayOrder(amount: number) {
+  if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
+      throw new Error('Razorpay API keys are not configured.');
+  }
+
   const instance = new Razorpay({
-    key_id: process.env.RAZORPAY_KEY_ID!,
-    key_secret: process.env.RAZORPAY_KEY_SECRET!,
+    key_id: process.env.RAZORPAY_KEY_ID,
+    key_secret: process.env.RAZORPAY_KEY_SECRET,
   });
 
   const options = {
-    amount: amount * 100, // amount in the smallest currency unit
+    amount: amount * 100, // amount in the smallest currency unit (paise)
     currency: "INR",
     receipt: `receipt_order_${new Date().getTime()}`,
   };

@@ -66,8 +66,8 @@ export default function ProfilePage() {
 
 
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (!user) {
-            toast({ variant: "destructive", title: "Action Not Allowed", description: "Please sign up to change your profile picture." });
+        if (!user || user.department === 'guest') {
+            toast({ variant: "destructive", title: "Action Not Allowed", description: "Guests cannot change their profile picture. Please sign up." });
             return;
         }
         if (event.target.files && event.target.files[0]) {
@@ -82,8 +82,8 @@ export default function ProfilePage() {
     };
     
     const handleSaveName = async () => {
-        if (!user) {
-            toast({ variant: "destructive", title: "Action Not Allowed", description: "Please sign up to change your name." });
+        if (!user || user.department === 'guest') {
+            toast({ variant: "destructive", title: "Action Not Allowed", description: "Guests cannot change their name. Please sign up." });
             setIsEditingName(false);
             return;
         }
@@ -109,11 +109,11 @@ export default function ProfilePage() {
     }
 
     const handleDepartmentChange = (dept: Department) => {
-        if (user) {
+        if (user && user.department !== 'guest') {
             updateUserProfile({ department: dept });
             toast({
                 title: "Department Updated",
-                description: `Your access has been set to ${getDepartmentName(dept)}.`,
+                description: `Your access has been set to ${getDepartmentName(dept)}. You can now view plans for this department.`,
             });
         }
     };
@@ -362,4 +362,3 @@ export default function ProfilePage() {
         </>
     );
 }
-

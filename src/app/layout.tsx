@@ -10,6 +10,8 @@ import { AuthProvider } from '@/context/auth-context';
 import { SubscriptionProvider } from '@/context/subscription-context';
 import { SplashScreen } from '@/components/splash-screen';
 import { useState, useEffect, Fragment } from 'react';
+import Script from 'next/script';
+
 
 // Font configuration using next/font
 const inter = Inter({
@@ -64,6 +66,10 @@ export default function RootLayout({
         <meta name="theme-color" content="#ffffff" />
       </head>
       <body className="font-body antialiased">
+        <Script
+            id="razorpay-checkout"
+            src="https://checkout.razorpay.com/v1/checkout.js"
+        />
         {showSplash ? (
           <SplashScreen onFinished={() => setShowSplash(false)} />
         ) : (
