@@ -2,14 +2,13 @@
 "use client";
 
 import type { Metadata } from 'next';
-import Script from 'next/script';
 import { Inter, Poppins, Source_Code_Pro, Space_Grotesk, Noto_Sans_Devanagari } from 'next/font/google';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { LanguageProvider } from '@/context/language-context';
 import { AuthProvider } from '@/context/auth-context';
 import { SubscriptionProvider } from '@/context/subscription-context';
-import { useEffect, useState, Fragment } from 'react';
+import { useEffect, useState } from 'react';
 import { SplashScreen } from '@/components/splash-screen';
 
 
@@ -64,24 +63,19 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.webmanifest" />
         <link rel="apple-touch-icon" href="/icon-192x192.png" />
         <meta name="theme-color" content="#ffffff" />
-         <Script
-            id="razorpay-checkout"
-            src="https://checkout.razorpay.com/v1/checkout.js"
-            strategy="beforeInteractive"
-        />
       </head>
       <body className="font-body antialiased">
          {showSplash ? (
           <SplashScreen onFinished={() => setShowSplash(false)} />
         ) : (
-            <LanguageProvider>
-              <SubscriptionProvider>
-                <AuthProvider>
-                  <>{children}</>
-                  <Toaster />
-                </AuthProvider>
-              </SubscriptionProvider>
-            </LanguageProvider>
+          <LanguageProvider>
+            <SubscriptionProvider>
+              <AuthProvider>
+                {children}
+                <Toaster />
+              </AuthProvider>
+            </SubscriptionProvider>
+          </LanguageProvider>
         )}
       </body>
     </html>

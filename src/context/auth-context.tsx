@@ -2,20 +2,6 @@
 "use client";
 
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
-import {
-    getAuth,
-    onAuthStateChanged,
-    signInWithEmailAndPassword,
-    createUserWithEmailAndPassword,
-    signOut,
-    updateProfile as updateFirebaseProfile,
-    signInAnonymously,
-    type User as FirebaseUser,
-    updateEmail
-} from 'firebase/auth';
-import { doc, getDoc, setDoc, serverTimestamp, updateDoc } from 'firebase/firestore';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { auth, db, storage } from '@/lib/firebase';
 import { useSubscription } from './subscription-context';
 
 export type Department = 'process-access' | 'production-access' | 'quality-access' | 'all-control-access' | 'guest';
@@ -51,135 +37,79 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const { loadSubscription } = useSubscription();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser: FirebaseUser | null) => {
-        if (firebaseUser) {
-            // User is signed in.
-            const userDocRef = doc(db, "users", firebaseUser.uid);
-            const userDocSnap = await getDoc(userDocRef);
-            
-            if (userDocSnap.exists()) {
-                const userData = userDocSnap.data();
-                const appUser: AppUser = {
-                    uid: firebaseUser.uid,
-                    email: firebaseUser.email,
-                    displayName: firebaseUser.displayName,
-                    photoURL: firebaseUser.photoURL,
-                    isAnonymous: firebaseUser.isAnonymous,
-                    gender: userData.gender,
-                    department: userData.department,
-                };
-                setUser(appUser);
-                await loadSubscription(firebaseUser.uid);
-            } else {
-                 // This case might happen for anonymous users or if doc creation failed.
-                 // We'll create a doc for them if they don't have one.
-                 const newUser: AppUser = {
-                    uid: firebaseUser.uid,
-                    email: firebaseUser.email,
-                    displayName: firebaseUser.displayName || 'Guest',
-                    photoURL: firebaseUser.photoURL,
-                    isAnonymous: firebaseUser.isAnonymous,
-                    department: 'guest',
-                    gender: 'other',
-                 };
-                 await setDoc(userDocRef, { 
-                     uid: newUser.uid,
-                     email: newUser.email,
-                     displayName: newUser.displayName,
-                     createdAt: serverTimestamp()
-                 });
-                 setUser(newUser);
-            }
-        } else {
-            // User is signed out.
-            setUser(null);
-        }
-        setLoading(false);
-    });
-
-    return () => unsubscribe();
+    // Simulate loading user from localStorage
+    const storedUser = localStorage.getItem('dairy-hub-user');
+    if (storedUser) {
+        const parsedUser = JSON.parse(storedUser);
+        setUser(parsedUser);
+        loadSubscription(parsedUser.uid);
+    }
+    setLoading(false);
   }, [loadSubscription]);
 
   const login = async (email: string, password: string) => {
-    await signInWithEmailAndPassword(auth, email, password);
+    // Mock login
+    const mockUser: AppUser = {
+        uid: 'mock-' + email,
+        email: email,
+        displayName: 'Mock User',
+        isAnonymous: false,
+        gender: 'other',
+        department: 'all-control-access'
+    };
+    localStorage.setItem('dairy-hub-user', JSON.stringify(mockUser));
+    setUser(mockUser);
+    await loadSubscription(mockUser.uid);
   };
 
   const anonymousLogin = async () => {
-     const userCredential = await signInAnonymously(auth);
-     const firebaseUser = userCredential.user;
-     const userDocRef = doc(db, "users", firebaseUser.uid);
-     
-     // Create a document in Firestore for the guest user
-     await setDoc(userDocRef, {
-        uid: firebaseUser.uid,
-        displayName: 'Guest',
+     // Mock anonymous login
+    const mockGuest: AppUser = {
+        uid: 'guest-' + Date.now(),
         email: null,
+        displayName: 'Guest',
         isAnonymous: true,
         department: 'guest',
         gender: 'other',
-        createdAt: serverTimestamp(),
-     });
+    };
+    localStorage.setItem('dairy-hub-user', JSON.stringify(mockGuest));
+    setUser(mockGuest);
+    await loadSubscription(mockGuest.uid);
   }
 
 
   const signup = async (email: string, password: string, displayName: string, gender: 'male' | 'female' | 'other', department: Department) => {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    const firebaseUser = userCredential.user;
-
-    await updateFirebaseProfile(firebaseUser, { displayName });
-
-    // Create a document in Firestore for the new user
-    const userDocRef = doc(db, "users", firebaseUser.uid);
-    await setDoc(userDocRef, {
-        uid: firebaseUser.uid,
-        displayName,
-        email,
-        gender,
-        department,
+    // Mock signup
+     const mockUser: AppUser = {
+        uid: 'mock-' + email,
+        email: email,
+        displayName: displayName,
         isAnonymous: false,
-        createdAt: serverTimestamp()
-    });
+        gender: gender,
+        department: department
+    };
+    localStorage.setItem('dairy-hub-user', JSON.stringify(mockUser));
+    setUser(mockUser);
+    await loadSubscription(mockUser.uid);
   };
 
   const logout = async () => {
-    await signOut(auth);
+    localStorage.removeItem('dairy-hub-user');
+    setUser(null);
   };
 
   const updateUserProfile = async (profileData: { displayName?: string; department?: Department, photoURL?: string }) => {
-     if (!auth.currentUser) throw new Error("No user is currently signed in.");
-     
-     const { uid } = auth.currentUser;
-     const userDocRef = doc(db, "users", uid);
-
-     const updateData: any = {};
-     if (profileData.displayName) updateData.displayName = profileData.displayName;
-     if (profileData.department) updateData.department = profileData.department;
-
-     // Update Firebase Auth profile
-     await updateFirebaseProfile(auth.currentUser, {
-         displayName: profileData.displayName || auth.currentUser.displayName,
-         photoURL: profileData.photoURL || auth.currentUser.photoURL,
-     });
-     
-     // Update Firestore document
-     if (Object.keys(updateData).length > 0) {
-        await updateDoc(userDocRef, updateData);
-     }
-
-     // Manually update local user state to reflect changes immediately
      setUser(prevUser => {
         if (!prevUser) return null;
-        return { ...prevUser, ...profileData, displayName: profileData.displayName || prevUser.displayName, photoURL: profileData.photoURL || prevUser.photoURL };
+        const updatedUser = { ...prevUser, ...profileData };
+        localStorage.setItem('dairy-hub-user', JSON.stringify(updatedUser));
+        return updatedUser;
      });
   };
   
   const updateUserPhoto = async (file: File) => {
-      if (!auth.currentUser) throw new Error("No user is currently signed in.");
-      const { uid } = auth.currentUser;
-      const storageRef = ref(storage, `profile_pictures/${uid}/${file.name}`);
-      await uploadBytes(storageRef, file);
-      const photoURL = await getDownloadURL(storageRef);
-      await updateUserProfile({ photoURL });
+     const photoURL = URL.createObjectURL(file);
+     await updateUserProfile({ photoURL });
   };
 
 
