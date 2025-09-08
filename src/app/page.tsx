@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { DailyTip } from "@/components/daily-tip";
 import { Header } from "@/components/header";

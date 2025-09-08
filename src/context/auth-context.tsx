@@ -42,7 +42,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (storedUser) {
         const parsedUser = JSON.parse(storedUser);
         setUser(parsedUser);
-        loadSubscription(parsedUser.uid);
+        if (parsedUser.uid) {
+           loadSubscription(parsedUser.uid);
+        }
     }
     setLoading(false);
   }, [loadSubscription]);
