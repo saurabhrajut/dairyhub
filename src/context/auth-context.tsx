@@ -3,6 +3,19 @@
 
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { useSubscription } from './subscription-context';
+import { auth, db } from '@/lib/firebase';
+import { 
+  onAuthStateChanged, 
+  createUserWithEmailAndPassword, 
+  signInWithEmailAndPassword, 
+  signOut, 
+  signInAnonymously,
+  updateProfile,
+  type User
+} from "firebase/auth";
+import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+
 
 export type Department = 'process-access' | 'production-access' | 'quality-access' | 'all-control-access' | 'guest';
 
@@ -37,81 +50,122 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const { loadSubscription } = useSubscription();
 
   useEffect(() => {
-    // Simulate loading user from localStorage
-    const storedUser = localStorage.getItem('dairy-hub-user');
-    if (storedUser) {
-        const parsedUser = JSON.parse(storedUser);
-        setUser(parsedUser);
-        if (parsedUser.uid) {
-           loadSubscription(parsedUser.uid);
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+        if (firebaseUser) {
+            const userDocRef = doc(db, "users", firebaseUser.uid);
+            const userDocSnap = await getDoc(userDocRef);
+            if (userDocSnap.exists()) {
+                const userData = userDocSnap.data();
+                const appUser: AppUser = {
+                    uid: firebaseUser.uid,
+                    email: firebaseUser.email,
+                    displayName: firebaseUser.displayName,
+                    photoURL: firebaseUser.photoURL,
+                    isAnonymous: firebaseUser.isAnonymous,
+                    gender: userData.gender,
+                    department: userData.department
+                };
+                setUser(appUser);
+                if (!appUser.isAnonymous) {
+                   await loadSubscription(appUser.uid);
+                }
+            } else {
+                 // This case might happen for anonymous users or if doc creation failed
+                 const appUser: AppUser = {
+                    uid: firebaseUser.uid,
+                    email: firebaseUser.email,
+                    displayName: firebaseUser.displayName,
+                    photoURL: firebaseUser.photoURL,
+                    isAnonymous: firebaseUser.isAnonymous,
+                    department: 'guest',
+                    gender: 'other',
+                 };
+                 setUser(appUser);
+                 if(firebaseUser.isAnonymous){
+                     await setDoc(doc(db, "users", firebaseUser.uid), {
+                        uid: firebaseUser.uid,
+                        displayName: 'Guest',
+                        email: null,
+                        createdAt: serverTimestamp(),
+                        department: 'guest',
+                        gender: 'other'
+                    });
+                 }
+            }
+        } else {
+            setUser(null);
         }
-    }
-    setLoading(false);
+        setLoading(false);
+    });
+
+    return () => unsubscribe();
   }, [loadSubscription]);
 
   const login = async (email: string, password: string) => {
-    // Mock login
-    const mockUser: AppUser = {
-        uid: 'mock-' + email,
-        email: email,
-        displayName: 'Mock User',
-        isAnonymous: false,
-        gender: 'other',
-        department: 'all-control-access'
-    };
-    localStorage.setItem('dairy-hub-user', JSON.stringify(mockUser));
-    setUser(mockUser);
-    await loadSubscription(mockUser.uid);
+    await signInWithEmailAndPassword(auth, email, password);
   };
 
   const anonymousLogin = async () => {
-     // Mock anonymous login
-    const mockGuest: AppUser = {
-        uid: 'guest-' + Date.now(),
-        email: null,
-        displayName: 'Guest',
-        isAnonymous: true,
-        department: 'guest',
-        gender: 'other',
-    };
-    localStorage.setItem('dairy-hub-user', JSON.stringify(mockGuest));
-    setUser(mockGuest);
-    await loadSubscription(mockGuest.uid);
+     await signInAnonymously(auth);
   }
 
 
   const signup = async (email: string, password: string, displayName: string, gender: 'male' | 'female' | 'other', department: Department) => {
-    // Mock signup
-     const mockUser: AppUser = {
-        uid: 'mock-' + email,
-        email: email,
-        displayName: displayName,
-        isAnonymous: false,
-        gender: gender,
-        department: department
-    };
-    localStorage.setItem('dairy-hub-user', JSON.stringify(mockUser));
-    setUser(mockUser);
-    await loadSubscription(mockUser.uid);
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const firebaseUser = userCredential.user;
+    await updateProfile(firebaseUser, { displayName });
+    await setDoc(doc(db, "users", firebaseUser.uid), {
+        uid: firebaseUser.uid,
+        displayName,
+        email,
+        createdAt: serverTimestamp(),
+        gender,
+        department
+    });
   };
 
   const logout = async () => {
-    localStorage.removeItem('dairy-hub-user');
-    setUser(null);
+    await signOut(auth);
   };
 
   const updateUserProfile = async (profileData: { displayName?: string; department?: Department, photoURL?: string }) => {
-     setUser(prevUser => {
-        if (!prevUser) return null;
-        const updatedUser = { ...prevUser, ...profileData };
-        localStorage.setItem('dairy-hub-user', JSON.stringify(updatedUser));
-        return updatedUser;
-     });
+     if (auth.currentUser) {
+        if(profileData.displayName || profileData.photoURL) {
+            await updateProfile(auth.currentUser, { 
+                displayName: profileData.displayName,
+                photoURL: profileData.photoURL
+            });
+        }
+        const userDocRef = doc(db, "users", auth.currentUser.uid);
+        await setDoc(userDocRef, profileData, { merge: true });
+
+        // Force a refresh of the user object
+        const updatedUser = auth.currentUser;
+        if(updatedUser){
+             const userDocSnap = await getDoc(userDocRef);
+             const userData = userDocSnap.data();
+             const appUser: AppUser = {
+                    uid: updatedUser.uid,
+                    email: updatedUser.email,
+                    displayName: updatedUser.displayName,
+                    photoURL: updatedUser.photoURL,
+                    isAnonymous: updatedUser.isAnonymous,
+                    gender: userData?.gender,
+                    department: userData?.department
+                };
+             setUser(appUser);
+        }
+     }
   };
   
   const updateUserPhoto = async (file: File) => {
-     const photoURL = URL.createObjectURL(file);
-     await updateUserProfile({ photoURL });
+     if (auth.currentUser) {
+        const storage = getStorage();
+        const storageRef = ref(storage, `profile_pictures/${auth.currentUser.uid}`);
+        await uploadBytes(storageRef, file);
+        const photoURL = await getDownloadURL(storageRef);
+        await updateUserProfile({ photoURL });
+     }
   };
 
 
