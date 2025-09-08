@@ -1,7 +1,6 @@
 
 "use server";
 
-import 'dotenv/config';
 import { generateDairyTip } from "@/ai/flows/generate-dairy-tip";
 import { suggestDairyRecipes } from "@/ai/flows/suggest-dairy-recipes";
 import { generateAdulterantDetectionInstructions } from "@/ai/flows/generate-adulterant-detection-instructions";
