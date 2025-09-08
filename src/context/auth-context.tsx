@@ -108,19 +108,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const anonymousLogin = async () => {
     const userCredential = await signInAnonymously(auth);
     const firebaseUser = userCredential.user;
-     const guestUser: AppUser = {
-        uid: firebaseUser.uid, 
-        email: 'guest@example.com', 
-        displayName: 'Guest User', 
+    
+    // For anonymous users, we still create a Firestore doc to handle subscriptions and permissions correctly.
+    const userDocRef = doc(db, "users", firebaseUser.uid);
+    const guestData = {
+        uid: firebaseUser.uid,
+        email: 'guest@example.com',
+        displayName: 'Guest User',
         photoURL: 'https://placehold.co/128x128/E0E0E0/333?text=G',
-        gender: 'other',
-        department: 'guest',
+        gender: 'other' as const,
+        department: 'guest' as const,
         isAnonymous: true,
+        createdAt: serverTimestamp(),
     };
-    // For anonymous users, we don't need a persistent Firestore doc unless we want to store their prefs
-    setUser(guestUser);
-    loadSubscription(guestUser.uid);
+    await setDoc(userDocRef, guestData, { merge: true });
+    
+    setUser({
+        uid: firebaseUser.uid,
+        email: guestData.email,
+        displayName: guestData.displayName,
+        photoURL: guestData.photoURL,
+        gender: guestData.gender,
+        department: guestData.department,
+        isAnonymous: true,
+    });
+    loadSubscription(firebaseUser.uid);
   }
+
 
   const signup = async (email: string, password: string, displayName: string, gender: 'male' | 'female' | 'other', department: Department) => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
