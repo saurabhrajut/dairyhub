@@ -11,7 +11,7 @@ import {
   signOut, 
   signInAnonymously,
   updateProfile,
-  type User
+  type User as FirebaseUser // Renamed to avoid conflict
 } from "firebase/auth";
 import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -43,80 +43,61 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AppUser | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); // Start with loading as true
   const { loadSubscription } = useSubscription();
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-        if (firebaseUser) {
-            const userDocRef = doc(db, "users", firebaseUser.uid);
-            const userDocSnap = await getDoc(userDocRef);
-            if (userDocSnap.exists()) {
-                const userData = userDocSnap.data();
-                const appUser: AppUser = {
-                    uid: firebaseUser.uid,
-                    email: firebaseUser.email,
-                    displayName: firebaseUser.displayName,
-                    photoURL: firebaseUser.photoURL,
-                    isAnonymous: firebaseUser.isAnonymous,
-                    gender: userData.gender,
-                    department: userData.department
-                };
-                setUser(appUser);
-                if (!appUser.isAnonymous) {
-                   await loadSubscription(appUser.uid);
-                }
-            } else {
-                 // This case might happen for anonymous users or if doc creation failed
-                 const appUser: AppUser = {
-                    uid: firebaseUser.uid,
-                    email: firebaseUser.email,
-                    displayName: firebaseUser.displayName,
-                    photoURL: firebaseUser.photoURL,
-                    isAnonymous: firebaseUser.isAnonymous,
-                    department: 'guest',
-                    gender: 'other',
-                 };
-                 setUser(appUser);
-                 if(firebaseUser.isAnonymous){
-                     await setDoc(doc(db, "users", firebaseUser.uid), {
-                        uid: firebaseUser.uid,
-                        displayName: 'Guest',
-                        email: null,
-                        createdAt: serverTimestamp(),
-                        department: 'guest',
-                        gender: 'other'
-                    });
-                 }
-            }
-        } else {
-            setUser(null);
-        }
-        setLoading(false);
-    });
+  const handleUser = useCallback(async (firebaseUser: FirebaseUser | null) => {
+    if (firebaseUser) {
+      const userDocRef = doc(db, "users", firebaseUser.uid);
+      const userDocSnap = await getDoc(userDocRef);
+      
+      const appUser: AppUser = {
+        uid: firebaseUser.uid,
+        email: firebaseUser.email,
+        displayName: firebaseUser.displayName,
+        photoURL: firebaseUser.photoURL,
+        isAnonymous: firebaseUser.isAnonymous,
+        gender: userDocSnap.exists() ? userDocSnap.data().gender : 'other',
+        department: userDocSnap.exists() ? userDocSnap.data().department : 'guest'
+      };
 
-    return () => unsubscribe();
+      setUser(appUser);
+      if (!appUser.isAnonymous) {
+        await loadSubscription(appUser.uid);
+      }
+    } else {
+      setUser(null);
+    }
+    setLoading(false); // Set loading to false after user is handled
   }, [loadSubscription]);
+
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, handleUser);
+    return () => unsubscribe();
+  }, [handleUser]);
   
 
   const login = async (email: string, password: string) => {
-    setLoading(true);
     await signInWithEmailAndPassword(auth, email, password);
-    // onAuthStateChanged will handle setting the user and loading state
   };
 
   const anonymousLogin = async () => {
-     setLoading(true);
-     await signInAnonymously(auth);
-     // onAuthStateChanged will handle setting the user and loading state
+     const userCredential = await signInAnonymously(auth);
+     await setDoc(doc(db, "users", userCredential.user.uid), {
+        uid: userCredential.user.uid,
+        displayName: 'Guest',
+        email: null,
+        createdAt: serverTimestamp(),
+        department: 'guest',
+        gender: 'other'
+    });
   }
 
 
   const signup = async (email: string, password: string, displayName: string, gender: 'male' | 'female' | 'other', department: Department) => {
-    setLoading(true);
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const firebaseUser = userCredential.user;
     await updateProfile(firebaseUser, { displayName });
@@ -128,42 +109,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         gender,
         department
     });
-     // onAuthStateChanged will handle setting the user and loading state
   };
 
   const logout = async () => {
-    setLoading(true);
     await signOut(auth);
-     // onAuthStateChanged will handle setting the user to null and loading to false
   };
 
   const updateUserProfile = async (profileData: { displayName?: string; department?: Department, photoURL?: string }) => {
-     if (auth.currentUser) {
-        if(profileData.displayName || profileData.photoURL) {
-            await updateProfile(auth.currentUser, { 
-                displayName: profileData.displayName,
-                photoURL: profileData.photoURL
-            });
-        }
-        const userDocRef = doc(db, "users", auth.currentUser.uid);
+     const currentUser = auth.currentUser;
+     if (currentUser) {
+        await updateProfile(currentUser, { 
+            displayName: profileData.displayName ?? currentUser.displayName,
+            photoURL: profileData.photoURL ?? currentUser.photoURL
+        });
+        
+        const userDocRef = doc(db, "users", currentUser.uid);
         await setDoc(userDocRef, profileData, { merge: true });
 
-        // Force a refresh of the user object
-        const updatedUser = auth.currentUser;
-        if(updatedUser){
-             const userDocSnap = await getDoc(userDocRef);
-             const userData = userDocSnap.data();
-             const appUser: AppUser = {
-                    uid: updatedUser.uid,
-                    email: updatedUser.email,
-                    displayName: updatedUser.displayName,
-                    photoURL: updatedUser.photoURL,
-                    isAnonymous: updatedUser.isAnonymous,
-                    gender: userData?.gender,
-                    department: userData?.department
-                };
-             setUser(appUser);
-        }
+        // Manually update the user state to reflect changes immediately
+        setUser(prevUser => {
+          if (!prevUser) return null;
+          return {
+            ...prevUser,
+            ...profileData,
+            displayName: profileData.displayName ?? prevUser.displayName,
+            photoURL: profileData.photoURL ?? prevUser.photoURL,
+          };
+        });
      }
   };
   
@@ -199,5 +171,4 @@ export function useAuth() {
   }
   return context;
 }
-
     
