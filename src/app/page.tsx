@@ -8,7 +8,6 @@ import { Header } from "@/components/header";
 import { TopicGrid } from "@/components/topic-grid";
 import { ChatWidget, type ChatUserProfile } from "@/components/chat-widget";
 import { useAuth } from "@/context/auth-context";
-import { Loader2 } from "lucide-react";
 import { useSubscription } from "@/context/subscription-context";
 
 export default function Home() {
@@ -25,24 +24,15 @@ export default function Home() {
     }
   }, [user, loading, router, loadSubscription]);
 
-  if (loading || !user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <Loader2 className="h-12 w-12 animate-spin text-primary" />
-        <p className="ml-4 text-lg text-gray-600">Loading your Dairy Hub...</p>
-      </div>
-    );
-  }
-
   // This ensures that the user object passed to ChatWidget is always up-to-date
   const chatUser: ChatUserProfile = {
-    name: user.displayName || 'Guest',
+    name: user?.displayName || 'Guest',
     age: 30, // This can be customized later
-    gender: user.gender || 'other',
+    gender: user?.gender || 'other',
   };
   
-  const hasDailyTipAccess = user.department === 'all-control-access' || user.department === 'production-access' || user.department === 'quality-access';
-  const hasChatAccess = user.department === 'all-control-access' || user.department === 'production-access' || user.department === 'quality-access';
+  const hasDailyTipAccess = user?.department === 'all-control-access' || user?.department === 'production-access' || user?.department === 'quality-access';
+  const hasChatAccess = user?.department === 'all-control-access' || user?.department === 'production-access' || user?.department === 'quality-access';
 
 
   return (
@@ -62,7 +52,8 @@ export default function Home() {
           <TopicGrid />
         </main>
       </div>
-      {hasChatAccess && <ChatWidget user={chatUser} />}
+      {hasChatAccess && user && <ChatWidget user={chatUser} />}
     </>
   );
 }
+
