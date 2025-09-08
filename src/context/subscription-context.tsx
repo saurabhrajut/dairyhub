@@ -6,12 +6,12 @@ import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { add } from 'date-fns';
 
-export type SubscriptionPlan = any;
+export type SubscriptionPlan = '7-days' | '1-month' | '6-months' | 'yearly' | 'lifetime' | '7-days-ultimate' | '1-month-ultimate' | '6-months-ultimate' | 'yearly-ultimate' | 'lifetime-ultimate';
 
 interface SubscriptionContextType {
   plan: SubscriptionPlan | null;
   expiryDate: Date | null;
-  subscribe: (plan: SubscriptionPlan, userId: string, paymentId: string) => Promise<void>;
+  subscribe: (newPlan: SubscriptionPlan, userId: string, paymentId: string) => Promise<void>;
   isPro: boolean;
   loadSubscription: (userId: string) => Promise<void>;
 }
@@ -23,13 +23,24 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
   const [expiryDate, setExpiryDate] = useState<Date | null>(null);
 
   const loadSubscription = useCallback(async (userId: string) => {
+    if (!userId) {
+        setPlan(null);
+        setExpiryDate(null);
+        return;
+    }
     const subDocRef = doc(db, "users", userId, "subscription", "current");
-    const subDocSnap = await getDoc(subDocRef);
-    if (subDocSnap.exists()) {
-        const data = subDocSnap.data();
-        setPlan(data.plan);
-        setExpiryDate(data.expiryDate ? data.expiryDate.toDate() : null);
-    } else {
+    try {
+        const subDocSnap = await getDoc(subDocRef);
+        if (subDocSnap.exists()) {
+            const data = subDocSnap.data();
+            setPlan(data.plan);
+            setExpiryDate(data.expiryDate ? data.expiryDate.toDate() : null);
+        } else {
+            setPlan(null);
+            setExpiryDate(null);
+        }
+    } catch (error) {
+        console.error("Failed to load subscription:", error);
         setPlan(null);
         setExpiryDate(null);
     }

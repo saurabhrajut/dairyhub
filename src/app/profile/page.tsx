@@ -35,7 +35,7 @@ const allProFeatures = [
 export default function ProfilePage() {
     const { user, loading, logout, updateUserProfile, updateUserPhoto } = useAuth();
     const { language, setLanguage } = useLanguage();
-    const { plan, expiryDate, isPro } = useSubscription();
+    const { plan, expiryDate, isPro, loadSubscription } = useSubscription();
     const { toast } = useToast();
     const router = useRouter();
 
@@ -61,8 +61,11 @@ export default function ProfilePage() {
             // Update local state when context user changes
             setDisplayUser(user);
             setTempName(user.displayName || '');
+            if (!user.isAnonymous) {
+                loadSubscription(user.uid);
+            }
         }
-    }, [user, loading, router, toast]);
+    }, [user, loading, router, toast, loadSubscription]);
 
 
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {

@@ -16,7 +16,7 @@ import { useAuth, type Department } from "@/context/auth-context";
 import { useToast } from "@/hooks/use-toast";
 import { ScrollArea } from "./ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-// import { createRazorpayOrder, verifyRazorpayPayment } from "@/app/actions";
+import { createRazorpayOrder, verifyRazorpayPayment } from "@/app/actions";
 
 
 const allProFeatures = [
@@ -87,52 +87,51 @@ export function SubscriptionModal({
     setIsLoading(planKey);
     
     try {
-        toast({ title: "Coming Soon!", description: "Payment functionality is temporarily disabled." });
       // 1. Create Razorpay Order
-    //   const order = await createRazorpayOrder(planDetails.price);
+      const order = await createRazorpayOrder(planDetails.price);
 
-    //   // 2. Configure Razorpay Options
-    //   const options = {
-    //     key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,
-    //     amount: order.amount,
-    //     currency: order.currency,
-    //     name: "Dairy Hub Pro",
-    //     description: `Subscription: ${planDetails.title}`,
-    //     order_id: order.id,
-    //     handler: async function (response: any) {
-    //       // 3. Verify Payment
-    //       const verificationResult = await verifyRazorpayPayment({
-    //         orderId: response.razorpay_order_id,
-    //         paymentId: response.razorpay_payment_id,
-    //         signature: response.razorpay_signature,
-    //       });
+      // 2. Configure Razorpay Options
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,
+        amount: order.amount,
+        currency: order.currency,
+        name: "Dairy Hub Pro",
+        description: `Subscription: ${planDetails.title}`,
+        order_id: order.id,
+        handler: async function (response: any) {
+          // 3. Verify Payment
+          const verificationResult = await verifyRazorpayPayment({
+            orderId: response.razorpay_order_id,
+            paymentId: response.razorpay_payment_id,
+            signature: response.razorpay_signature,
+          });
 
-    //       if (verificationResult.success) {
-    //          // 4. Update Department if changed
-    //         if (user.department !== selectedDept) {
-    //             await updateUserProfile({ department: selectedDept });
-    //             toast({ title: "Department Updated!", description: `Your access is now set to ${getDepartmentName(selectedDept)}.` });
-    //         }
-    //         // 5. Activate Subscription
-    //         await subscribe(planKey as SubscriptionPlan);
-    //         setIsOpen(false);
-    //         toast({ title: "Subscribed! 🎉", description: "Welcome to Pro! All features for your department are now unlocked." });
-    //       } else {
-    //         toast({ variant: "destructive", title: "Payment Verification Failed", description: "Please contact support." });
-    //       }
-    //     },
-    //     prefill: {
-    //       name: user.displayName || "Dairy Hub User",
-    //       email: user.email,
-    //     },
-    //     theme: {
-    //       color: "#4F46E5",
-    //     },
-    //   };
+          if (verificationResult.success) {
+             // 4. Update Department if changed
+            if (user.department !== selectedDept) {
+                await updateUserProfile({ department: selectedDept });
+                toast({ title: "Department Updated!", description: `Your access is now set to ${getDepartmentName(selectedDept)}.` });
+            }
+            // 5. Activate Subscription
+            await subscribe(planKey as SubscriptionPlan, user.uid, response.razorpay_payment_id);
+            setIsOpen(false);
+            toast({ title: "Subscribed! 🎉", description: "Welcome to Pro! All features for your department are now unlocked." });
+          } else {
+            toast({ variant: "destructive", title: "Payment Verification Failed", description: "Please contact support." });
+          }
+        },
+        prefill: {
+          name: user.displayName || "Dairy Hub User",
+          email: user.email,
+        },
+        theme: {
+          color: "#4F46E5",
+        },
+      };
 
-    //   // 6. Open Razorpay Checkout
-    //   const rzp = new (window as any).Razorpay(options);
-    //   rzp.open();
+      // 6. Open Razorpay Checkout
+      const rzp = new (window as any).Razorpay(options);
+      rzp.open();
 
     } catch (error: any) {
         toast({ variant: "destructive", title: "Action Failed", description: error.message || "Could not complete the action. Please try again." });

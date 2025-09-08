@@ -2,13 +2,15 @@
 "use client";
 
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import { Inter, Poppins, Source_Code_Pro, Space_Grotesk, Noto_Sans_Devanagari } from 'next/font/google';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { LanguageProvider } from '@/context/language-context';
 import { AuthProvider } from '@/context/auth-context';
 import { SubscriptionProvider } from '@/context/subscription-context';
-import { useEffect, Fragment } from 'react';
+import { useEffect, useState, Fragment } from 'react';
+import { SplashScreen } from '@/components/splash-screen';
 
 
 // Font configuration using next/font
@@ -49,6 +51,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [showSplash, setShowSplash] = useState(true);
 
   useEffect(() => {
     // Add document metadata here since this is a client component
@@ -61,16 +64,25 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.webmanifest" />
         <link rel="apple-touch-icon" href="/icon-192x192.png" />
         <meta name="theme-color" content="#ffffff" />
+         <Script
+            id="razorpay-checkout"
+            src="https://checkout.razorpay.com/v1/checkout.js"
+            strategy="beforeInteractive"
+        />
       </head>
       <body className="font-body antialiased">
-        <LanguageProvider>
-          <SubscriptionProvider>
-            <AuthProvider>
-              {children}
-              <Toaster />
-            </AuthProvider>
-          </SubscriptionProvider>
-        </LanguageProvider>
+         {showSplash ? (
+          <SplashScreen onFinished={() => setShowSplash(false)} />
+        ) : (
+            <LanguageProvider>
+              <SubscriptionProvider>
+                <AuthProvider>
+                  <>{children}</>
+                  <Toaster />
+                </AuthProvider>
+              </SubscriptionProvider>
+            </LanguageProvider>
+        )}
       </body>
     </html>
   );

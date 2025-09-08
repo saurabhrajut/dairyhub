@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -8,21 +9,21 @@ import { TopicGrid } from "@/components/topic-grid";
 import { ChatWidget, type ChatUserProfile } from "@/components/chat-widget";
 import { useAuth } from "@/context/auth-context";
 import { Loader2 } from "lucide-react";
+import { useSubscription } from "@/context/subscription-context";
 
 export default function Home() {
   const { user, loading } = useAuth();
+  const { loadSubscription } = useSubscription();
   const router = useRouter();
-  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  useEffect(() => {
-    if (isClient && !loading && !user) {
+    if (!loading && !user) {
       router.push('/login');
     }
-  }, [user, loading, router, isClient]);
+    if (user && !user.isAnonymous) {
+        loadSubscription(user.uid);
+    }
+  }, [user, loading, router, loadSubscription]);
 
   if (loading || !user) {
     return (
