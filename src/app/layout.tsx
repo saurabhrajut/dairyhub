@@ -8,8 +8,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { LanguageProvider } from '@/context/language-context';
 import { AuthProvider } from '@/context/auth-context';
 import { SubscriptionProvider } from '@/context/subscription-context';
-import { SplashScreen } from '@/components/splash-screen';
-import { useState, useEffect, Fragment } from 'react';
+import { useEffect, Fragment } from 'react';
 
 
 // Font configuration using next/font
@@ -50,7 +49,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [showSplash, setShowSplash] = useState(true);
 
   useEffect(() => {
     // Add document metadata here since this is a client component
@@ -65,20 +63,16 @@ export default function RootLayout({
         <meta name="theme-color" content="#ffffff" />
       </head>
       <body className="font-body antialiased">
-        {showSplash ? (
-          <SplashScreen onFinished={() => setShowSplash(false)} />
-        ) : (
-          <LanguageProvider>
-            <SubscriptionProvider>
-              <AuthProvider>
-                <Fragment>
-                  {children}
-                  <Toaster />
-                </Fragment>
-              </AuthProvider>
-            </SubscriptionProvider>
-          </LanguageProvider>
-        )}
+        <LanguageProvider>
+          <SubscriptionProvider>
+            <AuthProvider>
+              <Fragment>
+                {children}
+                <Toaster />
+              </Fragment>
+            </AuthProvider>
+          </SubscriptionProvider>
+        </LanguageProvider>
       </body>
     </html>
   );
