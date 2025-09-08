@@ -16,6 +16,7 @@ import { useLanguage } from '@/context/language-context';
 import { format } from 'date-fns';
 import { Info, Mail, MessageCircle, Crown, ChevronLeft, LogOut, Settings, HelpCircle, User, Loader2, Building2, ChevronRight } from 'lucide-react';
 import type { Department } from '@/context/auth-context';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const EditIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -31,6 +32,25 @@ const allProFeatures = [
     "Save and export your calculations",
     "Ad-free experience",
 ];
+
+const ProfilePageSkeleton = () => (
+    <div className="max-w-md mx-auto min-h-screen bg-white shadow-lg animate-pulse">
+        <div className="relative bg-gray-200 h-60 rounded-b-3xl p-6">
+             <Skeleton className="absolute top-4 left-4 h-6 w-6 rounded-full" />
+        </div>
+        <div className="text-center p-6 -mt-16">
+            <Skeleton className="w-28 h-28 rounded-full mx-auto border-4 border-white shadow-lg" />
+            <Skeleton className="h-8 w-40 mx-auto mt-4" />
+            <Skeleton className="h-4 w-48 mx-auto mt-2" />
+        </div>
+        <div className="px-6 pb-6 space-y-6">
+            <Skeleton className="h-48 w-full rounded-xl" />
+            <Skeleton className="h-32 w-full rounded-xl" />
+            <Skeleton className="h-40 w-full rounded-xl" />
+        </div>
+    </div>
+);
+
 
 export default function ProfilePage() {
     const { user, loading, logout, updateUserProfile, updateUserPhoto } = useAuth();
@@ -51,11 +71,6 @@ export default function ProfilePage() {
     useEffect(() => {
         setIsMounted(true);
         if (!loading && !user) {
-            toast({
-                title: "Please Log In",
-                description: "You need to be logged in to view your profile.",
-                variant: "destructive"
-            });
             router.push('/login');
         } else if (user) {
             // Update local state when context user changes
@@ -65,7 +80,7 @@ export default function ProfilePage() {
                 loadSubscription(user.uid);
             }
         }
-    }, [user, loading, router, toast, loadSubscription]);
+    }, [user, loading, router, loadSubscription]);
 
 
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -157,11 +172,7 @@ export default function ProfilePage() {
     }
 
     if (loading || !displayUser) {
-        return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-100">
-                <Loader2 className="h-12 w-12 animate-spin text-primary" />
-            </div>
-        );
+        return <ProfilePageSkeleton />;
     }
 
 
@@ -365,3 +376,5 @@ export default function ProfilePage() {
         </>
     );
 }
+
+    

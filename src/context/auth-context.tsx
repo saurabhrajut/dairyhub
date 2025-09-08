@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
+import React, { createContext, useState, useContext, ReactNode, useEffect, useCallback } from 'react';
 import { useSubscription } from './subscription-context';
 import { auth, db } from '@/lib/firebase';
 import { 
@@ -100,17 +100,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     return () => unsubscribe();
   }, [loadSubscription]);
+  
 
   const login = async (email: string, password: string) => {
+    setLoading(true);
     await signInWithEmailAndPassword(auth, email, password);
+    // onAuthStateChanged will handle setting the user and loading state
   };
 
   const anonymousLogin = async () => {
+     setLoading(true);
      await signInAnonymously(auth);
+     // onAuthStateChanged will handle setting the user and loading state
   }
 
 
   const signup = async (email: string, password: string, displayName: string, gender: 'male' | 'female' | 'other', department: Department) => {
+    setLoading(true);
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const firebaseUser = userCredential.user;
     await updateProfile(firebaseUser, { displayName });
@@ -122,10 +128,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         gender,
         department
     });
+     // onAuthStateChanged will handle setting the user and loading state
   };
 
   const logout = async () => {
+    setLoading(true);
     await signOut(auth);
+     // onAuthStateChanged will handle setting the user to null and loading to false
   };
 
   const updateUserProfile = async (profileData: { displayName?: string; department?: Department, photoURL?: string }) => {
@@ -190,3 +199,5 @@ export function useAuth() {
   }
   return context;
 }
+
+    
