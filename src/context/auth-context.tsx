@@ -106,33 +106,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const anonymousLogin = async () => {
-    const userCredential = await signInAnonymously(auth);
-    const firebaseUser = userCredential.user;
-    
-    // For anonymous users, we still create a Firestore doc to handle subscriptions and permissions correctly.
-    const userDocRef = doc(db, "users", firebaseUser.uid);
-    const guestData = {
-        uid: firebaseUser.uid,
-        email: 'guest@example.com',
-        displayName: 'Guest User',
-        photoURL: 'https://placehold.co/128x128/E0E0E0/333?text=G',
-        gender: 'other' as const,
-        department: 'guest' as const,
-        isAnonymous: true,
-        createdAt: serverTimestamp(),
-    };
-    await setDoc(userDocRef, guestData, { merge: true });
-    
-    setUser({
-        uid: firebaseUser.uid,
-        email: guestData.email,
-        displayName: guestData.displayName,
-        photoURL: guestData.photoURL,
-        gender: guestData.gender,
-        department: guestData.department,
-        isAnonymous: true,
-    });
-    loadSubscription(firebaseUser.uid);
+    await signInAnonymously(auth);
   }
 
 
