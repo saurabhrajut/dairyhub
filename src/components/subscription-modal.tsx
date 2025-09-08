@@ -27,7 +27,7 @@ const allProFeatures = [
     "Ad-free experience",
 ];
 
-const departmentPlans: Record<Department, Record<string, { title: string; price: number; duration: string; popular?: boolean }>> = {
+const departmentPlans: Record<string, Record<string, { title: string; price: number; duration: string; popular?: boolean }>> = {
     'process-access': {
         '7-days': { title: "7 Days", price: 19, duration: "Trial Access" },
         '1-month': { title: "1 Month", price: 99, duration: "Full Access" },
@@ -79,7 +79,7 @@ export function SubscriptionModal({
         toast({ variant: "destructive", title: "Error", description: "Plan or user not found." });
         return;
     }
-    if (user.department === 'guest') {
+    if (user.isAnonymous) {
         toast({ variant: "destructive", title: "Action Not Allowed", description: "Guests cannot subscribe. Please sign up for an account." });
         return;
     }
@@ -125,7 +125,7 @@ export function SubscriptionModal({
           email: user.email,
         },
         theme: {
-          color: "#3B82F6",
+          color: "#4F46E5",
         },
       };
 
@@ -204,7 +204,7 @@ export function SubscriptionModal({
                   <h3 className="text-xl font-bold text-primary font-headline mb-2 text-center">Choose Your Plan</h3>
                   <div className="mb-6">
                       <label htmlFor="dept-select" className="block text-sm font-medium text-gray-700 mb-1 text-center">Select Your Department to See Plans:</label>
-                      <Select value={selectedDept} onValueChange={(val) => setSelectedDept(val as Department)} disabled={user?.department === 'guest'}>
+                      <Select value={selectedDept} onValueChange={(val) => setSelectedDept(val as Department)} disabled={user?.isAnonymous}>
                           <SelectTrigger id="dept-select" className="w-full max-w-xs mx-auto bg-white">
                               <SelectValue placeholder="Select Department" />
                           </SelectTrigger>

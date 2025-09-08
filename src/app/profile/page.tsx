@@ -66,7 +66,7 @@ export default function ProfilePage() {
 
 
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (!user || user.department === 'guest') {
+        if (!user || user.isAnonymous) {
             toast({ variant: "destructive", title: "Action Not Allowed", description: "Guests cannot change their profile picture. Please sign up." });
             return;
         }
@@ -82,7 +82,7 @@ export default function ProfilePage() {
     };
     
     const handleSaveName = async () => {
-        if (!user || user.department === 'guest') {
+        if (!user || user.isAnonymous) {
             toast({ variant: "destructive", title: "Action Not Allowed", description: "Guests cannot change their name. Please sign up." });
             setIsEditingName(false);
             return;
@@ -109,7 +109,7 @@ export default function ProfilePage() {
     }
 
     const handleDepartmentChange = (dept: Department) => {
-        if (user && user.department !== 'guest') {
+        if (user && !user.isAnonymous) {
             updateUserProfile({ department: dept });
             toast({
                 title: "Department Updated",
@@ -180,7 +180,7 @@ export default function ProfilePage() {
                             alt="Profile Picture"
                             className="w-28 h-28 rounded-full border-4 border-white shadow-lg object-cover"
                         />
-                         {user?.department !== 'guest' && (
+                         {!user?.isAnonymous && (
                             <label htmlFor="fileInput" className="absolute bottom-0 right-0 bg-white p-1.5 rounded-full shadow-md cursor-pointer hover:bg-gray-200 transition-colors">
                                <EditIcon />
                             </label>
@@ -209,7 +209,7 @@ export default function ProfilePage() {
                     ) : (
                          <div className="flex items-center justify-center space-x-2">
                             <h1 id="userName" className="text-2xl font-bold text-gray-800">{displayUser.displayName}</h1>
-                             {user?.department !== 'guest' && (
+                             {!user?.isAnonymous && (
                                 <button onClick={() => { setIsEditingName(true); setTempName(displayUser.displayName || ''); }} className="text-gray-500 hover:text-blue-600">
                                    <EditIcon />
                                 </button>
@@ -310,7 +310,7 @@ export default function ProfilePage() {
                                             </SelectContent>
                                         </Select>
                                     </div>
-                                    {user?.department !== 'guest' && (
+                                    {!user?.isAnonymous && (
                                         <div>
                                             <label htmlFor="department-select" className="block text-sm font-medium text-gray-700 mb-2">Your Department</label>
                                             <Select value={user?.department} onValueChange={(value) => handleDepartmentChange(value as Department)}>

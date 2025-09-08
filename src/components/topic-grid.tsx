@@ -127,7 +127,7 @@ export function TopicGrid() {
   const userDepartment = user?.department; // Can be undefined or 'guest'
 
   const hasAccess = (topic: typeof topics[0]) => {
-    if (userDepartment === 'guest') {
+    if (user?.isAnonymous) {
       return topic.id === 'about-us'; // Guests can only access 'About Us'
     }
     if (!userDepartment) {
@@ -145,7 +145,7 @@ export function TopicGrid() {
 
   const openModal = (id: string, isAccessible: boolean) => {
       if (!isAccessible) {
-          if (user?.department === 'guest') {
+          if (user?.isAnonymous) {
               toast({
                   title: "Feature Locked for Guests",
                   description: "Please sign up for an account to access this feature.",

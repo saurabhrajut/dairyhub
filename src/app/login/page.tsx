@@ -19,7 +19,7 @@ export default function LoginPage() {
     const [isLoading, setIsLoading] = useState(false);
     const { toast } = useToast();
     const router = useRouter();
-    const { login } = useAuth();
+    const { login, anonymousLogin } = useAuth();
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -46,7 +46,7 @@ export default function LoginPage() {
     const handleGuestLogin = async () => {
         setIsLoading(true);
         try {
-            await login('guest@example.com', 'guestpassword');
+            await anonymousLogin();
             toast({
                 title: 'Logged in as Guest!',
                 description: "Welcome! Explore the app's features.",
