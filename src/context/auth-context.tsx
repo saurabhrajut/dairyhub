@@ -45,7 +45,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AppUser | null>(null);
-  const [loading, setLoading] = useState(true); // Start with loading as true
+  const [loading, setLoading] = useState(true);
   const { loadSubscription } = useSubscription();
 
   const handleUser = useCallback(async (firebaseUser: FirebaseUser | null) => {
@@ -70,21 +70,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } else {
       setUser(null);
     }
-    setLoading(false); // Set loading to false after user is handled
+    // This is the crucial part: set loading to false AFTER handling the user.
+    setLoading(false);
   }, [loadSubscription]);
 
 
   useEffect(() => {
+    // onAuthStateChanged returns an unsubscribe function
     const unsubscribe = onAuthStateChanged(auth, handleUser);
+    
+    // Cleanup subscription on unmount
     return () => unsubscribe();
   }, [handleUser]);
   
 
   const login = async (email: string, password: string) => {
+    setLoading(true);
     await signInWithEmailAndPassword(auth, email, password);
   };
 
   const anonymousLogin = async () => {
+     setLoading(true);
      const userCredential = await signInAnonymously(auth);
      await setDoc(doc(db, "users", userCredential.user.uid), {
         uid: userCredential.user.uid,
@@ -98,6 +104,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
 
   const signup = async (email: string, password: string, displayName: string, gender: 'male' | 'female' | 'other', department: Department) => {
+    setLoading(true);
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const firebaseUser = userCredential.user;
     await updateProfile(firebaseUser, { displayName });
@@ -112,6 +119,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const logout = async () => {
+    setLoading(true);
     await signOut(auth);
   };
 
