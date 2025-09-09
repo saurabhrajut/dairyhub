@@ -100,7 +100,7 @@ const topicComponents = {
             </Section>
         )
     },
-    yield_texture: ({ content }: { content_en: any, content_hi: any }) => {
+    yield_texture: ({ content_en, content_hi }: { content_en: any, content_hi: any }) => {
         const { t } = useLanguage();
         const yieldContent = t({ en: content_en.topics.yield_texture, hi: content_hi.topics.yield_texture });
         
