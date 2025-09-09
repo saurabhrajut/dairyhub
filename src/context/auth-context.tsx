@@ -46,41 +46,42 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const { loadSubscription, clearSubscription } = useSubscription();
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      if (firebaseUser) {
-        const userDocRef = doc(db, "users", firebaseUser.uid);
-        const userDocSnap = await getDoc(userDocRef);
+  const handleUserUpdate = useCallback(async (firebaseUser: FirebaseUser | null) => {
+    if (firebaseUser) {
+      const userDocRef = doc(db, "users", firebaseUser.uid);
+      const userDocSnap = await getDoc(userDocRef);
 
-        const appUser: AppUser = {
-          uid: firebaseUser.uid,
-          email: firebaseUser.email,
-          displayName: firebaseUser.displayName,
-          photoURL: firebaseUser.photoURL,
-          isAnonymous: firebaseUser.isAnonymous,
-        };
+      const appUser: AppUser = {
+        uid: firebaseUser.uid,
+        email: firebaseUser.email,
+        displayName: firebaseUser.displayName,
+        photoURL: firebaseUser.photoURL,
+        isAnonymous: firebaseUser.isAnonymous,
+      };
 
-        if (userDocSnap.exists()) {
-          const userData = userDocSnap.data();
-          appUser.gender = userData.gender;
-          appUser.department = userData.department;
-        }
-
-        setUser(appUser);
-        if (!firebaseUser.isAnonymous) {
-          await loadSubscription(firebaseUser.uid);
-        } else {
-          clearSubscription();
-        }
+      if (userDocSnap.exists()) {
+        const userData = userDocSnap.data();
+        appUser.gender = userData.gender;
+        appUser.department = userData.department;
+      }
+      
+      setUser(appUser);
+      if (!firebaseUser.isAnonymous) {
+        await loadSubscription(firebaseUser.uid);
       } else {
-        setUser(null);
         clearSubscription();
       }
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
+    } else {
+      setUser(null);
+      clearSubscription();
+    }
+    setLoading(false);
   }, [loadSubscription, clearSubscription]);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, handleUserUpdate);
+    return () => unsubscribe();
+  }, [handleUserUpdate]);
   
 
   const login = async (email: string, password: string) => {
