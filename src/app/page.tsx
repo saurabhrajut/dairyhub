@@ -1,19 +1,38 @@
 
 "use client";
 
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { DailyTip } from "@/components/daily-tip";
 import { Header } from "@/components/header";
 import { TopicGrid } from "@/components/topic-grid";
 import { ChatWidget, type ChatUserProfile } from "@/components/chat-widget";
 import { useAuth } from "@/context/auth-context";
+import { SplashScreen } from '@/components/splash-screen';
 
 export default function Home() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+  const router = useRouter();
 
+  // This effect will handle redirection after the initial auth state is determined.
+  useEffect(() => {
+    // Only redirect if loading is finished and there is no user.
+    if (!loading && !user) {
+      router.push('/login');
+    }
+  }, [user, loading, router]);
+
+  // Show a loading screen only during the initial check
+  if (loading) {
+     return <SplashScreen onFinished={() => {}} />;
+  }
+
+  // If there's a user, render the main content.
+  // The ChatWidget will conditionally render based on user properties.
   const chatUser: ChatUserProfile | null = user
     ? {
         name: user.displayName || 'Guest',
-        age: 30, 
+        age: 30,
         gender: user.gender || 'other',
       }
     : null;

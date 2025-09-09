@@ -143,7 +143,7 @@ export default function ProfilePage() {
         return names[deptKey];
     }
     
-    if (!user) {
+    if (loading || !user) {
         return (
             <div className="flex items-center justify-center min-h-screen">
                 <Loader2 className="animate-spin h-8 w-8" />
