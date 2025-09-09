@@ -98,13 +98,17 @@ export default function ProfilePage() {
         });
     }
 
-    const handleDepartmentChange = (dept: Department) => {
+    const handleDepartmentChange = async (dept: Department) => {
         if (user && !user.isAnonymous) {
-            updateUserProfile({ department: dept });
-            toast({
-                title: "Department Updated",
-                description: `Your access has been set to ${getDepartmentName(dept)}. You can now view plans for this department.`,
-            });
+            try {
+                await updateUserProfile({ department: dept });
+                toast({
+                    title: "Department Updated",
+                    description: `Your access has been set to ${getDepartmentName(dept)}.`,
+                });
+            } catch (error: any) {
+                toast({ variant: 'destructive', title: "Update Failed", description: error.message });
+            }
         }
     };
 
@@ -167,7 +171,7 @@ export default function ProfilePage() {
                             alt="Profile Picture"
                             className="w-28 h-28 rounded-full border-4 border-white shadow-lg object-cover"
                         />
-                         {!user?.isAnonymous && (
+                         {!user.isAnonymous && (
                             <label htmlFor="fileInput" className="absolute bottom-0 right-0 bg-white p-1.5 rounded-full shadow-md cursor-pointer hover:bg-gray-200 transition-colors">
                                <EditIcon />
                             </label>
@@ -195,7 +199,7 @@ export default function ProfilePage() {
                     ) : (
                          <div className="flex items-center justify-center space-x-2">
                             <h1 id="userName" className="text-2xl font-bold text-gray-800">{user.displayName || ''}</h1>
-                             {!user?.isAnonymous && (
+                             {!user.isAnonymous && (
                                 <button onClick={() => { setIsEditingName(true); setTempName(user.displayName || ''); }} className="text-gray-500 hover:text-blue-600">
                                    <EditIcon />
                                 </button>
@@ -292,10 +296,10 @@ export default function ProfilePage() {
                                             </SelectContent>
                                         </Select>
                                     </div>
-                                    {!user?.isAnonymous && (
+                                    {!user.isAnonymous && (
                                         <div>
                                             <label htmlFor="department-select" className="block text-sm font-medium text-gray-700 mb-2">Your Department</label>
-                                            <Select value={user?.department} onValueChange={(value) => handleDepartmentChange(value as Department)}>
+                                            <Select value={user.department} onValueChange={(value) => handleDepartmentChange(value as Department)}>
                                                 <SelectTrigger id="department-select"><SelectValue placeholder="Select Department"/></SelectTrigger>
                                                 <SelectContent>
                                                     <SelectItem value="process-access">Process Access</SelectItem>

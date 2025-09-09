@@ -141,7 +141,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
      const userDocRef = doc(db, "users", currentUser.uid);
      await setDoc(userDocRef, firestoreUpdateData, { merge: true });
      
-     setUser(prevUser => prevUser ? { ...prevUser, ...profileData } : null);
+     // Re-fetch user data to ensure consistency
+     await handleUserUpdate(currentUser);
   };
   
   const updateUserPhoto = async (file: File) => {
@@ -161,7 +162,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     loading,
     login,
     signup,
-    logout,
+logout,
     anonymousLogin,
     updateUserProfile,
     updateUserPhoto

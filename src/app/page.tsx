@@ -27,18 +27,21 @@ export default function Home() {
      return <SplashScreen onFinished={() => {}} />;
   }
 
+  // If we are done loading but there is no user, we are about to redirect.
+  // Render null to avoid a flash of the home page.
+  if (!user) {
+    return null;
+  }
+  
   // If there's a user, render the main content.
   // The ChatWidget will conditionally render based on user properties.
-  const chatUser: ChatUserProfile | null = user
-    ? {
-        name: user.displayName || 'Guest',
-        age: 30,
-        gender: user.gender || 'other',
-      }
-    : null;
+  const chatUser: ChatUserProfile = {
+      name: user.displayName || 'Guest',
+      age: 30,
+      gender: user.gender || 'other',
+  };
 
   const hasAccess = (feature: 'dailyTip' | 'chat') => {
-      if (!user) return false;
       if (user.isAnonymous) return false;
       if (user.department === 'all-control-access') return true;
       if (feature === 'dailyTip' && (user.department === 'production-access' || user.department === 'quality-access')) return true;
@@ -66,7 +69,7 @@ export default function Home() {
           <TopicGrid />
         </main>
       </div>
-      {hasChatAccess && chatUser && <ChatWidget user={chatUser} />}
+      {hasChatAccess && <ChatWidget user={chatUser} />}
     </>
   );
 }

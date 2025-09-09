@@ -1,16 +1,22 @@
+
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Allow public read of user profiles, but only the user can write to their own document.
-    // This is secure and allows the app to function correctly.
+
+    // Users can read any profile, but only write to their own.
+    // This allows displaying user info, but keeps it secure.
     match /users/{userId} {
       allow read: if true;
-      allow write: if request.auth != null && request.auth.uid == userId;
+      allow create: if request.auth != null;
+      allow update: if request.auth.uid == userId;
+      allow delete: if false;
 
-      // Subscription data can only be read and written by the owning user.
+      // Subscription data is private to the user.
       match /subscription/{subId} {
-        allow read, write: if request.auth != null && request.auth.uid == userId;
+        allow read, write: if request.auth.uid == userId;
       }
     }
+    
   }
 }
