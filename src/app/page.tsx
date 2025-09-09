@@ -1,44 +1,34 @@
 
 "use client";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { DailyTip } from "@/components/daily-tip";
 import { Header } from "@/components/header";
 import { TopicGrid } from "@/components/topic-grid";
 import { ChatWidget, type ChatUserProfile } from "@/components/chat-widget";
 import { useAuth } from "@/context/auth-context";
-import { useSubscription } from "@/context/subscription-context";
-import { SplashScreen } from "@/components/splash-screen";
-
 
 export default function Home() {
-  const { user, loading } = useAuth();
-  const { loadSubscription } = useSubscription();
-  const router = useRouter();
+  const { user } = useAuth();
 
-  useEffect(() => {
-    if (!loading && !user) {
-      router.push('/login');
-    }
-    if (!loading && user && !user.isAnonymous) {
-        loadSubscription(user.uid);
-    }
-  }, [user, loading, router, loadSubscription]);
+  const chatUser: ChatUserProfile | null = user
+    ? {
+        name: user.displayName || 'Guest',
+        age: 30, 
+        gender: user.gender || 'other',
+      }
+    : null;
 
-  if (loading) {
-    return <SplashScreen onFinished={() => {}} />;
+  const hasAccess = (feature: 'dailyTip' | 'chat') => {
+      if (!user) return false;
+      if (user.isAnonymous) return false;
+      if (user.department === 'all-control-access') return true;
+      if (feature === 'dailyTip' && (user.department === 'production-access' || user.department === 'quality-access')) return true;
+      if (feature === 'chat' && (user.department === 'production-access' || user.department === 'quality-access')) return true;
+      return false;
   }
-
-  // This ensures that the user object passed to ChatWidget is always up-to-date
-  const chatUser: ChatUserProfile = {
-    name: user?.displayName || 'Guest',
-    age: 30, // This can be customized later
-    gender: user?.gender || 'other',
-  };
   
-  const hasDailyTipAccess = user?.department === 'all-control-access' || user?.department === 'production-access' || user?.department === 'quality-access';
-  const hasChatAccess = user?.department === 'all-control-access' || user?.department === 'production-access' || user?.department === 'quality-access';
+  const hasDailyTipAccess = hasAccess('dailyTip');
+  const hasChatAccess = hasAccess('chat');
 
   return (
     <>
@@ -57,10 +47,7 @@ export default function Home() {
           <TopicGrid />
         </main>
       </div>
-      {hasChatAccess && user && <ChatWidget user={chatUser} />}
+      {hasChatAccess && chatUser && <ChatWidget user={chatUser} />}
     </>
   );
 }
-
-
-    

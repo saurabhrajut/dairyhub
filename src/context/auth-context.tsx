@@ -48,7 +48,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser: FirebaseUser | null) => {
-      setLoading(true); // Start loading when auth state changes
       if (firebaseUser) {
         const userDocRef = doc(db, "users", firebaseUser.uid);
         const userDocSnap = await getDoc(userDocRef);
@@ -72,7 +71,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(null);
         clearSubscription();
       }
-      setLoading(false); // Set loading to false after user state is resolved
+      setLoading(false);
     });
     
     return () => unsubscribe();
@@ -183,6 +182,3 @@ export function useAuth() {
   }
   return context;
 }
-    
-
-    
