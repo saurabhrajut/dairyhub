@@ -1,7 +1,7 @@
 
 'use client';
 
-import { createContext, useState, useContext, ReactNode, useEffect, useCallback } from 'react';
+import { createContext, useState, useContext, ReactNode, useCallback } from 'react';
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { add } from 'date-fns';
@@ -14,6 +14,7 @@ interface SubscriptionContextType {
   subscribe: (newPlan: SubscriptionPlan, userId: string, paymentId: string) => Promise<void>;
   isPro: boolean;
   loadSubscription: (userId: string) => Promise<void>;
+  clearSubscription: () => void;
 }
 
 const SubscriptionContext = createContext<SubscriptionContextType | undefined>(undefined);
@@ -46,19 +47,25 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  const clearSubscription = () => {
+    setPlan(null);
+    setExpiryDate(null);
+  };
+
   const subscribe = async (newPlan: SubscriptionPlan, userId: string, paymentId: string) => {
     const now = new Date();
     let newExpiryDate: Date | null = null;
     
-    let durationDays: number | null = null;
-    if (newPlan.includes('7-days')) durationDays = 7;
-    else if (newPlan.includes('1-month')) durationDays = 30;
-    else if (newPlan.includes('6-months')) durationDays = 180;
-    else if (newPlan.includes('yearly')) durationDays = 365;
-    else if (newPlan.includes('lifetime')) durationDays = null; // Lifetime plan
-    
-    if (durationDays) {
-        newExpiryDate = add(now, { days: durationDays });
+    let duration: { [key: string]: number } | undefined;
+
+    if (newPlan.includes('7-days')) duration = { days: 7 };
+    else if (newPlan.includes('1-month')) duration = { months: 1 };
+    else if (newPlan.includes('6-months')) duration = { months: 6 };
+    else if (newPlan.includes('yearly')) duration = { years: 1 };
+    else if (newPlan.includes('lifetime')) duration = undefined;
+
+    if (duration) {
+        newExpiryDate = add(now, duration);
     }
 
     const subDocRef = doc(db, "users", userId, "subscription", "current");
@@ -78,7 +85,7 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
 
 
   return (
-    <SubscriptionContext.Provider value={{ plan, expiryDate, subscribe, isPro, loadSubscription }}>
+    <SubscriptionContext.Provider value={{ plan, expiryDate, subscribe, isPro, loadSubscription, clearSubscription }}>
       {children}
     </SubscriptionContext.Provider>
   );
@@ -91,3 +98,5 @@ export function useSubscription() {
   }
   return context;
 }
+
+    

@@ -9,6 +9,8 @@ import { TopicGrid } from "@/components/topic-grid";
 import { ChatWidget, type ChatUserProfile } from "@/components/chat-widget";
 import { useAuth } from "@/context/auth-context";
 import { useSubscription } from "@/context/subscription-context";
+import { SplashScreen } from "@/components/splash-screen";
+
 
 export default function Home() {
   const { user, loading } = useAuth();
@@ -19,10 +21,14 @@ export default function Home() {
     if (!loading && !user) {
       router.push('/login');
     }
-    if (user && !user.isAnonymous) {
+    if (!loading && user && !user.isAnonymous) {
         loadSubscription(user.uid);
     }
   }, [user, loading, router, loadSubscription]);
+
+  if (loading) {
+    return <SplashScreen onFinished={() => {}} />;
+  }
 
   // This ensures that the user object passed to ChatWidget is always up-to-date
   const chatUser: ChatUserProfile = {
@@ -33,7 +39,6 @@ export default function Home() {
   
   const hasDailyTipAccess = user?.department === 'all-control-access' || user?.department === 'production-access' || user?.department === 'quality-access';
   const hasChatAccess = user?.department === 'all-control-access' || user?.department === 'production-access' || user?.department === 'quality-access';
-
 
   return (
     <>
@@ -57,3 +62,5 @@ export default function Home() {
   );
 }
 
+
+    

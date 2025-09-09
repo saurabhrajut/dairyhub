@@ -55,15 +55,13 @@ const ProfilePageSkeleton = () => (
 export default function ProfilePage() {
     const { user, loading, logout, updateUserProfile, updateUserPhoto } = useAuth();
     const { language, setLanguage } = useLanguage();
-    const { plan, expiryDate, isPro, loadSubscription } = useSubscription();
+    const { plan, expiryDate, isPro } = useSubscription();
     const { toast } = useToast();
     const router = useRouter();
 
     const [isMounted, setIsMounted] = useState(false);
     const [isEditingName, setIsEditingName] = useState(false);
     
-    // Use a local state for user data to ensure it's always up-to-date on this page
-    const [displayUser, setDisplayUser] = useState(user);
     const [tempName, setTempName] = useState(user?.displayName || '');
     
     const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState(false);
@@ -73,14 +71,9 @@ export default function ProfilePage() {
         if (!loading && !user) {
             router.push('/login');
         } else if (user) {
-            // Update local state when context user changes
-            setDisplayUser(user);
             setTempName(user.displayName || '');
-            if (!user.isAnonymous) {
-                loadSubscription(user.uid);
-            }
         }
-    }, [user, loading, router, loadSubscription]);
+    }, [user, loading, router]);
 
 
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -171,7 +164,12 @@ export default function ProfilePage() {
         return names[deptKey];
     }
 
-    if (loading || !displayUser) {
+    if (loading) {
+        return <ProfilePageSkeleton />;
+    }
+    
+    if (!user) {
+        // This case should be handled by the redirect in useEffect, but as a fallback:
         return <ProfilePageSkeleton />;
     }
 
@@ -190,7 +188,7 @@ export default function ProfilePage() {
                     <div className="relative">
                         <img
                             id="profilePic"
-                            src={displayUser.photoURL || 'https://placehold.co/128x128/E0E0E0/333?text=User'}
+                            src={user.photoURL || 'https://placehold.co/128x128/E0E0E0/333?text=User'}
                             alt="Profile Picture"
                             className="w-28 h-28 rounded-full border-4 border-white shadow-lg object-cover"
                         />
@@ -222,16 +220,16 @@ export default function ProfilePage() {
                          </div>
                     ) : (
                          <div className="flex items-center justify-center space-x-2">
-                            <h1 id="userName" className="text-2xl font-bold text-gray-800">{displayUser.displayName}</h1>
+                            <h1 id="userName" className="text-2xl font-bold text-gray-800">{user.displayName}</h1>
                              {!user?.isAnonymous && (
-                                <button onClick={() => { setIsEditingName(true); setTempName(displayUser.displayName || ''); }} className="text-gray-500 hover:text-blue-600">
+                                <button onClick={() => { setIsEditingName(true); setTempName(user.displayName || ''); }} className="text-gray-500 hover:text-blue-600">
                                    <EditIcon />
                                 </button>
                              )}
                         </div>
                     )}
                 </div>
-                 <p className="text-gray-500 text-sm">{displayUser.email}</p>
+                 <p className="text-gray-500 text-sm">{user.email}</p>
             </div>
 
             <div className="px-6 pb-6 space-y-6">
@@ -284,15 +282,15 @@ export default function ProfilePage() {
                     <div className="space-y-3">
                         <div className="flex items-center">
                             <div className="bg-blue-100 p-2 rounded-lg"><Mail className="h-5 w-5 text-blue-600"/></div>
-                            <span className="ml-4 text-gray-600">{displayUser.email}</span>
+                            <span className="ml-4 text-gray-600">{user.email}</span>
                         </div>
                         <div className="flex items-center">
                             <div className="bg-green-100 p-2 rounded-lg"><User className="h-5 w-5 text-green-600"/></div>
-                            <span className="ml-4 text-gray-600 capitalize">{displayUser.gender || 'Not specified'}</span>
+                            <span className="ml-4 text-gray-600 capitalize">{user.gender || 'Not specified'}</span>
                         </div>
                          <div className="flex items-center">
                             <div className="bg-purple-100 p-2 rounded-lg"><Building2 className="h-5 w-5 text-purple-600"/></div>
-                            <span className="ml-4 text-gray-600 capitalize">{getDepartmentName(displayUser.department)}</span>
+                            <span className="ml-4 text-gray-600 capitalize">{getDepartmentName(user.department)}</span>
                         </div>
                     </div>
                 </div>
@@ -376,5 +374,7 @@ export default function ProfilePage() {
         </>
     );
 }
+
+    
 
     
