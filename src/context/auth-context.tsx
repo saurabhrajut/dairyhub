@@ -46,48 +46,41 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const { loadSubscription, clearSubscription } = useSubscription();
 
-  const handleUserAuth = useCallback(async (firebaseUser: FirebaseUser | null) => {
-    if (firebaseUser) {
-      const userDocRef = doc(db, "users", firebaseUser.uid);
-      const userDocSnap = await getDoc(userDocRef);
-      
-      const appUser: AppUser = {
-        uid: firebaseUser.uid,
-        email: firebaseUser.email,
-        displayName: firebaseUser.displayName,
-        photoURL: firebaseUser.photoURL,
-        isAnonymous: firebaseUser.isAnonymous,
-      };
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      if (firebaseUser) {
+        const userDocRef = doc(db, "users", firebaseUser.uid);
+        const userDocSnap = await getDoc(userDocRef);
 
-      if (userDocSnap.exists()) {
-        const userData = userDocSnap.data();
-        appUser.gender = userData.gender;
-        appUser.department = userData.department;
-      }
-      
-      setUser(appUser);
+        const appUser: AppUser = {
+          uid: firebaseUser.uid,
+          email: firebaseUser.email,
+          displayName: firebaseUser.displayName,
+          photoURL: firebaseUser.photoURL,
+          isAnonymous: firebaseUser.isAnonymous,
+        };
 
-      if (!firebaseUser.isAnonymous) {
-        await loadSubscription(firebaseUser.uid);
+        if (userDocSnap.exists()) {
+          const userData = userDocSnap.data();
+          appUser.gender = userData.gender;
+          appUser.department = userData.department;
+        }
+
+        setUser(appUser);
+        if (!firebaseUser.isAnonymous) {
+          await loadSubscription(firebaseUser.uid);
+        } else {
+          clearSubscription();
+        }
       } else {
+        setUser(null);
         clearSubscription();
       }
+      setLoading(false);
+    });
 
-    } else {
-      setUser(null);
-      clearSubscription();
-    }
-    // This is the key change: ensure loading is false after the first auth check.
-    setLoading(false);
-  }, [loadSubscription, clearSubscription]);
-
-  useEffect(() => {
-    // onAuthStateChanged returns an unsubscribe function
-    const unsubscribe = onAuthStateChanged(auth, handleUserAuth);
-    
-    // Cleanup subscription on unmount
     return () => unsubscribe();
-  }, [handleUserAuth]);
+  }, [loadSubscription, clearSubscription]);
   
 
   const login = async (email: string, password: string) => {
@@ -110,10 +103,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const firebaseUser = userCredential.user;
     
-    // First, update the profile on Firebase Auth
     await updateProfile(firebaseUser, { displayName });
     
-    // Then, create the user document in Firestore
     await setDoc(doc(db, "users", firebaseUser.uid), {
         uid: firebaseUser.uid,
         displayName,
@@ -132,14 +123,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
      const currentUser = auth.currentUser;
      if (!currentUser) return;
      
-     // Data for Firestore update
      const firestoreUpdateData: any = {};
      if (profileData.displayName) firestoreUpdateData.displayName = profileData.displayName;
      if (profileData.department) firestoreUpdateData.department = profileData.department;
      if (profileData.photoURL) firestoreUpdateData.photoURL = profileData.photoURL;
      if (profileData.gender) firestoreUpdateData.gender = profileData.gender;
 
-     // Data for Auth profile update
      const authProfileUpdate: { displayName?: string; photoURL?: string } = {};
      if (profileData.displayName) authProfileUpdate.displayName = profileData.displayName;
      if (profileData.photoURL) authProfileUpdate.photoURL = profileData.photoURL;
@@ -151,7 +140,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
      const userDocRef = doc(db, "users", currentUser.uid);
      await setDoc(userDocRef, firestoreUpdateData, { merge: true });
      
-     // Optimistically update local state
      setUser(prevUser => prevUser ? { ...prevUser, ...profileData } : null);
   };
   

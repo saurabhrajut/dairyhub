@@ -16,7 +16,6 @@ import { useLanguage } from '@/context/language-context';
 import { format } from 'date-fns';
 import { Info, Mail, MessageCircle, Crown, ChevronLeft, LogOut, Settings, HelpCircle, User, Loader2, Building2, ChevronRight } from 'lucide-react';
 import type { Department } from '@/context/auth-context';
-import { Skeleton } from '@/components/ui/skeleton';
 
 const EditIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -32,24 +31,6 @@ const allProFeatures = [
     "Save and export your calculations",
     "Ad-free experience",
 ];
-
-const ProfilePageSkeleton = () => (
-    <div className="max-w-md mx-auto min-h-screen bg-white shadow-lg animate-pulse">
-        <div className="relative bg-gray-200 h-60 rounded-b-3xl p-6">
-             <Skeleton className="absolute top-4 left-4 h-6 w-6 rounded-full" />
-        </div>
-        <div className="text-center p-6 -mt-16">
-            <Skeleton className="w-28 h-28 rounded-full mx-auto border-4 border-white shadow-lg" />
-            <Skeleton className="h-8 w-40 mx-auto mt-4" />
-            <Skeleton className="h-4 w-48 mx-auto mt-2" />
-        </div>
-        <div className="px-6 pb-6 space-y-6">
-            <Skeleton className="h-48 w-full rounded-xl" />
-            <Skeleton className="h-32 w-full rounded-xl" />
-            <Skeleton className="h-40 w-full rounded-xl" />
-        </div>
-    </div>
-);
 
 
 export default function ProfilePage() {
@@ -162,22 +143,23 @@ export default function ProfilePage() {
         return names[deptKey];
     }
     
-    if (loading || !user) {
-        return <ProfilePageSkeleton />;
+    if (!user) {
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <Loader2 className="animate-spin h-8 w-8" />
+            </div>
+        );
     }
-
 
     return (
         <>
         <div className="max-w-md mx-auto min-h-screen bg-white shadow-lg">
-            {/* Header Section with Gradient */}
             <div className="relative bg-gradient-to-br from-cyan-400 to-blue-600 h-60 p-6 rounded-b-3xl text-white">
                 <Link href="/" className="absolute top-4 left-4 cursor-pointer">
                    <ChevronLeft className="h-6 w-6"/>
                 </Link>
                 
                 <div className="flex flex-col items-center justify-center h-full">
-                    {/* Profile Picture */}
                     <div className="relative">
                         <img
                             id="profilePic"
@@ -195,7 +177,6 @@ export default function ProfilePage() {
                 </div>
             </div>
 
-            {/* User Name and Email Section */}
             <div className="text-center p-6 -mt-8">
                 <div className="flex items-center justify-center space-x-2 min-h-[36px]">
                     {isEditingName ? (
@@ -226,7 +207,6 @@ export default function ProfilePage() {
             </div>
 
             <div className="px-6 pb-6 space-y-6">
-                {/* Subscription Card */}
                 <div className={`p-5 rounded-xl text-white shadow-lg ${isPro ? 'bg-gradient-to-r from-green-400 to-teal-500' : 'bg-gradient-to-r from-gray-500 to-gray-600'} ${getCardClass(0)}`}>
                     <div className="flex justify-between items-center">
                         <div>
@@ -239,7 +219,7 @@ export default function ProfilePage() {
                                 <p className="font-semibold">{format(expiryDate, 'dd MMM yyyy')}</p>
                             </div>
                         )}
-                        {isPro && !expiryDate && ( // Lifetime plan
+                        {isPro && !expiryDate && (
                              <div className="text-right">
                                 <p className="text-sm font-medium opacity-80">Expires</p>
                                 <p className="font-semibold">Never</p>
@@ -269,7 +249,6 @@ export default function ProfilePage() {
                     )}
                 </div>
 
-                {/* Details Card */}
                 <div className={`bg-gray-50 p-5 rounded-xl border border-gray-200 ${getCardClass(100)}`} >
                     <h3 className="font-bold text-gray-700 mb-4">Your Information</h3>
                     <div className="space-y-3">
@@ -288,10 +267,8 @@ export default function ProfilePage() {
                     </div>
                 </div>
 
-                {/* Menu Options */}
                 <div className={`bg-gray-50 p-3 rounded-xl border border-gray-200 ${getCardClass(200)}`}>
                     <ul className="divide-y divide-gray-200">
-                        {/* Settings */}
                          <Dialog>
                             <DialogTrigger asChild>
                                 <li className="flex justify-between items-center p-3 hover:bg-gray-100 rounded-lg cursor-pointer">
@@ -333,7 +310,6 @@ export default function ProfilePage() {
                             </DialogContent>
                         </Dialog>
                         
-                        {/* Help & Support */}
                         <Dialog>
                              <DialogTrigger asChild>
                                 <li className="flex justify-between items-center p-3 hover:bg-gray-100 rounded-lg cursor-pointer">
@@ -354,7 +330,6 @@ export default function ProfilePage() {
                             </DialogContent>
                         </Dialog>
 
-                        {/* Logout */}
                         <li onClick={handleLogout} className="flex justify-between items-center p-3 hover:bg-red-50 rounded-lg cursor-pointer">
                             <span className="flex items-center gap-3 text-red-500 font-medium"><LogOut/>Logout</span>
                             <ChevronRight className="h-5 w-5 text-red-500" />
