@@ -46,44 +46,44 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const { loadSubscription, clearSubscription } = useSubscription();
 
-  const handleUserUpdate = useCallback(async (firebaseUser: FirebaseUser | null) => {
-    if (firebaseUser) {
-      const userDocRef = doc(db, "users", firebaseUser.uid);
-      const userDocSnap = await getDoc(userDocRef);
+  const handleUserUpdate = useCallback(async (firebaseUser: FirebaseUser) => {
+    const userDocRef = doc(db, "users", firebaseUser.uid);
+    const userDocSnap = await getDoc(userDocRef);
 
-      const appUser: AppUser = {
-        uid: firebaseUser.uid,
-        email: firebaseUser.email,
-        displayName: firebaseUser.displayName,
-        photoURL: firebaseUser.photoURL,
-        isAnonymous: firebaseUser.isAnonymous,
-      };
+    const appUser: AppUser = {
+      uid: firebaseUser.uid,
+      email: firebaseUser.email,
+      displayName: firebaseUser.displayName,
+      photoURL: firebaseUser.photoURL,
+      isAnonymous: firebaseUser.isAnonymous,
+    };
 
-      if (userDocSnap.exists()) {
-        const userData = userDocSnap.data();
-        appUser.gender = userData.gender;
-        appUser.department = userData.department;
-      }
-      
-      setUser(appUser);
-      if (!firebaseUser.isAnonymous) {
-        await loadSubscription(firebaseUser.uid);
-      } else {
-        clearSubscription();
-      }
+    if (userDocSnap.exists()) {
+      const userData = userDocSnap.data();
+      appUser.gender = userData.gender;
+      appUser.department = userData.department;
+    }
+    
+    setUser(appUser);
+    if (!firebaseUser.isAnonymous) {
+      await loadSubscription(firebaseUser.uid);
     } else {
-      setUser(null);
       clearSubscription();
     }
-    setLoading(false);
   }, [loadSubscription, clearSubscription]);
-
+  
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-        handleUserUpdate(firebaseUser);
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      if (firebaseUser) {
+        await handleUserUpdate(firebaseUser);
+      } else {
+        setUser(null);
+        clearSubscription();
+      }
+      setLoading(false);
     });
     return () => unsubscribe();
-  }, [handleUserUpdate]);
+  }, [handleUserUpdate, clearSubscription]);
   
 
   const login = async (email: string, password: string) => {
@@ -143,7 +143,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
      const userDocRef = doc(db, "users", currentUser.uid);
      await setDoc(userDocRef, firestoreUpdateData, { merge: true });
      
-     await handleUserUpdate(currentUser);
+     // Manually trigger a refresh of user state
+     const updatedUser = { ...auth.currentUser };
+     await handleUserUpdate(updatedUser as FirebaseUser);
   };
   
   const updateUserPhoto = async (file: File) => {

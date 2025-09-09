@@ -8,7 +8,6 @@ import { Header } from "@/components/header";
 import { TopicGrid } from "@/components/topic-grid";
 import { ChatWidget, type ChatUserProfile } from "@/components/chat-widget";
 import { useAuth } from "@/context/auth-context";
-import { SplashScreen } from '@/components/splash-screen';
 import { Loader2 } from 'lucide-react';
 
 export default function Home() {
@@ -30,6 +29,8 @@ export default function Home() {
   }
 
   if (!user) {
+    // This will be shown briefly before the redirect happens.
+    // Or if the redirect logic is removed, this prevents a crash.
     return null;
   }
   
