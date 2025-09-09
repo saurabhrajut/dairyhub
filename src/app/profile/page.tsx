@@ -61,7 +61,7 @@ export default function ProfilePage() {
 
     const [isEditingName, setIsEditingName] = useState(false);
     
-    const [tempName, setTempName] = useState(user?.displayName || '');
+    const [tempName, setTempName] = useState('');
     
     const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState(false);
 
@@ -213,7 +213,7 @@ export default function ProfilePage() {
                          </div>
                     ) : (
                          <div className="flex items-center justify-center space-x-2">
-                            <h1 id="userName" className="text-2xl font-bold text-gray-800">{user.displayName}</h1>
+                            <h1 id="userName" className="text-2xl font-bold text-gray-800">{user.displayName || ''}</h1>
                              {!user?.isAnonymous && (
                                 <button onClick={() => { setIsEditingName(true); setTempName(user.displayName || ''); }} className="text-gray-500 hover:text-blue-600">
                                    <EditIcon />
@@ -251,7 +251,7 @@ export default function ProfilePage() {
                             <div className="mt-4 pt-4 border-t border-white/20">
                                 <h4 className="text-sm font-semibold mb-2">Pro Features Unlocked:</h4>
                                 <ul className="space-y-1 text-xs">
-                                  {allProFeatures.slice(0, 2).map(feature => <li key={feature} className="flex items-center gap-2"><Info size={14}/>{feature}</li>)}
+                                  {allProFeatures.slice(0, 2).map((feature, index) => <li key={index} className="flex items-center gap-2"><Info size={14}/>{feature}</li>)}
                                 </ul>
                             </div>
                             <div className="mt-4 text-center">

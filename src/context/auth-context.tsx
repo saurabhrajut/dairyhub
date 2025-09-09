@@ -57,24 +57,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         displayName: firebaseUser.displayName,
         photoURL: firebaseUser.photoURL,
         isAnonymous: firebaseUser.isAnonymous,
-        gender: userDocSnap.exists() ? userDocSnap.data().gender : 'other',
-        department: userDocSnap.exists() ? userDocSnap.data().department : 'guest'
       };
+
+      if (userDocSnap.exists()) {
+        const userData = userDocSnap.data();
+        appUser.gender = userData.gender;
+        appUser.department = userData.department;
+      }
+      
       setUser(appUser);
-      if (!appUser.isAnonymous) {
-        await loadSubscription(appUser.uid);
+
+      if (!firebaseUser.isAnonymous) {
+        await loadSubscription(firebaseUser.uid);
       } else {
         clearSubscription();
       }
+
     } else {
       setUser(null);
       clearSubscription();
     }
+    // This is the key change: ensure loading is false after the first auth check.
     setLoading(false);
   }, [loadSubscription, clearSubscription]);
 
   useEffect(() => {
+    // onAuthStateChanged returns an unsubscribe function
     const unsubscribe = onAuthStateChanged(auth, handleUserAuth);
+    
+    // Cleanup subscription on unmount
     return () => unsubscribe();
   }, [handleUserAuth]);
   
@@ -92,7 +103,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         createdAt: serverTimestamp(),
         department: 'guest',
         gender: 'other'
-    });
+    }, { merge: true });
   }
 
   const signup = async (email: string, password: string, displayName: string, gender: 'male' | 'female' | 'other', department: Department) => {
@@ -121,21 +132,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
      const currentUser = auth.currentUser;
      if (!currentUser) return;
      
+     // Data for Firestore update
+     const firestoreUpdateData: any = {};
+     if (profileData.displayName) firestoreUpdateData.displayName = profileData.displayName;
+     if (profileData.department) firestoreUpdateData.department = profileData.department;
+     if (profileData.photoURL) firestoreUpdateData.photoURL = profileData.photoURL;
+     if (profileData.gender) firestoreUpdateData.gender = profileData.gender;
+
+     // Data for Auth profile update
      const authProfileUpdate: { displayName?: string; photoURL?: string } = {};
-     if (profileData.displayName) {
-         authProfileUpdate.displayName = profileData.displayName;
-     }
-      if (profileData.photoURL) {
-         authProfileUpdate.photoURL = profileData.photoURL;
-     }
+     if (profileData.displayName) authProfileUpdate.displayName = profileData.displayName;
+     if (profileData.photoURL) authProfileUpdate.photoURL = profileData.photoURL;
      
      if(Object.keys(authProfileUpdate).length > 0) {
         await updateProfile(currentUser, authProfileUpdate);
      }
         
      const userDocRef = doc(db, "users", currentUser.uid);
-     await setDoc(userDocRef, profileData, { merge: true });
+     await setDoc(userDocRef, firestoreUpdateData, { merge: true });
      
+     // Optimistically update local state
      setUser(prevUser => prevUser ? { ...prevUser, ...profileData } : null);
   };
   
