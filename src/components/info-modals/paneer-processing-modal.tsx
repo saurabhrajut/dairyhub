@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -99,14 +100,16 @@ const topicComponents = {
             </Section>
         )
     },
-    yield_texture: ({ content }: { content: any }) => {
-        const yieldContent = content.topics.yield_texture;
+    yield_texture: ({ content }: { content_en: any, content_hi: any }) => {
+        const { t } = useLanguage();
+        const yieldContent = t({ en: content_en.topics.yield_texture, hi: content_hi.topics.yield_texture });
+        
         return (
             <>
                 <Section title={yieldContent.yield.title}>
                     <p className="mb-4">{yieldContent.yield.description}</p>
                     <ul className="list-disc list-outside pl-5 space-y-3 text-muted-foreground">
-                        {yieldContent.yield.methods.map((method: string) => <li key={method} dangerouslySetInnerHTML={{ __html: method }} />)}
+                        {yieldContent.yield.methods.map((method: string, index: number) => <li key={index} dangerouslySetInnerHTML={{ __html: method }} />)}
                     </ul>
                 </Section>
 
@@ -189,7 +192,7 @@ export function PaneerProcessingModal({
                 </div>
                 <ScrollArea className="flex-1 mt-4 sm:pr-4">
                     <div className="p-4 pt-0 sm:p-0">
-                        <ActiveComponent content={content} />
+                        <ActiveComponent content={content} content_en={paneerProcessingContent.en} content_hi={paneerProcessingContent.hi} />
                     </div>
                 </ScrollArea>
             </div>
