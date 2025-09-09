@@ -59,7 +59,6 @@ export default function ProfilePage() {
     const { toast } = useToast();
     const router = useRouter();
 
-    const [isMounted, setIsMounted] = useState(false);
     const [isEditingName, setIsEditingName] = useState(false);
     
     const [tempName, setTempName] = useState(user?.displayName || '');
@@ -67,7 +66,6 @@ export default function ProfilePage() {
     const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState(false);
 
     useEffect(() => {
-        setIsMounted(true);
         if (!loading && !user) {
             router.push('/login');
         } else if (user) {
@@ -136,7 +134,7 @@ export default function ProfilePage() {
 
     const getCardClass = (delay: number) => {
         const baseClass = "card-enter";
-        const activeClass = isMounted ? "card-enter-active" : "";
+        const activeClass = "card-enter-active";
         return `${baseClass} ${activeClass}`;
     };
 
@@ -369,7 +367,3 @@ export default function ProfilePage() {
         </>
     );
 }
-
-    
-
-    

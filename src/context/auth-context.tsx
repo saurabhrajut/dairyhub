@@ -46,36 +46,37 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const { loadSubscription, clearSubscription } = useSubscription();
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser: FirebaseUser | null) => {
-      if (firebaseUser) {
-        const userDocRef = doc(db, "users", firebaseUser.uid);
-        const userDocSnap = await getDoc(userDocRef);
-        
-        const appUser: AppUser = {
-          uid: firebaseUser.uid,
-          email: firebaseUser.email,
-          displayName: firebaseUser.displayName,
-          photoURL: firebaseUser.photoURL,
-          isAnonymous: firebaseUser.isAnonymous,
-          gender: userDocSnap.exists() ? userDocSnap.data().gender : 'other',
-          department: userDocSnap.exists() ? userDocSnap.data().department : 'guest'
-        };
-        setUser(appUser);
-        if (!appUser.isAnonymous) {
-          await loadSubscription(appUser.uid);
-        } else {
-          clearSubscription();
-        }
+  const handleUserAuth = useCallback(async (firebaseUser: FirebaseUser | null) => {
+    if (firebaseUser) {
+      const userDocRef = doc(db, "users", firebaseUser.uid);
+      const userDocSnap = await getDoc(userDocRef);
+      
+      const appUser: AppUser = {
+        uid: firebaseUser.uid,
+        email: firebaseUser.email,
+        displayName: firebaseUser.displayName,
+        photoURL: firebaseUser.photoURL,
+        isAnonymous: firebaseUser.isAnonymous,
+        gender: userDocSnap.exists() ? userDocSnap.data().gender : 'other',
+        department: userDocSnap.exists() ? userDocSnap.data().department : 'guest'
+      };
+      setUser(appUser);
+      if (!appUser.isAnonymous) {
+        await loadSubscription(appUser.uid);
       } else {
-        setUser(null);
         clearSubscription();
       }
-      setLoading(false);
-    });
-    
-    return () => unsubscribe();
+    } else {
+      setUser(null);
+      clearSubscription();
+    }
+    setLoading(false);
   }, [loadSubscription, clearSubscription]);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, handleUserAuth);
+    return () => unsubscribe();
+  }, [handleUserAuth]);
   
 
   const login = async (email: string, password: string) => {
@@ -109,17 +110,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         createdAt: serverTimestamp(),
         gender,
         department
-    });
-
-    // Finally, update the local user state to reflect the new user immediately
-    setUser({
-      uid: firebaseUser.uid,
-      email: firebaseUser.email,
-      displayName: displayName,
-      photoURL: null,
-      isAnonymous: false,
-      gender,
-      department
     });
   };
 
