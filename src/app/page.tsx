@@ -1,37 +1,31 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { DailyTip } from "@/components/daily-tip";
 import { Header } from "@/components/header";
 import { TopicGrid } from "@/components/topic-grid";
 import { ChatWidget, type ChatUserProfile } from "@/components/chat-widget";
-import { useAuth } from "@/context/auth-context";
 import { SplashScreen } from "@/components/splash-screen";
 
 
 export default function Home() {
-  const { user, loading } = useAuth();
   const [showSplash, setShowSplash] = useState(true);
 
   const handleSplashFinished = () => {
     setShowSplash(false);
   };
   
-  const chatUser: ChatUserProfile = user ? {
-    name: user.displayName || 'Guest',
-    age: 30, // Default age, can be updated from user profile if available
-    gender: user.gender || 'other',
-  } : {
+  // Default user for chat widget when auth is disabled
+  const chatUser: ChatUserProfile = {
     name: 'Guest',
     age: 30,
     gender: 'other',
   };
   
-  if (showSplash || loading) {
+  if (showSplash) {
     return <SplashScreen onFinished={handleSplashFinished} />;
   }
-
 
   return (
     <>

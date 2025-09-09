@@ -30,7 +30,7 @@ export function ChatWidget({ user: chatUser }: { user: ChatUserProfile }) {
           {isOpen ? <X className="h-8 w-8" /> : <MessageCircle className="h-8 w-8" />}
         </Button>
       </div>
-      <ChatPanel isOpen={isOpen} setIsOpen={setIsOpen} user={chatUser} />
+      {isOpen && <ChatPanel isOpen={isOpen} setIsOpen={setIsOpen} user={chatUser} />}
     </>
   );
 }
