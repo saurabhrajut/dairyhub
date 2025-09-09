@@ -7,25 +7,34 @@ import { Header } from "@/components/header";
 import { TopicGrid } from "@/components/topic-grid";
 import { ChatWidget, type ChatUserProfile } from "@/components/chat-widget";
 import { SplashScreen } from "@/components/splash-screen";
+import { useAuth } from "@/context/auth-context";
+import { Loader2 } from "lucide-react";
 
 
 export default function Home() {
   const [showSplash, setShowSplash] = useState(true);
+  const { user, loading } = useAuth();
 
   const handleSplashFinished = () => {
     setShowSplash(false);
   };
   
-  // Default user for chat widget when auth is disabled
-  const chatUser: ChatUserProfile = {
-    name: 'Guest',
-    age: 30,
-    gender: 'other',
-  };
-  
-  if (showSplash) {
+  if (loading || showSplash) {
     return <SplashScreen onFinished={handleSplashFinished} />;
   }
+  
+  // Default user for chat widget when auth is disabled or user not logged in
+  const chatUser: ChatUserProfile = user 
+    ? {
+        name: user.displayName || 'Guest',
+        age: 30,
+        gender: user.gender || 'other',
+      }
+    : {
+        name: 'Guest',
+        age: 30,
+        gender: 'other',
+      };
 
   return (
     <>

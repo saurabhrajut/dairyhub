@@ -5,6 +5,8 @@ import type { Metadata } from 'next';
 import { Inter, Poppins, Source_Code_Pro, Space_Grotesk, Noto_Sans_Devanagari } from 'next/font/google';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
+import { AuthProvider } from '@/context/auth-context';
+import { SubscriptionProvider } from '@/context/subscription-context';
 import { LanguageProvider } from '@/context/language-context';
 import { useEffect } from 'react';
 
@@ -61,10 +63,14 @@ export default function RootLayout({
         <meta name="theme-color" content="#ffffff" />
       </head>
       <body className="font-body antialiased">
-          <LanguageProvider>
-              {children}
-              <Toaster />
-          </LanguageProvider>
+          <SubscriptionProvider>
+            <AuthProvider>
+              <LanguageProvider>
+                  {children}
+                  <Toaster />
+              </LanguageProvider>
+            </AuthProvider>
+          </SubscriptionProvider>
       </body>
     </html>
   );
