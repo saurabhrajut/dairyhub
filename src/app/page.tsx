@@ -8,8 +8,6 @@ import { TopicGrid } from "@/components/topic-grid";
 import { ChatWidget, type ChatUserProfile } from "@/components/chat-widget";
 import { SplashScreen } from "@/components/splash-screen";
 import { useAuth } from "@/context/auth-context";
-import { Loader2 } from "lucide-react";
-
 
 export default function Home() {
   const [showSplash, setShowSplash] = useState(true);
@@ -19,7 +17,7 @@ export default function Home() {
     setShowSplash(false);
   };
   
-  if (loading || showSplash) {
+  if (showSplash) {
     return <SplashScreen onFinished={handleSplashFinished} />;
   }
   
