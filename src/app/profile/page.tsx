@@ -163,13 +163,8 @@ export default function ProfilePage() {
         }
         return names[deptKey];
     }
-
-    if (loading) {
-        return <ProfilePageSkeleton />;
-    }
     
-    if (!user) {
-        // This case should be handled by the redirect in useEffect, but as a fallback:
+    if (loading || !user) {
         return <ProfilePageSkeleton />;
     }
 
