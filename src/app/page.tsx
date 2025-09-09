@@ -1,64 +1,44 @@
 
 "use client";
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState } from "react";
 import { DailyTip } from "@/components/daily-tip";
 import { Header } from "@/components/header";
 import { TopicGrid } from "@/components/topic-grid";
 import { ChatWidget, type ChatUserProfile } from "@/components/chat-widget";
 import { useAuth } from "@/context/auth-context";
-import { Loader2 } from 'lucide-react';
+import { SplashScreen } from "@/components/splash-screen";
+
 
 export default function Home() {
   const { user, loading } = useAuth();
-  const router = useRouter();
+  const [showSplash, setShowSplash] = useState(true);
 
-  // This effect will run when loading is finished and we know the user's status.
-  useEffect(() => {
-    if (!loading && !user) {
-      router.push('/login');
-    }
-  }, [user, loading, router]);
-
-  // This is the critical change to prevent the app from getting stuck.
-  // It shows a loading spinner ONLY while the initial auth check is happening.
-  if (loading) {
-     return (
-        <div className="flex items-center justify-center min-h-screen">
-            <Loader2 className="animate-spin h-8 w-8" />
-        </div>
-    );
-  }
-
-  // After loading, if there's no user, we can return null to wait for the redirect.
-  if (!user) {
-    return null;
-  }
-  
-  const chatUser: ChatUserProfile = {
-      name: user.displayName || 'Guest',
-      age: 30,
-      gender: user.gender || 'other',
+  const handleSplashFinished = () => {
+    setShowSplash(false);
   };
-
-  const hasAccess = (feature: 'dailyTip' | 'chat') => {
-      if (user.isAnonymous) return false;
-      if (user.department === 'all-control-access') return true;
-      if (feature === 'dailyTip' && (user.department === 'production-access' || user.department === 'quality-access')) return true;
-      if (feature === 'chat' && (user.department === 'production-access' || user.department === 'quality-access')) return true;
-      return false;
-  }
   
-  const hasDailyTipAccess = hasAccess('dailyTip');
-  const hasChatAccess = hasAccess('chat');
+  const chatUser: ChatUserProfile = user ? {
+    name: user.displayName || 'Guest',
+    age: 30, // Default age, can be updated from user profile if available
+    gender: user.gender || 'other',
+  } : {
+    name: 'Guest',
+    age: 30,
+    gender: 'other',
+  };
+  
+  if (showSplash || loading) {
+    return <SplashScreen onFinished={handleSplashFinished} />;
+  }
+
 
   return (
     <>
       <div className="max-w-7xl mx-auto p-4 sm:p-6">
         <Header />
         <main>
-          {hasDailyTipAccess && <DailyTip />}
+          <DailyTip />
           <div className="text-center mb-8">
             <h2 className="font-headline text-3xl font-bold text-gray-800">
               Dairy Information & Calculations
@@ -70,7 +50,7 @@ export default function Home() {
           <TopicGrid />
         </main>
       </div>
-      {hasChatAccess && <ChatWidget user={chatUser} />}
+      <ChatWidget user={chatUser} />
     </>
   );
 }

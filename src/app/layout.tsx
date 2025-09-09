@@ -63,14 +63,14 @@ export default function RootLayout({
         <meta name="theme-color" content="#ffffff" />
       </head>
       <body className="font-body antialiased">
-          <LanguageProvider>
-            <SubscriptionProvider>
-              <AuthProvider>
-                {children}
-                <Toaster />
-              </AuthProvider>
-            </SubscriptionProvider>
-          </LanguageProvider>
+          <SubscriptionProvider>
+            <AuthProvider>
+              <LanguageProvider>
+                  {children}
+                  <Toaster />
+              </LanguageProvider>
+            </AuthProvider>
+          </SubscriptionProvider>
       </body>
     </html>
   );
