@@ -1,23 +1,26 @@
-
 rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    
-    // Users can read and update their own user document.
+    // Rules for the 'users' collection
     match /users/{userId} {
-      allow read, update: if request.auth != null && request.auth.uid == userId;
+      // Any authenticated user can read user documents (e.g., for profile display)
+      allow read: if request.auth != null;
+      
+      // Any authenticated user can create their own user document during signup
       allow create: if request.auth != null;
-    }
-    
-    // Users can manage their own subscription information.
-    match /users/{userId}/subscription/{docId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
-    }
-    
-    // Default deny all other access
-    match /{document=**} {
-      allow read, write: if false;
+      
+      // Only the user themselves can update their own document
+      allow update: if request.auth != null && request.auth.uid == userId;
+      
+      // Deleting user documents is not allowed from the client
+      allow delete: if false;
+
+      // Rules for the 'subscription' subcollection within a user document
+      match /subscription/{subId} {
+        // Only the user can read or write to their own subscription document
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
     }
   }
 }
