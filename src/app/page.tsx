@@ -9,32 +9,30 @@ import { TopicGrid } from "@/components/topic-grid";
 import { ChatWidget, type ChatUserProfile } from "@/components/chat-widget";
 import { useAuth } from "@/context/auth-context";
 import { SplashScreen } from '@/components/splash-screen';
+import { Loader2 } from 'lucide-react';
 
 export default function Home() {
   const { user, loading } = useAuth();
   const router = useRouter();
 
-  // This effect will handle redirection after the initial auth state is determined.
   useEffect(() => {
-    // Only redirect if loading is finished and there is no user.
     if (!loading && !user) {
       router.push('/login');
     }
   }, [user, loading, router]);
 
-  // Show a loading screen only during the initial check
   if (loading) {
-     return <SplashScreen onFinished={() => {}} />;
+     return (
+        <div className="flex items-center justify-center min-h-screen">
+            <Loader2 className="animate-spin h-8 w-8" />
+        </div>
+    );
   }
 
-  // If we are done loading but there is no user, we are about to redirect.
-  // Render null to avoid a flash of the home page.
   if (!user) {
     return null;
   }
   
-  // If there's a user, render the main content.
-  // The ChatWidget will conditionally render based on user properties.
   const chatUser: ChatUserProfile = {
       name: user.displayName || 'Guest',
       age: 30,

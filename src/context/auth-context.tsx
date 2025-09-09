@@ -79,7 +79,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [loadSubscription, clearSubscription]);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, handleUserUpdate);
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+        handleUserUpdate(firebaseUser);
+    });
     return () => unsubscribe();
   }, [handleUserUpdate]);
   
@@ -141,7 +143,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
      const userDocRef = doc(db, "users", currentUser.uid);
      await setDoc(userDocRef, firestoreUpdateData, { merge: true });
      
-     // Re-fetch user data to ensure consistency
      await handleUserUpdate(currentUser);
   };
   
@@ -162,7 +163,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     loading,
     login,
     signup,
-logout,
+    logout,
     anonymousLogin,
     updateUserProfile,
     updateUserPhoto
