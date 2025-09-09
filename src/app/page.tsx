@@ -14,12 +14,15 @@ export default function Home() {
   const { user, loading } = useAuth();
   const router = useRouter();
 
+  // This effect will run when loading is finished and we know the user's status.
   useEffect(() => {
     if (!loading && !user) {
       router.push('/login');
     }
   }, [user, loading, router]);
 
+  // This is the critical change to prevent the app from getting stuck.
+  // It shows a loading spinner ONLY while the initial auth check is happening.
   if (loading) {
      return (
         <div className="flex items-center justify-center min-h-screen">
@@ -28,9 +31,8 @@ export default function Home() {
     );
   }
 
+  // After loading, if there's no user, we can return null to wait for the redirect.
   if (!user) {
-    // This will be shown briefly before the redirect happens.
-    // Or if the redirect logic is removed, this prevents a crash.
     return null;
   }
   

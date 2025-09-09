@@ -46,7 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const { loadSubscription, clearSubscription } = useSubscription();
 
-  const handleUserUpdate = useCallback(async (firebaseUser: FirebaseUser) => {
+  const fetchAppUser = useCallback(async (firebaseUser: FirebaseUser): Promise<AppUser> => {
     const userDocRef = doc(db, "users", firebaseUser.uid);
     const userDocSnap = await getDoc(userDocRef);
 
@@ -56,6 +56,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       displayName: firebaseUser.displayName,
       photoURL: firebaseUser.photoURL,
       isAnonymous: firebaseUser.isAnonymous,
+      department: 'guest', // Default value
     };
 
     if (userDocSnap.exists()) {
@@ -63,28 +64,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       appUser.gender = userData.gender;
       appUser.department = userData.department;
     }
-    
-    setUser(appUser);
-    if (!firebaseUser.isAnonymous) {
-      await loadSubscription(firebaseUser.uid);
-    } else {
-      clearSubscription();
-    }
-  }, [loadSubscription, clearSubscription]);
-  
+    return appUser;
+  }, []);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
-        await handleUserUpdate(firebaseUser);
+        const appUser = await fetchAppUser(firebaseUser);
+        setUser(appUser);
+        if (!firebaseUser.isAnonymous) {
+          await loadSubscription(firebaseUser.uid);
+        } else {
+          clearSubscription();
+        }
       } else {
         setUser(null);
         clearSubscription();
       }
+      // This is the crucial change: setLoading is now called reliably.
       setLoading(false);
     });
+
     return () => unsubscribe();
-  }, [handleUserUpdate, clearSubscription]);
-  
+  }, [fetchAppUser, loadSubscription, clearSubscription]);
 
   const login = async (email: string, password: string) => {
     await signInWithEmailAndPassword(auth, email, password);
@@ -100,6 +102,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         department: 'guest',
         gender: 'other'
     }, { merge: true });
+    
+    const appUser = await fetchAppUser(userCredential.user);
+    setUser(appUser);
   }
 
   const signup = async (email: string, password: string, displayName: string, gender: 'male' | 'female' | 'other', department: Department) => {
@@ -116,10 +121,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         gender,
         department
     });
+
+    const appUser = await fetchAppUser(firebaseUser);
+    setUser(appUser);
   };
 
   const logout = async () => {
     await signOut(auth);
+    setUser(null);
   };
 
   const updateUserProfile = async (profileData: { displayName?: string; department?: Department; photoURL?: string; gender?: 'male' | 'female' | 'other' }) => {
@@ -143,9 +152,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
      const userDocRef = doc(db, "users", currentUser.uid);
      await setDoc(userDocRef, firestoreUpdateData, { merge: true });
      
-     // Manually trigger a refresh of user state
-     const updatedUser = { ...auth.currentUser };
-     await handleUserUpdate(updatedUser as FirebaseUser);
+     const appUser = await fetchAppUser(currentUser);
+     setUser(appUser);
   };
   
   const updateUserPhoto = async (file: File) => {
