@@ -94,7 +94,7 @@ export default function ProfilePage() {
         setLanguage(lang);
         toast({
             title: "Language Updated",
-            description: `App language set to ${lang === 'hi' ? 'Hinglish' : 'English'}.`,
+            description: `App language set to ${lang === 'hi' ? 'Hindi' : 'English'}.`,
         });
     }
 
@@ -292,7 +292,7 @@ export default function ProfilePage() {
                                             <SelectTrigger id="language-select"><SelectValue/></SelectTrigger>
                                             <SelectContent>
                                                 <SelectItem value="en">English</SelectItem>
-                                                <SelectItem value="hi">Hinglish</SelectItem>
+                                                <SelectItem value="hi">Hindi</SelectItem>
                                             </SelectContent>
                                         </Select>
                                     </div>

@@ -134,7 +134,7 @@ export function ChatPanel({
       setAppLanguage(lang as 'en' | 'hi');
       toast({
           title: "Language Updated",
-          description: `App language set to ${lang === 'hi' ? 'Hinglish' : 'English'}.`,
+          description: `App language set to ${lang === 'hi' ? 'Hindi' : 'English'}.`,
       });
   };
 
@@ -253,11 +253,11 @@ export function ChatPanel({
               <SelectValue placeholder="Language" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="hi-IN">Hinglish</SelectItem>
+              <SelectItem value="hi-IN">Hindi</SelectItem>
               <SelectItem value="hi-IN-haryanvi">Haryanvi</SelectItem>
               <SelectItem value="pa-IN">Punjabi</SelectItem>
               <SelectItem value="en-IN">English</SelectItem>
-              <SelectItem value="hi-IN-hindi">Hindi</SelectItem>
+              <SelectItem value="hi-IN-hindi">Pure Hindi</SelectItem>
               <SelectItem value="hi-Braj">Braj Bhasha</SelectItem>
               <SelectItem value="hi-Bhoj">Bhojpuri</SelectItem>
             </SelectContent>
@@ -270,7 +270,7 @@ export function ChatPanel({
                   <SelectValue placeholder="Language" />
                   </SelectTrigger>
                   <SelectContent>
-                      <SelectItem value="hi">Hinglish</SelectItem>
+                      <SelectItem value="hi">Hindi</SelectItem>
                       <SelectItem value="en">English</SelectItem>
                   </SelectContent>
               </Select>

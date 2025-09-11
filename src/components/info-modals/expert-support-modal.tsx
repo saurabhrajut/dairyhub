@@ -66,7 +66,7 @@ export function ExpertSupportModal({ isOpen, setIsOpen }: { isOpen: boolean; set
             case 'gyan-ai': return <GyanAIPage setActivePage={setActivePage} />;
             case 'register': return <RegisterExpertPage setActivePage={setActivePage} />;
             case 'home':
-            default: return <HomePage setActivePage={setActivePage} onSelectExpert={handleSelectExpert} />;
+            default: return <HomePage setActivePage={setActivePage} onSelectExpert={onSelectExpert} />;
         }
     };
 
@@ -208,7 +208,7 @@ function ChatPage({ expert, onBack }: { expert: typeof initialExperts[0], onBack
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="English">English</SelectItem>
-                            <SelectItem value="Hinglish">Hinglish</SelectItem>
+                            <SelectItem value="Hindi">Hindi</SelectItem>
                         </SelectContent>
                     </Select>
                 </header>
@@ -291,7 +291,7 @@ function GyanAIPage({ setActivePage }: { setActivePage: (page: string) => void }
                             <SelectTrigger><SelectValue placeholder="Response Language" /></SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="English">English</SelectItem>
-                                <SelectItem value="Hinglish">Hinglish</SelectItem>
+                                <SelectItem value="Hindi">Hindi</SelectItem>
                             </SelectContent>
                         </Select>
                         <Button onClick={handleAskGyan} disabled={isLoading} className="w-full">

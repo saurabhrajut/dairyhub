@@ -2,7 +2,7 @@
 
 import { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 
-type Language = 'en' | 'hi'; // 'en' for English, 'hi' for Hinglish
+type Language = 'en' | 'hi'; // 'en' for English, 'hi' for Hindi
 
 interface LanguageContextType {
   language: Language;
@@ -13,7 +13,7 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguageState] = useState<Language>('hi'); // Default to Hinglish
+  const [language, setLanguageState] = useState<Language>('en'); // Default to English
 
   useEffect(() => {
     const storedLang = localStorage.getItem('dairy-hub-language') as Language | null;
