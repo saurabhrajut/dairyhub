@@ -2,7 +2,7 @@
 "use client";
 
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
-import type { User as FirebaseUser } from "firebase/auth";
+import { useSubscription } from './subscription-context';
 
 export type Department = 'process-access' | 'production-access' | 'quality-access' | 'all-control-access' | 'guest';
 
@@ -16,51 +16,176 @@ export interface AppUser {
     isAnonymous: boolean;
 }
 
+// --- Auth Context ka Type ---
 interface AuthContextType {
   user: AppUser | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   signup: (email: string, password: string, displayName: string, gender: 'male' | 'female' | 'other', department: Department) => Promise<void>;
   logout: () => Promise<void>;
-  anonymousLogin: () => Promise<void>;
-  updateUserProfile: (profileData: { displayName?: string; department?: Department; photoURL?: string; gender?: 'male' | 'female' | 'other' }) => Promise<void>;
+  updateUserProfile: (profileData: { displayName?: string; department?: Department }) => Promise<void>;
   updateUserPhoto: (file: File) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export function AuthProvider({ children }: { children: ReactNode }) {
-  // Set a default guest user and loading to false to ensure the app always loads.
-  const [user, setUser] = useState<AppUser | null>({
-    uid: 'guest-user',
-    email: null,
-    displayName: 'Guest',
-    isAnonymous: true,
-    department: 'guest',
-    gender: 'other',
-  });
-  const [loading, setLoading] = useState(false);
+const USERS_STORAGE_KEY = 'dairy-hub-users';
+const CURRENT_USER_STORAGE_KEY = 'dairy-hub-current-user';
 
-  // Keep the functions as placeholders so other components don't break.
-  const login = async () => { console.log("Login function called"); };
-  const signup = async () => { console.log("Signup function called"); };
-  const logout = async () => { console.log("Logout function called"); };
-  const anonymousLogin = async () => { console.log("Anonymous login function called"); };
-  const updateUserProfile = async () => { console.log("Update profile function called"); };
-  const updateUserPhoto = async () => { console.log("Update photo function called"); };
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<AppUser | null>(null);
+  const [loading, setLoading] = useState(true);
+  const { loadSubscription } = useSubscription();
+
+  useEffect(() => {
+    try {
+        const storedUser = localStorage.getItem(CURRENT_USER_STORAGE_KEY);
+        if (storedUser) {
+            const parsedUser = JSON.parse(storedUser);
+            setUser(parsedUser);
+            if (parsedUser?.uid) {
+              loadSubscription(parsedUser.uid);
+            }
+        }
+    } catch (error) {
+        console.error("Failed to parse user from localStorage", error);
+        localStorage.removeItem(CURRENT_USER_STORAGE_KEY);
+    } finally {
+        setLoading(false);
+    }
+  }, [loadSubscription]);
   
+  const getUsers = (): AppUser[] => {
+      try {
+        const usersRaw = localStorage.getItem(USERS_STORAGE_KEY);
+        return usersRaw ? JSON.parse(usersRaw) : [];
+      } catch (error) {
+        console.error("Failed to parse users from localStorage", error);
+        return [];
+      }
+  };
+
+  const saveUsers = (users: AppUser[]) => {
+      localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(users));
+  };
+
+  const login = async (email: string, password: string) => {
+    // Special case for guest login
+    if (email === 'guest@example.com' && password === 'guestpassword') {
+        const guestUser: AppUser = {
+            uid: 'guest-' + Date.now(), 
+            email: 'guest@example.com', 
+            displayName: 'Guest User', 
+            photoURL: 'https://placehold.co/128x128/E0E0E0/333?text=G',
+            gender: 'other',
+            department: 'guest' // Assign a specific guest department
+        };
+        localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(guestUser));
+        setUser(guestUser);
+        loadSubscription(guestUser.uid);
+        return;
+    }
+
+    const allUsers = getUsers();
+    const foundUser = allUsers.find(u => u.email === email);
+    
+    if (foundUser) {
+        // In a real app, you'd check the hashed password here
+        setUser(foundUser);
+        localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(foundUser));
+        loadSubscription(foundUser.uid);
+    } else {
+        throw new Error("User not found. Please check your credentials or sign up.");
+    }
+  };
+
+  const signup = async (email: string, password: string, displayName: string, gender: 'male' | 'female' | 'other', department: Department) => {
+    const allUsers = getUsers();
+    if (allUsers.some(u => u.email === email)) {
+        throw new Error("An account with this email already exists.");
+    }
+
+    const newUser: AppUser = {
+        uid: 'user-' + Date.now(),
+        email,
+        displayName,
+        gender,
+        department,
+        photoURL: `https://placehold.co/128x128/E0E0E0/333?text=${displayName.charAt(0).toUpperCase()}`,
+    };
+    
+    allUsers.push(newUser);
+    saveUsers(allUsers);
+    
+    localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(newUser));
+    setUser(newUser);
+    loadSubscription(newUser.uid);
+  };
+
+  const logout = async () => {
+    localStorage.removeItem(CURRENT_USER_STORAGE_KEY);
+    setUser(null);
+  };
+
+  const updateUserProfile = async (profileData: Partial<AppUser>) => {
+     if (!user || user.department === 'guest') {
+       console.log("Update blocked for guest user or no user logged in.");
+       return;
+     }
+      
+      const updatedUser = { ...user, ...profileData };
+      setUser(updatedUser);
+      localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(updatedUser));
+      
+      const allUsers = getUsers();
+      const userIndex = allUsers.findIndex(u => u.uid === user.uid);
+      if (userIndex !== -1) {
+          allUsers[userIndex] = updatedUser;
+          saveUsers(allUsers);
+      }
+      console.log("User profile updated.", updatedUser);
+  };
+
+  const updateUserPhoto = async (file: File) => {
+    if (!user) return;
+
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+            const photoURL = reader.result as string;
+            if (user) {
+                const updatedUser = { ...user, photoURL };
+                setUser(updatedUser);
+                localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(updatedUser));
+                
+                const allUsers = getUsers();
+                const userIndex = allUsers.findIndex(u => u.uid === user.uid);
+                if (userIndex !== -1) {
+                    allUsers[userIndex] = updatedUser;
+                    saveUsers(allUsers);
+                }
+            }
+            resolve();
+        };
+        reader.onerror = (error) => {
+            console.error("Error reading file:", error);
+            reject(error);
+        };
+    });
+  };
+
   const value = {
     user,
     loading,
     login,
     signup,
     logout,
-    anonymousLogin,
     updateUserProfile,
     updateUserPhoto
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return React.createElement(AuthContext.Provider, { value }, children);
 }
 
 export function useAuth() {
@@ -70,3 +195,5 @@ export function useAuth() {
   }
   return context;
 }
+
+
