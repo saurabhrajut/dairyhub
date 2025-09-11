@@ -14,8 +14,9 @@ import {
 } from 'firebase/auth';
 import { getFirestore, doc, setDoc, getDoc, updateDoc } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-// !! YEH PATH CHECK KAREIN !! Apni firebase config file ka sahi path yahan daalein
-import { app } from '../firebase'; 
+
+// <<-- YEH SABSE ZAROORI FIX HAI. Sahi Path Daal Diya Gaya Hai.
+import { app } from '../lib/firebase'; 
 
 // Firebase services ko initialize karein
 const auth = getAuth(app);
@@ -43,23 +44,20 @@ interface AuthContextType {
   signup: (email: string, password: string, displayName: string, gender: 'male' | 'female' | 'other', department: Department) => Promise<void>;
   logout: () => Promise<void>;
   anonymousLogin: () => Promise<void>;
-  updateUserProfile: (profileData: { displayName?: string; department?: Department; photoURL?: string; gender?: 'male' | 'female' | 'other' }) => Promise<void>;
+  updateUserProfile: (profileData: Partial<AppUser>) => Promise<void>;
   updateUserPhoto: (file: File) => Promise<string>; 
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-
-// --- YEH AAPKA MAIN COMPONENT HAI JISME SABHI LOGIC HAI ---
+// --- Main AuthProvider Component ---
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AppUser | null>(null);
-  const [loading, setLoading] = useState(true); // <<-- Shuru me loading TRUE rakhein
+  const [loading, setLoading] = useState(true);
 
-  // <<-- YAHI SABSE ZAROORI HAI: Ye app load hone par user ka status check karta hai
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
-        // User logged in hai, ab uski extra details Firestore se laayein
         const userDocRef = doc(db, 'users', firebaseUser.uid);
         const userDoc = await getDoc(userDocRef);
         
@@ -71,30 +69,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             displayName: firebaseUser.displayName,
             photoURL: firebaseUser.photoURL,
             isAnonymous: firebaseUser.isAnonymous,
-            department: userData.department,
-            gender: userData.gender,
+            department: userData?.department || 'guest',
+            gender: userData?.gender || 'other',
           });
         } else if (firebaseUser.isAnonymous) {
              setUser({
                 uid: firebaseUser.uid,
                 email: null,
                 displayName: 'Guest',
+                photoURL: null,
                 isAnonymous: true,
                 department: 'guest',
+                gender: 'other',
              });
         }
       } else {
-        // User logged out hai
         setUser(null);
       }
-      setLoading(false); // <<-- Check poora hone ke baad loading FALSE karein
+      setLoading(false);
     });
 
-    // Cleanup function
     return () => unsubscribe();
-  }, []); // [] ka matlab hai ye sirf ek baar chalega
+  }, []);
 
-  // --- Asli Firebase functions ---
+  // --- Functions ---
   const login = async (email: string, password: string) => {
     await signInWithEmailAndPassword(auth, email, password);
   };
@@ -104,7 +102,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const firebaseUser = userCredential.user;
     await updateProfile(firebaseUser, { displayName });
     const userDocRef = doc(db, 'users', firebaseUser.uid);
-    await setDoc(userDocRef, { uid: firebaseUser.uid, displayName, email, gender, department });
+    await setDoc(userDocRef, { uid: firebaseUser.uid, displayName, email, gender, department, createdAt: new Date() });
   };
 
   const logout = async () => {
@@ -115,22 +113,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await signInAnonymously(auth);
   };
 
-  const updateUserProfile = async (profileData: { displayName?: string; department?: Department; photoURL?: string; gender?: 'male' | 'female' | 'other' }) => {
+  const updateUserProfile = async (profileData: Partial<AppUser>) => {
     if (!auth.currentUser) throw new Error("User not logged in");
     const userDocRef = doc(db, 'users', auth.currentUser.uid);
     await updateDoc(userDocRef, profileData);
+
     if (profileData.displayName || profileData.photoURL) {
-        await updateProfile(auth.currentUser, { displayName: profileData.displayName, photoURL: profileData.photoURL });
+        await updateProfile(auth.currentUser, { 
+            displayName: profileData.displayName, 
+            photoURL: profileData.photoURL 
+        });
     }
   };
 
   const updateUserPhoto = async (file: File): Promise<string> => {
       if (!auth.currentUser) throw new Error("User not logged in");
-      const filePath = `profile-photos/${auth.currentUser.uid}/${file.name}`;
+      const filePath = `profile-photos/${auth.currentUser.uid}/${Date.now()}_${file.name}`;
       const storageRef = ref(storage, filePath);
       await uploadBytes(storageRef, file);
       const photoURL = await getDownloadURL(storageRef);
-      await updateUserProfile({ photoURL });
+      await updateUserProfile({ photoURL: photoURL });
+      setUser(prevUser => prevUser ? { ...prevUser, photoURL } : null);
       return photoURL;
   };
   
