@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react'; // <<-- useEffect ko import karein
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -31,7 +31,8 @@ const formSchema = z.object({
 export default function SignUpPage() {
     const { toast } = useToast();
     const router = useRouter();
-    const { signup } = useAuth();
+    // <<-- 1. User object ko context se lein
+    const { signup, user } = useAuth();
     const [isLoading, setIsLoading] = useState(false);
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -43,15 +44,24 @@ export default function SignUpPage() {
         },
     });
 
+    // <<-- 2. useEffect ka istemal karein jo 'user' object par nazar rakhega
+    useEffect(() => {
+        // Jab 'user' object null se badal kar usmein data aa jaaye, tab redirect karo
+        if (user) {
+            router.push('/profile');
+        }
+    }, [user, router]);
+
+
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setIsLoading(true);
         try {
             await signup(values.email, values.password, values.username, values.gender, values.department as Department);
             toast({
                 title: 'Account Created!',
-                description: "Welcome! You are now logged in.",
+                description: "Welcome! You will be redirected shortly.",
             });
-            router.push('/profile');
+            // <<-- 3. Yahan se router.push hata dein. Ab yeh useEffect se handle hoga.
         } catch (error: any) {
             toast({
                 variant: 'destructive',
@@ -63,6 +73,7 @@ export default function SignUpPage() {
         }
     }
 
+    // Baaki ka poora JSX code waisa hi rahega...
     return (
         <div className="bg-gradient-to-br from-pink-200 via-purple-200 to-indigo-300 flex items-center justify-center min-h-screen">
             <div className="w-full max-w-md bg-white rounded-xl shadow-2xl p-8 m-4">
@@ -73,6 +84,7 @@ export default function SignUpPage() {
 
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                        {/* Aapke saare Form Fields yahan aayenge... poora form waisa hi rahega */}
                         <FormField
                             control={form.control}
                             name="username"
@@ -191,3 +203,4 @@ export default function SignUpPage() {
         </div>
     );
 }
+
