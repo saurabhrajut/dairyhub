@@ -13,7 +13,8 @@ import {
 } from 'firebase/auth';
 import { getFirestore, doc, setDoc, getDoc, updateDoc } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { app } from '../lib/firebase'; // Sahi path
+import { app } from '@/lib/firebase';
+
 
 // Firebase services ko initialize karein
 const auth = getAuth(app);
