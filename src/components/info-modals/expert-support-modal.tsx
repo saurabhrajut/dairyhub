@@ -66,7 +66,7 @@ export function ExpertSupportModal({ isOpen, setIsOpen }: { isOpen: boolean; set
             case 'gyan-ai': return <GyanAIPage setActivePage={setActivePage} />;
             case 'register': return <RegisterExpertPage setActivePage={setActivePage} />;
             case 'home':
-            default: return <HomePage setActivePage={setActivePage} onSelectExpert={onSelectExpert} />;
+            default: return <HomePage setActivePage={setActivePage} onSelectExpert={handleSelectExpert} />;
         }
     };
 
