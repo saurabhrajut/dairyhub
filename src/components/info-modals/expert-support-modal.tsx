@@ -110,7 +110,7 @@ function HomePage({ setActivePage, onSelectExpert }: { setActivePage: (page: str
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                    {filteredExperts.map(expert => (
                        <div key={expert.id} className="bg-white rounded-xl shadow-lg p-6 text-center transform hover:-translate-y-1 transition-transform duration-300 cursor-pointer" onClick={() => onSelectExpert(expert)}>
-                           <img className="w-24 h-24 rounded-full object-cover mx-auto mb-4 border-4 border-blue-200" src={expert.photo} alt={expert.name} />
+                           <img className="w-24 h-24 rounded-full object-cover mx-auto mb-4 border-4 border-blue-200" src={expert.photo} data-ai-hint="profile photo" alt={expert.name} />
                            <h4 className="text-lg font-semibold text-gray-900">{expert.name}</h4>
                            <p className="text-sm text-gray-600 mt-1">{expert.experience}+ years in {expert.specialization}</p>
                        </div>
@@ -196,7 +196,7 @@ function ChatPage({ expert, onBack }: { expert: typeof initialExperts[0], onBack
             <div className="flex-1 flex flex-col bg-card border rounded-lg overflow-hidden">
                 <header className="p-4 border-b flex items-center justify-between gap-4">
                     <div className='flex items-center gap-4'>
-                        <img className="w-12 h-12 rounded-full object-cover" src={expert.photo} alt={expert.name} />
+                        <img className="w-12 h-12 rounded-full object-cover" src={expert.photo} data-ai-hint="profile photo" alt={expert.name} />
                         <div>
                             <h3 className="font-bold">{expert.name}</h3>
                             <p className="text-xs text-muted-foreground">{expert.specialization}</p>
@@ -208,7 +208,7 @@ function ChatPage({ expert, onBack }: { expert: typeof initialExperts[0], onBack
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="English">English</SelectItem>
-                            <SelectItem value="Hindi">Hindi</SelectItem>
+                            <SelectItem value="Hinglish">Hinglish</SelectItem>
                         </SelectContent>
                     </Select>
                 </header>
@@ -291,7 +291,7 @@ function GyanAIPage({ setActivePage }: { setActivePage: (page: string) => void }
                             <SelectTrigger><SelectValue placeholder="Response Language" /></SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="English">English</SelectItem>
-                                <SelectItem value="Hindi">Hindi</SelectItem>
+                                <SelectItem value="Hinglish">Hinglish</SelectItem>
                             </SelectContent>
                         </Select>
                         <Button onClick={handleAskGyan} disabled={isLoading} className="w-full">
