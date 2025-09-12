@@ -1,11 +1,9 @@
-
 "use client";
 
 import { useState } from "react";
 import { DailyTip } from "@/components/daily-tip";
 import { Header } from "@/components/header";
 import { TopicGrid } from "@/components/topic-grid";
-import { ChatWidget, type ChatUserProfile } from "@/components/chat-widget";
 import { SplashScreen } from "@/components/splash-screen";
 import { useAuth } from "@/context/auth-context";
 
@@ -20,19 +18,6 @@ export default function Home() {
   if (showSplash) {
     return <SplashScreen onFinished={handleSplashFinished} />;
   }
-  
-  // Default user for chat widget when auth is disabled or user not logged in
-  const chatUser: ChatUserProfile = user 
-    ? {
-        name: user.displayName || 'Guest',
-        age: 30,
-        gender: user.gender || 'other',
-      }
-    : {
-        name: 'Guest',
-        age: 30,
-        gender: 'other',
-      };
 
   return (
     <>
@@ -51,7 +36,6 @@ export default function Home() {
           <TopicGrid />
         </main>
       </div>
-      <ChatWidget user={chatUser} />
     </>
   );
 }

@@ -101,7 +101,6 @@ const topics: { id: string; title: string; description: string; category: string
   { id: 'audits', title: 'Audits', description: 'Internal & External Audits', category: 'industry', icon: ClipboardCheck, badge: 'New', modal: AuditsModal, isPro: true, color: 'from-rose-100 to-red-200' },
   { id: 'validation-verification', title: 'Validation & Verification', description: 'Food Safety Assurance', category: 'industry', icon: ClipboardCheck, badge: 'New', modal: ValidationVerificationModal, isPro: true, color: 'from-violet-100 to-fuchsia-200' },
   
-  { id: 'expert-support', title: 'Expert Support', description: 'Ask AI & Real Experts', category: 'industry', icon: GraduationCap, badge: 'Pro', modal: ExpertSupportModal, isPro: true, color: 'from-teal-100 to-emerald-200' },
   { id: 'about-us', title: 'About Us', description: 'Our Mission & Vision', category: 'industry', icon: Users, modal: AboutUsModal, isPro: false, color: 'from-slate-100 to-stone-200' },
 ];
 

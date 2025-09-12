@@ -9,7 +9,6 @@ import { askExpert as askExpertFlow } from "@/ai/flows/expert-support-flow";
 import { gyanAI as gyanAIFlow } from "@/ai/flows/gyan-ai-flow";
 import { refineQuestion as refineQuestionFlow } from "@/ai/flows/refine-question-flow";
 import { textToSpeech as textToSpeechFlow } from "@/ai/flows/text-to-speech-flow";
-import { sarathiChatbot } from "@/ai/flows/sarathi-chatbot";
 
 
 import type { 
@@ -18,9 +17,7 @@ import type {
     AskExpertInput,
     GyanAIInput,
     RefineQuestionInput,
-    TextToSpeechInput,
-    SarathiChatbotInput,
-    SarathiChatbotOutput
+    TextToSpeechInput
 } from "@/ai/flows/types";
 
 export async function getDailyTip() {
@@ -53,8 +50,4 @@ export async function refineQuestion(input: RefineQuestionInput) {
 
 export async function textToSpeech(input: TextToSpeechInput) {
     return await textToSpeechFlow(input);
-}
-
-export async function getSarathiChatbotResponse(input: SarathiChatbotInput): Promise<SarathiChatbotOutput> {
-    return await sarathiChatbot(input);
 }
