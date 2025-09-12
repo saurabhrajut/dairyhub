@@ -51,12 +51,11 @@ const sarathiPrompt = ai.definePrompt({
 
 /**
  * Ensures that the provided history is in a valid format for the Genkit prompt.
- * It filters out any malformed, null, or empty messages.
- * @param history The conversation history from the client.
+ * It filters out any malformed, null, or empty messages and correctly maps roles.
+ * @param history The conversation history from the client, which could be in various formats.
  * @returns A validated array of Genkit-compatible messages.
  */
 function validateHistory(history: any): Message[] {
-  // Agar history hai hi nahi ya woh array nahi hai, to khaali array bhejo.
   if (!Array.isArray(history)) {
     return [];
   }
@@ -64,31 +63,27 @@ function validateHistory(history: any): Message[] {
   const validatedMessages: Message[] = [];
   
   for (const msg of history) {
-    // Kya message ek object hai aur null nahi hai?
     if (typeof msg !== 'object' || msg === null) {
-      continue;
+      continue; 
     }
 
-    // Kya message mein 'role' aur 'content' dono hain?
     if (!msg.role || !msg.content) {
       continue;
     }
     
-    // 'assistant' role ko 'model' role ke roop mein sweekar karein.
+    // IMPORTANT FIX: Accept 'assistant' role and map it to 'model'
     const role = msg.role === 'assistant' ? 'model' : msg.role;
 
-    // Kya 'role' sahi hai ('user' ya 'model')?
     if (role !== 'user' && role !== 'model') {
        continue;
     }
 
-    // Kya 'content' ek array hai aur khaali nahi hai?
     if (!Array.isArray(msg.content) || msg.content.length === 0) {
        continue;
     }
-
-    // Kya 'content' mein kam se kam ek valid text part hai?
-    const hasValidContent = msg.content.some((c: any) => c && typeof c.text === 'string');
+    
+    // Ensure content has at least one valid text part
+    const hasValidContent = msg.content.some((c: any) => c && typeof c.text === 'string' && c.text.trim() !== '');
     if (!hasValidContent) {
         continue;
     }
