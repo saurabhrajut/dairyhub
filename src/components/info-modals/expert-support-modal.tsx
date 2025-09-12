@@ -269,7 +269,7 @@ function ChatPage({ expert, onBack }: { expert: typeof initialExperts[0], onBack
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="English">English</SelectItem>
-                            <SelectItem value="Hindi">Hindi</SelectItem>
+                            <SelectItem value="Hinglish">Hinglish</SelectItem>
                         </SelectContent>
                     </Select>
                 </header>
@@ -388,7 +388,7 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
                                     <SelectTrigger><SelectValue/></SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="English">English</SelectItem>
-                                        <SelectItem value="Hindi">Hindi</SelectItem>
+                                        <SelectItem value="Hinglish">Hinglish</SelectItem>
                                     </SelectContent>
                                 </Select>
                             </div>
