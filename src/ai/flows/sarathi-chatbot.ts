@@ -47,8 +47,7 @@ const sarathiPrompt = ai.definePrompt({
   input: {
     schema: SarathiChatbotInputSchema,
   },
-  // Is line ko humne test karne ke liye comment kar diya hai
-  // output: {schema: SarathiChatbotOutputSchema}, 
+  output: {schema: SarathiChatbotOutputSchema}, 
 });
 
 
@@ -61,32 +60,33 @@ const sarathiPrompt = ai.definePrompt({
 // <<<<<<<<<<< Is Poore Function ko Copy Karke Replace Karein >>>>>>>>>>>>>
 
 function validateHistory(history: Message[] | undefined): Message[] {
-  if (!history || !Array.isArray(history)) {
+  if (!Array.isArray(history)) {
     return [];
   }
 
-  return history
-    // Step 1: Pehle hi array se saari null/undefined entries hata do
-    .filter(Boolean) 
-    .map(msg => {
-      // Step 2: Ab humein pata hai ki 'msg' null nahi hai, to hum safely check kar sakte hain
-      if (!msg.content || !Array.isArray(msg.content)) {
-        return null;
-      }
-      
-      const validContent = msg.content.filter(c => c && typeof c.text === 'string' && c.text.trim() !== '');
-      
-      if (validContent.length === 0) {
-        return null;
-      }
+  const validatedMessages: Message[] = [];
+  
+  for (const msg of history) {
+    if (typeof msg !== 'object' || msg === null) {
+      continue;
+    }
 
-      if (msg.role !== 'user' && msg.role !== 'assistant' && msg.role !== 'model') {
-        return null;
-      }
-      
-      return { role: msg.role, content: validContent };
-    })
-    .filter((msg): msg is Message => msg !== null);
+    if (!msg.role || !msg.content) {
+      continue;
+    }
+
+    if (msg.role !== 'user' && msg.role !== 'model' && msg.role !== 'assistant') {
+       continue;
+    }
+
+    if (!Array.isArray(msg.content)) {
+       continue;
+    }
+    
+    validatedMessages.push(msg as Message);
+  }
+
+  return validatedMessages;
 }
 
 
@@ -101,12 +101,12 @@ const sarathiChatbotFlow = ai.defineFlow(
     const {history, ...restOfInput} = input;
     const validHistory = validateHistory(history);
 
-    const {output} = await sarathiPrompt(restOfInput, {history: validHistory});
-console.log('Sarathi output:', output);
+    const {output} = await sarathiPrompt({...restOfInput, history: validHistory});
 
-    if (!output) {
-      return {answer: 'Maaf karna, kuch gadbad ho gayi. Fir se try karein.'};
+    if (!output || typeof output.answer !== 'string' || !output.answer.trim()) {
+      return {answer: 'Maaf karna, kuch gadbad ho gayi. Shayad main theek se soch nahi paa raha hoon. Fir se try karein.'};
     }
+    
     return output;
   }
 );
