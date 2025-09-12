@@ -100,6 +100,7 @@ export type GenerateAdulterantDetectionInstructionsOutput = z.infer<typeof Gener
 export const InterviewPrepperInputSchema = z.object({
   resumeText: z.string().describe("The user's full resume text."),
   jobField: z.string().describe("The specific job field the user is applying for (e.g., Quality Control, Production, R&D)."),
+  language: z.string().describe("The language for the response (e.g., English, Hinglish)."),
   history: z.array(z.object({
     role: z.enum(['user', 'model']),
     content: z.array(z.object({

@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
@@ -22,6 +23,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { Message } from '@/ai/flows/types';
+import { Textarea } from '../ui/textarea';
+import * as pdfjs from "pdfjs-dist";
 
 
 const initialExperts = [
@@ -122,39 +125,53 @@ function HomePage({ setActivePage, onSelectExpert }: { setActivePage: (page: str
 }
 
 function ChatInterface({ title, description, initialMessage, onBack, apiCall, apiCallPayload, isInterviewPrep = false }: { title: string, description: string, initialMessage: string, onBack: () => void, apiCall: (payload: any) => Promise<any>, apiCallPayload: (query: string, history: Message[], isInitial?: boolean) => any, isInterviewPrep?: boolean }) {
-    const [messages, setMessages] = useState<UIMessage[]>([
-        { id: "initial", role: "assistant", text: initialMessage }
-    ]);
+    const [messages, setMessages] = useState<UIMessage[]>([]);
     const [history, setHistory] = useState<Message[]>([]);
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const scrollAreaRef = useRef<HTMLDivElement>(null);
     const { toast } = useToast();
 
+     // Use a ref to track if the initial message has been sent
+    const initialMessageSent = useRef(false);
+
     useEffect(() => {
-        if(isInterviewPrep && history.length === 0 && !isLoading) {
-            const getInitialQuestions = async () => {
-                setIsLoading(true);
-                try {
-                    const payload = apiCallPayload("", [], true); // Initial request
-                    const response = await apiCall(payload);
-                    if (response.response) {
-                        const responseText = response.response.map((qa: any) => `<strong>Q: ${qa.question}</strong><br/>${qa.answer}`).join('<br/><br/>') + `<br/><br/><em>${response.followUpSuggestion}</em>`;
-                        const initialQuestionsMessage: UIMessage = { id: "initial-q", role: "assistant", text: responseText };
-                        setMessages(prev => [...prev, initialQuestionsMessage]);
-                        setHistory([{ role: 'model', content: [{ text: responseText }] }]);
-                    }
-                } catch (error) {
-                    console.error(error);
-                    toast({ variant: 'destructive', title: 'Error', description: 'Failed to start interview session.' });
-                } finally {
-                    setIsLoading(false);
+        const sendInitialMessage = async () => {
+            setIsLoading(true);
+            try {
+                // If it's an interview prep, the payload might be different for the initial call
+                const payload = apiCallPayload("", [], true); // isInitial = true
+                const response = await apiCall(payload);
+                
+                let responseText: string;
+                 if (isInterviewPrep && response.response) {
+                    responseText = response.response.map((qa: any) => `<strong>Q: ${qa.question}</strong><br/>${qa.answer}`).join('<br/><br/>') + `<br/><br/><em>${response.followUpSuggestion}</em>`;
+                } else {
+                     responseText = response.answer || initialMessage;
                 }
-            };
-            getInitialQuestions();
+
+                const initialAssistantMessage: UIMessage = { id: "initial-q", role: "assistant", text: responseText };
+                setMessages([initialAssistantMessage]);
+                setHistory([{ role: 'model', content: [{ text: responseText }] }]);
+            } catch (error) {
+                console.error(error);
+                toast({ variant: 'destructive', title: 'Error', description: 'Failed to start the session.' });
+                const errorMessage: UIMessage = { id: "initial-error", role: "assistant", text: "Sorry, I couldn't start the session. Please try again." };
+                setMessages([errorMessage]);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        // Send the initial message only if it hasn't been sent before
+        if (isInterviewPrep && !initialMessageSent.current) {
+            sendInitialMessage();
+            initialMessageSent.current = true;
+        } else if (!isInterviewPrep && messages.length === 0) {
+            setMessages([{ id: "initial", role: "assistant", text: initialMessage }]);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isInterviewPrep]);
+    }, []);
 
 
     useEffect(() => {
@@ -301,38 +318,62 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
 
     const handleStartChat = () => {
       if (topic === 'Interview Preparation') {
-          if (!resumeText || !jobField) {
-              toast({ variant: 'destructive', title: 'Error', description: 'Please upload your resume and specify the job field.' });
+          if ((!resumeText) || !jobField) {
+              toast({ variant: 'destructive', title: 'Error', description: 'Please upload or paste your resume and specify the job field.' });
               return;
           }
       }
       setChatStarted(true);
     };
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (e.target.files && e.target.files[0]) {
-          const file = e.target.files[0];
-          const reader = new FileReader();
-          reader.onload = (event) => {
-              const text = event.target?.result as string;
-              setResumeText(text);
-              setFileName(file.name);
-              toast({ title: "Success", description: "Resume uploaded successfully." });
-          };
-          reader.onerror = () => {
-              toast({ variant: 'destructive', title: "Error", description: "Failed to read the file." });
-          };
-          reader.readAsText(file);
-      }
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            const file = e.target.files[0];
+            if (file.type === "application/pdf") {
+                try {
+                    const arrayBuffer = await file.arrayBuffer();
+                    const pdf = await pdfjs.getDocument(arrayBuffer).promise;
+                    let fullText = "";
+                    for (let i = 1; i <= pdf.numPages; i++) {
+                        const page = await pdf.getPage(i);
+                        const textContent = await page.getTextContent();
+                        const pageText = textContent.items.map(item => (item as any).str).join(" ");
+                        fullText += pageText + "\n";
+                    }
+                    setResumeText(fullText);
+                    setFileName(file.name);
+                    toast({ title: "Success", description: "PDF resume uploaded and processed." });
+                } catch (error) {
+                    console.error(error);
+                    toast({ variant: 'destructive', title: "Error", description: "Failed to read the PDF file." });
+                }
+            } else {
+                 const reader = new FileReader();
+                reader.onload = (event) => {
+                    const text = event.target?.result as string;
+                    setResumeText(text);
+                    setFileName(file.name);
+                    toast({ title: "Success", description: "Resume uploaded successfully." });
+                };
+                reader.onerror = () => {
+                    toast({ variant: 'destructive', title: "Error", description: "Failed to read the file." });
+                };
+                reader.readAsText(file);
+            }
+        }
     };
+    
+    useEffect(() => {
+        pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.mjs`;
+    }, []);
 
     const gyanApiCallPayload = useCallback((query: string, history: Message[]) => {
         return { topic, question: query, language, history };
     }, [topic, language]);
 
     const interviewApiCallPayload = useCallback((query: string, history: Message[], isInitial = false) => {
-        return { resumeText, jobField, history, initialRequest: isInitial };
-    }, [resumeText, jobField]);
+        return { resumeText, jobField, history, initialRequest: isInitial, language };
+    }, [resumeText, jobField, language]);
     
     if (chatStarted) {
         const isInterview = topic === 'Interview Preparation';
@@ -381,8 +422,7 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
                                     </SelectContent>
                                 </Select>
                            </div>
-                           {topic !== 'Interview Preparation' && (
-                                <div>
+                           <div>
                                 <label className="text-sm font-medium mb-2 block">Choose Language</label>
                                 <Select onValueChange={setLanguage} defaultValue="English">
                                     <SelectTrigger><SelectValue/></SelectTrigger>
@@ -392,19 +432,18 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
                                     </SelectContent>
                                 </Select>
                             </div>
-                           )}
                         </div>
                         
                         {topic === 'Interview Preparation' ? (
                             <div className="p-4 border-l-4 border-primary bg-primary/10 space-y-4 rounded-r-lg">
                                 <h4 className='font-bold'>Interview Preparation</h4>
-                                <p className='text-sm text-muted-foreground'>Upload your resume and specify the job role you're targeting. The AI will act as an interviewer.</p>
+                                <p className='text-sm text-muted-foreground'>Upload or paste your resume and specify the job role you're targeting. The AI will act as an interviewer.</p>
                                 <div>
                                     <label htmlFor="job-field" className="text-sm font-medium mb-1 block">Job Field (e.g., Quality Control)</label>
                                     <Input id="job-field" placeholder="e.g., Production Manager, R&D Scientist" value={jobField} onChange={e => setJobField(e.target.value)} />
                                 </div>
                                 <div>
-                                    <label htmlFor="resume-file" className="text-sm font-medium mb-1 block">Upload Your Resume</label>
+                                     <label htmlFor="resume-file" className="text-sm font-medium mb-1 block">Upload Your Resume (.pdf)</label>
                                     <div className="flex items-center gap-2">
                                         <label htmlFor="resume-file" className="flex-grow">
                                             <Button asChild variant="outline" className="w-full cursor-pointer">
@@ -413,14 +452,18 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
                                                     {fileName || "Choose a file..."}
                                                 </span>
                                             </Button>
-                                            <Input id="resume-file" type="file" className="hidden" onChange={handleFileChange} accept=".txt,.md,.pdf,.doc,.docx" />
+                                            <Input id="resume-file" type="file" className="hidden" onChange={handleFileChange} accept=".pdf,.txt" />
                                         </label>
                                     </div>
+                                </div>
+                                 <div>
+                                    <label htmlFor="resume-text" className="text-sm font-medium mb-1 block">Or Paste Your Resume</label>
+                                    <Textarea id="resume-text" value={resumeText} onChange={e => setResumeText(e.target.value)} placeholder="Paste resume text here..." className="bg-white"/>
                                 </div>
                             </div>
                         ) : null}
 
-                         <Button onClick={handleStartChat} disabled={isLoading} className="w-full mt-6">
+                         <Button onClick={handleStartChat} disabled={isLoading || (topic === 'Interview Preparation' && (!resumeText || !jobField))} className="w-full mt-6">
                             {isLoading ? <Loader2 className="animate-spin" /> : (topic === 'Interview Preparation' ? "Start Mock Interview" : "Start Chat")}
                         </Button>
                     </div>

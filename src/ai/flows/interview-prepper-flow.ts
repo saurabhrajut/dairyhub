@@ -26,6 +26,7 @@ const interviewPrepperPrompt = ai.definePrompt({
     *   If 'initialRequest' is true, generate a diverse set of 3-4 initial questions based on the resume and job field.
     *   If 'initialRequest' is false, respond to the user's last message, ask a relevant follow-up question, and provide the answer.
 6.  **Concluding Remark:** End your response with a 'followUpSuggestion' to guide the user, such as "Would you like to dive deeper into any of these topics?" or "Now, let's move on to questions about food safety regulations."
+7.  **Language:** All your responses, including questions, answers, and suggestions, MUST be in the requested language: {{language}}.
 
 **Tone:** Professional, encouraging, but challenging. You are here to help them get a job, so your standards should be high.
 `,
@@ -36,6 +37,7 @@ const interviewPrepperPrompt = ai.definePrompt({
     '''
 
     **Job Field:** {{jobField}}
+    **Language for Response:** {{language}}
 
     {{#if history}}
     **Conversation History:**
