@@ -1,3 +1,4 @@
+
 import { z } from 'genkit';
 
 // Types for expert-support-flow.ts
@@ -27,6 +28,12 @@ export const GyanAIInputSchema = z.object({
   topic: z.string().describe("The topic of expertise (e.g., Dairy Technology, Food Safety)."),
   question: z.string().describe("The user's question."),
   language: z.string().describe("The language for the response (e.g., English, Hinglish)."),
+  history: z.array(z.object({
+    role: z.enum(['user', 'model']),
+    content: z.array(z.object({
+      text: z.string()
+    }))
+  })).optional().describe('The previous conversation history to maintain context.'),
 });
 export type GyanAIInput = z.infer<typeof GyanAIInputSchema>;
 

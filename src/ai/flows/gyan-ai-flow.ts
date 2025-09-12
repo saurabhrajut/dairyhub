@@ -12,10 +12,30 @@ const gyanAIPrompt = ai.definePrompt({
     name: 'gyanAIPrompt',
     input: { schema: GyanAIInputSchema },
     output: { schema: GyanAIOutputSchema },
-    prompt: `Act as a PhD-level expert in {{topic}}. Provide a scientifically valid, professional, and well-structured answer in {{language}} for the following question. Start with a clear introduction, provide detailed points in the body, and end with a conclusion. Question: "{{question}}"`,
+    system: `Act as a PhD-level expert in {{topic}}. Provide a scientifically valid, professional, and well-structured answer in {{language}} for the user's question.
+    Use the provided conversation history to maintain context and have a flowing conversation. Refer back to what was said before. Do not start every answer as if it's a new conversation.`,
+    prompt: `User's question is: "{{question}}"`,
 });
 
+const gyanAIFlow = ai.defineFlow(
+    {
+        name: 'gyanAIFlow',
+        inputSchema: GyanAIInputSchema,
+        outputSchema: GyanAIOutputSchema,
+    },
+    async (input) => {
+        const { history, ...restOfInput } = input;
+        
+        const { output } = await gyanAIPrompt(
+            restOfInput,
+            { history: history || [] }
+        );
+
+        return output!;
+    }
+);
+
+
 export async function gyanAI(input: GyanAIInput) {
-  const { output } = await gyanAIPrompt(input);
-  return output!;
+  return gyanAIFlow(input);
 }
