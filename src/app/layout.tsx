@@ -8,7 +8,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider } from '@/context/auth-context';
 import { SubscriptionProvider } from '@/context/subscription-context';
 import { LanguageProvider } from '@/context/language-context';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 
 // Font configuration using next/font
@@ -63,14 +63,16 @@ export default function RootLayout({
         <meta name="theme-color" content="#ffffff" />
       </head>
       <body className="font-body antialiased">
-        <SubscriptionProvider>
-          <AuthProvider>
-            <LanguageProvider>
-                {children}
-                <Toaster />
-            </LanguageProvider>
-          </AuthProvider>
-        </SubscriptionProvider>
+        <React.Fragment>
+          <SubscriptionProvider key="sub-provider">
+            <AuthProvider key="auth-provider">
+              <LanguageProvider key="lang-provider">
+                  {children}
+                  <Toaster />
+              </LanguageProvider>
+            </AuthProvider>
+          </SubscriptionProvider>
+        </React.Fragment>
       </body>
     </html>
   );
