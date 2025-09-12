@@ -55,7 +55,8 @@ const sarathiPrompt = ai.definePrompt({
  * @param history The conversation history from the client.
  * @returns A validated array of Genkit-compatible messages.
  */
-function validateHistory(history: Message[] | undefined): Message[] {
+function validateHistory(history: any): Message[] {
+  // Agar history hai hi nahi ya woh array nahi hai, to khaali array bhejo.
   if (!Array.isArray(history)) {
     return [];
   }
@@ -63,33 +64,38 @@ function validateHistory(history: Message[] | undefined): Message[] {
   const validatedMessages: Message[] = [];
   
   for (const msg of history) {
+    // Kya message ek object hai aur null nahi hai?
     if (typeof msg !== 'object' || msg === null) {
       continue;
     }
 
+    // Kya message mein 'role' aur 'content' dono hain?
     if (!msg.role || !msg.content) {
       continue;
     }
     
-    // Accept 'assistant' role as a valid alias for 'model' from some clients
-    if (msg.role !== 'user' && msg.role !== 'model' && msg.role !== 'assistant') {
+    // 'assistant' role ko 'model' role ke roop mein sweekar karein.
+    const role = msg.role === 'assistant' ? 'model' : msg.role;
+
+    // Kya 'role' sahi hai ('user' ya 'model')?
+    if (role !== 'user' && role !== 'model') {
        continue;
     }
 
+    // Kya 'content' ek array hai aur khaali nahi hai?
     if (!Array.isArray(msg.content) || msg.content.length === 0) {
        continue;
     }
 
-    // Ensure content has at least one valid part
-    const hasValidContent = msg.content.some(c => c && typeof c.text === 'string');
+    // Kya 'content' mein kam se kam ek valid text part hai?
+    const hasValidContent = msg.content.some((c: any) => c && typeof c.text === 'string');
     if (!hasValidContent) {
         continue;
     }
     
     validatedMessages.push({
         ...msg,
-        // Ensure role is either 'user' or 'model' for the API
-        role: msg.role === 'assistant' ? 'model' : msg.role
+        role: role,
     } as Message);
   }
 
