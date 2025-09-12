@@ -39,8 +39,6 @@ User's Resume for Analysis:
 {{/if}}`;
 
 
-// <<<<<<<<<<< YEH WALA PURA CODE COPY KARKE REPLACE KAREIN >>>>>>>>>>>>>
-
 const sarathiPrompt = ai.definePrompt({
   name: 'sarathiChatbotPrompt',
   system: sarathiSystemPrompt,
@@ -57,8 +55,6 @@ const sarathiPrompt = ai.definePrompt({
  * @param history The conversation history from the client.
  * @returns A validated array of Genkit-compatible messages.
  */
-// <<<<<<<<<<< Is Poore Function ko Copy Karke Replace Karein >>>>>>>>>>>>>
-
 function validateHistory(history: Message[] | undefined): Message[] {
   if (!Array.isArray(history)) {
     return [];
@@ -74,16 +70,27 @@ function validateHistory(history: Message[] | undefined): Message[] {
     if (!msg.role || !msg.content) {
       continue;
     }
-
+    
+    // Accept 'assistant' role as a valid alias for 'model' from some clients
     if (msg.role !== 'user' && msg.role !== 'model' && msg.role !== 'assistant') {
        continue;
     }
 
-    if (!Array.isArray(msg.content)) {
+    if (!Array.isArray(msg.content) || msg.content.length === 0) {
        continue;
     }
+
+    // Ensure content has at least one valid part
+    const hasValidContent = msg.content.some(c => c && typeof c.text === 'string');
+    if (!hasValidContent) {
+        continue;
+    }
     
-    validatedMessages.push(msg as Message);
+    validatedMessages.push({
+        ...msg,
+        // Ensure role is either 'user' or 'model' for the API
+        role: msg.role === 'assistant' ? 'model' : msg.role
+    } as Message);
   }
 
   return validatedMessages;
@@ -101,7 +108,7 @@ const sarathiChatbotFlow = ai.defineFlow(
     const {history, ...restOfInput} = input;
     const validHistory = validateHistory(history);
 
-    const {output} = await sarathiPrompt({...restOfInput, history: validHistory});
+    const {output} = await sarathiPrompt(restOfInput, {history: validHistory});
 
     if (!output || typeof output.answer !== 'string' || !output.answer.trim()) {
       return {answer: 'Maaf karna, kuch gadbad ho gayi. Shayad main theek se soch nahi paa raha hoon. Fir se try karein.'};
