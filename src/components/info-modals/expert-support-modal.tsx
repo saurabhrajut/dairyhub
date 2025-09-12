@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
@@ -13,7 +12,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Sparkles, Lightbulb, UserPlus, Bot, ArrowLeft, Send } from 'lucide-react';
+import { Loader2, Sparkles, Lightbulb, UserPlus, Bot, ArrowLeft, Send, Upload, FileCheck } from 'lucide-react';
 import { askExpert, gyanAI, interviewPrepper } from '@/app/actions';
 import {
   Select,
@@ -23,7 +22,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { Message } from '@/ai/flows/types';
-import { Textarea } from '../ui/textarea';
 
 
 const initialExperts = [
@@ -63,7 +61,7 @@ export function ExpertSupportModal({ isOpen, setIsOpen }: { isOpen: boolean; set
                 return <RegisterExpertPage onBack={() => setActivePage('home')} />;
             case 'home':
             default: 
-                return <HomePage setActivePage={setActivePage} onSelectExpert={handleSelectExpert} />;
+                return <HomePage onSelectExpert={handleSelectExpert} setActivePage={setActivePage} />;
         }
     };
 
@@ -131,6 +129,33 @@ function ChatInterface({ title, description, initialMessage, onBack, apiCall, ap
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const scrollAreaRef = useRef<HTMLDivElement>(null);
+    const { toast } = useToast();
+
+    useEffect(() => {
+        if(isInterviewPrep && history.length === 0 && !isLoading) {
+            const getInitialQuestions = async () => {
+                setIsLoading(true);
+                try {
+                    const payload = apiCallPayload("", [], true); // Initial request
+                    const response = await apiCall(payload);
+                    if (response.response) {
+                        const responseText = response.response.map((qa: any) => `<strong>Q: ${qa.question}</strong><br/>${qa.answer}`).join('<br/><br/>') + `<br/><br/><em>${response.followUpSuggestion}</em>`;
+                        const initialQuestionsMessage: UIMessage = { id: "initial-q", role: "assistant", text: responseText };
+                        setMessages(prev => [...prev, initialQuestionsMessage]);
+                        setHistory([{ role: 'model', content: [{ text: responseText }] }]);
+                    }
+                } catch (error) {
+                    console.error(error);
+                    toast({ variant: 'destructive', title: 'Error', description: 'Failed to start interview session.' });
+                } finally {
+                    setIsLoading(false);
+                }
+            };
+            getInitialQuestions();
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isInterviewPrep]);
+
 
     useEffect(() => {
         if (scrollAreaRef.current) {
@@ -151,7 +176,7 @@ function ChatInterface({ title, description, initialMessage, onBack, apiCall, ap
         setIsLoading(true);
 
         try {
-            const payload = apiCallPayload(query, newHistoryForApi);
+            const payload = apiCallPayload(query, newHistoryForApi, false); // Not an initial request
             const response = await apiCall(payload);
 
             let assistantMessage: UIMessage;
@@ -272,54 +297,56 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
     // For Interview Prep
     const [resumeText, setResumeText] = useState("");
     const [jobField, setJobField] = useState("");
+    const [fileName, setFileName] = useState("");
 
-    const handleStartInterview = async () => {
-        if (!resumeText || !jobField) {
-            toast({ variant: 'destructive', title: 'Error', description: 'Please provide both your resume and the job field.' });
-            return;
-        }
-        setIsLoading(true);
-        try {
-            const response = await interviewPrepper({
-                resumeText,
-                jobField,
-                history: [],
-                initialRequest: true
-            });
-            // This will trigger the chat view
-            setChatStarted(true); 
-            // We'll handle the response inside the chat component now
-        } catch (error) {
-             toast({ variant: 'destructive', title: 'Error', description: 'Failed to start the interview session. Please try again.' });
-        } finally {
-            setIsLoading(false);
-        }
+    const handleStartChat = () => {
+      if (topic === 'Interview Preparation') {
+          if (!resumeText || !jobField) {
+              toast({ variant: 'destructive', title: 'Error', description: 'Please upload your resume and specify the job field.' });
+              return;
+          }
+      }
+      setChatStarted(true);
+    };
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (e.target.files && e.target.files[0]) {
+          const file = e.target.files[0];
+          const reader = new FileReader();
+          reader.onload = (event) => {
+              const text = event.target?.result as string;
+              setResumeText(text);
+              setFileName(file.name);
+              toast({ title: "Success", description: "Resume uploaded successfully." });
+          };
+          reader.onerror = () => {
+              toast({ variant: 'destructive', title: "Error", description: "Failed to read the file." });
+          };
+          reader.readAsText(file);
+      }
     };
 
     const gyanApiCallPayload = useCallback((query: string, history: Message[]) => {
-        if (!query) {
-            toast({ variant: 'destructive', title: 'Error', description: 'Please enter a question.' });
-            return;
-        }
         return { topic, question: query, language, history };
-    }, [topic, language, toast]);
+    }, [topic, language]);
 
     const interviewApiCallPayload = useCallback((query: string, history: Message[], isInitial = false) => {
         return { resumeText, jobField, history, initialRequest: isInitial };
     }, [resumeText, jobField]);
     
     if (chatStarted) {
-         return (
-             <div className="h-full flex flex-col p-4">
-                 <Button variant="ghost" onClick={() => { setChatStarted(false); setResumeText(""); setJobField("");}} className="self-start mb-2"><ArrowLeft className="mr-2"/> Back to Topics</Button>
+        const isInterview = topic === 'Interview Preparation';
+        return (
+            <div className="h-full flex flex-col p-4">
+                 <Button variant="ghost" onClick={() => { setChatStarted(false); setResumeText(""); setJobField(""); setFileName(""); }} className="self-start mb-2"><ArrowLeft className="mr-2"/> Back to Topics</Button>
                 <ChatInterface
-                    title="Interview Preparation"
-                    description={`Mock interview for a ${jobField} role.`}
-                    initialMessage="Hello! I have reviewed your resume. Let's begin the interview. Here are your first questions:"
+                    title={isInterview ? "Interview Preparation" : "Gyan AI"}
+                    description={isInterview ? `Mock interview for a ${jobField} role.` : `Ask anything about ${topic}`}
+                    initialMessage={isInterview ? "Hello! I have reviewed your resume. Let's begin the interview. Here are your first questions:" : `Hello! I am Gyan AI. Ask me anything about ${topic}.`}
                     onBack={() => setChatStarted(false)}
-                    apiCall={interviewPrepper}
-                    apiCallPayload={interviewApiCallPayload}
-                    isInterviewPrep={true}
+                    apiCall={isInterview ? interviewPrepper : gyanAI}
+                    apiCallPayload={isInterview ? interviewApiCallPayload : gyanApiCallPayload}
+                    isInterviewPrep={isInterview}
                 />
             </div>
         );
@@ -340,45 +367,62 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
                 </header>
                  <ScrollArea className="flex-grow">
                      <div className="p-6">
-                        <div className="mb-6">
-                            <label className="text-sm font-medium mb-2 block">Choose Topic</label>
-                            <Select onValueChange={setTopic} defaultValue="Dairy Technology">
-                                <SelectTrigger><SelectValue/></SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="Dairy Technology">Dairy Technology</SelectItem>
-                                    <SelectItem value="Food Safety and Quality">Food Safety and Quality</SelectItem>
-                                    <SelectItem value="Food Processing">Food Processing</SelectItem>
-                                    <SelectItem value="Career Guidance in Food Industry">Career Guidance</SelectItem>
-                                    <SelectItem value="Interview Preparation">Interview Preparation</SelectItem>
-                                </SelectContent>
-                            </Select>
+                        <div className="mb-6 space-y-4">
+                           <div>
+                                <label className="text-sm font-medium mb-2 block">Choose Topic</label>
+                                <Select onValueChange={setTopic} defaultValue="Dairy Technology">
+                                    <SelectTrigger><SelectValue/></SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="Dairy Technology">Dairy Technology</SelectItem>
+                                        <SelectItem value="Food Safety and Quality">Food Safety and Quality</SelectItem>
+                                        <SelectItem value="Food Processing">Food Processing</SelectItem>
+                                        <SelectItem value="Career Guidance in Food Industry">Career Guidance</SelectItem>
+                                        <SelectItem value="Interview Preparation">Interview Preparation</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                           </div>
+                           {topic !== 'Interview Preparation' && (
+                                <div>
+                                <label className="text-sm font-medium mb-2 block">Choose Language</label>
+                                <Select onValueChange={setLanguage} defaultValue="English">
+                                    <SelectTrigger><SelectValue/></SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="English">English</SelectItem>
+                                        <SelectItem value="Hindi">Hindi</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                           )}
                         </div>
+                        
                         {topic === 'Interview Preparation' ? (
-                            <div className="p-4 border-l-4 border-primary bg-primary/10 space-y-4">
+                            <div className="p-4 border-l-4 border-primary bg-primary/10 space-y-4 rounded-r-lg">
                                 <h4 className='font-bold'>Interview Preparation</h4>
-                                <p className='text-sm text-muted-foreground'>Paste your resume below and specify the job role you're targeting. The AI will act as an interviewer.</p>
+                                <p className='text-sm text-muted-foreground'>Upload your resume and specify the job role you're targeting. The AI will act as an interviewer.</p>
                                 <div>
                                     <label htmlFor="job-field" className="text-sm font-medium mb-1 block">Job Field (e.g., Quality Control)</label>
                                     <Input id="job-field" placeholder="e.g., Production Manager, R&D Scientist" value={jobField} onChange={e => setJobField(e.target.value)} />
                                 </div>
                                 <div>
-                                    <label htmlFor="resume-text" className="text-sm font-medium mb-1 block">Paste Your Resume</label>
-                                    <Textarea id="resume-text" placeholder="Paste your full resume text here..." className="h-48" value={resumeText} onChange={e => setResumeText(e.target.value)} />
+                                    <label htmlFor="resume-file" className="text-sm font-medium mb-1 block">Upload Your Resume</label>
+                                    <div className="flex items-center gap-2">
+                                        <label htmlFor="resume-file" className="flex-grow">
+                                            <Button asChild variant="outline" className="w-full cursor-pointer">
+                                                <span>
+                                                    {fileName ? <FileCheck className="mr-2" /> : <Upload className="mr-2" />}
+                                                    {fileName || "Choose a file..."}
+                                                </span>
+                                            </Button>
+                                            <Input id="resume-file" type="file" className="hidden" onChange={handleFileChange} accept=".txt,.md,.pdf,.doc,.docx" />
+                                        </label>
+                                    </div>
                                 </div>
-                                <Button onClick={handleStartInterview} disabled={isLoading} className="w-full">
-                                    {isLoading ? <Loader2 className="animate-spin" /> : "Start Mock Interview"}
-                                </Button>
                             </div>
-                        ) : (
-                            <ChatInterface
-                                title="Gyan AI"
-                                description={`Ask anything about ${topic}`}
-                                initialMessage={`Hello! I am Gyan AI. Ask me anything about ${topic}.`}
-                                onBack={onBack}
-                                apiCall={gyanAI}
-                                apiCallPayload={gyanApiCallPayload}
-                            />
-                        )}
+                        ) : null}
+
+                         <Button onClick={handleStartChat} disabled={isLoading} className="w-full mt-6">
+                            {isLoading ? <Loader2 className="animate-spin" /> : (topic === 'Interview Preparation' ? "Start Mock Interview" : "Start Chat")}
+                        </Button>
                     </div>
                 </ScrollArea>
             </div>
