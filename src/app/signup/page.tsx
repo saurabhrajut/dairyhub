@@ -13,7 +13,7 @@ import {
 } from 'firebase/auth';
 import { getFirestore, doc, setDoc, getDoc, updateDoc } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { app } from '@/lib/firebase';
+import app from '@/lib/firebase';
 
 
 // Firebase services ko initialize karein
@@ -145,4 +145,3 @@ export function useAuth() {
   }
   return context;
 }
-

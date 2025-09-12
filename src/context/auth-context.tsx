@@ -13,7 +13,8 @@ import {
 import { getFirestore, doc, setDoc, getDoc, updateDoc } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 // YEH PATH ALIAS AB HAMESHA KAAM KAREGA
-import { app } from '@/lib/firebase'; 
+import app from '@/lib/firebase'; 
+import { useSubscription } from '@/context/subscription-context';
 
 // Firebase services ko initialize karein
 const auth = getAuth(app);
@@ -51,6 +52,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AppUser | null>(null);
   const [loading, setLoading] = useState(true);
+  const { loadSubscription, clearSubscription } = useSubscription();
 
   // YEH FUNCTION FIREBASE SE LIVE USER KA STATUS CHECK KARTA HAI
   useEffect(() => {
@@ -61,7 +63,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const userDoc = await getDoc(userDocRef);
         
         const userData = userDoc.exists() ? userDoc.data() : {};
-        setUser({
+        const appUser = {
           uid: firebaseUser.uid,
           email: firebaseUser.email,
           displayName: firebaseUser.displayName,
@@ -69,17 +71,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           isAnonymous: firebaseUser.isAnonymous,
           department: userData.department || 'guest',
           gender: userData.gender || 'other',
-        });
+        };
+        setUser(appUser);
+        await loadSubscription(firebaseUser.uid);
 
       } else {
         // User logged out hai
         setUser(null);
+        clearSubscription();
       }
       setLoading(false);
     });
     // Cleanup function
     return () => unsubscribe();
-  }, []);
+  }, [loadSubscription, clearSubscription]);
 
   // YEH SACH MEIN FIREBASE MEIN LOGIN KARTA HAI
   const login = async (email: string, password: string) => {
@@ -116,6 +121,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             photoURL: profileData.photoURL 
         });
     }
+    // Update local user state
+    setUser(prevUser => prevUser ? { ...prevUser, ...profileData } : null);
   };
 
   const updateUserPhoto = async (file: File): Promise<string> => {
@@ -125,7 +132,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await uploadBytes(storageRef, file);
       const photoURL = await getDownloadURL(storageRef);
       await updateUserProfile({ photoURL: photoURL });
-      setUser(prevUser => prevUser ? { ...prevUser, photoURL } : null);
       return photoURL;
   };
   
@@ -141,5 +147,3 @@ export function useAuth() {
   }
   return context;
 }
-
-
