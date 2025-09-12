@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Sparkles, Lightbulb, UserPlus, Bot, ArrowLeft, Send } from 'lucide-react';
-import { askExpert, gyanAI } from '@/app/actions';
+import { askExpert, gyanAI, interviewPrepper } from '@/app/actions';
 import {
   Select,
   SelectContent,
@@ -22,6 +22,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import type { Message } from '@/ai/flows/types';
+import { Textarea } from '../ui/textarea';
 
 
 const initialExperts = [
@@ -29,11 +31,6 @@ const initialExperts = [
     { id: '2', name: "Sunita Sharma", experience: 12, specialization: "Food Safety and Quality", photo: "https://placehold.co/150x150/E2E8F0/4A5568?text=S", type: 'ai' },
     { id: '3', name: "Anil Singh", experience: 20, specialization: "Food Processing", photo: "https://placehold.co/150x150/E2E8F0/4A5568?text=A", type: 'ai' }
 ];
-
-interface Message {
-  role: "user" | "model";
-  content: { text: string }[];
-}
 
 interface UIMessage {
     id: string;
@@ -126,7 +123,7 @@ function HomePage({ setActivePage, onSelectExpert }: { setActivePage: (page: str
     );
 }
 
-function ChatInterface({ title, description, initialMessage, onBack, apiCall }: { title: string, description: string, initialMessage: string, onBack: () => void, apiCall: (query: string, history: Message[]) => Promise<{ answer: string }> }) {
+function ChatInterface({ title, description, initialMessage, onBack, apiCall, apiCallPayload, isInterviewPrep = false }: { title: string, description: string, initialMessage: string, onBack: () => void, apiCall: (payload: any) => Promise<any>, apiCallPayload: (query: string, history: Message[], isInitial?: boolean) => any, isInterviewPrep?: boolean }) {
     const [messages, setMessages] = useState<UIMessage[]>([
         { id: "initial", role: "assistant", text: initialMessage }
     ]);
@@ -154,11 +151,22 @@ function ChatInterface({ title, description, initialMessage, onBack, apiCall }: 
         setIsLoading(true);
 
         try {
-            const response = await apiCall(query, newHistoryForApi);
+            const payload = apiCallPayload(query, newHistoryForApi);
+            const response = await apiCall(payload);
 
-            const assistantMessage: UIMessage = { id: Date.now().toString() + "-ai", role: "assistant", text: response.answer };
+            let assistantMessage: UIMessage;
+            let responseText: string;
+
+            if (isInterviewPrep && response.response) {
+                responseText = response.response.map((qa: any) => `<strong>Q: ${qa.question}</strong><br/>${qa.answer}`).join('<br/><br/>') + `<br/><br/><em>${response.followUpSuggestion}</em>`;
+                assistantMessage = { id: Date.now().toString() + "-ai", role: "assistant", text: responseText };
+            } else {
+                 responseText = response.answer;
+                 assistantMessage = { id: Date.now().toString() + "-ai", role: "assistant", text: responseText };
+            }
+
             setMessages((prev) => [...prev, assistantMessage]);
-            setHistory([...newHistoryForApi, { role: 'model', content: [{ text: response.answer }] }]);
+            setHistory([...newHistoryForApi, { role: 'model', content: [{ text: responseText }] }]);
 
         } catch (error) {
             console.error(error);
@@ -171,17 +179,7 @@ function ChatInterface({ title, description, initialMessage, onBack, apiCall }: 
 
     return (
         <div className="h-full flex flex-col p-4">
-            <Button variant="ghost" onClick={onBack} className="self-start mb-2"><ArrowLeft className="mr-2"/> Back</Button>
-            <div className="flex-1 flex flex-col bg-card border rounded-lg overflow-hidden">
-                <header className="p-4 border-b flex items-center justify-between gap-4">
-                    <div className='flex items-center gap-4'>
-                        <div className="bg-primary/10 p-2 rounded-full"><Bot className="w-6 h-6 text-primary"/></div>
-                        <div>
-                            <h3 className="font-bold">{title}</h3>
-                            <p className="text-xs text-muted-foreground">{description}</p>
-                        </div>
-                    </div>
-                </header>
+             <div className="flex-1 flex flex-col bg-card border rounded-lg overflow-hidden">
                 <ScrollArea className="flex-grow p-4" ref={scrollAreaRef}>
                     <div className="flex flex-col gap-4">
                         {messages.map((msg) => (
@@ -217,15 +215,15 @@ function ChatInterface({ title, description, initialMessage, onBack, apiCall }: 
 function ChatPage({ expert, onBack }: { expert: typeof initialExperts[0], onBack: () => void }) {
     const [language, setLanguage] = useState("English");
 
-    const apiCall = useCallback((query: string, history: Message[]) => {
-        return askExpert({
+    const apiCallPayload = useCallback((query: string, history: Message[]) => {
+        return {
             expertName: expert.name,
             experience: expert.experience,
             specialization: expert.specialization,
             question: query,
             language: language,
             history: history,
-        });
+        };
     }, [expert, language]);
 
     return (
@@ -255,7 +253,8 @@ function ChatPage({ expert, onBack }: { expert: typeof initialExperts[0], onBack
                     description={expert.specialization}
                     initialMessage={`Hello! I am ${expert.name}. Ask me anything about ${expert.specialization}.`}
                     onBack={onBack}
-                    apiCall={apiCall}
+                    apiCall={askExpert}
+                    apiCallPayload={apiCallPayload}
                 />
             </div>
         </div>
@@ -267,57 +266,121 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
     const [topic, setTopic] = useState("Dairy Technology");
     const [language, setLanguage] = useState('English');
     const { toast } = useToast();
+    const [chatStarted, setChatStarted] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    
+    // For Interview Prep
+    const [resumeText, setResumeText] = useState("");
+    const [jobField, setJobField] = useState("");
 
-    const apiCall = useCallback((query: string, history: Message[]) => {
+    const handleStartInterview = async () => {
+        if (!resumeText || !jobField) {
+            toast({ variant: 'destructive', title: 'Error', description: 'Please provide both your resume and the job field.' });
+            return;
+        }
+        setIsLoading(true);
+        try {
+            const response = await interviewPrepper({
+                resumeText,
+                jobField,
+                history: [],
+                initialRequest: true
+            });
+            // This will trigger the chat view
+            setChatStarted(true); 
+            // We'll handle the response inside the chat component now
+        } catch (error) {
+             toast({ variant: 'destructive', title: 'Error', description: 'Failed to start the interview session. Please try again.' });
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const gyanApiCallPayload = useCallback((query: string, history: Message[]) => {
         if (!query) {
             toast({ variant: 'destructive', title: 'Error', description: 'Please enter a question.' });
-            return Promise.reject('Empty question');
+            return;
         }
-        return gyanAI({ topic, question: query, language, history });
+        return { topic, question: query, language, history };
     }, [topic, language, toast]);
 
-    const GyanAIHeader = (
-         <div className="space-y-4">
-            <Select onValueChange={setTopic} defaultValue="Dairy Technology">
-                <SelectTrigger><SelectValue placeholder="Choose Topic" /></SelectTrigger>
-                <SelectContent>
-                    <SelectItem value="Dairy Technology">Dairy Technology</SelectItem>
-                    <SelectItem value="Food Safety and Quality">Food Safety and Quality</SelectItem>
-                    <SelectItem value="Food Processing">Food Processing</SelectItem>
-                    <SelectItem value="Career Guidance in Food Industry">Career Guidance</SelectItem>
-                </SelectContent>
-            </Select>
-            <Select onValueChange={setLanguage} defaultValue="English">
-                <SelectTrigger><SelectValue placeholder="Response Language" /></SelectTrigger>
-                <SelectContent>
-                    <SelectItem value="English">English</SelectItem>
-                    <SelectItem value="Hindi">Hindi</SelectItem>
-                </SelectContent>
-            </Select>
-        </div>
-    );
-
+    const interviewApiCallPayload = useCallback((query: string, history: Message[], isInitial = false) => {
+        return { resumeText, jobField, history, initialRequest: isInitial };
+    }, [resumeText, jobField]);
+    
+    if (chatStarted) {
+         return (
+             <div className="h-full flex flex-col p-4">
+                 <Button variant="ghost" onClick={() => { setChatStarted(false); setResumeText(""); setJobField("");}} className="self-start mb-2"><ArrowLeft className="mr-2"/> Back to Topics</Button>
+                <ChatInterface
+                    title="Interview Preparation"
+                    description={`Mock interview for a ${jobField} role.`}
+                    initialMessage="Hello! I have reviewed your resume. Let's begin the interview. Here are your first questions:"
+                    onBack={() => setChatStarted(false)}
+                    apiCall={interviewPrepper}
+                    apiCallPayload={interviewApiCallPayload}
+                    isInterviewPrep={true}
+                />
+            </div>
+        );
+    }
+    
     return (
-        <div className="h-full flex flex-col p-4">
+         <div className="h-full flex flex-col p-4">
             <Button variant="ghost" onClick={onBack} className="self-start mb-2"><ArrowLeft className="mr-2"/> Back to Home</Button>
             <div className="flex-1 flex flex-col bg-card border rounded-lg overflow-hidden">
-                <header className="p-4 border-b flex flex-col sm:flex-row items-center justify-between gap-4">
+                <header className="p-4 border-b flex items-center justify-between gap-4">
                      <div className='flex items-center gap-4'>
                         <div className="bg-primary/10 p-2 rounded-full"><Lightbulb className="w-6 h-6 text-primary"/></div>
                         <div>
                             <h3 className="font-bold">Gyan AI - Your AI Specialist</h3>
-                            <p className="text-xs text-muted-foreground">Instant, scientific information on any topic.</p>
+                            <p className="text-xs text-muted-foreground">Select a topic and get instant, scientific information.</p>
                         </div>
                     </div>
-                    <div className="w-full sm:w-auto">{GyanAIHeader}</div>
                 </header>
-                 <ChatInterface
-                    title="Gyan AI"
-                    description="Your AI Specialist"
-                    initialMessage="Hello! I am Gyan AI. Select a topic and ask me anything."
-                    onBack={onBack}
-                    apiCall={apiCall}
-                />
+                 <ScrollArea className="flex-grow">
+                     <div className="p-6">
+                        <div className="mb-6">
+                            <label className="text-sm font-medium mb-2 block">Choose Topic</label>
+                            <Select onValueChange={setTopic} defaultValue="Dairy Technology">
+                                <SelectTrigger><SelectValue/></SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="Dairy Technology">Dairy Technology</SelectItem>
+                                    <SelectItem value="Food Safety and Quality">Food Safety and Quality</SelectItem>
+                                    <SelectItem value="Food Processing">Food Processing</SelectItem>
+                                    <SelectItem value="Career Guidance in Food Industry">Career Guidance</SelectItem>
+                                    <SelectItem value="Interview Preparation">Interview Preparation</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        {topic === 'Interview Preparation' ? (
+                            <div className="p-4 border-l-4 border-primary bg-primary/10 space-y-4">
+                                <h4 className='font-bold'>Interview Preparation</h4>
+                                <p className='text-sm text-muted-foreground'>Paste your resume below and specify the job role you're targeting. The AI will act as an interviewer.</p>
+                                <div>
+                                    <label htmlFor="job-field" className="text-sm font-medium mb-1 block">Job Field (e.g., Quality Control)</label>
+                                    <Input id="job-field" placeholder="e.g., Production Manager, R&D Scientist" value={jobField} onChange={e => setJobField(e.target.value)} />
+                                </div>
+                                <div>
+                                    <label htmlFor="resume-text" className="text-sm font-medium mb-1 block">Paste Your Resume</label>
+                                    <Textarea id="resume-text" placeholder="Paste your full resume text here..." className="h-48" value={resumeText} onChange={e => setResumeText(e.target.value)} />
+                                </div>
+                                <Button onClick={handleStartInterview} disabled={isLoading} className="w-full">
+                                    {isLoading ? <Loader2 className="animate-spin" /> : "Start Mock Interview"}
+                                </Button>
+                            </div>
+                        ) : (
+                            <ChatInterface
+                                title="Gyan AI"
+                                description={`Ask anything about ${topic}`}
+                                initialMessage={`Hello! I am Gyan AI. Ask me anything about ${topic}.`}
+                                onBack={onBack}
+                                apiCall={gyanAI}
+                                apiCallPayload={gyanApiCallPayload}
+                            />
+                        )}
+                    </div>
+                </ScrollArea>
             </div>
         </div>
     );

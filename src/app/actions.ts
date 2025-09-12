@@ -9,6 +9,7 @@ import { askExpert as askExpertFlow } from "@/ai/flows/expert-support-flow";
 import { gyanAI as gyanAIFlow } from "@/ai/flows/gyan-ai-flow";
 import { refineQuestion as refineQuestionFlow } from "@/ai/flows/refine-question-flow";
 import { textToSpeech as textToSpeechFlow } from "@/ai/flows/text-to-speech-flow";
+import { interviewPrepper as interviewPrepperFlow } from "@/ai/flows/interview-prepper-flow";
 
 
 import type { 
@@ -17,7 +18,8 @@ import type {
     AskExpertInput,
     GyanAIInput,
     RefineQuestionInput,
-    TextToSpeechInput
+    TextToSpeechInput,
+    InterviewPrepperInput
 } from "@/ai/flows/types";
 
 export async function getDailyTip() {
@@ -50,4 +52,8 @@ export async function refineQuestion(input: RefineQuestionInput) {
 
 export async function textToSpeech(input: TextToSpeechInput) {
     return await textToSpeechFlow(input);
+}
+
+export async function interviewPrepper(input: InterviewPrepperInput) {
+    return await interviewPrepperFlow(input);
 }

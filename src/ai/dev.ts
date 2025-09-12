@@ -9,3 +9,4 @@ import '@/ai/flows/expert-support-flow.ts';
 import '@/ai/flows/gyan-ai-flow.ts';
 import '@/ai/flows/refine-question-flow.ts';
 import '@/ai/flows/text-to-speech-flow.ts';
+import '@/ai/flows/interview-prepper-flow.ts';
