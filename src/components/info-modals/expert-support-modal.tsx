@@ -54,6 +54,10 @@ export function ExpertSupportModal({ isOpen, setIsOpen }: { isOpen: boolean; set
         setSelectedExpert(expert);
         setActivePage('chat');
     };
+    
+    const onSelectExpert = (expert: any) => {
+        handleSelectExpert(expert);
+    };
 
     const handleBackToHome = () => {
         setActivePage('home');
@@ -377,3 +381,5 @@ function ResponseModal({ response, setResponse, isOpen }: { response: {title: st
         </Dialog>
     );
 }
+
+    
