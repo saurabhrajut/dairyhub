@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useTransition, useMemo, useEffect, useRef } from 'react';
@@ -40,7 +39,7 @@ interface Message {
 
 interface UIMessage {
     id: string;
-    sender: "user" | "assistant";
+    role: "user" | "assistant";
     text: string;
     lang?: string;
 }
@@ -132,7 +131,7 @@ function HomePage({ setActivePage, onSelectExpert }: { setActivePage: (page: str
 
 function ChatPage({ expert, onBack }: { expert: typeof initialExperts[0], onBack: () => void }) {
     const [messages, setMessages] = useState<UIMessage[]>([
-        { id: "initial", sender: "assistant", text: `Hello! I am ${expert.name}. Ask me anything about ${expert.specialization}.` }
+        { id: "initial", role: "assistant", text: `Hello! I am ${expert.name}. Ask me anything about ${expert.specialization}.` }
     ]);
     const [history, setHistory] = useState<Message[]>([]);
     const [input, setInput] = useState("");
@@ -153,7 +152,7 @@ function ChatPage({ expert, onBack }: { expert: typeof initialExperts[0], onBack
 
         const userMessage: UIMessage = {
             id: Date.now().toString(),
-            sender: "user",
+            role: "user",
             text: query,
         };
         setMessages((prev) => [...prev, userMessage]);
@@ -174,7 +173,7 @@ function ChatPage({ expert, onBack }: { expert: typeof initialExperts[0], onBack
 
             const assistantMessage: UIMessage = {
                 id: Date.now().toString() + "-ai",
-                sender: "assistant",
+                role: "assistant",
                 text: response.answer,
                 lang: language,
             };
@@ -185,7 +184,7 @@ function ChatPage({ expert, onBack }: { expert: typeof initialExperts[0], onBack
             console.error(error);
             const errorMessage: UIMessage = {
                 id: Date.now().toString() + "-error",
-                sender: "assistant",
+                role: "assistant",
                 text: "Sorry, something went wrong. Please try again.",
             };
             setMessages((prev) => [...prev, errorMessage]);
@@ -219,9 +218,9 @@ function ChatPage({ expert, onBack }: { expert: typeof initialExperts[0], onBack
                 <ScrollArea className="flex-grow p-4" ref={scrollAreaRef}>
                     <div className="flex flex-col gap-4">
                         {messages.map((msg) => (
-                            <div key={msg.id} className={`flex gap-3 max-w-[85%] ${msg.sender === "user" ? "self-end" : "self-start"}`}>
-                                {msg.sender === 'assistant' && <div className="bg-muted p-2 rounded-full h-fit shrink-0"><Bot className="w-5 h-5 text-foreground" /></div>}
-                                <div className={`flex-1 p-3 rounded-2xl break-words ${msg.sender === "user" ? "bg-primary/90 text-primary-foreground rounded-br-none" : "bg-muted text-muted-foreground rounded-bl-none"}`}>
+                            <div key={msg.id} className={`flex gap-3 max-w-[85%] ${msg.role === "user" ? "self-end" : "self-start"}`}>
+                                {msg.role === 'assistant' && <div className="bg-muted p-2 rounded-full h-fit shrink-0"><Bot className="w-5 h-5 text-foreground" /></div>}
+                                <div className={`flex-1 p-3 rounded-2xl break-words ${msg.role === "user" ? "bg-primary/90 text-primary-foreground rounded-br-none" : "bg-muted text-muted-foreground rounded-bl-none"}`}>
                                     <p className="text-sm" dangerouslySetInnerHTML={{ __html: msg.text.replace(/\n/g, '<br />') }}></p>
                                 </div>
                             </div>
