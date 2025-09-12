@@ -380,5 +380,3 @@ function ResponseModal({ response, setResponse, isOpen }: { response: {title: st
         </Dialog>
     );
 }
-
-    
