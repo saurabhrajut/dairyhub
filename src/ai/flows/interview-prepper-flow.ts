@@ -1,13 +1,12 @@
 
 'use server';
-/**
- * @fileOverview An AI flow to act as an interviewer based on a user's resume.
- */
-
 import { ai } from '@/ai/genkit';
 import { InterviewPrepperInputSchema, InterviewPrepperOutputSchema, type InterviewPrepperInput, type InterviewPrepperOutput } from './types';
 
-
+/**
+ * Primary prompt (uses your strict schema).
+ * If provider returns structured output exactly matching schema, we use it.
+ */
 const interviewPrepperPrompt = ai.definePrompt({
     name: 'interviewPrepperPrompt',
     input: { schema: InterviewPrepperInputSchema },
@@ -58,35 +57,191 @@ Please respond to the user's last message and ask the next relevant question.
 });
 
 
-const interviewPrepperFlow = ai.defineFlow(
-    {
-        name: 'interviewPrepperFlow',
-        inputSchema: InterviewPrepperInputSchema,
-        outputSchema: InterviewPrepperOutputSchema,
-    },
-    async (input) => {
-        try {
-            // Basic validation
-            if (!input.resumeText || input.resumeText.trim().length === 0) {
-              throw new Error("resumeText is empty or invalid.");
-            }
-            
-            const { output } = await interviewPrepperPrompt(input);
-            // Handle cases where the AI might return a null or undefined output
-            if (!output) {
-                console.error("Interview Prepper Flow: AI returned a null or undefined output.");
-                return { response: [], followUpSuggestion: "Sorry, I encountered an issue and couldn't generate questions. Please try again." };
-            }
-            return output;
-        } catch (error) {
-            console.error("Error in interviewPrepperFlow:", error);
-            // Return a default error structure that matches the output schema
-            return {
-                response: [],
-                followUpSuggestion: "An unexpected error occurred. Please try again or shorten your resume."
-            };
-        }
+/**
+ * Fallback prompt: ask the model to emit a plain JSON string inside a single text field.
+ * This is more permissive and helps when strict schema validation fails.
+ */
+const interviewPrepperFallbackPrompt = ai.definePrompt({
+  name: 'interviewPrepperFallbackPrompt',
+  input: { schema: InterviewPrepperInputSchema },
+  // output here is simple text (we'll parse JSON from text)
+  output: { schema: { type: 'object', properties: { rawText: { type: 'string' } }, required: ['rawText'] } },
+  system: `You are an expert hiring manager and technical interviewer... (same tone)`,
+  prompt: `
+Given the following resume and experience level ({{experienceLevel}}), produce a JSON object with two keys:
+1) "response": an array of objects with keys "question" and "answer" (answer = model answer / guideline).
+2) "followUpSuggestion": a single string with the next step suggestion.
+
+Return ONLY valid JSON (no explanatory text) as the value of "rawText". Example of the JSON you should produce:
+
+{
+  "response": [{"question":"Tell me about yourself","answer":"Suggested answer..."}],
+  "followUpSuggestion": "Would you like to dive deeper..."
+}
+
+Resume:
+'''
+{{resumeText}}
+'''
+
+History (if present):
+{{#if history}}
+{{#each history}}
+- {{role}}: {{#if content.[0].text}}{{content.[0].text}}{{/if}}
+{{/each}}
+{{/if}}
+
+If initialRequest is true, create 3-4 initial questions (including Intro and Why hire you). Otherwise answer the last user message and ask the next relevant question.
+`
+});
+
+/**
+ * Helper: call prompt with retries
+ */
+async function callWithRetries<T>(fn: (input:any)=>Promise<T>, input: any, tries = 2) {
+  let lastErr: any = null;
+  for (let i = 0; i <= tries; i++) {
+    try {
+      const res = await fn(input);
+      return res;
+    } catch (err) {
+      lastErr = err;
+      console.error(`[interviewPrepper] attempt ${i} failed`, err);
+      // small backoff
+      await new Promise(r => setTimeout(r, 700 * (i + 1)));
     }
+  }
+  throw lastErr;
+}
+
+/**
+ * Optional helper: summarize in chunks (non-destructive).
+ * NOTE: This DOES NOT modify user's stored resume. It only makes a temporary summary
+ * to reduce prompt size if your provider/model needs it.
+ */
+async function summarizeResumeIfNeeded(resumeText: string) {
+  // If resume is small (<30k chars) skip summarization
+  if (!resumeText || resumeText.length < 30000) return resumeText;
+
+  console.warn("[interviewPrepper] resume is large; creating condensed summary for prompt (non-destructive).");
+  // Simple chunking and summarization prompt (use a very small prompt definition or ai.call if available)
+  // We'll create a quick summarizer prompt inline (implementation depends on ai SDK ability).
+  const chunkSize = 20000;
+  const chunks: string[] = [];
+  for (let i = 0; i < resumeText.length; i += chunkSize) {
+    chunks.push(resumeText.slice(i, i + chunkSize));
+  }
+
+  // summarize each chunk
+  const summaries: string[] = [];
+  for (const [idx, chunk] of chunks.entries()) {
+    // Using fallback-like prompt for chunk summary (very short)
+    const summaryPrompt = ai.definePrompt({
+      name: `resumeChunkSummary-${idx}`,
+      input: { schema: { type: 'object', properties: { chunk: { type: 'string' } }, required: ['chunk'] } },
+      output: { schema: { type: 'object', properties: { summary: { type: 'string' } }, required: ['summary'] } },
+      system: `You are a helpful summarizer. Produce a concise structured bulleted summary (3-6 bullets) of the important skills, projects, and dates in the following resume chunk.`,
+      prompt: `Resume chunk:
+'''
+{{chunk}}
+'''
+Return a short bullet-list style summary (each bullet 1-2 sentences).`
+    });
+
+    try {
+      const r: any = await callWithRetries(() => summaryPrompt({ chunk }), 2);
+      if (r && r.output && r.output.summary) {
+        summaries.push(r.output.summary);
+      } else {
+        // fallback to first N chars if summary fails
+        summaries.push(chunk.slice(0, 2000));
+      }
+    } catch (e) {
+      console.error("[interviewPrepper] chunk summary failed:", e);
+      summaries.push(chunk.slice(0, 2000));
+    }
+  }
+
+  // combine summaries into one string (still much smaller than original)
+  return summaries.join("\n\n");
+}
+
+/**
+ * Main flow (robust)
+ */
+const interviewPrepperFlow = ai.defineFlow(
+  {
+    name: 'interviewPrepperFlow',
+    inputSchema: InterviewPrepperInputSchema,
+    outputSchema: InterviewPrepperOutputSchema,
+  },
+  async (input: InterviewPrepperInput): Promise<InterviewPrepperOutput> => {
+    try {
+      console.log("[interviewPrepperFlow] incoming input size:", input?.resumeText?.length ?? 0, "language:", input.language, "initialRequest:", !!input.initialRequest);
+
+      if (!input.resumeText || input.resumeText.trim().length === 0) {
+        throw new Error("resumeText is empty or invalid.");
+      }
+      
+      const effectiveResume = input.resumeText;
+
+      // build the input we will send to the main prompt
+      const promptInput = { ...input, resumeText: effectiveResume };
+
+      // try primary (schema-validated) prompt with retries
+      let primaryResult: any = null;
+      try {
+        primaryResult = await callWithRetries((payload) => interviewPrepperPrompt(payload), promptInput, 2);
+        console.log("[interviewPrepperFlow] primaryResult:", !!primaryResult?.output);
+      } catch (primaryErr) {
+        console.warn("[interviewPrepperFlow] primary prompt failed:", primaryErr);
+      }
+
+      // If primary returned valid structured output, use it
+      if (primaryResult && primaryResult.output && Array.isArray(primaryResult.output.response)) {
+        console.log("[interviewPrepperFlow] using primary structured output");
+        return primaryResult.output as InterviewPrepperOutput;
+      }
+
+      // Primary failed — attempt fallback that returns raw JSON text inside a single field
+      console.warn("[interviewPrepperFlow] primary output missing, trying fallback prompt");
+      const fallbackResult: any = await callWithRetries((payload) => interviewPrepperFallbackPrompt(payload), promptInput, 2);
+
+      if (fallbackResult && fallbackResult.output && typeof fallbackResult.output.rawText === 'string') {
+        const rawText = fallbackResult.output.rawText.trim();
+        // Attempt to parse JSON from rawText
+        try {
+          const parsed = JSON.parse(rawText);
+          if (parsed && Array.isArray(parsed.response)) {
+            const out: InterviewPrepperOutput = {
+              response: parsed.response.map((q: any) => ({ question: q.question ?? '', answer: q.answer ?? '' })),
+              followUpSuggestion: parsed.followUpSuggestion ?? '',
+            };
+            console.log("[interviewPrepperFlow] fallback parsed successfully");
+            return out;
+          } else {
+            console.warn("[interviewPrepperFlow] fallback JSON parsed but structure unexpected, returning default");
+          }
+        } catch (parseErr) {
+          console.error("[interviewPrepperFlow] Failed to parse fallback JSON:", parseErr, "rawText:", rawText.slice(0, 1000));
+        }
+      }
+
+      // If all attempts fail, return a safe default consistent with schema
+      console.error("[interviewPrepperFlow] All attempts failed, returning safe default");
+      return {
+        response: [],
+        followUpSuggestion: "Sorry, I couldn't generate interview questions right now. Please try again in a few moments."
+      };
+
+    } catch (err) {
+      console.error("Error in interviewPrepperFlow (outer):", err);
+      return {
+        response: [],
+        followUpSuggestion: "An unexpected error occurred. Please try again later."
+      };
+    }
+  }
 );
 
 export async function interviewPrepper(input: InterviewPrepperInput): Promise<InterviewPrepperOutput> {
