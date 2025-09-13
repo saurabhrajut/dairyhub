@@ -4,6 +4,7 @@
 /node_modules
 /.pnp
 .pnp.js
+.yarn/install-state.gz
 
 # testing
 /coverage
@@ -39,5 +40,8 @@ next-env.d.ts
 
 # genkit
 .genkit/
-.genkit-cache.json
-dhenuguide/
+.genkit-cache/
+genkit-tools.conf
+
+# studio
+dhenuguide/.env
