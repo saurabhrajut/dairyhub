@@ -131,31 +131,31 @@ function ChatInterface({ title, description, initialMessage, onBack, apiCall, ap
     const scrollAreaRef = useRef<HTMLDivElement>(null);
     const { toast } = useToast();
 
-     // Use a ref to track if the initial message has been sent
     const initialMessageSent = useRef(false);
 
     useEffect(() => {
         const sendInitialMessage = async () => {
             setIsLoading(true);
             try {
-                // If it's an interview prep, the payload might be different for the initial call
                 const payload = apiCallPayload("", [], true); // isInitial = true
                 const response = await apiCall(payload);
                 
                 let responseText: string;
-                 if (isInterviewPrep && response.response) {
-                     if (response.response.length === 0) {
-                        responseText = response.followUpSuggestion || "Sorry, I couldn't generate any questions for this resume. Please try a different one.";
-                     } else {
-                        responseText = response.response.map((qa: any) => `<strong>Q: ${qa.question}</strong><br/>${qa.answer}`).join('<br/><br/>') + `<br/><br/><em>${response.followUpSuggestion}</em>`;
-                     }
+                if (isInterviewPrep && response && Array.isArray(response.response)) {
+                    if (response.response.length === 0) {
+                        responseText = response.followUpSuggestion || "Sorry, I couldn't generate any questions. Please try again with a different resume.";
+                    } else {
+                        responseText = response.response.map((qa: any) => `<strong>Q: ${qa.question}</strong><br/>${qa.answer}`).join('<br/><br/>') + `<br/><br/><em>${response.followUpSuggestion || ""}</em>`;
+                    }
                 } else {
-                     responseText = response.answer || initialMessage;
+                     responseText = response?.answer || "Sorry, no answer received.";
                 }
 
                 const initialAssistantMessage: UIMessage = { id: "initial-q", role: "assistant", text: responseText };
                 setMessages([initialAssistantMessage]);
-                setHistory([{ role: 'model', content: [{ text: responseText }] }]);
+                if (responseText) {
+                    setHistory([{ role: 'model', content: [{ text: responseText }] }]);
+                }
             } catch (error: any) {
                 console.error(error);
                 toast({ variant: 'destructive', title: 'Error', description: error.message || 'Failed to start the session.' });
@@ -166,7 +166,6 @@ function ChatInterface({ title, description, initialMessage, onBack, apiCall, ap
             }
         };
 
-        // Send the initial message only if it hasn't been sent before
         if (isInterviewPrep && !initialMessageSent.current) {
             sendInitialMessage();
             initialMessageSent.current = true;
@@ -202,20 +201,22 @@ function ChatInterface({ title, description, initialMessage, onBack, apiCall, ap
             let assistantMessage: UIMessage;
             let responseText: string;
 
-            if (isInterviewPrep && response.response) {
-                 if (response.response.length === 0) {
+            if (isInterviewPrep && response && Array.isArray(response.response)) {
+                if (response.response.length === 0) {
                     responseText = response.followUpSuggestion || "Sorry, I couldn't generate a follow-up. Please ask another question.";
-                 } else {
-                    responseText = response.response.map((qa: any) => `<strong>Q: ${qa.question}</strong><br/>${qa.answer}`).join('<br/><br/>') + `<br/><br/><em>${response.followUpSuggestion}</em>`;
-                 }
-                assistantMessage = { id: Date.now().toString() + "-ai", role: "assistant", text: responseText };
+                } else {
+                    responseText = response.response.map((qa: any) => `<strong>Q: ${qa.question}</strong><br/>${qa.answer}`).join('<br/><br/>') + `<br/><br/><em>${response.followUpSuggestion || ""}</em>`;
+                }
             } else {
-                 responseText = response.answer;
-                 assistantMessage = { id: Date.now().toString() + "-ai", role: "assistant", text: responseText };
+                 responseText = response?.answer || "Sorry, no answer received.";
             }
 
+            assistantMessage = { id: Date.now().toString() + "-ai", role: "assistant", text: responseText };
+
             setMessages((prev) => [...prev, assistantMessage]);
-            setHistory([...newHistoryForApi, { role: 'model', content: [{ text: responseText }] }]);
+            if(responseText) {
+                setHistory([...newHistoryForApi, { role: 'model', content: [{ text: responseText }] }]);
+            }
 
         } catch (error: any) {
             console.error(error);
@@ -324,14 +325,16 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
     const [fileName, setFileName] = useState("");
 
     useEffect(() => {
-        // Set the workerSrc for pdf.js. This is a common pattern for Next.js.
-        GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${getDocument.version}/pdf.worker.min.mjs`;
+        // Set workerSrc only on the client side
+        if (typeof window !== 'undefined') {
+            GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${'4.5.136'}/pdf.worker.min.mjs`;
+        }
     }, []);
 
     const handleStartChat = () => {
       if (topic === 'Interview Preparation') {
           if (!resumeText) {
-              toast({ variant: 'destructive', title: 'Error', description: 'Please upload or paste your resume.' });
+              toast({ variant: 'destructive', title: 'Error', description: 'Please upload or paste a valid resume.' });
               return;
           }
       }
@@ -350,7 +353,7 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
                     const arrayBuffer = await file.arrayBuffer();
                     const pdf = await getDocument({ data: new Uint8Array(arrayBuffer) }).promise;
                     let fullText = "";
-                    const numPages = Math.min(pdf.numPages, 2);
+                    const numPages = Math.min(pdf.numPages, 5); // Limit pages to avoid huge text
                     for (let i = 1; i <= numPages; i++) {
                         const page = await pdf.getPage(i);
                         const textContent = await page.getTextContent();
@@ -463,7 +466,7 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
                         {topic === 'Interview Preparation' && (
                             <div className="p-4 border-l-4 border-primary bg-primary/10 space-y-4 rounded-r-lg">
                                 <h4 className='font-bold'>Interview Preparation</h4>
-                                <p className='text-sm text-muted-foreground'>Upload your resume. The AI will act as an interviewer.</p>
+                                <p className='text-sm text-muted-foreground'>Upload your resume to start a mock interview with the AI.</p>
                                 <div>
                                     <label htmlFor="experience-level" className="text-sm font-medium mb-1 block">Experience Level</label>
                                     <Select onValueChange={setExperienceLevel} defaultValue="Fresher Student">

@@ -209,7 +209,7 @@ const interviewPrepperFlow = ai.defineFlow(
         throw new Error("resumeText empty");
       }
 
-      const effectiveResume = await summarizeResumeIfNeeded(input.resumeText);
+      const effectiveResume = input.resumeText;
 
       const promptInput = { ...input, resumeText: effectiveResume };
 
@@ -222,7 +222,6 @@ const interviewPrepperFlow = ai.defineFlow(
         }
         console.warn("[interviewPrepperFlow] primaryResult missing output:", JSON.stringify(primaryResult).slice(0, 1000));
       } catch (primaryErr: any) {
-        // **EXTRA LOGGING**: try to extract provider details
         console.error("[interviewPrepperFlow] primary prompt threw:", primaryErr?.message);
         if (primaryErr?.response) {
           try {
