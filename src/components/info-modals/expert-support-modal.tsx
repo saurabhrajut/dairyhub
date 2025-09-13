@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Sparkles, Lightbulb, UserPlus, Bot, ArrowLeft, Send, Upload, FileCheck } from 'lucide-react';
-import { askExpert, gyanAI, interviewPrepper } from '@/app/actions';
+import { askExpert, gyanAI, interviewPrepper, parseDocx } from '@/app/actions';
 import {
   Select,
   SelectContent,
@@ -23,8 +23,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { Message } from '@/ai/flows/types';
-import { getDocument, GlobalWorkerOptions } from "pdfjs-dist";
-import * as pdfjsWorker from 'pdfjs-dist/build/pdf.worker.mjs';
 
 
 const initialExperts = [
@@ -146,7 +144,7 @@ function ChatInterface({ title, description, initialMessage, onBack, apiCall, ap
                 }
 
                 let responseText: string;
-                if (isInterviewPrep && Array.isArray(response.response)) {
+                 if (isInterviewPrep && response && Array.isArray(response.response)) {
                   if (response.response.length === 0) {
                     responseText = response.followUpSuggestion || "Sorry, I couldn't generate any questions. Please try again with a different resume.";
                   } else {
@@ -155,6 +153,7 @@ function ChatInterface({ title, description, initialMessage, onBack, apiCall, ap
                 } else {
                      responseText = response?.answer || "Sorry, no answer received.";
                 }
+
 
                 const initialAssistantMessage: UIMessage = { id: "initial-q", role: "assistant", text: responseText };
                 setMessages([initialAssistantMessage]);
@@ -210,7 +209,7 @@ function ChatInterface({ title, description, initialMessage, onBack, apiCall, ap
             let assistantMessage: UIMessage;
             let responseText: string;
 
-            if (isInterviewPrep && Array.isArray(response.response)) {
+            if (isInterviewPrep && response && Array.isArray(response.response)) {
                 if (response.response.length === 0) {
                     responseText = response.followUpSuggestion || "Sorry, I couldn't generate a follow-up. Please ask another question.";
                 } else {
@@ -335,9 +334,20 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
     const [fileName, setFileName] = useState("");
 
     useEffect(() => {
-      if (typeof window !== 'undefined') {
-        GlobalWorkerOptions.workerSrc = pdfjsWorker;
-      }
+        if (typeof window === "undefined") return;
+      
+        (async () => {
+          try {
+            // dynamic import of the legacy build (works in browsers)
+            const pdfjsLib = await import("pdfjs-dist/legacy/build/pdf");
+            // import worker as URL (note the ?url)
+            const workerModule = await import("pdfjs-dist/build/pdf.worker.min.mjs?url");
+            // set workerSrc to the URL string (workerModule.default)
+            pdfjsLib.GlobalWorkerOptions.workerSrc = workerModule.default;
+          } catch (err) {
+            console.error("Failed to load pdfjs in browser:", err);
+          }
+        })();
     }, []);
 
     const handleStartChat = () => {
@@ -359,15 +369,18 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
 
             try {
                 if (fileName.endsWith('.pdf')) {
+                    const pdfjsLib = await import("pdfjs-dist/legacy/build/pdf");
+
                     const arrayBuffer = await file.arrayBuffer();
-                    const pdf = await getDocument({ data: new Uint8Array(arrayBuffer) }).promise;
+                    const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) }).promise;
+                  
                     let fullText = "";
-                    const numPages = Math.min(pdf.numPages, 5); // Limit pages to avoid huge text
+                    const numPages = Math.min(pdf.numPages, 5); // you already limit pages
                     for (let i = 1; i <= numPages; i++) {
-                        const page = await pdf.getPage(i);
-                        const textContent = await page.getTextContent();
-                        const pageText = textContent.items.map((item: any) => item.str).join(" ");
-                        fullText += pageText + "\n";
+                      const page = await pdf.getPage(i);
+                      const textContent = await page.getTextContent();
+                      const pageText = textContent.items.map((item: any) => (item as any).str || "").join(" ");
+                      fullText += pageText + "\n";
                     }
                     setResumeText(fullText);
                     toast({ title: "Success", description: "PDF resume uploaded." });
@@ -375,13 +388,8 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
                 } else if (fileName.endsWith('.doc') || fileName.endsWith('.docx')) {
                     const formData = new FormData();
                     formData.append('file', file);
-                    const res = await fetch('/api/parse-docx', { method: 'POST', body: formData });
-                    if (!res.ok) {
-                        const errorBody = await res.json();
-                        throw new Error(errorBody.error || "Docx parse failed on server");
-                    }
-                    const result = await res.json();
-                    setResumeText(result.text);
+                    const text = await parseDocx(formData);
+                    setResumeText(text);
                     toast({ title: "Success", description: "Word document uploaded." });
 
                 } else {
