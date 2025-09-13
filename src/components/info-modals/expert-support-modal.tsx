@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
@@ -219,7 +220,7 @@ function ChatInterface({ title, description, initialMessage, onBack, apiCall, ap
     };
 
     return (
-        <div className="h-full flex flex-col p-4">
+        <div className="h-full flex flex-col">
              <div className="flex-1 flex flex-col bg-card border rounded-lg overflow-hidden">
                 <ScrollArea className="flex-grow p-4" ref={scrollAreaRef}>
                     <div className="flex flex-col gap-4">
@@ -312,13 +313,13 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
     
     // For Interview Prep
     const [resumeText, setResumeText] = useState("");
-    const [jobField, setJobField] = useState("");
+    const [experienceLevel, setExperienceLevel] = useState("Fresher Student");
     const [fileName, setFileName] = useState("");
 
     const handleStartChat = () => {
       if (topic === 'Interview Preparation') {
-          if ((!resumeText) || !jobField) {
-              toast({ variant: 'destructive', title: 'Error', description: 'Please upload or paste your resume and specify the job field.' });
+          if (!resumeText) {
+              toast({ variant: 'destructive', title: 'Error', description: 'Please upload or paste your resume.' });
               return;
           }
       }
@@ -363,13 +364,13 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
     };
     
     useEffect(() => {
-        GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.worker.min.mjs`;
+        GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${'4.5.136'}/pdf.worker.min.mjs`;
     }, []);
 
     const handleBackFromChat = () => {
         setChatStarted(false);
         setResumeText("");
-        setJobField("");
+        setExperienceLevel("Fresher Student");
         setFileName("");
     };
 
@@ -378,8 +379,8 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
     }, [topic, language]);
 
     const interviewApiCallPayload = useCallback((query: string, history: Message[], isInitial = false) => {
-        return { resumeText, jobField, history, initialRequest: isInitial, language };
-    }, [resumeText, jobField, language]);
+        return { resumeText, experienceLevel, history, initialRequest: isInitial, language };
+    }, [resumeText, experienceLevel, language]);
     
     if (chatStarted) {
         const isInterview = topic === 'Interview Preparation';
@@ -388,7 +389,7 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
                  <Button variant="ghost" onClick={handleBackFromChat} className="self-start mb-2"><ArrowLeft className="mr-2"/> Back to Topics</Button>
                 <ChatInterface
                     title={isInterview ? "Interview Preparation" : "Gyan AI"}
-                    description={isInterview ? `Mock interview for a ${jobField} role.` : `Ask anything about ${topic}`}
+                    description={isInterview ? `Mock interview for a ${experienceLevel}.` : `Ask anything about ${topic}`}
                     initialMessage={isInterview ? "Hello! I have reviewed your resume. Let's begin the interview. Here are your first questions:" : `Hello! I am Gyan AI. Ask me anything about ${topic}.`}
                     onBack={handleBackFromChat}
                     apiCall={isInterview ? interviewPrepper : gyanAI}
@@ -443,10 +444,16 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
                         {topic === 'Interview Preparation' ? (
                             <div className="p-4 border-l-4 border-primary bg-primary/10 space-y-4 rounded-r-lg">
                                 <h4 className='font-bold'>Interview Preparation</h4>
-                                <p className='text-sm text-muted-foreground'>Upload or paste your resume and specify the job role you're targeting. The AI will act as an interviewer.</p>
+                                <p className='text-sm text-muted-foreground'>Upload or paste your resume and specify your experience level. The AI will act as an interviewer.</p>
                                 <div>
-                                    <label htmlFor="job-field" className="text-sm font-medium mb-1 block">Job Field (e.g., Quality Control)</label>
-                                    <Input id="job-field" placeholder="e.g., Production Manager, R&D Scientist" value={jobField} onChange={e => setJobField(e.target.value)} />
+                                    <label htmlFor="experience-level" className="text-sm font-medium mb-1 block">Experience Level</label>
+                                    <Select onValueChange={setExperienceLevel} defaultValue="Fresher Student">
+                                        <SelectTrigger id="experience-level"><SelectValue /></SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="Fresher Student">Fresher Student</SelectItem>
+                                            <SelectItem value="Experienced Person">Experienced Person</SelectItem>
+                                        </SelectContent>
+                                    </Select>
                                 </div>
                                 <div>
                                      <label htmlFor="resume-file" className="text-sm font-medium mb-1 block">Upload Your Resume (.pdf, .txt)</label>
@@ -469,7 +476,7 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
                             </div>
                         ) : null}
 
-                         <Button onClick={handleStartChat} disabled={isLoading || (topic === 'Interview Preparation' && (!resumeText || !jobField))} className="w-full mt-6">
+                         <Button onClick={handleStartChat} disabled={isLoading || (topic === 'Interview Preparation' && !resumeText)} className="w-full mt-6">
                             {isLoading ? <Loader2 className="animate-spin" /> : (topic === 'Interview Preparation' ? "Start Mock Interview" : "Start Chat")}
                         </Button>
                     </div>
