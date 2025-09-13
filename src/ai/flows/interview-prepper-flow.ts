@@ -66,7 +66,27 @@ const interviewPrepperFallbackPrompt = ai.definePrompt({
   input: { schema: InterviewPrepperInputSchema },
   // output here is simple text (we'll parse JSON from text)
   output: { schema: { type: 'object', properties: { rawText: { type: 'string' } }, required: ['rawText'] } },
-  system: `You are an expert hiring manager and technical interviewer... (same tone)`,
+  system: `You are an expert hiring manager and technical interviewer for the Dairy and Food Technology industry. Your goal is to conduct a rigorous and realistic mock interview to help the user prepare for a real job interview. You must be thorough, professional, and insightful.
+
+Your Task:
+1.  **Analyze the Resume and Experience Level:** Carefully read the user's resume (provided as 'resumeText') and their stated 'experienceLevel'.
+2.  **Generate Relevant Questions:**
+    *   Always start with a question like "Tell me about yourself" or "Introduce yourself". Provide a detailed, well-structured model answer for it.
+    *   Always include a question like "Why should we select you?" or "What makes you a good fit for this industry?". Provide a detailed, well-structured model answer for it.
+    *   **Resume-Based Questions:** Ask specific questions about their listed skills, experiences, projects, and education. For example, "In your internship at [Company Name], you mentioned working on [Project]. Can you elaborate on the challenges you faced and how you overcame them?"
+    *   **For a 'Fresher Student':** Focus more on educational background, courses, internships, and fundamental theoretical knowledge. Provide advice and guidance within your answers.
+    *   **For an 'Experienced Person':** Focus more on past job roles, responsibilities, achievements, and handling complex situations.
+    *   **Behavioral Questions:** Include standard behavioral questions like "Tell me about a time you worked in a team" or "What are your greatest strengths and weaknesses?"
+3.  **Provide Expert Answers:** For each question you generate, you MUST provide a detailed, well-structured, and correct model answer. The answer should be comprehensive enough to serve as a high-quality study guide for the user. Explain the 'why' behind the answer.
+4.  **Maintain Conversational Context:** Use the provided 'history' to have a flowing, continuous conversation. Refer back to previous points if relevant. Don't treat every user message as a new start.
+5.  **Initial vs. Follow-up:**
+    *   If 'initialRequest' is true, generate a diverse set of 3-4 initial questions based on the resume and experience level, including the mandatory introduction questions.
+    *   If 'initialRequest' is false, respond to the user's last message, ask a relevant follow-up question, and provide the answer.
+6.  **Concluding Remark:** End your response with a 'followUpSuggestion' to guide the user, such as "Would you like to dive deeper into any of these topics?" or "Now, let's move on to questions about food safety regulations."
+7.  **Language:** All your responses, including questions, answers, and suggestions, MUST be in the requested language: {{language}}.
+
+**Tone:** Professional, encouraging, but challenging. You are here to help them get a job, so your standards should be high.
+`,
   prompt: `
 Given the following resume and experience level ({{experienceLevel}}), produce a JSON object with two keys:
 1) "response": an array of objects with keys "question" and "answer" (answer = model answer / guideline).
@@ -177,65 +197,76 @@ const interviewPrepperFlow = ai.defineFlow(
   },
   async (input: InterviewPrepperInput): Promise<InterviewPrepperOutput> => {
     try {
-      console.log("[interviewPrepperFlow] incoming input size:", input?.resumeText?.length ?? 0, "language:", input.language, "initialRequest:", !!input.initialRequest);
+      console.log("[interviewPrepperFlow] starting, resume length:", input.resumeText?.length ?? 0);
 
       if (!input.resumeText || input.resumeText.trim().length === 0) {
-        throw new Error("resumeText is empty or invalid.");
+        throw new Error("resumeText empty");
       }
-      
-      const effectiveResume = input.resumeText;
 
-      // build the input we will send to the main prompt
+      const effectiveResume = await summarizeResumeIfNeeded(input.resumeText);
+
       const promptInput = { ...input, resumeText: effectiveResume };
 
-      // try primary (schema-validated) prompt with retries
-      let primaryResult: any = null;
+      // try primary prompt
       try {
-        primaryResult = await callWithRetries((payload) => interviewPrepperPrompt(payload), promptInput, 2);
-        console.log("[interviewPrepperFlow] primaryResult:", !!primaryResult?.output);
-      } catch (primaryErr) {
-        console.warn("[interviewPrepperFlow] primary prompt failed:", primaryErr);
-      }
-
-      // If primary returned valid structured output, use it
-      if (primaryResult && primaryResult.output && Array.isArray(primaryResult.output.response)) {
-        console.log("[interviewPrepperFlow] using primary structured output");
-        return primaryResult.output as InterviewPrepperOutput;
-      }
-
-      // Primary failed — attempt fallback that returns raw JSON text inside a single field
-      console.warn("[interviewPrepperFlow] primary output missing, trying fallback prompt");
-      const fallbackResult: any = await callWithRetries((payload) => interviewPrepperFallbackPrompt(payload), promptInput, 2);
-
-      if (fallbackResult && fallbackResult.output && typeof fallbackResult.output.rawText === 'string') {
-        const rawText = fallbackResult.output.rawText.trim();
-        // Attempt to parse JSON from rawText
-        try {
-          const parsed = JSON.parse(rawText);
-          if (parsed && Array.isArray(parsed.response)) {
-            const out: InterviewPrepperOutput = {
-              response: parsed.response.map((q: any) => ({ question: q.question ?? '', answer: q.answer ?? '' })),
-              followUpSuggestion: parsed.followUpSuggestion ?? '',
-            };
-            console.log("[interviewPrepperFlow] fallback parsed successfully");
-            return out;
-          } else {
-            console.warn("[interviewPrepperFlow] fallback JSON parsed but structure unexpected, returning default");
-          }
-        } catch (parseErr) {
-          console.error("[interviewPrepperFlow] Failed to parse fallback JSON:", parseErr, "rawText:", rawText.slice(0, 1000));
+        const primaryResult: any = await callWithRetries((payload) => interviewPrepperPrompt(payload), promptInput, 2);
+        if (primaryResult?.output) {
+          console.log("[interviewPrepperFlow] primary prompt succeeded.");
+          return primaryResult.output;
+        }
+        console.warn("[interviewPrepperFlow] primaryResult missing output:", JSON.stringify(primaryResult).slice(0, 1000));
+      } catch (primaryErr: any) {
+        // **EXTRA LOGGING**: try to extract provider details
+        console.error("[interviewPrepperFlow] primary prompt threw:", primaryErr?.message);
+        if (primaryErr?.response) {
+          try {
+            console.error("[interviewPrepperFlow] primaryErr.response:", typeof primaryErr.response === "object" ? JSON.stringify(primaryErr.response).slice(0,2000) : primaryErr.response);
+          } catch (_) {}
+        }
+        if (primaryErr?.body) {
+          try { console.error("[interviewPrepperFlow] primaryErr.body:", JSON.stringify(primaryErr.body).slice(0,2000)); } catch(_) {}
+        }
+        if (primaryErr?.raw) {
+          try { console.error("[interviewPrepperFlow] primaryErr.raw:", String(primaryErr.raw).slice(0,2000)); } catch(_) {}
         }
       }
 
-      // If all attempts fail, return a safe default consistent with schema
+      // fallback attempt
+      console.warn("[interviewPrepperFlow] Primary prompt failed or returned no output. Trying fallback.");
+      try {
+        const fallbackResult: any = await callWithRetries((payload) => interviewPrepperFallbackPrompt(payload), promptInput, 2);
+        if (fallbackResult?.output?.rawText) {
+          const rawText = fallbackResult.output.rawText.trim();
+          try {
+            const parsed = JSON.parse(rawText);
+            if (parsed && Array.isArray(parsed.response)) {
+              console.log("[interviewPrepperFlow] Fallback prompt succeeded and parsed.");
+              const out: InterviewPrepperOutput = {
+                response: parsed.response.map((q: any) => ({ question: q.question ?? '', answer: q.answer ?? '' })),
+                followUpSuggestion: parsed.followUpSuggestion ?? '',
+              };
+              return out;
+            }
+            console.warn("[interviewPrepperFlow] fallback JSON parsed but structure unexpected:", rawText.slice(0,1000));
+          } catch (parseErr: any) {
+            console.error("[interviewPrepperFlow] fallback JSON parse failed:", parseErr?.message, "rawText snippet:", rawText.slice(0,1000));
+          }
+        } else {
+          console.warn("[interviewPrepperFlow] fallback returned no rawText:", JSON.stringify(fallbackResult).slice(0,1000));
+        }
+      } catch (fallbackErr: any) {
+        console.error("[interviewPrepperFlow] fallback prompt threw:", fallbackErr?.message);
+        if (fallbackErr?.response) { console.error("[interviewPrepperFlow] fallbackErr.response:", JSON.stringify(fallbackErr.response).slice(0,2000)); }
+      }
+
+      // final safe default
       console.error("[interviewPrepperFlow] All attempts failed, returning safe default");
       return {
         response: [],
-        followUpSuggestion: "Sorry, I couldn't generate interview questions right now. Please try again in a few moments."
+        followUpSuggestion: "Sorry, I couldn't complete the request. Please try again later."
       };
-
-    } catch (err) {
-      console.error("Error in interviewPrepperFlow (outer):", err);
+    } catch (err: any) {
+      console.error("[interviewPrepperFlow] outer handler error:", err?.stack ?? err?.message ?? err);
       return {
         response: [],
         followUpSuggestion: "An unexpected error occurred. Please try again later."
