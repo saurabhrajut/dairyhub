@@ -122,3 +122,10 @@ export const InterviewPrepperOutputSchema = z.object({
   followUpSuggestion: z.string().describe("A concluding remark or a follow-up question to keep the conversation going.")
 });
 export type InterviewPrepperOutput = z.infer<typeof InterviewPrepperOutputSchema>;
+
+
+// Types for DOCX parsing action
+export const DocxParsingInputSchema = z.object({
+  file: z.instanceof(File),
+});
+export type DocxParsingInput = z.infer<typeof DocxParsingInputSchema>;

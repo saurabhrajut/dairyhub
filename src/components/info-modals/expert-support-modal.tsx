@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
@@ -13,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Sparkles, Lightbulb, UserPlus, Bot, ArrowLeft, Send, Upload, FileCheck } from 'lucide-react';
-import { askExpert, gyanAI, interviewPrepper } from '@/app/actions';
+import { askExpert, gyanAI, interviewPrepper, parseDocx } from '@/app/actions';
 import {
   Select,
   SelectContent,
@@ -24,7 +25,6 @@ import {
 import type { Message } from '@/ai/flows/types';
 import { Textarea } from '../ui/textarea';
 import { getDocument, GlobalWorkerOptions } from "pdfjs-dist/legacy/build/pdf.mjs";
-import mammoth from 'mammoth';
 
 
 const initialExperts = [
@@ -330,6 +330,8 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
         if (e.target.files && e.target.files[0]) {
             const file = e.target.files[0];
             const fileType = file.type;
+            setFileName(file.name);
+            setIsLoading(true);
 
             try {
                 if (fileType === "application/pdf") {
@@ -343,29 +345,31 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
                         fullText += pageText + "\n";
                     }
                     setResumeText(fullText);
-                    setFileName(file.name);
                     toast({ title: "Success", description: "PDF resume uploaded." });
                 } else if (fileType === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" || fileType === "application/msword") {
-                     const arrayBuffer = await file.arrayBuffer();
-                     const result = await mammoth.extractRawText({ arrayBuffer: arrayBuffer });
-                     setResumeText(result.value);
-                     setFileName(file.name);
+                     const formData = new FormData();
+                     formData.append('file', file);
+                     const result = await parseDocx(formData);
+                     setResumeText(result.text);
                      toast({ title: "Success", description: "Word document uploaded." });
                 } else if (fileType === "text/plain") {
                     const reader = new FileReader();
                     reader.onload = (event) => {
                         const text = event.target?.result as string;
                         setResumeText(text);
-                        setFileName(file.name);
                         toast({ title: "Success", description: "Text file uploaded." });
                     };
                     reader.readAsText(file);
                 } else {
                     toast({ variant: 'destructive', title: 'Unsupported File', description: 'Please upload a PDF, DOC, DOCX or TXT file.' });
+                    setFileName("");
                 }
             } catch (error) {
                 console.error(error);
                 toast({ variant: 'destructive', title: "Error", description: "Failed to read the file." });
+                setFileName("");
+            } finally {
+                setIsLoading(false);
             }
         }
     };
