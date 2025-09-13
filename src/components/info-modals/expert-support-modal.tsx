@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/select";
 import type { Message } from '@/ai/flows/types';
 import { Textarea } from '../ui/textarea';
-import { getDocument, GlobalWorkerOptions } from "pdfjs-dist";
+import { getDocument, GlobalWorkerOptions } from "pdfjs-dist/legacy/build/pdf.mjs";
 
 
 const initialExperts = [
@@ -367,6 +367,13 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
         GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.worker.min.mjs`;
     }, []);
 
+    const handleBackFromChat = () => {
+        setChatStarted(false);
+        setResumeText("");
+        setJobField("");
+        setFileName("");
+    };
+
     const gyanApiCallPayload = useCallback((query: string, history: Message[]) => {
         return { topic, question: query, language, history };
     }, [topic, language]);
@@ -379,12 +386,12 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
         const isInterview = topic === 'Interview Preparation';
         return (
             <div className="h-full flex flex-col p-4">
-                 <Button variant="ghost" onClick={() => { setChatStarted(false); setResumeText(""); setJobField(""); setFileName(""); }} className="self-start mb-2"><ArrowLeft className="mr-2"/> Back to Topics</Button>
+                 <Button variant="ghost" onClick={handleBackFromChat} className="self-start mb-2"><ArrowLeft className="mr-2"/> Back to Topics</Button>
                 <ChatInterface
                     title={isInterview ? "Interview Preparation" : "Gyan AI"}
                     description={isInterview ? `Mock interview for a ${jobField} role.` : `Ask anything about ${topic}`}
                     initialMessage={isInterview ? "Hello! I have reviewed your resume. Let's begin the interview. Here are your first questions:" : `Hello! I am Gyan AI. Ask me anything about ${topic}.`}
-                    onBack={() => setChatStarted(false)}
+                    onBack={handleBackFromChat}
                     apiCall={isInterview ? interviewPrepper : gyanAI}
                     apiCallPayload={isInterview ? interviewApiCallPayload : gyanApiCallPayload}
                     isInterviewPrep={isInterview}
@@ -473,7 +480,7 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
     );
 }
 
-function RegisterExpertPage({ onBack }: { onBack: () => void }) {
+function RegisterExpertPage({ onBack }: { onBack: () => void; }) {
     return (
         <ScrollArea className="h-full">
             <div className="p-4">
