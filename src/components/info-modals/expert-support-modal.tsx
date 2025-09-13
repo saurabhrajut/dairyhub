@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
@@ -22,7 +23,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { Message } from '@/ai/flows/types';
-import { Textarea } from '../ui/textarea';
 import { getDocument, GlobalWorkerOptions } from "pdfjs-dist/legacy/build/pdf.mjs";
 
 
@@ -324,9 +324,8 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
     const [fileName, setFileName] = useState("");
 
     useEffect(() => {
-      import("pdfjs-dist/build/pdf.worker.mjs").then((pdfjsWorker) => {
-        GlobalWorkerOptions.workerSrc = pdfjsWorker.default;
-      });
+        // Set the workerSrc for pdf.js. This is a common pattern for Next.js.
+        GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${getDocument.version}/pdf.worker.min.mjs`;
     }, []);
 
     const handleStartChat = () => {
@@ -461,7 +460,7 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
                             </div>
                         </div>
                         
-                        {topic === 'Interview Preparation' ? (
+                        {topic === 'Interview Preparation' && (
                             <div className="p-4 border-l-4 border-primary bg-primary/10 space-y-4 rounded-r-lg">
                                 <h4 className='font-bold'>Interview Preparation</h4>
                                 <p className='text-sm text-muted-foreground'>Upload your resume. The AI will act as an interviewer.</p>
@@ -490,7 +489,7 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
                                     </div>
                                 </div>
                             </div>
-                        ) : null}
+                        )}
 
                          <Button onClick={handleStartChat} disabled={isLoading || (topic === 'Interview Preparation' && !resumeText)} className="w-full mt-6">
                             {isLoading ? <Loader2 className="animate-spin" /> : (topic === 'Interview Preparation' ? "Start Mock Interview" : "Start Chat")}
