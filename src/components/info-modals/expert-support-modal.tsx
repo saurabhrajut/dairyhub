@@ -41,7 +41,7 @@ interface UIMessage {
 
 // Main Component
 export function ExpertSupportModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
-    const [activePage, setActivePage] = useState<'home' | 'chat' | 'gyan-ai' | 'register'>('home');
+    const [activePage, setActivePage] = useState<string>('home');
     const [selectedExpert, setSelectedExpert] = useState<typeof initialExperts[0] | null>(null);
 
     const handleSelectExpert = useCallback((expert: typeof initialExperts[0]) => {
