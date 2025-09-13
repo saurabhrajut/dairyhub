@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
@@ -25,7 +24,6 @@ import {
 import type { Message } from '@/ai/flows/types';
 import { Textarea } from '../ui/textarea';
 import { getDocument, GlobalWorkerOptions } from "pdfjs-dist/legacy/build/pdf.mjs";
-import("pdfjs-dist/build/pdf.worker.mjs");
 
 
 const initialExperts = [
@@ -325,6 +323,12 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
     const [experienceLevel, setExperienceLevel] = useState("Fresher Student");
     const [fileName, setFileName] = useState("");
 
+    useEffect(() => {
+      import("pdfjs-dist/build/pdf.worker.mjs").then((pdfjsWorker) => {
+        GlobalWorkerOptions.workerSrc = pdfjsWorker.default;
+      });
+    }, []);
+
     const handleStartChat = () => {
       if (topic === 'Interview Preparation') {
           if (!resumeText) {
@@ -335,53 +339,53 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
       setChatStarted(true);
     };
 
-const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-        const file = e.target.files[0];
-        const fileName = file.name.toLowerCase();
-        setFileName(file.name);
-        setIsLoading(true);
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            const file = e.target.files[0];
+            const fileName = file.name.toLowerCase();
+            setFileName(file.name);
+            setIsLoading(true);
 
-        try {
-            if (fileName.endsWith('.pdf')) {
-                const arrayBuffer = await file.arrayBuffer();
-                const pdf = await getDocument({ data: new Uint8Array(arrayBuffer) }).promise;
-                let fullText = "";
-                // Limit parsing to the first 2 pages to avoid overly long inputs
-                const numPages = Math.min(pdf.numPages, 2);
-                for (let i = 1; i <= numPages; i++) {
-                    const page = await pdf.getPage(i);
-                    const textContent = await page.getTextContent();
-                    const pageText = textContent.items.map((item: any) => item.str).join(" ");
-                    fullText += pageText + "\n";
+            try {
+                if (fileName.endsWith('.pdf')) {
+                    const arrayBuffer = await file.arrayBuffer();
+                    const pdf = await getDocument({ data: new Uint8Array(arrayBuffer) }).promise;
+                    let fullText = "";
+                    const numPages = Math.min(pdf.numPages, 2);
+                    for (let i = 1; i <= numPages; i++) {
+                        const page = await pdf.getPage(i);
+                        const textContent = await page.getTextContent();
+                        const pageText = textContent.items.map((item: any) => item.str).join(" ");
+                        fullText += pageText + "\n";
+                    }
+                    setResumeText(fullText);
+                    toast({ title: "Success", description: "PDF resume uploaded." });
+
+                } else if (fileName.endsWith('.doc') || fileName.endsWith('.docx')) {
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    const res = await fetch('/api/parse-docx', { method: 'POST', body: formData });
+                    if (!res.ok) {
+                        const errorBody = await res.json();
+                        throw new Error(errorBody.error || "Docx parse failed on server");
+                    }
+                    const result = await res.json();
+                    setResumeText(result.text);
+                    toast({ title: "Success", description: "Word document uploaded." });
+
+                } else {
+                     throw new Error("Unsupported file type. Please upload a PDF or Word document.");
                 }
-                setResumeText(fullText);
-                toast({ title: "Success", description: "PDF resume uploaded." });
-
-            } else if (fileName.endsWith('.doc') || fileName.endsWith('.docx')) {
-                const formData = new FormData();
-                formData.append('file', file);
-                const res = await fetch('/api/parse-docx', { method: 'POST', body: formData });
-                 if (!res.ok) {
-                    const errorBody = await res.json();
-                    throw new Error(errorBody.error || "Docx parse failed on server");
-                }
-                const result = await res.json();
-                setResumeText(result.text);
-                toast({ title: "Success", description: "Word document uploaded." });
-
-            } else {
-                 throw new Error("Unsupported file type. Please upload a PDF or Word document.");
+            } catch (error: any) {
+                console.error("File Read Error:", error);
+                toast({ variant: 'destructive', title: "Error", description: error.message || "Failed to read the file." });
+                setFileName("");
+            } finally {
+                setIsLoading(false);
             }
-        } catch (error: any) {
-            console.error("File Read Error:", error);
-            toast({ variant: 'destructive', title: "Error", description: error.message || "Failed to read the file." });
-            setFileName("");
-        } finally {
-            setIsLoading(false);
         }
-    }
-};
+    };
+
 
     const handleBackFromChat = () => {
         setChatStarted(false);

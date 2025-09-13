@@ -1,6 +1,6 @@
-
 'use server';
 import { ai } from '@/ai/genkit';
+import { z } from 'zod';
 import { InterviewPrepperInputSchema, InterviewPrepperOutputSchema, type InterviewPrepperInput, type InterviewPrepperOutput } from './types';
 
 /**
@@ -57,6 +57,10 @@ Please respond to the user's last message and ask the next relevant question.
 });
 
 
+const RawTextSchema = z.object({
+  rawText: z.string()
+});
+
 /**
  * Fallback prompt: ask the model to emit a plain JSON string inside a single text field.
  * This is more permissive and helps when strict schema validation fails.
@@ -64,8 +68,7 @@ Please respond to the user's last message and ask the next relevant question.
 const interviewPrepperFallbackPrompt = ai.definePrompt({
   name: 'interviewPrepperFallbackPrompt',
   input: { schema: InterviewPrepperInputSchema },
-  // output here is simple text (we'll parse JSON from text)
-  output: { schema: { type: 'object', properties: { rawText: { type: 'string' } }, required: ['rawText'] } },
+  output: { schema: RawTextSchema },
   system: `You are an expert hiring manager and technical interviewer for the Dairy and Food Technology industry. Your goal is to conduct a rigorous and realistic mock interview to help the user prepare for a real job interview. You must be thorough, professional, and insightful.
 
 Your Task:
@@ -151,6 +154,9 @@ async function summarizeResumeIfNeeded(resumeText: string) {
   for (let i = 0; i < resumeText.length; i += chunkSize) {
     chunks.push(resumeText.slice(i, i + chunkSize));
   }
+  
+  const ChunkInputSchema = z.object({ chunk: z.string() });
+  const ChunkOutputSchema = z.object({ summary: z.string() });
 
   // summarize each chunk
   const summaries: string[] = [];
@@ -158,8 +164,8 @@ async function summarizeResumeIfNeeded(resumeText: string) {
     // Using fallback-like prompt for chunk summary (very short)
     const summaryPrompt = ai.definePrompt({
       name: `resumeChunkSummary-${idx}`,
-      input: { schema: { type: 'object', properties: { chunk: { type: 'string' } }, required: ['chunk'] } },
-      output: { schema: { type: 'object', properties: { summary: { type: 'string' } }, required: ['summary'] } },
+      input: { schema: ChunkInputSchema },
+      output: { schema: ChunkOutputSchema },
       system: `You are a helpful summarizer. Produce a concise structured bulleted summary (3-6 bullets) of the important skills, projects, and dates in the following resume chunk.`,
       prompt: `Resume chunk:
 '''
