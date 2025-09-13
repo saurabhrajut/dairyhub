@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
@@ -329,16 +328,18 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             const file = e.target.files[0];
-            const fileType = file.type;
+            const fileName = file.name.toLowerCase();
             setFileName(file.name);
             setIsLoading(true);
 
             try {
-                if (fileType === "application/pdf") {
+                if (fileName.endsWith('.pdf')) {
                     const arrayBuffer = await file.arrayBuffer();
                     const pdf = await getDocument(arrayBuffer).promise;
                     let fullText = "";
-                    for (let i = 1; i <= pdf.numPages; i++) {
+                    // Limit parsing to first 2 pages for performance
+                    const numPages = Math.min(pdf.numPages, 2); 
+                    for (let i = 1; i <= numPages; i++) {
                         const page = await pdf.getPage(i);
                         const textContent = await page.getTextContent();
                         const pageText = textContent.items.map(item => (item as any).str).join(" ");
@@ -346,13 +347,15 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
                     }
                     setResumeText(fullText);
                     toast({ title: "Success", description: "PDF resume uploaded." });
-                } else if (fileType === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" || fileType === "application/msword") {
+
+                } else if (fileName.endsWith('.doc') || fileName.endsWith('.docx')) {
                      const formData = new FormData();
                      formData.append('file', file);
                      const result = await parseDocx(formData);
                      setResumeText(result.text);
                      toast({ title: "Success", description: "Word document uploaded." });
-                } else if (fileType === "text/plain") {
+
+                } else { // Assume .txt or other text-readable formats
                     const reader = new FileReader();
                     reader.onload = (event) => {
                         const text = event.target?.result as string;
@@ -360,9 +363,6 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
                         toast({ title: "Success", description: "Text file uploaded." });
                     };
                     reader.readAsText(file);
-                } else {
-                    toast({ variant: 'destructive', title: 'Unsupported File', description: 'Please upload a PDF, DOC, DOCX or TXT file.' });
-                    setFileName("");
                 }
             } catch (error) {
                 console.error(error);
