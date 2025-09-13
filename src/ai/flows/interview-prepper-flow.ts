@@ -65,8 +65,22 @@ const interviewPrepperFlow = ai.defineFlow(
         outputSchema: InterviewPrepperOutputSchema,
     },
     async (input) => {
-        const { output } = await interviewPrepperPrompt(input);
-        return output!;
+        try {
+            const { output } = await interviewPrepperPrompt(input);
+            // Handle cases where the AI might return a null or undefined output
+            if (!output) {
+                console.error("Interview Prepper Flow: AI returned a null or undefined output.");
+                return { response: [], followUpSuggestion: "Sorry, I encountered an issue and couldn't generate questions. Please try again." };
+            }
+            return output;
+        } catch (error) {
+            console.error("Error in interviewPrepperFlow:", error);
+            // Return a default error structure that matches the output schema
+            return {
+                response: [],
+                followUpSuggestion: "An unexpected error occurred. Please try again later."
+            };
+        }
     }
 );
 
