@@ -25,10 +25,7 @@ import {
 import type { Message } from '@/ai/flows/types';
 import { Textarea } from '../ui/textarea';
 import { getDocument, GlobalWorkerOptions } from "pdfjs-dist/legacy/build/pdf.mjs";
-
-if (typeof window !== 'undefined') {
-  import("pdfjs-dist/build/pdf.worker.mjs");
-}
+import("pdfjs-dist/build/pdf.worker.mjs");
 
 
 const initialExperts = [
@@ -149,7 +146,11 @@ function ChatInterface({ title, description, initialMessage, onBack, apiCall, ap
                 
                 let responseText: string;
                  if (isInterviewPrep && response.response) {
-                    responseText = response.response.map((qa: any) => `<strong>Q: ${qa.question}</strong><br/>${qa.answer}`).join('<br/><br/>') + `<br/><br/><em>${response.followUpSuggestion}</em>`;
+                     if (response.response.length === 0) {
+                        responseText = response.followUpSuggestion || "Sorry, I couldn't generate any questions for this resume. Please try a different one.";
+                     } else {
+                        responseText = response.response.map((qa: any) => `<strong>Q: ${qa.question}</strong><br/>${qa.answer}`).join('<br/><br/>') + `<br/><br/><em>${response.followUpSuggestion}</em>`;
+                     }
                 } else {
                      responseText = response.answer || initialMessage;
                 }
@@ -157,9 +158,9 @@ function ChatInterface({ title, description, initialMessage, onBack, apiCall, ap
                 const initialAssistantMessage: UIMessage = { id: "initial-q", role: "assistant", text: responseText };
                 setMessages([initialAssistantMessage]);
                 setHistory([{ role: 'model', content: [{ text: responseText }] }]);
-            } catch (error) {
+            } catch (error: any) {
                 console.error(error);
-                toast({ variant: 'destructive', title: 'Error', description: 'Failed to start the session.' });
+                toast({ variant: 'destructive', title: 'Error', description: error.message || 'Failed to start the session.' });
                 const errorMessage: UIMessage = { id: "initial-error", role: "assistant", text: "Sorry, I couldn't start the session. Please try again." };
                 setMessages([errorMessage]);
             } finally {
@@ -204,7 +205,11 @@ function ChatInterface({ title, description, initialMessage, onBack, apiCall, ap
             let responseText: string;
 
             if (isInterviewPrep && response.response) {
-                responseText = response.response.map((qa: any) => `<strong>Q: ${qa.question}</strong><br/>${qa.answer}`).join('<br/><br/>') + `<br/><br/><em>${response.followUpSuggestion}</em>`;
+                 if (response.response.length === 0) {
+                    responseText = response.followUpSuggestion || "Sorry, I couldn't generate a follow-up. Please ask another question.";
+                 } else {
+                    responseText = response.response.map((qa: any) => `<strong>Q: ${qa.question}</strong><br/>${qa.answer}`).join('<br/><br/>') + `<br/><br/><em>${response.followUpSuggestion}</em>`;
+                 }
                 assistantMessage = { id: Date.now().toString() + "-ai", role: "assistant", text: responseText };
             } else {
                  responseText = response.answer;
@@ -214,9 +219,9 @@ function ChatInterface({ title, description, initialMessage, onBack, apiCall, ap
             setMessages((prev) => [...prev, assistantMessage]);
             setHistory([...newHistoryForApi, { role: 'model', content: [{ text: responseText }] }]);
 
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
-            const errorMessage: UIMessage = { id: Date.now().toString() + "-error", role: "assistant", text: "Sorry, something went wrong. Please try again." };
+            const errorMessage: UIMessage = { id: Date.now().toString() + "-error", role: "assistant", text: error.message || "Sorry, something went wrong. Please try again." };
             setMessages((prev) => [...prev, errorMessage]);
         } finally {
             setIsLoading(false);
@@ -330,53 +335,59 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
       setChatStarted(true);
     };
 
-    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0]) {
-            const file = e.target.files[0];
-            const fileName = file.name.toLowerCase();
-            setFileName(file.name);
-            setIsLoading(true);
+const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+        const file = e.target.files[0];
+        const fileName = file.name.toLowerCase();
+        setFileName(file.name);
+        setIsLoading(true);
 
-            try {
-                if (fileName.endsWith('.pdf')) {
-                    const arrayBuffer = await file.arrayBuffer();
-                    const pdf = await getDocument({ data: new Uint8Array(arrayBuffer) }).promise;
-                    let fullText = "";
-                    const numPages = Math.min(pdf.numPages, 2);
-                    for (let i = 1; i <= numPages; i++) {
-                        const page = await pdf.getPage(i);
-                        const textContent = await page.getTextContent();
-                        const pageText = textContent.items.map((item: any) => item.str).join(" ");
-                        fullText += pageText + "\n";
-                    }
-                    setResumeText(fullText);
-                    toast({ title: "Success", description: "PDF resume uploaded." });
-                } else if (fileName.endsWith('.doc') || fileName.endsWith('.docx')) {
-                    const formData = new FormData();
-                    formData.append('file', file);
-                    const res = await fetch('/api/parse-docx', { method: 'POST', body: formData });
-                    if (!res.ok) throw new Error("Docx parse failed");
-                    const result = await res.json();
-                    setResumeText(result.text);
-                    toast({ title: "Success", description: "Word document uploaded." });
-                } else {
-                    const reader = new FileReader();
-                    reader.onload = (event) => {
-                        const text = event.target?.result as string;
-                        setResumeText(text);
-                        toast({ title: "Success", description: "Text file uploaded." });
-                    };
-                    reader.readAsText(file);
+        try {
+            if (fileName.endsWith('.pdf')) {
+                const arrayBuffer = await file.arrayBuffer();
+                const pdf = await getDocument({ data: new Uint8Array(arrayBuffer) }).promise;
+                let fullText = "";
+                // Limit parsing to the first 2 pages to avoid overly long inputs
+                const numPages = Math.min(pdf.numPages, 2);
+                for (let i = 1; i <= numPages; i++) {
+                    const page = await pdf.getPage(i);
+                    const textContent = await page.getTextContent();
+                    const pageText = textContent.items.map((item: any) => item.str).join(" ");
+                    fullText += pageText + "\n";
                 }
-            } catch (error) {
-                console.error(error);
-                toast({ variant: 'destructive', title: "Error", description: "Failed to read the file." });
-                setFileName("");
-            } finally {
-                setIsLoading(false);
+                setResumeText(fullText);
+                toast({ title: "Success", description: "PDF resume uploaded." });
+
+            } else if (fileName.endsWith('.doc') || fileName.endsWith('.docx')) {
+                const formData = new FormData();
+                formData.append('file', file);
+                const res = await fetch('/api/parse-docx', { method: 'POST', body: formData });
+                if (!res.ok) {
+                    const errorBody = await res.json();
+                    throw new Error(errorBody.error || "Docx parse failed on server");
+                }
+                const result = await res.json();
+                setResumeText(result.text);
+                toast({ title: "Success", description: "Word document uploaded." });
+
+            } else {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const text = event.target?.result as string;
+                    setResumeText(text);
+                    toast({ title: "Success", description: "Text file uploaded." });
+                };
+                reader.readAsText(file);
             }
+        } catch (error: any) {
+            console.error("File Read Error:", error);
+            toast({ variant: 'destructive', title: "Error", description: error.message || "Failed to read the file. Please try a different file." });
+            setFileName("");
+        } finally {
+            setIsLoading(false);
         }
-    };
+    }
+};
 
     const handleBackFromChat = () => {
         setChatStarted(false);

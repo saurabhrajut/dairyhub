@@ -66,6 +66,16 @@ const interviewPrepperFlow = ai.defineFlow(
     },
     async (input) => {
         try {
+            // Basic validation
+            if (!input.resumeText || input.resumeText.trim().length === 0) {
+              throw new Error("resumeText is empty or invalid.");
+            }
+            // Truncate very long resumes to prevent model errors
+            if (input.resumeText.length > 45000) {
+              console.warn("[interviewPrepper] resumeText is too long, truncating to 45000 characters.");
+              input = { ...input, resumeText: input.resumeText.slice(0, 45000) + "\n\n[TRUNCATED...]" };
+            }
+
             const { output } = await interviewPrepperPrompt(input);
             // Handle cases where the AI might return a null or undefined output
             if (!output) {
@@ -78,7 +88,7 @@ const interviewPrepperFlow = ai.defineFlow(
             // Return a default error structure that matches the output schema
             return {
                 response: [],
-                followUpSuggestion: "An unexpected error occurred. Please try again later."
+                followUpSuggestion: "An unexpected error occurred. Please try again or shorten your resume."
             };
         }
     }
