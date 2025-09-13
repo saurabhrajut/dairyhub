@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
@@ -486,11 +485,11 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
     );
 }
 
-function RegisterExpertPage({ onBack }: { onBack: (page: string) => void }) {
+function RegisterExpertPage({ onBack }: { onBack: () => void }) {
     return (
         <ScrollArea className="h-full">
             <div className="p-4">
-                <Button variant="ghost" onClick={onBack}><ArrowLeft className="mr-2" /> Back to Home</Button>
+                <Button variant="ghost" onClick={() => onBack()}><ArrowLeft className="mr-2" /> Back to Home</Button>
                 <div className="bg-card p-6 rounded-xl shadow-lg max-w-2xl mx-auto border mt-6">
                     <h3 className="text-xl font-bold text-center text-gray-900 mb-6">Register as a Real Expert</h3>
                     <div className="space-y-4">
@@ -506,6 +505,3 @@ function RegisterExpertPage({ onBack }: { onBack: (page: string) => void }) {
         </ScrollArea>
     );
 }
-
-
-    
