@@ -10,7 +10,6 @@ import { gyanAI as gyanAIFlow } from "@/ai/flows/gyan-ai-flow";
 import { refineQuestion as refineQuestionFlow } from "@/ai/flows/refine-question-flow";
 import { textToSpeech as textToSpeechFlow } from "@/ai/flows/text-to-speech-flow";
 import { interviewPrepper as interviewPrepperFlow } from "@/ai/flows/interview-prepper-flow";
-import mammoth from 'mammoth';
 
 
 import type { 
@@ -58,15 +57,4 @@ export async function textToSpeech(input: TextToSpeechInput) {
 
 export async function interviewPrepper(input: InterviewPrepperInput) {
     return await interviewPrepperFlow(input);
-}
-
-export async function parseDocx(formData: FormData): Promise<{ text: string }> {
-  const file = formData.get('file') as File;
-  if (!file) {
-    throw new Error('No file uploaded.');
-  }
-
-  const arrayBuffer = await file.arrayBuffer();
-  const result = await mammoth.extractRawText({ arrayBuffer });
-  return { text: result.value };
 }

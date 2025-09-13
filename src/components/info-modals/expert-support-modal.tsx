@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
@@ -13,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Sparkles, Lightbulb, UserPlus, Bot, ArrowLeft, Send, Upload, FileCheck } from 'lucide-react';
-import { askExpert, gyanAI, interviewPrepper, parseDocx } from '@/app/actions';
+import { askExpert, gyanAI, interviewPrepper } from '@/app/actions';
 import {
   Select,
   SelectContent,
@@ -24,6 +25,10 @@ import {
 import type { Message } from '@/ai/flows/types';
 import { Textarea } from '../ui/textarea';
 import { getDocument, GlobalWorkerOptions } from "pdfjs-dist/legacy/build/pdf.mjs";
+
+if (typeof window !== 'undefined') {
+  import("pdfjs-dist/build/pdf.worker.mjs");
+}
 
 
 const initialExperts = [
@@ -335,27 +340,26 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
             try {
                 if (fileName.endsWith('.pdf')) {
                     const arrayBuffer = await file.arrayBuffer();
-                    const pdf = await getDocument(arrayBuffer).promise;
+                    const pdf = await getDocument({ data: new Uint8Array(arrayBuffer) }).promise;
                     let fullText = "";
-                    // Limit parsing to first 2 pages for performance
-                    const numPages = Math.min(pdf.numPages, 2); 
+                    const numPages = Math.min(pdf.numPages, 2);
                     for (let i = 1; i <= numPages; i++) {
                         const page = await pdf.getPage(i);
                         const textContent = await page.getTextContent();
-                        const pageText = textContent.items.map(item => (item as any).str).join(" ");
+                        const pageText = textContent.items.map((item: any) => item.str).join(" ");
                         fullText += pageText + "\n";
                     }
                     setResumeText(fullText);
                     toast({ title: "Success", description: "PDF resume uploaded." });
-
                 } else if (fileName.endsWith('.doc') || fileName.endsWith('.docx')) {
-                     const formData = new FormData();
-                     formData.append('file', file);
-                     const result = await parseDocx(formData);
-                     setResumeText(result.text);
-                     toast({ title: "Success", description: "Word document uploaded." });
-
-                } else { // Assume .txt or other text-readable formats
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    const res = await fetch('/api/parse-docx', { method: 'POST', body: formData });
+                    if (!res.ok) throw new Error("Docx parse failed");
+                    const result = await res.json();
+                    setResumeText(result.text);
+                    toast({ title: "Success", description: "Word document uploaded." });
+                } else {
                     const reader = new FileReader();
                     reader.onload = (event) => {
                         const text = event.target?.result as string;
@@ -373,10 +377,6 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
             }
         }
     };
-    
-    useEffect(() => {
-        GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${'4.5.136'}/pdf.worker.min.mjs`;
-    }, []);
 
     const handleBackFromChat = () => {
         setChatStarted(false);
