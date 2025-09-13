@@ -362,7 +362,7 @@ const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
                 const formData = new FormData();
                 formData.append('file', file);
                 const res = await fetch('/api/parse-docx', { method: 'POST', body: formData });
-                if (!res.ok) {
+                 if (!res.ok) {
                     const errorBody = await res.json();
                     throw new Error(errorBody.error || "Docx parse failed on server");
                 }
@@ -371,17 +371,11 @@ const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
                 toast({ title: "Success", description: "Word document uploaded." });
 
             } else {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    const text = event.target?.result as string;
-                    setResumeText(text);
-                    toast({ title: "Success", description: "Text file uploaded." });
-                };
-                reader.readAsText(file);
+                 throw new Error("Unsupported file type. Please upload a PDF or Word document.");
             }
         } catch (error: any) {
             console.error("File Read Error:", error);
-            toast({ variant: 'destructive', title: "Error", description: error.message || "Failed to read the file. Please try a different file." });
+            toast({ variant: 'destructive', title: "Error", description: error.message || "Failed to read the file." });
             setFileName("");
         } finally {
             setIsLoading(false);
@@ -466,7 +460,7 @@ const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
                         {topic === 'Interview Preparation' ? (
                             <div className="p-4 border-l-4 border-primary bg-primary/10 space-y-4 rounded-r-lg">
                                 <h4 className='font-bold'>Interview Preparation</h4>
-                                <p className='text-sm text-muted-foreground'>Upload or paste your resume and specify your experience level. The AI will act as an interviewer.</p>
+                                <p className='text-sm text-muted-foreground'>Upload your resume. The AI will act as an interviewer.</p>
                                 <div>
                                     <label htmlFor="experience-level" className="text-sm font-medium mb-1 block">Experience Level</label>
                                     <Select onValueChange={setExperienceLevel} defaultValue="Fresher Student">
@@ -478,7 +472,7 @@ const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
                                     </Select>
                                 </div>
                                 <div>
-                                     <label htmlFor="resume-file" className="text-sm font-medium mb-1 block">Upload Your Resume (.pdf, .doc, .docx, .txt)</label>
+                                     <label htmlFor="resume-file" className="text-sm font-medium mb-1 block">Upload Your Resume (.pdf, .doc, .docx)</label>
                                     <div className="flex items-center gap-2">
                                         <label htmlFor="resume-file" className="flex-grow">
                                             <Button asChild variant="outline" className="w-full cursor-pointer">
@@ -487,13 +481,9 @@ const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
                                                     {fileName || "Choose a file..."}
                                                 </span>
                                             </Button>
-                                            <Input id="resume-file" type="file" className="hidden" onChange={handleFileChange} accept=".pdf,.doc,.docx,.txt" />
+                                            <Input id="resume-file" type="file" className="hidden" onChange={handleFileChange} accept=".pdf,.doc,.docx" />
                                         </label>
                                     </div>
-                                </div>
-                                 <div>
-                                    <label htmlFor="resume-text" className="text-sm font-medium mb-1 block">Or Paste Your Resume</label>
-                                    <Textarea id="resume-text" value={resumeText} onChange={e => setResumeText(e.target.value)} placeholder="Paste resume text here..." className="bg-white"/>
                                 </div>
                             </div>
                         ) : null}
