@@ -23,7 +23,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { Message } from '@/ai/flows/types';
-import { getDocument, GlobalWorkerOptions } from "pdfjs-dist/legacy/build/pdf.mjs";
+import { getDocument, GlobalWorkerOptions } from "pdfjs-dist";
+import * as pdfjsWorker from 'pdfjs-dist/build/pdf.worker.mjs';
 
 
 const initialExperts = [
@@ -140,13 +141,17 @@ function ChatInterface({ title, description, initialMessage, onBack, apiCall, ap
                 const payload = apiCallPayload("", [], true); // isInitial = true
                 const response = await apiCall(payload);
                 
+                 if (!response) {
+                    throw new Error("Received an empty response from the server.");
+                }
+
                 let responseText: string;
-                if (isInterviewPrep && response && Array.isArray(response.response)) {
-                    if (response.response.length === 0) {
-                        responseText = response.followUpSuggestion || "Sorry, I couldn't generate any questions. Please try again with a different resume.";
-                    } else {
-                        responseText = response.response.map((qa: any) => `<strong>Q: ${qa.question}</strong><br/>${qa.answer}`).join('<br/><br/>') + `<br/><br/><em>${response.followUpSuggestion || ""}</em>`;
-                    }
+                if (isInterviewPrep && Array.isArray(response.response)) {
+                  if (response.response.length === 0) {
+                    responseText = response.followUpSuggestion || "Sorry, I couldn't generate any questions. Please try again with a different resume.";
+                  } else {
+                    responseText = response.response.map((qa: any) => `<strong>Q: ${qa.question}</strong><br/>${qa.answer}`).join('<br/><br/>') + `<br/><br/><em>${response.followUpSuggestion || ""}</em>`;
+                  }
                 } else {
                      responseText = response?.answer || "Sorry, no answer received.";
                 }
@@ -197,11 +202,15 @@ function ChatInterface({ title, description, initialMessage, onBack, apiCall, ap
         try {
             const payload = apiCallPayload(query, newHistoryForApi, false); // Not an initial request
             const response = await apiCall(payload);
+            
+            if (!response) {
+                throw new Error("Received an empty response from the server.");
+            }
 
             let assistantMessage: UIMessage;
             let responseText: string;
 
-            if (isInterviewPrep && response && Array.isArray(response.response)) {
+            if (isInterviewPrep && Array.isArray(response.response)) {
                 if (response.response.length === 0) {
                     responseText = response.followUpSuggestion || "Sorry, I couldn't generate a follow-up. Please ask another question.";
                 } else {
@@ -210,6 +219,7 @@ function ChatInterface({ title, description, initialMessage, onBack, apiCall, ap
             } else {
                  responseText = response?.answer || "Sorry, no answer received.";
             }
+
 
             assistantMessage = { id: Date.now().toString() + "-ai", role: "assistant", text: responseText };
 
@@ -325,10 +335,9 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
     const [fileName, setFileName] = useState("");
 
     useEffect(() => {
-        // Set workerSrc only on the client side
-        if (typeof window !== 'undefined') {
-            GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${'4.5.136'}/pdf.worker.min.mjs`;
-        }
+      if (typeof window !== 'undefined') {
+        GlobalWorkerOptions.workerSrc = pdfjsWorker;
+      }
     }, []);
 
     const handleStartChat = () => {
