@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/select";
 import type { Message } from '@/ai/flows/types';
 import { Textarea } from '../ui/textarea';
-import * as pdfjs from "pdfjs-dist";
+import { getDocument, GlobalWorkerOptions } from "pdfjs-dist";
 
 
 const initialExperts = [
@@ -332,7 +332,7 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
             if (file.type === "application/pdf") {
                 try {
                     const arrayBuffer = await file.arrayBuffer();
-                    const pdf = await pdfjs.getDocument(arrayBuffer).promise;
+                    const pdf = await getDocument(arrayBuffer).promise;
                     let fullText = "";
                     for (let i = 1; i <= pdf.numPages; i++) {
                         const page = await pdf.getPage(i);
@@ -364,7 +364,7 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
     };
     
     useEffect(() => {
-        pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.mjs`;
+        GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.worker.min.mjs`;
     }, []);
 
     const gyanApiCallPayload = useCallback((query: string, history: Message[]) => {
@@ -443,7 +443,7 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
                                     <Input id="job-field" placeholder="e.g., Production Manager, R&D Scientist" value={jobField} onChange={e => setJobField(e.target.value)} />
                                 </div>
                                 <div>
-                                     <label htmlFor="resume-file" className="text-sm font-medium mb-1 block">Upload Your Resume (.pdf)</label>
+                                     <label htmlFor="resume-file" className="text-sm font-medium mb-1 block">Upload Your Resume (.pdf, .txt)</label>
                                     <div className="flex items-center gap-2">
                                         <label htmlFor="resume-file" className="flex-grow">
                                             <Button asChild variant="outline" className="w-full cursor-pointer">
@@ -473,11 +473,11 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
     );
 }
 
-function RegisterExpertPage({ onBack }: { onBack: (page: string) => void }) {
+function RegisterExpertPage({ onBack }: { onBack: () => void }) {
     return (
         <ScrollArea className="h-full">
             <div className="p-4">
-                <Button variant="ghost" onClick={() => onBack('home')}><ArrowLeft className="mr-2" /> Back to Home</Button>
+                <Button variant="ghost" onClick={onBack}><ArrowLeft className="mr-2" /> Back to Home</Button>
                 <div className="bg-card p-6 rounded-xl shadow-lg max-w-2xl mx-auto border mt-6">
                     <h3 className="text-xl font-bold text-center text-gray-900 mb-6">Register as a Real Expert</h3>
                     <div className="space-y-4">
