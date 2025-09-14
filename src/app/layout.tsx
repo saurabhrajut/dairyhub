@@ -1,6 +1,3 @@
-
-"use client";
-
 import type { Metadata } from 'next';
 import { Inter, Poppins, Source_Code_Pro, Space_Grotesk, Noto_Sans_Devanagari } from 'next/font/google';
 import './globals.css';
@@ -8,7 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider } from '@/context/auth-context';
 import { SubscriptionProvider } from '@/context/subscription-context';
 import { LanguageProvider } from '@/context/language-context';
-import React, { useEffect } from 'react';
+import React from 'react';
 
 
 // Font configuration using next/font
@@ -44,16 +41,16 @@ const notoDevanagari = Noto_Sans_Devanagari({
   display: 'swap',
 });
 
+export const metadata: Metadata = {
+  title: 'DhenuGuide',
+  description: 'Your digital dairy guide for science, processing, and quality assurance.',
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  
-  useEffect(() => {
-    // Add document metadata here since this is a client component
-    document.title = 'Dairy Hub';
-  }, []);
 
   return (
     <html lang="en" className={`${inter.variable} ${poppins.variable} ${spaceGrotesk.variable} ${sourceCodePro.variable} ${notoDevanagari.variable}`}>
