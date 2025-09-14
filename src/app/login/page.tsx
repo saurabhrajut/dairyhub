@@ -31,7 +31,7 @@ export default function LoginPage() {
                 title: 'Login Successful!',
                 description: "Welcome back!",
             });
-            router.push('/profile');
+            router.push('/');
         } catch (error: any) {
              toast({
                 variant: "destructive",
@@ -51,7 +51,7 @@ export default function LoginPage() {
                 title: 'Logged in as Guest!',
                 description: "Welcome! Explore the app's features.",
             });
-            router.push('/profile');
+            router.push('/');
         } catch (error: any) {
             toast({
                 variant: "destructive",
