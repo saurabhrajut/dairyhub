@@ -23,10 +23,6 @@ import {
 } from "@/components/ui/select";
 import type { Message } from '@/ai/flows/types';
 
-// --------------------- IMPORTANT: PDF.JS SETUP ---------------------
-// We DO NOT import pdfjs at top level. We'll dynamic-import it in the browser only.
-// ------------------------------------------------------------------
-
 const initialExperts = [
   { id: '1', name: "Dr. Ramesh Kumar", experience: 15, specialization: "Dairy Technology", photo: "https://placehold.co/150x150/E2E8F0/4A5568?text=R", type: 'ai' },
   { id: '2', name: "Sunita Sharma", experience: 12, specialization: "Food Safety and Quality", photo: "https://placehold.co/150x150/E2E8F0/4A5568?text=S", type: 'ai' },
@@ -34,6 +30,10 @@ const initialExperts = [
 ];
 
 interface UIMessage { id: string; role: "user" | "assistant"; text: string; }
+
+// --------------------- IMPORTANT: PDF.JS SETUP ---------------------
+// We DO NOT import pdfjs at top level. We'll dynamic-import it in the browser only.
+// ------------------------------------------------------------------
 
 export function ExpertSupportModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
   const [activePage, setActivePage] = useState<string>('home');
@@ -127,7 +127,7 @@ function ChatInterface({ title, description, initialMessage, onBack, apiCall, ap
                 const payload = apiCallPayload("", [], true); // isInitial = true
                 const response = await apiCall(payload);
                 
-                 if (!response) {
+                if (!response) {
                     throw new Error("Received an empty response from the server.");
                 }
 
@@ -202,12 +202,10 @@ function ChatInterface({ title, description, initialMessage, onBack, apiCall, ap
                 } else {
                     responseText = response.response.map((qa: any) => `<strong>Q: ${qa.question}</strong><br/>${qa.answer}`).join('<br/><br/>') + `<br/><br/><em>${response.followUpSuggestion || ""}</em>`;
                 }
+            } else if (response?.answer) {
+                 responseText = response.answer;
             } else {
-                 responseText = response?.answer || "Sorry, no answer received.";
-            }
-
-            if (!responseText) {
-                 throw new Error("Received an empty answer from the server.");
+                throw new Error("Sorry, no valid answer was received from the server.");
             }
 
             assistantMessage = { id: Date.now().toString() + "-ai", role: "assistant", text: responseText };
@@ -375,9 +373,9 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
           let fullText = "";
           const numPages = Math.min(pdf.numPages, 5);
           for (let i = 1; i <= numPages; i++) {
-            const page = await page.getPage(i);
+            const page = await pdf.getPage(i);
             const textContent = await page.getTextContent();
-            const pageText = textContent.items.map((item: any) => item.str || "").join(" ");
+            const pageText = textContent.items.map((item: any) => (item as any).str || "").join(" ");
             fullText += pageText + "\n";
           }
           setResumeText(fullText);
@@ -542,11 +540,3 @@ function RegisterExpertPage({ onBack }: { onBack: () => void }) {
     </ScrollArea>
   );
 }
-
-    import { genkit } from 'genkit';
-import { googleAI } from '@genkit-ai/googleai';
-
-export const ai = genkit({
-  plugins: [googleAI()],
-  model: 'googleai/gemini-2.0-flash',
-});

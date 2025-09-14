@@ -10,7 +10,5 @@ export const ai = genkit({
       apiKey: geminiApiKey,
     }),
   ],
-  model: 'googleai/gemini-2.0-flash',
-  // Log errors to the console, but disable verbose logging for cleaner output.
-  logLevel: 'error',
+  model: 'googleai/gemini-1.5-flash',
 });
