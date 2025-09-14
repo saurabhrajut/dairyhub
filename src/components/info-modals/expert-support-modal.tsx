@@ -31,10 +31,6 @@ const initialExperts = [
 
 interface UIMessage { id: string; role: "user" | "assistant"; text: string; }
 
-// --------------------- IMPORTANT: PDF.JS SETUP ---------------------
-// We DO NOT import pdfjs at top level. We'll dynamic-import it in the browser only.
-// ------------------------------------------------------------------
-
 export function ExpertSupportModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
   const [activePage, setActivePage] = useState<string>('home');
   const [selectedExpert, setSelectedExpert] = useState<typeof initialExperts[0] | null>(null);
@@ -138,8 +134,10 @@ function ChatInterface({ title, description, initialMessage, onBack, apiCall, ap
                     } else {
                         responseText = response.response.map((qa: any) => `<strong>Q: ${qa.question}</strong><br/>${qa.answer}`).join('<br/><br/>') + `<br/><br/><em>${response.followUpSuggestion || ""}</em>`;
                     }
+                } else if (response?.answer) {
+                     responseText = response.answer;
                 } else {
-                     responseText = response?.answer || "Sorry, no answer received.";
+                     responseText = response?.refinedQuestion?.refinedQuestion || "Sorry, no answer received.";
                 }
 
                 const initialAssistantMessage: UIMessage = { id: "initial-q", role: "assistant", text: responseText };
@@ -205,7 +203,7 @@ function ChatInterface({ title, description, initialMessage, onBack, apiCall, ap
             } else if (response?.answer) {
                  responseText = response.answer;
             } else {
-                throw new Error("Sorry, no valid answer was received from the server.");
+                responseText = response?.refinedQuestion?.refinedQuestion || "Sorry, no valid answer received from the server.";
             }
 
             assistantMessage = { id: Date.now().toString() + "-ai", role: "assistant", text: responseText };
@@ -328,7 +326,7 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
       try {
         const pdfjsLib = await import("pdfjs-dist/legacy/build/pdf");
         const workerModule = await import("pdfjs-dist/build/pdf.worker.min.mjs?url");
-        const workerUrl = (workerModule as any).default;
+        const workerUrl = (workerModule as any).default || workerModule;
         
         if (typeof workerUrl !== "string") {
           console.error("pdfjs worker import did not return a string URL:", workerModule);
