@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from 'react';
@@ -51,7 +52,7 @@ export default function SignupPage() {
                 title: 'Signup Successful!',
                 description: 'Welcome! You can now log in.',
             });
-            router.push('/login');
+            router.push('/');
         } catch (error: any) {
             toast({
                 variant: 'destructive',
@@ -192,3 +193,4 @@ export default function SignupPage() {
         </div>
     );
 }
+
