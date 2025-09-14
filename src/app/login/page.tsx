@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from 'react';
@@ -31,7 +30,7 @@ export default function LoginPage() {
                 title: 'Login Successful!',
                 description: "Welcome back!",
             });
-            router.push('/');
+            window.location.href = '/';
         } catch (error: any) {
              toast({
                 variant: "destructive",
@@ -51,7 +50,7 @@ export default function LoginPage() {
                 title: 'Logged in as Guest!',
                 description: "Welcome! Explore the app's features.",
             });
-            router.push('/');
+            window.location.href = '/';
         } catch (error: any) {
             toast({
                 variant: "destructive",
