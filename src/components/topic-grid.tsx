@@ -60,8 +60,6 @@ import { ValidationVerificationModal } from "./info-modals/validation-verificati
 import { EtpModal } from "./info-modals/etp-modal";
 import { IceCreamProductionModal } from "./info-modals/ice-cream-production-modal";
 import { ExpertSupportModal } from "./info-modals/expert-support-modal";
-import { useToast } from "@/hooks/use-toast";
-import { useRouter } from "next/navigation";
 import { ProductionCalculationsModal } from "./calculators/production-calculations-modal";
 
 const topics: { id: string; title: string; description: string; category: string; icon: React.ElementType; badge?: string; modal: React.ElementType; isPro: boolean; color: string; }[] = [
@@ -121,10 +119,7 @@ export function TopicGrid() {
   });
 
   const openModal = (id: string) => {
-      const topic = topics.find(t => t.id === id);
-      if (topic && topic.modal) {
-        setActiveModal(id);
-      }
+    setActiveModal(id);
   };
 
   return (

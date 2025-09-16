@@ -2,8 +2,20 @@
 
 import { Header } from "@/components/header";
 import { TopicGrid } from "@/components/topic-grid";
+import { useAuth } from "@/context/auth-context";
+import { Loader2 } from "lucide-react";
+
 
 export default function Home() {
+  const { loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <>
