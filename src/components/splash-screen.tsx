@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from 'react';
+import SplashScreen from '../components/splash-screen/SplashScreen';
 import { useRouter } from 'next/navigation';
 
 export function SplashScreen({ onFinished }: { onFinished: () => void }) {
