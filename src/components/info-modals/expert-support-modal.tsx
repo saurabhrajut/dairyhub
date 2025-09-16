@@ -111,7 +111,7 @@ function ChatInterface({ title, description, initialMessage, onBack, apiCall, ap
     const [history, setHistory] = useState<Message[]>([]);
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    const scrollAreaRef = useRef<HTMLDivElement>(null);
+    const scrollViewportRef = useRef<HTMLDivElement>(null);
     const { toast } = useToast();
 
     const initialMessageSent = useRef(false);
@@ -166,10 +166,10 @@ function ChatInterface({ title, description, initialMessage, onBack, apiCall, ap
 
 
     useEffect(() => {
-        if (scrollAreaRef.current) {
-            scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight;
+        if (scrollViewportRef.current) {
+            scrollViewportRef.current.scrollTop = scrollViewportRef.current.scrollHeight;
         }
-    }, [messages]);
+    }, [messages, isLoading]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -225,7 +225,7 @@ function ChatInterface({ title, description, initialMessage, onBack, apiCall, ap
     return (
         <div className="h-full flex flex-col">
              <div className="flex-1 flex flex-col bg-card border rounded-lg overflow-hidden">
-                <ScrollArea className="flex-grow p-4" ref={scrollAreaRef}>
+                <ScrollArea className="flex-grow p-4" viewportRef={scrollViewportRef}>
                     <div className="flex flex-col gap-4">
                         {messages.map((msg) => (
                             <div key={msg.id} className={`flex gap-3 max-w-[85%] ${msg.role === "user" ? "self-end" : "self-start"}`}>
@@ -295,14 +295,16 @@ function ChatPage({ expert, onBack }: { expert: typeof initialExperts[0], onBack
                     </SelectContent>
                 </Select>
             </header>
-             <ChatInterface
-                    title={expert.name}
-                    description={expert.specialization}
-                    initialMessage={`Hello! I am ${expert.name}. Ask me anything about ${expert.specialization}.`}
-                    onBack={onBack}
-                    apiCall={askExpert}
-                    apiCallPayload={apiCallPayload}
-                />
+             <div className="flex-1 min-h-0">
+                 <ChatInterface
+                        title={expert.name}
+                        description={expert.specialization}
+                        initialMessage={`Hello! I am ${expert.name}. Ask me anything about ${expert.specialization}.`}
+                        onBack={onBack}
+                        apiCall={askExpert}
+                        apiCallPayload={apiCallPayload}
+                    />
+            </div>
         </div>
       </div>
   );
@@ -432,15 +434,17 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
     return (
       <div className="h-full flex flex-col p-4">
         <Button variant="ghost" onClick={handleBackFromChat} className="self-start mb-2"><ArrowLeft className="mr-2"/> Back to Topics</Button>
-        <ChatInterface
-          title={isInterview ? "Interview Preparation" : "Gyan AI"}
-          description={isInterview ? `Mock interview for a ${experienceLevel}.` : `Ask anything about ${topic}`}
-          initialMessage={isInterview ? "Hello! I have reviewed your resume. Let's begin the interview. Here are your first questions:" : `Hello! I am Gyan AI. Ask me anything about ${topic}.`}
-          onBack={handleBackFromChat}
-          apiCall={isInterview ? interviewPrepper : gyanAI}
-          apiCallPayload={isInterview ? interviewApiCallPayload : gyanApiCallPayload}
-          isInterviewPrep={isInterview}
-        />
+         <div className="flex-1 min-h-0">
+            <ChatInterface
+            title={isInterview ? "Interview Preparation" : "Gyan AI"}
+            description={isInterview ? `Mock interview for a ${experienceLevel}.` : `Ask anything about ${topic}`}
+            initialMessage={isInterview ? "Hello! I have reviewed your resume. Let's begin the interview. Here are your first questions:" : `Hello! I am Gyan AI. Ask me anything about ${topic}.`}
+            onBack={handleBackFromChat}
+            apiCall={isInterview ? interviewPrepper : gyanAI}
+            apiCallPayload={isInterview ? interviewApiCallPayload : gyanApiCallPayload}
+            isInterviewPrep={isInterview}
+            />
+        </div>
       </div>
     );
   }
