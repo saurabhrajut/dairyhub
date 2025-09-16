@@ -25,7 +25,8 @@ export default function LoginPage() {
         setIsLoading(true);
 
         try {
-            await login(email, password);
+            const userCredential = await login(email, password);
+            console.log(userCredential.user);
             toast({
                 title: 'Login Successful!',
                 description: "Welcome back!",

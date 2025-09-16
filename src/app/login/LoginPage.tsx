@@ -25,12 +25,13 @@ export default function LoginPage() {
         setIsLoading(true);
 
         try {
-            await login(email, password);
+            const userCredential = await login(email, password);
+            console.log(userCredential.user);
             toast({
                 title: 'Login Successful!',
                 description: "Welcome back!",
             });
-            window.location.href = '/';
+            router.push('/');
         } catch (error: any) {
              toast({
                 variant: "destructive",
@@ -50,7 +51,7 @@ export default function LoginPage() {
                 title: 'Logged in as Guest!',
                 description: "Welcome! Explore the app's features.",
             });
-            window.location.href = '/';
+            router.push('/');
         } catch (error: any) {
             toast({
                 variant: "destructive",
