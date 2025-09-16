@@ -1,16 +1,18 @@
-
 "use client";
 
 import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 export function SplashScreen({ onFinished }: { onFinished: () => void }) {
+  const router = useRouter();
+
   useEffect(() => {
     const timer = setTimeout(() => {
       onFinished();
     }, 6000); // 6 seconds
 
     return () => clearTimeout(timer);
-  }, [onFinished]);
+  }, [onFinished, router]);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black">

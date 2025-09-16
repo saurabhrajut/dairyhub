@@ -16,6 +16,10 @@ export default function Home() {
     setShowSplash(false);
   };
 
+  if (loading) {
+    return <SplashScreen onFinished={handleSplashFinished} />;
+  }
+
   if (showSplash) {
     return <SplashScreen onFinished={handleSplashFinished} />;
   }
