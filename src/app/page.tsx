@@ -5,10 +5,12 @@ import { Header } from "@/components/header";
 import { TopicGrid } from "@/components/topic-grid";
 import { useAuth } from "@/context/auth-context";
 import { SplashScreen } from "@/components/splash-screen";
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
   const { user, loading } = useAuth();
   const [showSplash, setShowSplash] = useState(true);
+  const router = useRouter();
 
   const handleSplashFinished = () => {
     setShowSplash(false);
