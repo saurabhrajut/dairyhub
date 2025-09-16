@@ -224,35 +224,33 @@ function ChatInterface({ title, description, initialMessage, onBack, apiCall, ap
 
     return (
         <div className="h-full flex flex-col">
-             <div className="flex-1 flex flex-col bg-card border rounded-lg overflow-hidden">
-                <ScrollArea className="flex-grow p-4" viewportRef={scrollViewportRef}>
-                    <div className="flex flex-col gap-4">
-                        {messages.map((msg) => (
-                            <div key={msg.id} className={`flex gap-3 max-w-[85%] ${msg.role === "user" ? "self-end" : "self-start"}`}>
-                                {msg.role === 'assistant' && <div className="bg-muted p-2 rounded-full h-fit shrink-0"><Bot className="w-5 h-5 text-foreground" /></div>}
-                                <div className={`flex-1 p-3 rounded-2xl break-words ${msg.role === "user" ? "bg-primary/90 text-primary-foreground rounded-br-none" : "bg-muted text-muted-foreground rounded-bl-none"}`}>
-                                    <p className="text-sm" dangerouslySetInnerHTML={{ __html: msg.text.replace(/\n/g, '<br />') }}></p>
+            <ScrollArea className="flex-grow p-4" viewportRef={scrollViewportRef}>
+                <div className="flex flex-col gap-4">
+                    {messages.map((msg) => (
+                        <div key={msg.id} className={`flex gap-3 max-w-[85%] ${msg.role === "user" ? "self-end" : "self-start"}`}>
+                            {msg.role === 'assistant' && <div className="bg-muted p-2 rounded-full h-fit shrink-0"><Bot className="w-5 h-5 text-foreground" /></div>}
+                            <div className={`flex-1 p-3 rounded-2xl break-words ${msg.role === "user" ? "bg-primary/90 text-primary-foreground rounded-br-none" : "bg-muted text-muted-foreground rounded-bl-none"}`}>
+                                <p className="text-sm" dangerouslySetInnerHTML={{ __html: msg.text.replace(/\n/g, '<br />') }}></p>
+                            </div>
+                        </div>
+                    ))}
+                     {isLoading && (
+                        <div className="self-start flex gap-3 items-center">
+                            <div className="bg-muted p-2 rounded-full h-fit"><Bot className="w-5 h-5 text-foreground" /></div>
+                            <div className="bg-muted p-3 rounded-2xl rounded-bl-none">
+                                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                    <Loader2 className="animate-spin h-4 w-4" />
+                                    Thinking...
                                 </div>
                             </div>
-                        ))}
-                         {isLoading && (
-                            <div className="self-start flex gap-3 items-center">
-                                <div className="bg-muted p-2 rounded-full h-fit"><Bot className="w-5 h-5 text-foreground" /></div>
-                                <div className="bg-muted p-3 rounded-2xl rounded-bl-none">
-                                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                        <Loader2 className="animate-spin h-4 w-4" />
-                                        Thinking...
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                </ScrollArea>
-                <form onSubmit={handleSubmit} className="p-4 border-t bg-background flex items-center gap-2">
-                    <Input type="text" value={input} onChange={(e) => setInput(e.target.value)} placeholder="Ask a follow-up question..." className="flex-grow" disabled={isLoading} />
-                    <Button type="submit" size="icon" className="shrink-0" disabled={isLoading || !input}><Send /></Button>
-                </form>
-            </div>
+                        </div>
+                    )}
+                </div>
+            </ScrollArea>
+            <form onSubmit={handleSubmit} className="p-4 border-t bg-background flex items-center gap-2">
+                <Input type="text" value={input} onChange={(e) => setInput(e.target.value)} placeholder="Ask a follow-up question..." className="flex-grow" disabled={isLoading} />
+                <Button type="submit" size="icon" className="shrink-0" disabled={isLoading || !input}><Send /></Button>
+            </form>
         </div>
     );
 }
@@ -274,37 +272,37 @@ function ChatPage({ expert, onBack }: { expert: typeof initialExperts[0], onBack
   }, [expert]);
 
   return (
-      <div className="h-full flex flex-col p-4">
-        <Button variant="ghost" onClick={onBack} className="self-start mb-2"><ArrowLeft className="mr-2"/> Back to Experts</Button>
-        <div className="flex-1 flex flex-col bg-card border rounded-lg overflow-hidden">
-            <header className="p-4 border-b flex items-center justify-between gap-4">
-                <div className='flex items-center gap-4'>
-                    <img className="w-12 h-12 rounded-full object-cover" src={expert.photo} data-ai-hint="profile photo" alt={expert.name} />
-                    <div>
-                        <h3 className="font-bold">{expert.name}</h3>
-                        <p className="text-xs text-muted-foreground">{expert.specialization}</p>
-                    </div>
+      <div className="h-full flex flex-col">
+        <header className="p-4 border-b flex items-center justify-between gap-4 shrink-0">
+            <div className='flex items-center gap-4'>
+                <Button variant="ghost" size="icon" onClick={onBack} className="shrink-0">
+                    <ArrowLeft className="h-5 w-5" />
+                </Button>
+                <img className="w-12 h-12 rounded-full object-cover" src={expert.photo} data-ai-hint="profile photo" alt={expert.name} />
+                <div>
+                    <h3 className="font-bold">{expert.name}</h3>
+                    <p className="text-xs text-muted-foreground">{expert.specialization}</p>
                 </div>
-                <Select value={language} onValueChange={setLanguage}>
-                    <SelectTrigger className="w-[120px]">
-                        <SelectValue placeholder="Language" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="English">English</SelectItem>
-                        <SelectItem value="Hinglish">Hinglish</SelectItem>
-                    </SelectContent>
-                </Select>
-            </header>
-             <div className="flex-1 min-h-0">
-                 <ChatInterface
-                        title={expert.name}
-                        description={expert.specialization}
-                        initialMessage={`Hello! I am ${expert.name}. Ask me anything about ${expert.specialization}.`}
-                        onBack={onBack}
-                        apiCall={askExpert}
-                        apiCallPayload={apiCallPayload}
-                    />
             </div>
+            <Select value={language} onValueChange={setLanguage}>
+                <SelectTrigger className="w-[120px]">
+                    <SelectValue placeholder="Language" />
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="English">English</SelectItem>
+                    <SelectItem value="Hinglish">Hinglish</SelectItem>
+                </SelectContent>
+            </Select>
+        </header>
+         <div className="flex-1 min-h-0">
+             <ChatInterface
+                    title={expert.name}
+                    description={expert.specialization}
+                    initialMessage={`Hello! I am ${expert.name}. Ask me anything about ${expert.specialization}.`}
+                    onBack={onBack}
+                    apiCall={askExpert}
+                    apiCallPayload={apiCallPayload}
+                />
         </div>
       </div>
   );
@@ -432,17 +430,28 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
   if (chatStarted) {
     const isInterview = topic === 'Interview Preparation';
     return (
-      <div className="h-full flex flex-col p-4">
-        <Button variant="ghost" onClick={handleBackFromChat} className="self-start mb-2"><ArrowLeft className="mr-2"/> Back to Topics</Button>
+      <div className="h-full flex flex-col">
+         <header className="p-4 border-b flex items-center justify-between gap-4 shrink-0">
+            <div className='flex items-center gap-4'>
+                <Button variant="ghost" size="icon" onClick={handleBackFromChat} className="shrink-0">
+                    <ArrowLeft className="h-5 w-5" />
+                </Button>
+                <div className="bg-primary/10 p-2 rounded-full"><Lightbulb className="w-6 h-6 text-primary"/></div>
+                <div>
+                  <h3 className="font-bold">{isInterview ? "Interview Preparation" : "Gyan AI"}</h3>
+                  <p className="text-xs text-muted-foreground">{isInterview ? `Mock interview for a ${experienceLevel}.` : `Ask anything about ${topic}`}</p>
+                </div>
+            </div>
+         </header>
          <div className="flex-1 min-h-0">
             <ChatInterface
-            title={isInterview ? "Interview Preparation" : "Gyan AI"}
-            description={isInterview ? `Mock interview for a ${experienceLevel}.` : `Ask anything about ${topic}`}
-            initialMessage={isInterview ? "Hello! I have reviewed your resume. Let's begin the interview. Here are your first questions:" : `Hello! I am Gyan AI. Ask me anything about ${topic}.`}
-            onBack={handleBackFromChat}
-            apiCall={isInterview ? interviewPrepper : gyanAI}
-            apiCallPayload={isInterview ? interviewApiCallPayload : gyanApiCallPayload}
-            isInterviewPrep={isInterview}
+                title={isInterview ? "Interview Preparation" : "Gyan AI"}
+                description={isInterview ? `Mock interview for a ${experienceLevel}.` : `Ask anything about ${topic}`}
+                initialMessage={isInterview ? "Hello! I have reviewed your resume. Let's begin the interview. Here are your first questions:" : `Hello! I am Gyan AI. Ask me anything about ${topic}.`}
+                onBack={handleBackFromChat}
+                apiCall={isInterview ? interviewPrepper : gyanAI}
+                apiCallPayload={isInterview ? interviewApiCallPayload : gyanApiCallPayload}
+                isInterviewPrep={isInterview}
             />
         </div>
       </div>
