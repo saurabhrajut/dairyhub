@@ -4,9 +4,19 @@ import { useState } from "react";
 import { Header } from "@/components/header";
 import { TopicGrid } from "@/components/topic-grid";
 import { useAuth } from "@/context/auth-context";
+import { SplashScreen } from "@/components/splash-screen";
 
 export default function Home() {
   const { user, loading } = useAuth();
+  const [showSplash, setShowSplash] = useState(true);
+
+  const handleSplashFinished = () => {
+    setShowSplash(false);
+  };
+
+  if (showSplash) {
+    return <SplashScreen onFinished={handleSplashFinished} />;
+  }
 
   return (
     <>
