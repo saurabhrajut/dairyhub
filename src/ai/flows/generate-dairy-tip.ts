@@ -50,7 +50,7 @@ Choose a topic from the following areas:
 - **Chemicals in Dairy:** The role and preparation of acids (Citric, Lactic, HCl), bases (NaOH), and indicators (Phenolphthalein) in a dairy lab.
 - **Standardization:** Detailed explanation of standardizing milk for Fat and SNF using Pearson Square or algebraic methods.
 - **Acidity Control:** How to chemically decrease milk acidity using neutralizers (like sodium bicarbonate) or naturally increase it during fermentation.
-- **Food Engineering Principles:** In-depth look at a specific piece of equipment like a Pasteurizer (PHE), Homogenizer, or Evaporator, explaining its working principle and critical parameters.
+- **Food Engineering Principles:** In-depth look at a specific piece of equipment like a Pasteurizer (PHE), Homogenizer, Evaporator (including Calandria types), explaining its working principle and critical parameters.
 
 Example of a good, detailed, technical response:
 "**Homogenization ka scientific raaz kya hai?** Homogenization ek mechanical process hai jisme doodh ko high pressure (lagbhag 2000-3000 PSI) par ek chote se gap (homogenizer valve) se force kiya jaata hai. Isse doodh ke bade fat globules (3-6 microns) toot kar 2 micron se bhi chote ho jaate hain. Is process se fat globules ka surface area badh jaata hai, aur un par ek nayi membrane ban jaati hai jisme casein aur whey proteins hote hain. Yeh nayi membrane fat globules ko aapas mein judne se rokti hai, jisse doodh par malai ki layer nahi banti. Isliye homogenized doodh ka texture zyada creamy aur taste rich lagta hai. Two-stage homogenization me, pehle stage ke baad ek lower pressure (around 500 PSI) ka second stage istemal hota hai jo pehle stage me bane छोटे fat clusters ko todta hai, jisse viscosity control hoti hai."
