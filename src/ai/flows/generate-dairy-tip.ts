@@ -30,6 +30,7 @@ const generateDairyTipFlow = ai.defineFlow(
   },
   async () => {
     const { text } = await ai.generate({
+      model: 'googleai/gemini-1.5-flash',
       prompt: `You are an expert dairy and food technologist. Your task is to generate a detailed, insightful, and scientific "Did you know?" style tip related to the dairy or food industry.
 
 The response MUST be in Hinglish (a mix of Hindi and English).
