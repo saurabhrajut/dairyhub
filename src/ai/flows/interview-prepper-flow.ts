@@ -78,9 +78,10 @@ Your Task:
     *   For 'Fresher', focus on education and fundamentals.
     *   For 'Experienced', focus on job roles and achievements.
     *   Include behavioral questions.
-3.  **Initial vs. Follow-up:** If 'initialRequest' is true, generate 3-4 initial questions. Otherwise, respond to the user's last message and ask a relevant follow-up.
-4.  **Language:** Respond entirely in the requested 'language'.
-5.  **Output Format:** You must produce a single, valid JSON object assigned to the 'rawText' field. The JSON object should contain two keys:
+3.  **Context:** Use the provided 'history' to have a flowing, continuous conversation.
+4.  **Initial vs. Follow-up:** If 'initialRequest' is true, generate 3-4 initial questions. Otherwise, respond to the user's last message and ask a relevant follow-up.
+5.  **Language:** Respond entirely in the requested 'language'.
+6.  **Output Format:** You must produce a single, valid JSON object assigned to the 'rawText' field. The JSON object should contain two keys:
     *   "response": An array of objects, where each object has a "question" and an "answer" string.
     *   "followUpSuggestion": A single string for the next step.
 
@@ -206,7 +207,7 @@ const interviewPrepperFlow = ai.defineFlow(
 
       // try primary prompt
       try {
-        const primaryResult: any = await callWithRetries((payload) => interviewPrepperPrompt(payload), promptInput, 2);
+        const primaryResult: any = await callWithRetries((payload) => interviewPrepperPrompt(payload, {history: payload.history}), promptInput, 2);
         if (primaryResult?.output) {
           console.log("[interviewPrepperFlow] primary prompt succeeded.");
           return primaryResult.output;
@@ -230,7 +231,7 @@ const interviewPrepperFlow = ai.defineFlow(
       // fallback attempt
       console.warn("[interviewPrepperFlow] Primary prompt failed or returned no output. Trying fallback.");
       try {
-        const fallbackResult: any = await callWithRetries((payload) => interviewPrepperFallbackPrompt(payload), promptInput, 2);
+        const fallbackResult: any = await callWithRetries((payload) => interviewPrepperFallbackPrompt(payload, {history: payload.history}), promptInput, 2);
         if (fallbackResult?.output?.rawText) {
           const rawText = fallbackResult.output.rawText.trim();
           try {

@@ -18,7 +18,14 @@ const expertSupportPrompt = ai.definePrompt({
     Do not answer questions outside of your expertise.
     Provide scientifically valid, professional, and well-structured answers in the requested language. Your responses MUST be long, deep, insightful, and reflect your deep expertise and experience.
     Use the provided conversation history to maintain context and have a flowing conversation. Refer back to what was said before. Do not start every answer as if it's a new conversation.`,
-    prompt: `User's question is: "{{question}}"
+    prompt: `{{#if history}}
+    **Conversation History:**
+    {{#each history}}
+        **{{role}}:** {{#if content.[0].text}}{{content.[0].text}}{{/if}}
+    {{/each}}
+    {{/if}}
+    
+    User's question is: "{{question}}"
     Respond in this language: {{language}}`
 });
 
@@ -29,7 +36,12 @@ const expertSupportFlow = ai.defineFlow(
         outputSchema: AskExpertOutputSchema,
     },
     async (input) => {
-        const { output } = await expertSupportPrompt(input);
+        const { history, ...restOfInput } = input;
+        
+        const { output } = await expertSupportPrompt(
+            restOfInput,
+            { history: history || [] }
+        );
 
         return output!;
     }
