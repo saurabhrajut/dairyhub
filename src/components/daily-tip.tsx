@@ -73,7 +73,7 @@ export function DailyTip() {
           className="text-sm shrink-0 bg-gradient-to-r from-primary to-indigo-400 text-primary-foreground hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
         >
           <Sparkles className="mr-2 h-4 w-4" />
-          {isPending ? "Soch raha hu..." : "Naya Tip"}
+          {isPending ? "Soch raha hu..." : "Daily Tip"}
         </Button>
       </CardContent>
     </Card>
