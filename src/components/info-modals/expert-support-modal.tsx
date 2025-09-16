@@ -259,16 +259,19 @@ function ChatInterface({ title, description, initialMessage, onBack, apiCall, ap
 
 function ChatPage({ expert, onBack }: { expert: typeof initialExperts[0], onBack: () => void }) {
   const [language, setLanguage] = useState("English");
+  const languageRef = useRef(language);
+  languageRef.current = language;
+
   const apiCallPayload = useCallback((query: string, history: Message[]) => {
     return {
         expertName: expert.name,
         experience: expert.experience,
         specialization: expert.specialization,
         question: query,
-        language: language,
+        language: languageRef.current,
         history: history,
     };
-  }, [expert, language]);
+  }, [expert]);
 
   return (
       <div className="h-full flex flex-col p-4">
@@ -311,6 +314,12 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
   const { toast } = useToast();
   const [chatStarted, setChatStarted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  
+  const languageRef = useRef(language);
+  languageRef.current = language;
+  const topicRef = useRef(topic);
+  topicRef.current = topic;
+
 
   // For Interview Prep
   const [resumeText, setResumeText] = useState("");
@@ -411,12 +420,12 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
   };
 
   const gyanApiCallPayload = useCallback((query: string, history: Message[]) => {
-    return { topic, question: query, language, history };
-  }, [topic, language]);
+    return { topic: topicRef.current, question: query, language: languageRef.current, history };
+  }, []);
 
   const interviewApiCallPayload = useCallback((query: string, history: Message[], isInitial = false) => {
-    return { resumeText, experienceLevel, history, initialRequest: isInitial, language };
-  }, [resumeText, experienceLevel, language]);
+    return { resumeText, experienceLevel, history, initialRequest: isInitial, language: languageRef.current };
+  }, [resumeText, experienceLevel]);
 
   if (chatStarted) {
     const isInterview = topic === 'Interview Preparation';
