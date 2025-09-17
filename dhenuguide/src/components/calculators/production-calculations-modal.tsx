@@ -126,14 +126,19 @@ const MemoizedInputField = memo(function InputField({ label, value, name, setter
     const [internalValue, setInternalValue] = useState(value);
 
     // Update internal state when props change, but not if the element has focus
-    if (value !== internalValue && document.activeElement?.getAttribute('name') !== name) {
-        setInternalValue(value);
-    }
+    useEffect(() => {
+        if (value !== internalValue && document.activeElement?.getAttribute('name') !== name) {
+            setInternalValue(value);
+        }
+    }, [value, name, internalValue]);
     
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setInternalValue(e.target.value);
-        setter(e.target.name, e.target.value); // Update parent state on change
     };
+
+    const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+        setter(e.target.name, e.target.value);
+    }
     
     return (
         <div>
@@ -145,6 +150,7 @@ const MemoizedInputField = memo(function InputField({ label, value, name, setter
                     id={name} 
                     value={internalValue} 
                     onChange={handleChange}
+                    onBlur={handleBlur}
                     className={cn(unit ? "rounded-r-none" : "", inputClassName || '')}
                     placeholder={placeholder} 
                     step={step}
@@ -922,8 +928,7 @@ function MassBalanceCalc() {
             <div className="space-y-6 p-4 bg-muted/30 rounded-lg">
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4 font-bold text-center text-sm">
                     <span className="sm:text-left">Component</span>
-                    <span className="text-left">Fat (kg)</span>
-                    <span className="text-left">SNF (kg)</span>
+                    <span className="text-left sm:col-span-2">Kg Inputs</span>
                 </div>
                 
                 <div className="space-y-4">
@@ -1119,3 +1124,4 @@ function PlantEfficiencyCalc() {
     
 
     
+
