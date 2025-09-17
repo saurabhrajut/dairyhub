@@ -829,8 +829,10 @@ function MixCompositionCalc() {
 
 function MassBalanceCalc() {
     const [inputs, setInputs] = useState({
-        availableFat: '', availableSnf: '',
+        openingFat: '', openingSnf: '',
+        intakeFat: '', intakeSnf: '',
         addedFat: '', addedSnf: '',
+        dispatchedFat: '', dispatchedSnf: '',
         removedFat: '', removedSnf: '',
         closingFat: '', closingSnf: ''
     });
@@ -840,20 +842,24 @@ function MassBalanceCalc() {
     }, []);
 
     const results = useMemo(() => {
-        const avF = parseFloat(inputs.availableFat) || 0;
-        const avS = parseFloat(inputs.availableSnf) || 0;
+        const opF = parseFloat(inputs.openingFat) || 0;
+        const opS = parseFloat(inputs.openingSnf) || 0;
+        const inF = parseFloat(inputs.intakeFat) || 0;
+        const inS = parseFloat(inputs.intakeSnf) || 0;
         const adF = parseFloat(inputs.addedFat) || 0;
         const adS = parseFloat(inputs.addedSnf) || 0;
+        const dispF = parseFloat(inputs.dispatchedFat) || 0;
+        const dispS = parseFloat(inputs.dispatchedSnf) || 0;
         const remF = parseFloat(inputs.removedFat) || 0;
         const remS = parseFloat(inputs.removedSnf) || 0;
         const clF = parseFloat(inputs.closingFat) || 0;
         const clS = parseFloat(inputs.closingSnf) || 0;
 
-        const totalInFat = avF + adF;
-        const totalInSnf = avS + adS;
+        const totalInFat = opF + inF + adF;
+        const totalInSnf = opS + inS + adS;
         
-        const totalOutFat = remF + clF;
-        const totalOutSnf = remS + clS;
+        const totalOutFat = dispF + remF + clF;
+        const totalOutSnf = dispS + remS + clS;
 
         const gainLossFat = totalInFat - totalOutFat;
         const gainLossSnf = totalInSnf - totalOutSnf;
@@ -887,7 +893,8 @@ function MassBalanceCalc() {
                 
                 <div className="space-y-4">
                     <h4 className="text-lg font-bold text-green-700 flex items-center gap-2"><Plus className="w-5 h-5"/> Inputs</h4>
-                    <InputRow label="Available (Opening + Intake)" fatName="availableFat" snfName="availableSnf"/>
+                    <InputRow label="Opening Balance" fatName="openingFat" snfName="openingSnf"/>
+                    <InputRow label="Total Intake" fatName="intakeFat" snfName="intakeSnf"/>
                     <InputRow label="Added (e.g. from SMP)" fatName="addedFat" snfName="addedSnf"/>
                 </div>
 
@@ -895,7 +902,8 @@ function MassBalanceCalc() {
 
                 <div className="space-y-4">
                     <h4 className="text-lg font-bold text-red-700 flex items-center gap-2"><Minus className="w-5 h-5"/> Outputs</h4>
-                    <InputRow label="Removed / Dispatched" fatName="removedFat" snfName="removedSnf"/>
+                    <InputRow label="Dispatched (in Products)" fatName="dispatchedFat" snfName="dispatchedSnf"/>
+                    <InputRow label="Removed (as Cream/etc.)" fatName="removedFat" snfName="removedSnf"/>
                     <InputRow label="Closing Balance" fatName="closingFat" snfName="closingSnf"/>
                 </div>
             </div>
@@ -1071,3 +1079,6 @@ function PlantEfficiencyCalc() {
 
     
 
+
+
+    
