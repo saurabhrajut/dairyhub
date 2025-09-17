@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label"
 import { componentProps } from "@/lib/utils"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { ArrowLeft, Percent, ChevronsUp, Target, Droplets, Info, Weight, Thermometer, ShieldAlert, Factory } from 'lucide-react'
+import { ArrowLeft, Percent, ChevronsUp, Target, Droplets, Info, Weight, Thermometer, ShieldAlert, Factory, Check, Minus, Plus } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { cn } from "@/lib/utils"
@@ -43,13 +43,14 @@ interface MixIngredient {
 }
 
 
-type CalculatorType =  'yields' | 'paneer-yield' | 'ice-cream' | 'plant-efficiency';
+type CalculatorType =  'yields' | 'paneer-yield' | 'ice-cream' | 'plant-efficiency' | 'mass-balance';
 
 const calculatorsInfo = {
     'yields': { title: "Product Yields", icon: Percent, component: YieldsCalc },
     'paneer-yield': { title: "Paneer Yield", icon: PaneerIcon, component: PaneerYieldCalc },
     'ice-cream': { title: "Ice Cream", icon: IceCreamIcon, component: IceCreamCalculators },
     'plant-efficiency': { title: "Plant Efficiency", icon: Factory, component: PlantEfficiencyCalc },
+    'mass-balance': { title: "Fat/SNF Mass Balance", icon: Weight, component: MassBalanceCalc },
 };
 
 export function ProductionCalculationsModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
@@ -162,8 +163,8 @@ function PaneerYieldCalc() {
         const yieldPercentage = (paneerYieldKg / milkWeightKg) * 100;
 
         setTheoreticalResult(`
-            <p class="font-bold text-lg">Estimated Theoretical Yield: <span class="text-2xl text-green-700">${paneerYieldKg.toFixed(2)} kg</span></p>
-            <p class="text-sm mt-1">This is approximately a <span class="font-bold">${yieldPercentage.toFixed(2)}%</span> yield from ${qty} Litres of milk.</p>
+            <p class="font-bold text-lg">Estimated Theoretical Yield: <span class="text-2xl text-green-700">${'paneerYieldKg.toFixed(2)'} kg</span></p>
+            <p class="text-sm mt-1">This is approximately a <span class="font-bold">${'yieldPercentage.toFixed(2)'}%</span> yield from ${qty} Litres of milk.</p>
             <p class="text-xs mt-2">This is a scientific estimate based on solid recovery. Actual yield will vary.</p>
         `);
     };
@@ -183,7 +184,7 @@ function PaneerYieldCalc() {
 
         const actualYield = (paneer / milk) * 100;
         setActualResult(`
-             <p class="font-bold text-lg">Actual Yield: <span class="text-2xl text-blue-700">${actualYield.toFixed(2)}%</span></p>
+             <p class="font-bold text-lg">Actual Yield: <span class="text-2xl text-blue-700">${'actualYield.toFixed(2)'}%</span></p>
              <p class="text-sm mt-1">You obtained ${paneer} kg of paneer from ${milk} kg of milk.</p>
         `);
     };
@@ -619,7 +620,7 @@ function BatchScalingCalc() {
 
             {result && (
                 <Alert className="mt-4">
-                    <AlertTitle>Ingredients for {finalBatchSize} kg Batch</AlertTitle>
+                    <AlertTitle>Ingredients for ${finalBatchSize} kg Batch</AlertTitle>
                     <AlertDescription>
                         <Table>
                             <TableHeader><TableRow><TableHead>Ingredient</TableHead><TableHead className="text-right">Required Amount</TableHead></TableRow></TableHeader>
@@ -826,6 +827,118 @@ function MixCompositionCalc() {
     );
 }
 
+function MassBalanceCalc() {
+    const [inputs, setInputs] = useState({
+        availableFat: '', availableSnf: '',
+        addedFat: '', addedSnf: '',
+        removedFat: '', removedSnf: '',
+        closingFat: '', closingSnf: ''
+    });
+
+    const handleInputChange = useCallback((field: keyof typeof inputs, value: string) => {
+        setInputs(prev => ({...prev, [field]: value}));
+    }, []);
+
+    const results = useMemo(() => {
+        const avF = parseFloat(inputs.availableFat) || 0;
+        const avS = parseFloat(inputs.availableSnf) || 0;
+        const adF = parseFloat(inputs.addedFat) || 0;
+        const adS = parseFloat(inputs.addedSnf) || 0;
+        const remF = parseFloat(inputs.removedFat) || 0;
+        const remS = parseFloat(inputs.removedSnf) || 0;
+        const clF = parseFloat(inputs.closingFat) || 0;
+        const clS = parseFloat(inputs.closingSnf) || 0;
+
+        const totalInFat = avF + adF;
+        const totalInSnf = avS + adS;
+        
+        const totalOutFat = remF + clF;
+        const totalOutSnf = remS + clS;
+
+        const gainLossFat = totalInFat - totalOutFat;
+        const gainLossSnf = totalInSnf - totalOutSnf;
+
+        return {
+            totalInFat, totalInSnf,
+            totalOutFat, totalOutSnf,
+            gainLossFat, gainLossSnf,
+        };
+    }, [inputs]);
+
+    const InputRow = ({ label, fatName, snfName }: { label: string, fatName: keyof typeof inputs, snfName: keyof typeof inputs }) => (
+        <div className="grid grid-cols-3 items-center gap-4">
+            <Label className="font-semibold text-gray-700">{label}</Label>
+            <Input type="number" placeholder="Fat (kg)" value={inputs[fatName]} onChange={e => handleInputChange(fatName, e.target.value)} />
+            <Input type="number" placeholder="SNF (kg)" value={inputs[snfName]} onChange={e => handleInputChange(snfName, e.target.value)} />
+        </div>
+    );
+
+    return (
+         <CalculatorCard 
+            title="Fat & SNF Mass Balance" 
+            description="Calculate the gain or loss of fat and SNF during processing to track plant efficiency. All values should be in Kilograms (kg).">
+            
+            <div className="space-y-6 p-4 bg-muted/30 rounded-lg">
+                <div className="grid grid-cols-3 gap-4 font-bold text-center text-sm">
+                    <span>Component</span>
+                    <span>Fat (kg)</span>
+                    <span>SNF (kg)</span>
+                </div>
+                
+                <div className="space-y-4">
+                    <h4 className="text-lg font-bold text-green-700 flex items-center gap-2"><Plus className="w-5 h-5"/> Inputs</h4>
+                    <InputRow label="Available (Opening + Intake)" fatName="availableFat" snfName="availableSnf"/>
+                    <InputRow label="Added (e.g. from SMP)" fatName="addedFat" snfName="addedSnf"/>
+                </div>
+
+                <hr/>
+
+                <div className="space-y-4">
+                    <h4 className="text-lg font-bold text-red-700 flex items-center gap-2"><Minus className="w-5 h-5"/> Outputs</h4>
+                    <InputRow label="Removed / Dispatched" fatName="removedFat" snfName="removedSnf"/>
+                    <InputRow label="Closing Balance" fatName="closingFat" snfName="closingSnf"/>
+                </div>
+            </div>
+
+            <div className="mt-6">
+                <Alert>
+                    <AlertTitle className="text-xl font-extrabold text-center">Reconciliation</AlertTitle>
+                    <AlertDescription>
+                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 text-center">
+                             <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+                                <p className="text-sm font-medium text-gray-600">Total Fat In</p>
+                                <p className="text-2xl font-bold text-green-800">{results.totalInFat.toFixed(3)} kg</p>
+                             </div>
+                              <div className="bg-red-50 p-4 rounded-lg border border-red-200">
+                                <p className="text-sm font-medium text-gray-600">Total Fat Out</p>
+                                <p className="text-2xl font-bold text-red-800">{results.totalOutFat.toFixed(3)} kg</p>
+                             </div>
+                             <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+                                <p className="text-sm font-medium text-gray-600">Total SNF In</p>
+                                <p className="text-2xl font-bold text-green-800">{results.totalInSnf.toFixed(3)} kg</p>
+                             </div>
+                             <div className="bg-red-50 p-4 rounded-lg border border-red-200">
+                                <p className="text-sm font-medium text-gray-600">Total SNF Out</p>
+                                <p className="text-2xl font-bold text-red-800">{results.totalOutSnf.toFixed(3)} kg</p>
+                             </div>
+                         </div>
+                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 text-center">
+                             <div className={`p-4 rounded-lg border ${results.gainLossFat >= 0 ? 'bg-blue-50 border-blue-200' : 'bg-orange-50 border-orange-200'}`}>
+                                <p className="text-sm font-medium text-gray-600">Fat Gain / Loss</p>
+                                <p className={`text-2xl font-bold ${results.gainLossFat >= 0 ? 'text-blue-800' : 'text-orange-800'}`}>{results.gainLossFat.toFixed(3)} kg</p>
+                             </div>
+                             <div className={`p-4 rounded-lg border ${results.gainLossSnf >= 0 ? 'bg-blue-50 border-blue-200' : 'bg-orange-50 border-orange-200'}`}>
+                                <p className="text-sm font-medium text-gray-600">SNF Gain / Loss</p>
+                                <p className={`text-2xl font-bold ${results.gainLossSnf >= 0 ? 'text-blue-800' : 'text-orange-800'}`}>{results.gainLossSnf.toFixed(3)} kg</p>
+                             </div>
+                         </div>
+                    </AlertDescription>
+                </Alert>
+            </div>
+        </CalculatorCard>
+    );
+}
+
 function PlantEfficiencyCalc() {
     const [inputs, setInputs] = useState({
         actualOutput: '8000',
@@ -925,19 +1038,19 @@ function PlantEfficiencyCalc() {
                          <h4 className="font-semibold mb-4 text-gray-800">Assign Importance (Weights)</h4>
                          <div className="space-y-4">
                              <div>
-                                <Label>Capacity Utilization ({weights.capacity}%)</Label>
+                                <Label>Capacity Utilization (${weights.capacity}%)</Label>
                                 <Slider defaultValue={[weights.capacity]} max={100} step={5} onValueChange={(v) => handleWeightChange('capacity', v[0])} />
                              </div>
                              <div>
-                                <Label>Processing Time ({weights.processing}%)</Label>
+                                <Label>Processing Time (${weights.processing}%)</Label>
                                 <Slider defaultValue={[weights.processing]} max={100} step={5} onValueChange={(v) => handleWeightChange('processing', v[0])} />
                              </div>
                              <div>
-                                <Label>Energy Efficiency ({weights.energy}%)</Label>
+                                <Label>Energy Efficiency (${weights.energy}%)</Label>
                                 <Slider defaultValue={[weights.energy]} max={100} step={5} onValueChange={(v) => handleWeightChange('energy', v[0])} />
                              </div>
                              <div>
-                                <Label>Waste Generation ({weights.waste}%)</Label>
+                                <Label>Waste Generation (${weights.waste}%)</Label>
                                 <Slider defaultValue={[weights.waste]} max={100} step={5} onValueChange={(v) => handleWeightChange('waste', v[0])} />
                              </div>
                          </div>
@@ -957,3 +1070,4 @@ function PlantEfficiencyCalc() {
 
 
     
+
