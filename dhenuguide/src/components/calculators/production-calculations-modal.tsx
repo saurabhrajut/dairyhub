@@ -1285,7 +1285,7 @@ function PlantCostCalc() {
 
 
   return (
-        <CalculatorCard title="Dairy Plant Profit &amp; Loss Calculator" description="Analyze the financial health of your entire dairy operation.">
+        <CalculatorCard title="Dairy Plant Profit & Loss Calculator" description="Analyze the financial health of your entire dairy operation.">
             <div className="bg-muted/50 p-4 rounded-lg mb-6 grid grid-cols-2 gap-4">
                 <div>
                     <Label htmlFor="period-select">Calculation Period</Label>
@@ -1303,7 +1303,7 @@ function PlantCostCalc() {
                 </div>
             </div>
 
-            <Section title="1. Production &amp; Revenue Details" description="Define your production volume and total sales for the selected period.">
+            <Section title="1. Production & Revenue Details" description="Define your production volume and total sales for the selected period.">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <MemoizedInputField label={`Total Milk Processed (${period === 'monthly' ? 'Litres/month' : 'Litres/day'})`} value={inputs.milkProcessed} name="milkProcessed" setter={handleInputChange} placeholder="e.g., 30000" />
                     <MemoizedInputField label={`Total Sales Revenue (${period === 'monthly' ? '₹/month' : '₹/day'})`} value={inputs.totalRevenue} name="totalRevenue" setter={handleInputChange} placeholder="e.g., 2100000" />
@@ -1324,7 +1324,7 @@ function PlantCostCalc() {
                     <MemoizedInputField label="Other Ingredients (₹ per Litre)" value={inputs.ingredientsPerLitre} name="ingredientsPerLitre" setter={handleInputChange} />
                     <MemoizedInputField label="Energy (Electricity, Fuel) (₹ per Litre)" value={inputs.energyPerLitre} name="energyPerLitre" setter={handleInputChange} />
                     <MemoizedInputField label="Water / ETP (₹ per Litre)" value={inputs.waterPerLitre} name="waterPerLitre" setter={handleInputChange} />
-                    <MemoizedInputField label="Distribution &amp; Logistics (₹ per Litre)" value={inputs.distributionPerLitre} name="distributionPerLitre" setter={handleInputChange} />
+                    <MemoizedInputField label="Distribution & Logistics (₹ per Litre)" value={inputs.distributionPerLitre} name="distributionPerLitre" setter={handleInputChange} />
                  </div>
             </Section>
 
@@ -1395,6 +1395,8 @@ function PlantCostCalc() {
     
 
 
+
+    
 
     
 
