@@ -1,5 +1,3 @@
-
-
 "use client"
 
 import { useState, memo, useCallback, useEffect } from "react"
@@ -27,7 +25,7 @@ const calculatorsInfo = {
     'fat-snf-clr-ts': { title: "Fat, SNF, CLR & TS", icon: Calculator, component: FatSnfClrTsCalc },
     'milk-blending': { title: "Milk Blending", icon: Blend, component: MilkBlendingCalc },
     'two-milk-blending-target': { title: "Two-Milk Blending (to Target)", icon: Target, component: TwoMilkBlendingToTargetCalc },
-    'fat-reduction-clr-maintain': { title: "Fat & CLR Corrector", icon: ShieldAlert, component: FatReductionClrMaintainCalc },
+    'fat-reduction-clr-maintain': { title: "Fat & CLR Corrector (with Rich Milk/Cream)", icon: ShieldAlert, component: FatReductionClrMaintainCalc },
     'two-component-standardization': { title: "Two-Component Standardization", icon: Combine, component: TwoComponentStandardizationCalc },
     'custom-calculator': { title: 'Custom Calculator', icon: Settings, component: CustomStandardizationCalc },
     'clr-increase': { title: 'CLR Increase (by SMP)', icon: ChevronsUp, component: ClrIncreaseCalc },
@@ -293,8 +291,8 @@ function CustomStandardizationCalc() {
             
             <Tabs value={scenario} onValueChange={(val) => setScenario(val as 'increase' | 'decrease')}>
                 <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="increase">Increase Fat & SNF</TabsTrigger>
-                    <TabsTrigger value="decrease">Decrease Fat & SNF</TabsTrigger>
+                    <TabsTrigger value="increase">Increase Fat &amp; SNF</TabsTrigger>
+                    <TabsTrigger value="decrease">Decrease Fat &amp; SNF</TabsTrigger>
                 </TabsList>
             </Tabs>
 
@@ -592,17 +590,20 @@ function TwoMilkBlendingToTargetCalc() {
 }
 
 function FatReductionClrMaintainCalc() {
+    const [fatSourceType, setFatSourceType] = useState<'richMilk' | 'cream'>('richMilk');
     const [inputs, setInputs] = useState({
-        initialVolume: '1000',
-        initialFat: '6.3',
-        initialClr: '29.5',
-        targetFat: '5.9',
-        targetClr: '29.5',
-        skimFat: '0.05',
-        skimClr: '34.5',
+        initialVolume: '500',
+        initialFat: '2.2',
+        initialClr: '34',
+        targetFat: '2.2',
+        targetClr: '30',
+        richMilkFat: '6.1',
+        richMilkClr: '30',
+        creamFat: '40.0',
+        creamSnf: '5.4'
     });
 
-    const [results, setResults] = useState<{ skim: string, water: string, finalVolume: string, finalFat: string, finalClr: string } | null>(null);
+    const [results, setResults] = useState<{ ingredient1: string, ingredient2: string, finalVolume: string, finalFat: string, finalClr: string } | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     const handleInputChange = useCallback((name: string, value: string) => {
@@ -610,112 +611,145 @@ function FatReductionClrMaintainCalc() {
     }, []);
     
     const calculate = useCallback(() => {
-        const V0 = parseFloat(inputs.initialVolume);
+        const M0 = parseFloat(inputs.initialVolume) || 0;
         const F0 = parseFloat(inputs.initialFat);
         const C0 = parseFloat(inputs.initialClr);
         const Ft = parseFloat(inputs.targetFat);
         const Ct = parseFloat(inputs.targetClr);
-        const Fs = parseFloat(inputs.skimFat);
-        const Cs = parseFloat(inputs.skimClr);
 
-        if ([V0, F0, C0, Ft, Ct, Fs, Cs].some(isNaN)) {
+        let ing1, ing2;
+        let ing1Name = "", ing2Name = "";
+        
+        if (fatSourceType === 'richMilk') {
+            ing1 = { F: parseFloat(inputs.richMilkFat), C: parseFloat(inputs.richMilkClr) };
+            ing1Name = "Rich Milk";
+        } else {
+            const creamFat = parseFloat(inputs.creamFat);
+            // Estimate CLR for cream from SNF
+            const creamSnf = parseFloat(inputs.creamSnf);
+            const creamClr = 4 * (creamSnf - 0.25 * creamFat - 0.72); // Using ISI formula in reverse
+            ing1 = { F: creamFat, C: creamClr };
+            ing1Name = "Cream";
+        }
+        ing2 = { F: 0, C: 0 }; // Water
+        ing2Name = "Water";
+
+        if ([M0, F0, C0, Ft, Ct, ing1.F, ing1.C].some(isNaN)) {
             setError("Please enter valid numbers in all input boxes.");
             setResults(null);
             return;
         }
 
-        const a = (Cs - Ct);
-        const b = -Ct;
-        const d = (Ct - C0) * V0;
-        
-        const a2 = (Fs - Ft);
-        const b2 = -Ft;
-        const d2 = (Ft - F0) * V0;
+        const a = (ing1.F - Ft);
+        const b = (ing2.F - Ft);
+        const d = (Ft - F0) * M0;
 
-        const D = a * b2 - b * a2;
+        const a2 = (ing1.C - Ct);
+        const b2 = (ing2.C - Ct);
+        const d2 = (Ct - C0) * M0;
 
-        if (Math.abs(D) < 1e-9) {
-            setError("Calculation is not possible. Please check the inputs.");
+        const det = a * b2 - b * a2;
+
+        if (Math.abs(det) < 1e-9) {
+            setError("Calculation is not possible with these inputs. Ingredients might not be able to achieve the target. (e.g., they are collinear)");
             setResults(null);
             return;
         }
 
-        const x = (d * b2 - b * d2) / D;
-        const y = (a * d2 - d * a2) / D;
+        const M1 = (d * b2 - b * d2) / det;
+        const M2 = (a * d2 - d * a2) / det;
 
-        if (x < 0 || y < 0) {
-             setError("Result is negative. Standardization is not possible in this case.");
+        if (M1 < -1e-9 || M2 < -1e-9) { // Small tolerance for floating point errors
+             setError("Result is negative. This standardization scenario is not possible with the selected ingredients.");
              setResults(null);
              return;
         }
+        
+        const M1_final = Math.max(0, M1);
+        const M2_final = Math.max(0, M2);
 
         setError(null);
 
-        const finalVolume = V0 + x + y;
-        const finalFatCheck = ((F0 * V0) + (Fs * x)) / finalVolume;
-        const finalClrCheck = ((C0 * V0) + (Cs * x)) / finalVolume;
+        const finalVolume = M0 + M1_final + M2_final;
+        const finalFatCheck = ((F0 * M0) + (ing1.F * M1_final)) / finalVolume;
+        const finalClrCheck = ((C0 * M0) + (ing1.C * M1_final)) / finalVolume;
 
         setResults({
-            skim: `${x.toFixed(2)} L`,
-            water: `${y.toFixed(2)} L`,
+            ingredient1: `${M1_final.toFixed(2)} L`,
+            ingredient2: `${M2_final.toFixed(2)} L`,
             finalVolume: `${finalVolume.toFixed(2)} L`,
             finalFat: `${finalFatCheck.toFixed(2)} %`,
             finalClr: `${finalClrCheck.toFixed(2)}`
         });
 
-    }, [inputs]);
+    }, [inputs, fatSourceType]);
 
     return (
         <CalculatorCard 
-            title="Fat &amp; CLR Corrector"
-            description="Calculate the amount of skimmed milk and water needed to correct your batch to the target fat and CLR.">
+            title="Fat &amp; CLR Corrector (with Rich Milk/Cream)"
+            description="Calculate the amount of a fat source (Rich Milk/Cream) and Water needed to correct your batch to a target fat and CLR. This is useful for both increasing and decreasing values.">
+            <div className="mb-4">
+                <Label>Select Fat Source</Label>
+                <Select value={fatSourceType} onValueChange={(val) => setFatSourceType(val as 'richMilk' | 'cream')}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="richMilk">Rich Milk</SelectItem>
+                        <SelectItem value="cream">Cream</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-blue-50 p-6 rounded-2xl border-2 border-blue-200">
-                    <h2 className="text-xl md:text-lg font-semibold mb-6 text-blue-700">Inputs</h2>
-                    <div className="space-y-4">
-                        <MemoizedInputField label="Initial Volume (V₀):" value={inputs.initialVolume} name="initialVolume" setter={handleInputChange} inputClassName="bg-yellow-100 border-yellow-300" unit="L" />
-                        <MemoizedInputField label="Initial Fat (F₀) %:" value={inputs.initialFat} name="initialFat" setter={handleInputChange} inputClassName="bg-yellow-100 border-yellow-300" unit="%" />
-                        <MemoizedInputField label="Initial CLR (C₀):" value={inputs.initialClr} name="initialClr" setter={handleInputChange} inputClassName="bg-yellow-100 border-yellow-300" />
-                        <MemoizedInputField label="Target Fat (Ft) %:" value={inputs.targetFat} name="targetFat" setter={handleInputChange} inputClassName="bg-yellow-100 border-yellow-300" unit="%" />
-                        <MemoizedInputField label="Target CLR (Ct):" value={inputs.targetClr} name="targetClr" setter={handleInputChange} inputClassName="bg-yellow-100 border-yellow-300" />
-                        <MemoizedInputField label="Skimmed Milk Fat (Fs) %:" value={inputs.skimFat} name="skimFat" setter={handleInputChange} inputClassName="bg-yellow-100 border-yellow-300" unit="%" />
-                        <MemoizedInputField label="Skimmed Milk CLR (Cs):" value={inputs.skimClr} name="skimClr" setter={handleInputChange} inputClassName="bg-yellow-100 border-yellow-300" />
-                    </div>
+                <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 space-y-3">
+                    <h3 className="font-semibold text-gray-700 font-headline">Initial Milk</h3>
+                    <MemoizedInputField label="Initial Volume (L):" value={inputs.initialVolume} name="initialVolume" setter={handleInputChange} />
+                    <MemoizedInputField label="Initial Fat %:" value={inputs.initialFat} name="initialFat" setter={handleInputChange} />
+                    <MemoizedInputField label="Initial CLR:" value={inputs.initialClr} name="initialClr" setter={handleInputChange} />
                 </div>
-                 <div className="bg-green-50 p-6 rounded-2xl border-2 border-green-200">
-                    <h2 className="text-xl md:text-2xl font-semibold mb-6 text-green-700">Outputs (Result)</h2>
-                    {error ? (
-                        <Alert variant="destructive"><AlertDescription>{error}</AlertDescription></Alert>
-                    ) : (
-                        <div className="space-y-4">
-                            <div className="bg-white p-4 rounded-lg shadow-md border border-green-300">
-                                <p className="text-sm font-medium text-gray-600">Skimmed Milk to Add (x):</p>
-                                <p className="text-2xl font-bold text-green-800">{results?.skim || '0 L'}</p>
-                            </div>
-                            <div className="bg-white p-4 rounded-lg shadow-md border border-green-300">
-                                <p className="text-sm font-medium text-gray-600">Water to Add (y):</p>
-                                <p className="text-2xl font-bold text-green-800">{results?.water || '0 L'}</p>
-                            </div>
-                            <div className="bg-white p-4 rounded-lg shadow-md border border-green-300">
-                                <p className="text-sm font-medium text-gray-600">Final Volume:</p>
-                                <p className="text-2xl font-bold text-green-800">{results?.finalVolume || '0 L'}</p>
-                            </div>
-                            <div className="mt-6 p-4 bg-yellow-100 rounded-lg border border-yellow-300">
-                                <p className="text-lg font-semibold text-yellow-800">Check Result</p>
-                                <div className="flex justify-between mt-2">
-                                    <span className="text-gray-700">Final Fat %:</span>
-                                    <span className="font-bold text-blue-600">{results?.finalFat || '-'}</span>
-                                </div>
-                                <div className="flex justify-between mt-1">
-                                    <span className="text-gray-700">Final CLR:</span>
-                                    <span className="font-bold text-blue-600">{results?.finalClr || '-'}</span>
-                                </div>
-                            </div>
-                        </div>
-                    )}
+                 <div className="bg-green-50 p-4 rounded-lg border border-green-200 space-y-3">
+                    <h3 className="font-semibold text-gray-700 font-headline">Target</h3>
+                    <MemoizedInputField label="Target Fat %:" value={inputs.targetFat} name="targetFat" setter={handleInputChange} />
+                    <MemoizedInputField label="Target CLR:" value={inputs.targetClr} name="targetClr" setter={handleInputChange} />
+                </div>
+                 <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200 space-y-3 md:col-span-2">
+                     <h3 className="font-semibold text-gray-700 font-headline">Available Ingredients for Correction</h3>
+                     {fatSourceType === 'richMilk' ? (
+                          <>
+                              <MemoizedInputField label="Rich Milk Fat %:" value={inputs.richMilkFat} name="richMilkFat" setter={handleInputChange} />
+                              <MemoizedInputField label="Rich Milk CLR:" value={inputs.richMilkClr} name="richMilkClr" setter={handleInputChange} />
+                          </>
+                      ) : (
+                          <>
+                              <MemoizedInputField label="Cream Fat %:" value={inputs.creamFat} name="creamFat" setter={handleInputChange} />
+                              <MemoizedInputField label="Cream SNF %:" value={inputs.creamSnf} name="creamSnf" setter={handleInputChange} />
+                          </>
+                      )}
+                      <p className="text-xs text-muted-foreground">The other ingredient available is Water (0% Fat, 0 CLR).</p>
                  </div>
             </div>
              <Button onClick={calculate} className="w-full mt-6">Calculate</Button>
+
+            {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
+            {results && (
+                 <div className="mt-6 bg-purple-50 p-6 rounded-2xl border-2 border-purple-200">
+                    <h2 className="text-xl font-semibold mb-4 text-purple-700">Results</h2>
+                    <div className="space-y-4">
+                        <div className="bg-white p-4 rounded-lg shadow-md border">
+                            <p className="text-sm font-medium text-gray-600">{fatSourceType === 'richMilk' ? 'Rich Milk' : 'Cream'} to Add:</p>
+                            <p className="text-2xl font-bold text-purple-800">{results?.ingredient1 || '0 L'}</p>
+                        </div>
+                        <div className="bg-white p-4 rounded-lg shadow-md border">
+                            <p className="text-sm font-medium text-gray-600">Water to Add:</p>
+                            <p className="text-2xl font-bold text-purple-800">{results?.ingredient2 || '0 L'}</p>
+                        </div>
+                        <div className="mt-4 p-4 bg-gray-100 rounded-lg border">
+                            <p className="text-lg font-semibold text-gray-800">Final Batch Summary</p>
+                            <div className="flex justify-between mt-2"><span>Final Volume:</span><span className="font-bold">{results?.finalVolume || '-'}</span></div>
+                            <div className="flex justify-between mt-1"><span>Final Fat %:</span><span className="font-bold">{results?.finalFat || '-'}</span></div>
+                            <div className="flex justify-between mt-1"><span>Final CLR:</span><span className="font-bold">{results?.finalClr || '-'}</span></div>
+                        </div>
+                    </div>
+                 </div>
+            )}
         </CalculatorCard>
     );
 }
@@ -802,7 +836,7 @@ const StandardizeWithCream = () => {
     }, [inputs]);
 
     return (
-        <CalculatorCard title="Standardize with Water & Cream" description="Calculate the amount of water and cream to add to achieve target Fat and CLR.">
+        <CalculatorCard title="Standardize with Water &amp; Cream" description="Calculate the amount of water and cream to add to achieve target Fat and CLR.">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                 <div className="bg-blue-50 p-4 rounded-lg space-y-3">
                     <h4 className="font-semibold text-gray-700">Initial Milk</h4>
@@ -906,7 +940,7 @@ const StandardizeWithRichMilk = () => {
     }, [inputs]);
 
     return (
-        <CalculatorCard title="Standardize with Water & Rich Milk" description="Calculate the amount of water and rich milk to add to achieve target Fat and CLR.">
+        <CalculatorCard title="Standardize with Water &amp; Rich Milk" description="Calculate the amount of water and rich milk to add to achieve target Fat and CLR.">
              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                 <div className="bg-blue-50 p-4 rounded-lg space-y-3">
                     <h4 className="font-semibold text-gray-700">Initial Milk</h4>
@@ -1730,6 +1764,5 @@ function KgFatSnfCalc() {
         </CalculatorCard>
     );
 }
-
 
 
