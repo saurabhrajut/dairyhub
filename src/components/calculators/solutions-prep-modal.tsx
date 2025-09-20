@@ -323,7 +323,10 @@ function ReagentCalculator() {
                                 const reagent = reagentRecipes[key as keyof typeof reagentRecipes];
                                 return (
                                     <SelectItem key={key} value={key}>
-                                        {`${index + 1}. ${reagent.name} (${reagent.testName})`}
+                                        <div className="flex flex-col">
+                                            <span className="font-semibold">{`${index + 1}. ${reagent.name}`}</span>
+                                            <span className="text-xs text-muted-foreground">{`(${reagent.testName})`}</span>
+                                        </div>
                                     </SelectItem>
                                 );
                             })}
@@ -911,5 +914,6 @@ function DilutionCalc() {
         </CalculatorCard>
     );
 };
+
 
 
