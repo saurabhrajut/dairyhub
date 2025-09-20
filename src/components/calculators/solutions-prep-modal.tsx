@@ -319,9 +319,14 @@ function ReagentCalculator() {
                     <Select value={selectedReagent} onValueChange={setSelectedReagent}>
                         <SelectTrigger id="reagent-select"><SelectValue placeholder="-- Please select a reagent --" /></SelectTrigger>
                         <SelectContent>
-                            {sortedReagentKeys.map(key => (
-                                <SelectItem key={key} value={key}>{reagentRecipes[key as keyof typeof reagentRecipes].name}</SelectItem>
-                            ))}
+                            {sortedReagentKeys.map((key, index) => {
+                                const reagent = reagentRecipes[key as keyof typeof reagentRecipes];
+                                return (
+                                    <SelectItem key={key} value={key}>
+                                        {`${index + 1}. ${reagent.name} (${reagent.testName})`}
+                                    </SelectItem>
+                                );
+                            })}
                         </SelectContent>
                     </Select>
                 </div>
@@ -906,4 +911,5 @@ function DilutionCalc() {
         </CalculatorCard>
     );
 };
+
 

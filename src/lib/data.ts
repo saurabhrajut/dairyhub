@@ -102,6 +102,7 @@ export const funFacts = [
 export const reagentRecipes = {
     'alcohol_alizarin': {
         name: 'Alcohol Alizarin Reagent (0.2%)',
+        testName: 'Alcohol Test',
         type: 'w/v',
         components: [
             { name: 'Alizarin', amount: 0.2, unit: 'g'}
@@ -110,6 +111,7 @@ export const reagentRecipes = {
     },
      'barium_chloride_5': {
         name: 'Barium Chloride Solution (5% w/v)',
+        testName: 'Sulphate Test',
         type: 'w/v',
         components: [
             { name: 'Barium Chloride (BaCl₂·2H₂O)', amount: 5, unit: 'g'}
@@ -118,11 +120,14 @@ export const reagentRecipes = {
     },
     'barfoed': {
         name: 'Barfoed’s Reagent',
+        testName: 'Reducing Sugar Test',
         type: 'fixed',
+        components: [],
         instructions: 'Ise banane ke liye, 24g cupric acetate ko 450ml ubalte hue distilled water mein gholein. Turant 25ml 8.5% lactic acid garam solution mein milayein. Thanda karke, distilled water se volume 500ml tak poora karein. Is calculator se iski matra scale nahi ki ja sakti.'
     },
     'benedict': {
         name: "Benedict's Reagent",
+        testName: 'Reducing Sugar Test',
         type: 'complex',
         components: [
             { name: 'Sodium Citrate', amount: 173, unit: 'g' },
@@ -133,12 +138,14 @@ export const reagentRecipes = {
     },
     'bromothymol_blue_02': {
         name: 'Bromothymol Blue Solution (0.2%)',
+        testName: 'Indicator',
         type: 'w/v',
         components: [ { name: 'Bromothymol Blue', amount: 0.2, unit: 'g' } ],
         instructions: '0.2g Bromothymol Blue ko 20ml 95% Ethanol mein gholein aur phir distilled water se volume 100ml tak poora karein.'
     },
     'buffer_sol_ph10': {
         name: 'Buffer Solution (pH 10, Hardness)',
+        testName: 'Hardness Test',
         type: 'complex',
         components: [
             { name: 'Ammonium Chloride (NH4Cl)', amount: 67.5, unit: 'g'},
@@ -148,6 +155,7 @@ export const reagentRecipes = {
     },
     'buffer_carbonate_bicarbonate': {
         name: 'Buffer (Sodium Carbonate/Bicarbonate)',
+        testName: 'Phosphatase Test',
         type: 'complex',
         components: [
             { name: 'Sodium Carbonate (anhydrous)', amount: 3.5, unit: 'g'},
@@ -157,6 +165,7 @@ export const reagentRecipes = {
     },
     'buffer_substrate_phos': {
         name: 'Buffer Substrate (Phosphatase Test)',
+        testName: 'Phosphatase Test',
         type: 'complex',
         components: [
             { name: 'Carbonate/Bicarbonate Buffer', amount: 1000, unit: 'ml' },
@@ -166,12 +175,14 @@ export const reagentRecipes = {
     },
     'chromotropic_acid': {
         name: 'Chromotropic Acid Reagent',
+        testName: 'Formalin Test',
         type: 'w/v_in_acid',
         components: [ { name: '1,8-dihydroxynaphthalene-3,6-disulfonic acid', amount: 0.5, unit: 'g' } ],
         instructions: '0.5g (500mg) Chromotropic acid ko 72% Sulfuric Acid mein gholkar final volume 100ml poora karein. Yeh ek saturated solution hai.'
     },
     'color_dev_reagent': {
         name: 'Color Developing Reagent (Veg. Fat)',
+        testName: 'Vegetable Fat Test',
         type: 'ratio',
         components: [
             { name: 'Water', ratio: 20 },
@@ -182,6 +193,7 @@ export const reagentRecipes = {
     },
     'crystal_violet': {
         name: "Gram's Crystal Violet",
+        testName: 'Gram Staining',
         type: 'complex',
         components: [
             { name: 'Crystal Violet (90% dye content)', amount: 2, unit: 'g' },
@@ -193,12 +205,14 @@ export const reagentRecipes = {
     },
     'diphenylamine_2': {
         name: 'Diphenylamine Solution (2% w/v in H₂SO₄)',
+        testName: 'Nitrate Test',
         type: 'w/v_in_acid',
         components: [ { name: 'Diphenylamine', amount: 2, unit: 'g' } ],
         instructions: '2g Diphenylamine ko dhyan se 100ml concentrated Sulfuric Acid mein gholein. <strong>Savdhani: Hamesha acid ko paani mein milayein, na ki paani ko acid mein. Suraksha upkaran pehnein.</strong>'
     },
     'dmab': {
         name: 'DMAB Reagent (Urea Test)',
+        testName: 'Urea Test',
         type: 'complex',
         components: [
             { name: 'DMAB', amount: 1.6, unit: 'g' },
@@ -209,12 +223,14 @@ export const reagentRecipes = {
     },
     'enzyme_glucoamylase': {
         name: 'Alpha Glucoamylase Enzyme Solution',
+        testName: 'Starch Estimation',
         type: 'w/v',
         components: [ { name: 'Alpha Glucoamylase Enzyme', amount: 0.2, unit: 'g' } ],
         instructions: 'Enzyme ko distilled water mein gholkar final volume poora karein.'
     },
     'erichrome_black_t': {
         name: 'Erichrome Black T Indicator',
+        testName: 'Hardness Test',
         type: 'complex',
         components: [
             { name: 'Erichrome Black T', amount: 0.5, unit: 'g'},
@@ -225,18 +241,21 @@ export const reagentRecipes = {
     },
     'ethanolic_koh_05': {
         name: 'Ethanolic KOH (0.5 N)',
+        testName: 'Fat Analysis',
         type: 'w/v',
         components: [ { name: 'Potassium Hydroxide (KOH)', amount: 2.8, unit: 'g' } ],
         instructions: '2.8g KOH ko thode 95% ethanol mein gholein aur phir ethanol se final volume 100ml tak poora karein.'
     },
     'fehlings_a': {
         name: "Fehling's Solution A",
+        testName: 'Reducing Sugar Test',
         type: 'w/v',
         components: [{ name: 'Copper(II) sulfate pentahydrate (CuSO₄·5H₂O)', amount: 6.928, unit: 'g' }],
         instructions: '6.928g Copper sulfate ko distilled water mein gholkar 100ml banayein.'
     },
     'fehlings_b': {
         name: "Fehling's Solution B",
+        testName: 'Reducing Sugar Test',
         type: 'complex',
         components: [
             { name: 'Potassium sodium tartrate (Rochelle salt)', amount: 34.6, unit: 'g' },
@@ -246,6 +265,7 @@ export const reagentRecipes = {
     },
     'ferric_chloride_10': {
         name: 'Ferric Chloride Solution (10% w/v)',
+        testName: 'Formalin Test',
         type: 'w/v',
         components: [
             { name: 'Ferric Chloride (FeCl3)', amount: 10, unit: 'g' }
@@ -254,12 +274,14 @@ export const reagentRecipes = {
     },
     'furfural_2': {
         name: 'Furfural Solution (2% v/v)',
+        testName: 'Baudouin Test (Vanaspati)',
         type: 'v/v',
         components: [ { name: 'Furfural', amount: 2, unit: 'ml' } ],
         instructions: '2ml Furfural ko 98ml Ethyl Alcohol mein milakar 100ml solution banayein.'
     },
     'grams_iodine': {
         name: "Gram's Iodine",
+        testName: 'Gram Staining',
         type: 'complex',
         components: [
             { name: 'Iodine', amount: 1, unit: 'g' },
@@ -270,6 +292,7 @@ export const reagentRecipes = {
     },
     'hcl_1_3': {
         name: 'Diluted HCl (1:3)',
+        testName: 'General Purpose',
         type: 'ratio',
         components: [
             { name: 'Concentrated HCl', ratio: 1 },
@@ -279,11 +302,14 @@ export const reagentRecipes = {
     },
     'iodine_maltodextrin': {
         name: 'Iodine Solution (0.05 N)',
+        testName: 'Maltodextrin Test',
         type: 'fixed',
+        components: [],
         instructions: '0.05 N Iodine solution taiyar karna ek standard lab procedure hai. Iske liye aam taur par Potassium Iodate (KIO3) aur Potassium Iodide (KI) ka istemal hota hai. Iski calculation thodi complex hai, isliye standard lab manual refer karein.'
     },
     'iodine_starch': {
         name: 'Iodine Solution (Starch Test)',
+        testName: 'Starch Test',
         type: 'w/v',
         components: [
             { name: 'Potassium Iodide (KI)', amount: 2.5, unit: 'g' },
@@ -293,29 +319,35 @@ export const reagentRecipes = {
     },
     'kmno4_01n': {
         name: 'Potassium Permanganate (0.1 N)',
+        testName: 'Redox Titration',
         type: 'w/v',
         components: [{ name: 'Potassium Permanganate (KMnO₄)', amount: 3.16, unit: 'g' }],
         instructions: '3.16g Potassium Permanganate ko distilled water mein gholkar 100ml banayein.'
     },
     'lactic_acid_10': {
         name: 'Lactic Acid Solution (10%)',
+        testName: 'General Purpose',
         type: 'v/v',
         components: [ { name: 'Concentrated Lactic Acid', amount: 10, unit: 'ml' } ],
         instructions: 'Concentrated Lactic Acid ko volumetric flask mein lein aur distilled water se final volume poora karein.'
     },
     'mbrt_solution': {
         name: 'MBRT Solution',
+        testName: 'MBRT',
         type: 'fixed',
+        components: [],
         instructions: 'Standard Methylene Blue Thiocyanate tablet (jaise R-58) ko 200ml sterile ubalte hue distilled water mein gholein. Thanda hone ke baad, sterile distilled water se volume 800ml tak poora karein. Solution ko andhere, thande sthan par rakhein.'
     },
     'methylene_blue': {
         name: 'Methylene Blue Solution (Detergent Test)',
+        testName: 'Detergent Test',
         type: 'w/v',
         components: [ { name: 'Methylene Blue', amount: 0.0125, unit: 'g' } ],
         instructions: '12.5mg (ya 0.0125g) Methylene Blue ko 100ml distilled water mein gholkar solution banayein.'
     },
      'nesslers_reagent': {
         name: 'Nessler’s Reagent (Ammonium Test)',
+        testName: 'Ammonium Test',
         type: 'complex',
         components: [
             { name: 'Mercuric Chloride (8g in 150ml water)', amount: 1, unit: 'part' },
@@ -326,6 +358,7 @@ export const reagentRecipes = {
     },
     'neutral_ferric_chloride_05': {
         name: 'Neutral Ferric Chloride Solution (0.5% w/v)',
+        testName: 'Salicylic Acid Test',
         type: 'w/v',
         components: [
             { name: 'Ferric Chloride (FeCl3)', amount: 0.5, unit: 'g' }
@@ -334,18 +367,21 @@ export const reagentRecipes = {
     },
     'naoh_10': {
         name: 'Sodium Hydroxide Solution (10% w/v)',
+        testName: 'General Purpose',
         type: 'w/v',
         components: [ { name: 'Sodium Hydroxide (NaOH)', amount: 10, unit: 'g' } ],
         instructions: 'NaOH pellets ko dhyan se distilled water mein gholein aur final volume poora karein. Solution garam ho sakta hai.'
     },
     'na_thio_01n': {
         name: 'Sodium Thiosulfate (0.1 N)',
+        testName: 'Redox Titration',
         type: 'w/v',
         components: [{ name: 'Sodium Thiosulfate (Na₂S₂O₃·5H₂O)', amount: 24.8, unit: 'g' }],
         instructions: '24.8g Sodium Thiosulfate ko uble hue thande distilled water mein gholkar 100ml banayein. Stability ke liye thoda chloroform ya NaOH daalein.'
     },
     'para_phenylenediamine_2': {
         name: 'Para-phenylenediamine Solution (2% w/v)',
+        testName: 'Hydrogen Peroxide Test',
         type: 'w/v',
         components: [
             { name: 'Para-phenylenediamine', amount: 2, unit: 'g' }
@@ -354,17 +390,21 @@ export const reagentRecipes = {
     },
     'phosphomolybdic_acid': {
         name: 'Phosphomolybdic Acid Reagent',
+        testName: 'Glucose Test',
         type: 'fixed',
+        components: [],
         instructions: 'Yeh ek complex recipe hai. 35g ammonium molybdate aur 5g sodium tungstate ko 400ml 5% (w/v) NaOH solution mein gholein. 20-40 min tak zor se ubaalein. Thanda karke volume 350ml tak karein aur 125ml concentrated (85%) phosphoric acid milayein. Ant mein, distilled water se volume 500ml tak poora karein. Iski taiyari ke liye lab manual follow karein.'
     },
     'potassium_chromate_10': {
         name: 'Potassium Chromate Solution (10% w/v)',
+        testName: 'Chloride Test',
         type: 'w/v',
         components: [ { name: 'Potassium Chromate (K₂CrO₄)', amount: 10, unit: 'g'} ],
         instructions: '10g Potassium Chromate ko distilled water mein gholkar 100ml solution banayein. Iska istemal chloride test mein indicator ke roop mein hota hai.'
     },
     'rosolic_acid': {
         name: 'Rosolic Acid Solution (0.1%)',
+        testName: 'Neutralizer Test',
         type: 'complex',
         components: [
             { name: 'Rosolic Acid', amount: 0.1, unit: 'g' },
@@ -374,6 +414,7 @@ export const reagentRecipes = {
     },
     'safranin': {
         name: "Gram's Safranin",
+        testName: 'Gram Staining',
         type: 'complex',
         components: [
             { name: 'Safranin O (2.5% solution in 95% ethanol)', amount: 10, unit: 'ml' },
@@ -383,6 +424,7 @@ export const reagentRecipes = {
     },
     'seliwanoff': {
         name: 'Seliwanoff’s Reagent',
+        testName: 'Sucrose Test',
         type: 'complex',
         components: [
             { name: 'Resorcinol', amount: 0.5, unit: 'g' },
@@ -393,18 +435,21 @@ export const reagentRecipes = {
     },
     'silver_nitrate_01n': {
         name: 'Silver Nitrate Solution (0.1 N)',
+        testName: 'Chloride Test',
         type: 'w/v',
         components: [ { name: 'Silver Nitrate (AgNO₃)', amount: 1.7, unit: 'g'} ],
         instructions: '1.7g Silver Nitrate ko 100ml distilled water mein gholkar 0.1 N solution banayein. Brown bottle mein store karein.'
     },
     'stannous_chloride_0025': {
         name: 'Stannous Chloride Solution (0.025% w/v)',
+        testName: 'General Reducing Agent',
         type: 'w/v',
         components: [ { name: 'Stannous Chloride (SnCl2)', amount: 0.025, unit: 'g' } ],
         instructions: 'Stannous Chloride ko distilled water mein gholkar final volume poora karein.'
     },
      'tca_24': {
         name: 'Trichloroacetic Acid (TCA) 24% w/v',
+        testName: 'Urea Test',
         type: 'w/v',
         components: [
             { name: 'Trichloroacetic Acid', amount: 24, unit: 'g' }
@@ -413,12 +458,14 @@ export const reagentRecipes = {
     },
     'urease_2': {
         name: 'Urease Solution (2% w/v)',
+        testName: 'Urea Estimation',
         type: 'w/v',
         components: [ { name: 'Urease Enzyme', amount: 2, unit: 'g' } ],
         instructions: 'Urease enzyme ko distilled water mein gholkar final volume poora karein.'
     },
     'zinc_copper_precipitant': {
         name: 'Zinc-Copper Precipitant (Phosphatase)',
+        testName: 'Phosphatase Test',
         type: 'complex',
         components: [
             { name: 'Zinc Sulphate (ZnSO4.7H2O)', amount: 25, unit: 'g'},
@@ -428,18 +475,21 @@ export const reagentRecipes = {
     },
     'na_stock_1000ppm': {
         name: 'Sodium Stock Standard (1000 ppm)',
+        testName: 'Flame Photometry',
         type: 'w/v',
         components: [{ name: 'Sodium Chloride (NaCl, dried)', amount: 0.2542, unit: 'g' }],
         instructions: 'Accurately weigh 0.2542g of dried NaCl and dissolve in distilled water. Make up the volume to 100ml to get a 1000 ppm Sodium (Na) stock solution.'
     },
     'k_stock_1000ppm': {
         name: 'Potassium Stock Standard (1000 ppm)',
+        testName: 'Flame Photometry',
         type: 'w/v',
         components: [{ name: 'Potassium Chloride (KCl, dried)', amount: 0.1907, unit: 'g' }],
         instructions: 'Accurately weigh 0.1907g of dried KCl and dissolve in distilled water. Make up the volume to 100ml to get a 1000 ppm Potassium (K) stock solution.'
     },
     'cod_dichromate': {
         name: 'Potassium Dichromate Digestion Soln (0.25N)',
+        testName: 'COD Test',
         type: 'w/v',
         components: [
             { name: 'Potassium Dichromate (K₂Cr₂O₇, dried)', amount: 12.259, unit: 'g' },
@@ -449,12 +499,14 @@ export const reagentRecipes = {
     },
     'cod_acid_reagent': {
         name: 'Sulfuric Acid Reagent (for COD)',
+        testName: 'COD Test',
         type: 'w/v_in_acid',
         components: [{ name: 'Silver Sulfate (Ag₂SO₄)', amount: 10, unit: 'g' }],
         instructions: 'Dhyan se 10g Silver Sulfate (Ag₂SO₄) ko 1 litre concentrated Sulfuric Acid (H₂SO₄) me gholein. 1-2 din tak stir karke poori tarah ghulne dein.'
     },
     'bod_phosphate_buffer': {
         name: 'Phosphate Buffer (for BOD)',
+        testName: 'BOD Test',
         type: 'complex',
         components: [
             { name: 'KH₂PO₄', amount: 8.5, unit: 'g' },
@@ -466,30 +518,35 @@ export const reagentRecipes = {
     },
     'bod_mgso4': {
         name: 'Magnesium Sulfate Solution (for BOD)',
+        testName: 'BOD Test',
         type: 'w/v',
         components: [{ name: 'MgSO₄·7H₂O', amount: 22.5, unit: 'g' }],
         instructions: '22.5g Magnesium Sulfate ko distilled water me gholkar 1 litre banayein.'
     },
     'bod_cacl2': {
         name: 'Calcium Chloride Solution (for BOD)',
+        testName: 'BOD Test',
         type: 'w/v',
         components: [{ name: 'CaCl₂', amount: 27.5, unit: 'g' }],
         instructions: '27.5g anhydrous Calcium Chloride ko distilled water me gholkar 1 litre banayein.'
     },
     'bod_fecl3': {
         name: 'Ferric Chloride Solution (for BOD)',
+        testName: 'BOD Test',
         type: 'w/v',
         components: [{ name: 'FeCl₃·6H₂O', amount: 0.25, unit: 'g' }],
         instructions: '0.25g Ferric Chloride ko distilled water me gholkar 1 litre banayein.'
     },
     'do_manganese_sulfate': {
         name: 'Manganese Sulfate Solution (for DO)',
+        testName: 'DO Test',
         type: 'w/v',
         components: [{ name: 'MnSO₄·4H₂O', amount: 48, unit: 'g' }],
         instructions: '48g Manganese Sulfate ko distilled water me gholkar 100ml banayein.'
     },
     'do_alkali_iodide_azide': {
         name: 'Alkali-Iodide-Azide Reagent (for DO)',
+        testName: 'DO Test',
         type: 'complex',
         components: [
             { name: 'Sodium Hydroxide (NaOH)', amount: 50, unit: 'g' },
@@ -500,18 +557,21 @@ export const reagentRecipes = {
     },
      'std_na2co3_005n': {
         name: 'Standard Sodium Carbonate (0.05 N)',
+        testName: 'Standardization',
         type: 'w/v',
         components: [{ name: 'Anhydrous Sodium Carbonate (Na₂CO₃, dried)', amount: 2.5, unit: 'g' }],
         instructions: '2.5g dried Na₂CO₃ ko distilled water me gholkar 1 litre banayein.'
     },
     'std_h2so4_01n': {
         name: 'Standard Sulphuric Acid (0.1 N)',
+        testName: 'Standardization',
         type: 'v/v',
         components: [{ name: 'Concentrated H₂SO₄', amount: 2.8, unit: 'ml' }],
         instructions: '2.8ml Concentrated H₂SO₄ ko distilled water me milakar 1 litre banayein. Ise 0.05N Na₂CO₃ se standardize karein.'
     },
      'cod_fas_025m': {
         name: 'Standard Ferrous Ammonium Sulphate (0.25M for COD)',
+        testName: 'COD Test',
         type: 'complex',
         components: [
             { name: 'Ferrous Ammonium Sulphate', amount: 98, unit: 'g' },
@@ -521,35 +581,41 @@ export const reagentRecipes = {
     },
     'std_khp_cod': {
         name: 'Potassium Hydrogen Phthalate Standard (for COD)',
+        testName: 'COD Test',
         type: 'w/v',
         components: [{ name: 'Potassium Hydrogen Phthalate (KHP, dried)', amount: 0.425, unit: 'g' }],
         instructions: '425mg (0.425g) dried KHP ko distilled water me gholkar 1 litre banayein. Theoretical COD = 500 µgO₂/mL.'
     },
      'std_ag_nitrate_00141n': {
         name: 'Standard Silver Nitrate Titrant (0.0141N)',
+        testName: 'Chloride Test',
         type: 'w/v',
         components: [{ name: 'Silver Nitrate (AgNO₃)', amount: 2.395, unit: 'g' }],
         instructions: '2.395g AgNO₃ ko distilled water me gholkar 1 litre banayein.'
     },
      'std_nacl_00141n': {
         name: 'Standard Sodium Chloride (0.0141N)',
+        testName: 'Standardization',
         type: 'w/v',
         components: [{ name: 'Sodium Chloride (NaCl, dried)', amount: 0.824, unit: 'g' }],
         instructions: '824mg (0.824g) dried NaCl ko distilled water me gholkar 1 litre banayein.'
     },
     'std_edta_001m': {
         name: 'Standard EDTA Titrant (0.01M)',
+        testName: 'Hardness Test',
         type: 'w/v',
         components: [{ name: 'EDTA Disodium Salt Dihydrate', amount: 3.723, unit: 'g' }],
         instructions: '3.723g EDTA disodium salt ko distilled water me gholkar 1 litre banayein.'
     },
      'std_calcium_sol': {
         name: 'Standard Calcium Solution (for Hardness)',
+        testName: 'Standardization',
         type: 'w/v',
         components: [{ name: 'Anhydrous Calcium Carbonate (CaCO₃)', amount: 1.000, unit: 'g' }],
         instructions: '1.000g CaCO₃ ko thode 1+1 HCl me gholein, 200ml distilled water milakar ubaalein, thanda karein, aur 1 litre tak poora karein.'
     }
 };
+
 
 
 
