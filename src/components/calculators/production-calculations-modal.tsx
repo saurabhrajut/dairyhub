@@ -836,8 +836,50 @@ function MixCompositionCalc() {
     );
 }
 
+type MassBalanceInputs = {
+    openingFat: string; openingSnf: string;
+    intakeFat: string; intakeSnf: string;
+    addedFat: string; addedSnf: string;
+    dispatchedFat: string; dispatchedSnf: string;
+    removedFat: string; removedSnf: string;
+    closingFat: string; closingSnf: string;
+}
+
+const MemoizedInputRow = memo(function InputRow({
+  label,
+  fatName,
+  snfName,
+  inputs,
+  onInputChange,
+}: {
+  label: string;
+  fatName: keyof MassBalanceInputs;
+  snfName: keyof MassBalanceInputs;
+  inputs: MassBalanceInputs;
+  onInputChange: (field: keyof MassBalanceInputs, value: string) => void;
+}) {
+  return (
+    <div className="grid grid-cols-3 items-center gap-4">
+      <Label className="font-semibold text-gray-700">{label}</Label>
+      <Input
+        type="number"
+        placeholder="Fat (kg)"
+        value={inputs[fatName]}
+        onChange={(e) => onInputChange(fatName, e.target.value)}
+      />
+      <Input
+        type="number"
+        placeholder="SNF (kg)"
+        value={inputs[snfName]}
+        onChange={(e) => onInputChange(snfName, e.target.value)}
+      />
+    </div>
+  );
+});
+
+
 function MassBalanceCalc() {
-    const [inputs, setInputs] = useState({
+    const [inputs, setInputs] = useState<MassBalanceInputs>({
         openingFat: '', openingSnf: '',
         intakeFat: '', intakeSnf: '',
         addedFat: '', addedSnf: '',
@@ -879,15 +921,7 @@ function MassBalanceCalc() {
             gainLossFat, gainLossSnf,
         };
     }, [inputs]);
-
-    const InputRow = ({ label, fatName, snfName }: { label: string, fatName: keyof typeof inputs, snfName: keyof typeof inputs }) => (
-        <div className="grid grid-cols-3 items-center gap-4">
-            <Label className="font-semibold text-gray-700">{label}</Label>
-            <Input type="number" placeholder="Fat (kg)" value={inputs[fatName]} onChange={e => handleInputChange(fatName, e.target.value)} />
-            <Input type="number" placeholder="SNF (kg)" value={inputs[snfName]} onChange={e => handleInputChange(snfName, e.target.value)} />
-        </div>
-    );
-
+    
     return (
          <CalculatorCard 
             title="Fat & SNF Mass Balance" 
@@ -902,18 +936,18 @@ function MassBalanceCalc() {
                 
                 <div className="space-y-4">
                     <h4 className="text-lg font-bold text-green-700 flex items-center gap-2"><Plus className="w-5 h-5"/> Inputs</h4>
-                    <InputRow label="Opening Balance" fatName="openingFat" snfName="openingSnf"/>
-                    <InputRow label="Total Intake" fatName="intakeFat" snfName="intakeSnf"/>
-                    <InputRow label="Added (e.g. from SMP)" fatName="addedFat" snfName="addedSnf"/>
+                    <MemoizedInputRow label="Opening Balance" fatName="openingFat" snfName="openingSnf" inputs={inputs} onInputChange={handleInputChange}/>
+                    <MemoizedInputRow label="Total Intake" fatName="intakeFat" snfName="intakeSnf" inputs={inputs} onInputChange={handleInputChange}/>
+                    <MemoizedInputRow label="Added (e.g. from SMP)" fatName="addedFat" snfName="addedSnf" inputs={inputs} onInputChange={handleInputChange}/>
                 </div>
 
                 <hr/>
 
                 <div className="space-y-4">
                     <h4 className="text-lg font-bold text-red-700 flex items-center gap-2"><Minus className="w-5 h-5"/> Outputs</h4>
-                    <InputRow label="Dispatched (in Products)" fatName="dispatchedFat" snfName="dispatchedSnf"/>
-                    <InputRow label="Removed (as Cream/etc.)" fatName="removedFat" snfName="removedSnf"/>
-                    <InputRow label="Closing Balance" fatName="closingFat" snfName="closingSnf"/>
+                    <MemoizedInputRow label="Dispatched (in Products)" fatName="dispatchedFat" snfName="dispatchedSnf" inputs={inputs} onInputChange={handleInputChange}/>
+                    <MemoizedInputRow label="Removed (as Cream/etc.)" fatName="removedFat" snfName="removedSnf" inputs={inputs} onInputChange={handleInputChange}/>
+                    <MemoizedInputRow label="Closing Balance" fatName="closingFat" snfName="closingSnf" inputs={inputs} onInputChange={handleInputChange}/>
                 </div>
             </div>
 
@@ -1405,3 +1439,4 @@ function PlantCostCalc() {
     </>
   );
 }
+
