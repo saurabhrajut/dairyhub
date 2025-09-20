@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -46,7 +47,6 @@ import { CalibrationStandardizationModal } from "./info-modals/calibration-stand
 import { QualityConceptModal } from "./info-modals/quality-concept-modal";
 import { WaterTestingModal } from "./info-modals/water-testing-modal";
 import { PackagingMaterialTestingModal } from "./info-modals/packaging-material-testing-modal";
-import { PlantCostModal } from "./calculators/plant-cost-modal";
 import { LabEquipmentsModal } from "./info-modals/lab-equipments-modal";
 import { CipProcessModal } from "./info-modals/cip-process-modal";
 import { MicrobiologyTestingModal } from "./info-modals/microbiology-testing-modal";
@@ -82,7 +82,6 @@ const topics: { id: string; title: string; description: string; category: string
   { id: 'std2', title: 'Advanced Standardization', description: 'Advanced Blending', category: 'milk', icon: Calculator, modal: StandardizationIIModal, isPro: false, color: 'from-fuchsia-100 to-purple-200' },
   { id: 'production-calculations', title: 'Production Calculations', description: 'Batch & Yield Calculations', category: 'milk', icon: Combine, modal: ProductionCalculationsModal, isPro: true, color: 'from-violet-100 to-purple-200' },
   { id: 'lab-calculations', title: 'Lab Calculations', description: 'Yield, Acidity, etc.', category: 'science', icon: FileSpreadsheet, badge: 'Updated', modal: VariousCalculatorsModal, isPro: false, color: 'from-orange-100 to-red-200' },
-  { id: 'plant-cost', title: 'Plant Cost', description: 'Profit & Loss Calc', category: 'industry', icon: DollarSign, badge: 'Pro', modal: PlantCostModal, isPro: true, color: 'from-yellow-100 to-green-200' },
   
   { id: 'quality-concept', title: 'Quality Concepts', description: 'HACCP, TQM, ISO', category: 'industry', icon: CheckSquare, modal: QualityConceptModal, isPro: false, color: 'from-teal-100 to-cyan-200' },
   { id: 'cip-process', title: 'CIP Process', description: 'Cleaning-In-Place Guide', category: 'industry', icon: Recycle, badge: 'New', modal: CipProcessModal, isPro: true, color: 'from-blue-100 to-cyan-300' },

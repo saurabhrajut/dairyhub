@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, memo, useCallback, useEffect, useMemo } from "react"
+import { useState, memo, useCallback, useEffect, useMemo, useRef } from "react"
 import {
   Dialog,
   DialogContent,
@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label"
 import { componentProps } from "@/lib/utils"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { ArrowLeft, Percent, ChevronsUp, Target, Droplets, Info, Weight, Thermometer, ShieldAlert, Factory, Check, Minus, Plus } from 'lucide-react'
+import { ArrowLeft, Percent, ChevronsUp, Target, Droplets, Info, Weight, Thermometer, ShieldAlert, Factory, Check, Minus, Plus, DollarSign, FileDown, Loader2 } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { cn } from "@/lib/utils"
@@ -24,6 +24,8 @@ import { useToast } from "@/hooks/use-toast";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { PlusCircle, XCircle } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 interface BatchIngredient {
   id: number;
@@ -42,8 +44,14 @@ interface MixIngredient {
     sugar: string;
 }
 
+interface FixedExpense {
+  id: number;
+  name: string;
+  cost: string;
+}
 
-type CalculatorType =  'yields' | 'paneer-yield' | 'ice-cream' | 'plant-efficiency' | 'mass-balance';
+
+type CalculatorType =  'yields' | 'paneer-yield' | 'ice-cream' | 'plant-efficiency' | 'mass-balance' | 'plant-cost';
 
 const calculatorsInfo = {
     'yields': { title: "Product Yields", icon: Percent, component: YieldsCalc },
@@ -51,6 +59,7 @@ const calculatorsInfo = {
     'ice-cream': { title: "Ice Cream", icon: IceCreamIcon, component: IceCreamCalculators },
     'plant-efficiency': { title: "Plant Efficiency", icon: Factory, component: PlantEfficiencyCalc },
     'mass-balance': { title: "Fat/SNF Mass Balance", icon: Weight, component: MassBalanceCalc },
+    'plant-cost': { title: "Plant Cost Calculator", icon: DollarSign, component: PlantCostCalc },
 };
 
 export function ProductionCalculationsModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
@@ -1075,10 +1084,324 @@ function PlantEfficiencyCalc() {
     );
 }
 
+// Plant Cost Calculator Component
+const MemoizedInputField_PlantCost = memo(function InputField({ label, value, name, setter, placeholder }: { label: string, value: string, name: string, setter: (name: string, value: string) => void, placeholder?: string }) {
+    const [internalValue, setInternalValue] = useState(value);
 
-
+    // Update internal state when props change
+    if (value !== internalValue && document.activeElement?.getAttribute('name') !== name) {
+        setInternalValue(value);
+    }
     
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setInternalValue(e.target.value);
+    };
 
-
-
+    const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+        setter(e.target.name, e.target.value);
+    }
     
+    return (
+        <div>
+            <Label htmlFor={name}>{label}</Label>
+            <Input 
+                type="number" 
+                name={name} 
+                id={name} 
+                value={internalValue} 
+                onChange={handleChange} 
+                onBlur={handleBlur}
+                placeholder={placeholder} 
+            />
+        </div>
+    );
+});
+
+
+const FixedExpenseRow = memo(function FixedExpenseRow({ 
+    item, 
+    onChange, 
+    onRemove 
+}: { 
+    item: FixedExpense, 
+    onChange: (id: number, field: keyof FixedExpense, value: string) => void, 
+    onRemove: (id: number) => void 
+}) {
+    return (
+        <div className="grid grid-cols-1 sm:grid-cols-[2fr_1fr_auto] gap-2 items-center">
+            <Input 
+                placeholder="Expense (e.g., Salaries)" 
+                value={item.name} 
+                onChange={(e) => onChange(item.id, 'name', e.target.value)} 
+            />
+            <Input 
+                type="number" 
+                placeholder="Monthly Cost (₹)" 
+                value={item.cost} 
+                onChange={(e) => onChange(item.id, 'cost', e.target.value)} 
+            />
+            <Button variant="ghost" size="icon" className="text-destructive" onClick={() => onRemove(item.id)}>
+                <XCircle />
+            </Button>
+        </div>
+    );
+});
+
+
+function PlantCostCalc() {
+  const [period, setPeriod] = useState("monthly");
+  const [inputs, setInputs] = useState({
+      milkProcessed: "30000",
+      totalRevenue: "2100000",
+      avgMilkPurchaseCost: '45',
+      packagingPerLitre: '2.5',
+      ingredientsPerLitre: '1.0',
+      energyPerLitre: '1.2',
+      waterPerLitre: '0.3',
+      distributionPerLitre: '1.0',
+  });
+  
+  const [fixedExpenses, setFixedExpenses] = useState<FixedExpense[]>([
+    { id: 1, name: "Salaries & Wages", cost: "150000" },
+    { id: 2, name: "Plant Rent/Lease", cost: "50000" },
+    { id: 3, name: "Marketing & Admin", cost: "25000" },
+    { id: 4, name: "Maintenance & Repairs", cost: "15000" },
+    { id: 5, name: "Depreciation on Assets", cost: "20000" },
+    { id: 6, name: "Interest on Loan", cost: "10000" },
+  ]);
+
+  const [isDownloading, setIsDownloading] = useState(false);
+  const reportRef = useRef<HTMLDivElement>(null);
+
+  const handleInputChange = useCallback((name: string, value: string) => {
+    setInputs(prev => ({...prev, [name]: value}));
+  }, []);
+
+  const handleAddFixedExpense = () => {
+    setFixedExpenses(prev => [...prev, { id: Date.now(), name: "", cost: "" }]);
+  };
+  
+  const handleRemoveFixedExpense = (id: number) => {
+    setFixedExpenses(prev => prev.filter(item => item.id !== id));
+  };
+
+  const handleFixedExpenseChange = useCallback((id: number, field: keyof FixedExpense, value: string) => {
+    setFixedExpenses(prev => 
+        prev.map(item => (item.id === id ? { ...item, [field]: value } : item))
+    );
+  }, []);
+
+  const results = useMemo(() => {
+    const i = Object.fromEntries(Object.entries(inputs).map(([k, v]) => [k, parseFloat(v) || 0]));
+    const { milkProcessed, totalRevenue, avgMilkPurchaseCost, packagingPerLitre, ingredientsPerLitre, energyPerLitre, waterPerLitre, distributionPerLitre } = i;
+
+    // --- Variable Costs ---
+    const totalRawMaterialCost = avgMilkPurchaseCost * milkProcessed;
+
+    const packagingCost = packagingPerLitre * milkProcessed;
+    const ingredientsCost = ingredientsPerLitre * milkProcessed;
+    const energyCost = energyPerLitre * milkProcessed;
+    const waterCost = waterPerLitre * milkProcessed;
+    const distributionCost = distributionPerLitre * milkProcessed;
+    
+    const totalOtherVariableCosts = packagingCost + ingredientsCost + energyCost + waterCost + distributionCost;
+    const totalVariableCosts = totalRawMaterialCost + totalOtherVariableCosts;
+    const variableCostPerLitre = milkProcessed > 0 ? totalVariableCosts / milkProcessed : 0;
+
+    // --- Fixed Costs ---
+    const monthlyFixedCost = fixedExpenses.reduce((sum, item) => sum + (parseFloat(item.cost) || 0), 0);
+    const totalFixedCost = period === 'monthly' ? monthlyFixedCost : monthlyFixedCost / 30; // Prorate for daily
+    
+    // --- Profitability ---
+    const grossProfit = totalRevenue - totalVariableCosts;
+    const netProfit = grossProfit - totalFixedCost;
+    
+    const grossMargin = totalRevenue > 0 ? (grossProfit / totalRevenue) * 100 : 0;
+    const netMargin = totalRevenue > 0 ? (netProfit / totalRevenue) * 100 : 0;
+    
+    // --- Break-Even Analysis ---
+    const contributionMarginRatio = totalRevenue > 0 ? grossProfit / totalRevenue : 0;
+    const breakEvenRevenue = contributionMarginRatio > 0 ? totalFixedCost / contributionMarginRatio : 0;
+
+    return {
+        revenue: totalRevenue,
+        totalRawMaterialCost,
+        packagingCost,
+        ingredientsCost,
+        energyCost,
+        waterCost,
+        distributionCost,
+        totalOtherVariableCosts,
+        totalVariableCosts,
+        variableCostPerLitre,
+        grossProfit,
+        totalFixedCost,
+        netProfit,
+        grossMargin,
+        netMargin,
+        breakEvenRevenue
+    };
+  }, [inputs, fixedExpenses, period]);
+  
+
+  const Section = ({ title, children, description }: { title: string, children: React.ReactNode, description?: string }) => (
+      <div className="bg-card p-4 rounded-lg border mt-6">
+          <h3 className="text-lg font-bold text-primary font-headline mb-2">{title}</h3>
+          {description && <p className="text-xs text-muted-foreground mb-4">{description}</p>}
+          {children}
+      </div>
+  );
+
+  const handleDownloadPdf = async () => {
+    const reportElement = reportRef.current;
+    if (!reportElement) return;
+
+    setIsDownloading(true);
+    try {
+        const canvas = await html2canvas(reportElement, {
+            scale: 2, 
+            useCORS: true,
+            backgroundColor: '#ffffff'
+        });
+        const imgData = canvas.toDataURL('image/png');
+        
+        const pdf = new jsPDF({
+            orientation: 'portrait',
+            unit: 'mm',
+            format: 'a4'
+        });
+
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = pdf.internal.pageSize.getHeight();
+        const imgWidth = canvas.width;
+        const imgHeight = canvas.height;
+        const ratio = imgWidth / imgHeight;
+        
+        let finalImgWidth = pdfWidth - 20; // with margin
+        let finalImgHeight = finalImgWidth / ratio;
+        
+        if (finalImgHeight > pdfHeight - 20) {
+            finalImgHeight = pdfHeight - 20;
+            finalImgWidth = finalImgHeight * ratio;
+        }
+
+        const x = (pdfWidth - finalImgWidth) / 2;
+        const y = 10;
+        
+        pdf.addImage(imgData, 'PNG', x, y, finalImgWidth, finalImgHeight);
+        pdf.save(`dairy_plant_report_${period}_${new Date().toISOString().slice(0,10)}.pdf`);
+    } catch (error) {
+        console.error("Failed to generate PDF", error);
+    } finally {
+        setIsDownloading(false);
+    }
+  };
+
+
+  return (
+    <>
+        <div className="bg-muted/50 p-4 rounded-lg mb-6 grid grid-cols-2 gap-4">
+            <div>
+                <Label htmlFor="period-select">Calculation Period</Label>
+                <Select value={period} onValueChange={setPeriod}>
+                    <SelectTrigger id="period-select"><SelectValue/></SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="daily">Daily</SelectItem>
+                        <SelectItem value="monthly">Monthly</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
+            <div>
+                <Label>Assumption</Label>
+                <p className="text-xs text-muted-foreground mt-1">For daily calculations, monthly fixed costs are divided by 30.</p>
+            </div>
+        </div>
+
+        <Section title="1. Production &amp; Revenue Details" description="Define your production volume and total sales for the selected period.">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <MemoizedInputField_PlantCost label={`Total Milk Processed (${period === 'monthly' ? 'Litres/month' : 'Litres/day'})`} value={inputs.milkProcessed} name="milkProcessed" setter={handleInputChange} placeholder="e.g., 30000" />
+                <MemoizedInputField_PlantCost label={`Total Sales Revenue (${period === 'monthly' ? '₹/month' : '₹/day'})`} value={inputs.totalRevenue} name="totalRevenue" setter={handleInputChange} placeholder="e.g., 2100000" />
+            </div>
+        </Section>
+
+        <Section title="2. Variable Costs" description="Costs that change in proportion to your production volume.">
+            <h4 className="font-semibold text-gray-700">A. Raw Material Cost</h4>
+             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
+                 <div>
+                    <MemoizedInputField_PlantCost label="Average Purchase Cost of Milk (₹ per Litre)" value={inputs.avgMilkPurchaseCost} name="avgMilkPurchaseCost" setter={handleInputChange} />
+                </div>
+             </div>
+
+             <h4 className="font-semibold text-gray-700 mt-6">B. Other Variable Costs (per Litre of milk processed)</h4>
+             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
+                <MemoizedInputField_PlantCost label="Packaging (₹ per Litre)" value={inputs.packagingPerLitre} name="packagingPerLitre" setter={handleInputChange} />
+                <MemoizedInputField_PlantCost label="Other Ingredients (₹ per Litre)" value={inputs.ingredientsPerLitre} name="ingredientsPerLitre" setter={handleInputChange} />
+                <MemoizedInputField_PlantCost label="Energy (Electricity, Fuel) (₹ per Litre)" value={inputs.energyPerLitre} name="energyPerLitre" setter={handleInputChange} />
+                <MemoizedInputField_PlantCost label="Water / ETP (₹ per Litre)" value={inputs.waterPerLitre} name="waterPerLitre" setter={handleInputChange} />
+                <MemoizedInputField_PlantCost label="Distribution &amp; Logistics (₹ per Litre)" value={inputs.distributionPerLitre} name="distributionPerLitre" setter={handleInputChange} />
+             </div>
+        </Section>
+
+        <Section title="3. Fixed Expenses (Monthly Overhead)" description="Costs that remain constant regardless of production volume. Enter all costs on a monthly basis.">
+             <div className="space-y-3">
+                 <div className="grid grid-cols-1 sm:grid-cols-[2fr_1fr_auto] gap-2 items-center text-sm font-medium text-muted-foreground">
+                    <p>Expense Name</p><p>Monthly Cost (₹)</p><div />
+                </div>
+                {fixedExpenses.map((item) => (
+                    <FixedExpenseRow
+                        key={item.id}
+                        item={item}
+                        onChange={handleFixedExpenseChange}
+                        onRemove={handleRemoveFixedExpense}
+                    />
+                ))}
+            </div>
+            <Button variant="outline" size="sm" onClick={handleAddFixedExpense} className="mt-4"><PlusCircle className="mr-2"/> Add Fixed Expense</Button>
+        </Section>
+        
+        <div ref={reportRef} className="p-1">
+            <Alert className={`mt-8 ${results.netProfit >= 0 ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
+                <AlertTitle className="text-xl font-bold">Financial Summary ({period})</AlertTitle>
+                <AlertDescription>
+                    <div className="mt-4 text-base">
+                        <Table>
+                           <TableBody>
+                             <TableRow><TableCell>A. Total Revenue</TableCell><TableCell className="text-right font-semibold">₹ {results.revenue.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell></TableRow>
+                             
+                             <TableRow className="bg-muted/30"><TableCell colSpan={2} className="font-bold text-primary">B. Variable Costs</TableCell></TableRow>
+                             <TableRow><TableCell className="pl-8">Raw Material (Milk)</TableCell><TableCell className="text-right text-red-600">- ₹ {results.totalRawMaterialCost.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell></TableRow>
+                             <TableRow><TableCell className="pl-8">Other Variable Costs (Packaging, Energy, etc.)</TableCell><TableCell className="text-right text-red-600">- ₹ {results.totalOtherVariableCosts.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell></TableRow>
+                             <TableRow><TableCell className="font-semibold pl-4">Total Variable Costs</TableCell><TableCell className="text-right font-semibold text-red-600">- ₹ {results.totalVariableCosts.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell></TableRow>
+
+                             <TableRow className="bg-muted/50 text-lg"><TableCell className="font-bold">C. Gross Profit (A - B)</TableCell><TableCell className="font-bold text-right">₹ {results.grossProfit.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell></TableRow>
+                             
+                             <TableRow><TableCell className="font-bold text-primary">D. Total Fixed Costs</TableCell><TableCell className="text-right font-semibold text-red-600">- ₹ {results.totalFixedCost.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell></TableRow>
+                             
+                             <TableRow className={`font-extrabold text-xl ${results.netProfit >= 0 ? 'text-green-700' : 'text-red-700'}`}>
+                                <TableCell>E. {results.netProfit >= 0 ? 'Net Profit' : 'Net Loss'} (C - D)</TableCell>
+                                <TableCell className="text-right">₹ {results.netProfit.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell>
+                             </TableRow>
+                           </TableBody>
+                        </Table>
+                         <h4 className="font-semibold mt-6 mb-2 text-center text-gray-600">Key Metrics</h4>
+                         <Table>
+                            <TableBody>
+                                <TableRow><TableCell>Gross Profit Margin</TableCell><TableCell className="font-bold text-right">{results.grossMargin.toFixed(2)} %</TableCell></TableRow>
+                                <TableRow><TableCell>Net Profit Margin</TableCell><TableCell className="font-bold text-right">{results.netMargin.toFixed(2)} %</TableCell></TableRow>
+                                <TableRow><TableCell>Break-Even Revenue ({period})</TableCell><TableCell className="font-bold text-right">₹ {results.breakEvenRevenue.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell></TableRow>
+                            </TableBody>
+                         </Table>
+                    </div>
+                </AlertDescription>
+            </Alert>
+        </div>
+        <div className="text-center mt-6">
+            <Button onClick={handleDownloadPdf} disabled={isDownloading}>
+                {isDownloading ? <Loader2 className="mr-2 animate-spin" /> : <FileDown className="mr-2" />}
+                Download Report as PDF
+            </Button>
+        </div>
+        <div className="h-12"></div>
+    </>
+  );
+}
