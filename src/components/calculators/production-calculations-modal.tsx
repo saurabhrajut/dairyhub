@@ -172,8 +172,8 @@ function PaneerYieldCalc() {
         const yieldPercentage = (paneerYieldKg / milkWeightKg) * 100;
 
         setTheoreticalResult(`
-            <p class="font-bold text-lg">Estimated Theoretical Yield: <span class="text-2xl text-green-700">${'paneerYieldKg.toFixed(2)'} kg</span></p>
-            <p class="text-sm mt-1">This is approximately a <span class="font-bold">${'yieldPercentage.toFixed(2)'}%</span> yield from ${qty} Litres of milk.</p>
+            <p class="font-bold text-lg">Estimated Theoretical Yield: <span class="text-2xl text-green-700">${paneerYieldKg.toFixed(2)} kg</span></p>
+            <p class="text-sm mt-1">This is approximately a <span class="font-bold">${yieldPercentage.toFixed(2)}%</span> yield from ${qty} Litres of milk.</p>
             <p class="text-xs mt-2">This is a scientific estimate based on solid recovery. Actual yield will vary.</p>
         `);
     };
@@ -193,7 +193,7 @@ function PaneerYieldCalc() {
 
         const actualYield = (paneer / milk) * 100;
         setActualResult(`
-             <p class="font-bold text-lg">Actual Yield: <span class="text-2xl text-blue-700">${'actualYield.toFixed(2)'}%</span></p>
+             <p class="font-bold text-lg">Actual Yield: <span class="text-2xl text-blue-700">${actualYield.toFixed(2)}%</span></p>
              <p class="text-sm mt-1">You obtained ${paneer} kg of paneer from ${milk} kg of milk.</p>
         `);
     };
@@ -858,20 +858,36 @@ const MemoizedInputRow = memo(function InputRow({
   inputs: MassBalanceInputs;
   onInputChange: (field: keyof MassBalanceInputs, value: string) => void;
 }) {
+    const [internalFat, setInternalFat] = useState(inputs[fatName]);
+    const [internalSnf, setInternalSnf] = useState(inputs[snfName]);
+
+    useEffect(() => {
+        if (document.activeElement?.getAttribute('name') !== fatName) {
+            setInternalFat(inputs[fatName]);
+        }
+         if (document.activeElement?.getAttribute('name') !== snfName) {
+            setInternalSnf(inputs[snfName]);
+        }
+    }, [inputs, fatName, snfName]);
+    
   return (
     <div className="grid grid-cols-3 items-center gap-4">
       <Label className="font-semibold text-gray-700">{label}</Label>
       <Input
         type="number"
+        name={fatName}
         placeholder="Fat (kg)"
-        value={inputs[fatName]}
-        onChange={(e) => onInputChange(fatName, e.target.value)}
+        value={internalFat}
+        onChange={(e) => setInternalFat(e.target.value)}
+        onBlur={(e) => onInputChange(fatName, e.target.value)}
       />
       <Input
         type="number"
+        name={snfName}
         placeholder="SNF (kg)"
-        value={inputs[snfName]}
-        onChange={(e) => onInputChange(snfName, e.target.value)}
+        value={internalSnf}
+        onChange={(e) => setInternalSnf(e.target.value)}
+        onBlur={(e) => onInputChange(snfName, e.target.value)}
       />
     </div>
   );
@@ -1439,4 +1455,5 @@ function PlantCostCalc() {
     </>
   );
 }
+
 
