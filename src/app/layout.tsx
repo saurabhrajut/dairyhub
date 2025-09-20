@@ -36,11 +36,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={cn('font-body antialiased', inter.variable, spaceGrotesk.variable, notoDevanagari.variable)}>
         <LanguageProvider>
-          <AuthProvider>
-            <SubscriptionProvider>
+          <SubscriptionProvider>
+            <AuthProvider>
               {children}
-            </SubscriptionProvider>
-          </AuthProvider>
+            </AuthProvider>
+          </SubscriptionProvider>
         </LanguageProvider>
         <Toaster />
       </body>
