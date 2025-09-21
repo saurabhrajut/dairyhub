@@ -18,7 +18,7 @@ import { milkChemistryContent } from "@/lib/content/milk-chemistry-content";
 
 
 const InfoBlock = ({ title, children, noProse }: { title: string, children: React.ReactNode, noProse?: boolean }) => (
-    <div className="p-4 bg-gray-50 rounded-lg border border-gray-200 mt-4">
+    <div className={`bg-card p-4 sm:p-6 rounded-xl shadow-sm border mt-6`}>
         <h4 className="text-lg font-bold text-primary mb-2 font-headline">{title}</h4>
         {noProse ? (
             <div className="text-gray-700">{children}</div>
@@ -59,23 +59,25 @@ function CompositionContent({ content }: { content: any }) {
             
             <InfoBlock title={content.composition.generalComposition.title} noProse={true}>
                 <div className="overflow-x-auto">
-                    <Table>
+                     <Table>
                         <TableHeader>
-                            <TableRow>
-                                <TableHead>{content.composition.generalComposition.headers[0]}</TableHead>
-                                <TableHead className="text-right">{content.composition.generalComposition.headers[1]}</TableHead>
-                                <TableHead>{content.composition.generalComposition.headers[2]}</TableHead>
-                                <TableHead className="text-right">{content.composition.generalComposition.headers[3]}</TableHead>
-                            </TableRow>
+                           <TableRow>
+                               <TableHead>{content.composition.generalComposition.headers[0]}</TableHead>
+                               <TableHead className="text-right">{content.composition.generalComposition.headers[1]}</TableHead>
+                           </TableRow>
                         </TableHeader>
                         <TableBody>
                             {content.composition.generalComposition.rows.map((row: any, i: number) => (
-                                <TableRow key={i}>
-                                    <TableCell>{row.c1}</TableCell>
-                                    <TableCell className="text-right">{row.v1}</TableCell>
-                                    <TableCell>{row.c2}</TableCell>
-                                    <TableCell className="text-right">{row.v2}</TableCell>
-                                </TableRow>
+                                <React.Fragment key={i}>
+                                    <TableRow>
+                                        <TableCell>{row.c1}</TableCell>
+                                        <TableCell className="text-right">{row.v1}</TableCell>
+                                    </TableRow>
+                                     <TableRow>
+                                        <TableCell>{row.c2}</TableCell>
+                                        <TableCell className="text-right">{row.v2}</TableCell>
+                                    </TableRow>
+                                </React.Fragment>
                             ))}
                         </TableBody>
                     </Table>
