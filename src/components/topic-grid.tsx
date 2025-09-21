@@ -70,7 +70,7 @@ const topics: { id: string; title: string; description: string; category: string
   
   { id: 'milk-handling', title: 'Milk Handling', description: 'Reception & Preservation', category: 'process', icon: Droplet, badge: 'New', modal: MilkHandlingPreservationModal, isPro: false, color: 'from-cyan-100 to-sky-200' },
   { id: 'processing', title: 'Dairy Processing', description: 'Techniques & Machinery', category: 'process', icon: Settings, modal: DairyProcessingModal, isPro: false, color: 'from-gray-100 to-gray-300' },
-  { id: 'adulteration', title: 'Adulteration', description: 'Detection & Prevention', category: 'quality', icon: TestTube, badge: 'Updated', modal: AdulterationModal, isPro: false, color: 'from-yellow-100 to-amber-200' },
+  { id: 'adulteration', title: 'Adulteration', description: 'Detection & Prevention', category: 'quality', icon: ReagentIcon, badge: 'Updated', modal: AdulterationModal, isPro: false, color: 'from-yellow-100 to-amber-200' },
   { id: 'solutions-prep', title: 'Solutions Preparation', description: 'Reagents & Calculators', category: 'quality', icon: Beaker, modal: SolutionsPrepModal, isPro: false, color: 'from-emerald-100 to-green-200' },
 
   { id: 'fermented-products', title: 'Fermented Products', description: 'Yogurt, Dahi & More', category: 'production', icon: ReagentIcon, badge: 'New', modal: FermentedProductsModal, isPro: true, color: 'from-pink-100 to-fuchsia-200' },
