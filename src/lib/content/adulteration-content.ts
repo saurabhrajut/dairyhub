@@ -63,6 +63,50 @@ export const adulterationContent = {
                 `
             },
             {
+                title: "एलिजारिन-अल्कोहल परीक्षण",
+                content: `
+                    <p><strong>परिचय:</strong> अल्कोहल या उच्च तापमान के प्रति दूध की स्थिरता विकसित अम्लता, जीवाणु वृद्धि के परिणाम के रूप में मीठा दही जमना, सामान्य नमक संतुलन में गड़बड़ी, और असामान्य रासायनिक संरचना (जैसे कोलोस्ट्रम, देर से स्तनपान, और मास्टिटिस दूध) से काफी प्रभावित होती है। अल्कोहल परीक्षण का उपयोग इसलिए दूध की गर्मी-प्रसंस्करण, विशेष रूप से संघनन और नसबंदी के लिए स्थिरता का आकलन करने के लिए किया जाता है। अल्कोहल के साथ एलिजारिन मिलाने से यह पता लगाने में मदद मिलती है कि दूध अम्लीय है या क्षारीय।</p>
+                    <h4 class="font-semibold mt-2">प्रक्रिया:</h4>
+                    <ol class="list-disc list-inside mt-1">
+                        <li>एक टेस्ट ट्यूब में 5 मिली दूध और समान मात्रा में एलिजारिन-अल्कोहल घोल (0.2% एलिजारिन 68% एथिल अल्कोहल में) डालें।</li>
+                        <li>टेस्ट ट्यूब को कई बार उल्टा करके सामग्री को मिलाएं।</li>
+                        <li>गुच्छे या थक्के की उपस्थिति की जांच करें और ध्यान दें कि क्या गुच्छे छोटे हैं या बड़े।</li>
+                        <li>मिश्रण के रंग का निरीक्षण करें।</li>
+                    </ol>
+                    <h4 class="font-semibold mt-2">व्याख्या:</h4>
+                    <p>दूध की गुणवत्ता का मूल्यांकन गुच्छे और थक्के के गठन और मिश्रण के रंग के आधार पर किया जाता है। गुच्छे या थक्के की उपस्थिति (अम्लता के विकास के साथ या बिना) खराब गर्मी स्थिरता और दूध की असंतोषजनक गुणवत्ता को इंगित करती है।</p>
+                    <div class="overflow-x-auto"><table class="w-full"><thead><tr><th>गुच्छे/थक्के</th><th>रंग</th><th>गर्मी-स्थिरता</th><th>गुणवत्ता</th></tr></thead><tbody>
+                    <tr><td>नकारात्मक</td><td>बैंगनी या हल्का लाल</td><td>अच्छा (कम अम्लता)</td><td>संतोषजनक</td></tr>
+                    <tr><td>सकारात्मक</td><td>बैंगनी हल्का लाल</td><td>खराब (मीठा दही जमना)</td><td>असंतोषजनक</td></tr>
+                    <tr><td>सकारात्मक</td><td>बैंगनी (क्षारीय)</td><td>खराब (देर से स्तनपान) या मास्टिटिस</td><td>असंतोषजनक</td></tr>
+                    <tr><td>सकारात्मक</td><td>भूरा (अम्लीय)</td><td>खराब (विकसित अम्लता 0.1-0.2%)</td><td>असंतोषजनक</td></tr>
+                    <tr><td>बड़े गुच्छे</td><td>पीला (अत्यधिक अम्लीय)</td><td>खराब (विकसित अम्लता 0.2% से अधिक)</td><td>असंतोषजनक</td></tr>
+                    </tbody></table></div>
+                `
+            },
+            {
+                title: "दस मिनट का रेसाज़ुरिन परीक्षण",
+                content: `
+                    <p><strong>परिचय:</strong> यह परीक्षण खराब गुणवत्ता वाले दूध की आपूर्ति का तेजी से पता लगाने के लिए एक त्वरित विधि के रूप में है। रेसाज़ुरिन एक ऑक्सीकरण-अपचयन संकेतक है जो ऑक्सीकृत अवस्था में नीला होता है और जीवाणु गतिविधि या अन्य कारणों से अपचयन पर, यह पहले एक गुलाबी यौगिक "रेसो्रुफिन" में अपरिवर्तनीय रूप से बदल जाता है और फिर रंगहीन 'डाइहाइड्रोरेसो्रुफिन' में। दूसरा परिवर्तन एक प्रतिवर्ती प्रतिक्रिया है। पहले चरण के दौरान रेसाज़ुरिन (नीला) से रेसो्रुफिन (गुलाबी) में अपचयन के दौरान दूध में अलग-अलग मध्यवर्ती रंग के शेड विकसित होते हैं जिन्हें एक तुलनित्र में मानक रंग डिस्क के साथ मिलाया जा सकता है। दूसरे चरण के दौरान गुलाबी रंग तेजी से फीका पड़ जाता है और दूध अंततः सतह पर एक संकीर्ण गुलाबी बैंड के साथ सफेद हो जाता है। रेसाज़ुरिन के अपचयन की दर दूध में जीवाणु गतिविधि की सीमा द्वारा नियंत्रित होती है और किसी भी समय रंग परिवर्तनों को रिकॉर्ड करके मापा जा सकता है। यह सिद्धांत दूध की जीवाणुविज्ञानी गुणवत्ता का आकलन करने के लिए दस मिनट या एक घंटे के रेसाज़ुरिन अपचयन परीक्षणों का आधार बनता है। रेसाज़ुरिन ल्यूकोसाइटिक कोशिकाओं की अपचयन क्रिया के प्रति भी संवेदनशील है।</p>
+                    <h4 class="font-semibold mt-2">प्रक्रिया:</h4>
+                    <ol class="list-disc list-inside mt-1">
+                        <li>एक कैन से दूध का नमूना लें, फिर 10 मिली को एक निष्फल टेस्ट ट्यूब में स्थानांतरित करें।</li>
+                        <li>1 मिली बेंच रेसाज़ुरिन घोल (0.05%) डालें, स्टॉपर डालें और उल्टा करके मिलाएं।</li>
+                        <li>37.5°C पर बनाए गए पानी के स्नान में रखें।</li>
+                        <li>10 मिनट के अंत में, ट्यूब को पानी के स्नान से हटा दें।</li>
+                        <li>ट्यूब को तुलनित्र के दाहिने खंड में रखें। प्राकृतिक रंग की भरपाई के लिए तुलनित्र के बाएं खंड में एक नियंत्रण दूध ट्यूब रखें।</li>
+                        <li>मानक रेसाज़ुरिन डिस्क को तब तक घुमाया जाता है जब तक कि नमूना मेल न खा जाए और संबंधित डिस्क रीडिंग नोट की जाती है। जब रंग दो डिस्क नंबरों के बीच आता है तो इसे आधे मान के रूप में दर्ज किया जाएगा।</li>
+                    </ol>
+                    <h4 class="font-semibold mt-2">परिणाम:</h4>
+                    <p>निम्नलिखित मानकों के अनुसार नमूनों के परिणाम और वर्गीकरण तालिका में दिए गए हैं:</p>
+                    <div class="overflow-x-auto"><table class="w-full"><thead><tr><th>क्रमांक</th><th>रेसाज़ुरिन डिस्क रीडिंग</th><th>रखने की गुणवत्ता</th><th>टिप्पणियां</th></tr></thead><tbody>
+                    <tr><td>1</td><td>6, 5 या 4</td><td>संतोषजनक</td><td>दूध स्वीकार करें</td></tr>
+                    <tr><td>2</td><td>3.5 से 1</td><td>संदिग्ध</td><td>आगे की जांच की आवश्यकता है</td></tr>
+                    <tr><td>3</td><td>0.5 से 0</td><td>असंतोषजनक</td><td>दूध अस्वीकार करें</td></tr>
+                    </tbody></table></div>
+                `
+            },
+            {
                 title: "लैक्टोमीटर के साथ कुल ठोस (TS) और ठोस-गैर-वसा (SNF) परीक्षण",
                 content: `
                     <p><strong>सिद्धांत:</strong> यह परीक्षण दूध के विशिष्ट गुरुत्व को मापने के लिए एक लैक्टोमीटर का उपयोग करता है, जिसे बाद में रिचमंड के सूत्र में वसा प्रतिशत के साथ SNF और TS का अनुमान लगाने के लिए उपयोग किया जाता है।</p>
@@ -101,16 +145,6 @@ export const adulterationContent = {
                     </ul>
                     <h4 class="font-semibold mt-2">अनुमान:</h4>
                     <p>उच्च मात्रा में अवसादन दूध दुहने के दौरान खराब स्वच्छता और थन के स्वास्थ्य को इंगित करता है।</p>
-                `
-            },
-            {
-                title: "रेसाज़ुरिन परीक्षण",
-                content: `
-                    <p><strong>सिद्धांत:</strong> रेसाज़ुरिन एक रेडॉक्स डाई है जो दूध में बैक्टीरिया की चयापचय गतिविधि के आधार पर रंग बदलती है। यह सूक्ष्मजीवविज्ञानी गुणवत्ता का एक त्वरित अनुमान प्रदान करता है।</p>
-                    <h4 class="font-semibold mt-2">प्रक्रिया:</h4>
-                    <p>रेसाज़ुरिन का एक मानक घोल एक दूध के नमूने में जोड़ा जाता है, जिसे बाद में ऊष्मायन किया जाता है। नीले से गुलाबी से सफेद रंग में परिवर्तन समय के साथ देखा जाता है।</p>
-                    <h4 class="font-semibold mt-2">अनुमान:</h4>
-                    <p>एक तीव्र रंग परिवर्तन एक उच्च जीवाणु भार और खराब गुणवत्ता वाले दूध को इंगित करता है।</p>
                 `
             }
         ],
@@ -341,14 +375,14 @@ export const adulterationContent = {
                         <ol>
                            <li>एक टेस्ट ट्यूब में 5 मिली दूध का नमूना लें।</li>
                            <li>2 मिली आयोडीन घोल (0.05 N) डालें और मिलाएं।</li>
-                           <li>एक <strong>चॉकलेट जैसा लाल-भूरा रंग</strong> का दिखना डेक्सट्रिन/माल्टोडेक्सट्रिन की उपस्थिति को इंगित करता है।</li>
+                           <li>Appearance of a <strong>chocolate-like red-brown color</strong> indicates the presence of dextrin/maltodextrin.</li>
                         </ol>
                         <h4 class="mt-4">विधि 2: साइट्रिक एसिड और आयोडीन अभिकर्मकों का उपयोग करके</h4>
                         <ol>
                            <li>20 मिली दूध को उबालें, 70°C तक ठंडा करें और 0.5 मिली 10% साइट्रिक एसिड डालकर जमाएं।</li>
                            <li>जमे हुए दूध को फ़िल्टर करें।</li>
                            <li>2 मिली निस्यंद में, आयोडीन घोल की 3 बूँदें डालें।</li>
-                           <li>एक <strong>नारंगी-भूरा रंग</strong> माल्टोडेक्सट्रिन की उपस्थिति को इंगित करता है।</li>
+                           <li>An <strong>orange-brown shade</strong> indicates the presence of maltodextrin.</li>
                         </ol>
                     </div>
                 `
@@ -361,7 +395,7 @@ export const adulterationContent = {
                         <ol>
                             <li>1 मिली दूध लें, 1 मिली मिथाइलीन ब्लू घोल डालें और फिर 2 मिली क्लोरोफॉर्म डालें।</li>
                             <li>15 सेकंड के लिए भंवर करें और फिर 3 मिनट के लिए 1100 आरपीएम पर अपकेंद्रित्र करें।</li>
-                            <li>निचली (क्लोरोफॉर्म) परत में एक अधिक <strong>तीव्र नीला रंग</strong> डिटर्जेंट की उपस्थिति को इंगित करता है। यदि ऊपरी परत अधिक तीव्र है, तो डिटर्जेंट अनुपस्थित है।</li>
+                            <li>A more <strong>intense blue colour in the lower (chloroform) layer</strong> indicates the presence of detergent. If the upper layer is more intense, the detergent is absent.</li>
                         </ol>
                     </div>
                 `
@@ -374,22 +408,22 @@ export const adulterationContent = {
                          <ol>
                             <li>एक टेस्ट ट्यूब में 5 मिली दूध का नमूना लें।</li>
                             <li>1 मिली नेसलर का अभिकर्मक डालें।</li>
-                            <li><strong>पीला या भूरा रंग</strong> का दिखना अतिरिक्त अमोनियम लवणों की उपस्थिति की पुष्टि करता है।</li>
+                            <li>Appearance of <strong>yellowish or grey colour</strong> confirms the presence of added ammonium salts.</li>
                         </ol>
                         <h4 class="mt-4">विधि 2: हल्दी कागज विधि</h4>
                         <p><strong>सिद्धांत:</strong> अमोनियम लवण क्षारीय स्थितियों में अमोनिया छोड़ते हैं, जो गीले हल्दी कागज को लाल कर देता है।</p>
                         <ol>
                             <li>5 मिली दूध लें और 1 मिली 10% NaOH डालें।</li>
-                            <li>टेस्ट ट्यूब के रिम पर एक गीला हल्दी कागज रखें।</li>
-                            <li>कागज पर <strong>गुलाबी लाल रंग</strong> का दिखना अमोनियम नमक की उपस्थिति की पुष्टि करता है।</li>
+                            <li>Place a wet turmeric paper on the rim of the test tube.</li>
+                            <li>Appearance of <strong>pinkish red colour</strong> on the paper confirms the presence of ammonium salt.</li>
                         </ol>
-                         <h4 class="mt-4">विधि 3: सल्फेट का पता लगाना (BaCl₂ के साथ)</h4>
-                        <p><strong>सिद्धांत:</strong> सल्फेट बेरियम क्लोराइड (BaCl₂) के साथ अवक्षेपित होते हैं।</p>
+                         <h4 class="mt-4">Method 3: Sulfate Detection (with BaCl₂)</h4>
+                        <p><strong>Principle:</strong> Sulphates precipitate with Barium Chloride (BaCl₂).</p>
                         <ol>
-                            <li>10 मिली दूध लें और इसे जमाने के लिए 10 मिली ट्राइक्लोरोएसिटिक एसिड (TCA) डालें।</li>
-                            <li>दूध को फ़िल्टर करें और 5 मिली स्पष्ट निस्यंद लें।</li>
-                            <li>5% BaCl₂ घोल की कुछ बूँदें डालें।</li>
-                            <li>एक <strong>दूधिया-सफेद अवक्षेप</strong> का बनना अतिरिक्त सल्फेट्स (जैसे अमोनियम सल्फेट) की उपस्थिति को इंगित करता है।</li>
+                            <li>Take 10 ml of milk and add 10 ml of Trichloroacetic acid (TCA) to coagulate it.</li>
+                            <li>Filter the milk and take 5 ml of the clear filtrate.</li>
+                            <li>Add a few drops of 5% BaCl₂ solution.</li>
+                            <li>Formation of a <strong>milky-white precipitate</strong> indicates the presence of added sulphates (like ammonium sulphate).</li>
                         </ol>
                     </div>
                 `
@@ -398,142 +432,142 @@ export const adulterationContent = {
                 title: 'आम नमक (NaCl)',
                 content: `
                     <div class="prose max-w-none prose-green">
-                        <h4>सिल्वर नाइट्रेट परीक्षण</h4>
-                         <p><strong>सिद्धांत:</strong> अतिरिक्त नमक सिल्वर नाइट्रेट के साथ प्रतिक्रिया करता है। पोटेशियम क्रोमेट एक संकेतक के रूप में कार्य करता है।</p>
+                        <h4>Silver Nitrate Test</h4>
+                         <p><strong>Principle:</strong> Added salt reacts with silver nitrate. Potassium chromate acts as an indicator.</p>
                         <ol>
-                            <li>एक टेस्ट ट्यूब में 5 मिली दूध लें।</li>
-                            <li>0.1 N सिल्वर नाइट्रेट घोल का 1 मिली डालें।</li>
-                            <li> मिलाएं और 10% पोटेशियम क्रोमेट घोल का 0.5 मिली डालें।</li>
-                            <li><strong>पीले रंग</strong> का दिखना अतिरिक्त नमक को इंगित करता है, जबकि शुद्ध दूध एक ईंट लाल रंग देता है।</li>
+                            <li>Take 5 ml of milk in a test tube.</li>
+                            <li>Add 1 ml of 0.1 N silver nitrate solution.</li>
+                            <li> Mix and add 0.5 ml of 10% potassium chromate solution.</li>
+                            <li>Appearance of a <strong>yellow colour</strong> indicates added salt, whereas pure milk gives a brick red color.</li>
                         </ol>
                     </div>
                 `
             },
             {
-                title: 'वनस्पति/रिफाइंड तेल (विदेशी वसा)',
+                title: 'Vegetable/Refined Oil (Foreign Fat)',
                 content: `
                     <div class="prose max-w-none prose-green">
-                         <h4>ब्यूटिरो-रिफ्रैक्टोमीटर (बीआर) रीडिंग विधि</h4>
-                         <p><strong>सिद्धांत:</strong> अधिकांश वनस्पति तेलों में शुद्ध दूध वसा (घी) की तुलना में अधिक अपवर्तक सूचकांक होता है।</p>
+                         <h4>Butyro-Refractometer (BR) Reading Method</h4>
+                         <p><strong>Principle:</strong> Most vegetable oils have a higher refractive index than pure milk fat (ghee).</p>
                         <ol>
-                            <li>एक संशोधित Gerber butyrometer का उपयोग करके दूध के नमूने से वसा को अलग करें।</li>
-                            <li>निकाले गए वसा की बीआर रीडिंग 40°C पर लें।</li>
-                            <li>शुद्ध दूध वसा की बीआर रीडिंग 40-43 होती है। 45 से अधिक कोई भी रीडिंग विदेशी वसा की उपस्थिति का सुझाव देती है।</li>
+                            <li>Isolate fat from the milk sample using a modified Gerber butyrometer.</li>
+                            <li>Take the BR reading of the extracted fat at 40°C.</li>
+                            <li>Pure milk fat has a BR reading of 40-43. Any reading higher than 45 suggests the presence of foreign fat.</li>
                         </ol>
-                        <h4 class="mt-4">वनस्पति के लिए बॉडॉइन परीक्षण</h4>
-                        <p><strong>सिद्धांत:</strong> वनस्पति में 5% तिल का तेल होना आवश्यक है। इस तेल से सेसमोल फुरफुरल के साथ प्रतिक्रिया करके लाल रंग देता है।</p>
+                        <h4 class="mt-4">Baudouin Test for Vanaspati</h4>
+                        <p><strong>Principle:</strong> Vanaspati is required to contain 5% sesame oil. The sesamol from this oil reacts with furfural to give a red color.</p>
                         <ol>
-                            <li>दूध के नमूने से घी निकालें।</li>
-                            <li>5 ग्राम पिघला हुआ वसा लें, 5 मिली सांद्रित एचसीएल और 0.4 मिली 2% फुरफुरल घोल डालें। 2 मिनट के लिए भंवर करें।</li>
-                            <li>एसिड परत में एक <strong>गुलाबी या लाल रंग</strong> वनस्पति मिलावट को इंगित करता है।</li>
+                            <li>Extract ghee from the milk sample.</li>
+                            <li>Take 5g of melted fat, add 5ml concentrated HCl and 0.4ml of 2% furfural solution. Vortex for 2 minutes.</li>
+                            <li>A <strong>pink or red color</strong> in the acid layer indicates vanaspati adulteration.</li>
                         </ol>
                         <p class="text-xs"><strong>Ref:</strong> IS 3508 – 1966</p>
                     </div>
                 `
             },
             {
-                title: 'खनिज तेल',
+                title: 'Mineral Oil',
                 content: `
                     <div class="prose max-w-none prose-green">
-                         <h4>होल्ड का परीक्षण</h4>
-                         <p><strong>सिद्धांत:</strong> खनिज तेल गैर-साबुनीकरणीय होते हैं, जिसका अर्थ है कि वे खाद्य वसा के विपरीत क्षार के साथ साबुन नहीं बनाते हैं।</p>
+                         <h4>Holde's Test</h4>
+                         <p><strong>Principle:</strong> Mineral oils are non-saponifiable, meaning they do not form soap with alkali, unlike edible fats.</p>
                         <ol>
-                            <li>1 ग्राम वसा को 25 मिली 4% अल्कोहलिक KOH से साबुनीकृत करें।</li>
-                            <li>100 मिली गर्म पानी डालें।</li>
-                            <li><strong>गंदगी</strong> का दिखना खनिज तेल की उपस्थिति को इंगित करता है।</li>
+                            <li>Saponify 1g of fat with 25ml of 4% alcoholic KOH.</li>
+                            <li>Add 100ml of hot water.</li>
+                            <li>The appearance of <strong>turbidity</strong> indicates the presence of mineral oil.</li>
                         </ol>
                     </div>
                 `
             },
              {
-                title: 'पशु शरीर वसा (जैसे, लार्ड)',
+                title: 'Animal Body Fat (e.g., Lard)',
                 content: `
                     <div class="prose max-w-none prose-green">
-                         <h4>अपारदर्शिता परीक्षण</h4>
-                         <p><strong>सिद्धांत:</strong> विभिन्न वसा अलग-अलग दरों और तापमानों पर जमते और अपारदर्शी हो जाते हैं।</p>
+                         <h4>Opacity Test</h4>
+                         <p><strong>Principle:</strong> Different fats solidify and become opaque at different rates and temperatures.</p>
                         <ol>
-                            <li>5 ग्राम घी को 50°C पर पिघलाएं।</li>
-                            <li>23°C पर एक पानी के स्नान में स्थानांतरित करें और नमूने के अपारदर्शी होने में लगने वाले समय को रिकॉर्ड करें।</li>
-                            <li><strong>परिणाम:</strong> भैंस के घी में 14-15 मिनट लगते हैं, गाय के घी में 18-19 मिनट लगते हैं। एक छोटा समय पशु शरीर वसा मिलावट का सुझाव देता है, जबकि एक लंबा समय वनस्पति तेल का सुझाव देता है।</li>
+                            <li>Melt 5g of ghee at 50°C.</li>
+                            <li>Transfer to a water bath at 23°C and record the time it takes for the sample to become opaque.</li>
+                            <li><strong>Result:</strong> Buffalo ghee takes 14-15 min, cow ghee 18-19 min. A shorter time suggests animal body fat adulteration, while a longer time suggests vegetable oil.</li>
                         </ol>
                     </div>
                 `
             },
             {
-                title: 'तालाब का पानी (नाइट्रेट्स)',
+                title: 'Pond Water (Nitrates)',
                 content: `
                     <div class="prose max-w-none prose-green">
-                        <p><strong>सिद्धांत:</strong> यह विधि कृषि उर्वरकों से तालाब के पानी में मौजूद नाइट्रेट्स/नाइट्राइट्स का पता लगाती है।</p>
+                        <p><strong>Principle:</strong> This method detects nitrates/nitrites present in pond water from agricultural fertilizers.</p>
                         <ol>
-                            <li>एक टेस्ट ट्यूब को दूध के नमूने से धोएं और खाली करें।</li>
-                            <li>टेस्ट ट्यूब के किनारे 2% डिफेनिलएमाइन घोल की 2-3 बूँदें डालें।</li>
-                            <li>यदि टेस्ट ट्यूब के किनारे <strong>नीले</strong> हो जाते हैं, तो दूध में तालाब का पानी होता है।</li>
+                            <li>Rinse a test tube with the milk sample and drain.</li>
+                            <li>Add 2-3 drops of 2% diphenylamine solution along the side of the test tube.</li>
+                            <li>If the sides of the test tube turn <strong>blue</strong>, the milk contains pond water.</li>
                         </ol>
                     </div>
                 `
             },
             {
-                title: 'प्राकृतिक दूध में स्किम्ड मिल्क पाउडर (एसएमपी)',
+                title: 'Skimmed Milk Powder (SMP) in Natural Milk',
                 content: `
                     <div class="prose max-w-none prose-green">
-                        <p><strong>उद्देश्य:</strong> प्राकृतिक दूध की एसएनएफ सामग्री को अवैध रूप से बढ़ाने के लिए।</p>
-                        <p><strong>सिद्धांत:</strong> पुनर्गठित दूध पाउडर में प्रोटीन में कम करने वाले समूह होते हैं जो उबालने पर फॉस्फोमॉलिब्डिक एसिड के साथ प्रतिक्रिया करके एक नीला रंग देते हैं।</p>
+                        <p><strong>Purpose:</strong> To illegally increase the SNF content of natural milk.</p>
+                        <p><strong>Principle:</strong> The proteins in reconstituted milk powder contain reducing groups that react with phosphomolybdic acid on boiling to give a blue colour.</p>
                         <ol>
-                            <li>क्रीम को अलग करने के लिए 50 मिली दूध को अपकेंद्रित्र करें।</li>
-                            <li>स्किम दूध के हिस्से को एसिटिक एसिड से जमाएं।</li>
-                            <li>अवक्षेप को धोएं, फिर 2 मिली 1% फॉस्फोमॉलिब्डिक एसिड डालें और 15 मिनट के लिए उबालें।</li>
-                            <li>शुद्ध दूध से दही हरा होगा, जबकि एसएमपी युक्त नमूने से दही <strong>नीला</strong> होगा।</li>
+                            <li>Centrifuge 50 ml of milk to separate the cream.</li>
+                            <li>Coagulate the skim milk portion with acetic acid.</li>
+                            <li>Wash the precipitate, then add 2 ml of 1% phosphomolybdic acid and boil for 15 minutes.</li>
+                            <li>The curd from pure milk will be greenish, whereas the curd from a sample containing SMP will be <strong>bluish</strong>.</li>
                         </ol>
-                        <p class="text-xs"><strong>Ref:</strong> जर्नल ऑफ फूड साइंस एंड टेक्नोलॉजी, वॉल्यूम 22 (1985)</p>
+                        <p class="text-xs"><strong>Ref:</strong> Journal of Food Science and Technology, Vol 22 (1985)</p>
                     </div>
                 `
             },
              {
-                title: 'दूध में सोया दूध',
+                title: 'Soymilk in Milk',
                 content: `
                     <div class="prose max-w-none prose-green">
-                        <p>दूध की प्रोटीन सामग्री और एसएनएफ रीडिंग को अवैध रूप से बढ़ाने के लिए कभी-कभी सोया दूध मिलाया जाता है। इसके पता लगाने के लिए कई विधियाँ मौजूद हैं।</p>
-                        <h4 class="mt-4">विधि I: पोलारिमेट्रिक विधि</h4>
-                        <p>शर्करा के विभिन्न ऑप्टिकल रोटेशन के आधार पर। सोया दूध में सुक्रोज, रैफिनोज और स्टैचियोज होते हैं, जबकि गोजातीय दूध में लैक्टोज होता है। एक प्रोटीन-मुक्त निस्यंद के ऑप्टिकल रोटेशन में एक महत्वपूर्ण परिवर्तन सोया दूध के अतिरिक्त का संकेत दे सकता है।</p>
-                        <h4 class="mt-4">विधि II: आइसोइलेक्ट्रिक वर्षा विधि</h4>
-                        <p>सोया प्रोटीन दूध कैसिइन (पीएच 4.6) की तुलना में उच्च पीएच (~ 5.7) पर अवक्षेपित होते हैं। दूध के पीएच को 5.7 पर समायोजित करके और गर्म करके, यदि सोया दूध मौजूद है तो जमावट होगी।</p>
-                         <h4 class="mt-4">विधि III: एसडीएस-पेज विधि</h4>
-                        <p>यह वैद्युतकणसंचलन तकनीक आणविक भार के आधार पर प्रोटीन को अलग करती है। सोया प्रोटीन में दूध प्रोटीन की तुलना में अलग-अलग आणविक भार होते हैं और जेल पर अलग, अतिरिक्त बैंड के रूप में दिखाई देंगे, जिससे मिलावट की पुष्टि होती है।</p>
-                        <h4 class="mt-4">विधि IV: इम्यूनोडिफ्यूजन विधि</h4>
-                        <p>सोया प्रोटीन के लिए विशिष्ट एंटीबॉडी का उपयोग करता है। यदि दूध में सोया प्रोटीन मौजूद है, तो यह एंटीबॉडी के साथ प्रतिक्रिया करके एक अगर जेल में एक दृश्यमान वर्षा रेखा बनाएगा।</p>
-                        <h4 class="mt-4">विधि V: एचपीएलसी आधारित विधि</h4>
-                        <p>उच्च-प्रदर्शन तरल क्रोमैटोग्राफी विभिन्न शर्कराओं को अलग और मात्रा निर्धारित कर सकती है। स्टैचियोज की उपस्थिति, सोयाबीन में पाई जाने वाली लेकिन दूध में नहीं, सोया दूध मिलावट के लिए एक निश्चित मार्कर है।</p>
-                        <h4 class="mt-4">विधि VI: तीव्र विधि (ट्रिप्सिन निषेध)</h4>
-                        <p>सोया दूध में ट्रिप्सिन अवरोधक होते हैं। यह परीक्षण एंजाइम ट्रिप्सिन की गतिविधि को मापता है। यदि सोया दूध मौजूद है, तो ट्रिप्सिन को बाधित किया जाएगा, जिससे शुद्ध दूध के नमूने की तुलना में एक विशिष्ट रासायनिक प्रतिक्रिया में रंग परिवर्तन कम होगा।</p>
+                        <p>Soymilk is sometimes added to illegally increase the protein content and SNF reading of milk. Several methods exist for its detection.</p>
+                        <h4 class="mt-4">Method I: Polarimeteric method</h4>
+                        <p>Based on the different optical rotation of sugars. Soymilk contains sucrose, raffinose, and stachyose, while bovine milk contains lactose. A significant change in the optical rotation of a protein-free filtrate can indicate soymilk addition.</p>
+                        <h4 class="mt-4">Method II: Isoelectric precipitation method</h4>
+                        <p>Soy proteins precipitate at a higher pH (~5.7) than milk casein (pH 4.6). By adjusting the milk pH to 5.7 and heating, coagulation will occur if soymilk is present.</p>
+                         <h4 class="mt-4">Method III: SDS-PAGE method</h4>
+                        <p>This electrophoretic technique separates proteins based on molecular weight. Soy proteins have different molecular weights than milk proteins and will show up as distinct, extra bands on the gel, confirming adulteration.</p>
+                        <h4 class="mt-4">Method IV: Immunodiffusion method</h4>
+                        <p>Uses antibodies specific to soy proteins. If soy protein is present in the milk, it will react with the antibody to form a visible precipitation line in an agar gel.</p>
+                        <h4 class="mt-4">Method V: HPLC based method</h4>
+                        <p>High-Performance Liquid Chromatography can separate and quantify the different sugars. The presence of stachyose, a sugar found in soybeans but not milk, is a definitive marker for soymilk adulteration.</p>
+                        <h4 class="mt-4">Method VI: Rapid method (Trypsin Inhibition)</h4>
+                        <p>Soymilk contains trypsin inhibitors. This test measures the activity of the enzyme trypsin. If soymilk is present, the trypsin will be inhibited, leading to a reduced color change in a specific chemical reaction compared to a pure milk sample.</p>
                     </div>
                 `
             },
              {
-                title: 'दूध में पनीर मट्ठा',
+                title: 'Cheese Whey in Milk',
                 content: `
                     <div class="prose max-w-none prose-green">
-                        <h4>निनहाइड्रिन आधारित स्पेक्ट्रोफोटोमेट्रिक विधि</h4>
-                        <p><strong>सिद्धांत:</strong> जब पनीर बनाने के लिए रेनेट का उपयोग किया जाता है, तो यह कप्पा-कैसिइन के एक विशिष्ट भाग को तोड़ता है जिसे ग्लाइकोमैक्रोपेप्टाइड (जीएमपी) कहा जाता है, जो मट्ठे में चला जाता है। इस जीएमपी में सियालिक एसिड होता है। परीक्षण दूध के नमूने से जीएमपी को चुनिंदा रूप से अवक्षेपित करता है और फिर सियालिक एसिड सामग्री को मापता है। सियालिक एसिड का एक उच्च स्तर अतिरिक्त पनीर मट्ठे की उपस्थिति को इंगित करता है।</p>
+                        <h4>Ninhydrin based spectrophotometric method</h4>
+                        <p><strong>Principle:</strong> When rennet is used to make cheese, it cleaves a specific part of kappa-casein called glycomacropeptide (GMP), which goes into the whey. This GMP contains sialic acid. The test selectively precipitates GMP from the milk sample and then measures the sialic acid content. A high level of sialic acid indicates the presence of added cheese whey.</p>
                         <ol>
-                            <li>ग्लाइकोमैक्रोपेप्टाइड (जीएमपी) को दूध के नमूने से ट्राइक्लोरोएसिटिक एसिड (टीसीए) का उपयोग करके चुनिंदा रूप से अवक्षेपित किया जाता है।</li>
-                            <li>अवक्षेप को फिर एक अम्लीय निनहाइड्रिन अभिकर्मक से उपचारित किया जाता है और गर्म किया जाता है।</li>
-                            <li>जीएमपी से बंधा सियालिक एसिड एक स्थिर पीला-भूरा रंग उत्पन्न करता है, जिसे 470 एनएम पर एक स्पेक्ट्रोफोटोमीटर से मापा जाता है।</li>
-                            <li>शुद्ध दूध की तुलना में काफी अधिक अवशोषण मान पनीर मट्ठे के साथ मिलावट को इंगित करता है।</li>
+                            <li>Glycomacropeptide (GMP) is selectively precipitated from the milk sample using Trichloroacetic acid (TCA).</li>
+                            <li>The precipitate is then treated with an acidic ninhydrin reagent and heated.</li>
+                            <li>The sialic acid bound to the GMP produces a stable yellow-brown color, which is measured with a spectrophotometer at 470 nm.</li>
+                            <li>An absorbance value significantly higher than that of pure milk indicates adulteration with cheese whey.</li>
                         </ol>
                     </div>
                 `
             },
             {
-                title: 'जिलेटिन',
+                title: 'Gelatine',
                 content: `
                     <div class="prose max-w-none prose-green">
-                        <p><strong>उद्देश्य:</strong> दूध की मोटाई और एसएनएफ सामग्री को बढ़ाने के लिए।</p>
-                        <p><strong>सिद्धांत:</strong> जिलेटिन पिक्रिक एसिड के साथ एक पीला अवक्षेप बनाता है।</p>
+                        <p><strong>Purpose:</strong> To increase the thickness and SNF content of milk.</p>
+                        <p><strong>Principle:</strong> Gelatine forms a yellow precipitate with picric acid.</p>
                         <ol>
-                            <li>10 मिली दूध लें और 20 मिली स्टोक्स अभिकर्मक (एसिड मर्क्यूरिक नाइट्रेट) डालें।</li>
-                            <li>अच्छी तरह हिलाएं और फ़िल्टर करें।</li>
-                            <li>निस्यंद में, संतृप्त पिक्रिक एसिड घोल की समान मात्रा डालें।</li>
-                            <li>एक <strong>पीला अवक्षेप</strong> जिलेटिन की उपस्थिति को इंगित करता है।</li>
+                            <li>Take 10 ml of milk and add 20 ml of Stokes reagent (acid mercuric nitrate).</li>
+                            <li>Shake well and filter.</li>
+                            <li>To the filtrate, add an equal volume of saturated picric acid solution.</li>
+                            <li>A <strong>yellow precipitate</strong> indicates the presence of gelatine.</li>
                         </ol>
                     </div>
                 `
@@ -602,6 +636,50 @@ export const adulterationContent = {
                     <p>If any coagulation is formed, then fine particles of curd will be visible inside the test tube. This denotes positive alcohol test and such milk is rejected.</p>
                 `
             },
+             {
+                title: "Alizarin-Alcohol Test",
+                content: `
+                    <p><strong>Introduction:</strong> The stability of milk to alcohol or high temperature is considerably affected by developed acidity, sweet curdling as results of bacterial growth, disturbance in normal salt balance, and abnormal chemical composition (e.g. colostrum, late lactation and mastitis milks). The alcohol test is, therefore, used to assess the stability of milk to heat-processing particularly for condensing and sterilization. Addition of alizarin alongwith alcohol helps in finding out whether milk is acidic or alkaline.</p>
+                    <h4 class="font-semibold mt-2">Procedure:</h4>
+                    <ol class="list-disc list-inside mt-1">
+                        <li>Transfer 5ml of milk to a test tube and an equal quantity of alizarin-alcohol solution (0.2% alizarin in 68% ethyl alcohol).</li>
+                        <li>Mix the contents of the tube by inverting several times.</li>
+                        <li>Examine for the presence of flakes or clots and also note whether the flakes are small or large.</li>
+                        <li>Observe the colour of the mixture.</li>
+                    </ol>
+                    <h4 class="font-semibold mt-2">Interpretation:</h4>
+                    <p>The quality of the milk is judged on the basis of the formation of flakes and clots and also the colour of the mixture. Presence of flakes or clots (with or without development of acidity) indicates poor heat stability and unsatisfactory quality of milk.</p>
+                    <div class="overflow-x-auto"><table class="w-full"><thead><tr><th>Flakes/Clots</th><th>Colour</th><th>Heat-Stability</th><th>Quality</th></tr></thead><tbody>
+                    <tr><td>Negative</td><td>Lilac or pale red</td><td>Good (Low acidity)</td><td>Satisfactory</td></tr>
+                    <tr><td>Positive</td><td>Lilac pale red</td><td>Poor (sweet curdling)</td><td>Unsatisfactory</td></tr>
+                    <tr><td>Positive</td><td>Violet (Alkaline)</td><td>Poor (late lactation) or mastitis</td><td>Unsatisfactory</td></tr>
+                    <tr><td>Positive</td><td>Brown (Acidic)</td><td>Poor (Developed acidity 0.1-0.2%)</td><td>Unsatisfactory</td></tr>
+                    <tr><td>Large flakes</td><td>Yellow (Highly acidic)</td><td>Poor (Developed acidity more than 0.2%)</td><td>Unsatisfactory</td></tr>
+                    </tbody></table></div>
+                `
+            },
+            {
+                title: "Ten-Minute Resazurin Test",
+                content: `
+                    <p><strong>Introduction:</strong> This test is intended as a rapid method of detecting milk supplies of poor keeping quality on the receiving platform. Resazurin is an oxidation-reduction indicator which is blue in the oxidised stage and upon reduction due to bacterial activity or other causes it is first turned irreversible into a pink compound "resorufin" and then into the colourless 'dihydroresorufin'. The second change is a reversible reaction. During first of reduction from resazurin (blue) to resorufin (pink) in milk distinct intermediate colour shades are developed which can be matched with standard colour discs in a comparator. During the second stage the pink fades out at a fast rate and the milk eventually turns white with a narrow pink band on the surface. The rate of reduction of resazurin'is governed by the. extent of bacterial activity in milk and can· be measured by recording the colour changes at any time. This principle forms the basis of the ten-minute or one hour resazurin reduction tests for judging the bacteriological quality of milk. Resazurin is also susceptible to the reducing action of leucocytic cells.</p>
+                    <h4 class="font-semibold mt-2">Procedure:</h4>
+                    <ol class="list-disc list-inside mt-1">
+                        <li>Draw milk sample from a can, then transfer 10ml in a sterilized test tube.</li>
+                        <li>Add 1ml bench resazurin solution (0.05%), insert the stopper and mixed by inverting.</li>
+                        <li>Placed in water bath maintained at 37.5°C.</li>
+                        <li>At the end of 10 minutes remove the tube from water bath.</li>
+                        <li>Place the tube in the right section of the comparator. Keep. Control milk tube in the left section of the comparator to compensate for the natural colour.</li>
+                        <li>The standard resazurin disc is revolved until the sample is matched and the corresponding disc reading noted. When the colour falls between two discs numbers it shall be recorded as half value.</li>
+                    </ol>
+                    <h4 class="font-semibold mt-2">Results:</h4>
+                    <p>Results and classification of the samples according to the following standards are given in table:</p>
+                    <div class="overflow-x-auto"><table class="w-full"><thead><tr><th>Sr. No.</th><th>Resazurin Disc Reading</th><th>Keeping quality</th><th>Remarks</th></tr></thead><tbody>
+                    <tr><td>1</td><td>6, 5 or 4</td><td>Satisfactory</td><td>Accept the milk</td></tr>
+                    <tr><td>2</td><td>3.5 to 1</td><td>Doubtful</td><td>Requires further examination</td></tr>
+                    <tr><td>3</td><td>0.5 to 0</td><td>Unsatisfactory</td><td>Reject the milk</td></tr>
+                    </tbody></table></div>
+                `
+            },
             {
                 title: "Total Solids (TS) and Solid-Not-Fat (SNF) Test with Lactometer",
                 content: `
@@ -641,16 +719,6 @@ export const adulterationContent = {
                     </ul>
                     <h4 class="font-semibold mt-2">Inference:</h4>
                     <p>A high amount of sediment indicates poor hygiene and udder health during milking.</p>
-                `
-            },
-            {
-                title: "Resazurin Test",
-                content: `
-                    <p><strong>Principle:</strong> Resazurin is a redox dye that changes color based on the metabolic activity of bacteria in the milk. It provides a quick estimate of the microbiological quality.</p>
-                    <h4 class="font-semibold mt-2">Procedure:</h4>
-                    <p>A standard solution of resazurin is added to a milk sample, which is then incubated. The color change from blue to pink to white is observed over time.</p>
-                    <h4 class="font-semibold mt-2">Inference:</h4>
-                    <p>A rapid color change indicates a high bacterial load and poor quality milk.</p>
                 `
             }
         ],
@@ -1081,3 +1149,5 @@ export const adulterationContent = {
         ]
     }
 }
+
+    
