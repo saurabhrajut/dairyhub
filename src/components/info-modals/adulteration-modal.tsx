@@ -41,7 +41,7 @@ export function AdulterationModal({
     setIsOpen(open);
   };
   
-  if (!content) return null;
+  if (!content?.tabs || !content?.platformTests) return null;
 
   const categories = [
     { id: 'platform-tests', title: content.tabs.platform, description: content.tabs.platform_desc, data: content.platformTests, icon: Microscope, intro: content.intros.platform },
@@ -90,17 +90,21 @@ export function AdulterationModal({
         ) : (
              <ScrollArea className="flex-1 mt-4 sm:pr-4">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 sm:p-0">
-                    {categories.map(category => (
-                        <button
-                          key={category.id}
-                          onClick={() => setActiveCategory(category.id as AdulterationCategory)}
-                          className="flex flex-col items-center justify-center p-6 bg-card hover:bg-primary/10 rounded-lg shadow-sm border text-center transition-all duration-200"
-                        >
-                            <category.icon className="w-12 h-12 text-primary mb-3" />
-                            <h3 className="font-semibold font-headline text-card-foreground">{category.title}</h3>
-                            <p className="text-xs text-muted-foreground mt-1">{category.description}</p>
-                        </button>
-                    ))}
+                    {categories.map(category => {
+                        const Icon = category.icon;
+                        return (
+                            <button
+                            key={category.id}
+                            type="button"
+                            onClick={() => setActiveCategory(category.id as AdulterationCategory)}
+                            className="flex flex-col items-center justify-center p-6 bg-card hover:bg-primary/10 rounded-lg shadow-sm border text-center transition-all duration-200"
+                            >
+                                <Icon className="w-12 h-12 text-primary mb-3" />
+                                <h3 className="font-semibold font-headline text-card-foreground">{category.title}</h3>
+                                <p className="text-xs text-muted-foreground mt-1">{category.description}</p>
+                            </button>
+                        )
+                    })}
                 </div>
             </ScrollArea>
         )}
