@@ -34,18 +34,20 @@ export function AdulterationModal({
   const { t } = useLanguage();
   const content = t(adulterationContent);
 
-  const categories = [
-    { id: 'platform-tests', title: content.tabs.platform, description: content.tabs.platform_desc, data: content.platformTests, icon: Microscope, intro: content.intros.platform },
-    { id: 'preservatives', title: content.tabs.preservatives, description: content.tabs.preservatives_desc, data: content.preservatives, icon: Shield, intro: content.intros.preservatives },
-    { id: 'adulterants', title: content.tabs.adulterants, description: content.tabs.adulterants_desc, data: content.adulterants, icon: FlaskConical, intro: content.intros.adulterants },
-  ];
-
   const handleOpenChange = (open: boolean) => {
     if (!open) {
       setActiveCategory(null);
     }
     setIsOpen(open);
   };
+  
+  if (!content) return null;
+
+  const categories = [
+    { id: 'platform-tests', title: content.tabs.platform, description: content.tabs.platform_desc, data: content.platformTests, icon: Microscope, intro: content.intros.platform },
+    { id: 'preservatives', title: content.tabs.preservatives, description: content.tabs.preservatives_desc, data: content.preservatives, icon: Shield, intro: content.intros.preservatives },
+    { id: 'adulterants', title: content.tabs.adulterants, description: content.tabs.adulterants_desc, data: content.adulterants, icon: FlaskConical, intro: content.intros.adulterants },
+  ];
   
   const selectedCategory = categories.find(c => c.id === activeCategory);
 
