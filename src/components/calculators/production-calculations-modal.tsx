@@ -862,6 +862,7 @@ const MemoizedInputRow = memo(function InputRow({
     const [internalSnf, setInternalSnf] = useState(inputs[snfName]);
 
     useEffect(() => {
+        // Only update if the input is not focused, to avoid cursor jumps
         if (document.activeElement?.getAttribute('name') !== fatName) {
             setInternalFat(inputs[fatName]);
         }
@@ -878,16 +879,20 @@ const MemoizedInputRow = memo(function InputRow({
         name={fatName}
         placeholder="Fat (kg)"
         value={internalFat}
-        onChange={(e) => setInternalFat(e.target.value)}
-        onBlur={(e) => onInputChange(fatName, e.target.value)}
+        onChange={(e) => {
+            setInternalFat(e.target.value);
+            onInputChange(fatName, e.target.value);
+        }}
       />
       <Input
         type="number"
         name={snfName}
         placeholder="SNF (kg)"
         value={internalSnf}
-        onChange={(e) => setInternalSnf(e.target.value)}
-        onBlur={(e) => onInputChange(snfName, e.target.value)}
+        onChange={(e) => {
+            setInternalSnf(e.target.value);
+            onInputChange(snfName, e.target.value);
+        }}
       />
     </div>
   );
@@ -903,6 +908,9 @@ function MassBalanceCalc() {
         removedFat: '', removedSnf: '',
         closingFat: '', closingSnf: ''
     });
+    
+    const [isDownloading, setIsDownloading] = useState(false);
+    const reportRef = useRef<HTMLDivElement>(null);
 
     const handleInputChange = useCallback((field: keyof typeof inputs, value: string) => {
         setInputs(prev => ({...prev, [field]: value}));
@@ -937,6 +945,52 @@ function MassBalanceCalc() {
             gainLossFat, gainLossSnf,
         };
     }, [inputs]);
+
+    const handleDownloadPdf = async () => {
+        const reportElement = reportRef.current;
+        if (!reportElement) return;
+
+        setIsDownloading(true);
+        try {
+            const canvas = await html2canvas(reportElement, {
+                scale: 2, 
+                useCORS: true,
+                backgroundColor: '#ffffff'
+            });
+            const imgData = canvas.toDataURL('image/png');
+            
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'mm',
+                format: 'a4'
+            });
+
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
+            const imgWidth = canvas.width;
+            const imgHeight = canvas.height;
+            const ratio = imgWidth / imgHeight;
+            
+            let finalImgWidth = pdfWidth - 20; // with margin
+            let finalImgHeight = finalImgWidth / ratio;
+            
+            if (finalImgHeight > pdfHeight - 20) {
+                finalImgHeight = pdfHeight - 20;
+                finalImgWidth = finalImgHeight * ratio;
+            }
+
+            const x = (pdfWidth - finalImgWidth) / 2;
+            const y = 10;
+            
+            pdf.addImage(imgData, 'PNG', x, y, finalImgWidth, finalImgHeight);
+            pdf.save(`mass_balance_report_${new Date().toISOString().slice(0,10)}.pdf`);
+        } catch (error) {
+            console.error("Failed to generate PDF", error);
+            toast({ variant: "destructive", title: "PDF Error", description: "Could not generate the PDF report." });
+        } finally {
+            setIsDownloading(false);
+        }
+      };
     
     return (
          <CalculatorCard 
@@ -967,7 +1021,7 @@ function MassBalanceCalc() {
                 </div>
             </div>
 
-            <div className="mt-6">
+            <div ref={reportRef} className="mt-6 p-1">
                 <Alert>
                     <AlertTitle className="text-xl font-extrabold text-center">Reconciliation</AlertTitle>
                     <AlertDescription>
@@ -1001,6 +1055,12 @@ function MassBalanceCalc() {
                          </div>
                     </AlertDescription>
                 </Alert>
+            </div>
+             <div className="text-center mt-6">
+                <Button onClick={handleDownloadPdf} disabled={isDownloading}>
+                    {isDownloading ? <Loader2 className="mr-2 animate-spin" /> : <FileDown className="mr-2" />}
+                    Download Report as PDF
+                </Button>
             </div>
         </CalculatorCard>
     );
@@ -1455,5 +1515,6 @@ function PlantCostCalc() {
     </>
   );
 }
+
 
 
