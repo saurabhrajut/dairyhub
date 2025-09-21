@@ -88,7 +88,7 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
   const renderContent = () => {
     if (!selectedContent) return null;
     return (
-      <div>
+      <div className="min-h-0">
           <InfoCard>
               <SectionTitle id={`${activeTopic}-analysis`}>{selectedContent.title}</SectionTitle>
               <Accordion type="single" collapsible className="w-full">
@@ -103,7 +103,7 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogContent className="max-w-6xl w-[95vw] h-full max-h-[90vh] flex flex-col p-0 sm:p-6">
+      <DialogContent className="max-w-6xl w-[95vw] max-h-[calc(100dvh-4rem)] flex flex-col p-0 sm:p-6">
         <DialogHeader className="p-4 sm:p-0 shrink-0">
           <DialogTitle className="text-3xl font-bold text-center text-gray-800 font-headline">
             {content.main_title}
@@ -121,14 +121,14 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
                         {content.back_to_topics}
                     </Button>
                 </div>
-                <ScrollArea className="flex-1 mt-4 sm:pr-4">
-                    <div className="p-4 pt-0 sm:p-0">
+                <ScrollArea className="flex-1 mt-4 sm:pr-4 min-h-0 overflow-auto">
+                    <div className="p-4 pt-0 sm:p-0 min-h-0">
                        {renderContent()}
                     </div>
                 </ScrollArea>
             </div>
         ) : (
-            <ScrollArea className="flex-1 mt-4 sm:pr-4">
+            <ScrollArea className="flex-1 mt-4 sm:pr-4 min-h-0 overflow-auto">
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 p-4 sm:p-0">
                     {analysisTopics.map(topic => (
                         <button
