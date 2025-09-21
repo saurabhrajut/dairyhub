@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -55,21 +56,27 @@ function CompositionContent({ content }: { content: any }) {
                 </div>
             </InfoBlock>
             
-            <InfoBlock title={content.composition.generalComposition.title}>
+            <InfoBlock title={content.composition.generalComposition.title} noProse={true}>
                 <div className="overflow-x-auto">
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead>{content.composition.generalComposition.headers[0]}</TableHead><TableHead>{content.composition.generalComposition.headers[1]}</TableHead>
-                                <TableHead>{content.composition.generalComposition.headers[2]}</TableHead><TableHead>{content.composition.generalComposition.headers[3]}</TableHead>
+                                <TableHead>{content.composition.generalComposition.headers[0]}</TableHead>
+                                <TableHead className="text-right">{content.composition.generalComposition.headers[1]}</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {content.composition.generalComposition.rows.map((row: any, i: number) => (
-                                <TableRow key={i}>
-                                    <TableCell>{row.c1}</TableCell><TableCell>{row.v1}</TableCell>
-                                    <TableCell>{row.c2}</TableCell><TableCell>{row.v2}</TableCell>
-                                </TableRow>
+                                <React.Fragment key={i}>
+                                    <TableRow>
+                                        <TableCell>{row.c1}</TableCell>
+                                        <TableCell className="text-right">{row.v1}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell>{row.c2}</TableCell>
+                                        <TableCell className="text-right">{row.v2}</TableCell>
+                                    </TableRow>
+                                </React.Fragment>
                             ))}
                         </TableBody>
                     </Table>
