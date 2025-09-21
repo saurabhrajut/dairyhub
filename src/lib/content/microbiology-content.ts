@@ -102,48 +102,71 @@ export const microbiologyContent = {
           intro: "डेयरी उत्पादों की सुरक्षा और गुणवत्ता सुनिश्चित करने के लिए कई मानक सूक्ष्मजीवविज्ञानी परीक्षण किए जाते हैं। यहाँ कुछ प्रमुख परीक्षण विधियों का अवलोकन दिया गया है:",
           tests: [
             {
-              id: 'tpc',
-              title: 'एरोबिक मेसोफिलिक प्लेट काउंट (कुल प्लेट काउंट)',
-              principle: 'यह परीक्षण एक नमूने में व्यवहार्य (जीवित) बैक्टीरिया और कवक की कुल संख्या को मापता है जो ऑक्सीजन की उपस्थिति में मध्यम (मेसोफिलिक) तापमान पर बढ़ सकते हैं। इसे मानक प्लेट काउंट (SPC) या कुल व्यवहार्य गणना (TVC) के रूप में भी जाना जाता है।',
+              id: 'spc',
+              title: 'Standard Plate Count (SPC) of Milk',
+              principle: 'Classically SPC procedures are used to determine the Total Plate Count (TPC) or Aerobic Plate Count (APC) or Total Viable Count (TVC). SPC is the standard method to which other screening tests are compared.',
               procedure: `
                 <ol class='list-decimal list-inside space-y-2 mt-2'>
-                  <li><strong>नमूना तैयार करना:</strong> 90 मिलीलीटर बाँझ मंदक (जैसे, पेप्टोन पानी) के साथ 10 ग्राम या 10 मिलीलीटर नमूना मिलाकर 1:10 का तनुकरण बनाएं।</li>
-                  <li><strong>क्रमिक तनुकरण:</strong> इससे आगे क्रमिक तनुकरण (1:100, 1:1000, आदि) तैयार करें।</li>
-                  <li><strong>प्लेटिंग:</strong> प्रत्येक तनुकरण से 1 मिलीलीटर को दो बाँझ पेट्री प्लेटों में स्थानांतरित करें (पोर प्लेट विधि)।</li>
-                  <li><strong>मीडिया:</strong> प्लेटों में 15-20 मिलीलीटर पिघला हुआ प्लेट काउंट अगर (PCA), 45 डिग्री सेल्सियस तक ठंडा, डालें। मिलाने के लिए धीरे से घुमाएं।</li>
-                  <li><strong>ऊष्मायन:</strong> प्लेटों को 35-37 डिग्री सेल्सियस पर 24-48 घंटे के लिए उल्टा करके ऊष्मायन करें।</li>
-                  <li><strong>गिनती:</strong> 25 और 250 कॉलोनियों के बीच वाली प्लेटों का चयन करें। एक कॉलोनी काउंटर का उपयोग करके कॉलोनियों की गिनती करें।</li>
+                  <li><strong>Preparation of Diluent-Phosphate Buffer Solution:</strong> Prepare stock and bench solutions as specified.</li>
+                  <li><strong>Preparation of Medium:</strong> Use Plate Count Agar (PCA) or Standard Method Agar.</li>
+                  <li><strong>Preparation of Test Samples:</strong> Thoroughly agitate the milk sample. Prepare decimal dilutions (10⁻¹, 10⁻², etc.).</li>
+                  <li><strong>Inoculation and Incubation:</strong> Pipette 1ml of appropriate dilutions into sterile petri dishes. Pour melted PCA, mix, and solidify. Incubate inverted at 37°C for 48h.</li>
+                  <li><strong>Counting:</strong> Count colonies in dishes containing between 15 and 300 colonies.</li>
                 </ol>`,
-              calculation: '<code>CFU/g (या ml) = (कॉलोनियों की औसत संख्या × तनुकरण कारक) / प्लेट किए गए नमूने का आयतन (ml)</code>'
+              calculation: `Calculate the weighted mean N using the formula: <code>N = ΣC / { (n1 + 0.1n2) d }</code>`
             },
             {
               id: 'coliforms',
-              title: 'कोलीफॉर्म, मल कोलीफॉर्म और ई. कोलाई का पता लगाना',
-              principle: 'कोलीफॉर्म लैक्टोज को किण्वित करके एसिड और गैस का उत्पादन करते हैं। उन्हें वायलेट रेड बाइल अगर (VRBA) पर गिना जाता है। ई. कोलाई एक मल कोलीफॉर्म है जिसकी पुष्टि विशिष्ट जैव रासायनिक परीक्षणों द्वारा की जाती है।',
+              title: 'Coliform Count',
+              principle: 'Coliforms ferment lactose with the production of acid and gas. They are detected using Violet Red Bile Agar (VRBA). Their presence suggests unsanitary conditions.',
               procedure: `
                 <ol class='list-decimal list-inside space-y-2 mt-2'>
-                  <li><strong>नमूना और तनुकरण:</strong> टीपीसी विधि के अनुसार क्रमिक तनुकरण तैयार करें।</li>
-                  <li><strong>प्लेटिंग:</strong> प्रत्येक तनुकरण से 1 मिलीलीटर को बाँझ पेट्री प्लेटों में पिपेट करें।</li>
-                  <li><strong>मीडिया:</strong> 15-20 मिलीलीटर पिघला हुआ वीआरबीए डालें और मिलाएं। जमने के बाद, ऊपर एक और वीआरबीए की परत डालें (ओवरले)।</li>
-                  <li><strong>ऊष्मायन:</strong> प्लेटों को 35-37 डिग्री सेल्सियस पर 18-24 घंटे के लिए ऊष्मायन करें।</li>
-                  <li><strong>गिनती:</strong> लाल-बैंगनी कॉलोनियों (0.5 मिमी या उससे अधिक व्यास) को कोलीफॉर्म के रूप में गिनें।</li>
-                  <li><strong>पुष्टि (ई. कोलाई):</strong> संदिग्ध कॉलोनियों को ब्रिलियंट ग्रीन लैक्टोज बाइल (BGLB) शोरबा में टीका लगाएं और 44.5 डिग्री सेल्सियस पर ऊष्मायन करें। गैस उत्पादन ई. कोलाई की उपस्थिति को इंगित करता है। आगे की पुष्टि IMViC परीक्षणों द्वारा की जाती है।</li>
+                  <li><strong>Preparation:</strong> Prepare dilutions and Violet Red Bile Agar (VRBA) medium.</li>
+                  <li><strong>Inoculation:</strong> Pipette 1ml of appropriate dilutions into sterile petri dishes.</li>
+                  <li><strong>Plating:</strong> Pour VRBA, mix, and after solidification, add an overlay of the same medium.</li>
+                  <li><strong>Incubation:</strong> Incubate inverted dishes at 37°C for 24h.</li>
+                  <li><strong>Counting:</strong> Count characteristic dark red colonies (≥0.5 mm diameter).</li>
                 </ol>`,
-              calculation: '<code>कोलीफॉर्म/जी (या एमएल) = विशिष्ट कॉलोनियों की औसत संख्या × तनुकरण कारक</code>'
+              calculation: 'Calculate the weighted mean N for coliforms using a similar formula as SPC, retaining dishes with 15 to 150 colonies.'
+            },
+            {
+              id: 'dmscc',
+              title: 'Direct Microscopic Somatic Cell Count (DMSCC)',
+              principle: 'The number of somatic cells in raw milk provides a measure of mastitis or other abnormal milk secretions. A film of milk is stained and cells are counted under a microscope.',
+              procedure: `
+                <ol class='list-decimal list-inside space-y-2 mt-2'>
+                  <li><strong>Estimation of Single Strip Factor (SSF):</strong> Calibrate the microscope to determine the SSF.</li>
+                  <li><strong>Preparation of Milk Film:</strong> Spread 0.01ml of warmed, mixed milk uniformly over a 1cm² area on a slide and dry.</li>
+                  <li><strong>Staining:</strong> Defat, fix, and stain the smear using Newman\'s stain.</li>
+                  <li><strong>Examination and Counting:</strong> Examine under oil immersion and count all somatic cells within a defined strip across the film.</li>
+                </ol>`,
+              calculation: '<code>DMSCC per ml = No. of somatic cells in a single strip × SSF</code>'
+            },
+             {
+              id: 'drug_residues',
+              title: 'Veterinary Drug Residues (Delvotest)',
+              principle: 'Based on the germination and growth of Bacillus stearothermophilus spores. If inhibitory substances (like antibiotics) are present in the milk, the spores will not grow, and the pH indicator in the medium will not change color.',
+              procedure: `
+                <ol class='list-decimal list-inside space-y-2 mt-2'>
+                  <li>Add 0.1 ml of the milk sample to an ampoule containing the agar medium with spores and indicator.</li>
+                  <li>Incubate the ampoule at 63°C to 66°C for 2.5 hours.</li>
+                  <li>Observe the color change.</li>
+                </ol>`,
+              calculation: '<strong>Interpretation:</strong> A yellow color indicates a negative result (no antibiotics). If the color remains purple, the result is positive for inhibitory substances.'
             },
             {
               id: 'yeast_mould',
-              title: 'खमीर और मोल्ड गणना',
-              principle: 'खमीर और मोल्ड अम्लीय वातावरण में बढ़ सकते हैं, इसलिए उनकी गणना के लिए एक अम्लीय माध्यम (जैसे पोटैटो डेक्सट्रोज अगर, पीडीए) का उपयोग किया जाता है।',
+              title: 'Yeast and Mould Count',
+              principle: 'Yeasts and moulds can grow in acidic environments, so an acidic medium (like Potato Dextrose Agar, PDA) is used for their enumeration.',
               procedure: `
                  <ol class='list-decimal list-inside space-y-2 mt-2'>
-                  <li><strong>नमूना और तनुकरण:</strong> टीपीसी विधि के अनुसार क्रमिक तनुकरण तैयार करें।</li>
-                  <li><strong>प्लेटिंग:</strong> प्रत्येक तनुकरण से 1 मिलीलीटर को बाँझ पेट्री प्लेटों में स्थानांतरित करें (स्प्रेड प्लेट विधि बेहतर है)।</li>
-                  <li><strong>मीडिया:</strong> प्लेटों में पहले से डाला हुआ पोटैटो डेक्सट्रोज अगर (PDA) होना चाहिए, जिसका पीएच ~3.5 (टार्टरिक एसिड के साथ) पर समायोजित किया गया हो ताकि जीवाणु वृद्धि को रोका जा सके।</li>
-                  <li><strong>ऊष्मायन:</strong> प्लेटों को 22-25 डिग्री सेल्सियस पर 5 दिनों के लिए ऊष्मायन करें।</li>
-                  <li><strong>गिनती:</strong> खमीर (आमतौर पर चमकदार, गोल) और मोल्ड (कपास जैसी, फैलने वाली) की कॉलोनियों को अलग-अलग गिनें।</li>
+                  <li><strong>Sample & Dilutions:</strong> Prepare serial dilutions as in the TPC method.</li>
+                  <li><strong>Plating:</strong> Transfer 1ml of each dilution to sterile Petri plates (Spread Plate method is better).</li>
+                  <li><strong>Media:</strong> Plates should contain pre-poured Potato Dextrose Agar (PDA), with pH adjusted to ~3.5 (with tartaric acid) to inhibit bacterial growth.</li>
+                  <li><strong>Incubation:</strong> Incubate plates at 22-25°C for 5 days.</li>
+                  <li><strong>Counting:</strong> Count colonies of yeasts (typically shiny, round) and moulds (cotton-like, spreading) separately.</li>
                 </ol>`,
-              calculation: '<code>खमीर/मोल्ड गणना/जी (या एमएल) = कॉलोनियों की औसत संख्या × तनुकरण कारक</code>'
+              calculation: '<code>Yeast/Mould Count/g (or ml) = Average no. of colonies × Dilution factor</code>'
             }
           ]
         }
@@ -249,34 +272,57 @@ export const microbiologyContent = {
           intro: "Several standard microbiological tests are performed to ensure the safety and quality of dairy products. Here is an overview of some key test methods:",
           tests: [
             {
-              id: 'tpc',
-              title: 'Aerobic Mesophilic Plate Count (Total Plate Count)',
-              principle: 'This test measures the total number of viable (living) bacteria and fungi in a sample that can grow in the presence of oxygen at moderate (mesophilic) temperatures. It is also known as Standard Plate Count (SPC) or Total Viable Count (TVC).',
+              id: 'spc',
+              title: 'Standard Plate Count (SPC) of Milk',
+              principle: 'Classically SPC procedures are used to determine the Total Plate Count (TPC) or Aerobic Plate Count (APC) or Total Viable Count (TVC). SPC is the standard method to which other screening tests are compared.',
               procedure: `
                 <ol class='list-decimal list-inside space-y-2 mt-2'>
-                  <li><strong>Sample Preparation:</strong> Create a 1:10 dilution by mixing 10g or 10ml of the sample with 90ml of sterile diluent (e.g., peptone water).</li>
-                  <li><strong>Serial Dilutions:</strong> Prepare further serial dilutions from this (1:100, 1:1000, etc.).</li>
-                  <li><strong>Plating:</strong> Transfer 1ml of each dilution into two sterile Petri plates (Pour Plate Method).</li>
-                  <li><strong>Media:</strong> Pour 15-20ml of melted Plate Count Agar (PCA), cooled to 45°C, into the plates. Gently swirl to mix.</li>
-                  <li><strong>Incubation:</strong> Incubate the plates inverted at 35-37°C for 24-48 hours.</li>
-                  <li><strong>Counting:</strong> Select plates with between 25 and 250 colonies. Count the colonies using a colony counter.</li>
+                  <li><strong>Preparation of Diluent-Phosphate Buffer Solution:</strong> Prepare stock and bench solutions as specified.</li>
+                  <li><strong>Preparation of Medium:</strong> Use Plate Count Agar (PCA) or Standard Method Agar.</li>
+                  <li><strong>Preparation of Test Samples:</strong> Thoroughly agitate the milk sample. Prepare decimal dilutions (10⁻¹, 10⁻², etc.).</li>
+                  <li><strong>Inoculation and Incubation:</strong> Pipette 1ml of appropriate dilutions into sterile petri dishes. Pour melted PCA, mix, and solidify. Incubate inverted at 37°C for 48h.</li>
+                  <li><strong>Counting:</strong> Count colonies in dishes containing between 15 and 300 colonies.</li>
                 </ol>`,
-              calculation: '<code>CFU/g (or ml) = (Average no. of colonies × Dilution factor) / Volume of sample plated (ml)</code>'
+              calculation: `Calculate the weighted mean N using the formula: <code>N = ΣC / { (n1 + 0.1n2) d }</code>`
             },
             {
               id: 'coliforms',
-              title: 'Detection of Coliforms, Faecal Coliforms & E.coli',
-              principle: 'Coliforms ferment lactose to produce acid and gas. They are enumerated on Violet Red Bile Agar (VRBA). E. coli is a faecal coliform confirmed by specific biochemical tests.',
+              title: 'Coliform Count',
+              principle: 'Coliforms ferment lactose with the production of acid and gas. They are detected using Violet Red Bile Agar (VRBA). Their presence suggests unsanitary conditions.',
               procedure: `
                 <ol class='list-decimal list-inside space-y-2 mt-2'>
-                  <li><strong>Sample & Dilutions:</strong> Prepare serial dilutions as in the TPC method.</li>
-                  <li><strong>Plating:</strong> Pipette 1ml from each dilution into sterile Petri plates.</li>
-                  <li><strong>Media:</strong> Pour 15-20ml of melted VRBA and mix. After solidification, add another layer of VRBA on top (overlay).</li>
-                  <li><strong>Incubation:</strong> Incubate the plates at 35-37°C for 18-24 hours.</li>
-                  <li><strong>Counting:</strong> Count red-purple colonies (0.5mm or more in diameter) as coliforms.</li>
-                  <li><strong>Confirmation (E.coli):</strong> Inoculate suspected colonies into Brilliant Green Lactose Bile (BGLB) broth and incubate at 44.5°C. Gas production indicates the presence of E. coli. Further confirmation is done by IMViC tests.</li>
+                  <li><strong>Preparation:</strong> Prepare dilutions and Violet Red Bile Agar (VRBA) medium.</li>
+                  <li><strong>Inoculation:</strong> Pipette 1ml of appropriate dilutions into sterile petri dishes.</li>
+                  <li><strong>Plating:</strong> Pour VRBA, mix, and after solidification, add an overlay of the same medium.</li>
+                  <li><strong>Incubation:</strong> Incubate inverted dishes at 37°C for 24h.</li>
+                  <li><strong>Counting:</strong> Count characteristic dark red colonies (≥0.5 mm diameter).</li>
                 </ol>`,
-              calculation: '<code>Coliforms/g (or ml) = Average no. of characteristic colonies × Dilution factor</code>'
+              calculation: 'Calculate the weighted mean N for coliforms using a similar formula as SPC, retaining dishes with 15 to 150 colonies.'
+            },
+            {
+              id: 'dmscc',
+              title: 'Direct Microscopic Somatic Cell Count (DMSCC)',
+              principle: 'The number of somatic cells in raw milk provides a measure of mastitis or other abnormal milk secretions. A film of milk is stained and cells are counted under a microscope.',
+              procedure: `
+                <ol class='list-decimal list-inside space-y-2 mt-2'>
+                  <li><strong>Estimation of Single Strip Factor (SSF):</strong> Calibrate the microscope to determine the SSF.</li>
+                  <li><strong>Preparation of Milk Film:</strong> Spread 0.01ml of warmed, mixed milk uniformly over a 1cm² area on a slide and dry.</li>
+                  <li><strong>Staining:</strong> Defat, fix, and stain the smear using Newman\'s stain.</li>
+                  <li><strong>Examination and Counting:</strong> Examine under oil immersion and count all somatic cells within a defined strip across the film.</li>
+                </ol>`,
+              calculation: '<code>DMSCC per ml = No. of somatic cells in a single strip × SSF</code>'
+            },
+             {
+              id: 'drug_residues',
+              title: 'Veterinary Drug Residues (Delvotest)',
+              principle: 'Based on the germination and growth of Bacillus stearothermophilus spores. If inhibitory substances (like antibiotics) are present in the milk, the spores will not grow, and the pH indicator in the medium will not change color.',
+              procedure: `
+                <ol class='list-decimal list-inside space-y-2 mt-2'>
+                  <li>Add 0.1 ml of the milk sample to an ampoule containing the agar medium with spores and indicator.</li>
+                  <li>Incubate the ampoule at 63°C to 66°C for 2.5 hours.</li>
+                  <li>Observe the color change.</li>
+                </ol>`,
+              calculation: '<strong>Interpretation:</strong> A yellow color indicates a negative result (no antibiotics). If the color remains purple, the result is positive for inhibitory substances.'
             },
             {
               id: 'yeast_mould',
@@ -296,3 +342,5 @@ export const microbiologyContent = {
         }
     }
 }
+
+    
