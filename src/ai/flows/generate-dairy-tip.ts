@@ -25,7 +25,7 @@ export async function generateDairyTip(): Promise<DairyTipOutput> {
 const generateDairyTipPrompt = ai.definePrompt({
     name: 'generateDairyTipPrompt',
     model: 'googleai/gemini-1.5-flash',
-    prompt: `You are an expert dairy and food technologist. Your task is to generate a detailed, insightful, and scientific "Did you know?" style tip related to the dairy or food industry.
+    prompt: `You are an expert dairy and food technologist. Your task is to generate a new, detailed, insightful, and scientific "Did you know?" style tip related to the dairy or food industry.
 
 The response MUST be in Hinglish (a mix of Hindi and English).
 The tone should be educational yet easy for a common person to understand.
@@ -46,10 +46,8 @@ Choose a topic from the following areas:
 - **Acidity Control:** How to chemically decrease milk acidity using neutralizers (like sodium bicarbonate) or naturally increase it during fermentation.
 - **Food Engineering Principles:** In-depth look at a specific piece of equipment like a Pasteurizer (PHE), Homogenizer, Evaporator (including Calandria types), explaining its working principle and critical parameters.
 
-Example of a good, detailed, technical response:
-"**Homogenization ka scientific raaz kya hai?** Homogenization ek mechanical process hai jisme doodh ko high pressure (lagbhag 2000-3000 PSI) par ek chote se gap (homogenizer valve) se force kiya jaata hai. Isse doodh ke bade fat globules (3-6 microns) toot kar 2 micron se bhi chote ho jaate hain. Is process se fat globules ka surface area badh jaata hai, aur un par ek nayi membrane ban jaati hai jisme casein aur whey proteins hote hain. Yeh nayi membrane fat globules ko aapas mein judne se rokti hai, jisse doodh par malai ki layer nahi banti. Isliye homogenized doodh ka texture zyada creamy aur taste rich lagta hai. Two-stage homogenization me, pehle stage ke baad ek lower pressure (around 500 PSI) ka second stage istemal hota hai jo pehle stage me bane छोटे fat clusters ko todta hai, jisse viscosity control hoti hai."
-
-Now, generate a new, different, and equally detailed scientific and technical tip from one of the categories above.`,
+Now, generate a new, different, and detailed scientific and technical tip from one of the categories above. Do not repeat topics frequently.
+`,
 });
 
 const generateDairyTipFlow = ai.defineFlow(
@@ -62,8 +60,11 @@ const generateDairyTipFlow = ai.defineFlow(
     const { text } = await ai.generate({
       prompt: generateDairyTipPrompt,
       history: [], 
-      config: {} 
+      config: {
+          temperature: 1.0,
+      }
     });
-    return text ?? "Homogenization ek mechanical process hai jisme doodh ko high pressure par ek chote se gap se force kiya jaata hai. Isse doodh ke bade fat globules toot kar chote ho jaate hain, jisse doodh par malai ki layer nahi banti aur texture zyada creamy lagta hai.";
+    return text ?? "Did you know? Homogenization is a mechanical process where milk is forced through a small gap at high pressure. This breaks down large fat globules into smaller ones, preventing a cream layer from forming and resulting in a creamier texture.";
   }
 );
+
