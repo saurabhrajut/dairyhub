@@ -23,7 +23,7 @@ const InfoBlock = ({ title, children, noProse }: { title: string, children: Reac
         {noProse ? (
             <div className="text-gray-700">{children}</div>
         ) : (
-            <div className="prose prose-sm max-w-none text-gray-700">{children}</div>
+            <div className="text-base leading-relaxed text-gray-700 break-words">{children}</div>
         )}
     </div>
 );
@@ -46,7 +46,7 @@ function CompositionContent({ content }: { content: any }) {
     return (
         <Section title={content.composition.title} icon={BookOpen}>
             <InfoBlock title={content.composition.whatIsMilk.title}>
-                <div className="prose prose-sm max-w-none break-words">
+                <div className="break-words">
                     <p dangerouslySetInnerHTML={{ __html: content.composition.whatIsMilk.fssaiDef }} />
                     <p dangerouslySetInnerHTML={{ __html: content.composition.whatIsMilk.codexDef }} />
                     <p dangerouslySetInnerHTML={{ __html: content.composition.whatIsMilk.usaDef }} />
@@ -68,16 +68,10 @@ function CompositionContent({ content }: { content: any }) {
                         </TableHeader>
                         <TableBody>
                             {content.composition.generalComposition.rows.map((row: any, i: number) => (
-                                <React.Fragment key={i}>
-                                    <TableRow>
-                                        <TableCell>{row.c1}</TableCell>
-                                        <TableCell className="text-right">{row.v1}</TableCell>
-                                    </TableRow>
-                                     <TableRow>
-                                        <TableCell>{row.c2}</TableCell>
-                                        <TableCell className="text-right">{row.v2}</TableCell>
-                                    </TableRow>
-                                </React.Fragment>
+                                <TableRow key={i}>
+                                    <TableCell>{row.c1}</TableCell>
+                                    <TableCell className="text-right">{row.v1}</TableCell>
+                                </TableRow>
                             ))}
                         </TableBody>
                     </Table>
@@ -108,7 +102,7 @@ function CompositionContent({ content }: { content: any }) {
                 </div>
             </InfoBlock>
             <InfoBlock title={content.composition.water.title}>
-                <div className="prose prose-sm max-w-none break-words">
+                <div className="break-words">
                     <p>{content.composition.water.p1}</p>
                     <ul className="list-disc list-inside mt-2 space-y-1">
                          {content.composition.water.forms.map((form: any, i: number) => <li key={i}><strong className="font-semibold">{form.name}:</strong> {form.desc}</li>)}
