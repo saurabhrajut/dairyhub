@@ -119,23 +119,18 @@ export const adulterationContent = {
               `
           },
           {
-              title: "प्रत्यक्ष सूक्ष्मदर्शी गणना (Direct Microscopic Count)",
+              title: "डायरेक्ट माइक्रोस्कोपिक सोमैटिक सेल काउंट (DMSCC)",
               content: `
                   <p><strong>परिचय:</strong> इस विधि में, दूध की एक मापी हुई मात्रा (0.01 मिली) को एक कांच की स्लाइड पर एक निर्दिष्ट क्षेत्र (1 वर्ग सेमी) में फैलाकर, रंगकर, और एक यौगिक सूक्ष्मदर्शी के नीचे जांचना शामिल है। सूक्ष्मदर्शी क्षेत्र में जीवाणु कोशिकाओं या कोशिकाओं के गुच्छों की संख्या गिनकर, प्रति मिलीलीटर दूध में कोशिकाओं या गुच्छों की संख्या की गणना की जाती है। यह दूध के एक नमूने की कुल जीवाणु आबादी का तेजी से अनुमान लगाने में सक्षम बनाता है और दूध में संदूषण के स्रोतों का पता लगाने के लिए उपयोगी जानकारी भी प्रकट करता है।</p>
                   <h4 class="font-semibold mt-2">प्रक्रिया:</h4>
                   <ol class="list-disc list-inside mt-1">
-                      <li><strong>सूक्ष्मदर्शी कारक का निर्धारण:</strong> सूक्ष्मदर्शी क्षेत्र के व्यास को मापें और क्षेत्र की गणना करें। सूक्ष्मदर्शी कारक की गणना करें।</li>
+                      <li><strong>माइक्रोस्कोप फैक्टर का निर्धारण:</strong> माइक्रोस्कोप क्षेत्र के व्यास को मापें और क्षेत्र की गणना करें। माइक्रोस्कोपिक कारक की गणना करें।</li>
                       <li><strong>दूध स्मीयर तैयार करना:</strong> 0.01 मिली दूध को एक स्लाइड पर 1 वर्ग सेमी क्षेत्र में समान रूप से फैलाएं और 40-45°C पर सुखाएं।</li>
                       <li><strong>फिल्मों को रंगना:</strong> फिल्मों को न्यूमैन के दाग में 1/2 से 1 मिनट के लिए डुबोएं। यह दाग एक ही ऑपरेशन में वसा को हटाता है, कोशिकाओं को ठीक करता है, और जीवों को दागता है।</li>
-                      <li><strong>सूक्ष्मदर्शी परीक्षा:</strong> तेल विसर्जन उद्देश्य के तहत दागदार फिल्मों की जांच करें। एकल जीवों या कोशिकाओं के गुच्छों की गिनती करें।</li>
+                      <li><strong>माइक्रोस्कोपिक परीक्षा:</strong> तेल विसर्जन उद्देश्य के तहत दागदार फिल्मों की जांच करें। एकल जीवों या कोशिकाओं के गुच्छों की गिनती करें।</li>
                   </ol>
                   <h4 class="font-semibold mt-2">व्याख्या:</h4>
-                  <div class="overflow-x-auto"><table class="w-full"><thead><tr><th>सूक्ष्मदर्शी क्लंप गणना प्रति मिलीलीटर दूध</th><th>जीवाणुविज्ञानी गुणवत्ता</th></tr></thead><tbody>
-                  <tr><td>500,000 से कम</td><td>अच्छा</td></tr>
-                  <tr><td>500,001 से 4,000,000</td><td>संतोषजनक</td></tr>
-                  <tr><td>4,000,000 से 20,000,000</td><td>खराब</td></tr>
-                  <tr><td>20,000,000 से अधिक</td><td>बहुत खराब</td></tr>
-                  </tbody></table></div>
+                  <p>500,000 कोशिकाएं/मिली से अधिक की सोमैटिक सेल काउंट मास्टिटिस का संकेत है।</p>
               `
           },
           {
@@ -645,8 +640,6 @@ export const adulterationContent = {
         adulterants: "Adulterants are substances added to milk to increase its volume or solids-not-fat content to deceive quality tests. Common adulterants include sugar, starch, urea, and vegetable oil."
     },
     platformTests: [
-        // This array should contain the English translations of the Hindi platformTests array.
-        // For brevity, I will only translate the first one.
         {
             title: "Organoleptic Test (Sensory Test)",
             content: `
@@ -661,7 +654,170 @@ export const adulterationContent = {
                 <p>Milk that does not meet the required standards is rejected.</p>
             `
         },
-        // ... all other platform tests translated to English
+        {
+            title: "Clot on Boiling (COB) Test",
+            content: `
+                <p>This is a simple and inexpensive test for a definite result based on the heat stability of milk.</p>
+                <h4 class="font-semibold mt-2">Procedure:</h4>
+                <ul class="list-disc list-inside mt-1">
+                    <li>Take 5 ml of milk in a test tube.</li>
+                    <li>Place it in a boiling water bath.</li>
+                    <li>Remove it from the bath without shaking.</li>
+                    <li>Note any acidic odor or precipitated particles.</li>
+                </ul>
+                <h4 class="font-semibold mt-2">Inference:</h4>
+                <p>The acidity of milk that results in a positive test is usually greater than 0.22 percent (as lactic acid) or has an abnormally high protein content, such as colostrum milk. Because such milk cannot withstand heat treatment during processing, it is not suitable for distribution as liquid milk or for processing.</p>
+            `
+        },
+        {
+            title: "Alcohol Test",
+            content: `
+                <p>A simple and quick alcohol coagulation test is available. It is based on the fact that milk proteins have less stability when exposed to alcohol. The test may fail when the milk has a high content of lactic acid, rennet, milk proteins, or salt, as in mastitis.</p>
+                <h4 class="font-semibold mt-2">Procedure:</h4>
+                <ul class="list-disc list-inside mt-1">
+                    <li>Take 5 ml of milk in a test tube.</li>
+                    <li>Add an equal volume of 68% ethyl alcohol.</li>
+                    <li>Mix the contents well by inverting the test tube.</li>
+                    <li>Check for the formation of coagulation.</li>
+                </ul>
+                <h4 class="font-semibold mt-2">Inference:</h4>
+                <p>If any coagulation forms, fine particles of curd will be visible inside the test tube. This indicates a positive alcohol test and such milk is rejected.</p>
+            `
+        },
+        {
+            title: "Alizarin-Alcohol Test",
+            content: `
+                <p><strong>Introduction:</strong> The stability of milk towards alcohol or high temperatures is significantly affected by developed acidity, sweet curdling as a result of bacterial growth, disturbances in the normal salt balance, and abnormal chemical composition (e.g., colostrum, late lactation, and mastitis milk). The alcohol test is therefore used to assess the stability of milk for heat-processing, especially condensation and sterilization. Adding alizarin to the alcohol helps to detect whether the milk is acidic or alkaline.</p>
+                <h4 class="font-semibold mt-2">Procedure:</h4>
+                <ol class="list-disc list-inside mt-1">
+                    <li>Take 5 ml of milk and an equal volume of alizarin-alcohol solution (0.2% alizarin in 68% ethyl alcohol) in a test tube.</li>
+                    <li>Mix the contents by inverting the test tube several times.</li>
+                    <li>Check for the presence of flakes or clots and note whether the flakes are small or large.</li>
+                    <li>Observe the color of the mixture.</li>
+                </ol>
+                <h4 class="font-semibold mt-2">Interpretation:</h4>
+                <p>The quality of the milk is assessed based on the formation of flakes and clots and the color of the mixture. The presence of flakes or clots (with or without the development of acidity) indicates poor heat stability and unsatisfactory quality of the milk.</p>
+                <div class="overflow-x-auto"><table class="w-full"><thead><tr><th>Flakes/Clots</th><th>Color</th><th>Heat-Stability</th><th>Quality</th></tr></thead><tbody>
+                <tr><td>Negative</td><td>Purple or light red</td><td>Good (Low Acidity)</td><td>Satisfactory</td></tr>
+                <tr><td>Positive</td><td>Purple light red</td><td>Poor (Sweet Curdling)</td><td>Unsatisfactory</td></tr>
+                <tr><td>Positive</td><td>Purple (Alkaline)</td><td>Poor (Late Lactation) or Mastitis</td><td>Unsatisfactory</td></tr>
+                <tr><td>Positive</td><td>Brownish (Acidic)</td><td>Poor (Developed Acidity 0.1-0.2%)</td><td>Unsatisfactory</td></tr>
+                <tr><td>Large Flakes</td><td>Yellow (Highly Acidic)</td><td>Poor (Developed Acidity >0.2%)</td><td>Unsatisfactory</td></tr>
+                </tbody></table></div>
+            `
+        },
+        {
+            title: "Ten-Minute Resazurin Test",
+            content: `
+                <p><strong>Introduction:</strong> This test is intended as a quick method for rapidly detecting poor-quality milk supplies. Resazurin is an oxidation-reduction indicator that is blue in the oxidized state and, upon reduction by bacterial activity or other causes, first irreversibly changes to a pink compound "resorufin" and then to the colorless 'dihydroresorufin'. The second change is a reversible reaction. During the reduction from resazurin (blue) to resorufin (pink) in the first phase, different intermediate shades of color develop in the milk that can be matched with standard color discs in a comparator. During the second phase, the pink color fades rapidly and the milk eventually becomes white with a narrow pink band at the surface. The rate of reduction of resazurin is controlled by the extent of bacterial activity in the milk and can be measured by recording the color changes at any given time. This principle forms the basis of the ten-minute or one-hour resazurin reduction tests for assessing the bacteriological quality of milk. Resazurin is also sensitive to the reducing action of leucocytic cells.</p>
+                <h4 class="font-semibold mt-2">Procedure:</h4>
+                <ol class="list-disc list-inside mt-1">
+                    <li>Take a milk sample from a can, then transfer 10 ml to a sterile test tube.</li>
+                    <li>Add 1 ml of bench resazurin solution (0.05%), insert the stopper, and mix by inverting.</li>
+                    <li>Place in a water bath maintained at 37.5°C.</li>
+                    <li>At the end of 10 minutes, remove the tube from the water bath.</li>
+                    <li>Place the tube in the right section of the comparator. Place a control milk tube in the left section of the comparator to compensate for natural color.</li>
+                    <li>The standard resazurin disc is rotated until the sample matches and the corresponding disc reading is noted. When the color falls between two disc numbers, it will be recorded as a half value.</li>
+                </ol>
+                <h4 class="font-semibold mt-2">Results:</h4>
+                <p>The results and classification of samples according to the following standards are given in the table:</p>
+                <div class="overflow-x-auto"><table class="w-full"><thead><tr><th>Sr.No.</th><th>Resazurin Disc Reading</th><th>Keeping Quality</th><th>Remarks</th></tr></thead><tbody>
+                <tr><td>1</td><td>6, 5 or 4</td><td>Satisfactory</td><td>Accept milk</td></tr>
+                <tr><td>2</td><td>3.5 to 1</td><td>Doubtful</td><td>Requires further investigation</td></tr>
+                <tr><td>3</td><td>0.5 to 0</td><td>Unsatisfactory</td><td>Reject milk</td></tr>
+                </tbody></table></div>
+            `
+        },
+        {
+            title: "One-Hour Resazurin Reduction Test",
+            content: `
+                <p><strong>Introduction:</strong> Resazurin is an oxidation-reduction indicator that first turns from blue to pink (resorufin) and then to colorless (dihydroresorufin). The rate of this change indicates the bacterial activity in the milk. The one-hour test is used to grade raw milk supplies.</p>
+                <h4 class="font-semibold mt-2">Interpretation:</h4>
+                <p>The following standards are used as a guide for grading raw milk supplies:</p>
+                <div class="overflow-x-auto"><table class="w-full"><thead><tr><th>One Hour Resazurin Disc Number</th><th>Quality of Milk</th></tr></thead><tbody>
+                <tr><td>4 or more</td><td>Good</td></tr>
+                <tr><td>3.5 to 1</td><td>Satisfactory</td></tr>
+                <tr><td>0.5 to 0</td><td>Poor</td></tr>
+                </tbody></table></div>
+            `
+        },
+        {
+            title: "Direct Microscopic Somatic Cell Count (DMSCC)",
+            content: `
+                <p><strong>Introduction:</strong> In this method, a measured volume of milk (0.01 ml) is spread over a specified area (1 sq. cm) on a glass slide, stained, and examined under a compound microscope. By counting the number of bacterial cells or clumps of cells in a microscopic field, the number of cells or clumps per ml of milk is calculated. This enables a rapid estimation of the total bacterial population of a milk sample and also reveals useful information for locating the sources of contamination in milk.</p>
+                <h4 class="font-semibold mt-2">Procedure:</h4>
+                <ol class="list-disc list-inside mt-1">
+                    <li><strong>Determination of Microscopic Factor:</strong> Measure the diameter of the microscopic field and calculate the area. Calculate the microscopic factor.</li>
+                    <li><strong>Preparation of Milk Smear:</strong> Spread 0.01 ml of milk uniformly over a 1 sq. cm area on a slide and dry at 40-45°C.</li>
+                    <li><strong>Staining the Films:</strong> Immerse the films in Newman's stain for 1/2 to 1 minute. This stain removes fat, fixes cells, and stains organisms in a single operation.</li>
+                    <li><strong>Microscopic Examination:</strong> Examine the stained films under an oil immersion objective. Count single organisms or clumps of cells.</li>
+                </ol>
+                <h4 class="font-semibold mt-2">Interpretation:</h4>
+                <p>A somatic cell count of more than 500,000 cells/ml is indicative of mastitis.</p>
+            `
+        },
+        {
+            title: "Detection of Mastitis",
+            content: `
+                <p><strong>Introduction:</strong> Mastitis, an inflammation of the udder, is one of the most common diseases of dairy cattle and buffaloes. It reduces milk yield, alters the chemical composition of milk, and makes the milk unsuitable for use. Several simple field and laboratory tests are used to detect mastitis infection.</p>
+                <h4 class="font-semibold mt-2">Strip-Cup Test:</h4>
+                <p>This is a simple field test used to detect the presence of fibrin, mucus, and milk clots in the foremilk. Wash the first 2 or 3 streams of foremilk onto a strip-cup (a black cloth stretched over a cup) and check for the presence of clots.</p>
+                <h4 class="font-semibold mt-2">Bromothymol Blue Test:</h4>
+                <p>This test is based on the fact that milk from infected udders is usually alkaline in reaction (pH 7.0 to 7.4). Add one ml of indicator solution to 5 ml of milk. A greenish-blue or blue color indicates mastitis infection.</p>
+                <h4 class="font-semibold mt-2">Leucocyte Count:</h4>
+                <p>Milk from infected quarters usually contains an excessive number of leucocyte cells. A microscopic examination of milk smears is carried out, and a leucocyte count of more than 500,000 per ml is indicative of mastitis infection.</p>
+            `
+        },
+        {
+            title: "Standard Operating Procedures (SOPs) for Acidity and Alkaline Phosphatase Test",
+            content: `
+                <h4 class="font-semibold mt-2">Acidity of Milk:</h4>
+                <p>The titratable acidity of milk is estimated to detect its keeping quality and heat stability. It is measured by a standardized titration using 0.1 N sodium hydroxide solution with phenolphthalein indicator.</p>
+                <h4 class="font-semibold mt-2">Phosphatase Test for Pasteurized Milk:</h4>
+                <p>This test is performed to determine the efficacy of pasteurization of milk. The principle is that the enzyme phosphatase is destroyed during pasteurization. If the test is positive (a yellow color develops), it indicates improper pasteurization.</p>
+            `
+        },
+        {
+            title: "Total Solids (TS) and Solids-Not-Fat (SNF) Test with Lactometer",
+            content: `
+                <p><strong>Principle:</strong> This test uses a lactometer to measure the specific gravity of milk, which is then used in Richmond's formula along with the fat percentage to estimate SNF and TS.</p>
+                <h4 class="font-semibold mt-2">Procedure:</h4>
+                <ul class="list-disc list-inside mt-1">
+                    <li>Determine the fat percentage of the milk using the Gerber method.</li>
+                    <li>Warm the milk sample to 40°C and then cool it to 27°C.</li>
+                    <li>Pour the milk into a lactometer jar and gently insert an ISI-marked lactometer.</li>
+                    <li>Record the lactometer reading (LR) at the top of the meniscus.</li>
+                    <li>Apply temperature and fat corrections to get the Corrected Lactometer Reading (CLR).</li>
+                </ul>
+                <h4 class="font-semibold mt-2">Calculation:</h4>
+                <pre><code>SNF (%) = (CLR / 4) + (0.25 * Fat %) + 0.72 (for cow milk)</code></pre>
+                <pre><code>Total Solids (TS %) = Fat % + SNF %</code></pre>
+                <p class="text-xs"><strong>Ref:</strong> IS:1479 (1960)</p>
+            `
+        },
+        {
+            title: "Freezing Point Test",
+            content: `
+                <p><strong>Principle:</strong> The freezing point of milk is one of its most constant properties (-0.512 to -0.575 °C). The addition of water to milk raises the freezing point closer to the freezing point of water, 0°C.</p>
+                <h4 class="font-semibold mt-2">Procedure:</h4>
+                <p>This test is performed using a specialized instrument called a cryoscope. The instrument supercools the milk sample and then induces crystallization, accurately measuring the temperature at which it freezes.</p>
+                <h4 class="font-semibold mt-2">Inference:</h4>
+                <p>A freezing point higher than the standard range is a definitive indication of added water.</p>
+            `
+        },
+        {
+            title: "Sedimentation Test",
+            content: `
+                <p><strong>Principle:</strong> This test measures the amount of visible dirt and foreign matter in milk.</p>
+                <h4 class="font-semibold mt-2">Procedure:</h4>
+                <ul class="list-disc list-inside mt-1">
+                    <li>A known volume of milk (e.g., 500 ml) is filtered through a special sediment test disc.</li>
+                    <li>The disc is then dried and compared with standard sediment discs to grade the milk.</li>
+                </ul>
+                <h4 class="font-semibold mt-2">Inference:</h4>
+                <p>A high amount of sediment indicates poor hygiene during milking and udder health.</p>
+            `
+        }
     ],
     preservatives: [
         // English translations of preservatives tests
@@ -679,10 +835,97 @@ export const adulterationContent = {
                 </div>
             `
         },
-        // ... all other preservatives tests translated
+         {
+              title: 'Boric Acid and Borates',
+              content: `
+                  <div class="prose max-w-none prose-blue">
+                      <p><strong>Principle:</strong> Boric acid and its salts give a red color with turmeric paper.</p>
+                      <ol>
+                          <li>Take 5 ml of milk in a test tube and add 1 ml of conc. HCl.</li>
+                          <li>Mix well, then dip a strip of turmeric paper.</li>
+                          <li>Dry the paper strip and observe the color change.</li>
+                          <li>A <strong>red color</strong> on the paper indicates the presence of boric acid.</li>
+                          <li>Then add a drop of ammonium hydroxide solution.</li>
+                          <li>A change from red to <strong>dark bluish-green</strong> confirms the presence of boric acid.</li>
+                      </ol>
+                  </div>
+              `
+          },
+          {
+              title: 'Formalin (Formaldehyde)',
+              content: `
+                  <div class="prose max-w-none prose-blue">
+                      <h4>Method 1: Leach Test</h4>
+                      <p><strong>Principle:</strong> Formaldehyde gives a violet colour in the presence of ferric salts with conc. sulphuric acid.</p>
+                      <ol>
+                          <li>Take about 5 ml of milk in a test tube.</li>
+                          <li>Add to it an equal volume of detecting reagent (Conc. HCl + 10% FeCl3 soln).</li>
+                          <li>Place the tube in a boiling water bath for about 3-4 mins.</li>
+                          <li>Appearance of <strong>brownish-pink colour</strong> confirms the presence of formalin in the sample, whereas; the control sample will remain white.</li>
+                      </ol>
+                      <h4 class="mt-4">Method 2: Chromotropic Acid Test</h4>
+                       <p><strong>Principle:</strong> Formaldehyde reacts with chromotropic acid to form a colored compound.</p>
+                      <ol>
+                          <li>Take 1 ml of milk in a test tube.</li>
+                          <li>Add 1 ml of chromotropic acid reagent and mix well.</li>
+                          <li>Appearance of <strong>yellow color</strong> confirms the presence of formalin, while the control sample remains white.</li>
+                      </ol>
+                      <p class="text-xs"><strong>Ref:</strong> IS:1479 (1960)</p>
+                  </div>
+              `
+          },
+           {
+              title: 'Hydrogen Peroxide (H₂O₂)',
+              content: `
+                  <div class="prose max-w-none prose-blue">
+                      <h4>Method 1: Para-Phenylenediamine Test</h4>
+                      <p><strong>Principle:</strong> Hydrogen peroxide oxidizes para-phenylenediamine, causing its color to change from yellow to blue.</p>
+                      <ol>
+                          <li>Take 2 ml milk in a test tube and add an equal volume of raw milk.</li>
+                          <li>Add 2 drops of 2% para-phenylenediamine solution and shake well.</li>
+                          <li>Appearance of <strong>blue colour</strong> confirms the presence of hydrogen peroxide.</li>
+                      </ol>
+                      
+                      <h4 class="mt-4">Method 2: Potassium Iodide and Starch Test</h4>
+                       <p><strong>Principle:</strong> H₂O₂ oxidizes potassium iodide (KI) to iodine (I₂), which then reacts with starch to form a blue complex.</p>
+                      <ol>
+                          <li>Take 1 ml milk and add 1 ml of potassium iodide-starch reagent.</li>
+                          <li>Appearance of a <strong>blue color</strong> indicates the presence of H₂O₂.</li>
+                      </ol>
+                  </div>
+              `
+          },
+          {
+              title: 'Salicylic Acid and Benzoic Acid',
+              content: `
+                   <div class="prose max-w-none prose-blue">
+                      <p><strong>Principle:</strong> These acids are extracted with ether and then react with ferric chloride to produce characteristic colors.</p>
+                      <ol>
+                          <li>Acidify 10 ml of milk with HCl and extract with ethyl ether.</li>
+                          <li>Evaporate the ether. Dissolve the residue in water.</li>
+                          <li>Add a few drops of 0.5% neutral ferric chloride solution.</li>
+                          <li><strong>Salicylic Acid:</strong> A violet color indicates its presence.</li>
+                          <li><strong>Benzoic Acid:</strong> A salmon-colored precipitate indicates its presence.</li>
+                      </ol>
+                  </div>
+              `
+          },
+          {
+              title: 'Hypochlorites and Chloramines',
+              content: `
+                  <div class="prose max-w-none prose-blue">
+                      <p><strong>Principle:</strong> These strong oxidizing agents can be detected by their reaction with potassium iodide and starch.</p>
+                      <ol>
+                          <li>Add 5 ml of milk to a test tube.</li>
+                          <li>Add 1.5 ml of 7% potassium iodide solution and mix.</li>
+                          <li>Add 4 ml of dilute HCl and mix.</li>
+                          <li>In the presence of hypochlorite, a <strong>yellowish-brown to deep mauve color</strong> develops.</li>
+                      </ol>
+                  </div>
+              `
+          }
     ],
     adulterants: [
-        // English translations of adulterants tests
         {
             title: 'Cane Sugar',
             content: `
@@ -697,8 +940,285 @@ export const adulterationContent = {
                 </div>
             `
         },
-        // ... all other adulterants tests translated
-    ]
+         {
+              title: 'Starch and Other Cereal Flours',
+              content: `
+                  <div class="prose max-w-none prose-green">
+                      <h4>Method 1: Using Iodine (with unboiled milk sample)</h4>
+                      <ol>
+                          <li>Take 1ml of milk in a test tube.</li>
+                          <li>Add 2 drops of iodine solution.</li>
+                          <li>Appearance of a <strong>blue color</strong> indicates the presence of starch.</li>
+                      </ol>
+
+                      <h4 class="mt-4">Method 2: Using Iodine (with boiled milk sample)</h4>
+                      <p><strong>Principle:</strong> Starch forms a purple-blue complex with iodine.</p>
+                      <ol>
+                          <li>Boil 3-5 ml of milk and cool to room temperature.</li>
+                          <li>Add 1-2 drops of iodine solution. A <strong>blue color</strong> indicates starch, which disappears on boiling and reappears on cooling.</li>
+                      </ol>
+                      <p class="text-xs"><strong>Ref:</strong> IS:1479 (1960)</p>
+                  </div>
+              `
+          },
+          {
+              title: 'Cellulose',
+              content: `
+                  <div class="prose max-w-none prose-green">
+                      <p><strong>Principle:</strong> Cellulose is insoluble. It can be detected by its reaction with iodinated zinc chloride.</p>
+                      <ol>
+                          <li>Take 10 ml of milk and add 10-15 drops of conc. nitric acid.</li>
+                          <li>Filter the coagulated mass and wash with water.</li>
+                          <li>Boil the residue with 1-2 ml of iodinated zinc chloride reagent.</li>
+                          <li>Appearance of <strong>blue or violet color</strong> indicates the presence of cellulose.</li>
+                      </ol>
+                  </div>
+              `
+          },
+          {
+              title: 'Urea',
+              content: `
+                  <div class="prose max-w-none prose-green">
+                      <h4>Method 1: DMAB and TCA Method</h4>
+                      <p><strong>Principle:</strong> Urea forms a yellow complex with p-dimethylaminobenzaldehyde (DMAB) in a slightly acidic solution.</p>
+                       <ol>
+                          <li>Take equal volumes of milk and 24% TCA in a test tube, mix and filter.</li>
+                          <li>Take 3 ml of filtrate in another test tube.</li>
+                          <li>Add 3 ml of 1.6% DMAB reagent.</li>
+                          <li>A <strong>distinct yellow colour</strong> indicates added urea.</li>
+                      </ol>
+                      <h4 class="mt-4">Method 2: DMAB Reagent Method</h4>
+                      <ol>
+                          <li>Take 1 ml of milk in a test tube.</li>
+                          <li>Add 1 ml of 1.6% DMAB reagent.</li>
+                          <li>A <strong>distinct yellow colour</strong> indicates added urea.</li>
+                      </ol>
+                      <p class="text-xs"><strong>Ref:</strong> IS:1479 (1960), FSSAI 2006 (Limit: 70mg/100ml)</p>
+                  </div>
+              `
+          },
+          {
+              title: 'Glucose',
+              content: `
+                  <div class="prose max-w-none prose-green">
+                      <p><strong>Principle:</strong> Using a modified Barfoed's test, glucose reduces cupric ions to cuprous, which then reduces phosphomolybdic acid to form a blue compound.</p>
+                      <ol>
+                          <li>Take 1 ml of milk, add 1 ml of modified Barfoed’s reagent.</li>
+                          <li>Heat in a boiling water bath for 3 min, then cool.</li>
+                          <li>Add 1 ml of phosphomolybdic acid reagent.</li>
+                          <li>An immediate formation of a <strong>deep blue colour</strong> indicates added glucose.</li>
+                      </ol>
+                  </div>
+              `
+          },
+          {
+              title: 'Maltodextrin',
+              content: `
+                  <div class="prose max-w-none prose-green">
+                      <h4>Method 1: Using Iodine Reagent</h4>
+                      <ol>
+                         <li>Take 5 ml of milk sample in a test tube.</li>
+                         <li>Add 2 ml of iodine solution (0.05 N) and mix.</li>
+                         <li>Appearance of a <strong>chocolate-like red-brown color</strong> indicates the presence of dextrin/maltodextrin.</li>
+                      </ol>
+                      <h4 class="mt-4">Method 2: Using Citric Acid and Iodine Reagents</h4>
+                      <ol>
+                         <li>Boil 20 ml of milk, cool to 70°C, and coagulate by adding 0.5 ml of 10% citric acid.</li>
+                         <li>Filter the coagulated milk.</li>
+                         <li>To 2 ml of the filtrate, add 3 drops of iodine solution.</li>
+                         <li>An <strong>orange-brown shade</strong> indicates the presence of maltodextrin.</li>
+                      </ol>
+                  </div>
+              `
+          },
+          {
+              title: 'Detergents',
+              content: `
+                  <div class="prose max-w-none prose-red">
+                      <p><strong>Principle:</strong> Anionic detergents form a complex with the cationic dye methylene blue. This complex is soluble in chloroform.</p>
+                      <ol>
+                          <li>Take 1 ml milk, add 1 ml of methylene blue solution and then 2 ml chloroform.</li>
+                          <li>Vortex for 15 seconds and then centrifuge at 1100 rpm for 3 minutes.</li>
+                          <li>A more <strong>intense blue colour in the lower (chloroform) layer</strong> indicates the presence of detergent. If the upper layer is more intense, the detergent is absent.</li>
+                      </ol>
+                  </div>
+              `
+          },
+          {
+              title: 'Ammonium Compounds (Sulphates)',
+              content: `
+                  <div class="prose max-w-none prose-green">
+                      <h4>Method 1: Nessler's Reagent Method</h4>
+                       <ol>
+                          <li>Take 5 ml of milk sample in a test tube.</li>
+                          <li>Add 1 ml of Nessler's reagent.</li>
+                          <li>Appearance of <strong>yellowish or grey colour</strong> confirms the presence of added ammonium salts.</li>
+                      </ol>
+                      <h4 class="mt-4">Method 2: Turmeric Paper Method</h4>
+                      <p><strong>Principle:</strong> Ammonium salts release ammonia in alkaline conditions, which turns wet turmeric paper red.</p>
+                      <ol>
+                          <li>Take 5ml of milk and add 1ml of 10% NaOH.</li>
+                          <li>Place a wet turmeric paper on the rim of the test tube.</li>
+                          <li>Appearance of <strong>pinkish red colour</strong> on the paper confirms the presence of ammonium salt.</li>
+                      </ol>
+                       <h4 class="mt-4">Method 3: Sulfate Detection (with BaCl₂)</h4>
+                      <p><strong>Principle:</strong> Sulphates precipitate with Barium Chloride (BaCl₂).</p>
+                      <ol>
+                          <li>Take 10 ml of milk and add 10 ml of Trichloroacetic acid (TCA) to coagulate it.</li>
+                          <li>Filter the milk and take 5 ml of the clear filtrate.</li>
+                          <li>Add a few drops of 5% BaCl₂ solution.</li>
+                          <li>Formation of a <strong>milky-white precipitate</strong> indicates the presence of added sulphates (like ammonium sulphate).</li>
+                      </ol>
+                  </div>
+              `
+          },
+           {
+              title: 'Common Salt (NaCl)',
+              content: `
+                  <div class="prose max-w-none prose-green">
+                      <h4>Silver Nitrate Test</h4>
+                       <p><strong>Principle:</strong> Added salt reacts with silver nitrate. Potassium chromate acts as an indicator.</p>
+                      <ol>
+                          <li>Take 5 ml of milk in a test tube.</li>
+                          <li>Add 1 ml of 0.1 N silver nitrate solution.</li>
+                          <li> Mix and add 0.5 ml of 10% potassium chromate solution.</li>
+                          <li>Appearance of a <strong>yellow colour</strong> indicates added salt, whereas pure milk gives a brick red color.</li>
+                      </ol>
+                  </div>
+              `
+          },
+          {
+              title: 'Vegetable/Refined Oil (Foreign Fat)',
+              content: `
+                  <div class="prose max-w-none prose-green">
+                       <h4>Butyro-Refractometer (BR) Reading Method</h4>
+                       <p><strong>Principle:</strong> Most vegetable oils have a higher refractive index than pure milk fat (ghee).</p>
+                      <ol>
+                          <li>Isolate fat from the milk sample using a modified Gerber butyrometer.</li>
+                          <li>Take the BR reading of the extracted fat at 40°C.</li>
+                          <li>Pure milk fat has a BR reading of 40-43. Any reading higher than 45 suggests the presence of foreign fat.</li>
+                      </ol>
+                      <h4 class="mt-4">Baudouin Test for Vanaspati</h4>
+                      <p><strong>Principle:</strong> Vanaspati is required to contain 5% sesame oil. The sesamol from this oil reacts with furfural to give a red color.</p>
+                      <ol>
+                          <li>Extract ghee from the milk sample.</li>
+                          <li>Take 5g of melted fat, add 5ml concentrated HCl and 0.4ml of 2% furfural solution. Vortex for 2 minutes.</li>
+                          <li>A <strong>pink or red color</strong> in the acid layer indicates vanaspati adulteration.</li>
+                      </ol>
+                      <p class="text-xs"><strong>Ref:</strong> IS 3508 – 1966</p>
+                  </div>
+              `
+          },
+          {
+              title: 'Mineral Oil',
+              content: `
+                  <div class="prose max-w-none prose-green">
+                       <h4>Holde's Test</h4>
+                       <p><strong>Principle:</strong> Mineral oils are non-saponifiable, meaning they do not form soap with alkali, unlike edible fats.</p>
+                      <ol>
+                          <li>Saponify 1g of fat with 25ml of 4% alcoholic KOH.</li>
+                          <li>Add 100ml of hot water.</li>
+                          <li>The appearance of <strong>turbidity</strong> indicates the presence of mineral oil.</li>
+                      </ol>
+                  </div>
+              `
+          },
+           {
+              title: 'Animal Body Fat (e.g., Lard)',
+              content: `
+                  <div class="prose max-w-none prose-green">
+                       <h4>Opacity Test</h4>
+                       <p><strong>Principle:</strong> Different fats solidify and become opaque at different rates and temperatures.</p>
+                      <ol>
+                          <li>Melt 5g of ghee at 50°C.</li>
+                          <li>Transfer to a water bath at 23°C and record the time it takes for the sample to become opaque.</li>
+                          <li><strong>Result:</strong> Buffalo ghee takes 14-15 min, cow ghee 18-19 min. A shorter time suggests animal body fat adulteration, while a longer time suggests vegetable oil.</li>
+                      </ol>
+                  </div>
+              `
+          },
+          {
+              title: 'Pond Water (Nitrates)',
+              content: `
+                  <div class="prose max-w-none prose-green">
+                      <p><strong>Principle:</strong> This method detects nitrates/nitrites present in pond water from agricultural fertilizers.</p>
+                      <ol>
+                          <li>Rinse a test tube with the milk sample and drain.</li>
+                          <li>Add 2-3 drops of 2% diphenylamine solution along the side of the test tube.</li>
+                          <li>If the sides of the test tube turn <strong>blue</strong>, the milk contains pond water.</li>
+                      </ol>
+                  </div>
+              `
+          },
+          {
+              title: 'Skimmed Milk Powder (SMP) in Natural Milk',
+              content: `
+                  <div class="prose max-w-none prose-green">
+                      <p><strong>Purpose:</strong> To illegally increase the SNF content of natural milk.</p>
+                      <p><strong>Principle:</strong> The proteins in reconstituted milk powder contain reducing groups that react with phosphomolybdic acid on boiling to give a blue colour.</p>
+                      <ol>
+                          <li>Centrifuge 50 ml of milk to separate the cream.</li>
+                          <li>Coagulate the skim milk portion with acetic acid.</li>
+                          <li>Wash the precipitate, then add 2 ml of 1% phosphomolybdic acid and boil for 15 minutes.</li>
+                          <li>The curd from pure milk will be greenish, whereas the curd from a sample containing SMP will be <strong>bluish</strong>.</li>
+                      </ol>
+                      <p class="text-xs"><strong>Ref:</strong> Journal of Food Science and Technology, Vol 22 (1985)</p>
+                  </div>
+              `
+          },
+           {
+              title: 'Soymilk in Milk',
+              content: `
+                  <div class="prose max-w-none prose-green">
+                      <p>Soymilk is sometimes added to illegally increase the protein content and SNF reading of milk. Several methods exist for its detection.</p>
+                      <h4 class="mt-4">Method I: Polarimeteric method</h4>
+                      <p>Based on the different optical rotation of sugars. Soymilk contains sucrose, raffinose, and stachyose, while bovine milk contains lactose. A significant change in the optical rotation of a protein-free filtrate can indicate soymilk addition.</p>
+                      <h4 class="mt-4">Method II: Isoelectric precipitation method</h4>
+                      <p>Soy proteins precipitate at a higher pH (~5.7) than milk casein (pH 4.6). By adjusting the milk pH to 5.7 and heating, coagulation will occur if soymilk is present.</p>
+                       <h4 class="mt-4">Method III: SDS-PAGE method</h4>
+                      <p>This electrophoretic technique separates proteins based on molecular weight. Soy proteins have different molecular weights than milk proteins and will show up as distinct, extra bands on the gel, confirming adulteration.</p>
+                      <h4 class="mt-4">Method IV: Immunodiffusion method</h4>
+                      <p>Uses antibodies specific to soy proteins. If soy protein is present in the milk, it will react with the antibody to form a visible precipitation line in an agar gel.</p>
+                      <h4 class="mt-4">Method V: HPLC based method</h4>
+                      <p>High-Performance Liquid Chromatography can separate and quantify the different sugars. The presence of stachyose, a sugar found in soybeans but not milk, is a definitive marker for soymilk adulteration.</p>
+                      <h4 class="mt-4">Method VI: Rapid method (Trypsin Inhibition)</h4>
+                      <p>Soymilk contains trypsin inhibitors. This test measures the activity of the enzyme trypsin. If soymilk is present, the trypsin will be inhibited, leading to a reduced color change in a specific chemical reaction compared to a pure milk sample.</p>
+                  </div>
+              `
+          },
+           {
+              title: 'Cheese Whey in Milk',
+              content: `
+                  <div class="prose max-w-none prose-green">
+                      <h4>Ninhydrin based spectrophotometric method</h4>
+                      <p><strong>Principle:</strong> When rennet is used to make cheese, it cleaves a specific part of kappa-casein called glycomacropeptide (GMP), which goes into the whey. This GMP contains sialic acid. The test selectively precipitates GMP from the milk sample and then measures the sialic acid content. A high level of sialic acid indicates the presence of added cheese whey.</p>
+                      <ol>
+                          <li>Glycomacropeptide (GMP) is selectively precipitated from the milk sample using Trichloroacetic acid (TCA).</li>
+                          <li>The precipitate is then treated with an acidic ninhydrin reagent and heated.</li>
+                          <li>The sialic acid bound to the GMP produces a stable yellow-brown color, which is measured with a spectrophotometer at 470 nm.</li>
+                          <li>An absorbance value significantly higher than that of pure milk indicates adulteration with cheese whey.</li>
+                      </ol>
+                  </div>
+              `
+          },
+          {
+              title: 'Gelatine',
+              content: `
+                  <div class="prose max-w-none prose-green">
+                      <p><strong>Purpose:</strong> To increase the thickness and SNF content of milk.</p>
+                      <p><strong>Principle:</strong> Gelatine forms a yellow precipitate with picric acid.</p>
+                      <ol>
+                          <li>Take 10 ml of milk and add 20 ml of Stokes reagent (acid mercuric nitrate).</li>
+                          <li>Shake well and filter.</li>
+                          <li>To the filtrate, add an equal volume of saturated picric acid solution.</li>
+                          <li>A <strong>yellow precipitate</strong> indicates the presence of gelatine.</li>
+                      </ol>
+                  </div>
+              `
+          }
+      ]
   }
 }
+    
+
     
