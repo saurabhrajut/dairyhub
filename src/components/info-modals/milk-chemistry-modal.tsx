@@ -48,6 +48,7 @@ function CompositionContent({ content }: { content: any }) {
             <InfoBlock title={content.composition.whatIsMilk.title}>
                 <div className="prose prose-sm max-w-none break-words">
                     <p dangerouslySetInnerHTML={{ __html: content.composition.whatIsMilk.fssaiDef }} />
+                    <p dangerouslySetInnerHTML={{ __html: content.composition.whatIsMilk.codexDef }} />
                     <p dangerouslySetInnerHTML={{ __html: content.composition.whatIsMilk.usaDef }} />
                     <p>{content.composition.whatIsMilk.p1}</p>
                     <ul className="list-disc list-inside mt-2 space-y-1">
@@ -63,20 +64,18 @@ function CompositionContent({ content }: { content: any }) {
                             <TableRow>
                                 <TableHead>{content.composition.generalComposition.headers[0]}</TableHead>
                                 <TableHead className="text-right">{content.composition.generalComposition.headers[1]}</TableHead>
+                                <TableHead>{content.composition.generalComposition.headers[2]}</TableHead>
+                                <TableHead className="text-right">{content.composition.generalComposition.headers[3]}</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {content.composition.generalComposition.rows.map((row: any, i: number) => (
-                                <React.Fragment key={i}>
-                                    <TableRow>
-                                        <TableCell>{row.c1}</TableCell>
-                                        <TableCell className="text-right">{row.v1}</TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell>{row.c2}</TableCell>
-                                        <TableCell className="text-right">{row.v2}</TableCell>
-                                    </TableRow>
-                                </React.Fragment>
+                                <TableRow key={i}>
+                                    <TableCell>{row.c1}</TableCell>
+                                    <TableCell className="text-right">{row.v1}</TableCell>
+                                    <TableCell>{row.c2}</TableCell>
+                                    <TableCell className="text-right">{row.v2}</TableCell>
+                                </TableRow>
                             ))}
                         </TableBody>
                     </Table>

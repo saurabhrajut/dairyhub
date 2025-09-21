@@ -9,6 +9,7 @@ export const milkChemistryContent = {
             whatIsMilk: {
                 title: "दूध क्या है?",
                 fssaiDef: "<strong>FSSAI परिभाषा:</strong> “दूध एक स्वस्थ दूध देने वाले जानवर से पूर्ण दूध निकालने से प्राप्त सामान्य स्तन स्राव है। यह कोलोस्ट्रम से मुक्त होना चाहिए।”",
+                codexDef: "<strong>कोडेक्स एलिमेंटेरियस परिभाषा:</strong> \"दूध एक या एक से अधिक दूध देने वाले जानवरों का सामान्य स्तन स्राव है, जिसमें से कुछ भी नहीं मिलाया गया है या निकाला नहीं गया है, जिसका उद्देश्य तरल दूध के रूप में उपभोग या आगे की प्रक्रिया के लिए है।\"",
                 usaDef: "<strong>USA की संघीय परिभाषा:</strong> \"दूध एक या एक से अधिक स्वस्थ गायों, जिन्हें ठीक से खिलाया और रखा गया हो, के पूर्ण दूध निकालने से प्राप्त ताजा, स्वच्छ लैक्टियल स्राव है, जिसमें प्रसव से 15 दिन पहले और 10 दिन बाद प्राप्त दूध शामिल नहीं है और जिसमें 8.5 प्रतिशत से कम ठोस-गैर-वसा और 3.25 प्रतिशत से कम दूध वसा नहीं है।\"",
                 p1: "दूध एक जटिल जैविक तरल पदार्थ है जिसे तीन अलग-अलग चरणों में देखा जा सकता है:",
                 phases: ["पायस (Emulsion): वसा ग्लोब्यूल्स पानी में बिखरे हुए हैं।", "कोलाइडल सस्पेंशन (Colloidal Suspension): कैसिइन प्रोटीन मिसेल पानी में निलंबित हैं।", "सच्चा घोल (True Solution): लैक्टोज, मट्ठा प्रोटीन, खनिज और विटामिन पूरी तरह से पानी में घुल जाते हैं।"]
@@ -220,7 +221,8 @@ export const milkChemistryContent = {
             title: "Composition of Milk",
             whatIsMilk: {
                 title: "What is Milk?",
-                fssaiDef: "<strong>FSSAI Definition:</strong> “Milk is the secretion derived from the complete milking of healthy milch animals. It shall be free from colostrum.”",
+                fssaiDef: "<strong>FSSAI Definition:</strong> “Milk is the normal mammary secretion derived from complete milking of a healthy milch animal without either addition thereto or extraction therefrom, unless otherwise provided. It shall be free from colostrum.”",
+                codexDef: "<strong>Codex Alimentarius Definition:</strong> \"Milk is the normal mammary secretion of milking animals obtained from one or more milkings without either addition to it or extraction from it, intended for consumption as liquid milk or for further processing.\"",
                 usaDef: "<strong>Federal Definition of U.S.A.:</strong> \"Milk is the fresh, clean lacteal secretion obtained by the complete milking of one or more healthy cows, properly fed and kept, excluding that obtained within 15 days before and 10 days after calving and containing not less than 8.5 percent solids-not-fat and not less than 3.25 percent milk fat.\"",
                 p1: "Milk is a complex biological fluid that can be seen in three different phases:",
                 phases: ["Emulsion: Fat globules are dispersed in water.", "Colloidal Suspension: Casein protein micelles are suspended in water.", "True Solution: Lactose, whey proteins, minerals, and vitamins are completely dissolved in water."]
@@ -424,4 +426,4 @@ export const milkChemistryContent = {
             }
         }
     }
-};
+}
