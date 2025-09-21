@@ -44,7 +44,7 @@ const Procedure = ({ test }: { test: any }) => (
             </div>
         </AccordionTrigger>
         <AccordionContent>
-            <div className="prose prose-sm max-w-none break-words">
+            <div className="text-sm break-words">
                 {test.procedure && <div dangerouslySetInnerHTML={{ __html: test.procedure }} />}
                 {test.reference && <p className="text-xs text-muted-foreground mt-4"><strong>Ref:</strong> {test.reference}</p>}
             </div>
@@ -88,7 +88,7 @@ export function CompositionalAnalysisModal({ isOpen, setIsOpen }: { isOpen: bool
   const renderContent = () => {
     if (!selectedContent) return null;
     return (
-      <div className="prose prose-sm max-w-none break-words">
+      <div>
           <InfoCard>
               <SectionTitle id={`${activeTopic}-analysis`}>{selectedContent.title}</SectionTitle>
               <Accordion type="single" collapsible className="w-full">
