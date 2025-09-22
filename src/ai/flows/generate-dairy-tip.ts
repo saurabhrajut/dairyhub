@@ -48,6 +48,9 @@ Choose a topic from the following areas:
 
 Now, generate a new, different, and detailed scientific and technical tip from one of the categories above. Do not repeat topics frequently.
 `,
+    config: {
+        temperature: 1.0,
+    }
 });
 
 const generateDairyTipFlow = ai.defineFlow(
@@ -57,13 +60,10 @@ const generateDairyTipFlow = ai.defineFlow(
     outputSchema: DairyTipOutputSchema,
   },
   async () => {
-    const response = await ai.generate({
+    const { text } = await ai.generate({
       prompt: generateDairyTipPrompt,
       history: [], 
-      config: {
-          temperature: 1.0,
-      }
     });
-    return response.text ?? "Did you know? Homogenization is a mechanical process where milk is forced through a small gap at high pressure. This breaks down large fat globules into smaller ones, preventing a cream layer from forming and resulting in a creamier texture.";
+    return text ?? "Did you know? Homogenization is a mechanical process where milk is forced through a small gap at high pressure. This breaks down large fat globules into smaller ones, preventing a cream layer from forming and resulting in a creamier texture.";
   }
 );
