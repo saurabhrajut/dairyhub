@@ -29,7 +29,7 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
       {
-        protocol: 'https',
+        protocol: 'https//',
         hostname: 'lh3.googleusercontent.com',
         port: '',
         pathname: '/**',
@@ -42,6 +42,9 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  experimental: {
+  },
+  serverExternalPackages: ['handlebars', 'dotprompt'],
 };
 
 export default nextConfig;
