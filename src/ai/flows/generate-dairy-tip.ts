@@ -1,15 +1,11 @@
+
 'use server';
 /**
  * @fileOverview This file defines a Genkit flow for generating a daily dairy tip.
- *
- * It exports:
- * - `generateDairyTip`: An async function to generate a new daily dairy tip.
- * - `DairyTipInput`: The input type for the generateDairyTip function (empty).
- * - `DairyTipOutput`: The output type for the generateDairyTip function (string).
  */
 
 import {ai} from '@/ai/genkit';
-import {z, runFlow} from 'genkit';
+import {z} from 'genkit';
 
 const DairyTipInputSchema = z.object({});
 export type DairyTipInput = z.infer<typeof DairyTipInputSchema>;
@@ -17,15 +13,11 @@ export type DairyTipInput = z.infer<typeof DairyTipInputSchema>;
 const DairyTipOutputSchema = z.string();
 export type DairyTipOutput = z.infer<typeof DairyTipOutputSchema>;
 
-export async function generateDairyTip(): Promise<DairyTipOutput> {
-  const tip = await generateDairyTipFlow({});
-  return tip;
-}
 
 const generateDairyTipPrompt = ai.definePrompt({
     name: 'generateDairyTipPrompt',
     model: 'googleai/gemini-1.5-flash',
-    prompt: `You are an expert dairy and food technologist. Your task is to generate a new, detailed, insightful, and scientific "Did you know?" style tip related to the dairy or food industry.
+    prompt: `You are an expert dairy and food technologist. Your task is to generate a detailed, insightful, and scientific "Did you know?" style tip related to the dairy or food industry.
 
 The response MUST be in Hinglish (a mix of Hindi and English).
 The tone should be educational yet easy for a common person to understand.
@@ -49,12 +41,9 @@ Choose a topic from the following areas:
 Example of a good, detailed, technical response:
 "**Homogenization ka scientific raaz kya hai?** Homogenization ek mechanical process hai jisme doodh ko high pressure (lagbhag 2000-3000 PSI) par ek chote se gap (homogenizer valve) se force kiya jaata hai. Isse doodh ke bade fat globules (3-6 microns) toot kar 2 micron se bhi chote ho jaate hain. Is process se fat globules ka surface area badh jaata hai, aur un par ek nayi membrane ban jaati hai jisme casein aur whey proteins hote hain. Yeh nayi membrane fat globules ko aapas mein judne se rokti hai, jisse doodh par malai ki layer nahi banti. Isliye homogenized doodh ka texture zyada creamy aur taste rich lagta hai. Two-stage homogenization me, pehle stage ke baad ek lower pressure (around 500 PSI) ka second stage istemal hota hai jo pehle stage me bane छोटे fat clusters ko todta hai, jisse viscosity control hoti hai."
 
-Now, generate a new, different, and equally detailed scientific and technical tip from one of the categories above.
-`,
-    config: {
-        temperature: 1.0,
-    }
+Now, generate a new, different, and equally detailed scientific and technical tip from one of the categories above.`,
 });
+
 
 const generateDairyTipFlow = ai.defineFlow(
   {
@@ -63,7 +52,16 @@ const generateDairyTipFlow = ai.defineFlow(
     outputSchema: DairyTipOutputSchema,
   },
   async () => {
-    const response = await generateDairyTipPrompt();
-    return response.text ?? "Did you know? Homogenization is a mechanical process where milk is forced through a small gap at high pressure. This breaks down large fat globules into smaller ones, preventing a cream layer from forming and resulting in a creamier texture.";
+    const { text } = await ai.generate({
+        prompt: generateDairyTipPrompt,
+        history: [], 
+    });
+    return text ?? "Did you know? Homogenization is a mechanical process where milk is forced through a small gap at high pressure. This breaks down large fat globules into smaller ones, preventing a cream layer from forming and resulting in a creamier texture.";
   }
 );
+
+
+export async function generateDairyTip(): Promise<DairyTipOutput> {
+  const tip = await generateDairyTipFlow({});
+  return tip;
+}
