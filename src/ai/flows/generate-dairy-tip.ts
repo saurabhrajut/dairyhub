@@ -57,14 +57,13 @@ const generateDairyTipFlow = ai.defineFlow(
     outputSchema: DairyTipOutputSchema,
   },
   async () => {
-    const { text } = await ai.generate({
+    const response = await ai.generate({
       prompt: generateDairyTipPrompt,
       history: [], 
       config: {
           temperature: 1.0,
       }
     });
-    return text ?? "Did you know? Homogenization is a mechanical process where milk is forced through a small gap at high pressure. This breaks down large fat globules into smaller ones, preventing a cream layer from forming and resulting in a creamier texture.";
+    return response.text ?? "Did you know? Homogenization is a mechanical process where milk is forced through a small gap at high pressure. This breaks down large fat globules into smaller ones, preventing a cream layer from forming and resulting in a creamier texture.";
   }
 );
-
