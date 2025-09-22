@@ -18,7 +18,7 @@ const DairyTipOutputSchema = z.string();
 export type DairyTipOutput = z.infer<typeof DairyTipOutputSchema>;
 
 export async function generateDairyTip(): Promise<DairyTipOutput> {
-  const tip = await runFlow(generateDairyTipFlow, {});
+  const tip = await generateDairyTipFlow({});
   return tip;
 }
 
