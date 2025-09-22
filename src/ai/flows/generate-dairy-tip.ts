@@ -10,8 +10,7 @@
  */
 
 import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
-import { runFlow } from 'genkit';
+import {z, runFlow} from 'genkit';
 
 const DairyTipInputSchema = z.object({});
 export type DairyTipInput = z.infer<typeof DairyTipInputSchema>;
