@@ -42,8 +42,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  experimental: {
-  },
+  experimental: {},
   serverExternalPackages: ['handlebars', 'dotprompt'],
 };
 
