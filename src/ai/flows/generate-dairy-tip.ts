@@ -11,6 +11,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import { runFlow } from 'genkit';
 
 const DairyTipInputSchema = z.object({});
 export type DairyTipInput = z.infer<typeof DairyTipInputSchema>;
@@ -19,7 +20,8 @@ const DairyTipOutputSchema = z.string();
 export type DairyTipOutput = z.infer<typeof DairyTipOutputSchema>;
 
 export async function generateDairyTip(): Promise<DairyTipOutput> {
-  return generateDairyTipFlow({});
+  const tip = await runFlow(generateDairyTipFlow, {});
+  return tip;
 }
 
 const generateDairyTipPrompt = ai.definePrompt({
