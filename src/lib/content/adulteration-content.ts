@@ -1,3 +1,4 @@
+
 export const adulterationContent = {
   hi: {
       main_title: "कच्चे दूध की गुणवत्ता और मिलावट",
@@ -197,123 +198,123 @@ export const adulterationContent = {
           }
       ],
       preservatives: [
-          {
-              title: 'Neutralizers (NaOH, Na₂CO₃, NaHCO₃)',
+           {
+              title: 'न्यूट्रलाइज़र (NaOH, Na₂CO₃, NaHCO₃)',
               content: `
                   <div class="prose max-w-none prose-blue">
-                      <h4>Method 1: Rosalic Acid Test</h4>
-                      <p><strong>Principle:</strong> Rosalic acid is an indicator that gives a red color in alkaline conditions.</p>
+                      <h4>विधि 1: रोसेलिक एसिड टेस्ट</h4>
+                      <p><strong>सिद्धांत:</strong> रोसेलिक एसिड एक संकेतक है जो क्षारीय स्थिति में लाल रंग देता है।</p>
                       <ol>
-                          <li>Take 10 ml of milk in a test tube and add an equal volume of ethyl alcohol (95%).</li>
-                          <li>Add a few drops of 0.1% rosalic acid solution and mix.</li>
-                          <li>Appearance of a <strong>rose-red colour</strong> indicates the presence of neutralizers, while pure milk turns brownish.</li>
+                          <li>एक टेस्ट ट्यूब में 10 मिली दूध लें और समान मात्रा में एथिल अल्कोहल (95%) डालें।</li>
+                          <li>0.1% रोसेलिक एसिड घोल की कुछ बूँदें डालें और मिलाएं।</li>
+                          <li><strong>गुलाब-लाल रंग</strong> का दिखना न्यूट्रलाइज़र की उपस्थिति को इंगित करता है, जबकि शुद्ध दूध भूरा हो जाता है।</li>
                       </ol>
-                      <h4 class="mt-4">Method 2: Alkalinity of Ash Test</h4>
-                      <p><strong>Principle:</strong> If a neutralizer has been added, the ash of the milk will have a higher alkalinity than that of pure milk.</p>
+                      <h4 class="mt-4">विधि 2: राख की क्षारीयता परीक्षण</h4>
+                      <p><strong>सिद्धांत:</strong> यदि एक न्यूट्रलाइज़र मिलाया गया है, तो दूध की राख में शुद्ध दूध की तुलना में अधिक क्षारीयता होगी।</p>
                       <ol>
-                          <li>Take 20 ml of milk in a silica crucible.</li>
-                          <li>Evaporate the water and ash the contents at 550°C in a muffle furnace.</li>
-                          <li>Dissolve the ash in 10 ml of distilled water and titrate it against 0.1 N HCl.</li>
-                          <li>A titre value greater than 1.2 ml of 0.1 N HCl indicates the presence of neutralizers.</li>
+                          <li>एक सिलिका क्रूसिबल में 20 मिली दूध लें।</li>
+                          <li>पानी को वाष्पित करें और सामग्री को 550°C पर एक मफल फर्नेस में राख करें।</li>
+                          <li>राख को 10 मिली आसुत जल में घोलें और इसे 0.1 N HCl के विरुद्ध अनुमापित करें।</li>
+                          <li>0.1 N HCl का 1.2 मिली से अधिक का अनुमापन मान न्यूट्रलाइज़र की उपस्थिति को इंगित करता है।</li>
                       </ol>
-                      <h4 class="mt-4">Method 3: Determination of true lactic acid/lactate content</h4>
-                      <p><strong>Principle:</strong> The true lactic acid/lactate content is determined spectrophotometrically. The principle involves removal of interfering substances, oxidation of lactic acid to acetaldehyde, which then forms a purple colour with p-hydroxydiphenyl. A disturbed relationship between lactic acid content and titrable acidity suspects neutralization.</p>
+                      <h4 class="mt-4">विधि 3: वास्तविक लैक्टिक एसिड/लैक्टेट सामग्री का निर्धारण</h4>
+                       <p><strong>सिद्धांत:</strong> वास्तविक लैक्टिक एसिड/लैक्टेट सामग्री को स्पेक्ट्रोफोटोमेट्रिक रूप से निर्धारित किया जाता है। सिद्धांत में हस्तक्षेप करने वाले पदार्थों को हटाना, लैक्टिक एसिड को एसिटाल्डिहाइड में ऑक्सीकृत करना शामिल है, जो तब पी-हाइड्रॉक्सीडिफेनिल के साथ एक बैंगनी रंग बनाता है। लैक्टिक एसिड सामग्री और अनुमापनीय अम्लता के बीच एक गड़बड़ी वाला संबंध न्यूट्रलाइजेशन का संदेह करता है।</p>
                       <ol>
-                          <li>A protein-free filtrate of the milk sample is prepared using copper sulphate and calcium hydroxide.</li>
-                          <li>The filtrate is treated with sulphuric acid and copper sulphate to oxidize the lactic acid.</li>
-                          <li>p-Hydroxydiphenyl reagent is added, and after incubation, a violet colour develops.</li>
-                          <li>The intensity of the colour is measured at 570 nm and compared against a standard curve.</li>
-                          <li>If milk has normal or low titrable acidity, but lactic acid content is more than 30 mg/100 ml, neutralization is suspected.</li>
+                          <li>कॉपर सल्फेट और कैल्शियम हाइड्रॉक्साइड का उपयोग करके दूध के नमूने का एक प्रोटीन-मुक्त निस्यंद तैयार किया जाता है।</li>
+                          <li>निस्यंद को सल्फ्यूरिक एसिड और कॉपर सल्फेट के साथ उपचारित किया जाता है ताकि लैक्टिक एसिड ऑक्सीकृत हो सके।</li>
+                          <li>पी-हाइड्रॉक्सीडिफेनिल अभिकर्मक डाला जाता है, और ऊष्मायन के बाद, एक बैंगनी रंग विकसित होता है।</li>
+                          <li>रंग की तीव्रता 570 एनएम पर मापी जाती है और एक मानक वक्र के साथ तुलना की जाती है।</li>
+                          <li>यदि दूध में सामान्य या कम अनुमापनीय अम्लता है, लेकिन लैक्टिक एसिड सामग्री 30 मिलीग्राम/100 मिली से अधिक है, तो न्यूट्रलाइजेशन का संदेह है।</li>
                       </ol>
                       <p class="text-xs"><strong>Ref:</strong> IS:1479 (1960), BIS (1981)</p>
                   </div>
               `
           },
-           {
-              title: 'Boric Acid and Borates',
+          {
+              title: 'बोरिक एसिड और बोरेट्स',
               content: `
                   <div class="prose max-w-none prose-blue">
-                      <p><strong>Principle:</strong> Boric acid and its salts give a red color with turmeric paper.</p>
+                      <p><strong>सिद्धांत:</strong> बोरिक एसिड और इसके लवण हल्दी कागज के साथ लाल रंग देते हैं।</p>
                       <ol>
-                          <li>Take 5 ml of milk in a test tube and add 1 ml of conc. HCl.</li>
-                          <li>Mix well, then dip a strip of turmeric paper.</li>
-                          <li>Dry the paper strip and observe the color change.</li>
-                          <li>A <strong>red color</strong> on the paper indicates the presence of boric acid.</li>
-                          <li>Then add a drop of ammonium hydroxide solution.</li>
-                          <li>A change from red to <strong>dark bluish-green</strong> confirms the presence of boric acid.</li>
+                          <li>एक टेस्ट ट्यूब में 5 मिली दूध लें और 1 मिली सांद्र एचसीएल डालें।</li>
+                          <li>अच्छी तरह मिलाएं, फिर हल्दी कागज की एक पट्टी डुबोएं।</li>
+                          <li>कागज की पट्टी को सुखाएं और रंग परिवर्तन का निरीक्षण करें।</li>
+                          <li>कागज पर <strong>लाल रंग</strong> बोरिक एसिड की उपस्थिति को इंगित करता है।</li>
+                          <li>फिर अमोनियम हाइड्रॉक्साइड घोल की एक बूंद डालें।</li>
+                          <li>लाल से <strong>गहरे नीले-हरे रंग</strong> में बदलना बोरिक एसिड की उपस्थिति की पुष्टि करता है।</li>
                       </ol>
                   </div>
               `
           },
           {
-              title: 'Formalin (Formaldehyde)',
+              title: 'फॉर्मेलिन (फॉर्मेल्डिहाइड)',
               content: `
                   <div class="prose max-w-none prose-blue">
-                      <h4>Method 1: Leach Test</h4>
-                      <p><strong>Principle:</strong> Formaldehyde gives a violet colour in the presence of ferric salts with conc. sulphuric acid.</p>
+                      <h4>विधि 1: लीच टेस्ट</h4>
+                      <p><strong>सिद्धांत:</strong> फॉर्मेल्डिहाइड फेरिक लवणों की उपस्थिति में सांद्र सल्फ्यूरिक एसिड के साथ एक बैंगनी रंग देता है।</p>
                       <ol>
-                          <li>Take about 5 ml of milk in a test tube.</li>
-                          <li>Add to it an equal volume of detecting reagent (Conc. HCl + 10% FeCl3 soln).</li>
-                          <li>Place the tube in a boiling water bath for about 3-4 mins.</li>
-                          <li>Appearance of <strong>brownish-pink colour</strong> confirms the presence of formalin in the sample, whereas; the control sample will remain white.</li>
+                          <li>एक टेस्ट ट्यूब में लगभग 5 मिली दूध लें।</li>
+                          <li>इसमें समान मात्रा में डिटेक्टिंग अभिकर्मक (सांद्र एचसीएल + 10% FeCl3 घोल) डालें।</li>
+                          <li>ट्यूब को लगभग 3-4 मिनट के लिए उबलते पानी के स्नान में रखें।</li>
+                          <li><strong>भूरा-गुलाबी रंग</strong> का दिखना नमूने में फॉर्मेलिन की उपस्थिति की पुष्टि करता है; जबकि नियंत्रण नमूना सफेद रहेगा।</li>
                       </ol>
-                      <h4 class="mt-4">Method 2: Chromotropic Acid Test</h4>
-                       <p><strong>Principle:</strong> Formaldehyde reacts with chromotropic acid to form a colored compound.</p>
+                      <h4 class="mt-4">विधि 2: क्रोमोट्रोपिक एसिड टेस्ट</h4>
+                       <p><strong>सिद्धांत:</strong> फॉर्मेल्डिहाइड क्रोमोट्रोपिक एसिड के साथ प्रतिक्रिया करके एक रंगीन यौगिक बनाता है।</p>
                       <ol>
-                          <li>Take 1 ml of milk in a test tube.</li>
-                          <li>Add 1 ml of chromotropic acid reagent and mix well.</li>
-                          <li>Appearance of <strong>yellow color</strong> confirms the presence of formalin, while the control sample remains white.</li>
+                          <li>एक टेस्ट ट्यूब में 1 मिली दूध लें।</li>
+                          <li>1 मिली क्रोमोट्रोपिक एसिड अभिकर्मक डालें और अच्छी तरह मिलाएं।</li>
+                          <li><strong>पीले रंग</strong> का दिखना फॉर्मेलिन की उपस्थिति की पुष्टि करता है, जबकि नियंत्रण नमूना सफेद रहता है।</li>
                       </ol>
                       <p class="text-xs"><strong>Ref:</strong> IS:1479 (1960)</p>
                   </div>
               `
           },
            {
-              title: 'Hydrogen Peroxide (H₂O₂)',
+              title: 'हाइड्रोजन पेरोक्साइड (H₂O₂)',
               content: `
                   <div class="prose max-w-none prose-blue">
-                      <h4>Method 1: Para-Phenylenediamine Test</h4>
-                      <p><strong>Principle:</strong> Hydrogen peroxide oxidizes para-phenylenediamine, causing its color to change from yellow to blue.</p>
+                      <h4>विधि 1: पैरा-फेनिलेनडायमाइन टेस्ट</h4>
+                      <p><strong>सिद्धांत:</strong> हाइड्रोजन पेरोक्साइड पैरा-फेनिलेनडायमाइन को ऑक्सीकृत करता है, जिससे इसका रंग पीले से नीले में बदल जाता है।</p>
                       <ol>
-                          <li>Take 2 ml milk in a test tube and add an equal volume of raw milk.</li>
-                          <li>Add 2 drops of 2% para-phenylenediamine solution and shake well.</li>
-                          <li>Appearance of <strong>blue colour</strong> confirms the presence of hydrogen peroxide.</li>
+                          <li>एक टेस्ट ट्यूब में 2 मिली दूध लें और समान मात्रा में कच्चा दूध डालें।</li>
+                          <li>2% पैरा-फेनिलेनडायमाइन घोल की 2 बूँदें डालें और अच्छी तरह हिलाएं।</li>
+                          <li><strong>नीले रंग</strong> का दिखना हाइड्रोजन पेरोक्साइड की उपस्थिति की पुष्टि करता है।</li>
                       </ol>
                       
-                      <h4 class="mt-4">Method 2: Potassium Iodide and Starch Test</h4>
-                       <p><strong>Principle:</strong> H₂O₂ oxidizes potassium iodide (KI) to iodine (I₂), which then reacts with starch to form a blue complex.</p>
+                      <h4 class="mt-4">विधि 2: पोटेशियम आयोडाइड और स्टार्च टेस्ट</h4>
+                       <p><strong>सिद्धांत:</strong> H₂O₂ पोटेशियम आयोडाइड (KI) को आयोडीन (I₂) में ऑक्सीकृत करता है, जो तब स्टार्च के साथ प्रतिक्रिया करके एक नीला परिसर बनाता है।</p>
                       <ol>
-                          <li>Take 1 ml milk and add 1 ml of potassium iodide-starch reagent.</li>
-                          <li>Appearance of a <strong>blue color</strong> indicates the presence of H₂O₂.</li>
+                          <li>1 मिली दूध लें और 1 मिली पोटेशियम आयोडाइड-स्टार्च अभिकर्मक डालें।</li>
+                          <li><strong>नीले रंग</strong> का दिखना H₂O₂ की उपस्थिति को इंगित करता है।</li>
                       </ol>
                   </div>
               `
           },
           {
-              title: 'Salicylic Acid and Benzoic Acid',
+              title: 'सैलिसिलिक एसिड और बेंजोइक एसिड',
               content: `
                    <div class="prose max-w-none prose-blue">
-                      <p><strong>Principle:</strong> These acids are extracted with ether and then react with ferric chloride to produce characteristic colors.</p>
+                      <p><strong>सिद्धांत:</strong> इन एसिड को ईथर से निकाला जाता है और फिर फेरिक क्लोराइड के साथ प्रतिक्रिया करके विशिष्ट रंग उत्पन्न करते हैं।</p>
                       <ol>
-                          <li>Acidify 10 ml of milk with HCl and extract with ethyl ether.</li>
-                          <li>Evaporate the ether. Dissolve the residue in water.</li>
-                          <li>Add a few drops of 0.5% neutral ferric chloride solution.</li>
-                          <li><strong>Salicylic Acid:</strong> A violet color indicates its presence.</li>
-                          <li><strong>Benzoic Acid:</strong> A salmon-colored precipitate indicates its presence.</li>
+                          <li>10 मिली दूध को एचसीएल से अम्लीकृत करें और एथिल ईथर से निकालें।</li>
+                          <li>ईथर को वाष्पित करें। अवशेष को पानी में घोलें।</li>
+                          <li>0.5% न्यूट्रल फेरिक क्लोराइड घोल की कुछ बूँदें डालें।</li>
+                          <li><strong>सैलिसिलिक एसिड:</strong> एक बैंगनी रंग इसकी उपस्थिति को इंगित करता है।</li>
+                          <li><strong>बेंजोइक एसिड:</strong> एक सामन रंग का अवक्षेप इसकी उपस्थिति को इंगित करता है।</li>
                       </ol>
                   </div>
               `
           },
           {
-              title: 'Hypochlorites and Chloramines',
+              title: 'हाइपोक्लोराइट्स और क्लोरामाइन',
               content: `
                   <div class="prose max-w-none prose-blue">
-                      <p><strong>Principle:</strong> These strong oxidizing agents can be detected by their reaction with potassium iodide and starch.</p>
+                      <p><strong>सिद्धांत:</strong> इन मजबूत ऑक्सीकरण एजेंटों को पोटेशियम आयोडाइड और स्टार्च के साथ उनकी प्रतिक्रिया द्वारा पता लगाया जा सकता है।</p>
                       <ol>
-                          <li>Add 5 ml of milk to a test tube.</li>
-                          <li>Add 1.5 ml of 7% potassium iodide solution and mix.</li>
-                          <li>Add 4 ml of dilute HCl and mix.</li>
-                          <li>In the presence of hypochlorite, a <strong>yellowish-brown to deep mauve color</strong> develops.</li>
+                          <li>एक टेस्ट ट्यूब में 5 मिली दूध डालें।</li>
+                          <li>1.5 मिली 7% पोटेशियम आयोडाइड घोल डालें और मिलाएं।</li>
+                          <li>4 मिली पतला एचसीएल डालें और मिलाएं।</li>
+                          <li>हाइपोक्लोराइट की उपस्थिति में, एक <strong>पीला-भूरा से गहरा मौवे रंग</strong> विकसित होता है।</li>
                       </ol>
                   </div>
               `
@@ -321,301 +322,301 @@ export const adulterationContent = {
       ],
       adulterants: [
           {
-              title: 'Cane Sugar',
+              title: 'गन्ने की चीनी',
               content: `
                   <div class="prose max-w-none prose-green">
-                      <h4>Method 1: Using Seliwanoff’s Reagent</h4>
-                      <p><strong>Principle:</strong> Fructose in cane sugar reacts with resorcinol in HCl to give a red color.</p>
+                      <h4>विधि 1: सेलिवानॉफ के अभिकर्मक का उपयोग करना</h4>
+                      <p><strong>सिद्धांत:</strong> गन्ने की चीनी में फ्रुक्टोज एचसीएल में रिसोर्सिनॉल के साथ प्रतिक्रिया करके लाल रंग देता है।</p>
                       <ol>
-                          <li>Take 1ml of milk and add 1ml of Seliwanoff’s reagent (resorcinol in HCl).</li>
-                          <li>Heat in a boiling water bath for 5 mins.</li>
-                          <li>A <strong>red color</strong> indicates the presence of sucrose. Pure milk remains white.</li>
+                          <li>1 मिली दूध लें और 1 मिली सेलिवानॉफ का अभिकर्मक (एचसीएल में रिसोर्सिनॉल) डालें।</li>
+                          <li>5 मिनट के लिए उबलते पानी के स्नान में गरम करें।</li>
+                          <li>एक <strong>लाल रंग</strong> सुक्रोज की उपस्थिति को इंगित करता है। शुद्ध दूध सफेद रहता है।</li>
                       </ol>
 
-                      <h4 class="mt-4">Method 2: Resorcinol Test</h4>
+                      <h4 class="mt-4">विधि 2: रिसोर्सिनॉल टेस्ट</h4>
                       <ol>
-                          <li>Take about 5 ml of milk in a test tube.</li>
-                          <li>Add 1 ml of concentrated HCl.</li>
-                          <li>Add 0.1 g of resorcinol and mix.</li>
-                          <li>Place the tube in a boiling water bath for 5 mins.</li>
-                          <li>A <strong>red colour</strong> indicates the presence of sucrose.</li>
+                          <li>एक टेस्ट ट्यूब में लगभग 5 मिली दूध लें।</li>
+                          <li>1 मिली सांद्र एचसीएल डालें।</li>
+                          <li>0.1 ग्राम रिसोर्सिनॉल डालें और मिलाएं।</li>
+                          <li>ट्यूब को 5 मिनट के लिए उबलते पानी के स्नान में रखें।</li>
+                          <li>एक <strong>लाल रंग</strong> सुक्रोज की उपस्थिति को इंगित करता है।</li>
                       </ol>
                       <p class="text-xs"><strong>Ref:</strong> IS:1479 (1960)</p>
                   </div>
               `
           },
           {
-              title: 'Starch and Other Cereal Flours',
+              title: 'स्टार्च और अन्य अनाज के आटे',
               content: `
                   <div class="prose max-w-none prose-green">
-                      <h4>Method 1: Using Iodine (with unboiled milk sample)</h4>
+                      <h4>विधि 1: आयोडीन का उपयोग करना (बिना उबाले दूध के नमूने के साथ)</h4>
                       <ol>
-                          <li>Take 1ml of milk in a test tube.</li>
-                          <li>Add 2 drops of iodine solution.</li>
-                          <li>Appearance of a <strong>blue color</strong> indicates the presence of starch.</li>
+                          <li>एक टेस्ट ट्यूब में 1 मिली दूध लें।</li>
+                          <li>आयोडीन घोल की 2 बूँदें डालें।</li>
+                          <li><strong>नीले रंग</strong> का दिखना स्टार्च की उपस्थिति को इंगित करता है।</li>
                       </ol>
 
-                      <h4 class="mt-4">Method 2: Using Iodine (with boiled milk sample)</h4>
-                      <p><strong>Principle:</strong> Starch forms a purple-blue complex with iodine.</p>
+                      <h4 class="mt-4">विधि 2: आयोडीन का उपयोग करना (उबले हुए दूध के नमूने के साथ)</h4>
+                      <p><strong>सिद्धांत:</strong> स्टार्च आयोडीन के साथ एक बैंगनी-नीला परिसर बनाता है।</p>
                       <ol>
-                          <li>Boil 3-5 ml of milk and cool to room temperature.</li>
-                          <li>Add 1-2 drops of iodine solution. A <strong>blue color</strong> indicates starch, which disappears on boiling and reappears on cooling.</li>
+                          <li>3-5 मिली दूध को उबालें और कमरे के तापमान पर ठंडा करें।</li>
+                          <li>आयोडीन घोल की 1-2 बूँदें डालें। एक <strong>नीला रंग</strong> स्टार्च को इंगित करता है, जो उबालने पर गायब हो जाता है और ठंडा होने पर फिर से दिखाई देता है।</li>
                       </ol>
                       <p class="text-xs"><strong>Ref:</strong> IS:1479 (1960)</p>
                   </div>
               `
           },
           {
-              title: 'Cellulose',
+              title: 'सेलूलोज़',
               content: `
                   <div class="prose max-w-none prose-green">
-                      <p><strong>Principle:</strong> Cellulose is insoluble. It can be detected by its reaction with iodinated zinc chloride.</p>
+                      <p><strong>सिद्धांत:</strong> सेलूलोज़ अघुलनशील है। इसका पता आयोडिनेटेड जिंक क्लोराइड के साथ इसकी प्रतिक्रिया द्वारा लगाया जा सकता है।</p>
                       <ol>
-                          <li>Take 10 ml of milk and add 10-15 drops of conc. nitric acid.</li>
-                          <li>Filter the coagulated mass and wash with water.</li>
-                          <li>Boil the residue with 1-2 ml of iodinated zinc chloride reagent.</li>
-                          <li>Appearance of <strong>blue or violet color</strong> indicates the presence of cellulose.</li>
+                          <li>10 मिली दूध लें और 10-15 बूँदें सांद्र नाइट्रिक एसिड डालें।</li>
+                          <li>जमे हुए द्रव्यमान को फ़िल्टर करें और पानी से धो लें।</li>
+                          <li>अवशेष को 1-2 मिली आयोडिनेटेड जिंक क्लोराइड अभिकर्मक के साथ उबालें।</li>
+                          <li><strong>नीले या बैंगनी रंग</strong> का दिखना सेलूलोज़ की उपस्थिति को इंगित करता है।</li>
                       </ol>
                   </div>
               `
           },
           {
-              title: 'Urea',
+              title: 'यूरिया',
               content: `
                   <div class="prose max-w-none prose-green">
-                      <h4>Method 1: DMAB and TCA Method</h4>
-                      <p><strong>Principle:</strong> Urea forms a yellow complex with p-dimethylaminobenzaldehyde (DMAB) in a slightly acidic solution.</p>
+                      <h4>विधि 1: DMAB और TCA विधि</h4>
+                      <p><strong>सिद्धांत:</strong> यूरिया पी-डाइमिथाइलअमीनोबेंजाल्डिहाइड (DMAB) के साथ एक थोड़ा अम्लीय घोल में एक पीला परिसर बनाता है।</p>
                        <ol>
-                          <li>Take equal volumes of milk and 24% TCA in a test tube, mix and filter.</li>
-                          <li>Take 3 ml of filtrate in another test tube.</li>
-                          <li>Add 3 ml of 1.6% DMAB reagent.</li>
-                          <li>A <strong>distinct yellow colour</strong> indicates added urea.</li>
+                          <li>एक टेस्ट ट्यूब में समान मात्रा में दूध और 24% TCA लें, मिलाएं और फ़िल्टर करें।</li>
+                          <li>एक और टेस्ट ट्यूब में 3 मिली निस्यंद लें।</li>
+                          <li>3 मिली 1.6% DMAB अभिकर्मक डालें।</li>
+                          <li>एक <strong>स्पष्ट पीला रंग</strong> अतिरिक्त यूरिया को इंगित करता है।</li>
                       </ol>
-                      <h4 class="mt-4">Method 2: DMAB Reagent Method</h4>
+                      <h4 class="mt-4">विधि 2: DMAB अभिकर्मक विधि</h4>
                       <ol>
-                          <li>Take 1 ml of milk in a test tube.</li>
-                          <li>Add 1 ml of 1.6% DMAB reagent.</li>
-                          <li>A <strong>distinct yellow colour</strong> indicates added urea.</li>
+                          <li>एक टेस्ट ट्यूब में 1 मिली दूध लें।</li>
+                          <li>1 मिली 1.6% DMAB अभिकर्मक डालें।</li>
+                          <li>एक <strong>स्पष्ट पीला रंग</strong> अतिरिक्त यूरिया को इंगित करता है।</li>
                       </ol>
                       <p class="text-xs"><strong>Ref:</strong> IS:1479 (1960), FSSAI 2006 (Limit: 70mg/100ml)</p>
                   </div>
               `
           },
           {
-              title: 'Glucose',
+              title: 'ग्लूकोज',
               content: `
                   <div class="prose max-w-none prose-green">
-                      <p><strong>Principle:</strong> Using a modified Barfoed's test, glucose reduces cupric ions to cuprous, which then reduces phosphomolybdic acid to form a blue compound.</p>
+                      <p><strong>सिद्धांत:</strong> संशोधित बारफोड के परीक्षण का उपयोग करते हुए, ग्लूकोज क्यूप्रिक आयनों को क्यूप्रस में कम कर देता है, जो तब फॉस्फोमोलीब्डिक एसिड को कम करके एक नीला यौगिक बनाता है।</p>
                       <ol>
-                          <li>Take 1 ml of milk, add 1 ml of modified Barfoed’s reagent.</li>
-                          <li>Heat in a boiling water bath for 3 min, then cool.</li>
-                          <li>Add 1 ml of phosphomolybdic acid reagent.</li>
-                          <li>An immediate formation of a <strong>deep blue colour</strong> indicates added glucose.</li>
+                          <li>1 मिली दूध लें, 1 मिली संशोधित बारफोड का अभिकर्मक डालें।</li>
+                          <li>3 मिनट के लिए उबलते पानी के स्नान में गरम करें, फिर ठंडा करें।</li>
+                          <li>1 मिली फॉस्फोमोलीब्डिक एसिड अभिकर्मक डालें।</li>
+                          <li><strong>गहरे नीले रंग</strong> का तत्काल बनना अतिरिक्त ग्लूकोज को इंगित करता है।</li>
                       </ol>
                   </div>
               `
           },
           {
-              title: 'Maltodextrin',
+              title: 'माल्टोडेक्सट्रिन',
               content: `
                   <div class="prose max-w-none prose-green">
-                      <h4>Method 1: Using Iodine Reagent</h4>
+                      <h4>विधि 1: आयोडीन अभिकर्मक का उपयोग करना</h4>
                       <ol>
-                         <li>Take 5 ml of milk sample in a test tube.</li>
-                         <li>Add 2 ml of iodine solution (0.05 N) and mix.</li>
-                         <li>Appearance of a <strong>chocolate-like red-brown color</strong> indicates the presence of dextrin/maltodextrin.</li>
+                         <li>एक टेस्ट ट्यूब में 5 मिली दूध का नमूना लें।</li>
+                         <li>2 मिली आयोडीन घोल (0.05 N) डालें और मिलाएं।</li>
+                         <li>एक <strong>चॉकलेट जैसा लाल-भूरा रंग</strong> डेक्सट्रिन/माल्टोडेक्सट्रिन की उपस्थिति को इंगित करता है।</li>
                       </ol>
-                      <h4 class="mt-4">Method 2: Using Citric Acid and Iodine Reagents</h4>
+                      <h4 class="mt-4">विधि 2: साइट्रिक एसिड और आयोडीन अभिकर्मकों का उपयोग करना</h4>
                       <ol>
-                         <li>Boil 20 ml of milk, cool to 70°C, and coagulate by adding 0.5 ml of 10% citric acid.</li>
-                         <li>Filter the coagulated milk.</li>
-                         <li>To 2 ml of the filtrate, add 3 drops of iodine solution.</li>
-                         <li>An <strong>orange-brown shade</strong> indicates the presence of maltodextrin.</li>
+                         <li>20 मिली दूध को उबालें, 70°C पर ठंडा करें, और 0.5 मिली 10% साइट्रिक एसिड डालकर जमाएं।</li>
+                         <li>जमे हुए दूध को फ़िल्टर करें।</li>
+                         <li>2 मिली निस्यंद में, आयोडीन घोल की 3 बूँदें डालें।</li>
+                         <li>एक <strong>नारंगी-भूरा रंग</strong> माल्टोडेक्सट्रिन की उपस्थिति को इंगित करता है।</li>
                       </ol>
                   </div>
               `
           },
           {
-              title: 'Detergents',
+              title: 'डिटर्जेंट',
               content: `
                   <div class="prose max-w-none prose-red">
-                      <p><strong>Principle:</strong> Anionic detergents form a complex with the cationic dye methylene blue. This complex is soluble in chloroform.</p>
+                      <p><strong>सिद्धांत:</strong> आयनिक डिटर्जेंट धनायनित डाई मेथाइलीन ब्लू के साथ एक परिसर बनाते हैं। यह परिसर क्लोरोफॉर्म में घुलनशील है।</p>
                       <ol>
-                          <li>Take 1 ml milk, add 1 ml of methylene blue solution and then 2 ml chloroform.</li>
-                          <li>Vortex for 15 seconds and then centrifuge at 1100 rpm for 3 minutes.</li>
-                          <li>A more <strong>intense blue colour in the lower (chloroform) layer</strong> indicates the presence of detergent. If the upper layer is more intense, the detergent is absent.</li>
+                          <li>1 मिली दूध लें, 1 मिली मेथाइलीन ब्लू घोल और फिर 2 मिली क्लोरोफॉर्म डालें।</li>
+                          <li>15 सेकंड के लिए वोर्टेक्स करें और फिर 1100 आरपीएम पर 3 मिनट के लिए अपकेंद्रित्र करें।</li>
+                          <li>निचली (क्लोरोफॉर्म) परत में एक अधिक <strong>तीव्र नीला रंग</strong> डिटर्जेंट की उपस्थिति को इंगित करता है। यदि ऊपरी परत अधिक तीव्र है, तो डिटर्जेंट अनुपस्थित है।</li>
                       </ol>
                   </div>
               `
           },
           {
-              title: 'Ammonium Compounds (Sulphates)',
+              title: 'अमोनियम यौगिक (सल्फेट)',
               content: `
                   <div class="prose max-w-none prose-green">
-                      <h4>Method 1: Nessler's Reagent Method</h4>
+                      <h4>विधि 1: नेसलर का अभिकर्मक विधि</h4>
                        <ol>
-                          <li>Take 5 ml of milk sample in a test tube.</li>
-                          <li>Add 1 ml of Nessler's reagent.</li>
-                          <li>Appearance of <strong>yellowish or grey colour</strong> confirms the presence of added ammonium salts.</li>
+                          <li>एक टेस्ट ट्यूब में 5 मिली दूध का नमूना लें।</li>
+                          <li>1 मिली नेसलर का अभिकर्मक डालें।</li>
+                          <li><strong>पीला या ग्रे रंग</strong> का दिखना अतिरिक्त अमोनियम लवणों की उपस्थिति की पुष्टि करता है।</li>
                       </ol>
-                      <h4 class="mt-4">Method 2: Turmeric Paper Method</h4>
-                      <p><strong>Principle:</strong> Ammonium salts release ammonia in alkaline conditions, which turns wet turmeric paper red.</p>
+                      <h4 class="mt-4">विधि 2: हल्दी कागज विधि</h4>
+                      <p><strong>सिद्धांत:</strong> अमोनियम लवण क्षारीय स्थितियों में अमोनिया छोड़ते हैं, जो गीले हल्दी कागज को लाल कर देता है।</p>
                       <ol>
-                          <li>Take 5ml of milk and add 1ml of 10% NaOH.</li>
-                          <li>Place a wet turmeric paper on the rim of the test tube.</li>
-                          <li>Appearance of <strong>pinkish red colour</strong> on the paper confirms the presence of ammonium salt.</li>
+                          <li>5 मिली दूध लें और 1 मिली 10% NaOH डालें।</li>
+                          <li>टेस्ट ट्यूब के रिम पर एक गीला हल्दी कागज रखें।</li>
+                          <li>कागज पर <strong>गुलाबी लाल रंग</strong> का दिखना अमोनियम लवण की उपस्थिति की पुष्टि करता है।</li>
                       </ol>
-                       <h4 class="mt-4">Method 3: Sulfate Detection (with BaCl₂)</h4>
-                      <p><strong>Principle:</strong> Sulphates precipitate with Barium Chloride (BaCl₂).</p>
+                       <h4 class="mt-4">विधि 3: सल्फेट का पता लगाना (BaCl₂ के साथ)</h4>
+                      <p><strong>सिद्धांत:</strong> सल्फेट बेरियम क्लोराइड (BaCl₂) के साथ अवक्षेपित होते हैं।</p>
                       <ol>
-                          <li>Take 10 ml of milk and add 10 ml of Trichloroacetic acid (TCA) to coagulate it.</li>
-                          <li>Filter the milk and take 5 ml of the clear filtrate.</li>
-                          <li>Add a few drops of 5% BaCl₂ solution.</li>
-                          <li>Formation of a <strong>milky-white precipitate</strong> indicates the presence of added sulphates (like ammonium sulphate).</li>
+                          <li>10 मिली दूध लें और इसे जमाने के लिए 10 मिली ट्राइक्लोरोएसेटिक एसिड (TCA) डालें।</li>
+                          <li>दूध को फ़िल्टर करें और 5 मिली स्पष्ट निस्यंद लें।</li>
+                          <li>5% BaCl₂ घोल की कुछ बूँदें डालें।</li>
+                          <li>एक <strong>दूधिया-सफेद अवक्षेप</strong> का बनना अतिरिक्त सल्फेट (जैसे अमोनियम सल्फेट) की उपस्थिति को इंगित करता है।</li>
                       </ol>
                   </div>
               `
           },
            {
-              title: 'Common Salt (NaCl)',
+              title: 'साधारण नमक (NaCl)',
               content: `
                   <div class="prose max-w-none prose-green">
-                      <h4>Silver Nitrate Test</h4>
-                       <p><strong>Principle:</strong> Added salt reacts with silver nitrate. Potassium chromate acts as an indicator.</p>
+                      <h4>सिल्वर नाइट्रेट टेस्ट</h4>
+                       <p><strong>सिद्धांत:</strong> अतिरिक्त नमक सिल्वर नाइट्रेट के साथ प्रतिक्रिया करता है। पोटेशियम क्रोमेट एक संकेतक के रूप में कार्य करता है।</p>
                       <ol>
-                          <li>Take 5 ml of milk in a test tube.</li>
-                          <li>Add 1 ml of 0.1 N silver nitrate solution.</li>
-                          <li> Mix and add 0.5 ml of 10% potassium chromate solution.</li>
-                          <li>Appearance of a <strong>yellow colour</strong> indicates added salt, whereas pure milk gives a brick red color.</li>
+                          <li>एक टेस्ट ट्यूब में 5 मिली दूध लें।</li>
+                          <li>1 मिली 0.1 N सिल्वर नाइट्रेट घोल डालें।</li>
+                          <li>मिलाएं और 0.5 मिली 10% पोटेशियम क्रोमेट घोल डालें।</li>
+                          <li><strong>पीले रंग</strong> का दिखना अतिरिक्त नमक को इंगित करता है, जबकि शुद्ध दूध एक ईंट लाल रंग देता है।</li>
                       </ol>
                   </div>
               `
           },
           {
-              title: 'Vegetable/Refined Oil (Foreign Fat)',
+              title: 'वनस्पति/रिफाइंड तेल (विदेशी वसा)',
               content: `
                   <div class="prose max-w-none prose-green">
-                       <h4>Butyro-Refractometer (BR) Reading Method</h4>
-                       <p><strong>Principle:</strong> Most vegetable oils have a higher refractive index than pure milk fat (ghee).</p>
+                       <h4>ब्यूटिरो-रिफ्रेक्टोमीटर (BR) रीडिंग विधि</h4>
+                       <p><strong>सिद्धांत:</strong> अधिकांश वनस्पति तेलों में शुद्ध दूध वसा (घी) की तुलना में अधिक अपवर्तक सूचकांक होता है।</p>
                       <ol>
-                          <li>Isolate fat from the milk sample using a modified Gerber butyrometer.</li>
-                          <li>Take the BR reading of the extracted fat at 40°C.</li>
-                          <li>Pure milk fat has a BR reading of 40-43. Any reading higher than 45 suggests the presence of foreign fat.</li>
+                          <li>एक संशोधित Gerber ब्यूटिरोमीटर का उपयोग करके दूध के नमूने से वसा को अलग करें।</li>
+                          <li>40°C पर निकाले गए वसा की BR रीडिंग लें।</li>
+                          <li>शुद्ध दूध वसा की BR रीडिंग 40-43 होती है। 45 से अधिक कोई भी रीडिंग विदेशी वसा की उपस्थिति का सुझाव देती है।</li>
                       </ol>
-                      <h4 class="mt-4">Baudouin Test for Vanaspati</h4>
-                      <p><strong>Principle:</strong> Vanaspati is required to contain 5% sesame oil. The sesamol from this oil reacts with furfural to give a red color.</p>
+                      <h4 class="mt-4">वनस्पति के लिए बाउडौइन टेस्ट</h4>
+                      <p><strong>सिद्धांत:</strong> वनस्पति में 5% तिल का तेल होना आवश्यक है। इस तेल से सेसमोल फरफुरल के साथ प्रतिक्रिया करके लाल रंग देता है।</p>
                       <ol>
-                          <li>Extract ghee from the milk sample.</li>
-                          <li>Take 5g of melted fat, add 5ml concentrated HCl and 0.4ml of 2% furfural solution. Vortex for 2 minutes.</li>
-                          <li>A <strong>pink or red color</strong> in the acid layer indicates vanaspati adulteration.</li>
+                          <li>दूध के नमूने से घी निकालें।</li>
+                          <li>5 ग्राम पिघला हुआ वसा लें, 5 मिली सांद्रित एचसीएल और 0.4 मिली 2% फरफुरल घोल डालें। 2 मिनट के लिए वोर्टेक्स करें।</li>
+                          <li>एसिड परत में <strong>गुलाबी या लाल रंग</strong> वनस्पति मिलावट को इंगित करता है।</li>
                       </ol>
                       <p class="text-xs"><strong>Ref:</strong> IS 3508 – 1966</p>
                   </div>
               `
           },
           {
-              title: 'Mineral Oil',
+              title: 'खनिज तेल',
               content: `
                   <div class="prose max-w-none prose-green">
-                       <h4>Holde's Test</h4>
-                       <p><strong>Principle:</strong> Mineral oils are non-saponifiable, meaning they do not form soap with alkali, unlike edible fats.</p>
+                       <h4>होल्ड का टेस्ट</h4>
+                       <p><strong>सिद्धांत:</strong> खनिज तेल गैर-साबुनीकरणीय होते हैं, जिसका अर्थ है कि वे क्षार के साथ साबुन नहीं बनाते हैं, खाद्य वसा के विपरीत।</p>
                       <ol>
-                          <li>Saponify 1g of fat with 25ml of 4% alcoholic KOH.</li>
-                          <li>Add 100ml of hot water.</li>
-                          <li>The appearance of <strong>turbidity</strong> indicates the presence of mineral oil.</li>
+                          <li>1 ग्राम वसा को 25 मिली 4% अल्कोहलिक KOH के साथ साबुनीकृत करें।</li>
+                          <li>100 मिली गर्म पानी डालें।</li>
+                          <li><strong>गंदगी</strong> का दिखना खनिज तेल की उपस्थिति को इंगित करता है।</li>
                       </ol>
                   </div>
               `
           },
            {
-              title: 'Animal Body Fat (e.g., Lard)',
+              title: 'पशु शरीर की वसा (जैसे, लार्ड)',
               content: `
                   <div class="prose max-w-none prose-green">
-                       <h4>Opacity Test</h4>
-                       <p><strong>Principle:</strong> Different fats solidify and become opaque at different rates and temperatures.</p>
+                       <h4>अपारदर्शिता टेस्ट</h4>
+                       <p><strong>सिद्धांत:</strong> अलग-अलग वसा अलग-अलग दरों और तापमानों पर जमते हैं और अपारदर्शी हो जाते हैं।</p>
                       <ol>
-                          <li>Melt 5g of ghee at 50°C.</li>
-                          <li>Transfer to a water bath at 23°C and record the time it takes for the sample to become opaque.</li>
-                          <li><strong>Result:</strong> Buffalo ghee takes 14-15 min, cow ghee 18-19 min. A shorter time suggests animal body fat adulteration, while a longer time suggests vegetable oil.</li>
+                          <li>5 ग्राम घी को 50°C पर पिघलाएं।</li>
+                          <li>23°C पर एक पानी के स्नान में स्थानांतरित करें और नमूने को अपारदर्शी होने में लगने वाले समय को रिकॉर्ड करें।</li>
+                          <li><strong>परिणाम:</strong> भैंस के घी को 14-15 मिनट लगते हैं, गाय के घी को 18-19 मिनट लगते हैं। एक छोटा समय पशु शरीर की वसा मिलावट का सुझाव देता है, जबकि एक लंबा समय वनस्पति तेल का सुझाव देता है।</li>
                       </ol>
                   </div>
               `
           },
           {
-              title: 'Pond Water (Nitrates)',
+              title: 'तालाब का पानी (नाइट्रेट्स)',
               content: `
                   <div class="prose max-w-none prose-green">
-                      <p><strong>Principle:</strong> This method detects nitrates/nitrites present in pond water from agricultural fertilizers.</p>
+                      <p><strong>सिद्धांत:</strong> यह विधि कृषि उर्वरकों से तालाब के पानी में मौजूद नाइट्रेट्स/नाइट्राइट्स का पता लगाती है।</p>
                       <ol>
-                          <li>Rinse a test tube with the milk sample and drain.</li>
-                          <li>Add 2-3 drops of 2% diphenylamine solution along the side of the test tube.</li>
-                          <li>If the sides of the test tube turn <strong>blue</strong>, the milk contains pond water.</li>
+                          <li>एक टेस्ट ट्यूब को दूध के नमूने से धोएं और खाली कर दें।</li>
+                          <li>टेस्ट ट्यूब की तरफ से 2% डिफेनिलामाइन घोल की 2-3 बूँदें डालें।</li>
+                          <li>यदि टेस्ट ट्यूब के किनारे <strong>नीले</strong> हो जाते हैं, तो दूध में तालाब का पानी है।</li>
                       </ol>
                   </div>
               `
           },
           {
-              title: 'Skimmed Milk Powder (SMP) in Natural Milk',
+              title: 'प्राकृतिक दूध में स्किम्ड दूध पाउडर (SMP)',
               content: `
                   <div class="prose max-w-none prose-green">
-                      <p><strong>Purpose:</strong> To illegally increase the SNF content of natural milk.</p>
-                      <p><strong>Principle:</strong> The proteins in reconstituted milk powder contain reducing groups that react with phosphomolybdic acid on boiling to give a blue colour.</p>
+                      <p><strong>उद्देश्य:</strong> प्राकृतिक दूध की SNF सामग्री को अवैध रूप से बढ़ाने के लिए।</p>
+                      <p><strong>सिद्धांत:</strong> पुनर्गठित दूध पाउडर में प्रोटीन में अपचायक समूह होते हैं जो उबलने पर फॉस्फोमोलीब्डिक एसिड के साथ प्रतिक्रिया करके नीला रंग देते हैं।</p>
                       <ol>
-                          <li>Centrifuge 50 ml of milk to separate the cream.</li>
-                          <li>Coagulate the skim milk portion with acetic acid.</li>
-                          <li>Wash the precipitate, then add 2 ml of 1% phosphomolybdic acid and boil for 15 minutes.</li>
-                          <li>The curd from pure milk will be greenish, whereas the curd from a sample containing SMP will be <strong>bluish</strong>.</li>
+                          <li>क्रीम को अलग करने के लिए 50 मिली दूध को अपकेंद्रित्र करें।</li>
+                          <li>स्किम दूध के हिस्से को एसिटिक एसिड से जमाएं।</li>
+                          <li>अवक्षेप को धोएं, फिर 2 मिली 1% फॉस्फोमोलीब्डिक एसिड डालें और 15 मिनट तक उबालें।</li>
+                          <li>शुद्ध दूध का दही हरा होगा, जबकि SMP वाले नमूने का दही <strong>नीला</strong> होगा।</li>
                       </ol>
                       <p class="text-xs"><strong>Ref:</strong> Journal of Food Science and Technology, Vol 22 (1985)</p>
                   </div>
               `
           },
            {
-              title: 'Soymilk in Milk',
+              title: 'दूध में सोया दूध',
               content: `
                   <div class="prose max-w-none prose-green">
-                      <p>Soymilk is sometimes added to illegally increase the protein content and SNF reading of milk. Several methods exist for its detection.</p>
-                      <h4 class="mt-4">Method I: Polarimeteric method</h4>
-                      <p>Based on the different optical rotation of sugars. Soymilk contains sucrose, raffinose, and stachyose, while bovine milk contains lactose. A significant change in the optical rotation of a protein-free filtrate can indicate soymilk addition.</p>
-                      <h4 class="mt-4">Method II: Isoelectric precipitation method</h4>
-                      <p>Soy proteins precipitate at a higher pH (~5.7) than milk casein (pH 4.6). By adjusting the milk pH to 5.7 and heating, coagulation will occur if soymilk is present.</p>
-                       <h4 class="mt-4">Method III: SDS-PAGE method</h4>
-                      <p>This electrophoretic technique separates proteins based on molecular weight. Soy proteins have different molecular weights than milk proteins and will show up as distinct, extra bands on the gel, confirming adulteration.</p>
-                      <h4 class="mt-4">Method IV: Immunodiffusion method</h4>
-                      <p>Uses antibodies specific to soy proteins. If soy protein is present in the milk, it will react with the antibody to form a visible precipitation line in an agar gel.</p>
-                      <h4 class="mt-4">Method V: HPLC based method</h4>
-                      <p>High-Performance Liquid Chromatography can separate and quantify the different sugars. The presence of stachyose, a sugar found in soybeans but not milk, is a definitive marker for soymilk adulteration.</p>
-                      <h4 class="mt-4">Method VI: Rapid method (Trypsin Inhibition)</h4>
-                      <p>Soymilk contains trypsin inhibitors. This test measures the activity of the enzyme trypsin. If soymilk is present, the trypsin will be inhibited, leading to a reduced color change in a specific chemical reaction compared to a pure milk sample.</p>
+                      <p>सोया दूध कभी-कभी दूध की प्रोटीन सामग्री और SNF रीडिंग को अवैध रूप से बढ़ाने के लिए मिलाया जाता है। इसके पता लगाने के लिए कई विधियाँ मौजूद हैं।</p>
+                      <h4 class="mt-4">विधि I: पोलारिमीटरिक विधि</h4>
+                      <p>शर्करा के विभिन्न ऑप्टिकल रोटेशन पर आधारित। सोया दूध में सुक्रोज, रैफिनोज और स्टैच्योज होते हैं, जबकि गोजातीय दूध में लैक्टोज होता है। एक प्रोटीन-मुक्त निस्यंद के ऑप्टिकल रोटेशन में एक महत्वपूर्ण परिवर्तन सोया दूध के अतिरिक्त का संकेत दे सकता है।</p>
+                      <h4 class="mt-4">विधि II: आइसोइलेक्ट्रिक वर्षा विधि</h4>
+                      <p>सोया प्रोटीन दूध कैसिइन (पीएच 4.6) की तुलना में उच्च पीएच (~5.7) पर अवक्षेपित होते हैं। दूध के पीएच को 5.7 पर समायोजित करके और गर्म करके, यदि सोया दूध मौजूद है तो जमावट होगी।</p>
+                       <h4 class="mt-4">विधि III: एसडीएस-पेज विधि</h4>
+                      <p>यह इलेक्ट्रोफोरेटिक तकनीक आणविक भार के आधार पर प्रोटीन को अलग करती है। सोया प्रोटीन में दूध प्रोटीन की तुलना में अलग-अलग आणविक भार होते हैं और जेल पर अलग, अतिरिक्त बैंड के रूप में दिखाई देंगे, जिससे मिलावट की पुष्टि होती है।</p>
+                      <h4 class="mt-4">विधि IV: इम्यूनोडिफ्यूजन विधि</h4>
+                      <p>सोया प्रोटीन के लिए विशिष्ट एंटीबॉडी का उपयोग करता है। यदि दूध में सोया प्रोटीन मौजूद है, तो यह एक अगर जेल में एक दृश्यमान वर्षा रेखा बनाने के लिए एंटीबॉडी के साथ प्रतिक्रिया करेगा।</p>
+                      <h4 class="mt-4">विधि V: एचपीएलसी आधारित विधि</h4>
+                      <p>उच्च-प्रदर्शन तरल क्रोमैटोग्राफी विभिन्न शर्करा को अलग और निर्धारित कर सकती है। स्टैच्योज की उपस्थिति, सोयाबीन में पाई जाने वाली एक चीनी लेकिन दूध में नहीं, सोया दूध मिलावट के लिए एक निश्चित मार्कर है।</p>
+                      <h4 class="mt-4">विधि VI: रैपिड विधि (ट्रिप्सिन निषेध)</h4>
+                      <p>सोया दूध में ट्रिप्सिन अवरोधक होते हैं। यह परीक्षण एंजाइम ट्रिप्सिन की गतिविधि को मापता है। यदि सोया दूध मौजूद है, तो ट्रिप्सिन बाधित हो जाएगा, जिससे एक शुद्ध दूध के नमूने की तुलना में एक विशिष्ट रासायनिक प्रतिक्रिया में कम रंग परिवर्तन होगा।</p>
                   </div>
               `
           },
            {
-              title: 'Cheese Whey in Milk',
+              title: 'दूध में पनीर मट्ठा',
               content: `
                   <div class="prose max-w-none prose-green">
-                      <h4>Ninhydrin based spectrophotometric method</h4>
-                      <p><strong>Principle:</strong> When rennet is used to make cheese, it cleaves a specific part of kappa-casein called glycomacropeptide (GMP), which goes into the whey. This GMP contains sialic acid. The test selectively precipitates GMP from the milk sample and then measures the sialic acid content. A high level of sialic acid indicates the presence of added cheese whey.</p>
+                      <h4>निनहाइड्रिन आधारित स्पेक्ट्रोफोटोमेट्रिक विधि</h4>
+                      <p><strong>सिद्धांत:</strong> जब पनीर बनाने के लिए रेनेट का उपयोग किया जाता है, तो यह कप्पा-कैसिइन के एक विशिष्ट भाग को तोड़ता है जिसे ग्लाइकोमैक्रोपेप्टाइड (GMP) कहा जाता है, जो मट्ठे में चला जाता है। इस GMP में सियालिक एसिड होता है। परीक्षण दूध के नमूने से GMP को चुनिंदा रूप से अवक्षेपित करता है और फिर सियालिक एसिड सामग्री को मापता है। सियालिक एसिड का एक उच्च स्तर अतिरिक्त पनीर मट्ठे की उपस्थिति को इंगित करता है।</p>
                       <ol>
-                          <li>Glycomacropeptide (GMP) is selectively precipitated from the milk sample using Trichloroacetic acid (TCA).</li>
-                          <li>The precipitate is then treated with an acidic ninhydrin reagent and heated.</li>
-                          <li>The sialic acid bound to the GMP produces a stable yellow-brown color, which is measured with a spectrophotometer at 470 nm.</li>
-                          <li>An absorbance value significantly higher than that of pure milk indicates adulteration with cheese whey.</li>
+                          <li>ग्लाइकोमैक्रोपेप्टाइड (GMP) को दूध के नमूने से ट्राइक्लोरोएसेटिक एसिड (TCA) का उपयोग करके चुनिंदा रूप से अवक्षेपित किया जाता है।</li>
+                          <li>अवक्षेप को फिर एक अम्लीय निनहाइड्रिन अभिकर्मक के साथ उपचारित किया जाता है और गर्म किया जाता है।</li>
+                          <li>GMP से बंधा हुआ सियालिक एसिड एक स्थिर पीला-भूरा रंग उत्पन्न करता है, जिसे 470 एनएम पर एक स्पेक्ट्रोफोटोमीटर से मापा जाता है।</li>
+                          <li>शुद्ध दूध की तुलना में काफी अधिक अवशोषण मान पनीर मट्ठे के साथ मिलावट को इंगित करता है।</li>
                       </ol>
                   </div>
               `
           },
           {
-              title: 'Gelatine',
+              title: 'जिलेटिन',
               content: `
                   <div class="prose max-w-none prose-green">
-                      <p><strong>Purpose:</strong> To increase the thickness and SNF content of milk.</p>
-                      <p><strong>Principle:</strong> Gelatine forms a yellow precipitate with picric acid.</p>
+                      <p><strong>उद्देश्य:</strong> दूध की मोटाई और SNF सामग्री को बढ़ाने के लिए।</p>
+                      <p><strong>सिद्धांत:</strong> जिलेटिन पिक्रिक एसिड के साथ एक पीला अवक्षेप बनाता है।</p>
                       <ol>
-                          <li>Take 10 ml of milk and add 20 ml of Stokes reagent (acid mercuric nitrate).</li>
-                          <li>Shake well and filter.</li>
-                          <li>To the filtrate, add an equal volume of saturated picric acid solution.</li>
-                          <li>A <strong>yellow precipitate</strong> indicates the presence of gelatine.</li>
+                          <li>10 मिली दूध लें और 20 मिली स्टोक्स अभिकर्मक (एसिड मरक्यूरिक नाइट्रेट) डालें।</li>
+                          <li>अच्छी तरह हिलाएं और फ़िल्टर करें।</li>
+                          <li>निस्यंद में, संतृप्त पिक्रिक एसिड घोल की समान मात्रा डालें।</li>
+                          <li>एक <strong>पीला अवक्षेप</strong> जिलेटिन की उपस्थिति को इंगित करता है।</li>
                       </ol>
                   </div>
               `
@@ -829,9 +830,27 @@ export const adulterationContent = {
                     <p><strong>Principle:</strong> Rosalic acid is an indicator that gives a red color in alkaline conditions.</p>
                     <ol>
                         <li>Take 10 ml of milk in a test tube and add an equal volume of ethyl alcohol (95%).</li>
-                        <li>Add a few drops of 0.1% rosalic acid solution and mix.</li>
+                        <li>Add a few drops of 0.1% rosolic acid solution and mix.</li>
                         <li>Appearance of a <strong>rose-red colour</strong> indicates the presence of neutralizers, while pure milk turns brownish.</li>
                     </ol>
+                    <h4 class="mt-4">Method 2: Alkalinity of Ash Test</h4>
+                    <p><strong>Principle:</strong> If a neutralizer has been added, the ash of the milk will have a higher alkalinity than that of pure milk.</p>
+                    <ol>
+                        <li>Take 20 ml of milk in a silica crucible.</li>
+                        <li>Evaporate the water and ash the contents at 550°C in a muffle furnace.</li>
+                        <li>Dissolve the ash in 10 ml of distilled water and titrate it against 0.1 N HCl.</li>
+                        <li>A titre value greater than 1.2 ml of 0.1 N HCl indicates the presence of neutralizers.</li>
+                    </ol>
+                    <h4 class="mt-4">Method 3: Determination of true lactic acid/lactate content</h4>
+                     <p><strong>Principle:</strong> The true lactic acid/lactate content is determined spectrophotometrically. The principle involves removal of interfering substances, oxidation of lactic acid to acetaldehyde, which then forms a purple colour with p-hydroxydiphenyl. A disturbed relationship between lactic acid content and titrable acidity suspects neutralization.</p>
+                    <ol>
+                        <li>A protein-free filtrate of the milk sample is prepared using copper sulphate and calcium hydroxide.</li>
+                        <li>The filtrate is treated with sulphuric acid and copper sulphate to oxidize the lactic acid.</li>
+                        <li>p-Hydroxydiphenyl reagent is added, and after incubation, a violet colour develops.</li>
+                        <li>The intensity of the colour is measured at 570 nm and compared against a standard curve.</li>
+                        <li>If milk has normal or low titrable acidity, but lactic acid content is more than 30 mg/100 ml, neutralization is suspected.</li>
+                    </ol>
+                    <p class="text-xs"><strong>Ref:</strong> IS:1479 (1960), BIS (1981)</p>
                 </div>
             `
         },
@@ -934,9 +953,18 @@ export const adulterationContent = {
                     <p><strong>Principle:</strong> Fructose in cane sugar reacts with resorcinol in HCl to give a red color.</p>
                     <ol>
                         <li>Take 1ml of milk and add 1ml of Seliwanoff’s reagent (resorcinol in HCl).</li>
-                        <li>Heat in a boiling water bath for 5 mins.</li>
+                        <li>Heat in a boiling water bath for 5 minutes.</li>
                         <li>A <strong>red color</strong> indicates the presence of sucrose. Pure milk remains white.</li>
                     </ol>
+                    <h4 class="mt-4">Method 2: Resorcinol Test</h4>
+                    <ol>
+                        <li>Take about 5 ml of milk in a test tube.</li>
+                        <li>Add 1 ml of concentrated HCl.</li>
+                        <li>Add 0.1 g of resorcinol and mix.</li>
+                        <li>Place the tube in a boiling water bath for 5 min.</li>
+                        <li>A <strong>red colour</strong> indicates the presence of sucrose.</li>
+                    </ol>
+                    <p class="text-xs"><strong>Ref:</strong> IS:1479 (1960)</p>
                 </div>
             `
         },
@@ -1219,6 +1247,8 @@ export const adulterationContent = {
       ]
   }
 }
+    
+
     
 
     
