@@ -1,4 +1,3 @@
-
 'use server';
 /**
  * @fileOverview This file defines a Genkit flow for generating a daily dairy tip.
@@ -12,7 +11,6 @@ export type DairyTipInput = z.infer<typeof DairyTipInputSchema>;
 
 const DairyTipOutputSchema = z.string();
 export type DairyTipOutput = z.infer<typeof DairyTipOutputSchema>;
-
 
 const generateDairyTipPrompt = ai.definePrompt({
     name: 'generateDairyTipPrompt',
@@ -52,8 +50,9 @@ const generateDairyTipFlow = ai.defineFlow(
     outputSchema: DairyTipOutputSchema,
   },
   async () => {
+    const rendered = await generateDairyTipPrompt();
     const { text } = await ai.generate({
-        prompt: generateDairyTipPrompt,
+        prompt: rendered.prompt,
         history: [], 
     });
     return text ?? "Did you know? Homogenization is a mechanical process where milk is forced through a small gap at high pressure. This breaks down large fat globules into smaller ones, preventing a cream layer from forming and resulting in a creamier texture.";
