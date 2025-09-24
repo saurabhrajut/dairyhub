@@ -68,15 +68,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             const userDocRef = doc(db, 'users', firebaseUser.uid);
             const userDoc = await getDoc(userDocRef);
             
-            const userData = userDoc.exists() ? userDoc.data() : {};
+            let userData: Partial<AppUser> = {};
+            if (userDoc.exists()) {
+                userData = userDoc.data();
+            } else if (!firebaseUser.isAnonymous) {
+                // If the user doc doesn't exist but they are a real user,
+                // don't default them to guest. The profile might be created later.
+                 userData = {
+                    department: 'process-access', // Sensible default for a new registered user
+                    gender: 'other'
+                };
+            }
+
             const appUser: AppUser = {
-            uid: firebaseUser.uid,
-            email: firebaseUser.email,
-            displayName: firebaseUser.displayName,
-            photoURL: firebaseUser.photoURL,
-            isAnonymous: firebaseUser.isAnonymous,
-            department: userData.department || 'guest',
-            gender: userData.gender || 'other',
+                uid: firebaseUser.uid,
+                email: firebaseUser.email,
+                displayName: firebaseUser.displayName,
+                photoURL: firebaseUser.photoURL,
+                isAnonymous: firebaseUser.isAnonymous,
+                // Ensure department is 'guest' ONLY if they are anonymous and have no doc
+                department: firebaseUser.isAnonymous ? 'guest' : userData.department || 'process-access',
+                gender: userData.gender || 'other',
             };
             setUser(appUser);
             await loadSubscription(firebaseUser.uid);
