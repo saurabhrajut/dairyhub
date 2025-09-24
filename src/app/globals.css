@@ -83,3 +83,31 @@
   opacity: 1;
   transform: translateY(0);
 }
+
+pre {
+  @apply whitespace-pre-wrap break-words p-4 rounded-lg border;
+  background-color: hsl(var(--secondary));
+  border-color: hsl(var(--border));
+  overflow-x: auto;
+}
+
+pre code {
+  @apply break-all;
+  background-color: transparent;
+  color: hsl(var(--secondary-foreground));
+}
+
+/* ===== START: टेबल को ठीक करने के लिए यह कोड जोड़ा गया है ===== */
+.table-container {
+  overflow-x: auto; /* यह हॉरिजॉन्टल स्क्रॉल बार जोड़ता है */
+  -webkit-overflow-scrolling: touch; /* iOS पर स्मूथ स्क्रॉलिंग के लिए */
+  border: 1px solid hsl(var(--border)); /* आपकी थीम जैसा बॉर्डर */
+  border-radius: var(--radius); /* आपकी थीम जैसा गोल कोना */
+}
+
+.force-wrap {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-all; /* यह सबसे ज़रूरी है, यह किसी भी लंबे शब्द को तोड़ देता है */
+}
+/* ===== END: नया कोड यहाँ खत्म हुआ ===== */

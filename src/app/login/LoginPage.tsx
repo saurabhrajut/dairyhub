@@ -24,9 +24,18 @@ export default function LoginPage() {
         e.preventDefault();
         setIsLoading(true);
 
+        // --- DEBUGGING STEP 1: चेक करें कि सही फंक्शन चल रहा है ---
+        console.log("--- handleLogin function started ---");
+        
+        // --- DEBUGGING STEP 2: देखें कि useAuth() से क्या मिल रहा है ---
+        console.log("The 'login' function received from context is:", login);
+
         try {
-            // बदला गया: अब यह कुछ रिटर्न नहीं करता, इसलिए userCredential हटा दिया
-            await login(email, password);
+            const userCredential = await login(email, password);
+
+            // --- DEBUGGING STEP 3: लॉगिन के बाद यूजर की जानकारी देखें ---
+            console.log("Login successful, userCredential object:", userCredential);
+            console.log("Is the user anonymous? :", userCredential.user.isAnonymous);
 
             toast({
                 title: 'Login Successful!',
@@ -34,10 +43,12 @@ export default function LoginPage() {
             });
             router.push('/');
         } catch (error: any) {
+             // --- DEBUGGING: अगर कोई एरर आए तो उसे देखें ---
+             console.error("Login failed with error:", error);
              toast({
                 variant: "destructive",
                 title: 'Login Failed',
-                description: error.message || "Please check your credentials.",
+                description: error.message || "Please check your credentials or sign up.",
             });
         } finally {
             setIsLoading(false);
@@ -46,8 +57,9 @@ export default function LoginPage() {
     
     const handleGuestLogin = async () => {
         setIsLoading(true);
+        // गेस्ट लॉगिन के लिए भी एक लॉग लगा देते हैं ताकि कोई कन्फ्यूजन न हो
+        console.log("--- handleGuestLogin function started ---");
         try {
-            // यह अब सही से काम करेगा
             await anonymousLogin();
             toast({
                 title: 'Logged in as Guest!',
@@ -65,9 +77,12 @@ export default function LoginPage() {
         }
     }
 
+    // JSX कोड में कोई बदलाव नहीं है, इसलिए उसे यहाँ से हटा रहा हूँ ताकि फोकस बना रहे
+    // ... आपका पूरा JSX कोड यहाँ आएगा ...
     return (
         <div className="bg-gray-50 flex items-center justify-center min-h-screen p-4">
             <div className="w-full max-w-sm bg-white rounded-2xl shadow-xl p-8 m-4 border">
+                {/* ... The rest of your JSX code is exactly the same ... */}
                  <div className="text-center mb-8">
                     <MilkCanIcon className="w-16 h-16 text-primary mx-auto mb-4" />
                     <h1 className="text-3xl font-bold text-gray-800">
