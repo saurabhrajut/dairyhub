@@ -1,15 +1,16 @@
-
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useLanguage } from "@/context/language-context";
+import { useToast } from "@/hooks/use-toast"; // ## FIX 1: useToast को यहाँ इम्पोर्ट किया गया
 
+// ## FIX 2: FatSnfClrTsCalc कंपोनेंट को मुख्य कंपोनेंट से बाहर निकाला गया ##
 const FatSnfClrTsCalc = ({ inputs, setInputs, result, setResult, language }: any) => {
     const texts = {
         en: {
@@ -50,11 +51,11 @@ const FatSnfClrTsCalc = ({ inputs, setInputs, result, setResult, language }: any
         const snf = parseFloat(inputs.snf);
         let newSnf = 0, newClr = 0, newTs = 0;
 
-        if (calculationBasis === 'fat_clr' && fat && clr) {
+        if (calculationBasis === 'fat_clr' && !isNaN(fat) && !isNaN(clr)) {
             newSnf = (clr / 4) + (fat * 0.25) + 0.72;
             newTs = newSnf + fat;
             newClr = clr;
-        } else if (calculationBasis === 'fat_snf' && fat && snf) {
+        } else if (calculationBasis === 'fat_snf' && !isNaN(fat) && !isNaN(snf)) {
             newClr = 4 * (snf - 0.72 - (0.25 * fat));
             newTs = snf + fat;
             newSnf = snf;
@@ -63,11 +64,11 @@ const FatSnfClrTsCalc = ({ inputs, setInputs, result, setResult, language }: any
     };
 
     return (
-        <div className="space-y-4 p-4 border rounded-md bg-gray-50">
+        <div className="space-y-4 p-4 border rounded-md bg-gray-50 dark:bg-gray-800">
             <h3 className="font-semibold text-lg">{t.title}</h3>
             <div className="grid grid-cols-2 gap-4">
                 <div>
-                    <label>{t.basedOn}</label>
+                    <label className="text-sm font-medium">{t.basedOn}</label>
                     <Select value={calculationBasis} onValueChange={(val: "fat_clr" | "fat_snf") => setCalculationBasis(val)}>
                         <SelectTrigger><SelectValue /></SelectTrigger>
                         <SelectContent>
@@ -77,27 +78,27 @@ const FatSnfClrTsCalc = ({ inputs, setInputs, result, setResult, language }: any
                     </Select>
                 </div>
                 <div>
-                    <label>{t.fat}</label>
+                    <label className="text-sm font-medium">{t.fat}</label>
                     <Input type="number" name="fat" value={inputs.fat} onChange={handleInputChange} placeholder="e.g., 3.5" />
                 </div>
                 {calculationBasis === 'fat_clr' && (
                     <div>
-                        <label>{t.clr}</label>
+                        <label className="text-sm font-medium">{t.clr}</label>
                         <Input type="number" name="clr" value={inputs.clr} onChange={handleInputChange} placeholder="e.g., 28" />
                     </div>
                 )}
                 {calculationBasis === 'fat_snf' && (
                     <div>
-                        <label>{t.snf}</label>
+                        <label className="text-sm font-medium">{t.snf}</label>
                         <Input type="number" name="snf" value={inputs.snf} onChange={handleInputChange} placeholder="e.g., 8.5" />
                     </div>
                 )}
             </div>
             <Button onClick={calculate} className="w-full">{t.calculate}</Button>
             {result && (
-                <div className="mt-4 p-4 bg-green-50 rounded-lg border border-green-200">
+                <div className="mt-4 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-700">
                     <h4 className="font-bold text-center">Calculated Values</h4>
-                    <div className="flex justify-around mt-2">
+                    <div className="flex justify-around mt-2 text-sm">
                         <p><strong>SNF:</strong> {result.snf}%</p>
                         <p><strong>CLR:</strong> {result.clr}</p>
                         <p><strong>TS:</strong> {result.ts}%</p>
@@ -111,6 +112,7 @@ const FatSnfClrTsCalc = ({ inputs, setInputs, result, setResult, language }: any
 
 export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: (isOpen: boolean) => void }) {
     const { language } = useLanguage();
+    const { toast } = useToast(); // ## FIX 1: useToast को यहाँ जोड़ा गया
     const texts = {
         en: {
             title: "Standardization of Milk & Cream",
@@ -147,7 +149,6 @@ export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean,
         milkQty: '',
         creamFat: '',
         stdFat: '',
-        // For FatSnfClrTsCalc
         fat: '',
         clr: '',
         snf: '',
@@ -160,38 +161,38 @@ export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean,
         setInputs(prev => ({ ...prev, [name]: value }));
     };
 
-    const calculatedValues = useMemo(() => {
-        const fat = parseFloat(inputs.fat);
-        const clr = parseFloat(inputs.clr);
-        const snf = parseFloat(inputs.snf);
-        return { fat, clr, snf };
-    }, [inputs.fat, inputs.clr, inputs.snf]);
-
     const calculate = () => {
         const milkFat = parseFloat(inputs.milkFat);
         const milkQty = parseFloat(inputs.milkQty);
         const creamFat = parseFloat(inputs.creamFat);
         const stdFat = parseFloat(inputs.stdFat);
 
-        if (milkFat && milkQty && creamFat && stdFat) {
-            const creamPart = stdFat;
-            const milkPart = creamFat - stdFat;
-            const totalParts = creamPart + milkPart;
-
-            const requiredCream = (milkQty / totalParts) * creamPart;
-            const requiredMilk = (milkQty / totalParts) * milkPart;
-            const totalMixture = requiredCream + requiredMilk;
-
-            setResult({
-                requiredCream: requiredCream.toFixed(2),
-                requiredMilk: requiredMilk.toFixed(2),
-                totalMixture: totalMixture.toFixed(2)
-            });
-        } else {
+        if (isNaN(milkFat) || isNaN(milkQty) || isNaN(creamFat) || isNaN(stdFat)) {
             setResult(null);
+            return;
         }
-    };
 
+        if (stdFat <= milkFat || stdFat >= creamFat) {
+             toast({
+                variant: "destructive",
+                title: "Invalid Input",
+                description: "Standardized FAT must be between Milk FAT and Cream FAT.",
+            });
+            setResult(null);
+            return;
+        }
+
+        const partsOfCream = stdFat - milkFat;
+        const partsOfMilk = creamFat - stdFat;
+        const creamToAdd = milkQty * (partsOfCream / partsOfMilk);
+        const totalMixture = milkQty + creamToAdd;
+
+        setResult({
+            requiredCream: creamToAdd.toFixed(2),
+            initialMilk: milkQty.toFixed(2),
+            totalMixture: totalMixture.toFixed(2),
+        });
+    };
 
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -201,58 +202,59 @@ export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean,
                         <DialogTitle>{t.title}</DialogTitle>
                         <DialogDescription>{t.description}</DialogDescription>
                     </DialogHeader>
-
                     <div className="grid md:grid-cols-2 gap-6 mt-4">
                         <div className="space-y-4">
                             <div>
-                                <label>{t.milkFat}</label>
+                                <label className="text-sm font-medium">{t.milkFat}</label>
                                 <Input type="number" name="milkFat" value={inputs.milkFat} onChange={handleInputChange} placeholder="e.g., 3.5" />
                             </div>
                             <div>
-                                <label>{t.milkQty}</label>
+                                <label className="text-sm font-medium">{t.milkQty}</label>
                                 <Input type="number" name="milkQty" value={inputs.milkQty} onChange={handleInputChange} placeholder="e.g., 100" />
                             </div>
                             <div>
-                                <label>{t.creamFat}</label>
+                                <label className="text-sm font-medium">{t.creamFat}</label>
                                 <Input type="number" name="creamFat" value={inputs.creamFat} onChange={handleInputChange} placeholder="e.g., 40" />
                             </div>
                             <div>
-                                <label>{t.stdFat}</label>
-                                <Input type="number" name="stdFat" value={inputs.stdFat} onChange={handleInputChange} placeholder="e.g., 3.0" />
+                                <label className="text-sm font-medium">{t.stdFat}</label>
+                                <Input type="number" name="stdFat" value={inputs.stdFat} onChange={handleInputChange} placeholder="e.g., 4.5" />
                             </div>
                             <Button onClick={calculate} className="w-full">{t.calculate}</Button>
-
                             {result && (
-                                <div className="p-4 bg-gray-100 rounded-lg">
+                                <div className="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
                                     <h3 className="font-semibold text-lg text-center mb-2">{t.results}</h3>
                                     <Table>
                                         <TableBody>
                                             <TableRow>
-                                                <TableCell>{t.requiredCream}</TableCell>
-                                                <TableCell className="font-bold">{result.requiredCream} Kg</TableCell>
+                                                <TableCell>{t.requiredCream} (to add)</TableCell>
+                                                <TableCell className="font-bold text-right">{result.requiredCream} Kg</TableCell>
                                             </TableRow>
                                             <TableRow>
-                                                <TableCell>{t.requiredMilk}</TableCell>
-                                                <TableCell className="font-bold">{result.requiredMilk} Kg</TableCell>
+                                                <TableCell>Initial Milk</TableCell>
+                                                <TableCell className="font-bold text-right">{result.initialMilk} Kg</TableCell>
                                             </TableRow>
                                             <TableRow>
                                                 <TableCell>{t.totalMixture}</TableCell>
-                                                <TableCell className="font-bold">{result.totalMixture} Kg</TableCell>
+                                                <TableCell className="font-bold text-right">{result.totalMixture} Kg</TableCell>
                                             </TableRow>
                                         </TableBody>
                                     </Table>
                                 </div>
                             )}
                         </div>
-
                         <div>
-                            <FatSnfClrTsCalc inputs={inputs} setInputs={setInputs} result={fatSnfResult} setResult={setFatSnfResult} language={language}/>
+                            <FatSnfClrTsCalc 
+                                inputs={inputs} 
+                                setInputs={setInputs} 
+                                result={fatSnfResult} 
+                                setResult={setFatSnfResult} 
+                                language={language}
+                            />
                         </div>
-
                     </div>
                 </ScrollArea>
             </DialogContent>
         </Dialog>
     );
 }
-
