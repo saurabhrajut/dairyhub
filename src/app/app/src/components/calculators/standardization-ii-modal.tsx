@@ -166,66 +166,43 @@ export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean,
         const creamFat = parseFloat(inputs.creamFat);
         const stdFat = parseFloat(inputs.stdFat);
 
-        if (!isNaN(milkFat) && !isNaN(milkQty) && !isNaN(creamFat) && !isNaN(stdFat)) {
-            // Pearson Square logic
-            // Ensure stdFat is between milkFat and creamFat
-            if ((stdFat > milkFat && stdFat < creamFat) || (stdFat < milkFat && stdFat > creamFat)) {
-                const highFat = Math.max(milkFat, creamFat);
-                const lowFat = Math.min(milkFat, creamFat);
-
-                const highFatParts = Math.abs(stdFat - lowFat);
-                const lowFatParts = Math.abs(highFat - stdFat);
-                
-                const totalParts = highFatParts + lowFatParts;
-                
-                let requiredCream = 0;
-                let requiredMilk = 0;
-
-                // This part is complex, for a simple standardization of cream to lower fat milk:
-                // We are mixing cream (high fat) and milk (low fat) to get a std fat.
-                // This seems to be the intention, but the variable names are confusing.
-                // Assuming we are standardizing MILK using CREAM.
-                
-                const creamPart = stdFat - milkFat; // Parts of cream to add
-                const skimPart = creamFat - stdFat; // Parts of milk to use
-                
-                const totalMixParts = creamPart + skimPart;
-                
-                // This logic is for mixing two liquids to get a target.
-                // Let's use a simpler, more common interpretation of Pearson Square
-                // for standardizing a batch of milk.
-
-                // A (High Fat - Cream)      (Target - Low Fat) -> Parts of A
-                //           \      /
-                //            Target
-                //           /      \
-                // B (Low Fat - Milk)       (High Fat - Target) -> Parts of B
-                
-                const partsOfCream = Math.abs(stdFat - milkFat);
-                const partsOfMilk = Math.abs(creamFat - stdFat);
-
-                // This seems wrong for standardizing a fixed quantity of milk.
-                // Let's assume we are adding cream or skim milk to a batch of milk.
-                // The current calculator UI seems to mix two components to get a third,
-                // which is not a standard Pearson square for batch standardization.
-                // Let's re-implement the existing logic correctly.
-
-                const finalRequiredCream = (milkQty / partsOfMilk) * partsOfCream;
-                const totalMixture = milkQty + finalRequiredCream;
-
-
-                setResult({
-                    requiredCream: finalRequiredCream.toFixed(2), // This is cream to ADD
-                    requiredMilk: milkQty.toFixed(2), // This is the initial milk
-                    totalMixture: totalMixture.toFixed(2)
-                });
-
-            } else {
-                 setResult(null); // Or show an error
-            }
-        } else {
+        if (isNaN(milkFat) || isNaN(milkQty) || isNaN(creamFat) || isNaN(stdFat)) {
             setResult(null);
+            return;
         }
+
+        // Pearson Square logic to standardize milk
+        // Case 1: Standardized fat is LOWER than milk fat (removing cream / adding skim)
+        // This calculator seems to be ADDING cream, so we are increasing fat.
+        // We will assume we are standardizing UP.
+        // stdFat must be between milkFat and creamFat.
+        if (stdFat <= milkFat || stdFat >= creamFat) {
+             toast({
+                variant: "destructive",
+                title: "Invalid Input",
+                description: "Standardized FAT must be between Milk FAT and Cream FAT.",
+            });
+            setResult(null);
+            return;
+        }
+
+        // Parts of cream needed = |Target Fat - Milk Fat|
+        const partsOfCream = stdFat - milkFat;
+        // Parts of milk needed = |Cream Fat - Target Fat|
+        const partsOfMilk = creamFat - stdFat;
+
+        // For a given quantity of milk (milkQty), how much cream to add?
+        // Ratio is partsOfCream / partsOfMilk
+        // Cream to add = milkQty * (partsOfCream / partsOfMilk)
+        
+        const creamToAdd = milkQty * (partsOfCream / partsOfMilk);
+        const totalMixture = milkQty + creamToAdd;
+
+        setResult({
+            requiredCream: creamToAdd.toFixed(2),
+            initialMilk: milkQty.toFixed(2),
+            totalMixture: totalMixture.toFixed(2),
+        });
     };
 
 
@@ -254,7 +231,7 @@ export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean,
                             </div>
                             <div>
                                 <label>{t.stdFat}</label>
-                                <Input type="number" name="stdFat" value={inputs.stdFat} onChange={handleInputChange} placeholder="e.g., 3.0" />
+                                <Input type="number" name="stdFat" value={inputs.stdFat} onChange={handleInputChange} placeholder="e.g., 4.5" />
                             </div>
                             <Button onClick={calculate} className="w-full">{t.calculate}</Button>
 
@@ -269,7 +246,7 @@ export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean,
                                             </TableRow>
                                             <TableRow>
                                                 <TableCell>Initial Milk</TableCell>
-                                                <TableCell className="font-bold">{result.requiredMilk} Kg</TableCell>
+                                                <TableCell className="font-bold">{result.initialMilk} Kg</TableCell>
                                             </TableRow>
                                             <TableRow>
                                                 <TableCell>{t.totalMixture}</TableCell>
@@ -291,3 +268,6 @@ export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean,
         </Dialog>
     );
 }
+
+
+    
