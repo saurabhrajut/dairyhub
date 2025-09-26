@@ -110,17 +110,21 @@ const CalculatorCard = ({ title, children, description }: { title: string; child
     </div>
 );
 
+// ## FIX: MemoizedInputField कंपोनेंट को useEffect के साथ ठीक किया गया ##
 const MemoizedInputField = memo(function InputField({ label, value, name, setter, unit, placeholder, inputClassName, type = "number", step = "any" }: { label: string, value: string, name: string, setter: (name: string, value: string) => void, unit?: string, placeholder?: string, inputClassName?: string, type?: string, step?: string }) {
     const [internalValue, setInternalValue] = useState(value);
 
-    // Update internal state when props change, but not if the element has focus
-    if (value !== internalValue && document.activeElement?.getAttribute('name') !== name) {
-        setInternalValue(value);
-    }
+    // यह सुनिश्चित करता है कि जब बाहरी 'value' बदलती है तो अंदर की वैल्यू भी अपडेट हो,
+    // लेकिन अगर यूज़र टाइप कर रहा हो तो उसे डिस्टर्ब न करे।
+    useEffect(() => {
+        if (value !== internalValue && document.activeElement?.getAttribute('name') !== name) {
+            setInternalValue(value);
+        }
+    }, [value, name, internalValue]); // useEffect इन वेरिएबल्स के बदलने पर चलेगा
     
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setInternalValue(e.target.value);
-        setter(e.target.name, e.target.value); // Update parent state on change
+        setter(e.target.name, e.target.value); // पैरेंट स्टेट को अपडेट करें
     };
     
     return (
