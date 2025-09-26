@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, memo, useCallback, useEffect, useMemo } from "react"
@@ -914,14 +913,30 @@ function TwoComponentStandardizationCalc() {
             ing2_F = parseFloat(inputs.Fr) / 100;
             ing2_SNF = formula(parseFloat(inputs.CLRr), parseFloat(inputs.Fr)) / 100;
             ing2_name = "Rich Milk";
-        } else { // skim_cream
+        } else if (calcType === 'skim_cream') {
             ing1_F = parseFloat(inputs.Fs) / 100;
             ing1_SNF = formula(parseFloat(inputs.CLRs), parseFloat(inputs.Fs)) / 100;
             ing1_name = "Skimmed Milk";
             ing2_F = parseFloat(inputs.Fc) / 100;
             ing2_SNF = formula(parseFloat(inputs.CLRc), parseFloat(inputs.Fc)) / 100;
             ing2_name = "Cream";
+        } else if (calcType === 'rich_milk_water') {
+            ing1_F = parseFloat(inputs.Fr) / 100;
+            ing1_SNF = formula(parseFloat(inputs.CLRr), parseFloat(inputs.Fr)) / 100;
+            ing1_name = "Rich Milk";
+            ing2_F = 0; ing2_SNF = 0; ing2_name = "Water";
+        } else if (calcType === 'cream_water') {
+            ing1_F = parseFloat(inputs.Fc) / 100;
+            ing1_SNF = formula(parseFloat(inputs.CLRc), parseFloat(inputs.Fc)) / 100;
+            ing1_name = "Cream";
+            ing2_F = 0; ing2_SNF = 0; ing2_name = "Water";
+        } else if (calcType === 'skim_milk_water') {
+            ing1_F = parseFloat(inputs.Fs) / 100;
+            ing1_SNF = formula(parseFloat(inputs.CLRs), parseFloat(inputs.Fs)) / 100;
+            ing1_name = "Skimmed Milk";
+            ing2_F = 0; ing2_SNF = 0; ing2_name = "Water";
         }
+
 
         if ([V0, Fi, CLR0, Ft, CLRt, ing1_F, ing1_SNF, ing2_F, ing2_SNF].some(isNaN)) {
              setError("Please fill all fields with valid numbers.");
