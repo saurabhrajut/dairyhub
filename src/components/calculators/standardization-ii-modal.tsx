@@ -216,8 +216,13 @@ function FatSnfClrTsCalc() {
                 <Select value={formula} onValueChange={setFormula}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>
-                        {Object.entries(snfFormulas).map(([key, {name}]) => (
-                            <SelectItem key={key} value={key}>{name}</SelectItem>
+                        {Object.entries(snfFormulas).map(([key, {name, formulaText}]) => (
+                            <SelectItem key={key} value={key}>
+                                <div className="flex flex-col">
+                                    <span className="font-semibold">{name}</span>
+                                    <span className="text-xs text-muted-foreground">{formulaText}</span>
+                                </div>
+                            </SelectItem>
                         ))}
                     </SelectContent>
                 </Select>
