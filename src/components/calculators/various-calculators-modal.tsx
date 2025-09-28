@@ -2,7 +2,7 @@
       
 "use client";
 
-import { useState, useMemo, memo, useCallback } from "react";
+import { useState, memo, useCallback, useEffect, useMemo } from "react"
 import {
   Dialog,
   DialogContent,
@@ -47,7 +47,7 @@ const calculatorsInfo = {
     'formulas': { title: "Common Formulas", icon: Calculator, component: FormulasTab },
 };
 
-export function VariousCalculatorsModal({
+export function LabCalculatorsModal({
   isOpen,
   setIsOpen,
 }: {
