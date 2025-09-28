@@ -795,11 +795,16 @@ function PointBasedPricingCalc() {
 }
 
 
+// अपनी फाइल में इस फंक्शन को नीचे दिए गए कोड से बदलें
+
 function CreamCalculators() {
-    const [activeCalc, setActiveCalc] = useState('fat-percent');
+    const [activeCalc, setActiveCalc] = useState('cream-dilution'); // डिफ़ॉल्ट रूप से नया कैलकुलेटर दिखाएँ
 
     const renderCalculator = () => {
         switch (activeCalc) {
+            // ## FIX: यहाँ CreamDilutionCalc को सही से जोड़ा गया है ##
+            case 'cream-dilution':
+                return <CreamDilutionCalc />;
             case 'actual-snf':
                 return <ActualCreamSnfCalc />;
             case 'diluted-snf':
@@ -819,6 +824,8 @@ function CreamCalculators() {
                         <SelectValue placeholder="Select a calculator" />
                     </SelectTrigger>
                     <SelectContent>
+                        {/* ## FIX: ड्रॉपडाउन में सही ऑप्शन जोड़े गए हैं ## */}
+                        <SelectItem value="cream-dilution">Cream Dilution (by Water)</SelectItem>
                         <SelectItem value="fat-percent">Fat %</SelectItem>
                         <SelectItem value="actual-snf">Actual SNF</SelectItem>
                         <SelectItem value="diluted-snf">Diluted SNF</SelectItem>
