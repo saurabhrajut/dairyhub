@@ -160,98 +160,105 @@ function FatSnfClrTsCalc() {
     const [inputs, setInputs] = useState({
         fat: '4.5',
         clr: '28.0',
-        snf: '',
-        ts: ''
+        snf: '8.94',
     });
-    const [lastChanged, setLastChanged] = useState<'fat' | 'clr' | 'snf' | 'ts'>('fat');
+    const [result, setResult] = useState<{ snf: string, clr: string, ts: string } | null>(null);
     const [formula, setFormula] = useState('isi');
+    const [basis, setBasis] = useState<'fat_clr' | 'fat_snf'>('fat_clr');
 
     const handleInputChange = useCallback((name: string, value: string) => {
         setInputs(prev => ({ ...prev, [name]: value }));
-        if (['fat', 'clr', 'snf', 'ts'].includes(name)) {
-            setLastChanged(name as 'fat' | 'clr' | 'snf' | 'ts');
-        }
     }, []);
 
-    const calculatedValues = useMemo(() => {
+    const calculate = useCallback(() => {
         const fat = parseFloat(inputs.fat);
         const clr = parseFloat(inputs.clr);
         const snf = parseFloat(inputs.snf);
-        const ts = parseFloat(inputs.ts);
         
         let newSnf = NaN, newTs = NaN, newClr = NaN;
         
-        const selectedFormula = snfFormulas[formula as keyof typeof snfFormulas] || snfFormulas['isi'];
+        const selectedFormula = snfFormulas[formula] || snfFormulas['isi'];
 
-        if (lastChanged === 'fat' || lastChanged === 'clr') {
+        if (basis === 'fat_clr') {
             if (!isNaN(fat) && !isNaN(clr)) {
                 newSnf = selectedFormula.calc(clr, fat);
                 newTs = newSnf + fat;
                 newClr = clr;
             }
-        } else if (lastChanged === 'snf') {
-            if (!isNaN(snf) && !isNaN(fat)) {
+        } else if (basis === 'fat_snf') {
+            if (!isNaN(fat) && !isNaN(snf)) {
                 newClr = selectedFormula.inverse(snf, fat);
                 newTs = snf + fat;
-            }
-        } else if (lastChanged === 'ts') {
-            if (!isNaN(ts) && !isNaN(fat)) {
-                newSnf = ts - fat;
-                newClr = selectedFormula.inverse(newSnf, fat);
+                newSnf = snf;
             }
         }
 
-        return {
-            snf: !isNaN(newSnf) ? newSnf.toFixed(2) : (lastChanged === 'snf' ? inputs.snf : ''),
-            ts: !isNaN(newTs) ? newTs.toFixed(2) : (lastChanged === 'ts' ? inputs.ts : ''),
-            clr: !isNaN(newClr) ? newClr.toFixed(2) : (lastChanged === 'clr' ? inputs.clr : '')
-        };
+        setResult({
+            snf: !isNaN(newSnf) ? newSnf.toFixed(2) : '...',
+            ts: !isNaN(newTs) ? newTs.toFixed(2) : '...',
+            clr: !isNaN(newClr) ? newClr.toFixed(2) : '...'
+        });
 
-    }, [inputs, lastChanged, formula]);
+    }, [inputs, basis, formula]);
     
     return (
         <CalculatorCard title="Fat, SNF, CLR & TS Calculator" description="Enter any two values to calculate the others. You can also select different industry-standard formulas for SNF calculation.">
-            <div className="mb-4">
-                <Label>Select SNF Formula</Label>
-                <Select value={formula} onValueChange={setFormula}>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                        {Object.entries(snfFormulas).map(([key, {name, formulaText}]) => (
-                            <SelectItem key={key} value={key}>
-                                <div className="flex flex-col">
-                                    <span className="font-semibold">{name}</span>
-                                    <span className="text-xs text-muted-foreground">{formulaText}</span>
-                                </div>
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
+            <div className="mb-4 space-y-4">
+                <div>
+                    <Label>Select SNF Formula</Label>
+                    <Select value={formula} onValueChange={setFormula}>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            {Object.entries(snfFormulas).map(([key, {name, formulaText}]) => (
+                                <SelectItem key={key} value={key}>
+                                    <div className="flex flex-col">
+                                        <span className="font-semibold">{name}</span>
+                                        <span className="text-xs text-muted-foreground">{formulaText}</span>
+                                    </div>
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </div>
+                 <div>
+                    <Label>Calculate based on:</Label>
+                    <Select value={basis} onValueChange={(val: 'fat_clr' | 'fat_snf') => setBasis(val)}>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="fat_clr">FAT and CLR</SelectItem>
+                            <SelectItem value="fat_snf">FAT and SNF</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 <MemoizedInputField label="Fat %" value={inputs.fat} name="fat" setter={handleInputChange} />
-                <MemoizedInputField label="CLR" value={inputs.clr} name="clr" setter={handleInputChange} />
-                <MemoizedInputField label="SNF %" value={inputs.snf} name="snf" setter={handleInputChange} />
-                <MemoizedInputField label="TS %" value={inputs.ts} name="ts" setter={handleInputChange} />
+                {basis === 'fat_clr' ? (
+                    <MemoizedInputField label="CLR" value={inputs.clr} name="clr" setter={handleInputChange} />
+                ) : (
+                    <MemoizedInputField label="SNF %" value={inputs.snf} name="snf" setter={handleInputChange} />
+                )}
             </div>
-             <Alert className="mt-6 bg-primary/10">
+            <Button onClick={calculate} className="w-full mt-6">Calculate</Button>
+             {result && <Alert className="mt-6 bg-primary/10">
                 <AlertTitle className="text-center font-bold text-lg">Calculated Values</AlertTitle>
                 <AlertDescription>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center mt-2">
                         <div>
                             <p className="text-sm text-muted-foreground">Calculated CLR</p>
-                            <p className="text-2xl font-bold">{calculatedValues.clr || '...'}</p>
+                            <p className="text-2xl font-bold">{result.clr}</p>
                         </div>
                          <div>
                             <p className="text-sm text-muted-foreground">Calculated SNF %</p>
-                            <p className="text-2xl font-bold">{calculatedValues.snf || '...'}</p>
+                            <p className="text-2xl font-bold">{result.snf}</p>
                         </div>
                          <div>
                             <p className="text-sm text-muted-foreground">Calculated TS %</p>
-                            <p className="text-2xl font-bold">{calculatedValues.ts || '...'}</p>
+                            <p className="text-2xl font-bold">{result.ts}</p>
                         </div>
                     </div>
                 </AlertDescription>
-            </Alert>
+            </Alert>}
         </CalculatorCard>
     );
 }
