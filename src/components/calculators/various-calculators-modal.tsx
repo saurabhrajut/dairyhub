@@ -47,7 +47,7 @@ const calculatorsInfo = {
     'formulas': { title: "Common Formulas", icon: Calculator, component: FormulasTab },
 };
 
-export function LabCalculatorsModal({
+export function VariousCalculatorsModal({
   isOpen,
   setIsOpen,
 }: {
@@ -121,41 +121,6 @@ const CalculatorCard = ({ title, children, description }: { title: string; child
         {children}
     </div>
 );
-
-const MemoizedInputField = memo(function InputField({ label, value, name, setter, unit, placeholder, inputClassName, type = "number", step = "any" }: { label: string, value: string, name: string, setter: (name: string, value: string) => void, unit?: string, placeholder?: string, inputClassName?: string, type?: string, step?: string }) {
-    const [internalValue, setInternalValue] = useState(value);
-
-    // Update internal state when props change, but not if the element has focus
-    useEffect(() => {
-      if (value !== internalValue && document.activeElement?.getAttribute('name') !== name) {
-          setInternalValue(value);
-      }
-    }, [value, name, internalValue]);
-    
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setInternalValue(e.target.value);
-        setter(e.target.name, e.target.value); // Update parent state on change
-    };
-    
-    return (
-        <div>
-            <Label htmlFor={name}>{label}</Label>
-            <div className="flex items-center">
-                <Input 
-                    type={type} 
-                    name={name} 
-                    id={name} 
-                    value={internalValue} 
-                    onChange={handleChange}
-                    className={unit ? "rounded-r-none" : ""}
-                    placeholder={placeholder} 
-                    step={step}
-                />
-                {unit && <span className="p-2 bg-muted border border-l-0 rounded-r-md text-sm">{unit}</span>}
-            </div>
-        </div>
-    );
-});
 
 
 function ProductAcidityCalc() {
@@ -829,18 +794,19 @@ function PointBasedPricingCalc() {
     );
 }
 
+
 function CreamCalculators() {
     const [activeCalc, setActiveCalc] = useState('cream-dilution');
 
     const renderCalculator = () => {
         switch (activeCalc) {
-            case 'cream-dilution':
-                return <CreamDilutionCalc />;
+            case 'fat-percent':
+                return <CreamFatCalc />;
             case 'actual-snf':
                 return <ActualCreamSnfCalc />;
-            case 'fat-percent':
+            case 'cream-dilution':
             default:
-                return <CreamFatCalc />;
+                return <CreamDilutionCalc />;
         }
     };
     
@@ -933,7 +899,8 @@ function CreamDilutionCalc() {
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
-    const handleInputChange = useCallback((name: string, value: string) => {
+    const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
         setInputs(prev => ({...prev, [name]: value}));
     }, []);
 
@@ -968,9 +935,18 @@ function CreamDilutionCalc() {
     return (
         <div>
             <div className="bg-muted/50 p-4 rounded-lg space-y-4">
-                 <MemoizedInputField label="Initial Cream Quantity (kg)" value={inputs.initialQty} name="initialQty" setter={handleInputChange} />
-                 <MemoizedInputField label="Initial Cream Fat %" value={inputs.initialFat} name="initialFat" setter={handleInputChange} />
-                 <MemoizedInputField label="Target Cream Fat %" value={inputs.targetFat} name="targetFat" setter={handleInputChange} />
+                 <div>
+                    <Label htmlFor="initialQty">Initial Cream Quantity (kg)</Label>
+                    <Input id="initialQty" name="initialQty" type="number" value={inputs.initialQty} onChange={handleInputChange} />
+                 </div>
+                 <div>
+                    <Label htmlFor="initialFat">Initial Cream Fat %</Label>
+                    <Input id="initialFat" name="initialFat" type="number" value={inputs.initialFat} onChange={handleInputChange} />
+                 </div>
+                 <div>
+                    <Label htmlFor="targetFat">Target Cream Fat %</Label>
+                    <Input id="targetFat" name="targetFat" type="number" value={inputs.targetFat} onChange={handleInputChange} />
+                 </div>
             </div>
             <Button onClick={calculate} className="w-full mt-4">Calculate Water to Add</Button>
             {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
@@ -978,6 +954,7 @@ function CreamDilutionCalc() {
         </div>
     );
 }
+
 
 function MineralAnalysisCalc() {
     const [mineral, setMineral] = useState<'sodium' | 'potassium'>('sodium');
@@ -1487,5 +1464,6 @@ function SolutionStrengthCalc() {
     );
 }
 
+
     
-```
+
