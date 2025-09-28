@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, memo, useCallback, useEffect, useMemo } from "react"
@@ -27,7 +26,7 @@ const calculatorsInfo = {
     'milk-blending': { title: "Milk Blending", icon: Blend, component: MilkBlendingCalc },
     'two-milk-blending-target': { title: "Two-Milk Blending (to Target)", icon: Target, component: TwoMilkBlendingToTargetCalc },
     'fat-reduction-clr-maintain': { title: "Fat & CLR Corrector", icon: ShieldAlert, component: FatReductionClrMaintainCalc },
-    'two-component-standardization': { title: "Standardize with Two Components", icon: Combine, component: TwoComponentStandardizationCalc },
+    'two-component-standardization': { title: "Automated Standardization", icon: Combine, component: TwoComponentStandardizationCalc },
     'custom-calculator': { title: 'Custom Calculator', icon: Settings, component: CustomStandardizationCalc },
     'clr-increase': { title: 'CLR Increase (by SMP)', icon: ChevronsUp, component: ClrIncreaseCalc },
     'fat-clr-maintainer': { title: 'Fat & CLR Maintainer', icon: Target, component: FatClrMaintainerCalc },
@@ -110,21 +109,19 @@ const CalculatorCard = ({ title, children, description }: { title: string; child
     </div>
 );
 
-// ## FIX: MemoizedInputField कंपोनेंट को useEffect के साथ ठीक किया गया ##
 const MemoizedInputField = memo(function InputField({ label, value, name, setter, unit, placeholder, inputClassName, type = "number", step = "any" }: { label: string, value: string, name: string, setter: (name: string, value: string) => void, unit?: string, placeholder?: string, inputClassName?: string, type?: string, step?: string }) {
     const [internalValue, setInternalValue] = useState(value);
 
-    // यह सुनिश्चित करता है कि जब बाहरी 'value' बदलती है तो अंदर की वैल्यू भी अपडेट हो,
-    // लेकिन अगर यूज़र टाइप कर रहा हो तो उसे डिस्टर्ब न करे।
+    // Update internal state when props change, but not if the element has focus
     useEffect(() => {
-        if (value !== internalValue && document.activeElement?.getAttribute('name') !== name) {
-            setInternalValue(value);
-        }
-    }, [value, name, internalValue]); // useEffect इन वेरिएबल्स के बदलने पर चलेगा
+      if (value !== internalValue && document.activeElement?.getAttribute('name') !== name) {
+          setInternalValue(value);
+      }
+    }, [value, name, internalValue]);
     
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setInternalValue(e.target.value);
-        setter(e.target.name, e.target.value); // पैरेंट स्टेट को अपडेट करें
+        setter(e.target.name, e.target.value); // Update parent state on change
     };
     
     return (
@@ -285,8 +282,17 @@ function CustomStandardizationCalc() {
         return snfFormulas[formulaKey].calc(clr, fat);
     }, [inputs.formula, inputs.customC]);
     
-    const milkSnf = parseFloat(inputs.milkFat) && parseFloat(inputs.milkClr) ? calculateSnf(parseFloat(inputs.milkClr), parseFloat(inputs.milkFat)) : 0;
-    const reqSnf = parseFloat(inputs.reqFat) && parseFloat(inputs.reqClr) ? calculateSnf(parseFloat(inputs.reqClr), parseFloat(inputs.reqFat)) : 0;
+    const milkSnf = useMemo(() => {
+        const fat = parseFloat(inputs.milkFat);
+        const clr = parseFloat(inputs.milkClr);
+        return !isNaN(fat) && !isNaN(clr) ? calculateSnf(clr, fat) : 0;
+    }, [inputs.milkFat, inputs.milkClr, calculateSnf]);
+    
+    const reqSnf = useMemo(() => {
+        const fat = parseFloat(inputs.reqFat);
+        const clr = parseFloat(inputs.reqClr);
+        return !isNaN(fat) && !isNaN(clr) ? calculateSnf(clr, fat) : 0;
+    }, [inputs.reqFat, inputs.reqClr, calculateSnf]);
 
 
     const calculate = useCallback(() => {
@@ -1144,8 +1150,17 @@ function FatSnfAdjustmentCalc() {
         return snfFormulas[formulaKey].calc(clr, fat);
     }, [inputs.formula, inputs.customC]);
 
-    const milkSnf = parseFloat(inputs.milkFat) && parseFloat(inputs.milkClr) ? calculateSnf(parseFloat(inputs.milkClr), parseFloat(inputs.milkFat)) : 0;
-    const targetSnf = parseFloat(inputs.targetFat) && parseFloat(inputs.targetClr) ? calculateSnf(parseFloat(inputs.targetClr), parseFloat(inputs.targetFat)) : 0;
+    const milkSnf = useMemo(() => {
+        const fat = parseFloat(inputs.milkFat);
+        const clr = parseFloat(inputs.milkClr);
+        return !isNaN(fat) && !isNaN(clr) ? calculateSnf(clr, fat) : 0;
+    }, [inputs.milkFat, inputs.milkClr, calculateSnf]);
+
+    const targetSnf = useMemo(() => {
+        const fat = parseFloat(inputs.targetFat);
+        const clr = parseFloat(inputs.targetClr);
+        return !isNaN(fat) && !isNaN(clr) ? calculateSnf(clr, fat) : 0;
+    }, [inputs.targetFat, inputs.targetClr, calculateSnf]);
 
     const calculate = useCallback(() => {
         setResult(null);
@@ -1207,7 +1222,7 @@ function FatSnfAdjustmentCalc() {
             </ul>
             <p class='mt-3'>Final Batch Weight will be approximately <strong>${finalWeight.toFixed(3)} kg</strong>.</p>
         `);
-    }, [inputs, milkSnf, targetSnf, calculateSnf]);
+    }, [inputs, milkSnf, targetSnf]);
 
     return (
         <CalculatorCard title="Fat &amp; SNF Adjustment Calculator" description="Calculate how much Cream and Skimmed Milk Powder (SMP) to add to standardize both Fat and SNF upwards.">
@@ -1339,7 +1354,11 @@ function RecombinedMilkCalc() {
         return snfFormulas[formulaKey].calc(clr, fat);
     }, [inputs.formula, inputs.customC]);
     
-    const targetSnf = parseFloat(inputs.targetFat) && parseFloat(inputs.targetClr) ? calculateSnf(parseFloat(inputs.targetClr), parseFloat(inputs.targetFat)) : 0;
+    const targetSnf = useMemo(() => {
+        const fat = parseFloat(inputs.targetFat);
+        const clr = parseFloat(inputs.targetClr);
+        return !isNaN(fat) && !isNaN(clr) ? calculateSnf(clr, fat) : 0;
+    }, [inputs.targetFat, inputs.targetClr, calculateSnf]);
 
 
     const calculate = useCallback(() => {
@@ -1624,9 +1643,3 @@ function FatClrMaintainerCalc() {
         </CalculatorCard>
     );
 }
-
-    
-
-    
-
-    
