@@ -122,6 +122,41 @@ const CalculatorCard = ({ title, children, description }: { title: string; child
     </div>
 );
 
+const MemoizedInputField = memo(function InputField({ label, value, name, setter, unit, placeholder, inputClassName, type = "number", step = "any" }: { label: string, value: string, name: string, setter: (name: string, value: string) => void, unit?: string, placeholder?: string, inputClassName?: string, type?: string, step?: string }) {
+    const [internalValue, setInternalValue] = useState(value);
+
+    // Update internal state when props change, but not if the element has focus
+    useEffect(() => {
+      if (value !== internalValue && document.activeElement?.getAttribute('name') !== name) {
+          setInternalValue(value);
+      }
+    }, [value, name, internalValue]);
+    
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setInternalValue(e.target.value);
+        setter(e.target.name, e.target.value); // Update parent state on change
+    };
+    
+    return (
+        <div>
+            <Label htmlFor={name}>{label}</Label>
+            <div className="flex items-center">
+                <Input 
+                    type={type} 
+                    name={name} 
+                    id={name} 
+                    value={internalValue} 
+                    onChange={handleChange}
+                    className={unit ? "rounded-r-none" : ""}
+                    placeholder={placeholder} 
+                    step={step}
+                />
+                {unit && <span className="p-2 bg-muted border border-l-0 rounded-r-md text-sm">{unit}</span>}
+            </div>
+        </div>
+    );
+});
+
 
 function ProductAcidityCalc() {
     const [activeCalc, setActiveCalc] = useState('check');
@@ -794,21 +829,15 @@ function PointBasedPricingCalc() {
     );
 }
 
-
-// अपनी फाइल में इस फंक्शन को नीचे दिए गए कोड से बदलें
-
 function CreamCalculators() {
-    const [activeCalc, setActiveCalc] = useState('cream-dilution'); // डिफ़ॉल्ट रूप से नया कैलकुलेटर दिखाएँ
+    const [activeCalc, setActiveCalc] = useState('cream-dilution');
 
     const renderCalculator = () => {
         switch (activeCalc) {
-            // ## FIX: यहाँ CreamDilutionCalc को सही से जोड़ा गया है ##
             case 'cream-dilution':
                 return <CreamDilutionCalc />;
             case 'actual-snf':
                 return <ActualCreamSnfCalc />;
-            case 'diluted-snf':
-                return <DilutedCreamSnfCalc />;
             case 'fat-percent':
             default:
                 return <CreamFatCalc />;
@@ -824,11 +853,9 @@ function CreamCalculators() {
                         <SelectValue placeholder="Select a calculator" />
                     </SelectTrigger>
                     <SelectContent>
-                        {/* ## FIX: ड्रॉपडाउन में सही ऑप्शन जोड़े गए हैं ## */}
                         <SelectItem value="cream-dilution">Cream Dilution (by Water)</SelectItem>
                         <SelectItem value="fat-percent">Fat %</SelectItem>
                         <SelectItem value="actual-snf">Actual SNF</SelectItem>
-                        <SelectItem value="diluted-snf">Diluted SNF</SelectItem>
                     </SelectContent>
                 </Select>
             </div>
@@ -939,7 +966,7 @@ function CreamDilutionCalc() {
     }, [inputs]);
 
     return (
-        <CalculatorCard title="Cream Dilution Calculator" description="Calculate the amount of water needed to dilute a high-fat cream to a lower target fat percentage.">
+        <div>
             <div className="bg-muted/50 p-4 rounded-lg space-y-4">
                  <MemoizedInputField label="Initial Cream Quantity (kg)" value={inputs.initialQty} name="initialQty" setter={handleInputChange} />
                  <MemoizedInputField label="Initial Cream Fat %" value={inputs.initialFat} name="initialFat" setter={handleInputChange} />
@@ -948,10 +975,9 @@ function CreamDilutionCalc() {
             <Button onClick={calculate} className="w-full mt-4">Calculate Water to Add</Button>
             {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
             {result && <Alert className="mt-4"><AlertTitle>Result</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
-        </CalculatorCard>
+        </div>
     );
 }
-
 
 function MineralAnalysisCalc() {
     const [mineral, setMineral] = useState<'sodium' | 'potassium'>('sodium');
@@ -1461,6 +1487,5 @@ function SolutionStrengthCalc() {
     );
 }
 
-
     
-
+```
