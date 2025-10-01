@@ -1,7 +1,6 @@
 
 export const cipProcessContent = {
-    {
-  "hi": {
+    hi: {
     "main_title": "Dairy Instruments ki Dhulai aur Safai",
     "main_description": "Alag-alag dairy instruments ko saaf aur sanitize karne ke liye ek detailed guide.",
     "intro": {
@@ -296,8 +295,7 @@ export const cipProcessContent = {
         }
       }
     }
-  }
-}
+  },
     en: {
         main_title: "Washing and Cleaning of Dairy Equipments",
         main_description: "A detailed guide to clean and sanitize different dairy equipments.",
