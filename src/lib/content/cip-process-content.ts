@@ -1,301 +1,303 @@
 
 export const cipProcessContent = {
-    hi: {
-        main_title: "डेयरी उपकरणों की धुलाई और सफाई",
-        main_description: "विभिन्न डेयरी उपकरणों को साफ और स्वच्छ करने के लिए एक विस्तृत गाइड।",
-        intro: {
-            title: "परिचय: CIP और मिल्क स्टोन",
-            htmlContent: `
-                <p>डेयरी उपकरणों और कंटेनरों की सतह पर बचा हुआ दूध माइक्रोबियल विकास के लिए उत्कृष्ट माध्यम प्रदान करता है। इसलिए, डेयरी उपकरणों को ठीक से साफ और स्वच्छ करना आवश्यक है। सफाई और सैनिटाइजेशन पूरक प्रक्रियाएं हैं और अकेले कोई भी अंतिम परिणाम प्राप्त नहीं करता है। सफाई का मतलब दूध के अवशेष (Soil) को हटाना और सतह को इस मिट्टी और व्यवहार्य जीव से मुक्त करना है।</p>
-                <h4 class="font-bold mt-4">CIP/CAC क्या है?</h4>
-                <p><strong>CIP (Cleaning-In-Place):</strong> यह एक स्वचालित विधि है जिसमें पाइपलाइनों, टैंकों और अन्य उपकरणों को बिना खोले (disassemble) साफ किया जाता है। इसमें सफाई और सैनिटाइजिंग घोल को एक निश्चित क्रम में पाइपों और उपकरणों के माध्यम से पंप किया जाता है। उच्च वेग प्रवाह यांत्रिक स्क्रबिंग प्रभाव उत्पन्न करता है जो जमा को हटाता है।</p>
-                <p><strong>CAC (Cleaning-Out-of-Place):</strong> इस विधि में, छोटे भागों या उपकरणों को अलग किया जाता है और उन्हें सफाई के लिए एक समर्पित क्षेत्र में ले जाया जाता है, जहाँ उन्हें टैंकों में डुबोकर या मैन्युअल रूप से साफ किया जाता है।</p>
+    {
+  "hi": {
+    "main_title": "Dairy Instruments ki Dhulai aur Safai",
+    "main_description": "Alag-alag dairy instruments ko saaf aur sanitize karne ke liye ek detailed guide.",
+    "intro": {
+      "title": "Introduction: CIP aur Milk Stone",
+      "htmlContent": `
+              <p>Dairy instruments aur containers ki surface par bacha hua doodh microbial growth ke liye ek excellent medium pradan karta hai. Isliye, dairy instruments ko theek se saaf aur sanitize karna zaroori hai. Cleaning aur sanitization complementary processes hain aur akele koi bhi final result prapt nahi karta hai. Cleaning ka matlab doodh ke residue (Soil) ko hatana aur surface ko is mitti aur viable organism se free karna hai.</p>
+              <h4 class="font-bold mt-4">CIP/CAC Kya Hai?</h4>
+              <p><strong>CIP (Cleaning-In-Place):</strong> Yeh ek automated method hai jismein pipelines, tanks, aur doosre instruments ko bina khole (disassemble) saaf kiya jaata hai. Ismein cleaning aur sanitizing solution ko ek certain sequence mein pipes aur instruments ke through pump kiya jaata hai. High velocity flow mechanical scrubbing effect paida karta hai jo deposits ko hatata hai.</p>
+              <p><strong>CAC (Cleaning-Out-of-Place):</strong> Is method mein, chhote parts ya instruments ko alag kiya jaata hai aur unhein cleaning ke liye ek dedicated area mein le jaaya jaata hai, jahan unhein tanks mein dubokar ya manually saaf kiya jaata hai.</p>
 
-                <h4 class="font-bold mt-4">CIP सिस्टम के प्रकार</h4>
-                <p><strong>Single Pass Systems:</strong> प्रत्येक सफाई चक्र के लिए नया सफाई घोल पेश किया जाता है और फिर नाली में निपटा दिया जाता है। यह अधिकांश मामलों में एक पूर्व-रिंस से शुरू होगा ताकि जितना संभव हो उतना मिट्टी हटाया जा सके, इसके बाद डिटर्जेंट सफाई और अंतिम रिंस होगा।</p>
-                <p><strong>Recirculation Systems:</strong> सफाई के घोल को बाहरी टैंकों में मिलाया जाता है और साफ किए जाने वाले संयंत्र में पेश किया जाता है। उन्हें फिर से प्रसारित किया जाता है और आवश्यकतानुसार टॉप-अप किया जाता है जब तक कि सफाई चक्र पूरा न हो जाए। डिटर्जेंट रिंस के बाद अंतिम रिंस करना सामान्य है। रीसर्कुलेशन सिस्टम को अधिक प्रारंभिक निवेश की आवश्यकता होती है, लेकिन कम पानी और सफाई डिटर्जेंट का उपयोग करते हैं।</p>
+              <h4 class="font-bold mt-4">CIP System ke Types</h4>
+              <p><strong>Single Pass Systems:</strong> Har cleaning cycle ke liye naya cleaning solution introduce kiya jaata hai aur phir drain mein dispose kar diya jaata hai. Yeh zyada tar mamlon mein ek pre-rinse se shuru hoga taaki jitna possible ho utna soil hataya ja sake, iske baad detergent cleaning aur final rinse hoga.</p>
+              <p><strong>Recirculation Systems:</strong> Cleaning solution ko external tanks mein milaya jaata hai aur saaf kiye jaane wale plant mein introduce kiya jaata hai. Unhein phir se recirculate kiya jaata hai aur zaroorat ke anusaar top-up kiya jaata hai jab tak ki cleaning cycle poora na ho jaaye. Detergent rinse ke baad final rinse karna normal hai. Recirculation systems ko zyada initial investment ki zaroorat hoti hai, lekin kam paani aur cleaning detergent ka use karte hain.</p>
 
-                <h4 class="font-bold mt-4">मिल्क स्टोन:</h4>
-                <p>यह गर्म पानी और डिटर्जेंट समाधानों से सूखे दूध के ठोस और लवणों का संचय है। इसमें अघुलनशील कैल्शियम लवण, कैल्शियम फॉस्फेट और दूध प्रोटीन (जमा और अवक्षेपित) होते हैं।</p>
-                <p><strong>संघटन:</strong> इसमें 2.6-8.7% नमी; 3.6-17.6% वसा; 4.4-43.8% प्रोटीन और 42-67% राख होती है।</p>
+              <h4 class="font-bold mt-4">Milk Stone:</h4>
+              <p>Yeh garam paani aur detergent solutions se sookhe doodh ke solids aur salts ka accumulation hai. Ismein insoluble calcium salts, calcium phosphate aur milk protein (coagulated aur precipitated) hote hain.</p>
+              <p><strong>Composition:</strong> Ismein 2.6-8.7% moisture; 3.6-17.6% fat; 4.4-43.8% protein aur 42-67% ash hoti hai.</p>
             `
-        },
-        cip_cycle: {
-            title: "Standard CIP Cleaning Cycle",
-            intro: "एक विशिष्ट CIP साइकिल में निम्नलिखित चरण होते हैं:",
-            steps: [
-                {
-                    title: "उत्पाद अवशेषों की रिकवरी",
-                    details: "<p>ड्रेनेज द्वारा उत्पाद के अवशेषों को पुनर्प्राप्त करना।</p>"
-                },
-                {
-                    title: "अवशेषों का निष्कासन",
-                    details: "<p>पानी या संपीड़ित हवा के साथ गैर-पुनर्प्राप्त करने योग्य अवशेषों का निष्कासन।</p>"
-                },
-                {
-                    title: "Pre-rinse (प्रारंभिक धुलाई)",
-                    details: "<p><strong>उद्देश्य:</strong> अधिकांश ढीली गंदगी और दूध के अवशेषों को हटाना।<br/><strong>प्रक्रिया:</strong> सिस्टम को गुनगुने पानी (50-60°C) से 10 मिनट तक धोया जाता है।</p>"
-                },
-                {
-                    title: "Alkali Wash (क्षारीय धुलाई)",
-                    details: "<p><strong>उद्देश्य:</strong> वसा (fat) और प्रोटीन को हटाना।<br/><strong>प्रक्रिया:</strong> 0.5-1.5% कास्टिक सोडा (NaOH) के घोल को 75°C पर 30 मिनट के लिए प्रसारित किया जाता है।</p>"
-                },
-                {
-                    title: "Intermediate Rinse (मध्यवर्ती धुलाई)",
-                    details: "<p><strong>उद्देश्य:</strong> क्षारीय डिटर्जेंट के अवशेषों को हटाना।<br/><strong>प्रक्रिया:</strong> सिस्टम को फिर से गर्म पानी (50°C) से 5-8 मिनट के लिए धोया जाता है।</p>"
-                },
-                {
-                    title: "Acid Wash (अम्लीय धुलाई)",
-                    details: "<p><strong>उद्देश्य:</strong> खनिज जमा (mineral deposits) जैसे मिल्क स्टोन को हटाना।<br/><strong>प्रक्रिया:</strong> 0.5-1.0% नाइट्रिक एसिड (HNO₃) के घोल को 75°C पर 20 मिनट के लिए प्रसारित किया जाता है।</p>"
-                },
-                {
-                    title: "Final Rinse (अंतिम धुलाई)",
-                    details: "<p><strong>उद्देश्य:</strong> एसिड के अवशेषों को हटाना।<br/><strong>प्रक्रिया:</strong> सिस्टम को गर्म पानी (50°C) से 5-8 मिनट के लिए धोया जाता है।</p>"
-                },
-                {
-                    title: "Disinfection (कीटाणुशोधन)",
-                    details: "<p><strong>उद्देश्य:</strong> बचे हुए सूक्ष्मजीवों को मारना।<br/><strong>प्रक्रिया:</strong> थर्मल कीटाणुशोधन (90-95°C पर 10 मिनट) और ठंडा करना, या एक उपयुक्त सैनिटाइज़र के साथ रासायनिक कीटाणुशोधन।</p>"
-                }
-            ]
-        },
-        chemicals: {
-            title: "CIP में प्रयुक्त रसायन",
-            intro: "CIP प्रक्रिया में विभिन्न प्रकार के रसायनों का उपयोग किया जाता है, प्रत्येक का एक विशिष्ट उद्देश्य होता है:",
-            types: [
-                {
-                    title: "Alkaline Detergents (क्षारीय डिटर्जेंट)",
-                    details: "<p><strong>उदाहरण:</strong> कास्टिक सोडा (NaOH), सोडियम कार्बोनेट, सोडियम मेटासिलिकेट।<br/><strong>उद्देश्य:</strong> ये वसा को सैपोनिफाई करते हैं और प्रोटीन को तोड़ते हैं। ये बहुत प्रभावी सफाई एजेंट हैं।</p>"
-                },
-                {
-                    title: "Acid Detergents (अम्लीय डिटर्जेंट)",
-                    details: "<p><strong>उदाहरण:</strong> नाइट्रिक एसिड (HNO₃), फॉस्फोरिक एसिड (H₃PO₄)।<br/><strong>उद्देश्य:</strong> ये मिल्क स्टोन जैसे खनिज जमा को घोलते हैं।</p>"
-                },
-                {
-                    title: "Sanitizers (कीटाणुनाशक)",
-                    details: "<p><strong>उदाहरण:</strong> क्लोरीन यौगिक (सोडियम हाइपोक्लोराइट), पेरएसिटिक एसिड (PAA), गर्म पानी (>85°C)।<br/><strong>उद्देश्य:</strong> अंतिम धुलाई के बाद बचे हुए सूक्ष्मजीवों को मारना।</p>"
-                }
-            ]
-        },
-        cleaning_procedures: {
-            title: "विशिष्ट उपकरणों की सफाई प्रक्रियाएं",
-            sections: [
-                {
-                    title: "दूध के डिब्बे की सफाई",
-                    content: `
-                        <p>डेयरी रिसेप्शन डॉक पर एल्यूमीनियम के डिब्बे में प्राप्त कच्चे दूध को मैन्युअल और/या मैकेनिकल वाशिंग दोनों का उपयोग करके साफ और स्वच्छ किया जा सकता है, जो दैनिक रूप से प्राप्त होने वाले डिब्बे की संख्या पर निर्भर करता है।</p>
-                        <h5 class="font-bold mt-2">मैन्युअल धुलाई:</h5>
-                        <ol class="list-decimal list-inside space-y-1 mt-2">
-                            <li>डिब्बे खाली करने के तुरंत बाद, उन्हें पहले नल के पानी से धोया जाता है और ढीली गंदगी को ब्रश से अंदर से हटा दिया जाता है।</li>
-                            <li>डिब्बे को पहले से तैयार 50°C पर डिटर्जेंट घोल (1% सोडियम हेक्सामेटाफॉस्फेट, ट्राइसोडियम फॉस्फेट, सोडियम कार्बोनेट, टीपोल) में भिगोएँ।</li>
-                            <li>गर्म डिटर्जेंट घोल से डिब्बे के अंदरूनी हिस्से को अच्छी तरह से ब्रश करें।</li>
-                            <li>डिब्बे को गर्म पानी से धोएँ।</li>
-                            <li>ढक्कन के साथ डिब्बे को स्टीम करें और ड्रेनिंग रैक पर स्टोर करें।</li>
-                        </ol>
-                        <h5 class="font-bold mt-2">मैकेनिकल धुलाई (रोटरी या टनल टाइप वॉशर):</h5>
-                         <ol class="list-decimal list-inside space-y-1 mt-2">
-                            <li>डिटर्जेंट टैंक को 0.5% क्षारीयता वाले डिटर्जेंट घोल से चार्ज करें।</li>
-                            <li>मैकेनिकल वॉशर के पानी और स्टीम वाल्व खोलें और मोटर और पंप शुरू करें।</li>
-                            <li>डिब्बे और ढक्कन को उनके संबंधित वाहक मार्गों में लोड करें।</li>
-                            <li>जेट दबाव को 15 psi पर और प्री-रिंसिंग (40°C), डिटर्जेंट वॉश (75°C), गर्म पानी वॉश (85°C) का तापमान बनाए रखें।</li>
-                            <li>स्टीमिंग और गर्म पानी ब्लास्ट दबाव क्रमशः 20 psi और तापमान 120°C और 125°C पर बनाए रखा जाता है।</li>
-                            <li>आउटलेट पर डिब्बे और ढक्कन उतारें और रैक पर स्टोर करें।</li>
-                            <li>प्रत्येक ऑपरेशन के शुरू और अंत में गुणात्मक या मात्रात्मक परीक्षणों का उपयोग करके डिटर्जेंट घोल की शक्ति की जाँच करें।</li>
-                        </ol>
-                    `
-                },
-                {
-                    title: "क्रीम सेपरेटर/क्लेरिफायर की सफाई",
-                    content: `
-                         <ol class="list-decimal list-inside space-y-1 mt-2">
-                            <li>दिन के ऑपरेशन के बाद, मुख्य मशीन से कटोरा (bowl) हटा दें।</li>
-                            <li>कटोरे को अलग करें और डिस्क हटा दें।</li>
-                            <li>कटोरे की परिधि से सेपरेटर स्लाइम हटा दें।</li>
-                            <li>ब्रश की मदद से प्रत्येक डिस्क को गर्म डिटर्जेंट घोल से साफ करें।</li>
-                            <li>सभी भागों को गुनगुने पानी से धोएं और सूखने के लिए रख दें।</li>
-                        </ol>
-                    `
-                },
-                {
-                    title: "प्लेट हीट एक्सचेंजर्स (PHE) की सफाई",
-                    content: `
-                        <h5 class="font-bold mt-2">दैनिक सफाई:</h5>
-                         <ol class="list-decimal list-inside space-y-1 mt-2">
-                            <li>फिल्म हटाने के लिए गुनगुने पानी से धोएँ।</li>
-                            <li>70°C पर 20 मिनट के लिए 1% एसिड डिटर्जेंट घोल प्रसारित करके धोएँ।</li>
-                            <li>गर्म पानी से धोएँ।</li>
-                            <li>70°C पर 20-30 मिनट के लिए 1% क्षार घोल प्रसारित करें।</li>
-                            <li>40-50°C पर गर्म पानी से धोएँ, फिर 10 मिनट के लिए नल के पानी से और सूखने दें।</li>
-                            <li>उपयोग से पहले सैनिटाइज़र घोल प्रसारित करें।</li>
-                        </ol>
-                        <h5 class="font-bold mt-2">आवधिक सफाई:</h5>
-                         <ol class="list-decimal list-inside space-y-1 mt-2">
-                            <li>प्लेट हीट एक्सचेंजर को सावधानी से खोलें और अलग करें।</li>
-                            <li>रबर गास्केट की जाँच करें और यदि खराब हो तो बदलें।</li>
-                            <li>प्रत्येक प्लेट की जाँच करें और डिटर्जेंट घोल का उपयोग करके नरम ब्रश से स्क्रब करके स्केल हटा दें।</li>
-                            <li>प्लेटों पर कोई खरोंच या डेंट बनाने से बचें।</li>
-                            <li>डिटर्जेंट के निशान हटाने के लिए प्लेटों को नल के पानी से अच्छी तरह धो लें।</li>
-                            <li>निर्माता के निर्देशों का पालन करते हुए प्लेटों को फिर से इकट्ठा करें।</li>
-                        </ol>
-                    `
-                },
-                {
-                    title: "दूध भंडारण टैंक की सफाई",
-                    content: `
-                         <ol class="list-decimal list-inside space-y-1 mt-2">
-                            <li>टैंक खाली होने के बाद, ड्रेन वाल्व खोलें।</li>
-                            <li>दबावयुक्त स्प्रे हेड का उपयोग करके टैंक को गर्म पानी से धोएँ।</li>
-                            <li>वाल्व बंद करें और दबाव नोजल का उपयोग करके डिटर्जेंट घोल से धोएँ।</li>
-                            <li>वाल्व खोलें और डिटर्जेंट घोल को निकलने दें।</li>
-                            <li>डिटर्जेंट घोल के निशान हटाने के लिए गर्म पानी के बाद ठंडे पीने योग्य पानी से धोएँ।</li>
-                            <li>पानी निकालें और सूखने दें।</li>
-                            <li>स्टीम या क्लोरीनयुक्त पानी (150-200 ppm क्लोरीन) का उपयोग करके स्वच्छ करें।</li>
-                        </ol>
-                    `
-                }
-            ]
-        },
-        teepol_detergent: {
-            title: "लिक्विड डिटर्जेंट बनाना और जांचना",
-            htmlContent: `
-                <p>डेयरी और खाद्य उद्योग में, हाथ से बर्तनों और छोटे उपकरणों की सफाई के लिए न्यूट्रल लिक्विड डिटर्जेंट (जैसे टीपोल) का व्यापक रूप से उपयोग किया जाता है।</p>
-                <h4 class="font-bold mt-4">1. सामान्य प्रयोजन लिक्विड डिटर्जेंट कैसे बनाएं (1000 लीटर बैच):</h4>
-                <p>यह एक सामान्य फॉर्मूलेशन है। औद्योगिक उत्पादन अधिक जटिल हो सकता है।</p>
-                <div class="overflow-x-auto my-4"><table class="w-full"><thead><tr class="bg-muted"><th class="p-2 text-left">घटक (Ingredient)</th><th class="p-2 text-left">मात्रा (Kg)</th><th class="p-2 text-left">%</th><th class="p-2 text-left">उद्देश्य</th></tr></thead><tbody>
-                <tr><td class="p-2 border-b">पानी (Water)</td><td class="p-2 border-b">820 - 840 Kg</td><td class="p-2 border-b">82-84%</td><td class="p-2 border-b">मुख्य विलायक (Solvent)</td></tr>
-                <tr><td class="p-2 border-b">एसिड स्लरी (Acid Slurry - LABSA 90%)</td><td class="p-2 border-b">100 Kg</td><td class="p-2 border-b">10%</td><td class="p-2 border-b">मुख्य सफाई एजेंट (Anionic Surfactant)</td></tr>
-                <tr><td class="p-2 border-b">कास्टिक सोडा (Caustic Soda - NaOH)</td><td class="p-2 border-b">~15 Kg</td><td class="p-2 border-b">~1.5%</td><td class="p-2 border-b">स्लरी को न्यूट्रलाइज करने के लिए (pH 7 तक)</td></tr>
-                <tr><td class="p-2 border-b">यूरिया (Urea) या नमक (Salt)</td><td class="p-2 border-b">20 - 40 Kg</td><td class="p-2 border-b">2-4%</td><td class="p-2 border-b">गाढ़ापन बढ़ाने वाला (Viscosity Enhancer)</td></tr>
-                <tr><td class="p-2 border-b">रंग और सुगंध (Color & Perfume)</td><td class="p-2 border-b">आवश्यकतानुसार</td><td class="p-2 border-b">-</td><td class="p-2 border-b">सौंदर्यशास्त्र के लिए</td></tr>
-                <tr class="bg-muted"><td class="p-2 font-bold">कुल</td><td class="p-2 font-bold">1000 Kg</td><td class="p-2 font-bold">100%</td><td class="p-2 font-bold"></td></tr>
-                </tbody></table></div>
-                <p class="font-semibold">प्रक्रिया:</p>
-                <ol class="list-decimal list-inside space-y-1 mt-2">
-                    <li>एक बड़े टैंक में पानी लें। धीरे-धीरे एसिड स्लरी डालें और लगातार हिलाते रहें।</li>
-                    <li>अलग से, कास्टिक सोडा को थोड़े पानी में घोलें (सावधानी बरतें, यह गर्म होता है)।</li>
-                    <li>कास्टिक सोडा के घोल को धीरे-धीरे स्लरी वाले मिश्रण में डालें जब तक कि मिश्रण का pH 7 (न्यूट्रल) न हो जाए।</li>
-                    <li>गाढ़ापन बढ़ाने के लिए यूरिया या नमक डालें और अच्छी तरह मिलाएं। अंत में, रंग और सुगंध मिलाएं।</li>
-                </ol>
-
-                <h4 class="font-bold mt-6">2. एसिडिक क्लीनर कैसे बनाएं (1000 लीटर बैच):</h4>
-                <p>यह एक मजबूत एसिड-आधारित क्लीनर है जो मिल्क स्टोन और अन्य खनिज जमा को हटाने के लिए उपयोग किया जाता है। <strong>चेतावनी: मजबूत एसिड खतरनाक होते हैं, हमेशा उचित सुरक्षा उपकरण (PPE) पहनें।</strong></p>
-                 <div class="overflow-x-auto my-4"><table class="w-full"><thead><tr class="bg-muted"><th class="p-2 text-left">घटक (Ingredient)</th><th class="p-2 text-left">मात्रा (Kg)</th><th class="p-2 text-left">%</th><th class="p-2 text-left">उद्देश्य</th></tr></thead><tbody>
-                <tr><td class="p-2 border-b">पानी (Water)</td><td class="p-2 border-b">880 Kg</td><td class="p-2 border-b">88%</td><td class="p-2 border-b">विलायक (Solvent)</td></tr>
-                <tr><td class="p-2 border-b">हाइड्रोक्लोरिक एसिड (HCl - 33%)</td><td class="p-2 border-b">100 Kg</td><td class="p-2 border-b">10%</td><td class="p-2 border-b">मुख्य सफाई एजेंट (Descaling)</td></tr>
-                <tr><td class="p-2 border-b">नॉन-आयोनिक सर्फेक्टेंट</td><td class="p-2 border-b">20 Kg</td><td class="p-2 border-b">2%</td><td class="p-2 border-b">सतह को गीला करने और गंदगी हटाने में मदद करता है</td></tr>
-                </tbody></table></div>
-                <p class="font-semibold">प्रक्रिया:</p>
-                <ol class="list-decimal list-inside space-y-1 mt-2">
-                    <li>एक एसिड-प्रतिरोधी टैंक में पानी लें।</li>
-                    <li><strong>हमेशा एसिड को पानी में धीरे-धीरे डालें, कभी भी पानी को एसिड में न डालें।</strong> हाइड्रोक्लोरिक एसिड को पानी में डालें और मिलाएं।</li>
-                    <li>अंत में, नॉन-आयोनिक सर्फेक्टेंट डालें और अच्छी तरह मिलाएं।</li>
-                </ol>
-                
-                <h4 class="font-bold mt-6">लिक्विड डिटर्जेंट की शक्ति कैसे जांचें (Active Matter %):</h4>
-                <p>डिटर्जेंट की शक्ति को उसमें मौजूद "एक्टिव मैटर" (सर्फेक्टेंट की मात्रा) से मापा जाता है। इसकी जाँच के लिए एक मानक विधि टू-फेज टाइट्रेशन है, जो एक जटिल लैब प्रक्रिया है और इसके लिए विशिष्ट रसायनों और विशेषज्ञता की आवश्यकता होती है।</p>
-            `
-        },
-        sip: {
-            title: "SIP (Sterilization-In-Place)",
-            intro: "Sterilization-in-place (SIP) एक सतत वाणिज्यिक पैमाने का ऑपरेशन है, जहाँ आवश्यक इकाइयों को स्टरलाइज़ किया जा सकता है। ये डिज़ाइन, इंस्टॉलेशन और ऑपरेशन के मामले में बहुत परिष्कृत हैं और इन्हें उच्च योग्य जनशक्ति की आवश्यकता होती है।",
-            process: `
-                <h5 class="font-bold mt-2">SIP प्रक्रिया:</h5>
-                <ol class="list-decimal list-inside space-y-1 mt-2">
-                   <li>दबाव में भाप को पूरे इंस्टॉलेशन से गुजारा जाता है।</li>
-                   <li>हवा को पाइपिंग या उपकरण पर लगे वेंट के माध्यम से बाहर निकाला जाता है। वेंट बैक्टीरियल फिल्टर द्वारा संरक्षित होते हैं।</li>
-                   <li>एक उपयुक्त अवधि के बाद वेंट बंद हो जाते हैं ताकि भाप का दबाव एक पूर्व निर्धारित स्तर तक बढ़ सके।</li>
-                   <li>दबाव को आवश्यक अवधि तक बनाए रखा जाता है, जिसके बाद भाप को एक कंडेनसर के माध्यम से छोड़ा जाता है।</li>
-                   <li>रिकॉर्ड किया गया दबाव सभी संदूषकों के विनाश के लिए वांछित समय-तापमान संयोजन को प्राप्त करने के लिए पर्याप्त होना चाहिए।</li>
-                </ol>
-            `
-        },
-        advantages: {
-            title: "CIP के फायदे",
-            list: [
-                "गारंटीकृत और दोहराने योग्य गुणवत्ता आश्वासन।",
-                "गुणवत्ता आश्वासन आवश्यकताओं के लिए पूर्ण डेटा लॉगिंग का प्रावधान।",
-                "सफाई समाधानों को पुनर्चक्रित करके सफाई लागत में कमी।",
-                "उपकरण पर दुर्गम क्षेत्रों को साफ करने की संभावना।",
-                "ऑपरेटरों के लिए बेहतर सुरक्षा क्योंकि खतरनाक सफाई सामग्री को संभाला नहीं जाता है।",
-                "दो उत्पादन रनों के बीच समय में कमी।",
-                "श्रम आवश्यकताओं में कमी।",
-                "सफाई सामग्री का अधिक प्रभावी उपयोग और नियंत्रण।",
-                "पानी की खपत में कमी।"
-            ]
-        },
-        solution_strength: {
-            title: "CIP घोल की शक्ति का परीक्षण",
-            intro: "कुशल सफाई और कीटाणुनाशक प्रभावों के लिए डिटर्जेंट घोल की उचित शक्ति बनाए रखना महत्वपूर्ण है। शक्ति को आमतौर पर % कंसंट्रेशन या ppm (क्लोरीन के लिए) में मापा जाता है।",
-            alkalinity_test: {
-                title: "धुलाई के घोल की शक्ति का निर्धारण (क्षारीयता परीक्षण)",
-                content: `
-                    <p>धुलाई के घोल की शक्ति को आम तौर पर NaOH के संदर्भ में व्यक्त किया जाता है क्योंकि यह अक्सर अकेले या डाइसोडियम फॉस्फेट और सोडियम मेटासिलिकेट आदि के साथ संयोजन में उपयोग किया जाता है। कांच की बोतलों के लिए आम तौर पर 1.5% NaOH के बराबर क्षार और कैन की धुलाई के लिए 0.5% का उपयोग किया जाता है। स्वचालित मशीनों में धुलाई के घोल का बार-बार उपयोग करने से यह आम तौर पर पतला हो जाता है। कुशल सफाई और कीटाणुनाशक प्रभावों के लिए डिटर्जेंट घोल की उचित क्षारीयता बनाए रखना महत्वपूर्ण है।</p>
-                    <h5 class="font-bold mt-4">आवश्यकताएँ:</h5>
-                    <p>कोनिकल फ्लास्क, पिपेट, ब्यूरेट, वॉल्यूमेट्रिक फ्लास्क, 2.5 N सल्फ्यूरिक एसिड, हाइड्रोक्लोरिक एसिड (0.1N), फेनोल्फथेलिन इंडिकेटर (0.5%)</p>
-
-                    <h5 class="font-bold mt-4">गुणात्मक परीक्षण (Qualitative Test):</h5>
-                    <ol class="list-decimal list-inside space-y-1 mt-2">
-                        <li>एक कोनिकल फ्लास्क में 10 ml डिटर्जेंट घोल लें।</li>
-                        <li>12.5 ml N/10 HCl और 5 बूँदें 0.5% फेनोल्फथेलिन इंडिकेटर डालें।</li>
-                        <li>यदि मिश्रण लाल हो जाता है, तो यह 0.5% से अधिक कास्टिक सोडा के रूप में क्षारीयता को इंगित करता है, जो पर्याप्त है।</li>
-                    </ol>
-
-                    <h5 class="font-bold mt-4">मात्रात्मक परीक्षण (Quantitative Test) - सीधी पठन विधि:</h5>
-                     <ol class="list-decimal list-inside space-y-1 mt-2">
-                        <li>100 ml कोनिकल फ्लास्क में 10 ml सैंपल मापें।</li>
-                        <li>5 बूँदें फेनोल्फथेलिन इंडिकेटर डालें।</li>
-                        <li>2.5 N सल्फ्यूरिक एसिड के साथ तब तक टाइट्रेट करें जब तक घोल रंगहीन न हो जाए।</li>
-                        <li>उपयोग किए गए एसिड के मिलीलीटर को नोट करें।</li>
-                        <li>उपयोग किया गया एसिड NaOH के रूप में प्रतिशत क्षार का सीधा संकेतक है।</li>
-                    </ol>
-
-                     <h5 class="font-bold mt-4">प्रयोगशाला विधि (Laboratory Method):</h5>
-                     <ol class="list-decimal list-inside space-y-1 mt-2">
-                        <li>250 ml वॉल्यूमेट्रिक फ्लास्क में 5 ml धुलाई का घोल लें।</li>
-                        <li>डिस्टिल्ड वॉटर से वॉल्यूम पूरा करें और अच्छी तरह मिलाएं।</li>
-                        <li>इस घोल के 50 ml को 100 ml कोनिकल फ्लास्क में ट्रांसफर करें।</li>
-                        <li>कुछ बूँदें फेनोल्फथेलिन इंडिकेटर डालें।</li>
-                        <li>0.1 N सल्फ्यूरिक एसिड के साथ घोल को रंगहीन होने तक टाइट्रेट करें। उपयोग किए गए एसिड के ml को "A" के रूप में रिकॉर्ड करें।</li>
-                        <li>कुछ बूँदें मिथाइल ऑरेंज इंडिकेटर डालें।</li>
-                        <li>हल्का गुलाबी रंग आने तक टाइट्रेशन जारी रखें। उपयोग किए गए एसिड के ml को "B" के रूप में नोट करें।</li>
-                    </ol>
-                    <p class="mt-2"><strong>गणना:</strong><br/>% मुक्त कास्टिक (Free Caustic) = (A - B) × 0.4<br/>% कुल क्षार (Total Alkali) = (A + B) × 0.4</p>
-                `
-            },
-            calculators: {
-                error_title: "त्रुटि",
-                success_title: "सफलतापूर्वक गणना की गई",
-                error_invalid_titre: "कृपया एक मान्य टाइट्रे मान दर्ज करें।",
-                naoh: {
-                    title: "NaOH (%)",
-                    description: "10ml CIP घोल के सैंपल को 0.1 N एसिड (जैसे HCl) के साथ फिनोल्फथेलिन इंडिकेटर का उपयोग करके टाइट्रेट करें।",
-                    label: "0.1 N एसिड का उपयोग (ml)",
-                    button: "NaOH % की गणना करें",
-                    result_prefix: "कास्टिक सोडा (NaOH):"
-                },
-                hno3: {
-                    title: "HNO₃ (%)",
-                    description: "10ml CIP घोल के सैंपल को 0.1 N बेस (जैसे NaOH) के साथ फिनोल्फथेलिन इंडिकेटर का उपयोग करके टाइट्रेट करें।",
-                    label: "0.1 N बेस का उपयोग (ml)",
-                    button: "HNO₃ % की गणना करें",
-                    result_prefix: "नाइट्रिक एसिड (HNO₃):"
-                },
-                h3po4: {
-                    title: "H₃PO₄ (%)",
-                    description: "10ml CIP घोल के सैंपल को 0.1 N बेस (जैसे NaOH) के साथ फिनोल्फथेलिन इंडिकेटर का उपयोग करके टाइट्रेट करें।",
-                    label: "0.1 N बेस का उपयोग (ml)",
-                    button: "H₃PO₄ % की गणना करें",
-                    result_prefix: "फॉस्फोरिक एसिड (H₃PO₄):"
-                },
-                 chlorine: {
-                    title: "Chlorine (ppm)",
-                    description: "100ml CIP घोल के सैंपल को 0.01 N सोडियम थायोसल्फेट के साथ आयोडोमेट्रिक टाइट्रेशन विधि का उपयोग करके टाइट्रेट करें।",
-                    label: "0.01 N सोडियम थायोसल्फेट का उपयोग (ml)",
-                    button: "Chlorine (ppm) की गणना करें",
-                    result_prefix: "उपलब्ध क्लोरीन:"
-                }
-            }
-        }
     },
+    "cip_cycle": {
+      "title": "Standard CIP Cleaning Cycle",
+      "intro": "Ek typical CIP cycle mein neeche diye gaye steps hote hain:",
+      "steps": [
+        {
+          "title": "Product Residues ki Recovery",
+          "details": "<p>Drainage dwara product ke residues ko recover karna.</p>"
+        },
+        {
+          "title": "Residues ka Expulsion",
+          "details": "<p>Paani ya compressed air ke saath non-recoverable residues ka expulsion.</p>"
+        },
+        {
+          "title": "Pre-rinse (Initial Wash)",
+          "details": "<p><strong>Purpose:</strong> Zyada tar loose dirt aur doodh ke residues ko hatana.<br/><strong>Process:</strong> System ko gungune paani (50-60°C) se 10 minute tak dhoya jaata hai.</p>"
+        },
+        {
+          "title": "Alkali Wash",
+          "details": "<p><strong>Purpose:</strong> Fat aur protein ko hatana.<br/><strong>Process:</strong> 0.5-1.5% caustic soda (NaOH) ke solution ko 75°C par 30 minute ke liye circulate kiya jaata hai.</p>"
+        },
+        {
+          "title": "Intermediate Rinse",
+          "details": "<p><strong>Purpose:</strong> Alkaline detergent ke residues ko hatana.<br/><strong>Process:</strong> System ko phir se garam paani (50°C) se 5-8 minute ke liye dhoya jaata hai.</p>"
+        },
+        {
+          "title": "Acid Wash",
+          "details": "<p><strong>Purpose:</strong> Mineral deposits jaise milk stone ko hatana.<br/><strong>Process:</strong> 0.5-1.0% nitric acid (HNO₃) ke solution ko 75°C par 20 minute ke liye circulate kiya jaata hai.</p>"
+        },
+        {
+          "title": "Final Rinse",
+          "details": "<p><strong>Purpose:</strong> Acid ke residues ko hatana.<br/><strong>Process:</strong> System ko garam paani (50°C) se 5-8 minute ke liye dhoya jaata hai.</p>"
+        },
+        {
+          "title": "Disinfection",
+          "details": "<p><strong>Purpose:</strong> Bache hue microorganisms ko maarna.<br/><strong>Process:</strong> Thermal disinfection (90-95°C par 10 minute) aur thanda karna, ya ek suitable sanitizer ke saath chemical disinfection.</p>"
+        }
+      ]
+    },
+    "chemicals": {
+      "title": "CIP mein Use Hone Wale Chemicals",
+      "intro": "CIP process mein alag-alag tarah ke chemicals ka use kiya jaata hai, har ek ka ek specific purpose hota hai:",
+      "types": [
+        {
+          "title": "Alkaline Detergents",
+          "details": "<p><strong>Example:</strong> Caustic soda (NaOH), sodium carbonate, sodium metasilicate.<br/><strong>Purpose:</strong> Yeh fat ko saponify karte hain aur protein ko todte hain. Yeh bahut effective cleaning agents hain.</p>"
+        },
+        {
+          "title": "Acid Detergents",
+          "details": "<p><strong>Example:</strong> Nitric acid (HNO₃), phosphoric acid (H₃PO₄).<br/><strong>Purpose:</strong> Yeh milk stone jaise mineral deposits ko dissolve karte hain.</p>"
+        },
+        {
+          "title": "Sanitizers",
+          "details": "<p><strong>Example:</strong> Chlorine compounds (sodium hypochlorite), peracetic acid (PAA), garam paani (>85°C).<br/><strong>Purpose:</strong> Final wash ke baad bache hue microorganisms ko maarna.</p>"
+        }
+      ]
+    },
+    "cleaning_procedures": {
+      "title": "Specific Instruments ki Cleaning Procedures",
+      "sections": [
+        {
+          "title": "Doodh ke Cans ki Safai",
+          "content": `
+                    <p>Dairy reception dock par aluminium cans mein receive hue raw milk ko manual aur/ya mechanical washing dono ka use karke saaf aur sanitize kiya ja sakta hai, jo daily receive hone wale cans ke number par depend karta hai.</p>
+                    <h5 class="font-bold mt-2">Manual Washing:</h5>
+                    <ol class="list-decimal list-inside space-y-1 mt-2">
+                        <li>Cans khaali karne ke turant baad, unhein pehle tap water se dhoya jaata hai aur loose dirt ko brush se andar se hata diya jaata hai.</li>
+                        <li>Cans ko pehle se taiyaar 50°C par detergent solution (1% sodium hexametaphosphate, trisodium phosphate, sodium carbonate, teepol) mein bhigoyein.</li>
+                        <li>Garam detergent solution se cans ke andar ke hisse ko acchi tarah se brush karein.</li>
+                        <li>Cans ko garam paani se dhoyein.</li>
+                        <li>Lid ke saath cans ko steam karein aur draining rack par store karein.</li>
+                    </ol>
+                    <h5 class="font-bold mt-2">Mechanical Washing (Rotary ya Tunnel Type Washer):</h5>
+                     <ol class="list-decimal list-inside space-y-1 mt-2">
+                        <li>Detergent tank ko 0.5% alkalinity wale detergent solution se charge karein.</li>
+                        <li>Mechanical washer ke paani aur steam valve kholein aur motor aur pump start karein.</li>
+                        <li>Cans aur lids ko unke respective carrier paths mein load karein.</li>
+                        <li>Jet pressure ko 15 psi par aur pre-rinsing (40°C), detergent wash (75°C), garam paani wash (85°C) ka temperature maintain rakhein.</li>
+                        <li>Steaming aur garam paani blast pressure ko respectively 20 psi aur temperature 120°C aur 125°C par maintain rakha jaata hai.</li>
+                        <li>Outlet par cans aur lids utaarein aur rack par store karein.</li>
+                        <li>Har operation ke start aur end mein qualitative ya quantitative tests ka use karke detergent solution ki strength check karein.</li>
+                    </ol>
+                  `
+        },
+        {
+          "title": "Cream Separator/Clarifier ki Safai",
+          "content": `
+                       <ol class="list-decimal list-inside space-y-1 mt-2">
+                          <li>Din ke operation ke baad, main machine se bowl hata dein.</li>
+                          <li>Bowl ko dismantle karein aur discs hata dein.</li>
+                          <li>Bowl ke periphery se separator slime hata dein.</li>
+                          <li>Brush ki madad se har ek disc ko garam detergent solution se saaf karein.</li>
+                          <li>Sabhi parts ko gungune paani se dhoyein aur sookhne ke liye rakh dein.</li>
+                       </ol>
+                  `
+        },
+        {
+          "title": "Plate Heat Exchangers (PHE) ki Safai",
+          "content": `
+                    <h5 class="font-bold mt-2">Daily Cleaning:</h5>
+                     <ol class="list-decimal list-inside space-y-1 mt-2">
+                        <li>Film hatane ke liye gungune paani se dhoyein.</li>
+                        <li>70°C par 20 minute ke liye 1% acid detergent solution circulate karke dhoyein.</li>
+                        <li>Garam paani se dhoyein.</li>
+                        <li>70°C par 20-30 minute ke liye 1% alkali solution circulate karein.</li>
+                        <li>40-50°C par garam paani se dhoyein, phir 10 minute ke liye tap water se aur sookhne dein.</li>
+                        <li>Use se pehle sanitizer solution circulate karein.</li>
+                    </ol>
+                    <h5 class="font-bold mt-2">Periodic Cleaning:</h5>
+                     <ol class="list-decimal list-inside space-y-1 mt-2">
+                        <li>Plate heat exchanger ko dhyan se kholein aur dismantle karein.</li>
+                        <li>Rubber gaskets check karein aur agar kharab ho toh badlein.</li>
+                        <li>Har ek plate ko check karein aur detergent solution ka use karke soft brush se scrub karke scale hata dein.</li>
+                        <li>Plates par koi scratch ya dent banane se bachein.</li>
+                        <li>Detergent ke nishan hatane ke liye plates ko tap water se acchi tarah dhoyein.</li>
+                        <li>Manufacturer ke instructions follow karte hue plates ko reassemble karein.</li>
+                    </ol>
+                  `
+        },
+        {
+          "title": "Doodh Storage Tank ki Safai",
+          "content": `
+                       <ol class="list-decimal list-inside space-y-1 mt-2">
+                          <li>Tank khaali hone ke baad, drain valve kholein.</li>
+                          <li>Pressurized spray head ka use karke tank ko garam paani se dhoyein.</li>
+                          <li>Valve band karein aur pressure nozzle ka use karke detergent solution se dhoyein.</li>
+                          <li>Valve kholein aur detergent solution ko nikalne dein.</li>
+                          <li>Detergent solution ke nishan hatane ke liye garam paani ke baad thande peene yogya paani se dhoyein.</li>
+                          <li>Paani nikalein aur sookhne dein.</li>
+                          <li>Steam ya chlorinated water (150-200 ppm chlorine) ka use karke sanitize karein.</li>
+                       </ol>
+                  `
+        }
+      ]
+    },
+    "teepol_detergent": {
+      "title": "Liquid Detergent Banana aur Check Karna",
+      "htmlContent": `
+              <p>Dairy aur food industry mein, haath se bartano aur chhote instruments ki safai ke liye neutral liquid detergent (jaise Teepol) kaafi use kiya jaata hai.</p>
+              <h4 class="font-bold mt-4">1. General Purpose Liquid Detergent Kaise Banayein (1000 Litre Batch):</h4>
+              <p>Yeh ek general formulation hai. Industrial production zyada complex ho sakta hai.</p>
+              <div class="overflow-x-auto my-4"><table class="w-full"><thead><tr class="bg-muted"><th class="p-2 text-left">Ingredient</th><th class="p-2 text-left">Quantity (Kg)</th><th class="p-2 text-left">%</th><th class="p-2 text-left">Purpose</th></tr></thead><tbody>
+              <tr><td class="p-2 border-b">Paani (Water)</td><td class="p-2 border-b">820 - 840 Kg</td><td class="p-2 border-b">82-84%</td><td class="p-2 border-b">Main Solvent</td></tr>
+              <tr><td class="p-2 border-b">Acid Slurry (LABSA 90%)</td><td class="p-2 border-b">100 Kg</td><td class="p-2 border-b">10%</td><td class="p-2 border-b">Main Cleaning Agent (Anionic Surfactant)</td></tr>
+              <tr><td class="p-2 border-b">Caustic Soda (NaOH)</td><td class="p-2 border-b">~15 Kg</td><td class="p-2 border-b">~1.5%</td><td class="p-2 border-b">Slurry ko neutralize karne ke liye (pH 7 tak)</td></tr>
+              <tr><td class="p-2 border-b">Urea ya Namak (Salt)</td><td class="p-2 border-b">20 - 40 Kg</td><td class="p-2 border-b">2-4%</td><td class="p-2 border-b">Viscosity Enhancer</td></tr>
+              <tr><td class="p-2 border-b">Rang aur Khushboo (Color & Perfume)</td><td class="p-2 border-b">Zaroorat anusaar</td><td class="p-2 border-b">-</td><td class="p-2 border-b">Aesthetics ke liye</td></tr>
+              <tr class="bg-muted"><td class="p-2 font-bold">Total</td><td class="p-2 font-bold">1000 Kg</td><td class="p-2 font-bold">100%</td><td class="p-2 font-bold"></td></tr>
+              </tbody></table></div>
+              <p class="font-semibold">Process:</p>
+              <ol class="list-decimal list-inside space-y-1 mt-2">
+                  <li>Ek bade tank mein paani lein. Dheere-dheere Acid Slurry daalein aur lagataar hilate rahein.</li>
+                  <li>Alag se, Caustic Soda ko thode paani mein gholein (savdhani bartein, yeh garam hota hai).</li>
+                  <li>Caustic soda ke solution ko dheere-dheere slurry wale mixture mein daalein jab tak ki mixture ka pH 7 (neutral) na ho jaaye.</li>
+                  <li>Gaadhapan badhane ke liye Urea ya namak daalein aur acchi tarah milayein. Aakhir mein, rang aur khushboo milayein.</li>
+              </ol>
+
+              <h4 class="font-bold mt-6">2. Acidic Cleaner Kaise Banayein (1000 Litre Batch):</h4>
+              <p>Yeh ek strong acid-based cleaner hai jo milk stone aur doosre mineral deposits ko hatane ke liye use kiya jaata hai. <strong>Warning: Strong acids khatarnak hote hain, hamesha aavashyak suraksha upkaran (PPE) pehnein.</strong></p>
+               <div class="overflow-x-auto my-4"><table class="w-full"><thead><tr class="bg-muted"><th class="p-2 text-left">Ingredient</th><th class="p-2 text-left">Quantity (Kg)</th><th class="p-2 text-left">%</th><th class="p-2 text-left">Purpose</th></tr></thead><tbody>
+              <tr><td class="p-2 border-b">Paani (Water)</td><td class="p-2 border-b">880 Kg</td><td class="p-2 border-b">88%</td><td class="p-2 border-b">Solvent</td></tr>
+              <tr><td class="p-2 border-b">Hydrochloric Acid (HCl - 33%)</td><td class="p-2 border-b">100 Kg</td><td class="p-2 border-b">10%</td><td class="p-2 border-b">Main Cleaning Agent (Descaling)</td></tr>
+              <tr><td class="p-2 border-b">Non-ionic Surfactant</td><td class="p-2 border-b">20 Kg</td><td class="p-2 border-b">2%</td><td class="p-2 border-b">Surface ko geela karne aur gandagi hatane mein madad karta hai</td></tr>
+              </tbody></table></div>
+              <p class="font-semibold">Process:</p>
+              <ol class="list-decimal list-inside space-y-1 mt-2">
+                  <li>Ek acid-resistant tank mein paani lein.</li>
+                  <li><strong>Hamesha acid ko paani mein dheere-dheere daalein, kabhi bhi paani ko acid mein na daalein.</strong> Hydrochloric Acid ko paani mein daalein aur milayein.</li>
+                  <li>Aakhir mein, non-ionic surfactant daalein aur acchi tarah milayein.</li>
+              </ol>
+              
+              <h4 class="font-bold mt-6">Liquid Detergent ki Strength Kaise Check Karein (Active Matter %):</h4>
+              <p>Detergent ki strength ko usmein maujood "Active Matter" (surfactant ki matra) se maapa jaata hai. Iski jaanch ke liye ek standard method two-phase titration hai, jo ek complex lab procedure hai aur iske liye specific chemicals aur expertise ki zaroorat hoti hai.</p>
+            `
+    },
+    "sip": {
+      "title": "SIP (Sterilization-In-Place)",
+      "intro": "Sterilization-in-place (SIP) ek continuous commercial scale ka operation hai, jahan zaroori units ko sterilize kiya ja sakta hai. Yeh design, installation aur operation ke maamle mein bahut sophisticated hote hain aur inhein highly qualified manpower ki zaroorat hoti hai.",
+      "process": `
+              <h5 class="font-bold mt-2">SIP Process:</h5>
+              <ol class="list-decimal list-inside space-y-1 mt-2">
+                 <li>Pressure mein steam ko poore installation se guzara jaata hai.</li>
+                 <li>Hawa ko piping ya equipment par lage vents ke through bahar nikala jaata hai. Vents bacterial filters dwara protected hote hain.</li>
+                 <li>Ek suitable time ke baad vents band ho jaate hain taaki steam ka pressure ek pehle se nirdharit level tak badh sake.</li>
+                 <li>Pressure ko zaroori samay tak maintain kiya jaata hai, jiske baad steam ko ek condenser ke through chhoda jaata hai.</li>
+                 <li>Record kiya gaya pressure sabhi contaminants ke destruction ke liye zaroori time-temperature combination ko prapt karne ke liye paryapt hona chahiye.</li>
+              </ol>
+            `
+    },
+    "advantages": {
+      "title": "CIP ke Fayde",
+      "list": [
+        "Guaranteed aur repeatable quality assurance.",
+        "Quality assurance requirements ke liye poora data logging ka provision.",
+        "Cleaning solutions ko recycle karke cleaning cost mein kami.",
+        "Equipment par na pahunchne wale areas ko saaf karne ki sambhavna.",
+        "Operators ke liye behtar suraksha kyunki khatarnak cleaning materials ko handle nahi kiya jaata hai.",
+        "Do production runs ke beech ke samay mein kami.",
+        "Labour requirements mein kami.",
+        "Cleaning materials ka zyada prabhavi upyog aur control.",
+        "Paani ki khapat mein kami."
+      ]
+    },
+    "solution_strength": {
+      "title": "CIP Solution ki Strength ka Test",
+      "intro": "Kushal safai aur germicidal prabhav ke liye detergent solution ki sahi strength banaye rakhna mahatvapurna hai. Strength aamtaur par % concentration ya ppm (chlorine ke liye) mein maapi jaati hai.",
+      "alkalinity_test": {
+        "title": "Washing Solution ki Strength ka Pata Lagana (Alkalinity Test)",
+        "content": `
+                  <p>Washing solution ki strength ko aamtaur par NaOH ke terms mein vyakt kiya jaata hai kyunki yeh aksar akele ya disodium phosphate aur sodium metasilicate aadi ke saath combination mein use kiya jaata hai. Glass bottles ke liye aamtaur par 1.5% NaOH ke barabar alkali aur can washing ke liye 0.5% ka use kiya jaata hai. Automatic machines mein washing solution ka baar-baar use karne se yeh aamtaur par patla ho jaata hai. Kushal safai aur germicidal prabhav ke liye detergent solution ki sahi alkalinity banaye rakhna mahatvapurna hai.</p>
+                  <h5 class="font-bold mt-4">Requirements:</h5>
+                  <p>Conical flask, pipettes, burette, volumetric flask, 2.5 N sulphuric acid, hydrochloric acid (0.1N), phenolphthalein indicator (0.5%)</p>
+
+                  <h5 class="font-bold mt-4">Qualitative Test:</h5>
+                  <ol class="list-decimal list-inside space-y-1 mt-2">
+                      <li>Ek conical flask mein 10 ml detergent solution lein.</li>
+                      <li>12.5 ml N/10 HCl aur 5 boondein 0.5% phenolphthalein indicator daalein.</li>
+                      <li>Agar mixture laal ho jaata hai, toh yeh 0.5% se zyada caustic soda ke roop mein alkalinity ko indicate karta hai, jo paryapt hai.</li>
+                  </ol>
+
+                  <h5 class="font-bold mt-4">Quantitative Test - Direct Reading Method:</h5>
+                   <ol class="list-decimal list-inside space-y-1 mt-2">
+                      <li>100 ml conical flask mein 10 ml sample maapein.</li>
+                      <li>5 boondein phenolphthalein indicator daalein.</li>
+                      <li>2.5 N sulphuric acid ke saath tab tak titrate karein jab tak solution rangheen na ho jaaye.</li>
+                      <li>Use kiye gaye acid ke ml ko note karein.</li>
+                      <li>Use kiya gaya acid NaOH ke roop mein percent alkali ka direct indicator hai.</li>
+                  </ol>
+
+                   <h5 class="font-bold mt-4">Laboratory Method:</h5>
+                   <ol class="list-decimal list-inside space-y-1 mt-2">
+                      <li>250 ml volumetric flask mein 5 ml washing solution lein.</li>
+                      <li>Distilled water se volume poora karein aur acchi tarah milayein.</li>
+                      <li>Is solution ke 50 ml ko 100 ml conical flask mein transfer karein.</li>
+                      <li>Kuch boondein phenolphthalein indicator daalein.</li>
+                      <li>0.1 N sulphuric acid ke saath solution ko rangheen hone tak titrate karein. Use kiye gaye acid ke ml ko "A" ke roop mein record karein.</li>
+                      <li>Kuch boondein methyl orange indicator daalein.</li>
+                      <li>Halka gulabi rang aane tak titration jaari rakhein. Use kiye gaye acid ke ml ko "B" ke roop mein note karein.</li>
+                  </ol>
+                  <p class="mt-2"><strong>Calculation:</strong><br/>% Free Caustic = (A - B) × 0.4<br/>% Total Alkali = (A + B) × 0.4</p>
+                `
+      },
+      "calculators": {
+        "error_title": "Error",
+        "success_title": "Successfully Calculate Kiya Gaya",
+        "error_invalid_titre": "Kripya ek valid titre value enter karein.",
+        "naoh": {
+          "title": "NaOH (%)",
+          "description": "10ml CIP solution ke sample ko 0.1 N acid (jaise HCl) ke saath phenolphthalein indicator ka use karke titrate karein.",
+          "label": "0.1 N Acid ka Use (ml)",
+          "button": "NaOH % Calculate Karein",
+          "result_prefix": "Caustic Soda (NaOH):"
+        },
+        "hno3": {
+          "title": "HNO₃ (%)",
+          "description": "10ml CIP solution ke sample ko 0.1 N base (jaise NaOH) ke saath phenolphthalein indicator ka use karke titrate karein.",
+          "label": "0.1 N Base ka Use (ml)",
+          "button": "HNO₃ % Calculate Karein",
+          "result_prefix": "Nitric Acid (HNO₃):"
+        },
+        "h3po4": {
+          "title": "H₃PO₄ (%)",
+          "description": "10ml CIP solution ke sample ko 0.1 N base (jaise NaOH) ke saath phenolphthalein indicator ka use karke titrate karein.",
+          "label": "0.1 N Base ka Use (ml)",
+          "button": "H₃PO₄ % Calculate Karein",
+          "result_prefix": "Phosphoric Acid (H₃PO₄):"
+        },
+        "chlorine": {
+          "title": "Chlorine (ppm)",
+          "description": "100ml CIP solution ke sample ko 0.01 N sodium thiosulphate ke saath iodometric titration method ka use karke titrate karein.",
+          "label": "0.01 N Sodium Thiosulphate ka Use (ml)",
+          "button": "Chlorine (ppm) Calculate Karein",
+          "result_prefix": "Available Chlorine:"
+        }
+      }
+    }
+  }
+}
     en: {
         main_title: "Washing and Cleaning of Dairy Equipments",
         main_description: "A detailed guide to clean and sanitize different dairy equipments.",
