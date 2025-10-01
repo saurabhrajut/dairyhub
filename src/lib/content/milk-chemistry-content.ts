@@ -1,7 +1,6 @@
 
 export const milkChemistryContent = {
-   {
-  "hi": {
+   hi: {
     "mainTitle": "Doodh ka Rasayan Vigyan",
     "description": "Doodh ke science mein ek gehri dive.",
     "backToTopics": "Topics par wapas jaayein",
