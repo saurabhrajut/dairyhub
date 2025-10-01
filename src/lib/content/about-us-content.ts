@@ -173,7 +173,7 @@ export const aboutUsContent = {
       "text": "Aapka feedback hamare liye anmol hai. Agar aapko app pasand aaye, toh kripya ise share karein, review karein, aur hamein behtar banane mein madad karein."
     },
     "footer": "Made with ❤️ by Saurabh Rajput | Dairy Hub App"
-  }
+  },
     en: {
         title: "Behind Dairy Hub",
         description: "The story of your trusted digital dairy partner",
