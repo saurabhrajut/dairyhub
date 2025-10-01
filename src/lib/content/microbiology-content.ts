@@ -1,173 +1,148 @@
 
-
 export const microbiologyContent = {
     hi: {
-        title: "दूध सूक्ष्म जीव विज्ञान और परीक्षण",
-        description: "डेयरी उत्पादों में पाए जाने वाले मुख्य सूक्ष्मजीवों और उनके परीक्षण के बारे में जानकारी।",
-        backToTopics: "विषयों पर वापस जाएं",
+        title: "Doodh Microbiology aur Parikshan",
+        description: "Dairy products mein paaye jaane wale main microorganisms aur unke tests ke baare mein jaankari.",
         sections: [
             {
                 id: "intro",
-                title: "दूध सूक्ष्म जीव विज्ञान का परिचय",
+                title: "Milk Microbiology ka Introduction",
                 content: `
-                    <p>दूध में वांछनीय रासायनिक संरचना होनी चाहिए और संतोषजनक स्वच्छ गुणवत्ता होनी चाहिए। यह सार्वजनिक स्वास्थ्य, दूध से बने उत्पादों की गुणवत्ता और प्रसंस्करण के लिए दूध की उपयुक्तता के संदर्भ में आवश्यक है। जो घटक दूध के लिए विदेशी हैं, लेकिन दूध में थन में या दूध दुहने के दौरान या बाद में प्रवेश करते हैं, साथ ही दूध में होने वाले कोई भी परिवर्तन अक्सर इसकी गुणवत्ता के लिए हानिकारक होते हैं। ये मामले दूध स्वच्छता के विषय हैं। सूक्ष्म, रासायनिक और भौतिक स्वच्छता को प्रतिष्ठित किया जा सकता है। उदाहरण के लिए, सूक्ष्मजीव जो स्वास्थ्य के लिए खतरा पैदा कर सकते हैं (खाद्य संक्रमण या खाद्य विषाक्तता) या जो दूध को खराब कर देते हैं, जैसे, क्योंकि वे भंडारण के दौरान इसे खट्टा कर देते हैं। प्रकाश-प्रेरित ऑफ-फ्लेवर, वसा ऑक्सीकरण, और वसा हाइड्रोलिसिस रासायनिक या एंजाइमेटिक परिवर्तनों से उत्पन्न होते हैं। इसके अलावा, जो यौगिक उपभोक्ता के लिए संभावित रूप से हानिकारक हो सकते हैं, जैसे कि एंटीबायोटिक्स, कीटाणुनाशक, कीटनाशक और भारी धातुएं, दूध में प्रवेश कर सकते हैं।</p>
-                    <h4 class="font-bold mt-4">सामान्य पहलू</h4>
-                    <p>दूध न केवल स्तनधारियों के लिए बल्कि कई सूक्ष्मजीवों के लिए पोषक तत्वों और खाद्य ऊर्जा का एक अच्छा स्रोत है, जो इस प्रकार दूध में विकसित हो सकते हैं। यह मुख्य रूप से बैक्टीरिया से संबंधित है, लेकिन कुछ मोल्ड और यीस्ट भी दूध में विकसित हो सकते हैं।</p>
-                    <h4 class="font-bold mt-4">वृद्धि (Growth)</h4>
-                    <p>बैक्टीरिया विभाजन द्वारा गुणा करते हैं। प्रत्येक कोशिका विभाजन से दो नए जीवाणु कोशिकाएं उत्पन्न होती हैं। गुणन एक ज्यामितीय प्रगति है। बैक्टीरिया की वृद्धि के विभिन्न चरणों को प्रतिष्ठित किया जा सकता है। लैग चरण के दौरान बैक्टीरिया गुणा नहीं करते हैं, मुख्य रूप से क्योंकि उनके एंजाइम सिस्टम को अनुकूलन की आवश्यकता होती है। घातीय चरण के दौरान, विकास अधिकतम दर पर होता है जब तक कि स्थिर चरण तक नहीं पहुंच जाता। बाद के चरण में, कुछ विकास अभी भी होता है, साथ ही मरना भी होता है। विकास दर में कमी आमतौर पर बैक्टीरिया द्वारा स्वयं बनाए गए अवरोधकों की क्रिया और/या उपलब्ध पोषक तत्वों की कमी के कारण होती है। अंततः, स्थिर चरण मरने वाले चरण में बदल जाता है, जिसके दौरान गिनती कम हो जाती है।</p>
-                    <p>तापमान का जीवाणु वृद्धि पर बड़ा प्रभाव पड़ता है। तापमान कम करने से कोशिका में लगभग सभी प्रक्रियाओं की दर मंद हो जाती है, जिससे विकास धीमा हो जाता है और किण्वन दर (जैसे, एसिड उत्पादन) कम हो जाती है।</p>
-                    <h4 class="font-bold mt-4">दूध एक सब्सट्रेट के रूप में</h4>
-                    <p>दूध में पोषक तत्वों की इतनी विस्तृत श्रृंखला होती है, जिसमें सभी विटामिन शामिल हैं, कि कई प्रजातियों के बैक्टीरिया किण्वन और विकास के लिए पर्याप्त कच्चा माल पाते हैं। दूध में प्राकृतिक अवरोधक होते हैं। अवरोधकों का एक महत्वपूर्ण वर्ग इम्युनोग्लोबुलिन है, जो विशिष्ट एंटीजन, अक्सर बैक्टीरिया के खिलाफ एंटीबॉडी होते हैं। दूध का सबसे महत्वपूर्ण गैर-विशिष्ट अवरोधक परऑक्सीडेज-थायोसाइनेट-H2O2 प्रणाली है।</p>
-                    <p>दूध का उपचार इसकी उपयुक्तता को बैक्टीरिया के लिए एक सब्सट्रेट के रूप में गहरा बदल सकता है। सबसे महत्वपूर्ण गर्मी उपचार है, जो बैक्टीरिया को मारता है और बीजाणु को सक्रिय कर सकता है लेकिन दूध को भी बदलता है। अवरोधक निष्क्रिय हो जाते हैं। नतीजतन, पाश्चुरीकरण बैक्टीरिया के विकास को काफी हद तक उत्तेजित कर सकता है (जो बाद में दूध में प्रवेश कर चुके हैं)।</p>
+                    <p>Doodh mein desirable chemical structure honi chahiye aur satisfactory hygienic quality honi chahiye. Yeh public health, doodh se bane products ki quality aur processing ke liye doodh ki suitability ke sandarbh mein zaroori hai. Jo components doodh ke liye foreign hain, lekin doodh mein udder mein ya doodh nikalne ke dauran ya baad mein enter karte hain, saath hi doodh mein hone wale koi bhi changes aksar iski quality ke liye harmful hote hain. Ye maamle milk hygiene ke subject hain. Microbial, chemical aur physical hygiene ko distinguish kiya ja sakta hai. Udaharan ke liye, microorganisms jo health ke liye khatra paida kar sakte hain (food infection ya food poisoning) ya jo doodh ko kharab kar dete hain, jaise, kyunki ve storage ke dauran ise khatta kar dete hain. Light-induced off-flavors, fat oxidation, aur fat hydrolysis chemical ya enzymatic changes se utpann hote hain. Iske alawa, jo compounds consumer ke liye potentially harmful ho sakte hain, jaise ki antibiotics, disinfectants, pesticides aur heavy metals, doodh mein enter kar sakte hain.</p>
+                    <h4 class="font-bold mt-4">General Aspects</h4>
+                    <p>Doodh na keval mammals ke liye balki kai microorganisms ke liye nutrients aur food energy ka ek achha source hai, jo is prakar doodh mein develop ho sakte hain. Yeh mukhya roop se bacteria se related hai, lekin kuch mold aur yeast bhi doodh mein develop ho sakte hain.</p>
+                    <h4 class="font-bold mt-4">Growth</h4>
+                    <p>Bacteria division dwara multiply karte hain. Har cell division se do naye bacterial cells utpann hote hain. Multiplication ek geometrical progression hai. Bacteria ki growth ke various phases ko distinguish kiya ja sakta hai. Lag phase ke dauran bacteria multiply nahi karte hain, mukhya roop se kyunki unke enzyme system ko adaptation ki avashyakta hoti hai. Exponential phase ke dauran, growth maximum rate par hota hai jab tak ki stationary phase tak nahi pahunch jata. Baad ke phase mein, kuch growth abhi bhi hota hai, saath hi marna bhi hota hai. Growth rate mein kami aamtaur par bacteria dwara swayam banaye gaye inhibitors ki kriya aur/ya available nutrients ki kami ke karan hoti hai. Antatah, stationary phase dying-off phase mein badal jata hai, jiske dauran ginti kam ho jati hai.</p>
+                    <p>Temperature ka bacterial growth par bada prabhav padta hai. Temperature kam karne se cell mein lagbhag sabhi processes ki dar mand ho jati hai, jisse growth dhima ho jata hai aur fermentation rate (jaise, acid production) kam ho jati hai.</p>
+                    <h4 class="font-bold mt-4">Doodh ek Substrate ke roop mein</h4>
+                    <p>Doodh mein nutrients ki itni vistrit range hoti hai, jismein sabhi vitamin shamil hain, ki kai species ke bacteria fermentation aur growth ke liye paryapt raw material paate hain. Doodh mein natural inhibitors hote hain. Inhibitors ka ek mahatvapurna varg immunoglobulin hai, jo vishisht antigen, aksar bacteria ke khilaf antibody hote hain. Doodh ka sabse mahatvapurna gair-specific inhibitor peroxidase–thiocyanate–H2O2 system hai.</p>
+                    <p>Doodh ka treatment iski suitability ko bacteria ke liye ek substrate ke roop mein gehra badal sakta hai. Sabse mahatvapurna heat treatment hai, jo bacteria ko marta hai aur beej ko sakriya kar sakta hai lekin doodh ko bhi badalta hai. Inhibitor nishkriya ho jate hain. Natijatan, pasteurization bacteria ke vikas ko kafi had tak uttejit kar sakta hai (jo baad mein doodh mein pravesh kar chuke hain).</p>
                 `
             },
             {
                 id: "thermophilic_thermoduric",
-                title: "थर्मोफिलिक और थर्मोड्यूरिक बैक्टीरिया",
+                title: "Thermophilic aur Thermoduric Bacteria",
                 content: `
-                    <h4 class="font-bold mt-4">थर्मोफिलिक बैक्टीरिया</h4>
-                    <p>ये बैक्टीरिया उच्च तापमान (45°C से ऊपर) पर पनपते हैं। वे डेयरी प्रसंस्करण में एक चिंता का विषय हैं क्योंकि वे पाश्चुरीकरण से बच सकते हैं यदि तापमान पर्याप्त रूप से नियंत्रित नहीं किया जाता है और उच्च तापमान वाले उपकरणों में बढ़ सकता है। उदाहरणों में बैसिलस और क्लोस्ट्रीडियम की प्रजातियां शामिल हैं।</p>
-                    <h4 class="font-bold mt-4">थर्मोड्यूरिक बैक्टीरिया</h4>
-                    <p>ये जीव पाश्चुरीकरण तापमान से बच सकते हैं लेकिन जरूरी नहीं कि वे उच्च तापमान पर बढ़ें। वे खराब साफ किए गए उपकरणों से उत्पन्न हो सकते हैं और पाश्चुरीकृत दूध की शेल्फ जीवन और गुणवत्ता को प्रभावित कर सकते हैं। उदाहरणों में माइक्रोकोकस, माइक्रोबैक्टीरियम और कुछ बैसिलस बीजाणु शामिल हैं।</p>
+                    <h4 class="font-bold mt-4">Thermophilic Bacteria</h4>
+                    <p>Ye bacteria high temperature (45°C se upar) par panapte hain. Ve dairy processing mein ek chinta ka vishay hain kyunki ve pasteurization se bach sakte hain yadi temperature apyapt roop se niyantrit nahi kiya jata hai aur high temperature wale upkaranon mein badh sakta hai. Udaharanon mein Bacillus aur Clostridium ki prajatiyan shamil hain.</p>
+                    <h4 class="font-bold mt-4">Thermoduric Bacteria</h4>
+                    <p>Ye jeev pasteurization temperature se bach sakte hain lekin jaroori nahi ki ve uchch taapman par badhen. Ve kharab saaf kiye gaye upkaranon se utpann ho sakte hain aur pasteurized doodh ki shelf life aur quality ko prabhavit kar sakte hain. Udaharanon mein Micrococcus, Microbacterium, aur kuch Bacillus beej shamil hain.</p>
                 `
             },
             {
                 id: "psychrotrophic",
-                title: "साइकोट्रोफिक बैक्टीरिया",
+                title: "Psychrotrophic Bacteria",
                 content: `
-                    <p>साइकोट्रोफिक बैक्टीरिया रेफ्रिजरेटर के तापमान (7°C से नीचे) पर बढ़ सकते हैं, जिससे वे प्रशीतित कच्चे और पाश्चुरीकृत दूध के लिए एक बड़ी चिंता का विषय बन जाते हैं। वे गर्मी-स्थिर प्रोटीज और लाइपेस का उत्पादन कर सकते हैं जो पाश्चुरीकरण से बच जाते हैं और भंडारण के दौरान कड़वाहट और बासीपन जैसे ऑफ-फ्लेवर का कारण बनते हैं। स्यूडोमोनास जीनस एक सामान्य अपराधी है।</p>
+                    <p>Psychrotrophic bacteria refrigerator ke temperature (7°C se neeche) par badh sakte hain, jisse ve refrigerated kachche aur pasteurized doodh ke liye ek badi chinta ka vishay ban jate hain. Ve garmi-sthir protease aur lipase ka utpadan kar sakte hain jo pasteurization se bach jate hain aur storage ke dauran kadwahat aur basipan jaise off-flavors ka karan bante hain. Pseudomonas genus ek samanya culprit hai.</p>
                 `
             },
             {
                 id: "lactic_acid_bacteria",
-                title: "लैक्टिक एसिड बैक्टीरिया (LAB)",
+                title: "Lactic Acid Bacteria (LAB)",
                 content: `
-                    <p>लैक्टिक एसिड बैक्टीरिया (LAB) किण्वित डेयरी उत्पादों जैसे दही, पनीर और छाछ के उत्पादन के लिए आवश्यक हैं। वे लैक्टोज को लैक्टिक एसिड में किण्वित करते हैं, जो इन उत्पादों के संरक्षण और विशिष्ट बनावट और स्वाद के लिए जिम्मेदार है। सामान्य जेनेरा में लैक्टोकोकस, लैक्टोबैसिलस, स्ट्रेप्टोकोकस और ल्यूकोनोस्टोक शामिल हैं। जबकि किण्वित उत्पादों में फायदेमंद है, कच्चे दूध में उनका अनियंत्रित विकास खट्टापन और खराब होने का कारण बनता है।</p>
+                    <p>Lactic Acid Bacteria (LAB) fermented dairy products jaise dahi, paneer aur chach ke production ke liye avashyak hain. Ve lactose ko lactic acid mein ferment karte hain, jo in products ke preservation aur vishisht banavat aur swad ke liye responsible hai. Samanya genera mein Lactococcus, Lactobacillus, Streptococcus, aur Leuconostoc shamil hain. Jabki fermented products mein faydemand hai, kachche doodh mein unka aniyantrit vikas souring aur spoilage ka karan banta hai.</p>
                 `
             },
             {
                 id: "spoilage_pathogenic",
-                title: "खराब करने वाले और रोगजनक जीव",
+                title: "Spoilage aur Pathogenic Organisms",
                 content: `
-                    <h4 class="font-bold mt-4">खराब करने वाले जीव (Spoilage Organisms)</h4>
-                    <p>ये सूक्ष्मजीव रोग का कारण नहीं बनते हैं लेकिन दूध और दूध उत्पादों के स्वाद, गंध और बनावट को नीचा दिखाते हैं, जिससे वे उपभोग के लिए अनुपयुक्त हो जाते हैं। उदाहरणों में स्यूडोमोनास, कुछ बैसिलस प्रजातियां और खमीर और मोल्ड शामिल हैं।</p>
-                    <h4 class="font-bold mt-4">रोगजनक जीव (Pathogenic Organisms)</h4>
-                    <p>ये सूक्ष्मजीव मनुष्यों में बीमारी पैदा करने में सक्षम हैं। दूध साल्मोनेला, लिस्टेरिया मोनोसाइटोजेन्स, कैम्पिलोबैक्टर जेजुनी और ई. कोलाई O157:H7 जैसे रोगजनकों के लिए एक वाहन हो सकता है। पाश्चुरीकरण इन रोगजनकों को प्रभावी ढंग से नष्ट करने के लिए डिज़ाइन किया गया है, जिससे दूध का सेवन सुरक्षित हो जाता है।</p>
+                    <h4 class="font-bold mt-4">Spoilage Organisms</h4>
+                    <p>Ye microorganisms rog ka karan nahi bante hain lekin doodh aur doodh products ke swad, gandh aur banavat ko neecha dikhate hain, jisse ve consumption ke liye anupyukt ho jate hain. Udaharanon mein Pseudomonas, kuch Bacillus prajatiyan aur khamir aur mold shamil hain.</p>
+                    <h4 class="font-bold mt-4">Pathogenic Organisms</h4>
+                    <p>Ye microorganisms manushyon mein bimari paida karne mein saksham hain. Doodh Salmonella, Listeria monocytogenes, Campylobacter jejuni aur E. coli O157:H7 jaise pathogens ke liye ek vehicle ho sakta hai. Pasteurization in pathogens ko prabhavi dhang se nasht karne ke liye design kiya gaya hai, jisse doodh ka sevan surakshit ho jata hai.</p>
                 `
             },
             {
                 id: "enterobacteriaceae",
-                title: "एंटरोबैक्टीरियासी (Enterobacteriaceae)",
+                title: "Enterobacteriaceae",
                 content: `
-                    <p>यह बैक्टीरिया का एक बड़ा परिवार है जिसमें कोलीफॉर्म, ई. कोलाई और साल्मोनेला जैसे कई जेनेरा शामिल हैं। वे अक्सर पर्यावरण और जानवरों की आंतों में पाए जाते हैं। डेयरी उत्पादों में उनकी उपस्थिति आम तौर पर खराब स्वच्छता या अपर्याप्त प्रसंस्करण का संकेत देती है, और इसलिए उन्हें स्वच्छता संकेतक के रूप में उपयोग किया जाता है।</p>
+                    <p>Yeh bacteria ka ek bada parivar hai jismein Coliforms, E. coli, aur Salmonella jaise kai genera shamil hain. Ve aksar environment aur janwaron ki aanton mein paaye jaate hain. Dairy products mein unki upasthiti aamtaur par kharab swachhata ya aparyapt processing ka sanket deti hai, aur isliye unhein hygiene indicator ke roop mein upyog kiya jaata hai.</p>
                 `
             },
             {
                 id: "cronobacter",
-                title: "क्रोनोबैक्टर (Cronobacter)",
+                title: "Cronobacter",
                 content: `
-                    <p>क्रोनोबैक्टर (पूर्व में एंटरोबैक्टर साकाज़ाकी) एक रोगजनक बैक्टीरिया है जो शिशुओं, विशेष रूप से नवजातों में मैनिंजाइटिस और नेक्रोटाइज़िंग एंटरोकोलाइटिस जैसे गंभीर संक्रमणों का कारण बन सकता है। यह पाउडर शिशु फार्मूला (PIF) में एक विशेष चिंता का विषय है क्योंकि यह सूखे वातावरण में जीवित रह सकता है। निर्माण के दौरान कड़े स्वच्छता नियंत्रण इसे रोकने के लिए महत्वपूर्ण हैं।</p>
+                    <p>Cronobacter (poorv mein Enterobacter sakazakii) ek pathogenic bacteria hai jo shishuon, vishesh roop se navjaton mein, meningitis aur necrotizing enterocolitis jaise gambhir infections ka karan ban sakta hai. Yeh powdered infant formula (PIF) mein ek vishesh chinta ka vishay hai kyunki yah sukhe environment mein jeevit rah sakta hai. Nirman ke dauran kathor swachhata niyantran ise rokne ke liye mahatvapurna hain.</p>
                 `
             },
             {
                 id: 'sources_of_contamination',
-                title: 'संदूषण के स्रोत',
+                title: 'Contamination ke Sources',
                 content: `
-                    <h4 class="font-bold mt-4">थन में मौजूद सूक्ष्मजीव</h4>
-                    <p>स्वस्थ गायों में, दूध स्रावी ऊतक में बाँझ होता है, लेकिन निप्पल नहर में बैक्टीरिया मौजूद हो सकते हैं। अस्वस्थ गायों, विशेष रूप से मास्टिटिस वाली, के दूध में रोगजनक जीवों सहित उच्च जीवाणु संख्या हो सकती है।</p>
-                    <h4 class="font-bold mt-4">दूध दुहने के दौरान और बाद में संदूषण</h4>
+                    <h4 class="font-bold mt-4">Udder mein maujood microorganisms</h4>
+                    <p>Swasth gayon mein, doodh secretory tissue mein sterile hota hai, lekin nipple canal mein bacteria maujood ho sakte hain. Aswasth gayon, vishesh roop se mastitis wali, ke doodh mein pathogenic jeevon sahit high bacterial count ho sakti hai.</p>
+                    <h4 class="font-bold mt-4">Doodh duhne ke dauran aur baad mein contamination</h4>
                     <ul class="list-disc list-outside pl-5 space-y-2 mt-2">
-                        <li><strong>गाय:</strong> गोबर, मिट्टी या धूल से दूषित निप्पल की त्वचा से सूक्ष्मजीव दूध में प्रवेश कर सकते हैं।</li>
-                        <li><strong>मिट्टी, गोबर, धूल:</strong> ये संदूषक हवा के माध्यम से या सीधे संपर्क से दूध तक पहुंच सकते हैं, जिससे बैक्टीरिया, यीस्ट और मोल्ड के बीजाणु आ सकते हैं।</li>
-                        <li><strong>चारा:</strong> चारे में बड़ी संख्या में सूक्ष्मजीव हो सकते हैं, जिनमें बीजाणु बनाने वाले बैक्टीरिया भी शामिल हैं जो पाचन तंत्र से गुजर सकते हैं और गोबर के माध्यम से दूध को दूषित कर सकते हैं।</li>
-                        <li><strong>दूध दुहने की इकाई:</strong> खराब साफ और कीटाणुरहित दूध दुहने के उपकरण संदूषण का एक प्रमुख स्रोत हैं।</li>
-                        <li><strong>पानी:</strong> सफाई और धोने के लिए इस्तेमाल किया जाने वाला दूषित पानी साइकोट्रोफिक बैक्टीरिया और अन्य रोगजनकों को पेश कर सकता है।</li>
-                        <li><strong>दूध वाला:</strong> दूध वाला अपने हाथों या कपड़ों से सीधे दूध को दूषित कर सकता है, खासकर यदि वे किसी संक्रमण से पीड़ित हों।</li>
+                        <li><strong>Gaay:</strong> Gobar, mitti ya dhool se dushit nipple ki twacha se microorganisms doodh mein enter kar sakte hain.</li>
+                        <li><strong>Mitti, Gobar, Dhool:</strong> Ye contaminants hawa ke madhyam se ya seedhe sampark se doodh tak pahunch sakte hain, jisse bacteria, yeast aur mold ke spores aa sakte hain.</li>
+                        <li><strong>Chara:</strong> Chare mein badi sankhya mein microorganisms ho sakte hain, jinmein spore-forming bacteria bhi shamil hain jo digestive tract se gujar sakte hain aur gobar ke madhyam se doodh ko dushit kar sakte hain.</li>
+                        <li><strong>Doodh duhne ki unit:</strong> Kharab saaf aur non-sanitized doodh duhne ke upkaran contamination ka ek pramukh srot hain.</li>
+                        <li><strong>Pani:</strong> Safai aur dhone ke liye istemal kiya jane wala dushit pani psychrotrophic bacteria aur anya pathogens ko pesh kar sakta hai.</li>
+                        <li><strong>Doodh wala:</strong> Doodh wala apne hathon ya kapdon se seedhe doodh ko dushit kar sakta hai, khaskar yadi ve kisi infection se pidit hon.</li>
                     </ul>
                 `
             },
             {
                 id: 'hygienic_measures',
-                title: 'स्वच्छ उपाय',
+                title: 'Hygienic Measures',
                 content: `
-                    <h4 class="font-bold mt-4">उपभोक्ता को रोगजनक सूक्ष्मजीवों से बचाना</h4>
-                    <p>कच्चे दूध में रोगजनकों द्वारा संदूषण को कभी भी खारिज नहीं किया जा सकता है। इसलिए तरल उपभोग या दूध उत्पादों में परिवर्तन के लिए नियत दूध को अक्सर कानून द्वारा इतनी गर्मी तक गर्म करने की आवश्यकता होती है कि आम रोगजनक मारे जाएं; इसका मतलब कम से कम कम पाश्चुरीकरण है। कच्चे दूध का सेवन करने की सलाह नहीं दी जाती है।</p>
-                    <h4 class="font-bold mt-4">खराब करने वाले जीवों के खिलाफ उपाय</h4>
-                    <p>सूक्ष्मजीवों द्वारा कम संदूषण पहला लक्ष्य है। इसे प्राप्त करने के लिए, संदूषण के स्रोतों को जानना चाहिए। दूध दुहने के उपकरणों की सफाई और कीटाणुशोधन आवश्यक है।</p>
-                    <p>दूध में बैक्टीरिया के विकास को धीमा करने का मुख्य साधन शीतलन है। खेत पर प्रशीतित दूध टैंकों का एक संतोषजनक संचालन आवश्यक है। हालांकि, दूध को ठंडा करने से कोई बैक्टीरिया नहीं मरता है और यह असंतोषजनक स्वच्छता का समाधान नहीं कर सकता है।</p>
+                    <h4 class="font-bold mt-4">Consumer ko pathogenic microorganisms se bachana</h4>
+                    <p>Kachche doodh mein pathogens dwara contamination ko kabhi bhi rule out nahi kiya ja sakta hai. Isliye liquid consumption ya milk products mein conversion ke liye niyat doodh ko aksar kanoon dwara itni garmi tak garam karne ki avashyakta hoti hai ki aam pathogens mare jayein; iska matlab kam se kam low pasteurization hai. Kachche doodh ka sevan karne ki salah nahi di jati hai.</p>
+                    <h4 class="font-bold mt-4">Spoilage organisms ke khilaf upay</h4>
+                    <p>Microorganisms dwara kam contamination pahla lakshya hai. Ise prapt karne ke liye, contamination ke sroton ko janna chahiye. Doodh duhne ke upkaranon ki safai aur disinfection avashyak hai.</p>
+                    <p>Doodh mein bacteria ke vikas ko dhima karne ka mukhya sadhan cooling hai. Khet par refrigerated doodh tankon ka ek satisfactory sanchalan avashyak hai. Halanki, doodh ko thanda karne se koi bacteria nahi marta hai aur yah unsatisfactory hygiene ka samadhan nahi kar sakta hai.</p>
                 `
             }
         ],
         testMethods: {
-          title: "सामान्य सूक्ष्मजीवविज्ञानी परीक्षण विधियाँ",
-          intro: "डेयरी उत्पादों की सुरक्षा और गुणवत्ता सुनिश्चित करने के लिए कई मानक सूक्ष्मजीवविज्ञानी परीक्षण किए जाते हैं। यहाँ कुछ प्रमुख परीक्षण विधियों का अवलोकन दिया गया है:",
+          title: "Common Microbiological Test Methods",
+          intro: "Dairy products ki safety aur quality sunishchit karne ke liye kai standard microbiological tests kiye jaate hain. Yahan kuch pramukh test methods ka overview diya gaya hai:",
           tests: [
             {
-              id: 'spc',
-              title: 'दूध का मानक प्लेट गणना (SPC)',
-              principle: 'शास्त्रीय रूप से SPC प्रक्रियाओं का उपयोग कुल प्लेट गणना (TPC) या एरोबिक प्लेट गणना (APC) या कुल व्यवहार्य गणना (TVC) निर्धारित करने के लिए किया जाता है। SPC मानक विधि है जिससे अन्य स्क्रीनिंग परीक्षणों की तुलना की जाती है।',
+              id: 'tpc',
+              title: 'Aerobic Mesophilic Plate Count (Total Plate Count)',
+              principle: 'Yeh test ek sample mein viable (jeevit) bacteria aur fungi ki kul sankhya ko mapta hai jo oxygen ki upasthiti mein moderate (mesophilic) temperature par badh sakte hain. Ise Standard Plate Count (SPC) ya Total Viable Count (TVC) ke roop mein bhi jana jata hai.',
               procedure: `
                 <ol class='list-decimal list-inside space-y-2 mt-2'>
-                  <li><strong>तनुकारक-फॉस्फेट बफर घोल तैयार करना:</strong> निर्दिष्ट के रूप में स्टॉक और बेंच घोल तैयार करें।</li>
-                  <li><strong>माध्यम तैयार करना:</strong> प्लेट काउंट अगर (PCA) या मानक विधि अगर का उपयोग करें।</li>
-                  <li><strong>परीक्षण नमूने तैयार करना:</strong> दूध के नमूने को अच्छी तरह से हिलाएं। दशमलव तनुकरण (10⁻¹, 10⁻², आदि) तैयार करें।</li>
-                  <li><strong>टीकाकरण और ऊष्मायन:</strong> उपयुक्त तनुकरणों का 1 मिलीलीटर बाँझ पेट्री डिश में पिपेट करें। पिघला हुआ PCA डालें, मिलाएं और जमने दें। 48 घंटे के लिए 37°C पर उल्टा ऊष्मायन करें।</li>
-                  <li><strong>गिनती:</strong> 15 और 300 कॉलोनियों के बीच वाली डिश में कॉलोनियों की गिनती करें।</li>
+                  <li><strong>Sample Taiyar Karna:</strong> 90 ml sterile diluent (jaise, peptone water) ke saath 10 gram ya 10 ml sample milakar 1:10 ka dilution banayein.</li>
+                  <li><strong>Serial Dilutions:</strong> Isse aage serial dilutions (1:100, 1:1000, etc.) taiyar karein.</li>
+                  <li><strong>Plating:</strong> Har dilution se 1 ml ko do sterile Petri plates mein transfer karein (Pour Plate method).</li>
+                  <li><strong>Media:</strong> Platon mein 15-20 ml pighla hua Plate Count Agar (PCA), 45°C tak thanda, dalein. Mix karne ke liye dhire se ghumayein.</li>
+                  <li><strong>Incubation:</strong> Platon ko 35-37°C par 24-48 ghante ke liye ulta karke incubate karein.</li>
+                  <li><strong>Ginti:</strong> 25 aur 250 colonies ke beech wali plates select karein. Ek colony counter ka upyog karke colonies ki ginti karein.</li>
                 </ol>`,
-              calculation: `भारित माध्य N की गणना सूत्र का उपयोग करके करें: <code>N = ΣC / { (n1 + 0.1n2) d }</code>`
+              calculation: '<code>CFU/g (ya ml) = (Colonies ki average sankhya × Dilution factor) / Plate kiye gaye sample ka volume (ml)</code>'
             },
             {
               id: 'coliforms',
-              title: 'कोलीफॉर्म गणना',
-              principle: 'कोलीफॉर्म एसिड और गैस के उत्पादन के साथ लैक्टोज को किण्वित करते हैं। वे वायलेट रेड बाइल अगर (VRBA) का उपयोग करके पता लगाए जाते हैं। उनकी उपस्थिति अस्वच्छ स्थितियों का सुझाव देती है।',
+              title: 'Coliform, Faecal Coliform aur E. coli ka Pata Lagana',
+              principle: 'Coliforms lactose ko ferment karke acid aur gas ka utpadan karte hain. Unhein Violet Red Bile Agar (VRBA) par gina jata hai. E. coli ek faecal coliform hai jiski confirmation specific biochemical tests dwara ki jati hai.',
               procedure: `
                 <ol class='list-decimal list-inside space-y-2 mt-2'>
-                  <li><strong>तैयारी:</strong> तनुकरण और वायलेट रेड बाइल अगर (VRBA) माध्यम तैयार करें।</li>
-                  <li><strong>टीकाकरण:</strong> उपयुक्त तनुकरणों का 1 मिलीलीटर बाँझ पेट्री डिश में पिपेट करें।</li>
-                  <li><strong>प्लेटिंग:</strong> VRBA डालें, मिलाएं, और जमने के बाद, उसी माध्यम का एक ओवरले जोड़ें।</li>
-                  <li><strong>ऊष्मायन:</strong> 24 घंटे के लिए 37°C पर उल्टे डिश को ऊष्मायन करें।</li>
-                  <li><strong>गिनती:</strong> विशिष्ट गहरे लाल कॉलोनियों (≥0.5 मिमी व्यास) की गिनती करें।</li>
+                  <li><strong>Sample aur Dilutions:</strong> TPC method ke anusaar serial dilutions taiyar karein.</li>
+                  <li><strong>Plating:</strong> Har dilution se 1 ml ko sterile Petri plates mein pipette karein.</li>
+                  <li><strong>Media:</strong> 15-20 ml pighla hua VRBA dalein aur mix karein. Jamne ke baad, upar ek aur VRBA ki layer dalein (overlay).</li>
+                  <li><strong>Incubation:</strong> Platon ko 35-37°C par 18-24 ghante ke liye incubate karein.</li>
+                  <li><strong>Ginti:</strong> Lal-baingani colonies (0.5 mm ya usse adhik vyas) ko coliform ke roop mein ginen.</li>
+                  <li><strong>Confirmation (E. coli):</strong> Sandigdh colonies ko Brilliant Green Lactose Bile (BGLB) broth mein inoculate karein aur 44.5°C par incubate karein. Gas production E. coli ki presence ko indicate karta hai. Aage ki confirmation IMViC tests dwara ki jati hai.</li>
                 </ol>`,
-              calculation: 'कोलीफॉर्म के लिए भारित माध्य N की गणना करें, SPC के समान सूत्र का उपयोग करें, 15 से 150 कॉलोनियों वाली डिश को बनाए रखें।'
-            },
-            {
-              id: 'dmscc',
-              title: 'प्रत्यक्ष सूक्ष्म दैहिक कोशिका गणना (DMSCC)',
-              principle: 'कच्चे दूध में दैहिक कोशिकाओं की संख्या मास्टिटिस या अन्य असामान्य दूध स्राव का एक माप प्रदान करती है। दूध की एक फिल्म को रंगा जाता है और कोशिकाओं को एक माइक्रोस्कोप के नीचे गिना जाता है।',
-              procedure: `
-                <ol class='list-decimal list-inside space-y-2 mt-2'>
-                  <li><strong>एकल स्ट्रिप फैक्टर (SSF) का अनुमान:</strong> SSF निर्धारित करने के लिए माइक्रोस्कोप को कैलिब्रेट करें।</li>
-                  <li><strong>दूध फिल्म तैयार करना:</strong> गर्म, मिश्रित दूध का 0.01 मिलीलीटर एक स्लाइड पर 1 सेमी² क्षेत्र में समान रूप से फैलाएं और सुखाएं।</li>
-                  <li><strong>रंगाई:</strong> न्यूमैन के दाग का उपयोग करके स्मीयर को डीफैट, फिक्स और दाग दें।</li>
-                  <li><strong>परीक्षा और गिनती:</strong> तेल विसर्जन के तहत जांच करें और एक परिभाषित पट्टी में सभी दैहिक कोशिकाओं की गिनती करें।</li>
-                </ol>`,
-              calculation: '<code>DMSCC प्रति मिली = एक एकल पट्टी में दैहिक कोशिकाओं की संख्या × SSF</code>'
-            },
-             {
-              id: 'drug_residues',
-              title: 'पशु चिकित्सा दवा अवशेष (डेल्वोटेस्ट)',
-              principle: 'बैसिलस स्टीयरोथर्मोफिलस बीजाणुओं के अंकुरण और वृद्धि पर आधारित। यदि दूध में निरोधात्मक पदार्थ (जैसे एंटीबायोटिक्स) मौजूद हैं, तो बीजाणु नहीं बढ़ेंगे, और माध्यम में पीएच संकेतक रंग नहीं बदलेगा।',
-              procedure: `
-                <ol class='list-decimal list-inside space-y-2 mt-2'>
-                  <li>दूध के नमूने का 0.1 मिलीलीटर एक एम्पाउल में डालें जिसमें बीजाणुओं और संकेतक के साथ अगर माध्यम हो।</li>
-                  <li>एम्पाउल को 63°C से 66°C पर 2.5 घंटे के लिए ऊष्मायन करें।</li>
-                  <li>रंग परिवर्तन का निरीक्षण करें।</li>
-                </ol>`,
-              calculation: '<strong>व्याख्या:</strong> एक पीला रंग एक नकारात्मक परिणाम (कोई एंटीबायोटिक्स नहीं) इंगित करता है। यदि रंग बैंगनी रहता है, तो परिणाम निरोधात्मक पदार्थों के लिए सकारात्मक है।'
+              calculation: '<code>Coliforms/g (ya ml) = Characteristic colonies ki average sankhya × Dilution factor</code>'
             },
             {
               id: 'yeast_mould',
-              title: 'खमीर और मोल्ड गणना',
-              principle: 'खमीर और मोल्ड अम्लीय वातावरण में बढ़ सकते हैं, इसलिए उनकी गणना के लिए एक अम्लीय माध्यम (जैसे आलू डेक्सट्रोज अगर, PDA) का उपयोग किया जाता है।',
+              title: 'Yeast aur Mould Count',
+              principle: 'Yeast aur mould acidic environment mein badh sakte hain, isliye unki ginti ke liye ek acidic medium (jaise Potato Dextrose Agar, PDA) ka upyog kiya jata hai.',
               procedure: `
                  <ol class='list-decimal list-inside space-y-2 mt-2'>
-                  <li><strong>नमूना और तनुकरण:</strong> TPC विधि की तरह क्रमिक तनुकरण तैयार करें।</li>
-                  <li><strong>प्लेटिंग:</strong> प्रत्येक तनुकरण का 1 मिलीलीटर बाँझ पेट्री प्लेटों में स्थानांतरित करें (स्प्रेड प्लेट विधि बेहतर है)।</li>
-                  <li><strong>माध्यम:</strong> प्लेटों में पहले से डाला हुआ आलू डेक्सट्रोज अगर (PDA) होना चाहिए, जिसमें जीवाणु वृद्धि को रोकने के लिए पीएच ~3.5 (टार्टरिक एसिड के साथ) समायोजित किया गया हो।</li>
-                  <li><strong>ऊष्मायन:</strong> प्लेटों को 22-25°C पर 5 दिनों के लिए ऊष्मायन करें।</li>
-                  <li><strong>गिनती:</strong> खमीर (आमतौर पर चमकदार, गोल) और मोल्ड (कपास जैसी, फैलने वाली) की कॉलोनियों को अलग-अलग गिनें।</li>
+                  <li><strong>Sample aur Dilutions:</strong> TPC method ke anusaar serial dilutions taiyar karein.</li>
+                  <li><strong>Plating:</strong> Har dilution se 1 ml ko sterile Petri plates par transfer karein (Spread Plate method behtar hai).</li>
+                  <li><strong>Media:</strong> Plates mein pehle se dala hua Potato Dextrose Agar (PDA) hona chahiye, jiska pH ~3.5 (tartaric acid ke saath) par adjust kiya gaya ho taki bacterial growth ko roka ja sake.</li>
+                  <li><strong>Incubation:</strong> Platon ko 22-25°C par 5 dinon ke liye incubate karein.</li>
+                  <li><strong>Ginti:</strong> Yeast (aamtaur par chamakdar, gol) aur mould (kapas jaisi, phailne wali) ki colonies ko alag-alag ginen.</li>
                 </ol>`,
-              calculation: '<code>खमीर/मोल्ड गणना/जी (या मिली) = कॉलोनियों की औसत संख्या × तनुकरण कारक</code>'
+              calculation: '<code>Yeast/Mould Count/g (ya ml) = Colonies ki average sankhya × Dilution factor</code>'
             }
           ]
         }
@@ -175,7 +150,6 @@ export const microbiologyContent = {
     en: {
         title: "Milk Microbiology & Testing",
         description: "A guide to the main microorganisms found in dairy products and their testing.",
-        backToTopics: "Back to Topics",
         sections: [
             {
                 id: "intro",
@@ -274,57 +248,34 @@ export const microbiologyContent = {
           intro: "Several standard microbiological tests are performed to ensure the safety and quality of dairy products. Here is an overview of some key test methods:",
           tests: [
             {
-              id: 'spc',
-              title: 'Standard Plate Count (SPC) of Milk',
-              principle: 'Classically SPC procedures are used to determine the Total Plate Count (TPC) or Aerobic Plate Count (APC) or Total Viable Count (TVC). SPC is the standard method to which other screening tests are compared.',
+              id: 'tpc',
+              title: 'Aerobic Mesophilic Plate Count (Total Plate Count)',
+              principle: 'This test measures the total number of viable (living) bacteria and fungi in a sample that can grow in the presence of oxygen at moderate (mesophilic) temperatures. It is also known as Standard Plate Count (SPC) or Total Viable Count (TVC).',
               procedure: `
                 <ol class='list-decimal list-inside space-y-2 mt-2'>
-                  <li><strong>Preparation of Diluent-Phosphate Buffer Solution:</strong> Prepare stock and bench solutions as specified.</li>
-                  <li><strong>Preparation of Medium:</strong> Use Plate Count Agar (PCA) or Standard Method Agar.</li>
-                  <li><strong>Preparation of Test Samples:</strong> Thoroughly agitate the milk sample. Prepare decimal dilutions (10⁻¹, 10⁻², etc.).</li>
-                  <li><strong>Inoculation and Incubation:</strong> Pipette 1ml of appropriate dilutions into sterile petri dishes. Pour melted PCA, mix, and solidify. Incubate inverted at 37°C for 48h.</li>
-                  <li><strong>Counting:</strong> Count colonies in dishes containing between 15 and 300 colonies.</li>
+                  <li><strong>Sample Preparation:</strong> Create a 1:10 dilution by mixing 10g or 10ml of the sample with 90ml of sterile diluent (e.g., peptone water).</li>
+                  <li><strong>Serial Dilutions:</strong> Prepare further serial dilutions from this (1:100, 1:1000, etc.).</li>
+                  <li><strong>Plating:</strong> Transfer 1ml of each dilution into two sterile Petri plates (Pour Plate Method).</li>
+                  <li><strong>Media:</strong> Pour 15-20ml of melted Plate Count Agar (PCA), cooled to 45°C, into the plates. Gently swirl to mix.</li>
+                  <li><strong>Incubation:</strong> Incubate the plates inverted at 35-37°C for 24-48 hours.</li>
+                  <li><strong>Counting:</strong> Select plates with between 25 and 250 colonies. Count the colonies using a colony counter.</li>
                 </ol>`,
-              calculation: `Calculate the weighted mean N using the formula: <code>N = ΣC / { (n1 + 0.1n2) d }</code>`
+              calculation: '<code>CFU/g (or ml) = (Average no. of colonies × Dilution factor) / Volume of sample plated (ml)</code>'
             },
             {
               id: 'coliforms',
-              title: 'Coliform Count',
-              principle: 'Coliforms ferment lactose with the production of acid and gas. They are detected using Violet Red Bile Agar (VRBA). Their presence suggests unsanitary conditions.',
+              title: 'Detection of Coliforms, Faecal Coliforms & E.coli',
+              principle: 'Coliforms ferment lactose to produce acid and gas. They are enumerated on Violet Red Bile Agar (VRBA). E. coli is a faecal coliform confirmed by specific biochemical tests.',
               procedure: `
                 <ol class='list-decimal list-inside space-y-2 mt-2'>
-                  <li><strong>Preparation:</strong> Prepare dilutions and Violet Red Bile Agar (VRBA) medium.</li>
-                  <li><strong>Inoculation:</strong> Pipette 1ml of appropriate dilutions into sterile petri dishes.</li>
-                  <li><strong>Plating:</strong> Pour VRBA, mix, and after solidification, add an overlay of the same medium.</li>
-                  <li><strong>Incubation:</strong> Incubate inverted dishes at 37°C for 24h.</li>
-                  <li><strong>Counting:</strong> Count characteristic dark red colonies (≥0.5 mm diameter).</li>
+                  <li><strong>Sample & Dilutions:</strong> Prepare serial dilutions as in the TPC method.</li>
+                  <li><strong>Plating:</strong> Pipette 1ml from each dilution into sterile Petri plates.</li>
+                  <li><strong>Media:</strong> Pour 15-20ml of melted VRBA and mix. After solidification, add another layer of VRBA on top (overlay).</li>
+                  <li><strong>Incubation:</strong> Incubate the plates at 35-37°C for 18-24 hours.</li>
+                  <li><strong>Counting:</strong> Count red-purple colonies (0.5mm or more in diameter) as coliforms.</li>
+                  <li><strong>Confirmation (E.coli):</strong> Inoculate suspected colonies into Brilliant Green Lactose Bile (BGLB) broth and incubate at 44.5°C. Gas production indicates the presence of E. coli. Further confirmation is done by IMViC tests.</li>
                 </ol>`,
-              calculation: 'Calculate the weighted mean N for coliforms using a similar formula as SPC, retaining dishes with 15 to 150 colonies.'
-            },
-            {
-              id: 'dmscc',
-              title: 'Direct Microscopic Somatic Cell Count (DMSCC)',
-              principle: 'The number of somatic cells in raw milk provides a measure of mastitis or other abnormal milk secretions. A film of milk is stained and cells are counted under a microscope.',
-              procedure: `
-                <ol class='list-decimal list-inside space-y-2 mt-2'>
-                  <li><strong>Estimation of Single Strip Factor (SSF):</strong> Calibrate the microscope to determine the SSF.</li>
-                  <li><strong>Preparation of Milk Film:</strong> Spread 0.01ml of warmed, mixed milk uniformly over a 1cm² area on a slide and dry.</li>
-                  <li><strong>Staining:</strong> Defat, fix, and stain the smear using Newman\'s stain.</li>
-                  <li><strong>Examination and Counting:</strong> Examine under oil immersion and count all somatic cells within a defined strip across the film.</li>
-                </ol>`,
-              calculation: '<code>DMSCC per ml = No. of somatic cells in a single strip × SSF</code>'
-            },
-             {
-              id: 'drug_residues',
-              title: 'Veterinary Drug Residues (Delvotest)',
-              principle: 'Based on the germination and growth of Bacillus stearothermophilus spores. If inhibitory substances (like antibiotics) are present in the milk, the spores will not grow, and the pH indicator in the medium will not change color.',
-              procedure: `
-                <ol class='list-decimal list-inside space-y-2 mt-2'>
-                  <li>Add 0.1 ml of the milk sample to an ampoule containing the agar medium with spores and indicator.</li>
-                  <li>Incubate the ampoule at 63°C to 66°C for 2.5 hours.</li>
-                  <li>Observe the color change.</li>
-                </ol>`,
-              calculation: '<strong>Interpretation:</strong> A yellow color indicates a negative result (no antibiotics). If the color remains purple, the result is positive for inhibitory substances.'
+              calculation: '<code>Coliforms/g (or ml) = Average no. of characteristic colonies × Dilution factor</code>'
             },
             {
               id: 'yeast_mould',
@@ -332,7 +283,7 @@ export const microbiologyContent = {
               principle: 'Yeasts and moulds can grow in acidic environments, so an acidic medium (like Potato Dextrose Agar, PDA) is used for their enumeration.',
               procedure: `
                  <ol class='list-decimal list-inside space-y-2 mt-2'>
-                  <li><strong>Sample &amp; Dilutions:</strong> Prepare serial dilutions as in the TPC method.</li>
+                  <li><strong>Sample & Dilutions:</strong> Prepare serial dilutions as in the TPC method.</li>
                   <li><strong>Plating:</strong> Transfer 1ml of each dilution to sterile Petri plates (Spread Plate method is better).</li>
                   <li><strong>Media:</strong> Plates should contain pre-poured Potato Dextrose Agar (PDA), with pH adjusted to ~3.5 (with tartaric acid) to inhibit bacterial growth.</li>
                   <li><strong>Incubation:</strong> Incubate plates at 22-25°C for 5 days.</li>
