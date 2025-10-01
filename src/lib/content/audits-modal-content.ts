@@ -1,118 +1,118 @@
 
 export const auditsModalContent = {
     hi: {
-        title: "डेयरी में ऑडिट",
-        description: "डेयरी संयंत्रों के लिए खाद्य सुरक्षा ऑडिट के लिए एक व्यापक गाइड।",
-        tabs: {
-            intro: "परिचय",
-            regulatory: "ढांचे",
-            internal: "आंतरिक ऑडिट",
-            external: "बाहरी ऑडिट",
-            focus_areas: "फोकस क्षेत्र",
-            challenges: "चुनौतियां",
-            conclusion: "निष्कर्ष",
-            recommendations: "सिफारिशें"
-        },
-        sections: {
-            executive_summary: {
-                title: "1. कार्यकारी सारांश",
-                content: "<p>डेयरी उत्पादों की अखंडता, खेत से उपभोक्ता तक, मजबूत खाद्य सुरक्षा प्रबंधन प्रणालियों पर गंभीर रूप से निर्भर करती है, जिनका आंतरिक और बाहरी दोनों ऑडिट के माध्यम से कठोर मूल्यांकन किया जाता है। यह रिपोर्ट डेयरी उद्योग के भीतर ऑडिट परिदृश्य की एक व्यापक परीक्षा प्रदान करती है, जिसमें जटिल आवश्यकताओं और परिचालन तंत्रों का विवरण है। यह भारत के खाद्य सुरक्षा और मानक प्राधिकरण (FSSAI) जैसे राष्ट्रीय नियामक निकायों और ISO 22000 और खतरा विश्लेषण और महत्वपूर्ण नियंत्रण बिंदु (HACCP) सिद्धांतों सहित अंतरराष्ट्रीय मानकों की भूमिकाओं का वर्णन करता है। इन ऑडिटों के संचालन के लिए संरचित प्रक्रियाओं, उनके निहित लाभों और निरंतर ऑडिट तैयारी के लिए एक सक्रिय दृष्टिकोण को बढ़ावा देने की रणनीतिक अनिवार्यता का भी पता लगाया गया है। विश्लेषण इस बात पर प्रकाश डालता है कि प्रभावी आंतरिक ऑडिटिंग सीधे बाहरी ऑडिट परिणामों को बढ़ाती है, जिससे नियामक जांच कम होती है और परिचालन क्षमता में सुधार होता है। इसके अलावा, प्रणालीगत आश्वासन की ओर नियामक ढांचे का विकास, डेटा-संचालित सत्यापन की महत्वपूर्ण भूमिका, और प्रणालीगत लचीलेपन के लिए एकीकृत प्रथाओं का विकास डेयरी क्षेत्र में खाद्य सुरक्षा और गुणवत्ता सुनिश्चित करने के लिए मूलभूत तत्वों के रूप में चर्चा की गई है।</p>"
-            },
-            introduction: {
-                title: "2. डेयरी संयंत्रों में खाद्य सुरक्षा ऑडिट का परिचय",
-                content: "<p>खाद्य सुरक्षा ऑडिट एक व्यवस्थित, स्वतंत्र और प्रलेखित प्रक्रिया का प्रतिनिधित्व करते हैं जो निर्दिष्ट खाद्य सुरक्षा मानकों, नियामक आदेशों और आंतरिक परिचालन प्रोटोकॉल के लिए डेयरी संयंत्र के पालन का मूल्यांकन करने के लिए सावधानीपूर्वक डिज़ाइन किया गया है। ये आकलन सार्वजनिक स्वास्थ्य की सुरक्षा, उत्पाद की अखंडता को बनाए रखने और डेयरी व्यवसायों की दीर्घकालिक व्यवहार्यता सुनिश्चित करने के लिए अनिवार्य हैं।</p>",
-                subsections: {
-                    purpose_and_benefits: {
-                        title: "2.1. ऑडिट का उद्देश्य और लाभ",
-                        content: "<p>खाद्य सुरक्षा ऑडिट डेयरी उद्योग के भीतर कई महत्वपूर्ण कार्य करते हैं। सबसे पहले, वे नियामक अनुपालन सुनिश्चित करते हैं, यह सत्यापित करते हुए कि डेयरी संयंत्र स्थानीय, राष्ट्रीय और अंतरराष्ट्रीय खाद्य सुरक्षा कानूनों और विनियमों के सख्त पालन में काम करते हैं। उदाहरण के लिए, भारत में, FSSAI डेयरी उत्पाद निर्माण, प्रसंस्करण और वितरण को नियंत्रित करने वाले विस्तृत मानकों के लिए विशिष्ट लाइसेंस और अनुपालन को अनिवार्य करता है।</p><p>केवल अनुपालन से परे, ऑडिट गुणवत्ता आश्वासन में सहायक होते हैं, यह पुष्टि करते हुए कि स्थापित गुणवत्ता प्रबंधन प्रणाली प्रभावी रूप से और लगातार सुरक्षित और उच्च गुणवत्ता वाले डेयरी उत्पादों का उत्पादन करती है। वे संभावित खतरों और नियंत्रण विफलताओं की पहचान करके जोखिम शमन में एक महत्वपूर्ण भूमिका निभाते हैं, जिससे खाद्य जनित रोग के प्रकोप को रोका जा सकता है, सार्वजनिक स्वास्थ्य जोखिमों को कम किया जा सकता है और एक ब्रांड की प्रतिष्ठा की रक्षा की जा सकती है। एक अच्छी तरह से काम करने वाला ऑडिट कार्यक्रम परिचालन दक्षता और लागत में कमी में भी महत्वपूर्ण योगदान देता है। प्रयासों के दोहराव को समाप्त करके और संसाधन उपयोग को अनुकूलित करके, ऐसे कार्यक्रम श्रम लागत को कम कर सकते हैं और ग्राहकों की शिकायतों को कम कर सकते हैं, अंततः समग्र उत्पाद की गुणवत्ता को बढ़ा सकते हैं और महंगे रिकॉल की क्षमता को कम कर सकते हैं।</p><p>अंत में, सफल ऑडिट और प्रमाणन विभिन्न हितधारकों, उपभोक्ताओं और ग्राहकों सहित, को महत्वपूर्ण तीसरे पक्ष का आश्वासन प्रदान करते हैं कि डेयरी उत्पाद सुरक्षित हैं और कठोर परिस्थितियों में निर्मित हैं। यह बाहरी सत्यापन बाजार पहुंच के लिए एक संविदात्मक पूर्वापेक्षा बनता जा रहा है, जो मजबूत ऑडिट प्रदर्शन के वाणिज्यिक महत्व को रेखांकित करता है।</p>"
-                    },
-                    distinction_audits: {
-                        title: "2.2. आंतरिक और बाहरी ऑडिट के बीच अंतर",
-                        content: "<p>खाद्य सुरक्षा ऑडिट को मोटे तौर पर आंतरिक और बाहरी आकलनों में वर्गीकृत किया जाता है, प्रत्येक अलग-अलग लेकिन पूरक भूमिकाएं निभाता है।</p><p><b>आंतरिक ऑडिट (प्रथम-पक्ष)</b> एक संगठन के अपने कर्मियों या एक समर्पित आंतरिक टीम द्वारा किए गए स्व-मूल्यांकन हैं। इन ऑडिटों का प्राथमिक उद्देश्य खाद्य सुरक्षा प्रबंधन प्रणाली के भीतर निहित शक्तियों और कमजोरियों की पहचान करना, सुधार के लिए क्षेत्रों का पता लगाना और आगामी बाहरी ऑडिट के लिए तैयारी की स्थिति सुनिश्चित करना है। आंतरिक ऑडिट अक्सर अपने बाहरी समकक्षों की तुलना में अधिक कड़े और कठोर होने के लिए डिज़ाइन किए जाते हैं, जो पूरी तरह से आत्म-परीक्षा के प्रति प्रतिबद्धता को दर्शाते हैं।</p><p><b>बाहरी ऑडिट</b>, इसके विपरीत, संगठन के बाहर की संस्थाओं द्वारा किए जाते हैं। इन्हें आगे दो प्रकारों में विभाजित किया गया है:</p><ul class='list-disc pl-5'><li><b>द्वितीय-पक्ष ऑडिट</b> तब होते हैं जब कोई ग्राहक अपने आपूर्तिकर्ता का आकलन करता है, या इसके विपरीत। ये आकलन आमतौर पर विशिष्ट ग्राहक आवश्यकताओं या आपूर्ति श्रृंखला की अखंडता पर ध्यान केंद्रित करते हैं।</li><li><b>तृतीय-पक्ष ऑडिट</b> स्वतंत्र, मान्यता प्राप्त प्रमाणन निकायों (जैसे, ISO 22000, या SQF, BRC, IFS, FSSC 22000 जैसी वैश्विक खाद्य सुरक्षा पहल (GFSI) योजनाओं के लिए) या सरकारी एजेंसियों द्वारा आयोजित किए जाते हैं। इन ऑडिटों के परिणामस्वरूप आमतौर पर औपचारिक प्रमाणन या नियामक अनुपालन का आधिकारिक सत्यापन होता है।</li></ul>"
-                    }
-                }
-            },
-            regulatory_frameworks: {
-                title: "3. नियामक ढांचे और अंतर्राष्ट्रीय मानक",
-                content: "<p>डेयरी संयंत्र नियामक आवश्यकताओं और अंतरराष्ट्रीय मानकों के एक जटिल ढांचे के भीतर काम करते हैं, जो सभी पूरी आपूर्ति श्रृंखला में खाद्य सुरक्षा सुनिश्चित करने के लिए डिज़ाइन किए गए हैं। प्रमुख ढांचों में भारत के FSSAI नियम, विश्व स्तर पर मान्यता प्राप्त ISO 22000, और HACCP के मूलभूत सिद्धांत शामिल हैं।</p>",
-                subsections: {
-                    fssai: {
-                        title: "3.1. डेयरी संयंत्रों के लिए FSSAI नियम (भारत)",
-                        content: "<p>भारतीय खाद्य सुरक्षा और मानक प्राधिकरण (FSSAI) भारत में डेयरी उत्पादों की देखरेख करने वाला प्राथमिक नियामक निकाय है। इसका जनादेश व्यापक नियमों के माध्यम से इन उत्पादों की सुरक्षा और गुणवत्ता सुनिश्चित करना है।</p><p><b>लाइसेंसिंग और पंजीकरण आवश्यकताएँ:</b> डेयरी उत्पादों के निर्माण या व्यापार में लगे व्यवसायों के लिए FSSAI लाइसेंस एक अनिवार्य पूर्वापेक्षा है। लाइसेंसिंग संरचना व्यवसाय के परिचालन पैमाने और वार्षिक कारोबार के आधार पर tiered है।</p><p><b>दूध और डेयरी उत्पादों के लिए विशिष्ट मानक:</b> FSSAI उद्योग भर में स्थिरता और अखंडता सुनिश्चित करने के लिए डेयरी उत्पादों की एक विस्तृत श्रृंखला के लिए विस्तृत संरचनात्मक और गुणवत्ता मानक स्थापित करता है। इन मानकों में दूध, किण्वित उत्पादों, पनीर और बहुत कुछ के लिए विभिन्न पैरामीटर शामिल हैं।</p><p><b>प्रसंस्करण, पैकेजिंग और भंडारण मानक:</b> FSSAI व्यापक मैनुअल प्रदान करता है जो प्रारंभिक प्रसंस्करण से लेकर अंतिम भंडारण तक सभी चरणों को शामिल करते हुए डेयरी उत्पाद उत्पादन के लिए विस्तृत दिशानिर्देश और प्रक्रियाएं रेखांकित करता है।</p>"
-                    },
-                    iso22000: {
-                        title: "3.2. ISO 22000: खाद्य सुरक्षा प्रबंधन प्रणाली (FSMS)",
-                        content: "<p>ISO 22000 अंतर्राष्ट्रीय मानकीकरण संगठन द्वारा विकसित एक अंतरराष्ट्रीय मानक है, जो एक खाद्य सुरक्षा प्रबंधन प्रणाली (FSMS) के लिए एक मजबूत ढांचा प्रदान करता है।</p><p><b>मुख्य तत्व:</b> इंटरैक्टिव कम्युनिकेशन, सिस्टम मैनेजमेंट, प्रिरिक्विजिट प्रोग्राम्स (PRPs), और हैजर्ड एनालिसिस एंड क्रिटिकल कंट्रोल प्वाइंट (HACCP) सिद्धांत।</p>"
-                    },
-                    haccp: {
-                        title: "3.3. खतरा विश्लेषण और महत्वपूर्ण नियंत्रण बिंदु (HACCP)",
-                        content: "<p>HACCP मूल रूप से संयुक्त राज्य अमेरिका के अंतरिक्ष कार्यक्रम के लिए पिल्सबरी कंपनी द्वारा कल्पना की गई एक निवारक खाद्य सुरक्षा प्रणाली है। HACCP के सात सिद्धांत हैं: एक खतरा विश्लेषण आयोजित करें, महत्वपूर्ण नियंत्रण बिंदु (CCPs) निर्धारित करें, महत्वपूर्ण सीमाएं स्थापित करें, निगरानी प्रक्रियाएं स्थापित करें, सुधारात्मक कार्रवाइयां स्थापित करें, रिकॉर्ड रखने की प्रणाली स्थापित करें, और सत्यापन प्रक्रियाएं स्थापित करें।</p>"
-                    }
-                }
-            },
-            internal_audits: {
-                title: "4. आंतरिक ऑडिट आवश्यकताएँ और प्रक्रिया",
-                content: "<p>आंतरिक ऑडिट किसी भी प्रभावी खाद्य सुरक्षा प्रबंधन प्रणाली (FSMS) का एक मौलिक स्तंभ हैं, जो आत्म-मूल्यांकन के लिए एक आवश्यक उपकरण के रूप में काम करते हैं और डेयरी संयंत्रों के भीतर निरंतर सुधार को बढ़ावा देते हैं।</p>",
-                subsections: {
-                    purpose: {
-                        title: "4.1. आंतरिक ऑडिट का उद्देश्य और मूल्य",
-                        content: "<p>आंतरिक ऑडिट अच्छे विनिर्माण प्रथाओं (GMPs), HACCP कार्यक्रमों और अन्य खाद्य सुरक्षा प्रणालियों की प्रभावशीलता का आकलन करने के लिए डिज़ाइन किए गए हैं। वे ताकत और कमजोरियों की पहचान करने में मदद करते हैं और बाहरी ऑडिट के लिए सक्रिय तैयारी सुनिश्चित करते हैं।</p>"
-                    },
-                    process: {
-                        title: "4.2. चरण-दर-चरण प्रक्रिया (PDCA चक्र)",
-                        content: "<p>आंतरिक ऑडिट आमतौर पर प्लान-डू-चेक-एक्ट (PDCA) चक्र का पालन करते हैं:</p><h4 class='text-lg font-semibold text-gray-700 mt-4 mb-2'>योजना:</h4><p>ऑडिट उद्देश्यों, दायरे और अनुसूची को स्थापित करें। योजना का एक महत्वपूर्ण हिस्सा सभी प्रासंगिक कानूनी अनुपालन आवश्यकताओं को ऑडिट चेकलिस्ट में एकीकृत करना है। इसमें FSSAI नियमों जैसे राष्ट्रीय कानूनों और ISO 22000 जैसे अंतरराष्ट्रीय मानकों का पालन शामिल है। चेकलिस्ट को प्रसंस्करण, पैकेजिंग और लेबलिंग के लिए विशिष्ट कानूनी मापदंडों के पालन को सत्यापित करना होगा।</p><h4 class='text-lg font-semibold text-gray-700 mt-4 mb-2'>करें:</h4><p>दस्तावेज़ीकरण समीक्षा और ऑन-साइट सत्यापन के माध्यम से ऑडिट का संचालन करें। लेखा परीक्षकों को यह सत्यापित करना होगा कि प्रथाएं न केवल आंतरिक SOPs का पालन करती हैं, बल्कि सभी लागू कानूनों और विनियमों का भी पालन करती हैं।</p><h4 class='text-lg font-semibold text-gray-700 mt-4 mb-2'>जांचें:</h4><p>निष्कर्षों का मूल्यांकन करें और उन्हें सटीक रूप से रिपोर्ट करें। कानूनी मानकों से किसी भी विचलन को एक बड़ी गैर-अनुरूपता के रूप में वर्गीकृत किया जाना चाहिए और तत्काल कार्रवाई के लिए प्राथमिकता दी जानी चाहिए।</p><h4 class='text-lg font-semibold text-gray-700 mt-4 mb-2'>कार्य करें:</h4><p>सुधारात्मक कार्य योजनाओं को विकसित और कार्यान्वित करें और उनकी प्रभावशीलता पर अनुवर्ती कार्रवाई करें ताकि आंतरिक और कानूनी दोनों अनुपालन सुनिश्चित हो सकें।</p>"
-                    }
-                }
-            },
-            external_audits: {
-                title: "5. बाहरी ऑडिट आवश्यकताएँ और प्रक्रिया",
-                content: "<p>बाहरी ऑडिट हितधारकों को स्वतंत्र आश्वासन प्रदान करते हैं कि डेयरी संयंत्र की खाद्य सुरक्षा प्रणाली मजबूत है, ठीक से लागू की गई है, और खतरों को प्रभावी ढंग से नियंत्रित करती है। ये ऑडिट कानूनी अनुपालन के लिए महत्वपूर्ण हैं।</p>",
-                subsections: {
-                    types: {
-                        title: "5.1. बाहरी ऑडिट के प्रकार",
-                        content: "<p><b>द्वितीय-पक्ष ऑडिट:</b> एक ग्राहक द्वारा अपने आपूर्तिकर्ता पर आयोजित किया जाता है।</p><p><b>तृतीय-पक्ष ऑडिट:</b> प्रमाणन (जैसे, ISO, GFSI) के लिए या नियामक अनुपालन सत्यापन के लिए स्वतंत्र, मान्यता प्राप्त संगठनों द्वारा किया जाता है।</p><p><b>नियामक ऑडिट:</b> कानूनी मानकों को लागू करने के लिए FSSAI जैसी सरकारी एजेंसियों द्वारा आयोजित किया जाता है। यह कानूनी अनुपालन की सीधी जांच है।</p>"
-                    },
-                    process: {
-                        title: "5.2. बाहरी ऑडिट प्रक्रिया और कानूनी अनुपालन",
-                        content: "<p>बाहरी ऑडिट प्रक्रिया मौलिक रूप से कानूनी अनुपालन को सत्यापित करने के लिए डिज़ाइन की गई है। लेखा परीक्षक जांचते हैं कि सुविधा के संचालन खाद्य सुरक्षा और मानक अधिनियम जैसे कानूनों की सभी आवश्यकताओं को पूरा करते हैं या नहीं। इसमें लाइसेंस, उत्पाद मानकों और प्रसंस्करण दिशानिर्देशों की जांच शामिल है। प्रक्रिया में आम तौर पर आवेदन और योजना, कानूनी आवश्यकताओं के खिलाफ एक गहन दस्तावेज़ीकरण समीक्षा, कानूनों को व्यवहार में देखने के लिए एक ऑन-साइट सत्यापन ऑडिट और एक समापन बैठक शामिल होती है जहां किसी भी कानूनी गैर-अनुरूपता को प्रस्तुत किया जाता है।</p>"
-                    },
-                    fssai_system: {
-                        title: "5.3. FSSAI तृतीय-पक्ष ऑडिट प्रणाली (भारत विशिष्ट)",
-                        content: "<p>FSSAI की तृतीय-पक्ष ऑडिट प्रणाली कानूनी अनुपालन सुनिश्चित करने के लिए एक औपचारिक तंत्र है। डेयरी जैसी उच्च-जोखिम वाली श्रेणियों के लिए अनिवार्य ऑडिट एक कानूनी आवश्यकता है। ऑडिट आवृत्ति स्वयं FSSAI द्वारा प्रदर्शन के आधार पर निर्धारित की जाती है, जिससे निरंतर अनुपालन एक कानूनी और परिचालन आवश्यकता बन जाता है।</p>"
-                    }
-                }
-            },
-            focus_areas: {
-                title: "6. डेयरी संयंत्रों में मुख्य ऑडिट फोकस क्षेत्र",
-                content: "<p>डेयरी संयंत्रों में ऑडिट विभिन्न महत्वपूर्ण परिचालन क्षेत्रों की सावधानीपूर्वक जांच करते हैं:</p><ul class='list-disc pl-5 space-y-2'><li><b>कच्चे दूध की प्राप्ति और गुणवत्ता नियंत्रण:</b> तापमान, माइक्रोबियल सीमा और एंटीबायोटिक अवशेषों की जाँच।</li><li><b>पाश्चुरीकरण प्रभावकारिता और निगरानी:</b> समय-तापमान मापदंडों और ALP परीक्षण का सत्यापन।</li><li><b>क्लीन-इन-प्लेस (CIP) सिस्टम:</b> सफाई प्रक्रियाओं के उचित रखरखाव और सत्यापन को सुनिश्चित करना।</li><li><b>कोल्ड चेन प्रबंधन और भंडारण:</b> भंडारण और वितरण के दौरान तापमान की निगरानी।</li><li><b>स्वच्छता, स्वच्छता और कीट नियंत्रण:</b> सुविधा की सफाई और कीट प्रबंधन कार्यक्रमों का आकलन।</li><li><b>उपकरण रखरखाव और अंशांकन:</b> सभी उपकरणों के नियमित रखरखाव और अंशांकन का सत्यापन।</li><li><b>पता लगाने की क्षमता और एलर्जेन प्रबंधन:</b> उत्पादों पर नज़र रखने और एलर्जेन के प्रबंधन के लिए मजबूत प्रणालियों को सुनिश्चित करना।</li><li><b>कार्मिक स्वच्छता और प्रशिक्षण:</b> कर्मचारी स्वच्छता प्रथाओं और प्रशिक्षण रिकॉर्ड का आकलन।</li></ul>"
-            },
-            challenges: {
-                title: "7. सामान्य चुनौतियाँ और ऑडिट तैयारी के लिए सर्वोत्तम अभ्यास",
-                subsections: {
-                    common_challenges: {
-                        title: "7.1. डेयरी प्लांट ऑडिट में सामान्य चुनौतियाँ",
-                        content: "<p>चुनौतियों में नियामक जटिलता, सफाई और स्वच्छता में कठिनाइयाँ, अपर्याप्त डेटा प्रबंधन, परिचालन रुकावटें और कर्मचारी प्रथाओं में निरंतरता बनाए रखना शामिल है।</p>"
-                    },
-                    best_practices: {
-                        title: "7.2. निरंतर ऑडिट तैयारी के लिए सर्वोत्तम अभ्यास",
-                        content: "<ul class='list-disc pl-5 space-y-2'><li>चल रहे आंतरिक जोखिम मूल्यांकन आयोजित करें।</li><li>नियामक परिवर्तनों के साथ अद्यतित रहें।</li><li>सभी दस्तावेज़ों को सुलभ तरीके से व्यवस्थित करें।</li><li>व्यापक ऑडिट चेकलिस्ट का उपयोग करें और नियमित आंतरिक ऑडिट करें।</li><li>निरंतर सुधार के लिए प्रवृत्तियों के लिए ऑडिट निष्कर्षों का विश्लेषण करें।</li><li>सभी कर्मचारियों को व्यापक और नियमित प्रशिक्षण प्रदान करें।</li><li>संपत्ति प्रबंधन और वास्तविक समय की निगरानी के लिए प्रौद्योगिकी का लाभ उठाएं।</li><li>स्वच्छ रूप से डिज़ाइन किए गए उपकरणों में निवेश करें (जैसे, 3-ए मानक)।</li></ul>"
-                    },
-                    fostering_culture: {
-                        title: "7.3. एक मजबूत खाद्य सुरक्षा संस्कृति को बढ़ावा देना",
-                        content: "<p>एक मजबूत खाद्य सुरक्षा संस्कृति, नेतृत्व प्रतिबद्धता और कर्मचारी जुड़ाव द्वारा संचालित, ऑडिट तैयारी की नींव है। यह सुनिश्चित करता है कि खाद्य सुरक्षा दैनिक कार्यों का एक अभिन्न अंग है।</p>"
-                    }
-                }
-            },
-            conclusion: {
-                title: "8. निष्कर्ष",
-                content: "<p>डेयरी संयंत्रों में प्रभावी खाद्य सुरक्षा प्रबंधन कठोर नियामक अनुपालन, ISO 22000 और HACCP जैसे अंतरराष्ट्रीय मानकों का पालन, और एक सक्रिय, निरंतर सुधार मानसिकता का एक गतिशील परस्पर क्रिया है। एक डेयरी संयंत्र की एकीकृत ऑडिट प्रथाओं के प्रति अटूट प्रतिबद्धता सार्वजनिक स्वास्थ्य की रक्षा, लगातार उत्पाद की गुणवत्ता सुनिश्चित करने और दीर्घकालिक व्यावसायिक लचीलापन हासिल करने के लिए सर्वोपरि है।</p>"
-            },
-            recommendations: {
-                title: "9. डेयरी प्लांट ऑपरेटरों के लिए सिफारिशें",
-                content: "<ul class='list-disc pl-5 space-y-2'><li>एक मजबूत, एकीकृत खाद्य सुरक्षा प्रबंधन प्रणाली (FSMS) में निवेश करें।</li><li>आंतरिक ऑडिट कार्यक्रमों को मजबूत करें।</li><li>व्यापक दस्तावेज़ीकरण और रिकॉर्ड-कीपिंग को प्राथमिकता दें।</li><li>परिचालन नियंत्रण और डेटा प्रबंधन के लिए प्रौद्योगिकी को अपनाएं।</li><li>एक मजबूत खाद्य सुरक्षा संस्कृति को बढ़ावा दें।</li><li>नियामक परिवर्तनों और उद्योग मानकों की सक्रिय रूप से निगरानी करें।</li><li>FSSAI की तृतीय-पक्ष ऑडिट प्रणाली के साथ रणनीतिक रूप से जुड़ें।</li><li>महत्वपूर्ण नियंत्रण बिंदुओं (CCPs) और पूर्वापेक्षित कार्यक्रमों (PRPs) का अनुकूलन करें।</li></ul>"
-            }
-        }
+    "title": "Dairy mein Audits",
+    "description": "Dairy plants ke liye food safety audits ke liye ek comprehensive guide.",
+    "tabs": {
+      "intro": "Introduction",
+      "regulatory": "Frameworks",
+      "internal": "Internal Audits",
+      "external": "External Audits",
+      "focus_areas": "Focus Areas",
+      "challenges": "Challenges",
+      "conclusion": "Conclusion",
+      "recommendations": "Recommendations"
     },
+    "sections": {
+      "executive_summary": {
+        "title": "1. Executive Summary",
+        "content": "<p>Dairy products ki integrity, farm se consumer tak, strong food safety management systems par gambhir roop se nirbhar karti hai, jinka internal aur external dono audits ke through kathor mulyankan kiya jaata hai. Yeh report dairy industry ke andar audit landscape ka ek comprehensive examination pradan karti hai, jismein jatil avashyaktaon aur operational mechanisms ka vivaran hai. Yeh India ke Food Safety and Standards Authority (FSSAI) jaise national regulatory bodies aur ISO 22000 aur Hazard Analysis and Critical Control Point (HACCP) siddhanton sahit international standards ki bhumikaon ka varnan karta hai. In audits ko sanchalit karne ke liye structured processes, unke nihit laabh, aur nirantar audit taiyari ke liye ek proactive drishtikon ko badhava dene ki strategic anivaryata ka bhi pata lagaya gaya hai. Analysis is baat par prakash dalta hai ki prabhavi internal auditing seedhe external audit parinamon ko badhati hai, jisse regulatory jaanch kam hoti hai aur operational kshamata mein sudhar hota hai. Iske alawa, systemic assurance ki ore regulatory dhaanche ka vikas, data-driven verification ki mahatvapurna bhumika, aur systemic lachilepan ke liye ekikrit prathaon ka vikas dairy sector mein food safety aur quality sunishchit karne ke liye maulik tatvon ke roop mein charcha ki gayi hai.</p>"
+      },
+      "introduction": {
+        "title": "2. Dairy Plants mein Food Safety Audits ka Introduction",
+        "content": "<p>Food safety audits ek systematic, independent, aur documented process ko represent karte hain jo ek dairy plant ke specified food safety standards, regulatory aadeshon, aur internal operational protocols ke anupalan ka mulyankan karne ke liye savdhani se design kiya gaya hai. Yeh aakalan sarvajanik swasthya ki suraksha, product ki integrity ko banaye rakhne aur dairy businesses ki long-term viability sunishchit karne ke liye anivarya hain.</p>",
+        "subsections": {
+          "purpose_and_benefits": {
+            "title": "2.1. Audit ka Uddeshya aur Laabh",
+            "content": "<p>Food safety audits dairy industry ke bheetar kai mahatvapurna kaam karte hain. Sabse pehle, ve regulatory compliance sunishchit karte hain, yeh verify karte hue ki dairy plant local, national, aur international food safety laws aur regulations ka sakhti se paalan karte hue kaam karte hain. Udaharan ke liye, India mein, FSSAI dairy product manufacturing, processing aur distribution ko control karne wale vistarit standards ke liye vishisht license aur compliance anivarya karta hai.</p><p>Sirf compliance se pare, audits quality assurance mein sahayak hote hain, yeh confirm karte hue ki sthapit quality management systems prabhavi roop se aur lagatar surakshit aur high-quality dairy products ka utpadan karte hain. Ve sambhavit khatron aur control vifaltaon ki pehchan karke risk mitigation mein ek mahatvapurna bhumika nibhate hain, jisse food-borne bimariyon ke prakop ko roka ja sakta hai, sarvajanik swasthya jokhimon ko kam kiya ja sakta hai aur ek brand ki pratishtha ki raksha ki ja sakti hai. Ek acchi tarah se kaam karne wala audit program operational efficiency aur lagat mein kami mein bhi mahatvapurna yogdan deta hai. Prayason ke dohraav ko samapt karke aur sansadhan upyog ko anukulit karke, aise karyakram shram lagat ko kam kar sakte hain aur grahakon ki shikayaton ko kam kar sakte hain, antतः samagra utpad ki gunvatta ko badha sakte hain aur mehenge recalls ki sambhavna ko kam kar sakte hain.</p><p>Ant mein, safal audits aur certification vibhinn hitadharakon, upbhoktaon aur grahakon sahit, ko mahatvapurna third-party aashvasan pradan karte hain ki dairy products surakshit hain aur kathor paristhitiyon mein nirmit hain. Yeh bahari satyapan market access ke liye ek contractual anivarya shart banta ja raha hai, jo majboot audit pradarshan ke vanijyik mahatva ko rekhankit karta hai.</p>"
+          },
+          "distinction_audits": {
+            "title": "2.2. Internal aur External Audits ke Beech Antar",
+            "content": "<p>Food safety audits ko mote taur par internal aur external aakalano mein vargikrit kiya jaata hai, pratyek alag-alag lekin purak bhumikayein nibhata hai.</p><p><b>Internal Audits (First-Party)</b> ek sangathan ke apne karmiyon ya ek samarpit internal team dwara kiye gaye swa-mulyankan hain. In audits ka prathmik uddeshya food safety management system ke bheetar nihit shaktiyon aur kamjoriyon ki pehchan karna, sudhar ke liye kshetron ka pata lagana aur aagami bahari audits ke liye taiyari ki sthiti sunishchit karna hai. Internal audits aksar apne bahari samkakshon ki tulna mein adhik kathor aur sakht hone ke liye design kiye jaate hain, jo poori tarah se aatm-pariksha ke prati pratibaddhata ko darshate hain.</p><p><b>External Audits</b>, iske viprit, sangathan ke bahar ki sansthaon dwara kiye jaate hain. Inhein aage do prakaron mein vibhajit kiya gaya hai:</p><ul class='list-disc pl-5'><li><b>Second-Party Audits</b> tab hote hain jab koi grahak apne supplier ka aakalan karta hai, ya iske viprit. Yeh aakalan aamtaur par vishisht grahak avashyaktaon ya supply chain ki integrity par dhyan kendrit karte hain.</li><li><b>Third-Party Audits</b> swatantra, maanyata prapt pramanan nikayon (jaise, ISO 22000, ya SQF, BRC, IFS, FSSC 22000 jaisi global food safety initiative (GFSI) yojanaon ke liye) ya sarakari ejensiyon dwara aayojit kiye jaate hain. In audits ke parinaamaswaroop aamtaur par aupcharik pramanan ya niyamak anupalan ka aadhikarik satyapan hota hai.</li></ul>"
+          }
+        }
+      },
+      "regulatory_frameworks": {
+        "title": "3. Regulatory Frameworks aur International Standards",
+        "content": "<p>Dairy plants niyamak avashyaktaon aur antarrashtriya manakon ke ek jatil dhaanche ke bheetar kaam karte hain, jo sabhi poori supply chain mein khadya suraksha sunishchit karne ke liye design kiye gaye hain. Pramukh dhaanchon mein Bharat ke FSSAI niyam, vishva star par maanyata prapt ISO 22000, aur HACCP ke maulik siddhant shamil hain.</p>",
+        "subsections": {
+          "fssai": {
+            "title": "3.1. Dairy Plants ke liye FSSAI Niyam (India)",
+            "content": "<p>Food Safety and Standards Authority of India (FSSAI) Bharat mein dairy products ki dekhrekh karne wala prathmik niyamak nikay hai. Iska janadesh vyaapak niyamono ke madhyam se in utpadon ki suraksha aur gunvatta sunishchit karna hai.</p><p><b>Licensing aur Registration Avashyaktaayein:</b> Dairy products ke nirman ya vyapar mein lage vyavsayon ke liye FSSAI license ek anivarya purvapeksha hai. Licensing sanrachna vyavsay ke prachalan paimane aur varshik karobar ke aadhar par tiered hai.</p><p><b>Doodh aur Dairy Products ke liye Vishisht Standards:</b> FSSAI udyog bhar mein sthirata aur akhandata sunishchit karne ke liye dairy utpadon ki ek vistrit shrrinkhala ke liye vistrit sanrachnatmak aur gunvatta manak sthapit karta hai. In manakon mein doodh, kinvit utpadon, paneer aur bahut kuchh ke liye vibhinn parameter shamil hain.</p><p><b>Processing, Packaging, aur Storage Standards:</b> FSSAI vyaapak manual pradan karta hai jo prarambhik processing se lekar antim bhandaran tak sabhi charanon ko shamil karte hue dairy utpad utpadan ke liye vistrit dishanirdesh aur prakriyaen rekhankit karta hai.</p>"
+          },
+          "iso22000": {
+            "title": "3.2. ISO 22000: Food Safety Management System (FSMS)",
+            "content": "<p>ISO 22000 International Organization for Standardization dwara viksit ek antarrashtriya manak hai, jo ek Food Safety Management System (FSMS) ke liye ek majboot dhaancha pradan karta hai.</p><p><b>Mukhya Tatva:</b> Interactive Communication, System Management, Prerequisite Programs (PRPs), aur Hazard Analysis and Critical Control Point (HACCP) siddhant.</p>"
+          },
+          "haccp": {
+            "title": "3.3. Hazard Analysis and Critical Control Point (HACCP)",
+            "content": "<p>HACCP mool roop se United States ke antariksh karyakram ke liye Pillsbury Company dwara kalpit ek nivarak khadya suraksha pranali hai. HACCP ke saat siddhant hain: ek khatra vishleshan aayojit karein, mahatvapurna niyantran bindu (CCPs) nirdharit karein, mahatvapurna seemaen sthapit karein, nigrani prakriyaen sthapit karein, sudharatmak karyavahiyan sthapit karein, record rakhne ki pranali sthapit karein, aur satyapan prakriyaen sthapit karein.</p>"
+          }
+        }
+      },
+      "internal_audits": {
+        "title": "4. Internal Audit Avashyaktaayein aur Prakriya",
+        "content": "<p>Internal audits kisi bhi prabhavi Food Safety Management System (FSMS) ka ek maulik stambh hain, jo aatm-mulyankan ke liye ek avashyak upakaran ke roop mein kaam karte hain aur dairy plants ke bheetar nirantar sudhar ko badhava dete hain.</p>",
+        "subsections": {
+          "purpose": {
+            "title": "4.1. Internal Audit ka Uddeshya aur Moolya",
+            "content": "<p>Internal audits Good Manufacturing Practices (GMPs), HACCP karyakramon aur anya khadya suraksha pranaliyon ki prabhavshilta ka aakalan karne ke liye design kiye gaye hain. Ve shaktiyon aur kamjoriyon ki pehchan karne mein madad karte hain aur bahari audits ke liye sakriya taiyari sunishchit karte hain.</p>"
+          },
+          "process": {
+            "title": "4.2. Charan-dar-Charan Prakriya (PDCA Cycle)",
+            "content": "<p>Internal audits aamtaur par Plan-Do-Check-Act (PDCA) chakra ka palan karte hain:</p><h4 class='text-lg font-semibold text-gray-700 mt-4 mb-2'>Plan:</h4><p>Audit uddeshyon, dayre aur schedule ko sthapit karein. Yojana ka ek mahatvapurna hissa sabhi prasangik kanooni anupalan avashyaktaon ko audit checklist mein ekikrit karna hai. Ismein FSSAI niyamono jaise rashtriya kanoonon aur ISO 22000 jaise antarrashtriya manakon ka palan shamil hai. Checklist ko processing, packaging aur labeling ke liye vishisht kanooni mapdandon ke palan ko satyapit karna hoga.</p><h4 class='text-lg font-semibold text-gray-700 mt-4 mb-2'>Do:</h4><p>Dastavejikaran samiksha aur on-site satyapan ke madhyam se audit ka sanchalan karein. Lekha parikshakon ko yeh satyapit karna hoga ki prathayen na keval antarik SOPs ka palan karti hain, balki sabhi lagu kanoonon aur niyamono ka bhi palan karti hain.</p><h4 class='text-lg font-semibold text-gray-700 mt-4 mb-2'>Check:</h4><p>Nishkarshon ka mulyankan karein aur unhein sateek roop se report karein. Kanooni manakon se kisi bhi vichalan ko ek badi gair-anuroopata ke roop mein vargikrit kiya jana chahiye aur tatkal karyavahi ke liye prathmikta di jani chahiye.</p><h4 class='text-lg font-semibold text-gray-700 mt-4 mb-2'>Act:</h4><p>Sudharatmak karya yojanaon ko viksit aur karyanvit karein aur unki prabhavshilta par anugami karyavahi karein taki antarik aur kanooni dono anupalan sunishchit ho saken.</p>"
+          }
+        }
+      },
+      "external_audits": {
+        "title": "5. External Audit Avashyaktaayein aur Prakriya",
+        "content": "<p>External audits hitadharakon ko swatantra aashvasan pradan karte hain ki dairy plant ki khadya suraksha pranali majboot hai, theek se lagu ki gayi hai, aur khatron ko prabhavi dhang se niyantrit karti hai. Yeh audits kanooni anupalan ke liye mahatvapurna hain.</p>",
+        "subsections": {
+          "types": {
+            "title": "5.1. External Audits ke Prakar",
+            "content": "<p><b>Second-Party Audits:</b> Ek grahak dwara apne supplier par aayojit kiya jaata hai.</p><p><b>Third-Party Audits:</b> Pramanan (jaise, ISO, GFSI) ke liye ya niyamak anupalan satyapan ke liye swatantra, maanyata prapt sangathanon dwara kiya jaata hai.</p><p><b>Regulatory Audits:</b> Kanooni manakon ko lagu karne ke liye FSSAI jaisi sarakari ejensiyon dwara aayojit kiya jaata hai. Yeh kanooni anupalan ki seedhi jaanch hai.</p>"
+          },
+          "process": {
+            "title": "5.2. External Audit Prakriya aur Kanooni Anupalan",
+            "content": "<p>External audit prakriya maulik roop se kanooni anupalan ko satyapit karne ke liye design ki gayi hai. Lekha parikshak jaanchte hain ki suvidha ke sanchalan khadya suraksha aur manak adhiniyam jaise kanoonon ki sabhi avashyaktaon ko poora karte hain ya nahin. Ismein license, utpad manakon aur processing dishanirdeshon ki jaanch shamil hai. Prakriya mein aamtaur par aavedan aur yojana, kanooni avashyaktaon ke khilaf ek gahri dastavejikaran samiksha, kanoonon ko vyavahar mein dekhne ke liye ek on-site satyapan audit aur ek samapan baithak shamil hoti hai jahan kisi bhi kanooni gair-anuroopata ko prastut kiya jaata hai.</p>"
+          },
+          "fssai_system": {
+            "title": "5.3. FSSAI Third-Party Audit System (India Specific)",
+            "content": "<p>FSSAI ki third-party audit pranali kanooni anupalan sunishchit karne ke liye ek aupcharik tantra hai. Dairy jaisi uchch-jokhim wali shreniyon ke liye anivarya audits ek kanooni avashyakta hai. Audit aavrtti swayam FSSAI dwara pradarshan ke aadhar par nirdharit ki jaati hai, jisse nirantar anupalan ek kanooni aur prachalangat avashyakta ban jaati hai.</p>"
+          }
+        }
+      },
+      "focus_areas": {
+        "title": "6. Dairy Plants mein Mukhya Audit Focus Kshetr",
+        "content": "<p>Dairy plants mein audits vibhinn mahatvapurna prachalangat kshetron ki savdhanipurvak jaanch karte hain:</p><ul class='list-disc pl-5 space-y-2'><li><b>Kachche Doodh ki Prapti aur Gunvatta Niyantran:</b> Taapman, microbial seema aur antibiotic avasheshon ki jaanch.</li><li><b>Pasteurization Prabhavkarita aur Nigrani:</b> Samay-taapman mapdandon aur ALP parikshan ka satyapan.</li><li><b>Clean-in-Place (CIP) Systems:</b> Safai prakriyaon ke uchit rakharakhav aur satyapan ko sunishchit karna.</li><li><b>Cold Chain Management aur Bhandaran:</b> Bhandaran aur vitaran ke dauran taapman ki nigrani.</li><li><b>Swachhata, Swachhata aur Keet Niyantran:</b> Suvidha ki safai aur keet prabandhan karyakramon ka aakalan.</li><li><b>Upkaran Rakharakhav aur Anshankan:</b> Sabhi upkaranon ke niyamit rakharakhav aur anshankan ka satyapan.</li><li><b>Pata Lagane ki Kshamata aur Allergen Prabandhan:</b> Utpadon par nazar rakhne aur allergen ke prabandhan ke liye majboot pranaliyon ko sunishchit karna.</li><li><b>Karmik Swachhata aur Prashikshan:</b> Karmachari swachhata prathaon aur prashikshan record ka aakalan.</li></ul>"
+      },
+      "challenges": {
+        "title": "7. Samanya Chunautiyan aur Audit Taiyari ke liye Sarvottam Abhyas",
+        "subsections": {
+          "common_challenges": {
+            "title": "7.1. Dairy Plant Audits mein Samanya Chunautiyan",
+            "content": "<p>Chunautiyon mein niyamak jatilta, safai aur swachhata mein kathinaiyan, aparyapt data prabandhan, prachalangat rukavaten aur karmachari prathaon mein nirantarata banaye rakhna shamil hai.</p>"
+          },
+          "best_practices": {
+            "title": "7.2. Nirantar Audit Taiyari ke liye Sarvottam Abhyas",
+            "content": "<ul class='list-disc pl-5 space-y-2'><li>Chal rahe antarik jokhim mulyankan aayojit karein.</li><li>Niyamak parivartanon ke saath adyatan rahein.</li><li>Sabhi dastavejon ko sulabh tarike se vyavasthit karein.</li><li>Vyapak audit checklist ka upyog karein aur niyamit antarik audits karein.</li><li>Nirantar sudhar ke liye pravrttiyon ke liye audit nishkarshon ka vishleshan karein.</li><li>Sabhi karmachariyon ko vyapak aur niyamit prashikshan pradan karein.</li><li>Sampatti prabandhan aur vastavik samay ki nigrani ke liye praudyogiki ka labh uthayein.</li><li>Swachh roop se design kiye gaye upkaranon mein nivesh karein (jaise, 3-A manak).</li></ul>"
+          },
+          "fostering_culture": {
+            "title": "7.3. Ek Majboot Khadya Suraksha Sanskriti ko Badhava Dena",
+            "content": "<p>Ek majboot khadya suraksha sanskriti, netrtva pratibaddhata aur karmachari sanlagnata dwara sanchalit, audit taiyari ki neenv hai. Yeh sunishchit karta hai ki khadya suraksha dainik karyon ka ek abhinn ang hai.</p>"
+          }
+        }
+      },
+      "conclusion": {
+        "title": "8. Nishkarsh",
+        "content": "<p>Dairy plants mein prabhavi khadya suraksha prabandhan kathor niyamak anupalan, ISO 22000 aur HACCP jaise antarrashtriya manakon ka palan, aur ek sakriya, nirantar sudhar mansikta ka ek gatishil paraspar kriya hai. Ek dairy plant ki ekikrit audit prathaon ke prati atal pratibaddhata sarvajanik swasthya ki raksha, lagatar utpad ki gunvatta sunishchit karne aur deerghakalik vyavasayik lachilapan hasil karne ke liye sarvopari hai.</p>"
+      },
+      "recommendations": {
+        "title": "9. Dairy Plant Operators ke liye Sifarish",
+        "content": "<ul class='list-disc pl-5 space-y-2'><li>Ek majboot, ekikrit khadya suraksha prabandhan pranali (FSMS) mein nivesh karein.</li><li>Antarik audit karyakramon ko majboot karein.</li><li>Vyapak dastavejikaran aur record-keeping ko prathmikta dein.</li><li>Prachalangat niyantran aur data prabandhan ke liye praudyogiki ko apnayein.</li><li>Ek majboot khadya suraksha sanskriti ko badhava dein.</li><li>Niyamak parivartanon aur udyog manakon ki sakriya roop se nigrani karein.</li><li>FSSAI ki third-party audit pranali ke saath rananitik roop se judein.</li><li>Mahatvapurna niyantran binduon (CCPs) aur purvapekshit karyakramon (PRPs) ka anukulan karein.</li></ul>"
+      }
+    }
+  },
     en: {
         title: "Audits in the Dairy Industry",
         description: "A comprehensive guide to food safety audits for dairy plants.",
