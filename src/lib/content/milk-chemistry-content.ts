@@ -183,6 +183,22 @@ export const milkChemistryContent = {
         "crystallizationText2": "Mutarotation ki dar taapman aur pH se prabhavit hoti hai. Yeh dairy powder aur sanghanit utpadon ke utpadan mein ek chikni banavat sunishchit karne ke liye ek mahatvapurna karak hai."
       }
     },
+    "minerals": {
+      "title": "Khanij aur Lavan (Minerals and Salts)",
+      "composition": {
+        "title": "Khanij Sanrachna aur Vitaran",
+        "p1": "Doodh aahar calcium, magnesium, phosphorus aur potassium ka ek utkrsht srot hai. Doodh mein lavan ek bhang (soluble) charan aur casein micelles se jude ek colloidal charan ke beech ek jatil santulan mein maujood hote hain.",
+        "p2": "Lagbhag do-tihai calcium aur aadha phosphate casein micelles ke bheetar \"colloidal calcium phosphate\" (CCP) ke roop mein bandhe hote hain. Yeh CCP casein micelles ki sanrachna aur sthirta ko banaye rakhne ke liye mahatvapurna hai. Doodh serum mein ghule hue lavan protein sthirta, garmi sthirta aur osmotic dabav sahit vibhinn gunon ko prabhavit karte hain. Yeh 'salt balance', vishesh roop se divalent cations (Ca²⁺, Mg²⁺) ka monovalent cations (Na⁺, K⁺) aur anions (phosphate, citrate) se anupat, nirdharit karta hai ki doodh UHT jaise heat treatment ke dauran sthir rahega ya nahi. Is santulan mein gadbadi se doodh garam karne par fat sakta hai."
+      },
+      "calciumBioavailability": {
+          "title": "Calcium ki Jaiv Uplabdhata (Bioavailability)",
+          "p1": "Doodh se milne wala calcium sharir mein aasani se avshoshit ho jaata hai. Iske kai karan hain: 1) Lactose aant mein ek amliya vatavaran banata hai, jo calcium ki ghulanshilta badhata hai. 2) Casein ke paachan se banne wale Casein Phosphopeptides (CPPs) calcium se judkar use ghulanshil rakhte hain, jisse uska avshoshan behtar hota hai. 3) Doodh mein Vitamin D ki upasthiti bhi calcium avshoshan mein sahayak hoti hai."
+      },
+      "trace": {
+        "title": "Trace Elements",
+        "p1": "Doodh mein jasta, taamba aur loha jaise kai trace elements hote hain. Inmein se kuch poshan sambandhi hote hain, jabki anya sandushak ho sakte hain. Udaharan ke liye, taamba (Cu) vasa oxidation ke liye ek utprerak ke roop mein kaam kar sakta hai, jisse bahut kam sandrata mein bhi off-flavour ho sakta hai. Isliye, taambe ki mishr dhatuon se bane upkaranon se sandushan se bachna mahatvapurna hai."
+      }
+    },
     "vitaminsEnzymes": {
         "title": "Vitamins aur Enzymes",
         "vitamins": {
