@@ -3,72 +3,177 @@ import { Bot, Lightbulb, Factory, FlaskConical, Beaker, Scale, Calculator, Setti
 import { PaneerIcon, IceCreamIcon, ReagentIcon } from "@/components/icons";
 
 export const aboutUsContent = {
-    hi: {
-        title: "Dairy Hub के पीछे",
-        description: "आपके भरोसेमंद डिजिटल डेयरी पार्टनर की कहानी",
-        developer: {
-            name: "सौरभ राजपूत",
-            image: "/IMG_6535 (2).jpg",
-            academicInfo: {
-                title: "शैक्षणिक जानकारी",
-                degrees: [
-                    { name: "B.Tech, Food Technology", institution: "Ch. Devi Lal State Institute, Sirsa (Pursuing)" },
-                    { name: "Diploma, Food Technology", institution: "Ch. Bansi Lal Govt. Polytechnic, Bhiwani" },
-                    { name: "Diploma, Dairy Technology", institution: "IGNOU, New Delhi" }
-                ]
-            }
-        },
-        welcomeMessage: `<p class="text-lg"><span class="font-bold">Dairy Hub में आपका स्वागत है!</span> यह सिर्फ एक ऐप नहीं, बल्कि डेयरी विज्ञान और उद्योग की जटिल दुनिया में आपका विश्वसनीय साथी है। हमारा मिशन डेयरी क्षेत्र से जुड़ी हर आवश्यक जानकारी को एक <strong class="font-semibold">सरल, सटीक और वैज्ञानिक</strong> तरीके से आप तक पहुँचाना है, जो छात्रों, पेशेवरों और उत्साही लोगों को समान रूप से सशक्त बनाता है।</p>`,
-        journey: {
-            title: "मेरा सफ़र: डेयरी टेक्नोलॉजी के प्रति मेरा जुनून",
-            story: `
-                <p>डेयरी और खाद्य प्रौद्योगिकी के क्षेत्र में मेरी यात्रा अकादमिक जिज्ञासा से शुरू हुई और जल्द ही एक जुनून में बदल गई। अपनी पढ़ाई और इंटर्नशिप के दौरान, मैंने उद्योग के पेशेवरों और नए लोगों के बीच एक महत्वपूर्ण अंतर देखा: व्यावहारिक, सुलभ और वैज्ञानिक रूप से मान्य जानकारी की कमी, खासकर डिजिटल क्षेत्र में। जटिल प्रक्रियाओं को समझने से लेकर नवीनतम उद्योग मानकों के साथ अपडेट रहने तक की चुनौतियाँ स्पष्ट थीं।</p>
-                <p>इसी कमी को दूर करने के संकल्प के साथ मैंने Dairy Hub की नींव रखी। मेरा लक्ष्य एक व्यापक डिजिटल पारिस्थितिकी तंत्र बनाना था जो सिर्फ जानकारी प्रदान करने से कहीं आगे जाए। मैं एक ऐसा उपकरण बनाना चाहता था जो जटिल गणनाओं को सरल करे, नवीनतम उद्योग ज्ञान प्रदान करे, और उपयोगकर्ताओं को उनकी उंगलियों पर विशेषज्ञ सहायता प्रदान करे। यह ऐप उस दृष्टिकोण की परिणति है - डेयरी क्षेत्र में सीखने, बढ़ने और उत्कृष्टता प्राप्त करने के इच्छुक किसी भी व्यक्ति के लिए एक वन-स्टॉप समाधान।</p>
-            `
-        },
-        whatsInside: {
-            title: "Dairy Hub में क्या है?",
-            features: [
-                { icon: Factory, title: "Dairy Industry Insights", description: "भारतीय डेयरी क्षेत्र से नवीनतम रुझान, आँकड़े और अपडेट प्राप्त करें।" },
-                { icon: ShieldCheck, title: "FSSAI Standards", description: "दूध और दूध उत्पादों के लिए आधिकारिक FSSAI मानकों को समझें।" },
-                { icon: Atom, title: "Milk Chemistry", description: "दूध की संरचना, प्रोटीन और गुणों में गहराई से उतरें।" },
-                { icon: Bug, title: "Microbiology", description: "डेयरी में सूक्ष्मजीवों, उनके परीक्षण और सुरक्षा प्रोटोकॉल के बारे में जानें।" },
-                { icon: Droplet, title: "Milk Handling", description: "दूध की प्राप्ति, भंडारण और संरक्षण की सर्वोत्तम प्रथाओं को जानें।" },
-                { icon: Settings, title: "Dairy Processing", description: "पाश्चुरीकरण से लेकर होमोजेनाइजेशन तक, मुख्य डेयरी प्रसंस्करण तकनीकों का अन्वेषण करें।" },
-                { icon: ReagentIcon, title: "Fermented Products", description: "दही, छाछ और अन्य किण्वित उत्पादों के विज्ञान और प्रसंस्करण को समझें।" },
-                { icon: Wind, title: "Evaporation & Drying", description: "संघनित दूध और दूध पाउडर बनाने की प्रक्रियाओं के बारे में जानें।" },
-                { icon: PaneerIcon, title: "Paneer Processing", description: "औद्योगिक प्रक्रिया में महारत हासिल करें और पनीर की उपज की गणना करें।" },
-                { icon: IceCreamIcon, title: "Ice-Cream Production", description: "आइसक्रीम बनाने के पीछे के विज्ञान और इंजीनियरिंग को समझें।" },
-                { icon: TestTube, title: "Compositional Analysis", description: "विभिन्न डेयरी उत्पादों के लिए रासायनिक परीक्षण विधियाँ जानें।" },
-                { icon: CheckSquare, title: "Quality Concepts", description: "HACCP, TQM, और ISO जैसे गुणवत्ता प्रबंधन प्रणालियों का अन्वेषण करें।" },
-                { icon: ClipboardCheck, title: "Audits & Verification", description: "डेयरी संयंत्रों में खाद्य सुरक्षा ऑडिट और सत्यापन प्रक्रियाओं को समझें।" },
-                { icon: Beaker, title: "Solutions Preparation", description: "विभिन्न लैब अभिकर्मकों और विलयनों की सही-सही गणना और तैयारी करें।" },
-                { icon: Scale, title: "Standardization Calculators", description: "पियर्सन स्क्वायर, सम्मिश्रण और दूध मानकीकरण के लिए उन्नत गणनाएँ।" },
-                { icon: FileSpreadsheet, title: "Various Calculations", description: "उपज, अम्लता, लागत-लाभ और अन्य विविध गणनाएँ करें।" },
-                { icon: Recycle, title: "CIP & ETP", description: "सफाई-इन-प्लेस (CIP) प्रक्रियाओं और अपशिष्ट उपचार संयंत्रों (ETP) के बारे में जानें।" },
-                { icon: Microscope, title: "Lab Equipments", description: "डेयरी प्रयोगशाला में उपयोग होने वाले उपकरणों के सिद्धांतों और कामकाज को जानें।" },
-                { icon: Search, title: "Adulteration Testing", description: "दूध में आम मिलावटों का पता लगाने और उन्हें रोकने के तरीके सीखें।" },
-                { icon: ClipboardCheck, title: "Calibration", description: "सटीक परिणामों के लिए लैब के कांच के बने पदार्थ और अभिकर्मकों को कैलिब्रेट करें।" },
-                { icon: PackageCheck, title: "Packaging Testing", description: "डेयरी उत्पादों के लिए पैकेजिंग सामग्री के गुणवत्ता परीक्षणों को समझें।" },
-                { icon: Droplet, title: "Water Testing", description: "WTP/ETP विश्लेषण के लिए पानी परीक्षण के महत्व और तरीकों को जानें।" },
-                { icon: GraduationCap, title: "Expert Support", description: "AI और वास्तविक विशेषज्ञों से सलाह और उत्तर प्राप्त करें।" },
-                { icon: Bot, title: "Sarathi AI Chatbot", description: "अपने व्यक्तिगत AI सहायक से तुरंत जवाब और सहायता प्राप्त करें। डेयरी या करियर से संबंधित कोई भी प्रश्न पूछें!" }
-            ]
-        },
-        mission: {
-            title: "हमारा मिशन",
-            text: `हर उपयोगकर्ता तक <strong>सही, वैज्ञानिक और व्यावहारिक डेयरी ज्ञान</strong> पहुंचाना – बिना किसी भ्रम के।`
-        },
-        vision: {
-            title: "हमारा दृष्टिकोण",
-            text: "भारत के डेयरी क्षेत्र को डिजिटल समर्थन देना, जिससे नए सीखने वाले और पेशेवर स्मार्ट निर्णय ले सकें।"
-        },
-        callToAction: {
-            title: "आइए, साथ मिलकर आगे बढ़ें",
-            text: "आपका फ़ीडबैक हमारे लिए अनमोल है। अगर आपको ऐप पसंद आए, तो कृपया इसे साझा करें, समीक्षा करें, और हमें बेहतर बनने में मदद करें।"
-        },
-        footer: "Made with ❤️ by Saurabh Rajput | Dairy Hub App"
+  hi: {
+    "title": "Dairy Hub ke Peeche",
+    "description": "Aapke Bharosemand Digital Dairy Partner ki Kahani",
+    "developer": {
+      "name": "Saurabh Rajput",
+      "image": "/IMG_6535 (2).jpg",
+      "academicInfo": {
+        "title": "Academic Jaankari",
+        "degrees": [
+          {
+            "name": "B.Tech, Food Technology",
+            "institution": "Ch. Devi Lal State Institute, Sirsa (Pursuing)"
+          },
+          {
+            "name": "Diploma, Food Technology",
+            "institution": "Ch. Bansi Lal Govt. Polytechnic, Bhiwani"
+          },
+          {
+            "name": "Diploma, Dairy Technology",
+            "institution": "IGNOU, New Delhi"
+          }
+        ]
+      }
     },
+    "welcomeMessage": "<p class=\"text-lg\"><span class=\"font-bold\">Dairy Hub mein aapka swagat hai!</span> Yeh sirf ek app nahi, balki dairy science aur industry ki complex duniya mein aapka vishvasneey saathi hai. Hamara mission dairy sector se judi har zaroori jaankari ko ek <strong class=\"font-semibold\">simple, accurate, aur scientific</strong> tareeke se aap tak pahunchana hai, jo students, professionals, aur enthusiasts ko samaan roop se empower karta hai.</p>",
+    "journey": {
+      "title": "Mera Safar: Dairy Technology ke Prati Mera Junoon",
+      "story": `
+              <p>Dairy aur food technology ke field mein meri journey academic curiosity se shuru hui aur jald hi ek passion mein badal gayi. Apni padhai aur internships ke dauran, maine industry professionals aur naye logon ke beech ek important difference dekha: practical, accessible, aur scientifically valid jaankari ki kami, khaaskar digital field mein. Complex processes ko samajhne se lekar latest industry standards ke saath update rehne tak ki challenges saaf thi.</p>
+              <p>Isi kami ko door karne ke resolution ke saath maine Dairy Hub ki neev rakhi. Mera goal ek comprehensive digital ecosystem banana tha jo sirf information provide karne se kahin aage jaaye. Main ek aisa tool banana chahta tha jo complex calculations ko simplify kare, latest industry knowledge provide kare, aur users ko unki fingertips par expert support de. Yeh app us vision ka result hai - dairy sector mein seekhne, badhne, aur excel karne ke इच्छुक kisi bhi vyakti ke liye ek one-stop solution.</p>
+            `
+    },
+    "whatsInside": {
+      "title": "Dairy Hub mein kya hai?",
+      "features": [
+        {
+          "icon": "Factory",
+          "title": "Dairy Industry Insights",
+          "description": "Indian dairy sector se latest trends, stats, aur updates prapt karein."
+        },
+        {
+          "icon": "ShieldCheck",
+          "title": "FSSAI Standards",
+          "description": "Doodh aur doodh products ke liye official FSSAI standards ko samjhein."
+        },
+        {
+          "icon": "Atom",
+          "title": "Milk Chemistry",
+          "description": "Doodh ki composition, protein, aur properties mein gehraai se utrein."
+        },
+        {
+          "icon": "Bug",
+          "title": "Microbiology",
+          "description": "Dairy mein microorganisms, unke testing, aur safety protocols ke baare mein jaanein."
+        },
+        {
+          "icon": "Droplet",
+          "title": "Milk Handling",
+          "description": "Doodh ki receiving, storage, aur preservation ki best practices ko jaanein."
+        },
+        {
+          "icon": "Settings",
+          "title": "Dairy Processing",
+          "description": "Pasteurization se lekar homogenization tak, core dairy processing techniques ko explore karein."
+        },
+        {
+          "icon": "ReagentIcon",
+          "title": "Fermented Products",
+          "description": "Dahi, chhaachh, aur anya fermented products ke science aur processing ko samjhein."
+        },
+        {
+          "icon": "Wind",
+          "title": "Evaporation & Drying",
+          "description": "Condensed milk aur milk powder banane ke processes ke baare mein jaanein."
+        },
+        {
+          "icon": "PaneerIcon",
+          "title": "Paneer Processing",
+          "description": "Industrial process mein maharat haasil karein aur paneer ki yield calculate karein."
+        },
+        {
+          "icon": "IceCreamIcon",
+          "title": "Ice-Cream Production",
+          "description": "Ice cream banane ke peeche ke science aur engineering ko samjhein."
+        },
+        {
+          "icon": "TestTube",
+          "title": "Compositional Analysis",
+          "description": "Alag-alag dairy products ke liye chemical testing methods jaanein."
+        },
+        {
+          "icon": "CheckSquare",
+          "title": "Quality Concepts",
+          "description": "HACCP, TQM, aur ISO jaise quality management systems ko explore karein."
+        },
+        {
+          "icon": "ClipboardCheck",
+          "title": "Audits & Verification",
+          "description": "Dairy plants mein food safety audits aur verification processes ko samjhein."
+        },
+        {
+          "icon": "Beaker",
+          "title": "Solutions Preparation",
+          "description": "Alag-alag lab reagents aur solutions ko aasaani se calculate aur prepare karein."
+        },
+        {
+          "icon": "Scale",
+          "title": "Standardization Calculators",
+          "description": "Pearson Square, blending, aur milk standardization ke liye advanced calculations."
+        },
+        {
+          "icon": "FileSpreadsheet",
+          "title": "Various Calculations",
+          "description": "Yield, acidity, cost-benefit, aur anya miscellaneous calculations karein."
+        },
+        {
+          "icon": "Recycle",
+          "title": "CIP & ETP",
+          "description": "Cleaning-In-Place (CIP) processes aur Effluent Treatment Plants (ETP) ke baare mein jaanein."
+        },
+        {
+          "icon": "Microscope",
+          "title": "Lab Equipments",
+          "description": "Dairy laboratory mein use hone wale equipments ke principles aur working ko jaanein."
+        },
+        {
+          "icon": "Search",
+          "title": "Adulteration Testing",
+          "description": "Doodh mein aam milavaton ka pata lagane aur unhein rokne ke tareeke seekhein."
+        },
+        {
+          "icon": "ClipboardCheck",
+          "title": "Calibration",
+          "description": "Accurate results ke liye lab ke glassware aur reagents ko calibrate karein."
+        },
+        {
+          "icon": "PackageCheck",
+          "title": "Packaging Testing",
+          "description": "Dairy products ke liye packaging material ke quality tests ko samjhein."
+        },
+        {
+          "icon": "Droplet",
+          "title": "Water Testing",
+          "description": "WTP/ETP analysis ke liye water testing ke importance aur methods ko jaanein."
+        },
+        {
+          "icon": "GraduationCap",
+          "title": "Expert Support",
+          "description": "AI aur real experts se salah aur answers prapt karein."
+        },
+        {
+          "icon": "Bot",
+          "title": "Sarathi AI Chatbot",
+          "description": "Apne personal AI assistant se turant jawab aur sahayata prapt karein. Dairy ya career se related koi bhi sawal poochein!"
+        }
+      ]
+    },
+    "mission": {
+      "title": "Hamara Mission",
+      "text": "Har user tak <strong>sahi, scientific, aur practical dairy knowledge</strong> pahunchana – bina kisi confusion ke."
+    },
+    "vision": {
+      "title": "Hamara Vision",
+      "text": "India ke dairy sector ko digital support dena, jisse naye sikhne wale aur professionals smart decisions le sakein."
+    },
+    "callToAction": {
+      "title": "Aaiye, Saath Milkar Aage Badhein",
+      "text": "Aapka feedback hamare liye anmol hai. Agar aapko app pasand aaye, toh kripya ise share karein, review karein, aur hamein behtar banane mein madad karein."
+    },
+    "footer": "Made with ❤️ by Saurabh Rajput | Dairy Hub App"
+  }
     en: {
         title: "Behind Dairy Hub",
         description: "The story of your trusted digital dairy partner",
