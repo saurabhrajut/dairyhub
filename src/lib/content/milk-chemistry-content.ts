@@ -1,272 +1,271 @@
-
 export const milkChemistryContent = {
-    hi: {
-    "mainTitle": "Doodh ka Rasayan Vigyan",
-    "description": "Doodh ke science mein ek gehri dive.",
+  hi: {
+    "mainTitle": "Milk ki Chemistry",
+    "description": "Milk ke science mein ek deep dive.",
     "backToTopics": "Topics par wapas jaayein",
     "composition": {
-      "title": "Doodh ki Sanrachna (Composition)",
+      "title": "Milk ka Composition",
       "whatIsMilk": {
-        "title": "Doodh Kya Hai?",
-        "fssaiDef": "<strong>FSSAI Definition:</strong> “Doodh ek swasth doodh dene wale janwar se poorn doodh nikalne se prapt samanya mammary secretion hai. Yeh colostrum se mukt hona chahiye.”",
-        "codexDef": "<strong>Codex Alimentarius Definition:</strong> \"Doodh ek ya ek se adhik doodh dene wale janwaron ka samanya mammary secretion hai, jismein se kuch bhi nahi milaya gaya hai ya nikala nahi gaya hai, jiska uddeshya liquid doodh ke roop mein upbhog ya aage ki prakriya ke liye hai.\"",
-        "usaDef": "<strong>USA ki Federal Definition:</strong> \"Doodh ek ya ek se adhik swasth gaayon, jinhein theek se khilaya aur rakha gaya ho, ke poorn doodh nikalne se prapt taza, swachh lacteal srav hai, jismein prasav se 15 din pehle aur 10 din baad prapt doodh shamil nahi hai aur jismein 8.5 pratishat se kam solids-not-fat aur 3.25 pratishat se kam doodh vasa nahi hai.\"",
-        "p1": "Doodh ek complex biological fluid hai jise teen alag-alag phases mein dekha ja sakta hai:",
+        "title": "Milk Kya Hai?",
+        "fssaiDef": "<strong>FSSAI Definition:</strong> “Milk ek healthy milk dene wale animal se complete milking se milne wala normal mammary secretion hai. Yeh colostrum se free hona chahiye.”",
+        "codexDef": "<strong>Codex Alimentarius Definition:</strong> \"Milk ek ya ek se zyada milk dene wale animals ka normal mammary secretion hai, jismein kuch bhi add ya extract nahi kiya gaya hai, jiska purpose liquid milk ke form mein consumption ya aage ki processing ke liye hai.\"",
+        "usaDef": "<strong>USA ki Federal Definition:</strong> \"Milk ek ya ek se zyada healthy cows, jinhein a ache se feed aur rakha gaya ho, ke complete milking se milne wala fresh, clean lacteal secretion hai, jismein delivery se 15 din pehle aur 10 din baad milne wala milk shamil nahi hai aur jismein 8.5 percent se kam solids-not-fat aur 3.25 percent se kam milk fat nahi hai.\"",
+        "p1": "Milk ek complex biological fluid hai jise teen alag-alag phases mein dekha ja sakta hai:",
         "phases": [
-          "Emulsion: Fat globules (vasa ke kan) paani mein bikhre hue hain.",
+          "Emulsion: Fat globules (fat ke particles) paani mein bikhre hue hain.",
           "Colloidal Suspension: Casein protein micelles paani mein suspended hain.",
           "True Solution: Lactose, whey proteins, minerals aur vitamins poori tarah se paani mein ghul jaate hain."
         ]
       },
       "generalComposition": {
-        "title": "Doodh ki General Composition",
-        "headers": ["Ghatak", "%", "Ghatak", "%"],
+        "title": "Milk ki General Composition",
+        "headers": ["Component", "%", "Component", "%"],
         "rows": [
-            { "c1": "Paani", "v1": "87.54", "c2": "Casein", "v2": "2.63" },
-            { "c1": "Fat", "v1": "3.71", "c2": "Whey Protein", "v2": "0.42" },
-            { "c1": "Protein", "v1": "3.18", "c2": "Protease-peptone", "v2": "0.13" },
-            { "c1": "Lactose", "v1": "4.70", "c2": "Anya Nitrogenous Padarth", "v2": "0.11" },
-            { "c1": "Ash", "v1": "0.76", "c2": "Kul", "v2": "100.0" }
+          { "c1": "Water", "v1": "87.54", "c2": "Casein", "v2": "2.63" },
+          { "c1": "Fat", "v1": "3.71", "c2": "Whey Protein", "v2": "0.42" },
+          { "c1": "Protein", "v1": "3.18", "c2": "Protease-peptone", "v2": "0.13" },
+          { "c1": "Lactose", "v1": "4.70", "c2": "Other Nitrogenous Substances", "v2": "0.11" },
+          { "c1": "Ash", "v1": "0.76", "c2": "Total", "v2": "100.0" }
         ]
       },
       "speciesDifferences": {
-        "title": "Species ke kaaran Doodh ki Composition mein Antar",
-        "headers": ["Species", "Paani (%)", "Vasa (%)", "Cheeni (%)", "Protein (%)", "Raakh (%)"],
+        "title": "Species ke karan Milk ki Composition mein Difference",
+        "headers": ["Species", "Water (%)", "Fat (%)", "Sugar (%)", "Protein (%)", "Ash (%)"],
         "rows": [
-          { "species": "Gaay", "water": "87.54", "fat": "3.71", "sugar": "4.70", "protein": "3.31", "ash": "0.76" },
-          { "species": "Bakri", "water": "85.58", "fat": "4.93", "sugar": "4.78", "protein": "4.11", "ash": "0.89" },
-          { "species": "Bhains", "water": "82.90", "fat": "7.50", "sugar": "4.70", "protein": "4.10", "ash": "0.80" },
-          { "species": "Manushya", "water": "88.50", "fat": "3.30", "sugar": "6.80", "protein": "1.30", "ash": "0.20" }
+          { "species": "Cow", "water": "87.54", "fat": "3.71", "sugar": "4.70", "protein": "3.31", "ash": "0.76" },
+          { "species": "Goat", "water": "85.58", "fat": "4.93", "sugar": "4.78", "protein": "4.11", "ash": "0.89" },
+          { "species": "Buffalo", "water": "82.90", "fat": "7.50", "sugar": "4.70", "protein": "4.10", "ash": "0.80" },
+          { "species": "Human", "water": "88.50", "fat": "3.30", "sugar": "6.80", "protein": "1.30", "ash": "0.20" }
         ]
       },
       "factorsAffectingComposition": {
-        "title": "Doodh ki Sanrachna ko Prabhavit Karne Wale Karak",
-        "intro": "Doodh ki sanrachna sthir nahi hoti hai; yeh kai karakon ke aadhar par badalti rehti hai:",
+        "title": "Milk ki Composition ko Affect Karne Wale Factors",
+        "intro": "Milk ki composition constant nahi hoti hai; yeh kai factors ke aadhar par badalti rehti hai:",
         "factors": [
-          { "name": "Nasal (Breed)", "desc": "Alag-alag naslon (jaise Jersey, Holstein Friesian) ke doodh mein vasa aur protein ki matra alag-alag hoti hai. Jersey gaayon mein aamtaur par HF gaayon ki tulna mein adhik fat hota hai." },
-          { "name": "Aahar (Feed)", "desc": "Pashu ko diya jaane wala chara doodh ki vasa samagri aur fatty acid profile ko seedhe taur par prabhavit karta hai. Hara chara vasa mein Conjugated Linoleic Acid (CLA) jaise faydemand fatty acids ko badha sakta hai." },
-          { "name": "Dugdh-sravan ki Avastha (Stage of Lactation)", "desc": "Prasav ke theek baad doodh (colostrum) mein protein aur antibodies bahut adhik hote hain. Jaise-jaise lactation aage badhta hai, sanrachna badalti hai, aur aakhir mein fat aur protein ka star badh jaata hai." },
-          { "name": "Mausam (Season)", "desc": "Garmiyon mein aamtaur par vasa aur SNF (Solids-Not-Fat) kam ho jaate hain, jabki sardiyon mein yeh badh jaate hain." },
-          { "name": "Pashu ka Swasthya (Animal Health)", "desc": "Mastitis jaisi bimariyan doodh ki sanrachna ko badal sakti hain, jisse somatic cell count (SCC) aur namak (salt) badh jaate hain jabki lactose kam ho jaata hai." }
+          { "name": "Nasal (Breed)", "desc": "Alag-alag breeds (jaise Jersey, Holstein Friesian) ke milk mein fat aur protein ki quantity alag-alag hoti hai. Jersey cows mein aamtaur par HF cows ke comparison mein zyada fat hota hai." },
+          { "name": "Aahar (Feed)", "desc": "Animal ko diya jaane wala feed milk ke fat content aur fatty acid profile ko directly affect karta hai. Green fodder fat mein Conjugated Linoleic Acid (CLA) jaise beneficial fatty acids ko badha sakta hai." },
+          { "name": "Dugdh-sravan ki Avastha (Stage of Lactation)", "desc": "Delivery ke theek baad milk (colostrum) mein protein aur antibodies bahut zyada hote hain. Jaise-jaise lactation aage badhta hai, composition badalti hai, aur aakhir mein fat aur protein ka level badh jaata hai." },
+          { "name": "Mausam (Season)", "desc": "Garmiyon mein aamtaur par fat aur SNF (Solids-Not-Fat) kam ho jaate hain, jabki sardiyon mein yeh badh jaate hain." },
+          { "name": "Pashu ka Swasthya (Animal Health)", "desc": "Mastitis jaisi diseases milk ki composition ko badal sakti hain, jisse somatic cell count (SCC) aur salt badh jaate hain jabki lactose kam ho jaata hai." }
         ]
       },
       "water": {
-        "title": "Doodh mein Paani",
-        "p1": "Paani sabse prachur matra mein ghatak hai, jo ek suspending, dispersing aur dissolving medium ke roop mein kaam karta hai. Yeh teen roopon mein maujood hai:",
+        "title": "Milk mein Water",
+        "p1": "Water sabse abundant component hai, jo ek suspending, dispersing aur dissolving medium ke roop mein kaam karta hai. Yeh teen forms mein maujood hai:",
         "forms": [
           { "name": "Free Water", "desc": "Sabse bada hissa, yeh ek solvent ke roop mein kaam karta hai aur microbial growth ko support karta hai." },
-          { "name": "Bound Water", "desc": "Protein aur anya ghatakon se hydrogen bonds ke madhyam se bandha hua. Yeh 0°C par nahi jamta hai, solvent ke roop mein kaam nahi karta hai, aur microbial growth ko support nahi kar sakta hai." },
-          { "name": "Crystallized Water", "desc": "Lactose hydrate (C₁₂H₂₂O₁₁·H₂O) jaise ghatakon ki chemical sanrachna ke bheetar maujood paani. Ise hatana sabse mushkil hai." }
+          { "name": "Bound Water", "desc": "Protein aur anya components se hydrogen bonds ke through bandha hua. Yeh 0°C par nahi jamta hai, solvent ke roop mein kaam nahi karta hai, aur microbial growth ko support nahi kar sakta hai." },
+          { "name": "Crystallized Water", "desc": "Lactose hydrate (C₁₂H₂₂O₁₁·H₂O) jaise components ki chemical structure ke andar maujood paani. Ise hatana sabse mushkil hai." }
         ]
       }
     },
     "mammaryGland": {
-        "title": "Mammary Gland aur Doodh Srav",
+        "title": "Mammary Gland aur Milk Secretion",
         "structure": {
-            "title": "Mammary Gland ki Sanrachna",
-            "p1": "Mammary gland secretory aur connective tissue se bani hoti hai. Mool secretory units chhoti, angoor jaisi vastuen hoti hain jinhein \"alveoli\" kaha jaata hai. 150-220 alveoli ka ek samuh ek lobule banata hai, aur kai lobules ek lobe banate hain. Gaay ke than mein 4 alag-alag quarters hote hain, pratyek mein ek nipple cistern aur gland cistern hota hai, jisse kai nalikayein alveoli tak shakhayein banati hain.",
-            "p2": "Pratyek alveolus mein ek central cavity (lumen) ke charon ore epithelial koshikaon ki ek hi parat hoti hai aur yeh myoepithelial koshikaon se ghira hota hai jo doodh nikalne ke liye jimmedar hote hain."
+            "title": "Mammary Gland ka Structure",
+            "p1": "Mammary gland secretory aur connective tissue se bani hoti hai. Basic secretory units chhoti, angoor jaisi cheezein hoti hain jinhein \"alveoli\" kaha jaata hai. 150-220 alveoli ka ek group ek lobule banata hai, aur kai lobules ek lobe banate hain. Cow ke than mein 4 alag-alag quarters hote hain, har ek mein ek nipple cistern aur gland cistern hota hai, jisse kai ducts alveoli tak branch out hoti hain.",
+            "p2": "Har alveolus mein ek central cavity (lumen) ke chaaron ore epithelial cells ki ek hi layer hoti hai aur yeh myoepithelial cells se ghira hota hai jo milk ejection ke liye responsible hote hain."
         },
         "physiology": {
-            "title": "Doodh Srav ki Physiology",
-            "p1": "Doodh alveolus ki epithelial koshikaon mein jatil hormonal niyantran (estrogen, progesterone, prolactin, aadi) ke tahat sanshleshit hota hai. Doodh sanshleshan ke liye precursors rakt se liye jaate hain. Protein aur lipid endoplasmic reticulum mein sanshleshit hote hain; lactose sanshleshan aur casein micelle ki assembly Golgi apparatus mein hoti hai. Sravit doodh ke har litre ke liye, lagbhag 400-500 litre rakt ko than se hokar parichalit hona chahiye.",
-            "ejectionTitle": "Doodh Nikalna (Let-down)",
-            "ejectionText": "Yeh ek reflex kriya hai jo hormone oxytocin dwara niyantrit hoti hai, jo myoepithelial koshikaon ko contract karne aur alveoli se doodh ko nalikaon mein nichodne ka karan banti hai. Yeh reflex lagbhag 10 minute tak rehta hai."
+            "title": "Milk Secretion ki Physiology",
+            "p1": "Milk, alveolus ke epithelial cells mein complex hormonal control (estrogen, progesterone, prolactin, aadi) ke under synthesize hota hai. Milk synthesis ke liye precursors blood se liye jaate hain. Protein aur lipid endoplasmic reticulum mein synthesize hote hain; lactose synthesis aur casein micelle ki assembly Golgi apparatus mein hoti hai. Har litre milk secretion ke liye, lagbhag 400-500 litre blood ko than se hokar circulate hona chahiye.",
+            "ejectionTitle": "Milk Ejection (Let-down)",
+            "ejectionText": "Yeh ek reflex action hai jo hormone oxytocin dwara control hota hai, jo myoepithelial cells ko contract karne aur alveoli se milk ko ducts mein nichodne ka karan banta hai. Yeh reflex lagbhag 10 minute tak rehta hai."
         },
         "precursors": {
-            "title": "Doodh Precursors",
-            "caption": "Rakt Plasma aur Doodh Sanrachna ki Tulna",
-            "headers": ["Ghatak", "Rakt Plasma (%)", "Doodh (%)"],
+            "title": "Milk Precursors",
+            "caption": "Blood Plasma aur Milk Composition ka Comparison",
+            "headers": ["Component", "Blood Plasma (%)", "Milk (%)"],
             "rows": [
-              { "constituent": "Paani", "plasma": "91.0", "milk": "87.0" },
+              { "constituent": "Water", "plasma": "91.0", "milk": "87.0" },
               { "constituent": "Glucose", "plasma": "0.05", "milk": "Lactose: 4.8" },
               { "constituent": "Serum Albumin", "plasma": "3.20", "milk": "Lactalbumin: 0.52" },
               { "constituent": "Serum Globulin", "plasma": "4.40", "milk": "Globulin: 0.05" },
               { "constituent": "Amino Acids", "plasma": "0.003", "milk": "Casein: 2.9" },
-              { "constituent": "Neutral Vasa", "plasma": "0.09", "milk": "3.8" },
+              { "constituent": "Neutral Fat", "plasma": "0.09", "milk": "3.8" },
               { "constituent": "Calcium", "plasma": "0.009", "milk": "0.12" }
             ]
         }
     },
     "proteins": {
-      "title": "Doodh Proteins",
+      "title": "Milk Proteins",
       "overview": {
-        "title": "Doodh Proteins ka Overview",
-        "p1": "Protein doodh ke sabse avashyak poshak tatvon mein se ek hai, jo lagbhag 3.5% par maujood hai. Ismein sabhi avashyak amino acids hote hain. Doodh mein protein ko do mukhya samuhon mein baanta gaya hai: <strong>Casein (~80%)</strong> aur <strong>Whey Protein (~20%)</strong>."
+        "title": "Milk Proteins ka Overview",
+        "p1": "Protein milk ke sabse essential nutrients mein se ek hai, jo lagbhag 3.5% par maujood hai. Ismein sabhi essential amino acids hote hain. Milk mein protein ko do main groups mein divide kiya gaya hai: <strong>Casein (~80%)</strong> aur <strong>Whey Protein (~20%)</strong>."
       },
       "casein": {
-        "title": "Casein (~80% Doodh Protein)",
-        "p1": "Casein phosphoproteins ka ek varg hai jo doodh mein jatil kanon ke roop mein maujood hota hai jinhein <strong>micelles</strong> kaha jaata hai. Yeh micelles hi doodh ko safed aur apardarshi banate hain. Jaivik roop se, casein calcium aur phosphate ke vahak ke roop mein kaam karta hai. Sabhi casein 4.6 (unke isoelectric bindu) ke pH par avakshepit hote hain.",
+        "title": "Casein (~80% Milk Protein)",
+        "p1": "Casein phosphoproteins ka ek class hai jo milk mein complex particles ke roop mein maujood hota hai jinhein <strong>micelles</strong> kaha jaata hai. Yeh micelles hi milk ko white aur opaque banate hain. Biologically, casein calcium aur phosphate ke carrier ke roop mein kaam karta hai. Sabhi casein 4.6 (unke isoelectric point) ke pH par precipitate hote hain.",
         "micelleStructure": {
-            "title": "Casein Micelle ki Gehri Sanrachna",
-            "p1": "Casein micelle ki sanrachna ek adbhut engineering ka namuna hai. Yeh chote protein samuhon (sub-micelles) se bana hai jo 'colloidal calcium phosphate' (CCP) ke nano-clusters dwara ek saath jude hote hain. Micelle ki satah par κ-casein ki ek 'hairy layer' hoti hai. Yeh layer micelles ko ek doosre se door rakhti hai (steric repulsion), jisse ve aapas mein chipakte nahi hain aur doodh ek sthir liquid bana rehta hai."
+            "title": "Casein Micelle ka Deep Structure",
+            "p1": "Casein micelle ka structure ek amazing engineering ka example hai. Yeh chhote protein groups (sub-micelles) se bana hai jo 'colloidal calcium phosphate' (CCP) ke nano-clusters dwara ek saath jude hote hain. Micelle ki surface par κ-casein ki ek 'hairy layer' hoti hai. Yeh layer micelles ko ek doosre se door rakhti hai (steric repulsion), jisse ve aapas mein chipakte nahi hain aur milk ek stable liquid bana rehta hai."
         },
         "fractionsTitle": "Casein Fractions",
-        "fractionsText": "Casein char mukhya bhinnon se bana hai: αs1-casein, αs2-casein, β-casein, aur κ-casein. κ-casein micelle ki satah par sthit hota hai aur iski sthirta ke liye jimmedar hota hai.",
-        "coagulationTitle": "Casein Coagulation (Dahi Banna)",
-        "coagulationText": "Casein ki jamavat ki kshamta paneer aur dahi jaise utpad banane ke liye maulik hai. Yeh kai tarikon se hota hai:",
+        "fractionsText": "Casein char main fractions se bana hai: αs1-casein, αs2-casein, β-casein, aur κ-casein. κ-casein micelle ki surface par hota hai aur iski stability ke liye responsible hota hai.",
+        "coagulationTitle": "Casein Coagulation (Dahi Banana)",
+        "coagulationText": "Casein ki coagulation ki ability cheese aur yogurt jaise products banane ke liye fundamental hai. Yeh kai tarikon se hota hai:",
         "coagulationTypes": [
-          { "name": "Acid Coagulation", "desc": "Jab doodh ka pH 4.6 tak gir jaata hai (jaise, nimbu/sirka milane ya bacterial fermentation ke madhyam se), casein micelles apna negative charge kho dete hain aur CCP ghul jaata hai, jisse ve ek gel banane ke liye ekatrit hote hain. Yeh paneer aur dahi ke peeche ka siddhant hai." },
-          { "name": "Enzymatic Coagulation", "desc": "Enzyme rennet (ya chymosin) vishesh roop se κ-casein ki 'hairy layer' ko kaat deta hai, micelles ko asthir karta hai aur unhein calcium ki upasthiti mein ek saath guchchhe banane ka karan banta hai. Yeh adhikansh cheesemaking ka aadhar hai." },
-          { "name": "Alcohol Precipitation", "desc": "Alcohol micelles ki surakshatmak parat ko nirjalit karta hai. Yadi doodh pehle se hi amliya (asthir) hai, to protein jama ho jayega. Yeh doodh ki tazgi ke liye ek tvarit parikshan hai." },
-          { "name": "Heat Precipitation", "desc": "Jabki shuddh casein garmi-sthir hai, bahut uchch taapman par lambe samay tak garam karne (jaise, dabav mein 120°C) se jamavat ho sakti hai." }
+          { "name": "Acid Coagulation", "desc": "Jab milk ka pH 4.6 tak gir jaata hai (jaise, nimbu/sirka milane ya bacterial fermentation ke through), casein micelles apna negative charge kho dete hain aur CCP ghul jaata hai, jisse ve ek gel banane ke liye ikatthe hote hain. Yeh paneer aur dahi ke peeche ka principle hai." },
+          { "name": "Enzymatic Coagulation", "desc": "Enzyme rennet (ya chymosin) specifically κ-casein ki 'hairy layer' ko kaat deta hai, micelles ko unstable karta hai aur unhein calcium ki presence mein ek saath guchchhe banane ka karan banta hai. Yeh adhikansh cheesemaking ka basis hai." },
+          { "name": "Alcohol Precipitation", "desc": "Alcohol micelles ki protective layer ko dehydrate karta hai. Yadi milk pehle se hi acidic (unstable) hai, to protein coagulate ho jayega. Yeh milk ki freshness ke liye ek quick test hai." },
+          { "name": "Heat Precipitation", "desc": "Jabki pure casein heat-stable hai, bahut high temperature par lambe samay tak garam karne (jaise, pressure mein 120°C) se coagulation ho sakti hai." }
         ]
       },
       "whey": {
-        "title": "Whey Protein (~20% Doodh Protein)",
-        "p1": "Casein avakshepan ke baad taral whey mein shesh protein ko whey protein kaha jaata hai. Yeh golakar protein casein ki tulna mein adhik paani mein ghulanshil hote hain aur garmi se vikrt (denature) ho jaate hain.",
+        "title": "Whey Protein (~20% Milk Protein)",
+        "p1": "Casein precipitation ke baad liquid whey mein bache hue protein ko whey protein kaha jaata hai. Yeh globular protein casein ki tulna mein zyada water-soluble hote hain aur heat se denature ho jaate hain.",
         "functionalProperties": {
-            "title": "Whey Proteins ke Functional Gunn",
-            "p1": "Whey proteins ka upyog food industry mein unke vishesh gunon ke karan kiya jaata hai:",
+            "title": "Whey Proteins ki Functional Properties",
+            "p1": "Whey proteins ka use food industry mein unki special properties ke karan kiya jaata hai:",
             "properties": [
-                { "name": "Gelling:", "desc": "Garam karne par, whey proteins denature hokar ek gel network bana sakte hain, jo utpadon ko structure deta hai." },
-                { "name": "Foaming:", "desc": "Yeh hawa ke bubbles ke charon ore ek film banakar sthir jhaag (foam) bana sakte hain." },
-                { "name": "Emulsification:", "desc": "Whey proteins tel aur paani ko alag hone se rokne mein madad karte hain, jisse sthir emulsion banta hai." }
+              { "name": "Gelling:", "desc": "Garam karne par, whey proteins denature hokar ek gel network bana sakte hain, jo products ko structure deta hai." },
+              { "name": "Foaming:", "desc": "Yeh hawa ke bubbles ke chaaron ore ek film banakar stable foam bana sakte hain." },
+              { "name": "Emulsification:", "desc": "Whey proteins tel aur paani ko alag hone se rokne mein madad karte hain, jisse stable emulsion banta hai." }
             ]
         },
         "fractionsTitle": "Whey Protein Fractions",
         "fractions": [
-          { "name": "Beta-lactoglobulin (β-Lg)", "desc": "Kul whey protein ka lagbhag aadha hissa hota hai. Yeh garmi se jama hota hai aur avashyak amino acids ka ek utkrsht srot hai." },
-          { "name": "Alpha-lactalbumin (α-La)", "desc": "Manav doodh mein ek pramukh protein, yeh tryptophan ka ek accha srot hai aur lactose sanshleshan mein shamil hai." },
-          { "name": "Immunoglobulins (Ig)", "desc": "Yeh antibodies hain jo nishkriya pratiraksha pradan karte hain aur colostrum mein bahut adhik sandrata mein paaye jaate hain." },
-          { "name": "Bovine Serum Albumin (BSA)", "desc": "Acche vasa-bandhak gunon wala ek bada protein." }
+          { "name": "Beta-lactoglobulin (β-Lg)", "desc": "Total whey protein ka lagbhag aadha hissa hota hai. Yeh heat se coagulate hota hai aur essential amino acids ka ek excellent source hai." },
+          { "name": "Alpha-lactalbumin (α-La)", "desc": "Human milk mein ek main protein, yeh tryptophan ka ek accha source hai aur lactose synthesis mein shamil hai." },
+          { "name": "Immunoglobulins (Ig)", "desc": "Yeh antibodies hain jo passive immunity provide karte hain aur colostrum mein bahut high concentration mein paaye jaate hain." },
+          { "name": "Bovine Serum Albumin (BSA)", "desc": "Acche fat-binding properties wala ek bada protein." }
         ]
       }
     },
     "fat": {
-        "title": "Doodh Vasa (Lipids)",
+        "title": "Milk Fat (Lipids)",
         "characteristics": {
-            "title": "Doodh Vasa ki Visheshtayein",
-            "p1": "Vasa doodh ka sabse vyavsayik roop se mahatvapurna aur parivartanshil ghatak hai. Lagbhag 98% doodh vasa triglycerides ka mishran hai. Yeh doodh vasa globule jhillī (MFGM) namak ek surakshatmak jhillī se ghire chhote globules (0.1-15 micron vyas) ke roop mein maujood hota hai.",
-            "p2": "Doodh vasa apni chhoti-shrinkhala fatty acids (jaise butyric acid, C4:0) ke uchch anupat ke karan advitiya hai, jo iske vishisht swad mein yogdan deta hai. Yeh vistrit vividhata fatty acid bhi doodh vasa ko ek vyapak pighalne ki seema (lagbhag -30°C se +40°C) deti hai, jisse yeh prasheetan taapman par thos aur sharir ke taapman par taral ho jaata hai.",
+            "title": "Milk Fat ki Characteristics",
+            "p1": "Fat milk ka sabse commercially important aur variable component hai. Lagbhag 98% milk fat triglycerides ka mixture hai. Yeh Milk Fat Globule Membrane (MFGM) naam ki ek protective membrane se ghire chhote globules (0.1-15 micron diameter) ke roop mein maujood hota hai.",
+            "p2": "Milk fat apni short-chain fatty acids (jaise butyric acid, C4:0) ke high proportion ke karan unique hai, jo iske special taste mein contribute karta hai. Yeh wide variety fatty acid bhi milk fat ko ek broad melting range (lagbhag -30°C se +40°C) deti hai, jisse yeh refrigeration temperature par solid aur body temperature par liquid ho jaata hai.",
             "mfgmComposition": {
-                "title": "Milk Fat Globule Membrane (MFGM) ki Sanrachna",
-                "p1": "MFGM sirf ek sadharan jhillī nahi hai. Yeh phospholipids, glycolipids, proteins, aur enzymes ki ek jatil teen-parati sanrachna hai jo na sirf vasa globules ko sthir karti hai balki iske apne poshan sambandhi laabh bhi hain, jaise ki shishuon mein sangyanatmak vikas."
+                "title": "Milk Fat Globule Membrane (MFGM) ka Structure",
+                "p1": "MFGM sirf ek simple membrane nahi hai. Yeh phospholipids, glycolipids, proteins, aur enzymes ka ek complex three-layered structure hai jo na sirf fat globules ko stabilize karta hai balki iske apne nutritional benefits bhi hain, jaise ki shishuon mein cognitive development."
             },
             "fattyAcidProfile": {
                 "title": "Fatty Acid Profile",
-                "p1": "Doodh ki vasa mein lagbhag 70% Saturated (SFA), 25% Monounsaturated (MUFA), aur 5% Polyunsaturated (PUFA) fatty acids hote hain. Ismein Conjugated Linoleic Acid (CLA) bhi hota hai, jiske kai swasthya labh maane jaate hain."
+                "p1": "Milk fat mein lagbhag 70% Saturated (SFA), 25% Monounsaturated (MUFA), aur 5% Polyunsaturated (PUFA) fatty acids hote hain. Ismein Conjugated Linoleic Acid (CLA) bhi hota hai, jiske kai health benefits maane jaate hain."
             }
         },
         "stability": {
-            "title": "Vasa Globules aur Emulsion Sthirta",
-            "p1": "Doodh ek oil-in-water ka emulsion hai. MFGM vasa globules ko sthir karta hai, unhein ek saath guchchhe banane (coalescence) se rokta hai.",
+            "title": "Fat Globules aur Emulsion Stability",
+            "p1": "Milk ek oil-in-water ka emulsion hai. MFGM fat globules ko stabilize karta hai, unhein ek saath guchchhe banane (coalescence) se rokta hai.",
             "creamingTitle": "Creaming",
-            "creamingText": "Unke kam ghantv ke karan, vasa globules upar uthte hain, is prakriya ko creaming kaha jaata hai. Homogenization globule aakar ko kam karke ise rokta hai.",
+            "creamingText": "Unke kam density ke karan, fat globules upar uthte hain, is process ko creaming kaha jaata hai. Homogenization globule size ko kam karke ise rokta hai.",
             "lipolysisTitle": "Lipolysis",
-            "lipolysisText": "Enzyme lipoprotein lipase vasa (lipolysis) ko tod sakta hai, mukt fatty acids jaari kar sakta hai jo ek sabun ya baasi off-flavour ka karan banta hai. Yeh aamtaur par ek akshunn MFGM dwara roka jaata hai lekin globules ko yantrik kshati (jaise atyadhik pumping) se shuru kiya ja sakta hai."
+            "lipolysisText": "Enzyme lipoprotein lipase fat (lipolysis) ko tod sakta hai, free fatty acids release kar sakta hai jo ek soapy ya baasi off-flavour ka karan banta hai. Yeh aamtaur par ek intact MFGM dwara roka jaata hai lekin globules ko mechanical damage (jaise atyadhik pumping) se shuru kiya ja sakta hai."
         },
         "autoxidation": {
             "title": "Autoxidation aur Crystallization",
             "autoxidationTitle": "Autoxidation",
-            "autoxidationText": "Asantrpt fatty acids mein double bonds oxidation kar sakte hain, jisse off-flavours (tallowy, fishy, metallic) ho sakta hai. Yeh prakriya garmi, prakash aur dhatu aayanon (vishesh roop se taamba) dwara tez hoti hai.",
+            "autoxidationText": "Unsaturated fatty acids mein double bonds oxidize kar sakte hain, jisse off-flavours (tallowy, fishy, metallic) ho sakta hai. Yeh process heat, light aur metal ions (vishesh roop se copper) dwara tez hoti hai.",
             "crystallizationTitle": "Crystallization",
-            "crystallizationText": "Doodh vasa mein alag-alag pighalne wale binduon ke saath triglycerides ka mishran hota hai. Jab doodh ko thanda kiya jaata hai, to uchch pighalne wale bindu wale triglycerides crystallize ho jaate hain. Yeh prakriya jatil hai aur vibhinn bahurupi roopon (α, β', β) mein ho sakti hai, jo makkhan aur cream jaise utpadon ki banavat aur sthirta ko prabhavit karti hai."
+            "crystallizationText": "Milk fat mein alag-alag melting points ke saath triglycerides ka mixture hota hai. Jab milk ko thanda kiya jaata hai, to high melting point wale triglycerides crystallize ho jaate hain. Yeh process complex hai aur vibhinn polymorphic forms (α, β', β) mein ho sakti hai, jo butter aur cream jaise products ki texture aur stability ko affect karti hai."
         }
     },
     "lactose": {
-      "title": "Lactose (Doodh Chini)",
+      "title": "Lactose (Milk Sugar)",
       "properties": {
-        "title": "Lactose ke Gunn",
-        "p1": "Lactose doodh mein mukhya carbohydrate (4.8-5.2%) hai, jo sachche ghol mein maujood hai. Yeh glucose aur galactose se bana ek disaccharide hai. Lactose sucrose (table sugar) se lagbhag 1/6 guna meetha hota hai.",
-        "p2": "Yeh sukshmajiviyon dwara kinvit hokar lactic acid banata hai, jo dahi aur paneer jaise sanskrt utpadon ke liye avashyak hai. Garam karne par, lactose protein amino samuhon ke saath Maillard pratikriya se guzar sakta hai, jisse browning aur ek paka hua swad hota hai, visheshkar nishphal (sterilized) doodh mein.",
+        "title": "Lactose ki Properties",
+        "p1": "Lactose milk mein main carbohydrate (4.8-5.2%) hai, jo true solution mein maujood hai. Yeh glucose aur galactose se bana ek disaccharide hai. Lactose sucrose (table sugar) se lagbhag 1/6 guna meetha hota hai.",
+        "p2": "Yeh microorganisms dwara ferment hokar lactic acid banata hai, jo dahi aur cheese jaise cultured products ke liye essential hai. Garam karne par, lactose protein amino groups ke saath Maillard reaction se guzar sakta hai, jisse browning aur ek paka hua taste hota hai, visheshkar sterilized milk mein.",
         "lactoseIntolerance": {
             "title": "Lactose Intolerance Kya Hai?",
-            "p1": "Yeh ek aisi sthiti hai jismein sharir 'lactase' नामक enzyme ka paryapt utpadan nahi kar pata. Lactase, lactose ko glucose aur galactose mein todne ke liye zaroori hai taki vah aanton mein avshoshit ho sake. Iske bina, lactose aant mein ferment ho jaata hai, jisse gas, bloating, aur anya paachan sambandhi samasyayein hoti hain."
+            "p1": "Yeh ek aisi condition hai jismein body 'lactase' naamak enzyme ka sufficient production nahi kar pata. Lactase, lactose ko glucose aur galactose mein todne ke liye zaroori hai taki vah aanton mein absorb ho sake. Iske bina, lactose aant mein ferment ho jaata hai, jisse gas, bloating, aur anya digestive issues hoti hain."
         },
         "crystallizationTitle": "Crystallization aur Mutarotation",
-        "crystallizationText1": "Lactose do roopon mein crystallize ho sakta hai, α-hydrate aur β-anhydrous. Jab paani mein ghola jaata hai, to yeh roop ek santulan tak pahunchne tak paraspar parivartit hote hain, is prakriya ko <strong>mutarotation</strong> kaha jaata hai. α-lactose hydrate kam ghulanshil hota hai aur kathor, kirakira crystal bana sakta hai, jisse ice cream aur meetha sanghanit doodh jaise utpadon mein \"sandiness\" dosh ho sakta hai yadi theek se niyantrit nahi kiya jaata hai.",
-        "crystallizationText2": "Mutarotation ki dar taapman aur pH se prabhavit hoti hai. Yeh dairy powder aur sanghanit utpadon ke utpadan mein ek chikni banavat sunishchit karne ke liye ek mahatvapurna karak hai."
+        "crystallizationText1": "Lactose do forms mein crystallize ho sakta hai, α-hydrate aur β-anhydrous. Jab paani mein ghola jaata hai, to yeh forms ek equilibrium tak pahunchne tak interconvert hote hain, is process ko <strong>mutarotation</strong> kaha jaata hai. α-lactose hydrate kam soluble hota hai aur kathor, kirakira crystal bana sakta hai, jisse ice cream aur meetha condensed milk jaise products mein \"sandiness\" defect ho sakta hai yadi theek se control nahi kiya jaata hai.",
+        "crystallizationText2": "Mutarotation ki rate temperature aur pH se affect hoti hai. Yeh dairy powder aur condensed products ke production mein ek smooth texture ensure karne ke liye ek important factor hai."
       }
     },
     "minerals": {
-      "title": "Khanij aur Lavan (Minerals and Salts)",
+      "title": "Minerals aur Salts",
       "composition": {
-        "title": "Khanij Sanrachna aur Vitaran",
-        "p1": "Doodh aahar calcium, magnesium, phosphorus aur potassium ka ek utkrsht srot hai. Doodh mein lavan ek bhang (soluble) charan aur casein micelles se jude ek colloidal charan ke beech ek jatil santulan mein maujood hote hain.",
-        "p2": "Lagbhag do-tihai calcium aur aadha phosphate casein micelles ke bheetar \"colloidal calcium phosphate\" (CCP) ke roop mein bandhe hote hain. Yeh CCP casein micelles ki sanrachna aur sthirta ko banaye rakhne ke liye mahatvapurna hai. Doodh serum mein ghule hue lavan protein sthirta, garmi sthirta aur osmotic dabav sahit vibhinn gunon ko prabhavit karte hain. Yeh 'salt balance', vishesh roop se divalent cations (Ca²⁺, Mg²⁺) ka monovalent cations (Na⁺, K⁺) aur anions (phosphate, citrate) se anupat, nirdharit karta hai ki doodh UHT jaise heat treatment ke dauran sthir rahega ya nahi. Is santulan mein gadbadi se doodh garam karne par fat sakta hai."
+        "title": "Mineral Composition aur Distribution",
+        "p1": "Milk dietary calcium, magnesium, phosphorus aur potassium ka ek excellent source hai. Milk mein salts ek soluble phase aur casein micelles se jude ek colloidal phase ke beech ek complex equilibrium mein maujood hote hain.",
+        "p2": "Lagbhag do-tihai calcium aur aadha phosphate casein micelles ke andar \"colloidal calcium phosphate\" (CCP) ke roop mein bandhe hote hain. Yeh CCP casein micelles ki structure aur stability ko banaye rakhne ke liye important hai. Milk serum mein ghule hue salts protein stability, heat stability aur osmotic pressure sahit vibhinn properties ko affect karte hain. Yeh 'salt balance', vishesh roop se divalent cations (Ca²⁺, Mg²⁺) ka monovalent cations (Na⁺, K⁺) aur anions (phosphate, citrate) se ratio, determine karta hai ki milk UHT jaise heat treatment ke dauran stable rahega ya nahi. Is balance mein gadbadi se milk garam karne par fat sakta hai."
       },
       "trace": {
         "title": "Trace Elements",
-        "p1": "Doodh mein jasta, taamba aur loha jaise kai trace elements hote hain. Inmein se kuch poshan sambandhi hote hain, jabki anya sandushak ho sakte hain. Udaharan ke liye, taamba (Cu) vasa oxidation ke liye ek utprerak ke roop mein kaam kar sakta hai, jisse bahut kam sandrata mein bhi off-flavour ho sakta hai. Isliye, taambe ki mishr dhatuon se bane upkaranon se sandushan se bachna mahatvapurna hai."
+        "p1": "Milk mein zinc, copper aur iron jaise kai trace elements hote hain. Inmein se kuch nutritional hote hain, jabki anya contaminants ho sakte hain. Example ke liye, copper (Cu) fat oxidation ke liye ek catalyst ke roop mein kaam kar sakta hai, jisse bahut kam concentration mein bhi off-flavour ho sakta hai. Isliye, copper alloys se bane instruments se contamination se bachna important hai."
       }
     },
     "vitaminsEnzymes": {
         "title": "Vitamins aur Enzymes",
         "vitamins": {
-            "title": "Doodh mein Vitamins",
-            "p1": "Doodh kai vitaminon ka ek accha srot hai. Vasa mein ghulanshil vitamin (A, D, E, K) doodh ki vasa mein paaye jaate hain, jabki paani mein ghulanshil vitamin (B-complex aur Vitamin C) jaliya charan mein hote hain. Pasteurization kuch adhik garmi ke prati samvedanshil vitamin jaise Vitamin C aur folate ko nasht kar sakta hai."
+            "title": "Milk mein Vitamins",
+            "p1": "Milk kai vitaminon ka ek accha source hai. Fat-soluble vitamins (A, D, E, K) milk fat mein paaye jaate hain, jabki water-soluble vitamins (B-complex aur Vitamin C) aqueous phase mein hote hain. Pasteurization kuch zyada heat-sensitive vitamin jaise Vitamin C aur folate ko nasht kar sakta hai."
         },
         "enzymes": {
-            "title": "Doodh mein Enzymes",
-            "p1": "Doodh mein kai prakritik (native) enzymes hote hain. Kuch mahatvapurna enzymes mein shamil hain:",
+            "title": "Milk mein Enzymes",
+            "p1": "Milk mein kai native enzymes hote hain. Kuch important enzymes mein shamil hain:",
             "list": [
-                { "name": "Lipoprotein Lipase", "desc": "Yadi vasa globules kshatigrast ho jaate hain to hydrolytic rancidity (sabun jaisa swad) paida kar sakta hai. Yeh jyadatar pasteurization dwara nishkriya kar diya jaata hai." },
-                { "name": "Alkaline Phosphatase (ALP)", "desc": "Uchit pasteurization ke liye ek sanketak ke roop mein upyog kiya jaata hai, kyunki yeh pasteurization ke taapman par nasht ho jaata hai. Ek positive ALP test aparyapt pasteurization ya kachche doodh ke contamination ko ingit karta hai." },
-                { "name": "Plasmin", "desc": "Ek garmi pratirodhi protease jo lambe samay tak bhandaran ke dauran UHT doodh mein protein ko tod sakta hai aur age gelation ya kadwahat paida kar sakta hai." },
-                { "name": "Lactoperoxidase (LP)", "desc": "Kachche doodh mein ek prakrtik roganurodhi pranali (LP system) ka hissa. Yeh ALP ki tulna mein adhik garmi pratirodhi hai aur iski anupasthiti doodh ke over-heating ka sanket de sakti hai." },
-                { "name": "Xanthine Oxidase", "desc": "Vasa globule jhillī se juda hua hai. Iski gatividhi kabhi-kabhi oxidative prakriyaon se judi hoti hai." }
+              { "name": "Lipoprotein Lipase", "desc": "Yadi fat globules damage ho jaate hain to hydrolytic rancidity (soapy taste) paida kar sakta hai. Yeh jyadatar pasteurization dwara inactivate kar diya jaata hai." },
+              { "name": "Alkaline Phosphatase (ALP)", "desc": "Proper pasteurization ke liye ek indicator ke roop mein use kiya jaata hai, kyunki yeh pasteurization ke temperature par destroy ho jaata hai. Ek positive ALP test inadequate pasteurization ya kachche doodh ke contamination ko indicate karta hai." },
+              { "name": "Plasmin", "desc": "Ek heat-resistant protease jo lambe samay tak storage ke dauran UHT milk mein protein ko tod sakta hai aur age gelation ya kadwahat paida kar sakta hai." },
+              { "name": "Lactoperoxidase (LP)", "desc": "Kachche doodh mein ek natural antimicrobial system (LP system) ka hissa. Yeh ALP ki tulna mein adhik heat-resistant hai aur iski absence doodh ke over-heating ka sanket de sakti hai." },
+              { "name": "Xanthine Oxidase", "desc": "Fat globule membrane se juda hua hai. Iski activity kabhi-kabhi oxidative processes se judi hoti hai." }
             ]
         }
     },
     "properties": {
-        "title": "Bhautik Gunn (Physical Properties)",
+        "title": "Physical Properties",
         "overview": {
-            "title": "Bhautik Gunno ka Overview",
-            "p1": "Doodh ke bhautik gunn iski jatil sanrachna dwara nirdharit hote hain aur processing aur quality control ke liye mahatvapurna hain."
+            "title": "Physical Properties ka Overview",
+            "p1": "Milk ke physical properties iski complex composition dwara determine hote hain aur processing aur quality control ke liye important hain."
         },
-        "headers": ["Gunn", "Maan", "Mahatva"],
+        "headers": ["Property", "Value", "Significance"],
         "rows": [
-            { "property": "Rang aur Optical Gunn", "value": "Safed se Peela Apardarshi", "details": "Apardarshita (opacity) vasa globules aur casein micelles dwara prakash ke bikharne (light scattering) ke karan hoti hai. Peela rang chare se carotene (ek Vitamin A precursor) ke karan hota hai." },
-            { "property": "Swad (Flavour)", "value": "Sukhद, Thoda Meetha", "details": "Ghatakon ka sanyukt prabhav. Chare, jeevanu vrddhi, ya oxidation se off-flavours viksit ho sakte hain." },
-            { "property": "Refractive Index (20°C par)", "value": "1.3440 - 1.3485", "details": "Kul thos padarthon (Total Solids) ke tvarit anuman aur paani ki milavat ka pata lagane ke liye upyog kiya jaata hai." },
-            { "property": "Density (20°C par)", "value": "Gaay: 1.028-1.032 g/mL, Bhains: 1.030-1.034 g/mL", "details": "Doodh apne thos samagri (SNF) ke karan paani se saghan hota hai. Iska upyog volume ko mass mein badalne aur milavat ki jaanch ke liye lactometer reading mein kiya jaata hai." },
-            { "property": "Viscosity (25°C par)", "value": "~2.0 cP", "details": "Paani se lagbhag doguna chipchipa. Taapman aur sanrachna (vasa, protein) par nirbhar karta hai. Yeh pumping, filtration aur heat transfer jaisi prakriyaon ko prabhavit karta hai. Homogenization viscosity badhata hai." },
-            { "property": "Surface Tension (20°C par)", "value": "50 dyne/cm", "details": "Protein aur mukt fatty acids jaise surfactants ke karan paani (72 dyne/cm) se kam. Yeh doodh ke foaming gunno ko prabhavit karta hai." },
-            { "property": "Freezing Point", "value": "-0.512 se -0.575 °C", "details": "Milavati paani ka pata lagane ke liye sabse vishvasniya sanketak. Ghule hue solids (lactose, minerals) ke karan paani se neeche jamta hai. Paani milane par yeh 0°C ke kareeb aa jaata hai." },
-            { "property": "Boiling Point", "value": "100.17 °C", "details": "Ghule hue thos padarthon ke karan paani se thoda adhik." },
-            { "property": "Acidity (Titratable)", "value": "Gaay: 0.14-0.16% LA, Bhains: 0.17-0.18% LA", "details": "Prakrtik amlata casein, phosphates, citrates aadi ke karan hoti hai. Taze doodh mein lactic acid nahi hota. Iski vrddhi bacterial gatividhi ka sanket hai." },
-            { "property": "pH", "value": "6.5 - 6.7", "details": "Thoda amliya. Kam pH jeevanu kriya (khattapan) ka sujhav deta hai." },
-            { "property": "Heat Stability", "value": "Bhinna hota hai, lavan santulan par nirbhar karta hai", "details": "Jamavat (coagulation) ke bina uchch taapman ka samna karne ki kshamta. Nishphal (sterilized) doodh utpadon ke liye mahatvapurna." },
-            { "property": "Redox Potential (Eh)", "value": "+0.2 se +0.3 Volt", "details": "Oxidation aur kam karne wale agenton ke beech santulan ko ingit karta hai. Ubalne ya microbial vrddhi ke karan ghatata hai." }
+          { "property": "Color aur Optical Properties", "value": "White se Yellow Opaque", "details": "Opacity (apardarshita) fat globules aur casein micelles dwara light scattering ke karan hoti hai. Yellow color chare se carotene (ek Vitamin A precursor) ke karan hota hai." },
+          { "property": "Taste (Flavour)", "value": "Pleasant, Thoda Meetha", "details": "Components ka combined effect. Chare, bacterial growth, ya oxidation se off-flavours develop ho sakte hain." },
+          { "property": "Refractive Index (20°C par)", "value": "1.3440 - 1.3485", "details": "Total Solids ke quick estimation aur paani ki adulteration ka pata lagane ke liye use kiya jaata hai." },
+          { "property": "Density (20°C par)", "value": "Cow: 1.028-1.032 g/mL, Buffalo: 1.030-1.034 g/mL", "details": "Milk apne solid content (SNF) ke karan paani se denser hota hai. Iska use volume ko mass mein badalne aur adulteration ki jaanch ke liye lactometer reading mein kiya jaata hai." },
+          { "property": "Viscosity (25°C par)", "value": "~2.0 cP", "details": "Paani se lagbhag doguna viscous. Temperature aur composition (fat, protein) par depend karta hai. Yeh pumping, filtration aur heat transfer jaisi processes ko affect karta hai. Homogenization viscosity badhata hai." },
+          { "property": "Surface Tension (20°C par)", "value": "50 dyne/cm", "details": "Protein aur free fatty acids jaise surfactants ke karan paani (72 dyne/cm) se kam. Yeh milk ke foaming properties ko affect karta hai." },
+          { "property": "Freezing Point", "value": "-0.512 se -0.575 °C", "details": "Milavati paani ka pata lagane ke liye sabse reliable indicator. Ghule hue solids (lactose, minerals) ke karan paani se neeche jamta hai. Paani milane par yeh 0°C ke kareeb aa jaata hai." },
+          { "property": "Boiling Point", "value": "100.17 °C", "details": "Ghule hue solids ke karan paani se thoda adhik." },
+          { "property": "Acidity (Titratable)", "value": "Cow: 0.14-0.16% LA, Buffalo: 0.17-0.18% LA", "details": "Natural acidity casein, phosphates, citrates aadi ke karan hoti hai. Taze doodh mein lactic acid nahi hota. Iski vrddhi bacterial activity ka sanket hai." },
+          { "property": "pH", "value": "6.5 - 6.7", "details": "Thoda acidic. Kam pH bacterial action (khattapan) ka suggestion deta hai." },
+          { "property": "Heat Stability", "value": "Vary karta hai, salt balance par depend karta hai", "details": "Coagulation ke bina high temperature ka samna karne ki ability. Sterilized milk products ke liye important." },
+          { "property": "Redox Potential (Eh)", "value": "+0.2 se +0.3 Volt", "details": "Oxidation aur reducing agents ke beech balance ko indicate karta hai. Ubalne ya microbial growth ke karan ghatata hai." }
         ]
     },
     "processingEffects": {
-        "title": "Processing ka Doodh ke Ghatakon par Prabhav",
-        "intro": "Dairy processing doodh ko surakshit aur sthir banati hai, lekin yeh iske rasayanik aur bhautik gunon ko bhi badal deti hai:",
+        "title": "Processing ka Milk ke Components par Effect",
+        "intro": "Dairy processing milk ko safe aur stable banati hai, lekin yeh iske chemical aur physical properties ko bhi change kar deti hai:",
         "sections": [
             {
                 "name": "Heat Treatment (Pasteurization / Sterilization)",
-                "desc": "Garmi upchar mukhya roop se whey proteins ko denature karta hai, jisse ve kam ghulanshil ho jaate hain. Vitamin C aur B-complex jaise kuch vitamin nasht ho jaate hain. Uchch taapman par (UHT/sterilization), Maillard reaction (lactose + protein) hota hai, jisse halka bhura rang aur 'paka hua' swad aata hai."
+                "desc": "Heat treatment mukhya roop se whey proteins ko denature karta hai, jisse ve kam soluble ho jaate hain. Vitamin C aur B-complex jaise kuch vitamin nasht ho jaate hain. High temperature par (UHT/sterilization), Maillard reaction (lactose + protein) hota hai, jisse halka bhura rang aur 'paka hua' taste aata hai."
             },
             {
                 "name": "Homogenization",
-                "desc": "Yeh ek mechanical prakriya hai jo doodh ko uchch dabav par ek chhote se chhidra se gujar kar vasa ke globules ko todti hai. Isse doodh adhik safed dikhta hai, cream ki parat nahi jamti, aur texture behtar hota hai. Halanki, nayi bani vasa ki satah lipase enzyme ke hamle ke liye adhik samvedanshil ho jaati hai, isliye homogenization se pehle pasteurization zaroori hai."
+                "desc": "Yeh ek mechanical process hai jo milk ko high pressure par ek chhote se orifice se gujar kar fat ke globules ko todti hai. Isse milk adhik white dikhta hai, cream ki layer nahi jamti, aur texture behtar hota hai. Halanki, nayi bani fat ki surface lipase enzyme ke attack ke liye adhik susceptible ho jaati hai, isliye homogenization se pehle pasteurization zaroori hai."
             },
             {
-                "name": "Fermentation (Kinvan)",
-                "desc": "Dahi jaise utpadon mein, starter culture ke bacteria lactose ko lactic acid mein badal dete hain. Isse pH kam hota hai, jo casein micelle ko unke isoelectric point (pH 4.6) par coagulate kar deta hai, jisse ek sthir gel (dahi) banta hai. Is dauran, acetaldehyde jaise flavor compounds bhi bante hain."
+                "name": "Fermentation",
+                "desc": "Yogurt jaise products mein, starter culture ke bacteria lactose ko lactic acid mein badal dete hain. Isse pH kam hota hai, jo casein micelle ko unke isoelectric point (pH 4.6) par coagulate kar deta hai, jisse ek stable gel (dahi) banta hai. Is dauran, acetaldehyde jaise flavor compounds bhi bante hain."
             }
         ]
     },
     "other": {
-      "title": "Anya Ghatak aur Sandushak",
+      "title": "Anya Components aur Contaminants",
       "minor": {
-        "title": "Chhote Prakrtik Ghatak",
+        "title": "Chhote Natural Components",
         "list": [
-          { "name": "Organic Acids", "desc": "Doodh mein citric acid aur doosron ki trace matra hoti hai. Jeevanu kriya lactic acid ko badha sakti hai." },
-          { "name": "Non-Protein Nitrogen (NPN) Compounds", "desc": "Kul nitrogen ka lagbhag 5% gair-protein nitrogen hota hai, jismein urea, creatinine aur mukt amino acids shamil hain. Iski matra doodh mein milavat (jaise urea milana) ka pata lagane mein madad karti hai." },
-          { "name": "Gases", "desc": "Taze nikale gaye doodh mein ghuli hui gasen hoti hain, mukhya roop se carbon dioxide. Hawa ke sampark mein aane par, CO₂ kho jaati hai aur O₂/N₂ prapt hoti hai. Ghuli hui oxygen oxidation mein yogdan kar sakti hai." }
+          { "name": "Organic Acids", "desc": "Milk mein citric acid aur doosron ki trace amounts hoti hai. Bacterial action lactic acid ko badha sakti hai." },
+          { "name": "Non-Protein Nitrogen (NPN) Compounds", "desc": "Total nitrogen ka lagbhag 5% non-protein nitrogen hota hai, jismein urea, creatinine aur free amino acids shamil hain. Iski matra milk mein milavat (jaise urea milana) ka pata lagane mein madad karti hai." },
+          { "name": "Gases", "desc": "Taze nikale gaye milk mein ghuli hui gasen hoti hain, mukhya roop se carbon dioxide. Hawa ke sampark mein aane par, CO₂ kho jaati hai aur O₂/N₂ prapt hoti hai. Ghuli hui oxygen oxidation mein yogdan kar sakti hai." }
         ]
       },
       "contaminants": {
-        "title": "Sandushak (Contaminants)",
-        "p1": "Ve padarth jo anjane mein doodh mein pravesh kar sakte hain:",
+        "title": "Contaminants",
+        "p1": "Ve substances jo anjane mein milk mein enter kar sakte hain:",
         "list": [
-          { "name": "Gaay se", "desc": "Yadi gaay ko mastitis hai, to rakt ke ghatak aur somatic koshikayein doodh mein pravesh kar sakti hain. Upchar ke liye upyog ki jaane wali davayein (antibiotics) bhi doodh mein ja sakti hain." },
-          { "name": "Chare se", "desc": "Keetnashak, mycotoxins (chare par fafundi se), aur bhari dhatuyen doodh mein sthanantarit ho sakti hain." },
-          { "name": "Handling se", "desc": "Safai agent, sanitizers, aur dhatu aayan (jaise upkaranon se taamba) doodh ko dushit kar sakte hain." },
-          { "name": "Radionuclides", "desc": "Radioactive isotopes (jaise Strontium-90, Iodine-131) yadi gaay dushit chara ya paani ka sevan karti hai to doodh mein pravesh kar sakte hain." }
+          { "name": "Cow se", "desc": "Yadi cow ko mastitis hai, to blood ke components aur somatic cells milk mein enter kar sakte hain. Treatment ke liye use ki jaane wali dawaiyan (antibiotics) bhi milk mein ja sakti hain." },
+          { "name": "Feed se", "desc": "Pesticides, mycotoxins (feed par molds se), aur heavy metals milk mein transfer ho sakte hain." },
+          { "name": "Handling se", "desc": "Cleaning agents, sanitizers, aur metal ions (jaise instruments se copper) milk ko contaminate kar sakte hain." },
+          { "name": "Radionuclides", "desc": "Radioactive isotopes (jaise Strontium-90, Iodine-131) yadi cow contaminated feed ya paani ka sevan karti hai to milk mein enter kar sakte hain." }
         ]
       }
     }
@@ -390,9 +389,9 @@ export const milkChemistryContent = {
             "title": "Functional Properties of Whey Proteins",
             "p1": "Whey proteins are widely used in the food industry for their unique properties:",
             "properties": [
-                { "name": "Gelling:", "desc": "Upon heating, whey proteins can denature and form a gel network, providing structure to products." },
-                { "name": "Foaming:", "desc": "They can form a film around air bubbles to create stable foams." },
-                { "name": "Emulsification:", "desc": "Whey proteins help prevent oil and water from separating, creating stable emulsions." }
+              { "name": "Gelling:", "desc": "Upon heating, whey proteins can denature and form a gel network, providing structure to products." },
+              { "name": "Foaming:", "desc": "They can form a film around air bubbles to create stable foams." },
+              { "name": "Emulsification:", "desc": "Whey proteins help prevent oil and water from separating, creating stable emulsions." }
             ]
         },
         "fractionsTitle": "Whey Protein Fractions",
@@ -472,11 +471,11 @@ export const milkChemistryContent = {
             "title": "Enzymes in Milk",
             "p1": "Milk contains several native enzymes. Some important ones include:",
             "list": [
-                { "name": "Lipoprotein Lipase", "desc": "Can cause hydrolytic rancidity (soapy flavor) if fat globules are damaged. It is mostly inactivated by pasteurization." },
-                { "name": "Alkaline Phosphatase (ALP)", "desc": "Used as an indicator for proper pasteurization, as it is destroyed at pasteurization temperatures. A positive ALP test indicates inadequate pasteurization or raw milk contamination." },
-                { "name": "Plasmin", "desc": "A heat-resistant protease that can break down protein and cause age gelation or bitterness in UHT milk during long storage." },
-                { "name": "Lactoperoxidase (LP)", "desc": "Part of a natural antimicrobial system (the LP system) in raw milk. It is more heat-resistant than ALP and its absence can indicate overheating of milk." },
-                { "name": "Xanthine Oxidase", "desc": "Associated with the fat globule membrane. Its activity is sometimes linked to oxidative processes." }
+              { "name": "Lipoprotein Lipase", "desc": "Can cause hydrolytic rancidity (soapy flavor) if fat globules are damaged. It is mostly inactivated by pasteurization." },
+              { "name": "Alkaline Phosphatase (ALP)", "desc": "Used as an indicator for proper pasteurization, as it is destroyed at pasteurization temperatures. A positive ALP test indicates inadequate pasteurization or raw milk contamination." },
+              { "name": "Plasmin", "desc": "A heat-resistant protease that can break down protein and cause age gelation or bitterness in UHT milk during long storage." },
+              { "name": "Lactoperoxidase (LP)", "desc": "Part of a natural antimicrobial system (the LP system) in raw milk. It is more heat-resistant than ALP and its absence can indicate overheating of milk." },
+              { "name": "Xanthine Oxidase", "desc": "Associated with the fat globule membrane. Its activity is sometimes linked to oxidative processes." }
             ]
         }
     },
@@ -488,18 +487,18 @@ export const milkChemistryContent = {
         },
         "headers": ["Property", "Value", "Significance"],
         "rows": [
-            { "property": "Colour and optical properties", "value": "White to yellow opaque", "details": "Opacity is due to light scattering by fat globules and casein micelles. The yellow color is due to carotene (a Vitamin A precursor) from feed." },
-            { "property": "Flavour", "value": "Pleasant, slightly sweet", "details": "Combined effect of components. Off-flavors can develop from feed, bacterial growth, or oxidation." },
-            { "property": "Refractive Index (at 20°C)", "value": "1.3440 - 1.3485", "details": "Used for quick estimation of total solids and to detect water adulteration." },
-            { "property": "Density (at 20°C)", "value": "Cow: 1.028-1.032 g/mL, Buffalo: 1.030-1.034 g/mL", "details": "Milk is denser than water due to its solid content (SNF). Used in lactometer readings to check for adulteration and to convert volume to mass." },
-            { "property": "Viscosity (at 25°C)", "value": "~2.0 cP", "details": "About twice as viscous as water. Depends on temperature and composition. It affects processes like pumping, filtration, and heat transfer. Homogenization increases viscosity." },
-            { "property": "Surface Tension (at 20°C)", "value": "50 dyne/cm", "details": "Lower than water (72 dyne/cm) due to surfactants like proteins and free fatty acids. This affects the foaming properties of milk." },
-            { "property": "Freezing Point", "value": "-0.512 to -0.575 °C", "details": "The most reliable indicator for detecting added water. Milk freezes below 0°C due to dissolved solids (lactose, minerals). Adding water brings the freezing point closer to 0°C." },
-            { "property": "Boiling Point", "value": "100.17 °C", "details": "Slightly higher than water due to dissolved solids." },
-            { "property": "Acidity (Titratable)", "value": "Cow: 0.14-0.16% LA, Buffalo: 0.17-0.18% LA", "details": "Natural acidity is due to casein, phosphates, citrates, etc. Fresh milk has no lactic acid. An increase indicates bacterial activity." },
-            { "property": "pH", "value": "6.5 - 6.7", "details": "Slightly acidic. Lower pH suggests bacterial action (souring)." },
-            { "property": "Heat Stability", "value": "Varies, depends on salt balance", "details": "Ability to withstand high temperatures without coagulation. Crucial for sterilized milk products." },
-            { "property": "Redox Potential (Eh)", "value": "+0.2 to +0.3 volts", "details": "Indicates the balance between oxidizing and reducing agents. Decreases upon boiling or due to microbial growth." }
+          { "property": "Colour and optical properties", "value": "White to yellow opaque", "details": "Opacity is due to light scattering by fat globules and casein micelles. The yellow color is due to carotene (a Vitamin A precursor) from feed." },
+          { "property": "Flavour", "value": "Pleasant, slightly sweet", "details": "Combined effect of components. Off-flavors can develop from feed, bacterial growth, or oxidation." },
+          { "property": "Refractive Index (at 20°C)", "value": "1.3440 - 1.3485", "details": "Used for quick estimation of total solids and to detect water adulteration." },
+          { "property": "Density (at 20°C)", "value": "Cow: 1.028-1.032 g/mL, Buffalo: 1.030-1.034 g/mL", "details": "Milk is denser than water due to its solid content (SNF). Used in lactometer readings to check for adulteration and to convert volume to mass." },
+          { "property": "Viscosity (at 25°C)", "value": "~2.0 cP", "details": "About twice as viscous as water. Depends on temperature and composition. It affects processes like pumping, filtration, and heat transfer. Homogenization increases viscosity." },
+          { "property": "Surface Tension (at 20°C)", "value": "50 dyne/cm", "details": "Lower than water (72 dyne/cm) due to surfactants like proteins and free fatty acids. This affects the foaming properties of milk." },
+          { "property": "Freezing Point", "value": "-0.512 to -0.575 °C", "details": "The most reliable indicator for detecting added water. Milk freezes below 0°C due to dissolved solids (lactose, minerals). Adding water brings the freezing point closer to 0°C." },
+          { "property": "Boiling Point", "value": "100.17 °C", "details": "Slightly higher than water due to dissolved solids." },
+          { "property": "Acidity (Titratable)", "value": "Cow: 0.14-0.16% LA, Buffalo: 0.17-0.18% LA", "details": "Natural acidity is due to casein, phosphates, citrates, etc. Fresh milk has no lactic acid. An increase indicates bacterial activity." },
+          { "property": "pH", "value": "6.5 - 6.7", "details": "Slightly acidic. Lower pH suggests bacterial action (souring)." },
+          { "property": "Heat Stability", "value": "Varies, depends on salt balance", "details": "Ability to withstand high temperatures without coagulation. Crucial for sterilized milk products." },
+          { "property": "Redox Potential (Eh)", "value": "+0.2 to +0.3 volts", "details": "Indicates the balance between oxidizing and reducing agents. Decreases upon boiling or due to microbial growth." }
         ]
     },
     "processingEffects": {
