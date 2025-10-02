@@ -892,7 +892,7 @@ function TwoComponentStandardizationCalc() {
         Fc: '40', CLRc: '10', // Cream
         Fr: '6', CLRr: '30',   // Rich Milk
         Fs: '0.1', CLRs: '27', // Skim Milk
-        smpSnf: '96', smpFat: '1'
+        smpSnf: '96', smpFat: '.5'
     });
     const [results, setResults] = useState<any>(null);
     const [error, setError] = useState<string | null>(null);
@@ -1039,7 +1039,7 @@ function TwoComponentStandardizationCalc() {
                         <MemoizedInputField label="Skim Milk CLR (CLRₛ)" value={inputs.CLRs} name="CLRs" setter={handleInputChange} />
                     </>)}
                 </div>
-                 <p className="text-xs text-muted-foreground mt-2">Note: Water (0% Fat, 0 CLR) and SMP (1% Fat, 96% SNF) will be used automatically for fine-tuning.</p>
+                 <p className="text-xs text-muted-foreground mt-2">Note: Water (0% Fat, 0 CLR) and SMP (.5% Fat, 96% SNF) will be used automatically for fine-tuning.</p>
             </div>
 
             <Button onClick={calculate} className="w-full mt-4">Calculate</Button>
