@@ -1,7 +1,6 @@
 'use server';
 /**
  * @fileOverview Expert AI flow with quota management, caching, and error handling
- * @description Optimized flow to prevent quota exhaustion and improve performance
  */
 
 import { ai, DEFAULT_MODEL } from '@/ai/genkit';
@@ -29,14 +28,14 @@ interface QuotaTracker {
 // CONFIGURATION CONSTANTS
 // ================================
 
-const MAX_DAILY_REQUESTS = 900;        // 90% of 1000 (safety buffer)
-const MAX_REQUESTS_PER_MINUTE = 15;    // Rate limiting
-const CACHE_TTL = 1800000;             // 30 minutes in milliseconds
-const MAX_CACHE_SIZE = 100;            // Maximum cached responses
-const MAX_HISTORY_MESSAGES = 4;        // Keep only last 4 messages
+const MAX_DAILY_REQUESTS = 900;
+const MAX_REQUESTS_PER_MINUTE = 15;
+const CACHE_TTL = 1800000; // 30 minutes
+const MAX_CACHE_SIZE = 100;
+const MAX_HISTORY_MESSAGES = 4;
 
 // ================================
-// STATE MANAGEMENT (Server-side)
+// STATE MANAGEMENT
 // ================================
 
 let dailyQuota: QuotaTracker = {
@@ -51,9 +50,6 @@ const requestTimestamps: number[] = [];
 // QUOTA & RATE LIMITING
 // ================================
 
-/**
- * Reset quota counter if it's a new day
- */
 function resetQuotaIfNeeded(): void {
   const today = new Date().toDateString();
   
@@ -63,10 +59,6 @@ function resetQuotaIfNeeded(): void {
   }
 }
 
-/**
- * Check if daily quota has been exceeded
- * @throws Error if quota exceeded
- */
 function checkDailyQuota(): void {
   resetQuotaIfNeeded();
   
@@ -78,15 +70,10 @@ function checkDailyQuota(): void {
   }
 }
 
-/**
- * Check rate limiting (requests per minute)
- * @throws Error if rate limit exceeded
- */
 function checkRateLimit(): void {
   const now = Date.now();
   const oneMinuteAgo = now - 60000;
   
-  // Remove old timestamps
   while (requestTimestamps.length > 0 && requestTimestamps[0] < oneMinuteAgo) {
     requestTimestamps.shift();
   }
@@ -101,9 +88,6 @@ function checkRateLimit(): void {
   requestTimestamps.push(now);
 }
 
-/**
- * Increment the daily quota counter
- */
 function incrementQuota(): void {
   dailyQuota.count++;
   console.log(`📊 API calls today: ${dailyQuota.count}/${MAX_DAILY_REQUESTS}`);
@@ -113,9 +97,6 @@ function incrementQuota(): void {
 // CACHING SYSTEM
 // ================================
 
-/**
- * Generate cache key from input (excluding history)
- */
 function generateCacheKey(input: AskExpertInput): string {
   const questionSnippet = input.question
     .trim()
@@ -125,9 +106,6 @@ function generateCacheKey(input: AskExpertInput): string {
   return `${input.expertName}:${input.specialization}:${questionSnippet}:${input.language}`;
 }
 
-/**
- * Get cached response if available and not expired
- */
 function getCachedResponse(cacheKey: string): any | null {
   const cached = responseCache.get(cacheKey);
   
@@ -144,11 +122,7 @@ function getCachedResponse(cacheKey: string): any | null {
   return cached.data;
 }
 
-/**
- * Store response in cache with LRU eviction
- */
 function setCachedResponse(cacheKey: string, data: any): void {
-  // LRU eviction if cache is full
   if (responseCache.size >= MAX_CACHE_SIZE) {
     const firstKey = responseCache.keys().next().value;
     responseCache.delete(firstKey);
@@ -165,12 +139,6 @@ function setCachedResponse(cacheKey: string, data: any): void {
 // HISTORY MANAGEMENT
 // ================================
 
-/**
- * Truncate conversation history to save tokens
- * @param history - Full conversation history
- * @param maxMessages - Maximum messages to keep (default: 4)
- * @returns Truncated history array
- */
 function truncateHistory(
   history: any[] | undefined, 
   maxMessages: number = MAX_HISTORY_MESSAGES
@@ -192,14 +160,11 @@ function truncateHistory(
 // GENKIT PROMPT & FLOW
 // ================================
 
-/**
- * Define the expert support prompt
- */
 const expertSupportPrompt = ai.definePrompt({
   name: 'expertSupportPrompt',
   input: { schema: AskExpertInputSchema },
   output: { schema: AskExpertOutputSchema },
-  model: DEFAULT_MODEL, // ✅ Uses consistent model from config
+  model: DEFAULT_MODEL,
   
   config: {
     temperature: 0.7,
@@ -238,9 +203,6 @@ const expertSupportPrompt = ai.definePrompt({
 Provide a comprehensive, expert-level answer considering the conversation context above.`,
 });
 
-/**
- * Define the expert support flow
- */
 const expertSupportFlow = ai.defineFlow(
   {
     name: 'expertSupportFlow',
@@ -250,7 +212,6 @@ const expertSupportFlow = ai.defineFlow(
   async (input) => {
     const { history, ...restOfInput } = input;
     
-    // ✅ Truncate history to reduce token consumption
     const recentHistory = truncateHistory(history);
     
     try {
@@ -276,9 +237,6 @@ const expertSupportFlow = ai.defineFlow(
 // RETRY LOGIC
 // ================================
 
-/**
- * Execute operation with automatic retry on transient failures
- */
 async function executeWithRetry<T>(
   operation: () => Promise<T>,
   maxRetries: number = 2
@@ -292,17 +250,14 @@ async function executeWithRetry<T>(
     } catch (error: any) {
       lastError = error;
       
-      // Don't retry on quota/rate limit errors
       if (error.status === 429 || error.message?.includes('quota') || error.message?.includes('limit')) {
         throw error;
       }
       
-      // Don't retry on bad input
       if (error.status === 400) {
         throw error;
       }
       
-      // Retry on server errors with exponential backoff
       if (attempt < maxRetries) {
         const delay = Math.pow(2, attempt) * 1000;
         console.log(`⚠️ Attempt ${attempt} failed, retrying in ${delay}ms...`);
@@ -315,25 +270,16 @@ async function executeWithRetry<T>(
 }
 
 // ================================
-// MAIN EXPORT FUNCTION
+// MAIN EXPORT - SERVER ACTION
 // ================================
 
-/**
- * Ask expert a question with full error handling and optimization
- * @param input - Expert question input
- * @returns Expert's response
- */
 export async function askExpert(input: AskExpertInput) {
   const startTime = Date.now();
   
   try {
-    // ✅ Step 1: Check rate limiting
     checkRateLimit();
-    
-    // ✅ Step 2: Check daily quota
     checkDailyQuota();
     
-    // ✅ Step 3: Check cache first
     const cacheKey = generateCacheKey(input);
     const cachedResult = getCachedResponse(cacheKey);
     
@@ -341,12 +287,10 @@ export async function askExpert(input: AskExpertInput) {
       return cachedResult;
     }
     
-    // ✅ Step 4: Make API call with retry logic
     const result = await executeWithRetry(
       () => expertSupportFlow(input)
     );
     
-    // ✅ Step 5: Update quota and cache result
     incrementQuota();
     setCachedResponse(cacheKey, result);
     
@@ -359,7 +303,6 @@ export async function askExpert(input: AskExpertInput) {
     const duration = Date.now() - startTime;
     console.error(`❌ Request failed after ${duration}ms:`, error.message);
     
-    // ✅ User-friendly error messages
     if (error.status === 429 || error.message?.includes('quota')) {
       throw new Error(
         'API limit पूरी हो गई है। कृपया बाद में प्रयास करें।\n\n' +
@@ -368,10 +311,9 @@ export async function askExpert(input: AskExpertInput) {
     }
     
     if (error.message?.includes('limit') || error.message?.includes('तेज़ी')) {
-      throw error; // Already has user-friendly message
+      throw error;
     }
     
-    // Generic error for other cases
     throw new Error(
       'एक त्रुटि हुई। कृपया पुनः प्रयास करें।\n\n' +
       'An error occurred. Please try again.'
@@ -380,14 +322,13 @@ export async function askExpert(input: AskExpertInput) {
 }
 
 // ================================
-// UTILITY FUNCTIONS (for monitoring)
+// ✅ UTILITY FUNCTIONS - NOW ASYNC
 // ================================
 
 /**
  * Get current quota status
- * Useful for monitoring and debugging
  */
-export function getQuotaStatus() {
+export async function getQuotaStatus() {
   resetQuotaIfNeeded();
   
   return {
@@ -401,9 +342,8 @@ export function getQuotaStatus() {
 
 /**
  * Clear all cached responses
- * Useful for debugging or manual cache management
  */
-export function clearCache() {
+export async function clearCache() {
   const size = responseCache.size;
   responseCache.clear();
   console.log(`🗑️ Cleared ${size} cache entries`);
@@ -417,11 +357,11 @@ export function clearCache() {
 /**
  * Get cache statistics
  */
-export function getCacheStats() {
+export async function getCacheStats() {
   return {
     size: responseCache.size,
     maxSize: MAX_CACHE_SIZE,
-    ttl: CACHE_TTL / 1000, // in seconds
+    ttl: CACHE_TTL / 1000,
     usage: Math.round((responseCache.size / MAX_CACHE_SIZE) * 100),
   };
 }
