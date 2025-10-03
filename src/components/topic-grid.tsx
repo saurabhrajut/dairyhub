@@ -137,14 +137,6 @@ const topics: Topic[] = [
   { id: 'cip-process', title: 'CIP Process', description: 'Cleaning-In-Place Guide', category: 'process', icon: Recycle, badge: 'New', modal: CipProcessModal, isPro: true, color: 'from-blue-100 to-cyan-300' },
   { id: 'etp', title: 'ETP', description: 'Wastewater Treatment', category: 'process', icon: Recycle, badge: 'New', modal: EtpModal, isPro: true, color: 'from-green-100 to-lime-200' },
   { id: 'about-us', title: 'About Us', description: 'Our Mission & Vision', category: 'production', icon: Users, modal: AboutUsModal, isPro: false, color: 'from-slate-100 to-stone-200' },
-];
-
-const filters = [
-  { label: "All", value: "all" },
-  { label: "Production", value: "production" },
-  { label: "Process", value: "process" },
-  { label: "Quality", value: "quality" },
-];
 
 export function TopicGrid() {
   const [activeFilter, setActiveFilter] = useState("all");
