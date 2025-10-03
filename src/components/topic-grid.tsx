@@ -137,19 +137,19 @@ const topics: Topic[] = [
   { id: 'cip-process', title: 'CIP Process', description: 'Cleaning-In-Place Guide', category: 'process', icon: Recycle, badge: 'New', modal: CipProcessModal, isPro: true, color: 'from-blue-100 to-cyan-300' },
   { id: 'etp', title: 'ETP', description: 'Wastewater Treatment', category: 'process', icon: Recycle, badge: 'New', modal: EtpModal, isPro: true, color: 'from-green-100 to-lime-200' },
   { id: 'about-us', title: 'About Us', description: 'Our Mission & Vision', category: 'production', icon: Users, modal: AboutUsModal, isPro: false, color: 'from-slate-100 to-stone-200' },
+];
 
 export function TopicGrid() {
-  const [activeFilter, setActiveFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const { user } = useAuth();
   const { toast } = useToast();
   const router = useRouter();
 
+  // Filter logic - sirf search ke liye, category filter removed
   const filteredTopics = topics.filter((topic) => {
-    const matchesFilter = activeFilter === "all" || topic.category === activeFilter;
     const matchesSearch = topic.title.toLowerCase().includes(searchTerm.toLowerCase()) || topic.description.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesFilter && matchesSearch;
+    return matchesSearch;
   });
 
   const openModal = (id: string) => {
@@ -169,18 +169,7 @@ export function TopicGrid() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4">
-          {filters.map((filter) => (
-            <Button
-              key={filter.value}
-              variant={activeFilter === filter.value ? "default" : "secondary"}
-              onClick={() => setActiveFilter(filter.value)}
-              className="rounded-full px-5 transition-all shadow-sm data-[variant=default]:shadow-lg"
-            >
-              {filter.label}
-            </Button>
-          ))}
-        </div>
+        {/* Filter buttons removed */}
       </div>
 
       <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-4 sm:gap-6">
