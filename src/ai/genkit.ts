@@ -1,6 +1,5 @@
-
-import {genkit} from 'genkit';
-import {googleAI} from '@genkit-ai/googleai';
+import { genkit } from 'genkit';
+import { googleAI, gemini25FlashLite } from '@genkit-ai/googleai';
 
 const geminiApiKey = process.env.GEMINI_API_KEY;
 if (!geminiApiKey) {
@@ -15,5 +14,5 @@ export const ai = genkit({
       apiKey: geminiApiKey,
     }),
   ],
-  model: 'googleai/gemini-1.5-flash',
+  model: gemini25FlashLite, // ✅ Ye perfect hai
 });
