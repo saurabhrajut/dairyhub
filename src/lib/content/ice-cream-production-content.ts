@@ -1,158 +1,159 @@
 
 export const iceCreamProductionContent = {
     hi: {
-        title: "आइसक्रीम उत्पादन",
-        description: "आइसक्रीम के विज्ञान और इंजीनियरिंग के लिए एक व्यापक गाइड।",
+        title: "Ice Cream Production",
+        description: "Ice cream ke science aur engineering ke liye ek comprehensive guide.",
         tabs: {
-            intro: "परिचय",
-            diff: "आइसक्रीम बनाम फ्रोजन डेजर्ट",
-            process: "निर्माण प्रक्रिया",
-            ingredients: "सामग्री की कार्यक्षमता",
-            factors: "मुख्य कारक",
-            crystallization: "क्रिस्टलीकरण",
-            other: "अन्य कारक",
-            implementation: "रणनीतियाँ",
-            conclusion: "निष्कर्ष"
+            intro: "Introduction",
+            diff: "Ice Cream vs Frozen Dessert",
+            process: "Manufacturing Process",
+            ingredients: "Ingredient Functionality",
+            factors: "Key Factors",
+            crystallization: "Crystallization",
+            other: "Other Factors",
+            implementation: "Strategies",
+            conclusion: "Conclusion"
         },
         summary: {
-            title: "कार्यकारी सारांश",
-            content: "आइसक्रीम एक अत्यंत जटिल कोलाइडल प्रणाली का प्रतिनिधित्व करती है, जहाँ ठोस बर्फ के क्रिस्टल, एक तरल बिना जमे चीनी का घोल, बिखरे हुए वसा के ग्लोब्यूल्स, और फंसी हुई हवा की कोशिकाओं का नाजुक संतुलन इसके संवेदी गुणों और स्थिरता को निर्धारित करता है। यह रिपोर्ट आइसक्रीम उत्पादन और भंडारण को नियंत्रित करने वाले वैज्ञानिक सिद्धांतों और इंजीनियरिंग प्रथाओं की एक व्यापक परीक्षा प्रदान करती है। यह सामग्री सम्मिश्रण और पाश्चुरीकरण से लेकर होमोजेनाइजेशन, एजिंग, फ्रीजिंग और हार्डनिंग तक के अनुक्रमिक निर्माण चरणों का विवरण देती है, प्रत्येक चरण में होने वाले भौतिक-रासायनिक परिवर्तनों को स्पष्ट करती है। स्टेबलाइजर्स और इमल्सीफायर्स जैसे प्रमुख अवयवों की कार्यात्मक भूमिकाओं और बनावट, पिघलने के प्रतिरोध और शेल्फ जीवन पर उनके गहरे प्रभावों पर विशेष ध्यान दिया जाता है। इसके अलावा, वसा इमल्शन स्थिरता, जल गतिविधि, और भंडारण के दौरान क्रिस्टलीकरण की रोकथाम जैसे महत्वपूर्ण कारकों का गहन विश्लेषण किया जाता है। रिपोर्ट इस बात पर जोर देती है कि बेहतर आइसक्रीम गुणवत्ता और विस्तारित स्थिरता प्राप्त करने के लिए सूत्रीकरण, प्रसंस्करण और पर्यावरण नियंत्रण के लिए एक सटीक, समग्र दृष्टिकोण की आवश्यकता होती है, जो आइसक्रीम बनाने की कला को एक भविष्य कहनेवाला विज्ञान में बदल देता है।"
+            title: "Executive Summary",
+            content: "Ice cream ek bahut complex colloidal system represent karta hai, jahan solid ice crystals, liquid unfrozen sugar solution, dispersed fat globules, aur entrapped air cells ka delicate balance iski sensory attributes aur stability determine karta hai. Ye report ice cream production aur storage ko govern karne wale scientific principles aur engineering practices ki comprehensive examination provide karti hai. Ye ingredient blending aur pasteurization se lekar homogenization, aging, freezing aur hardening tak ke sequential manufacturing steps detail karti hai, har stage par hone wale physicochemical transformations ko clarify karti hai. Stabilizers aur emulsifiers jaise key ingredients ki functional roles aur texture, melt resistance aur shelf life par unke profound effects par special focus diya gaya hai. Furthermore, fat emulsion stability, water activity, aur storage ke dauran crystallization ki prevention jaise critical factors ka thorough analysis kiya gaya hai. Report emphasize karti hai ki superior ice cream quality aur extended stability achieve karne ke liye formulation, processing aur environmental control ke liye ek precise, holistic approach ki zarurat hoti hai, jo ice cream banane ki art ko predictive science mein transform kar deti hai."
         },
         introduction: {
-            title: "परिचय: आइसक्रीम एक बहु-चरण प्रणाली के रूप में",
-            p1: "आइसक्रीम एक परिष्कृत बहु-चरण खाद्य उत्पाद है, जो ठोस बर्फ के क्रिस्टल, एक तरल बिना जमे चीनी के घोल (सीरम चरण), बिखरे हुए वसा ग्लोब्यूल्स, और सूक्ष्म रूप से वितरित हवा कोशिकाओं के नाजुक संतुलन की विशेषता है। यह जटिल सूक्ष्म संरचना इसके संवेदी गुणों के लिए सर्वोपरि है, जिसमें इसकी विशिष्ट चिकनी बनावट, वांछनीय माउथफिल और नियंत्रित पिघलने का व्यवहार शामिल है।",
-            p2: "बुनियादी अवयवों में आमतौर पर दूध की वसा, गैर-वसा वाले दूध के ठोस (MSNF), शर्करा/मिठास, पानी, स्वाद, रंग, और महत्वपूर्ण कार्यात्मक योजक जैसे इमल्सीफायर और स्टेबलाइजर्स शामिल हैं। प्रत्येक घटक को अंतिम उत्पाद की गुणवत्ता में उसके विशिष्ट कार्यात्मक योगदान के लिए चुना जाता है।",
-            p3: "आइसक्रीम की प्रारंभिक संरचना केवल एक योजक सूची नहीं है; यह एक पूर्व-इंजीनियर प्रणाली है जहाँ प्रत्येक घटक के भौतिक और रासायनिक गुणों को एक विशिष्ट बहु-चरण संरचना में योगदान करने के लिए चुना जाता है।",
-            p4: "इन जटिल अंतर्संबंधों को देखते हुए, आइसक्रीम सूत्रीकरण केवल एक नुस्खा नहीं है, बल्कि एक भविष्य कहनेवाला विज्ञान है। वांछित 'मिश्रण संतुलन' और 'नुस्खा संतुलन' प्राप्त करने के लिए यह समझ महत्वपूर्ण है जो गुणवत्ता वाली आइसक्रीम को परिभाषित करती है।",
+            title: "Introduction: Ice Cream as a Multi-Phase System",
+            p1: "Ice cream ek sophisticated multi-phase food product hai, jo solid ice crystals, liquid unfrozen sugar solution (serum phase), dispersed fat globules, aur finely distributed air cells ke delicate balance se characterized hai. Ye intricate microstructure iski sensory properties ke liye paramount hai, jismein iski characteristic smooth texture, desirable mouthfeel aur controlled melting behavior shamil hai.",
+            p2: "Foundational ingredients mein typically milk fat, non-fat milk solids (MSNF), sugars/sweeteners, water, flavorings, colors, aur crucial functional additives jaise emulsifiers aur stabilizers shamil hote hain. Har component ko final product ki quality mein iski specific functional contribution ke liye select kiya jata hai.",
+            p3: "Ice cream ki initial composition sirf ek additive list nahi hai; ye ek pre-engineered system hai jahan har component ki physical aur chemical properties ko specific multi-phase structure mein contribute karne ke liye select kiya jata hai.",
+            p4: "In intricate interdependencies ko dekhte hue, ice cream formulation sirf recipe nahi hai balki ek predictive science hai. Ye understanding desired 'mix balance' aur 'recipe balance' achieve karne ke liye critical hai jo quality ice cream define karti hai.",
             table: {
-                headers: { category: "संघटक श्रेणी", examples: "विशिष्ट उदाहरण", role: "प्राथमिक कार्यात्मक भूमिका", impact: "अंतिम उत्पाद पर प्रभाव" },
+                headers: { category: "Ingredient Category", examples: "Specific Examples", role: "Primary Functional Role(s)", impact: "Final Product par Impact" },
                 rows: [
-                    { category: "वसा", examples: "दूध की वसा, वनस्पति वसा", role: "स्वाद, शरीर, बनावट, हवा के बुलबुले को स्थिर करता है, आंशिक सहसंयोजन को बढ़ावा देता है", impact: "समृद्धि, मलाई, पिघलने का प्रतिरोध, संरचना" },
-                    { category: "गैर-वसा दूध ठोस (MSNF)", examples: "दूध प्रोटीन, लैक्टोज, खनिज", role: "कुल ठोस बढ़ाता है, शरीर और बनावट में सुधार करता है, बर्फ क्रिस्टल के आकार को सीमित करता है, स्थिरता बढ़ाता है", impact: "उच्च ओवररन, चिकनी बनावट, परतदार होने से रोकता है" },
-                    { category: "शर्करा और मिठास", examples: "सुक्रोज, ग्लूकोज, फ्रुक्टोज, कॉर्न सिरप", role: "मिठास, बनावट और शरीर में सुधार करता है, हिमांक कम करता है, जमे हुए पानी को नियंत्रित करता है", impact: "कोमलता, स्कूपेबिलिटी, रॉक-हार्ड ठंड को रोकता है" },
-                    { category: "पानी", examples: "दूध और अन्य सामग्री से", role: "सतत चरण, घुलनशील घटकों के लिए विलायक", impact: "बर्फ क्रिस्टल गठन, बनावट (यदि नियंत्रित नहीं है)" },
-                    { category: "पायसीकारी (Emulsifiers)", examples: "अंडे की जर्दी (लेसिथिन), मोनो- और डाइग्लिसराइड्स, पॉलीसोर्बेट 80, GMS", role: "अमिश्रणीय सामग्री को मिलाता है, व्हिपिंग गुणवत्ता में सुधार करता है, वसा/वायु वितरण को स्थिर करता है, आंशिक वसा अस्थिरता को बढ़ावा देता है", impact: "चिकनापन, मलाई, पिघलने के गुण, वायु समावेश" },
-                    { category: "स्थिरिकारक (Stabilizers)", examples: "ग्वार गम, टिड्डी बीन गम, कैरेजेनन, सेलूलोज़ गम", role: "पानी बांधता है, मिश्रण की चिपचिपाहट बढ़ाता है, बड़े बर्फ क्रिस्टल के विकास को रोकता है, लैक्टोज क्रिस्टलीकरण को रोकता है", impact: "चिकनी बनावट, विस्तारित शेल्फ जीवन, पिघलने का प्रतिरोध, 'व्हेइंग ऑफ' को रोकता है" },
-                    { category: "हवा", examples: "फ्रीजिंग के दौरान शामिल", role: "मात्रा बढ़ाता है, बनावट को हल्का करता है, इन्सुलेट प्रभाव", impact: "ओवररन, शरीर, पिघलने की दर" }
+                    { category: "Fat", examples: "Milk fat, Vegetable fat", role: "Flavor, Body, Texture, Air bubbles ko stabilize karta hai, Partial coalescence promote karta hai", impact: "Richness, Creaminess, Meltdown resistance, Structure" },
+                    { category: "Non-Fat Milk Solids (MSNF)", examples: "Milk proteins, Lactose, Minerals", role: "Total solids increase karta hai, Body aur texture improve karta hai, Ice crystal size limit karta hai, Stability enhance karta hai", impact: "Higher overrun, Smoother texture, Flakiness prevent karta hai" },
+                    { category: "Sugars & Sweeteners", examples: "Sucrose, Glucose, Fructose, Corn syrup", role: "Sweetness, Texture aur body improve karta hai, Freezing point lower karta hai, Frozen water control karta hai", impact: "Softness, Scoopability, Rock-hard freezing prevent karta hai" },
+                    { category: "Water", examples: "Milk aur other ingredients se", role: "Continuous phase, Soluble components ke liye solvent", impact: "Ice crystal formation, Texture (agar control nahi hai to)" },
+                    { category: "Emulsifiers", examples: "Egg Yolks (Lecithin), Mono- & Diglycerides, Polysorbate 80, GMS", role: "Immiscible ingredients blend karta hai, Whipping quality improve karta hai, Fat/air distribution stabilize karta hai, Partial fat destabilization promote karta hai", impact: "Smoothness, Creaminess, Meltdown properties, Air incorporation" },
+                    { category: "Stabilizers", examples: "Guar Gum, Locust Bean Gum, Carrageenan, Cellulose Gum", role: "Water bind karta hai, Mix viscosity increase karta hai, Large ice crystal growth prevent karta hai, Lactose crystallization retard karta hai", impact: "Smooth texture, Extended shelf life, Meltdown resistance, 'Wheying off' prevent karta hai" },
+                    { category: "Air", examples: "Freezing ke dauran incorporate hoti hai", role: "Volume increase karta hai, Texture lighten karta hai, Insulating effect", impact: "Overrun, Body, Meltdown rate" }
                 ]
             }
         },
         iceCreamVsFrozenDessert: {
-            title: "आइसक्रीम बनाम फ्रोजन डेजर्ट: संरचनात्मक अंतर और उनका प्रभाव",
-            intro: "“आइसक्रीम” और “फ्रोजन डेजर्ट” शब्द अक्सर एक दूसरे के स्थान पर उपयोग किए जाते हैं, लेकिन वे जमे हुए व्यवहार की अलग-अलग श्रेणियों को संदर्भित करते हैं, जो मुख्य रूप से उनकी वसा सामग्री और स्रोत से भिन्न होते हैं, जो उनकी बनावट, स्वाद और पोषण प्रोफ़ाइल को गहराई से प्रभावित करते हैं।",
+            title: "Ice Cream vs Frozen Dessert: Compositional Differences aur Unka Impact",
+            intro: "'Ice cream' aur 'frozen dessert' terms ko aksar interchangeably use kiya jata hai, lekin ye frozen treats ki distinct categories refer karte hain, jo primarily unki fat content aur source se differentiate hote hain, jo unki texture, taste aur nutritional profile ko profoundly impact karta hai.",
             definitions: {
-                title: "A. कानूनी और संरचनात्मक परिभाषाएं",
-                iceCream: { title: "आइसक्रीम (असली फैट आइसक्रीम)", content: "कानूनी तौर पर, आइसक्रीम को एक जमे हुए खाद्य मिठाई के रूप में परिभाषित किया गया है जो मुख्य रूप से दूध और क्रीम जैसे डेयरी उत्पादों से बना है। संयुक्त राज्य अमेरिका में, “आइसक्रीम” में कम से कम 10% दूध वसा और प्रति लीटर न्यूनतम 180 ग्राम ठोस होना चाहिए।" },
-                frozenDessert: { title: "फ्रोजन डेजर्ट", content: "यह एक व्यापक श्रेणी है जिसमें ठंडे व्यवहार शामिल हैं जो डेयरी-आधारित उत्पादों से परे हैं। फ्रोजन डेसर्ट को फलों, पानी, चीनी और डेयरी या पौधे-आधारित विकल्पों सहित घटकों की एक विस्तृत श्रृंखला के साथ तैयार किया जा सकता है।" }
+                title: "A. Legal aur Compositional Definitions",
+                iceCream: { title: "Ice Cream (Real Fat Ice Cream)", content: "Legally, ice cream ko ek frozen food dessert ke roop mein define kiya jata hai jo primarily milk aur cream jaise dairy products se bana hota hai. United States mein, 'ice cream' mein kam se kam 10% milk fat aur per liter minimum 180 grams solids hona chahiye." },
+                frozenDessert: { title: "Frozen Dessert", content: "Ye ek broader category hai jo chilled treats ko encompass karti hai jo dairy-based products se beyond extend karti hai. Frozen desserts ko fruits, water, sugar, aur dairy ya plant-based alternatives including components ki wide array ke saath craft kiya ja sakta hai." }
             },
             impact: {
-                title: "B. वसा सामग्री और स्रोत का प्रभाव",
-                content: `अंतिम उत्पाद की विशेषताओं के महत्वपूर्ण निर्धारक वसा का प्रकार और मात्रा हैं:
+                title: "B. Fat Content aur Source ka Impact",
+                content: `Fat ka type aur amount final product ki characteristics ke critical determinants hain:
                    <ul>
-                     <li><strong>बनावट और मुँह में एहसास:</strong> उच्च दूध वसा सामग्री एक समृद्ध, मलाईदार और चिकनी बनावट प्रदान करती है। कम वसा वाले संस्करणों में अक्सर बनावट की नकल करने के लिए स्टेबलाइजर्स की आवश्यकता होती है।</li>
-                     <li><strong>पिघलने की विशेषताएँ:</strong> उच्च वसा वाली आइसक्रीम धीमी और समान रूप से पिघलती है क्योंकि वसा बर्फ के क्रिस्टल को इन्सुलेट करता है।</li>
-                     <li><strong>स्वाद प्रोफ़ाइल:</strong> वसा एक प्राकृतिक स्वाद वाहक है, जो स्वाद को अधिक तीव्र और लंबे समय तक चलने वाला बनाता है।</li>
-                     <li><strong>पोषण संबंधी अंतर:</strong> आइसक्रीम में आमतौर पर अधिक वसा और कैलोरी होती है, जबकि जमे हुए डेसर्ट पोषण सामग्री में व्यापक रूप से भिन्न हो सकते हैं।</li>
+                     <li><strong>Texture aur Mouthfeel:</strong> Higher milk fat content ek rich, creamy aur smooth mouthfeel result karta hai. Low-fat versions ko texture mimic karne ke liye aksar stabilizers ki zarurat hoti hai.</li>
+                     <li><strong>Meltdown Characteristics:</strong> High-fat ice cream slower aur more evenly melts karta hai kyunki fat ice crystals ko insulate karta hai.</li>
+                     <li><strong>Flavor Profile:</strong> Fat ek natural flavor carrier hai, jo flavors ko more intense aur long-lasting banata hai.</li>
+                     <li><strong>Nutritional Differences:</strong> Ice cream typically higher fat aur calories mein hota hai, jabki frozen desserts nutritional content mein widely vary kar sakte hain.</li>
                    </ul>`
             }
         },
         manufacturingProcess: {
-            title: "आइसक्रीम निर्माण प्रक्रिया: एक चरण-दर-चरण वैज्ञानिक यात्रा",
-            intro: "आइसक्रीम का उत्पादन सावधानीपूर्वक नियंत्रित चरणों का एक क्रम है, प्रत्येक को कच्चे माल को एक जटिल, स्थिर और स्वादिष्ट जमे हुए मिठाई में बदलने के लिए डिज़ाइन किया गया है।",
+            title: "Ice Cream Manufacturing Process: Ek Step-by-Step Scientific Journey",
+            intro: "Ice cream ka production meticulously controlled steps ka sequence hai, har ek ko raw ingredients ko complex, stable aur palatable frozen dessert mein transform karne ke liye design kiya gaya hai.",
             steps: `
-                <h4>A. सामग्री का वजन और मिश्रण</h4><p>निर्माण प्रक्रिया सभी कच्चे माल के सटीक वजन और मिश्रण के साथ शुरू होती है ताकि सजातीय “आइसक्रीम मिश्रण” बन सके।</p>
-                <h4>B. पाश्चुरीकरण</h4><p>मिश्रण के बाद, आइसक्रीम मिश्रण पाश्चुरीकरण से गुजरता है, जो खाद्य सुरक्षा सुनिश्चित करने और उत्पाद की गुणवत्ता में सुधार करने के लिए एक महत्वपूर्ण गर्मी उपचार है।</p>
-                <h4>C. होमोजेनाइजेशन</h4><p>पाश्चुरीकरण के तुरंत बाद, गर्म आइसक्रीम मिश्रण को होमोजेनाइजेशन के अधीन किया जाता है। यह प्रक्रिया वसा के ग्लोब्यूल्स को तोड़ती है, एक स्थिर वसा इमल्शन सुनिश्चित करती है।</p>
-                <h4>D. एजिंग (परिपक्वता)</h4><p>होमोजेनाइजेशन के बाद, आइसक्रीम मिश्रण को 4 से 24 घंटे के लिए 2°C से 5°C पर ठंडा और रखा जाता है। यह महत्वपूर्ण कदम वसा क्रिस्टलीकरण और प्रोटीन और स्टेबलाइजर्स के पूर्ण जलयोजन की अनुमति देता है।</p>
-                <h4>E. फ्रीजिंग और ओवररन</h4><p>फ्रीजिंग चरण वह जगह है जहाँ तरल आइसक्रीम मिश्रण एक अर्ध-ठोस, वातित उत्पाद में बदल जाता है। ओवररन शामिल की गई हवा से प्राप्त मात्रा विस्तार का प्रतिशत है, जो बनावट और लाभप्रदता को महत्वपूर्ण रूप से प्रभावित करता है।</p>
-                <h4>F. समावेशन जोड़ना</h4><p>प्रारंभिक फ्रीजिंग चरण के बाद, जब आइसक्रीम अभी भी अर्ध-जमे हुए है, तो तरल स्वाद, फलों की प्यूरी, चॉकलेट चिप्स या नट्स जैसे समावेशन जोड़े जाते हैं।</p>
-                <h4>G. हार्डनिंग</h4><p>अंतिम महत्वपूर्ण फ्रीजिंग चरण हार्डनिंग है, जहाँ अर्ध-जमे हुए आइसक्रीम को बहुत कम तापमान, आमतौर पर -30°C या उससे कम, पर तेजी से लाया जाता है। यह शेष पानी को जमा देता है और संरचना को स्थिर करता है।</p>`
+                <h4>A. Ingredient Weighing aur Blending</h4><p>Manufacturing process sabhi raw ingredients ke precise weighing aur blending ke saath commence hoti hai taki homogeneous "ice cream mix" form ho sake.</p>
+                <h4>B. Pasteurization</h4><p>Blending ke baad, ice cream mix pasteurization se guzarta hai, jo food safety ensure karne aur product quality improve karne ke liye ek critical heat treatment hai.</p>
+                <h4>C. Homogenization</h4><p>Pasteurization ke turant baad, hot ice cream mix ko homogenization ke subjected kiya jata hai. Ye process fat globules ko break down karta hai, ek stable fat emulsion ensure karta hai.</p>
+                <h4>D. Aging (Maturation)</h4><p>Homogenization ke baad, ice cream mix ko 4 se 24 hours ke liye 2°C se 5°C par cool aur hold kiya jata hai. Ye crucial step fat crystallization aur proteins aur stabilizers ke full hydration ki allow karta hai.</p>
+                <h4>E. Freezing aur Overrun</h4><p>Freezing stage wahan hai jahan liquid ice cream mix ek semi-solid, aerated product mein transform hota hai. Overrun incorporated air se achieve kiye gaye volume expansion ka percentage hai, jo texture aur profitability ko significantly affect karta hai.</p>
+                <h4>F. Inclusions Add karna</h4><p>Initial freezing phase ke baad, jab ice cream abhi bhi semi-frozen hai, to liquid flavors, fruit purees, chocolate chips ya nuts jaise inclusions add kiye jate hain.</p>
+                <h4>G. Hardening</h4><p>Final critical freezing step hardening hai, jahan semi-frozen ice cream ko rapidly bahut low temperatures par laya jata hai, typically -30°C ya lower. Ye remaining water ko freeze kar deta hai aur structure ko stabilize karta hai.</p>`
         },
         ingredientFunctionality: {
-            title: "घटक की कार्यक्षमता: स्टेबलाइजर्स और इमल्सीफायर्स का विज्ञान",
-            intro: "स्टेबलाइजर्स और इमल्सीफायर आइसक्रीम में अनिवार्य कार्यात्मक तत्व हैं, जो इसकी बनावट, स्थिरता और संवेदी विशेषताओं को आकार देने में जटिल भूमिका निभाते हैं।",
+            title: "Ingredient Functionality: Stabilizers aur Emulsifiers ka Science",
+            intro: "Stabilizers aur emulsifiers ice cream mein indispensable functional ingredients hain, jo iski texture, stability aur sensory attributes ko shape karne mein complex roles play karte hain.",
             stabilizers: {
-                title: "A. स्टेबलाइजर्स और उनके प्रभाव",
-                content: `<p>स्टेबलाइजर्स मुख्य रूप से हाइड्रोक्लोइड या स्टार्च होते हैं जो पानी को बांधते हैं और बिना जमे मिश्रण की चिपचिपाहट बढ़ाते हैं।</p>
+                title: "A. Stabilizers aur Unke Effects",
+                content: `<p>Stabilizers primarily hydrocolloids ya starches hote hain jo water bind karte hain aur unfrozen mix ki viscosity increase karte hain.</p>
                 <ul>
-                    <li><strong>मिश्रण की चिपचिपाहट बढ़ाना:</strong> क्रीमनेस की धारणा में योगदान देता है।</li>
-                    <li><strong>पिघलने का प्रतिरोध प्रदान करना:</strong> पिघलने की दर को धीमा करता है।</li>
-                    <li><strong>बर्फ और लैक्टोज क्रिस्टल के विकास को रोकना:</strong> यह चिकनी बनावट बनाए रखने के लिए सबसे महत्वपूर्ण कार्यों में से một है।</li>
+                    <li><strong>Mix Viscosity Increase karna:</strong> Creaminess ke perception mein contribute karta hai.</li>
+                    <li><strong>Melting ko Resistance Provide karna:</strong> Melting rate ko slow down karta hai.</li>
+                    <li><strong>Ice aur Lactose Crystal Growth ko Retard karna:</strong> Smooth texture maintain karne ke liye ye sabse critical functions mein se ek hai.</li>
                 </ul>`
             },
             emulsifiers: {
-                title: "B. इमल्सीफायर्स और उनके प्रभाव",
-                content: `<p>इमल्सीफायर अमिश्रणीय सामग्री के मिश्रण की सुविधा प्रदान करते हैं, एक चिकनी और मलाईदार बनावट सुनिश्चित करते हैं।</p>
+                title: "B. Emulsifiers aur Unke Effects",
+                content: `<p>Emulsifiers immiscible ingredients ke blending ko facilitate karte hain, smooth aur creamy texture ensure karte hain.</p>
                 <ul>
-                    <li><strong>पृथक्करण को रोकना:</strong> वसा को पानी से अलग होने से रोकता है।</li>
-                    <li><strong>क्रीमनेस और माउथफिल में सुधार:</strong> एक रेशमी माउथफिल में योगदान देता है।</li>
-                    <li><strong>व्हिपिंग क्षमता और ओवररन को बढ़ाना:</strong> हवा को शामिल करने की सुविधा प्रदान करता है।</li>
-                    <li><strong>वसा इमल्शन स्थिरता को नियंत्रित करना:</strong> नियंत्रित आंशिक सहसंयोजन को बढ़ावा देता है, जो संरचना के लिए महत्वपूर्ण है।</li>
+                    <li><strong>Separation Prevent karna:</strong> Fat ko water se separate hone se prevent karta hai.</li>
+                    <li><strong>Creaminess aur Mouthfeel Improve karna:</strong> Silky mouthfeel mein contribute karta hai.</li>
+                    <li><strong>Whipping Ability aur Overrun Enhance karna:</strong> Air ke incorporation ko facilitate karta hai.</li>
+                    <li><strong>Fat Emulsion Stability Control karna:</strong> Controlled partial coalescence promote karta hai, jo structure ke liye crucial hai.</li>
                 </ul>`
             }
         },
         physicochemicalFactors: {
-            title: "आइसक्रीम की गुणवत्ता को प्रभावित करने वाले मुख्य भौतिक-रासायनिक कारक",
-            intro: "आइसक्रीम की गुणवत्ता और स्थिरता कई भौतिक-रासायनिक मापदंडों से गहराई से प्रभावित होती है, जिन्हें प्रसंस्करण और भंडारण के दौरान सावधानीपूर्वक प्रबंधित किया जाता है।",
+            title: "Ice Cream Quality ko Influence karne wale Key Physicochemical Factors",
+            intro: "Ice cream ki quality aur stability kai physicochemical parameters se profoundly influenced hoti hai, jinhe processing aur storage ke throughout carefully manage kiya jata hai.",
             fatEmulsion: {
-                title: "A. वसा इमल्शन और आंशिक सहसंयोजन",
-                content: `<p>आइसक्रीम मौलिक रूप से एक तेल-في-पानी इमल्शन है। इस वसा इमल्शन की स्थिरता महत्वपूर्ण है: इसे जमने से पहले स्थिर होना चाहिए लेकिन गतिशील जमने के चरण के दौरान “आंशिक सहसंयोजन” की अनुमति देने के लिए पर्याप्त अस्थिर होना चाहिए। यह आंशिक रूप से सहसंयोजित वसा ग्लोब्यूल्स एक चिकनी बनावट विकसित करने, संरचनात्मक अखंडता प्रदान करने और पिघलने के प्रतिरोध को बढ़ाने के लिए महत्वपूर्ण हैं।</p>`
+                title: "A. Fat Emulsion aur Partial Coalescence",
+                content: `<p>Ice cream fundamentally ek oil-in-water emulsion hai. Is fat emulsion ki stability critical hai: isko freezing se prior stable hona chahiye lekin sufficiently unstable hona chahiye taki dynamic freezing stage ke dauran "partial coalescence" allow ho sake. Ye partially coalesced fat globules smooth texture develop karne, structural integrity provide karne aur meltdown ko resistance enhance karne ke liye crucial hain.</p>`
             },
             waterActivity: {
-                title: "B. जल गतिविधि (aw)",
-                content: "<p>जल गतिविधि माइक्रोबियल विकास और रासायनिक प्रतिक्रियाओं के लिए उपलब्ध अबाध पानी की मात्रा को मापती है। आइसक्रीम में, चीनी और लवण जैसे तत्व पानी के अणुओं को बांधकर जल गतिविधि को कम करते हैं, जिससे हिमांक कम होता है और माइक्रोबियल प्रसार बाधित होता है।</p>"
+                title: "B. Water Activity (aw)",
+                content: "<p>Water activity microbial growth aur chemical reactions ke liye available unbound water ki amount quantify karta hai. Ice cream mein, sugars aur salts jaise ingredients water molecules bind karke water activity reduce karte hain, thereby freezing point lower karte hain aur microbial proliferation inhibit karte hain.</p>"
             }
         },
         crystallization: {
-            title: "भंडारण और रोकथाम के दौरान क्रिस्टलीकरण",
-            intro: "क्रिस्टलीकरण, विशेष रूप से पानी (बर्फ) और लैक्टोज का, भंडारण के दौरान आइसक्रीम की गुणवत्ता के लिए महत्वपूर्ण चुनौतियां पैदा करता है, जिससे अवांछनीय बनावट दोष होते हैं।",
+            title: "Storage ke Dauran Crystallization aur Prevention",
+            intro: "Crystallization, particularly water (ice) aur lactose ka, storage ke dauran ice cream quality ke liye significant challenges pose karta hai, jisse undesirable textural defects hote hain.",
             ice: {
-                title: "A. बर्फ क्रिस्टलीकरण और पुन: क्रिस्टलीकरण",
-                content: `<p>ताजा बनी आइसक्रीम में छोटे बर्फ के क्रिस्टल होते हैं। भंडारण के दौरान, विशेष रूप से तापमान में उतार-चढ़ाव (हीट शॉक) के तहत, ये क्रिस्टल “पुन: क्रिस्टलीकरण” नामक प्रक्रिया के माध्यम से बड़े हो सकते हैं, जिससे एक किरकिरा या बर्फीला बनावट होता है।</p>
-                <p><strong>रोकथाम रणनीतियाँ:</strong> तेजी से जमना, लगातार मंथन, इष्टतम स्टेबलाइजर्स का उपयोग, और लगातार कम भंडारण तापमान।</p>`
+                title: "A. Ice Crystallization aur Recrystallization",
+                content: `<p>Freshly made ice cream mein small ice crystals hote hain. Storage ke dauran, especially fluctuating temperatures (heat shock) ke under, ye crystals "recrystallization" ke through larger ho sakte hain, jisse grainy ya icy texture hota hai.</p>
+                <p><strong>Prevention Strategies:</strong> Rapid freezing, constant churning, optimal stabilizers ka use, aur consistent low storage temperatures.</p>`
             },
             lactose: {
-                title: "B. लैक्टोज क्रिस्टलीकरण",
-                content: `<p>लैक्टोज क्रिस्टलीकरण आइसक्रीम में किरकिरापन और भोजन जैसा अहसास का कारण बनता है, जिसके परिणामस्वरूप एक अप्रिय रेतीला मुँह में अहसास होता है।</p>
-                <p><strong>रोकथाम के तरीके:</strong> लैक्टोज सामग्री को नियंत्रित करना, रणनीतिक चीनी चयन, और स्टेबलाइजर्स का उपयोग जो लैक्टोज नाभिक के गठन को रोकते हैं।</p>`
+                title: "B. Lactose Crystallization",
+                content: `<p>Lactose crystallization ice cream mein grittiness aur sandy mouthfeel cause karta hai.</p>
+                <p><strong>Prevention Methods:</strong> Lactose content control karna, strategic sugar selection, aur stabilizers use karna jo lactose nuclei formation inhibit karte hain.</p>`
             }
         },
         otherFactors: {
-            title: "आइसक्रीम प्रसंस्करण और भंडारण में अन्य महत्वपूर्ण कारक",
-            intro: "मुख्य प्रसंस्करण चरणों और घटक कार्यात्मकताओं से परे, कई अन्य कारक अंतिम गुणवत्ता, स्थिरता और उपभोक्ता अनुभव को महत्वपूर्ण रूप से प्रभावित करते हैं।",
+            title: "Ice Cream Processing aur Storage mein Other Critical Factors",
+            intro: "Core processing steps aur ingredient functionalities ke beyond, kai other factors final quality, stability aur consumer experience ko significantly influence karte hain.",
             melting: {
-                title: "A. पिघलने की विशेषताएँ",
-                content: "<p>आइसक्रीम का पिघलने का व्यवहार एक महत्वपूर्ण गुणवत्ता विशेषता है। यह वसा अस्थिरता, ओवररन और मिश्रण चिपचिपाहट जैसे कारकों से नियंत्रित होता है।</p>"
+                title: "A. Melting Characteristics",
+                content: "<p>Ice cream ka meltdown behavior ek critical quality attribute hai. Ye production ke dauran formed microstructure se governed hota hai, melting rate aur shape retention dono ko affect karta hai.</p>"
             },
             tempControl: {
-                title: "B. तापमान नियंत्रण और भंडारण",
-                content: "<p>गुणवत्ता बनाए रखने और दोषों को रोकने के लिए प्रसंस्करण से लेकर उपभोक्ता भंडारण तक सटीक तापमान नियंत्रण बनाए रखना सर्वोपरि है।</p>"
+                title: "B. Temperature Control aur Storage",
+                content: "<p>Ice cream ke life cycle ke throughout precise temperature control maintain karna quality preserve karne aur defects prevent karne ke liye paramount hai.</p>"
             },
             equipment: {
-                title: "C. उपकरण प्रभाव और स्वच्छता",
-                content: "<p>प्रसंस्करण उपकरणों का चुनाव और रखरखाव आइसक्रीम की गुणवत्ता और उत्पादन क्षमता को महत्वपूर्ण रूप से प्रभावित करता है।</p>"
+                title: "C. Equipment Impact aur Sanitation",
+                content: "<p>Processing equipment ka choice aur maintenance ice cream quality aur production efficiency ko significantly influence karta hai.</p>"
             },
             packaging: {
-                title: "D. पैकेजिंग",
-                content: "<p>पैकेजिंग आइसक्रीम की गुणवत्ता की रक्षा करने और उत्पादन से उपभोग तक इसके शेल्फ जीवन का विस्तार करने में एक महत्वपूर्ण भूमिका निभाती है।</p>"
+                title: "D. Packaging",
+                content: "<p>Packaging production se consumption tak ice cream quality protect karne aur iski shelf life extend karne mein vital role play karti hai.</p>"
             }
         },
         implementation: {
-            title: "इष्टतम आइसक्रीम उत्पादन के लिए कार्यान्वयन रणनीतियाँ",
-            intro: "लगातार उच्च-गुणवत्ता वाली आइसक्रीम का उत्पादन करने के लिए, निर्माताओं को एक समग्र रणनीति लागू करनी चाहिए जो वैज्ञानिक समझ को कठोर परिचालन प्रथाओं के साथ एकीकृत करती है।",
+            title: "Optimal Ice Cream Production ke liye Implementation Strategies",
+            intro: "Consistently high-quality ice cream produce karne ke liye, manufacturers ko ek holistic strategy implement karni chahiye jo scientific understanding ko rigorous operational practices ke saath integrate karti hai.",
             strategies: `<ul>
-                <li><strong>सूत्रीकरण और घटक सोर्सिंग में परिशुद्धता:</strong> मामूली अवयवों के लिए भी सावधानीपूर्वक वजन पर जोर दें।</li>
-                <li><strong>अनुकूलित प्रसंस्करण पैरामीटर:</strong> पूरी तरह से सम्मिश्रण, नियंत्रित पाश्चुरीकरण, प्रभावी होमोजेनाइजेशन और पर्याप्त एजिंग सुनिश्चित करें।</li>
-                <li><strong>सक्रिय क्रिस्टलीकरण प्रबंधन:</strong> तेजी से जमने और लगातार कम तापमान भंडारण को प्राथमिकता दें।</li>
-                <li><strong>कठोर गुणवत्ता नियंत्रण और स्वच्छता:</strong> वास्तविक समय की निगरानी, HACCP सिद्धांतों और कठोर स्वच्छता मानकों को लागू करें।</li>
-                <li><strong>अनुकूलित भंडारण और वितरण:</strong> एक स्थिर कोल्ड चेन बनाए रखें और उचित पैकेजिंग का उपयोग करें।</li>
+                <li><strong>Formulation aur Ingredient Sourcing mein Precision:</strong> Minor ingredients ke liye bhi scrupulous weighing par emphasize karein.</li>
+                <li><strong>Optimized Processing Parameters:</strong> Thorough blending, controlled pasteurization, effective homogenization aur adequate aging ensure karein.</li>
+                <li><strong>Proactive Crystallization Management:</strong> Rapid freezing aur consistent low-temperature storage ko prioritize karein.</li>
+                <li><strong>Rigorous Quality Control aur Sanitation:</strong> Real-time monitoring, HACCP principles aur stringent sanitation standards implement karein.</li>
+                <li><strong>Optimized Storage aur Distribution:</strong> Stable cold chain maintain karein aur appropriate packaging use karein.</li>
             </ul>`
         },
         conclusion: {
-            title: "निष्कर्ष",
-            content: "उच्च गुणवत्ता वाली आइसक्रीम का उत्पादन एक परिष्कृत प्रयास है, जिसमें खाद्य विज्ञान सिद्धांतों की गहरी समझ और निर्माण प्रक्रिया के हर चरण पर सावधानीपूर्वक नियंत्रण की मांग होती है। सफल आइसक्रीम निर्माण केवल नुस्खा पालन से परे है; इसके लिए सूत्रीकरण और प्रक्रिया अनुकूलन के लिए एक भविष्य कहनेवाला, वैज्ञानिक दृष्टिकोण की आवश्यकता होती है।"
+            title: "Conclusion",
+            content: "High-quality ice cream ka production ek sophisticated endeavor hai, jo food science principles ki deep understanding aur manufacturing process ke har stage par meticulous control demand karta hai. Successful ice cream manufacturing mere recipe adherence se beyond hai; iske liye formulation aur process optimization ke liye ek predictive, scientific approach required hai."
         }
     },
+    
     en: {
         title: "Ice-Cream Production",
         description: "A comprehensive guide to the science and engineering of ice cream.",
