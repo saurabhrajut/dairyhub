@@ -376,7 +376,7 @@ function FatSnfAdjustmentCalc() {
         creamSnf: '5.5',
         richMilkFat: '6.0',
         richMilkSnf: '9.0',
-        skimMilkFat: '0.05',
+        skimMilkFat: '0.1',
         skimMilkSnf: '8.8',
     });
     const [result, setResult] = useState<string | null>(null);
@@ -528,7 +528,7 @@ function FatSnfAdjustmentCalc() {
                         <MemoizedInputField label="Skim Milk SNF %" value={inputs.skimMilkSnf} name="skimMilkSnf" setter={handleInputChange} />
                      </>)}
                  </div>
-                 <p className="text-xs text-muted-foreground">Note: The calculator will automatically use SMP (0.5% Fat, 96% SNF) or Water to achieve the final target.</p>
+                 <p className="text-xs text-muted-foreground">Note: The calculator will automatically use SMP (1% Fat, 95% SNF) or Water to achieve the final target.</p>
              </div>
 
              <Button onClick={calculate} className="w-full mt-4">Calculate</Button>
@@ -699,7 +699,7 @@ function TwoComponentStandardizationCalc() {
         Fc: '40', CLRc: '10', // Cream
         Fr: '6', CLRr: '30',   // Rich Milk
         Fs: '0.1', CLRs: '27', // Skim Milk
-        smpSnf: '96', smpFat: '0.5'
+        smpSnf: '96', smpFat: '1'
     });
     const [results, setResults] = useState<any>(null);
     const [error, setError] = useState<string | null>(null);
@@ -854,7 +854,7 @@ function TwoComponentStandardizationCalc() {
                         <MemoizedInputField label="Skim Milk CLR (CLRₛ)" value={inputs.CLRs} name="CLRs" setter={handleInputChange} />
                     </>)}
                 </div>
-                 <p className="text-xs text-muted-foreground mt-2">Note: Water (0% Fat, 0 CLR) and SMP (0.5% Fat, 96% SNF) will be used automatically for fine-tuning.</p>
+                 <p className="text-xs text-muted-foreground mt-2">Note: Water (0% Fat, 0 CLR) and SMP (1% Fat, 96% SNF) will be used automatically for fine-tuning.</p>
             </div>
 
             <Button onClick={calculate} className="w-full mt-4">Calculate</Button>
