@@ -1,139 +1,139 @@
 
 export const validationVerificationContent = {
     hi: {
-        title: "डेयरी में सत्यापन और प्रमाणीकरण",
-        description: "खाद्य सुरक्षा आश्वासन के मूल सिद्धांतों के लिए एक गाइड।",
+        title: "Dairy mein Validation aur Verification",
+        description: "Food safety assurance ke basic principles ke liye ek guide.",
         tabs: {
-            intro: "परिचय",
-            raw_milk: "कच्चा दूध हैंडलिंग",
-            processing: "प्रसंस्करण",
-            storage: "भंडारण और अन्य",
-            conclusion: "निष्कर्ष"
+            intro: "Introduction",
+            raw_milk: "Raw Milk Handling",
+            processing: "Processing",
+            storage: "Storage aur Other",
+            conclusion: "Conclusion"
         },
         sections: {
             introduction: {
-                title: "I. परिचय: डेयरी खाद्य सुरक्षा की आधारशिला",
-                content: `<p>वैश्विक डेयरी उद्योग एक अत्यंत जटिल और संवेदनशील खाद्य उत्पादन वातावरण में काम करता है, जहाँ उत्पाद सुरक्षा और गुणवत्ता सुनिश्चित करना सर्वोपरि है। इस जटिल परिदृश्य में, "प्रमाणीकरण" और "सत्यापन" शब्द मूलभूत अवधारणाएँ हैं, जिन्हें अक्सर गलती से एक दूसरे के स्थान पर उपयोग किया जाता है, फिर भी ये मजबूत खाद्य सुरक्षा प्रबंधन प्रणालियों के लिए महत्वपूर्ण और पूरक कार्य करते हैं। उनका कठोर अनुप्रयोग केवल एक सर्वोत्तम अभ्यास नहीं है, बल्कि दुनिया भर में विभिन्न नियामक ढाँचों में एक कानूनी जनादेश है।</p>`,
+                title: "I. Introduction: Dairy Food Safety ki Foundation",
+                content: `<p>Global dairy industry ek bahut complex aur sensitive food production environment mein kaam karta hai, jahan product safety aur quality ensure karna sabse important hai. Is complex scenario mein, "Validation" aur "Verification" shabd fundamental concepts hain, jinhe aksar galti se interchangeably use kiya jata hai, lekin ye robust food safety management systems ke liye critical aur complementary functions perform karte hain. Inka rigorous application sirf best practice nahi hai, balki duniya bhar mein various regulatory frameworks mein ek legal mandate hai.</p>`,
                 subsections: {
                     defining: {
-                        title: "खाद्य सुरक्षा में प्रमाणीकरण और सत्यापन को परिभाषित करना",
-                        content: `<p><strong>प्रमाणीकरण (Validation)</strong> वैज्ञानिक और तकनीकी साक्ष्य जमा करने की मूलभूत प्रक्रिया है जो निर्णायक रूप से यह प्रदर्शित करती है कि एक विशिष्ट नियंत्रण उपाय, या एक संपूर्ण खाद्य सुरक्षा योजना, एक पहचाने गए खाद्य सुरक्षा खतरे को प्रभावी ढंग से प्रबंधित करने में स्वाभाविक रूप से सक्षम है। यह मौलिक रूप से इस प्रश्न का समाधान करता है: <strong>"क्या हमारी योजना प्रभावी है?"</strong>। यह प्रक्रिया खाद्य सुरक्षा योजना के डिजाइन और सैद्धांतिक सटीकता पर कठोरता से ध्यान केंद्रित करती है, इसकी वैज्ञानिक सुदृढ़ता सुनिश्चित करती है। प्रमाणीकरण के तरीकों में सहकर्मी-समीक्षित पत्रिकाओं से वैज्ञानिक सिद्धांतों और डेटा का हवाला देना, नियामक मार्गदर्शन का संदर्भ देना, गणितीय मॉडल का उपयोग करना, इन-प्लांट परीक्षण करना और खाद्य सुरक्षा विशेषज्ञों से परामर्श करना शामिल है।</p>
-                        <p><strong>सत्यापन (Verification)</strong>, इसके विपरीत, जाँच, परीक्षण और अवलोकनों का नियमित, नियमित अनुप्रयोग है जो यह पुष्टि करने के लिए डिज़ाइन किया गया है कि पहले से प्रमाणित योजना को सही ढंग से, लगातार और इरादे के अनुसार लागू किया जा रहा है। यह महत्वपूर्ण प्रश्न का उत्तर देता है: <strong>"क्या हम अपनी योजना का पालन कर रहे हैं?"</strong>। इसमें निगरानी से परे तरीकों, प्रक्रियाओं, परीक्षणों और अन्य मूल्यांकनों का व्यवस्थित अनुप्रयोग शामिल है, यह सुनिश्चित करने के लिए कि प्रमाणित योजना का दैनिक पालन किया जाता है। सत्यापन गतिविधियों के प्रकारों में नियमित अंशांकन जांच, लक्षित उत्पाद नमूनाकरण और सूक्ष्मजीवविज्ञानी परीक्षण, निगरानी रिकॉर्ड की समीक्षा, दृश्य निरीक्षण, पर्यावरण निगरानी, और आंतरिक या तीसरे पक्ष के ऑडिट करना शामिल है।</p>`
+                        title: "Food Safety mein Validation aur Verification ko Define karna",
+                        content: `<p><strong>Validation</strong> scientific aur technical evidence collect karne ki fundamental process hai jo conclusively demonstrate karti hai ki ek specific control measure, ya complete food safety plan, identified food safety hazard ko effectively manage karne mein inherently capable hai. Ye fundamentally is question ka answer deta hai: <strong>"Kya hamari plan effective hai?"</strong>. Ye process food safety plan ke design aur theoretical accuracy par rigorously focus karta hai, iski scientific soundness ensure karta hai. Validation ke methods mein peer-reviewed journals se scientific principles aur data cite karna, regulatory guidance reference karna, mathematical models use karna, in-plant tests conduct karna aur food safety experts se consult karna shamil hai.</p>
+                        <p><strong>Verification</strong>, iske opposite, checks, tests aur observations ka ongoing, routine application hai jo is baat ko confirm karne ke liye design kiya gaya hai ki previously validated plan ko correctly, consistently aur intended tarike se implement kiya ja raha hai. Ye critical question ka answer deta hai: <strong>"Kya hum apni plan ko follow kar rahe hain?"</strong>. Ismein monitoring se beyond methods, procedures, tests aur other evaluations ka systematic application shamil hai, yah ensure karne ke liye ki validated plan ka daily basis par palan kiya jata hai. Verification activities ke types mein regular calibration checks, targeted product sampling aur microbiological testing, monitoring records ki review, visual inspections, environmental monitoring, aur internal ya third-party audits conduct karna shamil hai.</p>`
                     },
                     indispensable_role: {
-                        title: "डेयरी उद्योग में प्रमाणीकरण और सत्यापन की अनिवार्य भूमिका",
-                        content: `<p>डेयरी क्षेत्र में प्रमाणीकरण और सत्यापन सर्वोपरि हैं, जो प्रारंभिक कृषि संग्रह से लेकर अंतिम उपभोक्ता तक पूरी आपूर्ति श्रृंखला में उत्पाद सुरक्षा सुनिश्चित करने के लिए आधार के रूप में काम करते हैं। ये प्रक्रियाएँ खाद्य सुरक्षा प्रबंधन प्रणालियों के भीतर किसी भी कमजोरी या अंतराल की सक्रिय रूप से पहचान करने और उन्हें दूर करने में सहायक होती हैं, जिससे समय पर सुधारात्मक कार्रवाइयां सक्षम होती हैं जो संदूषण या अन्य सुरक्षा मुद्दों को बढ़ने से रोकती हैं। खाद्य जनित बीमारी के प्रकोप के जोखिम को कम करने और नियामक आवश्यकताओं के सख्त पालन को बनाए रखने के लिए उनका कठोर अनुप्रयोग महत्वपूर्ण है, जिससे सार्वजनिक स्वास्थ्य और उपभोक्ता विश्वास की रक्षा होती है।</p>`
+                        title: "Dairy Industry mein Validation aur Verification ki Essential Role",
+                        content: `<p>Dairy sector mein Validation aur Verification paramount hain, jo initial farm collection se lekar final consumer tak puri supply chain mein product safety ensure karne ke liye foundation ke roop mein kaam karte hain. Ye processes food safety management systems ke andar kisi bhi weakness ya gaps ko proactively identify aur address karne mein instrumental hoti hain, jisse timely corrective actions enable hoti hain jo contamination ya other safety issues ko escalate hone se prevent karti hain. Foodborne illness outbreaks ke risk ko mitigate karne aur regulatory requirements ke strict adherence ko maintain karne ke liye inka rigorous application critical hai, jisse public health aur consumer trust ki protection hoti hai.</p>`
                     },
                     regulatory_frameworks: {
-                        title: "मुख्य नियामक ढाँचों का अवलोकन",
-                        content: `<p>डेयरी उद्योग राष्ट्रीय और अंतर्राष्ट्रीय नियमों के एक जटिल वेब के तहत काम करता है, जो सभी प्रमाणीकरण और सत्यापन के महत्व पर जोर देते हैं।</p>
+                        title: "Key Regulatory Frameworks ka Overview",
+                        content: `<p>Dairy industry national aur international regulations ke ek complex web ke under operate karta hai, jo sabhi Validation aur Verification ke importance par emphasize karte hain.</p>
                         <ul class="list-disc pl-5 space-y-2">
-                            <li><strong>HACCP (खतरा विश्लेषण और महत्वपूर्ण नियंत्रण बिंदु):</strong> खाद्य सुरक्षा के लिए एक व्यवस्थित, निवारक दृष्टिकोण। प्रमाणीकरण एक मुख्य सिद्धांत है, यह सुनिश्चित करता है कि सिस्टम खतरों को नियंत्रित कर सकता है, जबकि सत्यापन इसके चल रहे प्रभावी संचालन की पुष्टि करता है।</li>
-                            <li><strong>ISO 22000 (खाद्य सुरक्षा प्रबंधन प्रणाली):</strong> एक व्यापक FSMS के लिए एक अंतरराष्ट्रीय मानक, HACCP सिद्धांतों को एकीकृत करता है।</li>
-                            <li><strong>USDA/FDA (संयुक्त राज्य):</strong> दोनों एजेंसियां प्रमाणीकरण और सत्यापन को अनिवार्य करती हैं, जिसमें उच्च दबाव प्रसंस्करण (HPP) जैसी प्रक्रियाओं के लिए विशिष्ट आवश्यकताएं होती हैं।</li>
-                            <li><strong>EU विनियम:</strong> यूरोपीय संघ के नियम विशिष्ट स्वच्छता नियम स्थापित करते हैं और HACCP को अनिवार्य करते हैं, जिसमें प्रमाणीकरण और सत्यापन प्रक्रियाएं शामिल हैं।</li>
-                            <li><strong>FSSAI (भारत):</strong> FSSAI भारत में डेयरी उद्योग को नियंत्रित करता है, यह अनिवार्य करता है कि अनुपालन के लिए उपयोग किए जाने वाले विश्लेषणात्मक तरीकों और परीक्षण किटों को इसके दिशानिर्देशों के अनुसार प्रमाणित किया जाना चाहिए।</li>
-                            <li><strong>Codex Alimentarius:</strong> एक अंतर-सरकारी निकाय जो अंतरराष्ट्रीय खाद्य मानक विकसित करता है, मान्य नियंत्रण उपायों के उपयोग की सिफारिश करता है।</li>
+                            <li><strong>HACCP (Hazard Analysis and Critical Control Points):</strong> Food safety ke liye ek systematic, preventive approach. Validation ek core principle hai, ensuring ki system hazards ko control kar sakta hai, jabki Verification iske ongoing effective operation ko confirm karta hai.</li>
+                            <li><strong>ISO 22000 (Food Safety Management Systems):</strong> Ek comprehensive FSMS ke liye international standard, jo HACCP principles ko integrate karta hai.</li>
+                            <li><strong>USDA/FDA (United States):</strong> Dono agencies Validation aur Verification mandate karti hain, jismein High Pressure Processing (HPP) jaisi processes ke liye specific requirements hoti hain.</li>
+                            <li><strong>EU Regulations:</strong> European Union ke regulations specific hygiene rules establish karte hain aur HACCP mandate karte hain, jismein Validation aur Verification procedures shamil hain.</li>
+                            <li><strong>FSSAI (India):</strong> FSSAI India mein dairy industry ko regulate karta hai, yah mandate karta hai ki compliance ke liye use kiye jane wale analytical methods aur testing kits ko iske guidelines ke according validate kiya jana chahiye.</li>
+                            <li><strong>Codex Alimentarius:</strong> Ek inter-governmental body jo international food standards develop karti hai, validated control measures ke use ki recommend karti hai.</li>
                         </ul>`
                     }
                 }
             },
             raw_milk_handling: {
-                title: "II. कच्चे दूध की हैंडलिंग में प्रमाणीकरण और सत्यापन",
-                content: `<p>डेयरी उत्पादों की यात्रा कच्चे दूध से शुरू होती है, और इसका प्रारंभिक प्रबंधन और स्वागत सभी बाद के उत्पादों की सुरक्षा और गुणवत्ता के लिए मौलिक है। कच्चे दूध की आंतरिक गुणवत्ता अंतिम डेयरी उत्पादों की सुरक्षा, गुणवत्ता और शेल्फ जीवन का सबसे महत्वपूर्ण निर्धारक है।</p>`,
+                title: "II. Raw Milk Handling mein Validation aur Verification",
+                content: `<p>Dairy products ki journey raw milk se start hoti hai, aur iska initial handling aur reception sabhi subsequent products ki safety aur quality ke liye foundational hai. Raw milk ki intrinsic quality final dairy products ki safety, quality aur shelf life ka sabse critical determinant hai.</p>`,
                 subsections: {
                     quality_control: {
-                        title: "कच्चे दूध की गुणवत्ता नियंत्रण: तरीके और प्रमाणीकरण प्रोटोकॉल",
-                        content: `<p>कच्चा दूध स्वागत डॉक (RMRD) पहला महत्वपूर्ण बिंदु है। प्रारंभिक गुणवत्ता जांच, जिसे अक्सर "प्लेटफ़ॉर्म परीक्षण" कहा जाता है, में शामिल हैं:</p>
+                        title: "Raw Milk Quality Control: Methods aur Validation Protocols",
+                        content: `<p>Raw milk reception dock (RMRD) pehla critical point hai. Initial quality checks, jinhe aksar "platform tests" kaha jata hai, mein shamil hain:</p>
                         <ul class="list-disc pl-5 space-y-2">
-                            <li><strong>ऑर्गनोलेप्टिक परीक्षण:</strong> उपस्थिति, गंध और स्वाद का संवेदी मूल्यांकन।</li>
-                            <li><strong>तापमान मापन:</strong> जीवाणु गुणवत्ता का महत्वपूर्ण संकेतक।</li>
-                            <li><strong>दैहिक कोशिका गणना (SCC):</strong> थन के स्वास्थ्य का संकेतक।</li>
-                            <li><strong>दवा अवशेष स्तर:</strong> बीटा-लैक्टम जैसे दवा अवशेषों के लिए शून्य सहिष्णुता।</li>
-                            <li><strong>अन्य तीव्र परीक्षण:</strong> COB परीक्षण, अल्कोहल परीक्षण, और कमी परीक्षण (रेसाज़ुरिन, मिथाइलीन ब्लू) जीवाणु गतिविधि और स्थिरता का आकलन करते हैं।</li>
+                            <li><strong>Organoleptic Tests:</strong> Appearance, odor aur taste ka sensory evaluation.</li>
+                            <li><strong>Temperature Measurement:</strong> Bacterial quality ka vital indicator.</li>
+                            <li><strong>Somatic Cell Count (SCC):</strong> Udder health ka indicator.</li>
+                            <li><strong>Drug Residue Level:</strong> Beta-lactams jaise drug residues ke liye positive results par zero tolerance.</li>
+                            <li><strong>Other Rapid Tests:</strong> COB test, Alcohol test, aur reduction tests (Resazurin, Methylene Blue) bacterial activity aur stability assess karte hain.</li>
                         </ul>`
                     },
                     tanker_cleaning: {
-                        title: "कच्चे दूध के टैंकर की सफाई और स्वच्छता: प्रमाणीकरण और सत्यापन",
-                        content: `<p>कच्चे दूध के टैंकरों की स्वच्छ अखंडता बनाए रखना महत्वपूर्ण है। सफाई कम से कम हर 24 घंटे में एक बार होनी चाहिए।</p>
-                        <p><strong>एक विशिष्ट CIP चक्र में शामिल हैं:</strong></p>
+                        title: "Raw Milk Tanker Cleaning aur Sanitation: Validation aur Verification",
+                        content: `<p>Raw milk tankers ki hygienic integrity maintain karna crucial hai. Cleaning kam se kam har 24 hours mein ek baar honi chahiye.</p>
+                        <p><strong>Ek typical CIP cycle mein shamil hain:</strong></p>
                         <ol class="list-decimal pl-5 space-y-1">
-                          <li>प्रारंभिक प्री-रिंस (ठंडा/गुनगुना पानी)।</li>
-                          <li>डिटर्जेंट परिसंचरण (कार्बनिक पदार्थों के लिए क्षारीय, खनिज जमा के लिए एसिड)।</li>
-                          <li>मध्यवर्ती और अंतिम रिंस।</li>
-                          <li>कीटाणुशोधन (थर्मल या रासायनिक)।</li>
+                          <li>Preliminary Pre-rinse (cold/lukewarm water).</li>
+                          <li>Detergent Circulation (organic matter ke liye alkaline, mineral deposits ke liye acid).</li>
+                          <li>Intermediate aur Final Rinses.</li>
+                          <li>Disinfection (thermal ya chemical).</li>
                         </ol>
-                        <p>सफाई प्रक्रिया का <strong>प्रमाणीकरण</strong> यह दस्तावेजी साक्ष्य प्रदान करता है कि प्रक्रिया लगातार सफाई के पूर्व निर्धारित स्तरों को प्राप्त करती है। <strong>सत्यापन</strong> में दृश्य निरीक्षण, सूक्ष्मजीवविज्ञानी परीक्षण (स्वैबिंग), रैपिड टेस्ट (ATP, प्रोटीन), और डिटर्जेंट की रासायनिक निगरानी के माध्यम से चल रही निगरानी शामिल है।</p>`
+                        <p>Cleaning process ka <strong>Validation</strong> documented evidence provide karta hai ki procedure consistently cleanliness ke predetermined levels achieve karti hai. <strong>Verification</strong> mein visual inspection, microbiological testing (swabbing), rapid tests (ATP, protein), aur detergents ki chemical monitoring ke through ongoing monitoring shamil hai.</p>`
                     }
                 }
             },
             processing: {
-                title: "III. डेयरी प्रसंस्करण में प्रमाणीकरण और सत्यापन",
-                content: `<p>प्रत्येक प्रसंस्करण चरण, थर्मल उपचार से लेकर होमोजेनाइजेशन और किण्वन तक, उत्पाद की अखंडता की गारंटी के लिए सावधानीपूर्वक प्रमाणीकरण और चल रहे सत्यापन की आवश्यकता होती है।</p>`,
+                title: "III. Dairy Processing mein Validation aur Verification",
+                content: `<p>Har processing stage, thermal treatments se lekar homogenization aur fermentation tak, product integrity ki guarantee ke liye meticulous Validation aur ongoing Verification require karta hai.</p>`,
                 subsections: {
                     thermal: {
-                        title: "थर्मल प्रसंस्करण (पाश्चुरीकरण, UHT)",
-                        content: `<p><strong>पाश्चुरीकरण:</strong> प्रमाणीकरण में यह प्रदर्शित करना शामिल है कि समय/तापमान व्यवस्था लक्षित सूक्ष्मजीवों को कम करने के लिए पर्याप्त है। सत्यापन में क्षारीय फॉस्फेट (ALP) एंजाइम निष्क्रियता की जाँच शामिल है, और तापमान रिकॉर्ड की दैनिक निगरानी।</p>
-                        <p><strong>UHT प्रसंस्करण:</strong> प्रमाणीकरण वाणिज्यिक बाँझपन (F-मान) प्राप्त करने और सड़न रोकनेवाला स्थितियों को बनाए रखने पर केंद्रित है। सत्यापन में तापमान और समय की निरंतर निगरानी शामिल है, अक्सर डेटा लॉगर और विशेष सॉफ्टवेयर का उपयोग करके।</p>`
+                        title: "Thermal Processing (Pasteurization, UHT)",
+                        content: `<p><strong>Pasteurization:</strong> Validation mein demonstrate karna shamil hai ki time/temperature regime target microorganisms ko reduce karne ke liye sufficient hai. Verification mein Alkaline Phosphatase (ALP) enzyme inactivation check karna, aur temperature records ki daily monitoring shamil hai.</p>
+                        <p><strong>UHT Processing:</strong> Validation commercial sterility (F-value) achieve karne aur aseptic conditions maintain karne par focus karta hai. Verification mein temperature aur time ki continuous monitoring shamil hai, often data loggers aur specialized software use karke.</p>`
                     },
                     non_thermal: {
-                        title: "गैर-थर्मल प्रसंस्करण (HPP, PEF, UV)",
-                        content: `<p><strong>उच्च दबाव प्रसंस्करण (HPP):</strong> प्रमाणीकरण के लिए एक विशिष्ट दबाव और धारण समय पर वांछित रोगज़नक़ में कमी (जैसे, 5-लॉग कमी) को प्रदर्शित करने के लिए वैज्ञानिक समर्थन की आवश्यकता होती है।</p>
-                        <p><strong>स्पंदित विद्युत क्षेत्र (PEF):</strong> प्रमाणीकरण अध्ययन हल्के गर्मी के साथ तालमेल में माइक्रोबियल प्रभावों की जांच करते हैं, ताकि सुरक्षा और गुणवत्ता संरक्षण सुनिश्चित हो सके।</p>
-                        <p><strong>यूवी उपचार:</strong> प्रक्रिया के पानी के लिए, प्रमाणीकरण को पाश्चुरीकृत दूध अध्यादेश (PMO) जैसे नियमों का अनुपालन प्रदर्शित करना होगा, यह सुनिश्चित करते हुए कि पर्याप्त यूवी खुराक दी जाती है।</p>`
+                        title: "Non-Thermal Processing (HPP, PEF, UV)",
+                        content: `<p><strong>High Pressure Processing (HPP):</strong> Validation ke liye specific pressure aur hold time par desired pathogen reduction (e.g., 5-log reduction) demonstrate karne ke liye scientific support required hai.</p>
+                        <p><strong>Pulsed Electric Fields (PEF):</strong> Validation studies microbicidal effects investigate karti hain, often mild heat ke synergy mein, taki safety aur quality preservation ensure ho sake.</p>
+                        <p><strong>UV Treatment:</strong> Process water ke liye, Validation ko Pasteurized Milk Ordinance (PMO) jaise regulations ka compliance demonstrate karna hoga, ensuring ki adequate UV dose delivered hai.</p>`
                     },
                     homogenization: {
-                        title: "होमोजेनाइजेशन और किण्वन",
-                        content: `<p><strong>होमोजेनाइजेशन:</strong> दक्षता को फैरल इंडेक्स या कण आकार विश्लेषण जैसे तरीकों से सत्यापित किया जाता है। खाद्य सुरक्षा अप्रत्यक्ष रूप से पूर्ववर्ती पाश्चुरीकरण चरण द्वारा सुनिश्चित की जाती है।</p>
-                        <p><strong>किण्वन:</strong> एक प्राथमिक CCP एक मान्य समय सीमा के भीतर एक विशिष्ट पीएच (जैसे, <4.6) प्राप्त कर रहा है। सत्यापन में नियमित पीएच जांच और संवेदी मूल्यांकन शामिल है।</p>`
+                        title: "Homogenization aur Fermentation",
+                        content: `<p><strong>Homogenization:</strong> Efficiency ko Farrall Index ya particle size analysis jaise methods se verify kiya jata hai. Food safety indirectly preceding pasteurization step se assured hai.</p>
+                        <p><strong>Fermentation:</strong> Ek primary CCP validated time frame ke andar specific pH (e.g., <4.6) achieve karna hai. Verification mein routine pH checks aur sensory evaluation shamil hai.</p>`
                     },
                     cip_cop: {
-                        title: "क्लीनिंग-इन-प्लेस (CIP) और क्लीनिंग-आउट-ऑफ-प्लेस (COP)",
-                        content: `<p>प्रभावी सफाई और स्वच्छता महत्वपूर्ण है। CIP प्रमाणीकरण यह प्रदर्शित करता है कि सफाई प्रक्रिया प्रभावी रूप से अवशेषों को हटाती है। सत्यापन में मापदंडों (तापमान, चालकता, प्रवाह) की वास्तविक समय की निगरानी और नियमित विश्लेषणात्मक परीक्षण (ATP, प्रोटीन स्वैब) शामिल है।</p>`
+                        title: "Cleaning-in-Place (CIP) aur Cleaning-out-of-Place (COP)",
+                        content: `<p>Effective cleaning aur sanitation crucial hai. CIP Validation demonstrate karta hai ki cleaning procedure effectively residues remove karti hai. Verification mein parameters (temperature, conductivity, flow) ki real-time monitoring aur regular analytical testing (ATP, protein swabs) shamil hai.</p>`
                     }
                 }
             },
             storage: {
-                title: "IV. भंडारण और अन्य कारकों में प्रमाणीकरण और सत्यापन",
-                content: `<p>एक व्यापक FSMS भंडारण, वितरण और सहायक कार्यक्रमों की एक श्रृंखला तक फैला हुआ है।</p>`,
+                title: "IV. Storage aur Other Factors mein Validation aur Verification",
+                content: `<p>Ek comprehensive FSMS storage, distribution aur supporting programs ki range tak extend hota hai.</p>`,
                 subsections: {
                     cold_chain: {
-                        title: "कोल्ड चेन प्रबंधन",
-                        content: `<p>प्रमाणीकरण में हॉटस्पॉट की पहचान करने और एकरूपता सुनिश्चित करने के लिए भंडारण क्षेत्रों और परिवहन का तापमान मानचित्रण शामिल है। सत्यापन में सभी नियंत्रण बिंदुओं पर तापमान की निरंतर वास्तविक समय की निगरानी शामिल है।</p>`
+                        title: "Cold Chain Management",
+                        content: `<p>Validation mein hotspots identify karne aur uniformity ensure karne ke liye storage areas aur transport ka temperature mapping shamil hai. Verification mein sabhi control points par temperature ki continuous real-time monitoring shamil hai.</p>`
                     },
                     calibration: {
-                        title: "उपकरण अंशांकन और प्रदर्शन सत्यापन",
-                        content: `<p>एक मजबूत अंशांकन कार्यक्रम यह सुनिश्चित करता है कि सभी निगरानी और मापने वाले उपकरण सटीक हैं। सत्यापन में एक परिभाषित अनुसूची के अनुसार थर्मामीटर, प्रवाह नियंत्रण और अन्य महत्वपूर्ण उपकरणों की नियमित जांच शामिल है।</p>`
+                        title: "Equipment Calibration aur Performance Verification",
+                        content: `<p>Ek robust calibration program ensure karta hai ki sabhi monitoring aur measuring equipment accurate hai. Verification mein defined schedule ke according thermometers, flow controls aur other critical devices ki regular checks shamil hain.</p>`
                     },
                     microbiological: {
-                        title: "सूक्ष्मजीवविज्ञानी नियंत्रण कार्यक्रम",
-                        content: `<p>पर्यावरण निगरानी कार्यक्रम (EMPs) स्वच्छता और स्वच्छता प्रथाओं की प्रभावशीलता को सत्यापित करते हैं। माइक्रोबियल चैलेंज अध्ययन एक प्रमाणीकरण विधि है जहां उत्पादों को उनके शेल्फ जीवन पर माइक्रोबियल विकास को बाधित करने की उनकी क्षमता निर्धारित करने के लिए जानबूझकर टीका लगाया जाता है।</p>`
+                        title: "Microbiological Control Programs",
+                        content: `<p>Environmental Monitoring Programs (EMPs) sanitation aur hygiene practices ki effectiveness verify karte hain. Microbial Challenge Studies ek Validation method hai jahan products ko intentionally inoculate kiya jata hai unki shelf life par microbial growth inhibit karne ki ability determine karne ke liye.</p>`
                     },
                     allergen: {
-                        title: "एलर्जेन प्रबंधन और रासायनिक अवशेष निगरानी",
-                        content: `<p>एलर्जेन सफाई प्रमाणीकरण यह साबित करता है कि सफाई प्रक्रियाएं एलर्जेन को प्रभावी ढंग से हटाती हैं, जिसे एलर्जेन-विशिष्ट परीक्षणों (ELISA, LFD) द्वारा सत्यापित किया जाता है। रासायनिक अवशेष निगरानी कार्यक्रम यह प्रमाणित और सत्यापित करते हैं कि उत्पाद स्थापित अधिकतम अवशेष सीमाओं (MRLs) का अनुपालन करते हैं।</p>`
+                        title: "Allergen Management aur Chemical Residue Monitoring",
+                        content: `<p>Allergen cleaning validation prove karta hai ki cleaning processes effectively allergens remove karti hain, jinhe allergen-specific tests (ELISA, LFD) se verify kiya jata hai. Chemical residue monitoring programs validate aur verify karte hain ki products established Maximum Residue Limits (MRLs) ka compliance karte hain.</p>`
                     },
                     shelf_life: {
-                        title: "शेल्फ-जीवन निर्धारण",
-                        content: `<p>"उपयोग-तिथि" को यह सुनिश्चित करने के लिए विश्लेषण और चुनौती अध्ययनों के माध्यम से मान्य किया जाता है कि उत्पाद सुरक्षित रहता है। सत्यापन में उत्पाद की गुणवत्ता और उपभोक्ता प्रतिक्रिया की चल रही निगरानी शामिल है।</p>`
+                        title: "Shelf-Life Determination",
+                        content: `<p>"Use-By" date ko analysis aur challenge studies ke through validate kiya jata hai yah ensure karne ke liye ki product safe rahta hai. Verification mein product quality aur consumer feedback ki ongoing monitoring shamil hai.</p>`
                     },
                     documentation: {
-                        title: "दस्तावेज़ीकरण और रिकॉर्ड-कीपिंग",
-                        content: `<p>सावधानीपूर्वक दस्तावेज़ीकरण किसी भी FSMS की रीढ़ है, जो सभी प्रमाणीकरण और सत्यापन गतिविधियों के लिए आवश्यक वस्तुनिष्ठ साक्ष्य प्रदान करता है, अनुपालन और पता लगाने की क्षमता सुनिश्चित करता है।</p>`
+                        title: "Documentation aur Record-Keeping",
+                        content: `<p>Meticulous documentation kisi bhi FSMS ki backbone hai, jo sabhi Validation aur Verification activities ke liye required objective evidence provide karta hai, compliance aur traceability ensure karta hai.</p>`
                     }
                 }
             },
             conclusion: {
-                title: "V. निष्कर्ष और सिफारिशें",
-                content: `<p>प्रमाणीकरण और सत्यापन केवल नियामक बाधाएं नहीं हैं, बल्कि वे वैज्ञानिक और परिचालन स्तंभ हैं जिन पर डेयरी खाद्य सुरक्षा का निर्माण होता है। वे एक सक्रिय, साक्ष्य-आधारित दृष्टिकोण का प्रतिनिधित्व करते हैं जो पूरी डेयरी आपूर्ति श्रृंखला में फैला हुआ है। जबकि तकनीकी प्रगति निगरानी के लिए तेजी से और अधिक उद्देश्यपूर्ण तरीके प्रदान करती है, मानव विशेषज्ञता, प्रशिक्षण और परिश्रम की अनिवार्य भूमिका सर्वोपरि है।</p>
-                <p><strong>सिफारिशें:</strong></p>
+                title: "V. Conclusions aur Recommendations",
+                content: `<p>Validation aur Verification sirf regulatory hurdles nahi hain, balki ye scientific aur operational pillars hain jin par dairy food safety built hai. Ye ek proactive, evidence-based approach represent karte hain jo puri dairy supply chain mein extend hota hai. Jabki technological advancements monitoring ke liye increasingly rapid aur objective methods offer karti hain, human expertise, training aur diligence ki indispensable role paramount rehti hai.</p>
+                <p><strong>Recommendations:</strong></p>
                 <ul class="list-disc pl-5 space-y-2">
-                    <li>एक सतत सुधार चक्र में प्रमाणीकरण और सत्यापन को एकीकृत करें।</li>
-                    <li>उन्नत विश्लेषणात्मक प्रौद्योगिकियों और डेटा प्रबंधन में निवेश करें।</li>
-                    <li>प्रशिक्षण और क्षमता कार्यक्रमों को बढ़ाएं।</li>
-                    <li>FSMS के लिए एक समग्र, प्रणालीगत दृष्टिकोण अपनाएं।</li>
-                    <li>वैश्विक प्रतिस्पर्धात्मकता के लिए अंतर्राष्ट्रीय मानकों का लाभ उठाएं।</li>
-                    <li>उत्पाद विकास और शेल्फ-जीवन प्रमाणीकरण के लिए चुनौती अध्ययनों को प्राथमिकता दें।</li>
+                    <li>Validation aur Verification ko Continuous Improvement Cycle mein integrate karein.</li>
+                    <li>Advanced Analytical Technologies aur Data Management mein invest karein.</li>
+                    <li>Training aur Competency Programs enhance karein.</li>
+                    <li>FSMS ke liye ek Holistic, Systemic Approach adopt karein.</li>
+                    <li>Global Competitiveness ke liye International Standards leverage karein.</li>
+                    <li>Product Development aur Shelf-Life Validation ke liye Challenge Studies prioritize karein.</li>
                 </ul>`
             }
         }
