@@ -1,143 +1,143 @@
 
 export const evaporationDryingContent = {
     hi: {
-        title: "वाष्पीकरण और सुखाने की प्रक्रियाएं",
-        description: "संघनित और पाउडर दूध उत्पादों के उत्पादन में अंतर्दृष्टि।",
+        title: "Evaporation aur Drying Processes",
+        description: "Condensed aur powdered milk products ke production mein insights.",
         tabs: {
-            intro: "परिचय",
-            evaporated_milk: "वाष्पित दूध",
-            milk_powder: "दूध पाउडर",
-            whey_processing: "मट्ठा प्रसंस्करण",
-            casein_production: "कैसिइन उत्पादन",
-            drying_principles: "सुखाने के सिद्धांत"
+            intro: "Introduction",
+            evaporated_milk: "Evaporated Milk",
+            milk_powder: "Milk Powder",
+            whey_processing: "Whey Processing",
+            casein_production: "Casein Production",
+            drying_principles: "Drying Principles"
         },
         sections: {
             introduction: {
-                title: "I. परिचय: डेयरी में जल न्यूनीकरण",
-                content: "<p>डेयरी उद्योग में, वाष्पीकरण और सुखाने महत्वपूर्ण प्रक्रियाएं हैं जिनका उपयोग दूध से पानी निकालकर केंद्रित और स्थिर उत्पाद बनाने के लिए किया जाता है। ये तकनीकें न केवल शेल्फ जीवन का विस्तार करती हैं बल्कि परिवहन और भंडारण की लागत को भी काफी कम करती हैं। वाष्पीकरण आंशिक रूप से पानी को हटाता है, जिससे संघनित दूध जैसे तरल उत्पाद बनते हैं, जबकि सुखाने से लगभग सारा पानी निकल जाता है, जिससे दूध पाउडर बनता है। ये प्रक्रियाएं दूध की पोषण अखंडता को बनाए रखते हुए दूध के ठोस पदार्थों को संरक्षित करने के लिए महत्वपूर्ण हैं, जो उन्हें वैश्विक डेयरी आपूर्ति श्रृंखला का एक अनिवार्य हिस्सा बनाती हैं।</p>",
+                title: "I. Introduction: Dairy mein Water Reduction",
+                content: "<p>Dairy industry mein, evaporation aur drying critical processes hain jinhe milk se water remove karke concentrated aur stable products create karne ke liye use kiya jata hai. Ye techniques na sirf shelf life extend karti hain balki transportation aur storage costs ko bhi significantly reduce karti hain. Evaporation partially water remove karta hai, jisse condensed milk jaise liquid products bante hain, jabki drying lagbhag sara pani nikal deta hai, jisse milk powder banta hai. Ye processes milk solids preserve karne ke liye vital hain jabki milk ki nutritional integrity maintain karti hain, jo inhe global dairy supply chain ka essential part banati hain.</p>",
                 table: {
-                    headers: ["उत्पाद प्रकार", "आधार सामग्री", "जल न्यूनीकरण", "विशेषताएँ", "वसा सामग्री (%)", "प्रोटीन सामग्री (%)", "शेल्फ जीवन", "प्रशीतन आवश्यक?", "प्राथमिक उपयोग"],
+                    headers: ["Product Type", "Base Material", "Water Reduction", "Characteristics", "Fat Content (%)", "Protein Content (%)", "Shelf Life", "Refrigeration Required?", "Primary Uses"],
                     rows: [
-                        { product_type: "वाष्पित दूध", base_material: "पूरा दूध", water_reduction: "~60%", characteristics: "गाढ़ा तरल, पके हुए स्वाद के साथ", fat_content: "≥7.5", protein_content: "≥6.5", shelf_life: ">1 वर्ष", refrigeration_required: "डिब्बाबंदी के बाद नहीं", primary_uses: "कॉफी, खाना पकाने, बेकिंग में क्रीम के विकल्प के रूप में" },
-                        { product_type: "मीठा संघनित दूध", base_material: "पूरा दूध + चीनी", water_reduction: "~60%", characteristics: "बहुत मीठा, चिपचिपा तरल", fat_content: "≥8", protein_content: "≥6.5", shelf_life: ">1 वर्ष", refrigeration_required: "नहीं", primary_uses: "मिठाई, मिठाई, टॉपिंग" },
-                        { product_type: "पूरा दूध पाउडर", base_material: "पूरा दूध", water_reduction: "~87%", characteristics: "सूखा पाउडर, पुनर्गठन के बाद दूध जैसा स्वाद", fat_content: "≥26", protein_content: "≥24", shelf_life: "6-12 महीने", refrigeration_required: "नहीं", primary_uses: "पुनर्गठित दूध, शिशु फार्मूला, बेकरी, कन्फेक्शनरी" },
-                        { product_type: "स्किम्ड दूध पाउडर", base_material: "स्किम्ड दूध", water_reduction: "~90%", characteristics: "सूखा पाउडर, कम वसा वाला स्वाद", fat_content: "≤1.5", protein_content: "≥34", shelf_life: "1-2 साल", refrigeration_required: "नहीं", primary_uses: "पुनर्गठित दूध, दही, पनीर, बेकरी" }
+                        { product_type: "Evaporated Milk", base_material: "Whole milk", water_reduction: "~60%", characteristics: "Thick liquid, cooked flavor ke saath", fat_content: "≥7.5", protein_content: "≥6.5", shelf_life: ">1 year", refrigeration_required: "Canning ke baad nahi", primary_uses: "Coffee mein cream substitute, cooking, baking" },
+                        { product_type: "Sweetened Condensed Milk", base_material: "Whole milk + sugar", water_reduction: "~60%", characteristics: "Bahut sweet, viscous liquid", fat_content: "≥8", protein_content: "≥6.5", shelf_life: ">1 year", refrigeration_required: "Nahi", primary_uses: "Desserts, sweets, toppings" },
+                        { product_type: "Whole Milk Powder", base_material: "Whole milk", water_reduction: "~87%", characteristics: "Dry powder, reconstitution ke baad milk jaisa taste", fat_content: "≥26", protein_content: "≥24", shelf_life: "6-12 months", refrigeration_required: "Nahi", primary_uses: "Reconstituted milk, infant formula, bakery, confectionery" },
+                        { product_type: "Skimmed Milk Powder", base_material: "Skimmed milk", water_reduction: "~90%", characteristics: "Dry powder, low-fat taste", fat_content: "≤1.5", protein_content: "≥34", shelf_life: "1-2 years", refrigeration_required: "Nahi", primary_uses: "Reconstituted milk, yogurt, cheese, bakery" }
                     ]
                 }
             },
             evaporated_milk: {
-                title: "II. वाष्पित दूध: प्रसंस्करण और सिद्धांत",
-                content: "<p>वाष्पित दूध, जिसे अनमीठा संघनित दूध के रूप में भी जाना जाता है, एक शेल्फ-स्थिर डिब्बाबंद दूध उत्पाद है जिसे इसके मूल मात्रा के लगभग 60% पानी को हटाकर बनाया गया है। यह प्रक्रिया दूध के पोषक तत्वों और दूध के ठोस पदार्थों को केंद्रित करती है, जिसके परिणामस्वरूप एक गाढ़ा, थोड़ा कैरामेलाइज्ड स्वाद वाला उत्पाद बनता है।</p>",
+                title: "II. Evaporated Milk: Processing aur Principles",
+                content: "<p>Evaporated milk, jise unsweetened condensed milk ke naam se bhi jana jata hai, ek shelf-stable canned milk product hai jise iski original volume se lagbhag 60% pani remove karke banaya jata hai. Ye process milk ke nutrients aur milk solids ko concentrate karta hai, jiske result mein ek thicker product banta hai jo slightly caramelized flavor ke saath hota hai.</p>",
                 subsections: {
                     pre_treatment: {
-                        title: "प्रारंभिक उपचार और मानकीकरण",
-                        content: "<p>उत्पादन प्रक्रिया आने वाले दूध की सावधानीपूर्वक जाँच के साथ शुरू होती है ताकि यह सुनिश्चित हो सके कि यह उच्च गुणवत्ता वाला है। दूध को फिर अंतिम उत्पाद में एक विशिष्ट वसा-से-ठोस-गैर-वसा अनुपात प्राप्त करने के लिए मानकीकृत किया जाता है। गर्मी स्थिरता में सुधार के लिए फॉस्फेट या साइट्रेट जैसे स्टेबलाइजिंग लवणों का जोड़ एक महत्वपूर्ण कदम है, जो बाद में तीव्र गर्मी उपचार के दौरान दूध को जमने से रोकता है।</p>"
+                        title: "Pre-treatment aur Standardization",
+                        content: "<p>Production process incoming milk ki careful checking ke saath start hoti hai taki ensure ho sake ki ye high quality ka hai. Milk ko phir final product mein specific fat-to-solids-not-fat ratio achieve karne ke liye standardize kiya jata hai. Phosphates ya citrates jaise stabilizing salts ka addition heat stability improve karne ke liye ek crucial step hai, jo subsequent intense heat treatment ke dauran milk ko coagulate hone se prevent karta hai.</p>"
                     },
                     evaporation: {
-                        title: "वाष्पीकरण: पानी हटाने का मूल",
-                        content: "<p>मानकीकरण के बाद, दूध को लगभग 40-50% की कुल ठोस सामग्री तक केंद्रित करने के लिए वाष्पीकरण से गुजरना पड़ता है। पानी को हटाने के लिए दूध को वैक्यूम के तहत उबालकर यह हासिल किया जाता है, जो कम तापमान पर उबलने की अनुमति देता है। यह सौम्य दृष्टिकोण अत्यधिक गर्मी से प्रेरित रासायनिक परिवर्तनों को कम करने, उत्पाद के स्वाद और रंग को संरक्षित करने के लिए महत्वपूर्ण है।</p>"
+                        title: "Evaporation: Water Removal ka Core",
+                        content: "<p>Standardization ke baad, milk evaporation se guzarta hai taki ise lagbhag 40-50% ki total solids content tak concentrate kiya ja sake. Water remove karne ke liye milk ko vacuum ke under boil karke ye achieve kiya jata hai, jo lower temperature par boiling allow karta hai. Ye gentle approach heat-induced chemical changes minimize karne ke liye critical hai, product ke flavor aur color ko preserve karta hai.</p>"
                     },
                     evaporator_types: {
-                        title: "वाष्पीकरणकर्ता के प्रकार",
+                        title: "Evaporators ke Types",
                         content: `
                             <ul>
-                                <li><strong>गिरती फिल्म वाष्पीकरणकर्ता:</strong> यह सबसे अधिक इस्तेमाल किया जाने वाला प्रकार है। दूध गर्म ऊर्ध्वाधर ट्यूबों की आंतरिक सतहों पर एक पतली फिल्म के रूप में बहता है। इस बड़े सतह क्षेत्र के कारण पानी तेजी से वाष्पित होता है।</li>
-                                <li><strong>बहु-प्रभाव वाष्पीकरणकर्ता:</strong> ऊर्जा दक्षता में सुधार करने के लिए, कई वाष्पीकरणकर्ताओं को श्रृंखला में व्यवस्थित किया जाता है। एक प्रभाव से उत्पन्न भाप का उपयोग अगले को गर्म करने के लिए किया जाता है, जिससे समग्र भाप की खपत कम हो जाती है।</li>
+                                <li><strong>Falling Film Evaporators:</strong> Ye sabse commonly used type hai. Milk heated vertical tubes ki inner surfaces par thin film ke roop mein flow karta hai. Is large surface area ki wajah se pani rapidly evaporate hota hai.</li>
+                                <li><strong>Multi-effect Evaporators:</strong> Energy efficiency improve karne ke liye, kai evaporators ko series mein arrange kiya jata hai. Ek effect se generated steam ka use next ko heat karne ke liye hota hai, jisse overall steam consumption reduce hoti hai.</li>
                             </ul>`
                     },
                     sterilization: {
-                        title: "समरूपता, डिब्बाबंदी और नसबंदी",
-                        content: "<p>केंद्रित दूध को फिर समरूप बनाया जाता है ताकि भंडारण के दौरान वसा पृथक्करण को रोका जा सके। फिर इसे डिब्बे में भरा जाता है और भली भांति बंद करके सील कर दिया जाता है। अंतिम चरण नसबंदी है, जहाँ बंद डिब्बे को गर्मी के अधीन किया जाता है - या तो बैच रिटॉर्ट्स में या निरंतर प्रणालियों में - सभी शेष सूक्ष्मजीवों को नष्ट करने और व्यावसायिक बाँझपन प्राप्त करने के लिए। यह अंतिम गर्मी उपचार वाष्पित दूध को इसकी विशिष्ट पकी हुई स्वाद और थोड़ी गहरी रंगत भी देता है।</p>"
+                        title: "Homogenization, Canning aur Sterilization",
+                        content: "<p>Concentrated milk ko phir homogenize kiya jata hai taki storage ke dauran fat separation prevent ho sake. Ise phir cans mein fill kiya jata hai aur hermetically seal kar diya jata hai. Final step sterilization hai, jahan sealed cans ko heat ke subject kiya jata hai—ya to batch retorts mein ya continuous systems mein—sabhi remaining microorganisms destroy karne aur commercial sterility achieve karne ke liye. Ye final heat treatment evaporated milk ko iski characteristic cooked flavor aur slightly darker color bhi deta hai.</p>"
                     }
                 }
             },
             milk_powder: {
-                title: "III. दूध पाउडर: स्प्रे सुखाने के माध्यम से उत्पादन",
-                content: "<p>दूध पाउडर, या सूखा दूध, एक निर्मित डेयरी उत्पाद है जो दूध से लगभग सभी पानी को वाष्पीकरण और स्प्रे सुखाने के माध्यम से हटाकर बनाया जाता है। दूध पाउडर का मुख्य उद्देश्य दूध को संरक्षित करना है; इसकी कम नमी सामग्री के कारण, इसका शेल्फ जीवन तरल दूध की तुलना में बहुत लंबा होता है और इसे प्रशीतन की आवश्यकता नहीं होती है।</p>",
+                title: "III. Milk Powder: Spray Drying ke Through Production",
+                content: "<p>Milk powder, ya dried milk, ek manufactured dairy product hai jo evaporation aur spray drying ke through milk se lagbhag sara pani remove karke banaya jata hai. Milk powder ka main purpose milk preserve karna hai; iski low moisture content ki wajah se, iska shelf life liquid milk se bahut lamba hota hai aur ise refrigeration ki zarurat nahi hoti.</p>",
                 subsections: {
                     initial_processing: {
-                        title: "प्रारंभिक प्रसंस्करण और एकाग्रता",
-                        content: "<p>दूध पाउडर के उत्पादन में पहला कदम कच्चे दूध को गुणवत्ता के लिए जाँचने और स्किम्ड दूध या पूरे दूध में अलग करना है। दूध को फिर 88°C पर 15-20 सेकंड के लिए पहले से गरम किया जाता है ताकि अधिकांश सूक्ष्मजीवों को नष्ट किया जा सके और एंजाइमों को निष्क्रिय किया जा सके। इसके बाद, दूध को वाष्पीकरण के माध्यम से 45-55% की कुल ठोस सामग्री तक केंद्रित किया जाता है, ठीक वाष्पित दूध के उत्पादन की तरह। यह एकाग्रता चरण बाद के स्प्रे सुखाने की प्रक्रिया को अधिक कुशल और किफायती बनाता है।</p>"
+                        title: "Initial Processing aur Concentration",
+                        content: "<p>Milk powder produce karne mein pehla step raw milk ko quality ke liye check karna aur ise skimmed milk ya whole milk mein separate karna hai. Milk ko phir 88°C par 15-20 seconds ke liye preheat kiya jata hai taki most microorganisms destroy ho jayein aur enzymes inactivate ho jayein. Iske baad, milk ko evaporation ke through 45-55% ki total solids content tak concentrate kiya jata hai, bilkul evaporated milk ke production ki tarah. Ye concentration step subsequent spray drying process ko more efficient aur economical banata hai.</p>"
                     },
                     composition: {
-                        title: "दूध पाउडर की संरचना",
+                        title: "Milk Powder ki Composition",
                         table: {
-                            headers: ["घटक", "पूरा दूध पाउडर (WMP) (%)", "स्किम्ड दूध पाउडर (SMP) (%)"],
+                            headers: ["Component", "Whole Milk Powder (WMP) (%)", "Skimmed Milk Powder (SMP) (%)"],
                             rows: [
-                                { component: "नमी", wmp: "2.5 - 4.5", smp: "3.5 - 4.5" },
-                                { component: "वसा", wmp: "26 - 40", smp: "अधिकतम 1.5" },
-                                { component: "प्रोटीन", wmp: "24 - 27", smp: "34 - 37" },
-                                { component: "लैक्टोज", wmp: "36 - 38", smp: "49 - 52" },
-                                { component: "खनिज (राख)", wmp: "5.5 - 6.5", smp: "7.9 - 8.2" }
+                                { component: "Moisture", wmp: "2.5 - 4.5", smp: "3.5 - 4.5" },
+                                { component: "Fat", wmp: "26 - 40", smp: "Max 1.5" },
+                                { component: "Protein", wmp: "24 - 27", smp: "34 - 37" },
+                                { component: "Lactose", wmp: "36 - 38", smp: "49 - 52" },
+                                { component: "Minerals (Ash)", wmp: "5.5 - 6.5", smp: "7.9 - 8.2" }
                             ]
                         }
                     }
                 }
             },
             whey_processing: {
-                title: "IV. मट्ठा प्रसंस्करण: मूल्य वर्धित उत्पादों में एक उप-उत्पाद को बदलना",
-                content: "<p>मट्ठा, एक बार पनीर बनाने का एक उप-उत्पाद माना जाता था, अब एक मूल्यवान घटक है जिसे विभिन्न प्रकार के खाद्य और पोषण उत्पादों में संसाधित किया जाता है। मट्ठा प्रसंस्करण में एकाग्रता और सुखाने की तकनीकें शामिल हैं जो दूध पाउडर के उत्पादन के समान हैं।</p>",
+                title: "IV. Whey Processing: By-product ko Value-Added Products mein Transform karna",
+                content: "<p>Whey, jo ek time cheesemaking ka by-product mana jata tha, ab ek valuable ingredient hai jise variety of food aur nutritional products mein process kiya jata hai. Whey processing mein concentration aur drying techniques shamil hain jo milk powder ke production mein use kiye jane wale similar hain.</p>",
                 subsections: {
                     initial_separation: {
-                        title: "प्रारंभिक पृथक्करण और स्पष्टीकरण",
-                        content: "<p>पनीर बनाने से प्राप्त तरल मट्ठा में अभी भी जुर्माना कैसिइन कण और अवशिष्ट वसा हो सकता है। इन्हें स्पष्टीकरण और क्रीम पृथक्करण के माध्यम से हटा दिया जाता है। परिणामी मट्ठा को फिर पाश्चुरीकृत किया जाता है ताकि किसी भी शेष सूक्ष्मजीवों को नष्ट किया जा सके और इसे आगे के प्रसंस्करण के लिए तैयार किया जा सके।</p>"
+                        title: "Initial Separation aur Clarification",
+                        content: "<p>Cheesemaking se milne wala liquid whey mein abhi bhi fine casein particles aur residual fat ho sakta hai. Inhe clarification aur cream separation ke through remove kiya jata hai. Resulting whey ko phir pasteurize kiya jata hai taki koi bhi remaining microorganisms destroy ho jayein aur ise further processing ke liye prepare kiya ja sake.</p>"
                     },
                     protein_concentration: {
-                        title: "प्रोटीन एकाग्रता: WPC और WPI का उत्पादन",
-                        content: "<p>मट्ठा प्रोटीन को केंद्रित करने के लिए अल्ट्राफिल्ट्रेशन (UF) एक महत्वपूर्ण प्रक्रिया है। UF झिल्ली का उपयोग करके लैक्टोज, खनिज और पानी को हटा देता है जबकि बड़े प्रोटीन अणुओं को बनाए रखता है। यह मट्ठा प्रोटीन कॉन्सेंट्रेट (WPC) का उत्पादन करता है, जिसमें 35% से 80% तक प्रोटीन होता है। आगे के प्रसंस्करण, जैसे आयन-विनिमय क्रोमैटोग्राफी, का उपयोग मट्ठा प्रोटीन आइसोलेट्स (WPI) बनाने के लिए किया जा सकता है, जिसमें 90% से अधिक प्रोटीन होता है।</p>"
+                        title: "Protein Concentration: WPC aur WPI ka Production",
+                        content: "<p>Ultrafiltration (UF) whey proteins concentrate karne ke liye ek key process hai. UF membranes use karke lactose, minerals aur water remove karta hai jabki larger protein molecules retain karta hai. Ye Whey Protein Concentrate (WPC) produce karta hai, jismein 35% se 80% tak protein hota hai. Further processing, jaise ion-exchange chromatography, ka use Whey Protein Isolates (WPI) create karne ke liye kiya ja sakta hai, jismein 90% se zyada protein hota hai.</p>"
                     },
                     drying_applications: {
-                        title: "सुखाने और अनुप्रयोग",
-                        content: "<p>केंद्रित मट्ठा या WPC को फिर स्प्रे सुखाकर पाउडर बनाया जाता है। परिणामी मट्ठा पाउडर और WPC का व्यापक रूप से खाद्य उद्योग में उनके कार्यात्मक गुणों (जैसे, पायसीकरण, गेलिंग) और पोषण मूल्य के लिए उपयोग किया जाता है। वे खेल पोषण की खुराक, शिशु फार्मूला, पके हुए माल और प्रसंस्कृत खाद्य पदार्थों में पाए जाते हैं।</p>"
+                        title: "Drying aur Applications",
+                        content: "<p>Concentrated whey ya WPC ko phir spray-dry karke powder banaya jata hai. Resulting whey powder aur WPC ka food industry mein unke functional properties (e.g., emulsification, gelling) aur nutritional value ke liye widely use hota hai. Ye sports nutrition supplements, infant formula, baked goods aur processed foods mein paye jate hain.</p>"
                     }
                 }
             },
             casein_production: {
-                title: "V. कैसिइन उत्पादन: दूध से प्रोटीन को अलग करना",
-                content: "<p>कैसिइन स्किम्ड दूध में मुख्य प्रोटीन है, जो कुल प्रोटीन का लगभग 80% है। इसे दूध से इसके आइसोइलेक्ट्रिक बिंदु पर वर्षा द्वारा अलग किया जा सकता है। परिणामी उत्पाद, कैसिइन, एक उच्च-प्रोटीन घटक है जिसका उपयोग विभिन्न खाद्य और औद्योगिक अनुप्रयोगों में किया जाता है।</p>",
+                title: "V. Casein Production: Milk se Protein Isolate karna",
+                content: "<p>Casein skimmed milk mein main protein hai, jo total protein ka lagbhag 80% account karta hai. Ise milk se iski isoelectric point par precipitation dwara isolate kiya ja sakta hai. Resulting product, casein, ek high-protein ingredient hai jiska use various food aur industrial applications mein hota hai.</p>",
                 subsections: {
                     precipitation_methods: {
-                        title: "वर्षा के तरीके: एसिड बनाम रेनेट कैसिइन",
+                        title: "Precipitation Methods: Acid vs Rennet Casein",
                         table: {
-                            headers: ["चरण", "एसिड कैसिइन", "रेनेट कैसिइन"],
+                            headers: ["Step", "Acid Casein", "Rennet Casein"],
                             rows: [
-                                { stage: "दूध का प्रकार", acid_casein: "पाश्चुरीकृत स्किम्ड दूध", rennet_casein: "पाश्चुरीकृत स्किम्ड दूध" },
-                                { stage: "वर्षा एजेंट", acid_casein: "हाइड्रोक्लोरिक या सल्फ्यूरिक एसिड", rennet_casein: "रेनेट एंजाइम" },
-                                { stage: "वर्षा pH", acid_casein: "4.6 (आइसोइलेक्ट्रिक बिंदु)", rennet_casein: "6.2 - 6.4" },
-                                { stage: "तापमान", acid_casein: "35-40°C", rennet_casein: "30-35°C" },
-                                { stage: "विशेषताएँ", acid_casein: "अघुलनशील, दानेदार", rennet_casein: "कैल्शियम कैसिनेट-फॉस्फेट कॉम्प्लेक्स" },
-                                { stage: "अनुप्रयोग", acid_casein: "औद्योगिक उपयोग (चिपकने वाले, पेंट), खाद्य योजक", rennet_casein: "पनीर एनालॉग, प्रसंस्कृत पनीर" }
+                                { stage: "Milk ka Type", acid_casein: "Pasteurized skimmed milk", rennet_casein: "Pasteurized skimmed milk" },
+                                { stage: "Precipitation Agent", acid_casein: "Hydrochloric ya sulfuric acid", rennet_casein: "Rennet enzyme" },
+                                { stage: "Precipitation pH", acid_casein: "4.6 (isoelectric point)", rennet_casein: "6.2 - 6.4" },
+                                { stage: "Temperature", acid_casein: "35-40°C", rennet_casein: "30-35°C" },
+                                { stage: "Characteristics", acid_casein: "Insoluble, granular", rennet_casein: "Calcium caseinate-phosphate complex" },
+                                { stage: "Applications", acid_casein: "Industrial uses (adhesives, paints), food additives", rennet_casein: "Cheese analogs, processed cheese" }
                             ]
                         }
                     },
                     drying_applications: {
-                        title: "धुलाई, सुखाने और अनुप्रयोग",
-                        content: "<p>वर्षा के बाद, कैसिइन दही को मट्ठा से अलग किया जाता है, धोया जाता है ताकि अवशिष्ट लैक्टोज और खनिजों को हटाया जा सके, और फिर सुखाया जाता है। सुखाने की प्रक्रिया में आमतौर पर पीसना, एक गर्म हवा के प्रवाह में सुखाना और अंतिम पाउडर को मिलिंग करना शामिल है। एसिड कैसिइन का उपयोग इसके पोषण मूल्य के लिए खाद्य पदार्थों में किया जाता है, जबकि रेनेट कैसिइन का उपयोग पनीर और अन्य डेयरी उत्पादों में इसकी बनावट और पिघलने के गुणों के लिए किया जाता है।</p>"
+                        title: "Washing, Drying aur Applications",
+                        content: "<p>Precipitation ke baad, casein curd ko whey se separate kiya jata hai, residual lactose aur minerals remove karne ke liye wash kiya jata hai, aur phir dry kiya jata hai. Drying process mein typically grinding, hot air ke stream mein drying, aur final powder ko milling karna shamil hai. Acid casein ka use foods mein iski nutritional value ke liye hota hai, jabki rennet casein ka use cheese aur other dairy products mein iski textural aur melting properties ke liye hota hai.</p>"
                     }
                 }
             },
             drying_principles: {
-                title: "VI. डेयरी में सुखाने के सिद्धांत और प्रौद्योगिकियां",
+                title: "VI. Dairy mein Drying ke Principles aur Technologies",
                 subsections: {
                     technologies: {
-                        title: "सुखाने की प्रौद्योगिकियां",
-                        content: "<p>कई सुखाने की प्रौद्योगिकियों का उपयोग किया जाता है, प्रत्येक के अपने फायदे और सीमाएं हैं।</p>",
+                        title: "Drying Technologies",
+                        content: "<p>Kai drying technologies use ki jati hain, har ek ke apne advantages aur limitations hain.</p>",
                         table: {
-                            headers: ["प्रौद्योगिकी", "सिद्धांत", "उत्पाद रूप", "लाभ", "सीमाएं"],
+                            headers: ["Technology", "Principle", "Product Form", "Advantages", "Limitations"],
                             rows: [
-                                { technology: "स्प्रे सुखाने", principle: "तरल फ़ीड को गर्म हवा के प्रवाह में महीन बूंदों में परमाणु बनाना, जिससे तेजी से वाष्पीकरण होता है।", product_form: "महीन पाउडर", advantages: "निरंतर प्रक्रिया, कम गर्मी क्षति, अच्छा घुलनशीलता।", limitations: "उच्च पूंजी लागत, बड़े पदचिह्न।" },
-                                { technology: "ड्रम सुखाने", principle: "केंद्रित तरल को आंतरिक रूप से गर्म घूमने वाले ड्रम की सतह पर एक पतली फिल्म के रूप में लागू करना। सूखी फिल्म को फिर बंद कर दिया जाता है।", product_form: "गुच्छे या पाउडर", advantages: "उच्च ऊर्जा कुशल, चिपचिपा उत्पादों के लिए उपयुक्त।", limitations: "अधिक गर्मी क्षति, खराब घुलनशीलता।" },
-                                { technology: "फ्रीज सुखाने (लियोफिलाइजेशन)", principle: "उत्पाद को फ्रीज करना और फिर दबाव को कम करना ताकि जमे हुए पानी को सीधे ठोस से गैस (ऊर्ध्वपातन) में बदल दिया जा सके।", product_form: "छिद्रपूर्ण, हल्का ठोस", advantages: "उत्कृष्ट गुणवत्ता प्रतिधारण, न्यूनतम गर्मी क्षति, अच्छा पुनर्जलीकरण।", limitations: "बहुत महंगा, धीमी प्रक्रिया, उच्च ऊर्जा खपत।" }
+                                { technology: "Spray Drying", principle: "Liquid feed ko hot air ke stream mein fine droplets mein atomize karna, jisse rapid evaporation hota hai.", product_form: "Fine powder", advantages: "Continuous process, low heat damage, good solubility.", limitations: "High capital cost, large footprint." },
+                                { technology: "Drum Drying", principle: "Concentrated liquid ki thin film ko internally heated rotating drum ki surface par apply karna. Dried film ko phir scrape off kiya jata hai.", product_form: "Flakes ya powder", advantages: "High energy efficiency, viscous products ke liye suitable.", limitations: "More heat damage, poor solubility." },
+                                { technology: "Freeze Drying (Lyophilization)", principle: "Product ko freeze karna aur phir pressure reduce karna taki frozen water directly solid se gas (sublimation) mein change ho jaye.", product_form: "Porous, lightweight solid", advantages: "Excellent quality retention, minimal heat damage, good rehydration.", limitations: "Bahut expensive, slow process, high energy consumption." }
                             ]
                         }
                     },
                     post_drying: {
-                        title: "सुखाने के बाद के चरण: इंस्टेंटाइजेशन और एग्लोमरेशन",
-                        content: "<p>मानक दूध पाउडर में अक्सर खराब घुलनशीलता होती है। इंस्टेंटाइजेशन इस समस्या को हल करने के लिए डिज़ाइन की गई एक प्रक्रिया है। इसमें पाउडर कणों को थोड़ा गीला करना शामिल है ताकि वे एक साथ चिपक जाएं और छिद्रपूर्ण समूह बना सकें। ये समूह पानी में अधिक आसानी से डूब जाते हैं और तेजी से घुल जाते हैं, जिससे एक 'तत्काल' उत्पाद बनता है।</p>"
+                        title: "Post-Drying Steps: Instantization aur Agglomeration",
+                        content: "<p>Standard milk powder mein aksar poor solubility hoti hai. Instantization ek process hai jo is problem solve karne ke liye design ki gayi hai. Ismein powder particles ko slightly wet karna shamil hai taki ye ek saath stick ho jayein aur porous agglomerates bana sakein. Ye agglomerates pani mein zyada easily sink ho jate hain aur quickly dissolve ho jate hain, jisse ek 'instant' product banta hai.</p>"
                     },
                     conclusion: {
-                        title: "निष्कर्ष",
-                        content: "<p>संक्षेप में, वाष्पीकरण और सुखाने डेयरी उद्योग में परिवर्तनकारी प्रक्रियाएं हैं जो दूध की स्थिरता, परिवहन क्षमता और बहुमुखी प्रतिभा को बहुत बढ़ाती हैं। जबकि ये तकनीकें दूध के ठोस पदार्थों को संरक्षित करने में अत्यधिक प्रभावी हैं, उन्हें सावधानीपूर्वक नियंत्रित किया जाना चाहिए ताकि गर्मी से प्रेरित रासायनिक परिवर्तनों को कम किया जा सके जो स्वाद, रंग और पोषण मूल्य को प्रभावित कर सकते हैं। इन प्रक्रियाओं के पीछे के सिद्धांतों को समझना लगातार उच्च गुणवत्ता वाले केंद्रित और सूखे डेयरी उत्पादों के उत्पादन के लिए आवश्यक है जो दुनिया भर के उपभोक्ताओं की मांगों को पूरा करते हैं।</p>"
+                        title: "Conclusion",
+                        content: "<p>Summary mein, evaporation aur drying dairy industry mein transformative processes hain jo milk ki stability, transportability aur versatility ko greatly enhance karti hain. Jabki ye techniques milk solids preserve karne mein highly effective hain, inhe carefully control kiya jana chahiye taki heat-induced chemical changes minimize ho sakein jo flavor, color aur nutritional value ko affect kar sakti hain. In processes ke peeche ke principles samajhna consistently high-quality concentrated aur dried dairy products produce karne ke liye essential hai jo worldwide consumers ki demands meet karti hain.</p>"
                     }
                 }
             }
