@@ -231,6 +231,7 @@ function AcidityCheckCalc() {
 
 function AcidityMaintenanceCalc() {
     const [inputs, setInputs] = useState({ milkQty: "100", initialAcidity: "0.14", targetAcidity: "0.13" });
+    const [milkUnit, setMilkUnit] = useState<'kg' | 'liters'>('kg');
     const [results, setResults] = useState<{ naoh: string, na2co3: string, nahco3: string } | null>(null);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -238,7 +239,8 @@ function AcidityMaintenanceCalc() {
     };
     
     const calculate = () => {
-        const qty = parseFloat(inputs.milkQty);
+        const qtyValue = parseFloat(inputs.milkQty);
+        const qty = milkUnit === 'liters' ? qtyValue * 1.03 : qtyValue;
         const initial = parseFloat(inputs.initialAcidity);
         const target = parseFloat(inputs.targetAcidity);
 
@@ -255,14 +257,7 @@ function AcidityMaintenanceCalc() {
         const acidityToNeutralize = initial - target;
         const totalLacticAcidKg = (acidityToNeutralize / 100) * qty;
 
-        // Molecular weights: Lactic Acid (LA) = 90.08, NaOH = 40.00, Na2CO3 = 105.99, NaHCO3 = 84.01
-        // Reactions:
-        // LA + NaOH -> Na-Lactate + H2O (1:1 molar)
-        // 2LA + Na2CO3 -> 2Na-Lactate + H2CO3 (2:1 molar)
-        // LA + NaHCO3 -> Na-Lactate + H2CO3 (1:1 molar)
-
         const molesLA = (totalLacticAcidKg * 1000) / 90.08;
-
         const gramsNaOH = molesLA * 40.00;
         const gramsNa2CO3 = (molesLA / 2) * 105.99;
         const gramsNaHCO3 = molesLA * 84.01;
@@ -277,8 +272,20 @@ function AcidityMaintenanceCalc() {
 
     return (
         <div>
-             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div><Label>Milk Quantity (kg)</Label><Input name="milkQty" value={inputs.milkQty} onChange={handleInputChange}/></div>
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label>Milk Quantity</Label>
+                    <div className="flex">
+                        <Input name="milkQty" value={inputs.milkQty} onChange={handleInputChange} className="rounded-r-none" />
+                        <Select value={milkUnit} onValueChange={(v) => setMilkUnit(v as any)}>
+                            <SelectTrigger className="w-[100px] rounded-l-none"><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="kg">Kg</SelectItem>
+                                <SelectItem value="liters">Liters</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </div>
                 <div><Label>Initial Acidity (% Lactic Acid)</Label><Input name="initialAcidity" value={inputs.initialAcidity} onChange={handleInputChange}/></div>
                 <div><Label>Target Acidity (% Lactic Acid)</Label><Input name="targetAcidity" value={inputs.targetAcidity} onChange={handleInputChange}/></div>
             </div>
@@ -303,6 +310,7 @@ function AcidityMaintenanceCalc() {
 
 function IncreaseAcidityCalc() {
     const [inputs, setInputs] = useState({ milkQty: "100", initialAcidity: "0.14", targetAcidity: "0.18" });
+    const [milkUnit, setMilkUnit] = useState<'kg' | 'liters'>('kg');
     const [results, setResults] = useState<{ lactic: string, citric: string } | null>(null);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -310,7 +318,8 @@ function IncreaseAcidityCalc() {
     };
     
     const calculate = () => {
-        const qty = parseFloat(inputs.milkQty);
+        const qtyValue = parseFloat(inputs.milkQty);
+        const qty = milkUnit === 'liters' ? qtyValue * 1.03 : qtyValue;
         const initial = parseFloat(inputs.initialAcidity);
         const target = parseFloat(inputs.targetAcidity);
 
@@ -327,13 +336,7 @@ function IncreaseAcidityCalc() {
         const acidityToIncrease = target - initial;
         const totalLacticAcidEquivalentsKg = (acidityToIncrease / 100) * qty;
 
-        // Lactic Acid (MW: 90.08, n-factor: 1)
-        const gramsLacticAcid = totalLacticAcidEquivalentsKg * 1000; // Directly add as it's the reference
-
-        // Citric Acid (MW: 192.12, n-factor: 3)
-        // Equivalent weight of Citric Acid = 192.12 / 3 = 64.04
-        // Equivalent weight of Lactic Acid = 90.08 / 1 = 90.08
-        // Grams of Citric = Grams of Lactic * (Eq. Wt. Citric / Eq. Wt. Lactic)
+        const gramsLacticAcid = totalLacticAcidEquivalentsKg * 1000;
         const gramsCitricAcid = gramsLacticAcid * (64.04 / 90.08);
 
         setResults({
@@ -344,8 +347,20 @@ function IncreaseAcidityCalc() {
 
     return (
         <div>
-             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div><Label>Milk Quantity (kg)</Label><Input name="milkQty" value={inputs.milkQty} onChange={handleInputChange}/></div>
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                 <div>
+                  <Label>Milk Quantity</Label>
+                    <div className="flex">
+                        <Input name="milkQty" value={inputs.milkQty} onChange={handleInputChange} className="rounded-r-none"/>
+                        <Select value={milkUnit} onValueChange={(v) => setMilkUnit(v as any)}>
+                            <SelectTrigger className="w-[100px] rounded-l-none"><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="kg">Kg</SelectItem>
+                                <SelectItem value="liters">Liters</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </div>
                 <div><Label>Initial Acidity (% Lactic Acid)</Label><Input name="initialAcidity" value={inputs.initialAcidity} onChange={handleInputChange}/></div>
                 <div><Label>Target Acidity (% Lactic Acid)</Label><Input name="targetAcidity" value={inputs.targetAcidity} onChange={handleInputChange}/></div>
             </div>
@@ -1466,4 +1481,3 @@ function SolutionStrengthCalc() {
 
 
     
-
