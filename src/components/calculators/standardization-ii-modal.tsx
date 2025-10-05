@@ -376,7 +376,7 @@ function FatSnfAdjustmentCalc() {
         creamSnf: '5.5',
         richMilkFat: '6.0',
         richMilkSnf: '9.0',
-        skimMilkFat: '0.1',
+        skimMilkFat: '0.5',
         skimMilkSnf: '8.8',
     });
     const [result, setResult] = useState<string | null>(null);
@@ -528,7 +528,7 @@ function FatSnfAdjustmentCalc() {
                         <MemoizedInputField label="Skim Milk SNF %" value={inputs.skimMilkSnf} name="skimMilkSnf" setter={handleInputChange} />
                      </>)}
                  </div>
-                 <p className="text-xs text-muted-foreground">Note: The calculator will automatically use SMP (1% Fat, 95% SNF) or Water to achieve the final target.</p>
+                 <p className="text-xs text-muted-foreground">Note: The calculator will automatically use SMP (0.5% Fat, 96% SNF) or Water to achieve the final target.</p>
              </div>
 
              <Button onClick={calculate} className="w-full mt-4">Calculate</Button>
@@ -699,7 +699,7 @@ function TwoComponentStandardizationCalc() {
         Fc: '40', CLRc: '10', // Cream
         Fr: '6', CLRr: '30',   // Rich Milk
         Fs: '0.1', CLRs: '27', // Skim Milk
-        smpSnf: '96', smpFat: '1'
+        smpSnf: '96', smpFat: '0.5'
     });
     const [results, setResults] = useState<any>(null);
     const [error, setError] = useState<string | null>(null);
@@ -854,7 +854,7 @@ function TwoComponentStandardizationCalc() {
                         <MemoizedInputField label="Skim Milk CLR (CLRₛ)" value={inputs.CLRs} name="CLRs" setter={handleInputChange} />
                     </>)}
                 </div>
-                 <p className="text-xs text-muted-foreground mt-2">Note: Water (0% Fat, 0 CLR) and SMP (1% Fat, 96% SNF) will be used automatically for fine-tuning.</p>
+                 <p className="text-xs text-muted-foreground mt-2">Note: Water (0% Fat, 0 CLR) and SMP (0.5% Fat, 96% SNF) will be used automatically for fine-tuning.</p>
             </div>
 
             <Button onClick={calculate} className="w-full mt-4">Calculate</Button>
@@ -1284,13 +1284,12 @@ function ClrIncreaseCalc() {
         setError(null);
         
         const initialVolumeValue = parseFloat(inputs.initialVolume);
-        const V0_kg = volumeUnit === 'liters' ? initialVolumeValue * componentProps.milkDensity : initialVolumeValue;
         
         const C0 = parseFloat(inputs.initialClr);
         const Ct = parseFloat(inputs.targetClr);
-        const Ps = parseFloat(inputs.smpSnf) / 100;
+        const Ps = parseFloat(inputs.smpSnf);
 
-        if ([V0_kg, C0, Ct, Ps].some(isNaN) || V0_kg <= 0 || Ps <=0) {
+        if ([initialVolumeValue, C0, Ct, Ps].some(isNaN) || initialVolumeValue <= 0 || Ps <=0) {
             setError("Please fill all fields with valid positive numbers.");
             return;
         }
@@ -1299,8 +1298,8 @@ function ClrIncreaseCalc() {
             return;
         }
 
-        const snfToAdd = (Ct - C0) * 0.25 * (V0_kg/componentProps.milkDensity);
-        const smpNeeded = snfToAdd / Ps;
+        const snfToAdd = (initialVolumeValue * (Ct - C0) * 0.25) / 100;
+        const smpNeeded = (snfToAdd * 100) / Ps;
         
         setResult(`To increase CLR from <strong>${C0}</strong> to <strong>${Ct}</strong> in <strong>${inputs.initialVolume} ${volumeUnit}</strong> of milk, you need to add approximately <strong>${smpNeeded.toFixed(2)} kg</strong> of SMP (${inputs.smpSnf}% SNF).`);
     }, [inputs, volumeUnit]);
@@ -1343,6 +1342,7 @@ function ClrIncreaseCalc() {
     
 
     
+
 
 
 
