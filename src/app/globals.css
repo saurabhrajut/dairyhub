@@ -110,4 +110,36 @@ pre code {
   word-wrap: break-word;
   word-break: break-all; /* यह सबसे ज़रूरी है, यह किसी भी लंबे शब्द को तोड़ देता है */
 }
+
+@keyframes text-3d-pop {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) rotateX(90deg) scale(0.8);
+  }
+  50% {
+    transform: translateY(-5px) rotateX(0deg) scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotateX(0deg) scale(1);
+  }
+}
 /* ===== END: नया कोड यहाँ खत्म हुआ ===== */
+
+@keyframes fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes fade-in-out {
+  0% { opacity: 0; }
+  25% { opacity: 1; }
+  75% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes draw-outline {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
