@@ -152,9 +152,14 @@ function FatSnfClrTsCalc() {
     const [result, setResult] = useState<{ snf: string, clr: string, ts: string } | null>(null);
     const [formula, setFormula] = useState('isi');
     const [basis, setBasis] = useState<'fat_clr' | 'fat_snf'>('fat_clr');
+    const [customConstants, setCustomConstants] = useState({ fatMultiplier: "0.25", constant: "0.72" });
 
     const handleInputChange = useCallback((name: string, value: string) => {
         setInputs(prev => ({ ...prev, [name]: value }));
+    }, []);
+
+    const handleCustomConstChange = useCallback((name: string, value: string) => {
+        setCustomConstants(prev => ({ ...prev, [name]: value }));
     }, []);
 
     const calculate = useCallback(() => {
@@ -164,7 +169,17 @@ function FatSnfClrTsCalc() {
         
         let newSnf = NaN, newTs = NaN, newClr = NaN;
         
-        const selectedFormula = snfFormulas[formula] || snfFormulas['isi'];
+        let selectedFormula;
+        if (formula === 'custom') {
+            const multi = parseFloat(customConstants.fatMultiplier) || 0;
+            const constFactor = parseFloat(customConstants.constant) || 0;
+            selectedFormula = {
+                calc: (c: number, f: number) => (c / 4) + (f * multi) + constFactor,
+                inverse: (s: number, f: number) => (s - (f * multi) - constFactor) * 4
+            };
+        } else {
+            selectedFormula = snfFormulas[formula] || snfFormulas['isi'];
+        }
 
         if (basis === 'fat_clr') {
             if (!isNaN(fat) && !isNaN(clr)) {
@@ -186,7 +201,7 @@ function FatSnfClrTsCalc() {
             clr: !isNaN(newClr) ? newClr.toFixed(2) : '...'
         });
 
-    }, [inputs, basis, formula]);
+    }, [inputs, basis, formula, customConstants]);
     
     return (
         <CalculatorCard title="Fat, SNF, CLR & TS Calculator" description="Enter any two values to calculate the others. You can also select different industry-standard formulas for SNF calculation.">
@@ -198,15 +213,35 @@ function FatSnfClrTsCalc() {
                         <SelectContent>
                             {Object.entries(snfFormulas).map(([key, {name, formulaText}]) => (
                                 <SelectItem key={key} value={key}>
-                                    <div className="flex flex-col">
+                                    <div className="flex flex-col break-words">
                                         <span className="font-semibold">{name}</span>
                                         <span className="text-xs text-muted-foreground">{formulaText}</span>
                                     </div>
                                 </SelectItem>
                             ))}
+                             <SelectItem value="custom">Custom Formula</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
+                {formula === 'custom' && (
+                <div className="grid grid-cols-2 gap-4 p-4 border rounded-lg bg-indigo-50">
+                    <MemoizedInputField 
+                        label="Fat Multiplier" 
+                        value={customConstants.fatMultiplier} 
+                        name="fatMultiplier" 
+                        setter={handleCustomConstChange}
+                        placeholder="e.g., 0.25"
+                    />
+                     <MemoizedInputField 
+                        label="Constant (C)" 
+                        value={customConstants.constant} 
+                        name="constant" 
+                        setter={handleCustomConstChange}
+                        placeholder="e.g., 0.72"
+                    />
+                    <p className="col-span-2 text-xs text-muted-foreground">Custom Formula: SNF % = (CLR/4) + (Fat % * Fat Multiplier) + Constant</p>
+                </div>
+            )}
                  <div>
                     <Label>Calculate based on:</Label>
                     <Select value={basis} onValueChange={(val: 'fat_clr' | 'fat_snf') => setBasis(val)}>
@@ -367,6 +402,7 @@ function FatSnfAdjustmentCalc() {
     const [adjustmentComponent, setAdjustmentComponent] = useState<'cream' | 'rich_milk' | 'skim_milk'>('cream');
     const [baseUnit, setBaseUnit] = useState<'kg' | 'liters'>('kg');
     const [snfFormula, setSnfFormula] = useState('isi');
+    const [customConstants, setCustomConstants] = useState({ fatMultiplier: "0.25", constant: "0.72" });
 
     const [inputs, setInputs] = useState({
         baseQty: '1000',
@@ -388,14 +424,26 @@ function FatSnfAdjustmentCalc() {
     const handleInputChange = useCallback((name: string, value: string) => {
         setInputs(prev => ({ ...prev, [name]: value }));
     }, []);
+    
+    const handleCustomConstChange = useCallback((name: string, value: string) => {
+        setCustomConstants(prev => ({ ...prev, [name]: value }));
+    }, []);
 
-    const selectedSnfFormula = useMemo(() => snfFormulas[snfFormula] || snfFormulas.isi, [snfFormula]);
+    const calculateSnf = useCallback((clr: number, fat: number) => {
+        if (snfFormula === 'custom') {
+            const multi = parseFloat(customConstants.fatMultiplier) || 0;
+            const constFactor = parseFloat(customConstants.constant) || 0;
+            return (clr / 4) + (fat * multi) + constFactor;
+        }
+        const formula = snfFormulas[snfFormula as keyof typeof snfFormulas] || snfFormulas.isi;
+        return formula.calc(clr, fat);
+    }, [snfFormula, customConstants]);
 
     const baseSnf = useMemo(() => {
         const fat = parseFloat(inputs.baseFat);
         const clr = parseFloat(inputs.baseClr);
-        return !isNaN(fat) && !isNaN(clr) ? selectedSnfFormula.calc(clr, fat) : 0;
-    }, [inputs.baseFat, inputs.baseClr, selectedSnfFormula]);
+        return !isNaN(fat) && !isNaN(clr) ? calculateSnf(clr, fat) : 0;
+    }, [inputs.baseFat, inputs.baseClr, calculateSnf]);
     
     const adjustmentCompSnf = useMemo(() => {
         let fat=0, clr=0;
@@ -404,9 +452,8 @@ function FatSnfAdjustmentCalc() {
             case 'rich_milk': fat = parseFloat(inputs.richMilkFat); clr = parseFloat(inputs.richMilkClr); break;
             case 'skim_milk': fat = parseFloat(inputs.skimMilkFat); clr = parseFloat(inputs.skimMilkClr); break;
         }
-        return !isNaN(fat) && !isNaN(clr) ? selectedSnfFormula.calc(clr, fat) : 0;
-    }, [adjustmentComponent, inputs, selectedSnfFormula]);
-
+        return !isNaN(fat) && !isNaN(clr) ? calculateSnf(clr, fat) : 0;
+    }, [adjustmentComponent, inputs, calculateSnf]);
 
     const calculate = useCallback(() => {
         setError(null);
@@ -439,15 +486,15 @@ function FatSnfAdjustmentCalc() {
                 break;
         }
 
-        if (isNaN(mainComp.F_percent) || isNaN(mainComp.S_percent)) {
-            setError("Please enter valid properties for the selected adjustment component.");
+        if (isNaN(mainComp.F_percent) || isNaN(mainComp.S_percent) || adjustmentCompSnf <= 0) {
+            setError("Please enter valid properties for the selected adjustment component and ensure its SNF is calculated.");
             return;
         }
 
         const F_m = Fm_percent / 100, S_m = Sm_percent / 100;
         const F_t = Ft_percent / 100, S_t = St_percent / 100;
         const F_adj = mainComp.F_percent / 100, S_adj = mainComp.S_percent / 100;
-        const F_smp = componentProps.smp.fat / 100, S_smp = componentProps.smp.snf / 100;
+        const F_smp = componentProps.smp.fat / 100, S_smp = componentProps.smp.ts / 100 - F_smp;
         const F_w = 0, S_w = 0;
 
         let comp2: { name: string; F: number; S: number; };
@@ -456,7 +503,6 @@ function FatSnfAdjustmentCalc() {
         const fatDifference = F_t - F_m;
         const snfDifference = S_t - S_m;
 
-        // Decide which second component to use (SMP or Water)
         let determinant = (F_adj - F_t) * (S_smp - S_t) - (F_smp - F_t) * (S_adj - S_t);
         if (Math.abs(determinant) > 1e-9) {
             mainCompNeeded = (Qm * (fatDifference * (S_smp - S_t) - snfDifference * (F_smp - F_t))) / determinant;
@@ -498,7 +544,7 @@ function FatSnfAdjustmentCalc() {
         resultHTML += `<hr class='my-2'/><strong>Final Batch:</strong> ${finalWeight.toFixed(2)} kg with ~${(Ft_percent).toFixed(2)}% Fat and ~${(St_percent).toFixed(2)}% SNF.`;
         setResult(resultHTML);
 
-    }, [inputs, adjustmentComponent, baseUnit, baseSnf, adjustmentCompSnf]);
+    }, [inputs, adjustmentComponent, baseUnit, baseSnf, adjustmentCompSnf, calculateSnf]);
 
     return (
         <CalculatorCard title="Fat & SNF Adjustment" description="Calculate the amount of a primary component (Cream, Rich Milk, or Skim Milk) and a secondary component (SMP or Water) needed to standardize milk to a target Fat and SNF content.">
@@ -508,11 +554,35 @@ function FatSnfAdjustmentCalc() {
                     <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>
                         {Object.entries(snfFormulas).map(([key, {name, formulaText}]) => (
-                            <SelectItem key={key} value={key}>{name} ({formulaText})</SelectItem>
+                            <SelectItem key={key} value={key}>
+                                <div className="flex flex-col break-words">
+                                    <span className="font-semibold">{name}</span>
+                                    <span className="text-xs text-muted-foreground">{formulaText}</span>
+                                </div>
+                            </SelectItem>
                         ))}
+                        <SelectItem value="custom">Custom Formula</SelectItem>
                     </SelectContent>
                 </Select>
             </div>
+             {snfFormula === 'custom' && (
+                <div className="grid grid-cols-2 gap-4 mb-4 p-4 border rounded-lg bg-indigo-50">
+                    <MemoizedInputField 
+                        label="Fat Multiplier" 
+                        value={customConstants.fatMultiplier} 
+                        name="customFatMultiplier" 
+                        setter={handleCustomConstChange}
+                        placeholder="e.g., 0.25"
+                    />
+                     <MemoizedInputField 
+                        label="Constant (C)" 
+                        value={customConstants.constant} 
+                        name="constant" 
+                        setter={handleCustomConstChange}
+                        placeholder="e.g., 0.72"
+                    />
+                </div>
+            )}
              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mb-4">
                  <div className="bg-blue-50 p-4 rounded-lg space-y-3">
                     <h3 className="font-semibold text-gray-700">Base Milk</h3>
@@ -1086,7 +1156,8 @@ function RecombinedMilkCalc() {
         smpSNF: '95.0',
         fatSourceFat: '99.8',
         formula: 'isi',
-        customC: '0.72'
+        customFatMultiplier: '0.25',
+        customConstant: '0.72'
     });
     const [batchUnit, setBatchUnit] = useState<'kg' | 'liters'>('kg');
     const [result, setResult] = useState<string | null>(null);
@@ -1097,12 +1168,14 @@ function RecombinedMilkCalc() {
     }, []);
 
     const calculateSnf = useCallback((clr: number, fat: number) => {
-        const formulaKey = inputs.formula as keyof typeof snfFormulas;
-        if (formulaKey === 'general') {
-            return snfFormulas.general.calc(clr, fat, parseFloat(inputs.customC));
+        if (inputs.formula === 'custom') {
+            const multi = parseFloat(inputs.customFatMultiplier) || 0;
+            const constFactor = parseFloat(inputs.customConstant) || 0;
+            return (clr / 4) + (fat * multi) + constFactor;
         }
-        return snfFormulas[formulaKey].calc(clr, fat);
-    }, [inputs.formula, inputs.customC]);
+        const formula = snfFormulas[inputs.formula as keyof typeof snfFormulas] || snfFormulas.isi;
+        return formula.calc(clr, fat);
+    }, [inputs.formula, inputs.customFatMultiplier, inputs.customConstant]);
     
     const targetSnf = useMemo(() => {
         const fat = parseFloat(inputs.targetFat);
@@ -1151,24 +1224,26 @@ function RecombinedMilkCalc() {
 
     return (
         <CalculatorCard title="Recombined Milk Calculator" description="Calculate the required Skim Milk Powder (SMP), Butter Oil (or other fat source), and Water to create milk of a desired composition.">
-             <div className="bg-muted/50 p-4 rounded-lg mb-4">
+             <div className="mb-4">
                  <Label>Select SNF Calculation Formula</Label>
                  <Select value={inputs.formula} onValueChange={(val) => handleInputChange('formula', val)}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>
                         {Object.entries(snfFormulas).map(([key, {name, formulaText}]) => (
                             <SelectItem key={key} value={key}>
-                                <div className="flex flex-col">
+                                <div className="flex flex-col break-words">
                                     <span className="font-semibold">{name}</span>
                                     <span className="text-xs text-muted-foreground">{formulaText}</span>
                                 </div>
                             </SelectItem>
                         ))}
+                        <SelectItem value="custom">Custom Formula</SelectItem>
                     </SelectContent>
                  </Select>
-                 {inputs.formula === 'general' && (
-                     <div className="mt-2">
-                        <MemoizedInputField label="Custom Constant (C)" value={inputs.customC} name="customC" setter={handleInputChange} />
+                 {inputs.formula === 'custom' && (
+                     <div className="grid grid-cols-2 gap-4 mt-4 p-4 border rounded-lg bg-indigo-50">
+                        <MemoizedInputField label="Fat Multiplier" value={inputs.customFatMultiplier} name="customFatMultiplier" setter={(name, val) => handleInputChange(name, val)} />
+                        <MemoizedInputField label="Constant (C)" value={inputs.customConstant} name="customConstant" setter={(name, val) => handleInputChange(name, val)} />
                      </div>
                  )}
             </div>
@@ -1235,70 +1310,63 @@ function ClrCorrectionCalc() {
 }
 
 function KgFatSnfCalc() {
-    const [inputs, setInputs] = useState({ literQty: "1000", kgQty: "", fat: "4.5", snf: "8.5" });
+    const [inputs, setInputs] = useState({
+        qty: "1000",
+        fat: "4.5",
+        snf: "8.5",
+    });
+    const [unit, setUnit] = useState<'liter' | 'kg'>('liter');
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
-    const [activeTab, setActiveTab] = useState("liter");
 
     const handleInputChange = useCallback((name: string, value: string) => {
         setInputs(prev => ({...prev, [name]: value}));
     }, []);
 
-    const calculateByLiter = () => {
-        const litersVal = parseFloat(inputs.literQty);
+    const calculate = useCallback(() => {
+        const qtyVal = parseFloat(inputs.qty);
         const fatVal = parseFloat(inputs.fat);
         const snfVal = parseFloat(inputs.snf);
         setResult(null); setError(null);
 
-        if([litersVal, fatVal, snfVal].some(isNaN)) {
-            setError("Please fill all fields with numbers."); return;
+        if ([qtyVal, fatVal, snfVal].some(isNaN)) {
+            setError("Please fill all fields with numbers.");
+            return;
         }
-        
-        const milkWeight = litersVal * componentProps.milkDensity;
+
+        const milkWeight = unit === 'liter' ? qtyVal * componentProps.milkDensity : qtyVal;
         const fatKg = milkWeight * (fatVal / 100);
         const snfKg = milkWeight * (snfVal / 100);
-        setResult(`In <strong>${litersVal} Ltr</strong> of milk:<br/>- <strong>Total Fat:</strong> ${fatKg.toFixed(2)} Kg<br/>- <strong>Total SNF (Powder):</strong> ${snfKg.toFixed(2)} Kg`);
-    };
-
-    const calculateByKg = () => {
-        const kgVal = parseFloat(inputs.kgQty);
-        const fatVal = parseFloat(inputs.fat);
-        const snfVal = parseFloat(inputs.snf);
-        setResult(null); setError(null);
-
-        if([kgVal, fatVal, snfVal].some(isNaN)) {
-            setError("Please fill all fields with numbers."); return;
-        }
-        
-        const fatKg = kgVal * (fatVal / 100);
-        const snfKg = kgVal * (snfVal / 100);
-        setResult(`In <strong>${kgVal} Kg</strong> of milk:<br/>- <strong>Total Fat:</strong> ${fatKg.toFixed(2)} Kg<br/>- <strong>Total SNF (Powder):</strong> ${snfKg.toFixed(2)} Kg`);
-    };
+        setResult(`In <strong>${qtyVal} ${unit === 'liter' ? 'Ltr' : 'Kg'}</strong> of milk:<br/>- <strong>Total Fat:</strong> ${fatKg.toFixed(2)} Kg<br/>- <strong>Total SNF (Powder):</strong> ${snfKg.toFixed(2)} Kg`);
+    }, [inputs, unit]);
 
     return (
-        <CalculatorCard title="Kg Fat &amp; SNF Calculator" description="Find out the amount (in Kg) of Fat and Powder (SNF) from a given quantity of milk.">
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="liter">Calculate by Liter</TabsTrigger>
-                    <TabsTrigger value="kg">Calculate by Kg</TabsTrigger>
-                </TabsList>
-                <TabsContent value="liter">
-                    <div className="bg-muted/50 p-4 rounded-lg space-y-3 mt-4">
-                        <MemoizedInputField label="Milk Quantity (Liters)" value={inputs.literQty} name="literQty" setter={handleInputChange} placeholder="1000" />
-                        <MemoizedInputField label="Fat %" value={inputs.fat} name="fat" setter={handleInputChange} placeholder="4.5" />
-                        <MemoizedInputField label="SNF %" value={inputs.snf} name="snf" setter={handleInputChange} placeholder="8.5" />
+        <CalculatorCard title="Kg Fat & SNF Calculator" description="Find out the amount (in Kg) of Fat and Powder (SNF) from a given quantity of milk.">
+            <div className="bg-muted/50 p-4 rounded-lg space-y-4">
+                 <div>
+                    <Label>Milk Quantity</Label>
+                    <div className="flex">
+                       <Input 
+                            type="number" 
+                            name="qty" 
+                            value={inputs.qty} 
+                            onChange={(e) => handleInputChange(e.target.name, e.target.value)} 
+                            className="rounded-r-none" 
+                            placeholder="1000"
+                        />
+                         <Select value={unit} onValueChange={(v) => setUnit(v as 'liter' | 'kg')}>
+                            <SelectTrigger className="w-[100px] rounded-l-none"><SelectValue/></SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="liter">Liters</SelectItem>
+                                <SelectItem value="kg">Kg</SelectItem>
+                            </SelectContent>
+                        </Select>
                     </div>
-                    <Button onClick={calculateByLiter} className="w-full mt-4">Calculate from Liters</Button>
-                </TabsContent>
-                <TabsContent value="kg">
-                     <div className="bg-muted/50 p-4 rounded-lg space-y-3 mt-4">
-                        <MemoizedInputField label="Milk Quantity (Kg)" value={inputs.kgQty} name="kgQty" setter={handleInputChange} placeholder="1030" />
-                        <MemoizedInputField label="Fat %" value={inputs.fat} name="fat" setter={handleInputChange} placeholder="4.5" />
-                        <MemoizedInputField label="SNF %" value={inputs.snf} name="snf" setter={handleInputChange} placeholder="8.5" />
-                    </div>
-                    <Button onClick={calculateByKg} className="w-full mt-4">Calculate from Kg</Button>
-                </TabsContent>
-            </Tabs>
+                </div>
+                <MemoizedInputField label="Fat %" value={inputs.fat} name="fat" setter={handleInputChange} placeholder="4.5" />
+                <MemoizedInputField label="SNF %" value={inputs.snf} name="snf" setter={handleInputChange} placeholder="8.5" />
+            </div>
+            <Button onClick={calculate} className="w-full mt-4">Calculate</Button>
             
             {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
             {result && <Alert className="mt-4"><AlertTitle>Result</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
@@ -1339,9 +1407,11 @@ function ClrIncreaseCalc() {
             setError("Target CLR must be higher than the initial CLR.");
             return;
         }
-
-        const snfToAdd = (initialVolumeValue * (Ct - C0) * 0.25) / 100;
-        const smpNeeded = (snfToAdd * 100) / Ps;
+        
+        const volumeInLiters = volumeUnit === 'kg' ? initialVolumeValue / componentProps.milkDensity : initialVolumeValue;
+        
+        const snfKgToAdd = (volumeInLiters * (Ct - C0) * 0.25) / 100;
+        const smpNeeded = (snfKgToAdd * 100) / Ps;
         
         setResult(`To increase CLR from <strong>${C0}</strong> to <strong>${Ct}</strong> in <strong>${inputs.initialVolume} ${volumeUnit}</strong> of milk, you need to add approximately <strong>${smpNeeded.toFixed(2)} kg</strong> of SMP (${inputs.smpSnf}% SNF).`);
     }, [inputs, volumeUnit]);
@@ -1391,3 +1461,6 @@ function ClrIncreaseCalc() {
 
 
     
+
+
+
