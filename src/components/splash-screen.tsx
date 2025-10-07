@@ -1,29 +1,63 @@
 "use client";
 
 import React, { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { Microscope } from 'lucide-react';
 
 export default function SplashScreen({ onFinished }: { onFinished: () => void }) {
-  const router = useRouter();
-
   useEffect(() => {
     const timer = setTimeout(() => {
       onFinished();
-    }, 6000); // 6 seconds
+    }, 6000); // Animation duration is set to 6 seconds
 
     return () => clearTimeout(timer);
-  }, [onFinished, router]);
+  }, [onFinished]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black">
-      <video
-        src="https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/0f78-5ba2-4b80-8b36-a4f989cc5bd3.mp4?alt=media&token=6fd6825c-c769-4367-a0c4-9c948da32638"
-        autoPlay
-        muted
-        playsInline
-        className="object-cover w-full h-full"
-        onContextMenu={(e) => e.preventDefault()} // Disable right-click menu
-      />
+    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gray-100 overflow-hidden">
+        <style jsx>{`
+            .title-container {
+                animation: fade-in-out 4s ease-in-out 1s forwards, fade-out 1s ease-in 5s forwards;
+             }
+             .container-fade-out{
+                animation: fade-out 1s ease-in 5s forwards;
+             }
+             .drawing-animation {
+                stroke-dasharray: 1000;
+                stroke-dashoffset: 1000;
+                animation: draw-outline 2.5s ease-in-out 0.5s forwards;
+             }
+        `}</style>
+        
+        <div className="relative mb-4 container-fade-out w-36 h-36">
+           <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path className="drawing-animation text-gray-400" stroke="currentColor" strokeWidth="3" d="M87.5,50a37.5,37.5 0 1,1 -75,0a37.5,37.5 0 1,1 75,0" style={{ animationDelay: '0.2s' }} />
+              <path className="drawing-animation text-gray-400" stroke="currentColor" strokeWidth="3" d="M80,50a30,30 0 1,1 -60,0a30,30 0 1,1 60,0" style={{ animationDelay: '0.4s' }} />
+              {[...Array(12)].map((_, i) => (
+                  <path
+                      key={i}
+                      className="drawing-animation text-gray-400"
+                      stroke="currentColor"
+                      strokeWidth="3"
+                      d={`M ${50 + 30 * Math.cos(i * Math.PI / 6)} ${50 + 30 * Math.sin(i * Math.PI / 6)} L ${50 + 37.5 * Math.cos(i * Math.PI / 6)} ${50 + 37.5 * Math.sin(i * Math.PI / 6)}`}
+                      style={{ animationDelay: `${0.6 + i * 0.1}s` }}
+                  />
+              ))}
+           </svg>
+           <Microscope className="w-20 h-20 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 drawing-animation text-primary" style={{ strokeDasharray: 500, strokeDashoffset: 500, animationDelay: '1s' }}/>
+        </div>
+
+        <div className="title-container opacity-0 text-center">
+             <h1 className="text-3xl md:text-5xl font-extrabold font-headline">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-400">
+                    Welcome To Dairy Hub
+                </span>
+            </h1>
+            <p className="mt-2 text-lg md:text-xl font-semibold">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
+                    Your Digital Partner
+                </span>
+            </p>
+        </div>
     </div>
   );
 }
