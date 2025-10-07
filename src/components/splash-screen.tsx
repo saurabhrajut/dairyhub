@@ -54,7 +54,7 @@ export default function SplashScreen({ onFinished }: { onFinished: () => void })
             </h1>
             <p className="mt-2 text-lg md:text-xl font-semibold">
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
-                    Your Digital Partner
+                    Transforming Dairy Science Into Digital Simplicity
                 </span>
             </p>
         </div>
