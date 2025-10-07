@@ -53,6 +53,8 @@ export function StandardizationIModal({
   const [targetMilkType, setTargetMilkType] = useState<MilkType>("toned")
   const [mainComponent, setMainComponent] = useState<MainComponent>('cream');
   const [snfFormula, setSnfFormula] = useState('isi');
+  const [customSnfConstants, setCustomSnfConstants] = useState({ fatMultiplier: "0.25", constant: "0.72" });
+
 
   // Ingredient properties states
   const [creamFat, setCreamFat] = useState("40.0");
@@ -70,9 +72,17 @@ export function StandardizationIModal({
   const [recipe, setRecipe] = useState<string | null>(null)
   const [isRecipeLoading, startRecipeTransition] = useTransition()
 
-  const calculateSnf = useCallback((fat: number, clr: number) => {
+ const calculateSnf = useCallback((fat: number, clr: number) => {
+    if (snfFormula === 'custom') {
+        const multi = parseFloat(customSnfConstants.fatMultiplier);
+        const constant = parseFloat(customSnfConstants.constant);
+        if (!isNaN(multi) && !isNaN(constant)) {
+            return (clr / 4) + (multi * fat) + constant;
+        }
+        return 0;
+    }
     return snfFormulas[snfFormula as keyof typeof snfFormulas]?.calc(clr, fat) || 0;
-  }, [snfFormula]);
+  }, [snfFormula, customSnfConstants]);
 
   const currentSnf = useMemo(() => milkClr && milkFat ? calculateSnf(parseFloat(milkFat), parseFloat(milkClr)) : 0, [milkFat, milkClr, calculateSnf]);
   const targetSnf = useMemo(() => calculateSnf(milkStandards[targetMilkType].fat, milkStandards[targetMilkType].clr), [targetMilkType, calculateSnf]);
@@ -239,21 +249,34 @@ export function StandardizationIModal({
                     <Label htmlFor="milkClr">CLR</Label>
                     <Input id="milkClr" value={milkClr} onChange={(e) => setMilkClr(e.target.value)} step="0.1" placeholder="27.5" />
                   </div>
-                   <div className="mt-4">
+                   <div className="mt-4 space-y-2">
                     <Label>SNF Calculation Formula</Label>
-                    <Select value={snfFormula} onValueChange={setSnfFormula}>
+                     <Select value={snfFormula} onValueChange={setSnfFormula}>
                       <SelectTrigger><SelectValue /></SelectTrigger>
-                      <SelectContent>
+                       <SelectContent>
                         {Object.entries(snfFormulas).map(([key, {name, formulaText}]) => (
                             <SelectItem key={key} value={key}>
-                                <div className="flex flex-col">
+                                <div className="flex flex-col break-words">
                                     <span className="font-semibold">{name}</span>
                                     <span className="text-xs text-muted-foreground">{formulaText}</span>
                                 </div>
                             </SelectItem>
                         ))}
+                         <SelectItem value="custom">Custom Formula</SelectItem>
                       </SelectContent>
                     </Select>
+                     {snfFormula === 'custom' && (
+                        <div className="grid grid-cols-2 gap-4 p-4 border rounded-lg bg-indigo-50 mt-2">
+                           <div>
+                                <Label>Fat Multiplier</Label>
+                                <Input value={customSnfConstants.fatMultiplier} onChange={(e) => setCustomSnfConstants(prev => ({...prev, fatMultiplier: e.target.value}))} placeholder="e.g., 0.25"/>
+                           </div>
+                           <div>
+                                <Label>Constant (C)</Label>
+                                <Input value={customSnfConstants.constant} onChange={(e) => setCustomSnfConstants(prev => ({...prev, constant: e.target.value}))} placeholder="e.g., 0.72"/>
+                           </div>
+                        </div>
+                    )}
                   </div>
                   {currentSnf > 0 && (
                     <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
@@ -406,3 +429,5 @@ export function StandardizationIModal({
     </Dialog>
   )
 }
+
+    
