@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Microscope } from 'lucide-react';
 
 export default function SplashScreen({ onFinished }: { onFinished: () => void }) {
-  // Random slogan selector
+  // All slogans combined
   const slogans = [
     "Digitizing Dairy Science.",
     "Smart Tech for Dairy.",
@@ -16,7 +16,26 @@ export default function SplashScreen({ onFinished }: { onFinished: () => void })
     "Smart Dairy, Smarter Chemistry.",
     "Precision, Purity, and Progress — All in One Hub.",
     "Transforming Dairy Science into Digital Simplicity.",
-    "Where Dairy Processing Meets Innovation."
+    "Where Dairy Processing Meets Innovation.",
+    "Integrating Technology with the Art of Dairy.",
+    "Empowering Dairy Processing through Intelligent Automation.",
+    "From Collection to Chemistry — One Smart Platform.",
+    "Digital Intelligence for Dairy Innovation.",
+    "Where Data Meets Dairy Science.",
+    "Redefining Dairy with Smart Technology.",
+    "Simplifying Complex Dairy Operations Digitally.",
+    "Smart Science for a Smarter Dairy Future.",
+    "Precision in Every Drop, Accuracy in Every Test.",
+    "Digitizing Dairy Labs for Reliable Results.",
+    "From Milk Molecules to Digital Metrics.",
+    "Innovating Dairy Chemistry through Technology.",
+    "Ensuring Quality through Digital Precision.",
+    "Precision. Purity. Performance.",
+    "Smart Dairy. Simple Tech.",
+    "Where Dairy Becomes Digital.",
+    "Tech for Tomorrow's Dairy.",
+    "Digital Dairy. Real Science.",
+    "Think Smart, Do Fast."
   ];
 
   const [currentSlogan] = useState(() => {
