@@ -42,6 +42,22 @@ export default function SplashScreen({ onFinished }: { onFinished: () => void })
     return slogans[Math.floor(Math.random() * slogans.length)];
   });
 
+  // Different colors for each spoke segment
+  const spokeColors = [
+    "#3B82F6", // Blue
+    "#8B5CF6", // Purple
+    "#EC4899", // Pink
+    "#10B981", // Green
+    "#F59E0B", // Amber
+    "#EF4444", // Red
+    "#06B6D4", // Cyan
+    "#6366F1", // Indigo
+    "#84CC16", // Lime
+    "#F97316", // Orange
+    "#14B8A6", // Teal
+    "#A855F7"  // Violet
+  ];
+
   useEffect(() => {
     const timer = setTimeout(() => {
       onFinished();
@@ -79,6 +95,45 @@ export default function SplashScreen({ onFinished }: { onFinished: () => void })
              @keyframes draw-outline {
                 to {
                     stroke-dashoffset: 0;
+                }
+             }
+
+             /* Wheel segment fill animation */
+             .wheel-segment {
+                animation: fill-segment 0.3s ease-in-out forwards;
+                opacity: 0;
+             }
+
+             @keyframes fill-segment {
+                to {
+                    opacity: 1;
+                }
+             }
+
+             /* Spoke animation */
+             .spoke-line {
+                stroke-dasharray: 100;
+                stroke-dashoffset: 100;
+                animation: draw-spoke 1.5s ease-in-out forwards;
+             }
+
+             @keyframes draw-spoke {
+                to {
+                    stroke-dashoffset: 0;
+                }
+             }
+
+             /* Colorful Microscope appearance after wheel completes */
+             .microscope-color {
+                animation: microscope-appear 0.8s ease-out 2.8s forwards;
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.5);
+             }
+
+             @keyframes microscope-appear {
+                to {
+                    opacity: 1;
+                    transform: translate(-50%, -50%) scale(1);
                 }
              }
 
@@ -172,20 +227,116 @@ export default function SplashScreen({ onFinished }: { onFinished: () => void })
         
         <div className="relative mb-4 container-fade-out w-36 h-36">
            <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path className="drawing-animation text-gray-400" stroke="currentColor" strokeWidth="3" d="M87.5,50a37.5,37.5 0 1,1 -75,0a37.5,37.5 0 1,1 75,0" style={{ animationDelay: '0.2s' }} />
-              <path className="drawing-animation text-gray-400" stroke="currentColor" strokeWidth="3" d="M80,50a30,30 0 1,1 -60,0a30,30 0 1,1 60,0" style={{ animationDelay: '0.4s' }} />
+              {/* Colored wheel segments (pizza slices) */}
+              {[...Array(12)].map((_, i) => {
+                const angle1 = (i * Math.PI / 6) - (Math.PI / 12);
+                const angle2 = ((i + 1) * Math.PI / 6) - (Math.PI / 12);
+                const outerRadius = 37.5;
+                const innerRadius = 30;
+                
+                const x1 = 50 + innerRadius * Math.cos(angle1);
+                const y1 = 50 + innerRadius * Math.sin(angle1);
+                const x2 = 50 + outerRadius * Math.cos(angle1);
+                const y2 = 50 + outerRadius * Math.sin(angle1);
+                const x3 = 50 + outerRadius * Math.cos(angle2);
+                const y3 = 50 + outerRadius * Math.sin(angle2);
+                const x4 = 50 + innerRadius * Math.cos(angle2);
+                const y4 = 50 + innerRadius * Math.sin(angle2);
+                
+                return (
+                  <path
+                    key={`segment-${i}`}
+                    className="wheel-segment"
+                    d={`M ${x1} ${y1} L ${x2} ${y2} A ${outerRadius} ${outerRadius} 0 0 1 ${x3} ${y3} L ${x4} ${y4} A ${innerRadius} ${innerRadius} 0 0 0 ${x1} ${y1} Z`}
+                    fill={spokeColors[i]}
+                    opacity="0.7"
+                    style={{ animationDelay: `${0.8 + i * 0.1}s` }}
+                  />
+                );
+              })}
+              
+              {/* Outer Circle */}
+              <path className="drawing-animation text-gray-600" stroke="currentColor" strokeWidth="3" d="M87.5,50a37.5,37.5 0 1,1 -75,0a37.5,37.5 0 1,1 75,0" style={{ animationDelay: '0.2s' }} />
+              
+              {/* Inner Circle */}
+              <path className="drawing-animation text-gray-600" stroke="currentColor" strokeWidth="3" d="M80,50a30,30 0 1,1 -60,0a30,30 0 1,1 60,0" style={{ animationDelay: '0.4s' }} />
+              
+              {/* Spokes with different colors */}
               {[...Array(12)].map((_, i) => (
                   <path
                       key={i}
-                      className="drawing-animation text-gray-400"
-                      stroke="currentColor"
-                      strokeWidth="3"
+                      className="spoke-line"
+                      stroke={spokeColors[i]}
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
                       d={`M ${50 + 30 * Math.cos(i * Math.PI / 6)} ${50 + 30 * Math.sin(i * Math.PI / 6)} L ${50 + 37.5 * Math.cos(i * Math.PI / 6)} ${50 + 37.5 * Math.sin(i * Math.PI / 6)}`}
-                      style={{ animationDelay: `${0.6 + i * 0.1}s` }}
+                      style={{ animationDelay: `${0.8 + i * 0.1}s` }}
                   />
               ))}
+              
+              {/* Center circle filled with gradient */}
+              <circle 
+                cx="50" 
+                cy="50" 
+                r="28" 
+                fill="url(#centerGradient)" 
+                className="drawing-animation"
+                style={{ animationDelay: '0.6s' }}
+              />
+              
+              <defs>
+                <radialGradient id="centerGradient">
+                  <stop offset="0%" stopColor="#ffffff" />
+                  <stop offset="100%" stopColor="#f3f4f6" />
+                </radialGradient>
+              </defs>
            </svg>
-           <Microscope className="w-20 h-20 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 drawing-animation text-primary" style={{ strokeDasharray: 500, strokeDashoffset: 500, animationDelay: '1s' }}/>
+           
+           {/* Colorful Microscope Icon that appears after wheel completes */}
+           <div className="microscope-color absolute top-1/2 left-1/2">
+              <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                {/* Base */}
+                <ellipse cx="40" cy="75" rx="30" ry="3" fill="#2C3E50"/>
+                
+                {/* Stand/Pillar */}
+                <rect x="36" y="50" width="8" height="25" fill="#7F8C8D" rx="1"/>
+                <rect x="34" y="50" width="12" height="4" fill="#95A5A6" rx="1"/>
+                
+                {/* Arm */}
+                <rect x="30" y="30" width="6" height="22" fill="#7F8C8D" rx="2" transform="rotate(-15 33 30)"/>
+                
+                {/* Body */}
+                <rect x="28" y="22" width="22" height="16" fill="#3B82F6" rx="2"/>
+                <circle cx="39" cy="22" r="4" fill="#8B5CF6"/>
+                
+                {/* Eyepiece */}
+                <rect x="36" y="12" width="6" height="12" fill="#10B981" rx="1"/>
+                <ellipse cx="39" cy="11" rx="3" ry="2" fill="#34495E"/>
+                
+                {/* Objective Lenses */}
+                <circle cx="39" cy="40" r="6" fill="#EC4899"/>
+                <circle cx="39" cy="40" r="4" fill="#F59E0B"/>
+                <circle cx="39" cy="40" r="2.5" fill="#EF4444" opacity="0.8"/>
+                
+                {/* Revolving Nosepiece */}
+                <circle cx="39" cy="36" r="7" fill="#6366F1"/>
+                
+                {/* Stage */}
+                <rect x="28" y="44" width="22" height="3" fill="#14B8A6" rx="1"/>
+                
+                {/* Stage Clips */}
+                <rect x="27" y="44" width="2" height="4" fill="#5D6D7E" rx="0.5"/>
+                <rect x="49" y="44" width="2" height="4" fill="#5D6D7E" rx="0.5"/>
+                
+                {/* Focus Knobs */}
+                <circle cx="52" cy="48" r="3" fill="#EF4444"/>
+                <circle cx="52" cy="54" r="3" fill="#F59E0B"/>
+                
+                {/* Light Source */}
+                <rect x="34" y="48" width="10" height="6" fill="#FBBF24" rx="1"/>
+                <circle cx="39" cy="51" r="2" fill="#FCD34D" opacity="0.9"/>
+              </svg>
+           </div>
         </div>
 
         <div className="title-container opacity-0 text-center px-4">
