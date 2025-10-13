@@ -129,3 +129,23 @@ export const DocxParsingInputSchema = z.object({
   file: z.instanceof(File),
 });
 export type DocxParsingInput = z.infer<typeof DocxParsingInputSchema>;
+
+
+// Types for sarathi-ai-flow.ts
+export const SarathiAIInputSchema = z.object({
+  userName: z.string().describe("The name of the user for personalization."),
+  question: z.string().describe("The user's question."),
+  language: z.string().describe("The language for the response (e.g., English, Hinglish)."),
+  history: z.array(z.object({
+    role: z.enum(['user', 'model']),
+    content: z.array(z.object({
+      text: z.string()
+    }))
+  })).optional().describe('The previous conversation history to maintain context.'),
+});
+export type SarathiAIInput = z.infer<typeof SarathiAIInputSchema>;
+
+export const SarathiAIOutputSchema = z.object({
+  answer: z.string().describe("The AI-generated response from Sarathi."),
+});
+export type SarathiAIOutput = z.infer<typeof SarathiAIOutputSchema>;
