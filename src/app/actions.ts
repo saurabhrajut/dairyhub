@@ -10,6 +10,7 @@ import { gyanAI as gyanAIFlow } from "@/ai/flows/gyan-ai-flow";
 import { refineQuestion as refineQuestionFlow } from "@/ai/flows/refine-question-flow";
 import { textToSpeech as textToSpeechFlow } from "@/ai/flows/text-to-speech-flow";
 import { interviewPrepper as interviewPrepperFlow } from "@/ai/flows/interview-prepper-flow";
+import { sarathiAI as sarathiAIFlow } from "@/ai/flows/sarathi-ai-flow";
 import mammoth from 'mammoth';
 
 
@@ -21,7 +22,8 @@ import type {
     RefineQuestionInput,
     TextToSpeechInput,
     InterviewPrepperInput,
-    DocxParsingInput
+    DocxParsingInput,
+    SarathiAIInput
 } from "@/ai/flows/types";
 
 export async function getDailyTip() {
@@ -58,6 +60,10 @@ export async function textToSpeech(input: TextToSpeechInput) {
 
 export async function interviewPrepper(input: InterviewPrepperInput) {
     return await interviewPrepperFlow(input);
+}
+
+export async function sarathiAI(input: SarathiAIInput) {
+    return await sarathiAIFlow(input);
 }
 
 export async function parseDocx(formData: FormData) {
