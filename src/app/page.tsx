@@ -7,6 +7,7 @@ import { useAuth } from "@/context/auth-context";
 import { Loader2 } from "lucide-react";
 import { DailyTip } from "@/components/daily-tip";
 import SplashScreen from "@/components/splash-screen";
+import { SarathiChatWidget } from "@/components/sarathi-chat-widget";
 
 
 export default function Home() {
@@ -50,6 +51,7 @@ export default function Home() {
           <TopicGrid />
         </main>
       </div>
+       <SarathiChatWidget />
     </div>
   );
 }
