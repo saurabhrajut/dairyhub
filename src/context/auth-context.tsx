@@ -134,12 +134,8 @@ const signInWithGoogle = async () => {
         const result = await signInWithPopup(auth, provider);
         const firebaseUser = result.user;
 
-        if (!firebaseUser.email) {
-            throw new Error("Google sign-in did not provide an email address.");
-        }
-
         const allUsers = getUsers();
-        let appUser = allUsers.find(u => u.email === firebaseUser.email && !u.isAnonymous);
+        let appUser = allUsers.find(u => u.uid === firebaseUser.uid && !u.isAnonymous);
 
         if (!appUser) {
             // New user, create an account
