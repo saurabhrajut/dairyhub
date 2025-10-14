@@ -3,6 +3,9 @@
 
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { useSubscription } from './subscription-context';
+import { getAuth, GoogleAuthProvider, signInWithPopup, User as FirebaseUser, setPersistence, browserPopupRedirectResolver } from 'firebase/auth';
+import { initFirebaseClient } from '@/lib/firebaseClient';
+
 
 export type Department = 'process-access' | 'production-access' | 'quality-access' | 'all-control-access' | 'guest';
 
@@ -116,8 +119,8 @@ const login = async (email: string, password: string) => {
       photoURL: `https://placehold.co/128x128/E0E0E0/333?text=${displayName.charAt(0).toUpperCase()}`,
   };
   
-  allUsers.push(newUser);
-  saveUsers(allUsers);
+  const updatedUsers = [...allUsers, newUser];
+  saveUsers(updatedUsers);
   
   localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(newUser));
   setUser(newUser);
@@ -125,32 +128,49 @@ const login = async (email: string, password: string) => {
 };
 
 const signInWithGoogle = async () => {
-    // This is a mock implementation. In a real app, you would use Firebase Auth.
-    const mockGoogleUser = {
-        uid: 'google-user-' + Date.now(),
-        email: 'google.user@example.com',
-        isAnonymous: false,
-        displayName: 'Google User',
-        photoURL: 'https://placehold.co/128x128/DB4437/fff?text=G',
-        department: 'process-access' as Department
-    };
+    const auth = getAuth(initFirebaseClient());
+    const provider = new GoogleAuthProvider();
+    try {
+        await setPersistence(auth, browserPopupRedirectResolver);
+        const result = await signInWithPopup(auth, provider);
+        const firebaseUser = result.user;
 
-    const allUsers = getUsers();
-    const existingUserIndex = allUsers.findIndex(u => u.email === mockGoogleUser.email);
-    
-    if (existingUserIndex !== -1) {
-        // User exists, log them in
-        const existingUser = allUsers[existingUserIndex];
-        setUser(existingUser);
-        localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(existingUser));
-        loadSubscription(existingUser.uid);
-    } else {
-        // New Google user, add to users list and log in
-        allUsers.push(mockGoogleUser);
-        saveUsers(allUsers);
-        setUser(mockGoogleUser);
-        localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(mockGoogleUser));
-        loadSubscription(mockGoogleUser.uid);
+        if (!firebaseUser.email) {
+            throw new Error("Google sign-in did not provide an email address.");
+        }
+
+        const allUsers = getUsers();
+        let appUser = allUsers.find(u => u.email === firebaseUser.email && !u.isAnonymous);
+
+        if (!appUser) {
+            // New user, create an account
+            appUser = {
+                uid: firebaseUser.uid,
+                email: firebaseUser.email,
+                isAnonymous: false,
+                displayName: firebaseUser.displayName,
+                photoURL: firebaseUser.photoURL,
+                // Default department, user can change it in profile
+                department: 'process-access', 
+            };
+            const updatedUsers = [...allUsers, appUser];
+            saveUsers(updatedUsers);
+        }
+
+        // Log in the user
+        setUser(appUser);
+        localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(appUser));
+        loadSubscription(appUser.uid);
+    } catch (error: any) {
+        console.error("Google Sign-In Error:", error);
+        // Handle specific errors if needed
+        if (error.code === 'auth/popup-closed-by-user') {
+            throw new Error("Sign-in process was cancelled.");
+        }
+        if (error.code === 'auth/unauthorized-domain') {
+            throw new Error("This domain is not authorized for Google Sign-In. Please contact support.");
+        }
+        throw new Error(error.message || "An unknown error occurred during Google sign-in.");
     }
 };
 
