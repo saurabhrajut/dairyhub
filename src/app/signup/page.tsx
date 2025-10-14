@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Mail, Lock, User, UserCheck, Loader2 } from 'lucide-react';
+import { Mail, Lock, User, UserCheck, Loader2, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { useAuth, type Department } from '@/context/auth-context';
 import { useToast } from '@/hooks/use-toast';
@@ -67,7 +67,10 @@ export default function SignupPage() {
 
     return (
         <div className="bg-gray-50 flex items-center justify-center min-h-screen p-4">
-            <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 m-4 border">
+            <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 m-4 border relative">
+                 <Link href="/" className="absolute top-4 left-4 text-gray-500 hover:text-gray-800 transition-colors">
+                    <ArrowLeft className="w-6 h-6" />
+                </Link>
                  <div className="text-center mb-8">
                     <MilkCanIcon className="w-16 h-16 text-primary mx-auto mb-4" />
                     <h1 className="text-3xl font-bold text-gray-800">
