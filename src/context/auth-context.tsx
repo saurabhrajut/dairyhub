@@ -3,7 +3,7 @@
 
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { useSubscription } from './subscription-context';
-import { getAuth, GoogleAuthProvider, signInWithPopup, User as FirebaseUser, setPersistence, browserPopupRedirectResolver } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, signInWithPopup, User as FirebaseUser } from 'firebase/auth';
 import { initFirebaseClient } from '@/lib/firebaseClient';
 
 
@@ -131,7 +131,6 @@ const signInWithGoogle = async () => {
     const auth = getAuth(initFirebaseClient());
     const provider = new GoogleAuthProvider();
     try {
-        await setPersistence(auth, browserPopupRedirectResolver);
         const result = await signInWithPopup(auth, provider);
         const firebaseUser = result.user;
 
