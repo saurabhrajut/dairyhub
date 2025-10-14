@@ -94,7 +94,7 @@ export default function ProfilePage() {
         setLanguage(lang);
         toast({
             title: "Language Updated",
-            description: `App language set to ${lang === 'hi' ? 'Hindi' : 'English'}.`,
+            description: `App language set to ${lang === 'hi' ? 'Hinglish' : 'English'}.`,
         });
     }
 
@@ -159,7 +159,7 @@ export default function ProfilePage() {
         <>
         <div className="max-w-md mx-auto min-h-screen bg-white shadow-lg">
             <div className="relative bg-gradient-to-b from-orange-500 via-white to-green-600 h-60 p-6 rounded-b-3xl">
-                <Link href="/" className="absolute top-4 left-4 cursor-pointer">
+                <Link href="/home" className="absolute top-4 left-4 cursor-pointer">
                    <ChevronLeft className="h-6 w-6 text-gray-800"/>
                 </Link>
                 
@@ -253,7 +253,7 @@ export default function ProfilePage() {
                     )}
                 </div>
 
-                <div className={`bg-amber-50 p-5 rounded-xl border border-amber-200 ${getCardClass(100)}`} >
+                <div className={`bg-gray-50 p-5 rounded-xl border border-gray-200 ${getCardClass(100)}`} >
                     <h3 className="font-bold text-gray-700 mb-4">Your Information</h3>
                     <div className="space-y-3">
                         <div className="flex items-center">
@@ -271,11 +271,11 @@ export default function ProfilePage() {
                     </div>
                 </div>
 
-                <div className={`bg-amber-50 p-3 rounded-xl border border-amber-200 ${getCardClass(200)}`}>
+                <div className={`bg-gray-50 p-3 rounded-xl border border-gray-200 ${getCardClass(200)}`}>
                     <ul className="divide-y divide-gray-200">
                          <Dialog>
                             <DialogTrigger asChild>
-                                <li className="flex justify-between items-center p-3 hover:bg-amber-100/50 rounded-lg cursor-pointer">
+                                <li className="flex justify-between items-center p-3 hover:bg-gray-100 rounded-lg cursor-pointer">
                                     <span className="flex items-center gap-3 text-gray-700 font-medium"><Settings/>Settings</span>
                                     <ChevronRight className="h-5 w-5 text-gray-400" />
                                 </li>
@@ -292,7 +292,7 @@ export default function ProfilePage() {
                                             <SelectTrigger id="language-select"><SelectValue/></SelectTrigger>
                                             <SelectContent>
                                                 <SelectItem value="en">English</SelectItem>
-                                                <SelectItem value="hi">Hindi</SelectItem>
+                                                <SelectItem value="hi">Hinglish</SelectItem>
                                             </SelectContent>
                                         </Select>
                                     </div>
@@ -316,7 +316,7 @@ export default function ProfilePage() {
                         
                         <Dialog>
                              <DialogTrigger asChild>
-                                <li className="flex justify-between items-center p-3 hover:bg-amber-100/50 rounded-lg cursor-pointer">
+                                <li className="flex justify-between items-center p-3 hover:bg-gray-100 rounded-lg cursor-pointer">
                                     <span className="flex items-center gap-3 text-gray-700 font-medium"><HelpCircle/>Help & Support</span>
                                     <ChevronRight className="h-5 w-5 text-gray-400" />
                                 </li>
@@ -346,7 +346,3 @@ export default function ProfilePage() {
         </>
     );
 }
-
-    
-
-    
