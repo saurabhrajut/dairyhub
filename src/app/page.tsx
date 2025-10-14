@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -19,25 +18,23 @@ export default function Home() {
 
   useEffect(() => {
     if (!loading && !user) {
-      setShowSplash(false); // Do not show splash if not logged in
+      setShowSplash(false);
       router.push('/login');
     }
   }, [loading, user, router]);
   
   useEffect(() => {
-    // This effect runs only when the user is determined.
+    // Jab user logged in ho, splash screen dikhao
     if (!loading && user) {
-        const splashShown = sessionStorage.getItem('splashShown');
-        if (splashShown) {
-            setShowSplash(false);
-        } else {
-            setShowSplash(true);
-            sessionStorage.setItem('splashShown', 'true');
-        }
+      setShowSplash(true);
+      // 3 seconds ke baad automatic hide ho jayega
+      const timer = setTimeout(() => {
+        setShowSplash(false);
+      }, 3000);
+      
+      return () => clearTimeout(timer);
     } else if (loading) {
-        // While loading, assume we might show the splash.
-        // This prevents the main content from flashing briefly.
-        setShowSplash(true);
+      setShowSplash(true);
     }
   }, [user, loading]);
 
