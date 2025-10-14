@@ -5,11 +5,18 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Mail, Lock, Loader2, UserCheck } from 'lucide-react';
+import { Mail, Lock, Loader2, UserCheck, ArrowLeft } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { MilkCanIcon } from '@/components/icons';
 import { useAuth } from '@/context/auth-context';
+
+const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" {...props}>
+        <title>Google</title>
+        <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.85 3.18-1.73 4.1-1.05 1.05-2.58 2.05-4.82 2.05-5.82 0-10.56-4.74-10.56-10.56S6.66 3.14 12.48 3.14c3.3 0 5.39 1.28 6.68 2.52l2.52-2.52C19.22 1.28 16.21 0 12.48 0 5.6 0 0 5.6 0 12.48s5.6 12.48 12.48 12.48c7.1 0 12.12-4.92 12.12-12.12 0-.8-.08-1.55-.25-2.28H12.48z" />
+    </svg>
+);
 
 
 export default function LoginPage() {
@@ -18,33 +25,20 @@ export default function LoginPage() {
     const [isLoading, setIsLoading] = useState(false);
     const { toast } = useToast();
     const router = useRouter();
-    const { login, anonymousLogin } = useAuth();
+    const { login, anonymousLogin, signInWithGoogle } = useAuth();
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
 
-        // --- DEBUGGING STEP 1: चेक करें कि सही फंक्शन चल रहा है ---
-        console.log("--- handleLogin function started ---");
-        
-        // --- DEBUGGING STEP 2: देखें कि useAuth() से क्या मिल रहा है ---
-        console.log("The 'login' function received from context is:", login);
-
         try {
-            const userCredential = await login(email, password);
-
-            // --- DEBUGGING STEP 3: लॉगिन के बाद यूजर की जानकारी देखें ---
-            console.log("Login successful, userCredential object:", userCredential);
-            console.log("Is the user anonymous? :", userCredential.user.isAnonymous);
-
+            await login(email, password);
             toast({
                 title: 'Login Successful!',
                 description: "Welcome back!",
             });
             router.push('/');
         } catch (error: any) {
-             // --- DEBUGGING: अगर कोई एरर आए तो उसे देखें ---
-             console.error("Login failed with error:", error);
              toast({
                 variant: "destructive",
                 title: 'Login Failed',
@@ -57,8 +51,6 @@ export default function LoginPage() {
     
     const handleGuestLogin = async () => {
         setIsLoading(true);
-        // गेस्ट लॉगिन के लिए भी एक लॉग लगा देते हैं ताकि कोई कन्फ्यूजन न हो
-        console.log("--- handleGuestLogin function started ---");
         try {
             await anonymousLogin();
             toast({
@@ -77,12 +69,32 @@ export default function LoginPage() {
         }
     }
 
-    // JSX कोड में कोई बदलाव नहीं है, इसलिए उसे यहाँ से हटा रहा हूँ ताकि फोकस बना रहे
-    // ... आपका पूरा JSX कोड यहाँ आएगा ...
+    const handleGoogleSignIn = async () => {
+        setIsLoading(true);
+        try {
+            await signInWithGoogle();
+             toast({
+                title: 'Signed in with Google!',
+                description: "Welcome!",
+            });
+            router.push('/');
+        } catch (error: any) {
+            toast({
+                variant: "destructive",
+                title: 'Google Sign-In Failed',
+                description: error.message || "Could not sign in with Google. Please try again.",
+            });
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     return (
         <div className="bg-gray-50 flex items-center justify-center min-h-screen p-4">
-            <div className="w-full max-w-sm bg-white rounded-2xl shadow-xl p-8 m-4 border">
-                {/* ... The rest of your JSX code is exactly the same ... */}
+            <div className="w-full max-w-sm bg-white rounded-2xl shadow-xl p-8 m-4 border relative">
+                <Link href="/" className="absolute top-4 left-4 text-gray-500 hover:text-gray-800 transition-colors">
+                    <ArrowLeft className="w-6 h-6" />
+                </Link>
                  <div className="text-center mb-8">
                     <MilkCanIcon className="w-16 h-16 text-primary mx-auto mb-4" />
                     <h1 className="text-3xl font-bold text-gray-800">
@@ -140,7 +152,11 @@ export default function LoginPage() {
                     </div>
                 </div>
 
-                 <div>
+                 <div className="space-y-3">
+                    <Button onClick={handleGoogleSignIn} variant="outline" className="w-full" disabled={isLoading}>
+                        {isLoading ? <Loader2 className="animate-spin" /> : <GoogleIcon className="mr-2 h-4 w-4" />}
+                        Sign in with Google
+                    </Button>
                     <Button onClick={handleGuestLogin}
                             variant="outline"
                             className="w-full"
