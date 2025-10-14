@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -13,22 +14,30 @@ import { useRouter } from "next/navigation";
 
 export default function Home() {
   const { loading, user } = useAuth();
-  const [showSplash, setShowSplash] = useState(false);
+  const [showSplash, setShowSplash] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
     if (!loading && !user) {
+      setShowSplash(false); // Do not show splash if not logged in
       router.push('/login');
     }
   }, [loading, user, router]);
   
   useEffect(() => {
-    const splashShown = sessionStorage.getItem('splashShown');
-    if (splashShown) {
-      setShowSplash(false);
-    } else if (!loading && user) { // Only show splash if user is loaded
-      setShowSplash(true);
-      sessionStorage.setItem('splashShown', 'true');
+    // This effect runs only when the user is determined.
+    if (!loading && user) {
+        const splashShown = sessionStorage.getItem('splashShown');
+        if (splashShown) {
+            setShowSplash(false);
+        } else {
+            setShowSplash(true);
+            sessionStorage.setItem('splashShown', 'true');
+        }
+    } else if (loading) {
+        // While loading, assume we might show the splash.
+        // This prevents the main content from flashing briefly.
+        setShowSplash(true);
     }
   }, [user, loading]);
 
