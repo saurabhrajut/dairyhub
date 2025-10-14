@@ -6,9 +6,10 @@ import { useSubscription } from './subscription-context';
 
 export type Department = 'process-access' | 'production-access' | 'quality-access' | 'all-control-access' | 'guest';
 
-interface AppUser {
+export interface AppUser {
     uid: string;
-    email: string;
+    email: string | null;
+    isAnonymous: boolean;
     displayName?: string | null;
     photoURL?: string | null;
     gender?: 'male' | 'female' | 'other';
@@ -19,10 +20,12 @@ interface AuthContextType {
   user: AppUser | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
+  anonymousLogin: () => Promise<void>;
   signup: (email: string, password: string, displayName: string, gender: 'male' | 'female' | 'other', department: Department) => Promise<void>;
   logout: () => Promise<void>;
   updateUserProfile: (profileData: { displayName?: string; department?: Department }) => Promise<void>;
   updateUserPhoto: (file: File) => Promise<void>;
+  signInWithGoogle: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -36,6 +39,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const { loadSubscription } = useSubscription();
 
   useEffect(() => {
+    setLoading(true);
     try {
         const storedUser = localStorage.getItem(CURRENT_USER_STORAGE_KEY);
         if (storedUser) {
@@ -68,24 +72,8 @@ const saveUsers = (users: AppUser[]) => {
 };
 
 const login = async (email: string, password: string) => {
-  // Special case for guest login
-  if (email === 'guest@example.com' && password === 'guestpassword') {
-      const guestUser: AppUser = {
-          uid: 'guest-' + Date.now(), 
-          email: 'guest@example.com', 
-          displayName: 'Guest User', 
-          photoURL: 'https://placehold.co/128x128/E0E0E0/333?text=G',
-          gender: 'other',
-          department: 'guest' // Assign a specific guest department
-      };
-      localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(guestUser));
-      setUser(guestUser);
-      loadSubscription(guestUser.uid);
-      return;
-  }
-
   const allUsers = getUsers();
-    const foundUser = allUsers.find(u => u.email === email);
+    const foundUser = allUsers.find(u => u.email === email && !u.isAnonymous);
     
     if (foundUser) {
         // In a real app, you'd check the hashed password here
@@ -97,15 +85,31 @@ const login = async (email: string, password: string) => {
     }
   };
 
+  const anonymousLogin = async () => {
+    const guestUser: AppUser = {
+        uid: 'guest-' + Date.now(), 
+        email: null,
+        isAnonymous: true,
+        displayName: 'Guest User', 
+        photoURL: 'https://placehold.co/128x128/E0E0E0/333?text=G',
+        gender: 'other',
+        department: 'guest'
+    };
+    localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(guestUser));
+    setUser(guestUser);
+    loadSubscription(guestUser.uid);
+  };
+
   const signup = async (email: string, password: string, displayName: string, gender: 'male' | 'female' | 'other', department: Department) => {
     const allUsers = getUsers();
-    if (allUsers.some(u => u.email === email)) {
+    if (allUsers.some(u => u.email === email && !u.isAnonymous)) {
         throw new Error("An account with this email already exists.");
     }
 
     const newUser: AppUser = {
       uid: 'user-' + Date.now(),
       email,
+      isAnonymous: false,
       displayName,
       gender,
       department,
@@ -120,6 +124,36 @@ const login = async (email: string, password: string) => {
   loadSubscription(newUser.uid);
 };
 
+const signInWithGoogle = async () => {
+    // This is a mock implementation. In a real app, you would use Firebase Auth.
+    const mockGoogleUser = {
+        uid: 'google-user-' + Date.now(),
+        email: 'google.user@example.com',
+        isAnonymous: false,
+        displayName: 'Google User',
+        photoURL: 'https://placehold.co/128x128/DB4437/fff?text=G',
+        department: 'process-access' as Department
+    };
+
+    const allUsers = getUsers();
+    const existingUserIndex = allUsers.findIndex(u => u.email === mockGoogleUser.email);
+    
+    if (existingUserIndex !== -1) {
+        // User exists, log them in
+        const existingUser = allUsers[existingUserIndex];
+        setUser(existingUser);
+        localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(existingUser));
+        loadSubscription(existingUser.uid);
+    } else {
+        // New Google user, add to users list and log in
+        allUsers.push(mockGoogleUser);
+        saveUsers(allUsers);
+        setUser(mockGoogleUser);
+        localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(mockGoogleUser));
+        loadSubscription(mockGoogleUser.uid);
+    }
+};
+
 const logout = async () => {
   localStorage.removeItem(CURRENT_USER_STORAGE_KEY);
   setUser(null);
@@ -131,22 +165,20 @@ const updateUserProfile = async (profileData: Partial<AppUser>) => {
     setUser(updatedUser);
     localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(updatedUser));
 
-    let allUsers = getUsers();
-      const userIndex = allUsers.findIndex(u => u.uid === user.uid);
-      if (userIndex !== -1) {
-          allUsers[userIndex] = updatedUser;
-      } else if (user.uid.startsWith('guest-')) {
-          // If it's a guest user who is updating, they might not be in the main list.
-          // This path is unlikely given current UI, but good to handle.
-          allUsers.push(updatedUser);
-      }
-      saveUsers(allUsers);
-      console.log("User profile updated.", updatedUser);
+    if(!user.isAnonymous) {
+        let allUsers = getUsers();
+        const userIndex = allUsers.findIndex(u => u.uid === user.uid);
+        if (userIndex !== -1) {
+            allUsers[userIndex] = updatedUser;
+            saveUsers(allUsers);
+        }
+    }
+    console.log("User profile updated.", updatedUser);
     }
   };
 
   const updateUserPhoto = async (file: File) => {
-    if (!user) return;
+    if (!user || user.isAnonymous) return;
 
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -177,10 +209,12 @@ const updateUserProfile = async (profileData: Partial<AppUser>) => {
     user,
     loading,
     login,
+    anonymousLogin,
     signup,
     logout,
     updateUserProfile,
-    updateUserPhoto
+    updateUserPhoto,
+    signInWithGoogle
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
