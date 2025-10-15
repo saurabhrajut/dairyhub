@@ -48,7 +48,7 @@ export const milkHandlingPreservationContent = {
                     title: "Containers aur Equipment ke liye Initial Hygiene aur Cleaning Procedures",
                     p1: "Cleaning, jisme dirt aur doodh jaise physical residues ko remove karna shamil hai, aur disinfection, jo harmful bacteria ko marne par focus karta hai, ke beech ek clear distinction kiya jata hai. Doodh se deal karne mein involved sare containers aur equipment ko thoroughly clean aur disinfected kiya jana chahiye. Ismein typically cold water se initial rinse, uske baad ek brush aur warm water ke saath detergent-containing scrubbing, aur ek final cold water rinse shamil hai. Milk testing equipment, particularly, har use ke baad meticulous cleaning ki requirement hai, jise kam se kam ek minute ke liye boiling water, 70% alcohol, ya direct flame exposure ke through achieve kiya ja sakta hai.",
                     p2: "Farm tanks ko kisi bhi milk residue ke liye inspect kiya jata hai, kyunki inefficient cleaning ke evidence quality payment schemes ke under deductions ka result ban sakta hai. Milk tankers ki daily cleaning hoti hai, ya har collection round ke baad, either reception area mein ya ek dedicated cleaning station par. External cleaning bhi ek common practice hai, aur increasingly, kuch countries mein regulations animal diseases ke spread ko prevent karne ke liye tanker disinfection ko mandate karte hain.",
-                    p3: "Ek dairy plant ke reception aur processing stages ki operational efficiency aur economic viability farm level par implemented quality assurance measures par profoundly dependent hai. Agar farm-level practices, jaise rapid cooling, hygienic milking, aur antibiotic residue checks, consistently adhere nahi kiye jate hain, toh dairy plant mein arriving doodh higher bacterial counts exhibit karega ya contaminants contain kar sakta hai. Yeh directly reception dock par increased rejection rates ki taraf lead karta hai, jo turn mein, significant operational bottlenecks jaise excessive truck waits, increased labor costs, aur wasted transport resources ka cause banta hai. Yeh observation ki tanker mein doodh ke around sloshing se air intrusion doodh ki quality ke liye detrimental hai aur dairy mein processing ko complicate karta hai, yeh illustrate karta hai ki farm-level tank filling aur transport practices downstream processing ko directly kaise influence kar sakti hain. Yeh situation ek collaborative aur integrated supply chain approach ki need ko highlight karti hai, jahan dairy companies na keval strict reception protocols implement karti hain balki robust farmer education programs, technical support aur quality-linked payment schemes mein bhi invest karti hain optimal farm-level practices ko incentivize karne ke liye. Aisi proactive engagement upstream aksar reactive rejection aur disposal downstream se adhik cost-effective hoti hai."
+                    p3: "Ek dairy plant ke reception aur processing stages ki operational efficiency aur economic viability farm level par implemented quality assurance measures par profoundly dependent hai. Agar farm-level practices, jaise rapid cooling, hygienic milking, aur antibiotic residue checks, consistently adhere nahi kiye jate hain, toh dairy plant mein arriving doodh higher bacterial counts exhibit karega ya contaminants contain kar sakta hai. Yeh directly reception dock par increased rejection rates ki taraf lead karta hai, jo turn mein, significant operational bottlenecks jaise excessive truck waits, increased labor costs, aur wasted transport resources ka cause banta hai."
                 }
             },
             transportation: {
@@ -73,26 +73,105 @@ export const milkHandlingPreservationContent = {
                 },
                 monitoring_logistics: {
                     title: "Efficiency aur Safety ke liye Real-time Monitoring aur Logistics",
-                    p1: "Tankers aksar GPS systems aur onboard monitoring tools se fitted hote hain jo critical data record karte hain jaise collection times, volumes, temperatures aur tank ki sanitation status. Yeh information real-time mein centralized databases mein upload ki jati hai, doodh ki journey ka ek clear aur uninterrupted record create karte hue. Drivers initial field-level inspections perform karte hain, including visual assessments aur basic tests, doodh ki normal appearance aur smell confirm karne ke liye.",
-                    p2: "Efficient logistics, jisme optimized transport times aur tank containers ki continuous tracking shamil hai, doodh ki quality maintain karne aur operational costs reduce karne ke liye crucial hai. 'Congested milk intakes par excessive truck waits' jaisi inefficiencies ko address karne se thousands of driver aur equipment hours bach sakte hain, freight rates aur detention costs par significantly impact dalte hue.",
-                    p3: "Milk transport stringent regulations ke subject hai (e.g., U.S. mein FDA ka Pasteurized Milk Ordinance) jo materials, cleaning methods aur inspections ko cover karte hain. Drivers ko proper handling procedures mein specialized training milti hai, including loading/unloading systems operate karna, temperature monitor karna aur vehicle hygiene maintain karna.",
-                    p4: "Doodh ki poori journey ke dauran temperature control karne ka continuous effort, farm cooling se lekar insulated, temperature-monitored tankers tak, aur dairy mein arrival par re-chilling tak, yeh demonstrate karta hai ki doodh ke liye 'cold chain' isolated cooling events ki series nahi hai balki ek dynamic, interdependent system hai. Poori chain ki effectiveness har link ki integrity par hinges karti hai: farm mein initial rapid cooling, insulation aur active monitoring ke through transport ke dauran temperature ka maintenance, aur processing plant mein immediate re-chilling. Kisi bhi single point par failure ya temperature deviation poore batch ko compromise kar sakta hai, leading to microbial growth aur spoilage despite other stages par efforts. ATP-certified tankers ke liye regulatory mandate yeh underscore karta hai ki yeh continuity keval ek best practice nahi hai balki product safety ensure karne ke liye ek legal requirement hai. Yeh holistic perspective emphasize karta hai ki cold chain infrastructure aur integrated monitoring technologies mein investment dairy operations ke liye ek strategic imperative hai, rather than sirf ek logistical cost. Yeh cold chain mein weak points identify karne aur temperature excursions minimize karne aur overall efficiency improve karne ke liye logistics optimize karne mein data analytics ke value ko bhi highlight karta hai."
+                    p1: "Tankers aksar GPS systems aur onboard monitoring tools se fitted hote hain jo critical data record karte hain jaise collection times, volumes, temperatures aur tank ki sanitation status. Yeh information real-time mein centralized databases mein upload ki jati hai, doodh ki journey ka ek clear aur uninterrupted record create karte hue.",
+                    p2: "Efficient logistics, jisme optimized transport times aur tank containers ki continuous tracking shamil hai, doodh ki quality maintain karne aur operational costs reduce karne ke liye crucial hai.",
+                    p3: "Milk transport stringent regulations ke subject hai jo materials, cleaning methods aur inspections ko cover karte hain. Drivers ko proper handling procedures mein specialized training milti hai.",
+                    p4: "Doodh ki poori journey ke dauran temperature control karne ka continuous effort yeh demonstrate karta hai ki doodh ke liye 'cold chain' isolated cooling events ki series nahi hai balki ek dynamic, interdependent system hai."
                 }
             },
-
-            // Storage, Preservation aur Conclusions sections similar tarike se convert honge...
-            // File bahut badi hai toh main core structure dikhaya hai
-            
+            storage: {
+                title: "IV. Milk Storage Techniques",
+                p1: "Effective storage doodh preservation ka ek critical component hai, jo reception se distribution tak iske quality aur safety ko maintain karta hai.",
+                raw_milk_silos: {
+                    title: "Silo Tanks mein Raw Milk Storage",
+                    p1: "Untreated raw milk usually large, vertical, insulated silo tanks mein store kiya jata hai, jo aksar bahar located hote hain. Yeh tanks high capacity ke liye design kiye gaye hain, approximately 50,000 se 500,000 liters tak ranging. Kuch silo tanks ek cooling jacket se equipped hote hain jo doodh ke low temperature ko actively maintain karne ke liye chilled water circulate karta hai.",
+                    p2: "Gravity ke karan cream separation prevent karne ke liye raw milk ke silos ke bhitar gentle agitation crucial hai. Side-mounted propeller agitators commonly use kiye jate hain. Agitation gentle hona chahiye taki air intrusion aur fat globules ko damage se bacha ja sake.",
+                    sensors: {
+                        temp: { title: "Temperature Sensors", text: "Alcove mein located, yeh doodh ke temperature ko monitor karte hain ensure karte hue ki yeh cool rahe." },
+                        level: { title: "Level Sensors", text: "Alcove mein bhi, yeh doodh ke level ko monitor karte hain, jo unloading schedules plan karne ke liye critical hai." },
+                        low_level: { title: "Low-Level Sensors", text: "Outlet pipe par located, yeh sensor indicate karta hai ki silo kab empty hai." },
+                        overflow: { title: "Overflow Protection", text: "Tank ke top par ek high-level sensor critical overflow protection provide karta hai." }
+                    }
+                },
+                refrigerated_storage: {
+                    title: "Fresh Milk ke liye Refrigerated Storage (Pasteurized/Homogenized)",
+                    p1: "Refrigeration ko doodh aur dairy products ki safety aur quality maintain karne ke liye sabse critical factor aur sabse widely used method ke roop mein recognized kiya jata hai. Yeh microbial growth aur enzymatic reactions ko dramatically slow kar deta hai jo spoilage ka cause bante hain.",
+                    p2: "Law dwara, Grade A milk ko 45°F (7.2°C) ya usse neeche maintain kiya jana chahiye. However, 40°F (4.4°C) se significantly below ka temperature doodh ki quality ki better protection ke liye necessary considered hai.",
+                    p3: "Consumers ke liye, doodh ko kabhi bhi room temperature par nahi chhoda jana chahiye. Unused doodh jo bahar chod diya gaya hai, usse original container mein vapas nahi kiya jana chahiye."
+                },
+                uht_storage: {
+                    title: "Ultra-High Temperature (UHT) Milk Storage",
+                    p1: "UHT milk flash sterilization se guzarta hai, jahan isse bahut short duration (2-8 seconds) ke liye bahut high temperature (jaise, 290°F / 143°C) par rapidly heated kiya jata hai. Yeh intense heat treatment raw milk mein present sare microorganisms ko effectively kill karta hai.",
+                    p2: "Ultra-high heat treatment aur aseptic packaging ka combination ek aisa product create karta hai jo package kholne tak bina refrigeration ke kai mahino (6+ months tak) tak shelf-stable rehta hai.",
+                    p3: "Sare microorganisms ke complete elimination aur protective aseptic packaging ke karan, UHT milk ko chemical preservatives ke addition ki requirement nahi hoti hai."
+                }
+            },
+            preservation: {
+                title: "V. Doodh Preservation ke liye Chemical Methods",
+                principles: {
+                    title: "Dairy mein Chemical Preservation ke Principles",
+                    p1: "Chemical preservatives ek aisa environment create karke kaam karte hain jo microbial growth ke liye unfavorable hota hai, jisse food products ka shelf life extend hota hai. Unke primary mechanisms mein direct microbial poison ke roop mein act karna ya pH ko ek aise level tak reduce karna shamil hai jo microorganisms ke proliferation ko inhibit karta hai."
+                },
+                chemicals: {
+                    title: "Specific Chemical Preservatives",
+                    h2o2: {
+                        title: "Hydrogen Peroxide (H2O2)",
+                        p1: "Hydrogen peroxide microbial proliferation ko prevent karke aur doodh spoilage ko inhibit karke ek antimicrobial agent ke roop mein act karta hai. Yeh water aur oxygen mein break down hota hai.",
+                        p2: "Iske effectiveness ke bawajood, hydrogen peroxide doodh ke flavor aur nutritional content ko negatively affect kar sakta hai. Iska use aksar strictly regulated ya restricted hota hai."
+                    },
+                    lp_system: {
+                        title: "Lactoperoxidase System (LP-System)",
+                        p1: "Yeh doodh mein present ek natural antibacterial system hai. Enzyme lactoperoxidase, jo bovine aur buffalo milk mein naturally abundant hai, hydrogen peroxide ki slight amounts ki presence mein thiocyanate ions ko hypothiocyanous acid mein oxidize karta hai.",
+                        p2: "LP-System ka effect primarily mixed raw milk ke flora ke against bacteriostatic (inhibitory) hota hai. System ko raw milk mein thiocyanate aur hydrogen peroxide add karke activate kiya ja sakta hai."
+                    },
+                    other: {
+                        title: "Dairy mein Other Common Chemical Preservatives",
+                        p1: "Examples mein sodium benzoate, potassium sorbate, natamycin, calcium propionate, sorbic acid, ascorbic acid, aur sucrose shamil hain. Yeh preservatives primarily antifungal ya antibacterial agents ke roop mein act karte hain."
+                    }
+                },
+                regulatory: {
+                    title: "Chemical Preservatives ki Regulatory Status aur Safety Issues",
+                    p1: "Doodh mein various preservatives aur adulterants ka illegal use ek persistent challenge hai. FSSAI jaise regulatory bodies dairy product safety ki oversight mein critical role play karte hain.",
+                    p2: "FSSAI explicitly doodh aur ghee mein starch, detergents, synthetic milk, ya other harmful chemicals jaise substances ke addition ko prohibit karta hai.",
+                    p3: "Health perspective se, artificial/chemical preservatives ke excessive consumption se various health complications ho sakti hain."
+                },
+                comparison: {
+                    title: "Comparative Analysis: Chemical Preservation vs Non-Chemical Methods",
+                    p1: "Doodh preservation method ka choice effectiveness, safety, cost aur product characteristics par impact ke careful balancing ko involve karta hai.",
+                    refrigeration: {
+                        title: "Refrigeration",
+                        advantages: { title: "Advantages", text: "Yeh doodh ki safety maintain karne ke liye sabse widely used aur effective method hai." },
+                        disadvantages: { title: "Disadvantages", text: "Yeh hamesha economically ya technically feasible nahi hota hai, especially limited infrastructure wale areas mein." }
+                    },
+                    pasteurization: {
+                        title: "Pasteurization",
+                        advantages: { title: "Advantages", text: "Doodh ki safety ke liye 'gold standard' considered hai. Yeh pathogenic microorganisms ko effectively eliminate karta hai." },
+                        disadvantages: { title: "Disadvantages", text: "Relatively short shelf life ke liye continuous refrigeration ki requirement hoti hai." }
+                    },
+                    uht: {
+                        title: "Ultra-High Temperature (UHT)",
+                        advantages: { title: "Advantages", text: "Commercial sterility achieve karta hai. Shelf-stable milk result hota hai jo kholne tak refrigeration ki requirement nahi rakhta." },
+                        disadvantages: { title: "Disadvantages", text: "Intense heat treatment doodh ke flavor ko slightly alter kar sakta hai." }
+                    },
+                    chemical: {
+                        title: "Chemical Preservation",
+                        advantages: { title: "Advantages", text: "Shelf life extend kar sakta hai, especially un situations mein jahan refrigeration unavailable hai." },
+                        disadvantages: { title: "Disadvantages", text: "Aksar potential adverse health effects ke karan significant regulatory aur consumer safety concerns raise karta hai." }
+                    },
+                    p2: "Modern dairy preservation mein aksar kai methods ka combination shamil hota hai, ek approach jise 'hurdle technology' ke roop mein jana jata hai."
+                }
+            },
+            conclusions: {
+                title: "VI. Conclusions",
+                p1: "Reception se preservation tak doodh ka comprehensive management dairy industry ke bhitar product safety aur economic viability dono ensure karne ke liye paramount hai.",
+                p2: "Effective milk management farm mein rigorous hygiene aur rapid cooling ke saath start hota hai, jo processing plant mein arriving doodh ki quality ko directly impact karta hai.",
+                p3: "Doodh transportation ek specialized operation hai jo advanced tanker design par rely karta hai.",
+                p4: "Storage techniques, chahe large raw milk silos mein ho ya processed milk ke liye, quality maintain karte hue shelf life ko further extend karti hain.",
+                p5: "Platform tests ek strategic, tiered quality control system ke roop mein serve karte hain.",
+                p6: "Conclusion mein, farm se consumer tak doodh ki journey scientific principles, technological advancements aur rigorous operational protocols ka ek complex interplay hai."
+            }
         }
     },
-    en: {
-        // English version waise hi rahega
-        title: "Milk Handling and Preservation",
-        description: "From Reception to Preservation: Ensuring Quality and Safety",
-        // ... rest of English content remains same
-    }
-};
-
     en: {
         title: "Milk Handling and Preservation",
         description: "From Reception to Preservation: Ensuring Quality and Safety",
@@ -109,160 +188,160 @@ export const milkHandlingPreservationContent = {
             introduction: {
                 title: "I. Introduction: The Criticality of Milk Quality and Safety",
                 p1: "Milk, a staple in human nutrition for millennia, is inherently a highly perishable raw material. Its rich nutritional composition provides an ideal growth medium for a diverse array of spoilage and pathogenic microorganisms, including Klebsiella, Bacillus, Pseudomonas, Staphylococcus, and Streptococcus. This inherent susceptibility means that bacterial populations can multiply rapidly, quickly rendering milk unsuitable for processing and unsafe for human consumption. Maintaining the quality and safety of milk is a continuous and critical endeavor that spans the entire supply chain, from the dairy farm to the processing plant and, ultimately, to the consumer.",
-                p2: "A fundamental principle in dairy processing emphasizes that the quality of milk cannot be improved by blending it with higher quality milk; indeed, a single lot of poor-quality milk possesses the capacity to compromise or spoil an entire mixed batch. This underscores the critical need for robust initial quality checks and effective segregation protocols. For example, the Indian dairy industry, characterized by its vast network of over 350 million smallholder farmers, frequently encounters challenges related to raw milk quality, including high bacterial loads and the potential presence of antibiotic residues. Such conditions highlight the imperative for comprehensive quality management systems and continuous monitoring to ensure both safety and consistency across the entire production chain.",
-                p3: "The rapid multiplication rates of spoilage and pathogenic microorganisms in milk mean that any failure in hygiene or temperature control at the earliest stages, such as farm collection or initial transport, can lead to an exponential increase in bacterial load. If this compromised milk is subsequently mixed with a larger volume of good quality milk, it acts as a significant inoculum, capable of rapidly degrading the entire batch. This creates a cascading effect where an initial, seemingly minor lapse in quality control can have widespread and severe consequences, leading to substantial economic losses from rejected milk and posing significant public health risks. Therefore, the implementation of rigorous quality control at the reception dock is not merely a regulatory hurdle but a critical, proactive risk mitigation strategy. It necessitates a stringent approach to substandard milk at the point of entry to safeguard the entire processing operation and ensure ultimate consumer safety."
+                p2: "A fundamental principle in dairy processing emphasizes that the quality of milk cannot be improved by blending it with higher quality milk; indeed, a single lot of poor-quality milk possesses the capacity to compromise or spoil an entire mixed batch. This underscores the critical need for robust initial quality checks and effective segregation protocols.",
+                p3: "The rapid multiplication rates of spoilage and pathogenic microorganisms in milk mean that any failure in hygiene or temperature control in the earliest stages can result in exponential increases in bacterial load, creating a cascading effect where an initial lapse in quality control can have widespread and severe consequences."
             },
             reception: {
                 title: "II. Milk Reception and Initial Handling at Dairy Plants",
-                p1: "The journey of milk from the farm to the processing plant involves meticulous handling and stringent quality control measures to preserve its integrity.",
+                p1: "The journey of milk from farm to processing plant involves meticulous handling and stringent quality control measures to preserve its integrity.",
                 farm_practices: {
-                    title: "Farm-Level Best Practices for Milk Collection and Cooling",
-                    p1: "At the farm level, the foundation for milk quality is laid through strict adherence to hygiene and rapid cooling protocols. Paramount importance is placed on good hygiene, which includes the use of clean containers and equipment that are easy to clean and feature wide openings. Collected milk must be kept covered and in the shade, and its transport should occur as quickly as possible after milking. Effective cleaning of containers involves an initial rinse with cold water, followed by scrubbing with a brush and warm water containing detergent, and a final cold water rinse.",
-                    p2: "Rapid cooling is another essential practice. Milk should be cooled quickly to +4°C (or below 40°F) no later than two hours after milking. This immediate chilling is crucial for inhibiting bacterial growth and preserving milk quality until it reaches the processing plant. Direct expansion cooling systems are commonly employed at the farm for this purpose.",
-                    p3: "Modern dairy farms increasingly utilize data-driven tools for initial quality checks. Automated milking systems record vital information such as milk volume, milking duration, milk conductivity (an indicator of potential infections like mastitis), and cow identity via RFID tags. This data is fed into farm management software, enabling farmers to monitor trends and make informed decisions regarding animal health and milk production. Critically, before milk ever leaves the farm, it undergoes preliminary quality tests for temperature, bacterial count, somatic cell count (SCC), butterfat content, protein levels, and the presence of antibiotic residues. These initial tests serve as the first benchmark for milk quality and determine its suitability for transport."
+                    title: "Best Practices for Milk Collection and Cooling at Farm-Level",
+                    p1: "At the farm level, the foundation of milk quality is laid through strict adherence to hygiene and rapid cooling protocols.",
+                    p2: "Rapid cooling is another essential practice. Milk should be quickly cooled to +4°C within two hours of milking.",
+                    p3: "Modern dairy farms are increasingly utilizing data-driven tools for initial quality checks."
                 },
                 plant_reception: {
                     title: "Dairy Plant Reception Area Design and Equipment",
-                    p1: "Upon arrival at the dairy plant, milk enters specialized reception departments designed for efficient handling and rigorous quality assessment. These departments are responsible for comprehensive quality testing, accurate quantity measurement, and the seamless transfer of milk to subsequent processing stages.",
-                    p2: "The tanker reception area can be configured as either an open space or a dedicated reception hall. The number of unloading lanes is strategically determined to minimize tanker waiting times, addressing a significant area of potential waste within the dairy industry. Tankers are identified upon arrival using unique codes or tags.",
+                    p1: "Upon arrival at the dairy plant, milk enters specialized reception departments designed for efficient handling and rigorous quality assessment.",
+                    p2: "The tanker reception area can be configured as either an open space or a dedicated reception hall.",
                     measurement_methods: {
                         by_weight: {
                             title: "By Weight",
-                            text: "This method involves weighing the tanker on a weighbridge both before and after unloading, with the difference indicating the milk quantity. Alternatively, milk can be pumped into specialized weighing tanks equipped with load cells."
+                            text: "This method involves weighing the tanker on a weighbridge before and after unloading."
                         },
                         by_volume: {
                             title: "By Volume",
-                            text: "Flowmeters are utilized for volume measurement. To ensure accuracy and prevent air from entering the milk line—a condition that can negatively impact milk quality and processing—an air-eliminator is typically fitted before the flowmeter."
+                            text: "Flowmeters are utilized for volume measurement."
                         }
                     },
-                    p3: "Despite initial cooling at the farm and insulated transport, a slight temperature increase during transit is often unavoidable. Therefore, milk is usually re-cooled to below +4°C using a plate heat exchanger installed in the transfer line to the raw milk silos."
+                    p3: "Despite initial cooling at the farm and insulated transport, a slight temperature increase during transit is often unavoidable."
                 },
                 hygiene_cleaning: {
                     title: "Initial Hygiene and Cleaning Procedures for Containers and Equipment",
-                    p1: "A clear distinction is made between cleaning, which involves the removal of physical residues like dirt and milk, and disinfection, which focuses on killing harmful bacteria. All containers and equipment involved in milk handling must be thoroughly cleaned and disinfected. This typically involves an initial rinse with cold water, followed by scrubbing with a brush and warm water containing detergent, and a final cold water rinse. Milk testing equipment, in particular, requires meticulous cleaning after each use, which can be achieved through boiling water for at least one minute, 70% alcohol, or direct flame exposure.",
-                    p2: "Farm tanks are subject to inspection for any milk residue, as evidence of inefficient cleaning can result in deductions under quality payment schemes. Milk tankers undergo daily cleaning, or after each collection round, either at the reception area or a dedicated cleaning station. External cleaning is also a common practice, and increasingly, regulations in some countries mandate tanker disinfection to prevent the spread of animal diseases.",
-                    p3: "The operational efficiency and economic viability of a dairy plant's reception and processing stages are profoundly dependent on the quality assurance measures implemented at the farm level. If farm-level practices, such as rapid cooling, hygienic milking, and antibiotic residue checks, are not consistently adhered to, the milk arriving at the dairy plant will exhibit higher bacterial counts or may contain contaminants. This directly leads to increased rejection rates at the reception dock, which, in turn, causes significant operational bottlenecks such as excessive truck waits, increased labor costs, and wasted transport resources. The observation that air intrusion from milk sloshing around in the tanker is detrimental to milk quality and complicates processing at the dairy further illustrates how farm-level tank filling and transport practices can directly influence downstream processing. This situation highlights the need for a collaborative and integrated supply chain approach, where dairy companies not only implement strict reception protocols but also invest in robust farmer education programs, technical support, and quality-linked payment schemes to incentivize optimal farm-level practices. Such proactive engagement upstream is often more cost-effective than reactive rejection and disposal downstream."
+                    p1: "A clear distinction is made between cleaning and disinfection.",
+                    p2: "Farm tanks are inspected for any milk residue.",
+                    p3: "The operational efficiency and economic viability of a dairy plant's reception and processing stages are profoundly dependent on quality assurance measures implemented at the farm level."
                 }
             },
             transportation: {
                 title: "III. Milk Transportation Systems and Logistics",
-                p1: "The transportation of milk from farm to processing plant is a carefully orchestrated operation, critical for maintaining product quality and safety.",
+                p1: "The transportation of milk from farm to processing plant is a carefully orchestrated operation critical to maintaining product quality and safety.",
                 tanker_design: {
                     title: "Design and Construction of Milk Tankers",
-                    p1: "Milk tank trucks are exclusively constructed from food-grade stainless steel, typically grades 304 or 316. This material is chosen for its high resistance to corrosion, non-reactivity with milk, and ease of cleaning, ensuring that the milk's quality remains unaltered during transit.",
-                    p2: "A critical design feature is the robust insulation system, usually comprising layers of polyurethane or similar insulating materials. This insulation is vital for maintaining a stable temperature within the tank, preventing bacterial growth, and preserving the milk's freshness over extended transport periods.",
-                    p3: "Many milk tankers are designed with multiple internal compartments or baffles. This serves several purposes: it allows for the segregation of milk from different farms or varying quality grades within a single trip, and it significantly minimizes milk sloshing during transport, which enhances vehicle stability and prevents potential mechanical issues or damage to milk fat globules."
+                    p1: "Milk tank trucks are constructed exclusively from food-grade stainless steel.",
+                    p2: "A critical design feature is the robust insulation system.",
+                    p3: "Many milk tankers are designed with multiple internal compartments or baffles."
                 },
                 hygienic_transport: {
                     title: "Ensuring Hygienic Transport",
-                    p1: "All components that come into contact with milk, including valves, pumps, and hoses, are designed with hygiene as a paramount consideration. These fittings are made of stainless steel, feature smooth surfaces, and are engineered for easy cleaning, dismantling, and sanitization. Loading and unloading systems are typically closed to minimize exposure to external contaminants.",
-                    p2: "The interior surfaces of the milk tank are meticulously designed to be smooth, preventing the accumulation of milk residues and bacterial growth. Every part, from welds to seams, is polished to eliminate crevices where bacteria could harbor.",
-                    p3: "Most modern milk tank trucks are equipped with advanced Clean-in-Place (CIP) systems. These automated systems allow for thorough cleaning and sanitization of the tank's interior surfaces without manual disassembly. They circulate cleaning solutions, hot water, and sanitizing agents through spray balls, ensuring comprehensive hygiene between loads."
+                    p1: "All components that come into contact with milk are designed with hygiene as a paramount consideration.",
+                    p2: "The interior surfaces of milk tanks are meticulously designed to be smooth.",
+                    p3: "Most modern milk tank trucks are equipped with advanced Clean-in-Place (CIP) systems."
                 },
                 temp_control: {
                     title: "Temperature Control During Transit",
-                    p1: "After initial cooling at the farm (to +6°C/+8°C from approximately +38°C), the milk's temperature must not exceed +10°C during transport. Meeting these stringent temperature requirements during transport is only possible if the transport vehicle is equipped with an ATP-certified tanker. ATP (Accord Transport Perissable) is a European regulation that sets standards for the construction of isothermal equipment used for temperature-controlled transport of perishable foodstuffs, including milk.",
-                    p2: "Most modern milk tank trucks feature advanced temperature monitoring systems. These systems provide real-time data to drivers and dispatch centers, ensuring the milk remains within the required temperature range throughout the journey. Immediate corrective actions can be taken if any temperature fluctuations are detected. Checks of milk temperature upon loading and unloading are essential for hygienic safety."
+                    p1: "After initial cooling at the farm, the temperature of milk during transport should not exceed +10°C.",
+                    p2: "Most modern milk tank trucks feature advanced temperature monitoring systems."
                 },
                 monitoring_logistics: {
                     title: "Real-time Monitoring and Logistics for Efficiency and Safety",
-                    p1: "Tankers are often fitted with GPS systems and onboard monitoring tools that record critical data such as collection times, volumes, temperatures, and the sanitation status of the tank. This information is uploaded in real-time to centralized databases, creating a clear and uninterrupted record of the milk's journey. Drivers perform initial field-level inspections, including visual assessments and basic tests, to confirm the milk's normal appearance and smell.",
-                    p2: "Efficient logistics, including optimized transport times and continuous tracking of tank containers, are crucial for maintaining milk quality and reducing operational costs. Addressing inefficiencies like 'excessive truck waits at congested milk intakes' can save thousands of driver and equipment hours, significantly impacting freight rates and detention costs.",
-                    p3: "Milk transport is subject to stringent regulations (e.g., FDA's Pasteurized Milk Ordinance in the U.S.) that cover materials, cleaning methods, and inspections. Drivers receive specialized training in proper handling procedures, including operating loading/unloading systems, monitoring temperature, and maintaining vehicle hygiene.",
-                    p4: "The continuous effort to control temperature throughout the milk's journey, from farm cooling to insulated, temperature-monitored tankers, and re-chilling upon arrival at the dairy, demonstrates that the 'cold chain' for milk is not a series of isolated cooling events but a dynamic, interdependent system. The effectiveness of the entire chain hinges on the integrity of each link: initial rapid cooling at the farm, maintenance of temperature during transport through insulation and active monitoring, and immediate re-chilling at the processing plant. A failure or temperature deviation at any single point can compromise the entire batch, leading to microbial growth and spoilage despite efforts at other stages. The regulatory mandate for ATP-certified tankers underscores that this continuity is not just a best practice but a legal requirement for ensuring product safety. This holistic perspective emphasizes that investment in cold chain infrastructure and integrated monitoring technologies is a strategic imperative for dairy operations, rather than just a logistical cost. It also highlights the value of data analytics in identifying weak points in the cold chain and optimizing logistics to minimize temperature excursions and improve overall efficiency."
+                    p1: "Tankers are often fitted with GPS systems and onboard monitoring tools.",
+                    p2: "Efficient logistics are crucial for maintaining milk quality and reducing operational costs.",
+                    p3: "Milk transport is subject to stringent regulations.",
+                    p4: "The continuous effort to control temperature throughout milk's journey demonstrates that the 'cold chain' is a dynamic, interdependent system."
                 }
             },
             storage: {
                 title: "IV. Milk Storage Techniques",
-                p1: "Effective storage is a critical component of milk preservation, maintaining its quality and safety from reception through to distribution.",
+                p1: "Effective storage is a critical component of milk preservation.",
                 raw_milk_silos: {
                     title: "Raw Milk Storage in Silo Tanks",
-                    p1: "Untreated raw milk is typically stored in large, vertical, insulated silo tanks, often located outdoors. These tanks are designed for high capacities, ranging from approximately 50,000 to 500,000 liters. Some silo tanks are equipped with a cooling jacket that circulates chilled water to actively maintain the milk's low temperature, minimizing degradation during storage.",
-                    p2: "Gentle agitation is crucial within raw milk silos to prevent cream separation due to gravity. Side-mounted propeller agitators are commonly used, and very tall tanks may require two agitators at different levels to ensure uniform mixing. The agitation must be gentle to avoid air intrusion and damage to fat globules, which could expose the fat to lipase enzymes present in raw milk. Agitators typically operate intermittently to conserve energy and prevent excessive shear.",
+                    p1: "Untreated raw milk is typically stored in large, vertical, insulated silo tanks.",
+                    p2: "Gentle agitation within raw milk silos is crucial to prevent cream separation.",
                     sensors: {
-                        temp: { title: "Temperature Sensors", text: "Located in the alcove, these monitor milk temperature to ensure it remains cold and minimize degradation." },
-                        level: { title: "Level Sensors", text: "Also in the alcove, these monitor the milk level, which is vital for planning unloading schedules, managing transfer to processing, and automatically stopping agitators if the level drops too low to prevent air intrusion." },
-                        low_level: { title: "Low-Level Sensor", text: "Positioned at the outlet pipe, this sensor indicates when the silo is empty, facilitating seamless switching between silos during milk transfer." },
-                        overflow: { title: "Overflow Protection", text: "A high-level sensor at the top of the tank provides critical overflow protection by automatically closing the inlet valve and diverting milk supply to the next available tank when the current one is full." }
+                        temp: { title: "Temperature Sensors", text: "Located in the alcove, these monitor the milk's temperature." },
+                        level: { title: "Level Sensors", text: "Also in the alcove, these monitor the milk level." },
+                        low_level: { title: "Low-Level Sensors", text: "Located on the outlet pipe, this sensor indicates when the silo is empty." },
+                        overflow: { title: "Overflow Protection", text: "A high-level sensor at the top of the tank provides critical overflow protection." }
                     }
                 },
                 refrigerated_storage: {
                     title: "Refrigerated Storage for Fresh Milk (Pasteurized/Homogenized)",
-                    p1: "Refrigeration is recognized as the single most important factor and the most widely used method for maintaining the safety and quality of milk and dairy products. It dramatically slows down microbial growth and enzymatic reactions that lead to spoilage.",
-                    p2: "By law, Grade A milk must be maintained at 45°F (7.2°C) or below. However, temperatures well below 40°F (4.4°C) are considered necessary to optimally protect the milk's quality. It is critical that these temperatures are consistently maintained throughout warehousing, distribution, delivery, and consumer storage. Properly refrigerated, pasteurized milk can typically withstand about two weeks of storage. If stored above 40°F, milk will rapidly develop signs of spoilage, including sour odor, off-flavor, and a curdled consistency.",
-                    p3: "For consumers, milk should never be left at room temperature. When pouring, only the required amount should be taken, and the original container should be immediately returned to the refrigerator. Unused milk that has been left out should not be returned to the original container, as it could contaminate the remaining fresh milk. Milk can be safely stored frozen at 0°F (-18°C) for up to three months. While safe to drink if thawed in the refrigerator, it may not retain its smooth texture."
+                    p1: "Refrigeration is recognized as the most critical factor and most widely used method for maintaining the safety and quality of milk and dairy products.",
+                    p2: "By law, Grade A milk must be maintained at 45°F (7.2°C) or below.",
+                    p3: "For consumers, milk should never be left at room temperature."
                 },
                 uht_storage: {
                     title: "Ultra-High Temperature (UHT) Milk Storage",
-                    p1: "UHT milk undergoes flash sterilization, where it is rapidly heated to very high temperatures (e.g., 290°F / 143°C, or 135-150°C) for a very short duration (2-8 seconds). This intense heat treatment effectively kills all microorganisms present in the raw milk. After UHT treatment, the milk is immediately packaged into airtight, sterilized, aseptic containers, typically cardboard cartons. This aseptic packaging protects the milk from re-contamination by microorganisms, air, and light, further extending its shelf life and preserving its quality.",
-                    p2: "The combination of ultra-high heat treatment and aseptic packaging results in a product that is shelf-stable for many months (up to 6+ months) without requiring refrigeration until the package is opened. The shelf life of unopened UHT milk is limited by physical, chemical, and enzymatic changes, rather than microbial growth. Once opened, UHT milk must be refrigerated and consumed quickly, similar to pasteurized milk, as its sterility is compromised.",
-                    p3: "Due to the complete elimination of microorganisms and the protective aseptic packaging, UHT milk does not require the addition of chemical preservatives. The significantly extended shelf life of UHT milk, which does not require refrigeration until opened, comes with a notable trade-off in sensory and nutritional quality. While the high temperatures and short holding times of UHT processing (e.g., 280°F for 2 seconds) are highly effective at achieving commercial sterility, thereby eliminating microbial spoilage as the primary shelf-life determinant, this intense thermal energy inevitably induces chemical reactions within the milk matrix. These reactions, such as Maillard reactions and protein denaturation, are responsible for the 'cooked flavor' often associated with UHT milk. Furthermore, certain vitamins, particularly water-soluble B vitamins, are susceptible to heat degradation during this process. This presents a fundamental challenge in dairy processing: achieving maximum microbial safety and shelf-life extension often comes at the cost of subtle changes to the milk's natural sensory attributes and a potential reduction in heat-sensitive micronutrients. This strategic choice influences market positioning, with UHT milk often catering to convenience-driven consumers or markets with less developed cold chains, while pasteurized milk retains its appeal for those prioritizing a 'fresh-from-the-farm' taste and perceived higher natural nutrient profile. This observation suggests that ongoing research and development in dairy processing will continue to seek 'gentler' preservation methods, such as novel non-thermal technologies, that can extend shelf life without compromising the sensory and nutritional integrity of milk. It also highlights the importance for consumers to understand the characteristics of different milk types based on their processing."
+                    p1: "UHT milk undergoes flash sterilization where it is rapidly heated to very high temperatures for a very short duration.",
+                    p2: "The combination of ultra-high heat treatment and aseptic packaging creates a product that remains shelf-stable for several months without refrigeration.",
+                    p3: "Due to the complete elimination of microorganisms and protective aseptic packaging, UHT milk does not require the addition of chemical preservatives."
                 }
             },
             preservation: {
                 title: "V. Chemical Methods for Milk Preservation",
                 principles: {
                     title: "Principles of Chemical Preservation in Dairy",
-                    p1: "Chemical preservatives function by creating an environment that is hostile to microbial growth, thereby extending the shelf life of food products. Their primary mechanisms involve acting as direct microbial poisons or reducing the pH to a level that inhibits the proliferation of microorganisms. While chemical preservation offers a means to extend shelf life, its application in fresh liquid milk is generally less common due to stringent regulatory restrictions and evolving consumer preferences that favor minimal additives. The use of chemical preservatives, particularly in liquid milk, remains a subject of considerable debate due to their potential for adverse effects on human health."
+                    p1: "Chemical preservatives work by creating an environment unfavorable for microbial growth, thereby extending the shelf life of food products."
                 },
                 chemicals: {
                     title: "Specific Chemical Preservatives",
                     h2o2: {
                         title: "Hydrogen Peroxide (H2O2)",
-                        p1: "Hydrogen peroxide acts as an antimicrobial agent by inhibiting microbial proliferation and preventing milk spoilage. It breaks down into water and oxygen, theoretically leaving no residue. Its antimicrobial action is concentration-dependent and influenced by environmental factors like pH and temperature. Historically, and sometimes currently, it is used as a preservative in milk, particularly in developing countries where access to adequate refrigeration infrastructure is limited. It has been considered an 'Excellent and Safe Preservative' in certain contexts.",
-                        p2: "Despite its effectiveness, hydrogen peroxide can negatively affect the taste and nutritional content of milk. High concentrations (300–800 ppm) can destroy the milk's natural lactoperoxidase enzyme system. A significant concern is the difficulty in controlling its use, as it can be misused to mask milk of poor hygienic quality produced under unsanitary conditions. Toxicological aspects of using relatively high concentrations in milk have also been questioned. Its use is often strictly regulated or prohibited. For instance, the addition of H2O2 to milk at any concentration is not permitted in Brazil. The US Food and Drug Administration (FDA) recognizes it as Generally Recognized As Safe (GRAS) as an antimicrobial and oxidizing agent, but specifies that its amount must not exceed 0.05% of the milk's weight to minimize adverse human health effects."
+                        p1: "Hydrogen peroxide acts as an antimicrobial agent by preventing microbial proliferation and inhibiting milk spoilage.",
+                        p2: "Despite its effectiveness, hydrogen peroxide can negatively affect milk's flavor and nutritional content."
                     },
                     lp_system: {
-                        title: "Lactoperoxidase System (LP-system)",
-                        p1: "This is a natural antibacterial system present in milk. The enzyme lactoperoxidase, naturally abundant in bovine and buffalo milk, oxidizes thiocyanate ions (SCN-) into hypothiocyanous acid (HOSCN) in the presence of small amounts of hydrogen peroxide. At milk's pH, HOSCN primarily exists as hypothiocyanate ions (OSCN-), which specifically react with vital free sulfhydryl groups in bacterial metabolic enzymes, thereby inactivating them and blocking bacterial metabolism and multiplication. Milk proteins are largely unaffected due to the inaccessibility of their sulfhydryl groups.",
-                        p2: "The LP-system's effect is predominantly bacteriostatic (inhibitory) against a mixed raw milk flora (primarily mesophilic bacteria) but can be bactericidal (killing) against certain gram-negative bacteria, such as Pseudomonas and Escherichia coli. The system can be activated in raw milk by adding thiocyanate (as sodium thiocyanate) and hydrogen peroxide (as sodium percarbonate). It is primarily recommended for situations where technical, economic, or practical reasons prevent the use of cooling facilities for maintaining raw milk quality. Its use can help ensure the production of safe and wholesome milk in areas lacking adequate collection infrastructure. The antibacterial effect is proportional to the thiocyanate concentration, which can be supplemented as natural levels vary. The resulting thiocyanate levels are within physiological ranges, and clinical studies indicate no interference with iodine uptake by the thyroid gland. Crucially, because its effect is mainly bacteriostatic, the LP-system cannot disguise poor quality milk that already has a high initial bacterial population. It does not eliminate the necessity of pasteurization before human consumption, nor does it replace normal hygienic handling routines."
+                        title: "Lactoperoxidase System (LP-System)",
+                        p1: "This is a natural antibacterial system present in milk.",
+                        p2: "The effect of the LP-System is primarily bacteriostatic against the flora of mixed raw milk."
                     },
                     other: {
-                        title: "Other Common Chemical Preservatives in Dairy (typically for processed products)",
-                        p1: "Examples include Sodium benzoate (C7H5NaO2), Potassium sorbate (C6H7KO2), Natamycin (C33H47NO13), Calcium propionate (C6H10CaO4), Sorbic acid (C6H8O2), Ascorbic acid (C6H8O6), and Sucrose (C12H22O11). These preservatives primarily function as antifungal or antibacterial agents. Ascorbic acid, for instance, also acts as an antioxidant, preventing the oxidation of milk components. Natamycin is specifically used on cheese surfaces to prevent mold growth. Some substances, like sucrose, can serve dual roles as both preservatives and adulterants/extenders."
+                        title: "Other Common Chemical Preservatives in Dairy",
+                        p1: "Examples include sodium benzoate, potassium sorbate, natamycin, calcium propionate, sorbic acid, ascorbic acid, and sucrose."
                     }
                 },
                 regulatory: {
                     title: "Regulatory Status and Safety Issues of Chemical Preservatives",
-                    p1: "The illegal use of various preservatives and adulterants (e.g., hydrogen peroxide, salicylic acid, benzoic acid, water, neutralizers, melamine) in milk is a persistent challenge, particularly in densely populated regions. Regulatory bodies, such as the Food Safety and Standards Authority of India (FSSAI), play a crucial role in overseeing dairy product safety. FSSAI sets comprehensive standards for milk composition (e.g., fat content, milk solids, microbial limits) and methods for detecting adulteration.",
-                    p2: "FSSAI explicitly prohibits the addition of harmful substances like starch, detergents, synthetic milk, or other chemicals to milk and ghee.",
-                    p3: "While many chemical preservatives are listed, FSSAI-approved chemical preservatives for liquid milk are highly restricted. For broader dairy products, FSSAI has approved substances like Sorbic Acid (E-200), Potassium Sorbate (E-202), D-Hydro Acetic Acid (DHA) (E-265), and Sodium D-hydro Acetic Acid (E-266). However, the context of other information suggests these are primarily for processed dairy products rather than fresh fluid milk. From a health perspective, the overconsumption of artificial/chemical preservatives can lead to various health complications, including gastroesophageal reflux disease (GERD) symptoms such as heartburn, difficulty swallowing, and bloating. While some preservatives are deemed necessary, others can have harmful side effects, leading to a general recommendation to limit or avoid unnatural preservatives."
+                    p1: "The illegal use of various preservatives and adulterants in milk is a persistent challenge.",
+                    p2: "FSSAI explicitly prohibits the addition of harmful substances in milk and ghee.",
+                    p3: "From a health perspective, excessive consumption of artificial/chemical preservatives can lead to various health complications."
                 },
                 comparison: {
-                    title: "Comparative Analysis: Advantages and Disadvantages of Chemical Preservation Versus Non-Chemical Methods (Refrigeration, Pasteurization, UHT)",
-                    p1: "The choice of milk preservation method involves a careful balance of effectiveness, safety, cost, and impact on product characteristics.",
+                    title: "Comparative Analysis: Chemical Preservation vs Non-Chemical Methods",
+                    p1: "The choice of milk preservation method involves careful balancing of effectiveness, safety, cost, and impact on product characteristics.",
                     refrigeration: {
                         title: "Refrigeration",
-                        advantages: { title: "Advantages", text: "This is the most widely used and effective method for preserving milk safety by dramatically slowing down microbial growth and enzymatic reactions. It is essential for maintaining milk quality." },
-                        disadvantages: { title: "Disadvantages", text: "It is not always economically or technically feasible, especially in areas with limited infrastructure or during initial stages of dairy industry development. It requires continuous maintenance of the cold chain." }
+                        advantages: { title: "Advantages", text: "Most widely used and effective method for maintaining milk safety." },
+                        disadvantages: { title: "Disadvantages", text: "Not always economically or technically feasible, especially in areas with limited infrastructure." }
                     },
                     pasteurization: {
-                        title: "Pasteurization (Low Temperature Long Time - LTLT; High Temperature Short Time - HTST)",
-                        advantages: { title: "Advantages", text: "Considered the 'gold standard' for milk safety. It effectively eliminates pathogenic microorganisms while largely preserving nutritional quality and acceptable taste. This method is highly effective at killing bacteria and viruses." },
-                        disadvantages: { title: "Disadvantages", text: "Requires continuous refrigeration for a relatively short shelf life, typically ranging from 7 to 21 days. While effective against microorganisms, its efficacy against chemical contaminants is limited. Pathogens can persist if raw milk has an excessively high initial microbial load, without causing organoleptic changes." }
+                        title: "Pasteurization",
+                        advantages: { title: "Advantages", text: "Considered the 'gold standard' for milk safety." },
+                        disadvantages: { title: "Disadvantages", text: "Requires continuous refrigeration for relatively short shelf life." }
                     },
                     uht: {
                         title: "Ultra-High Temperature (UHT)",
-                        advantages: { title: "Advantages", text: "Achieves commercial sterility, killing all microorganisms. Results in shelf-stable milk that does not require refrigeration until opened, with a shelf life of several months. Offers significant logistical and storage convenience, particularly beneficial for distribution to remote areas or for long-term pantry storage." },
-                        disadvantages: { title: "Disadvantages", text: "The intense heat treatment can slightly alter the milk's taste, often resulting in a 'cooked flavor'. It may also lead to some loss of heat-sensitive nutrients, particularly certain B vitamins." }
+                        advantages: { title: "Advantages", text: "Achieves commercial sterility. Results in shelf-stable milk." },
+                        disadvantages: { title: "Disadvantages", text: "Intense heat treatment can slightly alter milk's flavor." }
                     },
                     chemical: {
                         title: "Chemical Preservation",
-                        advantages: { title: "Advantages", text: "Can extend shelf life, particularly in situations where refrigeration is unavailable or impractical. Some systems, like the lactoperoxidase system, are natural to milk and do not mask poor quality." },
-                        disadvantages: { title: "Disadvantages", text: "Often raises significant regulatory and consumer safety concerns due to potential adverse health effects. Can impact the taste and nutritional profile of milk. Some chemical methods, like high concentrations of hydrogen peroxide, can be misused to disguise milk of poor hygienic quality. Regulatory bodies often prohibit or severely restrict their use in fresh liquid milk." }
+                        advantages: { title: "Advantages", text: "Can extend shelf life, especially where refrigeration is unavailable." },
+                        disadvantages: { title: "Disadvantages", text: "Often raises significant regulatory and consumer safety concerns." }
                     },
-                    p2: "Modern dairy preservation frequently involves combining multiple methods, an approach known as 'hurdle technology'. For example, pasteurized milk is immediately refrigerated, creating two barriers against microbial growth. UHT milk combines sterilization with aseptic packaging, while some specialty products might use mild heat treatment combined with natural preservatives. This multi-hurdle approach maximizes effectiveness and safety while balancing sensory and nutritional considerations."
+                    p2: "Modern dairy preservation often involves a combination of multiple methods, an approach known as 'hurdle technology'."
                 }
             },
             conclusions: {
                 title: "VI. Conclusions",
-                p1: "The comprehensive management of milk from reception to preservation is paramount for ensuring both product safety and economic viability within the dairy industry. The inherent perishability of milk necessitates a continuous, integrated approach to quality control, where each stage of the supply chain critically influences the integrity of the final product. The observation that a single batch of poor-quality milk can compromise an entire mixed lot underscores the foundational importance of stringent initial quality checks and immediate segregation at the reception dock. This proactive stance is not merely a procedural step but a vital risk mitigation strategy that prevents widespread contamination and significant economic losses.",
-                p2: "Effective milk handling begins at the farm with rigorous hygiene and rapid cooling, which directly impacts the quality of milk arriving at the processing plant. The operational efficiency of dairy plants, particularly at the reception stage, is profoundly dependent on the consistent adherence to these farm-level best practices. Rejection of substandard milk, while necessary, can lead to costly logistical bottlenecks. This highlights the value of collaborative efforts between dairy companies and farmers, emphasizing education and quality-linked incentives to foster optimal practices upstream.",
-                p3: "Milk transportation is a specialized operation that relies on advanced tanker design, including food-grade stainless steel construction, robust insulation, and compartmentalization to maintain temperature and stability. The concept of the 'cold chain' is not a series of isolated cooling events but a dynamic, interdependent system. Any breach in temperature control at any point can compromise the entire batch. Regulatory frameworks, such as ATP certification, and real-time monitoring systems are essential for ensuring the continuous integrity of this cold chain, transforming temperature maintenance from a simple target to a holistic, monitored process.",
-                p4: "Storage techniques, whether in large raw milk silos or for processed milk, further extend shelf life while maintaining quality. Raw milk silos require precise temperature control, gentle agitation, and sophisticated monitoring systems to prevent spoilage and cream separation. For processed milk, the choice between pasteurization and Ultra-High Temperature (UHT) treatment involves a deliberate trade-off. While UHT offers extended shelf life without refrigeration through intense heating and aseptic packaging, it can subtly alter sensory attributes and reduce heat-sensitive nutrients. This presents an ongoing challenge for the industry to develop gentler preservation methods that minimize such impacts.",
-                p5: "Finally, platform tests serve as a strategic, tiered quality control system. Rapid, cost-effective preliminary tests efficiently screen and segregate milk, preventing contamination of bulk supplies. These are complemented by more precise laboratory analyses for accepted milk. This dual approach optimizes operational efficiency while ensuring high safety standards. While chemical preservation methods exist and find application in certain dairy products, their use in fresh liquid milk is highly restricted due to regulatory concerns and potential health implications. Regulatory bodies like FSSAI play a critical role in setting standards and prohibiting harmful adulterants, ensuring consumer safety.",
-                p6: "In conclusion, the journey of milk from farm to consumer is a complex interplay of scientific principles, technological advancements, and stringent operational protocols. The continuous pursuit of enhanced hygiene, precise temperature control, advanced monitoring, and strategic quality assurance measures across every stage is fundamental to delivering safe, high-quality dairy products to the global market."
+                p1: "The comprehensive management of milk from reception to preservation is paramount for ensuring both product safety and economic viability within the dairy industry.",
+                p2: "Effective milk management begins at the farm with rigorous hygiene and rapid cooling.",
+                p3: "Milk transportation is a specialized operation relying on advanced tanker design.",
+                p4: "Storage techniques further extend shelf life while maintaining quality.",
+                p5: "Platform tests serve as a strategic, tiered quality control system.",
+                p6: "In conclusion, the journey of milk from farm to consumer is a complex interplay of scientific principles, technological advancements, and rigorous operational protocols."
             }
         }
     }
-}
+};
