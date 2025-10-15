@@ -14,7 +14,7 @@ export const aboutUsContent = {
         "degrees": [
           {
             "name": "B.Tech, Food Technology",
-            "institution": "Ch. Devi Lal State Institute, Sirsa (Pursuing)"
+            "institution": "Ch. Devi Lal State Institute of Engineering & Technology, Sirsa (Pursuing)"
           },
           {
             "name": "Diploma, Food Technology",
@@ -183,7 +183,7 @@ export const aboutUsContent = {
             academicInfo: {
                 title: "Academic Information",
                 degrees: [
-                    { name: "B.Tech, Food Technology", institution: "Ch. Devi Lal State Institute, Sirsa (Pursuing)" },
+                    { name: "B.Tech, Food Technology", institution: "Ch. Devi Lal State Institute of Engineering & Technology, Sirsa (Pursuing)" },
                     { name: "Diploma, Food Technology", institution: "Ch. Bansi Lal Govt. Polytechnic, Bhiwani" },
                     { name: "Diploma, Dairy Technology", institution: "IGNOU, New Delhi" }
                 ]
