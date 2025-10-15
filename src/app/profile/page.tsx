@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -159,7 +158,8 @@ export default function ProfilePage() {
         <>
         <div className="max-w-md mx-auto min-h-screen bg-white shadow-lg">
             <div className="relative bg-gradient-to-b from-orange-500 via-white to-green-600 h-60 p-6 rounded-b-3xl">
-                <Link href="/home" className="absolute top-4 left-4 cursor-pointer">
+                {/* ✅ YE LINE FIX HO GAYI - href="/home" se href="/" */}
+                <Link href="/" className="absolute top-4 left-4 cursor-pointer">
                    <ChevronLeft className="h-6 w-6 text-gray-800"/>
                 </Link>
                 
