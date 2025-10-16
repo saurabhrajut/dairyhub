@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -26,6 +27,8 @@ const EditIcon = () => (
 const allProFeatures = [
     "Unlock all premium calculators & guides",
     "Full access to Sarathi AI Chatbot",
+    "Full access to Expert Support & Gyan AI",
+    "AI-powered Interview Preparation",
     "Access to exclusive industry reports",
     "Save and export your calculations",
     "Ad-free experience",
@@ -158,8 +161,7 @@ export default function ProfilePage() {
         <>
         <div className="max-w-md mx-auto min-h-screen bg-white shadow-lg">
             <div className="relative bg-gradient-to-b from-orange-500 via-white to-green-600 h-60 p-6 rounded-b-3xl">
-                {/* ✅ YE LINE FIX HO GAYI - href="/home" se href="/" */}
-                <Link href="/" className="absolute top-4 left-4 cursor-pointer">
+                <Link href="/home" className="absolute top-4 left-4 cursor-pointer">
                    <ChevronLeft className="h-6 w-6 text-gray-800"/>
                 </Link>
                 
@@ -346,3 +348,5 @@ export default function ProfilePage() {
         </>
     );
 }
+
+    
