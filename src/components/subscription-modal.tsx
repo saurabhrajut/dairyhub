@@ -21,6 +21,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 const allProFeatures = [
     "Unlock all premium calculators & guides",
     "Full access to Sarathi AI Chatbot",
+    "Full access to Expert Support & Gyan AI",
+    "AI-powered Interview Preparation",
     "Access to exclusive industry reports",
     "Save and export your calculations",
     "Ad-free experience",
@@ -180,3 +182,5 @@ export function SubscriptionModal({
     </Dialog>
   );
 }
+
+    
