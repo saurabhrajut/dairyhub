@@ -1,9 +1,12 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Microscope } from 'lucide-react';
 
 export default function SplashScreen({ onFinished }: { onFinished: () => void }) {
+  // Prevent double execution in strict mode
+  const hasShown = useRef(false);
+  
   // All slogans combined
   const slogans = [
     "Digitizing Dairy Science.",
@@ -42,6 +45,8 @@ export default function SplashScreen({ onFinished }: { onFinished: () => void })
     return slogans[Math.floor(Math.random() * slogans.length)];
   });
 
+  const [isVisible, setIsVisible] = useState(true);
+
   // Lighter colors for each spoke segment
   const spokeColors = [
     "#93C5FD", // Light Blue
@@ -59,12 +64,24 @@ export default function SplashScreen({ onFinished }: { onFinished: () => void })
   ];
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      onFinished();
-    }, 8000); // 8 seconds total duration
+    // Prevent strict mode double execution
+    if (hasShown.current) return;
+    hasShown.current = true;
 
-    return () => clearTimeout(timer);
+    const timer = setTimeout(() => {
+      setIsVisible(false);
+      // Give time for fade-out animation to complete
+      setTimeout(() => {
+        onFinished();
+      }, 1000);
+    }, 8000); // 8 seconds display time
+
+    return () => {
+      clearTimeout(timer);
+    };
   }, [onFinished]);
+
+  if (!isVisible) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gray-100 overflow-hidden">
