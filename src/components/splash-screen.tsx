@@ -131,7 +131,7 @@ export default function SplashScreen({ onFinished }: { onFinished: () => void })
 
              /* Colorful Microscope appearance after wheel completes */
              .microscope-color {
-                animation: microscope-appear 0.8s ease-out 2.8s forwards;
+                animation: microscope-appear 1s ease-out 6s forwards;
                 opacity: 0;
                 transform: translate(-50%, -50%) scale(0.5);
              }
