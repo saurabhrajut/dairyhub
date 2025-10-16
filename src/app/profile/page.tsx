@@ -1,6 +1,7 @@
 
 "use client";
 
+
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -17,12 +18,14 @@ import { format } from 'date-fns';
 import { Info, Mail, MessageCircle, Crown, ChevronLeft, LogOut, Settings, HelpCircle, User, Loader2, Building2, ChevronRight } from 'lucide-react';
 import type { Department } from '@/context/auth-context';
 
+
 const EditIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
         <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
         <path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd" />
     </svg>
 );
+
 
 const allProFeatures = [
     "Unlock all premium calculators & guides",
@@ -35,6 +38,7 @@ const allProFeatures = [
 ];
 
 
+
 export default function ProfilePage() {
     const { user, loading, logout, updateUserProfile, updateUserPhoto } = useAuth();
     const { language, setLanguage } = useLanguage();
@@ -42,11 +46,13 @@ export default function ProfilePage() {
     const { toast } = useToast();
     const router = useRouter();
 
+
     const [isEditingName, setIsEditingName] = useState(false);
     
     const [tempName, setTempName] = useState('');
     
     const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState(false);
+
 
     useEffect(() => {
         if (!loading && !user) {
@@ -55,6 +61,7 @@ export default function ProfilePage() {
             setTempName(user.displayName || '');
         }
     }, [user, loading, router]);
+
 
 
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -100,6 +107,7 @@ export default function ProfilePage() {
         });
     }
 
+
     const handleDepartmentChange = async (dept: Department) => {
         if (user && !user.isAnonymous) {
             try {
@@ -114,16 +122,19 @@ export default function ProfilePage() {
         }
     };
 
+
     const handleLogout = async () => {
         await logout();
         router.push('/login');
     }
+
 
     const getCardClass = (delay: number) => {
         const baseClass = "card-enter";
         const activeClass = "card-enter-active";
         return `${baseClass} ${activeClass}`;
     };
+
 
     const getPlanName = (planKey: string | null) => {
       if (!planKey) return "Free Plan";
@@ -136,6 +147,7 @@ export default function ProfilePage() {
       }
       return names[planKey] || 'Pro Plan';
     }
+
 
     const getDepartmentName = (deptKey?: Department) => {
         if (!deptKey) return 'Not specified';
@@ -157,11 +169,13 @@ export default function ProfilePage() {
         );
     }
 
+
     return (
         <>
         <div className="max-w-md mx-auto min-h-screen bg-white shadow-lg">
             <div className="relative bg-gradient-to-b from-orange-500 via-white to-green-600 h-60 p-6 rounded-b-3xl">
-                <Link href="/home" className="absolute top-4 left-4 cursor-pointer">
+                {/* ✅ FIXED: href="/home" changed to href="/" */}
+                <Link href="/" className="absolute top-4 left-4 cursor-pointer">
                    <ChevronLeft className="h-6 w-6 text-gray-800"/>
                 </Link>
                 
@@ -182,6 +196,7 @@ export default function ProfilePage() {
                     </div>
                 </div>
             </div>
+
 
             <div className="text-center p-6 -mt-8">
                 <div className="flex items-center justify-center space-x-2 min-h-[36px]">
@@ -211,6 +226,7 @@ export default function ProfilePage() {
                 </div>
                  <p className="text-gray-500 text-sm">{user.email}</p>
             </div>
+
 
             <div className="px-6 pb-6 space-y-6">
                 <div className={`p-5 rounded-xl text-white shadow-lg ${isPro ? 'bg-gradient-to-r from-green-400 to-teal-500' : 'bg-gradient-to-r from-gray-500 to-gray-600'} ${getCardClass(0)}`}>
@@ -255,6 +271,7 @@ export default function ProfilePage() {
                     )}
                 </div>
 
+
                 <div className={`bg-gray-50 p-5 rounded-xl border border-gray-200 ${getCardClass(100)}`} >
                     <h3 className="font-bold text-gray-700 mb-4">Your Information</h3>
                     <div className="space-y-3">
@@ -272,6 +289,7 @@ export default function ProfilePage() {
                         </div>
                     </div>
                 </div>
+
 
                 <div className={`bg-gray-50 p-3 rounded-xl border border-gray-200 ${getCardClass(200)}`}>
                     <ul className="divide-y divide-gray-200">
@@ -336,6 +354,7 @@ export default function ProfilePage() {
                             </DialogContent>
                         </Dialog>
 
+
                         <li onClick={handleLogout} className="flex justify-between items-center p-3 hover:bg-red-50 rounded-lg cursor-pointer">
                             <span className="flex items-center gap-3 text-red-500 font-medium"><LogOut/>Logout</span>
                             <ChevronRight className="h-5 w-5 text-red-500" />
@@ -348,5 +367,3 @@ export default function ProfilePage() {
         </>
     );
 }
-
-    
