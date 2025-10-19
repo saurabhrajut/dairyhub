@@ -24,9 +24,9 @@ import {
 import type { Message } from '@/ai/flows/types';
 
 const initialExperts = [
-  { id: '1', name: "Dr. Ramesh Kumar", experience: 15, specialization: "Dairy Technology", photo: "https://placehold.co/150x150/E2E8F0/4A5568?text=R", type: 'ai' },
-  { id: '2', name: "Sunita Sharma", experience: 12, specialization: "Food Safety and Quality", photo: "https://placehold.co/150x150/E2E8F0/4A5568?text=S", type: 'ai' },
-  { id: '3', name: "Anil Singh", experience: 20, specialization: "Food Processing", photo: "https://placehold.co/150x150/E2E8F0/4A5568?text=A", type: 'ai' }
+  { id: '1', name: "Career Coach", experience: 10, specialization: "Career Development", photo: "https://placehold.co/150x150/E2E8F0/4A5568?text=C", type: 'ai' },
+  { id: '2', name: "Tech Mentor", experience: 15, specialization: "Technology & Programming", photo: "https://placehold.co/150x150/E2E8F0/4A5568?text=T", type: 'ai' },
+  { id: '3', name: "Business Advisor", experience: 12, specialization: "Business & Entrepreneurship", photo: "https://placehold.co/150x150/E2E8F0/4A5568?text=B", type: 'ai' }
 ];
 
 interface UIMessage { id: string; role: "user" | "assistant"; text: string; }
@@ -120,7 +120,7 @@ function ChatInterface({ title, description, initialMessage, onBack, apiCall, ap
         const sendInitialMessage = async () => {
             setIsLoading(true);
             try {
-                const payload = apiCallPayload("", [], true); // isInitial = true
+                const payload = apiCallPayload("", [], true);
                 const response = await apiCall(payload);
                 
                 if (!response) {
@@ -184,7 +184,7 @@ function ChatInterface({ title, description, initialMessage, onBack, apiCall, ap
         setIsLoading(true);
 
         try {
-            const payload = apiCallPayload(query, newHistoryForApi, false); // Not an initial request
+            const payload = apiCallPayload(query, newHistoryForApi, false);
             const response = await apiCall(payload);
             
             if (!response) {
@@ -311,7 +311,7 @@ function ChatPage({ expert, onBack }: { expert: typeof initialExperts[0], onBack
 }
 
 function GyanAIPage({ onBack }: { onBack: () => void }) {
-  const [topic, setTopic] = useState("Dairy Technology");
+  const [topic, setTopic] = useState("General Knowledge");
   const [language, setLanguage] = useState('English');
   const { toast } = useToast();
   const [chatStarted, setChatStarted] = useState(false);
@@ -377,7 +377,7 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
           }
 
           const arrayBuffer = await file.arrayBuffer();
-          const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) }).promise;
+          const pdf = await pdfjsLib.getDocument({  new Uint8Array(arrayBuffer) }).promise;
 
           let fullText = "";
           const numPages = Math.min(pdf.numPages, 5);
@@ -458,7 +458,7 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
             <div className="bg-primary/10 p-2 rounded-full"><Lightbulb className="w-6 h-6 text-primary"/></div>
             <div>
               <h3 className="font-bold">Gyan AI - Your AI Specialist</h3>
-              <p className="text-xs text-muted-foreground">Select a topic and get instant, scientific information.</p>
+              <p className="text-xs text-muted-foreground">Select a topic and get instant, expert information.</p>
             </div>
           </div>
         </header>
@@ -467,13 +467,14 @@ function GyanAIPage({ onBack }: { onBack: () => void }) {
             <div className="mb-6 space-y-4">
               <div>
                 <label className="text-sm font-medium mb-2 block">Choose Topic</label>
-                <Select onValueChange={setTopic} defaultValue="Dairy Technology">
+                <Select onValueChange={setTopic} defaultValue="General Knowledge">
                   <SelectTrigger><SelectValue/></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Dairy Technology">Dairy Technology</SelectItem>
-                    <SelectItem value="Food Safety and Quality">Food Safety and Quality</SelectItem>
-                    <SelectItem value="Food Processing">Food Processing</SelectItem>
-                    <SelectItem value="Career Guidance in Food Industry">Career Guidance</SelectItem>
+                    <SelectItem value="General Knowledge">General Knowledge</SelectItem>
+                    <SelectItem value="Science and Technology">Science & Technology</SelectItem>
+                    <SelectItem value="Business and Finance">Business & Finance</SelectItem>
+                    <SelectItem value="Health and Wellness">Health & Wellness</SelectItem>
+                    <SelectItem value="Career Development">Career Development</SelectItem>
                     <SelectItem value="Interview Preparation">Interview Preparation</SelectItem>
                   </SelectContent>
                 </Select>
@@ -541,7 +542,7 @@ function RegisterExpertPage({ onBack }: { onBack: () => void }) {
           <div className="space-y-4">
             <Input placeholder="Full Name" />
             <Input type="number" placeholder="Experience (in years)" />
-            <Input placeholder="Specialization (e.g., Dairy Technology)" />
+            <Input placeholder="Specialization (e.g., Business, Technology)" />
             <Input type="url" placeholder="URL to your photo (Optional)" />
             <Input type="number" placeholder="Fee per hour (₹)" />
             <Button className="w-full bg-green-600 hover:bg-green-700">Register</Button>
