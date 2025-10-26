@@ -61,7 +61,7 @@ export default function SplashScreen({ onFinished }: { onFinished: () => void })
   useEffect(() => {
     const timer = setTimeout(() => {
       onFinished();
-    }, 6000);
+    }, 6200);
 
     return () => clearTimeout(timer);
   }, [onFinished]);
@@ -70,15 +70,15 @@ export default function SplashScreen({ onFinished }: { onFinished: () => void })
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gray-100 overflow-hidden">
         <style jsx>{`
             .title-container {
-                animation: fade-in-out 4s ease-in-out 1s forwards, fade-out 1s ease-in 5s forwards;
+                animation: fade-in-out 3s ease-in-out 1s forwards, fade-out 1s ease-in 5.8s forwards;
              }
              .container-fade-out{
-                animation: fade-out 1s ease-in 5s forwards;
+                animation: fade-out 1s ease-in 5.8s forwards;
              }
              .drawing-animation {
                 stroke-dasharray: 1000;
                 stroke-dashoffset: 1000;
-                animation: draw-outline 2.5s ease-in-out 0.5s forwards;
+                animation: draw-outline 2s ease-in-out 0.5s forwards;
              }
              
              @keyframes fade-in-out {
@@ -88,8 +88,8 @@ export default function SplashScreen({ onFinished }: { onFinished: () => void })
              }
              
              @keyframes fade-out {
-                0% { opacity: 1; }
-                100% { opacity: 0; }
+                from { opacity: 1; }
+                to { opacity: 0; }
              }
              
              @keyframes draw-outline {
@@ -120,7 +120,7 @@ export default function SplashScreen({ onFinished }: { onFinished: () => void })
              .spoke-line {
                 stroke-dasharray: 100;
                 stroke-dashoffset: 100;
-                animation: draw-spoke 1.5s ease-in-out forwards;
+                animation: draw-spoke 1s ease-in-out forwards;
              }
 
              @keyframes draw-spoke {
@@ -131,7 +131,7 @@ export default function SplashScreen({ onFinished }: { onFinished: () => void })
 
              /* Colorful Microscope appearance after wheel completes */
              .microscope-color {
-                animation: microscope-appear 0.8s ease-out 2.8s forwards;
+                animation: microscope-appear 0.8s ease-out 2.5s forwards;
                 opacity: 0;
                 transform: translate(-50%, -50%) scale(0.5);
              }
@@ -175,7 +175,7 @@ export default function SplashScreen({ onFinished }: { onFinished: () => void })
                 border: 2px solid rgba(59, 130, 246, 0.3);
                 border-radius: 50px;
                 box-shadow: 0 4px 20px rgba(59, 130, 246, 0.2);
-                animation: fade-in-out 4s ease-in-out 1.5s forwards, fade-out 1s ease-in 5s forwards, border-glow 3s ease-in-out 2s infinite;
+                animation: fade-in-out 3s ease-in-out 1.5s forwards, fade-out 1s ease-in 5.8s forwards, border-glow 3s ease-in-out 2s infinite;
                 opacity: 0;
              }
              
