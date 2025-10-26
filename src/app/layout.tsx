@@ -6,7 +6,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { SubscriptionProvider } from '@/context/subscription-context';
 import { LanguageProvider } from '@/context/language-context';
 import Script from 'next/script';
-import { FirebaseClientProvider } from '@/firebase';
+import { FirebaseClientProvider } from '@/firebase/client-provider';
 import { SplashScreenProvider } from '@/context/splash-screen-context';
 
 const inter = Inter({
