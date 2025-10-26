@@ -17,38 +17,26 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
+    // If not loading and no user, immediately redirect to login
     if (!loading && !user) {
-      setShowSplash(false);
       router.push('/login');
     }
   }, [loading, user, router]);
-  
-  useEffect(() => {
-    // Jab user logged in ho, splash screen dikhao
-    if (!loading && user) {
-      setShowSplash(true);
-      // 3 seconds ke baad automatic hide ho jayega
-      const timer = setTimeout(() => {
-        setShowSplash(false);
-      }, 3000);
-      
-      return () => clearTimeout(timer);
-    } else if (loading) {
-      setShowSplash(true);
-    }
-  }, [user, loading]);
 
-  if (loading || !user) {
-    return (
+  // While loading or if there's no user yet (before redirect happens), show a loader or splash
+  if (loading || showSplash) {
+    return <SplashScreen onFinished={() => setShowSplash(false)} />;
+  }
+  
+  // This check is a safeguard for the brief moment after loading but before router push completes
+  if (!user) {
+     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="h-8 w-8 animate-spin" />
       </div>
     );
   }
 
-  if (showSplash) {
-    return <SplashScreen onFinished={() => setShowSplash(false)} />;
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-blue-50">
