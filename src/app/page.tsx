@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Header } from "@/components/header";
 import { TopicGrid } from "@/components/topic-grid";
 import { useAuth } from "@/context/auth-context";
@@ -9,11 +9,12 @@ import { DailyTip } from "@/components/daily-tip";
 import SplashScreen from "@/components/splash-screen";
 import { SarathiChatWidget } from "@/components/sarathi-chat-widget";
 import { useRouter } from "next/navigation";
+import { useSplashScreen } from "@/context/splash-screen-context";
 
 
 export default function Home() {
   const { loading, user } = useAuth();
-  const [showSplash, setShowSplash] = useState(true);
+  const { isFinished, setIsFinished } = useSplashScreen();
   const router = useRouter();
 
   useEffect(() => {
@@ -23,9 +24,10 @@ export default function Home() {
     }
   }, [loading, user, router]);
 
-  // While loading or if there's no user yet (before redirect happens), show a loader or splash
-  if (loading || showSplash) {
-    return <SplashScreen onFinished={() => setShowSplash(false)} />;
+  // While loading auth state or if splash screen hasn't finished
+  if (loading || !isFinished) {
+    // Show splash only if it hasn't finished. If auth is loading, it will also show splash.
+    return <SplashScreen onFinished={() => setIsFinished(true)} />;
   }
   
   // This check is a safeguard for the brief moment after loading but before router push completes
