@@ -1,61 +1,30 @@
-'use client';
-// /firebase/firestore/use-collection.tsx
-import { useEffect, useState, useRef } from 'react';
-import { onSnapshot, query, type Query, type DocumentData, type QuerySnapshot, type FirestoreError } from 'firebase/firestore';
+"use client";
 
-interface UseCollectionOptions {
-  initialData?: any[];
-  // Add other options as needed
-}
+import { useEffect, useState } from 'react';
+import { getFirestore, collection, onSnapshot, QuerySnapshot, DocumentData } from 'firebase/firestore';
 
-export function useCollection(q: Query | null, options?: UseCollectionOptions) {
-  const [data, setData] = useState<DocumentData[] | null>(options?.initialData || null);
+export default function useCollection(path: string) {
+  const [docs, setDocs] = useState<DocumentData[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<FirestoreError | null>(null);
-
-  // Use a ref to store the query to avoid re-subscribing on every render
-  // if the query object is created inline.
-  const queryRef = useRef<Query | null>(q);
-  useEffect(() => {
-    // Only update if the query has actually changed.
-    // A simple JSON.stringify might not work for complex queries, but it's a decent check.
-    if (JSON.stringify(queryRef.current) !== JSON.stringify(q)) {
-      queryRef.current = q;
-    }
-  }, [q]);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    // If the query is null, do nothing.
-    if (!queryRef.current) {
-      setData(null);
-      setLoading(false);
-      return;
-    }
-
-    setLoading(true);
-
-    const unsubscribe = onSnapshot(
-      queryRef.current,
+    const db = getFirestore();
+    const colRef = collection(db, path);
+    const unsub = onSnapshot(
+      colRef,
       (snapshot: QuerySnapshot<DocumentData>) => {
-        const documents = snapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setData(documents);
+        const items = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+        setDocs(items);
         setLoading(false);
-        setError(null);
       },
-      (err: FirestoreError) => {
-        console.error("Error fetching collection:", err);
+      (err) => {
         setError(err);
         setLoading(false);
       }
     );
+    return () => unsub();
+  }, [path]);
 
-    // Cleanup subscription on unmount
-    return () => unsubscribe();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [queryRef.current]); // Re-run effect only when the queryRef changes
-
-  return { data, loading, error };
+  return { docs, loading, error };
 }
