@@ -5,6 +5,9 @@ import { AuthProvider } from '@/context/auth-context';
 import { Toaster } from '@/components/ui/toaster';
 import { SubscriptionProvider } from '@/context/subscription-context';
 import { LanguageProvider } from '@/context/language-context';
+import Script from 'next/script';
+import { FirebaseClientProvider } from '@/firebase';
+import { SplashScreenProvider } from '@/context/splash-screen-context';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -35,14 +38,28 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cn('font-body antialiased', inter.variable, spaceGrotesk.variable, notoDevanagari.variable)}>
-        <LanguageProvider>
-          <SubscriptionProvider>
-            <AuthProvider>
-              {children}
-            </AuthProvider>
-          </SubscriptionProvider>
-        </LanguageProvider>
+        <SplashScreenProvider>
+          <FirebaseClientProvider>
+            <LanguageProvider>
+              <SubscriptionProvider>
+                <AuthProvider>
+                  {children}
+                </AuthProvider>
+              </SubscriptionProvider>
+            </LanguageProvider>
+          </FirebaseClientProvider>
+        </SplashScreenProvider>
         <Toaster />
+        <Script id="chunk-error-handler">
+          {`
+            window.addEventListener('error', (event) => {
+              if (event.message && (event.message.includes('ChunkLoadError') || event.message.includes('Loading chunk'))) {
+                console.warn('ChunkLoadError detected, forcing page reload.');
+                window.location.reload();
+              }
+            });
+          `}
+        </Script>
       </body>
     </html>
   );
