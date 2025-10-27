@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from 'react';
@@ -15,15 +14,15 @@ import Link from 'next/link';
 import { useAuth, type Department } from '@/context/auth-context';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
-import { MilkCanIcon, DepartmentIcon } from '@/components/icons';
+import { MilkBottleIcon, DepartmentIcon } from '@/components/icons';
 
 
 const signupSchema = z.object({
-  name: z.string().min(2, { message: "नाम कम से कम 2 अक्षरों का होना चाहिए।" }),
-  email: z.string().email({ message: "कृपया एक मान्य ईमेल पता दर्ज करें।" }),
-  password: z.string().min(6, { message: "पासवर्ड कम से कम 6 अक्षरों का होना चाहिए।" }),
-  gender: z.enum(['male', 'female', 'other'], { errorMap: () => ({ message: "लिंग चुनना आवश्यक है।" }) }),
-  department: z.enum(['process-access', 'production-access', 'quality-access', 'all-control-access'], { errorMap: () => ({ message: "विभाग चुनना आवश्यक है।" }) })
+  name: z.string().min(2, { message: "Name must be at least 2 characters." }),
+  email: z.string().email({ message: "Please enter a valid email address." }),
+  password: z.string().min(6, { message: "Password must be at least 6 characters." }),
+  gender: z.enum(['male', 'female', 'other'], { errorMap: () => ({ message: "Gender is required." }) }),
+  department: z.enum(['process-access', 'production-access', 'quality-access', 'all-control-access'], { errorMap: () => ({ message: "Department is required." }) })
 });
 
 type SignupFormValues = z.infer<typeof signupSchema>;
@@ -57,7 +56,7 @@ export default function SignupPage() {
             toast({
                 variant: 'destructive',
                 title: 'Signup Failed',
-                description: error.code === 'auth/email-already-in-use' ? 'यह ईमेल पहले से ही उपयोग में है।' : (error.message || 'कृपया अपनी जानकारी जांचें और पुनः प्रयास करें।'),
+                description: error.code === 'auth/email-already-in-use' ? 'This email is already in use.' : (error.message || 'Please check your information and try again.'),
             });
         } finally {
             setIsLoading(false);
@@ -72,7 +71,7 @@ export default function SignupPage() {
                     <ArrowLeft className="w-6 h-6" />
                 </Link>
                  <div className="text-center mb-8">
-                    <MilkCanIcon className="w-16 h-16 text-primary mx-auto mb-4" />
+                    <MilkBottleIcon className="w-16 h-16 text-primary mx-auto mb-4" />
                     <h1 className="text-3xl font-bold text-gray-800">
                         Join <span className="text-primary">Dairy Hub</span>
                     </h1>
@@ -90,7 +89,7 @@ export default function SignupPage() {
                                     <FormControl>
                                         <div className="relative">
                                             <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
-                                            <Input placeholder="e.g. Saurabh Rajput" {...field} className="pl-10" />
+                                            <Input placeholder="e.g. xyz" {...field} className="pl-10" />
                                         </div>
                                     </FormControl>
                                     <FormMessage />
@@ -140,7 +139,7 @@ export default function SignupPage() {
                                     <FormControl>
                                          <div className="relative">
                                               <UserCheck className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
-                                              <SelectTrigger className="pl-10"><SelectValue placeholder="लिंग चुनें" /></SelectTrigger>
+                                              <SelectTrigger className="pl-10"><SelectValue placeholder="Select Gender" /></SelectTrigger>
                                          </div>
                                     </FormControl>
                                     <SelectContent>
@@ -163,7 +162,7 @@ export default function SignupPage() {
                                     <FormControl>
                                          <div className="relative">
                                              <DepartmentIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
-                                             <SelectTrigger className="pl-10"><SelectValue placeholder="विभाग चुनें" /></SelectTrigger>
+                                             <SelectTrigger className="pl-10"><SelectValue placeholder="Select Department" /></SelectTrigger>
                                          </div>
                                     </FormControl>
                                     <SelectContent>
