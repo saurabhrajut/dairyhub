@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from 'react';
@@ -8,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Mail, Lock, Loader2, UserCheck, ArrowLeft } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
-import { MilkCanIcon } from '@/components/icons';
+import { MilkBottleIcon } from '@/components/icons';
 import { useAuth } from '@/context/auth-context';
 
 const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -22,14 +23,16 @@ const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
 export default function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
+    const [isEmailLoading, setIsEmailLoading] = useState(false);
+    const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+    const [isGuestLoading, setIsGuestLoading] = useState(false);
     const { toast } = useToast();
     const router = useRouter();
     const { login, anonymousLogin, signInWithGoogle } = useAuth();
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        setIsLoading(true);
+        setIsEmailLoading(true);
 
         try {
             await login(email, password);
@@ -45,12 +48,12 @@ export default function LoginPage() {
                 description: error.message || "Please check your credentials or sign up.",
             });
         } finally {
-            setIsLoading(false);
+            setIsEmailLoading(false);
         }
     };
     
     const handleGuestLogin = async () => {
-        setIsLoading(true);
+        setIsGuestLoading(true);
         try {
             await anonymousLogin();
             toast({
@@ -65,12 +68,12 @@ export default function LoginPage() {
                 description: "Could not log in as guest. Please try again.",
             });
         } finally {
-            setIsLoading(false);
+            setIsGuestLoading(false);
         }
     }
 
     const handleGoogleSignIn = async () => {
-        setIsLoading(true);
+        setIsGoogleLoading(true);
         try {
             await signInWithGoogle();
              toast({
@@ -85,7 +88,7 @@ export default function LoginPage() {
                 description: error.message || "Could not sign in with Google. Please try again.",
             });
         } finally {
-            setIsLoading(false);
+            setIsGoogleLoading(false);
         }
     };
 
@@ -96,7 +99,7 @@ export default function LoginPage() {
                     <ArrowLeft className="w-6 h-6" />
                 </Link>
                  <div className="text-center mb-8">
-                    <MilkCanIcon className="w-16 h-16 text-primary mx-auto mb-4" />
+                    <MilkBottleIcon className="w-16 h-16 text-primary mx-auto mb-4" />
                     <h1 className="text-3xl font-bold text-gray-800">
                         Welcome to <span className="text-primary">Dairy Hub</span>
                     </h1>
@@ -137,8 +140,8 @@ export default function LoginPage() {
                     <div>
                         <Button type="submit"
                                 className="w-full bg-primary text-white font-semibold py-2.5 rounded-lg hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition duration-300 ease-in-out"
-                                disabled={isLoading}>
-                            {isLoading ? <Loader2 className="animate-spin" /> : 'Sign In'}
+                                disabled={isEmailLoading}>
+                            {isEmailLoading ? <Loader2 className="animate-spin" /> : 'Sign In'}
                         </Button>
                     </div>
                 </form>
@@ -153,15 +156,15 @@ export default function LoginPage() {
                 </div>
 
                  <div className="space-y-3">
-                    <Button onClick={handleGoogleSignIn} variant="outline" className="w-full" disabled={isLoading}>
-                        {isLoading ? <Loader2 className="animate-spin" /> : <GoogleIcon className="mr-2 h-4 w-4" />}
+                    <Button onClick={handleGoogleSignIn} variant="outline" className="w-full" disabled={isGoogleLoading || isGuestLoading || isEmailLoading}>
+                        {isGoogleLoading ? <Loader2 className="animate-spin" /> : <GoogleIcon className="mr-2 h-4 w-4" />}
                         Sign in with Google
                     </Button>
                     <Button onClick={handleGuestLogin}
                             variant="outline"
                             className="w-full"
-                            disabled={isLoading}>
-                        {isLoading ? <Loader2 className="animate-spin" /> : <UserCheck className="mr-2 h-4 w-4" />}
+                            disabled={isGuestLoading || isGoogleLoading || isEmailLoading}>
+                        {isGuestLoading ? <Loader2 className="animate-spin" /> : <UserCheck className="mr-2 h-4 w-4" />}
                         Continue as Guest
                     </Button>
                 </div>
