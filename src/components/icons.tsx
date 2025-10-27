@@ -110,13 +110,33 @@ export const IceCreamIcon = (props: SVGProps<SVGSVGElement>) => (
 );
 
 export const MilkBottleIcon = (props: SVGProps<SVGSVGElement>) => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-    <path d="M8 2h8" />
-    <path d="M9 2v2.34c0 .55.45 1 .91 1 .43 0 .83-.34.9-.77 .08-.5.48-.87.99-.87s.91.37 1 .87c.07.43.47.77.9.77.46 0 .91-.45.91-1V2" />
-    <path d="M17 4h-1.11c-.55 0-1.04-.34-1.18-.83-.17-.6-.63-1-1.21-1-.58-.04-1.09.34-1.18.89-.14.5-.63.94-1.18.94H8.85c-.55 0-1.04-.44-1.18-.94-.09-.55-.6-.93-1.18-.89-.58.05-1.04.5-1.21 1-.14.49-.63.83-1.18.83H4v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4Z" />
-    <path d="M5 12h14" />
-  </svg>
+    <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+        <defs>
+            <linearGradient id="bottleGradient" x1="0.5" y1="0" x2="0.5" y2="1">
+                <stop stopColor="#FFFFFF" stopOpacity="0.5"/>
+                <stop offset="1" stopColor="#E0E7FF" stopOpacity="0.5"/>
+            </linearGradient>
+            <linearGradient id="milkGradient" x1="0.5" y1="0" x2="0.5" y2="1">
+                <stop stopColor="#FFFFFF"/>
+                <stop offset="1" stopColor="#F0F8FF"/>
+            </linearGradient>
+            <linearGradient id="capGradient" x1="0.5" y1="0" x2="0.5" y2="1">
+                <stop stopColor="#60A5FA"/>
+                <stop offset="1" stopColor="#3B82F6"/>
+            </linearGradient>
+        </defs>
+        {/* Bottle Body */}
+        <path d="M38.5,62H25.5C23.0147,62 21,59.9853 21,57.5V36C21,30,24,28,26,26L28,24V14H36V24L38,26C40,28 43,30 43,36V57.5C43,59.9853 40.9853,62 38.5,62Z" fill="url(#bottleGradient)" stroke="#A4B7D0" strokeWidth="1.5"/>
+        {/* Milk Inside */}
+        <path d="M23,60V42C26,45 30,41 32,42C34,43 38,39 41,41V60H23Z" fill="url(#milkGradient)"/>
+        {/* Bottle Neck and Cap */}
+        <rect x="27" y="8" width="10" height="6" rx="2" fill="url(#capGradient)" stroke="#2563EB" strokeWidth="1.5"/>
+        <path d="M28,14V11H36V14" fill="url(#bottleGradient)" stroke="#A4B7D0" strokeWidth="1.5" />
+        {/* Highlight */}
+        <path d="M25 30 V55" stroke="white" strokeWidth="2" strokeOpacity="0.6" strokeLinecap="round"/>
+    </svg>
 );
+
 
 export const MilkCanIcon = (props: SVGProps<SVGSVGElement>) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -141,3 +161,9 @@ export const Beaker = (props: SVGProps<SVGSVGElement>) => (
         <path d="M4.5 3h15"/><path d="M6 3v16a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V3"/><path d="M6 14h12"/>
     </svg>
 );
+
+    
+
+
+
+
