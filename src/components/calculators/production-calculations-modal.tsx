@@ -1195,13 +1195,15 @@ function PlantEfficiencyCalc() {
 }
 
 // Plant Cost Calculator Component
-const MemoizedInputField_PlantCost = memo(function InputField({ label, value, name, setter, placeholder }: { label: string, value: string, name: string, setter: (name: string, value: string) => void, placeholder?: string }) {
+const MemoizedInputField = memo(function InputField({ label, value, name, setter, placeholder }: { label: string, value: string, name: string, setter: (name: string, value: string) => void, placeholder?: string }) {
     const [internalValue, setInternalValue] = useState(value);
 
     // Update internal state when props change
-    if (value !== internalValue && document.activeElement?.getAttribute('name') !== name) {
-        setInternalValue(value);
-    }
+    useEffect(() => {
+      if (value !== internalValue && document.activeElement?.getAttribute('name') !== name) {
+          setInternalValue(value);
+      }
+    }, [value, name, internalValue]);
     
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setInternalValue(e.target.value);
@@ -1227,28 +1229,43 @@ const MemoizedInputField_PlantCost = memo(function InputField({ label, value, na
     );
 });
 
-
-const FixedExpenseRow = memo(function FixedExpenseRow({ 
-    item, 
-    onChange, 
-    onRemove 
-}: { 
-    item: FixedExpense, 
-    onChange: (id: number, field: keyof FixedExpense, value: string) => void, 
-    onRemove: (id: number) => void 
+const FixedExpenseRow = memo(function FixedExpenseRow({
+    item,
+    onChange,
+    onRemove
+}: {
+    item: FixedExpense,
+    onChange: (id: number, field: keyof FixedExpense, value: string) => void,
+    onRemove: (id: number) => void
 }) {
+    const [name, setName] = useState(item.name);
+    const [cost, setCost] = useState(item.cost);
+
+    useEffect(() => {
+        if (item.name !== name) setName(item.name);
+        if (item.cost !== cost) setCost(item.cost);
+    }, [item.name, item.cost]);
+
+    const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value);
+    const handleCostChange = (e: React.ChangeEvent<HTMLInputElement>) => setCost(e.target.value);
+
+    const handleNameBlur = () => onChange(item.id, 'name', name);
+    const handleCostBlur = () => onChange(item.id, 'cost', cost);
+
     return (
         <div className="grid grid-cols-1 sm:grid-cols-[2fr_1fr_auto] gap-2 items-center">
-            <Input 
-                placeholder="Expense (e.g., Salaries)" 
-                value={item.name} 
-                onChange={(e) => onChange(item.id, 'name', e.target.value)} 
+            <Input
+                placeholder="Expense (e.g., Salaries)"
+                value={name}
+                onChange={handleNameChange}
+                onBlur={handleNameBlur}
             />
-            <Input 
-                type="number" 
-                placeholder="Monthly Cost (₹)" 
-                value={item.cost} 
-                onChange={(e) => onChange(item.id, 'cost', e.target.value)} 
+            <Input
+                type="number"
+                placeholder="Monthly Cost (₹)"
+                value={cost}
+                onChange={handleCostChange}
+                onBlur={handleCostBlur}
             />
             <Button variant="ghost" size="icon" className="text-destructive" onClick={() => onRemove(item.id)}>
                 <XCircle />
@@ -1256,7 +1273,6 @@ const FixedExpenseRow = memo(function FixedExpenseRow({
         </div>
     );
 });
-
 
 function PlantCostCalc() {
   const [period, setPeriod] = useState("monthly");
@@ -1409,112 +1425,108 @@ function PlantCostCalc() {
 
 
   return (
-    <>
-        <div className="bg-muted/50 p-4 rounded-lg mb-6 grid grid-cols-2 gap-4">
-            <div>
-                <Label htmlFor="period-select">Calculation Period</Label>
-                <Select value={period} onValueChange={setPeriod}>
-                    <SelectTrigger id="period-select"><SelectValue/></SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="daily">Daily</SelectItem>
-                        <SelectItem value="monthly">Monthly</SelectItem>
-                    </SelectContent>
-                </Select>
-            </div>
-            <div>
-                <Label>Assumption</Label>
-                <p className="text-xs text-muted-foreground mt-1">For daily calculations, monthly fixed costs are divided by 30.</p>
-            </div>
-        </div>
+    <div>
+      <div className="bg-muted/50 p-4 rounded-lg mb-6 grid grid-cols-2 gap-4">
+          <div>
+              <Label htmlFor="period-select">Calculation Period</Label>
+              <Select value={period} onValueChange={setPeriod}>
+                  <SelectTrigger id="period-select"><SelectValue/></SelectTrigger>
+                  <SelectContent>
+                      <SelectItem value="daily">Daily</SelectItem>
+                      <SelectItem value="monthly">Monthly</SelectItem>
+                  </SelectContent>
+              </Select>
+          </div>
+          <div>
+              <Label>Assumption</Label>
+              <p className="text-xs text-muted-foreground mt-1">For daily calculations, monthly fixed costs are divided by 30.</p>
+          </div>
+      </div>
 
-        <Section title="1. Production &amp; Revenue Details" description="Define your production volume and total sales for the selected period.">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <MemoizedInputField_PlantCost label={`Total Milk Processed (${period === 'monthly' ? 'Litres/month' : 'Litres/day'})`} value={inputs.milkProcessed} name="milkProcessed" setter={handleInputChange} placeholder="e.g., 30000" />
-                <MemoizedInputField_PlantCost label={`Total Sales Revenue (${period === 'monthly' ? '₹/month' : '₹/day'})`} value={inputs.totalRevenue} name="totalRevenue" setter={handleInputChange} placeholder="e.g., 2100000" />
-            </div>
-        </Section>
+      <Section title="1. Production & Revenue Details" description="Define your production volume and total sales for the selected period.">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <MemoizedInputField label={`Total Milk Processed (${period === 'monthly' ? 'Litres/month' : 'Litres/day'})`} value={inputs.milkProcessed} name="milkProcessed" setter={handleInputChange} placeholder="e.g., 30000" />
+              <MemoizedInputField label={`Total Sales Revenue (${period === 'monthly' ? '₹/month' : '₹/day'})`} value={inputs.totalRevenue} name="totalRevenue" setter={handleInputChange} placeholder="e.g., 2100000" />
+          </div>
+      </Section>
 
-        <Section title="2. Variable Costs" description="Costs that change in proportion to your production volume.">
-            <h4 className="font-semibold text-gray-700">A. Raw Material Cost</h4>
-             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
-                 <div>
-                    <MemoizedInputField_PlantCost label="Average Purchase Cost of Milk (₹ per Litre)" value={inputs.avgMilkPurchaseCost} name="avgMilkPurchaseCost" setter={handleInputChange} />
-                </div>
-             </div>
+      <Section title="2. Variable Costs" description="Costs that change in proportion to your production volume.">
+          <h4 className="font-semibold text-gray-700">A. Raw Material Cost</h4>
+           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
+               <div>
+                  <MemoizedInputField label="Average Purchase Cost of Milk (₹ per Litre)" value={inputs.avgMilkPurchaseCost} name="avgMilkPurchaseCost" setter={handleInputChange} />
+              </div>
+           </div>
 
-             <h4 className="font-semibold text-gray-700 mt-6">B. Other Variable Costs (per Litre of milk processed)</h4>
-             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
-                <MemoizedInputField_PlantCost label="Packaging (₹ per Litre)" value={inputs.packagingPerLitre} name="packagingPerLitre" setter={handleInputChange} />
-                <MemoizedInputField_PlantCost label="Other Ingredients (₹ per Litre)" value={inputs.ingredientsPerLitre} name="ingredientsPerLitre" setter={handleInputChange} />
-                <MemoizedInputField_PlantCost label="Energy (Electricity, Fuel) (₹ per Litre)" value={inputs.energyPerLitre} name="energyPerLitre" setter={handleInputChange} />
-                <MemoizedInputField_PlantCost label="Water / ETP (₹ per Litre)" value={inputs.waterPerLitre} name="waterPerLitre" setter={handleInputChange} />
-                <MemoizedInputField_PlantCost label="Distribution &amp; Logistics (₹ per Litre)" value={inputs.distributionPerLitre} name="distributionPerLitre" setter={handleInputChange} />
-             </div>
-        </Section>
+           <h4 className="font-semibold text-gray-700 mt-6">B. Other Variable Costs (per Litre of milk processed)</h4>
+           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
+              <MemoizedInputField label="Packaging (₹ per Litre)" value={inputs.packagingPerLitre} name="packagingPerLitre" setter={handleInputChange} />
+              <MemoizedInputField label="Other Ingredients (₹ per Litre)" value={inputs.ingredientsPerLitre} name="ingredientsPerLitre" setter={handleInputChange} />
+              <MemoizedInputField label="Energy (Electricity, Fuel) (₹ per Litre)" value={inputs.energyPerLitre} name="energyPerLitre" setter={handleInputChange} />
+              <MemoizedInputField label="Water / ETP (₹ per Litre)" value={inputs.waterPerLitre} name="waterPerLitre" setter={handleInputChange} />
+              <MemoizedInputField label="Distribution & Logistics (₹ per Litre)" value={inputs.distributionPerLitre} name="distributionPerLitre" setter={handleInputChange} />
+           </div>
+      </Section>
 
-        <Section title="3. Fixed Expenses (Monthly Overhead)" description="Costs that remain constant regardless of production volume. Enter all costs on a monthly basis.">
-             <div className="space-y-3">
-                 <div className="grid grid-cols-1 sm:grid-cols-[2fr_1fr_auto] gap-2 items-center text-sm font-medium text-muted-foreground">
-                    <p>Expense Name</p><p>Monthly Cost (₹)</p><div />
-                </div>
-                {fixedExpenses.map((item) => (
-                    <FixedExpenseRow
-                        key={item.id}
-                        item={item}
-                        onChange={handleFixedExpenseChange}
-                        onRemove={handleRemoveFixedExpense}
-                    />
-                ))}
-            </div>
-            <Button variant="outline" size="sm" onClick={handleAddFixedExpense} className="mt-4"><PlusCircle className="mr-2"/> Add Fixed Expense</Button>
-        </Section>
-        
-        <div ref={reportRef} className="p-1">
-            <Alert className={`mt-8 ${results.netProfit >= 0 ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
-                <AlertTitle className="text-xl font-bold">Financial Summary ({period})</AlertTitle>
-                <AlertDescription>
-                    <div className="mt-4 text-base">
-                        <Table>
-                           <TableBody>
-                             <TableRow><TableCell>A. Total Revenue</TableCell><TableCell className="text-right font-semibold">₹ {results.revenue.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell></TableRow>
-                             
-                             <TableRow className="bg-muted/30"><TableCell colSpan={2} className="font-bold text-primary">B. Variable Costs</TableCell></TableRow>
-                             <TableRow><TableCell className="pl-8">Raw Material (Milk)</TableCell><TableCell className="text-right text-red-600">- ₹ {results.totalRawMaterialCost.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell></TableRow>
-                             <TableRow><TableCell className="pl-8">Other Variable Costs (Packaging, Energy, etc.)</TableCell><TableCell className="text-right text-red-600">- ₹ {results.totalOtherVariableCosts.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell></TableRow>
-                             <TableRow><TableCell className="font-semibold pl-4">Total Variable Costs</TableCell><TableCell className="text-right font-semibold text-red-600">- ₹ {results.totalVariableCosts.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell></TableRow>
+      <Section title="3. Fixed Expenses (Monthly Overhead)" description="Costs that remain constant regardless of production volume. Enter all costs on a monthly basis.">
+           <div className="space-y-3">
+               <div className="grid grid-cols-1 sm:grid-cols-[2fr_1fr_auto] gap-2 items-center text-sm font-medium text-muted-foreground">
+                  <p>Expense Name</p><p>Monthly Cost (₹)</p><div />
+              </div>
+              {fixedExpenses.map((item) => (
+                  <FixedExpenseRow
+                      key={item.id}
+                      item={item}
+                      onChange={handleFixedExpenseChange}
+                      onRemove={handleRemoveFixedExpense}
+                  />
+              ))}
+          </div>
+          <Button variant="outline" size="sm" onClick={handleAddFixedExpense} className="mt-4"><PlusCircle className="mr-2"/> Add Fixed Expense</Button>
+      </Section>
+      
+      <div ref={reportRef} className="p-1">
+          <Alert className={`mt-8 ${results.netProfit >= 0 ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
+              <AlertTitle className="text-xl font-bold">Financial Summary ({period})</AlertTitle>
+              <AlertDescription>
+                  <div className="mt-4 text-base">
+                      <Table>
+                         <TableBody>
+                           <TableRow><TableCell>A. Total Revenue</TableCell><TableCell className="text-right font-semibold">₹ {results.revenue.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell></TableRow>
+                           
+                           <TableRow className="bg-muted/30"><TableCell colSpan={2} className="font-bold text-primary">B. Variable Costs</TableCell></TableRow>
+                           <TableRow><TableCell className="pl-8">Raw Material (Milk)</TableCell><TableCell className="text-right text-red-600">- ₹ {results.totalRawMaterialCost.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell></TableRow>
+                           <TableRow><TableCell className="pl-8">Other Variable Costs (Packaging, Energy, etc.)</TableCell><TableCell className="text-right text-red-600">- ₹ {results.totalOtherVariableCosts.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell></TableRow>
+                           <TableRow><TableCell className="font-semibold pl-4">Total Variable Costs</TableCell><TableCell className="text-right font-semibold text-red-600">- ₹ {results.totalVariableCosts.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell></TableRow>
 
-                             <TableRow className="bg-muted/50 text-lg"><TableCell className="font-bold">C. Gross Profit (A - B)</TableCell><TableCell className="font-bold text-right">₹ {results.grossProfit.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell></TableRow>
-                             
-                             <TableRow><TableCell className="font-bold text-primary">D. Total Fixed Costs</TableCell><TableCell className="text-right font-semibold text-red-600">- ₹ {results.totalFixedCost.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell></TableRow>
-                             
-                             <TableRow className={`font-extrabold text-xl ${results.netProfit >= 0 ? 'text-green-700' : 'text-red-700'}`}>
-                                <TableCell>E. {results.netProfit >= 0 ? 'Net Profit' : 'Net Loss'} (C - D)</TableCell>
-                                <TableCell className="text-right">₹ {results.netProfit.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell>
-                             </TableRow>
-                           </TableBody>
-                        </Table>
-                         <h4 className="font-semibold mt-6 mb-2 text-center text-gray-600">Key Metrics</h4>
-                         <Table>
-                            <TableBody>
-                                <TableRow><TableCell>Gross Profit Margin</TableCell><TableCell className="font-bold text-right">{results.grossMargin.toFixed(2)} %</TableCell></TableRow>
-                                <TableRow><TableCell>Net Profit Margin</TableCell><TableCell className="font-bold text-right">{results.netMargin.toFixed(2)} %</TableCell></TableRow>
-                                <TableRow><TableCell>Break-Even Revenue ({period})</TableCell><TableCell className="font-bold text-right">₹ {results.breakEvenRevenue.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell></TableRow>
-                            </TableBody>
-                         </Table>
-                    </div>
-                </AlertDescription>
-            </Alert>
-        </div>
-        <div className="text-center mt-6">
-            <Button onClick={handleDownloadPdf} disabled={isDownloading}>
-                {isDownloading ? <Loader2 className="mr-2 animate-spin" /> : <FileDown className="mr-2" />}
-                Download Report as PDF
-            </Button>
-        </div>
-        <div className="h-12"></div>
-    </>
+                           <TableRow className="bg-muted/50 text-lg"><TableCell className="font-bold">C. Gross Profit (A - B)</TableCell><TableCell className="font-bold text-right">₹ {results.grossProfit.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell></TableRow>
+                           
+                           <TableRow><TableCell className="font-bold text-primary">D. Total Fixed Costs</TableCell><TableCell className="text-right font-semibold text-red-600">- ₹ {results.totalFixedCost.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell></TableRow>
+                           
+                           <TableRow className={`font-extrabold text-xl ${results.netProfit >= 0 ? 'text-green-700' : 'text-red-700'}`}>
+                              <TableCell>E. {results.netProfit >= 0 ? 'Net Profit' : 'Net Loss'} (C - D)</TableCell>
+                              <TableCell className="text-right">₹ {results.netProfit.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell>
+                           </TableRow>
+                         </TableBody>
+                      </Table>
+                       <h4 className="font-semibold mt-6 mb-2 text-center text-gray-600">Key Metrics</h4>
+                       <Table>
+                          <TableBody>
+                              <TableRow><TableCell>Gross Profit Margin</TableCell><TableCell className="font-bold text-right">{results.grossMargin.toFixed(2)} %</TableCell></TableRow>
+                              <TableRow><TableCell>Net Profit Margin</TableCell><TableCell className="font-bold text-right">{results.netMargin.toFixed(2)} %</TableCell></TableRow>
+                              <TableRow><TableCell>Break-Even Revenue ({period})</TableCell><TableCell className="font-bold text-right">₹ {results.breakEvenRevenue.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell></TableRow>
+                          </TableBody>
+                       </Table>
+                  </div>
+              </AlertDescription>
+          </Alert>
+      </div>
+      <div className="text-center mt-6">
+          <Button onClick={handleDownloadPdf} disabled={isDownloading}>
+              {isDownloading ? <Loader2 className="mr-2 animate-spin" /> : <FileDown className="mr-2" />}
+              Download Report as PDF
+          </Button>
+      </div>
+    </div>
   );
 }
-
-
-
