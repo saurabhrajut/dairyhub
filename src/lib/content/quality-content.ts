@@ -1,3 +1,4 @@
+
 export const qualityContent = {
   hi: {
     title: "Quality ki Concept",
@@ -50,7 +51,7 @@ export const qualityContent = {
     },
     qa: {
       title: "Quality Assurance (QA) Kya Hai?",
-      p1: "Yeh un activities ka set hai jo yeh ensure karti hain ki products aur services ke quality levels properly maintain kiye jaate hain aur supplier aur customer quality issues properly resolve kiye jaate hain. Quality assurance mistakes aur defects hone se prevent karne ki ek method hai.",
+      p1: "Yeh un activities ka set hai jo yeh ensure karti hain ki products aur services ke quality levels properly maintain kiye jaate hain aur supplier aur customer quality issues are properly resolve kiye jaate hain. Quality assurance mistakes aur defects hone se prevent karne ki ek method hai.",
       p2: "ISO, quality assurance ko 'quality management ka woh part jo yeh confidence provide karne par focus hai ki quality requirements fulfill hongi' ke roop mein define karta hai. Yeh ek proactive approach hai, reactive nahi. Product ko har step par monitor kiya jaata hai.",
       table: {
         caption: "Table 9.1: Quality Control vs Quality Assurance",
@@ -145,13 +146,13 @@ export const qualityContent = {
       principles: {
         title: "HACCP ke Saat Principles",
         list: [
-          { title: "Hazard Analysis Conduct Karein:\", description: "Dairy production ke har step ka in-depth analysis karna, raw milk se lekar packaging tak. Har step par potential biological (Listeria, Salmonella), chemical (antibiotics, cleaning agents), aur physical (metal, glass) hazards ko identify karna." },
-          { title: "Critical Control Points Determine Karein (CCPs):\", description: "CCPs ve points hain jahan control apply karke food safety hazard ko prevent, eliminate, ya ek acceptable level tak reduce kiya ja sakta hai. For example, pasteurization ek CCP hai." },
-          { title: "Critical Limits Establish Karein:\", description: "Har CCP ke liye measurable limits set karna, jaise temperature (≥72°C), time (≥15 seconds), pH (≤4.6). Ye limits safe aur unsafe conditions ke beech ki boundary hoti hain." },
-          { title: "Monitoring Procedures Establish Karein:\", description: "Yeh observations ya measurements ka ek planned sequence hai, jisse yeh assess kiya ja sake ki ek CCP control mein hai ya nahi. Ismein yeh specify hota hai ki kya, kaise, kab, aur kaun monitor karega." },
-          { title: "Corrective Actions Establish Karein:\", description: "Ye pre-determined actions hain jo tab liye jaate hain jab monitoring se pata chalta hai ki critical limit se deviation ho gaya hai. Ismein product ko isolate karna aur further action lena included hai." },
-          { title: "Verification Procedures Establish Karein:\", description: "Ye activities is baat ki confirm karti hain ki HACCP system correctly kaam kar raha hai. Ismein HACCP plan ka audit, equipment ka calibration, aur testing included hai." },
-          { title: "Record-Keeping aur Documentation Procedures Establish Karein:\", description: "Accurate aur complete documentation HACCP system ke effective implementation ke liye bahut essential hai. Ismein hazard analysis, monitoring logs, corrective actions, aur verification activities ke records included hote hain." }
+          { title: "Hazard Analysis Conduct Karein:", description: "Dairy production ke har step ka in-depth analysis karna, raw milk se lekar packaging tak. Har step par potential biological (Listeria, Salmonella), chemical (antibiotics, cleaning agents), aur physical (metal, glass) hazards ko identify karna." },
+          { title: "Critical Control Points Determine Karein (CCPs):", description: "CCPs ve points hain jahan control apply karke food safety hazard ko prevent, eliminate, ya ek acceptable level tak reduce kiya ja sakta hai. For example, pasteurization ek CCP hai." },
+          { title: "Critical Limits Establish Karein:", description: "Har CCP ke liye measurable limits set karna, jaise temperature (≥72°C), time (≥15 seconds), pH (≤4.6). Ye limits safe aur unsafe conditions ke beech ki boundary hoti hain." },
+          { title: "Monitoring Procedures Establish Karein:", description: "Yeh observations ya measurements ka ek planned sequence hai, jisse yeh assess kiya ja sake ki ek CCP control mein hai ya nahi. Ismein yeh specify hota hai ki kya, kaise, kab, aur kaun monitor karega." },
+          { title: "Corrective Actions Establish Karein:", description: "Ye pre-determined actions hain jo tab liye jaate hain jab monitoring se pata chalta hai ki critical limit se deviation ho gaya hai. Ismein product ko isolate karna aur further action lena included hai." },
+          { title: "Verification Procedures Establish Karein:", description: "Ye activities is baat ki confirm karti hain ki HACCP system correctly kaam kar raha hai. Ismein HACCP plan ka audit, equipment ka calibration, aur testing included hai." },
+          { title: "Record-Keeping aur Documentation Procedures Establish Karein:", description: "Accurate aur complete documentation HACCP system ke effective implementation ke liye bahut essential hai. Ismein hazard analysis, monitoring logs, corrective actions, aur verification activities ke records included hote hain." }
         ]
       }
     },
@@ -232,11 +233,11 @@ export const qualityContent = {
         },
         agmark: {
             title: "Agmark",
-            p1: "Agriculture Produce Grading and Marketing Act 1937 mein enact kiya gaya tha. Iske under standards 'Agmark' standards ke roop mein jaane jaate hain. Is act ke under grading voluntary hai. Teen dairy products (ghee, butter aur dairy spreads) currently is scheme ke under grade kiye jaate hain."
+            p1: "The Agriculture Produce Grading and Marketing Act was first enacted in 1937 to prescribe grade standards for agricultural and allied commodities. The standards came to be known as Agmark standards and are formulated by the Directorate of Marketing and Inspection (DMI), under Ministry of Agriculture (Government of India). Grading under this act is voluntary. Teen dairy products (ghee, butter aur dairy spreads) currently is scheme ke under grade kiye jaate hain."
         },
         mmpo: {
             title: "Milk and Milk Product Order (MMPO)",
-            p1: "Daily 10,000 liters se zyada milk ka processing karne wale ya yearly 500 tonnes se zyada milk solids ko handle karne wale sabhi dairy plants ko competent authority se registration certificate obtain karna required hai. Is order ne milkshed areas bhi define kiye hain."
+            p1: "All dairy plants processing more than 10,000 liters of milk per day or handling more than 500 tonnes of milk solids per annum are now required to obtain registration certificates from the competent authority. This order has also defined milkshed areas, so as to restrict uneven procurement and marketing of milk."
         },
         export_act: {
             title: "Export (Quality Control and Inspection) Act",
@@ -296,7 +297,7 @@ export const qualityContent = {
     qa: {
       title: "What Is Quality Assurance (QA)?",
       p1: "It is defined as a set of activities which ensure that the quality levels of products and services are properly maintained and that the supplier and customer quality issues are properly resolved. Quality assurance is a method to prevent the occurrence of mistakes and defects.",
-      p2: "ISO defines quality assurance as "part of quality management focused on providing confidence that quality requirements will be fulfilled". It is a proactive approach, not a reactive one. The product is monitored at each step.",
+      p2: "ISO defines quality assurance as \"part of quality management focused on providing confidence that quality requirements will be fulfilled\". It is a proactive approach, not a reactive one. The product is monitored at each step.",
       table: {
         caption: "Table 9.1: Quality Control vs Quality Assurance",
         header1: "Quality Control",
@@ -438,31 +439,31 @@ export const qualityContent = {
       }
     },
     oprps: {
-        title: "Operational Prerequisite Programs (oPRPs)",
-        p1: "Operational Prerequisite Programs (oPRPs) are control measures identified by hazard analysis as essential to control the likelihood of introducing food safety hazards. They are more specific than general PRPs but not as critical as Critical Control Points (CCPs).",
-        p2: "<strong>Difference between PRP, oPRP, and CCP:</strong>",
-        table: {
-            header1: "Aspect",
-            header2: "PRP (Prerequisite Program)",
-            header3: "oPRP (Operational PRP)",
-            header4: "CCP (Critical Control Point)",
-            rows: [
-                { c1: "Focus", c2: "General hygiene and good practices", c3: "Specific measure essential to control a particular hazard", c4: "Last point to eliminate or reduce a hazard to an unacceptable level" },
-                { c1: "Identification", c2: "Standard practices and guidelines", c3: "Through hazard analysis", c4: "Through HACCP decision tree" },
-                { c1: "Monitoring", c2: "Regular inspection (e.g., sanitation checks)", c3: "Observation or measurement (e.g., temperature checks)", c4: "Continuous or frequent measurement (e.g., pasteurizer temperature recording)" },
-                { c1: "Consequence of Failure", c2: "Minor increase in risk", c3: "Potentially unsafe product", c4: "Definitely unsafe product" }
-            ]
-        },
-        dairy_examples: {
-            title: "Examples of oPRPs in the Dairy Industry",
-            list: [
-                { title: "Raw Milk Reception", description: "<strong>oPRP:</strong> Temperature control and rapid antibiotic testing of milk. <strong>Why:</strong> To ensure milk is received at an acceptable temperature (e.g., <5°C) and is free from antibiotics, which can inhibit starter cultures and cause allergies. It's not a CCP because subsequent pasteurization will kill bacteria." },
-                { title: "Pasteurization", description: "<strong>oPRP:</strong> Pressure differential in the heat exchanger. <strong>Why:</strong> To ensure the pasteurized side always has a higher pressure than the raw side. This prevents raw milk from entering the pasteurized milk in case of a leak. The pasteurization time and temperature itself is a CCP." },
-                { title: "CIP (Cleaning-In-Place)", description: "<strong>oPRP:</strong> Visual inspection and ATP swabbing for cleanliness after the final rinse. <strong>Why:</strong> To verify that the cleaning was effective and no chemical residues are left. It's not a CCP as it's not directly controlling a hazard in the product, but indirectly." },
-                { title: "Allergen Management", description: "<strong>oPRP:</strong> Production sequencing and cleaning between allergen-containing and allergen-free products. <strong>Why:</strong> To control the risk of cross-contamination. The effectiveness of cleaning is verifiable, but it may not be a final control point." },
-                { title: "Packaging", description: "<strong>oPRP:</strong> Hourly checks of package seal integrity. <strong>Why:</strong> To ensure packages are sealed correctly to prevent post-contamination. It may not be a CCP if other downstream controls exist." }
-            ]
-        }
+      title: "Operational Prerequisite Programs (oPRPs)",
+      p1: "Operational Prerequisite Programs (oPRPs) are control measures identified by hazard analysis as essential to control the likelihood of introducing food safety hazards. They are more specific than general PRPs but not as critical as Critical Control Points (CCPs).",
+      p2: "<strong>Difference between PRP, oPRP, and CCP:</strong>",
+      table: {
+          header1: "Aspect",
+          header2: "PRP (Prerequisite Program)",
+          header3: "oPRP (Operational PRP)",
+          header4: "CCP (Critical Control Point)",
+          rows: [
+              { c1: "Focus", c2: "General hygiene and good practices", c3: "Specific measure essential to control a particular hazard", c4: "Last point to eliminate or reduce a hazard to an unacceptable level" },
+              { c1: "Identification", c2: "Standard practices and guidelines", c3: "Through hazard analysis", c4: "Through HACCP decision tree" },
+              { c1: "Monitoring", c2: "Regular inspection (e.g., sanitation checks)", c3: "Observation or measurement (e.g., temperature checks)", c4: "Continuous or frequent measurement (e.g., pasteurizer temperature recording)" },
+              { c1: "Consequence of Failure", c2: "Minor increase in risk", c3: "Potentially unsafe product", c4: "Definitely unsafe product" }
+          ]
+      },
+      dairy_examples: {
+          title: "Examples of oPRPs in the Dairy Industry",
+          list: [
+              { title: "Raw Milk Reception", description: "<strong>oPRP:</strong> Temperature control and rapid antibiotic testing of milk. <strong>Why:</strong> To ensure milk is received at an acceptable temperature (e.g., <5°C) and is free from antibiotics, which can inhibit starter cultures and cause allergies. It's not a CCP because subsequent pasteurization will kill bacteria." },
+              { title: "Pasteurization", description: "<strong>oPRP:</strong> Pressure differential in the heat exchanger. <strong>Why:</strong> To ensure the pasteurized side always has a higher pressure than the raw side. This prevents raw milk from entering the pasteurized milk in case of a leak. The pasteurization time and temperature itself is a CCP." },
+              { title: "CIP (Cleaning-In-Place)", description: "<strong>oPRP:</strong> Visual inspection and ATP swabbing for cleanliness after the final rinse. <strong>Why:</strong> To verify that the cleaning was effective and no chemical residues are left. It's not a CCP as it's not directly controlling a hazard in the product, but indirectly." },
+              { title: "Allergen Management", description: "<strong>oPRP:</strong> Production sequencing and cleaning between allergen-containing and allergen-free products. <strong>Why:</strong> To control the risk of cross-contamination. The effectiveness of cleaning is verifiable, but it may not be a final control point." },
+              { title: "Packaging", description: "<strong>oPRP:</strong> Hourly checks of package seal integrity. <strong>Why:</strong> To ensure packages are sealed correctly to prevent post-contamination. It may not be a CCP if other downstream controls exist." }
+          ]
+      }
     },
     regulatory_bodies: {
         title: "Regulatory Bodies in India",
@@ -477,7 +478,7 @@ export const qualityContent = {
         },
         agmark: {
             title: "Agmark",
-            p1: "The Agriculture Produce Grading and Marketing Act was first enacted in 1937 to prescribe grade standards for agricultural and allied commodities. The standards came to be known as Agmark standards and are formulated by the Directorate of Marketing and Inspection (DMI), under Ministry of Agriculture (Government of India). Grading under this act is voluntary. Three dairy products (ghee, butter and dairy spreads) are currently graded under this scheme."
+            p1: "The Agriculture Produce Grading and Marketing Act was first enacted in 1937 to prescribe grade standards for agricultural and allied commodities. The standards came to be known as Agmark standards and are formulated by the Directorate of Marketing and Inspection (DMI), under Ministry of Agriculture (Government of India). Grading under this act is voluntary. Teen dairy products (ghee, butter aur dairy spreads) currently is scheme ke under grade kiye jaate hain."
         },
         mmpo: {
             title: "Milk and Milk Product Order (MMPO)",
@@ -490,3 +491,5 @@ export const qualityContent = {
     }
   }
 }
+
+    
