@@ -107,6 +107,42 @@ const topicComponents = {
             </Section>
         )
     },
+    oprps: function Content({ content }: { content: any }) {
+        return (
+            <Section title={content.oprps.title} id="oprps">
+                <p>{content.oprps.p1}</p>
+                <SubHeading>{content.oprps.p2}</SubHeading>
+                 <div className="overflow-x-auto">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>{content.oprps.table.header1}</TableHead>
+                                <TableHead>{content.oprps.table.header2}</TableHead>
+                                <TableHead>{content.oprps.table.header3}</TableHead>
+                                <TableHead>{content.oprps.table.header4}</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {content.oprps.table.rows.map((row: any, index: number) => (
+                                <TableRow key={index}>
+                                    <TableCell>{row.c1}</TableCell>
+                                    <TableCell>{row.c2}</TableCell>
+                                    <TableCell>{row.c3}</TableCell>
+                                    <TableCell>{row.c4}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </div>
+                <SubHeading>{content.oprps.dairy_examples.title}</SubHeading>
+                <ul className="list-disc list-inside space-y-2">
+                    {content.oprps.dairy_examples.list.map((item: any, index: number) => (
+                        <li key={index}><strong>{item.title}:</strong> {item.description}</li>
+                    ))}
+                </ul>
+            </Section>
+        )
+    },
     philosophy: function Content({ content }: { content: any }) {
         return (
             <>
@@ -221,6 +257,7 @@ export function QualityConceptModal({ isOpen, setIsOpen }: { isOpen: boolean; se
       { value: "intro", title: content.tabs.intro, icon: Book },
       { value: "concepts", title: content.tabs.concepts, icon: CheckSquare },
       { value: "prps", title: content.tabs.prps, icon: Settings },
+      { value: "oprps", title: content.tabs.oprps, icon: ShieldCheck }, // New Topic
       { value: "philosophy", title: content.tabs.philosophy, icon: Users },
       { value: "tqm", title: content.tabs.tqm, icon: Award },
       { value: "haccp", title: content.tabs.haccp, icon: ShieldCheck },
