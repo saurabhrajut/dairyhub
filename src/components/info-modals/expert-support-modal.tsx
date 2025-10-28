@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
@@ -13,8 +12,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Sparkles, Lightbulb, UserPlus, Bot, ArrowLeft, Send, Upload } from 'lucide-react';
-import { askExpert } from '@/app/actions';
+import { Loader2, Sparkles, Lightbulb, UserPlus, Bot, ArrowLeft, Send, Upload, FileCheck } from 'lucide-react';
+import { askExpert, gyanAI, interviewPrepper } from '@/app/actions';
 import {
   Select,
   SelectContent,
@@ -23,9 +22,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { Message } from '@/ai/flows/types';
-import { useAuth } from '@/context/auth-context';
-import { useCollection, useFirebase } from '@/firebase';
-import { collection, doc, serverTimestamp, setDoc, addDoc, query, orderBy, where, getDocs, limit, getDoc, updateDoc } from 'firebase/firestore';
 
 const initialExperts = [
   { id: '1', name: "Dr. Ramesh Kumar", experience: 15, specialization: "Dairy Technology", photo: "https://placehold.co/150x150/E2E8F0/4A5568?text=R", type: 'ai' },
@@ -33,156 +29,34 @@ const initialExperts = [
   { id: '3', name: "Anil Singh", experience: 20, specialization: "Food Processing", photo: "https://placehold.co/150x150/E2E8F0/4A5568?text=A", type: 'ai' }
 ];
 
-interface Expert {
-    id: string;
-    name: string;
-    experience: number;
-    specialization: string;
-    photo: string;
-    type: 'ai' | 'real';
-    fee?: number;
-}
-
 interface UIMessage { id: string; role: "user" | "assistant"; text: string; }
-
-// --- New Firebase-related functions ---
-async function getOrCreateChat(db: any, currentUserId: string, expertId: string) {
-    if (!currentUserId || !expertId) {
-        throw new Error("User ID or Expert ID is missing.");
-    }
-    const sortedParticipants = [currentUserId, expertId].sort();
-    const chatId = sortedParticipants.join('_');
-    const chatRef = doc(db, 'chats', chatId);
-    
-    // Check if a chat with this ID already exists
-    const chatSnap = await getDocs(query(collection(db, 'chats'), where('participants', '==', sortedParticipants), limit(1)));
-
-    if (chatSnap.empty) {
-        await setDoc(chatRef, {
-            participants: sortedParticipants,
-            createdAt: serverTimestamp(),
-        });
-        return chatId;
-    } else {
-        return chatSnap.docs[0].id;
-    }
-}
-
-async function sendMessage(db: any, chatId: string, senderId: string, text: string) {
-    if (!text.trim()) return;
-    const messagesRef = collection(db, 'chats', chatId, 'messages');
-    await addDoc(messagesRef, {
-        senderId,
-        text,
-        timestamp: serverTimestamp()
-    });
-    // Also update the last message on the chat document for previews
-    await setDoc(doc(db, 'chats', chatId), {
-        lastMessage: { text, senderId, timestamp: serverTimestamp() }
-    }, { merge: true });
-}
-
 
 export function ExpertSupportModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
   const [activePage, setActivePage] = useState<string>('home');
-  const [selectedExpert, setSelectedExpert] = useState<Expert | null>(null);
-  const { user } = useAuth();
-  const [chatId, setChatId] = useState<string | null>(null);
-  const { firestore } = useFirebase();
+  const [selectedExpert, setSelectedExpert] = useState<typeof initialExperts[0] | null>(null);
 
-  // Fetch real experts from Firestore
-  const expertsQuery = useMemo(() => {
-    if (!firestore) return null;
-    return query(collection(firestore, "experts"));
-  }, [firestore]);
-  const { data: realExpertsData, loading: expertsLoading } = useCollection(expertsQuery);
-
-  const realExperts: Expert[] = useMemo(() => {
-    if (!realExpertsData) return [];
-    return realExpertsData.map((doc: any) => ({
-      id: doc.id,
-      name: doc.displayName,
-      experience: doc.experience,
-      specialization: doc.specialization,
-      photo: doc.photoURL,
-      fee: doc.fee,
-      type: 'real'
-    }));
-  }, [realExpertsData]);
-
-
-  const handleSelectExpert = useCallback(async (expert: Expert) => {
+  const handleSelectExpert = useCallback((expert: typeof initialExperts[0]) => {
       setSelectedExpert(expert);
-      if (expert.type === 'real' && firestore && user) {
-          try {
-              const id = await getOrCreateChat(firestore, user.uid, expert.id);
-              setChatId(id);
-          } catch(error) {
-              console.error("Failed to get or create chat:", error);
-              // Handle error, maybe show a toast
-          }
-      }
       setActivePage('chat');
-  }, [firestore, user]);
+  }, []);
 
   const handleBackToHome = useCallback(() => {
       setActivePage('home');
       setSelectedExpert(null);
-      setChatId(null);
   }, []);
-  
-  const handleAddExpert = async (newExpert: Omit<Expert, 'id' | 'type'>) => {
-    if (!user || user.isAnonymous || !firestore) return;
-    
-    // Use the authenticated user's UID as the expert ID
-    const expertId = user.uid;
-    const expertRef = doc(firestore, 'experts', expertId);
-
-    const expertData = {
-      displayName: newExpert.name,
-      experience: newExpert.experience,
-      specialization: newExpert.specialization,
-      fee: newExpert.fee,
-      photoURL: newExpert.photo || `https://placehold.co/150x150/E2E8F0/4A5568?text=${newExpert.name.charAt(0)}`,
-    };
-
-    // Save expert profile to 'experts' collection
-    await setDoc(expertRef, expertData, { merge: true });
-
-    // Update user's profile to mark them as an expert
-    const userRef = doc(firestore, 'users', user.uid);
-    await updateDoc(userRef, {
-        isExpert: true,
-        expertDetails: {
-            specialization: newExpert.specialization,
-            experience: newExpert.experience,
-            fee: newExpert.fee,
-        }
-    });
-
-    setActivePage('home');
-  };
-
-  const handleOpenChange = (open: boolean) => {
-    if (!open) {
-      setActivePage('home');
-      setSelectedExpert(null);
-      setChatId(null);
-    }
-    setIsOpen(open);
-  }
 
   const renderPage = () => {
       switch (activePage) {
-          case 'chat': return <ChatPage expert={selectedExpert!} onBack={handleBackToHome} chatId={chatId} />;
-          case 'register': return <RegisterExpertPage onBack={() => setActivePage('home')} onRegister={handleAddExpert} />;
+          case 'chat': return <ChatPage expert={selectedExpert!} onBack={handleBackToHome} />;
+          case 'gyan-ai': return <GyanAIPage onBack={() => setActivePage('home')} />;
+          case 'register': return <RegisterExpertPage onBack={() => setActivePage('home')} />;
           case 'home':
-          default: return <HomePage onSelectExpert={handleSelectExpert} setActivePage={setActivePage} realExperts={realExperts} expertsLoading={expertsLoading} />;
+          default: return <HomePage onSelectExpert={handleSelectExpert} setActivePage={setActivePage} />;
       }
   };
 
   return (
-      <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogContent className="max-w-6xl w-[95vw] h-full max-h-[90vh] flex flex-col p-0 sm:p-6">
               <DialogHeader className="p-4 sm:p-0 shrink-0">
                   <DialogTitle className="text-2xl md:text-3xl font-bold text-center text-gray-800 font-headline">
@@ -197,13 +71,10 @@ export function ExpertSupportModal({ isOpen, setIsOpen }: { isOpen: boolean; set
   );
 }
 
-function HomePage({ setActivePage, onSelectExpert, realExperts, expertsLoading }: { setActivePage: (page: string) => void, onSelectExpert: (expert: any) => void, realExperts: Expert[], expertsLoading: boolean }) {
+function HomePage({ setActivePage, onSelectExpert }: { setActivePage: (page: string) => void, onSelectExpert: (expert: any) => void }) {
   const [expertType, setExpertType] = useState<'ai' | 'real'>('ai');
-  const experts = useMemo(() => {
-      if (expertType === 'ai') return initialExperts;
-      return realExperts;
-  }, [expertType, realExperts]);
-
+  const [experts, setExperts] = useState(initialExperts);
+  const filteredExperts = useMemo(() => experts.filter(e => e.type === expertType), [experts, expertType]);
   return (
     <ScrollArea className="h-full">
       <div className="p-4">
@@ -214,34 +85,20 @@ function HomePage({ setActivePage, onSelectExpert, realExperts, expertsLoading }
         <div className="flex justify-center mb-6">
           <div className="bg-gray-200 rounded-full p-1 flex items-center">
             <Button onClick={() => setExpertType('ai')} variant={expertType === 'ai' ? 'default' : 'ghost'} className="rounded-full shadow-sm">AI Experts</Button>
-            <Button onClick={() => setExpertType('real')} variant={expertType === 'real' ? 'default' : 'ghost'} className="rounded-full shadow-sm">Real Experts</Button>
+            <Button onClick={() => setExpertType('real')} variant={expertType === 'real' ? 'default' : 'ghost'} className="rounded-full shadow-sm" disabled>Real Experts (Coming Soon)</Button>
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {expertsLoading && expertType === 'real' && (
-            <div className="col-span-full text-center py-10">
-              <Loader2 className="w-8 h-8 animate-spin mx-auto text-primary" />
-              <p className="text-muted-foreground mt-2">Loading Experts...</p>
-            </div>
-          )}
-
-          {!expertsLoading && experts.map(expert => (
+          {filteredExperts.map(expert => (
             <div key={expert.id} className="bg-white rounded-xl shadow-lg p-6 text-center transform hover:-translate-y-1 transition-transform duration-300 cursor-pointer" onClick={() => onSelectExpert(expert)}>
               <img className="w-24 h-24 rounded-full object-cover mx-auto mb-4 border-4 border-blue-200" src={expert.photo} data-ai-hint="profile photo" alt={expert.name} />
               <h4 className="text-lg font-semibold text-gray-900">{expert.name}</h4>
               <p className="text-sm text-gray-600 mt-1">{expert.experience}+ years in {expert.specialization}</p>
-              {expert.type === 'real' && expert.fee && <p className="text-sm font-bold text-green-600 mt-2">₹{expert.fee}/hour</p>}
             </div>
           ))}
-
-           {!expertsLoading && expertType === 'real' && experts.length === 0 && (
-                <div className="col-span-full text-center py-10 text-gray-500">
-                    <p>No real experts have registered yet.</p>
-                    <p>Be the first one!</p>
-                </div>
-            )}
         </div>
         <div className="text-center mt-8 space-x-4">
+          <Button variant="secondary" onClick={() => setActivePage('gyan-ai')}>Go to Gyan AI <Lightbulb className="ml-2"/></Button>
           <Button variant="outline" onClick={() => setActivePage('register')}>Become an Expert <UserPlus className="ml-2" /></Button>
         </div>
       </div>
@@ -249,28 +106,64 @@ function HomePage({ setActivePage, onSelectExpert, realExperts, expertsLoading }
   );
 }
 
-function ChatPage({ expert, onBack, chatId }: { expert: Expert, onBack: () => void, chatId: string | null }) {
-    if (expert.type === 'ai') {
-        return <AIChat expert={expert} onBack={onBack} />;
-    } else {
-        return <RealExpertChat expert={expert} onBack={onBack} chatId={chatId} />;
-    }
-}
-
-
-function AIChat({ expert, onBack }: { expert: Expert, onBack: () => void }) {
+function ChatInterface({ title, description, initialMessage, onBack, apiCall, apiCallPayload, isInterviewPrep = false }: { title: string, description: string, initialMessage: string, onBack: () => void, apiCall: (payload: any) => Promise<any>, apiCallPayload: (query: string, history: Message[], isInitial?: boolean) => any, isInterviewPrep?: boolean }) {
     const [messages, setMessages] = useState<UIMessage[]>([]);
     const [history, setHistory] = useState<Message[]>([]);
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const scrollViewportRef = useRef<HTMLDivElement>(null);
-    const [language, setLanguage] = useState("English");
-    const languageRef = useRef(language);
-    languageRef.current = language;
+    const { toast } = useToast();
+
+    const initialMessageSent = useRef(false);
 
     useEffect(() => {
-        setMessages([{ id: "initial-ai", role: "assistant", text: `Hello! I am ${expert.name}. Ask me anything about ${expert.specialization}.` }]);
-    }, [expert]);
+        const sendInitialMessage = async () => {
+            setIsLoading(true);
+            try {
+                const payload = apiCallPayload("", [], true); // isInitial = true
+                const response = await apiCall(payload);
+                
+                if (!response) {
+                    throw new Error("Received an empty response from the server.");
+                }
+
+                let responseText: string;
+                 if (isInterviewPrep && response && Array.isArray(response.response)) {
+                    if (response.response.length === 0) {
+                        responseText = response.followUpSuggestion || "Sorry, I couldn't generate any questions. Please try again with a different resume.";
+                    } else {
+                        responseText = response.response.map((qa: any) => `<strong>Q: ${qa.question}</strong><br/>${qa.answer}`).join('<br/><br/>') + `<br/><br/><em>${response.followUpSuggestion || ""}</em>`;
+                    }
+                } else if (response?.answer) {
+                     responseText = response.answer;
+                } else {
+                     responseText = response?.refinedQuestion?.refinedQuestion || "Sorry, no answer received.";
+                }
+
+                const initialAssistantMessage: UIMessage = { id: "initial-q", role: "assistant", text: responseText };
+                setMessages([initialAssistantMessage]);
+                if (responseText) {
+                    setHistory([{ role: 'model', content: [{ text: responseText }] }]);
+                }
+            } catch (error: any) {
+                console.error(error);
+                toast({ variant: 'destructive', title: 'Error', description: error.message || 'Failed to start the session.' });
+                const errorMessage: UIMessage = { id: "initial-error", role: "assistant", text: "Sorry, I couldn't start the session. Please try again." };
+                setMessages([errorMessage]);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        if (isInterviewPrep && !initialMessageSent.current) {
+            sendInitialMessage();
+            initialMessageSent.current = true;
+        } else if (!isInterviewPrep && messages.length === 0) {
+            setMessages([{ id: "initial", role: "assistant", text: initialMessage }]);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
 
     useEffect(() => {
         if (scrollViewportRef.current) {
@@ -291,24 +184,38 @@ function AIChat({ expert, onBack }: { expert: Expert, onBack: () => void }) {
         setIsLoading(true);
 
         try {
-            const payload = {
-                expertName: expert.name,
-                experience: expert.experience,
-                specialization: expert.specialization,
-                question: query,
-                language: languageRef.current,
-                history: newHistoryForApi,
-            };
-            const response = await askExpert(payload);
+            const payload = apiCallPayload(query, newHistoryForApi, false); // Not an initial request
+            const response = await apiCall(payload);
             
-            if (!response?.answer) throw new Error("Received an empty response.");
+            if (!response) {
+                throw new Error("Received an empty response from the server.");
+            }
 
-            const assistantMessage: UIMessage = { id: Date.now().toString() + "-ai", role: "assistant", text: response.answer };
+            let assistantMessage: UIMessage;
+            let responseText: string;
+
+            if (isInterviewPrep && response && Array.isArray(response.response)) {
+                if (response.response.length === 0) {
+                    responseText = response.followUpSuggestion || "Sorry, I couldn't generate a follow-up. Please ask another question.";
+                } else {
+                    responseText = response.response.map((qa: any) => `<strong>Q: ${qa.question}</strong><br/>${qa.answer}`).join('<br/><br/>') + `<br/><br/><em>${response.followUpSuggestion || ""}</em>`;
+                }
+            } else if (response?.answer) {
+                 responseText = response.answer;
+            } else {
+                responseText = response?.refinedQuestion?.refinedQuestion || "Sorry, no valid answer received from the server.";
+            }
+
+            assistantMessage = { id: Date.now().toString() + "-ai", role: "assistant", text: responseText };
+
             setMessages((prev) => [...prev, assistantMessage]);
-            setHistory([...newHistoryForApi, { role: 'model', content: [{ text: response.answer }] }]);
+            if(responseText) {
+                setHistory([...newHistoryForApi, { role: 'model', content: [{ text: responseText }] }]);
+            }
 
         } catch (error: any) {
-            const errorMessage: UIMessage = { id: Date.now().toString() + "-error", role: "assistant", text: error.message || "Sorry, something went wrong." };
+            console.error(error);
+            const errorMessage: UIMessage = { id: Date.now().toString() + "-error", role: "assistant", text: error.message || "Sorry, something went wrong. Please try again." };
             setMessages((prev) => [...prev, errorMessage]);
         } finally {
             setIsLoading(false);
@@ -316,208 +223,331 @@ function AIChat({ expert, onBack }: { expert: Expert, onBack: () => void }) {
     };
 
     return (
-      <div className="h-full flex flex-col p-4">
-        <Button variant="ghost" onClick={onBack} className="self-start mb-2"><ArrowLeft className="mr-2"/> Back to Experts</Button>
-        <div className="flex-1 flex flex-col bg-card border rounded-lg overflow-hidden">
-            <header className="p-4 border-b flex items-center justify-between gap-4">
-                <div className='flex items-center gap-4'>
-                    <img className="w-12 h-12 rounded-full object-cover" src={expert.photo} alt={expert.name} />
-                    <div>
-                        <h3 className="font-bold">{expert.name}</h3>
-                        <p className="text-xs text-muted-foreground">{expert.specialization}</p>
-                    </div>
-                </div>
-                <Select value={language} onValueChange={setLanguage}>
-                    <SelectTrigger className="w-[120px]"><SelectValue placeholder="Language" /></SelectTrigger>
-                    <SelectContent><SelectItem value="English">English</SelectItem><SelectItem value="Hinglish">Hinglish</SelectItem></SelectContent>
-                </Select>
-            </header>
-             <ScrollArea className="flex-grow p-4" viewportRef={scrollViewportRef}>
-                <div className="flex flex-col gap-4">
-                    {messages.map((msg) => (
-                        <div key={msg.id} className={`flex gap-3 max-w-[85%] ${msg.role === "user" ? "self-end" : "self-start"}`}>
-                            {msg.role === 'assistant' && <div className="bg-muted p-2 rounded-full h-fit shrink-0"><Bot className="w-5 h-5 text-foreground" /></div>}
-                            <div className={`flex-1 p-3 rounded-2xl break-words ${msg.role === "user" ? "bg-primary/90 text-primary-foreground rounded-br-none" : "bg-muted text-muted-foreground rounded-bl-none"}`}>
-                                <p className="text-sm" dangerouslySetInnerHTML={{ __html: msg.text.replace(/\n/g, '<br />') }}></p>
-                            </div>
-                        </div>
-                    ))}
-                     {isLoading && (
-                        <div className="self-start flex gap-3 items-center">
-                            <div className="bg-muted p-2 rounded-full h-fit"><Bot className="w-5 h-5 text-foreground" /></div>
-                            <div className="bg-muted p-3 rounded-2xl rounded-bl-none"><div className="flex items-center gap-2 text-sm text-muted-foreground"><Loader2 className="animate-spin h-4 w-4" />Thinking...</div></div>
-                        </div>
-                    )}
-                </div>
-            </ScrollArea>
-            <form onSubmit={handleSubmit} className="p-4 border-t bg-background flex items-center gap-2">
-                <Input type="text" value={input} onChange={(e) => setInput(e.target.value)} placeholder="Ask a follow-up question..." className="flex-grow" disabled={isLoading} />
-                <Button type="submit" size="icon" className="shrink-0" disabled={isLoading || !input}><Send /></Button>
-            </form>
-        </div>
-      </div>
-    );
-}
-
-function RealExpertChat({ expert, onBack, chatId }: { expert: Expert, onBack: () => void, chatId: string | null }) {
-    const { user } = useAuth();
-    const { firestore } = useFirebase();
-    const [input, setInput] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
-    const scrollViewportRef = useRef<HTMLDivElement>(null);
-
-    const messagesQuery = useMemo(() => {
-        if (!firestore || !chatId) return null;
-        return query(collection(firestore, 'chats', chatId, 'messages'), orderBy('timestamp', 'asc'));
-    }, [firestore, chatId]);
-
-    const { data: messages, loading: messagesLoading } = useCollection(messagesQuery);
-
-    useEffect(() => {
-        if (scrollViewportRef.current) {
-            scrollViewportRef.current.scrollTop = scrollViewportRef.current.scrollHeight;
-        }
-    }, [messages, isLoading]);
-
-    const handleSendMessage = async (e: React.FormEvent) => {
-        e.preventDefault();
-        const text = input.trim();
-        if (!text || !firestore || !user || !chatId) return;
-
-        setIsLoading(true);
-        setInput("");
-        try {
-            await sendMessage(firestore, chatId, user.uid, text);
-        } catch (error) {
-            console.error("Error sending message:", error);
-            // Optionally, show a toast to the user
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    return (
-        <div className="h-full flex flex-col p-4">
-            <Button variant="ghost" onClick={onBack} className="self-start mb-2"><ArrowLeft className="mr-2"/> Back to Experts</Button>
-            <div className="flex-1 flex flex-col bg-card border rounded-lg overflow-hidden">
-                <header className="p-4 border-b flex items-center justify-between gap-4">
-                    <div className='flex items-center gap-4'>
-                        <img className="w-12 h-12 rounded-full object-cover" src={expert.photo} alt={expert.name} />
-                        <div>
-                            <h3 className="font-bold">{expert.name}</h3>
-                            <p className="text-xs text-muted-foreground">{expert.specialization}</p>
-                            {expert.fee && <p className="text-xs font-bold text-green-600 mt-1">₹{expert.fee}/hour</p>}
-                        </div>
-                    </div>
-                </header>
-                 <ScrollArea className="flex-grow p-4" viewportRef={scrollViewportRef}>
+        <div className="h-full flex flex-col">
+             <div className="flex-1 flex flex-col bg-card border rounded-lg overflow-hidden">
+                <ScrollArea className="flex-grow p-4" viewportRef={scrollViewportRef}>
                     <div className="flex flex-col gap-4">
-                        {messagesLoading && <div className="text-center text-muted-foreground"><Loader2 className="animate-spin inline-block mr-2" />Loading messages...</div>}
-                        {messages?.map((msg: any) => (
-                            <div key={msg.id} className={`flex gap-3 max-w-[85%] ${msg.senderId === user?.uid ? "self-end" : "self-start"}`}>
-                                {msg.senderId !== user?.uid && (
-                                    <div className="bg-muted p-2 rounded-full h-fit shrink-0">
-                                        <img src={expert.photo} alt={expert.name} className="w-5 h-5 rounded-full" />
-                                    </div>
-                                )}
-                                <div className={`flex-1 p-3 rounded-2xl break-words ${msg.senderId === user?.uid ? "bg-primary/90 text-primary-foreground rounded-br-none" : "bg-muted text-muted-foreground rounded-bl-none"}`}>
-                                    <p className="text-sm">{msg.text}</p>
+                        {messages.map((msg) => (
+                            <div key={msg.id} className={`flex gap-3 max-w-[85%] ${msg.role === "user" ? "self-end" : "self-start"}`}>
+                                {msg.role === 'assistant' && <div className="bg-muted p-2 rounded-full h-fit shrink-0"><Bot className="w-5 h-5 text-foreground" /></div>}
+                                <div className={`flex-1 p-3 rounded-2xl break-words ${msg.role === "user" ? "bg-primary/90 text-primary-foreground rounded-br-none" : "bg-muted text-muted-foreground rounded-bl-none"}`}>
+                                    <p className="text-sm" dangerouslySetInnerHTML={{ __html: msg.text.replace(/\n/g, '<br />') }}></p>
                                 </div>
                             </div>
                         ))}
                          {isLoading && (
-                            <div className="self-end flex gap-3 items-center">
-                                <div className="bg-primary/90 p-3 rounded-2xl rounded-br-none">
-                                    <div className="flex items-center gap-2 text-sm text-primary-foreground">
+                            <div className="self-start flex gap-3 items-center">
+                                <div className="bg-muted p-2 rounded-full h-fit"><Bot className="w-5 h-5 text-foreground" /></div>
+                                <div className="bg-muted p-3 rounded-2xl rounded-bl-none">
+                                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
                                         <Loader2 className="animate-spin h-4 w-4" />
-                                        Sending...
+                                        Thinking...
                                     </div>
                                 </div>
                             </div>
                         )}
                     </div>
                 </ScrollArea>
-                <form onSubmit={handleSendMessage} className="p-4 border-t bg-background flex items-center gap-2">
-                    <Input type="text" value={input} onChange={(e) => setInput(e.target.value)} placeholder="Type your message..." className="flex-grow" disabled={isLoading} />
+                <form onSubmit={handleSubmit} className="p-4 border-t bg-background flex items-center gap-2">
+                    <Input type="text" value={input} onChange={(e) => setInput(e.target.value)} placeholder="Ask a follow-up question..." className="flex-grow" disabled={isLoading} />
                     <Button type="submit" size="icon" className="shrink-0" disabled={isLoading || !input}><Send /></Button>
                 </form>
             </div>
-      </div>
+        </div>
     );
 }
 
+function ChatPage({ expert, onBack }: { expert: typeof initialExperts[0], onBack: () => void }) {
+  const [language, setLanguage] = useState("English");
+  const languageRef = useRef(language);
+  languageRef.current = language;
 
-function RegisterExpertPage({ onBack, onRegister }: { onBack: () => void, onRegister: (data: Omit<Expert, 'id' | 'type'>) => void }) {
-    const [formData, setFormData] = useState({ name: '', experience: '', specialization: '', photo: '', fee: '' });
-    const { toast } = useToast();
-    const [photoPreview, setPhotoPreview] = useState<string | null>(null);
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({...prev, [name]: value}));
+  const apiCallPayload = useCallback((query: string, history: Message[]) => {
+    return {
+        expertName: expert.name,
+        experience: expert.experience,
+        specialization: expert.specialization,
+        question: query,
+        language: languageRef.current,
+        history: history,
     };
-    
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                const result = reader.result as string;
-                setFormData(prev => ({...prev, photo: result}));
-                setPhotoPreview(result);
-            };
-            reader.readAsDataURL(file);
-        }
-    };
+  }, [expert]);
 
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        const { name, experience, specialization, fee } = formData;
-        if (!name || !experience || !specialization || !fee) {
-            toast({ variant: 'destructive', title: "Missing fields", description: "Please fill out all required fields."});
-            return;
-        }
-        onRegister({
-            name,
-            experience: parseInt(experience, 10),
-            specialization,
-            photo: formData.photo,
-            fee: parseInt(fee, 10)
-        });
-        toast({ title: "Registration Successful!", description: "You are now listed as a real expert." });
-    }
-
-    return (
-        <ScrollArea className="h-full">
-        <div className="p-4">
-            <Button variant="ghost" onClick={onBack}><ArrowLeft className="mr-2" /> Back to Home</Button>
-            <div className="bg-card p-6 rounded-xl shadow-lg max-w-2xl mx-auto border mt-6">
-            <h3 className="text-xl font-bold text-center text-gray-900 mb-6">Register as a Real Expert</h3>
-            <form onSubmit={handleSubmit} className="space-y-4">
-                 <div className="flex flex-col items-center space-y-4">
-                    <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center">
-                        {photoPreview ? (
-                            <img src={photoPreview} alt="Preview" className="w-full h-full object-cover rounded-full" />
-                        ) : (
-                            <UserPlus className="w-12 h-12 text-gray-400" />
-                        )}
+  return (
+      <div className="h-full flex flex-col p-4">
+        <Button variant="ghost" onClick={onBack} className="self-start mb-2"><ArrowLeft className="mr-2"/> Back to Experts</Button>
+        <div className="flex-1 flex flex-col bg-card border rounded-lg overflow-hidden">
+            <header className="p-4 border-b flex items-center justify-between gap-4">
+                <div className='flex items-center gap-4'>
+                    <img className="w-12 h-12 rounded-full object-cover" src={expert.photo} data-ai-hint="profile photo" alt={expert.name} />
+                    <div>
+                        <h3 className="font-bold">{expert.name}</h3>
+                        <p className="text-xs text-muted-foreground">{expert.specialization}</p>
                     </div>
-                     <Button asChild variant="outline">
-                        <label htmlFor="photo-upload" className="cursor-pointer">
-                           <Upload className="mr-2" /> Upload Photo
-                        </label>
-                    </Button>
-                    <Input id="photo-upload" name="photo" type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
                 </div>
-                <Input name="name" placeholder="Full Name" value={formData.name} onChange={handleChange} required />
-                <Input name="experience" type="number" placeholder="Experience (in years)" value={formData.experience} onChange={handleChange} required />
-                <Input name="specialization" placeholder="Specialization (e.g., Dairy Technology)" value={formData.specialization} onChange={handleChange} required />
-                <Input name="fee" type="number" placeholder="Fee per hour (₹)" value={formData.fee} onChange={handleChange} required />
-                <Button type="submit" className="w-full bg-green-600 hover:bg-green-700">Register</Button>
-            </form>
+                <Select value={language} onValueChange={setLanguage}>
+                    <SelectTrigger className="w-[120px]">
+                        <SelectValue placeholder="Language" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="English">English</SelectItem>
+                        <SelectItem value="Hinglish">Hinglish</SelectItem>
+                    </SelectContent>
+                </Select>
+            </header>
+             <div className="flex-1 min-h-0">
+                 <ChatInterface
+                        title={expert.name}
+                        description={expert.specialization}
+                        initialMessage={`Hello! I am ${expert.name}. Ask me anything about ${expert.specialization}.`}
+                        onBack={onBack}
+                        apiCall={askExpert}
+                        apiCallPayload={apiCallPayload}
+                    />
             </div>
         </div>
-        </ScrollArea>
+      </div>
+  );
+}
+
+function GyanAIPage({ onBack }: { onBack: () => void }) {
+  const [topic, setTopic] = useState("Dairy Technology");
+  const [language, setLanguage] = useState('English');
+  const { toast } = useToast();
+  const [chatStarted, setChatStarted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  
+  const languageRef = useRef(language);
+  languageRef.current = language;
+  const topicRef = useRef(topic);
+  topicRef.current = topic;
+
+
+  // For Interview Prep
+  const [resumeText, setResumeText] = useState("");
+  const [experienceLevel, setExperienceLevel] = useState("Fresher Student");
+  const [fileName, setFileName] = useState("");
+
+  const pdfReadyRef = useRef(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    (async () => {
+      try {
+        const pdfjsLib = await import("pdfjs-dist/legacy/build/pdf");
+        const workerModule = await import("pdfjs-dist/build/pdf.worker.min.mjs?url");
+        const workerUrl = (workerModule as any).default || workerModule;
+        
+        if (typeof workerUrl !== "string") {
+          console.error("pdfjs worker import did not return a string URL:", workerModule);
+          return;
+        }
+        pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
+        pdfReadyRef.current = true;
+      } catch (err) {
+        console.error("Failed to dynamically load pdfjs or its worker:", err);
+      }
+    })();
+  }, []);
+
+  const handleStartChat = () => {
+    if (topic === 'Interview Preparation' && !resumeText) {
+      toast({ variant: 'destructive', title: 'Error', description: 'Please upload a valid resume.' });
+      return;
+    }
+    setChatStarted(true);
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      const fname = file.name.toLowerCase();
+      setFileName(file.name);
+      setIsLoading(true);
+
+      try {
+        if (fname.endsWith('.pdf')) {
+          if (!pdfReadyRef.current) {
+            await new Promise((r) => setTimeout(r, 300));
+          }
+          const pdfjsLib = await import("pdfjs-dist/legacy/build/pdf");
+          if (typeof (pdfjsLib as any).GlobalWorkerOptions?.workerSrc !== "string") {
+            throw new Error("PDF worker not properly initialized (workerSrc invalid).");
+          }
+
+          const arrayBuffer = await file.arrayBuffer();
+          const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) }).promise;
+
+          let fullText = "";
+          const numPages = Math.min(pdf.numPages, 5);
+          for (let i = 1; i <= numPages; i++) {
+            const page = await pdf.getPage(i);
+            const textContent = await page.getTextContent();
+            const pageText = textContent.items.map((item: any) => (item as any).str || "").join(" ");
+            fullText += pageText + "\n";
+          }
+          setResumeText(fullText);
+          toast({ title: "Success", description: "PDF resume uploaded." });
+
+        } else if (fname.endsWith('.doc') || fname.endsWith('.docx')) {
+            const formData = new FormData();
+            formData.append('file', file);
+            const res = await fetch('/api/parse-docx', { method: 'POST', body: formData });
+            if (!res.ok) {
+                const errorBody = await res.json();
+                throw new Error(errorBody.error || "Docx parse failed on server");
+            }
+            const result = await res.json();
+            setResumeText(result.text);
+            toast({ title: "Success", description: "Word document uploaded." });
+        } else {
+          throw new Error("Unsupported file type. Please upload a PDF or Word document.");
+        }
+      } catch (error: any) {
+        console.error("File Read Error:", error);
+        toast({ variant: 'destructive', title: "Error", description: error.message || "Failed to read the file." });
+        setFileName("");
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  };
+
+  const handleBackFromChat = () => {
+    setChatStarted(false);
+    setResumeText("");
+    setExperienceLevel("Fresher Student");
+    setFileName("");
+  };
+
+  const gyanApiCallPayload = useCallback((query: string, history: Message[]) => {
+    return { topic: topicRef.current, question: query, language: languageRef.current, history };
+  }, []);
+
+  const interviewApiCallPayload = useCallback((query: string, history: Message[], isInitial = false) => {
+    return { resumeText, experienceLevel, history, initialRequest: isInitial, language: languageRef.current };
+  }, [resumeText, experienceLevel]);
+
+  if (chatStarted) {
+    const isInterview = topic === 'Interview Preparation';
+    return (
+      <div className="h-full flex flex-col p-4">
+        <Button variant="ghost" onClick={handleBackFromChat} className="self-start mb-2"><ArrowLeft className="mr-2"/> Back to Topics</Button>
+         <div className="flex-1 min-h-0">
+            <ChatInterface
+            title={isInterview ? "Interview Preparation" : "Gyan AI"}
+            description={isInterview ? `Mock interview for a ${experienceLevel}.` : `Ask anything about ${topic}`}
+            initialMessage={isInterview ? "Hello! I have reviewed your resume. Let's begin the interview. Here are your first questions:" : `Hello! I am Gyan AI. Ask me anything about ${topic}.`}
+            onBack={handleBackFromChat}
+            apiCall={isInterview ? interviewPrepper : gyanAI}
+            apiCallPayload={isInterview ? interviewApiCallPayload : gyanApiCallPayload}
+            isInterviewPrep={isInterview}
+            />
+        </div>
+      </div>
     );
+  }
+
+  return (
+    <div className="h-full flex flex-col p-4">
+      <Button variant="ghost" onClick={onBack} className="self-start mb-2"><ArrowLeft className="mr-2"/> Back to Home</Button>
+      <div className="flex-1 flex flex-col bg-card border rounded-lg overflow-hidden">
+        <header className="p-4 border-b flex items-center justify-between gap-4">
+          <div className='flex items-center gap-4'>
+            <div className="bg-primary/10 p-2 rounded-full"><Lightbulb className="w-6 h-6 text-primary"/></div>
+            <div>
+              <h3 className="font-bold">Gyan AI - Your AI Specialist</h3>
+              <p className="text-xs text-muted-foreground">Select a topic and get instant, scientific information.</p>
+            </div>
+          </div>
+        </header>
+        <ScrollArea className="flex-grow">
+          <div className="p-6">
+            <div className="mb-6 space-y-4">
+              <div>
+                <label className="text-sm font-medium mb-2 block">Choose Topic</label>
+                <Select onValueChange={setTopic} defaultValue="Dairy Technology">
+                  <SelectTrigger><SelectValue/></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Dairy Technology">Dairy Technology</SelectItem>
+                    <SelectItem value="Food Safety and Quality">Food Safety and Quality</SelectItem>
+                    <SelectItem value="Food Processing">Food Processing</SelectItem>
+                    <SelectItem value="Career Guidance in Food Industry">Career Guidance</SelectItem>
+                    <SelectItem value="Interview Preparation">Interview Preparation</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <label className="text-sm font-medium mb-2 block">Choose Language</label>
+                <Select onValueChange={setLanguage} defaultValue="English">
+                  <SelectTrigger><SelectValue/></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="English">English</SelectItem>
+                    <SelectItem value="Hinglish">Hinglish</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            {topic === 'Interview Preparation' && (
+              <div className="p-4 border-l-4 border-primary bg-primary/10 space-y-4 rounded-r-lg">
+                <h4 className='font-bold'>Interview Preparation</h4>
+                <p className='text-sm text-muted-foreground'>Upload your resume to start a mock interview with the AI.</p>
+                <div>
+                  <label htmlFor="experience-level" className="text-sm font-medium mb-1 block">Experience Level</label>
+                  <Select onValueChange={setExperienceLevel} defaultValue="Fresher Student">
+                    <SelectTrigger id="experience-level"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Fresher Student">Fresher Student</SelectItem>
+                      <SelectItem value="Experienced Person">Experienced Person</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <label htmlFor="resume-file" className="text-sm font-medium mb-1 block">Upload Your Resume (.pdf, .doc, .docx)</label>
+                  <div className="flex items-center gap-2">
+                    <label htmlFor="resume-file" className="flex-grow">
+                      <Button asChild variant="outline" className="w-full cursor-pointer">
+                        <span>
+                          {fileName ? <FileCheck className="mr-2" /> : <Upload className="mr-2" />}
+                          {fileName || "Choose a file..."}
+                        </span>
+                      </Button>
+                      <Input id="resume-file" type="file" className="hidden" onChange={handleFileChange} accept=".pdf,.doc,.docx" />
+                    </label>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <Button onClick={handleStartChat} disabled={isLoading || (topic === 'Interview Preparation' && !resumeText)} className="w-full mt-6">
+              {isLoading ? <Loader2 className="animate-spin" /> : (topic === 'Interview Preparation' ? "Start Mock Interview" : "Start Chat")}
+            </Button>
+          </div>
+        </ScrollArea>
+      </div>
+    </div>
+  );
+}
+
+function RegisterExpertPage({ onBack }: { onBack: () => void }) {
+  return (
+    <ScrollArea className="h-full">
+      <div className="p-4">
+        <Button variant="ghost" onClick={() => onBack()}><ArrowLeft className="mr-2" /> Back to Home</Button>
+        <div className="bg-card p-6 rounded-xl shadow-lg max-w-2xl mx-auto border mt-6">
+          <h3 className="text-xl font-bold text-center text-gray-900 mb-6">Register as a Real Expert</h3>
+          <div className="space-y-4">
+            <Input placeholder="Full Name" />
+            <Input type="number" placeholder="Experience (in years)" />
+            <Input placeholder="Specialization (e.g., Dairy Technology)" />
+            <Input type="url" placeholder="URL to your photo (Optional)" />
+            <Input type="number" placeholder="Fee per hour (₹)" />
+            <Button className="w-full bg-green-600 hover:bg-green-700">Register</Button>
+          </div>
+        </div>
+      </div>
+    </ScrollArea>
+  );
 }
