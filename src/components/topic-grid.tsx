@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -67,6 +68,8 @@ import { EtpModal } from "./info-modals/etp-modal";
 import { IceCreamProductionModal } from "./info-modals/ice-cream-production-modal";
 import { ExpertSupportModal } from "./info-modals/expert-support-modal";
 import { ProductionCalculationsModal } from "./calculators/production-calculations-modal";
+import { PlantCostModal } from "./calculators/plant-cost-modal";
+import { PestControlModal } from "./info-modals/pest-control-modal";
 
 type Topic = {
   id: string;
@@ -86,19 +89,19 @@ const qualityAccessTopics = [
   'industry', 'fssai-standards', 'quality-concept', 'microbiology', 'audits', 'validation-verification',
   'expert-support', 'calibration', 'lab-equipments', 'milk-chemistry', 'lab-calculations', 'production-calculations',
   'adulteration', 'solutions-prep', 'compositional-analysis', 'water-testing', 'packaging-testing',
-  'std1', 'std2', 'milk-handling', 'paneer-production', 'cip-process', 'etp', 'about-us'
+  'std1', 'std2', 'milk-handling', 'paneer-production', 'cip-process', 'etp', 'about-us', 'plant-cost', 'pest-control'
 ];
 
 const productionAccessTopics = [
   'industry', 'fssai-standards', 'quality-concept', 'audits', 'validation-verification', 'expert-support',
   'milk-chemistry', 'production-calculations', 'std1', 'std2', 'processing', 'milk-handling',
   'paneer-production', 'fermented-products', 'evaporation-drying', 'ice-cream-production',
-  'cip-process', 'etp', 'about-us'
+  'cip-process', 'etp', 'about-us', 'plant-cost', 'pest-control'
 ];
 
 const processAccessTopics = [
   'industry', 'std1', 'std2', 'processing', 'milk-handling', 'paneer-production',
-  'fermented-products', 'evaporation-drying', 'ice-cream-production', 'cip-process', 'about-us'
+  'fermented-products', 'evaporation-drying', 'ice-cream-production', 'cip-process', 'about-us', 'plant-cost'
 ];
 
 const departmentAccess: Record<string, string[]> = {
@@ -121,6 +124,7 @@ const topics: Topic[] = [
   { id: 'milk-chemistry', title: 'Milk Chemistry', description: 'Composition & Properties', category: 'quality', icon: Atom, modal: MilkChemistryModal, isPro: false, color: 'from-red-100 to-rose-200' },
   { id: 'lab-calculations', title: 'Lab Calculations', description: 'Yield, Acidity, etc.', category: 'quality', icon: FileSpreadsheet, badge: 'Updated', modal: VariousCalculatorsModal, isPro: false, color: 'from-orange-100 to-red-200' },
   { id: 'production-calculations', title: 'Production Calculations', description: 'Batch & Yield Calculations', category: 'production', icon: Combine, modal: ProductionCalculationsModal, isPro: true, color: 'from-violet-100 to-purple-200' },
+  { id: 'plant-cost', title: 'Plant Cost', description: 'P&L Analysis', category: 'production', icon: DollarSign, modal: PlantCostModal, isPro: true, color: 'from-lime-100 to-green-200' },
   { id: 'adulteration', title: 'Adulteration', description: 'Detection & Prevention', category: 'quality', icon: ReagentIcon, badge: 'Updated', modal: AdulterationModal, isPro: false, color: 'from-yellow-100 to-amber-200' },
   { id: 'solutions-prep', title: 'Solutions Preparation', description: 'Reagents & Calculators', category: 'quality', icon: Beaker, modal: SolutionsPrepModal, isPro: false, color: 'from-emerald-100 to-green-200' },
   { id: 'compositional-analysis', title: 'Compositional Analysis', description: 'Chemical tests for products', category: 'quality', icon: TestTube, modal: CompositionalAnalysisModal, isPro: false, color: 'from-indigo-100 to-purple-300' },
@@ -136,20 +140,29 @@ const topics: Topic[] = [
   { id: 'ice-cream-production', title: 'Ice-Cream Production', description: 'Process & Science', category: 'production', icon: IceCreamIcon, modal: IceCreamProductionModal, isPro: true, color: 'from-rose-100 to-pink-200' },
   { id: 'cip-process', title: 'CIP Process', description: 'Cleaning-In-Place Guide', category: 'process', icon: Recycle, badge: 'New', modal: CipProcessModal, isPro: true, color: 'from-blue-100 to-cyan-300' },
   { id: 'etp', title: 'ETP', description: 'Wastewater Treatment', category: 'process', icon: Recycle, badge: 'New', modal: EtpModal, isPro: true, color: 'from-green-100 to-lime-200' },
+  { id: 'pest-control', title: 'Pest Control', description: 'Prevention & Management', category: 'quality', icon: Bug, modal: PestControlModal, isPro: false, color: 'from-red-100 to-orange-200' },
   { id: 'about-us', title: 'About Us', description: 'Our Mission & Vision', category: 'production', icon: Users, modal: AboutUsModal, isPro: false, color: 'from-slate-100 to-stone-200' },
 ];
 
+const filters = [
+  { label: "All", value: "all" },
+  { label: "Production", value: "production" },
+  { label: "Process", value: "process" },
+  { label: "Quality", value: "quality" },
+];
+
 export function TopicGrid() {
+  const [activeFilter, setActiveFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const { user } = useAuth();
   const { toast } = useToast();
   const router = useRouter();
 
-  // Filter logic - sirf search ke liye, category filter removed
   const filteredTopics = topics.filter((topic) => {
+    const matchesFilter = activeFilter === "all" || topic.category === activeFilter;
     const matchesSearch = topic.title.toLowerCase().includes(searchTerm.toLowerCase()) || topic.description.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesSearch;
+    return matchesFilter && matchesSearch;
   });
 
   const openModal = (id: string) => {
@@ -169,11 +182,23 @@ export function TopicGrid() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        {/* Filter buttons removed */}
+        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4">
+          {filters.map((filter) => (
+            <Button
+              key={filter.value}
+              variant={activeFilter === filter.value ? "default" : "secondary"}
+              onClick={() => setActiveFilter(filter.value)}
+              className="rounded-full px-5 transition-all shadow-sm data-[variant=default]:shadow-lg"
+            >
+              {filter.label}
+            </Button>
+          ))}
+        </div>
       </div>
 
       <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-4 sm:gap-6">
         {filteredTopics.map((topic) => {
+          
           const userDepartment = user?.department;
           let hasAccess = false;
 
