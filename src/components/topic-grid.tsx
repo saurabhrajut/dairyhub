@@ -30,7 +30,7 @@ import {
   Combine,
   ShieldAlert,
 } from "lucide-react";
-import { PaneerIcon, IceCreamIcon, ReagentIcon } from "@/components/icons";
+import { ReagentIcon } from "@/components/icons";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/context/auth-context";
 import { useToast } from "@/hooks/use-toast";
@@ -45,7 +45,6 @@ import { AdulterationModal } from "./info-modals/adulteration-modal";
 import { StandardizationIModal } from "./calculators/standardization-i-modal";
 import { StandardizationIIModal } from "./calculators/standardization-ii-modal";
 import { SolutionsPrepModal } from "./calculators/solutions-prep-modal";
-import { PaneerProcessingModal } from "./info-modals/paneer-processing-modal";
 import { DairyProcessingModal } from "./info-modals/dairy-processing-modal";
 import { AboutUsModal } from "./info-modals/about-us-modal";
 import { CompositionalAnalysisModal } from "./info-modals/compositional-analysis-modal";
@@ -59,12 +58,10 @@ import { MicrobiologyTestingModal } from "./info-modals/microbiology-testing-mod
 import { MilkHandlingPreservationModal } from "./info-modals/milk-handling-preservation-modal";
 import { FssaiStandardsModal } from "./info-modals/fssai-standards-modal";
 import { VariousCalculatorsModal } from "./calculators/various-calculators-modal";
-import { FermentedProductsModal } from "./info-modals/fermented-products-modal";
-import { EvaporationDryingModal } from "./info-modals/evaporation-drying-modal";
+import { ProductsProcessingModal } from "./info-modals/products-processing-modal";
 import { AuditsModal } from "./info-modals/audits-modal";
 import { ValidationVerificationModal } from "./info-modals/validation-verification-modal";
 import { EtpModal } from "./info-modals/etp-modal";
-import { IceCreamProductionModal } from "./info-modals/ice-cream-production-modal";
 import { ExpertSupportModal } from "./info-modals/expert-support-modal";
 import { ProductionCalculationsModal } from "./calculators/production-calculations-modal";
 import { PestControlModal } from "./info-modals/pest-control-modal";
@@ -87,19 +84,19 @@ const qualityAccessTopics = [
   'industry', 'fssai-standards', 'quality-concept', 'microbiology', 'audits', 'validation-verification',
   'expert-support', 'calibration', 'lab-equipments', 'milk-chemistry', 'lab-calculations', 'production-calculations',
   'adulteration', 'solutions-prep', 'compositional-analysis', 'water-testing', 'packaging-testing',
-  'std1', 'std2', 'milk-handling', 'paneer-production', 'cip-process', 'etp', 'about-us', 'pest-control'
+  'std1', 'std2', 'milk-handling', 'cip-process', 'etp', 'about-us', 'pest-control'
 ];
 
 const productionAccessTopics = [
   'industry', 'fssai-standards', 'quality-concept', 'audits', 'validation-verification', 'expert-support',
   'milk-chemistry', 'production-calculations', 'std1', 'std2', 'processing', 'milk-handling',
-  'paneer-production', 'fermented-products', 'evaporation-drying', 'ice-cream-production',
+  'products-processing',
   'cip-process', 'etp', 'about-us', 'pest-control'
 ];
 
 const processAccessTopics = [
-  'industry', 'std1', 'std2', 'processing', 'milk-handling', 'paneer-production',
-  'fermented-products', 'evaporation-drying', 'ice-cream-production', 'cip-process', 'about-us'
+  'industry', 'std1', 'std2', 'processing', 'milk-handling',
+  'products-processing', 'cip-process', 'about-us'
 ];
 
 const departmentAccess: Record<string, string[]> = {
@@ -131,10 +128,7 @@ const topics: Topic[] = [
   { id: 'std2', title: 'Advanced Standardization', description: 'Advanced Blending', category: 'process', icon: Calculator, modal: StandardizationIIModal, isPro: false, color: 'from-fuchsia-100 to-purple-200' },
   { id: 'processing', title: 'Dairy Processing', description: 'Techniques & Machinery', category: 'process', icon: Settings, modal: DairyProcessingModal, isPro: false, color: 'from-gray-100 to-gray-300' },
   { id: 'milk-handling', title: 'Milk Handling', description: 'Reception & Preservation', category: 'process', icon: Droplet, badge: 'New', modal: MilkHandlingPreservationModal, isPro: false, color: 'from-cyan-100 to-sky-200' },
-  { id: 'paneer-production', title: 'Paneer Processing', description: 'Process & Yield', category: 'production', icon: PaneerIcon, modal: PaneerProcessingModal, isPro: false, color: 'from-lime-100 to-yellow-200' },
-  { id: 'fermented-products', title: 'Fermented Products', description: 'Yogurt, Dahi & More', category: 'production', icon: ReagentIcon, badge: 'New', modal: FermentedProductsModal, isPro: true, color: 'from-pink-100 to-fuchsia-200' },
-  { id: 'evaporation-drying', title: 'Evaporation & Drying', description: 'Condensed & Powdered Milk', category: 'production', icon: Wind, badge: 'New', modal: EvaporationDryingModal, isPro: true, color: 'from-indigo-100 to-blue-200' },
-  { id: 'ice-cream-production', title: 'Ice-Cream Production', description: 'Process & Science', category: 'production', icon: IceCreamIcon, modal: IceCreamProductionModal, isPro: true, color: 'from-rose-100 to-pink-200' },
+  { id: 'products-processing', title: 'Products Processing', description: 'Yogurt, Butter, Ghee & More', category: 'production', icon: Factory, badge: 'New', modal: ProductsProcessingModal, isPro: true, color: 'from-pink-100 to-fuchsia-200' },
   { id: 'cip-process', title: 'CIP Process', description: 'Cleaning-In-Place Guide', category: 'process', icon: Recycle, badge: 'New', modal: CipProcessModal, isPro: true, color: 'from-blue-100 to-cyan-300' },
   { id: 'etp', title: 'ETP', description: 'Wastewater Treatment', category: 'process', icon: Recycle, badge: 'New', modal: EtpModal, isPro: true, color: 'from-green-100 to-lime-200' },
   { id: 'pest-control', title: 'Pest Control', description: 'Prevention & Management', category: 'quality', icon: Bug, modal: PestControlModal, isPro: false, color: 'from-red-100 to-orange-200' },
