@@ -20,44 +20,42 @@ export const cipProcessContent = {
               <p><strong>Composition:</strong> Ismein 2.6-8.7% moisture; 3.6-17.6% fat; 4.4-43.8% protein aur 42-67% ash hoti hai.</p>
             `
     },
-    "cip_cycle": {
-      "title": "Standard CIP Cleaning Cycle",
-      "intro": "Ek typical CIP cycle mein neeche diye gaye steps hote hain:",
-      "steps": [
-        {
-          "title": "Product Residues ki Recovery",
-          "details": "<p>Drainage dwara product ke residues ko recover karna.</p>"
+    cip_cycle: {
+            title: "Standard CIP Cleaning Cycle",
+            intro: "एक विशिष्ट CIP साइकिल में निम्नलिखित चरण होते हैं, प्रत्येक के पीछे एक विशिष्ट वैज्ञानिक कारण होता है:",
+            steps: [
+                {
+                    title: "1. प्रारंभिक धुलाई (Pre-rinse)",
+                    colorClass: "bg-blue-100 border-blue-300",
+                    details: "<p><strong>उद्देश्य:</strong> अधिकांश ढीली गंदगी और दूध के अवशेषों को हटाना।<br/><strong>प्रक्रिया:</strong> गुनगुने पानी (40-50°C) से 10 मिनट तक धोया जाता है।<br/><strong>विज्ञान:</strong> बहुत गर्म पानी (>60°C) प्रोटीन को विकृत कर सकता है, जिससे वे सतह पर चिपक जाते हैं। ठंडा पानी वसा को ठोस बना सकता है, जिससे उसे हटाना मुश्किल हो जाता है। गुनगुना पानी वसा को नरम करता है और प्रोटीन को जमाए बिना अधिकांश अवशेषों को हटा देता है।</p>"
+                },
+                {
+                    title: "2. क्षारीय धुलाई (Alkali Wash)",
+                    colorClass: "bg-orange-100 border-orange-300",
+                    details: "<p><strong>उद्देश्य:</strong> वसा (fat) और प्रोटीन को हटाना।<br/><strong>प्रक्रिया:</strong> 0.5-1.5% कास्टिक सोडा (NaOH) के घोल को 70-80°C पर 15-30 मिनट के लिए प्रसारित किया जाता है।<br/><strong>विज्ञान:</strong> गर्म कास्टिक सोडा वसा के साथ <strong>सैपोनिफिकेशन</strong> प्रतिक्रिया करता है, जिससे वे घुलनशील साबुन में बदल जाते हैं। यह प्रोटीन को भी हाइड्रोलाइज करता है, उन्हें छोटे, अधिक घुलनशील पेप्टाइड्स में तोड़ता है। उच्च तापमान इन रासायनिक प्रतिक्रियाओं को तेज करता है।</p>"
+                },
+                {
+                    title: "3. मध्यवर्ती धुलाई (Intermediate Rinse)",
+                    colorClass: "bg-gray-100 border-gray-300",
+                    details: "<p><strong>उद्देश्य:</strong> क्षारीय डिटर्जेंट के अवशेषों को पूरी तरह से हटाना।<br/><strong>प्रक्रिया:</strong> सिस्टम को गर्म पानी (50°C) से 5-8 मिनट के लिए धोया जाता है।<br/><strong>विज्ञान:</strong> यह एसिड धुलाई की प्रभावशीलता सुनिश्चित करता है, क्योंकि किसी भी शेष क्षार को बेअसर करने के लिए एसिड का उपयोग किया जाएगा, जिससे इसकी सफाई शक्ति कम हो जाएगी।</p>"
+                },
+                {
+                    title: "4. अम्लीय धुलाई (Acid Wash)",
+                    colorClass: "bg-yellow-100 border-yellow-300",
+                    details: "<p><strong>उद्देश्य:</strong> मिल्क स्टोन जैसे खनिज जमा (mineral deposits) को हटाना।<br/><strong>प्रक्रिया:</strong> 0.5-1.0% नाइट्रिक एसिड (HNO₃) या फॉस्फोरिक एसिड के घोल को 60-70°C पर 10-20 मिनट के लिए प्रसारित किया जाता है।<br/><strong>विज्ञान:</strong> मिल्क स्टोन मुख्य रूप से कैल्शियम और मैग्नीशियम फॉस्फेट और कार्बोनेट से बना होता है, जो क्षार में अघुलनशील होते हैं। एसिड इन खनिज लवणों को घोलकर उन्हें घुलनशील यौगिकों में बदल देता है जिन्हें आसानी से धोया जा सकता है।</p>"
+                },
+                {
+                    title: "5. अंतिम धुलाई (Final Rinse)",
+                    colorClass: "bg-blue-100 border-blue-300",
+                    details: "<p><strong>उद्देश्य:</strong> एसिड के सभी अवशेषों को हटाना।<br/><strong>प्रक्रिया:</strong> सिस्टम को ठंडे, पीने योग्य पानी से तब तक धोया जाता है जब तक कि बहने वाला पानी तटस्थ (neutral pH) न हो जाए।<br/><strong>विज्ञान:</strong> यह सुनिश्चित करता है कि अंतिम उत्पाद में कोई रासायनिक संदूषण न हो।</p>"
+                },
+                {
+                    title: "6. कीटाणुशोधन (Disinfection/Sanitization)",
+                    colorClass: "bg-green-100 border-green-300",
+                    details: "<p><strong>उद्देश्य:</strong> उत्पादन शुरू होने से ठीक पहले किसी भी शेष सूक्ष्मजीवों को मारना।<br/><strong>प्रक्रिया:</strong> या तो <strong>थर्मल कीटाणुशोधन</strong> (90-95°C पर 10 मिनट के लिए गर्म पानी) या <strong>रासायनिक कीटाणुशोधन</strong> (जैसे, 150-200 ppm क्लोरीन या पेरएसिटिक एसिड)।<br/><strong>विज्ञान:</strong> थर्मल कीटाणुशोधन गर्मी का उपयोग करके सूक्ष्मजीवों को मारता है। रासायनिक सैनिटाइज़र ऑक्सीकरण या कोशिका झिल्ली को बाधित करके काम करते हैं। यह कदम एक स्वच्छ सतह सुनिश्चित करता है ताकि उत्पाद का पुन: संदूषण न हो।</p>"
+                }
+            ]
         },
-        {
-          "title": "Residues ka Expulsion",
-          "details": "<p>Paani ya compressed air ke saath non-recoverable residues ka expulsion.</p>"
-        },
-        {
-          "title": "Pre-rinse (Initial Wash)",
-          "details": "<p><strong>Purpose:</strong> Zyada tar loose dirt aur doodh ke residues ko hatana.<br/><strong>Process:</strong> System ko gungune paani (50-60°C) se 10 minute tak dhoya jaata hai.</p>"
-        },
-        {
-          "title": "Alkali Wash",
-          "details": "<p><strong>Purpose:</strong> Fat aur protein ko hatana.<br/><strong>Process:</strong> 0.5-1.5% caustic soda (NaOH) ke solution ko 75°C par 30 minute ke liye circulate kiya jaata hai.</p>"
-        },
-        {
-          "title": "Intermediate Rinse",
-          "details": "<p><strong>Purpose:</strong> Alkaline detergent ke residues ko hatana.<br/><strong>Process:</strong> System ko phir se garam paani (50°C) se 5-8 minute ke liye dhoya jaata hai.</p>"
-        },
-        {
-          "title": "Acid Wash",
-          "details": "<p><strong>Purpose:</strong> Mineral deposits jaise milk stone ko hatana.<br/><strong>Process:</strong> 0.5-1.0% nitric acid (HNO₃) ke solution ko 75°C par 20 minute ke liye circulate kiya jaata hai.</p>"
-        },
-        {
-          "title": "Final Rinse",
-          "details": "<p><strong>Purpose:</strong> Acid ke residues ko hatana.<br/><strong>Process:</strong> System ko garam paani (50°C) se 5-8 minute ke liye dhoya jaata hai.</p>"
-        },
-        {
-          "title": "Disinfection",
-          "details": "<p><strong>Purpose:</strong> Bache hue microorganisms ko maarna.<br/><strong>Process:</strong> Thermal disinfection (90-95°C par 10 minute) aur thanda karna, ya ek suitable sanitizer ke saath chemical disinfection.</p>"
-        }
-      ]
-    },
     "chemicals": {
       "title": "CIP mein Use Hone Wale Chemicals",
       "intro": "CIP process mein alag-alag tarah ke chemicals ka use kiya jaata hai, har ek ka ek specific purpose hota hai:",
@@ -318,39 +316,37 @@ export const cipProcessContent = {
         },
         cip_cycle: {
             title: "Standard CIP Cleaning Cycle",
-            intro: "A typical CIP cycle consists of the following steps:",
+            intro: "A typical CIP cycle consists of the following steps, each with a specific scientific reason behind it:",
             steps: [
                 {
-                    title: "Recovery of Product Residues",
-                    details: "<p>Recovering product residues by drainage.</p>"
+                    title: "1. Pre-rinse",
+                    colorClass: "bg-blue-100 border-blue-300",
+                    details: "<p><strong>Purpose:</strong> To remove most of the loose soil and milk residues.<br/><strong>Process:</strong> The system is rinsed with lukewarm water (40-50°C) for 10 minutes.<br/><strong>The Science:</strong> Very hot water (>60°C) can denature proteins, making them adhere to the surface. Cold water can solidify fats, making them harder to remove. Lukewarm water softens fats and removes most residues without coagulating proteins.</p>"
                 },
                 {
-                    title: "Expulsion of Residues",
-                    details: "<p>Expulsion of non-retrievable residue with water or compressed air.</p>"
+                    title: "2. Alkali Wash",
+                    colorClass: "bg-orange-100 border-orange-300",
+                    details: "<p><strong>Purpose:</strong> To remove fat and protein.<br/><strong>Process:</strong> A 0.5-1.5% caustic soda (NaOH) solution is circulated at 70-80°C for 15-30 minutes.<br/><strong>The Science:</strong> Hot caustic soda reacts with fats in a process called <strong>saponification</strong>, turning them into soluble soaps. It also hydrolyzes proteins, breaking them down into smaller, more soluble peptides. The high temperature accelerates these chemical reactions.</p>"
                 },
                 {
-                    title: "Pre-rinse",
-                    details: "<p><strong>Purpose:</strong> To remove most of the loose dirt and milk residues.<br/><strong>Process:</strong> The system is rinsed with lukewarm water (50-60°C) for 10 minutes.</p>"
+                    title: "3. Intermediate Rinse",
+                     colorClass: "bg-gray-100 border-gray-300",
+                    details: "<p><strong>Purpose:</strong> To completely remove residues of the alkaline detergent.<br/><strong>Process:</strong> The system is rinsed with warm water (50°C) for 5-8 minutes.<br/><strong>The Science:</strong> This ensures the effectiveness of the acid wash, as any remaining alkali would be used to neutralize the acid, reducing its cleaning power.</p>"
                 },
                 {
-                    title: "Alkali Wash",
-                    details: "<p><strong>Purpose:</strong> To remove fat and protein.<br/><strong>Process:</strong> A 0.5-1.5% caustic soda (NaOH) solution is circulated at 75°C for 30 minutes.</p>"
-                },
-                {
-                    title: "Intermediate Rinse",
-                    details: "<p><strong>Purpose:</strong> To remove residues of the alkaline detergent.<br/><strong>Process:</strong> The system is rinsed again with warm water (50°C) for 5-8 minutes.</p>"
-                },
-                {
-                    title: "Acid Wash",
-                    details: "<p><strong>Purpose:</strong> To remove mineral deposits like milk stone.<br/><strong>Process:</strong> A 0.5-1.0% solution of nitric acid (HNO₃) is circulated at 75°C for 20 minutes.</p>"
+                    title: "4. Acid Wash",
+                    colorClass: "bg-yellow-100 border-yellow-300",
+                    details: "<p><strong>Purpose:</strong> To remove mineral deposits like milk stone.<br/><strong>Process:</strong> A 0.5-1.0% solution of nitric acid (HNO₃) or phosphoric acid is circulated at 60-70°C for 10-20 minutes.<br/><strong>The Science:</strong> Milk stone is primarily composed of calcium and magnesium phosphates and carbonates, which are insoluble in alkali. The acid dissolves these mineral salts, converting them into soluble compounds that can be easily washed away.</p>"
                 },
                  {
-                    title: "Final Rinse",
-                    details: "<p><strong>Purpose:</strong> To remove acid residues.<br/><strong>Process:</strong> The system is rinsed with warm water (50°C) for 5-8 minutes.</p>"
+                    title: "5. Final Rinse",
+                    colorClass: "bg-blue-100 border-blue-300",
+                    details: "<p><strong>Purpose:</strong> To remove all traces of acid.<br/><strong>Process:</strong> The system is rinsed with cold, potable water until the draining water is neutral (neutral pH).<br/><strong>The Science:</strong> This ensures there is no chemical contamination in the final product.</p>"
                 },
                 {
-                    title: "Disinfection",
-                    details: "<p><strong>Purpose:</strong> To kill any remaining microorganisms.<br/><strong>Process:</strong> Thermal disinfection (90-95°C for 10 min) and cooling, or chemical disinfection with a suitable sanitizer.</p>"
+                    title: "6. Disinfection/Sanitization",
+                    colorClass: "bg-green-100 border-green-300",
+                    details: "<p><strong>Purpose:</strong> To kill any remaining microorganisms just before starting production.<br/><strong>Process:</strong> Either <strong>Thermal Disinfection</strong> (hot water at 90-95°C for 10 min) or <strong>Chemical Disinfection</strong> (e.g., 150-200 ppm chlorine or peracetic acid).<br/><strong>The Science:</strong> Thermal disinfection uses heat to kill microbes. Chemical sanitizers work by oxidation or by disrupting cell membranes. This step ensures a clean surface so that the product is not re-contaminated.</p>"
                 }
             ]
         },
