@@ -1,9 +1,10 @@
+
 export const paneerProcessingContent = {
     hi: {
         title: "Paneer Processing",
         content: `
             <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Introduction to Paneer</h3>
-            <p>Paneer is a fresh, non-aged, non-melting cheese common in the Indian subcontinent. It is made by curdling heated milk with a fruit- or vegetable-derived acid, such as lemon juice. Its crumbly and moist form is called chhena. Paneer is a rich source of milk protein and is widely used in various Indian culinary preparations.</p>
+            <p>Paneer is a fresh, non-aged, non-melting cheese common in the Indian subcontinent. It is an unripened, acid-coagulated cheese made by curdling heated milk with a fruit- or vegetable-derived acid, such as lemon juice, or other food-grade acids. Its crumbly and moist form is called chhena. Paneer is a rich source of milk protein and is widely used in various Indian culinary preparations.</p>
 
             <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">FSSAI Standards for Paneer</h3>
             <p>The Food Safety and Standards Authority of India (FSSAI) has defined standards for Paneer to ensure its quality and safety.</p>
@@ -49,59 +50,61 @@ export const paneerProcessingContent = {
                 <div class="p-3 bg-gray-200 border border-gray-400 rounded">Packaging & Storage <span class="font-sans text-xs bg-red-200 p-1 rounded">CCP-3</span></div>
             </div>
 
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Raw Material & Quality Control</h3>
-            <p>Paneer ki quality seedhe aane wale milk ki quality par nirbhar karti hai. Dairy industry mein, milk ko process karne se pehle mahatvapurna parameters ke liye test kiya jaata hai.</p>
-            <div class="overflow-x-auto mt-4">
-                <table class="w-full text-left border-collapse">
-                    <thead class="bg-muted">
-                        <tr><th class="p-2 border">Parameter</th><th class="p-2 border">Ideal Range (Buffalo Milk)</th><th class="p-2 border">Importance</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td class="p-2 border">Fat Content</td><td class="p-2 border">5.8% - 6.0%</td><td class="p-2 border">Antim paneer ki upaj aur banavat ko seedhe prabhavit karta hai.</td></tr>
-                        <tr><td class="p-2 border">Acidity (% Lactic Acid)</td><td class="p-2 border">0.14 - 0.16%</td><td class="p-2 border">Taaza milk avashyak hai. Adhik acidity kharab banavat aur kam upaj ka kaaran banti hai.</td></tr>
-                    </tbody>
-                </table>
-            </div>
-
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Detailed Explanation of Processing Steps</h3>
+            <ol class="list-decimal list-outside pl-5 space-y-4">
+                <li><strong>Raw Material & Quality Control (PRP):</strong>
+                    <p>The quality of paneer is directly dependent on the quality of the incoming milk. This is a fundamental <strong>Prerequisite Program (PRP)</strong>. In the dairy industry, milk is first tested for critical parameters before being accepted for processing. Buffalo milk is preferred for its higher fat and SNF content, which yields a whiter, softer product.</p>
+                    <div class="overflow-x-auto mt-2">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-muted">
+                                <tr><th class="p-2 border">Parameter</th><th class="p-2 border">Ideal Range (Buffalo Milk)</th><th class="p-2 border">Importance</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="p-2 border">Fat Content</td><td class="p-2 border">5.8% - 6.0%</td><td class="p-2 border">Directly impacts the final yield and texture of the paneer.</td></tr>
+                                <tr><td class="p-2 border">Acidity (% Lactic Acid)</td><td class="p-2 border">0.14 - 0.16%</td><td class="p-2 border">Fresh milk is required. High acidity leads to a hard, brittle texture and lower yield.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </li>
+                <li><strong>Heating (CCP-1):</strong>
+                    <p>The standardized milk is heated to <strong>85-90°C</strong> and held for 5-10 minutes. This is a <strong>Critical Control Point (CCP-1)</strong> for destroying pathogenic microorganisms. <strong>Scientific Reason:</strong> This high heat treatment is crucial for maximizing yield. It denatures the whey proteins (like β-lactoglobulin), causing them to unfold. These denatured proteins then co-precipitate with the casein during acid coagulation, becoming part of the curd and increasing the total solid recovery by about 5-6%.</p>
+                </li>
+                <li><strong>Coagulation (CCP-2 / oPRP):</strong>
+                    <p>The milk is cooled to the optimal coagulation temperature of <strong>70-75°C</strong> (an <strong>oPRP</strong>). A coagulating agent (typically a 1-2% hot citric acid solution) is then added slowly with gentle stirring until clear whey separates. This is a <strong>Critical Control Point (CCP-2)</strong>. <strong>Scientific Reason:</strong> The acid lowers the milk's pH to the isoelectric point of casein (pH 4.6), at which the casein micelles lose their net negative charge and aggregate, forming a curd. The temperature is critical; too high a temperature (>80°C) results in a hard, dry paneer, while too low a temperature (<65°C) yields a very soft, fragile curd that shatters easily.</p>
+                </li>
+                <li><strong>Pressing (oPRP):</strong>
+                    <p>The drained curd is transferred to hoops and pressed at <strong>2-3 kg/cm² for 15-20 minutes</strong>. This is an <strong>Operational Prerequisite Program (oPRP)</strong>. <strong>Scientific Reason:</strong> Pressing is essential for expelling excess whey and fusing the curd particles into a solid, cohesive block. The pressure and duration are controlled to achieve the desired moisture content (around 55-60%). Over-pressing results in a dry, rubbery texture, while under-pressing leads to a product with high moisture, which has a shorter shelf life and a weak, crumbly body.</p>
+                </li>
+                <li><strong>Chilling & Storage (CCP-3):</strong>
+                    <p>The pressed paneer blocks are immersed in chilled water (4-6°C) for 2-3 hours. This rapid cooling firms up the texture and prevents it from becoming too soft. The final product is then packaged and stored under refrigeration (<5°C). Maintaining this cold chain is a <strong>Critical Control Point (CCP-3)</strong> to ensure safety and prevent microbial spoilage.</p>
+                </li>
+            </ol>
+            
             <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Coagulants: Types and Usage</h3>
-            <p>Coagulant ka chayan paneer ki banavat, swaad aur upaj ko prabhavit karta hai.</p>
+            <p>The choice of coagulant affects the texture, flavor, and yield of the paneer.</p>
             <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
-                <li><strong>Citric Acid:</strong> Sabse aam audyogik coagulant. Ek saaf, amliy swaad aur sthir parinaam pradan karta hai.</li>
-                <li><strong>Sour Whey:</strong> Ek paramparik aur kifayti tarika. Aksar ek naram, adhik paramparik swaad wala paneer milta hai.</li>
+                <li><strong>Citric Acid:</strong> Most common industrial coagulant. Provides a clean, acidic flavor and consistent results. A 1-2% solution in hot water (70°C) is typically used.</li>
+                <li><strong>Acetic Acid (Vinegar):</strong> A widely available and effective coagulant. Can sometimes impart a slight pungent or vinegar-like flavor, which is why citric acid is often preferred for a more neutral taste profile.</li>
+                <li><strong>Sour Whey:</strong> A traditional and economical method, using whey from a previous batch that has developed natural acidity. Often results in a softer, more traditional-flavored paneer but can be less consistent.</li>
+                <li><strong>Calcium Chloride (Coagulation Aid):</strong> Not a primary coagulant, but often added to milk (especially cow milk or pasteurized milk) before the acid. <strong>Scientific Reason:</strong> Pasteurization can slightly reduce the availability of soluble calcium. Adding calcium chloride replenishes the calcium ions needed to form strong bridges between casein micelles during coagulation, resulting in a firmer curd and slightly improved yield.</li>
             </ul>
 
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">How to Increase Paneer Yield</h3>
-            <p>Upaj ko adhiktam karna labhdayakta ki kunji hai. Yahan sabse prabhavi tarike hain:</p>
-            <ol class="list-decimal list-outside pl-5 mt-2 space-y-2">
-                <li><strong>Optimal Heating:</strong> Milk ko 85-90°C tak garam karne se whey proteins denature ho jaate hain, jo phir coagulation ke dauran casein dahi mein phans jaate hain, jisse kul thos recovery badh jaati hai.</li>
-                <li><strong>Correct Coagulation pH:</strong> Paneer jamane ke liye aadarsh pH lagbhag 5.2 hai. Is pH tak pahunchne ke liye coagulant ko sahi dhang se milana adhiktam protein varsha sunishchit karta hai.</li>
-                <li><strong>Gentle Stirring:</strong> Jamane ke dauran bahut jor se hilane se dahi mahin kanon mein toot jaata hai, jo phir whey mein kho jaate hain.</li>
-                <li><strong>Controlled Pressing:</strong> Sahi dabav (2-3 kg/cm²) ko sahi samay (15-20 min) ke liye lagana mahatvapurna hai. Adhik dabane se bahut adhik nami aur vasa nikal jaati hai.</li>
-            </ol>
-
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Safe Yield Increasers for Consumption</h3>
-            <p><strong>Whey Protein Concentrate (WPC):</strong> Garam karne se pehle milk mein WPC powder milana protein samagri ko badhava dene ke liye ek aadhunik taknik hai. Yah seedhe jamne ke liye uplabdh thos padarthon ki matra ko badhata hai.</p>
-        
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Paneer Texture Explained: Hard, Soft, and Fluffy</h3>
-            <div class="overflow-x-auto mt-4">
-                <table class="w-full text-left border-collapse">
-                    <thead class="bg-muted">
-                        <tr><th class="p-2 border">Texture</th><th class="p-2 border">Primary Causes</th><th class="p-2 border">Result</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td class="p-2 border">Hard / Rubbery</td><td class="p-2 border">Low fat content, over-pressing, high coagulation temperature.</td><td class="p-2 border">Chewy, dry, and does not absorb flavors well.</td></tr>
-                        <tr><td class="p-2 border">Soft / Spongy (Ideal)</td><td class="p-2 border">Standardized milk (6% fat), correct coagulation temp (70-75°C), controlled pressing.</td><td class="p-2 border">Holds its shape, has a smooth bite, and absorbs gravies.</td></tr>
-                        <tr><td class="p-2 border">Crumbly / Brittle</td><td class="p-2 border">High acidity in milk, coagulation at too low a temperature, insufficient pressing.</td><td class="p-2 border">Breaks apart easily, difficult to cut into cubes.</td></tr>
-                    </tbody>
-                </table>
-            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Factors Affecting Paneer Yield and Texture</h3>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
+                <li><strong>Type of Milk:</strong> Buffalo milk gives a higher yield (20-22%) than cow milk (15-17%) due to its higher total solids content (fat and protein).</li>
+                <li><strong>Fat Content:</strong> Higher fat content leads to a higher yield and a softer, richer paneer. A minimum of 5.8% fat is ideal for a good texture.</li>
+                <li><strong>SNF Content:</strong> Higher SNF, particularly casein, directly increases the yield as it forms the main structure of the paneer.</li>
+                <li><strong>Coagulation Temperature:</strong> A higher temperature (around 80°C) leads to a harder paneer with lower moisture, while a lower temperature (around 65°C) yields a softer, more fragile paneer. The optimal range is 70-75°C.</li>
+                <li><strong>Coagulation pH:</strong> The ideal final pH of the whey is around 5.4. A lower pH (more acid) results in a hard, sour paneer with lower yield, while a higher pH leads to incomplete coagulation and a very soft, weak curd.</li>
+                <li><strong>Heat Treatment of Milk:</strong> Heating milk to 90°C before coagulation is crucial. It denatures the whey proteins, allowing them to be incorporated into the curd, which can increase the yield by 5-6% and results in a softer paneer.</li>
+            </ul>
         `
     },
     en: {
         title: "Paneer Processing",
         content: `
             <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Introduction to Paneer</h3>
-            <p>Paneer is a fresh, non-aged, non-melting cheese common in the Indian subcontinent. It is made by curdling heated milk with a fruit- or vegetable-derived acid, such as lemon juice. Its crumbly and moist form is called chhena. Paneer is a rich source of milk protein and is widely used in various Indian culinary preparations.</p>
+            <p>Paneer is a fresh, non-aged, non-melting cheese common in the Indian subcontinent. It is an unripened, acid-coagulated cheese made by curdling heated milk with a fruit- or vegetable-derived acid, such as lemon juice, or other food-grade acids. Its crumbly and moist form is called chhena. Paneer is a rich source of milk protein and is widely used in various Indian culinary preparations.</p>
 
             <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">FSSAI Standards for Paneer</h3>
             <p>The Food Safety and Standards Authority of India (FSSAI) has defined standards for Paneer to ensure its quality and safety.</p>
@@ -147,52 +150,54 @@ export const paneerProcessingContent = {
                 <div class="p-3 bg-gray-200 border border-gray-400 rounded">Packaging & Storage <span class="font-sans text-xs bg-red-200 p-1 rounded">CCP-3</span></div>
             </div>
 
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Raw Material & Quality Control</h3>
-            <p>The quality of paneer is directly dependent on the quality of the incoming milk. In a dairy industry setting, milk is first tested for critical parameters before being accepted for processing.</p>
-            <div class="overflow-x-auto mt-4">
-                <table class="w-full text-left border-collapse">
-                    <thead class="bg-muted">
-                        <tr><th class="p-2 border">Parameter</th><th class="p-2 border">Ideal Range (Buffalo Milk)</th><th class="p-2 border">Importance</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td class="p-2 border">Fat Content</td><td class="p-2 border">5.8% - 6.0%</td><td class="p-2 border">Directly impacts the final yield and texture of the paneer.</td></tr>
-                        <tr><td class="p-2 border">Acidity (% Lactic Acid)</td><td class="p-2 border">0.14 - 0.16%</td><td class="p-2 border">Fresh milk is required. High acidity leads to poor texture and low yield.</td></tr>
-                    </tbody>
-                </table>
-            </div>
-
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Detailed Explanation of Processing Steps</h3>
+            <ol class="list-decimal list-outside pl-5 space-y-4">
+                <li><strong>Raw Material & Quality Control (PRP):</strong>
+                    <p>The quality of paneer is directly dependent on the quality of the incoming milk. This is a fundamental <strong>Prerequisite Program (PRP)</strong>. In the dairy industry, milk is first tested for critical parameters before being accepted for processing. Buffalo milk is preferred for its higher fat and SNF content, which yields a whiter, softer product.</p>
+                    <div class="overflow-x-auto mt-2">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-muted">
+                                <tr><th class="p-2 border">Parameter</th><th class="p-2 border">Ideal Range (Buffalo Milk)</th><th class="p-2 border">Importance</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="p-2 border">Fat Content</td><td class="p-2 border">5.8% - 6.0%</td><td class="p-2 border">Directly impacts the final yield and texture of the paneer.</td></tr>
+                                <tr><td class="p-2 border">Acidity (% Lactic Acid)</td><td class="p-2 border">0.14 - 0.16%</td><td class="p-2 border">Fresh milk is required. High acidity leads to a hard, brittle texture and lower yield.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </li>
+                <li><strong>Heating (CCP-1):</strong>
+                    <p>The standardized milk is heated to <strong>85-90°C</strong> and held for 5-10 minutes. This is a <strong>Critical Control Point (CCP-1)</strong> for destroying pathogenic microorganisms. <strong>Scientific Reason:</strong> This high heat treatment is crucial for maximizing yield. It denatures the whey proteins (like β-lactoglobulin), causing them to unfold. These denatured proteins then co-precipitate with the casein during acid coagulation, becoming part of the curd and increasing the total solid recovery by about 5-6%.</p>
+                </li>
+                <li><strong>Coagulation (CCP-2 / oPRP):</strong>
+                    <p>The milk is cooled to the optimal coagulation temperature of <strong>70-75°C</strong> (an <strong>oPRP</strong>). A coagulating agent (typically a 1-2% hot citric acid solution) is then added slowly with gentle stirring until clear whey separates. This is a <strong>Critical Control Point (CCP-2)</strong>. <strong>Scientific Reason:</strong> The acid lowers the milk's pH to the isoelectric point of casein (pH 4.6), at which the casein micelles lose their net negative charge and aggregate, forming a curd. The temperature is critical; too high a temperature (>80°C) results in a hard, dry paneer, while too low a temperature (<65°C) yields a very soft, fragile curd that shatters easily.</p>
+                </li>
+                <li><strong>Pressing (oPRP):</strong>
+                    <p>The drained curd is transferred to hoops and pressed at <strong>2-3 kg/cm² for 15-20 minutes</strong>. This is an <strong>Operational Prerequisite Program (oPRP)</strong>. <strong>Scientific Reason:</strong> Pressing is essential for expelling excess whey and fusing the curd particles into a solid, cohesive block. The pressure and duration are controlled to achieve the desired moisture content (around 55-60%). Over-pressing results in a dry, rubbery texture, while under-pressing leads to a product with high moisture, which has a shorter shelf life and a weak, crumbly body.</p>
+                </li>
+                <li><strong>Chilling & Storage (CCP-3):</strong>
+                    <p>The pressed paneer blocks are immersed in chilled water (4-6°C) for 2-3 hours. This rapid cooling firms up the texture and prevents it from becoming too soft. The final product is then packaged and stored under refrigeration (<5°C). Maintaining this cold chain is a <strong>Critical Control Point (CCP-3)</strong> to ensure safety and prevent microbial spoilage.</p>
+                </li>
+            </ol>
+            
             <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Coagulants: Types and Usage</h3>
             <p>The choice of coagulant affects the texture, flavor, and yield of the paneer.</p>
             <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
-                <li><strong>Citric Acid:</strong> Most common industrial coagulant. Provides a clean, acidic flavor and consistent results.</li>
-                <li><strong>Sour Whey:</strong> A traditional and economical method. Often results in a softer, more traditional-flavored paneer.</li>
+                <li><strong>Citric Acid:</strong> Most common industrial coagulant. Provides a clean, acidic flavor and consistent results. A 1-2% solution in hot water (70°C) is typically used.</li>
+                <li><strong>Acetic Acid (Vinegar):</strong> A widely available and effective coagulant. Can sometimes impart a slight pungent or vinegar-like flavor, which is why citric acid is often preferred for a more neutral taste profile.</li>
+                <li><strong>Sour Whey:</strong> A traditional and economical method, using whey from a previous batch that has developed natural acidity. Often results in a softer, more traditional-flavored paneer but can be less consistent.</li>
+                <li><strong>Calcium Chloride (Coagulation Aid):</strong> Not a primary coagulant, but often added to milk (especially cow milk or pasteurized milk) before the acid. <strong>Scientific Reason:</strong> Pasteurization can slightly reduce the availability of soluble calcium. Adding calcium chloride replenishes the calcium ions needed to form strong bridges between casein micelles during coagulation, resulting in a firmer curd and slightly improved yield.</li>
             </ul>
 
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">How to Increase Paneer Yield</h3>
-            <p>Maximizing yield is key to profitability. Here are the most effective methods:</p>
-            <ol class="list-decimal list-outside pl-5 mt-2 space-y-2">
-                <li><strong>Optimal Heating:</strong> Heating milk to 85-90°C denatures the whey proteins, which then get trapped in the casein curd during coagulation, increasing total solid recovery.</li>
-                <li><strong>Correct Coagulation pH:</strong> The ideal pH for paneer coagulation is around 5.2. Adding the coagulant correctly to reach this pH ensures maximum protein precipitation.</li>
-                <li><strong>Gentle Stirring:</strong> Stirring too vigorously during coagulation breaks the curd into fine particles, which are then lost in the whey.</li>
-                <li><strong>Controlled Pressing:</strong> Applying the correct pressure (2-3 kg/cm²) for the right amount of time (15-20 mins) is crucial. Over-pressing squeezes out too much moisture and fat.</li>
-            </ol>
-
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Safe Yield Increasers for Consumption</h3>
-            <p><strong>Whey Protein Concentrate (WPC):</strong> Adding WPC powder to milk before heating is a modern technique to boost the protein content. This directly increases the amount of solids available for coagulation.</p>
-        
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Paneer Texture Explained: Hard, Soft, and Fluffy</h3>
-            <div class="overflow-x-auto mt-4">
-                <table class="w-full text-left border-collapse">
-                    <thead class="bg-muted">
-                        <tr><th class="p-2 border">Texture</th><th class="p-2 border">Primary Causes</th><th class="p-2 border">Result</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td class="p-2 border">Hard / Rubbery</td><td class="p-2 border">Low fat content, over-pressing, high coagulation temperature.</td><td class="p-2 border">Chewy, dry, and does not absorb flavors well.</td></tr>
-                        <tr><td class="p-2 border">Soft / Spongy (Ideal)</td><td class="p-2 border">Standardized milk (6% fat), correct coagulation temp (70-75°C), controlled pressing.</td><td class="p-2 border">Holds its shape, has a smooth bite, and absorbs gravies.</td></tr>
-                        <tr><td class="p-2 border">Crumbly / Brittle</td><td class="p-2 border">High acidity in milk, coagulation at too low a temperature, insufficient pressing.</td><td class="p-2 border">Breaks apart easily, difficult to cut into cubes.</td></tr>
-                    </tbody>
-                </table>
-            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Factors Affecting Paneer Yield and Texture</h3>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
+                <li><strong>Type of Milk:</strong> Buffalo milk gives a higher yield (20-22%) than cow milk (15-17%) due to its higher total solids content (fat and protein).</li>
+                <li><strong>Fat Content:</strong> Higher fat content leads to a higher yield and a softer, richer paneer. A minimum of 5.8% fat is ideal for a good texture.</li>
+                <li><strong>SNF Content:</strong> Higher SNF, particularly casein, directly increases the yield as it forms the main structure of the paneer.</li>
+                <li><strong>Coagulation Temperature:</strong> A higher temperature (around 80°C) leads to a harder paneer with lower moisture, while a lower temperature (around 65°C) yields a softer, more fragile paneer. The optimal range is 70-75°C.</li>
+                <li><strong>Coagulation pH:</strong> The ideal final pH of the whey is around 5.4. A lower pH (more acid) results in a hard, sour paneer with lower yield, while a higher pH leads to incomplete coagulation and a very soft, weak curd.</li>
+                <li><strong>Heat Treatment of Milk:</strong> Heating milk to 90°C before coagulation is crucial. It denatures the whey proteins, allowing them to be incorporated into the curd, which can increase the yield by 5-6% and results in a softer paneer.</li>
+            </ul>
         `
     }
-};
+}
