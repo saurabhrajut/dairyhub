@@ -75,22 +75,25 @@ const topicComponents = {
         )
     },
     processes: function Content({ content }: { content: any }) {
+        const processContent = content.sections.treatment_processes;
         return (
             <div className="prose prose-sm max-w-none break-words">
-                <Section title={content.sections.treatment_processes.title}>
-                    <div dangerouslySetInnerHTML={{ __html: content.sections.treatment_processes.content }} />
-                    <SubSection title={content.sections.treatment_processes.subsections.preliminary.title}>
-                        <div dangerouslySetInnerHTML={{ __html: content.sections.treatment_processes.subsections.preliminary.content }} />
-                    </SubSection>
-                    <SubSection title={content.sections.treatment_processes.subsections.primary.title}>
-                        <div dangerouslySetInnerHTML={{ __html: content.sections.treatment_processes.subsections.primary.content }} />
-                    </SubSection>
-                    <SubSection title={content.sections.treatment_processes.subsections.secondary.title}>
-                        <div dangerouslySetInnerHTML={{ __html: content.sections.treatment_processes.subsections.secondary.content }} />
-                    </SubSection>
-                    <SubSection title={content.sections.treatment_processes.subsections.tertiary.title}>
-                        <div dangerouslySetInnerHTML={{ __html: content.sections.treatment_processes.subsections.tertiary.content }} />
-                    </SubSection>
+                <Section title={processContent.title}>
+                    <p>{processContent.content}</p>
+                    <div className="mt-8 space-y-4">
+                        {processContent.flowchart.map((step: any, index: number) => (
+                            <div key={index} className="flex flex-col items-center">
+                                <div className="w-full bg-blue-50 border-l-4 border-blue-500 p-4 rounded-lg shadow">
+                                    <h4 className="font-bold text-lg text-blue-800">{step.step}</h4>
+                                    <p className="font-semibold text-gray-700 mt-1">{step.title}</p>
+                                    <div className="mt-2 text-sm text-gray-600" dangerouslySetInnerHTML={{ __html: step.details }}/>
+                                </div>
+                                {index < processContent.flowchart.length - 1 && (
+                                    <div className="text-2xl text-blue-400 my-2">↓</div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
                 </Section>
             </div>
         )
@@ -249,3 +252,5 @@ export function EtpModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (o
     </Dialog>
   );
 }
+
+    
