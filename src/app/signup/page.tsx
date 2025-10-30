@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from 'react';
@@ -14,7 +15,7 @@ import Link from 'next/link';
 import { useAuth, type Department } from '@/context/auth-context';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
-import { MilkBottleIcon, DepartmentIcon } from '@/components/icons';
+import { FactoryIcon, DepartmentIcon } from '@/components/icons';
 
 
 const signupSchema = z.object({
@@ -71,7 +72,7 @@ export default function SignupPage() {
                     <ArrowLeft className="w-6 h-6" />
                 </Link>
                  <div className="text-center mb-8">
-                    <MilkBottleIcon className="w-16 h-16 text-primary mx-auto mb-4" />
+                    <FactoryIcon className="w-20 h-20 text-primary mx-auto mb-4" />
                     <h1 className="text-3xl font-bold text-gray-800">
                         Join <span className="text-primary">Dairy Hub</span>
                     </h1>
@@ -195,3 +196,5 @@ export default function SignupPage() {
         </div>
     );
 }
+
+    
