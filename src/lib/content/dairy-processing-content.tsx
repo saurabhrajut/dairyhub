@@ -9,7 +9,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Button } from "../ui/button";
+import { Button } from '@/components/ui/button'; // <-- YEH SAHI HAI
 import { ArrowLeft, BookOpen, Thermometer, Settings, Droplet, CheckSquare, Factory } from "lucide-react";
 import { useLanguage } from "@/context/language-context";
 
