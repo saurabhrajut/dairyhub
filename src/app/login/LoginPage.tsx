@@ -9,8 +9,8 @@ import { Label } from '@/components/ui/label';
 import { Mail, Lock, Loader2, UserCheck, ArrowLeft } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
-import { MilkBottleIcon } from '@/components/icons';
 import { useAuth } from '@/context/auth-context';
+import { FactoryIcon } from '@/components/icons';
 
 const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" {...props}>
@@ -99,7 +99,7 @@ export default function LoginPage() {
                     <ArrowLeft className="w-6 h-6" />
                 </Link>
                  <div className="text-center mb-8">
-                    <MilkBottleIcon className="w-16 h-16 text-primary mx-auto mb-4" />
+                    <FactoryIcon className="w-20 h-20 text-primary mx-auto mb-4" />
                     <h1 className="text-3xl font-bold text-gray-800">
                         Welcome to <span className="text-primary">Dairy Hub</span>
                     </h1>
@@ -181,3 +181,5 @@ export default function LoginPage() {
         </div>
     );
 }
+
+    
