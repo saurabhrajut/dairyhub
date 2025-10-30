@@ -20,16 +20,21 @@ import { butterContent } from "@/lib/content/processing/butter";
 import { gheeContent } from "@/lib/content/processing/ghee";
 import { curdContent } from "@/lib/content/processing/curd";
 import { buttermilkContent } from "@/lib/content/processing/buttermilk";
+import { lassiContent } from "@/lib/content/processing/lassi";
 import { iceCreamContent } from "@/lib/content/processing/ice-cream";
 import { yoghurtContent } from "@/lib/content/processing/yoghurt";
 import { chhanaContent } from "@/lib/content/processing/chhana";
 import { rasgullaContent } from "@/lib/content/processing/rasgulla";
 import { khoaContent } from "@/lib/content/processing/khoa";
 import { sandeshContent } from "@/lib/content/processing/sandesh";
+import { barfiContent } from "@/lib/content/processing/barfi";
 import { shrikhandContent } from "@/lib/content/processing/shrikhand";
 import { condensedMilkContent } from "@/lib/content/processing/condensed-milk";
 import { milkPowderContent } from "@/lib/content/processing/milk-powder";
 import { paneerProcessingContent } from "@/lib/content/processing/paneer";
+import { cheeseContent } from "@/lib/content/processing/cheese";
+import { flavouredMilkContent } from "@/lib/content/processing/flavoured-milk";
+
 
 const Section = ({ title, children }: { title: string, children: React.ReactNode }) => (
     <div className="space-y-4 text-gray-700 leading-relaxed mt-6">
@@ -80,6 +85,8 @@ export function ProductsProcessingModal({ isOpen, setIsOpen }: { isOpen: boolean
     "ghee": t(gheeContent),
     "curd": t(curdContent),
     "buttermilk": t(buttermilkContent),
+    "lassi": t(lassiContent),
+    "barfi": t(barfiContent),
     "ice-cream": t(iceCreamContent),
     "yoghurt": t(yoghurtContent),
     "chhana": t(chhanaContent),
@@ -90,6 +97,8 @@ export function ProductsProcessingModal({ isOpen, setIsOpen }: { isOpen: boolean
     "condensed-milk": t(condensedMilkContent),
     "milk-powder": t(milkPowderContent),
     "paneer": t(paneerProcessingContent),
+    "cheese": t(cheeseContent),
+    "flavoured-milk": t(flavouredMilkContent),
   }), [t]);
 
   const topics = Object.keys(productMap).map(key => {
