@@ -25,7 +25,7 @@ const Section = ({ title, children }: { title: string, children: React.ReactNode
     </div>
 );
 
-const topicComponents = {
+const topicComponents: { [key: string]: React.FC<{ content: any }> } = {
     intro: function Content({ content }: { content: any }) {
         return <Section title={content.intro.title}><div dangerouslySetInnerHTML={{ __html: content.intro.htmlContent }} /></Section>
     },
@@ -33,14 +33,19 @@ const topicComponents = {
         return (
             <Section title={content.cip_cycle.title}>
                 <p>{content.cip_cycle.intro}</p>
-                <ol className="list-decimal list-outside pl-5 mt-4 space-y-4">
+                <div className="space-y-2 font-mono text-center mt-6">
                     {content.cip_cycle.steps.map((step: any, index: number) => (
-                        <li key={index}>
-                            <strong className="text-gray-800">{step.title}</strong>
-                            <div className="pl-2" dangerouslySetInnerHTML={{ __html: step.details }} />
-                        </li>
+                       <div key={index}>
+                            <div className={`p-4 border rounded-lg shadow-sm text-left ${step.colorClass || 'bg-gray-100 border-gray-300'}`}>
+                                <h4 className="font-sans font-bold text-lg text-gray-800">{step.title}</h4>
+                                <div className="font-sans text-sm mt-2 prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: step.details }} />
+                            </div>
+                            {index < content.cip_cycle.steps.length - 1 && (
+                                <div className="text-2xl text-gray-400 my-2">↓</div>
+                            )}
+                       </div>
                     ))}
-                </ol>
+                </div>
             </Section>
         )
     },
