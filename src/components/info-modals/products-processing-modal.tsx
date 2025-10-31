@@ -34,6 +34,7 @@ import { milkPowderContent } from "@/lib/content/processing/milk-powder";
 import { paneerProcessingContent } from "@/lib/content/processing/paneer";
 import { cheeseContent } from "@/lib/content/processing/cheese";
 import { flavouredMilkContent } from "@/lib/content/processing/flavoured-milk";
+import { wheyBeverageContent } from "@/lib/content/processing/whey-beverage";
 
 
 const Section = ({ title, children }: { title: string, children: React.ReactNode }) => (
@@ -99,6 +100,7 @@ export function ProductsProcessingModal({ isOpen, setIsOpen }: { isOpen: boolean
     "paneer": t(paneerProcessingContent),
     "cheese": t(cheeseContent),
     "flavoured-milk": t(flavouredMilkContent),
+    "whey-beverage": t(wheyBeverageContent),
   }), [t]);
 
   const topics = Object.keys(productMap).map(key => {
