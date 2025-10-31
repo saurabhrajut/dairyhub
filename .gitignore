@@ -9,39 +9,48 @@
 # testing
 /coverage
 
-# next.js
+# next.js build
 /.next/
 /out/
 
-# production
+# production build
 /build
 
 # misc
 .DS_Store
 *.pem
 
-# debug
+# debug logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# local env files
+# environment files (very important)
+/.env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
 
-# vercel
+# vercel config folder
 .vercel
 
-# typescript
+# typescript build info
 *.tsbuildinfo
 next-env.d.ts
 
-# genkit
+# genkit related
 .genkit/
 .genkit-cache/
 genkit-tools.conf
 
-# studio
+# Firebase Studio or local project envs
 dhenuguide/.env
+
+# firebase config (optional — if sensitive)
+google-services.json
+
+# IDE / editor junk
+.vscode/
+.idea/
+*.swp
