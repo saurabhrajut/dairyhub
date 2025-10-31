@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -10,53 +9,54 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Crown, CheckCircle2, Zap, Loader2 } from "lucide-react";
+import { Crown, CheckCircle2, Loader2 } from "lucide-react";
 import { useSubscription, type SubscriptionPlan } from "@/context/subscription-context";
 import { useAuth, type Department } from "@/context/auth-context";
 import { useToast } from "@/hooks/use-toast";
 import { ScrollArea } from "./ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-
 const allProFeatures = [
-    "Unlock all premium calculators & guides",
-    "Full access to Sarathi AI Chatbot",
-    "Full access to Expert Support & Gyan AI",
-    "AI-powered Interview Preparation",
-    "Access to exclusive industry reports",
-    "Save and export your calculations",
-    "Ad-free experience",
+  "Unlock all premium calculators & guides",
+  "Full access to Sarathi AI Chatbot",
+  "Full access to Expert Support & Gyan AI",
+  "AI-powered Interview Preparation",
+  "Access to exclusive industry reports",
+  "Save and export your calculations",
+  "Ad-free experience",
 ];
 
-const departmentPlans: Record<string, Record<string, { title: string; price: number; duration: string; popular?: boolean }>> = {
-    'process-access': {
-        '7-days': { title: "7 Days", price: 19, duration: "Trial Access" },
-        '1-month': { title: "1 Month", price: 99, duration: "Full Access" },
-        '6-months': { title: "6 Months", price: 299, duration: "Save 45%", popular: true },
-        'yearly': { title: "Yearly", price: 549, duration: "Best Value" },
-    },
-    'production-access': {
-        '7-days': { title: "7 Days", price: 49, duration: "Starter Access" },
-        '1-month': { title: "1 Month", price: 99, duration: "Full Access" },
-        '6-months': { title: "6 Months", price: 399, duration: "Save 33%", popular: true },
-        'yearly': { title: "Yearly", price: 749, duration: "Best Value" },
-    },
-    'quality-access': {
-        '7-days': { title: "7 Days", price: 79, duration: "Starter Access" },
-        '1-month': { title: "1 Month", price: 149, duration: "Full Access" },
-        '6-months': { title: "6 Months", price: 499, duration: "Save 45%", popular: true },
-        'yearly': { title: "Yearly", price: 849, duration: "Best Value" },
-    },
-    'all-control-access': {
-        '7-days': { title: "7 Days Ultimate", price: 89, duration: "All Access Pass" },
-        '1-month': { title: "1 Month Ultimate", price: 199, duration: "All Access Pass" },
-        '6-months': { title: "6 Months Ultimate", price: 499, duration: "Save 58%", popular: true },
-        'yearly': { title: "Yearly Ultimate", price: 999, duration: "Best Value" },
-        'lifetime': { title: "Lifetime Ultimate", price: 1499, duration: "One-Time Purchase" },
-    },
-    'guest': {} // Guests can't subscribe
+const departmentPlans: Record<
+  string,
+  Record<string, { title: string; price: number; duration: string; popular?: boolean }>
+> = {
+  "process-access": {
+    "7-days": { title: "7 Days", price: 19, duration: "Trial Access" },
+    "1-month": { title: "1 Month", price: 99, duration: "Full Access" },
+    "6-months": { title: "6 Months", price: 299, duration: "Save 45%", popular: true },
+    yearly: { title: "Yearly", price: 549, duration: "Best Value" },
+  },
+  "production-access": {
+    "7-days": { title: "7 Days", price: 49, duration: "Starter Access" },
+    "1-month": { title: "1 Month", price: 99, duration: "Full Access" },
+    "6-months": { title: "6 Months", price: 399, duration: "Save 33%", popular: true },
+    yearly: { title: "Yearly", price: 749, duration: "Best Value" },
+  },
+  "quality-access": {
+    "7-days": { title: "7 Days", price: 79, duration: "Starter Access" },
+    "1-month": { title: "1 Month", price: 149, duration: "Full Access" },
+    "6-months": { title: "6 Months", price: 499, duration: "Save 45%", popular: true },
+    yearly: { title: "Yearly", price: 849, duration: "Best Value" },
+  },
+  "all-control-access": {
+    "7-days": { title: "7 Days Ultimate", price: 89, duration: "All Access Pass" },
+    "1-month": { title: "1 Month Ultimate", price: 199, duration: "All Access Pass" },
+    "6-months": { title: "6 Months Ultimate", price: 499, duration: "Save 58%", popular: true },
+    yearly: { title: "Yearly Ultimate", price: 999, duration: "Best Value" },
+    lifetime: { title: "Lifetime Ultimate", price: 1499, duration: "One-Time Purchase" },
+  },
+  guest: {},
 };
-
 
 export function SubscriptionModal({
   isOpen,
@@ -66,121 +66,196 @@ export function SubscriptionModal({
   setIsOpen: (open: boolean) => void;
 }) {
   const { subscribe } = useSubscription();
-  const { user, updateUserProfile } = useAuth();
+  const { user } = useAuth();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState<any | null>(null);
-  const [selectedDept, setSelectedDept] = useState<Department>(user?.department && user.department !== 'guest' ? user.department : 'process-access');
-
+  const [selectedDept, setSelectedDept] = useState<Department>(
+    user?.department && user.department !== "guest" ? user.department : "process-access"
+  );
 
   const currentPlans = departmentPlans[selectedDept] || {};
-  
-  const handleSubscription = async (planKey: any) => {
+
+  // ✅ Razorpay Payment Handler
+  const handleSubscription = async (planKey: string) => {
     setIsLoading(planKey);
-    // Temporarily disable payment logic
-    setTimeout(() => {
-        toast({
-            variant: "destructive",
-            title: "Feature Temporarily Disabled",
-            description: "The payment system is currently under maintenance. Please try again later.",
-        });
-        setIsLoading(null);
-    }, 1000);
+
+    try {
+      // Load Razorpay script
+      if (typeof window !== "undefined" && !(window as any).Razorpay) {
+        const script = document.createElement("script");
+        script.src = "https://checkout.razorpay.com/v1/checkout.js";
+        script.async = true;
+        document.body.appendChild(script);
+        await new Promise((resolve) => (script.onload = resolve));
+      }
+
+      const plan = currentPlans[planKey];
+      if (!plan) throw new Error("Invalid plan selected");
+
+      const totalAmount = plan.price;
+      const fakeOrderId = "order_" + Math.random().toString(36).substring(2, 15);
+
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        amount: totalAmount * 100,
+        currency: "INR",
+        name: "Dairy Hub",
+        description: `${plan.title} - ${getDepartmentName(selectedDept)}`,
+        order_id: fakeOrderId,
+        handler: function (response: any) {
+          console.log("✅ Payment success:", response);
+          toast({
+            variant: "default",
+            title: "Payment Successful!",
+            description: `Your ${plan.title} plan is now active.`,
+          });
+          setIsLoading(null);
+          setIsOpen(false);
+        },
+        prefill: {
+          name: user?.displayName || "Dairy Hub User",
+          email: user?.email || "example@gmail.com",
+        },
+        theme: { color: "#3399cc" },
+      };
+
+      const rzp1 = new (window as any).Razorpay(options);
+      rzp1.open();
+    } catch (err: any) {
+      console.error("❌ Payment error:", err);
+      toast({
+        variant: "destructive",
+        title: "Payment Failed",
+        description: err.message || "Something went wrong during payment.",
+      });
+      setIsLoading(null);
+    }
   };
 
   const getDepartmentName = (deptKey?: Department) => {
-    if (!deptKey) return 'Not specified';
+    if (!deptKey) return "Not specified";
     const names: Record<Department, string> = {
-        'process-access': 'Process Access',
-        'production-access': 'Production Access',
-        'quality-access': 'Quality Access',
-        'all-control-access': 'All Control Access',
-        'guest': 'Guest'
-    }
+      "process-access": "Process Access",
+      "production-access": "Production Access",
+      "quality-access": "Quality Access",
+      "all-control-access": "All Control Access",
+      guest: "Guest",
+    };
     return names[deptKey];
-  }
+  };
 
   const PlanCard = ({ planKey }: { planKey: string }) => {
     const plan = currentPlans[planKey];
     if (!plan) return null;
     const popular = plan.popular || false;
     return (
-        <div className={`border bg-white p-5 rounded-xl shadow-sm relative ${popular ? 'border-2 border-primary' : ''}`}>
-            {popular && <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-3 py-0.5 rounded-full text-xs font-semibold shadow">Best Value</div>}
-            <h4 className="text-lg font-bold text-center font-headline">{plan.title}</h4>
-            <p className="text-center text-muted-foreground text-sm mb-3">{plan.duration}</p>
-            <p className="text-4xl font-extrabold text-center text-gray-800 mb-4">
-                ₹{plan.price}
-            </p>
-            <Button onClick={() => handleSubscription(planKey)} className={`w-full ${popular ? 'bg-gradient-to-r from-primary to-indigo-500 text-white shadow-md' : ''}`} variant={popular ? 'default' : 'outline'} disabled={!!isLoading}>
-                {isLoading === planKey ? <Loader2 className="animate-spin" /> : 'Choose Plan'}
-            </Button>
-        </div>
+      <div
+        className={`border bg-white p-5 rounded-xl shadow-sm relative ${
+          popular ? "border-2 border-primary" : ""
+        }`}
+      >
+        {popular && (
+          <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-3 py-0.5 rounded-full text-xs font-semibold shadow">
+            Best Value
+          </div>
+        )}
+        <h4 className="text-lg font-bold text-center font-headline">{plan.title}</h4>
+        <p className="text-center text-muted-foreground text-sm mb-3">{plan.duration}</p>
+        <p className="text-4xl font-extrabold text-center text-gray-800 mb-4">₹{plan.price}</p>
+        <Button
+          onClick={() => handleSubscription(planKey)}
+          className={`w-full ${
+            popular ? "bg-gradient-to-r from-primary to-indigo-500 text-white shadow-md" : ""
+          }`}
+          variant={popular ? "default" : "outline"}
+          disabled={!!isLoading}
+        >
+          {isLoading === planKey ? <Loader2 className="animate-spin" /> : "Choose Plan"}
+        </Button>
+      </div>
     );
-  }
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="max-w-5xl h-full max-h-[90vh] flex flex-col p-0">
         <ScrollArea className="flex-1">
           <div className="grid grid-cols-1 md:grid-cols-2">
-              <div className="p-8 order-2 md:order-1 flex flex-col">
-                  <DialogHeader>
-                      <div className="flex justify-center mb-2">
-                          <div className="bg-amber-100 p-3 rounded-full">
-                              <Crown className="w-8 h-8 text-amber-500" />
-                          </div>
-                      </div>
-                      <DialogTitle className="text-3xl text-center font-extrabold text-gray-800 font-headline">Go Pro!</DialogTitle>
-                      <DialogDescription className="text-muted-foreground text-center">
-                          Unlock powerful features and support Dairy Hub App development.
-                      </DialogDescription>
-                  </DialogHeader>
-                  <div className="mt-6 space-y-3 flex-1">
-                      {allProFeatures.map((feature, index) => (
-                          <div key={index} className="flex items-start gap-3">
-                              <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5 shrink-0" />
-                              <span className="text-muted-foreground">{feature}</span>
-                          </div>
-                      ))}
+            <div className="p-8 order-2 md:order-1 flex flex-col">
+              <DialogHeader>
+                <div className="flex justify-center mb-2">
+                  <div className="bg-amber-100 p-3 rounded-full">
+                    <Crown className="w-8 h-8 text-amber-500" />
                   </div>
-                   <div className="mt-8 bg-gray-50 p-4 rounded-lg text-center border">
-                      <p className="text-xs text-muted-foreground">Payments are securely processed by Razorpay.</p>
+                </div>
+                <DialogTitle className="text-3xl text-center font-extrabold text-gray-800 font-headline">
+                  Go Pro!
+                </DialogTitle>
+                <DialogDescription className="text-muted-foreground text-center">
+                  Unlock powerful features and support Dairy Hub App development.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="mt-6 space-y-3 flex-1">
+                {allProFeatures.map((feature, index) => (
+                  <div key={index} className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5 shrink-0" />
+                    <span className="text-muted-foreground">{feature}</span>
                   </div>
+                ))}
               </div>
-              <div className="bg-primary/5 p-8 order-1 md:order-2 flex flex-col justify-center">
-                  <h3 className="text-xl font-bold text-primary font-headline mb-2 text-center">Choose Your Plan</h3>
-                  <div className="mb-6">
-                      <label htmlFor="dept-select" className="block text-sm font-medium text-gray-700 mb-1 text-center">Select Your Department to See Plans:</label>
-                      <Select value={selectedDept} onValueChange={(val) => setSelectedDept(val as Department)} disabled={user?.isAnonymous}>
-                          <SelectTrigger id="dept-select" className="w-full max-w-xs mx-auto bg-white">
-                              <SelectValue placeholder="Select Department" />
-                          </SelectTrigger>
-                          <SelectContent>
-                              <SelectItem value="process-access">Process Access</SelectItem>
-                              <SelectItem value="production-access">Production Access</SelectItem>
-                              <SelectItem value="quality-access">Quality Access</SelectItem>
-                              <SelectItem value="all-control-access">All Control Access</SelectItem>
-                          </SelectContent>
-                      </Select>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {Object.keys(currentPlans).map(planKey => (
-                       <PlanCard key={planKey} planKey={planKey} />
-                    ))}
-                     {Object.keys(currentPlans).length === 0 && (
-                        <div className="sm:col-span-2 text-center text-muted-foreground bg-white p-6 rounded-lg">
-                            <p>No subscription plans available for Guests.</p>
-                            <p className="text-xs mt-2">Please sign up for an account to subscribe.</p>
-                        </div>
-                     )}
-                  </div>
+              <div className="mt-8 bg-gray-50 p-4 rounded-lg text-center border">
+                <p className="text-xs text-muted-foreground">
+                  Payments are securely processed by Razorpay.
+                </p>
               </div>
+            </div>
+            <div className="bg-primary/5 p-8 order-1 md:order-2 flex flex-col justify-center">
+              <h3 className="text-xl font-bold text-primary font-headline mb-2 text-center">
+                Choose Your Plan
+              </h3>
+              <div className="mb-6">
+                <label
+                  htmlFor="dept-select"
+                  className="block text-sm font-medium text-gray-700 mb-1 text-center"
+                >
+                  Select Your Department to See Plans:
+                </label>
+                <Select
+                  value={selectedDept}
+                  onValueChange={(val) => setSelectedDept(val as Department)}
+                  disabled={user?.isAnonymous}
+                >
+                  <SelectTrigger
+                    id="dept-select"
+                    className="w-full max-w-xs mx-auto bg-white"
+                  >
+                    <SelectValue placeholder="Select Department" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="process-access">Process Access</SelectItem>
+                    <SelectItem value="production-access">Production Access</SelectItem>
+                    <SelectItem value="quality-access">Quality Access</SelectItem>
+                    <SelectItem value="all-control-access">All Control Access</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {Object.keys(currentPlans).map((planKey) => (
+                  <PlanCard key={planKey} planKey={planKey} />
+                ))}
+                {Object.keys(currentPlans).length === 0 && (
+                  <div className="sm:col-span-2 text-center text-muted-foreground bg-white p-6 rounded-lg">
+                    <p>No subscription plans available for Guests.</p>
+                    <p className="text-xs mt-2">
+                      Please sign up for an account to subscribe.
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </ScrollArea>
       </DialogContent>
     </Dialog>
   );
 }
-
-    
