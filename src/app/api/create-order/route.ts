@@ -10,9 +10,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid amount" }, { status: 400 });
     }
 
+    // ✅ Backend should never use NEXT_PUBLIC_ variables
     const razorpay = new Razorpay({
-      key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,
-      key_secret: process.env.RAZORPAY_KEY_SECRET!,
+      key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,  // you can keep same if testing
+      key_secret: process.env.RAZORPAY_SECRET!,
     });
 
     const options = {
@@ -22,6 +23,8 @@ export async function POST(req: Request) {
     };
 
     const order = await razorpay.orders.create(options);
+
+    console.log("✅ Razorpay Order Created:", order);
 
     return NextResponse.json({ order });
   } catch (error: any) {
