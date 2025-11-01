@@ -15,8 +15,13 @@ import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, Dialog
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useLanguage } from '@/context/language-context';
 import { format } from 'date-fns';
-import { Info, Mail, MessageCircle, Crown, ChevronLeft, LogOut, Settings, HelpCircle, User, Loader2, Building2, ChevronRight } from 'lucide-react';
+import { Info, Mail, MessageCircle, Crown, ChevronLeft, LogOut, Settings, HelpCircle, User, Loader2, Building2, ChevronRight, BookOpen, Droplet, Moon, Sun } from 'lucide-react';
 import type { Department } from '@/context/auth-context';
+import { useReadingMode } from '@/context/reading-mode-context';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
+import { cn } from '@/lib/utils';
+import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 
 
 const EditIcon = () => (
@@ -37,6 +42,14 @@ const allProFeatures = [
     "Ad-free experience",
 ];
 
+const themes = [
+  { name: 'default', label: 'Default', color: 'bg-gray-400', icon: Sun },
+  { name: 'sepia', label: 'Sepia', color: 'bg-[#C6B8A3]', icon: BookOpen },
+  { name: 'slate', label: 'Slate', color: 'bg-slate-600', icon: Moon },
+  { name: 'paper', label: 'Paper', color: 'bg-[#F8F5E9]', icon: BookOpen },
+  { name: 'mint', label: 'Mint', color: 'bg-emerald-200', icon: Droplet },
+  { name: 'night', label: 'Night', color: 'bg-[#1E2024]', icon: Moon },
+] as const;
 
 
 export default function ProfilePage() {
@@ -45,6 +58,7 @@ export default function ProfilePage() {
     const { plan, expiryDate, isPro } = useSubscription();
     const { toast } = useToast();
     const router = useRouter();
+    const { theme, setTheme, isEnabled, setIsEnabled } = useReadingMode();
 
 
     const [isEditingName, setIsEditingName] = useState(false);
@@ -174,7 +188,6 @@ export default function ProfilePage() {
         <>
         <div className="max-w-md mx-auto min-h-screen bg-white shadow-lg">
             <div className="relative bg-gradient-to-b from-orange-500 via-white to-green-600 h-60 p-6 rounded-b-3xl">
-                {/* ✅ FIXED: href="/home" changed to href="/" */}
                 <Link href="/" className="absolute top-4 left-4 cursor-pointer">
                    <ChevronLeft className="h-6 w-6 text-gray-800"/>
                 </Link>
@@ -305,7 +318,7 @@ export default function ProfilePage() {
                                     <DialogTitle>App Settings</DialogTitle>
                                     <DialogDescription>Change your app preferences here.</DialogDescription>
                                 </DialogHeader>
-                                <div className="py-4 space-y-4">
+                                <div className="py-4 space-y-6">
                                     <div>
                                         <label htmlFor="language-select" className="block text-sm font-medium text-gray-700 mb-2">App Language</label>
                                         <Select value={language} onValueChange={(value) => handleLanguageChange(value as 'en' | 'hi')}>
@@ -330,6 +343,39 @@ export default function ProfilePage() {
                                             </Select>
                                         </div>
                                     )}
+                                     <div>
+                                        <Label className="block text-sm font-medium text-gray-700 mb-2">Reading Mode</Label>
+                                        <div className='flex items-center space-x-2 mb-4'>
+                                          <Switch id="reading-mode-switch" checked={isEnabled} onCheckedChange={setIsEnabled} />
+                                          <Label htmlFor="reading-mode-switch">Enable eye-friendly themes</Label>
+                                        </div>
+                                        {isEnabled && (
+                                          <TooltipProvider>
+                                            <div className="flex justify-around items-center p-2 bg-muted rounded-lg">
+                                                {themes.map((t) => (
+                                                <Tooltip key={t.name}>
+                                                    <TooltipTrigger asChild>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        className={cn(
+                                                        "w-8 h-8 rounded-full",
+                                                        theme === t.name ? 'ring-2 ring-primary ring-offset-2' : ''
+                                                        )}
+                                                        onClick={() => setTheme(t.name)}
+                                                    >
+                                                        <div className={cn("w-5 h-5 rounded-full border", t.color)} />
+                                                    </Button>
+                                                    </TooltipTrigger>
+                                                    <TooltipContent side="bottom">
+                                                    <p>{t.label}</p>
+                                                    </TooltipContent>
+                                                </Tooltip>
+                                                ))}
+                                            </div>
+                                          </TooltipProvider>
+                                        )}
+                                    </div>
                                 </div>
                             </DialogContent>
                         </Dialog>
