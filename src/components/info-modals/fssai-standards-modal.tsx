@@ -13,8 +13,8 @@ import { ArrowLeft, BookOpen, Droplet, Wind, ShieldCheck, Component, Factory, Fl
 import { IceCreamIcon, PaneerIcon } from "../icons";
 import { useLanguage } from "@/context/language-context";
 import { fssaiStandardsContent } from "@/lib/content/fssai-standards-content";
-
 import { useState } from "react";
+
 const ProductCard = ({ title, children }: { title: string, children: React.ReactNode }) => (
     <div className="bg-white border border-gray-200 rounded-xl shadow-sm mb-6 overflow-hidden">
         <div className="bg-gray-100 p-4 border-b border-gray-200">
@@ -33,6 +33,20 @@ const SectionTitle = ({ children }: { children: React.ReactNode }) => (
 const Note = ({ children }: { children: React.ReactNode }) => (
      <p className="text-xs italic mt-2 text-gray-500">*{children}</p>
 );
+
+// ===== KEY MAPPING FUNCTION - YE ADD KARO ===== 
+const topicKeyMap: Record<string, string> = {
+    "fat-products": "fatProducts",
+    "milk-powders": "milkPowders",
+    "ice-cream": "iceCream",
+    "chhana-paneer": "chhanaPaneer",
+    "whey-protein": "wheyProtein",
+};
+
+const getTopicKey = (value: string): string => {
+    return topicKeyMap[value] || value;
+};
+// ===== END KEY MAPPING =====
 
 function GeneralContent() {
     const { t } = useLanguage();
@@ -685,7 +699,6 @@ const topics = [
     { value: "colostrum", icon: ShieldCheck, component: ColostrumContent },
 ];
 
-
 export function FssaiStandardsModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
   const { t } = useLanguage();
   const content = t(fssaiStandardsContent);
@@ -693,13 +706,21 @@ export function FssaiStandardsModal({ isOpen, setIsOpen }: { isOpen: boolean; se
 
   const handleOpenChange = (open: boolean) => {
     if (!open) {
-      setActiveTopic(null); // Reset when closing
+      setActiveTopic(null);
     }
     setIsOpen(open);
   };
   
   const selectedTopic = topics.find(t => t.value === activeTopic);
   const ActiveComponent = selectedTopic ? selectedTopic.component : null;
+
+  // ===== YE FUNCTION USE KARO TITLE DISPLAY KE LIYE ===== 
+  const getTopicTitle = (topicValue: string) => {
+    const topicKey = getTopicKey(topicValue);
+    const topicData = content.topics[topicKey as keyof typeof content.topics];
+    return topicData?.title || topicValue;
+  };
+  // ===== END FUNCTION =====
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
@@ -709,7 +730,7 @@ export function FssaiStandardsModal({ isOpen, setIsOpen }: { isOpen: boolean; se
             {content.mainTitle}
           </DialogTitle>
            <DialogDescription className="text-center text-lg text-gray-500">
-            {selectedTopic ? content.topics[selectedTopic.value as keyof typeof content.topics]?.title : content.description}
+            {selectedTopic ? getTopicTitle(selectedTopic.value) : content.description}
           </DialogDescription>
         </DialogHeader>
 
@@ -730,18 +751,23 @@ export function FssaiStandardsModal({ isOpen, setIsOpen }: { isOpen: boolean; se
         ) : (
              <ScrollArea className="flex-1 mt-4 sm:pr-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4 sm:p-0">
-                    {topics.map(topic => (
-                        <button
-                        key={topic.value}
-                        onClick={() => setActiveTopic(topic.value)}
-                        className="flex items-center p-4 bg-card hover:bg-primary/10 rounded-lg shadow-sm border text-left transition-all duration-200"
-                        >
-                        <topic.icon className="w-8 h-8 text-primary mr-4 shrink-0" />
-                        <div>
-                            <span className="font-semibold font-headline text-card-foreground">{content.topics[topic.value as keyof typeof content.topics]?.title}</span>
-                        </div>
-                        </button>
-                    ))}
+                    {topics.map(topic => {
+                        const topicTitle = getTopicTitle(topic.value);
+                        return (
+                            <button
+                                key={topic.value}
+                                onClick={() => setActiveTopic(topic.value)}
+                                className="flex items-center p-4 bg-card hover:bg-primary/10 rounded-lg shadow-sm border text-left transition-all duration-200"
+                            >
+                                <topic.icon className="w-8 h-8 text-primary mr-4 shrink-0" />
+                                <div>
+                                    <span className="font-semibold font-headline text-card-foreground">
+                                        {topicTitle}
+                                    </span>
+                                </div>
+                            </button>
+                        );
+                    })}
                 </div>
             </ScrollArea>
         )}
