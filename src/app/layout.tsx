@@ -8,6 +8,8 @@ import { LanguageProvider } from '@/context/language-context';
 import Script from 'next/script';
 import { FirebaseClientProvider } from '@/firebase/client-provider';
 import { SplashScreenProvider } from '@/context/splash-screen-context';
+import { ReadingModeProvider } from '@/context/reading-mode-context';
+
 
 const inter = Inter({
   subsets: ['latin'],
@@ -36,9 +38,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={cn('font-body antialiased', inter.variable, spaceGrotesk.variable, notoDevanagari.variable)}>
         <SplashScreenProvider>
+        <ReadingModeProvider>
           <FirebaseClientProvider>
             <LanguageProvider>
               <SubscriptionProvider>
@@ -48,6 +51,7 @@ export default function RootLayout({
               </SubscriptionProvider>
             </LanguageProvider>
           </FirebaseClientProvider>
+        </ReadingModeProvider>
         </SplashScreenProvider>
         <Toaster />
         <Script id="chunk-error-handler">
