@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useEffect, useState } from 'react';
@@ -58,7 +59,7 @@ const GearAnimation = () => (
       </g>
     </svg>
     <div className="milk-drop absolute top-1/2 left-1/2">
-      <svg width="15" height="15" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg width="10" height="10" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M40 80C56.5685 80 70 66.5685 70 50C70 33.4315 40 0 40 0C40 0 10 33.4315 10 50C10 66.5685 23.4315 80 40 80Z" fill="white"/>
       </svg>
     </div>
@@ -150,6 +151,25 @@ const LiquidVortexAnimation = () => (
     </div>
 );
 
+const AtomAnimation = () => (
+    <div className="relative w-36 h-36 flex items-center justify-center">
+      <style jsx>{`
+        .orbit { position: absolute; width: 100px; height: 100px; border-radius: 50%; border: 2px solid #C4B5FD; transform-style: preserve-3d; animation: orbit-rotate 6s linear infinite; }
+        .orbit:nth-child(1) { transform: rotateY(70deg); }
+        .orbit:nth-child(2) { transform: rotateX(70deg); }
+        .electron { position: absolute; width: 10px; height: 10px; background: #8B5CF6; border-radius: 50%; animation: electron-path 6s linear infinite; }
+        .nucleus { width: 20px; height: 20px; background: #6366F1; border-radius: 50%; box-shadow: 0 0 10px #6366F1; }
+        @keyframes orbit-rotate { from { transform: rotateZ(0deg) rotateY(70deg); } to { transform: rotateZ(360deg) rotateY(70deg); } }
+        .orbit:nth-child(2) { animation-name: orbit-rotate-2; }
+        @keyframes orbit-rotate-2 { from { transform: rotateZ(0deg) rotateX(70deg); } to { transform: rotateZ(360deg) rotateX(70deg); } }
+        @keyframes electron-path { from { transform: rotateZ(0deg) translateX(50px) rotateZ(0deg); } to { transform: rotateZ(360deg) translateX(50px) rotateZ(-360deg); } }
+      `}</style>
+        <div className="nucleus"></div>
+        <div className="orbit"><div className="electron"></div></div>
+        <div className="orbit"><div className="electron" style={{ animationDelay: '-3s' }}></div></div>
+    </div>
+);
+
 const DnaHelixAnimation = () => (
     <div className="relative w-36 h-36 flex items-center justify-center">
         <style jsx>{`
@@ -235,44 +255,6 @@ const CrownSplashAnimation = () => (
     </div>
 );
 
-const BlueprintDrawAnimation = () => (
-    <div className="relative w-36 h-36">
-        <style jsx>{`
-            .blueprint-line {
-                stroke-dasharray: 500;
-                stroke-dashoffset: 500;
-                animation: draw-blueprint 2.5s ease-out forwards;
-            }
-             @keyframes draw-blueprint { to { stroke-dashoffset: 0; } }
-        `}</style>
-        <svg viewBox="0 0 100 100" className="w-full h-full">
-            <path className="blueprint-line" stroke="#A5B4FC" strokeWidth="2" fill="none" d="M20 80 L20 40 L35 40 L35 30 L65 30 L65 40 L80 40 L80 80 Z" style={{ animationDelay: '0.5s' }}/>
-            <path className="blueprint-line" stroke="#A5B4FC" strokeWidth="2" fill="none" d="M45 30 L45 20 L55 20 L55 30" style={{ animationDelay: '1s' }}/>
-            <path className="blueprint-line" stroke="#A5B4FC" strokeWidth="1.5" fill="none" d="M50 20 L50 10 M45 15 L55 15" style={{ animationDelay: '1.5s' }}/>
-            <circle className="blueprint-line" cx="50" cy="60" r="10" stroke="#A5B4FC" strokeWidth="2" fill="none" style={{ animationDelay: '1.2s' }}/>
-        </svg>
-    </div>
-);
-
-const AtomAnimation = () => (
-    <div className="relative w-36 h-36 flex items-center justify-center">
-      <style jsx>{`
-        .orbit { position: absolute; width: 100px; height: 100px; border-radius: 50%; border: 2px solid #C4B5FD; transform-style: preserve-3d; animation: orbit-rotate 6s linear infinite; }
-        .orbit:nth-child(1) { transform: rotateY(70deg); }
-        .orbit:nth-child(2) { transform: rotateX(70deg); }
-        .electron { position: absolute; width: 10px; height: 10px; background: #8B5CF6; border-radius: 50%; animation: electron-path 6s linear infinite; }
-        .nucleus { width: 20px; height: 20px; background: #6366F1; border-radius: 50%; box-shadow: 0 0 10px #6366F1; }
-        @keyframes orbit-rotate { from { transform: rotateZ(0deg) rotateY(70deg); } to { transform: rotateZ(360deg) rotateY(70deg); } }
-        .orbit:nth-child(2) { animation-name: orbit-rotate-2; }
-        @keyframes orbit-rotate-2 { from { transform: rotateZ(0deg) rotateX(70deg); } to { transform: rotateZ(360deg) rotateX(70deg); } }
-        @keyframes electron-path { from { transform: rotateZ(0deg) translateX(50px) rotateZ(0deg); } to { transform: rotateZ(360deg) translateX(50px) rotateZ(-360deg); } }
-      `}</style>
-        <div className="nucleus"></div>
-        <div className="orbit"><div className="electron"></div></div>
-        <div className="orbit"><div className="electron" style={{ animationDelay: '-3s' }}></div></div>
-    </div>
-);
-
 const MilkPourAnimation = () => (
     <div className="relative w-36 h-36">
         <style jsx>{`
@@ -290,41 +272,6 @@ const MilkPourAnimation = () => (
     </div>
 );
 
-const BubblingBeakerAnimation = () => (
-    <div className="relative w-36 h-36 flex items-center justify-center">
-        <style jsx>{`
-            .beaker { width: 80px; height: 100px; border: 4px solid #9CA3AF; border-top: none; border-radius: 0 0 10px 10px; position: relative; background: linear-gradient(to top, #E0F2FE, #BAE6FD); }
-            .bubble { background: white; border-radius: 50%; position: absolute; bottom: 10px; opacity: 0; animation: rise 4s infinite; }
-            @keyframes rise { 0% { bottom: 5%; opacity: 1; transform: scale(1); } 100% { bottom: 90%; opacity: 0; transform: scale(1.5); } }
-        `}</style>
-        <div className="beaker">
-            {[...Array(10)].map((_, i) => (
-                <div key={i} className="bubble" style={{
-                    left: `${Math.random() * 80 + 10}%`,
-                    animationDelay: `${Math.random() * 4}s`,
-                    width: `${Math.random() * 8 + 4}px`,
-                    height: `${Math.random() * 8 + 4}px`,
-                }}></div>
-            ))}
-        </div>
-    </div>
-);
-
-const ConveyorBeltAnimation = () => (
-    <div className="relative w-48 h-36 overflow-hidden">
-        <style jsx>{`
-            .belt { position: absolute; bottom: 40px; left: -50%; width: 200%; height: 10px; background: #6B7280; animation: move-belt 4s linear infinite; }
-            .carton { position: absolute; bottom: 50px; width: 30px; height: 50px; background: #F9FAFB; border: 2px solid #D1D5DB; animation: move-carton 4s linear infinite; }
-            @keyframes move-belt { from { transform: translateX(0); } to { transform: translateX(25%); } }
-            @keyframes move-carton { from { left: -10%; } to { left: 110%; } }
-        `}</style>
-        <div className="belt"></div>
-        {[...Array(3)].map((_, i) => (
-            <div key={i} className="carton" style={{ animationDelay: `${i * 1.33}s` }}></div>
-        ))}
-    </div>
-);
-
 const AbstractLiquidSwirl = () => (
     <div className="relative w-36 h-36">
         <style jsx>{`
@@ -337,20 +284,6 @@ const AbstractLiquidSwirl = () => (
     </div>
 );
 
-const GrowingPlantAnimation = () => (
-    <div className="relative w-36 h-36 flex items-end justify-center">
-        <style jsx>{`
-            .stem { width: 6px; background: #84CC16; transform-origin: bottom center; animation: grow-stem 2s ease-out forwards; }
-            .leaf { width: 30px; height: 10px; background: #4D7C0F; border-radius: 50%; position: absolute; bottom: 50px; animation: grow-leaf 1.5s ease-out 1s forwards; opacity: 0; }
-            @keyframes grow-stem { from { height: 0; } to { height: 80px; } }
-            @keyframes grow-leaf { 0% { opacity: 0; transform: scale(0); } 100% { opacity: 1; transform: scale(1); } }
-        `}</style>
-        <div className="stem"></div>
-        <div className="leaf" style={{ left: '42px', transform: 'rotate(45deg)' }}></div>
-        <div className="leaf" style={{ right: '42px', transform: 'rotate(-45deg)', animationDelay: '1.2s' }}></div>
-        <div className="leaf" style={{ left: '45px', bottom: '70px', transform: 'rotate(60deg)', animationDelay: '1.4s' }}></div>
-    </div>
-);
 
 const animations = [
   GearAnimation, 
@@ -358,13 +291,9 @@ const animations = [
   LiquidVortexAnimation,
   DnaHelixAnimation,
   CrownSplashAnimation,
-  BlueprintDrawAnimation,
   AtomAnimation,
   MilkPourAnimation,
-  BubblingBeakerAnimation,
-  ConveyorBeltAnimation,
   AbstractLiquidSwirl,
-  GrowingPlantAnimation
 ];
 
 export default function SplashScreen({ onFinished }: { onFinished: () => void }) {
@@ -389,8 +318,9 @@ export default function SplashScreen({ onFinished }: { onFinished: () => void })
   const [SelectedAnimation, setSelectedAnimation] = useState<React.FC | null>(null);
 
   useEffect(() => {
-    // Select a random animation component on initial client render
-    setSelectedAnimation(() => animations[Math.floor(Math.random() * animations.length)]);
+    // This effect should only run on the client
+    const randomIndex = Math.floor(Math.random() * animations.length);
+    setSelectedAnimation(() => animations[randomIndex]);
 
     const timer = setTimeout(() => {
       onFinished();
@@ -480,3 +410,4 @@ export default function SplashScreen({ onFinished }: { onFinished: () => void })
     </div>
   );
 }
+
