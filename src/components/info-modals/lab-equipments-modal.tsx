@@ -1,6 +1,7 @@
+
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -20,7 +21,7 @@ const EquipmentDetail = ({ equipment, content }: { equipment: any; content: any 
     <div className="prose prose-sm max-w-none text-gray-700 leading-relaxed">
         <h2 className="text-2xl font-bold text-blue-800 font-headline">{equipment.name}</h2>
         <h3 className="font-bold text-lg mt-4 not-prose">{content.purposeTitle}</h3>
-        <p>{equipment.purpose}</p>
+        <p dangerouslySetInnerHTML={{ __html: equipment.purpose }} />
 
         <h3 className="font-bold text-lg mt-4 not-prose">{content.principleTitle}</h3>
         <p dangerouslySetInnerHTML={{ __html: equipment.principle }} />
@@ -42,23 +43,53 @@ const EquipmentDetail = ({ equipment, content }: { equipment: any; content: any 
 
 export function LabEquipmentsModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
   const { t } = useLanguage();
-  const content = t(labEquipmentsContent);
   const [searchTerm, setSearchTerm] = useState("");
   const [activeEquipmentId, setActiveEquipmentId] = useState<string | null>(null);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const scrollPosition = useRef(0);
+  
+  const content = t(labEquipmentsContent);
 
   const handleOpenChange = (open: boolean) => {
     if (!open) {
       setActiveEquipmentId(null);
+      setSearchTerm("");
     }
     setIsOpen(open);
   };
   
+  if (!content || !content.equipments) {
+      return null; // or a loading state
+  }
+
   const selectedEquipment = activeEquipmentId ? content.equipments.find(e => e.id === activeEquipmentId) : null;
 
   const filteredEquipments = content.equipments.filter(equip => 
     equip.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
     equip.purpose.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  
+  const handleSelectEquipment = (id: string) => {
+    if (scrollAreaRef.current) {
+        scrollPosition.current = scrollAreaRef.current.scrollTop;
+    }
+    setActiveEquipmentId(id);
+  }
+
+  const handleBack = () => {
+      setActiveEquipmentId(null);
+  }
+
+  useEffect(() => {
+    if (!activeEquipmentId && scrollAreaRef.current) {
+        // Restore scroll position after a short delay to allow content to render
+        setTimeout(() => {
+            if(scrollAreaRef.current) {
+                scrollAreaRef.current.scrollTop = scrollPosition.current;
+            }
+        }, 0);
+    }
+  }, [activeEquipmentId]);
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
@@ -75,7 +106,7 @@ export function LabEquipmentsModal({ isOpen, setIsOpen }: { isOpen: boolean; set
         {selectedEquipment ? (
              <div className="flex-1 flex flex-col min-h-0">
                 <div className="px-4 sm:px-0">
-                    <Button variant="ghost" onClick={() => setActiveEquipmentId(null)}>
+                    <Button variant="ghost" onClick={handleBack}>
                         <ArrowLeft className="w-4 h-4 mr-2" />
                         Back to Equipments
                     </Button>
@@ -98,12 +129,12 @@ export function LabEquipmentsModal({ isOpen, setIsOpen }: { isOpen: boolean; set
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
                 </div>
-                <ScrollArea className="flex-1 mt-2 sm:pr-4">
+                <ScrollArea className="flex-1 mt-2 sm:pr-4" viewportRef={scrollAreaRef}>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4 sm:p-0">
                     {filteredEquipments.map((equip) => (
                          <button
                             key={equip.id}
-                            onClick={() => setActiveEquipmentId(equip.id)}
+                            onClick={() => handleSelectEquipment(equip.id)}
                             className="p-4 bg-card hover:bg-primary/10 rounded-lg shadow-sm border text-left transition-all duration-200"
                             >
                              <h4 className="font-semibold font-headline text-card-foreground">{equip.name}</h4>
