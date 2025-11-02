@@ -1,6 +1,10 @@
 // /lib/firebaseClient.ts
-import { initializeApp, getApps, getApp, type FirebaseApp } from "firebase/app";
+import { initializeApp, getApps, getApp, FirebaseApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
+// 🧩 Firebase Config from .env.local file
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY!,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN!,
@@ -10,10 +14,17 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID!,
 };
 
-export function initFirebaseClient(): FirebaseApp | null {
-  if (typeof window === "undefined") return null; // server pe mat run karo
-  if (!getApps().length) {
-    return initializeApp(firebaseConfig);
-  }
-  return getApp();
+// 🏗 Initialize Firebase only once (Next.js fix)
+let firebaseApp: FirebaseApp;
+
+if (!getApps().length) {
+  firebaseApp = initializeApp(firebaseConfig);
+} else {
+  firebaseApp = getApp();
 }
+
+// 🚀 Export commonly used Firebase services
+export const firebaseClientApp = firebaseApp;
+export const auth = getAuth(firebaseApp);
+export const db = getFirestore(firebaseApp);
+export const storage = getStorage(firebaseApp);
