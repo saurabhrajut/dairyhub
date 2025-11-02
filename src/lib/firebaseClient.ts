@@ -1,5 +1,8 @@
-// /lib/firebaseClient.ts
 import { initializeApp, getApps, getApp, type FirebaseApp } from "firebase/app";
+// Firestore को import करें
+import { getFirestore, type Firestore } from "firebase/firestore";
+// Auth को import करें
+import { getAuth, type Auth } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY!,
@@ -10,10 +13,25 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID!,
 };
 
-export function initFirebaseClient(): FirebaseApp | null {
-  if (typeof window === "undefined") return null; // server pe mat run karo
-  if (!getApps().length) {
-    return initializeApp(firebaseConfig);
+// ऐप इनिशियलाइज़ेशन के लिए एक सुरक्षित तरीका
+function initFirebaseServices() {
+  if (typeof window === "undefined") {
+    // सर्वर पर null रिटर्न करें
+    return { app: null, auth: null, db: null };
   }
-  return getApp();
+
+  let app: FirebaseApp;
+  if (!getApps().length) {
+    app = initializeApp(firebaseConfig);
+  } else {
+    app = getApp();
+  }
+
+  const auth: Auth = getAuth(app);
+  const db: Firestore = getFirestore(app);
+
+  return { app, auth, db };
 }
+
+// Auth और DB को एक्सपोर्ट करें ताकि हम उन्हें context में इस्तेमाल कर सकें
+export const { app, auth, db } = initFirebaseServices();
