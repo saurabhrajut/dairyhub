@@ -1,16 +1,25 @@
 "use client";
 
-import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
-import { useSubscription } from './subscription-context';
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { auth } from '@/lib/firebaseClient'; // ✅ new import (no initFirebaseClient)
- 
-export type Department = 
-  'process-access' | 
-  'production-access' | 
-  'quality-access' | 
-  'all-control-access' | 
-  'guest';
+import React, { createContext, useState, useContext, useEffect, ReactNode } from "react";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
+  signInAnonymously,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+  User as FirebaseUser
+} from "firebase/auth";
+import { initFirebaseClient } from "@/lib/firebaseClient";
+
+export type Department =
+  | "process-access"
+  | "production-access"
+  | "quality-access"
+  | "all-control-access"
+  | "guest";
 
 export interface AppUser {
   uid: string;
@@ -18,7 +27,7 @@ export interface AppUser {
   isAnonymous: boolean;
   displayName?: string | null;
   photoURL?: string | null;
-  gender?: 'male' | 'female' | 'other';
+  gender?: "male" | "female" | "other";
   department?: Department;
 }
 
@@ -26,225 +35,124 @@ interface AuthContextType {
   user: AppUser | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  anonymousLogin: () => Promise<void>;
   signup: (
     email: string,
     password: string,
     displayName: string,
-    gender: 'male' | 'female' | 'other',
+    gender: "male" | "female" | "other",
     department: Department
   ) => Promise<void>;
-  logout: () => Promise<void>;
-  updateUserProfile: (profileData: { displayName?: string; department?: Department }) => Promise<void>;
-  updateUserPhoto: (file: File) => Promise<void>;
+  anonymousLogin: () => Promise<void>;
   signInWithGoogle: () => Promise<void>;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const USERS_STORAGE_KEY = 'dairy-hub-users';
-const CURRENT_USER_STORAGE_KEY = 'dairy-hub-current-user';
-
-export function AuthProvider({ children }: { children: ReactNode }) {
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<AppUser | null>(null);
   const [loading, setLoading] = useState(true);
-  const { loadSubscription } = useSubscription();
+
+  const auth = getAuth(initFirebaseClient()!);
 
   useEffect(() => {
-    setLoading(true);
-    try {
-      const storedUser = localStorage.getItem(CURRENT_USER_STORAGE_KEY);
-      if (storedUser) {
-        const parsedUser = JSON.parse(storedUser);
-        setUser(parsedUser);
-        if (parsedUser?.uid) loadSubscription(parsedUser.uid);
+    const unsubscribe = auth.onAuthStateChanged((firebaseUser) => {
+      if (firebaseUser) {
+        const appUser: AppUser = {
+          uid: firebaseUser.uid,
+          email: firebaseUser.email,
+          isAnonymous: firebaseUser.isAnonymous,
+          displayName: firebaseUser.displayName,
+          photoURL: firebaseUser.photoURL,
+        };
+        setUser(appUser);
+      } else {
+        setUser(null);
       }
-    } catch (error) {
-      console.error("Failed to parse user from localStorage", error);
-      localStorage.removeItem(CURRENT_USER_STORAGE_KEY);
-    } finally {
       setLoading(false);
-    }
-  }, [loadSubscription]);
-
-  const getUsers = (): AppUser[] => {
-    try {
-      const usersRaw = localStorage.getItem(USERS_STORAGE_KEY);
-      return usersRaw ? JSON.parse(usersRaw) : [];
-    } catch (error) {
-      console.error("Failed to parse users from localStorage", error);
-      return [];
-    }
-  };
-
-  const saveUsers = (users: AppUser[]) => {
-    localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(users));
-  };
-
-  const login = async (email: string, password: string) => {
-    const allUsers = getUsers();
-    const foundUser = allUsers.find(u => u.email === email && !u.isAnonymous);
-    if (foundUser) {
-      setUser(foundUser);
-      localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(foundUser));
-      loadSubscription(foundUser.uid);
-    } else {
-      throw new Error("User not found. Please check your credentials or sign up.");
-    }
-  };
-
-  const anonymousLogin = async () => {
-    const guestUser: AppUser = {
-      uid: 'guest-' + Date.now(),
-      email: null,
-      isAnonymous: true,
-      displayName: 'Guest User',
-      photoURL: 'https://placehold.co/128x128/E0E0E0/333?text=G',
-      gender: 'other',
-      department: 'guest'
-    };
-    localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(guestUser));
-    setUser(guestUser);
-    loadSubscription(guestUser.uid);
-  };
+    });
+    return () => unsubscribe();
+  }, [auth]);
 
   const signup = async (
     email: string,
     password: string,
     displayName: string,
-    gender: 'male' | 'female' | 'other',
+    gender: "male" | "female" | "other",
     department: Department
   ) => {
-    const allUsers = getUsers();
-    if (allUsers.some(u => u.email === email && !u.isAnonymous)) {
-      throw new Error("An account with this email already exists.");
-    }
-
-    const newUser: AppUser = {
-      uid: 'user-' + Date.now(),
-      email,
-      isAnonymous: false,
+    const { user } = await createUserWithEmailAndPassword(auth, email, password);
+    await updateProfile(user, { displayName });
+    setUser({
+      uid: user.uid,
+      email: user.email,
+      isAnonymous: user.isAnonymous,
       displayName,
       gender,
       department,
-      photoURL: `https://placehold.co/128x128/E0E0E0/333?text=${displayName.charAt(0).toUpperCase()}`,
-    };
+    });
+  };
 
-    const updatedUsers = [...allUsers, newUser];
-    saveUsers(updatedUsers);
+  const login = async (email: string, password: string) => {
+    const { user } = await signInWithEmailAndPassword(auth, email, password);
+    setUser({
+      uid: user.uid,
+      email: user.email,
+      isAnonymous: user.isAnonymous,
+      displayName: user.displayName,
+      photoURL: user.photoURL,
+    });
+  };
 
-    localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(newUser));
-    setUser(newUser);
-    loadSubscription(newUser.uid);
+  const anonymousLogin = async () => {
+    const { user } = await signInAnonymously(auth);
+    setUser({
+      uid: user.uid,
+      email: null,
+      isAnonymous: true,
+      displayName: "Guest User",
+      department: "guest",
+    });
   };
 
   const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const firebaseUser = result.user;
-
-      const allUsers = getUsers();
-      let appUser = allUsers.find(u => u.uid === firebaseUser.uid && !u.isAnonymous);
-
-      if (!appUser) {
-        appUser = {
-          uid: firebaseUser.uid,
-          email: firebaseUser.email,
-          isAnonymous: false,
-          displayName: firebaseUser.displayName,
-          photoURL: firebaseUser.photoURL,
-          department: 'process-access',
-        };
-        const updatedUsers = [...allUsers, appUser];
-        saveUsers(updatedUsers);
-      }
-
-      setUser(appUser);
-      localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(appUser));
-      loadSubscription(appUser.uid);
-    } catch (error: any) {
-      console.error("Google Sign-In Error:", error);
-      if (error.code === 'auth/popup-closed-by-user') {
-        throw new Error("Sign-in process was cancelled.");
-      }
-      if (error.code === 'auth/unauthorized-domain') {
-        throw new Error("This domain is not authorized for Google Sign-In.");
-      }
-      throw new Error(error.message || "An unknown error occurred during Google sign-in.");
-    }
-  };
-
-  const logout = async () => {
-    localStorage.removeItem(CURRENT_USER_STORAGE_KEY);
-    setUser(null);
-  };
-
-  const updateUserProfile = async (profileData: Partial<AppUser>) => {
-    if (user) {
-      const updatedUser = { ...user, ...profileData };
-      setUser(updatedUser);
-      localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(updatedUser));
-
-      if (!user.isAnonymous) {
-        let allUsers = getUsers();
-        const userIndex = allUsers.findIndex(u => u.uid === user.uid);
-        if (userIndex !== -1) {
-          allUsers[userIndex] = updatedUser;
-          saveUsers(allUsers);
-        }
-      }
-      console.log("User profile updated.", updatedUser);
-    }
-  };
-
-  const updateUserPhoto = async (file: File) => {
-    if (!user || user.isAnonymous) return;
-
-    return new Promise<void>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        const photoURL = reader.result as string;
-        const updatedUser = { ...user, photoURL };
-        setUser(updatedUser);
-        localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(updatedUser));
-
-        const allUsers = getUsers();
-        const userIndex = allUsers.findIndex(u => u.uid === user.uid);
-        if (userIndex !== -1) {
-          allUsers[userIndex] = updatedUser;
-          saveUsers(allUsers);
-        }
-        console.log("User photo updated and saved to localStorage.");
-        resolve();
-      };
-      reader.onerror = (error) => {
-        console.error("Error reading file:", error);
-        reject(error);
-      };
+    const result = await signInWithPopup(auth, provider);
+    const firebaseUser = result.user;
+    setUser({
+      uid: firebaseUser.uid,
+      email: firebaseUser.email,
+      isAnonymous: firebaseUser.isAnonymous,
+      displayName: firebaseUser.displayName,
+      photoURL: firebaseUser.photoURL,
+      department: "process-access",
     });
   };
 
-  const value: AuthContextType = {
-    user,
-    loading,
-    login,
-    anonymousLogin,
-    signup,
-    logout,
-    updateUserProfile,
-    updateUserPhoto,
-    signInWithGoogle,
+  const logout = async () => {
+    await signOut(auth);
+    setUser(null);
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-}
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        login,
+        signup,
+        anonymousLogin,
+        signInWithGoogle,
+        logout,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+};
 
-export function useAuth() {
+export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
+  if (!context) throw new Error("useAuth must be used within an AuthProvider");
   return context;
-}
+};
