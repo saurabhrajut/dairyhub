@@ -1,5 +1,4 @@
 
-      
 "use client";
 
 import { useState, memo, useCallback, useEffect, useMemo } from "react"
@@ -23,8 +22,9 @@ import {
 } from "@/components/ui/select";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { componentProps, getSnf } from "@/lib/utils";
-import { CheckCircle, PlusCircle, XCircle, Beaker, Thermometer, Weight, Percent, Scaling, Combine, Calculator, FlaskConical, ArrowLeft, RotateCw, Dna, Atom, Droplet, DollarSign, Microscope, Recycle, Bug, ShieldCheck, FileSpreadsheet, Search, Wind } from "lucide-react";
+import { componentProps, chemicals } from "@/lib/data";
+import { getSnf } from "@/lib/utils";
+import { CheckCircle, PlusCircle, XCircle, Beaker, Thermometer, Weight, Percent, Scaling, Combine, Calculator, FlaskConical, ArrowLeft, RotateCw, Dna, Atom, Droplet, DollarSign, Microscope, Recycle, Bug, ShieldCheck, FileSpreadsheet, Search, Wind, Factory } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -240,11 +240,11 @@ function AcidityMaintenanceCalc() {
     
     const calculate = () => {
         const qtyValue = parseFloat(inputs.milkQty);
-        const qty = milkUnit === 'liters' ? qtyValue * 1.03 : qtyValue;
+        const qtyInKg = milkUnit === 'liters' ? qtyValue * 1.03 : qtyValue;
         const initial = parseFloat(inputs.initialAcidity);
         const target = parseFloat(inputs.targetAcidity);
 
-        if(isNaN(qty) || isNaN(initial) || isNaN(target) || qty <= 0 || initial <= 0 || target <= 0) {
+        if(isNaN(qtyInKg) || isNaN(initial) || isNaN(target) || qtyInKg <= 0 || initial < 0 || target < 0) {
             alert("Please enter valid positive numbers for all fields.");
             return;
         }
@@ -254,21 +254,34 @@ function AcidityMaintenanceCalc() {
             return;
         }
 
-        const acidityToNeutralize = initial - target;
-        const totalLacticAcidKg = (acidityToNeutralize / 100) * qty;
-
-        const molesLA = (totalLacticAcidKg * 1000) / 90.08;
-        const gramsNaOH = molesLA * 40.00;
-        const gramsNa2CO3 = (molesLA / 2) * 105.99;
-        const gramsNaHCO3 = molesLA * 84.01;
+        const acidityToNeutralizePercent = initial - target;
+        const totalLacticAcidGrams = (acidityToNeutralizePercent / 100) * qtyInKg * 1000;
         
+        const MM_LACTIC_ACID = 90.08;
+        const MM_NAOH = 40.00;
+        const MM_NA2CO3 = 105.99;
+        const MM_NAHCO3 = 84.01;
+
+        const molesLacticAcid = totalLacticAcidGrams / MM_LACTIC_ACID;
+
+        // Stoichiometry:
+        // C₃H₆O₃ + NaOH → C₃H₅O₃Na + H₂O (1:1)
+        const molesNaOH = molesLacticAcid;
+        // 2C₃H₆O₃ + Na₂CO₃ → 2C₃H₅O₃Na + H₂O + CO₂ (2:1)
+        const molesNa2CO3 = molesLacticAcid / 2;
+        // C₃H₆O₃ + NaHCO₃ → C₃H₅O₃Na + H₂O + CO₂ (1:1)
+        const molesNaHCO3 = molesLacticAcid;
+
+        const gramsNaOH = molesNaOH * MM_NAOH;
+        const gramsNa2CO3 = molesNa2CO3 * MM_NA2CO3;
+        const gramsNaHCO3 = molesNaHCO3 * MM_NAHCO3;
+
         setResults({
             naoh: gramsNaOH.toFixed(2),
             na2co3: gramsNa2CO3.toFixed(2),
             nahco3: gramsNaHCO3.toFixed(2),
         });
     }
-
 
     return (
         <div>
@@ -319,11 +332,11 @@ function IncreaseAcidityCalc() {
     
     const calculate = () => {
         const qtyValue = parseFloat(inputs.milkQty);
-        const qty = milkUnit === 'liters' ? qtyValue * 1.03 : qtyValue;
+        const qtyInKg = milkUnit === 'liters' ? qtyValue * 1.03 : qtyValue;
         const initial = parseFloat(inputs.initialAcidity);
         const target = parseFloat(inputs.targetAcidity);
 
-        if(isNaN(qty) || isNaN(initial) || isNaN(target) || qty <= 0 || initial < 0 || target <= 0) {
+        if(isNaN(qtyInKg) || isNaN(initial) || isNaN(target) || qtyInKg <= 0 || initial < 0 || target <= 0) {
             alert("Please enter valid positive numbers for all fields.");
             return;
         }
@@ -333,14 +346,16 @@ function IncreaseAcidityCalc() {
             return;
         }
 
-        const acidityToIncrease = target - initial;
-        const totalLacticAcidEquivalentsKg = (acidityToIncrease / 100) * qty;
+        const acidityToIncreasePercent = target - initial;
+        const gramsLacticAcidEquivalent = (acidityToIncreasePercent / 100) * qtyInKg * 1000;
+        
+        const EQ_WT_LACTIC = 90.08;
+        const EQ_WT_CITRIC = 192.12 / 3; // Molar Mass / n-factor (3 for citric acid)
 
-        const gramsLacticAcid = totalLacticAcidEquivalentsKg * 1000;
-        const gramsCitricAcid = gramsLacticAcid * (64.04 / 90.08);
+        const gramsCitricAcid = gramsLacticAcidEquivalent * (EQ_WT_CITRIC / EQ_WT_LACTIC);
 
         setResults({
-            lactic: gramsLacticAcid.toFixed(2),
+            lactic: gramsLacticAcidEquivalent.toFixed(2),
             citric: gramsCitricAcid.toFixed(2)
         });
     }
@@ -867,6 +882,9 @@ function CreamFatCalc() {
                 <div><Label>Butyrometer Reading</Label><Input type="number" value={reading} onChange={e => setReading(e.target.value)} placeholder="e.g., 8.0" /></div>
                 <div><Label>Sample Weight (g)</Label><Input type="number" value={weight} onChange={e => setWeight(e.target.value)} placeholder="e.g., 5" /></div>
             </div>
+            <p className="text-xs text-muted-foreground mt-2">
+                Note: This calculation is based on the Gerber method for cream using a standard 10.75 <strong>milk butyrometer</strong> where a 1g sample is taken. If using a specific cream butyrometer, follow its instructions.
+            </p>
             <Button onClick={calculate} className="w-full mt-4">Calculate Fat %</Button>
             {result && <Alert className="mt-4"><AlertDescription className="text-lg font-bold text-center" dangerouslySetInnerHTML={{ __html: result }} /></Alert>}
         </div>
@@ -1420,38 +1438,124 @@ function FormulasTab() {
 function SolutionStrengthCalc() {
     const { toast } = useToast();
     const [activeCalc, setActiveCalc] = useState('naoh');
+    const [sampleQuantity, setSampleQuantity] = useState("10");
+    const [sampleUnit, setSampleUnit] = useState<'ml' | 'gm'>('ml');
     const [titreValue, setTitreValue] = useState("");
-    const [result, setResult] = useState<string | null>(null);
+    const [titrant, setTitrant] = useState("hcl");
+    const [titrantNormality, setTitrantNormality] = useState("0.1");
+    const [currentStrength, setCurrentStrength] = useState<number | null>(null);
+    const [adjustmentResult, setAdjustmentResult] = useState<string | null>(null);
+    const [inputs, setInputs] = useState({
+        targetStrength: "",
+        currentVolume: ""
+    });
+    const [volumeUnit, setVolumeUnit] = useState<'L' | 'ml'>('L');
+
+    const acidTitrants = { hcl: chemicals.acids.hcl, h2so4: chemicals.acids.h2so4 };
+    const baseTitrants = { naoh: chemicals.bases.naoh };
 
     const calculatorInfo = {
-        naoh: { label: "0.1 N Acid Used (ml)", formula: (titre: number) => `Caustic Soda (NaOH): ${(titre * 0.4).toFixed(3)}%`, description: "Titrate a 10ml sample of the CIP solution with 0.1 N acid (e.g., HCl) using phenolphthalein indicator." },
-        hno3: { label: "0.1 N Base Used (ml)", formula: (titre: number) => `Nitric Acid (HNO₃): ${(titre * 0.63).toFixed(3)}%`, description: "Titrate a 10ml sample of the CIP solution with 0.1 N base (e.g., NaOH) using phenolphthalein indicator." },
-        h3po4: { label: "0.1 N Base Used (ml)", formula: (titre: number) => `Phosphoric Acid (H₃PO₄): ${(titre * 0.49).toFixed(3)}%`, description: "Titrate a 10ml sample of the CIP solution with 0.1 N base (e.g., NaOH) using phenolphthalein indicator." },
-        chlorine: { label: "0.01 N Sodium Thiosulphate Used (ml)", formula: (titre: number) => `Available Chlorine: ${(titre * 35.45).toFixed(2)} ppm`, description: "Titrate a 100ml sample of the CIP solution using the iodometric titration method with 0.01 N Sodium Thiosulphate." }
+        naoh: { label: "Acid Used (ml)", eqWt: 40.0, unit: '%', type: 'base', chemical: 'NaOH', density: 1.05, titrants: acidTitrants, defaultTitrant: 'hcl' },
+        hno3: { label: "Base Used (ml)", eqWt: 63.0, unit: '%', type: 'acid', chemical: 'HNO₃', density: 1.51, titrants: baseTitrants, defaultTitrant: 'naoh' },
+        h3po4: { label: "Base Used (ml)", eqWt: 49.0, unit: '%', type: 'acid', chemical: 'H₃PO₄', density: 1.88, titrants: baseTitrants, defaultTitrant: 'naoh' },
+        chlorine: { label: "Sodium Thiosulphate Used (ml)", eqWt: 35.45, unit: 'ppm', type: 'redox', chemical: 'Chlorine', density: 1.1, titrants: { 'sodium_thiosulphate': chemicals.other_reagents.sodium_thiosulphate }, defaultTitrant: 'sodium_thiosulphate' }
     };
     
     const currentCalc = calculatorInfo[activeCalc as keyof typeof calculatorInfo];
+    const availableTitrants = currentCalc.titrants;
+    
+    useEffect(() => {
+        setTitrant(currentCalc.defaultTitrant);
+    }, [activeCalc, currentCalc.defaultTitrant]);
+
 
     const handleCalc = () => {
+        const sampleQty = parseFloat(sampleQuantity);
         const titre = parseFloat(titreValue);
-        if (isNaN(titre) || titre < 0) {
-            toast({ variant: 'destructive', title: "Error", description: "Please enter a valid titre value." });
-            setResult(null);
+        const normality = parseFloat(titrantNormality);
+        const analyte = currentCalc;
+        
+        if (isNaN(sampleQty) || isNaN(titre) || isNaN(normality) || sampleQty <= 0) {
+            toast({ variant: 'destructive', title: "Error", description: "Please enter a valid sample quantity, titre value, and normality." });
+            setCurrentStrength(null);
             return;
         }
-        const calcResult = currentCalc.formula(titre);
-        setResult(calcResult);
-        toast({ title: "Calculated Successfully", description: calcResult });
+
+        const sampleVolumeInMl = sampleUnit === 'gm' ? sampleQty / (analyte.density || 1) : sampleQty;
+
+        let strength: number;
+        if (analyte.unit === '%') {
+             strength = (titre * normality * analyte.eqWt) / (sampleVolumeInMl * 10);
+        } else { // ppm for Chlorine
+            strength = (titre * normality * analyte.eqWt * 1000) / sampleVolumeInMl;
+        }
+
+        setCurrentStrength(strength);
+        setAdjustmentResult(null); 
+        toast({ title: "Calculated Successfully", description: `Current Strength: ${strength.toFixed(3)} ${analyte.unit}` });
     }
+
+    const handleAdjustmentCalc = () => {
+        if (currentStrength === null) {
+            toast({ variant: 'destructive', title: "Error", description: "Please calculate the current strength first." });
+            return;
+        }
+        const target = parseFloat(inputs.targetStrength);
+        const volumeValue = parseFloat(inputs.currentVolume);
+        const volumeInLiters = volumeUnit === 'ml' ? volumeValue / 1000 : volumeValue;
+
+
+        if (isNaN(target) || isNaN(volumeValue) || target <= 0 || volumeValue <= 0) {
+            toast({ variant: 'destructive', title: "Error", description: "Please enter a valid target strength and volume." });
+            return;
+        }
+        
+        let resultMsg = "";
+        if (currentStrength > target) { // Dilution
+            const finalVolume = (currentStrength * volumeInLiters) / target;
+            const waterToAdd = finalVolume - volumeInLiters;
+            resultMsg = `To decrease strength from <strong>${currentStrength.toFixed(3)} ${currentCalc.unit}</strong> to <strong>${target} ${currentCalc.unit}</strong> in <strong>${inputs.currentVolume} ${volumeUnit}</strong>, add <strong>${waterToAdd.toFixed(2)} L</strong> of water.`;
+        } else if (currentStrength < target) { // Fortification
+            const neededStrength = target - currentStrength;
+            if (currentCalc.type === 'base') { // It's a powder/solid base like NaOH
+                const chemicalToAddInKg = (neededStrength / 100) * volumeInLiters;
+                resultMsg = `To increase strength from <strong>${currentStrength.toFixed(3)}%</strong> to <strong>${target}%</strong> in <strong>${inputs.currentVolume} ${volumeUnit}</strong>, add <strong>${chemicalToAddInKg.toFixed(4)} kg</strong> of <strong>${currentCalc.chemical}</strong>.`;
+            } else if (currentCalc.type === 'acid') { // It's a liquid acid
+                 const chemicalInfo = chemicals.acids[activeCalc as keyof typeof chemicals.acids];
+                 if(chemicalInfo && chemicalInfo.type === 'liquid') {
+                    const massOfPureChemicalToAdd_kg = (neededStrength / 100) * volumeInLiters;
+                    const volumeOfStockChemicalToAdd_L = massOfPureChemicalToAdd_kg / (chemicalInfo.density * (chemicalInfo.purity/100));
+                    resultMsg = `To increase strength from <strong>${currentStrength.toFixed(3)}%</strong> to <strong>${target}%</strong> in <strong>${inputs.currentVolume} ${volumeUnit}</strong>, add <strong>${(volumeOfStockChemicalToAdd_L * 1000).toFixed(3)} ml</strong> of concentrated <strong>${currentCalc.chemical}</strong>.`;
+                 } else {
+                     resultMsg = "Cannot calculate fortification for this acid type.";
+                 }
+            } else { // Liquid ppm (Chlorine)
+                const chemicalToAdd_mg = neededStrength * volumeInLiters;
+                const chemicalToAdd_kg = chemicalToAdd_mg / 1000000;
+                resultMsg = `To increase strength from <strong>${currentStrength.toFixed(2)} ppm</strong> to <strong>${target} ppm</strong> in <strong>${inputs.currentVolume} ${volumeUnit}</strong>, add <strong>${chemicalToAdd_kg.toFixed(6)} kg</strong> of <strong>${currentCalc.chemical}</strong>.`;
+            }
+        } else {
+             resultMsg = `The current strength is already at the target value. No adjustment needed.`;
+        }
+        setAdjustmentResult(resultMsg);
+    };
 
     const handleSelectChange = (value: string) => {
         setActiveCalc(value);
+        setSampleQuantity("10");
         setTitreValue("");
-        setResult(null);
+        setCurrentStrength(null);
+        setAdjustmentResult(null);
+        setInputs({ targetStrength: "", currentVolume: "" });
     }
+
+     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setInputs(prev => ({...prev, [name]: value}));
+    };
     
     return (
-        <CalculatorCard title="CIP Solution Strength Calculator" description="Check the strength of common Cleaning-In-Place solutions.">
+        <CalculatorCard title="CIP Solution Strength Calculator" description="Check the strength of common Cleaning-In-Place solutions and calculate adjustments.">
              <div className="mb-6">
                 <Label>Select CIP Solution</Label>
                 <Select value={activeCalc} onValueChange={handleSelectChange}>
@@ -1468,16 +1572,86 @@ function SolutionStrengthCalc() {
             </div>
 
             {currentCalc && (
-                <div>
-                    <p className="text-sm text-muted-foreground mb-4">{currentCalc.description}</p>
-                    <div><Label>{currentCalc.label}</Label><Input type="number" value={titreValue} onChange={e => setTitreValue(e.target.value)} placeholder="e.g., 2.5"/></div>
-                    <Button onClick={handleCalc} className="w-full mt-4">Calculate Strength</Button>
-                    {result && <Alert className="mt-4"><AlertDescription className="font-bold text-center">{result}</AlertDescription></Alert>}
+                <div className="space-y-6">
+                    <div className="p-4 rounded-lg border bg-muted/50 space-y-4">
+                        <h4 className="font-semibold text-gray-800 text-center">Strength Check</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                           <div>
+                                <Label>Sample Quantity</Label>
+                                <div className="flex">
+                                    <Input type="number" value={sampleQuantity} onChange={(e) => setSampleQuantity(e.target.value)} placeholder="e.g., 10" className="rounded-r-none"/>
+                                    <Select value={sampleUnit} onValueChange={(v) => setSampleUnit(v as 'ml' | 'gm')}>
+                                        <SelectTrigger className="w-[80px] rounded-l-none"><SelectValue/></SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="ml">ml</SelectItem>
+                                            <SelectItem value="gm">gm</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            </div>
+                             <div>
+                                <Label>Titrant Used</Label>
+                                <Select value={titrant} onValueChange={setTitrant} disabled={currentCalc.type === 'redox'}>
+                                    <SelectTrigger><SelectValue /></SelectTrigger>
+                                    <SelectContent>
+                                        {Object.entries(availableTitrants).map(([key, chemical]) => (
+                                            <SelectItem key={key} value={key}>{(chemical as any).name}</SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <div>
+                                <Label>Normality of Titrant</Label>
+                                <Input type="number" value={titrantNormality} onChange={(e) => setTitrantNormality(e.target.value)} placeholder="e.g., 0.1"/>
+                            </div>
+                            <div><Label>{currentCalc.label}</Label><Input type="number" value={titreValue} onChange={e => setTitreValue(e.target.value)} placeholder="e.g., 2.5"/></div>
+                        </div>
+                        <Button onClick={handleCalc} className="w-full">Check Current Strength</Button>
+                        {currentStrength !== null && <Alert className="mt-4"><AlertDescription className="font-bold text-center text-lg">{`Current Strength: ${currentStrength.toFixed(3)} ${currentCalc.unit}`}</AlertDescription></Alert>}
+                    </div>
+
+                    {currentStrength !== null && (
+                        <div className="pt-6 border-t">
+                             <h4 className="font-semibold text-gray-800 mb-4 text-center">Strength Adjustment</h4>
+                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <Label>Current Volume</Label>
+                                    <div className="flex">
+                                        <Input 
+                                            type="number" 
+                                            name="currentVolume" 
+                                            value={inputs.currentVolume} 
+                                            onChange={handleInputChange} 
+                                            placeholder="e.g., 1000"
+                                            className="rounded-r-none"
+                                        />
+                                        <Select value={volumeUnit} onValueChange={(v) => setVolumeUnit(v as any)}>
+                                            <SelectTrigger className="w-[100px] rounded-l-none"><SelectValue /></SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="L">Liters</SelectItem>
+                                                <SelectItem value="ml">ml</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                </div>
+                                <div><Label>Target Strength ({currentCalc.unit})</Label><Input type="number" name="targetStrength" value={inputs.targetStrength} onChange={handleInputChange} placeholder="e.g., 1.5"/></div>
+                             </div>
+                             <Button onClick={handleAdjustmentCalc} className="w-full mt-4">Adjust Strength</Button>
+                              {adjustmentResult && <Alert className="mt-4"><AlertTitle>Adjustment Instruction</AlertTitle><AlertDescription dangerouslySetInnerHTML={{ __html: adjustmentResult }} /></Alert>}
+                        </div>
+                    )}
                 </div>
             )}
         </CalculatorCard>
     );
 }
+    
 
+    
+
+
+    
+
+    
 
     
