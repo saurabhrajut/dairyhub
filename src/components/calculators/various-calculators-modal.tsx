@@ -262,18 +262,20 @@ function AcidityMaintenanceCalc() {
         const MM_NA2CO3 = 105.99;
         const MM_NAHCO3 = 84.01;
 
+        // Moles of Lactic Acid to be neutralized
         const molesLacticAcid = totalLacticAcidGrams / MM_LACTIC_ACID;
 
         // Stoichiometry:
-        // C₃H₆O₃ + NaOH → C₃H₅O₃Na + H₂O (1:1)
-        const molesNaOH = molesLacticAcid;
-        // 2C₃H₆O₃ + Na₂CO₃ → 2C₃H₅O₃Na + H₂O + CO₂ (2:1)
-        const molesNa2CO3 = molesLacticAcid / 2;
-        // C₃H₆O₃ + NaHCO₃ → C₃H₅O₃Na + H₂O + CO₂ (1:1)
-        const molesNaHCO3 = molesLacticAcid;
-
+        // C₃H₆O₃ + NaOH → C₃H₅O₃Na + H₂O (1:1 mole ratio)
+        const molesNaOH = molesLacticAcid; 
         const gramsNaOH = molesNaOH * MM_NAOH;
+
+        // 2C₃H₆O₃ + Na₂CO₃ → 2C₃H₅O₃Na + H₂O + CO₂ (2:1 mole ratio)
+        const molesNa2CO3 = molesLacticAcid / 2;
         const gramsNa2CO3 = molesNa2CO3 * MM_NA2CO3;
+
+        // C₃H₆O₃ + NaHCO₃ → C₃H₅O₃Na + H₂O + CO₂ (1:1 mole ratio)
+        const molesNaHCO3 = molesLacticAcid;
         const gramsNaHCO3 = molesNaHCO3 * MM_NAHCO3;
 
         setResults({
@@ -349,8 +351,13 @@ function IncreaseAcidityCalc() {
         const acidityToIncreasePercent = target - initial;
         const gramsLacticAcidEquivalent = (acidityToIncreasePercent / 100) * qtyInKg * 1000;
         
-        const EQ_WT_LACTIC = 90.08;
-        const EQ_WT_CITRIC = 192.12 / 3; // Molar Mass / n-factor (3 for citric acid)
+        const MM_LACTIC = 90.08;
+        const MM_CITRIC = 192.12;
+        const N_FACTOR_LACTIC = 1;
+        const N_FACTOR_CITRIC = 3;
+
+        const EQ_WT_LACTIC = MM_LACTIC / N_FACTOR_LACTIC;
+        const EQ_WT_CITRIC = MM_CITRIC / N_FACTOR_CITRIC;
 
         const gramsCitricAcid = gramsLacticAcidEquivalent * (EQ_WT_CITRIC / EQ_WT_LACTIC);
 
@@ -883,7 +890,7 @@ function CreamFatCalc() {
                 <div><Label>Sample Weight (g)</Label><Input type="number" value={weight} onChange={e => setWeight(e.target.value)} placeholder="e.g., 5" /></div>
             </div>
             <p className="text-xs text-muted-foreground mt-2">
-                Note: This calculation is based on the Gerber method for cream using a standard 10.75 <strong>milk butyrometer</strong> where a 1g sample is taken. If using a specific cream butyrometer, follow its instructions.
+                Note: This calculation is based on the Gerber method for cream using a standard 10.75 <strong>milk butyrometer</strong> with a 1g sample. If using a specific cream butyrometer, follow its instructions.
             </p>
             <Button onClick={calculate} className="w-full mt-4">Calculate Fat %</Button>
             {result && <Alert className="mt-4"><AlertDescription className="text-lg font-bold text-center" dangerouslySetInnerHTML={{ __html: result }} /></Alert>}
@@ -1519,7 +1526,8 @@ function SolutionStrengthCalc() {
             const neededStrength = target - currentStrength;
             if (currentCalc.type === 'base') { // It's a powder/solid base like NaOH
                 const chemicalToAddInKg = (neededStrength / 100) * volumeInLiters;
-                resultMsg = `To increase strength from <strong>${currentStrength.toFixed(3)}%</strong> to <strong>${target}%</strong> in <strong>${inputs.currentVolume} ${volumeUnit}</strong>, add <strong>${chemicalToAddInKg.toFixed(4)} kg</strong> of <strong>${currentCalc.chemical}</strong>.`;
+                const chemicalToAddInGm = chemicalToAddInKg * 1000;
+                resultMsg = `To increase strength from <strong>${currentStrength.toFixed(3)}%</strong> to <strong>${target}%</strong> in <strong>${inputs.currentVolume} ${volumeUnit}</strong>, add <strong>${chemicalToAddInKg.toFixed(4)} kg (${chemicalToAddInGm.toFixed(2)} gm)</strong> of <strong>${currentCalc.chemical}</strong>.`;
             } else if (currentCalc.type === 'acid') { // It's a liquid acid
                  const chemicalInfo = chemicals.acids[activeCalc as keyof typeof chemicals.acids];
                  if(chemicalInfo && chemicalInfo.type === 'liquid') {
@@ -1532,7 +1540,8 @@ function SolutionStrengthCalc() {
             } else { // Liquid ppm (Chlorine)
                 const chemicalToAdd_mg = neededStrength * volumeInLiters;
                 const chemicalToAdd_kg = chemicalToAdd_mg / 1000000;
-                resultMsg = `To increase strength from <strong>${currentStrength.toFixed(2)} ppm</strong> to <strong>${target} ppm</strong> in <strong>${inputs.currentVolume} ${volumeUnit}</strong>, add <strong>${chemicalToAdd_kg.toFixed(6)} kg</strong> of <strong>${currentCalc.chemical}</strong>.`;
+                const chemicalToAdd_gm = chemicalToAdd_kg * 1000;
+                resultMsg = `To increase strength from <strong>${currentStrength.toFixed(2)} ppm</strong> to <strong>${target} ppm</strong> in <strong>${inputs.currentVolume} ${volumeUnit}</strong>, add <strong>${chemicalToAdd_kg.toFixed(6)} kg (${chemicalToAdd_gm.toFixed(3)} gm)</strong> of <strong>${currentCalc.chemical}</strong>.`;
             }
         } else {
              resultMsg = `The current strength is already at the target value. No adjustment needed.`;
@@ -1649,6 +1658,8 @@ function SolutionStrengthCalc() {
 
     
 
+
+    
 
     
 
