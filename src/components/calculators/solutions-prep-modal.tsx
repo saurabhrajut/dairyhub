@@ -354,78 +354,272 @@ function ReagentCalculator() {
 }
 
 function StandardizationCalc() {
-    const [result, setResult] = useState<string | null>(null);
+    const [standardizationMethod, setStandardizationMethod] = useState<'primary' | 'secondary'>('primary');
+    
+    // Common state
+    const [calculatedNormality, setCalculatedNormality] = useState<number | null>(null);
+    const [adjustmentResult, setAdjustmentResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
-    const [primaryStd, setPrimaryStd] = useState<string>("");
-    const [v1, setV1] = useState(""); // Primary std volume
-    const [w1, setW1] = useState(""); // Primary std weight
-    const [v2, setV2] = useState(""); // Titrant volume
+    const allChemicals = { ...chemicals.acids, ...chemicals.bases, ...chemicals.other_reagents };
 
-    const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        setResult(null);
+    // Primary Standardization State
+    const [primaryTitrantKey, setPrimaryTitrantKey] = useState("");
+    const [primaryStdKey, setPrimaryStdKey] = useState("");
+    const [stdWeight, setStdWeight] = useState("");
+    const [stdVol, setStdVol] = useState("100");
+    const [titrantVol, setTitrantVol] = useState("");
+    const [primaryStdTakenVol, setPrimaryStdTakenVol] = useState("10");
+
+    // Secondary Standardization State
+    const [secondaryAnalyteKey, setSecondaryAnalyteKey] = useState("");
+    const [secondaryTitrantKey, setSecondaryTitrantKey] = useState("");
+    const [secondaryTitrantNormality, setSecondaryTitrantNormality] = useState("");
+    const [analyteVolume, setAnalyteVolume] = useState("10");
+    const [secondaryTitrantVolume, setSecondaryTitrantVolume] = useState("");
+
+    // Adjustment State
+    const [targetNormality, setTargetNormality] = useState("");
+    const [currentVolume, setCurrentVolume] = useState("");
+    const [volumeUnit, setVolumeUnit] = useState<'L'|'ml'>('L');
+
+    const resetAll = useCallback(() => {
+        setCalculatedNormality(null);
+        setAdjustmentResult(null);
         setError(null);
-        
-        const primaryStdKey = primaryStd;
-        const vol1 = parseFloat(v1);
-        const weight1 = parseFloat(w1);
-        const vol2 = parseFloat(v2);
+        setTargetNormality("");
+        setCurrentVolume("");
+    }, []);
 
-        if (!primaryStdKey || isNaN(weight1) || isNaN(vol1) || isNaN(vol2) || vol1 <= 0 || weight1 <= 0 || vol2 <= 0) {
-            setError('Please enter valid positive numbers in all fields.');
-            return;
+    useEffect(() => {
+        resetAll();
+    }, [standardizationMethod, primaryTitrantKey, primaryStdKey, secondaryAnalyteKey, secondaryTitrantKey, resetAll]);
+    
+    const { availableTitrants } = useMemo(() => {
+        const acids = Object.keys(chemicals.acids);
+        const bases = Object.keys(chemicals.bases);
+        let titrants: string[] = [];
+        if (secondaryAnalyteKey) {
+            if (acids.includes(secondaryAnalyteKey)) titrants = bases;
+            else if (bases.includes(secondaryAnalyteKey)) titrants = acids;
         }
+        return { availableTitrants: titrants };
+    }, [secondaryAnalyteKey]);
+
+    useEffect(() => {
+        if (availableTitrants.length > 0 && !availableTitrants.includes(secondaryTitrantKey)) {
+            setSecondaryTitrantKey("");
+        }
+    }, [availableTitrants, secondaryTitrantKey]);
+
+    const handleCalculateNormality = useCallback(() => {
+        setCalculatedNormality(null);
+        setAdjustmentResult(null);
+        setError(null);
+
+        if (standardizationMethod === 'primary') {
+            const weight = parseFloat(stdWeight);
+            const vol1 = parseFloat(stdVol);
+            const vol2 = parseFloat(titrantVol);
+            const volTaken = parseFloat(primaryStdTakenVol);
+
+            if (!primaryStdKey || !primaryTitrantKey || isNaN(weight) || isNaN(vol1) || isNaN(vol2) || isNaN(volTaken) || [weight, vol1, vol2, volTaken].some(v => v <= 0)) {
+                setError('Please enter valid positive numbers in all fields for primary standardization.');
+                return;
+            }
+            
+            const primaryStd = chemicals.primaryStandards[primaryStdKey as keyof typeof chemicals.primaryStandards];
+            const equivalentWeight = primaryStd.molarMass / primaryStd.nFactor;
+
+            const n1 = (weight * 1000) / (equivalentWeight * vol1);
+            const n2 = (n1 * volTaken) / vol2;
+
+            setCalculatedNormality(n2);
+        } else { // secondary
+            const n1 = parseFloat(secondaryTitrantNormality);
+            const v1 = parseFloat(secondaryTitrantVolume);
+            const v2 = parseFloat(analyteVolume);
+
+            if (!secondaryAnalyteKey || !secondaryTitrantKey || isNaN(n1) || isNaN(v1) || isNaN(v2) || [n1, v1, v2].some(v => v <= 0)) {
+                setError('Please fill all fields for secondary standardization with valid positive numbers.');
+                return;
+            }
+
+            const n2 = (n1 * v1) / v2;
+            setCalculatedNormality(n2);
+        }
+    }, [
+        standardizationMethod,
+        stdWeight, stdVol, titrantVol, primaryStdTakenVol, primaryStdKey, primaryTitrantKey,
+        secondaryTitrantNormality, secondaryTitrantVolume, analyteVolume, secondaryAnalyteKey, secondaryTitrantKey
+    ]);
+
+    const handleAdjustNormality = useCallback(() => {
+        if (calculatedNormality === null) { setError("Please calculate the exact normality first."); return; }
+        setError(null); setAdjustmentResult(null);
+
+        const n_have = calculatedNormality;
+        const v_have_input = parseFloat(currentVolume);
+        const v_have_liters = volumeUnit === 'ml' ? v_have_input / 1000 : v_have_input;
+        const n_req = parseFloat(targetNormality);
+
+        if (isNaN(v_have_input) || isNaN(n_req) || v_have_input <= 0 || n_req <= 0) { setError("Please provide a valid target normality and current volume."); return; }
         
-        const std = chemicals.primaryStandards[primaryStdKey as keyof typeof chemicals.primaryStandards];
-        const equivalentWeight = std.molarMass / std.nFactor;
+        let resultMsg = "";
+        const chemicalKeyToUse = standardizationMethod === 'primary' ? primaryTitrantKey : secondaryAnalyteKey;
 
-        // N1 = (Weight of Primary Std * 1000) / (Eq. Wt. * Volume of solution in ml)
-        const n1 = (weight1 * 1000) / (equivalentWeight * vol1);
-        const n2 = (n1 * 10) / vol2; // Assuming 10ml of primary std is taken for titration
+        if (n_have > n_req) {
+            const v_final = (n_have * v_have_liters) / n_req;
+            const water_to_add = v_final - v_have_liters;
+            resultMsg = `To decrease normality from <strong>${n_have.toFixed(4)} N</strong> to <strong>${n_req} N</strong> in your <strong>${currentVolume} ${volumeUnit}</strong> solution, add <strong>${(water_to_add * 1000).toFixed(2)} ml</strong> of solvent.`;
+        } else if (n_have < n_req) {
+            const chemical = allChemicals[chemicalKeyToUse as keyof typeof allChemicals];
+            if (!chemical) { setError("Selected chemical for fortification is not valid."); return; }
+            
+            const equivalents_needed = n_req * v_have_liters;
+            const equivalents_have = n_have * v_have_liters;
+            const equivalents_to_add = equivalents_needed - equivalents_have;
+            
+            if (chemical.type === 'solid') {
+                const equivalentWeight = chemical.molarMass / chemical.nFactor;
+                const weight_to_add_g = equivalents_to_add * equivalentWeight;
+                resultMsg = `To increase normality from <strong>${n_have.toFixed(4)} N</strong> to <strong>${n_req} N</strong>, you need to add <strong>${weight_to_add_g.toFixed(4)} g</strong> of <strong>${chemical.name}</strong> to your <strong>${currentVolume} ${volumeUnit}</strong> solution.`;
+            } else if (chemical.type === 'liquid') {
+                const stockMolarity = (chemical.purity / 100 * chemical.density * 1000) / chemical.molarMass;
+                const stockNormality = stockMolarity * chemical.nFactor;
+                const vol_to_add_ml = (equivalents_to_add / stockNormality) * 1000;
+                resultMsg = `To increase normality from <strong>${n_have.toFixed(4)} N</strong> to <strong>${n_req} N</strong>, you need to add <strong>${vol_to_add_ml.toFixed(3)} mL</strong> of concentrated <strong>${chemical.name}</strong> to your <strong>${currentVolume} ${volumeUnit}</strong> solution.`;
+            }
+        } else {
+            resultMsg = "Current normality is already at the target value. No adjustment needed.";
+        }
+        setAdjustmentResult(resultMsg);
 
-        setResult(`The normality of the secondary standard solution is <code class="font-bold bg-green-100 p-1 rounded">${n2.toFixed(4)} N</code>.`);
-    }, [primaryStd, v1, w1, v2]);
+    }, [calculatedNormality, targetNormality, currentVolume, volumeUnit, standardizationMethod, primaryTitrantKey, secondaryAnalyteKey, allChemicals]);
 
     return (
-         <CalculatorCard title="Standardize a Solution (Titration)" description="Use the formula N₁V₁ = N₂V₂ to find the exact normality (N₂) of your prepared solution.">
-            <form onSubmit={handleSubmit}>
-                <h3 className="font-bold text-lg mb-2 text-gray-700">1. Prepare Primary Standard</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end p-4 bg-muted rounded-lg">
-                    <div>
-                        <Label htmlFor="std-select">Select Primary Standard</Label>
-                        <Select value={primaryStd} onValueChange={setPrimaryStd} name="std-select" required>
-                            <SelectTrigger><SelectValue placeholder="Select a standard" /></SelectTrigger>
-                            <SelectContent>
-                                {Object.entries(chemicals.primaryStandards).map(([key, value]) => (
-                                    <SelectItem key={key} value={key}>{value.name}</SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
+        <CalculatorCard title="Solution Standardization & Adjustment" description="Use a primary or secondary standard to find the exact normality of your solution, then calculate the adjustment needed.">
+            <div className="mb-4">
+                <Label htmlFor="standardization-method">Standardization Method</Label>
+                 <Select value={standardizationMethod} onValueChange={(v) => setStandardizationMethod(v as 'primary' | 'secondary')}>
+                    <SelectTrigger id="standardization-method"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="primary">Standardize with Primary Standard</SelectItem>
+                        <SelectItem value="secondary">Standardize with Secondary Standard</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
+            
+            {standardizationMethod === 'primary' && (
+                <div className="pt-4 border-t">
+                    <h3 className="font-bold text-lg mb-2 text-gray-700">Step 1: Select Chemicals</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-muted rounded-lg">
+                        <div>
+                            <Label htmlFor="titrant-select-primary">Solution to Standardize (Titrant)</Label>
+                            <Select value={primaryTitrantKey} onValueChange={setPrimaryTitrantKey} name="titrant-select-primary" required>
+                                <SelectTrigger><SelectValue placeholder="Select Titrant" /></SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup><Label className="px-2 text-xs font-semibold text-muted-foreground">Acids</Label>{Object.entries(chemicals.acids).map(([key, value]) => (<SelectItem key={key} value={key}>{value.name}</SelectItem>))}</SelectGroup>
+                                    <SelectGroup><Label className="px-2 text-xs font-semibold text-muted-foreground">Bases</Label>{Object.entries(chemicals.bases).map(([key, value]) => (<SelectItem key={key} value={key}>{value.name}</SelectItem>))}</SelectGroup>
+                                    <SelectGroup><Label className="px-2 text-xs font-semibold text-muted-foreground">Other</Label>{Object.entries(chemicals.other_reagents).map(([key, value]) => (<SelectItem key={key} value={key}>{value.name}</SelectItem>))}</SelectGroup>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div>
+                            <Label htmlFor="std-select-primary">Primary Standard Used</Label>
+                            <Select value={primaryStdKey} onValueChange={setPrimaryStdKey} name="std-select-primary" required>
+                                <SelectTrigger><SelectValue placeholder="Select a Primary Standard" /></SelectTrigger>
+                                <SelectContent>
+                                    {Object.entries(chemicals.primaryStandards).map(([key, value]) => (
+                                        <SelectItem key={key} value={key}>{value.name}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
                     </div>
-                    <div>
-                        <Label htmlFor="std-weight">Weight taken (g)</Label>
-                        <Input type="number" name="std-weight" value={w1} onChange={e => setW1(e.target.value)} placeholder="e.g., 0.53" step="any" required />
-                    </div>
-                    <div>
-                        <Label htmlFor="std-vol1">Final Volume made (ml)</Label>
-                        <Input type="number" name="std-vol1" value={v1} onChange={e => setV1(e.target.value)} placeholder="e.g., 100" step="any" required />
-                    </div>
-                </div>
 
-                <h3 className="font-bold text-lg mt-6 mb-2 text-gray-700">2. Titration</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end p-4 bg-muted rounded-lg">
-                    <div>
-                        <Label htmlFor="std-v2">Titrant Volume used for 10ml Primary Std (V₂)</Label>
-                        <Input type="number" name="std-v2" value={v2} onChange={e => setV2(e.target.value)} placeholder="e.g., 9.8" step="any" required />
+                    <h3 className="font-bold text-lg mt-6 mb-2 text-gray-700">Step 2: Enter Titration Data</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 bg-muted rounded-lg">
+                        <div><Label htmlFor="std-weight">Weight of Primary Std (g)</Label><Input type="number" name="std-weight" value={stdWeight} onChange={e => setStdWeight(e.target.value)} placeholder="e.g., 0.53" step="any" required /></div>
+                        <div><Label htmlFor="std-vol1">Final Vol. of Std Sol. (ml)</Label><Input type="number" name="std-vol1" value={stdVol} onChange={e => setStdVol(e.target.value)} placeholder="e.g., 100" step="any" required /></div>
+                        <div><Label htmlFor="std-vol-taken">Vol. of Std Sol. Taken (ml)</Label><Input type="number" name="std-vol-taken" value={primaryStdTakenVol} onChange={e => setPrimaryStdTakenVol(e.target.value)} placeholder="e.g., 10" step="any" required /></div>
+                        <div><Label htmlFor="titrant-vol">Titrant Volume Used (ml)</Label><Input type="number" name="titrant-vol" value={titrantVol} onChange={e => setTitrantVol(e.target.value)} placeholder="e.g., 9.8" step="any" required /></div>
                     </div>
-                    <Button type="submit" className="w-full">Calculate Normality (N₂)</Button>
                 </div>
-                {error && <Alert variant="destructive" className="mt-8"><AlertDescription>{error}</AlertDescription></Alert>}
-                {result && <Alert className="mt-8"><AlertTitle>Result</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
-            </form>
+            )}
+
+            {standardizationMethod === 'secondary' && (
+                 <div className="pt-4 border-t">
+                    <h3 className="font-bold text-lg mb-2 text-gray-700">Step 1: Select Chemicals</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-muted rounded-lg">
+                        <div>
+                            <Label htmlFor="analyte-select">Solution to Standardize (Analyte)</Label>
+                            <Select value={secondaryAnalyteKey} onValueChange={setSecondaryAnalyteKey} name="analyte-select" required>
+                                <SelectTrigger><SelectValue placeholder="Select Analyte" /></SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup><Label className="px-2 text-xs font-semibold text-muted-foreground">Acids</Label>{Object.entries(chemicals.acids).map(([key, value]) => (<SelectItem key={key} value={key}>{value.name}</SelectItem>))}</SelectGroup>
+                                    <SelectGroup><Label className="px-2 text-xs font-semibold text-muted-foreground">Bases</Label>{Object.entries(chemicals.bases).map(([key, value]) => (<SelectItem key={key} value={key}>{value.name}</SelectItem>))}</SelectGroup>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div>
+                            <Label htmlFor="titrant-sec-select">Standard Solution Used (Titrant)</Label>
+                            <Select value={secondaryTitrantKey} onValueChange={setSecondaryTitrantKey} name="titrant-sec-select" required disabled={!secondaryAnalyteKey}>
+                                <SelectTrigger><SelectValue placeholder="Select Titrant" /></SelectTrigger>
+                                <SelectContent>
+                                    {availableTitrants.map((key: string) => (
+                                        <SelectItem key={key} value={key}>{allChemicals[key as keyof typeof allChemicals].name}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+                    </div>
+                    <h3 className="font-bold text-lg mt-6 mb-2 text-gray-700">Step 2: Enter Titration Data</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 bg-muted rounded-lg">
+                        <div><Label htmlFor="titrant-normality">Normality of Titrant (N₁)</Label><Input type="number" name="titrant-normality" value={secondaryTitrantNormality} onChange={e => setSecondaryTitrantNormality(e.target.value)} placeholder="e.g., 0.1000" step="any" required /></div>
+                        <div><Label htmlFor="analyte-volume">Volume of Analyte (V₂)</Label><Input type="number" name="analyte-volume" value={analyteVolume} onChange={e => setAnalyteVolume(e.target.value)} placeholder="e.g., 10" step="any" required /></div>
+                        <div><Label htmlFor="titrant-volume">Volume of Titrant (V₁)</Label><Input type="number" name="titrant-volume" value={secondaryTitrantVolume} onChange={e => setSecondaryTitrantVolume(e.target.value)} placeholder="e.g., 9.8" step="any" required /></div>
+                    </div>
+                </div>
+            )}
+
+            <Button onClick={handleCalculateNormality} className="w-full mt-4">Calculate Exact Normality</Button>
+            {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
+
+            {calculatedNormality !== null && (
+                <div className="mt-4">
+                    <Alert>
+                        <AlertTitle>Calculated Normality</AlertTitle>
+                        <AlertDescription className="text-2xl font-bold text-green-700">{calculatedNormality.toFixed(4)} N</AlertDescription>
+                    </Alert>
+                    <div className="pt-6 mt-6 border-t">
+                        <h3 className="font-bold text-lg mb-2 text-gray-700">Step 3: Adjust Normality (Optional)</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-muted rounded-lg">
+                            <div>
+                                <Label htmlFor="target-normality-sec">Target Normality (N)</Label>
+                                <Input id="target-normality-sec" type="number" placeholder="e.g., 0.1000" value={targetNormality} onChange={e => setTargetNormality(e.target.value)} />
+                            </div>
+                            <div>
+                                <Label htmlFor="current-volume-sec">Current Volume of Solution</Label>
+                                <div className="flex">
+                                    <Input id="current-volume-sec" type="number" placeholder="e.g., 950" className="rounded-r-none" value={currentVolume} onChange={e => setCurrentVolume(e.target.value)} />
+                                    <Select value={volumeUnit} onValueChange={(val) => setVolumeUnit(val as 'L'|'ml')}>
+                                        <SelectTrigger className="w-[80px] rounded-l-none"><SelectValue /></SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="L">L</SelectItem>
+                                            <SelectItem value="ml">ml</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            </div>
+                        </div>
+                        <Button onClick={handleAdjustNormality} className="w-full mt-4">Adjust Normality</Button>
+                        {adjustmentResult && <Alert className="mt-4"><AlertTitle>Adjustment Instruction</AlertTitle><AlertDescription dangerouslySetInnerHTML={{ __html: adjustmentResult }} /></Alert>}
+                    </div>
+                </div>
+            )}
         </CalculatorCard>
     );
-};
+}
 
 function StrengthCalc() {
     const [result, setResult] = useState<string | null>(null);
