@@ -1,8 +1,13 @@
 "use client";
 
-import React, { createContext, useState, useContext, useEffect, ReactNode } from "react";
+import React, {
+  createContext,
+  useState,
+  useContext,
+  useEffect,
+  ReactNode,
+} from "react";
 import {
-  getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   updateProfile,
@@ -10,9 +15,17 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   signOut,
-  User as FirebaseUser
+  User as FirebaseUser,
 } from "firebase/auth";
-import { initFirebaseClient } from "@/lib/firebaseClient";
+// Firestore फंक्शन्स import करें
+import {
+  doc,
+  getDoc,
+  setDoc,
+  serverTimestamp,
+} from "firebase/firestore";
+// auth और db को firebaseClient से import करें
+import { auth, db } from "@/lib/firebaseClient";
 
 export type Department =
   | "process-access"
@@ -53,26 +66,51 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<AppUser | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const auth = getAuth(initFirebaseClient()!);
-
+  // onAuthStateChanged यूज़र स्टेट के लिए "single source of truth" होना चाहिए
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((firebaseUser) => {
-      if (firebaseUser) {
-        const appUser: AppUser = {
-          uid: firebaseUser.uid,
-          email: firebaseUser.email,
-          isAnonymous: firebaseUser.isAnonymous,
-          displayName: firebaseUser.displayName,
-          photoURL: firebaseUser.photoURL,
-        };
-        setUser(appUser);
-      } else {
-        setUser(null);
-      }
+    // सुनिश्चित करें कि auth और db client-side पर ही चलें
+    if (auth && db) {
+      const unsubscribe = auth.onAuthStateChanged(async (firebaseUser) => {
+        if (firebaseUser) {
+          // यूज़र लॉग-इन है, Firestore से कस्टम डेटा लाएं
+          const userDocRef = doc(db, "users", firebaseUser.uid);
+          const userDoc = await getDoc(userDocRef);
+
+          if (userDoc.exists()) {
+            // Auth डेटा और Firestore डेटा को मिलाएं
+            const customData = userDoc.data();
+            setUser({
+              uid: firebaseUser.uid,
+              email: firebaseUser.email,
+              isAnonymous: firebaseUser.isAnonymous,
+              displayName: firebaseUser.displayName || customData.displayName,
+              photoURL: firebaseUser.photoURL,
+              gender: customData.gender,
+              department: customData.department,
+            });
+          } else {
+            // ऐसा हो सकता है अगर Firestore doc अभी नहीं बना है (जैसे Google sign-in)
+            // सिर्फ Auth डेटा सेट करें
+            setUser({
+              uid: firebaseUser.uid,
+              email: firebaseUser.email,
+              isAnonymous: firebaseUser.isAnonymous,
+              displayName: firebaseUser.displayName,
+              photoURL: firebaseUser.photoURL,
+            });
+          }
+        } else {
+          // यूज़र लॉग-आउट है
+          setUser(null);
+        }
+        setLoading(false);
+      });
+      return () => unsubscribe();
+    } else {
+      // Auth/DB लोड नहीं हुआ (शायद सर्वर पर)
       setLoading(false);
-    });
-    return () => unsubscribe();
-  }, [auth]);
+    }
+  }, []); // यह इफ़ेक्ट एक बार चलना चाहिए
 
   const signup = async (
     email: string,
@@ -81,57 +119,81 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     gender: "male" | "female" | "other",
     department: Department
   ) => {
+    if (!auth || !db) throw new Error("Firebase services not initialized.");
+
+    // 1. Auth में यूज़र बनाएं
     const { user } = await createUserWithEmailAndPassword(auth, email, password);
+    // 2. Auth प्रोफाइल अपडेट करें
     await updateProfile(user, { displayName });
-    setUser({
+
+    // 3. Firestore में कस्टम डेटा सेव करें
+    const userDocRef = doc(db, "users", user.uid);
+    await setDoc(userDocRef, {
       uid: user.uid,
       email: user.email,
-      isAnonymous: user.isAnonymous,
-      displayName,
-      gender,
-      department,
+      displayName: displayName,
+      gender: gender,
+      department: department,
+      createdAt: serverTimestamp(),
     });
+
+    // setUser() को कॉल न करें। onAuthStateChanged इसे हैंडल करेगा।
   };
 
   const login = async (email: string, password: string) => {
-    const { user } = await signInWithEmailAndPassword(auth, email, password);
-    setUser({
-      uid: user.uid,
-      email: user.email,
-      isAnonymous: user.isAnonymous,
-      displayName: user.displayName,
-      photoURL: user.photoURL,
-    });
+    if (!auth) throw new Error("Auth not initialized.");
+    await signInWithEmailAndPassword(auth, email, password);
+    // setUser() को कॉल न करें। onAuthStateChanged इसे हैंडल करेगा।
   };
 
   const anonymousLogin = async () => {
+    if (!auth || !db) throw new Error("Firebase services not initialized.");
     const { user } = await signInAnonymously(auth);
-    setUser({
-      uid: user.uid,
-      email: null,
-      isAnonymous: true,
-      displayName: "Guest User",
-      department: "guest",
-    });
+
+    // गेस्ट यूज़र के लिए भी Firestore doc बनाएं
+    const userDocRef = doc(db, "users", user.uid);
+    await setDoc(
+      userDocRef,
+      {
+        uid: user.uid,
+        isAnonymous: true,
+        displayName: "Guest User",
+        department: "guest",
+        createdAt: serverTimestamp(),
+      },
+      { merge: true } // अगर पहले से मौजूद है तो मर्ज करें
+    );
+    // setUser() को कॉल न करें। onAuthStateChanged इसे हैंडल करेगा।
   };
 
   const signInWithGoogle = async () => {
+    if (!auth || !db) throw new Error("Firebase services not initialized.");
     const provider = new GoogleAuthProvider();
     const result = await signInWithPopup(auth, provider);
     const firebaseUser = result.user;
-    setUser({
-      uid: firebaseUser.uid,
-      email: firebaseUser.email,
-      isAnonymous: firebaseUser.isAnonymous,
-      displayName: firebaseUser.displayName,
-      photoURL: firebaseUser.photoURL,
-      department: "process-access",
-    });
+
+    // Google यूज़र के लिए Firestore doc बनाएं या अपडेट करें
+    const userDocRef = doc(db, "users", firebaseUser.uid);
+    await setDoc(
+      userDocRef,
+      {
+        uid: firebaseUser.uid,
+        email: firebaseUser.email,
+        displayName: firebaseUser.displayName,
+        photoURL: firebaseUser.photoURL,
+        isAnonymous: false,
+        department: "process-access", // डिफ़ॉल्ट, या आप यूज़र से पूछ सकते हैं
+        lastLogin: serverTimestamp(),
+      },
+      { merge: true } // मौजूदा यूज़र का डेटा ओवरराइट न हो
+    );
+    // setUser() को कॉल न करें। onAuthStateChanged इसे हैंडल करेगा।
   };
 
   const logout = async () => {
+    if (!auth) throw new Error("Auth not initialized.");
     await signOut(auth);
-    setUser(null);
+    // setUser(null) को कॉल न करें। onAuthStateChanged इसे हैंडल करेगा।
   };
 
   return (
