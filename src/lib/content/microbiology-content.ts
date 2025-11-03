@@ -1,4 +1,5 @@
 
+
 export const microbiologyContent = {
     hi: {
         title: "दूध सूक्ष्म जीव विज्ञान और परीक्षण",
@@ -117,7 +118,7 @@ export const microbiologyContent = {
                     <ol class="list-decimal list-outside pl-5 space-y-1 mt-2">
                         <li><strong>अपर्याप्त पाश्चुरीकरण:</strong> गर्मी उपचार प्रक्रिया रोगजनकों को मारने के लिए पर्याप्त नहीं थी।</li>
                         <li><strong>पाश्चुरीकरण के बाद संदूषण (Post-Pasteurization Contamination - PPC):</strong> उत्पाद गर्मी उपचार के बाद खराब साफ किए गए उपकरणों, पर्यावरण या कर्मियों से दूषित हो गया था।</li>
-                    </ul>
+                    </ol>
                     <p>इसलिए, तैयार उत्पादों में एंटरोबैक्टीरियासी के लिए परीक्षण करना एक खाद्य सुरक्षा प्रबंधन प्रणाली की प्रभावशीलता को सत्यापित करने के लिए एक महत्वपूर्ण गुणवत्ता नियंत्रण जांच है।</p>
                 `
             },
@@ -173,56 +174,6 @@ export const microbiologyContent = {
                 `
             }
         ],
-        testMethods: {
-          title: "सामान्य सूक्ष्मजीवविज्ञानी परीक्षण विधियाँ",
-          intro: "डेयरी उत्पादों की सुरक्षा और गुणवत्ता सुनिश्चित करने के लिए कई मानक सूक्ष्मजीवविज्ञानी परीक्षण किए जाते हैं। यहाँ कुछ प्रमुख परीक्षण विधियों का अवलोकन दिया गया है:",
-          tests: [
-            {
-              id: 'tpc',
-              title: 'एरोबिक मेसोफिलिक प्लेट काउंट (कुल प्लेट काउंट)',
-              principle: 'यह परीक्षण एक नमूने में व्यवहार्य (जीवित) बैक्टीरिया और कवक की कुल संख्या को मापता है जो ऑक्सीजन की उपस्थिति में मध्यम (मेसोफिलिक) तापमान पर बढ़ सकते हैं। इसे मानक प्लेट काउंट (SPC) या कुल व्यवहार्य गणना (TVC) के रूप में भी जाना जाता है।',
-              procedure: `
-                <ol class='list-decimal list-inside space-y-2 mt-2'>
-                  <li><strong>नमूना तैयार करना:</strong> 90 मिलीलीटर बाँझ मंदक (जैसे, पेप्टोन पानी) के साथ 10 ग्राम या 10 मिलीलीटर नमूना मिलाकर 1:10 का तनुकरण बनाएं।</li>
-                  <li><strong>क्रमिक तनुकरण:</strong> इससे आगे क्रमिक तनुकरण (1:100, 1:1000, आदि) तैयार करें।</li>
-                  <li><strong>प्लेटिंग:</strong> प्रत्येक तनुकरण से 1 मिलीलीटर को दो बाँझ पेट्री प्लेटों में स्थानांतरित करें (पोर प्लेट विधि)।</li>
-                  <li><strong>मीडिया:</strong> प्लेटों में 15-20 मिलीलीटर पिघला हुआ प्लेट काउंट अगर (PCA), 45 डिग्री सेल्सियस तक ठंडा, डालें। मिलाने के लिए धीरे से घुमाएं।</li>
-                  <li><strong>ऊष्मायन:</strong> प्लेटों को 35-37 डिग्री सेल्सियस पर 24-48 घंटे के लिए उल्टा करके ऊष्मायन करें।</li>
-                  <li><strong>गिनती:</strong> 25 और 250 कॉलोनियों के बीच वाली प्लेटों का चयन करें। एक कॉलोनी काउंटर का उपयोग करके कॉलोनियों की गिनती करें।</li>
-                </ol>`,
-              calculation: '<code>CFU/g (या ml) = (कॉलोनियों की औसत संख्या × तनुकरण कारक) / प्लेट किए गए नमूने का आयतन (ml)</code>'
-            },
-            {
-              id: 'coliforms',
-              title: 'कोलीफॉर्म, मल कोलीफॉर्म और ई. कोलाई का पता लगाना',
-              principle: 'कोलीफॉर्म लैक्टोज को किण्वित करके एसिड और गैस का उत्पादन करते हैं। उन्हें वायलेट रेड बाइल अगर (VRBA) पर गिना जाता है। ई. कोलाई एक मल कोलीफॉर्म है जिसकी पुष्टि विशिष्ट जैव रासायनिक परीक्षणों द्वारा की जाती है।',
-              procedure: `
-                <ol class='list-decimal list-inside space-y-2 mt-2'>
-                  <li><strong>नमूना और तनुकरण:</strong> टीपीसी विधि के अनुसार क्रमिक तनुकरण तैयार करें।</li>
-                  <li><strong>प्लेटिंग:</strong> प्रत्येक तनुकरण से 1 मिलीलीटर को बाँझ पेट्री प्लेटों में पिपेट करें।</li>
-                  <li><strong>मीडिया:</strong> 15-20 मिलीलीटर पिघला हुआ वीआरबीए डालें और मिलाएं। जमने के बाद, ऊपर एक और वीआरबीए की परत डालें (ओवरले)।</li>
-                  <li><strong>ऊष्मायन:</strong> प्लेटों को 35-37 डिग्री सेल्सियस पर 18-24 घंटे के लिए ऊष्मायन करें।</li>
-                  <li><strong>गिनती:</strong> लाल-बैंगनी कॉलोनियों (0.5 मिमी या उससे अधिक व्यास) को कोलीफॉर्म के रूप में गिनें।</li>
-                  <li><strong>पुष्टि (ई. कोलाई):</strong> संदिग्ध कॉलोनियों को ब्रिलियंट ग्रीन लैक्टोज बाइल (BGLB) शोरबा में टीका लगाएं और 44.5 डिग्री सेल्सियस पर ऊष्मायन करें। गैस उत्पादन ई. कोलाई की उपस्थिति को इंगित करता है। आगे की पुष्टि IMViC परीक्षणों द्वारा की जाती है।</li>
-                </ol>`,
-              calculation: '<code>कोलीफॉर्म/जी (या एमएल) = विशिष्ट कॉलोनियों की औसत संख्या × तनुकरण कारक</code>'
-            },
-            {
-              id: 'yeast_mould',
-              title: 'खमीर और मोल्ड गणना',
-              principle: 'खमीर और मोल्ड अम्लीय वातावरण में बढ़ सकते हैं, इसलिए उनकी गणना के लिए एक अम्लीय माध्यम (जैसे पोटैटो डेक्सट्रोज अगर, पीडीए) का उपयोग किया जाता है।',
-              procedure: `
-                 <ol class='list-decimal list-inside space-y-2 mt-2'>
-                  <li><strong>नमूना और तनुकरण:</strong> टीपीसी विधि के अनुसार क्रमिक तनुकरण तैयार करें।</li>
-                  <li><strong>प्लेटिंग:</strong> प्रत्येक तनुकरण से 1 मिलीलीटर को बाँझ पेट्री प्लेटों में स्थानांतरित करें (स्प्रेड प्लेट विधि बेहतर है)।</li>
-                  <li><strong>मीडिया:</strong> प्लेटों में पहले से डाला हुआ पोटैटो डेक्सट्रोज अगर (PDA) होना चाहिए, जिसका पीएच ~3.5 (टार्टरिक एसिड के साथ) पर समायोजित किया गया हो ताकि जीवाणु वृद्धि को रोका जा सके।</li>
-                  <li><strong>ऊष्मायन:</strong> प्लेटों को 22-25 डिग्री सेल्सियस पर 5 दिनों के लिए ऊष्मायन करें।</li>
-                  <li><strong>गिनती:</strong> खमीर (आमतौर पर चमकदार, गोल) और मोल्ड (कपास जैसी, फैलने वाली) की कॉलोनियों को अलग-अलग गिनें।</li>
-                </ol>`,
-              calculation: '<code>खमीर/मोल्ड गणना/जी (या एमएल) = कॉलोनियों की औसत संख्या × तनुकरण कारक</code>'
-            }
-          ]
-        }
     },
     en: {
         title: "Milk Microbiology & Testing",
@@ -341,7 +292,7 @@ export const microbiologyContent = {
                     <ol class="list-decimal list-outside pl-5 space-y-1 mt-2">
                         <li><strong>Inadequate Pasteurization:</strong> The heat treatment process was not sufficient to kill the pathogens.</li>
                         <li><strong>Post-Pasteurization Contamination (PPC):</strong> The product was contaminated after the heat treatment from poorly cleaned equipment, the environment, or personnel.</li>
-                    </ul>
+                    </ol>
                     <p>Therefore, testing for Enterobacteriaceae in finished products is a key quality control check to verify the effectiveness of a food safety management system.</p>
                 `
             },
@@ -396,57 +347,7 @@ export const microbiologyContent = {
                     <p>Refrigeration is the main means of slowing down the growth of bacteria in milk. An unbroken cold chain (typically at &lt;4°C) must be maintained from the farm to the processing plant, to the retailer, and finally to the consumer's refrigerator. <strong>It is crucial to remember that cooling does not remedy poor hygiene</strong>; it only slows the growth of bacteria that are already present. If the initial contamination is high, the milk will spoil quickly even under refrigeration.</p>
                 `
             }
-        ],
-        testMethods: {
-          title: "Common Microbiological Test Methods",
-          intro: "Several standard microbiological tests are performed to ensure the safety and quality of dairy products. Here is an overview of some key test methods:",
-          tests: [
-            {
-              id: 'tpc',
-              title: 'Aerobic Mesophilic Plate Count (Total Plate Count)',
-              principle: 'This test measures the total number of viable (living) bacteria and fungi in a sample that can grow in the presence of oxygen at moderate (mesophilic) temperatures. It is also known as Standard Plate Count (SPC) or Total Viable Count (TVC).',
-              procedure: `
-                <ol class='list-decimal list-inside space-y-2 mt-2'>
-                  <li><strong>Sample Preparation:</strong> Create a 1:10 dilution by mixing 10g or 10ml of the sample with 90ml of sterile diluent (e.g., peptone water).</li>
-                  <li><strong>Serial Dilutions:</strong> Prepare further serial dilutions from this (1:100, 1:1000, etc.).</li>
-                  <li><strong>Plating:</strong> Transfer 1ml of each dilution into two sterile Petri plates (Pour Plate Method).</li>
-                  <li><strong>Media:</strong> Pour 15-20ml of melted Plate Count Agar (PCA), cooled to 45°C, into the plates. Gently swirl to mix.</li>
-                  <li><strong>Incubation:</strong> Incubate the plates inverted at 35-37°C for 24-48 hours.</li>
-                  <li><strong>Counting:</strong> Select plates with between 25 and 250 colonies. Count the colonies using a colony counter.</li>
-                </ol>`,
-              calculation: '<code>CFU/g (or ml) = (Average no. of colonies × Dilution factor) / Volume of sample plated (ml)</code>'
-            },
-            {
-              id: 'coliforms',
-              title: 'Detection of Coliforms, Faecal Coliforms & E.coli',
-              principle: 'Coliforms ferment lactose to produce acid and gas. They are enumerated on Violet Red Bile Agar (VRBA). E. coli is a faecal coliform confirmed by specific biochemical tests.',
-              procedure: `
-                <ol class='list-decimal list-inside space-y-2 mt-2'>
-                  <li><strong>Sample & Dilutions:</strong> Prepare serial dilutions as in the TPC method.</li>
-                  <li><strong>Plating:</strong> Pipette 1ml from each dilution into sterile Petri plates.</li>
-                  <li><strong>Media:</strong> Pour 15-20ml of melted VRBA and mix. After solidification, add another layer of VRBA on top (overlay).</li>
-                  <li><strong>Incubation:</strong> Incubate the plates at 35-37°C for 18-24 hours.</li>
-                  <li><strong>Counting:</strong> Count red-purple colonies (0.5mm or more in diameter) as coliforms.</li>
-                  <li><strong>Confirmation (E.coli):</strong> Inoculate suspected colonies into Brilliant Green Lactose Bile (BGLB) broth and incubate at 44.5°C. Gas production indicates the presence of E. coli. Further confirmation is done by IMViC tests.</li>
-                </ol>`,
-              calculation: '<code>Coliforms/g (or ml) = Average no. of characteristic colonies × Dilution factor</code>'
-            },
-            {
-              id: 'yeast_mould',
-              title: 'Yeast and Mould Count',
-              principle: 'Yeasts and moulds can grow in acidic environments, so an acidic medium (like Potato Dextrose Agar, PDA) is used for their enumeration.',
-              procedure: `
-                 <ol class='list-decimal list-inside space-y-2 mt-2'>
-                  <li><strong>Sample & Dilutions:</strong> Prepare serial dilutions as in the TPC method.</li>
-                  <li><strong>Plating:</strong> Transfer 1ml of each dilution to sterile Petri plates (Spread Plate method is better).</li>
-                  <li><strong>Media:</strong> Plates should contain pre-poured Potato Dextrose Agar (PDA), with pH adjusted to ~3.5 (with tartaric acid) to inhibit bacterial growth.</li>
-                  <li><strong>Incubation:</strong> Incubate plates at 22-25°C for 5 days.</li>
-                  <li><strong>Counting:</strong> Count colonies of yeasts (typically shiny, round) and moulds (cotton-like, spreading) separately.</li>
-                </ol>`,
-              calculation: '<code>Yeast/Mould Count/g (or ml) = Average no. of colonies × Dilution factor</code>'
-            }
-          ]
-        }
+        ]
     }
 }
 
