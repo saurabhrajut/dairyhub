@@ -1,5 +1,6 @@
+
 "use client";
-import { useState, Fragment, useCallback, memo, useEffect, useMemo } from "react";
+import { useState, Fragment, useCallback, memo, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
@@ -11,8 +12,18 @@ import { chemicals, reagentRecipes } from "@/lib/data";
 import { ArrowLeft, ChevronsUp } from 'lucide-react';
 import { AcidIcon, BaseIcon, DilutionIcon, IndicatorIcon, PercentageSolutionIcon, ReagentIcon, SpiritSolutionIcon, StandardizationIcon, StrengthIcon } from "@/components/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 const sortedReagentKeys = Object.keys(reagentRecipes).sort((a,b) => reagentRecipes[a as keyof typeof reagentRecipes].name.localeCompare(reagentRecipes[b as keyof typeof reagentRecipes].name));
 type CalculatorType = 'acid-solution' | 'base-solution' | 'indicator-solution' | 'reagent-calculator' | 'percentage-solution' | 'stock-solution' | 'standardization' | 'strength-calculator' | 'spirit-solution';
+
+const indicatorsInfo: Record<string, { name: string; usage: string; endpoint: string; type: ('strong_acid_strong_base' | 'weak_acid_strong_base' | 'strong_acid_weak_base')[] }> = {
+  phenolphthalein: { name: 'Phenolphthalein', usage: '2-3 drops of 0.5% solution', endpoint: 'Colorless to Pink', type: ['strong_acid_strong_base', 'weak_acid_strong_base'] },
+  methyl_orange: { name: 'Methyl Orange', usage: '2-3 drops of 0.1% solution', endpoint: 'Yellow to Red/Orange', type: ['strong_acid_strong_base', 'strong_acid_weak_base'] },
+  'kjeldahl-mixed': { name: 'Kjeldahl Mixed Indicator', usage: 'Few drops', endpoint: 'Green to Violet/Pink', type: ['strong_acid_strong_base', 'strong_acid_weak_base'] },
+  'bromothymol-blue': { name: 'Bromothymol Blue', usage: '2-3 drops', endpoint: 'Yellow to Blue (at pH 7)', type: ['strong_acid_strong_base'] },
+};
+
+
 const calculatorsInfo = {
   'acid-solution': { title: "Acids", icon: AcidIcon, component: AcidSolutionCalc },
   'base-solution': { title: "Bases", icon: BaseIcon, component: BaseSolutionCalc },
@@ -24,6 +35,7 @@ const calculatorsInfo = {
   'strength-calculator': { title: "Strength", icon: StrengthIcon, component: StrengthCalc },
   'spirit-solution': { title: "Spirit Solution", icon: SpiritSolutionIcon, component: SpiritSolutionCalc },
 };
+
 export function SolutionsPrepModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
   const [activeCalculator, setActiveCalculator] = useState<CalculatorType | null>(null);
   const handleBack = useCallback(() => setActiveCalculator(null), []);
@@ -82,6 +94,7 @@ export function SolutionsPrepModal({ isOpen, setIsOpen }: { isOpen: boolean; set
     </Dialog>
   );
 }
+
 const CalculatorCard = ({ title, children, description }: { title: string; children: React.ReactNode; description?: string }) => (
     <div className="bg-card p-4 rounded-xl shadow-sm border mt-4">
         <h3 className="text-xl font-bold text-primary mb-2 font-headline">{title}</h3>
@@ -89,42 +102,60 @@ const CalculatorCard = ({ title, children, description }: { title: string; child
         {children}
     </div>
 );
+
 function SolutionCalculator({ chemType, title, idPrefix }: { chemType: 'acids' | 'bases' | 'other_reagents'; title: string; idPrefix: string; }) {
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [chemicalKey, setChemicalKey] = useState("");
-    const [normality, setNormality] = useState("");
+    const [strength, setStrength] = useState("");
     const [volume, setVolume] = useState("");
+    const [prepBy, setPrepBy] = useState<'normality' | 'molarity'>('normality');
+
+    const chemical = useCallback(() => {
+        if (!chemicalKey) return null;
+        return (chemicals as any)[chemType][chemicalKey];
+    }, [chemicalKey, chemType])();
+
     const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setResult(null);
         setError(null);
-        const norm = parseFloat(normality);
+        const str = parseFloat(strength);
         const vol = parseFloat(volume);
-        if (!chemicalKey || isNaN(norm) || isNaN(vol) || norm <= 0 || vol <= 0) {
+        if (!chemical || isNaN(str) || isNaN(vol) || str <= 0 || vol <= 0) {
             setError('Please enter valid positive numbers for all fields.');
             return;
         }
         
-        const chemical = (chemicals as any)[chemType][chemicalKey];
         let resultText = '';
         if (chemical.type === 'solid') {
-            const equivalentWeight = chemical.molarMass / chemical.nFactor;
-            const weight = norm * equivalentWeight * (vol / 1000);
-            resultText = `To prepare ${vol} mL of ${norm} N ${chemical.name}, dissolve <code class="font-bold bg-green-100 p-1 rounded">${weight.toFixed(3)} g</code> of the solid in distilled water and make the final volume up to <code class="font-bold">${vol} mL</code>.`;
+            const equivalentWeight = prepBy === 'normality' ? chemical.molarMass / chemical.nFactor : chemical.molarMass;
+            const weight = str * equivalentWeight * (vol / 1000);
+            resultText = `To prepare ${vol} mL of ${str} ${prepBy === 'normality' ? 'N' : 'M'} ${chemical.name}, dissolve <code class="font-bold bg-green-100 p-1 rounded">${weight.toFixed(3)} g</code> of the solid in distilled water and make the final volume up to <code class="font-bold">${vol} mL</code>.`;
         } else if (chemical.type === 'liquid') {
             const stockMolarity = (chemical.purity / 100 * chemical.density * 1000) / chemical.molarMass;
-            const stockNormality = stockMolarity * chemical.nFactor;
-            const requiredVolume = (norm * vol) / stockNormality;
-            resultText = `To prepare ${vol} mL of ${norm} N ${chemical.name}, take <code class="font-bold bg-green-100 p-1 rounded">${requiredVolume.toFixed(3)} mL</code> of the concentrated liquid (Purity: ${chemical.purity}%, Density: ${chemical.density} g/mL) and carefully add it to distilled water, then make the final volume up to <code class="font-bold">${vol} mL</code>. <strong class="block mt-2 text-yellow-700 bg-yellow-50 p-2 rounded">⚠️ Always add acid to water!</strong>`;
+            const stockStrength = prepBy === 'normality' ? stockMolarity * chemical.nFactor : stockMolarity;
+            const requiredVolume = (str * vol) / stockStrength;
+            resultText = `To prepare ${vol} mL of ${str} ${prepBy === 'normality' ? 'N' : 'M'} ${chemical.name}, take <code class="font-bold bg-green-100 p-1 rounded">${requiredVolume.toFixed(3)} mL</code> of the concentrated liquid (Purity: ${chemical.purity}%, Density: ${chemical.density} g/mL) and carefully add it to distilled water, then make the final volume up to <code class="font-bold">${vol} mL</code>. <strong class="block mt-2 text-yellow-700 bg-yellow-50 p-2 rounded">⚠️ Always add acid to water!</strong>`;
         }
         setResult(resultText);
-    }, [chemicalKey, normality, volume, chemType]);
+    }, [strength, volume, chemical, prepBy]);
     
     return (
         <CalculatorCard title={title}>
-            <form onSubmit={handleSubmit}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
+            <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                  <Label>Preparation Method</Label>
+                  <Select value={prepBy} onValueChange={(val) => setPrepBy(val as any)}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="normality">Prepare by Normality (N)</SelectItem>
+                      <SelectItem value="molarity">Prepare by Molarity (M)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
                     <div>
                         <Label htmlFor={`${idPrefix}-select`}>Select Chemical</Label>
                         <Select name={`${idPrefix}-select`} value={chemicalKey} onValueChange={setChemicalKey} required>
@@ -135,16 +166,24 @@ function SolutionCalculator({ chemType, title, idPrefix }: { chemType: 'acids' |
                                 ))}
                             </SelectContent>
                         </Select>
+                        {chemical && (
+                            <div className="text-xs text-muted-foreground mt-2 space-y-1">
+                                <p><strong>Molecular Wt:</strong> {chemical.molarMass}</p>
+                                {chemical.nFactor > 0 && <p><strong>Equivalent Wt:</strong> {(chemical.molarMass / chemical.nFactor).toFixed(2)} (for Normality)</p>}
+                            </div>
+                        )}
                     </div>
                     <div>
-                        <Label htmlFor={`${idPrefix}-normality`}>Required Normality (N)</Label>
-                        <Input type="number" name={`${idPrefix}-normality`} placeholder="e.g., 0.1" step="any" value={normality} onChange={(e) => setNormality(e.target.value)} required />
+                        <Label htmlFor={`${idPrefix}-strength`}>Required {prepBy === 'normality' ? 'Normality (N)' : 'Molarity (M)'}</Label>
+                        <Input type="number" name={`${idPrefix}-strength`} placeholder="e.g., 0.1" step="any" value={strength} onChange={(e) => setStrength(e.target.value)} required />
                     </div>
                     <div>
                         <Label htmlFor={`${idPrefix}-volume`}>Final Volume (mL)</Label>
                         <Input type="number" name={`${idPrefix}-volume`} placeholder="e.g., 1000" step="any" value={volume} onChange={(e) => setVolume(e.target.value)} required />
                     </div>
-                    <Button type="submit" className="w-full">Calculate</Button>
+                    <div className="self-end">
+                        <Button type="submit" className="w-full">Calculate</Button>
+                    </div>
                 </div>
                 {error && <Alert variant="destructive" className="mt-8"><AlertDescription>{error}</AlertDescription></Alert>}
                 {result && <Alert className="mt-8"><AlertTitle>Instructions</AlertTitle><AlertDescription dangerouslySetInnerHTML={{__html: result}} /></Alert>}
@@ -152,13 +191,16 @@ function SolutionCalculator({ chemType, title, idPrefix }: { chemType: 'acids' |
         </CalculatorCard>
     );
 }
-function AcidSolutionCalc() { return <SolutionCalculator chemType="acids" title="Prepare Acid Solution (by Normality)" idPrefix="acid" />; }
-function BaseSolutionCalc() { return <SolutionCalculator chemType="bases" title="Prepare Base Solution (by Normality)" idPrefix="base" />; }
+
+function AcidSolutionCalc() { return <SolutionCalculator chemType="acids" title="Prepare Acid Solution" idPrefix="acid" />; }
+function BaseSolutionCalc() { return <SolutionCalculator chemType="bases" title="Prepare Base Solution" idPrefix="base" />; }
+
 function IndicatorCalc() {
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [indicatorKey, setIndicatorKey] = useState("");
     const [volume, setVolume] = useState("100");
+
     const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setResult(null);
@@ -193,6 +235,7 @@ function IndicatorCalc() {
         }
         setResult(resultText);
     }, [indicatorKey, volume]);
+
     return (
         <CalculatorCard title="Prepare Indicator Solution">
             <form onSubmit={handleSubmit}>
@@ -222,11 +265,13 @@ function IndicatorCalc() {
         </CalculatorCard>
     );
 };
+
 function ReagentCalculator() {
     const [selectedReagent, setSelectedReagent] = useState("");
     const [volume, setVolume] = useState("100");
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
+
     const handleCalculate = useCallback(() => {
         setError(null);
         setResult(null);
@@ -239,10 +284,12 @@ function ReagentCalculator() {
             setError("Please enter a valid volume (in ml).");
             return;
         }
+
         const recipe = reagentRecipes[selectedReagent as keyof typeof reagentRecipes];
         let resultHTML = `<h4 class="font-bold text-lg mb-2">To make ${vol}ml of ${recipe.name}:</h4>`;
         
         const factor = vol / 100;
+
         switch(recipe.type) {
             case 'w/v':
             case 'v/v':
@@ -265,6 +312,7 @@ function ReagentCalculator() {
                 resultHTML += '</ul>';
                 resultHTML += `<p class="mt-3 text-sm text-gray-600">${recipe.instructions}</p>`;
                 break;
+            
             case 'ratio':
                 const totalParts = recipe.components.reduce((sum, c) => sum + c.ratio, 0);
                 resultHTML += '<ul class="list-disc list-inside space-y-1">';
@@ -275,12 +323,14 @@ function ReagentCalculator() {
                 resultHTML += '</ul>';
                 resultHTML += `<p class="mt-3 text-sm text-gray-600">${recipe.instructions}</p>`;
                 break;
+
             case 'fixed':
                 resultHTML += `<p class="text-gray-700">${recipe.instructions}</p>`;
                 break;
         }
         setResult(resultHTML);
     }, [selectedReagent, volume]);
+
     return (
         <CalculatorCard title="Reagent Calculator">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
@@ -322,61 +372,92 @@ function ReagentCalculator() {
         </CalculatorCard>
     );
 }
+
 function StandardizationCalc() {
     const [standardizationMethod, setStandardizationMethod] = useState<'primary' | 'secondary'>('primary');
-    
-    // Common state
     const [calculatedNormality, setCalculatedNormality] = useState<number | null>(null);
     const [adjustmentResult, setAdjustmentResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
-    const allChemicals = { ...chemicals.acids, ...chemicals.bases, ...chemicals.other_reagents };
-    // Primary Standardization State
+    const allChemicals = {...chemicals.acids, ...chemicals.bases, ...chemicals.other_reagents};
+    const [indicatorKey, setIndicatorKey] = useState('');
     const [primaryTitrantKey, setPrimaryTitrantKey] = useState("");
     const [primaryStdKey, setPrimaryStdKey] = useState("");
     const [stdWeight, setStdWeight] = useState("");
     const [stdVol, setStdVol] = useState("100");
     const [titrantVol, setTitrantVol] = useState("");
     const [primaryStdTakenVol, setPrimaryStdTakenVol] = useState("10");
-    // Secondary Standardization State
     const [secondaryAnalyteKey, setSecondaryAnalyteKey] = useState("");
     const [secondaryTitrantKey, setSecondaryTitrantKey] = useState("");
     const [secondaryTitrantNormality, setSecondaryTitrantNormality] = useState("");
     const [analyteVolume, setAnalyteVolume] = useState("10");
     const [secondaryTitrantVolume, setSecondaryTitrantVolume] = useState("");
-    // Adjustment State
     const [targetNormality, setTargetNormality] = useState("");
     const [currentVolume, setCurrentVolume] = useState("");
     const [volumeUnit, setVolumeUnit] = useState<'L'|'ml'>('L');
+
+    const selectedIndicator = indicatorsInfo[indicatorKey];
+    
     const resetAll = useCallback(() => {
         setCalculatedNormality(null);
         setAdjustmentResult(null);
         setError(null);
         setTargetNormality("");
         setCurrentVolume("");
+        setIndicatorKey('');
     }, []);
+
     useEffect(() => {
         resetAll();
     }, [standardizationMethod, primaryTitrantKey, primaryStdKey, secondaryAnalyteKey, secondaryTitrantKey, resetAll]);
     
-    const { availableTitrants } = useMemo(() => {
+    const { availableTitrants, availableIndicators } = useCallback(() => {
         const acids = Object.keys(chemicals.acids);
         const bases = Object.keys(chemicals.bases);
         let titrants: string[] = [];
+        let indicators: string[] = [];
+        let titrationType: 'strong_acid_strong_base' | 'weak_acid_strong_base' | 'strong_acid_weak_base' | null = null;
+        
+        let analyteKey = standardizationMethod === 'primary' ? primaryStdKey : secondaryAnalyteKey;
+        let titrantKey = standardizationMethod === 'primary' ? primaryTitrantKey : secondaryTitrantKey;
+        
+        const isAnalyteBase = bases.includes(analyteKey) || (chemicals.primaryStandards[analyteKey as keyof typeof chemicals.primaryStandards]?.type === 'base');
+        const isTitrantBase = bases.includes(titrantKey);
+        
+        if (isAnalyteBase && !isTitrantBase) titrationType = 'strong_acid_weak_base';
+        if (!isAnalyteBase && isTitrantBase) titrationType = 'weak_acid_strong_base'; 
+
+        if (analyteKey && titrantKey) {
+             const analyte = allChemicals[analyteKey as keyof typeof allChemicals] || chemicals.primaryStandards[analyteKey as keyof typeof chemicals.primaryStandards];
+             const titrant = allChemicals[titrantKey as keyof typeof allChemicals];
+             if(analyte && titrant && !titrationType) {
+                 titrationType = 'strong_acid_strong_base'; 
+             }
+        }
+        
+        if (titrationType) {
+            indicators = Object.keys(indicatorsInfo).filter(key => indicatorsInfo[key].type.includes(titrationType!));
+        }
+
         if (secondaryAnalyteKey) {
             if (acids.includes(secondaryAnalyteKey)) titrants = bases;
             else if (bases.includes(secondaryAnalyteKey)) titrants = acids;
         }
-        return { availableTitrants: titrants };
-    }, [secondaryAnalyteKey]);
+        
+        return { availableTitrants: titrants, availableIndicators: indicators };
+    }, [standardizationMethod, primaryTitrantKey, primaryStdKey, secondaryAnalyteKey, secondaryTitrantKey, allChemicals])();
+
+
     useEffect(() => {
         if (availableTitrants.length > 0 && !availableTitrants.includes(secondaryTitrantKey)) {
             setSecondaryTitrantKey("");
         }
     }, [availableTitrants, secondaryTitrantKey]);
+
     const handleCalculateNormality = useCallback(() => {
         setCalculatedNormality(null);
         setAdjustmentResult(null);
         setError(null);
+        
         if (standardizationMethod === 'primary') {
             const weight = parseFloat(stdWeight);
             const vol1 = parseFloat(stdVol);
@@ -408,6 +489,7 @@ function StandardizationCalc() {
         stdWeight, stdVol, titrantVol, primaryStdTakenVol, primaryStdKey, primaryTitrantKey,
         secondaryTitrantNormality, secondaryTitrantVolume, analyteVolume, secondaryAnalyteKey, secondaryTitrantKey
     ]);
+
     const handleAdjustNormality = useCallback(() => {
         if (calculatedNormality === null) { setError("Please calculate the exact normality first."); return; }
         setError(null); setAdjustmentResult(null);
@@ -415,6 +497,7 @@ function StandardizationCalc() {
         const v_have_input = parseFloat(currentVolume);
         const v_have_liters = volumeUnit === 'ml' ? v_have_input / 1000 : v_have_input;
         const n_req = parseFloat(targetNormality);
+
         if (isNaN(v_have_input) || isNaN(n_req) || v_have_input <= 0 || n_req <= 0) { setError("Please provide a valid target normality and current volume."); return; }
         
         let resultMsg = "";
@@ -434,7 +517,7 @@ function StandardizationCalc() {
             if (chemical.type === 'solid') {
                 const equivalentWeight = chemical.molarMass / chemical.nFactor;
                 const weight_to_add_g = equivalents_to_add * equivalentWeight;
-                resultMsg = `To increase normality from <strong>${n_have.toFixed(4)} N</strong> to <strong>${n_req} N</strong>, you need to add <strong>${weight_to_add_g.toFixed(4)} g</strong> of <strong>${chemical.name}</strong> to your <strong>${currentVolume} ${volumeUnit}</strong> solution.`;
+                resultMsg = `To increase normality from <strong>${n_have.toFixed(4)} N</strong> to <strong>${n_req} N</strong>, you need to add <strong>${weight_to_add_g.toFixed(4)} g (${(weight_to_add_g * 1000).toFixed(2)} mg)</strong> of <strong>${chemical.name}</strong> to your <strong>${currentVolume} ${volumeUnit}</strong> solution.`;
             } else if (chemical.type === 'liquid') {
                 const stockMolarity = (chemical.purity / 100 * chemical.density * 1000) / chemical.molarMass;
                 const stockNormality = stockMolarity * chemical.nFactor;
@@ -446,6 +529,7 @@ function StandardizationCalc() {
         }
         setAdjustmentResult(resultMsg);
     }, [calculatedNormality, targetNormality, currentVolume, volumeUnit, standardizationMethod, primaryTitrantKey, secondaryAnalyteKey, allChemicals]);
+
     return (
         <CalculatorCard title="Solution Standardization & Adjustment" description="Use a primary or secondary standard to find the exact normality of your solution, then calculate the adjustment needed.">
             <div className="mb-4">
@@ -487,11 +571,21 @@ function StandardizationCalc() {
                         </div>
                     </div>
                     <h3 className="font-bold text-lg mt-6 mb-2 text-gray-700">Step 2: Enter Titration Data</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 bg-muted rounded-lg">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 p-4 bg-muted rounded-lg">
                         <div><Label htmlFor="std-weight">Weight of Primary Std (g)</Label><Input type="number" name="std-weight" value={stdWeight} onChange={e => setStdWeight(e.target.value)} placeholder="e.g., 0.53" step="any" required /></div>
                         <div><Label htmlFor="std-vol1">Final Vol. of Std Sol. (ml)</Label><Input type="number" name="std-vol1" value={stdVol} onChange={e => setStdVol(e.target.value)} placeholder="e.g., 100" step="any" required /></div>
                         <div><Label htmlFor="std-vol-taken">Vol. of Std Sol. Taken (ml)</Label><Input type="number" name="std-vol-taken" value={primaryStdTakenVol} onChange={e => setPrimaryStdTakenVol(e.target.value)} placeholder="e.g., 10" step="any" required /></div>
                         <div><Label htmlFor="titrant-vol">Titrant Volume Used (ml)</Label><Input type="number" name="titrant-vol" value={titrantVol} onChange={e => setTitrantVol(e.target.value)} placeholder="e.g., 9.8" step="any" required /></div>
+                         <div className="md:col-span-2">
+                           <Label htmlFor="indicator-select-primary">Indicator</Label>
+                            <Select value={indicatorKey} onValueChange={setIndicatorKey} name="indicator-select-primary" required>
+                               <SelectTrigger><SelectValue placeholder="Select Indicator" /></SelectTrigger>
+                               <SelectContent>
+                                   {availableIndicators.map(key => <SelectItem key={key} value={key}>{indicatorsInfo[key].name}</SelectItem>)}
+                               </SelectContent>
+                           </Select>
+                           {selectedIndicator && <p className="text-xs text-muted-foreground mt-2">Usage: {selectedIndicator.usage} | Endpoint: <strong>{selectedIndicator.endpoint}</strong></p>}
+                        </div>
                     </div>
                 </div>
             )}
@@ -522,15 +616,27 @@ function StandardizationCalc() {
                         </div>
                     </div>
                     <h3 className="font-bold text-lg mt-6 mb-2 text-gray-700">Step 2: Enter Titration Data</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 bg-muted rounded-lg">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 p-4 bg-muted rounded-lg">
                         <div><Label htmlFor="titrant-normality">Normality of Titrant (N₁)</Label><Input type="number" name="titrant-normality" value={secondaryTitrantNormality} onChange={e => setSecondaryTitrantNormality(e.target.value)} placeholder="e.g., 0.1000" step="any" required /></div>
                         <div><Label htmlFor="analyte-volume">Volume of Analyte (V₂)</Label><Input type="number" name="analyte-volume" value={analyteVolume} onChange={e => setAnalyteVolume(e.target.value)} placeholder="e.g., 10" step="any" required /></div>
                         <div><Label htmlFor="titrant-volume">Volume of Titrant (V₁)</Label><Input type="number" name="titrant-volume" value={secondaryTitrantVolume} onChange={e => setSecondaryTitrantVolume(e.target.value)} placeholder="e.g., 9.8" step="any" required /></div>
+                        <div>
+                           <Label htmlFor="indicator-select-secondary">Indicator</Label>
+                           <Select value={indicatorKey} onValueChange={setIndicatorKey} name="indicator-select-secondary" required>
+                               <SelectTrigger><SelectValue placeholder="Select Indicator" /></SelectTrigger>
+                               <SelectContent>
+                                   {availableIndicators.map(key => <SelectItem key={key} value={key}>{indicatorsInfo[key].name}</SelectItem>)}
+                               </SelectContent>
+                           </Select>
+                           {selectedIndicator && <p className="text-xs text-muted-foreground mt-2">Usage: {selectedIndicator.usage} | Endpoint: <strong>{selectedIndicator.endpoint}</strong></p>}
+                        </div>
                     </div>
                 </div>
             )}
             <Button onClick={handleCalculateNormality} className="w-full mt-4">Calculate Exact Normality</Button>
+            
             {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
+            
             {calculatedNormality !== null && (
                 <div className="mt-4">
                     <Alert>
@@ -566,12 +672,14 @@ function StandardizationCalc() {
         </CalculatorCard>
     );
 }
+
 function StrengthCalc() {
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     const allChemicals = {...chemicals.acids, ...chemicals.bases, ...chemicals.other_reagents};
     const [chemicalKey, setChemicalKey] = useState("");
     const [normality, setNormality] = useState("");
+
     const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setResult(null);
@@ -590,6 +698,7 @@ function StrengthCalc() {
         
         setResult(`The strength of ${norm} N ${chemical.name} is <code class="font-bold bg-green-100 p-1 rounded">${strength.toFixed(3)} g/L</code>.`);
     }, [chemicalKey, normality, allChemicals]);
+
     return (
         <CalculatorCard title="Strength Calculator">
             <form onSubmit={handleSubmit}>
@@ -634,12 +743,14 @@ function StrengthCalc() {
         </CalculatorCard>
     );
 };
+
 function SpiritSolutionCalc() {
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [spiritKey, setSpiritKey] = useState("");
     const [reqStrength, setReqStrength] = useState("");
     const [reqVolume, setReqVolume] = useState("");
+
     const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setResult(null);
@@ -657,9 +768,11 @@ function SpiritSolutionCalc() {
             setError(`Required strength cannot be higher than stock purity (${spirit.stockPurity}%).`);
             return;
         }
+
         const v1 = (requiredStrength * requiredVolume) / spirit.stockPurity;
         setResult(`To prepare ${requiredVolume} mL of ${requiredStrength}% ${spirit.name}, take <code class="font-bold bg-green-100 p-1 rounded">${v1.toFixed(2)} mL</code> of ${spirit.stockPurity}% stock solution and add <code class="font-bold bg-blue-100 p-1 rounded">${(requiredVolume - v1).toFixed(2)} mL</code> of distilled water.`);
     }, [spiritKey, reqStrength, reqVolume]);
+
     return (
         <CalculatorCard title="Spirit Solution (Alcohol Dilution)" description="Use the formula C₁V₁ = C₂V₂.">
             <form onSubmit={handleSubmit}>
@@ -693,6 +806,7 @@ function SpiritSolutionCalc() {
         </CalculatorCard>
     );
 };
+
 function PercentageSolutionCalc() {
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -700,6 +814,7 @@ function PercentageSolutionCalc() {
     const [chemicalKey, setChemicalKey] = useState("");
     const [percentage, setPercentage] = useState("");
     const [volume, setVolume] = useState("");
+
     const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setResult(null);
@@ -774,6 +889,7 @@ function PercentageSolutionCalc() {
         </CalculatorCard>
     );
 };
+
 function DilutionCalc() {
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -782,6 +898,7 @@ function DilutionCalc() {
     const [v2, setV2] = useState("");
     const [chemicalKey, setChemicalKey] = useState("");
     const allChemicals = {...chemicals.acids, ...chemicals.bases};
+
     const handleChemChange = useCallback((key: string) => {
         setChemicalKey(key);
         const chemical = allChemicals[key as keyof typeof allChemicals];
@@ -793,6 +910,7 @@ function DilutionCalc() {
             setN1("");
         }
     }, [allChemicals]);
+
     const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setResult(null);
@@ -809,10 +927,12 @@ function DilutionCalc() {
             setError(`Final normality (N₂) cannot be greater than stock normality (N₁).`);
             return;
         }
+
         const v1 = (n2Val * v2Val) / n1Val;
         const resultText = `To prepare <code class="font-bold">${v2Val} mL</code> of <code class="font-bold">${n2Val} N</code> solution, you need to take <code class="font-bold bg-green-100 p-1 rounded">${v1.toFixed(3)} mL</code> of your <code class="font-bold">${n1Val} N</code> stock solution and dilute it with the solvent up to a final volume of <code class="font-bold">${v2Val} mL</code>.`;
         setResult(resultText);
     }, [n1, n2, v2]);
+
     return (
         <CalculatorCard title="Working with Stock Solutions (Dilution)" description="Use the dilution formula: N₁V₁ = N₂V₂. Calculate the initial volume (V₁) needed from a stock solution.">
             <form onSubmit={handleSubmit}>
