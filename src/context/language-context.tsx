@@ -1,6 +1,7 @@
 'use client';
 
 import { createContext, useState, useContext, ReactNode, useEffect } from 'react';
+import { fssaiStandardsContent } from '@/lib/content/fssai-standards-content';
 
 type Language = 'en' | 'hi'; // 'en' for English, 'hi' for Hindi
 
@@ -14,12 +15,14 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguageState] = useState<Language>('en'); // Default to English
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     const storedLang = localStorage.getItem('dairy-hub-language') as Language | null;
     if (storedLang && ['en', 'hi'].includes(storedLang)) {
       setLanguageState(storedLang);
     }
+    setIsLoaded(true);
   }, []);
 
   const setLanguage = (lang: Language) => {
@@ -30,6 +33,10 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   };
   
   const t = <T,> (translations: { [key in Language]: T }) => {
+    // Return a default/fallback content if not loaded yet, or if a specific language is missing
+    if (!isLoaded || !translations[language]) {
+        return translations['en'];
+    }
     return translations[language];
   };
 
@@ -49,3 +56,5 @@ export function useLanguage() {
   }
   return context;
 }
+
+    
