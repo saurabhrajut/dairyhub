@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/accordion";
 import { useLanguage } from "@/context/language-context";
 import { microbiologyContent } from "@/lib/content/microbiology-content";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
+import { microbiologyTestMethodsContent } from "@/lib/content/microbiology-test-methods-content";
 import { Button } from "../ui/button";
 import { ArrowLeft, TestTube, Bug, ShieldOff, FlaskConical, Proportions, Dna, Thermometer } from "lucide-react";
 
@@ -98,13 +98,12 @@ const topicComponents: { [key: string]: React.FC<{ content: any }> } = {
         return <Section title={section.title}><div dangerouslySetInnerHTML={{ __html: section.content }} /></Section>;
     },
     test_methods: function Content({ content }: { content: any }) {
-        const section = content.testMethods;
-        if (!section) return null;
+        if (!content) return null;
         return (
-            <Section title={section.title} icon={TestTube}>
-                <p>{section.intro}</p>
+            <Section title={content.title} icon={TestTube}>
+                <p>{content.intro}</p>
                  <Accordion type="single" collapsible className="w-full mt-4">
-                    {section.tests.map((test: any, index: number) => (
+                    {content.tests.map((test: any, index: number) => (
                        <TestProcedure key={index} test={test} />
                     ))}
                 </Accordion>
@@ -116,8 +115,12 @@ const topicComponents: { [key: string]: React.FC<{ content: any }> } = {
 
 export function MicrobiologyTestingModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
   const { t } = useLanguage();
-  const content = t(microbiologyContent);
+  const mainContent = t(microbiologyContent);
+  const testMethodsContent = t(microbiologyTestMethodsContent);
   const [activeTopic, setActiveTopic] = useState<string | null>(null);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const scrollPosition = useRef(0);
+
 
   const handleOpenChange = (open: boolean) => {
     if (!open) {
@@ -126,7 +129,7 @@ export function MicrobiologyTestingModal({ isOpen, setIsOpen }: { isOpen: boolea
     setIsOpen(open);
   };
   
-  if (!content) return null;
+  if (!mainContent || !testMethodsContent) return null;
 
   const topics = [
       { value: "intro", title: "Introduction", icon: Bug },
@@ -141,42 +144,64 @@ export function MicrobiologyTestingModal({ isOpen, setIsOpen }: { isOpen: boolea
       { value: "test_methods", title: "Common Test Methods", icon: TestTube }
   ];
 
-  const selectedTopic = topics.find(t => t.value === activeTopic);
+  const selectedTopicInfo = topics.find(t => t.value === activeTopic);
   const ActiveComponent = activeTopic ? topicComponents[activeTopic as keyof typeof topicComponents] : null;
+
+  const handleSelectTopic = (topicValue: string) => {
+    if (scrollAreaRef.current) {
+      scrollPosition.current = scrollAreaRef.current.scrollTop;
+    }
+    setActiveTopic(topicValue);
+  };
+
+  const handleBack = () => {
+    setActiveTopic(null);
+  };
+
+  useEffect(() => {
+    if (!activeTopic && scrollAreaRef.current) {
+      setTimeout(() => {
+        if(scrollAreaRef.current) {
+          scrollAreaRef.current.scrollTop = scrollPosition.current;
+        }
+      }, 0);
+    }
+  }, [activeTopic]);
+
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogContent className="max-w-4xl lg:max-w-6xl w-[95vw] h-full max-h-[90vh] flex flex-col p-0 sm:p-6">
         <DialogHeader className="p-4 sm:p-0 shrink-0">
           <DialogTitle className="text-2xl md:text-3xl font-bold text-center text-gray-800 font-headline">
-            {content.title}
+            {mainContent.title}
           </DialogTitle>
           <DialogDescription className="text-center text-lg text-gray-500">
-            {selectedTopic ? selectedTopic.title : content.description}
+            {selectedTopicInfo ? selectedTopicInfo.title : mainContent.description}
           </DialogDescription>
         </DialogHeader>
 
-        {selectedTopic && ActiveComponent ? (
+        {selectedTopicInfo && ActiveComponent ? (
           <div className="flex-1 flex flex-col min-h-0">
             <div className="px-4 sm:px-0">
-              <Button variant="ghost" onClick={() => setActiveTopic(null)}>
+              <Button variant="ghost" onClick={handleBack}>
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Back to Topics
               </Button>
             </div>
             <ScrollArea className="flex-1 mt-4 sm:pr-4">
               <div className="p-4 pt-0 sm:p-0">
-                <ActiveComponent content={content} />
+                <ActiveComponent content={activeTopic === 'test_methods' ? testMethodsContent : mainContent} />
               </div>
             </ScrollArea>
           </div>
         ) : (
-          <ScrollArea className="flex-1 mt-4 sm:pr-4">
+          <ScrollArea className="flex-1 mt-4 sm:pr-4" viewportRef={scrollAreaRef}>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4 sm:p-0">
               {topics.map(topic => (
                 <button
                   key={topic.value}
-                  onClick={() => setActiveTopic(topic.value)}
+                  onClick={() => handleSelectTopic(topic.value)}
                   className="flex items-center p-4 bg-card hover:bg-primary/10 rounded-lg shadow-sm border text-left transition-all duration-200"
                 >
                   <topic.icon className="w-8 h-8 text-primary mr-4 shrink-0" />
