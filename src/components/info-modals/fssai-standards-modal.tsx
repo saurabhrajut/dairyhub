@@ -10,7 +10,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "../ui/button";
-import { ArrowLeft, BookOpen, Droplet, Wind, ShieldCheck, Component, Factory, FlaskConical, Snowflake, Thermometer, Beaker, Archive, Atom } from "lucide-react";
+import { ArrowLeft, BookOpen, Droplet, Wind, ShieldCheck, Component, Factory, FlaskConical, Snowflake, Thermometer, Beaker, Archive, Atom, Loader2 } from "lucide-react";
 import { IceCreamIcon, PaneerIcon } from "../icons";
 import { useLanguage } from "@/context/language-context";
 import { fssaiStandardsContent } from "@/lib/content/fssai-standards-content";
@@ -52,7 +52,7 @@ const renderTable = (tableData: any) => {
                     {tableData.rows.map((row: any, rowIndex: number) => (
                         <TableRow key={rowIndex}>
                             {Object.values(row).map((cell: any, cellIndex: number) => (
-                                <TableCell key={cellIndex}>{cell}</TableCell>
+                                <TableCell key={cellIndex} dangerouslySetInnerHTML={{ __html: cell }} />
                             ))}
                         </TableRow>
                     ))}
@@ -63,27 +63,27 @@ const renderTable = (tableData: any) => {
 };
 
 
-const topicComponents: { [key: string]: React.FC } = {
-    general: function Content() {
-        const { t } = useLanguage();
-        const content = t(fssaiStandardsContent);
+const topicComponents: { [key: string]: React.FC<{ content: any }> } = {
+    general: function Content({ content }: { content: any }) {
+        if (!content) return null;
         const sectionContent = content.topics.general;
         return (
             <ProductCard title={sectionContent.title}>
                 <div className="prose prose-sm max-w-none break-words">
-                    <p className="font-medium leading-relaxed" dangerouslySetInnerHTML={{ __html: sectionContent.p1 }}></p>
+                    <p className="font-medium leading-relaxed" dangerouslySetInnerHTML={{__html: sectionContent.p1}} />
                     <SectionTitle>{sectionContent.definitions.title}</SectionTitle>
                     <ul className="list-disc pl-5 space-y-1">
-                        {sectionContent?.definitions?.list?.map((item, index) => (
+                        {sectionContent?.definitions?.list?.map((item:any, index:any) => (
                             <li key={index} dangerouslySetInnerHTML={{ __html: item }} />
                         ))}
                     </ul>
-                    <SectionTitle>{sectionContent.principles.title}</SectionTitle>
-                    <p className="font-medium leading-relaxed">{sectionContent.principles.p1}</p>
-                    <SectionTitle>{sectionContent.microbiological.title}</SectionTitle>
-                    <p className="font-medium leading-relaxed">{sectionContent.microbiological.p1}</p>
+                    <SectionTitle>{content.principles.title}</SectionTitle>
+                    <p className="font-medium leading-relaxed" dangerouslySetInnerHTML={{ __html: content.principles.p1 }}/>
+
+                    <SectionTitle>{content.microbiological.title}</SectionTitle>
+                    <p className="font-medium leading-relaxed">{content.microbiological.p1}</p>
                      <ul className="list-disc pl-5 space-y-1">
-                        {sectionContent?.microbiological?.list?.map((item, index) => (
+                        {content.microbiological.list.map((item:any, index:any) => (
                             <li key={index} dangerouslySetInnerHTML={{ __html: item }} />
                         ))}
                     </ul>
@@ -91,16 +91,15 @@ const topicComponents: { [key: string]: React.FC } = {
             </ProductCard>
         )
     },
-    milk: function Content() {
-        const { t } = useLanguage();
-        const content = t(fssaiStandardsContent);
+    milk: function Content({ content }: { content: any }) {
+        if (!content) return null;
         const sectionContent = content.topics.milk;
         return (
             <ProductCard title={sectionContent.title}>
                 <div className="prose prose-sm max-w-none break-words">
                     <SectionTitle>{sectionContent.description.title}</SectionTitle>
                     <ul className="list-disc pl-5 space-y-1">
-                        {sectionContent?.description?.list?.map((item, index) => (
+                        {sectionContent?.description?.list?.map((item:any, index:any) => (
                             <li key={index} dangerouslySetInnerHTML={{ __html: item }}></li>
                         ))}
                     </ul>
@@ -109,18 +108,17 @@ const topicComponents: { [key: string]: React.FC } = {
                 {renderTable(sectionContent.composition)}
                 <div className="prose prose-sm max-w-none break-words mt-4">
                     <SectionTitle>{sectionContent.additives.title}</SectionTitle>
-                    <p className="font-medium leading-relaxed">{sectionContent.additives.p1}</p>
+                    <p className="font-medium leading-relaxed" dangerouslySetInnerHTML={{__html: sectionContent.additives.p1}}></p>
                     <SectionTitle>{sectionContent.hygiene.title}</SectionTitle>
-                    <p className="font-medium leading-relaxed">{sectionContent.hygiene.p1}</p>
+                    <p className="font-medium leading-relaxed" dangerouslySetInnerHTML={{__html: sectionContent.hygiene.p1}}></p>
                     <SectionTitle>{sectionContent.labeling.title}</SectionTitle>
                     <div className="font-medium leading-relaxed" dangerouslySetInnerHTML={{ __html: sectionContent.labeling.p1 }}></div>
                 </div>
             </ProductCard>
         )
     },
-    flavouredMilk: function Content() {
-        const { t } = useLanguage();
-        const content = t(fssaiStandardsContent);
+    flavouredMilk: function Content({ content }: { content: any }) {
+        if (!content) return null;
         const sectionContent = content.topics.flavouredMilk;
         return (
             <ProductCard title={sectionContent.title}>
@@ -133,9 +131,8 @@ const topicComponents: { [key: string]: React.FC } = {
             </ProductCard>
         )
     },
-    evaporatedMilk: function Content() {
-        const { t } = useLanguage();
-        const content = t(fssaiStandardsContent);
+    evaporatedMilk: function Content({ content }: { content: any }) {
+        if (!content) return null;
         const sectionContent = content.topics.evaporatedMilk;
         return (
             <ProductCard title={sectionContent.title}>
@@ -148,9 +145,8 @@ const topicComponents: { [key: string]: React.FC } = {
             </ProductCard>
         )
     },
-    sweetenedCondensedMilk: function Content() {
-        const { t } = useLanguage();
-        const content = t(fssaiStandardsContent);
+    sweetenedCondensedMilk: function Content({ content }: { content: any }) {
+        if (!content) return null;
         const sectionContent = content.topics.sweetenedCondensedMilk;
         return (
             <ProductCard title={sectionContent.title}>
@@ -163,9 +159,8 @@ const topicComponents: { [key: string]: React.FC } = {
             </ProductCard>
         )
     },
-    khoa: function Content() {
-        const { t } = useLanguage();
-        const content = t(fssaiStandardsContent);
+    khoa: function Content({ content }: { content: any }) {
+        if (!content) return null;
         const sectionContent = content.topics.khoa;
         return (
             <ProductCard title={sectionContent.title}>
@@ -178,16 +173,15 @@ const topicComponents: { [key: string]: React.FC } = {
             </ProductCard>
         )
     },
-    cream: function Content() {
-        const { t } = useLanguage();
-        const content = t(fssaiStandardsContent);
+    cream: function Content({ content }: { content: any }) {
+        if (!content) return null;
         const sectionContent = content.topics.cream;
         return (
             <ProductCard title={sectionContent.title}>
                 <div className="prose prose-sm max-w-none break-words">
                     <SectionTitle>{sectionContent.description.title}</SectionTitle>
                      <ul className="list-disc pl-5 space-y-1">
-                        {sectionContent?.description?.list?.map((item, index) => (
+                        {sectionContent?.description?.list?.map((item:any, index:any) => (
                             <li key={index} dangerouslySetInnerHTML={{ __html: item }}></li>
                         ))}
                     </ul>
@@ -199,9 +193,8 @@ const topicComponents: { [key: string]: React.FC } = {
             </ProductCard>
         )
     },
-    fatProducts: function Content() {
-        const { t } = useLanguage();
-        const content = t(fssaiStandardsContent);
+    fatProducts: function Content({ content }: { content: any }) {
+        if (!content) return null;
         const sectionContent = content.topics.fatProducts;
         return (
             <ProductCard title={sectionContent.title}>
@@ -214,9 +207,8 @@ const topicComponents: { [key: string]: React.FC } = {
             </ProductCard>
         )
     },
-    butter: function Content() {
-        const { t } = useLanguage();
-        const content = t(fssaiStandardsContent);
+    butter: function Content({ content }: { content: any }) {
+        if (!content) return null;
         const sectionContent = content.topics.butter;
         return (
             <ProductCard title={sectionContent.title}>
@@ -230,9 +222,8 @@ const topicComponents: { [key: string]: React.FC } = {
             </ProductCard>
         )
     },
-    milkPowders: function Content() {
-        const { t } = useLanguage();
-        const content = t(fssaiStandardsContent);
+    milkPowders: function Content({ content }: { content: any }) {
+        if (!content) return null;
         const sectionContent = content.topics.milkPowders;
         return (
             <ProductCard title={sectionContent.title}>
@@ -246,16 +237,15 @@ const topicComponents: { [key: string]: React.FC } = {
             </ProductCard>
         )
     },
-     fermented: function Content() {
-        const { t } = useLanguage();
-        const content = t(fssaiStandardsContent);
+     fermented: function Content({ content }: { content: any }) {
+        if (!content) return null;
         const sectionContent = content.topics.fermented;
         return (
             <ProductCard title={sectionContent.title}>
                 <div className="prose prose-sm max-w-none break-words">
                     <SectionTitle>{sectionContent.description.title}</SectionTitle>
                     <ul className="list-disc pl-5 space-y-1">
-                        {sectionContent?.description?.list?.map((item, index) => (
+                        {sectionContent?.description?.list?.map((item:any, index:any) => (
                             <li key={index} dangerouslySetInnerHTML={{ __html: item }}></li>
                         ))}
                     </ul>
@@ -269,9 +259,8 @@ const topicComponents: { [key: string]: React.FC } = {
             </ProductCard>
         )
     },
-    iceCream: function Content() {
-        const { t } = useLanguage();
-        const content = t(fssaiStandardsContent);
+    iceCream: function Content({ content }: { content: any }) {
+        if (!content) return null;
         const sectionContent = content.topics.iceCream;
         return (
             <ProductCard title={sectionContent.title}>
@@ -289,9 +278,8 @@ const topicComponents: { [key: string]: React.FC } = {
             </ProductCard>
         )
     },
-    frozenDessert: function Content() {
-        const { t } = useLanguage();
-        const content = t(fssaiStandardsContent);
+    frozenDessert: function Content({ content }: { content: any }) {
+        if (!content) return null;
         const sectionContent = content.topics.frozenDessert;
          return (
             <ProductCard title={sectionContent.title}>
@@ -304,9 +292,8 @@ const topicComponents: { [key: string]: React.FC } = {
             </ProductCard>
         )
     },
-    chhanaPaneer: function Content() {
-        const { t } = useLanguage();
-        const content = t(fssaiStandardsContent);
+    chhanaPaneer: function Content({ content }: { content: any }) {
+        if (!content) return null;
         const sectionContent = content.topics.chhanaPaneer;
         return (
             <ProductCard title={sectionContent.title}>
@@ -323,16 +310,15 @@ const topicComponents: { [key: string]: React.FC } = {
             </ProductCard>
         )
     },
-     cheese: function Content() {
-        const { t } = useLanguage();
-        const content = t(fssaiStandardsContent);
+     cheese: function Content({ content }: { content: any }) {
+        if (!content) return null;
         const sectionContent = content.topics.cheese;
         return (
             <ProductCard title={sectionContent.title}>
                 <div className="prose prose-sm max-w-none break-words">
                     <SectionTitle>{sectionContent.description.title}</SectionTitle>
                     <ul className="list-disc pl-5 space-y-1">
-                        {sectionContent?.description?.list?.map((item, index) => (
+                        {sectionContent?.description?.list?.map((item:any, index:any) => (
                             <li key={index} dangerouslySetInnerHTML={{ __html: item }}></li>
                         ))}
                     </ul>
@@ -346,16 +332,15 @@ const topicComponents: { [key: string]: React.FC } = {
             </ProductCard>
         )
     },
-    casein: function Content() {
-        const { t } = useLanguage();
-        const content = t(fssaiStandardsContent);
+    casein: function Content({ content }: { content: any }) {
+        if (!content) return null;
         const sectionContent = content.topics.casein;
          return (
             <ProductCard title={sectionContent.title}>
                 <div className="prose prose-sm max-w-none break-words">
                     <SectionTitle>{sectionContent.description.title}</SectionTitle>
                     <ul className="list-disc pl-5 space-y-1">
-                        {sectionContent?.description?.list?.map((item, index) => (
+                        {sectionContent?.description?.list?.map((item:any, index:any) => (
                             <li key={index}>{item}</li>
                         ))}
                     </ul>
@@ -366,9 +351,8 @@ const topicComponents: { [key: string]: React.FC } = {
             </ProductCard>
         )
     },
-    lactose: function Content() {
-        const { t } = useLanguage();
-        const content = t(fssaiStandardsContent);
+    lactose: function Content({ content }: { content: any }) {
+        if (!content) return null;
         const sectionContent = content.topics.lactose;
          return (
             <ProductCard title={sectionContent.title}>
@@ -381,9 +365,8 @@ const topicComponents: { [key: string]: React.FC } = {
             </ProductCard>
         )
     },
-    wheyProtein: function Content() {
-        const { t } = useLanguage();
-        const content = t(fssaiStandardsContent);
+    wheyProtein: function Content({ content }: { content: any }) {
+        if (!content) return null;
         const sectionContent = content.topics.wheyProtein;
         return (
             <ProductCard title={sectionContent.title}>
@@ -397,16 +380,15 @@ const topicComponents: { [key: string]: React.FC } = {
             </ProductCard>
         )
     },
-    colostrum: function Content() {
-        const { t } = useLanguage();
-        const content = t(fssaiStandardsContent);
+    colostrum: function Content({ content }: { content: any }) {
+        if (!content) return null;
         const sectionContent = content.topics.colostrum;
         return (
             <ProductCard title={sectionContent.title}>
                 <div className="prose prose-sm max-w-none break-words">
                     <SectionTitle>{sectionContent.description.title}</SectionTitle>
                      <ul className="list-disc pl-5 space-y-1">
-                        {sectionContent?.description?.list?.map((item, index) => (
+                        {sectionContent?.description?.list?.map((item:any, index:any) => (
                             <li key={index}>{item}</li>
                         ))}
                     </ul>
@@ -421,9 +403,8 @@ const topicComponents: { [key: string]: React.FC } = {
             </ProductCard>
         )
     },
-    dairyPermeatePowders: function Content() {
-        const { t } = useLanguage();
-        const content = t(fssaiStandardsContent);
+    dairyPermeatePowders: function Content({ content }: { content: any }) {
+        if (!content) return null;
         const sectionContent = content.topics.dairyPermeatePowders;
         return (
             <ProductCard title={sectionContent.title}>
@@ -503,6 +484,18 @@ export function FssaiStandardsModal({ isOpen, setIsOpen }: { isOpen: boolean; se
     const topicData = content.topics[topicValue as keyof typeof content.topics];
     return topicData?.title || topicValue;
   };
+  
+  if (!content) {
+    return (
+        <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+            <DialogContent>
+                <div className="flex items-center justify-center p-8">
+                    <Loader2 className="h-8 w-8 animate-spin" />
+                </div>
+            </DialogContent>
+        </Dialog>
+    );
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
@@ -526,7 +519,7 @@ export function FssaiStandardsModal({ isOpen, setIsOpen }: { isOpen: boolean; se
                 </div>
                 <ScrollArea className="flex-1 mt-4 sm:pr-4">
                     <div className="p-4 pt-0 sm:p-0">
-                        <ActiveComponent />
+                        <ActiveComponent content={content} />
                     </div>
                 </ScrollArea>
             </div>
@@ -557,5 +550,7 @@ export function FssaiStandardsModal({ isOpen, setIsOpen }: { isOpen: boolean; se
     </Dialog>
   );
 }
+
+    
 
     
