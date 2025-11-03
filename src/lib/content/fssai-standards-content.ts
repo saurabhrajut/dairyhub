@@ -554,10 +554,10 @@ export const fssaiStandardsContent = {
                     title: "Compositional Specifications",
                     headers: ["Parameter", "Requirement"],
                     rows: [
-                        ["Total solids, minimum, %, (m/m)", "55.0"],
-                        ["Milk fat, minimum, %, (m/m), dry matter basis", "30.0"],
-                        ["Total ash, maximum, %, (m/m)", "6.0"],
-                        ["Titrable acidity (as % lactic acid), maximum, %", "0.9"]
+                        ["Total Solids, min, %, (m/m)", "55.0"],
+                        ["Milk Fat, min, %, dry matter basis", "30.0 (27.0 from May 1, 2025)"],
+                        ["Total Ash, max, %, (m/m)", "6.0"],
+                        ["Titrable Acidity (lactic acid), max, %", "0.9"]
                     ]
                 }
             },
