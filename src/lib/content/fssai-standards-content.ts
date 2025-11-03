@@ -1,42 +1,42 @@
 export const fssaiStandardsContent = {
-    hinglish: {
-        mainTitle: "Dairy Products ke liye FSSAI Standards",
-        description: "Official dairy standards ke liye ek comprehensive guide.",
-        backToTopics: "Topics par wapas jaayein",
+    hi: {
+        mainTitle: "डेयरी उत्पादों के लिए FSSAI मानक",
+        description: "आधिकारिक डेयरी मानकों के लिए एक व्यापक गाइड।",
+        backToTopics: "विषयों पर वापस जाएं",
+        principles: {
+            title: "General Principles",
+            p1: "खाद्य पदार्थों का वर्णन या प्रस्तुति इस तरह से की जानी चाहिए ताकि डेयरी शब्दों का सही उपयोग सुनिश्चित हो सके, उपभोक्ताओं को गुमराह होने से बचाया जा सके, और उचित व्यापार प्रथाओं को सुनिश्चित किया जा सके। डेयरी उत्पादों को 4°C से नीचे प्रशीतन में संग्रहीत किया जाना चाहिए (UHT और निष्फल उत्पादों को छोड़कर)।"
+        },
+        microbiological: {
+            title: "Microbiological Standards",
+            p1: "FSSAI और अंतरराष्ट्रीय दिशानिर्देशों के अनुसार माइक्रोबायोलॉजिकल सीमाएँ:",
+            list: [
+                "<b>Total Plate Count (TPC):</b> पाश्चुरीकृत दूध: <30,000 CFU/ml; कच्चा दूध: <2,00,000 CFU/ml",
+                "<b>Coliform Count:</b> पाश्चुरीकृत दूध: <10 CFU/ml (संतोषजनक: <20, स्वीकार्य: 20-10,000, असंतोषजनक: >10,000)",
+                "<b>E. coli:</b> पाश्चुरीकृत दूध में अनुपस्थित होना चाहिए (<10 CFU/ml)",
+                "<b>Staphylococcus aureus:</b> <20 CFU/ml (संतोषजनक), <100 CFU/ml (स्वीकार्य), ≥10,000 CFU/ml (अस्वीकार्य)",
+                "<b>Salmonella:</b> 25 मिलीलीटर नमूने में अनुपस्थित/पता नहीं चला",
+                "<b>Listeria monocytogenes:</b> 25 ग्राम नमूने में अनुपस्थित/पता नहीं चला",
+                "<b>Yeast and Mold:</b> पाश्चुरीकृत उत्पादों के लिए <50 CFU/ml"
+            ]
+        },
         topics: {
             general: {
-                title: "Milk aur Milk Products ke liye General Standards",
-                p1: "General standards milk aur milk products ke liye comprehensive definitions aur consumers ya aage ki processing ke liye pesh kiye jaane wale food items ke sambandh mein dairy terms ke use par guidance provide karta hai.",
+                title: "दूध और दूध उत्पादों के लिए सामान्य मानक",
+                p1: "सामान्य मानक दूध और दूध उत्पादों के लिए व्यापक परिभाषाएं और उपभोक्ताओं या आगे की प्रक्रिया के लिए पेश किए जाने वाले खाद्य पदार्थों के संबंध में डेयरी शब्दों के उपयोग पर मार्गदर्शन प्रदान करता है।",
                 definitions: {
-                    title: "Definitions",
+                    title: "परिभाषाएं",
                     list: [
-                        "<b>Ubalna (Boiling):</b> Milk ko atmospheric pressure (101.325 kPa) par lagatar garam karke 100°C tak ubalne ki process ko refer karta hai. Yeh process pathogenic microorganisms ko destroy karta hai lekin spores ko survive karne deta hai.",
-                        "<b>Analogue:</b> Ek product jismein milk se hasil nahi hone wale components (jaise vegetable oils, plant proteins), partial ya complete taur par, kisi bhi milk component ko replace karte hain aur final product organoleptically aur/ya functionally ek milk product jaisa dikhta hai. Inhe clearly label karna zaroori hai.",
-                        "<b>Composite Milk Product:</b> Ek product jiska milk, milk products, ya milk constituents final product mein quantity ke mamle mein ek essential part hai (generally >50% by weight). Examples: flavoured milk, milk-based desserts.",
-                        "<b>Milk (Doodh):</b> Ek healthy milch animal ke complete milking se hasil normal mammary secretion, bina kisi addition ya extraction ke. Yeh colostrum se free hona chahiye. pH range: 6.6-6.8, specific gravity: 1.027-1.035 at 15°C.",
-                        "<b>Milk Product:</b> Milk ki processing se hasil ek product, jismein permitted food additives (emulsifiers, stabilizers, preservatives) aur other ingredients ho sakti hain, jo FSSAI regulations ke anusaar hain.",
-                        "<b>Pasteurisation:</b> Milk ka ek microbicidal heat treatment jo pathogenic bacteria ko destroy karta hai:<br>• Low Temperature Long Time (LTLT): 63°C par 30 minutes<br>• High Temperature Short Time (HTST): 72°C par 15 seconds<br>• Higher Heat Shorter Time (HHST): 89°C par 1.0 second<br>Yeh process Alkaline Phosphatase enzyme ko inactivate kar deta hai, jo pasteurization ki success ka indicator hai.",
-                        "<b>Recombined Milk:</b> Milk fat (butter, butter oil, cream) aur milk-solids-non-fat (skim milk powder) ke preserved forms ke combination se hasil ek product, potable water ke saath ya bina. Processing temperature: 50-55°C, homogenization pressure: 150-200 bar.",
-                        "<b>Reconstituted Milk:</b> Milk ke dried (milk powder) ya concentrated form (evaporated milk) mein potable water milane se hasil ek product. Reconstitution ratio: typically 1:7 to 1:8 (powder:water) for full cream milk powder.",
-                        "<b>Sterilisation (Nasbandi):</b> Milk ya milk products ko commercially sterile banane ke liye high temperature par heat ka application:<br>• In-container sterilization: 115-121°C par 15-40 minutes<br>• Continuous sterilization: 140-150°C par 2-6 seconds<br>Yeh process spores including Clostridium botulinum ko bhi destroy karta hai.",
-                        "<b>Ultra High Temperature (UHT) Treatment:</b> Milk ko kam se kam 135-150°C par 2-8 seconds ke liye continuous flow mein garam karna aur phir aseptic conditions mein pack karna. Direct heating (steam injection) ya indirect heating (plate/tubular heat exchangers) methods use hote hain. Shelf life: 6-9 months at room temperature without refrigeration."
-                    ]
-                },
-                principles: {
-                    title: "General Principles",
-                    p1: "Food items ko is tarah se describe ya present kiya jana chahiye ki dairy terms ka correct use ensure ho, consumers ko mislead hone se bachaya ja sake, aur fair trade practices ensure ki ja sakein. Dairy products ko 4°C se niche refrigeration mein store karna chahiye (except UHT aur sterilized products)."
-                },
-                microbiological: {
-                    title: "Microbiological Standards",
-                    p1: "FSSAI aur international guidelines ke anusaar microbiological limits:",
-                    list: [
-                        "<b>Total Plate Count (TPC):</b> Pasteurized milk: <30,000 CFU/ml; Raw milk: <2,00,000 CFU/ml",
-                        "<b>Coliform Count:</b> Pasteurized milk: <10 CFU/ml (Satisfactory: <20, Acceptable: 20-10,000, Unsatisfactory: >10,000)",
-                        "<b>E. coli:</b> Pasteurized milk mein absent hona chahiye (<10 CFU/ml)",
-                        "<b>Staphylococcus aureus:</b> <20 CFU/ml (Satisfactory), <100 CFU/ml (Acceptable), ≥10,000 CFU/ml (Unacceptable)",
-                        "<b>Salmonella:</b> 25 ml sample mein absent/not detected",
-                        "<b>Listeria monocytogenes:</b> 25 g sample mein absent/not detected",
-                        "<b>Yeast and Mold:</b> <50 CFU/ml for pasteurized products"
+                        "<b>Ubalna (Boiling):</b> दूध को वायुमंडलीय दबाव (101.325 kPa) पर लगातार गर्म करके 100°C तक उबालने की प्रक्रिया को संदर्भित करता है। यह प्रक्रिया रोगजनक सूक्ष्मजीवों को नष्ट करती है लेकिन बीजाणुओं को जीवित रहने देती है।",
+                        "<b>Analogue:</b> एक उत्पाद जिसमें दूध से प्राप्त नहीं होने वाले घटक (जैसे वनस्पति तेल, पौधे प्रोटीन), आंशिक या पूर्ण रूप से, किसी भी दूध घटक को प्रतिस्थापित करते हैं और अंतिम उत्पाद ऑर्गेनोलेप्टिक रूप से और/या कार्यात्मक रूप से एक दूध उत्पाद जैसा दिखता है। इन्हें स्पष्ट रूप से लेबल करना जरूरी है।",
+                        "<b>Composite Milk Product:</b> एक उत्पाद जिसका दूध, दूध उत्पाद, या दूध घटक अंतिम उत्पाद में मात्रा के मामले में एक आवश्यक हिस्सा है (आमतौर पर> 50% वजन द्वारा)। उदाहरण: स्वाद वाला दूध, दूध आधारित डेसर्ट।",
+                        "<b>Milk (Doodh):</b> एक स्वस्थ दूध देने वाले जानवर के पूर्ण दूध निकालने से प्राप्त सामान्य स्तन स्राव, बिना किसी जोड़ या निष्कर्षण के। यह कोलोस्ट्रम से मुक्त होना चाहिए। pH सीमा: 6.6-6.8, विशिष्ट गुरुत्व: 1.027-1.035 15°C पर।",
+                        "<b>Milk Product:</b> दूध की प्रसंस्करण से प्राप्त एक उत्पाद, जिसमें अनुमत खाद्य योजक (पायसीकारी, स्टेबलाइजर्स, परिरक्षक) और अन्य सामग्री हो सकती है, जो FSSAI नियमों के अनुसार हैं।",
+                        "<b>Pasteurisation:</b> दूध का एक सूक्ष्मजीवी ताप उपचार जो रोगजनक जीवाणुओं को नष्ट करता है:<br>• कम तापमान लंबा समय (LTLT): 63°C पर 30 मिनट<br>• उच्च तापमान कम समय (HTST): 72°C पर 15 सेकंड<br>• उच्च ताप कम समय (HHST): 89°C पर 1.0 सेकंड<br>यह प्रक्रिया क्षारीय फॉस्फेट एंजाइम को निष्क्रिय कर देती है, जो पाश्चुरीकरण की सफलता का एक संकेतक है।",
+                        "<b>Recombined Milk:</b> दूध वसा (मक्खन, मक्खन तेल, क्रीम) और दूध-ठोस-गैर-वसा (स्किम्ड दूध पाउडर) के संरक्षित रूपों के संयोजन से प्राप्त एक उत्पाद, पीने योग्य पानी के साथ या बिना। प्रसंस्करण तापमान: 50-55°C, समरूपता दबाव: 150-200 बार।",
+                        "<b>Reconstituted Milk:</b> दूध के सूखे (दूध पाउडर) या केंद्रित रूप (वाष्पित दूध) में पीने योग्य पानी मिलाने से प्राप्त एक उत्पाद। पुनर्गठन अनुपात: आमतौर पर पूरे क्रीम दूध पाउडर के लिए 1:7 से 1:8 (पाउडर: पानी)।",
+                        "<b>Sterilisation (Nasbandi):</b> दूध या दूध उत्पादों को व्यावसायिक रूप से बाँझ बनाने के लिए उच्च तापमान पर गर्मी का अनुप्रयोग:<br>• इन-कंटेनर नसबंदी: 115-121°C पर 15-40 मिनट<br>• निरंतर नसबंदी: 140-150°C पर 2-6 सेकंड<br>यह प्रक्रिया क्लोस्ट्रीडियम बोटुलिनम सहित बीजाणुओं को भी नष्ट करती है।",
+                        "<b>Ultra High Temperature (UHT) Treatment:</b> दूध को कम से कम 135-150°C पर 2-8 सेकंड के लिए निरंतर प्रवाह में गर्म करना और फिर सड़न रोकनेवाला स्थितियों में पैक करना। प्रत्यक्ष हीटिंग (भाप इंजेक्शन) या अप्रत्यक्ष हीटिंग (प्लेट/ट्यूबलर हीट एक्सचेंजर्स) विधियों का उपयोग होता है। शेल्फ जीवन: कमरे के तापमान पर बिना प्रशीतन के 6-9 महीने।"
                     ]
                 }
             },
@@ -70,19 +70,11 @@ export const fssaiStandardsContent = {
                 },
                 additives: {
                     title: "Food Additives aur Contaminants",
-                    p1: "Milk mein koi food additives nahi hona chahiye, except sterilised milk mein specific additives ke (sodium citrate, sodium bicarbonate as stabilizers - max 2000 mg/kg).",
-                    contaminants: "Heavy metals limits: Lead <0.02 mg/kg, Arsenic <0.1 mg/kg, Mercury <0.01 mg/kg. Antibiotic residues (penicillin, tetracycline, streptomycin) detection limit se niche hone chahiye."
+                    p1: "Milk mein koi food additives nahi hona chahiye, except sterilised milk mein specific additives ke (sodium citrate, sodium bicarbonate as stabilizers - max 2000 mg/kg)."
                 },
                 hygiene: {
                     title: "Hygiene (Swachhata) aur Quality Parameters",
-                    p1: "Products ko prescribed hygiene standards ke anusaar prepare aur handle kiya jana chahiye:",
-                    list: [
-                        "<b>Somatic Cell Count (SCC):</b> Buffalo milk: <4,00,000 cells/ml; Cow milk: <4,00,000 cells/ml (indicator of udder health/mastitis)",
-                        "<b>Freezing Point:</b> -0.512°C to -0.550°C (adultered milk ka freezing point higher hota hai)",
-                        "<b>Acidity:</b> Fresh milk: 0.13-0.14% lactic acid; Sour milk: >0.18%",
-                        "<b>Alcohol Test:</b> 68% alcohol test positive nahi hona chahiye (indicates stability)",
-                        "<b>Methylene Blue Reduction Test (MBRT):</b> Good quality milk: >5 hours; Poor quality: <2 hours"
-                    ]
+                    p1: "Products ko prescribed hygiene standards ke anusaar prepare aur handle kiya jana chahiye:"
                 },
                 labeling: {
                     title: "Labelling Requirements",
@@ -208,16 +200,17 @@ export const fssaiStandardsContent = {
                 title: "Milk Powder aur Cream Powder ke liye Standards",
                 description: { 
                     title: "Description", 
-                    p1: "Milk ya cream se pani ko spray drying ya roller drying methods dwara approximately 95-97% partially remove karke hasil kiye gaye products." 
+                    p1: "Milk products obtained by partial removal (approximately 95-97%) of water from milk or cream through spray drying or roller drying methods." 
                 },
                 composition: {
                     title: "Compositional Specifications",
                     headers: ["Parameter", "Whole Milk Powder", "Partially Skimmed Milk Powder", "Skimmed Milk Powder", "Cream Powder"],
                     rows: [
                         ["Moisture*, max, % (m/m)", "5.0", "5.0", "5.0", "5.0"],
-                        ["Milk Fat, % (m/m)", "Min 26.0", ">1.5 and <26.0", "1.5 (max)", "42.0 (min)"],
-                        ["Milk Protein in SNF, min, %", "34.0", "34.0", "34.0", "34.0"],
-                        ["Insolubility Index, max, ml", "2.0", "2.0", "2.0", "-"]
+                        ["Milk fat, % (m/m)", "Min 26.0", ">1.5 and <26.0", "1.5 (max)", "42.0 (min)"],
+                        ["Milk protein in SNF, min, %", "34.0", "34.0", "34.0", "34.0"],
+                        ["Insolubility Index, max, ml", "2.0", "2.0", "2.0", "-"],
+                        ["Total ash, max, % (m/m), on moisture and fat free basis", "9.3", "9.3", "9.3", "-"]
                     ]
                 },
                 note: "*Moisture content mein lactose ka crystallization water include nahi hai."
@@ -306,7 +299,7 @@ export const fssaiStandardsContent = {
                     p1: "Product ka naam 'Chhana', 'Paneer', 'Low Fat Chhana', etc. hona chahiye, jo composition par depend karta hai."
                 }
             },
-            cheese: {
+             cheese: {
                 title: "Cheese aur Cheese Products ke liye Standards",
                 description: {
                     title: "Description",
@@ -429,6 +422,23 @@ export const fssaiStandardsContent = {
         mainTitle: "FSSAI Standards for Dairy Products",
         description: "A comprehensive guide to official dairy standards.",
         backToTopics: "Back to Topics",
+        principles: {
+            title: "General Principles",
+            p1: "Foods shall be described or presented in such a manner as to ensure the correct use of dairy terms, to protect consumers from being misled, and to ensure fair trade practices. Dairy products should be stored under refrigeration below 4°C (except UHT and sterilized products)."
+        },
+        microbiological: {
+            title: "Microbiological Standards",
+            p1: "Microbiological limits as per FSSAI and international guidelines:",
+            list: [
+                "<b>Total Plate Count (TPC):</b> Pasteurized milk: <30,000 CFU/ml; Raw milk: <2,00,000 CFU/ml",
+                "<b>Coliform Count:</b> Pasteurized milk: <10 CFU/ml (Satisfactory: <20, Acceptable: 20-10,000, Unsatisfactory: >10,000)",
+                "<b>E. coli:</b> Should be absent in pasteurized milk (<10 CFU/ml)",
+                "<b>Staphylococcus aureus:</b> <20 CFU/ml (Satisfactory), <100 CFU/ml (Acceptable), ≥10,000 CFU/ml (Unacceptable)",
+                "<b>Salmonella:</b> Absent/not detected in 25 ml sample",
+                "<b>Listeria monocytogenes:</b> Absent/not detected in 25 g sample",
+                "<b>Yeast and Mold:</b> <50 CFU/ml for pasteurized products"
+            ]
+        },
         topics: {
             general: {
                 title: "General Standards for Milk and Milk Products",
@@ -447,23 +457,6 @@ export const fssaiStandardsContent = {
                         "<b>Sterilisation:</b> The application of heat to milk or milk products at high temperatures to render them commercially sterile:<br>• In-container sterilization: 115-121°C for 15-40 minutes<br>• Continuous sterilization: 140-150°C for 2-6 seconds<br>This process also destroys spores including Clostridium botulinum.",
                         "<b>Ultra High Temperature (UHT) Treatment:</b> Heating milk in a continuous flow to a temperature of not less than 135-150°C for 2-8 seconds and then packing in aseptic conditions. Methods include direct heating (steam injection) or indirect heating (plate/tubular heat exchangers). Shelf life: 6-9 months at room temperature without refrigeration."
                     ]
-                },
-                principles: {
-                    title: "General Principles",
-                    p1: "Foods shall be described or presented in such a manner as to ensure the correct use of dairy terms, to protect consumers from being misled, and to ensure fair trade practices. Dairy products should be stored under refrigeration below 4°C (except UHT and sterilized products)."
-                },
-                microbiological: {
-                    title: "Microbiological Standards",
-                    p1: "Microbiological limits as per FSSAI and international guidelines:",
-                    list: [
-                        "<b>Total Plate Count (TPC):</b> Pasteurized milk: <30,000 CFU/ml; Raw milk: <2,00,000 CFU/ml",
-                        "<b>Coliform Count:</b> Pasteurized milk: <10 CFU/ml (Satisfactory: <20, Acceptable: 20-10,000, Unsatisfactory: >10,000)",
-                        "<b>E. coli:</b> Should be absent in pasteurized milk (<10 CFU/ml)",
-                        "<b>Staphylococcus aureus:</b> <20 CFU/ml (Satisfactory), <100 CFU/ml (Acceptable), ≥10,000 CFU/ml (Unacceptable)",
-                        "<b>Salmonella:</b> Absent/not detected in 25 ml sample",
-                        "<b>Listeria monocytogenes:</b> Absent/not detected in 25 g sample",
-                        "<b>Yeast and Mold:</b> <50 CFU/ml for pasteurized products"
-                    ]
                 }
             },
             milk: {
@@ -473,7 +466,7 @@ export const fssaiStandardsContent = {
                     list: [
                         "<b>Species identified milk:</b> Milk obtained from a specific animal (cow, buffalo, goat, sheep, camel).",
                         "<b>Mixed Milk:</b> Any combination of species identified milk.",
-                        "<b>Standardized milk:</b> Milk standardized to a specific fat (4.5%) and solids-not-fat percentage (8.5%).",
+                        "<b>Standardized Milk:</b> Milk standardized to a specific fat (4.5%) and solids-not-fat percentage (8.5%).",
                         "<b>Low Lactose or Lactose free milk:</b> Milk in which the lactose content has been substantially reduced through hydrolysis."
                     ]
                 },
@@ -496,19 +489,11 @@ export const fssaiStandardsContent = {
                 },
                 additives: {
                     title: "Food Additives and Contaminants",
-                    p1: "Milk shall not contain any food additives, except for specific additives in sterilised milk (sodium citrate, sodium bicarbonate as stabilizers - maximum 2000 mg/kg).",
-                    contaminants: "Heavy metals limits: Lead <0.02 mg/kg, Arsenic <0.1 mg/kg, Mercury <0.01 mg/kg. Antibiotic residues (penicillin, tetracycline, streptomycin) should be below detection limits."
+                    p1: "Milk shall not contain any food additives, except for specific additives in sterilised milk (sodium citrate, sodium bicarbonate as stabilizers - max 2000 mg/kg)."
                 },
                 hygiene: {
                     title: "Hygiene and Quality Parameters",
-                    p1: "Products shall be prepared and handled in accordance with prescribed hygiene standards:",
-                    list: [
-                        "<b>Somatic Cell Count (SCC):</b> Buffalo milk: <4,00,000 cells/ml; Cow milk: <4,00,000 cells/ml (indicator of udder health/mastitis)",
-                        "<b>Freezing Point:</b> -0.512°C to -0.550°C (adulterated milk has a higher freezing point)",
-                        "<b>Acidity:</b> Fresh milk: 0.13-0.14% lactic acid; Sour milk: >0.18%",
-                        "<b>Alcohol Test:</b> 68% alcohol test should not be positive (indicates stability)",
-                        "<b>Methylene Blue Reduction Test (MBRT):</b> Good quality milk: >5 hours; Poor quality: <2 hours"
-                    ]
+                    p1: "Products shall be prepared and handled in accordance with prescribed hygiene standards:"
                 },
                 labeling: {
                     title: "Labelling Requirements",
@@ -519,18 +504,18 @@ export const fssaiStandardsContent = {
                 title: "Standard for Flavoured Milk",
                 description: {
                     title: "Description",
-                    p1: "Flavoured Milk means the product prepared from milk or other products derived from milk, and edible flavourings (chocolate, vanilla, strawberry, mango, coffee) with or without addition of sugar, nutritive sweeteners, stabilisers and food colours. Flavoured milk shall be subjected to heat treatment."
+                    p1: "Flavoured Milk means the product prepared from milk or other products derived from milk, or both, and edible flavourings with or without addition of sugar, nutritive sweeteners, other non-dairy ingredients including, stabilisers and food colours. Flavoured milk shall be subjected to heat treatment."
                 },
                 composition: {
                     title: "Composition",
-                    p1: "Flavoured Milk shall have the same minimum percentage of milk fat and milk solids-not-fat as that of the milk from which it is prepared."
+                    p1: "Flavoured Milk shall have the same minimum percentage of milk fat and milk solids-not-fat as that of the milk, as provided for in the Standard for Milk, from which it is prepared."
                 }
             },
             evaporatedMilk: {
                 title: "Standard for Evaporated or Concentrated Milk",
                 description: {
                     title: "Description",
-                    p1: "Evaporated Milk means the product obtained by partial removal (approximately 60%) of water from milk by heat or any other process. The fat and protein content may be adjusted."
+                    p1: "Evaporated Milk means the product obtained by partial removal of water from milk by heat or any other process which leads to a product of the same composition and characteristics. The fat and protein content of the milk may be adjusted."
                 },
                 composition: {
                     title: "Composition",
@@ -538,7 +523,7 @@ export const fssaiStandardsContent = {
                     rows: [
                         ["Milk fat, %, (m/m)", "7.5 (minimum)", "More than 1.0 and Less than 7.5", "1.0 (maximum)", "15.0 (minimum)"],
                         ["Milk solids, minimum, %, (m/m)", "25.0", "20.0", "20.0", "26.5"],
-                        ["Milk protein in SNF, minimum, %, (m/m)", "34.0", "34.0", "34.0", "34.0"]
+                        ["Milk protein* in milk solids- not fat, minimum, %, (m/m)", "34.0", "34.0", "34.0", "34.0"]
                     ]
                 }
             },
@@ -546,16 +531,16 @@ export const fssaiStandardsContent = {
                 title: "Standard for Sweetened Condensed Milk",
                 description: {
                     title: "Description",
-                    p1: "Sweetened Condensed Milk is the product obtained by partial removal (approximately 60%) of water from milk with the addition of sugar (40-45%). The fat or protein content may be adjusted."
+                    p1: "Sweetened Condensed Milk is the product obtained by partial removal of water from milk with the addition of sugar. The fat or protein content may be adjusted."
                 },
                 composition: {
                     title: "Composition",
-                    headers: ["Parameter", "Sweetened condensed milk", "Sweetened condensed partly skimmed", "Sweetened condensed skimmed", "Sweetened condensed high fat"],
+                    headers: ["Parameter", "Sweetened condensed milk", "Sweetened condensed partly skimmed milk", "Sweetened condensed skimmed milk", "Sweetened condensed high fat milk"],
                     rows: [
                         ["Milk fat, %, (m/m)", "8.0 (minimum)", "More than 1.0 and less than 8.0", "1.0 (maximum)", "16.0 (minimum)"],
                         ["Milk solids, minimum, %, (m/m)", "28.0", "24.0", "24.0", "--"],
                         ["Milk solid not fat, minimum, %, (m/m)", "--", "20.0", "--", "14.0"],
-                        ["Milk protein in SNF, minimum, %, (m/m)", "34.0", "34.0", "34.0", "34.0"]
+                        ["Milk protein* in milk solids-not- fat, minimum, %, (m/m)", "34.0", "34.0", "34.0", "34.0"]
                     ]
                 }
             },
@@ -563,14 +548,14 @@ export const fssaiStandardsContent = {
                 title: "Standard for Khoa",
                 description: { 
                     title: "Description", 
-                    p1: "Khoa or Mawa is a product obtained by partial removal (approximately 70-75%) of water from milk."
+                    p1: "Khoa by whatever name it is sold such as Khoa or Mawa or any other region specific popular name means the product obtained by partial removal of water from any variant of milk with or without added milk solids by heating under controlled conditions." 
                 },
                 composition: {
                     title: "Compositional Specifications",
                     headers: ["Parameter", "Requirement"],
                     rows: [
                         ["Total solids, minimum, %, (m/m)", "55.0"],
-                        ["Milk fat, minimum, %, (m/m), dry matter basis", "30.0 (27.0 from May 1, 2025)"],
+                        ["Milk fat, minimum, %, (m/m), dry matter basis", "30.0"],
                         ["Total ash, maximum, %, (m/m)", "6.0"],
                         ["Titrable acidity (as % lactic acid), maximum, %", "0.9"]
                     ]
@@ -581,28 +566,28 @@ export const fssaiStandardsContent = {
                 description: {
                     title: "Description",
                     list: [
-                        "<b>Cream:</b> A fat-rich liquid product obtained by physical separation (centrifugation) from milk.",
-                        "<b>Malai:</b> A fat-rich product prepared by heating (80-85°C) and then cooling milk."
+                        "<b>Cream:</b> means the fluid product comparatively rich in fat, in the form of an emulsion of fat-in-skimmed milk, obtained by physical separation from milk.",
+                        "<b>Malai:</b> means the product rich in milk fat prepared by boiling and cooling of milk."
                     ]
                 },
                 composition: {
                     title: "Compositional Specifications",
-                    p1: "The product shall contain not less than 10.0% (m/m) of milk fat."
+                    p1: "The product shall contain minimum 10.0 per cent. (m/m) milk fat."
                 },
                 labeling: {
                     title: "Labelling",
-                    p1: "The fat content shall be mentioned (e.g., 'Low-fat cream,' 'Medium-fat cream,' 'High-fat cream')."
+                    p1: "The type of cream and the fat content shall be declared on the label (e.g., 'Low fat cream', 'Medium fat cream', 'High fat cream')."
                 }
             },
             fatProducts: {
                 title: "Standard for Milk Fat Products",
                 description: { 
                     title: "Description", 
-                    p1: "Fat-rich products derived exclusively from milk." 
+                    p1: "Fatty products derived exclusively from milk or products obtained from milk, or both, by means of processes which result in almost total removal of water and milk solids-not-fat." 
                 },
                 composition: {
                     title: "Compositional Requirements",
-                    headers: ["Parameter", "Milk Fat, Butter Oil", "Anhydrous Milk Fat, Anhydrous Butter Oil", "Ghee"],
+                    headers: ["Parameter", "Milk Fat, Butter Oil", "Anhydrous Milk Fat", "Ghee"],
                     rows: [
                         ["Moisture, max, % (m/m)", "0.4", "0.1", "0.5"],
                         ["Milk fat, min, % (m/m)", "99.6", "99.8", "99.5"],
@@ -616,7 +601,7 @@ export const fssaiStandardsContent = {
                 title: "Standard for Butter",
                 definition: { 
                     title: "Definition", 
-                    p1: "Butter is a fatty product, principally in the form of a water-in-oil emulsion."
+                    p1: "Butter means the fatty product principally in the form of an emulsion of the type water-in-oil derived exclusively from milk or milk products, or both."
                 },
                 composition: {
                     title: "Compositional Specifications",
@@ -628,22 +613,23 @@ export const fssaiStandardsContent = {
                         ["Common salt, max, % (m/m)", "3.0", "-"]
                     ]
                 },
-                note: "If butter is sold without any indication as to whether it is table butter or white butter, the standards of table butter shall apply."
+                note: "Where butter is sold or offered for sale without any indication as to whether it is table butter or white butter, the Standards of table butter shall apply."
             },
             milkPowders: {
                 title: "Standard for Milk Powders and Cream Powder",
                 description: { 
                     title: "Description", 
-                    p1: "Milk products obtained by partial removal (approximately 95-97%) of water from milk or cream through spray drying or roller drying methods."
+                    p1: "Milk products obtained by partial removal of water from milk or cream." 
                 },
                 composition: {
                     title: "Compositional Specifications",
                     headers: ["Parameter", "Whole Milk Powder", "Partly Skimmed Milk Powder", "Skimmed Milk Powder", "Cream Powder"],
                     rows: [
                         ["Moisture*, max, % (m/m)", "5.0", "5.0", "5.0", "5.0"],
-                        ["Milk fat, % (m/m)", "Min 26.0", ">1.5 and <26.0", "1.5 (max)", "42.0 (min)"],
-                        ["Milk protein in SNF, min, %, (m/m)", "34.0", "34.0", "34.0", "34.0"],
-                        ["Insolubility Index, max, ml", "2.0", "2.0", "2.0", "-"]
+                        ["Milk fat, %, (m/m)", "Min 26.0", ">1.5 and <26.0", "1.5 (max)", "42.0 (min)"],
+                        ["Milk protein** in milk solids-not-fat, min, %, (m/m)", "34.0", "34.0", "34.0", "34.0"],
+                        ["Insolubility Index, max, ml", "2.0", "2.0", "2.0", "--"],
+                        ["Total ash, max, % (m/m), on moisture and fat free basis", "9.3", "9.3", "9.3", "--"]
                     ]
                 },
                 note: "*The moisture content does not include water of crystallization of the lactose."
@@ -653,16 +639,16 @@ export const fssaiStandardsContent = {
                 description: {
                     title: "Description",
                     list: [
-                        "<b>Fermented Milk:</b> Obtained by fermentation of milk by microorganisms. Includes Dahi and Yoghurt.",
-                        "<b>Chakka:</b> Fermented and concentrated milk product obtained from Dahi or Yoghurt by partial removal of whey.",
-                        "<b>Shrikhand:</b> Product obtained from chakka, with added milk fat and sugar (30-40%)."
+                        "<b>Fermented Milk:</b> Obtained by fermentation of milk by suitable microorganisms. Includes Dahi and Yoghurt.",
+                        "<b>Chakka:</b> Fermented and concentrated milk product obtained by partial removal of whey from Dahi or Yoghurt.",
+                        "<b>Shrikhand:</b> Product obtained from chakka, with added milk fat and sugar."
                     ]
                 },
                 yoghurt: {
                     title: "Compositional Specifications (Yoghurt and Dahi)",
                     headers: ["Parameter", "Yoghurt and Dahi", "Partly skimmed Yoghurt", "Skimmed Yoghurt"],
                     rows: [
-                        ["Milk Fat, % (m/m)", "3.0 to 15.0", "0.5 to 3.0", "0.5 (max)"],
+                        ["Milk Fat, % (m/m)", "Not less than 3.0 and not more than 15", "More than 0.5 and less than 3.0", "0.5 (maximum)"],
                         ["Milk solids-not-fat, min, % (m/m)", "8.5", "8.5", "8.5"]
                     ]
                 },
@@ -671,7 +657,7 @@ export const fssaiStandardsContent = {
                     headers: ["Parameter", "Chakka", "Skimmed Milk Chakka", "Full Cream Chakka"],
                     rows: [
                         ["Total solids, min, % (m/m)", "30.0", "20.0", "28.0"],
-                        ["Milk fat, % (m/m), on dry basis", "33.0 (min)", "5.0 (max)", "38.0 (min)"]
+                        ["Milk fat, %, (m/m), on dry basis", "33.0 (minimum)", "5.0 (maximum)", "38.0 (minimum)"]
                     ]
                 }
             },
@@ -679,7 +665,7 @@ export const fssaiStandardsContent = {
                 title: "Standard for Ice Cream, Kulfi, etc.",
                 description: { 
                     title: "Description", 
-                    p1: "Frozen milk products obtained by freezing a pasteurized mix."
+                    p1: "Frozen milk products obtained by freezing a pasteurized mix." 
                 },
                 composition: {
                     title: "Compositional Specifications",
@@ -687,8 +673,8 @@ export const fssaiStandardsContent = {
                     rows: [
                         ["Total Solids, min, % (m/m)", "36.0", "30.0", "26.0"],
                         ["Weight, min, g/l", "525.0", "475.0", "475.0"],
-                        ["Milk Fat, % (m/m)", "10.0 (min)", "2.5 to 10.0", "2.5 (max)"],
-                        ["Milk Protein, min, % (m/m)", "3.5", "3.5", "3.0"]
+                        ["Milk Fat, % (m/m)", "10.0 (min)", "More than 2.5 and less than 10.0", "2.5 (max)"],
+                        ["Milk Protein*, min, % (m/m)", "3.5", "3.5", "3.0"]
                     ]
                 },
                 milkIce: {
@@ -697,16 +683,16 @@ export const fssaiStandardsContent = {
                     rows: [
                         ["Total Solids, min, % (m/m)", "20.0"],
                         ["Milk Fat, max, % (m/m)", "2.0"],
-                        ["Milk Protein, min, % (m/m)", "3.5"]
+                        ["Milk Protein*, min, % (m/m)", "3.5"]
                     ]
                 },
-                note: "If a coating or layer is made of non-dairy ingredients, only the ice cream portion must conform to the composition."
+                note: "In case where coating, base or layer of non-dairy ingredients forms a separate part of the product, only the Ice Cream portion shall conform to the respective composition."
             },
             frozenDessert: {
                 title: "Standard for Frozen Desserts or Confections",
                 description: { 
                     title: "Description", 
-                    p1: "Product obtained by freezing a pasteurized mix prepared with edible vegetable oils or fats, or vegetable protein products, or both." 
+                    p1: "Product obtained by freezing a pasteurised mix prepared with edible vegetable oils or fats, or vegetable protein products, or both." 
                 },
                 composition: {
                     title: "Composition",
@@ -717,22 +703,22 @@ export const fssaiStandardsContent = {
                 title: "Standard for Chhana and Paneer",
                 definition: { 
                     title: "Definition", 
-                    p1: "Chhana or Paneer means the product obtained from milk by precipitation with permitted acidulants and heat (80-90°C) through acid-heat coagulation." 
+                    p1: "Chhana or Paneer means the product obtained from any variant of milk with or without added milk solids, by precipitation with permitted acidulants and heating." 
                 },
                 composition: {
                     title: "Compositional Specifications",
                     headers: ["Parameter", "Chhana or Paneer", "Medium fat Chhana or Paneer", "Low fat Chhana or Paneer"],
                     rows: [
-                        ["Moisture, max, % (m/m)", "65.0 (Chhana) / 60.0 (Paneer)", "65.0 (Chhana) / 60.0 (Paneer)", "70.0 (Chhana) / 70.0 (Paneer)"],
-                        ["Milk fat, % (m/m), dry matter basis", "50.0 (min)", ">20.0 and <50.0", "20.0 (max)"]
+                        ["Moisture, max, % (m/m)", "65.0 (for Chhana) / 60.0 (for Paneer)", "65.0 (for Chhana) / 60.0 (for Paneer)", "70.0 (for Chhana) / 70.0 (for Paneer)"],
+                        ["Milk fat, %, (m/m), dry matter basis", "50.0 (minimum)", "More than 20.0 and less than 50.0", "20.0(maximum)"]
                     ]
                 },
                 labeling: {
                     title: "Labelling",
-                    p1: "The name of the product shall be 'Chhana', 'Paneer', 'Low Fat Chhana', etc., depending upon the composition."
+                    p1: "The name of the product shall be 'Chhana', 'Paneer', 'Low Fat Chhana' etc., depending upon the composition."
                 }
             },
-            cheese: {
+             cheese: {
                 title: "Standard for Cheese and Cheese Products",
                 description: {
                     title: "Description",
@@ -743,7 +729,7 @@ export const fssaiStandardsContent = {
                 },
                 composition: {
                     title: "Compositional Requirements (Examples)",
-                    headers: ["Product", "Moisture, Max, % (m/m)", "Milk fat, Min, % (on dry basis)"],
+                    headers: ["Product", "Moisture, Max, % (m/m)", "Milk fat, Min, % (dry basis)"],
                     rows: [
                         ["Hard-Pressed Cheese", "39.0", "48.0"],
                         ["Cheddar Cheese", "39.0", "48.0"],
@@ -771,7 +757,7 @@ export const fssaiStandardsContent = {
                     rows: [
                         ["Moisture, max, % (m/m)", "12.0", "12.0"],
                         ["Milk fat, max, % (m/m)", "2.0", "2.0"],
-                        ["Milk protein, min, % (m/m), on dry basis", "90.0", "84.0"],
+                        ["Milk protein, min, %, dry matter basis", "90.0", "84.0"],
                         ["Lactose, max, % (m/m)", "1.0", "1.0"]
                     ]
                 },
@@ -788,7 +774,7 @@ export const fssaiStandardsContent = {
                     headers: ["Parameters", "Limits"],
                     rows: [
                         ["Total moisture, max, % (m/m)", "6.0"],
-                        ["Lactose, min, % (m/m) on dry basis", "99.0"],
+                        ["Lactose, min, % (m/m), on dry basis", "99.0"],
                         ["Sulphated ash, max, % (m/m)", "0.3"]
                     ]
                 }
@@ -804,7 +790,7 @@ export const fssaiStandardsContent = {
                     headers: ["Parameters", "Limits"],
                     rows: [
                         ["Moisture, max, % (m/m)", "6.0"],
-                        ["Milk Protein, min, %, (m/m)", "35.0"],
+                        ["Milk Protein**, min, %, (m/m)", "35.0"],
                         ["Milk Fat, max, %, (m/m)", "10"],
                         ["Scorched particles, max", "Disc B (15 mg)"]
                     ]
@@ -816,7 +802,7 @@ export const fssaiStandardsContent = {
                 description: {
                     title: "Description",
                     list: [
-                        "<b>Colostrum:</b> The lacteal secretion from the mammary glands of cow or buffalo obtained three to five days after parturition.",
+                        "<b>Colostrum:</b> The lacteal secretion from the mammary glands of cow or buffalo obtained upto three to five days of parturition.",
                         "<b>Colostrum powder:</b> Product obtained by drying colostrum."
                     ]
                 },
@@ -824,7 +810,7 @@ export const fssaiStandardsContent = {
                     title: "Compositional Specifications (Colostrum)",
                     headers: ["Parameters", "Requirements"],
                     rows: [
-                        ["Protein, min, % (m/m)", "7.0"],
+                        ["Protein*, min, % (m/m)", "7.0"],
                         ["Immunoglobulins-G (IgG), min, % (m/m)", "1.8"]
                     ]
                 },
@@ -832,7 +818,7 @@ export const fssaiStandardsContent = {
                     title: "Compositional Specifications (Colostrum Powder)",
                     headers: ["Parameters", "Requirements"],
                     rows: [
-                        ["Protein, min, % (m/m)", "40.0"],
+                        ["Protein*, min, % (m/m)", "40.0"],
                         ["Immunoglobulins-G (IgG), min, % (m/m)", "8.5"]
                     ]
                 },
@@ -852,3 +838,6 @@ export const fssaiStandardsContent = {
         }
     }
 };
+
+
+    
