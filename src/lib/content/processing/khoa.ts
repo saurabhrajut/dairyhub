@@ -26,7 +26,7 @@ export const khoaContent = {
                         </tr>
                         <tr>
                             <td class="p-2 border"><strong>Milk Fat (min, % m/m, on dry basis)</strong></td>
-                            <td class="p-2 border">30.0</td>
+                            <td class="p-2 border">30.0(27.0 from May 1, 2025)</td>
                             <td class="p-2 border">Guarantees richness and is a key quality indicator.</td>
                         </tr>
                         <tr>
@@ -111,7 +111,7 @@ export const khoaContent = {
                         </tr>
                         <tr>
                             <td class="p-2 border"><strong>दूध वसा (न्यूनतम, % मी/मी, सूखे आधार पर)</strong></td>
-                            <td class="p-2 border">30.0</td>
+                            <td class="p-2 border">30.0(27.0 from May 1, 2025)</td>
                             <td class="p-2 border">समृद्धि की गारंटी देता है और एक प्रमुख गुणवत्ता संकेतक है।</td>
                         </tr>
                         <tr>
