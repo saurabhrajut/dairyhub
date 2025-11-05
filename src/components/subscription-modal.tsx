@@ -54,16 +54,31 @@ export function SubscriptionModal({
   const [isLoading, setIsLoading] = useState<string | null>(null);
   const [selectedPlan, setSelectedPlan] = useState<{key: SubscriptionPlan, price: number} | null>(null);
 
+  const handleSubscription = (planKey: SubscriptionPlan, price: number) => {
+    setIsLoading(planKey);
+    setSelectedPlan({ key: planKey, price });
+  };
+  
   useEffect(() => {
     if (!selectedPlan || !isOpen) {
       return;
     }
 
     const processPayment = async () => {
-        setIsLoading(selectedPlan.key);
-
         if (!user || user.isAnonymous) {
             toast({ variant: "destructive", title: "Authentication Required", description: "Please sign up or log in to subscribe." });
+            setIsLoading(null);
+            setSelectedPlan(null);
+            return;
+        }
+
+        // Check if Razorpay script is loaded
+        if (typeof window.Razorpay === 'undefined') {
+            toast({
+                variant: "destructive",
+                title: "Payment Gateway Error",
+                description: "Could not connect to payment gateway. Please check your internet connection and try again.",
+            });
             setIsLoading(null);
             setSelectedPlan(null);
             return;
@@ -101,6 +116,9 @@ export function SubscriptionModal({
                             title: "Subscription Failed",
                             description: "Could not update your subscription status. Please contact support.",
                         });
+                    } finally {
+                        setIsLoading(null);
+                        setSelectedPlan(null);
                     }
                 },
                 modal: {
@@ -186,7 +204,7 @@ export function SubscriptionModal({
                                    ₹{plan.price}
                                </p>
                                <Button 
-                                   onClick={() => setSelectedPlan({ key: planKey as SubscriptionPlan, price: plan.price })}
+                                   onClick={() => handleSubscription(planKey as SubscriptionPlan, plan.price)}
                                    className={`w-full ${popular ? 'bg-gradient-to-r from-primary to-indigo-500 text-white shadow-md' : ''}`}
                                    variant={popular ? 'default' : 'outline'}
                                    disabled={!!isLoading}
