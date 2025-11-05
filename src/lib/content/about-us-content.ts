@@ -14,11 +14,11 @@ export const aboutUsContent = {
         "degrees": [
           {
             "name": "B.Tech, Food Technology",
-            "institution": "Ch. Devi Lal State Institute of Engineering & Technology, Sirsa (Pursuing)"
+            "institution": "Ch. Devi Lal State Institute of Engineering & Technology, Sirsa @ (CDLU)"
           },
           {
             "name": "Diploma, Food Technology",
-            "institution": "Ch. Bansi Lal Govt. Polytechnic, Bhiwani"
+            "institution": "Ch. Bansi Lal Govt. Polytechnic, Bhiwani @ (HSBTE)"
           },
           {
             "name": "Diploma, Dairy Technology",
