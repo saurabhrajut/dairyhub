@@ -12,6 +12,13 @@ import { textToSpeech as textToSpeechFlow } from "@/ai/flows/text-to-speech-flow
 import { interviewPrepper as interviewPrepperFlow } from "@/ai/flows/interview-prepper-flow";
 import { sarathiAI as sarathiAIFlow } from "@/ai/flows/sarathi-ai-flow";
 import mammoth from 'mammoth';
+import * as pdfjs from 'pdfjs-dist/build/pdf.mjs';
+import Razorpay from 'razorpay';
+
+// Set the workerSrc to prevent it from trying to load a worker script on the server.
+// This is necessary for server-side rendering environments like Next.js.
+const PDF_JS_VERSION = "4.10.38"; // Use the version installed in package.json
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${PDF_JS_VERSION}/pdf.worker.min.mjs`;
 
 
 import type { 
@@ -23,6 +30,7 @@ import type {
     TextToSpeechInput,
     InterviewPrepperInput,
     DocxParsingInput,
+    PdfParsingInput,
     SarathiAIInput
 } from "@/ai/flows/types";
 
@@ -66,13 +74,48 @@ export async function sarathiAI(input: SarathiAIInput) {
     return await sarathiAIFlow(input);
 }
 
-export async function parseDocx(formData: FormData) {
+export async function parseResume(formData: FormData): Promise<{text: string}> {
     const file = formData.get('file') as File;
     if (!file) {
         throw new Error('No file provided');
     }
+
     const arrayBuffer = await file.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
-    const result = await mammoth.extractRawText({ buffer });
-    return result.value;
+
+    if (file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+        const result = await mammoth.extractRawText({ arrayBuffer });
+        return { text: result.value };
+    } else if (file.type === 'application/pdf') {
+        const loadingTask = pdfjs.getDocument({ data: new Uint8Array(arrayBuffer) });
+        const pdf = await loadingTask.promise;
+        let text = '';
+        for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const textContent = await page.getTextContent();
+            text += textContent.items.map((item: any) => item.str).join(' ') + '\n';
+        }
+        return { text };
+    } else {
+        throw new Error('Invalid file type. Please upload a .docx or .pdf file.');
+    }
+}
+
+export async function createRazorpayOrder(amount: number) {
+    const razorpay = new Razorpay({
+        key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,
+        key_secret: process.env.RAZORPAY_KEY_SECRET!,
+    });
+
+    const options = {
+        amount: amount * 100, // amount in the smallest currency unit
+        currency: "INR",
+    };
+
+    try {
+        const order = await razorpay.orders.create(options);
+        return { success: true, order };
+    } catch (error) {
+        console.error("Razorpay order creation failed:", error);
+        return { success: false, error: "Could not create order." };
+    }
 }
