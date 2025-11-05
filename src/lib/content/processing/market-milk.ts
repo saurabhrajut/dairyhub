@@ -20,7 +20,7 @@ export const marketMilkContent = {
                     </thead>
                     <tbody>
                         <tr><td class="p-2 border"><strong>Toned Milk</strong></td><td class="p-2 border">3.0</td><td class="p-2 border">8.5</td></tr>
-                        <tr><td class="p-2 border"><strong>Double Toned Milk</strong></td><td class="p-2 border">1.5</td><td class="p-2 border">9.0</td></tr>
+                        <tr><td class="p-2 border"><strong>Double Toned Milk</strong></td><td class="p-2 border">1.3</td><td class="p-2 border">9.0</td></tr>
                         <tr><td class="p-2 border"><strong>Standardized Milk</strong></td><td class="p-2 border">4.5</td><td class="p-2 border">8.5</td></tr>
                         <tr><td class="p-2 border"><strong>Full Cream Milk</strong></td><td class="p-2 border">6.0</td><td class="p-2 border">9.0</td></tr>
                         <tr><td class="p-2 border"><strong>Skimmed Milk</strong></td><td class="p-2 border">Not more than 0.5</td><td class="p-2 border">8.7</td></tr>
@@ -118,7 +118,7 @@ export const marketMilkContent = {
                     </thead>
                     <tbody>
                         <tr><td class="p-2 border"><strong>Toned Milk</strong></td><td class="p-2 border">3.0</td><td class="p-2 border">8.5</td></tr>
-                        <tr><td class="p-2 border"><strong>Double Toned Milk</strong></td><td class="p-2 border">1.5</td><td class="p-2 border">9.0</td></tr>
+                        <tr><td class="p-2 border"><strong>Double Toned Milk</strong></td><td class="p-2 border">1.3</td><td class="p-2 border">9.0</td></tr>
                         <tr><td class="p-2 border"><strong>Standardized Milk</strong></td><td class="p-2 border">4.5</td><td class="p-2 border">8.5</td></tr>
                         <tr><td class="p-2 border"><strong>Full Cream Milk</strong></td><td class="p-2 border">6.0</td><td class="p-2 border">9.0</td></tr>
                         <tr><td class="p-2 border"><strong>Skimmed Milk</strong></td><td class="p-2 border">Not more than 0.5</td><td class="p-2 border">8.7</td></tr>
