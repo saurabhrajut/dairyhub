@@ -1,7 +1,7 @@
 
 export const milkStandards = {
   toned: { name: "Toned Milk", fat: 3.0, snf: 8.5 },
-  double_toned: { name: "Double Toned Milk", fat: 1.5, snf: 9.0 },
+  double_toned: { name: "Double Toned Milk", fat: 1.3, snf: 9.0 },
   standardized: { name: "Standardized Milk", fat: 4.5, snf: 8.5 },
   full_cream: { name: "Full Cream Milk", fat: 6.0, snf: 9.0 },
   skimmed_milk: { name: "Skimmed Milk", fat: 0.5, snf: 8.7 },
@@ -10,7 +10,7 @@ export const milkStandards = {
 export const snfFormulas: Record<string, { name: string; formulaText: string; calc: (clr: number, fat: number, c?: number) => number; inverse: (snf: number, fat: number, c?: number) => number }> = {
     'isi': { name: 'ISI / BIS (Official)', formulaText: 'SNF % = (CLR/4) + (0.25 * Fat) + 0.44', calc: (clr, fat) => (clr / 4) + (0.25 * fat) + 0.44, inverse: (snf, fat) => (snf - (0.25 * fat) - 0.44) * 4 },
     'richmond': { name: 'Richmond’s Formula', formulaText: 'SNF % = (CLR/4) + (0.21 * Fat) + 0.36', calc: (clr, fat) => (clr / 4) + (0.21 * fat) + 0.36, inverse: (snf, fat) => (snf - (0.21 * fat) - 0.36) * 4 },
-    'new_formula': { name: 'New Formula', formulaText: 'SNF % = (CLR/4) + (0.21 * Fat) + 0.29', calc: (clr, fat) => (clr / 4) + (0.21 * fat) + 0.29, inverse: (snf, fat) => (snf - (0.21 * fat) - 0.29) * 4 },
+    'Modified_formula': { name: 'Modified Formula', formulaText: 'SNF % = (CLR/4) + (0.21 * Fat) + 0.29', calc: (clr, fat) => (clr / 4) + (0.21 * fat) + 0.29, inverse: (snf, fat) => (snf - (0.21 * fat) - 0.29) * 4 },
     'cooperative': { name: 'Modified ISI / Cooperative', formulaText: 'SNF % = (CLR/4) + (0.25 * Fat) + 0.14', calc: (clr, fat) => (clr / 4) + (0.25 * fat) + 0.14, inverse: (snf, fat) => (snf - (0.25 * fat) - 0.14) * 4 },
     'dairy_union': { name: 'Simplified Dairy Union', formulaText: 'SNF % = (CLR/4) + (Fat/5) + 0.44', calc: (clr, fat) => (clr / 4) + (fat / 5) + 0.44, inverse: (snf, fat) => (snf - (fat/5) - 0.44) * 4 },
     'punjab_haryana': { name: 'Punjab / Haryana Variation', formulaText: 'SNF % = (CLR/4) + (0.22 * Fat) + 0.36', calc: (clr, fat) => (clr / 4) + (0.22 * fat) + 0.36, inverse: (snf, fat) => (snf - (0.22 * fat) - 0.36) * 4 },
@@ -95,7 +95,7 @@ export const chemicals = {
     k2cr2o7_std: { name: "Potassium Dichromate (K₂Cr₂O₇)", molarMass: 294.18, nFactor: 6 },
   },
   spirits: {
-    ethanol: { name: "Ethanol (Ethyl Alcohol)", stockPurity: 95 },
+    ethanol: { name: "Ethanol (Ethyl Alcohol)", stockPurity: 99.9 },
     ipa: { name: "IPA (Isopropyl Alcohol)", stockPurity: 99.9 },
     propanol: { name: 'Propanol', stockPurity: 99.5 },
     methanol: { name: 'Methanol (Methyl Alcohol)', stockPurity: 99.8 }
