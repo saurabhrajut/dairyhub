@@ -6,9 +6,9 @@ location: us-central1
 # Yahaan environment variables (API keys) set karein
 runConfig:
   environmentVariables:
-    - variable: RAZORPAY_KEY_ID
+    - variable: NEXT_PUBLIC_RAZORPAY_KEY_ID
       value: 'rzp_live_RaIS0kmA42YM68'
-    - variable: RAZORPAY_SECRET_KEY
+    - variable: RAZORPAY_SECRET
       value: 'YjfUkrJ5uNG8tby4J9MjJ4eY'
 
 # Yeh Firebase ko batata hai ki server kaise chalana hai
