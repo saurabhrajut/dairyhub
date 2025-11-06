@@ -10,7 +10,7 @@
         "source": "**",
         "run": {
           "serviceId": "studio",
-          "region": "us-central1"
+          "region": "asia-south1"
         }
       }
     ]
