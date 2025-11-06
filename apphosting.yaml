@@ -12,6 +12,4 @@ runConfig:
       value: 'YjfUkrJ5uNG8tby4J9MjJ4eY'
 
 # Yeh Firebase ko batata hai ki server kaise chalana hai
-# (Yeh hissa pehle se hi aapke code ke liye set hona chahiye,
-# lekin agar pehle se nahi hai toh isse add karein)
 entryPoint: npm run start
