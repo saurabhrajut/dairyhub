@@ -1,15 +1,35 @@
-# Yeh apphosting.yaml file hai
+# apphosting.yaml
 
-# Apne backend ka region (location) set karein
+# Region ko India (Mumbai) karein (Razorpay ke liye zaroori)
 location: asia-south1
 
-# Yahaan environment variables (API keys) set karein
+# Server ko start karne ka command
+entryPoint: npm run start
+
+# Saari Environment Variables (API Keys) yahaan daalein
 runConfig:
   environmentVariables:
+
+    # ----- FIREBASE KEYS (Aapki .env file se) -----
+    - variable: NEXT_PUBLIC_FIREBASE_API_KEY
+      value: 'AIzaSyAthfWIq2RSTYGVS2rcmO4e6b-0IQJ4qNc'
+    - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+      value: 'dhenuguide.firebaseapp.com'
+    - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+      value: 'dhenuguide'
+    - variable: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+      value: 'dhenuguide.appspot.com'
+    - variable: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+      value: '103418941595'
+    - variable: NEXT_PUBLIC_FIREBASE_APP_ID
+      value: '1:103418941595:web:0f785ba24b808b36a4f989'
+    - variable: NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
+      value: 'G-9BCR233Y1Y'
+    - variable: GEMINI_API_KEY
+      value: 'AIzaSyBTCX81oq5Z4APW-4u6uiumxNs5SApNvpo'
+      
+    # ----- RAZORPAY KEYS (Aapke server code 'route.ts' ke hisaab se) -----
     - variable: NEXT_PUBLIC_RAZORPAY_KEY_ID
       value: 'rzp_live_RaIS0kmA42YM68'
     - variable: RAZORPAY_KEY_SECRET
       value: 'YjfUkrJ5uNG8tby4J9MjJ4eY'
-
-# Yeh Firebase ko batata hai ki server kaise chalana hai
-entryPoint: npm run start
