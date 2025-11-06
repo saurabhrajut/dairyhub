@@ -1,7 +1,7 @@
 # Yeh apphosting.yaml file hai
 
 # Apne backend ka region (location) set karein
-location: us-central1
+location: asia-south1
 
 # Yahaan environment variables (API keys) set karein
 runConfig:
