@@ -1,7 +1,17 @@
-# Settings to manage and configure a Firebase App Hosting backend.
-# https://firebase.google.com/docs/app-hosting/configure
+# Yeh apphosting.yaml file hai
 
+# Apne backend ka region (location) set karein
+location: us-central1
+
+# Yahaan environment variables (API keys) set karein
 runConfig:
-  # Increase this value if you'd like to automatically spin up
-  # more instances in response to increased traffic.
-  maxInstances: 1
+  environmentVariables:
+    - variable: RAZORPAY_KEY_ID
+      value: 'rzp_live_RaIS0kmA42YM68'
+    - variable: RAZORPAY_SECRET_KEY
+      value: 'YjfUkrJ5uNG8tby4J9MjJ4eY'
+
+# Yeh Firebase ko batata hai ki server kaise chalana hai
+# (Yeh hissa pehle se hi aapke code ke liye set hona chahiye,
+# lekin agar pehle se nahi hai toh isse add karein)
+entryPoint: npm run start
