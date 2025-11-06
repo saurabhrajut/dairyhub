@@ -1,7 +1,5 @@
-
 {
   "hosting": {
-    "source": ".",
     "ignore": [
       "firebase.json",
       "**/.*",
@@ -10,8 +8,8 @@
     "rewrites": [
       {
         "source": "**",
-        "apphosting": {
-          "backendId": "studio",
+        "run": {
+          "serviceId": "studio",
           "region": "us-central1"
         }
       }
@@ -23,5 +21,16 @@
   },
   "storage": {
     "rules": "storage.rules"
+  },
+  "apphosting": {
+    "backendId": "studio",
+    "rootDir": "/",
+    "ignore": [
+      "node_modules",
+      ".git",
+      "firebase-debug.log",
+      "firebase-debug.*.log",
+      "functions"
+    ]
   }
 }
