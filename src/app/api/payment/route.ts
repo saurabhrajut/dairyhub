@@ -21,11 +21,11 @@ export async function POST(req: Request) {
 
     // show whether envs are present (masked)
     console.log("[PAYMENT] env NEXT_PUBLIC_RAZORPAY_KEY_ID:", mask(process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID));
-    console.log("[PAYMENT] env RAZORPAY_SECRET present?:", !!process.env.RAZORPAY_SECRET);
+    console.log("[PAYMENT] env RAZORPAY_KEY_SECRET present?:", !!process.env.RAZORPAY_KEY_SECRET);
 
     const razorpay = new Razorpay({
       key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,
-      key_secret: process.env.RAZORPAY_SECRET!,
+      key_secret: process.env.RAZORPAY_KEY_SECRET!,
     });
 
     const options = {
