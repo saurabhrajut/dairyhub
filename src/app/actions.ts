@@ -101,9 +101,17 @@ export async function parseResume(formData: FormData): Promise<{text: string}> {
 }
 
 export async function createRazorpayOrder(amount: number) {
+    const keyId = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
+    const keySecret = process.env.RAZORPAY_KEY_SECRET;
+
+    if (!keyId || !keySecret) {
+        console.error("Razorpay key_id or key_secret is not set in environment variables.");
+        return { success: false, error: "Payment gateway is not configured on the server." };
+    }
+
     const razorpay = new Razorpay({
-        key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,
-        key_secret: process.env.RAZORPAY_KEY_SECRET!,
+        key_id: keyId,
+        key_secret: keySecret,
     });
 
     const options = {
