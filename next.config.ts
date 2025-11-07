@@ -9,8 +9,23 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '2mb',
+    },
+  },
+  env: {
+    RAZORPAY_KEY_SECRET: process.env.RAZORPAY_KEY_SECRET,
+    NEXT_PUBLIC_RAZORPAY_KEY_ID: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+  },
   images: {
     remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'picsum.photos',
+        port: '',
+        pathname: '/**',
+      },
       {
         protocol: 'https',
         hostname: 'placehold.co',
@@ -43,15 +58,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  serverRuntimeConfig: {
-    // Will only be available on the server side
-    razorpayKeyId: process.env.RAZORPAY_KEY_ID,
-    razorpayKeySecret: process.env.RAZORPAY_KEY_SECRET,
-  },
-  publicRuntimeConfig: {
-    // Will be available on both server and client
-    razorpayKeyId: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-  },
+  serverExternalPackages: ['handlebars', 'dotprompt'],
 };
 
 export default nextConfig;
