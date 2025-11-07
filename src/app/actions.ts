@@ -125,6 +125,6 @@ export async function createRazorpayOrder(amount: number) {
         return { success: true, order };
     } catch (error) {
         console.error("Razorpay order creation failed:", error);
-        return { success: false, error: "Could not create order." };
+        return { success: false, error: "Could not create Razorpay order. Please check server logs." };
     }
 }
