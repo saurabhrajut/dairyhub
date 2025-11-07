@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
@@ -84,6 +85,19 @@ export function SubscriptionModal({
             return;
         }
 
+        const keyId = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
+        if (!keyId) {
+            toast({
+                variant: "destructive",
+                title: "Configuration Error",
+                description: "Payment gateway is not configured correctly. Please contact support.",
+            });
+            setIsLoading(null);
+            setSelectedPlan(null);
+            return;
+        }
+
+
         try {
             const orderResponse = await createRazorpayOrder(selectedPlan.price);
             
@@ -92,7 +106,7 @@ export function SubscriptionModal({
             }
 
             const options = {
-                key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+                key: keyId,
                 amount: orderResponse.order.amount,
                 currency: orderResponse.order.currency,
                 name: "Dairy Hub Pro",
