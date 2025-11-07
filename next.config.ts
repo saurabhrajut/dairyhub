@@ -14,10 +14,6 @@ const nextConfig: NextConfig = {
       bodySizeLimit: '2mb',
     },
   },
-  env: {
-    RAZORPAY_KEY_SECRET: process.env.RAZORPAY_KEY_SECRET,
-    NEXT_PUBLIC_RAZORPAY_KEY_ID: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-  },
   images: {
     remotePatterns: [
       {
