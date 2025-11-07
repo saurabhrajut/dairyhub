@@ -30,13 +30,6 @@ export {
 // Low level initialize function
 // Should be called once in the root layout.
 export function initializeFirebase() {
-  const app = getApps().length ? getApp() : initializeApp(getFirebaseConfig());
-  const auth = getAuth(app);
-  const firestore = getFirestore(app);
-  return { app, auth, firestore };
-}
-
-function getFirebaseConfig() {
   const firebaseConfig = {
     apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
     authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -46,9 +39,21 @@ function getFirebaseConfig() {
     appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
   };
 
-  if (!firebaseConfig.apiKey) {
-    throw new Error('Missing NEXT_PUBLIC_FIREBASE_API_KEY');
+  if (getApps().length) {
+    return {
+      app: getApp(),
+      auth: getAuth(getApp()),
+      firestore: getFirestore(getApp()),
+    };
+  } else if (firebaseConfig.apiKey) {
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const firestore = getFirestore(app);
+    return { app, auth, firestore };
+  } else {
+    // This case is for when Firebase is not configured, returning null
+    // or some mock implementation might be necessary depending on the app's needs.
+    // For now, we'll throw an error to make it clear.
+    throw new Error('Firebase configuration is missing.');
   }
-
-  return firebaseConfig;
 }
