@@ -3,7 +3,7 @@
 
 import { createContext, useState, useContext, ReactNode, useCallback, useEffect } from 'react';
 import { doc, getDoc, setDoc, serverTimestamp, Firestore, getFirestore } from 'firebase/firestore';
-import { initFirebaseClient } from '@/lib/firebaseClient';
+import { initializeFirebase } from '@/firebase';
 import { add } from 'date-fns';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError, type SecurityRuleContext } from '@/firebase/errors';
@@ -27,9 +27,11 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
   const [db, setDb] = useState<Firestore | null>(null);
 
   useEffect(() => {
-    const app = initFirebaseClient();
-    if (app) {
-      setDb(getFirestore(app));
+    try {
+        const { firestore } = initializeFirebase();
+        setDb(firestore);
+    } catch(e) {
+        console.error("Failed to initialize Firebase for subscriptions", e);
     }
   }, []);
 
