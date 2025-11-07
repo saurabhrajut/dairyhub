@@ -17,6 +17,8 @@ import { useToast } from "@/hooks/use-toast";
 import { ScrollArea } from "./ui/scroll-area";
 import { createRazorpayOrder } from "@/app/actions";
 import { cn } from "@/lib/utils";
+import getConfig from 'next/config';
+
 
 declare global {
     interface Window {
@@ -55,10 +57,10 @@ export function SubscriptionModal({
   const [isLoading, setIsLoading] = useState<string | null>(null);
   const [selectedPlan, setSelectedPlan] = useState<{key: SubscriptionPlan, price: number} | null>(null);
 
-  const handleSubscription = (planKey: SubscriptionPlan, price: number) => {
+  const handleSubscription = useCallback((planKey: SubscriptionPlan, price: number) => {
     setIsLoading(planKey);
     setSelectedPlan({ key: planKey, price });
-  };
+  }, []);
   
   useEffect(() => {
     if (!selectedPlan || !isOpen) {
@@ -85,7 +87,9 @@ export function SubscriptionModal({
             return;
         }
 
-        const keyId = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
+        const { publicRuntimeConfig } = getConfig();
+        const keyId = publicRuntimeConfig.razorpayKeyId;
+
         if (!keyId) {
             toast({
                 variant: "destructive",
