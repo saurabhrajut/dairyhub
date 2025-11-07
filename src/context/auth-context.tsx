@@ -4,7 +4,7 @@
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { useSubscription } from './subscription-context';
 import { getAuth, GoogleAuthProvider, signInWithPopup, User as FirebaseUser } from 'firebase/auth';
-import { initFirebaseClient } from '@/lib/firebaseClient';
+import { initializeFirebase } from '@/firebase';
 
 
 export type Department = 'process-access' | 'production-access' | 'quality-access' | 'all-control-access' | 'guest';
@@ -17,6 +17,7 @@ export interface AppUser {
     photoURL?: string | null;
     gender?: 'male' | 'female' | 'other';
     department?: Department;
+    expertId?: string; // To link to the expert profile
 }
 
 interface AuthContextType {
@@ -26,7 +27,7 @@ interface AuthContextType {
   anonymousLogin: () => Promise<void>;
   signup: (email: string, password: string, displayName: string, gender: 'male' | 'female' | 'other', department: Department) => Promise<void>;
   logout: () => Promise<void>;
-  updateUserProfile: (profileData: { displayName?: string; department?: Department }) => Promise<void>;
+  updateUserProfile: (profileData: { displayName?: string; department?: Department; expertId?: string; }) => Promise<void>;
   updateUserPhoto: (file: File) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
 }
@@ -128,7 +129,7 @@ const login = async (email: string, password: string) => {
 };
 
 const signInWithGoogle = async () => {
-    const auth = getAuth(initFirebaseClient());
+    const { auth } = initializeFirebase();
     const provider = new GoogleAuthProvider();
     try {
         const result = await signInWithPopup(auth, provider);
