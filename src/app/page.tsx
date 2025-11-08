@@ -1,51 +1,56 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import { Header } from "@/components/header";
-import { TopicGrid } from "@/components/topic-grid";
-import { useAuth } from "@/context/auth-context";
-import { Loader2 } from "lucide-react";
-import { DailyTip } from "@/components/daily-tip";
-import SplashScreen from "@/components/splash-screen";
-import { SarathiChatWidget } from "@/components/sarathi-chat-widget";
-import { useRouter } from "next/navigation";
-import { useSplashScreen } from "@/context/splash-screen-context";
+import { Header } from '@/components/header';
+import { TopicGrid } from '@/components/topic-grid';
+import { DailyTip } from '@/components/daily-tip';
+import { SarathiChatWidget } from '@/components/sarathi-chat-widget';
+import { AdBanner } from '@/components/ad-banner';
+import { FlaskConical, Beaker, Leaf, Settings, TestTube, Microscope } from 'lucide-react';
+import React from 'react';
 
-
-export default function Home() {
-  const { loading, user } = useAuth();
-  const { isFinished, setIsFinished } = useSplashScreen();
-  const router = useRouter();
-
-  useEffect(() => {
-    // If not loading and no user, immediately redirect to login
-    if (!loading && !user) {
-      router.push('/login');
-    }
-  }, [loading, user, router]);
-
-  // While loading auth state or if splash screen hasn't finished
-  if (loading || !isFinished) {
-    // Show splash only if it hasn't finished. If auth is loading, it will also show splash.
-    return <SplashScreen onFinished={() => setIsFinished(true)} />;
-  }
-  
-  // This check is a safeguard for the brief moment after loading but before router push completes
-  if (!user) {
-     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="h-8 w-8 animate-spin" />
-      </div>
-    );
-  }
-
+const AnimatedBackground = () => {
+  const icons = [
+    { Icon: FlaskConical, style: { animationDelay: '0s', animationDuration: '15s', left: '10%' } },
+    { Icon: Beaker, style: { animationDelay: '2s', animationDuration: '17s', left: '20%' } },
+    { Icon: Leaf, style: { animationDelay: '4s', animationDuration: '20s', left: '30%' } },
+    { Icon: Settings, style: { animationDelay: '1s', animationDuration: '22s', left: '40%', fontSize: '24px' } },
+    { Icon: TestTube, style: { animationDelay: '6s', animationDuration: '16s', left: '50%' } },
+    { Icon: Microscope, style: { animationDelay: '8s', animationDuration: '18s', left: '60%' } },
+    { Icon: FlaskConical, style: { animationDelay: '3s', animationDuration: '19s', left: '70%' } },
+    { Icon: Leaf, style: { animationDelay: '7s', animationDuration: '21s', left: '80%' } },
+    { Icon: Settings, style: { animationDelay: '5s', animationDuration: '25s', left: '90%', fontSize: '20px' } },
+    { Icon: Beaker, style: { animationDelay: '9s', animationDuration: '15s', left: '55%' } },
+    { Icon: Microscope, style: { animationDelay: '10s', animationDuration: '23s', left: '15%' } },
+    { Icon: TestTube, style: { animationDelay: '11s', animationDuration: '19s', left: '65%' } },
+  ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-blue-50">
-      <div className="max-w-7xl mx-auto p-4 sm:p-6">
+    <div className="background-animations">
+      {icons.map((item, index) => {
+        const { Icon, style } = item;
+        return <Icon key={index} className="animated-icon" style={style} />;
+      })}
+    </div>
+  );
+};
+
+export default function Home() {
+  return (
+    <div className="relative min-h-screen bg-gradient-to-br from-background to-blue-50">
+      <AnimatedBackground />
+      <div className="max-w-7xl mx-auto p-4 sm:p-6 relative z-10">
         <Header />
         <main>
           <DailyTip />
+          <div className="my-8">
+            <AdBanner
+              data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+              data-ad-slot="YYYYYYYYYY"
+              data-ad-format="auto"
+              data-full-width-responsive="true"
+              className="h-[100px]"
+            />
+          </div>
           <div className="text-center my-8">
             <h2 className="font-headline text-3xl font-bold text-gray-800">
               Dairy Information & Calculations
@@ -57,7 +62,7 @@ export default function Home() {
           <TopicGrid />
         </main>
       </div>
-       <SarathiChatWidget />
+      <SarathiChatWidget />
     </div>
   );
 }
