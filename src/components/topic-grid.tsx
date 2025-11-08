@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -153,11 +152,9 @@ export function TopicGrid() {
     return matchesSearch;
   });
 
+  // Lock remove kar diya - ab seedha modal open hoga
   const openModal = (id: string, isProFeature: boolean) => {
-    if (isProFeature && !isPro) {
-      setIsSubscriptionModalOpen(true);
-      return;
-    }
+    // Pro check ko remove kar diya
     setActiveModal(id);
   };
 
@@ -179,7 +176,8 @@ export function TopicGrid() {
       <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-4 sm:gap-6">
         {filteredTopics.map((topic) => {
           
-          const isLocked = topic.isPro && !isPro;
+          // Lock logic ko disable kar diya - ab koi bhi locked nahi hoga
+          const isLocked = false;
 
           return (
             <div
@@ -190,12 +188,7 @@ export function TopicGrid() {
                 "cursor-pointer"
               )}
             >
-              {isLocked && (
-                <>
-                  <div className="absolute inset-0 bg-black/5 backdrop-blur-xs z-10"></div>
-                  <Lock className="absolute top-2 left-2 h-4 w-4 text-gray-500 z-20" />
-                </>
-              )}
+              {/* Lock icon aur blur effect completely remove ho gaya */}
               {topic.badge && <Badge variant={topic.badge === 'Pro' ? 'default' : 'destructive'} className="absolute top-2 right-2 text-xs px-1.5 py-0.5 h-auto animate-pulse z-30">{topic.badge}</Badge>}
               <div className={`w-16 h-16 mx-auto mb-3 rounded-full flex items-center justify-center bg-gradient-to-br ${topic.color}`}>
                 <topic.icon className="w-8 h-8 text-primary" />
