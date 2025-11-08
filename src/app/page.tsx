@@ -4,7 +4,7 @@ import { Header } from '@/components/header';
 import { TopicGrid } from '@/components/topic-grid';
 import { DailyTip } from '@/components/daily-tip';
 import { SarathiChatWidget } from '@/components/sarathi-chat-widget';
-import { AdBanner } from '@/components/ad-banner';
+// AdBanner import remove kar diya
 import { FlaskConical, Beaker, Leaf, Settings, TestTube, Microscope } from 'lucide-react';
 import React from 'react';
 
@@ -42,7 +42,8 @@ export default function Home() {
         <Header />
         <main>
           <DailyTip />
-          <div className="my-8">
+          {/* AdBanner component ko comment ya remove kar diya */}
+          {/* <div className="my-8">
             <AdBanner
               data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
               data-ad-slot="YYYYYYYYYY"
@@ -50,7 +51,7 @@ export default function Home() {
               data-full-width-responsive="true"
               className="h-[100px]"
             />
-          </div>
+          </div> */}
           <div className="text-center my-8">
             <h2 className="font-headline text-3xl font-bold text-gray-800">
               Dairy Information & Calculations
