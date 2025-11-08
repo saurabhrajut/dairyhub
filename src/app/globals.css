@@ -49,7 +49,7 @@
   }
 
   body.theme-sepia {
-    --background: 44 23% 85%; /* Lighter Sepia */
+    --background: 44 23% 85%;
     --foreground: 44 20% 20%;
     --card: 44 23% 90%;
     --card-foreground: 44 20% 20%;
@@ -64,7 +64,7 @@
   }
 
   body.theme-slate {
-    --background: 220 13% 18%; /* Dark Slate Gray */
+    --background: 220 13% 18%;
     --foreground: 220 10% 80%;
     --card: 220 13% 22%;
     --card-foreground: 220 10% 85%;
@@ -79,7 +79,7 @@
   }
 
   body.theme-paper {
-    --background: 50 33% 95%; /* Creamy Paper */
+    --background: 50 33% 95%;
     --foreground: 40 10% 25%;
     --card: 50 33% 98%;
     --card-foreground: 40 10% 25%;
@@ -94,7 +94,7 @@
   }
   
   body.theme-mint {
-    --background: 140 30% 95%; /* Light Mint */
+    --background: 140 30% 95%;
     --foreground: 140 20% 15%;
     --card: 140 30% 98%;
     --card-foreground: 140 20% 15%;
@@ -109,7 +109,7 @@
   }
   
   body.theme-night {
-    --background: 220 14% 10%; /* Very Dark Blue */
+    --background: 220 14% 10%;
     --foreground: 220 10% 75%;
     --card: 220 14% 14%;
     --card-foreground: 220 10% 80%;
@@ -164,7 +164,6 @@ body.theme-mint .glass-card {
     border: 1px solid rgba(200, 230, 210, 0.4);
 }
 
-
 .card-enter {
   opacity: 0;
   transform: translateY(20px);
@@ -189,18 +188,17 @@ pre code {
   color: hsl(var(--secondary-foreground));
 }
 
-/* ===== START: टेबल को ठीक करने के लिए यह कोड जोड़ा गया है ===== */
 .table-container {
-  overflow-x: auto; /* यह हॉरिजॉन्टल स्क्रॉल बार जोड़ता है */
-  -webkit-overflow-scrolling: touch; /* iOS पर स्मूथ स्क्रॉलिंग के लिए */
-  border: 1px solid hsl(var(--border)); /* आपकी थीम जैसा बॉर्डर */
-  border-radius: var(--radius); /* आपकी थीम जैसा गोल कोना */
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
 }
 
 .force-wrap {
   overflow-wrap: break-word;
   word-wrap: break-word;
-  word-break: break-all; /* यह सबसे ज़रूरी है, यह किसी भी लंबे शब्द को तोड़ देता है */
+  word-break: break-all;
 }
 
 @keyframes text-3d-pop {
@@ -216,7 +214,6 @@ pre code {
     transform: translateY(0) rotateX(0deg) scale(1);
   }
 }
-/* ===== END: नया कोड यहाँ खत्म हुआ ===== */
 
 @keyframes fade-out {
   from { opacity: 1; }
@@ -236,8 +233,62 @@ pre code {
   }
 }
 
-/* ===== START: मोबाइल ओवरफ्लो के लिए फिक्स ===== */
 .flex {
     min-width: 0;
 }
-/* ===== END: फिक्स यहाँ खत्म हुआ ===== */
+
+/* ===== FIXED: Animated Background - Opacity aur Color Increase ===== */
+.background-animations {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.background-animations .animated-icon {
+  position: absolute;
+  bottom: -50px;
+  font-size: 20px;
+  /* Opacity 0.15 se 0.35 kar diya - ab clearly visible honge */
+  color: hsl(var(--primary) / 0.35);
+  animation: animate-background linear infinite;
+  pointer-events: none;
+}
+
+/* Dark themes ke liye alag color */
+.dark .background-animations .animated-icon,
+body.theme-slate .background-animations .animated-icon,
+body.theme-night .background-animations .animated-icon {
+  color: hsl(var(--primary) / 0.25);
+}
+
+/* Mint theme ke liye green tint */
+body.theme-mint .background-animations .animated-icon {
+  color: hsl(150 50% 45% / 0.35);
+}
+
+/* Sepia theme ke liye warm color */
+body.theme-sepia .background-animations .animated-icon {
+  color: hsl(39 70% 45% / 0.35);
+}
+
+/* Paper theme ke liye subtle brown */
+body.theme-paper .background-animations .animated-icon {
+  color: hsl(35 50% 50% / 0.35);
+}
+
+@keyframes animate-background {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+/* ===== END: Animated Background ===== */
