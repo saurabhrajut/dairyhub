@@ -1,7 +1,7 @@
-
 "use client";
 
 import React, { useEffect, useState } from 'react';
+import { useSplashScreen } from '@/context/splash-screen-context';
 
 // --- Animation Components ---
 
@@ -296,38 +296,40 @@ const animations = [
   AbstractLiquidSwirl,
 ];
 
-export default function SplashScreen({ onFinished }: { onFinished: () => void }) {
-  const [currentSlogan] = useState(() => {
-    const slogans = [
-      "Digitizing Dairy Science.", "Smart Tech for Dairy.", "Science Meets Dairy.", "Your Dairy, Our Logic.",
-      "Digital Dairy. Real Results.", "From Milk to Molecules — Digitizing Every Step.",
-      "Your Complete Digital Solution for Dairy Processing & Testing.", "Smart Dairy, Smarter Chemistry.",
-      "Precision, Purity, and Progress — All in One Hub.", "Transforming Dairy Science into Digital Simplicity.",
-      "Where Dairy Processing Meets Innovation.", "Integrating Technology with the Art of Dairy.",
-      "Empowering Dairy Processing through Intelligent Automation.", "From Collection to Chemistry — One Smart Platform.",
-      "Digital Intelligence for Dairy Innovation.", "Where Data Meets Dairy Science.", "Redefining Dairy with Smart Technology.",
-      "Simplifying Complex Dairy Operations Digitally.", "Smart Science for a Smarter Dairy Future.",
-      "Precision in Every Drop, Accuracy in Every Test.", "Digitizing Dairy Labs for Reliable Results.",
-      "From Milk Molecules to Digital Metrics.", "Innovating Dairy Chemistry through Technology.",
-      "Ensuring Quality through Digital Precision.", "Precision. Purity. Performance.", "Smart Dairy. Simple Tech.",
-      "Where Dairy Becomes Digital.", "Tech for Tomorrow's Dairy.", "Digital Dairy. Real Science.", "Think Smart, Do Fast."
-    ];
-    return slogans[Math.floor(Math.random() * slogans.length)];
-  });
+const slogans = [
+  "Digitizing Dairy Science.", "Smart Tech for Dairy.", "Science Meets Dairy.", "Your Dairy, Our Logic.",
+  "Digital Dairy. Real Results.", "From Milk to Molecules — Digitizing Every Step.",
+  "Your Complete Digital Solution for Dairy Processing & Testing.", "Smart Dairy, Smarter Chemistry.",
+  "Precision, Purity, and Progress — All in One Hub.", "Transforming Dairy Science into Digital Simplicity.",
+  "Where Dairy Processing Meets Innovation.", "Integrating Technology with the Art of Dairy.",
+  "Empowering Dairy Processing through Intelligent Automation.", "From Collection to Chemistry — One Smart Platform.",
+  "Digital Intelligence for Dairy Innovation.", "Where Data Meets Dairy Science.", "Redefining Dairy with Smart Technology.",
+  "Simplifying Complex Dairy Operations Digitally.", "Smart Science for a Smarter Dairy Future.",
+  "Precision in Every Drop, Accuracy in Every Test.", "Digitizing Dairy Labs for Reliable Results.",
+  "From Milk Molecules to Digital Metrics.", "Innovating Dairy Chemistry through Technology.",
+  "Ensuring Quality through Digital Precision.", "Precision. Purity. Performance.", "Smart Dairy. Simple Tech.",
+  "Where Dairy Becomes Digital.", "Tech for Tomorrow's Dairy.", "Digital Dairy. Real Science.", "Think Smart, Do Fast."
+];
 
+export default function SplashScreen() {
+  const { setIsFinished } = useSplashScreen();
+  const [currentSlogan, setCurrentSlogan] = useState(slogans[0]);
   const [SelectedAnimation, setSelectedAnimation] = useState<React.FC | null>(null);
 
   useEffect(() => {
-    // This effect should only run on the client
-    const randomIndex = Math.floor(Math.random() * animations.length);
-    setSelectedAnimation(() => animations[randomIndex]);
+    // This effect runs only on the client-side to avoid hydration mismatch
+    const randomSloganIndex = Math.floor(Math.random() * slogans.length);
+    setCurrentSlogan(slogans[randomSloganIndex]);
 
+    const randomAnimationIndex = Math.floor(Math.random() * animations.length);
+    setSelectedAnimation(() => animations[randomAnimationIndex]);
+    
     const timer = setTimeout(() => {
-      onFinished();
+      setIsFinished(true);
     }, 8200);
 
     return () => clearTimeout(timer);
-  }, [onFinished]);
+  }, [setIsFinished]);
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gray-100 overflow-hidden">
@@ -410,4 +412,3 @@ export default function SplashScreen({ onFinished }: { onFinished: () => void })
     </div>
   );
 }
-
