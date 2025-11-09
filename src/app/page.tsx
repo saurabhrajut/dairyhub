@@ -4,8 +4,7 @@ import { Header } from '@/components/header';
 import { TopicGrid } from '@/components/topic-grid';
 import { DailyTip } from '@/components/daily-tip';
 import { SarathiChatWidget } from '@/components/sarathi-chat-widget';
-import { AdBanner } from '@/components/ad-banner';
-import { FlaskConical, Beaker, Pipette, Settings, TestTube, Microscope, Combine } from 'lucide-react';
+import { FlaskConical, Beaker, Pipette, Settings, TestTube, Microscope, Combine, Leaf } from 'lucide-react';
 import React from 'react';
 import { useSplashScreen } from '@/context/splash-screen-context';
 import SplashScreen from '@/components/splash-screen';
@@ -38,10 +37,10 @@ const AnimatedBackground = () => {
 };
 
 export default function Home() {
-  const { isFinished } = useSplashScreen();
+  const { isFinished, setIsFinished } = useSplashScreen();
 
   if (!isFinished) {
-    return <SplashScreen />;
+    return <SplashScreen onFinished={() => setIsFinished(true)} />;
   }
   
   return (
@@ -51,15 +50,6 @@ export default function Home() {
         <Header />
         <main>
           <DailyTip />
-          <div className="my-8">
-            <AdBanner
-              data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-              data-ad-slot="YYYYYYYYYY"
-              data-ad-format="auto"
-              data-full-width-responsive="true"
-              className="h-[100px]"
-            />
-          </div>
           <div className="text-center my-8">
             <h2 className="font-headline text-3xl font-bold text-gray-800">
               Dairy Information & Calculations
