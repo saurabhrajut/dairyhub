@@ -1,10 +1,10 @@
 "use client";
 
-import { createContext, useState, useContext, ReactNode, useMemo } from 'react';
+import React, { createContext, useState, useContext, ReactNode, useCallback } from 'react';
 
 interface SplashScreenContextType {
   isFinished: boolean;
-  setIsFinished: (finished: boolean) => void;
+  setIsFinished: (isFinished: boolean) => void;
 }
 
 const SplashScreenContext = createContext<SplashScreenContextType | undefined>(undefined);
@@ -12,13 +12,8 @@ const SplashScreenContext = createContext<SplashScreenContextType | undefined>(u
 export function SplashScreenProvider({ children }: { children: ReactNode }) {
   const [isFinished, setIsFinished] = useState(false);
 
-  const value = useMemo(() => ({
-    isFinished,
-    setIsFinished,
-  }), [isFinished]);
-
   return (
-    <SplashScreenContext.Provider value={value}>
+    <SplashScreenContext.Provider value={{ isFinished, setIsFinished }}>
       {children}
     </SplashScreenContext.Provider>
   );
