@@ -3,11 +3,11 @@
 import { Header } from '@/components/header';
 import { TopicGrid } from '@/components/topic-grid';
 import { DailyTip } from '@/components/daily-tip';
-import { SarathiChatWidget } from '@/components/sarathi-chat-widget';
-import { FlaskConical, Beaker, Pipette, Settings, TestTube, Microscope, Combine, Leaf } from 'lucide-react';
-import React from 'react';
-import { useSplashScreen } from '@/context/splash-screen-context';
+import { FlaskConical, Beaker, Pipette, Settings, TestTube, Microscope, Combine } from 'lucide-react';
+import React, { useState } from 'react';
 import SplashScreen from '@/components/splash-screen';
+import { useSplashScreen } from '@/context/splash-screen-context';
+import { cn } from '@/lib/utils';
 
 const AnimatedBackground = () => {
   const icons = [
@@ -36,13 +36,20 @@ const AnimatedBackground = () => {
   );
 };
 
+
 export default function Home() {
   const { isFinished, setIsFinished } = useSplashScreen();
+  const [isBouncing, setIsBouncing] = useState(false);
+
+  const handleBounce = () => {
+    setIsBouncing(true);
+    setTimeout(() => setIsBouncing(false), 700); // Duration of the bounce animation
+  };
 
   if (!isFinished) {
     return <SplashScreen onFinished={() => setIsFinished(true)} />;
   }
-  
+
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-background to-blue-50">
       <AnimatedBackground />
@@ -50,18 +57,22 @@ export default function Home() {
         <Header />
         <main>
           <DailyTip />
-          <div className="text-center my-8">
-            <h2 className="font-headline text-3xl font-bold text-gray-800">
+          <div className="text-center my-8 cursor-pointer" onClick={handleBounce}>
+            <h2 className={cn(
+                "font-headline text-3xl font-bold text-gray-800 text-pop-initial",
+                isBouncing && 'bouncing'
+              )}>
               Dairy Information & Calculations
             </h2>
-            <p className="font-headline text-sm font-semibold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
+            <p className={cn(
+                "font-headline text-sm font-semibold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent"
+              )} style={{ animationDelay: '0.4s' }}>
               By Saurabh Rajput
             </p>
           </div>
           <TopicGrid />
         </main>
       </div>
-      <SarathiChatWidget />
     </div>
   );
 }
