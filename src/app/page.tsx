@@ -4,8 +4,11 @@ import { Header } from '@/components/header';
 import { TopicGrid } from '@/components/topic-grid';
 import { DailyTip } from '@/components/daily-tip';
 import { SarathiChatWidget } from '@/components/sarathi-chat-widget';
+import { AdBanner } from '@/components/ad-banner';
 import { FlaskConical, Beaker, Leaf, Settings, TestTube, Microscope } from 'lucide-react';
 import React from 'react';
+import { useSplashScreen } from '@/context/splash-screen-context';
+import SplashScreen from '@/components/splash-screen';
 
 const AnimatedBackground = () => {
   const icons = [
@@ -34,15 +37,28 @@ const AnimatedBackground = () => {
 };
 
 export default function Home() {
+  const { isFinished, setIsFinished } = useSplashScreen();
+
+  if (!isFinished) {
+    return <SplashScreen />;
+  }
+  
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-background to-blue-50">
-      {/* Background animations - ye hamesha chalti rahegi */}
       <AnimatedBackground />
-      
       <div className="max-w-7xl mx-auto p-4 sm:p-6 relative z-10">
         <Header />
         <main>
           <DailyTip />
+          <div className="my-8">
+            <AdBanner
+              data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+              data-ad-slot="YYYYYYYYYY"
+              data-ad-format="auto"
+              data-full-width-responsive="true"
+              className="h-[100px]"
+            />
+          </div>
           <div className="text-center my-8">
             <h2 className="font-headline text-3xl font-bold text-gray-800">
               Dairy Information & Calculations
