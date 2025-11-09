@@ -5,7 +5,7 @@ import { TopicGrid } from '@/components/topic-grid';
 import { DailyTip } from '@/components/daily-tip';
 import { SarathiChatWidget } from '@/components/sarathi-chat-widget';
 import { AdBanner } from '@/components/ad-banner';
-import { FlaskConical, Beaker, Leaf, Settings, TestTube, Microscope } from 'lucide-react';
+import { FlaskConical, Beaker, Pipette, Settings, TestTube, Microscope, Combine } from 'lucide-react';
 import React from 'react';
 import { useSplashScreen } from '@/context/splash-screen-context';
 import SplashScreen from '@/components/splash-screen';
@@ -14,16 +14,17 @@ const AnimatedBackground = () => {
   const icons = [
     { Icon: FlaskConical, style: { animationDelay: '0s', animationDuration: '15s', left: '10%' } },
     { Icon: Beaker, style: { animationDelay: '2s', animationDuration: '17s', left: '20%' } },
-    { Icon: Leaf, style: { animationDelay: '4s', animationDuration: '20s', left: '30%' } },
+    { Icon: Pipette, style: { animationDelay: '4s', animationDuration: '20s', left: '30%' } },
     { Icon: Settings, style: { animationDelay: '1s', animationDuration: '22s', left: '40%', fontSize: '24px' } },
     { Icon: TestTube, style: { animationDelay: '6s', animationDuration: '16s', left: '50%' } },
     { Icon: Microscope, style: { animationDelay: '8s', animationDuration: '18s', left: '60%' } },
     { Icon: FlaskConical, style: { animationDelay: '3s', animationDuration: '19s', left: '70%' } },
-    { Icon: Leaf, style: { animationDelay: '7s', animationDuration: '21s', left: '80%' } },
+    { Icon: Combine, style: { animationDelay: '7s', animationDuration: '21s', left: '80%' } },
     { Icon: Settings, style: { animationDelay: '5s', animationDuration: '25s', left: '90%', fontSize: '20px' } },
     { Icon: Beaker, style: { animationDelay: '9s', animationDuration: '15s', left: '55%' } },
     { Icon: Microscope, style: { animationDelay: '10s', animationDuration: '23s', left: '15%' } },
     { Icon: TestTube, style: { animationDelay: '11s', animationDuration: '19s', left: '65%' } },
+    { Icon: Pipette, style: { animationDelay: '12s', animationDuration: '24s', left: '25%' } },
   ];
 
   return (
@@ -37,7 +38,7 @@ const AnimatedBackground = () => {
 };
 
 export default function Home() {
-  const { isFinished, setIsFinished } = useSplashScreen();
+  const { isFinished } = useSplashScreen();
 
   if (!isFinished) {
     return <SplashScreen />;
