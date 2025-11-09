@@ -4,7 +4,6 @@ import { Header } from '@/components/header';
 import { TopicGrid } from '@/components/topic-grid';
 import { DailyTip } from '@/components/daily-tip';
 import { SarathiChatWidget } from '@/components/sarathi-chat-widget';
-// AdBanner import remove kar diya
 import { FlaskConical, Beaker, Leaf, Settings, TestTube, Microscope } from 'lucide-react';
 import React from 'react';
 
@@ -37,21 +36,13 @@ const AnimatedBackground = () => {
 export default function Home() {
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-background to-blue-50">
+      {/* Background animations - ye hamesha chalti rahegi */}
       <AnimatedBackground />
+      
       <div className="max-w-7xl mx-auto p-4 sm:p-6 relative z-10">
         <Header />
         <main>
           <DailyTip />
-          {/* AdBanner component ko comment ya remove kar diya */}
-          {/* <div className="my-8">
-            <AdBanner
-              data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-              data-ad-slot="YYYYYYYYYY"
-              data-ad-format="auto"
-              data-full-width-responsive="true"
-              className="h-[100px]"
-            />
-          </div> */}
           <div className="text-center my-8">
             <h2 className="font-headline text-3xl font-bold text-gray-800">
               Dairy Information & Calculations
