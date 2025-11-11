@@ -7,15 +7,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAuth } from '@/context/auth-context';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
-import { useSubscription } from '@/context/subscription-context';
-import { SubscriptionModal } from '@/components/subscription-modal';
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useLanguage } from '@/context/language-context';
-import { format } from 'date-fns';
-import { Info, Mail, MessageCircle, Crown, ChevronLeft, LogOut, Settings, HelpCircle, User, Loader2, Building2, ChevronRight, BookOpen, Droplet, Moon, Sun } from 'lucide-react';
+import { Heart, QrCode, Mail, MessageCircle, ChevronLeft, LogOut, Settings, HelpCircle, User, Loader2, Building2, ChevronRight, BookOpen, Droplet, Moon, Sun, Gift } from 'lucide-react';
 import type { Department } from '@/context/auth-context';
 import { useReadingMode } from '@/context/reading-mode-context';
 import { Switch } from '@/components/ui/switch';
@@ -32,16 +30,6 @@ const EditIcon = () => (
 );
 
 
-const allProFeatures = [
-    "Unlock all premium calculators & guides",
-    "Full access to Sarathi AI Chatbot",
-    "Full access to Expert Support & Gyan AI",
-    "AI-powered Interview Preparation",
-    "Access to exclusive industry reports",
-    "Save and export your calculations",
-    "Ad-free experience",
-];
-
 const themes = [
   { name: 'default', label: 'Default', color: 'bg-gray-400', icon: Sun },
   { name: 'sepia', label: 'Sepia', color: 'bg-[#C6B8A3]', icon: BookOpen },
@@ -55,19 +43,15 @@ const themes = [
 export default function ProfilePage() {
     const { user, loading, logout, updateUserProfile, updateUserPhoto } = useAuth();
     const { language, setLanguage } = useLanguage();
-    const { plan, expiryDate, isPro } = useSubscription();
     const { toast } = useToast();
     const router = useRouter();
     const { theme, setTheme, isEnabled, setIsEnabled } = useReadingMode();
-
+    const [isDonationModalOpen, setIsDonationModalOpen] = useState(false);
 
     const [isEditingName, setIsEditingName] = useState(false);
     
     const [tempName, setTempName] = useState('');
     
-    const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState(false);
-
-
     useEffect(() => {
         if (!loading && !user) {
             router.push('/login');
@@ -150,19 +134,6 @@ export default function ProfilePage() {
     };
 
 
-    const getPlanName = (planKey: string | null) => {
-      if (!planKey) return "Free Plan";
-      const names: Record<string, string> = {
-          '7-days': '7-Day Pass',
-          '1-month': 'Monthly Pro',
-          '6-months': '6-Month Pro',
-          'yearly': 'Yearly Pro',
-          'lifetime': 'Lifetime Pro'
-      }
-      return names[planKey] || 'Pro Plan';
-    }
-
-
     const getDepartmentName = (deptKey?: Department) => {
         if (!deptKey) return 'Not specified';
         const names: Record<Department, string> = {
@@ -242,47 +213,47 @@ export default function ProfilePage() {
 
 
             <div className="px-6 pb-6 space-y-6">
-                <div className={`p-5 rounded-xl text-white shadow-lg ${isPro ? 'bg-gradient-to-r from-green-400 to-teal-500' : 'bg-gradient-to-r from-gray-500 to-gray-600'} ${getCardClass(0)}`}>
-                    <div className="flex justify-between items-center">
-                        <div>
-                            <p className="text-sm font-medium opacity-80">Subscription Plan</p>
-                            <p className="text-2xl font-bold">{getPlanName(plan)}</p>
+                <Dialog open={isDonationModalOpen} onOpenChange={setIsDonationModalOpen}>
+                    <div className={`p-5 rounded-xl text-white shadow-lg bg-gradient-to-r from-pink-500 to-rose-500 ${getCardClass(0)}`}>
+                        <div className="text-center">
+                            <h3 className="text-2xl font-bold">Support Dairy Hub's Mission</h3>
+                            <p className="text-sm mt-2 opacity-90">If you find this app helpful, your contribution keeps it running and growing!</p>
+                            <DialogTrigger asChild>
+                                <Button className="mt-4 bg-white text-rose-600 font-bold py-2 px-6 rounded-full hover:bg-rose-50 transition-colors animate-pulse">
+                                    <Heart className="mr-2 h-4 w-4"/>
+                                    Donate
+                                </Button>
+                            </DialogTrigger>
                         </div>
-                        {isPro && expiryDate && (
-                            <div className="text-right">
-                                <p className="text-sm font-medium opacity-80">Expires on</p>
-                                <p className="font-semibold">{format(expiryDate, 'dd MMM yyyy')}</p>
-                            </div>
-                        )}
-                        {isPro && !expiryDate && (
-                             <div className="text-right">
-                                <p className="text-sm font-medium opacity-80">Expires</p>
-                                <p className="font-semibold">Never</p>
-                            </div>
-                        )}
                     </div>
-                    {isPro ? (
-                        <>
-                            <div className="mt-4 pt-4 border-t border-white/20">
-                                <h4 className="text-sm font-semibold mb-2">Pro Features Unlocked:</h4>
-                                <ul className="space-y-1 text-xs">
-                                  {allProFeatures.slice(0, 2).map((feature, index) => <li key={index} className="flex items-center gap-2"><Info size={14}/>{feature}</li>)}
-                                </ul>
+                     <DialogContent>
+                        <DialogHeader>
+                            <div className="flex justify-center mb-4">
+                                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-pink-100 to-rose-200 flex items-center justify-center">
+                                    <Gift className="w-8 h-8 text-rose-500"/>
+                                </div>
                             </div>
-                            <div className="mt-4 text-center">
-                                <Button onClick={() => setIsSubscriptionModalOpen(true)} className="bg-white text-teal-600 font-bold py-2 px-6 rounded-full hover:bg-teal-50 transition-colors">Manage Plan</Button>
+                            <DialogTitle className="text-2xl font-bold text-center">Support Dairy Hub</DialogTitle>
+                            <DialogDescription className="text-center text-muted-foreground">
+                                आपका समर्थन हमें सशक्त बनाता है और बेहतर बनने की प्रेरणा देता है।
+                            </DialogDescription>
+                        </DialogHeader>
+                        <div className="py-4 text-center">
+                            <p className="mb-4">Scan the QR code with any payment app to contribute.</p>
+                            <div className="bg-white p-2 rounded-lg inline-block border-4 border-dashed border-rose-200">
+                                <Image 
+                                    src="https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/IMG_9565.jpg?alt=media&token=e56e6c1f-aeb5-4a6f-a2ec-f797e4060d5e" 
+                                    alt="QR Code for Donation"
+                                    width={192}
+                                    height={192}
+                                    className="w-48 h-48 rounded-md"
+                                />
                             </div>
-                        </>
-                    ) : (
-                        <div className="mt-4 text-center">
-                            <p className="mb-3 text-sm">Upgrade to unlock all premium features!</p>
-                            <Button onClick={() => setIsSubscriptionModalOpen(true)} className="bg-amber-400 text-amber-900 font-bold py-2 px-6 rounded-full hover:bg-amber-300 transition-colors">
-                                <Crown className="mr-2 h-4 w-4"/>
-                                Go Pro
-                            </Button>
+                            <p className="mt-4 text-lg font-semibold text-gray-800">हर योगदान मायने रखता है, चाहे वह कितना भी छोटा क्यों न हो।</p>
+                            <p className="mt-1 text-sm text-rose-600 font-bold">Thank you for your support! 🙏</p>
                         </div>
-                    )}
-                </div>
+                    </DialogContent>
+                </Dialog>
 
 
                 <div className={`bg-gray-50 p-5 rounded-xl border border-gray-200 ${getCardClass(100)}`} >
@@ -409,7 +380,10 @@ export default function ProfilePage() {
                 </div>
             </div>
         </div>
-        <SubscriptionModal isOpen={isSubscriptionModalOpen} setIsOpen={setIsSubscriptionModalOpen} />
         </>
     );
 }
+
+    
+
+    
