@@ -842,7 +842,6 @@ function TwoComponentStandardizationCalc() {
         </CalculatorCard>
     );
 };
-
 function TwoMilkBlendingToTargetCalc() {
     const [inputs, setInputs] = useState({
         milk1Fat: '6.5', milk1Clr: '29',
