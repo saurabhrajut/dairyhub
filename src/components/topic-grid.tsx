@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -34,13 +35,11 @@ import { ReagentIcon, PaneerIcon, IceCreamIcon } from "@/components/icons";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/context/auth-context";
 import { useToast } from "@/hooks/use-toast";
-import { ToastAction } from "@/components/ui/toast";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useSubscription } from "@/context/subscription-context";
-import { SubscriptionModal } from "./subscription-modal";
 
-// सभी Modals को इम्पोर्ट करें
+// All Modals are imported here
 import { DairyIndustryModal } from "./info-modals/dairy-industry-modal";
 import { MilkChemistryModal } from "./info-modals/milk-chemistry-modal";
 import { AdulterationModal } from "./info-modals/adulteration-modal";
@@ -80,8 +79,6 @@ type Topic = {
   color: string;
 };
 
-// ## हर डिपार्टमेंट के लिए एक्सेस के नियम ##
-
 const qualityAccessTopics = [
   'industry', 'fssai-standards', 'quality-concept', 'microbiology', 'audits', 'validation-verification',
   'expert-support', 'calibration', 'lab-equipments', 'milk-chemistry', 'lab-calculations', 'production-calculations',
@@ -107,7 +104,6 @@ const departmentAccess: Record<string, string[]> = {
   'process-access': processAccessTopics,
 };
 
-// सभी Topics की लिस्ट
 const topics: Topic[] = [
   { id: 'industry', title: 'Dairy Industry', description: 'Overview & Trends', category: 'production', icon: Factory, badge: 'New', modal: DairyIndustryModal, isPro: false, color: 'from-blue-100 to-indigo-200' },
   { id: 'fssai-standards', title: 'FSSAI Standards', description: 'Official Dairy Standards', category: 'quality', icon: ShieldCheck, badge: 'New', modal: FssaiStandardsModal, isPro: false, color: 'from-green-100 to-teal-200' },
@@ -141,9 +137,7 @@ export function TopicGrid() {
   const [activeFilter, setActiveFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [activeModal, setActiveModal] = useState<string | null>(null);
-  const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState(false);
   const { user } = useAuth();
-  const { isPro } = useSubscription();
   const { toast } = useToast();
   const router = useRouter();
 
@@ -152,9 +146,7 @@ export function TopicGrid() {
     return matchesSearch;
   });
 
-  // Lock remove kar diya - ab seedha modal open hoga
   const openModal = (id: string, isProFeature: boolean) => {
-    // Pro check ko remove kar diya
     setActiveModal(id);
   };
 
@@ -176,7 +168,6 @@ export function TopicGrid() {
       <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-4 sm:gap-6">
         {filteredTopics.map((topic) => {
           
-          // Lock logic ko disable kar diya - ab koi bhi locked nahi hoga
           const isLocked = false;
 
           return (
@@ -188,7 +179,6 @@ export function TopicGrid() {
                 "cursor-pointer"
               )}
             >
-              {/* Lock icon aur blur effect completely remove ho gaya */}
               {topic.badge && <Badge variant={topic.badge === 'Pro' ? 'default' : 'destructive'} className="absolute top-2 right-2 text-xs px-1.5 py-0.5 h-auto animate-pulse z-30">{topic.badge}</Badge>}
               <div className={`w-16 h-16 mx-auto mb-3 rounded-full flex items-center justify-center bg-gradient-to-br ${topic.color}`}>
                 <topic.icon className="w-8 h-8 text-primary" />
@@ -206,7 +196,8 @@ export function TopicGrid() {
           return <ModalComponent key={`${topic.id}-modal`} isOpen={activeModal === topic.id} setIsOpen={() => setActiveModal(null)} />
       })}
 
-      <SubscriptionModal isOpen={isSubscriptionModalOpen} setIsOpen={setIsSubscriptionModalOpen} />
     </>
   );
 }
+
+    
