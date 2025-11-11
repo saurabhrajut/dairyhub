@@ -259,7 +259,7 @@ export default function ProfilePage() {
                              <div className="mt-6 bg-rose-50 p-3 rounded-lg border border-dashed border-rose-200">
                                 <p className="text-sm text-gray-600">Or use UPI ID:</p>
                                 <div className="flex items-center justify-center gap-2 mt-2">
-                                  <p className="font-mono text-lg text-rose-700 font-semibold">9119005734-2@axl</p>
+                                  <p className="font-mono text-lg text-rose-700 font-semibold">911900573@ybl</p>
                                   <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-500" onClick={handleCopyUpi}>
                                     <Copy className="h-4 w-4" />
                                   </Button>
