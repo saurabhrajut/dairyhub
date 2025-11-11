@@ -13,7 +13,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useLanguage } from '@/context/language-context';
-import { Heart, QrCode, Mail, MessageCircle, ChevronLeft, LogOut, Settings, HelpCircle, User, Loader2, Building2, ChevronRight, BookOpen, Droplet, Moon, Sun, Gift } from 'lucide-react';
+import { Heart, QrCode, Mail, MessageCircle, ChevronLeft, LogOut, Settings, HelpCircle, User, Loader2, Building2, ChevronRight, BookOpen, Droplet, Moon, Sun, Gift, Copy } from 'lucide-react';
 import type { Department } from '@/context/auth-context';
 import { useReadingMode } from '@/context/reading-mode-context';
 import { Switch } from '@/components/ui/switch';
@@ -60,7 +60,14 @@ export default function ProfilePage() {
         }
     }, [user, loading, router]);
 
-
+    const handleCopyUpi = () => {
+        const upiId = "911900573@ybl";
+        navigator.clipboard.writeText(upiId);
+        toast({
+            title: "UPI ID Copied!",
+            description: `${upiId} has been copied to your clipboard.`,
+        });
+    };
 
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         if (!user || user.isAnonymous) {
@@ -249,6 +256,15 @@ export default function ProfilePage() {
                                     className="w-48 h-48 rounded-md"
                                 />
                             </div>
+                             <div className="mt-6 bg-rose-50 p-3 rounded-lg border border-dashed border-rose-200">
+                                <p className="text-sm text-gray-600">Or use UPI ID:</p>
+                                <div className="flex items-center justify-center gap-2 mt-2">
+                                  <p className="font-mono text-lg text-rose-700 font-semibold">9119005734-2@axl</p>
+                                  <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-500" onClick={handleCopyUpi}>
+                                    <Copy className="h-4 w-4" />
+                                  </Button>
+                                </div>
+                            </div>
                             <p className="mt-4 text-lg font-semibold text-gray-800">हर योगदान मायने रखता है, चाहे वह कितना भी छोटा क्यों न हो।</p>
                             <p className="mt-1 text-sm text-rose-600 font-bold">Thank you for your support! 🙏</p>
                         </div>
@@ -383,6 +399,8 @@ export default function ProfilePage() {
         </>
     );
 }
+
+    
 
     
 
