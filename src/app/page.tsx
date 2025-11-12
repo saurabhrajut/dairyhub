@@ -4,10 +4,13 @@ import { Header } from '@/components/header';
 import { TopicGrid } from '@/components/topic-grid';
 import { DailyTip } from '@/components/daily-tip';
 import { FlaskConical, Beaker, Pipette, Settings, TestTube, Microscope, Combine } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SplashScreen from '@/components/splash-screen';
 import { useSplashScreen } from '@/context/splash-screen-context';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/context/auth-context';
+import { useRouter } from 'next/navigation';
+import { Loader2 } from 'lucide-react';
 
 const AnimatedBackground = () => {
   const icons = [
@@ -40,6 +43,17 @@ const AnimatedBackground = () => {
 export default function Home() {
   const { isFinished, setIsFinished } = useSplashScreen();
   const [isBouncing, setIsBouncing] = useState(false);
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    // This effect runs after the splash screen is finished.
+    // It checks if the user is authenticated.
+    if (isFinished && !loading && !user) {
+      router.push('/login');
+    }
+  }, [isFinished, loading, user, router]);
+
 
   const handleBounce = () => {
     setIsBouncing(true);
@@ -49,6 +63,16 @@ export default function Home() {
   if (!isFinished) {
     return <SplashScreen onFinished={() => setIsFinished(true)} />;
   }
+  
+  if (loading || !user) {
+    // Show a loader or a blank page while redirecting
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+          <Loader2 className="animate-spin h-8 w-8" />
+      </div>
+    );
+  }
+
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-background to-blue-50">
