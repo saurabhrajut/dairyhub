@@ -3,7 +3,7 @@
 
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { useSubscription } from './subscription-context';
-import { getAuth, GoogleAuthProvider, signInWithPopup, User as FirebaseUser } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, signInWithPopup, User as FirebaseUser, updateProfile } from 'firebase/auth';
 import { initializeFirebase } from '@/firebase';
 
 
@@ -146,20 +146,18 @@ const signInWithGoogle = async () => {
                 isAnonymous: false,
                 displayName: firebaseUser.displayName,
                 photoURL: firebaseUser.photoURL,
-                // Default department, user can change it in profile
-                department: 'process-access', 
+                department: 'process-access',
+                gender: 'other',
             };
             const updatedUsers = [...allUsers, appUser];
             saveUsers(updatedUsers);
         }
 
-        // Log in the user
         setUser(appUser);
         localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(appUser));
         loadSubscription(appUser.uid);
     } catch (error: any) {
         console.error("Google Sign-In Error:", error);
-        // Handle specific errors if needed
         if (error.code === 'auth/popup-closed-by-user') {
             throw new Error("Sign-in process was cancelled.");
         }
