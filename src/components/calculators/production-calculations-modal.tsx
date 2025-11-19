@@ -71,11 +71,12 @@ import { Slider } from "@/components/ui/slider";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
-// ==================== ENHANCED // ===========================
+// ==================== ENHANCED INTERFACES ===========================
+
 interface ValidationResult {
     isValid: boolean;
     message?: string;
-    severity?: "error" | "warning" | "info";
+    severity: "error" | "warning" | "info";
   }
   
   interface CalculationResult {
@@ -103,6 +104,13 @@ interface ValidationResult {
     percentage: string;
   }
   
+  // ✅ YE MISSING THA - ISKO ZAROOR ADD KAREIN
+  interface FixedExpense {
+    id: number;
+    name: string;
+    cost: string;
+  }
+  
   interface MassBalanceInputs {
     openingFat: string;
     openingSnf: string;
@@ -125,7 +133,7 @@ interface ValidationResult {
     | "ice-cream"
     | "plant-efficiency"
     | "plant-cost"
-    | "mass-balance";  
+    | "mass-balance"; 
 // ==================== VALIDATION UTILITIES ====================
 const useInputValidation = () => {
   const validateNumber = useCallback(
@@ -352,35 +360,41 @@ ResultCard.displayName = "ResultCard";
 
 // ==================== MAIN CALCULATOR MODAL ====================
 const calculatorsInfo = {
-    yields: { 
-      title: "Product Yields", 
-      icon: Percent, 
-      component: YieldsCalculator 
+    yields: {
+      title: "Product Yields",
+      icon: Percent,
+      component: YieldsCalc,
+      color: "from-blue-500 to-cyan-500", // ✅ Gradient Blue
     },
-    "paneer-yield": { 
-      title: "Paneer Yield", 
-      icon: PaneerIcon, 
-      component: PaneerYieldCalc 
+    "paneer-yield": {
+      title: "Paneer Yield",
+      icon: PaneerIcon,
+      component: PaneerYieldCalc,
+      color: "from-emerald-500 to-green-600", // ✅ Gradient Green
     },
-    "ice-cream": { 
-      title: "Ice Cream Mix", 
-      icon: IceCreamIcon, 
-      component: IceCreamCalc 
+    "ice-cream": {
+      title: "Ice Cream Mix",
+      icon: IceCreamIcon,
+      component: IceCreamCalculators,
+      color: "from-pink-500 to-rose-500", // ✅ Gradient Pink
     },
-    "plant-efficiency": { 
-      title: "Plant Efficiency", 
-      icon: Factory, 
-      component: PlantEfficiencyCalc 
+    "plant-efficiency": {
+      title: "Plant Efficiency",
+      icon: Factory,
+      component: PlantEfficiencyCalc,
+      color: "from-orange-500 to-amber-500", // ✅ Gradient Orange
     },
-    "plant-cost": { 
-      title: "Plant Costing", 
-      icon: DollarSign, 
-      component: PlantCostingCalc 
+    "plant-cost": {
+      title: "Plant Costing",
+      icon: DollarSign,
+      component: PlantCostCalc,
+      color: "from-purple-500 to-indigo-600", // ✅ Gradient Purple
     },
-    "mass-balance": {  // ✅ ADDED
-      title: "Mass Balance", 
-      icon: Scale, 
-      component: MassBalanceCalc 
+    "mass-balance": {
+      title: "Mass Balance",
+      icon: Scale,
+      component: MassBalanceCalc,
+      color: "from-indigo-500 to-blue-600", // ✅ Gradient Indigo
     },
   };  
 
@@ -4245,26 +4259,12 @@ function PlantCostCalc() {
     </Card>
   );
 }
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
-import { useToast } from '@/hooks/use-toast';
-import { Plus, Minus, FileDown, Loader2, Calculator, CheckCircle2, AlertTriangle, Scale, TrendingUp, TrendingDown } from 'lucide-react';
 
-type MassBalanceInputs = {
-    openingFat: string;
-    openingSnf: string;
-    intakeFat: string;
-    intakeSnf: string;
-    addedFat: string;
-    addedSnf: string;
-    dispatchedFat: string;
-    dispatchedSnf: string;
-    removedFat: string;
-    removedSnf: string;
-    closingFat: string;
-    closingSnf: string;
-};
+// ... (PlantCostCalc upar khatam ho gaya)
 
+// ==================== MASS BALANCE CALCULATOR ====================
+
+// MemoizedInputRow Component
 const MemoizedInputRow = memo(({ 
     label, 
     fatName, 
@@ -4314,9 +4314,9 @@ function MassBalanceCalc() {
     const [calculationSteps, setCalculationSteps] = useState<string[]>([]);
     const [isDownloading, setIsDownloading] = useState(false);
     const reportRef = useRef<HTMLDivElement>(null);
-    const { toast } = useToast();
+    // const { toast } = useToast(); // Already imported at top
 
-    const handleInputChange = useCallback((field: keyof typeof inputs, value: string) => {
+    const handleInputChange = useCallback((field: keyof MassBalanceInputs, value: string) => {
         setInputs(prev => ({...prev, [field]: value}));
     }, []);
 
@@ -4473,27 +4473,35 @@ function MassBalanceCalc() {
             pdf.addImage(imgData, 'PNG', x, y, finalImgWidth, finalImgHeight);
             pdf.save(`mass_balance_report_${new Date().toISOString().slice(0,10)}.pdf`);
             
-            toast({
-                title: "✅ PDF Downloaded",
-                description: "Mass balance report has been saved successfully."
-            });
+            // toast({
+            //     title: "✅ PDF Downloaded",
+            //     description: "Mass balance report has been saved successfully."
+            // });
         } catch (error) {
             console.error("Failed to generate PDF", error);
-            toast({ 
-                variant: "destructive", 
-                title: "PDF Error", 
-                description: "Could not generate the PDF report." 
-            });
+            // toast({ 
+            //     variant: "destructive", 
+            //     title: "PDF Error", 
+            //     description: "Could not generate the PDF report." 
+            // });
         } finally {
             setIsDownloading(false);
         }
     };
     
     return (
-        <CalculatorCard 
-            title="Fat & SNF Mass Balance Calculator" 
-            description="Track plant efficiency by calculating gain/loss of fat and SNF during processing. All values in Kilograms (kg)."
-        >
+        <Card className="border-2 shadow-lg">
+            <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50">
+                <CardTitle className="flex items-center gap-2 text-xl sm:text-2xl">
+                    <Scale className="h-6 sm:h-7 w-6 sm:w-7 text-blue-600" />
+                    Fat & SNF Mass Balance Calculator
+                </CardTitle>
+                <CardDescription>
+                    Track plant efficiency by calculating gain/loss of fat and SNF during processing. All values in Kilograms (kg).
+                </CardDescription>
+            </CardHeader>
+            
+            <CardContent className="pt-6">
             {/* Input Section */}
             <div className="space-y-6 p-4 md:p-6 bg-gradient-to-br from-gray-50 to-slate-100 rounded-xl border-2 border-gray-300 shadow-md">
                 {/* Header Row */}
@@ -4679,6 +4687,7 @@ function MassBalanceCalc() {
                     )}
                 </Button>
             </div>
-        </CalculatorCard>
+            </CardContent>
+        </Card>
     );
 }
