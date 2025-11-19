@@ -31,9 +31,14 @@ import {
   AlertTriangle,
   Calculator,
   Zap,
-  PlusCircle,  // ✅ IMPORTANT
+  PlusCircle,
   FileDown,
   Loader2,
+  Plus,          // ✅ ADDED
+  Minus,         // ✅ ADDED
+  Scale,         // ✅ ADDED
+  TrendingUp,    // ✅ ADDED
+  TrendingDown,  // ✅ ADDED
 } from "lucide-react";
 import {
   Select,
@@ -65,28 +70,62 @@ import {
 import { Slider } from "@/components/ui/slider";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
-// ==================== ENHANCED TYPES ====================
+
+// ==================== ENHANCED // ===========================
 interface ValidationResult {
-  isValid: boolean;
-  message?: string;
-  severity?: "error" | "warning" | "info";
-}
-
-interface CalculationResult {
-  value: number;
-  unit: string;
-  confidence: "high" | "medium" | "low";
-  warnings?: string[];
-  metadata?: Record<string, any>;
-}
-
-type CalculatorType =
-  | "yields"
-  | "paneer-yield"
-  | "ice-cream"
-  | "plant-efficiency"
-  | "plant-cost";
-
+    isValid: boolean;
+    message?: string;
+    severity?: "error" | "warning" | "info";
+  }
+  
+  interface CalculationResult {
+    value: number;
+    unit: string;
+    confidence: "high" | "medium" | "low";
+    warnings?: string[];
+    metadata?: Record<string, any>;
+  }
+  
+  interface MixIngredient {
+    id: number;
+    name: string;
+    amount: string;
+    fat: string;
+    msnf: string;
+    sugar: string;
+  }
+  
+  interface BatchIngredient {
+    id: number;
+    name: string;
+    amount: string;
+    unit: "g" | "kg";
+    percentage: string;
+  }
+  
+  interface MassBalanceInputs {
+    openingFat: string;
+    openingSnf: string;
+    intakeFat: string;
+    intakeSnf: string;
+    addedFat: string;
+    addedSnf: string;
+    dispatchedFat: string;
+    dispatchedSnf: string;
+    removedFat: string;
+    removedSnf: string;
+    closingFat: string;
+    closingSnf: string;
+  }
+  
+  // ✅ UPDATED: Added mass-balance
+  type CalculatorType =
+    | "yields"
+    | "paneer-yield"
+    | "ice-cream"
+    | "plant-efficiency"
+    | "plant-cost"
+    | "mass-balance";  
 // ==================== VALIDATION UTILITIES ====================
 const useInputValidation = () => {
   const validateNumber = useCallback(
@@ -313,37 +352,37 @@ ResultCard.displayName = "ResultCard";
 
 // ==================== MAIN CALCULATOR MODAL ====================
 const calculatorsInfo = {
-  yields: {
-    title: "Product Yields",
-    icon: Percent,
-    component: YieldsCalc,
-    color: "from-blue-500 to-cyan-500",
-  },
-  "paneer-yield": {
-    title: "Paneer Yield",
-    icon: PaneerIcon,
-    component: PaneerYieldCalc,
-    color: "from-green-500 to-emerald-500",
-  },
-  "ice-cream": {
-    title: "Ice Cream",
-    icon: IceCreamIcon,
-    component: IceCreamCalculators,
-    color: "from-purple-500 to-pink-500",
-  },
-  "plant-efficiency": {
-    title: "Plant Efficiency",
-    icon: Factory,
-    component: PlantEfficiencyCalc,
-    color: "from-orange-500 to-red-500",
-  },
-  "plant-cost": {
-    title: "Plant P&L",
-    icon: DollarSign,
-    component: PlantCostCalc,
-    color: "from-indigo-500 to-purple-500",
-  },
-};
+    yields: { 
+      title: "Product Yields", 
+      icon: Percent, 
+      component: YieldsCalculator 
+    },
+    "paneer-yield": { 
+      title: "Paneer Yield", 
+      icon: PaneerIcon, 
+      component: PaneerYieldCalc 
+    },
+    "ice-cream": { 
+      title: "Ice Cream Mix", 
+      icon: IceCreamIcon, 
+      component: IceCreamCalc 
+    },
+    "plant-efficiency": { 
+      title: "Plant Efficiency", 
+      icon: Factory, 
+      component: PlantEfficiencyCalc 
+    },
+    "plant-cost": { 
+      title: "Plant Costing", 
+      icon: DollarSign, 
+      component: PlantCostingCalc 
+    },
+    "mass-balance": {  // ✅ ADDED
+      title: "Mass Balance", 
+      icon: Scale, 
+      component: MassBalanceCalc 
+    },
+  };  
 
 export function ProductionCalculationsModal({
   isOpen,
@@ -4205,4 +4244,441 @@ function PlantCostCalc() {
       </CardContent>
     </Card>
   );
+}
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
+import { useToast } from '@/hooks/use-toast';
+import { Plus, Minus, FileDown, Loader2, Calculator, CheckCircle2, AlertTriangle, Scale, TrendingUp, TrendingDown } from 'lucide-react';
+
+type MassBalanceInputs = {
+    openingFat: string;
+    openingSnf: string;
+    intakeFat: string;
+    intakeSnf: string;
+    addedFat: string;
+    addedSnf: string;
+    dispatchedFat: string;
+    dispatchedSnf: string;
+    removedFat: string;
+    removedSnf: string;
+    closingFat: string;
+    closingSnf: string;
+};
+
+const MemoizedInputRow = memo(({ 
+    label, 
+    fatName, 
+    snfName, 
+    inputs, 
+    onInputChange 
+}: { 
+    label: string; 
+    fatName: keyof MassBalanceInputs; 
+    snfName: keyof MassBalanceInputs; 
+    inputs: MassBalanceInputs; 
+    onInputChange: (field: keyof MassBalanceInputs, value: string) => void;
+}) => (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 items-center">
+        <Label className="text-sm md:text-base font-semibold">{label}</Label>
+        <Input 
+            type="number" 
+            step="0.001"
+            value={inputs[fatName]} 
+            onChange={(e) => onInputChange(fatName, e.target.value)} 
+            placeholder="0.000"
+            className="h-10 md:h-11 text-sm md:text-base border-2"
+        />
+        <Input 
+            type="number" 
+            step="0.001"
+            value={inputs[snfName]} 
+            onChange={(e) => onInputChange(snfName, e.target.value)} 
+            placeholder="0.000"
+            className="h-10 md:h-11 text-sm md:text-base border-2"
+        />
+    </div>
+));
+
+MemoizedInputRow.displayName = 'MemoizedInputRow';
+
+function MassBalanceCalc() {
+    const [inputs, setInputs] = useState<MassBalanceInputs>({
+        openingFat: '', openingSnf: '',
+        intakeFat: '', intakeSnf: '',
+        addedFat: '', addedSnf: '',
+        dispatchedFat: '', dispatchedSnf: '',
+        removedFat: '', removedSnf: '',
+        closingFat: '', closingSnf: ''
+    });
+    
+    const [calculationSteps, setCalculationSteps] = useState<string[]>([]);
+    const [isDownloading, setIsDownloading] = useState(false);
+    const reportRef = useRef<HTMLDivElement>(null);
+    const { toast } = useToast();
+
+    const handleInputChange = useCallback((field: keyof typeof inputs, value: string) => {
+        setInputs(prev => ({...prev, [field]: value}));
+    }, []);
+
+    const results = useMemo(() => {
+        const opF = parseFloat(inputs.openingFat) || 0;
+        const opS = parseFloat(inputs.openingSnf) || 0;
+        const inF = parseFloat(inputs.intakeFat) || 0;
+        const inS = parseFloat(inputs.intakeSnf) || 0;
+        const adF = parseFloat(inputs.addedFat) || 0;
+        const adS = parseFloat(inputs.addedSnf) || 0;
+        const dispF = parseFloat(inputs.dispatchedFat) || 0;
+        const dispS = parseFloat(inputs.dispatchedSnf) || 0;
+        const remF = parseFloat(inputs.removedFat) || 0;
+        const remS = parseFloat(inputs.removedSnf) || 0;
+        const clF = parseFloat(inputs.closingFat) || 0;
+        const clS = parseFloat(inputs.closingSnf) || 0;
+
+        const totalInFat = opF + inF + adF;
+        const totalInSnf = opS + inS + adS;
+        
+        const totalOutFat = dispF + remF + clF;
+        const totalOutSnf = dispS + remS + clS;
+
+        const gainLossFat = totalInFat - totalOutFat;
+        const gainLossSnf = totalInSnf - totalOutSnf;
+
+        // Generate calculation steps
+        const steps: string[] = [];
+        
+        steps.push(`📊 **═══════════ MASS BALANCE CALCULATION ═══════════**`);
+        
+        steps.push(`\n\n📥 **═══════════ STEP 1: TOTAL INPUTS ═══════════**`);
+        steps.push(`\n   FAT INPUTS:`);
+        steps.push(`     Opening Balance: ${opF.toFixed(6)} kg`);
+        steps.push(`     Total Intake: ${inF.toFixed(6)} kg`);
+        steps.push(`     Added (SMP/etc): ${adF.toFixed(6)} kg`);
+        steps.push(`     ─────────────────────────────`);
+        steps.push(`     Total Fat In = ${opF.toFixed(6)} + ${inF.toFixed(6)} + ${adF.toFixed(6)}`);
+        steps.push(`                  = ${totalInFat.toFixed(8)} kg`);
+        
+        steps.push(`\n   SNF INPUTS:`);
+        steps.push(`     Opening Balance: ${opS.toFixed(6)} kg`);
+        steps.push(`     Total Intake: ${inS.toFixed(6)} kg`);
+        steps.push(`     Added (SMP/etc): ${adS.toFixed(6)} kg`);
+        steps.push(`     ─────────────────────────────`);
+        steps.push(`     Total SNF In = ${opS.toFixed(6)} + ${inS.toFixed(6)} + ${adS.toFixed(6)}`);
+        steps.push(`                  = ${totalInSnf.toFixed(8)} kg`);
+
+        steps.push(`\n\n📤 **═══════════ STEP 2: TOTAL OUTPUTS ═══════════**`);
+        steps.push(`\n   FAT OUTPUTS:`);
+        steps.push(`     Dispatched (Products): ${dispF.toFixed(6)} kg`);
+        steps.push(`     Removed (Cream/etc): ${remF.toFixed(6)} kg`);
+        steps.push(`     Closing Balance: ${clF.toFixed(6)} kg`);
+        steps.push(`     ─────────────────────────────`);
+        steps.push(`     Total Fat Out = ${dispF.toFixed(6)} + ${remF.toFixed(6)} + ${clF.toFixed(6)}`);
+        steps.push(`                   = ${totalOutFat.toFixed(8)} kg`);
+        
+        steps.push(`\n   SNF OUTPUTS:`);
+        steps.push(`     Dispatched (Products): ${dispS.toFixed(6)} kg`);
+        steps.push(`     Removed (Cream/etc): ${remS.toFixed(6)} kg`);
+        steps.push(`     Closing Balance: ${clS.toFixed(6)} kg`);
+        steps.push(`     ─────────────────────────────`);
+        steps.push(`     Total SNF Out = ${dispS.toFixed(6)} + ${remS.toFixed(6)} + ${clS.toFixed(6)}`);
+        steps.push(`                   = ${totalOutSnf.toFixed(8)} kg`);
+
+        steps.push(`\n\n⚖️ **═══════════ STEP 3: MASS BALANCE RECONCILIATION ═══════════**`);
+        steps.push(`\n   FAT RECONCILIATION:`);
+        steps.push(`     Total Fat In: ${totalInFat.toFixed(8)} kg`);
+        steps.push(`     Total Fat Out: ${totalOutFat.toFixed(8)} kg`);
+        steps.push(`     Fat Gain/Loss = In - Out`);
+        steps.push(`                   = ${totalInFat.toFixed(8)} - ${totalOutFat.toFixed(8)}`);
+        steps.push(`                   = ${gainLossFat.toFixed(8)} kg`);
+        steps.push(`     Status: ${gainLossFat >= 0 ? '✅ Gain' : '⚠️ Loss'} (${Math.abs(gainLossFat).toFixed(8)} kg)`);
+        
+        steps.push(`\n   SNF RECONCILIATION:`);
+        steps.push(`     Total SNF In: ${totalInSnf.toFixed(8)} kg`);
+        steps.push(`     Total SNF Out: ${totalOutSnf.toFixed(8)} kg`);
+        steps.push(`     SNF Gain/Loss = In - Out`);
+        steps.push(`                   = ${totalInSnf.toFixed(8)} - ${totalOutSnf.toFixed(8)}`);
+        steps.push(`                   = ${gainLossSnf.toFixed(8)} kg`);
+        steps.push(`     Status: ${gainLossSnf >= 0 ? '✅ Gain' : '⚠️ Loss'} (${Math.abs(gainLossSnf).toFixed(8)} kg)`);
+
+        steps.push(`\n\n📈 **═══════════ STEP 4: PERCENTAGE ANALYSIS ═══════════**`);
+        const fatLossPercentage = totalInFat > 0 ? (Math.abs(gainLossFat) / totalInFat) * 100 : 0;
+        const snfLossPercentage = totalInSnf > 0 ? (Math.abs(gainLossSnf) / totalInSnf) * 100 : 0;
+        
+        steps.push(`\n   FAT LOSS/GAIN PERCENTAGE:`);
+        steps.push(`     = (|Gain/Loss| / Total In) × 100`);
+        steps.push(`     = (${Math.abs(gainLossFat).toFixed(8)} / ${totalInFat.toFixed(8)}) × 100`);
+        steps.push(`     = ${fatLossPercentage.toFixed(6)}%`);
+        
+        steps.push(`\n   SNF LOSS/GAIN PERCENTAGE:`);
+        steps.push(`     = (|Gain/Loss| / Total In) × 100`);
+        steps.push(`     = (${Math.abs(gainLossSnf).toFixed(8)} / ${totalInSnf.toFixed(8)}) × 100`);
+        steps.push(`     = ${snfLossPercentage.toFixed(6)}%`);
+
+        steps.push(`\n\n✨ **═══════════ FINAL SUMMARY ═══════════**`);
+        steps.push(`\n   Fat Balance:`);
+        steps.push(`     - Total In: ${totalInFat.toFixed(6)} kg`);
+        steps.push(`     - Total Out: ${totalOutFat.toFixed(6)} kg`);
+        steps.push(`     - Net: ${gainLossFat >= 0 ? 'Gain' : 'Loss'} of ${Math.abs(gainLossFat).toFixed(6)} kg (${fatLossPercentage.toFixed(4)}%)`);
+        
+        steps.push(`\n   SNF Balance:`);
+        steps.push(`     - Total In: ${totalInSnf.toFixed(6)} kg`);
+        steps.push(`     - Total Out: ${totalOutSnf.toFixed(6)} kg`);
+        steps.push(`     - Net: ${gainLossSnf >= 0 ? 'Gain' : 'Loss'} of ${Math.abs(gainLossSnf).toFixed(6)} kg (${snfLossPercentage.toFixed(4)}%)`);
+
+        setCalculationSteps(steps);
+
+        return {
+            totalInFat, totalInSnf,
+            totalOutFat, totalOutSnf,
+            gainLossFat, gainLossSnf,
+            fatLossPercentage, snfLossPercentage
+        };
+    }, [inputs]);
+
+    const handleDownloadPdf = async () => {
+        const reportElement = reportRef.current;
+        if (!reportElement) return;
+
+        setIsDownloading(true);
+        try {
+            const canvas = await html2canvas(reportElement, {
+                scale: 2, 
+                useCORS: true,
+                backgroundColor: '#ffffff'
+            });
+            const imgData = canvas.toDataURL('image/png');
+            
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'mm',
+                format: 'a4'
+            });
+
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
+            const imgWidth = canvas.width;
+            const imgHeight = canvas.height;
+            const ratio = imgWidth / imgHeight;
+            
+            let finalImgWidth = pdfWidth - 20;
+            let finalImgHeight = finalImgWidth / ratio;
+            
+            if (finalImgHeight > pdfHeight - 20) {
+                finalImgHeight = pdfHeight - 20;
+                finalImgWidth = finalImgHeight * ratio;
+            }
+
+            const x = (pdfWidth - finalImgWidth) / 2;
+            const y = 10;
+            
+            pdf.addImage(imgData, 'PNG', x, y, finalImgWidth, finalImgHeight);
+            pdf.save(`mass_balance_report_${new Date().toISOString().slice(0,10)}.pdf`);
+            
+            toast({
+                title: "✅ PDF Downloaded",
+                description: "Mass balance report has been saved successfully."
+            });
+        } catch (error) {
+            console.error("Failed to generate PDF", error);
+            toast({ 
+                variant: "destructive", 
+                title: "PDF Error", 
+                description: "Could not generate the PDF report." 
+            });
+        } finally {
+            setIsDownloading(false);
+        }
+    };
+    
+    return (
+        <CalculatorCard 
+            title="Fat & SNF Mass Balance Calculator" 
+            description="Track plant efficiency by calculating gain/loss of fat and SNF during processing. All values in Kilograms (kg)."
+        >
+            {/* Input Section */}
+            <div className="space-y-6 p-4 md:p-6 bg-gradient-to-br from-gray-50 to-slate-100 rounded-xl border-2 border-gray-300 shadow-md">
+                {/* Header Row */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 font-bold text-center text-sm md:text-base bg-gradient-to-r from-indigo-100 to-purple-100 p-3 rounded-lg border-2 border-indigo-300">
+                    <span className="text-indigo-800">Component</span>
+                    <span className="text-yellow-800">Fat (kg)</span>
+                    <span className="text-pink-800">SNF (kg)</span>
+                </div>
+                
+                {/* INPUTS Section */}
+                <div className="space-y-4 bg-green-50 p-4 md:p-5 rounded-xl border-2 border-green-300">
+                    <h4 className="text-lg md:text-xl font-bold text-green-700 flex items-center gap-2">
+                        <Plus className="w-5 h-5 md:w-6 md:h-6"/>
+                        Total Inputs
+                    </h4>
+                    <MemoizedInputRow label="Opening Balance" fatName="openingFat" snfName="openingSnf" inputs={inputs} onInputChange={handleInputChange}/>
+                    <MemoizedInputRow label="Total Intake" fatName="intakeFat" snfName="intakeSnf" inputs={inputs} onInputChange={handleInputChange}/>
+                    <MemoizedInputRow label="Added (SMP/etc)" fatName="addedFat" snfName="addedSnf" inputs={inputs} onInputChange={handleInputChange}/>
+                </div>
+
+                <hr className="border-2 border-dashed border-gray-400"/>
+
+                {/* OUTPUTS Section */}
+                <div className="space-y-4 bg-red-50 p-4 md:p-5 rounded-xl border-2 border-red-300">
+                    <h4 className="text-lg md:text-xl font-bold text-red-700 flex items-center gap-2">
+                        <Minus className="w-5 h-5 md:w-6 md:h-6"/>
+                        Total Outputs
+                    </h4>
+                    <MemoizedInputRow label="Dispatched (Products)" fatName="dispatchedFat" snfName="dispatchedSnf" inputs={inputs} onInputChange={handleInputChange}/>
+                    <MemoizedInputRow label="Removed (Cream/etc)" fatName="removedFat" snfName="removedSnf" inputs={inputs} onInputChange={handleInputChange}/>
+                    <MemoizedInputRow label="Closing Balance" fatName="closingFat" snfName="closingSnf" inputs={inputs} onInputChange={handleInputChange}/>
+                </div>
+            </div>
+
+            {/* Results Section */}
+            <div ref={reportRef} className="mt-6 space-y-6">
+                <Alert className="bg-gradient-to-r from-blue-100 via-cyan-100 to-teal-100 border-3 border-blue-500 shadow-xl">
+                    <Scale className="h-6 w-6 md:h-8 md:w-8 text-blue-700" />
+                    <AlertTitle className="text-xl md:text-2xl font-extrabold text-center text-blue-900 mb-4">
+                        ⚖️ Mass Balance Reconciliation
+                    </AlertTitle>
+                    <AlertDescription>
+                        {/* In vs Out Comparison */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                            <div className="bg-gradient-to-br from-green-100 to-emerald-100 p-4 md:p-5 rounded-xl border-2 border-green-400 shadow-md">
+                                <p className="text-xs md:text-sm font-semibold text-green-700 mb-2 flex items-center gap-2">
+                                    <TrendingUp className="w-4 h-4" />
+                                    Total Fat In
+                                </p>
+                                <p className="text-3xl md:text-4xl font-extrabold text-green-800">{results.totalInFat.toFixed(4)}</p>
+                                <p className="text-sm text-green-600">kg</p>
+                            </div>
+                            
+                            <div className="bg-gradient-to-br from-red-100 to-rose-100 p-4 md:p-5 rounded-xl border-2 border-red-400 shadow-md">
+                                <p className="text-xs md:text-sm font-semibold text-red-700 mb-2 flex items-center gap-2">
+                                    <TrendingDown className="w-4 h-4" />
+                                    Total Fat Out
+                                </p>
+                                <p className="text-3xl md:text-4xl font-extrabold text-red-800">{results.totalOutFat.toFixed(4)}</p>
+                                <p className="text-sm text-red-600">kg</p>
+                            </div>
+                            
+                            <div className="bg-gradient-to-br from-green-100 to-emerald-100 p-4 md:p-5 rounded-xl border-2 border-green-400 shadow-md">
+                                <p className="text-xs md:text-sm font-semibold text-green-700 mb-2 flex items-center gap-2">
+                                    <TrendingUp className="w-4 h-4" />
+                                    Total SNF In
+                                </p>
+                                <p className="text-3xl md:text-4xl font-extrabold text-green-800">{results.totalInSnf.toFixed(4)}</p>
+                                <p className="text-sm text-green-600">kg</p>
+                            </div>
+                            
+                            <div className="bg-gradient-to-br from-red-100 to-rose-100 p-4 md:p-5 rounded-xl border-2 border-red-400 shadow-md">
+                                <p className="text-xs md:text-sm font-semibold text-red-700 mb-2 flex items-center gap-2">
+                                    <TrendingDown className="w-4 h-4" />
+                                    Total SNF Out
+                                </p>
+                                <p className="text-3xl md:text-4xl font-extrabold text-red-800">{results.totalOutSnf.toFixed(4)}</p>
+                                <p className="text-sm text-red-600">kg</p>
+                            </div>
+                        </div>
+
+                        {/* Gain/Loss Analysis */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className={cn(
+                                "p-4 md:p-5 rounded-xl border-2 shadow-md",
+                                results.gainLossFat >= 0 
+                                    ? "bg-gradient-to-br from-blue-100 to-cyan-100 border-blue-400" 
+                                    : "bg-gradient-to-br from-orange-100 to-amber-100 border-orange-400"
+                            )}>
+                                <p className="text-xs md:text-sm font-semibold mb-2 flex items-center gap-2">
+                                    {results.gainLossFat >= 0 ? (
+                                        <CheckCircle2 className="w-4 h-4 text-blue-700" />
+                                    ) : (
+                                        <AlertTriangle className="w-4 h-4 text-orange-700" />
+                                    )}
+                                    Fat {results.gainLossFat >= 0 ? 'Gain' : 'Loss'}
+                                </p>
+                                <p className={cn(
+                                    "text-3xl md:text-4xl font-extrabold",
+                                    results.gainLossFat >= 0 ? "text-blue-800" : "text-orange-800"
+                                )}>
+                                    {results.gainLossFat >= 0 ? '+' : ''}{results.gainLossFat.toFixed(4)}
+                                </p>
+                                <p className="text-sm mt-1">kg ({results.fatLossPercentage.toFixed(4)}%)</p>
+                            </div>
+                            
+                            <div className={cn(
+                                "p-4 md:p-5 rounded-xl border-2 shadow-md",
+                                results.gainLossSnf >= 0 
+                                    ? "bg-gradient-to-br from-blue-100 to-cyan-100 border-blue-400" 
+                                    : "bg-gradient-to-br from-orange-100 to-amber-100 border-orange-400"
+                            )}>
+                                <p className="text-xs md:text-sm font-semibold mb-2 flex items-center gap-2">
+                                    {results.gainLossSnf >= 0 ? (
+                                        <CheckCircle2 className="w-4 h-4 text-blue-700" />
+                                    ) : (
+                                        <AlertTriangle className="w-4 h-4 text-orange-700" />
+                                    )}
+                                    SNF {results.gainLossSnf >= 0 ? 'Gain' : 'Loss'}
+                                </p>
+                                <p className={cn(
+                                    "text-3xl md:text-4xl font-extrabold",
+                                    results.gainLossSnf >= 0 ? "text-blue-800" : "text-orange-800"
+                                )}>
+                                    {results.gainLossSnf >= 0 ? '+' : ''}{results.gainLossSnf.toFixed(4)}
+                                </p>
+                                <p className="text-sm mt-1">kg ({results.snfLossPercentage.toFixed(4)}%)</p>
+                            </div>
+                        </div>
+                    </AlertDescription>
+                </Alert>
+
+                {/* Calculation Steps */}
+                <div className="bg-gradient-to-br from-gray-100 to-slate-200 p-4 md:p-6 rounded-xl border-2 border-gray-400 shadow-xl">
+                    <h4 className="font-extrabold text-base md:text-xl mb-3 md:mb-4 flex items-center gap-2 text-gray-800">
+                        <Calculator className="w-5 h-5 md:w-6 md:h-6" />
+                        Complete Mass Balance Calculation
+                    </h4>
+                    <ScrollArea className="h-[300px] md:h-[500px] pr-2 md:pr-4">
+                        <div className="space-y-1 text-xs md:text-sm font-mono leading-relaxed">
+                            {calculationSteps.map((step, idx) => (
+                                <p 
+                                    key={idx} 
+                                    className={cn(
+                                        step.includes('**') && 'font-extrabold mt-3 text-gray-900 text-sm md:text-base',
+                                        step.includes('═══') && 'text-purple-700 font-extrabold text-base md:text-lg',
+                                        step.includes('✅') && 'text-green-700 font-bold',
+                                        step.includes('⚠️') && 'text-yellow-700 font-bold',
+                                        !step.includes('**') && !step.includes('✅') && !step.includes('⚠️') && !step.includes('═══') && 'text-gray-700'
+                                    )}
+                                >
+                                    {step.replace(/\*\*/g, '')}
+                                </p>
+                            ))}
+                        </div>
+                    </ScrollArea>
+                    <div className="mt-3 md:mt-4 p-3 md:p-4 bg-green-100 border-2 border-green-300 rounded-xl shadow-md">
+                        <p className="text-xs md:text-sm text-green-900 font-bold flex items-center gap-2">
+                            <CheckCircle2 className="w-4 h-4 md:w-5 md:h-5 flex-shrink-0" />
+                            <span>✓ Complete mass balance verification with percentage analysis!</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            {/* Download Button */}
+            <div className="text-center mt-6">
+                <Button 
+                    onClick={handleDownloadPdf} 
+                    disabled={isDownloading}
+                    className="h-12 md:h-14 px-6 md:px-8 text-base md:text-lg font-bold bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700"
+                >
+                    {isDownloading ? (
+                        <>
+                            <Loader2 className="mr-2 w-5 h-5 animate-spin" />
+                            Generating PDF...
+                        </>
+                    ) : (
+                        <>
+                            <FileDown className="mr-2 w-5 h-5" />
+                            Download Report as PDF
+                        </>
+                    )}
+                </Button>
+            </div>
+        </CalculatorCard>
+    );
 }
