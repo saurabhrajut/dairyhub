@@ -22,29 +22,100 @@ import {
 } from "@/components/ui/select";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+// Make sure component imports exist in your actual file
 import { componentProps, chemicals } from "@/lib/data";
 import { getSnf } from "@/lib/utils";
+import { cn } from "@/lib/utils"; // ✅ CN Utility zaroori hai
 import { CheckCircle, PlusCircle, XCircle, Beaker, Thermometer, Weight, Percent, Scaling, Combine, Calculator, FlaskConical, ArrowLeft, RotateCw, Dna, Atom, Droplet, DollarSign, Microscope, Recycle, Bug, ShieldCheck, FileSpreadsheet, Search, Wind, Factory } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
+// Assuming you have these components imported or defined in the same file
+// import MilkPricingCalculators from ...
+// ... other imports
 
 type CalculatorType = 'acidity' | 'fat-dry' | 'gravimetric' | 'formulas' | 'cip-strength' | 'protein-casein' | 'minerals' | 'cream' | 'pricing' | 'rm-pv' | 'peroxide-value' | 'salt-percent' | 'ffa-percent' | 'oil-percent';
 
+// ✅ Updated Object with Gradient Colors
 const calculatorsInfo = {
-    'pricing': { title: "Milk Pricing", icon: DollarSign, component: MilkPricingCalculators },
-    'rm-pv': { title: "RM & Polenske Value", icon: FlaskConical, component: RMPVCalc },
-    'ffa-percent': { title: "FFA % & Acid Value", icon: FlaskConical, component: FfaPercentCalc },
-    'peroxide-value': { title: "Peroxide Value", icon: FlaskConical, component: PeroxideValueCalc },
-    'salt-percent': { title: "Salt %", icon: FlaskConical, component: SaltPercentCalc },
-    'oil-percent': { title: "Oil % (Soxhlet)", icon: FlaskConical, component: OilPercentCalc },
-    'acidity': { title: "Acidity", icon: Beaker, component: ProductAcidityCalc },
-    'protein-casein': { title: "Protein & Casein", icon: Dna, component: ProteinCaseinCalc },
-    'minerals': { title: "Minerals (Na/K)", icon: Atom, component: MineralAnalysisCalc },
-    'cream': { title: "Cream", icon: Droplet, component: CreamCalculators },
-    'gravimetric': { title: "Gravimetric Analysis", icon: Weight, component: GravimetricAnalysisCalc },
-    'cip-strength': { title: "CIP Strength", icon: RotateCw, component: SolutionStrengthCalc },
-    'formulas': { title: "Common Formulas", icon: Calculator, component: FormulasTab },
+    'pricing': { 
+        title: "Milk Pricing", 
+        icon: DollarSign, 
+        component: MilkPricingCalculators,
+        color: "from-emerald-500 to-green-600" 
+    },
+    'rm-pv': { 
+        title: "RM & Polenske Value", 
+        icon: FlaskConical, 
+        component: RMPVCalc,
+        color: "from-orange-400 to-red-500" 
+    },
+    'ffa-percent': { 
+        title: "FFA % & Acid Value", 
+        icon: FlaskConical, 
+        component: FfaPercentCalc,
+        color: "from-yellow-400 to-orange-500" 
+    },
+    'peroxide-value': { 
+        title: "Peroxide Value", 
+        icon: FlaskConical, 
+        component: PeroxideValueCalc,
+        color: "from-red-500 to-rose-600" 
+    },
+    'salt-percent': { 
+        title: "Salt %", 
+        icon: FlaskConical, 
+        component: SaltPercentCalc,
+        color: "from-cyan-400 to-blue-500" 
+    },
+    'oil-percent': { 
+        title: "Oil % (Soxhlet)", 
+        icon: FlaskConical, 
+        component: OilPercentCalc,
+        color: "from-amber-400 to-yellow-500" 
+    },
+    'acidity': { 
+        title: "Acidity", 
+        icon: Beaker, 
+        component: ProductAcidityCalc,
+        color: "from-lime-500 to-green-600" 
+    },
+    'protein-casein': { 
+        title: "Protein & Casein", 
+        icon: Dna, 
+        component: ProteinCaseinCalc,
+        color: "from-violet-500 to-purple-600" 
+    },
+    'minerals': { 
+        title: "Minerals (Na/K)", 
+        icon: Atom, 
+        component: MineralAnalysisCalc,
+        color: "from-indigo-500 to-blue-600" 
+    },
+    'cream': { 
+        title: "Cream", 
+        icon: Droplet, 
+        component: CreamCalculators,
+        color: "from-sky-400 to-blue-500" 
+    },
+    'gravimetric': { 
+        title: "Gravimetric Analysis", 
+        icon: Weight, 
+        component: GravimetricAnalysisCalc,
+        color: "from-slate-500 to-gray-600" 
+    },
+    'cip-strength': { 
+        title: "CIP Strength", 
+        icon: RotateCw, 
+        component: SolutionStrengthCalc,
+        color: "from-teal-400 to-emerald-500" 
+    },
+    'formulas': { 
+        title: "Common Formulas", 
+        icon: Calculator, 
+        component: FormulasTab,
+        color: "from-blue-600 to-indigo-700" 
+    },
 };
 
 export function VariousCalculatorsModal({
@@ -69,20 +140,29 @@ export function VariousCalculatorsModal({
   
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogContent className="max-w-4xl w-[95vw] h-full max-h-[90vh] flex flex-col p-0 sm:p-6">
+      <DialogContent className="max-w-4xl w-[95vw] h-full max-h-[90vh] flex flex-col p-0 sm:p-6 bg-gradient-to-br from-slate-50 to-slate-100">
         {activeCalculator && ActiveCalculatorComponent ? (
             <>
                 <DialogHeader className="flex-row items-center space-x-4 pr-6 shrink-0 p-4 sm:p-0">
-                     <Button variant="ghost" size="icon" onClick={handleBack} className="shrink-0">
+                     <Button variant="ghost" size="icon" onClick={handleBack} className="shrink-0 hover:bg-white/50">
                         <ArrowLeft className="h-5 w-5" />
                      </Button>
-                     <div>
-                        <DialogTitle className="text-xl font-bold font-headline">{calculatorsInfo[activeCalculator].title}</DialogTitle>
-                        <DialogDescription>Calculate specific dairy parameters.</DialogDescription>
+                     <div className="flex items-center gap-3">
+                        {/* Active Calculator Icon with Color */}
+                        <div className={cn("p-2 rounded-lg bg-gradient-to-br text-white shadow-sm", calculatorsInfo[activeCalculator].color)}>
+                            {(() => {
+                                const Icon = calculatorsInfo[activeCalculator].icon;
+                                return <Icon className="h-5 w-5" />;
+                            })()}
+                        </div>
+                        <div>
+                            <DialogTitle className="text-xl font-bold font-headline">{calculatorsInfo[activeCalculator].title}</DialogTitle>
+                            <DialogDescription>Calculate specific dairy parameters.</DialogDescription>
+                        </div>
                      </div>
                 </DialogHeader>
-                <ScrollArea className="h-full mt-4 pr-4">
-                    <div className="p-4 sm:p-0">
+                <ScrollArea className="h-full mt-4 pr-4 w-full">
+                    <div className="p-4 sm:p-0 px-1">
                       <ActiveCalculatorComponent />
                     </div>
                 </ScrollArea>
@@ -90,19 +170,34 @@ export function VariousCalculatorsModal({
         ) : (
             <>
                 <DialogHeader className="p-4 sm:p-0">
-                    <DialogTitle className="text-3xl font-bold text-center font-headline">Lab Calculations</DialogTitle>
-                    <DialogDescription className="text-center">Choose a calculator from the options below.</DialogDescription>
+                    <div className="flex justify-center mb-4">
+                        <div className="p-3 bg-white rounded-xl shadow-md">
+                            <FlaskConical className="h-8 w-8 text-blue-600" />
+                        </div>
+                    </div>
+                    <DialogTitle className="text-2xl sm:text-3xl font-bold text-center font-headline">Lab Calculations</DialogTitle>
+                    <DialogDescription className="text-center">Choose a specific analysis tool below.</DialogDescription>
                 </DialogHeader>
+                
                 <ScrollArea className="h-full mt-4 pr-4">
+                    {/* ✅ UPDATED GRID: Buttons with Gradient Backgrounds */}
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-                       {Object.entries(calculatorsInfo).map(([key, { title, icon: Icon }]) => (
+                       {Object.entries(calculatorsInfo).map(([key, { title, icon: Icon, color }]) => (
                             <button 
                                 key={key} 
                                 onClick={() => setActiveCalculator(key as CalculatorType)}
-                                className="flex flex-col items-center justify-center p-6 bg-card hover:bg-primary/10 rounded-xl shadow-sm border text-center aspect-square transition-all duration-200"
+                                className="group relative flex flex-col items-center justify-center p-4 bg-white hover:shadow-xl rounded-2xl border-2 border-transparent hover:border-primary/20 text-center aspect-square transition-all duration-300 transform hover:scale-105"
                             >
-                                <Icon className="w-12 h-12 text-primary mb-3" />
-                                <span className="font-semibold font-headline text-card-foreground">{title}</span>
+                                {/* Gradient Icon Circle */}
+                                <div className={cn(
+                                    "p-4 rounded-full bg-gradient-to-br text-white mb-3 shadow-md transition-transform group-hover:scale-110", 
+                                    color
+                                )}>
+                                    <Icon className="w-7 h-7 sm:w-8 sm:h-8" />
+                                </div>
+                                <span className="font-bold text-sm sm:text-base font-headline text-slate-700 group-hover:text-primary transition-colors">
+                                    {title}
+                                </span>
                             </button>
                        ))}
                     </div>
@@ -115,9 +210,9 @@ export function VariousCalculatorsModal({
 }
 
 const CalculatorCard = ({ title, children, description }: { title: string; children: React.ReactNode; description?: string }) => (
-    <div className="bg-card p-4 rounded-xl shadow-sm border mt-4">
-        <h3 className="text-xl font-bold text-primary mb-2 font-headline">{title}</h3>
-        {description && <p className="text-sm text-muted-foreground mb-4">{description}</p>}
+    <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md border border-slate-100 mt-4">
+        <h3 className="text-lg sm:text-xl font-bold text-slate-800 mb-2 font-headline">{title}</h3>
+        {description && <p className="text-sm text-slate-500 mb-4">{description}</p>}
         {children}
     </div>
 );
