@@ -781,27 +781,32 @@ const MemoizedMilkInputGroup = memo(function MilkInputGroup({
 });
 
 function MilkBlendingCalc() {
-    const [milk1, setMilk1] = useState({ qty: '500', fat: '6.5', clr: '29', unit: 'kg' as 'kg' | 'liters' });
-    const [milk2, setMilk2] = useState({ qty: '500', fat: '2.5', clr: '27', unit: 'kg' as 'kg' | 'liters' });
+    const [numberOfMilks, setNumberOfMilks] = useState('2');
+    const [milks, setMilks] = useState([
+        { id: 1, qty: '500', fat: '6.5', clr: '29', unit: 'kg' as 'kg' | 'liters' },
+        { id: 2, qty: '500', fat: '2.5', clr: '27', unit: 'kg' as 'kg' | 'liters' }
+    ]);
     const [snfFormula, setSnfFormula] = useState('isi');
-    const [result, setResult] = useState<{ 
-        finalQtyKg: number;
-        finalQtyLiters: number;
-        finalFat: number;
-        finalClr: number;
-        finalSnf: number;
-        finalTs: number;
-        milk1QtyKg: number;
-        milk2QtyKg: number;
-        milk1QtyLiters: number;
-        milk2QtyLiters: number;
-    } | null>(null);
+    const [result, setResult] = useState<any | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [calculationSteps, setCalculationSteps] = useState<string[]>([]);
+    const [showSteps, setShowSteps] = useState(false);
 
-    const handleInputChange = useCallback((milkNum: 1 | 2, field: string, value: string) => {
-        const setter = milkNum === 1 ? setMilk1 : setMilk2;
-        setter(prev => ({ ...prev, [field]: value }));
+    useEffect(() => {
+        const num = parseInt(numberOfMilks, 10);
+        setMilks(currentMilks => {
+            const newMilks = [...currentMilks];
+            while (newMilks.length < num) {
+                newMilks.push({ id: Date.now() + newMilks.length, qty: '100', fat: '3.5', clr: '28', unit: 'kg' });
+            }
+            return newMilks.slice(0, num);
+        });
+    }, [numberOfMilks]);
+    
+    const handleInputChange = useCallback((milkId: number, field: string, value: string) => {
+        setMilks(prevMilks => prevMilks.map(milk => 
+            milk.id === milkId ? { ...milk, [field]: value } : milk
+        ));
     }, []);
 
     const calculateSnf = useCallback((clr: number, fat: number) => {
@@ -813,193 +818,126 @@ function MilkBlendingCalc() {
         setResult(null);
         setError(null);
         setCalculationSteps([]);
+        setShowSteps(false);
         
-        const q1_val = parseFloat(milk1.qty);
-        const q2_val = parseFloat(milk2.qty);
-        
-        const q1 = milk1.unit === 'liters' ? q1_val * componentProps.milkDensity : q1_val;
-        const f1 = parseFloat(milk1.fat);
-        const c1 = parseFloat(milk1.clr);
-        
-        const q2 = milk2.unit === 'liters' ? q2_val * componentProps.milkDensity : q2_val;
-        const f2 = parseFloat(milk2.fat);
-        const c2 = parseFloat(milk2.clr);
+        const milkData = milks.map(milk => ({
+            qtyVal: parseFloat(milk.qty),
+            unit: milk.unit,
+            fat: parseFloat(milk.fat),
+            clr: parseFloat(milk.clr),
+        }));
 
-        if ([q1, f1, c1, q2, f2, c2].some(isNaN)) {
-            setError("⚠️ Please fill all fields with valid numbers.");
+        if (milkData.some(m => isNaN(m.qtyVal) || isNaN(m.fat) || isNaN(m.clr) || m.qtyVal <= 0)) {
+            setError("⚠️ Please fill all fields for all milk sources with valid positive numbers.");
             return;
         }
 
-        if (q1 <= 0 || q2 <= 0) {
-            setError("⚠️ Quantities must be positive numbers.");
+        const steps: string[] = ["📊 **═══════════ STEP 1: INPUT VALUES & CONVERSIONS ═══════════**"];
+        let totalQtyKg = 0;
+        let totalFatMass = 0;
+        let totalClrMass = 0;
+
+        const processedMilks = milkData.map((milk, index) => {
+            const qtyKg = milk.unit === 'liters' ? milk.qtyVal * componentProps.milkDensity : milk.qtyVal;
+            const snf = calculateSnf(milk.clr, milk.fat);
+            
+            steps.push(`\n   **Milk Source ${index + 1}:**`);
+            steps.push(`     Quantity = ${milk.qtyVal} ${milk.unit} → ${qtyKg.toFixed(4)} kg`);
+            steps.push(`     Fat = ${milk.fat}%`);
+            steps.push(`     CLR = ${milk.clr}`);
+            steps.push(`     Calculated SNF = ${snf.toFixed(4)}%`);
+            
+            totalQtyKg += qtyKg;
+            totalFatMass += qtyKg * milk.fat;
+            totalClrMass += qtyKg * milk.clr;
+            
+            return { ...milk, qtyKg, snf };
+        });
+
+        steps.push(`\n\n🔢 **═══════════ STEP 2: CALCULATE TOTALS ═══════════**`);
+        steps.push(`   Total Quantity (Kg) = ${processedMilks.map(m => m.qtyKg.toFixed(4)).join(' + ')} = ${totalQtyKg.toFixed(4)} kg`);
+        steps.push(`   Total Fat Mass = Σ(Qty × Fat%) = ${totalFatMass.toFixed(4)}`);
+        steps.push(`   Total CLR Mass = Σ(Qty × CLR) = ${totalClrMass.toFixed(4)}`);
+
+        if (totalQtyKg === 0) {
+            setError("Total quantity cannot be zero.");
             return;
         }
 
-        const steps: string[] = [];
+        steps.push(`\n\n🔬 **═══════════ STEP 3: CALCULATE FINAL COMPOSITION ═══════════**`);
         
-        // ============ STEP 1: INPUT VALUES ============
-        steps.push(`📊 **═══════════ STEP 1: INPUT VALUES ═══════════**`);
-        steps.push(`\n   Milk Source 1:`);
-        steps.push(`     Quantity = ${q1_val} ${milk1.unit} → ${q1.toFixed(6)} kg`);
-        steps.push(`     Fat = ${f1}%`);
-        steps.push(`     CLR = ${c1}`);
+        const finalFat = totalFatMass / totalQtyKg;
+        steps.push(`   Final Fat % = Total Fat Mass / Total Qty = ${totalFatMass.toFixed(4)} / ${totalQtyKg.toFixed(4)} = **${finalFat.toFixed(4)}%**`);
         
-        const snf1 = calculateSnf(c1, f1);
-        steps.push(`     SNF = ${snf1.toFixed(6)}% (Calculated)`);
-        
-        steps.push(`\n   Milk Source 2:`);
-        steps.push(`     Quantity = ${q2_val} ${milk2.unit} → ${q2.toFixed(6)} kg`);
-        steps.push(`     Fat = ${f2}%`);
-        steps.push(`     CLR = ${c2}`);
-        
-        const snf2 = calculateSnf(c2, f2);
-        steps.push(`     SNF = ${snf2.toFixed(6)}% (Calculated)`);
-
-        // ============ STEP 2: CALCULATE FINAL QUANTITY ============
-        steps.push(`\n\n🔢 **═══════════ STEP 2: CALCULATE TOTAL QUANTITY ═══════════**`);
-        
-        const finalQty = q1 + q2;
-        steps.push(`\n   Total Quantity Calculation:`);
-        steps.push(`     Total Qty (kg) = Q₁ + Q₂`);
-        steps.push(`                    = ${q1.toFixed(6)} + ${q2.toFixed(6)}`);
-        steps.push(`                    = ${finalQty.toFixed(6)} kg`);
-        
-        const finalQtyLiters = finalQty / componentProps.milkDensity;
-        steps.push(`\n   Conversion to Liters:`);
-        steps.push(`     Total Qty (liters) = ${finalQty.toFixed(6)} / ${componentProps.milkDensity}`);
-        steps.push(`                        = ${finalQtyLiters.toFixed(6)} liters`);
-
-        // ============ STEP 3: CALCULATE FINAL FAT ============
-        steps.push(`\n\n🧈 **═══════════ STEP 3: CALCULATE FINAL FAT% ═══════════**`);
-        steps.push(`   Using Weighted Average Method`);
-        
-        const finalFat = ((q1 * f1) + (q2 * f2)) / finalQty;
-        
-        steps.push(`\n   Formula: Final Fat = (Q₁ × F₁ + Q₂ × F₂) / Total Qty`);
-        steps.push(`\n   Calculation:`);
-        steps.push(`     Numerator = (Q₁ × F₁) + (Q₂ × F₂)`);
-        steps.push(`               = (${q1.toFixed(6)} × ${f1}) + (${q2.toFixed(6)} × ${f2})`);
-        steps.push(`               = ${(q1 * f1).toFixed(6)} + ${(q2 * f2).toFixed(6)}`);
-        steps.push(`               = ${(q1 * f1 + q2 * f2).toFixed(6)} kg`);
-        steps.push(`\n     Final Fat% = ${(q1 * f1 + q2 * f2).toFixed(6)} / ${finalQty.toFixed(6)}`);
-        steps.push(`                = ${finalFat.toFixed(8)}%`);
-
-        // ============ STEP 4: CALCULATE FINAL CLR ============
-        steps.push(`\n\n🌡️ **═══════════ STEP 4: CALCULATE FINAL CLR ═══════════**`);
-        steps.push(`   Using Weighted Average Method`);
-        
-        const finalClr = ((q1 * c1) + (q2 * c2)) / finalQty;
-        
-        steps.push(`\n   Formula: Final CLR = (Q₁ × CLR₁ + Q₂ × CLR₂) / Total Qty`);
-        steps.push(`\n   Calculation:`);
-        steps.push(`     Numerator = (Q₁ × CLR₁) + (Q₂ × CLR₂)`);
-        steps.push(`               = (${q1.toFixed(6)} × ${c1}) + (${q2.toFixed(6)} × ${c2})`);
-        steps.push(`               = ${(q1 * c1).toFixed(6)} + ${(q2 * c2).toFixed(6)}`);
-        steps.push(`               = ${(q1 * c1 + q2 * c2).toFixed(6)}`);
-        steps.push(`\n     Final CLR = ${(q1 * c1 + q2 * c2).toFixed(6)} / ${finalQty.toFixed(6)}`);
-        steps.push(`               = ${finalClr.toFixed(8)}`);
-
-        // ============ STEP 5: CALCULATE FINAL SNF ============
-        steps.push(`\n\n🔬 **═══════════ STEP 5: CALCULATE FINAL SNF ═══════════**`);
+        const finalClr = totalClrMass / totalQtyKg;
+        steps.push(`   Final CLR = Total CLR Mass / Total Qty = ${totalClrMass.toFixed(4)} / ${totalQtyKg.toFixed(4)} = **${finalClr.toFixed(4)}**`);
         
         const finalSnf = calculateSnf(finalClr, finalFat);
-        const formula = snfFormulas[snfFormula as keyof typeof snfFormulas] || snfFormulas.isi;
-        
-        steps.push(`   Using ${formula.name} formula`);
-        steps.push(`   Formula: ${formula.formulaText}`);
-        steps.push(`\n   Calculation:`);
-        steps.push(`     Final SNF = f(CLR=${finalClr.toFixed(8)}, Fat=${finalFat.toFixed(8)}%)`);
-        steps.push(`               = ${finalSnf.toFixed(8)}%`);
+        steps.push(`   Final SNF % (using final Fat & CLR) = **${finalSnf.toFixed(4)}%**`);
 
-        // ============ STEP 6: CALCULATE FINAL TS ============
-        steps.push(`\n\n📦 **═══════════ STEP 6: CALCULATE FINAL TOTAL SOLIDS ═══════════**`);
+        const finalTs = finalFat + finalSnf;
+        steps.push(`   Final Total Solids (TS) % = Final Fat % + Final SNF % = ${finalFat.toFixed(4)} + ${finalSnf.toFixed(4)} = **${finalTs.toFixed(4)}%**`);
         
-        const finalTs = finalSnf + finalFat;
-        
-        steps.push(`\n   Formula: Total Solids (TS) = SNF + Fat`);
-        steps.push(`\n   Calculation:`);
-        steps.push(`     Final TS = ${finalSnf.toFixed(8)} + ${finalFat.toFixed(8)}`);
-        steps.push(`              = ${finalTs.toFixed(8)}%`);
-
-        // ============ STEP 7: VERIFICATION ============
-        steps.push(`\n\n✅ **═══════════ STEP 7: VERIFICATION ═══════════**`);
-        steps.push(`\n   Mass Balance Check (Fat):`);
-        steps.push(`     Total Fat Mass = (Q₁ × F₁) + (Q₂ × F₂)`);
-        steps.push(`                    = ${(q1 * f1 + q2 * f2).toFixed(6)} kg`);
-        steps.push(`     Final Fat Mass = Total Qty × Final Fat%`);
-        steps.push(`                    = ${finalQty.toFixed(6)} × ${finalFat.toFixed(8)}`);
-        steps.push(`                    = ${(finalQty * finalFat).toFixed(6)} kg`);
-        steps.push(`     Match: ✓ ${Math.abs((q1 * f1 + q2 * f2) - (finalQty * finalFat)) < 0.0001 ? 'Perfect' : 'Close'}`);
-
-        // ============ STEP 8: SUMMARY ============
-        steps.push(`\n\n✨ **═══════════ STEP 8: FINAL SUMMARY ═══════════**`);
-        steps.push(`\n   Input Milks:`);
-        steps.push(`     Milk 1: ${q1.toFixed(6)} kg (${(q1 / componentProps.milkDensity).toFixed(6)} L) @ ${f1}% Fat, CLR ${c1}`);
-        steps.push(`     Milk 2: ${q2.toFixed(6)} kg (${(q2 / componentProps.milkDensity).toFixed(6)} L) @ ${f2}% Fat, CLR ${c2}`);
-        
-        steps.push(`\n   Final Blended Milk:`);
-        steps.push(`     Total Quantity: ${finalQty.toFixed(6)} kg (${finalQtyLiters.toFixed(6)} liters)`);
-        steps.push(`     Final Fat: ${finalFat.toFixed(8)}%`);
-        steps.push(`     Final CLR: ${finalClr.toFixed(8)}`);
-        steps.push(`     Final SNF: ${finalSnf.toFixed(8)}%`);
-        steps.push(`     Final TS: ${finalTs.toFixed(8)}%`);
+        const finalQtyLiters = totalQtyKg / componentProps.milkDensity;
 
         setCalculationSteps(steps);
         setResult({
-            finalQtyKg: finalQty,
+            finalQtyKg: totalQtyKg,
             finalQtyLiters,
             finalFat,
             finalClr,
             finalSnf,
             finalTs,
-            milk1QtyKg: q1,
-            milk2QtyKg: q2,
-            milk1QtyLiters: q1 / componentProps.milkDensity,
-            milk2QtyLiters: q2 / componentProps.milkDensity
+            blendedMilks: processedMilks
         });
 
-    }, [milk1, milk2, calculateSnf, snfFormula]);
+    }, [milks, calculateSnf]);
 
     return (
         <CalculatorCard 
-            title="Milk Blending Calculator" 
-            description="Calculate precise final composition when blending two different milk sources with detailed step-by-step calculations"
+            title="Multi-Milk Blending Calculator" 
+            description="Calculate the final composition when blending two to six different milk sources."
         >
-            {/* SNF Formula Selection */}
-            <div className="bg-gradient-to-r from-indigo-100 via-purple-100 to-pink-100 p-5 rounded-xl border-2 border-indigo-300 shadow-md mb-6">
-                <Label className="text-base font-bold mb-3 block flex items-center gap-2">
-                    <Calculator className="w-5 h-5" />
-                    SNF Calculation Formula
-                </Label>
-                <Select value={snfFormula} onValueChange={setSnfFormula}>
-                    <SelectTrigger className="bg-white border-2 border-indigo-200 h-12 text-base font-medium">
-                        <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {Object.entries(snfFormulas).map(([key, {name, formulaText}]) => (
-                            <SelectItem key={key} value={key} className="text-base py-3">
-                                <div className="flex flex-col">
-                                    <span className="font-bold text-gray-800">{name}</span>
-                                    <span className="text-xs text-muted-foreground mt-1">{formulaText}</span>
-                                </div>
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                    <Label className="text-base font-bold mb-3 block">Number of Milk Sources</Label>
+                    <Select value={numberOfMilks} onValueChange={setNumberOfMilks}>
+                        <SelectTrigger className="h-12 text-base font-medium">
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="2">Two Milk Blending</SelectItem>
+                            <SelectItem value="3">Three Milk Blending</SelectItem>
+                            <SelectItem value="4">Four Milk Blending</SelectItem>
+                            <SelectItem value="5">Five Milk Blending</SelectItem>
+                            <SelectItem value="6">Six Milk Blending</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+                <div className="bg-gradient-to-r from-indigo-100 via-purple-100 to-pink-100 p-4 rounded-xl border-2 border-indigo-300">
+                    <Label className="text-base font-bold mb-2 block">SNF Formula</Label>
+                    <Select value={snfFormula} onValueChange={setSnfFormula}>
+                        <SelectTrigger className="bg-white border-2 border-indigo-200 h-11 font-medium text-sm">
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {Object.entries(snfFormulas).map(([key, {name}]) => (
+                                <SelectItem key={key} value={key}>{name}</SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </div>
             </div>
 
-            {/* Milk Sources */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                <MemoizedMilkInputGroup 
-                    milkNum={1} 
-                    onInputChange={handleInputChange} 
-                    initialValues={{...milk1}}
-                />
-                <MemoizedMilkInputGroup 
-                    milkNum={2}
-                    onInputChange={handleInputChange} 
-                    initialValues={{...milk2}}
-                />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+                {milks.map((milk, index) => (
+                     <MemoizedMilkInputGroup 
+                        key={milk.id}
+                        milkNum={index + 1} 
+                        onInputChange={(id, field, value) => handleInputChange(milk.id, field, value)} 
+                        initialValues={milk}
+                    />
+                ))}
             </div>
 
             <Button 
@@ -1019,176 +957,55 @@ function MilkBlendingCalc() {
 
             {result && (
                 <div className="mt-6 space-y-6">
-                    {/* Result Summary */}
                     <Alert className="bg-gradient-to-r from-green-100 via-emerald-100 to-teal-100 border-3 border-green-500 shadow-2xl">
                         <CheckCircle2 className="h-8 w-8 text-green-700" />
-                        <AlertTitle className="text-2xl font-extrabold text-green-900 mb-4">
-                            ✅ Blend Result
-                        </AlertTitle>
+                        <AlertTitle className="text-2xl font-extrabold text-green-900 mb-4">✅ Final Blend Composition</AlertTitle>
                         <AlertDescription>
-                            <div className="space-y-5">
-                                {/* Input Summary */}
-                                <div className="bg-white/90 p-5 rounded-xl shadow-md border-2 border-teal-300">
-                                    <h5 className="font-bold text-lg text-teal-800 mb-3 flex items-center gap-2">
-                                        <Droplets className="w-5 h-5" />
-                                        Milk Sources Used
-                                    </h5>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div className="bg-blue-50 p-4 rounded-lg border-2 border-blue-300">
-                                            <p className="text-xs font-bold text-blue-900 mb-2">Milk Source 1</p>
-                                            <p className="font-bold text-xl text-blue-700">{result.milk1QtyKg.toFixed(4)} kg</p>
-                                            <p className="text-sm text-blue-600">{result.milk1QtyLiters.toFixed(4)} liters</p>
-                                            <div className="mt-2 text-xs space-y-1">
-                                                <p><strong>Fat:</strong> {milk1.fat}%</p>
-                                                <p><strong>CLR:</strong> {milk1.clr}</p>
-                                            </div>
-                                        </div>
-                                        <div className="bg-green-50 p-4 rounded-lg border-2 border-green-300">
-                                            <p className="text-xs font-bold text-green-900 mb-2">Milk Source 2</p>
-                                            <p className="font-bold text-xl text-green-700">{result.milk2QtyKg.toFixed(4)} kg</p>
-                                            <p className="text-sm text-green-600">{result.milk2QtyLiters.toFixed(4)} liters</p>
-                                            <div className="mt-2 text-xs space-y-1">
-                                                <p><strong>Fat:</strong> {milk2.fat}%</p>
-                                                <p><strong>CLR:</strong> {milk2.clr}</p>
-                                            </div>
-                                        </div>
-                                    </div>
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                                <div className="bg-white/90 p-4 rounded-lg shadow-sm border">
+                                    <p className="text-sm font-semibold text-muted-foreground">Final Fat</p>
+                                    <p className="text-2xl font-bold text-green-700">{result.finalFat.toFixed(4)}%</p>
                                 </div>
-
-                                {/* Final Blend Properties */}
-                                <div className="bg-white/90 p-5 rounded-xl shadow-md border-2 border-green-300">
-                                    <h5 className="font-bold text-lg text-green-800 mb-4 flex items-center gap-2">
-                                        <Blend className="w-5 h-5" />
-                                        Final Blended Milk Properties
-                                    </h5>
-                                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                                        {/* Total Quantity */}
-                                        <div className="bg-teal-50 p-4 rounded-lg border border-teal-200 text-center">
-                                            <div className="flex items-center justify-center gap-2 mb-2">
-                                                <Scale className="w-5 h-5 text-teal-700" />
-                                                <p className="text-xs font-bold text-muted-foreground">Total Quantity</p>
-                                            </div>
-                                            <p className="text-3xl font-extrabold text-teal-700">
-                                                {result.finalQtyKg.toFixed(4)}
-                                            </p>
-                                            <p className="text-sm text-teal-600 font-semibold">kg</p>
-                                            <p className="text-xs text-teal-600 mt-1">
-                                                {result.finalQtyLiters.toFixed(4)} liters
-                                            </p>
-                                        </div>
-
-                                        {/* Final Fat */}
-                                        <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200 text-center">
-                                            <div className="flex items-center justify-center gap-2 mb-2">
-                                                <Milk className="w-5 h-5 text-yellow-700" />
-                                                <p className="text-xs font-bold text-muted-foreground">Final Fat</p>
-                                            </div>
-                                            <p className="text-3xl font-extrabold text-yellow-700">
-                                                {result.finalFat.toFixed(4)}
-                                            </p>
-                                            <p className="text-sm text-yellow-600 font-semibold">%</p>
-                                        </div>
-
-                                        {/* Final CLR */}
-                                        <div className="bg-purple-50 p-4 rounded-lg border border-purple-200 text-center">
-                                            <div className="flex items-center justify-center gap-2 mb-2">
-                                                <Thermometer className="w-5 h-5 text-purple-700" />
-                                                <p className="text-xs font-bold text-muted-foreground">Final CLR</p>
-                                            </div>
-                                            <p className="text-3xl font-extrabold text-purple-700">
-                                                {result.finalClr.toFixed(4)}
-                                            </p>
-                                        </div>
-
-                                        {/* Final SNF */}
-                                        <div className="bg-pink-50 p-4 rounded-lg border border-pink-200 text-center">
-                                            <div className="flex items-center justify-center gap-2 mb-2">
-                                                <Beaker className="w-5 h-5 text-pink-700" />
-                                                <p className="text-xs font-bold text-muted-foreground">Final SNF</p>
-                                            </div>
-                                            <p className="text-3xl font-extrabold text-pink-700">
-                                                {result.finalSnf.toFixed(4)}
-                                            </p>
-                                            <p className="text-sm text-pink-600 font-semibold">%</p>
-                                        </div>
-
-                                        {/* Final TS */}
-                                        <div className="bg-indigo-50 p-4 rounded-lg border border-indigo-200 text-center md:col-span-2">
-                                            <div className="flex items-center justify-center gap-2 mb-2">
-                                                <Weight className="w-5 h-5 text-indigo-700" />
-                                                <p className="text-xs font-bold text-muted-foreground">Final Total Solids (TS)</p>
-                                            </div>
-                                            <p className="text-3xl font-extrabold text-indigo-700">
-                                                {result.finalTs.toFixed(4)}
-                                            </p>
-                                            <p className="text-sm text-indigo-600 font-semibold">%</p>
-                                        </div>
-                                    </div>
+                                <div className="bg-white/90 p-4 rounded-lg shadow-sm border">
+                                    <p className="text-sm font-semibold text-muted-foreground">Final CLR</p>
+                                    <p className="text-2xl font-bold text-blue-700">{result.finalClr.toFixed(4)}</p>
                                 </div>
-
-                                {/* Blending Ratio */}
-                                <div className="bg-gradient-to-r from-blue-50 to-green-50 p-4 rounded-xl border-2 border-blue-300">
-                                    <h5 className="font-bold text-base text-blue-900 mb-3 flex items-center gap-2">
-                                        <Info className="w-5 h-5" />
-                                        Blending Ratio
-                                    </h5>
-                                    <div className="grid grid-cols-2 gap-4 text-center">
-                                        <div>
-                                            <p className="text-sm font-semibold text-blue-700">Milk Source 1</p>
-                                            <p className="text-2xl font-bold text-blue-900">
-                                                {((result.milk1QtyKg / result.finalQtyKg) * 100).toFixed(2)}%
-                                            </p>
-                                        </div>
-                                        <div>
-                                            <p className="text-sm font-semibold text-green-700">Milk Source 2</p>
-                                            <p className="text-2xl font-bold text-green-900">
-                                                {((result.milk2QtyKg / result.finalQtyKg) * 100).toFixed(2)}%
-                                            </p>
-                                        </div>
-                                    </div>
+                                <div className="bg-white/90 p-4 rounded-lg shadow-sm border">
+                                    <p className="text-sm font-semibold text-muted-foreground">Final SNF</p>
+                                    <p className="text-2xl font-bold text-purple-700">{result.finalSnf.toFixed(4)}%</p>
+                                </div>
+                                <div className="bg-white/90 p-4 rounded-lg shadow-sm border">
+                                    <p className="text-sm font-semibold text-muted-foreground">Final TS</p>
+                                    <p className="text-2xl font-bold text-orange-700">{result.finalTs.toFixed(4)}%</p>
+                                </div>
+                                <div className="col-span-full bg-white/90 p-4 rounded-lg shadow-sm border">
+                                    <p className="text-sm font-semibold text-muted-foreground">Total Quantity</p>
+                                    <p className="text-2xl font-bold text-teal-700">{result.finalQtyKg.toFixed(4)} kg ({result.finalQtyLiters.toFixed(4)} Liters)</p>
                                 </div>
                             </div>
                         </AlertDescription>
                     </Alert>
+                    
+                    <Button variant="outline" onClick={() => setShowSteps(s => !s)} className="w-full">
+                        {showSteps ? 'Hide' : 'Show'} Calculation Steps
+                    </Button>
 
-                    {/* Calculation Steps */}
-                    <div className="bg-gradient-to-br from-gray-100 to-slate-200 p-6 rounded-xl border-2 border-gray-400 shadow-xl">
-                        <h4 className="font-extrabold text-xl mb-4 flex items-center gap-2 text-gray-800">
-                            <Calculator className="w-6 h-6" />
-                            Complete Calculation Process (Mobile Calculator Verification)
-                        </h4>
-                        <ScrollArea className="h-[500px] pr-4">
-                            <div className="space-y-1 text-sm font-mono leading-relaxed">
-                                {calculationSteps.map((step, idx) => (
-                                    <p 
-                                        key={idx} 
-                                        className={cn(
-                                            step.includes('**') && 'font-extrabold mt-3 text-gray-900 text-base',
-                                            step.includes('═══') && 'text-purple-700 font-extrabold text-lg',
-                                            step.includes('✅') && 'text-green-700 font-bold',
-                                            step.includes('⚠️') && 'text-yellow-700 font-bold',
-                                            step.includes('📊') && 'text-blue-700 font-bold text-lg',
-                                            step.includes('🔢') && 'text-purple-700 font-bold text-lg',
-                                            step.includes('🧈') && 'text-amber-700 font-bold text-lg',
-                                            step.includes('🌡️') && 'text-pink-700 font-bold text-lg',
-                                            step.includes('🔬') && 'text-indigo-700 font-bold text-lg',
-                                            step.includes('📦') && 'text-teal-700 font-bold text-lg',
-                                            step.includes('✨') && 'text-green-700 font-extrabold text-lg',
-                                            !step.includes('**') && !step.includes('✅') && !step.includes('⚠️') && !step.includes('═══') && 'text-gray-700'
-                                        )}
-                                    >
-                                        {step.replace(/\*\*/g, '')}
-                                    </p>
-                                ))}
-                            </div>
-                        </ScrollArea>
-                        <div className="mt-4 p-4 bg-green-100 border-2 border-green-300 rounded-xl shadow-md">
-                            <p className="text-sm text-green-900 font-bold flex items-center gap-2">
-                                <CheckCircle2 className="w-5 h-5" />
-                                ✓ All calculations shown with complete detail - verify each step with your calculator!
-                            </p>
+                    {showSteps && (
+                        <div className="bg-gradient-to-br from-gray-100 to-slate-200 p-6 rounded-xl border-2 border-gray-400 shadow-xl">
+                            <h4 className="font-extrabold text-xl mb-4 flex items-center gap-2 text-gray-800">
+                                <Calculator className="w-6 h-6" /> Detailed Calculation Process
+                            </h4>
+                            <ScrollArea className="h-[400px] pr-4">
+                                <div className="space-y-1 text-sm font-mono leading-relaxed">
+                                    {calculationSteps.map((step, idx) => (
+                                        <p key={idx} className={cn("whitespace-pre-wrap", step.includes('**') && 'font-extrabold mt-3 text-gray-900 text-base', step.includes('═══') && 'text-purple-700')}>
+                                            {step.replace(/\*\*/g, '')}
+                                        </p>
+                                    ))}
+                                </div>
+                            </ScrollArea>
                         </div>
-                    </div>
+                    )}
                 </div>
             )}
         </CalculatorCard>
