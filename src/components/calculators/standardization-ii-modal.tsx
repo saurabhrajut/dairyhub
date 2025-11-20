@@ -12,7 +12,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { componentProps } from "@/lib/data"
+// import { componentProps } from "@/lib/data" // Make sure this path is correct
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { 
@@ -32,7 +32,6 @@ import {
   Thermometer, 
   ShieldAlert, 
   DollarSign,
-  // ✅ NEW ICONS FOR ADVANCED CALCULATOR
   Beaker,
   Scale,
   TrendingUp,
@@ -40,34 +39,97 @@ import {
   CheckCircle2,
   AlertTriangle,
   Plus,
-  X
+  X,
+  Zap
 } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { cn } from "@/lib/utils"
-import { snfFormulas } from "@/lib/data"
+// import { snfFormulas } from "@/lib/data" // Make sure this path is correct
 import { Checkbox } from "@/components/ui/checkbox"
-// ✅ NEW IMPORTS FOR ADVANCED CALCULATOR
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 
+// Import your actual calculator components here
+// import FatSnfClrTsCalc from ... 
+// ... other imports
 
 type CalculatorType = 'fat-snf-clr-ts' | 'fat-blending' | 'reconstituted-milk' | 'recombined-milk' | 'clr-blending' | 'milk-blending' | 'clr-increase' | 'two-milk-blending-target' | 'clr-correction' | 'kg-fat-snf' | 'two-component-standardization' | 'fat-snf-adjustment';
 
-
+// ✅ UPDATED: Added Gradient Colors to each calculator
 const calculatorsInfo = {
-    'fat-snf-clr-ts': { title: "Fat, SNF, CLR & TS", icon: Calculator, component: FatSnfClrTsCalc },
-    'milk-blending': { title: "Milk Blending", icon: Blend, component: MilkBlendingCalc },
-    'two-milk-blending-target': { title: "Advanced Two-Milk Blending", icon: Bot, component: TwoMilkBlendingToTargetCalc },
-    'two-component-standardization': { title: "Automated Standardization", icon: Bot, component: TwoComponentStandardizationCalc },
-    'fat-snf-adjustment': { title: 'Fat & SNF Adjustment', icon: SlidersHorizontal, component: FatSnfAdjustmentCalc },
-    'clr-increase': { title: 'CLR Increase (by SMP)', icon: ChevronsUp, component: ClrIncreaseCalc },
-    'fat-blending': { title: "Fat Blending (Pearson)", icon: Blend, component: FatBlendingCalc },
-    'reconstituted-milk': { title: "Reconstituted Milk", icon: Milk, component: ReconstitutedMilkCalc },
-    'recombined-milk': { title: "Recombined Milk", icon: Combine, component: RecombinedMilkCalc },
-    'clr-blending': { title: "CLR Blending (Pearson)", icon: Bot, component: ClrBlendingCalc },
-    'clr-correction': { title: "CLR Correction", icon: Thermometer, component: ClrCorrectionCalc },
-    'kg-fat-snf': { title: "Kg Fat & SNF", icon: Weight, component: KgFatSnfCalc },
+    'fat-snf-clr-ts': { 
+        title: "Fat, SNF, CLR & TS", 
+        icon: Calculator, 
+        component: FatSnfClrTsCalc,
+        color: "from-blue-500 to-cyan-500" 
+    },
+    'milk-blending': { 
+        title: "Milk Blending", 
+        icon: Blend, 
+        component: MilkBlendingCalc,
+        color: "from-indigo-500 to-purple-600" 
+    },
+    'two-milk-blending-target': { 
+        title: "Advanced Two-Milk Blending", 
+        icon: Bot, 
+        component: TwoMilkBlendingToTargetCalc,
+        color: "from-violet-500 to-fuchsia-600" 
+    },
+    'two-component-standardization': { 
+        title: "Automated Standardization", 
+        icon: Settings, 
+        component: TwoComponentStandardizationCalc,
+        color: "from-emerald-500 to-teal-600" 
+    },
+    'fat-snf-adjustment': { 
+        title: 'Fat & SNF Adjustment', 
+        icon: SlidersHorizontal, 
+        component: FatSnfAdjustmentCalc,
+        color: "from-orange-500 to-amber-500" 
+    },
+    'clr-increase': { 
+        title: 'CLR Increase (by SMP)', 
+        icon: ChevronsUp, 
+        component: ClrIncreaseCalc,
+        color: "from-green-500 to-emerald-600" 
+    },
+    'fat-blending': { 
+        title: "Fat Blending (Pearson)", 
+        icon: Blend, 
+        component: FatBlendingCalc,
+        color: "from-blue-600 to-indigo-600" 
+    },
+    'reconstituted-milk': { 
+        title: "Reconstituted Milk", 
+        icon: Milk, 
+        component: ReconstitutedMilkCalc,
+        color: "from-sky-400 to-blue-500" 
+    },
+    'recombined-milk': { 
+        title: "Recombined Milk", 
+        icon: Combine, 
+        component: RecombinedMilkCalc,
+        color: "from-cyan-500 to-teal-500" 
+    },
+    'clr-blending': { 
+        title: "CLR Blending (Pearson)", 
+        icon: Bot, 
+        component: ClrBlendingCalc,
+        color: "from-indigo-400 to-blue-500" 
+    },
+    'clr-correction': { 
+        title: "CLR Correction", 
+        icon: Thermometer, 
+        component: ClrCorrectionCalc,
+        color: "from-red-500 to-rose-600" 
+    },
+    'kg-fat-snf': { 
+        title: "Kg Fat & SNF", 
+        icon: Weight, 
+        component: KgFatSnfCalc,
+        color: "from-slate-500 to-gray-600" 
+    },
 };
 
 export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
@@ -86,20 +148,31 @@ export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean;
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogContent className="max-w-4xl h-[90vh] flex flex-col p-0 sm:p-6">
+      {/* ✅ Mobile Friendly Width & Padding */}
+      <DialogContent className="max-w-4xl w-[95vw] h-[95vh] flex flex-col p-0 sm:p-6 bg-gradient-to-br from-slate-50 to-slate-100">
         {activeCalculator && ActiveCalculatorComponent ? (
           <>
             <DialogHeader className="flex-row items-center space-x-4 pr-6 shrink-0 p-4 sm:p-0">
-              <Button variant="ghost" size="icon" onClick={handleBack} className="shrink-0">
+              <Button variant="ghost" size="icon" onClick={handleBack} className="shrink-0 hover:bg-white/50">
                 <ArrowLeft className="h-5 w-5" />
               </Button>
-              <div>
-                <DialogTitle className="text-xl font-bold font-headline">{calculatorsInfo[activeCalculator].title}</DialogTitle>
-                <DialogDescription>Calculate specific dairy parameters.</DialogDescription>
+              <div className="flex items-center gap-3">
+                 {/* ✅ Gradient Icon in Header */}
+                 <div className={cn("p-2 rounded-lg bg-gradient-to-br text-white shadow-md", calculatorsInfo[activeCalculator].color)}>
+                    {(() => {
+                        const Icon = calculatorsInfo[activeCalculator].icon;
+                        return <Icon className="h-5 w-5" />;
+                    })()}
+                 </div>
+                 <div>
+                    <DialogTitle className="text-xl font-bold font-headline">{calculatorsInfo[activeCalculator].title}</DialogTitle>
+                    <DialogDescription>Calculate specific dairy parameters.</DialogDescription>
+                 </div>
               </div>
             </DialogHeader>
-            <ScrollArea className="h-full mt-4 pr-4">
-              <div className="p-4 sm:p-0">
+            
+            <ScrollArea className="h-full mt-4 w-full">
+              <div className="p-2 sm:p-0 px-1">
                 <ActiveCalculatorComponent />
               </div>
             </ScrollArea>
@@ -107,19 +180,42 @@ export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean;
         ) : (
           <>
             <DialogHeader className="p-4 sm:p-0">
-              <DialogTitle className="text-3xl font-bold text-center font-headline">Advanced Standardization</DialogTitle>
-              <DialogDescription className="text-center">Advanced calculators for precise dairy processing.</DialogDescription>
+              <div className="flex justify-center mb-4">
+                  <div className="p-3 bg-white rounded-xl shadow-md">
+                      <Blend className="h-8 w-8 text-indigo-600" />
+                  </div>
+              </div>
+              <DialogTitle className="text-2xl sm:text-4xl font-bold text-center font-headline bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                Advanced Standardization
+              </DialogTitle>
+              <DialogDescription className="text-center text-sm sm:text-lg">
+                Advanced calculators for precise dairy processing & blending.
+              </DialogDescription>
             </DialogHeader>
-            <ScrollArea className="flex-1 mt-4 pr-4">
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4">
-                {Object.entries(calculatorsInfo).map(([key, { title, icon: Icon }]) => (
+            
+            <ScrollArea className="flex-1 mt-4 pr-2">
+              {/* ✅ Colorful Grid Layout */}
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 p-4">
+                {Object.entries(calculatorsInfo).map(([key, { title, icon: Icon, color }]) => (
                   <button
                     key={key}
                     onClick={() => setActiveCalculator(key as CalculatorType)}
-                    className="flex flex-col items-center justify-center p-6 bg-card hover:bg-primary/10 rounded-xl shadow-sm border text-center aspect-square transition-all duration-200"
+                    className="group relative flex flex-col items-center justify-center p-4 bg-white hover:shadow-xl rounded-2xl border-2 border-transparent hover:border-primary/20 text-center aspect-square transition-all duration-300 transform hover:scale-105"
                   >
-                    <Icon className="w-12 h-12 text-primary mb-3" />
-                    <span className="font-semibold font-headline text-card-foreground">{title}</span>
+                     {/* ✅ Gradient Circle for Icon */}
+                    <div className={cn(
+                        "p-4 rounded-full bg-gradient-to-br text-white mb-3 shadow-md transition-transform group-hover:scale-110", 
+                        color
+                    )}>
+                      <Icon className="w-7 h-7 sm:w-8 sm:h-8" />
+                    </div>
+                    
+                    <span className="font-bold text-sm sm:text-base font-headline text-slate-700 group-hover:text-primary transition-colors">
+                        {title}
+                    </span>
+                    
+                    {/* Optional: Flash icon on hover */}
+                    <Zap className="absolute top-2 right-2 h-4 w-4 text-yellow-400 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </button>
                 ))}
               </div>
@@ -130,7 +226,6 @@ export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean;
     </Dialog>
   )
 }
-
 
 const CalculatorCard = ({ title, children, description }: { title: string; children: React.ReactNode; description?: string }) => (
     <div className="bg-card p-4 rounded-xl shadow-sm border mt-4">
