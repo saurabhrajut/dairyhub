@@ -298,6 +298,89 @@ const AbstractLiquidSwirl = () => (
     </div>
 );
 
+// NEW ANIMATIONS
+const HexagonalGridAnimation = () => (
+    <div className="relative w-36 h-36 flex items-center justify-center">
+        <style jsx>{`
+            .hexagon {
+                position: absolute;
+                width: 30px;
+                height: 17px;
+                background: linear-gradient(135deg, #60A5FA, #EC4899);
+                animation: hex-glow 3s ease-in-out infinite;
+                clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+                box-shadow: 0 0 15px currentColor;
+            }
+            @keyframes hex-glow {
+                0%, 100% { opacity: 0.3; transform: scale(1); }
+                50% { opacity: 1; transform: scale(1.2); }
+            }
+        `}</style>
+        {[...Array(7)].map((_, i) => (
+            <div 
+                key={i}
+                className="hexagon"
+                style={{
+                    left: `${20 + (i % 3) * 30}px`,
+                    top: `${30 + Math.floor(i / 3) * 25}px`,
+                    animationDelay: `${i * 0.3}s`,
+                    background: `linear-gradient(135deg, hsl(${200 + i * 30}, 80%, 60%), hsl(${280 + i * 20}, 80%, 65%))`
+                }}
+            />
+        ))}
+    </div>
+);
+
+const NeonPulseAnimation = () => (
+    <div className="relative w-36 h-36 flex items-center justify-center">
+        <style jsx>{`
+            .neon-ring {
+                position: absolute;
+                border-radius: 50%;
+                border: 3px solid;
+                animation: neon-pulse 2s ease-in-out infinite;
+            }
+            @keyframes neon-pulse {
+                0%, 100% {
+                    transform: scale(0.8);
+                    opacity: 0;
+                    box-shadow: 0 0 0 rgba(96, 165, 250, 0);
+                }
+                50% {
+                    transform: scale(1.2);
+                    opacity: 1;
+                    box-shadow: 0 0 30px currentColor, 0 0 60px currentColor;
+                }
+            }
+            .neon-core {
+                width: 30px;
+                height: 30px;
+                background: linear-gradient(135deg, #60A5FA, #EC4899);
+                border-radius: 50%;
+                box-shadow: 0 0 30px #60A5FA, 0 0 60px #EC4899, 0 0 90px #A78BFA;
+                animation: core-pulse 2s ease-in-out infinite;
+            }
+            @keyframes core-pulse {
+                0%, 100% { transform: scale(1); }
+                50% { transform: scale(1.3); }
+            }
+        `}</style>
+        <div className="neon-core"></div>
+        {[...Array(3)].map((_, i) => (
+            <div
+                key={i}
+                className="neon-ring"
+                style={{
+                    width: `${60 + i * 30}px`,
+                    height: `${60 + i * 30}px`,
+                    borderColor: `hsl(${200 + i * 50}, 80%, 60%)`,
+                    animationDelay: `${i * 0.4}s`
+                }}
+            />
+        ))}
+    </div>
+);
+
 const animations = [
   GearAnimation, 
   MilkDropRippleAnimation,
@@ -307,6 +390,8 @@ const animations = [
   AtomAnimation,
   MilkPourAnimation,
   AbstractLiquidSwirl,
+  HexagonalGridAnimation,
+  NeonPulseAnimation,
 ];
 
 const slogans = [
@@ -353,38 +438,72 @@ export default function SplashScreen() {
         <div className="absolute bottom-10 left-20 w-80 h-80 bg-gradient-to-br from-pink-400/40 to-purple-500/40 rounded-full blur-3xl animate-float-orb-2"></div>
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-br from-orange-400/30 to-yellow-500/30 rounded-full blur-3xl animate-pulse-orb"></div>
         
-        {/* Floating Dairy Equipment Icons */}
-        <div className="absolute top-[15%] left-[10%] animate-float-equipment opacity-20">
-          <Beaker className="w-12 h-12 text-white" strokeWidth={1.5} />
-        </div>
-        <div className="absolute top-[25%] right-[12%] animate-float-equipment-delayed opacity-20">
-          <TestTube className="w-10 h-10 text-white" strokeWidth={1.5} />
-        </div>
-        <div className="absolute bottom-[20%] left-[15%] animate-float-equipment-slow opacity-20">
-          <FlaskConical className="w-14 h-14 text-white" strokeWidth={1.5} />
-        </div>
-        <div className="absolute top-[60%] right-[18%] animate-float-equipment opacity-20">
-          <Microscope className="w-12 h-12 text-white" strokeWidth={1.5} />
-        </div>
-        <div className="absolute bottom-[35%] left-[8%] animate-float-equipment-delayed opacity-20">
-          <Droplet className="w-10 h-10 text-white" strokeWidth={1.5} />
-        </div>
-        <div className="absolute top-[40%] right-[8%] animate-float-equipment-slow opacity-20">
-          <Atom className="w-13 h-13 text-white" strokeWidth={1.5} />
+        {/* Hexagonal Grid Pattern Overlay */}
+        <div className="absolute inset-0 opacity-10">
+            <svg width="100%" height="100%">
+                <defs>
+                    <pattern id="hexPattern" x="0" y="0" width="60" height="52" patternUnits="userSpaceOnUse">
+                        <path d="M15 0 L45 0 L60 26 L45 52 L15 52 L0 26 Z" fill="none" stroke="white" strokeWidth="1" />
+                    </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#hexPattern)" />
+            </svg>
         </div>
         
-        {/* Particle Effects */}
-        {[...Array(15)].map((_, i) => (
+        {/* Floating Dairy Equipment Icons */}
+        <div className="absolute top-[15%] left-[10%] animate-float-equipment opacity-20">
+          <Beaker className="w-12 h-12 text-white neon-glow-blue" strokeWidth={1.5} />
+        </div>
+        <div className="absolute top-[25%] right-[12%] animate-float-equipment-delayed opacity-20">
+          <TestTube className="w-10 h-10 text-white neon-glow-pink" strokeWidth={1.5} />
+        </div>
+        <div className="absolute bottom-[20%] left-[15%] animate-float-equipment-slow opacity-20">
+          <FlaskConical className="w-14 h-14 text-white neon-glow-purple" strokeWidth={1.5} />
+        </div>
+        <div className="absolute top-[60%] right-[18%] animate-float-equipment opacity-20">
+          <Microscope className="w-12 h-12 text-white neon-glow-cyan" strokeWidth={1.5} />
+        </div>
+        <div className="absolute bottom-[35%] left-[8%] animate-float-equipment-delayed opacity-20">
+          <Droplet className="w-10 h-10 text-white neon-glow-blue" strokeWidth={1.5} />
+        </div>
+        <div className="absolute top-[40%] right-[8%] animate-float-equipment-slow opacity-20">
+          <Atom className="w-13 h-13 text-white neon-glow-orange" strokeWidth={1.5} />
+        </div>
+        
+        {/* Enhanced Particle Effects with Colors */}
+        {[...Array(20)].map((_, i) => (
           <div
             key={i}
-            className="particle absolute w-2 h-2 bg-white rounded-full opacity-70"
+            className="particle absolute rounded-full opacity-70"
             style={{
+              width: `${2 + Math.random() * 4}px`,
+              height: `${2 + Math.random() * 4}px`,
               left: `${Math.random() * 100}%`,
+              background: `hsl(${Math.random() * 360}, 80%, 60%)`,
+              boxShadow: `0 0 ${5 + Math.random() * 10}px currentColor`,
               animationDelay: `${Math.random() * 5}s`,
               animationDuration: `${5 + Math.random() * 5}s`,
             }}
           ></div>
         ))}
+        
+        {/* Diagonal Light Beams */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            {[...Array(3)].map((_, i) => (
+                <div
+                    key={i}
+                    className="light-beam absolute h-[200%] w-2 opacity-20"
+                    style={{
+                        left: `${20 + i * 30}%`,
+                        background: `linear-gradient(180deg, transparent, hsl(${200 + i * 60}, 80%, 60%), transparent)`,
+                        transform: 'rotate(45deg)',
+                        animation: `beam-move ${8 + i * 2}s ease-in-out infinite`,
+                        animationDelay: `${i * 1}s`,
+                        filter: 'blur(8px)'
+                    }}
+                />
+            ))}
+        </div>
         
         <style jsx>{`
             @keyframes gradient-flow {
@@ -429,13 +548,24 @@ export default function SplashScreen() {
             .animate-float-equipment-delayed { animation: float-equipment-delayed 12s ease-in-out infinite; }
             .animate-float-equipment-slow { animation: float-equipment-slow 14s ease-in-out infinite; }
             
+            .neon-glow-blue { filter: drop-shadow(0 0 10px #60A5FA) drop-shadow(0 0 20px #60A5FA); }
+            .neon-glow-pink { filter: drop-shadow(0 0 10px #EC4899) drop-shadow(0 0 20px #EC4899); }
+            .neon-glow-purple { filter: drop-shadow(0 0 10px #A78BFA) drop-shadow(0 0 20px #A78BFA); }
+            .neon-glow-cyan { filter: drop-shadow(0 0 10px #22D3EE) drop-shadow(0 0 20px #22D3EE); }
+            .neon-glow-orange { filter: drop-shadow(0 0 10px #F59E0B) drop-shadow(0 0 20px #F59E0B); }
+            
             @keyframes particle-float {
-                0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+                0% { transform: translateY(100vh) translateX(0) rotate(0deg); opacity: 0; }
                 10% { opacity: 0.7; }
                 90% { opacity: 0.7; }
-                100% { transform: translateY(-100vh) translateX(50px); opacity: 0; }
+                100% { transform: translateY(-100vh) translateX(50px) rotate(360deg); opacity: 0; }
             }
             .particle { animation: particle-float linear infinite; }
+            
+            @keyframes beam-move {
+                0%, 100% { transform: translateX(-50px) rotate(45deg); opacity: 0.1; }
+                50% { transform: translateX(50px) rotate(45deg); opacity: 0.3; }
+            }
             
             .title-container {
                 animation: fade-in-out 3s ease-in-out 1s forwards, fade-out 1s ease-in 7.8s forwards;
@@ -466,6 +596,22 @@ export default function SplashScreen() {
                 box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3), 0 0 60px rgba(236, 72, 153, 0.2);
                 animation: fade-in-out 3s ease-in-out 1.5s forwards, fade-out 1s ease-in 7.8s forwards, glow-pulse 2s ease-in-out 2s infinite;
                 opacity: 0;
+                position: relative;
+                overflow: hidden;
+            }
+            .premium-tagline::before {
+                content: '';
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+                animation: shimmer-move 3s linear infinite;
+            }
+            @keyframes shimmer-move {
+                0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+                100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
             }
             @keyframes glow-pulse {
                 0%, 100% { box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3), 0 0 60px rgba(236, 72, 153, 0.2); }
@@ -484,6 +630,8 @@ export default function SplashScreen() {
                 display: block; 
                 text-align: center;
                 text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+                position: relative;
+                z-index: 1;
             }
             @keyframes text-shimmer {
                 0%, 100% { background-position: 0% 50%; }
@@ -494,6 +642,8 @@ export default function SplashScreen() {
                 justify-content: center; 
                 gap: 0.75rem; 
                 margin-top: 0.5rem; 
+                position: relative;
+                z-index: 1;
             }
             .star { 
                 display: inline-block; 
