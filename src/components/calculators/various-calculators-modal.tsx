@@ -26,11 +26,12 @@ import { componentProps, chemicals } from "@/lib/data";
 import { getSnf } from "@/lib/utils";
 import { cn } from "@/lib/utils"; 
 import { 
-  CheckCircle, PlusCircle, XCircle, Beaker, Thermometer, Weight, Percent, Scaling, 
-  Combine, Calculator, FlaskConical, ArrowLeft, RotateCw, Dna, Atom, Droplet, 
-  DollarSign, Microscope, Recycle, Bug, ShieldCheck, FileSpreadsheet, Search, 
-  Wind, Factory, Info, TrendingDown, TrendingUp, FlaskRound as Flask, AlertCircle, Sparkles 
-} from "lucide-react";
+    CheckCircle, PlusCircle, XCircle, Beaker, Thermometer, Weight, Percent, Scaling, 
+    Combine, Calculator, FlaskConical, ArrowLeft, RotateCw, Dna, Atom, Droplet, 
+    DollarSign, Microscope, Recycle, Bug, ShieldCheck, FileSpreadsheet, Search, 
+    Wind, Factory, Info, TrendingDown, TrendingUp, FlaskRound as Flask, AlertCircle, Sparkles,
+    ChevronDown  // 👈 Yeh add karo
+  } from "lucide-react";  
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { QRCodeSVG } from "qrcode.react"; // Ensure you run: npm install qrcode.react
@@ -6714,6 +6715,36 @@ function GravimetricAnalysisCalc() {
         }
     };
 
+    // Helper to get styling based on selection
+    const getActiveMetadata = () => {
+        switch (activeCalc) {
+            case 'ash': 
+                return { 
+                    icon: Weight, 
+                    color: 'text-orange-600', 
+                    bg: 'bg-orange-50', 
+                    borderColor: 'focus:ring-orange-500' 
+                };
+            case 'fat-on-dry-basis': 
+                return { 
+                    icon: Percent, 
+                    color: 'text-purple-600', 
+                    bg: 'bg-purple-50', 
+                    borderColor: 'focus:ring-purple-500' 
+                };
+            default: 
+                return { 
+                    icon: Droplet, 
+                    color: 'text-blue-600', 
+                    bg: 'bg-blue-50', 
+                    borderColor: 'focus:ring-blue-500' 
+                };
+        }
+    };
+
+    const meta = getActiveMetadata();
+    const ActiveIcon = meta.icon;
+
     return (
         <CalculatorCard 
             title="⚖️ Gravimetric Analysis Calculators" 
@@ -6721,54 +6752,35 @@ function GravimetricAnalysisCalc() {
         >
             <div className="mb-6">
                 <Label className="text-base font-semibold mb-3 block">Select Analysis Type</Label>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    <button
-                        onClick={() => setActiveCalc('moisture-ts')}
-                        className={`p-4 rounded-xl border-2 transition-all duration-300 ${
-                            activeCalc === 'moisture-ts'
-                                ? 'border-blue-500 bg-blue-50 shadow-lg scale-105'
-                                : 'border-gray-200 hover:border-blue-300 hover:bg-gray-50'
-                        }`}
+                
+                <div className="relative">
+                    {/* Visual Icon on the left */}
+                    <div className={`absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded-lg ${meta.bg} transition-colors duration-300`}>
+                        <ActiveIcon className={`w-5 h-5 ${meta.color}`} />
+                    </div>
+
+                    {/* The Dropdown */}
+                    <select
+                        value={activeCalc}
+                        onChange={(e) => setActiveCalc(e.target.value)}
+                        className={`w-full pl-14 pr-10 py-4 text-base bg-white border-2 border-gray-200 rounded-xl appearance-none cursor-pointer outline-none transition-all duration-300 ${meta.borderColor} focus:ring-4 focus:ring-opacity-20 hover:border-gray-300`}
                     >
-                        <Droplet className={`mx-auto mb-2 ${activeCalc === 'moisture-ts' ? 'text-blue-600' : 'text-gray-500'}`} size={28} />
-                        <div className={`font-semibold ${activeCalc === 'moisture-ts' ? 'text-blue-700' : 'text-gray-700'}`}>
-                            Moisture & TS
-                        </div>
-                        <div className="text-xs text-gray-500 mt-1">Oven drying method</div>
-                    </button>
-                    
-                    <button
-                        onClick={() => setActiveCalc('ash')}
-                        className={`p-4 rounded-xl border-2 transition-all duration-300 ${
-                            activeCalc === 'ash'
-                                ? 'border-orange-500 bg-orange-50 shadow-lg scale-105'
-                                : 'border-gray-200 hover:border-orange-300 hover:bg-gray-50'
-                        }`}
-                    >
-                        <Weight className={`mx-auto mb-2 ${activeCalc === 'ash' ? 'text-orange-600' : 'text-gray-500'}`} size={28} />
-                        <div className={`font-semibold ${activeCalc === 'ash' ? 'text-orange-700' : 'text-gray-700'}`}>
-                            Ash Content
-                        </div>
-                        <div className="text-xs text-gray-500 mt-1">Incineration method</div>
-                    </button>
-                    
-                    <button
-                        onClick={() => setActiveCalc('fat-on-dry-basis')}
-                        className={`p-4 rounded-xl border-2 transition-all duration-300 ${
-                            activeCalc === 'fat-on-dry-basis'
-                                ? 'border-purple-500 bg-purple-50 shadow-lg scale-105'
-                                : 'border-gray-200 hover:border-purple-300 hover:bg-gray-50'
-                        }`}
-                    >
-                        <Percent className={`mx-auto mb-2 ${activeCalc === 'fat-on-dry-basis' ? 'text-purple-600' : 'text-gray-500'}`} size={28} />
-                        <div className={`font-semibold ${activeCalc === 'fat-on-dry-basis' ? 'text-purple-700' : 'text-gray-700'}`}>
-                            Fat on Dry Basis
-                        </div>
-                        <div className="text-xs text-gray-500 mt-1">Moisture correction</div>
-                    </button>
+                        <option value="moisture-ts">Moisture & Total Solids (Oven Method)</option>
+                        <option value="ash">Ash Content (Incineration)</option>
+                        <option value="fat-on-dry-basis">Fat on Dry Basis (Correction)</option>
+                    </select>
+
+                    {/* Custom Arrow Icon on the right */}
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
+                        <ChevronDown size={20} />
+                    </div>
                 </div>
             </div>
-            {renderCalculator()}
+
+            {/* Dynamic Content Render */}
+            <div className="transition-all duration-300 ease-in-out">
+                {renderCalculator()}
+            </div>
         </CalculatorCard>
     );
 }
