@@ -2198,25 +2198,102 @@ function OilPercentCalc() {
 
 function MilkPricingCalculators() {
     const [activeTab, setActiveTab] = useState("two-axis");
+    
+    // Pricing options with icons and descriptions
+    const pricingOptions = {
+        'two-axis': {
+            icon: <DollarSign className="text-green-600" size={20} />,
+            label: 'Two-Axis Pricing',
+            desc: 'Fat + SNF based pricing'
+        },
+        'point-based': {
+            icon: <Calculator className="text-blue-600" size={20} />,
+            label: 'Point-Based Pricing',
+            desc: 'Quality points system'
+        }
+    };
+    
+    const renderCalculator = () => {
+        switch (activeTab) {
+            case 'point-based':
+                return <PointBasedPricingCalc />;
+            case 'two-axis':
+            default:
+                return <TwoAxisPricingCalc />;
+        }
+    };
+    
     return (
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="two-axis">Two-Axis Pricing</TabsTrigger>
-                <TabsTrigger value="point-based">Point-Based Pricing</TabsTrigger>
-            </TabsList>
-            <TabsContent value="two-axis" className="pt-4">
-                <TwoAxisPricingCalc />
-            </TabsContent>
-            <TabsContent value="point-based" className="pt-4">
-                <PointBasedPricingCalc />
-            </TabsContent>
-        </Tabs>
-    )
+        <CalculatorCard 
+            title="💰 Milk Pricing Calculators" 
+            description="Calculate milk prices using different pricing methods"
+        >
+            <div className="mb-6">
+                <Label className="text-base font-semibold mb-3 block">Select Pricing Method</Label>
+                
+                {/* DROPDOWN */}
+                <Select value={activeTab} onValueChange={setActiveTab}>
+                    <SelectTrigger className="w-full h-16 text-base">
+                        <div className="flex items-center gap-3">
+                            {pricingOptions[activeTab].icon}
+                            <div className="text-left">
+                                <div className="font-semibold">
+                                    {pricingOptions[activeTab].label}
+                                </div>
+                                <div className="text-xs text-gray-500">
+                                    {pricingOptions[activeTab].desc}
+                                </div>
+                            </div>
+                        </div>
+                    </SelectTrigger>
+                    
+                    <SelectContent className="z-[99999]" position="popper">
+                        <SelectItem value="two-axis" className="cursor-pointer">
+                            <div className="py-1">
+                                <div className="font-medium">💰 Two-Axis Pricing</div>
+                                <div className="text-xs text-gray-500">Fat + SNF based pricing</div>
+                            </div>
+                        </SelectItem>
+                        
+                        <SelectItem value="point-based" className="cursor-pointer">
+                            <div className="py-1">
+                                <div className="font-medium">📊 Point-Based Pricing</div>
+                                <div className="text-xs text-gray-500">Quality points system</div>
+                            </div>
+                        </SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
+            
+            <div className="pt-4">
+                {renderCalculator()}
+            </div>
+        </CalculatorCard>
+    );
 }
 
 // ===== 🧪 RM & POLENSKE VALUE CALCULATORS =====
 function RMPVCalc() {
     const [activeCalc, setActiveCalc] = useState('rm-volume');
+
+    // Calculator options with icons
+    const calculatorOptions = {
+        'rm-volume': {
+            icon: <FlaskConical className="text-orange-600" size={20} />,
+            label: 'RM Value (Volume)',
+            desc: 'Standard method'
+        },
+        'rm-weight': {
+            icon: <Weight className="text-amber-600" size={20} />,
+            label: 'RM Value (Weight)',
+            desc: 'Adjusted method'
+        },
+        'pv': {
+            icon: <Beaker className="text-rose-600" size={20} />,
+            label: 'Polenske Value',
+            desc: 'Insoluble acids'
+        }
+    };
 
     const renderCalculator = () => {
         switch (activeCalc) {
@@ -2237,53 +2314,48 @@ function RMPVCalc() {
         >
             <div className="mb-6">
                 <Label className="text-base font-semibold mb-3 block">Select Calculator Type</Label>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    <button
-                        onClick={() => setActiveCalc('rm-volume')}
-                        className={`p-4 rounded-xl border-2 transition-all duration-300 ${
-                            activeCalc === 'rm-volume'
-                                ? 'border-orange-500 bg-orange-50 shadow-lg scale-105'
-                                : 'border-gray-200 hover:border-orange-300 hover:bg-gray-50'
-                        }`}
-                    >
-                        <FlaskConical className={`mx-auto mb-2 ${activeCalc === 'rm-volume' ? 'text-orange-600' : 'text-gray-500'}`} size={28} />
-                        <div className={`font-semibold ${activeCalc === 'rm-volume' ? 'text-orange-700' : 'text-gray-700'}`}>
-                            RM Value (Volume)
+                
+                {/* DROPDOWN WITH ICON IN TRIGGER */}
+                <Select value={activeCalc} onValueChange={setActiveCalc}>
+                    <SelectTrigger className="w-full h-16 text-base">
+                        <div className="flex items-center gap-3">
+                            {calculatorOptions[activeCalc].icon}
+                            <div className="text-left">
+                                <div className="font-semibold">
+                                    {calculatorOptions[activeCalc].label}
+                                </div>
+                                <div className="text-xs text-gray-500">
+                                    {calculatorOptions[activeCalc].desc}
+                                </div>
+                            </div>
                         </div>
-                        <div className="text-xs text-gray-500 mt-1">Standard method</div>
-                    </button>
+                    </SelectTrigger>
                     
-                    <button
-                        onClick={() => setActiveCalc('rm-weight')}
-                        className={`p-4 rounded-xl border-2 transition-all duration-300 ${
-                            activeCalc === 'rm-weight'
-                                ? 'border-amber-500 bg-amber-50 shadow-lg scale-105'
-                                : 'border-gray-200 hover:border-amber-300 hover:bg-gray-50'
-                        }`}
-                    >
-                        <Weight className={`mx-auto mb-2 ${activeCalc === 'rm-weight' ? 'text-amber-600' : 'text-gray-500'}`} size={28} />
-                        <div className={`font-semibold ${activeCalc === 'rm-weight' ? 'text-amber-700' : 'text-gray-700'}`}>
-                            RM Value (Weight)
-                        </div>
-                        <div className="text-xs text-gray-500 mt-1">Adjusted method</div>
-                    </button>
-                    
-                    <button
-                        onClick={() => setActiveCalc('pv')}
-                        className={`p-4 rounded-xl border-2 transition-all duration-300 ${
-                            activeCalc === 'pv'
-                                ? 'border-rose-500 bg-rose-50 shadow-lg scale-105'
-                                : 'border-gray-200 hover:border-rose-300 hover:bg-gray-50'
-                        }`}
-                    >
-                        <Beaker className={`mx-auto mb-2 ${activeCalc === 'pv' ? 'text-rose-600' : 'text-gray-500'}`} size={28} />
-                        <div className={`font-semibold ${activeCalc === 'pv' ? 'text-rose-700' : 'text-gray-700'}`}>
-                            Polenske Value
-                        </div>
-                        <div className="text-xs text-gray-500 mt-1">Insoluble acids</div>
-                    </button>
-                </div>
+                    <SelectContent className="z-[99999]" position="popper">
+                        <SelectItem value="rm-volume" className="cursor-pointer">
+                            <div className="py-1">
+                                <div className="font-medium">🧪 RM Value (Volume)</div>
+                                <div className="text-xs text-gray-500">Standard method</div>
+                            </div>
+                        </SelectItem>
+                        
+                        <SelectItem value="rm-weight" className="cursor-pointer">
+                            <div className="py-1">
+                                <div className="font-medium">⚖️ RM Value (Weight)</div>
+                                <div className="text-xs text-gray-500">Adjusted method</div>
+                            </div>
+                        </SelectItem>
+                        
+                        <SelectItem value="pv" className="cursor-pointer">
+                            <div className="py-1">
+                                <div className="font-medium">🧫 Polenske Value</div>
+                                <div className="text-xs text-gray-500">Insoluble acids</div>
+                            </div>
+                        </SelectItem>
+                    </SelectContent>
+                </Select>
             </div>
+            
             {renderCalculator()}
         </CalculatorCard>
     );
@@ -3712,6 +3784,25 @@ function PointBasedPricingCalc() {
 function CreamCalculators() {
     const [activeCalc, setActiveCalc] = useState('cream-dilution');
 
+    // Cream calculator options with icons
+    const creamOptions = {
+        'cream-dilution': {
+            icon: <Droplet className="text-sky-600" size={20} />,
+            label: 'Cream Dilution',
+            desc: 'Water addition calculation'
+        },
+        'fat-percent': {
+            icon: <Percent className="text-yellow-600" size={20} />,
+            label: 'Fat Percentage',
+            desc: 'Gerber method'
+        },
+        'actual-snf': {
+            icon: <Calculator className="text-purple-600" size={20} />,
+            label: 'Actual SNF',
+            desc: 'From TS & Fat'
+        }
+    };
+
     const renderCalculator = () => {
         switch (activeCalc) {
             case 'fat-percent':
@@ -3731,53 +3822,48 @@ function CreamCalculators() {
         >
             <div className="mb-6">
                 <Label className="text-base font-semibold mb-3 block">Select Calculator Type</Label>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    <button
-                        onClick={() => setActiveCalc('cream-dilution')}
-                        className={`p-4 rounded-xl border-2 transition-all duration-300 ${
-                            activeCalc === 'cream-dilution'
-                                ? 'border-sky-500 bg-sky-50 shadow-lg scale-105'
-                                : 'border-gray-200 hover:border-sky-300 hover:bg-gray-50'
-                        }`}
-                    >
-                        <Droplet className={`mx-auto mb-2 ${activeCalc === 'cream-dilution' ? 'text-sky-600' : 'text-gray-500'}`} size={28} />
-                        <div className={`font-semibold ${activeCalc === 'cream-dilution' ? 'text-sky-700' : 'text-gray-700'}`}>
-                            Cream Dilution
+                
+                {/* DROPDOWN */}
+                <Select value={activeCalc} onValueChange={setActiveCalc}>
+                    <SelectTrigger className="w-full h-16 text-base">
+                        <div className="flex items-center gap-3">
+                            {creamOptions[activeCalc].icon}
+                            <div className="text-left">
+                                <div className="font-semibold">
+                                    {creamOptions[activeCalc].label}
+                                </div>
+                                <div className="text-xs text-gray-500">
+                                    {creamOptions[activeCalc].desc}
+                                </div>
+                            </div>
                         </div>
-                        <div className="text-xs text-gray-500 mt-1">Water addition</div>
-                    </button>
+                    </SelectTrigger>
                     
-                    <button
-                        onClick={() => setActiveCalc('fat-percent')}
-                        className={`p-4 rounded-xl border-2 transition-all duration-300 ${
-                            activeCalc === 'fat-percent'
-                                ? 'border-yellow-500 bg-yellow-50 shadow-lg scale-105'
-                                : 'border-gray-200 hover:border-yellow-300 hover:bg-gray-50'
-                        }`}
-                    >
-                        <Percent className={`mx-auto mb-2 ${activeCalc === 'fat-percent' ? 'text-yellow-600' : 'text-gray-500'}`} size={28} />
-                        <div className={`font-semibold ${activeCalc === 'fat-percent' ? 'text-yellow-700' : 'text-gray-700'}`}>
-                            Fat Percentage
-                        </div>
-                        <div className="text-xs text-gray-500 mt-1">Gerber method</div>
-                    </button>
-                    
-                    <button
-                        onClick={() => setActiveCalc('actual-snf')}
-                        className={`p-4 rounded-xl border-2 transition-all duration-300 ${
-                            activeCalc === 'actual-snf'
-                                ? 'border-purple-500 bg-purple-50 shadow-lg scale-105'
-                                : 'border-gray-200 hover:border-purple-300 hover:bg-gray-50'
-                        }`}
-                    >
-                        <Calculator className={`mx-auto mb-2 ${activeCalc === 'actual-snf' ? 'text-purple-600' : 'text-gray-500'}`} size={28} />
-                        <div className={`font-semibold ${activeCalc === 'actual-snf' ? 'text-purple-700' : 'text-gray-700'}`}>
-                            Actual SNF
-                        </div>
-                        <div className="text-xs text-gray-500 mt-1">From TS & Fat</div>
-                    </button>
-                </div>
+                    <SelectContent className="z-[99999]" position="popper">
+                        <SelectItem value="cream-dilution" className="cursor-pointer">
+                            <div className="py-1">
+                                <div className="font-medium">💧 Cream Dilution</div>
+                                <div className="text-xs text-gray-500">Water addition calculation</div>
+                            </div>
+                        </SelectItem>
+                        
+                        <SelectItem value="fat-percent" className="cursor-pointer">
+                            <div className="py-1">
+                                <div className="font-medium">📊 Fat Percentage</div>
+                                <div className="text-xs text-gray-500">Gerber method</div>
+                            </div>
+                        </SelectItem>
+                        
+                        <SelectItem value="actual-snf" className="cursor-pointer">
+                            <div className="py-1">
+                                <div className="font-medium">🧮 Actual SNF</div>
+                                <div className="text-xs text-gray-500">From TS & Fat</div>
+                            </div>
+                        </SelectItem>
+                    </SelectContent>
+                </Select>
             </div>
+            
             {renderCalculator()}
         </CalculatorCard>
     );
@@ -5104,6 +5190,35 @@ function MineralAnalysisCalc() {
 function ProteinCaseinCalc() {
     const [activeCalc, setActiveCalc] = useState<'kjeldahl' | 'formol' | 'casein-titration' | 'casein-factor' | 'protein-factor'>('kjeldahl');
 
+    // Protein analysis options with icons
+    const proteinOptions = {
+        'kjeldahl': {
+            icon: <Dna className="text-violet-600" size={20} />,
+            label: 'Kjeldahl Method',
+            desc: 'Protein by Kjeldahl'
+        },
+        'formol': {
+            icon: <Beaker className="text-blue-600" size={20} />,
+            label: 'Formol Titration',
+            desc: 'Protein by formol'
+        },
+        'casein-titration': {
+            icon: <FlaskConical className="text-green-600" size={20} />,
+            label: 'Casein Titration',
+            desc: 'Direct casein analysis'
+        },
+        'casein-factor': {
+            icon: <Calculator className="text-orange-600" size={20} />,
+            label: 'Casein Estimation',
+            desc: 'From protein %'
+        },
+        'protein-factor': {
+            icon: <Percent className="text-pink-600" size={20} />,
+            label: 'Protein Estimation',
+            desc: 'From casein %'
+        }
+    };
+
     const renderCalculator = () => {
         switch (activeCalc) {
             case 'formol': return <FormolTitrationCalc />;
@@ -5122,78 +5237,62 @@ function ProteinCaseinCalc() {
         >
             <div className="mb-6">
                 <Label className="text-base font-semibold mb-3 block">Select Analysis Method</Label>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-                    <button
-                        onClick={() => setActiveCalc('kjeldahl')}
-                        className={`p-3 rounded-xl border-2 transition-all duration-300 ${
-                            activeCalc === 'kjeldahl'
-                                ? 'border-violet-500 bg-violet-50 shadow-lg scale-105'
-                                : 'border-gray-200 hover:border-violet-300 hover:bg-gray-50'
-                        }`}
-                    >
-                        <Dna className={`mx-auto mb-1 ${activeCalc === 'kjeldahl' ? 'text-violet-600' : 'text-gray-500'}`} size={24} />
-                        <div className={`font-semibold text-xs ${activeCalc === 'kjeldahl' ? 'text-violet-700' : 'text-gray-700'}`}>
-                            Kjeldahl
+                
+                {/* DROPDOWN */}
+                <Select value={activeCalc} onValueChange={(value) => setActiveCalc(value as typeof activeCalc)}>
+                    <SelectTrigger className="w-full h-16 text-base">
+                        <div className="flex items-center gap-3">
+                            {proteinOptions[activeCalc].icon}
+                            <div className="text-left">
+                                <div className="font-semibold">
+                                    {proteinOptions[activeCalc].label}
+                                </div>
+                                <div className="text-xs text-gray-500">
+                                    {proteinOptions[activeCalc].desc}
+                                </div>
+                            </div>
                         </div>
-                    </button>
+                    </SelectTrigger>
                     
-                    <button
-                        onClick={() => setActiveCalc('formol')}
-                        className={`p-3 rounded-xl border-2 transition-all duration-300 ${
-                            activeCalc === 'formol'
-                                ? 'border-blue-500 bg-blue-50 shadow-lg scale-105'
-                                : 'border-gray-200 hover:border-blue-300 hover:bg-gray-50'
-                        }`}
-                    >
-                        <Beaker className={`mx-auto mb-1 ${activeCalc === 'formol' ? 'text-blue-600' : 'text-gray-500'}`} size={24} />
-                        <div className={`font-semibold text-xs ${activeCalc === 'formol' ? 'text-blue-700' : 'text-gray-700'}`}>
-                            Formol
-                        </div>
-                    </button>
-                    
-                    <button
-                        onClick={() => setActiveCalc('casein-titration')}
-                        className={`p-3 rounded-xl border-2 transition-all duration-300 ${
-                            activeCalc === 'casein-titration'
-                                ? 'border-green-500 bg-green-50 shadow-lg scale-105'
-                                : 'border-gray-200 hover:border-green-300 hover:bg-gray-50'
-                        }`}
-                    >
-                        <FlaskConical className={`mx-auto mb-1 ${activeCalc === 'casein-titration' ? 'text-green-600' : 'text-gray-500'}`} size={24} />
-                        <div className={`font-semibold text-xs ${activeCalc === 'casein-titration' ? 'text-green-700' : 'text-gray-700'}`}>
-                            Casein Titr.
-                        </div>
-                    </button>
-                    
-                    <button
-                        onClick={() => setActiveCalc('casein-factor')}
-                        className={`p-3 rounded-xl border-2 transition-all duration-300 ${
-                            activeCalc === 'casein-factor'
-                                ? 'border-orange-500 bg-orange-50 shadow-lg scale-105'
-                                : 'border-gray-200 hover:border-orange-300 hover:bg-gray-50'
-                        }`}
-                    >
-                        <Calculator className={`mx-auto mb-1 ${activeCalc === 'casein-factor' ? 'text-orange-600' : 'text-gray-500'}`} size={24} />
-                        <div className={`font-semibold text-xs ${activeCalc === 'casein-factor' ? 'text-orange-700' : 'text-gray-700'}`}>
-                            Casein Est.
-                        </div>
-                    </button>
-                    
-                    <button
-                        onClick={() => setActiveCalc('protein-factor')}
-                        className={`p-3 rounded-xl border-2 transition-all duration-300 ${
-                            activeCalc === 'protein-factor'
-                                ? 'border-pink-500 bg-pink-50 shadow-lg scale-105'
-                                : 'border-gray-200 hover:border-pink-300 hover:bg-gray-50'
-                        }`}
-                    >
-                        <Percent className={`mx-auto mb-1 ${activeCalc === 'protein-factor' ? 'text-pink-600' : 'text-gray-500'}`} size={24} />
-                        <div className={`font-semibold text-xs ${activeCalc === 'protein-factor' ? 'text-pink-700' : 'text-gray-700'}`}>
-                            Protein Est.
-                        </div>
-                    </button>
-                </div>
+                    <SelectContent className="z-[99999]" position="popper">
+                        <SelectItem value="kjeldahl" className="cursor-pointer">
+                            <div className="py-1">
+                                <div className="font-medium">🧬 Kjeldahl Method</div>
+                                <div className="text-xs text-gray-500">Protein by Kjeldahl</div>
+                            </div>
+                        </SelectItem>
+                        
+                        <SelectItem value="formol" className="cursor-pointer">
+                            <div className="py-1">
+                                <div className="font-medium">🧪 Formol Titration</div>
+                                <div className="text-xs text-gray-500">Protein by formol</div>
+                            </div>
+                        </SelectItem>
+                        
+                        <SelectItem value="casein-titration" className="cursor-pointer">
+                            <div className="py-1">
+                                <div className="font-medium">⚗️ Casein Titration</div>
+                                <div className="text-xs text-gray-500">Direct casein analysis</div>
+                            </div>
+                        </SelectItem>
+                        
+                        <SelectItem value="casein-factor" className="cursor-pointer">
+                            <div className="py-1">
+                                <div className="font-medium">🧮 Casein Estimation</div>
+                                <div className="text-xs text-gray-500">From protein %</div>
+                            </div>
+                        </SelectItem>
+                        
+                        <SelectItem value="protein-factor" className="cursor-pointer">
+                            <div className="py-1">
+                                <div className="font-medium">📊 Protein Estimation</div>
+                                <div className="text-xs text-gray-500">From casein %</div>
+                            </div>
+                        </SelectItem>
+                    </SelectContent>
+                </Select>
             </div>
+            
             {renderCalculator()}
         </CalculatorCard>
     );
@@ -8234,32 +8333,62 @@ function SolutionStrengthCalc() {
             description="Check and adjust cleaning solution concentrations for dairy CIP systems"
         >
             <div className="space-y-6">
-                {/* Solution Selector */}
+                {/* ===== DROPDOWN SELECTOR ===== */}
                 <div>
                     <Label className="text-base font-semibold mb-3 block">Select CIP Solution</Label>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                        {Object.entries(calculatorInfo).map(([key, info]) => (
-                            <button
-                                key={key}
-                                onClick={() => {
-                                    setActiveCalc(key);
-                                    setCurrentStrength(null);
-                                    setInputs(prev => ({...prev, titreValue: '', targetStrength: '', currentVolume: ''}));
-                                }}
-                                className={`p-4 rounded-xl border-2 transition-all duration-300 ${
-                                    activeCalc === key
-                                        ? `${info.borderColor} bg-gradient-to-br ${info.color} shadow-lg scale-105`
-                                        : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                                }`}
-                            >
-                                <Beaker className={`mx-auto mb-2 ${activeCalc === key ? info.iconColor : 'text-gray-500'}`} size={24} />
-                                <div className={`font-semibold text-sm ${activeCalc === key ? info.textColor : 'text-gray-700'}`}>
-                                    {info.chemical}
+                    
+                    <Select 
+                        value={activeCalc} 
+                        onValueChange={(value) => {
+                            setActiveCalc(value);
+                            setCurrentStrength(null);
+                            setInputs(prev => ({...prev, titreValue: '', targetStrength: '', currentVolume: ''}));
+                        }}
+                    >
+                        <SelectTrigger className="w-full h-16 text-base">
+                            <div className="flex items-center gap-3">
+                                <Beaker className={currentCalc.iconColor} size={20} />
+                                <div className="text-left">
+                                    <div className="font-semibold">
+                                        {currentCalc.fullName}
+                                    </div>
+                                    <div className="text-xs text-gray-500">
+                                        {currentCalc.ranges.normal}{currentCalc.unit} • {currentCalc.tempRange}
+                                    </div>
                                 </div>
-                                <div className="text-xs text-gray-500 mt-1">{info.ranges.normal}{info.unit}</div>
-                            </button>
-                        ))}
-                    </div>
+                            </div>
+                        </SelectTrigger>
+                        
+                        <SelectContent className="z-[99999]" position="popper">
+                            <SelectItem value="naoh" className="cursor-pointer">
+                                <div className="py-1">
+                                    <div className="font-medium">🧪 NaOH - Caustic Soda</div>
+                                    <div className="text-xs text-gray-500">1.5% • Removes fats & proteins</div>
+                                </div>
+                            </SelectItem>
+                            
+                            <SelectItem value="hno3" className="cursor-pointer">
+                                <div className="py-1">
+                                    <div className="font-medium">🔴 HNO₃ - Nitric Acid</div>
+                                    <div className="text-xs text-gray-500">1.0% • Removes mineral deposits</div>
+                                </div>
+                            </SelectItem>
+                            
+                            <SelectItem value="h3po4" className="cursor-pointer">
+                                <div className="py-1">
+                                    <div className="font-medium">🟡 H₃PO₄ - Phosphoric Acid</div>
+                                    <div className="text-xs text-gray-500">1.0% • Removes milkstone</div>
+                                </div>
+                            </SelectItem>
+                            
+                            <SelectItem value="chlorine" className="cursor-pointer">
+                                <div className="py-1">
+                                    <div className="font-medium">🟢 Chlorine - Sanitizer</div>
+                                    <div className="text-xs text-gray-500">100ppm • Microbial control</div>
+                                </div>
+                            </SelectItem>
+                        </SelectContent>
+                    </Select>
                 </div>
 
                 {/* Strength Check Section */}
