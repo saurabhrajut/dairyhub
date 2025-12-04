@@ -9,6 +9,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "../ui/button";
 import { 
     ArrowLeft, 
@@ -48,19 +49,19 @@ import { boilerContent } from "@/lib/content/dairy-processing/boiler";
 
 // ✅ Configuration for Icons and Colors
 const processingConfig: Record<string, { icon: any, color: string }> = {
-    "pasteurization": { icon: Thermometer, color: "from-orange-500 to-red-500" }, // Heat
-    "standardization": { icon: Settings, color: "from-blue-500 to-indigo-600" }, // Adjustment
-    "separation": { icon: Layers, color: "from-cyan-400 to-blue-500" }, // Layers
-    "clarification": { icon: Filter, color: "from-teal-400 to-emerald-500" }, // Cleaning
-    "homogenization": { icon: Combine, color: "from-violet-500 to-purple-600" }, // Mixing
-    "refrigeration": { icon: Snowflake, color: "from-sky-400 to-blue-600" }, // Cold
-    "sterilization": { icon: Flame, color: "from-red-500 to-rose-600" }, // High Heat
-    "evaporation": { icon: CloudFog, color: "from-gray-400 to-slate-500" }, // Steam/Vapor
-    "uht": { icon: Zap, color: "from-orange-400 to-amber-500" }, // Rapid/Intense
-    "spray-drying": { icon: Wind, color: "from-yellow-400 to-orange-400" }, // Air/Drying
-    "fermentation": { icon: FlaskConical, color: "from-green-500 to-emerald-700" }, // Biology
-    "churning": { icon: RotateCw, color: "from-yellow-300 to-amber-400" }, // Rotation
-    "boiler": { icon: Factory, color: "from-slate-500 to-gray-700" }, // Industry
+    "pasteurization": { icon: Thermometer, color: "from-orange-500 to-red-500" },
+    "standardization": { icon: Settings, color: "from-blue-500 to-indigo-600" },
+    "separation": { icon: Layers, color: "from-cyan-400 to-blue-500" },
+    "clarification": { icon: Filter, color: "from-teal-400 to-emerald-500" },
+    "homogenization": { icon: Combine, color: "from-violet-500 to-purple-600" },
+    "refrigeration": { icon: Snowflake, color: "from-sky-400 to-blue-600" },
+    "sterilization": { icon: Flame, color: "from-red-500 to-rose-600" },
+    "evaporation": { icon: CloudFog, color: "from-gray-400 to-slate-500" },
+    "uht": { icon: Zap, color: "from-orange-400 to-amber-500" },
+    "spray-drying": { icon: Wind, color: "from-yellow-400 to-orange-400" },
+    "fermentation": { icon: FlaskConical, color: "from-green-500 to-emerald-700" },
+    "churning": { icon: RotateCw, color: "from-yellow-300 to-amber-400" },
+    "boiler": { icon: Factory, color: "from-slate-500 to-gray-700" },
 };
 
 const Section = ({ title, children }: { title: string, children: React.ReactNode }) => (
@@ -73,8 +74,27 @@ const Section = ({ title, children }: { title: string, children: React.ReactNode
 );
 
 const TopicContent = ({ content }: { content: any }) => {
+  const [activeTab, setActiveTab] = useState("info");
     if (!content) return <p>Content will be available soon.</p>;
     
+    if (content.simulation) {
+      return (
+          <Tabs value={activeTab} onValueChange={setActiveTab}>
+              <TabsList>
+                  <TabsTrigger value="info">Information</TabsTrigger>
+                  <TabsTrigger value="simulation">3D Simulation</TabsTrigger>
+              </TabsList>
+              <TabsContent value="info">
+                  <Section title={content.title}>
+                      <div dangerouslySetInnerHTML={{ __html: content.content }} />
+                  </Section>
+              </TabsContent>
+              <TabsContent value="simulation" className="h-[70vh]">
+                   <iframe srcDoc={content.simulation} style={{ width: '100%', height: '100%', border: 'none' }} title="Processing Simulation" />
+              </TabsContent>
+          </Tabs>
+      )
+  } 
     return (
         <Section title={content.title}>
             <div dangerouslySetInnerHTML={{ __html: content.content }} />
@@ -106,7 +126,6 @@ export function DairyProcessingModal({ isOpen, setIsOpen }: { isOpen: boolean; s
 
   const topics = Object.keys(topicMap).map(key => {
     const topic = topicMap[key as keyof typeof topicMap];
-    // ✅ Get config or default
     const config = processingConfig[key] || { icon: Cog, color: "from-gray-400 to-gray-600" };
 
     return {
@@ -145,7 +164,6 @@ export function DairyProcessingModal({ isOpen, setIsOpen }: { isOpen: boolean; s
     }
   }, [activeTopic]);
 
-
   const selectedTopic = activeTopic ? topicMap[activeTopic as keyof typeof topicMap] : null;
   const selectedConfig = activeTopic ? processingConfig[activeTopic] : null;
 
@@ -156,18 +174,15 @@ export function DairyProcessingModal({ isOpen, setIsOpen }: { isOpen: boolean; s
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      {/* ✅ Mobile Width Fix */}
       <DialogContent className="max-w-4xl lg:max-w-6xl w-[95vw] h-full max-h-[90vh] flex flex-col p-0 sm:p-6 bg-gradient-to-br from-slate-50 to-slate-100">
         
         {activeTopic && selectedTopic ? (
-             // === ACTIVE VIEW ===
             <div className="flex-1 flex flex-col min-h-0">
                 <DialogHeader className="flex-row items-center space-x-4 pr-6 shrink-0 p-4 sm:p-0">
                     <Button variant="ghost" size="icon" onClick={handleBack} className="shrink-0 hover:bg-white/50">
                         <ArrowLeft className="h-5 w-5" />
                     </Button>
                     <div className="flex items-center gap-3">
-                         {/* ✅ Colorful Header Icon */}
                         <div className={cn("p-2 rounded-lg bg-gradient-to-br text-white shadow-md", selectedConfig?.color)}>
                              {selectedConfig && <selectedConfig.icon className="h-5 w-5" />}
                         </div>
@@ -189,7 +204,6 @@ export function DairyProcessingModal({ isOpen, setIsOpen }: { isOpen: boolean; s
                 </ScrollArea>
             </div>
         ) : (
-             // === DASHBOARD GRID VIEW ===
              <>
                 <DialogHeader className="p-4 sm:p-0 shrink-0">
                     <div className="flex justify-center mb-4">
@@ -206,7 +220,6 @@ export function DairyProcessingModal({ isOpen, setIsOpen }: { isOpen: boolean; s
                 </DialogHeader>
 
                 <ScrollArea className="flex-1 mt-4 sm:pr-4" viewportRef={scrollAreaRef}>
-                    {/* ✅ Colorful Grid */}
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 p-4">
                         {topics.map(topic => (
                             <button
@@ -214,7 +227,6 @@ export function DairyProcessingModal({ isOpen, setIsOpen }: { isOpen: boolean; s
                                 onClick={() => handleSelectTopic(topic.value)}
                                 className="group relative flex flex-col items-center justify-center p-4 bg-white hover:shadow-xl rounded-2xl border-2 border-transparent hover:border-primary/20 text-center aspect-square transition-all duration-300 transform hover:scale-105"
                             >
-                                {/* ✅ Gradient Circle */}
                                 <div className={cn(
                                     "p-4 rounded-full bg-gradient-to-br text-white mb-3 shadow-md transition-transform group-hover:scale-110",
                                     topic.color
@@ -226,7 +238,6 @@ export function DairyProcessingModal({ isOpen, setIsOpen }: { isOpen: boolean; s
                                     {topic.title}
                                 </span>
 
-                                {/* Flash Icon */}
                                 <Zap className="absolute top-2 right-2 h-4 w-4 text-yellow-400 opacity-0 group-hover:opacity-100 transition-opacity" />
                             </button>
                         ))}
