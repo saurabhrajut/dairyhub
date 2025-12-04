@@ -76,64 +76,39 @@ export const pasteurizationContent = {
                 <style>
                     body { margin: 0; overflow: hidden; background-color: #1a1a1a; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
                     
-                    /* SCADA Control Panel */
                     #ui-container {
-                        position: absolute;
-                        bottom: 0;
-                        left: 0;
+                        position: absolute; bottom: 0; left: 0;
                         width: 100%;
-                        height: 200px;
                         background: rgba(20, 30, 40, 0.95);
-                        border-top: 4px solid #3498db;
-                        color: white;
-                        display: flex;
-                        justify-content: space-around;
-                        align-items: flex-start;
-                        padding: 15px 10px;
-                        box-sizing: border-box;
-                        backdrop-filter: blur(5px);
-                        z-index: 10;
+                        border-top: 4px solid #3498db; color: white;
+                        display: flex; justify-content: space-around; align-items: flex-start;
+                        padding: 15px 10px; box-sizing: border-box;
+                        backdrop-filter: blur(5px); z-index: 10;
                     }
 
                     .panel-section {
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        padding: 0 15px;
-                        border-right: 1px solid #444;
-                        height: 100%;
+                        display: flex; flex-direction: column; align-items: center;
+                        padding: 0 15px; border-right: 1px solid #444; height: 100%;
                     }
                     .panel-section:last-child { border-right: none; }
 
                     h2 { margin: 0 0 10px 0; font-size: 14px; color: #3498db; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
 
                     .digital-display {
-                        background: #000;
-                        color: #0f0;
-                        font-family: 'Courier New', monospace;
-                        font-size: 20px;
-                        padding: 5px 10px;
-                        border: 2px solid #555;
-                        border-radius: 4px;
-                        margin-bottom: 5px;
-                        min-width: 70px;
-                        text-align: center;
+                        background: #000; color: #0f0; font-family: 'Courier New', monospace;
+                        font-size: 20px; padding: 5px 10px; border: 2px solid #555;
+                        border-radius: 4px; margin-bottom: 5px;
+                        min-width: 70px; text-align: center;
                     }
                     
                     .status-light {
-                        width: 15px;
-                        height: 15px;
-                        border-radius: 50%;
-                        background: #333;
-                        border: 2px solid #555;
-                        margin: 5px;
-                        box-shadow: inset 0 0 5px #000;
-                        display: inline-block;
+                        width: 15px; height: 15px; border-radius: 50%;
+                        background: #333; border: 2px solid #555; margin: 5px;
+                        box-shadow: inset 0 0 5px #000; display: inline-block;
                     }
                     .status-light.on { background: #00ff00; box-shadow: 0 0 8px #00ff00; }
                     .status-light.off { background: #ff0000; box-shadow: 0 0 8px #ff0000; }
 
-                    /* Switches & Buttons */
                     .toggle-btn {
                         background: #444; color: #ccc; border: 1px solid #666;
                         padding: 5px 10px; cursor: pointer; border-radius: 4px; font-size: 12px; margin: 2px;
@@ -150,7 +125,6 @@ export const pasteurizationContent = {
                     button.main-start:hover { background: #34495e; box-shadow: 0 0 15px rgba(52, 152, 219, 0.5); }
                     button.main-start.active { background: #e74c3c; border-color: #c0392b; }
 
-                    /* View Controls (New) */
                     #view-controls {
                         position: absolute; top: 20px; right: 20px;
                         display: flex; flex-direction: column; gap: 5px;
@@ -164,7 +138,6 @@ export const pasteurizationContent = {
                     #view-controls button:hover { background: #3498db; border-color: #3498db; }
                     .view-label { font-size: 10px; color: #aaa; text-align: center; margin-bottom: 2px; }
 
-                    /* Slider */
                     input[type=range] { width: 120px; cursor: pointer; }
 
                     #tooltip {
@@ -181,25 +154,35 @@ export const pasteurizationContent = {
                     .legend-item { display: flex; align-items: center; margin-bottom: 4px; }
                     .color-box { width: 10px; height: 10px; margin-right: 8px; border: 1px solid #777; }
 
+                    @media (max-width: 768px) {
+                        #ui-container { height: auto; flex-wrap: wrap; padding: 10px; justify-content: center; }
+                        .panel-section { width: 45%; border-right: none; padding: 5px; margin-bottom: 10px; }
+                        h2 { font-size: 12px; }
+                        .digital-display { font-size: 16px; padding: 3px 6px; }
+                        .toggle-btn { width: 80px; font-size: 10px; }
+                        button.main-start { padding: 8px 12px; font-size: 14px; }
+                        #view-controls { display: none; }
+                        .legend { padding: 5px; font-size: 9px; }
+                        .legend-item { margin-bottom: 2px; }
+                        .color-box { width: 8px; height: 8px; margin-right: 5px; }
+                    }
                 </style>
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script>
-                <!-- OrbitControls -->
                 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"><\/script>
             </head>
             <body>
 
                 <div class="legend">
-                    <div class="legend-item"><div class="color-box" style="background:#ecf0f1"></div>Tanks / Pipes</div>
-                    <div class="legend-item"><div class="color-box" style="background:#34495e"></div>Pump & Motors</div>
-                    <div class="legend-item"><div class="color-box" style="background:#f39c12"></div>Regeneration / Separator</div>
+                    <div class="legend-item"><div class="color-box" style="background:#ecf0f1"></div>Tanks/Pipes</div>
+                    <div class="legend-item"><div class="color-box" style="background:#34495e"></div>Pump/Motors</div>
+                    <div class="legend-item"><div class="color-box" style="background:#f39c12"></div>Regen/Separator</div>
                     <div class="legend-item"><div class="color-box" style="background:#8e44ad"></div>Homogenizer</div>
-                    <div class="legend-item"><div class="color-box" style="background:#e74c3c"></div>Heating Section</div>
-                    <div class="legend-item"><div class="color-box" style="background:#3498db"></div>Cooling Section</div>
+                    <div class="legend-item"><div class="color-box" style="background:#e74c3c"></div>Heating</div>
+                    <div class="legend-item"><div class="color-box" style="background:#3498db"></div>Cooling</div>
                 </div>
 
-                <!-- View Controls -->
                 <div id="view-controls">
-                    <div class="view-label">CAMERA VIEW</div>
+                    <div class="view-label">CAMERA</div>
                     <button onclick="setView('front')">FRONT</button>
                     <button onclick="setView('back')">BACK</button>
                     <button onclick="setView('left')">LEFT</button>
@@ -208,10 +191,9 @@ export const pasteurizationContent = {
                     <button onclick="setView('iso')">ISO</button>
                 </div>
 
-                <div id="tooltip">PLANT READY. Configure Machines & Start Pump.</div>
+                <div id="tooltip">PLANT READY. Configure & Start.</div>
 
                 <div id="ui-container">
-                    <!-- 1. Main Power -->
                     <div class="panel-section">
                         <h2>Main Control</h2>
                         <div style="display:flex; align-items:center; margin-bottom:10px;">
@@ -220,532 +202,96 @@ export const pasteurizationContent = {
                         </div>
                         <button class="main-start" id="btn-power" onclick="toggleSystem()">START PLANT</button>
                     </div>
-
-                    <!-- 2. Processing Units -->
                     <div class="panel-section">
-                        <h2>Processing Units</h2>
+                        <h2>Units</h2>
                         <button class="toggle-btn" id="btn-sep" onclick="toggleSep()">Separator: OFF</button>
                         <button class="toggle-btn" id="btn-homo" onclick="toggleHomo()">Homogenizer: OFF</button>
-                        <div style="font-size:11px; color:#aaa; margin-top:5px; text-align:center;">
-                            Separator removes cream.<br>Homo breaks fat.
-                        </div>
                     </div>
-
-                    <!-- 3. Heating -->
                     <div class="panel-section">
                         <h2>Pasteurizer</h2>
                         <div class="digital-display" id="temp-display">25.0°C</div>
-                        <div style="display:flex; flex-direction:column; align-items:center;">
-                            <label style="font-size:11px; color:#aaa;">Steam Valve</label>
-                            <input type="range" min="0" max="100" value="0" oninput="updateSteam(this.value)">
-                            <span id="steam-val-text" style="font-size:12px;">0%</span>
-                        </div>
+                        <label style="font-size:11px; color:#aaa;">Steam Valve</label>
+                        <input type="range" min="0" max="100" value="0" oninput="updateSteam(this.value)">
+                        <span id="steam-val-text" style="font-size:12px;">0%</span>
                     </div>
-
-                    <!-- 4. FDV Status -->
                     <div class="panel-section">
                         <h2>FDV Logic</h2>
                         <div style="display:flex; gap:15px; margin-top:5px;">
-                            <div style="text-align:center;">
-                                <div id="light-fwd" class="status-light"></div>
-                                <div style="font-size:10px;">SAFE</div>
-                            </div>
-                            <div style="text-align:center;">
-                                <div id="light-div" class="status-light on"></div>
-                                <div style="font-size:10px;">DIVERT</div>
-                            </div>
+                            <div style="text-align:center;"><div id="light-fwd" class="status-light"></div><div style="font-size:10px;">SAFE</div></div>
+                            <div style="text-align:center;"><div id="light-div" class="status-light on"></div><div style="font-size:10px;">DIVERT</div></div>
                         </div>
                         <div style="font-size:11px; color:#aaa; margin-top:8px;">Set Point: 72.0°C</div>
                     </div>
-
-                    <!-- 5. Output Log -->
-                     <div class="panel-section" style="width: 180px; align-items:flex-start;">
-                        <h2>Product Flow</h2>
-                        <div id="flow-status" style="font-size: 11px; color: #0f0; line-height:1.4;">
-                            System Idle.
-                        </div>
+                    <div class="panel-section" style="width: 180px; align-items:flex-start;">
+                        <h2>Status</h2>
+                        <div id="flow-status" style="font-size: 11px; color: #0f0; line-height:1.4;">Idle.</div>
                     </div>
                 </div>
 
                 <script>
-                    // --- VARIABLES ---
                     let scene, camera, renderer, controls;
-                    let fdvMesh, pumpMesh;
-                    let particles = [];
-                    
-                    // State
-                    let systemOn = false;
-                    let sepOn = false;
-                    let homoOn = false;
-                    let steamVal = 0;
-                    let currentTemp = 25.0;
+                    let fdvMesh, pumpMesh, particles = [];
+                    let systemOn = false, sepOn = false, homoOn = false, steamVal = 0, currentTemp = 25.0;
                     const targetTempSet = 72.0;
-                    let fdvState = 'DIVERT'; // DIVERT or FORWARD
+                    let fdvState = 'DIVERT';
+                    let pathFeed, pathRegen, pathSepMain, pathSepCream, pathHomo, pathHeat, pathHold, pathSafe, pathDivert;
                     
-                    // Paths
-                    let pathFeed, pathRegen, pathSepMain, pathSepCream, pathHomo, pathHeat, pathHold, pathFDV;
-                    let pathSafe, pathDivert;
-                    
-                    // DOM
-                    const elTemp = document.getElementById('temp-display');
-                    const elSteam = document.getElementById('steam-val-text');
-                    const elTooltip = document.getElementById('tooltip');
-                    const elStatus = document.getElementById('flow-status');
-                    const elLightFwd = document.getElementById('light-fwd');
-                    const elLightDiv = document.getElementById('light-div');
-                    const elPumpLight = document.getElementById('status-pump');
-                    const btnSep = document.getElementById('btn-sep');
-                    const btnHomo = document.getElementById('btn-homo');
-                    const btnPower = document.getElementById('btn-power');
+                    const elTemp = document.getElementById('temp-display'),
+                          elStatus = document.getElementById('flow-status'),
+                          elLightFwd = document.getElementById('light-fwd'),
+                          elLightDiv = document.getElementById('light-div'),
+                          elPumpLight = document.getElementById('status-pump'),
+                          btnPower = document.getElementById('btn-power');
 
-                    // --- INIT ---
+                    function getRendererHeight() {
+                        return window.innerWidth < 768 ? window.innerHeight - 250 : window.innerHeight - 200;
+                    }
+
                     function init() {
                         scene = new THREE.Scene();
                         scene.background = new THREE.Color(0x222222);
                         scene.fog = new THREE.Fog(0x222222, 30, 100);
-
-                        camera = new THREE.PerspectiveCamera(45, window.innerWidth / (window.innerHeight - 200), 0.1, 1000);
-                        
-                        // Initial View (Front/South)
+                        camera = new THREE.PerspectiveCamera(45, window.innerWidth / getRendererHeight(), 0.1, 1000);
                         camera.position.set(0, 20, 35);
-
                         renderer = new THREE.WebGLRenderer({ antialias: true });
-                        renderer.setSize(window.innerWidth, window.innerHeight - 200);
-                        renderer.shadowMap.enabled = true;
+                        renderer.setSize(window.innerWidth, getRendererHeight());
                         document.body.appendChild(renderer.domElement);
-
-                        // Orbit Controls
                         controls = new THREE.OrbitControls(camera, renderer.domElement);
-                        controls.enableDamping = true;
-                        controls.dampingFactor = 0.05;
-                        controls.maxPolarAngle = Math.PI / 2 - 0.05; // Stay above ground
-
-                        // Lighting
-                        const amb = new THREE.AmbientLight(0xffffff, 0.4);
-                        scene.add(amb);
-                        
-                        // Front Sun
-                        const sun1 = new THREE.DirectionalLight(0xffffff, 0.7);
-                        sun1.position.set(10, 30, 20);
-                        sun1.castShadow = true;
-                        scene.add(sun1);
-                        
-                        // Back Sun (Fill Light for Northern view)
-                        const sun2 = new THREE.DirectionalLight(0xffbbaa, 0.4);
-                        sun2.position.set(-10, 20, -20);
-                        scene.add(sun2);
-
-                        // --- BUILD PLANT ---
-                        buildEnvironment();
-                        buildTanks();
-                        buildPump();
-                        buildProcessingLine(); // Regen -> Sep -> Homo -> Heat
-                        buildHoldingAndFDV();
-                        buildPipes();
-                        
-                        // Paths
+                        controls.enableDamping = true; controls.maxPolarAngle = Math.PI / 2 - 0.05;
+                        const amb = new THREE.AmbientLight(0xffffff, 0.4); scene.add(amb);
+                        const sun1 = new THREE.DirectionalLight(0xffffff, 0.7); sun1.position.set(10, 30, 20); scene.add(sun1);
+                        const sun2 = new THREE.DirectionalLight(0xffbbaa, 0.4); sun2.position.set(-10, 20, -20); scene.add(sun2);
+                        buildEnvironment(); buildTanks(); buildPump(); buildProcessingLine(); buildHoldingAndFDV(); buildPipes();
                         initPaths();
-
                         window.addEventListener('resize', onWindowResize);
                         animate();
                     }
-
-                    // --- VIEW CONTROLS ---
-                    window.setView = function(view) {
-                        const dist = 35;
-                        const h = 20;
-                        let x=0, y=h, z=0;
-                        
-                        switch(view) {
-                            case 'front': x=0; z=dist; break;
-                            case 'back': x=0; z=-dist; break;
-                            case 'left': x=-dist; z=0; break;
-                            case 'right': x=dist; z=0; break;
-                            case 'top': x=0; y=dist+15; z=1; break; // z=1 to avoid Gimbal lock
-                            case 'iso': x=25; y=25; z=25; break;
-                        }
-                        
-                        camera.position.set(x, y, z);
-                        camera.lookAt(0, 0, 0);
-                        controls.update(); // Important to sync controls
-                    }
-
-                    // --- BUILD FUNCTIONS ---
-
-                    function buildEnvironment() {
-                        const floorGeo = new THREE.PlaneGeometry(80, 60);
-                        const floorMat = new THREE.MeshStandardMaterial({ color: 0x151515, roughness: 0.8 });
-                        const floor = new THREE.Mesh(floorGeo, floorMat);
-                        floor.rotation.x = -Math.PI / 2;
-                        floor.receiveShadow = true;
-                        scene.add(floor);
-
-                        const grid = new THREE.GridHelper(80, 40, 0x444444, 0x222222);
-                        scene.add(grid);
-                    }
-
-                    function buildTanks() {
-                        const tankMat = new THREE.MeshStandardMaterial({ color: 0xbdc3c7, metalness: 0.7, roughness: 0.2 });
-                        
-                        // 1. Raw Milk Silo (Left)
-                        createTank(-25, 5, 0, 3, 10, "RAW MILK", tankMat);
-                        
-                        // 2. Balance Tank (Mid-Left)
-                        createTank(-15, 2.5, 0, 1.5, 3, "BALANCE", tankMat);
-                        
-                        // 3. Skim/Product Silo (Right)
-                        createTank(20, 5, -5, 3, 10, "SKIM/PAST.", tankMat);
-
-                        // 4. Cream Tank (Right Front)
-                        createTank(20, 3, 5, 1.5, 5, "CREAM", tankMat);
-                    }
-
-                    function createTank(x, y, z, r, h, label, mat) {
-                        const geo = new THREE.CylinderGeometry(r, r, h, 32);
-                        const mesh = new THREE.Mesh(geo, mat);
-                        mesh.position.set(x, y, z);
-                        mesh.castShadow = true;
-                        mesh.receiveShadow = true;
-                        scene.add(mesh);
-
-                        // Legs
-                        const legGeo = new THREE.CylinderGeometry(0.1, 0.1, 1.5, 8);
-                        for(let i=0; i<4; i++) {
-                            const leg = new THREE.Mesh(legGeo, mat);
-                            const angle = (i * 90) * Math.PI/180;
-                            leg.position.set(x + Math.cos(angle)*(r-0.2), 0.75, z + Math.sin(angle)*(r-0.2));
-                            scene.add(leg);
-                        }
-                        
-                        addLabel(label, x, h+1.5, z);
-                    }
-
-                    function buildPump() {
-                        // Centrifugal Pump between Balance and Processing
-                        const pumpGroup = new THREE.Group();
-                        
-                        // Motor
-                        const motor = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.6, 1.5, 16), new THREE.MeshStandardMaterial({color:0x34495e}));
-                        motor.rotation.z = Math.PI/2;
-                        pumpGroup.add(motor);
-                        
-                        // Impeller Casing
-                        const casing = new THREE.Mesh(new THREE.CylinderGeometry(0.8, 0.8, 0.5, 16), new THREE.MeshStandardMaterial({color:0x95a5a6}));
-                        casing.rotation.x = Math.PI/2;
-                        casing.position.set(0.8, 0, 0);
-                        pumpGroup.add(casing);
-                        
-                        pumpGroup.position.set(-10, 0.8, 0);
-                        pumpMesh = pumpGroup;
-                        scene.add(pumpGroup);
-                        addLabel("PUMP", -10, 2, 0);
-                    }
-
-                    function buildProcessingLine() {
-                        // All units arranged linearly for clarity
-                        
-                        // 1. REGENERATION (PHE)
-                        createPHEUnit(-5, 0, 0, 0xf39c12, "REGEN");
-                        
-                        // 2. SEPARATOR (Centrifuge)
-                        const sepGroup = new THREE.Group();
-                        const sepBody = new THREE.Mesh(new THREE.CylinderGeometry(1, 1.5, 2), new THREE.MeshStandardMaterial({color:0xecf0f1}));
-                        const sepTop = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16, 0, Math.PI*2, 0, Math.PI/2), new THREE.MeshStandardMaterial({color:0xecf0f1}));
-                        sepTop.position.y = 1;
-                        sepGroup.add(sepBody); sepGroup.add(sepTop);
-                        sepGroup.position.set(-1, 2, 2); // Slightly forward
-                        scene.add(sepGroup);
-                        addLabel("SEPARATOR", -1, 4, 2);
-
-                        // 3. HOMOGENIZER (Block)
-                        const homoGroup = new THREE.Group();
-                        const body = new THREE.Mesh(new THREE.BoxGeometry(2.5, 2, 1.5), new THREE.MeshStandardMaterial({color:0x8e44ad}));
-                        const pistons = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 0.8), new THREE.MeshStandardMaterial({color:0xffffff}));
-                        pistons.rotation.z = Math.PI/2; pistons.position.set(0, 0.5, 0.8);
-                        homoGroup.add(body); homoGroup.add(pistons);
-                        const p2 = pistons.clone(); p2.position.set(0, 0, 0.8); homoGroup.add(p2);
-                        const p3 = pistons.clone(); p3.position.set(0, -0.5, 0.8); homoGroup.add(p3);
-                        homoGroup.position.set(3, 1.5, 0);
-                        scene.add(homoGroup);
-                        addLabel("HOMOGENIZER", 3, 3.5, 0);
-
-                        // 4. HEATING & COOLING (PHE)
-                        createPHEUnit(7, 0, 0, 0xe74c3c, "HEATING");
-                        createPHEUnit(10, 0, 0, 0x3498db, "COOLING");
-                    }
                     
-                    function createPHEUnit(x, z, offset, color, lbl) {
-                        const mat = new THREE.MeshStandardMaterial({ color: color });
-                        const plates = new THREE.Mesh(new THREE.BoxGeometry(1.5, 2.5, 2), mat);
-                        plates.position.set(x, 2, z);
-                        scene.add(plates);
-                        
-                        // Frame
-                        const frame = new THREE.Mesh(new THREE.BoxGeometry(1.6, 2.7, 0.2), new THREE.MeshStandardMaterial({color:0x2c3e50}));
-                        frame.position.set(x, 2, z-1.1); scene.add(frame);
-                        const f2 = frame.clone(); f2.position.set(x, 2, z+1.1); scene.add(f2);
-                        
-                        addLabel(lbl, x, 4, z);
-                    }
-
-                    function buildHoldingAndFDV() {
-                        // Holding Tube: Zig Zag above Heating
-                        const tubeMat = new THREE.MeshStandardMaterial({color:0xbdc3c7});
-                        const tubeGroup = new THREE.Group();
-                        for(let i=0; i<3; i++) {
-                            const t = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 4), tubeMat);
-                            t.rotation.z = Math.PI/2;
-                            t.position.set(0, i*0.3, -i*0.4);
-                            tubeGroup.add(t);
-                        }
-                        // Connector bends simulated
-                        tubeGroup.position.set(7, 4, -2); // Above heating
-                        scene.add(tubeGroup);
-                        addLabel("HOLDING", 7, 5.5, -2);
-
-                        // FDV
-                        fdvMesh = new THREE.Mesh(new THREE.SphereGeometry(0.5), new THREE.MeshStandardMaterial({color:0xecf0f1}));
-                        fdvMesh.position.set(10, 4, -2);
-                        const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.2,0.2,0.8), new THREE.MeshStandardMaterial({color:0x333}));
-                        stem.position.y = 0.5; fdvMesh.add(stem);
-                        scene.add(fdvMesh);
-                        addLabel("FDV", 10, 5, -2);
-                    }
-
-                    function buildPipes() {
-                        const pipeMat = new THREE.MeshStandardMaterial({ color: 0x888888, transparent: true, opacity: 0.3 });
-                        // Visual Pipes (Static simplified)
-                        // Raw -> Balance
-                        createPipe([-25,1,0, -15,1,0, -15,3,0], pipeMat);
-                        // Balance -> Pump
-                        createPipe([-15,0.5,0, -10,0.5,0], pipeMat);
-                        // Pump -> Regen
-                        createPipe([-10,0.5,0, -5,0.5,0, -5,1,0], pipeMat);
-                        // Regen -> Sep
-                        createPipe([-5,3,0, -1,3,0, -1,3,2], pipeMat);
-                        // Sep -> Homo
-                        createPipe([-1,3,2, 3,3,2, 3,2,0], pipeMat);
-                        // Homo -> Heat
-                        createPipe([3,2,0, 7,2,0], pipeMat);
-                        // Heat -> Hold
-                        createPipe([7,3,0, 7,4,0, 7,4,-2], pipeMat);
-                        // Hold -> FDV
-                        createPipe([7,4,-2, 10,4,-2], pipeMat);
-                        // FDV -> Cool (Forward)
-                        createPipe([10,4,-2, 10,3,0], pipeMat);
-                        // Cool -> Silos
-                        createPipe([10,1,0, 20,1,0], pipeMat);
-                        // FDV -> Balance (Divert)
-                        createPipe([10,4,-2, 10,6,-2, -15,6,-2, -15,4,0], pipeMat);
-                    }
-
-                    function createPipe(points, mat) {
-                        const pts = [];
-                        for(let i=0; i<points.length; i+=3) pts.push(new THREE.Vector3(points[i], points[i+1], points[i+2]));
-                        const path = new THREE.CatmullRomCurve3(pts);
-                        const geo = new THREE.TubeGeometry(path, 10, 0.08, 8, false);
-                        const mesh = new THREE.Mesh(geo, mat);
-                        scene.add(mesh);
-                    }
-
-                    function addLabel(text, x, y, z) {
-                        const canvas = document.createElement('canvas');
-                        const ctx = canvas.getContext('2d');
-                        canvas.width = 256; canvas.height = 64;
-                        ctx.fillStyle = "rgba(0,0,0,0.6)"; ctx.fillRect(0,0,256,64);
-                        ctx.font = "bold 28px Arial"; ctx.fillStyle = "white";
-                        ctx.textAlign = "center"; ctx.textBaseline = "middle";
-                        ctx.fillText(text, 128, 32);
-                        const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(canvas) }));
-                        sprite.position.set(x, y, z);
-                        sprite.scale.set(3, 0.75, 1);
-                        scene.add(sprite);
-                    }
-
-                    // --- PATHS FOR ANIMATION ---
-                    function initPaths() {
-                        // 1. Raw to Pump
-                        pathFeed = new THREE.CatmullRomCurve3([v(-25,1,0), v(-15,1,0), v(-15,0.5,0), v(-10,0.5,0)]);
-                        // 2. Pump to Regen
-                        pathRegen = new THREE.CatmullRomCurve3([v(-10,0.5,0), v(-5,0.5,0), v(-5,2.5,0)]);
-                        // 3. Regen to Separator
-                        pathSepMain = new THREE.CatmullRomCurve3([v(-5,2.5,0), v(-1,2.5,0), v(-1,2.5,2)]);
-                        // 4. Sep Output (Cream)
-                        pathSepCream = new THREE.CatmullRomCurve3([v(-1,2.5,2), v(-1,1,4), v(20,1,5), v(20,5,5)]);
-                        // 5. Sep Output (Skim/Main) -> Homo
-                        pathHomo = new THREE.CatmullRomCurve3([v(-1,2.5,2), v(3,2.5,0)]);
-                        // 6. Homo -> Heating
-                        pathHeat = new THREE.CatmullRomCurve3([v(3,2.5,0), v(7,2.5,0), v(7,4,-2)]); // Ends at hold start
-                        // 7. Holding -> FDV
-                        pathHold = new THREE.CatmullRomCurve3([v(7,4,-2), v(8.5,4,-2), v(10,4,-2)]);
-                        
-                        // 8. Safe Path (Forward)
-                        pathSafe = new THREE.CatmullRomCurve3([v(10,4,-2), v(10,2.5,0), v(20,0.5,-5), v(20,5,-5)]);
-                        // 9. Divert Path
-                        pathDivert = new THREE.CatmullRomCurve3([v(10,4,-2), v(10,6,-2), v(-15,6,-2), v(-15,4,0)]);
-                    }
-                    function v(x,y,z) { return new THREE.Vector3(x,y,z); }
-
-                    // --- GAME LOOP ---
-                    function animate() {
-                        requestAnimationFrame(animate);
-                        controls.update();
-
-                        updateProcessLogic();
-                        updateParticles();
-                        
-                        if(systemOn) {
-                            pumpMesh.children[1].rotation.x += 0.5; // Rotate pump impeller
-                        }
-
-                        renderer.render(scene, camera);
-                    }
-
-                    function updateProcessLogic() {
-                        // Temp Simulation
-                        let target = 25;
-                        if(systemOn) {
-                            target = 25 + (steamVal * 0.7); // Max ~95C
-                            if(currentTemp < target) currentTemp += 0.2;
-                            if(currentTemp > target) currentTemp -= 0.1;
-                        } else {
-                            if(currentTemp > 25) currentTemp -= 0.1;
-                        }
-                        elTemp.innerText = currentTemp.toFixed(1) + "°C";
-
-                        // FDV Logic
-                        if(systemOn && currentTemp >= targetTempSet) {
-                            fdvState = 'FORWARD';
-                            setLight(elLightFwd, true); setLight(elLightDiv, false);
-                            fdvMesh.material.color.setHex(0x2ecc71);
-                        } else {
-                            fdvState = 'DIVERT';
-                            setLight(elLightFwd, false); setLight(elLightDiv, true);
-                            fdvMesh.material.color.setHex(0xe74c3c);
-                        }
-                        
-                        // Status Text
-                        let status = "System Off";
-                        if(systemOn) {
-                            status = \`Pump ON.\\nSeparator: \${sepOn?'Active':'Bypass'}\\nHomo: \${homoOn?'Active':'Bypass'}\\nMode: \${fdvState}\`;
-                        }
-                        elStatus.innerText = status;
-                    }
-
-                    function updateParticles() {
-                        if(!systemOn) return;
-
-                        // Spawn Rate
-                        if(Math.random() > 0.8) spawnParticle();
-
-                        for(let i=particles.length-1; i>=0; i--) {
-                            let p = particles[i];
-                            p.progress += 0.01; // Speed
-                            
-                            if(p.path) {
-                                p.mesh.position.copy(p.path.getPoint(p.progress));
-                            }
-                            
-                            if(p.progress >= 1) {
-                                p.progress = 0;
-                                handlePathSwitch(p);
-                            }
-                        }
-                    }
-
-                    function spawnParticle() {
-                        const geo = new THREE.SphereGeometry(0.1, 8, 8);
-                        const mat = new THREE.MeshBasicMaterial({color:0xffffff});
-                        const mesh = new THREE.Mesh(geo, mat);
-                        scene.add(mesh);
-                        particles.push({ mesh: mesh, path: pathFeed, progress: 0, stage: 'feed' });
-                    }
-
-                    function handlePathSwitch(p) {
-                        // State Machine for Particles
-                        if(p.stage === 'feed') {
-                            p.path = pathRegen; p.stage = 'regen';
-                        } else if (p.stage === 'regen') {
-                            // To Separator
-                            p.path = pathSepMain; p.stage = 'sep_in';
-                        } else if (p.stage === 'sep_in') {
-                            if(sepOn) {
-                                // Split logic: 20% Cream, 80% Skim
-                                if(Math.random() > 0.8) {
-                                     p.path = pathSepCream; p.stage = 'cream_out';
-                                     p.mesh.material.color.setHex(0xf1c40f); // Yellow cream
-                                } else {
-                                    p.path = pathHomo; p.stage = 'homo_in';
-                                }
-                            } else {
-                                p.path = pathHomo; p.stage = 'homo_in'; // Bypass visual logic simplified
-                            }
-                        } else if (p.stage === 'homo_in') {
-                            p.path = pathHeat; p.stage = 'heating';
-                            if(homoOn && p.mesh.material.color.getHex() === 0xffffff) {
-                                // Visual effect: homogenized milk is brighter white? (keep white)
-                            }
-                        } else if (p.stage === 'heating') {
-                            p.path = pathHold; p.stage = 'holding';
-                        } else if (p.stage === 'holding') {
-                            // FDV Decision
-                            if(fdvState === 'FORWARD') {
-                                p.path = pathSafe; p.stage = 'finished';
-                                p.mesh.material.color.setHex(0x2ecc71); // Safe Green tint
-                            } else {
-                                p.path = pathDivert; p.stage = 'divert';
-                                p.mesh.material.color.setHex(0xe74c3c); // Unsafe Red tint
-                            }
-                        } else if (p.stage === 'divert') {
-                            // Back to start logic
-                            p.path = pathRegen; p.stage = 'regen'; // Loop back into process
-                            p.mesh.material.color.setHex(0xffffff);
-                        } else {
-                            // Finished or Cream Out -> Remove
-                            scene.remove(p.mesh);
-                            particles.splice(particles.indexOf(p), 1);
-                        }
-                    }
-
-                    // --- UI INTERACTION ---
-                    function toggleSystem() {
-                        systemOn = !systemOn;
-                        if(systemOn) {
-                            btnPower.classList.add('active');
-                            btnPower.innerText = "STOP PLANT";
-                            elPumpLight.classList.add('on'); elPumpLight.classList.remove('off');
-                            elTooltip.innerText = "Pump Running. Milk flowing.";
-                        } else {
-                            btnPower.classList.remove('active');
-                            btnPower.innerText = "START PLANT";
-                            elPumpLight.classList.remove('on'); elPumpLight.classList.add('off');
-                            elTooltip.innerText = "System Stopped.";
-                        }
-                    }
-                    function toggleSep() {
-                        sepOn = !sepOn;
-                        btnSep.innerText = sepOn ? "Separator: ON" : "Separator: OFF";
-                        btnSep.classList.toggle('active');
-                    }
-                    function toggleHomo() {
-                        homoOn = !homoOn;
-                        btnHomo.innerText = homoOn ? "Homogenizer: ON" : "Homogenizer: OFF";
-                        btnHomo.classList.toggle('active');
-                    }
-                    window.updateSteam = function(val) {
-                        steamVal = parseInt(val);
-                        document.getElementById('steam-val-text').innerText = val + "%";
-                    }
-                    function setLight(el, on) {
-                        if(on) { el.classList.add('on'); el.classList.remove('off'); }
-                        else { el.classList.add('off'); el.classList.remove('on'); }
-                    }
-                    function onWindowResize() {
-                        camera.aspect = window.innerWidth / (window.innerHeight - 200);
-                        camera.updateProjectionMatrix();
-                        renderer.setSize(window.innerWidth, window.innerHeight - 200);
-                    }
-
+                    window.setView=function(v){const d=35,h=20;let x=0,y=h,z=0;switch(v){case'front':z=d;break;case'back':z=-d;break;case'left':x=-d;break;case'right':x=d;break;case'top':y=d+15,z=1;break;case'iso':x=25,y=25,z=25;break}camera.position.set(x,y,z);camera.lookAt(0,0,0);controls.update()}
+                    
+                    function buildEnvironment(){const f=new THREE.Mesh(new THREE.PlaneGeometry(80,60),new THREE.MeshStandardMaterial({color:0x151515,roughness:.8}));f.rotation.x=-Math.PI/2;scene.add(f);scene.add(new THREE.GridHelper(80,40,4473924,2236962))}
+                    function buildTanks(){const t=new THREE.MeshStandardMaterial({color:0xbdc3c7,metalness:.7,roughness:.2});createTank(-25,5,0,3,10,"RAW MILK",t);createTank(-15,2.5,0,1.5,3,"BALANCE",t);createTank(20,5,-5,3,10,"SKIM/PAST.",t);createTank(20,3,5,1.5,5,"CREAM",t)}
+                    function createTank(t,e,o,i,n,s,a){const d=new THREE.Mesh(new THREE.CylinderGeometry(i,i,n,32),a);d.position.set(t,e,o);scene.add(d);const r=new THREE.CylinderGeometry(.1,.1,1.5,8);for(let e=0;e<4;e++){const a=new THREE.Mesh(r);const l=e*90*Math.PI/180;a.position.set(t+Math.cos(l)*(i-.2),.75,o+Math.sin(l)*(i-.2)),scene.add(a)}addLabel(s,t,n+1.5,o)}
+                    function buildPump(){const t=new THREE.Group;const e=new THREE.Mesh(new THREE.CylinderGeometry(.6,.6,1.5,16),new THREE.MeshStandardMaterial({color:0x34495e}));e.rotation.z=Math.PI/2,t.add(e);const o=new THREE.Mesh(new THREE.CylinderGeometry(.8,.8,.5,16),new THREE.MeshStandardMaterial({color:0x95a5a6}));o.rotation.x=Math.PI/2,o.position.set(.8,0,0),t.add(o),t.position.set(-10,.8,0),pumpMesh=t,scene.add(t),addLabel("PUMP",-10,2,0)}
+                    function buildProcessingLine(){createPHEUnit(-5,0,0,0xf39c12,"REGEN");const t=new THREE.Group,e=new THREE.Mesh(new THREE.CylinderGeometry(1,1.5,2),new THREE.MeshStandardMaterial({color:0xecf0f1})),o=new THREE.Mesh(new THREE.SphereGeometry(1,32,16,0,6.283185307179586,0,Math.PI/2),new THREE.MeshStandardMaterial({color:0xecf0f1}));o.position.y=1,t.add(e),t.add(o),t.position.set(-1,2,2),scene.add(t),addLabel("SEPARATOR",-1,4,2);const i=new THREE.Group,n=new THREE.Mesh(new THREE.BoxGeometry(2.5,2,1.5),new THREE.MeshStandardMaterial({color:0x8e44ad})),s=new THREE.Mesh(new THREE.CylinderGeometry(.2,.2,.8),new THREE.MeshStandardMaterial({color:0xffffff}));s.rotation.z=Math.PI/2,s.position.set(0,.5,.8),i.add(n),i.add(s);const a=s.clone();a.position.set(0,0,.8),i.add(a);const d=s.clone();d.position.set(0,-.5,.8),i.add(d),i.position.set(3,1.5,0),scene.add(i),addLabel("HOMOGENIZER",3,3.5,0),createPHEUnit(7,0,0,0xe74c3c,"HEATING"),createPHEUnit(10,0,0,0x3498db,"COOLING")}
+                    function createPHEUnit(t,e,o,i,n){const s=new THREE.MeshStandardMaterial({color:i}),a=new THREE.Mesh(new THREE.BoxGeometry(1.5,2.5,2),s);a.position.set(t,2,e),scene.add(a);const d=new THREE.Mesh(new THREE.BoxGeometry(1.6,2.7,.2),new THREE.MeshStandardMaterial({color:0x2c3e50}));d.position.set(t,2,e-1.1),scene.add(d);const r=d.clone();r.position.set(t,2,e+1.1),scene.add(r),addLabel(n,t,4,e)}
+                    function buildHoldingAndFDV(){const t=new THREE.MeshStandardMaterial({color:0xbdc3c7}),e=new THREE.Group;for(let o=0;o<3;o++){const i=new THREE.Mesh(new THREE.CylinderGeometry(.1,.1,4),t);i.rotation.z=Math.PI/2,i.position.set(0,o*.3,-o*.4),e.add(i)}e.position.set(7,4,-2),scene.add(e),addLabel("HOLDING",7,5.5,-2),fdvMesh=new THREE.Mesh(new THREE.SphereGeometry(.5),new THREE.MeshStandardMaterial({color:0xecf0f1}));const o=new THREE.Mesh(new THREE.CylinderGeometry(.2,.2,.8),new THREE.MeshStandardMaterial({color:0x333}));o.position.y=.5,fdvMesh.add(o),fdvMesh.position.set(10,4,-2),scene.add(fdvMesh),addLabel("FDV",10,5,-2)}
+                    function buildPipes(){const t=new THREE.MeshStandardMaterial({color:0x888888,transparent:!0,opacity:.3});createPipe([-25,1,0,-15,1,0,-15,3,0],t),createPipe([-15,.5,0,-10,.5,0],t),createPipe([-10,.5,0,-5,.5,0,-5,1,0],t),createPipe([-5,3,0,-1,3,0,-1,3,2],t),createPipe([-1,3,2,3,3,2,3,2,0],t),createPipe([3,2,0,7,2,0],t),createPipe([7,3,0,7,4,0,7,4,-2],t),createPipe([7,4,-2,10,4,-2],t),createPipe([10,4,-2,10,3,0],t),createPipe([10,1,0,20,1,0],t),createPipe([10,4,-2,10,6,-2,-15,6,-2,-15,4,0],t)}
+                    function createPipe(t,e){const o=[];for(let e=0;e<t.length;e+=3)o.push(new THREE.Vector3(t[e],t[e+1],t[e+2]));const i=new THREE.CatmullRomCurve3(o),n=new THREE.TubeGeometry(i,10,.08,8,!1),s=new THREE.Mesh(n,e);scene.add(s)}
+                    function addLabel(t,e,o,i){const n=document.createElement("canvas");n.width=256,n.height=64;const s=n.getContext("2d");s.fillStyle="rgba(0,0,0,0.6)",s.fillRect(0,0,256,64),s.font="bold 28px Arial",s.fillStyle="white",s.textAlign="center",s.textBaseline="middle",s.fillText(t,128,32);const a=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(n)}));a.position.set(e,o,i),a.scale.set(3,.75,1),scene.add(a)}
+                    function initPaths(){pathFeed=new THREE.CatmullRomCurve3([v(-25,1,0),v(-15,1,0),v(-15,.5,0),v(-10,.5,0)]),pathRegen=new THREE.CatmullRomCurve3([v(-10,.5,0),v(-5,.5,0),v(-5,2.5,0)]),pathSepMain=new THREE.CatmullRomCurve3([v(-5,2.5,0),v(-1,2.5,0),v(-1,2.5,2)]),pathSepCream=new THREE.CatmullRomCurve3([v(-1,2.5,2),v(-1,1,4),v(20,1,5),v(20,5,5)]),pathHomo=new THREE.CatmullRomCurve3([v(-1,2.5,2),v(3,2.5,0)]),pathHeat=new THREE.CatmullRomCurve3([v(3,2.5,0),v(7,2.5,0),v(7,4,-2)]),pathHold=new THREE.CatmullRomCurve3([v(7,4,-2),v(8.5,4,-2),v(10,4,-2)]),pathSafe=new THREE.CatmullRomCurve3([v(10,4,-2),v(10,2.5,0),v(20,0.5,-5),v(20,5,-5)]),pathDivert=new THREE.CatmullRomCurve3([v(10,4,-2),v(10,6,-2),v(-15,6,-2),v(-15,4,0)])}
+                    function v(t,e,o){return new THREE.Vector3(t,e,o)}
+                    function animate(){requestAnimationFrame(animate),controls.update(),updateProcessLogic(),updateParticles(),systemOn&&(pumpMesh.children[1].rotation.x+=.5),renderer.render(scene,camera)}
+                    function updateProcessLogic(){let t=25;systemOn?(t=25+steamVal*0.7,currentTemp<t?currentTemp+=.2:currentTemp>t&&(currentTemp-=.1)):currentTemp>25&&(currentTemp-=.1),elTemp.innerText=currentTemp.toFixed(1)+"°C",systemOn&&currentTemp>=72?(fdvState="FORWARD",setLight(elLightFwd,!0),setLight(elLightDiv,!1),fdvMesh.material.color.setHex(3066993)):(fdvState="DIVERT",setLight(elLightFwd,!1),setLight(elLightDiv,!0),fdvMesh.material.color.setHex(15158332));let e="System Off";if(systemOn){e="Pump ON.\\nSeparator: "+(sepOn?"Active":"Bypass")+"\\nHomo: "+(homoOn?"Active":"Bypass")+"\\nMode: "+fdvState}elStatus.innerText=e}
+                    function updateParticles(){if(!systemOn)return;Math.random()>.8&&spawnParticle();for(let t=particles.length-1;t>=0;t--){let e=particles[t];e.progress+=.01,e.path&&e.mesh.position.copy(e.path.getPoint(e.progress)),e.progress>=1&&(e.progress=0,handlePathSwitch(e))}}
+                    function spawnParticle(){const t=new THREE.SphereGeometry(.1,8,8),e=new THREE.MeshBasicMaterial({color:16777215}),o=new THREE.Mesh(t,e);scene.add(o),particles.push({mesh:o,path:pathFeed,progress:0,stage:"feed"})}
+                    function handlePathSwitch(t){"feed"===t.stage?(t.path=pathRegen,t.stage="regen"):"regen"===t.stage?(t.path=pathSepMain,t.stage="sep_in"):"sep_in"===t.stage?sepOn?Math.random()>.8?(t.path=pathSepCream,t.stage="cream_out",t.mesh.material.color.setHex(15844367)):(t.path=pathHomo,t.stage="homo_in"):(t.path=pathHomo,t.stage="homo_in"):"homo_in"===t.stage?(t.path=pathHeat,t.stage="heating"):"heating"===t.stage?(t.path=pathHold,t.stage="holding"):"holding"===t.stage?"FORWARD"===fdvState?(t.path=pathSafe,t.stage="finished",t.mesh.material.color.setHex(3066993)):(t.path=pathDivert,t.stage="divert",t.mesh.material.color.setHex(15158332)):"divert"===t.stage?(t.path=pathRegen,t.stage="regen",t.mesh.material.color.setHex(16777215)):(scene.remove(t.mesh),particles.splice(particles.indexOf(t),1))}
+                    function toggleSystem(){systemOn=!systemOn,systemOn?(btnPower.classList.add("active"),btnPower.innerText="STOP PLANT",elPumpLight.classList.add("on"),elPumpLight.classList.remove("off"),elTooltip.innerText="Pump Running. Milk flowing."):(btnPower.classList.remove("active"),btnPower.innerText="START PLANT",elPumpLight.classList.remove("on"),elPumpLight.classList.add("off"),elTooltip.innerText="System Stopped.")}
+                    function toggleSep(){sepOn=!sepOn;btnSep.innerText=sepOn?"Separator: ON":"Separator: OFF",btnSep.classList.toggle("active")}
+                    function toggleHomo(){homoOn=!homoOn;btnHomo.innerText=homoOn?"Homogenizer: ON":"Homogenizer: OFF",btnHomo.classList.toggle("active")}
+                    window.updateSteam=function(t){steamVal=parseInt(t),document.getElementById("steam-val-text").innerText=t+"%"}
+                    function setLight(t,e){e?(t.classList.add("on"),t.classList.remove("off")):(t.classList.add("off"),t.classList.remove("on"))}
+                    function onWindowResize(){camera.aspect=window.innerWidth/getRendererHeight(),camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,getRendererHeight())}
                     init();
                 <\/script>
             </body>
@@ -828,64 +374,39 @@ export const pasteurizationContent = {
                 <style>
                     body { margin: 0; overflow: hidden; background-color: #1a1a1a; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
                     
-                    /* SCADA Control Panel */
                     #ui-container {
-                        position: absolute;
-                        bottom: 0;
-                        left: 0;
+                        position: absolute; bottom: 0; left: 0;
                         width: 100%;
-                        height: 200px;
                         background: rgba(20, 30, 40, 0.95);
-                        border-top: 4px solid #3498db;
-                        color: white;
-                        display: flex;
-                        justify-content: space-around;
-                        align-items: flex-start;
-                        padding: 15px 10px;
-                        box-sizing: border-box;
-                        backdrop-filter: blur(5px);
-                        z-index: 10;
+                        border-top: 4px solid #3498db; color: white;
+                        display: flex; justify-content: space-around; align-items: flex-start;
+                        padding: 15px 10px; box-sizing: border-box;
+                        backdrop-filter: blur(5px); z-index: 10;
                     }
 
                     .panel-section {
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        padding: 0 15px;
-                        border-right: 1px solid #444;
-                        height: 100%;
+                        display: flex; flex-direction: column; align-items: center;
+                        padding: 0 15px; border-right: 1px solid #444; height: 100%;
                     }
                     .panel-section:last-child { border-right: none; }
 
                     h2 { margin: 0 0 10px 0; font-size: 14px; color: #3498db; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
 
                     .digital-display {
-                        background: #000;
-                        color: #0f0;
-                        font-family: 'Courier New', monospace;
-                        font-size: 20px;
-                        padding: 5px 10px;
-                        border: 2px solid #555;
-                        border-radius: 4px;
-                        margin-bottom: 5px;
-                        min-width: 70px;
-                        text-align: center;
+                        background: #000; color: #0f0; font-family: 'Courier New', monospace;
+                        font-size: 20px; padding: 5px 10px; border: 2px solid #555;
+                        border-radius: 4px; margin-bottom: 5px;
+                        min-width: 70px; text-align: center;
                     }
                     
                     .status-light {
-                        width: 15px;
-                        height: 15px;
-                        border-radius: 50%;
-                        background: #333;
-                        border: 2px solid #555;
-                        margin: 5px;
-                        box-shadow: inset 0 0 5px #000;
-                        display: inline-block;
+                        width: 15px; height: 15px; border-radius: 50%;
+                        background: #333; border: 2px solid #555; margin: 5px;
+                        box-shadow: inset 0 0 5px #000; display: inline-block;
                     }
                     .status-light.on { background: #00ff00; box-shadow: 0 0 8px #00ff00; }
                     .status-light.off { background: #ff0000; box-shadow: 0 0 8px #ff0000; }
 
-                    /* Switches & Buttons */
                     .toggle-btn {
                         background: #444; color: #ccc; border: 1px solid #666;
                         padding: 5px 10px; cursor: pointer; border-radius: 4px; font-size: 12px; margin: 2px;
@@ -902,7 +423,6 @@ export const pasteurizationContent = {
                     button.main-start:hover { background: #34495e; box-shadow: 0 0 15px rgba(52, 152, 219, 0.5); }
                     button.main-start.active { background: #e74c3c; border-color: #c0392b; }
 
-                    /* View Controls (New) */
                     #view-controls {
                         position: absolute; top: 20px; right: 20px;
                         display: flex; flex-direction: column; gap: 5px;
@@ -916,7 +436,6 @@ export const pasteurizationContent = {
                     #view-controls button:hover { background: #3498db; border-color: #3498db; }
                     .view-label { font-size: 10px; color: #aaa; text-align: center; margin-bottom: 2px; }
 
-                    /* Slider */
                     input[type=range] { width: 120px; cursor: pointer; }
 
                     #tooltip {
@@ -933,25 +452,35 @@ export const pasteurizationContent = {
                     .legend-item { display: flex; align-items: center; margin-bottom: 4px; }
                     .color-box { width: 10px; height: 10px; margin-right: 8px; border: 1px solid #777; }
 
+                    @media (max-width: 768px) {
+                        #ui-container { height: auto; flex-wrap: wrap; padding: 10px; justify-content: center; }
+                        .panel-section { width: 45%; border-right: none; padding: 5px; margin-bottom: 10px; }
+                        h2 { font-size: 12px; }
+                        .digital-display { font-size: 16px; padding: 3px 6px; }
+                        .toggle-btn { width: 80px; font-size: 10px; }
+                        button.main-start { padding: 8px 12px; font-size: 14px; }
+                        #view-controls { display: none; }
+                        .legend { padding: 5px; font-size: 9px; }
+                        .legend-item { margin-bottom: 2px; }
+                        .color-box { width: 8px; height: 8px; margin-right: 5px; }
+                    }
                 </style>
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script>
-                <!-- OrbitControls -->
                 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"><\/script>
             </head>
             <body>
 
                 <div class="legend">
-                    <div class="legend-item"><div class="color-box" style="background:#ecf0f1"></div>Tanks / Pipes</div>
-                    <div class="legend-item"><div class="color-box" style="background:#34495e"></div>Pump & Motors</div>
-                    <div class="legend-item"><div class="color-box" style="background:#f39c12"></div>Regeneration / Separator</div>
+                    <div class="legend-item"><div class="color-box" style="background:#ecf0f1"></div>Tanks/Pipes</div>
+                    <div class="legend-item"><div class="color-box" style="background:#34495e"></div>Pump/Motors</div>
+                    <div class="legend-item"><div class="color-box" style="background:#f39c12"></div>Regen/Separator</div>
                     <div class="legend-item"><div class="color-box" style="background:#8e44ad"></div>Homogenizer</div>
-                    <div class="legend-item"><div class="color-box" style="background:#e74c3c"></div>Heating Section</div>
-                    <div class="legend-item"><div class="color-box" style="background:#3498db"></div>Cooling Section</div>
+                    <div class="legend-item"><div class="color-box" style="background:#e74c3c"></div>Heating</div>
+                    <div class="legend-item"><div class="color-box" style="background:#3498db"></div>Cooling</div>
                 </div>
 
-                <!-- View Controls -->
                 <div id="view-controls">
-                    <div class="view-label">CAMERA VIEW</div>
+                    <div class="view-label">CAMERA</div>
                     <button onclick="setView('front')">FRONT</button>
                     <button onclick="setView('back')">BACK</button>
                     <button onclick="setView('left')">LEFT</button>
@@ -960,10 +489,9 @@ export const pasteurizationContent = {
                     <button onclick="setView('iso')">ISO</button>
                 </div>
 
-                <div id="tooltip">PLANT READY. Configure Machines & Start Pump.</div>
+                <div id="tooltip">PLANT READY. Configure & Start.</div>
 
                 <div id="ui-container">
-                    <!-- 1. Main Power -->
                     <div class="panel-section">
                         <h2>Main Control</h2>
                         <div style="display:flex; align-items:center; margin-bottom:10px;">
@@ -972,532 +500,96 @@ export const pasteurizationContent = {
                         </div>
                         <button class="main-start" id="btn-power" onclick="toggleSystem()">START PLANT</button>
                     </div>
-
-                    <!-- 2. Processing Units -->
                     <div class="panel-section">
-                        <h2>Processing Units</h2>
+                        <h2>Units</h2>
                         <button class="toggle-btn" id="btn-sep" onclick="toggleSep()">Separator: OFF</button>
                         <button class="toggle-btn" id="btn-homo" onclick="toggleHomo()">Homogenizer: OFF</button>
-                        <div style="font-size:11px; color:#aaa; margin-top:5px; text-align:center;">
-                            Separator removes cream.<br>Homo breaks fat.
-                        </div>
                     </div>
-
-                    <!-- 3. Heating -->
                     <div class="panel-section">
                         <h2>Pasteurizer</h2>
                         <div class="digital-display" id="temp-display">25.0°C</div>
-                        <div style="display:flex; flex-direction:column; align-items:center;">
-                            <label style="font-size:11px; color:#aaa;">Steam Valve</label>
-                            <input type="range" min="0" max="100" value="0" oninput="updateSteam(this.value)">
-                            <span id="steam-val-text" style="font-size:12px;">0%</span>
-                        </div>
+                        <label style="font-size:11px; color:#aaa;">Steam Valve</label>
+                        <input type="range" min="0" max="100" value="0" oninput="updateSteam(this.value)">
+                        <span id="steam-val-text" style="font-size:12px;">0%</span>
                     </div>
-
-                    <!-- 4. FDV Status -->
                     <div class="panel-section">
                         <h2>FDV Logic</h2>
                         <div style="display:flex; gap:15px; margin-top:5px;">
-                            <div style="text-align:center;">
-                                <div id="light-fwd" class="status-light"></div>
-                                <div style="font-size:10px;">SAFE</div>
-                            </div>
-                            <div style="text-align:center;">
-                                <div id="light-div" class="status-light on"></div>
-                                <div style="font-size:10px;">DIVERT</div>
-                            </div>
+                            <div style="text-align:center;"><div id="light-fwd" class="status-light"></div><div style="font-size:10px;">SAFE</div></div>
+                            <div style="text-align:center;"><div id="light-div" class="status-light on"></div><div style="font-size:10px;">DIVERT</div></div>
                         </div>
                         <div style="font-size:11px; color:#aaa; margin-top:8px;">Set Point: 72.0°C</div>
                     </div>
-
-                    <!-- 5. Output Log -->
-                     <div class="panel-section" style="width: 180px; align-items:flex-start;">
-                        <h2>Product Flow</h2>
-                        <div id="flow-status" style="font-size: 11px; color: #0f0; line-height:1.4;">
-                            System Idle.
-                        </div>
+                    <div class="panel-section" style="width: 180px; align-items:flex-start;">
+                        <h2>Status</h2>
+                        <div id="flow-status" style="font-size: 11px; color: #0f0; line-height:1.4;">Idle.</div>
                     </div>
                 </div>
 
                 <script>
-                    // --- VARIABLES ---
                     let scene, camera, renderer, controls;
-                    let fdvMesh, pumpMesh;
-                    let particles = [];
-                    
-                    // State
-                    let systemOn = false;
-                    let sepOn = false;
-                    let homoOn = false;
-                    let steamVal = 0;
-                    let currentTemp = 25.0;
+                    let fdvMesh, pumpMesh, particles = [];
+                    let systemOn = false, sepOn = false, homoOn = false, steamVal = 0, currentTemp = 25.0;
                     const targetTempSet = 72.0;
-                    let fdvState = 'DIVERT'; // DIVERT or FORWARD
+                    let fdvState = 'DIVERT';
+                    let pathFeed, pathRegen, pathSepMain, pathSepCream, pathHomo, pathHeat, pathHold, pathSafe, pathDivert;
                     
-                    // Paths
-                    let pathFeed, pathRegen, pathSepMain, pathSepCream, pathHomo, pathHeat, pathHold, pathFDV;
-                    let pathSafe, pathDivert;
-                    
-                    // DOM
-                    const elTemp = document.getElementById('temp-display');
-                    const elSteam = document.getElementById('steam-val-text');
-                    const elTooltip = document.getElementById('tooltip');
-                    const elStatus = document.getElementById('flow-status');
-                    const elLightFwd = document.getElementById('light-fwd');
-                    const elLightDiv = document.getElementById('light-div');
-                    const elPumpLight = document.getElementById('status-pump');
-                    const btnSep = document.getElementById('btn-sep');
-                    const btnHomo = document.getElementById('btn-homo');
-                    const btnPower = document.getElementById('btn-power');
+                    const elTemp = document.getElementById('temp-display'),
+                          elStatus = document.getElementById('flow-status'),
+                          elLightFwd = document.getElementById('light-fwd'),
+                          elLightDiv = document.getElementById('light-div'),
+                          elPumpLight = document.getElementById('status-pump'),
+                          btnPower = document.getElementById('btn-power');
 
-                    // --- INIT ---
+                    function getRendererHeight() {
+                        return window.innerWidth < 768 ? window.innerHeight - 250 : window.innerHeight - 200;
+                    }
+
                     function init() {
                         scene = new THREE.Scene();
                         scene.background = new THREE.Color(0x222222);
                         scene.fog = new THREE.Fog(0x222222, 30, 100);
-
-                        camera = new THREE.PerspectiveCamera(45, window.innerWidth / (window.innerHeight - 200), 0.1, 1000);
-                        
-                        // Initial View (Front/South)
+                        camera = new THREE.PerspectiveCamera(45, window.innerWidth / getRendererHeight(), 0.1, 1000);
                         camera.position.set(0, 20, 35);
-
                         renderer = new THREE.WebGLRenderer({ antialias: true });
-                        renderer.setSize(window.innerWidth, window.innerHeight - 200);
-                        renderer.shadowMap.enabled = true;
+                        renderer.setSize(window.innerWidth, getRendererHeight());
                         document.body.appendChild(renderer.domElement);
-
-                        // Orbit Controls
                         controls = new THREE.OrbitControls(camera, renderer.domElement);
-                        controls.enableDamping = true;
-                        controls.dampingFactor = 0.05;
-                        controls.maxPolarAngle = Math.PI / 2 - 0.05; // Stay above ground
-
-                        // Lighting
-                        const amb = new THREE.AmbientLight(0xffffff, 0.4);
-                        scene.add(amb);
-                        
-                        // Front Sun
-                        const sun1 = new THREE.DirectionalLight(0xffffff, 0.7);
-                        sun1.position.set(10, 30, 20);
-                        sun1.castShadow = true;
-                        scene.add(sun1);
-                        
-                        // Back Sun (Fill Light for Northern view)
-                        const sun2 = new THREE.DirectionalLight(0xffbbaa, 0.4);
-                        sun2.position.set(-10, 20, -20);
-                        scene.add(sun2);
-
-                        // --- BUILD PLANT ---
-                        buildEnvironment();
-                        buildTanks();
-                        buildPump();
-                        buildProcessingLine(); // Regen -> Sep -> Homo -> Heat
-                        buildHoldingAndFDV();
-                        buildPipes();
-                        
-                        // Paths
+                        controls.enableDamping = true; controls.maxPolarAngle = Math.PI / 2 - 0.05;
+                        const amb = new THREE.AmbientLight(0xffffff, 0.4); scene.add(amb);
+                        const sun1 = new THREE.DirectionalLight(0xffffff, 0.7); sun1.position.set(10, 30, 20); scene.add(sun1);
+                        const sun2 = new THREE.DirectionalLight(0xffbbaa, 0.4); sun2.position.set(-10, 20, -20); scene.add(sun2);
+                        buildEnvironment(); buildTanks(); buildPump(); buildProcessingLine(); buildHoldingAndFDV(); buildPipes();
                         initPaths();
-
                         window.addEventListener('resize', onWindowResize);
                         animate();
                     }
-
-                    // --- VIEW CONTROLS ---
-                    window.setView = function(view) {
-                        const dist = 35;
-                        const h = 20;
-                        let x=0, y=h, z=0;
-                        
-                        switch(view) {
-                            case 'front': x=0; z=dist; break;
-                            case 'back': x=0; z=-dist; break;
-                            case 'left': x=-dist; z=0; break;
-                            case 'right': x=dist; z=0; break;
-                            case 'top': x=0; y=dist+15; z=1; break; // z=1 to avoid Gimbal lock
-                            case 'iso': x=25; y=25; z=25; break;
-                        }
-                        
-                        camera.position.set(x, y, z);
-                        camera.lookAt(0, 0, 0);
-                        controls.update(); // Important to sync controls
-                    }
-
-                    // --- BUILD FUNCTIONS ---
-
-                    function buildEnvironment() {
-                        const floorGeo = new THREE.PlaneGeometry(80, 60);
-                        const floorMat = new THREE.MeshStandardMaterial({ color: 0x151515, roughness: 0.8 });
-                        const floor = new THREE.Mesh(floorGeo, floorMat);
-                        floor.rotation.x = -Math.PI / 2;
-                        floor.receiveShadow = true;
-                        scene.add(floor);
-
-                        const grid = new THREE.GridHelper(80, 40, 0x444444, 0x222222);
-                        scene.add(grid);
-                    }
-
-                    function buildTanks() {
-                        const tankMat = new THREE.MeshStandardMaterial({ color: 0xbdc3c7, metalness: 0.7, roughness: 0.2 });
-                        
-                        // 1. Raw Milk Silo (Left)
-                        createTank(-25, 5, 0, 3, 10, "RAW MILK", tankMat);
-                        
-                        // 2. Balance Tank (Mid-Left)
-                        createTank(-15, 2.5, 0, 1.5, 3, "BALANCE", tankMat);
-                        
-                        // 3. Skim/Product Silo (Right)
-                        createTank(20, 5, -5, 3, 10, "SKIM/PAST.", tankMat);
-
-                        // 4. Cream Tank (Right Front)
-                        createTank(20, 3, 5, 1.5, 5, "CREAM", tankMat);
-                    }
-
-                    function createTank(x, y, z, r, h, label, mat) {
-                        const geo = new THREE.CylinderGeometry(r, r, h, 32);
-                        const mesh = new THREE.Mesh(geo, mat);
-                        mesh.position.set(x, y, z);
-                        mesh.castShadow = true;
-                        mesh.receiveShadow = true;
-                        scene.add(mesh);
-
-                        // Legs
-                        const legGeo = new THREE.CylinderGeometry(0.1, 0.1, 1.5, 8);
-                        for(let i=0; i<4; i++) {
-                            const leg = new THREE.Mesh(legGeo, mat);
-                            const angle = (i * 90) * Math.PI/180;
-                            leg.position.set(x + Math.cos(angle)*(r-0.2), 0.75, z + Math.sin(angle)*(r-0.2));
-                            scene.add(leg);
-                        }
-                        
-                        addLabel(label, x, h+1.5, z);
-                    }
-
-                    function buildPump() {
-                        // Centrifugal Pump between Balance and Processing
-                        const pumpGroup = new THREE.Group();
-                        
-                        // Motor
-                        const motor = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.6, 1.5, 16), new THREE.MeshStandardMaterial({color:0x34495e}));
-                        motor.rotation.z = Math.PI/2;
-                        pumpGroup.add(motor);
-                        
-                        // Impeller Casing
-                        const casing = new THREE.Mesh(new THREE.CylinderGeometry(0.8, 0.8, 0.5, 16), new THREE.MeshStandardMaterial({color:0x95a5a6}));
-                        casing.rotation.x = Math.PI/2;
-                        casing.position.set(0.8, 0, 0);
-                        pumpGroup.add(casing);
-                        
-                        pumpGroup.position.set(-10, 0.8, 0);
-                        pumpMesh = pumpGroup;
-                        scene.add(pumpGroup);
-                        addLabel("PUMP", -10, 2, 0);
-                    }
-
-                    function buildProcessingLine() {
-                        // All units arranged linearly for clarity
-                        
-                        // 1. REGENERATION (PHE)
-                        createPHEUnit(-5, 0, 0, 0xf39c12, "REGEN");
-                        
-                        // 2. SEPARATOR (Centrifuge)
-                        const sepGroup = new THREE.Group();
-                        const sepBody = new THREE.Mesh(new THREE.CylinderGeometry(1, 1.5, 2), new THREE.MeshStandardMaterial({color:0xecf0f1}));
-                        const sepTop = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16, 0, Math.PI*2, 0, Math.PI/2), new THREE.MeshStandardMaterial({color:0xecf0f1}));
-                        sepTop.position.y = 1;
-                        sepGroup.add(sepBody); sepGroup.add(sepTop);
-                        sepGroup.position.set(-1, 2, 2); // Slightly forward
-                        scene.add(sepGroup);
-                        addLabel("SEPARATOR", -1, 4, 2);
-
-                        // 3. HOMOGENIZER (Block)
-                        const homoGroup = new THREE.Group();
-                        const body = new THREE.Mesh(new THREE.BoxGeometry(2.5, 2, 1.5), new THREE.MeshStandardMaterial({color:0x8e44ad}));
-                        const pistons = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 0.8), new THREE.MeshStandardMaterial({color:0xffffff}));
-                        pistons.rotation.z = Math.PI/2; pistons.position.set(0, 0.5, 0.8);
-                        homoGroup.add(body); homoGroup.add(pistons);
-                        const p2 = pistons.clone(); p2.position.set(0, 0, 0.8); homoGroup.add(p2);
-                        const p3 = pistons.clone(); p3.position.set(0, -0.5, 0.8); homoGroup.add(p3);
-                        homoGroup.position.set(3, 1.5, 0);
-                        scene.add(homoGroup);
-                        addLabel("HOMOGENIZER", 3, 3.5, 0);
-
-                        // 4. HEATING & COOLING (PHE)
-                        createPHEUnit(7, 0, 0, 0xe74c3c, "HEATING");
-                        createPHEUnit(10, 0, 0, 0x3498db, "COOLING");
-                    }
                     
-                    function createPHEUnit(x, z, offset, color, lbl) {
-                        const mat = new THREE.MeshStandardMaterial({ color: color });
-                        const plates = new THREE.Mesh(new THREE.BoxGeometry(1.5, 2.5, 2), mat);
-                        plates.position.set(x, 2, z);
-                        scene.add(plates);
-                        
-                        // Frame
-                        const frame = new THREE.Mesh(new THREE.BoxGeometry(1.6, 2.7, 0.2), new THREE.MeshStandardMaterial({color:0x2c3e50}));
-                        frame.position.set(x, 2, z-1.1); scene.add(frame);
-                        const f2 = frame.clone(); f2.position.set(x, 2, z+1.1); scene.add(f2);
-                        
-                        addLabel(lbl, x, 4, z);
-                    }
-
-                    function buildHoldingAndFDV() {
-                        // Holding Tube: Zig Zag above Heating
-                        const tubeMat = new THREE.MeshStandardMaterial({color:0xbdc3c7});
-                        const tubeGroup = new THREE.Group();
-                        for(let i=0; i<3; i++) {
-                            const t = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 4), tubeMat);
-                            t.rotation.z = Math.PI/2;
-                            t.position.set(0, i*0.3, -i*0.4);
-                            tubeGroup.add(t);
-                        }
-                        // Connector bends simulated
-                        tubeGroup.position.set(7, 4, -2); // Above heating
-                        scene.add(tubeGroup);
-                        addLabel("HOLDING", 7, 5.5, -2);
-
-                        // FDV
-                        fdvMesh = new THREE.Mesh(new THREE.SphereGeometry(0.5), new THREE.MeshStandardMaterial({color:0xecf0f1}));
-                        fdvMesh.position.set(10, 4, -2);
-                        const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.2,0.2,0.8), new THREE.MeshStandardMaterial({color:0x333}));
-                        stem.position.y = 0.5; fdvMesh.add(stem);
-                        scene.add(fdvMesh);
-                        addLabel("FDV", 10, 5, -2);
-                    }
-
-                    function buildPipes() {
-                        const pipeMat = new THREE.MeshStandardMaterial({ color: 0x888888, transparent: true, opacity: 0.3 });
-                        // Visual Pipes (Static simplified)
-                        // Raw -> Balance
-                        createPipe([-25,1,0, -15,1,0, -15,3,0], pipeMat);
-                        // Balance -> Pump
-                        createPipe([-15,0.5,0, -10,0.5,0], pipeMat);
-                        // Pump -> Regen
-                        createPipe([-10,0.5,0, -5,0.5,0, -5,1,0], pipeMat);
-                        // Regen -> Sep
-                        createPipe([-5,3,0, -1,3,0, -1,3,2], pipeMat);
-                        // Sep -> Homo
-                        createPipe([-1,3,2, 3,3,2, 3,2,0], pipeMat);
-                        // Homo -> Heat
-                        createPipe([3,2,0, 7,2,0], pipeMat);
-                        // Heat -> Hold
-                        createPipe([7,3,0, 7,4,0, 7,4,-2], pipeMat);
-                        // Hold -> FDV
-                        createPipe([7,4,-2, 10,4,-2], pipeMat);
-                        // FDV -> Cool (Forward)
-                        createPipe([10,4,-2, 10,3,0], pipeMat);
-                        // Cool -> Silos
-                        createPipe([10,1,0, 20,1,0], pipeMat);
-                        // FDV -> Balance (Divert)
-                        createPipe([10,4,-2, 10,6,-2, -15,6,-2, -15,4,0], pipeMat);
-                    }
-
-                    function createPipe(points, mat) {
-                        const pts = [];
-                        for(let i=0; i<points.length; i+=3) pts.push(new THREE.Vector3(points[i], points[i+1], points[i+2]));
-                        const path = new THREE.CatmullRomCurve3(pts);
-                        const geo = new THREE.TubeGeometry(path, 10, 0.08, 8, false);
-                        const mesh = new THREE.Mesh(geo, mat);
-                        scene.add(mesh);
-                    }
-
-                    function addLabel(text, x, y, z) {
-                        const canvas = document.createElement('canvas');
-                        const ctx = canvas.getContext('2d');
-                        canvas.width = 256; canvas.height = 64;
-                        ctx.fillStyle = "rgba(0,0,0,0.6)"; ctx.fillRect(0,0,256,64);
-                        ctx.font = "bold 28px Arial"; ctx.fillStyle = "white";
-                        ctx.textAlign = "center"; ctx.textBaseline = "middle";
-                        ctx.fillText(text, 128, 32);
-                        const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(canvas) }));
-                        sprite.position.set(x, y, z);
-                        sprite.scale.set(3, 0.75, 1);
-                        scene.add(sprite);
-                    }
-
-                    // --- PATHS FOR ANIMATION ---
-                    function initPaths() {
-                        // 1. Raw to Pump
-                        pathFeed = new THREE.CatmullRomCurve3([v(-25,1,0), v(-15,1,0), v(-15,0.5,0), v(-10,0.5,0)]);
-                        // 2. Pump to Regen
-                        pathRegen = new THREE.CatmullRomCurve3([v(-10,0.5,0), v(-5,0.5,0), v(-5,2.5,0)]);
-                        // 3. Regen to Separator
-                        pathSepMain = new THREE.CatmullRomCurve3([v(-5,2.5,0), v(-1,2.5,0), v(-1,2.5,2)]);
-                        // 4. Sep Output (Cream)
-                        pathSepCream = new THREE.CatmullRomCurve3([v(-1,2.5,2), v(-1,1,4), v(20,1,5), v(20,5,5)]);
-                        // 5. Sep Output (Skim/Main) -> Homo
-                        pathHomo = new THREE.CatmullRomCurve3([v(-1,2.5,2), v(3,2.5,0)]);
-                        // 6. Homo -> Heating
-                        pathHeat = new THREE.CatmullRomCurve3([v(3,2.5,0), v(7,2.5,0), v(7,4,-2)]); // Ends at hold start
-                        // 7. Holding -> FDV
-                        pathHold = new THREE.CatmullRomCurve3([v(7,4,-2), v(8.5,4,-2), v(10,4,-2)]);
-                        
-                        // 8. Safe Path (Forward)
-                        pathSafe = new THREE.CatmullRomCurve3([v(10,4,-2), v(10,2.5,0), v(20,0.5,-5), v(20,5,-5)]);
-                        // 9. Divert Path
-                        pathDivert = new THREE.CatmullRomCurve3([v(10,4,-2), v(10,6,-2), v(-15,6,-2), v(-15,4,0)]);
-                    }
-                    function v(x,y,z) { return new THREE.Vector3(x,y,z); }
-
-                    // --- GAME LOOP ---
-                    function animate() {
-                        requestAnimationFrame(animate);
-                        controls.update();
-
-                        updateProcessLogic();
-                        updateParticles();
-                        
-                        if(systemOn) {
-                            pumpMesh.children[1].rotation.x += 0.5; // Rotate pump impeller
-                        }
-
-                        renderer.render(scene, camera);
-                    }
-
-                    function updateProcessLogic() {
-                        // Temp Simulation
-                        let target = 25;
-                        if(systemOn) {
-                            target = 25 + (steamVal * 0.7); // Max ~95C
-                            if(currentTemp < target) currentTemp += 0.2;
-                            if(currentTemp > target) currentTemp -= 0.1;
-                        } else {
-                            if(currentTemp > 25) currentTemp -= 0.1;
-                        }
-                        elTemp.innerText = currentTemp.toFixed(1) + "°C";
-
-                        // FDV Logic
-                        if(systemOn && currentTemp >= targetTempSet) {
-                            fdvState = 'FORWARD';
-                            setLight(elLightFwd, true); setLight(elLightDiv, false);
-                            fdvMesh.material.color.setHex(0x2ecc71);
-                        } else {
-                            fdvState = 'DIVERT';
-                            setLight(elLightFwd, false); setLight(elLightDiv, true);
-                            fdvMesh.material.color.setHex(0xe74c3c);
-                        }
-                        
-                        // Status Text
-                        let status = "System Off";
-                        if(systemOn) {
-                            status = \`Pump ON.\\nSeparator: \${sepOn?'Active':'Bypass'}\\nHomo: \${homoOn?'Active':'Bypass'}\\nMode: \${fdvState}\`;
-                        }
-                        elStatus.innerText = status;
-                    }
-
-                    function updateParticles() {
-                        if(!systemOn) return;
-
-                        // Spawn Rate
-                        if(Math.random() > 0.8) spawnParticle();
-
-                        for(let i=particles.length-1; i>=0; i--) {
-                            let p = particles[i];
-                            p.progress += 0.01; // Speed
-                            
-                            if(p.path) {
-                                p.mesh.position.copy(p.path.getPoint(p.progress));
-                            }
-                            
-                            if(p.progress >= 1) {
-                                p.progress = 0;
-                                handlePathSwitch(p);
-                            }
-                        }
-                    }
-
-                    function spawnParticle() {
-                        const geo = new THREE.SphereGeometry(0.1, 8, 8);
-                        const mat = new THREE.MeshBasicMaterial({color:0xffffff});
-                        const mesh = new THREE.Mesh(geo, mat);
-                        scene.add(mesh);
-                        particles.push({ mesh: mesh, path: pathFeed, progress: 0, stage: 'feed' });
-                    }
-
-                    function handlePathSwitch(p) {
-                        // State Machine for Particles
-                        if(p.stage === 'feed') {
-                            p.path = pathRegen; p.stage = 'regen';
-                        } else if (p.stage === 'regen') {
-                            // To Separator
-                            p.path = pathSepMain; p.stage = 'sep_in';
-                        } else if (p.stage === 'sep_in') {
-                            if(sepOn) {
-                                // Split logic: 20% Cream, 80% Skim
-                                if(Math.random() > 0.8) {
-                                     p.path = pathSepCream; p.stage = 'cream_out';
-                                     p.mesh.material.color.setHex(0xf1c40f); // Yellow cream
-                                } else {
-                                    p.path = pathHomo; p.stage = 'homo_in';
-                                }
-                            } else {
-                                p.path = pathHomo; p.stage = 'homo_in'; // Bypass visual logic simplified
-                            }
-                        } else if (p.stage === 'homo_in') {
-                            p.path = pathHeat; p.stage = 'heating';
-                            if(homoOn && p.mesh.material.color.getHex() === 0xffffff) {
-                                // Visual effect: homogenized milk is brighter white? (keep white)
-                            }
-                        } else if (p.stage === 'heating') {
-                            p.path = pathHold; p.stage = 'holding';
-                        } else if (p.stage === 'holding') {
-                            // FDV Decision
-                            if(fdvState === 'FORWARD') {
-                                p.path = pathSafe; p.stage = 'finished';
-                                p.mesh.material.color.setHex(0x2ecc71); // Safe Green tint
-                            } else {
-                                p.path = pathDivert; p.stage = 'divert';
-                                p.mesh.material.color.setHex(0xe74c3c); // Unsafe Red tint
-                            }
-                        } else if (p.stage === 'divert') {
-                            // Back to start logic
-                            p.path = pathRegen; p.stage = 'regen'; // Loop back into process
-                            p.mesh.material.color.setHex(0xffffff);
-                        } else {
-                            // Finished or Cream Out -> Remove
-                            scene.remove(p.mesh);
-                            particles.splice(particles.indexOf(p), 1);
-                        }
-                    }
-
-                    // --- UI INTERACTION ---
-                    function toggleSystem() {
-                        systemOn = !systemOn;
-                        if(systemOn) {
-                            btnPower.classList.add('active');
-                            btnPower.innerText = "STOP PLANT";
-                            elPumpLight.classList.add('on'); elPumpLight.classList.remove('off');
-                            elTooltip.innerText = "Pump Running. Milk flowing.";
-                        } else {
-                            btnPower.classList.remove('active');
-                            btnPower.innerText = "START PLANT";
-                            elPumpLight.classList.remove('on'); elPumpLight.classList.add('off');
-                            elTooltip.innerText = "System Stopped.";
-                        }
-                    }
-                    function toggleSep() {
-                        sepOn = !sepOn;
-                        btnSep.innerText = sepOn ? "Separator: ON" : "Separator: OFF";
-                        btnSep.classList.toggle('active');
-                    }
-                    function toggleHomo() {
-                        homoOn = !homoOn;
-                        btnHomo.innerText = homoOn ? "Homogenizer: ON" : "Homogenizer: OFF";
-                        btnHomo.classList.toggle('active');
-                    }
-                    window.updateSteam = function(val) {
-                        steamVal = parseInt(val);
-                        document.getElementById('steam-val-text').innerText = val + "%";
-                    }
-                    function setLight(el, on) {
-                        if(on) { el.classList.add('on'); el.classList.remove('off'); }
-                        else { el.classList.add('off'); el.classList.remove('on'); }
-                    }
-                    function onWindowResize() {
-                        camera.aspect = window.innerWidth / (window.innerHeight - 200);
-                        camera.updateProjectionMatrix();
-                        renderer.setSize(window.innerWidth, window.innerHeight - 200);
-                    }
-
+                    window.setView=function(v){const d=35,h=20;let x=0,y=h,z=0;switch(v){case'front':z=d;break;case'back':z=-d;break;case'left':x=-d;break;case'right':x=d;break;case'top':y=d+15,z=1;break;case'iso':x=25,y=25,z=25;break}camera.position.set(x,y,z);camera.lookAt(0,0,0);controls.update()}
+                    
+                    function buildEnvironment(){const f=new THREE.Mesh(new THREE.PlaneGeometry(80,60),new THREE.MeshStandardMaterial({color:0x151515,roughness:.8}));f.rotation.x=-Math.PI/2;scene.add(f);scene.add(new THREE.GridHelper(80,40,4473924,2236962))}
+                    function buildTanks(){const t=new THREE.MeshStandardMaterial({color:0xbdc3c7,metalness:.7,roughness:.2});createTank(-25,5,0,3,10,"RAW MILK",t);createTank(-15,2.5,0,1.5,3,"BALANCE",t);createTank(20,5,-5,3,10,"SKIM/PAST.",t);createTank(20,3,5,1.5,5,"CREAM",t)}
+                    function createTank(t,e,o,i,n,s,a){const d=new THREE.Mesh(new THREE.CylinderGeometry(i,i,n,32),a);d.position.set(t,e,o);scene.add(d);const r=new THREE.CylinderGeometry(.1,.1,1.5,8);for(let e=0;e<4;e++){const a=new THREE.Mesh(r);const l=e*90*Math.PI/180;a.position.set(t+Math.cos(l)*(i-.2),.75,o+Math.sin(l)*(i-.2)),scene.add(a)}addLabel(s,t,n+1.5,o)}
+                    function buildPump(){const t=new THREE.Group;const e=new THREE.Mesh(new THREE.CylinderGeometry(.6,.6,1.5,16),new THREE.MeshStandardMaterial({color:0x34495e}));e.rotation.z=Math.PI/2,t.add(e);const o=new THREE.Mesh(new THREE.CylinderGeometry(.8,.8,.5,16),new THREE.MeshStandardMaterial({color:0x95a5a6}));o.rotation.x=Math.PI/2,o.position.set(.8,0,0),t.add(o),t.position.set(-10,.8,0),pumpMesh=t,scene.add(t),addLabel("PUMP",-10,2,0)}
+                    function buildProcessingLine(){createPHEUnit(-5,0,0,0xf39c12,"REGEN");const t=new THREE.Group,e=new THREE.Mesh(new THREE.CylinderGeometry(1,1.5,2),new THREE.MeshStandardMaterial({color:0xecf0f1})),o=new THREE.Mesh(new THREE.SphereGeometry(1,32,16,0,6.283185307179586,0,Math.PI/2),new THREE.MeshStandardMaterial({color:0xecf0f1}));o.position.y=1,t.add(e),t.add(o),t.position.set(-1,2,2),scene.add(t),addLabel("SEPARATOR",-1,4,2);const i=new THREE.Group,n=new THREE.Mesh(new THREE.BoxGeometry(2.5,2,1.5),new THREE.MeshStandardMaterial({color:0x8e44ad})),s=new THREE.Mesh(new THREE.CylinderGeometry(.2,.2,.8),new THREE.MeshStandardMaterial({color:0xffffff}));s.rotation.z=Math.PI/2,s.position.set(0,.5,.8),i.add(n),i.add(s);const a=s.clone();a.position.set(0,0,.8),i.add(a);const d=s.clone();d.position.set(0,-.5,.8),i.add(d),i.position.set(3,1.5,0),scene.add(i),addLabel("HOMOGENIZER",3,3.5,0),createPHEUnit(7,0,0,0xe74c3c,"HEATING"),createPHEUnit(10,0,0,0x3498db,"COOLING")}
+                    function createPHEUnit(t,e,o,i,n){const s=new THREE.MeshStandardMaterial({color:i}),a=new THREE.Mesh(new THREE.BoxGeometry(1.5,2.5,2),s);a.position.set(t,2,e),scene.add(a);const d=new THREE.Mesh(new THREE.BoxGeometry(1.6,2.7,.2),new THREE.MeshStandardMaterial({color:0x2c3e50}));d.position.set(t,2,e-1.1),scene.add(d);const r=d.clone();r.position.set(t,2,e+1.1),scene.add(r),addLabel(n,t,4,e)}
+                    function buildHoldingAndFDV(){const t=new THREE.MeshStandardMaterial({color:0xbdc3c7}),e=new THREE.Group;for(let o=0;o<3;o++){const i=new THREE.Mesh(new THREE.CylinderGeometry(.1,.1,4),t);i.rotation.z=Math.PI/2,i.position.set(0,o*.3,-o*.4),e.add(i)}e.position.set(7,4,-2),scene.add(e),addLabel("HOLDING",7,5.5,-2),fdvMesh=new THREE.Mesh(new THREE.SphereGeometry(.5),new THREE.MeshStandardMaterial({color:0xecf0f1}));const o=new THREE.Mesh(new THREE.CylinderGeometry(.2,.2,.8),new THREE.MeshStandardMaterial({color:0x333}));o.position.y=.5,fdvMesh.add(o),fdvMesh.position.set(10,4,-2),scene.add(fdvMesh),addLabel("FDV",10,5,-2)}
+                    function buildPipes(){const t=new THREE.MeshStandardMaterial({color:0x888888,transparent:!0,opacity:.3});createPipe([-25,1,0,-15,1,0,-15,3,0],t),createPipe([-15,.5,0,-10,.5,0],t),createPipe([-10,.5,0,-5,.5,0,-5,1,0],t),createPipe([-5,3,0,-1,3,0,-1,3,2],t),createPipe([-1,3,2,3,3,2,3,2,0],t),createPipe([3,2,0,7,2,0],t),createPipe([7,3,0,7,4,0,7,4,-2],t),createPipe([7,4,-2,10,4,-2],t),createPipe([10,4,-2,10,3,0],t),createPipe([10,1,0,20,1,0],t),createPipe([10,4,-2,10,6,-2,-15,6,-2,-15,4,0],t)}
+                    function createPipe(t,e){const o=[];for(let e=0;e<t.length;e+=3)o.push(new THREE.Vector3(t[e],t[e+1],t[e+2]));const i=new THREE.CatmullRomCurve3(o),n=new THREE.TubeGeometry(i,10,.08,8,!1),s=new THREE.Mesh(n,e);scene.add(s)}
+                    function addLabel(t,e,o,i){const n=document.createElement("canvas");n.width=256,n.height=64;const s=n.getContext("2d");s.fillStyle="rgba(0,0,0,0.6)",s.fillRect(0,0,256,64),s.font="bold 28px Arial",s.fillStyle="white",s.textAlign="center",s.textBaseline="middle",s.fillText(t,128,32);const a=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(n)}));a.position.set(e,o,i),a.scale.set(3,.75,1),scene.add(a)}
+                    function initPaths(){pathFeed=new THREE.CatmullRomCurve3([v(-25,1,0),v(-15,1,0),v(-15,.5,0),v(-10,.5,0)]),pathRegen=new THREE.CatmullRomCurve3([v(-10,.5,0),v(-5,.5,0),v(-5,2.5,0)]),pathSepMain=new THREE.CatmullRomCurve3([v(-5,2.5,0),v(-1,2.5,0),v(-1,2.5,2)]),pathSepCream=new THREE.CatmullRomCurve3([v(-1,2.5,2),v(-1,1,4),v(20,1,5),v(20,5,5)]),pathHomo=new THREE.CatmullRomCurve3([v(-1,2.5,2),v(3,2.5,0)]),pathHeat=new THREE.CatmullRomCurve3([v(3,2.5,0),v(7,2.5,0),v(7,4,-2)]),pathHold=new THREE.CatmullRomCurve3([v(7,4,-2),v(8.5,4,-2),v(10,4,-2)]),pathSafe=new THREE.CatmullRomCurve3([v(10,4,-2),v(10,2.5,0),v(20,0.5,-5),v(20,5,-5)]),pathDivert=new THREE.CatmullRomCurve3([v(10,4,-2),v(10,6,-2),v(-15,6,-2),v(-15,4,0)])}
+                    function v(t,e,o){return new THREE.Vector3(t,e,o)}
+                    function animate(){requestAnimationFrame(animate),controls.update(),updateProcessLogic(),updateParticles(),systemOn&&(pumpMesh.children[1].rotation.x+=.5),renderer.render(scene,camera)}
+                    function updateProcessLogic(){let t=25;systemOn?(t=25+steamVal*0.7,currentTemp<t?currentTemp+=.2:currentTemp>t&&(currentTemp-=.1)):currentTemp>25&&(currentTemp-=.1),elTemp.innerText=currentTemp.toFixed(1)+"°C",systemOn&&currentTemp>=72?(fdvState="FORWARD",setLight(elLightFwd,!0),setLight(elLightDiv,!1),fdvMesh.material.color.setHex(3066993)):(fdvState="DIVERT",setLight(elLightFwd,!1),setLight(elLightDiv,!0),fdvMesh.material.color.setHex(15158332));let e="System Off";if(systemOn){e="Pump ON.\\nSeparator: "+(sepOn?"Active":"Bypass")+"\\nHomo: "+(homoOn?"Active":"Bypass")+"\\nMode: "+fdvState}elStatus.innerText=e}
+                    function updateParticles(){if(!systemOn)return;Math.random()>.8&&spawnParticle();for(let t=particles.length-1;t>=0;t--){let e=particles[t];e.progress+=.01,e.path&&e.mesh.position.copy(e.path.getPoint(e.progress)),e.progress>=1&&(e.progress=0,handlePathSwitch(e))}}
+                    function spawnParticle(){const t=new THREE.SphereGeometry(.1,8,8),e=new THREE.MeshBasicMaterial({color:16777215}),o=new THREE.Mesh(t,e);scene.add(o),particles.push({mesh:o,path:pathFeed,progress:0,stage:"feed"})}
+                    function handlePathSwitch(t){"feed"===t.stage?(t.path=pathRegen,t.stage="regen"):"regen"===t.stage?(t.path=pathSepMain,t.stage="sep_in"):"sep_in"===t.stage?sepOn?Math.random()>.8?(t.path=pathSepCream,t.stage="cream_out",t.mesh.material.color.setHex(15844367)):(t.path=pathHomo,t.stage="homo_in"):(t.path=pathHomo,t.stage="homo_in"):"homo_in"===t.stage?(t.path=pathHeat,t.stage="heating"):"heating"===t.stage?(t.path=pathHold,t.stage="holding"):"holding"===t.stage?"FORWARD"===fdvState?(t.path=pathSafe,t.stage="finished",t.mesh.material.color.setHex(3066993)):(t.path=pathDivert,t.stage="divert",t.mesh.material.color.setHex(15158332)):"divert"===t.stage?(t.path=pathRegen,t.stage="regen",t.mesh.material.color.setHex(16777215)):(scene.remove(t.mesh),particles.splice(particles.indexOf(t),1))}
+                    function toggleSystem(){systemOn=!systemOn,systemOn?(btnPower.classList.add("active"),btnPower.innerText="STOP PLANT",elPumpLight.classList.add("on"),elPumpLight.classList.remove("off"),elTooltip.innerText="Pump Running. Milk flowing."):(btnPower.classList.remove("active"),btnPower.innerText="START PLANT",elPumpLight.classList.remove("on"),elPumpLight.classList.add("off"),elTooltip.innerText="System Stopped.")}
+                    function toggleSep(){sepOn=!sepOn;btnSep.innerText=sepOn?"Separator: ON":"Separator: OFF",btnSep.classList.toggle('active')}
+                    function toggleHomo(){homoOn=!homoOn;btnHomo.innerText=homoOn?"Homogenizer: ON":"Homogenizer: OFF",btnHomo.classList.toggle('active')}
+                    window.updateSteam=function(t){steamVal=parseInt(t),document.getElementById("steam-val-text").innerText=t+"%"}
+                    function setLight(t,e){e?(t.classList.add("on"),t.classList.remove("off")):(t.classList.add("off"),t.classList.remove("on"))}
+                    function onWindowResize(){camera.aspect=window.innerWidth/getRendererHeight(),camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,getRendererHeight())}
                     init();
                 <\/script>
             </body>
@@ -1505,3 +597,7 @@ export const pasteurizationContent = {
         `
     }
 }
+
+    
+
+    
