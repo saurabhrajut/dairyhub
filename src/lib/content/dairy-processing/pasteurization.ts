@@ -155,16 +155,12 @@ export const pasteurizationContent = {
                     .color-box { width: 10px; height: 10px; margin-right: 8px; border: 1px solid #777; }
 
                     @media (max-width: 768px) {
-                        #ui-container { height: auto; flex-wrap: wrap; padding: 10px; justify-content: center; }
-                        .panel-section { width: 45%; border-right: none; padding: 5px; margin-bottom: 10px; }
-                        h2 { font-size: 12px; }
-                        .digital-display { font-size: 16px; padding: 3px 6px; }
-                        .toggle-btn { width: 80px; font-size: 10px; }
-                        button.main-start { padding: 8px 12px; font-size: 14px; }
-                        #view-controls { display: none; }
-                        .legend { padding: 5px; font-size: 9px; }
-                        .legend-item { margin-bottom: 2px; }
-                        .color-box { width: 8px; height: 8px; margin-right: 5px; }
+                        #ui-container { flex-wrap: wrap; padding: 5px; justify-content: center; max-height: 160px; }
+                        .panel-section { width: 48%; padding: 5px; margin-bottom: 5px; border-right: none; }
+                        h2 { font-size: 11px; margin-bottom: 5px;}
+                        .digital-display { font-size: 14px; padding: 2px 4px; }
+                        .toggle-btn, button.main-start, #view-controls button { width: 90%; font-size: 10px; padding: 4px; }
+                        .legend, #view-controls { display: none; }
                     }
                 </style>
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script>
@@ -173,16 +169,16 @@ export const pasteurizationContent = {
             <body>
 
                 <div class="legend">
-                    <div class="legend-item"><div class="color-box" style="background:#ecf0f1"></div>Tanks/Pipes</div>
-                    <div class="legend-item"><div class="color-box" style="background:#34495e"></div>Pump/Motors</div>
+                    <div class="legend-item"><div class="color-box" style="background:#ecf0f1"></div>Tanks / Pipes</div>
+                    <div class="legend-item"><div class="color-box" style="background:#34495e"></div>Pump & Motors</div>
                     <div class="legend-item"><div class="color-box" style="background:#f39c12"></div>Regen/Separator</div>
                     <div class="legend-item"><div class="color-box" style="background:#8e44ad"></div>Homogenizer</div>
-                    <div class="legend-item"><div class="color-box" style="background:#e74c3c"></div>Heating</div>
-                    <div class="legend-item"><div class="color-box" style="background:#3498db"></div>Cooling</div>
+                    <div class="legend-item"><div class="color-box" style="background:#e74c3c"></div>Heating Section</div>
+                    <div class="legend-item"><div class="color-box" style="background:#3498db"></div>Cooling Section</div>
                 </div>
 
                 <div id="view-controls">
-                    <div class="view-label">CAMERA</div>
+                    <div class="view-label">CAMERA VIEW</div>
                     <button onclick="setView('front')">FRONT</button>
                     <button onclick="setView('back')">BACK</button>
                     <button onclick="setView('left')">LEFT</button>
@@ -241,10 +237,13 @@ export const pasteurizationContent = {
                           elLightFwd = document.getElementById('light-fwd'),
                           elLightDiv = document.getElementById('light-div'),
                           elPumpLight = document.getElementById('status-pump'),
-                          btnPower = document.getElementById('btn-power');
-
+                          btnPower = document.getElementById('btn-power'),
+                          btnSep = document.getElementById('btn-sep'),
+                          btnHomo = document.getElementById('btn-homo');
+                    
                     function getRendererHeight() {
-                        return window.innerWidth < 768 ? window.innerHeight - 250 : window.innerHeight - 200;
+                        const uiContainer = document.getElementById('ui-container');
+                        return window.innerHeight - (uiContainer ? uiContainer.offsetHeight : 0);
                     }
 
                     function init() {
@@ -269,7 +268,7 @@ export const pasteurizationContent = {
                     
                     window.setView=function(v){const d=35,h=20;let x=0,y=h,z=0;switch(v){case'front':z=d;break;case'back':z=-d;break;case'left':x=-d;break;case'right':x=d;break;case'top':y=d+15,z=1;break;case'iso':x=25,y=25,z=25;break}camera.position.set(x,y,z);camera.lookAt(0,0,0);controls.update()}
                     
-                    function buildEnvironment(){const f=new THREE.Mesh(new THREE.PlaneGeometry(80,60),new THREE.MeshStandardMaterial({color:0x151515,roughness:.8}));f.rotation.x=-Math.PI/2;scene.add(f);scene.add(new THREE.GridHelper(80,40,4473924,2236962))}
+                    function buildEnvironment(){const f=new THREE.Mesh(new THREE.PlaneGeometry(80,60),new THREE.MeshStandardMaterial({color:0x151515,roughness:.8}));f.rotation.x=-Math.PI/2;scene.add(f);scene.add(new THREE.GridHelper(80,40,0x444444,0x222222))}
                     function buildTanks(){const t=new THREE.MeshStandardMaterial({color:0xbdc3c7,metalness:.7,roughness:.2});createTank(-25,5,0,3,10,"RAW MILK",t);createTank(-15,2.5,0,1.5,3,"BALANCE",t);createTank(20,5,-5,3,10,"SKIM/PAST.",t);createTank(20,3,5,1.5,5,"CREAM",t)}
                     function createTank(t,e,o,i,n,s,a){const d=new THREE.Mesh(new THREE.CylinderGeometry(i,i,n,32),a);d.position.set(t,e,o);scene.add(d);const r=new THREE.CylinderGeometry(.1,.1,1.5,8);for(let e=0;e<4;e++){const a=new THREE.Mesh(r);const l=e*90*Math.PI/180;a.position.set(t+Math.cos(l)*(i-.2),.75,o+Math.sin(l)*(i-.2)),scene.add(a)}addLabel(s,t,n+1.5,o)}
                     function buildPump(){const t=new THREE.Group;const e=new THREE.Mesh(new THREE.CylinderGeometry(.6,.6,1.5,16),new THREE.MeshStandardMaterial({color:0x34495e}));e.rotation.z=Math.PI/2,t.add(e);const o=new THREE.Mesh(new THREE.CylinderGeometry(.8,.8,.5,16),new THREE.MeshStandardMaterial({color:0x95a5a6}));o.rotation.x=Math.PI/2,o.position.set(.8,0,0),t.add(o),t.position.set(-10,.8,0),pumpMesh=t,scene.add(t),addLabel("PUMP",-10,2,0)}
@@ -282,13 +281,13 @@ export const pasteurizationContent = {
                     function initPaths(){pathFeed=new THREE.CatmullRomCurve3([v(-25,1,0),v(-15,1,0),v(-15,.5,0),v(-10,.5,0)]),pathRegen=new THREE.CatmullRomCurve3([v(-10,.5,0),v(-5,.5,0),v(-5,2.5,0)]),pathSepMain=new THREE.CatmullRomCurve3([v(-5,2.5,0),v(-1,2.5,0),v(-1,2.5,2)]),pathSepCream=new THREE.CatmullRomCurve3([v(-1,2.5,2),v(-1,1,4),v(20,1,5),v(20,5,5)]),pathHomo=new THREE.CatmullRomCurve3([v(-1,2.5,2),v(3,2.5,0)]),pathHeat=new THREE.CatmullRomCurve3([v(3,2.5,0),v(7,2.5,0),v(7,4,-2)]),pathHold=new THREE.CatmullRomCurve3([v(7,4,-2),v(8.5,4,-2),v(10,4,-2)]),pathSafe=new THREE.CatmullRomCurve3([v(10,4,-2),v(10,2.5,0),v(20,0.5,-5),v(20,5,-5)]),pathDivert=new THREE.CatmullRomCurve3([v(10,4,-2),v(10,6,-2),v(-15,6,-2),v(-15,4,0)])}
                     function v(t,e,o){return new THREE.Vector3(t,e,o)}
                     function animate(){requestAnimationFrame(animate),controls.update(),updateProcessLogic(),updateParticles(),systemOn&&(pumpMesh.children[1].rotation.x+=.5),renderer.render(scene,camera)}
-                    function updateProcessLogic(){let t=25;systemOn?(t=25+steamVal*0.7,currentTemp<t?currentTemp+=.2:currentTemp>t&&(currentTemp-=.1)):currentTemp>25&&(currentTemp-=.1),elTemp.innerText=currentTemp.toFixed(1)+"°C",systemOn&&currentTemp>=72?(fdvState="FORWARD",setLight(elLightFwd,!0),setLight(elLightDiv,!1),fdvMesh.material.color.setHex(3066993)):(fdvState="DIVERT",setLight(elLightFwd,!1),setLight(elLightDiv,!0),fdvMesh.material.color.setHex(15158332));let e="System Off";if(systemOn){e="Pump ON.\\nSeparator: "+(sepOn?"Active":"Bypass")+"\\nHomo: "+(homoOn?"Active":"Bypass")+"\\nMode: "+fdvState}elStatus.innerText=e}
+                    function updateProcessLogic(){let t=25;systemOn?(t=25+steamVal*0.7,currentTemp<t?currentTemp+=.2:currentTemp>t&&(currentTemp-=.1)):currentTemp>25&&(currentTemp-=.1);elTemp.innerText=currentTemp.toFixed(1)+"°C";if(systemOn&&currentTemp>=72){fdvState="FORWARD";setLight(elLightFwd,!0);setLight(elLightDiv,!1);fdvMesh.material.color.setHex(0x2ecc71)}else{fdvState="DIVERT";setLight(elLightFwd,!1);setLight(elLightDiv,!0);fdvMesh.material.color.setHex(0xe74c3c)}let e="System Off";if(systemOn){e="Pump ON.\\nSeparator: "+(sepOn?"Active":"Bypass")+"\\nHomo: "+(homoOn?"Active":"Bypass")+"\\nMode: "+fdvState}elStatus.innerText=e}
                     function updateParticles(){if(!systemOn)return;Math.random()>.8&&spawnParticle();for(let t=particles.length-1;t>=0;t--){let e=particles[t];e.progress+=.01,e.path&&e.mesh.position.copy(e.path.getPoint(e.progress)),e.progress>=1&&(e.progress=0,handlePathSwitch(e))}}
-                    function spawnParticle(){const t=new THREE.SphereGeometry(.1,8,8),e=new THREE.MeshBasicMaterial({color:16777215}),o=new THREE.Mesh(t,e);scene.add(o),particles.push({mesh:o,path:pathFeed,progress:0,stage:"feed"})}
-                    function handlePathSwitch(t){"feed"===t.stage?(t.path=pathRegen,t.stage="regen"):"regen"===t.stage?(t.path=pathSepMain,t.stage="sep_in"):"sep_in"===t.stage?sepOn?Math.random()>.8?(t.path=pathSepCream,t.stage="cream_out",t.mesh.material.color.setHex(15844367)):(t.path=pathHomo,t.stage="homo_in"):(t.path=pathHomo,t.stage="homo_in"):"homo_in"===t.stage?(t.path=pathHeat,t.stage="heating"):"heating"===t.stage?(t.path=pathHold,t.stage="holding"):"holding"===t.stage?"FORWARD"===fdvState?(t.path=pathSafe,t.stage="finished",t.mesh.material.color.setHex(3066993)):(t.path=pathDivert,t.stage="divert",t.mesh.material.color.setHex(15158332)):"divert"===t.stage?(t.path=pathRegen,t.stage="regen",t.mesh.material.color.setHex(16777215)):(scene.remove(t.mesh),particles.splice(particles.indexOf(t),1))}
-                    function toggleSystem(){systemOn=!systemOn,systemOn?(btnPower.classList.add("active"),btnPower.innerText="STOP PLANT",elPumpLight.classList.add("on"),elPumpLight.classList.remove("off"),elTooltip.innerText="Pump Running. Milk flowing."):(btnPower.classList.remove("active"),btnPower.innerText="START PLANT",elPumpLight.classList.remove("on"),elPumpLight.classList.add("off"),elTooltip.innerText="System Stopped.")}
-                    function toggleSep(){sepOn=!sepOn;btnSep.innerText=sepOn?"Separator: ON":"Separator: OFF",btnSep.classList.toggle("active")}
-                    function toggleHomo(){homoOn=!homoOn;btnHomo.innerText=homoOn?"Homogenizer: ON":"Homogenizer: OFF",btnHomo.classList.toggle("active")}
+                    function spawnParticle(){const t=new THREE.SphereGeometry(.1,8,8),e=new THREE.MeshBasicMaterial({color:0xffffff}),o=new THREE.Mesh(t,e);scene.add(o),particles.push({mesh:o,path:pathFeed,progress:0,stage:"feed"})}
+                    function handlePathSwitch(t){"feed"===t.stage?(t.path=pathRegen,t.stage="regen"):"regen"===t.stage?(t.path=pathSepMain,t.stage="sep_in"):"sep_in"===t.stage?sepOn?Math.random()>.8?(t.path=pathSepCream,t.stage="cream_out",t.mesh.material.color.setHex(0xf1c40f)):(t.path=pathHomo,t.stage="homo_in"):(t.path=pathHomo,t.stage="homo_in"):"homo_in"===t.stage?(t.path=pathHeat,t.stage="heating"):"heating"===t.stage?(t.path=pathHold,t.stage="holding"):"holding"===t.stage?"FORWARD"===fdvState?(t.path=pathSafe,t.stage="finished",t.mesh.material.color.setHex(0x2ecc71)):(t.path=pathDivert,t.stage="divert",t.mesh.material.color.setHex(0xe74c3c)):"divert"===t.stage?(t.path=pathRegen,t.stage="regen",t.mesh.material.color.setHex(0xffffff)):(scene.remove(t.mesh),particles.splice(particles.indexOf(t),1))}
+                    function toggleSystem(){systemOn=!systemOn,systemOn?(btnPower.classList.add('active'),btnPower.innerText="STOP PLANT",elPumpLight.classList.add("on"),elPumpLight.classList.remove("off"),elTooltip.innerText="Pump Running. Milk flowing."):(btnPower.classList.remove('active'),btnPower.innerText="START PLANT",elPumpLight.classList.remove("on"),elPumpLight.classList.add("off"),elTooltip.innerText="System Stopped.")}
+                    function toggleSep(){sepOn=!sepOn;btnSep.innerText=sepOn?"Separator: ON":"Separator: OFF";btnSep.classList.toggle('active')}
+                    function toggleHomo(){homoOn=!homoOn;btnHomo.innerText=homoOn?"Homogenizer: ON":"Homogenizer: OFF";btnHomo.classList.toggle('active')}
                     window.updateSteam=function(t){steamVal=parseInt(t),document.getElementById("steam-val-text").innerText=t+"%"}
                     function setLight(t,e){e?(t.classList.add("on"),t.classList.remove("off")):(t.classList.add("off"),t.classList.remove("on"))}
                     function onWindowResize(){camera.aspect=window.innerWidth/getRendererHeight(),camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,getRendererHeight())}
@@ -296,7 +295,7 @@ export const pasteurizationContent = {
                 <\/script>
             </body>
             </html>
-        `
+        `,
     },
     hi: {
         title: "पाश्चुरीकरण",
@@ -453,16 +452,13 @@ export const pasteurizationContent = {
                     .color-box { width: 10px; height: 10px; margin-right: 8px; border: 1px solid #777; }
 
                     @media (max-width: 768px) {
-                        #ui-container { height: auto; flex-wrap: wrap; padding: 10px; justify-content: center; }
-                        .panel-section { width: 45%; border-right: none; padding: 5px; margin-bottom: 10px; }
-                        h2 { font-size: 12px; }
-                        .digital-display { font-size: 16px; padding: 3px 6px; }
-                        .toggle-btn { width: 80px; font-size: 10px; }
-                        button.main-start { padding: 8px 12px; font-size: 14px; }
-                        #view-controls { display: none; }
+                        #ui-container { flex-wrap: wrap; padding: 5px; justify-content: center; max-height: 160px; }
+                        .panel-section { width: 48%; padding: 5px; margin-bottom: 5px; border-right: none; }
+                        h2 { font-size: 11px; margin-bottom: 5px;}
+                        .digital-display { font-size: 14px; padding: 2px 4px; }
+                        .toggle-btn, button.main-start { width: 90%; font-size: 10px; padding: 4px; }
+                        #view-controls button { font-size: 10px; padding: 4px; width: 70px; }
                         .legend { padding: 5px; font-size: 9px; }
-                        .legend-item { margin-bottom: 2px; }
-                        .color-box { width: 8px; height: 8px; margin-right: 5px; }
                     }
                 </style>
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script>
@@ -471,16 +467,16 @@ export const pasteurizationContent = {
             <body>
 
                 <div class="legend">
-                    <div class="legend-item"><div class="color-box" style="background:#ecf0f1"></div>Tanks/Pipes</div>
-                    <div class="legend-item"><div class="color-box" style="background:#34495e"></div>Pump/Motors</div>
+                    <div class="legend-item"><div class="color-box" style="background:#ecf0f1"></div>Tanks / Pipes</div>
+                    <div class="legend-item"><div class="color-box" style="background:#34495e"></div>Pump & Motors</div>
                     <div class="legend-item"><div class="color-box" style="background:#f39c12"></div>Regen/Separator</div>
                     <div class="legend-item"><div class="color-box" style="background:#8e44ad"></div>Homogenizer</div>
-                    <div class="legend-item"><div class="color-box" style="background:#e74c3c"></div>Heating</div>
-                    <div class="legend-item"><div class="color-box" style="background:#3498db"></div>Cooling</div>
+                    <div class="legend-item"><div class="color-box" style="background:#e74c3c"></div>Heating Section</div>
+                    <div class="legend-item"><div class="color-box" style="background:#3498db"></div>Cooling Section</div>
                 </div>
 
                 <div id="view-controls">
-                    <div class="view-label">CAMERA</div>
+                    <div class="view-label">CAMERA VIEW</div>
                     <button onclick="setView('front')">FRONT</button>
                     <button onclick="setView('back')">BACK</button>
                     <button onclick="setView('left')">LEFT</button>
@@ -539,10 +535,13 @@ export const pasteurizationContent = {
                           elLightFwd = document.getElementById('light-fwd'),
                           elLightDiv = document.getElementById('light-div'),
                           elPumpLight = document.getElementById('status-pump'),
-                          btnPower = document.getElementById('btn-power');
-
+                          btnPower = document.getElementById('btn-power'),
+                          btnSep = document.getElementById('btn-sep'),
+                          btnHomo = document.getElementById('btn-homo');
+                    
                     function getRendererHeight() {
-                        return window.innerWidth < 768 ? window.innerHeight - 250 : window.innerHeight - 200;
+                        const uiContainer = document.getElementById('ui-container');
+                        return window.innerHeight - (uiContainer ? uiContainer.offsetHeight : 0);
                     }
 
                     function init() {
@@ -567,7 +566,7 @@ export const pasteurizationContent = {
                     
                     window.setView=function(v){const d=35,h=20;let x=0,y=h,z=0;switch(v){case'front':z=d;break;case'back':z=-d;break;case'left':x=-d;break;case'right':x=d;break;case'top':y=d+15,z=1;break;case'iso':x=25,y=25,z=25;break}camera.position.set(x,y,z);camera.lookAt(0,0,0);controls.update()}
                     
-                    function buildEnvironment(){const f=new THREE.Mesh(new THREE.PlaneGeometry(80,60),new THREE.MeshStandardMaterial({color:0x151515,roughness:.8}));f.rotation.x=-Math.PI/2;scene.add(f);scene.add(new THREE.GridHelper(80,40,4473924,2236962))}
+                    function buildEnvironment(){const f=new THREE.Mesh(new THREE.PlaneGeometry(80,60),new THREE.MeshStandardMaterial({color:0x151515,roughness:.8}));f.rotation.x=-Math.PI/2;scene.add(f);scene.add(new THREE.GridHelper(80,40,0x444444,0x222222))}
                     function buildTanks(){const t=new THREE.MeshStandardMaterial({color:0xbdc3c7,metalness:.7,roughness:.2});createTank(-25,5,0,3,10,"RAW MILK",t);createTank(-15,2.5,0,1.5,3,"BALANCE",t);createTank(20,5,-5,3,10,"SKIM/PAST.",t);createTank(20,3,5,1.5,5,"CREAM",t)}
                     function createTank(t,e,o,i,n,s,a){const d=new THREE.Mesh(new THREE.CylinderGeometry(i,i,n,32),a);d.position.set(t,e,o);scene.add(d);const r=new THREE.CylinderGeometry(.1,.1,1.5,8);for(let e=0;e<4;e++){const a=new THREE.Mesh(r);const l=e*90*Math.PI/180;a.position.set(t+Math.cos(l)*(i-.2),.75,o+Math.sin(l)*(i-.2)),scene.add(a)}addLabel(s,t,n+1.5,o)}
                     function buildPump(){const t=new THREE.Group;const e=new THREE.Mesh(new THREE.CylinderGeometry(.6,.6,1.5,16),new THREE.MeshStandardMaterial({color:0x34495e}));e.rotation.z=Math.PI/2,t.add(e);const o=new THREE.Mesh(new THREE.CylinderGeometry(.8,.8,.5,16),new THREE.MeshStandardMaterial({color:0x95a5a6}));o.rotation.x=Math.PI/2,o.position.set(.8,0,0),t.add(o),t.position.set(-10,.8,0),pumpMesh=t,scene.add(t),addLabel("PUMP",-10,2,0)}
@@ -580,13 +579,13 @@ export const pasteurizationContent = {
                     function initPaths(){pathFeed=new THREE.CatmullRomCurve3([v(-25,1,0),v(-15,1,0),v(-15,.5,0),v(-10,.5,0)]),pathRegen=new THREE.CatmullRomCurve3([v(-10,.5,0),v(-5,.5,0),v(-5,2.5,0)]),pathSepMain=new THREE.CatmullRomCurve3([v(-5,2.5,0),v(-1,2.5,0),v(-1,2.5,2)]),pathSepCream=new THREE.CatmullRomCurve3([v(-1,2.5,2),v(-1,1,4),v(20,1,5),v(20,5,5)]),pathHomo=new THREE.CatmullRomCurve3([v(-1,2.5,2),v(3,2.5,0)]),pathHeat=new THREE.CatmullRomCurve3([v(3,2.5,0),v(7,2.5,0),v(7,4,-2)]),pathHold=new THREE.CatmullRomCurve3([v(7,4,-2),v(8.5,4,-2),v(10,4,-2)]),pathSafe=new THREE.CatmullRomCurve3([v(10,4,-2),v(10,2.5,0),v(20,0.5,-5),v(20,5,-5)]),pathDivert=new THREE.CatmullRomCurve3([v(10,4,-2),v(10,6,-2),v(-15,6,-2),v(-15,4,0)])}
                     function v(t,e,o){return new THREE.Vector3(t,e,o)}
                     function animate(){requestAnimationFrame(animate),controls.update(),updateProcessLogic(),updateParticles(),systemOn&&(pumpMesh.children[1].rotation.x+=.5),renderer.render(scene,camera)}
-                    function updateProcessLogic(){let t=25;systemOn?(t=25+steamVal*0.7,currentTemp<t?currentTemp+=.2:currentTemp>t&&(currentTemp-=.1)):currentTemp>25&&(currentTemp-=.1),elTemp.innerText=currentTemp.toFixed(1)+"°C",systemOn&&currentTemp>=72?(fdvState="FORWARD",setLight(elLightFwd,!0),setLight(elLightDiv,!1),fdvMesh.material.color.setHex(3066993)):(fdvState="DIVERT",setLight(elLightFwd,!1),setLight(elLightDiv,!0),fdvMesh.material.color.setHex(15158332));let e="System Off";if(systemOn){e="Pump ON.\\nSeparator: "+(sepOn?"Active":"Bypass")+"\\nHomo: "+(homoOn?"Active":"Bypass")+"\\nMode: "+fdvState}elStatus.innerText=e}
+                    function updateProcessLogic(){let t=25;systemOn?(t=25+steamVal*0.7,currentTemp<t?currentTemp+=.2:currentTemp>t&&(currentTemp-=.1)):currentTemp>25&&(currentTemp-=.1);elTemp.innerText=currentTemp.toFixed(1)+"°C";if(systemOn&&currentTemp>=72){fdvState="FORWARD";setLight(elLightFwd,!0);setLight(elLightDiv,!1);fdvMesh.material.color.setHex(0x2ecc71)}else{fdvState="DIVERT";setLight(elLightFwd,!1);setLight(elLightDiv,!0);fdvMesh.material.color.setHex(0xe74c3c)}let e="System Off";if(systemOn){e=\`Pump ON.\\nSeparator: \${sepOn?'Active':'Bypass'}\\nHomo: \${homoOn?'Active':'Bypass'}\\nMode: \${fdvState}\`}elStatus.innerText=e}
                     function updateParticles(){if(!systemOn)return;Math.random()>.8&&spawnParticle();for(let t=particles.length-1;t>=0;t--){let e=particles[t];e.progress+=.01,e.path&&e.mesh.position.copy(e.path.getPoint(e.progress)),e.progress>=1&&(e.progress=0,handlePathSwitch(e))}}
-                    function spawnParticle(){const t=new THREE.SphereGeometry(.1,8,8),e=new THREE.MeshBasicMaterial({color:16777215}),o=new THREE.Mesh(t,e);scene.add(o),particles.push({mesh:o,path:pathFeed,progress:0,stage:"feed"})}
-                    function handlePathSwitch(t){"feed"===t.stage?(t.path=pathRegen,t.stage="regen"):"regen"===t.stage?(t.path=pathSepMain,t.stage="sep_in"):"sep_in"===t.stage?sepOn?Math.random()>.8?(t.path=pathSepCream,t.stage="cream_out",t.mesh.material.color.setHex(15844367)):(t.path=pathHomo,t.stage="homo_in"):(t.path=pathHomo,t.stage="homo_in"):"homo_in"===t.stage?(t.path=pathHeat,t.stage="heating"):"heating"===t.stage?(t.path=pathHold,t.stage="holding"):"holding"===t.stage?"FORWARD"===fdvState?(t.path=pathSafe,t.stage="finished",t.mesh.material.color.setHex(3066993)):(t.path=pathDivert,t.stage="divert",t.mesh.material.color.setHex(15158332)):"divert"===t.stage?(t.path=pathRegen,t.stage="regen",t.mesh.material.color.setHex(16777215)):(scene.remove(t.mesh),particles.splice(particles.indexOf(t),1))}
-                    function toggleSystem(){systemOn=!systemOn,systemOn?(btnPower.classList.add("active"),btnPower.innerText="STOP PLANT",elPumpLight.classList.add("on"),elPumpLight.classList.remove("off"),elTooltip.innerText="Pump Running. Milk flowing."):(btnPower.classList.remove("active"),btnPower.innerText="START PLANT",elPumpLight.classList.remove("on"),elPumpLight.classList.add("off"),elTooltip.innerText="System Stopped.")}
-                    function toggleSep(){sepOn=!sepOn;btnSep.innerText=sepOn?"Separator: ON":"Separator: OFF",btnSep.classList.toggle('active')}
-                    function toggleHomo(){homoOn=!homoOn;btnHomo.innerText=homoOn?"Homogenizer: ON":"Homogenizer: OFF",btnHomo.classList.toggle('active')}
+                    function spawnParticle(){const t=new THREE.SphereGeometry(.1,8,8),e=new THREE.MeshBasicMaterial({color:0xffffff}),o=new THREE.Mesh(t,e);scene.add(o),particles.push({mesh:o,path:pathFeed,progress:0,stage:"feed"})}
+                    function handlePathSwitch(t){"feed"===t.stage?(t.path=pathRegen,t.stage="regen"):"regen"===t.stage?(t.path=pathSepMain,t.stage="sep_in"):"sep_in"===t.stage?sepOn?Math.random()>.8?(t.path=pathSepCream,t.stage="cream_out",t.mesh.material.color.setHex(0xf1c40f)):(t.path=pathHomo,t.stage="homo_in"):(t.path=pathHomo,t.stage="homo_in"):"homo_in"===t.stage?(t.path=pathHeat,t.stage="heating"):"heating"===t.stage?(t.path=pathHold,t.stage="holding"):"holding"===t.stage?"FORWARD"===fdvState?(t.path=pathSafe,t.stage="finished",t.mesh.material.color.setHex(0x2ecc71)):(t.path=pathDivert,t.stage="divert",t.mesh.material.color.setHex(0xe74c3c)):"divert"===t.stage?(t.path=pathRegen,t.stage="regen",t.mesh.material.color.setHex(0xffffff)):(scene.remove(t.mesh),particles.splice(particles.indexOf(t),1))}
+                    function toggleSystem(){systemOn=!systemOn,systemOn?(btnPower.classList.add('active'),btnPower.innerText="STOP PLANT",elPumpLight.classList.add("on"),elPumpLight.classList.remove("off"),elTooltip.innerText="Pump Running. Milk flowing."):(btnPower.classList.remove('active'),btnPower.innerText="START PLANT",elPumpLight.classList.remove("on"),elPumpLight.classList.add("off"),elTooltip.innerText="System Stopped.")}
+                    function toggleSep(){sepOn=!sepOn;btnSep.innerText=sepOn?"Separator: ON":"Separator: OFF";btnSep.classList.toggle('active')}
+                    function toggleHomo(){homoOn=!homoOn;btnHomo.innerText=homoOn?"Homogenizer: ON":"Homogenizer: OFF";btnHomo.classList.toggle('active')}
                     window.updateSteam=function(t){steamVal=parseInt(t),document.getElementById("steam-val-text").innerText=t+"%"}
                     function setLight(t,e){e?(t.classList.add("on"),t.classList.remove("off")):(t.classList.add("off"),t.classList.remove("on"))}
                     function onWindowResize(){camera.aspect=window.innerWidth/getRendererHeight(),camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,getRendererHeight())}
@@ -597,7 +596,3 @@ export const pasteurizationContent = {
         `
     }
 }
-
-    
-
-    
