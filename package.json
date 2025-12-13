@@ -1,4 +1,17 @@
-"dependencies": {
+{
+  "name": "nextn",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "npx next dev",
+    "genkit:dev": "genkit start -- tsx src/ai/dev.ts",
+    "genkit:watch": "genkit start -- tsx --watch src/ai/dev.ts",
+    "build": "npx next build",
+    "start": "npx next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
     "@genkit-ai/firebase": "^1.19.2",
     "@genkit-ai/googleai": "^1.19.2",
     "@genkit-ai/next": "^1.19.2",
@@ -34,7 +47,7 @@
     "jspdf": "^2.5.1",
     "lucide-react": "^0.475.0",
     "mammoth": "^1.8.0",
-    "next": "^15.1.0", 
+    "next": "^15.1.0",
     "patch-package": "^8.0.0",
     "pdfjs-dist": "^4.5.136",
     "qrcode.react": "^4.0.1",
@@ -49,3 +62,16 @@
     "wav": "^1.0.2",
     "zod": "^3.25.76"
   },
+  "devDependencies": {
+    "@opentelemetry/exporter-jaeger": "^1.25.1",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@types/wav": "^1.0.4",
+    "dotenv": "^16.4.5",
+    "genkit-cli": "^1.14.1",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}
