@@ -75,99 +75,43 @@ export const pasteurizationContent = {
                 <title>Advanced Milk Processing Plant Simulator</title>
                 <style>
                     body { margin: 0; overflow: hidden; background-color: #1a1a1a; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-                    
-                    #ui-container {
-                        position: absolute; bottom: 0; left: 0;
-                        width: 100%;
-                        background: rgba(20, 30, 40, 0.95);
-                        border-top: 4px solid #3498db; color: white;
-                        display: flex; justify-content: space-around; align-items: flex-start;
-                        padding: 15px 10px; box-sizing: border-box;
-                        backdrop-filter: blur(5px); z-index: 10;
-                    }
-
-                    .panel-section {
-                        display: flex; flex-direction: column; align-items: center;
-                        padding: 0 15px; border-right: 1px solid #444; height: 100%;
-                    }
+                    #ui-container { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(20, 30, 40, 0.95); border-top: 4px solid #3498db; color: white; display: flex; justify-content: space-around; align-items: flex-start; padding: 15px 10px; box-sizing: border-box; backdrop-filter: blur(5px); z-index: 10; }
+                    .panel-section { display: flex; flex-direction: column; align-items: center; padding: 0 15px; border-right: 1px solid #444; height: 100%; }
                     .panel-section:last-child { border-right: none; }
-
                     h2 { margin: 0 0 10px 0; font-size: 14px; color: #3498db; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
-
-                    .digital-display {
-                        background: #000; color: #0f0; font-family: 'Courier New', monospace;
-                        font-size: 20px; padding: 5px 10px; border: 2px solid #555;
-                        border-radius: 4px; margin-bottom: 5px;
-                        min-width: 70px; text-align: center;
-                    }
-                    
-                    .status-light {
-                        width: 15px; height: 15px; border-radius: 50%;
-                        background: #333; border: 2px solid #555; margin: 5px;
-                        box-shadow: inset 0 0 5px #000; display: inline-block;
-                    }
+                    .digital-display { background: #000; color: #0f0; font-family: 'Courier New', monospace; font-size: 20px; padding: 5px 10px; border: 2px solid #555; border-radius: 4px; margin-bottom: 5px; min-width: 70px; text-align: center; }
+                    .status-light { width: 15px; height: 15px; border-radius: 50%; background: #333; border: 2px solid #555; margin: 5px; box-shadow: inset 0 0 5px #000; display: inline-block; }
                     .status-light.on { background: #00ff00; box-shadow: 0 0 8px #00ff00; }
                     .status-light.off { background: #ff0000; box-shadow: 0 0 8px #ff0000; }
-
-                    .toggle-btn {
-                        background: #444; color: #ccc; border: 1px solid #666;
-                        padding: 5px 10px; cursor: pointer; border-radius: 4px; font-size: 12px; margin: 2px;
-                        width: 100px;
-                    }
+                    .toggle-btn { background: #444; color: #ccc; border: 1px solid #666; padding: 5px 10px; cursor: pointer; border-radius: 4px; font-size: 12px; margin: 2px; width: 100px; }
                     .toggle-btn.active { background: #2ecc71; color: #fff; border-color: #27ae60; }
-                    
-                    button.main-start {
-                        background: linear-gradient(to bottom, #2c3e50, #1a252f);
-                        color: white; border: 2px solid #3498db;
-                        padding: 10px 20px; font-weight: bold; cursor: pointer;
-                        border-radius: 6px; transition: all 0.2s;
-                    }
+                    button.main-start { background: linear-gradient(to bottom, #2c3e50, #1a252f); color: white; border: 2px solid #3498db; padding: 10px 20px; font-weight: bold; cursor: pointer; border-radius: 6px; transition: all 0.2s; }
                     button.main-start:hover { background: #34495e; box-shadow: 0 0 15px rgba(52, 152, 219, 0.5); }
                     button.main-start.active { background: #e74c3c; border-color: #c0392b; }
-
-                    #view-controls {
-                        position: absolute; top: 20px; right: 20px;
-                        display: flex; flex-direction: column; gap: 5px;
-                        z-index: 20; background: rgba(0,0,0,0.5); padding: 5px; border-radius: 8px;
-                    }
-                    #view-controls button {
-                        background: rgba(50,50,50,0.8); color: white; border: 1px solid #777;
-                        padding: 6px 12px; cursor: pointer; border-radius: 4px; font-size: 11px;
-                        font-weight: bold; text-transform: uppercase; width: 80px;
-                    }
+                    #view-controls { position: absolute; top: 20px; right: 20px; display: flex; flex-direction: column; gap: 5px; z-index: 20; background: rgba(0,0,0,0.5); padding: 5px; border-radius: 8px; }
+                    #view-controls button { background: rgba(50,50,50,0.8); color: white; border: 1px solid #777; padding: 6px 12px; cursor: pointer; border-radius: 4px; font-size: 11px; font-weight: bold; text-transform: uppercase; width: 80px; }
                     #view-controls button:hover { background: #3498db; border-color: #3498db; }
                     .view-label { font-size: 10px; color: #aaa; text-align: center; margin-bottom: 2px; }
-
                     input[type=range] { width: 120px; cursor: pointer; }
-
-                    #tooltip {
-                        position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
-                        background: rgba(0,0,0,0.8); color: #fff; padding: 10px 20px;
-                        border-radius: 20px; pointer-events: none; font-size: 14px; border: 1px solid #555; z-index: 10;
-                    }
-                    
-                    .legend {
-                        position: absolute; top: 20px; left: 20px;
-                        background: rgba(0,0,0,0.7); padding: 10px; border-radius: 5px;
-                        font-size: 11px; color: #ddd; z-index: 10;
-                    }
+                    #tooltip { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: #fff; padding: 10px 20px; border-radius: 20px; pointer-events: none; font-size: 14px; border: 1px solid #555; z-index: 10; }
+                    .legend { position: absolute; top: 20px; left: 20px; background: rgba(0,0,0,0.7); padding: 10px; border-radius: 5px; font-size: 11px; color: #ddd; z-index: 10; }
                     .legend-item { display: flex; align-items: center; margin-bottom: 4px; }
                     .color-box { width: 10px; height: 10px; margin-right: 8px; border: 1px solid #777; }
-
-                    @media (max-width: 768px) {
-                        #ui-container { flex-wrap: wrap; padding: 5px; justify-content: center; max-height: 160px; }
-                        .panel-section { width: 48%; padding: 5px; margin-bottom: 5px; border-right: none; }
+                    @media (max-width: 768px) { 
+                        #ui-container { flex-wrap: wrap; padding: 5px; justify-content: center; height: auto; max-height: 200px; }
+                        .panel-section { flex-grow: 1; flex-basis: 45%; padding: 5px; margin-bottom: 5px; border-right: none; min-width: 140px; }
                         h2 { font-size: 11px; margin-bottom: 5px;}
                         .digital-display { font-size: 14px; padding: 2px 4px; }
-                        .toggle-btn, button.main-start, #view-controls button { width: 90%; font-size: 10px; padding: 4px; }
-                        .legend, #view-controls { display: none; }
+                        .toggle-btn, button.main-start { width: 90%; font-size: 10px; padding: 4px; }
+                        #view-controls { display: none; }
+                        .legend { display: none; }
+                        #tooltip { display: none; }
                     }
                 </style>
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script>
                 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"><\/script>
             </head>
             <body>
-
                 <div class="legend">
                     <div class="legend-item"><div class="color-box" style="background:#ecf0f1"></div>Tanks / Pipes</div>
                     <div class="legend-item"><div class="color-box" style="background:#34495e"></div>Pump & Motors</div>
@@ -176,7 +120,6 @@ export const pasteurizationContent = {
                     <div class="legend-item"><div class="color-box" style="background:#e74c3c"></div>Heating Section</div>
                     <div class="legend-item"><div class="color-box" style="background:#3498db"></div>Cooling Section</div>
                 </div>
-
                 <div id="view-controls">
                     <div class="view-label">CAMERA VIEW</div>
                     <button onclick="setView('front')">FRONT</button>
@@ -186,9 +129,7 @@ export const pasteurizationContent = {
                     <button onclick="setView('top')">TOP</button>
                     <button onclick="setView('iso')">ISO</button>
                 </div>
-
                 <div id="tooltip">PLANT READY. Configure & Start.</div>
-
                 <div id="ui-container">
                     <div class="panel-section">
                         <h2>Main Control</h2>
@@ -223,7 +164,6 @@ export const pasteurizationContent = {
                         <div id="flow-status" style="font-size: 11px; color: #0f0; line-height:1.4;">Idle.</div>
                     </div>
                 </div>
-
                 <script>
                     let scene, camera, renderer, controls;
                     let fdvMesh, pumpMesh, particles = [];
@@ -240,12 +180,12 @@ export const pasteurizationContent = {
                           btnPower = document.getElementById('btn-power'),
                           btnSep = document.getElementById('btn-sep'),
                           btnHomo = document.getElementById('btn-homo');
-                    
+
                     function getRendererHeight() {
                         const uiContainer = document.getElementById('ui-container');
                         return window.innerHeight - (uiContainer ? uiContainer.offsetHeight : 0);
                     }
-
+                    
                     function init() {
                         scene = new THREE.Scene();
                         scene.background = new THREE.Color(0x222222);
@@ -281,7 +221,34 @@ export const pasteurizationContent = {
                     function initPaths(){pathFeed=new THREE.CatmullRomCurve3([v(-25,1,0),v(-15,1,0),v(-15,.5,0),v(-10,.5,0)]),pathRegen=new THREE.CatmullRomCurve3([v(-10,.5,0),v(-5,.5,0),v(-5,2.5,0)]),pathSepMain=new THREE.CatmullRomCurve3([v(-5,2.5,0),v(-1,2.5,0),v(-1,2.5,2)]),pathSepCream=new THREE.CatmullRomCurve3([v(-1,2.5,2),v(-1,1,4),v(20,1,5),v(20,5,5)]),pathHomo=new THREE.CatmullRomCurve3([v(-1,2.5,2),v(3,2.5,0)]),pathHeat=new THREE.CatmullRomCurve3([v(3,2.5,0),v(7,2.5,0),v(7,4,-2)]),pathHold=new THREE.CatmullRomCurve3([v(7,4,-2),v(8.5,4,-2),v(10,4,-2)]),pathSafe=new THREE.CatmullRomCurve3([v(10,4,-2),v(10,2.5,0),v(20,0.5,-5),v(20,5,-5)]),pathDivert=new THREE.CatmullRomCurve3([v(10,4,-2),v(10,6,-2),v(-15,6,-2),v(-15,4,0)])}
                     function v(t,e,o){return new THREE.Vector3(t,e,o)}
                     function animate(){requestAnimationFrame(animate),controls.update(),updateProcessLogic(),updateParticles(),systemOn&&(pumpMesh.children[1].rotation.x+=.5),renderer.render(scene,camera)}
-                    function updateProcessLogic(){let t=25;systemOn?(t=25+steamVal*0.7,currentTemp<t?currentTemp+=.2:currentTemp>t&&(currentTemp-=.1)):currentTemp>25&&(currentTemp-=.1);elTemp.innerText=currentTemp.toFixed(1)+"°C";if(systemOn&&currentTemp>=72){fdvState="FORWARD";setLight(elLightFwd,!0);setLight(elLightDiv,!1);fdvMesh.material.color.setHex(0x2ecc71)}else{fdvState="DIVERT";setLight(elLightFwd,!1);setLight(elLightDiv,!0);fdvMesh.material.color.setHex(0xe74c3c)}let e="System Off";if(systemOn){e="Pump ON.\\nSeparator: "+(sepOn?"Active":"Bypass")+"\\nHomo: "+(homoOn?"Active":"Bypass")+"\\nMode: "+fdvState}elStatus.innerText=e}
+                    function updateProcessLogic() {
+                        let target = 25.0;
+                        if (systemOn) {
+                            target = 25.0 + (steamVal * 0.7); // Max ~95C
+                            if (currentTemp < target) currentTemp += 0.2;
+                            if (currentTemp > target) currentTemp -= 0.1;
+                        } else {
+                            if (currentTemp > 25) currentTemp -= 0.1;
+                        }
+                        elTemp.innerText = currentTemp.toFixed(1) + "°C";
+
+                        if (systemOn && currentTemp >= targetTempSet) {
+                            fdvState = 'FORWARD';
+                            setLight(elLightFwd, true);
+                            setLight(elLightDiv, false);
+                            fdvMesh.material.color.setHex(0x2ecc71);
+                        } else {
+                            fdvState = 'DIVERT';
+                            setLight(elLightFwd, false);
+                            setLight(elLightDiv, true);
+                            fdvMesh.material.color.setHex(0xe74c3c);
+                        }
+                        let status = "System Off";
+                        if (systemOn) {
+                           status = \`Pump ON.\\nSeparator: \${sepOn ? 'Active' : 'Bypass'}\\nHomo: \${homoOn ? 'Active' : 'Bypass'}\\nMode: \${fdvState}\`;
+                        }
+                        elStatus.innerText = status;
+                    }
                     function updateParticles(){if(!systemOn)return;Math.random()>.8&&spawnParticle();for(let t=particles.length-1;t>=0;t--){let e=particles[t];e.progress+=.01,e.path&&e.mesh.position.copy(e.path.getPoint(e.progress)),e.progress>=1&&(e.progress=0,handlePathSwitch(e))}}
                     function spawnParticle(){const t=new THREE.SphereGeometry(.1,8,8),e=new THREE.MeshBasicMaterial({color:0xffffff}),o=new THREE.Mesh(t,e);scene.add(o),particles.push({mesh:o,path:pathFeed,progress:0,stage:"feed"})}
                     function handlePathSwitch(t){"feed"===t.stage?(t.path=pathRegen,t.stage="regen"):"regen"===t.stage?(t.path=pathSepMain,t.stage="sep_in"):"sep_in"===t.stage?sepOn?Math.random()>.8?(t.path=pathSepCream,t.stage="cream_out",t.mesh.material.color.setHex(0xf1c40f)):(t.path=pathHomo,t.stage="homo_in"):(t.path=pathHomo,t.stage="homo_in"):"homo_in"===t.stage?(t.path=pathHeat,t.stage="heating"):"heating"===t.stage?(t.path=pathHold,t.stage="holding"):"holding"===t.stage?"FORWARD"===fdvState?(t.path=pathSafe,t.stage="finished",t.mesh.material.color.setHex(0x2ecc71)):(t.path=pathDivert,t.stage="divert",t.mesh.material.color.setHex(0xe74c3c)):"divert"===t.stage?(t.path=pathRegen,t.stage="regen",t.mesh.material.color.setHex(0xffffff)):(scene.remove(t.mesh),particles.splice(particles.indexOf(t),1))}
@@ -295,7 +262,7 @@ export const pasteurizationContent = {
                 <\/script>
             </body>
             </html>
-        `,
+        `
     },
     hi: {
         title: "पाश्चुरीकरण",
@@ -372,100 +339,43 @@ export const pasteurizationContent = {
                 <title>Advanced Milk Processing Plant Simulator</title>
                 <style>
                     body { margin: 0; overflow: hidden; background-color: #1a1a1a; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-                    
-                    #ui-container {
-                        position: absolute; bottom: 0; left: 0;
-                        width: 100%;
-                        background: rgba(20, 30, 40, 0.95);
-                        border-top: 4px solid #3498db; color: white;
-                        display: flex; justify-content: space-around; align-items: flex-start;
-                        padding: 15px 10px; box-sizing: border-box;
-                        backdrop-filter: blur(5px); z-index: 10;
-                    }
-
-                    .panel-section {
-                        display: flex; flex-direction: column; align-items: center;
-                        padding: 0 15px; border-right: 1px solid #444; height: 100%;
-                    }
+                    #ui-container { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(20, 30, 40, 0.95); border-top: 4px solid #3498db; color: white; display: flex; justify-content: space-around; align-items: flex-start; padding: 15px 10px; box-sizing: border-box; backdrop-filter: blur(5px); z-index: 10; }
+                    .panel-section { display: flex; flex-direction: column; align-items: center; padding: 0 15px; border-right: 1px solid #444; height: 100%; }
                     .panel-section:last-child { border-right: none; }
-
                     h2 { margin: 0 0 10px 0; font-size: 14px; color: #3498db; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
-
-                    .digital-display {
-                        background: #000; color: #0f0; font-family: 'Courier New', monospace;
-                        font-size: 20px; padding: 5px 10px; border: 2px solid #555;
-                        border-radius: 4px; margin-bottom: 5px;
-                        min-width: 70px; text-align: center;
-                    }
-                    
-                    .status-light {
-                        width: 15px; height: 15px; border-radius: 50%;
-                        background: #333; border: 2px solid #555; margin: 5px;
-                        box-shadow: inset 0 0 5px #000; display: inline-block;
-                    }
+                    .digital-display { background: #000; color: #0f0; font-family: 'Courier New', monospace; font-size: 20px; padding: 5px 10px; border: 2px solid #555; border-radius: 4px; margin-bottom: 5px; min-width: 70px; text-align: center; }
+                    .status-light { width: 15px; height: 15px; border-radius: 50%; background: #333; border: 2px solid #555; margin: 5px; box-shadow: inset 0 0 5px #000; display: inline-block; }
                     .status-light.on { background: #00ff00; box-shadow: 0 0 8px #00ff00; }
                     .status-light.off { background: #ff0000; box-shadow: 0 0 8px #ff0000; }
-
-                    .toggle-btn {
-                        background: #444; color: #ccc; border: 1px solid #666;
-                        padding: 5px 10px; cursor: pointer; border-radius: 4px; font-size: 12px; margin: 2px;
-                        width: 100px;
-                    }
+                    .toggle-btn { background: #444; color: #ccc; border: 1px solid #666; padding: 5px 10px; cursor: pointer; border-radius: 4px; font-size: 12px; margin: 2px; width: 100px; }
                     .toggle-btn.active { background: #2ecc71; color: #fff; border-color: #27ae60; }
-                    
-                    button.main-start {
-                        background: linear-gradient(to bottom, #2c3e50, #1a252f);
-                        color: white; border: 2px solid #3498db;
-                        padding: 10px 20px; font-weight: bold; cursor: pointer;
-                        border-radius: 6px; transition: all 0.2s;
-                    }
+                    button.main-start { background: linear-gradient(to bottom, #2c3e50, #1a252f); color: white; border: 2px solid #3498db; padding: 10px 20px; font-weight: bold; cursor: pointer; border-radius: 6px; transition: all 0.2s; }
                     button.main-start:hover { background: #34495e; box-shadow: 0 0 15px rgba(52, 152, 219, 0.5); }
                     button.main-start.active { background: #e74c3c; border-color: #c0392b; }
-
-                    #view-controls {
-                        position: absolute; top: 20px; right: 20px;
-                        display: flex; flex-direction: column; gap: 5px;
-                        z-index: 20; background: rgba(0,0,0,0.5); padding: 5px; border-radius: 8px;
-                    }
-                    #view-controls button {
-                        background: rgba(50,50,50,0.8); color: white; border: 1px solid #777;
-                        padding: 6px 12px; cursor: pointer; border-radius: 4px; font-size: 11px;
-                        font-weight: bold; text-transform: uppercase; width: 80px;
-                    }
+                    #view-controls { position: absolute; top: 20px; right: 20px; display: flex; flex-direction: column; gap: 5px; z-index: 20; background: rgba(0,0,0,0.5); padding: 5px; border-radius: 8px; }
+                    #view-controls button { background: rgba(50,50,50,0.8); color: white; border: 1px solid #777; padding: 6px 12px; cursor: pointer; border-radius: 4px; font-size: 11px; font-weight: bold; text-transform: uppercase; width: 80px; }
                     #view-controls button:hover { background: #3498db; border-color: #3498db; }
                     .view-label { font-size: 10px; color: #aaa; text-align: center; margin-bottom: 2px; }
-
                     input[type=range] { width: 120px; cursor: pointer; }
-
-                    #tooltip {
-                        position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
-                        background: rgba(0,0,0,0.8); color: #fff; padding: 10px 20px;
-                        border-radius: 20px; pointer-events: none; font-size: 14px; border: 1px solid #555; z-index: 10;
-                    }
-                    
-                    .legend {
-                        position: absolute; top: 20px; left: 20px;
-                        background: rgba(0,0,0,0.7); padding: 10px; border-radius: 5px;
-                        font-size: 11px; color: #ddd; z-index: 10;
-                    }
+                    #tooltip { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: #fff; padding: 10px 20px; border-radius: 20px; pointer-events: none; font-size: 14px; border: 1px solid #555; z-index: 10; }
+                    .legend { position: absolute; top: 20px; left: 20px; background: rgba(0,0,0,0.7); padding: 10px; border-radius: 5px; font-size: 11px; color: #ddd; z-index: 10; }
                     .legend-item { display: flex; align-items: center; margin-bottom: 4px; }
                     .color-box { width: 10px; height: 10px; margin-right: 8px; border: 1px solid #777; }
-
                     @media (max-width: 768px) {
-                        #ui-container { flex-wrap: wrap; padding: 5px; justify-content: center; max-height: 160px; }
-                        .panel-section { width: 48%; padding: 5px; margin-bottom: 5px; border-right: none; }
+                        #ui-container { flex-wrap: wrap; padding: 5px; justify-content: center; height: auto; max-height: 200px; }
+                        .panel-section { flex-grow: 1; flex-basis: 45%; padding: 5px; margin-bottom: 5px; border-right: none; min-width: 140px; }
                         h2 { font-size: 11px; margin-bottom: 5px;}
                         .digital-display { font-size: 14px; padding: 2px 4px; }
                         .toggle-btn, button.main-start { width: 90%; font-size: 10px; padding: 4px; }
-                        #view-controls button { font-size: 10px; padding: 4px; width: 70px; }
-                        .legend { padding: 5px; font-size: 9px; }
+                        #view-controls { display: none; }
+                        .legend { display: none; }
+                        #tooltip { display: none; }
                     }
                 </style>
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script>
                 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"><\/script>
             </head>
             <body>
-
                 <div class="legend">
                     <div class="legend-item"><div class="color-box" style="background:#ecf0f1"></div>Tanks / Pipes</div>
                     <div class="legend-item"><div class="color-box" style="background:#34495e"></div>Pump & Motors</div>
@@ -474,7 +384,6 @@ export const pasteurizationContent = {
                     <div class="legend-item"><div class="color-box" style="background:#e74c3c"></div>Heating Section</div>
                     <div class="legend-item"><div class="color-box" style="background:#3498db"></div>Cooling Section</div>
                 </div>
-
                 <div id="view-controls">
                     <div class="view-label">CAMERA VIEW</div>
                     <button onclick="setView('front')">FRONT</button>
@@ -484,9 +393,7 @@ export const pasteurizationContent = {
                     <button onclick="setView('top')">TOP</button>
                     <button onclick="setView('iso')">ISO</button>
                 </div>
-
                 <div id="tooltip">PLANT READY. Configure & Start.</div>
-
                 <div id="ui-container">
                     <div class="panel-section">
                         <h2>Main Control</h2>
@@ -504,9 +411,11 @@ export const pasteurizationContent = {
                     <div class="panel-section">
                         <h2>Pasteurizer</h2>
                         <div class="digital-display" id="temp-display">25.0°C</div>
-                        <label style="font-size:11px; color:#aaa;">Steam Valve</label>
-                        <input type="range" min="0" max="100" value="0" oninput="updateSteam(this.value)">
-                        <span id="steam-val-text" style="font-size:12px;">0%</span>
+                        <div style="display:flex; flex-direction:column; align-items:center;">
+                            <label style="font-size:11px; color:#aaa;">Steam Valve</label>
+                            <input type="range" min="0" max="100" value="0" oninput="updateSteam(this.value)">
+                            <span id="steam-val-text" style="font-size:12px;">0%</span>
+                        </div>
                     </div>
                     <div class="panel-section">
                         <h2>FDV Logic</h2>
@@ -521,7 +430,6 @@ export const pasteurizationContent = {
                         <div id="flow-status" style="font-size: 11px; color: #0f0; line-height:1.4;">Idle.</div>
                     </div>
                 </div>
-
                 <script>
                     let scene, camera, renderer, controls;
                     let fdvMesh, pumpMesh, particles = [];
@@ -538,12 +446,12 @@ export const pasteurizationContent = {
                           btnPower = document.getElementById('btn-power'),
                           btnSep = document.getElementById('btn-sep'),
                           btnHomo = document.getElementById('btn-homo');
-                    
+
                     function getRendererHeight() {
                         const uiContainer = document.getElementById('ui-container');
                         return window.innerHeight - (uiContainer ? uiContainer.offsetHeight : 0);
                     }
-
+                    
                     function init() {
                         scene = new THREE.Scene();
                         scene.background = new THREE.Color(0x222222);
@@ -579,10 +487,10 @@ export const pasteurizationContent = {
                     function initPaths(){pathFeed=new THREE.CatmullRomCurve3([v(-25,1,0),v(-15,1,0),v(-15,.5,0),v(-10,.5,0)]),pathRegen=new THREE.CatmullRomCurve3([v(-10,.5,0),v(-5,.5,0),v(-5,2.5,0)]),pathSepMain=new THREE.CatmullRomCurve3([v(-5,2.5,0),v(-1,2.5,0),v(-1,2.5,2)]),pathSepCream=new THREE.CatmullRomCurve3([v(-1,2.5,2),v(-1,1,4),v(20,1,5),v(20,5,5)]),pathHomo=new THREE.CatmullRomCurve3([v(-1,2.5,2),v(3,2.5,0)]),pathHeat=new THREE.CatmullRomCurve3([v(3,2.5,0),v(7,2.5,0),v(7,4,-2)]),pathHold=new THREE.CatmullRomCurve3([v(7,4,-2),v(8.5,4,-2),v(10,4,-2)]),pathSafe=new THREE.CatmullRomCurve3([v(10,4,-2),v(10,2.5,0),v(20,0.5,-5),v(20,5,-5)]),pathDivert=new THREE.CatmullRomCurve3([v(10,4,-2),v(10,6,-2),v(-15,6,-2),v(-15,4,0)])}
                     function v(t,e,o){return new THREE.Vector3(t,e,o)}
                     function animate(){requestAnimationFrame(animate),controls.update(),updateProcessLogic(),updateParticles(),systemOn&&(pumpMesh.children[1].rotation.x+=.5),renderer.render(scene,camera)}
-                    function updateProcessLogic(){let t=25;systemOn?(t=25+steamVal*0.7,currentTemp<t?currentTemp+=.2:currentTemp>t&&(currentTemp-=.1)):currentTemp>25&&(currentTemp-=.1);elTemp.innerText=currentTemp.toFixed(1)+"°C";if(systemOn&&currentTemp>=72){fdvState="FORWARD";setLight(elLightFwd,!0);setLight(elLightDiv,!1);fdvMesh.material.color.setHex(0x2ecc71)}else{fdvState="DIVERT";setLight(elLightFwd,!1);setLight(elLightDiv,!0);fdvMesh.material.color.setHex(0xe74c3c)}let e="System Off";if(systemOn){e=\`Pump ON.\\nSeparator: \${sepOn?'Active':'Bypass'}\\nHomo: \${homoOn?'Active':'Bypass'}\\nMode: \${fdvState}\`}elStatus.innerText=e}
+                    function updateProcessLogic(){let t=25;systemOn?(t=25+steamVal*0.7,currentTemp<t?currentTemp+=.2:currentTemp>t&&(currentTemp-=.1)):currentTemp>25&&(currentTemp-=.1);elTemp.innerText=currentTemp.toFixed(1)+"°C";let e="System Off";if(systemOn){e=\`Pump ON.\\nSeparator: \${sepOn?'Active':'Bypass'}\\nHomo: \${homoOn?'Active':'Bypass'}\\nMode: \${fdvState}\`}elStatus.innerText=e;if(systemOn&&currentTemp>=72){fdvState="FORWARD";setLight(elLightFwd,!0);setLight(elLightDiv,!1);fdvMesh.material.color.setHex(3066993)}else{fdvState="DIVERT";setLight(elLightFwd,!1);setLight(elLightDiv,!0);fdvMesh.material.color.setHex(15158332)}}
                     function updateParticles(){if(!systemOn)return;Math.random()>.8&&spawnParticle();for(let t=particles.length-1;t>=0;t--){let e=particles[t];e.progress+=.01,e.path&&e.mesh.position.copy(e.path.getPoint(e.progress)),e.progress>=1&&(e.progress=0,handlePathSwitch(e))}}
-                    function spawnParticle(){const t=new THREE.SphereGeometry(.1,8,8),e=new THREE.MeshBasicMaterial({color:0xffffff}),o=new THREE.Mesh(t,e);scene.add(o),particles.push({mesh:o,path:pathFeed,progress:0,stage:"feed"})}
-                    function handlePathSwitch(t){"feed"===t.stage?(t.path=pathRegen,t.stage="regen"):"regen"===t.stage?(t.path=pathSepMain,t.stage="sep_in"):"sep_in"===t.stage?sepOn?Math.random()>.8?(t.path=pathSepCream,t.stage="cream_out",t.mesh.material.color.setHex(0xf1c40f)):(t.path=pathHomo,t.stage="homo_in"):(t.path=pathHomo,t.stage="homo_in"):"homo_in"===t.stage?(t.path=pathHeat,t.stage="heating"):"heating"===t.stage?(t.path=pathHold,t.stage="holding"):"holding"===t.stage?"FORWARD"===fdvState?(t.path=pathSafe,t.stage="finished",t.mesh.material.color.setHex(0x2ecc71)):(t.path=pathDivert,t.stage="divert",t.mesh.material.color.setHex(0xe74c3c)):"divert"===t.stage?(t.path=pathRegen,t.stage="regen",t.mesh.material.color.setHex(0xffffff)):(scene.remove(t.mesh),particles.splice(particles.indexOf(t),1))}
+                    function spawnParticle(){const t=new THREE.SphereGeometry(.1,8,8),e=new THREE.MeshBasicMaterial({color:16777215}),o=new THREE.Mesh(t,e);scene.add(o),particles.push({mesh:o,path:pathFeed,progress:0,stage:"feed"})}
+                    function handlePathSwitch(t){"feed"===t.stage?(t.path=pathRegen,t.stage="regen"):"regen"===t.stage?(t.path=pathSepMain,t.stage="sep_in"):"sep_in"===t.stage?sepOn?Math.random()>.8?(t.path=pathSepCream,t.stage="cream_out",t.mesh.material.color.setHex(15844367)):(t.path=pathHomo,t.stage="homo_in"):(t.path=pathHomo,t.stage="homo_in"):"homo_in"===t.stage?(t.path=pathHeat,t.stage="heating"):"heating"===t.stage?(t.path=pathHold,t.stage="holding"):"holding"===t.stage?"FORWARD"===fdvState?(t.path=pathSafe,t.stage="finished",t.mesh.material.color.setHex(3066993)):(t.path=pathDivert,t.stage="divert",t.mesh.material.color.setHex(15158332)):"divert"===t.stage?(t.path=pathRegen,t.stage="regen",t.mesh.material.color.setHex(16777215)):(scene.remove(t.mesh),particles.splice(particles.indexOf(t),1))}
                     function toggleSystem(){systemOn=!systemOn,systemOn?(btnPower.classList.add('active'),btnPower.innerText="STOP PLANT",elPumpLight.classList.add("on"),elPumpLight.classList.remove("off"),elTooltip.innerText="Pump Running. Milk flowing."):(btnPower.classList.remove('active'),btnPower.innerText="START PLANT",elPumpLight.classList.remove("on"),elPumpLight.classList.add("off"),elTooltip.innerText="System Stopped.")}
                     function toggleSep(){sepOn=!sepOn;btnSep.innerText=sepOn?"Separator: ON":"Separator: OFF";btnSep.classList.toggle('active')}
                     function toggleHomo(){homoOn=!homoOn;btnHomo.innerText=homoOn?"Homogenizer: ON":"Homogenizer: OFF";btnHomo.classList.toggle('active')}
@@ -596,3 +504,5 @@ export const pasteurizationContent = {
         `
     }
 }
+
+    
