@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import { getFirestore, collection, onSnapshot, QuerySnapshot, DocumentData } from 'firebase/firestore';
 
-export default function useCollection(path: string) {
+// ✅ "default" hata diya gaya hai
+export function useCollection(path: string) {
   const [docs, setDocs] = useState<DocumentData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);

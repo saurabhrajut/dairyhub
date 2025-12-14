@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 
-// Maine yahan se 'default' hata diya hai
+// ✅ "default" hata diya gaya hai taaki { useUser } import kaam kare
 export function useUser() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
