@@ -1,7 +1,9 @@
 export const dailyTipsContent = {
   en: {
     tips: [
-      // --- ORIGINAL 30 TIPS (Basic to Advanced) ---
+      // ============================================================
+      // PART 1: PREVIOUS FOUNDATIONAL & INTERMEDIATE TIPS (1-100)
+      // ============================================================
       "The ideal temperature for cream separation is 40-50°C. This ensures fat is liquid and viscosity is low for maximum efficiency.",
       "Homogenization of milk at 60-65°C and 2500 PSI (1st stage) followed by 500 PSI (2nd stage) prevents cream layer formation.",
       "The standard pasteurization (HTST) parameters for milk are heating to 72°C for 15 seconds. This kills all pathogenic bacteria.",
@@ -32,8 +34,6 @@ export const dailyTipsContent = {
       "Biofilms are bacterial layers that form inside pipes and are resistant to standard CIP. Regular use of oxidative sanitizers (like Peracetic Acid) is required to strip them away.",
       "The 'Kjeldahl Method' measures total nitrogen to estimate protein. However, adulterants like Melamine are nitrogen-rich and can trick this test, requiring specific LC-MS/MS testing for detection.",
       "Modified Atmosphere Packaging (MAP) for cheese involves replacing air with a mix of CO2 (to stop mold) and Nitrogen (to prevent package collapse), significantly extending shelf life.",
-
-      // --- NEW ADDITIONS: PROCESSING ENGINEERING & CHEMISTRY ---
       "Regeneration Efficiency in a Plate Heat Exchanger (PHE) refers to how much heat from the outgoing hot milk is used to warm up the incoming cold milk, saving steam costs (usually 90-95%).",
       "Cavitation is a destructive phenomenon in homogenizers and pumps where vapor bubbles collapse, causing pitting on metal surfaces. It happens if the inlet pressure is too low.",
       "The Isoelectric Point of Casein is pH 4.6. At this pH, casein micelles lose their charge and precipitate, which is the fundamental principle behind making Dahi, Paneer, and Casein powder.",
@@ -44,8 +44,6 @@ export const dailyTipsContent = {
       "Steam Injection (Direct UHT) heats milk instantly but adds water, which must be removed by a 'Flash Vessel' (vacuum chamber) to restore the original solids content.",
       "Lecithin is a natural emulsifier found in the milk fat globule membrane (MFGM). In instant milk powder production, soya lecithin is sprayed (lecithination) to improve solubility in cold water.",
       "Over-homogenization can cause 'Cluster Formation' of fat globules, leading to high viscosity and poor creaming stability in coffee.",
-
-      // --- NEW ADDITIONS: CHEESE & FERMENTATION SECRETS ---
       "Rennet (Chymosin) specifically cleaves the Kappa-Casein 'hairs' on the surface of casein micelles. Once these hairs are cut, the micelles stick together to form a curd.",
       "Late Blowing Defect in Gouda or Emmental cheese is caused by Clostridium tyrobutyricum spores (from silage). They produce hydrogen gas, cracking the cheese during ripening.",
       "Processed Cheese is made by melting natural cheese with 'Emulsifying Salts' (Citrates/Phosphates). These salts chelate calcium, converting the protein into a smooth, meltable structure.",
@@ -56,8 +54,6 @@ export const dailyTipsContent = {
       "Phage-Robust Cultures are genetically selected bacterial strains that are resistant to specific bacteriophages, essential for large-scale reliable yoghurt production.",
       "The 'Stretch Test' in Mozzarella is basically testing the alignment of Casein fibers. If the pH is too low (<5.1), the curd breaks; if too high (>5.7), it stays rubbery and won't stretch.",
       "Camembert and Brie are 'Surface Ripened' cheeses. The white mold on the outside is Penicillium camemberti, which releases enzymes inward to soften the cheese core.",
-
-      // --- NEW ADDITIONS: QUALITY & ADULTERATION (Detailed) ---
       "The Alcohol Test (using 68% or 70% ethanol) determines the heat stability of milk. If milk curdles with alcohol, it will likely coagulate in the UHT or sterilization process.",
       "Somatic Cell Count (SCC) indicates udder health. A count >400,000 cells/ml suggests Mastitis. High SCC milk has high enzymes and low casein, reducing cheese yield.",
       "Coliform count is a 'Hygiene Indicator'. Since coliforms are killed by pasteurization, their presence in finished milk proves Post-Pasteurization Contamination (PPC).",
@@ -68,8 +64,6 @@ export const dailyTipsContent = {
       "Neutralizers (like Caustic Soda or Sodium Bicarbonate) are added to sour milk to correct the pH so it passes the platform test. This is detected using the Rosalic Acid test.",
       "Maltodextrin is a common adulterant in milk powder because it is cheap, soluble, and tasteless. It is detected using the Iodine test (turns reddish-brown, unlike starch which turns blue).",
       "Urea is naturally present in milk (~20-40 mg/dl), but high levels indicate adulteration to boost SNF values. The DMAB test identifies added urea.",
-
-      // --- NEW ADDITIONS: ICE CREAM & FAT TECHNOLOGY ---
       "Stabilizers (like Guar Gum, Carrageenan) in ice cream function by binding water. This prevents free water from moving around and forming large, icy crystals during storage.",
       "Emulsifiers (like Mono- and Diglycerides) in ice cream destabilize the fat globules slightly, allowing them to clump around air bubbles, which supports the foam structure.",
       "The 'Hardening' step in ice cream (rapid freezing to -18°C or lower in a tunnel) must happen immediately after packaging to keep ice crystals microscopic.",
@@ -80,8 +74,6 @@ export const dailyTipsContent = {
       "Heat Shock in ice cream occurs when the product melts slightly during transport and refreezes, forming a layer of ice on top and a coarse texture inside.",
       "Supercooling is necessary for lactose crystallization in condensed milk. Seed lactose (fine micro-crystals) is added to force lactose to crystallize into small, undetectable sizes.",
       "Buttermilk powder is rich in Phospholipids (from the broken fat globule membranes), making it an excellent natural emulsifier for bakery applications.",
-
-      // --- NEW ADDITIONS: PACKAGING & SHELF LIFE ---
       "ESL (Extended Shelf Life) milk lies between Pasteurization and UHT. It uses microfiltration or high-heat (125°C for 2s) to last 21-45 days under refrigeration.",
       "Oxygen Transmission Rate (OTR) of packaging film is critical for milk powder. If OTR is high, fat oxidation occurs, leading to rancidity within weeks.",
       "Aseptic Packaging (Tetra Pak) uses a laminate of Paper (structure), Polyethylene (sealing/barrier), and Aluminum Foil (light/oxygen barrier).",
@@ -92,18 +84,156 @@ export const dailyTipsContent = {
       "Tamper-evident bands on milk bottles are shrinking due to heat. The tunnel temperature must be precise to shrink the band without warping the bottle neck.",
       "Glass bottles are chemically inert but allow light to pass through. Dark glass or UV-blocking sleeves are needed to prevent Vitamin B2 (Riboflavin) destruction.",
       "Edible coatings (made from casein or beeswax) are an emerging trend to package cheese portions without creating plastic waste.",
-
-      // --- NEW ADDITIONS: WATER & EFFLUENT (Environment) ---
       "Dairy effluent typically has a high BOD (Biological Oxygen Demand) due to dissolved lactose and proteins. It cannot be dumped into rivers without aerobic/anaerobic treatment.",
       "Condensate Recovery: The water evaporated from milk during powder making (Cow Water) can be treated by RO and UV to be reused for boiler feed or plant cleaning.",
       "White Water is the mix of water and milk from the initial flush of pipes. It is often collected separately and used for pig feed or biogas generation rather than sent to the drain.",
       "Struvite formation (Magnesium Ammonium Phosphate) is a common problem in dairy biogas pipes, causing hard scale blockages due to the high mineral content of waste milk.",
-      "Sludge from the dairy ETP (Effluent Treatment Plant) is rich in Nitrogen and Phosphorus, making it a valuable organic fertilizer for local farms."
+      "Sludge from the dairy ETP (Effluent Treatment Plant) is rich in Nitrogen and Phosphorus, making it a valuable organic fertilizer for local farms.",
+
+      // ============================================================
+      // PART 2: NEW DEEP-DIVE TOPICS (100+)
+      // ============================================================
+
+      // --- ENGINEERING & FLUID MECHANICS ---
+      "Reynolds Number (Re) determines if milk flow in a pipe is Laminar or Turbulent. For efficient CIP cleaning, flow must be Turbulent (Re > 4000) to scour the walls.",
+      "Mixproof Valves are essential in automated dairies. They have two seats, allowing cleaning fluid (CIP) to flow in one line while product flows in the other without cross-contamination.",
+      "Positive Displacement pumps (like Lobe or Screw pumps) are used for cream and curd because centrifugal pumps shear the fat globules, damaging the texture.",
+      "Water Hammer is a pressure surge caused by closing a valve too fast. In dairy lines, this can rupture gaskets and cause microscopic cracks where bacteria hide.",
+      "Dead Legs are sections of pipe where liquid does not flow (stagnant). Sanitary design requires dead legs to be no longer than 1.5x the pipe diameter to ensure CIP reaches them.",
+      "Steam Purity is vital for Culinary Steam (used in direct injection). It must be free of boiler chemicals (like hydrazine) and is filtered to 5 microns.",
+      "Fouling Factor in heat exchangers increases over time as protein burns onto plates. This increases the pressure drop and forces the steam valve to open wider.",
+      "Corrosion in stainless steel (SS304/316) is often caused by Chloride ions. Using high-chloride water for cleaning can cause 'Pitting Corrosion' which is invisible to the naked eye.",
+      "The 'D-Value' in thermal processing is the time required at a specific temperature to reduce the bacterial population by 90% (1 log reduction).",
+      "The 'Z-Value' is the temperature increase required to reduce the D-value by 90%. This helps engineers calculate sterilization equivalents.",
+      "Flow Diversion Valve (FDV) is the safety heart of a pasteurizer. If milk temp drops below 72°C, it instantly diverts milk back to the balance tank.",
+      "Vapor Recompression (TVR/MVR) in evaporators uses high-pressure steam or fans to re-use vapors, reducing energy consumption by up to 70% in powder plants.",
+
+      // --- ADVANCED CHEMISTRY & PHYSICS ---
+      "Maillard Reaction vs. Caramelization: Maillard requires Amino Acids + Reducing Sugar (Lactose) and happens at lower temps. Caramelization is pure sugar pyrolysis at high temps (>160°C).",
+      "Alpha-Lactose Monohydrate is the most common crystal form in milk powder. It is non-hygroscopic (doesn't absorb water). Beta-lactose is sweeter but absorbs water rapidly.",
+      "Casein Micelles are stabilized by 'Colloidal Calcium Phosphate' (CCP). Adding acid dissolves CCP, causing the micelle to collapse (Curdling).",
+      "Whey Proteins (Beta-lactoglobulin) contain 'Free Sulfhydryl Groups' (-SH). When heated, these release sulfur compounds, giving cooked milk its 'eggy' smell.",
+      "Redox Potential (Eh) measures the oxidation state. Fresh milk has positive Eh. Bacterial growth consumes oxygen, lowering Eh, which can be measured to detect spoilage early.",
+      "Titratable Acidity (TA) vs. pH: pH measures active H+ ions (intensity), while TA measures the total buffering capacity of milk proteins and salts. Both are needed for quality control.",
+      "Water Activity (aw) determines microbial growth. Sweetened Condensed Milk has high sugar which lowers aw to ~0.85, stopping bacteria but allowing molds (Osmophilic yeasts).",
+      "Glass Transition Temperature (Tg) is critical for milk powder. If storage temp > Tg, the amorphous lactose turns into crystals, making the powder sticky and lumpy.",
+      "Mutarotation is the conversion between Alpha and Beta lactose in solution. This equilibrium affects the sandiness in condensed milk and ice cream.",
+      "Refractive Index of milk serum is used to detect added water. It is more complex but harder to cheat than the freezing point test.",
+
+      // --- MICROBIOLOGY DEEP DIVE ---
+      "Thermophilic Spores (like Bacillus stearothermophilus) can survive UHT treatment. If they grow, they cause 'Flat Sour' spoilage (acid produced but no gas/swelling).",
+      "Psychrotrophs (Pseudomonas fluorescens) produce a blue-green pigment (Pyoverdine) in milk and create intense bitterness due to proteolysis.",
+      "Ropey Milk is a defect where milk becomes slimy and stringy like thread. It is caused by Alcaligenes viscolactis producing a capsule of slime.",
+      "Yeasts (like Candida) in yoghurt produce gas and a 'yeasty/fruity' smell. They usually enter via fruit pulp or contaminated packaging.",
+      "Coliforms are differentiated into Fecal (E. coli) and Non-Fecal (Enterobacter). E. coli presence is a severe safety violation indicating fecal contamination.",
+      "Lactobacillus acidophilus is a probiotic that grows slowly. It is often paired with 'Bifidobacterium' and needs a higher inoculation rate than standard yoghurt cultures.",
+      "Starter Culture Activity Test involves incubating milk with culture for 4 hours. If acidity doesn't reach a specific target (e.g., 0.6% LA), the culture is dead or phages are present.",
+      "Nisin is the only bacteriocin (natural antibiotic peptide) approved as a food preservative (E234) in processed cheese to stop Clostridium spores.",
+      "Bio-protective Cultures are strains added not for flavor, but to produce metabolites that inhibit molds and yeast naturally (Clean Label preservation).",
+      "Enterotoxins produced by Staphylococcus aureus are heat stable. Boiling milk kills the bacteria, but the toxin remains and causes food poisoning.",
+
+      // --- CHEESE TECHNOLOGY SECRETS ---
+      "Van Slyke Formula is the industry standard equation used to predict Cheddar Cheese yield based on Fat and Casein content of the milk.",
+      "Chymosin vs. Pepsin: Adult cow rennet contains Pepsin, which is more proteolytic and can cause bitter cheese. Calf rennet (Chymosin) is specific and sweet.",
+      "Plasticizing (Pasta Filata) in Mozzarella aligns the protein fibers. The water must be Calcium-free; otherwise, the cheese becomes tough.",
+      "Gouda vs. Cheddar: Gouda is a 'Washed Curd' cheese. Warm water replaces whey to remove lactose, resulting in a sweeter, lower-acid cheese.",
+      "Blue Cheese veins are created by piercing the cheese with needles to let oxygen in, allowing Penicillium roqueforti to grow inside.",
+      "Cheese Mites are microscopic pests that eat the rind of aged cheeses. They look like dust but can ruin the cheese surface.",
+      "Tyrosine Crystals are the crunchy white bits found in very aged Cheddar or Parmesan. They are amino acid deposits and a sign of high quality aging.",
+      "Processed Cheese Spread has high moisture and uses 'Melting Salts' like Sodium Citrate to prevent fat separation.",
+      "Whey Taint is a defect where cheese tastes like dirty dishwater, often caused by poor quality starter cultures or oxidation.",
+      "Rennet coagulation time (RCT) increases if milk has been stored cold for too long (Cold Aging) due to dissociation of Beta-casein.",
+
+      // --- BUTTER & GHEE SECRETS ---
+      "Churning Efficiency depends on the fat crystal size. If cream is cooled too fast, crystals are small and fat loss in buttermilk is high.",
+      "Ghee Grain Formulation requires 'Slow Cooling'. Rapid cooling makes ghee waxy/smooth. Ideally, cool to 29°C and hold for 12 hours for big granules.",
+      "Cultured Butter uses Lactococcus lactis subsp. diacetylactis to produce aroma. Sweet Cream Butter relies purely on fresh cream flavor.",
+      "Oxidative Rancidity in butter is accelerated by Copper and Iron ions. This is why butter equipment is never made of 'Yellow Metal' (Brass/Copper).",
+      "Hydrolytic Rancidity is the soapy flavor in butter caused by Lipase enzyme breaking triglycerides into free butyric acid.",
+      "Vacreation is a vacuum pasteurization process used for cream to remove volatile weed flavors (like wild onion) before butter making.",
+      "Over-churning leads to 'Greasy Butter' because the fat globules lose their structure completely, making the butter oily rather than solid.",
+
+      // --- POWDER & EVAPORATION TECHNOLOGY ---
+      "Scorched Particles (burnt specs) in milk powder are graded (Disc A, B, C, D). They usually come from deposits falling off the spray dryer ceiling.",
+      "Bulk Density of milk powder is controlled by the 'Atomizer Speed'. Faster speed = smaller droplets = fluffier powder (Low Bulk Density).",
+      "Cyclone Separators use centrifugal force to separate powder from air. The 'Fines' that escape are often returned to the dryer to agglomerate (make instant powder).",
+      "Fluidized Bed Dryers are attached to the bottom of spray dryers to cool the powder and add lecithin for instantization.",
+      "Wettability is the time it takes for milk powder to sink below the water surface. Good instant powder sinks in <15 seconds.",
+      "Dispersibility is how well powder breaks apart in water without forming lumps. It is improved by 'Agglomeration' (sticking small particles together).",
+      "Free Fat in whole milk powder causes oxidation. It happens if homogenization was poor or the spray dryer nozzle pressure was too high.",
+
+      // --- ADULTERATION & LAB TESTS (Advanced) ---
+      "FTIR Spectroscopy (Fourier Transform Infrared) is the modern 'Milk Scanner' that detects fat, SNF, and adulterants (urea, sugar, water) in 30 seconds based on light absorption.",
+      "Cryoscope calibration is done using standard salt solutions. A drift of 0.002°C can lead to false accusations of watering milk.",
+      "Detergent Adulteration gives milk a foamy appearance. It is detected using the Methylene Blue test where the detergent interferes with the dye reduction.",
+      "Synthetic Milk is an emulsion of oil, urea, detergent, and paint. It has a bitter aftertaste and turns yellow when heated.",
+      "Formalin is a carcinogen used to preserve dead bodies, illegally added to milk to increase shelf life. Hehner's Test (Sulfuric acid + Ferric chloride) detects it (Purple ring).",
+      "Starch (flour/arrowroot) is added to increase solid content. It is easily detected by Iodine solution turning the sample deep blue.",
+      "Sugar (Sucrose) is added to mask the watered-down taste. The Resorcinol test turns red if sucrose is present.",
+      "Salt is added to correct the lactometer reading of watered milk. Silver Nitrate titration detects high chloride levels.",
+      "Vegetable Protein (Soy isolate) in milk is detected using SDS-PAGE electrophoresis in advanced labs.",
+      "Mineral Oil in butter/ghee is detected by the Holde’s Test (saponification). Mineral oil doesn't saponify and floats as a turbid layer.",
+
+      // --- UTILITIES & SAFETY ---
+      "Ammonia (NH3) is the most efficient refrigerant for large dairies but is toxic. Leak detection sensors must be placed at floor level (Ammonia is lighter than air, but in humid air, it forms a heavy mist).",
+      "Glycol systems are used for intermediate cooling (like chilling cheese vats) to avoid the risk of ammonia leaking directly into the product.",
+      "BOD/COD Ratio: Dairy waste is highly biodegradable (Ratio > 0.6). If the ratio is low, it means toxic chemicals (cleaning acids) are killing the ETP bacteria.",
+      "Dust Explosions are a real risk in Milk Powder silos. They require 'Explosion Venting' panels and spark detection systems.",
+      "Listeria monocytogenes is the most feared pathogen in wet dairy environments (drains/floors). It grows at fridge temperatures (4°C). Regular 'Swab Testing' of drains is mandatory.", // <--- Fixed COMMA Here
+      
+      // --- PART 3: UNIQUE & ADVANCED TOPICS (Previously Missing Comma Before Here) ---
+      "A1 vs A2 Milk: The difference lies in the Beta-Casein protein at position 67. A1 milk yields BCM-7 (a peptide linked to digestive issues), while A2 milk (from indigenous cows/buffaloes) does not.",
+      "Goat milk is naturally homogenized. Its fat globules are so small (approx 2 microns) that cream doesn't separate easily even without mechanical homogenization.",
+      "Camel milk contains insulin-like proteins and does not coagulate easily with rennet due to a deficiency in Kappa-Casein, making cheese making difficult.",
+      "Sheep milk has the highest solids (approx 18-19%), making it the most profitable milk for cheese production (almost double the yield of cow milk).",
+      
+      // --- NEW AGE PROCESSING TECHNOLOGIES ---
+      "Ohmic Heating passes electricity directly through the milk. It heats the milk from the 'inside out' instantly, preventing surface burning and preserving chunks in fruit yoghurt.",
+      "Pulsed Electric Field (PEF) uses high-voltage bursts to punch holes in bacterial cell membranes, pasteurizing milk without using heat (Non-Thermal Processing).",
+      "High-Pressure Processing (HPP) subjects packaged dairy products to 6000 bar pressure. It kills bacteria without affecting vitamins or flavor (Cold Pasteurization).",
+      "Micro-bubbling involves injecting microscopic gas bubbles into milk to strip away oxygen, significantly reducing the rate of oxidation and extending shelf life.",
+      "3D Food Printing uses casein or chocolate-based dairy inks to print intricate shapes of cheese or butter that are impossible to mold by hand.",
+      
+      // --- ADVANCED CHEMISTRY & PHYSICS ---
+      "Zeta Potential measures the electric charge on fat globules. If Zeta potential drops (near zero), the globules clump together. It helps in predicting emulsion stability.",
+      "Redox Potential (Eh) measures the oxidation/reduction state. A sharp drop in Eh indicates active bacterial growth before pH even starts to change.",
+      "Glass Transition Temperature (Tg) is critical for milk powder. If storage temp > Tg, the amorphous lactose turns rubbery and creates sticky lumps (Caking).",
+      "Thixotropy is the property where yoghurt becomes thinner when stirred (shear thinning) but regains thickness when left to stand. This texture analysis is crucial for pumping yoghurt.",
+      "Maillard Reaction vs. Caramelization: Maillard requires Amino Acids (Protein) + Sugar. Caramelization requires only Sugar. Both cause browning but taste different.",
+      
+      // --- ENGINEERING & AUTOMATION ---
+      "Pigging System: A rubber projectile ('Pig') is pushed through pipes by compressed air to recover residual product (saving expensive cream/ghee) before CIP starts.",
+      "Vapour Separator in evaporators removes entrained droplets. If this fails, milk solids carry over into the cow water, increasing BOD and losing product.",
+      "Robotic Milking Systems (AMS) use lasers to find the teats. They monitor electrical conductivity per quarter to detect mastitis before the milk even leaves the udder.",
+      "Psychrometrics involves controlling the humidity of the air entering a spray dryer. On a rainy day, dryer capacity drops because the intake air is already saturated.",
+      "Coriolis Mass Flow Meters measure the density and mass flow directly. They are immune to air bubbles, unlike magnetic flow meters which give wrong readings with foam.",
+      
+      // --- NICHE PRODUCTS & BY-PRODUCTS ---
+      "Edible Casein Films are biodegradable packaging made from milk protein. They can be eaten along with the cheese or wrapped around spice cubes.",
+      "Whey Beverages (Clear vs Cloudy): Clear whey drinks require acidification (pH < 4.6) to prevent protein precipitation. Cloudy drinks use stabilizers.",
+      "Ghee Residue is rich in phospholipids and burnt lactose. It is often used in the confectionery industry to make chocolates with a 'caramelized dairy' note.",
+      "Plastic Cream is a high-fat product (approx 80% fat) that looks like cream but has the consistency of a paste. It is used as a base for recombined butter.",
+      "Micellar Casein Concentrate (MCC) is different from Caseinates. It is made by filtration (keeping native structure) and digests slowly, making it premium for bodybuilders.",
+      
+      // --- SENSORY & QUALITY DEFECTS (Specifics) ---
+      "Triangle Test is a sensory evaluation method where 3 samples are given (2 same, 1 different) to see if a recipe change is detectable by customers.",
+      "Cowy/Barny Flavor in milk is caused by the absorption of smells from the shed directly into the milk via the cow's lungs (breathing), not just hygiene.",
+      "Fruity Flavor in milk (resembling apples) is a defect caused by Pseudomonas fragi. It is distinct from souring.",
+      "Malty Flavor (Grape-nut like) is a specific defect caused by Lactococcus lactis var. maltigenes due to improper cooling.",
+      "Cheese Mites are microscopic bugs that infest the rind of aged cheeses. While sometimes traditional (Mimolette), they are usually a pest in modern factories.",
+      
+      // --- SAFETY & AUDIT ---
+      "Tyramine and Histamine are biogenic amines formed in aged cheese. High levels cause 'Cheese Reaction' (headaches/migraines) in sensitive people.",
+      "Food Fraud (VACCP): Vulnerability Assessment involves checking if suppliers are substituting expensive milk fat with cheap animal tallow.",
+      "Traceability (Blockchain): Modern dairies use blockchain to let customers scan a QR code and see exactly which farm and cow their milk came from.",
+      "Allergen Cleaning Validation: Even after CIP, swab tests must prove that no beta-lactoglobulin remains before processing a non-dairy (vegan) product on the same line."
     ]
   },
   hi: {
     tips: [
-      // --- ORIGINAL 30 TIPS (Hinglish) ---
+      // ============================================================
+      // PART 1: HINGLISH TRANSLATIONS (1-100)
+      // ============================================================
       "Cream separation ke liye ideal temperature 40-50°C hai. Isse fat liquid rehta hai aur viscosity kam hoti hai, jisse maximum efficiency milti hai.",
       "Doodh ka Homogenization 60-65°C aur 2500 PSI (1st stage) ke baad 500 PSI (2nd stage) par karne se cream layer nahi banti.",
       "Doodh ke liye standard Pasteurization (HTST) parameters 72°C par 15 seconds tak garam karna hai. Yeh sabhi harmful pathogenic bacteria ko khatam karta hai.",
@@ -134,8 +264,6 @@ export const dailyTipsContent = {
       "Pipes ke andar 'Biofilms' bacteria ki ek layer hoti hai jo normal CIP se nahi hat ti. Inhe hatane ke liye Peracetic Acid jaise strong oxidative sanitizers ki zaroorat padti hai.",
       "'Kjeldahl Method' protein mapne ke liye nitrogen check karta hai. Lekin Melamine jaise milawati tatv bhi nitrogen-rich hote hain, isliye pakadne ke liye advanced LC-MS/MS test chahiye hota hai.",
       "Cheese ki shelf life badhane ke liye 'Modified Atmosphere Packaging (MAP)' use hoti hai, jisme packet se hawa nikal kar CO2 (mold rokne ke liye) aur Nitrogen (packet shape ke liye) bhari jati hai.",
-
-      // --- NEW ADDITIONS: PROCESSING ENGINEERING & CHEMISTRY (Hinglish) ---
       "PHE (Plate Heat Exchanger) mein 'Regeneration Efficiency' ka matlab hai ki garm doodh se thande doodh ko kitna garam kiya ja raha hai. Ye efficiency 90-95% honi chahiye taaki steam ka kharcha bache.",
       "Homogenizer mein 'Cavitation' ek destructive process hai. Agar inlet pressure kam ho, to vapor bubbles ban kar phat jate hain, jo metal pistons ko damage karte hain.",
       "Casein ka Isoelectric Point pH 4.6 hota hai. Is pH par doodh ka protein apna charge kho deta hai aur jam jata hai (precipitate). Yahi principle Dahi aur Paneer banane mein use hota hai.",
@@ -146,8 +274,6 @@ export const dailyTipsContent = {
       "Direct UHT (Steam Injection) doodh ko turant garam karta hai par pani add kar deta hai. Is pani ko nikalne ke liye 'Flash Vessel' (vacuum chamber) ka use hota hai.",
       "Instant milk powder banane ke liye 'Lecithin' (soya se) spray kiya jata hai. Ye powder ko thande pani mein ghulne (solubility) mein madad karta hai.",
       "Agar Homogenization zaroorat se zyada ho jaye (Over-homogenization), to fat globules ke 'Clusters' ban jate hain, jisse coffee mein doodh phat sakta hai (feathering).",
-
-      // --- NEW ADDITIONS: CHEESE & FERMENTATION SECRETS (Hinglish) ---
       "Rennet (Chymosin) enzyme specifically Casein micelles ke upar lage 'Kappa-Casein' ke baalon ko kaat deta hai, jisse doodh jam kar curd ban jata hai.",
       "Gouda cheese mein 'Late Blowing' defect Clostridium spores ki wajah se hota hai. Ye spores gas banate hain jisse cheese pakne ke baad andar se phat jati hai.",
       "Processed Cheese banane ke liye natural cheese ko 'Emulsifying Salts' (Citrates/Phosphates) ke saath pighlaya jata hai, taaki wo smooth aur melt hone wala bane.",
@@ -158,8 +284,6 @@ export const dailyTipsContent = {
       "'Phage-Robust Cultures' wo bacteria strains hote hain jo virus (bacteriophage) se lad sakte hain. Badi factories mein production loss rokne ke liye ye zaroori hain.",
       "Mozzarella ka 'Stretch Test' ye dekhne ke liye hota hai ki casein fibers align hue ya nahi. Agar pH 5.2 se kam hai to cheese toot jayegi, aur 5.7 se zyada hai to rubber jaisi rahegi.",
       "Camembert aur Brie cheese 'Surface Ripened' hoti hain. Inke upar safed mold (Penicillium camemberti) lagaya jata hai jo bahar se andar ki taraf cheese ko soft karta hai.",
-
-      // --- NEW ADDITIONS: QUALITY & ADULTERATION (Hinglish) ---
       "'Alcohol Test' (68-70% ethanol) doodh ki heat stability check karta hai. Agar doodh alcohol ke saath phat jaye, to wo UHT ya boiling ke dauran bhi phat jayega.",
       "Somatic Cell Count (SCC) agar 400,000 se zyada ho to iska matlab hai gaay ko 'Mastitis' (thanela rog) hai. Aise doodh se cheese kam banta hai.",
       "Coliform bacteria 'Hygiene Indicator' hote hain. Pasteurization inhe maar deta hai, to agar packet doodh mein Coliform mile, iska matlab hai packing ke dauran gandagi aayi hai (PPC).",
@@ -170,8 +294,6 @@ export const dailyTipsContent = {
       "Phate hue doodh ko theek karne ke liye 'Neutralizers' (Soda/Caustic) milaye jate hain. Is chori ko pakadne ke liye 'Rosalic Acid Test' kiya jata hai.",
       "Maltodextrin milk powder mein milaya jane wala sasta adulterant hai. Isse pakadne ke liye Iodine test karte hain (ye reddish-brown rang deta hai).",
       "Doodh mein Urea natural hota hai (~20-40 mg), par agar SNF badhane ke liye upar se Urea milaya jaye to 'DMAB Test' se pakda jata hai.",
-
-      // --- NEW ADDITIONS: ICE CREAM & FAT TECHNOLOGY (Hinglish) ---
       "Ice cream mein 'Stabilizers' (Guar Gum/Carrageenan) pani ko baandh kar rakhte hain, taaki storage ke dauran barf ke bade crystals (iciness) na banein.",
       "Ice cream mein 'Emulsifiers' fat globules ko thoda todte hain taaki wo hawa ke bulbulon ke charo taraf chipak sakein, jisse ice cream smooth banti hai.",
       "Ice cream pack karne ke turant baad 'Hardening' (tunnel mein -18°C par jamana) zaroori hai. Agar ye late hua to ice cream ka texture kharab ho jayega.",
@@ -179,25 +301,162 @@ export const dailyTipsContent = {
       "Butter mein 'Beta-prime crystals' chahiye hote hain. Agar temperature upar-neeche hua, to ye bade 'Beta crystals' ban jate hain aur makkhan daanedar (grainy) ho jata hai.",
       "'Recrystallization' ice cream ka sabse bada dushman hai. Jab freezer ka gate baar-baar khulta hai, to choti barf pighal kar badi barf ban jati hai (Heat Shock).",
       "Frozen Desserts mein Vegetable Fat use hota hai jiska melting point high hota hai. Agar sahi blend na ho, to ye mooh mein 'waxy' (mom jaisa) feel deta hai.",
+      "Ice cream mein 'Heat Shock' tab hota hai jab transport ke dauran product thoda pighal kar wapas jam jata hai, jisse upar barf ki parat ban jati hai.",
       "Condensed milk mein lactose ke bade crystals na bane, isliye 'Seed Lactose' (pise hue lactose powder) ko add kiya jata hai taaki smooth texture rahe.",
       "Buttermilk powder mein 'Phospholipids' bohot hote hain (jo fat membrane se aate hain). Ye bakery products mein egg yolk jaisa kaam karte hain.",
-
-      // --- NEW ADDITIONS: PACKAGING & SHELF LIFE (Hinglish) ---
       "ESL (Extended Shelf Life) milk Pasteurization aur UHT ke beech ki technology hai. Ye 21-45 din tak fridge mein sahi rehta hai.",
       "Milk Powder ke packet ka 'Oxygen Transmission Rate (OTR)' bohot kam hona chahiye. Agar hawa andar gayi, to powder mein se purane tel ki badboo (rancidity) aane lagegi.",
       "Aseptic Packaging (Tetra Pak) 3 layers ka bana hota hai: Paper (shape ke liye), Plastic (seal ke liye), aur Aluminum Foil (light aur oxygen rokne ke liye).",
       "Agar doodh par dhoop ya tube-light padti rahe, to 'Light Oxidation' ho jata hai. Isse doodh mein 'burnt feather' ya 'cabbage' jaisi badboo aati hai.",
       "Milk powder pack karte waqt packet ke andar Oxygen 2% se kam honi chahiye (Headspace Analysis), tabhi wo 1-2 saal tak kharab nahi hoga.",
+      "Packaging ki 'Migration Testing' zaroori hai taaki ye check ho sake ki packet ki ink ya gond (glue) doodh ke andar to nahi ris rahi hai.",
       "Cheese ke packet mein 'Active Packaging' ka use hota hai, jisme oxygen soakhne wale sachet (scavengers) dale jate hain taaki phaphoondi (mold) na lage.",
       "Doodh ki bottle ke dhakkan par jo seal (band) hoti hai, wo heat tunnel mein shrink ki jati hai. Agar temperature galat hua to bottle ki gardan tedhi ho sakti hai.",
       "Kanch ki bottles (Glass) sabse safe hain par wo light pass karti hain, jisse doodh ka Vitamin B2 (Riboflavin) khatam ho jata hai. Isliye dark glass use karna chahiye.",
-
-      // --- NEW ADDITIONS: WATER & EFFLUENT (Hinglish) ---
+      "Edible coatings (jo casein ya mom se bante hain) ka use cheese blocks ko pack karne ke liye ho raha hai taaki plastic waste kam ho.",
       "Dairy ke gande pani (Effluent) mein lactose aur protein hone ki wajah se BOD (Biological Oxygen Demand) bohot high hota hai. Ise bina treat kiye nadi mein nahi fek sakte.",
       "Powder plant mein doodh se jo pani udta hai (Cow Water), use RO se saaf karke wapas plant ki safai ya boiler mein use kiya ja sakta hai.",
       "Pipe saaf karte waqt pehla pani jo doodh ke saath mix hota hai use 'White Water' kehte hain. Ise drain mein fekne ki jagah suaron (pigs) ke khane ya Biogas ke liye use karna chahiye.",
       "Biogas pipes mein aksar 'Struvite' (ek tarah ka pathar) jam jata hai kyunki dairy waste mein Magnesium aur Phosphate bohot zyada hota hai.",
-      "Dairy ETP (Treatment Plant) se nikla hua keychad (Sludge) khet ke liye behtareen organic khaad (fertilizer) hai kyunki isme Nitrogen aur Phosphorus bharpoor hota hai."
+      "Dairy ETP (Treatment Plant) se nikla hua keychad (Sludge) khet ke liye behtareen organic khaad (fertilizer) hai kyunki isme Nitrogen aur Phosphorus bharpoor hota hai.",
+
+      // ============================================================
+      // PART 2: NEW DEEP-DIVE TOPICS (Hinglish Translations)
+      // ============================================================
+
+      // --- ENGINEERING & FLUID MECHANICS ---
+      "Reynolds Number (Re) batata hai ki pipe mein doodh ka flow Laminar (seedha) hai ya Turbulent (hilta hua). Cleaning (CIP) ke liye flow Turbulent hona zaroori hai.",
+      "Mixproof Valves automated dairies mein zaroori hote hain. Isme do seats hoti hain, taaki ek line mein cleaning liquid ho aur dusri mein doodh, bina mix hue.",
+      "Cream aur Curd ke liye 'Positive Displacement Pumps' (Lobe/Screw) use hote hain kyunki normal pumps fat ko tod dete hain (shear), jisse texture kharab hota hai.",
+      "'Water Hammer' tab hota hai jab valve ekdum se band kiya jaye. Is jhatke se gasket phat sakti hai aur waha bacteria ghar bana lete hain.",
+      "'Dead Legs' pipe ke wo hisse hote hain jaha pani nahi behta. Hygienic design mein ye pipe ki chaudai se 1.5 guna se zyada lambe nahi hone chahiye.",
+      "Direct heating ke liye 'Culinary Steam' chahiye hoti hai. Ye boiler chemicals se free honi chahiye aur 5 micron filter se saaf honi chahiye.",
+      "Heat exchanger mein samay ke saath protein jamne lagta hai jise 'Fouling Factor' kehte hain. Isse pressure badhta hai aur steam zyada lagti hai.",
+      "Stainless Steel mein 'Corrosion' aksar Chloride (namak) wale pani se hota hai. Isse 'Pitting' hoti hai, yaani aise ched jo aankh se nahi dikhte.",
+      "'D-Value' wo samay hai jo kisi specific temperature par 90% bacteria maarne ke liye lagta hai. Ye sterilization calculate karne mein madad karta hai.",
+      "'Z-Value' wo temperature increase hai jo D-value ko 90% kam kar deta hai. Engineers iska use process design mein karte hain.",
+      "Flow Diversion Valve (FDV) pasteurizer ka safety guard hai. Agar doodh 72°C se thanda reh gaya, to ye valve doodh ko wapas tank mein bhej deta hai.",
+      "Powder plants mein 'Vapor Recompression' (TVR/MVR) use hota hai jo bhap (vapor) ko wapas use karta hai, jisse 70% tak energy bachti hai.",
+
+      // --- ADVANCED CHEMISTRY & PHYSICS ---
+      "Maillard Reaction aur Caramelization alag hain. Maillard protein aur sugar ke beech hoti hai (brown rang), jabki Caramelization sirf sugar ke jalne se hoti hai.",
+      "Milk Powder mein 'Alpha-Lactose Monohydrate' crystals hote hain jo hawa se nami nahi sokhte. Beta-lactose meetha hota hai par nami jaldi sokhta hai (chipchipa).",
+      "Casein Micelles ko 'Calcium Phosphate' jod kar rakhta hai. Jab hum acid dalte hain, to ye calcium ghul jata hai aur doodh phat (curdle) jata hai.",
+      "Garam doodh mein 'eggy' (ande jaisi) smell Whey Proteins ke 'Sulfur groups' ke tootne se aati hai. Ise Cooked Flavor kehte hain.",
+      "'Redox Potential' (Eh) bacteria growth napne ka tarika hai. Bacteria oxygen khate hain, jisse Eh kam ho jata hai. Ye spoilage detect karta hai.",
+      "pH aur Titratable Acidity (TA) alag hain. pH batata hai ki acid kitna strong hai, jabki TA batata hai ki acid ki total matra kitni hai.",
+      "Water Activity (aw) batati hai ki bacteria ke liye kitna pani available hai. Condensed milk mein chini pani ko baandh leti hai, isliye bacteria grow nahi karte.",
+      "Agar storage temperature 'Glass Transition Temperature' (Tg) se zyada ho jaye, to powder jam kar pathar (lumpy) ban jata hai.",
+      "'Mutarotation' lactose ka Alpha se Beta form mein badalna hai. Agar ye balance bigda, to condensed milk aur ice cream mein ret (sandiness) aa jati hai.",
+      "Doodh mein pani ki milawat pakadne ke liye 'Refractive Index' bhi use hota hai. Ye freezing point se zyada mushkil test hai par accurate hai.",
+
+      // --- MICROBIOLOGY DEEP DIVE ---
+      "Kuch bacteria (Thermophilic Spores) UHT treatment mein bhi bach jate hain. Ye baad mein 'Flat Sour' defect karte hain (doodh khatta par packet phoolta nahi).",
+      "Psychrotrophs (thande mein panapne wale bacteria) doodh mein neela-hara rang (pigment) aur kadwa swaad (bitterness) paida karte hain.",
+      "'Ropey Milk' ek defect hai jisme doodh taar jaisa chipchipa ho jata hai. Ye Alcaligenes viscolactis bacteria ki wajah se hota hai.",
+      "Yoghurt mein agar gas ban rahi ho ya 'fruity' smell aaye, to iska matlab Yeast contamination hai (aksar fruit pulp se aata hai).",
+      "Coliforms mein 'E. coli' ka hona sabse khatarnak hai. Iska matlab hai ki doodh mein gandagi (fecal contamination) aayi hai.",
+      "Probiotic 'Lactobacillus acidophilus' dheere grow karta hai, isliye ise normal dahi ke culture se zyada matra mein dala jata hai.",
+      "'Starter Activity Test' mein culture ko 4 ghante incubate karte hain. Agar acidity target tak nahi pahunchi, to culture kharab hai ya phage attack hua hai.",
+      "'Nisin' ek natural preservative hai jo processed cheese mein Clostridium spores ko rokne ke liye use hota hai (E234).",
+      "'Bio-protective Cultures' wo bacteria hain jo swaad nahi badhate, par dushre mold aur yeast ko grow hone se rokte hain (Clean Label).",
+      "Staphylococcus aureus bacteria to ubalne se mar jata hai, par uska zeher (Enterotoxin) doodh mein bacha rehta hai jo food poisoning karta hai.",
+
+      // --- CHEESE TECHNOLOGY SECRETS ---
+      "Cheddar Cheese ki yield predict karne ke liye 'Van Slyke Formula' use hota hai, jo fat aur casein content par adharit hai.",
+      "Adult cow rennet (Pepsin) cheese ko kadwa kar sakta hai. Isliye bachde ka rennet (Chymosin) best mana jata hai kyunki wo specific hota hai.",
+      "Mozzarella mein 'Plasticizing' ka matlab hai protein fibers ko line mein lana. Isme use hone wala pani calcium-free hona chahiye varna cheese tough ho jayegi.",
+      "Gouda cheese 'Washed Curd' hoti hai. Isme whey nikal kar garm pani dala jata hai taaki lactose kam ho aur cheese meethi bane.",
+      "Blue Cheese mein neeli nasen (veins) banane ke liye needles se ched kiye jate hain taaki andar hawa jaye aur mold grow kar sake.",
+      "'Cheese Mites' chote keede hote hain jo purani cheese ke chilke (rind) ko khate hain. Ye dhool jaise dikhte hain.",
+      "Purani Cheddar ya Parmesan mein jo safed crunchy dane aate hain wo 'Tyrosine Crystals' hote hain. Ye achi quality ki nishani hai.",
+      "Processed Cheese Spread mein 'Melting Salts' (Sodium Citrate) dale jate hain taaki fat alag na ho aur texture smooth rahe.",
+      "Agar cheese mein gande pani jaisa swaad (Whey Taint) aaye, to iska karan kharab culture ya oxidation ho sakta hai.",
+      "Agar doodh ko bohot din tak thanda rakha jaye (Cold Aging), to cheese set hone mein zyada time lagta hai (Rennet Coagulation Time badh jata hai).",
+
+      // --- BUTTER & GHEE SECRETS ---
+      "Churning Efficiency fat crystal size par depend karti hai. Agar cream jaldi thandi ki gayi, to crystals chote honge aur fat loss zyada hoga.",
+      "Ghee mein dane (grains) lane ke liye 'Slow Cooling' zaroori hai. Ghee ko 29°C tak thanda karke 12 ghante chhod dena chahiye.",
+      "Cultured Butter mein khushboo ke liye alag bacteria (Diacetylactis) use hote hain, jabki Sweet Cream Butter sirf fresh cream se banta hai.",
+      "Makkhan mein 'Oxidative Rancidity' Copper aur Iron se badhti hai. Isliye dairy equipment kabhi bhi peetal ya tambe (brass/copper) ka nahi hota.",
+      "Makkhan mein agar sabun jaisa swaad (soapy) aaye, to ye 'Hydrolytic Rancidity' hai, jo Lipase enzyme ke fat todne se hoti hai.",
+      "Butter banane se pehle cream se ghaas-phoos ki badboo nikalne ke liye 'Vacreation' (vacuum pasteurization) kiya jata hai.",
+      "Agar makkhan ko zyada churn kar diya jaye (Over-churning), to wo 'Greasy' ho jata hai, yaani solid hone ki bajaye tel jaisa ho jata hai.",
+
+      // --- POWDER & EVAPORATION TECHNOLOGY ---
+      "Milk powder mein jale hue kaale dane (Scorched Particles) spray dryer ki chat se gire hue deposits hote hain. Inki grading A, B, C, D hoti hai.",
+      "Powder ka bhari-pan (Bulk Density) 'Atomizer Speed' se control hota hai. Tez speed = chote dane = halka powder.",
+      "Cyclone Separator hawa aur powder ko alag karta hai. Jo barik powder (fines) ud jata hai, use wapas dryer mein bhej kar 'Instant Powder' banaya jata hai.",
+      "Fluidized Bed Dryer powder ko thanda karne aur lecithin spray karne ke liye use hota hai taaki powder pani mein jaldi ghule.",
+      "'Wettability' wo time hai jitne mein powder pani mein doob jata hai. Acha instant powder 15 second se kam mein doobna chahiye.",
+      "'Dispersibility' ka matlab hai powder bina gaanth (lumps) bane pani mein kaise ghulta hai. Ye 'Agglomeration' process se improve hota hai.",
+      "Agar powder mein 'Free Fat' zyada ho, to wo jaldi kharab (oxidize) ho jata hai. Ye tab hota hai jab homogenization sahi na hua ho.",
+
+      // --- ADULTERATION & LAB TESTS (Advanced) ---
+      "FTIR Spectroscopy (Milk Scanner) ek modern machine hai jo 30 second mein fat, SNF aur milawat (urea, sugar, pani) sab bata deti hai.",
+      "Cryoscope (freezing point machine) ko namak ke paani se calibrate kiya jata hai. 0.002°C ki galti bhi galat result de sakti hai.",
+      "Detergent ki milawat se doodh mein jhaag banti hai. Ise 'Methylene Blue Test' se pakda jata hai kyunki detergent dye ke color ko effect karta hai.",
+      "Synthetic Milk tel, urea, detergent aur paint ka mixture hota hai. Ise garam karne par ye peela pad jata hai aur swaad kadwa hota hai.",
+      "Formalin (murda preserve karne wala chemical) doodh ko kharab hone se rokne ke liye milaya jata hai. Ise 'Hehner's Test' (purple ring) se pakda jata hai.",
+      "Doodh ko gadha dikhane ke liye Starch (aata/arrowroot) milaya jata hai. Iodine solution dalne par ye neela (blue) ho jata hai.",
+      "Pani milane ke baad mithaas maintain karne ke liye Cheeni (Sugar) dali jati hai. Resorcinol test mein ye laal (red) rang deta hai.",
+      "Lactometer reading theek karne ke liye Namak (Salt) milaya jata hai. Ise Silver Nitrate titration se pakda jata hai.",
+      "Doodh mein Vegetable Protein (Soy isolate) ki milawat pakadne ke liye advanced labs mein SDS-PAGE electrophoresis test hota hai.",
+      "Ghee mein Mineral Oil ki milawat 'Holde’s Test' se pakdi jati hai. Mineral oil sabun nahi banta aur alag tairta rehta hai.",
+
+      // --- UTILITIES & SAFETY ---
+      "Ammonia (NH3) sabse efficient refrigerant hai par zehreela hai. Iske sensors zameen ke paas hone chahiye kyunki nami mein ye bhari dhund (mist) ban jata hai.",
+      "Product mein ammonia leak na ho, isliye beech mein 'Glycol System' use kiya jata hai (jaise cheese vats ko thanda karne ke liye).",
+      "Agar Dairy waste ka BOD/COD ratio kam hai, to iska matlab hai ki cleaning acids (chemicals) ETP ke bacteria ko maar rahe hain.",
+      "Milk Powder ke silos mein 'Dust Explosion' ka khatra hota hai. Isliye waha explosion venting panels lagana zaroori hai.",
+      "Listeria monocytogenes gile floors aur drains mein panapta hai aur fridge ke temperature par bhi grow karta hai. Drains ki regular testing zaroori hai.", // <--- Fixed COMMA Here
+      
+      // --- PART 3: UNIQUE & ADVANCED TOPICS (Previously Missing Comma Before Here) ---
+      "A1 vs A2 Milk: Fark 'Beta-Casein' protein ke position 67 par hota hai. A1 milk pachan mein dikkat kar sakta hai (BCM-7 peptide), jabki Desi gaay/bhains ka A2 milk safe hota hai.",
+      "Bakri ka doodh (Goat milk) naturally homogenized hota hai. Iske fat globules itne chote (2 micron) hote hain ki machine ke bina bhi malai alag nahi hoti.",
+      "Oont ka doodh (Camel milk) jaldi dahi nahi banta kyunki usme 'Kappa-Casein' ki kami hoti hai, isliye iska cheese banana bohot mushkil hai.",
+      "Bhed (Sheep) ke doodh mein sabse zyada solids (18-19%) hote hain. Isliye Cheese banane ke liye ye sabse faydemand doodh hai (Gaay se dugna yield).",
+      
+      // --- NEW AGE PROCESSING TECHNOLOGIES (Hinglish) ---
+      "Ohmic Heating mein doodh ke andar se bijli (electricity) guzari jati hai. Ye doodh ko andar se turant garam karta hai, jisse fruit yoghurt ke chunks kharab nahi hote.",
+      "PEF (Pulsed Electric Field) mein high voltage ke jhatke diye jate hain jo bacteria ki chamdi faad dete hain. Isme bina garam kiye doodh pasteurize ho jata hai.",
+      "HPP (High Pressure) mein packet band doodh par samandar ki gehrai jitna pressure (6000 bar) dala jata hai. Bacteria mar jate hain par taste fresh rehta hai.",
+      "Micro-bubbling technique mein doodh mein microscopic gas ke bulbule dale jate hain jo oxygen ko kheech kar bahar nikal dete hain, jisse shelf life badhti hai.",
+      "3D Food Printing mein casein ya butter ki ink use karke cheese ke aise designs banaye jate hain jo haath se banana namumkin hai.",
+      
+      // --- ADVANCED CHEMISTRY & PHYSICS (Hinglish) ---
+      "Zeta Potential fat globules ka electric charge napta hai. Agar charge zero ke paas gaya, to fat jud kar guchha ban jayega aur emulsion toot jayega.",
+      "Redox Potential (Eh) bacteria ki activity ko pH badalne se pehle hi pakad leta hai. Agar Eh girne lage, to samajh lo bacteria grow kar rahe hain.",
+      "Glass Transition Temperature (Tg) milk powder ke liye zaroori hai. Agar storage ka temp Tg se zyada hua, to powder rubber jaisa ho jayega aur guthliyan (lumps) ban jayengi.",
+      "Thixotropy dahi ki wo property hai ki jab use hilao to wo patla ho jata hai, aur chhod do to wapas gaadha ho jata hai. Pump design karte waqt ye pata hona chahiye.",
+      "Maillard vs Caramelization: Maillard reaction ke liye Protein aur Sugar dono chahiye, jabki Caramelization sirf Sugar (cheeni) jalne se hota hai.",
+      
+      // --- ENGINEERING & AUTOMATION (Hinglish) ---
+      "Pigging System: Pipe saaf karne se pehle ek rubber ki ball (Pig) hawa ke pressure se bheji jati hai, jo pipe mein bacha hua mehnga cream/ghee nikal leti hai.",
+      "Evaporator mein 'Vapour Separator' bhaap se doodh ki boondon ko alag karta hai. Agar ye fail hua, to doodh bhaap ke saath udd jayega (Product Loss).",
+      "Robotic Milking mein laser se than (teats) dhunde jate hain. Ye machine doodh nikalne se pehle hi conductivity check karke Mastitis pakad leti hai.",
+      "Psychrometrics ka matlab hai hawa ki nami check karna. Barish ke dino mein spray dryer ki capacity kam ho jati hai kyunki hawa pehle se gili hoti hai.",
+      "'Coriolis Mass Flow Meter' doodh ka wazan (mass) direct naapta hai. Ispe hawa ya jhaag (foam) ka asar nahi padta, jabki magnetic meter jhaag mein galat reading deta hai.",
+      
+      // --- NICHE PRODUCTS & BY-PRODUCTS (Hinglish) ---
+      "Edible Casein Films doodh ke protein se bani transparent packing hoti hai. Aap cheese ke saath is plastic-jaisi film ko kha bhi sakte hain.",
+      "Whey Drinks agar clear (paani jaisi) banani hain to pH 4.6 se kam karna padega, nahi to protein phat kar niche baith jayega.",
+      "Ghee Residue (Khurchan) mein phospholipids aur jali hui lactose hoti hai. Chocolate companies ise 'Caramel/Toffee flavor' dene ke liye use karti hain.",
+      "Plastic Cream ek 80% fat wala product hai jo dikhne mein cream jaisa par toothpaste jaisa gaadha hota hai. Ye butter banane ke kaam aata hai.",
+      "Micellar Casein Concentrate (MCC) ko filter karke banaya jata hai (chemicals se nahi). Ye bodybuilders ke liye premium protein hai kyunki ye dheere pachta hai.",
+      
+      // --- SENSORY & QUALITY DEFECTS (Hinglish) ---
+      "Triangle Test ek sensory test hai jisme 3 cup diye jate hain (2 same, 1 alag). Ye check karne ke liye ki kya customer recipe change ko pakad payega.",
+      "Doodh mein 'Cowy/Barny' smell sirf gandagi se nahi, balki gaay ke saans lene (lungs) se bhi aati hai agar tabele mein hawa saaf na ho.",
+      "Agar doodh mein 'Fruity' (seb jaisi) khushboo aa rahi hai, to ye acha nahi hai. Ye 'Pseudomonas fragi' bacteria ka infection hai.",
+      "Malty Flavor (Gravel jaisa) tab aata hai jab cooling sahi na ho. Ye 'Lactococcus maltigenes' bacteria ki wajah se hota hai.",
+      "Cheese Mites chote keede hote hain jo purani cheese ke chilke (rind) par lag jate hain. Modern factory mein inhe pest mana jata hai.",
+      
+      // --- SAFETY & AUDIT (Hinglish) ---
+      "Purani cheese mein Tyramine aur Histamine ban jate hain. Kuch logon ko cheese khane ke baad jo sar dard (migraine) hota hai, wo is wajah se hai.",
+      "Food Fraud (VACCP) audit mein ye check kiya jata hai ki supplier ne mehnge milk fat ki jagah sasta janwar ki charbi (tallow) to mix nahi kiya.",
+      "Traceability (Blockchain) naye zamaane ki tech hai. QR code scan karke customer dekh sakta hai ki doodh kis farm aur kis gaay se aaya hai.",
+      "Allergen Validation: Agar usi line par Vegan product banana hai, to swab test se prove karna padega ki purane doodh ka ek kan bhi nahi bacha hai."
     ]
   }
 };
