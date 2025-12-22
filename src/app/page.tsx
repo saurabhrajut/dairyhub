@@ -3,6 +3,7 @@
 import { Header } from '@/components/header';
 import { TopicGrid } from '@/components/topic-grid';
 import { DailyTip } from '@/components/daily-tip';
+import { SarathiChatWidget } from '@/components/sarathi-chat-widget';
 import { FlaskConical, Beaker, Pipette, Settings, TestTube, Microscope, Combine } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import SplashScreen from '@/components/splash-screen';
@@ -97,6 +98,7 @@ export default function Home() {
           <TopicGrid />
         </main>
       </div>
+      <SarathiChatWidget />
     </div>
   );
 }
