@@ -1,7 +1,6 @@
 
 "use server";
 
-import { generateDairyTip } from "@/ai/flows/generate-dairy-tip";
 import { suggestDairyRecipes } from "@/ai/flows/suggest-dairy-recipes";
 import { generateAdulterantDetectionInstructions } from "@/ai/flows/generate-adulterant-detection-instructions";
 import { getLatestDairyIndustryData } from "@/ai/flows/get-latest-dairy-industry-data";
@@ -34,10 +33,6 @@ import type {
     PdfParsingInput,
     SarathiAIInput
 } from "@/ai/flows/types";
-
-export async function getDailyTip() {
-    return await generateDairyTip();
-}
 
 export async function getRecipeSuggestions(input: SuggestDairyRecipesInput) {
     return await suggestDairyRecipes(input);
