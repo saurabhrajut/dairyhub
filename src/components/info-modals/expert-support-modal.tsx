@@ -6,14 +6,26 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Sparkles, Lightbulb, UserPlus, Bot, ArrowLeft, Send, Upload, FileCheck } from 'lucide-react';
-import { askExpert, gyanAI, interviewPrepper } from '@/app/actions';
+import { 
+  Loader2, 
+  UserPlus, 
+  Bot, 
+  ArrowLeft, 
+  Send, 
+  Briefcase, 
+  Star, 
+  CheckCircle2, 
+  Sparkles 
+} from 'lucide-react';
+import { askExpert } from '@/app/actions';
 import {
   Select,
   SelectContent,
@@ -22,532 +34,491 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { Message } from '@/ai/flows/types';
+import { cn } from '@/lib/utils';
 
-const initialExperts = [
-  { id: '1', name: "Dr. Ramesh Kumar", experience: 15, specialization: "Dairy Technology", photo: "https://placehold.co/150x150/E2E8F0/4A5568?text=R", type: 'ai' },
-  { id: '2', name: "Sunita Sharma", experience: 12, specialization: "Food Safety and Quality", photo: "https://placehold.co/150x150/E2E8F0/4A5568?text=S", type: 'ai' },
-  { id: '3', name: "Anil Singh", experience: 20, specialization: "Food Processing", photo: "https://placehold.co/150x150/E2E8F0/4A5568?text=A", type: 'ai' }
+// --- Data & Types ---
+
+const expertsList = [
+  { 
+    id: '1', 
+    name: "Dr. Ramesh Kumar", 
+    experience: 15, 
+    specialization: "Dairy Technology", 
+    role: "Senior Dairy Scientist",
+    photo: "https://placehold.co/150x150/E2E8F0/1e293b?text=RK", 
+    type: 'ai',
+    status: 'online',
+    tags: ["Milk Processing", "Cheese", "Quality Control"]
+  },
+  { 
+    id: '2', 
+    name: "Sunita Sharma", 
+    experience: 12, 
+    specialization: "Food Safety & Quality", 
+    role: "ISO Certified Auditor",
+    photo: "https://placehold.co/150x150/E2E8F0/1e293b?text=SS", 
+    type: 'ai',
+    status: 'online',
+    tags: ["HACCP", "FSSAI", "Hygiene"]
+  },
+  { 
+    id: '3', 
+    name: "Anil Singh", 
+    experience: 20, 
+    specialization: "Food Processing", 
+    role: "Industrial Consultant",
+    photo: "https://placehold.co/150x150/E2E8F0/1e293b?text=AS", 
+    type: 'ai',
+    status: 'online',
+    tags: ["Packaging", "Preservation", "Machinery"]
+  }
 ];
 
-interface UIMessage { id: string; role: "user" | "assistant"; text: string; }
+interface UIMessage { 
+    id: string; 
+    role: "user" | "assistant"; 
+    text: string; 
+    timestamp: string;
+}
+
+type ViewState = 'list' | 'chat' | 'register';
+
+// --- Main Component ---
 
 export function ExpertSupportModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
-  const [activePage, setActivePage] = useState<string>('home');
-  const [selectedExpert, setSelectedExpert] = useState<typeof initialExperts[0] | null>(null);
+  const [activeView, setActiveView] = useState<ViewState>('list');
+  const [selectedExpert, setSelectedExpert] = useState<typeof expertsList[0] | null>(null);
 
-  const handleSelectExpert = useCallback((expert: typeof initialExperts[0]) => {
+  // Reset state when modal closes
+  useEffect(() => {
+    if (!isOpen) {
+        setTimeout(() => {
+            setActiveView('list');
+            setSelectedExpert(null);
+        }, 300);
+    }
+  }, [isOpen]);
+
+  const handleSelectExpert = (expert: typeof expertsList[0]) => {
       setSelectedExpert(expert);
-      setActivePage('chat');
-  }, []);
-
-  const handleBackToHome = useCallback(() => {
-      setActivePage('home');
-      setSelectedExpert(null);
-  }, []);
-
-  const renderPage = () => {
-      switch (activePage) {
-          case 'chat': return <ChatPage expert={selectedExpert!} onBack={handleBackToHome} />;
-          case 'gyan-ai': return <GyanAIPage onBack={() => setActivePage('home')} />;
-          case 'register': return <RegisterExpertPage onBack={() => setActivePage('home')} />;
-          case 'home':
-          default: return <HomePage onSelectExpert={handleSelectExpert} setActivePage={setActivePage} />;
-      }
+      setActiveView('chat');
   };
 
   return (
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-          <DialogContent className="max-w-6xl w-[95vw] h-full max-h-[90vh] flex flex-col p-0 sm:p-6">
-              <DialogHeader className="p-4 sm:p-0 shrink-0">
-                  <DialogTitle className="text-2xl md:text-3xl font-bold text-center text-gray-800 font-headline">
-                      💡 Experts Suggest
-                  </DialogTitle>
-              </DialogHeader>
-              <div className="flex-1 min-h-0">
-                  {renderPage()}
+          <DialogContent className="max-w-5xl w-[95vw] h-[85vh] flex flex-col p-0 overflow-hidden bg-slate-50/50 backdrop-blur-sm">
+              <div className="flex-1 w-full h-full flex flex-col min-h-0">
+                  {activeView === 'list' && (
+                      <ExpertListView 
+                          onSelectExpert={handleSelectExpert} 
+                          onRegister={() => setActiveView('register')} 
+                      />
+                  )}
+                  {activeView === 'chat' && selectedExpert && (
+                      <ChatView 
+                          expert={selectedExpert} 
+                          onBack={() => setActiveView('list')} 
+                      />
+                  )}
+                  {activeView === 'register' && (
+                      <RegisterView 
+                          onBack={() => setActiveView('list')} 
+                      />
+                  )}
               </div>
           </DialogContent>
       </Dialog>
   );
 }
 
-function HomePage({ setActivePage, onSelectExpert }: { setActivePage: (page: string) => void, onSelectExpert: (expert: any) => void }) {
-  const [expertType, setExpertType] = useState<'ai' | 'real'>('ai');
-  const [experts, setExperts] = useState(initialExperts);
-  const filteredExperts = useMemo(() => experts.filter(e => e.type === expertType), [experts, expertType]);
-  return (
-    <ScrollArea className="h-full">
-      <div className="p-4">
-        <div className="text-center my-6">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">Get Advice from Industry Experts</h2>
-          <p className="text-md text-gray-600 max-w-2xl mx-auto">Choose between instant AI-powered answers or connect with real-world professionals.</p>
-        </div>
-        <div className="flex justify-center mb-6">
-          <div className="bg-gray-200 rounded-full p-1 flex items-center">
-            <Button onClick={() => setExpertType('ai')} variant={expertType === 'ai' ? 'default' : 'ghost'} className="rounded-full shadow-sm">AI Experts</Button>
-            <Button onClick={() => setExpertType('real')} variant={expertType === 'real' ? 'default' : 'ghost'} className="rounded-full shadow-sm" disabled>Real Experts (Coming Soon)</Button>
-          </div>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {filteredExperts.map(expert => (
-            <div key={expert.id} className="bg-white rounded-xl shadow-lg p-6 text-center transform hover:-translate-y-1 transition-transform duration-300 cursor-pointer" onClick={() => onSelectExpert(expert)}>
-              <img className="w-24 h-24 rounded-full object-cover mx-auto mb-4 border-4 border-blue-200" src={expert.photo} data-ai-hint="profile photo" alt={expert.name} />
-              <h4 className="text-lg font-semibold text-gray-900">{expert.name}</h4>
-              <p className="text-sm text-gray-600 mt-1">{expert.experience}+ years in {expert.specialization}</p>
+// --- Sub-Components ---
+
+function ExpertListView({ onSelectExpert, onRegister }: { onSelectExpert: (e: any) => void, onRegister: () => void }) {
+    return (
+        <div className="flex flex-col h-full bg-white">
+            <div className="p-6 border-b bg-white shrink-0">
+                <div className="text-center max-w-2xl mx-auto">
+                    <div className="flex justify-center mb-3">
+                        <div className="bg-blue-100 p-3 rounded-full">
+                            <Sparkles className="w-6 h-6 text-blue-600" />
+                        </div>
+                    </div>
+                    <h2 className="text-2xl font-bold text-slate-800 mb-2">Expert Consultation</h2>
+                    <p className="text-slate-500 text-sm">
+                        Connect with AI-powered industry specialists for instant guidance on Dairy, Food Safety, and Processing.
+                    </p>
+                </div>
             </div>
-          ))}
+
+            <ScrollArea className="flex-1 bg-slate-50">
+                <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                    {expertsList.map((expert) => (
+                        <Card 
+                            key={expert.id} 
+                            className="group hover:shadow-xl transition-all duration-300 border-slate-200 cursor-pointer overflow-hidden relative"
+                            onClick={() => onSelectExpert(expert)}
+                        >
+                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-indigo-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+                            <CardHeader className="flex flex-row items-start gap-4 pb-3">
+                                <div className="relative">
+                                    <Avatar className="w-16 h-16 border-2 border-white shadow-sm">
+                                        <AvatarImage src={expert.photo} />
+                                        <AvatarFallback>{expert.name[0]}</AvatarFallback>
+                                    </Avatar>
+                                    <span className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></span>
+                                </div>
+                                <div>
+                                    <h3 className="font-bold text-lg text-slate-900 group-hover:text-blue-600 transition-colors">{expert.name}</h3>
+                                    <p className="text-xs text-slate-500 font-medium">{expert.role}</p>
+                                    <div className="flex items-center gap-1 mt-1 text-amber-500 text-xs font-bold">
+                                        <Star className="w-3 h-3 fill-current" />
+                                        <span>{expert.experience}+ Years Exp.</span>
+                                    </div>
+                                </div>
+                            </CardHeader>
+                            <CardContent className="pb-3">
+                                <p className="text-sm text-slate-600 mb-3 line-clamp-2">
+                                    Specialist in <span className="font-semibold text-slate-800">{expert.specialization}</span>. 
+                                    Ask me about {expert.tags.join(', ')}.
+                                </p>
+                                <div className="flex flex-wrap gap-2">
+                                    {expert.tags.slice(0, 2).map(tag => (
+                                        <Badge key={tag} variant="secondary" className="text-xs font-normal bg-slate-100 text-slate-600">
+                                            {tag}
+                                        </Badge>
+                                    ))}
+                                </div>
+                            </CardContent>
+                            <CardFooter className="pt-0">
+                                <Button className="w-full bg-slate-900 hover:bg-blue-600 transition-colors gap-2 group-hover:shadow-md">
+                                    Chat Now <Send className="w-3 h-3" />
+                                </Button>
+                            </CardFooter>
+                        </Card>
+                    ))}
+                </div>
+            </ScrollArea>
+
+            <div className="p-4 border-t bg-white shrink-0 flex justify-center">
+                <Button variant="outline" onClick={onRegister} className="text-slate-600 border-dashed border-slate-300 hover:border-blue-400 hover:text-blue-600">
+                    <UserPlus className="w-4 h-4 mr-2" />
+                    Join as a Real Expert
+                </Button>
+            </div>
         </div>
-        <div className="text-center mt-8 space-x-4">
-          <Button variant="secondary" onClick={() => setActivePage('gyan-ai')}>Go to Gyan AI <Lightbulb className="ml-2"/></Button>
-          <Button variant="outline" onClick={() => setActivePage('register')}>Become an Expert <UserPlus className="ml-2" /></Button>
-        </div>
-      </div>
-    </ScrollArea>
-  );
+    );
 }
 
-function ChatInterface({ title, description, initialMessage, onBack, apiCall, apiCallPayload, isInterviewPrep = false }: { title: string, description: string, initialMessage: string, onBack: () => void, apiCall: (payload: any) => Promise<any>, apiCallPayload: (query: string, history: Message[], isInitial?: boolean) => any, isInterviewPrep?: boolean }) {
+function ChatView({ expert, onBack }: { expert: typeof expertsList[0], onBack: () => void }) {
     const [messages, setMessages] = useState<UIMessage[]>([]);
     const [history, setHistory] = useState<Message[]>([]);
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    const scrollViewportRef = useRef<HTMLDivElement>(null);
-    const { toast } = useToast();
+    const [language, setLanguage] = useState("English");
+    
+    const scrollRef = useRef<HTMLDivElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
+    const languageRef = useRef(language);
+    languageRef.current = language;
 
-    const initialMessageSent = useRef(false);
-
+    // Auto-scroll
     useEffect(() => {
-        const sendInitialMessage = async () => {
-            setIsLoading(true);
-            try {
-                const payload = apiCallPayload("", [], true); // isInitial = true
-                const response = await apiCall(payload);
-                
-                if (!response) {
-                    throw new Error("Received an empty response from the server.");
-                }
+        if (scrollRef.current) {
+            scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+        }
+    }, [messages, isLoading]);
 
-                let responseText: string;
-                 if (isInterviewPrep && response && Array.isArray(response.response)) {
-                    if (response.response.length === 0) {
-                        responseText = response.followUpSuggestion || "Sorry, I couldn't generate any questions. Please try again with a different resume.";
-                    } else {
-                        responseText = response.response.map((qa: any) => `<strong>Q: ${qa.question}</strong><br/>${qa.answer}`).join('<br/><br/>') + `<br/><br/><em>${response.followUpSuggestion || ""}</em>`;
-                    }
-                } else if (response?.answer) {
-                     responseText = response.answer;
-                } else {
-                     responseText = response?.refinedQuestion?.refinedQuestion || "Sorry, no answer received.";
-                }
-
-                const initialAssistantMessage: UIMessage = { id: "initial-q", role: "assistant", text: responseText };
-                setMessages([initialAssistantMessage]);
-                if (responseText) {
-                    setHistory([{ role: 'model', content: [{ text: responseText }] }]);
-                }
-            } catch (error: any) {
-                console.error(error);
-                toast({ variant: 'destructive', title: 'Error', description: error.message || 'Failed to start the session.' });
-                const errorMessage: UIMessage = { id: "initial-error", role: "assistant", text: "Sorry, I couldn't start the session. Please try again." };
-                setMessages([errorMessage]);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        if (isInterviewPrep && !initialMessageSent.current) {
-            sendInitialMessage();
-            initialMessageSent.current = true;
-        } else if (!isInterviewPrep && messages.length === 0) {
-            setMessages([{ id: "initial", role: "assistant", text: initialMessage }]);
+    // Initial greeting
+    useEffect(() => {
+        if (messages.length === 0) {
+            setTimeout(() => {
+                const greeting = `Namaste! I am ${expert.name}. I specialize in ${expert.specialization}. How can I assist you today?`;
+                setMessages([{
+                    id: 'init',
+                    role: 'assistant',
+                    text: greeting,
+                    timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                }]);
+                setHistory([{ role: 'model', content: [{ text: greeting }] }]);
+            }, 500);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-
-    useEffect(() => {
-        if (scrollViewportRef.current) {
-            scrollViewportRef.current.scrollTop = scrollViewportRef.current.scrollHeight;
-        }
-    }, [messages, isLoading]);
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        const query = input.trim();
+    const handleSendMessage = async (textOverride?: string) => {
+        const query = textOverride || input.trim();
         if (!query || isLoading) return;
 
-        const userMessage: UIMessage = { id: Date.now().toString(), role: "user", text: query };
-        setMessages((prev) => [...prev, userMessage]);
+        const userMsg: UIMessage = {
+            id: Date.now().toString(),
+            role: 'user',
+            text: query,
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        };
 
-        const newHistoryForApi: Message[] = [...history, { role: 'user', content: [{ text: query }] }];
+        setMessages(prev => [...prev, userMsg]);
         setInput("");
         setIsLoading(true);
 
+        const newHistory: Message[] = [...history, { role: 'user', content: [{ text: query }] }];
+        setHistory(newHistory);
+
         try {
-            const payload = apiCallPayload(query, newHistoryForApi, false); // Not an initial request
-            const response = await apiCall(payload);
+            const response = await askExpert({
+                expertName: expert.name,
+                experience: expert.experience,
+                specialization: expert.specialization,
+                question: query,
+                language: languageRef.current,
+                history: newHistory
+            });
+
+            if (!response) throw new Error("No response received");
+
+            const answer = response.answer || response.refinedQuestion?.refinedQuestion || "I apologize, I could not generate a response.";
             
-            if (!response) {
-                throw new Error("Received an empty response from the server.");
-            }
+            const aiMsg: UIMessage = {
+                id: Date.now().toString() + 'ai',
+                role: 'assistant',
+                text: answer,
+                timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            };
 
-            let assistantMessage: UIMessage;
-            let responseText: string;
+            setMessages(prev => [...prev, aiMsg]);
+            setHistory(prev => [...prev, { role: 'model', content: [{ text: answer }] }]);
 
-            if (isInterviewPrep && response && Array.isArray(response.response)) {
-                if (response.response.length === 0) {
-                    responseText = response.followUpSuggestion || "Sorry, I couldn't generate a follow-up. Please ask another question.";
-                } else {
-                    responseText = response.response.map((qa: any) => `<strong>Q: ${qa.question}</strong><br/>${qa.answer}`).join('<br/><br/>') + `<br/><br/><em>${response.followUpSuggestion || ""}</em>`;
-                }
-            } else if (response?.answer) {
-                 responseText = response.answer;
-            } else {
-                responseText = response?.refinedQuestion?.refinedQuestion || "Sorry, no valid answer received from the server.";
-            }
-
-            assistantMessage = { id: Date.now().toString() + "-ai", role: "assistant", text: responseText };
-
-            setMessages((prev) => [...prev, assistantMessage]);
-            if(responseText) {
-                setHistory([...newHistoryForApi, { role: 'model', content: [{ text: responseText }] }]);
-            }
-
-        } catch (error: any) {
-            console.error(error);
-            const errorMessage: UIMessage = { id: Date.now().toString() + "-error", role: "assistant", text: error.message || "Sorry, something went wrong. Please try again." };
-            setMessages((prev) => [...prev, errorMessage]);
+        } catch (error) {
+            const errorMsg: UIMessage = {
+                id: Date.now().toString() + 'err',
+                role: 'assistant',
+                text: "Sorry, I am facing some connection issues. Please try again.",
+                timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            };
+            setMessages(prev => [...prev, errorMsg]);
         } finally {
             setIsLoading(false);
+            // Focus back on input after sending (desktop only mainly)
+            setTimeout(() => inputRef.current?.focus(), 100);
         }
     };
 
+    const suggestedQuestions = [
+        `What are the latest trends in ${expert.specialization}?`,
+        `How do I solve quality issues in production?`,
+        `Best practices for hygiene?`
+    ];
+
     return (
-        <div className="h-full flex flex-col">
-             <div className="flex-1 flex flex-col bg-card border rounded-lg overflow-hidden">
-                <ScrollArea className="flex-grow p-4" viewportRef={scrollViewportRef}>
-                    <div className="flex flex-col gap-4">
-                        {messages.map((msg) => (
-                            <div key={msg.id} className={`flex gap-3 max-w-[85%] ${msg.role === "user" ? "self-end" : "self-start"}`}>
-                                {msg.role === 'assistant' && <div className="bg-muted p-2 rounded-full h-fit shrink-0"><Bot className="w-5 h-5 text-foreground" /></div>}
-                                <div className={`flex-1 p-3 rounded-2xl break-words ${msg.role === "user" ? "bg-primary/90 text-primary-foreground rounded-br-none" : "bg-muted text-muted-foreground rounded-bl-none"}`}>
-                                    <p className="text-sm" dangerouslySetInnerHTML={{ __html: msg.text.replace(/\n/g, '<br />') }}></p>
-                                </div>
-                            </div>
-                        ))}
-                         {isLoading && (
-                            <div className="self-start flex gap-3 items-center">
-                                <div className="bg-muted p-2 rounded-full h-fit"><Bot className="w-5 h-5 text-foreground" /></div>
-                                <div className="bg-muted p-3 rounded-2xl rounded-bl-none">
-                                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                        <Loader2 className="animate-spin h-4 w-4" />
-                                        Thinking...
-                                    </div>
-                                </div>
-                            </div>
-                        )}
+        <div className="flex flex-col h-full bg-slate-100">
+            {/* Chat Header */}
+            <header className="bg-white px-4 py-3 border-b flex items-center justify-between shadow-sm z-10">
+                <div className="flex items-center gap-3">
+                    <Button variant="ghost" size="icon" onClick={onBack} className="text-slate-500 hover:text-slate-800 -ml-2">
+                        <ArrowLeft className="w-5 h-5" />
+                    </Button>
+                    <Avatar className="w-10 h-10 border border-slate-200">
+                        <AvatarImage src={expert.photo} />
+                        <AvatarFallback>{expert.name[0]}</AvatarFallback>
+                    </Avatar>
+                    <div>
+                        <h3 className="font-bold text-sm text-slate-800 leading-tight">{expert.name}</h3>
+                        <p className="text-xs text-green-600 flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
+                            Online • {expert.specialization}
+                        </p>
                     </div>
-                </ScrollArea>
-                <form onSubmit={handleSubmit} className="p-4 border-t bg-background flex items-center gap-2">
-                    <Input type="text" value={input} onChange={(e) => setInput(e.target.value)} placeholder="Ask a follow-up question..." className="flex-grow" disabled={isLoading} />
-                    <Button type="submit" size="icon" className="shrink-0" disabled={isLoading || !input}><Send /></Button>
+                </div>
+                <Select value={language} onValueChange={setLanguage}>
+                    <SelectTrigger className="w-[110px] h-8 text-xs border-slate-200 bg-slate-50">
+                        <SelectValue placeholder="Lang" />
+                    </SelectTrigger>
+                    <SelectContent align="end">
+                        <SelectItem value="English">🇬🇧 English</SelectItem>
+                        <SelectItem value="Hinglish">🇮🇳 Hinglish</SelectItem>
+                    </SelectContent>
+                </Select>
+            </header>
+
+            {/* Chat Area */}
+            <ScrollArea className="flex-1 p-4" viewportRef={scrollRef}>
+                <div className="flex flex-col gap-4 max-w-3xl mx-auto pb-4">
+                    <div className="text-center my-4">
+                        <span className="text-[10px] font-medium text-slate-400 bg-slate-200/50 px-2 py-1 rounded-full uppercase tracking-wider">
+                            Encrypted Session
+                        </span>
+                    </div>
+
+                    {messages.map((msg) => (
+                        <div 
+                            key={msg.id} 
+                            className={cn(
+                                "flex gap-2 max-w-[85%] md:max-w-[75%]",
+                                msg.role === 'user' ? "self-end flex-row-reverse" : "self-start"
+                            )}
+                        >
+                            <Avatar className="w-8 h-8 shrink-0 mt-1 border border-black/5">
+                                {msg.role === 'assistant' ? (
+                                    <AvatarImage src={expert.photo} />
+                                ) : (
+                                    <AvatarFallback className="bg-blue-600 text-white text-xs">Me</AvatarFallback>
+                                )}
+                            </Avatar>
+                            
+                            <div className={cn(
+                                "relative p-3 rounded-2xl text-sm shadow-sm",
+                                msg.role === 'user' 
+                                    ? "bg-blue-600 text-white rounded-tr-none" 
+                                    : "bg-white text-slate-800 border border-slate-100 rounded-tl-none"
+                            )}>
+                                <p dangerouslySetInnerHTML={{ __html: msg.text.replace(/\n/g, '<br/>') }} />
+                                <span className={cn(
+                                    "text-[10px] block text-right mt-1 opacity-70",
+                                    msg.role === 'user' ? "text-blue-100" : "text-slate-400"
+                                )}>
+                                    {msg.timestamp}
+                                </span>
+                            </div>
+                        </div>
+                    ))}
+
+                    {/* Loading Indicator */}
+                    {isLoading && (
+                        <div className="flex gap-2 self-start max-w-[75%]">
+                             <Avatar className="w-8 h-8 shrink-0 mt-1 border">
+                                <AvatarImage src={expert.photo} />
+                            </Avatar>
+                            <div className="bg-white border border-slate-100 p-3 rounded-2xl rounded-tl-none shadow-sm flex items-center gap-1">
+                                <span className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                                <span className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                                <span className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </ScrollArea>
+
+            {/* Input Area */}
+            <div className="bg-white p-4 border-t">
+                {/* Suggestions Chips (Only show if few messages) */}
+                {messages.length < 3 && !isLoading && (
+                    <div className="flex gap-2 mb-3 overflow-x-auto pb-1 no-scrollbar">
+                        {suggestedQuestions.map((q, i) => (
+                            <button 
+                                key={i}
+                                onClick={() => handleSendMessage(q)}
+                                className="whitespace-nowrap text-xs bg-slate-100 hover:bg-blue-50 text-slate-600 hover:text-blue-600 px-3 py-1.5 rounded-full border border-slate-200 transition-colors"
+                            >
+                                {q}
+                            </button>
+                        ))}
+                    </div>
+                )}
+                
+                <form 
+                    onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }} 
+                    className="flex gap-2 items-end max-w-3xl mx-auto"
+                >
+                    <Input 
+                        ref={inputRef}
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        placeholder="Type your question..."
+                        className="min-h-[44px] bg-slate-50 border-slate-200 focus-visible:ring-blue-500 rounded-full px-4"
+                        disabled={isLoading}
+                        autoFocus
+                    />
+                    <Button 
+                        type="submit" 
+                        size="icon" 
+                        disabled={isLoading || !input.trim()}
+                        className="w-11 h-11 rounded-full bg-blue-600 hover:bg-blue-700 shrink-0 shadow-md"
+                    >
+                        {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5 ml-0.5" />}
+                    </Button>
                 </form>
             </div>
         </div>
     );
 }
 
-function ChatPage({ expert, onBack }: { expert: typeof initialExperts[0], onBack: () => void }) {
-  const [language, setLanguage] = useState("English");
-  const languageRef = useRef(language);
-  languageRef.current = language;
-
-  const apiCallPayload = useCallback((query: string, history: Message[]) => {
-    return {
-        expertName: expert.name,
-        experience: expert.experience,
-        specialization: expert.specialization,
-        question: query,
-        language: languageRef.current,
-        history: history,
+function RegisterView({ onBack }: { onBack: () => void }) {
+    const { toast } = useToast();
+    
+    const handleRegister = (e: React.FormEvent) => {
+        e.preventDefault();
+        toast({
+            title: "Application Received",
+            description: "We will review your profile and contact you shortly.",
+            duration: 3000,
+        });
+        setTimeout(onBack, 2000);
     };
-  }, [expert]);
 
-  return (
-      <div className="h-full flex flex-col p-4">
-        <Button variant="ghost" onClick={onBack} className="self-start mb-2"><ArrowLeft className="mr-2"/> Back to Experts</Button>
-        <div className="flex-1 flex flex-col bg-card border rounded-lg overflow-hidden">
-            <header className="p-4 border-b flex items-center justify-between gap-4">
-                <div className='flex items-center gap-4'>
-                    <img className="w-12 h-12 rounded-full object-cover" src={expert.photo} data-ai-hint="profile photo" alt={expert.name} />
-                    <div>
-                        <h3 className="font-bold">{expert.name}</h3>
-                        <p className="text-xs text-muted-foreground">{expert.specialization}</p>
-                    </div>
-                </div>
-                <Select value={language} onValueChange={setLanguage}>
-                    <SelectTrigger className="w-[120px]">
-                        <SelectValue placeholder="Language" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="English">English</SelectItem>
-                        <SelectItem value="Hinglish">Hinglish</SelectItem>
-                    </SelectContent>
-                </Select>
-            </header>
-             <div className="flex-1 min-h-0">
-                 <ChatInterface
-                        title={expert.name}
-                        description={expert.specialization}
-                        initialMessage={`Hello! I am ${expert.name}. Ask me anything about ${expert.specialization}.`}
-                        onBack={onBack}
-                        apiCall={askExpert}
-                        apiCallPayload={apiCallPayload}
-                    />
-            </div>
-        </div>
-      </div>
-  );
-}
-
-function GyanAIPage({ onBack }: { onBack: () => void }) {
-  const [topic, setTopic] = useState("Dairy Technology");
-  const [language, setLanguage] = useState('English');
-  const { toast } = useToast();
-  const [chatStarted, setChatStarted] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  
-  const languageRef = useRef(language);
-  languageRef.current = language;
-  const topicRef = useRef(topic);
-  topicRef.current = topic;
-
-
-  // For Interview Prep
-  const [resumeText, setResumeText] = useState("");
-  const [experienceLevel, setExperienceLevel] = useState("Fresher Student");
-  const [fileName, setFileName] = useState("");
-
-  const pdfReadyRef = useRef(false);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    (async () => {
-      try {
-        const pdfjsLib = await import("pdfjs-dist/legacy/build/pdf");
-        const workerModule = await import("pdfjs-dist/build/pdf.worker.min.mjs?url");
-        const workerUrl = (workerModule as any).default || workerModule;
-        
-        if (typeof workerUrl !== "string") {
-          console.error("pdfjs worker import did not return a string URL:", workerModule);
-          return;
-        }
-        pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
-        pdfReadyRef.current = true;
-      } catch (err) {
-        console.error("Failed to dynamically load pdfjs or its worker:", err);
-      }
-    })();
-  }, []);
-
-  const handleStartChat = () => {
-    if (topic === 'Interview Preparation' && !resumeText) {
-      toast({ variant: 'destructive', title: 'Error', description: 'Please upload a valid resume.' });
-      return;
-    }
-    setChatStarted(true);
-  };
-
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      const fname = file.name.toLowerCase();
-      setFileName(file.name);
-      setIsLoading(true);
-
-      try {
-        if (fname.endsWith('.pdf')) {
-          if (!pdfReadyRef.current) {
-            await new Promise((r) => setTimeout(r, 300));
-          }
-          const pdfjsLib = await import("pdfjs-dist/legacy/build/pdf");
-          if (typeof (pdfjsLib as any).GlobalWorkerOptions?.workerSrc !== "string") {
-            throw new Error("PDF worker not properly initialized (workerSrc invalid).");
-          }
-
-          const arrayBuffer = await file.arrayBuffer();
-          const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) }).promise;
-
-          let fullText = "";
-          const numPages = Math.min(pdf.numPages, 5);
-          for (let i = 1; i <= numPages; i++) {
-            const page = await pdf.getPage(i);
-            const textContent = await page.getTextContent();
-            const pageText = textContent.items.map((item: any) => (item as any).str || "").join(" ");
-            fullText += pageText + "\n";
-          }
-          setResumeText(fullText);
-          toast({ title: "Success", description: "PDF resume uploaded." });
-
-        } else if (fname.endsWith('.doc') || fname.endsWith('.docx')) {
-            const formData = new FormData();
-            formData.append('file', file);
-            const res = await fetch('/api/parse-docx', { method: 'POST', body: formData });
-            if (!res.ok) {
-                const errorBody = await res.json();
-                throw new Error(errorBody.error || "Docx parse failed on server");
-            }
-            const result = await res.json();
-            setResumeText(result.text);
-            toast({ title: "Success", description: "Word document uploaded." });
-        } else {
-          throw new Error("Unsupported file type. Please upload a PDF or Word document.");
-        }
-      } catch (error: any) {
-        console.error("File Read Error:", error);
-        toast({ variant: 'destructive', title: "Error", description: error.message || "Failed to read the file." });
-        setFileName("");
-      } finally {
-        setIsLoading(false);
-      }
-    }
-  };
-
-  const handleBackFromChat = () => {
-    setChatStarted(false);
-    setResumeText("");
-    setExperienceLevel("Fresher Student");
-    setFileName("");
-  };
-
-  const gyanApiCallPayload = useCallback((query: string, history: Message[]) => {
-    return { topic: topicRef.current, question: query, language: languageRef.current, history };
-  }, []);
-
-  const interviewApiCallPayload = useCallback((query: string, history: Message[], isInitial = false) => {
-    return { resumeText, experienceLevel, history, initialRequest: isInitial, language: languageRef.current };
-  }, [resumeText, experienceLevel]);
-
-  if (chatStarted) {
-    const isInterview = topic === 'Interview Preparation';
     return (
-      <div className="h-full flex flex-col p-4">
-        <Button variant="ghost" onClick={handleBackFromChat} className="self-start mb-2"><ArrowLeft className="mr-2"/> Back to Topics</Button>
-         <div className="flex-1 min-h-0">
-            <ChatInterface
-            title={isInterview ? "Interview Preparation" : "Gyan AI"}
-            description={isInterview ? `Mock interview for a ${experienceLevel}.` : `Ask anything about ${topic}`}
-            initialMessage={isInterview ? "Hello! I have reviewed your resume. Let's begin the interview. Here are your first questions:" : `Hello! I am Gyan AI. Ask me anything about ${topic}.`}
-            onBack={handleBackFromChat}
-            apiCall={isInterview ? interviewPrepper : gyanAI}
-            apiCallPayload={isInterview ? interviewApiCallPayload : gyanApiCallPayload}
-            isInterviewPrep={isInterview}
-            />
+        <div className="flex flex-col h-full bg-white">
+            <div className="p-4 border-b">
+                <Button variant="ghost" onClick={onBack} className="-ml-2">
+                    <ArrowLeft className="mr-2 h-4 w-4" /> Back to Experts
+                </Button>
+            </div>
+            
+            <ScrollArea className="flex-1">
+                <div className="p-8 max-w-xl mx-auto">
+                    <div className="text-center mb-8">
+                        <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <Briefcase className="w-8 h-8 text-green-600" />
+                        </div>
+                        <h2 className="text-2xl font-bold text-slate-900">Join the Expert Panel</h2>
+                        <p className="text-slate-500 mt-2">Share your knowledge and earn by mentoring students and professionals.</p>
+                    </div>
+
+                    <form onSubmit={handleRegister} className="space-y-5">
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium leading-none">Full Name</label>
+                            <Input required placeholder="Dr. Aditi Verma" />
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium leading-none">Experience (Yrs)</label>
+                                <Input required type="number" placeholder="10" />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium leading-none">Consultation Fee (₹/hr)</label>
+                                <Input required type="number" placeholder="1500" />
+                            </div>
+                        </div>
+
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium leading-none">Specialization</label>
+                            <Select>
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select Domain" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="dairy">Dairy Technology</SelectItem>
+                                    <SelectItem value="safety">Food Safety</SelectItem>
+                                    <SelectItem value="processing">Food Processing</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium leading-none">LinkedIn Profile URL</label>
+                            <Input type="url" placeholder="https://linkedin.com/in/..." />
+                        </div>
+
+                        <div className="bg-slate-50 p-4 rounded-lg text-sm text-slate-600 flex gap-3">
+                            <CheckCircle2 className="w-5 h-5 text-green-600 shrink-0" />
+                            <p>Verified experts get a "Blue Tick" badge and priority listing on our platform.</p>
+                        </div>
+
+                        <Button type="submit" className="w-full h-11 bg-slate-900 hover:bg-blue-700 text-lg">
+                            Submit Application
+                        </Button>
+                    </form>
+                </div>
+            </ScrollArea>
         </div>
-      </div>
     );
-  }
-
-  return (
-    <div className="h-full flex flex-col p-4">
-      <Button variant="ghost" onClick={onBack} className="self-start mb-2"><ArrowLeft className="mr-2"/> Back to Home</Button>
-      <div className="flex-1 flex flex-col bg-card border rounded-lg overflow-hidden">
-        <header className="p-4 border-b flex items-center justify-between gap-4">
-          <div className='flex items-center gap-4'>
-            <div className="bg-primary/10 p-2 rounded-full"><Lightbulb className="w-6 h-6 text-primary"/></div>
-            <div>
-              <h3 className="font-bold">Gyan AI - Your AI Specialist</h3>
-              <p className="text-xs text-muted-foreground">Select a topic and get instant, scientific information.</p>
-            </div>
-          </div>
-        </header>
-        <ScrollArea className="flex-grow">
-          <div className="p-6">
-            <div className="mb-6 space-y-4">
-              <div>
-                <label className="text-sm font-medium mb-2 block">Choose Topic</label>
-                <Select onValueChange={setTopic} defaultValue="Dairy Technology">
-                  <SelectTrigger><SelectValue/></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Dairy Technology">Dairy Technology</SelectItem>
-                    <SelectItem value="Food Safety and Quality">Food Safety and Quality</SelectItem>
-                    <SelectItem value="Food Processing">Food Processing</SelectItem>
-                    <SelectItem value="Career Guidance in Food Industry">Career Guidance</SelectItem>
-                    <SelectItem value="Interview Preparation">Interview Preparation</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <label className="text-sm font-medium mb-2 block">Choose Language</label>
-                <Select onValueChange={setLanguage} defaultValue="English">
-                  <SelectTrigger><SelectValue/></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="English">English</SelectItem>
-                    <SelectItem value="Hinglish">Hinglish</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
-            {topic === 'Interview Preparation' && (
-              <div className="p-4 border-l-4 border-primary bg-primary/10 space-y-4 rounded-r-lg">
-                <h4 className='font-bold'>Interview Preparation</h4>
-                <p className='text-sm text-muted-foreground'>Upload your resume to start a mock interview with the AI.</p>
-                <div>
-                  <label htmlFor="experience-level" className="text-sm font-medium mb-1 block">Experience Level</label>
-                  <Select onValueChange={setExperienceLevel} defaultValue="Fresher Student">
-                    <SelectTrigger id="experience-level"><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Fresher Student">Fresher Student</SelectItem>
-                      <SelectItem value="Experienced Person">Experienced Person</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <label htmlFor="resume-file" className="text-sm font-medium mb-1 block">Upload Your Resume (.pdf, .doc, .docx)</label>
-                  <div className="flex items-center gap-2">
-                    <label htmlFor="resume-file" className="flex-grow">
-                      <Button asChild variant="outline" className="w-full cursor-pointer">
-                        <span>
-                          {fileName ? <FileCheck className="mr-2" /> : <Upload className="mr-2" />}
-                          {fileName || "Choose a file..."}
-                        </span>
-                      </Button>
-                      <Input id="resume-file" type="file" className="hidden" onChange={handleFileChange} accept=".pdf,.doc,.docx" />
-                    </label>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            <Button onClick={handleStartChat} disabled={isLoading || (topic === 'Interview Preparation' && !resumeText)} className="w-full mt-6">
-              {isLoading ? <Loader2 className="animate-spin" /> : (topic === 'Interview Preparation' ? "Start Mock Interview" : "Start Chat")}
-            </Button>
-          </div>
-        </ScrollArea>
-      </div>
-    </div>
-  );
-}
-
-function RegisterExpertPage({ onBack }: { onBack: () => void }) {
-  return (
-    <ScrollArea className="h-full">
-      <div className="p-4">
-        <Button variant="ghost" onClick={() => onBack()}><ArrowLeft className="mr-2" /> Back to Home</Button>
-        <div className="bg-card p-6 rounded-xl shadow-lg max-w-2xl mx-auto border mt-6">
-          <h3 className="text-xl font-bold text-center text-gray-900 mb-6">Register as a Real Expert</h3>
-          <div className="space-y-4">
-            <Input placeholder="Full Name" />
-            <Input type="number" placeholder="Experience (in years)" />
-            <Input placeholder="Specialization (e.g., Dairy Technology)" />
-            <Input type="url" placeholder="URL to your photo (Optional)" />
-            <Input type="number" placeholder="Fee per hour (₹)" />
-            <Button className="w-full bg-green-600 hover:bg-green-700">Register</Button>
-          </div>
-        </div>
-      </div>
-    </ScrollArea>
-  );
 }
