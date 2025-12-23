@@ -31,7 +31,6 @@ export function DailyTip() {
     setCurrentIndex(0); 
   }, [language]);
 
-  // Handle Navigation (Circular/Infinite Loop)
   const changeTip = useCallback((direction: "next" | "prev") => {
     setIsAnimating(true);
     setTimeout(() => {
@@ -67,7 +66,7 @@ export function DailyTip() {
           className="rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 shadow-md hover:shadow-indigo-500/25 transition-all text-xs"
         >
           <Sparkles className="mr-2 h-3 w-3" />
-          Daily Tip
+          Show Tip
         </Button>
       </div>
     );
@@ -76,77 +75,91 @@ export function DailyTip() {
   const currentTip = tips[currentIndex] || "";
 
   return (
-    <div className="relative mb-6 group w-full max-w-3xl mx-auto">
-      {/* Subtle Glow Effect */}
-      <div className="absolute -inset-0.5 bg-gradient-to-r from-violet-500/20 to-indigo-500/20 rounded-xl blur-sm opacity-0 group-hover:opacity-100 transition duration-700" />
+    <div className="relative mb-6 group w-full max-w-3xl mx-auto px-1 sm:px-0">
+      {/* Background Glow */}
+      <div className="absolute -inset-0.5 bg-gradient-to-r from-violet-500/20 to-indigo-500/20 rounded-xl blur-sm opacity-50 sm:opacity-0 sm:group-hover:opacity-100 transition duration-700" />
       
-      <Card className="relative overflow-hidden border-border/40 bg-background/80 backdrop-blur-md shadow-sm hover:shadow-md transition-all duration-300 rounded-xl">
-        <div className="flex items-center justify-between p-2 gap-3 min-h-[50px]">
+      <Card className="relative overflow-hidden border-border/40 bg-background/80 backdrop-blur-md shadow-sm rounded-xl">
+        
+        {/* Main Layout Container: Vertical on Mobile, Horizontal on Desktop */}
+        <div className="flex flex-col sm:flex-row items-center sm:justify-between p-4 sm:p-2 gap-4 sm:gap-3">
           
-          {/* Left: Icon */}
-          <div className="flex items-center justify-center h-8 w-8 rounded-full bg-gradient-to-br from-yellow-400/10 to-orange-500/10 shrink-0">
-             <Lightbulb className="h-4 w-4 text-yellow-500" />
-          </div>
-
-          {/* Center: Tip Content */}
-          <div className="flex-1 flex items-center justify-center sm:justify-start overflow-hidden">
-             <p 
-               className={cn(
-                 "text-sm font-medium text-foreground text-center sm:text-left leading-tight transition-all duration-300 ease-in-out px-1",
-                 isAnimating ? "opacity-0 translate-x-3" : "opacity-100 translate-x-0"
-               )}
-             >
-               {currentTip}
-             </p>
-          </div>
-
-          {/* Right: Controls (Nav + Actions) */}
-          <div className="flex items-center gap-1 shrink-0 bg-muted/30 rounded-lg p-0.5 border border-border/20">
-            {/* Previous Button */}
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className="h-7 w-7 rounded-md text-muted-foreground hover:text-foreground hover:bg-background/80" 
-              onClick={() => changeTip("prev")}
-              title="Previous Tip"
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-
-            {/* Next Button */}
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className="h-7 w-7 rounded-md text-muted-foreground hover:text-foreground hover:bg-background/80" 
-              onClick={() => changeTip("next")}
-              title="Next Tip"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </Button>
+          {/* Top Section (Mobile): Icon & Text */}
+          <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto flex-1">
             
-            <div className="w-px h-4 bg-border/50 mx-0.5" /> {/* Divider */}
+            {/* Icon */}
+            <div className="flex items-center justify-center h-10 w-10 sm:h-8 sm:w-8 rounded-full bg-primary/10 shrink-0">
+               <Lightbulb className="h-5 w-5 sm:h-4 sm:w-4 text-primary" />
+            </div>
 
-            {/* Copy Button */}
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className="h-7 w-7 rounded-md text-muted-foreground hover:text-primary hover:bg-background/80" 
-              onClick={handleCopy} 
-              title="Copy"
-            >
-              <Copy className="h-3.5 w-3.5" />
-            </Button>
+            {/* Tip Content */}
+            <div className="w-full flex items-center justify-center sm:justify-start min-h-[3rem] sm:min-h-0">
+               <p 
+                 className={cn(
+                   "text-base sm:text-sm font-medium text-foreground text-center sm:text-left leading-relaxed transition-all duration-300 ease-in-out",
+                   isAnimating ? "opacity-0 translate-x-2" : "opacity-100 translate-x-0"
+                 )}
+               >
+                 {currentTip}
+               </p>
+            </div>
+          </div>
 
-            {/* Close Button */}
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className="h-7 w-7 rounded-md text-muted-foreground hover:text-destructive hover:bg-background/80" 
-              onClick={() => setIsVisible(false)} 
-              title="Hide"
-            >
-              <X className="h-3.5 w-3.5" />
-            </Button>
+          {/* Divider only for Mobile */}
+          <div className="h-px w-full bg-border/50 sm:hidden" />
+
+          {/* Bottom Section (Mobile) / Right Section (Desktop): Controls */}
+          <div className="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-2 sm:gap-1">
+            
+            {/* Left Controls Group (Copy/Close) - Reordered for Mobile Ergonomics */}
+            <div className="flex items-center gap-1 sm:order-2">
+                 <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-9 w-9 sm:h-7 sm:w-7 rounded-full text-muted-foreground hover:bg-muted" 
+                  onClick={handleCopy} 
+                  title="Copy"
+                >
+                  <Copy className="h-4 w-4 sm:h-3.5 sm:w-3.5" />
+                </Button>
+            </div>
+
+            {/* Center Navigation Arrows (Main Focus) */}
+            <div className="flex items-center gap-3 sm:gap-1 bg-muted/40 sm:bg-transparent rounded-full px-3 py-1 sm:p-0 border sm:border-0 border-border/30 sm:order-1">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="h-8 w-8 sm:h-7 sm:w-7 rounded-full hover:bg-background shadow-sm sm:shadow-none" 
+                onClick={() => changeTip("prev")}
+              >
+                <ChevronLeft className="h-5 w-5 sm:h-4 sm:w-4" />
+              </Button>
+              
+              <div className="w-px h-4 bg-border/40 sm:hidden" /> {/* Small divider between arrows on mobile */}
+
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="h-8 w-8 sm:h-7 sm:w-7 rounded-full hover:bg-background shadow-sm sm:shadow-none" 
+                onClick={() => changeTip("next")}
+              >
+                <ChevronRight className="h-5 w-5 sm:h-4 sm:w-4" />
+              </Button>
+            </div>
+
+            {/* Right Control (Close) */}
+             <div className="flex items-center gap-1 sm:order-3">
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-9 w-9 sm:h-7 sm:w-7 rounded-full text-muted-foreground hover:text-destructive hover:bg-destructive/10" 
+                  onClick={() => setIsVisible(false)} 
+                  title="Close"
+                >
+                  <X className="h-4 w-4 sm:h-3.5 sm:w-3.5" />
+                </Button>
+             </div>
+
           </div>
 
         </div>
