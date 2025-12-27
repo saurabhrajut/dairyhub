@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useRef, useEffect } from "react";
@@ -14,78 +13,89 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableCap
 import { useLanguage } from "@/context/language-context";
 import { qualityContent } from "@/lib/content/quality-content";
 import { Button } from "../ui/button";
-import { ArrowLeft, Book, Award, ShieldCheck, CheckSquare, Settings, Users, TestTube, ClipboardCheck, Droplet, PackageCheck, Lock, DollarSign, Microscope, Recycle, Bug, FileSpreadsheet, Search, Wind, Factory, SortAsc, FileText, Forward, ShieldAlert, BadgeCheck } from "lucide-react";
+import { ArrowLeft, Book, Award, ShieldCheck, CheckSquare, Settings, Users, TestTube, ClipboardCheck, Droplet, PackageCheck, Lock, DollarSign, Microscope, Recycle, Bug, FileSpreadsheet, Search, Wind, Factory } from "lucide-react";
 
+
+// --- Helper Components with Professional Styling ---
 
 const Section = ({ title, id, children }: { title: string, id: string, children: React.ReactNode }) => (
-    <div id={id} className="prose max-w-none text-gray-700 text-base leading-relaxed break-words">
-        <h2 className="text-2xl font-bold text-primary mb-4 border-b-2 border-primary/20 pb-2 scroll-mt-24 font-headline">{title}</h2>
-        <div className="space-y-4">{children}</div>
+    <div id={id} className="bg-card border border-border rounded-xl shadow-sm mb-8 overflow-hidden">
+        <div className="bg-muted/30 p-4 border-b border-border">
+            <h2 className="text-xl font-bold text-primary font-headline">{title}</h2>
+        </div>
+        <div className="p-4 sm:p-6 text-card-foreground prose max-w-none text-gray-700 leading-relaxed break-words">
+            <div className="space-y-4">{children}</div>
+        </div>
     </div>
 );
 
 const SubHeading = ({ children }: { children: React.ReactNode }) => (
-    <h3 className="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">{children}</h3>
+    <h3 className="text-lg font-bold text-gray-800 mt-6 mb-3 font-headline border-l-4 border-primary pl-3">{children}</h3>
 );
+
+// --- Content Components ---
 
 const topicComponents = {
     intro: function Content({ content }: { content: any }) {
         return (
-             <div className="prose max-w-none text-gray-700 text-base leading-relaxed break-words">
-                <p>{content.intro1}</p>
-                <p>{content.intro2}</p>
-                <p>{content.intro3}</p>
-                <ul className="list-disc list-inside mt-2 space-y-1">
-                    {content.introBenefits.map((item:any, index:number) => <li key={index}>{item}</li>)}
-                </ul>
-            </div>
-        )
-    },
-    what_is_quality: function Content({ content }: { content: any }) {
-        return (
-            <Section title={content.whatIsQuality.title} id="quality">
-                <p>{content.whatIsQuality.p1}</p>
-                <blockquote className="border-l-4 border-primary bg-muted p-4 my-4">
-                    Quality &prop; 1 / {content.whatIsQuality.variability}
-                </blockquote>
-                <p>{content.whatIsQuality.p2}</p>
-                <p>{content.whatIsQuality.p3}</p>
-                <p>{content.whatIsQuality.p4}</p>
-            </Section>
-        )
-    },
-    qc: function Content({ content }: { content: any }) {
-        return (
-             <Section title={content.qc.title} id="qc">
-                <p>{content.qc.p1}</p>
-                <p>{content.qc.p2}</p>
-                
-                <SubHeading>{content.qc.responsibilities.title}</SubHeading>
-                <ol className="list-decimal list-inside space-y-2 mt-2">
-                    {content.qc.responsibilities.list.map((item: string, index: number) => <li key={index}>{item}</li>)}
-                </ol>
-            </Section>
-        )
-    },
-    qa: function Content({ content }: { content: any }) {
-        return (
-            <Section title={content.qa.title} id="qa">
-                <p>{content.qa.p1}</p>
-                <p>{content.qa.p2}</p>
-                <div className="overflow-x-auto">
-                    <Table>
-                        <TableCaption>{content.qa.table.caption}</TableCaption>
-                        <TableHeader>
-                            <TableRow><TableHead>{content.qa.table.header1}</TableHead><TableHead>{content.qa.table.header2}</TableHead></TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {content.qa.table.rows.map((row: any, index: number) => (
-                                <TableRow key={index}><TableCell>{row.qc}</TableCell><TableCell>{row.qa}</TableCell></TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+            <Section title="Introduction" id="intro">
+                 <div className="prose max-w-none text-gray-700 text-base leading-relaxed break-words">
+                    <p>{content.intro1}</p>
+                    <p>{content.intro2}</p>
+                    <p>{content.intro3}</p>
+                    <div className="bg-blue-50 p-4 rounded-lg border border-blue-100 mt-4">
+                        <p className="font-semibold mb-2">Key Benefits:</p>
+                        <ul className="list-disc list-inside space-y-1">
+                            {content.introBenefits.map((item:any, index:number) => <li key={index}>{item}</li>)}
+                        </ul>
+                    </div>
                 </div>
             </Section>
+        )
+    },
+    concepts: function Content({ content }: { content: any }) {
+        return (
+            <>
+                <Section title={content.whatIsQuality.title} id="quality">
+                    <p>{content.whatIsQuality.p1}</p>
+                    <blockquote className="border-l-4 border-indigo-500 bg-indigo-50 p-4 my-4 italic rounded-r-lg">
+                        Quality &prop; 1 / {content.whatIsQuality.variability}
+                    </blockquote>
+                    <p>{content.whatIsQuality.p2}</p>
+                    <p>{content.whatIsQuality.p3}</p>
+                    <p>{content.whatIsQuality.p4}</p>
+                </Section>
+                <Section title={content.qc.title} id="qc">
+                    <p>{content.qc.p1}</p>
+                    <p>{content.qc.p2}</p>
+                    
+                    <SubHeading>{content.qc.responsibilities.title}</SubHeading>
+                    <ol className="list-decimal list-inside space-y-2 mt-2 bg-gray-50 p-4 rounded-lg">
+                        {content.qc.responsibilities.list.map((item: string, index: number) => <li key={index}>{item}</li>)}
+                    </ol>
+                </Section>
+                
+                <Section title={content.qa.title} id="qa">
+                    <p>{content.qa.p1}</p>
+                    <p>{content.qa.p2}</p>
+                    <div className="overflow-x-auto mt-4 rounded-lg border">
+                        <Table>
+                            <TableCaption>{content.qa.table.caption}</TableCaption>
+                            <TableHeader className="bg-muted/50">
+                                <TableRow>
+                                    <TableHead className="font-bold">{content.qa.table.header1}</TableHead>
+                                    <TableHead className="font-bold">{content.qa.table.header2}</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {content.qa.table.rows.map((row: any, index: number) => (
+                                    <TableRow key={index}><TableCell className="font-medium">{row.qc}</TableCell><TableCell>{row.qa}</TableCell></TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </div>
+                </Section>
+            </>
         )
     },
     prps: function Content({ content }: { content: any }) {
@@ -94,19 +104,19 @@ const topicComponents = {
                 <p>{content.prps.p1}</p>
                 <SubHeading>{content.prps.gmp.title}</SubHeading>
                 <p>{content.prps.gmp.p1}</p>
-                <ul className="list-disc list-inside space-y-2">
+                <ul className="list-disc list-inside space-y-2 ml-2">
                     {content.prps.gmp.list.map((item: any, index: number) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
                 </ul>
 
                 <SubHeading>{content.prps.ghp.title}</SubHeading>
                 <p>{content.prps.ghp.p1}</p>
-                <ul className="list-disc list-inside space-y-2">
+                <ul className="list-disc list-inside space-y-2 ml-2">
                     {content.prps.ghp.list.map((item: any, index: number) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
                 </ul>
 
                 <SubHeading>{content.prps.glp.title}</SubHeading>
                 <p>{content.prps.glp.p1}</p>
-                <ul className="list-disc list-inside space-y-2">
+                <ul className="list-disc list-inside space-y-2 ml-2">
                     {content.prps.glp.list.map((item: any, index: number) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
                 </ul>
             </Section>
@@ -117,14 +127,14 @@ const topicComponents = {
             <Section title={content.oprps.title} id="oprps">
                 <p>{content.oprps.p1}</p>
                 <SubHeading>{content.oprps.p2}</SubHeading>
-                 <div className="overflow-x-auto">
+                 <div className="overflow-x-auto mt-4 rounded-lg border">
                     <Table>
-                        <TableHeader>
+                        <TableHeader className="bg-muted/50">
                             <TableRow>
-                                <TableHead>{content.oprps.table.header1}</TableHead>
-                                <TableHead>{content.oprps.table.header2}</TableHead>
-                                <TableHead>{content.oprps.table.header3}</TableHead>
-                                <TableHead>{content.oprps.table.header4}</TableHead>
+                                <TableHead className="font-bold">{content.oprps.table.header1}</TableHead>
+                                <TableHead className="font-bold">{content.oprps.table.header2}</TableHead>
+                                <TableHead className="font-bold">{content.oprps.table.header3}</TableHead>
+                                <TableHead className="font-bold">{content.oprps.table.header4}</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -140,9 +150,9 @@ const topicComponents = {
                     </Table>
                 </div>
                 <SubHeading>{content.oprps.dairy_examples.title}</SubHeading>
-                <ul className="list-disc list-inside space-y-2">
+                <ul className="list-disc list-inside space-y-2 bg-teal-50 p-4 rounded-lg border border-teal-100">
                     {content.oprps.dairy_examples.list.map((item: any, index: number) => (
-                        <li key={index}><strong>{item.title}:</strong> {item.description}</li>
+                        <li key={index}><strong className="text-teal-800">{item.title}:</strong> {item.description}</li>
                     ))}
                 </ul>
             </Section>
@@ -155,7 +165,7 @@ const topicComponents = {
                     <p>{content.deming.p1}</p>
                     <SubHeading>{content.deming.cycle.title}</SubHeading>
                     <p>{content.deming.cycle.p1}</p>
-                    <ul className="list-disc list-inside mt-2 space-y-2">
+                    <ul className="list-disc list-inside mt-2 space-y-2 ml-2">
                         <li><strong>{content.deming.cycle.plan.title}:</strong> {content.deming.cycle.plan.description}</li>
                         <li><strong>{content.deming.cycle.do.title}:</strong> {content.deming.cycle.do.description}</li>
                         <li><strong>{content.deming.cycle.check.title}:</strong> {content.deming.cycle.check.description}</li>
@@ -167,10 +177,10 @@ const topicComponents = {
                     <p>{content.juran.p1}</p>
                     <SubHeading>{content.juran.trilogy.title}</SubHeading>
                     <p>{content.juran.trilogy.p1}</p>
-                    <ul className="list-disc list-inside mt-2 space-y-1">
+                    <ul className="list-disc list-inside mt-2 space-y-1 ml-2">
                         {content.juran.trilogy.list.map((item: any, index: number) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
                     </ul>
-                    <p>{content.juran.p2}</p>
+                    <p className="mt-2">{content.juran.p2}</p>
                 </Section>
             </>
         )
@@ -180,8 +190,8 @@ const topicComponents = {
             <Section title={content.tqm.title} id="tqm">
                 <p>{content.tqm.p1}</p>
                 <SubHeading>{content.tqm.principles.title}</SubHeading>
-                <ul className="list-disc list-inside mt-2 space-y-2">
-                    {content.tqm.principles.list.map((item: any, index: number) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
+                <ul className="list-disc list-inside mt-2 space-y-2 bg-yellow-50 p-4 rounded-lg border border-yellow-100">
+                    {content.tqm.principles.list.map((item: any, index: number) => <li key={index}><strong className="text-yellow-900">{item.title}:</strong> {item.description}</li>)}
                 </ul>
             </Section>
         )
@@ -191,11 +201,11 @@ const topicComponents = {
             <Section title={content.haccp.title} id="haccp">
                 <p>{content.haccp.p1}</p>
                 <SubHeading>{content.haccp.principles.title}</SubHeading>
-                <ol className="list-decimal list-inside space-y-3">
+                <ol className="list-decimal list-inside space-y-4">
                     {content.haccp.principles.list.map((item: any, index: number) => (
-                        <li key={index}>
-                            <strong className="text-blue-600">{item.title}</strong>
-                            <p className="ml-4">{item.description}</p>
+                        <li key={index} className="p-3 bg-red-50 rounded-lg border border-red-100">
+                            <strong className="text-red-700 block mb-1">{item.title}</strong>
+                            <span className="text-gray-700">{item.description}</span>
                         </li>
                     ))}
                 </ol>
@@ -210,15 +220,15 @@ const topicComponents = {
                 
                 <SubHeading>{content.iso.qms.title}</SubHeading>
                 <p>{content.iso.qms.p1}</p>
-                <p><strong>{content.iso.qms.elementsTitle}:</strong></p>
-                <ul className="list-disc list-inside mt-2 space-y-2">
+                <p className="mt-2"><strong>{content.iso.qms.elementsTitle}:</strong></p>
+                <ul className="list-disc list-inside mt-2 space-y-2 ml-2">
                     {content.iso.qms.list.map((item: any, index: number) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
                 </ul>
 
                 <SubHeading>{content.iso.fsms.title}</SubHeading>
                 <p>{content.iso.fsms.p1}</p>
-                <p><strong>{content.iso.fsms.elementsTitle}:</strong></p>
-                <ul className="list-disc list-inside space-y-2">
+                <p className="mt-2"><strong>{content.iso.fsms.elementsTitle}:</strong></p>
+                <ul className="list-disc list-inside space-y-2 ml-2">
                     {content.iso.fsms.list.map((item: any, index: number) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
                 </ul>
                 <p className="mt-4">{content.iso.fsms.p2}</p>
@@ -229,86 +239,37 @@ const topicComponents = {
         return (
             <Section title={content.regulatory_bodies.title} id="regulatory_bodies">
                 <p>{content.regulatory_bodies.p1}</p>
-                <SubHeading>{content.regulatory_bodies.fssai.title}</SubHeading>
-                <p>{content.regulatory_bodies.fssai.p1}</p>
-                <SubHeading>{content.regulatory_bodies.bis.title}</SubHeading>
-                <p>{content.regulatory_bodies.bis.p1}</p>
-                <SubHeading>{content.regulatory_bodies.agmark.title}</SubHeading>
-                <p>{content.regulatory_bodies.agmark.p1}</p>
-                <SubHeading>{content.regulatory_bodies.mmpo.title}</SubHeading>
-                <p>{content.regulatory_bodies.mmpo.p1}</p>
-                <SubHeading>{content.regulatory_bodies.export_act.title}</SubHeading>
-                <p>{content.regulatory_bodies.export_act.p1}</p>
+                
+                <div className="grid gap-6 mt-4">
+                    <div className="bg-cyan-50 p-4 rounded-lg border border-cyan-100">
+                        <SubHeading>{content.regulatory_bodies.fssai.title}</SubHeading>
+                        <p>{content.regulatory_bodies.fssai.p1}</p>
+                    </div>
+                    
+                    <div className="bg-cyan-50 p-4 rounded-lg border border-cyan-100">
+                        <SubHeading>{content.regulatory_bodies.bis.title}</SubHeading>
+                        <p>{content.regulatory_bodies.bis.p1}</p>
+                    </div>
+
+                    <div className="bg-cyan-50 p-4 rounded-lg border border-cyan-100">
+                        <SubHeading>{content.regulatory_bodies.agmark.title}</SubHeading>
+                        <p>{content.regulatory_bodies.agmark.p1}</p>
+                    </div>
+                     <div className="bg-cyan-50 p-4 rounded-lg border border-cyan-100">
+                        <SubHeading>{content.regulatory_bodies.mmpo.title}</SubHeading>
+                        <p>{content.regulatory_bodies.mmpo.p1}</p>
+                    </div>
+                     <div className="bg-cyan-50 p-4 rounded-lg border border-cyan-100">
+                        <SubHeading>{content.regulatory_bodies.export_act.title}</SubHeading>
+                        <p>{content.regulatory_bodies.export_act.p1}</p>
+                    </div>
+                </div>
             </Section>
         )
-    },
-    "5s": function Content({ content }: { content: any }) {
-        return (
-            <Section title={content.fiveS.title} id="5s">
-                <p>{content.fiveS.p1}</p>
-                <ul className="list-decimal list-inside space-y-3 mt-4">
-                    {content.fiveS.principles.list.map((item: any, index: number) => (
-                        <li key={index}>
-                            <strong className="text-blue-600">{item.title} ({item.japanese}):</strong>
-                            <p className="ml-4">{item.description}</p>
-                        </li>
-                    ))}
-                </ul>
-            </Section>
-        );
-    },
-    sop: function Content({ content }: { content: any }) {
-        return (
-            <Section title={content.sop.title} id="sop">
-                <p>{content.sop.p1}</p>
-                <SubHeading>{content.sop.importance.title}</SubHeading>
-                <ul className="list-disc list-inside space-y-2">
-                    {content.sop.importance.list.map((item: string, index: number) => <li key={index}>{item}</li>)}
-                </ul>
-                <SubHeading>{content.sop.structure.title}</SubHeading>
-                <ul className="list-disc list-inside space-y-2">
-                     {content.sop.structure.list.map((item: any, index: number) => <li key={index}><strong>{item.title}:</strong> {item.description}</li>)}
-                </ul>
-            </Section>
-        );
-    },
-    fifo_fefo: function Content({ content }: { content: any }) {
-        return (
-            <Section title={content.fifo_fefo.title} id="fifo-fefo">
-                <p>{content.fifo_fefo.p1}</p>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-                    <div className="p-4 border rounded-lg bg-blue-50">
-                        <h4 className="font-bold text-lg text-blue-700">{content.fifo_fefo.fifo.title}</h4>
-                        <p className="mt-2">{content.fifo_fefo.fifo.description}</p>
-                    </div>
-                     <div className="p-4 border rounded-lg bg-green-50">
-                        <h4 className="font-bold text-lg text-green-700">{content.fifo_fefo.fefo.title}</h4>
-                        <p className="mt-2">{content.fifo_fefo.fefo.description}</p>
-                    </div>
-                </div>
-                 <p className="mt-4"><strong>{content.fifo_fefo.dairy_importance.title}:</strong> {content.fifo_fefo.dairy_importance.description}</p>
-            </Section>
-        );
-    },
-    taccp_vaccp: function Content({ content }: { content: any }) {
-        return (
-            <Section title={content.taccp_vaccp.title} id="taccp-vaccp">
-                <p>{content.taccp_vaccp.p1}</p>
-                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-                    <div className="p-4 border rounded-lg bg-red-50">
-                        <h4 className="font-bold text-lg text-red-700">{content.taccp_vaccp.taccp.title}</h4>
-                        <p className="mt-2">{content.taccp_vaccp.taccp.description}</p>
-                    </div>
-                     <div className="p-4 border rounded-lg bg-yellow-50">
-                        <h4 className="font-bold text-lg text-yellow-700">{content.taccp_vaccp.vaccp.title}</h4>
-                        <p className="mt-2">{content.taccp_vaccp.vaccp.description}</p>
-                    </div>
-                </div>
-                <p className="mt-4">{content.taccp_vaccp.p2}</p>
-            </Section>
-        );
     }
 };
+
+// --- Main Component ---
 
 export function QualityConceptModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
   const { t } = useLanguage();
@@ -326,22 +287,89 @@ export function QualityConceptModal({ isOpen, setIsOpen }: { isOpen: boolean; se
   
   if (!content) return null;
 
+  // --- COLOR CONFIGURATION (Pastel & Unique for each topic) ---
   const topics = [
-      { value: "intro", title: content.tabs.intro, icon: Book },
-      { value: "what_is_quality", title: content.whatIsQuality.title, icon: CheckSquare },
-      { value: "qc", title: content.tabs.qc, icon: TestTube },
-      { value: "qa", title: content.tabs.qa, icon: BadgeCheck },
-      { value: "prps", title: content.tabs.prps, icon: Settings },
-      { value: "oprps", title: content.tabs.oprps, icon: ShieldCheck },
-      { value: "5s", title: content.tabs.fiveS, icon: SortAsc },
-      { value: "sop", title: content.tabs.sop, icon: FileText },
-      { value: "fifo_fefo", title: content.tabs.fifo_fefo, icon: Forward },
-      { value: "philosophy", title: content.tabs.philosophy, icon: Users },
-      { value: "tqm", title: content.tabs.tqm, icon: Award },
-      { value: "haccp", title: content.tabs.haccp, icon: ShieldCheck },
-      { value: "taccp_vaccp", title: content.tabs.taccp_vaccp, icon: ShieldAlert },
-      { value: "iso", title: content.tabs.iso, icon: FileSpreadsheet },
-      { value: "bodies", title: content.tabs.bodies, icon: Factory }
+      { 
+          value: "intro", 
+          title: content.tabs.intro, 
+          icon: Book,
+          colorClass: "text-blue-600",
+          bgClass: "bg-blue-50",
+          borderClass: "border-blue-200",
+          hoverClass: "hover:bg-blue-100"
+      },
+      { 
+          value: "concepts", 
+          title: content.tabs.concepts, 
+          icon: CheckSquare,
+          colorClass: "text-indigo-600",
+          bgClass: "bg-indigo-50",
+          borderClass: "border-indigo-200",
+          hoverClass: "hover:bg-indigo-100"
+      },
+      { 
+          value: "prps", 
+          title: content.tabs.prps, 
+          icon: Settings,
+          colorClass: "text-emerald-600",
+          bgClass: "bg-emerald-50",
+          borderClass: "border-emerald-200",
+          hoverClass: "hover:bg-emerald-100"
+      },
+      { 
+          value: "oprps", 
+          title: content.tabs.oprps, 
+          icon: ShieldCheck, 
+          colorClass: "text-teal-600",
+          bgClass: "bg-teal-50",
+          borderClass: "border-teal-200",
+          hoverClass: "hover:bg-teal-100"
+      },
+      { 
+          value: "philosophy", 
+          title: content.tabs.philosophy, 
+          icon: Users,
+          colorClass: "text-violet-600",
+          bgClass: "bg-violet-50",
+          borderClass: "border-violet-200",
+          hoverClass: "hover:bg-violet-100"
+      },
+      { 
+          value: "tqm", 
+          title: content.tabs.tqm, 
+          icon: Award,
+          colorClass: "text-amber-600",
+          bgClass: "bg-amber-50",
+          borderClass: "border-amber-200",
+          hoverClass: "hover:bg-amber-100"
+      },
+      { 
+          value: "haccp", 
+          title: content.tabs.haccp, 
+          icon: ShieldCheck,
+          colorClass: "text-red-600",
+          bgClass: "bg-red-50",
+          borderClass: "border-red-200",
+          hoverClass: "hover:bg-red-100"
+      },
+      { 
+          value: "iso", 
+          title: content.tabs.iso, 
+          icon: FileSpreadsheet,
+          colorClass: "text-slate-600",
+          bgClass: "bg-slate-100",
+          borderClass: "border-slate-300",
+          hoverClass: "hover:bg-slate-200"
+      },
+      { 
+          value: "bodies", 
+          title: content.tabs.bodies, 
+          icon: Factory,
+          colorClass: "text-cyan-600",
+          bgClass: "bg-cyan-50",
+          borderClass: "border-cyan-200",
+          hoverClass: "hover:bg-cyan-100"
+      }
   ];
 
   const selectedTopic = topics.find(t => t.value === activeTopic);
@@ -370,10 +398,10 @@ export function QualityConceptModal({ isOpen, setIsOpen }: { isOpen: boolean; se
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogContent className="max-w-4xl lg:max-w-5xl w-[95vw] h-full max-h-[90vh] flex flex-col p-0 sm:p-6">
+      <DialogContent className="max-w-4xl lg:max-w-6xl w-[95vw] h-full max-h-[90vh] flex flex-col p-0 sm:p-6">
         <DialogHeader className="p-4 sm:p-0 shrink-0">
-          <DialogTitle className="text-2xl md:text-3xl font-bold text-center text-gray-800 font-headline">{content.title}</DialogTitle>
-          <DialogDescription className="text-center text-lg text-gray-500">
+          <DialogTitle className="text-2xl md:text-3xl font-bold text-center text-primary mb-2 font-headline">{content.title}</DialogTitle>
+          <DialogDescription className="text-center text-lg text-muted-foreground">
             {selectedTopic ? selectedTopic.title : content.description}
           </DialogDescription>
         </DialogHeader>
@@ -381,7 +409,7 @@ export function QualityConceptModal({ isOpen, setIsOpen }: { isOpen: boolean; se
         {selectedTopic && ActiveComponent ? (
             <div className="flex-1 flex flex-col min-h-0">
                 <div className="px-4 sm:px-0">
-                    <Button variant="ghost" onClick={handleBack}>
+                    <Button variant="ghost" onClick={handleBack} className="hover:bg-slate-100">
                         <ArrowLeft className="w-4 h-4 mr-2" />
                         Back to Topics
                     </Button>
@@ -394,16 +422,23 @@ export function QualityConceptModal({ isOpen, setIsOpen }: { isOpen: boolean; se
             </div>
         ) : (
             <ScrollArea className="flex-1 mt-4 sm:pr-4" viewportRef={scrollAreaRef}>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4 sm:p-0">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5 p-4 sm:p-2">
                     {topics.map(topic => (
                         <button
                           key={topic.value}
                           onClick={() => handleSelectTopic(topic.value)}
-                          className="flex items-center p-4 bg-card hover:bg-primary/10 rounded-lg shadow-sm border text-left transition-all duration-200"
+                          className={`
+                            flex items-center p-5 rounded-xl border transition-all duration-200
+                            text-left shadow-sm hover:shadow-md
+                            ${topic.bgClass} ${topic.borderClass} ${topic.hoverClass}
+                            group
+                          `}
                         >
-                          <topic.icon className="w-8 h-8 text-primary mr-4 shrink-0" />
+                          <topic.icon className={`w-8 h-8 mr-5 shrink-0 transition-transform duration-200 group-hover:scale-110 ${topic.colorClass}`} />
                           <div>
-                            <span className="font-semibold font-headline text-card-foreground">{topic.title}</span>
+                            <span className="font-bold font-headline text-lg text-gray-800 group-hover:text-black">
+                                {topic.title}
+                            </span>
                           </div>
                         </button>
                     ))}
