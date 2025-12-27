@@ -15,11 +15,11 @@ import { ArrowLeft, BookOpen, Atom, Droplets, FlaskConical, Gem, Dna, TestTube, 
 import { useLanguage } from "@/context/language-context";
 import { milkChemistryContent } from "@/lib/content/milk-chemistry-content";
 
+// --- Helper Components ---
 
 const InfoBlock = ({ title, children }: { title: string, children: React.ReactNode }) => (
     <div className="bg-card p-4 sm:p-6 rounded-xl shadow-sm border mt-6">
         <h4 className="text-lg font-bold text-primary mb-2 font-headline">{title}</h4>
-        {/* ## समाधान: यहाँ 'force-wrap' क्लास जोड़ी गई है ## */}
         <div className="text-base leading-relaxed text-gray-700 break-words prose max-w-none force-wrap">
             {children}
         </div>
@@ -39,8 +39,7 @@ const Section = ({ title, icon: Icon, children }: { title: string, icon: React.E
     </div>
 );
 
-// Content Components
-// अपनी फाइल में इस फंक्शन को नीचे दिए गए कोड से बदलें
+// --- Content Components ---
 
 function CompositionContent({ content }: { content: any }) {
     return (
@@ -55,13 +54,11 @@ function CompositionContent({ content }: { content: any }) {
                 </ul>
             </InfoBlock>
             
-            {/* ===== START: यहाँ बदलाव किया गया है ===== */}
             <InfoBlock title={content.composition.generalComposition.title}>
                 <div className="table-container">
                      <Table>
                         <TableHeader>
                            <TableRow>
-                               {/* अब चारों हेडर सही से दिखाए जा रहे हैं */}
                                <TableHead>{content.composition.generalComposition.headers[0]}</TableHead>
                                <TableHead>{content.composition.generalComposition.headers[1]}</TableHead>
                                <TableHead>{content.composition.generalComposition.headers[2]}</TableHead>
@@ -71,7 +68,6 @@ function CompositionContent({ content }: { content: any }) {
                         <TableBody>
                             {content.composition.generalComposition.rows.map((row: any, i: number) => (
                                 <TableRow key={i}>
-                                    {/* अब चारों सेल (c1, v1, c2, v2) सही से दिखाए जा रहे हैं */}
                                     <TableCell>{row.c1}</TableCell>
                                     <TableCell>{row.v1}</TableCell>
                                     <TableCell>{row.c2}</TableCell>
@@ -82,7 +78,6 @@ function CompositionContent({ content }: { content: any }) {
                     </Table>
                 </div>
             </InfoBlock>
-            {/* ===== END: यहाँ बदलाव खत्म हुआ ===== */}
 
             <InfoBlock title={content.composition.speciesDifferences.title}>
                  <div className="table-container">
@@ -118,37 +113,57 @@ function CompositionContent({ content }: { content: any }) {
 }
 
 function MammaryGlandContent({ content }: { content: any }) {
+    const data = content?.mammaryGland || content?.mammary_gland;
+
+    if (!data) {
+        return (
+            <div className="p-4 text-center text-gray-500">
+                Data not available for Mammary Gland section.
+            </div>
+        );
+    }
+
     return (
-        <Section title={content.mammaryGland.title} icon={Cpu}>
-            <InfoBlock title={content.mammaryGland.structure.title}>
-                <p>{content.mammaryGland.structure.p1}</p>
-                <p className="mt-2">{content.mammaryGland.structure.p2}</p>
-            </InfoBlock>
-            <InfoBlock title={content.mammaryGland.physiology.title}>
-                <p>{content.mammaryGland.physiology.p1}</p>
-                <p className="mt-2"><strong className="font-semibold">{content.mammaryGland.physiology.ejectionTitle}:</strong> {content.mammaryGland.physiology.ejectionText}</p>
-            </InfoBlock>
-            <InfoBlock title={content.mammaryGland.precursors.title}>
-                <div className="table-container">
-                    <Table>
-                        <TableCaption>{content.mammaryGland.precursors.caption}</TableCaption>
-                        <TableHeader>
-                            <TableRow>
-                                {content.mammaryGland.precursors.headers.map((h: string) => <TableHead key={h}>{h}</TableHead>)}
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {content.mammaryGland.precursors.rows.map((row: any, i: number) => (
-                                <TableRow key={i}>
-                                    <TableCell>{row.constituent}</TableCell>
-                                    <TableCell>{row.plasma}</TableCell>
-                                    <TableCell dangerouslySetInnerHTML={{ __html: row.milk }} />
+        <Section title={data?.title || "Mammary Gland"} icon={Cpu}>
+            {data?.structure && (
+                <InfoBlock title={data.structure.title}>
+                    <p>{data.structure.p1}</p>
+                    <p className="mt-2">{data.structure.p2}</p>
+                </InfoBlock>
+            )}
+            
+            {data?.physiology && (
+                <InfoBlock title={data.physiology.title}>
+                    <p>{data.physiology.p1}</p>
+                    <p className="mt-2">
+                        <strong className="font-semibold">{data.physiology.ejectionTitle}:</strong> {data.physiology.ejectionText}
+                    </p>
+                </InfoBlock>
+            )}
+            
+            {data?.precursors && (
+                <InfoBlock title={data.precursors.title}>
+                    <div className="table-container">
+                        <Table>
+                            <TableCaption>{data.precursors.caption}</TableCaption>
+                            <TableHeader>
+                                <TableRow>
+                                    {data.precursors.headers?.map((h: string) => <TableHead key={h}>{h}</TableHead>)}
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </div>
-            </InfoBlock>
+                            </TableHeader>
+                            <TableBody>
+                                {data.precursors.rows?.map((row: any, i: number) => (
+                                    <TableRow key={i}>
+                                        <TableCell>{row.constituent}</TableCell>
+                                        <TableCell>{row.plasma}</TableCell>
+                                        <TableCell dangerouslySetInnerHTML={{ __html: row.milk }} />
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </div>
+                </InfoBlock>
+            )}
         </Section>
     );
 }
@@ -228,16 +243,45 @@ function MineralsContent({ content }: { content: any }) {
 }
 
 function VitaminsEnzymesContent({ content }: { content: any }) {
+    const isTableFormat = content.vitaminsEnzymes.enzymes.headers ? true : false;
+
     return (
         <Section title={content.vitaminsEnzymes.title} icon={FlaskConical}>
              <InfoBlock title={content.vitaminsEnzymes.vitamins.title}>
                 <p>{content.vitaminsEnzymes.vitamins.p1}</p>
             </InfoBlock>
+
              <InfoBlock title={content.vitaminsEnzymes.enzymes.title}>
-                <p>{content.vitaminsEnzymes.enzymes.p1}</p>
-                <ul className="list-disc list-inside space-y-1 mt-2">
-                    {content.vitaminsEnzymes.enzymes.list.map((enzyme: any, i: number) => <li key={i}><strong className="font-semibold">{enzyme.name}:</strong> {enzyme.desc}</li>)}
-                </ul>
+                <p className="mb-4">{content.vitaminsEnzymes.enzymes.overview?.p1 || content.vitaminsEnzymes.enzymes.p1}</p>
+                
+                {isTableFormat ? (
+                    <div className="table-container border rounded-lg overflow-hidden">
+                        <Table>
+                            <TableHeader className="bg-muted/50">
+                                <TableRow>
+                                    {content.vitaminsEnzymes.enzymes.headers.map((h: string, i: number) => (
+                                        <TableHead key={i}>{h}</TableHead>
+                                    ))}
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {content.vitaminsEnzymes.enzymes.rows.map((row: any, i: number) => (
+                                    <TableRow key={i}>
+                                        <TableCell className="font-bold align-top">{row.name}</TableCell>
+                                        <TableCell className="text-red-600 font-medium align-top text-xs sm:text-sm">{row.stability}</TableCell>
+                                        <TableCell className="text-sm text-gray-600 align-top">{row.details}</TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </div>
+                ) : (
+                    <ul className="list-disc list-inside space-y-1 mt-2">
+                        {content.vitaminsEnzymes.enzymes.list?.map((enzyme: any, i: number) => (
+                            <li key={i}><strong className="font-semibold">{enzyme.name}:</strong> {enzyme.desc}</li>
+                        ))}
+                    </ul>
+                )}
             </InfoBlock>
         </Section>
     )
@@ -246,24 +290,27 @@ function VitaminsEnzymesContent({ content }: { content: any }) {
 function PropertiesContent({ content }: { content: any }) {
     return (
         <Section title={content.properties.title} icon={TestTube}>
-             <InfoBlock title={content.properties.overview.title}>
-                <p>{content.properties.overview.p1}</p>
-            </InfoBlock>
+             {content.properties.overview && (
+                 <InfoBlock title={content.properties.overview.title}>
+                    <p>{content.properties.overview.p1}</p>
+                </InfoBlock>
+             )}
+
             <div className="table-container mt-6">
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead className="w-[200px]">{content.properties.headers[0]}</TableHead>
-                            <TableHead>{content.properties.headers[1]}</TableHead>
-                            <TableHead>{content.properties.headers[2]}</TableHead>
+                            {content.properties.headers?.map((h: string, i: number) => (
+                                <TableHead key={i} className={i === 0 ? "w-[200px]" : ""}>{h}</TableHead>
+                            ))}
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {content.properties.rows.map((prop: any) => (
-                            <TableRow key={prop.property}>
-                                <TableCell className="font-medium">{prop.property}</TableCell>
-                                <TableCell>{prop.value}</TableCell>
-                                <TableCell>{prop.details}</TableCell>
+                        {content.properties.rows.map((prop: any, i: number) => (
+                            <TableRow key={i}>
+                                <TableCell className="font-semibold align-top">{prop.property}</TableCell>
+                                <TableCell className="align-top font-mono text-sm">{prop.value}</TableCell>
+                                <TableCell className="text-sm text-gray-600 align-top">{prop.details}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
@@ -304,28 +351,114 @@ const chemistryTopicComponents: { [key: string]: React.FC<{ content: any }> } = 
 };
 
 
+// --- Main Component ---
+
 export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
   const [activeTopic, setActiveTopic] = useState<string | null>(null);
-  const { t } = useLanguage();
-  const content = t(milkChemistryContent);
+  const { language } = useLanguage(); 
+
+  const rawContent = milkChemistryContent as any;
+  const content = rawContent[language] || rawContent['en'];
 
   const handleOpenChange = (open: boolean) => {
     if (!open) {
-      setActiveTopic(null); // Reset when closing
+      setActiveTopic(null);
     }
     setIsOpen(open);
   };
   
+  // --- COLOR CONFIGURATION (हर कार्ड का अपना अलग रंग) ---
   const chemistryTopics = [
-    { value: "composition", title: content.composition.title, icon: BookOpen },
-    { value: "mammary_gland", title: content.mammaryGland.title, icon: Cpu },
-    { value: "proteins", title: content.proteins.title, icon: Dna },
-    { value: "fat", title: content.fat.title, icon: Droplets },
-    { value: "lactose", title: content.lactose.title, icon: Atom },
-    { value: "minerals", title: content.minerals.title, icon: Gem },
-    { value: "vitamins_enzymes", title: content.vitaminsEnzymes.title, icon: FlaskConical },
-    { value: "properties", title: content.properties.title, icon: TestTube },
-    { value: "other", title: content.other.title, icon: FlaskConical },
+    { 
+        value: "composition", 
+        title: content?.composition?.title || "Composition", 
+        icon: BookOpen,
+        // Blue Theme
+        colorClass: "text-blue-700",
+        bgClass: "bg-blue-50",
+        borderClass: "border-blue-200",
+        hoverClass: "hover:bg-blue-100"
+    },
+    { 
+      value: "mammary_gland", 
+      title: content?.mammaryGland?.title || content?.mammary_gland?.title || "Mammary Gland", 
+      icon: Cpu,
+      // Pink/Rose Theme
+      colorClass: "text-pink-700",
+      bgClass: "bg-pink-50",
+      borderClass: "border-pink-200",
+      hoverClass: "hover:bg-pink-100"
+    },
+    { 
+        value: "proteins", 
+        title: content?.proteins?.title || "Proteins", 
+        icon: Dna,
+        // Purple/Violet Theme
+        colorClass: "text-purple-700",
+        bgClass: "bg-purple-50",
+        borderClass: "border-purple-200",
+        hoverClass: "hover:bg-purple-100"
+    },
+    { 
+        value: "fat", 
+        title: content?.fat?.title || "Fat", 
+        icon: Droplets,
+        // Yellow/Amber Theme
+        colorClass: "text-amber-700",
+        bgClass: "bg-yellow-50",
+        borderClass: "border-yellow-200",
+        hoverClass: "hover:bg-yellow-100"
+    },
+    { 
+        value: "lactose", 
+        title: content?.lactose?.title || "Lactose", 
+        icon: Atom,
+        // Cyan/Sky Theme
+        colorClass: "text-cyan-700",
+        bgClass: "bg-cyan-50",
+        borderClass: "border-cyan-200",
+        hoverClass: "hover:bg-cyan-100"
+    },
+    { 
+        value: "minerals", 
+        title: content?.minerals?.title || "Minerals", 
+        icon: Gem,
+        // Green/Emerald Theme
+        colorClass: "text-green-700",
+        bgClass: "bg-green-50",
+        borderClass: "border-green-200",
+        hoverClass: "hover:bg-green-100"
+    },
+    { 
+        value: "vitamins_enzymes", 
+        title: content?.vitaminsEnzymes?.title || "Vitamins & Enzymes", 
+        icon: FlaskConical,
+        // Orange Theme
+        colorClass: "text-orange-700",
+        bgClass: "bg-orange-50",
+        borderClass: "border-orange-200",
+        hoverClass: "hover:bg-orange-100"
+    },
+    { 
+        value: "properties", 
+        title: content?.properties?.title || "Properties", 
+        icon: TestTube,
+        // Indigo Theme
+        colorClass: "text-indigo-700",
+        bgClass: "bg-indigo-50",
+        borderClass: "border-indigo-200",
+        hoverClass: "hover:bg-indigo-100"
+    },
+    { 
+        value: "other", 
+        title: content?.other?.title || "Other", 
+        icon: FlaskConical,
+        // Slate/Grey Theme
+        colorClass: "text-slate-700",
+        bgClass: "bg-slate-100",
+        borderClass: "border-slate-300",
+        hoverClass: "hover:bg-slate-200"
+    },
   ];
 
   const selectedTopic = chemistryTopics.find(t => t.value === activeTopic);
@@ -344,7 +477,7 @@ export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; set
         {selectedTopic && ActiveComponent ? (
           <div className="flex-1 flex flex-col min-h-0">
             <div className="px-4 sm:px-0">
-              <Button variant="ghost" onClick={() => setActiveTopic(null)}>
+              <Button variant="ghost" onClick={() => setActiveTopic(null)} className="hover:bg-slate-100">
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   {content.backToTopics}
               </Button>
@@ -357,16 +490,24 @@ export function MilkChemistryModal({ isOpen, setIsOpen }: { isOpen: boolean; set
           </div>
         ) : (
           <ScrollArea className="flex-1 mt-4 sm:pr-4">
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 p-4 sm:p-0">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 p-4 sm:p-2">
               {chemistryTopics.map(topic => (
                 <button
                   key={topic.value}
                   onClick={() => setActiveTopic(topic.value)}
-                  className="flex items-center p-4 bg-card hover:bg-primary/10 rounded-lg shadow-sm border text-left transition-all duration-200"
+                  // यहाँ हर कार्ड के लिए अलग Background (bgClass) और Border (borderClass) सेट किया गया है
+                  className={`
+                    flex items-center p-5 rounded-xl border transition-all duration-200
+                    text-left shadow-sm hover:shadow-md
+                    ${topic.bgClass} ${topic.borderClass} ${topic.hoverClass}
+                    group
+                  `}
                 >
-                  <topic.icon className="w-8 h-8 text-primary mr-4 shrink-0" />
+                  <topic.icon className={`w-8 h-8 mr-5 shrink-0 transition-transform duration-200 group-hover:scale-110 ${topic.colorClass}`} />
                   <div>
-                    <span className="font-semibold font-headline text-card-foreground">{topic.title}</span>
+                    <span className="font-bold font-headline text-lg text-gray-800 group-hover:text-black">
+                        {topic.title}
+                    </span>
                   </div>
                 </button>
               ))}
