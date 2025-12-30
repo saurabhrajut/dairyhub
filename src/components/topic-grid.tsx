@@ -30,7 +30,7 @@ import {
   Combine,
   ShieldAlert,
 } from "lucide-react";
-import { ReagentIcon, PaneerIcon, IceCreamIcon } from "@/components/icons";
+import { ReagentIcon, PaneerIcon, IceCreamIcon, HplcIcon } from "@/components/icons";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/context/auth-context";
 import { useToast } from "@/hooks/use-toast";
