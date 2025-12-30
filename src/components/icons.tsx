@@ -192,23 +192,34 @@ export const MilkCanIcon = (props: SVGProps<SVGSVGElement>) => (
     </svg>
 );
 
-// Added HplcIcon here
+// Option 3: Isometric 3D-style HPLC
 export const HplcIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
-    strokeWidth="2"
+    strokeWidth="1.5"
     strokeLinecap="round"
     strokeLinejoin="round"
     {...props}
   >
-    <rect x="4" y="2" width="16" height="20" rx="2" />
-    <path d="M8 6h8" />
-    <path d="M8 10h8" />
-    <path d="M12 14v4" />
-    <path d="M8 18h8" />
+    {/* Main Tower angled */}
+    <path d="M4 7l4-2v16l-4 2z" /> {/* Side face */}
+    <path d="M8 5l12 2v16l-12-2z" /> {/* Front face */}
+    <path d="M4 7l12 2M8 5L4 7" />   {/* Top edges */}
+    
+    {/* Bottles on top angled */}
+    <path d="M10 3l3 0.5v3l-3-0.5z" />
+    <path d="M15 3.8l3 0.5v3l-3-0.5z" />
+
+    {/* Screen on front face */}
+    <path d="M10 9l8 1.3v5l-8-1.3z" fill="currentColor" fillOpacity="0.1" />
+    {/* Graph on screen */}
+    <path d="M11 12l2-.5 1 2 2-3 2 2" strokeWidth="1" />
+    
+    {/* Module lines on front */}
+    <path d="M8 16l12 2" />
   </svg>
 );
 
