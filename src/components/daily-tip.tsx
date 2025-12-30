@@ -17,8 +17,9 @@ import { dailyTipsContent } from "@/lib/content/daily-tips-content";
 import { cn } from "@/lib/utils"; 
 
 export function DailyTip() {
+  // Change 1: Start with isVisible as false (Hidden by default)
+  const [isVisible, setIsVisible] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isVisible, setIsVisible] = useState(true);
   const [isAnimating, setIsAnimating] = useState(false);
   
   const { toast } = useToast();
@@ -28,8 +29,18 @@ export function DailyTip() {
   useEffect(() => {
     const languageSpecificTips = dailyTipsContent[language]?.tips || dailyTipsContent.en.tips;
     setTips(languageSpecificTips);
-    setCurrentIndex(0); 
+    // Removed setCurrentIndex(0) so we don't force the first tip on load
   }, [language]);
+
+  // Change 2: Logic to handle showing a random tip
+  const handleShowTip = () => {
+    if (tips.length > 0) {
+      // Generate a random index based on the total number of tips
+      const randomIndex = Math.floor(Math.random() * tips.length);
+      setCurrentIndex(randomIndex);
+      setIsVisible(true);
+    }
+  };
 
   const changeTip = useCallback((direction: "next" | "prev") => {
     setIsAnimating(true);
@@ -57,16 +68,17 @@ export function DailyTip() {
     }
   };
 
+  // If not visible, show the Trigger Button
   if (!isVisible) {
     return (
       <div className="flex justify-center mb-6 animate-in fade-in zoom-in duration-300">
         <Button
-          onClick={() => setIsVisible(true)}
+          onClick={handleShowTip} // Using the new handler here
           size="sm"
-          className="rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 shadow-md hover:shadow-indigo-500/25 transition-all text-xs"
+          className="rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 shadow-md hover:shadow-indigo-500/25 transition-all text-xs font-medium px-6 py-5"
         >
-          <Sparkles className="mr-2 h-3 w-3" />
-          Show Tip
+          <Sparkles className="mr-2 h-4 w-4 animate-pulse" />
+          Get Daily Tip
         </Button>
       </div>
     );
@@ -75,7 +87,7 @@ export function DailyTip() {
   const currentTip = tips[currentIndex] || "";
 
   return (
-    <div className="relative mb-6 group w-full max-w-3xl mx-auto px-1 sm:px-0">
+    <div className="relative mb-6 group w-full max-w-3xl mx-auto px-1 sm:px-0 animate-in fade-in slide-in-from-bottom-4 duration-500">
       {/* Background Glow */}
       <div className="absolute -inset-0.5 bg-gradient-to-r from-violet-500/20 to-indigo-500/20 rounded-xl blur-sm opacity-50 sm:opacity-0 sm:group-hover:opacity-100 transition duration-700" />
       
@@ -111,7 +123,7 @@ export function DailyTip() {
           {/* Bottom Section (Mobile) / Right Section (Desktop): Controls */}
           <div className="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-2 sm:gap-1">
             
-            {/* Left Controls Group (Copy/Close) - Reordered for Mobile Ergonomics */}
+            {/* Left Controls Group (Copy) */}
             <div className="flex items-center gap-1 sm:order-2">
                  <Button 
                   variant="ghost" 
@@ -124,7 +136,7 @@ export function DailyTip() {
                 </Button>
             </div>
 
-            {/* Center Navigation Arrows (Main Focus) */}
+            {/* Center Navigation Arrows */}
             <div className="flex items-center gap-3 sm:gap-1 bg-muted/40 sm:bg-transparent rounded-full px-3 py-1 sm:p-0 border sm:border-0 border-border/30 sm:order-1">
               <Button 
                 variant="ghost" 
@@ -135,7 +147,7 @@ export function DailyTip() {
                 <ChevronLeft className="h-5 w-5 sm:h-4 sm:w-4" />
               </Button>
               
-              <div className="w-px h-4 bg-border/40 sm:hidden" /> {/* Small divider between arrows on mobile */}
+              <div className="w-px h-4 bg-border/40 sm:hidden" /> 
 
               <Button 
                 variant="ghost" 
