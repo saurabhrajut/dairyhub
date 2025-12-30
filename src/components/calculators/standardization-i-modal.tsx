@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo, useCallback, useTransition } from "react"
+import { useState, useMemo, useCallback } from "react"
 import {
   Dialog,
   DialogContent,
@@ -31,9 +31,7 @@ import {
   AlertTriangle,
   Info,
   Scale,
-  Droplets,
   Settings2,
-  FunctionSquare,
   FileText,
   ChevronDown,
   ChevronUp
@@ -64,6 +62,7 @@ export function StandardizationIModal({
   isOpen: boolean
   setIsOpen: (open: boolean) => void
 }) {
+  // --- STATE ---
   const [milkQuantity, setMilkQuantity] = useState("1000");
   const [milkUnit, setMilkUnit] = useState<'liters' | 'kg'>('liters');
   const [milkFat, setMilkFat] = useState("3.8")
@@ -87,6 +86,7 @@ export function StandardizationIModal({
   const [calculationSteps, setCalculationSteps] = useState<string[]>([])
   const [showCalculationSteps, setShowCalculationSteps] = useState(false)
 
+  // --- CONSTANTS & FORMULAS ---
   const allStandards = useMemo(() => ({
     ...milkStandards,
     'dahi_std': { name: 'Curd / Dahi (Standard)', fat: 3.0, snf: 10.0 },
@@ -115,6 +115,7 @@ export function StandardizationIModal({
    
   const selectedStandard = allStandards[targetMilkType as keyof typeof allStandards];
 
+  // --- CALCULATION ENGINE ---
   const handleCalculate = useCallback(() => {
     setError(null);
     setResults(null);
@@ -122,8 +123,9 @@ export function StandardizationIModal({
     setShowCalculationSteps(false);
 
     const steps: string[] = [];
-    const FIXED_DENSITY = 1.029; // ✅ Fixed average density
+    const FIXED_DENSITY = 1.029; 
 
+    // 1. Input Validation
     const initialQty = parseFloat(milkQuantity);
     const initialFatRaw = parseFloat(milkFat);
     const initialClrRaw = parseFloat(milkClr);
@@ -142,27 +144,20 @@ export function StandardizationIModal({
         return; 
     }
 
+    // 2. Target Setup (ZERO TOLERANCE: Exact Target Match)
     const targetFat = selectedStandard.fat / 100;
     const targetSnfValue = selectedStandard.snf / 100;
 
-    const isCurdTarget = targetMilkType.includes('dahi');
-    let effectiveTargetSnf = targetSnfValue;
-    let curdConcentrationFactor = 1.0;
+    // Log inputs
+    steps.push(`📊 Raw Milk Base: ${M_base.toFixed(4)} kg`);
+    steps.push(`   Composition: Fat ${(initialFat*100).toFixed(2)}%, SNF ${(initialSnf*100).toFixed(2)}%`);
+    steps.push(`🎯 Precise Target: Fat ${(targetFat*100).toFixed(2)}%, SNF ${(targetSnfValue*100).toFixed(2)}%`);
 
-    if (isCurdTarget) {
-        curdConcentrationFactor = 0.88;
-        effectiveTargetSnf = targetSnfValue / curdConcentrationFactor;
-        steps.push(`🧀 CURD MODE: Milk SNF ${(effectiveTargetSnf*100).toFixed(2)}% → Curd ${(targetSnfValue*100).toFixed(2)}%`);
-    }
-
-    steps.push(`📊 Raw Milk: ${initialQty} ${milkUnit} (${M_base.toFixed(1)} kg)`);
-    steps.push(`   Fat ${(initialFat*100).toFixed(2)}%, SNF ${(initialSnf*100).toFixed(2)}%`);
-    steps.push(`🎯 Target: ${selectedStandard.name}`);
-
-    const F_p = parseFloat(smpFat) / 100;
-    const S_p = (parseFloat(smpTs) - parseFloat(smpFat)) / 100;
-    const F_w = 0; 
-    const S_w = 0;
+    // 3. Define Component Properties
+    const F_p = parseFloat(smpFat) / 100; // SMP Fat
+    const S_p = (parseFloat(smpTs) - parseFloat(smpFat)) / 100; // SMP SNF
+    const F_w = 0; // Water Fat
+    const S_w = 0; // Water SNF
 
     let mainComp: { name: string; F_m: number; S_m: number };
     if (mainComponent === 'cream') {
@@ -177,59 +172,70 @@ export function StandardizationIModal({
         mainComp = { name: "Skim Milk", F_m: f/100, S_m: s/100 };
     }
 
+    // 4. Solve Mass Balance Linear Equations (Cramer's Rule)
+    // Equation 1 (Fat): x*Am + y*Ao = C1
+    // Equation 2 (SNF): x*Bm + y*Bo = C2
+    
     const solveEquations = (F_other: number, S_other: number) => {
+        // Coefficients derived from: MixFat = TargetFat, MixSNF = TargetSNF
         const A1 = mainComp.F_m - targetFat;
         const B1 = F_other - targetFat;
         const C1 = M_base * (targetFat - initialFat);
 
-        const A2 = mainComp.S_m - effectiveTargetSnf;
-        const B2 = S_other - effectiveTargetSnf;
-        const C2 = M_base * (effectiveTargetSnf - initialSnf);
+        const A2 = mainComp.S_m - targetSnfValue;
+        const B2 = S_other - targetSnfValue;
+        const C2 = M_base * (targetSnfValue - initialSnf);
 
         const det = (A1 * B2) - (A2 * B1);
-        if (Math.abs(det) < 1e-10) return { x: -1, y: -1, valid: false };
+        
+        // Check for singular matrix (impossible to solve unique solution)
+        if (Math.abs(det) < 1e-9) return { x: -1, y: -1, valid: false };
 
         const x = ((C1 * B2) - (C2 * B1)) / det;
         const y = ((A1 * C2) - (C1 * A2)) / det;
         return { x, y, valid: true };
     };
 
+    // Try calculating with SMP first, then Water
     const solSMP = solveEquations(F_p, S_p);
     const solWater = solveEquations(F_w, S_w);
 
     let finalMain = 0, finalSmp = 0, finalWater = 0, success = false, infoMsg = "";
-    const tolerance = 0.0001;
+    
+    // Tiny epsilon for float comparison to handle -0.000000001 cases
+    const epsilon = 1e-7; 
 
-    if (solSMP.valid && solSMP.x > -tolerance && solSMP.y > -tolerance) {
+    if (solSMP.valid && solSMP.x > -epsilon && solSMP.y > -epsilon) {
         finalMain = Math.max(0, solSMP.x);
         finalSmp = Math.max(0, solSMP.y);
         success = true;
         infoMsg = `✅ Standardized using ${mainComp.name} + SMP`;
-    } else if (solWater.valid && solWater.x > -tolerance && solWater.y > -tolerance) {
+    } else if (solWater.valid && solWater.x > -epsilon && solWater.y > -epsilon) {
         finalMain = Math.max(0, solWater.x);
         finalWater = Math.max(0, solWater.y);
         success = true;
         infoMsg = `✅ Standardized using ${mainComp.name} + Water`;
     } else {
-        setError("❌ Target unreachable. Try different Main Component.");
+        setError("❌ Target unreachable with selected ingredients. Try changing Main Component (e.g. use Cream instead of Skim).");
         return;
     }
 
+    // 5. Final Calculation & Verification
     const totalWeight = M_base + finalMain + finalSmp + finalWater;
     const totalFatKg = (M_base * initialFat) + (finalMain * mainComp.F_m) + (finalSmp * F_p);
     const totalSnfKg = (M_base * initialSnf) + (finalMain * mainComp.S_m) + (finalSmp * S_p);
 
-    let finalFatP = (totalFatKg / totalWeight) * 100;
-    let finalSnfP = (totalSnfKg / totalWeight) * 100;
+    const finalFatP = (totalFatKg / totalWeight) * 100;
+    const finalSnfP = (totalSnfKg / totalWeight) * 100;
     const finalVolume = totalWeight / FIXED_DENSITY;
 
-    let displaySnf = finalSnfP;
-    if (isCurdTarget) {
-        displaySnf = finalSnfP * (1 / curdConcentrationFactor);
-    }
-
-    steps.push(`🧮 ${mainComp.name}: ${finalMain.toFixed(1)}kg | SMP: ${finalSmp.toFixed(1)}kg | Water: ${finalWater.toFixed(1)}kg`);
-    steps.push(`⚖️ Final: ${totalWeight.toFixed(1)}kg | Fat ${finalFatP.toFixed(2)}% | SNF ${displaySnf.toFixed(2)}%`);
+    steps.push(`🧮 ADD: ${mainComp.name}: ${finalMain.toFixed(4)}kg`);
+    if(finalSmp > 0) steps.push(`🧮 ADD: SMP: ${finalSmp.toFixed(4)}kg`);
+    if(finalWater > 0) steps.push(`🧮 ADD: Water: ${finalWater.toFixed(4)}kg`);
+    
+    steps.push(`⚖️ Final Weight: ${totalWeight.toFixed(4)}kg`);
+    steps.push(`🔬 Result: Fat ${finalFatP.toFixed(5)}% | SNF ${finalSnfP.toFixed(5)}%`);
+    steps.push(`📉 Error: Fat ${(finalFatP - targetFat*100).toExponential(2)} | SNF ${(finalSnfP - targetSnfValue*100).toExponential(2)}`);
 
     setCalculationSteps(steps);
     setResults({
@@ -239,21 +245,17 @@ export function StandardizationIModal({
       finalWeight: totalWeight,
       finalWeightLiters: finalVolume,
       finalFat: finalFatP,
-      finalSnf: displaySnf,
-      finalTS: finalFatP + displaySnf,
+      finalSnf: finalSnfP,
+      finalTS: finalFatP + finalSnfP,
       infoMsg,
       mainComponentName: mainComp.name,
       fatError: Math.abs(finalFatP - (targetFat * 100)),
-      snfError: Math.abs(displaySnf - (targetSnfValue * 100))
+      snfError: Math.abs(finalSnfP - (targetSnfValue * 100))
     });
 
   }, [milkQuantity, milkUnit, milkFat, milkClr, targetMilkType, mainComponent, creamFat, creamSnf, richMilkFat, richMilkClr, skimMilkFat, skimMilkClr, smpFat, smpTs, calculateSnf, snfFormula, customSnfConstants, selectedStandard]);
 
-  const showCurdQualityTip = useMemo(() => {
-    if (!results) return false;
-    return targetMilkType.includes('dahi') && results.finalSnf < 10.0;
-  }, [results, targetMilkType]);
-
+  // --- RENDER ---
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="w-[95vw] max-w-5xl h-[95vh] md:h-[90vh] p-0 md:p-6 bg-gradient-to-br from-slate-50 via-white to-blue-50">
@@ -265,7 +267,7 @@ export function StandardizationIModal({
                 🥛 Milk Standardization
               </DialogTitle>
               <DialogDescription className="text-sm md:text-xl font-semibold text-slate-700 max-w-2xl mx-auto">
-                Precision mass balance calculations (1.029 kg/L)
+                High-Precision Mass Balance Calculator
               </DialogDescription>
             </DialogHeader>
 
@@ -485,7 +487,7 @@ export function StandardizationIModal({
               <Button onClick={handleCalculate} 
                       className="w-full h-16 md:h-20 text-xl md:text-2xl font-black bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-700 hover:via-purple-700 hover:to-pink-700 shadow-2xl hover:shadow-3xl transform hover:-translate-y-1 transition-all duration-200">
                 <Calculator className="w-8 h-8 md:w-10 md:h-10 mr-2 md:mr-4" />
-                Calculate
+                Calculate Precision Mix
               </Button>
 
               {/* Results */}
@@ -497,89 +499,77 @@ export function StandardizationIModal({
               )}
 
               {results && (
-                <>
-                  {showCurdQualityTip && (
-                    <Alert className="border-4 border-yellow-200 bg-gradient-to-r from-yellow-50 to-orange-50 shadow-2xl p-4 md:p-8 rounded-3xl">
-                      <div className="flex flex-col md:flex-row items-start gap-4">
-                        <div className="w-12 h-12 md:w-16 md:h-16 bg-yellow-500/20 rounded-2xl flex items-center justify-center flex-shrink-0">
-                          <Scale className="w-6 h-6 md:w-8 md:h-8 text-yellow-600" />
-                        </div>
-                        <div>
-                          <AlertTitle className="text-xl md:text-2xl font-black text-yellow-900 mb-2 md:mb-3">Quality Note</AlertTitle>
-                          <AlertDescription className="text-base md:text-lg text-yellow-900 leading-relaxed">
-                            Current SNF <strong>{results.finalSnf.toFixed(2)}%</strong> is FSSAI compliant, but for premium thick curd aim for <strong>10.0-10.5% SNF</strong>.
-                          </AlertDescription>
-                        </div>
-                      </div>
-                    </Alert>
-                  )}
-
-                  <Alert className="border-4 border-emerald-200 bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 shadow-2xl p-4 md:p-10 rounded-3xl">
-                    <div className="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-6 mb-6 md:mb-8 text-center md:text-left">
-                      <div className="w-16 h-16 md:w-20 md:h-20 bg-emerald-500/20 rounded-3xl flex items-center justify-center flex-shrink-0">
-                        <CheckCircle2 className="w-8 h-8 md:w-12 md:h-12 text-emerald-600" />
-                      </div>
-                      <div>
-                        <AlertTitle className="text-xl md:text-3xl font-black bg-gradient-to-r from-emerald-700 to-teal-700 bg-clip-text text-transparent mb-2">
-                          {results.infoMsg}
-                        </AlertTitle>
-                        <p className="text-base md:text-xl text-emerald-800 font-semibold">Precision: ±{(results.fatError + results.snfError).toFixed(3)}%</p>
-                      </div>
+                <Alert className="border-4 border-emerald-200 bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 shadow-2xl p-4 md:p-10 rounded-3xl">
+                  <div className="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-6 mb-6 md:mb-8 text-center md:text-left">
+                    <div className="w-16 h-16 md:w-20 md:h-20 bg-emerald-500/20 rounded-3xl flex items-center justify-center flex-shrink-0">
+                      <CheckCircle2 className="w-8 h-8 md:w-12 md:h-12 text-emerald-600" />
                     </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-10">
-                      {results.mainComponentAmount > 0.1 && (
-                        <div className="group bg-gradient-to-br from-yellow-400/20 to-orange-400/20 backdrop-blur-xl p-4 md:p-8 rounded-3xl border-4 border-yellow-200 hover:border-yellow-300 transition-all duration-200 hover:scale-[1.02] text-center md:text-left">
-                          <p className="text-base md:text-lg font-bold text-yellow-900 mb-2 md:mb-3">{results.mainComponentName}</p>
-                          <p className="text-3xl md:text-5xl font-black text-yellow-700">{results.mainComponentAmount.toFixed(1)}</p>
-                          <p className="text-sm md:text-lg font-semibold text-yellow-600 mt-2">kg</p>
-                        </div>
-                      )}
-                      {results.smpAmount > 0.1 && (
-                        <div className="group bg-gradient-to-br from-orange-400/20 to-red-400/20 backdrop-blur-xl p-4 md:p-8 rounded-3xl border-4 border-orange-200 hover:border-orange-300 transition-all duration-200 hover:scale-[1.02] text-center md:text-left">
-                          <p className="text-base md:text-lg font-bold text-orange-900 mb-2 md:mb-3">SMP</p>
-                          <p className="text-3xl md:text-5xl font-black text-orange-700">{results.smpAmount.toFixed(1)}</p>
-                          <p className="text-sm md:text-lg font-semibold text-orange-600 mt-2">kg</p>
-                        </div>
-                      )}
-                      {results.waterAmount > 0.1 && (
-                        <div className="group bg-gradient-to-br from-cyan-400/20 to-blue-400/20 backdrop-blur-xl p-4 md:p-8 rounded-3xl border-4 border-cyan-200 hover:border-cyan-300 transition-all duration-200 hover:scale-[1.02] text-center md:text-left">
-                          <p className="text-base md:text-lg font-bold text-cyan-900 mb-2 md:mb-3">Water</p>
-                          <p className="text-3xl md:text-5xl font-black text-cyan-700">{results.waterAmount.toFixed(1)}</p>
-                          <p className="text-sm md:text-lg font-semibold text-cyan-600 mt-2">kg</p>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
-                      <div className="bg-white/50 backdrop-blur-xl p-4 md:p-8 rounded-2xl border-2 border-slate-200 text-center shadow-xl">
-                        <p className="text-[10px] md:text-sm font-bold text-slate-600 uppercase tracking-wider mb-2 md:mb-3">Total Weight</p>
-                        <p className="text-2xl md:text-4xl font-black text-slate-900">{results.finalWeight.toFixed(1)}</p>
-                        <p className="text-xs md:text-lg text-slate-600">{results.finalWeightLiters.toFixed(1)} L</p>
-                      </div>
-                      <div className="bg-gradient-to-br from-purple-400/20 to-pink-400/20 backdrop-blur-xl p-4 md:p-8 rounded-2xl border-2 border-purple-200 text-center shadow-xl">
-                        <p className="text-[10px] md:text-sm font-bold text-purple-700 uppercase tracking-wider mb-2 md:mb-3">Final Fat</p>
-                        <p className="text-2xl md:text-4xl font-black text-purple-700">{results.finalFat.toFixed(2)}%</p>
-                        <Badge className={cn("text-xs md:text-lg px-2 md:px-4 py-1 md:py-2 mt-2 font-bold h-auto md:h-10", 
-                              results.fatError <= 0.05 ? "bg-emerald-500" : "bg-yellow-500")}>
-                          ±{results.fatError.toFixed(2)}%
+                    <div>
+                      <AlertTitle className="text-xl md:text-3xl font-black bg-gradient-to-r from-emerald-700 to-teal-700 bg-clip-text text-transparent mb-2">
+                        {results.infoMsg}
+                      </AlertTitle>
+                      <div className="flex flex-col md:flex-row gap-2 md:items-center">
+                        <Badge className={cn("text-sm md:text-base px-3 py-1 font-bold", 
+                              (results.fatError + results.snfError) <= 0.0001 ? "bg-emerald-600" : "bg-yellow-600")}>
+                          Deviation: ±{(results.fatError + results.snfError).toExponential(2)}%
                         </Badge>
-                      </div>
-                      <div className="bg-gradient-to-br from-pink-400/20 to-rose-400/20 backdrop-blur-xl p-4 md:p-8 rounded-2xl border-2 border-pink-200 text-center shadow-xl">
-                        <p className="text-[10px] md:text-sm font-bold text-pink-700 uppercase tracking-wider mb-2 md:mb-3">Final SNF</p>
-                        <p className="text-2xl md:text-4xl font-black text-pink-700">{results.finalSnf.toFixed(2)}%</p>
-                        <Badge className={cn("text-xs md:text-lg px-2 md:px-4 py-1 md:py-2 mt-2 font-bold h-auto md:h-10", 
-                              results.snfError <= 0.05 ? "bg-emerald-500" : "bg-yellow-500")}>
-                          ±{results.snfError.toFixed(2)}%
-                        </Badge>
-                      </div>
-                      <div className="bg-gradient-to-br from-indigo-400/20 to-slate-400/20 backdrop-blur-xl p-4 md:p-8 rounded-2xl border-2 border-indigo-200 text-center shadow-xl">
-                        <p className="text-[10px] md:text-sm font-bold text-indigo-700 uppercase tracking-wider mb-2 md:mb-3">Total Solids</p>
-                        <p className="text-2xl md:text-4xl font-black text-indigo-700">{results.finalTS.toFixed(2)}%</p>
+                        <p className="text-xs md:text-sm text-emerald-800 opacity-80">Zero Tolerance Policy Active</p>
                       </div>
                     </div>
-                  </Alert>
-                </>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-10">
+                    {results.mainComponentAmount > 0.0001 && (
+                      <div className="group bg-gradient-to-br from-yellow-400/20 to-orange-400/20 backdrop-blur-xl p-4 md:p-8 rounded-3xl border-4 border-yellow-200 hover:border-yellow-300 transition-all duration-200 hover:scale-[1.02] text-center md:text-left">
+                        <p className="text-base md:text-lg font-bold text-yellow-900 mb-2 md:mb-3">{results.mainComponentName}</p>
+                        <p className="text-3xl md:text-5xl font-black text-yellow-700">{results.mainComponentAmount.toFixed(2)}</p>
+                        <p className="text-sm md:text-lg font-semibold text-yellow-600 mt-2">kg</p>
+                      </div>
+                    )}
+                    {results.smpAmount > 0.0001 && (
+                      <div className="group bg-gradient-to-br from-orange-400/20 to-red-400/20 backdrop-blur-xl p-4 md:p-8 rounded-3xl border-4 border-orange-200 hover:border-orange-300 transition-all duration-200 hover:scale-[1.02] text-center md:text-left">
+                        <p className="text-base md:text-lg font-bold text-orange-900 mb-2 md:mb-3">SMP</p>
+                        <p className="text-3xl md:text-5xl font-black text-orange-700">{results.smpAmount.toFixed(2)}</p>
+                        <p className="text-sm md:text-lg font-semibold text-orange-600 mt-2">kg</p>
+                      </div>
+                    )}
+                    {results.waterAmount > 0.0001 && (
+                      <div className="group bg-gradient-to-br from-cyan-400/20 to-blue-400/20 backdrop-blur-xl p-4 md:p-8 rounded-3xl border-4 border-cyan-200 hover:border-cyan-300 transition-all duration-200 hover:scale-[1.02] text-center md:text-left">
+                        <p className="text-base md:text-lg font-bold text-cyan-900 mb-2 md:mb-3">Water</p>
+                        <p className="text-3xl md:text-5xl font-black text-cyan-700">{results.waterAmount.toFixed(2)}</p>
+                        <p className="text-sm md:text-lg font-semibold text-cyan-600 mt-2">kg</p>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
+                    <div className="bg-white/50 backdrop-blur-xl p-4 md:p-8 rounded-2xl border-2 border-slate-200 text-center shadow-xl">
+                      <p className="text-[10px] md:text-sm font-bold text-slate-600 uppercase tracking-wider mb-2 md:mb-3">Total Weight</p>
+                      <p className="text-2xl md:text-4xl font-black text-slate-900">{results.finalWeight.toFixed(2)}</p>
+                      <p className="text-xs md:text-lg text-slate-600">{results.finalWeightLiters.toFixed(1)} L</p>
+                    </div>
+                    <div className="bg-gradient-to-br from-purple-400/20 to-pink-400/20 backdrop-blur-xl p-4 md:p-8 rounded-2xl border-2 border-purple-200 text-center shadow-xl">
+                      <p className="text-[10px] md:text-sm font-bold text-purple-700 uppercase tracking-wider mb-2 md:mb-3">Final Fat</p>
+                      <p className="text-2xl md:text-4xl font-black text-purple-700">{results.finalFat.toFixed(2)}%</p>
+                      <Badge className={cn("text-xs md:text-sm px-2 mt-2", 
+                            results.fatError <= 0.001 ? "bg-emerald-500" : "bg-red-500")}>
+                        Error: {results.fatError.toFixed(5)}%
+                      </Badge>
+                    </div>
+                    <div className="bg-gradient-to-br from-pink-400/20 to-rose-400/20 backdrop-blur-xl p-4 md:p-8 rounded-2xl border-2 border-pink-200 text-center shadow-xl">
+                      <p className="text-[10px] md:text-sm font-bold text-pink-700 uppercase tracking-wider mb-2 md:mb-3">Final SNF</p>
+                      <p className="text-2xl md:text-4xl font-black text-pink-700">{results.finalSnf.toFixed(2)}%</p>
+                      <Badge className={cn("text-xs md:text-sm px-2 mt-2", 
+                            results.snfError <= 0.001 ? "bg-emerald-500" : "bg-red-500")}>
+                        Error: {results.snfError.toFixed(5)}%
+                      </Badge>
+                    </div>
+                    <div className="bg-gradient-to-br from-indigo-400/20 to-slate-400/20 backdrop-blur-xl p-4 md:p-8 rounded-2xl border-2 border-indigo-200 text-center shadow-xl">
+                      <p className="text-[10px] md:text-sm font-bold text-indigo-700 uppercase tracking-wider mb-2 md:mb-3">Total Solids</p>
+                      <p className="text-2xl md:text-4xl font-black text-indigo-700">{results.finalTS.toFixed(2)}%</p>
+                    </div>
+                  </div>
+                </Alert>
               )}
 
               {/* Calculation Steps */}
@@ -606,7 +596,7 @@ export function StandardizationIModal({
                               "p-3 md:p-4 rounded-2xl border-l-4",
                               step.includes('✅') && 'bg-emerald-50 border-emerald-400 text-emerald-900 font-semibold',
                               step.includes('🧮') && 'bg-blue-50 border-blue-400 text-blue-900 font-semibold',
-                              step.includes('🧀') && 'bg-amber-50 border-amber-400 text-amber-900 font-semibold',
+                              step.includes('📉') && 'bg-red-50 border-red-400 text-red-900 font-semibold',
                               step.includes('📊') && 'bg-slate-50 border-slate-400 text-slate-900 font-bold bg-gradient-to-r from-slate-100 to-slate-200'
                             )}>
                               {step}
