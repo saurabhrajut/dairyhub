@@ -65,6 +65,8 @@ import { EtpModal } from "./info-modals/etp-modal";
 import { ExpertSupportModal } from "./info-modals/expert-support-modal";
 import { ProductionCalculationsModal } from "./calculators/production-calculations-modal";
 import { PestControlModal } from "./info-modals/pest-control-modal";
+import { ChromatographyModal } from "./info-modals/chromatography-modal";
+
 
 type Topic = {
   id: string;
@@ -82,7 +84,7 @@ type Topic = {
 const qualityAccessTopics = [
   'industry', 'fssai-standards', 'quality-concept', 'microbiology', 'audits', 'validation-verification',
   'expert-support', 'calibration', 'lab-equipments', 'milk-chemistry', 'lab-calculations', 'production-calculations',
-  'adulteration', 'solutions-prep', 'compositional-analysis', 'water-testing', 'packaging-testing',
+  'adulteration', 'solutions-prep', 'compositional-analysis', 'water-testing', 'packaging-testing', 'chromatography',
   'std1', 'std2', 'milk-handling', 'cip-process', 'etp', 'about-us', 'pest-control'
 ];
 
@@ -122,6 +124,7 @@ const topics: Topic[] = [
   { id: 'compositional-analysis', title: 'Compositional Analysis', description: 'Chemical tests for products', category: 'quality', icon: TestTube, modal: CompositionalAnalysisModal, isPro: true, color: 'from-indigo-500 via-blue-500 to-purple-600', iconColor: 'text-white' },
   { id: 'water-testing', title: 'Water Testing', description: 'WTP/ETP Analysis', category: 'quality', icon: Droplet, modal: WaterTestingModal, isPro: true, color: 'from-blue-500 via-cyan-500 to-sky-600', iconColor: 'text-white' },
   { id: 'packaging-testing', title: 'Packaging Testing', description: 'Quality tests for materials', category: 'quality', icon: PackageCheck, modal: PackagingMaterialTestingModal, isPro: true, color: 'from-yellow-500 via-amber-500 to-orange-600', iconColor: 'text-white' },
+  { id: 'chromatography', title: 'Chromatography', description: 'HPLC, GC, TLC & More', category: 'quality', icon: HplcIcon, badge: 'New', modal: ChromatographyModal, isPro: false, color: 'from-pink-100 to-rose-200' },
   { id: 'std1', title: 'Standardization I', description: 'Basic Principles', category: 'process', icon: Scale, modal: StandardizationIModal, isPro: true, color: 'from-sky-500 via-blue-500 to-cyan-600', iconColor: 'text-white' },
   { id: 'std2', title: 'Advanced Standardization', description: 'Advanced Blending', category: 'process', icon: Calculator, modal: StandardizationIIModal, isPro: true, color: 'from-fuchsia-500 via-pink-500 to-purple-600', iconColor: 'text-white' },
   { id: 'processing', title: 'Dairy Processing', description: 'Techniques & Machinery', category: 'process', icon: Settings, modal: DairyProcessingModal, isPro: true, color: 'from-gray-500 via-slate-500 to-zinc-600', iconColor: 'text-white' },
