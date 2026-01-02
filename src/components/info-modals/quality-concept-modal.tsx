@@ -88,8 +88,9 @@ const topicComponents = {
             <Section title={content.qa.title} id="qa">
                 <p>{content.qa.p1}</p>
                 <p>{content.qa.p2}</p>
-                <div className="overflow-x-auto mt-4 rounded-lg border border-gray-200">
-                    <Table>
+                <div className="overflow-x-auto mt-4 rounded-lg border border-gray-200 w-full">
+                    {/* Fixed: Added min-w to table */}
+                    <Table className="min-w-[500px]">
                         <TableCaption>{content.qa.table.caption}</TableCaption>
                         <TableHeader className="bg-muted/50">
                             <TableRow>
@@ -148,20 +149,21 @@ const topicComponents = {
             <Section title={content.oprps.title} id="oprps">
                 <p>{content.oprps.p1}</p>
                 <SubHeading>{content.oprps.p2}</SubHeading>
-                 <div className="overflow-x-auto mt-4 rounded-lg border border-gray-200">
-                    <Table>
+                 {/* FIXED: Added overflow-x-auto and min-width to table for mobile scrolling */}
+                 <div className="overflow-x-auto mt-4 rounded-lg border border-gray-200 w-full">
+                    <Table className="min-w-[600px]">
                         <TableHeader className="bg-muted/50">
                             <TableRow>
-                                <TableHead className="font-bold">{content.oprps.table.header1}</TableHead>
-                                <TableHead className="font-bold">{content.oprps.table.header2}</TableHead>
-                                <TableHead className="font-bold">{content.oprps.table.header3}</TableHead>
-                                <TableHead className="font-bold">{content.oprps.table.header4}</TableHead>
+                                <TableHead className="font-bold whitespace-nowrap">{content.oprps.table.header1}</TableHead>
+                                <TableHead className="font-bold whitespace-nowrap">{content.oprps.table.header2}</TableHead>
+                                <TableHead className="font-bold whitespace-nowrap">{content.oprps.table.header3}</TableHead>
+                                <TableHead className="font-bold whitespace-nowrap">{content.oprps.table.header4}</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {content.oprps.table.rows.map((row: any, index: number) => (
                                 <TableRow key={index}>
-                                    <TableCell>{row.c1}</TableCell>
+                                    <TableCell className="font-medium">{row.c1}</TableCell>
                                     <TableCell>{row.c2}</TableCell>
                                     <TableCell>{row.c3}</TableCell>
                                     <TableCell>{row.c4}</TableCell>
