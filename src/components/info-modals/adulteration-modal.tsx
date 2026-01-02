@@ -1,25 +1,25 @@
-"use client"
+"use client";
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Button } from "../ui/button"
-import { FlaskConical, Microscope, Shield, ArrowLeft, Search, Zap } from "lucide-react"
-import { useLanguage } from "@/context/language-context"
-import { adulterationContent } from "@/lib/content/adulteration-content"
-import { cn } from "@/lib/utils" // ✅ Ensure cn is imported
+} from "@/components/ui/accordion";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "../ui/button";
+import { FlaskConical, Microscope, Shield, ArrowLeft, Search, Zap } from "lucide-react";
+import { useLanguage } from "@/context/language-context";
+import { adulterationContent } from "@/lib/content/adulteration-content";
+import { cn } from "@/lib/utils";
 
 type AdulterationCategory = 'platform-tests' | 'preservatives' | 'adulterants';
 
@@ -27,8 +27,8 @@ export function AdulterationModal({
   isOpen,
   setIsOpen,
 }: {
-  isOpen: boolean
-  setIsOpen: (open: boolean) => void
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
 }) {
   const [activeCategory, setActiveCategory] = useState<AdulterationCategory | null>(null);
   const { t } = useLanguage();
@@ -135,7 +135,7 @@ export function AdulterationModal({
                         </div>
                         
                         <Accordion type="single" collapsible className="w-full space-y-3">
-                            {selectedCategory.data.map((item) => (
+                            {selectedCategory.data.map((item: any) => (
                                 <AccordionItem 
                                     key={item.title} 
                                     value={item.title.replace(/\s/g, '-')}
@@ -206,5 +206,5 @@ export function AdulterationModal({
         )}
       </DialogContent>
     </Dialog>
-  )
+  );
 }
