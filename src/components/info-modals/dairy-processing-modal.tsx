@@ -79,17 +79,17 @@ const TopicContent = ({ content }: { content: any }) => {
     
     if (content.simulation) {
       return (
-          <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList>
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+              <TabsList className="grid w-full grid-cols-2 mb-6">
                   <TabsTrigger value="info">Information</TabsTrigger>
                   <TabsTrigger value="simulation">3D Simulation</TabsTrigger>
               </TabsList>
-              <TabsContent value="info">
+              <TabsContent value="info" className="mt-0">
                   <Section title={content.title}>
                       <div dangerouslySetInnerHTML={{ __html: content.content }} />
                   </Section>
               </TabsContent>
-              <TabsContent value="simulation" className="h-[70vh]">
+              <TabsContent value="simulation" className="h-[60vh] sm:h-[70vh] border rounded-xl overflow-hidden shadow-sm mt-0">
                    <iframe srcDoc={content.simulation} style={{ width: '100%', height: '100%', border: 'none' }} title="Processing Simulation" />
               </TabsContent>
           </Tabs>
