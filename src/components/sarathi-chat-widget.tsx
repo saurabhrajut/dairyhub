@@ -146,13 +146,15 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
     setHistory([]);
     setResumeFile(null);
     setFileName("");
+    if (fileInputRef.current) fileInputRef.current.value = "";
     
     if (!isOpen || !user) return;
     
     const cacheKey = getCacheKey();
     const cached = cacheKey ? localStorage.getItem(cacheKey) : null;
 
-    if (cached) {
+    // IMPORTANT: Don't restore cache for interview mode - always fresh start
+    if (cached && !(activeMode === 'gyan-ai' && selectedTopic === 'Interview Preparation')) {
         const data = JSON.parse(cached);
         setMessages(data.messages);
         setHistory(data.history);
@@ -173,10 +175,11 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
 
   useEffect(() => {
     const cacheKey = getCacheKey();
-    if (cacheKey && messages.length > 0) {
+    // Don't cache interview sessions - always fresh
+    if (cacheKey && messages.length > 0 && !(activeMode === 'gyan-ai' && selectedTopic === 'Interview Preparation')) {
         localStorage.setItem(cacheKey, JSON.stringify({ messages, history }));
     }
-  }, [messages, history, getCacheKey]);
+  }, [messages, history, getCacheKey, activeMode, selectedTopic]);
 
   useEffect(() => scrollToBottom(), [messages, isLoading, scrollToBottom]);
 
@@ -275,7 +278,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
     }
   };
 
-  // --- ✅ FULL FILE UPLOAD HANDLER RESTORED ---
+  // --- ✅ FULL FILE UPLOAD HANDLER ---
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
         const file = e.target.files[0];
@@ -333,6 +336,15 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
           if (!response?.response) throw new Error("Initialization failed");
 
           const timestamp = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+          
+          // Welcome message for interview start
+          const welcomeMsg: UIMessage = {
+              id: 'interview-welcome',
+              role: 'assistant',
+              text: `🎯 Great! I've analyzed your resume. Let's start your ${experienceLevel === 'Fresher Student' ? 'fresher' : 'experienced'} interview simulation. Answer naturally and I'll provide detailed feedback!`,
+              timestamp
+          };
+          
           const qaMessages: UIMessage[] = response.response.map((qa: any, idx: number) => ({
                 id: `init-${idx}`,
                 role: 'assistant',
@@ -343,7 +355,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                 timestamp
             }));
             
-           setMessages(qaMessages);
+           setMessages([welcomeMsg, ...qaMessages]);
            if (response.followUpSuggestion) {
              setMessages(prev => [...prev, { 
                 id: 'init-follow', 
@@ -362,6 +374,20 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
       } finally {
           setIsProcessingResume(false);
       }
+  };
+
+  const resetInterview = () => {
+      setMessages([]);
+      setHistory([]);
+      setResumeFile(null);
+      setFileName("");
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      
+      toast({
+          title: "🔄 Interview Reset",
+          description: "Ready for a fresh start! Upload your resume again.",
+          className: "bg-blue-50 border-blue-200"
+      });
   };
 
   const startTopicChat = async (topic: GyanAITopic) => {
@@ -528,7 +554,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                 </ScrollArea>
             )}
 
-            {/* 2. ✅ FULL INTERVIEW SETUP WITH PDF/DOC UPLOAD RESTORED */}
+            {/* 2. ✅ FULL INTERVIEW SETUP WITH PDF/DOC UPLOAD */}
             {isInterviewSetup && (
                 <div className="flex-1 flex flex-col p-8 bg-gradient-to-br from-indigo-50 via-white to-purple-50 items-center justify-center text-center space-y-8 overflow-hidden">
                     <div className="space-y-3 flex-shrink-0">
@@ -635,6 +661,20 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
             {/* 3. Enhanced Main Chat View */}
             {!isGyanHome && !isInterviewSetup && (
                 <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
+                    {/* Interview Reset Button - Only show during active interview */}
+                    {activeMode === 'gyan-ai' && selectedTopic === 'Interview Preparation' && messages.length > 0 && (
+                        <div className="px-5 pt-3 pb-2 border-b border-slate-200/50 bg-gradient-to-r from-slate-50 to-indigo-50/30 shrink-0">
+                            <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={resetInterview}
+                                className="w-full h-10 bg-white/80 backdrop-blur-sm hover:bg-red-50 hover:border-red-300 hover:text-red-600 transition-all rounded-2xl shadow-lg font-semibold text-slate-600 border-slate-200"
+                            >
+                                <X className="w-4 h-4 mr-2" />
+                                🔄 Reset & Upload New Resume
+                            </Button>
+                        </div>
+                    )}
                     <ScrollArea className="flex-1 px-6 pb-3 pt-2" viewportRef={scrollRef}>
                         <div className="flex flex-col gap-4 pb-1">
                             {messages.length === 0 && (
@@ -647,18 +687,29 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                             {messages.map((msg) => {
                                 if (msg.isQuestionAnswer) {
                                     return (
-                                        <div key={msg.id} className="bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-3xl border border-indigo-100/50 shadow-xl ml-4 max-w-[95%] backdrop-blur-sm">
+                                        <div key={msg.id} className="bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-3xl border-2 border-indigo-200/50 shadow-xl ml-4 max-w-[95%] backdrop-blur-sm">
                                             <div className="flex gap-3 items-start mb-4">
                                                 <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-2.5 rounded-2xl shadow-2xl flex-shrink-0 mt-0.5">
                                                     <BrainCircuit className="w-5 h-5 text-white" />
                                                 </div>
                                                 <div className="flex-1">
+                                                    <div className="inline-block bg-indigo-100 text-indigo-700 text-xs font-bold px-3 py-1 rounded-full mb-2 shadow-sm">
+                                                        📋 INTERVIEW QUESTION
+                                                    </div>
                                                     <p className="font-bold text-lg text-slate-800 leading-relaxed mb-1">{msg.question}</p>
                                                     <div className="h-px bg-gradient-to-r from-indigo-200 to-transparent w-20 -mt-1 mb-3" />
                                                 </div>
                                             </div>
-                                            <div className="pl-12 text-slate-700 leading-relaxed">
-                                                <p className="text-base" dangerouslySetInnerHTML={{ __html: msg.answer?.replace(/\n/g, '<br />') || "" }} />
+                                            <div className="pl-12 space-y-3">
+                                                <div className="inline-block bg-emerald-100 text-emerald-700 text-xs font-bold px-3 py-1 rounded-full shadow-sm">
+                                                    ✅ PROFESSIONAL ANSWER
+                                                </div>
+                                                <div className="text-slate-700 leading-relaxed bg-white/60 p-4 rounded-2xl border border-indigo-100">
+                                                    <p className="text-base" dangerouslySetInnerHTML={{ __html: msg.answer?.replace(/\n/g, '<br />') || "" }} />
+                                                </div>
+                                                <div className="text-xs text-indigo-600 font-semibold bg-indigo-50 px-3 py-2 rounded-xl border border-indigo-100">
+                                                    💡 <strong>Tip:</strong> Practice this answer in your own words before the real interview
+                                                </div>
                                             </div>
                                         </div>
                                     );
