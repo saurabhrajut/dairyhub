@@ -4,14 +4,13 @@ import { Header } from '@/components/header';
 import { TopicGrid } from '@/components/topic-grid';
 import { DailyTip } from '@/components/daily-tip';
 import { SarathiChatWidget } from '@/components/sarathi-chat-widget';
-import { FlaskConical, Beaker, Pipette, Settings, TestTube, Microscope, Combine } from 'lucide-react';
+import { FlaskConical, Beaker, Pipette, Settings, TestTube, Microscope, Combine, Loader2 } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import SplashScreen from '@/components/splash-screen';
 import { useSplashScreen } from '@/context/splash-screen-context';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
-import { Loader2 } from 'lucide-react';
 
 const AnimatedBackground = () => {
   const icons = [
@@ -97,6 +96,30 @@ export default function Home() {
           </div>
           <TopicGrid />
         </main>
+        
+        {/* Footer with Links for Google Verification */}
+        <footer className="w-full py-8 mt-10 border-t border-gray-200/50 text-center z-20 relative">
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-8 text-sm font-medium text-gray-600">
+            <a 
+              href="/privacy.html" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-blue-600 hover:underline transition-colors px-4 py-2 rounded-lg hover:bg-white/50"
+            >
+              Privacy Policy
+            </a>
+            <a 
+              href="/terms.html" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-blue-600 hover:underline transition-colors px-4 py-2 rounded-lg hover:bg-white/50"
+            >
+              Terms of Service
+            </a>
+          </div>
+          <p className="mt-4 text-xs text-gray-400">© 2025 DairyHub. All rights reserved.</p>
+        </footer>
+
       </div>
       <SarathiChatWidget />
     </div>
