@@ -7,7 +7,7 @@ export const aboutUsContent = {
     "title": "Dairy Hub ke Peeche",
     "description": "Aapke Bharosemand Digital Dairy Partner ki Kahani",
     "developer": {
-      "name": "Saurabh Singh Jadoun",
+      "name": "सौरभ सिंह जादोंन",
       "image": "/IMG_6535 (2).jpg",
       "academicInfo": {
         "title": "Academic Jaankari",
