@@ -2,11 +2,9 @@
 
 import mammoth from 'mammoth';
 import * as pdfjs from 'pdfjs-dist/build/pdf.mjs';
-import { generateOfflineInterview } from '@/lib/offline-processor'; // ✅ Import check karein
+import { generateOfflineInterview } from '@/lib/offline-processor'; 
 
-// --- Types ---
-// Agar apke paas types file alag hai to wahan se import karein, 
-// warna temporary yahan define kar raha hu taaki error na aaye
+// --- Types (Temporary Definition to prevent TS errors) ---
 interface InterviewPrepperInput {
   resumeText: string;
   experienceLevel: string;
@@ -15,19 +13,19 @@ interface InterviewPrepperInput {
   initialRequest?: boolean;
 }
 
-// PDF Worker Setup (Required for Next.js)
+// PDF Worker Setup
 const PDF_JS_VERSION = "4.10.38"; 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${PDF_JS_VERSION}/pdf.worker.min.mjs`;
 
-// --- 1. Resume Parsing Function ---
+// ==========================================
+// 1. ACTIVE FUNCTIONS (Working Offline)
+// ==========================================
+
 export async function parseResume(formData: FormData): Promise<{text: string}> {
-    console.log("--> parseResume Called");
-    
     try {
         const file = formData.get('file') as File;
         if (!file) throw new Error('No file provided');
 
-        console.log("--> File received:", file.name, file.type);
         const arrayBuffer = await file.arrayBuffer();
 
         if (file.type.includes('wordprocessingml')) {
@@ -46,39 +44,71 @@ export async function parseResume(formData: FormData): Promise<{text: string}> {
             return { text };
         } 
         else {
-            throw new Error('Unsupported file type');
+            return { text: "" };
         }
     } catch (error) {
-        console.error("--> Parsing Error:", error);
-        return { text: "" }; // Empty text return karein taaki app crash na ho
+        console.error("Parsing Error:", error);
+        return { text: "" };
     }
 }
 
-// --- 2. Offline Interview Function (AI REPLACEMENT) ---
 export async function interviewPrepper(input: InterviewPrepperInput) {
-    console.log("--> interviewPrepper Action Called");
-    
     try {
-        // AI Flow hata diya, seedha offline logic call kiya
-        const result = generateOfflineInterview(input.resumeText, input.experienceLevel);
-        
-        console.log("--> Returning Result to Frontend");
-        return result;
-
+        // Calling your offline logic
+        return generateOfflineInterview(input.resumeText, input.experienceLevel);
     } catch (error) {
-        console.error("--> interviewPrepper Error:", error);
-        // Error ke case mein safe data return karein
+        console.error("Interview Error:", error);
         return {
-            response: [{ 
-                question: "Could not generate questions.", 
-                answer: "Please try uploading the resume again." 
-            }],
+            response: [{ question: "Error generating questions.", answer: "Please try again." }],
             followUpSuggestion: "System Error"
         };
     }
 }
 
-// --- Dummy Exports to prevent errors if frontend calls them ---
-// (Baaki functions ko aise hi chhod dein agar wo use ho rahe hain)
-export async function sarathiAI() { return null; }
-export async function gyanAI() { return null; }
+// ==========================================
+// 2. PLACEHOLDER FUNCTIONS (To Fix Build Errors)
+// ==========================================
+// Ye functions error rokne ke liye add kiye gaye hain. 
+// Jab user inhe call karega, inhe ek simple message milega.
+
+export async function askExpert(input: any) {
+    return {
+        answer: "Expert support is currently operating in offline mode. Please check back later for full AI support."
+    };
+}
+
+export async function sarathiAI(input: any) {
+    return {
+        answer: "Namaste! I am currently undergoing maintenance. Please use the Interview Tool for now."
+    };
+}
+
+export async function gyanAI(input: any) {
+    return {
+        answer: "This topic expert is currently unavailable."
+    };
+}
+
+export async function getRecipeSuggestions(input: any) {
+    return { recipes: [] };
+}
+
+export async function getDetectionInstructions(input: any) {
+    return { instructions: "Feature unavailable offline." };
+}
+
+export async function fetchLatestDairyIndustryData() {
+    return { data: "Data unavailable." };
+}
+
+export async function refineQuestion(input: any) {
+    return { refinedQuestion: input.question };
+}
+
+export async function textToSpeech(input: any) {
+    return { audio: null };
+}
+
+export async function createRazorpayOrder(amount: number) {
+    return { success: false, error: "Payment gateway not configured." };
+}
