@@ -1,6 +1,6 @@
 export const clarificationContent = {
     en: {
-        title: "Filtration and Clarification: Scientific Deep Dive",
+        title: "Filtration and Clarification",
         content: `
             <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Introduction to Filtration and Clarification</h3>
             <p>Filtration and clarification are critical preliminary operations in raw milk processing that fundamentally improve the microbiological and physicochemical quality of milk. Both processes rely on different physical principles and perform complementary functions—filtration removes macroscopic particulates through mechanical sieving, while clarification employs centrifugal sedimentation to eliminate microscopic contaminants.</p>
@@ -168,7 +168,7 @@ export const clarificationContent = {
         `
     },
     hi: {
-        title: "Filtration aur Clarification: Scientific Deep Dive (Hinglish)",
+        title: "Filtration aur Clarification",
         content: `
             <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Filtration aur Clarification ka Introduction</h3>
             <p>Filtration aur clarification raw milk processing mein critical preliminary operations hain jo milk ki microbiological aur physicochemical quality ko fundamentally improve karte hain. Ye dono processes different physical principles par based hain aur complementary functions perform karte hain—filtration removes macroscopic particulates through mechanical sieving, jabki clarification employs centrifugal sedimentation to eliminate microscopic contaminants.</p>
