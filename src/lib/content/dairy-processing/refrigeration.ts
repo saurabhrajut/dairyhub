@@ -1,6 +1,6 @@
 export const refrigerationContent = {
     en: {
-        title: "Refrigeration & Cooling: Cold Chain Management in Dairy",
+        title: "Refrigeration & Cooling",
         content: `
             <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">The Role of Refrigeration in the Dairy Industry</h3>
             <p>Refrigeration represents the single most critical technology enabling modern dairy industry operations and global milk commerce. Milk, with its near-neutral pH (6.6-6.8), high water activity (0.97-0.99), rich nutrient composition (proteins, lactose, minerals, vitamins), and optimal temperature range, constitutes an exceptional growth medium for diverse microbial populations—both beneficial and pathogenic. At ambient tropical temperatures (25-35°C), raw milk bacterial populations can increase from initial 10⁴-10⁵ CFU/mL to spoilage levels (>10⁷ CFU/mL) within 4-6 hours, rendering milk unacceptable for human consumption. Refrigeration (maintaining temperatures 0-4°C throughout the supply chain) fundamentally disrupts this microbial proliferation, extending raw milk shelf life from mere hours to 48-72 hours and processed milk from days to weeks.</p>
@@ -304,7 +304,7 @@ export const refrigerationContent = {
         `
     },
     hi: {
-        title: "Refrigeration & Cooling: Dairy mein Cold Chain Management",
+        title: "Refrigeration & Cooling",
         content: `
             <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Dairy Industry mein Refrigeration ka Role</h3>
             
