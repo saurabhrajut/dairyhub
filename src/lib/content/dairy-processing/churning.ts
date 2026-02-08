@@ -1,6 +1,6 @@
 export const churningContent = {
   en: {
-    title: "Churning: The Science and Technology of Butter Manufacturing",
+    title: "Churning",
     content: `
       <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Comprehensive Introduction to Churning</h3>
       <p>Churning is a sophisticated mechanical and physicochemical process fundamental to dairy technology, representing one of humanity's oldest controlled phase inversions. This process transforms cream—a thermodynamically stable oil-in-water (O/W) emulsion containing 30-45% milk fat—into butter, a water-in-oil (W/O) emulsion with approximately 80-82% fat content. The transformation involves the deliberate destabilization of the Milk Fat Globule Membrane (MFGM), controlled fat crystallization, mechanical disruption through agitation, and precise phase inversion dynamics.</p>
@@ -218,7 +218,7 @@ export const churningContent = {
     `
   },
   hi: {
-    title: "मंथन (Churning): Butter Manufacturing की Science aur Technology",
+    title: "Churning",
     content: `
       <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Churning ka Comprehensive Introduction</h3>
       <p>Churning ek sophisticated mechanical aur physicochemical process hai jo dairy technology mein fundamental hai, aur ye humanity ki sabse purani controlled phase inversions mein se ek hai. Ye process cream—ek thermodynamically stable oil-in-water (O/W) emulsion jisme 30-45% milk fat hota hai—ko butter mein transform karta hai, jo ek water-in-oil (W/O) emulsion hai jisme approximately 80-82% fat content hota hai. Is transformation mein Milk Fat Globule Membrane (MFGM) ka deliberate destabilization, controlled fat crystallization, mechanical disruption through agitation, aur precise phase inversion dynamics shamil hain.</p>
