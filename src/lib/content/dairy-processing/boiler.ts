@@ -1,6 +1,6 @@
 export const boilerContent = {
     en: {
-        title: "Boiler Operations - Deep Scientific & Engineering Insights",
+        title: "Boiler Operations",
         content: `
             <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Introduction to Boilers in Dairy Plants</h3>
             <p>Boilers generate saturated or superheated steam (100-180°C, 2-15 bar) for dairy operations consuming 0.5-1.2 kg steam/kg milk processed. Steam drives pasteurization (72°C/15s HTST, latent heat ΔH_vap=2257 kJ/kg at 100°C), sterilization (121°C/15min retort, 2 bar absolute), CIP (80-85°C alkali/acid cycles), evaporation (MVR systems, 60-70°C vacuum), and spray drying (180°C inlet air). Efficiency impacts: 1% boiler efficiency loss = ₹2-5 lakh/year extra fuel cost for 50,000 LPD plant. Scientific basis: First Law of Thermodynamics—heat input (fuel combustion enthalpy ΔH_c) converts to steam enthalpy (h_fg) minus losses (radiation, blowdown, flue gas).</p>
@@ -79,7 +79,7 @@ export const boilerContent = {
         `
     },
     hi: {
-        title: "Boiler Operations - Complete Scientific Details (Hinglish)",
+        title: "Boiler Operations",
         content: `
             <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Dairy Plant Mein Boiler Ka Introduction</h3>
             <p>Boiler steam generate karta hai (100-180°C temperature pe, 2-15 bar pressure) dairy operations ke liye jo 0.5-1.2 kg steam consume karta hai per kg milk processed. Steam use hota hai pasteurization ke liye (72°C/15 seconds HTST method, latent heat ΔH_vap=2257 kJ/kg at 100°C), sterilization (121°C/15 minutes retort, 2 bar absolute pressure), CIP cleaning (80-85°C pe alkali/acid cycles), evaporation systems (MVR, 60-70°C vacuum mein), aur spray drying (180°C inlet air temperature). Efficiency ka impact: 1% boiler efficiency loss matlab hai ₹2-5 lakh per year extra fuel cost for 50,000 LPD (liters per day) plant ke liye. Scientific basis: First Law of Thermodynamics—fuel combustion enthalpy (ΔH_c) convert hota hai steam enthalpy (h_fg) mein minus losses (radiation, blowdown, flue gas se).</p>
