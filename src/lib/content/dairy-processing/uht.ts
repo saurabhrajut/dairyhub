@@ -1,6 +1,6 @@
 export const uhtContent = {
     en: {
-        title: "UHT Processing: Advanced Thermal Sterilization Technology",
+        title: "UHT Processing",
         content: `
             <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Introduction to UHT Processing</h3>
             <p>Ultra-High Temperature (UHT) processing, also termed Ultra-Heat Treatment or aseptic processing, represents the pinnacle of thermal preservation technology for liquid foods. This sophisticated process involves subjecting milk to extreme temperatures (135-150°C) for ultra-short holding times (2-8 seconds), achieving complete commercial sterility while remarkably preserving nutritional and organoleptic properties. When coupled with aseptic packaging technology, UHT milk achieves unprecedented shelf stability of 6-12 months at ambient temperature (15-25°C) without any chemical preservatives or refrigeration.</p>
@@ -452,7 +452,7 @@ export const uhtContent = {
         `
     },
     hi: {
-        title: "UHT Processing: Advanced Thermal Sterilization Technology (Hinglish)",
+        title: "UHT Processing",
         content: `
             <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">UHT Processing ka Introduction</h3>
             <p>Ultra-High Temperature (UHT) processing, jise Ultra-Heat Treatment ya aseptic processing bhi kaha jata hai, liquid foods ke liye thermal preservation technology ka pinnacle represent karta hai. Yeh sophisticated process involve karta hai milk ko extreme temperatures (135-150°C) par subject karna ultra-short holding times (2-8 seconds) ke liye, achieving complete commercial sterility while remarkably preserve karte hue nutritional aur organoleptic properties. Jab couple kiya jata hai aseptic packaging technology ke saath, UHT milk achieve karta hai unprecedented shelf stability of 6-12 months at ambient temperature (15-25°C) without any chemical preservatives ya refrigeration.</p>
