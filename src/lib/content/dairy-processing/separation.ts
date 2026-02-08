@@ -1,7 +1,7 @@
 
 export const separationContent = {
     en: {
-        title: "Cream Separation: Advanced Scientific Analysis",
+        title: "Cream Separation",
         content: `
             <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Introduction to Cream Separation</h3>
             <p>Cream separation ek precision-engineered centrifugal process hai jo whole milk ko do distinct liquid phases mein partition karta hai: skim milk (fat-depleted milk plasma containing <0.1% fat) aur cream (fat-concentrated emulsion with 30-45% fat). Yeh process dairy industry ka cornerstone hai, enabling fat standardization, cream product manufacturing (butter, whipping cream, ice cream base), aur skim milk powder production ke liye feedstock generation.</p>
@@ -316,7 +316,7 @@ export const separationContent = {
         `
     },
     hi: {
-        title: "Cream Separation: Advanced Scientific Analysis (Hinglish)",
+        title: "Cream Separation",
         content: `
             <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Cream Separation ka Introduction</h3>
             <p>Cream separation ek precision-engineered centrifugal process hai jo whole milk ko do distinct liquid phases mein partition karta hai: skim milk (fat-depleted milk plasma containing <0.1% fat) aur cream (fat-concentrated emulsion with 30-45% fat). Yeh process dairy industry ka cornerstone hai, enabling fat standardization, cream product manufacturing (butter, whipping cream, ice cream base), aur skim milk powder production ke liye feedstock generation.</p>
