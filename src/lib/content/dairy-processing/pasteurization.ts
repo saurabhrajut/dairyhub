@@ -265,70 +265,70 @@ export const pasteurizationContent = {
         `
     },
     hi: {
-        title: "पाश्चुरीकरण",
+        title: "Pasteurization:",
         content: `
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">पाश्चुरीकरण का परिचय</h3>
-            <p>पाश्चुरीकरण डेयरी उद्योग में एक महत्वपूर्ण गर्मी उपचार प्रक्रिया है जिसका उपयोग दूध और अन्य तरल डेयरी उत्पादों की सुरक्षा सुनिश्चित करने और उनकी शेल्फ लाइफ बढ़ाने के लिए किया जाता है। इसका नाम फ्रांसीसी वैज्ञानिक लुई पाश्चर के नाम पर रखा गया है, जिन्होंने पाया कि पेय पदार्थों को गर्म करने से हानिकारक सूक्ष्मजीव मारे जा सकते हैं। इस प्रक्रिया में दूध को एक विशिष्ट तापमान पर एक निश्चित अवधि के लिए गर्म करना और फिर उसे तेजी से ठंडा करना शामिल है।</p>
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Pasteurization ka Introduction</h3>
+            <p>Pasteurization ek critical heat treatment process hai jo use kiya jata hai dairy industry mein to ensure safety aur extend shelf life of milk aur other liquid dairy products. Iska naam hai French scientist Louis Pasteur ke naam par, jinhone discover kiya ki beverages ko heat karne se harmful microorganisms mar jate hain. Is process mein milk ko heat kiya jata hai to a specific temperature for a set period aur then rapidly cool kiya jata hai.</p>
 
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">I. पाश्चुरीकरण के उद्देश्य</h3>
-            <p>पाश्चुरीकरण के लक्ष्य दोहरे हैं और सार्वजनिक स्वास्थ्य और वाणिज्य के लिए अत्यंत महत्वपूर्ण हैं।</p>
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">I. Pasteurization ke Objectives</h3>
+            <p>Pasteurization ke goals twofold hain aur paramount importance rakhte hain for public health aur commerce.</p>
             <ul class="list-disc list-outside pl-5 space-y-2">
-                <li><strong>सार्वजनिक स्वास्थ्य सुरक्षा (प्राथमिक उद्देश्य):</strong> मुख्य लक्ष्य दूध को मानव उपभोग के लिए सुरक्षित बनाना है, जिसके लिए सभी रोगजनक (बीमारी पैदा करने वाले) सूक्ष्मजीवों को नष्ट किया जाता है। कच्चे दूध में <i>माइकोबैक्टीरियम ट्यूबरकुलोसिस</i> (तपेदिक का कारण), <i>ब्रूसेला</i> एसपीपी। (ब्रुसेलोसिस का कारण), <i>साल्मोनेला</i>, <i>लिस्टेरिया मोनोसाइटोजेन्स</i>, और <i>ई. कोलाई</i> के रोगजनक उपभेदों जैसे खतरनाक बैक्टीरिया हो सकते हैं। पाश्चुरीकरण विशेष रूप से इन खतरों को खत्म करने के लिए डिज़ाइन किया गया है।</li>
-                <li><strong>विस्तारित शेल्फ जीवन (द्वितीयक उद्देश्य):</strong> यह प्रक्रिया बड़ी संख्या में खराब करने वाले सूक्ष्मजीवों (जैसे साइकोट्रॉफिक बैक्टीरिया, यीस्ट और मोल्ड्स) को भी नष्ट कर देती है। इसके अलावा, गर्मी देशी दूध एंजाइमों जैसे लाइपेस को निष्क्रिय कर देती है, जो भंडारण के दौरान हाइड्रोलाइटिक बासीपन (एक साबुन जैसा ऑफ-फ्लेवर) का कारण बन सकता है। माइक्रोबियल लोड को कम करके और एंजाइमों को निष्क्रिय करके, पाश्चुरीकरण खराब होने की प्रक्रिया को काफी धीमा कर देता है और दूध की प्रशीतित शेल्फ लाइफ को कुछ घंटों से बढ़ाकर कई दिनों या हफ्तों तक कर देता है।</li>
+                <li><strong>Public Health Safety (Primary Objective):</strong> Main goal hai milk ko make karna safe for human consumption by destroying all pathogenic (disease-causing) microorganisms. Raw milk harbor kar sakta hai dangerous bacteria jaise <i>Mycobacterium tuberculosis</i> (causes tuberculosis), <i>Brucella</i> spp. (causes brucellosis), <i>Salmonella</i> (causes salmonellosis), <i>Listeria monocytogenes</i> (causes listeriosis), aur pathogenic strains of <i>E. coli</i>. Pasteurization specifically designed hai to eliminate these threats.</li>
+                <li><strong>Extended Shelf Life (Secondary Objective):</strong> Process also destroy karta hai large number of spoilage microorganisms (like psychrotrophic bacteria, yeasts, aur molds). Additionally, heat inactivate karta hai native milk enzymes like lipase, jo cause kar sakta hai hydrolytic rancidity (ek soapy off-flavor) during storage. By reducing microbial load aur inactivating enzymes, pasteurization significantly slow down karta hai spoilage process aur extend karta hai refrigerated shelf life of milk from few hours to several days ya weeks.</li>
             </ul>
 
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">II. सामान्य पाश्चुरीकरण के तरीके</h3>
-            <h4 class="font-semibold mt-4 mb-2">1. उच्च तापमान कम समय (HTST) पाश्चुरीकरण</h4>
-            <p>यह अपनी दक्षता और ऊर्जा-बचत क्षमताओं के कारण बाजार के दूध के लिए आधुनिक, बड़े पैमाने पर डेयरी संयंत्रों में सबसे आम तरीका है।</p>
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">II. Common Pasteurization Methods</h3>
+            <h4 class="font-semibold mt-4 mb-2">1. High-Temperature Short-Time (HTST) Pasteurization</h4>
+            <p>Yeh sabse common method hai jo use hota hai modern, large-scale dairy plants mein for market milk due to its efficiency aur energy-saving capabilities.</p>
             <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
-                <li><strong>तापमान:</strong> कम से कम <strong>72°C (161°F)</strong></li>
-                <li><strong>समय:</strong> कम से कम <strong>15 सेकंड</strong> के लिए</li>
+                <li><strong>Temperature:</strong> At least <strong>72°C (161°F)</strong></li>
+                <li><strong>Time:</strong> For at least <strong>15 seconds</strong></li>
             </ul>
-            <p><strong>वैज्ञानिक कारण:</strong> यह समय-तापमान संयोजन दूध में पाए जाने वाले सबसे गर्मी प्रतिरोधी, गैर-बीजाणु बनाने वाले रोगज़नक़, <i>कॉक्सिएला बर्नेटी</i> (क्यू-बुखार का कारण) को मारने के लिए वैज्ञानिक रूप से मान्य किया गया है। इस जीव के विनाश को सुनिश्चित करके, यह गारंटी है कि अन्य सभी कम-प्रतिरोधी रोगजनक भी नष्ट हो गए हैं। गर्मी के संपर्क की छोटी अवधि दूध के पोषण और संवेदी गुणों (स्वाद, रंग) को थर्मल क्षति को कम करती है। यह निरंतर प्रक्रिया एक प्लेट हीट एक्सचेंजर (PHE) में की जाती है।</p>
+            <p><strong>Scientific Reason:</strong> Yeh time-temperature combination scientifically validated hai to be lethal to the most heat-resistant, non-spore-forming pathogen jo commonly found hai milk mein, <i>Coxiella burnetii</i> (Q-fever ka agent). By ensuring destruction of this organism, yeh guaranteed hai ki all other less-resistant pathogens bhi destroy ho gaye. Heat exposure ki short duration minimize karta hai thermal damage to milk's nutritional aur sensory properties (flavor, color). Yeh continuous process carried out hota hai in a Plate Heat Exchanger (PHE).</p>
 
-            <h4 class="font-semibold mt-4 mb-2">2. कम तापमान लंबा समय (LTLT) या बैच पाश्चुरीकरण</h4>
-            <p>यह एक पुरानी विधि है, जो अब मुख्य रूप से छोटे बैचों या कुछ विशेष चीज़ों और आइसक्रीम मिक्स जैसे उत्पादों के लिए उपयोग की जाती है जहाँ बैच प्रक्रिया अधिक उपयुक्त होती है।</p>
+            <h4 class="font-semibold mt-4 mb-2">2. Low-Temperature Long-Time (LTLT) ya Batch Pasteurization</h4>
+            <p>Yeh purani method hai, ab primarily use hoti hai for smaller batches ya for products like some specialty cheeses aur ice cream mixes jahan batch process more suitable hai.</p>
              <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
-                <li><strong>तापमान:</strong> कम से कम <strong>63°C (145°F)</strong></li>
-                <li><strong>समय:</strong> कम से कम <strong>30 मिनट</strong> के लिए</li>
+                <li><strong>Temperature:</strong> At least <strong>63°C (145°F)</strong></li>
+                <li><strong>Time:</strong> For at least <strong>30 minutes</strong></li>
             </ul>
-            <p><strong>वैज्ञानिक कारण:</strong> सिद्धांत एचटीएसटी के समान है - रोगजनकों की थर्मल हत्या प्राप्त करना। कम तापमान को समान घातक प्रभाव प्राप्त करने के लिए बहुत लंबे समय तक रखने की आवश्यकता होती है। यह प्रक्रिया एक जैकेटेड वैट में की जाती है, जहाँ दूध को ठंडा करने से पहले पूरी अवधि के लिए आवश्यक तापमान पर गर्म और रखा जाता है। प्रभावी होते हुए भी, यह एचटीएसटी की तुलना में कम ऊर्जा-कुशल और अधिक समय लेने वाला है।</p>
+            <p><strong>Scientific Reason:</strong> Principle same hai jaise HTST—achieving thermal kill of pathogens. Lower temperature require karta hai much longer holding time to achieve same lethal effect. Yeh process carried out hota hai in a jacketed vat, jahan milk heated hai, held for full duration, aur then cooled. Effective hone ke bawajud, yeh less energy-efficient hai aur more time-consuming than HTST.</p>
             
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">III. एचटीएसटी पाश्चराइज़र: कार्य सिद्धांत और प्रवाह</h3>
-            <p>एक एचटीएसटी पाश्चराइज़र एक परिष्कृत प्रणाली है जिसे निरंतर, कुशल गर्मी उपचार के लिए डिज़ाइन किया गया है। यहाँ इसके संचालन का एक चरण-दर-चरण विवरण दिया गया है:</p>
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">III. HTST Pasteurizer: Working Principle & Flow</h3>
+            <p>Ek HTST pasteurizer ek sophisticated system hai jo designed hai for continuous, efficient heat treatment. Yahan step-by-step breakdown hai iske operation ka:</p>
             <div class="space-y-2 font-mono text-center">
-                <div class="p-3 bg-blue-100 border border-blue-300 rounded">1. बैलेंस टैंक</div><div class="text-2xl">↓</div>
-                <div class="p-3 bg-blue-100 border border-blue-300 rounded">2. फीड पंप</div><div class="text-2xl">↓</div>
-                <div class="p-3 bg-green-100 border border-green-300 rounded">3. पुनर्जनन खंड (हीटिंग)</div><div class="text-2xl">↓</div>
-                <div class="p-3 bg-yellow-100 border border-yellow-300 rounded">4. हीटिंग सेक्शन</div><div class="text-2xl">↓</div>
-                <div class="p-3 bg-red-200 border border-red-400 rounded">5. होल्डिंग ट्यूब (CCP)</div><div class="text-2xl">↓</div>
-                <div class="p-3 bg-orange-100 border border-orange-300 rounded">6. प्रवाह मोड़ वाल्व (FDV)</div><div class="text-2xl">↓</div>
-                <div class="p-3 bg-green-100 border border-green-300 rounded">7. पुनर्जनन खंड (शीतलन)</div><div class="text-2xl">↓</div>
-                <div class="p-3 bg-cyan-100 border border-cyan-300 rounded">8. शीतलन खंड</div><div class="text-2xl">↓</div>
-                <div class="p-3 bg-gray-200 border border-gray-400 rounded">9. भंडारण टैंक</div>
+                <div class="p-3 bg-blue-100 border border-blue-300 rounded">1. Balance Tank</div><div class="text-2xl">↓</div>
+                <div class="p-3 bg-blue-100 border border-blue-300 rounded">2. Feed Pump</div><div class="text-2xl">↓</div>
+                <div class="p-3 bg-green-100 border border-green-300 rounded">3. Regeneration Section (Heating)</div><div class="text-2xl">↓</div>
+                <div class="p-3 bg-yellow-100 border border-yellow-300 rounded">4. Heating Section</div><div class="text-2xl">↓</div>
+                <div class="p-3 bg-red-200 border border-red-400 rounded">5. Holding Tube (CCP)</div><div class="text-2xl">↓</div>
+                <div class="p-3 bg-orange-100 border border-orange-300 rounded">6. Flow Diversion Valve (FDV)</div><div class="text-2xl">↓</div>
+                <div class="p-3 bg-green-100 border border-green-300 rounded">7. Regeneration Section (Cooling)</div><div class="text-2xl">↓</div>
+                <div class="p-3 bg-cyan-100 border border-cyan-300 rounded">8. Cooling Section</div><div class="text-2xl">↓</div>
+                <div class="p-3 bg-gray-200 border border-gray-400 rounded">9. Storage Tank</div>
             </div>
 
             <ol class="list-decimal list-outside pl-5 space-y-4 mt-6">
-                <li><strong>बैलेंस टैंक:</strong> प्रक्रिया यहाँ से शुरू होती है। यह एक छोटा टैंक है जो कच्चा दूध प्राप्त करता है और फीड पंप के लिए एक निरंतर दबाव का सिर बनाए रखता है। <strong>वैज्ञानिक कारण:</strong> यह पाश्चराइज़र में दूध का एक सुसंगत, निर्बाध प्रवाह सुनिश्चित करता है, जो होल्डिंग ट्यूब के माध्यम से सही प्रवाह दर बनाए रखने के लिए महत्वपूर्ण है।</li>
-                <li><strong>फीड पंप:</strong> एक केन्द्रापसारक पंप जो बैलेंस टैंक से दूध खींचता है और इसे सिस्टम में आगे धकेलता है।</li>
-                <li><strong>पुनर्जनन खंड:</strong> यह पाश्चराइज़र का सबसे ऊर्जा-कुशल हिस्सा है। यहाँ, आने वाला ठंडा कच्चा दूध प्लेटों के एक तरफ बहता है, जबकि गर्म, पहले से पाश्चुरीकृत दूध विपरीत दिशा में दूसरी तरफ बहता है। <strong>वैज्ञानिक कारण:</strong> गर्मी गर्म दूध से ठंडे दूध में स्थानांतरित होती है। यह कच्चे दूध को मुफ्त में पहले से गरम करता है (जैसे, 4°C से ~57°C तक), हीटिंग सेक्शन में आवश्यक ऊर्जा को कम करता है, और साथ ही गर्म दूध को पहले से ठंडा करता है, अंतिम शीतलन के लिए आवश्यक ऊर्जा को कम करता है। आधुनिक पुनर्योजक 95% तक गर्मी ऊर्जा की वसूली कर सकते हैं।</li>
-                <li><strong>हीटिंग सेक्शन:</strong> पहले से गरम किया गया दूध फिर हीटिंग सेक्शन में बहता है, जहाँ इसे गर्म पानी को हीटिंग माध्यम के रूप में उपयोग करके पूर्ण पाश्चुरीकरण तापमान (जैसे, 72°C) तक गर्म किया जाता है।</li>
-                <li><strong>होल्डिंग ट्यूब:</strong> गर्म करने के बाद, दूध एक विशिष्ट लंबाई और व्यास के एक लंबे पाइप के माध्यम से बहता है, जिसे होल्डिंग ट्यूब के रूप में जाना जाता है। <strong>वैज्ञानिक कारण:</strong> यह ट्यूब ठीक से इंजीनियर की जाती है ताकि दूध को एक छोर से दूसरे छोर तक यात्रा करने में कम से कम 15 सेकंड (न्यूनतम होल्डिंग समय) लगे। फीड पंप द्वारा नियंत्रित प्रवाह दर, और ट्यूब के आयाम यह सुनिश्चित करने के लिए महत्वपूर्ण हैं कि यह सीसीपी पूरा हो।</li>
-                <li><strong>प्रवाह मोड़ वाल्व (FDV):</strong> होल्डिंग ट्यूब के अंत में स्थित, FDV एक स्वचालित, तीन-तरफा वाल्व है जो एक सुरक्षा उपकरण के रूप में कार्य करता है। एक तापमान सेंसर लगातार दूध के तापमान की निगरानी करता है। 
+                <li><strong>Balance Tank:</strong> Process yahan se begin hota hai. Yeh ek small tank hai jo receive karta hai raw milk aur maintain karta hai constant head of pressure for feed pump. <strong>Scientific Reason:</strong> Yeh ensure karta hai consistent, uninterrupted flow of milk into pasteurizer, jo crucial hai for maintaining correct flow rate through holding tube.</li>
+                <li><strong>Feed Pump:</strong> Ek centrifugal pump jo draw karta hai milk from balance tank aur push forward karta hai into system.</li>
+                <li><strong>Regeneration Section:</strong> Yeh sabse energy-efficient part hai pasteurizer ka. Yahan, cold incoming raw milk flow karta hai one side of plates par, while hot, already pasteurized milk flow karta hai other side par in opposite direction. <strong>Scientific Reason:</strong> Heat transfer hota hai from hot milk to cold milk. Yeh pre-heat karta hai raw milk (e.g., 4°C se ~57°C tak) for free, reducing energy needed in heating section, aur simultaneously pre-cool karta hai hot milk, reducing energy needed for final cooling. Modern regenerators recover kar sakte hain up to 95% of heat energy.</li>
+                <li><strong>Heating Section:</strong> Pre-heated milk then flow karta hai to heating section, jahan ise heat kiya jata hai to full pasteurization temperature (e.g., 72°C) using hot water as heating medium.</li>
+                <li><strong>Holding Tube:</strong> Heating ke baad, milk flow karta hai through a long pipe of specific length aur diameter, known as holding tube. <strong>Scientific Reason:</strong> Yeh tube precisely engineered hai so that milk takes at least 15 seconds (minimum holding time) to travel from one end to other. Flow rate, controlled by feed pump, aur tube's dimensions critical hain for ensuring yeh CCP meet ho.</li>
+                <li><strong>Flow Diversion Valve (FDV):</strong> Located at end of holding tube, FDV ek automated, three-way valve hai jo act karta hai as safety device. Ek temperature sensor continuously monitor karta hai milk temperature. 
                     <ul class='list-disc list-outside pl-5 mt-2 space-y-1'>
-                        <li>यदि तापमान निर्धारित बिंदु (जैसे, 72°C) पर या उससे ऊपर है, तो वाल्व ठीक से पाश्चुरीकृत दूध को पुनर्जनन खंड में आगे बहने की अनुमति देता है।</li>
-                        <li>यदि किसी भी कारण से तापमान निर्धारित बिंदु से नीचे गिर जाता है, तो वाल्व स्वचालित रूप से कम-संसाधित दूध को पुनर्संसाधन के लिए बैलेंस टैंक में वापस मोड़ देता है। यह सुनिश्चित करता है कि कोई भी कम-पाश्चुरीकृत दूध अंतिम उत्पाद तक कभी नहीं पहुंचता है।</li>
+                        <li>Agar temperature at ya above set point hai (e.g., 72°C), valve allow karta hai properly pasteurized milk ko flow forward to regeneration section.</li>
+                        <li>Agar temperature drop karta hai below set point for any reason, valve automatically divert karta hai under-processed milk back to balance tank for reprocessing. Yeh ensure karta hai ki no under-pasteurized milk ever reaches final product.</li>
                     </ul>
                 </li>
-                <li><strong>पुनर्जनन खंड (शीतलन):</strong> ठीक से पाश्चुरीकृत गर्म दूध पुनर्जनन खंड के माध्यम से वापस बहता है, अपनी गर्मी को आने वाले कच्चे दूध को देता है और इस प्रक्रिया में पहले से ठंडा हो जाता है (जैसे, 72°C से ~20°C तक)।</li>
-                <li><strong>शीतलन खंड:</strong> पहले से ठंडा किया गया दूध फिर अंतिम शीतलन खंड में प्रवेश करता है, जहाँ इसे ठंडे पानी या ग्लाइकोल से 5°C से कम के अपने अंतिम भंडारण तापमान तक ठंडा किया जाता है।</li>
-                <li><strong>भंडारण टैंक:</strong> पूरी तरह से संसाधित, ठंडा दूध फिर एक बाँझ भंडारण टैंक में भेजा जाता है, जो पैकेजिंग के लिए तैयार है।</li>
+                <li><strong>Regeneration Section (Cooling):</strong> Properly pasteurized hot milk flow back karta hai through regeneration section, giving up its heat to incoming raw milk aur getting pre-cooled in process (e.g., 72°C se down to ~20°C).</li>
+                <li><strong>Cooling Section:</strong> Pre-cooled milk then enter karta hai final cooling section, jahan ise chilled kiya jata hai with cold water ya glycol to its final storage temperature of less than 5°C.</li>
+                <li><strong>Storage Tank:</strong> Fully processed, chilled milk then sent hota hai to sterile storage tank, ready for packaging.</li>
             </ol>
             
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">IV. पाश्चुरीकरण का सत्यापन: क्षारीय फॉस्फेट (ALP) परीक्षण</h3>
-            <p>पाश्चुरीकरण सफल था या नहीं, यह सुनिश्चित करने के लिए एक विश्वसनीय सत्यापन परीक्षण की आवश्यकता है। क्षारीय फॉस्फेट (ALP) परीक्षण इसके लिए सार्वभौमिक रूप से स्वीकृत विधि है।</p>
-            <p><strong>वैज्ञानिक सिद्धांत:</strong> ALP कच्चे दूध में पाया जाने वाला एक प्राकृतिक एंजाइम है। संयोग से, इसकी गर्मी प्रतिरोधकता दूध में पाए जाने वाले सबसे गर्मी प्रतिरोधी सामान्य रोगजनक जीवाणु, <i>कॉक्सिएला बर्नेटी</i> (जो क्यू-बुखार का कारण बनता है) से थोड़ी अधिक है। इसका मतलब है कि ALP को नष्ट करने के लिए पर्याप्त समय-तापमान संयोजन निश्चित रूप से सभी सामान्य रोगजनकों को नष्ट करने के लिए पर्याप्त होगा।</p>
-            <p><strong>परीक्षण:</strong> यह परीक्षण एक दूध के नमूने को एक फॉस्फेट सब्सट्रेट प्रदान करके काम करता है। यदि सक्रिय ALP मौजूद है (जो अनुचित पाश्चुरीकरण या कच्चे दूध के संदूषण का संकेत देता है), तो यह सब्सट्रेट से फॉस्फेट समूह को तोड़ देगा, जो तब एक रंग परिवर्तन उत्पन्न करता है। रंग परिवर्तन की अनुपस्थिति (एक नकारात्मक परिणाम) पुष्टि करती है कि पाश्चुरीकरण सफल था। एक सकारात्मक ALP परीक्षण का मतलब है कि उत्पाद असुरक्षित है और इसे जारी नहीं किया जाना चाहिए।</p>
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">IV. Pasteurization ka Verification: Alkaline Phosphatase (ALP) Test</h3>
+            <p>To ensure pasteurization successful tha, ek reliable verification test needed hai. Alkaline Phosphatase (ALP) test universally accepted method hai for this.</p>
+            <p><strong>Scientific Principle:</strong> ALP ek natural enzyme hai jo found hota hai raw milk mein. Coincidentally, iska heat resistance slightly greater hai than that of most heat-resistant common pathogenic bacterium jo found hota hai milk mein, <i>Coxiella burnetii</i> (organism jo cause karta hai Q-fever). Iska matlab hai ki time-temperature combination jo sufficient hai to destroy ALP will have certainly been sufficient to destroy all common pathogens.</p>
+            <p><strong>The Test:</strong> Test work karta hai by providing ek phosphate substrate to milk sample. Agar active ALP present hai (indicating improper pasteurization ya raw milk contamination), yeh cleave karega phosphate group from substrate, jo then produce karta hai color change. Color change ki absence (negative result) confirm karta hai ki pasteurization successful tha. Positive ALP test means product unsafe hai aur must not be released.</p>
         `,
         simulation: `
             <!DOCTYPE html>
@@ -361,7 +361,7 @@ export const pasteurizationContent = {
                     .legend { position: absolute; top: 20px; left: 20px; background: rgba(0,0,0,0.7); padding: 10px; border-radius: 5px; font-size: 11px; color: #ddd; z-index: 10; }
                     .legend-item { display: flex; align-items: center; margin-bottom: 4px; }
                     .color-box { width: 10px; height: 10px; margin-right: 8px; border: 1px solid #777; }
-                    @media (max-width: 768px) {
+                    @media (max-width: 768px) { 
                         #ui-container { flex-wrap: wrap; padding: 5px; justify-content: center; height: auto; max-height: 200px; }
                         .panel-section { flex-grow: 1; flex-basis: 45%; padding: 5px; margin-bottom: 5px; border-right: none; min-width: 140px; }
                         h2 { font-size: 11px; margin-bottom: 5px;}
@@ -411,11 +411,9 @@ export const pasteurizationContent = {
                     <div class="panel-section">
                         <h2>Pasteurizer</h2>
                         <div class="digital-display" id="temp-display">25.0°C</div>
-                        <div style="display:flex; flex-direction:column; align-items:center;">
-                            <label style="font-size:11px; color:#aaa;">Steam Valve</label>
-                            <input type="range" min="0" max="100" value="0" oninput="updateSteam(this.value)">
-                            <span id="steam-val-text" style="font-size:12px;">0%</span>
-                        </div>
+                        <label style="font-size:11px; color:#aaa;">Steam Valve</label>
+                        <input type="range" min="0" max="100" value="0" oninput="updateSteam(this.value)">
+                        <span id="steam-val-text" style="font-size:12px;">0%</span>
                     </div>
                     <div class="panel-section">
                         <h2>FDV Logic</h2>
@@ -487,11 +485,38 @@ export const pasteurizationContent = {
                     function initPaths(){pathFeed=new THREE.CatmullRomCurve3([v(-25,1,0),v(-15,1,0),v(-15,.5,0),v(-10,.5,0)]),pathRegen=new THREE.CatmullRomCurve3([v(-10,.5,0),v(-5,.5,0),v(-5,2.5,0)]),pathSepMain=new THREE.CatmullRomCurve3([v(-5,2.5,0),v(-1,2.5,0),v(-1,2.5,2)]),pathSepCream=new THREE.CatmullRomCurve3([v(-1,2.5,2),v(-1,1,4),v(20,1,5),v(20,5,5)]),pathHomo=new THREE.CatmullRomCurve3([v(-1,2.5,2),v(3,2.5,0)]),pathHeat=new THREE.CatmullRomCurve3([v(3,2.5,0),v(7,2.5,0),v(7,4,-2)]),pathHold=new THREE.CatmullRomCurve3([v(7,4,-2),v(8.5,4,-2),v(10,4,-2)]),pathSafe=new THREE.CatmullRomCurve3([v(10,4,-2),v(10,2.5,0),v(20,0.5,-5),v(20,5,-5)]),pathDivert=new THREE.CatmullRomCurve3([v(10,4,-2),v(10,6,-2),v(-15,6,-2),v(-15,4,0)])}
                     function v(t,e,o){return new THREE.Vector3(t,e,o)}
                     function animate(){requestAnimationFrame(animate),controls.update(),updateProcessLogic(),updateParticles(),systemOn&&(pumpMesh.children[1].rotation.x+=.5),renderer.render(scene,camera)}
-                    function updateProcessLogic(){let t=25;systemOn?(t=25+steamVal*0.7,currentTemp<t?currentTemp+=.2:currentTemp>t&&(currentTemp-=.1)):currentTemp>25&&(currentTemp-=.1);elTemp.innerText=currentTemp.toFixed(1)+"°C";let e="System Off";if(systemOn){e=\`Pump ON.\\nSeparator: \${sepOn?'Active':'Bypass'}\\nHomo: \${homoOn?'Active':'Bypass'}\\nMode: \${fdvState}\`}elStatus.innerText=e;if(systemOn&&currentTemp>=72){fdvState="FORWARD";setLight(elLightFwd,!0);setLight(elLightDiv,!1);fdvMesh.material.color.setHex(3066993)}else{fdvState="DIVERT";setLight(elLightFwd,!1);setLight(elLightDiv,!0);fdvMesh.material.color.setHex(15158332)}}
+                    function updateProcessLogic() {
+                        let target = 25.0;
+                        if (systemOn) {
+                            target = 25.0 + (steamVal * 0.7);
+                            if (currentTemp < target) currentTemp += 0.2;
+                            if (currentTemp > target) currentTemp -= 0.1;
+                        } else {
+                            if (currentTemp > 25) currentTemp -= 0.1;
+                        }
+                        elTemp.innerText = currentTemp.toFixed(1) + "°C";
+
+                        if (systemOn && currentTemp >= targetTempSet) {
+                            fdvState = 'FORWARD';
+                            setLight(elLightFwd, true);
+                            setLight(elLightDiv, false);
+                            fdvMesh.material.color.setHex(0x2ecc71);
+                        } else {
+                            fdvState = 'DIVERT';
+                            setLight(elLightFwd, false);
+                            setLight(elLightDiv, true);
+                            fdvMesh.material.color.setHex(0xe74c3c);
+                        }
+                        let status = "System Off";
+                        if (systemOn) {
+                           status = \`Pump ON.\\nSeparator: \${sepOn ? 'Active' : 'Bypass'}\\nHomo: \${homoOn ? 'Active' : 'Bypass'}\\nMode: \${fdvState}\`;
+                        }
+                        elStatus.innerText = status;
+                    }
                     function updateParticles(){if(!systemOn)return;Math.random()>.8&&spawnParticle();for(let t=particles.length-1;t>=0;t--){let e=particles[t];e.progress+=.01,e.path&&e.mesh.position.copy(e.path.getPoint(e.progress)),e.progress>=1&&(e.progress=0,handlePathSwitch(e))}}
-                    function spawnParticle(){const t=new THREE.SphereGeometry(.1,8,8),e=new THREE.MeshBasicMaterial({color:16777215}),o=new THREE.Mesh(t,e);scene.add(o),particles.push({mesh:o,path:pathFeed,progress:0,stage:"feed"})}
-                    function handlePathSwitch(t){"feed"===t.stage?(t.path=pathRegen,t.stage="regen"):"regen"===t.stage?(t.path=pathSepMain,t.stage="sep_in"):"sep_in"===t.stage?sepOn?Math.random()>.8?(t.path=pathSepCream,t.stage="cream_out",t.mesh.material.color.setHex(15844367)):(t.path=pathHomo,t.stage="homo_in"):(t.path=pathHomo,t.stage="homo_in"):"homo_in"===t.stage?(t.path=pathHeat,t.stage="heating"):"heating"===t.stage?(t.path=pathHold,t.stage="holding"):"holding"===t.stage?"FORWARD"===fdvState?(t.path=pathSafe,t.stage="finished",t.mesh.material.color.setHex(3066993)):(t.path=pathDivert,t.stage="divert",t.mesh.material.color.setHex(15158332)):"divert"===t.stage?(t.path=pathRegen,t.stage="regen",t.mesh.material.color.setHex(16777215)):(scene.remove(t.mesh),particles.splice(particles.indexOf(t),1))}
-                    function toggleSystem(){systemOn=!systemOn,systemOn?(btnPower.classList.add('active'),btnPower.innerText="STOP PLANT",elPumpLight.classList.add("on"),elPumpLight.classList.remove("off"),elTooltip.innerText="Pump Running. Milk flowing."):(btnPower.classList.remove('active'),btnPower.innerText="START PLANT",elPumpLight.classList.remove("on"),elPumpLight.classList.add("off"),elTooltip.innerText="System Stopped.")}
+                    function spawnParticle(){const t=new THREE.SphereGeometry(.1,8,8),e=new THREE.MeshBasicMaterial({color:0xffffff}),o=new THREE.Mesh(t,e);scene.add(o),particles.push({mesh:o,path:pathFeed,progress:0,stage:"feed"})}
+                    function handlePathSwitch(t){"feed"===t.stage?(t.path=pathRegen,t.stage="regen"):"regen"===t.stage?(t.path=pathSepMain,t.stage="sep_in"):"sep_in"===t.stage?sepOn?Math.random()>.8?(t.path=pathSepCream,t.stage="cream_out",t.mesh.material.color.setHex(0xf1c40f)):(t.path=pathHomo,t.stage="homo_in"):(t.path=pathHomo,t.stage="homo_in"):"homo_in"===t.stage?(t.path=pathHeat,t.stage="heating"):"heating"===t.stage?(t.path=pathHold,t.stage="holding"):"holding"===t.stage?"FORWARD"===fdvState?(t.path=pathSafe,t.stage="finished",t.mesh.material.color.setHex(0x2ecc71)):(t.path=pathDivert,t.stage="divert",t.mesh.material.color.setHex(0xe74c3c)):"divert"===t.stage?(t.path=pathRegen,t.stage="regen",t.mesh.material.color.setHex(0xffffff)):(scene.remove(t.mesh),particles.splice(particles.indexOf(t),1))}
+                    function toggleSystem(){systemOn=!systemOn,systemOn?(btnPower.classList.add('active'),btnPower.innerText="STOP PLANT",elPumpLight.classList.add("on"),elPumpLight.classList.remove("off")):(btnPower.classList.remove('active'),btnPower.innerText="START PLANT",elPumpLight.classList.remove("on"),elPumpLight.classList.add("off"))}
                     function toggleSep(){sepOn=!sepOn;btnSep.innerText=sepOn?"Separator: ON":"Separator: OFF";btnSep.classList.toggle('active')}
                     function toggleHomo(){homoOn=!homoOn;btnHomo.innerText=homoOn?"Homogenizer: ON":"Homogenizer: OFF";btnHomo.classList.toggle('active')}
                     window.updateSteam=function(t){steamVal=parseInt(t),document.getElementById("steam-val-text").innerText=t+"%"}
@@ -503,6 +528,5 @@ export const pasteurizationContent = {
             </html>
         `
     }
-}
-
+};
     
