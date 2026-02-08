@@ -1,87 +1,160 @@
-
 export const boilerContent = {
     en: {
-        title: "Boiler Operations",
+        title: "Boiler Operations - Deep Scientific & Engineering Insights",
         content: `
             <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Introduction to Boilers in Dairy Plants</h3>
-            <p>Boilers are the heart of a dairy plant's utility section, providing the essential thermal energy in the form of steam. This steam is used for a wide range of processes, including pasteurization, sterilization, equipment cleaning (CIP), and heating various media. Efficient and safe boiler operation is critical for maintaining production schedules, ensuring product safety, and controlling operational costs.</p>
+            <p>Boilers generate saturated or superheated steam (100-180°C, 2-15 bar) for dairy operations consuming 0.5-1.2 kg steam/kg milk processed. Steam drives pasteurization (72°C/15s HTST, latent heat ΔH_vap=2257 kJ/kg at 100°C), sterilization (121°C/15min retort, 2 bar absolute), CIP (80-85°C alkali/acid cycles), evaporation (MVR systems, 60-70°C vacuum), and spray drying (180°C inlet air). Efficiency impacts: 1% boiler efficiency loss = ₹2-5 lakh/year extra fuel cost for 50,000 LPD plant. Scientific basis: First Law of Thermodynamics—heat input (fuel combustion enthalpy ΔH_c) converts to steam enthalpy (h_fg) minus losses (radiation, blowdown, flue gas).</p>
             
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Types of Boilers Used in the Dairy Industry</h3>
-            <p>While various boiler types exist, the most common ones found in dairy plants are Fire-tube and Water-tube boilers.</p>
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Types of Boilers: Design & Dairy Applications</h3>
+            
+            <h4 class="font-semibold mt-4 mb-2">1. Fire-Tube Boilers (Shell Boilers)</h4>
+            <p><strong>Design:</strong> Hot gases (900-1200°C) flow through 50-150 tubes (50-100mm dia) submerged in water shell (2-5m³ volume). Common types: Lancashire (2-pass), Cochran (vertical), Scotch marine (3-pass with corrugated furnace). Pressure: 6-10 bar, capacity: 0.5-12 TPH (Tonnes Per Hour) steam.  
+            <strong>Dairy Use:</strong> Small plants (<20,000 LPD), low-pressure needs (pasteurization only). Advantages: compact (footprint 3x2m), quick startup (30-45 min cold start). Limitations: tube-side fouling from combustion products (soot, particulates), slower response to load changes.  
+            <strong>Heat Transfer Science:</strong> Convective heat transfer coefficient h_gas=50-100 W/m²K (turbulent flow Re>10,000), h_water=3000-5000 W/m²K (nucleate boiling). Overall U=30-50 W/m²K limited by gas-side resistance and scale (k_scale=1-2 W/mK vs. steel k=50 W/mK). Fouling factor R_f=0.0002-0.0005 m²K/W reduces efficiency 5-10% annually without cleaning.</p>
+
+            <h4 class="font-semibold mt-4 mb-2">2. Water-Tube Boilers</h4>
+            <p><strong>Design:</strong> Water/steam flows in tubes (25-75mm dia, 4-10m length, arranged in membrane walls), hot gases (1000-1400°C) outside. Types: D-type (natural circulation, 10-50 TPH), O-type (forced circulation, 50-200 TPH), Bi-drum vs. mono-drum. Pressure: 10-100 bar (dairy typically 10-20 bar for superheated steam 150-180°C).  
+            <strong>Dairy Use:</strong> Large plants (>100,000 LPD), multi-stage evaporation, spray dryers (10-20 TPH steam demand). Advantages: rapid steam generation (5-10 min response), high efficiency (85-92% thermal), handles pressure fluctuations.  
+            <strong>Thermodynamic Advantage:</strong> Higher surface-to-volume ratio (tubes vs. shell) → faster heat transfer. Natural circulation driven by density difference Δρ=ρ_water-ρ_steam≈600 kg/m³ at 10 bar, creating driving head H=ρgΔh (5-10m water column). Forced circulation pumps (200-500 LPM) prevent flow stagnation in horizontal tubes, avoiding departure from nucleate boiling (DNB crisis at critical heat flux q_c=1-3 MW/m²).</p>
+
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Core Operating Principles: Thermochemistry & Physics</h3>
+
+            <h4 class="font-semibold mt-4 mb-2">1. Feedwater Treatment (Critical PRP - Chemistry Deep Dive)</h4>
+            <p><strong>Problem:</strong> Raw water contains Ca²⁺, Mg²⁺ (hardness 100-500 ppm as CaCO₃), O₂ (8-10 ppm), CO₂ (20-50 ppm), SiO₂ (5-30 ppm), suspended solids (10-100 ppm).  
+            <strong>Scale Formation Science:</strong> At boiler temp (150-180°C), solubility of CaCO₃ and MgSiO₃ decreases (inverse solubility). Reaction: Ca(HCO₃)₂ → CaCO₃↓ + H₂O + CO₂. Scale thickness 1mm reduces heat transfer by 10-15%, tube metal temp rises 50-100°C above normal (steel softens >400°C, creep failure). Thermal conductivity: water 0.6 W/mK, scale 1-2, steel 50 → scale is 25-50x worse insulator.</p>
+            
+            <p><strong>Treatment Methods:</strong></p>
             <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
-                <li><strong>Fire-Tube Boilers:</strong> In these boilers, hot gases from combustion pass through tubes that are submerged in water within a sealed vessel. The heat from the gases is transferred through the tube walls to the water, generating steam. They are generally used for lower pressure and smaller capacity requirements, making them suitable for small to medium-sized dairy plants.</li>
-                <li><strong>Water-Tube Boilers:</strong> In this design, water flows through the tubes, while the hot combustion gases flow around them. These boilers can handle much higher pressures and generate larger quantities of steam, making them suitable for large-scale industrial dairy operations.</li>
+                <li><strong>Ion Exchange Softening:</strong> Resin (sulfonated polystyrene, capacity 20-40 kg CaCO₃/m³ resin) exchanges: 2R-Na + Ca²⁺ → R₂-Ca + 2Na⁺. Regeneration: R₂-Ca + 2NaCl → 2R-Na + CaCl₂ (brine 8-12% NaCl, 300-500 L/m³ resin). Treated water hardness <5 ppm. pH control: 8.5-9.5 (slightly alkaline) using NaOH or Na₃PO₄ to prevent acidic corrosion.</li>
+                <li><strong>Deaeration (O₂ Removal):</strong> Oxygen causes pitting corrosion: Fe + O₂ + 2H₂O → 2Fe(OH)₂ → Fe₂O₃ (rust). Deaerator (150°C, 3-4 bar) exploits Henry's Law: dissolved gas solubility ∝ partial pressure. Spraying water in steam atmosphere (P_O₂→0) reduces O₂ to <0.007 ppm (7 ppb). Chemical scavenging: hydrazine (N₂H₄, 50-100 ppb) or sodium sulfite (Na₂SO₃, 10-20 ppm excess) reacts: N₂H₄ + O₂ → N₂ + 2H₂O. Residual O₂ <0.02 ppm mandatory for high-pressure boilers.</li>
+                <li><strong>pH & Alkalinity Control:</strong> Target pH 10.5-11.5 (boiler water) using trisodium phosphate Na₃PO₄ (30-50 ppm PO₄³⁻). Forms soft sludge: 3Ca²⁺ + 2PO₄³⁻ → Ca₃(PO₄)₂ (removed by blowdown, not hard scale). Alkalinity (P-alkalinity 200-400 ppm, M-alkalinity 400-700 ppm as CaCO₃) buffers pH.</li>
             </ul>
 
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Key Principles of Boiler Operation</h3>
-            <ol class="list-decimal list-outside pl-5 space-y-4">
-                <li><strong>Feedwater Treatment (Critical PRP):</strong> This is a crucial <strong>Prerequisite Program</strong>. The water fed to the boiler (feedwater) must be treated to remove impurities.
-                    <p class="mt-2"><strong>Scientific Reason:</strong> Raw water contains dissolved minerals like calcium and magnesium salts, which cause 'hardness'. If untreated, these minerals will precipitate inside the boiler tubes at high temperatures, forming a hard layer called 'scale'. Scale acts as an insulator, drastically reducing heat transfer efficiency and requiring more fuel to produce the same amount of steam. In severe cases, it can cause tubes to overheat and rupture, leading to a catastrophic failure. The treatment process typically involves:</p>
-                    <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
-                        <li><strong>Softening:</strong> Using an ion-exchange process to replace calcium and magnesium ions with sodium ions.</li>
-                        <li><strong>Deaeration:</strong> Removing dissolved gases, especially oxygen and carbon dioxide, which are highly corrosive to boiler metal at high temperatures.</li>
-                    </ul>
-                </li>
-                <li><strong>Combustion and Heat Transfer:</strong>
-                    <p>The boiler burns fuel (like furnace oil, natural gas, or biomass) to generate hot combustion gases. The efficiency of combustion—ensuring the right air-to-fuel ratio—is vital for maximizing heat output and minimizing fuel consumption. This heat is then transferred to the water to produce steam.</p>
-                </li>
-                <li><strong>Steam Generation and Distribution:</strong>
-                    <p>As water is heated, it turns into steam, which builds up pressure inside the boiler. This high-pressure steam is then distributed throughout the plant via a network of insulated pipes to various points of use (pasteurizers, sterilizers, CIP systems, etc.). Steam traps are used in the system to remove condensed water (condensate) from the steam lines, ensuring that only dry, high-quality steam is delivered to the process equipment.</p>
-                </li>
-                <li><strong>Blowdown (oPRP):</strong>
-                    <p>As steam is generated, the dissolved solids left behind in the boiler water become more concentrated. To prevent this concentration from becoming too high (which can lead to foaming, scaling, and corrosion), a small amount of boiler water is periodically or continuously drained. This process, known as 'blowdown', is an important <strong>Operational Prerequisite Program (oPRP)</strong> to maintain water quality inside the boiler.</p>
-                </li>
-                 <li><strong>Safety and Maintenance (CCP):</strong>
-                    <p>Boilers are high-pressure vessels and must be operated with strict safety protocols. Regular maintenance and inspection are <strong>Critical Control Points</strong>. Key safety devices include:</p>
-                     <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
-                        <li><strong>Safety Valves:</strong> To automatically release excess pressure.</li>
-                        <li><strong>Pressure Gauges:</strong> To monitor the internal pressure.</li>
-                        <li><strong>Water Level Indicators:</strong> To ensure the water level is always within the safe operating range. A low water level is extremely dangerous and can lead to an explosion.</li>
-                    </ul>
-                </li>
-            </ol>
+            <h4 class="font-semibold mt-4 mb-2">2. Combustion Science & Efficiency</h4>
+            <p><strong>Fuels in Dairy:</strong> Furnace Oil (FO, C₁₄H₃₀ avg, ΔH_c=42-43 MJ/kg), Natural Gas (CH₄, 50 MJ/kg), Rice Husk (biomass, 13-15 MJ/kg, 15% moisture), Coal (20-25 MJ/kg). Stoichiometric air: FO needs 14.5 kg air/kg fuel, NG 17 kg/kg. Excess air: 15-25% (λ=1.15-1.25) ensures complete combustion but cools flue gas (each 1% excess air = 0.6% efficiency loss above 25%).  
+            <strong>Combustion Equation (FO):</strong> C₁₄H₃₀ + 21.75O₂ → 14CO₂ + 15H₂O + heat (42 MJ/kg).  
+            <strong>Flue Gas Analysis:</strong> Ideal: CO₂ 12-14%, O₂ 3-5%, CO <100 ppm (incomplete combustion marker). Temperature: 200-250°C exit (lower = more heat recovered, but avoid acid dew point 120-140°C for sulfuric acid H₂SO₄ from fuel sulfur).  
+            <strong>Efficiency Calculation:</strong> η_boiler = (steam enthalpy output / fuel energy input) × 100. Direct method: η = [(m_steam × (h_steam - h_feedwater)) / (m_fuel × ΔH_c)] × 100. Indirect (heat loss) method: η = 100 - (L_flue + L_radiation + L_blowdown + L_unburnt), where L_flue = 10-18% (major loss), L_radiation = 1-3%, L_blowdown = 1-2%. Target: >85% for FO, >80% for biomass.</p>
+
+            <h4 class="font-semibold mt-4 mb-2">3. Steam Generation Thermodynamics</h4>
+            <p><strong>Phase Change Physics:</strong> Feedwater (30-80°C) → heated to saturation (100-184°C at 1-10 bar) → evaporation at constant T (latent heat absorption h_fg=2257-2015 kJ/kg) → saturated steam → optional superheat (+50-100°C, sensible heat c_p=2.1 kJ/kgK).  
+            <strong>Pressure-Temperature Relation (Clausius-Clapeyron):</strong> At 1 bar: T_sat=100°C; 10 bar: 180°C; 15 bar: 198°C. Each bar increase raises T_sat ~18°C (non-linear). Dairy uses: pasteurization 72°C (0.3-0.5 bar), sterilization 121°C (2 bar), evaporation 60-70°C (0.2 bar vacuum).  
+            <strong>Steam Quality:</strong> Dryness fraction x = (mass of dry steam / total mass). Target x>0.97 (3% moisture max). Wet steam (x<0.95) reduces heat transfer (water film on heat exchanger), causes water hammer (condensate slug impacts pipe bends, pressure spike 10-50 bar instantaneous, pipe rupture risk). Solution: steam separators, superheating.</p>
+
+            <h4 class="font-semibold mt-4 mb-2">4. Blowdown: Water Chemistry Control (oPRP)</h4>
+            <p><strong>Scientific Reason:</strong> As steam evaporates, dissolved solids (TDS: chlorides, sulfates, silica, phosphates) concentrate. Concentration factor CF = TDS_boiler / TDS_feedwater. If feedwater TDS=100 ppm, boiler TDS=3000 ppm → CF=30. High TDS causes: (1) foaming (bubbles carry water droplets into steam, contaminating process), (2) priming (violent boiling surges), (3) carryover (salts deposit on turbine blades or heat exchangers, 10-50 ppm steam TDS max).  
+            <strong>Blowdown Types:</strong>  
+            - <strong>Continuous:</strong> 1-5% of steam generation rate, via small valve (6-12mm dia) at bottom/mud drum (highest TDS location). Removes sludge (Ca₃(PO₄)₂, Fe₂O₃ particles).  
+            - <strong>Intermittent (Bottom Blowdown):</strong> 5-10 seconds every 8-12 hours, manual/automatic (solenoid valve), 50-100 L/batch. Flushes settled solids.  
+            <strong>Heat Recovery:</strong> Blowdown at 180°C, 10 bar contains 762 kJ/kg enthalpy. Flash tank (1-2 bar) recovers 10-15% as low-pressure steam (for deaerator preheating), saves 1-2% boiler fuel. Residual hot water (90-100°C) preheats feedwater via heat exchanger.</p>
+
+            <h4 class="font-semibold mt-4 mb-2">5. Safety Engineering & Critical Controls (CCP)</h4>
+            <p><strong>Pressure Vessel Hazards:</strong> Stored energy E = P×V (10 bar × 5 m³ = 5 MJ = 1.2 kg TNT equivalent). Catastrophic failure (rupture) → explosive decompression, projectile fragments (100-500 m range), steam blast (300+ casualties historically).  
+            <strong>Safety Devices (IBR - Indian Boiler Regulations mandated):</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
+                <li><strong>Safety Valves (2-4 redundant):</strong> Spring-loaded, set pressure = 1.05×design pressure (10.5 bar for 10 bar boiler). Opens at setpoint, vents steam to atmosphere via 150-300mm dia silencer. Capacity: must discharge full boiler steam generation rate. Annual testing: pop-off test at setpoint ±0.1 bar.</li>
+                <li><strong>Pressure Gauges (Bourdon tube type):</strong> Accuracy ±2%, range 0-1.5×design pressure. Dual gauges (primary + backup). Weekly calibration check vs. dead-weight tester.</li>
+                <li><strong>Water Level Controls (Triple Redundancy):</strong>  
+                  - Sight glass (visual, 2 required at different levels).  
+                  - Electrode probes (conductivity-based, 3 levels: Low-Low alarm, Low trip, Normal).  
+                  - Float switch (mechanical backup).  
+                  Low water level → tube overheating → metal failure in 2-5 minutes. Interlock: burner trips at Low-Low (150mm below normal), cannot restart until level restored.</li>
+                <li><strong>Flame Failure Detection:</strong> UV/IR sensors detect flame within 2 seconds of ignition. Loss of flame → fuel valve closes <1 second (prevents furnace explosion from unburnt gas accumulation, explosive limit CH₄ 5-15% in air).</li>
+                <li><strong>High Steam Temp/Pressure Trips:</strong> Redundant sensors, PLC-controlled shutdown. Alarms at 95% setpoint, trip at 105%.</li>
+            </ul>
+            <p><strong>IBR Compliance:</strong> Boiler >22.75 kW (35 kg/h steam) requires registration, annual inspection by Boiler Inspector (internal/external/hydraulic test at 1.5×design pressure), operator certification (Boiler Attendant Grade-I/II license after training + exam). Penalties: ₹50,000-5 lakh fine + imprisonment for non-compliance.</p>
+
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Advanced Operations: Optimization & Monitoring</h3>
+            
+            <h4 class="font-semibold mt-4 mb-2">Economizer & Air Preheater (Heat Recovery)</h4>
+            <p><strong>Economizer:</strong> Feedwater (30°C) passes through tubes in flue gas path (250°C), preheats to 90-110°C. Saves 5-8% fuel (each 6°C feedwater rise = 1% fuel saving). Material: carbon steel (low temp section) + stainless steel (high temp, avoid corrosion from flue gas condensates).  
+            <strong>Air Preheater:</strong> Combustion air (30°C) heated to 150-200°C by flue gas (250→180°C exit). Improves combustion (faster ignition, better mixing), saves 3-5% fuel. Rotary regenerative (Ljungstrom wheel) or tubular type.</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Condensate Recovery System</h4>
+            <p><strong>Economics:</strong> 1 kg condensate at 90°C contains 377 kJ/kg (vs. 125 kJ/kg for 30°C makeup water), saving 252 kJ/kg = 0.006 kg fuel/kg condensate (at 85% efficiency). For 10 TPH steam plant, 70% recovery = 7 tons/h × 24h = 168 tons/day × 0.006 kg FO/kg × ₹60/kg FO = ₹60,000/day saved.  
+            <strong>System:</strong> Steam traps (thermodynamic, float, inverted bucket types) remove condensate from steam lines without losing steam. Condensate collected in hot well (storage tank), returned via pump (5-10 bar discharge) to deaerator. Water quality: TDS <50 ppm, pH 8-9, no oil contamination (oil causes boiler foaming, max 2 ppm oil).</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Automation & SCADA</h4>
+            <p>Modern boilers use PLC/DCS control: feedwater flow (3-element control: steam flow, drum level, feedwater flow), combustion control (O₂ trim control adjusts air damper based on flue gas O₂ 3-5% target), sequential startup/shutdown. SCADA displays real-time: steam pressure/temp/flow, feedwater conductivity/pH, fuel consumption, efficiency (calculated every 15 min). Alarms: 50+ parameters, predictive maintenance (tube metal temp trends, flame intensity deviation).</p>
         `
     },
     hi: {
-        title: "बॉयलर संचालन",
+        title: "Boiler Operations - Complete Scientific Details (Hinglish)",
         content: `
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">डेयरी संयंत्रों में बॉयलरों का परिचय</h3>
-            <p>बॉयलर डेयरी संयंत्र के उपयोगिता खंड का दिल होते हैं, जो भाप के रूप में आवश्यक तापीय ऊर्जा प्रदान करते हैं। इस भाप का उपयोग पाश्चुरीकरण, नसबंदी, उपकरण की सफाई (CIP), और विभिन्न माध्यमों को गर्म करने सहित कई प्रक्रियाओं के लिए किया जाता है। कुशल और सुरक्षित बॉयलर संचालन उत्पादन कार्यक्रम बनाए रखने, उत्पाद सुरक्षा सुनिश्चित करने और परिचालन लागत को नियंत्रित करने के लिए महत्वपूर्ण है।</p>
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Dairy Plant Mein Boiler Ka Introduction</h3>
+            <p>Boiler steam generate karta hai (100-180°C temperature pe, 2-15 bar pressure) dairy operations ke liye jo 0.5-1.2 kg steam consume karta hai per kg milk processed. Steam use hota hai pasteurization ke liye (72°C/15 seconds HTST method, latent heat ΔH_vap=2257 kJ/kg at 100°C), sterilization (121°C/15 minutes retort, 2 bar absolute pressure), CIP cleaning (80-85°C pe alkali/acid cycles), evaporation systems (MVR, 60-70°C vacuum mein), aur spray drying (180°C inlet air temperature). Efficiency ka impact: 1% boiler efficiency loss matlab hai ₹2-5 lakh per year extra fuel cost for 50,000 LPD (liters per day) plant ke liye. Scientific basis: First Law of Thermodynamics—fuel combustion enthalpy (ΔH_c) convert hota hai steam enthalpy (h_fg) mein minus losses (radiation, blowdown, flue gas se).</p>
             
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">डेयरी उद्योग में उपयोग किए जाने वाले बॉयलरों के प्रकार</h3>
-            <p>हालांकि विभिन्न प्रकार के बॉयलर मौजूद हैं, डेयरी संयंत्रों में पाए जाने वाले सबसे आम फायर-ट्यूब और वाटर-ट्यूब बॉयलर हैं।</p>
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Boiler Types: Design Aur Dairy Mein Applications</h3>
+            
+            <h4 class="font-semibold mt-4 mb-2">1. Fire-Tube Boilers (Shell Boilers)</h4>
+            <p><strong>Design:</strong> Hot gases (900-1200°C temperature) flow karte hain 50-150 tubes (50-100mm diameter) ke through jo water shell (2-5m³ volume) mein submerged hote hain. Common types: Lancashire (2-pass design), Cochran (vertical type), Scotch marine (3-pass with corrugated furnace). Pressure rating: 6-10 bar, capacity: 0.5-12 TPH (Tonnes Per Hour) steam generation.  
+            <strong>Dairy Mein Use:</strong> Small plants (<20,000 LPD) ke liye, low-pressure requirements (sirf pasteurization). Advantages: compact size (footprint 3x2 meter), quick startup (30-45 minutes cold start se). Limitations: tube-side fouling combustion products se (soot, particulates), slower response to load changes.  
+            <strong>Heat Transfer Ki Science:</strong> Convective heat transfer coefficient h_gas=50-100 W/m²K (turbulent flow Re>10,000), h_water=3000-5000 W/m²K (nucleate boiling regime). Overall heat transfer coefficient U=30-50 W/m²K limited hota hai gas-side resistance aur scale se (k_scale=1-2 W/mK compared to steel k=50 W/mK). Fouling factor R_f=0.0002-0.0005 m²K/W jo efficiency reduce karta hai 5-10% annually bina cleaning ke.</p>
+
+            <h4 class="font-semibold mt-4 mb-2">2. Water-Tube Boilers</h4>
+            <p><strong>Design:</strong> Water aur steam tubes (25-75mm diameter, 4-10m length, membrane walls mein arranged) ke through flow karta hai, hot gases (1000-1400°C) outside flow karte hain. Types: D-type (natural circulation system, 10-50 TPH capacity), O-type (forced circulation, 50-200 TPH), Bi-drum ya mono-drum configuration. Pressure: 10-100 bar (dairy mein typically 10-20 bar for superheated steam 150-180°C).  
+            <strong>Dairy Mein Use:</strong> Large plants (>100,000 LPD), multi-stage evaporation plants, spray dryers (10-20 TPH steam demand). Advantages: rapid steam generation (5-10 minutes response time), high efficiency (85-92% thermal efficiency), handles pressure fluctuations easily.  
+            <strong>Thermodynamic Advantage:</strong> Higher surface-to-volume ratio (tubes vs. shell design) → faster heat transfer. Natural circulation driven hota hai density difference se Δρ=ρ_water-ρ_steam≈600 kg/m³ at 10 bar pressure, creating driving head H=ρgΔh (5-10 meter water column). Forced circulation pumps (200-500 LPM flow) prevent flow stagnation horizontal tubes mein, avoiding departure from nucleate boiling (DNB crisis at critical heat flux q_c=1-3 MW/m²).</p>
+
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Core Operating Principles: Thermochemistry Aur Physics</h3>
+
+            <h4 class="font-semibold mt-4 mb-2">1. Feedwater Treatment (Critical PRP - Chemistry Deep Dive)</h4>
+            <p><strong>Problem Kya Hai:</strong> Raw water mein hota hai Ca²⁺ (calcium), Mg²⁺ (magnesium) jo hardness dete hain (100-500 ppm as CaCO₃ equivalent), O₂ oxygen (8-10 ppm), CO₂ carbon dioxide (20-50 ppm), SiO₂ silica (5-30 ppm), suspended solids (10-100 ppm).  
+            <strong>Scale Formation Ka Science:</strong> Boiler temperature pe (150-180°C), CaCO₃ calcium carbonate aur MgSiO₃ magnesium silicate ki solubility decrease hoti hai (inverse solubility phenomenon). Chemical reaction: Ca(HCO₃)₂ → CaCO₃↓ (precipitate) + H₂O + CO₂ gas. Scale thickness agar 1mm ho jaye to heat transfer reduce hota hai 10-15% tak, tube metal temperature rise hota hai 50-100°C above normal (steel softens >400°C pe, creep failure hota hai). Thermal conductivity comparison: water=0.6 W/mK, scale=1-2 W/mK, steel=50 W/mK → scale is 25-50 times worse insulator hai.</p>
+            
+            <p><strong>Treatment Methods Detail Mein:</strong></p>
             <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
-                <li><strong>फायर-ट्यूब बॉयलर:</strong> इन बॉयलरों में, दहन से निकलने वाली गर्म गैसें एक सीलबंद बर्तन के भीतर पानी में डूबी हुई ट्यूबों से होकर गुजरती हैं। गैसों से निकलने वाली गर्मी ट्यूब की दीवारों के माध्यम से पानी में स्थानांतरित होती है, जिससे भाप बनती है। वे आम तौर पर कम दबाव और छोटी क्षमता की आवश्यकताओं के लिए उपयोग किए जाते हैं, जिससे वे छोटे से मध्यम आकार के डेयरी संयंत्रों के लिए उपयुक्त होते हैं।</li>
-                <li><strong>वाटर-ट्यूब बॉयलर:</strong> इस डिजाइन में, पानी ट्यूबों के माध्यम से बहता है, जबकि गर्म दहन गैसें उनके चारों ओर बहती हैं। ये बॉयलर बहुत अधिक दबाव को संभाल सकते हैं और बड़ी मात्रा में भाप उत्पन्न कर सकते हैं, जिससे वे बड़े पैमाने पर औद्योगिक डेयरी संचालन के लिए उपयुक्त होते हैं।</li>
+                <li><strong>Ion Exchange Softening Process:</strong> Resin use hota hai (sulfonated polystyrene material, capacity 20-40 kg CaCO₃ per m³ resin) jo exchange karta hai: 2R-Na + Ca²⁺ → R₂-Ca + 2Na⁺ (sodium ions release hote hain). Regeneration process: R₂-Ca + 2NaCl → 2R-Na + CaCl₂ calcium chloride (brine solution 8-12% NaCl concentration, 300-500 liters per m³ resin). Treated water hardness <5 ppm achieve hota hai. pH control: 8.5-9.5 range (slightly alkaline) maintain karte hain using NaOH sodium hydroxide ya Na₃PO₄ trisodium phosphate to prevent acidic corrosion.</li>
+                <li><strong>Deaeration (O₂ Oxygen Removal):</strong> Oxygen causes pitting corrosion karti hai: Fe + O₂ + 2H₂O → 2Fe(OH)₂ ferrous hydroxide → Fe₂O₃ rust. Deaerator equipment (150°C temperature, 3-4 bar pressure) exploit karta hai Henry's Law principle: dissolved gas solubility proportional hota hai partial pressure ke. Water ko spray karte hain steam atmosphere mein (P_O₂→0 approach karta hai) jo O₂ reduce kar deta hai <0.007 ppm (7 ppb parts per billion). Chemical scavenging method: hydrazine chemical (N₂H₄, 50-100 ppb dosage) ya sodium sulfite (Na₂SO₃, 10-20 ppm excess) react karta hai: N₂H₄ + O₂ → N₂ nitrogen gas + 2H₂O. Residual O₂ <0.02 ppm mandatory hai high-pressure boilers ke liye.</li>
+                <li><strong>pH & Alkalinity Control:</strong> Target pH 10.5-11.5 maintain karte hain (boiler water mein) using trisodium phosphate Na₃PO₄ chemical (30-50 ppm PO₄³⁻ phosphate ions). Ye soft sludge form karta hai: 3Ca²⁺ + 2PO₄³⁻ → Ca₃(PO₄)₂ calcium phosphate (removed by blowdown, hard scale nahi banta). Alkalinity parameters (P-alkalinity 200-400 ppm, M-alkalinity 400-700 ppm as CaCO₃ equivalent) pH ko buffer karte hain.</li>
             </ul>
 
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">बॉयलर संचालन के प्रमुख सिद्धांत</h3>
-            <ol class="list-decimal list-outside pl-5 space-y-4">
-                <li><strong>फीडवाटर उपचार (महत्वपूर्ण PRP):</strong> यह एक महत्वपूर्ण <strong>आवश्यक कार्यक्रम</strong> है। बॉयलर को खिलाया जाने वाला पानी (फीडवाटर) अशुद्धियों को दूर करने के लिए उपचारित किया जाना चाहिए।
-                    <p class="mt-2"><strong>वैज्ञानिक कारण:</strong> कच्चे पानी में कैल्शियम और मैग्नीशियम लवण जैसे घुले हुए खनिज होते हैं, जो 'कठोरता' का कारण बनते हैं। यदि अनुपचारित छोड़ दिया जाता है, तो ये खनिज उच्च तापमान पर बॉयलर ट्यूबों के अंदर अवक्षेपित हो जाएंगे, जिससे 'स्केल' नामक एक कठोर परत बन जाएगी। स्केल एक इन्सुलेटर के रूप में कार्य करता है, गर्मी हस्तांतरण दक्षता को काफी कम कर देता है और समान मात्रा में भाप का उत्पादन करने के लिए अधिक ईंधन की आवश्यकता होती है। गंभीर मामलों में, यह ट्यूबों को ज़्यादा गरम करने और फटने का कारण बन सकता है, जिससे एक विनाशकारी विफलता हो सकती है। उपचार प्रक्रिया में आमतौर पर शामिल हैं:</p>
-                    <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
-                        <li><strong>नरमी:</strong> कैल्शियम और मैग्नीशियम आयनों को सोडियम आयनों से बदलने के लिए एक आयन-विनिमय प्रक्रिया का उपयोग करना।</li>
-                        <li><strong>विआयनीकरण:</strong> घुली हुई गैसों को हटाना, विशेष रूप से ऑक्सीजन और कार्बन डाइऑक्साइड, जो उच्च तापमान पर बॉयलर धातु के लिए अत्यधिक संक्षारक होते हैं।</li>
-                    </ul>
-                </li>
-                <li><strong>दहन और ऊष्मा अंतरण:</strong>
-                    <p>बॉयलर गर्म दहन गैसों को उत्पन्न करने के लिए ईंधन (जैसे फर्नेस तेल, प्राकृतिक गैस, या बायोमास) जलाता है। दहन की दक्षता - सही वायु-से-ईंधन अनुपात सुनिश्चित करना - गर्मी उत्पादन को अधिकतम करने और ईंधन की खपत को कम करने के लिए महत्वपूर्ण है। यह गर्मी फिर पानी में स्थानांतरित की जाती है ताकि भाप का उत्पादन हो सके।</p>
-                </li>
-                <li><strong>भाप उत्पादन और वितरण:</strong>
-                    <p>जैसे ही पानी गर्म होता है, यह भाप में बदल जाता है, जो बॉयलर के अंदर दबाव बनाता है। यह उच्च दबाव वाली भाप फिर एक इंसुलेटेड पाइपों के नेटवर्क के माध्यम से संयंत्र भर में विभिन्न उपयोग बिंदुओं (पाश्चराइज़र, स्टरलाइज़र, सीआईपी सिस्टम, आदि) पर वितरित की जाती है। भाप जाल का उपयोग भाप लाइनों से संघनित पानी (कंडेनसेट) को हटाने के लिए किया जाता है, यह सुनिश्चित करते हुए कि प्रक्रिया उपकरण को केवल सूखी, उच्च गुणवत्ता वाली भाप वितरित की जाती है।</p>
-                </li>
-                <li><strong>ब्लोडाउन (oPRP):</strong>
-                    <p>जैसे ही भाप बनती है, बॉयलर के पानी में बचे हुए घुले हुए ठोस पदार्थ अधिक केंद्रित हो जाते हैं। इस सांद्रता को बहुत अधिक होने से रोकने के लिए (जो झाग, स्केलिंग और क्षरण का कारण बन सकता है), थोड़ी मात्रा में बॉयलर का पानी समय-समय पर या लगातार निकाला जाता है। यह प्रक्रिया, जिसे 'ब्लोडाउन' के रूप में जाना जाता है, बॉयलर के अंदर पानी की गुणवत्ता बनाए रखने के लिए एक महत्वपूर्ण <strong>परिचालन आवश्यक कार्यक्रम (oPRP)</strong> है।</p>
-                </li>
-                 <li><strong>सुरक्षा और रखरखाव (CCP):</strong>
-                    <p>बॉयलर उच्च दबाव वाले बर्तन हैं और इन्हें सख्त सुरक्षा प्रोटोकॉल के साथ संचालित किया जाना चाहिए। नियमित रखरखाव और निरीक्षण <strong>महत्वपूर्ण नियंत्रण बिंदु</strong> हैं। प्रमुख सुरक्षा उपकरणों में शामिल हैं:</p>
-                     <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
-                        <li><strong>सुरक्षा वाल्व:</strong> अतिरिक्त दबाव को स्वचालित रूप से छोड़ने के लिए।</li>
-                        <li><strong>दबाव गेज:</strong> आंतरिक दबाव की निगरानी के लिए।</li>
-                        <li><strong>जल स्तर संकेतक:</strong> यह सुनिश्चित करने के लिए कि पानी का स्तर हमेशा सुरक्षित संचालन सीमा के भीतर है। कम पानी का स्तर अत्यंत खतरनाक है और विस्फोट का कारण बन सकता है।</li>
-                    </ul>
-                </li>
-            </ol>
+            <h4 class="font-semibold mt-4 mb-2">2. Combustion Science Aur Efficiency</h4>
+            <p><strong>Dairy Mein Use Hone Wale Fuels:</strong> Furnace Oil (FO, molecular formula C₁₄H₃₀ average, calorific value ΔH_c=42-43 MJ/kg), Natural Gas (CH₄ methane, 50 MJ/kg), Rice Husk biomass fuel (13-15 MJ/kg, 15% moisture content), Coal (20-25 MJ/kg). Stoichiometric air requirement: FO needs 14.5 kg air per kg fuel, NG needs 17 kg air/kg. Excess air percentage: 15-25% (air factor λ=1.15-1.25) ensures complete combustion but cools flue gas (each 1% excess air above 25% = 0.6% efficiency loss).  
+            <strong>Combustion Equation (Furnace Oil):</strong> C₁₄H₃₀ + 21.75O₂ → 14CO₂ carbon dioxide + 15H₂O water vapor + heat energy (42 MJ/kg released).  
+            <strong>Flue Gas Analysis Ka Ideal Range:</strong> CO₂ carbon dioxide 12-14%, O₂ oxygen 3-5%, CO carbon monoxide <100 ppm (incomplete combustion ka marker). Temperature: 200-250°C exit temperature (lower temperature = more heat recovered, but avoid acid dew point 120-140°C for sulfuric acid H₂SO₄ formation from fuel sulfur content).  
+            <strong>Efficiency Calculation Methods:</strong> η_boiler = (steam enthalpy output / fuel energy input) × 100. Direct method formula: η = [(m_steam × (h_steam - h_feedwater)) / (m_fuel × ΔH_c)] × 100. Indirect method (heat loss basis): η = 100 - (L_flue + L_radiation + L_blowdown + L_unburnt), jahan L_flue = 10-18% (major loss component), L_radiation = 1-3% (surface radiation), L_blowdown = 1-2%. Target efficiency: >85% for Furnace Oil, >80% for biomass fuels.</p>
+
+            <h4 class="font-semibold mt-4 mb-2">3. Steam Generation Ka Thermodynamics</h4>
+            <p><strong>Phase Change Physics Explained:</strong> Feedwater (30-80°C initial temp) → heated to saturation temperature (100-184°C at 1-10 bar pressure range) → evaporation at constant temperature (latent heat absorption h_fg=2257-2015 kJ/kg depending on pressure) → saturated steam banta hai → optional superheat process (+50-100°C temperature increase, sensible heat addition c_p=2.1 kJ/kg·K specific heat).  
+            <strong>Pressure-Temperature Relation (Clausius-Clapeyron Equation):</strong> At 1 bar pressure: T_saturation=100°C; 10 bar: 180°C; 15 bar: 198°C. Each bar pressure increase raises T_sat approximately 18°C (non-linear relationship). Dairy mein different uses: pasteurization 72°C (0.3-0.5 bar steam pressure), sterilization 121°C (2 bar absolute), evaporation process 60-70°C (0.2 bar vacuum conditions).  
+            <strong>Steam Quality Parameter:</strong> Dryness fraction x = (mass of dry steam / total mass including moisture). Target x>0.97 matlab 3% moisture maximum allowed. Wet steam (x<0.95) reduces heat transfer efficiency (water film forms on heat exchanger surface), causes dangerous water hammer phenomenon (condensate slug impacts pipe bends violently, pressure spike 10-50 bar instantaneous generation, pipe rupture ka high risk). Solution: install steam separators, use superheating.</p>
+
+            <h4 class="font-semibold mt-4 mb-2">4. Blowdown: Water Chemistry Control (oPRP - Operational Prerequisite Program)</h4>
+            <p><strong>Scientific Reason Detailed:</strong> Jaise steam evaporate hota hai, dissolved solids concentrate hote rehte hain (TDS total dissolved solids: chlorides, sulfates, silica, phosphates salts). Concentration factor formula CF = TDS_boiler / TDS_feedwater. Example: agar feedwater TDS=100 ppm hai aur boiler TDS=3000 ppm ho jaye → CF=30 times concentration. High TDS causes multiple problems: (1) foaming phenomenon (bubbles carry water droplets into steam lines, contaminating process equipment), (2) priming (violent boiling surges dangerous hote hain), (3) carryover (salts deposit on turbine blades ya heat exchangers, maximum 10-50 ppm steam TDS allowed).  
+            <strong>Blowdown Ke Types Detail Mein:</strong>  
+            - <strong>Continuous Blowdown:</strong> 1-5% of steam generation rate continuously, via small control valve (6-12mm diameter) installed at bottom/mud drum location (highest TDS concentration point). Continuously removes sludge particles (Ca₃(PO₄)₂ calcium phosphate, Fe₂O₃ iron oxide).  
+            - <strong>Intermittent Bottom Blowdown:</strong> Short duration 5-10 seconds every 8-12 hours interval, manual operation ya automatic solenoid valve controlled, 50-100 liters per batch. Effectively flushes settled solid deposits.  
+            <strong>Heat Recovery From Blowdown:</strong> Blowdown water at 180°C temperature, 10 bar pressure contains 762 kJ/kg enthalpy energy. Flash tank equipment (operating at 1-2 bar) recovers 10-15% energy as low-pressure steam (used for deaerator preheating purpose), saves 1-2% boiler fuel consumption. Residual hot water (90-100°C) preheats feedwater via plate heat exchanger, further energy recovery.</p>
+
+            <h4 class="font-semibold mt-4 mb-2">5. Safety Engineering Aur Critical Controls (CCP - Critical Control Points)</h4>
+            <p><strong>Pressure Vessel Hazards Explained:</strong> Stored energy calculation E = Pressure × Volume (example: 10 bar × 5 m³ = 5 MegaJoules = 1.2 kg TNT explosive equivalent energy). Catastrophic failure (rupture event) → explosive decompression instantly, projectile fragments (100-500 meter range tak fly karte hain), steam blast wave (historically 300+ casualties documented in boiler explosions).  
+            <strong>Safety Devices (IBR - Indian Boiler Regulations Mandated):</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
+                <li><strong>Safety Valves (2-4 Redundant Units):</strong> Spring-loaded mechanism, set pressure = 1.05×design pressure (example: 10.5 bar setting for 10 bar rated boiler). Opens automatically at setpoint, vents steam safely to atmosphere via 150-300mm diameter silencer pipe. Discharge capacity requirement: must handle full boiler steam generation rate. Annual testing mandatory: pop-off pressure test at setpoint ±0.1 bar accuracy check.</li>
+                <li><strong>Pressure Gauges (Bourdon Tube Type):</strong> Measurement accuracy ±2% of full scale, range selection 0-1.5×design pressure. Dual gauge installation (primary + backup redundancy). Weekly calibration check against dead-weight tester standard.</li>
+                <li><strong>Water Level Controls (Triple Redundancy System):</strong>  
+                  - Sight glass (visual indication, 2 units required at different vertical levels).  
+                  - Electrode probes (conductivity-based sensing, 3 level monitoring: Low-Low alarm level, Low trip level, Normal operating level).  
+                  - Float switch (mechanical backup independent system).  
+                  Low water level condition → tube overheating starts → metal failure occurs within 2-5 minutes critical time. Interlock logic: burner trips automatically at Low-Low level (150mm below normal setpoint), cannot restart operation until water level properly restored and manually reset.</li>
+                <li><strong>Flame Failure Detection System:</strong> UV/IR optical sensors detect flame presence within 2 seconds of ignition attempt. Loss of flame signal → fuel valve closes automatically <1 second response time (prevents dangerous furnace explosion from unburnt gas accumulation, explosive limit for CH₄ methane is 5-15% concentration in air).</li>
+                <li><strong>High Steam Temperature/Pressure Trip Interlocks:</strong> Redundant sensor installation, PLC (Programmable Logic Controller) controlled automatic shutdown sequence. Alarm activation at 95% of setpoint value, complete trip shutdown at 105% threshold.</li>
+            </ul>
+            <p><strong>IBR Compliance Requirements India:</strong> Boiler capacity >22.75 kW (equivalent to 35 kg/hour steam generation) requires mandatory registration with IBR authorities, annual inspection by certified Boiler Inspector (internal inspection/external inspection/hydraulic pressure test at 1.5×design pressure), operator certification mandatory (Boiler Attendant Grade-I/II license after formal training + written examination). Legal penalties for non-compliance: ₹50,000 to ₹5 lakh fine amount + imprisonment provisions under IBR Act.</p>
+
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Advanced Operations: Optimization Aur Monitoring Technologies</h3>
+            
+            <h4 class="font-semibold mt-4 mb-2">Economizer Aur Air Preheater (Heat Recovery Equipment)</h4>
+            <p><strong>Economizer Function:</strong> Feedwater (30°C inlet) passes through finned tubes installed in flue gas path (250°C gas temperature), preheats water to 90-110°C outlet temperature. Fuel savings: 5-8% reduction in fuel consumption (proven rule: each 6°C feedwater temperature rise = 1% fuel saving). Construction material: carbon steel tubes (low temperature section to prevent corrosion) + stainless steel (high temperature section, avoids corrosion from acidic flue gas condensates).  
+            <strong>Air Preheater Working:</strong> Combustion air (ambient 30°C) heated to 150-200°C temperature by recovering heat from flue gas (temperature drops from 250°C to 180°C exit). Benefits: improves combustion quality (faster ignition timing, better fuel-air mixing turbulence), saves 3-5% fuel consumption. Design types: rotary regenerative type (Ljungstrom wheel rotating design) ya tubular fixed type heat exchanger.</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Condensate Recovery System Economics</h4>
+            <p><strong>Economic Calculation Detailed:</strong> 1 kg condensate at 90°C temperature contains 377 kJ/kg enthalpy energy (compared to 125 kJ/kg for fresh 30°C makeup water), energy saving = 252 kJ/kg difference = 0.006 kg fuel saved per kg condensate recovered (assuming 85% boiler efficiency). Real example calculation: For 10 TPH (Tonnes Per Hour) steam generation plant, 70% condensate recovery efficiency = 7 tonnes/hour × 24 hours operation = 168 tonnes/day recovered × 0.006 kg Furnace Oil/kg condensate × ₹60/kg FO current price = ₹60,000 per day cost savings (₹1.8 crore annual savings!).  
+            <strong>System Components Explained:</strong> Steam traps devices (thermodynamic disc type, float type, inverted bucket type mechanisms) automatically remove condensate water from steam distribution lines without losing valuable steam. Condensate collected in hot well insulated storage tank, returned via condensate pump (5-10 bar discharge pressure rating) back to deaerator feedwater tank. Water quality requirements strict: TDS <50 ppm maximum, pH maintained 8-9 range, absolutely no oil contamination allowed (oil causes severe boiler foaming problem, maximum 2 ppm oil limit).</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Automation Aur SCADA Monitoring Systems</h4>
+            <p>Modern advanced boilers use PLC (Programmable Logic Controller) / DCS (Distributed Control System) automation: feedwater flow control (sophisticated 3-element control algorithm: measures steam flow rate, drum water level, feedwater flow rate simultaneously for accurate control), combustion control optimization (O₂ trim control system automatically adjusts air damper position based on real-time flue gas O₂ measurement maintaining 3-5% target setpoint), fully automated sequential startup/shutdown procedures ensuring safety. SCADA (Supervisory Control And Data Acquisition) HMI screen displays real-time parameters: steam pressure/temperature/flow rates, feedwater conductivity/pH measurements, instantaneous fuel consumption rate, calculated boiler efficiency trending (computed every 15 minutes interval using direct/indirect method). Comprehensive alarm system: 50+ critical parameters continuously monitored, predictive maintenance features (tube metal temperature trends analyzed, flame intensity deviation patterns detected for early warning before failure).</p>
         `
     }
 };
