@@ -1,6 +1,6 @@
 export const sterilizationContent = {
   en: {
-    title: "Sterilization: Achieving Commercial Sterility and Ambient Shelf-Stability in Dairy Products",
+    title: "Sterilization",
     content: `
       <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Comprehensive Introduction to Milk Sterilization</h3>
       
@@ -362,7 +362,7 @@ export const sterilizationContent = {
   },
   
   hi: {
-    title: "Sterilization: Dairy Products mein Commercial Sterility aur Ambient Shelf-Stability",
+    title: "Sterilization",
     content: `
       <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Milk Sterilization ka Comprehensive Introduction</h3>
       
