@@ -1,6 +1,6 @@
 export const fermentationContent = {
     en: {
-        title: "Fermentation: Microbial Biotransformation in Dairy",
+        title: "Fermentation",
         content: `
             <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Introduction to Fermentation in Dairy</h3>
             <p>Fermentation represents a controlled microbial biotransformation process where selected microorganisms metabolically convert milk carbohydrates (primarily lactose) into organic acids, volatile flavor compounds, bioactive metabolites, and functional biomolecules. This ancient yet scientifically sophisticated preservation and processing technology forms the foundation for an extraordinarily diverse portfolio of cultured dairy products: yogurt (set and stirred), dahi (traditional Indian curd), cheese (hundreds of varieties), buttermilk, sour cream, kefir, koumiss, cultured butter, and probiotic functional beverages. Beyond mere preservation, fermentation fundamentally transforms milk's physicochemical structure, rheological properties, flavor profile, nutritional composition, and bioavailability of nutrients, while creating unique health benefits through generation of bioactive peptides, exopolysaccharides, and probiotic biomass.</p>
@@ -344,7 +344,7 @@ export const fermentationContent = {
         `
     },
     hi: {
-        title: "Fermentation: Microbial Biotransformation in Dairy (Hinglish)",
+        title: "Fermentation",
         content: `
             <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Dairy mein Fermentation ka Introduction</h3>
             <p>Fermentation ek controlled microbial biotransformation process represent karta hai jahan selected microorganisms metabolically convert karte hain milk carbohydrates (primarily lactose) into organic acids, volatile flavor compounds, bioactive metabolites, aur functional biomolecules. Yeh ancient yet scientifically sophisticated preservation aur processing technology form karta hai foundation extraordinarily diverse portfolio of cultured dairy products ke liye: yogurt (set aur stirred), dahi (traditional Indian curd), cheese (hundreds of varieties), buttermilk, sour cream, kefir, koumiss, cultured butter, aur probiotic functional beverages. Beyond mere preservation, fermentation fundamentally transform karta hai milk ki physicochemical structure, rheological properties, flavor profile, nutritional composition, aur nutrients ki bioavailability, while creating unique health benefits through generation of bioactive peptides, exopolysaccharides, aur probiotic biomass.</p>
