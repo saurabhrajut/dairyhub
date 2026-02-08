@@ -1,7 +1,7 @@
 
 export const evaporationContent = {
     en: {
-        title: "Evaporation: Concentration Technology for Efficient Dairy Processing",
+        title: "Evaporation",
         content: `
             <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Comprehensive Introduction to Dairy Evaporation</h3>
             <p>Evaporation is a critical unit operation in dairy manufacturing, serving as the primary method for concentrating liquid dairy products by removing water as vapor through controlled heat application under reduced pressure [web:99][web:103]. This thermal concentration process is fundamental to producing major dairy commodities including evaporated milk, sweetened condensed milk, milk powder precursors, whey concentrates, and concentrated dairy ingredients for food manufacturing [web:99]. The technology enables dramatic reductions in product volume (50-80% water removal typical), yielding substantial economic benefits: reduced transportation costs (freight savings 3-5x per unit of solids), decreased storage requirements, extended microbial shelf life through reduced water activity (aw), and preparation of feed streams for final drying operations [web:103].</p>
@@ -389,7 +389,7 @@ export const evaporationContent = {
         `
     },
     hi: {
-        title: "Evaporation: Efficient Dairy Processing ke liye Concentration Technology",
+        title: "Evaporation",
         content: `
             <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Dairy Evaporation ka Comprehensive Introduction</h3>
             <p>Evaporation dairy manufacturing mein ek critical unit operation hai, jo liquid dairy products ko concentrate karne ka primary method hai. Isme controlled heat application aur reduced pressure (kam dabav) ke zariye paani ko vapor (bhaap) ke roop mein remove kiya jata hai [web:99][web:103]. Yeh thermal concentration process major dairy commodities banane ke liye fundamental hai, jinme evaporated milk, sweetened condensed milk, milk powder precursors (powder banne se pehle ka stage), whey concentrates, aur food manufacturing ke liye concentrated dairy ingredients shamil hain [web:99]. Yeh technology product ke volume mein dramatic reductions enable karti hai (aamtaur par 50-80% paani nikal diya jata hai), jisse kaafi economic benefits milte hain: transportation costs kam hona (freight savings solids ke per unit par 3-5 guna hoti hai), storage requirements kam hona, reduced water activity (aw) ke zariye microbial shelf life badhna, aur final drying operations ke liye feed streams taiyar karna [web:103].</p>
