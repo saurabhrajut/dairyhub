@@ -1,7 +1,7 @@
 
 export const sprayDryingContent = {
     en: {
-        title: "Spray Drying: Advanced Powder Production Technology",
+        title: "Spray Drying",
         content: `
             <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Introduction to Spray Drying</h3>
             <p>Spray drying is a sophisticated thermal dehydration process that transforms liquid feeds into free-flowing, stable powders through atomization and rapid evaporative drying. In the dairy industry, it represents the dominant technology for manufacturing milk powder (skim milk powder - SMP, whole milk powder - WMP, infant formula), whey powders (sweet whey, whey protein concentrate/isolate), and specialized ingredients (caseinates, lactose, dairy-based nutraceuticals). The process is globally valued for its unique capability to achieve ultra-rapid dehydration (moisture removal in milliseconds to seconds) with exceptional preservation of nutritional integrity, functional properties, and organoleptic quality.</p>
@@ -499,7 +499,7 @@ export const sprayDryingContent = {
         `
     },
     hi: {
-        title: "Spray Drying: Advanced Powder Production Technology (Hinglish)",
+        title: "Spray Drying",
         content: `
             <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Spray Drying ka Introduction</h3>
             <p>Spray drying ek sophisticated thermal dehydration process hai jo transform karta hai liquid feeds ko free-flowing, stable powders mein through atomization aur rapid evaporative drying. Dairy industry mein, yeh dominant technology represent karta hai manufacturing ke liye milk powder (skim milk powder - SMP, whole milk powder - WMP, infant formula), whey powders (sweet whey, whey protein concentrate/isolate), aur specialized ingredients (caseinates, lactose, dairy-based nutraceuticals). Process globally valued hai iske unique capability ke liye to achieve ultra-rapid dehydration (moisture removal in milliseconds to seconds) with exceptional preservation of nutritional integrity, functional properties, aur organoleptic quality.</p>
