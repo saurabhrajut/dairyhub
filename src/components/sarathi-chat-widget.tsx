@@ -20,12 +20,11 @@ import {
   FileText
 } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
-import type { Message } from '@/ai/flows/types';
-import { sarathiAI, gyanAI, interviewPrepper, parseResume } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { generateOfflineResponse } from '@/lib/my-offline-ai';
 
 // --- Types ---
 
@@ -44,6 +43,243 @@ type ChatMode = 'sarathi' | 'gyan-ai';
 type GyanAITopic = 
   | 'Career Guidance in Food Industry' 
   | 'Interview Preparation';
+
+// --- Offline AI Helper Functions ---
+
+// Simple PDF text extraction using canvas approach
+async function extractPDFText(file: File): Promise<string> {
+    try {
+      // Use Mozilla's PDF.js with proper Next.js configuration
+      const pdfjs = await import('pdfjs-dist');
+      
+      // Configure worker
+      if (typeof window !== 'undefined') {
+        // FIX: Yahan end mein '.js' ko hata kar '.mjs' kar diya hai
+        pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+      }
+      
+      const arrayBuffer = await file.arrayBuffer();
+      const pdf = await pdfjs.getDocument({ data: arrayBuffer }).promise;
+      let fullText = '';
+      
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const textContent = await page.getTextContent();
+        const pageText = textContent.items
+          .map((item: any) => item.str)
+          .join(' ');
+        fullText += pageText + '\n';
+      }
+      
+      return fullText.trim() || 'PDF text extraction completed but no text found. Please ensure your PDF contains selectable text.';
+    } catch (error) {
+      console.error('PDF extraction error:', error);
+      // Fallback: just return a message
+      return `Unable to extract text from PDF. Please try a different file or ensure the PDF contains selectable text. Error: ${error}`;
+    }
+  }
+
+// Extract text from DOC/DOCX using mammoth
+async function extractDocText(file: File): Promise<string> {
+  try {
+    const mammoth = await import('mammoth');
+    const arrayBuffer = await file.arrayBuffer();
+    const result = await mammoth.extractRawText({ arrayBuffer });
+    return result.value.trim() || 'Document parsed but no text found.';
+  } catch (error) {
+    console.error('DOC extraction failed:', error);
+    return `Unable to extract text from document. Error: ${error}`;
+  }
+}
+
+// Unified resume parser
+async function parseResumeOffline(file: File): Promise<string> {
+  const fileType = file.type;
+  const fileName = file.name.toLowerCase();
+  
+  if (fileType === 'application/pdf' || fileName.endsWith('.pdf')) {
+    return await extractPDFText(file);
+  } else if (
+    fileType === 'application/msword' || 
+    fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+    fileName.endsWith('.doc') ||
+    fileName.endsWith('.docx')
+  ) {
+    return await extractDocText(file);
+  } else {
+    throw new Error('Unsupported file type. Please upload PDF, DOC, or DOCX.');
+  }
+}
+
+// --- NEW OFFLINE LOGIC ---
+// Yeh ab Internet use nahi karega, seedha aapke folder se jawab layega
+async function callClaudeAPI(
+    messages: Array<{ role: string; content: string }>,
+    systemPrompt: string
+  ): Promise<string> {
+    return await generateOfflineResponse(messages, systemPrompt);
+  }
+
+// Sarathi AI - Career Navigator
+async function sarathiAIOffline(
+  userName: string,
+  question: string,
+  language: string,
+  history: Array<{ role: string; content: string }>
+): Promise<string> {
+  const systemPrompt = `You are Sarathi - an enthusiastic career navigator AI assistant for the food industry. 
+  
+Your role:
+- Help users with career guidance, job search, skill development
+- Be friendly, motivating, and use emojis appropriately
+- Response language: ${language}
+- Keep responses concise (2-3 paragraphs max)
+- Use bullet points for actionable advice
+
+User's name: ${userName}`;
+
+  const messages = [
+    ...history.map(h => ({ role: h.role, content: h.content })),
+    { role: "user", content: question }
+  ];
+
+  return await callClaudeAPI(messages, systemPrompt);
+}
+
+// Gyan AI - Domain Expert
+async function gyanAIOffline(
+  topic: string,
+  question: string,
+  language: string,
+  history: Array<{ role: string; content: string }>
+): Promise<string> {
+  const systemPrompt = `You are an expert AI assistant specializing in: ${topic}
+
+Your role:
+- Provide deep, specialized knowledge
+- Be professional yet approachable
+- Response language: ${language}
+- Give practical, actionable advice
+- Use examples from the food industry
+
+Keep responses focused and valuable.`;
+
+  const messages = [
+    ...history.map(h => ({ role: h.role, content: h.content })),
+    { role: "user", content: question }
+  ];
+
+  return await callClaudeAPI(messages, systemPrompt);
+}
+
+// Interview Preparation - Smart Mock Interviews
+async function interviewPrepperOffline(
+  resumeText: string,
+  experienceLevel: string,
+  language: string,
+  history: Array<{ role: string; content: string }>,
+  isInitialRequest: boolean
+): Promise<{ questions: Array<{ question: string; answer: string }>; followUp: string }> {
+  let systemPrompt = '';
+  let userPrompt = '';
+
+  if (isInitialRequest) {
+    systemPrompt = `You are an expert interview coach. Analyze the resume and generate relevant interview questions with professional answers.
+
+Experience Level: ${experienceLevel}
+Language: ${language}
+
+Format your response EXACTLY as:
+Q1: [Question here]
+A1: [Detailed professional answer here]
+
+Q2: [Question here]
+A2: [Detailed professional answer here]
+
+Q3: [Question here]
+A3: [Detailed professional answer here]
+
+FOLLOW_UP: [A brief tip or suggestion for the candidate]
+
+Generate 3 questions based on the resume content.`;
+
+    userPrompt = `Resume Content:\n${resumeText}\n\nGenerate 3 relevant interview questions with professional answers.`;
+  } else {
+    systemPrompt = `You are an interview coach providing feedback and follow-up questions.
+
+Experience Level: ${experienceLevel}
+Language: ${language}
+
+Based on the conversation history, provide:
+1. Constructive feedback on the candidate's response
+2. A follow-up question if needed
+3. Tips for improvement
+
+Keep it conversational and encouraging.`;
+
+    userPrompt = history[history.length - 1]?.content || "Continue the interview";
+  }
+
+  const messages = isInitialRequest 
+    ? [{ role: "user", content: userPrompt }]
+    : history.map(h => ({ role: h.role, content: h.content }));
+
+  const response = await callClaudeAPI(messages, systemPrompt);
+
+  // Parse response
+  if (isInitialRequest) {
+    const questions: Array<{ question: string; answer: string }> = [];
+    const lines = response.split('\n').filter(l => l.trim());
+    
+    let currentQ = '';
+    let currentA = '';
+    let followUp = '';
+
+    for (const line of lines) {
+      if (line.match(/^Q\d+:/)) {
+        if (currentQ && currentA) {
+          questions.push({ question: currentQ, answer: currentA });
+        }
+        currentQ = line.replace(/^Q\d+:\s*/, '').trim();
+        currentA = '';
+      } else if (line.match(/^A\d+:/)) {
+        currentA = line.replace(/^A\d+:\s*/, '').trim();
+      } else if (line.startsWith('FOLLOW_UP:')) {
+        followUp = line.replace('FOLLOW_UP:', '').trim();
+        if (currentQ && currentA) {
+          questions.push({ question: currentQ, answer: currentA });
+        }
+      } else if (currentA) {
+        currentA += ' ' + line.trim();
+      }
+    }
+
+    if (currentQ && currentA && questions.length < 3) {
+      questions.push({ question: currentQ, answer: currentA });
+    }
+
+    // Fallback if parsing failed
+    if (questions.length === 0) {
+      questions.push({
+        question: "Tell me about yourself and your background.",
+        answer: "Based on your resume, you can highlight your education, relevant experience, and key skills that make you a strong candidate for this position."
+      });
+      questions.push({
+        question: "What are your key strengths?",
+        answer: "Emphasize the technical and soft skills mentioned in your resume that are most relevant to the role you're applying for."
+      });
+      questions.push({
+        question: "Why are you interested in this position?",
+        answer: "Connect your background and career goals with the specific opportunity, showing genuine interest and research about the role."
+      });
+      followUp = "Practice these answers out loud before your interview!";
+    }
+
+    return { questions, followUp };
+  } else {
+    return { questions: [], followUp: response };
+  }
+}
 
 // --- Main Widget Component ---
 
@@ -106,30 +342,31 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
   const { toast } = useToast();
    
   const [messages, setMessages] = useState<UIMessage[]>([]);
-  const [history, setHistory] = useState<Message[]>([]);
+  const [history, setHistory] = useState<Array<{ role: string; content: string }>>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [language, setLanguage] = useState('English');
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Gyan AI Specifics - FULL INTERVIEW PREP STATE
+  // Gyan AI Specifics
   const [selectedTopic, setSelectedTopic] = useState<GyanAITopic | null>(null);
   const [experienceLevel, setExperienceLevel] = useState<'Fresher Student' | 'Experienced Person'>('Fresher Student');
   const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [fileName, setFileName] = useState("");
   const [isProcessingResume, setIsProcessingResume] = useState(false);
+  const [resumeText, setResumeText] = useState("");
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const languageRef = useRef(language);
   languageRef.current = language;
 
-  // --- Enhanced Helpers ---
+  // --- Helpers ---
 
   const getCacheKey = useCallback(() => {
     if (!user) return null;
     const topicKey = activeMode === 'gyan-ai' && selectedTopic ? `_${selectedTopic}` : '';
-    return `chat_v3_${activeMode}${topicKey}_${user.uid}`;
+    return `chat_offline_v1_${activeMode}${topicKey}_${user.uid}`;
   }, [activeMode, selectedTopic, user]);
 
   const scrollToBottom = useCallback(() => {
@@ -139,13 +376,14 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
     });
   }, []);
 
-  // --- Enhanced Effects ---
+  // --- Effects ---
 
   useEffect(() => {
     setMessages([]);
     setHistory([]);
     setResumeFile(null);
     setFileName("");
+    setResumeText("");
     if (fileInputRef.current) fileInputRef.current.value = "";
     
     if (!isOpen || !user) return;
@@ -153,7 +391,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
     const cacheKey = getCacheKey();
     const cached = cacheKey ? localStorage.getItem(cacheKey) : null;
 
-    // IMPORTANT: Don't restore cache for interview mode - always fresh start
+    // Don't restore cache for interview mode
     if (cached && !(activeMode === 'gyan-ai' && selectedTopic === 'Interview Preparation')) {
         const data = JSON.parse(cached);
         setMessages(data.messages);
@@ -164,7 +402,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
             const welcomeMsg: UIMessage = {
                 id: 'welcome',
                 role: 'assistant',
-                text: `Namaste ${user.displayName?.split(' ')[0] || 'Champion'}! 🚀 I am **Sarathi** - your ultimate career navigator. Ready to conquer your goals?`,
+                text: `Namaste ${user.displayName?.split(' ')[0] || 'Champion'}! 🚀 I am **Sarathi** - your ultimate career navigator powered by offline AI. Ready to conquer your goals?`,
                 timestamp: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
             };
             setMessages([welcomeMsg]);
@@ -175,7 +413,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
 
   useEffect(() => {
     const cacheKey = getCacheKey();
-    // Don't cache interview sessions - always fresh
+    // Don't cache interview sessions
     if (cacheKey && messages.length > 0 && !(activeMode === 'gyan-ai' && selectedTopic === 'Interview Preparation')) {
         localStorage.setItem(cacheKey, JSON.stringify({ messages, history }));
     }
@@ -183,7 +421,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
 
   useEffect(() => scrollToBottom(), [messages, isLoading, scrollToBottom]);
 
-  // --- Enhanced Handlers ---
+  // --- Handlers ---
 
   const handleSendMessage = async (textOverride?: string) => {
     const query = textOverride || input.trim();
@@ -199,77 +437,85 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
     setInput('');
     setIsLoading(true);
 
-    const newHistory = [...history, { role: 'user', content: [{ text: query }] } as Message];
+    const newHistory = [...history, { role: 'user', content: query }];
     setHistory(newHistory);
 
     try {
-        let response: any;
+        let responseText = '';
+        let qaMessages: UIMessage[] = [];
+        let followUpText = '';
         
         if (activeMode === 'sarathi') {
-            response = await sarathiAI({
-                userName: user?.displayName || 'User',
-                question: query,
-                language: languageRef.current,
-                history: newHistory
-            });
+            responseText = await sarathiAIOffline(
+                user?.displayName || 'User',
+                query,
+                languageRef.current,
+                newHistory
+            );
         } else {
             if (selectedTopic === 'Interview Preparation') {
-                response = await interviewPrepper({
-                    resumeText: "",
+                const result = await interviewPrepperOffline(
+                    resumeText,
                     experienceLevel,
-                    language: languageRef.current,
-                    history: newHistory,
-                    initialRequest: false
-                });
+                    languageRef.current,
+                    newHistory,
+                    false
+                );
+                
+                if (result.questions.length > 0) {
+                    const timestamp = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                    qaMessages = result.questions.map((qa, idx) => ({
+                        id: `qa-${Date.now()}-${idx}`,
+                        role: 'assistant',
+                        text: "",
+                        isQuestionAnswer: true,
+                        question: qa.question,
+                        answer: qa.answer,
+                        timestamp
+                    }));
+                }
+                followUpText = result.followUp;
             } else {
-                response = await gyanAI({
-                    topic: selectedTopic!,
-                    question: query,
-                    language: languageRef.current,
-                    history: newHistory
-                });
+                responseText = await gyanAIOffline(
+                    selectedTopic!,
+                    query,
+                    languageRef.current,
+                    newHistory
+                );
             }
         }
 
-        if (!response) throw new Error("No response");
-
         const timestamp = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
         
-        if (activeMode === 'gyan-ai' && selectedTopic === 'Interview Preparation' && response.response) {
-            const qaMessages: UIMessage[] = response.response.map((qa: any, idx: number) => ({
-                id: `qa-${Date.now()}-${idx}`,
-                role: 'assistant',
-                text: "",
-                isQuestionAnswer: true,
-                question: qa.question,
-                answer: qa.answer,
-                timestamp
-            }));
+        if (qaMessages.length > 0) {
             setMessages(prev => [...prev, ...qaMessages]);
-            
-            if (response.followUpSuggestion) {
+            if (followUpText) {
                 setMessages(prev => [...prev, {
                     id: `followup-${Date.now()}`,
                     role: 'assistant',
-                    text: response.followUpSuggestion,
+                    text: followUpText,
                     timestamp
                 }]);
             }
-        } else {
-            const answerText = response.answer || response.refinedQuestion?.refinedQuestion || "Hmm, let me think about that...";
+        } else if (responseText) {
             setMessages(prev => [...prev, {
                 id: `ai-${Date.now()}`,
                 role: 'assistant',
-                text: answerText,
+                text: responseText,
                 timestamp
             }]);
         }
 
-    } catch (error) {
+        // Update history for next turn
+        setHistory(prev => [...prev, { role: 'assistant', content: responseText || followUpText || '' }]);
+
+    } catch (error: any) {
+        console.error('AI Error:', error);
+        const errorMessage = error.message || 'Unknown error';
         setMessages(prev => [...prev, {
             id: 'error',
             role: 'assistant',
-            text: "🌐 Connection hiccup! Try again in a moment?",
+            text: `⚠️ AI Error: ${errorMessage.includes('API') ? 'Please check your Claude API setup and internet connection.' : errorMessage}`,
             timestamp: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
         }]);
     } finally {
@@ -278,7 +524,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
     }
   };
 
-  // --- ✅ FULL FILE UPLOAD HANDLER ---
+  // File Upload Handler
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
         const file = e.target.files[0];
@@ -294,7 +540,8 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
         }
 
         const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-        if (!allowedTypes.includes(file.type) && !file.name.match(/\.(doc|docx|pdf)$/i)) {
+        const fileName = file.name.toLowerCase();
+        if (!allowedTypes.includes(file.type) && !fileName.match(/\.(doc|docx|pdf)$/)) {
             toast({
                 variant: "destructive",
                 title: "Invalid File Type",
@@ -309,7 +556,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
         
         toast({
             title: "✅ Resume Ready",
-            description: `"${file.name}" analyzed successfully!`,
+            description: `"${file.name}" loaded successfully!`,
             className: "bg-emerald-50 border-emerald-200"
         });
     }
@@ -318,34 +565,39 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
   const startInterview = async () => {
       if (!resumeFile) return;
       setIsProcessingResume(true);
+      
       try {
-          const formData = new FormData();
-          formData.append('file', resumeFile);
-          const result = await parseResume(formData);
+          // Parse resume offline
+          const extractedText = await parseResumeOffline(resumeFile);
+          setResumeText(extractedText);
           
-          if (!result?.text) throw new Error("Resume parsing failed");
+          if (!extractedText || extractedText.length < 50) {
+            throw new Error("Resume text extraction failed or too short. Please ensure your file contains readable text.");
+          }
 
-          const response = await interviewPrepper({
-              resumeText: result.text,
+          // Generate initial interview questions
+          const result = await interviewPrepperOffline(
+              extractedText,
               experienceLevel,
-              language: languageRef.current,
-              history: [],
-              initialRequest: true
-          });
+              languageRef.current,
+              [],
+              true
+          );
 
-          if (!response?.response) throw new Error("Initialization failed");
+          if (!result.questions || result.questions.length === 0) {
+            throw new Error("Failed to generate interview questions");
+          }
 
           const timestamp = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
           
-          // Welcome message for interview start
           const welcomeMsg: UIMessage = {
               id: 'interview-welcome',
               role: 'assistant',
-              text: `🎯 Great! I've analyzed your resume. Let's start your ${experienceLevel === 'Fresher Student' ? 'fresher' : 'experienced'} interview simulation. Answer naturally and I'll provide detailed feedback!`,
+              text: `🎯 Perfect! I've analyzed your resume (${extractedText.length} characters). Let's start your ${experienceLevel === 'Fresher Student' ? 'fresher' : 'experienced'} interview simulation. Answer naturally and I'll provide detailed feedback!`,
               timestamp
           };
           
-          const qaMessages: UIMessage[] = response.response.map((qa: any, idx: number) => ({
+          const qaMessages: UIMessage[] = result.questions.map((qa, idx) => ({
                 id: `init-${idx}`,
                 role: 'assistant',
                 text: "",
@@ -356,20 +608,28 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
             }));
             
            setMessages([welcomeMsg, ...qaMessages]);
-           if (response.followUpSuggestion) {
+           
+           if (result.followUp) {
              setMessages(prev => [...prev, { 
                 id: 'init-follow', 
                 role: 'assistant', 
-                text: response.followUpSuggestion, 
+                text: result.followUp, 
                 timestamp 
              }]);
            }
 
-      } catch (err) {
+           toast({
+               title: "🚀 Interview Started!",
+               description: "Answer questions naturally. Type your responses below.",
+               className: "bg-green-50 border-green-200"
+           });
+
+      } catch (err: any) {
+          console.error('Interview setup error:', err);
           toast({ 
             variant: "destructive", 
             title: "⚠️ Setup Error", 
-            description: "Resume analysis failed. Try another file?" 
+            description: err.message || "Resume analysis failed. Ensure file is readable and try again.",
           });
       } finally {
           setIsProcessingResume(false);
@@ -381,6 +641,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
       setHistory([]);
       setResumeFile(null);
       setFileName("");
+      setResumeText("");
       if (fileInputRef.current) fileInputRef.current.value = "";
       
       toast({
@@ -396,21 +657,26 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
 
       setIsLoading(true);
       try {
-          const response = await gyanAI({
+          const introText = await gyanAIOffline(
               topic,
-              question: `Introduce yourself as the ultimate ${topic} expert and share 3 key ways you can help.`,
-              language: languageRef.current,
-              history: []
-          });
+              `Introduce yourself as the ultimate ${topic} expert and share 3 key ways you can help.`,
+              languageRef.current,
+              []
+          );
           
           setMessages([{
               id: 'intro',
               role: 'assistant',
-              text: response.answer,
+              text: introText,
               timestamp: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
           }]);
-      } catch (e) {
+      } catch (e: any) {
           console.error(e);
+          toast({
+              variant: "destructive",
+              title: "Connection Error",
+              description: e.message || "Failed to initialize expert. Check your internet connection."
+          });
       } finally {
           setIsLoading(false);
       }
@@ -423,7 +689,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
 
   return (
     <div className="flex flex-col h-full bg-gradient-to-br from-slate-50 via-white to-indigo-50 relative">
-        {/* Enhanced Header */}
+        {/* Header */}
         <div className={cn(
             "px-5 py-4 flex items-center justify-between shrink-0 shadow-lg backdrop-blur-sm transition-all duration-500 border-b border-slate-200/50",
             activeMode === 'sarathi' ? "bg-white/90" : "bg-gradient-to-r from-indigo-600 to-purple-600 text-white"
@@ -462,7 +728,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                         <p className={cn("text-xs font-medium opacity-90 leading-tight", 
                             activeMode === 'sarathi' ? "text-slate-600" : "text-indigo-100"
                         )}>
-                            {activeMode === 'sarathi' ? 'Career Navigator' : 'Domain Expert'}
+                            {activeMode === 'sarathi' ? 'Offline Career Navigator' : 'Offline Domain Expert'}
                         </p>
                     </div>
                     <div className="w-2 h-2 bg-emerald-400 border-2 border-white rounded-full animate-pulse ml-auto"></div>
@@ -495,10 +761,10 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
             </div>
         </div>
 
-        {/* Enhanced Body Content */}
+        {/* Body Content */}
         <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
             
-            {/* 1. Enhanced Gyan AI Topic Selection */}
+            {/* Gyan AI Topic Selection */}
             {isGyanHome && (
                 <ScrollArea className="flex-1">
                     <div className="p-6 space-y-6 text-center">
@@ -507,7 +773,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                                 Choose Your Expert
                             </h2>
                             <p className="text-sm text-slate-500 max-w-sm mx-auto leading-relaxed">
-                                Tap to unlock specialized AI knowledge for your career journey
+                                Offline AI-powered specialized knowledge for your career journey
                             </p>
                         </div>
                         <div className="grid grid-cols-1 gap-4 max-w-sm mx-auto">
@@ -527,13 +793,13 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                                         </div>
                                         <div>
                                             <span className="block text-lg font-bold text-slate-800 leading-tight">{topic.id.split(' in ')[0]}</span>
-                                            <span className="text-xs text-emerald-600 font-semibold bg-emerald-100 px-2 py-0.5 rounded-full mt-1">Industry Expert</span>
+                                            <span className="text-xs text-emerald-600 font-semibold bg-emerald-100 px-2 py-0.5 rounded-full mt-1">Offline Expert</span>
                                         </div>
                                     </div>
                                 </button>
                             ))}
                         </div>
-                        {/* Featured Interview Prep */}
+                        {/* Interview Prep */}
                         <button
                             onClick={() => setSelectedTopic('Interview Preparation')}
                             className="w-full group relative overflow-hidden bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-600 rounded-3xl shadow-2xl hover:shadow-3xl hover:scale-[1.02] transition-all duration-300 h-24"
@@ -544,8 +810,8 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                                     <FileText className="w-8 h-8 text-white drop-shadow-lg" />
                                 </div>
                                 <div className="flex-1 text-left text-white">
-                                    <h3 className="text-xl font-black leading-tight">AI Mock Interview</h3>
-                                    <p className="text-sm opacity-90 leading-tight">Upload resume → Get real interview practice</p>
+                                    <h3 className="text-xl font-black leading-tight">Offline Mock Interview</h3>
+                                    <p className="text-sm opacity-90 leading-tight">Upload resume → AI interview practice</p>
                                 </div>
                                 <ArrowLeft className="w-6 h-6 text-white drop-shadow-lg group-hover:translate-x-2 transition-transform duration-300 rotate-[-20deg]" />
                             </div>
@@ -554,7 +820,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                 </ScrollArea>
             )}
 
-            {/* 2. ✅ FULL INTERVIEW SETUP WITH PDF/DOC UPLOAD */}
+            {/* Interview Setup */}
             {isInterviewSetup && (
                 <div className="flex-1 flex flex-col p-8 bg-gradient-to-br from-indigo-50 via-white to-purple-50 items-center justify-center text-center space-y-8 overflow-hidden">
                     <div className="space-y-3 flex-shrink-0">
@@ -562,15 +828,15 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                             <FileText className="w-10 h-10 text-white drop-shadow-lg" />
                         </div>
                         <div>
-                            <h2 className="text-2xl font-black text-slate-800 mb-1">🎯 Smart Interview Prep</h2>
+                            <h2 className="text-2xl font-black text-slate-800 mb-1">🎯 Offline Interview Prep</h2>
                             <p className="text-lg text-slate-600 max-w-md mx-auto leading-relaxed">
-                                AI analyzes your PDF/DOC resume and simulates real interviews
+                                AI analyzes your PDF/DOC resume offline and simulates real interviews
                             </p>
                         </div>
                     </div>
 
                     <div className="w-full max-w-md space-y-5 flex-1 flex flex-col justify-center">
-                         {/* Experience Level Select */}
+                         {/* Experience Level */}
                          <div className="space-y-2">
                             <label className="text-sm font-bold text-slate-700 block mb-1">Experience Level</label>
                             <Select value={experienceLevel} onValueChange={(v: any) => setExperienceLevel(v)}>
@@ -584,7 +850,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                             </Select>
                         </div>
 
-                        {/* ✅ FULL PDF/DOC FILE UPLOAD SECTION */}
+                        {/* File Upload */}
                         <div 
                             onClick={() => fileInputRef.current?.click()}
                             className={cn(
@@ -594,7 +860,6 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                                   : "border-slate-200/50 hover:border-indigo-400 bg-white/70 hover:bg-indigo-50/50"
                             )}
                         >
-                            {/* ✅ HIDDEN FILE INPUT - FULLY FUNCTIONAL */}
                             <input 
                                 ref={fileInputRef}
                                 type="file" 
@@ -611,9 +876,9 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                                         </div>
                                         <div className="space-y-1">
                                             <span className="text-lg font-black text-emerald-800 truncate max-w-[200px] block px-2">{fileName}</span>
-                                            <span className="text-sm text-emerald-600 font-semibold bg-emerald-100 px-3 py-1 rounded-full shadow-sm">✅ Ready to Analyze</span>
+                                            <span className="text-sm text-emerald-600 font-semibold bg-emerald-100 px-3 py-1 rounded-full shadow-sm">✅ Ready</span>
                                         </div>
-                                        <span className="text-xs text-emerald-500">Click to change file</span>
+                                        <span className="text-xs text-emerald-500">Click to change</span>
                                     </>
                                 ) : (
                                     <>
@@ -621,17 +886,15 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                                             <Upload className="w-8 h-8 text-slate-400 group-hover:text-indigo-500 transition-colors drop-shadow-sm" />
                                         </div>
                                         <div className="space-y-1">
-                                            <span className="text-lg font-bold text-slate-700">📄 Drop your Resume</span>
-                                            <span className="text-sm text-slate-500 flex items-center gap-1">
-                                                PDF, DOC, DOCX • Max 5MB
-                                            </span>
+                                            <span className="text-lg font-bold text-slate-700">📄 Drop Resume</span>
+                                            <span className="text-sm text-slate-500">PDF, DOC, DOCX • Max 5MB</span>
                                         </div>
                                     </>
                                 )}
                             </div>
                         </div>
 
-                        {/* ✅ START INTERVIEW BUTTON */}
+                        {/* Start Button */}
                         <Button 
                             className={cn(
                                 "w-full h-14 text-lg font-bold shadow-2xl backdrop-blur-sm transition-all duration-300 rounded-3xl flex-shrink-0",
@@ -645,12 +908,12 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                             {isProcessingResume ? (
                                 <>
                                     <Loader2 className="animate-spin mr-3 w-6 h-6" />
-                                    Analyzing Resume...
+                                    Analyzing Offline...
                                 </>
                             ) : (
                                 <>
                                     <Sparkles className="mr-3 w-6 h-6" />
-                                    🚀 Launch Interview
+                                    🚀 Start Interview
                                 </>
                             )}
                         </Button>
@@ -658,10 +921,10 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                 </div>
             )}
 
-            {/* 3. Enhanced Main Chat View */}
+            {/* Main Chat View */}
             {!isGyanHome && !isInterviewSetup && (
                 <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
-                    {/* Interview Reset Button - Only show during active interview */}
+                    {/* Reset Button for Active Interview */}
                     {activeMode === 'gyan-ai' && selectedTopic === 'Interview Preparation' && messages.length > 0 && (
                         <div className="px-5 pt-3 pb-2 border-b border-slate-200/50 bg-gradient-to-r from-slate-50 to-indigo-50/30 shrink-0">
                             <Button 
@@ -671,17 +934,18 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                                 className="w-full h-10 bg-white/80 backdrop-blur-sm hover:bg-red-50 hover:border-red-300 hover:text-red-600 transition-all rounded-2xl shadow-lg font-semibold text-slate-600 border-slate-200"
                             >
                                 <X className="w-4 h-4 mr-2" />
-                                🔄 Reset & Upload New Resume
+                                🔄 Reset Interview
                             </Button>
                         </div>
                     )}
+                    
                     <ScrollArea className="flex-1 px-6 pb-3 pt-2" viewportRef={scrollRef}>
                         <div className="flex flex-col gap-4 pb-1">
                             {messages.length === 0 && (
                                 <div className="flex flex-col items-center justify-center h-48 text-center text-slate-400 space-y-2">
                                     <Bot className="w-16 h-16 opacity-40 mx-auto" />
-                                    <p className="text-lg font-semibold text-slate-600">Ready to chat!</p>
-                                    <p className="text-sm">Ask anything about your career journey</p>
+                                    <p className="text-lg font-semibold text-slate-600">Ready for offline chat!</p>
+                                    <p className="text-sm">Ask anything about your career</p>
                                 </div>
                             )}
                             {messages.map((msg) => {
@@ -708,7 +972,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                                                     <p className="text-base" dangerouslySetInnerHTML={{ __html: msg.answer?.replace(/\n/g, '<br />') || "" }} />
                                                 </div>
                                                 <div className="text-xs text-indigo-600 font-semibold bg-indigo-50 px-3 py-2 rounded-xl border border-indigo-100">
-                                                    💡 <strong>Tip:</strong> Practice this answer in your own words before the real interview
+                                                    💡 <strong>Tip:</strong> Practice this in your own words
                                                 </div>
                                             </div>
                                         </div>
@@ -765,11 +1029,11 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                         </div>
                     </ScrollArea>
 
-                    {/* Enhanced Input Area */}
+                    {/* Input Area */}
                     <div className="px-5 pt-3 pb-2 bg-gradient-to-r from-white/90 via-slate-50 to-indigo-50/90 border-t border-slate-200/50 backdrop-blur-sm shadow-inner shrink-0">
                         <div className="flex items-center justify-between mb-2 px-1">
-                            <Select value={language} onValueChange={setLanguage} className="w-28">
-                                <SelectTrigger className="h-8 text-xs bg-white/70 backdrop-blur-sm border-slate-200 shadow-sm hover:shadow-md rounded-2xl px-2">
+                            <Select value={language} onValueChange={setLanguage}>
+                                <SelectTrigger className="h-8 text-xs bg-white/70 backdrop-blur-sm border-slate-200 shadow-sm hover:shadow-md rounded-2xl px-2 w-28">
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent className="bg-white/95 backdrop-blur-sm border-slate-200 shadow-2xl">
@@ -786,7 +1050,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                                 ref={inputRef}
                                 value={input} 
                                 onChange={(e) => setInput(e.target.value)} 
-                                placeholder={activeMode === 'sarathi' ? "💭 Ask Sarathi anything..." : "🧠 Ask the expert..."}
+                                placeholder={activeMode === 'sarathi' ? "💭 Ask Sarathi..." : "🧠 Ask expert..."}
                                 className="flex-1 border-none bg-transparent shadow-none focus-visible:ring-0 min-h-[44px] text-base px-4 placeholder-slate-400 group-focus-within:placeholder-slate-500"
                                 disabled={isLoading}
                             />
