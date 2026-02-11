@@ -2,8 +2,8 @@
 
 import mammoth from 'mammoth';
 import * as pdfjs from 'pdfjs-dist/build/pdf.mjs';
-import { generateOfflineInterview } from '@/lib/offline-processor'; 
-
+// Fix: Path correct karein aur function ka naam match karein (Alias use karke)
+import { handleInterviewSession as generateOfflineInterview } from '@/lib/my-offline-ai/interview';
 // --- Types (Temporary Definition to prevent TS errors) ---
 interface InterviewPrepperInput {
   resumeText: string;
