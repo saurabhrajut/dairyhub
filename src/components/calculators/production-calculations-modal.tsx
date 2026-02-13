@@ -39,6 +39,8 @@ import {
   Scale,         // ✅ ADDED
   TrendingUp,    // ✅ ADDED
   TrendingDown,  // ✅ ADDED
+  Beaker,      // <--- Ye add karein
+  Settings2,
 } from "lucide-react";
 import {
   Select,
@@ -2142,430 +2144,309 @@ function MixCompositionCalc() {
 }
 
 // ==================== BATCH SCALING CALCULATOR ====================
+
+// Types
+interface BatchIngredient {
+  id: number;
+  name: string;
+  amount: string;
+  unit: "kg" | "g";
+  percentage: string;
+}
+
 function BatchScalingCalc() {
   const { toast } = useToast();
-  const { validatePositive } = useInputValidation();
+  
+  // --- STATE FOR SIMPLE SCALING (Tab 1) ---
   const [ingredients, setIngredients] = useState<BatchIngredient[]>([
     { id: 1, name: "Milk", amount: "55", unit: "kg", percentage: "55" },
   ]);
-  const [finalBatchSize, setFinalBatchSize] = useState("100");
-  const [result, setResult] = useState<any[] | null>(null);
-  const [activeTab, setActiveTab] = useState<"by-weight" | "by-percentage">(
-    "by-weight"
-  );
+  const [activeTab, setActiveTab] = useState<"solver" | "simple-scaling">("solver");
+  
+  // --- STATE FOR ICE CREAM SOLVER (Tab 2 - The Advanced One) ---
+  const [batchSize, setBatchSize] = useState("100");
+  const [targetComposition, setTargetComposition] = useState({
+    fat: "10",
+    snf: "11",
+    sugar: "14.5",
+    stabilizer: "0.3",
+  });
+  
+  // Raw Material Composition (User can edit these if their milk quality changes)
+  const [rawMaterials, setRawMaterials] = useState({
+    milk: { fat: "6.8", snf: "9.6" },
+    cream: { fat: "40", snf: "5.4" },
+    smp: { fat: "0.5", snf: "97" },
+  });
+
+  const [solverResult, setSolverResult] = useState<any[] | null>(null);
+
+  // --- HELPER: SIMPLE SCALING LOGIC ---
+  const handleIngredientChange = (id: number, field: keyof BatchIngredient, value: string) => {
+    setIngredients(ingredients.map((ing) => (ing.id === id ? { ...ing, [field]: value } : ing)));
+  };
 
   const addIngredient = () => {
-    setIngredients([
-      ...ingredients,
-      { id: Date.now(), name: "", amount: "", unit: "kg", percentage: "" },
-    ]);
+    setIngredients([...ingredients, { id: Date.now(), name: "", amount: "", unit: "kg", percentage: "" }]);
   };
 
   const removeIngredient = (id: number) => {
-    if (ingredients.length <= 1) {
-      toast({
-        title: "Cannot Remove",
-        description: "At least one ingredient is required",
-        variant: "destructive",
-      });
-      return;
-    }
+    if (ingredients.length <= 1) return;
     setIngredients(ingredients.filter((ing) => ing.id !== id));
   };
 
-  const handleIngredientChange = (
-    id: number,
-    field: keyof BatchIngredient,
-    value: string
-  ) => {
-    setIngredients(
-      ingredients.map((ing) => (ing.id === id ? { ...ing, [field]: value } : ing))
-    );
-  };
+  // --- CORE LOGIC: THE ICE CREAM SOLVER (Linear Equation Solver) ---
+  const solveIceCreamMix = useCallback(() => {
+    const size = parseFloat(batchSize);
+    
+    // Parse Targets
+    const T_Fat = parseFloat(targetComposition.fat);
+    const T_Snf = parseFloat(targetComposition.snf);
+    const T_Sugar = parseFloat(targetComposition.sugar);
+    const T_Stab = parseFloat(targetComposition.stabilizer);
 
-  const calculateByWeight = useCallback(() => {
-    const finalSizeKg = parseFloat(finalBatchSize);
-    const validation = validatePositive(finalBatchSize, "Final batch size");
+    // Parse Ingredients
+    const M_f = parseFloat(rawMaterials.milk.fat);
+    const M_s = parseFloat(rawMaterials.milk.snf);
+    const C_f = parseFloat(rawMaterials.cream.fat);
+    const C_s = parseFloat(rawMaterials.cream.snf);
+    const S_f = parseFloat(rawMaterials.smp.fat);
+    const S_s = parseFloat(rawMaterials.smp.snf);
 
-    if (!validation.isValid) {
-      toast({
-        variant: "destructive",
-        title: "Validation Error",
-        description: validation.message,
-      });
+    if ([size, T_Fat, T_Snf, T_Sugar, T_Stab, M_f, M_s, C_f, C_s, S_f, S_s].some(isNaN)) {
+      toast({ variant: "destructive", title: "Error", description: "Please fill all fields with valid numbers." });
       return;
     }
 
-    const validIngredients = ingredients.filter(
-      (ing) => ing.name && parseFloat(ing.amount) > 0
-    );
+    // 1. Calculate fixed ingredients first
+    const sugarQty = (T_Sugar / 100) * size;
+    const stabQty = (T_Stab / 100) * size;
+    
+    // 2. Remaining needed for Dairy parts
+    const totalDairyMass = size - sugarQty - stabQty; 
+    
+    // Target Fat Mass required in total mix
+    const totalFatNeeded = (T_Fat / 100) * size;
+    
+    // Target SNF Mass required in total mix
+    const totalSnfNeeded = (T_Snf / 100) * size;
 
-    if (validIngredients.length === 0) {
-      toast({
-        variant: "destructive",
-        title: "Invalid Input",
-        description: "Please enter at least one ingredient with valid amount",
-      });
+    // 3. Solving System of Linear Equations (Cramer's Rule logic)
+    const a1 = 1, b1 = 1, c1 = 1, d1 = totalDairyMass;
+    const a2 = M_f/100, b2 = C_f/100, c2 = S_f/100, d2 = totalFatNeeded;
+    const a3 = M_s/100, b3 = C_s/100, c3 = S_s/100, d3 = totalSnfNeeded;
+
+    // Determinant of main matrix
+    const D = a1 * (b2 * c3 - c2 * b3) - b1 * (a2 * c3 - c2 * a3) + c1 * (a2 * b3 - b2 * a3);
+
+    if (Math.abs(D) < 0.000001) {
+      toast({ variant: "destructive", title: "Calculation Error", description: "These inputs create an impossible equation." });
       return;
     }
 
-    const baseTotalWeightKg = validIngredients.reduce((sum, ing) => {
-      const amount = parseFloat(ing.amount) || 0;
-      return sum + (ing.unit === "g" ? amount / 1000 : amount);
-    }, 0);
+    // Solve for X (Milk), Y (Cream), Z (SMP)
+    const Dx = d1 * (b2 * c3 - c2 * b3) - b1 * (d2 * c3 - c2 * d3) + c1 * (d2 * b3 - b2 * d3);
+    const Dy = a1 * (d2 * c3 - c2 * d3) - d1 * (a2 * c3 - c2 * a3) + c1 * (a2 * d3 - d2 * a3);
+    const Dz = a1 * (b2 * d3 - d2 * b3) - b1 * (a2 * d3 - d2 * a3) + d1 * (a2 * b3 - b2 * a3);
 
-    if (baseTotalWeightKg === 0) return;
+    const milkQty = Dx / D;
+    const creamQty = Dy / D;
+    const smpQty = Dz / D;
 
-    const scaledIngredients = validIngredients.map((ing) => {
-      const amountKg =
-        ing.unit === "g"
-          ? (parseFloat(ing.amount) || 0) / 1000
-          : parseFloat(ing.amount) || 0;
-      const scaledAmountKg = (amountKg / baseTotalWeightKg) * finalSizeKg;
-      const percentage = (amountKg / baseTotalWeightKg) * 100;
-      return {
-        name: ing.name,
-        amount: scaledAmountKg,
-        percentage: percentage,
-      };
-    });
-
-    setResult(scaledIngredients);
-    toast({
-      title: "Success",
-      description: `Batch scaled to ${finalSizeKg} kg successfully!`,
-    });
-  }, [ingredients, finalBatchSize, validatePositive, toast]);
-
-  const calculateByPercentage = useCallback(() => {
-    const finalSizeKg = parseFloat(finalBatchSize);
-    const validation = validatePositive(finalBatchSize, "Final batch size");
-
-    if (!validation.isValid) {
-      toast({
-        variant: "destructive",
-        title: "Validation Error",
-        description: validation.message,
+    if (milkQty < 0 || creamQty < 0 || smpQty < 0) {
+      toast({ 
+        variant: "destructive", 
+        title: "Impossible Balance", 
+        description: "Calculation resulted in negative values. Target Fat/SNF might be unreachable with these ingredients." 
       });
-      return;
     }
 
-    const validIngredients = ingredients.filter(
-      (ing) => ing.name && parseFloat(ing.percentage) > 0
-    );
+    const results = [
+      { name: "Whole Milk", amount: milkQty, percent: (milkQty/size)*100 },
+      { name: "Cream", amount: creamQty, percent: (creamQty/size)*100 },
+      { name: "SMP (Skim Powder)", amount: smpQty, percent: (smpQty/size)*100 },
+      { name: "Sugar", amount: sugarQty, percent: T_Sugar },
+      { name: "Stabilizer", amount: stabQty, percent: T_Stab },
+    ];
 
-    if (validIngredients.length === 0) {
-      toast({
-        variant: "destructive",
-        title: "Invalid Input",
-        description: "Please enter at least one ingredient with valid percentage",
-      });
-      return;
-    }
+    setSolverResult(results);
+    toast({ title: "Solved!", description: `Recipe calculated for ${size}kg batch.` });
 
-    const totalPercentage = validIngredients.reduce(
-      (sum, ing) => sum + (parseFloat(ing.percentage) || 0),
-      0
-    );
-
-    if (Math.abs(totalPercentage - 100) > 0.1) {
-      toast({
-        variant: "destructive",
-        title: "Invalid Percentages",
-        description: `Total must be 100%, currently ${totalPercentage.toFixed(
-          2
-        )}%`,
-      });
-      return;
-    }
-
-    const scaledIngredients = validIngredients.map((ing) => {
-      const percentage = parseFloat(ing.percentage);
-      const scaledAmountKg = (percentage / 100) * finalSizeKg;
-      return {
-        name: ing.name,
-        amount: scaledAmountKg,
-        percentage: percentage,
-      };
-    });
-
-    setResult(scaledIngredients);
-    toast({
-      title: "Success",
-      description: `Batch scaled to ${finalSizeKg} kg successfully!`,
-    });
-  }, [ingredients, finalBatchSize, validatePositive, toast]);
+  }, [batchSize, targetComposition, rawMaterials, toast]);
 
   return (
-    <div className="space-y-6">
-      <Alert className="bg-blue-50 border-blue-200">
-        <Weight className="h-4 w-4 text-blue-600" />
-        <AlertTitle className="text-sm sm:text-base">Batch Scaling</AlertTitle>
-        <AlertDescription className="text-xs sm:text-sm">
-          Scale your recipe to any batch size using weight or percentage
+    <div className="space-y-6 max-w-2xl mx-auto p-2">
+      <Alert className="bg-indigo-50 border-indigo-200">
+        <Beaker className="h-4 w-4 text-indigo-600" />
+        <AlertTitle>Smart Batch Calculator</AlertTitle>
+        <AlertDescription>
+          Choose "Solver" to balance Milk/Cream/SMP automatically, or "Simple" for basic resizing.
         </AlertDescription>
       </Alert>
 
-      <div className="mb-4">
-        <Label className="text-sm font-semibold mb-3 block">
-          Final Batch Size
-        </Label>
-        <ValidatedInput
-          label=""
-          value={finalBatchSize}
-          onChange={setFinalBatchSize}
-          validation={validatePositive(finalBatchSize, "Batch size")}
-          unit="kg"
-          icon={<Weight className="h-4 w-4 text-blue-500" />}
-          placeholder="e.g., 100"
-          colorScheme="blue"
-        />
-      </div>
-
-      <Tabs
-        value={activeTab}
-        onValueChange={(value) => setActiveTab(value as any)}
-      >
+      <Tabs value={activeTab} onValueChange={(v: any) => setActiveTab(v)} className="w-full">
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="by-weight">By Weight</TabsTrigger>
-          <TabsTrigger value="by-percentage">By Percentage</TabsTrigger>
+          <TabsTrigger value="solver">Ice Cream Solver</TabsTrigger>
+          <TabsTrigger value="simple-scaling">Simple Scaling</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="by-weight" className="space-y-4">
-          <p className="text-xs text-muted-foreground">
-            Enter your base recipe ingredients and weights
-          </p>
-
-          <div className="space-y-3">
-            {ingredients.map((ing, index) => (
-              <Card
-                key={ing.id}
-                className="p-3 bg-gradient-to-r from-blue-50/50 to-cyan-50/50"
-              >
-                <div className="grid grid-cols-1 sm:grid-cols-[2fr_1fr_1fr_auto] gap-3">
+        {/* --- TAB 1: ADVANCED SOLVER --- */}
+        <TabsContent value="solver" className="space-y-4 animate-in fade-in-50">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Target Settings */}
+            <Card className="border-indigo-100">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium flex items-center gap-2">
+                  <Settings2 className="w-4 h-4"/> Target Composition (%)
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <Label className="text-xs sm:hidden">
-                      Ingredient {index + 1}
-                    </Label>
-                    <Input
-                      type="text"
-                      placeholder="Ingredient name"
-                      value={ing.name}
-                      onChange={(e) =>
-                        handleIngredientChange(ing.id, "name", e.target.value)
-                      }
-                      className="mt-1 sm:mt-0"
+                    <Label className="text-xs">Fat %</Label>
+                    <Input 
+                      value={targetComposition.fat} 
+                      onChange={e => setTargetComposition({...targetComposition, fat: e.target.value})}
                     />
                   </div>
                   <div>
-                    <Label className="text-xs sm:hidden">Amount</Label>
-                    <Input
-                      type="number"
-                      inputMode="decimal"
-                      placeholder="Amount"
-                      value={ing.amount}
-                      onChange={(e) =>
-                        handleIngredientChange(ing.id, "amount", e.target.value)
-                      }
-                      className="mt-1 sm:mt-0"
+                    <Label className="text-xs">SNF %</Label>
+                    <Input 
+                      value={targetComposition.snf} 
+                      onChange={e => setTargetComposition({...targetComposition, snf: e.target.value})}
                     />
                   </div>
                   <div>
-                    <Label className="text-xs sm:hidden">Unit</Label>
-                    <Select
-                      value={ing.unit}
-                      onValueChange={(val) =>
-                        handleIngredientChange(ing.id, "unit", val as "g" | "kg")
-                      }
-                    >
-                      <SelectTrigger className="mt-1 sm:mt-0">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="kg">kg</SelectItem>
-                        <SelectItem value="g">g</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <Label className="text-xs">Sugar %</Label>
+                    <Input 
+                      value={targetComposition.sugar} 
+                      onChange={e => setTargetComposition({...targetComposition, sugar: e.target.value})}
+                    />
                   </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-destructive hover:bg-red-100"
-                    onClick={() => removeIngredient(ing.id)}
-                  >
-                    <XCircle className="h-5 w-5" />
-                  </Button>
+                  <div>
+                    <Label className="text-xs">Stabilizer %</Label>
+                    <Input 
+                      value={targetComposition.stabilizer} 
+                      onChange={e => setTargetComposition({...targetComposition, stabilizer: e.target.value})}
+                    />
+                  </div>
                 </div>
-              </Card>
-            ))}
+              </CardContent>
+            </Card>
+
+            {/* Ingredient Composition */}
+            <Card className="border-indigo-100">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium flex items-center gap-2">
+                  <Beaker className="w-4 h-4"/> Source Specs (%)
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="grid grid-cols-3 gap-2 text-xs font-semibold text-muted-foreground mb-1">
+                  <span>Source</span>
+                  <span>Fat %</span>
+                  <span>SNF %</span>
+                </div>
+                {/* Milk Row */}
+                <div className="grid grid-cols-3 gap-2 items-center">
+                  <Label className="text-xs">Milk</Label>
+                  <Input className="h-8" value={rawMaterials.milk.fat} onChange={e => setRawMaterials({...rawMaterials, milk: {...rawMaterials.milk, fat: e.target.value}})} />
+                  <Input className="h-8" value={rawMaterials.milk.snf} onChange={e => setRawMaterials({...rawMaterials, milk: {...rawMaterials.milk, snf: e.target.value}})} />
+                </div>
+                {/* Cream Row */}
+                <div className="grid grid-cols-3 gap-2 items-center">
+                  <Label className="text-xs">Cream</Label>
+                  <Input className="h-8" value={rawMaterials.cream.fat} onChange={e => setRawMaterials({...rawMaterials, cream: {...rawMaterials.cream, fat: e.target.value}})} />
+                  <Input className="h-8" value={rawMaterials.cream.snf} onChange={e => setRawMaterials({...rawMaterials, cream: {...rawMaterials.cream, snf: e.target.value}})} />
+                </div>
+                {/* SMP Row */}
+                <div className="grid grid-cols-3 gap-2 items-center">
+                  <Label className="text-xs">SMP</Label>
+                  <Input className="h-8" value={rawMaterials.smp.fat} onChange={e => setRawMaterials({...rawMaterials, smp: {...rawMaterials.smp, fat: e.target.value}})} />
+                  <Input className="h-8" value={rawMaterials.smp.snf} onChange={e => setRawMaterials({...rawMaterials, smp: {...rawMaterials.smp, snf: e.target.value}})} />
+                </div>
+              </CardContent>
+            </Card>
           </div>
 
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={addIngredient}
-            className="w-full sm:w-auto border-blue-300 hover:bg-blue-50"
-          >
-            <PlusCircle className="mr-2 h-4 w-4" /> Add Ingredient
-          </Button>
+          <div className="bg-indigo-50 p-4 rounded-lg flex items-end gap-4">
+             <div className="w-full">
+                <Label>Total Batch Size (kg)</Label>
+                <Input 
+                  className="bg-white text-lg font-semibold mt-1" 
+                  value={batchSize} 
+                  onChange={e => setBatchSize(e.target.value)}
+                />
+             </div>
+             <Button onClick={solveIceCreamMix} className="h-11 bg-indigo-600 hover:bg-indigo-700 min-w-[140px]">
+                Calculate
+             </Button>
+          </div>
 
-          <Button
-            onClick={calculateByWeight}
-            className="w-full h-12 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700"
-            size="lg"
-          >
-            <Calculator className="mr-2 h-5 w-5" />
-            Scale Batch by Weight
-          </Button>
+          {solverResult && (
+            <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-300">
+               <CardHeader>
+                  <CardTitle className="text-lg text-green-800">Final Recipe Formula</CardTitle>
+               </CardHeader>
+               <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Ingredient</TableHead>
+                        <TableHead className="text-right">Weight (kg)</TableHead>
+                        <TableHead className="text-right">% of Mix</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {solverResult.map((res, i) => (
+                        <TableRow key={i}>
+                          <TableCell className="font-medium">{res.name}</TableCell>
+                          <TableCell className="text-right font-bold text-lg">{res.amount.toFixed(3)}</TableCell>
+                          <TableCell className="text-right text-muted-foreground">{res.percent.toFixed(2)}%</TableCell>
+                        </TableRow>
+                      ))}
+                      <TableRow className="bg-green-100/50 font-bold">
+                        <TableCell>Total</TableCell>
+                        <TableCell className="text-right">{solverResult.reduce((a: any, b: any) => a + b.amount, 0).toFixed(2)}</TableCell>
+                        <TableCell className="text-right">100%</TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+               </CardContent>
+            </Card>
+          )}
         </TabsContent>
 
-        <TabsContent value="by-percentage" className="space-y-4">
-          <Alert className="bg-amber-50 border-amber-200">
-            <Info className="h-4 w-4 text-amber-600" />
-            <AlertDescription className="text-xs">
-              Percentages must add up to <strong>100%</strong>
-            </AlertDescription>
-          </Alert>
-
-          <div className="space-y-3">
-            {ingredients.map((ing, index) => (
-              <Card
-                key={ing.id}
-                className="p-3 bg-gradient-to-r from-purple-50/50 to-pink-50/50"
-              >
-                <div className="grid grid-cols-1 sm:grid-cols-[2fr_1fr_auto] gap-3">
-                  <div>
-                    <Label className="text-xs sm:hidden">
-                      Ingredient {index + 1}
-                    </Label>
-                    <Input
-                      type="text"
-                      placeholder="Ingredient name"
-                      value={ing.name}
-                      onChange={(e) =>
-                        handleIngredientChange(ing.id, "name", e.target.value)
-                      }
-                      className="mt-1 sm:mt-0"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs sm:hidden">Percentage</Label>
-                    <div className="relative mt-1 sm:mt-0">
-                      <Input
-                        type="number"
-                        inputMode="decimal"
-                        placeholder="%"
-                        value={ing.percentage}
-                        onChange={(e) =>
-                          handleIngredientChange(
-                            ing.id,
-                            "percentage",
-                            e.target.value
-                          )
-                        }
-                      />
-                      <span className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">
-                        %
-                      </span>
-                    </div>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-destructive hover:bg-red-100"
-                    onClick={() => removeIngredient(ing.id)}
-                  >
-                    <XCircle className="h-5 w-5" />
-                  </Button>
+        {/* --- TAB 2: SIMPLE SCALING --- */}
+        <TabsContent value="simple-scaling" className="space-y-4">
+             <Card className="bg-slate-50">
+               <CardHeader><CardTitle className="text-sm text-slate-500">Manual Ingredient Input</CardTitle></CardHeader>
+               <CardContent className="space-y-3">
+               {ingredients.map((ing, index) => (
+                <div key={ing.id} className="flex gap-2 items-center">
+                   <Input 
+                    placeholder="Name" 
+                    value={ing.name} 
+                    onChange={(e) => handleIngredientChange(ing.id, "name", e.target.value)}
+                   />
+                   <Input 
+                    placeholder="Kg" 
+                    type="number"
+                    value={ing.amount} 
+                    onChange={(e) => handleIngredientChange(ing.id, "amount", e.target.value)}
+                   />
+                   <Button variant="ghost" size="icon" onClick={() => removeIngredient(ing.id)}>
+                     <XCircle className="w-4 h-4 text-red-500"/>
+                   </Button>
                 </div>
-              </Card>
-            ))}
-          </div>
-
-          <div className="flex justify-between items-center p-3 bg-muted rounded-lg">
-            <span className="font-semibold">Total Percentage:</span>
-            <span
-              className={cn(
-                "text-lg font-bold",
-                Math.abs(
-                  ingredients.reduce(
-                    (sum, ing) => sum + (parseFloat(ing.percentage) || 0),
-                    0
-                  ) - 100
-                ) < 0.1
-                  ? "text-green-600"
-                  : "text-red-600"
-              )}
-            >
-              {ingredients
-                .reduce((sum, ing) => sum + (parseFloat(ing.percentage) || 0), 0)
-                .toFixed(2)}
-              %
-            </span>
-          </div>
-
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={addIngredient}
-            className="w-full sm:w-auto border-purple-300 hover:bg-purple-50"
-          >
-            <PlusCircle className="mr-2 h-4 w-4" /> Add Ingredient
-          </Button>
-
-          <Button
-            onClick={calculateByPercentage}
-            className="w-full h-12 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
-            size="lg"
-          >
-            <Calculator className="mr-2 h-5 w-5" />
-            Scale Batch by Percentage
-          </Button>
+               ))}
+               <Button variant="outline" size="sm" onClick={addIngredient} className="w-full mt-2">
+                 <PlusCircle className="w-4 h-4 mr-2"/> Add Row
+               </Button>
+               </CardContent>
+             </Card>
         </TabsContent>
       </Tabs>
-
-      {result && (
-        <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-300 animate-in slide-in-from-bottom-4">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <CheckCircle2 className="h-5 w-5 text-green-600" />
-              Scaled Batch: {finalBatchSize} kg
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Ingredient</TableHead>
-                  <TableHead className="text-right">Percentage</TableHead>
-                  <TableHead className="text-right">Required Amount</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {result.map((ing, i) => (
-                  <TableRow key={i}>
-                    <TableCell className="font-medium">{ing.name}</TableCell>
-                    <TableCell className="text-right text-blue-700">
-                      {ing.percentage.toFixed(2)}%
-                    </TableCell>
-                    <TableCell className="text-right font-semibold text-green-700">
-                      {ing.amount.toFixed(3)} kg
-                    </TableCell>
-                  </TableRow>
-                ))}
-                <TableRow className="font-bold bg-green-100">
-                  <TableCell>Total</TableCell>
-                  <TableCell className="text-right">100.00%</TableCell>
-                  <TableCell className="text-right text-green-900">
-                    {result.reduce((sum, ing) => sum + ing.amount, 0).toFixed(3)}{" "}
-                    kg
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-      )}
     </div>
   );
 }
