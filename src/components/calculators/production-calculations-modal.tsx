@@ -44,6 +44,11 @@ import {
   Calculator,
   BadgeIndianRupee, // <--- YE ADD KAREIN
   Snowflake,
+  IceCream2,
+  PieChart,
+  ArrowRight,
+  LayoutDashboard, // <--- YE ADD KAREIN
+  Package,         // <--- YE BHI ADD KAREIN
 } from "lucide-react";
 import {
   Select,
@@ -2213,8 +2218,10 @@ function MixCompositionCalc() {
   );
 }
 
-// ==================== ADVANCED BALANCER (POD/PAC) ====================
+// ==================== ADVANCED BALANCER (Fully Responsive Fix) ====================
 export const AdvancedBalancer = () => {
+  // const { toast } = useToast(); // Uncomment if needed
+
   const [ingredients, setIngredients] = useState([
     { id: 1, name: "Milk (Full Cream)", amount: "620", ...INGREDIENT_PRESETS["Milk (Full Cream)"] },
     { id: 2, name: "Cream (40%)", amount: "180", ...INGREDIENT_PRESETS["Cream (40%)"] },
@@ -2233,13 +2240,12 @@ export const AdvancedBalancer = () => {
     
     ingredients.forEach(ing => {
       const amt = parseFloat(ing.amount as string) || 0;
-      // Handle potentially missing values with defaults
-      const iFat = parseFloat(ing.fat || 0);
-      const iSnf = parseFloat(ing.snf || ing.msnf || 0); // Handle both keys
-      const iSugar = parseFloat(ing.sugar || 0);
-      const iSolids = parseFloat(ing.solids || 0);
-      const iPod = parseFloat(ing.pod || 0);
-      const iPac = parseFloat(ing.pac || 0);
+      const iFat = parseFloat(ing.fat) || 0;
+      const iSnf = parseFloat(ing.snf || ing.msnf) || 0;
+      const iSugar = parseFloat(ing.sugar) || 0;
+      const iSolids = parseFloat(ing.solids) || (iFat + iSnf + iSugar);
+      const iPod = parseFloat(ing.pod) || 0;
+      const iPac = parseFloat(ing.pac) || 0;
 
       totals.fat += (amt * iFat) / 100;
       totals.snf += (amt * iSnf) / 100;
@@ -2249,8 +2255,6 @@ export const AdvancedBalancer = () => {
       totals.pac += amt * iPac;
     });
 
-    // Lactose PAC correction (approx SNF has 50% lactose, lactose has PAC~1)
-    // Formula approximation: PAC includes contributions from sugars + lactose in milk solids
     const lactosePac = totals.snf; 
     
     setStats({
@@ -2264,102 +2268,246 @@ export const AdvancedBalancer = () => {
   }, [ingredients]);
 
   const updateIng = (id: number, field: string, val: string) => {
-    setIngredients(prev => prev.map(ing => ing.id === id ? { ...ing, [field]: parseFloat(val) || 0 } : ing));
+    setIngredients(prev => prev.map(ing => ing.id === id ? { ...ing, [field]: val } : ing));
+  };
+
+  const handlePresetChange = (id: number, presetName: string) => {
+    if (presetName === "Custom") {
+        updateIng(id, "name", "Custom Ingredient");
+        return;
+    }
+    const preset = INGREDIENT_PRESETS[presetName];
+    if (preset) {
+        setIngredients(prev => prev.map(ing => ing.id === id ? { 
+            ...ing, 
+            name: presetName,
+            fat: preset.fat,
+            snf: preset.snf || preset.msnf,
+            sugar: preset.sugar,
+            pod: preset.pod,
+            pac: preset.pac,
+            solids: preset.solids
+        } : ing));
+    }
   };
 
   const addRow = () => {
-     setIngredients([...ingredients, { id: Date.now(), name: "New Ing.", amount: 0, fat:0, snf:0, sugar:0, pod:0, pac:0, solids:0 }]);
+     setIngredients([...ingredients, { 
+         id: Date.now(), 
+         name: "New Item", 
+         amount: "0", 
+         fat: "0", snf: "0", sugar: "0", pod: "0", pac: "0", solids: "0" 
+     }]);
+  };
+
+  const removeRow = (id: number) => {
+      if(ingredients.length > 1) {
+          setIngredients(prev => prev.filter(i => i.id !== id));
+      }
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 w-full max-w-full">
       <Alert className="bg-indigo-50 border-indigo-200">
         <Snowflake className="h-4 w-4 text-indigo-600" />
         <AlertTitle className="text-sm font-bold">Texture Balancer</AlertTitle>
         <AlertDescription className="text-xs">
-          Balance Sweetness (POD) and Softness (PAC) for perfect texture.
+          Balance POD (Sweetness) & PAC (Softness) for perfect texture.
         </AlertDescription>
       </Alert>
 
-      <div className="rounded-lg border bg-white shadow-sm overflow-hidden">
+      {/* ================= MOBILE VIEW (CARDS) ================= */}
+      <div className="md:hidden space-y-4">
+        {ingredients.map(ing => (
+            <Card key={ing.id} className="p-3 border-l-4 border-l-indigo-500 shadow-sm">
+                {/* Row 1: Name & Weight */}
+                <div className="grid grid-cols-[2fr_1fr] gap-2 mb-3">
+                    <div className="space-y-1">
+                        <Label className="text-[10px] text-muted-foreground uppercase font-bold">Ingredient</Label>
+                        <Select onValueChange={(val) => handlePresetChange(ing.id, val)}>
+                            <SelectTrigger className="h-9 text-xs w-full">
+                                <SelectValue placeholder={ing.name} />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {Object.keys(INGREDIENT_PRESETS).map(key => (
+                                    <SelectItem key={key} value={key}>{key}</SelectItem>
+                                ))}
+                                <SelectItem value="Custom">Custom...</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <div className="space-y-1">
+                        <Label className="text-[10px] text-blue-600 uppercase font-bold">Qty (g)</Label>
+                        <Input 
+                            className="h-9 font-bold bg-blue-50/50 border-blue-200 text-right" 
+                            value={ing.amount} 
+                            type="number" 
+                            onChange={e=>updateIng(ing.id, 'amount', e.target.value)} 
+                        />
+                    </div>
+                </div>
+
+                {/* Row 2: Composition Grid */}
+                <div className="grid grid-cols-5 gap-1 mb-2 bg-slate-50 p-2 rounded border border-slate-100">
+                    <div className="space-y-1">
+                        <Label className="text-[9px] text-center block text-muted-foreground">Fat%</Label>
+                        <Input className="h-7 text-[10px] text-center px-0" value={ing.fat} onChange={e=>updateIng(ing.id,'fat',e.target.value)} />
+                    </div>
+                    <div className="space-y-1">
+                        <Label className="text-[9px] text-center block text-muted-foreground">SNF%</Label>
+                        <Input className="h-7 text-[10px] text-center px-0" value={ing.snf} onChange={e=>updateIng(ing.id,'snf',e.target.value)} />
+                    </div>
+                    <div className="space-y-1">
+                        <Label className="text-[9px] text-center block text-muted-foreground">Sug%</Label>
+                        <Input className="h-7 text-[10px] text-center px-0" value={ing.sugar} onChange={e=>updateIng(ing.id,'sugar',e.target.value)} />
+                    </div>
+                    <div className="space-y-1">
+                        <Label className="text-[9px] text-center block text-indigo-600 font-bold">POD</Label>
+                        <Input className="h-7 text-[10px] text-center px-0 bg-indigo-50 border-indigo-100 font-medium text-indigo-700" value={ing.pod} onChange={e=>updateIng(ing.id,'pod',e.target.value)} />
+                    </div>
+                    <div className="space-y-1">
+                        <Label className="text-[9px] text-center block text-blue-600 font-bold">PAC</Label>
+                        <Input className="h-7 text-[10px] text-center px-0 bg-blue-50 border-blue-100 font-medium text-blue-700" value={ing.pac} onChange={e=>updateIng(ing.id,'pac',e.target.value)} />
+                    </div>
+                </div>
+
+                <Button variant="ghost" size="sm" className="w-full h-8 text-red-500 hover:bg-red-50 hover:text-red-700 text-xs" onClick={() => removeRow(ing.id)}>
+                    <XCircle className="w-3 h-3 mr-1"/> Remove Ingredient
+                </Button>
+            </Card>
+        ))}
+      </div>
+
+      {/* ================= DESKTOP VIEW (TABLE) ================= */}
+      <div className="hidden md:block rounded-lg border bg-white shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
         <Table>
           <TableHeader className="bg-slate-50">
             <TableRow>
-              <TableHead className="w-[160px]">Ingredient</TableHead>
-              <TableHead className="w-[100px]">Qty (g/kg)</TableHead>
-              <TableHead className="w-[60px] text-xs">Fat%</TableHead>
-              <TableHead className="w-[60px] text-xs">SNF%</TableHead>
-              <TableHead className="w-[60px] text-xs">Sugar%</TableHead>
-              <TableHead className="w-[50px] text-xs text-blue-600">PAC</TableHead>
-              <TableHead className="w-[40px]"></TableHead>
+              <TableHead className="w-[200px] pl-4">Ingredient</TableHead>
+              <TableHead className="w-[100px]">Qty (g)</TableHead>
+              <TableHead className="w-[70px] text-xs">Fat %</TableHead>
+              <TableHead className="w-[70px] text-xs">SNF %</TableHead>
+              <TableHead className="w-[70px] text-xs">Sugar %</TableHead>
+              <TableHead className="w-[60px] text-xs text-indigo-600 font-bold bg-indigo-50/50">POD</TableHead>
+              <TableHead className="w-[60px] text-xs text-blue-600 font-bold bg-blue-50/50">PAC</TableHead>
+              <TableHead className="w-[50px]"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {ingredients.map(ing => (
               <TableRow key={ing.id}>
-                <TableCell className="p-2">
-                   <Input className="h-8 font-medium text-xs" value={ing.name} onChange={e=>setIngredients(prev=>prev.map(i=>i.id===ing.id?{...i, name: e.target.value}:i))} />
+                <TableCell className="p-2 pl-4">
+                    <Select onValueChange={(val) => handlePresetChange(ing.id, val)}>
+                        <SelectTrigger className="h-9 text-xs w-full min-w-[140px]">
+                            <SelectValue placeholder={ing.name} />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {Object.keys(INGREDIENT_PRESETS).map(key => (
+                                <SelectItem key={key} value={key}>{key}</SelectItem>
+                            ))}
+                            <SelectItem value="Custom">Custom...</SelectItem>
+                        </SelectContent>
+                    </Select>
                 </TableCell>
                 <TableCell className="p-2">
-                  <Input className="h-8 font-bold bg-slate-50 border-slate-200" value={ing.amount} type="number" onChange={e=>setIngredients(prev=>prev.map(i=>i.id===ing.id?{...i, amount: e.target.value}:i))} />
+                  <Input 
+                    className="h-9 font-bold bg-slate-50 border-slate-200 w-full" 
+                    value={ing.amount} 
+                    type="number" 
+                    onChange={e=>updateIng(ing.id, 'amount', e.target.value)} 
+                  />
                 </TableCell>
                 <TableCell className="p-2"><Input className="h-8 text-xs text-center" value={ing.fat} onChange={e=>updateIng(ing.id,'fat',e.target.value)} /></TableCell>
                 <TableCell className="p-2"><Input className="h-8 text-xs text-center" value={ing.snf} onChange={e=>updateIng(ing.id,'snf',e.target.value)} /></TableCell>
                 <TableCell className="p-2"><Input className="h-8 text-xs text-center" value={ing.sugar} onChange={e=>updateIng(ing.id,'sugar',e.target.value)} /></TableCell>
-                <TableCell className="p-2"><Input className="h-8 text-xs text-center bg-blue-50" value={ing.pac} onChange={e=>updateIng(ing.id,'pac',e.target.value)} /></TableCell>
-                <TableCell className="p-2"><Button variant="ghost" size="icon" className="h-8 w-8 text-red-500 hover:bg-red-50" onClick={()=>setIngredients(prev=>prev.filter(i=>i.id!==ing.id))}><XCircle className="w-4"/></Button></TableCell>
+                <TableCell className="p-2"><Input className="h-8 text-xs text-center font-semibold text-indigo-700 bg-indigo-50 border-indigo-100" value={ing.pod} onChange={e=>updateIng(ing.id,'pod',e.target.value)} /></TableCell>
+                <TableCell className="p-2"><Input className="h-8 text-xs text-center font-semibold text-blue-700 bg-blue-50 border-blue-100" value={ing.pac} onChange={e=>updateIng(ing.id,'pac',e.target.value)} /></TableCell>
+                <TableCell className="p-2">
+                    <Button variant="ghost" size="icon" className="h-8 w-8 text-red-400 hover:text-red-600 hover:bg-red-50" onClick={() => removeRow(ing.id)}>
+                        <XCircle className="w-4 h-4"/>
+                    </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
         </div>
-        <div className="p-3 bg-slate-50 border-t">
-            <Button variant="outline" size="sm" className="w-full border-dashed border-slate-400 text-slate-600 hover:bg-white" onClick={addRow}><PlusCircle className="w-4 mr-2"/> Add Row</Button>
-        </div>
+      </div>
+
+      <div className="p-2">
+        <Button variant="outline" size="sm" className="w-full h-10 border-dashed border-indigo-300 text-indigo-700 hover:bg-indigo-50" onClick={addRow}>
+            <PlusCircle className="w-4 h-4 mr-2"/> Add Ingredient
+        </Button>
       </div>
 
       {stats && (
         <div className="space-y-4 animate-in fade-in">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
              <Card className="bg-slate-800 text-white border-none shadow-lg">
                 <CardHeader className="pb-1 pt-4 px-4"><CardTitle className="text-xs uppercase opacity-70 flex items-center gap-2"><Target className="w-3 h-3"/> Total Solids</CardTitle></CardHeader>
                 <CardContent className="px-4 pb-4">
                    <div className="text-3xl font-bold">{stats.ts.toFixed(2)}%</div>
-                   <div className="text-[10px] opacity-70 mt-1">Target: 36% - 40%</div>
+                   <div className="flex justify-between items-center text-[10px] opacity-70 mt-1">
+                       <span>Target: 36-40%</span>
+                       {stats.ts < 36 && <span className="text-red-300 font-bold">Too Low</span>}
+                       {stats.ts > 42 && <span className="text-red-300 font-bold">Too High</span>}
+                   </div>
                 </CardContent>
              </Card>
+
              <Card className="bg-white border-slate-200 shadow-md">
-                <CardHeader className="pb-1 pt-4 px-4"><CardTitle className="text-xs uppercase text-slate-500 flex items-center gap-2"><Scale className="w-3 h-3"/> Total Weight</CardTitle></CardHeader>
+                <CardHeader className="pb-1 pt-4 px-4"><CardTitle className="text-xs uppercase text-slate-500 flex items-center gap-2"><Scale className="w-3 h-3"/> Total Batch</CardTitle></CardHeader>
                 <CardContent className="px-4 pb-4">
                    <div className="text-3xl font-bold text-slate-900">{stats.weight.toLocaleString()}</div>
-                   <div className="text-[10px] text-slate-500 mt-1">Units (kg/g)</div>
+                   <div className="text-[10px] text-slate-500 mt-1">Units (g/kg based on input)</div>
                 </CardContent>
              </Card>
+
              <Card className="bg-blue-600 text-white border-none shadow-lg">
                 <CardHeader className="pb-1 pt-4 px-4"><CardTitle className="text-xs uppercase opacity-70 flex items-center gap-2"><Snowflake className="w-3 h-3"/> Fat Content</CardTitle></CardHeader>
                 <CardContent className="px-4 pb-4">
                    <div className="text-3xl font-bold">{stats.fat.toFixed(2)}%</div>
-                   <div className="text-[10px] opacity-70 mt-1">Standard: 10% - 12%</div>
+                   <div className="text-[10px] opacity-70 mt-1">Standard: 8-14%</div>
                 </CardContent>
              </Card>
           </div>
+
           <Card className="border-indigo-100 bg-indigo-50/50">
-             <CardHeader className="py-2 px-4 border-b border-indigo-100"><CardTitle className="text-sm flex items-center gap-2 text-indigo-900"><Snowflake className="w-4 h-4"/> Texture Physics</CardTitle></CardHeader>
-             <CardContent className="py-4 px-4 space-y-4">
+             <CardHeader className="py-3 px-4 border-b border-indigo-100">
+                 <CardTitle className="text-sm flex items-center gap-2 text-indigo-900 font-bold">
+                     <Snowflake className="w-4 h-4"/> Texture Analysis
+                 </CardTitle>
+             </CardHeader>
+             <CardContent className="py-4 px-4 space-y-5">
                <div>
-                 <div className="flex justify-between text-sm font-medium mb-1"><span className="text-slate-600">Sweetness (POD)</span><span className="text-indigo-700 font-bold">{stats.pod.toFixed(1)}</span></div>
+                 <div className="flex justify-between text-sm font-medium mb-1">
+                     <span className="text-slate-600">Relative Sweetness (POD)</span>
+                     <span className="text-indigo-700 font-bold">{stats.pod.toFixed(1)}</span>
+                 </div>
                  <Progress value={(stats.pod/25)*100} className="h-2.5 bg-indigo-200"/>
-                 <div className="flex justify-between text-[10px] text-muted-foreground mt-1">
-                    <span>Low (10)</span> <span>Target: 14-18</span> <span>High (22)</span>
+                 <div className="flex justify-between text-[10px] text-muted-foreground mt-1 font-medium">
+                    <span>Bland (10)</span> 
+                    <span className="text-indigo-600">Target: 14-18</span> 
+                    <span>Too Sweet (22+)</span>
                  </div>
                </div>
+
                <div>
-                 <div className="flex justify-between text-sm font-medium mb-1"><span className="text-slate-600">Softness (PAC)</span><span className="text-blue-700 font-bold">{stats.pac.toFixed(1)}</span></div>
-                 <Progress value={(stats.pac/50)*100} className="h-2.5 bg-blue-200"/>
-                 <div className="flex justify-between text-[10px] text-muted-foreground mt-1">
-                    <span>Hard Ice Cream (12-16)</span> <span>Gelato (21-25)</span> <span>Soft (30+)</span>
+                 <div className="flex justify-between text-sm font-medium mb-1">
+                     <span className="text-slate-600">Softness / Anti-Freeze (PAC)</span>
+                     <span className="text-blue-700 font-bold">{stats.pac.toFixed(1)}</span>
                  </div>
+                 <Progress value={(stats.pac/50)*100} className="h-2.5 bg-blue-200"/>
+                 <div className="flex justify-between text-[10px] text-muted-foreground mt-1 font-medium">
+                    <span>Hard (12)</span> 
+                    <span className="text-blue-600">Scoopable (21-25)</span> 
+                    <span>Soft/Melty (32+)</span>
+                 </div>
+                 <p className="text-[10px] text-slate-500 mt-2 italic bg-white p-2 rounded border border-slate-100">
+                    *Higher PAC value means softer Ice Cream at same temperature. <br/>
+                    <strong>Gelato:</strong> Aim for 22-26 | <strong>Hard Scoop:</strong> Aim for 14-18
+                 </p>
                </div>
              </CardContent>
           </Card>
@@ -2368,7 +2516,7 @@ export const AdvancedBalancer = () => {
     </div>
   );
 };
-// ==================== BATCH SCALING & VERIFICATION CALCULATOR ====================
+// ==================== BATCH SCALING & VERIFICATION CALCULATOR (Updated) ====================
 
 // Types
 interface BatchIngredient {
@@ -2384,6 +2532,7 @@ function BatchScalingCalc() {
   
   // --- STATE ---
   const [activeTab, setActiveTab] = useState<"solver" | "verification" | "simple-scaling">("solver");
+  const [productType, setProductType] = useState<"ice-cream" | "frozen-dessert">("ice-cream");
   
   // Solver State
   const [batchSize, setBatchSize] = useState("100");
@@ -2395,9 +2544,9 @@ function BatchScalingCalc() {
   });
   
   const [rawMaterials, setRawMaterials] = useState({
-    milk: { fat: "6.0", snf: "9.0" },
-    cream: { fat: "40", snf: "5.4" },
-    smp: { fat: "0.5", snf: "97" },
+    base: { name: "Milk", fat: "6.0", snf: "9.0" }, // Milk or Water
+    fatSource: { name: "Cream", fat: "40", snf: "5.4" }, // Cream or Veg Fat
+    smp: { name: "SMP", fat: "0.5", snf: "97" },
   });
 
   const [solverResult, setSolverResult] = useState<any[] | null>(null);
@@ -2407,6 +2556,26 @@ function BatchScalingCalc() {
   const [ingredients, setIngredients] = useState<BatchIngredient[]>([
     { id: 1, name: "Milk", amount: "55", unit: "kg", percentage: "55" },
   ]);
+
+  // --- HANDLE PRODUCT TYPE SWITCH ---
+  const handleProductTypeChange = (type: "ice-cream" | "frozen-dessert") => {
+    setProductType(type);
+    setSolverResult(null); // Reset results
+    if (type === "ice-cream") {
+      setRawMaterials({
+        base: { name: "Milk", fat: "6.0", snf: "9.0" },
+        fatSource: { name: "Cream", fat: "40", snf: "5.4" },
+        smp: { name: "SMP", fat: "0.5", snf: "97" }
+      });
+    } else {
+      // Frozen Dessert Defaults (Water + Veg Fat)
+      setRawMaterials({
+        base: { name: "Water", fat: "0", snf: "0" },
+        fatSource: { name: "Veg Fat/Oil", fat: "99.0", snf: "0" },
+        smp: { name: "SMP", fat: "0.5", snf: "97" }
+      });
+    }
+  };
 
   // --- SIMPLE SCALING HANDLERS ---
   const handleIngredientChange = (id: number, field: keyof BatchIngredient, value: string) => {
@@ -2422,7 +2591,7 @@ function BatchScalingCalc() {
     setIngredients(ingredients.filter((ing) => ing.id !== id));
   };
 
-  // --- CORE LOGIC: SOLVER + VERIFICATION STEP GENERATOR ---
+  // --- CORE LOGIC: SOLVER ---
   const solveIceCreamMix = useCallback(() => {
     const size = parseFloat(batchSize);
     
@@ -2432,10 +2601,13 @@ function BatchScalingCalc() {
     const T_Sugar = parseFloat(targetComposition.sugar);
     const T_Stab = parseFloat(targetComposition.stabilizer);
 
-    const M_f = parseFloat(rawMaterials.milk.fat);
-    const M_s = parseFloat(rawMaterials.milk.snf);
-    const C_f = parseFloat(rawMaterials.cream.fat);
-    const C_s = parseFloat(rawMaterials.cream.snf);
+    // Dynamic Sources based on product type
+    const M_f = parseFloat(rawMaterials.base.fat);
+    const M_s = parseFloat(rawMaterials.base.snf);
+    
+    const C_f = parseFloat(rawMaterials.fatSource.fat);
+    const C_s = parseFloat(rawMaterials.fatSource.snf);
+    
     const S_f = parseFloat(rawMaterials.smp.fat);
     const S_s = parseFloat(rawMaterials.smp.snf);
 
@@ -2452,10 +2624,10 @@ function BatchScalingCalc() {
     const totalSnfNeeded = (T_Snf / 100) * size;
 
     // 2. Linear Equation Solver (Cramer's Rule)
-    // Matrix:
-    // [1    1    1   ] [M]   [TotalDairy]
-    // [Mf   Cf   Sf  ] [C] = [TotalFat  ]
-    // [Ms   Cs   Ss  ] [S]   [TotalSnf  ]
+    // Variables: x=Base(Milk/Water), y=FatSource, z=SMP
+    // Eq 1: x + y + z = totalDairyMass
+    // Eq 2: M_f*x + C_f*y + S_f*z = totalFatNeeded * 100
+    // Eq 3: M_s*x + C_s*y + S_s*z = totalSnfNeeded * 100
 
     const a1 = 1, b1 = 1, c1 = 1, d1 = totalDairyMass;
     const a2 = M_f/100, b2 = C_f/100, c2 = S_f/100, d2 = totalFatNeeded;
@@ -2468,57 +2640,48 @@ function BatchScalingCalc() {
       return;
     }
 
-    const milkQty = (d1 * (b2 * c3 - c2 * b3) - b1 * (d2 * c3 - c2 * d3) + c1 * (d2 * b3 - b2 * d3)) / D;
-    const creamQty = (a1 * (d2 * c3 - c2 * d3) - d1 * (a2 * c3 - c2 * a3) + c1 * (a2 * d3 - d2 * a3)) / D;
+    const baseQty = (d1 * (b2 * c3 - c2 * b3) - b1 * (d2 * c3 - c2 * d3) + c1 * (d2 * b3 - b2 * d3)) / D;
+    const fatSourceQty = (a1 * (d2 * c3 - c2 * d3) - d1 * (a2 * c3 - c2 * a3) + c1 * (a2 * d3 - d2 * a3)) / D;
     const smpQty = (a1 * (b2 * d3 - d2 * b3) - b1 * (a2 * d3 - d2 * a3) + d1 * (a2 * b3 - b2 * a3)) / D;
 
-    // 3. Generate Verification Steps for Mobile User
+    // 3. Verification Logic
     const steps = [];
-    steps.push(`🎯 **Target Batch:** ${size} kg`);
+    steps.push(`🎯 **Target Batch:** ${size} kg (${productType === 'ice-cream' ? 'Ice Cream' : 'Frozen Dessert'})`);
     steps.push(`🔹 **Fixed Solids:** Sugar (${sugarQty.toFixed(2)}kg) + Stabilizer (${stabQty.toFixed(2)}kg) = ${(sugarQty+stabQty).toFixed(2)}kg`);
-    steps.push(`🔹 **Dairy Base Required:** ${size} - ${(sugarQty+stabQty).toFixed(2)} = **${totalDairyMass.toFixed(2)} kg**`);
-    steps.push(`🔹 **Fat Required:** ${T_Fat}% of ${size} = **${totalFatNeeded.toFixed(2)} kg**`);
-    steps.push(`🔹 **SNF Required:** ${T_Snf}% of ${size} = **${totalSnfNeeded.toFixed(2)} kg**`);
+    steps.push(`🔹 **Base Mix Required:** ${totalDairyMass.toFixed(2)} kg`);
     steps.push(`---`);
-    steps.push(`🧮 **Solver Logic (Matrix Method):**`);
-    steps.push(`We solved 3 equations for Milk(M), Cream(C), SMP(S):`);
-    steps.push(`1. M + C + S = ${totalDairyMass.toFixed(2)}`);
-    steps.push(`2. Fat: ${(M_f/100).toFixed(3)}M + ${(C_f/100).toFixed(3)}C + ${(S_f/100).toFixed(3)}S = ${totalFatNeeded.toFixed(2)}`);
-    steps.push(`3. SNF: ${(M_s/100).toFixed(3)}M + ${(C_s/100).toFixed(3)}C + ${(S_s/100).toFixed(3)}S = ${totalSnfNeeded.toFixed(2)}`);
     
-    if (milkQty < 0 || creamQty < 0 || smpQty < 0) {
-      steps.push(`⚠️ **WARNING:** Negative values detected. Your target Fat/SNF is likely unreachable with these ingredients.`);
+    if (baseQty < 0 || fatSourceQty < 0 || smpQty < 0) {
+      steps.push(`⚠️ **WARNING:** Negative values detected. Inputs are mathematically impossible.`);
     } else {
       steps.push(`✅ **Solution Found:**`);
-      steps.push(`Milk: ${milkQty.toFixed(2)} kg`);
-      steps.push(`Cream: ${creamQty.toFixed(2)} kg`);
-      steps.push(`SMP: ${smpQty.toFixed(2)} kg`);
+      steps.push(`${rawMaterials.base.name}: ${baseQty.toFixed(2)} kg`);
+      steps.push(`${rawMaterials.fatSource.name}: ${fatSourceQty.toFixed(2)} kg`);
+      steps.push(`${rawMaterials.smp.name}: ${smpQty.toFixed(2)} kg`);
     }
 
     setVerificationSteps(steps);
     setSolverResult([
-      { name: "Whole Milk", amount: milkQty, percent: (milkQty/size)*100 },
-      { name: "Cream", amount: creamQty, percent: (creamQty/size)*100 },
-      { name: "SMP", amount: smpQty, percent: (smpQty/size)*100 },
+      { name: rawMaterials.base.name, amount: baseQty, percent: (baseQty/size)*100 },
+      { name: rawMaterials.fatSource.name, amount: fatSourceQty, percent: (fatSourceQty/size)*100 },
+      { name: rawMaterials.smp.name, amount: smpQty, percent: (smpQty/size)*100 },
       { name: "Sugar", amount: sugarQty, percent: T_Sugar },
       { name: "Stabilizer", amount: stabQty, percent: T_Stab },
     ]);
 
-    toast({ title: "Calculated!", description: "Check Verification tab for details." });
+    toast({ title: "Calculated!", description: "Result updated below." });
     
-    // Auto switch to result tab on mobile could be annoying, so we just show a badge or let them click.
-    // But user asked to "trigger tab", so let's switch to verification if they want or just show results.
-    // For now, staying on Solver but showing results below is best for UX.
+    // REMOVED: setActiveTab("verification") -> User stays on result screen
 
-  }, [batchSize, targetComposition, rawMaterials, toast]);
+  }, [batchSize, targetComposition, rawMaterials, productType, toast]);
 
   return (
     <div className="w-full max-w-full space-y-4 p-1 sm:p-2 overflow-x-hidden">
       <Alert className="bg-indigo-50 border-indigo-200">
         <Beaker className="h-4 w-4 text-indigo-600" />
-        <AlertTitle className="text-sm font-bold">Batch & Verification</AlertTitle>
+        <AlertTitle className="text-sm font-bold">Smart Batch Solver</AlertTitle>
         <AlertDescription className="text-xs">
-          Auto-balance recipes or scale manually.
+          Calculate recipes for Ice Cream (Milk) or Frozen Dessert (Water/Oil).
         </AlertDescription>
       </Alert>
 
@@ -2529,16 +2692,38 @@ function BatchScalingCalc() {
           <TabsTrigger value="simple-scaling" className="text-xs sm:text-sm py-2">Manual</TabsTrigger>
         </TabsList>
 
-        {/* --- TAB 1: SOLVER (Mobile Optimized) --- */}
+        {/* --- TAB 1: SOLVER --- */}
         <TabsContent value="solver" className="space-y-4 animate-in fade-in-50">
-          {/* Inputs Container */}
+          
+          {/* Product Type Selector */}
+          <div className="flex justify-center mb-2">
+             <div className="bg-slate-100 p-1 rounded-lg flex gap-1">
+                <Button 
+                   size="sm" 
+                   variant={productType === 'ice-cream' ? 'default' : 'ghost'} 
+                   className={productType === 'ice-cream' ? 'bg-indigo-600 text-white' : 'text-slate-600'}
+                   onClick={() => handleProductTypeChange('ice-cream')}
+                >
+                   <IceCream2 className="w-4 h-4 mr-2"/> Ice Cream
+                </Button>
+                <Button 
+                   size="sm" 
+                   variant={productType === 'frozen-dessert' ? 'default' : 'ghost'}
+                   className={productType === 'frozen-dessert' ? 'bg-indigo-600 text-white' : 'text-slate-600'}
+                   onClick={() => handleProductTypeChange('frozen-dessert')}
+                >
+                   <Snowflake className="w-4 h-4 mr-2"/> Frozen Dessert
+                </Button>
+             </div>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             
             {/* Target Card */}
             <Card className="border-indigo-100 shadow-sm">
               <CardHeader className="pb-2 p-3 sm:p-6">
                 <CardTitle className="text-sm font-medium flex items-center gap-2 text-indigo-700">
-                  <Settings2 className="w-4 h-4"/> Target (%)
+                  <Settings2 className="w-4 h-4"/> Target Composition (%)
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-3 sm:p-6 pt-0 space-y-3">
@@ -2546,8 +2731,7 @@ function BatchScalingCalc() {
                   <div>
                     <Label className="text-xs text-muted-foreground">Fat</Label>
                     <Input 
-                      type="number" inputMode="decimal"
-                      className="h-9 text-sm"
+                      type="number" inputMode="decimal" className="h-9 text-sm"
                       value={targetComposition.fat} 
                       onChange={e => setTargetComposition({...targetComposition, fat: e.target.value})}
                     />
@@ -2555,8 +2739,7 @@ function BatchScalingCalc() {
                   <div>
                     <Label className="text-xs text-muted-foreground">SNF</Label>
                     <Input 
-                      type="number" inputMode="decimal"
-                      className="h-9 text-sm"
+                      type="number" inputMode="decimal" className="h-9 text-sm"
                       value={targetComposition.snf} 
                       onChange={e => setTargetComposition({...targetComposition, snf: e.target.value})}
                     />
@@ -2564,8 +2747,7 @@ function BatchScalingCalc() {
                   <div>
                     <Label className="text-xs text-muted-foreground">Sugar</Label>
                     <Input 
-                      type="number" inputMode="decimal"
-                      className="h-9 text-sm"
+                      type="number" inputMode="decimal" className="h-9 text-sm"
                       value={targetComposition.sugar} 
                       onChange={e => setTargetComposition({...targetComposition, sugar: e.target.value})}
                     />
@@ -2573,8 +2755,7 @@ function BatchScalingCalc() {
                   <div>
                     <Label className="text-xs text-muted-foreground">Stabilizer</Label>
                     <Input 
-                      type="number" inputMode="decimal"
-                      className="h-9 text-sm"
+                      type="number" inputMode="decimal" className="h-9 text-sm"
                       value={targetComposition.stabilizer} 
                       onChange={e => setTargetComposition({...targetComposition, stabilizer: e.target.value})}
                     />
@@ -2583,40 +2764,86 @@ function BatchScalingCalc() {
               </CardContent>
             </Card>
 
-            {/* Source Specs Card */}
+            {/* Source Specs Card (Dynamic) */}
             <Card className="border-indigo-100 shadow-sm">
               <CardHeader className="pb-2 p-3 sm:p-6">
                 <CardTitle className="text-sm font-medium flex items-center gap-2 text-indigo-700">
-                  <Beaker className="w-4 h-4"/> Source Specs (%)
+                  <Beaker className="w-4 h-4"/> 
+                  {productType === 'ice-cream' ? 'Dairy Inputs (%)' : 'FD Ingredients (%)'}
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-3 sm:p-6 pt-0 space-y-3">
-                {/* Mobile Friendly Row Layout */}
-                {[
-                  { label: "Milk", key: "milk" as const },
-                  { label: "Cream", key: "cream" as const },
-                  { label: "SMP", key: "smp" as const }
-                ].map((item) => (
-                  <div key={item.key} className="flex items-center gap-2">
-                    <Label className="w-12 text-xs font-bold">{item.label}</Label>
+                
+                {/* Row 1: Base (Milk or Water) */}
+                <div className="flex items-center gap-2">
+                    <div className="w-20">
+                        <Label className="text-[10px] uppercase font-bold text-slate-500 block mb-1">Base</Label>
+                        <span className="text-xs font-semibold text-slate-800">{rawMaterials.base.name}</span>
+                    </div>
+                    <div className="flex-1">
+                      <Label className="text-[9px] text-muted-foreground">Fat %</Label>
+                      <Input 
+                        className="h-8 text-xs bg-slate-50"
+                        value={rawMaterials.base.fat} 
+                        onChange={e => setRawMaterials({...rawMaterials, base: {...rawMaterials.base, fat: e.target.value}})} 
+                        readOnly={productType === 'frozen-dessert'} // Water is 0
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <Label className="text-[9px] text-muted-foreground">SNF %</Label>
+                      <Input 
+                        className="h-8 text-xs bg-slate-50"
+                        value={rawMaterials.base.snf} 
+                        onChange={e => setRawMaterials({...rawMaterials, base: {...rawMaterials.base, snf: e.target.value}})} 
+                        readOnly={productType === 'frozen-dessert'} // Water is 0
+                      />
+                    </div>
+                </div>
+
+                {/* Row 2: Fat Source (Cream or Oil) */}
+                <div className="flex items-center gap-2">
+                    <div className="w-20">
+                        <Label className="text-[10px] uppercase font-bold text-slate-500 block mb-1">Fat Src</Label>
+                        <span className="text-xs font-semibold text-slate-800 truncate block">{rawMaterials.fatSource.name}</span>
+                    </div>
                     <div className="flex-1">
                       <Input 
-                        placeholder="Fat"
                         className="h-8 text-xs"
-                        value={rawMaterials[item.key].fat} 
-                        onChange={e => setRawMaterials({...rawMaterials, [item.key]: {...rawMaterials[item.key], fat: e.target.value}})} 
+                        value={rawMaterials.fatSource.fat} 
+                        onChange={e => setRawMaterials({...rawMaterials, fatSource: {...rawMaterials.fatSource, fat: e.target.value}})} 
                       />
                     </div>
                     <div className="flex-1">
                       <Input 
-                        placeholder="SNF"
                         className="h-8 text-xs"
-                        value={rawMaterials[item.key].snf} 
-                        onChange={e => setRawMaterials({...rawMaterials, [item.key]: {...rawMaterials[item.key], snf: e.target.value}})} 
+                        value={rawMaterials.fatSource.snf} 
+                        onChange={e => setRawMaterials({...rawMaterials, fatSource: {...rawMaterials.fatSource, snf: e.target.value}})} 
                       />
                     </div>
-                  </div>
-                ))}
+                </div>
+
+                {/* Row 3: SMP */}
+                <div className="flex items-center gap-2">
+                    <div className="w-20">
+                        <Label className="text-[10px] uppercase font-bold text-slate-500 block mb-1">Solids</Label>
+                        <span className="text-xs font-semibold text-slate-800">{rawMaterials.smp.name}</span>
+                    </div>
+                    <div className="flex-1">
+                      <Input 
+                        className="h-8 text-xs"
+                        value={rawMaterials.smp.fat} 
+                        onChange={e => setRawMaterials({...rawMaterials, smp: {...rawMaterials.smp, fat: e.target.value}})} 
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <Input 
+                        className="h-8 text-xs"
+                        value={rawMaterials.smp.snf} 
+                        onChange={e => setRawMaterials({...rawMaterials, smp: {...rawMaterials.smp, snf: e.target.value}})} 
+                      />
+                    </div>
+                </div>
+
               </CardContent>
             </Card>
           </div>
@@ -2633,7 +2860,7 @@ function BatchScalingCalc() {
                 />
              </div>
              <Button 
-                onClick={() => { solveIceCreamMix(); setActiveTab("verification"); }} 
+                onClick={solveIceCreamMix} 
                 className="w-full sm:w-auto h-10 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold shadow-md active:scale-95 transition-transform"
              >
                 <Calculator className="w-4 h-4 mr-2" /> Calculate
@@ -2641,11 +2868,13 @@ function BatchScalingCalc() {
           </div>
 
           {solverResult && (
-            <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-200 shadow-md">
+            <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-200 shadow-md animate-in slide-in-from-bottom-2">
                <CardHeader className="p-4 pb-2">
                   <CardTitle className="text-base text-green-800 flex justify-between items-center">
-                    <span>Recipe Formula</span>
-                    <span className="text-xs bg-green-200 px-2 py-1 rounded text-green-800">Final</span>
+                    <span>Final Formula</span>
+                    <Badge variant="outline" className="bg-white text-green-700 border-green-300">
+                        {productType === 'ice-cream' ? 'Ice Cream' : 'Frozen Dessert'}
+                    </Badge>
                   </CardTitle>
                </CardHeader>
                <CardContent className="p-0">
@@ -2679,7 +2908,7 @@ function BatchScalingCalc() {
           )}
         </TabsContent>
 
-        {/* --- TAB 2: VERIFICATION (New Feature) --- */}
+        {/* --- TAB 2: VERIFICATION --- */}
         <TabsContent value="verification" className="space-y-4">
           <Card className="border-2 border-dashed border-gray-300 bg-gray-50/50">
              <CardHeader className="p-4">
@@ -3629,808 +3858,524 @@ function PlantEfficiencyCalc() {
   );
 }
 
-// ==================== ENHANCED PLANT COST CALCULATOR ====================
+// --- 1. EXTENSIVE PRODUCT CATALOG (DATA) ---
+const PRODUCT_CATALOG: Record<string, any> = {
+  // --- LIQUID MILK ---
+  "fcm": { label: "Full Cream Milk (FCM)", price: "66", yield: "1.0", type: "Liquid", packCost: "2.2" },
+  "std": { label: "Standard Milk", price: "60", yield: "1.0", type: "Liquid", packCost: "2.0" },
+  "tm": { label: "Toned Milk (TM)", price: "54", yield: "1.0", type: "Liquid", packCost: "1.8" },
+  "dtm": { label: "Double Toned (DTM)", price: "48", yield: "1.0", type: "Liquid", packCost: "1.8" },
+  "sm": { label: "Skimmed Milk (SM)", price: "42", yield: "1.0", type: "Liquid", packCost: "1.8" },
 
-// Memoized Input Field Component
-const MemoizedInputField = memo(function InputField({
-  label,
-  value,
-  name,
-  setter,
-  placeholder,
-  validation,
-  icon,
-  colorScheme = "blue",
+  // --- CURD / DAHI ---
+  "curd_ton": { label: "Toned Curd", price: "65", yield: "1.0", type: "Fermented", packCost: "2.5" },
+  "curd_skim": { label: "Skimmed Milk Curd", price: "50", yield: "1.0", type: "Fermented", packCost: "2.5" },
+  "curd_part": { label: "Partial Curd", price: "60", yield: "1.0", type: "Fermented", packCost: "2.5" },
+  
+  // --- BEVERAGES (Yield > 1.0 means water/spices added) ---
+  "lassi": { label: "Lassi", price: "90", yield: "1.2", type: "Drink", packCost: "3.5" },
+  "chach_ms": { label: "Masala Chach", price: "35", yield: "1.6", type: "Drink", packCost: "2.0" },
+  "chach_td": { label: "Tadka Chach", price: "40", yield: "1.6", type: "Drink", packCost: "2.2" },
+  "chach_pn": { label: "Paneer Chach (Whey)", price: "10", yield: "0.9", type: "Drink", packCost: "1.0" }, 
+
+  // --- SOLIDS ---
+  "paneer": { label: "Paneer (Fresh)", price: "380", yield: "0.15", type: "Solid", packCost: "5.0" }, // 15% Yield
+  "khoa": { label: "Khoa / Mawa", price: "400", yield: "0.18", type: "Solid", packCost: "4.0" },
+  "shrikhand": { label: "Shrikhand", price: "350", yield: "0.7", type: "Solid", packCost: "8.0" },
+  
+  // --- FROZEN ---
+  "ice_cream": { label: "Ice Cream", price: "250", yield: "1.8", type: "Frozen", packCost: "10.0" },
+};
+
+// Variable Cost Presets
+const VARIABLE_COST_PRESETS = {
+  packaging: [
+    { label: "Pouch Film", value: "1.2" },
+    { label: "Cup/Glass", value: "2.5" },
+    { label: "Rigid Container", value: "6.0" },
+  ],
+  ingredients: [
+    { label: "Culture/Rennet", value: "0.5" },
+    { label: "Sugar/Spice", value: "2.5" },
+    { label: "Stabilizer", value: "5.0" },
+  ],
+  energy: [
+    { label: "Grid Power", value: "1.2" },
+    { label: "Diesel Gen", value: "3.5" },
+  ]
+};
+
+const FIXED_EXPENSE_TYPES = [
+  { label: "Salaries & Wages", default: "150000" },
+  { label: "Factory Rent", default: "50000" },
+  { label: "Electricity (Fixed)", default: "15000" },
+  { label: "Boiler Fuel", default: "15000" },
+  { label: "Maintenance", default: "10000" },
+  { label: "Marketing", default: "25000" },
+];
+
+// --- COMPONENTS ---
+
+// 1. Smart Input with Dropdown
+const SmartInput = memo(function SmartInput({
+  label, value, name, setter, placeholder, validation, icon, colorScheme = "blue", suffix, options, readOnly
 }: {
-  label: string;
-  value: string;
-  name: string;
-  setter: (name: string, value: string) => void;
-  placeholder?: string;
-  validation?: ValidationResult;
-  icon?: React.ReactNode;
-  colorScheme?: "blue" | "green" | "purple" | "orange" | "pink";
+  label: string; value: string; name: string; setter: (name: string, value: string) => void;
+  placeholder?: string; validation?: { isValid: boolean; message?: string };
+  icon?: React.ReactNode; colorScheme?: "blue" | "green" | "purple" | "orange" | "pink";
+  suffix?: string; options?: { label: string; value: string }[]; readOnly?: boolean;
 }) {
   const [internalValue, setInternalValue] = useState(value);
   const [touched, setTouched] = useState(false);
 
-  useEffect(() => {
-    if (
-      value !== internalValue &&
-      document.activeElement?.getAttribute("name") !== name
-    ) {
-      setInternalValue(value);
-    }
-  }, [value, name, internalValue]);
+  useEffect(() => { if (value !== internalValue) setInternalValue(value); }, [value]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInternalValue(e.target.value);
+  const handleChange = (val: string) => {
+    setInternalValue(val);
+    setter(name, val);
   };
 
-  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    setTouched(true);
-    setter(e.target.name, e.target.value);
-  };
-
-  const showValidation = touched && validation && !validation.isValid;
-
-  const colorClasses = {
-    blue: "focus-visible:ring-blue-500 border-blue-200",
-    green: "focus-visible:ring-green-500 border-green-200",
-    purple: "focus-visible:ring-purple-500 border-purple-200",
-    orange: "focus-visible:ring-orange-500 border-orange-200",
-    pink: "focus-visible:ring-pink-500 border-pink-200",
+  const colorClasses: Record<string, string> = {
+    blue: "focus:ring-blue-500 border-blue-200",
+    green: "focus:ring-green-500 border-green-200",
+    purple: "focus:ring-purple-500 border-purple-200",
+    orange: "focus:ring-orange-500 border-orange-200",
+    pink: "focus:ring-pink-500 border-pink-200",
   };
 
   return (
-    <div className="space-y-2">
-      <Label htmlFor={name} className="text-sm font-semibold flex items-center gap-2">
-        {icon}
-        {label}
-      </Label>
-      <div className="relative">
-        <Input
-          type="number"
-          inputMode="decimal"
-          name={name}
-          id={name}
-          value={internalValue}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          placeholder={placeholder}
-          className={cn(
-            "transition-all duration-200",
-            colorClasses[colorScheme],
-            showValidation && "border-red-500 focus-visible:ring-red-500"
-          )}
-        />
-        {validation?.isValid && touched && (
-          <CheckCircle2 className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-green-500" />
+    <div className="space-y-1 w-full bg-white p-2 rounded-lg border border-slate-100 shadow-sm">
+      <div className="flex justify-between items-center mb-1">
+        <Label className="text-xs font-bold flex items-center gap-1.5 text-slate-600 truncate">
+            {icon} {label}
+        </Label>
+        {options && (
+            <Select onValueChange={(v) => handleChange(v)}>
+                <SelectTrigger className="h-5 text-[10px] w-auto border-none bg-slate-50 px-2 text-indigo-600 font-bold hover:bg-slate-100">
+                    <SelectValue placeholder="Preset" />
+                </SelectTrigger>
+                <SelectContent>
+                    {options.map((opt, i) => (
+                        <SelectItem key={i} value={opt.value} className="text-xs">
+                            {opt.label} (₹{opt.value})
+                        </SelectItem>
+                    ))}
+                </SelectContent>
+            </Select>
         )}
       </div>
-      {showValidation && (
-        <div className="flex items-start gap-2 text-sm text-red-600 animate-in slide-in-from-top-1">
-          <XCircle className="h-4 w-4 mt-0.5 shrink-0" />
-          <span>{validation.message}</span>
-        </div>
-      )}
+      <div className="relative">
+        <Input
+          type="number" inputMode="decimal"
+          value={internalValue}
+          onChange={(e) => handleChange(e.target.value)}
+          readOnly={readOnly}
+          className={cn(
+            "transition-all h-9 text-sm font-semibold",
+            colorClasses[colorScheme],
+            readOnly && "bg-slate-100 text-slate-500 cursor-not-allowed",
+            touched && validation && !validation.isValid && "border-red-500"
+          )}
+        />
+        {suffix && <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground font-medium pointer-events-none">{suffix}</span>}
+      </div>
     </div>
   );
 });
 
-MemoizedInputField.displayName = "MemoizedInputField";
-
-// Fixed Expense Row Component
+// 2. Fixed Expense Row
 const FixedExpenseRow = memo(function FixedExpenseRow({
-  item,
-  onChange,
-  onRemove,
+  item, onChange, onRemove,
 }: {
-  item: FixedExpense;
-  onChange: (id: number, field: keyof FixedExpense, value: string) => void;
-  onRemove: (id: number) => void;
+  item: FixedExpense; onChange: (id: number, field: keyof FixedExpense, value: string) => void; onRemove: (id: number) => void;
 }) {
-  const [name, setName] = useState(item.name);
-  const [cost, setCost] = useState(item.cost);
-
-  useEffect(() => {
-    if (item.name !== name) setName(item.name);
-    if (item.cost !== cost) setCost(item.cost);
-  }, [item.name, item.cost, name, cost]);
-
-  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setName(e.target.value);
-  const handleCostChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setCost(e.target.value);
-
-  const handleNameBlur = () => onChange(item.id, "name", name);
-  const handleCostBlur = () => onChange(item.id, "cost", cost);
-
   return (
-    <Card className="p-3 bg-gradient-to-r from-indigo-50/50 to-purple-50/50">
-      <div className="grid grid-cols-1 sm:grid-cols-[2fr_1fr_auto] gap-3 items-center">
-        <div>
-          <Label className="text-xs sm:hidden">Expense Name</Label>
-          <Input
-            placeholder="e.g., Salaries & Wages"
-            value={name}
-            onChange={handleNameChange}
-            onBlur={handleNameBlur}
-            className="mt-1 sm:mt-0"
-          />
+    <div className="flex gap-2 items-center bg-slate-50 p-2 rounded-md border border-slate-200">
+        <div className="flex-grow grid grid-cols-[1.5fr_1fr] gap-2">
+            <div className="relative">
+                <Input placeholder="Name" value={item.name} onChange={(e) => onChange(item.id, "name", e.target.value)} className="h-8 text-xs bg-white" />
+                <div className="absolute right-0 top-0 h-full">
+                    <Select onValueChange={(val) => {
+                        onChange(item.id, "name", val);
+                        const p = FIXED_EXPENSE_TYPES.find(x=>x.label===val);
+                        if(p && !item.cost) onChange(item.id, "cost", p.default);
+                    }}>
+                        <SelectTrigger className="h-full w-6 p-0 border-none opacity-0 hover:opacity-100"><span className="sr-only">Open</span></SelectTrigger>
+                        <SelectContent>{FIXED_EXPENSE_TYPES.map((t, i) => <SelectItem key={i} value={t.label}>{t.label}</SelectItem>)}</SelectContent>
+                    </Select>
+                </div>
+            </div>
+            <div className="relative">
+                <Input type="number" placeholder="Cost" value={item.cost} onChange={(e) => onChange(item.id, "cost", e.target.value)} className="h-8 text-xs bg-white pr-6" />
+                <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-slate-400">₹</span>
+            </div>
         </div>
-        <div>
-          <Label className="text-xs sm:hidden">Monthly Cost</Label>
-          <div className="relative mt-1 sm:mt-0">
-            <Input
-              type="number"
-              inputMode="decimal"
-              placeholder="Monthly Cost"
-              value={cost}
-              onChange={handleCostChange}
-              onBlur={handleCostBlur}
-            />
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">
-              ₹
-            </span>
-          </div>
-        </div>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="text-destructive hover:bg-red-100"
-          onClick={() => onRemove(item.id)}
-        >
-          <XCircle className="h-5 w-5" />
-        </Button>
-      </div>
-    </Card>
+        <Button variant="ghost" size="icon" className="h-8 w-8 text-red-500 hover:bg-red-50 shrink-0" onClick={() => onRemove(item.id)}><XCircle className="h-4 w-4" /></Button>
+    </div>
   );
 });
 
-FixedExpenseRow.displayName = "FixedExpenseRow";
+// 3. Result Card
+const PlantResultCard = ({ title, value, unit, color, icon: Icon, subtitle }: any) => (
+    <div className={cn("p-3 rounded-xl border flex flex-col justify-between h-full bg-white shadow-sm", color)}>
+        <div className="flex justify-between items-start mb-2">
+            <span className="text-[10px] uppercase font-bold tracking-wider opacity-70">{title}</span>
+            <Icon className="h-4 w-4 opacity-50"/>
+        </div>
+        <div>
+            <div className="flex items-baseline gap-1">
+                <span className="text-xl sm:text-2xl font-bold">{value}</span>
+                {unit && <span className="text-xs font-medium opacity-70">{unit}</span>}
+            </div>
+            {subtitle && <p className="text-[10px] opacity-60 mt-1">{subtitle}</p>}
+        </div>
+    </div>
+);
 
-// Main Plant Cost Calculator
-function PlantCostCalc() {
+// ==================== MAIN COMPONENT ====================
+export default function PlantCostCalc() {
   const { toast } = useToast();
-  const { validatePositive } = useInputValidation();
+  const validatePositive = (val: string) => { const num = parseFloat(val); return { isValid: !isNaN(num) && num >= 0, message: "Invalid" }; };
+  
+  // State
+  const [scope, setScope] = useState<"plant" | "product">("product"); // Scope Toggle
   const [period, setPeriod] = useState("monthly");
+  const [selectedProduct, setSelectedProduct] = useState("fcm");
+  
   const [inputs, setInputs] = useState({
-    milkProcessed: "30000",
-    totalRevenue: "2100000",
-    avgMilkPurchaseCost: "45",
-    packagingPerLitre: "2.5",
-    ingredientsPerLitre: "1.0",
-    energyPerLitre: "1.2",
-    waterPerLitre: "0.3",
-    distributionPerLitre: "1.0",
+    inputQty: "1000",          // Raw Material Input (Litres/Kg)
+    avgSellingPrice: "66",     // Output Price
+    yieldFactor: "1.0",        // Input to Output Ratio
+    processLoss: "0.5",        // Wasted %
+    rawMaterialCost: "45",     // Base Cost
+    packagingCost: "2.0",      // Per Unit
+    ingredientsCost: "0.0",    // Cultures, Masala
+    energyCost: "1.5",         // Per Unit
+    logisticsCost: "1.0",      // Per Unit
+    taxRate: "0",
   });
 
   const [fixedExpenses, setFixedExpenses] = useState<FixedExpense[]>([
-    { id: 1, name: "Salaries & Wages", cost: "150000" },
-    { id: 2, name: "Plant Rent/Lease", cost: "50000" },
-    { id: 3, name: "Marketing & Admin", cost: "25000" },
-    { id: 4, name: "Maintenance & Repairs", cost: "15000" },
-    { id: 5, name: "Depreciation on Assets", cost: "20000" },
-    { id: 6, name: "Interest on Loan", cost: "10000" },
+    { id: 1, name: "Salaries & Wages", cost: "50000" },
+    { id: 2, name: "Rent & Utils", cost: "20000" },
   ]);
 
   const [isDownloading, setIsDownloading] = useState(false);
   const reportRef = useRef<HTMLDivElement>(null);
 
-  const handleInputChange = useCallback((name: string, value: string) => {
-    setInputs((prev) => ({ ...prev, [name]: value }));
-  }, []);
-
-  const handleAddFixedExpense = () => {
-    setFixedExpenses((prev) => [
-      ...prev,
-      { id: Date.now(), name: "", cost: "" },
-    ]);
+  // --- HANDLERS ---
+  const handleInputChange = (name: string, value: string) => {
+    setInputs(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleRemoveFixedExpense = (id: number) => {
-    if (fixedExpenses.length <= 1) {
-      toast({
-        title: "Cannot Remove",
-        description: "At least one fixed expense is required",
-        variant: "destructive",
-      });
-      return;
+  // Scope Switcher
+  const handleScopeChange = (val: "plant" | "product") => {
+      setScope(val);
+      if(val === 'plant') {
+          // Reset to Plant Defaults
+          setInputs(prev => ({
+              ...prev,
+              inputQty: "30000", // Larger volume for plant
+              avgSellingPrice: "60", // Avg realization
+              yieldFactor: "1.0", // Avg Yield
+              packagingCost: "2.0",
+              ingredientsCost: "0.5"
+          }));
+      } else {
+          // Reset to Product Defaults (Trigger currently selected product)
+          handleProductChange(selectedProduct);
+      }
+  };
+
+  const handleProductChange = (prodKey: string) => {
+      setSelectedProduct(prodKey);
+      const prod = PRODUCT_CATALOG[prodKey as keyof typeof PRODUCT_CATALOG];
+      if (prod) {
+          setInputs(prev => ({
+              ...prev,
+              inputQty: "1000", // Standard batch size
+              avgSellingPrice: prod.price,
+              yieldFactor: prod.yield,
+              packagingCost: prod.packCost,
+              ingredientsCost: prod.type === 'Drink' ? '2.0' : (prod.type === 'Fermented' ? '0.5' : '0.0'),
+          }));
+          // toast({ title: "Loaded", description: `${prod.label} settings applied.` });
+      }
+  };
+
+  const handleFixedExpense = {
+    add: () => setFixedExpenses(p => [...p, { id: Date.now(), name: "", cost: "" }]),
+    remove: (id: number) => setFixedExpenses(p => p.filter(i => i.id !== id)),
+    change: (id: number, field: keyof FixedExpense, val: string) => {
+        setFixedExpenses(p => p.map(i => i.id === id ? { ...i, [field]: val } : i));
     }
-    setFixedExpenses((prev) => prev.filter((item) => item.id !== id));
   };
 
-  const handleFixedExpenseChange = useCallback(
-    (id: number, field: keyof FixedExpense, value: string) => {
-      setFixedExpenses((prev) =>
-        prev.map((item) => (item.id === id ? { ...item, [field]: value } : item))
-      );
-    },
-    []
-  );
-
+  // --- CORE LOGIC ---
   const results = useMemo(() => {
-    const i = Object.fromEntries(
-      Object.entries(inputs).map(([k, v]) => [k, parseFloat(v) || 0])
-    );
-    const {
-      milkProcessed,
-      totalRevenue,
-      avgMilkPurchaseCost,
-      packagingPerLitre,
-      ingredientsPerLitre,
-      energyPerLitre,
-      waterPerLitre,
-      distributionPerLitre,
-    } = i;
+    const vals = Object.fromEntries(Object.entries(inputs).map(([k, v]) => [k, parseFloat(v) || 0]));
+    
+    const inputVolume = vals.inputQty;
+    const grossOutput = inputVolume * vals.yieldFactor;
+    const lossQty = grossOutput * (vals.processLoss / 100);
+    const saleableQty = grossOutput - lossQty;
+    
+    const totalRevenue = saleableQty * vals.avgSellingPrice;
 
-    // Variable Costs
-    const totalRawMaterialCost = avgMilkPurchaseCost * milkProcessed;
-    const packagingCost = packagingPerLitre * milkProcessed;
-    const ingredientsCost = ingredientsPerLitre * milkProcessed;
-    const energyCost = energyPerLitre * milkProcessed;
-    const waterCost = waterPerLitre * milkProcessed;
-    const distributionCost = distributionPerLitre * milkProcessed;
+    const totalRawCost = vals.rawMaterialCost * inputVolume;
+    const totalPackCost = vals.packagingCost * saleableQty; 
+    const totalIngCost = vals.ingredientsCost * saleableQty;
+    const totalEnergyCost = vals.energyCost * saleableQty;
+    const totalLogisticsCost = vals.logisticsCost * saleableQty;
 
-    const totalOtherVariableCosts =
-      packagingCost +
-      ingredientsCost +
-      energyCost +
-      waterCost +
-      distributionCost;
-    const totalVariableCosts = totalRawMaterialCost + totalOtherVariableCosts;
-    const variableCostPerLitre =
-      milkProcessed > 0 ? totalVariableCosts / milkProcessed : 0;
+    const totalVariableCost = totalRawCost + totalPackCost + totalIngCost + totalEnergyCost + totalLogisticsCost;
+    const unitVariableCost = saleableQty > 0 ? totalVariableCost / saleableQty : 0;
 
-    // Fixed Costs
-    const monthlyFixedCost = fixedExpenses.reduce(
-      (sum, item) => sum + (parseFloat(item.cost) || 0),
-      0
-    );
-    const totalFixedCost =
-      period === "monthly" ? monthlyFixedCost : monthlyFixedCost / 30;
+    const monthlyFixed = fixedExpenses.reduce((sum, i) => sum + (parseFloat(i.cost) || 0), 0);
+    const periodFixedCost = period === "monthly" ? monthlyFixed : monthlyFixed / 30;
+    
+    // In product mode, we allocate fixed cost based on share? 
+    // No, for simplicity in "Product" mode, user typically sees Batch P&L against Total Fixed Cost
+    // To make it realistic per product, we might check Break Even
+    
+    const totalCost = totalVariableCost + periodFixedCost;
+    const grossProfit = totalRevenue - totalVariableCost;
+    const netProfitPreTax = totalRevenue - totalCost;
+    
+    const taxAmount = netProfitPreTax > 0 ? netProfitPreTax * (vals.taxRate / 100) : 0;
+    const netProfitPostTax = netProfitPreTax - taxAmount;
 
-    // Profitability
-    const grossProfit = totalRevenue - totalVariableCosts;
-    const netProfit = grossProfit - totalFixedCost;
-
-    const grossMargin = totalRevenue > 0 ? (grossProfit / totalRevenue) * 100 : 0;
-    const netMargin = totalRevenue > 0 ? (netProfit / totalRevenue) * 100 : 0;
-
-    // Break-Even Analysis
-    const contributionMarginRatio =
-      totalRevenue > 0 ? grossProfit / totalRevenue : 0;
-    const breakEvenRevenue =
-      contributionMarginRatio > 0 ? totalFixedCost / contributionMarginRatio : 0;
-
-    // ROI & Efficiency Metrics
-    const revenuePerLitre = milkProcessed > 0 ? totalRevenue / milkProcessed : 0;
-    const profitPerLitre = milkProcessed > 0 ? netProfit / milkProcessed : 0;
-
-    // Performance Indicators
-    const warnings: string[] = [];
-    let confidence: "high" | "medium" | "low" = "high";
-
-    if (netMargin < 5) {
-      confidence = "low";
-      warnings.push("Net margin below 5%. Review pricing and cost structure.");
-    }
-    if (grossMargin < 20) {
-      confidence = "medium";
-      warnings.push("Gross margin below 20%. Consider cost optimization.");
-    }
-    if (totalRevenue < breakEvenRevenue) {
-      warnings.push("Revenue below break-even point. Increase sales or reduce costs.");
-    }
+    const netMargin = totalRevenue > 0 ? (netProfitPostTax / totalRevenue) * 100 : 0;
+    const breakEvenUnits = (vals.avgSellingPrice - unitVariableCost) > 0 
+        ? periodFixedCost / (vals.avgSellingPrice - unitVariableCost) 
+        : 0;
+    
+    const costStructure = {
+        material: (totalRawCost / totalCost) * 100,
+        overhead: ((totalCost - totalRawCost) / totalCost) * 100
+    };
 
     return {
-      revenue: totalRevenue,
-      totalRawMaterialCost,
-      packagingCost,
-      ingredientsCost,
-      energyCost,
-      waterCost,
-      distributionCost,
-      totalOtherVariableCosts,
-      totalVariableCosts,
-      variableCostPerLitre,
-      grossProfit,
-      totalFixedCost,
-      netProfit,
-      grossMargin,
-      netMargin,
-      breakEvenRevenue,
-      revenuePerLitre,
-      profitPerLitre,
-      confidence,
-      warnings,
+        saleableQty, totalRevenue, totalRawCost, totalVariableCost, periodFixedCost, totalCost,
+        grossProfit, netProfitPreTax, taxAmount, netProfitPostTax, netMargin, breakEvenUnits,
+        unitVariableCost, costStructure
     };
   }, [inputs, fixedExpenses, period]);
 
-  const Section = ({
-    title,
-    children,
-    description,
-    icon,
-  }: {
-    title: string;
-    children: React.ReactNode;
-    description?: string;
-    icon?: React.ReactNode;
-  }) => (
-    <Card className="mt-6 border-2 shadow-md">
-      <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
-        <CardTitle className="text-lg font-bold flex items-center gap-2">
-          {icon}
-          {title}
-        </CardTitle>
-        {description && (
-          <CardDescription className="text-xs">{description}</CardDescription>
-        )}
-      </CardHeader>
-      <CardContent className="pt-6">{children}</CardContent>
-    </Card>
-  );
-
-  const handleDownloadPdf = async () => {
-    const reportElement = reportRef.current;
-    if (!reportElement) return;
-
-    setIsDownloading(true);
-    try {
-      const canvas = await html2canvas(reportElement, {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: "#ffffff",
-      });
-      const imgData = canvas.toDataURL("image/png");
-
-      const pdf = new jsPDF({
-        orientation: "portrait",
-        unit: "mm",
-        format: "a4",
-      });
-
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
-      const imgWidth = canvas.width;
-      const imgHeight = canvas.height;
-      const ratio = imgWidth / imgHeight;
-
-      let finalImgWidth = pdfWidth - 20;
-      let finalImgHeight = finalImgWidth / ratio;
-
-      if (finalImgHeight > pdfHeight - 20) {
-        finalImgHeight = pdfHeight - 20;
-        finalImgWidth = finalImgHeight * ratio;
-      }
-
-      const x = (pdfWidth - finalImgWidth) / 2;
-      const y = 10;
-
-      pdf.addImage(imgData, "PNG", x, y, finalImgWidth, finalImgHeight);
-      pdf.save(
-        `dairy_plant_report_${period}_${new Date().toISOString().slice(0, 10)}.pdf`
-      );
-
-      toast({
-        title: "Success",
-        description: "Report downloaded successfully!",
-      });
-    } catch (error) {
-      console.error("Failed to generate PDF", error);
-      toast({
-        title: "Error",
-        description: "Failed to generate PDF report",
-        variant: "destructive",
-      });
-    } finally {
+  // Helper
+  const fmt = (n: number) => n.toLocaleString('en-IN', { maximumFractionDigits: 0 });
+  const downloadPdf = async () => {
+      if(!reportRef.current) return;
+      setIsDownloading(true);
+      try {
+          const canvas = await html2canvas(reportRef.current, { scale: 2, useCORS: true, backgroundColor: "#fff" });
+          const pdf = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
+          const img = canvas.toDataURL("image/png");
+          const w = pdf.internal.pageSize.getWidth();
+          const h = (canvas.height * w) / canvas.width;
+          pdf.addImage(img, "PNG", 0, 0, w, h);
+          pdf.save("Dairy_Cost_Report.pdf");
+      } catch(e) { console.error(e); }
       setIsDownloading(false);
-    }
   };
 
   return (
-    <Card className="border-2 shadow-lg">
-      <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
-        <CardTitle className="flex items-center gap-2 text-xl sm:text-2xl">
-          <DollarSign className="h-6 sm:h-7 w-6 sm:w-7 text-indigo-600" />
-          Plant P&L Calculator
-        </CardTitle>
-        <CardDescription className="text-xs sm:text-sm">
-          Comprehensive profit & loss analysis with break-even calculation
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="pt-6">
-        {/* Period Selection */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border-2 border-blue-200">
-          <div>
-            <Label htmlFor="period-select" className="font-semibold">
-              Calculation Period
-            </Label>
-            <Select value={period} onValueChange={setPeriod}>
-              <SelectTrigger id="period-select" className="mt-2 bg-white">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="daily">
-                  <div className="flex items-center gap-2">
-                    <Thermometer className="h-4 w-4" />
-                    <span>Daily</span>
-                  </div>
-                </SelectItem>
-                <SelectItem value="monthly">
-                  <div className="flex items-center gap-2">
-                    <Target className="h-4 w-4" />
-                    <span>Monthly</span>
-                  </div>
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <Alert className="bg-amber-50 border-amber-200">
-            <Info className="h-4 w-4 text-amber-600" />
-            <AlertTitle className="text-sm font-semibold">Note</AlertTitle>
-            <AlertDescription className="text-xs">
-              For daily calculations, monthly fixed costs are divided by 30 days
-            </AlertDescription>
-          </Alert>
-        </div>
-
-        {/* 1. Production & Revenue */}
-        <Section
-          title="1. Production & Revenue Details"
-          description="Define your production volume and total sales for the selected period"
-          icon={<Target className="h-5 w-5 text-indigo-600" />}
-        >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <MemoizedInputField
-              label={`Total Milk Processed (${
-                period === "monthly" ? "Litres/month" : "Litres/day"
-              })`}
-              value={inputs.milkProcessed}
-              name="milkProcessed"
-              setter={handleInputChange}
-              placeholder="e.g., 30000"
-              validation={validatePositive(inputs.milkProcessed)}
-              icon={<Droplets className="h-4 w-4 text-blue-500" />}
-              colorScheme="blue"
-            />
-            <MemoizedInputField
-              label={`Total Sales Revenue (${
-                period === "monthly" ? "₹/month" : "₹/day"
-              })`}
-              value={inputs.totalRevenue}
-              name="totalRevenue"
-              setter={handleInputChange}
-              placeholder="e.g., 2100000"
-              validation={validatePositive(inputs.totalRevenue)}
-              icon={<DollarSign className="h-4 w-4 text-green-500" />}
-              colorScheme="green"
-            />
-          </div>
-        </Section>
-
-        {/* 2. Variable Costs */}
-        <Section
-          title="2. Variable Costs"
-          description="Costs that change in proportion to your production volume"
-          icon={<Weight className="h-5 w-5 text-orange-600" />}
-        >
-          <h4 className="font-semibold text-gray-700 mb-4 flex items-center gap-2">
-            <Target className="h-5 w-5 text-red-500" />
-            A. Raw Material Cost
-          </h4>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <MemoizedInputField
-              label="Average Purchase Cost of Milk (₹ per Litre)"
-              value={inputs.avgMilkPurchaseCost}
-              name="avgMilkPurchaseCost"
-              setter={handleInputChange}
-              validation={validatePositive(inputs.avgMilkPurchaseCost)}
-              icon={<Droplets className="h-4 w-4 text-red-500" />}
-              colorScheme="orange"
-            />
-          </div>
-
-          <h4 className="font-semibold text-gray-700 mb-4 flex items-center gap-2">
-            <ChevronsUp className="h-5 w-5 text-blue-500" />
-            B. Other Variable Costs (per Litre)
-          </h4>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <MemoizedInputField
-              label="Packaging (₹ per Litre)"
-              value={inputs.packagingPerLitre}
-              name="packagingPerLitre"
-              setter={handleInputChange}
-              validation={validatePositive(inputs.packagingPerLitre)}
-              icon={<Target className="h-4 w-4 text-purple-500" />}
-              colorScheme="purple"
-            />
-            <MemoizedInputField
-              label="Other Ingredients (₹ per Litre)"
-              value={inputs.ingredientsPerLitre}
-              name="ingredientsPerLitre"
-              setter={handleInputChange}
-              validation={validatePositive(inputs.ingredientsPerLitre)}
-              icon={<Droplets className="h-4 w-4 text-green-500" />}
-              colorScheme="green"
-            />
-            <MemoizedInputField
-              label="Energy (Electricity, Fuel) (₹ per Litre)"
-              value={inputs.energyPerLitre}
-              name="energyPerLitre"
-              setter={handleInputChange}
-              validation={validatePositive(inputs.energyPerLitre)}
-              icon={<Zap className="h-4 w-4 text-yellow-500" />}
-              colorScheme="orange"
-            />
-            <MemoizedInputField
-              label="Water / ETP (₹ per Litre)"
-              value={inputs.waterPerLitre}
-              name="waterPerLitre"
-              setter={handleInputChange}
-              validation={validatePositive(inputs.waterPerLitre)}
-              icon={<Droplets className="h-4 w-4 text-cyan-500" />}
-              colorScheme="blue"
-            />
-            <MemoizedInputField
-              label="Distribution & Logistics (₹ per Litre)"
-              value={inputs.distributionPerLitre}
-              name="distributionPerLitre"
-              setter={handleInputChange}
-              validation={validatePositive(inputs.distributionPerLitre)}
-              icon={<Target className="h-4 w-4 text-pink-500" />}
-              colorScheme="pink"
-            />
-          </div>
-        </Section>
-
-        {/* 3. Fixed Expenses */}
-        <Section
-          title="3. Fixed Expenses (Monthly Overhead)"
-          description="Costs that remain constant regardless of production volume. Enter all costs on a monthly basis."
-          icon={<Factory className="h-5 w-5 text-purple-600" />}
-        >
-          <div className="space-y-3">
-            <div className="hidden sm:grid grid-cols-[2fr_1fr_auto] gap-2 items-center text-xs font-semibold text-muted-foreground">
-              <span>Expense Name</span>
-              <span>Monthly Cost (₹)</span>
-              <span></span>
-            </div>
-            {fixedExpenses.map((item) => (
-              <FixedExpenseRow
-                key={item.id}
-                item={item}
-                onChange={handleFixedExpenseChange}
-                onRemove={handleRemoveFixedExpense}
-              />
-            ))}
-          </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleAddFixedExpense}
-            className="mt-4 w-full sm:w-auto border-purple-300 hover:bg-purple-50"
-          >
-            <PlusCircle className="mr-2 h-4 w-4" /> Add Fixed Expense
-          </Button>
-          <div className="flex justify-between items-center p-4 bg-purple-100 rounded-lg border-2 border-purple-300 mt-4">
-            <span className="font-bold text-purple-900">
-              Total Monthly Fixed Costs:
-            </span>
-            <span className="text-2xl font-bold text-purple-700">
-              ₹{" "}
-              {fixedExpenses
-                .reduce((sum, item) => sum + (parseFloat(item.cost) || 0), 0)
-                .toLocaleString("en-IN")}
-            </span>
-          </div>
-        </Section>
-
-        {/* Financial Summary */}
-        <div ref={reportRef} className="p-1 mt-8">
-          <Card
-            className={cn(
-              "border-4 shadow-2xl",
-              results.netProfit >= 0
-                ? "bg-gradient-to-br from-green-50 to-emerald-100 border-green-400"
-                : "bg-gradient-to-br from-red-50 to-pink-100 border-red-400"
-            )}
-          >
-            <CardHeader className="text-center">
-              <CardTitle className="text-2xl sm:text-3xl font-bold flex items-center justify-center gap-2">
-                <DollarSign className="h-8 w-8" />
-                Financial Summary ({period === "monthly" ? "Monthly" : "Daily"})
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="mt-4">
-                <Table>
-                  <TableBody>
-                    <TableRow className="bg-blue-100">
-                      <TableCell className="font-bold text-lg">
-                        A. Total Revenue
-                      </TableCell>
-                      <TableCell className="text-right font-bold text-lg text-blue-700">
-                        ₹{" "}
-                        {results.revenue.toLocaleString("en-IN", {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        })}
-                      </TableCell>
-                    </TableRow>
-
-                    <TableRow className="bg-orange-100">
-                      <TableCell colSpan={2} className="font-bold text-primary">
-                        B. Variable Costs
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell className="pl-8">Raw Material (Milk)</TableCell>
-                      <TableCell className="text-right text-red-600">
-                        - ₹{" "}
-                        {results.totalRawMaterialCost.toLocaleString("en-IN", {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        })}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell className="pl-8">
-                        Other Variable Costs
-                      </TableCell>
-                      <TableCell className="text-right text-red-600">
-                        - ₹{" "}
-                        {results.totalOtherVariableCosts.toLocaleString("en-IN", {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        })}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="bg-red-50">
-                      <TableCell className="font-semibold pl-4">
-                        Total Variable Costs
-                      </TableCell>
-                      <TableCell className="text-right font-semibold text-red-700">
-                        - ₹{" "}
-                        {results.totalVariableCosts.toLocaleString("en-IN", {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        })}
-                      </TableCell>
-                    </TableRow>
-
-                    <TableRow className="bg-green-100 text-lg">
-                      <TableCell className="font-bold">
-                        C. Gross Profit (A - B)
-                      </TableCell>
-                      <TableCell className="font-bold text-right text-green-700">
-                        ₹{" "}
-                        {results.grossProfit.toLocaleString("en-IN", {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        })}
-                      </TableCell>
-                    </TableRow>
-
-                    <TableRow className="bg-purple-100">
-                      <TableCell className="font-bold text-primary">
-                        D. Total Fixed Costs
-                      </TableCell>
-                      <TableCell className="text-right font-semibold text-red-600">
-                        - ₹{" "}
-                        {results.totalFixedCost.toLocaleString("en-IN", {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        })}
-                      </TableCell>
-                    </TableRow>
-
-                    <TableRow
-                      className={cn(
-                        "font-extrabold text-xl",
-                        results.netProfit >= 0
-                          ? "bg-green-200 text-green-800"
-                          : "bg-red-200 text-red-800"
-                      )}
-                    >
-                      <TableCell className="text-lg">
-                        E. {results.netProfit >= 0 ? "Net Profit" : "Net Loss"} (C
-                        - D)
-                      </TableCell>
-                      <TableCell className="text-right text-2xl">
-                        ₹{" "}
-                        {results.netProfit.toLocaleString("en-IN", {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        })}
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-
-                <h4 className="font-bold mt-8 mb-4 text-center text-lg text-gray-700">
-                  📊 Key Performance Metrics
-                </h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <ResultCard
-                    title="Gross Profit Margin"
-                    value={results.grossMargin}
-                    unit="%"
-                    confidence={results.confidence}
-                    icon={<Target className="h-5 w-5" />}
-                    colorScheme="green"
-                  />
-                  <ResultCard
-                    title="Net Profit Margin"
-                    value={results.netMargin}
-                    unit="%"
-                    confidence={results.confidence}
-                    icon={<DollarSign className="h-5 w-5" />}
-                    colorScheme={results.netProfit >= 0 ? "blue" : "pink"}
-                  />
-                  <ResultCard
-                    title="Break-Even Revenue"
-                    value={results.breakEvenRevenue}
-                    unit="₹"
-                    confidence="high"
-                    icon={<Target className="h-5 w-5" />}
-                    colorScheme="orange"
-                    subtitle={period === "monthly" ? "Monthly" : "Daily"}
-                  />
-                  <ResultCard
-                    title="Profit Per Litre"
-                    value={results.profitPerLitre}
-                    unit="₹"
-                    confidence="high"
-                    icon={<Droplets className="h-5 w-5" />}
-                    colorScheme="purple"
-                  />
+    <Card className="border-2 shadow-lg bg-slate-50/50">
+      <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50 p-4 sm:p-6 border-b">
+        <div className="flex flex-col gap-4">
+            
+            {/* Header: Title & Scope Switcher */}
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <CardTitle className="flex items-center gap-2 text-xl font-bold text-indigo-900">
+                        <Factory className="h-6 w-6 text-indigo-600" />
+                        Dairy Plant Costing
+                    </CardTitle>
+                    <CardDescription>P&L Analysis, Break-even & Tax Calculations</CardDescription>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+                
+                {/* SCOPE DROPDOWN (PLANT vs PRODUCT) */}
+                <div className="flex gap-2">
+                    <Select value={scope} onValueChange={(v:any) => handleScopeChange(v)}>
+                        <SelectTrigger className="w-[160px] bg-indigo-600 text-white font-bold h-10 border-none shadow-md">
+                            <SelectValue placeholder="Scope" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="plant">
+                                <div className="flex items-center gap-2"><LayoutDashboard className="w-4 h-4"/> Total Plant</div>
+                            </SelectItem>
+                            <SelectItem value="product">
+                                <div className="flex items-center gap-2"><Package className="w-4 h-4"/> Product Wise</div>
+                            </SelectItem>
+                        </SelectContent>
+                    </Select>
+                    
+                    <div className="flex items-center bg-white rounded-lg p-1 border shadow-sm">
+                        <Button size="sm" variant={period === "daily" ? "default" : "ghost"} onClick={() => setPeriod("daily")} className="h-8 text-xs">Daily</Button>
+                        <Button size="sm" variant={period === "monthly" ? "default" : "ghost"} onClick={() => setPeriod("monthly")} className="h-8 text-xs">Monthly</Button>
+                    </div>
+                </div>
+            </div>
 
-        {/* Warnings */}
-        {results.warnings.length > 0 && (
-          <Alert className="mt-6 bg-gradient-to-r from-orange-50 to-red-50 border-orange-300">
-            <AlertTriangle className="h-4 w-4 text-orange-600" />
-            <AlertTitle className="text-orange-900 font-semibold">
-              Financial Health Alerts
-            </AlertTitle>
-            <AlertDescription className="text-orange-800">
-              <ul className="list-disc list-inside space-y-1 text-xs sm:text-sm mt-2">
-                {results.warnings.map((warning, idx) => (
-                  <li key={idx}>{warning}</li>
-                ))}
-              </ul>
-            </AlertDescription>
-          </Alert>
-        )}
-
-        {/* Download Button */}
-        <div className="text-center mt-8">
-          <Button
-            onClick={handleDownloadPdf}
-            disabled={isDownloading}
-            size="lg"
-            className="h-12 text-lg bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
-          >
-            {isDownloading ? (
-              <>
-                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                Generating PDF...
-              </>
-            ) : (
-              <>
-                <FileDown className="mr-2 h-5 w-5" />
-                Download Report as PDF
-              </>
+            {/* PRODUCT SELECTOR (Visible only in Product Mode) */}
+            {scope === 'product' && (
+                <div className="w-full bg-white p-3 rounded-lg border border-indigo-100 shadow-sm animate-in slide-in-from-top-2">
+                    <Label className="text-[10px] font-bold text-slate-400 mb-1 block tracking-wider uppercase">Select Product for Analysis</Label>
+                    <Select value={selectedProduct} onValueChange={handleProductChange}>
+                        <SelectTrigger className="w-full bg-indigo-50 border-indigo-200 text-indigo-800 font-bold h-11 text-base">
+                            <SelectValue placeholder="Select Product" />
+                        </SelectTrigger>
+                        <SelectContent className="max-h-[300px]">
+                            <SelectItem value="header1" disabled className="font-bold bg-slate-100 opacity-100">-- Liquid Milk --</SelectItem>
+                            <SelectItem value="fcm">Full Cream Milk</SelectItem>
+                            <SelectItem value="std">Standard Milk</SelectItem>
+                            <SelectItem value="tm">Toned Milk</SelectItem>
+                            <SelectItem value="dtm">Double Toned</SelectItem>
+                            <SelectItem value="sm">Skimmed Milk</SelectItem>
+                            
+                            <SelectItem value="header2" disabled className="font-bold bg-slate-100 opacity-100">-- Curd Products --</SelectItem>
+                            <SelectItem value="curd_fcm">Premium Curd</SelectItem>
+                            <SelectItem value="curd_ton">Toned Curd</SelectItem>
+                            <SelectItem value="curd_skim">Skimmed Curd</SelectItem>
+                            <SelectItem value="curd_part">Partial Curd</SelectItem>
+                            
+                            <SelectItem value="header3" disabled className="font-bold bg-slate-100 opacity-100">-- Beverages --</SelectItem>
+                            <SelectItem value="lassi">Sweet Lassi</SelectItem>
+                            <SelectItem value="chach_ms">Masala Chach</SelectItem>
+                            <SelectItem value="chach_td">Tadka Chach</SelectItem>
+                            <SelectItem value="chach_pn">Paneer Chach</SelectItem>
+                            
+                            <SelectItem value="header4" disabled className="font-bold bg-slate-100 opacity-100">-- Solids/Frozen --</SelectItem>
+                            <SelectItem value="paneer">Fresh Paneer</SelectItem>
+                            <SelectItem value="khoa">Khoa</SelectItem>
+                            <SelectItem value="shrikhand">Shrikhand</SelectItem>
+                            <SelectItem value="ice_cream">Ice Cream</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
             )}
-          </Button>
         </div>
+      </CardHeader>
+      
+      <CardContent className="p-4 sm:p-6 space-y-6">
+        
+        {/* === SECTION 1: PRODUCTION LOGIC === */}
+        <section className="space-y-4">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-indigo-600 flex items-center gap-2">
+                <Calculator className="h-4 w-4"/> {scope === 'plant' ? 'Plant Throughput' : 'Product Batching'}
+            </h3>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <SmartInput label="Input (Milk)" name="inputQty" value={inputs.inputQty} setter={handleInputChange} validation={validatePositive(inputs.inputQty)} icon={<Droplets className="h-3 w-3"/>} suffix="L/Kg" />
+                <SmartInput label="Yield Factor" name="yieldFactor" value={inputs.yieldFactor} setter={handleInputChange} validation={validatePositive(inputs.yieldFactor)} icon={<Target className="h-3 w-3"/>} suffix="Out/In" colorScheme="orange" readOnly={scope==='product'} />
+                <SmartInput label="Selling Price" name="avgSellingPrice" value={inputs.avgSellingPrice} setter={handleInputChange} validation={validatePositive(inputs.avgSellingPrice)} icon={<DollarSign className="h-3 w-3"/>} suffix="₹/Unit" colorScheme="green" />
+            </div>
+
+            <div className="grid grid-cols-3 gap-0 bg-slate-100 rounded-lg border border-slate-200 overflow-hidden text-center divide-x divide-slate-300">
+                <div className="p-2">
+                    <div className="text-[9px] font-bold text-slate-500 uppercase">Input</div>
+                    <div className="text-sm font-bold text-slate-800">{inputs.inputQty}</div>
+                </div>
+                <div className="p-2 bg-indigo-50/50">
+                    <div className="text-[9px] font-bold text-indigo-500 uppercase">Gross Output</div>
+                    <div className="text-sm font-bold text-indigo-700">{fmt(inputs.inputQty * parseFloat(inputs.yieldFactor))}</div>
+                </div>
+                <div className="p-2 bg-green-50/50">
+                    <div className="text-[9px] font-bold text-green-600 uppercase">Saleable</div>
+                    <div className="text-base font-extrabold text-green-700">{fmt(results.saleableQty)}</div>
+                </div>
+            </div>
+        </section>
+
+        {/* === SECTION 2: VARIABLE COSTS === */}
+        <section className="space-y-4 pt-4 border-t">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-red-600 flex items-center gap-2"><Weight className="h-4 w-4"/> Variable Costs</h3>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                <SmartInput label="Raw Milk" name="rawMaterialCost" value={inputs.rawMaterialCost} setter={handleInputChange} colorScheme="orange" suffix="₹/In" />
+                <SmartInput label="Packaging" name="packagingCost" value={inputs.packagingCost} setter={handleInputChange} options={VARIABLE_COST_PRESETS.packaging} colorScheme="purple" suffix="₹/Out" />
+                <SmartInput label="Additives/Spice" name="ingredientsCost" value={inputs.ingredientsCost} setter={handleInputChange} options={VARIABLE_COST_PRESETS.ingredients} colorScheme="blue" suffix="₹/Out" />
+                <SmartInput label="Energy/Fuel" name="energyCost" value={inputs.energyCost} setter={handleInputChange} options={VARIABLE_COST_PRESETS.energy} colorScheme="orange" suffix="₹/Out" />
+                <SmartInput label="Logistics" name="logisticsCost" value={inputs.logisticsCost} setter={handleInputChange} colorScheme="pink" suffix="₹/Out" />
+                <SmartInput label="Process Loss" name="processLoss" value={inputs.processLoss} setter={handleInputChange} colorScheme="red" suffix="%" />
+            </div>
+        </section>
+
+        {/* === SECTION 3: FIXED EXPENSES === */}
+        <section className="space-y-4 pt-4 border-t">
+            <div className="flex justify-between items-center">
+                <h3 className="text-sm font-bold uppercase tracking-wider text-purple-600 flex items-center gap-2"><Factory className="h-4 w-4"/> Fixed Overheads ({period})</h3>
+                <Button variant="outline" size="sm" onClick={handleFixedExpense.add} className="h-7 text-xs"><PlusCircle className="w-3 h-3 mr-1"/> Add</Button>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                {fixedExpenses.map(item => <FixedExpenseRow key={item.id} item={item} onChange={handleFixedExpense.change} onRemove={handleFixedExpense.remove} />)}
+            </div>
+        </section>
+
+        {/* === RESULTS SECTION === */}
+        <div ref={reportRef} className="bg-white border-2 border-indigo-100 rounded-xl overflow-hidden mt-6 shadow-sm">
+            <div className="bg-indigo-600 p-4 text-white flex justify-between items-center">
+                <h2 className="font-bold flex items-center gap-2"><PieChart className="w-5 h-5"/> {scope === 'plant' ? 'Total Plant Report' : `${PRODUCT_CATALOG[selectedProduct]?.label || 'Product'} Report`}</h2>
+                <Badge variant="secondary" className="bg-white/20 text-white">{period.toUpperCase()}</Badge>
+            </div>
+            
+            <div className="p-4 bg-slate-50 border-b">
+                <div className="flex justify-between text-xs mb-1 font-medium text-slate-600">
+                    <span>Raw Material ({results.costStructure.material.toFixed(0)}%)</span>
+                    <span>Overheads & Ops ({results.costStructure.overhead.toFixed(0)}%)</span>
+                </div>
+                <div className="h-3 w-full flex rounded-full overflow-hidden">
+                    <div className="bg-blue-500" style={{ width: `${results.costStructure.material}%` }} />
+                    <div className="bg-orange-400" style={{ width: `${results.costStructure.overhead}%` }} />
+                </div>
+            </div>
+
+            <div className="overflow-x-auto w-full">
+                <Table className="w-full min-w-[300px]">
+                    <TableBody>
+                        <TableRow className="hover:bg-slate-50">
+                            <TableCell className="font-medium text-slate-600 pl-4">Revenue ({fmt(results.saleableQty)} units)</TableCell>
+                            <TableCell className="text-right font-bold text-green-600 pr-4 text-lg">₹ {fmt(results.totalRevenue)}</TableCell>
+                        </TableRow>
+                        <TableRow className="hover:bg-slate-50">
+                            <TableCell className="font-medium text-slate-600 pl-4">Total Expenses</TableCell>
+                            <TableCell className="text-right font-bold text-red-500 pr-4">- ₹ {fmt(results.totalCost)}</TableCell>
+                        </TableRow>
+                        <TableRow className="bg-slate-100 border-t-2 border-slate-200">
+                            <TableCell className="font-bold pl-4">Gross Profit (Pre-Tax)</TableCell>
+                            <TableCell className={cn("text-right font-bold text-lg pr-4", results.netProfitPreTax > 0 ? "text-indigo-700" : "text-red-600")}>
+                                ₹ {fmt(results.netProfitPreTax)}
+                            </TableCell>
+                        </TableRow>
+                        {parseFloat(inputs.taxRate) > 0 && (
+                            <TableRow className="text-sm">
+                                <TableCell className="pl-4 text-muted-foreground">Tax @ {inputs.taxRate}%</TableCell>
+                                <TableCell className="text-right text-red-400 pr-4">- ₹ {fmt(results.taxAmount)}</TableCell>
+                            </TableRow>
+                        )}
+                        <TableRow className="bg-indigo-50 border-t border-indigo-100">
+                            <TableCell className="font-extrabold pl-4 text-indigo-900">NET PROFIT (Post-Tax)</TableCell>
+                            <TableCell className={cn("text-right font-extrabold text-xl pr-4", results.netProfitPostTax > 0 ? "text-green-600" : "text-red-600")}>
+                                ₹ {fmt(results.netProfitPostTax)}
+                            </TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 p-4 bg-slate-50">
+                <PlantResultCard title="Net Margin" value={results.netMargin.toFixed(1)} unit="%" icon={Target} color={results.netMargin > 15 ? "border-green-300 bg-green-50 text-green-900" : "border-orange-300 bg-orange-50 text-orange-900"} />
+                <PlantResultCard title="Break Even" value={fmt(results.breakEvenUnits)} unit="Units" icon={ArrowRight} color="border-blue-300 bg-blue-50 text-blue-900" subtitle="To survive" />
+                <div className="col-span-2 md:col-span-2 p-3 rounded-xl border bg-white flex items-center justify-between shadow-sm">
+                    <div className="flex flex-col"><span className="text-[10px] uppercase font-bold text-slate-400">Taxation</span><div className="flex items-center gap-2"><span className="text-sm font-semibold">Rate:</span><Input className="h-6 w-16 text-right text-xs" value={inputs.taxRate} onChange={(e) => handleInputChange('taxRate', e.target.value)} /><span className="text-sm">%</span></div></div>
+                    <div className="text-right"><span className="text-[10px] uppercase font-bold text-slate-400">Profit / Unit</span><div className="text-lg font-bold text-indigo-600">₹ {(results.netProfitPostTax / results.saleableQty || 0).toFixed(1)}</div></div>
+                </div>
+            </div>
+        </div>
+
+        <Button onClick={downloadPdf} disabled={isDownloading} className="w-full bg-indigo-600 hover:bg-indigo-700 h-12 text-lg shadow-md mt-4">
+            {isDownloading ? <Loader2 className="mr-2 animate-spin"/> : <FileDown className="mr-2"/>} Download Report PDF
+        </Button>
+
       </CardContent>
     </Card>
   );
