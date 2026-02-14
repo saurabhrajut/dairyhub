@@ -16,7 +16,7 @@ import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
-  FileText, // <--- Add this
+  FileText,
   ArrowLeft,
   Percent,
   ChevronsUp,
@@ -34,14 +34,16 @@ import {
   PlusCircle,
   FileDown,
   Loader2,
-  Plus,          // ✅ ADDED
-  Minus,         // ✅ ADDED
-  Scale,         // ✅ ADDED
-  TrendingUp,    // ✅ ADDED
-  TrendingDown,  // ✅ ADDED
-  Beaker,      // <--- Ye add karein
+  Plus,
+  Minus,
+  Scale,
+  TrendingUp,
+  TrendingDown,
+  Beaker,
   Settings2,
   Calculator,
+  BadgeIndianRupee, // <--- YE ADD KAREIN
+  Snowflake,
 } from "lucide-react";
 import {
   Select,
@@ -71,6 +73,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Slider } from "@/components/ui/slider";
+import { Progress } from "@/components/ui/progress";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
@@ -1753,6 +1756,13 @@ function IceCreamCalculators() {
       icon: Weight,
       color: "text-blue-600",
     },
+    // ✅ ADD THIS BLOCK
+    "texture-balancer": {
+      title: "Texture (POD/PAC)",
+      component: <AdvancedBalancer />, // <--- This calls the new component
+      icon: Snowflake,
+      color: "text-indigo-600",
+    },
     overrun: {
       title: "Overrun Calculator",
       component: <OverrunCalc />,
@@ -1811,7 +1821,7 @@ function IceCreamCalculators() {
   );
 }
 
-// ==================== ADVANCED MIX COMPOSITION & VERIFICATION CALCULATOR ====================
+// ==================== ADVANCED MIX COMPOSITION & ACCURATE VERIFICATION ====================
 
 // Extended Interface
 interface MixIngredient {
@@ -1826,15 +1836,18 @@ interface MixIngredient {
 }
 
 // Industry Standard Presets
-const INGREDIENT_PRESETS = {
-  "Raw Milk (Buffalo)": { fat: "6.5", msnf: "9.0", sugar: "0", stab: "0", price: "55" },
-  "Raw Milk (Cow)": { fat: "4.0", msnf: "8.5", sugar: "0", stab: "0", price: "45" },
-  "Cream (40%)": { fat: "40", msnf: "5.4", sugar: "0", stab: "0", price: "280" },
-  "Butter (Unsalted)": { fat: "82", msnf: "1.5", sugar: "0", stab: "0", price: "450" },
-  "SMP (Skim Powder)": { fat: "0.5", msnf: "97", sugar: "0", stab: "0", price: "320" },
-  "Sugar (Sucrose)": { fat: "0", msnf: "0", sugar: "100", stab: "0", price: "42" },
-  "Stabilizer": { fat: "0", msnf: "0", sugar: "0", stab: "100", price: "850" },
-  "Water": { fat: "0", msnf: "0", sugar: "0", stab: "0", price: "0" },
+// --- DATA & PRESETS (Updated with POD/PAC) ---
+const INGREDIENT_PRESETS: Record<string, any> = {
+  "Milk (Full Cream)": { fat: "6.0", msnf: "9.0", snf: "9.0", sugar: "0", stab: "0", pod: 0, pac: 0, solids: 15.0, price: "55" },
+  "Raw Milk (Buffalo)": { fat: "6.5", msnf: "9.0", snf: "9.0", sugar: "0", stab: "0", pod: 0, pac: 0, solids: 15.5, price: "60" },
+  "Cream (40%)": { fat: "40.0", msnf: "5.4", snf: "5.4", sugar: "0", stab: "0", pod: 0, pac: 0, solids: 45.4, price: "280" },
+  "SMP (Skim Powder)": { fat: "0.5", msnf: "97.0", snf: "97.0", sugar: "0", stab: "0", pod: 0, pac: 0, solids: 97.5, price: "320" },
+  "Sugar (Sucrose)": { fat: "0", msnf: "0", snf: "0", sugar: "100", stab: "0", pod: 100, pac: 100, solids: 100, price: "42" },
+  "Dextrose": { fat: "0", msnf: "0", snf: "0", sugar: "92", stab: "0", pod: 70, pac: 190, solids: 92, price: "65" },
+  "Glucose Syrup (42DE)": { fat: "0", msnf: "0", snf: "0", sugar: "80", stab: "0", pod: 50, pac: 80, solids: 80, price: "50" },
+  "Invert Sugar": { fat: "0", msnf: "0", snf: "0", sugar: "75", stab: "0", pod: 130, pac: 190, solids: 75, price: "55" },
+  "Stabilizer": { fat: "0", msnf: "0", snf: "0", sugar: "0", stab: "100", pod: 0, pac: 0, solids: 100, price: "850" },
+  "Water": { fat: "0", msnf: "0", snf: "0", sugar: "0", stab: "0", pod: 0, pac: 0, solids: 0, price: "0" },
 };
 
 function MixCompositionCalc() {
@@ -1900,7 +1913,7 @@ function MixCompositionCalc() {
     let totalCost = 0;
 
     const steps: string[] = [];
-    steps.push(`📊 **BATCH WEIGHT CALCULATION:**`);
+    steps.push(`📊 **WEIGHTED AVERAGE CALCULATION:**`);
 
     ingredients.forEach(ing => {
       const amt = parseFloat(ing.amount) || 0;
@@ -1931,6 +1944,7 @@ function MixCompositionCalc() {
       if(f > 0) steps.push(`   - Fat: ${amt} × ${f}% = ${fKg.toFixed(3)} kg`);
       if(m > 0) steps.push(`   - MSNF: ${amt} × ${m}% = ${mKg.toFixed(3)} kg`);
       if(s > 0) steps.push(`   - Sugar: ${amt} × ${s}% = ${sKg.toFixed(3)} kg`);
+      if(c > 0) steps.push(`   - Cost: ${amt} × ₹${p} = ₹${c.toFixed(2)}`);
     });
 
     if (totalWeight === 0) {
@@ -1948,13 +1962,15 @@ function MixCompositionCalc() {
 
     // Final Verification Summary
     steps.push(`\n📝 **FINAL TOTALS:**`);
-    steps.push(`   - Total Weight: ${totalWeight.toFixed(2)} kg`);
-    steps.push(`   - Total Fat: ${totalFatKg.toFixed(3)} kg`);
-    steps.push(`   - Total MSNF: ${totalMsnfKg.toFixed(3)} kg`);
+    steps.push(`   - Total Batch Weight: ${totalWeight.toFixed(2)} kg`);
+    steps.push(`   - Total Fat Content: ${totalFatKg.toFixed(3)} kg`);
+    steps.push(`   - Total Batch Cost: ₹${totalCost.toFixed(2)}`);
     steps.push(`\n🧮 **PERCENTAGE FORMULA:**`);
     steps.push(`   (Total Component Kg / Total Batch Kg) × 100`);
     steps.push(`   Fat % = (${totalFatKg.toFixed(3)} / ${totalWeight.toFixed(2)}) × 100 = **${fatP.toFixed(2)}%**`);
-    steps.push(`   MSNF % = (${totalMsnfKg.toFixed(3)} / ${totalWeight.toFixed(2)}) × 100 = **${msnfP.toFixed(2)}%**`);
+    steps.push(`\n💰 **COST FORMULA:**`);
+    steps.push(`   Total Cost / Total Weight`);
+    steps.push(`   ${totalCost.toFixed(2)} / ${totalWeight.toFixed(2)} = **₹${costPerKg.toFixed(2)} / kg**`);
 
     setVerificationData(steps);
     setResult({
@@ -1971,7 +1987,7 @@ function MixCompositionCalc() {
         <Droplets className="h-4 w-4 text-purple-600" />
         <AlertTitle className="text-sm font-bold">Mix Analyzer</AlertTitle>
         <AlertDescription className="text-xs">
-          Costing & Composition. Use "Verify" tab to check accuracy.
+          Calculate Batch Weight, Costing & Composition accurately.
         </AlertDescription>
       </Alert>
 
@@ -2012,7 +2028,7 @@ function MixCompositionCalc() {
                       />
                     </div>
                     <div className="space-y-1 relative">
-                      <Label className="text-[10px] text-green-600 uppercase font-bold">Rate (₹)</Label>
+                      <Label className="text-[10px] text-green-600 uppercase font-bold">Rate (₹/kg)</Label>
                       <Input 
                         type="number" inputMode="decimal" placeholder="0"
                         className="h-8 text-xs text-right pr-4 border-green-200 bg-green-50/30"
@@ -2066,22 +2082,68 @@ function MixCompositionCalc() {
             </Button>
           </div>
 
-          {/* Results Display */}
+          {/* --- CLEAR TRANSPARENT RESULTS (UPDATED) --- */}
           {result && (
             <div className="space-y-4 pt-4 border-t">
               
               <div className="grid grid-cols-2 gap-3">
-                 <ResultCard title="Total Batch" value={result.totalWeight} unit="kg" icon={<Weight className="w-3 h-3"/>} colorScheme="blue" />
-                 <ResultCard title="Total Solids" value={result.tsP} unit="%" icon={<Target className="w-3 h-3"/>} colorScheme="purple" subtitle={`H2O: ${result.waterP.toFixed(1)}%`} />
-                 <ResultCard title="Cost / Kg" value={result.costPerKg} unit="₹" icon={<DollarSign className="w-3 h-3"/>} colorScheme="green" />
-                 <ResultCard title="Total Cost" value={result.totalCost} unit="₹" icon={<DollarSign className="w-3 h-3"/>} colorScheme="orange" />
+                 {/* Card 1: Batch Weight */}
+                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 flex flex-col justify-between">
+                    <div className="flex items-center gap-1 text-blue-700 mb-1">
+                        <Weight className="w-3 h-3" />
+                        <span className="text-[10px] font-bold uppercase tracking-wider">Batch Weight</span>
+                    </div>
+                    <div className="flex items-baseline gap-1">
+                        <span className="text-xl font-bold text-blue-900">{result.totalWeight.toFixed(2)}</span>
+                        <span className="text-xs font-medium text-blue-600">kg</span>
+                    </div>
+                 </div>
+
+                 {/* Card 2: Total Solids */}
+                 <div className="bg-purple-50 border border-purple-200 rounded-lg p-3 flex flex-col justify-between">
+                    <div className="flex items-center gap-1 text-purple-700 mb-1">
+                        <Target className="w-3 h-3" />
+                        <span className="text-[10px] font-bold uppercase tracking-wider">Total Solids</span>
+                    </div>
+                    <div className="flex items-baseline gap-1">
+                        <span className="text-xl font-bold text-purple-900">{result.tsP.toFixed(2)}</span>
+                        <span className="text-xs font-medium text-purple-600">%</span>
+                    </div>
+                    <span className="text-[9px] text-purple-400">Fat+MSNF+Sugar</span>
+                 </div>
+
+                 {/* Card 3: Cost Per Kg */}
+                 <div className="bg-green-50 border border-green-200 rounded-lg p-3 flex flex-col justify-between">
+                    <div className="flex items-center gap-1 text-green-700 mb-1">
+                        <DollarSign className="w-3 h-3" />
+                        <span className="text-[10px] font-bold uppercase tracking-wider">Cost Per Kg</span>
+                    </div>
+                    <div className="flex items-baseline gap-1">
+                        <span className="text-sm font-bold text-green-700">₹</span>
+                        <span className="text-xl font-bold text-green-900">{result.costPerKg.toFixed(2)}</span>
+                    </div>
+                    <span className="text-[9px] text-green-500">per 1 kg mix</span>
+                 </div>
+
+                 {/* Card 4: Total Batch Cost */}
+                 <div className="bg-orange-50 border border-orange-200 rounded-lg p-3 flex flex-col justify-between">
+                    <div className="flex items-center gap-1 text-orange-700 mb-1">
+                        <DollarSign className="w-3 h-3" />
+                        <span className="text-[10px] font-bold uppercase tracking-wider">Batch Cost</span>
+                    </div>
+                    <div className="flex items-baseline gap-1">
+                        <span className="text-sm font-bold text-orange-700">₹</span>
+                        <span className="text-xl font-bold text-orange-900">{result.totalCost.toLocaleString('en-IN', { maximumFractionDigits: 0 })}</span>
+                    </div>
+                    <span className="text-[9px] text-orange-500">for full batch</span>
+                 </div>
               </div>
 
               <Card className="shadow-sm">
                 <CardHeader className="p-3 bg-slate-50 border-b">
                   <CardTitle className="text-sm flex justify-between items-center">
                     <span>Final Composition</span>
-                    <span className="text-xs text-muted-foreground">Weighted Avg</span>
+                    <span className="text-xs text-muted-foreground">Detailed Breakdown</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-0">
@@ -2089,8 +2151,8 @@ function MixCompositionCalc() {
                     <TableHeader>
                       <TableRow>
                         <TableHead className="text-xs font-bold h-8">Component</TableHead>
-                        <TableHead className="text-right text-xs font-bold h-8">%</TableHead>
-                        <TableHead className="text-right text-xs font-bold h-8">Kg</TableHead>
+                        <TableHead className="text-right text-xs font-bold h-8">% (Per 100g)</TableHead>
+                        <TableHead className="text-right text-xs font-bold h-8">Weight (kg)</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -2102,8 +2164,8 @@ function MixCompositionCalc() {
                       ].map((row, i) => (
                         <TableRow key={i} className="h-8">
                           <TableCell className={`py-2 text-xs font-medium ${row.c}`}>{row.l}</TableCell>
-                          <TableCell className="py-2 text-right text-sm font-bold">{row.v.toFixed(2)}</TableCell>
-                          <TableCell className="py-2 text-right text-xs text-muted-foreground">{((row.v/100)*result.totalWeight).toFixed(2)}</TableCell>
+                          <TableCell className="py-2 text-right text-sm font-bold">{row.v.toFixed(2)}%</TableCell>
+                          <TableCell className="py-2 text-right text-xs text-muted-foreground">{((row.v/100)*result.totalWeight).toFixed(2)} kg</TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
@@ -2151,6 +2213,161 @@ function MixCompositionCalc() {
   );
 }
 
+// ==================== ADVANCED BALANCER (POD/PAC) ====================
+export const AdvancedBalancer = () => {
+  const [ingredients, setIngredients] = useState([
+    { id: 1, name: "Milk (Full Cream)", amount: "620", ...INGREDIENT_PRESETS["Milk (Full Cream)"] },
+    { id: 2, name: "Cream (40%)", amount: "180", ...INGREDIENT_PRESETS["Cream (40%)"] },
+    { id: 3, name: "Sugar (Sucrose)", amount: "140", ...INGREDIENT_PRESETS["Sugar (Sucrose)"] },
+    { id: 4, name: "SMP (Skim Powder)", amount: "40", ...INGREDIENT_PRESETS["SMP (Skim Powder)"] },
+    { id: 5, name: "Dextrose", amount: "20", ...INGREDIENT_PRESETS["Dextrose"] },
+  ]);
+  const [stats, setStats] = useState<any>(null);
+
+  // Auto-calculate whenever ingredients change
+  useEffect(() => {
+    const totalWeight = ingredients.reduce((sum, ing) => sum + (parseFloat(ing.amount as string) || 0), 0);
+    if (totalWeight === 0) return;
+
+    let totals = { fat: 0, snf: 0, sugar: 0, ts: 0, pod: 0, pac: 0 };
+    
+    ingredients.forEach(ing => {
+      const amt = parseFloat(ing.amount as string) || 0;
+      // Handle potentially missing values with defaults
+      const iFat = parseFloat(ing.fat || 0);
+      const iSnf = parseFloat(ing.snf || ing.msnf || 0); // Handle both keys
+      const iSugar = parseFloat(ing.sugar || 0);
+      const iSolids = parseFloat(ing.solids || 0);
+      const iPod = parseFloat(ing.pod || 0);
+      const iPac = parseFloat(ing.pac || 0);
+
+      totals.fat += (amt * iFat) / 100;
+      totals.snf += (amt * iSnf) / 100;
+      totals.sugar += (amt * iSugar) / 100;
+      totals.ts += (amt * iSolids) / 100;
+      totals.pod += amt * iPod;
+      totals.pac += amt * iPac;
+    });
+
+    // Lactose PAC correction (approx SNF has 50% lactose, lactose has PAC~1)
+    // Formula approximation: PAC includes contributions from sugars + lactose in milk solids
+    const lactosePac = totals.snf; 
+    
+    setStats({
+      weight: totalWeight,
+      fat: (totals.fat / totalWeight) * 100,
+      snf: (totals.snf / totalWeight) * 100,
+      ts: (totals.ts / totalWeight) * 100,
+      pod: totals.pod / totalWeight,
+      pac: (totals.pac + (lactosePac * 100)) / totalWeight 
+    });
+  }, [ingredients]);
+
+  const updateIng = (id: number, field: string, val: string) => {
+    setIngredients(prev => prev.map(ing => ing.id === id ? { ...ing, [field]: parseFloat(val) || 0 } : ing));
+  };
+
+  const addRow = () => {
+     setIngredients([...ingredients, { id: Date.now(), name: "New Ing.", amount: 0, fat:0, snf:0, sugar:0, pod:0, pac:0, solids:0 }]);
+  };
+
+  return (
+    <div className="space-y-6">
+      <Alert className="bg-indigo-50 border-indigo-200">
+        <Snowflake className="h-4 w-4 text-indigo-600" />
+        <AlertTitle className="text-sm font-bold">Texture Balancer</AlertTitle>
+        <AlertDescription className="text-xs">
+          Balance Sweetness (POD) and Softness (PAC) for perfect texture.
+        </AlertDescription>
+      </Alert>
+
+      <div className="rounded-lg border bg-white shadow-sm overflow-hidden">
+        <div className="overflow-x-auto">
+        <Table>
+          <TableHeader className="bg-slate-50">
+            <TableRow>
+              <TableHead className="w-[160px]">Ingredient</TableHead>
+              <TableHead className="w-[100px]">Qty (g/kg)</TableHead>
+              <TableHead className="w-[60px] text-xs">Fat%</TableHead>
+              <TableHead className="w-[60px] text-xs">SNF%</TableHead>
+              <TableHead className="w-[60px] text-xs">Sugar%</TableHead>
+              <TableHead className="w-[50px] text-xs text-blue-600">PAC</TableHead>
+              <TableHead className="w-[40px]"></TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {ingredients.map(ing => (
+              <TableRow key={ing.id}>
+                <TableCell className="p-2">
+                   <Input className="h-8 font-medium text-xs" value={ing.name} onChange={e=>setIngredients(prev=>prev.map(i=>i.id===ing.id?{...i, name: e.target.value}:i))} />
+                </TableCell>
+                <TableCell className="p-2">
+                  <Input className="h-8 font-bold bg-slate-50 border-slate-200" value={ing.amount} type="number" onChange={e=>setIngredients(prev=>prev.map(i=>i.id===ing.id?{...i, amount: e.target.value}:i))} />
+                </TableCell>
+                <TableCell className="p-2"><Input className="h-8 text-xs text-center" value={ing.fat} onChange={e=>updateIng(ing.id,'fat',e.target.value)} /></TableCell>
+                <TableCell className="p-2"><Input className="h-8 text-xs text-center" value={ing.snf} onChange={e=>updateIng(ing.id,'snf',e.target.value)} /></TableCell>
+                <TableCell className="p-2"><Input className="h-8 text-xs text-center" value={ing.sugar} onChange={e=>updateIng(ing.id,'sugar',e.target.value)} /></TableCell>
+                <TableCell className="p-2"><Input className="h-8 text-xs text-center bg-blue-50" value={ing.pac} onChange={e=>updateIng(ing.id,'pac',e.target.value)} /></TableCell>
+                <TableCell className="p-2"><Button variant="ghost" size="icon" className="h-8 w-8 text-red-500 hover:bg-red-50" onClick={()=>setIngredients(prev=>prev.filter(i=>i.id!==ing.id))}><XCircle className="w-4"/></Button></TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        </div>
+        <div className="p-3 bg-slate-50 border-t">
+            <Button variant="outline" size="sm" className="w-full border-dashed border-slate-400 text-slate-600 hover:bg-white" onClick={addRow}><PlusCircle className="w-4 mr-2"/> Add Row</Button>
+        </div>
+      </div>
+
+      {stats && (
+        <div className="space-y-4 animate-in fade-in">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+             <Card className="bg-slate-800 text-white border-none shadow-lg">
+                <CardHeader className="pb-1 pt-4 px-4"><CardTitle className="text-xs uppercase opacity-70 flex items-center gap-2"><Target className="w-3 h-3"/> Total Solids</CardTitle></CardHeader>
+                <CardContent className="px-4 pb-4">
+                   <div className="text-3xl font-bold">{stats.ts.toFixed(2)}%</div>
+                   <div className="text-[10px] opacity-70 mt-1">Target: 36% - 40%</div>
+                </CardContent>
+             </Card>
+             <Card className="bg-white border-slate-200 shadow-md">
+                <CardHeader className="pb-1 pt-4 px-4"><CardTitle className="text-xs uppercase text-slate-500 flex items-center gap-2"><Scale className="w-3 h-3"/> Total Weight</CardTitle></CardHeader>
+                <CardContent className="px-4 pb-4">
+                   <div className="text-3xl font-bold text-slate-900">{stats.weight.toLocaleString()}</div>
+                   <div className="text-[10px] text-slate-500 mt-1">Units (kg/g)</div>
+                </CardContent>
+             </Card>
+             <Card className="bg-blue-600 text-white border-none shadow-lg">
+                <CardHeader className="pb-1 pt-4 px-4"><CardTitle className="text-xs uppercase opacity-70 flex items-center gap-2"><Snowflake className="w-3 h-3"/> Fat Content</CardTitle></CardHeader>
+                <CardContent className="px-4 pb-4">
+                   <div className="text-3xl font-bold">{stats.fat.toFixed(2)}%</div>
+                   <div className="text-[10px] opacity-70 mt-1">Standard: 10% - 12%</div>
+                </CardContent>
+             </Card>
+          </div>
+          <Card className="border-indigo-100 bg-indigo-50/50">
+             <CardHeader className="py-2 px-4 border-b border-indigo-100"><CardTitle className="text-sm flex items-center gap-2 text-indigo-900"><Snowflake className="w-4 h-4"/> Texture Physics</CardTitle></CardHeader>
+             <CardContent className="py-4 px-4 space-y-4">
+               <div>
+                 <div className="flex justify-between text-sm font-medium mb-1"><span className="text-slate-600">Sweetness (POD)</span><span className="text-indigo-700 font-bold">{stats.pod.toFixed(1)}</span></div>
+                 <Progress value={(stats.pod/25)*100} className="h-2.5 bg-indigo-200"/>
+                 <div className="flex justify-between text-[10px] text-muted-foreground mt-1">
+                    <span>Low (10)</span> <span>Target: 14-18</span> <span>High (22)</span>
+                 </div>
+               </div>
+               <div>
+                 <div className="flex justify-between text-sm font-medium mb-1"><span className="text-slate-600">Softness (PAC)</span><span className="text-blue-700 font-bold">{stats.pac.toFixed(1)}</span></div>
+                 <Progress value={(stats.pac/50)*100} className="h-2.5 bg-blue-200"/>
+                 <div className="flex justify-between text-[10px] text-muted-foreground mt-1">
+                    <span>Hard Ice Cream (12-16)</span> <span>Gelato (21-25)</span> <span>Soft (30+)</span>
+                 </div>
+               </div>
+             </CardContent>
+          </Card>
+        </div>
+      )}
+    </div>
+  );
+};
 // ==================== BATCH SCALING & VERIFICATION CALCULATOR ====================
 
 // Types
