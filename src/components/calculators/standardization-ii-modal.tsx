@@ -280,6 +280,10 @@ function FatSnfClrTsCalc() {
         clr: '28.0',
         snf: '8.94',
     });
+    
+    // ✅ NEW: Tab State
+    const [activeTab, setActiveTab] = useState<'summary' | 'verification'>('summary');
+
     const [result, setResult] = useState<{ 
         snf: number; 
         clr: number; 
@@ -287,6 +291,7 @@ function FatSnfClrTsCalc() {
         lactose: number;
         protein: number;
     } | null>(null);
+    
     const [formula, setFormula] = useState('isi');
     const [basis, setBasis] = useState<'fat_clr' | 'fat_snf'>('fat_clr');
     const [customConstants, setCustomConstants] = useState({ fatMultiplier: "0.25", constant: "0.72" });
@@ -303,6 +308,7 @@ function FatSnfClrTsCalc() {
     const calculate = useCallback(() => {
         setResult(null);
         setCalculationSteps([]);
+        setActiveTab('summary'); // ✅ Reset to Summary view
         
         const fat = parseFloat(inputs.fat);
         const clr = parseFloat(inputs.clr);
@@ -414,14 +420,14 @@ function FatSnfClrTsCalc() {
             steps.push(`\n\n🔬 **═══════════ STEP 4: ADDITIONAL COMPONENTS ═══════════**`);
             
             // Approximate Lactose (typically ~4.8-5.0% of milk)
-            const lactose = newSnf * 0.55; // Lactose is approximately 55% of SNF
+            const lactose = newSnf * 0.55; 
             steps.push(`\n   **Lactose (Approximate):**`);
             steps.push(`     Lactose ≈ SNF × 0.55`);
             steps.push(`             ≈ ${newSnf.toFixed(6)} × 0.55`);
             steps.push(`             ≈ ${lactose.toFixed(6)}%`);
             
             // Approximate Protein (typically ~3.2-3.5% of milk)
-            const protein = newSnf * 0.38; // Protein is approximately 38% of SNF
+            const protein = newSnf * 0.38; 
             steps.push(`\n   **Protein (Approximate):**`);
             steps.push(`     Protein ≈ SNF × 0.38`);
             steps.push(`             ≈ ${newSnf.toFixed(6)} × 0.38`);
@@ -468,32 +474,32 @@ function FatSnfClrTsCalc() {
             description="Calculate milk composition parameters using industry-standard formulas with detailed step-by-step calculations"
         >
             {/* Formula Selection */}
-            <div className="bg-gradient-to-r from-indigo-100 via-purple-100 to-pink-100 p-5 rounded-xl border-2 border-indigo-300 shadow-md mb-6">
-                <Label className="text-base font-bold mb-3 block flex items-center gap-2">
-                    <Calculator className="w-5 h-5" />
+            <div className="bg-gradient-to-r from-indigo-100 via-purple-100 to-pink-100 p-4 md:p-5 rounded-xl border-2 border-indigo-300 shadow-sm mb-4 md:mb-6">
+                <Label className="text-sm md:text-base font-bold mb-2 md:mb-3 block flex items-center gap-2">
+                    <Calculator className="w-4 h-4 md:w-5 md:h-5" />
                     Select SNF Formula
                 </Label>
                 <Select value={formula} onValueChange={setFormula}>
-                    <SelectTrigger className="bg-white border-2 border-indigo-200 h-12 text-base font-medium">
+                    <SelectTrigger className="bg-white border-2 border-indigo-200 h-10 md:h-12 text-sm md:text-base font-medium">
                         <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
                         {Object.entries(snfFormulas).map(([key, {name, formulaText}]) => (
-                            <SelectItem key={key} value={key} className="text-base py-3">
+                            <SelectItem key={key} value={key} className="text-sm md:text-base py-2 md:py-3">
                                 <div className="flex flex-col">
                                     <span className="font-bold text-gray-800">{name}</span>
-                                    <span className="text-xs text-muted-foreground mt-1">{formulaText}</span>
+                                    <span className="text-[10px] md:text-xs text-muted-foreground mt-0.5 md:mt-1">{formulaText}</span>
                                 </div>
                             </SelectItem>
                         ))}
-                        <SelectItem value="custom" className="text-base py-3">Custom Formula</SelectItem>
+                        <SelectItem value="custom" className="text-sm md:text-base py-2 md:py-3">Custom Formula</SelectItem>
                     </SelectContent>
                 </Select>
             </div>
 
             {/* Custom Formula */}
             {formula === 'custom' && (
-                <div className="grid grid-cols-2 gap-4 p-5 border-2 border-dashed border-purple-300 rounded-xl bg-purple-50 mb-6">
+                <div className="grid grid-cols-2 gap-3 md:gap-4 p-4 md:p-5 border-2 border-dashed border-purple-300 rounded-xl bg-purple-50 mb-4 md:mb-6">
                     <MemoizedInputField 
                         label="Fat Multiplier" 
                         value={customConstants.fatMultiplier} 
@@ -508,36 +514,36 @@ function FatSnfClrTsCalc() {
                         setter={handleCustomConstChange}
                         placeholder="e.g., 0.72"
                     />
-                    <Alert className="col-span-2 bg-purple-200 border-2 border-purple-400">
+                    <Alert className="col-span-2 bg-purple-200/50 border-2 border-purple-400 p-2 md:p-3">
                         <Info className="h-4 w-4" />
-                        <AlertDescription className="text-xs font-semibold text-purple-900">
-                            Custom Formula: <strong>SNF = (CLR/4) + (Fat × Fat Multiplier) + Constant</strong>
+                        <AlertDescription className="text-xs font-semibold text-purple-900 ml-2">
+                            Custom Formula: <strong>SNF = (CLR/4) + (Fat × Multiplier) + Constant</strong>
                         </AlertDescription>
                     </Alert>
                 </div>
             )}
 
             {/* Calculation Basis */}
-            <div className="bg-gradient-to-br from-amber-100 via-yellow-50 to-orange-100 p-5 rounded-xl border-2 border-amber-300 shadow-md mb-6">
-                <Label className="text-base font-bold mb-3 block flex items-center gap-2">
-                    <Target className="w-5 h-5" />
+            <div className="bg-gradient-to-br from-amber-100 via-yellow-50 to-orange-100 p-4 md:p-5 rounded-xl border-2 border-amber-300 shadow-sm mb-4 md:mb-6">
+                <Label className="text-sm md:text-base font-bold mb-2 md:mb-3 block flex items-center gap-2">
+                    <Target className="w-4 h-4 md:w-5 md:h-5" />
                     Calculate Based On
                 </Label>
                 <Select value={basis} onValueChange={(val: 'fat_clr' | 'fat_snf') => setBasis(val)}>
-                    <SelectTrigger className="bg-white border-2 border-amber-200 h-12 text-base font-medium">
+                    <SelectTrigger className="bg-white border-2 border-amber-200 h-10 md:h-12 text-sm md:text-base font-medium">
                         <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="fat_clr" className="text-base font-medium py-3">
+                        <SelectItem value="fat_clr" className="text-sm md:text-base font-medium py-2 md:py-3">
                             <div className="flex flex-col">
                                 <span className="font-bold">Fat & CLR</span>
-                                <span className="text-xs text-muted-foreground">Calculate SNF and TS</span>
+                                <span className="text-[10px] md:text-xs text-muted-foreground">Calculate SNF and TS</span>
                             </div>
                         </SelectItem>
-                        <SelectItem value="fat_snf" className="text-base font-medium py-3">
+                        <SelectItem value="fat_snf" className="text-sm md:text-base font-medium py-2 md:py-3">
                             <div className="flex flex-col">
                                 <span className="font-bold">Fat & SNF</span>
-                                <span className="text-xs text-muted-foreground">Calculate CLR and TS</span>
+                                <span className="text-[10px] md:text-xs text-muted-foreground">Calculate CLR and TS</span>
                             </div>
                         </SelectItem>
                     </SelectContent>
@@ -545,11 +551,11 @@ function FatSnfClrTsCalc() {
             </div>
 
             {/* Input Fields */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6">
                 {/* Fat - Always Required */}
-                <div className="bg-gradient-to-br from-blue-100 via-blue-50 to-cyan-100 p-6 rounded-xl border-2 border-blue-400 shadow-lg">
-                    <h3 className="font-bold text-lg mb-4 flex items-center gap-2 text-blue-800">
-                        <Droplets className="w-5 h-5" />
+                <div className="bg-gradient-to-br from-blue-100 via-blue-50 to-cyan-100 p-4 md:p-6 rounded-xl border-2 border-blue-400 shadow-sm">
+                    <h3 className="font-bold text-base md:text-lg mb-3 md:mb-4 flex items-center gap-2 text-blue-800">
+                        <Droplets className="w-4 h-4 md:w-5 md:h-5" />
                         Fat Content
                     </h3>
                     <MemoizedInputField 
@@ -562,9 +568,9 @@ function FatSnfClrTsCalc() {
 
                 {/* CLR or SNF - Based on Selection */}
                 {basis === 'fat_clr' ? (
-                    <div className="bg-gradient-to-br from-green-100 via-green-50 to-emerald-100 p-6 rounded-xl border-2 border-green-400 shadow-lg">
-                        <h3 className="font-bold text-lg mb-4 flex items-center gap-2 text-green-800">
-                            <Thermometer className="w-5 h-5" />
+                    <div className="bg-gradient-to-br from-green-100 via-green-50 to-emerald-100 p-4 md:p-6 rounded-xl border-2 border-green-400 shadow-sm">
+                        <h3 className="font-bold text-base md:text-lg mb-3 md:mb-4 flex items-center gap-2 text-green-800">
+                            <Thermometer className="w-4 h-4 md:w-5 md:h-5" />
                             CLR Reading
                         </h3>
                         <MemoizedInputField 
@@ -575,9 +581,9 @@ function FatSnfClrTsCalc() {
                         />
                     </div>
                 ) : (
-                    <div className="bg-gradient-to-br from-purple-100 via-purple-50 to-pink-100 p-6 rounded-xl border-2 border-purple-400 shadow-lg">
-                        <h3 className="font-bold text-lg mb-4 flex items-center gap-2 text-purple-800">
-                            <Beaker className="w-5 h-5" />
+                    <div className="bg-gradient-to-br from-purple-100 via-purple-50 to-pink-100 p-4 md:p-6 rounded-xl border-2 border-purple-400 shadow-sm">
+                        <h3 className="font-bold text-base md:text-lg mb-3 md:mb-4 flex items-center gap-2 text-purple-800">
+                            <Beaker className="w-4 h-4 md:w-5 md:h-5" />
                             SNF Content
                         </h3>
                         <MemoizedInputField 
@@ -592,197 +598,194 @@ function FatSnfClrTsCalc() {
 
             <Button 
                 onClick={calculate} 
-                className="w-full h-16 text-lg font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 shadow-xl hover:shadow-2xl transition-all"
+                className="w-full h-14 md:h-16 text-base md:text-lg font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 shadow-md transition-all"
             >
-                <Calculator className="w-6 h-6 mr-3" />
+                <Calculator className="w-5 h-5 md:w-6 md:h-6 mr-2 md:mr-3" />
                 Calculate Values
             </Button>
 
             {result && (
-                <div className="mt-6 space-y-6">
-                    {/* Results Display */}
-                    <Alert className="bg-gradient-to-r from-green-100 via-emerald-100 to-teal-100 border-3 border-green-500 shadow-2xl">
-                        <CheckCircle2 className="h-8 w-8 text-green-700" />
-                        <AlertTitle className="text-2xl font-extrabold text-green-900 mb-4">
-                            ✅ Calculated Values
-                        </AlertTitle>
-                        <AlertDescription>
-                            <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
-                                {/* CLR */}
-                                <div className="bg-white/90 p-5 rounded-xl shadow-md border-2 border-green-300 text-center">
-                                    <div className="flex items-center justify-center gap-2 mb-2">
-                                        <Thermometer className="w-5 h-5 text-green-700" />
-                                        <p className="text-sm font-bold text-muted-foreground">CLR</p>
-                                    </div>
-                                    <p className="text-4xl font-extrabold text-green-700">
-                                        {result.clr.toFixed(4)}
-                                    </p>
-                                    <Badge className={basis === 'fat_clr' ? 'bg-blue-500 mt-2' : 'bg-purple-500 mt-2'}>
-                                        {basis === 'fat_clr' ? 'Input' : 'Calculated'}
-                                    </Badge>
-                                </div>
+                <div className="mt-6 space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                    {/* ✅ TAB TRIGGER */}
+                    <div className="flex p-1 bg-slate-100 rounded-lg border border-slate-200">
+                        <button
+                            onClick={() => setActiveTab('summary')}
+                            className={cn(
+                                "flex-1 flex items-center justify-center gap-2 py-2 text-xs md:text-sm font-bold rounded-md transition-all",
+                                activeTab === 'summary' 
+                                    ? "bg-white text-blue-700 shadow-sm border border-slate-200" 
+                                    : "text-slate-500 hover:text-slate-700"
+                            )}
+                        >
+                            <LayoutDashboard className="w-3 h-3 md:w-4 md:h-4" />
+                            Results
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('verification')}
+                            className={cn(
+                                "flex-1 flex items-center justify-center gap-2 py-2 text-xs md:text-sm font-bold rounded-md transition-all",
+                                activeTab === 'verification' 
+                                    ? "bg-white text-purple-700 shadow-sm border border-slate-200" 
+                                    : "text-slate-500 hover:text-slate-700"
+                            )}
+                        >
+                            <FileText className="w-3 h-3 md:w-4 md:h-4" />
+                            Calculation Steps
+                        </button>
+                    </div>
 
-                                {/* SNF */}
-                                <div className="bg-white/90 p-5 rounded-xl shadow-md border-2 border-purple-300 text-center">
-                                    <div className="flex items-center justify-center gap-2 mb-2">
-                                        <Beaker className="w-5 h-5 text-purple-700" />
-                                        <p className="text-sm font-bold text-muted-foreground">SNF %</p>
-                                    </div>
-                                    <p className="text-4xl font-extrabold text-purple-700">
-                                        {result.snf.toFixed(4)}
-                                    </p>
-                                    <Badge className={basis === 'fat_snf' ? 'bg-blue-500 mt-2' : 'bg-purple-500 mt-2'}>
-                                        {basis === 'fat_snf' ? 'Input' : 'Calculated'}
-                                    </Badge>
+                    {/* ✅ TAB CONTENT: SUMMARY */}
+                    {activeTab === 'summary' && (
+                        <div className="space-y-4">
+                            <Alert className="bg-gradient-to-r from-green-50 via-emerald-50 to-teal-50 border-2 border-green-500 shadow-lg px-3 py-4 md:p-6">
+                                <div className="flex items-start gap-2 mb-4">
+                                    <CheckCircle2 className="h-6 w-6 text-green-700 shrink-0 mt-0.5" />
+                                    <AlertTitle className="text-lg md:text-xl font-extrabold text-green-900">
+                                        Calculated Values
+                                    </AlertTitle>
                                 </div>
+                                <AlertDescription>
+                                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-5">
+                                        {/* CLR */}
+                                        <div className="bg-white p-3 md:p-5 rounded-xl shadow-sm border border-green-200 text-center relative overflow-hidden">
+                                            <div className="absolute right-0 top-0 h-full w-1 bg-green-400"></div>
+                                            <div className="flex items-center justify-center gap-1.5 mb-1.5 md:mb-2">
+                                                <Thermometer className="w-4 h-4 md:w-5 md:h-5 text-green-600" />
+                                                <p className="text-[10px] md:text-sm font-bold text-muted-foreground">CLR</p>
+                                            </div>
+                                            {/* Responsive text & break-all */}
+                                            <p className="text-2xl md:text-4xl font-black text-green-700 break-all leading-tight">
+                                                {result.clr.toFixed(3)}
+                                            </p>
+                                            <Badge className={cn("mt-1.5 md:text-[10px]", basis === 'fat_clr' ? 'bg-blue-500' : 'bg-purple-500')}>
+                                                {basis === 'fat_clr' ? 'Input' : 'Calculated'}
+                                            </Badge>
+                                        </div>
 
-                                {/* TS */}
-                                <div className="bg-white/90 p-5 rounded-xl shadow-md border-2 border-pink-300 text-center">
-                                    <div className="flex items-center justify-center gap-2 mb-2">
-                                        <Scale className="w-5 h-5 text-pink-700" />
-                                        <p className="text-sm font-bold text-muted-foreground">TS %</p>
+                                        {/* SNF */}
+                                        <div className="bg-white p-3 md:p-5 rounded-xl shadow-sm border border-purple-200 text-center relative overflow-hidden">
+                                            <div className="absolute right-0 top-0 h-full w-1 bg-purple-400"></div>
+                                            <div className="flex items-center justify-center gap-1.5 mb-1.5 md:mb-2">
+                                                <Beaker className="w-4 h-4 md:w-5 md:h-5 text-purple-600" />
+                                                <p className="text-[10px] md:text-sm font-bold text-muted-foreground">SNF %</p>
+                                            </div>
+                                            <p className="text-2xl md:text-4xl font-black text-purple-700 break-all leading-tight">
+                                                {result.snf.toFixed(3)}
+                                            </p>
+                                            <Badge className={cn("mt-1.5 md:text-[10px]", basis === 'fat_snf' ? 'bg-blue-500' : 'bg-purple-500')}>
+                                                {basis === 'fat_snf' ? 'Input' : 'Calculated'}
+                                            </Badge>
+                                        </div>
+
+                                        {/* TS */}
+                                        <div className="bg-white p-3 md:p-5 rounded-xl shadow-sm border border-pink-200 text-center relative overflow-hidden">
+                                            <div className="absolute right-0 top-0 h-full w-1 bg-pink-400"></div>
+                                            <div className="flex items-center justify-center gap-1.5 mb-1.5 md:mb-2">
+                                                <Scale className="w-4 h-4 md:w-5 md:h-5 text-pink-600" />
+                                                <p className="text-[10px] md:text-sm font-bold text-muted-foreground">TS %</p>
+                                            </div>
+                                            <p className="text-2xl md:text-4xl font-black text-pink-700 break-all leading-tight">
+                                                {result.ts.toFixed(3)}
+                                            </p>
+                                            <Badge className="bg-purple-500 mt-1.5 md:text-[10px]">Calculated</Badge>
+                                        </div>
+
+                                        {/* Lactose */}
+                                        <div className="bg-white p-3 md:p-5 rounded-xl shadow-sm border border-amber-200 text-center relative overflow-hidden">
+                                            <div className="absolute right-0 top-0 h-full w-1 bg-amber-400"></div>
+                                            <div className="flex items-center justify-center gap-1.5 mb-1.5 md:mb-2">
+                                                <Droplets className="w-4 h-4 md:w-5 md:h-5 text-amber-600" />
+                                                <p className="text-[10px] md:text-sm font-bold text-muted-foreground">Lactose %</p>
+                                            </div>
+                                            <p className="text-2xl md:text-4xl font-black text-amber-700 break-all leading-tight">
+                                                {result.lactose.toFixed(3)}
+                                            </p>
+                                            <Badge className="bg-amber-500 mt-1.5 md:text-[10px]">Estimate</Badge>
+                                        </div>
+
+                                        {/* Protein */}
+                                        <div className="bg-white p-3 md:p-5 rounded-xl shadow-sm border border-indigo-200 text-center relative overflow-hidden">
+                                            <div className="absolute right-0 top-0 h-full w-1 bg-indigo-400"></div>
+                                            <div className="flex items-center justify-center gap-1.5 mb-1.5 md:mb-2">
+                                                <Weight className="w-4 h-4 md:w-5 md:h-5 text-indigo-600" />
+                                                <p className="text-[10px] md:text-sm font-bold text-muted-foreground">Protein %</p>
+                                            </div>
+                                            <p className="text-2xl md:text-4xl font-black text-indigo-700 break-all leading-tight">
+                                                {result.protein.toFixed(3)}
+                                            </p>
+                                            <Badge className="bg-indigo-500 mt-1.5 md:text-[10px]">Estimate</Badge>
+                                        </div>
+
+                                        {/* Fat (Reference) */}
+                                        <div className="bg-white p-3 md:p-5 rounded-xl shadow-sm border border-blue-200 text-center relative overflow-hidden">
+                                            <div className="absolute right-0 top-0 h-full w-1 bg-blue-400"></div>
+                                            <div className="flex items-center justify-center gap-1.5 mb-1.5 md:mb-2">
+                                                <Milk className="w-4 h-4 md:w-5 md:h-5 text-blue-600" />
+                                                <p className="text-[10px] md:text-sm font-bold text-muted-foreground">Fat %</p>
+                                            </div>
+                                            <p className="text-2xl md:text-4xl font-black text-blue-700 break-all leading-tight">
+                                                {parseFloat(inputs.fat).toFixed(2)}
+                                            </p>
+                                            <Badge className="bg-blue-500 mt-1.5 md:text-[10px]">Input</Badge>
+                                        </div>
                                     </div>
-                                    <p className="text-4xl font-extrabold text-pink-700">
-                                        {result.ts.toFixed(4)}
-                                    </p>
-                                    <Badge className="bg-purple-500 mt-2">Calculated</Badge>
-                                </div>
 
-                                {/* Lactose */}
-                                <div className="bg-white/90 p-5 rounded-xl shadow-md border-2 border-amber-300 text-center">
-                                    <div className="flex items-center justify-center gap-2 mb-2">
-                                        <Droplets className="w-5 h-5 text-amber-700" />
-                                        <p className="text-sm font-bold text-muted-foreground">Lactose %</p>
+                                    {/* Info Alert */}
+                                    <Alert className="mt-4 bg-blue-50 border-blue-200 p-2 md:p-3">
+                                        <Info className="h-4 w-4 text-blue-600" />
+                                        <AlertDescription className="text-[10px] md:text-xs font-medium text-blue-800 ml-2">
+                                            Lactose and Protein values are estimates based on standard milk composition ratios (~55% and ~38% of SNF).
+                                        </AlertDescription>
+                                    </Alert>
+                                    
+                                    <div className="mt-4 text-center">
+                                        <Button 
+                                            variant="ghost" 
+                                            size="sm" 
+                                            onClick={() => setActiveTab('verification')}
+                                            className="text-xs text-muted-foreground hover:text-primary h-8"
+                                        >
+                                            View Math Steps <ChevronRight className="w-3 h-3 ml-1" />
+                                        </Button>
                                     </div>
-                                    <p className="text-4xl font-extrabold text-amber-700">
-                                        {result.lactose.toFixed(4)}
-                                    </p>
-                                    <Badge className="bg-amber-500 mt-2">Estimate</Badge>
-                                </div>
-
-                                {/* Protein */}
-                                <div className="bg-white/90 p-5 rounded-xl shadow-md border-2 border-indigo-300 text-center">
-                                    <div className="flex items-center justify-center gap-2 mb-2">
-                                        <Weight className="w-5 h-5 text-indigo-700" />
-                                        <p className="text-sm font-bold text-muted-foreground">Protein %</p>
-                                    </div>
-                                    <p className="text-4xl font-extrabold text-indigo-700">
-                                        {result.protein.toFixed(4)}
-                                    </p>
-                                    <Badge className="bg-indigo-500 mt-2">Estimate</Badge>
-                                </div>
-
-                                {/* Fat (for reference) */}
-                                <div className="bg-white/90 p-5 rounded-xl shadow-md border-2 border-blue-300 text-center">
-                                    <div className="flex items-center justify-center gap-2 mb-2">
-                                        <Milk className="w-5 h-5 text-blue-700" />
-                                        <p className="text-sm font-bold text-muted-foreground">Fat %</p>
-                                    </div>
-                                    <p className="text-4xl font-extrabold text-blue-700">
-                                        {parseFloat(inputs.fat).toFixed(4)}
-                                    </p>
-                                    <Badge className="bg-blue-500 mt-2">Input</Badge>
-                                </div>
-                            </div>
-
-                            {/* Info Alert */}
-                            <Alert className="mt-5 bg-blue-100 border-2 border-blue-300">
-                                <Info className="h-5 w-5 text-blue-700" />
-                                <AlertDescription className="text-sm font-semibold text-blue-900">
-                                    <strong>Note:</strong> Lactose and Protein values are approximate estimates based on typical milk composition ratios.
                                 </AlertDescription>
                             </Alert>
-                        </AlertDescription>
-                    </Alert>
-
-                    {/* Calculation Steps */}
-                    <div className="bg-gradient-to-br from-gray-100 to-slate-200 p-6 rounded-xl border-2 border-gray-400 shadow-xl">
-                        <h4 className="font-extrabold text-xl mb-4 flex items-center gap-2 text-gray-800">
-                            <Calculator className="w-6 h-6" />
-                            Detailed Calculation Process (Mobile Calculator Verification)
-                        </h4>
-                        <ScrollArea className="h-[400px] pr-4">
-                            <div className="space-y-1 text-sm font-mono leading-relaxed">
-                                {calculationSteps.map((step, idx) => (
-                                    <p 
-                                        key={idx} 
-                                        className={cn(
-                                            step.includes('**') && 'font-extrabold mt-3 text-gray-900 text-base',
-                                            step.includes('═══') && 'text-purple-700 font-extrabold text-lg',
-                                            step.includes('✅') && 'text-green-700 font-bold',
-                                            step.includes('⚠️') && 'text-yellow-700 font-bold',
-                                            step.includes('❌') && 'text-red-700 font-bold',
-                                            step.includes('📊') && 'text-blue-700 font-bold text-lg',
-                                            step.includes('🔢') && 'text-purple-700 font-bold text-lg',
-                                            step.includes('🧪') && 'text-orange-700 font-bold text-lg',
-                                            step.includes('🔬') && 'text-pink-700 font-bold text-lg',
-                                            step.includes('✨') && 'text-green-700 font-extrabold text-lg',
-                                            !step.includes('**') && !step.includes('✅') && !step.includes('⚠️') && !step.includes('❌') && !step.includes('═══') && 'text-gray-700'
-                                        )}
-                                    >
-                                        {step.replace(/\*\*/g, '')}
-                                    </p>
-                                ))}
-                            </div>
-                        </ScrollArea>
-                        <div className="mt-4 p-4 bg-green-100 border-2 border-green-300 rounded-xl shadow-md">
-                            <p className="text-sm text-green-900 font-bold flex items-center gap-2">
-                                <CheckCircle2 className="w-5 h-5" />
-                                ✓ All calculations shown step-by-step - verify each step with your calculator!
-                            </p>
                         </div>
-                    </div>
+                    )}
+
+                    {/* ✅ TAB CONTENT: VERIFICATION */}
+                    {activeTab === 'verification' && (
+                        <div className="bg-slate-50 p-3 md:p-6 rounded-xl border border-slate-300 shadow-inner">
+                            <h4 className="font-bold text-sm md:text-base mb-3 flex items-center gap-2 text-slate-700">
+                                <Calculator className="w-4 h-4" />
+                                Mathematical Steps
+                            </h4>
+                            <ScrollArea className="h-[300px] md:h-[400px] pr-2">
+                                <div className="space-y-1.5 text-xs md:text-sm font-mono leading-relaxed">
+                                    {calculationSteps.map((step, idx) => (
+                                        <p 
+                                            key={idx} 
+                                            className={cn(
+                                                "break-words whitespace-pre-wrap p-1 rounded",
+                                                step.includes('**') && 'font-bold text-slate-900 bg-white/50 mt-1',
+                                                step.includes('═══') && 'text-purple-700 font-extrabold text-sm border-b border-purple-200 pb-1 mb-1',
+                                                step.includes('✅') && 'text-green-700 font-bold',
+                                                step.includes('❌') && 'text-red-700 font-bold',
+                                                !step.includes('**') && !step.includes('═══') && 'text-slate-600 ml-2 border-l-2 border-slate-200 pl-2'
+                                            )}
+                                        >
+                                            {step.replace(/\*\*/g, '')}
+                                        </p>
+                                    ))}
+                                </div>
+                            </ScrollArea>
+                        </div>
+                    )}
                 </div>
             )}
         </CalculatorCard>
     );
 }
-
-// ✅ Keep MemoizedMilkInputGroup as is
-const MemoizedMilkInputGroup = memo(function MilkInputGroup({
-    milkNum,
-    onInputChange,
-    initialValues,
-}: {
-    milkNum: 1 | 2;
-    onInputChange: (milkNum: 1 | 2, field: string, value: string) => void;
-    initialValues: { qty: string; fat: string; clr: string, unit: 'kg' | 'liters' };
-}) {
-    return (
-        <div className="bg-gradient-to-br from-blue-100 via-blue-50 to-cyan-100 p-6 rounded-xl border-2 border-blue-400 shadow-lg">
-            <h3 className="font-bold text-xl mb-5 flex items-center gap-2 text-blue-800">
-                <Droplets className="w-6 h-6" />
-                Milk Source {milkNum}
-            </h3>
-            <div className="space-y-4">
-                <div>
-                    <Label className="text-sm font-semibold mb-2 block">Quantity</Label>
-                    <div className="flex gap-2">
-                        <Input 
-                            type="number" 
-                            value={initialValues.qty} 
-                            onChange={(e) => onInputChange(milkNum, 'qty', e.target.value)} 
-                            className="flex-1 h-11 text-base font-medium border-2 border-blue-300"
-                            step="0.001"
-                        />
-                        <Select value={initialValues.unit} onValueChange={(val) => onInputChange(milkNum, 'unit', val)}>
-                            <SelectTrigger className="w-[110px] h-11 border-2 border-blue-300 font-semibold">
-                                <SelectValue/>
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="kg" className="text-base font-medium">Kg</SelectItem>
-                                <SelectItem value="liters" className="text-base font-medium">Liters</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
-                </div>
-                <MemoizedInputField label="Fat %" value={initialValues.fat} name="fat" setter={(name, val) => onInputChange(milkNum, name, val)} />
-                <MemoizedInputField label="CLR" value={initialValues.clr} name="clr" setter={(name, val) => onInputChange(milkNum, name, val)} />
-            </div>
-        </div>
-    );
-});
-
 function MilkBlendingCalc() {
     const [numberOfMilks, setNumberOfMilks] = useState('2');
     const [milks, setMilks] = useState([
