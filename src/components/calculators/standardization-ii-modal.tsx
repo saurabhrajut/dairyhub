@@ -4057,6 +4057,10 @@ function RecombinedMilkCalc() {
 function ClrCorrectionCalc() {
     const [olr, setOlr] = useState("28.5");
     const [temp, setTemp] = useState("29");
+    
+    // ✅ NEW: Tab State
+    const [activeTab, setActiveTab] = useState<'summary' | 'verification'>('summary');
+
     const [result, setResult] = useState<{
         clr: number;
         olr: number;
@@ -4071,6 +4075,7 @@ function ClrCorrectionCalc() {
         setResult(null);
         setError(null);
         setCalculationSteps([]);
+        setActiveTab('summary'); // ✅ Reset to Summary
         
         const olrNum = parseFloat(olr);
         const tempNum = parseFloat(temp);
@@ -4084,68 +4089,22 @@ function ClrCorrectionCalc() {
         const standardTemp = 27;
         const correctionFactor = 0.2;
         
-        // ============ STEP 1: INPUT VALUES ============
         steps.push(`📊 **═══════════ STEP 1: INPUT VALUES ═══════════**`);
-        steps.push(`\n   Observed Lactometer Reading (OLR): ${olrNum}`);
-        steps.push(`   Milk Temperature: ${tempNum}°C`);
-        steps.push(`   Standard Calibration Temperature: ${standardTemp}°C`);
-        steps.push(`   Correction Factor: ${correctionFactor} per °C`);
-
-        // ============ STEP 2: CALCULATE TEMPERATURE DIFFERENCE ============
-        steps.push(`\n\n🌡️ **═══════════ STEP 2: TEMPERATURE DIFFERENCE ═══════════**`);
-        
-        const tempDiff = tempNum - standardTemp;
-        
-        steps.push(`\n   Formula: Temperature Difference = Actual Temp - Standard Temp`);
-        steps.push(`\n   Calculation:`);
-        steps.push(`     Temperature Difference = ${tempNum} - ${standardTemp}`);
-        steps.push(`                            = ${tempDiff.toFixed(6)}°C`);
-        
-        if (tempDiff > 0) {
-            steps.push(`\n   ⚠️ Temperature is ${Math.abs(tempDiff).toFixed(2)}°C ABOVE standard`);
-            steps.push(`      → CLR reading will be LOWER than actual`);
-            steps.push(`      → Need to ADD correction`);
-        } else if (tempDiff < 0) {
-            steps.push(`\n   ⚠️ Temperature is ${Math.abs(tempDiff).toFixed(2)}°C BELOW standard`);
-            steps.push(`      → CLR reading will be HIGHER than actual`);
-            steps.push(`      → Need to SUBTRACT correction`);
-        } else {
-            steps.push(`\n   ✅ Temperature matches standard - no correction needed`);
-        }
-
-        // ============ STEP 3: CALCULATE CORRECTION ============
-        steps.push(`\n\n🔢 **═══════════ STEP 3: CALCULATE CORRECTION VALUE ═══════════**`);
-        
-        const correction = tempDiff * correctionFactor;
-        
-        steps.push(`\n   Formula: Correction = Temperature Difference × Correction Factor`);
-        steps.push(`\n   Calculation:`);
-        steps.push(`     Correction = ${tempDiff.toFixed(6)} × ${correctionFactor}`);
-        steps.push(`                = ${correction.toFixed(8)}`);
-
-        // ============ STEP 4: CALCULATE CORRECTED CLR ============
-        steps.push(`\n\n✅ **═══════════ STEP 4: CALCULATE CORRECTED CLR ═══════════**`);
-        
-        const clr = olrNum + correction;
-        
-        steps.push(`\n   Formula: Corrected CLR = OLR + Correction`);
-        steps.push(`\n   Calculation:`);
-        steps.push(`     Corrected CLR = ${olrNum} + ${correction.toFixed(8)}`);
-        steps.push(`                   = ${clr.toFixed(8)}`);
-
-        // ============ STEP 5: INTERPRETATION ============
-        steps.push(`\n\n📈 **═══════════ STEP 5: RESULT INTERPRETATION ═══════════**`);
-        
         steps.push(`\n   Observed Reading (OLR): ${olrNum}`);
-        steps.push(`   Corrected Reading (CLR): ${clr.toFixed(4)}`);
-        steps.push(`   Difference: ${Math.abs(clr - olrNum).toFixed(4)}`);
-        
-        if (Math.abs(tempDiff) < 0.5) {
-            steps.push(`\n   ✓ Temperature very close to standard - minimal correction applied`);
-        } else if (Math.abs(tempDiff) > 3) {
-            steps.push(`\n   ⚠️ Large temperature difference detected`);
-            steps.push(`      Consider re-testing at closer to standard temperature for accuracy`);
-        }
+        steps.push(`   Temperature: ${tempNum}°C`);
+        steps.push(`   Standard Temp: ${standardTemp}°C`);
+
+        const tempDiff = tempNum - standardTemp;
+        steps.push(`\n🌡️ **TEMP DIFFERENCE**`);
+        steps.push(`   Diff = ${tempNum} - ${standardTemp} = ${tempDiff.toFixed(2)}°C`);
+
+        const correction = tempDiff * correctionFactor;
+        steps.push(`\n🔢 **CORRECTION FACTOR**`);
+        steps.push(`   Correction = ${tempDiff.toFixed(2)} × ${correctionFactor} = ${correction.toFixed(2)}`);
+
+        const clr = olrNum + correction;
+        steps.push(`\n✅ **FINAL CLR**`);
+        steps.push(`   CLR = ${olrNum} + (${correction.toFixed(2)}) = ${clr.toFixed(2)}`);
 
         setCalculationSteps(steps);
         setResult({
@@ -4163,10 +4122,9 @@ function ClrCorrectionCalc() {
             description="Correct Lactometer Reading (CLR) based on milk temperature deviation from standard 27°C"
         >
             {/* Input Fields */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                {/* OLR Input */}
-                <div className="bg-gradient-to-br from-blue-100 via-cyan-50 to-sky-100 p-6 rounded-xl border-2 border-blue-400 shadow-lg">
-                    <h3 className="font-bold text-lg mb-4 flex items-center gap-2 text-blue-800">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6">
+                <div className="bg-gradient-to-br from-blue-100 via-cyan-50 to-sky-100 p-4 md:p-6 rounded-xl border-2 border-blue-400 shadow-lg">
+                    <h3 className="font-bold text-base md:text-lg mb-4 flex items-center gap-2 text-blue-800">
                         <Thermometer className="w-5 h-5" />
                         Observed Reading
                     </h3>
@@ -4183,9 +4141,8 @@ function ClrCorrectionCalc() {
                     </div>
                 </div>
 
-                {/* Temperature Input */}
-                <div className="bg-gradient-to-br from-orange-100 via-amber-50 to-yellow-100 p-6 rounded-xl border-2 border-orange-400 shadow-lg">
-                    <h3 className="font-bold text-lg mb-4 flex items-center gap-2 text-orange-800">
+                <div className="bg-gradient-to-br from-orange-100 via-amber-50 to-yellow-100 p-4 md:p-6 rounded-xl border-2 border-orange-400 shadow-lg">
+                    <h3 className="font-bold text-base md:text-lg mb-4 flex items-center gap-2 text-orange-800">
                         <Thermometer className="w-5 h-5" />
                         Milk Temperature
                     </h3>
@@ -4208,7 +4165,7 @@ function ClrCorrectionCalc() {
 
             <Button 
                 onClick={handleCalc} 
-                className="w-full h-16 text-lg font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 shadow-xl hover:shadow-2xl transition-all"
+                className="w-full h-14 md:h-16 text-lg font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 shadow-xl hover:shadow-2xl transition-all"
             >
                 <Calculator className="w-6 h-6 mr-3" />
                 Calculate Corrected CLR
@@ -4222,98 +4179,134 @@ function ClrCorrectionCalc() {
             )}
 
             {result && (
-                <div className="mt-6 space-y-6">
-                    {/* Result Display */}
-                    <Alert className="bg-gradient-to-r from-green-100 via-emerald-100 to-teal-100 border-3 border-green-500 shadow-2xl">
-                        <CheckCircle2 className="h-8 w-8 text-green-700" />
-                        <AlertTitle className="text-2xl font-extrabold text-green-900 mb-4">
-                            ✅ Corrected CLR
-                        </AlertTitle>
-                        <AlertDescription>
-                            <div className="space-y-5">
-                                {/* Main Result */}
-                                <div className="bg-white/90 p-8 rounded-xl shadow-md border-2 border-green-300 text-center">
-                                    <p className="text-sm text-muted-foreground font-semibold mb-2">
-                                        Corrected Lactometer Reading (CLR)
-                                    </p>
-                                    <p className="text-6xl font-extrabold text-green-700 mb-4">
-                                        {result.clr.toFixed(4)}
-                                    </p>
-                                    {Math.abs(result.correction) > 0.01 && (
-                                        <Badge className={result.correction > 0 ? "bg-blue-500" : "bg-orange-500"}>
-                                            {result.correction > 0 ? '+' : ''}{result.correction.toFixed(4)} correction applied
-                                        </Badge>
-                                    )}
-                                </div>
-
-                                {/* Comparison */}
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                    <div className="bg-blue-50 p-4 rounded-lg border-2 border-blue-300 text-center">
-                                        <p className="text-xs font-semibold text-muted-foreground mb-1">Observed (OLR)</p>
-                                        <p className="text-3xl font-bold text-blue-700">{result.olr.toFixed(4)}</p>
-                                        <p className="text-xs text-blue-600 mt-1">At {result.temp}°C</p>
-                                    </div>
-                                    <div className="bg-purple-50 p-4 rounded-lg border-2 border-purple-300 text-center">
-                                        <p className="text-xs font-semibold text-muted-foreground mb-1">Temperature Diff</p>
-                                        <p className="text-3xl font-bold text-purple-700">
-                                            {(result.temp - result.standardTemp) > 0 ? '+' : ''}{(result.temp - result.standardTemp).toFixed(2)}°C
-                                        </p>
-                                        <p className="text-xs text-purple-600 mt-1">From standard</p>
-                                    </div>
-                                    <div className="bg-green-50 p-4 rounded-lg border-2 border-green-300 text-center">
-                                        <p className="text-xs font-semibold text-muted-foreground mb-1">Corrected (CLR)</p>
-                                        <p className="text-3xl font-bold text-green-700">{result.clr.toFixed(4)}</p>
-                                        <p className="text-xs text-green-600 mt-1">At 27°C standard</p>
-                                    </div>
-                                </div>
-
-                                {/* Info Alert */}
-                                <Alert className="bg-blue-100 border-2 border-blue-300">
-                                    <Info className="h-5 w-5 text-blue-700" />
-                                    <AlertDescription className="text-sm font-semibold text-blue-900">
-                                        <strong>Note:</strong> Lactometers are calibrated at 27°C (80.6°F). Readings taken at different temperatures must be corrected using 0.2 per °C deviation.
-                                    </AlertDescription>
-                                </Alert>
-                            </div>
-                        </AlertDescription>
-                    </Alert>
-
-                    {/* Calculation Steps */}
-                    <div className="bg-gradient-to-br from-gray-100 to-slate-200 p-6 rounded-xl border-2 border-gray-400 shadow-xl">
-                        <h4 className="font-extrabold text-xl mb-4 flex items-center gap-2 text-gray-800">
-                            <Calculator className="w-6 h-6" />
-                            Temperature Correction Calculation Process
-                        </h4>
-                        <ScrollArea className="h-[400px] pr-4">
-                            <div className="space-y-1 text-sm font-mono leading-relaxed">
-                                {calculationSteps.map((step, idx) => (
-                                    <p 
-                                        key={idx} 
-                                        className={cn(
-                                            step.includes('**') && 'font-extrabold mt-3 text-gray-900 text-base',
-                                            step.includes('═══') && 'text-purple-700 font-extrabold text-lg',
-                                            step.includes('✅') && 'text-green-700 font-bold',
-                                            step.includes('⚠️') && 'text-yellow-700 font-bold',
-                                            step.includes('✓') && 'text-green-700 font-bold',
-                                            step.includes('📊') && 'text-blue-700 font-bold text-lg',
-                                            step.includes('🌡️') && 'text-orange-700 font-bold text-lg',
-                                            step.includes('🔢') && 'text-purple-700 font-bold text-lg',
-                                            step.includes('📈') && 'text-green-700 font-bold text-lg',
-                                            !step.includes('**') && !step.includes('✅') && !step.includes('⚠️') && !step.includes('✓') && !step.includes('═══') && 'text-gray-700'
-                                        )}
-                                    >
-                                        {step.replace(/\*\*/g, '')}
-                                    </p>
-                                ))}
-                            </div>
-                        </ScrollArea>
-                        <div className="mt-4 p-4 bg-green-100 border-2 border-green-300 rounded-xl shadow-md">
-                            <p className="text-sm text-green-900 font-bold flex items-center gap-2">
-                                <CheckCircle2 className="w-5 h-5" />
-                                ✓ Temperature correction formula: CLR = OLR + (Temp - 27) × 0.2
-                            </p>
-                        </div>
+                <div className="mt-6 space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                    {/* ✅ TAB TRIGGER */}
+                    <div className="flex p-1 bg-slate-100 rounded-lg border border-slate-200">
+                        <button
+                            onClick={() => setActiveTab('summary')}
+                            className={cn(
+                                "flex-1 flex items-center justify-center gap-2 py-2 text-xs md:text-sm font-bold rounded-md transition-all",
+                                activeTab === 'summary' 
+                                    ? "bg-white text-blue-700 shadow-sm border border-slate-200" 
+                                    : "text-slate-500 hover:text-slate-700"
+                            )}
+                        >
+                            <LayoutDashboard className="w-3 h-3 md:w-4 md:h-4" />
+                            Result Summary
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('verification')}
+                            className={cn(
+                                "flex-1 flex items-center justify-center gap-2 py-2 text-xs md:text-sm font-bold rounded-md transition-all",
+                                activeTab === 'verification' 
+                                    ? "bg-white text-purple-700 shadow-sm border border-slate-200" 
+                                    : "text-slate-500 hover:text-slate-700"
+                            )}
+                        >
+                            <FileText className="w-3 h-3 md:w-4 md:h-4" />
+                            Verification
+                        </button>
                     </div>
+
+                    {/* ✅ TAB CONTENT: SUMMARY */}
+                    {activeTab === 'summary' && (
+                        <div className="space-y-4">
+                            <Alert className="bg-gradient-to-r from-green-100 via-emerald-100 to-teal-100 border-3 border-green-500 shadow-2xl px-3 py-4 md:p-6">
+                                <div className="flex items-start gap-2 mb-4">
+                                    <CheckCircle2 className="h-8 w-8 text-green-700 shrink-0" />
+                                    <AlertTitle className="text-xl md:text-2xl font-extrabold text-green-900 mt-1">
+                                        Corrected CLR
+                                    </AlertTitle>
+                                </div>
+                                <AlertDescription>
+                                    <div className="space-y-5">
+                                        {/* Main Result */}
+                                        <div className="bg-white/90 p-4 md:p-8 rounded-xl shadow-md border-2 border-green-300 text-center overflow-hidden">
+                                            <p className="text-sm font-semibold text-muted-foreground mb-2">
+                                                Corrected Lactometer Reading
+                                            </p>
+                                            {/* Responsive Font Size & Break-all */}
+                                            <p className="text-5xl md:text-6xl font-extrabold text-green-700 mb-4 break-all leading-tight">
+                                                {result.clr.toFixed(2)}
+                                            </p>
+                                            
+                                            {Math.abs(result.correction) > 0.01 && (
+                                                <Badge className={result.correction > 0 ? "bg-blue-500" : "bg-orange-500"}>
+                                                    {result.correction > 0 ? '+' : ''}{result.correction.toFixed(2)} correction
+                                                </Badge>
+                                            )}
+                                        </div>
+
+                                        {/* Comparison Grid */}
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
+                                            <div className="bg-blue-50 p-3 md:p-4 rounded-lg border-2 border-blue-300 text-center">
+                                                <p className="text-[10px] md:text-xs font-semibold text-muted-foreground mb-1">Observed (OLR)</p>
+                                                <p className="text-2xl md:text-3xl font-bold text-blue-700">{result.olr}</p>
+                                                <p className="text-[10px] md:text-xs text-blue-600 mt-1">At {result.temp}°C</p>
+                                            </div>
+                                            <div className="bg-purple-50 p-3 md:p-4 rounded-lg border-2 border-purple-300 text-center">
+                                                <p className="text-[10px] md:text-xs font-semibold text-muted-foreground mb-1">Temp Difference</p>
+                                                <p className="text-2xl md:text-3xl font-bold text-purple-700">
+                                                    {(result.temp - result.standardTemp) > 0 ? '+' : ''}{(result.temp - result.standardTemp).toFixed(1)}°C
+                                                </p>
+                                                <p className="text-[10px] md:text-xs text-purple-600 mt-1">From standard 27°C</p>
+                                            </div>
+                                            <div className="bg-green-50 p-3 md:p-4 rounded-lg border-2 border-green-300 text-center">
+                                                <p className="text-[10px] md:text-xs font-semibold text-muted-foreground mb-1">Corrected (CLR)</p>
+                                                <p className="text-2xl md:text-3xl font-bold text-green-700">{result.clr.toFixed(2)}</p>
+                                                <p className="text-[10px] md:text-xs text-green-600 mt-1">Standardized</p>
+                                            </div>
+                                        </div>
+
+                                        <Alert className="bg-blue-100 border-2 border-blue-300 p-2 md:p-4">
+                                            <Info className="h-4 w-4 text-blue-700" />
+                                            <AlertDescription className="text-xs md:text-sm font-semibold text-blue-900 ml-2">
+                                                <strong>Note:</strong> Correction factor is 0.2 CLR per 1°C difference from 27°C.
+                                            </AlertDescription>
+                                        </Alert>
+                                    </div>
+                                    
+                                    <div className="mt-4 text-center">
+                                        <Button 
+                                            variant="ghost" 
+                                            size="sm" 
+                                            onClick={() => setActiveTab('verification')}
+                                            className="text-xs text-muted-foreground hover:text-primary h-8"
+                                        >
+                                            Check Calculation <ChevronRight className="w-3 h-3 ml-1" />
+                                        </Button>
+                                    </div>
+                                </AlertDescription>
+                            </Alert>
+                        </div>
+                    )}
+
+                    {/* ✅ TAB CONTENT: VERIFICATION */}
+                    {activeTab === 'verification' && (
+                        <div className="bg-slate-50 p-3 md:p-5 rounded-xl border border-slate-300 shadow-inner">
+                            <h4 className="font-bold text-sm md:text-base mb-3 flex items-center gap-2 text-slate-700">
+                                <Calculator className="w-4 h-4" />
+                                Calculation Logic
+                            </h4>
+                            <ScrollArea className="h-[300px] md:h-[400px] pr-2">
+                                <div className="space-y-2 text-xs md:text-sm font-mono leading-relaxed">
+                                    {calculationSteps.map((step, idx) => (
+                                        <p 
+                                            key={idx} 
+                                            className={cn(
+                                                "break-words whitespace-pre-wrap p-1 rounded",
+                                                step.includes('**') && 'font-extrabold mt-3 text-gray-900 bg-white/50',
+                                                step.includes('═══') && 'text-purple-700 font-extrabold',
+                                                !step.includes('**') && !step.includes('═══') && 'text-gray-700 ml-2 border-l-2 border-gray-300 pl-2'
+                                            )}
+                                        >
+                                            {step.replace(/\*\*/g, '')}
+                                        </p>
+                                    ))}
+                                </div>
+                            </ScrollArea>
+                        </div>
+                    )}
                 </div>
             )}
         </CalculatorCard>
