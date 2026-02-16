@@ -27,10 +27,10 @@ export const standardizationContent = {
             <p>Standardization operates on fundamental physical law: <strong>Conservation of Mass</strong>. When mixing ingredients, total mass of any component in final blend must exactly equal sum of that component contributed by each ingredient. Mathematically:</p>
             
             <p><strong>General Mass Balance Equation:</strong></p>
-            <p class="font-mono text-sm bg-gray-100 p-3 rounded">Σ(Mass of Ingredient_i × Component%_i) = (Total Final Mass) × (Target Component%)</p>
+            <p class="font-mono text-sm bg-gray-100 p-3 rounded overflow-x-auto">Σ(Mass of Ingredient_i × Component%_i) = (Total Final Mass) × (Target Component%)</p>
             
             <p><strong>For Two-Ingredient Fat Standardization (Most Common):</strong></p>
-            <p class="font-mono text-sm bg-gray-100 p-3 rounded">
+            <p class="font-mono text-sm bg-gray-100 p-3 rounded overflow-x-auto">
                 (M₁ × F₁) + (M₂ × F₂) = M_total × F_target<br/>
                 Where: M₁, M₂ = masses of ingredients 1 & 2<br/>
                 F₁, F₂ = fat percentages of ingredients 1 & 2<br/>
@@ -78,8 +78,8 @@ export const standardizationContent = {
                     </ul>
                 </li>
                 <li><strong>Perform Diagonal Subtraction (CRITICAL: Always subtract smaller from larger to avoid negatives):</strong>
-                    <div class="my-4 p-4 border rounded-lg bg-blue-50">
-                        <div class="grid grid-cols-3 gap-4 items-center">
+                    <div class="my-4 p-4 border rounded-lg bg-blue-50 overflow-x-auto">
+                        <div class="grid grid-cols-3 gap-4 items-center min-w-[300px]">
                             <div class="text-center">
                                 <div>Whole Milk</div>
                                 <div class="text-2xl font-bold">5.5%</div>
@@ -159,23 +159,25 @@ export const standardizationContent = {
                 </li>
                 <li><strong>Set Up Equations:</strong>
                     <p><strong>Equation 1 (Total Mass Balance):</strong></p>
-                    <p class="font-mono bg-gray-100 p-2 rounded">W + S = 5,000 kg</p>
+                    <p class="font-mono bg-gray-100 p-2 rounded overflow-x-auto">W + S = 5,000 kg</p>
                     
                     <p><strong>Equation 2 (Fat Balance):</strong></p>
-                    <p class="font-mono bg-gray-100 p-2 rounded">W(0.050) + S(0.001) = 5,000(0.030)</p>
-                    <p class="font-mono bg-gray-100 p-2 rounded">0.050W + 0.001S = 150 kg fat</p>
+                    <p class="font-mono bg-gray-100 p-2 rounded overflow-x-auto">W(0.050) + S(0.001) = 5,000(0.030)</p>
+                    <p class="font-mono bg-gray-100 p-2 rounded overflow-x-auto">0.050W + 0.001S = 150 kg fat</p>
                     
                     <p><strong>Equation 3 (SNF Balance):</strong></p>
-                    <p class="font-mono bg-gray-100 p-2 rounded">W(0.088) + S(0.090) = 5,000(0.085)</p>
-                    <p class="font-mono bg-gray-100 p-2 rounded">0.088W + 0.090S = 425 kg SNF</p>
+                    <p class="font-mono bg-gray-100 p-2 rounded overflow-x-auto">W(0.088) + S(0.090) = 5,000(0.085)</p>
+                    <p class="font-mono bg-gray-100 p-2 rounded overflow-x-auto">0.088W + 0.090S = 425 kg SNF</p>
                 </li>
                 <li><strong>Solve System of Equations:</strong>
                     <p>From Equation 1: S = 5,000 - W</p>
                     <p>Substitute into Equation 2:</p>
-                    <p class="font-mono bg-gray-100 p-2 rounded">0.050W + 0.001(5,000 - W) = 150</p>
-                    <p class="font-mono bg-gray-100 p-2 rounded">0.050W + 5 - 0.001W = 150</p>
-                    <p class="font-mono bg-gray-100 p-2 rounded">0.049W = 145</p>
-                    <p class="font-mono bg-gray-100 p-2 rounded">W = 2,959 kg</p>
+                    <div class="overflow-x-auto">
+                        <p class="font-mono bg-gray-100 p-2 rounded whitespace-nowrap">0.050W + 0.001(5,000 - W) = 150</p>
+                        <p class="font-mono bg-gray-100 p-2 rounded whitespace-nowrap">0.050W + 5 - 0.001W = 150</p>
+                        <p class="font-mono bg-gray-100 p-2 rounded whitespace-nowrap">0.049W = 145</p>
+                        <p class="font-mono bg-gray-100 p-2 rounded whitespace-nowrap">W = 2,959 kg</p>
+                    </div>
                     <p>Therefore: S = 5,000 - 2,959 = <strong>2,041 kg</strong></p>
                 </li>
                 <li><strong>Verify SNF Specification:</strong>
@@ -197,7 +199,7 @@ export const standardizationContent = {
             <p><strong>Target:</strong> Raise SNF from 8.2% to 8.5% in final product</p>
             <p><strong>Let x = kg SMP to add</strong></p>
             <p><strong>SNF Balance:</strong></p>
-            <p class="font-mono bg-gray-100 p-2 rounded">
+            <p class="font-mono bg-gray-100 p-2 rounded overflow-x-auto">
                 1,000(0.082) + x(0.96) = (1,000 + x)(0.085)<br/>
                 82 + 0.96x = 85 + 0.085x<br/>
                 0.875x = 3<br/>
@@ -248,7 +250,7 @@ export const standardizationContent = {
                     <p><strong>Functions:</strong></p>
                     <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
                         <li><strong>Data Acquisition:</strong> Continuously receives composition data from all in-line sensors (every 5-30 seconds updates)</li>
-                        <li><strong>Real-Time Calculation:</strong> PLC programmed with standardization algorithms (mass balance equations). Example: If target is 3.0% fat toned milk, and current readings show raw milk = 4.8% fat, skim = 0.06% fat, cream = 40% fat, PLC calculates required cream:skim ratio instantly using: <span class="font-mono">(Skim × 0.0006 + Cream × 0.40) = Total × 0.030</span></li>
+                        <li><strong>Real-Time Calculation:</strong> PLC programmed with standardization algorithms (mass balance equations). Example: If target is 3.0% fat toned milk, and current readings show raw milk = 4.8% fat, skim = 0.06% fat, cream = 40% fat, PLC calculates required cream:skim ratio instantly using: <span class="font-mono text-xs md:text-base">(Skim × 0.0006 + Cream × 0.40) = Total × 0.030</span></li>
                         <li><strong>Proportional-Integral-Derivative (PID) Control:</strong> Advanced control algorithm continuously adjusts cream recombination valve to maintain target within ±0.02% tolerance (extremely tight control impossible with manual operation)</li>
                         <li><strong>Adaptive Response:</strong> Compensates for feed variation. If raw milk fat% drifts from 4.8% to 5.2%, PLC instantly recalculates and adjusts cream valve within 10-30 seconds (prevents off-spec product)</li>
                     </ul>
@@ -282,62 +284,64 @@ export const standardizationContent = {
 
             <h4 class="font-semibold mt-4 mb-2">Performance Advantages of Automated Systems</h4>
             
-            <table class="min-w-full border-collapse border border-gray-300 mt-3">
-                <thead>
-                    <tr class="bg-gray-100">
-                        <th class="border border-gray-300 px-4 py-2">Parameter</th>
-                        <th class="border border-gray-300 px-4 py-2">Manual Batch System</th>
-                        <th class="border border-gray-300 px-4 py-2">Automated In-Line System</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="border border-gray-300 px-4 py-2">Accuracy (fat%)</td>
-                        <td class="border border-gray-300 px-4 py-2">±0.10-0.15% (human calculation/measurement error)</td>
-                        <td class="border border-gray-300 px-4 py-2">±0.02-0.05% (sensor + control precision)</td>
-                    </tr>
-                    <tr>
-                        <td class="border border-gray-300 px-4 py-2">Batch time</td>
-                        <td class="border border-gray-300 px-4 py-2">30-60 min per batch (separation + blending + testing)</td>
-                        <td class="border border-gray-300 px-4 py-2">Continuous (zero downtime, instant adjustment)</td>
-                    </tr>
-                    <tr>
-                        <td class="border border-gray-300 px-4 py-2">Tank requirements</td>
-                        <td class="border border-gray-300 px-4 py-2">Large blending tanks (3-5× hourly throughput)</td>
-                        <td class="border border-gray-300 px-4 py-2">Minimal (inline mixing, <5 min holdup)</td>
-                    </tr>
-                    <tr>
-                        <td class="border border-gray-300 px-4 py-2">Labor</td>
-                        <td class="border border-gray-300 px-4 py-2">2-3 operators per shift (calculations, valve adjustments, testing)</td>
-                        <td class="border border-gray-300 px-4 py-2">1 supervisor (system monitoring, parameter entry)</td>
-                    </tr>
-                    <tr>
-                        <td class="border border-gray-300 px-4 py-2">Product consistency</td>
-                        <td class="border border-gray-300 px-4 py-2">Batch-to-batch variation ±0.10-0.20%</td>
-                        <td class="border border-gray-300 px-4 py-2">Continuous uniformity ±0.02-0.05%</td>
-                    </tr>
-                    <tr>
-                        <td class="border border-gray-300 px-4 py-2">Off-spec product</td>
-                        <td class="border border-gray-300 px-4 py-2">2-5% of production (entire batch rejected if calculations wrong)</td>
-                        <td class="border border-gray-300 px-4 py-2"><0.5% (immediate detection and diversion)</td>
-                    </tr>
-                    <tr>
-                        <td class="border border-gray-300 px-4 py-2">Capital cost</td>
-                        <td class="border border-gray-300 px-4 py-2">Lower ($50,000-150,000 for separator + tanks)</td>
-                        <td class="border border-gray-300 px-4 py-2">Higher ($200,000-500,000 including sensors, PLC, automation)</td>
-                    </tr>
-                    <tr>
-                        <td class="border border-gray-300 px-4 py-2">Operating cost</td>
-                        <td class="border border-gray-300 px-4 py-2">Higher (labor, rework, waste)</td>
-                        <td class="border border-gray-300 px-4 py-2">Lower (reduced labor, minimal waste, optimized cream extraction)</td>
-                    </tr>
-                    <tr>
-                        <td class="border border-gray-300 px-4 py-2">Payback period</td>
-                        <td class="border border-gray-300 px-4 py-2">-</td>
-                        <td class="border border-gray-300 px-4 py-2">1.5-3 years for large plants (>100,000 L/day)</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="overflow-x-auto w-full">
+                <table class="min-w-full border-collapse border border-gray-300 mt-3 whitespace-nowrap md:whitespace-normal">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="border border-gray-300 px-4 py-2">Parameter</th>
+                            <th class="border border-gray-300 px-4 py-2">Manual Batch System</th>
+                            <th class="border border-gray-300 px-4 py-2">Automated In-Line System</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Accuracy (fat%)</td>
+                            <td class="border border-gray-300 px-4 py-2">±0.10-0.15% (human calculation/measurement error)</td>
+                            <td class="border border-gray-300 px-4 py-2">±0.02-0.05% (sensor + control precision)</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Batch time</td>
+                            <td class="border border-gray-300 px-4 py-2">30-60 min per batch (separation + blending + testing)</td>
+                            <td class="border border-gray-300 px-4 py-2">Continuous (zero downtime, instant adjustment)</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Tank requirements</td>
+                            <td class="border border-gray-300 px-4 py-2">Large blending tanks (3-5× hourly throughput)</td>
+                            <td class="border border-gray-300 px-4 py-2">Minimal (inline mixing, <5 min holdup)</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Labor</td>
+                            <td class="border border-gray-300 px-4 py-2">2-3 operators per shift (calculations, valve adjustments, testing)</td>
+                            <td class="border border-gray-300 px-4 py-2">1 supervisor (system monitoring, parameter entry)</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Product consistency</td>
+                            <td class="border border-gray-300 px-4 py-2">Batch-to-batch variation ±0.10-0.20%</td>
+                            <td class="border border-gray-300 px-4 py-2">Continuous uniformity ±0.02-0.05%</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Off-spec product</td>
+                            <td class="border border-gray-300 px-4 py-2">2-5% of production (entire batch rejected if calculations wrong)</td>
+                            <td class="border border-gray-300 px-4 py-2"><0.5% (immediate detection and diversion)</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Capital cost</td>
+                            <td class="border border-gray-300 px-4 py-2">Lower ($50,000-150,000 for separator + tanks)</td>
+                            <td class="border border-gray-300 px-4 py-2">Higher ($200,000-500,000 including sensors, PLC, automation)</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Operating cost</td>
+                            <td class="border border-gray-300 px-4 py-2">Higher (labor, rework, waste)</td>
+                            <td class="border border-gray-300 px-4 py-2">Lower (reduced labor, minimal waste, optimized cream extraction)</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Payback period</td>
+                            <td class="border border-gray-300 px-4 py-2">-</td>
+                            <td class="border border-gray-300 px-4 py-2">1.5-3 years for large plants (>100,000 L/day)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
             <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Special Standardization Scenarios</h3>
             
@@ -401,10 +405,10 @@ export const standardizationContent = {
             <p>Standardization operate karta hai fundamental physical law par: <strong>Conservation of Mass</strong>. Jab ingredients mix karte hain, final blend mein kisi bhi component ka total mass exactly equal hona chahiye sum of that component jo contributed hai by each ingredient. Mathematically:</p>
             
             <p><strong>General Mass Balance Equation:</strong></p>
-            <p class="font-mono text-sm bg-gray-100 p-3 rounded">Σ(Mass of Ingredient_i × Component%_i) = (Total Final Mass) × (Target Component%)</p>
+            <p class="font-mono text-sm bg-gray-100 p-3 rounded overflow-x-auto">Σ(Mass of Ingredient_i × Component%_i) = (Total Final Mass) × (Target Component%)</p>
             
             <p><strong>Two-Ingredient Fat Standardization ke liye (Most Common):</strong></p>
-            <p class="font-mono text-sm bg-gray-100 p-3 rounded">
+            <p class="font-mono text-sm bg-gray-100 p-3 rounded overflow-x-auto">
                 (M₁ × F₁) + (M₂ × F₂) = M_total × F_target<br/>
                 Jahan: M₁, M₂ = ingredients 1 & 2 ke masses<br/>
                 F₁, F₂ = ingredients 1 & 2 ke fat percentages<br/>
@@ -452,8 +456,8 @@ export const standardizationContent = {
                     </ul>
                 </li>
                 <li><strong>Diagonal Subtraction perform karo (CRITICAL: Always subtract smaller from larger to avoid negatives):</strong>
-                    <div class="my-4 p-4 border rounded-lg bg-blue-50">
-                        <div class="grid grid-cols-3 gap-4 items-center">
+                    <div class="my-4 p-4 border rounded-lg bg-blue-50 overflow-x-auto">
+                        <div class="grid grid-cols-3 gap-4 items-center min-w-[300px]">
                             <div class="text-center">
                                 <div>Whole Milk</div>
                                 <div class="text-2xl font-bold">5.5%</div>
@@ -533,23 +537,25 @@ export const standardizationContent = {
                 </li>
                 <li><strong>Equations Set Up karo:</strong>
                     <p><strong>Equation 1 (Total Mass Balance):</strong></p>
-                    <p class="font-mono bg-gray-100 p-2 rounded">W + S = 5,000 kg</p>
+                    <p class="font-mono bg-gray-100 p-2 rounded overflow-x-auto">W + S = 5,000 kg</p>
                     
                     <p><strong>Equation 2 (Fat Balance):</strong></p>
-                    <p class="font-mono bg-gray-100 p-2 rounded">W(0.050) + S(0.001) = 5,000(0.030)</p>
-                    <p class="font-mono bg-gray-100 p-2 rounded">0.050W + 0.001S = 150 kg fat</p>
+                    <p class="font-mono bg-gray-100 p-2 rounded overflow-x-auto">W(0.050) + S(0.001) = 5,000(0.030)</p>
+                    <p class="font-mono bg-gray-100 p-2 rounded overflow-x-auto">0.050W + 0.001S = 150 kg fat</p>
                     
                     <p><strong>Equation 3 (SNF Balance):</strong></p>
-                    <p class="font-mono bg-gray-100 p-2 rounded">W(0.088) + S(0.090) = 5,000(0.085)</p>
-                    <p class="font-mono bg-gray-100 p-2 rounded">0.088W + 0.090S = 425 kg SNF</p>
+                    <p class="font-mono bg-gray-100 p-2 rounded overflow-x-auto">W(0.088) + S(0.090) = 5,000(0.085)</p>
+                    <p class="font-mono bg-gray-100 p-2 rounded overflow-x-auto">0.088W + 0.090S = 425 kg SNF</p>
                 </li>
                 <li><strong>System of Equations Solve karo:</strong>
                     <p>Equation 1 se: S = 5,000 - W</p>
                     <p>Equation 2 mein substitute karo:</p>
-                    <p class="font-mono bg-gray-100 p-2 rounded">0.050W + 0.001(5,000 - W) = 150</p>
-                    <p class="font-mono bg-gray-100 p-2 rounded">0.050W + 5 - 0.001W = 150</p>
-                    <p class="font-mono bg-gray-100 p-2 rounded">0.049W = 145</p>
-                    <p class="font-mono bg-gray-100 p-2 rounded">W = 2,959 kg</p>
+                    <div class="overflow-x-auto">
+                        <p class="font-mono bg-gray-100 p-2 rounded whitespace-nowrap">0.050W + 0.001(5,000 - W) = 150</p>
+                        <p class="font-mono bg-gray-100 p-2 rounded whitespace-nowrap">0.050W + 5 - 0.001W = 150</p>
+                        <p class="font-mono bg-gray-100 p-2 rounded whitespace-nowrap">0.049W = 145</p>
+                        <p class="font-mono bg-gray-100 p-2 rounded whitespace-nowrap">W = 2,959 kg</p>
+                    </div>
                     <p>Therefore: S = 5,000 - 2,959 = <strong>2,041 kg</strong></p>
                 </li>
                 <li><strong>SNF Specification Verify karo:</strong>
@@ -571,7 +577,7 @@ export const standardizationContent = {
             <p><strong>Target:</strong> SNF raise karo from 8.2% to 8.5% in final product</p>
             <p><strong>Let x = kg SMP to add</strong></p>
             <p><strong>SNF Balance:</strong></p>
-            <p class="font-mono bg-gray-100 p-2 rounded">
+            <p class="font-mono bg-gray-100 p-2 rounded overflow-x-auto">
                 1,000(0.082) + x(0.96) = (1,000 + x)(0.085)<br/>
                 82 + 0.96x = 85 + 0.085x<br/>
                 0.875x = 3<br/>
@@ -622,7 +628,7 @@ export const standardizationContent = {
                     <p><strong>Functions:</strong></p>
                     <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
                         <li><strong>Data Acquisition:</strong> Continuously receive karta hai composition data from all in-line sensors (every 5-30 seconds updates)</li>
-                        <li><strong>Real-Time Calculation:</strong> PLC programmed hai with standardization algorithms (mass balance equations). Example: Agar target hai 3.0% fat toned milk, aur current readings show raw milk = 4.8% fat, skim = 0.06% fat, cream = 40% fat, PLC calculate karta hai required cream:skim ratio instantly using: <span class="font-mono">(Skim × 0.0006 + Cream × 0.40) = Total × 0.030</span></li>
+                        <li><strong>Real-Time Calculation:</strong> PLC programmed hai with standardization algorithms (mass balance equations). Example: Agar target hai 3.0% fat toned milk, aur current readings show raw milk = 4.8% fat, skim = 0.06% fat, cream = 40% fat, PLC calculate karta hai required cream:skim ratio instantly using: <span class="font-mono text-xs md:text-base">(Skim × 0.0006 + Cream × 0.40) = Total × 0.030</span></li>
                         <li><strong>Proportional-Integral-Derivative (PID) Control:</strong> Advanced control algorithm continuously adjust karta hai cream recombination valve to maintain target within ±0.02% tolerance (extremely tight control impossible with manual operation)</li>
                         <li><strong>Adaptive Response:</strong> Compensate karta hai for feed variation. Agar raw milk fat% drift karta hai from 4.8% to 5.2%, PLC instantly recalculate aur adjust cream valve within 10-30 seconds (prevents off-spec product)</li>
                     </ul>
@@ -648,7 +654,7 @@ export const standardizationContent = {
                 <li><strong>Final Product Verification aur Diversion:</strong>
                     <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
                         <li>Standardized milk pass karta hai through final in-line analyzer → verify karta hai fat%, SNF% meet specifications</li>
-                        <li>Agar out-of-spec detect hota hai (e.g., 2.85% fat instead of 3.0%): Automated diversion valve redirect karta hai flow back to raw milk tank for re-processing (prevents off-spec product entering pasteurizer/packaging)</li>
+                        <li>If out-of-spec detect hota hai (e.g., 2.85% fat instead of 3.0%): Automated diversion valve redirect karta hai flow back to raw milk tank for re-processing (prevents off-spec product entering pasteurizer/packaging)</li>
                         <li>Alarm systems: Visual/audible alerts notify karte hain operators of spec violations, sensor malfunctions, valve failures</li>
                     </ul>
                 </li>
@@ -656,62 +662,64 @@ export const standardizationContent = {
 
             <h4 class="font-semibold mt-4 mb-2">Automated Systems ke Performance Advantages</h4>
             
-            <table class="min-w-full border-collapse border border-gray-300 mt-3">
-                <thead>
-                    <tr class="bg-gray-100">
-                        <th class="border border-gray-300 px-4 py-2">Parameter</th>
-                        <th class="border border-gray-300 px-4 py-2">Manual Batch System</th>
-                        <th class="border border-gray-300 px-4 py-2">Automated In-Line System</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="border border-gray-300 px-4 py-2">Accuracy (fat%)</td>
-                        <td class="border border-gray-300 px-4 py-2">±0.10-0.15% (human calculation/measurement error)</td>
-                        <td class="border border-gray-300 px-4 py-2">±0.02-0.05% (sensor + control precision)</td>
-                    </tr>
-                    <tr>
-                        <td class="border border-gray-300 px-4 py-2">Batch time</td>
-                        <td class="border border-gray-300 px-4 py-2">30-60 min per batch (separation + blending + testing)</td>
-                        <td class="border border-gray-300 px-4 py-2">Continuous (zero downtime, instant adjustment)</td>
-                    </tr>
-                    <tr>
-                        <td class="border border-gray-300 px-4 py-2">Tank requirements</td>
-                        <td class="border border-gray-300 px-4 py-2">Large blending tanks (3-5× hourly throughput)</td>
-                        <td class="border border-gray-300 px-4 py-2">Minimal (inline mixing, <5 min holdup)</td>
-                    </tr>
-                    <tr>
-                        <td class="border border-gray-300 px-4 py-2">Labor</td>
-                        <td class="border border-gray-300 px-4 py-2">2-3 operators per shift (calculations, valve adjustments, testing)</td>
-                        <td class="border border-gray-300 px-4 py-2">1 supervisor (system monitoring, parameter entry)</td>
-                    </tr>
-                    <tr>
-                        <td class="border border-gray-300 px-4 py-2">Product consistency</td>
-                        <td class="border border-gray-300 px-4 py-2">Batch-to-batch variation ±0.10-0.20%</td>
-                        <td class="border border-gray-300 px-4 py-2">Continuous uniformity ±0.02-0.05%</td>
-                    </tr>
-                    <tr>
-                        <td class="border border-gray-300 px-4 py-2">Off-spec product</td>
-                        <td class="border border-gray-300 px-4 py-2">2-5% of production (entire batch rejected agar calculations wrong)</td>
-                        <td class="border border-gray-300 px-4 py-2"><0.5% (immediate detection aur diversion)</td>
-                    </tr>
-                    <tr>
-                        <td class="border border-gray-300 px-4 py-2">Capital cost</td>
-                        <td class="border border-gray-300 px-4 py-2">Lower ($50,000-150,000 for separator + tanks)</td>
-                        <td class="border border-gray-300 px-4 py-2">Higher ($200,000-500,000 including sensors, PLC, automation)</td>
-                    </tr>
-                    <tr>
-                        <td class="border border-gray-300 px-4 py-2">Operating cost</td>
-                        <td class="border border-gray-300 px-4 py-2">Higher (labor, rework, waste)</td>
-                        <td class="border border-gray-300 px-4 py-2">Lower (reduced labor, minimal waste, optimized cream extraction)</td>
-                    </tr>
-                    <tr>
-                        <td class="border border-gray-300 px-4 py-2">Payback period</td>
-                        <td class="border border-gray-300 px-4 py-2">-</td>
-                        <td class="border border-gray-300 px-4 py-2">1.5-3 years for large plants (>100,000 L/day)</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="overflow-x-auto w-full">
+                <table class="min-w-full border-collapse border border-gray-300 mt-3 whitespace-nowrap md:whitespace-normal">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="border border-gray-300 px-4 py-2">Parameter</th>
+                            <th class="border border-gray-300 px-4 py-2">Manual Batch System</th>
+                            <th class="border border-gray-300 px-4 py-2">Automated In-Line System</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Accuracy (fat%)</td>
+                            <td class="border border-gray-300 px-4 py-2">±0.10-0.15% (human calculation/measurement error)</td>
+                            <td class="border border-gray-300 px-4 py-2">±0.02-0.05% (sensor + control precision)</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Batch time</td>
+                            <td class="border border-gray-300 px-4 py-2">30-60 min per batch (separation + blending + testing)</td>
+                            <td class="border border-gray-300 px-4 py-2">Continuous (zero downtime, instant adjustment)</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Tank requirements</td>
+                            <td class="border border-gray-300 px-4 py-2">Large blending tanks (3-5× hourly throughput)</td>
+                            <td class="border border-gray-300 px-4 py-2">Minimal (inline mixing, <5 min holdup)</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Labor</td>
+                            <td class="border border-gray-300 px-4 py-2">2-3 operators per shift (calculations, valve adjustments, testing)</td>
+                            <td class="border border-gray-300 px-4 py-2">1 supervisor (system monitoring, parameter entry)</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Product consistency</td>
+                            <td class="border border-gray-300 px-4 py-2">Batch-to-batch variation ±0.10-0.20%</td>
+                            <td class="border border-gray-300 px-4 py-2">Continuous uniformity ±0.02-0.05%</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Off-spec product</td>
+                            <td class="border border-gray-300 px-4 py-2">2-5% of production (entire batch rejected agar calculations wrong)</td>
+                            <td class="border border-gray-300 px-4 py-2"><0.5% (immediate detection aur diversion)</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Capital cost</td>
+                            <td class="border border-gray-300 px-4 py-2">Lower ($50,000-150,000 for separator + tanks)</td>
+                            <td class="border border-gray-300 px-4 py-2">Higher ($200,000-500,000 including sensors, PLC, automation)</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Operating cost</td>
+                            <td class="border border-gray-300 px-4 py-2">Higher (labor, rework, waste)</td>
+                            <td class="border border-gray-300 px-4 py-2">Lower (reduced labor, minimal waste, optimized cream extraction)</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Payback period</td>
+                            <td class="border border-gray-300 px-4 py-2">-</td>
+                            <td class="border border-gray-300 px-4 py-2">1.5-3 years for large plants (>100,000 L/day)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
             <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Special Standardization Scenarios</h3>
             
