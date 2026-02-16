@@ -27,16 +27,20 @@ export const standardizationContent = {
             <p>Standardization operates on fundamental physical law: <strong>Conservation of Mass</strong>. When mixing ingredients, total mass of any component in final blend must exactly equal sum of that component contributed by each ingredient. Mathematically:</p>
             
             <p><strong>General Mass Balance Equation:</strong></p>
-            <p class="font-mono text-sm bg-gray-100 p-3 rounded overflow-x-auto">Σ(Mass of Ingredient_i × Component%_i) = (Total Final Mass) × (Target Component%)</p>
+            <div class="overflow-x-auto w-full mb-2">
+                <p class="font-mono text-sm bg-gray-100 p-3 rounded whitespace-nowrap">Σ(Mass of Ingredient_i × Component%_i) = (Total Final Mass) × (Target Component%)</p>
+            </div>
             
             <p><strong>For Two-Ingredient Fat Standardization (Most Common):</strong></p>
-            <p class="font-mono text-sm bg-gray-100 p-3 rounded overflow-x-auto">
-                (M₁ × F₁) + (M₂ × F₂) = M_total × F_target<br/>
-                Where: M₁, M₂ = masses of ingredients 1 & 2<br/>
-                F₁, F₂ = fat percentages of ingredients 1 & 2<br/>
-                M_total = M₁ + M₂ (total mass)<br/>
-                F_target = desired final fat percentage
-            </p>
+            <div class="overflow-x-auto w-full mb-2">
+                <p class="font-mono text-sm bg-gray-100 p-3 rounded whitespace-nowrap">
+                    (M₁ × F₁) + (M₂ × F₂) = M_total × F_target<br/>
+                    Where: M₁, M₂ = masses of ingredients 1 & 2<br/>
+                    F₁, F₂ = fat percentages of ingredients 1 & 2<br/>
+                    M_total = M₁ + M₂ (total mass)<br/>
+                    F_target = desired final fat percentage
+                </p>
+            </div>
             
             <h4 class="font-semibold mt-4 mb-2">Practical Example - Mass Balance Calculation</h4>
             
@@ -79,7 +83,7 @@ export const standardizationContent = {
                 </li>
                 <li><strong>Perform Diagonal Subtraction (CRITICAL: Always subtract smaller from larger to avoid negatives):</strong>
                     <div class="my-4 p-4 border rounded-lg bg-blue-50 overflow-x-auto">
-                        <div class="grid grid-cols-3 gap-4 items-center min-w-[300px]">
+                        <div class="grid grid-cols-3 gap-4 items-center min-w-[600px]">
                             <div class="text-center">
                                 <div>Whole Milk</div>
                                 <div class="text-2xl font-bold">5.5%</div>
@@ -159,20 +163,26 @@ export const standardizationContent = {
                 </li>
                 <li><strong>Set Up Equations:</strong>
                     <p><strong>Equation 1 (Total Mass Balance):</strong></p>
-                    <p class="font-mono bg-gray-100 p-2 rounded overflow-x-auto">W + S = 5,000 kg</p>
+                    <div class="overflow-x-auto w-full mb-2">
+                        <p class="font-mono bg-gray-100 p-2 rounded whitespace-nowrap">W + S = 5,000 kg</p>
+                    </div>
                     
                     <p><strong>Equation 2 (Fat Balance):</strong></p>
-                    <p class="font-mono bg-gray-100 p-2 rounded overflow-x-auto">W(0.050) + S(0.001) = 5,000(0.030)</p>
-                    <p class="font-mono bg-gray-100 p-2 rounded overflow-x-auto">0.050W + 0.001S = 150 kg fat</p>
+                    <div class="overflow-x-auto w-full mb-2">
+                        <p class="font-mono bg-gray-100 p-2 rounded whitespace-nowrap">W(0.050) + S(0.001) = 5,000(0.030)</p>
+                        <p class="font-mono bg-gray-100 p-2 rounded whitespace-nowrap">0.050W + 0.001S = 150 kg fat</p>
+                    </div>
                     
                     <p><strong>Equation 3 (SNF Balance):</strong></p>
-                    <p class="font-mono bg-gray-100 p-2 rounded overflow-x-auto">W(0.088) + S(0.090) = 5,000(0.085)</p>
-                    <p class="font-mono bg-gray-100 p-2 rounded overflow-x-auto">0.088W + 0.090S = 425 kg SNF</p>
+                    <div class="overflow-x-auto w-full mb-2">
+                        <p class="font-mono bg-gray-100 p-2 rounded whitespace-nowrap">W(0.088) + S(0.090) = 5,000(0.085)</p>
+                        <p class="font-mono bg-gray-100 p-2 rounded whitespace-nowrap">0.088W + 0.090S = 425 kg SNF</p>
+                    </div>
                 </li>
                 <li><strong>Solve System of Equations:</strong>
                     <p>From Equation 1: S = 5,000 - W</p>
                     <p>Substitute into Equation 2:</p>
-                    <div class="overflow-x-auto">
+                    <div class="overflow-x-auto w-full mb-2">
                         <p class="font-mono bg-gray-100 p-2 rounded whitespace-nowrap">0.050W + 0.001(5,000 - W) = 150</p>
                         <p class="font-mono bg-gray-100 p-2 rounded whitespace-nowrap">0.050W + 5 - 0.001W = 150</p>
                         <p class="font-mono bg-gray-100 p-2 rounded whitespace-nowrap">0.049W = 145</p>
@@ -199,12 +209,14 @@ export const standardizationContent = {
             <p><strong>Target:</strong> Raise SNF from 8.2% to 8.5% in final product</p>
             <p><strong>Let x = kg SMP to add</strong></p>
             <p><strong>SNF Balance:</strong></p>
-            <p class="font-mono bg-gray-100 p-2 rounded overflow-x-auto">
-                1,000(0.082) + x(0.96) = (1,000 + x)(0.085)<br/>
-                82 + 0.96x = 85 + 0.085x<br/>
-                0.875x = 3<br/>
-                x = 3.43 kg SMP
-            </p>
+            <div class="overflow-x-auto w-full mb-2">
+                <p class="font-mono bg-gray-100 p-2 rounded whitespace-nowrap">
+                    1,000(0.082) + x(0.96) = (1,000 + x)(0.085)<br/>
+                    82 + 0.96x = 85 + 0.085x<br/>
+                    0.875x = 3<br/>
+                    x = 3.43 kg SMP
+                </p>
+            </div>
             <p><strong>Result:</strong> Add 3.43 kg SMP to 1,000 kg milk → Final: 1,003.43 kg milk with 3.0% fat (unchanged), 8.5% SNF (target achieved)</p>
 
             <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Industrial Standardization Process: Automated In-Line Systems</h3>
@@ -250,7 +262,9 @@ export const standardizationContent = {
                     <p><strong>Functions:</strong></p>
                     <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
                         <li><strong>Data Acquisition:</strong> Continuously receives composition data from all in-line sensors (every 5-30 seconds updates)</li>
-                        <li><strong>Real-Time Calculation:</strong> PLC programmed with standardization algorithms (mass balance equations). Example: If target is 3.0% fat toned milk, and current readings show raw milk = 4.8% fat, skim = 0.06% fat, cream = 40% fat, PLC calculates required cream:skim ratio instantly using: <span class="font-mono text-xs md:text-base">(Skim × 0.0006 + Cream × 0.40) = Total × 0.030</span></li>
+                        <li><strong>Real-Time Calculation:</strong> PLC programmed with standardization algorithms (mass balance equations). Example: If target is 3.0% fat toned milk, and current readings show raw milk = 4.8% fat, skim = 0.06% fat, cream = 40% fat, PLC calculates required cream:skim ratio instantly using: 
+                        <span class="inline-block overflow-x-auto max-w-full align-bottom font-mono text-xs md:text-base">(Skim × 0.0006 + Cream × 0.40) = Total × 0.030</span>
+                        </li>
                         <li><strong>Proportional-Integral-Derivative (PID) Control:</strong> Advanced control algorithm continuously adjusts cream recombination valve to maintain target within ±0.02% tolerance (extremely tight control impossible with manual operation)</li>
                         <li><strong>Adaptive Response:</strong> Compensates for feed variation. If raw milk fat% drifts from 4.8% to 5.2%, PLC instantly recalculates and adjusts cream valve within 10-30 seconds (prevents off-spec product)</li>
                     </ul>
@@ -284,13 +298,13 @@ export const standardizationContent = {
 
             <h4 class="font-semibold mt-4 mb-2">Performance Advantages of Automated Systems</h4>
             
-            <div class="overflow-x-auto w-full">
-                <table class="min-w-full border-collapse border border-gray-300 mt-3 whitespace-nowrap md:whitespace-normal">
+            <div class="overflow-x-auto w-full mb-4">
+                <table class="min-w-[700px] border-collapse border border-gray-300 mt-3">
                     <thead>
                         <tr class="bg-gray-100">
-                            <th class="border border-gray-300 px-4 py-2">Parameter</th>
-                            <th class="border border-gray-300 px-4 py-2">Manual Batch System</th>
-                            <th class="border border-gray-300 px-4 py-2">Automated In-Line System</th>
+                            <th class="border border-gray-300 px-4 py-2 text-left">Parameter</th>
+                            <th class="border border-gray-300 px-4 py-2 text-left">Manual Batch System</th>
+                            <th class="border border-gray-300 px-4 py-2 text-left">Automated In-Line System</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -405,16 +419,20 @@ export const standardizationContent = {
             <p>Standardization operate karta hai fundamental physical law par: <strong>Conservation of Mass</strong>. Jab ingredients mix karte hain, final blend mein kisi bhi component ka total mass exactly equal hona chahiye sum of that component jo contributed hai by each ingredient. Mathematically:</p>
             
             <p><strong>General Mass Balance Equation:</strong></p>
-            <p class="font-mono text-sm bg-gray-100 p-3 rounded overflow-x-auto">Σ(Mass of Ingredient_i × Component%_i) = (Total Final Mass) × (Target Component%)</p>
+            <div class="overflow-x-auto w-full mb-2">
+                <p class="font-mono text-sm bg-gray-100 p-3 rounded whitespace-nowrap">Σ(Mass of Ingredient_i × Component%_i) = (Total Final Mass) × (Target Component%)</p>
+            </div>
             
             <p><strong>Two-Ingredient Fat Standardization ke liye (Most Common):</strong></p>
-            <p class="font-mono text-sm bg-gray-100 p-3 rounded overflow-x-auto">
-                (M₁ × F₁) + (M₂ × F₂) = M_total × F_target<br/>
-                Jahan: M₁, M₂ = ingredients 1 & 2 ke masses<br/>
-                F₁, F₂ = ingredients 1 & 2 ke fat percentages<br/>
-                M_total = M₁ + M₂ (total mass)<br/>
-                F_target = desired final fat percentage
-            </p>
+            <div class="overflow-x-auto w-full mb-2">
+                <p class="font-mono text-sm bg-gray-100 p-3 rounded whitespace-nowrap">
+                    (M₁ × F₁) + (M₂ × F₂) = M_total × F_target<br/>
+                    Jahan: M₁, M₂ = ingredients 1 & 2 ke masses<br/>
+                    F₁, F₂ = ingredients 1 & 2 ke fat percentages<br/>
+                    M_total = M₁ + M₂ (total mass)<br/>
+                    F_target = desired final fat percentage
+                </p>
+            </div>
             
             <h4 class="font-semibold mt-4 mb-2">Practical Example - Mass Balance Calculation</h4>
             
@@ -457,7 +475,7 @@ export const standardizationContent = {
                 </li>
                 <li><strong>Diagonal Subtraction perform karo (CRITICAL: Always subtract smaller from larger to avoid negatives):</strong>
                     <div class="my-4 p-4 border rounded-lg bg-blue-50 overflow-x-auto">
-                        <div class="grid grid-cols-3 gap-4 items-center min-w-[300px]">
+                        <div class="grid grid-cols-3 gap-4 items-center min-w-[600px]">
                             <div class="text-center">
                                 <div>Whole Milk</div>
                                 <div class="text-2xl font-bold">5.5%</div>
@@ -537,20 +555,26 @@ export const standardizationContent = {
                 </li>
                 <li><strong>Equations Set Up karo:</strong>
                     <p><strong>Equation 1 (Total Mass Balance):</strong></p>
-                    <p class="font-mono bg-gray-100 p-2 rounded overflow-x-auto">W + S = 5,000 kg</p>
+                    <div class="overflow-x-auto w-full mb-2">
+                        <p class="font-mono bg-gray-100 p-2 rounded whitespace-nowrap">W + S = 5,000 kg</p>
+                    </div>
                     
                     <p><strong>Equation 2 (Fat Balance):</strong></p>
-                    <p class="font-mono bg-gray-100 p-2 rounded overflow-x-auto">W(0.050) + S(0.001) = 5,000(0.030)</p>
-                    <p class="font-mono bg-gray-100 p-2 rounded overflow-x-auto">0.050W + 0.001S = 150 kg fat</p>
+                    <div class="overflow-x-auto w-full mb-2">
+                        <p class="font-mono bg-gray-100 p-2 rounded whitespace-nowrap">W(0.050) + S(0.001) = 5,000(0.030)</p>
+                        <p class="font-mono bg-gray-100 p-2 rounded whitespace-nowrap">0.050W + 0.001S = 150 kg fat</p>
+                    </div>
                     
                     <p><strong>Equation 3 (SNF Balance):</strong></p>
-                    <p class="font-mono bg-gray-100 p-2 rounded overflow-x-auto">W(0.088) + S(0.090) = 5,000(0.085)</p>
-                    <p class="font-mono bg-gray-100 p-2 rounded overflow-x-auto">0.088W + 0.090S = 425 kg SNF</p>
+                    <div class="overflow-x-auto w-full mb-2">
+                        <p class="font-mono bg-gray-100 p-2 rounded whitespace-nowrap">W(0.088) + S(0.090) = 5,000(0.085)</p>
+                        <p class="font-mono bg-gray-100 p-2 rounded whitespace-nowrap">0.088W + 0.090S = 425 kg SNF</p>
+                    </div>
                 </li>
                 <li><strong>System of Equations Solve karo:</strong>
                     <p>Equation 1 se: S = 5,000 - W</p>
                     <p>Equation 2 mein substitute karo:</p>
-                    <div class="overflow-x-auto">
+                    <div class="overflow-x-auto w-full mb-2">
                         <p class="font-mono bg-gray-100 p-2 rounded whitespace-nowrap">0.050W + 0.001(5,000 - W) = 150</p>
                         <p class="font-mono bg-gray-100 p-2 rounded whitespace-nowrap">0.050W + 5 - 0.001W = 150</p>
                         <p class="font-mono bg-gray-100 p-2 rounded whitespace-nowrap">0.049W = 145</p>
@@ -577,12 +601,14 @@ export const standardizationContent = {
             <p><strong>Target:</strong> SNF raise karo from 8.2% to 8.5% in final product</p>
             <p><strong>Let x = kg SMP to add</strong></p>
             <p><strong>SNF Balance:</strong></p>
-            <p class="font-mono bg-gray-100 p-2 rounded overflow-x-auto">
-                1,000(0.082) + x(0.96) = (1,000 + x)(0.085)<br/>
-                82 + 0.96x = 85 + 0.085x<br/>
-                0.875x = 3<br/>
-                x = 3.43 kg SMP
-            </p>
+            <div class="overflow-x-auto w-full mb-2">
+                <p class="font-mono bg-gray-100 p-2 rounded whitespace-nowrap">
+                    1,000(0.082) + x(0.96) = (1,000 + x)(0.085)<br/>
+                    82 + 0.96x = 85 + 0.085x<br/>
+                    0.875x = 3<br/>
+                    x = 3.43 kg SMP
+                </p>
+            </div>
             <p><strong>Result:</strong> 3.43 kg SMP add karo to 1,000 kg milk → Final: 1,003.43 kg milk with 3.0% fat (unchanged), 8.5% SNF (target achieved)</p>
 
             <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Industrial Standardization Process: Automated In-Line Systems</h3>
@@ -628,7 +654,9 @@ export const standardizationContent = {
                     <p><strong>Functions:</strong></p>
                     <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
                         <li><strong>Data Acquisition:</strong> Continuously receive karta hai composition data from all in-line sensors (every 5-30 seconds updates)</li>
-                        <li><strong>Real-Time Calculation:</strong> PLC programmed hai with standardization algorithms (mass balance equations). Example: Agar target hai 3.0% fat toned milk, aur current readings show raw milk = 4.8% fat, skim = 0.06% fat, cream = 40% fat, PLC calculate karta hai required cream:skim ratio instantly using: <span class="font-mono text-xs md:text-base">(Skim × 0.0006 + Cream × 0.40) = Total × 0.030</span></li>
+                        <li><strong>Real-Time Calculation:</strong> PLC programmed hai with standardization algorithms (mass balance equations). Example: Agar target hai 3.0% fat toned milk, aur current readings show raw milk = 4.8% fat, skim = 0.06% fat, cream = 40% fat, PLC calculate karta hai required cream:skim ratio instantly using: 
+                        <span class="inline-block overflow-x-auto max-w-full align-bottom font-mono text-xs md:text-base">(Skim × 0.0006 + Cream × 0.40) = Total × 0.030</span>
+                        </li>
                         <li><strong>Proportional-Integral-Derivative (PID) Control:</strong> Advanced control algorithm continuously adjust karta hai cream recombination valve to maintain target within ±0.02% tolerance (extremely tight control impossible with manual operation)</li>
                         <li><strong>Adaptive Response:</strong> Compensate karta hai for feed variation. Agar raw milk fat% drift karta hai from 4.8% to 5.2%, PLC instantly recalculate aur adjust cream valve within 10-30 seconds (prevents off-spec product)</li>
                     </ul>
@@ -662,13 +690,13 @@ export const standardizationContent = {
 
             <h4 class="font-semibold mt-4 mb-2">Automated Systems ke Performance Advantages</h4>
             
-            <div class="overflow-x-auto w-full">
-                <table class="min-w-full border-collapse border border-gray-300 mt-3 whitespace-nowrap md:whitespace-normal">
+            <div class="overflow-x-auto w-full mb-4">
+                <table class="min-w-[700px] border-collapse border border-gray-300 mt-3">
                     <thead>
                         <tr class="bg-gray-100">
-                            <th class="border border-gray-300 px-4 py-2">Parameter</th>
-                            <th class="border border-gray-300 px-4 py-2">Manual Batch System</th>
-                            <th class="border border-gray-300 px-4 py-2">Automated In-Line System</th>
+                            <th class="border border-gray-300 px-4 py-2 text-left">Parameter</th>
+                            <th class="border border-gray-300 px-4 py-2 text-left">Manual Batch System</th>
+                            <th class="border border-gray-300 px-4 py-2 text-left">Automated In-Line System</th>
                         </tr>
                     </thead>
                     <tbody>
