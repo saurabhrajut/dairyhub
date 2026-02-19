@@ -30,8 +30,20 @@ import {
     Combine, Calculator, FlaskConical, ArrowLeft, RotateCw, Dna, Atom, Droplet, 
     DollarSign, Microscope, Recycle, Bug, ShieldCheck, FileSpreadsheet, Search, 
     Wind, Factory, Info, TrendingDown, TrendingUp, FlaskRound as Flask, AlertCircle, Sparkles,
-    ChevronDown  // 👈 Yeh add karo
-  } from "lucide-react";  
+    ChevronDown,
+    // ✅ NEW UNIQUE ICONS
+    CircleDollarSign, // Pricing ke liye better
+    TestTube2,        // Chemical tests (RM/PV)
+    Pipette,          // Titration (FFA)
+    Flame,            // Peroxide (Oxidation/Burn)
+    Snowflake,        // Salt (Crystals look like snowflakes)
+    Fuel,             // Oil (Fuel/Viscous)
+    Gauge,            // Acidity (Meter/Level)
+    Layers,           // Cream (Separation layer)
+    Scale,            // Gravimetric (Balance scale)
+    Waves,            // CIP (Liquid flow)
+    FunctionSquare    // Formulas (Math function)
+} from "lucide-react";  
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { QRCodeSVG } from "qrcode.react"; // Ensure you run: npm install qrcode.react
@@ -72,84 +84,83 @@ type CalculatorType = 'acidity' | 'fat-dry' | 'gravimetric' | 'formulas' | 'cip-
 const calculatorsInfo = {
     'pricing': { 
         title: "Milk Pricing", 
-        icon: DollarSign, 
+        icon: CircleDollarSign, // 💲 Coin symbol
         component: MilkPricingCalculators,
         color: "from-emerald-500 to-green-600" 
     },
     'rm-pv': { 
         title: "RM & Polenske Value", 
-        icon: FlaskConical, 
+        icon: TestTube2, // 🧪 Chemical Testing Tube
         component: RMPVCalc,
         color: "from-orange-400 to-red-500" 
     },
     'ffa-percent': { 
         title: "FFA % & Acid Value", 
-        icon: FlaskConical, 
+        icon: Pipette, // 💧 Titration dropper
         component: FfaPercentCalc,
         color: "from-yellow-400 to-orange-500" 
     },
     'peroxide-value': { 
         title: "Peroxide Value", 
-        icon: FlaskConical, 
+        icon: Flame, // 🔥 Oxidation/Reaction symbol
         component: PeroxideValueCalc,
         color: "from-red-500 to-rose-600" 
     },
     'salt-percent': { 
         title: "Salt %", 
-        icon: FlaskConical, 
+        icon: Snowflake, // ❄️ Crystal structure symbol (Salt grains)
         component: SaltPercentCalc,
         color: "from-cyan-400 to-blue-500" 
     },
     'oil-percent': { 
         title: "Oil % (Soxhlet)", 
-        icon: FlaskConical, 
+        icon: Fuel, // ⛽ Oil/Fuel symbol
         component: OilPercentCalc,
         color: "from-amber-400 to-yellow-500" 
     },
     'acidity': {
-    title: "Acidity",
-    icon: Beaker,
-    component: ProductAcidityCalc,
-    color: "from-lime-500 to-green-600"
+        title: "Acidity",
+        icon: Gauge, // ⏲️ pH Meter/Gauge
+        component: ProductAcidityCalc,
+        color: "from-lime-500 to-green-600"
     },
     'protein-casein': { 
         title: "Protein & Casein", 
-        icon: Dna, 
+        icon: Dna, // 🧬 Molecular structure
         component: ProteinCaseinCalc,
         color: "from-violet-500 to-purple-600" 
     },
     'minerals': { 
         title: "Minerals (Na/K)", 
-        icon: Atom, 
+        icon: Atom, // ⚛️ Atomic elements
         component: MineralAnalysisCalc,
         color: "from-indigo-500 to-blue-600" 
     },
     'cream': { 
         title: "Cream", 
-        icon: Droplet, 
+        icon: Layers, // 🍰 Cream Layer separation symbol
         component: CreamCalculators,
         color: "from-sky-400 to-blue-500" 
     },
     'gravimetric': { 
         title: "Gravimetric Analysis", 
-        icon: Weight, 
+        icon: Scale, // ⚖️ Weighing Scale (Balance)
         component: GravimetricAnalysisCalc,
         color: "from-slate-500 to-gray-600" 
     },
     'cip-strength': { 
         title: "CIP Strength", 
-        icon: RotateCw, 
+        icon: Waves, // 🌊 Liquid Flow/Cleaning
         component: SolutionStrengthCalc,
         color: "from-teal-400 to-emerald-500" 
     },
     'formulas': { 
         title: "Common Formulas", 
-        icon: Calculator, 
+        icon: FunctionSquare, // ➗ Mathematical Function symbol
         component: FormulasTab,
         color: "from-blue-600 to-indigo-700" 
     },
 };
-
 export function VariousCalculatorsModal({
   isOpen,
   setIsOpen,
