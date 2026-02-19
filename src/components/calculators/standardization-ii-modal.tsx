@@ -44,6 +44,13 @@ import {
   FileText,
   ChevronRight,
   X
+  FlaskConical, // Lab testing ke liye
+  Crosshair,    // Target blending ke liye
+  Zap,          // Automated/Fast ke liye
+  Percent,      // Fat blending ke liye
+  RefreshCw,    // Recombined process ke liye
+  Waves,        // CLR/Density ke liye
+  GlassWater    // Reconstituted (Water mixing) ke liye
 } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -62,75 +69,75 @@ type CalculatorType = 'fat-snf-clr-ts' | 'fat-blending' | 'reconstituted-milk' |
 const calculatorsInfo = {
     'fat-snf-clr-ts': { 
         title: "Fat, SNF, CLR & TS", 
-        icon: Calculator, 
+        icon: FlaskConical, // 🧪 Lab test jaisa icon (kyunki ye testing parameters hain)
         component: FatSnfClrTsCalc,
-        color: "from-blue-500 to-cyan-500" // 🔵 Blue
+        color: "from-blue-500 to-cyan-500" 
     },
     'milk-blending': { 
         title: "Milk Blending", 
-        icon: Blend, 
+        icon: Blend, // 🌀 Standard Blending icon
         component: MilkBlendingCalc,
-        color: "from-indigo-500 to-purple-600" // 🟣 Purple
+        color: "from-indigo-500 to-purple-600" 
     },
     'two-milk-blending-target': { 
         title: "Advanced Two-Milk Blending", 
-        icon: Bot, 
+        icon: Crosshair, // 🎯 Target set karne ke liye (Target blending)
         component: TwoMilkBlendingToTargetCalc,
-        color: "from-violet-500 to-fuchsia-600" // 🤖 Violet
+        color: "from-violet-500 to-fuchsia-600" 
     },
     'two-component-standardization': { 
         title: "Automated Standardization", 
-        icon: Bot, 
+        icon: Zap, // ⚡ Automatic/Fast calculation ke liye
         component: TwoComponentStandardizationCalc,
-        color: "from-emerald-500 to-teal-600" // ✅ Teal
+        color: "from-emerald-500 to-teal-600" 
     },
     'fat-snf-adjustment': { 
         title: 'Fat & SNF Adjustment', 
-        icon: SlidersHorizontal, 
+        icon: SlidersHorizontal, // 🎚️ Adjustments/Sliders ke liye
         component: FatSnfAdjustmentCalc,
-        color: "from-orange-500 to-amber-500" // 🟠 Orange
+        color: "from-orange-500 to-amber-500" 
     },
     'clr-increase': { 
         title: 'CLR Increase (by SMP)', 
-        icon: ChevronsUp, 
+        icon: TrendingUp, // 📈 Increase dikhane ke liye
         component: ClrIncreaseCalc,
-        color: "from-green-500 to-emerald-600" // 🟢 Green
+        color: "from-green-500 to-emerald-600" 
     },
     'fat-blending': { 
         title: "Fat Blending (Pearson)", 
-        icon: Blend, 
+        icon: Percent, // % Percentage calculation ke liye
         component: FatBlendingCalc,
-        color: "from-blue-600 to-indigo-600" // 🔵 Deep Blue
+        color: "from-blue-600 to-indigo-600" 
     },
     'reconstituted-milk': { 
         title: "Reconstituted Milk", 
-        icon: Milk, 
+        icon: GlassWater, // 💧 Water + Powder mixing ke liye
         component: ReconstitutedMilkCalc,
-        color: "from-sky-400 to-blue-500" // 💧 Sky
+        color: "from-sky-400 to-blue-500" 
     },
     'recombined-milk': { 
         title: "Recombined Milk", 
-        icon: Combine, 
+        icon: RefreshCw, // 🔄 Cycle/Re-combine process ke liye
         component: RecombinedMilkCalc,
-        color: "from-cyan-500 to-teal-500" // 🌊 Cyan
+        color: "from-cyan-500 to-teal-500" 
     },
     'clr-blending': { 
         title: "CLR Blending (Pearson)", 
-        icon: Bot, 
+        icon: Waves, // 🌊 Liquid Density/Lactometer waves ke liye
         component: ClrBlendingCalc,
-        color: "from-indigo-400 to-blue-500" // 🤖 Indigo
+        color: "from-indigo-400 to-blue-500" 
     },
     'clr-correction': { 
         title: "CLR Correction", 
-        icon: Thermometer, 
+        icon: Thermometer, // 🌡️ Temperature correction ke liye perfect
         component: ClrCorrectionCalc,
-        color: "from-red-500 to-rose-600" // 🌡️ Red
+        color: "from-red-500 to-rose-600" 
     },
     'kg-fat-snf': { 
         title: "Kg Fat & SNF", 
-        icon: Weight, 
+        icon: Weight, // ⚖️ Weight calculation ke liye perfect
         component: KgFatSnfCalc,
-        color: "from-slate-500 to-gray-600" // ⚖️ Gray
+        color: "from-slate-500 to-gray-600" 
     },
 };
 
