@@ -1976,347 +1976,166 @@ function TwoMilkBlendingToTargetCalc() {
         </CalculatorCard>
     );
 }
-function TwoComponentStandardizationCalc() {
-    const [correctionType, setCorrectionType] = useState('cream');
-    const [milkUnit, setMilkUnit] = useState<'liters' | 'kg'>('kg');
-    const [snfFormula, setSnfFormula] = useState('isi');
+function TwoMilkBlendingToTargetCalc() {
     const [inputs, setInputs] = useState({
-        V0: '700', Fi: '3.5', CLRi: '28',
-        Ft: '4.5', CLRt: '28.5',
-        Fc: '40', CLRc: '10',    // Cream
-        Fr: '6', CLRr: '30',     // Rich Milk
-        Fs: '0.1', CLRs: '27',   // Skim Milk
-        smpSnf: '96', smpFat: '0.5'
+        f1: '6.5', c1: '29',
+        f2: '2.5', c2: '27',
+        fTarget: '4.5', cTarget: '28.5',
+        qTotal: '1000'
     });
-    const [results, setResults] = useState<{
-        x: number;
-        y: number;
-        z: number;
-        Vf: number;
-        VfLiters: number;
-        finalFatPercent: number;
-        finalSnfPercent: number;
+    const [totalQtyUnit, setTotalQtyUnit] = useState<'kg' | 'liters'>('kg');
+    const [snfFormula, setSnfFormula] = useState('isi');
+    
+    // ✅ NEW: Tab State
+    const [activeTab, setActiveTab] = useState<'summary' | 'verification'>('summary');
+
+    const [result, setResult] = useState<{
+        q1: number;
+        q2: number;
+        q1Liters: number;
+        q2Liters: number;
+        totalQtyKg: number;
+        finalFat: number;
         finalClr: number;
-        ingName: string;
-        targetFat: number;
-        targetClr: number;
+        finalSnf: number;
         targetSnf: number;
-        fatError: number;
-        clrError: number;
-        snfError: number;
+        clrDifference: number;
+        adjustment: {
+            type: 'none' | 'smp' | 'water';
+            amount: number;
+            amountLiters: number;
+        };
     } | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [calculationSteps, setCalculationSteps] = useState<string[]>([]);
+    
+    const componentProps = { milkDensity: 1.03 };
 
     const handleInputChange = useCallback((name: string, value: string) => {
-        setInputs(prev => ({...prev, [name]: value}));
+        setInputs(prev => ({...prev, [name]: value }));
     }, []);
 
-    const calculateSnf = useCallback((clr: number, fatPercent: number) => {
+    const calculateSnf = useCallback((clr: number, fat: number) => {
         const formula = snfFormulas[snfFormula as keyof typeof snfFormulas] || snfFormulas.isi;
-        return formula.calc(clr, fatPercent);
+        return formula.calc(clr, fat);
     }, [snfFormula]);
 
     const calculate = useCallback(() => {
-        setResults(null);
+        setResult(null);
         setError(null);
         setCalculationSteps([]);
+        setActiveTab('summary'); // ✅ Reset to Summary view
         
-        let V0 = parseFloat(inputs.V0) || 0;
-        const V0Input = V0;
-        const unitInput = milkUnit;
-        
-        if (milkUnit === 'liters') {
-            V0 = V0 * componentProps.milkDensity;
+        const F1 = parseFloat(inputs.f1);
+        const C1 = parseFloat(inputs.c1);
+        const F2 = parseFloat(inputs.f2);
+        const C2 = parseFloat(inputs.c2);
+        const FT = parseFloat(inputs.fTarget);
+        const CT = parseFloat(inputs.cTarget);
+        const qTotalVal = parseFloat(inputs.qTotal);
+
+        const QT = totalQtyUnit === 'liters' ? qTotalVal * componentProps.milkDensity : qTotalVal;
+
+        if ([F1, C1, F2, C2, FT, CT, qTotalVal].some(isNaN)) {
+            setError("⚠️ Please fill all fields with valid numbers.");
+            return;
         }
 
-        const Fi = parseFloat(inputs.Fi) / 100;
-        const CLRi = parseFloat(inputs.CLRi) || 0;
-        const Ft = parseFloat(inputs.Ft) / 100;
-        const CLRt = parseFloat(inputs.CLRt) || 0;
-        const smpSnf = parseFloat(inputs.smpSnf) / 100;
-        const smpFat = parseFloat(inputs.smpFat) / 100;
+        if (QT <= 0) {
+            setError("⚠️ Total Batch Quantity must be a positive number.");
+            return;
+        }
 
-        if ([V0, Fi, CLRi, Ft, CLRt, smpSnf, smpFat].some(isNaN) || V0 <= 0) {
-            setError("⚠️ Please fill all fields with valid positive numbers.");
+        if ( (FT > Math.max(F1,F2)) || (FT < Math.min(F1,F2)) ) {
+            setError(`❌ Target Fat% (${FT}%) must be between ${Math.min(F1,F2)}% and ${Math.max(F1,F2)}%`);
             return;
         }
 
         const steps: string[] = [];
         
-        // ============ STEP 1: INPUT VALUES ============
+        // ... (Original Calculation Logic) ...
+        
         steps.push(`📊 **═══════════ STEP 1: INPUT VALUES ═══════════**`);
-        steps.push(`\n   Initial Milk:`);
-        steps.push(`     Volume (V₀) = ${V0Input} ${unitInput} → ${V0.toFixed(6)} kg`);
-        steps.push(`     Fat (Fᵢ) = ${inputs.Fi}% → ${Fi.toFixed(8)} (decimal)`);
-        steps.push(`     CLR (CLRᵢ) = ${CLRi}`);
-        
-        const SNFi = calculateSnf(CLRi, parseFloat(inputs.Fi)) / 100;
-        steps.push(`     SNF (SNFᵢ) = ${(SNFi * 100).toFixed(8)}%`);
-        
-        steps.push(`\n   Target Milk:`);
-        steps.push(`     Target Fat (Fₜ) = ${inputs.Ft}% → ${Ft.toFixed(8)} (decimal)`);
-        steps.push(`     Target CLR (CLRₜ) = ${CLRt}`);
-        
-        const SNFt = calculateSnf(CLRt, parseFloat(inputs.Ft)) / 100;
-        steps.push(`     Target SNF (SNFₜ) = ${(SNFt * 100).toFixed(8)}%`);
-        
-        steps.push(`\n   SMP Properties:`);
-        steps.push(`     Fat = ${inputs.smpFat}% → ${smpFat.toFixed(8)} (decimal)`);
-        steps.push(`     SNF = ${inputs.smpSnf}% → ${smpSnf.toFixed(8)} (decimal)`);
+        steps.push(`\n   Milk 1: Fat=${F1}%, CLR=${C1}`);
+        steps.push(`   Milk 2: Fat=${F2}%, CLR=${C2}`);
+        steps.push(`   Target: Qty=${QT.toFixed(4)} kg, Fat=${FT}%, CLR=${CT}`);
 
-        // ============ STEP 2: DETERMINE MAIN INGREDIENT ============
-        let mainIng: { F: number, SNF: number, name: string, CLR: number, fatInput: string };
-        
-        steps.push(`\n\n🧪 **═══════════ STEP 2: MAIN CORRECTION INGREDIENT ═══════════**`);
-        
-        switch(correctionType) {
-            case 'cream':
-                const Fc = parseFloat(inputs.Fc);
-                const CLRc = parseFloat(inputs.CLRc);
-                const SNFc = calculateSnf(CLRc, Fc) / 100;
-                mainIng = { 
-                    F: Fc/100, 
-                    SNF: SNFc,
-                    CLR: CLRc,
-                    name: "Cream",
-                    fatInput: inputs.Fc
-                };
-                steps.push(`   Selected: **CREAM**`);
-                steps.push(`     Fat (F꜀) = ${inputs.Fc}% → ${(Fc/100).toFixed(8)} (decimal)`);
-                steps.push(`     CLR (CLR꜀) = ${CLRc}`);
-                steps.push(`     SNF (SNF꜀) = ${(SNFc * 100).toFixed(8)}%`);
-                break;
-            case 'rich_milk':
-                const Fr = parseFloat(inputs.Fr);
-                const CLRr = parseFloat(inputs.CLRr);
-                const SNFr = calculateSnf(CLRr, Fr) / 100;
-                mainIng = { 
-                    F: Fr/100, 
-                    SNF: SNFr,
-                    CLR: CLRr,
-                    name: "Rich Milk",
-                    fatInput: inputs.Fr
-                };
-                steps.push(`   Selected: **RICH MILK**`);
-                steps.push(`     Fat (Fᵣ) = ${inputs.Fr}% → ${(Fr/100).toFixed(8)} (decimal)`);
-                steps.push(`     CLR (CLRᵣ) = ${CLRr}`);
-                steps.push(`     SNF (SNFᵣ) = ${(SNFr * 100).toFixed(8)}%`);
-                break;
-            case 'skim_milk':
-                const Fs = parseFloat(inputs.Fs);
-                const CLRs = parseFloat(inputs.CLRs);
-                const SNFs = calculateSnf(CLRs, Fs) / 100;
-                mainIng = { 
-                    F: Fs/100, 
-                    SNF: SNFs,
-                    CLR: CLRs,
-                    name: "Skimmed Milk",
-                    fatInput: inputs.Fs
-                };
-                steps.push(`   Selected: **SKIMMED MILK**`);
-                steps.push(`     Fat (Fₛ) = ${inputs.Fs}% → ${(Fs/100).toFixed(8)} (decimal)`);
-                steps.push(`     CLR (CLRₛ) = ${CLRs}`);
-                steps.push(`     SNF (SNFₛ) = ${(SNFs * 100).toFixed(8)}%`);
-                break;
-            default:
-                setError("❌ Invalid correction ingredient selected.");
-                return;
-        }
-        
-        const water = { F: 0, SNF: 0, name: "Water", CLR: 0 };
-        const smp = { F: smpFat, SNF: smpSnf, name: "SMP", CLR: 380 }; // Approximate CLR for SMP
-
-        // ============ STEP 3: CALCULATE REQUIRED CHANGES ============
-        steps.push(`\n\n🔢 **═══════════ STEP 3: CALCULATE REQUIRED CHANGES ═══════════**`);
-        
-        const deltaF = V0 * (Ft - Fi);
-        const deltaSNF = V0 * (SNFt - SNFi);
-        
-        steps.push(`\n   Required Fat Change (ΔF):`);
-        steps.push(`     ΔF = V₀ × (Fₜ - Fᵢ)`);
-        steps.push(`        = ${V0.toFixed(6)} × (${Ft.toFixed(8)} - ${Fi.toFixed(8)})`);
-        steps.push(`        = ${V0.toFixed(6)} × ${(Ft - Fi).toFixed(8)}`);
-        steps.push(`        = ${deltaF.toFixed(8)} kg`);
-        
-        steps.push(`\n   Required SNF Change (ΔSNF):`);
-        steps.push(`     ΔSNF = V₀ × (SNFₜ - SNFᵢ)`);
-        steps.push(`          = ${V0.toFixed(6)} × (${SNFt.toFixed(8)} - ${SNFi.toFixed(8)})`);
-        steps.push(`          = ${V0.toFixed(6)} × ${(SNFt - SNFi).toFixed(8)}`);
-        steps.push(`          = ${deltaSNF.toFixed(8)} kg`);
-
-        const C = [deltaF, deltaSNF];
-
-        // ============ STEP 4: SOLVE LINEAR SYSTEM ============
-        steps.push(`\n\n🧮 **═══════════ STEP 4: SOLVE LINEAR EQUATIONS ═══════════**`);
-        steps.push(`   We need to solve: X × (ingredient) + Y × (water/SMP) = required changes`);
-
-        // System 1: Main Ingredient (X) and Water (Y)
-        steps.push(`\n   **System 1: ${mainIng.name} + Water**`);
-        steps.push(`   Linear Equations:`);
-        steps.push(`     X × (F_ing - Fₜ) + Y × (F_water - Fₜ) = ΔF`);
-        steps.push(`     X × (SNF_ing - SNFₜ) + Y × (SNF_water - SNFₜ) = ΔSNF`);
-        
-        const det1 = (mainIng.F - Ft) * (water.SNF - SNFt) - (water.F - Ft) * (mainIng.SNF - SNFt);
-        steps.push(`\n   Determinant (det₁):`);
-        steps.push(`     det₁ = (${mainIng.F.toFixed(8)} - ${Ft.toFixed(8)}) × (${water.SNF.toFixed(8)} - ${SNFt.toFixed(8)}) - (${water.F.toFixed(8)} - ${Ft.toFixed(8)}) × (${mainIng.SNF.toFixed(8)} - ${SNFt.toFixed(8)})`);
-        steps.push(`          = ${(mainIng.F - Ft).toFixed(8)} × ${(water.SNF - SNFt).toFixed(8)} - ${(water.F - Ft).toFixed(8)} × ${(mainIng.SNF - SNFt).toFixed(8)}`);
-        steps.push(`          = ${det1.toFixed(10)}`);
-        
-        let X1 = Infinity, Y1 = Infinity;
-        if (Math.abs(det1) > 1e-9) {
-            X1 = (C[0] * (water.SNF - SNFt) - (water.F - Ft) * C[1]) / det1;
-            Y1 = ((mainIng.F - Ft) * C[1] - C[0] * (mainIng.SNF - SNFt)) / det1;
+        let q1, q2;
+        // Pearson Square Logic
+        if (Math.abs(F1 - F2) < 1e-9) {
+             q1 = QT / 2; q2 = QT / 2;
+        } else {
+            const highFat = F1 >= F2 ? { fat: F1, isM1: true } : { fat: F2, isM1: false };
+            const lowFat = F1 < F2 ? { fat: F1, isM1: true } : { fat: F2, isM1: false };
             
-            steps.push(`\n   Solution (Cramer's Rule):`);
-            steps.push(`     X₁ = ${X1.toFixed(8)} kg`);
-            steps.push(`     Y₁ (Water) = ${Y1.toFixed(8)} kg`);
-            steps.push(`     Valid: ${X1 >= -1e-6 && Y1 >= -1e-6 ? '✅ YES' : '❌ NO (negative values)'}`);
-        } else {
-            steps.push(`     ⚠️ System 1 has no unique solution (determinant ≈ 0)`);
-        }
-
-        // System 2: Main Ingredient (X) and SMP (Z)
-        steps.push(`\n   **System 2: ${mainIng.name} + SMP**`);
-        steps.push(`   Linear Equations:`);
-        steps.push(`     X × (F_ing - Fₜ) + Z × (F_smp - Fₜ) = ΔF`);
-        steps.push(`     X × (SNF_ing - SNFₜ) + Z × (SNF_smp - SNFₜ) = ΔSNF`);
-        
-        const det2 = (mainIng.F - Ft) * (smp.SNF - SNFt) - (smp.F - Ft) * (mainIng.SNF - SNFt);
-        steps.push(`\n   Determinant (det₂):`);
-        steps.push(`     det₂ = (${mainIng.F.toFixed(8)} - ${Ft.toFixed(8)}) × (${smp.SNF.toFixed(8)} - ${SNFt.toFixed(8)}) - (${smp.F.toFixed(8)} - ${Ft.toFixed(8)}) × (${mainIng.SNF.toFixed(8)} - ${SNFt.toFixed(8)})`);
-        steps.push(`          = ${det2.toFixed(10)}`);
-        
-        let X2 = Infinity, Z2 = Infinity;
-        if (Math.abs(det2) > 1e-9) {
-            X2 = (C[0] * (smp.SNF - SNFt) - (smp.F - Ft) * C[1]) / det2;
-            Z2 = ((mainIng.F - Ft) * C[1] - C[0] * (mainIng.SNF - SNFt)) / det2;
+            const partsHigh = FT - lowFat.fat;
+            const partsLow = highFat.fat - FT;
+            const totalParts = partsHigh + partsLow;
             
-            steps.push(`\n   Solution (Cramer's Rule):`);
-            steps.push(`     X₂ = ${X2.toFixed(8)} kg`);
-            steps.push(`     Z₂ (SMP) = ${Z2.toFixed(8)} kg`);
-            steps.push(`     Valid: ${X2 >= -1e-6 && Z2 >= -1e-6 ? '✅ YES' : '❌ NO (negative values)'}`);
-        } else {
-            steps.push(`     ⚠️ System 2 has no unique solution (determinant ≈ 0)`);
+            const qtyHigh = (QT * partsHigh) / totalParts;
+            const qtyLow = (QT * partsLow) / totalParts;
+            
+            q1 = highFat.isM1 ? qtyHigh : qtyLow;
+            q2 = highFat.isM1 ? qtyLow : qtyHigh;
         }
 
-        // ============ STEP 5: SELECT BEST SOLUTION ============
-        steps.push(`\n\n⚙️ **═══════════ STEP 5: SELECT BEST SOLUTION ═══════════**`);
-        
-        let X = 0, Y = 0, Z = 0;
-        let solutionType = '';
-
-        if (X1 >= -1e-6 && Y1 >= -1e-6) {
-            X = Math.max(0, X1);
-            Y = Math.max(0, Y1);
-            solutionType = 'water';
-            steps.push(`   ✅ Selected: ${mainIng.name} + Water`);
-            steps.push(`   This solution uses water for dilution`);
-        } else if (X2 >= -1e-6 && Z2 >= -1e-6) {
-            X = Math.max(0, X2);
-            Z = Math.max(0, Z2);
-            solutionType = 'smp';
-            steps.push(`   ✅ Selected: ${mainIng.name} + SMP`);
-            steps.push(`   This solution uses SMP for SNF enrichment`);
-        } else {
-            setError("❌ Cannot find valid solution with two ingredients. The target may require a different combination or be impossible with given components.");
+        if (q1 < 0 || q2 < 0) {
+            setError("❌ Calculation error: Negative milk quantity.");
             return;
         }
 
-        steps.push(`\n   Final Quantities to Add:`);
-        steps.push(`     ${mainIng.name}: ${X.toFixed(8)} kg`);
-        if (Y > 0.001) steps.push(`     Water: ${Y.toFixed(8)} kg`);
-        if (Z > 0.001) steps.push(`     SMP: ${Z.toFixed(8)} kg`);
+        const finalFat = (q1 * F1 + q2 * F2) / QT;
+        const finalClr = (q1 * C1 + q2 * C2) / QT;
+        const clrDifference = CT - finalClr;
+        
+        steps.push(`\n🔢 **BLENDING RESULTS**`);
+        steps.push(`   Milk 1 Needed: ${q1.toFixed(4)} kg`);
+        steps.push(`   Milk 2 Needed: ${q2.toFixed(4)} kg`);
+        steps.push(`   Resulting Mix: Fat=${finalFat.toFixed(4)}%, CLR=${finalClr.toFixed(4)}`);
 
-        // ============ STEP 6: CALCULATE FINAL PROPERTIES ============
-        steps.push(`\n\n🔬 **═══════════ STEP 6: FINAL BATCH PROPERTIES ═══════════**`);
-        
-        const Vf = V0 + X + Y + Z;
-        const VfLiters = Vf / componentProps.milkDensity;
-        
-        steps.push(`\n   Final Volume:`);
-        steps.push(`     Vf = V₀ + X + Y + Z`);
-        steps.push(`        = ${V0.toFixed(6)} + ${X.toFixed(8)} + ${Y.toFixed(8)} + ${Z.toFixed(8)}`);
-        steps.push(`        = ${Vf.toFixed(8)} kg`);
-        steps.push(`        = ${VfLiters.toFixed(8)} liters`);
-        
-        const finalFatMass = (Fi * V0) + (mainIng.F * X) + (water.F * Y) + (smp.F * Z);
-        const finalFatPercent = (finalFatMass / Vf) * 100;
-        
-        steps.push(`\n   Final Fat Calculation:`);
-        steps.push(`     Fat Mass = (Fᵢ × V₀) + (F_ing × X) + (F_water × Y) + (F_smp × Z)`);
-        steps.push(`              = (${Fi.toFixed(8)} × ${V0.toFixed(6)}) + (${mainIng.F.toFixed(8)} × ${X.toFixed(8)}) + (${water.F} × ${Y.toFixed(8)}) + (${smp.F.toFixed(8)} × ${Z.toFixed(8)})`);
-        steps.push(`              = ${(Fi * V0).toFixed(8)} + ${(mainIng.F * X).toFixed(8)} + ${(water.F * Y).toFixed(8)} + ${(smp.F * Z).toFixed(8)}`);
-        steps.push(`              = ${finalFatMass.toFixed(8)} kg`);
-        steps.push(`     Final Fat% = (Fat Mass / Vf) × 100`);
-        steps.push(`                = (${finalFatMass.toFixed(8)} / ${Vf.toFixed(8)}) × 100`);
-        steps.push(`                = ${finalFatPercent.toFixed(8)}%`);
-        
-        const finalSnfMass = (SNFi * V0) + (mainIng.SNF * X) + (water.SNF * Y) + (smp.SNF * Z);
-        const finalSnfPercent = (finalSnfMass / Vf) * 100;
-        
-        steps.push(`\n   Final SNF Calculation:`);
-        steps.push(`     SNF Mass = (SNFᵢ × V₀) + (SNF_ing × X) + (SNF_water × Y) + (SNF_smp × Z)`);
-        steps.push(`              = (${SNFi.toFixed(8)} × ${V0.toFixed(6)}) + (${mainIng.SNF.toFixed(8)} × ${X.toFixed(8)}) + (${water.SNF} × ${Y.toFixed(8)}) + (${smp.SNF.toFixed(8)} × ${Z.toFixed(8)})`);
-        steps.push(`              = ${(SNFi * V0).toFixed(8)} + ${(mainIng.SNF * X).toFixed(8)} + ${(water.SNF * Y).toFixed(8)} + ${(smp.SNF * Z).toFixed(8)}`);
-        steps.push(`              = ${finalSnfMass.toFixed(8)} kg`);
-        steps.push(`     Final SNF% = (SNF Mass / Vf) × 100`);
-        steps.push(`                = (${finalSnfMass.toFixed(8)} / ${Vf.toFixed(8)}) × 100`);
-        steps.push(`                = ${finalSnfPercent.toFixed(8)}%`);
-        
-        // Calculate CLR from SNF and Fat (inverse formula)
-        const formula = snfFormulas[snfFormula as keyof typeof snfFormulas] || snfFormulas.isi;
-        const finalClr = formula.inverse ? formula.inverse(finalSnfPercent, finalFatPercent) : 
-                        4 * (finalSnfPercent/100 - 0.25 * finalFatPercent/100 - 0.0044);
-        
-        steps.push(`\n   Final CLR Calculation (Inverse of SNF formula):`);
-        steps.push(`     Final CLR = ${finalClr.toFixed(8)}`);
+        // SNF Calcs
+        const finalSnf = calculateSnf(finalClr, finalFat);
+        const targetSnf = calculateSnf(CT, FT);
 
-        // ============ STEP 7: ACCURACY CHECK ============
-        steps.push(`\n\n📊 **═══════════ STEP 7: ACCURACY CHECK ═══════════**`);
+        // Adjustment Logic
+        let adjustment: { type: 'none' | 'smp' | 'water'; amount: number; amountLiters: number } = { type: 'none', amount: 0, amountLiters: 0 };
         
-        const fatError = Math.abs(finalFatPercent - parseFloat(inputs.Ft));
-        const clrError = Math.abs(finalClr - CLRt);
-        const snfError = Math.abs(finalSnfPercent - (SNFt * 100));
-        
-        steps.push(`\n   Target vs Achieved:`);
-        steps.push(`     Fat Error = |${finalFatPercent.toFixed(8)} - ${inputs.Ft}| = ${fatError.toFixed(8)}%`);
-        steps.push(`     CLR Error = |${finalClr.toFixed(8)} - ${CLRt}| = ${clrError.toFixed(8)}`);
-        steps.push(`     SNF Error = |${finalSnfPercent.toFixed(8)} - ${(SNFt * 100).toFixed(8)}| = ${snfError.toFixed(8)}%`);
-        
-        steps.push(`\n   Accuracy Status:`);
-        steps.push(`     Fat: ${fatError <= 0.05 ? '✅ Excellent' : fatError <= 0.1 ? '⚠️ Good' : '❌ Needs Review'}`);
-        steps.push(`     CLR: ${clrError <= 0.15 ? '✅ Excellent' : clrError <= 0.3 ? '⚠️ Good' : '❌ Needs Review'}`);
-        steps.push(`     SNF: ${snfError <= 0.05 ? '✅ Excellent' : snfError <= 0.1 ? '⚠️ Good' : '❌ Needs Review'}`);
+        steps.push(`\n⚙️ **ADJUSTMENT STEP**`);
+        if (Math.abs(clrDifference) < 0.05) {
+            steps.push(`   ✅ No Adjustment Needed (CLR Match)`);
+        } else if (clrDifference > 0) {
+            // Add SMP
+            const smpSolidsPercent = 96;
+            const smpNeeded = (QT * clrDifference * 0.25) / smpSolidsPercent;
+            adjustment = { type: 'smp', amount: smpNeeded, amountLiters: smpNeeded / componentProps.milkDensity };
+            steps.push(`   ⚠️ CLR Low -> Add SMP: ${smpNeeded.toFixed(4)} kg`);
+        } else {
+            // Add Water
+            const clrToDecrease = Math.abs(clrDifference);
+            const waterNeeded = (clrToDecrease * QT) / 50; 
+            adjustment = { type: 'water', amount: waterNeeded, amountLiters: waterNeeded };
+            steps.push(`   ⚠️ CLR High -> Add Water: ${waterNeeded.toFixed(4)} kg`);
+        }
 
         setCalculationSteps(steps);
-        setResults({
-            x: X,
-            y: Y,
-            z: Z,
-            Vf,
-            VfLiters,
-            finalFatPercent,
-            finalSnfPercent,
-            finalClr,
-            ingName: mainIng.name,
-            targetFat: parseFloat(inputs.Ft),
-            targetClr: CLRt,
-            targetSnf: SNFt * 100,
-            fatError,
-            clrError,
-            snfError
+        setResult({
+            q1, q2,
+            q1Liters: q1 / componentProps.milkDensity,
+            q2Liters: q2 / componentProps.milkDensity,
+            totalQtyKg: QT,
+            finalFat, finalClr, finalSnf, targetSnf, clrDifference,
+            adjustment
         });
 
-    }, [inputs, correctionType, milkUnit, calculateSnf, snfFormula]);
+    }, [inputs, totalQtyUnit, calculateSnf, snfFormula]);
 
     return (
         <CalculatorCard 
-            title="Automated Milk Standardization" 
-            description="Standardize milk using one main ingredient with automatic Water or SMP fine-tuning for precise results"
+            title="Advanced Two-Milk Blending to Target" 
+            description="Calculate required quantities of two milk sources to achieve target Fat% & CLR with automatic SMP/water adjustment"
         >
             {/* SNF Formula Selection */}
-            <div className="bg-gradient-to-r from-indigo-100 via-purple-100 to-pink-100 p-5 rounded-xl border-2 border-indigo-300 shadow-md mb-6">
+            <div className="bg-gradient-to-r from-indigo-100 via-purple-100 to-pink-100 p-4 md:p-5 rounded-xl border-2 border-indigo-300 shadow-md mb-6">
                 <Label className="text-base font-bold mb-3 block flex items-center gap-2">
                     <Calculator className="w-5 h-5" />
                     SNF Calculation Formula
@@ -2338,26 +2157,50 @@ function TwoComponentStandardizationCalc() {
                 </Select>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                {/* Initial Milk */}
-                <div className="bg-gradient-to-br from-blue-100 via-blue-50 to-cyan-100 p-6 rounded-xl border-2 border-blue-400 shadow-lg">
-                    <h4 className="font-bold text-xl mb-5 flex items-center gap-2 text-blue-800">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6">
+                {/* Milk Source 1 */}
+                <div className="bg-gradient-to-br from-blue-100 via-blue-50 to-cyan-100 p-4 md:p-6 rounded-xl border-2 border-blue-400 shadow-lg">
+                    <h3 className="font-bold text-lg md:text-xl mb-5 flex items-center gap-2 text-blue-800">
                         <Droplets className="w-6 h-6" />
-                        Initial Milk
-                    </h4>
+                        Milk Source 1
+                    </h3>
                     <div className="space-y-4">
+                        <MemoizedInputField label="Fat % (F₁)" value={inputs.f1} name="f1" setter={handleInputChange} />
+                        <MemoizedInputField label="CLR (C₁)" value={inputs.c1} name="c1" setter={handleInputChange} />
+                    </div>
+                </div>
+
+                {/* Milk Source 2 */}
+                <div className="bg-gradient-to-br from-green-100 via-green-50 to-emerald-100 p-4 md:p-6 rounded-xl border-2 border-green-400 shadow-lg">
+                    <h3 className="font-bold text-lg md:text-xl mb-5 flex items-center gap-2 text-green-800">
+                        <Droplets className="w-6 h-6" />
+                        Milk Source 2
+                    </h3>
+                    <div className="space-y-4">
+                        <MemoizedInputField label="Fat % (F₂)" value={inputs.f2} name="f2" setter={handleInputChange} />
+                        <MemoizedInputField label="CLR (C₂)" value={inputs.c2} name="c2" setter={handleInputChange} />
+                    </div>
+                </div>
+
+                {/* Target Batch */}
+                <div className="bg-gradient-to-br from-yellow-100 via-amber-50 to-orange-100 p-4 md:p-6 rounded-xl border-2 border-yellow-400 shadow-lg md:col-span-2">
+                    <h3 className="font-bold text-lg md:text-xl mb-5 flex items-center gap-2 text-orange-800">
+                        <Target className="w-6 h-6" />
+                        Target Batch Specifications
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                         <div>
-                            <Label className="text-sm font-semibold mb-2 block">Volume (V₀)</Label>
+                            <Label className="text-sm font-semibold mb-2 block">Total Batch Qty (Qᴛ)</Label>
                             <div className="flex gap-2">
                                 <Input 
                                     type="number" 
-                                    value={inputs.V0} 
-                                    onChange={e => handleInputChange('V0', e.target.value)} 
-                                    className="flex-1 h-11 text-base font-medium border-2 border-blue-300"
+                                    value={inputs.qTotal} 
+                                    onChange={e => handleInputChange('qTotal', e.target.value)} 
+                                    className="flex-1 h-11 text-base font-medium border-2 border-yellow-300"
                                     step="0.001"
                                 />
-                                <Select value={milkUnit} onValueChange={(v) => setMilkUnit(v as 'liters' | 'kg')}>
-                                    <SelectTrigger className="w-[110px] h-11 border-2 border-blue-300 font-semibold">
+                                <Select value={totalQtyUnit} onValueChange={(val) => setTotalQtyUnit(val as 'kg' | 'liters')}>
+                                    <SelectTrigger className="w-[100px] md:w-[110px] h-11 border-2 border-yellow-300 font-semibold">
                                         <SelectValue/>
                                     </SelectTrigger>
                                     <SelectContent>
@@ -2367,71 +2210,18 @@ function TwoComponentStandardizationCalc() {
                                 </Select>
                             </div>
                         </div>
-                        <MemoizedInputField label="Fat (Fᵢ) %" value={inputs.Fi} name="Fi" setter={handleInputChange} />
-                        <MemoizedInputField label="CLR (CLRᵢ)" value={inputs.CLRi} name="CLRi" setter={handleInputChange} />
+                        <MemoizedInputField label="Target Fat % (Fᴛ)" value={inputs.fTarget} name="fTarget" setter={handleInputChange} />
+                        <MemoizedInputField label="Target CLR (Cᴛ)" value={inputs.cTarget} name="cTarget" setter={handleInputChange} />
                     </div>
                 </div>
-
-                {/* Target Milk */}
-                <div className="bg-gradient-to-br from-green-100 via-green-50 to-emerald-100 p-6 rounded-xl border-2 border-green-400 shadow-lg">
-                    <h4 className="font-bold text-xl mb-5 flex items-center gap-2 text-green-800">
-                        <Target className="w-6 h-6" />
-                        Target Milk
-                    </h4>
-                    <div className="space-y-4">
-                        <MemoizedInputField label="Target Fat (Fₜ) %" value={inputs.Ft} name="Ft" setter={handleInputChange} />
-                        <MemoizedInputField label="Target CLR (CLRₜ)" value={inputs.CLRt} name="CLRt" setter={handleInputChange} />
-                    </div>
-                </div>
-            </div>
-            
-            {/* Correction Ingredient */}
-            <div className="bg-gradient-to-br from-yellow-100 via-amber-50 to-orange-100 p-6 rounded-xl border-2 border-yellow-400 shadow-lg mb-6">
-                <h4 className="font-bold text-xl mb-5 flex items-center gap-2 text-orange-800">
-                    <Beaker className="w-6 h-6" />
-                    Main Correction Ingredient
-                </h4>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                    <div>
-                        <Label className="text-sm font-semibold mb-2 block">Select Ingredient</Label>
-                        <Select value={correctionType} onValueChange={(v) => setCorrectionType(v)}>
-                            <SelectTrigger className="h-11 border-2 border-yellow-300 font-semibold text-base">
-                                <SelectValue/>
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="cream" className="text-base font-medium">Cream</SelectItem>
-                                <SelectItem value="rich_milk" className="text-base font-medium">Rich Milk</SelectItem>
-                                <SelectItem value="skim_milk" className="text-base font-medium">Skimmed Milk</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
-                    {correctionType === 'cream' && (<>
-                        <MemoizedInputField label="Cream Fat (F꜀) %" value={inputs.Fc} name="Fc" setter={handleInputChange} />
-                        <MemoizedInputField label="Cream CLR (CLR꜀)" value={inputs.CLRc} name="CLRc" setter={handleInputChange} />
-                    </>)}
-                    {correctionType === 'rich_milk' && (<>
-                        <MemoizedInputField label="Rich Milk Fat (Fᵣ) %" value={inputs.Fr} name="Fr" setter={handleInputChange} />
-                        <MemoizedInputField label="Rich Milk CLR (CLRᵣ)" value={inputs.CLRr} name="CLRr" setter={handleInputChange} />
-                    </>)}
-                    {correctionType === 'skim_milk' && (<>
-                        <MemoizedInputField label="Skim Milk Fat (Fₛ) %" value={inputs.Fs} name="Fs" setter={handleInputChange} />
-                        <MemoizedInputField label="Skim Milk CLR (CLRₛ)" value={inputs.CLRs} name="CLRs" setter={handleInputChange} />
-                    </>)}
-                </div>
-                <Alert className="mt-4 bg-blue-100 border-2 border-blue-300">
-                    <Info className="h-5 w-5 text-blue-700" />
-                    <AlertDescription className="text-sm font-semibold text-blue-800">
-                        <strong>Auto Fine-Tuning:</strong> Water (0% Fat, 0 CLR) and SMP (0.5% Fat, 96% SNF) will be used automatically for precise standardization.
-                    </AlertDescription>
-                </Alert>
             </div>
 
             <Button 
                 onClick={calculate} 
-                className="w-full h-16 text-lg font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 shadow-xl hover:shadow-2xl transition-all"
+                className="w-full h-14 md:h-16 text-lg font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 shadow-xl hover:shadow-2xl transition-all"
             >
                 <Calculator className="w-6 h-6 mr-3" />
-                Calculate Standardization Plan
+                Calculate Blend & Adjust
             </Button>
 
             {error && (
@@ -2441,164 +2231,171 @@ function TwoComponentStandardizationCalc() {
                 </Alert>
             )}
 
-            {results && (
-                <div className="mt-6 space-y-6">
-                    {/* Result Summary */}
-                    <Alert className="bg-gradient-to-r from-green-100 via-emerald-100 to-teal-100 border-3 border-green-500 shadow-2xl">
-                        <CheckCircle2 className="h-8 w-8 text-green-700" />
-                        <AlertTitle className="text-2xl font-extrabold text-green-900 mb-4">
-                            ✅ Standardization Plan Ready!
-                        </AlertTitle>
-                        <AlertDescription>
-                            <div className="space-y-5">
-                                {/* Ingredients to Add */}
-                                <div className="bg-white/90 p-5 rounded-xl shadow-md border-2 border-green-300">
-                                    <h5 className="font-bold text-lg text-green-800 mb-3 flex items-center gap-2">
-                                        <Plus className="w-5 h-5" />
-                                        Ingredients to Add
-                                    </h5>
-                                    <div className="space-y-3">
-                                        {results.x > 0.001 && (
-                                            <div className="flex justify-between items-center p-3 bg-amber-50 rounded-lg border border-amber-200">
-                                                <span className="font-semibold text-amber-900">{results.ingName}</span>
-                                                <div className="text-right">
-                                                    <p className="font-bold text-xl text-amber-700">{results.x.toFixed(4)} kg</p>
-                                                    <p className="text-xs text-amber-600">{(results.x / componentProps.milkDensity).toFixed(4)} liters</p>
-                                                </div>
-                                            </div>
-                                        )}
-                                        {results.y > 0.001 && (
-                                            <div className="flex justify-between items-center p-3 bg-cyan-50 rounded-lg border border-cyan-200">
-                                                <span className="font-semibold text-cyan-900">Water</span>
-                                                <div className="text-right">
-                                                    <p className="font-bold text-xl text-cyan-700">{results.y.toFixed(4)} kg</p>
-                                                    <p className="text-xs text-cyan-600">= {results.y.toFixed(4)} liters</p>
-                                                </div>
-                                            </div>
-                                        )}
-                                        {results.z > 0.001 && (
-                                            <div className="flex justify-between items-center p-3 bg-purple-50 rounded-lg border border-purple-200">
-                                                <span className="font-semibold text-purple-900">SMP (Skim Milk Powder)</span>
-                                                <div className="text-right">
-                                                    <p className="font-bold text-xl text-purple-700">{results.z.toFixed(4)} kg</p>
-                                                    <p className="text-xs text-purple-600">Powder form</p>
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-
-                                {/* Final Batch Summary */}
-                                <div className="bg-white/90 p-5 rounded-xl shadow-md border-2 border-teal-300">
-                                    <h5 className="font-bold text-lg text-teal-800 mb-4 flex items-center gap-2">
-                                        <Scale className="w-5 h-5" />
-                                        Final Batch Summary
-                                    </h5>
-                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                        <div className="text-center">
-                                            <p className="text-xs text-muted-foreground font-semibold mb-1">Final Volume</p>
-                                            <p className="font-bold text-xl text-teal-700">{results.Vf.toFixed(4)} kg</p>
-                                            <p className="text-xs text-teal-600">{results.VfLiters.toFixed(4)} L</p>
-                                        </div>
-                                        <div className="text-center">
-                                            <p className="text-xs text-muted-foreground font-semibold mb-1">Final Fat</p>
-                                            <p className="font-bold text-xl text-purple-700">{results.finalFatPercent.toFixed(4)}%</p>
-                                            <Badge className={cn(
-                                                results.fatError <= 0.05 ? "bg-green-500" : 
-                                                results.fatError <= 0.1 ? "bg-yellow-500" : "bg-red-500"
-                                            )}>
-                                                Target: {results.targetFat}%
-                                            </Badge>
-                                        </div>
-                                        <div className="text-center">
-                                            <p className="text-xs text-muted-foreground font-semibold mb-1">Final CLR</p>
-                                            <p className="font-bold text-xl text-pink-700">{results.finalClr.toFixed(4)}</p>
-                                            <Badge className={cn(
-                                                results.clrError <= 0.15 ? "bg-green-500" : 
-                                                results.clrError <= 0.3 ? "bg-yellow-500" : "bg-red-500"
-                                            )}>
-                                                Target: {results.targetClr}
-                                            </Badge>
-                                        </div>
-                                        <div className="text-center">
-                                            <p className="text-xs text-muted-foreground font-semibold mb-1">Final SNF</p>
-                                            <p className="font-bold text-xl text-indigo-700">{results.finalSnfPercent.toFixed(4)}%</p>
-                                            <Badge className={cn(
-                                                results.snfError <= 0.05 ? "bg-green-500" : 
-                                                results.snfError <= 0.1 ? "bg-yellow-500" : "bg-red-500"
-                                            )}>
-                                                Target: {results.targetSnf.toFixed(2)}%
-                                            </Badge>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Accuracy Status */}
-                                <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-xl border-2 border-blue-300">
-                                    <h5 className="font-bold text-base text-blue-900 mb-3 flex items-center gap-2">
-                                        <Target className="w-5 h-5" />
-                                        Accuracy Status
-                                    </h5>
-                                    <div className="grid grid-cols-3 gap-3">
-                                        <div className="text-center">
-                                            <p className="text-xs font-semibold mb-1">Fat Error</p>
-                                            <p className="text-lg font-bold">{results.fatError.toFixed(6)}%</p>
-                                            <p className="text-xs">{results.fatError <= 0.05 ? '✅ Excellent' : results.fatError <= 0.1 ? '⚠️ Good' : '❌ Review'}</p>
-                                        </div>
-                                        <div className="text-center">
-                                            <p className="text-xs font-semibold mb-1">CLR Error</p>
-                                            <p className="text-lg font-bold">{results.clrError.toFixed(6)}</p>
-                                            <p className="text-xs">{results.clrError <= 0.15 ? '✅ Excellent' : results.clrError <= 0.3 ? '⚠️ Good' : '❌ Review'}</p>
-                                        </div>
-                                        <div className="text-center">
-                                            <p className="text-xs font-semibold mb-1">SNF Error</p>
-                                            <p className="text-lg font-bold">{results.snfError.toFixed(6)}%</p>
-                                            <p className="text-xs">{results.snfError <= 0.05 ? '✅ Excellent' : results.snfError <= 0.1 ? '⚠️ Good' : '❌ Review'}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </AlertDescription>
-                    </Alert>
-
-                    {/* Calculation Steps */}
-                    <div className="bg-gradient-to-br from-gray-100 to-slate-200 p-6 rounded-xl border-2 border-gray-400 shadow-xl">
-                        <h4 className="font-extrabold text-xl mb-4 flex items-center gap-2 text-gray-800">
-                            <Calculator className="w-6 h-6" />
-                            Complete Calculation Process (Mobile Calculator Verification)
-                        </h4>
-                        <ScrollArea className="h-[500px] pr-4">
-                            <div className="space-y-1 text-sm font-mono leading-relaxed">
-                                {calculationSteps.map((step, idx) => (
-                                    <p 
-                                        key={idx} 
-                                        className={cn(
-                                            step.includes('**') && 'font-extrabold mt-3 text-gray-900 text-base',
-                                            step.includes('═══') && 'text-purple-700 font-extrabold text-lg',
-                                            step.includes('✅') && 'text-green-700 font-bold',
-                                            step.includes('⚠️') && 'text-yellow-700 font-bold',
-                                            step.includes('❌') && 'text-red-700 font-bold',
-                                            step.includes('📊') && 'text-blue-700 font-bold text-lg',
-                                            step.includes('🔢') && 'text-purple-700 font-bold text-lg',
-                                            step.includes('🧮') && 'text-indigo-700 font-bold text-lg',
-                                            step.includes('🔬') && 'text-pink-700 font-bold text-lg',
-                                            step.includes('🧪') && 'text-orange-700 font-bold text-lg',
-                                            step.includes('⚙️') && 'text-teal-700 font-bold text-lg',
-                                            !step.includes('**') && !step.includes('✅') && !step.includes('⚠️') && !step.includes('❌') && !step.includes('═══') && 'text-gray-700'
-                                        )}
-                                    >
-                                        {step.replace(/\*\*/g, '')}
-                                    </p>
-                                ))}
-                            </div>
-                        </ScrollArea>
-                        <div className="mt-4 p-4 bg-green-100 border-2 border-green-300 rounded-xl shadow-md">
-                            <p className="text-sm text-green-900 font-bold flex items-center gap-2">
-                                <CheckCircle2 className="w-5 h-5" />
-                                ✓ All calculations shown with complete mathematical steps - verify each calculation with your mobile calculator!
-                            </p>
-                        </div>
+            {result && (
+                <div className="mt-6 space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                    {/* ✅ TAB TRIGGER */}
+                    <div className="flex p-1 bg-slate-100 rounded-lg border border-slate-200">
+                        <button
+                            onClick={() => setActiveTab('summary')}
+                            className={cn(
+                                "flex-1 flex items-center justify-center gap-2 py-2 text-xs md:text-sm font-bold rounded-md transition-all",
+                                activeTab === 'summary' 
+                                    ? "bg-white text-blue-700 shadow-sm border border-slate-200" 
+                                    : "text-slate-500 hover:text-slate-700"
+                            )}
+                        >
+                            <LayoutDashboard className="w-3 h-3 md:w-4 md:h-4" />
+                            Summary
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('verification')}
+                            className={cn(
+                                "flex-1 flex items-center justify-center gap-2 py-2 text-xs md:text-sm font-bold rounded-md transition-all",
+                                activeTab === 'verification' 
+                                    ? "bg-white text-purple-700 shadow-sm border border-slate-200" 
+                                    : "text-slate-500 hover:text-slate-700"
+                            )}
+                        >
+                            <FileText className="w-3 h-3 md:w-4 md:h-4" />
+                            Verification
+                        </button>
                     </div>
+
+                    {/* ✅ TAB CONTENT: SUMMARY */}
+                    {activeTab === 'summary' && (
+                        <div className="space-y-4">
+                            <Alert className="bg-gradient-to-r from-green-100 via-emerald-100 to-teal-100 border-3 border-green-500 shadow-2xl px-3 py-4 md:p-6">
+                                <div className="flex items-start gap-2 mb-4">
+                                    <CheckCircle2 className="h-8 w-8 text-green-700 shrink-0" />
+                                    <AlertTitle className="text-xl md:text-2xl font-extrabold text-green-900 mt-1">
+                                        Blending Plan Ready!
+                                    </AlertTitle>
+                                </div>
+                                <AlertDescription>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+                                        {/* Milk Source 1 */}
+                                        <div className="bg-white/90 p-4 md:p-5 rounded-xl shadow-md border-2 border-blue-300">
+                                            <div className="flex items-center gap-2 mb-3">
+                                                <Droplets className="w-5 h-5 text-blue-600" />
+                                                <p className="text-sm font-bold text-blue-800">Milk Source 1</p>
+                                            </div>
+                                            {/* FIX: Break-all and Responsive Font */}
+                                            <p className="font-extrabold text-3xl md:text-4xl text-blue-700 mb-1 break-all leading-tight">
+                                                {result.q1.toFixed(3)} <span className="text-lg">kg</span>
+                                            </p>
+                                            <p className="text-xs md:text-sm text-blue-600 font-semibold">
+                                                {result.q1Liters.toFixed(3)} liters
+                                            </p>
+                                        </div>
+
+                                        {/* Milk Source 2 */}
+                                        <div className="bg-white/90 p-4 md:p-5 rounded-xl shadow-md border-2 border-green-300">
+                                            <div className="flex items-center gap-2 mb-3">
+                                                <Droplets className="w-5 h-5 text-green-600" />
+                                                <p className="text-sm font-bold text-green-800">Milk Source 2</p>
+                                            </div>
+                                            <p className="font-extrabold text-3xl md:text-4xl text-green-700 mb-1 break-all leading-tight">
+                                                {result.q2.toFixed(3)} <span className="text-lg">kg</span>
+                                            </p>
+                                            <p className="text-xs md:text-sm text-green-600 font-semibold">
+                                                {result.q2Liters.toFixed(3)} liters
+                                            </p>
+                                        </div>
+
+                                        {/* Achieved Values */}
+                                        <div className="bg-white/90 p-4 md:p-5 rounded-xl shadow-md border-2 border-purple-300 md:col-span-2">
+                                            <p className="text-sm font-bold text-muted-foreground mb-3">Achieved Values</p>
+                                            <div className="flex flex-col md:flex-row justify-between gap-3">
+                                                <div className="flex justify-between md:flex-col items-center md:items-start w-full bg-purple-50 p-3 rounded-lg border border-purple-100">
+                                                    <span className="text-xs md:text-sm font-semibold text-purple-900">Fat</span>
+                                                    <span className="text-lg md:text-2xl font-bold text-purple-700">{result.finalFat.toFixed(2)}%</span>
+                                                </div>
+                                                <div className="flex justify-between md:flex-col items-center md:items-start w-full bg-indigo-50 p-3 rounded-lg border border-indigo-100">
+                                                    <span className="text-xs md:text-sm font-semibold text-indigo-900">CLR</span>
+                                                    <span className="text-lg md:text-2xl font-bold text-indigo-700">{result.finalClr.toFixed(2)}</span>
+                                                </div>
+                                                <div className="flex justify-between md:flex-col items-center md:items-start w-full bg-pink-50 p-3 rounded-lg border border-pink-100">
+                                                    <span className="text-xs md:text-sm font-semibold text-pink-900">SNF</span>
+                                                    <span className="text-lg md:text-2xl font-bold text-pink-700">{result.finalSnf.toFixed(2)}%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Adjustment */}
+                                        <div className="bg-white/90 p-4 md:p-5 rounded-xl shadow-md border-2 border-amber-300 md:col-span-2">
+                                            <p className="text-sm font-bold text-muted-foreground mb-3">CLR Adjustment</p>
+                                            {result.adjustment.type === 'none' ? (
+                                                <div className="flex items-center gap-2 text-green-700">
+                                                    <CheckCircle2 className="w-6 h-6" />
+                                                    <span className="font-bold text-lg">No Adjustment Needed</span>
+                                                </div>
+                                            ) : result.adjustment.type === 'smp' ? (
+                                                <div className="flex items-center justify-between">
+                                                    <div>
+                                                        <p className="font-bold text-lg text-amber-800">Add SMP</p>
+                                                        <p className="text-xs text-amber-600">To increase CLR</p>
+                                                    </div>
+                                                    <div className="text-right">
+                                                        <p className="text-2xl md:text-3xl font-extrabold text-amber-700">{result.adjustment.amount.toFixed(3)} kg</p>
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <div className="flex items-center justify-between">
+                                                    <div>
+                                                        <p className="font-bold text-lg text-cyan-800">Add Water</p>
+                                                        <p className="text-xs text-cyan-600">To decrease CLR</p>
+                                                    </div>
+                                                    <div className="text-right">
+                                                        <p className="text-2xl md:text-3xl font-extrabold text-cyan-700">{result.adjustment.amount.toFixed(3)} L</p>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="mt-4 text-center">
+                                        <Button 
+                                            variant="ghost" 
+                                            size="sm" 
+                                            onClick={() => setActiveTab('verification')}
+                                            className="text-xs text-muted-foreground hover:text-primary h-8"
+                                        >
+                                            Verify Calculation <ChevronRight className="w-3 h-3 ml-1" />
+                                        </Button>
+                                    </div>
+                                </AlertDescription>
+                            </Alert>
+                        </div>
+                    )}
+
+                    {/* ✅ TAB CONTENT: VERIFICATION */}
+                    {activeTab === 'verification' && (
+                        <div className="bg-slate-50 p-3 md:p-5 rounded-xl border border-slate-300 shadow-inner">
+                            <h4 className="font-bold text-sm md:text-base mb-3 flex items-center gap-2 text-slate-700">
+                                <Calculator className="w-4 h-4" />
+                                Step-by-Step Logic
+                            </h4>
+                            <ScrollArea className="h-[300px] md:h-[400px] pr-2">
+                                <div className="space-y-2 text-xs md:text-sm font-mono leading-relaxed">
+                                    {calculationSteps.map((step, idx) => (
+                                        <p 
+                                            key={idx} 
+                                            className={cn(
+                                                "break-words whitespace-pre-wrap p-1 rounded",
+                                                step.includes('**') && 'font-extrabold mt-3 text-gray-900 bg-white/50',
+                                                step.includes('═══') && 'text-purple-700 font-extrabold',
+                                                step.includes('✅') && 'text-green-700 font-bold',
+                                                step.includes('⚠️') && 'text-amber-700 font-bold',
+                                                !step.includes('**') && !step.includes('═══') && 'text-gray-700 ml-2 border-l-2 border-gray-300 pl-2'
+                                            )}
+                                        >
+                                            {step.replace(/\*\*/g, '')}
+                                        </p>
+                                    ))}
+                                </div>
+                            </ScrollArea>
+                        </div>
+                    )}
                 </div>
             )}
         </CalculatorCard>
