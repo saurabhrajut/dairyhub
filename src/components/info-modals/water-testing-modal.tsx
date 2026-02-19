@@ -20,49 +20,86 @@ import {
     FlaskConical, 
     Beaker, 
     Zap, 
-    Scale,
-    Calculator,
-    Thermometer, // ✅ Added missing import
-    Activity     // ✅ Added generic fallback icon
+    Scale, 
+    Calculator, 
+    Thermometer, 
+    Activity,
+    // ✅ NEW UNIQUE ICONS
+    Magnet,     // Iron
+    Gem,        // Hardness (Minerals)
+    Gauge,      // pH (Meter)
+    Filter,     // TDS (Filtration)
+    Atom,       // Sulfates (Chemicals)
+    Search      // Dashboard Icon
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// ✅ Configuration for Icons and Colors based on test type
-// Make sure these keys match EXACTLY with 'id' in your content file
+// ✅ COMPLETE UNIQUE ICON MAPPING
 const testsConfig: Record<string, { icon: any, color: string }> = {
-    "hardness": { icon: Scale, color: "from-slate-500 to-gray-600" }, 
-    "ph": { icon: TestTube, color: "from-pink-500 to-purple-500" }, 
-    "tds": { icon: Droplet, color: "from-cyan-500 to-blue-500" }, 
-    "chlorides": { icon: FlaskConical, color: "from-teal-400 to-emerald-500" }, 
-    "alkalinity": { icon: Beaker, color: "from-indigo-400 to-violet-500" }, 
-    "sulfates": { icon: Waves, color: "from-yellow-400 to-orange-500" }, 
-    "iron": { icon: Zap, color: "from-red-500 to-orange-700" }, 
-    "temperature": { icon: Thermometer, color: "from-orange-400 to-red-500" } // Added generic entry
+    "hardness": { 
+        icon: Gem, // 💎 Minerals (Calcium/Magnesium)
+        color: "from-slate-500 to-zinc-600" // Stone/Mineral color
+    }, 
+    "ph": { 
+        icon: Gauge, // ⏲️ pH Meter
+        color: "from-pink-500 to-rose-600" // Litmus paper color
+    }, 
+    "tds": { 
+        icon: Filter, // 🔽 Dissolved Solids
+        color: "from-cyan-500 to-blue-600" 
+    }, 
+    "chlorides": { 
+        icon: FlaskConical, // 🧪 Titration
+        color: "from-teal-400 to-emerald-600" 
+    }, 
+    "alkalinity": { 
+        icon: Beaker, // 🥛 Base Solution
+        color: "from-violet-500 to-purple-600" 
+    }, 
+    "sulfates": { 
+        icon: Atom, // ⚛️ Chemical Compound
+        color: "from-yellow-400 to-amber-500" 
+    }, 
+    "iron": { 
+        icon: Magnet, // 🧲 Iron Metal
+        color: "from-red-600 to-orange-700" // Rust color
+    }, 
+    "temperature": { 
+        icon: Thermometer, // 🌡️ Temp
+        color: "from-orange-500 to-red-500" 
+    },
+    // Fallback for others
+    "default": { 
+        icon: TestTube, 
+        color: "from-blue-400 to-indigo-500" 
+    }
 };
 
 const Formula = ({ children }: { children: React.ReactNode }) => (
-    <div className="p-4 bg-muted/50 rounded-lg text-center font-mono text-sm my-4 text-primary border border-primary/10"
+    <div className="p-4 bg-muted/50 rounded-lg text-center font-mono text-sm my-4 text-primary border border-primary/10 overflow-x-auto"
      dangerouslySetInnerHTML={{ __html: children as string }} />
 );
 
 const WaterTestSection = ({ test }: { test: any }) => {
     return (
         <section className="p-1">
-            <p className="mt-2 text-gray-600 leading-relaxed text-sm sm:text-base">{test.intro}</p>
+            <p className="mt-2 text-gray-600 leading-relaxed text-sm sm:text-base break-words">{test.intro}</p>
             
             <div className="mt-6">
                 <h3 className="text-lg font-bold mb-3 text-primary flex items-center gap-2 font-headline">
-                    <FlaskConical className="w-5 h-5" />
+                    <FlaskConical className="w-5 h-5 text-purple-600" />
                     Prakriya (Procedure)
                 </h3>
                 <ol className="list-decimal list-inside space-y-3 mt-2 text-gray-600 text-sm sm:text-base bg-white p-4 rounded-xl border shadow-sm">
-                    {test.procedure.map((step: any, i: number) => <li key={i} dangerouslySetInnerHTML={{__html: step}}/>)}
+                    {test.procedure.map((step: any, i: number) => (
+                        <li key={i} className="break-words pl-1 marker:font-bold marker:text-primary" dangerouslySetInnerHTML={{__html: step}}/>
+                    ))}
                 </ol>
             </div>
 
             <div className="mt-6">
                 <h3 className="text-lg font-bold mb-3 text-primary flex items-center gap-2 font-headline">
-                    <Calculator className="w-5 h-5" />
+                    <Calculator className="w-5 h-5 text-orange-500" />
                     Ganana (Calculation)
                 </h3>
                 <Formula>{test.calculation}</Formula>
@@ -107,12 +144,15 @@ export function WaterTestingModal({ isOpen, setIsOpen }: { isOpen: boolean; setI
     }
   }, [activeTestId]);
 
+  if (!content || !content.tests) {
+      return null;
+  }
 
   const selectedTest = content.tests.find(t => t.id === activeTestId);
   
-  // ✅ Fix: Get config safely with a fallback
+  // ✅ Safe Lookup with Fallback
   const activeConfig = activeTestId 
-    ? (testsConfig[activeTestId] || { icon: TestTube, color: "from-blue-500 to-cyan-500" }) 
+    ? (testsConfig[activeTestId] || testsConfig[activeTestId.toLowerCase()] || testsConfig["default"]) 
     : null;
 
   return (
@@ -164,15 +204,17 @@ export function WaterTestingModal({ isOpen, setIsOpen }: { isOpen: boolean; setI
 
                 <ScrollArea className="flex-1 mt-4 sm:pr-4" viewportRef={scrollAreaRef}>
                     {/* Important Note Section */}
-                     <div className="p-4 pt-0 sm:p-0 prose max-w-none text-gray-600 text-sm text-center bg-blue-50 border border-blue-200 rounded-lg mx-4 mb-6 shadow-sm">
+                    {content.important_note && (
+                      <div className="p-4 pt-0 sm:p-0 prose max-w-none text-gray-600 text-sm text-center bg-blue-50 border border-blue-200 rounded-lg mx-4 mb-6 shadow-sm">
                         <p className="m-2"><strong>{content.important_note.title}</strong> {content.important_note.text}</p>
-                    </div>
+                      </div>
+                    )}
 
                     {/* ✅ Colorful Grid of Tests */}
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 p-4 sm:p-0">
                         {content.tests.map(test => {
                             // ✅ Fallback added here also
-                            const config = testsConfig[test.id] || { icon: Activity, color: "from-gray-400 to-slate-500" };
+                            const config = testsConfig[test.id] || testsConfig[test.id.toLowerCase()] || testsConfig["default"];
                             
                             return (
                                 <button
@@ -188,7 +230,7 @@ export function WaterTestingModal({ isOpen, setIsOpen }: { isOpen: boolean; setI
                                         <config.icon className="w-7 h-7 sm:w-8 sm:h-8" />
                                     </div>
 
-                                    <span className="font-bold text-sm sm:text-base font-headline text-slate-700 group-hover:text-primary transition-colors">
+                                    <span className="font-bold text-sm sm:text-base font-headline text-slate-700 group-hover:text-primary transition-colors break-words line-clamp-2">
                                         {test.title}
                                     </span>
 
