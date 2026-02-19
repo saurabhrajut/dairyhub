@@ -21,7 +21,7 @@ import {
   Milk, 
   SlidersHorizontal, 
   Combine, 
-  Bot, 
+  Bot, // Agar ye abhi bhi kahin use ho raha hai to rakhein, warna hata dein
   Calculator, 
   Settings, 
   ChevronsUp, 
@@ -31,26 +31,26 @@ import {
   Weight, 
   Thermometer, 
   ShieldAlert, 
-  DollarSign,
-  // ✅ NEW ICONS FOR ADVANCED CALCULATOR
-  Beaker,
-  Scale,
-  TrendingUp,
-  TrendingDown,
-  CheckCircle2,
-  AlertTriangle,
-  Plus,
-  LayoutDashboard,
-  FileText,
-  ChevronRight,
-  X
-  FlaskConical, // Lab testing ke liye
-  Crosshair,    // Target blending ke liye
-  Zap,          // Automated/Fast ke liye
-  Percent,      // Fat blending ke liye
-  RefreshCw,    // Recombined process ke liye
-  Waves,        // CLR/Density ke liye
-  GlassWater    // Reconstituted (Water mixing) ke liye
+  DollarSign, 
+  Beaker, 
+  Scale, 
+  TrendingUp, 
+  TrendingDown, 
+  CheckCircle2, 
+  AlertTriangle, 
+  Plus, 
+  LayoutDashboard, 
+  FileText, 
+  ChevronRight, 
+  X, // <--- Yahan comma (,) zaroor lagayein
+  // ✅ NEW ICONS
+  FlaskConical, 
+  Crosshair,    
+  Zap,          
+  Percent,      
+  RefreshCw,    
+  Waves,        
+  GlassWater    
 } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
