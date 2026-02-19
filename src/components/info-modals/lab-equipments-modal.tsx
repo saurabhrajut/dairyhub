@@ -22,25 +22,36 @@ import {
     Filter, 
     Droplet, 
     Zap, 
-    Activity,
-    TestTube,
-    Gauge,
-    Beaker,
-    CookingPot, // Autoclave
-    Fan,        // Centrifuge
-    MonitorCheck, // Analyzer
-    ThermometerSun, // Incubator
-    Wind,       // Oven
-    FlaskRound, // Butyrometer
-    Waves,      // Water Bath
-    Box,        // Desiccator
-    Flame,      // Bunsen Burner
-    Syringe,    // Lactometer (looks like glass tube)
-    Timer,      // Stopwatch
-    GlassWater, // Beaker/Jar
-    ScanEye,    // Refractometer
-    Vibrate,    // Shaker
-    Refrigerator // Fridge/Freezer
+    Activity, 
+    TestTube, 
+    Gauge, 
+    Beaker, 
+    CookingPot, 
+    Fan,        
+    MonitorCheck, 
+    ThermometerSun, 
+    Wind,       
+    FlaskRound, 
+    Waves,      
+    Box,        
+    Flame,      
+    Syringe,    
+    Timer,      
+    GlassWater, 
+    ScanEye,    
+    Vibrate,    
+    Refrigerator,
+    // ✅ NEW UNIQUE ICONS
+    Cylinder,   // Measuring Cylinder ke liye perfect
+    Tornado,    // Magnetic Stirrer (Vortex) ke liye
+    Orbit,      // Centrifuge (Spinning) ke liye
+    Heater,     // Hot Air Oven ke liye
+    ShieldPlus, // Autoclave (Sterilization) ke liye
+    ScanLine,   // Refractometer (Scanning) ke liye
+    PcCase,     // Milk Analyzer (Machine) ke liye
+    Ruler,      // Lactometer (Scale) ke liye
+    Hourglass,  // Burette (Time/Flow) ke liye
+    UmbrellaOff // Desiccator (Keep dry) ke liye
 } from "lucide-react";
 import { useLanguage } from "@/context/language-context";
 import { labEquipmentsContent } from "@/lib/content/lab-equipments-content";
@@ -49,43 +60,121 @@ import { cn } from "@/lib/utils";
 
 // ✅ COMPLETE ICON MAPPING (All Equipments Covered)
 const equipmentsConfig: Record<string, { icon: any, color: string }> = {
-    // Milk Testing
-    "lactometer": { icon: Syringe, color: "from-blue-500 to-cyan-400" }, // Density
-    "butyrometer": { icon: FlaskRound, color: "from-yellow-400 to-amber-500" }, // Fat
-    "milk-analyzer": { icon: MonitorCheck, color: "from-indigo-500 to-purple-600" }, // Digital Analysis
-    "refractometer": { icon: ScanEye, color: "from-sky-400 to-blue-500" }, // Light refraction
+    // === MILK TESTING ===
+    "lactometer": { 
+        icon: Ruler, // 📏 Scale dikhata hai (Reading density)
+        color: "from-blue-500 to-indigo-500" 
+    }, 
+    "butyrometer": { 
+        icon: FlaskRound, // 🧪 Fat testing flask
+        color: "from-yellow-400 to-orange-500" 
+    }, 
+    "milk-analyzer": { 
+        icon: PcCase, // 🖥️ Computerized Machine
+        color: "from-slate-600 to-zinc-700" 
+    }, 
+    "refractometer": { 
+        icon: ScanLine, // 📉 Light Scan refraction
+        color: "from-sky-400 to-cyan-500" 
+    }, 
 
-    // General Lab
-    "centrifuge": { icon: Fan, color: "from-violet-500 to-fuchsia-600" }, // Spinning
-    "microscope": { icon: Microscope, color: "from-teal-500 to-emerald-600" }, // Microbes
-    "ph-meter": { icon: Gauge, color: "from-lime-500 to-green-600" }, // pH Level
-    "weighing-balance": { icon: Scale, color: "from-slate-500 to-gray-600" }, // Weight
-    "magnetic-stirrer": { icon: Vibrate, color: "from-indigo-400 to-blue-500" }, // Mixing
+    // === GENERAL LAB ===
+    "centrifuge": { 
+        icon: Orbit, // 💫 Fast Spinning motion
+        color: "from-fuchsia-500 to-purple-600" 
+    }, 
+    "microscope": { 
+        icon: Microscope, // 🔬 Bacteria check
+        color: "from-teal-500 to-emerald-600" 
+    }, 
+    "ph-meter": { 
+        icon: Gauge, // ⏲️ Meter reading
+        color: "from-lime-500 to-green-600" 
+    }, 
+    "weighing-balance": { 
+        icon: Scale, // ⚖️ Weight
+        color: "from-slate-400 to-slate-600" 
+    }, 
+    "magnetic-stirrer": { 
+        icon: Tornado, // 🌪️ Vortex mixing action
+        color: "from-violet-500 to-indigo-600" 
+    }, 
     
-    // Heating & Cooling
-    "water-bath": { icon: Waves, color: "from-blue-400 to-indigo-500" }, // Water Heating
-    "hot-air-oven": { icon: Wind, color: "from-orange-500 to-red-600" }, // Dry Heat
-    "incubator": { icon: ThermometerSun, color: "from-pink-500 to-rose-500" }, // Bacteria Growth
-    "autoclave": { icon: CookingPot, color: "from-slate-600 to-zinc-700" }, // Sterilization
-    "bunsen-burner": { icon: Flame, color: "from-orange-400 to-red-500" }, // Fire
-    "muffle-furnace": { icon: Flame, color: "from-red-600 to-orange-700" }, // High Heat
-    "refrigerator": { icon: Refrigerator, color: "from-cyan-200 to-blue-300" }, // Cooling
+    // === HEATING & COOLING ===
+    "water-bath": { 
+        icon: Waves, // 🌊 Warm Water
+        color: "from-blue-400 to-blue-600" 
+    }, 
+    "hot-air-oven": { 
+        icon: Heater, // ♨️ Heating Element
+        color: "from-orange-500 to-red-500" 
+    }, 
+    "incubator": { 
+        icon: ThermometerSun, // 🌡️ Controlled Warmth
+        color: "from-rose-400 to-pink-500" 
+    }, 
+    "autoclave": { 
+        icon: ShieldPlus, // 🛡️ Sterilization/Safety
+        color: "from-emerald-600 to-teal-700" 
+    }, 
+    "bunsen-burner": { 
+        icon: Flame, // 🔥 Direct Fire
+        color: "from-orange-400 to-red-600" 
+    }, 
+    "muffle-furnace": { 
+        icon: Flame, // 🔥🔥 Extreme Heat (Darker Red)
+        color: "from-red-600 to-rose-700" 
+    }, 
+    "refrigerator": { 
+        icon: Refrigerator, // ❄️ Cooling
+        color: "from-cyan-300 to-blue-400" 
+    }, 
 
-    // Glassware
-    "pipette": { icon: Pipette, color: "from-cyan-400 to-teal-400" }, // Precision
-    "burette": { icon: TestTube, color: "from-violet-400 to-purple-500" }, // Titration
-    "beaker": { icon: Beaker, color: "from-blue-300 to-blue-500" }, // Holding
-    "conical-flask": { icon: FlaskConical, color: "from-emerald-400 to-teal-500" }, // Mixing
-    "measuring-cylinder": { icon: GlassWater, color: "from-sky-300 to-cyan-500" }, // Volume
-    "funnel": { icon: Filter, color: "from-yellow-300 to-orange-400" }, // Filtration
-    "desiccator": { icon: Box, color: "from-amber-600 to-orange-700" }, // Drying Box
+    // === GLASSWARE ===
+    "pipette": { 
+        icon: Pipette, // 💧 Dropper
+        color: "from-cyan-400 to-teal-400" 
+    }, 
+    "burette": { 
+        icon: Hourglass, // ⏳ Controlled Flow
+        color: "from-violet-400 to-purple-500" 
+    }, 
+    "beaker": { 
+        icon: Beaker, // 🥛 Standard Glass
+        color: "from-blue-300 to-blue-500" 
+    }, 
+    "conical-flask": { 
+        icon: FlaskConical, // 🧪 Mixing Flask
+        color: "from-emerald-400 to-teal-500" 
+    }, 
+    "measuring-cylinder": { 
+        icon: Cylinder, // 🔋 Exact Cylinder Icon
+        color: "from-sky-300 to-cyan-500" 
+    }, 
+    "funnel": { 
+        icon: Filter, // 🔽 Filtration
+        color: "from-yellow-300 to-orange-400" 
+    }, 
+    "desiccator": { 
+        icon: CookingPot, // ☂️ No Moisture (Dry)
+        color: "from-amber-600 to-orange-700" 
+    }, 
     
-    // Others
-    "thermometer": { icon: Thermometer, color: "from-red-500 to-rose-600" }, // Temp
-    "stopwatch": { icon: Timer, color: "from-gray-700 to-black" }, // Time
+    // === OTHERS ===
+    "thermometer": { 
+        icon: Thermometer, // 🌡️ Temp Check
+        color: "from-red-400 to-orange-500" 
+    }, 
+    "stopwatch": { 
+        icon: Timer, // ⏱️ Time Check
+        color: "from-gray-600 to-slate-800" 
+    }, 
     
     // Fallback
-    "default": { icon: FlaskConical, color: "from-gray-400 to-slate-500" }
+    "default": { 
+        icon: FlaskConical, 
+        color: "from-gray-400 to-slate-500" 
+    }
 };
 
 const EquipmentDetail = ({ equipment, content }: { equipment: any; content: any }) => {
