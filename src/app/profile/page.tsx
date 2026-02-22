@@ -212,7 +212,7 @@ export default function ProfilePage() {
             // ✅ Subtitle mein bhi naam + tier
             description: `${donorName} ka Donation — ${selectedTier.label} ${selectedTier.emoji}`,
 
-            image: 'https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/IMG_9565.jpg?alt=media&token=e56e6c1f-aeb5-4a6f-a2ec-f797e4060d5e',
+            image: 'https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/EF9A49FE-8131-4DD5-9311-7FC058B1FD0E%20(1).png?alt=media&token=8b9c0609-762c-4e7b-bcfc-94b65976b54c',
 
             prefill: {
                 name:  donorName,           // ✅ App ka login naam
