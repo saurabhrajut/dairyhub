@@ -48,8 +48,10 @@
     --ring: 212.7 26.8% 83.9%;
   }
 
+  /* ───── EXISTING THEMES ───── */
+
   body.theme-sepia {
-    --background: 44 23% 85%; /* Lighter Sepia */
+    --background: 44 23% 85%;
     --foreground: 44 20% 20%;
     --card: 44 23% 90%;
     --card-foreground: 44 20% 20%;
@@ -64,7 +66,7 @@
   }
 
   body.theme-slate {
-    --background: 220 13% 18%; /* Dark Slate Gray */
+    --background: 220 13% 18%;
     --foreground: 220 10% 80%;
     --card: 220 13% 22%;
     --card-foreground: 220 10% 85%;
@@ -79,7 +81,7 @@
   }
 
   body.theme-paper {
-    --background: 50 33% 95%; /* Creamy Paper */
+    --background: 50 33% 95%;
     --foreground: 40 10% 25%;
     --card: 50 33% 98%;
     --card-foreground: 40 10% 25%;
@@ -94,7 +96,7 @@
   }
   
   body.theme-mint {
-    --background: 140 30% 95%; /* Light Mint */
+    --background: 140 30% 95%;
     --foreground: 140 20% 15%;
     --card: 140 30% 98%;
     --card-foreground: 140 20% 15%;
@@ -109,7 +111,7 @@
   }
   
   body.theme-night {
-    --background: 220 14% 10%; /* Very Dark Blue */
+    --background: 220 14% 10%;
     --foreground: 220 10% 75%;
     --card: 220 14% 14%;
     --card-foreground: 220 10% 80%;
@@ -121,6 +123,71 @@
     --border: 220 14% 24%;
     --input: 220 14% 24%;
     --ring: 210 40% 65%;
+  }
+
+  /* ───── NEW THEMES ───── */
+
+  /* 🌸 Rose — Soft warm pink, aankhon ke liye gentle */
+  body.theme-rose {
+    --background: 350 60% 96%;       /* very light blush pink */
+    --foreground: 350 30% 20%;       /* deep rose-brown text */
+    --card: 350 60% 98%;
+    --card-foreground: 350 30% 20%;
+    --popover: 350 60% 98%;
+    --popover-foreground: 350 30% 20%;
+    --primary: 350 65% 55%;          /* rose pink buttons */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 350 40% 92%;
+    --secondary-foreground: 350 30% 20%;
+    --muted: 350 40% 93%;
+    --muted-foreground: 350 20% 45%;
+    --accent: 340 70% 65%;
+    --accent-foreground: 0 0% 100%;
+    --border: 350 40% 86%;
+    --input: 350 40% 86%;
+    --ring: 350 65% 55%;
+  }
+
+  /* 🌲 Forest — Deep dark green, low blue light, perfect night reading */
+  body.theme-forest {
+    --background: 150 25% 12%;       /* very dark forest green */
+    --foreground: 120 15% 82%;       /* soft sage text */
+    --card: 150 25% 16%;
+    --card-foreground: 120 15% 85%;
+    --popover: 150 25% 16%;
+    --popover-foreground: 120 15% 85%;
+    --primary: 140 45% 55%;          /* medium green accent */
+    --primary-foreground: 150 25% 8%;
+    --secondary: 150 20% 22%;
+    --secondary-foreground: 120 15% 82%;
+    --muted: 150 20% 20%;
+    --muted-foreground: 120 10% 55%;
+    --accent: 160 50% 45%;
+    --accent-foreground: 0 0% 100%;
+    --border: 150 20% 26%;
+    --input: 150 20% 26%;
+    --ring: 140 45% 55%;
+  }
+
+  /* 🍦 Cream — Warm ivory, purest eye-comfort for long reading */
+  body.theme-cream {
+    --background: 48 80% 97%;        /* warm ivory white */
+    --foreground: 35 25% 18%;        /* dark warm brown text */
+    --card: 48 80% 99%;
+    --card-foreground: 35 25% 18%;
+    --popover: 48 80% 99%;
+    --popover-foreground: 35 25% 18%;
+    --primary: 32 70% 48%;           /* amber/honey buttons */
+    --primary-foreground: 48 80% 98%;
+    --secondary: 45 50% 93%;
+    --secondary-foreground: 35 25% 18%;
+    --muted: 45 50% 93%;
+    --muted-foreground: 35 15% 45%;
+    --accent: 28 80% 58%;
+    --accent-foreground: 0 0% 100%;
+    --border: 45 35% 86%;
+    --input: 45 35% 86%;
+    --ring: 32 70% 48%;
   }
 }
  
@@ -144,11 +211,12 @@
 
 .dark .glass-card,
 body.theme-slate .glass-card,
-body.theme-night .glass-card {
-    background: rgba(30, 30, 40, 0.6);
+body.theme-night .glass-card,
+body.theme-forest .glass-card {
+    background: rgba(20, 35, 25, 0.6);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 body.theme-sepia .glass-card {
@@ -162,6 +230,14 @@ body.theme-paper .glass-card {
 body.theme-mint .glass-card {
     background: rgba(230, 250, 240, 0.7);
     border: 1px solid rgba(200, 230, 210, 0.4);
+}
+body.theme-rose .glass-card {
+    background: rgba(255, 240, 242, 0.7);
+    border: 1px solid rgba(240, 200, 210, 0.4);
+}
+body.theme-cream .glass-card {
+    background: rgba(255, 253, 240, 0.75);
+    border: 1px solid rgba(235, 220, 190, 0.4);
 }
 
 
@@ -189,18 +265,17 @@ pre code {
   color: hsl(var(--secondary-foreground));
 }
 
-/* ===== START: टेबल को ठीक करने के लिए यह कोड जोड़ा गया है ===== */
 .table-container {
-  overflow-x: auto; /* यह हॉरिजॉन्टल स्क्रॉल बार जोड़ता है */
-  -webkit-overflow-scrolling: touch; /* iOS पर स्मूथ स्क्रॉलिंग के लिए */
-  border: 1px solid hsl(var(--border)); /* आपकी थीम जैसा बॉर्डर */
-  border-radius: var(--radius); /* आपकी थीम जैसा गोल कोना */
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
 }
 
 .force-wrap {
   overflow-wrap: break-word;
   word-wrap: break-word;
-  word-break: break-all; /* यह सबसे ज़रूरी है, यह किसी भी लंबे शब्द को तोड़ देता है */
+  word-break: break-all;
 }
 
 @keyframes text-3d-pop {
@@ -216,7 +291,6 @@ pre code {
     transform: translateY(0) rotateX(0deg) scale(1);
   }
 }
-/* ===== END: नया कोड यहाँ खत्म हुआ ===== */
 
 @keyframes fade-out {
   from { opacity: 1; }
@@ -236,8 +310,6 @@ pre code {
   }
 }
 
-/* ===== START: मोबाइल ओवरफ्लो के लिए फिक्स ===== */
 .flex {
     min-width: 0;
 }
-/* ===== END: फिक्स यहाँ खत्म हुआ ===== */
