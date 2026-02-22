@@ -44,6 +44,9 @@ const themes = [
   { name: 'paper',   label: 'Paper',   color: 'bg-[#F8F5E9]',  icon: BookOpen },
   { name: 'mint',    label: 'Mint',    color: 'bg-emerald-200', icon: Droplet  },
   { name: 'night',   label: 'Night',   color: 'bg-[#1E2024]',  icon: Moon     },
+  { name: 'rose',    label: 'Rose',    color: 'bg-[#F4D0D0]',  icon: Sun      },
+  { name: 'forest',  label: 'Forest',  color: 'bg-[#2D4A3E]',  icon: Droplet  },
+  { name: 'cream',   label: 'Cream',   color: 'bg-[#FFFBF0]',  icon: BookOpen },
 ] as const;
 
 const FRICTION          = 0.98;
@@ -653,20 +656,7 @@ export default function ProfilePage() {
                                 </SelectContent>
                             </Select>
                         </div>
-                        {!user.isAnonymous && (
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Your Department</label>
-                                <Select value={user.department} onValueChange={(v) => handleDepartmentChange(v as Department)}>
-                                    <SelectTrigger><SelectValue placeholder="Select Department"/></SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="process-access">Process Access</SelectItem>
-                                        <SelectItem value="production-access">Production Access</SelectItem>
-                                        <SelectItem value="quality-access">Quality Access</SelectItem>
-                                        <SelectItem value="all-control-access">All Control Access</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                        )}
+
                         <div>
                             <Label className="block text-sm font-medium text-gray-700 mb-2">Reading Mode</Label>
                             <div className="flex items-center space-x-2 mb-4">
