@@ -5,13 +5,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAuth } from '@/context/auth-context';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useLanguage } from '@/context/language-context';
-import { Heart, Mail, MessageCircle, ChevronLeft, LogOut, Settings, HelpCircle, User, Loader2, Building2, ChevronRight, BookOpen, Droplet, Moon, Sun, Gift, Copy, Sparkles, Shield, CheckCircle2 } from 'lucide-react';
+import { Heart, Mail, MessageCircle, ChevronLeft, LogOut, Settings, HelpCircle, User, Loader2, Building2, ChevronRight, BookOpen, Droplet, Moon, Sun, Gift, Sparkles, Shield, CheckCircle2 } from 'lucide-react';
 import type { Department } from '@/context/auth-context';
 import { useReadingMode } from '@/context/reading-mode-context';
 import { Switch } from '@/components/ui/switch';
@@ -296,11 +295,6 @@ export default function ProfilePage() {
         setPaymentSuccess(false);
         setSelectedTier(null);
         setLastPaymentId('');
-    };
-
-    const handleCopyUpi = () => {
-        navigator.clipboard.writeText("9119005734-2@axl");
-        toast({ title: "UPI ID Copied!" });
     };
 
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -605,30 +599,6 @@ export default function ProfilePage() {
                                 <p className="text-center text-xs text-gray-400">
                                     💳 Cards · 📱 UPI · 🏦 NetBanking · 👝 Wallets — sab supported
                                 </p>
-
-                                {/* Divider */}
-                                <div className="flex items-center gap-3">
-                                    <div className="flex-1 h-px bg-gray-200"/>
-                                    <span className="text-xs text-gray-400 font-medium whitespace-nowrap">YA SEEDHA UPI / QR</span>
-                                    <div className="flex-1 h-px bg-gray-200"/>
-                                </div>
-
-                                {/* QR + UPI */}
-                                <div className="text-center space-y-3">
-                                    <div className="bg-white p-2 rounded-xl inline-block border-4 border-dashed border-rose-200">
-                                        <Image
-                                            src="https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/IMG_9565.jpg?alt=media&token=e56e6c1f-aeb5-4a6f-a2ec-f797e4060d5e"
-                                            alt="QR Code" width={144} height={144}
-                                            className="w-36 h-36 rounded-lg"
-                                        />
-                                    </div>
-                                    <div className="bg-rose-50 p-3 rounded-xl border border-dashed border-rose-200 inline-flex items-center gap-2">
-                                        <p className="font-mono text-base text-rose-700 font-semibold">9119005734-2@axl</p>
-                                        <Button variant="ghost" size="icon" className="h-7 w-7 text-gray-500 hover:text-rose-500" onClick={handleCopyUpi}>
-                                            <Copy className="h-3.5 w-3.5"/>
-                                        </Button>
-                                    </div>
-                                </div>
                             </div>
                         )}
                     </DialogContent>
