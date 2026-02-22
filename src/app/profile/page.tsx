@@ -53,7 +53,7 @@ const CONTAINER_WIDTH   = 400;
 const CONTAINER_HEIGHT  = 300;
 
 // ============================================================
-// Razorpay script loader — properly waits if already injected
+// Razorpay script loader
 // ============================================================
 function loadRazorpayScript(): Promise<boolean> {
     return new Promise((resolve) => {
@@ -61,7 +61,6 @@ function loadRazorpayScript(): Promise<boolean> {
 
         const existing = document.getElementById('razorpay-script');
         if (existing) {
-            // Script tag exists but Razorpay not yet ready — poll
             const poll = setInterval(() => {
                 if ((window as any).Razorpay) { clearInterval(poll); resolve(true); }
             }, 100);
@@ -180,21 +179,6 @@ export default function ProfilePage() {
         else if (user) setTempName(user.displayName || '');
     }, [user, loading, router]);
 
-    // ============================================================
-    // 💳 RAZORPAY PAYMENT — Mobile number screen SKIP kiya gaya
-    //
-    // Razorpay pehle mobile number screen isliye dikhata hai kyunki
-    // prefill.contact empty hoti hai. Fix:
-    //
-    //   1. prefill.contact = "9999999999"  ← dummy number dene se
-    //      Razorpay phone collection screen SKIP kar deta hai aur
-    //      seedha payment methods dikhata hai.
-    //
-    //   2. config.display.language = "en"  ← consistent UI
-    //
-    //   3. Agar user ka actual phone available ho (Auth se),
-    //      to woh use karo — aur bhi better experience hoga.
-    // ============================================================
     const handleRazorpayPayment = async () => {
         if (!selectedTier) {
             toast({ variant: 'destructive', title: 'Koi amount select karo', description: 'Pehle ek donation tier choose karo.' });
@@ -210,30 +194,29 @@ export default function ProfilePage() {
             return;
         }
 
-        // FIX: Phone screen completely bypass karo
-        // Razorpay ka contact screen tab aata hai jab prefill.contact empty ho.
-        // readonly + valid prefill se screen skip hoti hai lekin
-        // BEST approach: config.fields se contact field hide karo — 
-        // tab Razorpay us screen ko render hi nahi karta.
-
         const userPhone =
             (user as any)?.phoneNumber?.replace(/^\+91/, '') || '9000000000';
+
+        // ✅ FIX: User ka naam description mein add kiya — Razorpay modal mein dikhega
+        const donorName = user?.displayName || 'Dairy Hub User';
 
         const options = {
             key: RAZORPAY_KEY_ID,
             amount: selectedTier.amount * 100,
             currency: 'INR',
             name: 'Dairy Hub',
-            description: `Donation - ${selectedTier.label} ${selectedTier.emoji}`,
+
+            // ✅ YAHAN HAI FIX — description mein user ka naam show hoga
+            description: `${donorName} ka Donation - ${selectedTier.label} ${selectedTier.emoji}`,
+
             image: 'https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/IMG_9565.jpg?alt=media&token=e56e6c1f-aeb5-4a6f-a2ec-f797e4060d5e',
 
             prefill: {
-                name:    user?.displayName || 'Dairy Hub User',
-                email:   user?.email       || '',
+                name:    donorName,
+                email:   user?.email || '',
                 contact: userPhone,
             },
 
-            // contact + email fields ko readonly rakho — keyboard popup nahi hoga
             readonly: {
                 contact: true,
                 email:   true,
@@ -241,20 +224,19 @@ export default function ProfilePage() {
             },
 
             notes: {
-                userId: user?.uid || 'anonymous',
+                userId:    user?.uid || 'anonymous',
+                donorName: donorName,
             },
 
             config: {
                 display: {
                     language: 'en',
-                    // contact field hide karo — phone entry screen bypass
                     hide: [{ key: 'contact' }],
                 },
             },
 
             theme: { color: '#A78BFA' },
 
-            // ✅ SUCCESS CALLBACK
             handler: function (response: any) {
                 setLastPaymentId(response.razorpay_payment_id);
                 setPaymentSuccess(true);
@@ -263,13 +245,6 @@ export default function ProfilePage() {
                     title: `🎉 ₹${selectedTier.amount} donation received!`,
                     description: `Payment ID: ${response.razorpay_payment_id}`,
                 });
-                // Firebase mein save karna ho to:
-                // await addDoc(collection(db, 'donations'), {
-                //   userId: user?.uid,
-                //   amount: selectedTier.amount,
-                //   paymentId: response.razorpay_payment_id,
-                //   createdAt: serverTimestamp()
-                // });
             },
 
             modal: {
@@ -277,7 +252,6 @@ export default function ProfilePage() {
                     setIsPaymentLoading(false);
                     toast({ title: 'Payment cancelled', description: 'Aapne window band kar di.' });
                 },
-                // ✅ escape key se dismiss hone par bhi loading reset ho
                 escape: true,
             },
         };
