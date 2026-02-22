@@ -52,13 +52,9 @@ const COLLISION_DAMPING = 0.9;
 const CONTAINER_WIDTH   = 400;
 const CONTAINER_HEIGHT  = 300;
 
-// ============================================================
-// Razorpay script loader
-// ============================================================
 function loadRazorpayScript(): Promise<boolean> {
     return new Promise((resolve) => {
         if ((window as any).Razorpay) { resolve(true); return; }
-
         const existing = document.getElementById('razorpay-script');
         if (existing) {
             const poll = setInterval(() => {
@@ -67,7 +63,6 @@ function loadRazorpayScript(): Promise<boolean> {
             setTimeout(() => { clearInterval(poll); resolve(false); }, 10000);
             return;
         }
-
         const script = document.createElement('script');
         script.id      = 'razorpay-script';
         script.src     = 'https://checkout.razorpay.com/v1/checkout.js';
@@ -179,6 +174,15 @@ export default function ProfilePage() {
         else if (user) setTempName(user.displayName || '');
     }, [user, loading, router]);
 
+    // ============================================================
+    // 💳 RAZORPAY PAYMENT
+    //
+    // FIX: prefill.contact HATA DIYA — yahi wajah thi ki Razorpay
+    // phone number ko naam ki jagah show karta tha.
+    //
+    // Ab sirf name aur email pass ho raha hai.
+    // name field mein app ka login naam directly aa raha hai.
+    // ============================================================
     const handleRazorpayPayment = async () => {
         if (!selectedTier) {
             toast({ variant: 'destructive', title: 'Koi amount select karo', description: 'Pehle ek donation tier choose karo.' });
@@ -194,44 +198,46 @@ export default function ProfilePage() {
             return;
         }
 
-        const userPhone =
-            (user as any)?.phoneNumber?.replace(/^\+91/, '') || '9000000000';
-
-        // ✅ FIX: User ka naam description mein add kiya — Razorpay modal mein dikhega
-        const donorName = user?.displayName || 'Dairy Hub User';
+        // ✅ App login naam — yahi Razorpay mein dikhega
+        const donorName = user?.displayName?.trim() || 'Dairy Hub User';
 
         const options = {
-            key: RAZORPAY_KEY_ID,
-            amount: selectedTier.amount * 100,
+            key:      RAZORPAY_KEY_ID,
+            amount:   selectedTier.amount * 100,
             currency: 'INR',
-            name: 'Dairy Hub',
 
-            // ✅ YAHAN HAI FIX — description mein user ka naam show hoga
-            description: `${donorName} ka Donation - ${selectedTier.label} ${selectedTier.emoji}`,
+            // ✅ Modal header mein user ka naam
+            name: donorName,
+
+            // ✅ Subtitle mein bhi naam + tier
+            description: `${donorName} ka Donation — ${selectedTier.label} ${selectedTier.emoji}`,
 
             image: 'https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/IMG_9565.jpg?alt=media&token=e56e6c1f-aeb5-4a6f-a2ec-f797e4060d5e',
 
             prefill: {
-                name:    donorName,
-                email:   user?.email || '',
-                contact: userPhone,
+                name:  donorName,           // ✅ App ka login naam
+                email: user?.email || '',   // ✅ Email
+                // ❌ contact NAHI diya — yahi phone number show hone ki wajah thi
             },
 
             readonly: {
-                contact: true,
-                email:   true,
-                name:    true,
+                name:  true,
+                email: true,
             },
 
             notes: {
-                userId:    user?.uid || 'anonymous',
+                userId:    user?.uid   || 'anonymous',
                 donorName: donorName,
+                email:     user?.email || '',
             },
 
             config: {
                 display: {
                     language: 'en',
-                    hide: [{ key: 'contact' }],
+                    // ✅ Contact field puri tarah hide — phone screen bypass
+                    hide: [
+                        { key: 'contact' },
+                    ],
                 },
             },
 
@@ -485,9 +491,7 @@ export default function ProfilePage() {
 
             <div className="px-6 pb-6 mt-6 space-y-4">
 
-                {/* ============================================================
-                    💳 DONATION CARD
-                ============================================================ */}
+                {/* DONATION CARD */}
                 <Dialog open={isDonationModalOpen} onOpenChange={(open) => {
                     setIsDonationModalOpen(open);
                     if (!open) resetDonation();
@@ -519,7 +523,6 @@ export default function ProfilePage() {
                             </DialogDescription>
                         </DialogHeader>
 
-                        {/* ---- SUCCESS SCREEN ---- */}
                         {paymentSuccess ? (
                             <div className="py-8 text-center space-y-4">
                                 <CheckCircle2 className="w-20 h-20 text-green-500 mx-auto" />
@@ -539,8 +542,6 @@ export default function ProfilePage() {
                             </div>
                         ) : (
                             <div className="py-4 space-y-5">
-
-                                {/* Tier cards */}
                                 <div>
                                     <p className="text-sm font-semibold text-gray-700 mb-3 text-center">💝 Ek amount choose karo</p>
                                     <div className="grid grid-cols-2 gap-3">
@@ -563,7 +564,6 @@ export default function ProfilePage() {
                                     </div>
                                 </div>
 
-                                {/* Pay button */}
                                 <Button
                                     onClick={handleRazorpayPayment}
                                     disabled={isPaymentLoading || !selectedTier}
