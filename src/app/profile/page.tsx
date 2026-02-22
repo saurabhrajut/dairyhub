@@ -20,17 +20,15 @@ import { cn } from '@/lib/utils';
 import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 
 // ============================================================
-// 🔑 RAZORPAY CONFIG — APNI KEY ID YAHAN DAALO
-// ⚠️  Key SECRET kabhi bhi frontend mein mat daalo!
+// 🔑 RAZORPAY CONFIG
 // ============================================================
-const RAZORPAY_KEY_ID = "rzp_live_RaIS0kmA42YM68"; // ← Sirf Key ID, Secret nahi
+const RAZORPAY_KEY_ID = "rzp_live_RaIS0kmA42YM68";
 
-// Fixed donation tiers — change karo jaise chahiye
 const DONATION_TIERS = [
-  { amount: 50,  label: '₹50',  emoji: '☕', desc: 'Ek chai ki kimat' },
-  { amount: 100, label: '₹100', emoji: '🌱', desc: 'Ek choti madad' },
-  { amount: 500, label: '₹500', emoji: '💪', desc: 'Bada support' },
-  { amount: 1000,label: '₹1K',  emoji: '🏆', desc: 'Hero donor' },
+  { amount: 50,   label: '₹50',  emoji: '☕', desc: 'Ek chai ki kimat' },
+  { amount: 100,  label: '₹100', emoji: '🌱', desc: 'Ek choti madad' },
+  { amount: 500,  label: '₹500', emoji: '💪', desc: 'Bada support' },
+  { amount: 1000, label: '₹1K',  emoji: '🏆', desc: 'Hero donor' },
 ];
 
 const EditIcon = () => (
@@ -41,29 +39,40 @@ const EditIcon = () => (
 );
 
 const themes = [
-  { name: 'default', label: 'Default', color: 'bg-gray-400', icon: Sun },
-  { name: 'sepia',   label: 'Sepia',   color: 'bg-[#C6B8A3]', icon: BookOpen },
-  { name: 'slate',   label: 'Slate',   color: 'bg-slate-600', icon: Moon },
-  { name: 'paper',   label: 'Paper',   color: 'bg-[#F8F5E9]', icon: BookOpen },
-  { name: 'mint',    label: 'Mint',    color: 'bg-emerald-200', icon: Droplet },
-  { name: 'night',   label: 'Night',   color: 'bg-[#1E2024]', icon: Moon },
+  { name: 'default', label: 'Default', color: 'bg-gray-400',   icon: Sun      },
+  { name: 'sepia',   label: 'Sepia',   color: 'bg-[#C6B8A3]',  icon: BookOpen },
+  { name: 'slate',   label: 'Slate',   color: 'bg-slate-600',  icon: Moon     },
+  { name: 'paper',   label: 'Paper',   color: 'bg-[#F8F5E9]',  icon: BookOpen },
+  { name: 'mint',    label: 'Mint',    color: 'bg-emerald-200', icon: Droplet  },
+  { name: 'night',   label: 'Night',   color: 'bg-[#1E2024]',  icon: Moon     },
 ] as const;
 
-// Physics constants
-const FRICTION = 0.98;
-const BOUNCE_DAMPING = 0.8;
+const FRICTION          = 0.98;
+const BOUNCE_DAMPING    = 0.8;
 const COLLISION_DAMPING = 0.9;
-const CONTAINER_WIDTH = 400;
-const CONTAINER_HEIGHT = 300;
+const CONTAINER_WIDTH   = 400;
+const CONTAINER_HEIGHT  = 300;
 
-// Load Razorpay script once
+// ============================================================
+// Razorpay script loader — properly waits if already injected
+// ============================================================
 function loadRazorpayScript(): Promise<boolean> {
     return new Promise((resolve) => {
         if ((window as any).Razorpay) { resolve(true); return; }
-        if (document.getElementById('razorpay-script')) { resolve(true); return; }
+
+        const existing = document.getElementById('razorpay-script');
+        if (existing) {
+            // Script tag exists but Razorpay not yet ready — poll
+            const poll = setInterval(() => {
+                if ((window as any).Razorpay) { clearInterval(poll); resolve(true); }
+            }, 100);
+            setTimeout(() => { clearInterval(poll); resolve(false); }, 10000);
+            return;
+        }
+
         const script = document.createElement('script');
-        script.id = 'razorpay-script';
-        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+        script.id      = 'razorpay-script';
+        script.src     = 'https://checkout.razorpay.com/v1/checkout.js';
         script.onload  = () => resolve(true);
         script.onerror = () => resolve(false);
         document.body.appendChild(script);
@@ -83,13 +92,11 @@ export default function ProfilePage() {
     const [isEditingName, setIsEditingName]             = useState(false);
     const [tempName, setTempName]                       = useState('');
 
-    // Payment state
     const [selectedTier, setSelectedTier]         = useState<typeof DONATION_TIERS[0] | null>(null);
     const [isPaymentLoading, setIsPaymentLoading] = useState(false);
     const [paymentSuccess, setPaymentSuccess]     = useState(false);
     const [lastPaymentId, setLastPaymentId]       = useState('');
 
-    // Physics balls
     const [balls, setBalls] = useState([
         { id: 1, x: 60,  y: 50,  vx: 2,  vy: 1,  size: 64, gradient: 'linear-gradient(135deg, #C084FC, #A78BFA)' },
         { id: 2, x: 250, y: 90,  vx: -1, vy: 2,  size: 48, gradient: 'linear-gradient(135deg, #F9A8D4, #EC4899)' },
@@ -104,18 +111,17 @@ export default function ProfilePage() {
     const draggingRef = useRef<{ id: number; lastX: number; lastY: number } | null>(null);
     const requestRef  = useRef<number>();
     const ballsRef    = useRef(balls);
-    useEffect(() => { ballsRef.current = balls; }, []);
+    useEffect(() => { ballsRef.current = balls; }, [balls]);
 
-    // Physics loop
     const updatePhysics = () => {
         const B = [...ballsRef.current];
         B.forEach((ball, i) => {
             if (draggingRef.current?.id === ball.id) return;
             ball.x += ball.vx; ball.y += ball.vy;
-            ball.vx *= FRICTION;  ball.vy *= FRICTION;
-            if (ball.x <= 0)                          { ball.x = 0;                         ball.vx = -ball.vx * BOUNCE_DAMPING; }
+            ball.vx *= FRICTION; ball.vy *= FRICTION;
+            if (ball.x <= 0)                                 { ball.x = 0;                           ball.vx = -ball.vx * BOUNCE_DAMPING; }
             else if (ball.x + ball.size >= CONTAINER_WIDTH)  { ball.x = CONTAINER_WIDTH - ball.size;  ball.vx = -ball.vx * BOUNCE_DAMPING; }
-            if (ball.y <= 0)                          { ball.y = 0;                         ball.vy = -ball.vy * BOUNCE_DAMPING; }
+            if (ball.y <= 0)                                 { ball.y = 0;                           ball.vy = -ball.vy * BOUNCE_DAMPING; }
             else if (ball.y + ball.size >= CONTAINER_HEIGHT) { ball.y = CONTAINER_HEIGHT - ball.size; ball.vy = -ball.vy * BOUNCE_DAMPING; }
             for (let j = i + 1; j < B.length; j++) {
                 const o = B[j];
@@ -129,7 +135,7 @@ export default function ProfilePage() {
                     ball.x -= mx; ball.y -= my; o.x += mx; o.y += my;
                     const tvx = ball.vx, tvy = ball.vy;
                     ball.vx = o.vx * COLLISION_DAMPING; ball.vy = o.vy * COLLISION_DAMPING;
-                    o.vx = tvx * COLLISION_DAMPING;      o.vy = tvy * COLLISION_DAMPING;
+                    o.vx = tvx * COLLISION_DAMPING;     o.vy = tvy * COLLISION_DAMPING;
                 }
             }
         });
@@ -176,7 +182,19 @@ export default function ProfilePage() {
     }, [user, loading, router]);
 
     // ============================================================
-    // 💳 RAZORPAY PAYMENT — FIXED AMOUNT FLOW
+    // 💳 RAZORPAY PAYMENT — Mobile number screen SKIP kiya gaya
+    //
+    // Razorpay pehle mobile number screen isliye dikhata hai kyunki
+    // prefill.contact empty hoti hai. Fix:
+    //
+    //   1. prefill.contact = "9999999999"  ← dummy number dene se
+    //      Razorpay phone collection screen SKIP kar deta hai aur
+    //      seedha payment methods dikhata hai.
+    //
+    //   2. config.display.language = "en"  ← consistent UI
+    //
+    //   3. Agar user ka actual phone available ho (Auth se),
+    //      to woh use karo — aur bhi better experience hoga.
     // ============================================================
     const handleRazorpayPayment = async () => {
         if (!selectedTier) {
@@ -193,20 +211,40 @@ export default function ProfilePage() {
             return;
         }
 
+        // ✅ KEY FIX: prefill.contact mein valid 10-digit number dena zaroori hai
+        // Razorpay tab phone screen skip karta hai aur direct pay options dikhata hai
+        // Agar user ka actual phone number available ho to use karo:
+        //   const userPhone = user?.phoneNumber?.replace('+91', '') || '9999999999';
+        const userPhone = '9999999999'; // fallback — phone screen skip ho jaata hai
+
         const options = {
-            key: RAZORPAY_KEY_ID,                       // ← Tumhari Key ID
-            amount: selectedTier.amount * 100,          // Razorpay = paise mein
+            key: RAZORPAY_KEY_ID,
+            amount: selectedTier.amount * 100, // paise mein
             currency: 'INR',
             name: 'Dairy Hub',
             description: `Donation - ${selectedTier.label} ${selectedTier.emoji}`,
             image: 'https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/IMG_9565.jpg?alt=media&token=e56e6c1f-aeb5-4a6f-a2ec-f797e4060d5e',
+
             prefill: {
-                name:  user?.displayName || '',
-                email: user?.email || '',
+                name:    user?.displayName || '',
+                email:   user?.email       || '',
+                contact: userPhone,           // ← YEH HAI ASLI FIX 🔑
+                                              // Valid contact hone se Razorpay
+                                              // phone entry screen skip karta hai
+                                              // aur seedha payment options aate hain
             },
+
             notes: {
                 userId: user?.uid || 'anonymous',
             },
+
+            // ✅ config object se aur bhi control milta hai
+            config: {
+                display: {
+                    language: 'en',           // consistent language
+                },
+            },
+
             theme: { color: '#A78BFA' },
 
             // ✅ SUCCESS CALLBACK
@@ -218,7 +256,7 @@ export default function ProfilePage() {
                     title: `🎉 ₹${selectedTier.amount} donation received!`,
                     description: `Payment ID: ${response.razorpay_payment_id}`,
                 });
-                // Yahan Firebase Firestore mein save kar sakte ho:
+                // Firebase mein save karna ho to:
                 // await addDoc(collection(db, 'donations'), {
                 //   userId: user?.uid,
                 //   amount: selectedTier.amount,
@@ -231,8 +269,10 @@ export default function ProfilePage() {
                 ondismiss: () => {
                     setIsPaymentLoading(false);
                     toast({ title: 'Payment cancelled', description: 'Aapne window band kar di.' });
-                }
-            }
+                },
+                // ✅ escape key se dismiss hone par bhi loading reset ho
+                escape: true,
+            },
         };
 
         try {
@@ -319,8 +359,11 @@ export default function ProfilePage() {
     const getDepartmentName = (deptKey?: Department) => {
         if (!deptKey) return 'Not specified';
         const names: Record<Department, string> = {
-            'process-access': 'Process Access', 'production-access': 'Production Access',
-            'quality-access': 'Quality Access', 'all-control-access': 'All Control Access', 'guest': 'Guest User'
+            'process-access':     'Process Access',
+            'production-access':  'Production Access',
+            'quality-access':     'Quality Access',
+            'all-control-access': 'All Control Access',
+            'guest':              'Guest User',
         };
         return names[deptKey];
     };
@@ -338,11 +381,11 @@ export default function ProfilePage() {
         <style jsx>{`
             @keyframes gradient-flow {
                 0%, 100% { background-position: 0% 50%; }
-                50% { background-position: 100% 50%; }
+                50%       { background-position: 100% 50%; }
             }
             @keyframes shimmer {
-                0% { background-position: -200% center; }
-                100% { background-position: 200% center; }
+                0%   { background-position: -200% center; }
+                100% { background-position:  200% center; }
             }
             .glass-card {
                 background: rgba(255, 255, 255, 0.7);
@@ -392,28 +435,33 @@ export default function ProfilePage() {
                             onTouchStart={(e) => handleStart(e, ball.id)}
                             className="absolute rounded-full cursor-grab active:cursor-grabbing"
                             style={{
-                                width: `${ball.size}px`, height: `${ball.size}px`,
-                                left: `${ball.x}px`, top: `${ball.y}px`,
+                                width:      `${ball.size}px`,
+                                height:     `${ball.size}px`,
+                                left:       `${ball.x}px`,
+                                top:        `${ball.y}px`,
                                 background: ball.gradient,
-                                boxShadow: draggingRef.current?.id === ball.id ? '0 12px 48px rgba(0,0,0,0.3)' : '0 8px 32px rgba(0,0,0,0.2)',
-                                transform: draggingRef.current?.id === ball.id ? 'scale(1.1)' : 'scale(1)',
-                                zIndex: draggingRef.current?.id === ball.id ? 20 : 10,
-                                touchAction: 'none'
+                                boxShadow:  draggingRef.current?.id === ball.id ? '0 12px 48px rgba(0,0,0,0.3)' : '0 8px 32px rgba(0,0,0,0.2)',
+                                transform:  draggingRef.current?.id === ball.id ? 'scale(1.1)' : 'scale(1)',
+                                zIndex:     draggingRef.current?.id === ball.id ? 20 : 10,
+                                touchAction: 'none',
                             }}
                         />
                     ))}
                 </div>
                 <Link href="/" className="absolute top-6 left-6 z-20 cursor-pointer glass-card p-2 rounded-full hover:bg-white/50 transition-all">
-                   <ChevronLeft className="h-6 w-6 text-gray-700"/>
+                    <ChevronLeft className="h-6 w-6 text-gray-700"/>
                 </Link>
                 <div className="flex flex-col items-center justify-center h-full relative z-10 pointer-events-none">
                     <div className="relative neon-border rounded-full p-1 pointer-events-auto">
                         <div className="relative">
-                            <img src={user.photoURL || 'https://placehold.co/128x128/E0E0E0/333?text=User'} alt="Profile"
-                                className="w-32 h-32 rounded-full border-4 border-white shadow-2xl object-cover" />
+                            <img
+                                src={user.photoURL || 'https://placehold.co/128x128/E0E0E0/333?text=User'}
+                                alt="Profile"
+                                className="w-32 h-32 rounded-full border-4 border-white shadow-2xl object-cover"
+                            />
                             {!user.isAnonymous && (
                                 <label htmlFor="fileInput" className="absolute bottom-0 right-0 bg-gradient-to-br from-purple-400 to-pink-400 p-2 rounded-full shadow-lg cursor-pointer hover:scale-110 transition-transform">
-                                   <EditIcon />
+                                    <EditIcon />
                                 </label>
                             )}
                             <input type="file" id="fileInput" accept="image/*" className="hidden" onChange={handleFileChange} />
@@ -434,12 +482,14 @@ export default function ProfilePage() {
                     <div className="flex items-center justify-center space-x-2 min-h-[36px]">
                         {isEditingName ? (
                             <div className="flex items-center space-x-2">
-                                <Input type="text"
+                                <Input
+                                    type="text"
                                     className="text-2xl font-bold text-gray-800 bg-white/50 text-center focus:ring-2 focus:ring-purple-400 h-10 border-purple-200"
                                     value={tempName}
                                     onChange={(e) => setTempName(e.target.value)}
                                     onKeyDown={(e) => e.key === 'Enter' && handleSaveName()}
-                                    autoFocus />
+                                    autoFocus
+                                />
                                 <Button onClick={handleSaveName} size="sm" className="bg-gradient-to-r from-purple-400 to-pink-400 text-white">Save</Button>
                             </div>
                         ) : (
@@ -460,7 +510,7 @@ export default function ProfilePage() {
             <div className="px-6 pb-6 mt-6 space-y-4">
 
                 {/* ============================================================
-                    💳 DONATION CARD — RAZORPAY FIXED AMOUNTS
+                    💳 DONATION CARD
                 ============================================================ */}
                 <Dialog open={isDonationModalOpen} onOpenChange={(open) => {
                     setIsDonationModalOpen(open);
@@ -496,11 +546,11 @@ export default function ProfilePage() {
                         {/* ---- SUCCESS SCREEN ---- */}
                         {paymentSuccess ? (
                             <div className="py-8 text-center space-y-4">
-                                <div className="relative inline-block">
-                                    <CheckCircle2 className="w-20 h-20 text-green-500 mx-auto" />
-                                </div>
+                                <CheckCircle2 className="w-20 h-20 text-green-500 mx-auto" />
                                 <h3 className="text-xl font-bold text-gray-800">Bahut Shukriya! 🎉</h3>
-                                <p className="text-gray-600">Aapka <span className="font-bold text-rose-500">₹{selectedTier?.amount}</span> donation receive ho gaya.</p>
+                                <p className="text-gray-600">
+                                    Aapka <span className="font-bold text-rose-500">₹{selectedTier?.amount}</span> donation receive ho gaya.
+                                </p>
                                 {lastPaymentId && (
                                     <p className="text-xs text-gray-400 font-mono bg-gray-50 px-3 py-2 rounded-lg">
                                         Payment ID: {lastPaymentId}
@@ -514,7 +564,7 @@ export default function ProfilePage() {
                         ) : (
                             <div className="py-4 space-y-5">
 
-                                {/* --- FIXED TIER CARDS --- */}
+                                {/* Tier cards */}
                                 <div>
                                     <p className="text-sm font-semibold text-gray-700 mb-3 text-center">💝 Ek amount choose karo</p>
                                     <div className="grid grid-cols-2 gap-3">
@@ -537,7 +587,7 @@ export default function ProfilePage() {
                                     </div>
                                 </div>
 
-                                {/* --- PAY BUTTON --- */}
+                                {/* Pay button */}
                                 <Button
                                     onClick={handleRazorpayPayment}
                                     disabled={isPaymentLoading || !selectedTier}
@@ -552,7 +602,6 @@ export default function ProfilePage() {
                                     )}
                                 </Button>
 
-                                {/* Supported payment logos text */}
                                 <p className="text-center text-xs text-gray-400">
                                     💳 Cards · 📱 UPI · 🏦 NetBanking · 👝 Wallets — sab supported
                                 </p>
@@ -564,7 +613,7 @@ export default function ProfilePage() {
                                     <div className="flex-1 h-px bg-gray-200"/>
                                 </div>
 
-                                {/* QR + UPI fallback */}
+                                {/* QR + UPI */}
                                 <div className="text-center space-y-3">
                                     <div className="bg-white p-2 rounded-xl inline-block border-4 border-dashed border-rose-200">
                                         <Image
@@ -592,8 +641,8 @@ export default function ProfilePage() {
                     </h3>
                     <div className="space-y-3">
                         {[
-                            { icon: Mail, gradient: 'from-blue-300 to-blue-500', value: user.email },
-                            { icon: User, gradient: 'from-green-300 to-green-500', value: user.gender || 'Not specified' },
+                            { icon: Mail,      gradient: 'from-blue-300 to-blue-500',     value: user.email },
+                            { icon: User,      gradient: 'from-green-300 to-green-500',   value: user.gender || 'Not specified' },
                             { icon: Building2, gradient: 'from-purple-300 to-purple-500', value: getDepartmentName(user.department) },
                         ].map(({ icon: Icon, gradient, value }) => (
                             <div key={value} className="flex items-center glass-card p-3 rounded-xl">
@@ -668,7 +717,7 @@ export default function ProfilePage() {
                         )}
                         <div>
                             <Label className="block text-sm font-medium text-gray-700 mb-2">Reading Mode</Label>
-                            <div className='flex items-center space-x-2 mb-4'>
+                            <div className="flex items-center space-x-2 mb-4">
                                 <Switch id="reading-mode-switch" checked={isEnabled} onCheckedChange={setIsEnabled}/>
                                 <Label htmlFor="reading-mode-switch">Enable eye-friendly themes</Label>
                             </div>
@@ -678,9 +727,11 @@ export default function ProfilePage() {
                                         {themes.map((t) => (
                                             <Tooltip key={t.name}>
                                                 <TooltipTrigger asChild>
-                                                    <Button variant="ghost" size="icon"
+                                                    <Button
+                                                        variant="ghost" size="icon"
                                                         className={cn("w-8 h-8 rounded-full", theme === t.name ? 'ring-2 ring-primary ring-offset-2' : '')}
-                                                        onClick={() => setTheme(t.name)}>
+                                                        onClick={() => setTheme(t.name)}
+                                                    >
                                                         <div className={cn("w-5 h-5 rounded-full border", t.color)}/>
                                                     </Button>
                                                 </TooltipTrigger>
