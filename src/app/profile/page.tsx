@@ -210,37 +210,45 @@ export default function ProfilePage() {
             return;
         }
 
-        // ✅ KEY FIX: prefill.contact mein valid 10-digit number dena zaroori hai
-        // Razorpay tab phone screen skip karta hai aur direct pay options dikhata hai
-        // Agar user ka actual phone number available ho to use karo:
-        //   const userPhone = user?.phoneNumber?.replace('+91', '') || '9999999999';
-        const userPhone = '9999999999'; // fallback — phone screen skip ho jaata hai
+        // FIX: Phone screen completely bypass karo
+        // Razorpay ka contact screen tab aata hai jab prefill.contact empty ho.
+        // readonly + valid prefill se screen skip hoti hai lekin
+        // BEST approach: config.fields se contact field hide karo — 
+        // tab Razorpay us screen ko render hi nahi karta.
+
+        const userPhone =
+            (user as any)?.phoneNumber?.replace(/^\+91/, '') || '9000000000';
 
         const options = {
             key: RAZORPAY_KEY_ID,
-            amount: selectedTier.amount * 100, // paise mein
+            amount: selectedTier.amount * 100,
             currency: 'INR',
             name: 'Dairy Hub',
             description: `Donation - ${selectedTier.label} ${selectedTier.emoji}`,
             image: 'https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/IMG_9565.jpg?alt=media&token=e56e6c1f-aeb5-4a6f-a2ec-f797e4060d5e',
 
             prefill: {
-                name:    user?.displayName || '',
+                name:    user?.displayName || 'Dairy Hub User',
                 email:   user?.email       || '',
-                contact: userPhone,           // ← YEH HAI ASLI FIX 🔑
-                                              // Valid contact hone se Razorpay
-                                              // phone entry screen skip karta hai
-                                              // aur seedha payment options aate hain
+                contact: userPhone,
+            },
+
+            // contact + email fields ko readonly rakho — keyboard popup nahi hoga
+            readonly: {
+                contact: true,
+                email:   true,
+                name:    true,
             },
 
             notes: {
                 userId: user?.uid || 'anonymous',
             },
 
-            // ✅ config object se aur bhi control milta hai
             config: {
                 display: {
-                    language: 'en',           // consistent language
+                    language: 'en',
+                    // contact field hide karo — phone entry screen bypass
+                    hide: [{ key: 'contact' }],
                 },
             },
 
