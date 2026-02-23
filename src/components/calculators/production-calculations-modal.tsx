@@ -2516,332 +2516,601 @@ export const AdvancedBalancer = () => {
     </div>
   );
 };
-// ==================== BATCH SCALING & VERIFICATION CALCULATOR (Updated) ====================
+// ==================== BATCH SCALING & VERIFICATION CALCULATOR (UPGRADED v3) ====================
 
-// Types
-interface BatchIngredient {
-  id: number;
-  name: string;
-  amount: string;
-  unit: "kg" | "g";
-  percentage: string;
-}
+const IC_INGREDIENT_DB = {
+  "Milk (Full Fat 6%)":         { fat: 6.0,  snf: 9.0,  sugar: 0,    ts: 15.0 },
+  "Milk (Toned 3%)":            { fat: 3.0,  snf: 8.5,  sugar: 0,    ts: 11.5 },
+  "Milk (Buffalo 7%)":          { fat: 7.0,  snf: 9.2,  sugar: 0,    ts: 16.2 },
+  "Water":                      { fat: 0,    snf: 0,    sugar: 0,    ts: 0    },
+  "Cream (40% fat)":            { fat: 40.0, snf: 5.4,  sugar: 0,    ts: 45.4 },
+  "Cream (35% fat)":            { fat: 35.0, snf: 5.6,  sugar: 0,    ts: 40.6 },
+  "Cream (25% fat)":            { fat: 25.0, snf: 6.5,  sugar: 0,    ts: 31.5 },
+  "Veg Fat / Oil":              { fat: 99.5, snf: 0,    sugar: 0,    ts: 99.5 },
+  "Coconut Oil":                { fat: 99.9, snf: 0,    sugar: 0,    ts: 99.9 },
+  "Butter":                     { fat: 80.0, snf: 2.0,  sugar: 0,    ts: 82.0 },
+  "SMP (Skim Milk Powder)":     { fat: 0.5,  snf: 97.0, sugar: 0,    ts: 97.5 },
+  "WMP (Whole Milk Powder)":    { fat: 26.0, snf: 68.0, sugar: 0,    ts: 94.0 },
+  "Condensed Milk (Sweet)":     { fat: 8.5,  snf: 20.5, sugar: 44.5, ts: 73.5 },
+  "Sucrose":                    { fat: 0,    snf: 0,    sugar: 100,  ts: 100  },
+  "Dextrose (DE 100)":          { fat: 0,    snf: 0,    sugar: 91.0, ts: 91.0 },
+  "Maltodextrin (DE 18)":       { fat: 0,    snf: 0,    sugar: 10.0, ts: 95.0 },
+  "Invert Sugar (syrup)":       { fat: 0,    snf: 0,    sugar: 70.0, ts: 75.0 },
+  "Honey":                      { fat: 0.3,  snf: 0,    sugar: 80.0, ts: 82.0 },
+  "Karo Light Corn Syrup":      { fat: 0,    snf: 0,    sugar: 75.0, ts: 80.0 },
+  "Egg Yolks (fresh)":          { fat: 31.9, snf: 0,    sugar: 0,    ts: 51.0 },
+  "Egg Whites (fresh)":         { fat: 0.2,  snf: 0,    sugar: 0,    ts: 12.0 },
+  "Fruit 1 (Custom)":           { fat: 0,    snf: 0,    sugar: 12.0, ts: 14.0 },
+  "Fruit 2 (Custom)":           { fat: 0,    snf: 0,    sugar: 12.0, ts: 14.0 },
+  "Mango Pulp":                 { fat: 0.4,  snf: 0,    sugar: 14.0, ts: 17.0 },
+  "Strawberry Puree":           { fat: 0.3,  snf: 0,    sugar: 7.0,  ts: 9.0  },
+  "Cocoa Powder (10-12% fat)":  { fat: 11.0, snf: 0,    sugar: 0,    ts: 97.0 },
+  "Dark Chocolate (70%)":       { fat: 42.0, snf: 0,    sugar: 28.0, ts: 97.0 },
+  "Stabilizer Blend":           { fat: 0,    snf: 0,    sugar: 0,    ts: 95.0 },
+  "Emulsifier (GMS)":           { fat: 0,    snf: 0,    sugar: 0,    ts: 98.0 },
+  "Other (Custom)":             { fat: 0,    snf: 0,    sugar: 0,    ts: 0    },
+};
+
+const IC_CATEGORIES = {
+  "🥛 Dairy Base":    ["Milk (Full Fat 6%)", "Milk (Toned 3%)", "Milk (Buffalo 7%)", "Water"],
+  "🧴 Cream & Fat":  ["Cream (40% fat)", "Cream (35% fat)", "Cream (25% fat)", "Veg Fat / Oil", "Coconut Oil", "Butter"],
+  "🥛 Milk Solids":  ["SMP (Skim Milk Powder)", "WMP (Whole Milk Powder)", "Condensed Milk (Sweet)"],
+  "🍬 Sweeteners":   ["Sucrose", "Dextrose (DE 100)", "Maltodextrin (DE 18)", "Invert Sugar (syrup)", "Honey", "Karo Light Corn Syrup"],
+  "🥚 Eggs":         ["Egg Yolks (fresh)", "Egg Whites (fresh)"],
+  "🍓 Fruits":       ["Fruit 1 (Custom)", "Fruit 2 (Custom)", "Mango Pulp", "Strawberry Puree"],
+  "🍫 Flavor":       ["Cocoa Powder (10-12% fat)", "Dark Chocolate (70%)"],
+  "⚗️ Stabilizers": ["Stabilizer Blend", "Emulsifier (GMS)"],
+  "✏️ Custom":       ["Other (Custom)"],
+};
+
+// Optional target ingredients that user can add on demand
+const OPTIONAL_TARGET_OPTIONS = [
+  { key: "dextrose",     label: "Dextrose" },
+  { key: "maltodextrin", label: "Maltodextrin" },
+  { key: "invertSugar",  label: "Invert Sugar" },
+  { key: "honey",        label: "Honey" },
+  { key: "cornSyrup",    label: "Karo Corn Syrup" },
+  { key: "cocoa",        label: "Cocoa Powder" },
+  { key: "chocolate",    label: "Dark Chocolate" },
+  { key: "eggYolk",      label: "Egg Yolks" },
+  { key: "eggWhite",     label: "Egg Whites" },
+  { key: "mango",        label: "Mango Pulp" },
+  { key: "strawberry",   label: "Strawberry Puree" },
+  { key: "fruit1",       label: "Fruit 1 (Custom)" },
+  { key: "fruit2",       label: "Fruit 2 (Custom)" },
+  { key: "condensed",    label: "Condensed Milk" },
+  { key: "emulsifier",   label: "Emulsifier (GMS)" },
+];
+
+// Map optional key → DB ingredient name for fat/snf lookup
+const OPTIONAL_KEY_TO_DB = {
+  dextrose:     "Dextrose (DE 100)",
+  maltodextrin: "Maltodextrin (DE 18)",
+  invertSugar:  "Invert Sugar (syrup)",
+  honey:        "Honey",
+  cornSyrup:    "Karo Light Corn Syrup",
+  cocoa:        "Cocoa Powder (10-12% fat)",
+  chocolate:    "Dark Chocolate (70%)",
+  eggYolk:      "Egg Yolks (fresh)",
+  eggWhite:     "Egg Whites (fresh)",
+  mango:        "Mango Pulp",
+  strawberry:   "Strawberry Puree",
+  fruit1:       "Fruit 1 (Custom)",
+  fruit2:       "Fruit 2 (Custom)",
+  condensed:    "Condensed Milk (Sweet)",
+  emulsifier:   "Emulsifier (GMS)",
+};
+
+// Source ingredient dropdown options (for extra source rows)
+const EXTRA_SOURCE_OPTIONS = [
+  "Condensed Milk (Sweet)", "WMP (Whole Milk Powder)", "Butter",
+  "Coconut Oil", "Egg Yolks (fresh)", "Egg Whites (fresh)",
+  "Mango Pulp", "Strawberry Puree", "Fruit 1 (Custom)", "Fruit 2 (Custom)",
+  "Cocoa Powder (10-12% fat)", "Dark Chocolate (70%)",
+  "Stabilizer Blend", "Emulsifier (GMS)", "Other (Custom)",
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
 
 function BatchScalingCalc() {
   const { toast } = useToast();
-  
-  // --- STATE ---
-  const [activeTab, setActiveTab] = useState<"solver" | "verification" | "simple-scaling">("solver");
-  const [productType, setProductType] = useState<"ice-cream" | "frozen-dessert">("ice-cream");
-  
-  // Solver State
+
+  const [activeTab, setActiveTab] = useState("solver");
+  const [productType, setProductType] = useState("ice-cream");
   const [batchSize, setBatchSize] = useState("100");
-  const [targetComposition, setTargetComposition] = useState({
-    fat: "10",
-    snf: "11",
-    sugar: "14.5",
+
+  // Core target (always visible)
+  const [coreTarget, setCoreTarget] = useState({
+    fat:        "10",
+    snf:        "11",
+    sugar:      "14.5",
     stabilizer: "0.3",
   });
-  
+
+  // Optional target ingredients added by user: [{ key, label, value }]
+  const [optionalTargets, setOptionalTargets] = useState([]);
+
+  // Raw materials — 3 solver variables
   const [rawMaterials, setRawMaterials] = useState({
-    base: { name: "Milk", fat: "6.0", snf: "9.0" }, // Milk or Water
-    fatSource: { name: "Cream", fat: "40", snf: "5.4" }, // Cream or Veg Fat
-    smp: { name: "SMP", fat: "0.5", snf: "97" },
+    base:      { name: "Milk (Full Fat 6%)",     fat: "6.0",  snf: "9.0" },
+    fatSource: { name: "Cream (40% fat)",        fat: "40",   snf: "5.4" },
+    smp:       { name: "SMP (Skim Milk Powder)", fat: "0.5",  snf: "97"  },
   });
 
-  const [solverResult, setSolverResult] = useState<any[] | null>(null);
-  const [verificationSteps, setVerificationSteps] = useState<string[]>([]);
+  // Extra source ingredients added by user: [{ id, name, fat, snf, amount }]
+  const [extraSources, setExtraSources] = useState([]);
 
-  // Simple Scaling State
-  const [ingredients, setIngredients] = useState<BatchIngredient[]>([
-    { id: 1, name: "Milk", amount: "55", unit: "kg", percentage: "55" },
+  const [solverResult, setSolverResult]           = useState(null);
+  const [verificationSteps, setVerificationSteps] = useState([]);
+
+  // Manual tab rows
+  const [manualRows, setManualRows] = useState([
+    { id: 1, name: "Milk (Full Fat 6%)", amount: "55" },
   ]);
 
-  // --- HANDLE PRODUCT TYPE SWITCH ---
-  const handleProductTypeChange = (type: "ice-cream" | "frozen-dessert") => {
+  // ── Optional target dropdown state ──
+  const [showOptionalDropdown, setShowOptionalDropdown] = useState(false);
+  const [showExtraSourceDropdown, setShowExtraSourceDropdown] = useState(false);
+
+  // ── Helpers ───────────────────────────────────────────────────────────────
+
+  const setRM = (key, field, value) =>
+    setRawMaterials(prev => ({ ...prev, [key]: { ...prev[key], [field]: value } }));
+
+  const handleRMSelect = (key, selectedName) => {
+    const db = IC_INGREDIENT_DB[selectedName] || {};
+    setRawMaterials(prev => ({
+      ...prev,
+      [key]: { name: selectedName, fat: String(db.fat ?? prev[key].fat), snf: String(db.snf ?? prev[key].snf) },
+    }));
+  };
+
+  const handleProductTypeChange = (type) => {
     setProductType(type);
-    setSolverResult(null); // Reset results
+    setSolverResult(null);
+    setExtraSources([]);
     if (type === "ice-cream") {
       setRawMaterials({
-        base: { name: "Milk", fat: "6.0", snf: "9.0" },
-        fatSource: { name: "Cream", fat: "40", snf: "5.4" },
-        smp: { name: "SMP", fat: "0.5", snf: "97" }
+        base:      { name: "Milk (Full Fat 6%)",     fat: "6.0",  snf: "9.0" },
+        fatSource: { name: "Cream (40% fat)",        fat: "40",   snf: "5.4" },
+        smp:       { name: "SMP (Skim Milk Powder)", fat: "0.5",  snf: "97"  },
       });
     } else {
-      // Frozen Dessert Defaults (Water + Veg Fat)
       setRawMaterials({
-        base: { name: "Water", fat: "0", snf: "0" },
-        fatSource: { name: "Veg Fat/Oil", fat: "99.0", snf: "0" },
-        smp: { name: "SMP", fat: "0.5", snf: "97" }
+        base:      { name: "Water",                  fat: "0",    snf: "0"   },
+        fatSource: { name: "Veg Fat / Oil",          fat: "99.5", snf: "0"   },
+        smp:       { name: "SMP (Skim Milk Powder)", fat: "0.5",  snf: "97"  },
       });
     }
   };
 
-  // --- SIMPLE SCALING HANDLERS ---
-  const handleIngredientChange = (id: number, field: keyof BatchIngredient, value: string) => {
-    setIngredients(ingredients.map((ing) => (ing.id === id ? { ...ing, [field]: value } : ing)));
+  // Add optional target ingredient
+  const addOptionalTarget = (option) => {
+    if (optionalTargets.find(o => o.key === option.key)) return; // already added
+    setOptionalTargets(prev => [...prev, { ...option, value: "0" }]);
+    setShowOptionalDropdown(false);
   };
 
-  const addIngredient = () => {
-    setIngredients([...ingredients, { id: Date.now(), name: "", amount: "", unit: "kg", percentage: "" }]);
+  const removeOptionalTarget = (key) =>
+    setOptionalTargets(prev => prev.filter(o => o.key !== key));
+
+  const updateOptionalTarget = (key, value) =>
+    setOptionalTargets(prev => prev.map(o => o.key === key ? { ...o, value } : o));
+
+  // Add extra source ingredient
+  const addExtraSource = (name) => {
+    const db = IC_INGREDIENT_DB[name] || {};
+    setExtraSources(prev => [
+      ...prev,
+      { id: Date.now(), name, fat: String(db.fat ?? 0), snf: String(db.snf ?? 0) },
+    ]);
+    setShowExtraSourceDropdown(false);
   };
 
-  const removeIngredient = (id: number) => {
-    if (ingredients.length <= 1) return;
-    setIngredients(ingredients.filter((ing) => ing.id !== id));
+  const removeExtraSource = (id) =>
+    setExtraSources(prev => prev.filter(s => s.id !== id));
+
+  const updateExtraSource = (id, field, value) =>
+    setExtraSources(prev => prev.map(s => s.id === id ? { ...s, [field]: value } : s));
+
+  const handleExtraSourceSelect = (id, name) => {
+    const db = IC_INGREDIENT_DB[name] || {};
+    setExtraSources(prev => prev.map(s =>
+      s.id === id ? { ...s, name, fat: String(db.fat ?? 0), snf: String(db.snf ?? 0) } : s
+    ));
   };
 
-  // --- CORE LOGIC: SOLVER ---
+  // ── Categorized ingredient select ─────────────────────────────────────────
+  const IngredientSelect = ({ value, onChange, className = "" }) => (
+    <select
+      value={value}
+      onChange={e => onChange(e.target.value)}
+      className={`w-full border rounded-md px-2 py-1 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-indigo-400 ${className}`}
+    >
+      {Object.entries(IC_CATEGORIES).map(([cat, items]) => (
+        <optgroup key={cat} label={cat}>
+          {items.map(item => <option key={item} value={item}>{item}</option>)}
+        </optgroup>
+      ))}
+    </select>
+  );
+
+  // ── SOLVER LOGIC ──────────────────────────────────────────────────────────
   const solveIceCreamMix = useCallback(() => {
     const size = parseFloat(batchSize);
-    
-    // Inputs
-    const T_Fat = parseFloat(targetComposition.fat);
-    const T_Snf = parseFloat(targetComposition.snf);
-    const T_Sugar = parseFloat(targetComposition.sugar);
-    const T_Stab = parseFloat(targetComposition.stabilizer);
-
-    // Dynamic Sources based on product type
-    const M_f = parseFloat(rawMaterials.base.fat);
-    const M_s = parseFloat(rawMaterials.base.snf);
-    
-    const C_f = parseFloat(rawMaterials.fatSource.fat);
-    const C_s = parseFloat(rawMaterials.fatSource.snf);
-    
-    const S_f = parseFloat(rawMaterials.smp.fat);
-    const S_s = parseFloat(rawMaterials.smp.snf);
-
-    if ([size, T_Fat, T_Snf, T_Sugar, T_Stab, M_f, M_s, C_f, C_s, S_f, S_s].some(isNaN)) {
-      toast({ variant: "destructive", title: "Error", description: "All fields must be numbers." });
+    if (!size || size <= 0) {
+      toast({ variant: "destructive", title: "Error", description: "Invalid batch size." });
       return;
     }
 
-    // 1. Fixed Ingredients
-    const sugarQty = (T_Sugar / 100) * size;
-    const stabQty = (T_Stab / 100) * size;
-    const totalDairyMass = size - sugarQty - stabQty; 
-    const totalFatNeeded = (T_Fat / 100) * size;
-    const totalSnfNeeded = (T_Snf / 100) * size;
+    const T_Fat   = parseFloat(coreTarget.fat)        || 0;
+    const T_Snf   = parseFloat(coreTarget.snf)        || 0;
+    const T_Sugar = parseFloat(coreTarget.sugar)      || 0;
+    const T_Stab  = parseFloat(coreTarget.stabilizer) || 0;
 
-    // 2. Linear Equation Solver (Cramer's Rule)
-    // Variables: x=Base(Milk/Water), y=FatSource, z=SMP
-    // Eq 1: x + y + z = totalDairyMass
-    // Eq 2: M_f*x + C_f*y + S_f*z = totalFatNeeded * 100
-    // Eq 3: M_s*x + C_s*y + S_s*z = totalSnfNeeded * 100
+    const M_f = (parseFloat(rawMaterials.base.fat)      || 0) / 100;
+    const M_s = (parseFloat(rawMaterials.base.snf)      || 0) / 100;
+    const C_f = (parseFloat(rawMaterials.fatSource.fat) || 0) / 100;
+    const C_s = (parseFloat(rawMaterials.fatSource.snf) || 0) / 100;
+    const S_f = (parseFloat(rawMaterials.smp.fat)       || 0) / 100;
+    const S_s = (parseFloat(rawMaterials.smp.snf)       || 0) / 100;
 
-    const a1 = 1, b1 = 1, c1 = 1, d1 = totalDairyMass;
-    const a2 = M_f/100, b2 = C_f/100, c2 = S_f/100, d2 = totalFatNeeded;
-    const a3 = M_s/100, b3 = C_s/100, c3 = S_s/100, d3 = totalSnfNeeded;
+    // Build fixed ingredient list from core (sugar, stabilizer) + optional targets
+    const fixedList = [
+      { name: "Sucrose / Sugar", qty: (T_Sugar / 100) * size, dbKey: "Sucrose" },
+      { name: "Stabilizer",      qty: (T_Stab  / 100) * size, dbKey: "Stabilizer Blend" },
+      ...optionalTargets.map(o => ({
+        name:  o.label,
+        qty:   ((parseFloat(o.value) || 0) / 100) * size,
+        dbKey: OPTIONAL_KEY_TO_DB[o.key] || "Other (Custom)",
+      })),
+    ].filter(i => i.qty > 0);
 
-    const D = a1 * (b2 * c3 - c2 * b3) - b1 * (a2 * c3 - c2 * a3) + c1 * (a2 * b3 - b2 * a3);
+    // Extra source ingredients (user-added, treated as known quantities — BUT we don't
+    // have their kg amounts in the solver tab; we include them by percentage if provided.
+    // For now extra sources are informational only — solver solves the 3-var system after
+    // accounting for fixed target ingredients.)
 
-    if (Math.abs(D) < 0.000001) {
-      toast({ variant: "destructive", title: "Math Error", description: "Impossible combination of ingredients." });
+    let fixedTotal = 0, fixedFat = 0, fixedSnf = 0;
+    fixedList.forEach(({ qty, dbKey }) => {
+      const db = IC_INGREDIENT_DB[dbKey] || {};
+      fixedTotal += qty;
+      fixedFat   += qty * ((db.fat ?? 0) / 100);
+      fixedSnf   += qty * ((db.snf ?? 0) / 100);
+    });
+
+    const totalDairyMass = size         - fixedTotal;
+    const totalFatNeeded = (T_Fat / 100) * size - fixedFat;
+    const totalSnfNeeded = (T_Snf / 100) * size - fixedSnf;
+
+    if (totalDairyMass <= 0) {
+      toast({ variant: "destructive", title: "Error", description: "Fixed ingredients exceed batch size. Reduce percentages." });
       return;
     }
 
-    const baseQty = (d1 * (b2 * c3 - c2 * b3) - b1 * (d2 * c3 - c2 * d3) + c1 * (d2 * b3 - b2 * d3)) / D;
-    const fatSourceQty = (a1 * (d2 * c3 - c2 * d3) - d1 * (a2 * c3 - c2 * a3) + c1 * (a2 * d3 - d2 * a3)) / D;
-    const smpQty = (a1 * (b2 * d3 - d2 * b3) - b1 * (a2 * d3 - d2 * a3) + d1 * (a2 * b3 - b2 * a3)) / D;
+    // Cramer's Rule
+    const a1=1, b1=1, c1=1, d1=totalDairyMass;
+    const a2=M_f, b2=C_f, c2=S_f, d2=totalFatNeeded;
+    const a3=M_s, b3=C_s, c3=S_s, d3=totalSnfNeeded;
 
-    // 3. Verification Logic
+    const D = a1*(b2*c3-c2*b3) - b1*(a2*c3-c2*a3) + c1*(a2*b3-b2*a3);
+    if (Math.abs(D) < 1e-8) {
+      toast({ variant: "destructive", title: "Math Error", description: "Impossible ingredient combination." });
+      return;
+    }
+
+    const baseQty      = (d1*(b2*c3-c2*b3) - b1*(d2*c3-c2*d3) + c1*(d2*b3-b2*d3)) / D;
+    const fatSourceQty = (a1*(d2*c3-c2*d3) - d1*(a2*c3-c2*a3) + c1*(a2*d3-d2*a3)) / D;
+    const smpQty       = (a1*(b2*d3-d2*b3) - b1*(a2*d3-d2*a3) + d1*(a2*b3-b2*a3)) / D;
+
+    // Verification steps
     const steps = [];
-    steps.push(`🎯 **Target Batch:** ${size} kg (${productType === 'ice-cream' ? 'Ice Cream' : 'Frozen Dessert'})`);
-    steps.push(`🔹 **Fixed Solids:** Sugar (${sugarQty.toFixed(2)}kg) + Stabilizer (${stabQty.toFixed(2)}kg) = ${(sugarQty+stabQty).toFixed(2)}kg`);
-    steps.push(`🔹 **Base Mix Required:** ${totalDairyMass.toFixed(2)} kg`);
+    steps.push(`🎯 **Target Batch:** ${size} kg (${productType === "ice-cream" ? "Ice Cream" : "Frozen Dessert"})`);
+    fixedList.forEach(({ name, qty }) => steps.push(`🔹 **${name}:** ${qty.toFixed(2)} kg`));
+    steps.push(`🔹 **Fixed Total:** ${fixedTotal.toFixed(2)} kg`);
+    steps.push(`🔹 **Dairy / Base Mix Required:** ${totalDairyMass.toFixed(2)} kg`);
     steps.push(`---`);
-    
-    if (baseQty < 0 || fatSourceQty < 0 || smpQty < 0) {
-      steps.push(`⚠️ **WARNING:** Negative values detected. Inputs are mathematically impossible.`);
+
+    const neg = baseQty < -0.01 || fatSourceQty < -0.01 || smpQty < -0.01;
+    if (neg) {
+      steps.push(`⚠️ **WARNING:** Negative values — inputs are mathematically impossible.`);
     } else {
       steps.push(`✅ **Solution Found:**`);
-      steps.push(`${rawMaterials.base.name}: ${baseQty.toFixed(2)} kg`);
-      steps.push(`${rawMaterials.fatSource.name}: ${fatSourceQty.toFixed(2)} kg`);
-      steps.push(`${rawMaterials.smp.name}: ${smpQty.toFixed(2)} kg`);
+      steps.push(`${rawMaterials.base.name}: ${Math.max(0, baseQty).toFixed(2)} kg`);
+      steps.push(`${rawMaterials.fatSource.name}: ${Math.max(0, fatSourceQty).toFixed(2)} kg`);
+      steps.push(`${rawMaterials.smp.name}: ${Math.max(0, smpQty).toFixed(2)} kg`);
+      extraSources.forEach(s => steps.push(`ℹ️ ${s.name}: user-defined (add % or kg manually)`));
     }
 
     setVerificationSteps(steps);
     setSolverResult([
-      { name: rawMaterials.base.name, amount: baseQty, percent: (baseQty/size)*100 },
-      { name: rawMaterials.fatSource.name, amount: fatSourceQty, percent: (fatSourceQty/size)*100 },
-      { name: rawMaterials.smp.name, amount: smpQty, percent: (smpQty/size)*100 },
-      { name: "Sugar", amount: sugarQty, percent: T_Sugar },
-      { name: "Stabilizer", amount: stabQty, percent: T_Stab },
+      { name: rawMaterials.base.name,      amount: Math.max(0, baseQty),      percent: (Math.max(0, baseQty)      / size) * 100 },
+      { name: rawMaterials.fatSource.name, amount: Math.max(0, fatSourceQty), percent: (Math.max(0, fatSourceQty) / size) * 100 },
+      { name: rawMaterials.smp.name,       amount: Math.max(0, smpQty),       percent: (Math.max(0, smpQty)       / size) * 100 },
+      ...fixedList.map(({ name, qty }) => ({ name, amount: qty, percent: (qty / size) * 100 })),
     ]);
 
     toast({ title: "Calculated!", description: "Result updated below." });
-    
-    // REMOVED: setActiveTab("verification") -> User stays on result screen
+  }, [batchSize, coreTarget, optionalTargets, rawMaterials, extraSources, productType, toast]);
 
-  }, [batchSize, targetComposition, rawMaterials, productType, toast]);
+  // ── Manual tab ────────────────────────────────────────────────────────────
+  const handleManualChange   = (id, field, value) => setManualRows(p => p.map(r => r.id === id ? { ...r, [field]: value } : r));
+  const handleManualSelect   = (id, name)         => setManualRows(p => p.map(r => r.id === id ? { ...r, name } : r));
+  const addManualRow         = ()                  => setManualRows(p => [...p, { id: Date.now(), name: "Milk (Full Fat 6%)", amount: "" }]);
+  const removeManualRow      = (id)                => { if (manualRows.length > 1) setManualRows(p => p.filter(r => r.id !== id)); };
 
+  // Already-added optional keys (to hide from dropdown)
+  const addedKeys = optionalTargets.map(o => o.key);
+  const availableOptions = OPTIONAL_TARGET_OPTIONS.filter(o => !addedKeys.includes(o.key));
+
+  // Already-added extra source names
+  const addedSourceNames = extraSources.map(s => s.name);
+  const availableExtraSources = EXTRA_SOURCE_OPTIONS.filter(n => !addedSourceNames.includes(n));
+
+  // Total fixed %
+  const fixedPct = [
+    parseFloat(coreTarget.fat) || 0,
+    parseFloat(coreTarget.snf) || 0,
+    parseFloat(coreTarget.sugar) || 0,
+    parseFloat(coreTarget.stabilizer) || 0,
+    ...optionalTargets.map(o => parseFloat(o.value) || 0),
+  ].reduce((a, b) => a + b, 0);
+
+  const rmKeys = [
+    { key: "base",      label: "Base" },
+    { key: "fatSource", label: "Fat Src" },
+    { key: "smp",       label: "Solids" },
+  ];
+
+  // ── Render ────────────────────────────────────────────────────────────────
   return (
     <div className="w-full max-w-full space-y-4 p-1 sm:p-2 overflow-x-hidden">
       <Alert className="bg-indigo-50 border-indigo-200">
         <Beaker className="h-4 w-4 text-indigo-600" />
         <AlertTitle className="text-sm font-bold">Smart Batch Solver</AlertTitle>
         <AlertDescription className="text-xs">
-          Calculate recipes for Ice Cream (Milk) or Frozen Dessert (Water/Oil).
+          Calculate recipes for Ice Cream or Frozen Dessert. Add extra ingredients as needed.
         </AlertDescription>
       </Alert>
 
-      <Tabs value={activeTab} onValueChange={(v: any) => setActiveTab(v)} className="w-full">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-3 h-auto p-1 bg-muted/50">
-          <TabsTrigger value="solver" className="text-xs sm:text-sm py-2">Solver</TabsTrigger>
-          <TabsTrigger value="verification" className="text-xs sm:text-sm py-2">Verify</TabsTrigger>
+          <TabsTrigger value="solver"         className="text-xs sm:text-sm py-2">Solver</TabsTrigger>
+          <TabsTrigger value="verification"   className="text-xs sm:text-sm py-2">Verify</TabsTrigger>
           <TabsTrigger value="simple-scaling" className="text-xs sm:text-sm py-2">Manual</TabsTrigger>
         </TabsList>
 
-        {/* --- TAB 1: SOLVER --- */}
+        {/* ═══════════════════════════════════════
+            TAB 1 — SOLVER
+        ═══════════════════════════════════════ */}
         <TabsContent value="solver" className="space-y-4 animate-in fade-in-50">
-          
-          {/* Product Type Selector */}
-          <div className="flex justify-center mb-2">
-             <div className="bg-slate-100 p-1 rounded-lg flex gap-1">
-                <Button 
-                   size="sm" 
-                   variant={productType === 'ice-cream' ? 'default' : 'ghost'} 
-                   className={productType === 'ice-cream' ? 'bg-indigo-600 text-white' : 'text-slate-600'}
-                   onClick={() => handleProductTypeChange('ice-cream')}
-                >
-                   <IceCream2 className="w-4 h-4 mr-2"/> Ice Cream
-                </Button>
-                <Button 
-                   size="sm" 
-                   variant={productType === 'frozen-dessert' ? 'default' : 'ghost'}
-                   className={productType === 'frozen-dessert' ? 'bg-indigo-600 text-white' : 'text-slate-600'}
-                   onClick={() => handleProductTypeChange('frozen-dessert')}
-                >
-                   <Snowflake className="w-4 h-4 mr-2"/> Frozen Dessert
-                </Button>
-             </div>
+
+          {/* Product Type Toggle */}
+          <div className="flex justify-center">
+            <div className="bg-slate-100 p-1 rounded-lg flex gap-1">
+              <Button size="sm"
+                variant={productType === "ice-cream" ? "default" : "ghost"}
+                className={productType === "ice-cream" ? "bg-indigo-600 text-white" : "text-slate-600"}
+                onClick={() => handleProductTypeChange("ice-cream")}
+              >
+                <IceCream2 className="w-4 h-4 mr-2" /> Ice Cream
+              </Button>
+              <Button size="sm"
+                variant={productType === "frozen-dessert" ? "default" : "ghost"}
+                className={productType === "frozen-dessert" ? "bg-indigo-600 text-white" : "text-slate-600"}
+                onClick={() => handleProductTypeChange("frozen-dessert")}
+              >
+                <Snowflake className="w-4 h-4 mr-2" /> Frozen Dessert
+              </Button>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            
-            {/* Target Card */}
+
+            {/* ─── Target Composition Card ─── */}
             <Card className="border-indigo-100 shadow-sm">
               <CardHeader className="pb-2 p-3 sm:p-6">
                 <CardTitle className="text-sm font-medium flex items-center gap-2 text-indigo-700">
-                  <Settings2 className="w-4 h-4"/> Target Composition (%)
+                  <Settings2 className="w-4 h-4" /> Target Composition (%)
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-3 sm:p-6 pt-0 space-y-3">
+
+                {/* Core fields — always visible */}
                 <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <Label className="text-xs text-muted-foreground">Fat</Label>
-                    <Input 
-                      type="number" inputMode="decimal" className="h-9 text-sm"
-                      value={targetComposition.fat} 
-                      onChange={e => setTargetComposition({...targetComposition, fat: e.target.value})}
-                    />
+                  {[
+                    { key: "fat",        label: "Fat"       },
+                    { key: "snf",        label: "SNF"       },
+                    { key: "sugar",      label: "Sugar"     },
+                    { key: "stabilizer", label: "Stabilizer"},
+                  ].map(f => (
+                    <div key={f.key}>
+                      <Label className="text-xs text-muted-foreground">{f.label}</Label>
+                      <Input
+                        type="number" inputMode="decimal" className="h-9 text-sm"
+                        value={coreTarget[f.key]}
+                        onChange={e => setCoreTarget(prev => ({ ...prev, [f.key]: e.target.value }))}
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                {/* Optional added ingredients */}
+                {optionalTargets.length > 0 && (
+                  <div className="space-y-2 pt-1 border-t border-dashed border-indigo-100">
+                    {optionalTargets.map(o => (
+                      <div key={o.key} className="flex items-center gap-2">
+                        <Label className="text-xs text-muted-foreground w-28 shrink-0">{o.label}</Label>
+                        <Input
+                          type="number" inputMode="decimal"
+                          className="h-8 text-sm flex-1"
+                          placeholder="0"
+                          value={o.value}
+                          onChange={e => updateOptionalTarget(o.key, e.target.value)}
+                        />
+                        <button
+                          onClick={() => removeOptionalTarget(o.key)}
+                          className="text-red-400 hover:text-red-600 shrink-0"
+                          title="Remove"
+                        >
+                          <XCircle className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ))}
                   </div>
-                  <div>
-                    <Label className="text-xs text-muted-foreground">SNF</Label>
-                    <Input 
-                      type="number" inputMode="decimal" className="h-9 text-sm"
-                      value={targetComposition.snf} 
-                      onChange={e => setTargetComposition({...targetComposition, snf: e.target.value})}
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs text-muted-foreground">Sugar</Label>
-                    <Input 
-                      type="number" inputMode="decimal" className="h-9 text-sm"
-                      value={targetComposition.sugar} 
-                      onChange={e => setTargetComposition({...targetComposition, sugar: e.target.value})}
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs text-muted-foreground">Stabilizer</Label>
-                    <Input 
-                      type="number" inputMode="decimal" className="h-9 text-sm"
-                      value={targetComposition.stabilizer} 
-                      onChange={e => setTargetComposition({...targetComposition, stabilizer: e.target.value})}
-                    />
-                  </div>
+                )}
+
+                {/* + Add Ingredient dropdown for target */}
+                <div className="relative">
+                  <button
+                    onClick={() => setShowOptionalDropdown(p => !p)}
+                    className="w-full flex items-center justify-center gap-1 text-xs text-indigo-600 font-semibold border border-dashed border-indigo-300 rounded-md py-1.5 hover:bg-indigo-50 transition-colors"
+                  >
+                    <PlusCircle className="w-3.5 h-3.5" />
+                    Add Ingredient
+                  </button>
+
+                  {showOptionalDropdown && (
+                    <div className="absolute z-30 top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-lg shadow-xl overflow-hidden">
+                      {availableOptions.length === 0 ? (
+                        <div className="text-xs text-muted-foreground p-3 text-center">All ingredients added</div>
+                      ) : (
+                        <div className="max-h-52 overflow-y-auto divide-y divide-slate-50">
+                          {availableOptions.map(opt => (
+                            <button
+                              key={opt.key}
+                              onClick={() => addOptionalTarget(opt)}
+                              className="w-full text-left px-3 py-2 text-xs hover:bg-indigo-50 hover:text-indigo-700 transition-colors"
+                            >
+                              {opt.label}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                      <button
+                        onClick={() => setShowOptionalDropdown(false)}
+                        className="w-full text-xs text-muted-foreground py-1.5 bg-slate-50 hover:bg-slate-100 border-t"
+                      >
+                        Close ✕
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {/* Live % total */}
+                <div className={`text-xs font-semibold px-2 py-1 rounded ${fixedPct > 100 ? "bg-red-50 text-red-600" : "bg-slate-50 text-slate-500"}`}>
+                  Fixed % Total: {fixedPct.toFixed(1)}% {fixedPct > 100 && "⚠️ Exceeds 100%"}
                 </div>
               </CardContent>
             </Card>
 
-            {/* Source Specs Card (Dynamic) */}
+            {/* ─── Source Specs Card ─── */}
             <Card className="border-indigo-100 shadow-sm">
               <CardHeader className="pb-2 p-3 sm:p-6">
                 <CardTitle className="text-sm font-medium flex items-center gap-2 text-indigo-700">
-                  <Beaker className="w-4 h-4"/> 
-                  {productType === 'ice-cream' ? 'Dairy Inputs (%)' : 'FD Ingredients (%)'}
+                  <Beaker className="w-4 h-4" />
+                  {productType === "ice-cream" ? "Dairy Inputs (%)" : "FD Ingredients (%)"}
                 </CardTitle>
+                <CardDescription className="text-xs">Dropdown se select karen — Fat% & SNF% auto-fill honge.</CardDescription>
               </CardHeader>
-              <CardContent className="p-3 sm:p-6 pt-0 space-y-3">
-                
-                {/* Row 1: Base (Milk or Water) */}
-                <div className="flex items-center gap-2">
-                    <div className="w-20">
-                        <Label className="text-[10px] uppercase font-bold text-slate-500 block mb-1">Base</Label>
-                        <span className="text-xs font-semibold text-slate-800">{rawMaterials.base.name}</span>
-                    </div>
-                    <div className="flex-1">
-                      <Label className="text-[9px] text-muted-foreground">Fat %</Label>
-                      <Input 
-                        className="h-8 text-xs bg-slate-50"
-                        value={rawMaterials.base.fat} 
-                        onChange={e => setRawMaterials({...rawMaterials, base: {...rawMaterials.base, fat: e.target.value}})} 
-                        readOnly={productType === 'frozen-dessert'} // Water is 0
-                      />
-                    </div>
-                    <div className="flex-1">
-                      <Label className="text-[9px] text-muted-foreground">SNF %</Label>
-                      <Input 
-                        className="h-8 text-xs bg-slate-50"
-                        value={rawMaterials.base.snf} 
-                        onChange={e => setRawMaterials({...rawMaterials, base: {...rawMaterials.base, snf: e.target.value}})} 
-                        readOnly={productType === 'frozen-dessert'} // Water is 0
-                      />
-                    </div>
-                </div>
+              <CardContent className="p-3 sm:p-6 pt-0 space-y-4">
 
-                {/* Row 2: Fat Source (Cream or Oil) */}
-                <div className="flex items-center gap-2">
-                    <div className="w-20">
-                        <Label className="text-[10px] uppercase font-bold text-slate-500 block mb-1">Fat Src</Label>
-                        <span className="text-xs font-semibold text-slate-800 truncate block">{rawMaterials.fatSource.name}</span>
+                {/* 3 solver variables */}
+                {rmKeys.map(({ key, label }) => (
+                  <div key={key} className="space-y-1">
+                    <Label className="text-[10px] uppercase font-bold text-slate-500">{label}</Label>
+                    <IngredientSelect
+                      value={rawMaterials[key].name}
+                      onChange={name => handleRMSelect(key, name)}
+                      className="mb-1"
+                    />
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <Label className="text-[9px] text-muted-foreground">Fat %</Label>
+                        <Input
+                          className="h-8 text-xs bg-slate-50" type="number" inputMode="decimal"
+                          value={rawMaterials[key].fat}
+                          onChange={e => setRM(key, "fat", e.target.value)}
+                          readOnly={key === "base" && productType === "frozen-dessert"}
+                        />
+                      </div>
+                      <div>
+                        <Label className="text-[9px] text-muted-foreground">SNF %</Label>
+                        <Input
+                          className="h-8 text-xs bg-slate-50" type="number" inputMode="decimal"
+                          value={rawMaterials[key].snf}
+                          onChange={e => setRM(key, "snf", e.target.value)}
+                          readOnly={key === "base" && productType === "frozen-dessert"}
+                        />
+                      </div>
                     </div>
-                    <div className="flex-1">
-                      <Input 
-                        className="h-8 text-xs"
-                        value={rawMaterials.fatSource.fat} 
-                        onChange={e => setRawMaterials({...rawMaterials, fatSource: {...rawMaterials.fatSource, fat: e.target.value}})} 
-                      />
-                    </div>
-                    <div className="flex-1">
-                      <Input 
-                        className="h-8 text-xs"
-                        value={rawMaterials.fatSource.snf} 
-                        onChange={e => setRawMaterials({...rawMaterials, fatSource: {...rawMaterials.fatSource, snf: e.target.value}})} 
-                      />
-                    </div>
-                </div>
+                  </div>
+                ))}
 
-                {/* Row 3: SMP */}
-                <div className="flex items-center gap-2">
-                    <div className="w-20">
-                        <Label className="text-[10px] uppercase font-bold text-slate-500 block mb-1">Solids</Label>
-                        <span className="text-xs font-semibold text-slate-800">{rawMaterials.smp.name}</span>
+                {/* Extra source ingredients added by user */}
+                {extraSources.length > 0 && (
+                  <div className="space-y-3 pt-1 border-t border-dashed border-indigo-100">
+                    {extraSources.map(src => (
+                      <div key={src.id} className="space-y-1">
+                        <div className="flex items-center justify-between">
+                          <Label className="text-[10px] uppercase font-bold text-slate-500">Extra</Label>
+                          <button onClick={() => removeExtraSource(src.id)} className="text-red-400 hover:text-red-600">
+                            <XCircle className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                        <IngredientSelect
+                          value={src.name}
+                          onChange={name => handleExtraSourceSelect(src.id, name)}
+                          className="mb-1"
+                        />
+                        <div className="grid grid-cols-2 gap-2">
+                          <div>
+                            <Label className="text-[9px] text-muted-foreground">Fat %</Label>
+                            <Input className="h-8 text-xs" type="number" inputMode="decimal"
+                              value={src.fat} onChange={e => updateExtraSource(src.id, "fat", e.target.value)} />
+                          </div>
+                          <div>
+                            <Label className="text-[9px] text-muted-foreground">SNF %</Label>
+                            <Input className="h-8 text-xs" type="number" inputMode="decimal"
+                              value={src.snf} onChange={e => updateExtraSource(src.id, "snf", e.target.value)} />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* + Add Ingredient dropdown for sources */}
+                <div className="relative">
+                  <button
+                    onClick={() => setShowExtraSourceDropdown(p => !p)}
+                    className="w-full flex items-center justify-center gap-1 text-xs text-indigo-600 font-semibold border border-dashed border-indigo-300 rounded-md py-1.5 hover:bg-indigo-50 transition-colors"
+                  >
+                    <PlusCircle className="w-3.5 h-3.5" />
+                    Add Ingredient
+                  </button>
+
+                  {showExtraSourceDropdown && (
+                    <div className="absolute z-30 top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-lg shadow-xl overflow-hidden">
+                      <div className="max-h-52 overflow-y-auto divide-y divide-slate-50">
+                        {availableExtraSources.map(name => (
+                          <button
+                            key={name}
+                            onClick={() => addExtraSource(name)}
+                            className="w-full text-left px-3 py-2 text-xs hover:bg-indigo-50 hover:text-indigo-700 transition-colors"
+                          >
+                            {name}
+                          </button>
+                        ))}
+                      </div>
+                      <button
+                        onClick={() => setShowExtraSourceDropdown(false)}
+                        className="w-full text-xs text-muted-foreground py-1.5 bg-slate-50 hover:bg-slate-100 border-t"
+                      >
+                        Close ✕
+                      </button>
                     </div>
-                    <div className="flex-1">
-                      <Input 
-                        className="h-8 text-xs"
-                        value={rawMaterials.smp.fat} 
-                        onChange={e => setRawMaterials({...rawMaterials, smp: {...rawMaterials.smp, fat: e.target.value}})} 
-                      />
-                    </div>
-                    <div className="flex-1">
-                      <Input 
-                        className="h-8 text-xs"
-                        value={rawMaterials.smp.snf} 
-                        onChange={e => setRawMaterials({...rawMaterials, smp: {...rawMaterials.smp, snf: e.target.value}})} 
-                      />
-                    </div>
+                  )}
                 </div>
 
               </CardContent>
@@ -2850,125 +3119,131 @@ function BatchScalingCalc() {
 
           {/* Action Bar */}
           <div className="bg-white p-3 rounded-lg border shadow-sm flex flex-col sm:flex-row items-end sm:items-center gap-3">
-             <div className="w-full sm:w-1/2">
-                <Label className="text-xs font-bold uppercase text-muted-foreground">Total Batch Size (kg)</Label>
-                <Input 
-                  type="number" inputMode="decimal"
-                  className="bg-indigo-50/50 text-lg font-bold mt-1 h-10 border-indigo-200" 
-                  value={batchSize} 
-                  onChange={e => setBatchSize(e.target.value)}
-                />
-             </div>
-             <Button 
-                onClick={solveIceCreamMix} 
-                className="w-full sm:w-auto h-10 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold shadow-md active:scale-95 transition-transform"
-             >
-                <Calculator className="w-4 h-4 mr-2" /> Calculate
-             </Button>
+            <div className="w-full sm:w-1/2">
+              <Label className="text-xs font-bold uppercase text-muted-foreground">Total Batch Size (kg)</Label>
+              <Input
+                type="number" inputMode="decimal"
+                className="bg-indigo-50/50 text-lg font-bold mt-1 h-10 border-indigo-200"
+                value={batchSize}
+                onChange={e => setBatchSize(e.target.value)}
+              />
+            </div>
+            <Button
+              onClick={solveIceCreamMix}
+              className="w-full sm:w-auto h-10 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold shadow-md active:scale-95 transition-transform"
+            >
+              <Calculator className="w-4 h-4 mr-2" /> Calculate
+            </Button>
           </div>
 
+          {/* Result Table */}
           {solverResult && (
             <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-200 shadow-md animate-in slide-in-from-bottom-2">
-               <CardHeader className="p-4 pb-2">
-                  <CardTitle className="text-base text-green-800 flex justify-between items-center">
-                    <span>Final Formula</span>
-                    <Badge variant="outline" className="bg-white text-green-700 border-green-300">
-                        {productType === 'ice-cream' ? 'Ice Cream' : 'Frozen Dessert'}
-                    </Badge>
-                  </CardTitle>
-               </CardHeader>
-               <CardContent className="p-0">
-                  <div className="overflow-x-auto">
-                    <Table>
-                      <TableHeader>
-                        <TableRow className="border-green-200 hover:bg-transparent">
-                          <TableHead className="text-xs font-bold text-green-900 h-9">Ingredient</TableHead>
-                          <TableHead className="text-xs font-bold text-green-900 text-right h-9">Kg</TableHead>
-                          <TableHead className="text-xs font-bold text-green-900 text-right h-9">%</TableHead>
+              <CardHeader className="p-4 pb-2">
+                <CardTitle className="text-base text-green-800 flex justify-between items-center">
+                  <span>Final Formula</span>
+                  <Badge variant="outline" className="bg-white text-green-700 border-green-300">
+                    {productType === "ice-cream" ? "Ice Cream" : "Frozen Dessert"}
+                  </Badge>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-0">
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="border-green-200 hover:bg-transparent">
+                        <TableHead className="text-xs font-bold text-green-900 h-9">Ingredient</TableHead>
+                        <TableHead className="text-xs font-bold text-green-900 text-right h-9">Kg</TableHead>
+                        <TableHead className="text-xs font-bold text-green-900 text-right h-9">%</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {solverResult.map((res, i) => (
+                        <TableRow key={i} className="border-green-100 hover:bg-green-100/50">
+                          <TableCell className="py-2 text-xs font-medium">{res.name}</TableCell>
+                          <TableCell className="py-2 text-right text-sm font-bold">{res.amount.toFixed(2)}</TableCell>
+                          <TableCell className="py-2 text-right text-xs text-muted-foreground">{res.percent.toFixed(1)}%</TableCell>
                         </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {solverResult.map((res, i) => (
-                          <TableRow key={i} className="border-green-100 hover:bg-green-100/50">
-                            <TableCell className="py-2 text-xs font-medium">{res.name}</TableCell>
-                            <TableCell className="py-2 text-right text-sm font-bold">{res.amount.toFixed(2)}</TableCell>
-                            <TableCell className="py-2 text-right text-xs text-muted-foreground">{res.percent.toFixed(1)}%</TableCell>
-                          </TableRow>
-                        ))}
-                        <TableRow className="bg-green-200/50 font-bold border-t-2 border-green-300">
-                          <TableCell className="py-2 text-xs">Total</TableCell>
-                          <TableCell className="py-2 text-right text-sm">{solverResult.reduce((a: any, b: any) => a + b.amount, 0).toFixed(2)}</TableCell>
-                          <TableCell className="py-2 text-right text-xs">100%</TableCell>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
-                  </div>
-               </CardContent>
+                      ))}
+                      <TableRow className="bg-green-200/50 font-bold border-t-2 border-green-300">
+                        <TableCell className="py-2 text-xs">Total</TableCell>
+                        <TableCell className="py-2 text-right text-sm">
+                          {solverResult.reduce((a, b) => a + b.amount, 0).toFixed(2)}
+                        </TableCell>
+                        <TableCell className="py-2 text-right text-xs">100%</TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </div>
+              </CardContent>
             </Card>
           )}
         </TabsContent>
 
-        {/* --- TAB 2: VERIFICATION --- */}
+        {/* ═══════════════════════════════════════
+            TAB 2 — VERIFICATION
+        ═══════════════════════════════════════ */}
         <TabsContent value="verification" className="space-y-4">
           <Card className="border-2 border-dashed border-gray-300 bg-gray-50/50">
-             <CardHeader className="p-4">
-                <CardTitle className="text-base flex items-center gap-2">
-                   <FileText className="w-4 h-4 text-blue-600"/> Calculation Process
-                </CardTitle>
-             </CardHeader>
-             <CardContent className="p-4 pt-0 space-y-2">
-                {verificationSteps.length > 0 ? (
-                  <div className="text-xs sm:text-sm font-mono space-y-2 bg-white p-3 rounded border">
-                    {verificationSteps.map((step, idx) => (
-                       <div key={idx} className={cn(
-                          "leading-relaxed",
-                          step.includes("**") ? "font-bold text-gray-800" : "text-gray-600",
-                          step.includes("WARNING") ? "text-red-600" : "",
-                          step.includes("Solution Found") ? "text-green-600 text-base border-t pt-2 mt-2" : ""
-                       )}>
-                         {step.replace(/\*\*/g, '')}
-                       </div>
-                    ))}
-                  </div>
-                ) : (
-                   <div className="text-center py-8 text-muted-foreground text-sm">
-                      Press "Calculate" in Solver tab to see steps.
-                   </div>
-                )}
-             </CardContent>
+            <CardHeader className="p-4">
+              <CardTitle className="text-base flex items-center gap-2">
+                <FileText className="w-4 h-4 text-blue-600" /> Calculation Process
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-4 pt-0 space-y-2">
+              {verificationSteps.length > 0 ? (
+                <div className="text-xs sm:text-sm font-mono space-y-2 bg-white p-3 rounded border">
+                  {verificationSteps.map((step, idx) => (
+                    <div key={idx} className={cn(
+                      "leading-relaxed",
+                      step.includes("**")             ? "font-bold text-gray-800"                     : "text-gray-600",
+                      step.includes("WARNING")        ? "text-red-600"                                 : "",
+                      step.includes("Solution Found") ? "text-green-600 text-base border-t pt-2 mt-2" : "",
+                    )}>
+                      {step.replace(/\*\*/g, "")}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8 text-muted-foreground text-sm">
+                  Press "Calculate" in Solver tab to see steps.
+                </div>
+              )}
+            </CardContent>
           </Card>
         </TabsContent>
 
-        {/* --- TAB 3: SIMPLE SCALING --- */}
+        {/* ═══════════════════════════════════════
+            TAB 3 — MANUAL
+        ═══════════════════════════════════════ */}
         <TabsContent value="simple-scaling" className="space-y-4">
-             <Card className="bg-slate-50 border-slate-200">
-               <CardHeader className="p-4 pb-2"><CardTitle className="text-sm text-slate-600">Manual Entry</CardTitle></CardHeader>
-               <CardContent className="p-4 space-y-3">
-               {ingredients.map((ing) => (
-                <div key={ing.id} className="flex gap-2 items-center">
-                   <Input 
-                    placeholder="Name" 
-                    className="h-9 text-sm"
-                    value={ing.name} 
-                    onChange={(e) => handleIngredientChange(ing.id, "name", e.target.value)}
-                   />
-                   <Input 
-                    placeholder="Kg" 
-                    type="number"
-                    className="h-9 text-sm w-20"
-                    value={ing.amount} 
-                    onChange={(e) => handleIngredientChange(ing.id, "amount", e.target.value)}
-                   />
-                   <Button variant="ghost" size="icon" className="h-9 w-9 text-red-500" onClick={() => removeIngredient(ing.id)}>
-                     <XCircle className="w-4 h-4"/>
-                   </Button>
+          <Card className="bg-slate-50 border-slate-200">
+            <CardHeader className="p-4 pb-2">
+              <CardTitle className="text-sm text-slate-600">Manual Entry</CardTitle>
+            </CardHeader>
+            <CardContent className="p-4 space-y-3">
+              {manualRows.map(row => (
+                <div key={row.id} className="space-y-1">
+                  <IngredientSelect value={row.name} onChange={name => handleManualSelect(row.id, name)} />
+                  <div className="flex gap-2 items-center">
+                    <Input
+                      placeholder="Kg" type="number"
+                      className="h-9 text-sm"
+                      value={row.amount}
+                      onChange={e => handleManualChange(row.id, "amount", e.target.value)}
+                    />
+                    <Button variant="ghost" size="icon" className="h-9 w-9 text-red-500" onClick={() => removeManualRow(row.id)}>
+                      <XCircle className="w-4 h-4" />
+                    </Button>
+                  </div>
                 </div>
-               ))}
-               <Button variant="outline" size="sm" onClick={addIngredient} className="w-full mt-2 h-9 border-dashed border-slate-400">
-                 <PlusCircle className="w-4 h-4 mr-2"/> Add Row
-               </Button>
-               </CardContent>
-             </Card>
+              ))}
+              <Button variant="outline" size="sm" onClick={addManualRow}
+                className="w-full mt-2 h-9 border-dashed border-slate-400">
+                <PlusCircle className="w-4 h-4 mr-2" /> Add Row
+              </Button>
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
     </div>
