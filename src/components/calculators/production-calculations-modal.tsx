@@ -20,7 +20,6 @@ import {
   ArrowLeft,
   Percent,
   ChevronsUp,
-  Target,
   Droplets,
   Info,
   Weight,
@@ -42,13 +41,28 @@ import {
   Beaker,
   Settings2,
   Calculator,
-  BadgeIndianRupee, // <--- YE ADD KAREIN
-  Snowflake,
+  BadgeIndianRupee,
   IceCream2,
   PieChart,
   ArrowRight,
-  LayoutDashboard, // <--- YE ADD KAREIN
-  Package,         // <--- YE BHI ADD KAREIN
+  LayoutDashboard,
+  Package,
+  Flame,
+  Snowflake,
+  Milk,
+  Target,
+  // 👇 New Icons for Advanced Calculators 👇
+  Ruler,         // Tank Dipstick
+  PackageOpen,   // Packaging Film
+  Cylinder,      // Pipeline Volume
+  Recycle,       // Recombined Milk
+  Pipette,       // Culture Dosing
+  Trash2,        // ETP Waste
+  Box,           // Cold Storage
+  Truck,         // Dispatch Logistics
+  Activity,      // Suite Header
+  FlaskConical,  // Lab SNF
+  Banknote       // Rate Calculation
 } from "lucide-react";
 import {
   Select,
@@ -954,82 +968,2807 @@ function PaneerYieldCalc() {
     </Card>
   );
 }
+// ============================================================
+// 4 NEW DAIRY PRODUCTION CALCULATORS
+// Drop these into your YieldsCalc calculators object
+// ============================================================
 
-// ==================== ENHANCED YIELDS CALCULATOR ====================
+// ════════════════════════════════════════════════════════════
+// CALCULATOR 1: CIP (Clean-In-Place) Chemical Dosing
+// ════════════════════════════════════════════════════════════
+function CIPChemicalCalc() {
+  const { toast } = useToast();
+
+  const [inputs, setInputs] = useState({
+    systemVolume:     "500",   // L — total pipe + vessel volume
+    causticConc:      "1.5",   // % target NaOH concentration
+    acidConc:         "1.0",   // % target HNO3 / phosphoric
+    causticStock:     "50",    // % NaOH stock solution strength
+    acidStock:        "60",    // % acid stock solution strength
+    causticTemp:      "75",    // °C recommended
+    acidTemp:         "60",    // °C
+    causticTime:      "20",    // min
+    acidTime:         "15",    // min
+    rinseVolume:      "200",   // L per rinse
+    rinseCount:       "3",     // number of rinses
+    causticDensity:   "1.53",  // kg/L for 50% NaOH
+    acidDensity:      "1.37",  // kg/L for 60% HNO3
+    causticCostPerKg: "35",    // ₹/kg
+    acidCostPerKg:    "85",    // ₹/kg
+    waterCostPerL:    "0.05",  // ₹/L
+    cyclesPerDay:     "2",
+    workingDays:      "26",
+  });
+
+  const [result, setResult] = useState(null);
+  const [showSteps, setShowSteps] = useState(false);
+
+  const set = (k, v) => setInputs(p => ({ ...p, [k]: v }));
+
+  const calculate = useCallback(() => {
+    const V      = parseFloat(inputs.systemVolume)     || 0;
+    const Cc     = parseFloat(inputs.causticConc)      / 100;
+    const Ac     = parseFloat(inputs.acidConc)         / 100;
+    const Cs     = parseFloat(inputs.causticStock)     / 100;
+    const As     = parseFloat(inputs.acidStock)        / 100;
+    const Cd     = parseFloat(inputs.causticDensity)   || 1.53;
+    const Ad     = parseFloat(inputs.acidDensity)      || 1.37;
+    const Cp     = parseFloat(inputs.causticCostPerKg) || 0;
+    const Ap     = parseFloat(inputs.acidCostPerKg)    || 0;
+    const Wp     = parseFloat(inputs.waterCostPerL)    || 0;
+    const Rv     = parseFloat(inputs.rinseVolume)      || 0;
+    const Rn     = parseFloat(inputs.rinseCount)       || 0;
+    const cycles = parseFloat(inputs.cyclesPerDay)     || 1;
+    const days   = parseFloat(inputs.workingDays)      || 26;
+
+    if (V <= 0) { toast({ variant: "destructive", title: "Error", description: "System volume must be > 0" }); return; }
+    if (Cs <= Cc) { toast({ variant: "destructive", title: "Error", description: "Stock NaOH% must be > target%" }); return; }
+    if (As <= Ac) { toast({ variant: "destructive", title: "Error", description: "Stock acid% must be > target%" }); return; }
+
+    // C1V1 = C2V2  →  stock required = (target% × circuit volume) / stock%
+    // Volume of stock to add (L)
+    const causticStockVol = (Cc * V) / Cs;          // L of stock NaOH
+    const acidStockVol    = (Ac * V) / As;           // L of stock acid
+    const waterForCaustic = V - causticStockVol;     // makeup water
+    const waterForAcid    = V - acidStockVol;
+
+    // Mass of actual chemical
+    const causticMassKg   = causticStockVol * Cd * Cs;   // kg pure NaOH
+    const acidMassKg      = acidStockVol    * Ad * As;   // kg pure acid
+
+    // Cost per cycle
+    const causticCost = causticMassKg * Cp;
+    const acidCost    = acidMassKg    * Ap;
+    const rinseWater  = Rv * Rn;
+    const waterCost   = (waterForCaustic + waterForAcid + rinseWater) * Wp;
+    const totalCycleChemCost = causticCost + acidCost + waterCost;
+
+    // Monthly cost
+    const monthlyCycles = cycles * days;
+    const monthlyCost   = totalCycleChemCost * monthlyCycles;
+    const totalWaterPerCycle = waterForCaustic + waterForAcid + rinseWater;
+
+    // Titration verification
+    const causticTitreCheck = (causticStockVol * Cs * 1000) / (40.0 * V); // mol/L NaOH
+    const normality = causticTitreCheck;
+
+    const warnings = [];
+    if (parseFloat(inputs.causticTemp) < 70) warnings.push("NaOH temp below 70°C — fat removal may be incomplete. Recommend 75–85°C.");
+    if (parseFloat(inputs.acidTemp) < 55) warnings.push("Acid temp below 55°C — mineral deposit removal may be poor. Recommend 60–70°C.");
+    if (parseFloat(inputs.causticConc) > 3) warnings.push("NaOH > 3% — check equipment material compatibility (rubber seals).");
+    if (parseFloat(inputs.rinseCount) < 2) warnings.push("Less than 2 rinses — residual chemical risk. Recommend minimum 3 rinses.");
+
+    setResult({
+      causticStockVol, acidStockVol,
+      waterForCaustic, waterForAcid,
+      causticMassKg, acidMassKg,
+      causticCost, acidCost, waterCost,
+      totalCycleChemCost, monthlyCost,
+      rinseWater, totalWaterPerCycle,
+      normality, monthlyCycles, warnings,
+    });
+
+    toast({ title: "CIP Calculated", description: `Cycle cost: ₹${totalCycleChemCost.toFixed(2)} | Monthly: ₹${monthlyCost.toFixed(0)}` });
+  }, [inputs, toast]);
+
+  const InputRow = ({ label, k, suffix, help }) => (
+    <div className="space-y-1">
+      <Label className="text-xs font-semibold text-slate-600 flex justify-between">
+        {label} {suffix && <span className="text-muted-foreground font-normal">{suffix}</span>}
+      </Label>
+      <Input type="number" inputMode="decimal" className="h-8 text-sm"
+        value={inputs[k]} onChange={e => set(k, e.target.value)} />
+      {help && <p className="text-[10px] text-muted-foreground">{help}</p>}
+    </div>
+  );
+
+  return (
+    <div className="space-y-4 w-full">
+      <Alert className="bg-orange-50 border-orange-200">
+        <Beaker className="h-4 w-4 text-orange-600" />
+        <AlertTitle className="text-sm font-bold">CIP Chemical Dosing Calculator</AlertTitle>
+        <AlertDescription className="text-xs">
+          Calculate exact NaOH & acid volumes using C₁V₁ = C₂V₂. Accurate chemical cost per cycle and monthly.
+        </AlertDescription>
+      </Alert>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Column 1: System */}
+        <Card className="border-orange-100">
+          <CardHeader className="p-3 pb-2 bg-orange-50 rounded-t-lg">
+            <CardTitle className="text-xs font-bold text-orange-700 uppercase tracking-wider flex items-center gap-2">
+              <Factory className="w-3 h-3" /> System Parameters
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-3 space-y-2">
+            <InputRow label="Circuit Volume" k="systemVolume" suffix="L" help="Total pipe + vessel + balance tank volume" />
+            <InputRow label="CIP Cycles / Day" k="cyclesPerDay" suffix="times" />
+            <InputRow label="Working Days / Month" k="workingDays" suffix="days" />
+            <InputRow label="Rinse Volume / Rinse" k="rinseVolume" suffix="L" />
+            <InputRow label="Number of Rinses" k="rinseCount" suffix="cycles" help="Min 2 pre + 1 post recommended" />
+          </CardContent>
+        </Card>
+
+        {/* Column 2: Chemicals */}
+        <Card className="border-red-100">
+          <CardHeader className="p-3 pb-2 bg-red-50 rounded-t-lg">
+            <CardTitle className="text-xs font-bold text-red-700 uppercase tracking-wider flex items-center gap-2">
+              <Droplets className="w-3 h-3" /> Chemical Specifications
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-3 space-y-2">
+            <div className="text-[10px] font-bold text-slate-500 uppercase border-b pb-1">Caustic (NaOH)</div>
+            <InputRow label="Target Conc" k="causticConc" suffix="%" help="Typically 1.0–2.5%" />
+            <InputRow label="Stock Strength" k="causticStock" suffix="%" help="Usually 30–50% liquid" />
+            <InputRow label="Temp" k="causticTemp" suffix="°C" />
+            <InputRow label="Contact Time" k="causticTime" suffix="min" />
+            <div className="text-[10px] font-bold text-slate-500 uppercase border-b pb-1 mt-2">Acid (HNO₃ / Phosphoric)</div>
+            <InputRow label="Target Conc" k="acidConc" suffix="%" help="Typically 0.5–1.5%" />
+            <InputRow label="Stock Strength" k="acidStock" suffix="%" />
+            <InputRow label="Temp" k="acidTemp" suffix="°C" />
+            <InputRow label="Contact Time" k="acidTime" suffix="min" />
+          </CardContent>
+        </Card>
+
+        {/* Column 3: Cost */}
+        <Card className="border-green-100">
+          <CardHeader className="p-3 pb-2 bg-green-50 rounded-t-lg">
+            <CardTitle className="text-xs font-bold text-green-700 uppercase tracking-wider flex items-center gap-2">
+              <DollarSign className="w-3 h-3" /> Cost Inputs
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-3 space-y-2">
+            <InputRow label="NaOH Stock Cost" k="causticCostPerKg" suffix="₹/kg" />
+            <InputRow label="NaOH Stock Density" k="causticDensity" suffix="kg/L" help="50% NaOH ≈ 1.53 kg/L" />
+            <InputRow label="Acid Stock Cost" k="acidCostPerKg" suffix="₹/kg" />
+            <InputRow label="Acid Stock Density" k="acidDensity" suffix="kg/L" help="60% HNO₃ ≈ 1.37 kg/L" />
+            <InputRow label="Water Cost" k="waterCostPerL" suffix="₹/L" />
+          </CardContent>
+        </Card>
+      </div>
+
+      <Button onClick={calculate} className="w-full h-11 bg-orange-600 hover:bg-orange-700 text-white font-bold shadow-md">
+        <Calculator className="w-4 h-4 mr-2" /> Calculate CIP Dosing
+      </Button>
+
+      {result && (
+        <div className="space-y-4 animate-in slide-in-from-bottom-2">
+          {result.warnings.length > 0 && (
+            <Alert className="border-yellow-300 bg-yellow-50">
+              <AlertTriangle className="h-4 w-4 text-yellow-600" />
+              <AlertTitle className="text-yellow-800 text-sm">Process Warnings</AlertTitle>
+              <AlertDescription className="text-xs space-y-1">
+                {result.warnings.map((w, i) => <div key={i}>⚠️ {w}</div>)}
+              </AlertDescription>
+            </Alert>
+          )}
+
+          {/* Dosing Results */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Card className="border-red-200 bg-red-50">
+              <CardHeader className="p-3 pb-1">
+                <CardTitle className="text-sm text-red-800">🧪 Caustic (NaOH) Dosing</CardTitle>
+              </CardHeader>
+              <CardContent className="p-3 space-y-2 text-sm">
+                <div className="flex justify-between"><span className="text-slate-600">Stock to add</span><span className="font-bold text-red-700">{result.causticStockVol.toFixed(2)} L</span></div>
+                <div className="flex justify-between"><span className="text-slate-600">Makeup water</span><span className="font-bold">{result.waterForCaustic.toFixed(2)} L</span></div>
+                <div className="flex justify-between"><span className="text-slate-600">Pure NaOH</span><span className="font-bold">{result.causticMassKg.toFixed(3)} kg</span></div>
+                <div className="flex justify-between border-t pt-1"><span className="text-slate-600">Normality check</span><span className="font-bold text-orange-600">{result.normality.toFixed(4)} N</span></div>
+                <div className="flex justify-between"><span className="text-slate-600">Cost / cycle</span><span className="font-bold text-green-700">₹ {result.causticCost.toFixed(2)}</span></div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-blue-200 bg-blue-50">
+              <CardHeader className="p-3 pb-1">
+                <CardTitle className="text-sm text-blue-800">🧪 Acid (HNO₃) Dosing</CardTitle>
+              </CardHeader>
+              <CardContent className="p-3 space-y-2 text-sm">
+                <div className="flex justify-between"><span className="text-slate-600">Stock to add</span><span className="font-bold text-blue-700">{result.acidStockVol.toFixed(2)} L</span></div>
+                <div className="flex justify-between"><span className="text-slate-600">Makeup water</span><span className="font-bold">{result.waterForAcid.toFixed(2)} L</span></div>
+                <div className="flex justify-between"><span className="text-slate-600">Pure acid</span><span className="font-bold">{result.acidMassKg.toFixed(3)} kg</span></div>
+                <div className="flex justify-between border-t pt-1"><span className="text-slate-600">Rinse water (all)</span><span className="font-bold">{result.rinseWater.toFixed(1)} L</span></div>
+                <div className="flex justify-between"><span className="text-slate-600">Cost / cycle</span><span className="font-bold text-green-700">₹ {result.acidCost.toFixed(2)}</span></div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Summary */}
+          <Card className="bg-gradient-to-r from-slate-800 to-slate-900 text-white border-none">
+            <CardContent className="p-4">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                <div>
+                  <div className="text-[10px] text-slate-400 uppercase font-bold">Total Water / Cycle</div>
+                  <div className="text-xl font-black text-cyan-400">{result.totalWaterPerCycle.toFixed(0)} <span className="text-sm">L</span></div>
+                </div>
+                <div>
+                  <div className="text-[10px] text-slate-400 uppercase font-bold">Chem Cost / Cycle</div>
+                  <div className="text-xl font-black text-yellow-400">₹ {result.totalCycleChemCost.toFixed(0)}</div>
+                </div>
+                <div>
+                  <div className="text-[10px] text-slate-400 uppercase font-bold">Cycles / Month</div>
+                  <div className="text-xl font-black text-green-400">{result.monthlyCycles}</div>
+                </div>
+                <div>
+                  <div className="text-[10px] text-slate-400 uppercase font-bold">Monthly CIP Cost</div>
+                  <div className="text-xl font-black text-orange-400">₹ {result.monthlyCost.toLocaleString('en-IN', { maximumFractionDigits: 0 })}</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Step-by-step */}
+          <div className="bg-slate-50 border border-slate-200 rounded-lg p-3">
+            <div className="text-xs font-bold text-slate-600 mb-2">📐 Formula Reference (C₁V₁ = C₂V₂)</div>
+            <div className="text-xs text-slate-500 space-y-1 font-mono">
+              <div>Caustic stock vol = (Target% × Circuit Vol) / Stock%</div>
+              <div>= ({inputs.causticConc}% × {inputs.systemVolume}L) / {inputs.causticStock}% = <strong>{result.causticStockVol.toFixed(2)} L</strong></div>
+              <div className="mt-1">Acid stock vol = ({inputs.acidConc}% × {inputs.systemVolume}L) / {inputs.acidStock}% = <strong>{result.acidStockVol.toFixed(2)} L</strong></div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+
+// ════════════════════════════════════════════════════════════
+// CALCULATOR 2: EVAPORATOR / CONCENTRATOR
+// Water evaporation load, steam economy, concentration ratio
+// ════════════════════════════════════════════════════════════
+function EvaporatorCalc() {
+  const { toast } = useToast();
+
+  const [inputs, setInputs] = useState({
+    feedQty:        "1000",   // kg/h feed milk
+    feedTS:         "13.0",   // % total solids in feed
+    targetTS:       "48.0",   // % TS in concentrate (e.g. condensed milk 28%, khoa 72%)
+    feedTemp:       "72",     // °C (after pasteurization)
+    boilingTemp:    "65",     // °C (vacuum evaporator — 1st effect)
+    steamPressure:  "3.0",    // bar (steam supply)
+    numEffects:     "3",      // number of effects (1, 2, 3)
+    steamCostPerKg: "2.5",    // ₹/kg steam
+    electricCost:   "7",      // ₹/kWh
+    pumpLoad:       "15",     // kW pump + vacuum
+    productType:    "condensed", // condensed | khoa | wpc
+  });
+
+  const [result, setResult] = useState(null);
+  const set = (k, v) => setInputs(p => ({ ...p, [k]: v }));
+
+  // Latent heat of vaporization table by temp (°C → kJ/kg)
+  const latentHeat = (T) => {
+    // Approximation: Lv ≈ 2501 - 2.37 × T (kJ/kg) — accurate within 0.5% for 40–100°C
+    return 2501 - 2.37 * T;
+  };
+
+  const calculate = useCallback(() => {
+    const F    = parseFloat(inputs.feedQty)        || 0;
+    const TSf  = parseFloat(inputs.feedTS)         / 100;
+    const TSc  = parseFloat(inputs.targetTS)       / 100;
+    const Tf   = parseFloat(inputs.feedTemp)       || 72;
+    const Tb   = parseFloat(inputs.boilingTemp)    || 65;
+    const n    = parseInt(inputs.numEffects)       || 1;
+    const Ps   = parseFloat(inputs.steamPressure)  || 3;
+    const Sc   = parseFloat(inputs.steamCostPerKg) || 0;
+    const Ec   = parseFloat(inputs.electricCost)   || 0;
+    const Pl   = parseFloat(inputs.pumpLoad)       || 0;
+
+    if (F <= 0) { toast({ variant: "destructive", title: "Error", description: "Feed quantity must be > 0" }); return; }
+    if (TSc <= TSf) { toast({ variant: "destructive", title: "Error", description: "Target TS% must be higher than feed TS%" }); return; }
+    if (TSc >= 100) { toast({ variant: "destructive", title: "Error", description: "Target TS% must be less than 100%" }); return; }
+
+    // Mass balance: F × TSf = C × TSc → Concentrate C = F × TSf / TSc
+    const C = F * TSf / TSc;             // kg/h concentrate
+    const W = F - C;                     // kg/h water evaporated
+    const concRatio = F / C;            // Concentration ratio
+
+    // Steam saturation temp at given pressure (Antoine approx)
+    // Ts_sat ≈ 100 + 28.5 × log10(P/1.01325) for P in bar
+    const Ts_sat = 100 + 28.5 * Math.log10(Ps / 1.01325);
+
+    // Latent heat of steam at Ts_sat & evaporation at Tb
+    const Lv_steam = latentHeat(Ts_sat);   // kJ/kg steam
+    const Lv_evap  = latentHeat(Tb);       // kJ/kg water evaporated
+
+    // Heat load on 1st effect (sensible + evaporation)
+    const Cp_milk = 3.93;  // kJ/(kg·°C) typical for milk
+    const Q_sensible = F * Cp_milk * Math.max(0, Ts_sat - Tf);  // kJ/h (preheat)
+    const Q_evap     = W * Lv_evap;                              // kJ/h total evaporation
+    const Q_total    = Q_sensible + Q_evap;                      // kJ/h
+
+    // Steam consumption — single effect
+    const steamSingleEffect = Q_total / Lv_steam;  // kg/h
+    // Multi-effect economy: ~0.9 kg water/kg steam per effect
+    const steamEconomy = n * 0.88;   // kg water evaporated per kg steam (typical: 1-eff=0.9, 2=1.7, 3=2.5)
+    const steamRequired = W / steamEconomy;   // kg/h
+
+    // Thermal energy
+    const thermalEnergyKJh = steamRequired * Lv_steam;   // kJ/h
+    const thermalEnergyKW  = thermalEnergyKJh / 3600;    // kW
+
+    // Electric load
+    const totalElecKW = Pl;
+    const totalPowerKW = thermalEnergyKW + totalElecKW;
+
+    // Costs per hour
+    const steamCostPerH  = steamRequired * Sc;
+    const elecCostPerH   = totalElecKW   * Ec;
+    const totalCostPerH  = steamCostPerH + elecCostPerH;
+
+    // Cost per kg concentrate
+    const costPerKgConc  = totalCostPerH / C;
+    const costPerKgWater = totalCostPerH / W;
+
+    const warnings = [];
+    if (TSc > 72) warnings.push("TS > 72% — product may scorch in evaporator. Consider short-time high-temp (STHT) finishing.");
+    if (Tb > 80) warnings.push("Boiling temp > 80°C — use vacuum evaporation to prevent coagulation and browning.");
+    if (n === 1) warnings.push("Single-effect evaporator — steam economy is low (~0.9). Consider multi-effect to reduce costs.");
+    if (concRatio > 10) warnings.push(`High concentration ratio (${concRatio.toFixed(1)}×) — viscosity rise may affect heat transfer in later stages.`);
+
+    setResult({
+      C, W, concRatio, steamRequired, steamEconomy,
+      thermalEnergyKW, Ts_sat, Lv_steam, Lv_evap,
+      Q_sensible, Q_evap, Q_total,
+      steamCostPerH, elecCostPerH, totalCostPerH,
+      costPerKgConc, costPerKgWater, warnings,
+    });
+
+    toast({ title: "Evaporator Calculated", description: `Evaporate ${W.toFixed(0)} kg/h water | Concentrate: ${C.toFixed(0)} kg/h` });
+  }, [inputs, toast]);
+
+  const InputRow = ({ label, k, suffix, help }) => (
+    <div className="space-y-1">
+      <Label className="text-xs font-semibold text-slate-600 flex justify-between">
+        {label} {suffix && <span className="text-muted-foreground font-normal">{suffix}</span>}
+      </Label>
+      <Input type="number" inputMode="decimal" className="h-8 text-sm"
+        value={inputs[k]} onChange={e => set(k, e.target.value)} />
+      {help && <p className="text-[10px] text-muted-foreground">{help}</p>}
+    </div>
+  );
+
+  return (
+    <div className="space-y-4 w-full">
+      <Alert className="bg-amber-50 border-amber-200">
+        <Thermometer className="h-4 w-4 text-amber-600" />
+        <AlertTitle className="text-sm font-bold">Evaporator / Concentrator Calculator</AlertTitle>
+        <AlertDescription className="text-xs">
+          Mass balance, steam economy & operating cost for milk concentration. Valid for condensed milk, khoa base, WPC pre-concentration.
+        </AlertDescription>
+      </Alert>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Card className="border-amber-100">
+          <CardHeader className="p-3 pb-2 bg-amber-50 rounded-t-lg">
+            <CardTitle className="text-xs font-bold text-amber-700 uppercase tracking-wider">📥 Feed & Target</CardTitle>
+          </CardHeader>
+          <CardContent className="p-3 space-y-2">
+            <InputRow label="Feed Milk" k="feedQty" suffix="kg/h" help="Hourly feed rate to evaporator" />
+            <InputRow label="Feed Total Solids" k="feedTS" suffix="%" help="Typical pasteurized milk: 13–15%" />
+            <InputRow label="Target Total Solids" k="targetTS" suffix="%" help="Condensed: 26–30% | Khoa base: 65–72% | WPC: 20–25%" />
+            <InputRow label="Feed Temperature" k="feedTemp" suffix="°C" help="After PHE preheat, typically 65–75°C" />
+            <InputRow label="Boiling Temp (1st Effect)" k="boilingTemp" suffix="°C" help="Vacuum evap: 55–70°C recommended" />
+            <div className="space-y-1">
+              <Label className="text-xs font-semibold text-slate-600">Number of Effects</Label>
+              <select value={inputs.numEffects} onChange={e => set("numEffects", e.target.value)}
+                className="w-full border rounded-md px-2 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-amber-400">
+                <option value="1">1 Effect (Economy ≈ 0.9)</option>
+                <option value="2">2 Effects (Economy ≈ 1.7)</option>
+                <option value="3">3 Effects (Economy ≈ 2.5)</option>
+                <option value="4">4 Effects (Economy ≈ 3.2)</option>
+              </select>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-orange-100">
+          <CardHeader className="p-3 pb-2 bg-orange-50 rounded-t-lg">
+            <CardTitle className="text-xs font-bold text-orange-700 uppercase tracking-wider">⚡ Energy & Cost</CardTitle>
+          </CardHeader>
+          <CardContent className="p-3 space-y-2">
+            <InputRow label="Steam Pressure" k="steamPressure" suffix="bar" help="Boiler steam pressure (2–6 bar typical)" />
+            <InputRow label="Steam Cost" k="steamCostPerKg" suffix="₹/kg" help="Typically ₹2–4/kg generated steam" />
+            <InputRow label="Electricity Cost" k="electricCost" suffix="₹/kWh" />
+            <InputRow label="Pump + Vacuum Load" k="pumpLoad" suffix="kW" help="Vacuum pump + condensate + feed pump combined" />
+          </CardContent>
+        </Card>
+      </div>
+
+      <Button onClick={calculate} className="w-full h-11 bg-amber-600 hover:bg-amber-700 text-white font-bold">
+        <Calculator className="w-4 h-4 mr-2" /> Calculate Evaporator Load
+      </Button>
+
+      {result && (
+        <div className="space-y-4 animate-in slide-in-from-bottom-2">
+          {result.warnings.length > 0 && (
+            <Alert className="border-yellow-300 bg-yellow-50">
+              <AlertTriangle className="h-4 w-4 text-yellow-600" />
+              <AlertTitle className="text-sm text-yellow-800">Process Notes</AlertTitle>
+              <AlertDescription className="text-xs space-y-1">
+                {result.warnings.map((w, i) => <div key={i}>⚠️ {w}</div>)}
+              </AlertDescription>
+            </Alert>
+          )}
+
+          {/* Mass Balance */}
+          <Card>
+            <CardHeader className="p-3 pb-2 bg-slate-50 border-b">
+              <CardTitle className="text-sm">📊 Mass Balance</CardTitle>
+            </CardHeader>
+            <CardContent className="p-3">
+              <div className="grid grid-cols-3 gap-3 text-center">
+                <div className="bg-blue-50 rounded-lg p-3 border border-blue-100">
+                  <div className="text-[10px] font-bold text-blue-600 uppercase">Feed In</div>
+                  <div className="text-2xl font-black text-blue-800">{parseFloat(inputs.feedQty).toFixed(0)}</div>
+                  <div className="text-xs text-blue-500">kg/h</div>
+                </div>
+                <div className="bg-slate-100 rounded-lg p-3 border border-slate-200">
+                  <div className="text-[10px] font-bold text-slate-500 uppercase">Water Out</div>
+                  <div className="text-2xl font-black text-slate-700">{result.W.toFixed(0)}</div>
+                  <div className="text-xs text-slate-400">kg/h evaporated</div>
+                </div>
+                <div className="bg-green-50 rounded-lg p-3 border border-green-100">
+                  <div className="text-[10px] font-bold text-green-600 uppercase">Concentrate</div>
+                  <div className="text-2xl font-black text-green-800">{result.C.toFixed(1)}</div>
+                  <div className="text-xs text-green-500">kg/h ({inputs.targetTS}% TS)</div>
+                </div>
+              </div>
+              <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
+                <div className="flex justify-between bg-slate-50 rounded p-2">
+                  <span className="text-slate-500">Concentration Ratio</span>
+                  <span className="font-bold">{result.concRatio.toFixed(2)}×</span>
+                </div>
+                <div className="flex justify-between bg-slate-50 rounded p-2">
+                  <span className="text-slate-500">Steam Economy</span>
+                  <span className="font-bold text-amber-600">{result.steamEconomy.toFixed(2)} kg/kg</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Energy */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Card className="border-orange-200 bg-orange-50">
+              <CardHeader className="p-3 pb-1"><CardTitle className="text-sm text-orange-800">🔥 Steam Requirement</CardTitle></CardHeader>
+              <CardContent className="p-3 space-y-2 text-sm">
+                <div className="flex justify-between"><span className="text-slate-600">Sat. steam temp</span><span className="font-bold">{result.Ts_sat.toFixed(1)} °C</span></div>
+                <div className="flex justify-between"><span className="text-slate-600">Latent heat (steam)</span><span className="font-bold">{result.Lv_steam.toFixed(0)} kJ/kg</span></div>
+                <div className="flex justify-between"><span className="text-slate-600">Latent heat (evap)</span><span className="font-bold">{result.Lv_evap.toFixed(0)} kJ/kg</span></div>
+                <div className="flex justify-between border-t pt-1"><span className="text-slate-600">Steam required</span><span className="font-black text-orange-700">{result.steamRequired.toFixed(1)} kg/h</span></div>
+                <div className="flex justify-between"><span className="text-slate-600">Thermal load</span><span className="font-bold">{result.thermalEnergyKW.toFixed(1)} kW</span></div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-gradient-to-br from-green-800 to-green-900 text-white border-none">
+              <CardHeader className="p-3 pb-1"><CardTitle className="text-sm text-green-200">💰 Operating Cost</CardTitle></CardHeader>
+              <CardContent className="p-3 space-y-2 text-sm">
+                <div className="flex justify-between"><span className="text-green-300">Steam cost / h</span><span className="font-bold">₹ {result.steamCostPerH.toFixed(2)}</span></div>
+                <div className="flex justify-between"><span className="text-green-300">Electric cost / h</span><span className="font-bold">₹ {result.elecCostPerH.toFixed(2)}</span></div>
+                <div className="flex justify-between border-t border-green-600 pt-1"><span className="text-green-200">Total cost / h</span><span className="font-black text-yellow-300 text-base">₹ {result.totalCostPerH.toFixed(2)}</span></div>
+                <div className="flex justify-between"><span className="text-green-300">Cost / kg concentrate</span><span className="font-bold text-yellow-300">₹ {result.costPerKgConc.toFixed(3)}</span></div>
+                <div className="flex justify-between"><span className="text-green-300">Cost / kg water evap</span><span className="font-bold">₹ {result.costPerKgWater.toFixed(3)}</span></div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Formula reference */}
+          <div className="bg-slate-50 border rounded-lg p-3 text-xs font-mono text-slate-500 space-y-1">
+            <div className="font-bold text-slate-700 mb-1">📐 Mass Balance Formulas Used:</div>
+            <div>Concentrate = Feed × (Feed TS%) / (Target TS%)</div>
+            <div>= {inputs.feedQty} × {inputs.feedTS}% / {inputs.targetTS}% = <strong className="text-slate-700">{result.C.toFixed(1)} kg/h</strong></div>
+            <div className="mt-1">Water Evaporated = Feed − Concentrate = {inputs.feedQty} − {result.C.toFixed(1)} = <strong className="text-slate-700">{result.W.toFixed(1)} kg/h</strong></div>
+            <div>Steam = Water Evap / Steam Economy = {result.W.toFixed(1)} / {result.steamEconomy.toFixed(2)} = <strong className="text-slate-700">{result.steamRequired.toFixed(1)} kg/h</strong></div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+
+// ════════════════════════════════════════════════════════════
+// CALCULATOR 3: SPRAY DRYER YIELD & EFFICIENCY
+// Feed → powder yield, moisture, energy, outlet humidity
+// ════════════════════════════════════════════════════════════
+function SprayDryerCalc() {
+  const { toast } = useToast();
+
+  const [inputs, setInputs] = useState({
+    feedRate:        "500",   // kg/h liquid feed
+    feedTS:          "48",    // % total solids (concentrate from evaporator)
+    targetMoisture:  "3.5",   // % final powder moisture
+    inletTemp:       "180",   // °C hot air inlet
+    outletTemp:      "85",    // °C exhaust air outlet
+    ambientTemp:     "30",    // °C ambient
+    ambientRH:       "60",    // % relative humidity
+    airFlowRate:     "5000",  // kg/h drying air
+    fuelCostPerKg:   "55",    // ₹/kg LPG / furnace oil
+    fuelCalorific:   "46000", // kJ/kg LPG ≈ 46000 | FO ≈ 42000
+    electricCost:    "7",     // ₹/kWh
+    atomiserLoad:    "22",    // kW atomiser motor
+    fanLoad:         "45",    // kW main air fan
+  });
+
+  const [result, setResult] = useState(null);
+  const set = (k, v) => setInputs(p => ({ ...p, [k]: v }));
+
+  const calculate = useCallback(() => {
+    const F   = parseFloat(inputs.feedRate)       || 0;
+    const TSf = parseFloat(inputs.feedTS)         / 100;
+    const Mw  = parseFloat(inputs.targetMoisture) / 100;
+    const Ti  = parseFloat(inputs.inletTemp)      || 0;
+    const To  = parseFloat(inputs.outletTemp)     || 0;
+    const Ta  = parseFloat(inputs.ambientTemp)    || 30;
+    const RH  = parseFloat(inputs.ambientRH)      / 100;
+    const Ga  = parseFloat(inputs.airFlowRate)    || 0;
+    const Fc  = parseFloat(inputs.fuelCostPerKg)  || 0;
+    const Cv  = parseFloat(inputs.fuelCalorific)  || 46000;
+    const Ec  = parseFloat(inputs.electricCost)   || 0;
+    const Pal = parseFloat(inputs.atomiserLoad)   || 0;
+    const Pfl = parseFloat(inputs.fanLoad)        || 0;
+
+    if (F <= 0 || TSf <= 0) { toast({ variant: "destructive", title: "Error", description: "Feed rate and TS% must be > 0" }); return; }
+    if (Ti <= To) { toast({ variant: "destructive", title: "Error", description: "Inlet temp must be higher than outlet temp" }); return; }
+    if (TSf + Mw >= 1) { toast({ variant: "destructive", title: "Error", description: "Feed TS% + moisture% cannot exceed 100%" }); return; }
+
+    // Mass balance
+    // Solids in feed = F × TSf
+    // Feed water = F × (1 - TSf)
+    // Powder: Solid / (1 - Mw) = powder yield
+    const solidsIn   = F * TSf;
+    const feedWater  = F * (1 - TSf);
+    const powderYield = solidsIn / (1 - Mw);        // kg/h powder
+    const waterEvaporated = F - powderYield;         // kg/h removed
+    const yieldPct   = (powderYield / (F * TSf / (1 - 0.04))) * 100; // vs ideal 4% moisture
+
+    // Thermal efficiency (approximate enthalpy method)
+    const Cp_air = 1.005;   // kJ/(kg·°C)
+    const Lv_85  = 2501 - 2.37 * 85; // latent at ~85°C outlet
+    // Heat to raise air temp from Ta → Ti
+    const Q_heat = Ga * Cp_air * (Ti - Ta);           // kJ/h heat input to air
+    // Heat used for evaporation
+    const Q_evap = waterEvaporated * Lv_85;           // kJ/h useful
+    const thermalEfficiency = (Q_evap / Q_heat) * 100;
+
+    // Fuel consumption
+    const fuelRate    = Q_heat / Cv;                  // kg/h fuel
+    const fuelCostPerH = fuelRate * Fc;
+    const elecCostPerH = (Pal + Pfl) * Ec;
+    const totalCostPerH = fuelCostPerH + elecCostPerH;
+
+    // Evaporation rate check
+    const evapRate = waterEvaporated / (Ga / 1000);  // kg water / 1000 kg air
+
+    // Humidity of outlet air (absolute humidity increase)
+    // Sat vapour pressure at Ta: Psat ≈ 0.6108 × exp(17.27×Ta/(Ta+237.3)) kPa
+    const Psat_a = 0.6108 * Math.exp(17.27 * Ta / (Ta + 237.3));
+    const w_in   = 0.622 * (RH * Psat_a) / (101.325 - RH * Psat_a); // kg/kg dry air
+    const w_out  = w_in + waterEvaporated / Ga;     // kg/kg dry air (approx)
+    const outletRH_approx = (w_out * 101.325) / ((0.622 + w_out) * (0.6108 * Math.exp(17.27 * To / (To + 237.3)))) * 100;
+
+    const warnings = [];
+    if (To > 90) warnings.push("Outlet temp > 90°C — may cause powder browning / denaturation especially for WMP/SMP.");
+    if (To < 75) warnings.push("Outlet temp < 75°C — powder moisture may be high; check final moisture.");
+    if (thermalEfficiency < 40) warnings.push("Thermal efficiency < 40% — consider heat recovery on exhaust air.");
+    if (outletRH_approx > 15) warnings.push(`Outlet RH ≈ ${outletRH_approx.toFixed(0)}% — above 15%, powder stickiness risk in cyclone. Check outlet temp.`);
+    if (TSf < 0.40) warnings.push("Feed TS < 40% — evaporation load is high. Pre-concentrate to ≥45% for better dryer efficiency.");
+
+    setResult({
+      solidsIn, feedWater, powderYield, waterEvaporated, yieldPct,
+      Q_heat, Q_evap, thermalEfficiency,
+      fuelRate, fuelCostPerH, elecCostPerH, totalCostPerH,
+      evapRate, w_in, w_out, outletRH_approx,
+      costPerKgPowder: totalCostPerH / powderYield,
+      warnings,
+    });
+
+    toast({ title: "Spray Dryer Calculated", description: `Powder: ${powderYield.toFixed(0)} kg/h | Efficiency: ${thermalEfficiency.toFixed(1)}%` });
+  }, [inputs, toast]);
+
+  const InputRow = ({ label, k, suffix, help }) => (
+    <div className="space-y-1">
+      <Label className="text-xs font-semibold text-slate-600 flex justify-between">
+        {label} {suffix && <span className="text-muted-foreground font-normal">{suffix}</span>}
+      </Label>
+      <Input type="number" inputMode="decimal" className="h-8 text-sm"
+        value={inputs[k]} onChange={e => set(k, e.target.value)} />
+      {help && <p className="text-[10px] text-muted-foreground">{help}</p>}
+    </div>
+  );
+
+  return (
+    <div className="space-y-4 w-full">
+      <Alert className="bg-sky-50 border-sky-200">
+        <Zap className="h-4 w-4 text-sky-600" />
+        <AlertTitle className="text-sm font-bold">Spray Dryer Yield & Efficiency Calculator</AlertTitle>
+        <AlertDescription className="text-xs">
+          Feed → powder mass balance, thermal efficiency, fuel & electric cost per kg powder. For SMP, WMP, WPC, infant formula.
+        </AlertDescription>
+      </Alert>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Card className="border-sky-100">
+          <CardHeader className="p-3 pb-2 bg-sky-50 rounded-t-lg">
+            <CardTitle className="text-xs font-bold text-sky-700 uppercase tracking-wider">📥 Feed Conditions</CardTitle>
+          </CardHeader>
+          <CardContent className="p-3 space-y-2">
+            <InputRow label="Feed Rate" k="feedRate" suffix="kg/h" help="Concentrated milk to atomiser" />
+            <InputRow label="Feed Total Solids" k="feedTS" suffix="%" help="After evaporator: 45–55% for SMP" />
+            <InputRow label="Target Powder Moisture" k="targetMoisture" suffix="%" help="SMP: 3–4% | WMP: 2.5–3.5%" />
+            <InputRow label="Ambient Temp" k="ambientTemp" suffix="°C" />
+            <InputRow label="Ambient RH" k="ambientRH" suffix="%" />
+          </CardContent>
+        </Card>
+
+        <Card className="border-red-100">
+          <CardHeader className="p-3 pb-2 bg-red-50 rounded-t-lg">
+            <CardTitle className="text-xs font-bold text-red-700 uppercase tracking-wider">🌡️ Air Conditions</CardTitle>
+          </CardHeader>
+          <CardContent className="p-3 space-y-2">
+            <InputRow label="Inlet Air Temp" k="inletTemp" suffix="°C" help="SMP: 170–190°C | WMP: 160–175°C" />
+            <InputRow label="Outlet Air Temp" k="outletTemp" suffix="°C" help="Typically 75–90°C" />
+            <InputRow label="Drying Air Flow" k="airFlowRate" suffix="kg/h" help="From dryer design spec" />
+            <InputRow label="Fuel Calorific Value" k="fuelCalorific" suffix="kJ/kg" help="LPG≈46000 | FO≈42000 | NG≈44000" />
+          </CardContent>
+        </Card>
+
+        <Card className="border-green-100">
+          <CardHeader className="p-3 pb-2 bg-green-50 rounded-t-lg">
+            <CardTitle className="text-xs font-bold text-green-700 uppercase tracking-wider">💰 Cost & Power</CardTitle>
+          </CardHeader>
+          <CardContent className="p-3 space-y-2">
+            <InputRow label="Fuel Cost" k="fuelCostPerKg" suffix="₹/kg" help="LPG market rate" />
+            <InputRow label="Electricity" k="electricCost" suffix="₹/kWh" />
+            <InputRow label="Atomiser Motor" k="atomiserLoad" suffix="kW" />
+            <InputRow label="Main Air Fan" k="fanLoad" suffix="kW" />
+          </CardContent>
+        </Card>
+      </div>
+
+      <Button onClick={calculate} className="w-full h-11 bg-sky-600 hover:bg-sky-700 text-white font-bold">
+        <Calculator className="w-4 h-4 mr-2" /> Calculate Dryer Performance
+      </Button>
+
+      {result && (
+        <div className="space-y-4 animate-in slide-in-from-bottom-2">
+          {result.warnings.length > 0 && (
+            <Alert className="border-yellow-300 bg-yellow-50">
+              <AlertTriangle className="h-4 w-4 text-yellow-600" />
+              <AlertTitle className="text-sm text-yellow-800">Process Warnings</AlertTitle>
+              <AlertDescription className="text-xs space-y-1">
+                {result.warnings.map((w, i) => <div key={i}>⚠️ {w}</div>)}
+              </AlertDescription>
+            </Alert>
+          )}
+
+          {/* Key Outputs */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {[
+              { label: "Powder Yield",       value: result.powderYield.toFixed(1),        unit: "kg/h",  color: "bg-green-600" },
+              { label: "Water Evaporated",   value: result.waterEvaporated.toFixed(1),     unit: "kg/h",  color: "bg-blue-500"  },
+              { label: "Thermal Efficiency", value: result.thermalEfficiency.toFixed(1),   unit: "%",     color: result.thermalEfficiency > 50 ? "bg-emerald-600" : "bg-orange-500" },
+              { label: "Cost / kg Powder",   value: `₹${result.costPerKgPowder.toFixed(2)}`, unit: "/kg", color: "bg-purple-600" },
+            ].map((item, i) => (
+              <div key={i} className={`${item.color} text-white rounded-xl p-3 text-center`}>
+                <div className="text-[10px] font-bold uppercase opacity-80">{item.label}</div>
+                <div className="text-xl font-black">{item.value}</div>
+                <div className="text-[10px] opacity-70">{item.unit}</div>
+              </div>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Card>
+              <CardHeader className="p-3 pb-2 bg-slate-50 border-b">
+                <CardTitle className="text-sm">📊 Mass Balance</CardTitle>
+              </CardHeader>
+              <CardContent className="p-3 space-y-2 text-sm">
+                <div className="flex justify-between"><span className="text-slate-500">Solids in feed</span><span className="font-bold">{result.solidsIn.toFixed(1)} kg/h</span></div>
+                <div className="flex justify-between"><span className="text-slate-500">Water in feed</span><span className="font-bold">{result.feedWater.toFixed(1)} kg/h</span></div>
+                <div className="flex justify-between"><span className="text-slate-500">Water removed</span><span className="font-bold text-blue-600">{result.waterEvaporated.toFixed(1)} kg/h</span></div>
+                <div className="flex justify-between border-t pt-1"><span className="text-slate-500">Powder @ {inputs.targetMoisture}% moisture</span><span className="font-black text-green-700">{result.powderYield.toFixed(1)} kg/h</span></div>
+                <div className="flex justify-between"><span className="text-slate-500">Outlet air humidity</span><span className="font-bold">{result.outletRH_approx.toFixed(1)}% RH</span></div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="p-3 pb-2 bg-slate-50 border-b">
+                <CardTitle className="text-sm">🔥 Energy & Cost</CardTitle>
+              </CardHeader>
+              <CardContent className="p-3 space-y-2 text-sm">
+                <div className="flex justify-between"><span className="text-slate-500">Heat input to air</span><span className="font-bold">{(result.Q_heat / 3600).toFixed(1)} kW</span></div>
+                <div className="flex justify-between"><span className="text-slate-500">Heat for evaporation</span><span className="font-bold">{(result.Q_evap / 3600).toFixed(1)} kW</span></div>
+                <div className="flex justify-between"><span className="text-slate-500">Fuel rate</span><span className="font-bold">{result.fuelRate.toFixed(2)} kg/h</span></div>
+                <div className="flex justify-between"><span className="text-slate-500">Fuel cost / h</span><span className="font-bold text-orange-600">₹ {result.fuelCostPerH.toFixed(2)}</span></div>
+                <div className="flex justify-between"><span className="text-slate-500">Electric cost / h</span><span className="font-bold">₹ {result.elecCostPerH.toFixed(2)}</span></div>
+                <div className="flex justify-between border-t pt-1"><span className="font-bold">Total cost / h</span><span className="font-black text-green-700">₹ {result.totalCostPerH.toFixed(2)}</span></div>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="bg-slate-50 border rounded-lg p-3 text-xs font-mono text-slate-500 space-y-1">
+            <div className="font-bold text-slate-700 mb-1">📐 Key Formulas:</div>
+            <div>Powder = Solids / (1 − Moisture%) = {result.solidsIn.toFixed(1)} / {(1 - parseFloat(inputs.targetMoisture)/100).toFixed(3)} = <strong className="text-slate-700">{result.powderYield.toFixed(1)} kg/h</strong></div>
+            <div>Water removed = Feed − Powder = {inputs.feedRate} − {result.powderYield.toFixed(1)} = <strong className="text-slate-700">{result.waterEvaporated.toFixed(1)} kg/h</strong></div>
+            <div>Thermal η = Q_evap / Q_air = {(result.Q_evap/3600).toFixed(1)} / {(result.Q_heat/3600).toFixed(1)} = <strong className="text-slate-700">{result.thermalEfficiency.toFixed(1)}%</strong></div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+
+// ════════════════════════════════════════════════════════════
+// CALCULATOR 4: PASTEURIZATION LOG REDUCTION & D-VALUE
+// HTST / LTLT / UHT validation, microbial kill, holding time
+// ════════════════════════════════════════════════════════════
+export function PasteurizationCalc() {
+  const { toast } = useToast();
+
+  const [activeMode, setActiveMode] = useState("htst"); // htst | ltlt | uht | dvalue
+
+  const [htst, setHtst] = useState({
+    targetTemp:    "72",    // °C
+    holdingTime:   "15",    // sec
+    flowRate:      "5000",  // L/h
+    holdingTubeID: "38",    // mm internal diameter
+    pathogen:      "listeria", // e.coli | listeria | salmonella | tb
+  });
+
+  const [dval, setDval] = useState({
+    dValue:      "0.5",   // min at reference temp
+    zValue:      "7.0",   // °C z-value
+    refTemp:     "72",    // °C reference
+    processTemp: "72",    // °C actual process
+    processTime: "0.25",  // min (15 sec default)
+    initialLoad: "1000000", // CFU/mL initial count
+  });
+
+  const [result, setResult] = useState<any>(null);
+
+  // FIXED: Corrected the syntax for e.coli object below
+  const pathogenData: any = {
+    listeria:    { name: "Listeria monocytogenes", D72: 0.5,  z: 7.0,  target6log: true  },
+    salmonella:  { name: "Salmonella spp.",        D72: 0.14, z: 5.6,  target6log: true  },
+    "e.coli":    { name: "E. coli O157:H7",        D72: 0.12, z: 6.4,  target6log: true  },
+    tb:          { name: "M. tuberculosis (TB)",   D72: 0.5,  z: 6.5,  target6log: false },
+    coxiella:    { name: "Coxiella burnetii (Q-fever)", D72: 0.4, z: 5.5, target6log: false },
+  };
+
+  const setH = (k: string, v: string) => setHtst(p => ({ ...p, [k]: v }));
+  const setD = (k: string, v: string) => setDval(p => ({ ...p, [k]: v }));
+
+  const calculateHTST = useCallback(() => {
+    const T    = parseFloat(htst.targetTemp)    || 72;
+    const t    = parseFloat(htst.holdingTime)   || 15;   // sec
+    const Q    = parseFloat(htst.flowRate)      || 5000; // L/h
+    const D    = parseFloat(htst.holdingTubeID) / 1000;  // m
+
+    const pathogen = pathogenData[htst.pathogen] || pathogenData["listeria"];
+
+    // D value at process temp using z-value
+    const D_process = pathogen.D72 * Math.pow(10, (pathogen.refTemp || 72 - T) / pathogen.z);
+    
+    // Log reduction = t(min) / D_process(min)
+    const t_min    = t / 60;
+    const logRed   = t_min / D_process;
+    const killedPct = (1 - Math.pow(10, -logRed)) * 100;
+
+    // Pasteurization Equivalent at 72°C (PE)
+    const PE = t_min * Math.pow(10, (T - 72) / pathogen.z);
+
+    // HTST compliance (legal: 72°C / 15 sec for cow milk in India / EU / US)
+    const legalTemp = 72, legalTime = 15;
+    const compliant = T >= legalTemp && t >= legalTime;
+
+    // Holding tube sizing
+    const Q_m3s  = Q / 3600 / 1000;                          // m³/s
+    const area   = Math.PI * Math.pow(D / 2, 2);             // m²
+    const velocity = area > 0 ? Q_m3s / area : 0;            // m/s
+    const holdingTubeLength = velocity * t;                  // m needed for given holding time
+
+    const warnings = [];
+    if (!compliant) warnings.push(`⚠️ Below legal minimum: 72°C / 15 sec. Current: ${T}°C / ${t} sec.`);
+    if (logRed < 5) warnings.push(`Log reduction ${logRed.toFixed(2)} < 5 — insufficient pasteurization for ${pathogen.name}.`);
+    if (velocity < 0.1) warnings.push("Very low flow velocity — risk of plug flow issues and temperature stratification.");
+    if (velocity > 2.0) warnings.push("High velocity — check turbulent flow (Re > 2100) assumption is maintained.");
+
+    setResult({
+      mode: "htst", pathogen, D_process, t_min, logRed, killedPct, PE,
+      compliant, velocity, holdingTubeLength, area, warnings,
+    });
+    toast({ title: "HTST Calculated", description: `Log reduction: ${logRed.toFixed(2)} | ${pathogen.name}` });
+  }, [htst, pathogenData, toast]);
+
+  const calculateDValue = useCallback(() => {
+    const Dref = parseFloat(dval.dValue)      || 0;
+    const z    = parseFloat(dval.zValue)      || 7;
+    const Tref = parseFloat(dval.refTemp)     || 72;
+    const Tp   = parseFloat(dval.processTemp) || 72;
+    const tp   = parseFloat(dval.processTime) || 0.25; // min
+    const N0   = parseFloat(dval.initialLoad) || 1e6;
+
+    if (Dref <= 0 || z <= 0) { 
+      toast({ variant: "destructive", title: "Error", description: "D-value and z-value must be > 0" }); 
+      return; 
+    }
+
+    const D_Tp     = Dref * Math.pow(10, (Tref - Tp) / z);
+    const logRed   = tp / D_Tp;
+    const Nfinal   = N0 * Math.pow(10, -logRed);
+    const killedPct = (1 - Nfinal / N0) * 100;
+
+    // Time needed for 6 log reduction at process temp
+    const t_6log = 6 * D_Tp;
+    const t_12log = 12 * D_Tp;
+
+    // Equivalent holding times at different temps
+    const equivTemps = [65, 68, 70, 72, 75, 80, 85].map(T => ({
+      temp: T,
+      D: Dref * Math.pow(10, (Tref - T) / z),
+      t6log: 6 * Dref * Math.pow(10, (Tref - T) / z),
+    }));
+
+    setResult({ mode: "dvalue", D_Tp, logRed, Nfinal, killedPct, t_6log, t_12log, equivTemps, N0, warnings: [] });
+    toast({ title: "D-Value Calculated", description: `At ${Tp}°C: D=${D_Tp.toFixed(4)} min | ${logRed.toFixed(2)} log reduction` });
+  }, [dval, toast]);
+
+  return (
+    <div className="space-y-4 w-full">
+      <Alert className="bg-rose-50 border-rose-200">
+        <Thermometer className="h-4 w-4 text-rose-600" />
+        <AlertTitle className="text-sm font-bold">Pasteurization Validation Calculator</AlertTitle>
+        <AlertDescription className="text-xs">
+          HTST compliance, microbial log reduction, D-value & z-value analysis. Based on FDA PMO & FSSAI standards.
+        </AlertDescription>
+      </Alert>
+
+      {/* Mode Selector */}
+      <div className="grid grid-cols-2 gap-2">
+        {[
+          { id: "htst",   label: "HTST Validation",    desc: "72°C / 15 sec compliance" },
+          { id: "dvalue", label: "D-Value / Log Kill",  desc: "Any temp, any pathogen"    },
+        ].map(m => (
+          <button key={m.id} onClick={() => { setActiveMode(m.id); setResult(null); }}
+            className={`p-3 rounded-xl border-2 text-left transition-all ${activeMode === m.id ? "border-rose-500 bg-rose-50" : "border-slate-200 bg-white hover:border-rose-200"}`}>
+            <div className={`text-sm font-bold ${activeMode === m.id ? "text-rose-700" : "text-slate-700"}`}>{m.label}</div>
+            <div className="text-[10px] text-muted-foreground mt-0.5">{m.desc}</div>
+          </button>
+        ))}
+      </div>
+
+      {/* HTST MODE */}
+      {activeMode === "htst" && (
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Card className="border-rose-100">
+              <CardHeader className="p-3 pb-2 bg-rose-50 rounded-t-lg">
+                <CardTitle className="text-xs font-bold text-rose-700 uppercase tracking-wider">🌡️ Process Parameters</CardTitle>
+              </CardHeader>
+              <CardContent className="p-3 space-y-3">
+                <div className="space-y-1">
+                  <Label className="text-xs font-semibold text-slate-600">Pathogen (Design Organism)</Label>
+                  <select value={htst.pathogen} onChange={e => setH("pathogen", e.target.value)}
+                    className="w-full border rounded-md px-2 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-rose-400">
+                    <option value="listeria">Listeria monocytogenes</option>
+                    <option value="salmonella">Salmonella spp.</option>
+                    <option value="e.coli">E. coli O157:H7</option>
+                    <option value="tb">M. tuberculosis (TB)</option>
+                    <option value="coxiella">Coxiella burnetii (Q-Fever)</option>
+                  </select>
+                </div>
+                {[
+                  { label: "Process Temperature", k: "targetTemp", suffix: "°C", help: "Legal min: 72°C for HTST" },
+                  { label: "Holding Time",        k: "holdingTime", suffix: "sec", help: "Legal min: 15 sec" },
+                ].map(f => (
+                  <div key={f.k} className="space-y-1">
+                    <Label className="text-xs font-semibold text-slate-600 flex justify-between">{f.label}<span className="font-normal text-muted-foreground">{f.suffix}</span></Label>
+                    <Input type="number" inputMode="decimal" className="h-8 text-sm" value={htst[f.k as keyof typeof htst]} onChange={e => setH(f.k, e.target.value)} />
+                    {f.help && <p className="text-[10px] text-muted-foreground">{f.help}</p>}
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+
+            <Card className="border-purple-100">
+              <CardHeader className="p-3 pb-2 bg-purple-50 rounded-t-lg">
+                <CardTitle className="text-xs font-bold text-purple-700 uppercase tracking-wider">🔧 Holding Tube Sizing</CardTitle>
+              </CardHeader>
+              <CardContent className="p-3 space-y-2">
+                {[
+                  { label: "Flow Rate",          k: "flowRate",      suffix: "L/h",  help: "Milk throughput" },
+                  { label: "Holding Tube ID",    k: "holdingTubeID", suffix: "mm",   help: "Internal diameter of holding tube" },
+                ].map(f => (
+                  <div key={f.k} className="space-y-1">
+                    <Label className="text-xs font-semibold text-slate-600 flex justify-between">{f.label}<span className="font-normal text-muted-foreground">{f.suffix}</span></Label>
+                    <Input type="number" inputMode="decimal" className="h-8 text-sm" value={htst[f.k as keyof typeof htst]} onChange={e => setH(f.k, e.target.value)} />
+                    {f.help && <p className="text-[10px] text-muted-foreground">{f.help}</p>}
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          </div>
+          <Button onClick={calculateHTST} className="w-full h-11 bg-rose-600 hover:bg-rose-700 text-white font-bold">
+            <Calculator className="w-4 h-4 mr-2" /> Validate Pasteurization
+          </Button>
+        </div>
+      )}
+
+      {/* D-VALUE MODE */}
+      {activeMode === "dvalue" && (
+        <div className="space-y-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            {[
+              { label: "D-value (at ref temp)", k: "dValue", suffix: "min", help: "Decimal reduction time" },
+              { label: "z-value",               k: "zValue", suffix: "°C",  help: "Temp for 10× D change" },
+              { label: "Reference Temp",        k: "refTemp", suffix: "°C" },
+              { label: "Process Temp",          k: "processTemp", suffix: "°C" },
+              { label: "Process Time",          k: "processTime", suffix: "min", help: "e.g. 15 sec = 0.25 min" },
+              { label: "Initial Count (N₀)",    k: "initialLoad", suffix: "CFU/mL" },
+            ].map(f => (
+              <div key={f.k} className="space-y-1">
+                <Label className="text-xs font-semibold text-slate-600 flex justify-between">{f.label}<span className="font-normal text-muted-foreground">{f.suffix}</span></Label>
+                <Input type="number" inputMode="decimal" className="h-8 text-sm" value={dval[f.k as keyof typeof dval]} onChange={e => setD(f.k, e.target.value)} />
+                {f.help && <p className="text-[10px] text-muted-foreground">{f.help}</p>}
+              </div>
+            ))}
+          </div>
+          <Button onClick={calculateDValue} className="w-full h-11 bg-purple-600 hover:bg-purple-700 text-white font-bold">
+            <Calculator className="w-4 h-4 mr-2" /> Calculate Log Reduction
+          </Button>
+        </div>
+      )}
+
+      {/* RESULTS */}
+      {result && (
+        <div className="space-y-4 animate-in slide-in-from-bottom-2">
+          {result.warnings.length > 0 && (
+            <Alert className="border-red-300 bg-red-50">
+              <AlertTriangle className="h-4 w-4 text-red-600" />
+              <AlertTitle className="text-sm text-red-800">Compliance Issues</AlertTitle>
+              <AlertDescription className="text-xs space-y-1">
+                {result.warnings.map((w: string, i: number) => <div key={i}>{w}</div>)}
+              </AlertDescription>
+            </Alert>
+          )}
+
+          {result.mode === "htst" && (
+            <>
+              {/* Compliance Badge */}
+              <div className={`rounded-xl p-4 text-center ${result.compliant ? "bg-green-600" : "bg-red-600"} text-white`}>
+                <div className="text-2xl mb-1">{result.compliant ? "✅" : "❌"}</div>
+                <div className="text-lg font-black">{result.compliant ? "HTST COMPLIANT" : "NOT COMPLIANT"}</div>
+                <div className="text-xs opacity-80 mt-1">FSSAI / FDA PMO: 72°C / 15 sec minimum</div>
+              </div>
+
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                {[
+                  { label: "Log Reduction",      value: result.logRed.toFixed(2),       unit: "log",   color: result.logRed >= 5 ? "text-green-700" : "text-red-600" },
+                  { label: "Kill %",             value: result.killedPct.toFixed(4),    unit: "%",     color: "text-blue-700" },
+                  { label: "D-value at temp",    value: result.D_process.toFixed(4),    unit: "min",   color: "text-purple-700" },
+                  { label: "Pasteurization Eq.", value: result.PE.toFixed(4),           unit: "min@72°C", color: "text-orange-700" },
+                ].map((c, i) => (
+                  <div key={i} className="bg-slate-50 rounded-lg p-3 border text-center">
+                    <div className="text-[10px] text-muted-foreground uppercase font-bold">{c.label}</div>
+                    <div className={`text-xl font-black ${c.color}`}>{c.value}</div>
+                    <div className="text-[10px] text-muted-foreground">{c.unit}</div>
+                  </div>
+                ))}
+              </div>
+
+              <Card>
+                <CardHeader className="p-3 pb-2 bg-slate-50 border-b">
+                  <CardTitle className="text-sm">🔧 Holding Tube</CardTitle>
+                </CardHeader>
+                <CardContent className="p-3 space-y-2 text-sm">
+                  <div className="flex justify-between"><span className="text-slate-500">Flow velocity</span><span className="font-bold">{result.velocity.toFixed(3)} m/s</span></div>
+                  <div className="flex justify-between"><span className="text-slate-500">Min tube length needed</span><span className="font-bold text-indigo-700">{result.holdingTubeLength.toFixed(2)} m</span></div>
+                  <div className="text-[10px] text-muted-foreground">For {htst.holdingTime} sec residence time at {(parseFloat(htst.flowRate)/3600/1000).toFixed(5)} m³/s through {htst.holdingTubeID} mm ID tube</div>
+                </CardContent>
+              </Card>
+            </>
+          )}
+
+          {result.mode === "dvalue" && (
+            <>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                {[
+                  { label: `D at ${dval.processTemp}°C`, value: result.D_Tp.toFixed(4),      unit: "min",     color: "text-purple-700" },
+                  { label: "Log Reduction",              value: result.logRed.toFixed(2),     unit: "log",     color: result.logRed >= 5 ? "text-green-700" : "text-red-600" },
+                  { label: "Final Count",                value: result.Nfinal < 1 ? "<1" : result.Nfinal.toExponential(2), unit: "CFU/mL", color: "text-blue-700" },
+                  { label: "Kill %",                     value: result.killedPct.toFixed(4),  unit: "%",       color: "text-teal-700" },
+                  { label: "Time for 6-log kill",        value: result.t_6log.toFixed(4),     unit: "min",     color: "text-orange-700" },
+                  { label: "Time for 12-log kill",       value: result.t_12log.toFixed(4),    unit: "min",     color: "text-red-700" },
+                ].map((c, i) => (
+                  <div key={i} className="bg-slate-50 rounded-lg p-3 border text-center">
+                    <div className="text-[10px] text-muted-foreground uppercase font-bold">{c.label}</div>
+                    <div className={`text-xl font-black ${c.color}`}>{c.value}</div>
+                    <div className="text-[10px] text-muted-foreground">{c.unit}</div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Equivalent time table */}
+              <Card>
+                <CardHeader className="p-3 pb-2 bg-slate-50 border-b">
+                  <CardTitle className="text-sm">📋 Equivalent Times for 6-Log Kill (Different Temperatures)</CardTitle>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-xs">
+                      <thead className="bg-slate-50">
+                        <tr>
+                          <th className="p-2 text-left font-bold">Temp (°C)</th>
+                          <th className="p-2 text-right font-bold">D-value (min)</th>
+                          <th className="p-2 text-right font-bold">Time for 6-log (min)</th>
+                          <th className="p-2 text-right font-bold">Time for 6-log (sec)</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {result.equivTemps.map((row: any, i: number) => (
+                          <tr key={i} className={`border-t ${row.temp === parseFloat(dval.processTemp) ? "bg-purple-50 font-bold" : ""}`}>
+                            <td className="p-2">{row.temp}°C {row.temp === parseFloat(dval.processTemp) ? "← current" : ""}</td>
+                            <td className="p-2 text-right">{row.D.toFixed(5)}</td>
+                            <td className="p-2 text-right">{row.t6log.toFixed(4)}</td>
+                            <td className="p-2 text-right font-bold text-purple-700">{(row.t6log * 60).toFixed(2)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </CardContent>
+              </Card>
+            </>
+          )}
+
+          {/* Formula box */}
+          <div className="bg-slate-50 border rounded-lg p-3 text-xs font-mono text-slate-500 space-y-1">
+            <div className="font-bold text-slate-700 mb-1">📐 Formulas Used:</div>
+            <div>D_T = D_ref × 10^((T_ref − T) / z)</div>
+            <div>Log Reduction = t(min) / D_T</div>
+            <div>N_final = N₀ × 10^(−Log Reduction)</div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+// ══════════════════════════════════════════════════════════════
+// SIRF YAHI FUNCTION COPY KARO — apni file mein purana
+// YieldsCalc function delete karke yeh paste karo.
+// Baaki sab same rahega.
+// ══════════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════
+// 2. ADVANCED GHEE RECOVERY & LOSS CALCULATOR
+// Industry Standard: Fat Balance Method
+// ════════════════════════════════════════════════════════════
+export function GheeRecoveryCalc() {
+  const [inputs, setInputs] = useState({
+    inputType: "butter", // butter | cream
+    quantity: "1000",    // kg
+    fatPercent: "82",    // % (White Butter usually 80-82%, Cream 40-60%)
+    moisture: "16",      // % moisture in input
+    efficiency: "98.5",  // % Fat Recovery Efficiency (Industrial standard)
+    gheePrice: "550",    // ₹/kg
+    residuePrice: "40",  // ₹/kg (Ghee Residue/Khurchan)
+  });
+
+  const [result, setResult] = useState<any>(null);
+
+  const calculate = useCallback(() => {
+    const Q = parseFloat(inputs.quantity) || 0;
+    const Fat = parseFloat(inputs.fatPercent) / 100;
+    const Eff = parseFloat(inputs.efficiency) / 100;
+    const GheeRate = parseFloat(inputs.gheePrice);
+    const ResidueRate = parseFloat(inputs.residuePrice);
+
+    // 1. Total Fat Available
+    const totalFatInput = Q * Fat;
+
+    // 2. Expected Ghee Yield (Pure Fat recovered)
+    // Ghee is 99.7% fat, usually calculated as pure fat * efficiency
+    const gheeYieldKg = (totalFatInput * Eff) / 0.997; 
+
+    // 3. Fat Loss
+    const fatLossKg = totalFatInput - (gheeYieldKg * 0.997);
+
+    // 4. Ghee Residue (SNF solids + burnt portion)
+    // Estimation: Non-fat solids usually precipitate as residue.
+    // Residue approx = (Total Solids - Recovered Fat) * burning_factor (approx 0.8 moisture evap)
+    // Simplified industrial estimation: 1-2% of cream/butter weight depending on SNF
+    const solidsNotFat = Q * (1 - Fat - (parseFloat(inputs.moisture)/100));
+    const estimatedResidue = solidsNotFat * 0.9; // Assuming 10% moisture in residue
+
+    // 5. Economics
+    const gheeValue = gheeYieldKg * GheeRate;
+    const residueValue = estimatedResidue * ResidueRate;
+    const totalValue = gheeValue + residueValue;
+
+    setResult({
+      gheeYieldKg,
+      totalFatInput,
+      fatLossKg,
+      estimatedResidue,
+      totalValue,
+      recoveryPercent: ((gheeYieldKg / Q) * 100).toFixed(2)
+    });
+  }, [inputs]);
+
+  return (
+    <Card className="border-yellow-200 bg-yellow-50/30">
+      <CardHeader className="pb-2 bg-yellow-100/50 rounded-t-lg">
+        <CardTitle className="text-lg text-yellow-800 flex gap-2">
+          <Target className="w-5 h-5"/> Industrial Ghee Recovery
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4 pt-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+          <div className="space-y-1">
+            <label className="text-xs font-bold text-slate-500">Input Type</label>
+            <select 
+              className="w-full h-9 border rounded px-2 text-sm"
+              value={inputs.inputType}
+              onChange={e => setInputs({...inputs, inputType: e.target.value, fatPercent: e.target.value === 'butter' ? '82' : '40', moisture: e.target.value === 'butter' ? '16' : '54'})}
+            >
+              <option value="butter">White Butter</option>
+              <option value="cream">Cream</option>
+            </select>
+          </div>
+          <ValidatedInput label="Quantity" value={inputs.quantity} onChange={v=>setInputs({...inputs, quantity:v})} unit="kg" colorScheme="yellow" />
+          <ValidatedInput label="Fat %" value={inputs.fatPercent} onChange={v=>setInputs({...inputs, fatPercent:v})} unit="%" colorScheme="orange" />
+          <ValidatedInput label="Plant Efficiency" value={inputs.efficiency} onChange={v=>setInputs({...inputs, efficiency:v})} unit="%" helpText="Std: 98-99%" colorScheme="green" />
+          <ValidatedInput label="Ghee Price" value={inputs.gheePrice} onChange={v=>setInputs({...inputs, gheePrice:v})} unit="₹" />
+        </div>
+
+        <Button onClick={calculate} className="w-full bg-yellow-600 hover:bg-yellow-700 text-white">Calculate Yield</Button>
+
+        {result && (
+          <div className="space-y-3 animate-in slide-in-from-bottom-2">
+            <div className="grid grid-cols-2 gap-3">
+              <ResultCard title="Expected Ghee" value={result.gheeYieldKg.toFixed(1)} unit="kg" icon={<Droplets className="w-4 h-4"/>} colorScheme="orange" />
+              <ResultCard title="Recovery %" value={result.recoveryPercent} unit="%" icon={<Target className="w-4 h-4"/>} colorScheme="green" />
+            </div>
+            
+            <div className="bg-white p-3 rounded-lg border border-yellow-200 text-sm space-y-2">
+              <div className="flex justify-between border-b pb-1">
+                <span className="text-slate-500">Total Fat Input</span>
+                <span className="font-bold">{result.totalFatInput.toFixed(1)} kg</span>
+              </div>
+              <div className="flex justify-between border-b pb-1">
+                <span className="text-slate-500">Fat Loss</span>
+                <span className="font-bold text-red-600">{result.fatLossKg.toFixed(2)} kg</span>
+              </div>
+              <div className="flex justify-between border-b pb-1">
+                <span className="text-slate-500">Ghee Residue</span>
+                <span className="font-bold">{result.estimatedResidue.toFixed(1)} kg</span>
+              </div>
+              <div className="flex justify-between pt-1">
+                <span className="text-slate-500 font-bold">Total Batch Value</span>
+                <span className="font-bold text-green-700 text-lg">₹ {result.totalValue.toLocaleString()}</span>
+              </div>
+            </div>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
+// ════════════════════════════════════════════════════════════
+// 3. CHEESE YIELD CALCULATOR (VAN SLYKE FORMULA)
+// The Gold Standard for Cheddar/Hard Cheese
+// ════════════════════════════════════════════════════════════
+export function CheeseYieldCalc() {
+  const [inputs, setInputs] = useState({
+    milkQty: "1000",
+    fat: "4.0",
+    protein: "3.3",      // Total protein
+    caseinRatio: "78",   // Casein is typically 78% of protein
+    targetMoisture: "37",// Cheddar ~37%, Mozzarella ~48%
+    fatRetention: "93",  // Process efficiency (93% typical)
+    caseinRetention: "96"// Process efficiency (96% typical)
+  });
+  const [result, setResult] = useState<any>(null);
+
+  const calculate = useCallback(() => {
+    const M = parseFloat(inputs.milkQty);
+    const F = parseFloat(inputs.fat) / 100; // Fat decimal
+    const P = parseFloat(inputs.protein) / 100; 
+    const CaseinPct = parseFloat(inputs.caseinRatio) / 100;
+    const C = P * CaseinPct; // Casein decimal
+    const W = parseFloat(inputs.targetMoisture) / 100; // Target Moisture decimal
+    
+    // Efficiency factors
+    const RF = parseFloat(inputs.fatRetention) / 100; // Fat Recovery
+    const RC = parseFloat(inputs.caseinRetention) / 100; // Casein Recovery (solids retention)
+
+    // Van Slyke Formula Generic:
+    // Yield = [ (RF * Fat) + (RC * Casein) ] * SolidsFactor / (1 - Moisture)
+    // SolidsFactor (Salt + Whey Solids) is typically 1.09 for Cheddar
+    const solidsFactor = 1.09;
+
+    const yieldPct = ((RF * inputs.fat * 1.0) + (RC * (inputs.protein * CaseinPct * 100))) * solidsFactor / (100 - parseFloat(inputs.targetMoisture)) * 100; // Simplified calculation in %
+    
+    // Detailed Kg Calculation
+    const recoveredFat = M * F * RF;
+    const recoveredCasein = M * C * RC;
+    const otherSolids = (recoveredFat + recoveredCasein) * (solidsFactor - 1); // Salt etc
+    const totalSolids = recoveredFat + recoveredCasein + otherSolids;
+    
+    const cheeseWeight = totalSolids / (1 - W);
+    const actualYieldPct = (cheeseWeight / M) * 100;
+
+    const wheyVolume = M - cheeseWeight;
+
+    setResult({ cheeseWeight, actualYieldPct, wheyVolume, recoveredFat });
+  }, [inputs]);
+
+  return (
+    <Card className="border-orange-200 bg-orange-50/30">
+      <CardHeader className="pb-2 bg-orange-100/50 rounded-t-lg">
+        <CardTitle className="text-lg text-orange-800 flex gap-2">
+          <Milk className="w-5 h-5"/> Cheese Yield (Van Slyke)
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4 pt-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+          <ValidatedInput label="Milk Qty (kg)" value={inputs.milkQty} onChange={v=>setInputs({...inputs, milkQty:v})} />
+          <ValidatedInput label="Milk Fat %" value={inputs.fat} onChange={v=>setInputs({...inputs, fat:v})} colorScheme="orange" />
+          <ValidatedInput label="Protein %" value={inputs.protein} onChange={v=>setInputs({...inputs, protein:v})} colorScheme="blue" />
+          
+          <ValidatedInput label="Target Moisture %" value={inputs.targetMoisture} onChange={v=>setInputs({...inputs, targetMoisture:v})} helpText="Cheddar 37, Mozz 48" />
+          <ValidatedInput label="Fat Retention %" value={inputs.fatRetention} onChange={v=>setInputs({...inputs, fatRetention:v})} helpText="Typical 93%" />
+          <ValidatedInput label="Casein Retention %" value={inputs.caseinRetention} onChange={v=>setInputs({...inputs, caseinRetention:v})} helpText="Typical 96%" />
+        </div>
+
+        <Button onClick={calculate} className="w-full bg-orange-600 hover:bg-orange-700 text-white">Predict Yield</Button>
+
+        {result && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 animate-in fade-in">
+             <ResultCard title="Cheese Output" value={result.cheeseWeight.toFixed(1)} unit="kg" icon={<Target className="w-4 h-4"/>} colorScheme="orange" />
+             <ResultCard title="Yield %" value={result.actualYieldPct.toFixed(2)} unit="%" icon={<Factory className="w-4 h-4"/>} colorScheme="green" />
+             <div className="p-3 rounded-xl border bg-white flex flex-col justify-center items-center shadow-sm">
+                <span className="text-xs uppercase font-bold text-slate-400">Whey Generated</span>
+                <span className="text-xl font-bold text-blue-600">{result.wheyVolume.toFixed(0)} kg</span>
+             </div>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
+// ════════════════════════════════════════════════════════════
+// 4. MILK CHILLING LOAD (REFRIGERATION)
+// Calculates TR required for PHE/Bulk Cooler
+// ════════════════════════════════════════════════════════════
+export function ChillingLoadCalc() {
+  const [inputs, setInputs] = useState({
+    volume: "5000",      // Liters
+    startTemp: "35",     // °C (Raw Milk)
+    endTemp: "4",        // °C (Chilled)
+    time: "2",           // Hours
+    safetyMargin: "15",  // % (Heat leakages, pump heat)
+    density: "1.03",     // kg/L
+    cp: "0.94"           // Specific Heat (kcal/kg°C) - Milk is approx 0.93-0.94
+  });
+  const [result, setResult] = useState<any>(null);
+
+  const calculate = useCallback(() => {
+    const V = parseFloat(inputs.volume);
+    const D = parseFloat(inputs.density);
+    const Mass = V * D; // kg
+    
+    const T1 = parseFloat(inputs.startTemp);
+    const T2 = parseFloat(inputs.endTemp);
+    const dT = T1 - T2;
+    
+    const Cp = parseFloat(inputs.cp);
+    const Hrs = parseFloat(inputs.time);
+    const Safety = 1 + (parseFloat(inputs.safetyMargin) / 100);
+
+    if(Hrs <= 0) return;
+
+    // Formula: Q (kcal) = m * Cp * dT
+    const totalHeatKcal = Mass * Cp * dT;
+    
+    // Heat Load per Hour
+    const heatLoadHr = totalHeatKcal / Hrs;
+    
+    // Apply Safety Margin
+    const requiredLoadKcal = heatLoadHr * Safety;
+
+    // Convert to TR (1 TR = 3024 kcal/hr)
+    const TR = requiredLoadKcal / 3024;
+    const kW = TR * 3.517; // 1 TR ~ 3.517 kW thermal
+
+    setResult({
+      totalHeatKcal,
+      requiredLoadKcal,
+      TR,
+      kW
+    });
+  }, [inputs]);
+
+  return (
+    <Card className="border-blue-200 bg-blue-50/30">
+      <CardHeader className="pb-2 bg-blue-100/50 rounded-t-lg">
+        <CardTitle className="text-lg text-blue-800 flex gap-2">
+          <Snowflake className="w-5 h-5"/> Refrigeration Load (TR)
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4 pt-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <ValidatedInput label="Volume (L)" value={inputs.volume} onChange={v=>setInputs({...inputs, volume:v})} />
+          <ValidatedInput label="Time (Hours)" value={inputs.time} onChange={v=>setInputs({...inputs, time:v})} />
+          <ValidatedInput label="Start Temp °C" value={inputs.startTemp} onChange={v=>setInputs({...inputs, startTemp:v})} colorScheme="red" />
+          <ValidatedInput label="End Temp °C" value={inputs.endTemp} onChange={v=>setInputs({...inputs, endTemp:v})} colorScheme="blue" />
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+           <ValidatedInput label="Safety Margin %" value={inputs.safetyMargin} onChange={v=>setInputs({...inputs, safetyMargin:v})} helpText="For leaks/pumps (10-20%)" />
+           <ValidatedInput label="Specific Heat" value={inputs.cp} onChange={v=>setInputs({...inputs, cp:v})} helpText="Milk: 0.94 kcal/kg°C" />
+        </div>
+
+        <Button onClick={calculate} className="w-full bg-blue-600 hover:bg-blue-700 text-white">Calculate TR</Button>
+
+        {result && (
+          <div className="flex flex-col gap-3 animate-in fade-in">
+             <div className="grid grid-cols-2 gap-4">
+                <div className="bg-slate-800 text-white p-4 rounded-xl text-center shadow-lg">
+                    <div className="text-xs uppercase opacity-70">Required Capacity</div>
+                    <div className="text-3xl font-bold text-cyan-400">{result.TR.toFixed(1)} TR</div>
+                    <div className="text-xs mt-1">({result.kW.toFixed(1)} kW Thermal)</div>
+                </div>
+                <div className="bg-white border p-4 rounded-xl text-center shadow-sm flex flex-col justify-center">
+                    <div className="text-xs uppercase text-slate-500">Heat Load</div>
+                    <div className="text-xl font-bold text-slate-700">{result.requiredLoadKcal.toLocaleString('en-IN', {maximumFractionDigits:0})}</div>
+                    <div className="text-xs text-slate-400">kcal/hr</div>
+                </div>
+             </div>
+             <Alert className="bg-blue-50 border-blue-200">
+                <AlertTriangle className="h-4 w-4 text-blue-600"/>
+                <AlertDescription className="text-xs text-blue-800">
+                   <strong>Industrial Note:</strong> Select a compressor with capacity <strong>{(result.TR * 1.1).toFixed(1)} TR</strong> to account for ambient temperature variations.
+                </AlertDescription>
+             </Alert>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
+// ════════════════════════════════════════════════════════════
+// 5. BOILER STEAM COST CALCULATOR
+// Calculates Fuel Cost per Kg of Steam Generated
+// ════════════════════════════════════════════════════════════
+export function BoilerCostCalc() {
+  const [inputs, setInputs] = useState({
+    fuelType: "coal",    // coal | wood | gas | diesel
+    fuelPrice: "12",     // ₹/kg or ₹/SCM
+    gcv: "4500",         // kcal/kg
+    efficiency: "75",    // %
+    steamPressure: "10", // Bar
+    feedWaterTemp: "85", // °C
+  });
+  const [result, setResult] = useState<any>(null);
+
+  // Presets for Fuels
+  const handleFuelChange = (type: string) => {
+    let p = "0", g = "0", e = "75";
+    switch(type) {
+        case "coal": p="12"; g="4500"; e="70"; break; // Indonesian Coal
+        case "wood": p="6"; g="3200"; e="65"; break;  // Briquettes/Wood
+        case "gas": p="45"; g="8500"; e="90"; break;  // PNG (per SCM)
+        case "diesel": p="90"; g="10500"; e="85"; break; // HSD
+        default: break;
+    }
+    setInputs({...inputs, fuelType: type, fuelPrice: p, gcv: g, efficiency: e});
+  };
+
+  const calculate = useCallback(() => {
+    const P_fuel = parseFloat(inputs.fuelPrice);
+    const GCV = parseFloat(inputs.gcv);
+    const Eff = parseFloat(inputs.efficiency) / 100;
+    const Tw = parseFloat(inputs.feedWaterTemp);
+    
+    // 1. Heat Required to produce 1kg Steam (Enthalpy)
+    // Approx Enthalpy of Saturated Steam at 10 bar ≈ 665 kcal/kg
+    // Heat req = Enthalpy - FeedWaterTemp (Since 1kg water = 1 kcal/C)
+    // Using a simplified regression for Enthalpy based on Pressure (P in Bar)
+    // H_steam ≈ 640 + (2 * P) roughly for industrial range, or typically 660 is standard safe assumption
+    const H_steam = 640 + (1.5 * parseFloat(inputs.steamPressure)); 
+    const HeatRequired = H_steam - Tw; // kcal/kg of steam
+
+    // 2. Heat Available from Fuel (Effective)
+    const HeatAvailable = GCV * Eff; // kcal/kg fuel
+
+    // 3. Steam to Fuel Ratio (Key KPI)
+    const SteamFuelRatio = HeatAvailable / HeatRequired; 
+
+    // 4. Cost Calculation
+    const CostPerKgSteam = P_fuel / SteamFuelRatio;
+
+    setResult({
+      HeatRequired,
+      SteamFuelRatio,
+      CostPerKgSteam
+    });
+  }, [inputs]);
+
+  return (
+    <Card className="border-red-200 bg-red-50/30">
+      <CardHeader className="pb-2 bg-red-100/50 rounded-t-lg">
+        <CardTitle className="text-lg text-red-800 flex gap-2">
+          <Flame className="w-5 h-5"/> Boiler Steam Cost
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4 pt-4">
+        <div className="grid grid-cols-2 gap-3">
+           <div className="space-y-1">
+            <label className="text-xs font-bold text-slate-500">Fuel Type</label>
+            <select className="w-full h-9 border rounded px-2 text-sm" onChange={e => handleFuelChange(e.target.value)} value={inputs.fuelType}>
+                <option value="coal">Imp. Coal</option>
+                <option value="wood">Wood/Briquette</option>
+                <option value="gas">Natural Gas (PNG)</option>
+                <option value="diesel">Diesel (HSD)</option>
+            </select>
+           </div>
+           <ValidatedInput label="Fuel Price" value={inputs.fuelPrice} onChange={v=>setInputs({...inputs, fuelPrice:v})} unit="₹" />
+           <ValidatedInput label="GCV (kcal)" value={inputs.gcv} onChange={v=>setInputs({...inputs, gcv:v})} helpText="Calorific Value" />
+           <ValidatedInput label="Efficiency %" value={inputs.efficiency} onChange={v=>setInputs({...inputs, efficiency:v})} />
+           <ValidatedInput label="Pressure (Bar)" value={inputs.steamPressure} onChange={v=>setInputs({...inputs, steamPressure:v})} />
+           <ValidatedInput label="Feed Water °C" value={inputs.feedWaterTemp} onChange={v=>setInputs({...inputs, feedWaterTemp:v})} helpText="Condensate return helps" />
+        </div>
+
+        <Button onClick={calculate} className="w-full bg-red-600 hover:bg-red-700 text-white">Analyze Cost</Button>
+
+        {result && (
+          <div className="flex flex-col gap-3 animate-in fade-in">
+             <div className="grid grid-cols-2 gap-4">
+                <div className="bg-white p-3 rounded-xl border border-red-200 shadow-sm text-center">
+                    <div className="text-xs uppercase text-slate-500">Steam/Fuel Ratio</div>
+                    <div className="text-2xl font-bold text-slate-800">{result.SteamFuelRatio.toFixed(2)}</div>
+                    <div className="text-[10px] text-slate-400">kg steam / kg fuel</div>
+                </div>
+                <div className="bg-red-600 text-white p-3 rounded-xl shadow-lg text-center flex flex-col justify-center">
+                    <div className="text-xs uppercase opacity-80">Steam Cost</div>
+                    <div className="text-2xl font-bold">₹ {result.CostPerKgSteam.toFixed(2)}</div>
+                    <div className="text-[10px] opacity-80">per kg</div>
+                </div>
+             </div>
+             <div className="text-xs text-center text-slate-500 bg-white p-2 rounded border">
+                Heat Required: <strong>{result.HeatRequired.toFixed(0)} kcal/kg</strong> (Based on pressure & feed temp)
+             </div>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+// ════════════════════════════════════════════════════════════
+// 1. ADVANCED TANK VOLUME CALCULATOR
+// Supports: Horizontal/Vertical, Dish Ends, Conical Bottoms
+// ════════════════════════════════════════════════════════════
+function TankVolumeCalc() {
+  const [input, setInput] = useState({ 
+    type: "horizontal", // horizontal | vertical
+    diameter: "200",    // cm (Internal Diameter)
+    length: "300",      // cm (Cylindrical length only)
+    height: "100",      // cm (Liquid Level)
+    dishHeight: "20",   // cm (Depth of the dish end/cone)
+    endType: "dish",    // flat | dish | cone (only for vertical)
+  });
+  
+  const [result, setResult] = useState<any>(null);
+
+  const calculate = () => {
+    const R = parseFloat(input.diameter) / 2; // Radius
+    const L = parseFloat(input.length);       // Cylindrical Length
+    const H = parseFloat(input.height);       // Liquid Height
+    const D = parseFloat(input.dishHeight);   // Dish/Cone Depth
+
+    // Validation
+    if (input.type === "horizontal" && H > parseFloat(input.diameter)) {
+       setResult({ error: "Liquid level cannot exceed diameter" }); return;
+    }
+    if (input.type === "vertical" && H > (L + D)) { // Approx total height check
+       // Allow for now, but usually H is total liquid height
+    }
+
+    let volLiters = 0;
+    let percentFull = 0;
+
+    // --- CASE 1: HORIZONTAL TANK (e.g., BMC) ---
+    if (input.type === "horizontal") {
+        // 1. Cylindrical Part (Partial Volume)
+        // Formula: L * [R² * cos⁻¹((R-H)/R) - (R-H) * √(2RH - H²)]
+        // If H > R, calculation flips. 
+        // Easier Trig approach:
+        
+        let areaCyl = 0;
+        
+        // Clamp H to Diameter
+        const h_cyl = Math.min(H, 2 * R);
+        
+        if (h_cyl > 0) {
+            if (h_cyl === R) {
+                areaCyl = 0.5 * Math.PI * R * R;
+            } else {
+                const term1 = R * R * Math.acos((R - h_cyl) / R);
+                const term2 = (R - h_cyl) * Math.sqrt(2 * R * h_cyl - h_cyl * h_cyl);
+                areaCyl = term1 - term2;
+            }
+        }
+        
+        const volCyl = areaCyl * L; // cm³
+
+        // 2. Dish Ends (2 ends) - Approximate Torispherical partial volume
+        // Full Dish Volume approx = 0.081 * Dia³ (Standard ASME) OR slightly less.
+        // Mathematical Approx for Partial Dish:
+        // V_dish_partial ≈ V_dish_total * (Area_segment / Area_circle) * correction
+        // Simplified High-Accuracy for partial dish: 
+        // V = (π * h² / 3) * (3R - h) is for sphere cap.
+        // We scale it by the dish depth factor.
+        
+        let volDish = 0;
+        if (input.endType === "dish") {
+            // Volume of ONE dish end (full) ≈ (2/3) * π * R² * D (Elliptical approximation)
+            // Partial fill logic is complex. Using spherical cap approximation scaled.
+            // Sphere Radius R_s = (R² + D²) / (2D)
+            
+            // Simplified ratio for industrial use:
+            // Volume ratio follows the area ratio roughly but slightly fuller at bottom
+            const fillRatio = areaCyl / (Math.PI * R * R);
+            const totalDishVol = 2 * ((2/3) * Math.PI * R * R * D); // 2 ends
+            volDish = totalDishVol * fillRatio; 
+        }
+
+        volLiters = (volCyl + volDish) / 1000;
+        percentFull = (H / (2 * R)) * 100;
+    }
+
+    // --- CASE 2: VERTICAL TANK (e.g., Silo) ---
+    else {
+        // H is total liquid height from bottom zero point.
+        // Structure: Bottom (Dish/Cone) + Cylinder
+        
+        let volBottom = 0;
+        let volCyl = 0;
+
+        // 1. Bottom Section
+        if (H <= D) {
+            // Liquid is only in the bottom dish/cone
+            if (input.endType === "cone") {
+                // Cone partial volume: V = (1/3) * π * r_level² * h_level
+                // r_level = R * (H / D)
+                const r_h = R * (H / D);
+                volBottom = (1/3) * Math.PI * r_h * r_h * H;
+            } else if (input.endType === "dish") {
+                // Spherical Cap approximation
+                // V = (π * H² / 3) * (3*Radius_of_curvature - H)
+                // Use Elliptical approximation for standard dish
+                // V_partial = π * R² * H * (H/D - (H/D)³/3 ) ? No, standard formula:
+                // V = (π * R² * D) * ( (H/D)^2 * (1.5 - 0.5*(H/D)) ) for 2:1 Ellipsoidal?
+                // Simple Spherical cap is best generic fit: V = (π/6) * H * (3*r_at_h^2 + H^2)
+                
+                // Effective logic:
+                volBottom = (Math.PI * R * R * D) / 2 * Math.pow(H/D, 2) * (3 - H/D) / 2; // Approx for dish bottom fill
+            } else {
+                // Flat bottom - theoretically H starts from 0, D is 0.
+                volBottom = Math.PI * R * R * H;
+            }
+        } else {
+            // Liquid covers bottom + part of cylinder
+            // Full Bottom Volume
+            if (input.endType === "cone") {
+                volBottom = (1/3) * Math.PI * R * R * D;
+            } else if (input.endType === "dish") {
+                volBottom = (2/3) * Math.PI * R * R * D; // Half ellipsoid
+            }
+            
+            // Cylindrical Part
+            const h_cyl = H - D;
+            volCyl = Math.PI * R * R * h_cyl;
+        }
+
+        volLiters = (volBottom + volCyl) / 1000;
+        percentFull = (H / (L + D)) * 100;
+    }
+
+    setResult({ volLiters, percentFull });
+  };
+
+  return (
+    <Card className="border-slate-300 bg-slate-50 shadow-md">
+        <CardHeader className="pb-2 border-b border-slate-200 bg-white rounded-t-lg">
+            <CardTitle className="text-sm font-bold flex items-center gap-2 text-slate-700">
+                <Ruler className="w-5 h-5 text-blue-600"/> 
+                Precision Tank Volume
+            </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4 pt-4">
+            {/* Configuration Row */}
+            <div className="flex gap-2">
+                <div className="w-1/2 space-y-1">
+                    <Label className="text-[10px] uppercase font-bold text-slate-500">Tank Shape</Label>
+                    <Select value={input.type} onValueChange={v=>setInput({...input, type:v, endType: v==='horizontal'?'dish':'cone'})}>
+                        <SelectTrigger className="h-8 text-xs bg-white"><SelectValue/></SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="horizontal">Horizontal (BMC)</SelectItem>
+                            <SelectItem value="vertical">Vertical (Silo)</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+                <div className="w-1/2 space-y-1">
+                    <Label className="text-[10px] uppercase font-bold text-slate-500">End Type</Label>
+                    <Select value={input.endType} onValueChange={v=>setInput({...input, endType:v})}>
+                        <SelectTrigger className="h-8 text-xs bg-white"><SelectValue/></SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="flat">Flat</SelectItem>
+                            <SelectItem value="dish">Dish / Torispherical</SelectItem>
+                            {input.type === 'vertical' && <SelectItem value="cone">Conical Bottom</SelectItem>}
+                        </SelectContent>
+                    </Select>
+                </div>
+            </div>
+
+            {/* Dimensions Grid */}
+            <div className="grid grid-cols-2 gap-3 bg-white p-3 rounded-lg border border-slate-200">
+                <ValidatedInput label="Liquid Level (cm)" value={input.height} onChange={v=>setInput({...input, height:v})} colorScheme="blue" icon={<Ruler className="w-3 h-3"/>} />
+                <ValidatedInput label="Tank Diameter (cm)" value={input.diameter} onChange={v=>setInput({...input, diameter:v})} helpText="Internal Dia" />
+                <ValidatedInput label="Cyl. Length/Height (cm)" value={input.length} onChange={v=>setInput({...input, length:v})} helpText="Straight shell only" />
+                {input.endType !== 'flat' && (
+                    <ValidatedInput 
+                        label={input.type==='vertical' ? 'Bottom Depth (cm)' : 'Dish Depth (cm)'} 
+                        value={input.dishHeight} 
+                        onChange={v=>setInput({...input, dishHeight:v})} 
+                        colorScheme="orange" 
+                        helpText="Curve/Cone height"
+                    />
+                )}
+            </div>
+
+            <Button onClick={calculate} size="lg" className="w-full bg-slate-800 hover:bg-slate-900 shadow-lg">
+                Calculate Volume
+            </Button>
+
+            {result && !result.error && (
+                <div className="grid grid-cols-2 gap-3 animate-in slide-in-from-bottom-2">
+                    <div className="bg-blue-600 text-white p-3 rounded-xl shadow-md text-center">
+                        <div className="text-[10px] uppercase opacity-70 font-bold">Total Volume</div>
+                        <div className="text-3xl font-black">{result.volLiters.toLocaleString('en-IN', {maximumFractionDigits: 0})}</div>
+                        <div className="text-xs opacity-80">Liters</div>
+                    </div>
+                    <div className="bg-white border border-slate-200 p-3 rounded-xl shadow-sm text-center flex flex-col justify-center">
+                        <div className="text-[10px] uppercase text-slate-500 font-bold">Tank Capacity Used</div>
+                        <div className="text-2xl font-bold text-slate-700">{result.percentFull.toFixed(1)}%</div>
+                        <div className="h-2 w-full bg-slate-100 rounded-full mt-1 overflow-hidden">
+                            <div className="h-full bg-blue-500" style={{width: `${Math.min(result.percentFull, 100)}%`}}></div>
+                        </div>
+                    </div>
+                </div>
+            )}
+            
+            {result?.error && (
+                <div className="p-3 bg-red-50 text-red-600 text-xs rounded border border-red-200 text-center font-bold">
+                    ⚠️ {result.error}
+                </div>
+            )}
+        </CardContent>
+    </Card>
+  );
+}
+// ════════════════════════════════════════════════════════════
+// 2. ADVANCED PACKAGING FILM CALCULATOR
+// Calculates: Film Weight, Roll Length, No. of Reels
+// ════════════════════════════════════════════════════════════
+function PackagingFilmCalc() {
+  const [p, setP] = useState({ 
+    pouches: "10000", 
+    width: "325",    // mm (Standard 500ml pouch)
+    repeat: "150",   // mm (Pouch Length)
+    thickness: "55", // microns
+    density: "0.92", // g/cm³ (LDPE)
+    wastage: "2.0",  // % Process Wastage
+    rollWeight: "25" // kg (Standard Roll Size)
+  });
+  const [res, setRes] = useState<any>(null);
+
+  const calculate = () => {
+    // 1. Single Pouch Weight
+    // Volume cm³ = (W/10) * (L/10) * (Thickness/10000)
+    const W_cm = parseFloat(p.width) / 10;
+    const L_cm = parseFloat(p.repeat) / 10;
+    const T_cm = parseFloat(p.thickness) / 10000;
+    const D = parseFloat(p.density);
+    const Wastage = 1 + (parseFloat(p.wastage) / 100);
+
+    const weightPerPouchG = (W_cm * L_cm * T_cm * D);
+    
+    // 2. Total Requirement
+    const netKg = (weightPerPouchG * parseFloat(p.pouches)) / 1000;
+    const grossKg = netKg * Wastage; // Adding wastage
+
+    // 3. Roll Logic (Yield)
+    // Yield (m²/kg) = 1000 / (Density * Thickness_micron * 10^-3) ??
+    // Simpler: Yield (Pouch/kg) = 1000g / WeightPerPouch
+    const yieldPouchPerKg = 1000 / weightPerPouchG;
+    
+    // 4. Meters Calculation
+    // Total Length (m) = (Pouches * Repeat_mm) / 1000
+    const totalMeters = (parseFloat(p.pouches) * parseFloat(p.repeat)) / 1000;
+    
+    // 5. Reels Needed
+    const reels = grossKg / parseFloat(p.rollWeight);
+
+    setRes({ 
+        weightPerPouchG, 
+        netKg, 
+        grossKg, 
+        yieldPouchPerKg,
+        totalMeters,
+        reels
+    });
+  };
+
+  return (
+    <Card className="border-purple-200 bg-purple-50/30">
+        <CardHeader className="pb-2 border-b border-purple-100 bg-purple-50 rounded-t-lg">
+            <CardTitle className="text-sm font-bold flex gap-2 text-purple-800">
+                <PackageOpen className="w-4 h-4"/> Industrial Packaging Planner
+            </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4 pt-4">
+            {/* Material Selector */}
+            <div className="space-y-1">
+                <Label className="text-[10px] uppercase font-bold text-slate-500">Material Type</Label>
+                <Select value={p.density} onValueChange={v=>setP({...p, density:v})}>
+                    <SelectTrigger className="h-8 text-xs bg-white"><SelectValue placeholder="Select Material"/></SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="0.92">LDPE (Milk Pouch) - 0.92</SelectItem>
+                        <SelectItem value="1.40">Polyester (PET) - 1.40</SelectItem>
+                        <SelectItem value="0.95">LLDPE - 0.95</SelectItem>
+                        <SelectItem value="1.20">Laminate (Avg) - 1.20</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
+
+            {/* Inputs Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                <ValidatedInput label="Target Pouches" value={p.pouches} onChange={v=>setP({...p, pouches:v})} />
+                <ValidatedInput label="Film Width (mm)" value={p.width} onChange={v=>setP({...p, width:v})} />
+                <ValidatedInput label="Repeat Len (mm)" value={p.repeat} onChange={v=>setP({...p, repeat:v})} />
+                <ValidatedInput label="Thickness (mic)" value={p.thickness} onChange={v=>setP({...p, thickness:v})} />
+                <ValidatedInput label="Wastage %" value={p.wastage} onChange={v=>setP({...p, wastage:v})} colorScheme="red" />
+                <ValidatedInput label="Roll Weight (kg)" value={p.rollWeight} onChange={v=>setP({...p, rollWeight:v})} helpText="Std Reel Wt" />
+            </div>
+
+            <Button onClick={calculate} size="sm" className="w-full bg-purple-600 hover:bg-purple-700 shadow-md">Calculate Requirement</Button>
+            
+            {res && (
+                <div className="space-y-2 animate-in slide-in-from-bottom-2">
+                    {/* Main Result */}
+                    <div className="flex justify-between items-center bg-white p-3 rounded-lg border border-purple-200 shadow-sm">
+                        <div>
+                            <div className="text-[10px] uppercase font-bold text-slate-400">Total Film Needed</div>
+                            <div className="text-2xl font-black text-purple-700">{res.grossKg.toFixed(1)} <span className="text-sm text-slate-500">kg</span></div>
+                        </div>
+                        <div className="text-right">
+                            <div className="text-[10px] uppercase font-bold text-slate-400">Est. Reels</div>
+                            <div className="text-xl font-bold text-slate-700">{Math.ceil(res.reels)} <span className="text-xs font-normal">({res.reels.toFixed(1)})</span></div>
+                        </div>
+                    </div>
+
+                    {/* Detailed Stats */}
+                    <div className="grid grid-cols-3 gap-2 text-center">
+                        <div className="bg-purple-100 p-2 rounded border border-purple-200">
+                            <div className="text-[9px] text-purple-800 font-bold uppercase">Yield</div>
+                            <div className="font-bold text-sm">{res.yieldPouchPerKg.toFixed(0)} <span className="text-[9px]">pouch/kg</span></div>
+                        </div>
+                        <div className="bg-slate-50 p-2 rounded border border-slate-200">
+                            <div className="text-[9px] text-slate-500 font-bold uppercase">Weight/Pouch</div>
+                            <div className="font-bold text-sm">{res.weightPerPouchG.toFixed(3)} g</div>
+                        </div>
+                        <div className="bg-slate-50 p-2 rounded border border-slate-200">
+                            <div className="text-[9px] text-slate-500 font-bold uppercase">Total Length</div>
+                            <div className="font-bold text-sm">{(res.totalMeters/1000).toFixed(2)} km</div>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </CardContent>
+    </Card>
+  );
+}
+// ════════════════════════════════════════════════════════════
+// 3. ADVANCED PIPELINE LOSS & CIP VOLUME
+// Uses Internal Diameter (ID) based on Pipe Schedule (Thickness)
+// ════════════════════════════════════════════════════════════
+function PipelineLossCalc() {
+  const [p, setP] = useState({ 
+    sizeOD: "51",     // mm (Standard Dairy OD)
+    thickness: "1.2", // mm (Wall thickness - SMS/DIN standard)
+    length: "100",    // m
+    lines: "1"        // Number of parallel lines
+  });
+  const [res, setRes] = useState<any>(null);
+
+  const calculate = () => {
+    const OD = parseFloat(p.sizeOD);
+    const Th = parseFloat(p.thickness);
+    
+    // Internal Diameter (ID) = OD - (2 * Thickness)
+    const ID_mm = OD - (2 * Th);
+    
+    if (ID_mm <= 0) { 
+        setRes(null); return; // Error handle
+    }
+
+    const radius_mm = ID_mm / 2;
+    const length_mm = parseFloat(p.length) * 1000;
+    const count = parseFloat(p.lines);
+
+    // Volume in mm³ = π * r² * h
+    const vol_mm3 = Math.PI * radius_mm * radius_mm * length_mm;
+    
+    // Volume in Liters = mm³ / 1,000,000
+    const singleLineVolL = vol_mm3 / 1000000;
+    const totalMilkVol = singleLineVolL * count;
+
+    // CIP Calculation (Rule of Thumb: 1.5x pipe volume for flush)
+    const cipWater = totalMilkVol * 1.5;
+
+    // Flow Velocity Check (Optional insight)
+    // At 5000 L/h flow, velocity (m/s) = Q / Area
+    // Area (m²) = vol_liters / length_m / 1000
+    // Not calculating here to keep simple, but volume is key.
+
+    setRes({ ID_mm, singleLineVolL, totalMilkVol, cipWater });
+  };
+
+  return (
+    <Card className="border-orange-200 bg-orange-50/30">
+        <CardHeader className="pb-2 border-b border-orange-100 bg-orange-50 rounded-t-lg">
+            <CardTitle className="text-sm font-bold flex gap-2 text-orange-800">
+                <Cylinder className="w-4 h-4"/> Pipeline Hold-up & CIP
+            </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4 pt-4">
+            
+            {/* Pipe Standard Selector */}
+            <div className="space-y-1">
+                <Label className="text-[10px] uppercase font-bold text-slate-500">Pipe Standard (SMS/DIN)</Label>
+                <Select value={p.sizeOD} onValueChange={v=>{
+                    // Auto-set standard thickness based on size (Approx SMS standard)
+                    let th = "1.2";
+                    if(v === "63.5" || v === "76.2") th = "1.5";
+                    if(v === "101.6") th = "2.0";
+                    setP({...p, sizeOD: v, thickness: th});
+                }}>
+                    <SelectTrigger className="h-8 text-xs bg-white"><SelectValue/></SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="25.4">1.0 Inch (25mm)</SelectItem>
+                        <SelectItem value="38.1">1.5 Inch (38mm)</SelectItem>
+                        <SelectItem value="51">2.0 Inch (51mm)</SelectItem>
+                        <SelectItem value="63.5">2.5 Inch (63.5mm)</SelectItem>
+                        <SelectItem value="76.2">3.0 Inch (76mm)</SelectItem>
+                        <SelectItem value="101.6">4.0 Inch (102mm)</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
+
+            <div className="grid grid-cols-3 gap-2">
+                <ValidatedInput label="Pipe OD (mm)" value={p.sizeOD} onChange={v=>setP({...p, sizeOD:v})} />
+                <ValidatedInput label="Wall Thk (mm)" value={p.thickness} onChange={v=>setP({...p, thickness:v})} helpText="ID calc" />
+                <ValidatedInput label="Length (m)" value={p.length} onChange={v=>setP({...p, length:v})} />
+                <div className="col-span-3">
+                    <ValidatedInput label="No. of Lines" value={p.lines} onChange={v=>setP({...p, lines:v})} />
+                </div>
+            </div>
+
+            <Button onClick={calculate} size="sm" className="w-full bg-orange-600 hover:bg-orange-700 text-white shadow-md">Calculate Loss</Button>
+
+            {res && (
+                <div className="space-y-2 animate-in slide-in-from-bottom-2">
+                    {/* Main Volume Card */}
+                    <div className="bg-white p-3 rounded-xl border border-orange-200 shadow-sm text-center">
+                        <div className="text-[10px] uppercase font-bold text-slate-400">Total Milk Hold-up (Loss)</div>
+                        <div className="text-3xl font-black text-orange-600">{res.totalMilkVol.toFixed(1)} <span className="text-lg font-medium text-slate-500">Liters</span></div>
+                        <div className="text-[10px] text-slate-400 mt-1">Based on ID: {res.ID_mm.toFixed(1)} mm</div>
+                    </div>
+
+                    {/* Secondary Stats */}
+                    <div className="flex gap-2">
+                        <div className="flex-1 bg-blue-50 p-2 rounded border border-blue-100 text-center">
+                            <div className="text-[9px] font-bold text-blue-600 uppercase">Per Meter</div>
+                            <div className="font-bold text-blue-900">{(res.singleLineVolL / parseFloat(p.length)).toFixed(3)} L/m</div>
+                        </div>
+                        <div className="flex-1 bg-green-50 p-2 rounded border border-green-100 text-center">
+                            <div className="text-[9px] font-bold text-green-600 uppercase">Min CIP Water</div>
+                            <div className="font-bold text-green-900">~{Math.ceil(res.cipWater)} L</div>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </CardContent>
+    </Card>
+  );
+}
+// ════════════════════════════════════════════════════════════
+// 4. ADVANCED CULTURE DOSING & COSTING
+// Supports: DVS (Direct Vat Set) & Bulk Starter Logic
+// ════════════════════════════════════════════════════════════
+function CultureDosingCalc() {
+  const [c, setC] = useState({ 
+    method: "dvs",      // dvs (units) | bulk (%)
+    batchSize: "2000",  // Liters
+    // DVS Params
+    dvsRate: "50",      // Units per 1000L (Standard DVS rate)
+    pouchStrength: "50",// Units per Pouch
+    pouchPrice: "850",  // ₹ per Pouch
+    // Bulk Params
+    bulkRate: "2.0",    // % Inoculation
+    bulkCost: "40"      // ₹ per Liter of starter
+  });
+  const [res, setRes] = useState<any>(null);
+
+  const calculate = () => {
+    const Vol = parseFloat(c.batchSize);
+    
+    if (c.method === "dvs") {
+        // DVS Calculation
+        const rate = parseFloat(c.dvsRate); // U/1000L
+        const pouchU = parseFloat(c.pouchStrength);
+        const price = parseFloat(c.pouchPrice);
+
+        const totalUnits = (Vol / 1000) * rate;
+        const pouchesNeeded = totalUnits / pouchU;
+        // Round up pouches for procurement, but calculating exact cost for batch logic usually uses partial if open allowed, 
+        // but industrially we open full pouches. Let's show exact ratio.
+        const totalCost = pouchesNeeded * price;
+        
+        setRes({ 
+            req: `${totalUnits.toFixed(1)} Units`, 
+            pack: `${pouchesNeeded.toFixed(2)} Pouches`, 
+            totalCost, 
+            costPerL: totalCost / Vol 
+        });
+    } else {
+        // Bulk Starter Calculation
+        const rate = parseFloat(c.bulkRate); // %
+        const price = parseFloat(c.bulkCost);
+
+        const starterLiters = Vol * (rate / 100);
+        const totalCost = starterLiters * price;
+
+        setRes({ 
+            req: `${starterLiters.toFixed(1)} Liters`, 
+            pack: "Bulk Tank", 
+            totalCost, 
+            costPerL: totalCost / Vol 
+        });
+    }
+  };
+
+  return (
+    <Card className="border-pink-200 bg-pink-50/30">
+        <CardHeader className="pb-2 border-b border-pink-100 bg-pink-50 rounded-t-lg">
+            <CardTitle className="text-sm font-bold flex gap-2 text-pink-800">
+                <Pipette className="w-4 h-4"/> Fermentation Culture Dosing
+            </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4 pt-4">
+            
+            {/* Method Selector */}
+            <div className="flex justify-center bg-white p-1 rounded border mb-2">
+                <button 
+                    onClick={() => setC({...c, method: "dvs"})} 
+                    className={`flex-1 text-xs font-bold py-1.5 rounded transition-all ${c.method==='dvs' ? 'bg-pink-600 text-white' : 'text-slate-500 hover:bg-slate-50'}`}
+                >
+                    DVS (Pouches)
+                </button>
+                <button 
+                    onClick={() => setC({...c, method: "bulk"})} 
+                    className={`flex-1 text-xs font-bold py-1.5 rounded transition-all ${c.method==='bulk' ? 'bg-pink-600 text-white' : 'text-slate-500 hover:bg-slate-50'}`}
+                >
+                    Bulk Starter (%)
+                </button>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+                <ValidatedInput label="Batch Size (L)" value={c.batchSize} onChange={v=>setC({...c, batchSize:v})} />
+                
+                {c.method === 'dvs' ? (
+                    <>
+                        <ValidatedInput label="Dose (U/1KL)" value={c.dvsRate} onChange={v=>setC({...c, dvsRate:v})} helpText="Std: 20-50 U" />
+                        <ValidatedInput label="Pouch Unit" value={c.pouchStrength} onChange={v=>setC({...c, pouchStrength:v})} helpText="e.g. 50U, 200U" />
+                        <ValidatedInput label="Price/Pouch" value={c.pouchPrice} onChange={v=>setC({...c, pouchPrice:v})} unit="₹" colorScheme="green" />
+                    </>
+                ) : (
+                    <>
+                        <ValidatedInput label="Inoculation %" value={c.bulkRate} onChange={v=>setC({...c, bulkRate:v})} helpText="Std: 1-3%" />
+                        <ValidatedInput label="Starter Cost" value={c.bulkCost} onChange={v=>setC({...c, bulkCost:v})} unit="₹/L" colorScheme="green" />
+                    </>
+                )}
+            </div>
+
+            <Button onClick={calculate} size="sm" className="w-full bg-pink-600 hover:bg-pink-700 shadow-md">Calculate Costing</Button>
+            
+            {res && (
+                <div className="space-y-2 animate-in fade-in">
+                    <div className="grid grid-cols-2 gap-3 text-center">
+                        <div className="bg-white p-2 rounded border border-pink-200">
+                            <div className="text-[9px] uppercase text-slate-500 font-bold">Requirement</div>
+                            <div className="font-black text-lg text-slate-800">{res.req}</div>
+                        </div>
+                        <div className="bg-white p-2 rounded border border-pink-200">
+                            <div className="text-[9px] uppercase text-slate-500 font-bold">{c.method==='dvs'?'Pouch Count':'Format'}</div>
+                            <div className="font-black text-lg text-pink-600">{res.pack}</div>
+                        </div>
+                    </div>
+                    
+                    <div className="flex justify-between items-center bg-pink-100 p-2 rounded border border-pink-300">
+                        <div className="text-xs text-pink-900 font-bold">Cost Impact: ₹ {res.costPerL.toFixed(2)} / L</div>
+                        <div className="text-sm font-black text-pink-900">Total: ₹ {Math.round(res.totalCost).toLocaleString()}</div>
+                    </div>
+                </div>
+            )}
+        </CardContent>
+    </Card>
+  );
+}
+// ════════════════════════════════════════════════════════════
+// 5. ADVANCED ETP POLLUTION LOAD
+// Calculates COD/BOD kg based on specific product waste
+// ════════════════════════════════════════════════════════════
+function EtpLoadCalc() {
+  const [e, setE] = useState({ 
+    lossVol: "50",     // Liters/Kg spilled
+    product: "milk",   // product type
+    treatmentCost: "5" // ₹ per kg COD removal (Electricity + Chem)
+  });
+  const [res, setRes] = useState<any>(null);
+
+  // Industry Standard COD Factors (kg COD per Liter/Kg of product)
+  const COD_FACTORS: any = {
+    milk:  { label: "Whole Milk", cod: 0.21,  bod: 0.14 }, // ~210,000 mg/L
+    skim:  { label: "Skim Milk",  cod: 0.10,  bod: 0.06 }, // Less fat = less COD
+    whey:  { label: "Cheese Whey",cod: 0.07,  bod: 0.05 }, // Lactose mainly
+    cream: { label: "Cream (40%)",cod: 0.45,  bod: 0.25 }, // High Fat = Massive COD
+    ice:   { label: "Ice Cream Mix",cod: 0.30,bod: 0.18 }, // High sugar/solids
+    ghee:  { label: "Ghee Residue",cod: 0.80, bod: 0.40 }, // Very concentrated
+  };
+
+  const calculate = () => {
+    const V = parseFloat(e.lossVol);
+    const prod = COD_FACTORS[e.product];
+    
+    // Total Loads
+    const totalCOD = V * prod.cod;
+    const totalBOD = V * prod.bod; // Or typically 0.6 * COD if data missing
+    
+    // Population Equivalent (PE)
+    // 1 PE ≈ 0.06 kg BOD per day (Human equivalent waste)
+    const PE = totalBOD / 0.06;
+
+    // Treatment Cost Estimate
+    const cost = totalCOD * parseFloat(e.treatmentCost);
+
+    setRes({ totalCOD, totalBOD, PE, cost, prodName: prod.label });
+  };
+
+  return (
+    <Card className="border-stone-300 bg-stone-50">
+        <CardHeader className="pb-2 border-b border-stone-200 bg-stone-100 rounded-t-lg">
+            <CardTitle className="text-sm font-bold flex gap-2 text-stone-700">
+                <Trash2 className="w-4 h-4"/> ETP Pollution Load Audit
+            </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4 pt-4">
+            
+            <div className="space-y-1">
+                <Label className="text-[10px] uppercase font-bold text-slate-500">Spilled Product</Label>
+                <Select value={e.product} onValueChange={v=>setE({...e, product:v})}>
+                    <SelectTrigger className="h-9 text-sm bg-white"><SelectValue/></SelectTrigger>
+                    <SelectContent>
+                        {Object.entries(COD_FACTORS).map(([key, val]: any) => (
+                            <SelectItem key={key} value={key}>{val.label}</SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+                <ValidatedInput label="Quantity (L/Kg)" value={e.lossVol} onChange={v=>setE({...e, lossVol:v})} colorScheme="red" />
+                <ValidatedInput label="Treat. Cost (₹/kg COD)" value={e.treatmentCost} onChange={v=>setE({...e, treatmentCost:v})} helpText="Power+Chem" />
+            </div>
+
+            <Button onClick={calculate} size="sm" className="w-full bg-red-700 hover:bg-red-800 text-white shadow-md">Calculate Environmental Impact</Button>
+            
+            {res && (
+                <div className="space-y-2 animate-in slide-in-from-bottom-2">
+                    <div className="grid grid-cols-2 gap-3 text-center">
+                        <div className="bg-white p-3 rounded-lg border border-red-300 shadow-sm">
+                            <div className="text-[9px] font-bold text-slate-500 uppercase">COD Load</div>
+                            <div className="text-2xl font-black text-red-700">{res.totalCOD.toFixed(2)} <span className="text-sm font-normal">kg</span></div>
+                        </div>
+                        <div className="bg-white p-3 rounded-lg border border-orange-300 shadow-sm">
+                            <div className="text-[9px] font-bold text-slate-500 uppercase">BOD Load</div>
+                            <div className="text-2xl font-black text-orange-600">{res.totalBOD.toFixed(2)} <span className="text-sm font-normal">kg</span></div>
+                        </div>
+                    </div>
+
+                    <div className="bg-stone-200 p-2 rounded border border-stone-300 text-center">
+                        <span className="text-xs text-stone-700 font-bold">Population Equivalent: </span>
+                        <span className="text-sm font-black text-stone-900">~{Math.ceil(res.PE)} Humans</span>
+                        <div className="text-[9px] text-stone-500 italic mt-1">Est. Treatment Cost: ₹ {Math.ceil(res.cost)}</div>
+                    </div>
+                </div>
+            )}
+        </CardContent>
+    </Card>
+  );
+}
+// ════════════════════════════════════════════════════════════
+// 6. ADVANCED COLD STORE CAPACITY PLANNER
+// Calculates Crates & Volume based on Room Dim & Usage Eff.
+// ════════════════════════════════════════════════════════════
+function StorageCalc() {
+  const [s, setS] = useState({ 
+    len: "20", width: "15", // Feet
+    stack: "6", // Crates high
+    efficiency: "65", // % Floor usage (remaining for aisles/movement)
+    crateType: "milk_std" // Preset selection
+  });
+  const [res, setRes] = useState<any>(null);
+
+  // Standard Crate Dimensions (mm)
+  // Milk: 450x350 (12L), Curd: 425x325, Large: 600x400
+  const CRATES: any = {
+    milk_std: { l: 450, w: 350, cap: 12, label: "Std Milk Crate (12L)" },
+    curd_cup: { l: 425, w: 325, cap: 10, label: "Curd/Cup Crate" },
+    jumbo:    { l: 600, w: 400, cap: 20, label: "Jumbo Crate (20L)" },
+    custom:   { l: 450, w: 350, cap: 12, label: "Custom Size" } // Default fallback
+  };
+
+  const calculate = () => {
+    // 1. Room Area in sq.mm
+    // 1 Foot = 304.8 mm
+    const roomL_mm = parseFloat(s.len) * 304.8;
+    const roomW_mm = parseFloat(s.width) * 304.8;
+    const totalArea = roomL_mm * roomW_mm;
+
+    // 2. Usable Area
+    const eff = parseFloat(s.efficiency) / 100;
+    const usableArea = totalArea * eff;
+
+    // 3. Crate Footprint
+    const crate = CRATES[s.crateType];
+    const crateArea = crate.l * crate.w;
+
+    // 4. Crates Calculation
+    const cratesPerLayer = Math.floor(usableArea / crateArea);
+    const totalCrates = cratesPerLayer * parseFloat(s.stack);
+    
+    // 5. Product Capacity
+    const totalCapacity = totalCrates * crate.cap;
+
+    setRes({ totalCrates, totalCapacity, cratesPerLayer });
+  };
+
+  return (
+    <Card className="border-cyan-200 bg-cyan-50/30">
+        <CardHeader className="pb-2 border-b border-cyan-100 bg-cyan-50 rounded-t-lg">
+            <CardTitle className="text-sm font-bold flex gap-2 text-cyan-800">
+                <Box className="w-4 h-4"/> Cold Store Capacity Planner
+            </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4 pt-4">
+            
+            {/* Crate Selector */}
+            <div className="space-y-1">
+                <Label className="text-[10px] uppercase font-bold text-slate-500">Crate Standard</Label>
+                <Select value={s.crateType} onValueChange={v=>setS({...s, crateType:v})}>
+                    <SelectTrigger className="h-8 text-xs bg-white"><SelectValue/></SelectTrigger>
+                    <SelectContent>
+                        {Object.entries(CRATES).map(([k, v]: any) => (
+                            <SelectItem key={k} value={k}>{v.label}</SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+                <ValidatedInput label="Room Length (ft)" value={s.len} onChange={v=>setS({...s, len:v})} />
+                <ValidatedInput label="Room Width (ft)" value={s.width} onChange={v=>setS({...s, width:v})} />
+                <ValidatedInput label="Stack Height" value={s.stack} onChange={v=>setS({...s, stack:v})} helpText="Tiers (High)" />
+                <ValidatedInput label="Floor Usage %" value={s.efficiency} onChange={v=>setS({...s, efficiency:v})} helpText="Std: 60-70%" colorScheme="blue" />
+            </div>
+
+            <Button onClick={calculate} size="sm" className="w-full bg-cyan-600 hover:bg-cyan-700 shadow-md">Plan Storage</Button>
+            
+            {res && (
+                <div className="space-y-2 animate-in slide-in-from-bottom-2">
+                    <div className="flex justify-between items-center bg-white p-3 rounded-lg border border-cyan-200 shadow-sm">
+                        <div>
+                            <div className="text-[10px] uppercase font-bold text-slate-400">Total Storage</div>
+                            <div className="text-2xl font-black text-cyan-700">{res.totalCapacity.toLocaleString()} <span className="text-sm text-slate-500">Liters/Kg</span></div>
+                        </div>
+                        <div className="text-right">
+                            <div className="text-[10px] uppercase font-bold text-slate-400">Total Crates</div>
+                            <div className="text-xl font-bold text-slate-700">{res.totalCrates.toLocaleString()}</div>
+                        </div>
+                    </div>
+                    
+                    <div className="text-center p-2 bg-cyan-100 rounded border border-cyan-300 text-xs text-cyan-900 font-medium">
+                        Floor Plan: approx <strong>{res.cratesPerLayer} crates</strong> spread per layer
+                    </div>
+                </div>
+            )}
+        </CardContent>
+    </Card>
+  );
+}
+// ════════════════════════════════════════════════════════════
+// 7. ADVANCED PANEER COAGULANT CALCULATOR
+// Calculates: Powder req, Solution Volume & Dilution Ratio
+// ════════════════════════════════════════════════════════════
+function PaneerCoagulantCalc() {
+  const [p, setP] = useState({ 
+    milk: "1000",      // Liters
+    type: "citric",    // citric | vinegar
+    rate: "2.5",       // g/L or ml/L
+    solConc: "1.5"     // % Concentration for solution (Important for soft texture)
+  });
+  const [res, setRes] = useState<any>(null);
+
+  const calculate = () => {
+    const milk = parseFloat(p.milk);
+    const rate = parseFloat(p.rate);
+    const conc = parseFloat(p.solConc); // %
+
+    let rawAmount = 0; // grams or ml
+    let unit = "g";
+
+    if (p.type === "citric") {
+        // Citric Acid Powder
+        rawAmount = milk * rate; // Total grams needed
+        unit = "g";
+    } else {
+        // Vinegar (Liquid) - Rate is ml/L
+        rawAmount = milk * rate; // Total ml needed
+        unit = "ml";
+    }
+
+    // Solution Preparation Logic
+    // We never add raw acid. We make a dilute solution (1-2%).
+    // Volume (L) = (Amount_raw / 1000) / (Concentration% / 100)
+    // If Vinegar (already liquid 4-5%), we dilute it further? 
+    // Usually industrial practice: 
+    // Citric: Dissolve powder in water.
+    // Vinegar: Dilute 1:4 or 1:5 with water.
+    
+    let totalSolutionL = 0;
+    
+    if (p.type === "citric") {
+        // g -> kg -> divide by %
+        totalSolutionL = (rawAmount / 1000) / (conc / 100);
+    } else {
+        // Vinegar dilution strategy (Target typically 1-2% acidity final)
+        // Store vinegar is ~5%. If we want 1%, we dilute 1 part vinegar + 4 parts water.
+        // Formula based on user % input:
+        // Assume input vinegar is 100% relative strength for calc, usually we just set volume.
+        // Better logic: Total Solution Volume needed to maintain gentle coagulation.
+        // Approx standard: Solution volume should be 10-15% of milk volume for very soft paneer? 
+        // No, standard is driven by concentration.
+        // Let's stick to Concentration math:
+        // To get 'conc'% solution from 'rawAmount' active.
+        // For vinegar, we assume 'rawAmount' is the active agent volume.
+        totalSolutionL = (rawAmount / 1000) * (5 / conc); // Assuming stock vinegar is 5%
+    }
+
+    setRes({ rawAmount, unit, totalSolutionL });
+  };
+
+  return (
+    <Card className="border-green-200 bg-green-50/30">
+        <CardHeader className="pb-2 border-b border-green-100 bg-green-50 rounded-t-lg">
+            <CardTitle className="text-sm font-bold flex gap-2 text-green-800">
+                <Beaker className="w-4 h-4"/> Paneer Coagulant Dosing
+            </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4 pt-4">
+            
+            {/* Type Selector */}
+            <div className="flex justify-center bg-white p-1 rounded border mb-2">
+                <button 
+                    onClick={() => setP({...p, type: "citric", rate: "2.5", solConc: "1.5"})} 
+                    className={`flex-1 text-xs font-bold py-1.5 rounded transition-all ${p.type==='citric' ? 'bg-green-600 text-white' : 'text-slate-500 hover:bg-slate-50'}`}
+                >
+                    Citric Acid
+                </button>
+                <button 
+                    onClick={() => setP({...p, type: "vinegar", rate: "30", solConc: "1.0"})} 
+                    className={`flex-1 text-xs font-bold py-1.5 rounded transition-all ${p.type==='vinegar' ? 'bg-green-600 text-white' : 'text-slate-500 hover:bg-slate-50'}`}
+                >
+                    Vinegar
+                </button>
+            </div>
+
+            <div className="grid grid-cols-3 gap-2">
+                <ValidatedInput label="Milk Qty (L)" value={p.milk} onChange={v=>setP({...p, milk:v})} />
+                <ValidatedInput label={p.type==='citric'?"Rate (g/L)":"Rate (ml/L)"} value={p.rate} onChange={v=>setP({...p, rate:v})} helpText={p.type==='citric'?"Std: 2.0-2.5":"Std: 25-35"} />
+                <ValidatedInput label="Sol. Conc %" value={p.solConc} onChange={v=>setP({...p, solConc:v})} helpText="Std: 1% - 2%" colorScheme="blue" />
+            </div>
+
+            <Button onClick={calculate} size="sm" className="w-full bg-green-600 hover:bg-green-700 shadow-md">Calculate Mix</Button>
+            
+            {res && (
+                <div className="space-y-2 animate-in fade-in">
+                    <div className="flex gap-2">
+                        <div className="flex-1 bg-white p-2 rounded border border-green-200 text-center">
+                            <div className="text-[9px] uppercase text-slate-500 font-bold">{p.type==='citric'?'Powder Needed':'Vinegar Needed'}</div>
+                            <div className="font-black text-xl text-green-800">{res.rawAmount.toFixed(0)} <span className="text-sm font-normal text-slate-500">{res.unit}</span></div>
+                        </div>
+                        <div className="flex-1 bg-blue-50 p-2 rounded border border-blue-200 text-center">
+                            <div className="text-[9px] uppercase text-blue-600 font-bold">Total Solution</div>
+                            <div className="font-black text-xl text-blue-800">{res.totalSolutionL.toFixed(1)} <span className="text-sm font-normal text-blue-500">Liters</span></div>
+                        </div>
+                    </div>
+                    
+                    <div className="text-center p-2 bg-slate-50 rounded border border-slate-200 text-[10px] text-slate-500">
+                        <strong>Preparation:</strong> Mix <strong>{res.rawAmount} {res.unit}</strong> into <strong>{(res.totalSolutionL - (p.type==='citric'?0:(res.rawAmount/1000))).toFixed(1)} L</strong> clean water (70°C).
+                    </div>
+                </div>
+            )}
+        </CardContent>
+    </Card>
+  );
+}
+// ════════════════════════════════════════════════════════════
+// 8. ADVANCED IBT CAPACITY & REFRIGERATION LOAD
+// Calculates: Total Heat Load, Ice Kg, & Compressor TR req.
+// ════════════════════════════════════════════════════════════
+function IbtCalc() {
+  const [i, setI] = useState({ 
+    milkVol: "10000",    // Liters
+    startT: "35",        // °C
+    endT: "4",           // °C
+    processHours: "4",   // Time available to cool milk (Melt time)
+    buildHours: "10",    // Compressor run time to build ice
+    losses: "10"         // % Heat loss (Insulation/Agitator)
+  });
+  const [res, setRes] = useState<any>(null);
+
+  const calculate = () => {
+    const mass = parseFloat(i.milkVol) * 1.03; // Density
+    const dT = parseFloat(i.startT) - parseFloat(i.endT);
+    const safety = 1 + (parseFloat(i.losses) / 100);
+
+    // 1. Product Heat Load (Q = m * Cp * dT)
+    // Milk Cp = 0.93 kcal/kg°C
+    const productLoad = mass * 0.93 * dT;
+
+    // 2. Total Thermal Load (inc. losses)
+    const totalLoadKcal = productLoad * safety;
+
+    // 3. Ice Required
+    // Latent heat of fusion of Ice = 80 kcal/kg
+    const iceReqKg = totalLoadKcal / 80;
+
+    // 4. Compressor Capacity (TR) needed to build this ice
+    // If we build this ice over 'buildHours' (usually night)
+    // 1 TR = 3024 kcal/hr
+    const hourlyLoadBuilding = totalLoadKcal / parseFloat(i.buildHours);
+    const compressorTR = hourlyLoadBuilding / 3024;
+
+    // 5. Rate of Cooling (Process side)
+    const peakLoadProcess = (totalLoadKcal / parseFloat(i.processHours)) / 3024; // Peak demand in TR
+
+    setRes({ totalLoadKcal, iceReqKg, compressorTR, peakLoadProcess });
+  };
+
+  return (
+    <Card className="border-blue-200 bg-blue-50/30">
+        <CardHeader className="pb-2 border-b border-blue-100 bg-blue-50 rounded-t-lg">
+            <CardTitle className="text-sm font-bold flex gap-2 text-blue-800">
+                <Snowflake className="w-4 h-4"/> IBT Energy & Ice Planner
+            </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4 pt-4">
+            
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                <ValidatedInput label="Milk Volume (L)" value={i.milkVol} onChange={v=>setI({...i, milkVol:v})} />
+                <ValidatedInput label="Start Temp °C" value={i.startT} onChange={v=>setI({...i, startT:v})} colorScheme="red" />
+                <ValidatedInput label="End Temp °C" value={i.endT} onChange={v=>setI({...i, endT:v})} colorScheme="blue" />
+                <ValidatedInput label="Melt Time (Hrs)" value={i.processHours} onChange={v=>setI({...i, processHours:v})} helpText="Processing Duration" />
+                <ValidatedInput label="Build Time (Hrs)" value={i.buildHours} onChange={v=>setI({...i, buildHours:v})} helpText="Comp. Run Time" />
+                <ValidatedInput label="Heat Loss %" value={i.losses} onChange={v=>setI({...i, losses:v})} helpText="Std: 10-15%" />
+            </div>
+
+            <Button onClick={calculate} size="sm" className="w-full bg-blue-600 hover:bg-blue-700 shadow-md">Calculate Load</Button>
+            
+            {res && (
+                <div className="space-y-2 animate-in fade-in">
+                    {/* Main Ice Result */}
+                    <div className="flex justify-between items-center bg-white p-3 rounded-lg border border-blue-200 shadow-sm">
+                        <div>
+                            <div className="text-[10px] uppercase font-bold text-slate-400">Total Ice Bank</div>
+                            <div className="text-2xl font-black text-blue-700">{res.iceReqKg.toLocaleString('en-IN', {maximumFractionDigits:0})} <span className="text-sm text-slate-500">kg</span></div>
+                        </div>
+                        <div className="text-right">
+                            <div className="text-[10px] uppercase font-bold text-slate-400">Total Load</div>
+                            <div className="text-lg font-bold text-slate-700">{(res.totalLoadKcal/1000).toFixed(0)} Mcal</div>
+                        </div>
+                    </div>
+
+                    {/* Compressor Specs */}
+                    <div className="grid grid-cols-2 gap-2 text-center">
+                        <div className="bg-slate-50 p-2 rounded border border-slate-200">
+                            <div className="text-[9px] text-slate-500 font-bold uppercase">Compressor Needed</div>
+                            <div className="font-bold text-sm text-blue-900">{res.compressorTR.toFixed(1)} TR</div>
+                            <div className="text-[9px] text-slate-400">(to build in {i.buildHours}h)</div>
+                        </div>
+                        <div className="bg-slate-50 p-2 rounded border border-slate-200">
+                            <div className="text-[9px] text-slate-500 font-bold uppercase">Peak Process Load</div>
+                            <div className="font-bold text-sm text-orange-700">{res.peakLoadProcess.toFixed(1)} TR</div>
+                            <div className="text-[9px] text-slate-400">(if Direct Expansion)</div>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </CardContent>
+    </Card>
+  );
+}
+// ════════════════════════════════════════════════════════════
+// 9. ADVANCED WATER AUDIT (WMR)
+// Breakdown of Water Usage by Department vs Production
+// ════════════════════════════════════════════════════════════
+function WmrCalc() {
+  const [w, setW] = useState({ 
+    milkProcessed: "50000", // Liters
+    waterProcess: "40000",  // L (CIP, Crates, Floors)
+    waterUtility: "20000",  // L (Boiler, Cooling Tower, Chiller)
+    waterDomestic: "5000"   // L (Canteen, Gardening, Toilets)
+  });
+  const [res, setRes] = useState<any>(null);
+
+  const calculate = () => {
+    const M = parseFloat(w.milkProcessed);
+    const W_proc = parseFloat(w.waterProcess);
+    const W_util = parseFloat(w.waterUtility);
+    const W_dom = parseFloat(w.waterDomestic);
+
+    const totalWater = W_proc + W_util + W_dom;
+    const ratio = totalWater / M;
+
+    // Benchmarking (Indian Dairy Standard)
+    // < 1.5 : Excellent (World Class)
+    // 1.5 - 2.0 : Good
+    // 2.0 - 3.0 : Average
+    // > 3.0 : Poor
+    let grade = "Poor";
+    let color = "text-red-600";
+    let bg = "bg-red-50 border-red-200";
+
+    if (ratio <= 1.5) { grade = "Excellent"; color = "text-green-700"; bg = "bg-green-50 border-green-200"; }
+    else if (ratio <= 2.0) { grade = "Good"; color = "text-emerald-600"; bg = "bg-emerald-50 border-emerald-200"; }
+    else if (ratio <= 3.0) { grade = "Average"; color = "text-yellow-600"; bg = "bg-yellow-50 border-yellow-200"; }
+
+    setRes({ totalWater, ratio, grade, color, bg });
+  };
+
+  return (
+    <Card className="border-teal-200 bg-teal-50/30">
+        <CardHeader className="pb-2 border-b border-teal-100 bg-teal-50 rounded-t-lg">
+            <CardTitle className="text-sm font-bold flex gap-2 text-teal-800">
+                <Droplets className="w-4 h-4"/> Water Consumption Audit
+            </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4 pt-4">
+            
+            <div className="grid grid-cols-2 gap-3">
+                <div className="col-span-2">
+                    <ValidatedInput label="Total Milk Processed (L)" value={w.milkProcessed} onChange={v=>setW({...w, milkProcessed:v})} />
+                </div>
+                <ValidatedInput label="Process Water (L)" value={w.waterProcess} onChange={v=>setW({...w, waterProcess:v})} helpText="CIP, Floor wash" />
+                <ValidatedInput label="Utility Water (L)" value={w.waterUtility} onChange={v=>setW({...w, waterUtility:v})} helpText="Boiler, Cooling" />
+                <ValidatedInput label="Domestic/Misc (L)" value={w.waterDomestic} onChange={v=>setW({...w, waterDomestic:v})} helpText="Staff, Gardens" />
+            </div>
+
+            <Button onClick={calculate} size="sm" className="w-full bg-teal-600 hover:bg-teal-700 shadow-md">Run Audit</Button>
+            
+            {res && (
+                <div className="space-y-2 animate-in fade-in">
+                    <div className={`flex justify-between items-center p-3 rounded-lg border shadow-sm ${res.bg}`}>
+                        <div>
+                            <div className="text-[10px] uppercase font-bold text-slate-500">Specific Water Consumption</div>
+                            <div className={`text-3xl font-black ${res.color}`}>{res.ratio.toFixed(2)} <span className="text-base text-slate-500">L/L</span></div>
+                        </div>
+                        <div className="text-right">
+                            <div className="text-[10px] uppercase font-bold text-slate-500">Efficiency Grade</div>
+                            <div className={`text-xl font-bold ${res.color}`}>{res.grade}</div>
+                        </div>
+                    </div>
+                    <div className="text-center text-xs text-slate-500">
+                        Total Water Used: <strong>{res.totalWater.toLocaleString()} Liters</strong>
+                    </div>
+                </div>
+            )}
+        </CardContent>
+    </Card>
+  );
+}
+// ════════════════════════════════════════════════════════════
+// 10. ADVANCED DISPATCH LOGISTICS PLANNER
+// Calculates: Crates, Weight Load & Suggested Vehicle
+// ════════════════════════════════════════════════════════════
+function DispatchCalc() {
+  const [d, setD] = useState({ 
+    pouch500: "15000", // Pkts
+    pouch1000: "2000", // Pkts
+    cups: "1000",      // Pkts
+    bulkCans: "10"     // No. of 40L Cans
+  });
+  const [res, setRes] = useState<any>(null);
+
+  const calculate = () => {
+    // 1. Crate Logic
+    // Std Crate holds: 24 x 500ml OR 12 x 1000ml OR ~40 Cups
+    const crates500 = Math.ceil(parseFloat(d.pouch500) / 24);
+    const crates1000 = Math.ceil(parseFloat(d.pouch1000) / 12);
+    const cratesCups = Math.ceil(parseFloat(d.cups) / 40);
+    
+    // Bulk Cans are separate, but take floor space. 
+    // Approx 1 Can footprint = 1.5 Crates
+    const canEquivalentCrates = parseFloat(d.bulkCans) * 1.5;
+
+    const totalCrates = crates500 + crates1000 + cratesCups;
+    const totalSpaceUnits = totalCrates + canEquivalentCrates;
+
+    // 2. Weight Logic (Approx)
+    // 1 Crate full ~ 13-14 kg. 1 Can ~ 42 kg.
+    const weightCrates = totalCrates * 14; 
+    const weightCans = parseFloat(d.bulkCans) * 42;
+    const totalWeightKg = weightCrates + weightCans;
+
+    // 3. Vehicle Suggestion
+    // Small Pickup (Bolero): ~800kg / 120 crates
+    // Light Truck (Canter/407): ~2500kg / 350 crates
+    // Medium Truck (1109): ~6000kg / 800 crates
+    // Heavy Truck: >8000kg
+    
+    let vehicle = "Heavy Truck (10 Ton)";
+    if (totalWeightKg < 900) vehicle = "Small Pickup (Bolero)";
+    else if (totalWeightKg < 2800) vehicle = "Light Truck (Canter/407)";
+    else if (totalWeightKg < 6500) vehicle = "Medium Truck (Eicher 1109)";
+
+    setRes({ 
+        totalCrates, 
+        totalWeightKg, 
+        vehicle, 
+        spaceIndex: Math.ceil(totalSpaceUnits) 
+    });
+  };
+
+  return (
+    <Card className="border-indigo-200 bg-indigo-50/30">
+        <CardHeader className="pb-2 border-b border-indigo-100 bg-indigo-50 rounded-t-lg">
+            <CardTitle className="text-sm font-bold flex gap-2 text-indigo-800">
+                <Truck className="w-4 h-4"/> Logistics & Dispatch Planner
+            </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4 pt-4">
+            
+            <div className="grid grid-cols-2 gap-3">
+                <ValidatedInput label="500ml Pouches" value={d.pouch500} onChange={v=>setD({...d, pouch500:v})} />
+                <ValidatedInput label="1L Pouches" value={d.pouch1000} onChange={v=>setD({...d, pouch1000:v})} />
+                <ValidatedInput label="Cups/Dahi" value={d.cups} onChange={v=>setD({...d, cups:v})} />
+                <ValidatedInput label="Bulk Cans (40L)" value={d.bulkCans} onChange={v=>setD({...d, bulkCans:v})} />
+            </div>
+
+            <Button onClick={calculate} size="sm" className="w-full bg-indigo-600 hover:bg-indigo-700 shadow-md">Plan Vehicle</Button>
+            
+            {res && (
+                <div className="space-y-2 animate-in fade-in">
+                    <div className="flex gap-2">
+                        <div className="flex-1 bg-white p-2 rounded border border-indigo-200 text-center">
+                            <div className="text-[9px] uppercase text-slate-500 font-bold">Total Crates</div>
+                            <div className="font-black text-xl text-indigo-800">{res.totalCrates}</div>
+                        </div>
+                        <div className="flex-1 bg-white p-2 rounded border border-indigo-200 text-center">
+                            <div className="text-[9px] uppercase text-slate-500 font-bold">Total Load</div>
+                            <div className="font-black text-xl text-indigo-900">{res.totalWeightKg.toLocaleString()} <span className="text-sm text-slate-400">kg</span></div>
+                        </div>
+                    </div>
+                    
+                    <div className="bg-indigo-100 p-2 rounded border border-indigo-300 text-center">
+                        <span className="text-xs text-indigo-700 font-bold uppercase">Suggested Vehicle</span>
+                        <div className="text-lg font-black text-indigo-900">{res.vehicle}</div>
+                    </div>
+                </div>
+            )}
+        </CardContent>
+    </Card>
+  );
+}
+
 function YieldsCalc() {
   const [activeCalc, setActiveCalc] = useState("cream-sep");
 
-  const calculators = {
-    "cream-sep": {
-      title: "Cream Separation",
-      component: <CreamSeparationCalc />,
-      icon: Droplets,
-      color: "text-blue-600",
-    },
-    butter: {
-      title: "Butter Yield",
-      component: <ButterYieldCalc />,
-      icon: Target,
-      color: "text-yellow-600",
-    },
-    khoa: {
-      title: "Khoa Yield",
-      component: <KhoaYieldCalc />,
-      icon: Thermometer,
-      color: "text-orange-600",
-    },
-    shrikhand: {
-      title: "Shrikhand Yield",
-      component: <ShrikhandYieldCalc />,
-      icon: Weight,
-      color: "text-purple-600",
-    },
-    pedha: {
-      title: "Pedha/Burfi Yield",
-      component: <PedhaBurfiYieldCalc />,
-      icon: PaneerIcon,
-      color: "text-pink-600",
-    },
+  // ── 1. Grouped Keys for Dropdown Sections (Cleaned) ──
+  
+  // A. Product Yields (Basic + New Ghee/Cheese)
+  const yieldKeys = [
+    "cream-sep", 
+    "butter", 
+    "ghee-recovery", 
+    "cheese-yield", 
+    "khoa", 
+    "shrikhand", 
+    "pedha"
+  ];
+
+  // B. Production & Processing (Only Essential Process Tools)
+  const processKeys = [
+    "pasteurization", 
+    "culture-dose",    // Culture Dosing
+    "paneer-coag",     // Paneer Coagulant
+    "cip-dosing", 
+    "evaporator", 
+    "spray-dryer"
+  ];
+
+  // C. Utility, Engineering & Store (All Industrial Tools)
+  const utilityKeys = [
+    "tank-vol",      // Dipstick
+    "pipe-vol",      // Pipeline Loss
+    "pack-film",     // Packaging Film
+    "chilling-load", // Refrigeration
+    "ibt-calc",      // Ice Bank
+    "boiler-cost",   // Steam Cost
+    "storage-cap",   // Cold Room
+    "etp-load",      // ETP Waste
+    "wmr-calc",      // Water:Milk Ratio
+    "dispatch-plan"  // Logistics
+  ];
+
+  // ── 2. Component Mapping ──
+  const calculators: Record<string, {
+    title: string;
+    component: React.ReactNode;
+    icon: React.ElementType;
+    color: string;
+  }> = {
+    // === YIELDS ===
+    "cream-sep": { title: "Cream Separation", component: <CreamSeparationCalc />, icon: Droplets, color: "text-blue-600" },
+    butter: { title: "Butter Yield", component: <ButterYieldCalc />, icon: Target, color: "text-yellow-600" },
+    "ghee-recovery": { title: "Ghee Recovery", component: <GheeRecoveryCalc />, icon: Target, color: "text-yellow-700" },
+    "cheese-yield": { title: "Cheese Yield (Van Slyke)", component: <CheeseYieldCalc />, icon: Milk, color: "text-orange-500" },
+    khoa: { title: "Khoa Yield", component: <KhoaYieldCalc />, icon: Thermometer, color: "text-orange-600" },
+    shrikhand: { title: "Shrikhand Yield", component: <ShrikhandYieldCalc />, icon: Weight, color: "text-purple-600" },
+    pedha: { title: "Pedha/Burfi Yield", component: <PedhaBurfiYieldCalc />, icon: PaneerIcon, color: "text-pink-600" },
+
+    // === PROCESS ===
+    pasteurization: { title: "Pasteurization Validation", component: <PasteurizationCalc />, icon: CheckCircle2, color: "text-rose-600" },
+    "culture-dose": { title: "Culture Dosing", component: <CultureDosingCalc />, icon: Pipette, color: "text-pink-600" },
+    "paneer-coag": { title: "Paneer Coagulant", component: <PaneerCoagulantCalc />, icon: Beaker, color: "text-green-600" },
+    "cip-dosing": { title: "CIP Chemical Dosing", component: <CIPChemicalCalc />, icon: Beaker, color: "text-orange-600" },
+    evaporator: { title: "Evaporator / Concentrator", component: <EvaporatorCalc />, icon: Thermometer, color: "text-amber-600" },
+    "spray-dryer": { title: "Spray Dryer Yield", component: <SprayDryerCalc />, icon: Zap, color: "text-sky-600" },
+
+    // === UTILITY ===
+    "tank-vol": { title: "Tank Volume (Dipstick)", component: <TankVolumeCalc />, icon: Ruler, color: "text-slate-600" },
+    "pipe-vol": { title: "Pipeline Loss/Vol", component: <PipelineLossCalc />, icon: Cylinder, color: "text-orange-600" },
+    "pack-film": { title: "Packaging Film Calc", component: <PackagingFilmCalc />, icon: PackageOpen, color: "text-purple-600" },
+    "chilling-load": { title: "Chilling Load (TR)", component: <ChillingLoadCalc />, icon: Snowflake, color: "text-blue-700" },
+    "ibt-calc": { title: "IBT Ice Capacity", component: <IbtCalc />, icon: Snowflake, color: "text-cyan-600" },
+    "boiler-cost": { title: "Boiler Steam Cost", component: <BoilerCostCalc />, icon: Flame, color: "text-red-600" },
+    "storage-cap": { title: "Cold Room Capacity", component: <StorageCalc />, icon: Box, color: "text-slate-700" },
+    "etp-load": { title: "ETP Waste Load", component: <EtpLoadCalc />, icon: Trash2, color: "text-stone-600" },
+    "wmr-calc": { title: "Water:Milk Ratio", component: <WmrCalc />, icon: Droplets, color: "text-teal-600" },
+    "dispatch-plan": { title: "Dispatch Planner", component: <DispatchCalc />, icon: Truck, color: "text-indigo-600" },
   };
+
+  const active = calculators[activeCalc];
 
   return (
     <Card className="border-2 shadow-lg">
       <CardHeader className="bg-gradient-to-r from-blue-50 to-purple-50">
         <CardTitle className="flex items-center gap-2 text-xl sm:text-2xl">
-          <Percent className="h-6 sm:h-7 w-6 sm:w-7 text-blue-600" />
-          Product Yield Calculators
+          <Activity className="h-6 sm:h-7 w-6 sm:w-7 text-blue-600" />
+          Industrial Production Suite
         </CardTitle>
         <CardDescription className="text-xs sm:text-sm">
-          Precision yield calculations for various dairy products
+          Advanced tools for Yields, Process, and Plant Utility management
         </CardDescription>
       </CardHeader>
       <CardContent className="pt-6">
-        {/* DROPDOWN - BOTH Mobile & Desktop */}
         <div className="mb-6">
           <Label className="text-sm sm:text-base font-semibold mb-3 block">
-            Select Product Calculator
+            Select Management Tool
           </Label>
           <Select value={activeCalc} onValueChange={setActiveCalc}>
             <SelectTrigger className="w-full h-12 bg-white">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
-              {Object.entries(calculators).map(
-                ([key, { title, icon: Icon, color }]) => (
+            <SelectContent className="max-h-[350px]">
+              
+              <div className="px-2 py-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-widest bg-slate-50 border-b">
+                📊 Product Yields
+              </div>
+              {yieldKeys.map((key) => {
+                const item = calculators[key];
+                return (
                   <SelectItem key={key} value={key}>
                     <div className="flex items-center gap-2">
-                      <Icon className={cn("h-4 w-4", color)} />
-                      <span>{title}</span>
+                      <div className={item.color}>{React.createElement(item.icon, { className: "w-4 h-4" })}</div>
+                      <span>{item.title}</span>
                     </div>
                   </SelectItem>
-                )
-              )}
+                );
+              })}
+
+              <div className="px-2 py-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-widest bg-slate-50 border-y mt-1">
+                ⚡ Production Process
+              </div>
+              {processKeys.map((key) => {
+                const item = calculators[key];
+                return (
+                  <SelectItem key={key} value={key}>
+                    <div className="flex items-center gap-2">
+                      <div className={item.color}>{React.createElement(item.icon, { className: "w-4 h-4" })}</div>
+                      <span>{item.title}</span>
+                    </div>
+                  </SelectItem>
+                );
+              })}
+
+              <div className="px-2 py-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-widest bg-slate-50 border-y mt-1">
+                🛠️ Utility & Infrastructure
+              </div>
+              {utilityKeys.map((key) => {
+                const item = calculators[key];
+                return (
+                  <SelectItem key={key} value={key}>
+                    <div className="flex items-center gap-2">
+                      <div className={item.color}>{React.createElement(item.icon, { className: "w-4 h-4" })}</div>
+                      <span>{item.title}</span>
+                    </div>
+                  </SelectItem>
+                );
+              })}
+
             </SelectContent>
           </Select>
         </div>
 
         <div className="border-t pt-6">
-          {calculators[activeCalc as keyof typeof calculators]?.component}
+          {active?.component}
         </div>
       </CardContent>
     </Card>
@@ -1744,6 +4483,7 @@ function PedhaBurfiYieldCalc() {
     </div>
   );
 }
+
 // ==================== ENHANCED ICE CREAM CALCULATORS ====================
 function IceCreamCalculators() {
   const [activeCalc, setActiveCalc] = useState("mix-comp");
