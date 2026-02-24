@@ -2261,209 +2261,1127 @@ export function CheeseYieldCalc() {
 }
 
 // ════════════════════════════════════════════════════════════
-// 4. MILK CHILLING LOAD (REFRIGERATION)
-// Calculates TR required for PHE/Bulk Cooler
+// ADVANCED MILK CHILLING LOAD CALCULATOR
+// 
+// INSTRUCTIONS:
+// 1. Apni file mein purana ChillingLoadCalc() function dhundhein
+//    (approximately line 900 ke aas paas, "// 4. MILK CHILLING LOAD" section)
+// 2. Purana function DELETE karein (export function ChillingLoadCalc() { ... } tak)
+// 3. Yeh poora code wahan PASTE kar dein
+// 4. Baaki koi change nahi — sab kuch same rahega
 // ════════════════════════════════════════════════════════════
+
+// ── CONSTANTS (function ke bahar, file level pe) ──────────
+const CHILLING_SEASON_FACTORS = {
+  Summer:  { label: "☀️ Summer (Apr–Jun)", factor: 1.12, ambientC: 42 },
+  Monsoon: { label: "🌧️ Monsoon (Jul–Sep)", factor: 1.05, ambientC: 32 },
+  Winter:  { label: "❄️ Winter (Oct–Mar)", factor: 0.95, ambientC: 18 },
+} as const;
+
+const CHILLING_REFRIGERANTS = {
+  "R-448A / R-449A": { cop: 3.1, note: "HFO blend, eco-friendly ✅" },
+  "R-404A":          { cop: 2.5, note: "Common in dairy" },
+  "R-134a":          { cop: 2.9, note: "Medium temp applications" },
+  "R-22 (Legacy)":   { cop: 2.8, note: "Phase-out — avoid new installs" },
+  "Ammonia (NH₃)":   { cop: 3.8, note: "Best COP, large plants only" },
+} as const;
+
+const CHILLING_PRESETS_DATA = {
+  "Small Farm (500L)":    { volume: "500",   startTemp: "35", endTemp: "4", time: "1",   safetyMargin: "15" },
+  "BMC Village (2000L)":  { volume: "2000",  startTemp: "36", endTemp: "4", time: "1.5", safetyMargin: "15" },
+  "Medium Plant (5000L)": { volume: "5000",  startTemp: "35", endTemp: "4", time: "2",   safetyMargin: "15" },
+  "Large Dairy (10000L)": { volume: "10000", startTemp: "34", endTemp: "4", time: "2.5", safetyMargin: "15" },
+  "IBT Plant (25000L)":   { volume: "25000", startTemp: "33", endTemp: "3", time: "3",   safetyMargin: "20" },
+} as const;
+
+// ── MAIN COMPONENT ─────────────────────────────────────────
 export function ChillingLoadCalc() {
-  const [inputs, setInputs] = useState({
-    volume: "5000",      // Liters
-    startTemp: "35",     // °C (Raw Milk)
-    endTemp: "4",        // °C (Chilled)
-    time: "2",           // Hours
-    safetyMargin: "15",  // % (Heat leakages, pump heat)
-    density: "1.03",     // kg/L
-    cp: "0.94"           // Specific Heat (kcal/kg°C) - Milk is approx 0.93-0.94
+  const { toast } = useToast();
+
+  // Active tab
+  const [activeTab, setActiveTab] = useState<"basic" | "advanced" | "results">("basic");
+
+  // Multi-stage PHE toggle
+  const [useMultiStage, setUseMultiStage] = useState(false);
+
+  // All inputs in one object (easier to manage)
+  const [inp, setInp] = useState({
+    // Basic
+    volume:       "5000",
+    startTemp:    "35",
+    endTemp:      "4",
+    time:         "2",
+    safetyMargin: "15",
+    // Advanced
+    density:         "1.032",
+    cp:              "0.938",
+    season:          "Summer" as keyof typeof CHILLING_SEASON_FACTORS,
+    refrigerant:     "R-448A / R-449A" as keyof typeof CHILLING_REFRIGERANTS,
+    tankInsulLoss:   "2",
+    operatingHours:  "16",
+    electricityRate: "7",
+    pheEndTemp:      "12",
   });
+
   const [result, setResult] = useState<any>(null);
 
+  // Helper to set single input field
+  const setField = (k: string, v: string) => setInp(p => ({ ...p, [k]: v }));
+
+  // Apply preset
+  const applyPreset = (name: keyof typeof CHILLING_PRESETS_DATA) => {
+    const p = CHILLING_PRESETS_DATA[name];
+    setInp(prev => ({ ...prev, ...p }));
+    toast({ title: `Preset Applied`, description: name });
+  };
+
+  // ── VALIDATIONS (same pattern as rest of the file) ──────
+  const { validatePositive, validatePercentage, validateNumber } = useInputValidation();
+
+  const volValidation  = useMemo(() => validatePositive(inp.volume,      "Volume"),     [inp.volume]);
+  const timeValidation = useMemo(() => validatePositive(inp.time,        "Time"),       [inp.time]);
+  const t1Validation   = useMemo(() => validateNumber(inp.startTemp,  20, 50, "Start Temp"), [inp.startTemp]);
+  const t2Validation   = useMemo(() => validateNumber(inp.endTemp,     1, 15, "End Temp"),   [inp.endTemp]);
+  const smValidation   = useMemo(() => validatePercentage(inp.safetyMargin, "Safety Margin"), [inp.safetyMargin]);
+
+  // ── CALCULATE ────────────────────────────────────────────
   const calculate = useCallback(() => {
-    const V = parseFloat(inputs.volume);
-    const D = parseFloat(inputs.density);
+    const V      = parseFloat(inp.volume)       || 0;
+    const D      = parseFloat(inp.density)      || 1.032;
+    const Cp     = parseFloat(inp.cp)           || 0.938;
+    const T1     = parseFloat(inp.startTemp)    || 0;
+    const T2     = parseFloat(inp.endTemp)      || 0;
+    const Hrs    = parseFloat(inp.time)         || 0;
+    const Safety = 1 + (parseFloat(inp.safetyMargin) || 0) / 100;
+
+    const sf   = CHILLING_SEASON_FACTORS[inp.season];
+    const refg = CHILLING_REFRIGERANTS[inp.refrigerant];
+    const elecR  = parseFloat(inp.electricityRate) || 7;
+    const opHrs  = parseFloat(inp.operatingHours)  || 16;
+    const tankL  = (parseFloat(inp.tankInsulLoss)  || 0) / 100;
+
+    // Validation checks
+    if (!volValidation.isValid || !timeValidation.isValid || !t1Validation.isValid || !t2Validation.isValid || !smValidation.isValid) {
+      toast({ variant: "destructive", title: "Validation Error", description: "Kripya sahi values enter karein." });
+      return;
+    }
+    if (T1 <= T2) {
+      toast({ variant: "destructive", title: "Invalid Temps", description: "Start temp must be higher than end temp." });
+      return;
+    }
+    if (Hrs <= 0 || V <= 0) return;
+
     const Mass = V * D; // kg
-    
-    const T1 = parseFloat(inputs.startTemp);
-    const T2 = parseFloat(inputs.endTemp);
-    const dT = T1 - T2;
-    
-    const Cp = parseFloat(inputs.cp);
-    const Hrs = parseFloat(inputs.time);
-    const Safety = 1 + (parseFloat(inputs.safetyMargin) / 100);
 
-    if(Hrs <= 0) return;
+    // ── Stages heat calculation ──────────────────────────
+    interface Stage { label: string; heatKcal: number; color: string; }
+    let stages: Stage[] = [];
 
-    // Formula: Q (kcal) = m * Cp * dT
-    const totalHeatKcal = Mass * Cp * dT;
-    
-    // Heat Load per Hour
-    const heatLoadHr = totalHeatKcal / Hrs;
-    
-    // Apply Safety Margin
-    const requiredLoadKcal = heatLoadHr * Safety;
+    if (useMultiStage) {
+      const pheEnd = parseFloat(inp.pheEndTemp) || 12;
+      stages.push({
+        label: `PHE (${T1}°C → ${pheEnd}°C) — well water`,
+        heatKcal: Mass * Cp * (T1 - pheEnd),
+        color: "text-orange-600",
+      });
+      stages.push({
+        label: `Bulk Cooler (${pheEnd}°C → ${T2}°C) — compressor`,
+        heatKcal: Mass * Cp * (pheEnd - T2),
+        color: "text-blue-600",
+      });
+    } else {
+      stages.push({
+        label: `Direct Chilling (${T1}°C → ${T2}°C)`,
+        heatKcal: Mass * Cp * (T1 - T2),
+        color: "text-blue-600",
+      });
+    }
 
-    // Convert to TR (1 TR = 3024 kcal/hr)
-    const TR = requiredLoadKcal / 3024;
-    const kW = TR * 3.517; // 1 TR ~ 3.517 kW thermal
+    const totalBaseHeat = stages.reduce((s, st) => s + st.heatKcal, 0);
+    const heatLoadHr    = totalBaseHeat / Hrs;
+    const withSeason    = heatLoadHr * sf.factor;
+
+    // Tank insulation heat gain
+    const tankGain = Mass * Cp * (sf.ambientC - T2) * tankL;
+
+    const requiredLoadKcal = (withSeason + tankGain) * Safety;
+    const TR               = requiredLoadKcal / 3024;
+    const kW_thermal       = TR * 3.517;
+    const kW_electric      = kW_thermal / refg.cop;
+    const kVA              = kW_electric / 0.85;
+
+    // Energy cost
+    const dailyUnits  = kW_electric * opHrs;
+    const dailyCost   = dailyUnits * elecR;
+    const monthlyCost = dailyCost * 26;
+
+    // Warnings
+    const warnings: string[] = [];
+    if (TR > 50)       warnings.push(`${TR.toFixed(1)} TR is large — consider screw compressor.`);
+    if (useMultiStage) warnings.push(`Multi-stage saves ~25–35% vs direct chilling. PHE needs well water ≤ 20°C.`);
+    if (tankL > 0.04)  warnings.push(`Tank insulation loss > 4% — check PUF insulation integrity.`);
 
     setResult({
-      totalHeatKcal,
-      requiredLoadKcal,
-      TR,
-      kW
+      stages, totalBaseHeat, heatLoadHr, requiredLoadKcal,
+      TR, kW_thermal, kW_electric, kVA,
+      dailyUnits, dailyCost, monthlyCost,
+      recommendedTR: TR * 1.10,
+      seasonFactor: sf.factor,
+      tankGain, Mass, warnings,
     });
-  }, [inputs]);
 
+    // Auto switch to results tab
+    setActiveTab("results");
+
+    toast({
+      title: "✅ Calculated",
+      description: `Required: ${TR.toFixed(1)} TR | Recommended: ${(TR * 1.1).toFixed(1)} TR`,
+    });
+  }, [inp, useMultiStage, volValidation, timeValidation, t1Validation, t2Validation, smValidation, toast]);
+
+  // ── RENDER ───────────────────────────────────────────────
   return (
-    <Card className="border-blue-200 bg-blue-50/30">
-      <CardHeader className="pb-2 bg-blue-100/50 rounded-t-lg">
-        <CardTitle className="text-lg text-blue-800 flex gap-2">
-          <Snowflake className="w-5 h-5"/> Refrigeration Load (TR)
+    <Card className="border-blue-200 bg-blue-50/20">
+      <CardHeader className="pb-3 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-t-lg border-b border-blue-100">
+        <CardTitle className="flex items-center justify-between">
+          <span className="flex items-center gap-2 text-blue-800">
+            <Snowflake className="w-5 h-5 text-blue-600" />
+            Advanced Chilling Load (TR)
+          </span>
+          {result && (
+            <Badge className="bg-blue-600 text-white text-sm px-3 py-1">
+              {result.TR.toFixed(1)} TR
+            </Badge>
+          )}
         </CardTitle>
+        <CardDescription className="text-blue-600 text-xs">
+          TR · kW · Energy Cost · Seasonal Correction · Multi-Stage PHE
+        </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4 pt-4">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <ValidatedInput label="Volume (L)" value={inputs.volume} onChange={v=>setInputs({...inputs, volume:v})} />
-          <ValidatedInput label="Time (Hours)" value={inputs.time} onChange={v=>setInputs({...inputs, time:v})} />
-          <ValidatedInput label="Start Temp °C" value={inputs.startTemp} onChange={v=>setInputs({...inputs, startTemp:v})} colorScheme="red" />
-          <ValidatedInput label="End Temp °C" value={inputs.endTemp} onChange={v=>setInputs({...inputs, endTemp:v})} colorScheme="blue" />
-        </div>
-        <div className="grid grid-cols-2 gap-3">
-           <ValidatedInput label="Safety Margin %" value={inputs.safetyMargin} onChange={v=>setInputs({...inputs, safetyMargin:v})} helpText="For leaks/pumps (10-20%)" />
-           <ValidatedInput label="Specific Heat" value={inputs.cp} onChange={v=>setInputs({...inputs, cp:v})} helpText="Milk: 0.94 kcal/kg°C" />
-        </div>
 
-        <Button onClick={calculate} className="w-full bg-blue-600 hover:bg-blue-700 text-white">Calculate TR</Button>
+      <CardContent className="pt-4 space-y-4">
 
-        {result && (
-          <div className="flex flex-col gap-3 animate-in fade-in">
-             <div className="grid grid-cols-2 gap-4">
-                <div className="bg-slate-800 text-white p-4 rounded-xl text-center shadow-lg">
-                    <div className="text-xs uppercase opacity-70">Required Capacity</div>
-                    <div className="text-3xl font-bold text-cyan-400">{result.TR.toFixed(1)} TR</div>
-                    <div className="text-xs mt-1">({result.kW.toFixed(1)} kW Thermal)</div>
-                </div>
-                <div className="bg-white border p-4 rounded-xl text-center shadow-sm flex flex-col justify-center">
-                    <div className="text-xs uppercase text-slate-500">Heat Load</div>
-                    <div className="text-xl font-bold text-slate-700">{result.requiredLoadKcal.toLocaleString('en-IN', {maximumFractionDigits:0})}</div>
-                    <div className="text-xs text-slate-400">kcal/hr</div>
-                </div>
-             </div>
-             <Alert className="bg-blue-50 border-blue-200">
-                <AlertTriangle className="h-4 w-4 text-blue-600"/>
-                <AlertDescription className="text-xs text-blue-800">
-                   <strong>Industrial Note:</strong> Select a compressor with capacity <strong>{(result.TR * 1.1).toFixed(1)} TR</strong> to account for ambient temperature variations.
-                </AlertDescription>
-             </Alert>
+        {/* ── QUICK PRESETS ───────────────────────────── */}
+        <div className="space-y-1">
+          <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Quick Presets</Label>
+          <div className="flex flex-wrap gap-2">
+            {(Object.keys(CHILLING_PRESETS_DATA) as Array<keyof typeof CHILLING_PRESETS_DATA>).map(name => (
+              <button
+                key={name}
+                onClick={() => applyPreset(name)}
+                className="px-3 py-1 rounded-full border border-blue-200 bg-white text-xs font-semibold text-blue-700 hover:bg-blue-600 hover:text-white transition-all shadow-sm"
+              >
+                {name}
+              </button>
+            ))}
           </div>
-        )}
+        </div>
+
+        {/* ── TABS ────────────────────────────────────── */}
+        <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as any)}>
+          <TabsList className="grid grid-cols-3 bg-slate-100">
+            <TabsTrigger value="basic"    className="text-xs">⚙️ Basic</TabsTrigger>
+            <TabsTrigger value="advanced" className="text-xs">🔬 Advanced</TabsTrigger>
+            <TabsTrigger value="results"  className="text-xs">📊 Results</TabsTrigger>
+          </TabsList>
+
+          {/* ═════ TAB 1: BASIC ════════════════════════ */}
+          <TabsContent value="basic" className="space-y-4 pt-3">
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <ValidatedInput
+                label="Milk Volume"
+                value={inp.volume}
+                onChange={v => setField("volume", v)}
+                validation={volValidation}
+                unit="L"
+                icon={<Droplets className="h-3 w-3 text-blue-500" />}
+                helpText="Total batch volume"
+                colorScheme="blue"
+              />
+              <ValidatedInput
+                label="Chilling Time"
+                value={inp.time}
+                onChange={v => setField("time", v)}
+                validation={timeValidation}
+                unit="hrs"
+                icon={<Thermometer className="h-3 w-3 text-blue-500" />}
+                helpText="Available hours"
+                colorScheme="blue"
+              />
+              <ValidatedInput
+                label="Inlet Temp"
+                value={inp.startTemp}
+                onChange={v => setField("startTemp", v)}
+                validation={t1Validation}
+                unit="°C"
+                icon={<Thermometer className="h-3 w-3 text-red-500" />}
+                helpText="Raw milk (33–38°C)"
+                colorScheme="orange"
+              />
+              <ValidatedInput
+                label="Target Temp"
+                value={inp.endTemp}
+                onChange={v => setField("endTemp", v)}
+                validation={t2Validation}
+                unit="°C"
+                icon={<Snowflake className="h-3 w-3 text-blue-500" />}
+                helpText="Storage (3–4°C)"
+                colorScheme="blue"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <ValidatedInput
+                label="Safety Margin"
+                value={inp.safetyMargin}
+                onChange={v => setField("safetyMargin", v)}
+                validation={smValidation}
+                unit="%"
+                helpText="Heat leaks + pump (10–20%)"
+                colorScheme="orange"
+              />
+              <div className="space-y-2">
+                <Label className="text-sm font-semibold flex items-center gap-1">
+                  Season
+                  <Badge variant="outline" className="ml-auto text-xs">
+                    {CHILLING_SEASON_FACTORS[inp.season].label}
+                  </Badge>
+                </Label>
+                <Select value={inp.season} onValueChange={v => setField("season", v)}>
+                  <SelectTrigger className="h-10 bg-white border-blue-200">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {(Object.keys(CHILLING_SEASON_FACTORS) as Array<keyof typeof CHILLING_SEASON_FACTORS>).map(k => (
+                      <SelectItem key={k} value={k}>
+                        {CHILLING_SEASON_FACTORS[k].label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            {/* Multi-stage toggle */}
+            <div className="flex items-center justify-between p-3 bg-purple-50 border border-purple-200 rounded-lg">
+              <div>
+                <div className="text-sm font-bold text-purple-800">⚡ Multi-Stage: PHE + Bulk Cooler</div>
+                <div className="text-xs text-purple-500">Pre-cool with well water → then compressor (saves 25–35%)</div>
+              </div>
+              <Button
+                size="sm"
+                variant={useMultiStage ? "default" : "outline"}
+                onClick={() => setUseMultiStage(!useMultiStage)}
+                className={useMultiStage ? "bg-purple-600 hover:bg-purple-700" : "border-purple-300 text-purple-600"}
+              >
+                {useMultiStage ? "ON ✓" : "OFF"}
+              </Button>
+            </div>
+
+            {useMultiStage && (
+              <ValidatedInput
+                label="PHE Outlet Temp"
+                value={inp.pheEndTemp}
+                onChange={v => setField("pheEndTemp", v)}
+                validation={{ isValid: true, severity: "info" }}
+                unit="°C"
+                helpText="After PHE with well water (~12–15°C)"
+                colorScheme="purple"
+              />
+            )}
+          </TabsContent>
+
+          {/* ═════ TAB 2: ADVANCED ═════════════════════ */}
+          <TabsContent value="advanced" className="space-y-4 pt-3">
+
+            {/* Refrigerant */}
+            <div className="space-y-2">
+              <Label className="text-sm font-semibold">Refrigerant</Label>
+              <Select value={inp.refrigerant} onValueChange={v => setField("refrigerant", v)}>
+                <SelectTrigger className="h-10 bg-white border-blue-200">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {(Object.keys(CHILLING_REFRIGERANTS) as Array<keyof typeof CHILLING_REFRIGERANTS>).map(k => (
+                    <SelectItem key={k} value={k}>
+                      <div className="flex flex-col">
+                        <span className="font-semibold">{k}</span>
+                        <span className="text-xs text-muted-foreground">
+                          COP {CHILLING_REFRIGERANTS[k].cop} — {CHILLING_REFRIGERANTS[k].note}
+                        </span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-muted-foreground flex items-center gap-1">
+                <Info className="h-3 w-3" />
+                {CHILLING_REFRIGERANTS[inp.refrigerant].note} | COP: {CHILLING_REFRIGERANTS[inp.refrigerant].cop}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <ValidatedInput
+                label="Milk Density"
+                value={inp.density}
+                onChange={v => setField("density", v)}
+                validation={{ isValid: true, severity: "info" }}
+                unit="kg/L"
+                helpText="Whole milk: 1.030–1.033"
+                colorScheme="blue"
+              />
+              <ValidatedInput
+                label="Specific Heat (Cp)"
+                value={inp.cp}
+                onChange={v => setField("cp", v)}
+                validation={{ isValid: true, severity: "info" }}
+                unit="kcal/kg°C"
+                helpText="Whole milk: 0.938"
+                colorScheme="blue"
+              />
+              <ValidatedInput
+                label="Tank Insulation Loss"
+                value={inp.tankInsulLoss}
+                onChange={v => setField("tankInsulLoss", v)}
+                validation={{ isValid: true, severity: "info" }}
+                unit="%/hr"
+                helpText="PUF: 1–2% | Older tanks: 3–5%"
+                colorScheme="orange"
+              />
+              <ValidatedInput
+                label="Daily Operating Hrs"
+                value={inp.operatingHours}
+                onChange={v => setField("operatingHours", v)}
+                validation={{ isValid: true, severity: "info" }}
+                unit="hrs"
+                helpText="Compressor run time/day"
+                colorScheme="blue"
+              />
+              <div className="col-span-2">
+                <ValidatedInput
+                  label="Electricity Rate"
+                  value={inp.electricityRate}
+                  onChange={v => setField("electricityRate", v)}
+                  validation={{ isValid: true, severity: "info" }}
+                  unit="₹/kWh"
+                  helpText="Agri: ₹5 | Industrial LT: ₹7 | Diesel Gen: ₹18"
+                  colorScheme="green"
+                />
+              </div>
+            </div>
+          </TabsContent>
+
+          {/* ═════ TAB 3: RESULTS ══════════════════════ */}
+          <TabsContent value="results" className="space-y-4 pt-3">
+            {result ? (
+              <>
+                {/* Main KPIs */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-slate-800 text-white p-4 rounded-xl text-center shadow-lg">
+                    <div className="text-[10px] uppercase opacity-70 font-bold">Required Capacity</div>
+                    <div className="text-3xl font-black text-cyan-400">{result.TR.toFixed(1)} TR</div>
+                    <div className="text-xs opacity-60 mt-1">{result.kW_thermal.toFixed(1)} kW Thermal</div>
+                  </div>
+                  <div className="bg-indigo-600 text-white p-4 rounded-xl text-center shadow-lg">
+                    <div className="text-[10px] uppercase opacity-80 font-bold">Select Compressor</div>
+                    <div className="text-3xl font-black text-yellow-300">{result.recommendedTR.toFixed(1)} TR</div>
+                    <div className="text-xs opacity-70 mt-1">+10% starting margin</div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <ResultCard
+                    title="Electrical Demand"
+                    value={result.kW_electric.toFixed(1)}
+                    unit="kW"
+                    icon={<Zap className="h-4 w-4" />}
+                    colorScheme="blue"
+                    confidence="high"
+                    subtitle={`${result.kVA.toFixed(1)} kVA (PF 0.85)`}
+                  />
+                  <div className="bg-white border-2 border-slate-200 rounded-xl p-4 text-center flex flex-col justify-center shadow-sm">
+                    <div className="text-[10px] text-slate-500 uppercase font-bold">Heat Load</div>
+                    <div className="text-xl font-black text-slate-700">
+                      {result.requiredLoadKcal.toLocaleString("en-IN", { maximumFractionDigits: 0 })}
+                    </div>
+                    <div className="text-xs text-slate-400">kcal/hr (with season + safety)</div>
+                  </div>
+                </div>
+
+                {/* Heat Load Breakdown */}
+                <Card className="bg-slate-50 border-slate-200">
+                  <CardHeader className="p-3 pb-1 border-b">
+                    <CardTitle className="text-sm">📊 Heat Load Breakdown</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-3 space-y-2 text-sm">
+                    {result.stages.map((s: { label: string; heatKcal: number; color: string }, i: number) => (
+                      <div key={i} className="flex justify-between items-center">
+                        <span className={`${s.color} font-medium text-xs`}>{s.label}</span>
+                        <span className="font-bold text-xs">
+                          {(s.heatKcal / parseFloat(inp.time)).toLocaleString("en-IN", { maximumFractionDigits: 0 })} kcal/hr
+                        </span>
+                      </div>
+                    ))}
+                    {result.tankGain > 0 && (
+                      <div className="flex justify-between border-t pt-1 text-red-600 text-xs">
+                        <span>Tank Wall Heat Gain</span>
+                        <span className="font-bold">
+                          {result.tankGain.toLocaleString("en-IN", { maximumFractionDigits: 0 })} kcal/hr
+                        </span>
+                      </div>
+                    )}
+                    <div className="flex justify-between border-t-2 pt-2 font-bold text-indigo-700 text-xs">
+                      <span>Season × Safety Applied</span>
+                      <span>
+                        {inp.season} × {CHILLING_SEASON_FACTORS[inp.season].factor} × {(1 + parseFloat(inp.safetyMargin) / 100).toFixed(2)}
+                      </span>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Energy & Cost */}
+                <Card className="bg-green-50 border-green-200">
+                  <CardHeader className="p-3 pb-1 border-b border-green-100">
+                    <CardTitle className="text-sm text-green-800">💰 Energy & Cost Estimate</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-3">
+                    <div className="grid grid-cols-3 gap-2 text-center">
+                      {[
+                        { label: "Daily Units", value: result.dailyUnits.toFixed(0),                                                unit: "kWh" },
+                        { label: "Daily Cost",  value: `₹${result.dailyCost.toFixed(0)}`,                                         unit: "per day" },
+                        { label: "Monthly",     value: `₹${result.monthlyCost.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`, unit: "26 days" },
+                      ].map((c, i) => (
+                        <div key={i} className="bg-white p-2 rounded-lg border border-green-100">
+                          <div className="text-[9px] text-green-700 font-bold uppercase">{c.label}</div>
+                          <div className="text-base font-black text-green-800">{c.value}</div>
+                          <div className="text-[9px] text-green-500">{c.unit}</div>
+                        </div>
+                      ))}
+                    </div>
+                    <p className="text-[10px] text-slate-400 mt-2 text-center">
+                      {inp.refrigerant} · COP {CHILLING_REFRIGERANTS[inp.refrigerant].cop} · ₹{inp.electricityRate}/kWh · {inp.operatingHours} hrs/day
+                    </p>
+                  </CardContent>
+                </Card>
+
+                {/* Warnings */}
+                {result.warnings.length > 0 && (
+                  <Alert className="bg-yellow-50 border-yellow-300">
+                    <AlertTriangle className="h-4 w-4 text-yellow-600" />
+                    <AlertTitle className="text-yellow-800 text-sm">Process Notes</AlertTitle>
+                    <AlertDescription className="text-xs text-yellow-700 space-y-1">
+                      {result.warnings.map((w: string, i: number) => (
+                        <div key={i}>⚠️ {w}</div>
+                      ))}
+                    </AlertDescription>
+                  </Alert>
+                )}
+
+                {/* Industrial Note */}
+                <Alert className="bg-blue-50 border-blue-200">
+                  <AlertTriangle className="h-4 w-4 text-blue-600" />
+                  <AlertDescription className="text-xs text-blue-800">
+                    <strong>Industrial Note:</strong> Select compressor rated{" "}
+                    <strong>{result.recommendedTR.toFixed(1)} TR</strong> at evaporator −5°C to −10°C,
+                    condenser 45°C (summer design point).
+                    {result.TR <= 10 && " → Scroll/Reciprocating suitable."}
+                    {result.TR > 10 && result.TR <= 100 && " → Screw compressor recommended."}
+                    {result.TR > 100 && " → Consider centrifugal compressor."}
+                  </AlertDescription>
+                </Alert>
+
+                {/* Formula Reference */}
+                <div className="bg-slate-50 border rounded-lg p-3 text-[10px] font-mono text-slate-500 space-y-1">
+                  <div className="font-bold text-slate-600 mb-1 text-xs">📐 Formulas Used:</div>
+                  <div>Q = Mass × Cp × ΔT = {result.Mass.toFixed(0)} × {inp.cp} × {(parseFloat(inp.startTemp) - parseFloat(inp.endTemp)).toFixed(0)} = {result.totalBaseHeat.toFixed(0)} kcal</div>
+                  <div>Load = Q/hrs = {result.totalBaseHeat.toFixed(0)}/{inp.time} = {result.heatLoadHr.toFixed(0)} kcal/hr</div>
+                  <div>TR = Final Load / 3024 = {result.requiredLoadKcal.toFixed(0)}/3024 = {result.TR.toFixed(2)} TR</div>
+                  <div>kW(elec) = kW(thermal)/COP = {result.kW_thermal.toFixed(2)}/{CHILLING_REFRIGERANTS[inp.refrigerant].cop} = {result.kW_electric.toFixed(2)} kW</div>
+                </div>
+              </>
+            ) : (
+              <div className="text-center py-10 text-muted-foreground text-sm">
+                <Snowflake className="h-10 w-10 mx-auto mb-3 text-blue-200" />
+                <p>Basic tab mein values bharein aur <strong>Calculate</strong> press karein.</p>
+              </div>
+            )}
+          </TabsContent>
+        </Tabs>
+
+        {/* ── CALCULATE BUTTON ────────────────────────── */}
+        <Button
+          onClick={calculate}
+          className="w-full h-11 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-bold shadow-md"
+        >
+          <Snowflake className="w-4 h-4 mr-2" />
+          Calculate Chilling Load
+        </Button>
+
       </CardContent>
     </Card>
   );
 }
+// ════════════════════════════════════════════════════════════
+// ADVANCED BOILER STEAM COST CALCULATOR
+//
+// INSTRUCTIONS:
+// Apni file mein purana BoilerCostCalc() function delete karein
+// aur yeh poora code wahan paste kar dein.
+// Koi naya import nahi chahiye — sab already aapki file mein hai.
+// ════════════════════════════════════════════════════════════
 
-// ════════════════════════════════════════════════════════════
-// 5. BOILER STEAM COST CALCULATOR
-// Calculates Fuel Cost per Kg of Steam Generated
-// ════════════════════════════════════════════════════════════
+// ── CONSTANTS ──────────────────────────────────────────────
+const BOILER_FUEL_PRESETS = {
+  coal:   { label: "🪨 Indonesian Coal",     price: "12",  gcv: "4500", eff: "70", unit: "kg",  co2: 2.42 },
+  husk:   { label: "🌾 Paddy Husk",          price: "4",   gcv: "3200", eff: "65", unit: "kg",  co2: 0.0  }, // biomass ~ carbon neutral
+  wood:   { label: "🪵 Wood / Briquettes",   price: "6",   gcv: "3400", eff: "68", unit: "kg",  co2: 0.0  },
+  gas:    { label: "🔵 Natural Gas (PNG)",   price: "45",  gcv: "8500", eff: "90", unit: "SCM", co2: 2.02 },
+  lpg:    { label: "🟠 LPG",                price: "90",  gcv: "10800",eff: "88", unit: "kg",  co2: 2.98 },
+  diesel: { label: "⚫ Diesel (HSD)",        price: "90",  gcv: "10200",eff: "85", unit: "kg",  co2: 2.66 },
+  furnace:{ label: "🛢️ Furnace Oil (HFO)",  price: "70",  gcv: "9800", eff: "83", unit: "kg",  co2: 3.15 },
+};
+
+// Saturated steam enthalpy table (Bar → kcal/kg) — ASHRAE approximation
+// H_sat ≈ 636 + 1.94×P − 0.008×P² for 2–20 bar range
+const steamEnthalpy = (P: number) => 636 + 1.94 * P - 0.008 * P * P;
+
+// ── MAIN COMPONENT ─────────────────────────────────────────
 export function BoilerCostCalc() {
-  const [inputs, setInputs] = useState({
-    fuelType: "coal",    // coal | wood | gas | diesel
-    fuelPrice: "12",     // ₹/kg or ₹/SCM
-    gcv: "4500",         // kcal/kg
-    efficiency: "75",    // %
-    steamPressure: "10", // Bar
-    feedWaterTemp: "85", // °C
-  });
-  const [result, setResult] = useState<any>(null);
+  const { toast } = useToast();
 
-  // Presets for Fuels
-  const handleFuelChange = (type: string) => {
-    let p = "0", g = "0", e = "75";
-    switch(type) {
-        case "coal": p="12"; g="4500"; e="70"; break; // Indonesian Coal
-        case "wood": p="6"; g="3200"; e="65"; break;  // Briquettes/Wood
-        case "gas": p="45"; g="8500"; e="90"; break;  // PNG (per SCM)
-        case "diesel": p="90"; g="10500"; e="85"; break; // HSD
-        default: break;
-    }
-    setInputs({...inputs, fuelType: type, fuelPrice: p, gcv: g, efficiency: e});
+  const [fuelType, setFuelType] = useState<keyof typeof BOILER_FUEL_PRESETS>("coal");
+
+  const [inp, setInp] = useState({
+    fuelPrice:      "12",
+    gcv:            "4500",
+    efficiency:     "70",
+    steamPressure:  "10",
+    feedWaterTemp:  "85",
+    steamCapacity:  "2000",   // kg/hr boiler rated capacity
+    operatingHours: "16",     // hrs/day
+    operatingDays:  "26",     // days/month
+    electricityRate:"7",      // ₹/kWh (for FD/ID fans)
+    auxiliaryLoad:  "15",     // kW fans + pumps
+  });
+
+  const [result, setResult] = useState<any>(null);
+  const [activeTab, setActiveTab] = useState<"inputs" | "results" | "env">("inputs");
+
+  const setF = (k: string, v: string) => setInp(p => ({ ...p, [k]: v }));
+
+  // Apply fuel preset
+  const applyFuel = (key: keyof typeof BOILER_FUEL_PRESETS) => {
+    const f = BOILER_FUEL_PRESETS[key];
+    setFuelType(key);
+    setInp(p => ({ ...p, fuelPrice: f.price, gcv: f.gcv, efficiency: f.eff }));
   };
 
+  // ── VALIDATIONS ───────────────────────────────────────────
+  const { validatePositive, validateNumber } = useInputValidation();
+
+  const gcvVal  = useMemo(() => validatePositive(inp.gcv,          "GCV"),         [inp.gcv]);
+  const effVal  = useMemo(() => validateNumber(inp.efficiency, 30, 98, "Efficiency"), [inp.efficiency]);
+  const presVal = useMemo(() => validateNumber(inp.steamPressure, 1, 50, "Pressure"),  [inp.steamPressure]);
+  const fwVal   = useMemo(() => validateNumber(inp.feedWaterTemp, 20, 120, "Feed Water Temp"), [inp.feedWaterTemp]);
+
+  // ── CALCULATE ─────────────────────────────────────────────
   const calculate = useCallback(() => {
-    const P_fuel = parseFloat(inputs.fuelPrice);
-    const GCV = parseFloat(inputs.gcv);
-    const Eff = parseFloat(inputs.efficiency) / 100;
-    const Tw = parseFloat(inputs.feedWaterTemp);
-    
-    // 1. Heat Required to produce 1kg Steam (Enthalpy)
-    // Approx Enthalpy of Saturated Steam at 10 bar ≈ 665 kcal/kg
-    // Heat req = Enthalpy - FeedWaterTemp (Since 1kg water = 1 kcal/C)
-    // Using a simplified regression for Enthalpy based on Pressure (P in Bar)
-    // H_steam ≈ 640 + (2 * P) roughly for industrial range, or typically 660 is standard safe assumption
-    const H_steam = 640 + (1.5 * parseFloat(inputs.steamPressure)); 
-    const HeatRequired = H_steam - Tw; // kcal/kg of steam
+    const P_fuel  = parseFloat(inp.fuelPrice)      || 0;
+    const GCV     = parseFloat(inp.gcv)            || 0;
+    const Eff     = (parseFloat(inp.efficiency)    || 0) / 100;
+    const Tw      = parseFloat(inp.feedWaterTemp)  || 0;
+    const P_bar   = parseFloat(inp.steamPressure)  || 10;
+    const capKgh  = parseFloat(inp.steamCapacity)  || 0;
+    const opHrs   = parseFloat(inp.operatingHours) || 0;
+    const opDays  = parseFloat(inp.operatingDays)  || 26;
+    const elecR   = parseFloat(inp.electricityRate)|| 7;
+    const auxKW   = parseFloat(inp.auxiliaryLoad)  || 0;
 
-    // 2. Heat Available from Fuel (Effective)
-    const HeatAvailable = GCV * Eff; // kcal/kg fuel
+    if (!gcvVal.isValid || !effVal.isValid || !presVal.isValid || !fwVal.isValid) {
+      toast({ variant: "destructive", title: "Validation Error", description: "Kripya sahi values enter karein." });
+      return;
+    }
 
-    // 3. Steam to Fuel Ratio (Key KPI)
-    const SteamFuelRatio = HeatAvailable / HeatRequired; 
+    // ── 1. Enthalpy calculations ─────────────────────────
+    const H_steam = steamEnthalpy(P_bar);       // kcal/kg sat. steam
+    const H_fw    = Tw * 1.0;                   // kcal/kg feed water (cp≈1)
+    const H_evap  = H_steam - H_fw;            // Actual heat added per kg steam
 
-    // 4. Cost Calculation
-    const CostPerKgSteam = P_fuel / SteamFuelRatio;
+    // ── 2. Fuel side ─────────────────────────────────────
+    const heatAvailable   = GCV * Eff;          // kcal available per kg fuel
+    const steamFuelRatio  = heatAvailable / H_evap; // kg steam per kg fuel
+    const fuelPerKgSteam  = 1 / steamFuelRatio; // kg fuel needed per kg steam
+
+    // ── 3. Cost per kg steam ──────────────────────────────
+    const fuelCostPerKg   = P_fuel * fuelPerKgSteam;
+
+    // Auxiliary (FD/ID fans, BFW pump) — spread over steam produced
+    const steamPerHr      = capKgh;             // rated capacity
+    const auxCostPerHr    = auxKW * elecR;
+    const auxCostPerKgSt  = steamPerHr > 0 ? auxCostPerHr / steamPerHr : 0;
+
+    const totalCostPerKg  = fuelCostPerKg + auxCostPerKgSt;
+
+    // ── 4. Operational totals ─────────────────────────────
+    const fuelPerHr       = steamPerHr * fuelPerKgSteam;   // kg fuel/hr
+    const fuelCostPerHr   = fuelPerHr * P_fuel;
+    const totalCostPerHr  = fuelCostPerHr + auxCostPerHr;
+
+    const dailySteam      = steamPerHr * opHrs;
+    const dailyFuel       = fuelPerHr  * opHrs;
+    const dailyCost       = totalCostPerHr * opHrs;
+
+    const monthlySteam    = dailySteam * opDays;
+    const monthlyFuel     = dailyFuel  * opDays;
+    const monthlyCost     = dailyCost  * opDays;
+
+    // ── 5. Boiler Efficiency benchmarks ──────────────────
+    const flueGasLoss     = (1 - Eff) * 100;            // %
+
+    // ── 6. Environmental ─────────────────────────────────
+    const fuelCO2Factor   = BOILER_FUEL_PRESETS[fuelType].co2; // kg CO2 per kg fuel
+    const co2PerKgSteam   = fuelPerKgSteam * fuelCO2Factor;
+    const dailyCO2        = dailyFuel * fuelCO2Factor;
+    const monthlyCO2      = monthlyFuel * fuelCO2Factor;
+
+    // ── 7. Condensate return savings ─────────────────────
+    // If feed water temp rises from 30→85°C (condensate return), saving per kg steam:
+    const savingBaseTemp  = 30; // if no condensate return, cold water at 30°C
+    const H_evap_cold     = H_steam - savingBaseTemp;
+    const steamFuel_cold  = heatAvailable / H_evap_cold;
+    const savingPerKg     = P_fuel * (1/steamFuel_cold - fuelPerKgSteam);
+    const monthlySaving   = savingPerKg * monthlySteam;
+
+    const warnings: string[] = [];
+    if (Eff < 0.70)   warnings.push(`Boiler efficiency ${(Eff*100).toFixed(0)}% is low. Target ≥ 75%. Check flue gas temp & excess air.`);
+    if (Tw < 60)      warnings.push(`Feed water temp ${Tw}°C is low. Install economizer or improve condensate return to save ₹${savingPerKg.toFixed(2)}/kg steam.`);
+    if (P_bar > 15)   warnings.push(`High pressure (${P_bar} bar). Ensure IBR certification & safety valves are calibrated.`);
+    if (fuelType === "diesel" || fuelType === "furnace") warnings.push(`${BOILER_FUEL_PRESETS[fuelType].label} is expensive. Consider switching to PNG or biomass for cost reduction.`);
 
     setResult({
-      HeatRequired,
-      SteamFuelRatio,
-      CostPerKgSteam
+      H_steam, H_fw, H_evap, heatAvailable,
+      steamFuelRatio, fuelPerKgSteam,
+      fuelCostPerKg, auxCostPerKgSt, totalCostPerKg,
+      fuelPerHr, fuelCostPerHr, auxCostPerHr, totalCostPerHr,
+      dailySteam, dailyFuel, dailyCost,
+      monthlySteam, monthlyFuel, monthlyCost,
+      flueGasLoss, co2PerKgSteam, dailyCO2, monthlyCO2,
+      savingPerKg, monthlySaving,
+      warnings,
     });
-  }, [inputs]);
 
+    setActiveTab("results");
+    toast({
+      title: "✅ Calculated",
+      description: `Steam cost: ₹${totalCostPerKg.toFixed(2)}/kg | Steam:Fuel = ${steamFuelRatio.toFixed(2)}`,
+    });
+  }, [inp, fuelType, gcvVal, effVal, presVal, fwVal, toast]);
+
+  const fuelPreset = BOILER_FUEL_PRESETS[fuelType];
+
+  // ── RENDER ────────────────────────────────────────────────
   return (
-    <Card className="border-red-200 bg-red-50/30">
-      <CardHeader className="pb-2 bg-red-100/50 rounded-t-lg">
-        <CardTitle className="text-lg text-red-800 flex gap-2">
-          <Flame className="w-5 h-5"/> Boiler Steam Cost
+    <Card className="border-red-200 bg-red-50/20">
+      <CardHeader className="pb-3 bg-gradient-to-r from-red-50 to-orange-50 rounded-t-lg border-b border-red-100">
+        <CardTitle className="flex items-center justify-between">
+          <span className="flex items-center gap-2 text-red-800">
+            <Flame className="w-5 h-5 text-red-600" />
+            Advanced Boiler Steam Cost
+          </span>
+          {result && (
+            <Badge className="bg-red-600 text-white text-sm px-3 py-1">
+              ₹{result.totalCostPerKg.toFixed(2)}/kg steam
+            </Badge>
+          )}
         </CardTitle>
+        <CardDescription className="text-red-600 text-xs">
+          Steam cost · Fuel consumption · Monthly budget · CO₂ · Condensate savings
+        </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4 pt-4">
-        <div className="grid grid-cols-2 gap-3">
-           <div className="space-y-1">
-            <label className="text-xs font-bold text-slate-500">Fuel Type</label>
-            <select className="w-full h-9 border rounded px-2 text-sm" onChange={e => handleFuelChange(e.target.value)} value={inputs.fuelType}>
-                <option value="coal">Imp. Coal</option>
-                <option value="wood">Wood/Briquette</option>
-                <option value="gas">Natural Gas (PNG)</option>
-                <option value="diesel">Diesel (HSD)</option>
-            </select>
-           </div>
-           <ValidatedInput label="Fuel Price" value={inputs.fuelPrice} onChange={v=>setInputs({...inputs, fuelPrice:v})} unit="₹" />
-           <ValidatedInput label="GCV (kcal)" value={inputs.gcv} onChange={v=>setInputs({...inputs, gcv:v})} helpText="Calorific Value" />
-           <ValidatedInput label="Efficiency %" value={inputs.efficiency} onChange={v=>setInputs({...inputs, efficiency:v})} />
-           <ValidatedInput label="Pressure (Bar)" value={inputs.steamPressure} onChange={v=>setInputs({...inputs, steamPressure:v})} />
-           <ValidatedInput label="Feed Water °C" value={inputs.feedWaterTemp} onChange={v=>setInputs({...inputs, feedWaterTemp:v})} helpText="Condensate return helps" />
+
+      <CardContent className="pt-4 space-y-4">
+
+        {/* ── FUEL TYPE SELECTOR ──────────────────────── */}
+        <div className="space-y-2">
+          <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Fuel Type</Label>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+            {(Object.keys(BOILER_FUEL_PRESETS) as Array<keyof typeof BOILER_FUEL_PRESETS>).map(key => (
+              <button
+                key={key}
+                onClick={() => applyFuel(key)}
+                className={`px-2 py-2 rounded-lg border text-xs font-semibold transition-all shadow-sm text-left leading-tight
+                  ${fuelType === key
+                    ? "bg-red-600 text-white border-red-600 shadow-md"
+                    : "bg-white text-slate-600 border-slate-200 hover:border-red-300 hover:text-red-600"
+                  }`}
+              >
+                {BOILER_FUEL_PRESETS[key].label}
+                <div className={`text-[9px] mt-0.5 ${fuelType === key ? "opacity-80" : "text-slate-400"}`}>
+                  GCV {BOILER_FUEL_PRESETS[key].gcv} kcal/{BOILER_FUEL_PRESETS[key].unit}
+                </div>
+              </button>
+            ))}
+          </div>
         </div>
 
-        <Button onClick={calculate} className="w-full bg-red-600 hover:bg-red-700 text-white">Analyze Cost</Button>
+        {/* ── TABS ────────────────────────────────────── */}
+        <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as any)}>
+          <TabsList className="grid grid-cols-3 bg-slate-100">
+            <TabsTrigger value="inputs"  className="text-xs">⚙️ Inputs</TabsTrigger>
+            <TabsTrigger value="results" className="text-xs">📊 Results</TabsTrigger>
+            <TabsTrigger value="env"     className="text-xs">🌿 Eco & Savings</TabsTrigger>
+          </TabsList>
 
-        {result && (
-          <div className="flex flex-col gap-3 animate-in fade-in">
-             <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white p-3 rounded-xl border border-red-200 shadow-sm text-center">
-                    <div className="text-xs uppercase text-slate-500">Steam/Fuel Ratio</div>
-                    <div className="text-2xl font-bold text-slate-800">{result.SteamFuelRatio.toFixed(2)}</div>
-                    <div className="text-[10px] text-slate-400">kg steam / kg fuel</div>
+          {/* ═════ TAB 1: INPUTS ════════════════════════ */}
+          <TabsContent value="inputs" className="space-y-4 pt-3">
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {/* Left: Fuel & Boiler */}
+              <Card className="border-red-100 bg-white">
+                <CardHeader className="p-3 pb-2 bg-red-50 rounded-t-lg border-b border-red-100">
+                  <CardTitle className="text-xs font-bold text-red-700 uppercase tracking-wider flex items-center gap-1">
+                    <Flame className="w-3 h-3" /> Fuel & Boiler
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-3 space-y-2">
+                  <ValidatedInput
+                    label={`Fuel Price (₹/${fuelPreset.unit})`}
+                    value={inp.fuelPrice}
+                    onChange={v => setF("fuelPrice", v)}
+                    validation={validatePositive(inp.fuelPrice, "Fuel price")}
+                    icon={<DollarSign className="h-3 w-3 text-red-500" />}
+                    colorScheme="orange"
+                  />
+                  <ValidatedInput
+                    label={`GCV (kcal/${fuelPreset.unit})`}
+                    value={inp.gcv}
+                    onChange={v => setF("gcv", v)}
+                    validation={gcvVal}
+                    helpText="Lab tested value preferred"
+                    colorScheme="orange"
+                  />
+                  <ValidatedInput
+                    label="Boiler Efficiency %"
+                    value={inp.efficiency}
+                    onChange={v => setF("efficiency", v)}
+                    validation={effVal}
+                    helpText="Modern boiler: 80–88%"
+                    colorScheme="orange"
+                  />
+                  <ValidatedInput
+                    label="Steam Pressure (Bar)"
+                    value={inp.steamPressure}
+                    onChange={v => setF("steamPressure", v)}
+                    validation={presVal}
+                    helpText="Typical dairy: 8–15 bar"
+                    colorScheme="red"
+                  />
+                  <ValidatedInput
+                    label="Feed Water Temp (°C)"
+                    value={inp.feedWaterTemp}
+                    onChange={v => setF("feedWaterTemp", v)}
+                    validation={fwVal}
+                    helpText="With condensate return: 80–95°C"
+                    colorScheme="blue"
+                  />
+                </CardContent>
+              </Card>
+
+              {/* Right: Operations & Cost */}
+              <Card className="border-orange-100 bg-white">
+                <CardHeader className="p-3 pb-2 bg-orange-50 rounded-t-lg border-b border-orange-100">
+                  <CardTitle className="text-xs font-bold text-orange-700 uppercase tracking-wider flex items-center gap-1">
+                    <Factory className="w-3 h-3" /> Operations
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-3 space-y-2">
+                  <ValidatedInput
+                    label="Boiler Capacity (kg/hr)"
+                    value={inp.steamCapacity}
+                    onChange={v => setF("steamCapacity", v)}
+                    validation={validatePositive(inp.steamCapacity, "Capacity")}
+                    helpText="Nameplate rated steam output"
+                    colorScheme="orange"
+                  />
+                  <ValidatedInput
+                    label="Operating Hours/Day"
+                    value={inp.operatingHours}
+                    onChange={v => setF("operatingHours", v)}
+                    validation={validateNumber(inp.operatingHours, 1, 24, "Operating hours")}
+                    helpText="Actual run time"
+                    colorScheme="blue"
+                  />
+                  <ValidatedInput
+                    label="Working Days/Month"
+                    value={inp.operatingDays}
+                    onChange={v => setF("operatingDays", v)}
+                    validation={validateNumber(inp.operatingDays, 1, 31, "Working days")}
+                    colorScheme="blue"
+                  />
+                  <ValidatedInput
+                    label="Electricity Rate (₹/kWh)"
+                    value={inp.electricityRate}
+                    onChange={v => setF("electricityRate", v)}
+                    validation={validatePositive(inp.electricityRate, "Electricity rate")}
+                    colorScheme="green"
+                  />
+                  <ValidatedInput
+                    label="Aux. Load (kW)"
+                    value={inp.auxiliaryLoad}
+                    onChange={v => setF("auxiliaryLoad", v)}
+                    validation={validatePositive(inp.auxiliaryLoad, "Aux load")}
+                    helpText="FD/ID fans + BFW pump"
+                    colorScheme="purple"
+                  />
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          {/* ═════ TAB 2: RESULTS ═══════════════════════ */}
+          <TabsContent value="results" className="space-y-4 pt-3">
+            {result ? (
+              <>
+                {/* Top KPIs */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-red-600 text-white p-4 rounded-xl text-center shadow-lg">
+                    <div className="text-[10px] uppercase opacity-80 font-bold">Steam Cost</div>
+                    <div className="text-3xl font-black">₹ {result.totalCostPerKg.toFixed(2)}</div>
+                    <div className="text-xs opacity-70 mt-1">per kg steam</div>
+                  </div>
+                  <div className="bg-slate-800 text-white p-4 rounded-xl text-center shadow-lg">
+                    <div className="text-[10px] uppercase opacity-70 font-bold">Steam : Fuel</div>
+                    <div className="text-3xl font-black text-yellow-300">{result.steamFuelRatio.toFixed(2)}</div>
+                    <div className="text-xs opacity-60 mt-1">kg steam / kg fuel</div>
+                  </div>
                 </div>
-                <div className="bg-red-600 text-white p-3 rounded-xl shadow-lg text-center flex flex-col justify-center">
-                    <div className="text-xs uppercase opacity-80">Steam Cost</div>
-                    <div className="text-2xl font-bold">₹ {result.CostPerKgSteam.toFixed(2)}</div>
-                    <div className="text-[10px] opacity-80">per kg</div>
+
+                {/* Enthalpy Breakdown */}
+                <Card className="bg-amber-50 border-amber-200">
+                  <CardHeader className="p-3 pb-1 border-b border-amber-100">
+                    <CardTitle className="text-sm text-amber-800">🔥 Thermal Analysis</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-3 space-y-1 text-sm">
+                    {[
+                      { label: "Sat. steam enthalpy",         value: `${result.H_steam.toFixed(1)} kcal/kg`,   color: "text-orange-700" },
+                      { label: "Feed water enthalpy",         value: `${result.H_fw.toFixed(1)} kcal/kg`,      color: "text-blue-600"   },
+                      { label: "Heat added per kg steam",     value: `${result.H_evap.toFixed(1)} kcal/kg`,    color: "text-red-700 font-bold" },
+                      { label: "Available heat (fuel)",       value: `${result.heatAvailable.toFixed(0)} kcal/kg fuel`, color: "text-green-700" },
+                      { label: "Flue gas + radiation loss",   value: `${result.flueGasLoss.toFixed(1)}%`,      color: "text-slate-500"  },
+                    ].map((r, i) => (
+                      <div key={i} className="flex justify-between">
+                        <span className="text-slate-600">{r.label}</span>
+                        <span className={r.color}>{r.value}</span>
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
+
+                {/* Cost Breakdown */}
+                <Card className="bg-slate-50 border-slate-200">
+                  <CardHeader className="p-3 pb-1 border-b">
+                    <CardTitle className="text-sm">💰 Cost Breakdown (per kg steam)</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-3 space-y-1 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-slate-600">Fuel cost</span>
+                      <span className="font-bold text-red-700">₹ {result.fuelCostPerKg.toFixed(3)}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-600">Auxiliary (fans/pump)</span>
+                      <span className="font-bold text-purple-600">₹ {result.auxCostPerKgSt.toFixed(3)}</span>
+                    </div>
+                    <div className="flex justify-between border-t-2 pt-1 font-bold text-lg text-red-800">
+                      <span>Total cost / kg steam</span>
+                      <span>₹ {result.totalCostPerKg.toFixed(3)}</span>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Operational Summary */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <Card className="border-orange-100">
+                    <CardHeader className="p-3 pb-1 bg-orange-50 border-b">
+                      <CardTitle className="text-xs text-orange-800 font-bold uppercase">Daily Operations</CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-3 space-y-1 text-sm">
+                      {[
+                        { label: "Steam generated",  value: `${result.dailySteam.toLocaleString("en-IN", { maximumFractionDigits: 0 })} kg/day` },
+                        { label: `Fuel consumed (${fuelPreset.unit}/day)`, value: `${result.dailyFuel.toLocaleString("en-IN", { maximumFractionDigits: 1 })} ${fuelPreset.unit}` },
+                        { label: "Fuel cost",         value: `₹ ${result.dailyCost.toLocaleString("en-IN", { maximumFractionDigits: 0 })}` },
+                      ].map((r, i) => (
+                        <div key={i} className="flex justify-between">
+                          <span className="text-slate-500">{r.label}</span>
+                          <span className="font-bold">{r.value}</span>
+                        </div>
+                      ))}
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-gradient-to-br from-slate-800 to-slate-900 text-white border-none">
+                    <CardHeader className="p-3 pb-1">
+                      <CardTitle className="text-xs text-slate-300 font-bold uppercase">Monthly Budget</CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-3 space-y-1 text-sm">
+                      {[
+                        { label: "Steam generated",  value: `${result.monthlySteam.toLocaleString("en-IN", { maximumFractionDigits: 0 })} kg`, color: "text-cyan-400" },
+                        { label: `Fuel consumed`,    value: `${result.monthlyFuel.toLocaleString("en-IN", { maximumFractionDigits: 0 })} ${fuelPreset.unit}`, color: "text-yellow-300" },
+                        { label: "Monthly spend",    value: `₹ ${result.monthlyCost.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`, color: "text-green-300 text-base font-black" },
+                      ].map((r, i) => (
+                        <div key={i} className="flex justify-between">
+                          <span className="text-slate-400">{r.label}</span>
+                          <span className={`font-bold ${r.color}`}>{r.value}</span>
+                        </div>
+                      ))}
+                    </CardContent>
+                  </Card>
                 </div>
-             </div>
-             <div className="text-xs text-center text-slate-500 bg-white p-2 rounded border">
-                Heat Required: <strong>{result.HeatRequired.toFixed(0)} kcal/kg</strong> (Based on pressure & feed temp)
-             </div>
-          </div>
-        )}
+
+                {/* Warnings */}
+                {result.warnings.length > 0 && (
+                  <Alert className="bg-yellow-50 border-yellow-300">
+                    <AlertTriangle className="h-4 w-4 text-yellow-600" />
+                    <AlertTitle className="text-yellow-800 text-sm">Optimization Tips</AlertTitle>
+                    <AlertDescription className="text-xs text-yellow-700 space-y-1">
+                      {result.warnings.map((w: string, i: number) => (
+                        <div key={i}>⚠️ {w}</div>
+                      ))}
+                    </AlertDescription>
+                  </Alert>
+                )}
+
+                {/* Formula Reference */}
+                <div className="bg-slate-50 border rounded-lg p-3 text-[10px] font-mono text-slate-500 space-y-1">
+                  <div className="font-bold text-slate-600 text-xs mb-1">📐 Formulas Used:</div>
+                  <div>H_steam(P) = 636 + 1.94×P − 0.008×P² = {result.H_steam.toFixed(1)} kcal/kg at {inp.steamPressure} bar</div>
+                  <div>Heat added = H_steam − H_feedwater = {result.H_steam.toFixed(1)} − {result.H_fw.toFixed(1)} = {result.H_evap.toFixed(1)} kcal/kg</div>
+                  <div>Steam:Fuel = (GCV×η) / Heat_added = ({inp.gcv}×{(parseFloat(inp.efficiency)/100).toFixed(2)}) / {result.H_evap.toFixed(1)} = {result.steamFuelRatio.toFixed(3)}</div>
+                  <div>Cost/kg = Fuel_price / Steam:Fuel = ₹{inp.fuelPrice} / {result.steamFuelRatio.toFixed(3)} = ₹{result.fuelCostPerKg.toFixed(3)}</div>
+                </div>
+              </>
+            ) : (
+              <div className="text-center py-10 text-muted-foreground text-sm">
+                <Flame className="h-10 w-10 mx-auto mb-3 text-red-200" />
+                <p>Inputs tab mein values bharein aur <strong>Calculate</strong> press karein.</p>
+              </div>
+            )}
+          </TabsContent>
+
+          {/* ═════ TAB 3: ECO & SAVINGS ═════════════════ */}
+          <TabsContent value="env" className="space-y-4 pt-3">
+            {result ? (
+              <>
+                {/* CO2 Emissions */}
+                <Card className="border-green-200 bg-green-50">
+                  <CardHeader className="p-3 pb-2 border-b border-green-100">
+                    <CardTitle className="text-sm text-green-800">🌿 CO₂ Emissions</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-3 space-y-2 text-sm">
+                    {fuelPreset.co2 === 0 ? (
+                      <Alert className="bg-emerald-50 border-emerald-300">
+                        <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                        <AlertDescription className="text-emerald-800 text-xs">
+                          <strong>Carbon Neutral Fuel!</strong> Biomass fuels (husk/wood) are considered carbon neutral as they re-absorb CO₂ during growth.
+                        </AlertDescription>
+                      </Alert>
+                    ) : (
+                      <div className="space-y-2">
+                        {[
+                          { label: "CO₂ per kg steam",   value: `${result.co2PerKgSteam.toFixed(3)} kg CO₂` },
+                          { label: "Daily CO₂",          value: `${result.dailyCO2.toLocaleString("en-IN", { maximumFractionDigits: 0 })} kg` },
+                          { label: "Monthly CO₂",        value: `${result.monthlyCO2.toLocaleString("en-IN", { maximumFractionDigits: 0 })} kg` },
+                          { label: "Annual CO₂ (est.)",  value: `${(result.monthlyCO2 * 12 / 1000).toFixed(1)} tonnes` },
+                        ].map((r, i) => (
+                          <div key={i} className="flex justify-between">
+                            <span className="text-green-700">{r.label}</span>
+                            <span className="font-bold text-green-900">{r.value}</span>
+                          </div>
+                        ))}
+                        <p className="text-[10px] text-green-600 mt-1">
+                          CO₂ factor for {fuelPreset.label}: {fuelPreset.co2} kg CO₂/kg fuel
+                        </p>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+
+                {/* Condensate Return Savings */}
+                <Card className="border-blue-200 bg-blue-50">
+                  <CardHeader className="p-3 pb-2 border-b border-blue-100">
+                    <CardTitle className="text-sm text-blue-800">💧 Condensate Return Benefit</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-3 space-y-2 text-sm">
+                    <p className="text-xs text-blue-600">
+                      Comparison: Your feed water at {inp.feedWaterTemp}°C vs. fresh cold water at 30°C
+                    </p>
+                    <div className="grid grid-cols-2 gap-3 mt-2">
+                      <div className="bg-white p-3 rounded-lg border border-blue-100 text-center">
+                        <div className="text-[9px] text-blue-500 font-bold uppercase">Savings / kg steam</div>
+                        <div className="text-xl font-black text-blue-800">₹ {result.savingPerKg.toFixed(3)}</div>
+                      </div>
+                      <div className="bg-blue-600 text-white p-3 rounded-lg text-center">
+                        <div className="text-[9px] opacity-80 font-bold uppercase">Monthly Savings</div>
+                        <div className="text-xl font-black text-yellow-300">
+                          ₹ {result.monthlySaving.toLocaleString("en-IN", { maximumFractionDigits: 0 })}
+                        </div>
+                      </div>
+                    </div>
+                    <p className="text-[10px] text-blue-500 mt-1">
+                      If condensate return is not yet installed, this is your potential monthly saving by installing a condensate recovery system.
+                    </p>
+                  </CardContent>
+                </Card>
+
+                {/* Efficiency Benchmarks */}
+                <Card className="bg-white border-slate-200">
+                  <CardHeader className="p-3 pb-2 border-b">
+                    <CardTitle className="text-sm">📊 Industry Benchmarks</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-3 space-y-2 text-xs text-slate-600">
+                    {[
+                      { label: "Fire-tube boiler (coal/biomass)", range: "70–78%",  current: parseFloat(inp.efficiency) >= 70 && parseFloat(inp.efficiency) <= 78 },
+                      { label: "Three-pass wet-back boiler",      range: "78–84%",  current: parseFloat(inp.efficiency) >= 78 && parseFloat(inp.efficiency) <= 84 },
+                      { label: "Gas-fired/PNG boiler",            range: "85–92%",  current: parseFloat(inp.efficiency) >= 85 && parseFloat(inp.efficiency) <= 92 },
+                      { label: "World-class with economizer",     range: "88–93%",  current: parseFloat(inp.efficiency) >= 88 },
+                    ].map((b, i) => (
+                      <div key={i} className={`flex justify-between p-2 rounded ${b.current ? "bg-green-50 border border-green-200" : ""}`}>
+                        <span className={b.current ? "text-green-800 font-semibold" : ""}>{b.label}</span>
+                        <span className={`font-bold ${b.current ? "text-green-600" : "text-slate-400"}`}>
+                          {b.range} {b.current ? "✓" : ""}
+                        </span>
+                      </div>
+                    ))}
+                    <div className="mt-2 p-2 bg-amber-50 rounded border border-amber-200 text-amber-800">
+                      <strong>Your boiler: {inp.efficiency}%</strong> — {
+                        parseFloat(inp.efficiency) >= 85
+                          ? "Excellent! Well-maintained."
+                          : parseFloat(inp.efficiency) >= 75
+                          ? "Good. Economizer installation can push to 85%+."
+                          : "Below average. Check excess air, flue temp & insulation."
+                      }
+                    </div>
+                  </CardContent>
+                </Card>
+              </>
+            ) : (
+              <div className="text-center py-10 text-muted-foreground text-sm">
+                <Flame className="h-10 w-10 mx-auto mb-3 text-red-200" />
+                <p>Calculate karein pehle — tab yahan data aayega.</p>
+              </div>
+            )}
+          </TabsContent>
+        </Tabs>
+
+        {/* ── CALCULATE BUTTON ────────────────────────── */}
+        <Button
+          onClick={calculate}
+          className="w-full h-11 bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 text-white font-bold shadow-md"
+        >
+          <Flame className="w-4 h-4 mr-2" />
+          Analyze Boiler Cost
+        </Button>
+
       </CardContent>
     </Card>
   );
