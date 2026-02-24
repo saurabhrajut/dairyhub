@@ -672,3 +672,4 @@ export const packagingContent = {
       nanotechnology: "Nanotechnology in Dairy Packaging: Nano-composite packaging — clay nanoparticles (montmorillonite, MMT) incorporated in polymer matrix create tortuous path for gas molecules, improving barrier by 2-5× without compromising transparency or recyclability. Nanosilver antimicrobial coatings — silver nanoparticles (10-100 nm) on packaging surface slowly release Ag⁺ ions with broad-spectrum antimicrobial activity. Nano-titanium dioxide (TiO₂) photocatalytic coatings — UV light activation generates reactive oxygen species destroying surface bacteria. Regulatory status: nanomaterials in food contact materials under scrutiny — EFSA aur FSSAI evaluation ongoing. Migration of nanoparticles into food is primary safety concern."
     },
   },
+};
