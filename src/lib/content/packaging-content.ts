@@ -1,442 +1,674 @@
 export const packagingContent = {
-    hi: {
-        title: "Packaging - Materials & Process",
-        description: "Dairy Industry ke liye packaging materials, processes, aur quality testing ke liye ek comprehensive guide.",
-        tabs: {
-            intro: "Introduction",
-            materials: "Materials",
-            forms: "Forms & Processes",
-            testing: "Testing"
-        },
-        introduction: {
-            title: "Introduction aur Uddeshya",
-            p1: "Milk ek atyant kharab hone wala product hai jise apni initial quality ko ek pre-determined samay tak banaye rakhne ke liye suitable packaging ki zaroorat hoti hai. Plastic package dwara diye jane wale unique fayde yeh hain ki unmein acchi barrier properties hoti hain, content ki visibility allow karti hain, halke vajan ke hote hain, single service ke liye use kiye ja sakte hain, ghar le jaane mein aasan hote hain, adhik kifayati hote hain aur adhik aakarshak banaye ja sakte hain.",
-            p2: "Vartaman mein, produce kiye gaye kul milk ka kewal 15% hi commercial dairy industry dwara pack kiya jaata hai aur flexible pouch kul marketing ka lagbhag 92% hissa hai. Aparyapt packaging se product ki quality mein tezi se giravat aati hai. Packaging food safety management system (jaise HACCP ya ISO 22000) mein ek mahatvapurna <strong>Prerequisite Program (PRP)</strong> hai, jo product ko physical, chemical, aur microbiological contamination se bachata hai.",
-            p3: "Packaging material ka selection critical hai kyonki ismein product type, shelf life requirement, transportation needs, cost aur environmental impact jaise factors ko consider karna padta hai. Modern packaging technology ne dairy industry mein revolution la diya hai.",
-            purpose_title: "Packaging ka Mukhya Uddeshya",
-            purposes: [
-                "<strong>Containment & Suraksha:</strong> Product ko handling, storage aur transportation ke dauran contain aur protect karna. Ismein mechanical shock, vibration, compression aur physical damage se protection shamil hai. Proper containment leakage aur spillage bhi prevent karta hai.",
-                "<strong>Barrier Protection:</strong> Oxygen, light, moisture, microorganisms aur external odors se complete protection provide karna. Oxygen lipid oxidation promote karta hai aur light riboflavin degradation aur off-flavors ka karan banta hai.",
-                "<strong>Communication & Marketing:</strong> Package par nutritional information, ingredients, dates, batch numbers, FSSAI license number aur storage instructions print hote hain jo regulatory compliance ke liye mandatory hain. Package design brand identity establish karta hai.",
-                "<strong>Consumer Convenience:</strong> Easy opening, re-closability, portion control, stackability aur tamper-evident features consumer experience ko enhance karte hain.",
-                "<strong>Sustainability:</strong> Recyclable, biodegradable materials ka use karke environmental impact reduce karna. Carbon footprint reduction aur waste management bhi important considerations hain."
-            ],
-            p4: "FSSAI guidelines ke anusar complete labeling mandatory hai. Information English, Hindi (Devnagri script) ya regional language mein honi chahiye including product name, net quantity, manufacturer details, dates, allergen information aur nutritional facts."
-        },
-        materials: {
-            title: "Vibhinn Packaging Materials",
-            intro: "Dairy packaging ke liye various materials ka upyog hota hai jinka selection product type, shelf life aur cost ke basis par kiya jaata hai.",
-            glass: {
-                title: "Kaanch (Glass)",
-                p1: "Glass (Type III soda-lime glass) chemical roop se inert hai aur doodh ke saath react nahi karta, taste aur purity maintain karta hai. Excellent barrier properties provide karta hai gas aur moisture ke liye.",
-                p2: "Lekin glass brittle, heavy (450-550g per liter extra weight), aur thermal shock ke prati sensitive hota hai. Transparency light-induced off-flavors ka risk banata hai, isliye amber glass prefer kiya jaata hai.",
-                p3: "India mein sterilized flavoured milk abhi bhi heat-resistant glass bottles (IS 1392-1967) mein pack hota hai. Glass 100% recyclable hai aur multiple times reuse ho sakta hai proper cleaning ke baad."
-            },
-            plastics: {
-                title: "Plastics",
-                p1: "Plastic materials jaise LDPE, LLDPE, HDPE, PET, PP aur PS dairy packaging mein widely used hain. Yeh flexible, lightweight aur economical hote hain with 92% market share.",
-                types: [
-                    "<h4>LDPE (Low-Density Polyethylene):</h4> Density: 0.910-0.925 g/cm³, highly flexible, excellent heat sealing (120-130°C), good moisture barrier. OTR: 7800 cc/m²/24hrs. Pasteurized milk pouches mein use hota hai (60-100 microns).",
-                    "<h4>LLDPE (Linear Low-Density Polyethylene):</h4> Density: 0.915-0.925 g/cm³, superior puncture resistance (4-8x better than LDPE), tensile strength: 40-50 MPa. LDPE ke saath 5:1 ya 4:1 ratio mein blend hota hai allowing thinner films.",
-                    "<h4>HDPE (High-Density Polyethylene):</h4> Density: 0.941-0.965 g/cm³, rigid aur strong, tensile strength: 30-40 MPa, withstands 80-120°C. Milk jugs, bottles aur caps ke liye use hota hai.",
-                    "<h4>PET (Polyethylene Terephthalate):</h4> High clarity, lightweight (30-40g for 1L), excellent barrier (OTR: 50-100 cc/m²/24hrs), melting point: 260°C. Re-closable bottles ke liye ideal.",
-                    "<h4>PP (Polypropylene):</h4> Density: 0.90-0.91 g/cm³, melting point: 160-170°C, microwave safe. Yogurt cups (200-400g) ke liye widely used.",
-                    "<h4>PS (Polystyrene):</h4> Density: 1.04-1.05 g/cm³, lightweight, good clarity. Crystal PS (transparent) aur HIPS (opaque) yogurt cups mein use hote hain (50ml-1kg sizes)."
-                ]
-            },
-            laminates: {
-                title: "Multilayer Laminates",
-                p1: "UHT milk ke liye 6-layer laminate structure use hota hai jo combined protection provide karta hai. Total thickness: 300-350 microns.",
-                p2: "<strong>Layer 1 - PE (15-20µ):</strong> Outer moisture protection aur printing<br><strong>Layer 2 - Paperboard (200-250 GSM):</strong> Structural strength aur rigidity<br><strong>Layer 3 - PE (15-20µ):</strong> Adhesive layer<br><strong>Layer 4 - Aluminum Foil (6-9µ):</strong> Complete barrier - OTR: 0, WVTR: 0. Sabse critical layer<br><strong>Layer 5 - PE (15-20µ):</strong> Adhesive layer<br><strong>Layer 6 - PE (40-60µ):</strong> Food contact aur sealing (120-140°C), seal strength: 2.5-3.5 N/15mm",
-                p3: "Tetra Pak cartons mein Tetra Brik, Tetra Wedge aur Tetra Top shapes available hain. Filling speed: 10,000-40,000 packages/hour."
-            },
-            additionalMaterials: {
-                title: "Anya Materials",
-                items: [
-                    "<strong>Metallized Films:</strong> Aluminum coating (300-600 Angstrom) vacuum deposition se. OTR improvement 10-20x compared to plain films.",
-                    "<strong>EVOH:</strong> Exceptional oxygen barrier (OTR: 0.5-2.0 cc/m²/24hrs). Multilayer core layer mein use hota hai.",
-                    "<strong>Nylon (PA):</strong> High tensile strength, excellent puncture resistance. Multilayer films mein mechanical strength ke liye.",
-                    "<strong>BOPP:</strong> High clarity, excellent printability, 20-40 microns thickness. Wrapper aur label applications mein."
-                ]
-            }
-        },
-        forms: {
-            title: "Packaging Forms aur Processes",
-            p1: "Flexible pouches (92%), glass bottles (7%), aur Tetra-pak (1%) main packaging forms hain Indian dairy market mein.",
-            aseptic: {
-                title: "Aseptic Packaging",
-                p1: "Advanced technique jismein sterile product ko sterile package mein aseptically pack kiya jaata hai. 6-12 months shelf life ambient temperature par without refrigeration.",
-                p2: "UHT treatment: 135-150°C for 2-4 seconds. HTST principle se nutritional loss minimize hota hai while achieving commercial sterility. Direct aur Indirect UHT methods use hote hain.",
-                p3: "Packaging material H₂O₂ (30-35%) se sterilize, 60-65°C hot air se dry. Filling ISO Class 5 cleanroom mein. Speed: 10,000-40,000 packages/hour.",
-                p4: "Tetra Pak ke 6 layers synergistically complete protection provide karte hain ensuring 6-12 months shelf life without refrigeration."
-            },
-            fino: {
-                title: "Fino Package",
-                p1: "Multilayer fiber-based tamper-proof pillow pouch. 6 layers similar to Tetra Pak including paperboard aur aluminum foil.",
-                p2: "Process: H₂O₂ sterilization → hot air drying → tube forming → aseptic filling → VFFS sealing.",
-                p3: "Shelf life: 90-120 days at 30°C. Lower cost than Tetra Pak. Sizes: 80ml, 200ml, 500ml, 1L."
-            },
-            pet: {
-                title: "PET Packaging",
-                p1: "Crystal clear, re-closable, recyclable bottles. Weight: 30-40g for 1L. Excellent drop impact resistance.",
-                p2: "Types: (1) Multilayer PET/EVOH/PET (OTR: 0.5-1.0 cc/m²/24hrs) (2) Pigmented PET for complete light barrier. 6 months shelf life ambient.",
-                p3: "Manufacturing: Preform injection molding → reheat → stretch blow molding. Filling speed: 5,000-20,000 bottles/hour. PP/HDPE tamper-evident caps."
-            },
-            retort: {
-                title: "Retort Packaging",
-                p1: "In-container sterilization for flavoured milk, coffee milk. Heat-resistant glass/PP/HDPE bottles → hermetic sealing → retort sterilization.",
-                p2: "Parameters: 115-121°C for 15-25 minutes depending on F₀ value. Rapid cooling to 35-40°C prevents over-processing.",
-                p3: "Shelf life: 6-12 months ambient. Slightly more thermal damage vs UHT-aseptic but lower equipment cost. Glass bottles reusable with proper cleaning."
-            },
-            pouches: {
-                title: "Flexible Pouches",
-                p1: "92% market share in India. LDPE/LLDPE monolayer ya multilayer films (LDPE/Nylon/LDPE or LDPE/Met-PET/LDPE).",
-                p2: "Form-Fill-Seal machines (VFFS/HFFS) par manufacture. Sizes: 200ml, 500ml, 1L. Speed: 60-120 pouches/min.",
-                p3: "Pasteurized milk: LDPE 80-100µ, shelf life 4-5 days at 4°C. Extended shelf life: Metallized multilayer 100-120µ, 30-60 days."
-            },
-            cups: {
-                title: "Thermoformed Cups",
-                p1: "Yogurt, dahi, lassi packaging. Materials: PS, PP, PET, HIPS. Thermoforming: heat sheet → vacuum/pressure forming.",
-                p2: "Aluminum foil peelable lids (PET/Al/seal layer) provide easy opening. Sizes: 50ml-1kg. Top load: 30-50N for stacking.",
-                p3: "Shelf life: 10-15 days at 4-7°C. HIPS cups Al-PE foil se seal hote hain for tamper evidence."
-            }
-        },
-        testing: {
-            title: "Packaging Material Testing",
-            intro: "Quality assurance ke liye standardized tests (BIS, ASTM, ISO) conduct kiye jaate hain.",
-            sampling_title: "Sampling Plan",
-            sampling_text: "AQL 1.5-2.5 standards ke anusar 10-20 packages randomly select kiye jaate hain as per IS 4905.",
-            conditioning_title: "Conditioning",
-            conditioning_text: "Samples ko 23±2°C aur 50±5% RH par 24 hours condition kiya jaata hai. Temperature fluctuation ±1°C se kam.",
-            calculation_title: "Calculations & Standards:",
-            tests: [
-                {
-                    title: "Paper - GSM Test",
-                    standard: "IS 1060 (Part 1), ASTM D646, ISO 536",
-                    procedure: "<h4>Principle:</h4> Basis weight measurement. Dairy paperboard: 200-250 g/m²<h4>Procedure:</h4><ol><li>Cut 10x10 cm sample with die cutter</li><li>Weigh on analytical balance (0.001g accuracy)</li><li>Calculate GSM from weight and area</li><li>Test minimum 5 samples</li></ol>",
-                    calculation: "GSM = [Weight (g) × 10,000] / Area (cm²)<br>Example: 2.3g for 100cm² = (2.3 × 10,000)/100 = 230 g/m²",
-                    acceptance: "Aseptic carton paperboard: 200-250 g/m² (±5%)"
-                },
-                {
-                    title: "Paper - Bursting Strength",
-                    standard: "IS 1060 (Part 5), ASTM D774, ISO 2758",
-                    procedure: "<h4>Principle:</h4> Hydraulic pressure resistance. Typical: 3.5-5.0 kg/cm²<h4>Procedure:</h4><ol><li>Clamp circular sample (30mm) in Mullen Tester</li><li>Apply hydraulic pressure (rate: 170±15 kPa/s)</li><li>Record burst pressure</li><li>Test 10 samples, report median</li></ol>",
-                    calculation: "Burst Factor = [Bursting Strength (kg/cm²) × 100] / GSM<br>Example: 4.2 kg/cm², GSM 230 = (4.2 × 100)/230 = 1.83",
-                    acceptance: "230 GSM paperboard: >4.0 kg/cm², Burst Factor >1.7"
-                },
-                {
-                    title: "Paper - Cobb Test",
-                    standard: "IS 1060 (Part 8), TAPPI T441, ISO 535",
-                    procedure: "<h4>Principle:</h4> Water absorption measurement. Lower is better<h4>Procedure:</h4><ol><li>Place 100cm² sample in Cobb tester</li><li>Add 100ml water, keep 60±0.5 seconds</li><li>Remove water, blot with roller (10kg)</li><li>Reweigh within 30 seconds</li></ol>",
-                    calculation: "Cobb Value = (Wet weight - Dry weight) × 100 g/m²<br>Example: 2.58g - 2.30g = 0.28 × 100 = 28 g/m²",
-                    acceptance: "Coated paperboard: <30 g/m²"
-                },
-                {
-                    title: "Film - Thickness",
-                    standard: "IS 2508, ASTM D374, ISO 4593",
-                    procedure: "<h4>Principle:</h4> Uniform thickness for consistent properties<h4>Procedure:</h4><ol><li>Measure 10+ points with digital micrometer (1µ resolution)</li><li>Pressure: 50-100 kPa</li><li>Calculate average, min, max, variation</li></ol>",
-                    calculation: "Avg Thickness = Sum of readings / Count<br>Variation % = [(Max-Min)/Avg] × 100<br>Example: Avg 63.5µ, Range 62-65µ = 4.7% variation",
-                    acceptance: "LDPE 80±8µ, variation <10%"
-                },
-                {
-                    title: "Film - Tensile Strength",
-                    standard: "IS 2508 (Part 7), ASTM D882, ISO 527",
-                    procedure: "<h4>Principle:</h4> Strength and stretch capability<h4>Procedure:</h4><ol><li>Cut dumbbell specimen (50mm gauge, 10mm width)</li><li>Clamp in UTM, pull at 500mm/min</li><li>Record max force and elongation</li><li>Test 5 samples MD and TD each</li></ol>",
-                    calculation: "Tensile Strength (MPa) = Max Load (N) / Cross-section Area (mm²)<br>Elongation % = [(Final-Initial)/Initial] × 100<br>Example: 15N, 10mm × 0.08mm = 15/0.8 = 18.75 MPa",
-                    acceptance: "LDPE: >18 MPa, >300% elongation<br>LLDPE: >35 MPa, >400%"
-                },
-                {
-                    title: "Film - WVTR",
-                    standard: "IS 2508 (Part 6), ASTM F1249, ISO 15106",
-                    procedure: "<h4>Principle:</h4> Water vapor permeation rate<h4>Procedure:</h4><ol><li>Seal film on cup with desiccant (CaCl₂)</li><li>Place in chamber: 38°C, 90% RH</li><li>Weigh daily for 7 days after steady state</li><li>Calculate from weight gain slope</li></ol>",
-                    calculation: "WVTR (g/m²/day) = [Weight gain (g) × 24] / [Area (m²) × Time (hrs)]<br>Example: 0.015g in 24hrs, Area 0.0038m² = 3.95 g/m²/day",
-                    acceptance: "LDPE 80µ: <15 g/m²/day at 38°C, 90% RH<br>Al foil laminate: <1 g/m²/day"
-                },
-                {
-                    title: "Film - OTR",
-                    standard: "ASTM D3985, ISO 15105, IS 15838",
-                    procedure: "<h4>Principle:</h4> Oxygen permeation affects shelf life<h4>Procedure:</h4><ol><li>Mount film in diffusion cell (50cm²)</li><li>Flow O₂ on test side, N₂ on sensor side</li><li>Coulometric sensor detects permeated O₂</li><li>Test at 23±2°C, 0 or 50% RH until steady state</li></ol>",
-                    calculation: "OTR (cc/m²/day/atm) reported at test conditions<br>Al foil: 0<br>LDPE 80µ: ~7800<br>PET 12µ: 50-100<br>PET/EVOH/PET: <1",
-                    acceptance: "LDPE pouch: 3000-8000 (ok for 4-5 days)<br>Aseptic laminate: <5<br>Multilayer PET: <1"
-                },
-                {
-                    title: "Foil - Pinhole Test",
-                    standard: "IS 5168, ASTM F392",
-                    procedure: "<h4>Principle:</h4> Detect microscopic holes compromising barrier<h4>Procedure:</h4><ol><li>Place 100cm² foil on light box (3000-5000 lux)</li><li>Observe from 30cm in dark room</li><li>Count light pinpoints with magnifier (2-5x)</li><li>Compare with standard charts</li></ol>",
-                    acceptance: "Quality foil: Zero pinholes per 100cm²"
-                },
-                {
-                    title: "Glass - Thermal Shock",
-                    standard: "IS 1392, ISO 7459",
-                    procedure: "<h4>Principle:</h4> Sudden temperature change resistance<h4>Procedure:</h4><ol><li>Immerse bottles in hot water (80-90°C)</li><li>Hold 15 minutes</li><li>Transfer immediately to cold water (4-10°C)</li><li>Check for cracks/breakage</li></ol>",
-                    acceptance: "No cracks or breakage = Pass"
-                },
-                {
-                    title: "Metal Can - Leak Test",
-                    standard: "ASTM D3078",
-                    procedure: "<h4>Principle:</h4> Seam integrity verification<h4>Procedure:</h4><ol><li>Submerge sealed can underwater</li><li>Apply 70-100 kPa internal air pressure</li><li>Observe for air bubbles indicating leaks</li></ol>",
-                    acceptance: "No bubble formation = Pass"
-                },
-                {
-                    title: "Container - Drop Test",
-                    standard: "ASTM D5276, IS 9873",
-                    procedure: "<h4>Principle:</h4> Impact resistance during handling<h4>Procedure:</h4><ol><li>Fill containers with product</li><li>Drop from specified height (60-120cm) onto concrete</li><li>Test different orientations (base, side, corner)</li><li>Inspect for leakage/damage</li></ol>",
-                    acceptance: "No leakage or structural failure"
-                },
-                {
-                    title: "CFB Box - Compression",
-                    standard: "IS 6318, ASTM D642",
-                    procedure: "<h4>Principle:</h4> Stacking strength for warehouse storage<h4>Procedure:</h4><ol><li>Place empty box in compression tester</li><li>Apply vertical load gradually (12±3 mm/min)</li><li>Record load at deformation/collapse</li></ol>",
-                    calculation: "Compression Strength (kg) = Max load before failure",
-                    acceptance: "Should exceed calculated stacking load with safety factor 4-5"
-                },
-                {
-                    title: "Aseptic Carton - Seal Integrity",
-                    standard: "Internal quality standards",
-                    procedure: "<h4>Principle:</h4> Hermetic seal verification<h4>Procedure:</h4><ol><li>Immerse carton in methylene blue dye (0.1%)</li><li>Apply vacuum (500-600 mm Hg) for 30 seconds</li><li>Remove, rinse, cut open carton</li><li>Check for dye penetration at seals</li></ol>",
-                    acceptance: "No dye penetration = Perfect seal"
-                },
-                {
-                    title: "Cup - Top Load Test",
-                    standard: "ASTM D642 modified",
-                    procedure: "<h4>Principle:</h4> Resistance to stacking pressure during sealing/storage<h4>Procedure:</h4><ol><li>Place empty cup on flat surface</li><li>Apply vertical load from top at 12 mm/min</li><li>Record force at deformation/buckling</li></ol>",
-                    calculation: "Top Load Strength (N) = Force at 3mm deformation or buckling",
-                    acceptance: "30-50 N for yogurt cups"
-                },
-                {
-                    title: "Seal Strength Test",
-                    standard: "ASTM F88, ISO 11607",
-                    procedure: "<h4>Principle:</h4> Bond strength of heat seals<h4>Procedure:</h4><ol><li>Cut 15mm wide strip across seal</li><li>Clamp in tensile tester with seal centered</li><li>Pull at 300mm/min until seal fails</li><li>Record peak force and failure mode</li></ol>",
-                    calculation: "Seal Strength (N/15mm) = Peak force at seal failure",
-                    acceptance: "Pouches: 15-25 N/15mm<br>Cartons: 2.5-3.5 N/15mm<br>Failure should be film break, not seal separation"
-                },
-                {
-                    title: "Migration Test",
-                    standard: "IS 9845, EU 10/2011",
-                    procedure: "<h4>Principle:</h4> Chemical safety - substances migrating into food<h4>Procedure:</h4><ol><li>Contact packaging with food simulant (water, acid, alcohol, oil)</li><li>Store at specified temp and time (10 days at 40°C typical)</li><li>Analyze simulant for migrated substances by GC-MS/ICP-MS</li><li>Check against limits</li></ol>",
-                    acceptance: "Overall migration: <10 mg/dm² (India)<br>Specific substances: within permitted limits<br>Heavy metals: Pb <0.5 ppm, Cd <0.1 ppm"
-                }
-            ]
-        }
+  hi: {
+    title: "Packaging — Materials, Processes & Quality Testing",
+    description: "Dairy Industry ke liye packaging materials, processes, quality testing aur sustainability ke liye ek comprehensive scientific guide.",
+    tabs: {
+      intro: "Introduction",
+      materials: "Materials",
+      forms: "Forms & Processes",
+      testing: "Testing",
+      labeling: "Labeling & Regulations",
+      sustainability: "Sustainability",
+      active_intelligent: "Active & Intelligent Packaging",
+      cold_chain: "Cold Chain & Logistics",
     },
-    en: {
-        title: "Packaging - Materials & Process",
-        description: "A comprehensive guide to packaging materials, processes, and quality testing for the dairy industry.",
-        tabs: {
-            intro: "Introduction",
-            materials: "Materials",
-            forms: "Forms & Processes",
-            testing: "Testing"
+
+    // ─── INTRODUCTION ───────────────────────────────────────────────
+    introduction: {
+      title: "Introduction aur Packaging ka Uddeshya",
+      p1: "Doodh ek atyant nashwar (perishable) product hai jis mein naturally present enzymes, microorganisms, aur reactive chemical compounds hote hain jo ise rapidly spoil karte hain. Doodh ki initial quality ko ek pre-determined samay tak preserve karne ke liye suitable packaging absolutely essential hai. India mein produce hone wale kul doodh ka sirf 15% commercial dairy industry dwara pack kiya jaata hai — baaki 72% unorganized sector se directly consumers tak pahunchta hai bina kisi proper packaging ke. Iska directly public health par negative impact padta hai.",
+      p2: "Flexible pouch abhi bhi kul dairy marketing ka lagbhag 92% hissa hai, lekin India ka dairy packaging market 8-10% CAGR se grow kar raha hai aseptic packaging, UHT technology, aur modern retail infrastructure ke expansion ke saath. Packaging food safety management system (jaise HACCP, ISO 22000, SQF) mein ek critical <strong>Prerequisite Program (PRP)</strong> hai — yeh product ko physical (glass, metal fragments), chemical (lubricants, cleaning agents), aur microbiological contamination se protect karta hai.",
+      p3: "Packaging material selection ek multi-criteria decision hai jisme product type, required shelf life, processing method (pasteurized vs. UHT vs. retort), distribution temperature (ambient vs. cold chain), transportation distance, consumer preference, regulatory compliance (FSSAI, BIS, FDA), cost economics, aur environmental sustainability sab ko simultaneously consider karna padta hai. Galat packaging selection se product spoilage, food safety incidents, economic losses, aur brand damage ho sakta hai.",
+      purpose_title: "Packaging ke Paanch Mukhya Karya (5 P's of Packaging)",
+      purposes: [
+        "<strong>Protection (Suraksha):</strong> Product ko physical damage (mechanical shock, vibration, compression, abrasion), chemical degradation (oxidation, hydrolysis, enzymatic reactions), aur microbiological contamination se comprehensive protection dena. Drop test (60-120 cm height), compression test (stacking load), aur vibration simulation tests packaging ki protection capability verify karte hain. Primary, secondary, aur tertiary packaging levels milke ek complete protection system form karte hain.",
+        "<strong>Preservation (Paridaan):</strong> Oxygen, light, moisture, gases (CO₂, N₂), microorganisms, aur external odors se effective barrier provide karna. Oxygen lipid oxidation promote karta hai jisse rancid flavors develop hote hain. Light (UV aur visible) riboflavin degradation, vitamin A loss, aur photo-oxidized off-flavors cause karta hai. Moisture gain ya loss product texture, consistency, aur weight ko affect karta hai. Barrier properties ko OTR (Oxygen Transmission Rate), WVTR (Water Vapor Transmission Rate), aur light transmission % se quantify kiya jaata hai.",
+        "<strong>Presentation & Promotion:</strong> Package consumer ka attention attract karta hai aur purchasing decision mein crucial role play karta hai. 7 seconds ka 'first impression' rule packaging design par apply hota hai — ismein color psychology, typography, imagery, aur shelf appeal include hain. FSSAI mandatory labeling (product name, net quantity, MRP, manufacturing date, expiry date, FSSAI license number, nutritional information, allergen declaration, ingredients) legal compliance ensure karta hai. Smart packaging mein QR codes, augmented reality features, aur anti-counterfeiting elements shamil hain.",
+        "<strong>Portability & Convenience:</strong> Consumer ease of handling, easy opening mechanisms (tear notches, peel tabs), re-sealability (zip locks, screw caps), portion control (single-serve packaging), microwave safety, stackability, aur tamper-evident features modern consumer demands hain. Ergonomic design consumer injuries prevent karta hai aur product wastage minimize karta hai.",
+        "<strong>Planet (Sustainability):</strong> Circular economy principles ke anusaar — Reduce (packaging material weight minimize karna, lightweighting), Reuse (refillable glass bottles, multi-trip containers), Recycle (mono-material structures jo easily recyclable hain), aur Recover (energy recovery from non-recyclable packaging) — packaging design karna zaroori hai. Extended Producer Responsibility (EPR) India mein legally mandated hai."
+      ],
+      p4: "FSSAI Food Safety and Standards (Labelling and Display) Regulations 2020 ke anusaar, sabhi packaged dairy products par complete labeling mandatory hai. Information English ya Hindi (Devnagri script) mein — ya jis state mein sold ho uski official language mein — clearly legible font mein honi chahiye. Mandatory elements: product name, net quantity (by weight/volume), list of ingredients (descending order by weight), nutritional information (per 100g/100ml), date of manufacture, best before/use by date, batch/lot number, FSSAI license number of manufacturer, manufacturer/packer/importer address, country of origin (imports ke liye), aur allergen declaration.",
+      milk_spoilage: "Doodh mein Spoilage ke Scientific Kaaran: Fresh raw milk mein initially 10³-10⁴ CFU/mL bacteria hote hain. Inka primary source hota hai udder, teat surface, milking equipment, aur environment. Major spoilage organisms: Pseudomonas (psychrotrophic, grows at 4°C), Bacillus (spore-forming, heat-resistant), Clostridium, Lactobacillus. Spoilage mechanisms include: proteolysis (casein breakdown → bitter flavor, curdling), lipolysis (fat hydrolysis → rancid/soapy taste), lactose fermentation (lactic acid production → souring), aur Maillard browning (amino acid + reducing sugar → browning, cooked flavor at high temperature). Proper packaging in combination with correct temperature control, pasteurization/UHT, aur hygienic processing inhe effectively control karta hai."
+    },
+
+    // ─── MATERIALS ──────────────────────────────────────────────────
+    materials: {
+      title: "Dairy Packaging ke liye Vibhinn Materials",
+      intro: "Dairy packaging materials ka selection product ke specific requirements ke basis par hota hai — jisme processing temperature resistance, barrier properties, mechanical strength, food contact safety, cost economics, aur environmental impact sab considered hain. Material selection mein life cycle assessment (LCA) increasingly important ho raha hai.",
+      glass: {
+        title: "Kaanch (Glass) — Traditional Packaging",
+        p1: "Glass (Type I borosilicate ya Type III soda-lime glass as per IS 1392) chemically completely inert hai — doodh ke saath kisi bhi condition mein react nahi karta. Yeh 100% impermeable barrier provide karta hai gases (O₂, CO₂, N₂), moisture, aur vapors ke liye — OTR aur WVTR practically zero hain. Glass ki surface non-porous hoti hai jo microbial adhesion prevent karti hai. Taste, aroma, aur purity perfectly preserved hoti hai. Glass repeatedly sterilized ho sakta hai 120°C+ par bina degradation ke.",
+        p2: "Glass ki limitations scientifically significant hain: Density approximately 2.5 g/cm³ hoti hai, ek 1-liter bottle ka weight 450-550g hota hai jo net product weight se adhik ho sakta hai — transportation cost dramatically increase karta hai. Brittle fracture tendency (fracture toughness: ~0.7-0.9 MPa·m^0.5) handling aur transportation mein breakage risk create karta hai. Thermal shock resistance limited hai — sudden temperature changes (>40°C differential) cracks/breakage cause karte hain. Transparency UV aur visible light transmission allow karti hai jo riboflavin degradation (peak absorption: 440-460 nm) aur photo-oxidized flavors cause karti hai — isliye amber glass (cuts UV <450 nm) ya opaque labels prefer kiye jaate hain. Kulled glass manufacturing energy-intensive process hai.",
+        p3: "India mein sterilized flavoured milk, lassi, aur dahi abhi bhi heat-resistant glass bottles (IS 1392-1967 Type I/II) mein pack hote hain 200ml-500ml capacity mein. Returnable glass bottles (RGB system) dairy cooperatives mein — jaise Amul, Verka — use hote hain jahan collection infrastructure available ho. Ek glass bottle 25-30 times reuse ho sakti hai proper multi-stage cleaning (caustic wash 2% NaOH at 75°C → water rinse → acid rinse → final rinse → inspection → filling) ke baad. Glass 100% infinitely recyclable hai bina quality loss ke."
+      },
+      plastics: {
+        title: "Plastic Materials — Dominant Dairy Packaging",
+        p1: "Plastic packaging materials — primarily polyolefins (LDPE, LLDPE, HDPE) aur engineering plastics (PET, PP, PS) — Indian dairy packaging mein 92%+ market share rakhte hain. Yeh lightweight (density 0.90-1.05 g/cm³), mechanically versatile, process-friendly (heat-sealable, thermoformable, blow-moldable), aur cost-effective hote hain. FDA 21 CFR aur BIS standards ke anusaar food-grade formulations use kiye jaate hain jisme no harmful additives/plasticizers hote hain.",
+        types: [
+          "<h4>LDPE — Low-Density Polyethylene (Pasteurized Milk Pouches)</h4> Molecular structure: highly branched long-chain polymer. Density: 0.910-0.925 g/cm³. Highly amorphous structure provides: excellent flexibility (elongation at break: 300-500%), good impact resistance, aur outstanding heat-sealing properties (seal initiation temperature: 110-120°C, seal strength: 15-30 N/15mm). Moisture barrier acceptable (WVTR: 15-20 g/m²/day at 38°C). Oxygen barrier poor (OTR: 7000-8500 cc/m²/day/atm at 23°C) — suitable sirf short shelf-life products (4-5 days refrigerated) ke liye. MI (Melt Index): 0.3-2.0 g/10min for film grade. Standard milk pouch thickness: 60µ (200ml), 75µ (500ml), 100µ (1L). Meets IS 2508 requirements.",
+          "<h4>LLDPE — Linear Low-Density Polyethylene (High-Performance Pouches)</h4> Molecular structure: linear backbone with short, uniform branches (co-monomers: butene C4, hexene C6, octene C8). Density: 0.915-0.930 g/cm³. Superior mechanical properties vs. LDPE: Tensile strength: 40-55 MPa (2x LDPE), Puncture resistance: 4-8x better (dart drop impact: 150-400g vs LDPE 80-150g), tear resistance: 30-50% higher. These properties allow downgauging (thinner films) by 15-25% while maintaining performance. Blended with LDPE in 20-80% ratio to optimize processability-performance balance. Coefficient of friction (COF): 0.2-0.4 for good machinability. LLDPE/LDPE blend pouches now dominating pasteurized milk market.",
+          "<h4>HDPE — High-Density Polyethylene (Bottles & Rigid Containers)</h4> Molecular structure: highly linear, minimal branching (co-monomer <2%). Density: 0.941-0.965 g/cm³, high crystallinity (70-80%). Semi-rigid to rigid material with excellent stiffness (flexural modulus: 800-1500 MPa), good chemical resistance, aur better moisture barrier than LDPE/LLDPE (WVTR: 5-10 g/m²/day). Temperature resistance: -40°C to 120°C continuous service. Used for 500ml-2L milk bottles, cream containers, ghee containers, cap manufacture. Natural (unpigmented) HDPE transmits UV light — TiO₂ pigmentation (0.5-2%) provides light barrier for light-sensitive products. HDPE recyclability excellent — HDPE #2 widely accepted in recycling programs.",
+          "<h4>PET — Polyethylene Terephthalate (Premium Clear Bottles)</h4> Semi-crystalline engineering thermoplastic. Density: 1.33-1.40 g/cm³. Excellent optical clarity (haze <5%), high tensile strength (55-75 MPa), rigid yet lightweight (1L PET bottle: 25-40g vs glass: 450-550g — 90% weight reduction). Thermal properties: Tg = 70-80°C, Tm = 255-265°C. Oxygen barrier moderate (OTR: 50-100 cc/m²/day/atm for 200µm) — acceptable for 30-60 days refrigerated products. Excellent chemical resistance aur FDA-approved food contact. Transparent PET allows light transmission — UV-blocking additives ya opaque labels required. Biaxial orientation during blow molding increases barrier by 2-3x vs amorphous PET. PET #1 most widely recycled plastic globally.",
+          "<h4>PP — Polypropylene (Yogurt Cups & Microwave Containers)</h4> Semi-crystalline polyolefin. Density: 0.900-0.910 g/cm³ (lightest common packaging plastic). Excellent heat resistance: Tm = 160-170°C, continuous service to 120°C — withstands retort (121°C) aur microwave heating. Stiffness: flexural modulus 1000-1700 MPa. Good chemical resistance, low moisture absorption, aur FDA/BIS food contact approval. Injection molded PP cups for yogurt (80-500g), dahi, shrikhand, mishti doi. PP thin-wall injection molding (IML — In-Mold Labeling technology) enables premium decoration without secondary labeling. PP #5 recyclable but collection infrastructure in India limited.",
+          "<h4>PS — Polystyrene & HIPS (Yogurt Cups & Thermoformed Trays)</h4> Amorphous polymer. GPPS (General Purpose PS): transparent, brittle, density 1.04-1.06 g/cm³. HIPS (High Impact PS): rubber-toughened, opaque white, better impact resistance (10-40 kJ/m² vs GPPS <2 kJ/m²). Thermoforming characteristics excellent — deep draw capability, good detail reproduction. Oxygen barrier poor (OTR: 1500-3000 cc/m²/day/atm). Used for 50ml-1kg dahi, yogurt, ice cream cups with Al-PE peelable foil lids. Disadvantage: not microwave safe (max service temp ~85°C), poor chemical resistance to fats/oils at elevated temperature. PS #6 recyclability poor in India."
+        ]
+      },
+      laminates: {
+        title: "Multilayer Laminates — Aseptic Packaging ka Core",
+        p1: "Koi bhi single material akela sab properties provide nahi kar sakta jo UHT/aseptic dairy packaging ke liye required hain — isliye multilayer laminate structures different materials ki complementary properties ko combine karte hain. Tetra Pak, SIG Combibloc, Elopak jaise aseptic cartons typically 5-7 layer laminates use karte hain. Total laminate thickness: 280-400 microns. Lamination processes: dry lamination (adhesive-based), extrusion lamination (molten polymer as adhesive), aur co-extrusion.",
+        layers: [
+          { layer: "Layer 1 — Outer PE (15-20µ)", function: "External moisture protection, printing ink protection, heat sealability for outer flaps, glossy appearance. Low-density PE provides flexibility for crease/fold operations.", color: "blue" },
+          { layer: "Layer 2 — Paperboard (200-300 GSM)", function: "Primary structural component — provides rigidity, squareness, dimensional stability, printability, aur stacking strength. Bleached kraft paperboard (food grade, clay-coated for printability). Basis weight determines carton rigidity. Must pass Cobb test (<30 g/m²) aur bursting strength (>3.5 kg/cm²).", color: "yellow" },
+          { layer: "Layer 3 — PE (15-20µ)", function: "Tie/adhesive layer — chemically bonds dissimilar materials (paperboard to aluminum foil). Prevents interlayer delamination under mechanical stress (filling, handling, consumer use). Critical for maintaining hermetic seal integrity throughout shelf life.", color: "blue" },
+          { layer: "Layer 4 — Aluminum Foil (6-9µ)", function: "THE most critical barrier layer. Provides ABSOLUTE barrier: OTR = 0 cc/m²/day, WVTR ≈ 0 g/m²/day, light transmission = 0%. Enables 6-12 months ambient shelf life for UHT milk by completely preventing: (1) Lipid photo-oxidation aur riboflavin degradation from light, (2) Oxidative rancidity from O₂, (3) Moisture gain/loss, (4) External odor pickup. Pinhole-free quality (zero pinholes per 100cm²) essential — even microscopic pinholes compromise barrier completely.", color: "silver" },
+          { layer: "Layer 5 — PE (15-20µ)", function: "Second adhesive/tie layer bonding Al foil to inner sealant PE. Prevents foil delamination on consumer opening. Provides food-safe intermediate layer.", color: "blue" },
+          { layer: "Layer 6 — Inner Sealant PE (40-60µ)", function: "Direct food contact layer — must meet strictest food safety standards (FDA 21 CFR 177, EU 10/2011, FSSAI). Provides heat sealability for all seams (longitudinal, top, bottom) at 120-140°C forming perfect hermetic seal. Seal strength: 2.5-4.0 N/15mm. Non-toxic, tasteless, odorless, FDA-approved food-grade PE.", color: "green" }
+        ],
+        p3: "Laminate manufacturing involves precision slitting, printing (flexographic/gravure, up to 10 colors, food-safe inks), aur converting operations. Quality parameters: interlayer bond strength (>300 g/15mm), seal strength (2.5-4.0 N/15mm), oxygen transmission rate (<5 cc/m²/day), WVTR (<0.5 g/m²/day). Modern aseptic lines can fill 10,000-40,000 packages/hour. Tetra Pak available in Tetra Brik Aseptic, Tetra Wedge Aseptic, aur Tetra Top shapes in 80ml-2L sizes."
+      },
+      additionalMaterials: {
+        title: "Anya Specialized Packaging Materials",
+        items: [
+          "<strong>Metallized Films (Met-PET, Met-BOPP):</strong> Plastic films (PET ya BOPP) par vacuum deposition se aluminum ka ultra-thin coating (300-600 Angstrom = 30-60 nm). Barrier improvement: OTR 10-50x better than plain film (Met-PET 12µ: OTR 1-5 cc/m²/day), WVTR 10-20x better. Significantly lighter aur cheaper than Al foil. Disadvantage: barrier not absolute (unlike true Al foil), can crack at fold lines, not microwave-safe. Used in ESL (Extended Shelf Life) pouches, snack food packaging.",
+          "<strong>EVOH — Ethylene Vinyl Alcohol Copolymer:</strong> Exceptional oxygen barrier polymer — OTR: 0.1-1.0 cc/m²/day at 23°C, 0% RH (500-1000x better than LDPE). Vinyl alcohol content (38-48 mol%) determines barrier — higher EVOH content = better O₂ barrier. Critical limitation: EVOH is highly moisture-sensitive — barrier degrades significantly at high humidity. Solution: always sandwiched between moisture-barrier layers (PE/EVOH/PE multilayer structure). Used in multilayer PET/EVOH/PET bottles for UHT milk, premium yogurt pouches, processed cheese packaging.",
+          "<strong>Nylon (Polyamide — PA 6, PA 6/66):</strong> Semi-crystalline engineering polymer with excellent mechanical properties: tensile strength 60-80 MPa, outstanding puncture resistance (50-100% better than PE), high abrasion resistance, aur good temperature resistance (Tm: 215-265°C). Moderate oxygen barrier (OTR: 20-40 cc/m²/day). Disadvantage: moisture-absorptive (up to 10% water absorption) which affects dimensions aur barrier. Used as structural/mechanical strength layer in multilayer films: LDPE/Nylon/LDPE for extended shelf-life pouches, retort pouches (LLDPE/Nylon/Al foil/Nylon/cast PP).",
+          "<strong>BOPP — Biaxially Oriented Polypropylene:</strong> PP film biaxially stretched (MD aur TD) to align polymer chains, dramatically improving optical (clarity: haze <1%, gloss: 80-90°) aur mechanical properties (tensile strength: 180-250 MPa in MD, 25x improvement). Excellent printability (gravure aur flexographic). Thickness: 15-40 microns. Moisture barrier good (WVTR: 3-8 g/m²/day). Used for outer wrap on cheese, butter packaging, printed labels, twist-wrap for candies. Metallized BOPP provides improved barrier at lower cost.",
+          "<strong>Retort Pouches (Flexible Sterilizable Packaging):</strong> Multilayer structure designed to withstand 121°C retort sterilization: outer layer PET (structural, printable) + middle layer Al foil (barrier) + inner layer cast PP or LLDPE (heat-sealable, food contact). Alternatively: PET/Nylon/Al/cast PP for better mechanical properties. Retort pouches are lighter than cans (80% weight reduction), heat faster (reducing processing time), better nutritional retention, aur require less energy to manufacture. Used for flavoured milk, dairy-based desserts, processed cheese.",
+          "<strong>Paperboard & Cartonboard:</strong> Virgin bleached kraft paperboard (200-400 GSM) used for secondary/tertiary packaging. Corrugated fiberboard (CFB) for shipping cartons (Edge Crush Test: 40-80 lb/in, Burst Strength: 15-30 kg/cm²). Microflute (E, F, G flute) for premium retail packaging of premium dairy products. Paperboard coated with PE or wax for moisture resistance in refrigerated applications."
+        ]
+      }
+    },
+
+    // ─── FORMS & PROCESSES ──────────────────────────────────────────
+    forms: {
+      title: "Packaging Forms aur Manufacturing Processes",
+      p1: "Indian dairy packaging market mein form distribution: Flexible pouches 92% (dominant, low-cost pasteurized milk market), Glass bottles 5-7% (declining, mainly flavoured milk), Aseptic cartons/Tetra Pak ~1% (growing, UHT segment), PET bottles 0.5-1% (premium, growing), Thermoformed cups 0.5-1% (fermented products). Yeh distribution infrastructure availability, consumer purchasing power, aur cold chain development ko reflect karta hai.",
+      aseptic: {
+        title: "Aseptic Packaging — Gold Standard for Ambient Dairy",
+        p1: "Aseptic packaging ek revolutionary technology hai jisme commercially sterilized product ko sterile package mein sterile environment mein pack kiya jaata hai without any post-packaging heat treatment. Result: 6-12 months shelf life at ambient temperature without refrigeration — cold chain ki zaroorat nahi. This dramatically reduces distribution costs aur food waste in warm climates like India.",
+        p2: "UHT (Ultra High Temperature) Processing Science: Milk ko 135-150°C par 2-6 seconds heat kiya jaata hai. Is short time-high temperature combination se Arrhenius equation ke anusaar: (1) Pathogens aur spoilage organisms (including heat-resistant spores) completely destroyed ho jaate hain — commercial sterility achieved. (2) Nutrient loss minimized — vitamins (B vitamins sensitive to heat), proteins (whey protein denaturation <3%), aur enzymes (alkaline phosphatase inactivated, verifiable). Z-value for microbial inactivation ~10°C, for nutrient degradation ~30°C — iska matlab high temperature se microbes zyada quickly kill hote hain relative to nutrient damage. Direct UHT (steam injection/infusion): milk directly steam ke saath contact mein aata hai — faster heating/cooling, less heat damage. Indirect UHT (plate/tubular heat exchanger): product aur heating medium wall ke through heat transfer karte hain — more common, easier to maintain.",
+        p3: "Aseptic Line Operation: (1) Packaging material roll ko H₂O₂ (hydrogen peroxide, 30-35% concentration) bath ya spray se sterilize kiya jaata hai — H₂O₂ sporicidal agent hai jo DNA damage karke microbes ko kill karta hai. (2) Excess H₂O₂ ko 60-70°C sterile hot air se completely evaporate kiya jaata hai — residual H₂O₂ <0.1 ppm (EU limit) ensure karna zaroori hai. (3) Filling zone ISO Class 5 (Class 100) cleanroom conditions mein maintain hota hai — <3520 particles/m³ at 0.5µm. Positive pressure sterile air microbes ko bahar rakhta hai. (4) Hermetic sealing immediate filling ke baad — longitudinal seam, top seal, aur bottom seal. Production speed: 6,000-40,000 packages/hour depending on carton size aur machine model.",
+        p4: "Shelf Life Science: 6-layer Tetra Pak laminate se Al foil (Layer 4) provide karta hai: OTR = 0 (complete O₂ exclusion), WVTR ≈ 0 (moisture stable), Light transmission = 0% (photo-oxidation prevention). In combination with UHT sterility (zero viable microorganisms), yeh combination theoretically infinite shelf life provide kar sakta hai. Practically 6-12 months because of: slow flavor changes (even without microbial activity, Maillard reaction slowly progresses at ambient temperature), PE layer kar thoda slow permeation, aur quality acceptance standards."
+      },
+      fino: {
+        title: "Fino Package — Cost-Effective Aseptic Alternative",
+        p1: "Fino package ek innovative multilayer fiber-based aseptic pillow pouch hai jo Tetra Pak ke similar barrier properties provide karta hai lekin significantly lower cost par. Distinctive pillow shape (similar to plastic pouch) familiar consumer experience deta hai. 6-layer structure mein paperboard, Al foil, aur multiple PE layers hain similar to Tetra Pak carton lekin pouch format mein.",
+        p2: "Manufacturing Process (VFFS-Aseptic): (1) Rollstock sterilization: H₂O₂ 30-35% concentration spray ya bath, exposure time precisely controlled. (2) Sterile air drying at 60-65°C — UV radiation additional sterilization ke liye sometimes used. (3) Tube forming: sterilized web ko longitudinal seal se continuous tube mein form kiya jaata hai. (4) Product filling: UHT milk ko ISO Class 5 zone mein tube mein aseptically fill kiya jaata hai. (5) Transverse sealing: heat sealing (120-140°C, 0.5-1 second dwell time) top aur bottom seals create karte hain. (6) Cutting individual pouches. Fill accuracy: ±1% of nominal fill weight. Process validation: FDA 21 CFR Part 113 aur European Aseptic Standard guidelines.",
+        p3: "Performance Characteristics: Shelf life 90-120 days at ≤30°C ambient without refrigeration. Capital cost 40-60% lower than Tetra Pak line. Operating cost lower due to simpler sealing mechanism. Available sizes: 80ml (school milk), 200ml (standard single-serve), 500ml, aur 1L. Disadvantage: less structural rigidity than carton — prone to puncture during rough handling. Straw required for consumption. Limited re-sealability."
+      },
+      pet: {
+        title: "PET Packaging — Premium Consumer Experience",
+        p1: "PET bottles dairy packaging mein premium positioning ke liye use hote hain — crystal clear visibility, re-closable convenience, recyclable eco-friendly image, aur modern aesthetics consumer appeal provide karte hain. Ultra-lightweight (1L bottle: 25-40g vs glass: 450-550g — 90% weight reduction) transportation costs dramatically reduce karta hai. Drop impact resistance excellent — biaxially oriented PET ki fracture toughness glass se significantly better.",
+        p2: "Extended Shelf Life PET Solutions: Standard monolayer clear PET ki oxygen barrier (OTR: 60-100 cc/m²/day) sirf 15-20 days refrigerated shelf life allow karti hai. UHT milk ke 6-month ambient target ke liye: (A) Multilayer PET/EVOH/PET (3-5 layers, co-injection molded preform): OTR drops to 0.2-0.5 cc/m²/day. (B) Plasma-treated PET (DLC — Diamond-Like Carbon inner coating ya SiOx coating): OTR <1 cc/m²/day, glass-like barrier without weight/recyclability compromise. (C) Oxygen scavenger additives in PET matrix: chemically react with permeated O₂, extending effective barrier life. (D) Pigmented/opaque PET (TiO₂ white ya amber): blocks 100% of light preventing photo-oxidation.",
+        p3: "Manufacturing: Two-stage injection stretch blow molding (ISBM) process. Stage 1: PET resin (IV: 0.76-0.84 dL/g for bottles) injection molded into preform (test-tube shaped, specific neck finish). Stage 2: Preform reheated to 95-115°C (above Tg: 80°C), then biaxially stretched by stretch rod (axial) aur high-pressure air (hoop) in blow mold. Biaxial orientation: 2-3x axial + 3-4x hoop — improves barrier by 2-3x, increases clarity, aur improves mechanical properties. Aseptic hot-fill PET: fill temperature 85-92°C, requires heat-set PET (Tg elevated to 95-100°C). Cold aseptic fill: peracetic acid sterilization + ISO Class 5 filling. Speed: 5,000-30,000 bottles/hour. Tamper-evident PP or HDPE caps with induction sealing."
+      },
+      retort: {
+        title: "Retort Packaging — In-Container Sterilization",
+        p1: "Retort packaging oldest in-pack sterilization technology hai — container filling aur sealing ke baad entire package ko steam retort mein sterilize kiya jaata hai. Products: flavoured milk, chocolate milk, coffee milk, almond milk, dairy-based nutritional drinks, kheer, basundi. Process sequence: (1) Filling at ambient or warm temperature (60-70°C) in glass bottles (Type I borosilicate for maximum thermal shock resistance) ya PP/HDPE bottles. (2) Hermetic sealing with aluminum roll-on caps, crown corks, ya vacuum lug caps — headspace 6-10% of container volume. (3) Loading in retort chamber (horizontal rotary ya vertical static). (4) Sterilization cycle.",
+        p2: "Retort Processing Science: Temperature 115-121°C (steam pressure: 1.0-2.1 bar) for 15-30 minutes depending on product viscosity, container size, aur required F₀ value. F₀ (sterilizing value) = equivalent minutes at 121.1°C required to achieve target log reduction of Clostridium botulinum spores (minimum F₀ = 3 minutes = 12-log reduction for low-acid products, pH >4.6). Heat penetration studies (thermocouple at coldest point — geometric center) mandatory before commercial production. Over-processing deliberately avoided: rapid cooling with pressurized cooling water (to maintain internal pressure aur prevent container deformation) to 35-40°C. Maillard browning (amino acid + reducing sugar) aur cooked/caramelized flavors are typical thermal damage markers for retort products.",
+        p3: "Shelf life: 6-18 months ambient at ≤30°C. Significant advantage over UHT-aseptic: lower equipment cost (retort: ₹50-200 lakhs vs UHT-aseptic line: ₹2-10 crores), simpler operation aur maintenance. Disadvantage: more thermal damage (cooked flavor, Maillard browning, vitamin loss especially vitamins B1, B12, C) vs UHT. Glass bottles can be washed aur refilled (RGB system) with proper multi-stage CIP cleaning. Retort pouches (PET/Al/cast-PP) increasingly used as cans/glass replacement — lighter, faster heat penetration (due to thin cross-section)."
+      },
+      pouches: {
+        title: "Flexible Pouches — India ka Dominant Format",
+        p1: "Flexible pouches Indian dairy market mein 92% share rakhte hain — yeh unparalleled cost economics, well-established cold chain infrastructure (4°C distribution), aur deep consumer familiarity ka result hai. Cost comparison: 1-liter LDPE pouch ₹0.80-1.20 vs Tetra Pak ₹3.50-5.00 vs PET bottle ₹6-10. Materials: Standard pasteurized milk ke liye LDPE monolayer (80-100µ) ya LDPE/LLDPE blend. ESL milk ke liye LDPE/Nylon/LDPE (triple layer, co-extruded) ya LDPE/Met-PET/LDPE (barrier pouch).",
+        p2: "Form-Fill-Seal (FFS) Technology: VFFS (Vertical Form-Fill-Seal) machines par pouches manufacture hote hain: (1) Printed rollstock (pre-printed flexographic, 2-6 colors) continuous web ke roop mein machine mein feed hoti hai. (2) Former collar: web ko vertical tube mein form karta hai. (3) Longitudinal seal (back seal): heated jaw se tube ka seam seal hota hai. (4) Product fill: metered fill (±0.5-1% accuracy) — level sensors ya mass flow meters use hote hain. (5) Transverse seal (top/bottom seal): synchronized seal bars tube ko seal karte hain aur individual pouch cut karte hain. (6) Outfeed conveyor par pouches collect hote hain. Machine speed: 60-120 pouches/minute (500ml), 40-80/min (1L). Jaw seal temperature: 140-180°C, dwell time: 0.3-0.8 seconds.",
+        p3: "Shelf Life Engineering: Pasteurized LDPE pouches (80-100µ): 4-5 days at ≤4°C — limited by O₂ ingress aur microbial growth. ESL (Extended Shelf Life) pouches with LDPE/Met-PET/LDPE barrier (OTR: 10-30 cc/m²/day): 15-30 days at 4°C with microfiltration (MF) ya heat treatment combination. Ultra-barrier pouches for UHT: LDPE/Al foil/LDPE (true foil laminate): shelf life 60-90 days ambient. Nitrogen flushing (replacing O₂ in headspace with N₂ before sealing) further extends shelf life by 20-30%. Pouch integrity test (burst test: 0.5-1.0 kPa, drop test: 1.2m height) performed at AQL 1.5."
+      },
+      cups: {
+        title: "Thermoformed Cups — Fermented Dairy Products",
+        p1: "Dahi, yogurt, shrikhand, lassi, mishti doi, rabri, aur ice cream ke liye thermoformed rigid plastic cups standard packaging format hain. Materials: PS (GPPS for transparent, HIPS for opaque) — most economical, best thermoformability; PP — microwave safe, better heat resistance, premium positioning; PET — excellent clarity, good barrier. Manufacturing: (A) Thermoforming: Plastic sheet (2-4mm) ko IR heaters se Tg se upar heat (PP: 150-170°C, PS: 120-140°C), phir vacuum forming (suction se) ya pressure forming (compressed air se) exact mold shape mein form kiya jaata hai. Draw ratio (depth:diameter): 0.5-1.5. Wall thickness uniformity critical (variation <10%). (B) Injection molding: PP cups ke liye — better dimensional control, thinner walls achievable, IML (In-Mold Labeling) integrated decoration.",
+        p2: "Lid Systems: (A) Heat-sealed aluminum foil lids (structure: PET 12µ / Al foil 20-40µ / heat-seal lacquer): hermetic seal, tamper evident, easy peel (peel force: 3-8 N/15mm). Induction sealing (eddy current heating of Al layer) for PP cups. (B) Snap-on plastic lids: PP or PE — re-sealable, consumer convenience, less hermetic. (C) Peelable plastic film lids: co-extruded PE/PP films with controlled peel adhesion. Cup Sizing: 50ml (single-serve portion), 80ml, 100ml, 200ml (standard yogurt), 400ml, 500ml, 1kg (bulk). Top load strength (stacking): 30-80 N required — must support 8-10 unit column in cold storage without deformation. Decoration: IML (In-Mold Labeling) — label placed in mold before injection/thermoforming, becomes integral part of cup — premium appearance, no label lifting in condensation environments.",
+        p3: "Shelf life: Dahi/yogurt in PP/PS cups with Al foil lid: 10-21 days at 2-4°C. Shrikhand (low water activity, aw: 0.85-0.90): 30-45 days refrigerated. Ice cream (stored at -18 to -22°C): 6-18 months depending on overrun, stabilizer system, aur packaging. MAP (Modified Atmosphere Packaging) — CO₂/N₂ flushing before lid sealing — for extended shelf life fermented products. HIPS cups Al-PE foil se hermetically sealed — methylene blue dye penetration test se integrity verify ki jaati hai."
+      },
+      map_packaging: {
+        title: "MAP — Modified Atmosphere Packaging",
+        p1: "MAP packaging mein container ke andar ka atmosphere replace ya modify kiya jaata hai optimal gas mixture se jo product-specific deterioration reactions ko slow karta hai. Dairy products ke liye primary concern: aerobic microbial growth (O₂ presence) aur oxidative rancidity. MAP gases: N₂ (inert filler, displaces O₂, prevents package collapse), CO₂ (bacteriostatic/bactericidal — inhibits aerobic bacteria aur molds, dissolves in water aur fat), O₂ (generally avoided in dairy MAP except for some cheeses).",
+        p2: "Dairy MAP Applications: (A) Hard/semi-hard cheese: 100% CO₂ ya CO₂/N₂ (30:70) — inhibits surface mold growth, extends shelf life from 30 to 90+ days. CO₂ absorption by cheese (0.5-1.5% by weight) slight shrinkage cause karta hai — packaging must accommodate. (B) Fresh cheese (paneer, ricotta, cottage cheese): CO₂/N₂ atmosphere 21-42 days vs 7-14 days in air. (C) Butter aur ghee: N₂ flushing prevents oxidative rancidity, extends shelf life by 2-3x. (D) Dried dairy (milk powder, whey): N₂ flush in cans/pouches prevents caking, oxidation, insect infestation.",
+        p3: "MAP Equipment: Tray-sealing machines (in-line MAP), flow-wrap with gas flushing, vacuum-gas flush-seal cycle. Gas flush efficiency: O₂ residual <0.5% for effective MAP. O₂ scavenger sachets (iron-based: Ageless, FreshPax) additional O₂ absorption provide karte hain package headspace se. MAP validation: residual O₂ measurement with O₂ analyzer, CO₂ measurement, shelf life challenge studies with challenge organisms (L. monocytogenes, Pseudomonas spp.)."
+      }
+    },
+
+    // ─── TESTING ────────────────────────────────────────────────────
+    testing: {
+      title: "Packaging Material Quality Testing",
+      intro: "Packaging quality assurance mein incoming material inspection (supplier QC), in-process monitoring (production QC), aur finished product testing (outgoing QC) tino levels par standardized tests conduct kiye jaate hain. Testing standards: BIS (IS series), ASTM International, ISO, TAPPI, aur FSSAI regulations follow kiye jaate hain. NABL-accredited testing laboratory se testing regulatory compliance ke liye preferred/mandatory hai.",
+      sampling_title: "Sampling Plan (IS 4905 / ISO 2859-1)",
+      sampling_text: "AQL (Acceptable Quality Level) 1.5-2.5 par incoming material ka random sampling. Lot size ke anusaar sample size determine hoti hai (e.g., lot 1001-10000 units → sample n=50 at AQL 2.5). Double sampling plan preferred for critical attributes (barrier, seal integrity). Destructive tests ke liye separate representative samples. Sampling records traceable to production lot number mandatory.",
+      conditioning_title: "Conditioning (IS 1060 Part 1 / TAPPI T402)",
+      conditioning_text: "Sabhi physical/mechanical tests se pehle samples ko standard atmosphere mein condition kiya jaata hai: 23±2°C temperature aur 50±5% relative humidity par minimum 24 hours (preferably 48 hours for thick materials). Conditioning chamber mein consistent airflow maintain karna zaroori hai. Temperature fluctuation ±1°C se kam, humidity fluctuation ±2% RH se kam. Conditioning ke baad test within 2 hours complete karna preferred.",
+      calculation_title: "Test Methods, Calculations & Acceptance Criteria:",
+      tests: [
+        {
+          title: "Paper/Paperboard — GSM (Grammage) Test",
+          standard: "IS 1060 (Part 1), ASTM D646, ISO 536, TAPPI T410",
+          procedure: "<h4>Principle:</h4> Grammage (basis weight) is the mass per unit area of paper/paperboard, expressed in g/m². It is the most fundamental paper property, directly affecting structural strength, printability, and barrier properties. Dairy aseptic carton paperboard specification: 200-300 GSM.<h4>Equipment:</h4> Precision die cutter (100 cm² circular or 10×10 cm square), calibrated analytical balance (readability 0.001g), conditioning chamber.<h4>Procedure:</h4><ol><li>Cut minimum 5 samples using die cutter — ensure clean, burr-free edges. Sample must be representative of full roll width.</li><li>Condition samples at 23±2°C, 50±5% RH for minimum 24 hours.</li><li>Weigh each sample individually on analytical balance (0.001g readability). Record tare weight of sample holder separately.</li><li>Calculate GSM for each sample. Report mean ± standard deviation.</li><li>Check against specification. CV% (coefficient of variation) should be <2% for uniform paper.</li></ol>",
+          calculation: "GSM = [Sample weight (g) × 10,000] / Area (cm²)\nFor 10×10 cm sample (100 cm²): GSM = Weight (g) × 100\nExample: 2.35g sample → GSM = 2.35 × 100 = 235 g/m²\nCV% = (SD / Mean) × 100 — should be < 2%",
+          acceptance: "Aseptic carton paperboard: 200-300 g/m² (±5% of nominal)\nMilk pouch outer wrap: 60-80 g/m²\nSecondary carton: 400-600 g/m²"
         },
-        introduction: {
-            title: "Introduction & Purpose",
-            p1: "Milk being an extremely perishable product requires suitable packaging to preserve its initial quality for a pre-determined length of time. The unique advantages offered by plastic packages include good barrier properties, content visibility, light weight, single service capability, easy portability, economic efficiency, and attractive appearance.",
-            p2: "Currently, only 15% of all milk produced is packaged by the commercial dairy industry, with flexible pouches accounting for approximately 92% of total marketing. Inadequate packaging leads to rapid degradation of product quality. Packaging is a critical <strong>Prerequisite Program (PRP)</strong> in food safety management systems (like HACCP or ISO 22000), protecting products from physical, chemical, and microbiological contamination.",
-            p3: "Material selection is critical as it involves considering factors such as product type, shelf life requirements, transportation needs, cost, and environmental impact. Modern packaging technology has revolutionized the dairy industry, enabling extended freshness and safety.",
-            purpose_title: "Main Purposes of Packaging",
-            purposes: [
-                "<strong>Containment & Protection:</strong> To contain and protect products during handling, storage, and transportation, thereby increasing shelf life. This includes protection from mechanical shock, vibration, compression, and physical damage. Proper containment prevents leakage and spillage.",
-                "<strong>Barrier Protection:</strong> Providing effective barriers against external factors like oxygen, light, moisture, microorganisms, and external odors. Oxygen promotes lipid oxidation, while light causes riboflavin degradation and off-flavors. Moisture migration affects product consistency and texture.",
-                "<strong>Communication & Marketing:</strong> Attracting consumer attention and increasing sales. Packages communicate crucial information including nutritional facts, ingredients, dates, batch numbers, FSSAI license numbers, and storage instructions - mandatory for regulatory compliance. Package design establishes brand identity.",
-                "<strong>Consumer Convenience:</strong> Preventing adulteration (tamper-proof systems) and providing convenience. Features like easy opening, re-closability, portion control, easy handling, and stackability enhance consumer experience while ensuring tamper evidence.",
-                "<strong>Sustainability:</strong> Modern packaging should be environmentally friendly. Using recyclable, biodegradable, and reusable materials reduces environmental impact. Carbon footprint reduction and waste management are important design considerations."
-            ],
-            p4: "Complete labeling is mandatory per FSSAI guidelines. Information must be in English, Hindi (Devnagri script), or regional languages, including product name, net quantity, manufacturer details, dates, allergen information, and nutritional facts."
+        {
+          title: "Paper/Paperboard — Bursting Strength (Mullen Test)",
+          standard: "IS 1060 (Part 5), ASTM D774/D774M, ISO 2758, TAPPI T403",
+          procedure: "<h4>Principle:</h4> Bursting strength measures the hydrostatic pressure required to rupture a paper sample clamped over a circular aperture using a rubber diaphragm inflated at a controlled rate. It indicates resistance to puncture and is related to tensile strength and elongation. Critical for carton structural integrity during filling, handling, and distribution.<h4>Equipment:</h4> Mullen Burst Tester (hydraulic, spring, or pneumatic type), circular clamp area: 30.5 mm diameter, pressure rate: 170±15 mL/min.<h4>Procedure:</h4><ol><li>Condition samples as specified. Cut 10 circular samples (65-75mm diameter) from different locations across roll width.</li><li>Clamp sample firmly in burst tester — no wrinkles, no slippage.</li><li>Apply hydraulic pressure at controlled rate until rupture. Record peak pressure at rupture.</li><li>Test 10 samples each side (wire side and felt side). Report median value (not mean — to reduce influence of outliers).</li><li>Calculate Burst Factor = Burst Strength / GSM.</li></ol>",
+          calculation: "Burst Strength: directly read from gauge (kg/cm² or kPa)\nBurst Factor (BF) = Burst Strength (g/cm²) / GSM\nExample: Burst = 4.2 kg/cm² = 4200 g/cm², GSM = 230\nBF = 4200 / 230 = 18.3\nBurst Index (SI) = Burst Strength (kPa) / GSM (g/m²) kPa·m²/g",
+          acceptance: "230 GSM aseptic carton board: >4.0 kg/cm², BF >17\n300 GSM carton board: >5.0 kg/cm²\nCorrugated board liner: >3.5 kg/cm²"
         },
-        materials: {
-            title: "Different Packaging Materials",
-            intro: "Various materials are used for dairy packaging, with selection based on product type, shelf life requirements, cost, and application.",
-            glass: {
-                title: "Glass",
-                p1: "Glass (typically Type III soda-lime glass) is chemically inert, meaning it doesn't react with milk, preserving taste and purity. It provides excellent barrier properties, completely preventing gas and moisture permeation.",
-                p2: "However, glass is brittle, prone to breakage, heavy (adding 450-550g per liter), and susceptible to thermal shock (sudden temperature changes). Its transparency makes milk vulnerable to light-induced off-flavors, which is why amber glass is often preferred.",
-                p3: "In India, sterilized flavoured milk is still packaged in heat-resistant glass bottles (conforming to IS 1392-1967) with 500ml capacity. Glass bottles are reusable with proper cleaning and sterilization. Glass is 100% recyclable and can be reused multiple times."
-            },
-            plastics: {
-                title: "Plastics",
-                p1: "Plastic packaging materials include polyolefins like LDPE, LLDPE, HDPE, and others like BOPP, PET, PS, and PP. They are flexible, lightweight, and economical, with over 92% market share in dairy packaging.",
-                types: [
-                    "<h4>LDPE (Low-Density Polyethylene):</h4> Density: 0.910-0.925 g/cm³, creating a less crystalline, lower density structure. This provides high flexibility, excellent heat-sealing properties (120-130°C), and good moisture resistance. However, gas barrier properties (especially oxygen) are relatively low. OTR: typically 7800-8000 cc/m²/24hrs/atm. Used for pasteurized milk pouches (60-100 microns thickness).",
-                    "<h4>LLDPE (Linear Low-Density Polyethylene):</h4> Density: 0.915-0.925 g/cm³, with long, straight polymer chains having short, uniform branches. Co-monomers like Butane, Hexene, or Octane control these branches. This structure provides superior puncture resistance (4-8 times better than LDPE), better seal strength, higher tensile strength (40-50 MPa), and improved impact resistance. Dart drop impact strength is 50% higher than LDPE. Blended with LDPE in 5:1 or 4:1 ratios, allowing thinner films.",
-                    "<h4>HDPE (High-Density Polyethylene):</h4> Highly linear polymer chains with minimal branching. Density: 0.941-0.965 g/cm³, creating a high crystalline, high-density structure that is rigid and strong with better moisture and chemical resistance than LDPE/LLDPE. Tensile strength: 30-40 MPa, withstands 80-120°C. Commonly used for milk jugs, bottles, and caps. Unpigmented or TiO₂ pigmented (1.5%) HDPE bottles are commonly used.",
-                    "<h4>PET (Polyethylene Terephthalate):</h4> High clarity, strong, lightweight material providing excellent oxygen barrier (OTR: 50-100 cc/m²/24hrs). Melting point: 260°C, glass transition temperature: 70-80°C. Ideal for wide-mouth applications with re-closable PP/HDPE caps. Available as clear PET, UV-blocking PET, or with exterior labels.",
-                    "<h4>PP (Polypropylene):</h4> Versatile plastic providing higher temperature resistance (melting point: 160-170°C). Density: 0.90-0.91 g/cm³, suitable for microwave-safe applications. Widely used for yogurt, curd, and fermented dairy product containers. PP cups are injection molded, available in 200-400g capacities.",
-                    "<h4>PS (Polystyrene):</h4> Mainly used for yogurt cups and thermoformed containers. Lightweight (density: 1.04-1.05 g/cm³) with good clarity. Two forms: Crystal PS (transparent) and Impact PS/HIPS (opaque white). HIPS cups available in 100gm-1kg sizes, sealed with Al-PE foil. PS/PP cups provide 10 days shelf life under refrigeration."
-                ]
-            },
-            laminates: {
-                title: "Multilayer Laminates",
-                p1: "Multilayer laminates are used for aseptically processed products like UHT milk, combining properties of different materials. Multiple layers are bonded together for maximum protection. Total laminate thickness: typically 300-350 microns.",
-                p2: "<strong>Layer 1 - Polyethylene (Outer: 15-20 microns):</strong> External moisture protection, print protection, and moisture resistance. Protects against water splash and condensation.<br><br><strong>Layer 2 - Paperboard (200-250 GSM):</strong> Provides structural strength, rigidity, squareness, and printability. Main structural component giving shape and stiffness. Must be bleached and food-grade quality. Supports printed graphics.<br><br><strong>Layer 3 - Polyethylene (Adhesive: 15-20 microns):</strong> Bonds paperboard to aluminum foil firmly. Functions as tie layer preventing delamination. Maintains structural integrity.<br><br><strong>Layer 4 - Aluminum Foil (Barrier: 6-9 microns):</strong> The most critical layer providing absolute barrier to light, oxygen, and moisture. Al foil OTR: exactly 0 cc/m²/24hrs, WVTR: virtually zero. Prevents oxidative and light-induced spoilage completely. Blocks odor transmission, flavor migration, and aroma loss 100%. This layer enables 6-12 months ambient storage for UHT milk.<br><br><strong>Layer 5 - Polyethylene (Adhesive: 15-20 microns):</strong> Bonds aluminum foil to final product-contact layer. Provides interlayer adhesion and prevents delamination.<br><br><strong>Layer 6 - Polyethylene (Inner Sealant: 40-60 microns):</strong> Final innermost layer in direct contact with milk, must be food-grade quality. Functions as sealant, enabling heat sealing (120-140°C) of all seams (top, bottom, longitudinal) to create perfect hermetic seal. Sealing strength: typically 2.5-3.5 N/15mm providing excellent seal integrity.",
-                p3: "This multilayer structure consists of 6 distinct functional layers working synergistically for combined protection. Modern co-extrusion technology processes different polymers simultaneously to create seamless multilayer films without adhesives. Tetra Pak cartons available in various shapes: Tetra Brik (rectangular), Tetra Wedge (triangular), and Tetra Top (gable top)."
-            },
-            additionalMaterials: {
-                title: "Other Packaging Materials",
-                items: [
-                    "<strong>Metallized Films:</strong> Plastic films with very thin aluminum coating (300-600 Angstrom thickness) applied via vacuum deposition. Provide significantly better barrier properties than plain films but less effective than aluminum foil. Metallized PET and BOPP commonly used. OTR improvement: 10-20 times compared to plain films.",
-                    "<strong>EVOH (Ethylene Vinyl Alcohol):</strong> High-barrier polymer providing exceptional oxygen barrier properties (OTR: 0.5-2.0 cc/m²/24hrs at 23°C, 0% RH). Typically used as core layer in multilayer structures as it's moisture sensitive. PET/EVOH/PET structure ideal for extended shelf life products.",
-                    "<strong>Nylon (Polyamide - PA):</strong> Provides good oxygen barrier, high tensile strength, excellent puncture resistance, and abrasion resistance. Used in multilayer films to improve mechanical strength. Nylon 6 and Nylon 66 are commonly used packaging grades.",
-                    "<strong>BOPP (Biaxially Oriented Polypropylene):</strong> Provides high clarity, excellent gloss, good stiffness, and outstanding printability. Used for wrapper, label, and overwrap applications. BOPP films available in 20-40 microns thickness, with metallized BOPP providing better barrier."
-                ]
-            }
+        {
+          title: "Paper/Paperboard — Cobb Test (Water Absorption)",
+          standard: "IS 1060 (Part 8), TAPPI T441, ISO 535",
+          procedure: "<h4>Principle:</h4> Cobb test measures the amount of water absorbed by paper/paperboard per unit area in a specified time under standardized conditions. Lower Cobb value = better water resistance = better coating/sizing treatment. Critical for dairy packaging as moisture uptake weakens structural integrity and compromises print quality. Coated paperboard for aseptic cartons must have very low Cobb values.<h4>Equipment:</h4> Cobb tester (100 cm² circular rubber ring), 100 mL water, blotting paper, roller (10 kg, 90 mm width), balance.<h4>Procedure:</h4><ol><li>Weigh conditioned sample — record as W1 (g).</li><li>Clamp sample face-up in Cobb ring. Pour exactly 100 mL water into ring.</li><li>After exactly 60±0.5 seconds, drain water rapidly. Immediately place blotting paper on sample.</li><li>Roll blotter 10 times (forward + backward = 1 cycle) with 10 kg roller within 30 seconds.</li><li>Quickly weigh sample + residual water — W2 (g). Total time from draining to weighing <45 seconds.</li><li>Cobb₆₀ = (W2 - W1) × 100 g/m².</li></ol>",
+          calculation: "Cobb₆₀ = (W2 - W1) × 100 g/m²\nExample: W1 = 23.00g, W2 = 23.28g\nCobb₆₀ = (23.28 - 23.00) × 100 = 28 g/m²\nAlso conducted as Cobb₁₈₀₀ (30 min) for specialty papers",
+          acceptance: "Clay-coated aseptic board (inner surface): <25 g/m²\nUncoated/craft liner: <30 g/m²\nHigh water resistance (wax-coated): <15 g/m²"
         },
-        forms: {
-            title: "Packaging Forms and Processes",
-            p1: "Among different forms used for milk packaging, flexible pouches dominate with 92% market share, glass bottles account for 7%, and Tetra-pak/aseptic cartons for UHT products comprise 1%. This distribution reflects cost-effectiveness, consumer preferences, infrastructure availability, and regional market dynamics.",
-            aseptic: {
-                title: "Aseptic Packaging",
-                p1: "Aseptic packaging is an advanced revolutionary technique where previously commercially sterilized food is aseptically packaged in sterile packages and hermetically sealed for extended shelf life (typically 6-12 months) under ambient conditions without refrigeration. The fundamental principle is to separately and continuously sterilize the product and packaging material, then combine them in a completely sterile environment (ISO Class 5 cleanroom or better) without microbial contamination.",
-                p2: "UHT (Ultra High Temperature) treatment heats milk to extremely high temperature (135-150°C) for very short time (2-4 seconds), killing all pathogenic and spoilage-causing microorganisms and their spores, achieving commercial sterility. This process uses HTST (High Temperature Short Time) scientific principle, significantly minimizing nutritional loss (vitamins, proteins) while reliably achieving complete commercial sterility. Both Indirect UHT and Direct UHT (steam injection/infusion) methods are used.",
-                p3: "In aseptic packaging lines, packaging material is sterilized with hydrogen peroxide (typically 30-35% concentration), then dried with 60-65°C hot sterile air to remove any H₂O₂ residue. Filling occurs in completely sterile environment where air quality is maintained at ISO Class 5 (fewer than 100 particles per cubic foot). Filling speed: 10,000-40,000 packages/hour depending on line capacity.",
-                p4: "The 6 Functional Layers of Tetra Pak Carton and Their Specific Technical Functions:<br><br><strong>Layer 1 - Polyethylene (Outer: 15-20 microns):</strong> Primary function is complete protection from external environmental moisture, securing printing ink, and providing water resistance. Provides heat sealability essential for flap sealing.<br><br><strong>Layer 2 - Paperboard (200-250 GSM):</strong> Structural component providing required structural strength, dimensional stability, rigidity, squareness, and standing ability. Maintains shape perfectly during handling. Supports premium quality printed graphics crucial for brand communication.<br><br><strong>Layer 3 - Polyethylene (Adhesive: 15-20 microns):</strong> Functions as critical bonding layer (adhesive/tie layer), chemically and mechanically bonding dissimilar materials - paperboard and aluminum foil firmly. Strong adhesive property ensures overall package structural integrity and delamination resistance.<br><br><strong>Layer 4 - Aluminum Foil (Critical Barrier: 6-9 microns):</strong> The package's most critical and vital functional barrier layer. Despite being extremely thin, provides perfect absolute barrier to light (100% blockage), oxygen (OTR: 0 cc/m²/24hrs), and moisture (WVTR: 0 g/m²/24hrs). Absolutely essential for shelf-stable milk as it completely prevents four main degradation processes: (1) Light-induced off-flavor development and riboflavin degradation (2) Lipid oxidative rancidity (3) Moisture gain/loss (4) Odor and flavor transmission. Also ensures complete aroma retention and external odor prevention.<br><br><strong>Layer 5 - Polyethylene (Adhesive: 15-20 microns):</strong> Another essential bonding layer firmly bonding aluminum foil to final innermost product-contact layer. Prevents delamination under mechanical stress, keeping layers permanently bonded throughout shelf life.<br><br><strong>Layer 6 - Polyethylene (Inner Sealant: 40-60 microns):</strong> Final innermost layer in direct continuous contact with milk, must meet strict food-grade quality standards (non-toxic, tasteless, odorless). Performs dual function: (1) Product contact layer - compatible with milk (2) Heat sealant - provides medium for heat sealing all seams (top, bottom, longitudinal) at precise temperature (120-140°C) to achieve absolutely hermetic (perfectly airtight) and leak-proof seal. Typical sealing strength: 2.5-3.5 N/15mm guaranteeing excellent seal integrity."
-            },
-            fino: {
-                title: "Fino Package",
-                p1: "Fino package is an innovative multilayer fiber-based tamper-proof tamper-evident aseptic pack with distinctive pillow pouch shape similar to plastic pouches. Contains 6 protective layers for extended shelf life similar to Tetra Pak, including paperboard and aluminum foil providing comprehensive barrier protection.",
-                p2: "Advanced filling process includes precise steps: (1) Packaging material roll completely sterilized with hydrogen peroxide solution (30-35% concentration) (2) Material thoroughly dried with sterile hot air blast at controlled 60-65°C to remove H₂O₂ residue (3) Sterilized material formed into continuous tube shape (tube forming) (4) Tube aseptically filled with UHT milk in strictly maintained sterile environment (Class 5 cleanroom) (5) Filled tube hermetically sealed with precise longitudinal and transverse heat seals on vertical form-fill-seal (VFFS) machine creating pillow-shaped pouches.",
-                p3: "Fino package's typical commercially proven shelf life: 90-120 days (3-4 months) at ambient temperature (up to 30°C) without refrigeration. Manufacturing and operational costs comparatively lower than Tetra Pak machinery while reliably providing comparable shelf life. Package sizes: typically commercially available in 80ml, 200ml, 500ml, and 1 liter catering to different consumer needs."
-            },
-            pet: {
-                title: "PET Packaging",
-                p1: "PET bottles provide premium perfect finish, are consumer-friendly re-closable, crystal clear and highly transparent, completely recyclable, and have good oxygen barrier properties. Modern lightweight PET bottles weigh only 30-40 grams (for 1 liter capacity) while providing excellent drop impact and crush resistance.",
-                p2: "Specifically for UHT milk, to achieve reliable six months extended shelf life at ambient temperature, two types of PET bottles are used: (1) Multilayer PET bottles typically with 3-5 layers (common structure: PET/EVOH/PET or PET/Nylon/EVOH/Nylon/PET) providing significantly enhanced oxygen barrier (OTR: 0.5-1.0 cc/m²/24hrs) (2) Monolayer pigmented PET bottles (white or amber colored with TiO₂ or other pigments) providing complete light barrier preventing photo-oxidation completely.",
-                p3: "PET bottles manufactured by sophisticated two-stage blow molding process: (1) First PET preforms (test tube shaped) precisely made from PET resin by injection molding with specific neck finish (2) Preforms accurately reheated to glass transition temperature with infrared heaters (3) Heated preforms converted to final bottle shape on stretch blow molding (SBM) machine while biaxially orienting, improving strength and barrier. Aseptic PET filling lines operate at impressive production speed of 5,000-20,000 bottles/hour with state-of-the-art technology. Bottles sealed with PP or HDPE tamper-evident caps."
-            },
-            retort: {
-                title: "Retort Packaging",
-                p1: "Oldest traditional in-container sterilization process, primarily still used commercially for specific products like flavoured milk drinks, chocolate milk, coffee milk, almond milk, and other dairy-based beverages. Complete sequence: filling, sealing, then sterilization: (1) Product filled in heat-resistant special grade glass (Type I borosilicate or Type II treated soda-lime glass) or high-temperature resistant plastic (PP or HDPE grade) bottles (2) Bottles tightly sealed with hermetically sealed aluminum roll-on caps or screw caps ensuring complete airtightness (3) Sealed packages loaded in retort chamber (horizontal or vertical autoclave) for complete in-package sterilization.",
-                p2: "Retort processing parameters very precise: 115-121°C temperature for 15-25 minutes holding time depending on product formulation, pH, package size, and required F₀ value. This is classic 'in-package sterilization' method, fundamentally completely different approach from aseptic packaging where product and package are separately sterilized then aseptically combined. Immediately after retort process, packages rapidly controlled cooled (typically to 35-40°C) using pressurized cooling water to avoid over-processing which can adversely affect color, flavor, and nutritional quality.",
-                p3: "Retort packaged products' commercially validated shelf life: typically 6-12 months (in some cases 18 months) at ambient temperature providing good distribution flexibility. Although this conventional process may result in slightly more thermal damage (Maillard browning, cooked flavor) compared to modern UHT-aseptic combination technology, equipment capital investment and operational technical complexity are significantly lower, making it suitable for small to medium dairy processors. Glass retort bottles economically reusable for multiple cycles but proper multi-stage cleaning, inspection, and re-sterilization mandatory required for quality assurance."
-            },
-            pouches: {
-                title: "Flexible Pouches",
-                p1: "Flexible pouches are overwhelmingly the most popular and dominant packaging format in Indian dairy market, holding impressive 92% market share primarily due to cost-effectiveness and consumer acceptance. Extremely lightweight, space-efficient, easy-to-handle, and economical. Common pouch materials specifically include LDPE monolayer films, LLDPE films, and advanced multilayer coextruded films (typical structures: LDPE/Nylon/LDPE providing better puncture resistance or LDPE/Metallized PET/LDPE providing enhanced barrier) depending on required shelf life.",
-                p2: "Pouches manufactured on highly efficient automated Form-Fill-Seal (FFS) machines (vertical VFFS or horizontal HFFS) in continuous operation, sequentially converting printed roll stock to pouch shape, accurately filling, and hermetically sealing - all in one integrated continuous high-speed operation. Typical commercially available pouch sizes: 200ml (single serve), 500ml (standard family pack), and 1 liter (economy pack). Machine speeds can achieve 60-120 pouches/minute.",
-                p3: "For pasteurized toned/double-toned milk, standard LDPE/LLDPE monolayer pouches (typical thickness: 80-100 microns with 60µ for 500ml and 75µ for 1L) widely used with practical shelf life of 4-5 days at strict 4°C refrigeration. For extended shelf life milk products, advanced multilayer metallized pouches (optimized thickness: 100-120 microns with enhanced barrier) used providing significantly improved 30-60 days shelf life under refrigeration. ESL (Extended Shelf Life) pouches designed with special barrier properties."
-            },
-            cups: {
-                title: "Thermoformed Cups",
-                p1: "Yogurt, curd, shrikhand, lassi, mishti doi, and other popular fermented dairy products and desserts conveniently packaged in specifically designed thermoformed rigid plastic cups. Cup material options typically: PS (Polystyrene - economical and transparent), PP (Polypropylene - better heat resistance and microwave safe), PET (excellent clarity), or HIPS (High Impact Polystyrene - opaque white and better toughness), precisely made by injection molding or thermoforming process. Advanced thermoforming process: plastic sheet/film accurately heated with infrared heaters above glass transition temperature, then given desired cup shape in precision mold by vacuum forming or pressure forming technique achieving uniform wall thickness.",
-                p2: "After product filling, cups hermetically sealed with aluminum foil laminated peelable lids (structure: PET/Al/Heat seal layer) or multi-layer plastic film lids by induction seal or heat seal. Easy-peel peelable lids provide exceptional consumer convenience without cup damage. Available cup sizes in wide range: 50ml and 80ml (single serve portion control), 100ml-200ml (standard individual serving), 400ml-500ml (family pack sharing size), and bulk 1kg packs. Critical top load compression strength typically designed at 30-50 Newtons to prevent deformation, buckling, or cracking during retail stacking and cold chain transportation ensuring package integrity.",
-                p3: "PP/PS cups with aluminum foil-based peelable lids combination typically provide reliable 10-15 days shelf life under strict refrigeration (4-7°C). HIPS cups manufactured by injection molding in 100gm-1kg size range, sealed with Al-PE foil lids providing excellent hermetic seal and tamper evidence. Cup packaging perfectly maintains yogurt texture and consistency while providing complete protection from contamination."
-            }
+        {
+          title: "Plastic Film — Thickness Measurement",
+          standard: "IS 2508, ASTM D374, ISO 4593, TAPPI T411",
+          procedure: "<h4>Principle:</h4> Film thickness uniformity directly determines consistency of barrier properties, mechanical strength, heat-sealing performance, and cost (grams per pack). Non-uniform thickness causes variable seal quality and material waste. Critical parameter for incoming QC and process control.<h4>Equipment:</h4> Digital contact micrometer or electronic thickness gauge (resolution: 0.1 µm, accuracy: ±0.5 µm), calibrated anvil diameter: 6.35 mm, contact pressure: 10-100 kPa (pressure-sensitive materials: ≤10 kPa).<h4>Procedure:</h4><ol><li>Cut samples from multiple positions across roll width (minimum 5 positions) and along length (minimum 3 positions per width position) = minimum 15 measurement points.</li><li>Clean anvil and spindle. Zero calibrate with certified slip gauge.</li><li>Place film sample, lower spindle gently. Read after stabilization (2-3 seconds). Avoid finger contact near measurement area.</li><li>Record all readings. Calculate mean, standard deviation, min, max, CV%.</li><li>Check thickness profile across web width — important for FFS machine runnability.</li></ol>",
+          calculation: "Average Thickness = ΣXᵢ / n\nVariation % = [(Xmax - Xmin) / Xavg] × 100\nCV% = (SD / Mean) × 100 — target <5%\nExample: Readings: 78, 80, 82, 79, 81, 83 µm\nMean = 80.5 µm, SD = 1.76 µm, CV% = 2.2%",
+          acceptance: "LDPE/LLDPE pouch (500ml): 75±7.5µm (±10%)\nLDPE/LLDPE pouch (1L): 100±10µm\nMetallized barrier film: 80-120µm ±10%\nCross-direction variation: <8%"
         },
-        testing: {
-            title: "Packaging Material Testing",
-            intro: "Standardized tests (BIS, ASTM, ISO) are conducted for quality assurance purposes.",
-            sampling_title: "Sampling Plan",
-            sampling_text: "According to AQL 1.5-2.5 standards, 10-20 packages are randomly selected as per IS 4905 guidelines.",
-            conditioning_title: "Conditioning",
-            conditioning_text: "Samples are conditioned at 23±2°C and 50±5% RH for 24 hours. Temperature fluctuation should be less than ±1°C.",
-            calculation_title: "Calculations & Standards:",
-            tests: [
-                {
-                    title: "Paper - GSM Test",
-                    standard: "IS 1060 (Part 1), ASTM D646, ISO 536",
-                    procedure: "<h4>Principle:</h4> Basis weight measurement. Dairy paperboard: 200-250 g/m²<h4>Procedure:</h4><ol><li>Cut 10x10 cm sample with die cutter</li><li>Weigh on analytical balance (0.001g accuracy)</li><li>Calculate GSM from weight and area</li><li>Test minimum 5 samples</li></ol>",
-                    calculation: "GSM = [Weight (g) × 10,000] / Area (cm²)<br>Example: 2.3g for 100cm² = (2.3 × 10,000)/100 = 230 g/m²",
-                    acceptance: "Aseptic carton paperboard: 200-250 g/m² (±5%)"
-                },
-                {
-                    title: "Paper - Bursting Strength",
-                    standard: "IS 1060 (Part 5), ASTM D774, ISO 2758",
-                    procedure: "<h4>Principle:</h4> Hydraulic pressure resistance. Typical: 3.5-5.0 kg/cm²<h4>Procedure:</h4><ol><li>Clamp circular sample (30mm) in Mullen Tester</li><li>Apply hydraulic pressure (rate: 170±15 kPa/s)</li><li>Record burst pressure</li><li>Test 10 samples, report median</li></ol>",
-                    calculation: "Burst Factor = [Bursting Strength (kg/cm²) × 100] / GSM<br>Example: 4.2 kg/cm², GSM 230 = (4.2 × 100)/230 = 1.83",
-                    acceptance: "230 GSM paperboard: >4.0 kg/cm², Burst Factor >1.7"
-                },
-                {
-                    title: "Paper - Cobb Test",
-                    standard: "IS 1060 (Part 8), TAPPI T441, ISO 535",
-                    procedure: "<h4>Principle:</h4> Water absorption measurement. Lower is better<h4>Procedure:</h4><ol><li>Place 100cm² sample in Cobb tester</li><li>Add 100ml water, keep 60±0.5 seconds</li><li>Remove water, blot with roller (10kg)</li><li>Reweigh within 30 seconds</li></ol>",
-                    calculation: "Cobb Value = (Wet weight - Dry weight) × 100 g/m²<br>Example: 2.58g - 2.30g = 0.28 × 100 = 28 g/m²",
-                    acceptance: "Coated paperboard: <30 g/m²"
-                },
-                {
-                    title: "Film - Thickness",
-                    standard: "IS 2508, ASTM D374, ISO 4593",
-                    procedure: "<h4>Principle:</h4> Uniform thickness for consistent properties<h4>Procedure:</h4><ol><li>Measure 10+ points with digital micrometer (1µ resolution)</li><li>Pressure: 50-100 kPa</li><li>Calculate average, min, max, variation</li></ol>",
-                    calculation: "Avg Thickness = Sum of readings / Count<br>Variation % = [(Max-Min)/Avg] × 100<br>Example: Avg 63.5µ, Range 62-65µ = 4.7% variation",
-                    acceptance: "LDPE 80±8µ, variation <10%"
-                },
-                {
-                    title: "Film - Tensile Strength",
-                    standard: "IS 2508 (Part 7), ASTM D882, ISO 527",
-                    procedure: "<h4>Principle:</h4> Strength and stretch capability<h4>Procedure:</h4><ol><li>Cut dumbbell specimen (50mm gauge, 10mm width)</li><li>Clamp in UTM, pull at 500mm/min</li><li>Record max force and elongation</li><li>Test 5 samples MD and TD each</li></ol>",
-                    calculation: "Tensile Strength (MPa) = Max Load (N) / Cross-section Area (mm²)<br>Elongation % = [(Final-Initial)/Initial] × 100<br>Example: 15N, 10mm × 0.08mm = 15/0.8 = 18.75 MPa",
-                    acceptance: "LDPE: >18 MPa, >300% elongation<br>LLDPE: >35 MPa, >400%"
-                },
-                {
-                    title: "Film - WVTR",
-                    standard: "IS 2508 (Part 6), ASTM F1249, ISO 15106",
-                    procedure: "<h4>Principle:</h4> Water vapor permeation rate<h4>Procedure:</h4><ol><li>Seal film on cup with desiccant (CaCl₂)</li><li>Place in chamber: 38°C, 90% RH</li><li>Weigh daily for 7 days after steady state</li><li>Calculate from weight gain slope</li></ol>",
-                    calculation: "WVTR (g/m²/day) = [Weight gain (g) × 24] / [Area (m²) × Time (hrs)]<br>Example: 0.015g in 24hrs, Area 0.0038m² = 3.95 g/m²/day",
-                    acceptance: "LDPE 80µ: <15 g/m²/day at 38°C, 90% RH<br>Al foil laminate: <1 g/m²/day"
-                },
-                {
-                    title: "Film - OTR",
-                    standard: "ASTM D3985, ISO 15105, IS 15838",
-                    procedure: "<h4>Principle:</h4> Oxygen permeation affects shelf life<h4>Procedure:</h4><ol><li>Mount film in diffusion cell (50cm²)</li><li>Flow O₂ on test side, N₂ on sensor side</li><li>Coulometric sensor detects permeated O₂</li><li>Test at 23±2°C, 0 or 50% RH until steady state</li></ol>",
-                    calculation: "OTR (cc/m²/day/atm) reported at test conditions<br>Al foil: 0<br>LDPE 80µ: ~7800<br>PET 12µ: 50-100<br>PET/EVOH/PET: <1",
-                    acceptance: "LDPE pouch: 3000-8000 (ok for 4-5 days)<br>Aseptic laminate: <5<br>Multilayer PET: <1"
-                },
-                {
-                    title: "Foil - Pinhole Test",
-                    standard: "IS 5168, ASTM F392",
-                    procedure: "<h4>Principle:</h4> Detect microscopic holes compromising barrier<h4>Procedure:</h4><ol><li>Place 100cm² foil on light box (3000-5000 lux)</li><li>Observe from 30cm in dark room</li><li>Count light pinpoints with magnifier (2-5x)</li><li>Compare with standard charts</li></ol>",
-                    acceptance: "Quality foil: Zero pinholes per 100cm²"
-                },
-                {
-                    title: "Glass - Thermal Shock",
-                    standard: "IS 1392, ISO 7459",
-                    procedure: "<h4>Principle:</h4> Sudden temperature change resistance<h4>Procedure:</h4><ol><li>Immerse bottles in hot water (80-90°C)</li><li>Hold 15 minutes</li><li>Transfer immediately to cold water (4-10°C)</li><li>Check for cracks/breakage</li></ol>",
-                    acceptance: "No cracks or breakage = Pass"
-                },
-                {
-                    title: "Metal Can - Leak Test",
-                    standard: "ASTM D3078",
-                    procedure: "<h4>Principle:</h4> Seam integrity verification<h4>Procedure:</h4><ol><li>Submerge sealed can underwater</li><li>Apply 70-100 kPa internal air pressure</li><li>Observe for air bubbles indicating leaks</li></ol>",
-                    acceptance: "No bubble formation = Pass"
-                },
-                {
-                    title: "Container - Drop Test",
-                    standard: "ASTM D5276, IS 9873",
-                    procedure: "<h4>Principle:</h4> Impact resistance during handling<h4>Procedure:</h4><ol><li>Fill containers with product</li><li>Drop from specified height (60-120cm) onto concrete</li><li>Test different orientations (base, side, corner)</li><li>Inspect for leakage/damage</li></ol>",
-                    acceptance: "No leakage or structural failure"
-                },
-                {
-                    title: "CFB Box - Compression",
-                    standard: "IS 6318, ASTM D642",
-                    procedure: "<h4>Principle:</h4> Stacking strength for warehouse storage<h4>Procedure:</h4><ol><li>Place empty box in compression tester</li><li>Apply vertical load gradually (12±3 mm/min)</li><li>Record load at deformation/collapse</li></ol>",
-                    calculation: "Compression Strength (kg) = Max load before failure",
-                    acceptance: "Should exceed calculated stacking load with safety factor 4-5"
-                },
-                {
-                    title: "Aseptic Carton - Seal Integrity",
-                    standard: "Internal quality standards",
-                    procedure: "<h4>Principle:</h4> Hermetic seal verification<h4>Procedure:</h4><ol><li>Immerse carton in methylene blue dye (0.1%)</li><li>Apply vacuum (500-600 mm Hg) for 30 seconds</li><li>Remove, rinse, cut open carton</li><li>Check for dye penetration at seals</li></ol>",
-                    acceptance: "No dye penetration = Perfect seal"
-                },
-                {
-                    title: "Cup - Top Load Test",
-                    standard: "ASTM D642 modified",
-                    procedure: "<h4>Principle:</h4> Resistance to stacking pressure during sealing/storage<h4>Procedure:</h4><ol><li>Place empty cup on flat surface</li><li>Apply vertical load from top at 12 mm/min</li><li>Record force at deformation/buckling</li></ol>",
-                    calculation: "Top Load Strength (N) = Force at 3mm deformation or buckling",
-                    acceptance: "30-50 N for yogurt cups"
-                },
-                {
-                    title: "Seal Strength Test",
-                    standard: "ASTM F88, ISO 11607",
-                    procedure: "<h4>Principle:</h4> Bond strength of heat seals<h4>Procedure:</h4><ol><li>Cut 15mm wide strip across seal</li><li>Clamp in tensile tester with seal centered</li><li>Pull at 300mm/min until seal fails</li><li>Record peak force and failure mode</li></ol>",
-                    calculation: "Seal Strength (N/15mm) = Peak force at seal failure",
-                    acceptance: "Pouches: 15-25 N/15mm<br>Cartons: 2.5-3.5 N/15mm<br>Failure should be film break, not seal separation"
-                },
-                {
-                    title: "Migration Test",
-                    standard: "IS 9845, EU 10/2011",
-                    procedure: "<h4>Principle:</h4> Chemical safety - substances migrating into food<h4>Procedure:</h4><ol><li>Contact packaging with food simulant (water, acid, alcohol, oil)</li><li>Store at specified temp and time (10 days at 40°C typical)</li><li>Analyze simulant for migrated substances by GC-MS/ICP-MS</li><li>Check against limits</li></ol>",
-                    acceptance: "Overall migration: <10 mg/dm² (India)<br>Specific substances: within permitted limits<br>Heavy metals: Pb <0.5 ppm, Cd <0.1 ppm"
-                }
-            ]
+        {
+          title: "Plastic Film — Tensile Strength & Elongation (UTM Test)",
+          standard: "IS 2508 (Part 7), ASTM D882, ISO 527-3",
+          procedure: "<h4>Principle:</h4> Tensile testing measures film's resistance to breakage when pulled in one direction (uniaxial tension). Key properties: tensile strength (maximum stress before fracture), yield strength (stress at permanent deformation onset), elongation at break (% extension at failure), Young's modulus (stiffness). MD (machine direction) aur TD (transverse direction) properties differ for oriented films — both must be tested. Critical for pouch integrity during filling, transportation, aur consumer handling.<h4>Equipment:</h4> Universal Testing Machine (UTM) with film clamps, 500N load cell, crosshead speed 500 mm/min for flexible films. Dumbbell die cutter (Type V per ASTM D882 for narrow specimens, or straight strips 25mm wide).<h4>Procedure:</h4><ol><li>Cut 5 dumbbell specimens each in MD and TD. Gauge length: 50mm, width: 25mm (strip) or 6mm (dumbbell). Measure exact width and thickness at 3 points.</li><li>Condition 24 hours. Mount in pneumatic grips — no slippage, uniform grip pressure.</li><li>Program: gauge length, crosshead speed (500 mm/min), preload (0.01N). Run test until break.</li><li>Record: peak force (N), stress at peak (MPa), strain at break (%), Young's modulus from initial slope.</li><li>Discard samples that break at grip — retest.</li></ol>",
+          calculation: "Tensile Strength (MPa) = Peak Force (N) / [Width (mm) × Thickness (mm)]\nElongation % = [(L_break - L_initial) / L_initial] × 100\nYoung's Modulus (MPa) = Stress / Strain (in elastic region)\nExample: LDPE: Force=14N, width=25mm, thickness=0.080mm\nTS = 14 / (25 × 0.080) = 7.0 MPa — low, normal for LDPE",
+          acceptance: "LDPE 80µm: TS >8 MPa MD, >7 MPa TD; Elongation >350%\nLLDPE 80µm: TS >15 MPa; Elongation >400%\nBopp 20µm: TS >150 MPa; Elongation 100-200%\nMet-PET 12µm: TS >150 MPa"
+        },
+        {
+          title: "Plastic Film — WVTR (Water Vapor Transmission Rate)",
+          standard: "IS 2508 (Part 6), ASTM F1249, ASTM E96, ISO 15106-1",
+          procedure: "<h4>Principle:</h4> WVTR measures the rate at which water vapor permeates through a film under specified temperature and humidity conditions. Moisture ingress affects dairy product texture (drying), weight loss, microbial growth (high moisture products), aur caking (dry dairy). Two methods: Gravimetric (ASTM E96 — weight gain of desiccant cup) aur Infrared Sensor (ASTM F1249 — more precise, faster). Conditions: 38°C, 90% RH (tropical/extreme conditions) or 23°C, 85% RH (standard).<h4>Equipment:</h4> WVTR test cups (or automated WVTR instrument), desiccant (anhydrous CaCl₂ or silica gel, activated), constant temperature-humidity chamber, analytical balance.<h4>Procedure (Gravimetric ASTM E96 Dish Method):</h4><ol><li>Fill test cup with desiccant (CaCl₂, freshly activated at 200°C). Film sample sealed over cup mouth with wax or clamp ring.</li><li>Weigh cup assembly — record W0.</li><li>Place in humidity chamber at 38°C, 90% RH.</li><li>Weigh daily for 7-10 days until steady-state is achieved (weight gain linear vs time).</li><li>Calculate WVTR from the steady-state slope of weight vs time curve.</li></ol>",
+          calculation: "WVTR (g/m²/day) = ΔW (g) / [A (m²) × Δt (days)]\nWhere ΔW = weight change during steady-state period\nExample: 0.12g gained in 24 hrs, area = 0.00315 m²\nWVTR = 0.12 / (0.00315 × 1) = 38.1 g/m²/day\nCorrection for film thickness: WVTR × thickness = permeance coefficient",
+          acceptance: "LDPE 80µm: <15 g/m²/day at 38°C, 90% RH\nLLDPE 100µm: <12 g/m²/day\nMet-PET 12µm: <2 g/m²/day\nAl foil laminate: <0.5 g/m²/day\nTetra Pak 6-layer: <0.1 g/m²/day"
+        },
+        {
+          title: "Plastic Film — OTR (Oxygen Transmission Rate)",
+          standard: "ASTM D3985, ISO 15105-1, IS 15838",
+          procedure: "<h4>Principle:</h4> OTR measures the quantity of oxygen gas passing through a film per unit area per unit time at specified conditions. Oxygen is the primary driver of dairy fat oxidation (rancidity), vitamin degradation (vitamins A, C, E, B₁₂), color change, aur aerobic microbial growth. Low OTR = extended shelf life. Measurement method: Coulometric detection (ASTM D3985) — O₂ electrochemically reduced at sensing electrode, current proportional to O₂ flux. Test conditions: 23±2°C, 0% RH (to isolate O₂ transport from moisture interaction).<h4>Equipment:</h4> Automated OTR analyzer (e.g., Mocon OxTran, Systech Illinois), coulometric or paramagnetic O₂ sensor, temperature-controlled test cell (50 cm² effective area).<h4>Procedure:</h4><ol><li>Cut film samples — handle without fingerprints (oils contaminate surface). Mount in test cell.</li><li>Purge both sides with nitrogen (99.999% pure) to remove all residual O₂. Steady baseline established.</li><li>Flow 100% O₂ on test side, N₂ on sensor side at precise flow rates.</li><li>Measure O₂ flux until steady state (constant transmission rate for 3 consecutive readings). Typically 1-24 hours.</li><li>Report OTR in cc/m²/day/atm at specified temperature and humidity.</li></ol>",
+          calculation: "OTR (cc/m²/day) = [O₂ flux (cc/sec) × 86400 sec/day] / Area (m²)\nPermeability = OTR × thickness (cc·mm/m²/day/atm)\nExample comparative values:\nAl foil: OTR = 0\nSiOx-coated PET: OTR = 0.5-2.0\nMet-PET 12µm: OTR = 1-5\nPET 12µm: OTR = 50-100\nNylon 25µm: OTR = 20-40\nLDPE 80µm: OTR ≈ 7800",
+          acceptance: "Aseptic laminate (Tetra Pak): <5 cc/m²/day\nESL metallized pouch: <30 cc/m²/day\nMultilayer PET/EVOH/PET: <1 cc/m²/day\nPasteurized milk LDPE: 3000-8000 (acceptable for 4-5 days)"
+        },
+        {
+          title: "Aluminum Foil — Pinhole Detection",
+          standard: "IS 5168, ASTM F392, TAPPI T559",
+          procedure: "<h4>Principle:</h4> Pinholes are microscopic holes (<0.5mm diameter) in aluminum foil caused by rolling defects, contamination, or mechanical damage. Even a single pinhole completely compromises the absolute barrier property of Al foil — O₂, moisture, aur light can permeate through. Critical QC test for aseptic laminate foil. Methods: (A) Light transmission (visual/photometric), (B) Electrical resistance method, (C) Gas permeation method.<h4>Equipment:</h4> Standardized light box (3000-5000 lux, uniform illumination), blackout room, calibrated magnifier (2-5× stereo microscope), pinhole counting chart.<h4>Procedure (Light Box Method):</h4><ol><li>Cut 100 cm² (10×10 cm) foil samples from multiple locations (5 samples minimum).</li><li>Darken room completely. Place foil sample on illuminated light box.</li><li>Observe from 30 cm distance with magnifier — bright points indicate pinholes.</li><li>Count all light pinpoints. Record coordinates for size estimation.</li><li>Also check foil from roll edges and centerline separately — higher defect probability at edges.</li></ol>",
+          calculation: "Pinhole count per 100 cm² reported directly\nPinhole frequency = Total pinholes / Total area tested (cm²)\nFor statistical reliability: test minimum 10 samples = 1000 cm²\nElectrical method: resistance (Ω) inversely related to pinhole area",
+          acceptance: "Premium aseptic Al foil (6-9µm): Zero pinholes per 100 cm²\nStandard foil (9-12µm): ≤1 pinhole per 100 cm²\nThicker foil (>12µm): ≤2 pinholes per 100 cm²\nReject entire roll if any sample fails — no AQL for pinholes"
+        },
+        {
+          title: "Glass Bottles — Thermal Shock Resistance",
+          standard: "IS 1392, ISO 7459, ASTM C149",
+          procedure: "<h4>Principle:</h4> Glass is susceptible to thermal shock — sudden temperature changes create differential expansion/contraction stresses exceeding glass tensile strength (~50 MPa), causing cracking or shattering. Dairy glass bottles must withstand: hot filling (70-85°C) → cold storage (4°C), pasteurization (63°C/30 min LTLT), retort sterilization (115-121°C), aur CIP/COP cleaning (85-95°C alkali wash). Thermal shock test simulates worst-case temperature differential.<h4>Equipment:</h4> Water bath(s) with precise temperature control (±1°C), thermometer, timer, inspection area.<h4>Procedure:</h4><ol><li>Pre-condition bottles to 25±2°C (ambient).</li><li>Fully immerse bottles in hot water bath at 63°C (LTLT pasteurization simulation) or 80-85°C (hot fill simulation). Ensure complete submersion including shoulder area.</li><li>Hold for minimum 15 minutes (thermal equilibration to glass core).</li><li>Immediately transfer to cold water bath at 4±2°C (cold chain simulation) within 5 seconds.</li><li>Hold 15 minutes. Remove and inspect each bottle carefully under good lighting for cracks, chips, or crazing (fine surface crack network).</li></ol>",
+          calculation: "Temperature Differential (ΔT) = Hot bath temp - Cold bath temp\nMinimum required ΔT for dairy glass: 40°C\nFor retort bottles: ΔT = 100°C (121°C retort → 21°C cooling)\nPass/fail based on: zero cracks, chips, fractures, or visible crazing",
+          acceptance: "Pasteurized milk bottles: No failure at ΔT 40°C (63→23°C)\nRetort glass (flavoured milk): No failure at ΔT 90-100°C\nReturn-trip glass (RGB): No failure after 25-30 wash-fill cycles\nFracture pattern analysis: safe (contained) vs. explosive (hazardous)"
+        },
+        {
+          title: "Sealed Containers — Leak Test",
+          standard: "ASTM D3078, ASTM F2096, IS 9873",
+          procedure: "<h4>Principle:</h4> Leak testing verifies hermetic seal integrity — no liquid/gas ingress or egress through seams, seals, or container body. Critical food safety test — leaking packages allow microorganism ingress causing spoilage aur potential pathogen contamination. Two primary methods: (A) Bubble emission (ASTM D3078) — internal pressure, submerge in water; (B) Vacuum bubble (ASTM F2096) — vacuum draws air through defects. Third method: Dye penetration (for cartons).<h4>Equipment:</h4> Water tank, compressed air source with pressure regulator (0-200 kPa), pressure gauge (±2 kPa accuracy), timer, observation setup. For dye test: 0.1% methylene blue solution, vacuum apparatus (500-600 mmHg).<h4>Procedure (Bubble Emission for Metal Cans/Pouches):</h4><ol><li>Connect pressurization probe to container valve/straw insertion point. Apply 70-100 kPa internal air pressure. Seal probe entry point.</li><li>Submerge pressurized container in water tank. Maintain pressure during 30-60 second observation.</li><li>Observe all seam/seal areas carefully for bubble streams (indicating leaks). Single bubbles from air attachment are not leaks — sustained streams indicate defects.</li><li>Slowly rotate container to inspect all surfaces.</li></ol>",
+          calculation: "Leak Rate (if measurable): L = ΔP/Δt × V/RT\nQualitative pass/fail for routine QC\nFor aseptic carton dye test:\nDye penetration area (cm²) = Fail\nNo dye penetration = Pass\nMinimum test: 3 samples per production batch",
+          acceptance: "All sealed dairy containers: Zero bubble emission = Pass\nAny visible bubble stream = Reject (investigate sealing parameters)\nAseptic carton dye test: Zero dye penetration in any seam area = Pass\nPouch burst test (ASTM F1140): >50 kPa without seal failure"
+        },
+        {
+          title: "Drop Test — Impact Resistance Verification",
+          standard: "ASTM D5276, IS 9873 (Part 3), ISTA Procedure 1A",
+          procedure: "<h4>Principle:</h4> Drop testing simulates real-world impact damage during handling, transportation, aur consumer use. Products experience drops: at filling line (conveyor transfers), warehouse handling (fork-lift drops), retail shelf placement, aur consumer accidental drops. Drop test reveals: seal integrity under shock loading, container structural integrity, liquid leakage tendency, aur corner/edge vulnerability.<h4>Equipment:</h4> Drop test machine or guided drop apparatus (ASTM D5276), concrete/steel impact surface, measurement tools.<h4>Procedure:</h4><ol><li>Fill containers with actual product (or water as surrogate) to nominal fill volume. Cap/seal as in production.</li><li>Condition at test temperature (typically 4°C for refrigerated products — cold makes plastics more brittle).</li><li>Perform drops in specified orientations: Flat bottom (base impact), Flat top, Longest edge (face drop), Shortest edge (face drop), Corner drop. Minimum 3 samples per orientation.</li><li>Drop heights: 1L pouches — 60cm; 2L bottles — 60cm; glass bottles — 30-45cm; PET bottles — 120cm.</li><li>Immediately after each drop, inspect for: visible cracks, seal failure, liquid leakage, structural deformation.</li></ol>",
+          calculation: "Pass/Fail criteria for each orientation\nLeakage mass (g) if any = measured by weighing before and after\nStructural integrity rating (0-3 scale)\nFor ISTA 1A: complete protocol includes vibration + drop sequence",
+          acceptance: "All dairy containers: Zero leakage in any orientation at specified height\nPouch (1L, 4°C): No seal failure at 60cm drop (flat, edge, corner)\nPET bottle (1L): No cracking/leakage at 120cm corner drop\nGlass bottle: No breakage at 30cm drop on rubber mat\nAfter drop: pass bubble emission leak test"
+        },
+        {
+          title: "CFB Box — Edge Crush Test & Box Compression Test",
+          standard: "IS 6318, ASTM D642 (BCT), ASTM D2808 (ECT), ISO 12048",
+          procedure: "<h4>Principle:</h4> Corrugated fiberboard (CFB) boxes must maintain structural integrity when stacked during warehouse storage aur transportation. Box Compression Test (BCT) measures actual box resistance to vertical compressive load — simulates stacking. Edge Crush Test (ECT) measures fluting/liner component strength — used for box design. Stacking factor: 4-5× safety margin over actual stacking load required to account for: humidity weakening (paper loses 50-60% strength at 90% RH), vibration fatigue, aur eccentric loading.<h4>Equipment:</h4> Compression testing machine (0-5000 N range), flat compression platens, ECT fixture (TAPPI T 811), strain gauge load cell.<h4>Procedure (BCT):</h4><ol><li>Condition box in humidity chamber at 23°C, 50% RH for 24 hours. Avoid crushing corners.</li><li>Place empty box centrally on lower platen. Ensure perfect vertical alignment.</li><li>Apply compressive load at constant rate: 12±3 mm/min. Record load-deflection curve.</li><li>Record peak load (Fmax) before box collapse/buckling. Note deflection at peak load.</li><li>Calculate BCT. Compare with McKee formula prediction and specification.</li></ol>",
+          calculation: "BCT (N) = Measured peak compression load\nMcKee Formula: BCT = 5.87 × ECT × √(Box Perimeter × Board Thickness)\nRequired BCT > (Number of boxes stacked × box weight) × safety factor (4-5×)\nExample: 12 boxes × 12kg each × 5 safety = 720 kg = 7060 N minimum BCT",
+          acceptance: "Pasteurized milk 500ml pouches (12×1L/box, 15 high stack):\nRequired BCT > 5000 N (actual load 2700 N × 2 safety)\nAseptic carton CFB: BCT > 3000 N\nECT: typically 14-25 kN/m for dairy CFB\nHumid BCT (72 hrs at 90%RH): minimum 60% of dry BCT"
+        },
+        {
+          title: "Aseptic Carton — Seal Integrity (Dye Penetration Test)",
+          standard: "Internal aseptic quality standards, Tetra Pak TM specifications",
+          procedure: "<h4>Principle:</h4> Aseptic carton seals (longitudinal, top, bottom) must be hermetically perfect — any microleakage pathway allows microbial recontamination ending sterility. Dye penetration test uses capillary action of low surface tension dye solution to reveal even microscopic seal defects. Vacuum accelerates dye ingress through defects for sensitive detection.<h4>Equipment:</h4> Dye solution (0.1% methylene blue or 0.1% rhodamine B in water — methylene blue preferred for visibility in white PE inner layer), vacuum apparatus (500-600 mmHg vacuum), transparent container for observation, sharp blade/scissors for opening.<h4>Procedure:</h4><ol><li>Prepare freshly opened dye solution (0.1% methylene blue). Check concentration spectrophotometrically if critical.</li><li>Fully submerge sealed carton (product removed/emptied) in dye solution. Ensure complete coverage of all seam areas.</li><li>Apply vacuum: 500-600 mmHg for 30 seconds. Vacuum creates pressure differential pulling dye through any defects.</li><li>Release vacuum. Keep submerged 30 more seconds.</li><li>Remove carton, rinse exterior with clean water. Cut carton open with sharp blade — avoid disturbing seal areas.</li><li>Inspect all seam/seal areas under good lighting for blue dye penetration. Document with photograph.</li></ol>",
+          calculation: "Qualitative pass/fail\nFor quantitative version: dye concentration in internal wash-out\nDye penetration distance (mm) in seal area\nMinimum: test 5 cartons per production batch, preferably at start/middle/end",
+          acceptance: "Perfect seal: Zero blue dye visible on internal seal surfaces = Pass\nAny blue dye at any seal point = Fail\nInvestigate: sealing temperature (set point vs actual), dwell time, jaw condition (wear, contamination), laminate quality\nCorrelate with: steam consumption data, seal strength test, packaging material pinhole test"
+        },
+        {
+          title: "Cup/Container — Top Load Compression Test",
+          standard: "ASTM D642 (modified), ASTM D2659",
+          procedure: "<h4>Principle:</h4> Yogurt, dahi, shrikhand cups must withstand stacking forces in retail cold cabinets (typically 8-12 units high) without deforming, buckling, or cracking. Inadequate top load strength leads to: cup deformation (unattractive), seal failure (contamination risk), aur consumer rejection. Test simulates stacking load during storage and retail display.<h4>Equipment:</h4> Universal Testing Machine (UTM) with flat compression platens (minimum diameter > cup diameter), crosshead speed controller, 0-500 N load cell.<h4>Procedure:</h4><ol><li>Condition empty cups at 4°C for 24 hours (simulate refrigerated storage conditions — plastics are slightly stiffer at low temperature).</li><li>Center cup on lower platen. Align upper platen to contact rim uniformly — critical for reproducible results.</li><li>Apply compressive load at constant rate: 12±3 mm/min. Record continuous load-deflection curve.</li><li>Note load at: first visible deformation, 3mm deflection, aur buckling/collapse (Fmax).</li><li>Test 10 samples. Report mean and minimum values (minimum value determines stacking performance).</li></ol>",
+          calculation: "Top Load Strength = Force at 3mm deformation (N) or Force at visible buckling\nStacking Load per cup = (Number of cups - 1) × cup weight\nRequired Top Load = Stacking Load × safety factor (2-3×)\nExample: 10 high stack, each cup 200g → load on bottom cup = 9 × 200 = 1800g = 17.7N\nRequired TL = 17.7 × 3 = 53 N minimum",
+          acceptance: "Standard 200g yogurt PP cup: >35 N at 3mm deformation\nLarge 1 kg dahi cup (HIPS): >80 N\nIce cream 500ml cup: >50 N\nMinimum value (not mean) must exceed specification — any cup below minimum = design failure"
+        },
+        {
+          title: "Seal Strength Test (Peel Test)",
+          standard: "ASTM F88/F88M, ISO 11607-1, ASTM F2029",
+          procedure: "<h4>Principle:</h4> Heat seal strength determines pouch/lid integrity and consumer opening experience. Underseal (low strength): leakage during distribution. Overseal (very high strength): consumer cannot open (frustrated, injures hand). Optimal seal: strong enough to contain product without leakage, weak enough for controlled easy opening. Three failure modes: (1) Adhesive failure (seal interface separates — worst), (2) Cohesive failure (material tears within film — best, indicates seal strength > film strength), (3) Delamination (layers separate in multilayer film — film defect).<h4>Equipment:</h4> Universal Testing Machine (UTM) with pneumatic grips, 50N load cell, crosshead speed 300 mm/min.<h4>Procedure:</h4><ol><li>Cut 15mm wide strips perpendicular to seal direction using precision die cutter. Minimum 10 strips per seal location (top seal, bottom seal, side seal — test all separately).</li><li>Carefully separate seal faces 25-30mm from cut edge — create 'tails' for gripping without peel angle change.</li><li>Clamp each tail in UTM grips at exactly 180° peel angle (T-peel) or 90° peel angle — specify which. Ensure seal is centered at grip jaw level.</li><li>Pull at 300 mm/min. Record entire force-displacement curve. Note: (a) peak force, (b) average peel force (integrated area), (c) failure mode.</li><li>Photograph failure mode. Discard samples with grip slippage.</li></ol>",
+          calculation: "Seal Strength (N/15mm) = Average peel force during stable peel region (N)\nNot just peak force — average more representative\nFor pop-open style (yogurt lid): measure force to initiate peel\nFailure mode scoring: Film tear = 3 (best), Delamination = 2, Adhesive = 1 (worst)\nExample: Average force 18N on 15mm strip = 18 N/15mm",
+          acceptance: "LDPE/LLDPE pasteurized milk pouch: 15-25 N/15mm (T-peel)\nAseptic carton longitudinal seal: 3.0-4.5 N/15mm\nYogurt Al foil peelable lid: 8-15 N/15mm (consumer-peelable)\nRetort pouch: >30 N/15mm\nPreferred failure mode: film tear (not adhesive separation)"
+        },
+        {
+          title: "Migration Testing — Food Safety Compliance",
+          standard: "IS 9845, EU Regulation 10/2011, FDA 21 CFR 177, FSSAI FSS (Contaminants) Regulations",
+          procedure: "<h4>Principle:</h4> Packaging materials in direct food contact can transfer (migrate) chemical substances into food — monomers, additives (plasticizers, antioxidants, slip agents, colorants), oligomers, aur reaction products. Migration testing ensures chemical safety of packaging. Overall migration: total mass transferred regardless of identity. Specific migration: particular substance of concern. Food simulants (model solutions representing different food types) replace actual food for standardized, reproducible testing: Simulant A (10% ethanol/water) = aqueous foods; Simulant B (3% acetic acid) = acidic foods; Simulant C (20% ethanol) = alcoholic; Simulant D1 (50% ethanol) = high-fat simulation; Simulant D2 (vegetable oil/iso-octane) = fatty foods like cream, butter.<h4>Equipment:</h4> Migration cells (food contact chambers, 6 dm² contact area), thermostated ovens, GC-MS/GC-FID for volatile migrants, HPLC-UV/MS for non-volatile, ICP-MS/AAS for heavy metals, gravimetric balance for overall migration.<h4>Procedure:</h4><ol><li>Select appropriate food simulant based on actual food product. Dairy simulant: Simulant A (milk, yogurt, fresh cheese) + Simulant D1 (cream, butter, high-fat dairy).</li><li>Pre-wash packaging material surface with simulant to remove surface contamination.</li><li>Contact packaging with simulant in migration cell at specified conditions: 10 days at 40°C (standard worst-case), or 2 hours at 70°C (hot-fill products), or 30 minutes at 100°C (retort).</li><li>Analyze simulant by appropriate analytical method. Blank simulant (no packaging contact) run simultaneously as control.</li><li>Calculate migration as mg/dm² or mg/kg food.</li></ol>",
+          calculation: "Overall Migration (mg/dm²) = [Mass gain of simulant (mg)] / [Contact area (dm²)]\nConversion: mg/dm² × 6 dm²/kg food = mg/kg (for food with 6 dm²/kg ratio)\nIndia limit: OM < 60 mg/kg = 10 mg/dm²\nSpecific migration: from analytical measurement concentration × simulant volume / contact area",
+          acceptance: "Overall Migration: <60 mg/kg (India, per IS 9845) = <10 mg/dm²\nEU: <10 mg/dm²\nSpecific substances (examples):\nAcetaldehyde (PET): <6 mg/kg\nAcrylamide: <0.01 mg/kg\nBPA (epoxy coatings): <0.05 mg/kg\nHeavy metals: Pb <0.01 mg/kg, Cd <0.01 mg/kg, As <0.01 mg/kg\nFormaldehyde: <15 mg/kg"
         }
-    }
-};        
+      ]
+    },
+
+    // ─── LABELING & REGULATIONS ─────────────────────────────────────
+    labeling: {
+      title: "Labeling, Regulations & Compliance",
+      intro: "Dairy packaging labeling India mein multiple regulatory frameworks ke through governed hoti hai. Primary legislation: Food Safety and Standards Act 2006 (FSSA) aur subordinate regulations. Non-compliance severe penalties attract karta hai including product recall, license cancellation, aur criminal prosecution.",
+      fssai_requirements: "FSSAI Mandatory Label Elements (FSS Labelling & Display Regulations 2020)",
+      fssai_items: [
+        "<strong>Product Name:</strong> Common/generic name of food. 'Toned Milk', 'Dahi', 'UHT Full Cream Milk' etc. Brand name alone insufficient — product description mandatory. Font size: minimum 1.5mm height.",
+        "<strong>Net Quantity:</strong> By weight (g/kg) for solid/semi-solid, by volume (ml/L) for liquids. Declared quantity must be accurate — tolerance limits as per Legal Metrology Act. Net weight = gross weight minus packaging weight.",
+        "<strong>Ingredients List:</strong> All ingredients in descending order of weight at time of manufacture. Compound ingredients (>2% of final product) must be further broken down. Water listed if added. Food additives listed by functional class + INS number: e.g., 'Stabilizer (INS 1442)'.",
+        "<strong>Allergen Declaration:</strong> Bold/highlighted/underlined allergen declaration mandatory for: Milk, eggs, fish, shellfish, tree nuts, peanuts, wheat, soybeans (Big 8 allergens). Example: 'Contains Milk'. FSSAI added sesame aur sulphites to mandatory list.",
+        "<strong>Nutritional Information:</strong> Per 100g or 100ml AND per serving size. Mandatory: Energy (kcal/kJ), Total Fat (g), Saturated Fat (g), Trans Fat (g), Total Carbohydrate (g), Added Sugars (g), Protein (g), Sodium (mg). Optional but encouraged: vitamins, minerals, dietary fiber.",
+        "<strong>Date Marking:</strong> 'Best Before' or 'Use By' — which applies depends on product. Use By: highly perishable products (pasteurized milk, fresh dahi). Best Before: less perishable (UHT milk, cheese, ghee). Format: DD/MM/YYYY or Month-Year. Both manufacturing date AND expiry date mandatory for dairy.",
+        "<strong>Manufacturer Details:</strong> Name aur complete postal address (city, state, pin code) of manufacturer/packer/importer. For imported: country of origin + Indian importer address.",
+        "<strong>FSSAI License Number:</strong> 14-digit license number of manufacturer. Prominently displayed. Consumer helpline number: 1800-11-4000.",
+        "<strong>Storage Instructions:</strong> Critical for dairy — 'Keep Refrigerated at 4°C or below', 'Store in cool dry place', 'Once opened, consume within 24 hours'. 'Shake well before use' for reconstituted/UHT products.",
+        "<strong>MRP (Maximum Retail Price):</strong> Inclusive of all taxes. 'MRP ₹XX (Incl. of all taxes)'. Per Legal Metrology (Packaged Commodities) Rules 2011."
+      ],
+      bis_standards: "BIS Standards for Dairy Packaging",
+      bis_items: [
+        "<strong>IS 1392:</strong> Specification for glass containers for dairy products — dimensions, thermal shock resistance, bursting pressure.",
+        "<strong>IS 2508:</strong> Specification for LDPE film — thickness tolerance, tensile properties, elongation, dart drop, WVTR.",
+        "<strong>IS 9845:</strong> Method of analysis for plastic materials — extraction, migration testing.",
+        "<strong>IS 4905:</strong> Sampling procedures for inspection by attributes (applicable to packaging QC).",
+        "<strong>IS 14433:</strong> Specification for aseptic packaging system for milk — material specifications, filling conditions, shelf life validation.",
+        "<strong>IS 15838:</strong> Plastics — Determination of oxygen transmission rate — test methods."
+      ],
+      eco_labeling: "Eco-labeling & Sustainability Claims: 'Recyclable' claim sirf tab allowed hai jab material actually collected aur recycled hoti ho consumer location par. 'Biodegradable' claim scientific evidence-backed honi chahiye with specific timeframe aur conditions. Green Dot, Mobius loop (♻), aur resin identification codes (RIC 1-7) voluntary but widely used. EPR (Extended Producer Responsibility) compliance mandatory under Plastic Waste Management Rules 2016 amended 2021."
+    },
+
+    // ─── SUSTAINABILITY ──────────────────────────────────────────────
+    sustainability: {
+      title: "Sustainable Packaging — Environmental Responsibility",
+      intro: "Dairy industry globally packaging ka ek significant consumer hai. India mein annually ~1.4 million MT plastic packaging dairy sector se generate hota hai. Sustainability ek multidimensional challenge hai: environmental (pollution, resource depletion, carbon emissions), regulatory (EPR compliance, plastic ban compliance), consumer preference (eco-conscious buying), aur economic (cost of alternatives).",
+      lca: "Life Cycle Assessment (LCA) — Scientific Comparison: Packaging choice ke environmental impact ko quantify karne ke liye LCA (ISO 14040/14044 framework) use kiya jaata hai. System boundary: raw material extraction → manufacturing → distribution → consumer use → end-of-life. Impact categories: Global Warming Potential (kg CO₂ equivalent), water consumption (L), energy use (MJ), land use (m²), aur eutrophication potential. Key insight: Dairy product's environmental impact is dominated by agricultural production (70-80% of total impact) — packaging ka relative contribution 3-7% hota hai. Isliye reducing food waste (by better packaging/shelf life) often outweighs environmental cost of packaging material itself.",
+      plastic_alternatives: "Packaging Material Environmental Comparison",
+      plastic_items: [
+        "<strong>HDPE Milk Bottle vs. Glass Bottle:</strong> Per 1000 liters delivered milk: HDPE bottle: 2.5 kg CO₂e, 15L water; Glass bottle (single-use): 7.2 kg CO₂e, 35L water; Glass bottle (10-trip returnable): 1.8 kg CO₂e, 12L water. Returnable glass best option where collection infrastructure exists.",
+        "<strong>Aseptic Carton (Tetra Pak):</strong> 75% paperboard (renewable), 20% PE, 5% Al foil. Carbon footprint: 0.15-0.20 kg CO₂e per liter. Al foil separation in recycling complex but specialized recycling plants (Tetra Pak's own recycling program) recover fiber + Al/PE. FSC-certified paperboard increasing — 100% FSC target by 2025.",
+        "<strong>Bio-based Plastics:</strong> PLA (Polylactic Acid) from corn starch — biodegradable in industrial composting (58°C, specific microbial conditions, 90 days). Not suitable for hot-fill or retort. Barrier properties poor — requires EVOH coating for dairy. PHA (Polyhydroxyalkanoate) from bacteria — marine biodegradable. Both currently 3-5× more expensive than conventional plastics.",
+        "<strong>Monomaterial Packaging:</strong> Single-material packages (all-PE, all-PP) easier to recycle than multilayer laminates. Reverse laminate technology allows performance similar to multilayer structures from single polymer family. Dow, Borealis developing all-polyolefin aseptic structures eliminating Al foil — not yet commercially proven for 12-month shelf life.",
+        "<strong>Lightweighting:</strong> Reducing packaging material weight while maintaining performance — significant environmental and cost benefit. PET bottle lightweighting: 1L bottle from 42g → 28g (33% reduction). LLDPE pouch lightweighting: 80µm → 65µm (19% reduction) using advanced LLDPE grades. Potential CO₂ reduction: 15-25% per package."
+      ],
+      epr_compliance: "EPR (Extended Producer Responsibility) Compliance in India: Under Plastic Waste Management Rules (Amendment) 2021, all producers/importers/brand owners must: (1) Register on CPCB EPR portal. (2) Declare plastic packaging used annually by category. (3) Meet EPR obligations through: own collection-recycling system, purchase of EPR certificates from registered recyclers, or working with PROs (Producer Responsibility Organizations). EPR targets: 2022-23: 30% of plastic packaging to be recycled; 2024-25: 60%; 2026-27: 80%. Non-compliance: EPR environmental compensation (EEC) = 5× prevailing market rate for plastic recyclate."
+    },
+
+    // ─── ACTIVE & INTELLIGENT PACKAGING ────────────────────────────
+    active_intelligent: {
+      title: "Active aur Intelligent Packaging — Next Generation",
+      intro: "Active packaging packaging aur product ke beech intentional interaction create karta hai shelf life improve karne ya safety enhance karne ke liye. Intelligent packaging information sense, detect, record, aur communicate karta hai about product condition. Yeh dono technologies dairy industry mein rapidly emerging hain.",
+      active_types: "Active Packaging Technologies",
+      active_items: [
+        "<strong>Oxygen Scavengers:</strong> Iron-based sachets (Ageless by Mitsubishi, FreshPax) ya polymer-incorporated O₂ scavengers headspace O₂ absorb karte hain. Mechanism: 4Fe + 3O₂ → 2Fe₂O₃. Capacity: 50-2000 cc O₂ per sachet. Used in: dry milk powder tins, cheese packaging, premium butter packs. Reduces O₂ from 21% to <0.1% within 24 hours. Critical: scavenger must not contact moist dairy — triggers premature activation.",
+        "<strong>CO₂ Emitters:</strong> Ascorbic acid + sodium bicarbonate combination generates CO₂ on moisture contact. CO₂ atmosphere inhibits aerobic molds aur bacteria. Used in sliced cheese, fresh paneer MAP packaging. CO₂ emitter combined with O₂ scavenger = ideal atmosphere for extended shelf-life dairy.",
+        "<strong>Ethanol Emitters:</strong> Silica gel impregnated with ethanol gradually releases ethanol vapor. Ethanol is antimicrobial — effective against molds, yeasts, aur gram-positive bacteria. Surface application only — not into product. Used in premium soft cheese, ricotta packaging.",
+        "<strong>Antimicrobial Packaging:</strong> Antimicrobial agents incorporated into polymer matrix or applied as coating. Active agents: nisin (natural bacteriocin from Lactococcus lactis — GRAS, effective against Listeria, Staphylococcus), natamycin (antifungal, polyene macrolide — approved surface treatment for cheese), silver ions (broad spectrum antimicrobial), zinc oxide nanoparticles. Application: coextruded LDPE/antimicrobial agent film for fresh cheese packaging.",
+        "<strong>Moisture Absorbers:</strong> Silica gel sachets, superabsorbent polymers (SAP), aur moisture-absorbing tray pads control excess moisture in meat/dairy. Particularly useful for fresh paneer, soft cheese, aur cut fruit dairy-based products."
+      ],
+      intelligent_types: "Intelligent Packaging Technologies",
+      intelligent_items: [
+        "<strong>Time-Temperature Indicators (TTI):</strong> Irreversible visual label jo cumulative time-temperature exposure record karta hai. Types: (A) Diffusion-based: colored dye migrates through porous membrane at temperature-dependent rate — color front position indicates exposure history. (B) Enzymatic: enzyme-substrate reaction rate temperature-dependent — color change proportional to spoilage prediction. (C) Polymerization-based: diacetylene polymer color change. Brands: OnVu, TEMPTIME, CheckPoint. Placed on pallet/case level for cold chain monitoring or primary package for consumer communication. Activation: photoinitiation (UV light).",
+        "<strong>Freshness Indicators:</strong> Chemical sensors detect spoilage metabolites — ammonia (protein degradation), biogenic amines (histamine, cadaverine), H₂S, CO₂ concentration changes. Colorimetric dye changes visibly when threshold exceeded. Dairy application: detecting acidification beyond acceptable range in yogurt, aur proteolysis markers in fresh paneer. Still mostly research stage for dairy specifically.",
+        "<strong>RFID (Radio Frequency Identification):</strong> Passive RFID tags (no battery, powered by reader RF field) embedded in packaging or pallet labels. Reads: product identity, lot number, temperature history (if combined with sensor), location tracking. 13.56 MHz (HF) for individual pack tracking; 860-960 MHz (UHF) for pallet/case. Benefits: automated inventory management, real-time cold chain monitoring, recall management (rapid targeted recall), counterfeit prevention.",
+        "<strong>QR Codes & Smart Labels:</strong> 2D QR codes link to: complete ingredient/nutritional information, farm-of-origin traceability, video content (preparation instructions), loyalty programs, aur authenticity verification. Dynamic QR codes (server-side content updates possible) vs static. Blockchain-integrated QR codes for immutable supply chain traceability — consumer scans to see entire farm-to-shelf journey.",
+        "<strong>NFC (Near Field Communication) Smart Tags:</strong> Smartphone-readable without dedicated scanner. Applications: anti-counterfeiting (unique serial number per pack), temperature breach alerts (smart NFC + temperature sensor combination), interactive consumer engagement. Cost currently high (₹5-15 per tag) — limiting to premium dairy products."
+      ]
+    },
+
+    // ─── COLD CHAIN & LOGISTICS ──────────────────────────────────────
+    cold_chain: {
+      title: "Cold Chain, Logistics aur Distribution Packaging",
+      intro: "India ka dairy cold chain infrastructure rapidly developing hai lekin significant gaps abhi bhi hain. Estimated 30-40% fresh milk is spoiled or wasted due to inadequate cold chain — packaging alone cannot compensate for cold chain failures. Cold chain packaging aur cold chain infrastructure complementary systems hain.",
+      temperature_zones: "Dairy Temperature Zones aur Packaging Requirements",
+      temp_items: [
+        "<strong>Ambient Storage (25-35°C):</strong> UHT milk (aseptic carton, Fino, aseptic PET), sterilized flavoured milk (retort glass/PP), ghee (tin, glass, HDPE), milk powder (tin cans, HDPE jars, paper-Al-PE laminate pouches). Packaging must withstand high ambient temperatures without deformation, seal failure, or accelerated migration.",
+        "<strong>Chilled Storage (1-4°C):</strong> Pasteurized milk (LDPE pouches, HDPE bottles), dahi (PS/PP cups), paneer, cream, flavoured milk (tetra paks refrigerated). Packaging at low temperature: plastics become more brittle (drop resistance decreases), paper absorbs condensation moisture (strength loss). Condensation on cold packages when moved to ambient — packaging must resist moisture weakening.",
+        "<strong>Frozen Storage (-18 to -22°C):</strong> Ice cream (coated paperboard tubs, PS tubs, PE pouches), frozen paneer, frozen khoa. Packaging must withstand embrittlement at -22°C without cracking. Rapid temperature changes during distribution: -22°C (frozen storage) → +5°C (display cabinet) → ambient (consumer home). Thermal contraction at freezing temperatures creates internal stresses in rigid containers.",
+        "<strong>Blast Freezing (-35 to -45°C):</strong> Quick freezing of dairy products. Packaging must withstand extreme cold without embrittlement — specialty cryogenic grades of PP aur PE required. Film flexibility at -40°C critical — standard LDPE becomes brittle below -30°C; metallocene LLDPE remains flexible to -40°C."
+      ],
+      insulated_packaging: "Insulated Packaging for Cold Chain: Expanded Polystyrene (EPS) boxes — excellent thermal insulation (k = 0.033 W/mK), lightweight, impact protective. Used for premium ice cream, specialty cheese home delivery. Vacuum Insulated Panels (VIP) — superior insulation (k = 0.005-0.010 W/mK, 5-10× better than EPS) but expensive and fragile. Phase Change Materials (PCMs) — frozen gel packs (water-based, Tm = 0-4°C), organic PCMs (n-hexadecane, Tm = 18°C) — absorb heat at constant temperature during phase change. Critical for pharmaceutical-grade dairy (colostrum, specialty proteins) temperature-controlled delivery.",
+      distribution_packaging: "Distribution Packaging Layers: (1) Primary: direct food contact (pouch, bottle, cup). (2) Secondary: groups primary packages (corrugated tray, shrink wrap, multi-pack holder). (3) Tertiary: transport unit (CFB master case). (4) Quaternary: unit load (stretch-wrapped pallet). Distribution packaging must be validated for actual supply chain conditions using ISTA (International Safe Transit Association) protocols: random vibration simulation, shock/drop sequence, aur temperature cycling.",
+      nanotechnology: "Nanotechnology in Dairy Packaging: Nano-composite packaging — clay nanoparticles (montmorillonite, MMT) incorporated in polymer matrix create tortuous path for gas molecules, improving barrier by 2-5× without compromising transparency or recyclability. Nanosilver antimicrobial coatings — silver nanoparticles (10-100 nm) on packaging surface slowly release Ag⁺ ions with broad-spectrum antimicrobial activity. Nano-titanium dioxide (TiO₂) photocatalytic coatings — UV light activation generates reactive oxygen species destroying surface bacteria. Regulatory status: nanomaterials in food contact materials under scrutiny — EFSA aur FSSAI evaluation ongoing. Migration of nanoparticles into food is primary safety concern."
+    },
+  },
+
+  // ─────────────────────────────────────────────────────────────────
+  // ENGLISH VERSION
+  // ─────────────────────────────────────────────────────────────────
+  en: {
+    title: "Packaging — Materials, Processes & Quality Testing",
+    description: "A comprehensive scientific guide to packaging materials, processes, quality testing, and sustainability for the dairy industry.",
+    tabs: {
+      intro: "Introduction",
+      materials: "Materials",
+      forms: "Forms & Processes",
+      testing: "Testing",
+      labeling: "Labeling & Regulations",
+      sustainability: "Sustainability",
+      active_intelligent: "Active & Intelligent Packaging",
+      cold_chain: "Cold Chain & Logistics",
+    },
+
+    introduction: {
+      title: "Introduction and Objectives of Dairy Packaging",
+      p1: "Milk is an extremely perishable biological product containing naturally present enzymes, microorganisms, and reactive chemical compounds that cause rapid spoilage. Suitable packaging is absolutely essential to preserve milk's initial quality for a predetermined shelf life. Currently, only about 15% of total milk produced in India is packaged by the commercial dairy industry — the remaining 72% reaches consumers through the unorganized sector without proper packaging, with direct negative implications for public health.",
+      p2: "Flexible pouches currently account for approximately 92% of all commercial dairy marketing, but India's dairy packaging market is growing at 8-10% CAGR driven by expansion of aseptic packaging, UHT technology, and modern retail infrastructure. Packaging is a critical <strong>Prerequisite Program (PRP)</strong> in food safety management systems (HACCP, ISO 22000, SQF) — protecting products from physical (glass, metal fragments), chemical (lubricants, cleaning agents), and microbiological contamination.",
+      p3: "Packaging material selection is a multi-criteria decision requiring simultaneous consideration of: product type, required shelf life, processing method (pasteurized vs. UHT vs. retort), distribution temperature (ambient vs. cold chain), transportation distance, consumer preferences, regulatory compliance (FSSAI, BIS), cost economics, and environmental sustainability. Incorrect packaging selection leads to product spoilage, food safety incidents, economic losses, and brand damage.",
+      purpose_title: "Five Primary Functions of Packaging (5 P's of Packaging)",
+      purposes: [
+        "<strong>Protection:</strong> Comprehensive protection from physical damage (mechanical shock, vibration, compression, abrasion), chemical degradation (oxidation, hydrolysis, enzymatic reactions), and microbiological contamination. Drop tests (60-120 cm), compression tests (stacking load), and vibration simulation tests verify packaging protection capabilities. Primary, secondary, and tertiary packaging levels together form a complete protection system.",
+        "<strong>Preservation:</strong> Providing effective barriers against oxygen, light, moisture, gases (CO₂, N₂), microorganisms, and external odors. Oxygen promotes lipid oxidation causing rancid flavors. Light (UV and visible) causes riboflavin degradation, vitamin A loss, and photo-oxidized off-flavors. Moisture gain or loss affects product texture, consistency, and weight. Barrier properties are quantified by OTR, WVTR, and light transmission percentage.",
+        "<strong>Presentation & Promotion:</strong> Packages attract consumer attention and play a crucial role in purchasing decisions. The '7-second first impression' rule applies to packaging design — encompassing color psychology, typography, imagery, and shelf appeal. FSSAI mandatory labeling (product name, net quantity, MRP, dates, FSSAI license number, nutritional information, allergen declaration, ingredients) ensures legal compliance. Smart packaging includes QR codes, augmented reality features, and anti-counterfeiting elements.",
+        "<strong>Portability & Convenience:</strong> Consumer ease of handling, easy opening mechanisms (tear notches, peel tabs), re-sealability (zip locks, screw caps), portion control (single-serve), microwave safety, stackability, and tamper-evident features are modern consumer requirements. Ergonomic design prevents consumer injuries and minimizes product wastage.",
+        "<strong>Planet (Sustainability):</strong> Packaging design following circular economy principles — Reduce (minimize packaging material weight/lightweighting), Reuse (refillable glass bottles, multi-trip containers), Recycle (mono-material structures easily recyclable), and Recover (energy recovery from non-recyclable packaging) — is essential. Extended Producer Responsibility (EPR) is legally mandated in India under Plastic Waste Management Rules 2021."
+      ],
+      p4: "Complete labeling is mandatory per FSSAI Food Safety and Standards (Labelling and Display) Regulations 2020. All mandatory information must be in English or Hindi (Devnagri script), or the official language of the state where sold, in clearly legible font. Mandatory elements include: product name, net quantity, complete ingredients list (descending order by weight), nutritional information (per 100g/100ml), manufacturing date, best before/use by date, batch/lot number, FSSAI license number, manufacturer/packer address, country of origin (for imports), and allergen declaration.",
+      milk_spoilage: "Scientific Causes of Milk Spoilage: Fresh raw milk initially contains 10³-10⁴ CFU/mL bacteria from udder, teat surfaces, milking equipment, and environment. Major spoilage organisms: Pseudomonas (psychrotrophic, grows at 4°C), Bacillus (spore-forming, heat-resistant), Clostridium, Lactobacillus. Spoilage mechanisms include: proteolysis (casein breakdown → bitter flavor, curdling), lipolysis (fat hydrolysis → rancid/soapy taste), lactose fermentation (lactic acid → souring), and Maillard browning (amino acid + reducing sugar → browning at high temperature). Proper packaging combined with correct temperature control, pasteurization/UHT, and hygienic processing effectively controls these mechanisms."
+    },
+
+    materials: {
+      title: "Different Dairy Packaging Materials",
+      intro: "Dairy packaging material selection is based on specific product requirements — including processing temperature resistance, barrier properties, mechanical strength, food contact safety, cost economics, and environmental impact. Life cycle assessment (LCA) is increasingly important in material selection decisions.",
+      glass: {
+        title: "Glass — Traditional Premium Packaging",
+        p1: "Glass (Type I borosilicate or Type III soda-lime glass per IS 1392) is completely chemically inert — it does not react with milk under any conditions. It provides a 100% impermeable barrier to gases (O₂, CO₂, N₂), moisture, and vapors — OTR and WVTR are practically zero. The non-porous surface prevents microbial adhesion. Taste, aroma, and purity are perfectly preserved. Glass can be repeatedly sterilized at 120°C+ without degradation.",
+        p2: "Glass limitations are scientifically significant: density approximately 2.5 g/cm³ means a 1-liter bottle weighs 450-550g — more than the net product — dramatically increasing transportation costs. Brittle fracture tendency (fracture toughness: ~0.7-0.9 MPa·m^0.5) creates breakage risk during handling and transportation. Thermal shock resistance is limited — sudden temperature changes (>40°C differential) cause cracking/breakage. Transparency allows UV and visible light transmission causing riboflavin degradation (peak absorption: 440-460 nm) and photo-oxidized flavors — hence amber glass (cuts UV <450 nm) or opaque labels are preferred.",
+        p3: "In India, sterilized flavoured milk, lassi, and dahi are still packaged in heat-resistant glass bottles (IS 1392-1967 Type I/II) in 200ml-500ml capacities. Returnable glass bottles (RGB system) are used in dairy cooperatives where collection infrastructure exists. A glass bottle can be reused 25-30 times with proper multi-stage cleaning (caustic wash 2% NaOH at 75°C → water rinse → acid rinse → final rinse → inspection → filling). Glass is 100% infinitely recyclable without quality loss."
+      },
+      plastics: {
+        title: "Plastic Materials — Dominant Dairy Packaging",
+        p1: "Plastic packaging materials — primarily polyolefins (LDPE, LLDPE, HDPE) and engineering plastics (PET, PP, PS) — hold 92%+ market share in Indian dairy packaging. They are lightweight (density 0.90-1.05 g/cm³), mechanically versatile, process-friendly (heat-sealable, thermoformable, blow-moldable), and cost-effective. Food-grade formulations per FDA 21 CFR and BIS standards contain no harmful additives or plasticizers.",
+        types: [
+          "<h4>LDPE — Low-Density Polyethylene (Pasteurized Milk Pouches)</h4> Molecular structure: highly branched long-chain polymer. Density: 0.910-0.925 g/cm³. High amorphous structure provides: excellent flexibility (elongation at break: 300-500%), good impact resistance, and outstanding heat-sealing properties (seal initiation temp: 110-120°C, seal strength: 15-30 N/15mm). Moisture barrier acceptable (WVTR: 15-20 g/m²/day at 38°C). Oxygen barrier poor (OTR: 7000-8500 cc/m²/day/atm at 23°C) — suitable only for short shelf-life products (4-5 days refrigerated). Standard milk pouch thickness: 60µ (200ml), 75µ (500ml), 100µ (1L). Meets IS 2508 requirements.",
+          "<h4>LLDPE — Linear Low-Density Polyethylene (High-Performance Pouches)</h4> Molecular structure: linear backbone with short, uniform branches (co-monomers: butene C4, hexene C6, octene C8). Density: 0.915-0.930 g/cm³. Superior mechanical properties vs. LDPE: Tensile strength: 40-55 MPa (2× LDPE), Puncture resistance: 4-8× better (dart drop impact: 150-400g vs LDPE 80-150g), tear resistance 30-50% higher. These properties allow downgauging (thinner films) by 15-25% while maintaining performance. Blended with LDPE in 20-80% ratio to optimize processability-performance balance.",
+          "<h4>HDPE — High-Density Polyethylene (Bottles & Rigid Containers)</h4> Molecular structure: highly linear, minimal branching (<2% co-monomer). Density: 0.941-0.965 g/cm³, high crystallinity (70-80%). Semi-rigid to rigid material with excellent stiffness (flexural modulus: 800-1500 MPa), good chemical resistance, and better moisture barrier than LDPE/LLDPE (WVTR: 5-10 g/m²/day). Temperature resistance: -40°C to 120°C continuous service. Used for 500ml-2L milk bottles, cream containers, ghee containers, cap manufacture. TiO₂ pigmentation (0.5-2%) provides light barrier.",
+          "<h4>PET — Polyethylene Terephthalate (Premium Clear Bottles)</h4> Semi-crystalline engineering thermoplastic. Density: 1.33-1.40 g/cm³. Excellent optical clarity (haze <5%), high tensile strength (55-75 MPa), rigid yet lightweight (1L PET bottle: 25-40g vs glass: 450-550g — 90% weight reduction). Thermal properties: Tg = 70-80°C, Tm = 255-265°C. Oxygen barrier moderate (OTR: 50-100 cc/m²/day/atm for 200µm) — acceptable for 30-60 days refrigerated. Biaxial orientation during blow molding increases barrier 2-3×. PET #1 most widely recycled plastic globally.",
+          "<h4>PP — Polypropylene (Yogurt Cups & Microwave Containers)</h4> Semi-crystalline polyolefin. Density: 0.900-0.910 g/cm³ (lightest common packaging plastic). Excellent heat resistance: Tm = 160-170°C, continuous service to 120°C — withstands retort (121°C) and microwave heating. Stiffness: flexural modulus 1000-1700 MPa. Used for injection-molded yogurt cups (80-500g), dahi, shrikhand. In-Mold Labeling (IML) enables premium decoration.",
+          "<h4>PS — Polystyrene & HIPS (Yogurt Cups & Thermoformed Trays)</h4> Amorphous polymer. GPPS: transparent, brittle, density 1.04-1.06 g/cm³. HIPS (rubber-toughened): opaque white, impact resistance 10-40 kJ/m² vs GPPS <2 kJ/m². Excellent thermoforming characteristics. Poor oxygen barrier (OTR: 1500-3000 cc/m²/day/atm). Used for 50ml-1kg dahi, yogurt, ice cream cups with Al-PE peelable foil lids."
+        ]
+      },
+      laminates: {
+        title: "Multilayer Laminates — Core of Aseptic Packaging",
+        p1: "No single material alone provides all properties required for UHT/aseptic dairy packaging — multilayer laminate structures combine complementary properties of different materials. Tetra Pak, SIG Combibloc, Elopak aseptic cartons typically use 5-7 layer laminates. Total laminate thickness: 280-400 microns. Lamination processes: dry lamination (adhesive-based), extrusion lamination, and co-extrusion.",
+        layers: [
+          { layer: "Layer 1 — Outer PE (15-20µ)", function: "External moisture protection, printing ink protection, heat sealability for outer flaps, glossy appearance. Low-density PE provides flexibility for crease/fold operations.", color: "blue" },
+          { layer: "Layer 2 — Paperboard (200-300 GSM)", function: "Primary structural component — provides rigidity, squareness, dimensional stability, printability, and stacking strength. Bleached kraft paperboard (food grade, clay-coated). Must pass Cobb test (<30 g/m²) and bursting strength (>3.5 kg/cm²).", color: "yellow" },
+          { layer: "Layer 3 — PE (15-20µ)", function: "Tie/adhesive layer — chemically bonds dissimilar materials (paperboard to aluminum foil). Prevents interlayer delamination under mechanical stress during filling, handling, and consumer use.", color: "blue" },
+          { layer: "Layer 4 — Aluminum Foil (6-9µ)", function: "THE most critical barrier layer. Provides ABSOLUTE barrier: OTR = 0 cc/m²/day, WVTR ≈ 0 g/m²/day, light transmission = 0%. Enables 6-12 months ambient shelf life by completely preventing: light-induced photo-oxidation, oxidative rancidity from O₂, moisture gain/loss, and external odor pickup. Pinhole-free quality (zero pinholes per 100cm²) essential.", color: "silver" },
+          { layer: "Layer 5 — PE (15-20µ)", function: "Second adhesive/tie layer bonding Al foil to inner sealant PE. Prevents foil delamination on consumer opening. Provides food-safe intermediate layer.", color: "blue" },
+          { layer: "Layer 6 — Inner Sealant PE (40-60µ)", function: "Direct food contact layer — must meet strictest food safety standards (FDA 21 CFR 177, EU 10/2011, FSSAI). Provides heat sealability for all seams (longitudinal, top, bottom) at 120-140°C forming perfect hermetic seal. Seal strength: 2.5-4.0 N/15mm. Non-toxic, tasteless, odorless, FDA-approved food-grade PE.", color: "green" }
+        ],
+        p3: "Laminate manufacturing involves precision slitting, printing (flexographic/gravure, up to 10 colors with food-safe inks), and converting operations. Quality parameters: interlayer bond strength (>300 g/15mm), seal strength (2.5-4.0 N/15mm), OTR (<5 cc/m²/day), WVTR (<0.5 g/m²/day). Tetra Pak available in Tetra Brik Aseptic, Tetra Wedge Aseptic, and Tetra Top shapes in 80ml-2L sizes."
+      },
+      additionalMaterials: {
+        title: "Other Specialized Packaging Materials",
+        items: [
+          "<strong>Metallized Films (Met-PET, Met-BOPP):</strong> Plastic films with ultra-thin aluminum coating (300-600 Angstrom = 30-60 nm) via vacuum deposition. Barrier improvement: OTR 10-50× better than plain film (Met-PET 12µ: OTR 1-5 cc/m²/day), WVTR 10-20× better. Significantly lighter and cheaper than Al foil. Disadvantage: barrier not absolute (unlike true Al foil), can crack at fold lines, not microwave-safe. Used in ESL pouches.",
+          "<strong>EVOH — Ethylene Vinyl Alcohol Copolymer:</strong> Exceptional oxygen barrier polymer — OTR: 0.1-1.0 cc/m²/day at 23°C, 0% RH (500-1000× better than LDPE). Vinyl alcohol content (38-48 mol%) determines barrier. Critical limitation: highly moisture-sensitive — barrier degrades significantly at high humidity. Always sandwiched between moisture-barrier layers. Used in multilayer PET/EVOH/PET bottles for UHT milk.",
+          "<strong>Nylon (Polyamide — PA 6, PA 6/66):</strong> Excellent mechanical properties: tensile strength 60-80 MPa, outstanding puncture resistance (50-100% better than PE), high abrasion resistance, good temperature resistance (Tm: 215-265°C). Moderate oxygen barrier (OTR: 20-40 cc/m²/day). Used as structural layer in multilayer films: LDPE/Nylon/LDPE for extended shelf-life pouches, retort pouches.",
+          "<strong>BOPP — Biaxially Oriented Polypropylene:</strong> PP film biaxially stretched to align polymer chains dramatically improving optical (haze <1%, gloss 80-90°) and mechanical properties (tensile strength: 180-250 MPa, 25× improvement). Excellent printability. Used for outer wrap on cheese, butter packaging, printed labels.",
+          "<strong>Retort Pouches:</strong> Multilayer structure withstanding 121°C retort sterilization: outer PET (structural, printable) + middle Al foil (barrier) + inner cast PP or LLDPE (heat-sealable, food contact). Lighter than cans (80% weight reduction), faster heat penetration, better nutritional retention.",
+          "<strong>Paperboard & Cartonboard:</strong> Virgin bleached kraft paperboard (200-400 GSM) for secondary/tertiary packaging. Corrugated fiberboard (CFB) for shipping cartons (ECT: 40-80 lb/in, Burst Strength: 15-30 kg/cm²). Microflute for premium retail dairy packaging."
+        ]
+      }
+    },
+
+    forms: {
+      title: "Packaging Forms and Manufacturing Processes",
+      p1: "Indian dairy packaging market form distribution: Flexible pouches 92% (dominant, low-cost pasteurized milk), Glass bottles 5-7% (declining, mainly flavoured milk), Aseptic cartons/Tetra Pak ~1% (growing UHT segment), PET bottles 0.5-1% (premium, growing), Thermoformed cups 0.5-1% (fermented products). This distribution reflects infrastructure availability, consumer purchasing power, and cold chain development levels.",
+      aseptic: {
+        title: "Aseptic Packaging — Gold Standard for Ambient Dairy",
+        p1: "Aseptic packaging is a revolutionary technology where commercially sterilized product is aseptically packaged in sterile containers in a sterile environment without post-packaging heat treatment. The result is 6-12 months shelf life at ambient temperature without refrigeration — dramatically reducing distribution costs and food waste in warm climates like India.",
+        p2: "UHT Processing Science: Milk is heated to 135-150°C for 2-6 seconds. This short time-high temperature combination, per Arrhenius equation, achieves: (1) Complete destruction of all pathogens and spoilage organisms including heat-resistant spores — commercial sterility achieved. (2) Minimized nutrient loss — vitamins, proteins (whey protein denaturation <3%), enzymes (alkaline phosphatase inactivated, verifiable). Z-value for microbial inactivation ~10°C, for nutrient degradation ~30°C — high temperature kills microbes much faster relative to nutrient damage. Direct UHT (steam injection/infusion) and Indirect UHT (plate/tubular heat exchangers) both used commercially.",
+        p3: "Aseptic Line Operation: (1) Packaging material sterilized with H₂O₂ (30-35% concentration) — H₂O₂ is sporicidal, causing DNA damage. (2) Excess H₂O₂ evaporated with 60-70°C sterile hot air — residual H₂O₂ <0.1 ppm (EU limit) must be ensured. (3) Filling zone maintained at ISO Class 5 (Class 100) cleanroom — <3520 particles/m³ at 0.5µm. Positive pressure sterile air prevents microbial ingress. (4) Immediate hermetic sealing after filling — longitudinal seam, top seal, bottom seal. Production speed: 6,000-40,000 packages/hour.",
+        p4: "Shelf Life Science: The 6-layer Tetra Pak Al foil (Layer 4) provides: OTR = 0 (complete O₂ exclusion), WVTR ≈ 0 (moisture stable), Light transmission = 0% (photo-oxidation prevention). Combined with UHT sterility (zero viable microorganisms), this enables 6-12 months ambient shelf life."
+      },
+      fino: {
+        title: "Fino Package — Cost-Effective Aseptic Alternative",
+        p1: "Fino package is an innovative multilayer fiber-based aseptic pillow pouch providing barrier properties similar to Tetra Pak at significantly lower cost. The distinctive pillow shape (similar to plastic pouches) offers a familiar consumer experience. The 6-layer structure includes paperboard, Al foil, and multiple PE layers similar to Tetra Pak carton but in pouch format.",
+        p2: "Manufacturing Process (VFFS-Aseptic): (1) Rollstock sterilization: H₂O₂ 30-35% spray or bath, precisely controlled exposure time. (2) Sterile air drying at 60-65°C — UV radiation sometimes used for additional sterilization. (3) Tube forming: longitudinal seal creates continuous tube. (4) Product filling: UHT milk aseptically filled in ISO Class 5 zone. (5) Transverse sealing: heat sealing (120-140°C, 0.5-1 second dwell time) creates top and bottom seals. (6) Cutting individual pouches. Fill accuracy: ±1% of nominal fill weight.",
+        p3: "Performance: Shelf life 90-120 days at ≤30°C ambient without refrigeration. Capital cost 40-60% lower than Tetra Pak line. Available sizes: 80ml (school milk), 200ml (single-serve), 500ml, and 1L. Disadvantage: less structural rigidity than carton — prone to puncture during rough handling."
+      },
+      pet: {
+        title: "PET Packaging — Premium Consumer Experience",
+        p1: "PET bottles provide premium presentation — crystal clear visibility, re-closable convenience, recyclable eco-friendly image, and modern aesthetics. Ultra-lightweight (1L bottle: 25-40g vs glass: 450-550g — 90% weight reduction) dramatically reduces transportation costs. Excellent drop impact resistance due to biaxially oriented PET.",
+        p2: "Extended Shelf Life PET Solutions: Standard monolayer clear PET (OTR: 60-100 cc/m²/day) supports only 15-20 days refrigerated. For UHT milk 6-month ambient target: (A) Multilayer PET/EVOH/PET (3-5 layers, co-injection molded preform): OTR drops to 0.2-0.5 cc/m²/day. (B) Plasma-treated PET (DLC — Diamond-Like Carbon inner coating or SiOx coating): OTR <1 cc/m²/day, glass-like barrier. (C) Oxygen scavenger additives in PET matrix. (D) Pigmented/opaque PET: blocks 100% light preventing photo-oxidation.",
+        p3: "Manufacturing — Two-stage Injection Stretch Blow Molding (ISBM): Stage 1: PET resin (IV: 0.76-0.84 dL/g) injection molded into preform with specific neck finish. Stage 2: Preform reheated to 95-115°C (above Tg: 80°C), then biaxially stretched by stretch rod (axial) and high-pressure air (hoop) in blow mold. Biaxial orientation 2-3× axial + 3-4× hoop improves barrier 2-3×, increases clarity, improves strength. Aseptic filling lines: 5,000-30,000 bottles/hour. Sealed with PP or HDPE tamper-evident caps."
+      },
+      retort: {
+        title: "Retort Packaging — In-Container Sterilization",
+        p1: "The oldest in-package sterilization technology, primarily used for flavoured milk, chocolate milk, coffee milk, almond milk, and dairy beverages. Process sequence: (1) Product filled at ambient/warm temperature (60-70°C) in heat-resistant glass bottles (Type I borosilicate or Type II treated soda-lime) or PP/HDPE bottles. (2) Hermetically sealed with aluminum roll-on caps, crown corks, or vacuum lug caps — 6-10% headspace. (3) Loaded in retort chamber (horizontal rotary or vertical static autoclave) for in-package sterilization.",
+        p2: "Retort Processing Science: Temperature 115-121°C (steam pressure: 1.0-2.1 bar) for 15-30 minutes depending on product viscosity, container size, and required F₀ value. F₀ (sterilizing value) = equivalent minutes at 121.1°C for target log reduction of C. botulinum spores (minimum F₀ = 3 min = 12-log reduction for low-acid products). Heat penetration studies mandatory. Rapid cooling with pressurized water to 35-40°C prevents over-processing.",
+        p3: "Shelf life: 6-18 months ambient. Significant advantage over UHT-aseptic: lower equipment cost (retort: ₹50-200 lakhs vs UHT-aseptic line: ₹2-10 crores), simpler operation. Disadvantage: more thermal damage (cooked flavor, Maillard browning, vitamin loss — B1, B12, C) vs UHT. Glass bottles reusable with proper CIP cleaning."
+      },
+      pouches: {
+        title: "Flexible Pouches — India's Dominant Format",
+        p1: "Flexible pouches dominate Indian dairy with 92% market share due to unparalleled cost economics, established cold chain infrastructure, and deep consumer familiarity. Cost comparison: 1-liter LDPE pouch ₹0.80-1.20 vs Tetra Pak ₹3.50-5.00 vs PET bottle ₹6-10. Materials: Standard pasteurized milk — LDPE monolayer (80-100µ) or LDPE/LLDPE blend. ESL milk — LDPE/Nylon/LDPE or LDPE/Met-PET/LDPE barrier pouch.",
+        p2: "Form-Fill-Seal (FFS) Technology — VFFS Process: (1) Printed rollstock continuous web feeds into machine. (2) Former collar forms web into vertical tube. (3) Longitudinal seal (back seal): heated jaw seals tube seam. (4) Product fill: metered ±0.5-1% accuracy using level sensors or mass flow meters. (5) Transverse seal: synchronized seal bars seal and cut individual pouches. Machine speed: 60-120 pouches/minute (500ml), 40-80/min (1L). Jaw seal temperature: 140-180°C, dwell time: 0.3-0.8 seconds.",
+        p3: "Shelf Life Engineering: Pasteurized LDPE pouches (80-100µ): 4-5 days at ≤4°C. ESL pouches with LDPE/Met-PET/LDPE barrier (OTR: 10-30 cc/m²/day): 15-30 days at 4°C with microfiltration. Ultra-barrier pouches (LDPE/Al foil/LDPE): 60-90 days ambient. Nitrogen flushing (replacing O₂ with N₂ before sealing) extends shelf life by 20-30%."
+      },
+      cups: {
+        title: "Thermoformed Cups — Fermented Dairy Products",
+        p1: "Dahi, yogurt, shrikhand, lassi, mishti doi, and ice cream are packaged in thermoformed rigid plastic cups. Materials: PS (GPPS transparent, HIPS opaque) — most economical, best thermoformability; PP — microwave safe, premium; PET — excellent clarity. Manufacturing: Thermoforming — plastic sheet (2-4mm) heated above Tg (PP: 150-170°C, PS: 120-140°C), then vacuum or pressure formed in precision mold. Injection molding for PP cups — better dimensional control, thinner walls, IML integration.",
+        p2: "Lid Systems: (A) Heat-sealed Al foil lids (structure: PET 12µ / Al foil 20-40µ / heat-seal lacquer): hermetic seal, tamper evident, easy peel (3-8 N/15mm peel force). Induction sealing for PP cups. (B) Snap-on plastic lids: re-sealable convenience. Cup sizes: 50ml (single-serve) to 1kg bulk. Top load compression strength: 30-80 N required for 8-12 unit stacking. IML (In-Mold Labeling) enables premium decoration without secondary labeling.",
+        p3: "Shelf life: PP/PS cups with Al foil lid: 10-21 days at 2-4°C. Shrikhand (aw: 0.85-0.90): 30-45 days refrigerated. Ice cream (stored at -18 to -22°C): 6-18 months. MAP (CO₂/N₂ flushing before lid sealing) for extended shelf-life fermented products. HIPS cups hermetically sealed with Al-PE foil — integrity verified by methylene blue dye penetration test."
+      },
+      map_packaging: {
+        title: "MAP — Modified Atmosphere Packaging",
+        p1: "MAP replaces or modifies the atmosphere inside containers with an optimal gas mixture to slow product-specific deterioration reactions. For dairy, primary concerns are aerobic microbial growth (O₂ presence) and oxidative rancidity. MAP gases: N₂ (inert filler, displaces O₂, prevents package collapse), CO₂ (bacteriostatic/bactericidal — inhibits aerobic bacteria and molds, dissolves in water and fat), O₂ (generally avoided in dairy MAP except for some cheeses).",
+        p2: "Dairy MAP Applications: (A) Hard/semi-hard cheese: 100% CO₂ or CO₂/N₂ (30:70) — inhibits surface mold growth, extends shelf life from 30 to 90+ days. (B) Fresh cheese (paneer, ricotta, cottage cheese): CO₂/N₂ atmosphere, 21-42 days vs 7-14 days in air. (C) Butter and ghee: N₂ flushing prevents oxidative rancidity, extends shelf life 2-3×. (D) Dried dairy (milk powder, whey): N₂ flush in cans/pouches prevents caking, oxidation, insect infestation.",
+        p3: "MAP Equipment: Tray-sealing machines (in-line MAP), flow-wrap with gas flushing, vacuum-gas flush-seal cycle. Gas flush efficiency: O₂ residual <0.5% for effective MAP. O₂ scavenger sachets provide additional O₂ absorption from package headspace. MAP validation: residual O₂ measurement, CO₂ measurement, shelf life challenge studies with challenge organisms."
+      }
+    },
+    testing: {
+      title: "Packaging Material Quality Testing",
+      intro: "Packaging quality assurance involves standardized testing at three levels: incoming material inspection (supplier QC), in-process monitoring (production QC), and finished product testing (outgoing QC). Standards followed: BIS (IS series), ASTM International, ISO, TAPPI, and FSSAI regulations. Testing in NABL-accredited laboratories is preferred/mandatory for regulatory compliance.",
+      sampling_title: "Sampling Plan (IS 4905 / ISO 2859-1)",
+      sampling_text: "Random sampling of incoming materials at AQL (Acceptable Quality Level) 1.5-2.5. Sample size determined by lot size (e.g., lot 1001-10000 units → sample n=50 at AQL 2.5). Double sampling plan preferred for critical attributes (barrier, seal integrity). Destructive tests require separate representative samples. Sampling records traceable to production lot number mandatory.",
+      conditioning_title: "Conditioning (IS 1060 Part 1 / TAPPI T402)",
+      conditioning_text: "All physical/mechanical tests require prior conditioning at standard atmosphere: 23±2°C temperature and 50±5% relative humidity for minimum 24 hours (preferably 48 hours for thick materials). Consistent airflow in conditioning chamber required. Temperature fluctuation <±1°C, humidity fluctuation <±2% RH. Preferred: complete testing within 2 hours after conditioning.",
+      calculation_title: "Test Methods, Calculations & Acceptance Criteria:",
+      tests: [
+        {
+          title: "Paper/Paperboard — GSM (Grammage) Test",
+          standard: "IS 1060 (Part 1), ASTM D646, ISO 536, TAPPI T410",
+          procedure: "<h4>Principle:</h4> Grammage (basis weight) is the mass per unit area of paper/paperboard in g/m². Most fundamental paper property, directly affecting structural strength, printability, and barrier. Aseptic carton specification: 200-300 GSM.<h4>Equipment:</h4> Precision die cutter (100 cm² circular), analytical balance (0.001g readability), conditioning chamber.<h4>Procedure:</h4><ol><li>Cut minimum 5 samples with die cutter — clean, burr-free edges. Representative of full roll width.</li><li>Condition at 23±2°C, 50±5% RH for 24 hours minimum.</li><li>Weigh each sample individually (0.001g readability). Record tare weight separately.</li><li>Calculate GSM per sample. Report mean ± SD.</li><li>CV% (coefficient of variation) should be <2% for uniform paper.</li></ol>",
+          calculation: "GSM = [Sample weight (g) × 10,000] / Area (cm²)\nFor 10×10 cm (100 cm²): GSM = Weight (g) × 100\nExample: 2.35g sample → GSM = 2.35 × 100 = 235 g/m²\nCV% = (SD / Mean) × 100 — target < 2%",
+          acceptance: "Aseptic carton paperboard: 200-300 g/m² (±5% of nominal)\nMilk pouch outer wrap: 60-80 g/m²\nSecondary carton: 400-600 g/m²"
+        },
+        {
+          title: "Paper/Paperboard — Bursting Strength (Mullen Test)",
+          standard: "IS 1060 (Part 5), ASTM D774/D774M, ISO 2758, TAPPI T403",
+          procedure: "<h4>Principle:</h4> Measures hydrostatic pressure to rupture paper clamped over circular aperture using rubber diaphragm inflated at controlled rate. Indicates resistance to puncture; related to tensile strength and elongation. Critical for carton structural integrity.<h4>Equipment:</h4> Mullen Burst Tester, 30.5mm diameter clamp area, pressure rate 170±15 mL/min.<h4>Procedure:</h4><ol><li>Condition samples. Cut 10 circular samples (65-75mm) from different roll width locations.</li><li>Clamp sample firmly — no wrinkles, no slippage.</li><li>Apply hydraulic pressure at controlled rate until rupture. Record peak pressure.</li><li>Test 10 samples per side. Report median value (reduces influence of outliers).</li><li>Calculate Burst Factor = Burst Strength / GSM.</li></ol>",
+          calculation: "Burst Strength: directly read from gauge (kg/cm² or kPa)\nBurst Factor (BF) = Burst Strength (g/cm²) / GSM\nExample: Burst = 4.2 kg/cm² = 4200 g/cm², GSM = 230\nBF = 4200 / 230 = 18.3",
+          acceptance: "230 GSM aseptic carton board: >4.0 kg/cm², BF >17\n300 GSM carton board: >5.0 kg/cm²\nCorrugated liner: >3.5 kg/cm²"
+        },
+        {
+          title: "Paper/Paperboard — Cobb Test (Water Absorption)",
+          standard: "IS 1060 (Part 8), TAPPI T441, ISO 535",
+          procedure: "<h4>Principle:</h4> Measures water absorbed by paper per unit area in specified time under standardized conditions. Lower Cobb = better water resistance. Critical for dairy packaging as moisture uptake weakens structural integrity and compromises print quality.<h4>Equipment:</h4> Cobb tester (100 cm² rubber ring), 100 mL water, blotting paper, 10 kg roller (90mm width), balance.<h4>Procedure:</h4><ol><li>Weigh conditioned sample — record as W1 (g).</li><li>Clamp sample face-up in Cobb ring. Pour exactly 100 mL water.</li><li>After exactly 60±0.5 seconds, drain water. Immediately blot with roller (10 passes within 30 seconds).</li><li>Weigh sample within 45 seconds of draining — W2 (g).</li><li>Calculate Cobb₆₀ = (W2 - W1) × 100 g/m².</li></ol>",
+          calculation: "Cobb₆₀ = (W2 - W1) × 100 g/m²\nExample: W1 = 23.00g, W2 = 23.28g\nCobb₆₀ = (23.28 - 23.00) × 100 = 28 g/m²",
+          acceptance: "Clay-coated aseptic board (inner surface): <25 g/m²\nUncoated/craft liner: <30 g/m²\nHigh water resistance (wax-coated): <15 g/m²"
+        },
+                {
+          title: "Plastic Film — Thickness Measurement",
+          standard: "IS 2508, ASTM D374, ISO 4593, TAPPI T411",
+          procedure: "<h4>Principle:</h4> Film thickness uniformity directly determines consistency of barrier properties, mechanical strength, heat-sealing performance, and cost (grams per pack). Non-uniform thickness causes variable seal quality and material waste. Critical parameter for incoming QC and process control.<h4>Equipment:</h4> Digital contact micrometer or electronic thickness gauge (resolution: 0.1 µm, accuracy: ±0.5 µm), calibrated anvil diameter: 6.35 mm, contact pressure: 10-100 kPa (pressure-sensitive materials: ≤10 kPa).<h4>Procedure:</h4><ol><li>Cut samples from multiple positions across roll width (minimum 5 positions) and along length (minimum 3 positions per width position) = minimum 15 measurement points.</li><li>Clean anvil and spindle. Zero calibrate with certified slip gauge.</li><li>Place film sample, lower spindle gently. Read after stabilization (2-3 seconds). Avoid finger contact near measurement area.</li><li>Record all readings. Calculate mean, standard deviation, min, max, CV%.</li><li>Check thickness profile across web width — important for FFS machine runnability.</li></ol>",
+          calculation: "Average Thickness = ΣXᵢ / n\nVariation % = [(Xmax - Xmin) / Xavg] × 100\nCV% = (SD / Mean) × 100 — target <5%\nExample: Readings: 78, 80, 82, 79, 81, 83 µm\nMean = 80.5 µm, SD = 1.76 µm, CV% = 2.2%",
+          acceptance: "LDPE/LLDPE pouch (500ml): 75±7.5µm (±10%)\nLDPE/LLDPE pouch (1L): 100±10µm\nMetallized barrier film: 80-120µm ±10%\nCross-direction variation: <8%"
+        },
+        {
+          title: "Plastic Film — Tensile Strength & Elongation (UTM Test)",
+          standard: "IS 2508 (Part 7), ASTM D882, ISO 527-3",
+          procedure: "<h4>Principle:</h4> Tensile testing measures film's resistance to breakage when pulled in one direction (uniaxial tension). Key properties: tensile strength (maximum stress before fracture), yield strength (stress at permanent deformation onset), elongation at break (% extension at failure), Young's modulus (stiffness). MD (machine direction) aur TD (transverse direction) properties differ for oriented films — both must be tested. Critical for pouch integrity during filling, transportation, aur consumer handling.<h4>Equipment:</h4> Universal Testing Machine (UTM) with film clamps, 500N load cell, crosshead speed 500 mm/min for flexible films. Dumbbell die cutter (Type V per ASTM D882 for narrow specimens, or straight strips 25mm wide).<h4>Procedure:</h4><ol><li>Cut 5 dumbbell specimens each in MD and TD. Gauge length: 50mm, width: 25mm (strip) or 6mm (dumbbell). Measure exact width and thickness at 3 points.</li><li>Condition 24 hours. Mount in pneumatic grips — no slippage, uniform grip pressure.</li><li>Program: gauge length, crosshead speed (500 mm/min), preload (0.01N). Run test until break.</li><li>Record: peak force (N), stress at peak (MPa), strain at break (%), Young's modulus from initial slope.</li><li>Discard samples that break at grip — retest.</li></ol>",
+          calculation: "Tensile Strength (MPa) = Peak Force (N) / [Width (mm) × Thickness (mm)]\nElongation % = [(L_break - L_initial) / L_initial] × 100\nYoung's Modulus (MPa) = Stress / Strain (in elastic region)\nExample: LDPE: Force=14N, width=25mm, thickness=0.080mm\nTS = 14 / (25 × 0.080) = 7.0 MPa — low, normal for LDPE",
+          acceptance: "LDPE 80µm: TS >8 MPa MD, >7 MPa TD; Elongation >350%\nLLDPE 80µm: TS >15 MPa; Elongation >400%\nBopp 20µm: TS >150 MPa; Elongation 100-200%\nMet-PET 12µm: TS >150 MPa"
+        },
+        {
+          title: "Plastic Film — WVTR (Water Vapor Transmission Rate)",
+          standard: "IS 2508 (Part 6), ASTM F1249, ASTM E96, ISO 15106-1",
+          procedure: "<h4>Principle:</h4> WVTR measures the rate at which water vapor permeates through a film under specified temperature and humidity conditions. Moisture ingress affects dairy product texture (drying), weight loss, microbial growth (high moisture products), aur caking (dry dairy). Two methods: Gravimetric (ASTM E96 — weight gain of desiccant cup) aur Infrared Sensor (ASTM F1249 — more precise, faster). Conditions: 38°C, 90% RH (tropical/extreme conditions) or 23°C, 85% RH (standard).<h4>Equipment:</h4> WVTR test cups (or automated WVTR instrument), desiccant (anhydrous CaCl₂ or silica gel, activated), constant temperature-humidity chamber, analytical balance.<h4>Procedure (Gravimetric ASTM E96 Dish Method):</h4><ol><li>Fill test cup with desiccant (CaCl₂, freshly activated at 200°C). Film sample sealed over cup mouth with wax or clamp ring.</li><li>Weigh cup assembly — record W0.</li><li>Place in humidity chamber at 38°C, 90% RH.</li><li>Weigh daily for 7-10 days until steady-state is achieved (weight gain linear vs time).</li><li>Calculate WVTR from the steady-state slope of weight vs time curve.</li></ol>",
+          calculation: "WVTR (g/m²/day) = ΔW (g) / [A (m²) × Δt (days)]\nWhere ΔW = weight change during steady-state period\nExample: 0.12g gained in 24 hrs, area = 0.00315 m²\nWVTR = 0.12 / (0.00315 × 1) = 38.1 g/m²/day\nCorrection for film thickness: WVTR × thickness = permeance coefficient",
+          acceptance: "LDPE 80µm: <15 g/m²/day at 38°C, 90% RH\nLLDPE 100µm: <12 g/m²/day\nMet-PET 12µm: <2 g/m²/day\nAl foil laminate: <0.5 g/m²/day\nTetra Pak 6-layer: <0.1 g/m²/day"
+        },
+        {
+          title: "Plastic Film — OTR (Oxygen Transmission Rate)",
+          standard: "ASTM D3985, ISO 15105-1, IS 15838",
+          procedure: "<h4>Principle:</h4> OTR measures the quantity of oxygen gas passing through a film per unit area per unit time at specified conditions. Oxygen is the primary driver of dairy fat oxidation (rancidity), vitamin degradation (vitamins A, C, E, B₁₂), color change, aur aerobic microbial growth. Low OTR = extended shelf life. Measurement method: Coulometric detection (ASTM D3985) — O₂ electrochemically reduced at sensing electrode, current proportional to O₂ flux. Test conditions: 23±2°C, 0% RH (to isolate O₂ transport from moisture interaction).<h4>Equipment:</h4> Automated OTR analyzer (e.g., Mocon OxTran, Systech Illinois), coulometric or paramagnetic O₂ sensor, temperature-controlled test cell (50 cm² effective area).<h4>Procedure:</h4><ol><li>Cut film samples — handle without fingerprints (oils contaminate surface). Mount in test cell.</li><li>Purge both sides with nitrogen (99.999% pure) to remove all residual O₂. Steady baseline established.</li><li>Flow 100% O₂ on test side, N₂ on sensor side at precise flow rates.</li><li>Measure O₂ flux until steady state (constant transmission rate for 3 consecutive readings). Typically 1-24 hours.</li><li>Report OTR in cc/m²/day/atm at specified temperature and humidity.</li></ol>",
+          calculation: "OTR (cc/m²/day) = [O₂ flux (cc/sec) × 86400 sec/day] / Area (m²)\nPermeability = OTR × thickness (cc·mm/m²/day/atm)\nExample comparative values:\nAl foil: OTR = 0\nSiOx-coated PET: OTR = 0.5-2.0\nMet-PET 12µm: OTR = 1-5\nPET 12µm: OTR = 50-100\nNylon 25µm: OTR = 20-40\nLDPE 80µm: OTR ≈ 7800",
+          acceptance: "Aseptic laminate (Tetra Pak): <5 cc/m²/day\nESL metallized pouch: <30 cc/m²/day\nMultilayer PET/EVOH/PET: <1 cc/m²/day\nPasteurized milk LDPE: 3000-8000 (acceptable for 4-5 days)"
+        },
+        {
+          title: "Aluminum Foil — Pinhole Detection",
+          standard: "IS 5168, ASTM F392, TAPPI T559",
+          procedure: "<h4>Principle:</h4> Pinholes are microscopic holes (<0.5mm diameter) in aluminum foil caused by rolling defects, contamination, or mechanical damage. Even a single pinhole completely compromises the absolute barrier property of Al foil — O₂, moisture, aur light can permeate through. Critical QC test for aseptic laminate foil. Methods: (A) Light transmission (visual/photometric), (B) Electrical resistance method, (C) Gas permeation method.<h4>Equipment:</h4> Standardized light box (3000-5000 lux, uniform illumination), blackout room, calibrated magnifier (2-5× stereo microscope), pinhole counting chart.<h4>Procedure (Light Box Method):</h4><ol><li>Cut 100 cm² (10×10 cm) foil samples from multiple locations (5 samples minimum).</li><li>Darken room completely. Place foil sample on illuminated light box.</li><li>Observe from 30 cm distance with magnifier — bright points indicate pinholes.</li><li>Count all light pinpoints. Record coordinates for size estimation.</li><li>Also check foil from roll edges and centerline separately — higher defect probability at edges.</li></ol>",
+          calculation: "Pinhole count per 100 cm² reported directly\nPinhole frequency = Total pinholes / Total area tested (cm²)\nFor statistical reliability: test minimum 10 samples = 1000 cm²\nElectrical method: resistance (Ω) inversely related to pinhole area",
+          acceptance: "Premium aseptic Al foil (6-9µm): Zero pinholes per 100 cm²\nStandard foil (9-12µm): ≤1 pinhole per 100 cm²\nThicker foil (>12µm): ≤2 pinholes per 100 cm²\nReject entire roll if any sample fails — no AQL for pinholes"
+        },
+        {
+          title: "Glass Bottles — Thermal Shock Resistance",
+          standard: "IS 1392, ISO 7459, ASTM C149",
+          procedure: "<h4>Principle:</h4> Glass is susceptible to thermal shock — sudden temperature changes create differential expansion/contraction stresses exceeding glass tensile strength (~50 MPa), causing cracking or shattering. Dairy glass bottles must withstand: hot filling (70-85°C) → cold storage (4°C), pasteurization (63°C/30 min LTLT), retort sterilization (115-121°C), aur CIP/COP cleaning (85-95°C alkali wash). Thermal shock test simulates worst-case temperature differential.<h4>Equipment:</h4> Water bath(s) with precise temperature control (±1°C), thermometer, timer, inspection area.<h4>Procedure:</h4><ol><li>Pre-condition bottles to 25±2°C (ambient).</li><li>Fully immerse bottles in hot water bath at 63°C (LTLT pasteurization simulation) or 80-85°C (hot fill simulation). Ensure complete submersion including shoulder area.</li><li>Hold for minimum 15 minutes (thermal equilibration to glass core).</li><li>Immediately transfer to cold water bath at 4±2°C (cold chain simulation) within 5 seconds.</li><li>Hold 15 minutes. Remove and inspect each bottle carefully under good lighting for cracks, chips, or crazing (fine surface crack network).</li></ol>",
+          calculation: "Temperature Differential (ΔT) = Hot bath temp - Cold bath temp\nMinimum required ΔT for dairy glass: 40°C\nFor retort bottles: ΔT = 100°C (121°C retort → 21°C cooling)\nPass/fail based on: zero cracks, chips, fractures, or visible crazing",
+          acceptance: "Pasteurized milk bottles: No failure at ΔT 40°C (63→23°C)\nRetort glass (flavoured milk): No failure at ΔT 90-100°C\nReturn-trip glass (RGB): No failure after 25-30 wash-fill cycles\nFracture pattern analysis: safe (contained) vs. explosive (hazardous)"
+        },
+        {
+          title: "Sealed Containers — Leak Test",
+          standard: "ASTM D3078, ASTM F2096, IS 9873",
+          procedure: "<h4>Principle:</h4> Leak testing verifies hermetic seal integrity — no liquid/gas ingress or egress through seams, seals, or container body. Critical food safety test — leaking packages allow microorganism ingress causing spoilage aur potential pathogen contamination. Two primary methods: (A) Bubble emission (ASTM D3078) — internal pressure, submerge in water; (B) Vacuum bubble (ASTM F2096) — vacuum draws air through defects. Third method: Dye penetration (for cartons).<h4>Equipment:</h4> Water tank, compressed air source with pressure regulator (0-200 kPa), pressure gauge (±2 kPa accuracy), timer, observation setup. For dye test: 0.1% methylene blue solution, vacuum apparatus (500-600 mmHg).<h4>Procedure (Bubble Emission for Metal Cans/Pouches):</h4><ol><li>Connect pressurization probe to container valve/straw insertion point. Apply 70-100 kPa internal air pressure. Seal probe entry point.</li><li>Submerge pressurized container in water tank. Maintain pressure during 30-60 second observation.</li><li>Observe all seam/seal areas carefully for bubble streams (indicating leaks). Single bubbles from air attachment are not leaks — sustained streams indicate defects.</li><li>Slowly rotate container to inspect all surfaces.</li></ol>",
+          calculation: "Leak Rate (if measurable): L = ΔP/Δt × V/RT\nQualitative pass/fail for routine QC\nFor aseptic carton dye test:\nDye penetration area (cm²) = Fail\nNo dye penetration = Pass\nMinimum test: 3 samples per production batch",
+          acceptance: "All sealed dairy containers: Zero bubble emission = Pass\nAny visible bubble stream = Reject (investigate sealing parameters)\nAseptic carton dye test: Zero dye penetration in any seam area = Pass\nPouch burst test (ASTM F1140): >50 kPa without seal failure"
+        },
+        {
+          title: "Drop Test — Impact Resistance Verification",
+          standard: "ASTM D5276, IS 9873 (Part 3), ISTA Procedure 1A",
+          procedure: "<h4>Principle:</h4> Drop testing simulates real-world impact damage during handling, transportation, aur consumer use. Products experience drops: at filling line (conveyor transfers), warehouse handling (fork-lift drops), retail shelf placement, aur consumer accidental drops. Drop test reveals: seal integrity under shock loading, container structural integrity, liquid leakage tendency, aur corner/edge vulnerability.<h4>Equipment:</h4> Drop test machine or guided drop apparatus (ASTM D5276), concrete/steel impact surface, measurement tools.<h4>Procedure:</h4><ol><li>Fill containers with actual product (or water as surrogate) to nominal fill volume. Cap/seal as in production.</li><li>Condition at test temperature (typically 4°C for refrigerated products — cold makes plastics more brittle).</li><li>Perform drops in specified orientations: Flat bottom (base impact), Flat top, Longest edge (face drop), Shortest edge (face drop), Corner drop. Minimum 3 samples per orientation.</li><li>Drop heights: 1L pouches — 60cm; 2L bottles — 60cm; glass bottles — 30-45cm; PET bottles — 120cm.</li><li>Immediately after each drop, inspect for: visible cracks, seal failure, liquid leakage, structural deformation.</li></ol>",
+          calculation: "Pass/Fail criteria for each orientation\nLeakage mass (g) if any = measured by weighing before and after\nStructural integrity rating (0-3 scale)\nFor ISTA 1A: complete protocol includes vibration + drop sequence",
+          acceptance: "All dairy containers: Zero leakage in any orientation at specified height\nPouch (1L, 4°C): No seal failure at 60cm drop (flat, edge, corner)\nPET bottle (1L): No cracking/leakage at 120cm corner drop\nGlass bottle: No breakage at 30cm drop on rubber mat\nAfter drop: pass bubble emission leak test"
+        },
+        {
+          title: "CFB Box — Edge Crush Test & Box Compression Test",
+          standard: "IS 6318, ASTM D642 (BCT), ASTM D2808 (ECT), ISO 12048",
+          procedure: "<h4>Principle:</h4> Corrugated fiberboard (CFB) boxes must maintain structural integrity when stacked during warehouse storage aur transportation. Box Compression Test (BCT) measures actual box resistance to vertical compressive load — simulates stacking. Edge Crush Test (ECT) measures fluting/liner component strength — used for box design. Stacking factor: 4-5× safety margin over actual stacking load required to account for: humidity weakening (paper loses 50-60% strength at 90% RH), vibration fatigue, aur eccentric loading.<h4>Equipment:</h4> Compression testing machine (0-5000 N range), flat compression platens, ECT fixture (TAPPI T 811), strain gauge load cell.<h4>Procedure (BCT):</h4><ol><li>Condition box in humidity chamber at 23°C, 50% RH for 24 hours. Avoid crushing corners.</li><li>Place empty box centrally on lower platen. Ensure perfect vertical alignment.</li><li>Apply compressive load at constant rate: 12±3 mm/min. Record load-deflection curve.</li><li>Record peak load (Fmax) before box collapse/buckling. Note deflection at peak load.</li><li>Calculate BCT. Compare with McKee formula prediction and specification.</li></ol>",
+          calculation: "BCT (N) = Measured peak compression load\nMcKee Formula: BCT = 5.87 × ECT × √(Box Perimeter × Board Thickness)\nRequired BCT > (Number of boxes stacked × box weight) × safety factor (4-5×)\nExample: 12 boxes × 12kg each × 5 safety = 720 kg = 7060 N minimum BCT",
+          acceptance: "Pasteurized milk 500ml pouches (12×1L/box, 15 high stack):\nRequired BCT > 5000 N (actual load 2700 N × 2 safety)\nAseptic carton CFB: BCT > 3000 N\nECT: typically 14-25 kN/m for dairy CFB\nHumid BCT (72 hrs at 90%RH): minimum 60% of dry BCT"
+        },
+        {
+          title: "Aseptic Carton — Seal Integrity (Dye Penetration Test)",
+          standard: "Internal aseptic quality standards, Tetra Pak TM specifications",
+          procedure: "<h4>Principle:</h4> Aseptic carton seals (longitudinal, top, bottom) must be hermetically perfect — any microleakage pathway allows microbial recontamination ending sterility. Dye penetration test uses capillary action of low surface tension dye solution to reveal even microscopic seal defects. Vacuum accelerates dye ingress through defects for sensitive detection.<h4>Equipment:</h4> Dye solution (0.1% methylene blue or 0.1% rhodamine B in water — methylene blue preferred for visibility in white PE inner layer), vacuum apparatus (500-600 mmHg vacuum), transparent container for observation, sharp blade/scissors for opening.<h4>Procedure:</h4><ol><li>Prepare freshly opened dye solution (0.1% methylene blue). Check concentration spectrophotometrically if critical.</li><li>Fully submerge sealed carton (product removed/emptied) in dye solution. Ensure complete coverage of all seam areas.</li><li>Apply vacuum: 500-600 mmHg for 30 seconds. Vacuum creates pressure differential pulling dye through any defects.</li><li>Release vacuum. Keep submerged 30 more seconds.</li><li>Remove carton, rinse exterior with clean water. Cut carton open with sharp blade — avoid disturbing seal areas.</li><li>Inspect all seam/seal areas under good lighting for blue dye penetration. Document with photograph.</li></ol>",
+          calculation: "Qualitative pass/fail\nFor quantitative version: dye concentration in internal wash-out\nDye penetration distance (mm) in seal area\nMinimum: test 5 cartons per production batch, preferably at start/middle/end",
+          acceptance: "Perfect seal: Zero blue dye visible on internal seal surfaces = Pass\nAny blue dye at any seal point = Fail\nInvestigate: sealing temperature (set point vs actual), dwell time, jaw condition (wear, contamination), laminate quality\nCorrelate with: steam consumption data, seal strength test, packaging material pinhole test"
+        },
+        {
+          title: "Cup/Container — Top Load Compression Test",
+          standard: "ASTM D642 (modified), ASTM D2659",
+          procedure: "<h4>Principle:</h4> Yogurt, dahi, shrikhand cups must withstand stacking forces in retail cold cabinets (typically 8-12 units high) without deforming, buckling, or cracking. Inadequate top load strength leads to: cup deformation (unattractive), seal failure (contamination risk), aur consumer rejection. Test simulates stacking load during storage and retail display.<h4>Equipment:</h4> Universal Testing Machine (UTM) with flat compression platens (minimum diameter > cup diameter), crosshead speed controller, 0-500 N load cell.<h4>Procedure:</h4><ol><li>Condition empty cups at 4°C for 24 hours (simulate refrigerated storage conditions — plastics are slightly stiffer at low temperature).</li><li>Center cup on lower platen. Align upper platen to contact rim uniformly — critical for reproducible results.</li><li>Apply compressive load at constant rate: 12±3 mm/min. Record continuous load-deflection curve.</li><li>Note load at: first visible deformation, 3mm deflection, aur buckling/collapse (Fmax).</li><li>Test 10 samples. Report mean and minimum values (minimum value determines stacking performance).</li></ol>",
+          calculation: "Top Load Strength = Force at 3mm deformation (N) or Force at visible buckling\nStacking Load per cup = (Number of cups - 1) × cup weight\nRequired Top Load = Stacking Load × safety factor (2-3×)\nExample: 10 high stack, each cup 200g → load on bottom cup = 9 × 200 = 1800g = 17.7N\nRequired TL = 17.7 × 3 = 53 N minimum",
+          acceptance: "Standard 200g yogurt PP cup: >35 N at 3mm deformation\nLarge 1 kg dahi cup (HIPS): >80 N\nIce cream 500ml cup: >50 N\nMinimum value (not mean) must exceed specification — any cup below minimum = design failure"
+        },
+        {
+          title: "Seal Strength Test (Peel Test)",
+          standard: "ASTM F88/F88M, ISO 11607-1, ASTM F2029",
+          procedure: "<h4>Principle:</h4> Heat seal strength determines pouch/lid integrity and consumer opening experience. Underseal (low strength): leakage during distribution. Overseal (very high strength): consumer cannot open (frustrated, injures hand). Optimal seal: strong enough to contain product without leakage, weak enough for controlled easy opening. Three failure modes: (1) Adhesive failure (seal interface separates — worst), (2) Cohesive failure (material tears within film — best, indicates seal strength > film strength), (3) Delamination (layers separate in multilayer film — film defect).<h4>Equipment:</h4> Universal Testing Machine (UTM) with pneumatic grips, 50N load cell, crosshead speed 300 mm/min.<h4>Procedure:</h4><ol><li>Cut 15mm wide strips perpendicular to seal direction using precision die cutter. Minimum 10 strips per seal location (top seal, bottom seal, side seal — test all separately).</li><li>Carefully separate seal faces 25-30mm from cut edge — create 'tails' for gripping without peel angle change.</li><li>Clamp each tail in UTM grips at exactly 180° peel angle (T-peel) or 90° peel angle — specify which. Ensure seal is centered at grip jaw level.</li><li>Pull at 300 mm/min. Record entire force-displacement curve. Note: (a) peak force, (b) average peel force (integrated area), (c) failure mode.</li><li>Photograph failure mode. Discard samples with grip slippage.</li></ol>",
+          calculation: "Seal Strength (N/15mm) = Average peel force during stable peel region (N)\nNot just peak force — average more representative\nFor pop-open style (yogurt lid): measure force to initiate peel\nFailure mode scoring: Film tear = 3 (best), Delamination = 2, Adhesive = 1 (worst)\nExample: Average force 18N on 15mm strip = 18 N/15mm",
+          acceptance: "LDPE/LLDPE pasteurized milk pouch: 15-25 N/15mm (T-peel)\nAseptic carton longitudinal seal: 3.0-4.5 N/15mm\nYogurt Al foil peelable lid: 8-15 N/15mm (consumer-peelable)\nRetort pouch: >30 N/15mm\nPreferred failure mode: film tear (not adhesive separation)"
+        },
+        {
+          title: "Migration Testing — Food Safety Compliance",
+          standard: "IS 9845, EU Regulation 10/2011, FDA 21 CFR 177, FSSAI FSS (Contaminants) Regulations",
+          procedure: "<h4>Principle:</h4> Packaging materials in direct food contact can transfer (migrate) chemical substances into food — monomers, additives (plasticizers, antioxidants, slip agents, colorants), oligomers, aur reaction products. Migration testing ensures chemical safety of packaging. Overall migration: total mass transferred regardless of identity. Specific migration: particular substance of concern. Food simulants (model solutions representing different food types) replace actual food for standardized, reproducible testing: Simulant A (10% ethanol/water) = aqueous foods; Simulant B (3% acetic acid) = acidic foods; Simulant C (20% ethanol) = alcoholic; Simulant D1 (50% ethanol) = high-fat simulation; Simulant D2 (vegetable oil/iso-octane) = fatty foods like cream, butter.<h4>Equipment:</h4> Migration cells (food contact chambers, 6 dm² contact area), thermostated ovens, GC-MS/GC-FID for volatile migrants, HPLC-UV/MS for non-volatile, ICP-MS/AAS for heavy metals, gravimetric balance for overall migration.<h4>Procedure:</h4><ol><li>Select appropriate food simulant based on actual food product. Dairy simulant: Simulant A (milk, yogurt, fresh cheese) + Simulant D1 (cream, butter, high-fat dairy).</li><li>Pre-wash packaging material surface with simulant to remove surface contamination.</li><li>Contact packaging with simulant in migration cell at specified conditions: 10 days at 40°C (standard worst-case), or 2 hours at 70°C (hot-fill products), or 30 minutes at 100°C (retort).</li><li>Analyze simulant by appropriate analytical method. Blank simulant (no packaging contact) run simultaneously as control.</li><li>Calculate migration as mg/dm² or mg/kg food.</li></ol>",
+          calculation: "Overall Migration (mg/dm²) = [Mass gain of simulant (mg)] / [Contact area (dm²)]\nConversion: mg/dm² × 6 dm²/kg food = mg/kg (for food with 6 dm²/kg ratio)\nIndia limit: OM < 60 mg/kg = 10 mg/dm²\nSpecific migration: from analytical measurement concentration × simulant volume / contact area",
+          acceptance: "Overall Migration: <60 mg/kg (India, per IS 9845) = <10 mg/dm²\nEU: <10 mg/dm²\nSpecific substances (examples):\nAcetaldehyde (PET): <6 mg/kg\nAcrylamide: <0.01 mg/kg\nBPA (epoxy coatings): <0.05 mg/kg\nHeavy metals: Pb <0.01 mg/kg, Cd <0.01 mg/kg, As <0.01 mg/kg\nFormaldehyde: <15 mg/kg"
+        }
+      ]
+    },
+
+    // ─── LABELING & REGULATIONS ─────────────────────────────────────
+    labeling: {
+      title: "Labeling, Regulations & Compliance",
+      intro: "Dairy packaging labeling India mein multiple regulatory frameworks ke through governed hoti hai. Primary legislation: Food Safety and Standards Act 2006 (FSSA) aur subordinate regulations. Non-compliance severe penalties attract karta hai including product recall, license cancellation, aur criminal prosecution.",
+      fssai_requirements: "FSSAI Mandatory Label Elements (FSS Labelling & Display Regulations 2020)",
+      fssai_items: [
+        "<strong>Product Name:</strong> Common/generic name of food. 'Toned Milk', 'Dahi', 'UHT Full Cream Milk' etc. Brand name alone insufficient — product description mandatory. Font size: minimum 1.5mm height.",
+        "<strong>Net Quantity:</strong> By weight (g/kg) for solid/semi-solid, by volume (ml/L) for liquids. Declared quantity must be accurate — tolerance limits as per Legal Metrology Act. Net weight = gross weight minus packaging weight.",
+        "<strong>Ingredients List:</strong> All ingredients in descending order of weight at time of manufacture. Compound ingredients (>2% of final product) must be further broken down. Water listed if added. Food additives listed by functional class + INS number: e.g., 'Stabilizer (INS 1442)'.",
+        "<strong>Allergen Declaration:</strong> Bold/highlighted/underlined allergen declaration mandatory for: Milk, eggs, fish, shellfish, tree nuts, peanuts, wheat, soybeans (Big 8 allergens). Example: 'Contains Milk'. FSSAI added sesame aur sulphites to mandatory list.",
+        "<strong>Nutritional Information:</strong> Per 100g or 100ml AND per serving size. Mandatory: Energy (kcal/kJ), Total Fat (g), Saturated Fat (g), Trans Fat (g), Total Carbohydrate (g), Added Sugars (g), Protein (g), Sodium (mg). Optional but encouraged: vitamins, minerals, dietary fiber.",
+        "<strong>Date Marking:</strong> 'Best Before' or 'Use By' — which applies depends on product. Use By: highly perishable products (pasteurized milk, fresh dahi). Best Before: less perishable (UHT milk, cheese, ghee). Format: DD/MM/YYYY or Month-Year. Both manufacturing date AND expiry date mandatory for dairy.",
+        "<strong>Manufacturer Details:</strong> Name aur complete postal address (city, state, pin code) of manufacturer/packer/importer. For imported: country of origin + Indian importer address.",
+        "<strong>FSSAI License Number:</strong> 14-digit license number of manufacturer. Prominently displayed. Consumer helpline number: 1800-11-4000.",
+        "<strong>Storage Instructions:</strong> Critical for dairy — 'Keep Refrigerated at 4°C or below', 'Store in cool dry place', 'Once opened, consume within 24 hours'. 'Shake well before use' for reconstituted/UHT products.",
+        "<strong>MRP (Maximum Retail Price):</strong> Inclusive of all taxes. 'MRP ₹XX (Incl. of all taxes)'. Per Legal Metrology (Packaged Commodities) Rules 2011."
+      ],
+      bis_standards: "BIS Standards for Dairy Packaging",
+      bis_items: [
+        "<strong>IS 1392:</strong> Specification for glass containers for dairy products — dimensions, thermal shock resistance, bursting pressure.",
+        "<strong>IS 2508:</strong> Specification for LDPE film — thickness tolerance, tensile properties, elongation, dart drop, WVTR.",
+        "<strong>IS 9845:</strong> Method of analysis for plastic materials — extraction, migration testing.",
+        "<strong>IS 4905:</strong> Sampling procedures for inspection by attributes (applicable to packaging QC).",
+        "<strong>IS 14433:</strong> Specification for aseptic packaging system for milk — material specifications, filling conditions, shelf life validation.",
+        "<strong>IS 15838:</strong> Plastics — Determination of oxygen transmission rate — test methods."
+      ],
+      eco_labeling: "Eco-labeling & Sustainability Claims: 'Recyclable' claim sirf tab allowed hai jab material actually collected aur recycled hoti ho consumer location par. 'Biodegradable' claim scientific evidence-backed honi chahiye with specific timeframe aur conditions. Green Dot, Mobius loop (♻), aur resin identification codes (RIC 1-7) voluntary but widely used. EPR (Extended Producer Responsibility) compliance mandatory under Plastic Waste Management Rules 2016 amended 2021."
+    },
+
+    // ─── SUSTAINABILITY ──────────────────────────────────────────────
+    sustainability: {
+      title: "Sustainable Packaging — Environmental Responsibility",
+      intro: "Dairy industry globally packaging ka ek significant consumer hai. India mein annually ~1.4 million MT plastic packaging dairy sector se generate hota hai. Sustainability ek multidimensional challenge hai: environmental (pollution, resource depletion, carbon emissions), regulatory (EPR compliance, plastic ban compliance), consumer preference (eco-conscious buying), aur economic (cost of alternatives).",
+      lca: "Life Cycle Assessment (LCA) — Scientific Comparison: Packaging choice ke environmental impact ko quantify karne ke liye LCA (ISO 14040/14044 framework) use kiya jaata hai. System boundary: raw material extraction → manufacturing → distribution → consumer use → end-of-life. Impact categories: Global Warming Potential (kg CO₂ equivalent), water consumption (L), energy use (MJ), land use (m²), aur eutrophication potential. Key insight: Dairy product's environmental impact is dominated by agricultural production (70-80% of total impact) — packaging ka relative contribution 3-7% hota hai. Isliye reducing food waste (by better packaging/shelf life) often outweighs environmental cost of packaging material itself.",
+      plastic_alternatives: "Packaging Material Environmental Comparison",
+      plastic_items: [
+        "<strong>HDPE Milk Bottle vs. Glass Bottle:</strong> Per 1000 liters delivered milk: HDPE bottle: 2.5 kg CO₂e, 15L water; Glass bottle (single-use): 7.2 kg CO₂e, 35L water; Glass bottle (10-trip returnable): 1.8 kg CO₂e, 12L water. Returnable glass best option where collection infrastructure exists.",
+        "<strong>Aseptic Carton (Tetra Pak):</strong> 75% paperboard (renewable), 20% PE, 5% Al foil. Carbon footprint: 0.15-0.20 kg CO₂e per liter. Al foil separation in recycling complex but specialized recycling plants (Tetra Pak's own recycling program) recover fiber + Al/PE. FSC-certified paperboard increasing — 100% FSC target by 2025.",
+        "<strong>Bio-based Plastics:</strong> PLA (Polylactic Acid) from corn starch — biodegradable in industrial composting (58°C, specific microbial conditions, 90 days). Not suitable for hot-fill or retort. Barrier properties poor — requires EVOH coating for dairy. PHA (Polyhydroxyalkanoate) from bacteria — marine biodegradable. Both currently 3-5× more expensive than conventional plastics.",
+        "<strong>Monomaterial Packaging:</strong> Single-material packages (all-PE, all-PP) easier to recycle than multilayer laminates. Reverse laminate technology allows performance similar to multilayer structures from single polymer family. Dow, Borealis developing all-polyolefin aseptic structures eliminating Al foil — not yet commercially proven for 12-month shelf life.",
+        "<strong>Lightweighting:</strong> Reducing packaging material weight while maintaining performance — significant environmental and cost benefit. PET bottle lightweighting: 1L bottle from 42g → 28g (33% reduction). LLDPE pouch lightweighting: 80µm → 65µm (19% reduction) using advanced LLDPE grades. Potential CO₂ reduction: 15-25% per package."
+      ],
+      epr_compliance: "EPR (Extended Producer Responsibility) Compliance in India: Under Plastic Waste Management Rules (Amendment) 2021, all producers/importers/brand owners must: (1) Register on CPCB EPR portal. (2) Declare plastic packaging used annually by category. (3) Meet EPR obligations through: own collection-recycling system, purchase of EPR certificates from registered recyclers, or working with PROs (Producer Responsibility Organizations). EPR targets: 2022-23: 30% of plastic packaging to be recycled; 2024-25: 60%; 2026-27: 80%. Non-compliance: EPR environmental compensation (EEC) = 5× prevailing market rate for plastic recyclate."
+    },
+
+    // ─── ACTIVE & INTELLIGENT PACKAGING ────────────────────────────
+    active_intelligent: {
+      title: "Active aur Intelligent Packaging — Next Generation",
+      intro: "Active packaging packaging aur product ke beech intentional interaction create karta hai shelf life improve karne ya safety enhance karne ke liye. Intelligent packaging information sense, detect, record, aur communicate karta hai about product condition. Yeh dono technologies dairy industry mein rapidly emerging hain.",
+      active_types: "Active Packaging Technologies",
+      active_items: [
+        "<strong>Oxygen Scavengers:</strong> Iron-based sachets (Ageless by Mitsubishi, FreshPax) ya polymer-incorporated O₂ scavengers headspace O₂ absorb karte hain. Mechanism: 4Fe + 3O₂ → 2Fe₂O₃. Capacity: 50-2000 cc O₂ per sachet. Used in: dry milk powder tins, cheese packaging, premium butter packs. Reduces O₂ from 21% to <0.1% within 24 hours. Critical: scavenger must not contact moist dairy — triggers premature activation.",
+        "<strong>CO₂ Emitters:</strong> Ascorbic acid + sodium bicarbonate combination generates CO₂ on moisture contact. CO₂ atmosphere inhibits aerobic molds aur bacteria. Used in sliced cheese, fresh paneer MAP packaging. CO₂ emitter combined with O₂ scavenger = ideal atmosphere for extended shelf-life dairy.",
+        "<strong>Ethanol Emitters:</strong> Silica gel impregnated with ethanol gradually releases ethanol vapor. Ethanol is antimicrobial — effective against molds, yeasts, aur gram-positive bacteria. Surface application only — not into product. Used in premium soft cheese, ricotta packaging.",
+        "<strong>Antimicrobial Packaging:</strong> Antimicrobial agents incorporated into polymer matrix or applied as coating. Active agents: nisin (natural bacteriocin from Lactococcus lactis — GRAS, effective against Listeria, Staphylococcus), natamycin (antifungal, polyene macrolide — approved surface treatment for cheese), silver ions (broad spectrum antimicrobial), zinc oxide nanoparticles. Application: coextruded LDPE/antimicrobial agent film for fresh cheese packaging.",
+        "<strong>Moisture Absorbers:</strong> Silica gel sachets, superabsorbent polymers (SAP), aur moisture-absorbing tray pads control excess moisture in meat/dairy. Particularly useful for fresh paneer, soft cheese, aur cut fruit dairy-based products."
+      ],
+      intelligent_types: "Intelligent Packaging Technologies",
+      intelligent_items: [
+        "<strong>Time-Temperature Indicators (TTI):</strong> Irreversible visual label jo cumulative time-temperature exposure record karta hai. Types: (A) Diffusion-based: colored dye migrates through porous membrane at temperature-dependent rate — color front position indicates exposure history. (B) Enzymatic: enzyme-substrate reaction rate temperature-dependent — color change proportional to spoilage prediction. (C) Polymerization-based: diacetylene polymer color change. Brands: OnVu, TEMPTIME, CheckPoint. Placed on pallet/case level for cold chain monitoring or primary package for consumer communication. Activation: photoinitiation (UV light).",
+        "<strong>Freshness Indicators:</strong> Chemical sensors detect spoilage metabolites — ammonia (protein degradation), biogenic amines (histamine, cadaverine), H₂S, CO₂ concentration changes. Colorimetric dye changes visibly when threshold exceeded. Dairy application: detecting acidification beyond acceptable range in yogurt, aur proteolysis markers in fresh paneer. Still mostly research stage for dairy specifically.",
+        "<strong>RFID (Radio Frequency Identification):</strong> Passive RFID tags (no battery, powered by reader RF field) embedded in packaging or pallet labels. Reads: product identity, lot number, temperature history (if combined with sensor), location tracking. 13.56 MHz (HF) for individual pack tracking; 860-960 MHz (UHF) for pallet/case. Benefits: automated inventory management, real-time cold chain monitoring, recall management (rapid targeted recall), counterfeit prevention.",
+        "<strong>QR Codes & Smart Labels:</strong> 2D QR codes link to: complete ingredient/nutritional information, farm-of-origin traceability, video content (preparation instructions), loyalty programs, aur authenticity verification. Dynamic QR codes (server-side content updates possible) vs static. Blockchain-integrated QR codes for immutable supply chain traceability — consumer scans to see entire farm-to-shelf journey.",
+        "<strong>NFC (Near Field Communication) Smart Tags:</strong> Smartphone-readable without dedicated scanner. Applications: anti-counterfeiting (unique serial number per pack), temperature breach alerts (smart NFC + temperature sensor combination), interactive consumer engagement. Cost currently high (₹5-15 per tag) — limiting to premium dairy products."
+      ]
+    },
+
+    // ─── COLD CHAIN & LOGISTICS ──────────────────────────────────────
+    cold_chain: {
+      title: "Cold Chain, Logistics aur Distribution Packaging",
+      intro: "India ka dairy cold chain infrastructure rapidly developing hai lekin significant gaps abhi bhi hain. Estimated 30-40% fresh milk is spoiled or wasted due to inadequate cold chain — packaging alone cannot compensate for cold chain failures. Cold chain packaging aur cold chain infrastructure complementary systems hain.",
+      temperature_zones: "Dairy Temperature Zones aur Packaging Requirements",
+      temp_items: [
+        "<strong>Ambient Storage (25-35°C):</strong> UHT milk (aseptic carton, Fino, aseptic PET), sterilized flavoured milk (retort glass/PP), ghee (tin, glass, HDPE), milk powder (tin cans, HDPE jars, paper-Al-PE laminate pouches). Packaging must withstand high ambient temperatures without deformation, seal failure, or accelerated migration.",
+        "<strong>Chilled Storage (1-4°C):</strong> Pasteurized milk (LDPE pouches, HDPE bottles), dahi (PS/PP cups), paneer, cream, flavoured milk (tetra paks refrigerated). Packaging at low temperature: plastics become more brittle (drop resistance decreases), paper absorbs condensation moisture (strength loss). Condensation on cold packages when moved to ambient — packaging must resist moisture weakening.",
+        "<strong>Frozen Storage (-18 to -22°C):</strong> Ice cream (coated paperboard tubs, PS tubs, PE pouches), frozen paneer, frozen khoa. Packaging must withstand embrittlement at -22°C without cracking. Rapid temperature changes during distribution: -22°C (frozen storage) → +5°C (display cabinet) → ambient (consumer home). Thermal contraction at freezing temperatures creates internal stresses in rigid containers.",
+        "<strong>Blast Freezing (-35 to -45°C):</strong> Quick freezing of dairy products. Packaging must withstand extreme cold without embrittlement — specialty cryogenic grades of PP aur PE required. Film flexibility at -40°C critical — standard LDPE becomes brittle below -30°C; metallocene LLDPE remains flexible to -40°C."
+      ],
+      insulated_packaging: "Insulated Packaging for Cold Chain: Expanded Polystyrene (EPS) boxes — excellent thermal insulation (k = 0.033 W/mK), lightweight, impact protective. Used for premium ice cream, specialty cheese home delivery. Vacuum Insulated Panels (VIP) — superior insulation (k = 0.005-0.010 W/mK, 5-10× better than EPS) but expensive and fragile. Phase Change Materials (PCMs) — frozen gel packs (water-based, Tm = 0-4°C), organic PCMs (n-hexadecane, Tm = 18°C) — absorb heat at constant temperature during phase change. Critical for pharmaceutical-grade dairy (colostrum, specialty proteins) temperature-controlled delivery.",
+      distribution_packaging: "Distribution Packaging Layers: (1) Primary: direct food contact (pouch, bottle, cup). (2) Secondary: groups primary packages (corrugated tray, shrink wrap, multi-pack holder). (3) Tertiary: transport unit (CFB master case). (4) Quaternary: unit load (stretch-wrapped pallet). Distribution packaging must be validated for actual supply chain conditions using ISTA (International Safe Transit Association) protocols: random vibration simulation, shock/drop sequence, aur temperature cycling.",
+      nanotechnology: "Nanotechnology in Dairy Packaging: Nano-composite packaging — clay nanoparticles (montmorillonite, MMT) incorporated in polymer matrix create tortuous path for gas molecules, improving barrier by 2-5× without compromising transparency or recyclability. Nanosilver antimicrobial coatings — silver nanoparticles (10-100 nm) on packaging surface slowly release Ag⁺ ions with broad-spectrum antimicrobial activity. Nano-titanium dioxide (TiO₂) photocatalytic coatings — UV light activation generates reactive oxygen species destroying surface bacteria. Regulatory status: nanomaterials in food contact materials under scrutiny — EFSA aur FSSAI evaluation ongoing. Migration of nanoparticles into food is primary safety concern."
+    },
+  },
