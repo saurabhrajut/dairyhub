@@ -2177,84 +2177,568 @@ export function GheeRecoveryCalc() {
 }
 
 // ════════════════════════════════════════════════════════════
-// 3. CHEESE YIELD CALCULATOR (VAN SLYKE FORMULA)
-// The Gold Standard for Cheddar/Hard Cheese
+// ADVANCED CHEESE YIELD CALCULATOR (VAN SLYKE FORMULA)
+// Drop-in Replacement for CheeseYieldCalc()
+//
+// INSTRUCTIONS:
+// 1. Apni file mein purana CheeseYieldCalc() function dhundhein
+// 2. Pura block DELETE karein
+// 3. Yeh poora code wahan PASTE karein
+// Koi naya import nahi chahiye.
 // ════════════════════════════════════════════════════════════
+
+// ── CHEESE TYPE DATABASE ─────────────────────────────────
+const CHEESE_DB = {
+  cheddar:     { label: "🧀 Cheddar",           moisture: 37, fatRet: 93, caseinRet: 96, salt: 1.8, caseinRatio: 78, solidsFactor: 1.09, color: "orange", fssai: "≤39% moisture, ≥48% FDM" },
+  mozzarella:  { label: "🍕 Mozzarella (LMPS)", moisture: 48, fatRet: 90, caseinRet: 95, salt: 1.2, caseinRatio: 78, solidsFactor: 1.07, color: "yellow", fssai: "45–52% moisture, ≥40% FDM" },
+  processed:   { label: "🧀 Processed Cheese",  moisture: 42, fatRet: 91, caseinRet: 94, salt: 2.5, caseinRatio: 78, solidsFactor: 1.11, color: "amber",  fssai: "≤45% moisture" },
+  paneer_ch:   { label: "🧀 Cottage / Queso",   moisture: 55, fatRet: 85, caseinRet: 90, salt: 0.5, caseinRatio: 76, solidsFactor: 1.04, color: "lime",   fssai: "Fresh cheese — <7 days" },
+  gouda:       { label: "🧀 Gouda",             moisture: 40, fatRet: 92, caseinRet: 95, salt: 2.0, caseinRatio: 78, solidsFactor: 1.09, color: "orange", fssai: "≤42% moisture, ≥48% FDM" },
+  feta:        { label: "🧀 Feta-style",        moisture: 55, fatRet: 82, caseinRet: 88, salt: 3.5, caseinRatio: 77, solidsFactor: 1.12, color: "slate",  fssai: "Brine-ripened" },
+  ricotta:     { label: "🫙 Ricotta (Whey)",    moisture: 72, fatRet: 60, caseinRet: 50, salt: 0.5, caseinRatio: 78, solidsFactor: 1.02, color: "blue",   fssai: "From whey solids recovery" },
+} as const;
+
+type CheeseKey = keyof typeof CHEESE_DB;
+
+// ── MILK COMPOSITION PRESETS ──────────────────────────────
+const MILK_PRESETS = {
+  "HF Cow (3.5% fat)":     { fat: "3.5", protein: "3.2", caseinRatio: "78" },
+  "Jersey Cow (5.0% fat)": { fat: "5.0", protein: "3.8", caseinRatio: "78" },
+  "Buffalo (7.5% fat)":    { fat: "7.5", protein: "4.0", caseinRatio: "80" },
+  "Mixed Herd (4.2% fat)": { fat: "4.2", protein: "3.4", caseinRatio: "78" },
+  "Standardised (4.0%F)":  { fat: "4.0", protein: "3.3", caseinRatio: "78" },
+} as const;
+
+// ── MAIN COMPONENT ────────────────────────────────────────
 export function CheeseYieldCalc() {
-  const [inputs, setInputs] = useState({
-    milkQty: "1000",
-    fat: "4.0",
-    protein: "3.3",      // Total protein
-    caseinRatio: "78",   // Casein is typically 78% of protein
-    targetMoisture: "37",// Cheddar ~37%, Mozzarella ~48%
-    fatRetention: "93",  // Process efficiency (93% typical)
-    caseinRetention: "96"// Process efficiency (96% typical)
+  const { toast } = useToast();
+
+  const [cheeseType, setCheeseType] = useState<CheeseKey>("cheddar");
+  const [inp, setInp] = useState({
+    milkQty:          "1000",
+    fat:              "4.0",
+    protein:          "3.3",
+    caseinRatio:      "78",
+    targetMoisture:   "37",
+    fatRetention:     "93",
+    caseinRetention:  "96",
+    saltPct:          "1.8",
+    milkPrice:        "40",   // ₹/kg milk
+    cheesePrice:      "500",  // ₹/kg cheese
+    wheyPrice:        "2",    // ₹/kg whey
+    batches:          "1",
   });
   const [result, setResult] = useState<any>(null);
+  const [activeTab, setActiveTab] = useState<"inputs" | "results" | "economics">("inputs");
 
+  const setF = (k: string, v: string) => setInp(p => ({ ...p, [k]: v }));
+  const { validatePositive, validateNumber } = useInputValidation();
+
+  // Apply cheese type
+  const applyCheeseType = (key: CheeseKey) => {
+    const c = CHEESE_DB[key];
+    setCheeseType(key);
+    setInp(p => ({
+      ...p,
+      targetMoisture:  String(c.moisture),
+      fatRetention:    String(c.fatRet),
+      caseinRetention: String(c.caseinRet),
+      saltPct:         String(c.salt),
+      caseinRatio:     String(c.caseinRatio),
+    }));
+    setResult(null);
+  };
+
+  // Apply milk preset
+  const applyMilkPreset = (name: keyof typeof MILK_PRESETS) => {
+    const m = MILK_PRESETS[name];
+    setInp(p => ({ ...p, ...m }));
+    toast({ title: "Milk Preset Applied", description: name });
+  };
+
+  // ── CALCULATE ─────────────────────────────────────────
   const calculate = useCallback(() => {
-    const M = parseFloat(inputs.milkQty);
-    const F = parseFloat(inputs.fat) / 100; // Fat decimal
-    const P = parseFloat(inputs.protein) / 100; 
-    const CaseinPct = parseFloat(inputs.caseinRatio) / 100;
-    const C = P * CaseinPct; // Casein decimal
-    const W = parseFloat(inputs.targetMoisture) / 100; // Target Moisture decimal
-    
-    // Efficiency factors
-    const RF = parseFloat(inputs.fatRetention) / 100; // Fat Recovery
-    const RC = parseFloat(inputs.caseinRetention) / 100; // Casein Recovery (solids retention)
+    const M   = parseFloat(inp.milkQty)          || 0;
+    const F   = parseFloat(inp.fat)         / 100;
+    const P   = parseFloat(inp.protein)     / 100;
+    const CR  = parseFloat(inp.caseinRatio) / 100;
+    const W   = parseFloat(inp.targetMoisture) / 100;
+    const RF  = parseFloat(inp.fatRetention)   / 100;
+    const RC  = parseFloat(inp.caseinRetention)/ 100;
+    const S   = parseFloat(inp.saltPct)    / 100;
+    const SF  = CHEESE_DB[cheeseType].solidsFactor;
+    const bat = parseFloat(inp.batches) || 1;
 
-    // Van Slyke Formula Generic:
-    // Yield = [ (RF * Fat) + (RC * Casein) ] * SolidsFactor / (1 - Moisture)
-    // SolidsFactor (Salt + Whey Solids) is typically 1.09 for Cheddar
-    const solidsFactor = 1.09;
+    if (M <= 0 || F <= 0 || P <= 0) {
+      toast({ variant: "destructive", title: "Invalid values" }); return;
+    }
 
-    const yieldPct = ((RF * inputs.fat * 1.0) + (RC * (inputs.protein * CaseinPct * 100))) * solidsFactor / (100 - parseFloat(inputs.targetMoisture)) * 100; // Simplified calculation in %
-    
-    // Detailed Kg Calculation
-    const recoveredFat = M * F * RF;
-    const recoveredCasein = M * C * RC;
-    const otherSolids = (recoveredFat + recoveredCasein) * (solidsFactor - 1); // Salt etc
-    const totalSolids = recoveredFat + recoveredCasein + otherSolids;
-    
-    const cheeseWeight = totalSolids / (1 - W);
-    const actualYieldPct = (cheeseWeight / M) * 100;
+    // ── VAN SLYKE FORMULA ──────────────────────────────
+    // Cheese Yield% = [ (RF × F) + (RC × Casein) ] × SolidsFactor / (1 − W)
+    // where Casein = P × CR
 
-    const wheyVolume = M - cheeseWeight;
+    const casein        = P * CR;                           // decimal
+    const recoveredFat  = M * F * RF;                       // kg
+    const recoveredCas  = M * casein * RC;                  // kg
+    const otherSolids   = (recoveredFat + recoveredCas) * (SF - 1); // salt, whey proteins, etc.
+    const totalSolids   = recoveredFat + recoveredCas + otherSolids;
 
-    setResult({ cheeseWeight, actualYieldPct, wheyVolume, recoveredFat });
-  }, [inputs]);
+    const cheeseKg      = totalSolids / (1 - W);            // Van Slyke result
+    const yieldPct      = (cheeseKg / M) * 100;
 
+    // Whey
+    const wheyKg        = M - cheeseKg;
+    const wheyFatKg     = M * F * (1 - RF);                 // fat lost to whey
+    const wheyProteinKg = M * P * (1 - RC);
+
+    // Cheese composition estimate
+    const cheeseWaterKg    = cheeseKg * W;
+    const cheeseFatKg      = recoveredFat;
+    const cheeseFatDM      = cheeseKg > 0 ? (cheeseFatKg / (cheeseKg - cheeseWaterKg)) * 100 : 0;
+    const cheeseSaltKg     = cheeseKg * S;
+
+    // Milk equivalent (kg milk needed per kg cheese)
+    const milkPerKgCheese  = yieldPct > 0 ? 100 / yieldPct : 0;
+
+    // Batch results
+    const cheeseKgBatch    = cheeseKg * bat;
+    const wheyKgBatch      = wheyKg   * bat;
+
+    // Economics
+    const milkCost     = M * bat * (parseFloat(inp.milkPrice) || 0);
+    const cheeseRevenue= cheeseKgBatch * (parseFloat(inp.cheesePrice) || 0);
+    const wheyRevenue  = wheyKgBatch   * (parseFloat(inp.wheyPrice) || 0);
+    const totalRevenue = cheeseRevenue + wheyRevenue;
+    const grossProfit  = totalRevenue - milkCost;
+    const gpm          = milkCost > 0 ? (grossProfit / milkCost) * 100 : 0;
+
+    // Sensitivity: +0.1% fat → change in yield
+    const dYield_dF = RF * SF / (1 - W) * 0.001 * 100; // kg per +0.1% fat per 100kg milk
+
+    const warnings: string[] = [];
+    if (W > 0.55)         warnings.push(`Moisture ${(W*100).toFixed(0)}% is high — check pressing pressure and duration.`);
+    if (RF < 0.88)        warnings.push(`Fat retention ${(RF*100).toFixed(0)}% is low — check cutting size and cooking temperature.`);
+    if (yieldPct < 8)     warnings.push(`Yield ${yieldPct.toFixed(1)}% seems low — verify milk composition and coagulation.`);
+    if (wheyFatKg > 2)    warnings.push(`${wheyFatKg.toFixed(2)} kg fat lost to whey — check curd fineness.`);
+
+    setResult({
+      cheeseKg, yieldPct, wheyKg, cheeseKgBatch, wheyKgBatch,
+      recoveredFat, recoveredCas, otherSolids, totalSolids,
+      cheeseWaterKg, cheeseFatKg, cheeseFatDM, cheeseSaltKg,
+      wheyFatKg, wheyProteinKg,
+      milkPerKgCheese, dYield_dF,
+      milkCost, cheeseRevenue, wheyRevenue, totalRevenue, grossProfit, gpm,
+      warnings, M, bat,
+    });
+    setActiveTab("results");
+    toast({
+      title: "✅ Calculated",
+      description: `Yield: ${yieldPct.toFixed(2)}% · ${cheeseKg.toFixed(1)} kg cheese · GPM: ${gpm.toFixed(1)}%`,
+    });
+  }, [inp, cheeseType, toast]);
+
+  const cheese = CHEESE_DB[cheeseType];
+
+  // ── RENDER ────────────────────────────────────────────
   return (
-    <Card className="border-orange-200 bg-orange-50/30">
-      <CardHeader className="pb-2 bg-orange-100/50 rounded-t-lg">
-        <CardTitle className="text-lg text-orange-800 flex gap-2">
-          <Milk className="w-5 h-5"/> Cheese Yield (Van Slyke)
+    <Card className="border-orange-200 bg-orange-50/20">
+      <CardHeader className="pb-3 bg-gradient-to-r from-orange-50 to-amber-50 rounded-t-lg border-b border-orange-100">
+        <CardTitle className="flex items-center justify-between">
+          <span className="flex items-center gap-2 text-orange-800">
+            <Milk className="w-5 h-5 text-orange-600" />
+            Cheese Yield (Van Slyke)
+          </span>
+          {result && (
+            <Badge className="bg-orange-600 text-white text-sm px-3 py-1">
+              {result.yieldPct.toFixed(2)}% yield
+            </Badge>
+          )}
         </CardTitle>
+        <CardDescription className="text-orange-600 text-xs">
+          Van Slyke formula · 7 cheese types · Composition · Economics · Sensitivity
+        </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4 pt-4">
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-          <ValidatedInput label="Milk Qty (kg)" value={inputs.milkQty} onChange={v=>setInputs({...inputs, milkQty:v})} />
-          <ValidatedInput label="Milk Fat %" value={inputs.fat} onChange={v=>setInputs({...inputs, fat:v})} colorScheme="orange" />
-          <ValidatedInput label="Protein %" value={inputs.protein} onChange={v=>setInputs({...inputs, protein:v})} colorScheme="blue" />
-          
-          <ValidatedInput label="Target Moisture %" value={inputs.targetMoisture} onChange={v=>setInputs({...inputs, targetMoisture:v})} helpText="Cheddar 37, Mozz 48" />
-          <ValidatedInput label="Fat Retention %" value={inputs.fatRetention} onChange={v=>setInputs({...inputs, fatRetention:v})} helpText="Typical 93%" />
-          <ValidatedInput label="Casein Retention %" value={inputs.caseinRetention} onChange={v=>setInputs({...inputs, caseinRetention:v})} helpText="Typical 96%" />
+
+      <CardContent className="pt-4 space-y-4">
+
+        {/* ── CHEESE TYPE GRID ─────────────────────────── */}
+        <div className="space-y-1">
+          <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Cheese Type</Label>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+            {(Object.keys(CHEESE_DB) as CheeseKey[]).map(key => (
+              <button key={key} onClick={() => applyCheeseType(key)}
+                className={`p-2 rounded-lg border text-xs font-semibold transition-all text-left leading-tight shadow-sm
+                  ${cheeseType === key
+                    ? "bg-orange-600 text-white border-orange-600 shadow-md"
+                    : "bg-white text-slate-600 border-slate-200 hover:border-orange-300 hover:text-orange-700"
+                  }`}>
+                {CHEESE_DB[key].label}
+                <div className={`text-[9px] mt-0.5 ${cheeseType === key ? "opacity-80" : "text-slate-400"}`}>
+                  {CHEESE_DB[key].moisture}% moisture
+                </div>
+              </button>
+            ))}
+          </div>
+          {/* FSSAI note */}
+          <p className="text-[10px] text-orange-600 bg-orange-50 px-2 py-1 rounded border border-orange-100">
+            📜 FSSAI: {cheese.fssai}
+          </p>
         </div>
 
-        <Button onClick={calculate} className="w-full bg-orange-600 hover:bg-orange-700 text-white">Predict Yield</Button>
+        {/* ── TABS ─────────────────────────────────────── */}
+        <Tabs value={activeTab} onValueChange={v => setActiveTab(v as any)}>
+          <TabsList className="grid grid-cols-3 bg-slate-100">
+            <TabsTrigger value="inputs"    className="text-xs">⚙️ Inputs</TabsTrigger>
+            <TabsTrigger value="results"   className="text-xs">📊 Results</TabsTrigger>
+            <TabsTrigger value="economics" className="text-xs">💰 Economics</TabsTrigger>
+          </TabsList>
 
-        {result && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 animate-in fade-in">
-             <ResultCard title="Cheese Output" value={result.cheeseWeight.toFixed(1)} unit="kg" icon={<Target className="w-4 h-4"/>} colorScheme="orange" />
-             <ResultCard title="Yield %" value={result.actualYieldPct.toFixed(2)} unit="%" icon={<Factory className="w-4 h-4"/>} colorScheme="green" />
-             <div className="p-3 rounded-xl border bg-white flex flex-col justify-center items-center shadow-sm">
-                <span className="text-xs uppercase font-bold text-slate-400">Whey Generated</span>
-                <span className="text-xl font-bold text-blue-600">{result.wheyVolume.toFixed(0)} kg</span>
-             </div>
-          </div>
-        )}
+          {/* ═════ TAB 1: INPUTS ════════════════════════ */}
+          <TabsContent value="inputs" className="space-y-4 pt-3">
+
+            {/* Milk presets */}
+            <div className="space-y-1">
+              <Label className="text-xs font-bold text-slate-500 uppercase">Milk Composition Presets</Label>
+              <div className="flex flex-wrap gap-2">
+                {(Object.keys(MILK_PRESETS) as Array<keyof typeof MILK_PRESETS>).map(name => (
+                  <button key={name} onClick={() => applyMilkPreset(name)}
+                    className="px-3 py-1 rounded-full border border-orange-200 bg-white text-xs font-semibold text-orange-700 hover:bg-orange-600 hover:text-white transition-all shadow-sm">
+                    {name}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Milk inputs */}
+            <Card className="border-orange-100 bg-white">
+              <CardHeader className="p-3 pb-2 bg-orange-50 rounded-t-lg border-b border-orange-100">
+                <CardTitle className="text-xs font-bold text-orange-700 uppercase">🥛 Milk Parameters</CardTitle>
+              </CardHeader>
+              <CardContent className="p-3 grid grid-cols-2 gap-3">
+                <ValidatedInput
+                  label="Milk Quantity"
+                  value={inp.milkQty}
+                  onChange={v => setF("milkQty", v)}
+                  validation={validatePositive(inp.milkQty, "Milk qty")}
+                  unit="kg"
+                  colorScheme="orange"
+                />
+                <ValidatedInput
+                  label="Batches"
+                  value={inp.batches}
+                  onChange={v => setF("batches", v)}
+                  validation={validatePositive(inp.batches, "Batches")}
+                  helpText="For monthly planning"
+                  colorScheme="blue"
+                />
+                <ValidatedInput
+                  label="Fat %"
+                  value={inp.fat}
+                  onChange={v => setF("fat", v)}
+                  validation={validateNumber(inp.fat, 0.5, 12, "Fat")}
+                  unit="%"
+                  colorScheme="orange"
+                />
+                <ValidatedInput
+                  label="Protein %"
+                  value={inp.protein}
+                  onChange={v => setF("protein", v)}
+                  validation={validateNumber(inp.protein, 1, 7, "Protein")}
+                  unit="%"
+                  colorScheme="blue"
+                />
+                <ValidatedInput
+                  label="Casein / Total Protein"
+                  value={inp.caseinRatio}
+                  onChange={v => setF("caseinRatio", v)}
+                  validation={validateNumber(inp.caseinRatio, 60, 85, "Casein ratio")}
+                  unit="%"
+                  helpText="Typically 76–80%"
+                  colorScheme="blue"
+                />
+              </CardContent>
+            </Card>
+
+            {/* Process inputs */}
+            <Card className="border-amber-100 bg-white">
+              <CardHeader className="p-3 pb-2 bg-amber-50 rounded-t-lg border-b border-amber-100">
+                <CardTitle className="text-xs font-bold text-amber-700 uppercase">⚙️ Process Parameters</CardTitle>
+              </CardHeader>
+              <CardContent className="p-3 grid grid-cols-2 gap-3">
+                <ValidatedInput
+                  label="Target Moisture"
+                  value={inp.targetMoisture}
+                  onChange={v => setF("targetMoisture", v)}
+                  validation={validateNumber(inp.targetMoisture, 20, 80, "Moisture")}
+                  unit="%"
+                  helpText={`${cheese.label}: ~${cheese.moisture}%`}
+                  colorScheme="orange"
+                />
+                <ValidatedInput
+                  label="Salt %"
+                  value={inp.saltPct}
+                  onChange={v => setF("saltPct", v)}
+                  validation={validateNumber(inp.saltPct, 0, 6, "Salt")}
+                  unit="% w/w"
+                  helpText={`Typical: ${cheese.salt}%`}
+                  colorScheme="orange"
+                />
+                <ValidatedInput
+                  label="Fat Retention"
+                  value={inp.fatRetention}
+                  onChange={v => setF("fatRetention", v)}
+                  validation={validateNumber(inp.fatRetention, 50, 99, "Fat retention")}
+                  unit="%"
+                  helpText="Typical: 90–94%"
+                  colorScheme="red"
+                />
+                <ValidatedInput
+                  label="Casein Retention"
+                  value={inp.caseinRetention}
+                  onChange={v => setF("caseinRetention", v)}
+                  validation={validateNumber(inp.caseinRetention, 50, 99, "Casein retention")}
+                  unit="%"
+                  helpText="Typical: 94–97%"
+                  colorScheme="blue"
+                />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* ═════ TAB 2: RESULTS ═══════════════════════ */}
+          <TabsContent value="results" className="space-y-4 pt-3">
+            {result ? (
+              <>
+                {/* Main KPIs */}
+                <div className="grid grid-cols-3 gap-2">
+                  <div className="bg-orange-600 text-white p-4 rounded-xl shadow-lg text-center">
+                    <div className="text-[9px] uppercase opacity-80 font-bold">Cheese Output</div>
+                    <div className="text-2xl font-black">{result.cheeseKg.toFixed(1)}</div>
+                    <div className="text-xs opacity-70">kg / batch</div>
+                  </div>
+                  <div className="bg-green-600 text-white p-4 rounded-xl shadow-lg text-center">
+                    <div className="text-[9px] uppercase opacity-80 font-bold">Yield %</div>
+                    <div className="text-2xl font-black">{result.yieldPct.toFixed(2)}</div>
+                    <div className="text-xs opacity-70">% w/w</div>
+                  </div>
+                  <div className="bg-blue-600 text-white p-4 rounded-xl shadow-lg text-center">
+                    <div className="text-[9px] uppercase opacity-80 font-bold">Whey</div>
+                    <div className="text-2xl font-black">{result.wheyKg.toFixed(0)}</div>
+                    <div className="text-xs opacity-70">kg / batch</div>
+                  </div>
+                </div>
+
+                {/* Van Slyke breakdown */}
+                <Card className="bg-amber-50 border-amber-200">
+                  <CardHeader className="p-3 pb-1 border-b border-amber-100">
+                    <CardTitle className="text-sm text-amber-800">🔬 Van Slyke Mass Balance</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-3 space-y-2 text-sm">
+                    {[
+                      { label: "Fat recovered into curd",      value: `${result.recoveredFat.toFixed(2)} kg`,    color: "text-orange-700" },
+                      { label: "Casein recovered into curd",   value: `${result.recoveredCas.toFixed(2)} kg`,    color: "text-blue-700"   },
+                      { label: "Other solids (salt + whey prot)",value:`${result.otherSolids.toFixed(2)} kg`,    color: "text-slate-600"  },
+                      { label: "Total cheese solids",          value: `${result.totalSolids.toFixed(2)} kg`,     color: "text-amber-800 font-black" },
+                      { label: "Moisture content",             value: `${result.cheeseWaterKg.toFixed(2)} kg (${inp.targetMoisture}%)`, color: "text-cyan-700" },
+                      { label: "Fat in Dry Matter (FDM)",      value: `${result.cheeseFatDM.toFixed(1)}%`,       color: "text-orange-800 font-bold" },
+                    ].map((r, i) => (
+                      <div key={i} className="flex justify-between">
+                        <span className="text-slate-500">{r.label}</span>
+                        <span className={r.color}>{r.value}</span>
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
+
+                {/* Whey composition */}
+                <Card className="bg-blue-50 border-blue-200">
+                  <CardHeader className="p-3 pb-1 border-b border-blue-100">
+                    <CardTitle className="text-sm text-blue-800">🫧 Whey Composition</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-3 space-y-1 text-sm">
+                    {[
+                      { label: "Whey volume",             value: `${result.wheyKg.toFixed(1)} kg` },
+                      { label: "Fat lost to whey",        value: `${result.wheyFatKg.toFixed(2)} kg`, warn: result.wheyFatKg > 1.5 },
+                      { label: "Whey protein (soluble)",  value: `${result.wheyProteinKg.toFixed(2)} kg` },
+                    ].map((r, i) => (
+                      <div key={i} className="flex justify-between">
+                        <span className="text-slate-500">{r.label}</span>
+                        <span className={`font-bold ${r.warn ? "text-red-600" : "text-blue-700"}`}>{r.value}</span>
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
+
+                {/* Milk per kg cheese + sensitivity */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-white border-2 border-orange-200 rounded-xl p-4 text-center">
+                    <div className="text-[10px] text-orange-500 font-bold uppercase">Milk / kg Cheese</div>
+                    <div className="text-2xl font-black text-orange-800">{result.milkPerKgCheese.toFixed(2)}</div>
+                    <div className="text-[10px] text-slate-400">kg milk per kg cheese</div>
+                  </div>
+                  <div className="bg-white border-2 border-green-200 rounded-xl p-4 text-center">
+                    <div className="text-[10px] text-green-600 font-bold uppercase">+0.1% Fat → Yield</div>
+                    <div className="text-2xl font-black text-green-700">+{result.dYield_dF.toFixed(2)}</div>
+                    <div className="text-[10px] text-slate-400">kg cheese per 100kg milk</div>
+                  </div>
+                </div>
+
+                {/* Batch summary (if multiple batches) */}
+                {result.bat > 1 && (
+                  <Card className="bg-indigo-50 border-indigo-200">
+                    <CardHeader className="p-3 pb-1 border-b border-indigo-100">
+                      <CardTitle className="text-xs text-indigo-700 font-bold uppercase">
+                        📅 {result.bat} Batch Summary
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-3 grid grid-cols-2 gap-2 text-sm">
+                      {[
+                        { label: "Total cheese",   value: `${result.cheeseKgBatch.toFixed(1)} kg` },
+                        { label: "Total whey",     value: `${result.wheyKgBatch.toFixed(0)} kg` },
+                        { label: "Total milk",     value: `${(result.M * result.bat).toFixed(0)} kg` },
+                      ].map((r, i) => (
+                        <div key={i} className="flex justify-between">
+                          <span className="text-slate-500">{r.label}</span>
+                          <span className="font-bold text-indigo-700">{r.value}</span>
+                        </div>
+                      ))}
+                    </CardContent>
+                  </Card>
+                )}
+
+                {/* Warnings */}
+                {result.warnings.length > 0 && (
+                  <Alert className="bg-yellow-50 border-yellow-300">
+                    <AlertTriangle className="h-4 w-4 text-yellow-600" />
+                    <AlertTitle className="text-yellow-800 text-sm">Quality Alerts</AlertTitle>
+                    <AlertDescription className="text-xs text-yellow-700 space-y-1">
+                      {result.warnings.map((w: string, i: number) => <div key={i}>⚠️ {w}</div>)}
+                    </AlertDescription>
+                  </Alert>
+                )}
+
+                {/* Formula */}
+                <div className="bg-slate-50 border rounded-lg p-3 text-[10px] font-mono text-slate-400 space-y-1">
+                  <div className="font-bold text-slate-600 text-xs mb-1">📐 Van Slyke Formula:</div>
+                  <div>Casein = Protein × CaseinRatio = {inp.protein}% × {inp.caseinRatio}% = {(parseFloat(inp.protein)*parseFloat(inp.caseinRatio)/100).toFixed(3)}%</div>
+                  <div>TotalSolids = (RF×Fat) + (RC×Casein) + OtherSolids</div>
+                  <div>CheeseYield = TotalSolids / (1 − Moisture%) = {result.totalSolids.toFixed(2)} / {(1 - parseFloat(inp.targetMoisture)/100).toFixed(2)} = {result.cheeseKg.toFixed(2)} kg</div>
+                  <div>Yield% = CheeseKg / MilkKg × 100 = {result.yieldPct.toFixed(3)}%</div>
+                </div>
+              </>
+            ) : (
+              <div className="text-center py-10 text-muted-foreground text-sm">
+                <Milk className="h-10 w-10 mx-auto mb-3 text-orange-200" />
+                <p>Inputs bharein aur <strong>Calculate</strong> press karein.</p>
+              </div>
+            )}
+          </TabsContent>
+
+          {/* ═════ TAB 3: ECONOMICS ═════════════════════ */}
+          <TabsContent value="economics" className="space-y-4 pt-3">
+            {result ? (
+              <>
+                {/* Price inputs */}
+                <Card className="border-green-100 bg-white">
+                  <CardHeader className="p-3 pb-2 bg-green-50 border-b border-green-100">
+                    <CardTitle className="text-xs font-bold text-green-700 uppercase">💰 Market Prices</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-3 grid grid-cols-3 gap-3">
+                    <ValidatedInput
+                      label="Milk Cost"
+                      value={inp.milkPrice}
+                      onChange={v => setF("milkPrice", v)}
+                      validation={{ isValid: true, severity: "info" }}
+                      unit="₹/kg"
+                      colorScheme="orange"
+                    />
+                    <ValidatedInput
+                      label="Cheese Price"
+                      value={inp.cheesePrice}
+                      onChange={v => setF("cheesePrice", v)}
+                      validation={{ isValid: true, severity: "info" }}
+                      unit="₹/kg"
+                      colorScheme="green"
+                    />
+                    <ValidatedInput
+                      label="Whey Price"
+                      value={inp.wheyPrice}
+                      onChange={v => setF("wheyPrice", v)}
+                      validation={{ isValid: true, severity: "info" }}
+                      unit="₹/kg"
+                      colorScheme="blue"
+                    />
+                  </CardContent>
+                </Card>
+
+                {/* P&L */}
+                <Card className="bg-gradient-to-br from-slate-800 to-slate-900 text-white border-none">
+                  <CardHeader className="p-3 pb-1">
+                    <CardTitle className="text-xs text-slate-300 font-bold uppercase">
+                      📊 P&L ({result.bat} batch{result.bat > 1 ? "es" : ""})
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-3 space-y-2 text-sm">
+                    {[
+                      { label: "Milk cost",        value: `-₹ ${result.milkCost.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,   color: "text-red-400"   },
+                      { label: "Cheese revenue",   value: `+₹ ${result.cheeseRevenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`, color: "text-green-300" },
+                      { label: "Whey revenue",     value: `+₹ ${result.wheyRevenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,   color: "text-cyan-300"  },
+                      { label: "Gross Profit",     value: `₹ ${result.grossProfit.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,    color: `${result.grossProfit >= 0 ? "text-green-300 font-black text-base" : "text-red-400 font-black text-base"}` },
+                    ].map((r, i) => (
+                      <div key={i} className={`flex justify-between ${i === 3 ? "border-t border-slate-700 pt-2" : ""}`}>
+                        <span className="text-slate-400">{r.label}</span>
+                        <span className={`font-bold ${r.color}`}>{r.value}</span>
+                      </div>
+                    ))}
+                    <div className="bg-slate-700 rounded-lg p-2 mt-2 text-center">
+                      <div className="text-[10px] text-slate-400 font-bold">GROSS MARGIN</div>
+                      <div className={`text-2xl font-black ${result.gpm >= 0 ? "text-green-300" : "text-red-400"}`}>
+                        {result.gpm.toFixed(1)}%
+                      </div>
+                      <div className="text-[10px] text-slate-400">(excl. processing & overhead costs)</div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Sensitivity insight */}
+                <Card className="bg-green-50 border-green-200">
+                  <CardHeader className="p-3 pb-1 border-b border-green-100">
+                    <CardTitle className="text-sm text-green-800">📈 Yield Sensitivity Analysis</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-3 space-y-1 text-xs text-green-800">
+                    {[
+                      { scenario: "+0.1% milk fat",     delta: result.dYield_dF,   unit: "kg cheese / 100kg milk" },
+                      { scenario: "+1% fat retention",  delta: result.cheeseKg * 0.01, unit: "kg more cheese" },
+                      { scenario: "-1% target moisture", delta: result.cheeseKg * (-0.01) / (1 - parseFloat(inp.targetMoisture)/100), unit: "kg cheese change" },
+                    ].map((s, i) => (
+                      <div key={i} className="flex justify-between p-1">
+                        <span className="font-semibold">{s.scenario}</span>
+                        <span className={s.delta >= 0 ? "text-green-700 font-bold" : "text-red-600 font-bold"}>
+                          {s.delta >= 0 ? "+" : ""}{s.delta.toFixed(2)} {s.unit}
+                        </span>
+                      </div>
+                    ))}
+                    <p className="text-[10px] text-green-600 mt-2">
+                      Milk standardization to higher fat → directly increases cheese output without additional milk.
+                    </p>
+                  </CardContent>
+                </Card>
+              </>
+            ) : (
+              <div className="text-center py-10 text-muted-foreground text-sm">
+                <Milk className="h-10 w-10 mx-auto mb-3 text-orange-200" />
+                <p>Pehle Results tab mein calculate karein.</p>
+              </div>
+            )}
+          </TabsContent>
+        </Tabs>
+
+        {/* ── CALCULATE ───────────────────────────────── */}
+        <Button onClick={calculate}
+          className="w-full h-11 bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white font-bold shadow-md">
+          <Milk className="w-4 h-4 mr-2" />
+          Predict Cheese Yield
+        </Button>
       </CardContent>
     </Card>
   );
@@ -3387,1150 +3871,5100 @@ export function BoilerCostCalc() {
   );
 }
 // ════════════════════════════════════════════════════════════
-// 1. ADVANCED TANK VOLUME CALCULATOR
-// Supports: Horizontal/Vertical, Dish Ends, Conical Bottoms
+// ADVANCED TANK VOLUME CALCULATOR — Drop-in Replacement
+//
+// INSTRUCTIONS:
+// 1. Apni file mein purana TankVolumeCalc() function dhundhein
+// 2. Pura block DELETE karein
+// 3. Yeh poora code wahan PASTE karein
+// Koi naya import nahi chahiye.
 // ════════════════════════════════════════════════════════════
+
+// ── PRESETS ───────────────────────────────────────────────
+const TANK_PRESETS = {
+  "BMC 500L":       { type: "horizontal", diameter: "70",  length: "130", height: "35",  dishHeight: "12", endType: "dish" },
+  "BMC 1000L":      { type: "horizontal", diameter: "90",  length: "165", height: "45",  dishHeight: "15", endType: "dish" },
+  "BMC 2000L":      { type: "horizontal", diameter: "112", length: "210", height: "56",  dishHeight: "18", endType: "dish" },
+  "Silo 5KL":       { type: "vertical",   diameter: "140", length: "320", height: "280", dishHeight: "35", endType: "cone" },
+  "Silo 10KL":      { type: "vertical",   diameter: "180", length: "400", height: "350", dishHeight: "45", endType: "cone" },
+  "Storage 25KL":   { type: "vertical",   diameter: "270", length: "450", height: "380", dishHeight: "55", endType: "dish" },
+  "Buffer Tank":    { type: "vertical",   diameter: "100", length: "150", height: "100", dishHeight: "0",  endType: "flat" },
+} as const;
+
+// ── MATH HELPERS ──────────────────────────────────────────
+// Precise horizontal partial-fill cylinder area
+function horizontalSegmentArea(R: number, h: number): number {
+  if (h <= 0) return 0;
+  if (h >= 2 * R) return Math.PI * R * R;
+  if (Math.abs(h - R) < 1e-9) return 0.5 * Math.PI * R * R;
+  return R * R * Math.acos((R - h) / R) - (R - h) * Math.sqrt(2 * R * h - h * h);
+}
+
+// Dish (torispherical approx as oblate semi-ellipsoid) partial volume
+// Full dish vol = (2/3)πR²D; partial fill via spherical-cap scaling
+function dishPartialVol(R: number, D: number, h: number): number {
+  if (D <= 0 || h <= 0) return 0;
+  const fullVol = (2 / 3) * Math.PI * R * R * D;
+  if (h >= D) return fullVol;
+  // Ratio from exact oblate ellipsoid partial-fill integral
+  const u = h / D;
+  return fullVol * (1.5 * u * u - 0.5 * u * u * u);
+}
+
+// Cone partial volume
+function conePartialVol(R: number, D: number, h: number): number {
+  if (D <= 0 || h <= 0) return 0;
+  if (h >= D) return (1 / 3) * Math.PI * R * R * D;
+  const r_h = R * (h / D);
+  return (1 / 3) * Math.PI * r_h * r_h * h;
+}
+
+// ── MAIN COMPONENT ────────────────────────────────────────
 function TankVolumeCalc() {
-  const [input, setInput] = useState({ 
-    type: "horizontal", // horizontal | vertical
-    diameter: "200",    // cm (Internal Diameter)
-    length: "300",      // cm (Cylindrical length only)
-    height: "100",      // cm (Liquid Level)
-    dishHeight: "20",   // cm (Depth of the dish end/cone)
-    endType: "dish",    // flat | dish | cone (only for vertical)
+  const { toast } = useToast();
+
+  const [inp, setInp] = useState({
+    type:       "horizontal" as "horizontal" | "vertical",
+    endType:    "dish"       as "flat" | "dish" | "cone",
+    diameter:   "112",
+    length:     "210",
+    height:     "56",
+    dishHeight: "18",
   });
-  
+
   const [result, setResult] = useState<any>(null);
+  const setF = (k: string, v: string) => setInp(p => ({ ...p, [k]: v }));
 
-  const calculate = () => {
-    const R = parseFloat(input.diameter) / 2; // Radius
-    const L = parseFloat(input.length);       // Cylindrical Length
-    const H = parseFloat(input.height);       // Liquid Height
-    const D = parseFloat(input.dishHeight);   // Dish/Cone Depth
+  // Validations
+  const { validatePositive, validateNumber } = useInputValidation();
+  const R_num   = parseFloat(inp.diameter) / 2  || 0;
+  const L_num   = parseFloat(inp.length)        || 0;
+  const D_num   = parseFloat(inp.dishHeight)    || 0;
+  const maxH    = inp.type === "horizontal" ? parseFloat(inp.diameter) : L_num + D_num;
+  const hVal    = useMemo(() => validateNumber(inp.height, 0.1, maxH + 0.001, "Liquid Level"), [inp.height, maxH]);
 
-    // Validation
-    if (input.type === "horizontal" && H > parseFloat(input.diameter)) {
-       setResult({ error: "Liquid level cannot exceed diameter" }); return;
-    }
-    if (input.type === "vertical" && H > (L + D)) { // Approx total height check
-       // Allow for now, but usually H is total liquid height
-    }
-
-    let volLiters = 0;
-    let percentFull = 0;
-
-    // --- CASE 1: HORIZONTAL TANK (e.g., BMC) ---
-    if (input.type === "horizontal") {
-        // 1. Cylindrical Part (Partial Volume)
-        // Formula: L * [R² * cos⁻¹((R-H)/R) - (R-H) * √(2RH - H²)]
-        // If H > R, calculation flips. 
-        // Easier Trig approach:
-        
-        let areaCyl = 0;
-        
-        // Clamp H to Diameter
-        const h_cyl = Math.min(H, 2 * R);
-        
-        if (h_cyl > 0) {
-            if (h_cyl === R) {
-                areaCyl = 0.5 * Math.PI * R * R;
-            } else {
-                const term1 = R * R * Math.acos((R - h_cyl) / R);
-                const term2 = (R - h_cyl) * Math.sqrt(2 * R * h_cyl - h_cyl * h_cyl);
-                areaCyl = term1 - term2;
-            }
-        }
-        
-        const volCyl = areaCyl * L; // cm³
-
-        // 2. Dish Ends (2 ends) - Approximate Torispherical partial volume
-        // Full Dish Volume approx = 0.081 * Dia³ (Standard ASME) OR slightly less.
-        // Mathematical Approx for Partial Dish:
-        // V_dish_partial ≈ V_dish_total * (Area_segment / Area_circle) * correction
-        // Simplified High-Accuracy for partial dish: 
-        // V = (π * h² / 3) * (3R - h) is for sphere cap.
-        // We scale it by the dish depth factor.
-        
-        let volDish = 0;
-        if (input.endType === "dish") {
-            // Volume of ONE dish end (full) ≈ (2/3) * π * R² * D (Elliptical approximation)
-            // Partial fill logic is complex. Using spherical cap approximation scaled.
-            // Sphere Radius R_s = (R² + D²) / (2D)
-            
-            // Simplified ratio for industrial use:
-            // Volume ratio follows the area ratio roughly but slightly fuller at bottom
-            const fillRatio = areaCyl / (Math.PI * R * R);
-            const totalDishVol = 2 * ((2/3) * Math.PI * R * R * D); // 2 ends
-            volDish = totalDishVol * fillRatio; 
-        }
-
-        volLiters = (volCyl + volDish) / 1000;
-        percentFull = (H / (2 * R)) * 100;
-    }
-
-    // --- CASE 2: VERTICAL TANK (e.g., Silo) ---
-    else {
-        // H is total liquid height from bottom zero point.
-        // Structure: Bottom (Dish/Cone) + Cylinder
-        
-        let volBottom = 0;
-        let volCyl = 0;
-
-        // 1. Bottom Section
-        if (H <= D) {
-            // Liquid is only in the bottom dish/cone
-            if (input.endType === "cone") {
-                // Cone partial volume: V = (1/3) * π * r_level² * h_level
-                // r_level = R * (H / D)
-                const r_h = R * (H / D);
-                volBottom = (1/3) * Math.PI * r_h * r_h * H;
-            } else if (input.endType === "dish") {
-                // Spherical Cap approximation
-                // V = (π * H² / 3) * (3*Radius_of_curvature - H)
-                // Use Elliptical approximation for standard dish
-                // V_partial = π * R² * H * (H/D - (H/D)³/3 ) ? No, standard formula:
-                // V = (π * R² * D) * ( (H/D)^2 * (1.5 - 0.5*(H/D)) ) for 2:1 Ellipsoidal?
-                // Simple Spherical cap is best generic fit: V = (π/6) * H * (3*r_at_h^2 + H^2)
-                
-                // Effective logic:
-                volBottom = (Math.PI * R * R * D) / 2 * Math.pow(H/D, 2) * (3 - H/D) / 2; // Approx for dish bottom fill
-            } else {
-                // Flat bottom - theoretically H starts from 0, D is 0.
-                volBottom = Math.PI * R * R * H;
-            }
-        } else {
-            // Liquid covers bottom + part of cylinder
-            // Full Bottom Volume
-            if (input.endType === "cone") {
-                volBottom = (1/3) * Math.PI * R * R * D;
-            } else if (input.endType === "dish") {
-                volBottom = (2/3) * Math.PI * R * R * D; // Half ellipsoid
-            }
-            
-            // Cylindrical Part
-            const h_cyl = H - D;
-            volCyl = Math.PI * R * R * h_cyl;
-        }
-
-        volLiters = (volBottom + volCyl) / 1000;
-        percentFull = (H / (L + D)) * 100;
-    }
-
-    setResult({ volLiters, percentFull });
+  // Apply preset
+  const applyPreset = (name: keyof typeof TANK_PRESETS) => {
+    setInp(TANK_PRESETS[name] as any);
+    toast({ title: "Preset Applied", description: name });
   };
 
+  // ── CALCULATE ─────────────────────────────────────────
+  const calculate = useCallback(() => {
+    const R  = parseFloat(inp.diameter)   / 2;
+    const L  = parseFloat(inp.length)     || 0;
+    const H  = parseFloat(inp.height)     || 0;
+    const D  = parseFloat(inp.dishHeight) || 0;
+
+    if (R <= 0 || L <= 0 || H <= 0) {
+      toast({ variant: "destructive", title: "Invalid values", description: "Sahi dimensions enter karein." });
+      return;
+    }
+
+    let volCm3      = 0;
+    let volCylCm3   = 0;
+    let volEndsCm3  = 0;
+    let totalCapCm3 = 0;
+
+    // ════ HORIZONTAL TANK ══════════════════════════════
+    if (inp.type === "horizontal") {
+      const H_clamp = Math.min(H, 2 * R);
+      const segArea = horizontalSegmentArea(R, H_clamp);
+      volCylCm3     = segArea * L;
+
+      // Dish ends (2 ends), partial fill using area ratio
+      if (inp.endType === "dish" && D > 0) {
+        const fillRatio = segArea / (Math.PI * R * R);
+        const fullDish  = 2 * (2 / 3) * Math.PI * R * R * D;
+        volEndsCm3      = fullDish * fillRatio;
+      }
+
+      volCm3      = volCylCm3 + volEndsCm3;
+      // Total capacity (full tank)
+      totalCapCm3 = Math.PI * R * R * L + (inp.endType === "dish" && D > 0 ? 2 * (2/3) * Math.PI * R * R * D : 0);
+    }
+
+    // ════ VERTICAL TANK ════════════════════════════════
+    else {
+      if (H <= D) {
+        // Liquid only in bottom
+        if (inp.endType === "cone")       volEndsCm3 = conePartialVol(R, D, H);
+        else if (inp.endType === "dish")  volEndsCm3 = dishPartialVol(R, D, H);
+        else                              volEndsCm3 = Math.PI * R * R * H;
+        volCylCm3  = 0;
+      } else {
+        // Full bottom + cylindrical portion
+        if (inp.endType === "cone")       volEndsCm3 = (1/3) * Math.PI * R * R * D;
+        else if (inp.endType === "dish")  volEndsCm3 = (2/3) * Math.PI * R * R * D;
+        else                              volEndsCm3 = 0;
+        volCylCm3  = Math.PI * R * R * (H - D);
+      }
+      volCm3      = volCylCm3 + volEndsCm3;
+
+      // Total capacity
+      const cylFull   = Math.PI * R * R * L;
+      let   bottomFull = 0;
+      if (inp.endType === "cone")       bottomFull = (1/3) * Math.PI * R * R * D;
+      else if (inp.endType === "dish")  bottomFull = (2/3) * Math.PI * R * R * D;
+      totalCapCm3 = cylFull + bottomFull;
+    }
+
+    const volLiters     = volCm3     / 1000;
+    const totalCapL     = totalCapCm3 / 1000;
+    const percentFull   = totalCapL > 0 ? (volLiters / totalCapL) * 100 : 0;
+    const emptyVol      = totalCapL - volLiters;
+
+    // Dipstick: cm per 100L (useful for field gauging)
+    const cmPer100L     = H > 0 ? (H / volLiters) * 100 : 0;
+
+    setResult({
+      volLiters, totalCapL, percentFull, emptyVol,
+      volCylL:  volCylCm3  / 1000,
+      volEndsL: volEndsCm3 / 1000,
+      cmPer100L,
+      H, R, L, D,
+    });
+
+    toast({
+      title: "✅ Calculated",
+      description: `Volume: ${volLiters.toLocaleString("en-IN", { maximumFractionDigits: 1 })} L (${percentFull.toFixed(1)}% full)`,
+    });
+  }, [inp, toast]);
+
+  const isHorizontal = inp.type === "horizontal";
+
+  // ── RENDER ────────────────────────────────────────────
   return (
-    <Card className="border-slate-300 bg-slate-50 shadow-md">
-        <CardHeader className="pb-2 border-b border-slate-200 bg-white rounded-t-lg">
-            <CardTitle className="text-sm font-bold flex items-center gap-2 text-slate-700">
-                <Ruler className="w-5 h-5 text-blue-600"/> 
-                Precision Tank Volume
+    <Card className="border-slate-300 bg-slate-50/30">
+      <CardHeader className="pb-3 bg-gradient-to-r from-slate-50 to-blue-50 rounded-t-lg border-b border-slate-200">
+        <CardTitle className="flex items-center justify-between">
+          <span className="flex items-center gap-2 text-slate-800">
+            <Ruler className="w-5 h-5 text-blue-600" />
+            Precision Tank Volume
+          </span>
+          {result && (
+            <Badge className="bg-blue-600 text-white text-sm px-3 py-1">
+              {result.volLiters.toLocaleString("en-IN", { maximumFractionDigits: 0 })} L
+            </Badge>
+          )}
+        </CardTitle>
+        <CardDescription className="text-slate-500 text-xs">
+          Horizontal/Vertical · Dish/Cone/Flat ends · Dipstick reference · % filled
+        </CardDescription>
+      </CardHeader>
+
+      <CardContent className="pt-4 space-y-4">
+
+        {/* ── QUICK PRESETS ──────────────────────────── */}
+        <div className="space-y-1">
+          <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Quick Presets</Label>
+          <div className="flex flex-wrap gap-2">
+            {(Object.keys(TANK_PRESETS) as Array<keyof typeof TANK_PRESETS>).map(name => (
+              <button
+                key={name}
+                onClick={() => applyPreset(name)}
+                className="px-3 py-1 rounded-full border border-slate-200 bg-white text-xs font-semibold text-slate-600 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all shadow-sm"
+              >
+                {name}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* ── TANK TYPE & END TYPE ───────────────────── */}
+        <div className="grid grid-cols-2 gap-3">
+          <div className="space-y-1">
+            <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Tank Orientation</Label>
+            <Select
+              value={inp.type}
+              onValueChange={v =>
+                setInp(p => ({
+                  ...p,
+                  type:    v as "horizontal" | "vertical",
+                  endType: v === "horizontal" ? "dish" : "cone",
+                }))
+              }
+            >
+              <SelectTrigger className="h-10 bg-white border-slate-200">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="horizontal">🔵 Horizontal (BMC/Road Tanker)</SelectItem>
+                <SelectItem value="vertical">🏛️ Vertical (Silo/Storage)</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-1">
+            <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">End / Bottom Type</Label>
+            <Select value={inp.endType} onValueChange={v => setF("endType", v)}>
+              <SelectTrigger className="h-10 bg-white border-slate-200">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="flat">⬛ Flat</SelectItem>
+                <SelectItem value="dish">🥣 Dish / Torispherical</SelectItem>
+                {inp.type === "vertical" && <SelectItem value="cone">🔺 Conical Bottom</SelectItem>}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        {/* ── DIMENSIONS ────────────────────────────── */}
+        <Card className="border-blue-100 bg-white">
+          <CardHeader className="p-3 pb-2 bg-blue-50 rounded-t-lg border-b border-blue-100">
+            <CardTitle className="text-xs font-bold text-blue-700 uppercase tracking-wider">
+              📐 Dimensions (all in cm — Internal)
             </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4 pt-4">
-            {/* Configuration Row */}
-            <div className="flex gap-2">
-                <div className="w-1/2 space-y-1">
-                    <Label className="text-[10px] uppercase font-bold text-slate-500">Tank Shape</Label>
-                    <Select value={input.type} onValueChange={v=>setInput({...input, type:v, endType: v==='horizontal'?'dish':'cone'})}>
-                        <SelectTrigger className="h-8 text-xs bg-white"><SelectValue/></SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="horizontal">Horizontal (BMC)</SelectItem>
-                            <SelectItem value="vertical">Vertical (Silo)</SelectItem>
-                        </SelectContent>
-                    </Select>
+          </CardHeader>
+          <CardContent className="p-3 grid grid-cols-2 gap-3">
+            <ValidatedInput
+              label="Internal Diameter"
+              value={inp.diameter}
+              onChange={v => setF("diameter", v)}
+              validation={validatePositive(inp.diameter, "Diameter")}
+              unit="cm"
+              helpText="ID (not OD)"
+              colorScheme="blue"
+              icon={<Ruler className="h-3 w-3 text-blue-500" />}
+            />
+            <ValidatedInput
+              label={isHorizontal ? "Cylindrical Length" : "Straight Shell Height"}
+              value={inp.length}
+              onChange={v => setF("length", v)}
+              validation={validatePositive(inp.length, "Length")}
+              unit="cm"
+              helpText="Shell only — exclude ends"
+              colorScheme="blue"
+            />
+            <ValidatedInput
+              label="Liquid Level (Dipstick)"
+              value={inp.height}
+              onChange={v => setF("height", v)}
+              validation={hVal}
+              unit="cm"
+              helpText={isHorizontal ? "0 to Diameter" : "0 to total height"}
+              colorScheme="green"
+              icon={<Droplets className="h-3 w-3 text-green-500" />}
+            />
+            {inp.endType !== "flat" && (
+              <ValidatedInput
+                label={isHorizontal ? "Dish Depth" : inp.endType === "cone" ? "Cone Depth" : "Dish Depth"}
+                value={inp.dishHeight}
+                onChange={v => setF("dishHeight", v)}
+                validation={validatePositive(inp.dishHeight, "Dish/Cone depth")}
+                unit="cm"
+                helpText="Depth of curve / cone"
+                colorScheme="orange"
+              />
+            )}
+          </CardContent>
+        </Card>
+
+        {/* ── CALCULATE ─────────────────────────────── */}
+        <Button
+          onClick={calculate}
+          className="w-full h-11 bg-gradient-to-r from-slate-800 to-blue-700 hover:from-slate-900 hover:to-blue-800 text-white font-bold shadow-md"
+        >
+          <Ruler className="w-4 h-4 mr-2" />
+          Calculate Volume
+        </Button>
+
+        {/* ── RESULTS ───────────────────────────────── */}
+        {result && (
+          <div className="space-y-3 animate-in fade-in">
+
+            {/* Main KPIs */}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="bg-blue-600 text-white p-4 rounded-xl shadow-lg text-center">
+                <div className="text-[10px] uppercase opacity-70 font-bold">Liquid Volume</div>
+                <div className="text-3xl font-black">
+                  {result.volLiters.toLocaleString("en-IN", { maximumFractionDigits: 0 })}
                 </div>
-                <div className="w-1/2 space-y-1">
-                    <Label className="text-[10px] uppercase font-bold text-slate-500">End Type</Label>
-                    <Select value={input.endType} onValueChange={v=>setInput({...input, endType:v})}>
-                        <SelectTrigger className="h-8 text-xs bg-white"><SelectValue/></SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="flat">Flat</SelectItem>
-                            <SelectItem value="dish">Dish / Torispherical</SelectItem>
-                            {input.type === 'vertical' && <SelectItem value="cone">Conical Bottom</SelectItem>}
-                        </SelectContent>
-                    </Select>
+                <div className="text-xs opacity-80">Litres</div>
+              </div>
+              <div className="bg-white border-2 border-slate-200 p-4 rounded-xl shadow-sm text-center flex flex-col justify-center">
+                <div className="text-[10px] uppercase text-slate-500 font-bold">Tank Capacity</div>
+                <div className="text-2xl font-bold text-slate-700">
+                  {result.totalCapL.toLocaleString("en-IN", { maximumFractionDigits: 0 })} L
                 </div>
+                <div className="text-[10px] text-slate-400">total rated</div>
+              </div>
             </div>
 
-            {/* Dimensions Grid */}
-            <div className="grid grid-cols-2 gap-3 bg-white p-3 rounded-lg border border-slate-200">
-                <ValidatedInput label="Liquid Level (cm)" value={input.height} onChange={v=>setInput({...input, height:v})} colorScheme="blue" icon={<Ruler className="w-3 h-3"/>} />
-                <ValidatedInput label="Tank Diameter (cm)" value={input.diameter} onChange={v=>setInput({...input, diameter:v})} helpText="Internal Dia" />
-                <ValidatedInput label="Cyl. Length/Height (cm)" value={input.length} onChange={v=>setInput({...input, length:v})} helpText="Straight shell only" />
-                {input.endType !== 'flat' && (
-                    <ValidatedInput 
-                        label={input.type==='vertical' ? 'Bottom Depth (cm)' : 'Dish Depth (cm)'} 
-                        value={input.dishHeight} 
-                        onChange={v=>setInput({...input, dishHeight:v})} 
-                        colorScheme="orange" 
-                        helpText="Curve/Cone height"
-                    />
+            {/* Fill bar */}
+            <Card className="bg-white border-slate-200">
+              <CardContent className="p-4 space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span className="font-bold text-slate-700">
+                    {result.percentFull.toFixed(1)}% Full
+                  </span>
+                  <span className="text-slate-400 text-xs">
+                    Empty: {result.emptyVol.toLocaleString("en-IN", { maximumFractionDigits: 0 })} L
+                  </span>
+                </div>
+                <div className="h-4 w-full bg-slate-100 rounded-full overflow-hidden border border-slate-200">
+                  <div
+                    className={`h-full rounded-full transition-all ${
+                      result.percentFull > 90
+                        ? "bg-red-500"
+                        : result.percentFull > 70
+                        ? "bg-orange-400"
+                        : "bg-blue-500"
+                    }`}
+                    style={{ width: `${Math.min(result.percentFull, 100)}%` }}
+                  />
+                </div>
+                <div className="flex justify-between text-[10px] text-slate-400">
+                  <span>0 L</span>
+                  <span>{(result.totalCapL / 2).toLocaleString("en-IN", { maximumFractionDigits: 0 })} L</span>
+                  <span>{result.totalCapL.toLocaleString("en-IN", { maximumFractionDigits: 0 })} L</span>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Volume breakdown */}
+            <Card className="bg-slate-50 border-slate-200">
+              <CardHeader className="p-3 pb-1 border-b">
+                <CardTitle className="text-xs font-bold text-slate-600 uppercase">Volume Breakdown</CardTitle>
+              </CardHeader>
+              <CardContent className="p-3 space-y-1 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-slate-500">Cylindrical shell</span>
+                  <span className="font-bold">
+                    {result.volCylL.toLocaleString("en-IN", { maximumFractionDigits: 1 })} L
+                  </span>
+                </div>
+                {result.volEndsL > 0 && (
+                  <div className="flex justify-between">
+                    <span className="text-slate-500">
+                      {isHorizontal ? "Dish ends (2×)" : `${inp.endType} bottom`}
+                    </span>
+                    <span className="font-bold text-orange-600">
+                      {result.volEndsL.toLocaleString("en-IN", { maximumFractionDigits: 1 })} L
+                    </span>
+                  </div>
                 )}
+                <div className="flex justify-between border-t pt-1 font-bold text-blue-700">
+                  <span>Total liquid</span>
+                  <span>{result.volLiters.toLocaleString("en-IN", { maximumFractionDigits: 1 })} L</span>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Dipstick reference */}
+            <Card className="bg-amber-50 border-amber-200">
+              <CardHeader className="p-3 pb-1 border-b border-amber-100">
+                <CardTitle className="text-xs font-bold text-amber-800 uppercase">📏 Dipstick Reference</CardTitle>
+              </CardHeader>
+              <CardContent className="p-3">
+                <div className="grid grid-cols-2 gap-3 text-sm">
+                  <div className="text-center bg-white p-2 rounded-lg border border-amber-100">
+                    <div className="text-[10px] text-amber-600 font-bold">CM per 100L</div>
+                    <div className="text-xl font-black text-amber-800">
+                      {result.cmPer100L.toFixed(2)} cm
+                    </div>
+                  </div>
+                  <div className="text-center bg-white p-2 rounded-lg border border-amber-100">
+                    <div className="text-[10px] text-amber-600 font-bold">L per cm</div>
+                    <div className="text-xl font-black text-amber-800">
+                      {result.cmPer100L > 0 ? (100 / result.cmPer100L).toFixed(1) : "—"} L
+                    </div>
+                  </div>
+                </div>
+                <p className="text-[10px] text-amber-600 mt-2 text-center">
+                  At current fill level ({result.H} cm). Varies non-linearly — use full dipstick chart for precision.
+                </p>
+              </CardContent>
+            </Card>
+
+            {/* Formula note */}
+            <div className="bg-slate-50 border rounded-lg p-3 text-[10px] font-mono text-slate-400 space-y-1">
+              <div className="font-bold text-slate-600 text-xs mb-1">📐 Formulas Used:</div>
+              {isHorizontal ? (
+                <>
+                  <div>Cyl area = R²·cos⁻¹((R−H)/R) − (R−H)·√(2RH−H²)</div>
+                  <div>Vol_cyl = Area × Length</div>
+                  {inp.endType === "dish" && <div>Dish ends: fill ratio × 2×(2/3)πR²D</div>}
+                </>
+              ) : (
+                <>
+                  {inp.endType === "cone"  && <div>Cone: V = (1/3)πr²h where r = R×(h/D)</div>}
+                  {inp.endType === "dish"  && <div>Dish: V = (2/3)πR²D × (1.5u² − 0.5u³), u=h/D</div>}
+                  <div>Cylinder: V = πR²×(H−D)</div>
+                </>
+              )}
+              <div>R={result.R.toFixed(1)}, L={result.L}, H={result.H}, D={result.D}</div>
             </div>
 
-            <Button onClick={calculate} size="lg" className="w-full bg-slate-800 hover:bg-slate-900 shadow-lg">
-                Calculate Volume
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+// ════════════════════════════════════════════════════════════
+// ADVANCED PACKAGING FILM CALCULATOR
+// Drop-in Replacement for PackagingFilmCalc()
+//
+// INSTRUCTIONS:
+// 1. Apni file mein purana PackagingFilmCalc() function dhundhein
+// 2. Pura block DELETE karein
+// 3. Yeh poora code wahan PASTE karein
+// Koi naya import nahi chahiye.
+// ════════════════════════════════════════════════════════════
+
+// ── MATERIAL DATABASE ─────────────────────────────────────
+const FILM_MATERIAL_DB = {
+  ldpe:      { label: "🥛 LDPE (Milk Pouch)",         density: 0.92, thkMin: 40,  thkMax: 80,  pricePerKg: 120, note: "Standard milk pouch — 50–60 micron"    },
+  lldpe:     { label: "🥛 LLDPE (Premium Pouch)",     density: 0.95, thkMin: 40,  thkMax: 75,  pricePerKg: 130, note: "Better seal strength, less puncture"   },
+  pet_plain: { label: "📦 PET (Plain)",               density: 1.40, thkMin: 10,  thkMax: 50,  pricePerKg: 180, note: "Outer layer of laminates"              },
+  laminate:  { label: "📦 LDPE/PET Laminate",        density: 1.20, thkMin: 70,  thkMax: 130, pricePerKg: 220, note: "Curd cup lid, ghee pack, retort"        },
+  bopp:      { label: "🏷️ BOPP (Butter wrap)",       density: 0.91, thkMin: 15,  thkMax: 40,  pricePerKg: 160, note: "Butter, cheese wrap"                   },
+  pp_cup:    { label: "🫙 PP Sheet (Cup/Tub)",        density: 0.91, thkMin: 200, thkMax: 600, pricePerKg: 100, note: "Thermoformed dahi cup, ice cream tub"  },
+  foil_lam:  { label: "🧈 Alu Foil Laminate",        density: 1.50, thkMin: 60,  thkMax: 120, pricePerKg: 350, note: "Butter, ghee, premium packs"           },
+  shrink:    { label: "🎁 Shrink Film (Multipack)",  density: 0.92, thkMin: 20,  thkMax: 50,  pricePerKg: 140, note: "Bundling milk pouches"                 },
+} as const;
+
+type FilmKey = keyof typeof FILM_MATERIAL_DB;
+
+// ── POUCH SIZE PRESETS ────────────────────────────────────
+const POUCH_PRESETS = {
+  "Milk 200ml":   { width: "195", repeat: "115", thickness: "50", pouches: "50000" },
+  "Milk 500ml":   { width: "325", repeat: "150", thickness: "55", pouches: "15000" },
+  "Milk 1L":      { width: "400", repeat: "200", thickness: "60", pouches: "5000"  },
+  "Dahi Cup lid": { width: "105", repeat: "105", thickness: "80", pouches: "20000" },
+  "Lassi 200ml":  { width: "200", repeat: "130", thickness: "55", pouches: "10000" },
+  "Butter 100g":  { width: "250", repeat: "160", thickness: "30", pouches: "8000"  },
+} as const;
+
+// ── MAIN COMPONENT ────────────────────────────────────────
+function PackagingFilmCalc() {
+  const { toast } = useToast();
+
+  const [material, setMaterial] = useState<FilmKey>("ldpe");
+  const [inp, setInp] = useState({
+    pouches:    "15000",
+    width:      "325",     // mm
+    repeat:     "150",     // mm (pitch length)
+    thickness:  "55",      // micron
+    wastage:    "2.0",     // %
+    rollWeight: "25",      // kg per reel
+    rollLength: "",        // m per reel (optional override)
+    gusset:     "0",       // mm side gusset (0 = flat pouch)
+    layers:     "1",       // number of plies/layers
+    pricePerKg: "120",     // ₹/kg film
+    batchDays:  "26",      // working days / month
+    dailyPouches:"",       // if filled → auto-calc monthly
+  });
+
+  const [result, setResult] = useState<any>(null);
+  const setF = (k: string, v: string) => setInp(p => ({ ...p, [k]: v }));
+  const { validatePositive, validateNumber } = useInputValidation();
+
+  // Apply material preset
+  const applyMaterial = (key: FilmKey) => {
+    const m = FILM_MATERIAL_DB[key];
+    setMaterial(key);
+    setInp(p => ({ ...p, pricePerKg: String(m.pricePerKg) }));
+  };
+
+  // Apply pouch preset
+  const applyPouch = (name: keyof typeof POUCH_PRESETS) => {
+    const pp = POUCH_PRESETS[name];
+    setInp(p => ({ ...p, ...pp }));
+    toast({ title: "Preset Applied", description: name });
+  };
+
+  // ── CALCULATE ─────────────────────────────────────────
+  const calculate = useCallback(() => {
+    const mat      = FILM_MATERIAL_DB[material];
+    const pouches  = parseFloat(inp.pouches)    || 0;
+    const W        = parseFloat(inp.width)      || 0;   // mm
+    const L        = parseFloat(inp.repeat)     || 0;   // mm
+    const T        = parseFloat(inp.thickness)  || 0;   // micron
+    const G        = parseFloat(inp.gusset)     || 0;   // mm
+    const layers   = parseFloat(inp.layers)     || 1;
+    const wastage  = 1 + (parseFloat(inp.wastage) || 0) / 100;
+    const rollWt   = parseFloat(inp.rollWeight) || 25;  // kg
+    const priceKg  = parseFloat(inp.pricePerKg) || 0;
+    const days     = parseFloat(inp.batchDays)  || 26;
+    const dailyP   = parseFloat(inp.dailyPouches) || 0;
+
+    if (pouches <= 0 || W <= 0 || L <= 0 || T <= 0) {
+      toast({ variant: "destructive", title: "Invalid values" }); return;
+    }
+
+    // ── 1. Effective pouch dimensions ────────────────
+    // Gusset adds to effective width: W_eff = W + 2G
+    const W_eff    = W + 2 * G;  // mm
+
+    // ── 2. Film area per pouch (both sides = 2 layers for tube stock) ──
+    // Flat area = Width × Repeat (one side)
+    // For tube stock: 1 run = 2-ply, so area factor = layers
+    const areaPerPouchCm2 = (W_eff / 10) * (L / 10) * layers;   // cm²
+
+    // ── 3. Weight per pouch ───────────────────────────
+    // Weight = Area × Thickness × Density
+    // T in micron → cm: T / 10000
+    const T_cm            = T / 10000;
+    const weightPerPouchG = areaPerPouchCm2 * T_cm * mat.density;
+
+    // ── 4. Total film requirement ──────────────────────
+    const netKg           = (weightPerPouchG * pouches) / 1000;
+    const grossKg         = netKg * wastage;
+
+    // ── 5. Linear metres ──────────────────────────────
+    // Total repeat length in metres
+    const totalMeters     = (pouches * L) / 1000;  // metres
+    const grossMeters     = totalMeters * wastage;
+
+    // ── 6. Roll/Reel length (if not overridden) ───────
+    // From roll weight and film specs:
+    // Length (m) = RollWt(g) / (W_eff_m × T_cm × Density × 10000)
+    // Area density (g/m) = W_eff(m) × T(micron) × Density / 1000
+    const areaGPerM       = (W_eff / 1000) * T * mat.density / 1000 * 1000 * layers;
+    // areaGPerM = (W_m × T_mic × density × 1000 / 1000) * layers  →  g/m
+    const calcRollLenM    = inp.rollLength
+      ? parseFloat(inp.rollLength)
+      : (rollWt * 1000) / areaGPerM;
+
+    // ── 7. Pouches per reel ───────────────────────────
+    const pouchesPerReel  = Math.floor(calcRollLenM * 1000 / L);
+
+    // ── 8. Reels needed ───────────────────────────────
+    const reelsExact      = grossKg / rollWt;
+    const reelsCeil       = Math.ceil(reelsExact);
+
+    // ── 9. Yield ──────────────────────────────────────
+    const yieldPouchPerKg = 1000 / weightPerPouchG;
+
+    // ── 10. Cost ──────────────────────────────────────
+    const batchCost       = grossKg * priceKg;
+    const costPerPouch    = batchCost / pouches;
+    const costPerThousand = costPerPouch * 1000;
+
+    // Monthly (if daily pouches given)
+    const monthlyPouches  = dailyP > 0 ? dailyP * days : pouches;
+    const monthlyNetKg    = (weightPerPouchG * monthlyPouches) / 1000;
+    const monthlyGrossKg  = monthlyNetKg * wastage;
+    const monthlyReels    = Math.ceil(monthlyGrossKg / rollWt);
+    const monthlyCost     = monthlyGrossKg * priceKg;
+
+    // ── 11. Surface area (print area) ─────────────────
+    const printAreaCm2    = W * L / 100;  // cm² per pouch (outer face only)
+    const printAreaTotalM2= (printAreaCm2 * pouches) / 10000;
+
+    const warnings: string[] = [];
+    if (T < mat.thkMin) warnings.push(`Thickness ${T}μ is below minimum (${mat.thkMin}μ) for ${mat.label}. Risk of leaks/tears.`);
+    if (T > mat.thkMax) warnings.push(`Thickness ${T}μ exceeds typical max (${mat.thkMax}μ). Unnecessary cost — verify spec.`);
+    if (parseFloat(inp.wastage) > 4) warnings.push(`Wastage ${inp.wastage}% is high. Check sealing jaw alignment and film tension.`);
+    if (pouchesPerReel < 500) warnings.push(`Only ${pouchesPerReel} pouches/reel — frequent reel changes. Consider heavier reels.`);
+
+    setResult({
+      weightPerPouchG, areaPerPouchCm2,
+      netKg, grossKg, totalMeters, grossMeters,
+      calcRollLenM, pouchesPerReel,
+      reelsExact, reelsCeil, yieldPouchPerKg,
+      batchCost, costPerPouch, costPerThousand,
+      monthlyPouches, monthlyGrossKg, monthlyReels, monthlyCost,
+      printAreaCm2, printAreaTotalM2,
+      warnings, pouches,
+    });
+
+    toast({
+      title: "✅ Calculated",
+      description: `${grossKg.toFixed(1)} kg film · ${reelsCeil} reels · ₹${costPerThousand.toFixed(2)}/1000 pouches`,
+    });
+  }, [inp, material, toast]);
+
+  const mat = FILM_MATERIAL_DB[material];
+
+  // ── RENDER ────────────────────────────────────────────
+  return (
+    <Card className="border-purple-200 bg-purple-50/20">
+      <CardHeader className="pb-3 bg-gradient-to-r from-purple-50 to-violet-50 rounded-t-lg border-b border-purple-100">
+        <CardTitle className="flex items-center justify-between">
+          <span className="flex items-center gap-2 text-purple-800">
+            <PackageOpen className="w-5 h-5 text-purple-600" />
+            Industrial Packaging Film Planner
+          </span>
+          {result && (
+            <Badge className="bg-purple-600 text-white text-sm px-3 py-1">
+              {result.reelsCeil} reels · ₹{result.costPerThousand.toFixed(1)}/K
+            </Badge>
+          )}
+        </CardTitle>
+        <CardDescription className="text-purple-600 text-xs">
+          8 materials · Gusset · Reel length · Monthly planning · Cost per 1000 pouches
+        </CardDescription>
+      </CardHeader>
+
+      <CardContent className="pt-4 space-y-4">
+
+        {/* ── MATERIAL SELECTOR ──────────────────────── */}
+        <div className="space-y-2">
+          <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Film Material</Label>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+            {(Object.keys(FILM_MATERIAL_DB) as FilmKey[]).map(key => (
+              <button key={key} onClick={() => applyMaterial(key)}
+                className={`p-2 rounded-lg border text-xs font-semibold transition-all text-left leading-tight shadow-sm
+                  ${material === key
+                    ? "bg-purple-600 text-white border-purple-600 shadow-md"
+                    : "bg-white text-slate-600 border-slate-200 hover:border-purple-300 hover:text-purple-700"
+                  }`}>
+                {FILM_MATERIAL_DB[key].label}
+                <div className={`text-[9px] mt-0.5 ${material === key ? "opacity-80" : "text-slate-400"}`}>
+                  ρ={FILM_MATERIAL_DB[key].density} · ₹{FILM_MATERIAL_DB[key].pricePerKg}/kg
+                </div>
+              </button>
+            ))}
+          </div>
+          <p className="text-[10px] text-purple-600 bg-purple-50 px-2 py-1 rounded border border-purple-100">
+            📌 {mat.note} · Thickness range: {mat.thkMin}–{mat.thkMax} μ
+          </p>
+        </div>
+
+        {/* ── POUCH PRESETS ────────────────────────────── */}
+        <div className="space-y-1">
+          <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Pouch Size Presets</Label>
+          <div className="flex flex-wrap gap-2">
+            {(Object.keys(POUCH_PRESETS) as Array<keyof typeof POUCH_PRESETS>).map(name => (
+              <button key={name} onClick={() => applyPouch(name)}
+                className="px-3 py-1 rounded-full border border-purple-200 bg-white text-xs font-semibold text-purple-700 hover:bg-purple-600 hover:text-white transition-all shadow-sm">
+                {name}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* ── FILM DIMENSIONS ──────────────────────────── */}
+        <Card className="border-purple-100 bg-white">
+          <CardHeader className="p-3 pb-2 bg-purple-50 rounded-t-lg border-b border-purple-100">
+            <CardTitle className="text-xs font-bold text-purple-700 uppercase">📐 Film Dimensions</CardTitle>
+          </CardHeader>
+          <CardContent className="p-3 grid grid-cols-2 gap-3">
+            <ValidatedInput
+              label="Target Pouches"
+              value={inp.pouches}
+              onChange={v => setF("pouches", v)}
+              validation={validatePositive(inp.pouches, "Pouches")}
+              colorScheme="purple"
+            />
+            <ValidatedInput
+              label="Film Width"
+              value={inp.width}
+              onChange={v => setF("width", v)}
+              validation={validatePositive(inp.width, "Width")}
+              unit="mm"
+              helpText="As per machine spec"
+              colorScheme="purple"
+            />
+            <ValidatedInput
+              label="Repeat / Pitch"
+              value={inp.repeat}
+              onChange={v => setF("repeat", v)}
+              validation={validatePositive(inp.repeat, "Repeat")}
+              unit="mm"
+              helpText="Pouch cut length"
+              colorScheme="purple"
+            />
+            <ValidatedInput
+              label="Thickness"
+              value={inp.thickness}
+              onChange={v => setF("thickness", v)}
+              validation={validateNumber(inp.thickness, 5, 1000, "Thickness")}
+              unit="μ"
+              helpText={`Range: ${mat.thkMin}–${mat.thkMax} μ`}
+              colorScheme="orange"
+            />
+            <ValidatedInput
+              label="Side Gusset"
+              value={inp.gusset}
+              onChange={v => setF("gusset", v)}
+              validation={{ isValid: parseFloat(inp.gusset) >= 0, severity: "error" }}
+              unit="mm"
+              helpText="0 = flat pouch"
+              colorScheme="blue"
+            />
+            <ValidatedInput
+              label="Layers (plies)"
+              value={inp.layers}
+              onChange={v => setF("layers", v)}
+              validation={validateNumber(inp.layers, 1, 4, "Layers")}
+              helpText="1=tube, 2=flat sheet"
+              colorScheme="blue"
+            />
+          </CardContent>
+        </Card>
+
+        {/* ── REEL & COST ───────────────────────────────── */}
+        <Card className="border-violet-100 bg-white">
+          <CardHeader className="p-3 pb-2 bg-violet-50 rounded-t-lg border-b border-violet-100">
+            <CardTitle className="text-xs font-bold text-violet-700 uppercase">🎞️ Reel & Cost</CardTitle>
+          </CardHeader>
+          <CardContent className="p-3 grid grid-cols-2 gap-3">
+            <ValidatedInput
+              label="Roll Weight"
+              value={inp.rollWeight}
+              onChange={v => setF("rollWeight", v)}
+              validation={validatePositive(inp.rollWeight, "Roll weight")}
+              unit="kg"
+              helpText="Std: 20–30 kg"
+              colorScheme="violet"
+            />
+            <ValidatedInput
+              label="Roll Length (opt)"
+              value={inp.rollLength}
+              onChange={v => setF("rollLength", v)}
+              validation={{ isValid: true, severity: "info" }}
+              unit="m"
+              helpText="Leave blank = auto-calc"
+              colorScheme="violet"
+            />
+            <ValidatedInput
+              label="Wastage %"
+              value={inp.wastage}
+              onChange={v => setF("wastage", v)}
+              validation={validateNumber(inp.wastage, 0, 15, "Wastage")}
+              unit="%"
+              helpText="Std: 1.5–3%"
+              colorScheme="red"
+            />
+            <ValidatedInput
+              label="Film Price"
+              value={inp.pricePerKg}
+              onChange={v => setF("pricePerKg", v)}
+              validation={validatePositive(inp.pricePerKg, "Price")}
+              unit="₹/kg"
+              colorScheme="green"
+            />
+            <ValidatedInput
+              label="Daily Production"
+              value={inp.dailyPouches}
+              onChange={v => setF("dailyPouches", v)}
+              validation={{ isValid: true, severity: "info" }}
+              helpText="For monthly planning"
+              colorScheme="blue"
+            />
+            <ValidatedInput
+              label="Working Days/Month"
+              value={inp.batchDays}
+              onChange={v => setF("batchDays", v)}
+              validation={{ isValid: true, severity: "info" }}
+              colorScheme="blue"
+            />
+          </CardContent>
+        </Card>
+
+        {/* ── CALCULATE ───────────────────────────────── */}
+        <Button onClick={calculate}
+          className="w-full h-11 bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 text-white font-bold shadow-md">
+          <PackageOpen className="w-4 h-4 mr-2" />
+          Calculate Film Requirement
+        </Button>
+
+        {/* ── RESULTS ─────────────────────────────────── */}
+        {result && (
+          <div className="space-y-3 animate-in fade-in">
+
+            {/* Main KPIs */}
+            <div className="grid grid-cols-3 gap-2">
+              {[
+                { label: "Gross Film",     value: result.grossKg.toFixed(1),  unit: "kg",   color: "bg-purple-600" },
+                { label: "Reels (ceil)",   value: result.reelsCeil,            unit: "reels",color: "bg-slate-800"  },
+                { label: "Film Length",    value: (result.grossMeters / 1000).toFixed(2), unit: "km", color: "bg-violet-600" },
+              ].map((k, i) => (
+                <div key={i} className={`${k.color} text-white p-3 rounded-xl text-center shadow`}>
+                  <div className="text-[9px] uppercase opacity-80 font-bold">{k.label}</div>
+                  <div className="text-2xl font-black">{k.value}</div>
+                  <div className="text-[9px] opacity-70">{k.unit}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Per-pouch stats */}
+            <Card className="bg-white border-purple-100">
+              <CardHeader className="p-3 pb-1 border-b border-purple-100">
+                <CardTitle className="text-xs text-purple-700 font-bold uppercase">📊 Per-Pouch Analysis</CardTitle>
+              </CardHeader>
+              <CardContent className="p-3 space-y-2 text-sm">
+                {[
+                  { label: "Pouch film area",       value: `${result.areaPerPouchCm2.toFixed(2)} cm²` },
+                  { label: "Weight per pouch",       value: `${result.weightPerPouchG.toFixed(3)} g` },
+                  { label: "Yield",                  value: `${result.yieldPouchPerKg.toFixed(0)} pouches/kg` },
+                  { label: "Pouches per reel",       value: `${result.pouchesPerReel.toLocaleString("en-IN")} pouches` },
+                  { label: "Reel length (calc)",     value: `${result.calcRollLenM.toFixed(0)} m` },
+                  { label: "Print area per pouch",   value: `${result.printAreaCm2.toFixed(0)} cm²` },
+                  { label: "Total print area",       value: `${result.printAreaTotalM2.toFixed(1)} m²` },
+                ].map((r, i) => (
+                  <div key={i} className="flex justify-between">
+                    <span className="text-slate-500">{r.label}</span>
+                    <span className="font-bold text-slate-700">{r.value}</span>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+
+            {/* Cost breakdown */}
+            <Card className="bg-green-50 border-green-200">
+              <CardHeader className="p-3 pb-1 border-b border-green-100">
+                <CardTitle className="text-sm text-green-800">💰 Cost Analysis</CardTitle>
+              </CardHeader>
+              <CardContent className="p-3 space-y-2 text-sm">
+                {[
+                  { label: "Net film (no wastage)",   value: `${result.netKg.toFixed(2)} kg` },
+                  { label: "Gross film (+ wastage)",  value: `${result.grossKg.toFixed(2)} kg` },
+                  { label: "Batch film cost",         value: `₹ ${result.batchCost.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`, bold: true },
+                  { label: "Cost per pouch",          value: `₹ ${result.costPerPouch.toFixed(4)}` },
+                  { label: "Cost per 1000 pouches",   value: `₹ ${result.costPerThousand.toFixed(2)}`, bold: true },
+                ].map((r, i) => (
+                  <div key={i} className="flex justify-between">
+                    <span className="text-slate-500">{r.label}</span>
+                    <span className={`${r.bold ? "font-black text-green-800 text-base" : "font-bold text-slate-700"}`}>{r.value}</span>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+
+            {/* Monthly planning */}
+            {(parseFloat(inp.dailyPouches) > 0) && (
+              <Card className="bg-gradient-to-br from-slate-800 to-slate-900 text-white border-none">
+                <CardHeader className="p-3 pb-1">
+                  <CardTitle className="text-xs text-slate-300 font-bold uppercase">
+                    📅 Monthly Plan ({inp.batchDays} days · {result.monthlyPouches.toLocaleString("en-IN")} pouches)
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-3 space-y-2 text-sm">
+                  {[
+                    { label: "Monthly film",    value: `${result.monthlyGrossKg.toFixed(1)} kg`,  color: "text-cyan-400"   },
+                    { label: "Monthly reels",   value: `${result.monthlyReels} reels`,             color: "text-yellow-300" },
+                    { label: "Monthly cost",    value: `₹ ${result.monthlyCost.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`, color: "text-green-300 font-black text-base" },
+                  ].map((r, i) => (
+                    <div key={i} className="flex justify-between">
+                      <span className="text-slate-400">{r.label}</span>
+                      <span className={`font-bold ${r.color}`}>{r.value}</span>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Warnings */}
+            {result.warnings.length > 0 && (
+              <Alert className="bg-yellow-50 border-yellow-300">
+                <AlertTriangle className="h-4 w-4 text-yellow-600" />
+                <AlertTitle className="text-yellow-800 text-sm">Packaging Alerts</AlertTitle>
+                <AlertDescription className="text-xs text-yellow-700 space-y-1">
+                  {result.warnings.map((w: string, i: number) => <div key={i}>⚠️ {w}</div>)}
+                </AlertDescription>
+              </Alert>
+            )}
+
+            {/* Formula note */}
+            <div className="bg-slate-50 border rounded-lg p-3 text-[10px] font-mono text-slate-400 space-y-1">
+              <div className="font-bold text-slate-600 text-xs mb-1">📐 Formulas:</div>
+              <div>W_eff = Width + 2×Gusset = {parseFloat(inp.width) + 2 * parseFloat(inp.gusset || "0")} mm</div>
+              <div>Area/pouch = W_eff × Repeat × Layers = {result.areaPerPouchCm2.toFixed(2)} cm²</div>
+              <div>Wt/pouch = Area × (T/10000) × ρ = {result.weightPerPouchG.toFixed(4)} g</div>
+              <div>Gross_kg = (Wt × Pouches / 1000) × (1 + Wastage%) = {result.grossKg.toFixed(3)} kg</div>
+              <div>Reels = Gross_kg / RollWeight = {result.reelsExact.toFixed(3)} → {result.reelsCeil} reels</div>
+            </div>
+
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+// ════════════════════════════════════════════════════════════
+// ADVANCED PIPELINE HOLD-UP & CIP VOLUME CALCULATOR
+// Drop-in Replacement for PipelineLossCalc()
+//
+// INSTRUCTIONS:
+// 1. Apni file mein purana PipelineLossCalc() function dhundhein
+// 2. Pura block DELETE karein
+// 3. Yeh poora code wahan PASTE karein
+// Koi naya import nahi chahiye.
+// ════════════════════════════════════════════════════════════
+
+// ── PIPE SIZE DATABASE (SMS/DIN 11850 Standards) ─────────
+const PIPE_SIZES = [
+  { label: '½"  (12.7mm OD)',  od: "12.7",  th: "1.0", dn: "DN10"  },
+  { label: '¾"  (19.0mm OD)',  od: "19.0",  th: "1.0", dn: "DN15"  },
+  { label: '1"  (25.4mm OD)',  od: "25.4",  th: "1.2", dn: "DN20"  },
+  { label: '1½" (38.1mm OD)',  od: "38.1",  th: "1.2", dn: "DN32"  },
+  { label: '2"  (51.0mm OD)',  od: "51.0",  th: "1.5", dn: "DN40"  },
+  { label: '2½" (63.5mm OD)',  od: "63.5",  th: "1.5", dn: "DN50"  },
+  { label: '3"  (76.2mm OD)',  od: "76.2",  th: "1.5", dn: "DN65"  },
+  { label: '4"  (101.6mm OD)', od: "101.6", th: "2.0", dn: "DN100" },
+  { label: '5"  (129.0mm OD)', od: "129.0", th: "2.0", dn: "DN125" },
+  { label: '6"  (154.0mm OD)', od: "154.0", th: "2.0", dn: "DN150" },
+] as const;
+
+// ── FITTING VOLUMES (Approximate, per fitting, for given OD) ──
+// L-equivalent per fitting in pipe diameters
+const FITTING_L_EQUIV: Record<string, number> = {
+  "Elbow 90°":          30,
+  "Elbow 45°":          16,
+  "Tee (flow-through)": 20,
+  "Tee (branch)":       60,
+  "Butterfly Valve":    40,
+  "Ball Valve":         6,
+  "Straight Reducer":   10,
+};
+
+// ── CIP VELOCITY GUIDELINE ──────────────────────────────
+// Recommended CIP velocity: 1.5 m/s minimum (turbulent flow for cleaning)
+// Re = ρvD/μ; for water: ρ=1000, μ=0.001 → Re = 1000*v*D/0.001
+function cipFlowRate(id_m: number, velocity_ms = 1.5): number {
+  return Math.PI * (id_m / 2) ** 2 * velocity_ms * 1000 * 3600; // L/hr
+}
+
+// ── MULTI-SEGMENT STATE ───────────────────────────────────
+interface PipeSegment {
+  id:        string;
+  od:        string;
+  thickness: string;
+  length:    string;
+  lines:     string;
+  label:     string;
+}
+
+// ── MAIN COMPONENT ────────────────────────────────────────
+function PipelineLossCalc() {
+  const { toast } = useToast();
+
+  // Multi-segment support
+  const [segments, setSegments] = useState<PipeSegment[]>([
+    { id: "s1", od: "51.0", thickness: "1.5", length: "100", lines: "1", label: "Main Line" },
+  ]);
+
+  // Fitting adder
+  const [fittings, setFittings] = useState<{ type: string; count: string }[]>([]);
+
+  const [result, setResult] = useState<any>(null);
+  const [activeTab, setActiveTab] = useState<"segments" | "fittings" | "results">("segments");
+
+  // ── SEGMENT HELPERS ──────────────────────────────────
+  const addSegment = () => {
+    setSegments(p => [...p, {
+      id: `s${Date.now()}`, od: "51.0", thickness: "1.5",
+      length: "50", lines: "1", label: `Line ${p.length + 1}`,
+    }]);
+  };
+
+  const removeSegment = (id: string) => {
+    if (segments.length === 1) return;
+    setSegments(p => p.filter(s => s.id !== id));
+  };
+
+  const updateSegment = (id: string, key: keyof PipeSegment, val: string) => {
+    setSegments(p => p.map(s => {
+      if (s.id !== id) return s;
+      // Auto-update thickness when OD changes
+      if (key === "od") {
+        const found = PIPE_SIZES.find(ps => ps.od === val);
+        return { ...s, od: val, thickness: found ? found.th : s.thickness };
+      }
+      return { ...s, [key]: val };
+    }));
+  };
+
+  // ── FITTING HELPERS ───────────────────────────────────
+  const addFitting = (type: string) => {
+    const existing = fittings.find(f => f.type === type);
+    if (existing) {
+      setFittings(p => p.map(f => f.type === type ? { ...f, count: String(parseInt(f.count) + 1) } : f));
+    } else {
+      setFittings(p => [...p, { type, count: "1" }]);
+    }
+  };
+  const removeFitting = (type: string) => setFittings(p => p.filter(f => f.type !== type));
+
+  // ── CALCULATE ─────────────────────────────────────────
+  const calculate = useCallback(() => {
+    // Per-segment calculation
+    const segResults = segments.map(s => {
+      const OD  = parseFloat(s.od);
+      const Th  = parseFloat(s.thickness);
+      const Len = parseFloat(s.length);
+      const N   = parseFloat(s.lines) || 1;
+      const ID  = OD - 2 * Th;
+      if (ID <= 0 || Len <= 0) return null;
+      const id_m        = ID / 1000;
+      const volPerLine  = Math.PI * (id_m / 2) ** 2 * Len * 1000; // litres
+      const totalVol    = volPerLine * N;
+      const lPerM       = volPerLine / Len;
+      const cipFlowLhr  = cipFlowRate(id_m);
+      const reynolds    = (1000 * 1.5 * id_m) / 0.001; // at 1.5 m/s CIP velocity
+      return { label: s.label, ID, OD, Th, Len, N, totalVol, volPerLine, lPerM, cipFlowLhr, reynolds };
+    }).filter(Boolean);
+
+    if (segResults.length === 0) {
+      toast({ variant: "destructive", title: "No valid segments", description: "Dimensions check karein." });
+      return;
+    }
+
+    const totalPipeVol = segResults.reduce((s: number, r: any) => s + r.totalVol, 0);
+
+    // Fittings equivalent volume
+    // Use largest segment OD for fitting volume reference
+    const refOD = parseFloat(segments[0].od) / 1000;
+    const refTh = parseFloat(segments[0].thickness) / 1000;
+    const refID = refOD - 2 * refTh;
+    const refAreaM2 = Math.PI * (refID / 2) ** 2;
+
+    let fittingVol = 0;
+    const fittingDetails: { type: string; count: number; vol: number }[] = [];
+    fittings.forEach(f => {
+      const n        = parseInt(f.count) || 0;
+      const lEquiv   = FITTING_L_EQUIV[f.type] || 0;
+      const fvol     = refAreaM2 * lEquiv * refID * n * 1000; // litres
+      fittingVol    += fvol;
+      fittingDetails.push({ type: f.type, count: n, vol: fvol });
+    });
+
+    const totalSystemVol  = totalPipeVol + fittingVol;
+
+    // CIP volumes
+    const preRinseVol    = totalSystemVol * 1.5;   // 1.5× for pre-rinse
+    const causticVol     = totalSystemVol * 2.0;   // 2× for caustic circulation
+    const acidVol        = totalSystemVol * 2.0;   // 2× for acid wash
+    const finalRinseVol  = totalSystemVol * 1.5;   // final rinse
+    const totalCIPVol    = preRinseVol + causticVol + acidVol + finalRinseVol;
+
+    // CIP pump sizing (for largest segment)
+    const maxCipFlow = Math.max(...(segResults as any[]).map((r: any) => r.cipFlowLhr));
+
+    // Milk loss cost (approximate ₹)
+    const milkRate = 35; // ₹/L typical
+    const milkLossCost = totalPipeVol * milkRate;
+
+    setResult({
+      segResults, totalPipeVol, fittingVol, fittingDetails,
+      totalSystemVol, preRinseVol, causticVol, acidVol,
+      finalRinseVol, totalCIPVol, maxCipFlow, milkLossCost,
+    });
+
+    setActiveTab("results");
+    toast({
+      title: "✅ Calculated",
+      description: `Total hold-up: ${totalSystemVol.toFixed(1)} L | CIP: ${totalCIPVol.toFixed(0)} L`,
+    });
+  }, [segments, fittings, toast]);
+
+  // ── RENDER ────────────────────────────────────────────
+  return (
+    <Card className="border-orange-200 bg-orange-50/20">
+      <CardHeader className="pb-3 bg-gradient-to-r from-orange-50 to-amber-50 rounded-t-lg border-b border-orange-100">
+        <CardTitle className="flex items-center justify-between">
+          <span className="flex items-center gap-2 text-orange-800">
+            <Cylinder className="w-5 h-5 text-orange-600" />
+            Pipeline Hold-up & CIP
+          </span>
+          {result && (
+            <Badge className="bg-orange-600 text-white text-sm px-3 py-1">
+              {result.totalSystemVol.toFixed(1)} L
+            </Badge>
+          )}
+        </CardTitle>
+        <CardDescription className="text-orange-600 text-xs">
+          Multi-segment · Fittings · CIP volume per stage · Flow velocity · Milk loss cost
+        </CardDescription>
+      </CardHeader>
+
+      <CardContent className="pt-4 space-y-4">
+        <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as any)}>
+          <TabsList className="grid grid-cols-3 bg-slate-100">
+            <TabsTrigger value="segments" className="text-xs">🔧 Segments</TabsTrigger>
+            <TabsTrigger value="fittings" className="text-xs">🔩 Fittings</TabsTrigger>
+            <TabsTrigger value="results"  className="text-xs">📊 Results</TabsTrigger>
+          </TabsList>
+
+          {/* ═════ TAB 1: SEGMENTS ══════════════════════ */}
+          <TabsContent value="segments" className="space-y-3 pt-3">
+            <p className="text-xs text-slate-500">
+              Alag-alag diameter lines alag segment mein add karein. For example: main 2" line + CIP return 1.5" line.
+            </p>
+
+            {segments.map((seg, idx) => (
+              <Card key={seg.id} className="border-orange-100 bg-white">
+                <CardHeader className="p-3 pb-2 bg-orange-50 rounded-t-lg border-b border-orange-100 flex flex-row items-center justify-between">
+                  <div className="flex items-center gap-2 flex-1">
+                    <span className="bg-orange-600 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">
+                      {idx + 1}
+                    </span>
+                    <input
+                      className="text-xs font-bold text-orange-800 bg-transparent border-none outline-none w-full"
+                      value={seg.label}
+                      onChange={e => updateSegment(seg.id, "label", e.target.value)}
+                      placeholder="Line name…"
+                    />
+                  </div>
+                  {segments.length > 1 && (
+                    <button
+                      onClick={() => removeSegment(seg.id)}
+                      className="text-red-400 hover:text-red-600 text-xs font-bold ml-2"
+                    >
+                      ✕
+                    </button>
+                  )}
+                </CardHeader>
+                <CardContent className="p-3 space-y-2">
+                  {/* Pipe standard selector */}
+                  <div className="space-y-1">
+                    <Label className="text-[10px] uppercase font-bold text-slate-500">
+                      Pipe Standard (SMS/DIN 11850)
+                    </Label>
+                    <Select
+                      value={seg.od}
+                      onValueChange={v => updateSegment(seg.id, "od", v)}
+                    >
+                      <SelectTrigger className="h-9 text-xs bg-white border-orange-100">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {PIPE_SIZES.map(ps => (
+                          <SelectItem key={ps.od} value={ps.od}>
+                            <span className="font-semibold">{ps.label}</span>
+                            <span className="text-[10px] text-slate-400 ml-2">
+                              ID: {(parseFloat(ps.od) - 2 * parseFloat(ps.th)).toFixed(1)}mm · {ps.dn}
+                            </span>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <ValidatedInput
+                      label="OD (mm)"
+                      value={seg.od}
+                      onChange={v => updateSegment(seg.id, "od", v)}
+                      validation={{ isValid: parseFloat(seg.od) > 0, severity: "error" }}
+                      helpText="Outer diameter"
+                      colorScheme="orange"
+                    />
+                    <ValidatedInput
+                      label="Wall Thickness (mm)"
+                      value={seg.thickness}
+                      onChange={v => updateSegment(seg.id, "thickness", v)}
+                      validation={{ isValid: parseFloat(seg.thickness) > 0, severity: "error" }}
+                      helpText={`ID = ${(parseFloat(seg.od) - 2 * parseFloat(seg.thickness)).toFixed(1)} mm`}
+                      colorScheme="orange"
+                    />
+                    <ValidatedInput
+                      label="Length (m)"
+                      value={seg.length}
+                      onChange={v => updateSegment(seg.id, "length", v)}
+                      validation={{ isValid: parseFloat(seg.length) > 0, severity: "error" }}
+                      colorScheme="blue"
+                    />
+                    <ValidatedInput
+                      label="No. of Lines"
+                      value={seg.lines}
+                      onChange={v => updateSegment(seg.id, "lines", v)}
+                      validation={{ isValid: parseFloat(seg.lines) >= 1, severity: "error" }}
+                      helpText="Parallel lines"
+                      colorScheme="blue"
+                    />
+                  </div>
+
+                  {/* Quick ID preview */}
+                  <div className="text-[10px] text-center bg-orange-50 rounded p-1 text-orange-700 font-mono">
+                    ID = {seg.od} − 2×{seg.thickness} ={" "}
+                    <strong>{(parseFloat(seg.od) - 2 * parseFloat(seg.thickness)).toFixed(1)} mm</strong>
+                    {" | "}
+                    ~{(Math.PI * ((parseFloat(seg.od) - 2 * parseFloat(seg.thickness)) / 2000) ** 2 * parseFloat(seg.length) * 1000).toFixed(2)} L
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={addSegment}
+              className="w-full border-dashed border-orange-300 text-orange-600 hover:bg-orange-50"
+            >
+              + Add Pipe Segment
+            </Button>
+          </TabsContent>
+
+          {/* ═════ TAB 2: FITTINGS ══════════════════════ */}
+          <TabsContent value="fittings" className="space-y-3 pt-3">
+            <p className="text-xs text-slate-500">
+              Fittings add karein — inhe pipe ke equivalent length mein convert karke total hold-up mein add kiya jaata hai.
+            </p>
+
+            {/* Fitting buttons */}
+            <div className="flex flex-wrap gap-2">
+              {Object.keys(FITTING_L_EQUIV).map(type => (
+                <button
+                  key={type}
+                  onClick={() => addFitting(type)}
+                  className="px-3 py-1.5 rounded-lg border border-orange-200 bg-white text-xs font-semibold text-orange-700 hover:bg-orange-600 hover:text-white transition-all shadow-sm"
+                >
+                  + {type}
+                </button>
+              ))}
+            </div>
+
+            {/* Added fittings */}
+            {fittings.length > 0 ? (
+              <Card className="border-orange-100 bg-white">
+                <CardContent className="p-3 space-y-2">
+                  {fittings.map(f => (
+                    <div key={f.type} className="flex items-center gap-3">
+                      <span className="flex-1 text-sm text-slate-700">{f.type}</span>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => setFittings(p => p.map(ff => ff.type === f.type ? { ...ff, count: String(Math.max(1, parseInt(ff.count) - 1)) } : ff))}
+                          className="w-6 h-6 rounded-full bg-orange-100 text-orange-600 font-bold text-sm flex items-center justify-center hover:bg-orange-200"
+                        >−</button>
+                        <span className="w-6 text-center font-bold text-sm">{f.count}</span>
+                        <button
+                          onClick={() => setFittings(p => p.map(ff => ff.type === f.type ? { ...ff, count: String(parseInt(ff.count) + 1) } : ff))}
+                          className="w-6 h-6 rounded-full bg-orange-100 text-orange-600 font-bold text-sm flex items-center justify-center hover:bg-orange-200"
+                        >+</button>
+                      </div>
+                      <span className="text-[10px] text-slate-400 w-12 text-right">
+                        {FITTING_L_EQUIV[f.type]}D equiv
+                      </span>
+                      <button onClick={() => removeFitting(f.type)} className="text-red-400 hover:text-red-600 text-xs">✕</button>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="text-center py-4 text-slate-400 text-xs border border-dashed border-slate-200 rounded-lg">
+                Koi fitting add nahi ki — upar se click karein
+              </div>
+            )}
+
+            <Alert className="bg-blue-50 border-blue-200">
+              <Info className="h-4 w-4 text-blue-600" />
+              <AlertDescription className="text-xs text-blue-700">
+                Equivalent length = fitting ke L/D value × pipe ID. Yeh volume pipeline hold-up mein add hoga.
+              </AlertDescription>
+            </Alert>
+          </TabsContent>
+
+          {/* ═════ TAB 3: RESULTS ═══════════════════════ */}
+          <TabsContent value="results" className="space-y-4 pt-3">
+            {result ? (
+              <>
+                {/* Main KPIs */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-orange-600 text-white p-4 rounded-xl shadow-lg text-center">
+                    <div className="text-[10px] uppercase opacity-80 font-bold">Total Hold-up</div>
+                    <div className="text-3xl font-black">{result.totalSystemVol.toFixed(1)}</div>
+                    <div className="text-xs opacity-70">Litres (pipes + fittings)</div>
+                  </div>
+                  <div className="bg-slate-800 text-white p-4 rounded-xl shadow-lg text-center">
+                    <div className="text-[10px] uppercase opacity-70 font-bold">Total CIP Water</div>
+                    <div className="text-3xl font-black text-cyan-400">{result.totalCIPVol.toFixed(0)}</div>
+                    <div className="text-xs opacity-60">Litres (4-stage)</div>
+                  </div>
+                </div>
+
+                {/* Segment breakdown */}
+                <Card className="bg-white border-orange-100">
+                  <CardHeader className="p-3 pb-1 border-b">
+                    <CardTitle className="text-xs text-orange-700 font-bold uppercase">Segment Breakdown</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-3 space-y-2">
+                    {result.segResults.map((r: any) => (
+                      <div key={r.label} className="space-y-1">
+                        <div className="flex justify-between text-sm">
+                          <span className="font-semibold text-slate-700">{r.label}</span>
+                          <span className="font-bold text-orange-600">{r.totalVol.toFixed(2)} L</span>
+                        </div>
+                        <div className="text-[10px] text-slate-400 flex gap-4">
+                          <span>OD {r.OD}mm · ID {r.ID.toFixed(1)}mm</span>
+                          <span>{r.Len}m × {r.N} line(s)</span>
+                          <span>{r.lPerM.toFixed(3)} L/m</span>
+                          <span className={r.reynolds >= 4000 ? "text-green-600" : "text-red-500"}>
+                            CIP Re={r.reynolds.toFixed(0)} {r.reynolds >= 4000 ? "✓ turbulent" : "⚠ laminar"}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                    {result.fittingVol > 0 && (
+                      <div className="border-t pt-2">
+                        <div className="flex justify-between text-sm">
+                          <span className="font-semibold text-slate-700">Fittings (equivalent)</span>
+                          <span className="font-bold text-purple-600">{result.fittingVol.toFixed(2)} L</span>
+                        </div>
+                        {result.fittingDetails.map((fd: any) => (
+                          <div key={fd.type} className="text-[10px] text-slate-400 flex justify-between px-2">
+                            <span>{fd.type} × {fd.count}</span>
+                            <span>{fd.vol.toFixed(3)} L</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    <div className="border-t-2 pt-2 flex justify-between font-bold text-base text-orange-800">
+                      <span>Grand Total Hold-up</span>
+                      <span>{result.totalSystemVol.toFixed(2)} L</span>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* CIP Stage Breakdown */}
+                <Card className="bg-blue-50 border-blue-200">
+                  <CardHeader className="p-3 pb-1 border-b border-blue-100">
+                    <CardTitle className="text-sm text-blue-800">🧹 CIP Volume Per Stage</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-3 space-y-2 text-sm">
+                    {[
+                      { stage: "Pre-Rinse (water flush)",    vol: result.preRinseVol,   mult: "1.5×", color: "text-blue-600"   },
+                      { stage: "Caustic Circulation (NaOH)", vol: result.causticVol,    mult: "2.0×", color: "text-red-600"    },
+                      { stage: "Acid Wash (HNO₃/HCl)",      vol: result.acidVol,       mult: "2.0×", color: "text-yellow-600" },
+                      { stage: "Final Rinse",                vol: result.finalRinseVol, mult: "1.5×", color: "text-green-600"  },
+                    ].map((s, i) => (
+                      <div key={i} className="flex justify-between items-center">
+                        <div>
+                          <span className={`font-semibold ${s.color}`}>{s.stage}</span>
+                          <span className="text-[10px] text-slate-400 ml-2">({s.mult} hold-up)</span>
+                        </div>
+                        <span className="font-bold">{s.vol.toFixed(0)} L</span>
+                      </div>
+                    ))}
+                    <div className="border-t-2 pt-2 flex justify-between font-black text-blue-800">
+                      <span>Total CIP Water / Cycle</span>
+                      <span>{result.totalCIPVol.toFixed(0)} L</span>
+                    </div>
+                    <div className="text-[10px] text-blue-500 mt-1">
+                      CIP pump sizing: ≥ {(result.maxCipFlow / 1000).toFixed(1)} m³/hr to achieve 1.5 m/s velocity
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Milk Loss Cost */}
+                <div className="grid grid-cols-2 gap-3">
+                  <ResultCard
+                    title="Per Meter (main line)"
+                    value={(result.segResults[0]?.lPerM || 0).toFixed(3)}
+                    unit="L/m"
+                    colorScheme="orange"
+                    confidence="high"
+                  />
+                  <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-center">
+                    <div className="text-[10px] text-red-500 font-bold uppercase">Milk Loss Value</div>
+                    <div className="text-xl font-black text-red-700">
+                      ₹ {result.milkLossCost.toLocaleString("en-IN", { maximumFractionDigits: 0 })}
+                    </div>
+                    <div className="text-[10px] text-red-400">per flush @ ₹35/L</div>
+                  </div>
+                </div>
+
+                {/* Formula note */}
+                <div className="bg-slate-50 border rounded-lg p-3 text-[10px] font-mono text-slate-400 space-y-1">
+                  <div className="font-bold text-slate-600 text-xs mb-1">📐 Formulas:</div>
+                  <div>ID = OD − 2 × Wall_thickness</div>
+                  <div>V = π × (ID/2)² × Length</div>
+                  <div>CIP velocity = Q / (π × (ID/2)²) ≥ 1.5 m/s for turbulent flow</div>
+                  <div>Re = ρvD/μ ≥ 4000 for turbulent (CIP effective)</div>
+                </div>
+              </>
+            ) : (
+              <div className="text-center py-10 text-muted-foreground text-sm">
+                <Cylinder className="h-10 w-10 mx-auto mb-3 text-orange-200" />
+                <p>Segments add karein aur <strong>Calculate</strong> press karein.</p>
+              </div>
+            )}
+          </TabsContent>
+        </Tabs>
+
+        {/* ── CALCULATE BUTTON ─────────────────────── */}
+        <Button
+          onClick={calculate}
+          className="w-full h-11 bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white font-bold shadow-md"
+        >
+          <Cylinder className="w-4 h-4 mr-2" />
+          Calculate Hold-up & CIP
+        </Button>
+      </CardContent>
+    </Card>
+  );
+}
+// ════════════════════════════════════════════════════════════
+// ADVANCED CULTURE DOSING & COSTING CALCULATOR
+// Drop-in Replacement for CultureDosingCalc()
+//
+// INSTRUCTIONS:
+// 1. Apni file mein purana CultureDosingCalc() function dhundhein
+// 2. Pura block DELETE karein
+// 3. Yeh poora code wahan PASTE karein
+// Koi naya import nahi chahiye.
+// ════════════════════════════════════════════════════════════
+
+// ── CULTURE DATABASE ─────────────────────────────────────
+const CULTURE_DB = {
+  // DVS Cultures
+  dvs: {
+    "Curd / Dahi (Meso)":        { dose: 20,  pouchU: 50,  price: 650,  temp: "30–32°C", time: "6–8 hr",  ph: "4.6" },
+    "Probiotic Dahi (LGG)":      { dose: 25,  pouchU: 50,  price: 1200, temp: "37°C",    time: "5–7 hr",  ph: "4.5" },
+    "Shrikhand Starter":         { dose: 20,  pouchU: 50,  price: 750,  temp: "30°C",    time: "8–10 hr", ph: "4.5" },
+    "Lassi / Chaas Starter":     { dose: 15,  pouchU: 50,  price: 550,  temp: "30–32°C", time: "5–6 hr",  ph: "4.6" },
+    "Yoghurt (Thermo)":          { dose: 20,  pouchU: 50,  price: 850,  temp: "42–45°C", time: "4–6 hr",  ph: "4.5" },
+    "Greek Yoghurt":             { dose: 25,  pouchU: 50,  price: 1100, temp: "42°C",    time: "5–7 hr",  ph: "4.2" },
+    "Cultured Butter / Cream":   { dose: 10,  pouchU: 50,  price: 900,  temp: "20–22°C", time: "14–18 hr",ph: "4.8" },
+    "Soft Cheese (Cottage)":     { dose: 20,  pouchU: 100, price: 1400, temp: "30°C",    time: "6–8 hr",  ph: "4.6" },
+    "Acidophilus Milk":          { dose: 30,  pouchU: 50,  price: 1500, temp: "37°C",    time: "4–6 hr",  ph: "4.3" },
+    "Kefir":                     { dose: 15,  pouchU: 50,  price: 950,  temp: "20–25°C", time: "20–24 hr",ph: "4.4" },
+  },
+  // Bulk Starter Cultures
+  bulk: {
+    "Standard Curd Starter":     { rate: 2.0, costPerL: 35,  temp: "30–32°C", inoTime: "6–8 hr"  },
+    "Thermophilic (Yoghurt)":    { rate: 2.0, costPerL: 40,  temp: "42–45°C", inoTime: "4–6 hr"  },
+    "Mesophilic (Butter/Cream)": { rate: 1.0, costPerL: 45,  temp: "22°C",    inoTime: "16–18 hr" },
+    "High-Acid (Shrikhand)":     { rate: 2.5, costPerL: 38,  temp: "30°C",    inoTime: "8–10 hr"  },
+    "Probiotic Blend":           { rate: 1.5, costPerL: 75,  temp: "37°C",    inoTime: "5–7 hr"   },
+  },
+} as const;
+
+// ── MAIN COMPONENT ────────────────────────────────────────
+function CultureDosingCalc() {
+  const { toast } = useToast();
+
+  const [method, setMethod] = useState<"dvs" | "bulk">("dvs");
+
+  // DVS inputs
+  const [dvsInp, setDvsInp] = useState({
+    culture:      "Curd / Dahi (Meso)" as keyof typeof CULTURE_DB.dvs,
+    batchSize:    "2000",
+    dvsRate:      "20",
+    pouchU:       "50",
+    price:        "650",
+    batches:      "1",    // batches per day
+    workingDays:  "26",
+  });
+
+  // Bulk inputs
+  const [bulkInp, setBulkInp] = useState({
+    culture:      "Standard Curd Starter" as keyof typeof CULTURE_DB.bulk,
+    batchSize:    "2000",
+    bulkRate:     "2.0",
+    costPerL:     "35",
+    batches:      "1",
+    workingDays:  "26",
+  });
+
+  const [result, setResult] = useState<any>(null);
+  const { validatePositive } = useInputValidation();
+
+  // Auto-fill from culture selection
+  const applyDvsCulture = (name: keyof typeof CULTURE_DB.dvs) => {
+    const c = CULTURE_DB.dvs[name];
+    setDvsInp(p => ({ ...p, culture: name, dvsRate: String(c.dose), pouchU: String(c.pouchU), price: String(c.price) }));
+  };
+
+  const applyBulkCulture = (name: keyof typeof CULTURE_DB.bulk) => {
+    const c = CULTURE_DB.bulk[name];
+    setBulkInp(p => ({ ...p, culture: name, bulkRate: String(c.rate), costPerL: String(c.costPerL) }));
+  };
+
+  // ── CALCULATE ─────────────────────────────────────────
+  const calculate = useCallback(() => {
+    if (method === "dvs") {
+      const Vol       = parseFloat(dvsInp.batchSize)    || 0;
+      const rate      = parseFloat(dvsInp.dvsRate)      || 0;
+      const pouchU    = parseFloat(dvsInp.pouchU)       || 1;
+      const price     = parseFloat(dvsInp.price)        || 0;
+      const batches   = parseFloat(dvsInp.batches)      || 1;
+      const days      = parseFloat(dvsInp.workingDays)  || 26;
+
+      if (Vol <= 0 || rate <= 0) {
+        toast({ variant: "destructive", title: "Invalid values" }); return;
+      }
+
+      const totalUnits      = (Vol / 1000) * rate;
+      const pouchesExact    = totalUnits / pouchU;
+      const pouchesCeil     = Math.ceil(pouchesExact);
+      const costBatch       = pouchesExact * price;      // economic cost (exact)
+      const costCeil        = pouchesCeil  * price;      // procurement cost (rounded up)
+      const costPerL        = costBatch / Vol;
+      const dailyCost       = costBatch * batches;
+      const monthlyCost     = dailyCost * days;
+      const monthlyPouches  = Math.ceil(pouchesExact * batches * days);
+
+      const cultureInfo = CULTURE_DB.dvs[dvsInp.culture as keyof typeof CULTURE_DB.dvs];
+
+      setResult({
+        method: "dvs",
+        totalUnits, pouchesExact, pouchesCeil,
+        costBatch, costCeil, costPerL,
+        dailyCost, monthlyCost, monthlyPouches,
+        cultureInfo,
+        Vol, batches, days,
+      });
+
+    } else {
+      const Vol       = parseFloat(bulkInp.batchSize)   || 0;
+      const rate      = parseFloat(bulkInp.bulkRate)    || 0;
+      const cpl       = parseFloat(bulkInp.costPerL)    || 0;
+      const batches   = parseFloat(bulkInp.batches)     || 1;
+      const days      = parseFloat(bulkInp.workingDays) || 26;
+
+      if (Vol <= 0 || rate <= 0) {
+        toast({ variant: "destructive", title: "Invalid values" }); return;
+      }
+
+      const starterL    = Vol * (rate / 100);
+      const milkForSt   = starterL;               // 1:1 approximation for propagation
+      const costBatch   = starterL * cpl;
+      const costPerL    = costBatch / Vol;
+      const dailyCost   = costBatch * batches;
+      const monthlyCost = dailyCost * days;
+      const monthlyL    = starterL * batches * days;
+
+      // Bulk starter tank size recommendation
+      const tankSizeL   = Math.ceil(starterL * 1.2 / 50) * 50; // +20% buffer, round to 50L
+
+      const cultureInfo = CULTURE_DB.bulk[bulkInp.culture as keyof typeof CULTURE_DB.bulk];
+
+      setResult({
+        method: "bulk",
+        starterL, costBatch, costPerL,
+        dailyCost, monthlyCost, monthlyL,
+        tankSizeL, cultureInfo,
+        Vol, batches, days,
+      });
+    }
+
+    toast({ title: "✅ Calculated", description: "Culture dosing complete." });
+  }, [method, dvsInp, bulkInp, toast]);
+
+  // ── RENDER ────────────────────────────────────────────
+  return (
+    <Card className="border-pink-200 bg-pink-50/20">
+      <CardHeader className="pb-3 bg-gradient-to-r from-pink-50 to-rose-50 rounded-t-lg border-b border-pink-100">
+        <CardTitle className="flex items-center justify-between">
+          <span className="flex items-center gap-2 text-pink-800">
+            <Pipette className="w-5 h-5 text-pink-600" />
+            Fermentation Culture Dosing
+          </span>
+          {result && (
+            <Badge className="bg-pink-600 text-white text-sm px-3 py-1">
+              ₹{result.costPerL.toFixed(2)}/L
+            </Badge>
+          )}
+        </CardTitle>
+        <CardDescription className="text-pink-600 text-xs">
+          DVS pouches · Bulk starter · Monthly budget · Fermentation parameters
+        </CardDescription>
+      </CardHeader>
+
+      <CardContent className="pt-4 space-y-4">
+
+        {/* ── METHOD TOGGLE ──────────────────────────── */}
+        <div className="flex bg-white border border-pink-200 rounded-lg p-1 gap-1">
+          {(["dvs", "bulk"] as const).map(m => (
+            <button
+              key={m}
+              onClick={() => { setMethod(m); setResult(null); }}
+              className={`flex-1 py-2 rounded-md text-xs font-bold transition-all ${
+                method === m
+                  ? "bg-pink-600 text-white shadow"
+                  : "text-slate-500 hover:text-pink-600"
+              }`}
+            >
+              {m === "dvs" ? "💊 DVS (Pouches)" : "🧪 Bulk Starter (%)"}
+            </button>
+          ))}
+        </div>
+
+        {/* ── DVS INPUTS ─────────────────────────────── */}
+        {method === "dvs" && (
+          <div className="space-y-3">
+            {/* Culture selector */}
+            <div className="space-y-1">
+              <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Culture Type</Label>
+              <Select
+                value={dvsInp.culture}
+                onValueChange={v => applyDvsCulture(v as keyof typeof CULTURE_DB.dvs)}
+              >
+                <SelectTrigger className="h-10 bg-white border-pink-200">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {(Object.keys(CULTURE_DB.dvs) as Array<keyof typeof CULTURE_DB.dvs>).map(k => (
+                    <SelectItem key={k} value={k}>
+                      <div className="flex flex-col">
+                        <span className="font-semibold">{k}</span>
+                        <span className="text-[10px] text-slate-400">
+                          {CULTURE_DB.dvs[k].dose} U/KL · {CULTURE_DB.dvs[k].temp} · {CULTURE_DB.dvs[k].time}
+                        </span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              {/* Culture info pill */}
+              {(() => {
+                const c = CULTURE_DB.dvs[dvsInp.culture];
+                return (
+                  <div className="flex flex-wrap gap-2 mt-1">
+                    {[
+                      { label: "Temp", value: c.temp },
+                      { label: "Time", value: c.time },
+                      { label: "Target pH", value: c.ph },
+                    ].map(i => (
+                      <span key={i.label} className="bg-pink-100 text-pink-800 text-[10px] font-semibold px-2 py-0.5 rounded-full">
+                        {i.label}: {i.value}
+                      </span>
+                    ))}
+                  </div>
+                );
+              })()}
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <ValidatedInput
+                label="Batch Size"
+                value={dvsInp.batchSize}
+                onChange={v => setDvsInp(p => ({ ...p, batchSize: v }))}
+                validation={validatePositive(dvsInp.batchSize, "Batch size")}
+                unit="L"
+                colorScheme="pink"
+              />
+              <ValidatedInput
+                label="Dose Rate"
+                value={dvsInp.dvsRate}
+                onChange={v => setDvsInp(p => ({ ...p, dvsRate: v }))}
+                validation={validatePositive(dvsInp.dvsRate, "Dose rate")}
+                unit="U/KL"
+                helpText="Standard: 20–50 U"
+                colorScheme="pink"
+              />
+              <ValidatedInput
+                label="Pouch Strength"
+                value={dvsInp.pouchU}
+                onChange={v => setDvsInp(p => ({ ...p, pouchU: v }))}
+                validation={validatePositive(dvsInp.pouchU, "Pouch strength")}
+                unit="Units"
+                helpText="e.g. 50U, 100U, 200U"
+                colorScheme="pink"
+              />
+              <ValidatedInput
+                label="Price per Pouch"
+                value={dvsInp.price}
+                onChange={v => setDvsInp(p => ({ ...p, price: v }))}
+                validation={validatePositive(dvsInp.price, "Price")}
+                unit="₹"
+                colorScheme="green"
+              />
+              <ValidatedInput
+                label="Batches / Day"
+                value={dvsInp.batches}
+                onChange={v => setDvsInp(p => ({ ...p, batches: v }))}
+                validation={validatePositive(dvsInp.batches, "Batches")}
+                colorScheme="blue"
+              />
+              <ValidatedInput
+                label="Working Days / Month"
+                value={dvsInp.workingDays}
+                onChange={v => setDvsInp(p => ({ ...p, workingDays: v }))}
+                validation={validatePositive(dvsInp.workingDays, "Working days")}
+                colorScheme="blue"
+              />
+            </div>
+          </div>
+        )}
+
+        {/* ── BULK INPUTS ─────────────────────────────── */}
+        {method === "bulk" && (
+          <div className="space-y-3">
+            <div className="space-y-1">
+              <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Starter Type</Label>
+              <Select
+                value={bulkInp.culture}
+                onValueChange={v => applyBulkCulture(v as keyof typeof CULTURE_DB.bulk)}
+              >
+                <SelectTrigger className="h-10 bg-white border-pink-200">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {(Object.keys(CULTURE_DB.bulk) as Array<keyof typeof CULTURE_DB.bulk>).map(k => (
+                    <SelectItem key={k} value={k}>
+                      <div className="flex flex-col">
+                        <span className="font-semibold">{k}</span>
+                        <span className="text-[10px] text-slate-400">
+                          {CULTURE_DB.bulk[k].rate}% · {CULTURE_DB.bulk[k].temp} · {CULTURE_DB.bulk[k].inoTime}
+                        </span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              {(() => {
+                const c = CULTURE_DB.bulk[bulkInp.culture];
+                return (
+                  <div className="flex flex-wrap gap-2 mt-1">
+                    {[
+                      { label: "Incubation Temp", value: c.temp },
+                      { label: "Set Time", value: c.inoTime },
+                    ].map(i => (
+                      <span key={i.label} className="bg-pink-100 text-pink-800 text-[10px] font-semibold px-2 py-0.5 rounded-full">
+                        {i.label}: {i.value}
+                      </span>
+                    ))}
+                  </div>
+                );
+              })()}
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <ValidatedInput
+                label="Batch Size"
+                value={bulkInp.batchSize}
+                onChange={v => setBulkInp(p => ({ ...p, batchSize: v }))}
+                validation={validatePositive(bulkInp.batchSize, "Batch size")}
+                unit="L"
+                colorScheme="pink"
+              />
+              <ValidatedInput
+                label="Inoculation %"
+                value={bulkInp.bulkRate}
+                onChange={v => setBulkInp(p => ({ ...p, bulkRate: v }))}
+                validation={validatePositive(bulkInp.bulkRate, "Rate")}
+                unit="%"
+                helpText="Standard: 1–3%"
+                colorScheme="pink"
+              />
+              <ValidatedInput
+                label="Starter Cost"
+                value={bulkInp.costPerL}
+                onChange={v => setBulkInp(p => ({ ...p, costPerL: v }))}
+                validation={validatePositive(bulkInp.costPerL, "Cost")}
+                unit="₹/L"
+                colorScheme="green"
+              />
+              <ValidatedInput
+                label="Batches / Day"
+                value={bulkInp.batches}
+                onChange={v => setBulkInp(p => ({ ...p, batches: v }))}
+                validation={validatePositive(bulkInp.batches, "Batches")}
+                colorScheme="blue"
+              />
+              <div className="col-span-2">
+                <ValidatedInput
+                  label="Working Days / Month"
+                  value={bulkInp.workingDays}
+                  onChange={v => setBulkInp(p => ({ ...p, workingDays: v }))}
+                  validation={validatePositive(bulkInp.workingDays, "Working days")}
+                  colorScheme="blue"
+                />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ── CALCULATE BUTTON ───────────────────────── */}
+        <Button
+          onClick={calculate}
+          className="w-full h-11 bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-700 hover:to-rose-700 text-white font-bold shadow-md"
+        >
+          <Pipette className="w-4 h-4 mr-2" />
+          Calculate Culture Dosing
+        </Button>
+
+        {/* ── RESULTS ────────────────────────────────── */}
+        {result && (
+          <div className="space-y-3 animate-in fade-in">
+
+            {/* KPIs */}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="bg-pink-600 text-white p-4 rounded-xl shadow-lg text-center">
+                <div className="text-[10px] uppercase opacity-80 font-bold">
+                  {result.method === "dvs" ? "Units Required" : "Starter Required"}
+                </div>
+                <div className="text-2xl font-black">
+                  {result.method === "dvs"
+                    ? `${result.totalUnits.toFixed(1)} U`
+                    : `${result.starterL.toFixed(1)} L`}
+                </div>
+                <div className="text-xs opacity-70">per batch of {result.Vol} L</div>
+              </div>
+              <div className="bg-slate-800 text-white p-4 rounded-xl shadow-lg text-center">
+                <div className="text-[10px] uppercase opacity-70 font-bold">Cost / Litre Milk</div>
+                <div className="text-2xl font-black text-yellow-300">
+                  ₹ {result.costPerL.toFixed(3)}
+                </div>
+                <div className="text-xs opacity-60">culture cost per L</div>
+              </div>
+            </div>
+
+            {/* DVS: Pouch details */}
+            {result.method === "dvs" && (
+              <Card className="bg-white border-pink-100">
+                <CardHeader className="p-3 pb-1 border-b border-pink-100">
+                  <CardTitle className="text-xs text-pink-700 font-bold uppercase">💊 Pouch Calculation</CardTitle>
+                </CardHeader>
+                <CardContent className="p-3 space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-slate-500">Exact pouches needed</span>
+                    <span className="font-bold">{result.pouchesExact.toFixed(3)} pouches</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-500">Procurement quantity (ceil)</span>
+                    <span className="font-bold text-orange-600">{result.pouchesCeil} pouches</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-500">Economic batch cost</span>
+                    <span className="font-bold text-green-700">₹ {result.costBatch.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between text-xs text-slate-400">
+                    <span>If full pouch opened</span>
+                    <span>₹ {result.costCeil.toFixed(2)} (wastage: ₹{(result.costCeil - result.costBatch).toFixed(2)})</span>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Bulk: Tank sizing */}
+            {result.method === "bulk" && (
+              <Card className="bg-white border-pink-100">
+                <CardHeader className="p-3 pb-1 border-b border-pink-100">
+                  <CardTitle className="text-xs text-pink-700 font-bold uppercase">🧪 Bulk Starter Details</CardTitle>
+                </CardHeader>
+                <CardContent className="p-3 space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-slate-500">Starter required / batch</span>
+                    <span className="font-bold">{result.starterL.toFixed(1)} L</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-500">Bulk tank size (recommended)</span>
+                    <span className="font-bold text-orange-600">{result.tankSizeL} L (+20% buffer)</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-500">Batch cost</span>
+                    <span className="font-bold text-green-700">₹ {result.costBatch.toFixed(2)}</span>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Monthly summary */}
+            <Card className="bg-gradient-to-br from-slate-800 to-slate-900 text-white border-none">
+              <CardHeader className="p-3 pb-1">
+                <CardTitle className="text-xs text-slate-300 font-bold uppercase">📅 Monthly Summary</CardTitle>
+              </CardHeader>
+              <CardContent className="p-3 space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-slate-400">Batches/month ({result.batches}/day × {result.days} days)</span>
+                  <span className="font-bold text-cyan-400">{result.batches * result.days} batches</span>
+                </div>
+                {result.method === "dvs" ? (
+                  <div className="flex justify-between">
+                    <span className="text-slate-400">Pouches to procure</span>
+                    <span className="font-bold text-yellow-300">{result.monthlyPouches} pouches</span>
+                  </div>
+                ) : (
+                  <div className="flex justify-between">
+                    <span className="text-slate-400">Starter consumed</span>
+                    <span className="font-bold text-yellow-300">{result.monthlyL.toFixed(0)} L</span>
+                  </div>
+                )}
+                <div className="flex justify-between border-t border-slate-700 pt-2">
+                  <span className="text-slate-300 font-bold">Monthly Culture Cost</span>
+                  <span className="font-black text-green-300 text-base">
+                    ₹ {result.monthlyCost.toLocaleString("en-IN", { maximumFractionDigits: 0 })}
+                  </span>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Fermentation process guide */}
+            {result.cultureInfo && (
+              <Alert className="bg-pink-50 border-pink-200">
+                <Pipette className="h-4 w-4 text-pink-600" />
+                <AlertTitle className="text-pink-800 text-sm">
+                  Fermentation Guide — {method === "dvs" ? dvsInp.culture : bulkInp.culture}
+                </AlertTitle>
+                <AlertDescription className="text-xs text-pink-700 space-y-1 mt-1">
+                  {method === "dvs" ? (
+                    <>
+                      <div>🌡️ Incubation temp: <strong>{result.cultureInfo.temp}</strong></div>
+                      <div>⏱️ Set time: <strong>{result.cultureInfo.time}</strong></div>
+                      <div>🧪 Target end pH: <strong>{result.cultureInfo.ph}</strong></div>
+                      <div>📦 Pouch strength: <strong>{result.cultureInfo.pouchU} Units</strong></div>
+                    </>
+                  ) : (
+                    <>
+                      <div>🌡️ Incubation temp: <strong>{result.cultureInfo.temp}</strong></div>
+                      <div>⏱️ Incubation time: <strong>{result.cultureInfo.inoTime}</strong></div>
+                      <div>📊 Standard inoculation: <strong>{result.cultureInfo.rate}%</strong></div>
+                    </>
+                  )}
+                </AlertDescription>
+              </Alert>
+            )}
+
+            {/* Formula note */}
+            <div className="bg-slate-50 border rounded-lg p-3 text-[10px] font-mono text-slate-400 space-y-1">
+              <div className="font-bold text-slate-600 text-xs mb-1">📐 Formulas:</div>
+              {result.method === "dvs" ? (
+                <>
+                  <div>Total Units = (Batch_L / 1000) × Dose_rate = ({result.Vol}/1000) × {dvsInp.dvsRate} = {result.totalUnits.toFixed(2)} U</div>
+                  <div>Pouches = Total_Units / Pouch_strength = {result.totalUnits.toFixed(2)} / {dvsInp.pouchU} = {result.pouchesExact.toFixed(3)}</div>
+                  <div>Cost/batch = Pouches × Price = {result.pouchesExact.toFixed(3)} × ₹{dvsInp.price} = ₹{result.costBatch.toFixed(2)}</div>
+                </>
+              ) : (
+                <>
+                  <div>Starter_L = Batch_L × (Rate/100) = {result.Vol} × ({bulkInp.bulkRate}/100) = {result.starterL.toFixed(2)} L</div>
+                  <div>Cost/batch = Starter_L × Rate = {result.starterL.toFixed(2)} × ₹{bulkInp.costPerL} = ₹{result.costBatch.toFixed(2)}</div>
+                </>
+              )}
+              <div>Monthly = Cost_batch × batches/day × days = ₹{result.costBatch.toFixed(2)} × {result.batches} × {result.days} = ₹{result.monthlyCost.toFixed(0)}</div>
+            </div>
+
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+// ════════════════════════════════════════════════════════════
+// ADVANCED ETP POLLUTION LOAD AUDIT CALCULATOR
+// Drop-in Replacement for EtpLoadCalc()
+//
+// INSTRUCTIONS:
+// 1. Apni file mein purana EtpLoadCalc() function dhundhein
+// 2. Pura block DELETE karein
+// 3. Yeh poora code wahan PASTE karein
+// Koi naya import nahi chahiye.
+// ════════════════════════════════════════════════════════════
+
+// ── PRODUCT COD/BOD DATABASE ─────────────────────────────
+// COD/BOD in kg per Litre/Kg of product
+// Source: CPCB dairy effluent guidelines + industry data
+const ETP_PRODUCT_DB = {
+  milk_whole:  { label: "🥛 Whole Milk (3.5% fat)",   cod: 0.210, bod: 0.140, tss: 0.008, category: "milk"    },
+  milk_toned:  { label: "🥛 Toned Milk (1.5% fat)",   cod: 0.120, bod: 0.080, tss: 0.006, category: "milk"    },
+  milk_skim:   { label: "🥛 Skim Milk (0.1% fat)",    cod: 0.100, bod: 0.060, tss: 0.005, category: "milk"    },
+  cream_40:    { label: "🧈 Cream (40% fat)",          cod: 0.450, bod: 0.250, tss: 0.015, category: "fat"     },
+  butter_milk: { label: "🫙 Butter Milk / Chach",      cod: 0.080, bod: 0.050, tss: 0.004, category: "milk"    },
+  whey_sweet:  { label: "🧀 Sweet Whey (cheese)",      cod: 0.070, bod: 0.050, tss: 0.006, category: "whey"    },
+  whey_acid:   { label: "🧀 Acid Whey (paneer/curd)",  cod: 0.090, bod: 0.065, tss: 0.007, category: "whey"    },
+  yoghurt:     { label: "🫙 Yoghurt / Curd",           cod: 0.170, bod: 0.110, tss: 0.010, category: "ferment" },
+  ice_cream:   { label: "🍦 Ice Cream Mix",            cod: 0.300, bod: 0.180, tss: 0.020, category: "frozen"  },
+  ghee:        { label: "🧈 Ghee / Clarified Butter",  cod: 0.800, bod: 0.400, tss: 0.050, category: "fat"     },
+  condensed:   { label: "🥫 Condensed Milk",           cod: 0.380, bod: 0.220, tss: 0.025, category: "conc"    },
+  khoa:        { label: "🍮 Khoa / Mawa",              cod: 0.420, bod: 0.260, tss: 0.030, category: "conc"    },
+  cip_caustic: { label: "🧹 CIP Caustic Effluent",     cod: 0.005, bod: 0.002, tss: 0.001, category: "cip"     },
+  cip_acid:    { label: "🧹 CIP Acid Effluent",        cod: 0.003, bod: 0.001, tss: 0.001, category: "cip"     },
+  wash_water:  { label: "💧 General Wash Water",       cod: 0.002, bod: 0.001, tss: 0.001, category: "wash"    },
+} as const;
+
+// ── CPCB DISCHARGE STANDARDS (mg/L) ──────────────────────
+const CPCB_STANDARDS = {
+  COD:  250,   // mg/L for inland surface water
+  BOD:  30,    // mg/L
+  TSS:  100,   // mg/L
+  pH:   { min: 6.5, max: 9.0 },
+};
+
+// ── MULTI-STREAM STATE ────────────────────────────────────
+interface EtpStream {
+  id:      string;
+  product: keyof typeof ETP_PRODUCT_DB;
+  qty:     string;
+  label:   string;
+}
+
+// ── MAIN COMPONENT ────────────────────────────────────────
+function EtpLoadCalc() {
+  const { toast } = useToast();
+
+  const [streams, setStreams] = useState<EtpStream[]>([
+    { id: "s1", product: "milk_whole", qty: "50", label: "Milk Spill" },
+  ]);
+
+  const [treatCostCOD,  setTreatCostCOD]  = useState("5");   // ₹/kg COD
+  const [effluentFlow,  setEffluentFlow]  = useState("50");  // m³/day ETP inlet
+  const [operatingDays, setOperatingDays] = useState("300"); // days/year
+
+  const [result, setResult] = useState<any>(null);
+  const [activeTab, setActiveTab] = useState<"streams" | "results" | "compliance">("streams");
+
+  // ── STREAM HELPERS ─────────────────────────────────────
+  const addStream = () => setStreams(p => [
+    ...p,
+    { id: `s${Date.now()}`, product: "milk_whole", qty: "20", label: `Stream ${p.length + 1}` },
+  ]);
+  const removeStream = (id: string) => { if (streams.length > 1) setStreams(p => p.filter(s => s.id !== id)); };
+  const updateStream = (id: string, key: keyof EtpStream, val: string) =>
+    setStreams(p => p.map(s => s.id === id ? { ...s, [key]: val } : s));
+
+  // ── CALCULATE ──────────────────────────────────────────
+  const calculate = useCallback(() => {
+    const treatCost = parseFloat(treatCostCOD) || 5;
+    const flowM3    = parseFloat(effluentFlow) || 1;
+    const opDays    = parseFloat(operatingDays) || 300;
+
+    // Per-stream calculation
+    const streamResults = streams.map(s => {
+      const prod = ETP_PRODUCT_DB[s.product];
+      const qty  = parseFloat(s.qty) || 0;
+      return {
+        label:  s.label,
+        product: prod.label,
+        qty,
+        cod:    qty * prod.cod,
+        bod:    qty * prod.bod,
+        tss:    qty * prod.tss,
+        category: prod.category,
+      };
+    });
+
+    const totalCOD_kg  = streamResults.reduce((s, r) => s + r.cod, 0);
+    const totalBOD_kg  = streamResults.reduce((s, r) => s + r.bod, 0);
+    const totalTSS_kg  = streamResults.reduce((s, r) => s + r.tss, 0);
+
+    // Concentration in effluent (mg/L = g/m³)
+    const flowL        = flowM3 * 1000;
+    const codMgL       = (totalCOD_kg * 1000 * 1000) / flowL;
+    const bodMgL       = (totalBOD_kg * 1000 * 1000) / flowL;
+    const tssMgL       = (totalTSS_kg * 1000 * 1000) / flowL;
+
+    // CPCB compliance
+    const codCompliant = codMgL <= CPCB_STANDARDS.COD;
+    const bodCompliant = bodMgL <= CPCB_STANDARDS.BOD;
+    const tssCompliant = tssMgL <= CPCB_STANDARDS.TSS;
+
+    // Minimum dilution water needed to meet CPCB norms
+    const dilutionCOD  = totalCOD_kg * 1e6 / CPCB_STANDARDS.COD / 1000; // m³
+    const dilutionBOD  = totalBOD_kg * 1e6 / CPCB_STANDARDS.BOD / 1000;
+    const minDilution  = Math.max(dilutionCOD, dilutionBOD);
+
+    // Population Equivalent (1 PE = 0.06 kg BOD/day)
+    const PE = totalBOD_kg / 0.06;
+
+    // Treatment costs
+    const dayCostCOD   = totalCOD_kg * treatCost;
+    const annualCost   = dayCostCOD * opDays;
+
+    // Biogas potential (anaerobic pre-treatment)
+    // ~0.35 m³ CH4 per kg COD removed at 70% efficiency
+    const biogasM3     = totalCOD_kg * 0.35 * 0.70;
+    const biogasValue  = biogasM3 * 30; // ₹30/m³ equivalent CNG value
+
+    // Water-to-milk ratio (WMR) — industry benchmark ≤ 2.5 L water per L milk
+    const totalMilkL   = streams
+      .filter(s => ETP_PRODUCT_DB[s.product].category === "milk")
+      .reduce((s, r) => s + (parseFloat(r.qty) || 0), 0);
+    const wmr          = totalMilkL > 0 ? flowM3 * 1000 / totalMilkL : null;
+
+    const warnings: string[] = [];
+    if (!codCompliant) warnings.push(`COD ${codMgL.toFixed(0)} mg/L > CPCB limit ${CPCB_STANDARDS.COD} mg/L. Needs ${(minDilution - flowM3).toFixed(1)} m³/day extra dilution or better treatment.`);
+    if (!bodCompliant) warnings.push(`BOD ${bodMgL.toFixed(0)} mg/L > CPCB limit ${CPCB_STANDARDS.BOD} mg/L. Improve aeration / SBR efficiency.`);
+    if (PE > 500)      warnings.push(`Population equivalent ${PE.toFixed(0)} PE is high. Ensure ETP capacity matches.`);
+    if (wmr && wmr > 3) warnings.push(`Water:Milk ratio ${wmr.toFixed(1)} > 2.5 benchmark. Review CIP water usage & floor washing.`);
+
+    setResult({
+      streamResults, totalCOD_kg, totalBOD_kg, totalTSS_kg,
+      codMgL, bodMgL, tssMgL,
+      codCompliant, bodCompliant, tssCompliant,
+      PE, dayCostCOD, annualCost,
+      biogasM3, biogasValue, minDilution,
+      wmr, warnings, flowM3, opDays,
+    });
+
+    setActiveTab("results");
+    toast({
+      title: "✅ Calculated",
+      description: `COD: ${totalCOD_kg.toFixed(2)} kg/day | ${codMgL.toFixed(0)} mg/L`,
+    });
+  }, [streams, treatCostCOD, effluentFlow, operatingDays, toast]);
+
+  // ── RENDER ─────────────────────────────────────────────
+  return (
+    <Card className="border-stone-300 bg-stone-50/30">
+      <CardHeader className="pb-3 bg-gradient-to-r from-stone-50 to-red-50 rounded-t-lg border-b border-stone-200">
+        <CardTitle className="flex items-center justify-between">
+          <span className="flex items-center gap-2 text-stone-800">
+            <Trash2 className="w-5 h-5 text-red-600" />
+            ETP Pollution Load Audit
+          </span>
+          {result && (
+            <Badge className={`text-white text-sm px-3 py-1 ${result.codCompliant && result.bodCompliant ? "bg-green-600" : "bg-red-600"}`}>
+              {result.codCompliant && result.bodCompliant ? "✓ Compliant" : "⚠ Exceeds Norms"}
+            </Badge>
+          )}
+        </CardTitle>
+        <CardDescription className="text-stone-500 text-xs">
+          Multi-stream COD/BOD · CPCB compliance · Biogas potential · Annual cost
+        </CardDescription>
+      </CardHeader>
+
+      <CardContent className="pt-4 space-y-4">
+        <Tabs value={activeTab} onValueChange={v => setActiveTab(v as any)}>
+          <TabsList className="grid grid-cols-3 bg-slate-100">
+            <TabsTrigger value="streams"    className="text-xs">🏭 Streams</TabsTrigger>
+            <TabsTrigger value="results"    className="text-xs">📊 Results</TabsTrigger>
+            <TabsTrigger value="compliance" className="text-xs">📋 CPCB</TabsTrigger>
+          </TabsList>
+
+          {/* ═════ TAB 1: STREAMS ═══════════════════════ */}
+          <TabsContent value="streams" className="space-y-3 pt-3">
+            <p className="text-xs text-slate-500">
+              Plant ke different waste streams alag-alag add karein — milk spill, CIP effluent, whey drain, wash water, etc.
+            </p>
+
+            {streams.map((s, idx) => {
+              const prod = ETP_PRODUCT_DB[s.product];
+              return (
+                <Card key={s.id} className="border-stone-200 bg-white">
+                  <CardHeader className="p-3 pb-2 bg-stone-50 rounded-t-lg border-b border-stone-100 flex flex-row items-center justify-between">
+                    <div className="flex items-center gap-2 flex-1">
+                      <span className="bg-red-600 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">
+                        {idx + 1}
+                      </span>
+                      <input
+                        className="text-xs font-bold text-stone-800 bg-transparent border-none outline-none w-full"
+                        value={s.label}
+                        onChange={e => updateStream(s.id, "label", e.target.value)}
+                        placeholder="Stream name…"
+                      />
+                    </div>
+                    {streams.length > 1 && (
+                      <button onClick={() => removeStream(s.id)} className="text-red-400 hover:text-red-600 text-xs font-bold ml-2">✕</button>
+                    )}
+                  </CardHeader>
+                  <CardContent className="p-3 space-y-2">
+                    <Select
+                      value={s.product}
+                      onValueChange={v => updateStream(s.id, "product", v)}
+                    >
+                      <SelectTrigger className="h-9 text-xs bg-white border-stone-200">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {(Object.entries(ETP_PRODUCT_DB) as [keyof typeof ETP_PRODUCT_DB, any][]).map(([key, val]) => (
+                          <SelectItem key={key} value={key}>
+                            <div className="flex flex-col">
+                              <span className="font-semibold">{val.label}</span>
+                              <span className="text-[10px] text-slate-400">
+                                COD: {val.cod} kg/L · BOD: {val.bod} kg/L
+                              </span>
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+
+                    {/* COD factor pills */}
+                    <div className="flex gap-2">
+                      {[
+                        { label: "COD", value: prod.cod, color: "bg-red-100 text-red-800" },
+                        { label: "BOD", value: prod.bod, color: "bg-orange-100 text-orange-800" },
+                        { label: "TSS", value: prod.tss, color: "bg-yellow-100 text-yellow-800" },
+                      ].map(p => (
+                        <span key={p.label} className={`${p.color} text-[10px] font-bold px-2 py-0.5 rounded-full`}>
+                          {p.label}: {p.value} kg/L
+                        </span>
+                      ))}
+                    </div>
+
+                    <ValidatedInput
+                      label={`Quantity (L or kg) — ${s.label}`}
+                      value={s.qty}
+                      onChange={v => updateStream(s.id, "qty", v)}
+                      validation={{ isValid: parseFloat(s.qty) > 0, severity: "error" }}
+                      unit="L/kg"
+                      helpText={`→ COD: ${(parseFloat(s.qty) * prod.cod || 0).toFixed(2)} kg`}
+                      colorScheme="red"
+                    />
+                  </CardContent>
+                </Card>
+              );
+            })}
+
+            <Button
+              variant="outline" size="sm"
+              onClick={addStream}
+              className="w-full border-dashed border-stone-300 text-stone-600 hover:bg-stone-100"
+            >
+              + Add Waste Stream
             </Button>
 
-            {result && !result.error && (
-                <div className="grid grid-cols-2 gap-3 animate-in slide-in-from-bottom-2">
-                    <div className="bg-blue-600 text-white p-3 rounded-xl shadow-md text-center">
-                        <div className="text-[10px] uppercase opacity-70 font-bold">Total Volume</div>
-                        <div className="text-3xl font-black">{result.volLiters.toLocaleString('en-IN', {maximumFractionDigits: 0})}</div>
-                        <div className="text-xs opacity-80">Liters</div>
+            {/* ETP parameters */}
+            <Card className="border-blue-100 bg-blue-50/50">
+              <CardHeader className="p-3 pb-2 border-b border-blue-100">
+                <CardTitle className="text-xs text-blue-700 font-bold uppercase">⚙️ ETP Parameters</CardTitle>
+              </CardHeader>
+              <CardContent className="p-3 grid grid-cols-1 md:grid-cols-3 gap-3">
+                <ValidatedInput
+                  label="ETP Inlet Flow"
+                  value={effluentFlow}
+                  onChange={setEffluentFlow}
+                  validation={{ isValid: parseFloat(effluentFlow) > 0, severity: "error" }}
+                  unit="m³/day"
+                  helpText="Total effluent volume"
+                  colorScheme="blue"
+                />
+                <ValidatedInput
+                  label="Treatment Cost"
+                  value={treatCostCOD}
+                  onChange={setTreatCostCOD}
+                  validation={{ isValid: parseFloat(treatCostCOD) > 0, severity: "error" }}
+                  unit="₹/kg COD"
+                  helpText="Power + chemicals"
+                  colorScheme="green"
+                />
+                <ValidatedInput
+                  label="Operating Days/Year"
+                  value={operatingDays}
+                  onChange={setOperatingDays}
+                  validation={{ isValid: parseFloat(operatingDays) > 0, severity: "error" }}
+                  unit="days"
+                  colorScheme="blue"
+                />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* ═════ TAB 2: RESULTS ═══════════════════════ */}
+          <TabsContent value="results" className="space-y-4 pt-3">
+            {result ? (
+              <>
+                {/* Main KPIs */}
+                <div className="grid grid-cols-3 gap-2">
+                  {[
+                    { label: "COD Load",    value: result.totalCOD_kg.toFixed(2), unit: "kg/day", color: "bg-red-600"    },
+                    { label: "BOD Load",    value: result.totalBOD_kg.toFixed(2), unit: "kg/day", color: "bg-orange-500" },
+                    { label: "TSS Load",    value: result.totalTSS_kg.toFixed(2), unit: "kg/day", color: "bg-yellow-600" },
+                  ].map(k => (
+                    <div key={k.label} className={`${k.color} text-white p-3 rounded-xl text-center shadow`}>
+                      <div className="text-[9px] uppercase opacity-80 font-bold">{k.label}</div>
+                      <div className="text-xl font-black">{k.value}</div>
+                      <div className="text-[9px] opacity-70">{k.unit}</div>
                     </div>
-                    <div className="bg-white border border-slate-200 p-3 rounded-xl shadow-sm text-center flex flex-col justify-center">
-                        <div className="text-[10px] uppercase text-slate-500 font-bold">Tank Capacity Used</div>
-                        <div className="text-2xl font-bold text-slate-700">{result.percentFull.toFixed(1)}%</div>
-                        <div className="h-2 w-full bg-slate-100 rounded-full mt-1 overflow-hidden">
-                            <div className="h-full bg-blue-500" style={{width: `${Math.min(result.percentFull, 100)}%`}}></div>
-                        </div>
-                    </div>
+                  ))}
                 </div>
-            )}
-            
-            {result?.error && (
-                <div className="p-3 bg-red-50 text-red-600 text-xs rounded border border-red-200 text-center font-bold">
-                    ⚠️ {result.error}
-                </div>
-            )}
-        </CardContent>
-    </Card>
-  );
-}
-// ════════════════════════════════════════════════════════════
-// 2. ADVANCED PACKAGING FILM CALCULATOR
-// Calculates: Film Weight, Roll Length, No. of Reels
-// ════════════════════════════════════════════════════════════
-function PackagingFilmCalc() {
-  const [p, setP] = useState({ 
-    pouches: "10000", 
-    width: "325",    // mm (Standard 500ml pouch)
-    repeat: "150",   // mm (Pouch Length)
-    thickness: "55", // microns
-    density: "0.92", // g/cm³ (LDPE)
-    wastage: "2.0",  // % Process Wastage
-    rollWeight: "25" // kg (Standard Roll Size)
-  });
-  const [res, setRes] = useState<any>(null);
 
-  const calculate = () => {
-    // 1. Single Pouch Weight
-    // Volume cm³ = (W/10) * (L/10) * (Thickness/10000)
-    const W_cm = parseFloat(p.width) / 10;
-    const L_cm = parseFloat(p.repeat) / 10;
-    const T_cm = parseFloat(p.thickness) / 10000;
-    const D = parseFloat(p.density);
-    const Wastage = 1 + (parseFloat(p.wastage) / 100);
-
-    const weightPerPouchG = (W_cm * L_cm * T_cm * D);
-    
-    // 2. Total Requirement
-    const netKg = (weightPerPouchG * parseFloat(p.pouches)) / 1000;
-    const grossKg = netKg * Wastage; // Adding wastage
-
-    // 3. Roll Logic (Yield)
-    // Yield (m²/kg) = 1000 / (Density * Thickness_micron * 10^-3) ??
-    // Simpler: Yield (Pouch/kg) = 1000g / WeightPerPouch
-    const yieldPouchPerKg = 1000 / weightPerPouchG;
-    
-    // 4. Meters Calculation
-    // Total Length (m) = (Pouches * Repeat_mm) / 1000
-    const totalMeters = (parseFloat(p.pouches) * parseFloat(p.repeat)) / 1000;
-    
-    // 5. Reels Needed
-    const reels = grossKg / parseFloat(p.rollWeight);
-
-    setRes({ 
-        weightPerPouchG, 
-        netKg, 
-        grossKg, 
-        yieldPouchPerKg,
-        totalMeters,
-        reels
-    });
-  };
-
-  return (
-    <Card className="border-purple-200 bg-purple-50/30">
-        <CardHeader className="pb-2 border-b border-purple-100 bg-purple-50 rounded-t-lg">
-            <CardTitle className="text-sm font-bold flex gap-2 text-purple-800">
-                <PackageOpen className="w-4 h-4"/> Industrial Packaging Planner
-            </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4 pt-4">
-            {/* Material Selector */}
-            <div className="space-y-1">
-                <Label className="text-[10px] uppercase font-bold text-slate-500">Material Type</Label>
-                <Select value={p.density} onValueChange={v=>setP({...p, density:v})}>
-                    <SelectTrigger className="h-8 text-xs bg-white"><SelectValue placeholder="Select Material"/></SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="0.92">LDPE (Milk Pouch) - 0.92</SelectItem>
-                        <SelectItem value="1.40">Polyester (PET) - 1.40</SelectItem>
-                        <SelectItem value="0.95">LLDPE - 0.95</SelectItem>
-                        <SelectItem value="1.20">Laminate (Avg) - 1.20</SelectItem>
-                    </SelectContent>
-                </Select>
-            </div>
-
-            {/* Inputs Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                <ValidatedInput label="Target Pouches" value={p.pouches} onChange={v=>setP({...p, pouches:v})} />
-                <ValidatedInput label="Film Width (mm)" value={p.width} onChange={v=>setP({...p, width:v})} />
-                <ValidatedInput label="Repeat Len (mm)" value={p.repeat} onChange={v=>setP({...p, repeat:v})} />
-                <ValidatedInput label="Thickness (mic)" value={p.thickness} onChange={v=>setP({...p, thickness:v})} />
-                <ValidatedInput label="Wastage %" value={p.wastage} onChange={v=>setP({...p, wastage:v})} colorScheme="red" />
-                <ValidatedInput label="Roll Weight (kg)" value={p.rollWeight} onChange={v=>setP({...p, rollWeight:v})} helpText="Std Reel Wt" />
-            </div>
-
-            <Button onClick={calculate} size="sm" className="w-full bg-purple-600 hover:bg-purple-700 shadow-md">Calculate Requirement</Button>
-            
-            {res && (
-                <div className="space-y-2 animate-in slide-in-from-bottom-2">
-                    {/* Main Result */}
-                    <div className="flex justify-between items-center bg-white p-3 rounded-lg border border-purple-200 shadow-sm">
-                        <div>
-                            <div className="text-[10px] uppercase font-bold text-slate-400">Total Film Needed</div>
-                            <div className="text-2xl font-black text-purple-700">{res.grossKg.toFixed(1)} <span className="text-sm text-slate-500">kg</span></div>
+                {/* Stream breakdown */}
+                <Card className="bg-white border-stone-200">
+                  <CardHeader className="p-3 pb-1 border-b">
+                    <CardTitle className="text-xs text-stone-700 font-bold uppercase">Stream Breakdown</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-3 space-y-2">
+                    {result.streamResults.map((r: any, i: number) => (
+                      <div key={i} className="space-y-0.5">
+                        <div className="flex justify-between text-sm">
+                          <span className="font-semibold text-slate-700">{r.label}</span>
+                          <span className="font-bold text-red-600">COD: {r.cod.toFixed(3)} kg</span>
                         </div>
-                        <div className="text-right">
-                            <div className="text-[10px] uppercase font-bold text-slate-400">Est. Reels</div>
-                            <div className="text-xl font-bold text-slate-700">{Math.ceil(res.reels)} <span className="text-xs font-normal">({res.reels.toFixed(1)})</span></div>
+                        <div className="text-[10px] text-slate-400 flex gap-4">
+                          <span>{r.product}</span>
+                          <span>{r.qty} L/kg</span>
+                          <span>BOD: {r.bod.toFixed(3)} kg</span>
+                          <span>TSS: {r.tss.toFixed(3)} kg</span>
                         </div>
+                      </div>
+                    ))}
+                    <div className="border-t-2 pt-2 flex justify-between font-black text-red-800">
+                      <span>Total COD</span>
+                      <span>{result.totalCOD_kg.toFixed(3)} kg/day</span>
                     </div>
+                  </CardContent>
+                </Card>
 
-                    {/* Detailed Stats */}
-                    <div className="grid grid-cols-3 gap-2 text-center">
-                        <div className="bg-purple-100 p-2 rounded border border-purple-200">
-                            <div className="text-[9px] text-purple-800 font-bold uppercase">Yield</div>
-                            <div className="font-bold text-sm">{res.yieldPouchPerKg.toFixed(0)} <span className="text-[9px]">pouch/kg</span></div>
-                        </div>
-                        <div className="bg-slate-50 p-2 rounded border border-slate-200">
-                            <div className="text-[9px] text-slate-500 font-bold uppercase">Weight/Pouch</div>
-                            <div className="font-bold text-sm">{res.weightPerPouchG.toFixed(3)} g</div>
-                        </div>
-                        <div className="bg-slate-50 p-2 rounded border border-slate-200">
-                            <div className="text-[9px] text-slate-500 font-bold uppercase">Total Length</div>
-                            <div className="font-bold text-sm">{(res.totalMeters/1000).toFixed(2)} km</div>
-                        </div>
+                {/* Population Equivalent + Cost */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-stone-800 text-white p-4 rounded-xl text-center shadow-lg">
+                    <div className="text-[10px] uppercase opacity-70 font-bold">Population Equiv.</div>
+                    <div className="text-2xl font-black text-yellow-300">{Math.ceil(result.PE)}</div>
+                    <div className="text-[10px] opacity-60">human equivalents</div>
+                  </div>
+                  <div className="bg-white border-2 border-red-200 p-4 rounded-xl text-center">
+                    <div className="text-[10px] text-red-500 font-bold uppercase">Daily Treatment Cost</div>
+                    <div className="text-2xl font-black text-red-700">₹ {result.dayCostCOD.toFixed(0)}</div>
+                    <div className="text-[10px] text-red-400">
+                      ₹ {result.annualCost.toLocaleString("en-IN", { maximumFractionDigits: 0 })} / year
                     </div>
+                  </div>
                 </div>
-            )}
-        </CardContent>
-    </Card>
-  );
-}
-// ════════════════════════════════════════════════════════════
-// 3. ADVANCED PIPELINE LOSS & CIP VOLUME
-// Uses Internal Diameter (ID) based on Pipe Schedule (Thickness)
-// ════════════════════════════════════════════════════════════
-function PipelineLossCalc() {
-  const [p, setP] = useState({ 
-    sizeOD: "51",     // mm (Standard Dairy OD)
-    thickness: "1.2", // mm (Wall thickness - SMS/DIN standard)
-    length: "100",    // m
-    lines: "1"        // Number of parallel lines
-  });
-  const [res, setRes] = useState<any>(null);
 
-  const calculate = () => {
-    const OD = parseFloat(p.sizeOD);
-    const Th = parseFloat(p.thickness);
-    
-    // Internal Diameter (ID) = OD - (2 * Thickness)
-    const ID_mm = OD - (2 * Th);
-    
-    if (ID_mm <= 0) { 
-        setRes(null); return; // Error handle
-    }
-
-    const radius_mm = ID_mm / 2;
-    const length_mm = parseFloat(p.length) * 1000;
-    const count = parseFloat(p.lines);
-
-    // Volume in mm³ = π * r² * h
-    const vol_mm3 = Math.PI * radius_mm * radius_mm * length_mm;
-    
-    // Volume in Liters = mm³ / 1,000,000
-    const singleLineVolL = vol_mm3 / 1000000;
-    const totalMilkVol = singleLineVolL * count;
-
-    // CIP Calculation (Rule of Thumb: 1.5x pipe volume for flush)
-    const cipWater = totalMilkVol * 1.5;
-
-    // Flow Velocity Check (Optional insight)
-    // At 5000 L/h flow, velocity (m/s) = Q / Area
-    // Area (m²) = vol_liters / length_m / 1000
-    // Not calculating here to keep simple, but volume is key.
-
-    setRes({ ID_mm, singleLineVolL, totalMilkVol, cipWater });
-  };
-
-  return (
-    <Card className="border-orange-200 bg-orange-50/30">
-        <CardHeader className="pb-2 border-b border-orange-100 bg-orange-50 rounded-t-lg">
-            <CardTitle className="text-sm font-bold flex gap-2 text-orange-800">
-                <Cylinder className="w-4 h-4"/> Pipeline Hold-up & CIP
-            </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4 pt-4">
-            
-            {/* Pipe Standard Selector */}
-            <div className="space-y-1">
-                <Label className="text-[10px] uppercase font-bold text-slate-500">Pipe Standard (SMS/DIN)</Label>
-                <Select value={p.sizeOD} onValueChange={v=>{
-                    // Auto-set standard thickness based on size (Approx SMS standard)
-                    let th = "1.2";
-                    if(v === "63.5" || v === "76.2") th = "1.5";
-                    if(v === "101.6") th = "2.0";
-                    setP({...p, sizeOD: v, thickness: th});
-                }}>
-                    <SelectTrigger className="h-8 text-xs bg-white"><SelectValue/></SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="25.4">1.0 Inch (25mm)</SelectItem>
-                        <SelectItem value="38.1">1.5 Inch (38mm)</SelectItem>
-                        <SelectItem value="51">2.0 Inch (51mm)</SelectItem>
-                        <SelectItem value="63.5">2.5 Inch (63.5mm)</SelectItem>
-                        <SelectItem value="76.2">3.0 Inch (76mm)</SelectItem>
-                        <SelectItem value="101.6">4.0 Inch (102mm)</SelectItem>
-                    </SelectContent>
-                </Select>
-            </div>
-
-            <div className="grid grid-cols-3 gap-2">
-                <ValidatedInput label="Pipe OD (mm)" value={p.sizeOD} onChange={v=>setP({...p, sizeOD:v})} />
-                <ValidatedInput label="Wall Thk (mm)" value={p.thickness} onChange={v=>setP({...p, thickness:v})} helpText="ID calc" />
-                <ValidatedInput label="Length (m)" value={p.length} onChange={v=>setP({...p, length:v})} />
-                <div className="col-span-3">
-                    <ValidatedInput label="No. of Lines" value={p.lines} onChange={v=>setP({...p, lines:v})} />
-                </div>
-            </div>
-
-            <Button onClick={calculate} size="sm" className="w-full bg-orange-600 hover:bg-orange-700 text-white shadow-md">Calculate Loss</Button>
-
-            {res && (
-                <div className="space-y-2 animate-in slide-in-from-bottom-2">
-                    {/* Main Volume Card */}
-                    <div className="bg-white p-3 rounded-xl border border-orange-200 shadow-sm text-center">
-                        <div className="text-[10px] uppercase font-bold text-slate-400">Total Milk Hold-up (Loss)</div>
-                        <div className="text-3xl font-black text-orange-600">{res.totalMilkVol.toFixed(1)} <span className="text-lg font-medium text-slate-500">Liters</span></div>
-                        <div className="text-[10px] text-slate-400 mt-1">Based on ID: {res.ID_mm.toFixed(1)} mm</div>
+                {/* Biogas potential */}
+                <Card className="bg-green-50 border-green-200">
+                  <CardHeader className="p-3 pb-1 border-b border-green-100">
+                    <CardTitle className="text-sm text-green-800">⚡ Biogas Recovery Potential</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-3 grid grid-cols-2 gap-3 text-sm">
+                    <div className="text-center bg-white p-2 rounded-lg border border-green-100">
+                      <div className="text-[10px] text-green-600 font-bold uppercase">CH₄ / day</div>
+                      <div className="text-xl font-black text-green-800">{result.biogasM3.toFixed(1)} m³</div>
                     </div>
-
-                    {/* Secondary Stats */}
-                    <div className="flex gap-2">
-                        <div className="flex-1 bg-blue-50 p-2 rounded border border-blue-100 text-center">
-                            <div className="text-[9px] font-bold text-blue-600 uppercase">Per Meter</div>
-                            <div className="font-bold text-blue-900">{(res.singleLineVolL / parseFloat(p.length)).toFixed(3)} L/m</div>
-                        </div>
-                        <div className="flex-1 bg-green-50 p-2 rounded border border-green-100 text-center">
-                            <div className="text-[9px] font-bold text-green-600 uppercase">Min CIP Water</div>
-                            <div className="font-bold text-green-900">~{Math.ceil(res.cipWater)} L</div>
-                        </div>
+                    <div className="text-center bg-green-600 text-white p-2 rounded-lg">
+                      <div className="text-[10px] opacity-80 font-bold uppercase">Daily Value</div>
+                      <div className="text-xl font-black text-yellow-300">
+                        ₹ {result.biogasValue.toFixed(0)}
+                      </div>
                     </div>
-                </div>
-            )}
-        </CardContent>
-    </Card>
-  );
-}
-// ════════════════════════════════════════════════════════════
-// 4. ADVANCED CULTURE DOSING & COSTING
-// Supports: DVS (Direct Vat Set) & Bulk Starter Logic
-// ════════════════════════════════════════════════════════════
-function CultureDosingCalc() {
-  const [c, setC] = useState({ 
-    method: "dvs",      // dvs (units) | bulk (%)
-    batchSize: "2000",  // Liters
-    // DVS Params
-    dvsRate: "50",      // Units per 1000L (Standard DVS rate)
-    pouchStrength: "50",// Units per Pouch
-    pouchPrice: "850",  // ₹ per Pouch
-    // Bulk Params
-    bulkRate: "2.0",    // % Inoculation
-    bulkCost: "40"      // ₹ per Liter of starter
-  });
-  const [res, setRes] = useState<any>(null);
+                    <p className="col-span-2 text-[10px] text-green-600">
+                      0.35 m³ CH₄/kg COD at 70% conversion. Install anaerobic pre-treatment (UASB/ABR) to recover value.
+                      Annual: ₹ {(result.biogasValue * result.opDays).toLocaleString("en-IN", { maximumFractionDigits: 0 })}
+                    </p>
+                  </CardContent>
+                </Card>
 
-  const calculate = () => {
-    const Vol = parseFloat(c.batchSize);
-    
-    if (c.method === "dvs") {
-        // DVS Calculation
-        const rate = parseFloat(c.dvsRate); // U/1000L
-        const pouchU = parseFloat(c.pouchStrength);
-        const price = parseFloat(c.pouchPrice);
-
-        const totalUnits = (Vol / 1000) * rate;
-        const pouchesNeeded = totalUnits / pouchU;
-        // Round up pouches for procurement, but calculating exact cost for batch logic usually uses partial if open allowed, 
-        // but industrially we open full pouches. Let's show exact ratio.
-        const totalCost = pouchesNeeded * price;
-        
-        setRes({ 
-            req: `${totalUnits.toFixed(1)} Units`, 
-            pack: `${pouchesNeeded.toFixed(2)} Pouches`, 
-            totalCost, 
-            costPerL: totalCost / Vol 
-        });
-    } else {
-        // Bulk Starter Calculation
-        const rate = parseFloat(c.bulkRate); // %
-        const price = parseFloat(c.bulkCost);
-
-        const starterLiters = Vol * (rate / 100);
-        const totalCost = starterLiters * price;
-
-        setRes({ 
-            req: `${starterLiters.toFixed(1)} Liters`, 
-            pack: "Bulk Tank", 
-            totalCost, 
-            costPerL: totalCost / Vol 
-        });
-    }
-  };
-
-  return (
-    <Card className="border-pink-200 bg-pink-50/30">
-        <CardHeader className="pb-2 border-b border-pink-100 bg-pink-50 rounded-t-lg">
-            <CardTitle className="text-sm font-bold flex gap-2 text-pink-800">
-                <Pipette className="w-4 h-4"/> Fermentation Culture Dosing
-            </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4 pt-4">
-            
-            {/* Method Selector */}
-            <div className="flex justify-center bg-white p-1 rounded border mb-2">
-                <button 
-                    onClick={() => setC({...c, method: "dvs"})} 
-                    className={`flex-1 text-xs font-bold py-1.5 rounded transition-all ${c.method==='dvs' ? 'bg-pink-600 text-white' : 'text-slate-500 hover:bg-slate-50'}`}
-                >
-                    DVS (Pouches)
-                </button>
-                <button 
-                    onClick={() => setC({...c, method: "bulk"})} 
-                    className={`flex-1 text-xs font-bold py-1.5 rounded transition-all ${c.method==='bulk' ? 'bg-pink-600 text-white' : 'text-slate-500 hover:bg-slate-50'}`}
-                >
-                    Bulk Starter (%)
-                </button>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-                <ValidatedInput label="Batch Size (L)" value={c.batchSize} onChange={v=>setC({...c, batchSize:v})} />
-                
-                {c.method === 'dvs' ? (
-                    <>
-                        <ValidatedInput label="Dose (U/1KL)" value={c.dvsRate} onChange={v=>setC({...c, dvsRate:v})} helpText="Std: 20-50 U" />
-                        <ValidatedInput label="Pouch Unit" value={c.pouchStrength} onChange={v=>setC({...c, pouchStrength:v})} helpText="e.g. 50U, 200U" />
-                        <ValidatedInput label="Price/Pouch" value={c.pouchPrice} onChange={v=>setC({...c, pouchPrice:v})} unit="₹" colorScheme="green" />
-                    </>
-                ) : (
-                    <>
-                        <ValidatedInput label="Inoculation %" value={c.bulkRate} onChange={v=>setC({...c, bulkRate:v})} helpText="Std: 1-3%" />
-                        <ValidatedInput label="Starter Cost" value={c.bulkCost} onChange={v=>setC({...c, bulkCost:v})} unit="₹/L" colorScheme="green" />
-                    </>
+                {/* WMR */}
+                {result.wmr !== null && (
+                  <div className={`p-3 rounded-lg border text-sm flex justify-between items-center ${
+                    result.wmr <= 2.5 ? "bg-green-50 border-green-200" : "bg-yellow-50 border-yellow-300"
+                  }`}>
+                    <span className="font-semibold text-slate-700">Water : Milk Ratio (WMR)</span>
+                    <div className="text-right">
+                      <div className={`text-lg font-black ${result.wmr <= 2.5 ? "text-green-700" : "text-orange-600"}`}>
+                        {result.wmr.toFixed(2)} L/L
+                      </div>
+                      <div className="text-[10px] text-slate-400">Benchmark: ≤ 2.5 L/L</div>
+                    </div>
+                  </div>
                 )}
-            </div>
 
-            <Button onClick={calculate} size="sm" className="w-full bg-pink-600 hover:bg-pink-700 shadow-md">Calculate Costing</Button>
-            
-            {res && (
-                <div className="space-y-2 animate-in fade-in">
-                    <div className="grid grid-cols-2 gap-3 text-center">
-                        <div className="bg-white p-2 rounded border border-pink-200">
-                            <div className="text-[9px] uppercase text-slate-500 font-bold">Requirement</div>
-                            <div className="font-black text-lg text-slate-800">{res.req}</div>
-                        </div>
-                        <div className="bg-white p-2 rounded border border-pink-200">
-                            <div className="text-[9px] uppercase text-slate-500 font-bold">{c.method==='dvs'?'Pouch Count':'Format'}</div>
-                            <div className="font-black text-lg text-pink-600">{res.pack}</div>
-                        </div>
-                    </div>
-                    
-                    <div className="flex justify-between items-center bg-pink-100 p-2 rounded border border-pink-300">
-                        <div className="text-xs text-pink-900 font-bold">Cost Impact: ₹ {res.costPerL.toFixed(2)} / L</div>
-                        <div className="text-sm font-black text-pink-900">Total: ₹ {Math.round(res.totalCost).toLocaleString()}</div>
-                    </div>
-                </div>
+                {/* Warnings */}
+                {result.warnings.length > 0 && (
+                  <Alert className="bg-yellow-50 border-yellow-300">
+                    <AlertTriangle className="h-4 w-4 text-yellow-600" />
+                    <AlertTitle className="text-yellow-800 text-sm">Action Required</AlertTitle>
+                    <AlertDescription className="text-xs text-yellow-700 space-y-1">
+                      {result.warnings.map((w: string, i: number) => (
+                        <div key={i}>⚠️ {w}</div>
+                      ))}
+                    </AlertDescription>
+                  </Alert>
+                )}
+              </>
+            ) : (
+              <div className="text-center py-10 text-muted-foreground text-sm">
+                <Trash2 className="h-10 w-10 mx-auto mb-3 text-stone-200" />
+                <p>Streams add karein aur <strong>Calculate</strong> press karein.</p>
+              </div>
             )}
-        </CardContent>
+          </TabsContent>
+
+          {/* ═════ TAB 3: CPCB COMPLIANCE ═══════════════ */}
+          <TabsContent value="compliance" className="space-y-4 pt-3">
+            {result ? (
+              <>
+                <Card className="bg-white border-slate-200">
+                  <CardHeader className="p-3 pb-2 border-b">
+                    <CardTitle className="text-sm font-bold">📋 CPCB Discharge Standards (Inland)</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-3 space-y-3">
+                    {[
+                      {
+                        param: "COD",
+                        measured: result.codMgL,
+                        limit:    CPCB_STANDARDS.COD,
+                        unit:     "mg/L",
+                        ok:       result.codCompliant,
+                      },
+                      {
+                        param: "BOD",
+                        measured: result.bodMgL,
+                        limit:    CPCB_STANDARDS.BOD,
+                        unit:     "mg/L",
+                        ok:       result.bodCompliant,
+                      },
+                      {
+                        param: "TSS",
+                        measured: result.tssMgL,
+                        limit:    CPCB_STANDARDS.TSS,
+                        unit:     "mg/L",
+                        ok:       result.tssCompliant,
+                      },
+                    ].map(r => (
+                      <div key={r.param} className={`p-3 rounded-lg border ${r.ok ? "bg-green-50 border-green-200" : "bg-red-50 border-red-300"}`}>
+                        <div className="flex justify-between items-center">
+                          <span className="font-bold text-slate-700">{r.param}</span>
+                          <span className={`text-lg font-black ${r.ok ? "text-green-700" : "text-red-700"}`}>
+                            {r.measured.toFixed(1)} {r.unit}
+                          </span>
+                        </div>
+                        <div className="mt-1">
+                          <div className="h-3 bg-slate-100 rounded-full overflow-hidden border">
+                            <div
+                              className={`h-full rounded-full ${r.ok ? "bg-green-500" : "bg-red-500"}`}
+                              style={{ width: `${Math.min((r.measured / r.limit) * 100, 100)}%` }}
+                            />
+                          </div>
+                          <div className="flex justify-between text-[10px] text-slate-400 mt-0.5">
+                            <span>0</span>
+                            <span className={r.ok ? "text-green-600 font-bold" : "text-red-600 font-bold"}>
+                              {r.ok ? `✓ Within limit (${r.limit} ${r.unit})` : `✗ Exceeds limit (${r.limit} ${r.unit})`}
+                            </span>
+                            <span>{(r.measured / r.limit * 100).toFixed(0)}% of limit</span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
+
+                {/* Minimum dilution needed */}
+                {(!result.codCompliant || !result.bodCompliant) && (
+                  <Alert className="bg-red-50 border-red-300">
+                    <AlertTriangle className="h-4 w-4 text-red-600" />
+                    <AlertTitle className="text-red-800 text-sm">Minimum Treatment Required</AlertTitle>
+                    <AlertDescription className="text-xs text-red-700 space-y-1">
+                      <div>
+                        Current ETP flow: <strong>{result.flowM3} m³/day</strong>. To meet CPCB norms, minimum effective treatment volume needed: <strong>{result.minDilution.toFixed(1)} m³/day</strong>.
+                      </div>
+                      <div>Options: (1) Increase ETP capacity, (2) Reduce product losses, (3) Improve biological treatment efficiency.</div>
+                    </AlertDescription>
+                  </Alert>
+                )}
+
+                {/* Compliance Summary */}
+                <div className={`p-4 rounded-xl text-center ${
+                  result.codCompliant && result.bodCompliant && result.tssCompliant
+                    ? "bg-green-600 text-white"
+                    : "bg-red-600 text-white"
+                }`}>
+                  <div className="text-2xl font-black mb-1">
+                    {result.codCompliant && result.bodCompliant && result.tssCompliant
+                      ? "✅ COMPLIANT"
+                      : "❌ NON-COMPLIANT"}
+                  </div>
+                  <div className="text-xs opacity-80">
+                    {result.codCompliant && result.bodCompliant && result.tssCompliant
+                      ? "All parameters within CPCB inland discharge standards"
+                      : "One or more parameters exceed permissible limits"}
+                  </div>
+                </div>
+
+                {/* Formula */}
+                <div className="bg-slate-50 border rounded-lg p-3 text-[10px] font-mono text-slate-400 space-y-1">
+                  <div className="font-bold text-slate-600 text-xs mb-1">📐 Formulas:</div>
+                  <div>COD_kg = Volume × COD_factor (kg/L) [per stream, then summed]</div>
+                  <div>Concentration (mg/L) = (COD_kg × 10⁶) / Flow_L</div>
+                  <div>Population Equiv. = BOD_kg / 0.06 (1 PE = 60g BOD/day)</div>
+                  <div>Biogas = COD_kg × 0.35 m³/kg × 70% recovery</div>
+                </div>
+              </>
+            ) : (
+              <div className="text-center py-10 text-muted-foreground text-sm">
+                <Trash2 className="h-10 w-10 mx-auto mb-3 text-stone-200" />
+                <p>Pehle calculate karein — tab CPCB analysis aayegi.</p>
+              </div>
+            )}
+          </TabsContent>
+        </Tabs>
+
+        {/* ── CALCULATE BUTTON ───────────────────────── */}
+        <Button
+          onClick={calculate}
+          className="w-full h-11 bg-gradient-to-r from-red-700 to-stone-700 hover:from-red-800 hover:to-stone-800 text-white font-bold shadow-md"
+        >
+          <Trash2 className="w-4 h-4 mr-2" />
+          Calculate Environmental Load
+        </Button>
+      </CardContent>
     </Card>
   );
 }
 // ════════════════════════════════════════════════════════════
-// 5. ADVANCED ETP POLLUTION LOAD
-// Calculates COD/BOD kg based on specific product waste
+// ADVANCED COLD STORE CAPACITY PLANNER
+// Drop-in Replacement for StorageCalc()
+//
+// INSTRUCTIONS:
+// 1. Apni file mein purana StorageCalc() function dhundhein
+// 2. Pura block DELETE karein
+// 3. Yeh poora code wahan PASTE karein
+// Koi naya import nahi chahiye.
 // ════════════════════════════════════════════════════════════
-function EtpLoadCalc() {
-  const [e, setE] = useState({ 
-    lossVol: "50",     // Liters/Kg spilled
-    product: "milk",   // product type
-    treatmentCost: "5" // ₹ per kg COD removal (Electricity + Chem)
-  });
-  const [res, setRes] = useState<any>(null);
 
-  // Industry Standard COD Factors (kg COD per Liter/Kg of product)
-  const COD_FACTORS: any = {
-    milk:  { label: "Whole Milk", cod: 0.21,  bod: 0.14 }, // ~210,000 mg/L
-    skim:  { label: "Skim Milk",  cod: 0.10,  bod: 0.06 }, // Less fat = less COD
-    whey:  { label: "Cheese Whey",cod: 0.07,  bod: 0.05 }, // Lactose mainly
-    cream: { label: "Cream (40%)",cod: 0.45,  bod: 0.25 }, // High Fat = Massive COD
-    ice:   { label: "Ice Cream Mix",cod: 0.30,bod: 0.18 }, // High sugar/solids
-    ghee:  { label: "Ghee Residue",cod: 0.80, bod: 0.40 }, // Very concentrated
-  };
+// ── CRATE DATABASE ───────────────────────────────────────
+const CRATE_DB = {
+  milk_std:   { label: "🥛 Std Milk Crate (12L)",     l: 450, w: 350, h: 310, capL: 12,  weightKg: 1.8,  stackMax: 8  },
+  milk_large: { label: "🥛 Large Milk Crate (20L)",   l: 600, w: 400, h: 320, capL: 20,  weightKg: 2.2,  stackMax: 7  },
+  curd_cup:   { label: "🫙 Curd/Cup Crate (10L)",     l: 425, w: 325, h: 280, capL: 10,  weightKg: 1.6,  stackMax: 8  },
+  pouch_tray: { label: "📦 Pouch Tray (6L)",          l: 500, w: 350, h: 150, capL: 6,   weightKg: 0.8,  stackMax: 12 },
+  jumbo:      { label: "📦 Jumbo Crate (30L)",        l: 650, w: 450, h: 360, capL: 30,  weightKg: 3.0,  stackMax: 6  },
+  butter_box: { label: "🧈 Butter/Paneer Box (5kg)",  l: 400, w: 300, h: 200, capL: 5,   weightKg: 0.6,  stackMax: 10 },
+  ice_cream:  { label: "🍦 Ice Cream Tub Box (4L)",   l: 380, w: 280, h: 250, capL: 4,   weightKg: 0.5,  stackMax: 8  },
+  pallet:     { label: "🏗️ Euro Pallet (1200×800)",  l: 1200,w: 800, h: 145, capL: 500, weightKg: 25,   stackMax: 3  },
+} as const;
 
-  const calculate = () => {
-    const V = parseFloat(e.lossVol);
-    const prod = COD_FACTORS[e.product];
-    
-    // Total Loads
-    const totalCOD = V * prod.cod;
-    const totalBOD = V * prod.bod; // Or typically 0.6 * COD if data missing
-    
-    // Population Equivalent (PE)
-    // 1 PE ≈ 0.06 kg BOD per day (Human equivalent waste)
-    const PE = totalBOD / 0.06;
+// ── COLD ROOM PRESETS ─────────────────────────────────────
+const ROOM_PRESETS = {
+  "Small Retail (10×12 ft)":    { len: "10", width: "12", heightFt: "10", efficiency: "65" },
+  "Medium Plant (20×15 ft)":    { len: "20", width: "15", heightFt: "12", efficiency: "65" },
+  "Large Dairy (30×25 ft)":     { len: "30", width: "25", heightFt: "14", efficiency: "70" },
+  "Walk-in Chiller (8×10 ft)":  { len: "8",  width: "10", heightFt: "8",  efficiency: "60" },
+  "Dispatch Bay (40×30 ft)":    { len: "40", width: "30", heightFt: "16", efficiency: "75" },
+} as const;
 
-    // Treatment Cost Estimate
-    const cost = totalCOD * parseFloat(e.treatmentCost);
-
-    setRes({ totalCOD, totalBOD, PE, cost, prodName: prod.label });
-  };
-
-  return (
-    <Card className="border-stone-300 bg-stone-50">
-        <CardHeader className="pb-2 border-b border-stone-200 bg-stone-100 rounded-t-lg">
-            <CardTitle className="text-sm font-bold flex gap-2 text-stone-700">
-                <Trash2 className="w-4 h-4"/> ETP Pollution Load Audit
-            </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4 pt-4">
-            
-            <div className="space-y-1">
-                <Label className="text-[10px] uppercase font-bold text-slate-500">Spilled Product</Label>
-                <Select value={e.product} onValueChange={v=>setE({...e, product:v})}>
-                    <SelectTrigger className="h-9 text-sm bg-white"><SelectValue/></SelectTrigger>
-                    <SelectContent>
-                        {Object.entries(COD_FACTORS).map(([key, val]: any) => (
-                            <SelectItem key={key} value={key}>{val.label}</SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-                <ValidatedInput label="Quantity (L/Kg)" value={e.lossVol} onChange={v=>setE({...e, lossVol:v})} colorScheme="red" />
-                <ValidatedInput label="Treat. Cost (₹/kg COD)" value={e.treatmentCost} onChange={v=>setE({...e, treatmentCost:v})} helpText="Power+Chem" />
-            </div>
-
-            <Button onClick={calculate} size="sm" className="w-full bg-red-700 hover:bg-red-800 text-white shadow-md">Calculate Environmental Impact</Button>
-            
-            {res && (
-                <div className="space-y-2 animate-in slide-in-from-bottom-2">
-                    <div className="grid grid-cols-2 gap-3 text-center">
-                        <div className="bg-white p-3 rounded-lg border border-red-300 shadow-sm">
-                            <div className="text-[9px] font-bold text-slate-500 uppercase">COD Load</div>
-                            <div className="text-2xl font-black text-red-700">{res.totalCOD.toFixed(2)} <span className="text-sm font-normal">kg</span></div>
-                        </div>
-                        <div className="bg-white p-3 rounded-lg border border-orange-300 shadow-sm">
-                            <div className="text-[9px] font-bold text-slate-500 uppercase">BOD Load</div>
-                            <div className="text-2xl font-black text-orange-600">{res.totalBOD.toFixed(2)} <span className="text-sm font-normal">kg</span></div>
-                        </div>
-                    </div>
-
-                    <div className="bg-stone-200 p-2 rounded border border-stone-300 text-center">
-                        <span className="text-xs text-stone-700 font-bold">Population Equivalent: </span>
-                        <span className="text-sm font-black text-stone-900">~{Math.ceil(res.PE)} Humans</span>
-                        <div className="text-[9px] text-stone-500 italic mt-1">Est. Treatment Cost: ₹ {Math.ceil(res.cost)}</div>
-                    </div>
-                </div>
-            )}
-        </CardContent>
-    </Card>
-  );
-}
-// ════════════════════════════════════════════════════════════
-// 6. ADVANCED COLD STORE CAPACITY PLANNER
-// Calculates Crates & Volume based on Room Dim & Usage Eff.
-// ════════════════════════════════════════════════════════════
+// ── MAIN COMPONENT ────────────────────────────────────────
 function StorageCalc() {
-  const [s, setS] = useState({ 
-    len: "20", width: "15", // Feet
-    stack: "6", // Crates high
-    efficiency: "65", // % Floor usage (remaining for aisles/movement)
-    crateType: "milk_std" // Preset selection
+  const { toast } = useToast();
+
+  const [unit,       setUnit]       = useState<"ft" | "m">("ft");
+  const [crateType,  setCrateType]  = useState<keyof typeof CRATE_DB>("milk_std");
+  const [inp, setInp] = useState({
+    len:        "20",
+    width:      "15",
+    heightFt:   "12",
+    stack:      "6",
+    efficiency: "65",
   });
-  const [res, setRes] = useState<any>(null);
+  const [useAutoStack, setUseAutoStack] = useState(true);
+  const [result, setResult] = useState<any>(null);
 
-  // Standard Crate Dimensions (mm)
-  // Milk: 450x350 (12L), Curd: 425x325, Large: 600x400
-  const CRATES: any = {
-    milk_std: { l: 450, w: 350, cap: 12, label: "Std Milk Crate (12L)" },
-    curd_cup: { l: 425, w: 325, cap: 10, label: "Curd/Cup Crate" },
-    jumbo:    { l: 600, w: 400, cap: 20, label: "Jumbo Crate (20L)" },
-    custom:   { l: 450, w: 350, cap: 12, label: "Custom Size" } // Default fallback
+  const setF = (k: string, v: string) => setInp(p => ({ ...p, [k]: v }));
+  const { validatePositive, validateNumber } = useInputValidation();
+
+  // Apply preset
+  const applyPreset = (name: keyof typeof ROOM_PRESETS) => {
+    const p = ROOM_PRESETS[name];
+    setInp(prev => ({ ...prev, ...p }));
+    toast({ title: "Preset Applied", description: name });
   };
 
-  const calculate = () => {
-    // 1. Room Area in sq.mm
-    // 1 Foot = 304.8 mm
-    const roomL_mm = parseFloat(s.len) * 304.8;
-    const roomW_mm = parseFloat(s.width) * 304.8;
-    const totalArea = roomL_mm * roomW_mm;
+  // Auto-stack = room height / crate height (with beam clearance)
+  const crate      = CRATE_DB[crateType];
+  const toMm       = (v: string) => unit === "ft"
+    ? parseFloat(v) * 304.8
+    : parseFloat(v) * 1000;
 
-    // 2. Usable Area
-    const eff = parseFloat(s.efficiency) / 100;
-    const usableArea = totalArea * eff;
-
-    // 3. Crate Footprint
-    const crate = CRATES[s.crateType];
-    const crateArea = crate.l * crate.w;
-
-    // 4. Crates Calculation
-    const cratesPerLayer = Math.floor(usableArea / crateArea);
-    const totalCrates = cratesPerLayer * parseFloat(s.stack);
-    
-    // 5. Product Capacity
-    const totalCapacity = totalCrates * crate.cap;
-
-    setRes({ totalCrates, totalCapacity, cratesPerLayer });
-  };
-
-  return (
-    <Card className="border-cyan-200 bg-cyan-50/30">
-        <CardHeader className="pb-2 border-b border-cyan-100 bg-cyan-50 rounded-t-lg">
-            <CardTitle className="text-sm font-bold flex gap-2 text-cyan-800">
-                <Box className="w-4 h-4"/> Cold Store Capacity Planner
-            </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4 pt-4">
-            
-            {/* Crate Selector */}
-            <div className="space-y-1">
-                <Label className="text-[10px] uppercase font-bold text-slate-500">Crate Standard</Label>
-                <Select value={s.crateType} onValueChange={v=>setS({...s, crateType:v})}>
-                    <SelectTrigger className="h-8 text-xs bg-white"><SelectValue/></SelectTrigger>
-                    <SelectContent>
-                        {Object.entries(CRATES).map(([k, v]: any) => (
-                            <SelectItem key={k} value={k}>{v.label}</SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-                <ValidatedInput label="Room Length (ft)" value={s.len} onChange={v=>setS({...s, len:v})} />
-                <ValidatedInput label="Room Width (ft)" value={s.width} onChange={v=>setS({...s, width:v})} />
-                <ValidatedInput label="Stack Height" value={s.stack} onChange={v=>setS({...s, stack:v})} helpText="Tiers (High)" />
-                <ValidatedInput label="Floor Usage %" value={s.efficiency} onChange={v=>setS({...s, efficiency:v})} helpText="Std: 60-70%" colorScheme="blue" />
-            </div>
-
-            <Button onClick={calculate} size="sm" className="w-full bg-cyan-600 hover:bg-cyan-700 shadow-md">Plan Storage</Button>
-            
-            {res && (
-                <div className="space-y-2 animate-in slide-in-from-bottom-2">
-                    <div className="flex justify-between items-center bg-white p-3 rounded-lg border border-cyan-200 shadow-sm">
-                        <div>
-                            <div className="text-[10px] uppercase font-bold text-slate-400">Total Storage</div>
-                            <div className="text-2xl font-black text-cyan-700">{res.totalCapacity.toLocaleString()} <span className="text-sm text-slate-500">Liters/Kg</span></div>
-                        </div>
-                        <div className="text-right">
-                            <div className="text-[10px] uppercase font-bold text-slate-400">Total Crates</div>
-                            <div className="text-xl font-bold text-slate-700">{res.totalCrates.toLocaleString()}</div>
-                        </div>
-                    </div>
-                    
-                    <div className="text-center p-2 bg-cyan-100 rounded border border-cyan-300 text-xs text-cyan-900 font-medium">
-                        Floor Plan: approx <strong>{res.cratesPerLayer} crates</strong> spread per layer
-                    </div>
-                </div>
-            )}
-        </CardContent>
-    </Card>
+  const roomHeightMm = toMm(inp.heightFt);
+  const beamClearMm  = 300; // min clearance for sprinklers/lights
+  const autoStack    = Math.min(
+    Math.floor((roomHeightMm - beamClearMm) / crate.h),
+    crate.stackMax
   );
-}
-// ════════════════════════════════════════════════════════════
-// 7. ADVANCED PANEER COAGULANT CALCULATOR
-// Calculates: Powder req, Solution Volume & Dilution Ratio
-// ════════════════════════════════════════════════════════════
-function PaneerCoagulantCalc() {
-  const [p, setP] = useState({ 
-    milk: "1000",      // Liters
-    type: "citric",    // citric | vinegar
-    rate: "2.5",       // g/L or ml/L
-    solConc: "1.5"     // % Concentration for solution (Important for soft texture)
-  });
-  const [res, setRes] = useState<any>(null);
 
-  const calculate = () => {
-    const milk = parseFloat(p.milk);
-    const rate = parseFloat(p.rate);
-    const conc = parseFloat(p.solConc); // %
+  const effectiveStack = useAutoStack ? autoStack : (parseInt(inp.stack) || 1);
 
-    let rawAmount = 0; // grams or ml
-    let unit = "g";
+  // ── CALCULATE ─────────────────────────────────────────
+  const calculate = useCallback(() => {
+    const lenMm   = toMm(inp.len);
+    const widMm   = toMm(inp.width);
+    const eff     = (parseFloat(inp.efficiency) || 65) / 100;
 
-    if (p.type === "citric") {
-        // Citric Acid Powder
-        rawAmount = milk * rate; // Total grams needed
-        unit = "g";
-    } else {
-        // Vinegar (Liquid) - Rate is ml/L
-        rawAmount = milk * rate; // Total ml needed
-        unit = "ml";
+    if (lenMm <= 0 || widMm <= 0) {
+      toast({ variant: "destructive", title: "Invalid dimensions" }); return;
     }
 
-    // Solution Preparation Logic
-    // We never add raw acid. We make a dilute solution (1-2%).
-    // Volume (L) = (Amount_raw / 1000) / (Concentration% / 100)
-    // If Vinegar (already liquid 4-5%), we dilute it further? 
-    // Usually industrial practice: 
-    // Citric: Dissolve powder in water.
-    // Vinegar: Dilute 1:4 or 1:5 with water.
-    
-    let totalSolutionL = 0;
-    
-    if (p.type === "citric") {
-        // g -> kg -> divide by %
-        totalSolutionL = (rawAmount / 1000) / (conc / 100);
-    } else {
-        // Vinegar dilution strategy (Target typically 1-2% acidity final)
-        // Store vinegar is ~5%. If we want 1%, we dilute 1 part vinegar + 4 parts water.
-        // Formula based on user % input:
-        // Assume input vinegar is 100% relative strength for calc, usually we just set volume.
-        // Better logic: Total Solution Volume needed to maintain gentle coagulation.
-        // Approx standard: Solution volume should be 10-15% of milk volume for very soft paneer? 
-        // No, standard is driven by concentration.
-        // Let's stick to Concentration math:
-        // To get 'conc'% solution from 'rawAmount' active.
-        // For vinegar, we assume 'rawAmount' is the active agent volume.
-        totalSolutionL = (rawAmount / 1000) * (5 / conc); // Assuming stock vinegar is 5%
-    }
+    const roomAreaMm2   = lenMm * widMm;
+    const usableAreaMm2 = roomAreaMm2 * eff;
+    const crateAreaMm2  = crate.l * crate.w;
 
-    setRes({ rawAmount, unit, totalSolutionL });
-  };
+    // Arrange crates in both orientations, pick better
+    const cratesNormal   = Math.floor(lenMm / crate.l) * Math.floor(widMm / crate.w);
+    const cratesRotated  = Math.floor(lenMm / crate.w) * Math.floor(widMm / crate.l);
+    const cratesPerLayer = Math.max(cratesNormal, cratesRotated);
+    const bestRotated    = cratesRotated > cratesNormal;
 
-  return (
-    <Card className="border-green-200 bg-green-50/30">
-        <CardHeader className="pb-2 border-b border-green-100 bg-green-50 rounded-t-lg">
-            <CardTitle className="text-sm font-bold flex gap-2 text-green-800">
-                <Beaker className="w-4 h-4"/> Paneer Coagulant Dosing
-            </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4 pt-4">
-            
-            {/* Type Selector */}
-            <div className="flex justify-center bg-white p-1 rounded border mb-2">
-                <button 
-                    onClick={() => setP({...p, type: "citric", rate: "2.5", solConc: "1.5"})} 
-                    className={`flex-1 text-xs font-bold py-1.5 rounded transition-all ${p.type==='citric' ? 'bg-green-600 text-white' : 'text-slate-500 hover:bg-slate-50'}`}
-                >
-                    Citric Acid
-                </button>
-                <button 
-                    onClick={() => setP({...p, type: "vinegar", rate: "30", solConc: "1.0"})} 
-                    className={`flex-1 text-xs font-bold py-1.5 rounded transition-all ${p.type==='vinegar' ? 'bg-green-600 text-white' : 'text-slate-500 hover:bg-slate-50'}`}
-                >
-                    Vinegar
-                </button>
-            </div>
+    // Also compute area-based estimate for comparison
+    const cratesAreaBased = Math.floor(usableAreaMm2 / crateAreaMm2);
 
-            <div className="grid grid-cols-3 gap-2">
-                <ValidatedInput label="Milk Qty (L)" value={p.milk} onChange={v=>setP({...p, milk:v})} />
-                <ValidatedInput label={p.type==='citric'?"Rate (g/L)":"Rate (ml/L)"} value={p.rate} onChange={v=>setP({...p, rate:v})} helpText={p.type==='citric'?"Std: 2.0-2.5":"Std: 25-35"} />
-                <ValidatedInput label="Sol. Conc %" value={p.solConc} onChange={v=>setP({...p, solConc:v})} helpText="Std: 1% - 2%" colorScheme="blue" />
-            </div>
+    // Use whichever is more practical: grid arrangement
+    const cratesFloor    = Math.min(cratesPerLayer, cratesAreaBased);
 
-            <Button onClick={calculate} size="sm" className="w-full bg-green-600 hover:bg-green-700 shadow-md">Calculate Mix</Button>
-            
-            {res && (
-                <div className="space-y-2 animate-in fade-in">
-                    <div className="flex gap-2">
-                        <div className="flex-1 bg-white p-2 rounded border border-green-200 text-center">
-                            <div className="text-[9px] uppercase text-slate-500 font-bold">{p.type==='citric'?'Powder Needed':'Vinegar Needed'}</div>
-                            <div className="font-black text-xl text-green-800">{res.rawAmount.toFixed(0)} <span className="text-sm font-normal text-slate-500">{res.unit}</span></div>
-                        </div>
-                        <div className="flex-1 bg-blue-50 p-2 rounded border border-blue-200 text-center">
-                            <div className="text-[9px] uppercase text-blue-600 font-bold">Total Solution</div>
-                            <div className="font-black text-xl text-blue-800">{res.totalSolutionL.toFixed(1)} <span className="text-sm font-normal text-blue-500">Liters</span></div>
-                        </div>
-                    </div>
-                    
-                    <div className="text-center p-2 bg-slate-50 rounded border border-slate-200 text-[10px] text-slate-500">
-                        <strong>Preparation:</strong> Mix <strong>{res.rawAmount} {res.unit}</strong> into <strong>{(res.totalSolutionL - (p.type==='citric'?0:(res.rawAmount/1000))).toFixed(1)} L</strong> clean water (70°C).
-                    </div>
-                </div>
-            )}
-        </CardContent>
-    </Card>
-  );
-}
-// ════════════════════════════════════════════════════════════
-// 8. ADVANCED IBT CAPACITY & REFRIGERATION LOAD
-// Calculates: Total Heat Load, Ice Kg, & Compressor TR req.
-// ════════════════════════════════════════════════════════════
-function IbtCalc() {
-  const [i, setI] = useState({ 
-    milkVol: "10000",    // Liters
-    startT: "35",        // °C
-    endT: "4",           // °C
-    processHours: "4",   // Time available to cool milk (Melt time)
-    buildHours: "10",    // Compressor run time to build ice
-    losses: "10"         // % Heat loss (Insulation/Agitator)
-  });
-  const [res, setRes] = useState<any>(null);
+    const totalCrates    = cratesFloor * effectiveStack;
+    const totalCapL      = totalCrates * crate.capL;
+    const totalWeightKg  = totalCrates * crate.weightKg + totalCapL; // tare + product
+    const totalWeightT   = totalWeightKg / 1000;
 
-  const calculate = () => {
-    const mass = parseFloat(i.milkVol) * 1.03; // Density
-    const dT = parseFloat(i.startT) - parseFloat(i.endT);
-    const safety = 1 + (parseFloat(i.losses) / 100);
+    // Floor loading (kg/m²)
+    const roomAreaM2     = (lenMm / 1000) * (widMm / 1000);
+    const floorLoadKgM2  = (totalWeightKg * eff) / (roomAreaM2 * eff);
 
-    // 1. Product Heat Load (Q = m * Cp * dT)
-    // Milk Cp = 0.93 kcal/kg°C
-    const productLoad = mass * 0.93 * dT;
+    // Refrigeration load estimate (simple)
+    // Rule: 1 TR per 500 kg of product in chiller mode (~4°C)
+    const refrigTR       = totalCapL / 500;
 
-    // 2. Total Thermal Load (inc. losses)
-    const totalLoadKcal = productLoad * safety;
+    // Utilization metrics
+    const usagePercent   = eff * 100;
+    const aisleFt        = unit === "ft"
+      ? ((1 - eff) * parseFloat(inp.len) * parseFloat(inp.width)).toFixed(0)
+      : ((1 - eff) * parseFloat(inp.len) * parseFloat(inp.width)).toFixed(1);
 
-    // 3. Ice Required
-    // Latent heat of fusion of Ice = 80 kcal/kg
-    const iceReqKg = totalLoadKcal / 80;
+    const roomAreaSqFt   = unit === "ft"
+      ? parseFloat(inp.len) * parseFloat(inp.width)
+      : parseFloat(inp.len) * parseFloat(inp.width) * 10.764;
 
-    // 4. Compressor Capacity (TR) needed to build this ice
-    // If we build this ice over 'buildHours' (usually night)
-    // 1 TR = 3024 kcal/hr
-    const hourlyLoadBuilding = totalLoadKcal / parseFloat(i.buildHours);
-    const compressorTR = hourlyLoadBuilding / 3024;
+    // SKU planning — how many products can fit
+    const skuRows        = Math.floor(Math.sqrt(cratesFloor));
 
-    // 5. Rate of Cooling (Process side)
-    const peakLoadProcess = (totalLoadKcal / parseFloat(i.processHours)) / 3024; // Peak demand in TR
-
-    setRes({ totalLoadKcal, iceReqKg, compressorTR, peakLoadProcess });
-  };
-
-  return (
-    <Card className="border-blue-200 bg-blue-50/30">
-        <CardHeader className="pb-2 border-b border-blue-100 bg-blue-50 rounded-t-lg">
-            <CardTitle className="text-sm font-bold flex gap-2 text-blue-800">
-                <Snowflake className="w-4 h-4"/> IBT Energy & Ice Planner
-            </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4 pt-4">
-            
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                <ValidatedInput label="Milk Volume (L)" value={i.milkVol} onChange={v=>setI({...i, milkVol:v})} />
-                <ValidatedInput label="Start Temp °C" value={i.startT} onChange={v=>setI({...i, startT:v})} colorScheme="red" />
-                <ValidatedInput label="End Temp °C" value={i.endT} onChange={v=>setI({...i, endT:v})} colorScheme="blue" />
-                <ValidatedInput label="Melt Time (Hrs)" value={i.processHours} onChange={v=>setI({...i, processHours:v})} helpText="Processing Duration" />
-                <ValidatedInput label="Build Time (Hrs)" value={i.buildHours} onChange={v=>setI({...i, buildHours:v})} helpText="Comp. Run Time" />
-                <ValidatedInput label="Heat Loss %" value={i.losses} onChange={v=>setI({...i, losses:v})} helpText="Std: 10-15%" />
-            </div>
-
-            <Button onClick={calculate} size="sm" className="w-full bg-blue-600 hover:bg-blue-700 shadow-md">Calculate Load</Button>
-            
-            {res && (
-                <div className="space-y-2 animate-in fade-in">
-                    {/* Main Ice Result */}
-                    <div className="flex justify-between items-center bg-white p-3 rounded-lg border border-blue-200 shadow-sm">
-                        <div>
-                            <div className="text-[10px] uppercase font-bold text-slate-400">Total Ice Bank</div>
-                            <div className="text-2xl font-black text-blue-700">{res.iceReqKg.toLocaleString('en-IN', {maximumFractionDigits:0})} <span className="text-sm text-slate-500">kg</span></div>
-                        </div>
-                        <div className="text-right">
-                            <div className="text-[10px] uppercase font-bold text-slate-400">Total Load</div>
-                            <div className="text-lg font-bold text-slate-700">{(res.totalLoadKcal/1000).toFixed(0)} Mcal</div>
-                        </div>
-                    </div>
-
-                    {/* Compressor Specs */}
-                    <div className="grid grid-cols-2 gap-2 text-center">
-                        <div className="bg-slate-50 p-2 rounded border border-slate-200">
-                            <div className="text-[9px] text-slate-500 font-bold uppercase">Compressor Needed</div>
-                            <div className="font-bold text-sm text-blue-900">{res.compressorTR.toFixed(1)} TR</div>
-                            <div className="text-[9px] text-slate-400">(to build in {i.buildHours}h)</div>
-                        </div>
-                        <div className="bg-slate-50 p-2 rounded border border-slate-200">
-                            <div className="text-[9px] text-slate-500 font-bold uppercase">Peak Process Load</div>
-                            <div className="font-bold text-sm text-orange-700">{res.peakLoadProcess.toFixed(1)} TR</div>
-                            <div className="text-[9px] text-slate-400">(if Direct Expansion)</div>
-                        </div>
-                    </div>
-                </div>
-            )}
-        </CardContent>
-    </Card>
-  );
-}
-// ════════════════════════════════════════════════════════════
-// 9. ADVANCED WATER AUDIT (WMR)
-// Breakdown of Water Usage by Department vs Production
-// ════════════════════════════════════════════════════════════
-function WmrCalc() {
-  const [w, setW] = useState({ 
-    milkProcessed: "50000", // Liters
-    waterProcess: "40000",  // L (CIP, Crates, Floors)
-    waterUtility: "20000",  // L (Boiler, Cooling Tower, Chiller)
-    waterDomestic: "5000"   // L (Canteen, Gardening, Toilets)
-  });
-  const [res, setRes] = useState<any>(null);
-
-  const calculate = () => {
-    const M = parseFloat(w.milkProcessed);
-    const W_proc = parseFloat(w.waterProcess);
-    const W_util = parseFloat(w.waterUtility);
-    const W_dom = parseFloat(w.waterDomestic);
-
-    const totalWater = W_proc + W_util + W_dom;
-    const ratio = totalWater / M;
-
-    // Benchmarking (Indian Dairy Standard)
-    // < 1.5 : Excellent (World Class)
-    // 1.5 - 2.0 : Good
-    // 2.0 - 3.0 : Average
-    // > 3.0 : Poor
-    let grade = "Poor";
-    let color = "text-red-600";
-    let bg = "bg-red-50 border-red-200";
-
-    if (ratio <= 1.5) { grade = "Excellent"; color = "text-green-700"; bg = "bg-green-50 border-green-200"; }
-    else if (ratio <= 2.0) { grade = "Good"; color = "text-emerald-600"; bg = "bg-emerald-50 border-emerald-200"; }
-    else if (ratio <= 3.0) { grade = "Average"; color = "text-yellow-600"; bg = "bg-yellow-50 border-yellow-200"; }
-
-    setRes({ totalWater, ratio, grade, color, bg });
-  };
-
-  return (
-    <Card className="border-teal-200 bg-teal-50/30">
-        <CardHeader className="pb-2 border-b border-teal-100 bg-teal-50 rounded-t-lg">
-            <CardTitle className="text-sm font-bold flex gap-2 text-teal-800">
-                <Droplets className="w-4 h-4"/> Water Consumption Audit
-            </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4 pt-4">
-            
-            <div className="grid grid-cols-2 gap-3">
-                <div className="col-span-2">
-                    <ValidatedInput label="Total Milk Processed (L)" value={w.milkProcessed} onChange={v=>setW({...w, milkProcessed:v})} />
-                </div>
-                <ValidatedInput label="Process Water (L)" value={w.waterProcess} onChange={v=>setW({...w, waterProcess:v})} helpText="CIP, Floor wash" />
-                <ValidatedInput label="Utility Water (L)" value={w.waterUtility} onChange={v=>setW({...w, waterUtility:v})} helpText="Boiler, Cooling" />
-                <ValidatedInput label="Domestic/Misc (L)" value={w.waterDomestic} onChange={v=>setW({...w, waterDomestic:v})} helpText="Staff, Gardens" />
-            </div>
-
-            <Button onClick={calculate} size="sm" className="w-full bg-teal-600 hover:bg-teal-700 shadow-md">Run Audit</Button>
-            
-            {res && (
-                <div className="space-y-2 animate-in fade-in">
-                    <div className={`flex justify-between items-center p-3 rounded-lg border shadow-sm ${res.bg}`}>
-                        <div>
-                            <div className="text-[10px] uppercase font-bold text-slate-500">Specific Water Consumption</div>
-                            <div className={`text-3xl font-black ${res.color}`}>{res.ratio.toFixed(2)} <span className="text-base text-slate-500">L/L</span></div>
-                        </div>
-                        <div className="text-right">
-                            <div className="text-[10px] uppercase font-bold text-slate-500">Efficiency Grade</div>
-                            <div className={`text-xl font-bold ${res.color}`}>{res.grade}</div>
-                        </div>
-                    </div>
-                    <div className="text-center text-xs text-slate-500">
-                        Total Water Used: <strong>{res.totalWater.toLocaleString()} Liters</strong>
-                    </div>
-                </div>
-            )}
-        </CardContent>
-    </Card>
-  );
-}
-// ════════════════════════════════════════════════════════════
-// 10. ADVANCED DISPATCH LOGISTICS PLANNER
-// Calculates: Crates, Weight Load & Suggested Vehicle
-// ════════════════════════════════════════════════════════════
-function DispatchCalc() {
-  const [d, setD] = useState({ 
-    pouch500: "15000", // Pkts
-    pouch1000: "2000", // Pkts
-    cups: "1000",      // Pkts
-    bulkCans: "10"     // No. of 40L Cans
-  });
-  const [res, setRes] = useState<any>(null);
-
-  const calculate = () => {
-    // 1. Crate Logic
-    // Std Crate holds: 24 x 500ml OR 12 x 1000ml OR ~40 Cups
-    const crates500 = Math.ceil(parseFloat(d.pouch500) / 24);
-    const crates1000 = Math.ceil(parseFloat(d.pouch1000) / 12);
-    const cratesCups = Math.ceil(parseFloat(d.cups) / 40);
-    
-    // Bulk Cans are separate, but take floor space. 
-    // Approx 1 Can footprint = 1.5 Crates
-    const canEquivalentCrates = parseFloat(d.bulkCans) * 1.5;
-
-    const totalCrates = crates500 + crates1000 + cratesCups;
-    const totalSpaceUnits = totalCrates + canEquivalentCrates;
-
-    // 2. Weight Logic (Approx)
-    // 1 Crate full ~ 13-14 kg. 1 Can ~ 42 kg.
-    const weightCrates = totalCrates * 14; 
-    const weightCans = parseFloat(d.bulkCans) * 42;
-    const totalWeightKg = weightCrates + weightCans;
-
-    // 3. Vehicle Suggestion
-    // Small Pickup (Bolero): ~800kg / 120 crates
-    // Light Truck (Canter/407): ~2500kg / 350 crates
-    // Medium Truck (1109): ~6000kg / 800 crates
-    // Heavy Truck: >8000kg
-    
-    let vehicle = "Heavy Truck (10 Ton)";
-    if (totalWeightKg < 900) vehicle = "Small Pickup (Bolero)";
-    else if (totalWeightKg < 2800) vehicle = "Light Truck (Canter/407)";
-    else if (totalWeightKg < 6500) vehicle = "Medium Truck (Eicher 1109)";
-
-    setRes({ 
-        totalCrates, 
-        totalWeightKg, 
-        vehicle, 
-        spaceIndex: Math.ceil(totalSpaceUnits) 
+    setResult({
+      cratesFloor, effectiveStack, totalCrates,
+      totalCapL, totalWeightT, floorLoadKgM2,
+      refrigTR, usagePercent, aisleFt,
+      roomAreaSqFt, bestRotated, cratesAreaBased,
+      skuRows, autoStack,
     });
-  };
 
+    toast({
+      title: "✅ Calculated",
+      description: `${totalCrates.toLocaleString("en-IN")} crates · ${totalCapL.toLocaleString("en-IN")} L · ${totalWeightT.toFixed(1)} T`,
+    });
+  }, [inp, crateType, effectiveStack, unit, crate, toast]);
+
+  // ── RENDER ────────────────────────────────────────────
   return (
-    <Card className="border-indigo-200 bg-indigo-50/30">
-        <CardHeader className="pb-2 border-b border-indigo-100 bg-indigo-50 rounded-t-lg">
-            <CardTitle className="text-sm font-bold flex gap-2 text-indigo-800">
-                <Truck className="w-4 h-4"/> Logistics & Dispatch Planner
+    <Card className="border-cyan-200 bg-cyan-50/20">
+      <CardHeader className="pb-3 bg-gradient-to-r from-cyan-50 to-blue-50 rounded-t-lg border-b border-cyan-100">
+        <CardTitle className="flex items-center justify-between">
+          <span className="flex items-center gap-2 text-cyan-800">
+            <Box className="w-5 h-5 text-cyan-600" />
+            Cold Store Capacity Planner
+          </span>
+          {result && (
+            <Badge className="bg-cyan-600 text-white text-sm px-3 py-1">
+              {result.totalCapL.toLocaleString("en-IN")} L
+            </Badge>
+          )}
+        </CardTitle>
+        <CardDescription className="text-cyan-600 text-xs">
+          Grid layout · Auto stack height · Floor load · Refrigeration estimate · SKU planning
+        </CardDescription>
+      </CardHeader>
+
+      <CardContent className="pt-4 space-y-4">
+
+        {/* ── PRESETS ──────────────────────────────────── */}
+        <div className="space-y-1">
+          <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Room Presets</Label>
+          <div className="flex flex-wrap gap-2">
+            {(Object.keys(ROOM_PRESETS) as Array<keyof typeof ROOM_PRESETS>).map(name => (
+              <button
+                key={name}
+                onClick={() => applyPreset(name)}
+                className="px-3 py-1 rounded-full border border-cyan-200 bg-white text-xs font-semibold text-cyan-700 hover:bg-cyan-600 hover:text-white hover:border-cyan-600 transition-all shadow-sm"
+              >
+                {name}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* ── CRATE SELECTOR ───────────────────────────── */}
+        <div className="space-y-1">
+          <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Crate / Container Type</Label>
+          <Select value={crateType} onValueChange={v => { setCrateType(v as keyof typeof CRATE_DB); setResult(null); }}>
+            <SelectTrigger className="h-10 bg-white border-cyan-200">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {(Object.entries(CRATE_DB) as [keyof typeof CRATE_DB, any][]).map(([k, v]) => (
+                <SelectItem key={k} value={k}>
+                  <div className="flex flex-col">
+                    <span className="font-semibold">{v.label}</span>
+                    <span className="text-[10px] text-slate-400">
+                      {v.l}×{v.w}×{v.h}mm · {v.capL}L · max {v.stackMax} high
+                    </span>
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          {/* Crate spec pills */}
+          <div className="flex flex-wrap gap-2 mt-1">
+            {[
+              { label: "Size",     value: `${crate.l}×${crate.w}×${crate.h} mm` },
+              { label: "Capacity", value: `${crate.capL} L`                      },
+              { label: "Tare",     value: `${crate.weightKg} kg`                 },
+              { label: "Max Stack",value: `${crate.stackMax} high`               },
+            ].map(p => (
+              <span key={p.label} className="bg-cyan-100 text-cyan-800 text-[10px] font-semibold px-2 py-0.5 rounded-full">
+                {p.label}: {p.value}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* ── ROOM DIMENSIONS ─────────────────────────── */}
+        <Card className="border-cyan-100 bg-white">
+          <CardHeader className="p-3 pb-2 bg-cyan-50 rounded-t-lg border-b border-cyan-100 flex flex-row items-center justify-between">
+            <CardTitle className="text-xs font-bold text-cyan-700 uppercase tracking-wider">
+              📐 Room Dimensions
             </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4 pt-4">
-            
+            {/* Unit toggle */}
+            <div className="flex bg-white border border-cyan-200 rounded p-0.5 gap-0.5">
+              {(["ft", "m"] as const).map(u => (
+                <button
+                  key={u}
+                  onClick={() => setUnit(u)}
+                  className={`px-2 py-0.5 rounded text-[10px] font-bold transition-all ${
+                    unit === u ? "bg-cyan-600 text-white" : "text-slate-400 hover:text-cyan-600"
+                  }`}
+                >
+                  {u}
+                </button>
+              ))}
+            </div>
+          </CardHeader>
+          <CardContent className="p-3 grid grid-cols-2 gap-3">
+            <ValidatedInput
+              label={`Length (${unit})`}
+              value={inp.len}
+              onChange={v => setF("len", v)}
+              validation={validatePositive(inp.len, "Length")}
+              unit={unit}
+              colorScheme="cyan"
+            />
+            <ValidatedInput
+              label={`Width (${unit})`}
+              value={inp.width}
+              onChange={v => setF("width", v)}
+              validation={validatePositive(inp.width, "Width")}
+              unit={unit}
+              colorScheme="cyan"
+            />
+            <ValidatedInput
+              label={`Room Height (${unit})`}
+              value={inp.heightFt}
+              onChange={v => setF("heightFt", v)}
+              validation={validatePositive(inp.heightFt, "Height")}
+              unit={unit}
+              helpText="To ceiling/beam"
+              colorScheme="blue"
+            />
+            <ValidatedInput
+              label="Floor Usage %"
+              value={inp.efficiency}
+              onChange={v => setF("efficiency", v)}
+              validation={validateNumber(inp.efficiency, 30, 90, "Usage %")}
+              unit="%"
+              helpText="Standard: 60–70%"
+              colorScheme="orange"
+            />
+          </CardContent>
+        </Card>
+
+        {/* ── STACK HEIGHT ─────────────────────────────── */}
+        <div className="flex items-center justify-between p-3 bg-blue-50 border border-blue-200 rounded-lg">
+          <div>
+            <div className="text-sm font-bold text-blue-800">
+              Auto Stack Height
+              <Badge className="ml-2 bg-blue-600 text-white text-xs">
+                {autoStack} tiers
+              </Badge>
+            </div>
+            <div className="text-xs text-blue-500">
+              = (Room height − 300mm clearance) ÷ {crate.h}mm crate · max {crate.stackMax}
+            </div>
+          </div>
+          <Button
+            size="sm"
+            variant={useAutoStack ? "default" : "outline"}
+            onClick={() => setUseAutoStack(!useAutoStack)}
+            className={useAutoStack ? "bg-blue-600 hover:bg-blue-700" : "border-blue-300 text-blue-600"}
+          >
+            {useAutoStack ? "AUTO ✓" : "MANUAL"}
+          </Button>
+        </div>
+
+        {!useAutoStack && (
+          <ValidatedInput
+            label="Manual Stack Tiers"
+            value={inp.stack}
+            onChange={v => setF("stack", v)}
+            validation={validateNumber(inp.stack, 1, crate.stackMax, "Stack")}
+            unit="tiers"
+            helpText={`Max safe: ${crate.stackMax} for this crate`}
+            colorScheme="orange"
+          />
+        )}
+
+        {/* ── CALCULATE ───────────────────────────────── */}
+        <Button
+          onClick={calculate}
+          className="w-full h-11 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white font-bold shadow-md"
+        >
+          <Box className="w-4 h-4 mr-2" />
+          Plan Cold Store Capacity
+        </Button>
+
+        {/* ── RESULTS ─────────────────────────────────── */}
+        {result && (
+          <div className="space-y-3 animate-in fade-in">
+
+            {/* Main KPIs */}
             <div className="grid grid-cols-2 gap-3">
-                <ValidatedInput label="500ml Pouches" value={d.pouch500} onChange={v=>setD({...d, pouch500:v})} />
-                <ValidatedInput label="1L Pouches" value={d.pouch1000} onChange={v=>setD({...d, pouch1000:v})} />
-                <ValidatedInput label="Cups/Dahi" value={d.cups} onChange={v=>setD({...d, cups:v})} />
-                <ValidatedInput label="Bulk Cans (40L)" value={d.bulkCans} onChange={v=>setD({...d, bulkCans:v})} />
+              <div className="bg-cyan-600 text-white p-4 rounded-xl shadow-lg text-center">
+                <div className="text-[10px] uppercase opacity-80 font-bold">Storage Capacity</div>
+                <div className="text-3xl font-black">
+                  {result.totalCapL.toLocaleString("en-IN")}
+                </div>
+                <div className="text-xs opacity-70">Litres</div>
+              </div>
+              <div className="bg-slate-800 text-white p-4 rounded-xl shadow-lg text-center">
+                <div className="text-[10px] uppercase opacity-70 font-bold">Total Crates</div>
+                <div className="text-3xl font-black text-yellow-300">
+                  {result.totalCrates.toLocaleString("en-IN")}
+                </div>
+                <div className="text-xs opacity-60">
+                  {result.cratesFloor} per layer × {result.effectiveStack} tiers
+                </div>
+              </div>
             </div>
 
-            <Button onClick={calculate} size="sm" className="w-full bg-indigo-600 hover:bg-indigo-700 shadow-md">Plan Vehicle</Button>
-            
-            {res && (
-                <div className="space-y-2 animate-in fade-in">
-                    <div className="flex gap-2">
-                        <div className="flex-1 bg-white p-2 rounded border border-indigo-200 text-center">
-                            <div className="text-[9px] uppercase text-slate-500 font-bold">Total Crates</div>
-                            <div className="font-black text-xl text-indigo-800">{res.totalCrates}</div>
-                        </div>
-                        <div className="flex-1 bg-white p-2 rounded border border-indigo-200 text-center">
-                            <div className="text-[9px] uppercase text-slate-500 font-bold">Total Load</div>
-                            <div className="font-black text-xl text-indigo-900">{res.totalWeightKg.toLocaleString()} <span className="text-sm text-slate-400">kg</span></div>
-                        </div>
-                    </div>
-                    
-                    <div className="bg-indigo-100 p-2 rounded border border-indigo-300 text-center">
-                        <span className="text-xs text-indigo-700 font-bold uppercase">Suggested Vehicle</span>
-                        <div className="text-lg font-black text-indigo-900">{res.vehicle}</div>
-                    </div>
+            {/* Floor plan breakdown */}
+            <Card className="bg-white border-cyan-100">
+              <CardHeader className="p-3 pb-1 border-b border-cyan-100">
+                <CardTitle className="text-xs text-cyan-700 font-bold uppercase">📐 Floor Plan Analysis</CardTitle>
+              </CardHeader>
+              <CardContent className="p-3 space-y-2 text-sm">
+                {[
+                  { label: "Room area",              value: `${result.roomAreaSqFt.toFixed(0)} sq ft` },
+                  { label: "Crates per layer (grid)",value: `${result.cratesFloor} crates ${result.bestRotated ? "(rotated layout better)" : ""}` },
+                  { label: "Stack tiers",            value: `${result.effectiveStack} ${useAutoStack ? "(auto)" : "(manual)"}` },
+                  { label: "Aisle + dead space",     value: `${(100 - result.usagePercent).toFixed(0)}% of floor` },
+                  { label: "Orientation",            value: result.bestRotated ? "Rotated 90° for best fit" : "Standard layout" },
+                ].map((r, i) => (
+                  <div key={i} className="flex justify-between">
+                    <span className="text-slate-500">{r.label}</span>
+                    <span className="font-bold text-slate-700">{r.value}</span>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+
+            {/* Load & Infra */}
+            <div className="grid grid-cols-2 gap-3">
+              <Card className="border-orange-100 bg-orange-50">
+                <CardContent className="p-3 space-y-1 text-sm">
+                  <div className="text-[10px] text-orange-700 font-bold uppercase">Floor Loading</div>
+                  <div className="text-2xl font-black text-orange-800">
+                    {result.floorLoadKgM2.toFixed(0)}
+                  </div>
+                  <div className="text-[10px] text-orange-600">kg/m² (full load)</div>
+                  <div className="text-[10px] text-slate-400 mt-1">
+                    Standard floor: 600–1000 kg/m²
+                  </div>
+                  <div className={`text-[10px] font-bold mt-1 ${result.floorLoadKgM2 > 1000 ? "text-red-600" : result.floorLoadKgM2 > 700 ? "text-orange-600" : "text-green-600"}`}>
+                    {result.floorLoadKgM2 > 1000 ? "⚠ Exceeds standard — check RCC" : result.floorLoadKgM2 > 700 ? "⚡ Heavy load — verify slab" : "✓ Safe for standard floor"}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-blue-100 bg-blue-50">
+                <CardContent className="p-3 space-y-1 text-sm">
+                  <div className="text-[10px] text-blue-700 font-bold uppercase">Refrigeration Est.</div>
+                  <div className="text-2xl font-black text-blue-800">
+                    {result.refrigTR.toFixed(1)} TR
+                  </div>
+                  <div className="text-[10px] text-blue-600">cooling required</div>
+                  <div className="text-[10px] text-slate-400 mt-1">
+                    Rule: 1 TR per 500 L product
+                  </div>
+                  <div className="text-[10px] text-blue-600 font-bold mt-1">
+                    ≈ {(result.refrigTR * 3.517).toFixed(1)} kW thermal
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Total weight */}
+            <div className="flex items-center justify-between p-3 bg-slate-50 border border-slate-200 rounded-lg text-sm">
+              <div>
+                <div className="font-bold text-slate-700">Total Weight (full load)</div>
+                <div className="text-xs text-slate-400">crate tare + product</div>
+              </div>
+              <div className="text-right">
+                <div className="text-xl font-black text-slate-800">{result.totalWeightT.toFixed(1)} T</div>
+                <div className="text-xs text-slate-400">
+                  {(result.totalWeightT * 1000).toLocaleString("en-IN", { maximumFractionDigits: 0 })} kg
                 </div>
+              </div>
+            </div>
+
+            {/* SKU / dispatch planning */}
+            <Card className="bg-purple-50 border-purple-200">
+              <CardHeader className="p-3 pb-1 border-b border-purple-100">
+                <CardTitle className="text-sm text-purple-800">📦 SKU / Dispatch Planning</CardTitle>
+              </CardHeader>
+              <CardContent className="p-3 text-sm space-y-1">
+                <div className="flex justify-between">
+                  <span className="text-slate-500">Crates per vehicle (6T truck)</span>
+                  <span className="font-bold">{Math.floor(6000 / (crate.capL + crate.weightKg))} crates</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-500">Full truckloads from store</span>
+                  <span className="font-bold text-purple-700">
+                    {Math.floor(result.totalCrates / Math.floor(6000 / (crate.capL + crate.weightKg)))} trucks
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-500">Suggested aisle rows</span>
+                  <span className="font-bold">{Math.max(2, result.skuRows)} rows</span>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Formula note */}
+            <div className="bg-slate-50 border rounded-lg p-3 text-[10px] font-mono text-slate-400 space-y-1">
+              <div className="font-bold text-slate-600 text-xs mb-1">📐 Formulas:</div>
+              <div>Crates/layer = floor(L/crate_L) × floor(W/crate_W) [grid packing]</div>
+              <div>Auto stack = floor((room_H − 300mm) / crate_H), capped at {crate.stackMax}</div>
+              <div>Total = Crates/layer × Stack × Capacity/crate</div>
+              <div>Floor load = Total weight / (room area × efficiency)</div>
+              <div>Refrigeration = Total product litres / 500</div>
+            </div>
+
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+// ════════════════════════════════════════════════════════════
+// ADVANCED PANEER COAGULANT DOSING CALCULATOR
+// Drop-in Replacement for PaneerCoagulantCalc()
+//
+// INSTRUCTIONS:
+// 1. Apni file mein purana PaneerCoagulantCalc() function dhundhein
+// 2. Pura block DELETE karein
+// 3. Yeh poora code wahan PASTE karein
+// Koi naya import nahi chahiye.
+// ════════════════════════════════════════════════════════════
+
+// ── COAGULANT DATABASE ────────────────────────────────────
+const COAGULANT_DB = {
+  citric: {
+    label:       "🍋 Citric Acid (Powder)",
+    unit:        "g/L",
+    rateMin:     1.8,
+    rateMax:     2.5,
+    rateDefault: "2.2",
+    concDefault: "1.5",
+    stockConc:   100,   // % (pure powder)
+    tempC:       70,    // solution prep temp
+    addTempC:    70,    // milk temp at addition
+    purity:      98,    // % typical food grade
+    price:       "85",  // ₹/kg
+    priceUnit:   "kg",
+    notes: [
+      "Powder pehle 70°C pani mein dissolve karein",
+      "Milk 70°C pe coagulate karo — soft texture",
+      "Dheere-dheere add karo aur stir band karo",
+      "Over-acidification se rubbery paneer hota hai",
+    ],
+    yieldFactor: 0.18,  // kg paneer per L milk (approx)
+  },
+  vinegar: {
+    label:       "🧴 White Vinegar (Liquid)",
+    unit:        "ml/L",
+    rateMin:     25,
+    rateMax:     35,
+    rateDefault: "30",
+    concDefault: "1.0",
+    stockConc:   5,     // % acidity (standard food vinegar)
+    tempC:       25,    // room temp liquid
+    addTempC:    70,
+    purity:      5,
+    price:       "40",  // ₹/L
+    priceUnit:   "L",
+    notes: [
+      "5% acidity vinegar standard hai",
+      "Dilute karke add karo — direct dalne se uneven coag",
+      "Slightly softer texture vs citric",
+      "Rinse curd well — vinegar flavour residue",
+    ],
+    yieldFactor: 0.17,
+  },
+  lactic: {
+    label:       "🧪 Lactic Acid (80% solution)",
+    unit:        "ml/L",
+    rateMin:     1.5,
+    rateMax:     2.5,
+    rateDefault: "2.0",
+    concDefault: "0.8",
+    stockConc:   80,
+    tempC:       25,
+    addTempC:    65,
+    purity:      80,
+    price:       "120",
+    priceUnit:   "L",
+    notes: [
+      "Premium option — very smooth, soft texture",
+      "65°C pe add karo for best curd structure",
+      "FSSAI approved food grade use karein",
+      "Khatte flavour se bachne ke liye rinse zaruri",
+    ],
+    yieldFactor: 0.185,
+  },
+  whey: {
+    label:       "♻️ Acid Whey (Recycled)",
+    unit:        "ml/L",
+    rateMin:     100,
+    rateMax:     200,
+    rateDefault: "150",
+    concDefault: "10",
+    stockConc:   0.5,  // % titratable acidity
+    tempC:       65,
+    addTempC:    70,
+    purity:      0.5,
+    price:       "2",
+    priceUnit:   "L",
+    notes: [
+      "Previous batch ki whey — zero waste approach",
+      "pH 4.2–4.5 hona chahiye for effective coagulation",
+      "Larger volume needed — plan whey storage tank",
+      "Flavour slightly different — consumer feedback lein",
+    ],
+    yieldFactor: 0.175,
+  },
+} as const;
+
+// ── PANEER VARIANT PRESETS ────────────────────────────────
+const PANEER_VARIANTS = {
+  "Standard Paneer":    { rate: "2.2", conc: "1.5", addTemp: "70", notes: "Regular coagulation, firm texture" },
+  "Soft Paneer":        { rate: "1.8", conc: "1.0", addTemp: "68", notes: "Lower acid, softer body" },
+  "Malai Paneer":       { rate: "2.0", conc: "1.2", addTemp: "70", notes: "Full fat milk, richer texture" },
+  "Tofu-Style":         { rate: "2.5", conc: "2.0", addTemp: "72", notes: "Higher acid, press firmly for density" },
+} as const;
+
+// ── MAIN COMPONENT ────────────────────────────────────────
+function PaneerCoagulantCalc() {
+  const { toast } = useToast();
+
+  const [coagType, setCoagType] = useState<keyof typeof COAGULANT_DB>("citric");
+  const [inp, setInp] = useState({
+    milk:    "1000",
+    rate:    "2.2",
+    conc:    "1.5",
+    addTemp: "70",
+    price:   "85",
+    milkFat: "3.5",  // % fat — affects yield
+  });
+  const [result, setResult] = useState<any>(null);
+  const [activeTab, setActiveTab] = useState<"inputs" | "results" | "process">("inputs");
+
+  const setF = (k: string, v: string) => setInp(p => ({ ...p, [k]: v }));
+  const { validatePositive, validateNumber } = useInputValidation();
+
+  const coag = COAGULANT_DB[coagType];
+
+  // Apply coagulant type defaults
+  const applyCoagType = (type: keyof typeof COAGULANT_DB) => {
+    const c = COAGULANT_DB[type];
+    setCoagType(type);
+    setInp(p => ({ ...p, rate: c.rateDefault, conc: c.concDefault, price: c.price }));
+    setResult(null);
+  };
+
+  // Apply variant preset
+  const applyVariant = (name: keyof typeof PANEER_VARIANTS) => {
+    const v = PANEER_VARIANTS[name];
+    setInp(p => ({ ...p, rate: v.rate, conc: v.conc, addTemp: v.addTemp }));
+    toast({ title: `Preset: ${name}`, description: v.notes });
+  };
+
+  // ── CALCULATE ─────────────────────────────────────────
+  const calculate = useCallback(() => {
+    const milk    = parseFloat(inp.milk)    || 0;
+    const rate    = parseFloat(inp.rate)    || 0;
+    const conc    = parseFloat(inp.conc)    || 1;
+    const price   = parseFloat(inp.price)  || 0;
+    const fat     = parseFloat(inp.milkFat)|| 3.5;
+
+    if (milk <= 0 || rate <= 0 || conc <= 0) {
+      toast({ variant: "destructive", title: "Invalid values" }); return;
+    }
+
+    // ── 1. Raw coagulant required ──────────────────────
+    // For powder (citric): grams = milk_L × rate_g/L
+    // For liquid: ml = milk_L × rate_ml/L
+    const rawAmount   = milk * rate;
+    const rawUnit     = coagType === "citric" ? "g" : "ml";
+
+    // ── 2. Solution preparation ────────────────────────
+    // C1V1 = C2V2
+    // C1 = stock concentration, C2 = target working concentration
+    // V1 = rawAmount (already in g or ml)
+    // For citric powder: C1=100% (pure), need V_total such that conc%=(rawAmount/V_total_ml)*100
+    // totalSolutionMl = rawAmount_g * 1000 / (density≈1) / (conc/100) → simplified:
+    let totalSolutionL = 0;
+    let waterToAddL    = 0;
+
+    if (coagType === "citric") {
+      // rawAmount in grams, conc in %
+      // totalSolutionMl = (rawAmount_g / (conc/100)) / (density≈1g/ml)
+      totalSolutionL = rawAmount / (conc / 100) / 1000;
+      waterToAddL    = totalSolutionL - rawAmount / 1000; // subtract volume of dissolved powder (approx)
+    } else if (coagType === "lactic") {
+      // Stock = 80%, target = conc%
+      // C1V1 = C2V2 → V1 = rawAmount ml (stock volume needed)
+      // rawAmount already accounts for rate, now dilute to conc%
+      totalSolutionL = rawAmount * (coag.stockConc / 100) / (conc / 100) / 1000;
+      waterToAddL    = totalSolutionL - rawAmount / 1000;
+    } else if (coagType === "vinegar") {
+      // Stock vinegar = 5% acidity, target = conc% active acid
+      // V_total = rawAmount_ml × (5/conc) / 1000
+      totalSolutionL = rawAmount * (coag.stockConc / conc) / 1000;
+      waterToAddL    = totalSolutionL - rawAmount / 1000;
+    } else {
+      // Whey — just volumetric, no significant dilution needed
+      totalSolutionL = rawAmount / 1000;
+      waterToAddL    = 0;
+    }
+
+    // Clamp negatives
+    waterToAddL = Math.max(0, waterToAddL);
+
+    // ── 3. Cost ───────────────────────────────────────
+    let coagCost = 0;
+    if (coagType === "citric") {
+      coagCost = (rawAmount / 1000) * price; // g → kg × ₹/kg
+    } else {
+      coagCost = (rawAmount / 1000) * price; // ml → L × ₹/L
+    }
+    const costPerL = coagCost / milk;
+
+    // ── 4. Paneer yield estimate ──────────────────────
+    // Base yield 16–18% (v/v), fat adjusted: +0.3% per 0.1% fat above 3%
+    const baseYield  = coag.yieldFactor;
+    const fatAdj     = (fat - 3.0) * 0.003;
+    const yieldFact  = Math.max(0.12, baseYield + fatAdj);
+    const paneerKg   = milk * yieldFact;
+    const wheyL      = milk - paneerKg; // approximate whey volume
+    const costPerKgPaneer = coagCost / paneerKg;
+
+    // ── 5. Acid addition rate warning ─────────────────
+    const warnings: string[] = [];
+    if (rate < coag.rateMin) warnings.push(`Rate ${rate} ${coag.unit} is below minimum (${coag.rateMin}). Under-coagulation risk.`);
+    if (rate > coag.rateMax) warnings.push(`Rate ${rate} ${coag.unit} exceeds recommended max (${coag.rateMax}). Rubbery/sour paneer risk.`);
+    if (conc > 2.5)          warnings.push(`Solution concentration > 2.5% — too concentrated. Uneven coagulation if not mixed well.`);
+    if (totalSolutionL > milk * 0.15) warnings.push(`Solution volume (${totalSolutionL.toFixed(1)} L) is >15% of milk — may dilute milk fat.`);
+
+    setResult({
+      rawAmount, rawUnit, totalSolutionL, waterToAddL,
+      coagCost, costPerL, paneerKg, wheyL, yieldFact,
+      costPerKgPaneer, warnings,
+    });
+    setActiveTab("results");
+    toast({
+      title: "✅ Calculated",
+      description: `${rawAmount.toFixed(0)} ${rawUnit} → ${totalSolutionL.toFixed(1)} L solution | Yield: ${paneerKg.toFixed(1)} kg paneer`,
+    });
+  }, [inp, coagType, coag, toast]);
+
+  // ── RENDER ────────────────────────────────────────────
+  return (
+    <Card className="border-green-200 bg-green-50/20">
+      <CardHeader className="pb-3 bg-gradient-to-r from-green-50 to-lime-50 rounded-t-lg border-b border-green-100">
+        <CardTitle className="flex items-center justify-between">
+          <span className="flex items-center gap-2 text-green-800">
+            <Beaker className="w-5 h-5 text-green-600" />
+            Paneer Coagulant Dosing
+          </span>
+          {result && (
+            <Badge className="bg-green-600 text-white text-sm px-3 py-1">
+              {result.paneerKg.toFixed(1)} kg paneer
+            </Badge>
+          )}
+        </CardTitle>
+        <CardDescription className="text-green-600 text-xs">
+          Citric · Vinegar · Lactic Acid · Whey · Yield estimate · Solution prep · Cost
+        </CardDescription>
+      </CardHeader>
+
+      <CardContent className="pt-4 space-y-4">
+
+        {/* ── COAGULANT TYPE ───────────────────────────── */}
+        <div className="grid grid-cols-2 gap-2">
+          {(Object.keys(COAGULANT_DB) as Array<keyof typeof COAGULANT_DB>).map(key => (
+            <button
+              key={key}
+              onClick={() => applyCoagType(key)}
+              className={`p-2 rounded-lg border text-xs font-semibold transition-all text-left leading-tight shadow-sm
+                ${coagType === key
+                  ? "bg-green-600 text-white border-green-600 shadow-md"
+                  : "bg-white text-slate-600 border-slate-200 hover:border-green-300 hover:text-green-700"
+                }`}
+            >
+              {COAGULANT_DB[key].label}
+              <div className={`text-[9px] mt-0.5 ${coagType === key ? "opacity-80" : "text-slate-400"}`}>
+                {COAGULANT_DB[key].rateMin}–{COAGULANT_DB[key].rateMax} {COAGULANT_DB[key].unit}
+              </div>
+            </button>
+          ))}
+        </div>
+
+        {/* ── TABS ─────────────────────────────────────── */}
+        <Tabs value={activeTab} onValueChange={v => setActiveTab(v as any)}>
+          <TabsList className="grid grid-cols-3 bg-slate-100">
+            <TabsTrigger value="inputs"  className="text-xs">⚙️ Inputs</TabsTrigger>
+            <TabsTrigger value="results" className="text-xs">📊 Results</TabsTrigger>
+            <TabsTrigger value="process" className="text-xs">📋 Process</TabsTrigger>
+          </TabsList>
+
+          {/* ═════ TAB 1: INPUTS ═══════════════════════ */}
+          <TabsContent value="inputs" className="space-y-4 pt-3">
+
+            {/* Paneer variant presets */}
+            <div className="space-y-1">
+              <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Paneer Type Presets</Label>
+              <div className="flex flex-wrap gap-2">
+                {(Object.keys(PANEER_VARIANTS) as Array<keyof typeof PANEER_VARIANTS>).map(name => (
+                  <button
+                    key={name}
+                    onClick={() => applyVariant(name)}
+                    className="px-3 py-1 rounded-full border border-green-200 bg-white text-xs font-semibold text-green-700 hover:bg-green-600 hover:text-white transition-all shadow-sm"
+                  >
+                    {name}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <ValidatedInput
+                label="Milk Volume"
+                value={inp.milk}
+                onChange={v => setF("milk", v)}
+                validation={validatePositive(inp.milk, "Milk volume")}
+                unit="L"
+                colorScheme="green"
+              />
+              <ValidatedInput
+                label="Milk Fat %"
+                value={inp.milkFat}
+                onChange={v => setF("milkFat", v)}
+                validation={validateNumber(inp.milkFat, 0.1, 10, "Fat %")}
+                unit="%"
+                helpText="Affects paneer yield"
+                colorScheme="green"
+              />
+              <ValidatedInput
+                label={`Dose Rate (${coag.unit})`}
+                value={inp.rate}
+                onChange={v => setF("rate", v)}
+                validation={validatePositive(inp.rate, "Dose rate")}
+                helpText={`Range: ${coag.rateMin}–${coag.rateMax} ${coag.unit}`}
+                colorScheme="orange"
+              />
+              <ValidatedInput
+                label="Working Sol. Conc %"
+                value={inp.conc}
+                onChange={v => setF("conc", v)}
+                validation={validateNumber(inp.conc, 0.5, 5, "Concentration")}
+                unit="%"
+                helpText="Standard: 1–2%"
+                colorScheme="blue"
+              />
+              <ValidatedInput
+                label="Addition Temp"
+                value={inp.addTemp}
+                onChange={v => setF("addTemp", v)}
+                validation={validateNumber(inp.addTemp, 50, 85, "Addition temp")}
+                unit="°C"
+                helpText={`Recommended: ${coag.addTempC}°C`}
+                colorScheme="red"
+              />
+              <ValidatedInput
+                label={`Coagulant Price`}
+                value={inp.price}
+                onChange={v => setF("price", v)}
+                validation={validatePositive(inp.price, "Price")}
+                unit={`₹/${coag.priceUnit}`}
+                colorScheme="green"
+              />
+            </div>
+
+            {/* Stock concentration info */}
+            <Alert className="bg-blue-50 border-blue-200">
+              <Info className="h-4 w-4 text-blue-600" />
+              <AlertDescription className="text-xs text-blue-700">
+                <strong>{coag.label}</strong> — Stock concentration: {coag.stockConc}% |
+                Solution prep temp: {coag.tempC}°C |
+                Optimal addition temp: {coag.addTempC}°C
+              </AlertDescription>
+            </Alert>
+          </TabsContent>
+
+          {/* ═════ TAB 2: RESULTS ══════════════════════ */}
+          <TabsContent value="results" className="space-y-3 pt-3">
+            {result ? (
+              <>
+                {/* Main KPIs */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-green-600 text-white p-4 rounded-xl shadow-lg text-center">
+                    <div className="text-[10px] uppercase opacity-80 font-bold">
+                      {coagType === "citric" ? "Powder Needed" : coagType === "whey" ? "Whey Volume" : "Liquid Needed"}
+                    </div>
+                    <div className="text-3xl font-black">
+                      {result.rawAmount.toFixed(1)}
+                    </div>
+                    <div className="text-xs opacity-70">{result.rawUnit}</div>
+                  </div>
+                  <div className="bg-blue-600 text-white p-4 rounded-xl shadow-lg text-center">
+                    <div className="text-[10px] uppercase opacity-80 font-bold">Working Solution</div>
+                    <div className="text-3xl font-black">
+                      {result.totalSolutionL.toFixed(2)} L
+                    </div>
+                    <div className="text-xs opacity-70">at {inp.conc}% concentration</div>
+                  </div>
+                </div>
+
+                {/* Solution Preparation Box */}
+                <Card className="bg-amber-50 border-amber-200">
+                  <CardHeader className="p-3 pb-1 border-b border-amber-100">
+                    <CardTitle className="text-sm text-amber-800">🧪 Solution Preparation Guide</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-3 space-y-2 text-sm">
+                    {coagType !== "whey" ? (
+                      <>
+                        <div className="flex justify-between">
+                          <span className="text-slate-600">
+                            {coagType === "citric" ? "Powder" : "Stock liquid"} to weigh/measure
+                          </span>
+                          <span className="font-bold text-amber-800">
+                            {result.rawAmount.toFixed(1)} {result.rawUnit}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-slate-600">Water to add ({coag.tempC}°C)</span>
+                          <span className="font-bold text-blue-700">
+                            {result.waterToAddL.toFixed(2)} L ({(result.waterToAddL * 1000).toFixed(0)} ml)
+                          </span>
+                        </div>
+                        <div className="flex justify-between border-t pt-1 font-bold">
+                          <span className="text-amber-800">Total working solution</span>
+                          <span className="text-amber-800">{result.totalSolutionL.toFixed(2)} L</span>
+                        </div>
+                        <div className="bg-amber-100 rounded p-2 text-xs text-amber-800 mt-1">
+                          📌 {coagType === "citric"
+                            ? `Dissolve ${result.rawAmount.toFixed(0)}g powder in ${(result.waterToAddL * 1000).toFixed(0)}ml warm water (70°C). Stir until clear.`
+                            : coagType === "vinegar"
+                            ? `Mix ${result.rawAmount.toFixed(0)}ml vinegar + ${(result.waterToAddL * 1000).toFixed(0)}ml water. Room temp.`
+                            : `Mix ${result.rawAmount.toFixed(0)}ml lactic acid + ${(result.waterToAddL * 1000).toFixed(0)}ml water. Handle with care.`
+                          }
+                        </div>
+                      </>
+                    ) : (
+                      <div className="text-amber-800">
+                        Use <strong>{result.totalSolutionL.toFixed(1)} L</strong> of recycled acid whey directly (pH 4.2–4.5). Heat to 65°C before addition.
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+
+                {/* Yield & Economics */}
+                <Card className="bg-white border-green-100">
+                  <CardHeader className="p-3 pb-1 border-b border-green-100">
+                    <CardTitle className="text-xs text-green-700 font-bold uppercase">📦 Yield & Economics</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-3 space-y-2 text-sm">
+                    {[
+                      { label: "Paneer yield",             value: `${result.paneerKg.toFixed(1)} kg`, color: "text-green-700 font-black text-base" },
+                      { label: "Yield factor",             value: `${(result.yieldFact * 100).toFixed(1)}% (fat-adjusted)` },
+                      { label: "Whey generated",           value: `~${result.wheyL.toFixed(0)} L` },
+                      { label: "Coagulant cost/batch",     value: `₹ ${result.coagCost.toFixed(2)}` },
+                      { label: "Coagulant cost/L milk",    value: `₹ ${result.costPerL.toFixed(3)}` },
+                      { label: "Coagulant cost/kg paneer", value: `₹ ${result.costPerKgPaneer.toFixed(2)}` },
+                    ].map((r, i) => (
+                      <div key={i} className="flex justify-between">
+                        <span className="text-slate-500">{r.label}</span>
+                        <span className={r.color || "font-bold"}>{r.value}</span>
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
+
+                {/* Warnings */}
+                {result.warnings.length > 0 && (
+                  <Alert className="bg-yellow-50 border-yellow-300">
+                    <AlertTriangle className="h-4 w-4 text-yellow-600" />
+                    <AlertTitle className="text-yellow-800 text-sm">Quality Alerts</AlertTitle>
+                    <AlertDescription className="text-xs text-yellow-700 space-y-1">
+                      {result.warnings.map((w: string, i: number) => (
+                        <div key={i}>⚠️ {w}</div>
+                      ))}
+                    </AlertDescription>
+                  </Alert>
+                )}
+
+                {/* Formula */}
+                <div className="bg-slate-50 border rounded-lg p-3 text-[10px] font-mono text-slate-400 space-y-1">
+                  <div className="font-bold text-slate-600 text-xs mb-1">📐 Formulas:</div>
+                  {coagType === "citric" && (
+                    <>
+                      <div>Raw = Milk_L × Rate = {inp.milk} × {inp.rate} = {result.rawAmount.toFixed(1)} g</div>
+                      <div>Solution_L = Raw_g / (Conc%/100) / 1000 = {result.totalSolutionL.toFixed(3)} L</div>
+                    </>
+                  )}
+                  {(coagType === "vinegar" || coagType === "lactic") && (
+                    <>
+                      <div>Raw = Milk_L × Rate = {inp.milk} × {inp.rate} = {result.rawAmount.toFixed(1)} ml</div>
+                      <div>C₁V₁ = C₂V₂ → V_total = Raw × (C_stock/C_working) = {result.totalSolutionL.toFixed(3)} L</div>
+                    </>
+                  )}
+                  <div>Yield = Milk × {(result.yieldFact * 100).toFixed(1)}% = {result.paneerKg.toFixed(2)} kg paneer</div>
+                </div>
+              </>
+            ) : (
+              <div className="text-center py-10 text-muted-foreground text-sm">
+                <Beaker className="h-10 w-10 mx-auto mb-3 text-green-200" />
+                <p>Inputs bharein aur <strong>Calculate</strong> press karein.</p>
+              </div>
             )}
-        </CardContent>
+          </TabsContent>
+
+          {/* ═════ TAB 3: PROCESS GUIDE ════════════════ */}
+          <TabsContent value="process" className="space-y-3 pt-3">
+            <Card className="bg-white border-green-100">
+              <CardHeader className="p-3 pb-2 bg-green-50 border-b border-green-100">
+                <CardTitle className="text-sm text-green-800">
+                  📋 {coag.label} — Process Notes
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-3 space-y-2">
+                {coag.notes.map((note, i) => (
+                  <div key={i} className="flex gap-2 text-sm text-slate-700">
+                    <span className="text-green-600 font-black mt-0.5">{i + 1}.</span>
+                    <span>{note}</span>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+
+            {/* Standard Paneer Process Steps */}
+            <Card className="bg-slate-50 border-slate-200">
+              <CardHeader className="p-3 pb-2 border-b">
+                <CardTitle className="text-sm font-bold text-slate-700">🏭 Standard Paneer Process</CardTitle>
+              </CardHeader>
+              <CardContent className="p-3 space-y-2">
+                {[
+                  { step: "1. Standardize",  detail: "Fat: 3.5–6% | SNF: 8.5%+ as required" },
+                  { step: "2. Pasteurize",   detail: "72°C × 15 sec (HTST) or 85°C × 15 min (batch)" },
+                  { step: "3. Heat to coag temp", detail: `${inp.addTemp}°C — critical for texture` },
+                  { step: "4. Add coagulant", detail: `Add ${result ? result.totalSolutionL.toFixed(1) + "L solution" : "prepared solution"} slowly with gentle stir` },
+                  { step: "5. Rest",          detail: "Stop stirring. Wait 5–10 min for clean whey separation" },
+                  { step: "6. Drain whey",    detail: `~${result ? result.wheyL.toFixed(0) : "~900"} L expected whey` },
+                  { step: "7. Hoop & press",  detail: "Press at 0.5–1.0 kg/cm² for 15–20 min" },
+                  { step: "8. Cold water dip",detail: "Dip in ice water (4°C) for 30 min — firms texture" },
+                  { step: "9. Cut & pack",    detail: "Cut to required weight. Pack in LDPE, vacuum optional" },
+                  { step: "10. Chill",        detail: "Store at 4°C. Shelf life: 3–5 days without vacuum" },
+                ].map((s, i) => (
+                  <div key={i} className="flex gap-3 text-xs">
+                    <span className="bg-green-600 text-white font-bold rounded px-1.5 py-0.5 text-[9px] h-fit mt-0.5 whitespace-nowrap">
+                      {s.step}
+                    </span>
+                    <span className="text-slate-600">{s.detail}</span>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+
+            {/* FSSAI Standards */}
+            <Card className="bg-amber-50 border-amber-200">
+              <CardHeader className="p-3 pb-1 border-b border-amber-100">
+                <CardTitle className="text-xs text-amber-800 font-bold uppercase">📜 FSSAI Standards — Paneer</CardTitle>
+              </CardHeader>
+              <CardContent className="p-3 space-y-1 text-xs text-amber-800">
+                {[
+                  { param: "Moisture",   std: "≤ 70% (cow) · ≤ 65% (buffalo)" },
+                  { param: "Fat/DM",     std: "≥ 50% (cow) · ≥ 55% (buffalo)" },
+                  { param: "Ash",        std: "≤ 3.0%" },
+                  { param: "Acidity",    std: "≤ 0.6% as lactic acid" },
+                  { param: "Coliform",   std: "≤ 10 CFU/g" },
+                  { param: "Yeast/Mold", std: "≤ 100 CFU/g" },
+                ].map((r, i) => (
+                  <div key={i} className="flex justify-between">
+                    <span className="font-semibold">{r.param}</span>
+                    <span>{r.std}</span>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+
+        {/* ── CALCULATE BUTTON ─────────────────────────── */}
+        <Button
+          onClick={calculate}
+          className="w-full h-11 bg-gradient-to-r from-green-600 to-lime-600 hover:from-green-700 hover:to-lime-700 text-white font-bold shadow-md"
+        >
+          <Beaker className="w-4 h-4 mr-2" />
+          Calculate Coagulant Dosing
+        </Button>
+      </CardContent>
+    </Card>
+  );
+}
+// ════════════════════════════════════════════════════════════
+// ADVANCED IBT CAPACITY & REFRIGERATION LOAD CALCULATOR
+// Drop-in Replacement for IbtCalc()
+//
+// INSTRUCTIONS:
+// 1. Apni file mein purana IbtCalc() function dhundhein
+// 2. Pura block DELETE karein
+// 3. Yeh poora code wahan PASTE karein
+// Koi naya import nahi chahiye.
+// ════════════════════════════════════════════════════════════
+
+// ── CONSTANTS ────────────────────────────────────────────
+const IBT_REFRIGERANTS = {
+  "R-404A":          { cop: 2.5, note: "Common dairy IBT"         },
+  "R-448A / R-449A": { cop: 3.0, note: "Eco-friendly HFO blend ✅" },
+  "R-22 (Legacy)":   { cop: 2.8, note: "Phase-out — avoid new"    },
+  "Ammonia (NH₃)":   { cop: 3.8, note: "Large plants, best COP"   },
+} as const;
+
+const IBT_PRESETS = {
+  "Village BMC (2KL)":    { milkVol: "2000",  startT: "36", endT: "4", processHours: "2",  buildHours: "8",  losses: "12", tankVol: "2500"  },
+  "Medium Plant (5KL)":   { milkVol: "5000",  startT: "35", endT: "4", processHours: "3",  buildHours: "10", losses: "10", tankVol: "6000"  },
+  "Large Plant (10KL)":   { milkVol: "10000", startT: "35", endT: "4", processHours: "4",  buildHours: "10", losses: "10", tankVol: "12000" },
+  "Mega Plant (25KL)":    { milkVol: "25000", startT: "34", endT: "3", processHours: "5",  buildHours: "12", losses: "8",  tankVol: "30000" },
+  "IBT Chiller (50KL)":   { milkVol: "50000", startT: "33", endT: "3", processHours: "6",  buildHours: "14", losses: "8",  tankVol: "60000" },
+} as const;
+
+// ── MAIN COMPONENT ────────────────────────────────────────
+function IbtCalc() {
+  const { toast } = useToast();
+
+  const [inp, setInp] = useState({
+    milkVol:      "10000",
+    startT:       "35",
+    endT:         "4",
+    processHours: "4",
+    buildHours:   "10",
+    losses:       "10",
+    tankVol:      "12000",   // L — IBT tank volume
+    refrigerant:  "R-404A" as keyof typeof IBT_REFRIGERANTS,
+    electricRate: "7",       // ₹/kWh
+    operDays:     "300",     // days/year
+    milkDensity:  "1.032",
+    milkCp:       "0.938",
+    iceThickness: "25",      // mm — target ice build on coils
+  });
+
+  const [result, setResult]   = useState<any>(null);
+  const [activeTab, setActiveTab] = useState<"inputs" | "results" | "tank">("inputs");
+
+  const setF = (k: string, v: string) => setInp(p => ({ ...p, [k]: v }));
+  const { validatePositive, validateNumber } = useInputValidation();
+
+  // Apply preset
+  const applyPreset = (name: keyof typeof IBT_PRESETS) => {
+    setInp(p => ({ ...p, ...IBT_PRESETS[name] }));
+    toast({ title: "Preset Applied", description: name });
+  };
+
+  // ── CALCULATE ─────────────────────────────────────────
+  const calculate = useCallback(() => {
+    const V         = parseFloat(inp.milkVol)      || 0;
+    const D         = parseFloat(inp.milkDensity)  || 1.032;
+    const Cp        = parseFloat(inp.milkCp)       || 0.938;
+    const T1        = parseFloat(inp.startT)       || 0;
+    const T2        = parseFloat(inp.endT)         || 0;
+    const meltHrs   = parseFloat(inp.processHours) || 0;
+    const buildHrs  = parseFloat(inp.buildHours)   || 0;
+    const lossP     = parseFloat(inp.losses)       || 0;
+    const tankL     = parseFloat(inp.tankVol)      || 0;
+    const elecR     = parseFloat(inp.electricRate) || 7;
+    const days      = parseFloat(inp.operDays)     || 300;
+    const refg      = IBT_REFRIGERANTS[inp.refrigerant];
+
+    if (V <= 0 || T1 <= T2 || meltHrs <= 0 || buildHrs <= 0) {
+      toast({ variant: "destructive", title: "Invalid values", description: "Check temperatures & hours." });
+      return;
+    }
+
+    const mass        = V * D;                              // kg milk
+    const safety      = 1 + lossP / 100;
+
+    // ── 1. Heat Loads ────────────────────────────────
+    const Q_milk      = mass * Cp * (T1 - T2);             // kcal — product cooling
+    const Q_total     = Q_milk * safety;                   // kcal — with losses
+
+    // ── 2. Ice Required ──────────────────────────────
+    // Latent heat of fusion = 80 kcal/kg
+    // Ice also provides sensible cooling (0°C → ~1°C avg melt temp → ~1 kcal/kg extra)
+    const L_ice       = 80;                                // kcal/kg
+    const iceReqKg    = Q_total / L_ice;
+
+    // Water volume for ice (density 0.917 kg/L)
+    const iceVolL     = iceReqKg / 0.917;
+
+    // ── 3. Compressor for BUILD phase ────────────────
+    // Must freeze this ice in buildHours
+    const buildLoadKcalHr  = Q_total / buildHrs;
+    const compTR_build     = buildLoadKcalHr / 3024;
+    const compTR_rec       = compTR_build * 1.10;           // +10% margin
+    const compKW_thermal   = compTR_rec * 3.517;
+    const compKW_electric  = compKW_thermal / refg.cop;
+    const compKVA          = compKW_electric / 0.85;
+
+    // ── 4. MELT phase peak demand ────────────────────
+    const meltLoadKcalHr   = Q_total / meltHrs;
+    const meltTR           = meltLoadKcalHr / 3024;        // instantaneous if all at once
+
+    // ── 5. IBT Tank sizing ───────────────────────────
+    // Tank water volume should hold the required ice + working fluid
+    // Typical: tank vol ≥ iceVolL × 3 (ice + water + freeboard)
+    const tankMinL    = iceVolL * 3;
+    const tankOK      = tankL >= tankMinL;
+    const tankUtilPc  = (iceVolL / (tankL / 3)) * 100;
+
+    // Ice slab thickness check on coil
+    // Typical coil area: 0.5 m² per TR of compressor (approx)
+    const coilAreaM2  = compTR_rec * 0.5;
+    const targetThkMm = parseFloat(inp.iceThickness) || 25;
+    // Ice vol from thickness: V = A × t → iceVolM3 = coilAreaM2 × (targetThkMm/1000)
+    const iceVolFromCoilM3 = coilAreaM2 * (targetThkMm / 1000);
+    const iceVolFromCoilL  = iceVolFromCoilM3 * 1000;
+    const thicknessOK = iceVolL <= iceVolFromCoilL;
+
+    // ── 6. Energy & Cost ────────────────────────────
+    const buildKwh     = compKW_electric * buildHrs;       // per day
+    const dailyCost    = buildKwh * elecR;
+    const annualCost   = dailyCost * days;
+
+    // COP-based kW savings if upgraded refrigerant
+    const currentCOP   = IBT_REFRIGERANTS["R-404A"].cop;
+    const savingsKwPc  = (1 - currentCOP / refg.cop) * 100;
+
+    // ── 7. Warnings ──────────────────────────────────
+    const warnings: string[] = [];
+    if (buildHrs < 8)  warnings.push(`Build time ${buildHrs}h is short — compressor will be oversized. Standard: 10–14h overnight.`);
+    if (meltHrs < 2)   warnings.push(`Melt time ${meltHrs}h is very fast — ice may not transfer heat evenly. Slow down milk intake.`);
+    if (!tankOK)       warnings.push(`Tank ${tankL}L may be undersized. Recommended ≥ ${tankMinL.toFixed(0)} L for this ice volume.`);
+    if (lossP > 15)    warnings.push(`Heat loss ${lossP}% is high. Check tank insulation (PUF 75mm recommended).`);
+    if (compTR_rec > 50) warnings.push(`${compTR_rec.toFixed(1)} TR — consider screw compressor for reliability.`);
+
+    setResult({
+      mass, Q_milk, Q_total,
+      iceReqKg, iceVolL,
+      compTR_build, compTR_rec, compKW_thermal, compKW_electric, compKVA,
+      meltTR, buildLoadKcalHr, meltLoadKcalHr,
+      tankMinL, tankOK, tankUtilPc,
+      coilAreaM2, thicknessOK, iceVolFromCoilL,
+      buildKwh, dailyCost, annualCost,
+      savingsKwPc, warnings,
+      lossP, buildHrs, meltHrs,
+    });
+
+    setActiveTab("results");
+    toast({
+      title: "✅ Calculated",
+      description: `Ice: ${iceReqKg.toFixed(0)} kg | Compressor: ${compTR_rec.toFixed(1)} TR | Cost: ₹${dailyCost.toFixed(0)}/day`,
+    });
+  }, [inp, toast]);
+
+  // ── RENDER ────────────────────────────────────────────
+  return (
+    <Card className="border-blue-200 bg-blue-50/20">
+      <CardHeader className="pb-3 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-t-lg border-b border-blue-100">
+        <CardTitle className="flex items-center justify-between">
+          <span className="flex items-center gap-2 text-blue-800">
+            <Snowflake className="w-5 h-5 text-blue-600" />
+            IBT Energy & Ice Bank Planner
+          </span>
+          {result && (
+            <Badge className="bg-blue-600 text-white text-sm px-3 py-1">
+              {result.iceReqKg.toLocaleString("en-IN", { maximumFractionDigits: 0 })} kg ice
+            </Badge>
+          )}
+        </CardTitle>
+        <CardDescription className="text-blue-600 text-xs">
+          Ice kg · Compressor TR · Build vs Melt · Tank sizing · Energy cost · Coil check
+        </CardDescription>
+      </CardHeader>
+
+      <CardContent className="pt-4 space-y-4">
+
+        {/* ── PRESETS ──────────────────────────────────── */}
+        <div className="space-y-1">
+          <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Quick Presets</Label>
+          <div className="flex flex-wrap gap-2">
+            {(Object.keys(IBT_PRESETS) as Array<keyof typeof IBT_PRESETS>).map(name => (
+              <button key={name} onClick={() => applyPreset(name)}
+                className="px-3 py-1 rounded-full border border-blue-200 bg-white text-xs font-semibold text-blue-700 hover:bg-blue-600 hover:text-white transition-all shadow-sm">
+                {name}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* ── TABS ─────────────────────────────────────── */}
+        <Tabs value={activeTab} onValueChange={v => setActiveTab(v as any)}>
+          <TabsList className="grid grid-cols-3 bg-slate-100">
+            <TabsTrigger value="inputs"  className="text-xs">⚙️ Inputs</TabsTrigger>
+            <TabsTrigger value="results" className="text-xs">📊 Results</TabsTrigger>
+            <TabsTrigger value="tank"    className="text-xs">🧊 Tank & Energy</TabsTrigger>
+          </TabsList>
+
+          {/* ═════ TAB 1: INPUTS ════════════════════════ */}
+          <TabsContent value="inputs" className="space-y-4 pt-3">
+
+            {/* Process params */}
+            <Card className="border-blue-100 bg-white">
+              <CardHeader className="p-3 pb-2 bg-blue-50 rounded-t-lg border-b border-blue-100">
+                <CardTitle className="text-xs font-bold text-blue-700 uppercase">🥛 Milk & Process</CardTitle>
+              </CardHeader>
+              <CardContent className="p-3 grid grid-cols-2 gap-3">
+                <ValidatedInput
+                  label="Milk Volume"
+                  value={inp.milkVol}
+                  onChange={v => setF("milkVol", v)}
+                  validation={validatePositive(inp.milkVol, "Milk volume")}
+                  unit="L"
+                  colorScheme="blue"
+                />
+                <ValidatedInput
+                  label="Inlet Temp"
+                  value={inp.startT}
+                  onChange={v => setF("startT", v)}
+                  validation={validateNumber(inp.startT, 20, 45, "Inlet temp")}
+                  unit="°C"
+                  colorScheme="red"
+                />
+                <ValidatedInput
+                  label="Target Temp"
+                  value={inp.endT}
+                  onChange={v => setF("endT", v)}
+                  validation={validateNumber(inp.endT, 1, 10, "Target temp")}
+                  unit="°C"
+                  colorScheme="blue"
+                />
+                <ValidatedInput
+                  label="Heat Losses"
+                  value={inp.losses}
+                  onChange={v => setF("losses", v)}
+                  validation={validateNumber(inp.losses, 0, 30, "Losses")}
+                  unit="%"
+                  helpText="Std: 8–12%"
+                  colorScheme="orange"
+                />
+                <ValidatedInput
+                  label="Milk Density"
+                  value={inp.milkDensity}
+                  onChange={v => setF("milkDensity", v)}
+                  validation={{ isValid: true, severity: "info" }}
+                  unit="kg/L"
+                  helpText="1.030–1.033"
+                  colorScheme="blue"
+                />
+                <ValidatedInput
+                  label="Specific Heat (Cp)"
+                  value={inp.milkCp}
+                  onChange={v => setF("milkCp", v)}
+                  validation={{ isValid: true, severity: "info" }}
+                  unit="kcal/kg°C"
+                  colorScheme="blue"
+                />
+              </CardContent>
+            </Card>
+
+            {/* Compressor & Timing */}
+            <Card className="border-indigo-100 bg-white">
+              <CardHeader className="p-3 pb-2 bg-indigo-50 rounded-t-lg border-b border-indigo-100">
+                <CardTitle className="text-xs font-bold text-indigo-700 uppercase">⚙️ Compressor & Timing</CardTitle>
+              </CardHeader>
+              <CardContent className="p-3 grid grid-cols-2 gap-3">
+                <ValidatedInput
+                  label="Ice Build Time"
+                  value={inp.buildHours}
+                  onChange={v => setF("buildHours", v)}
+                  validation={validateNumber(inp.buildHours, 2, 20, "Build time")}
+                  unit="hrs"
+                  helpText="Overnight: 10–14h"
+                  colorScheme="blue"
+                />
+                <ValidatedInput
+                  label="Ice Melt Time"
+                  value={inp.processHours}
+                  onChange={v => setF("processHours", v)}
+                  validation={validateNumber(inp.processHours, 1, 12, "Melt time")}
+                  unit="hrs"
+                  helpText="Milk intake window"
+                  colorScheme="orange"
+                />
+                <ValidatedInput
+                  label="IBT Tank Volume"
+                  value={inp.tankVol}
+                  onChange={v => setF("tankVol", v)}
+                  validation={validatePositive(inp.tankVol, "Tank volume")}
+                  unit="L"
+                  helpText="Existing/planned tank"
+                  colorScheme="cyan"
+                />
+                <ValidatedInput
+                  label="Target Ice Thickness"
+                  value={inp.iceThickness}
+                  onChange={v => setF("iceThickness", v)}
+                  validation={validateNumber(inp.iceThickness, 10, 60, "Ice thickness")}
+                  unit="mm"
+                  helpText="On coils: 20–35mm"
+                  colorScheme="blue"
+                />
+                <div className="col-span-2 space-y-1">
+                  <Label className="text-xs font-bold text-slate-500 uppercase">Refrigerant</Label>
+                  <Select value={inp.refrigerant} onValueChange={v => setF("refrigerant", v)}>
+                    <SelectTrigger className="h-10 bg-white border-indigo-200">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {(Object.keys(IBT_REFRIGERANTS) as Array<keyof typeof IBT_REFRIGERANTS>).map(k => (
+                        <SelectItem key={k} value={k}>
+                          <span className="font-semibold">{k}</span>
+                          <span className="text-[10px] text-slate-400 ml-2">
+                            COP {IBT_REFRIGERANTS[k].cop} — {IBT_REFRIGERANTS[k].note}
+                          </span>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <ValidatedInput
+                  label="Electricity Rate"
+                  value={inp.electricRate}
+                  onChange={v => setF("electricRate", v)}
+                  validation={{ isValid: true, severity: "info" }}
+                  unit="₹/kWh"
+                  colorScheme="green"
+                />
+                <ValidatedInput
+                  label="Operating Days/Year"
+                  value={inp.operDays}
+                  onChange={v => setF("operDays", v)}
+                  validation={{ isValid: true, severity: "info" }}
+                  unit="days"
+                  colorScheme="blue"
+                />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* ═════ TAB 2: RESULTS ═══════════════════════ */}
+          <TabsContent value="results" className="space-y-4 pt-3">
+            {result ? (
+              <>
+                {/* Main KPIs */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-slate-800 text-white p-4 rounded-xl shadow-lg text-center">
+                    <div className="text-[10px] uppercase opacity-70 font-bold">Ice Bank Required</div>
+                    <div className="text-3xl font-black text-cyan-400">
+                      {result.iceReqKg.toLocaleString("en-IN", { maximumFractionDigits: 0 })}
+                    </div>
+                    <div className="text-xs opacity-60">kg ice</div>
+                    <div className="text-[10px] opacity-50 mt-1">
+                      = {result.iceVolL.toFixed(0)} L ice volume
+                    </div>
+                  </div>
+                  <div className="bg-blue-600 text-white p-4 rounded-xl shadow-lg text-center">
+                    <div className="text-[10px] uppercase opacity-80 font-bold">Compressor (Recommended)</div>
+                    <div className="text-3xl font-black text-yellow-300">
+                      {result.compTR_rec.toFixed(1)} TR
+                    </div>
+                    <div className="text-xs opacity-70">
+                      ({result.compTR_build.toFixed(1)} TR + 10% margin)
+                    </div>
+                  </div>
+                </div>
+
+                {/* Thermal breakdown */}
+                <Card className="bg-white border-blue-100">
+                  <CardHeader className="p-3 pb-1 border-b">
+                    <CardTitle className="text-sm font-bold text-blue-800">🔥 Thermal Load Breakdown</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-3 space-y-2 text-sm">
+                    {[
+                      { label: "Product heat load (Q = mCpΔT)", value: `${(result.Q_milk / 1000).toFixed(1)} Mcal`, color: "text-slate-700" },
+                      { label: `Heat losses (${result.lossP}%)`,     value: `${((result.Q_total - result.Q_milk) / 1000).toFixed(1)} Mcal`, color: "text-orange-600" },
+                      { label: "Total thermal load",                  value: `${(result.Q_total / 1000).toFixed(1)} Mcal`, color: "text-blue-700 font-black text-base" },
+                      { label: "Build rate required",                  value: `${(result.buildLoadKcalHr / 1000).toFixed(1)} Mcal/hr over ${result.buildHrs}h`, color: "text-indigo-700" },
+                      { label: "Peak melt demand",                     value: `${result.meltTR.toFixed(1)} TR over ${result.meltHrs}h`, color: "text-red-600" },
+                    ].map((r, i) => (
+                      <div key={i} className="flex justify-between">
+                        <span className="text-slate-500">{r.label}</span>
+                        <span className={r.color || "font-bold"}>{r.value}</span>
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
+
+                {/* Electrical specs */}
+                <div className="grid grid-cols-3 gap-2 text-center">
+                  {[
+                    { label: "kW Thermal",   value: result.compKW_thermal.toFixed(1),  unit: "kW", color: "bg-blue-50 border-blue-200 text-blue-800" },
+                    { label: "kW Electrical", value: result.compKW_electric.toFixed(1), unit: "kW", color: "bg-indigo-50 border-indigo-200 text-indigo-800" },
+                    { label: "kVA",           value: result.compKVA.toFixed(1),         unit: "kVA", color: "bg-purple-50 border-purple-200 text-purple-800" },
+                  ].map((k, i) => (
+                    <div key={i} className={`p-3 rounded-xl border ${k.color}`}>
+                      <div className="text-[9px] font-bold uppercase opacity-70">{k.label}</div>
+                      <div className="text-xl font-black">{k.value}</div>
+                      <div className="text-[9px] opacity-60">{k.unit}</div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Compressor type recommendation */}
+                <Alert className="bg-blue-50 border-blue-200">
+                  <Snowflake className="h-4 w-4 text-blue-600" />
+                  <AlertDescription className="text-xs text-blue-800">
+                    <strong>Recommended compressor type:</strong>{" "}
+                    {result.compTR_rec <= 5
+                      ? "Hermetic/semi-hermetic reciprocating (≤5 TR)"
+                      : result.compTR_rec <= 20
+                      ? "Open-type reciprocating or scroll (5–20 TR)"
+                      : result.compTR_rec <= 60
+                      ? "Semi-hermetic or open screw compressor (20–60 TR)"
+                      : "Open screw / centrifugal compressor (>60 TR)"}
+                    {" "}| {inp.refrigerant} · COP {IBT_REFRIGERANTS[inp.refrigerant].cop}
+                  </AlertDescription>
+                </Alert>
+
+                {/* Warnings */}
+                {result.warnings.length > 0 && (
+                  <Alert className="bg-yellow-50 border-yellow-300">
+                    <AlertTriangle className="h-4 w-4 text-yellow-600" />
+                    <AlertTitle className="text-yellow-800 text-sm">Design Alerts</AlertTitle>
+                    <AlertDescription className="text-xs text-yellow-700 space-y-1">
+                      {result.warnings.map((w: string, i: number) => (
+                        <div key={i}>⚠️ {w}</div>
+                      ))}
+                    </AlertDescription>
+                  </Alert>
+                )}
+
+                {/* Formula */}
+                <div className="bg-slate-50 border rounded-lg p-3 text-[10px] font-mono text-slate-400 space-y-1">
+                  <div className="font-bold text-slate-600 text-xs mb-1">📐 Formulas:</div>
+                  <div>Q_milk = {result.mass.toFixed(0)} kg × {inp.milkCp} × {parseFloat(inp.startT) - parseFloat(inp.endT)}°C = {result.Q_milk.toFixed(0)} kcal</div>
+                  <div>Q_total = Q × (1 + {result.lossP}%) = {result.Q_total.toFixed(0)} kcal</div>
+                  <div>Ice_kg = Q_total / 80 kcal/kg = {result.iceReqKg.toFixed(0)} kg</div>
+                  <div>TR_build = (Q_total/{result.buildHrs}h) / 3024 = {result.compTR_build.toFixed(2)} TR</div>
+                  <div>kW_elec = (TR×3.517) / COP({IBT_REFRIGERANTS[inp.refrigerant].cop}) = {result.compKW_electric.toFixed(2)} kW</div>
+                </div>
+              </>
+            ) : (
+              <div className="text-center py-10 text-muted-foreground text-sm">
+                <Snowflake className="h-10 w-10 mx-auto mb-3 text-blue-200" />
+                <p>Inputs bharein aur <strong>Calculate</strong> press karein.</p>
+              </div>
+            )}
+          </TabsContent>
+
+          {/* ═════ TAB 3: TANK & ENERGY ═════════════════ */}
+          <TabsContent value="tank" className="space-y-4 pt-3">
+            {result ? (
+              <>
+                {/* Tank sizing */}
+                <Card className={`border-2 ${result.tankOK ? "border-green-300 bg-green-50" : "border-red-300 bg-red-50"}`}>
+                  <CardHeader className="p-3 pb-1 border-b border-current/20">
+                    <CardTitle className={`text-sm font-bold ${result.tankOK ? "text-green-800" : "text-red-800"}`}>
+                      🧊 IBT Tank Sizing
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-3 space-y-2 text-sm">
+                    {[
+                      { label: "Ice volume needed",       value: `${result.iceVolL.toFixed(0)} L` },
+                      { label: "Recommended tank size",   value: `≥ ${result.tankMinL.toFixed(0)} L (3× ice vol)` },
+                      { label: "Your tank",               value: `${inp.tankVol} L` },
+                      { label: "Ice utilization",         value: `${result.tankUtilPc.toFixed(1)}%` },
+                    ].map((r, i) => (
+                      <div key={i} className="flex justify-between">
+                        <span className="text-slate-600">{r.label}</span>
+                        <span className="font-bold">{r.value}</span>
+                      </div>
+                    ))}
+                    <div className={`mt-2 p-2 rounded text-xs font-bold text-center ${result.tankOK ? "bg-green-200 text-green-800" : "bg-red-200 text-red-800"}`}>
+                      {result.tankOK
+                        ? `✅ Tank adequate — ${(parseFloat(inp.tankVol) - result.tankMinL).toFixed(0)} L headroom`
+                        : `❌ Tank undersized by ${(result.tankMinL - parseFloat(inp.tankVol)).toFixed(0)} L`}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Coil ice thickness check */}
+                <Card className="bg-white border-indigo-100">
+                  <CardHeader className="p-3 pb-1 border-b border-indigo-100">
+                    <CardTitle className="text-sm text-indigo-800 font-bold">❄️ Coil Ice Thickness Check</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-3 space-y-2 text-sm">
+                    {[
+                      { label: "Estimated coil area",         value: `${result.coilAreaM2.toFixed(1)} m² (0.5 m²/TR)` },
+                      { label: `Ice vol at ${inp.iceThickness}mm thickness`, value: `${result.iceVolFromCoilL.toFixed(0)} L` },
+                      { label: "Required ice volume",         value: `${result.iceVolL.toFixed(0)} L` },
+                    ].map((r, i) => (
+                      <div key={i} className="flex justify-between">
+                        <span className="text-slate-500">{r.label}</span>
+                        <span className="font-bold">{r.value}</span>
+                      </div>
+                    ))}
+                    <div className={`mt-1 p-2 rounded text-xs font-bold ${result.thicknessOK ? "bg-green-50 text-green-700 border border-green-200" : "bg-orange-50 text-orange-700 border border-orange-200"}`}>
+                      {result.thicknessOK
+                        ? `✅ Coil surface adequate for ${inp.iceThickness}mm ice build`
+                        : `⚠️ Coil may need larger surface — consider increasing coil area or reducing ice thickness target`}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Energy & Cost */}
+                <Card className="bg-gradient-to-br from-slate-800 to-slate-900 text-white border-none">
+                  <CardHeader className="p-3 pb-1">
+                    <CardTitle className="text-xs text-slate-300 font-bold uppercase">💰 Energy & Annual Cost</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-3 space-y-2 text-sm">
+                    {[
+                      { label: `Daily units (${result.buildHrs}h build)`, value: `${result.buildKwh.toFixed(1)} kWh`, color: "text-cyan-400" },
+                      { label: "Daily cost",   value: `₹ ${result.dailyCost.toFixed(0)}`, color: "text-yellow-300" },
+                      { label: "Annual cost",  value: `₹ ${result.annualCost.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`, color: "text-green-300 text-base font-black" },
+                    ].map((r, i) => (
+                      <div key={i} className="flex justify-between">
+                        <span className="text-slate-400">{r.label}</span>
+                        <span className={`font-bold ${r.color}`}>{r.value}</span>
+                      </div>
+                    ))}
+                    {inp.refrigerant !== "R-404A" && result.savingsKwPc > 0 && (
+                      <div className="border-t border-slate-700 pt-2 text-emerald-400 text-xs">
+                        💡 {inp.refrigerant} gives {result.savingsKwPc.toFixed(1)}% lower energy vs R-404A baseline
+                        → Save ₹{(result.annualCost * result.savingsKwPc / 100).toLocaleString("en-IN", { maximumFractionDigits: 0 })}/year
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+
+                {/* IBT vs Direct chilling comparison */}
+                <Alert className="bg-cyan-50 border-cyan-200">
+                  <Info className="h-4 w-4 text-cyan-600" />
+                  <AlertTitle className="text-cyan-800 text-sm">IBT Advantage vs Direct Chilling</AlertTitle>
+                  <AlertDescription className="text-xs text-cyan-700 space-y-1 mt-1">
+                    <div>✅ Smaller compressor needed — builds ice overnight at off-peak tariff</div>
+                    <div>✅ Electricity cost saving: night tariff vs peak (~30–40% cheaper)</div>
+                    <div>✅ No compressor running during peak milk intake — silent operation</div>
+                    <div>✅ Power cuts handled — ice acts as energy buffer</div>
+                  </AlertDescription>
+                </Alert>
+              </>
+            ) : (
+              <div className="text-center py-10 text-muted-foreground text-sm">
+                <Snowflake className="h-10 w-10 mx-auto mb-3 text-blue-200" />
+                <p>Pehle calculate karein — tab tank aur energy data aayega.</p>
+              </div>
+            )}
+          </TabsContent>
+        </Tabs>
+
+        {/* ── CALCULATE BUTTON ─────────────────────────── */}
+        <Button
+          onClick={calculate}
+          className="w-full h-11 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold shadow-md"
+        >
+          <Snowflake className="w-4 h-4 mr-2" />
+          Calculate IBT Load
+        </Button>
+      </CardContent>
+    </Card>
+  );
+}
+// ════════════════════════════════════════════════════════════
+// ADVANCED WATER AUDIT (WMR) CALCULATOR
+// Drop-in Replacement for WmrCalc()
+//
+// INSTRUCTIONS:
+// 1. Apni file mein purana WmrCalc() function dhundhein
+// 2. Pura block DELETE karein
+// 3. Yeh poora code wahan PASTE karein
+// Koi naya import nahi chahiye.
+// ════════════════════════════════════════════════════════════
+
+// ── BENCHMARKS ───────────────────────────────────────────
+const WMR_BENCHMARKS = [
+  { label: "World Class",     max: 1.0,  color: "text-emerald-700", bg: "bg-emerald-50 border-emerald-300", badge: "bg-emerald-600" },
+  { label: "Excellent",       max: 1.5,  color: "text-green-700",   bg: "bg-green-50 border-green-300",     badge: "bg-green-600"   },
+  { label: "Good",            max: 2.0,  color: "text-blue-700",    bg: "bg-blue-50 border-blue-300",       badge: "bg-blue-600"    },
+  { label: "Average",         max: 3.0,  color: "text-yellow-700",  bg: "bg-yellow-50 border-yellow-300",   badge: "bg-yellow-500"  },
+  { label: "Poor",            max: 5.0,  color: "text-orange-700",  bg: "bg-orange-50 border-orange-300",   badge: "bg-orange-500"  },
+  { label: "Critical",        max: Infinity, color: "text-red-700", bg: "bg-red-50 border-red-300",         badge: "bg-red-600"     },
+] as const;
+
+// Department-wise sub-categories
+const DEPT_CATEGORIES = {
+  process: {
+    label: "🏭 Process Water",
+    color: "blue",
+    subs: [
+      { key: "cip",       label: "CIP (Cleaning-in-Place)",     default: "20000", benchmark: 0.35 },
+      { key: "crateWash", label: "Crate / Vessel Washing",      default: "8000",  benchmark: 0.15 },
+      { key: "floor",     label: "Floor / Area Washing",        default: "6000",  benchmark: 0.10 },
+      { key: "product",   label: "Product (dilution/rinse)",    default: "6000",  benchmark: 0.08 },
+    ],
+  },
+  utility: {
+    label: "⚙️ Utility Water",
+    color: "orange",
+    subs: [
+      { key: "boiler",    label: "Boiler Feed Water",           default: "10000", benchmark: 0.18 },
+      { key: "cooling",   label: "Cooling Tower Makeup",        default: "5000",  benchmark: 0.08 },
+      { key: "chiller",   label: "Chiller / IBT Makeup",        default: "3000",  benchmark: 0.05 },
+      { key: "vacuum",    label: "Vacuum Pump / Condenser",     default: "2000",  benchmark: 0.03 },
+    ],
+  },
+  domestic: {
+    label: "🏠 Domestic & Misc",
+    color: "purple",
+    subs: [
+      { key: "staff",     label: "Staff / Canteen / Toilets",   default: "2000",  benchmark: 0.03 },
+      { key: "garden",    label: "Gardening / Horticulture",    default: "1000",  benchmark: 0.01 },
+      { key: "etp",       label: "ETP / STP Process",           default: "1500",  benchmark: 0.02 },
+      { key: "misc",      label: "Misc / Losses / Leakages",    default: "500",   benchmark: 0.01 },
+    ],
+  },
+} as const;
+
+type DeptKey = keyof typeof DEPT_CATEGORIES;
+type SubValues = Record<string, string>;
+
+// ── PLANT PRESETS ─────────────────────────────────────────
+const WMR_PRESETS = {
+  "Small Dairy (20KL)":  { milk: "20000", cip: "7000",  crateWash: "3000", floor: "2000", product: "2000", boiler: "3000", cooling: "1500", chiller: "1000", vacuum: "500",  staff: "800",  garden: "300",  etp: "500",  misc: "200"  },
+  "Medium Plant (50KL)": { milk: "50000", cip: "18000", crateWash: "7000", floor: "5000", product: "5000", boiler: "9000", cooling: "4000", chiller: "2500", vacuum: "1500", staff: "1500", garden: "600",  etp: "1000", misc: "400"  },
+  "Large Plant (1L L)":  { milk: "100000",cip: "35000", crateWash: "14000",floor: "10000",product: "9000", boiler: "18000",cooling: "8000", chiller: "5000", vacuum: "3000", staff: "3000", garden: "1200", etp: "2000", misc: "800"  },
+} as const;
+
+// ── MAIN COMPONENT ────────────────────────────────────────
+function WmrCalc() {
+  const { toast } = useToast();
+
+  const [milk, setMilk] = useState("50000");
+  const [vals, setVals] = useState<SubValues>(() => {
+    const v: SubValues = {};
+    Object.values(DEPT_CATEGORIES).forEach(d => d.subs.forEach(s => { v[s.key] = s.default; }));
+    return v;
+  });
+  const [result, setResult]     = useState<any>(null);
+  const [activeTab, setActiveTab] = useState<"inputs" | "results" | "savings">("inputs");
+  const [waterCost, setWaterCost] = useState("15");  // ₹/KL
+  const [operDays,  setOperDays]  = useState("300");
+
+  const setV = (k: string, v: string) => setVals(p => ({ ...p, [k]: v }));
+  const { validatePositive } = useInputValidation();
+
+  // Apply preset
+  const applyPreset = (name: keyof typeof WMR_PRESETS) => {
+    const p = WMR_PRESETS[name] as Record<string, string>;
+    setMilk(p.milk);
+    setVals(prev => {
+      const next = { ...prev };
+      Object.keys(p).forEach(k => { if (k !== "milk") next[k] = p[k]; });
+      return next;
+    });
+    setResult(null);
+    toast({ title: "Preset Applied", description: name });
+  };
+
+  // Get benchmark grade
+  const getGrade = (ratio: number) =>
+    WMR_BENCHMARKS.find(b => ratio <= b.max) ?? WMR_BENCHMARKS[WMR_BENCHMARKS.length - 1];
+
+  // ── CALCULATE ─────────────────────────────────────────
+  const calculate = useCallback(() => {
+    const M = parseFloat(milk) || 0;
+    if (M <= 0) { toast({ variant: "destructive", title: "Enter milk processed volume." }); return; }
+
+    const wCost = parseFloat(waterCost) || 15;
+    const days  = parseFloat(operDays)  || 300;
+
+    // Department totals
+    const deptTotals: Record<DeptKey, number> = { process: 0, utility: 0, domestic: 0 };
+    const subVals: Record<string, number>     = {};
+    const subWMR:  Record<string, number>     = {};
+    const subExcess: Record<string, number>   = {};
+
+    Object.entries(DEPT_CATEGORIES).forEach(([dkey, dept]) => {
+      dept.subs.forEach(s => {
+        const v = parseFloat(vals[s.key]) || 0;
+        subVals[s.key]   = v;
+        subWMR[s.key]    = v / M;
+        subExcess[s.key] = Math.max(0, v / M - s.benchmark);
+        deptTotals[dkey as DeptKey] += v;
+      });
+    });
+
+    const totalWater = Object.values(deptTotals).reduce((a, b) => a + b, 0);
+    const wmr        = totalWater / M;
+    const grade      = getGrade(wmr);
+
+    // Dept WMR
+    const deptWMR = {
+      process:  deptTotals.process  / M,
+      utility:  deptTotals.utility  / M,
+      domestic: deptTotals.domestic / M,
+    };
+
+    // Benchmark totals per dept
+    const benchmarkWMR = {
+      process:  DEPT_CATEGORIES.process.subs.reduce((a, s)  => a + s.benchmark, 0),
+      utility:  DEPT_CATEGORIES.utility.subs.reduce((a, s)  => a + s.benchmark, 0),
+      domestic: DEPT_CATEGORIES.domestic.subs.reduce((a, s) => a + s.benchmark, 0),
+    };
+    const benchmarkTotal = Object.values(benchmarkWMR).reduce((a, b) => a + b, 0);
+
+    // Savings potential
+    const excessWMR       = Math.max(0, wmr - benchmarkTotal);
+    const excessDailyL    = excessWMR * M;
+    const excessDailyCost = excessDailyL / 1000 * wCost;
+    const excessAnnualL   = excessDailyL * days;
+    const excessAnnualCost = excessAnnualL / 1000 * wCost;
+
+    // Top 3 over-consuming sub-categories
+    const topExcess = Object.entries(subExcess)
+      .filter(([, v]) => v > 0)
+      .sort(([, a], [, b]) => b - a)
+      .slice(0, 3)
+      .map(([key]) => {
+        const sub = Object.values(DEPT_CATEGORIES).flatMap(d => d.subs).find(s => s.key === key)!;
+        return { label: sub.label, excess: subExcess[key], val: subVals[key], bench: sub.benchmark };
+      });
+
+    const warnings: string[] = [];
+    if (deptWMR.process  > benchmarkWMR.process  * 1.3) warnings.push(`Process water ${(deptWMR.process).toFixed(2)} L/L — CIP & washing review needed.`);
+    if (deptWMR.utility  > benchmarkWMR.utility  * 1.3) warnings.push(`Utility water ${(deptWMR.utility).toFixed(2)} L/L — check boiler blowdown & cooling tower cycles.`);
+    if (subExcess["misc"] > 0.02) warnings.push(`Misc/leakage WMR ${subWMR["misc"].toFixed(3)} L/L — conduct leak survey (pipes, valves, taps).`);
+    if (wmr > 3.0) warnings.push(`Overall WMR ${wmr.toFixed(2)} is critical. Set 6-month target: ≤ 2.5 → ≤ 2.0.`);
+
+    setResult({
+      wmr, grade, totalWater, deptTotals, deptWMR,
+      benchmarkTotal, benchmarkWMR,
+      subWMR, subExcess, subVals,
+      excessWMR, excessDailyL, excessDailyCost,
+      excessAnnualL, excessAnnualCost,
+      topExcess, warnings, M, days, wCost,
+    });
+
+    setActiveTab("results");
+    toast({
+      title: `WMR: ${wmr.toFixed(2)} L/L — ${getGrade(wmr).label}`,
+      description: `Total: ${(totalWater / 1000).toFixed(0)} KL/day | Savings potential: ₹${excessAnnualCost.toFixed(0)}/yr`,
+    });
+  }, [milk, vals, waterCost, operDays, toast]);
+
+  // ── RENDER ────────────────────────────────────────────
+  return (
+    <Card className="border-teal-200 bg-teal-50/20">
+      <CardHeader className="pb-3 bg-gradient-to-r from-teal-50 to-cyan-50 rounded-t-lg border-b border-teal-100">
+        <CardTitle className="flex items-center justify-between">
+          <span className="flex items-center gap-2 text-teal-800">
+            <Droplets className="w-5 h-5 text-teal-600" />
+            Water Consumption Audit (WMR)
+          </span>
+          {result && (
+            <Badge className={`text-white text-sm px-3 py-1 ${result.grade.badge}`}>
+              {result.wmr.toFixed(2)} L/L — {result.grade.label}
+            </Badge>
+          )}
+        </CardTitle>
+        <CardDescription className="text-teal-600 text-xs">
+          Dept-wise breakdown · Benchmark comparison · Savings potential · Annual cost
+        </CardDescription>
+      </CardHeader>
+
+      <CardContent className="pt-4 space-y-4">
+
+        {/* ── PRESETS ──────────────────────────────────── */}
+        <div className="space-y-1">
+          <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Plant Presets</Label>
+          <div className="flex flex-wrap gap-2">
+            {(Object.keys(WMR_PRESETS) as Array<keyof typeof WMR_PRESETS>).map(name => (
+              <button key={name} onClick={() => applyPreset(name)}
+                className="px-3 py-1 rounded-full border border-teal-200 bg-white text-xs font-semibold text-teal-700 hover:bg-teal-600 hover:text-white transition-all shadow-sm">
+                {name}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* ── TABS ─────────────────────────────────────── */}
+        <Tabs value={activeTab} onValueChange={v => setActiveTab(v as any)}>
+          <TabsList className="grid grid-cols-3 bg-slate-100">
+            <TabsTrigger value="inputs"  className="text-xs">💧 Inputs</TabsTrigger>
+            <TabsTrigger value="results" className="text-xs">📊 Results</TabsTrigger>
+            <TabsTrigger value="savings" className="text-xs">💰 Savings</TabsTrigger>
+          </TabsList>
+
+          {/* ═════ TAB 1: INPUTS ════════════════════════ */}
+          <TabsContent value="inputs" className="space-y-4 pt-3">
+
+            {/* Milk + audit settings */}
+            <Card className="border-teal-100 bg-white">
+              <CardHeader className="p-3 pb-2 bg-teal-50 border-b border-teal-100">
+                <CardTitle className="text-xs font-bold text-teal-700 uppercase">🥛 Production & Settings</CardTitle>
+              </CardHeader>
+              <CardContent className="p-3 grid grid-cols-2 gap-3">
+                <div className="col-span-2">
+                  <ValidatedInput
+                    label="Total Milk Processed"
+                    value={milk}
+                    onChange={setMilk}
+                    validation={validatePositive(milk, "Milk")}
+                    unit="L/day"
+                    colorScheme="teal"
+                    icon={<Droplets className="h-3 w-3 text-teal-500" />}
+                  />
+                </div>
+                <ValidatedInput
+                  label="Water Cost"
+                  value={waterCost}
+                  onChange={setWaterCost}
+                  validation={{ isValid: true, severity: "info" }}
+                  unit="₹/KL"
+                  helpText="Borewell: ₹5 | Municipal: ₹15–30"
+                  colorScheme="green"
+                />
+                <ValidatedInput
+                  label="Operating Days/Year"
+                  value={operDays}
+                  onChange={setOperDays}
+                  validation={{ isValid: true, severity: "info" }}
+                  unit="days"
+                  colorScheme="blue"
+                />
+              </CardContent>
+            </Card>
+
+            {/* Per-department inputs */}
+            {(Object.entries(DEPT_CATEGORIES) as [DeptKey, typeof DEPT_CATEGORIES[DeptKey]][]).map(([dkey, dept]) => (
+              <Card key={dkey} className={`border-${dept.color}-100 bg-white`}>
+                <CardHeader className={`p-3 pb-2 bg-${dept.color}-50 border-b border-${dept.color}-100`}>
+                  <CardTitle className={`text-xs font-bold text-${dept.color}-700 uppercase`}>
+                    {dept.label}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-3 grid grid-cols-2 gap-3">
+                  {dept.subs.map(sub => (
+                    <ValidatedInput
+                      key={sub.key}
+                      label={sub.label}
+                      value={vals[sub.key]}
+                      onChange={v => setV(sub.key, v)}
+                      validation={{ isValid: parseFloat(vals[sub.key]) >= 0, severity: "error" }}
+                      unit="L/day"
+                      helpText={`Benchmark: ${sub.benchmark} L/L`}
+                      colorScheme={dept.color as any}
+                    />
+                  ))}
+                </CardContent>
+              </Card>
+            ))}
+          </TabsContent>
+
+          {/* ═════ TAB 2: RESULTS ═══════════════════════ */}
+          <TabsContent value="results" className="space-y-4 pt-3">
+            {result ? (
+              <>
+                {/* Overall WMR */}
+                <div className={`p-5 rounded-xl border-2 ${result.grade.bg} text-center`}>
+                  <div className="text-xs uppercase font-bold text-slate-500 mb-1">Overall Water:Milk Ratio</div>
+                  <div className={`text-5xl font-black ${result.grade.color}`}>
+                    {result.wmr.toFixed(2)}
+                  </div>
+                  <div className="text-sm text-slate-500 mt-1">L water per L milk</div>
+                  <Badge className={`mt-2 ${result.grade.badge} text-white text-sm px-4 py-1`}>
+                    {result.grade.label}
+                  </Badge>
+                </div>
+
+                {/* WMR benchmark comparison bar */}
+                <Card className="bg-white border-slate-200">
+                  <CardHeader className="p-3 pb-1 border-b">
+                    <CardTitle className="text-xs font-bold text-slate-600 uppercase">Industry Benchmark Scale</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-3 space-y-2">
+                    {WMR_BENCHMARKS.filter(b => b.max < 6).map((b, i, arr) => {
+                      const rangeMin = i === 0 ? 0 : arr[i - 1].max;
+                      const isCurrent = result.wmr > rangeMin && result.wmr <= b.max;
+                      return (
+                        <div key={b.label} className={`flex items-center gap-3 p-2 rounded-lg ${isCurrent ? b.bg + " border" : ""}`}>
+                          <div className={`w-2 h-2 rounded-full ${isCurrent ? b.badge : "bg-slate-200"}`} />
+                          <span className={`text-xs font-semibold flex-1 ${isCurrent ? b.color : "text-slate-400"}`}>{b.label}</span>
+                          <span className={`text-xs ${isCurrent ? b.color + " font-black" : "text-slate-400"}`}>
+                            {rangeMin === 0 ? `≤ ${b.max}` : `${rangeMin}–${b.max}`} L/L
+                            {isCurrent ? " ← You" : ""}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </CardContent>
+                </Card>
+
+                {/* Dept breakdown */}
+                <Card className="bg-white border-slate-200">
+                  <CardHeader className="p-3 pb-1 border-b">
+                    <CardTitle className="text-xs font-bold text-slate-600 uppercase">Department Breakdown</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-3 space-y-3">
+                    {(Object.entries(DEPT_CATEGORIES) as [DeptKey, any][]).map(([dkey, dept]) => {
+                      const deptWMR  = result.deptWMR[dkey];
+                      const benchWMR = result.benchmarkWMR[dkey];
+                      const pct      = (result.deptTotals[dkey] / result.totalWater) * 100;
+                      const over     = deptWMR > benchWMR;
+                      return (
+                        <div key={dkey} className="space-y-1">
+                          <div className="flex justify-between text-sm">
+                            <span className="font-semibold text-slate-700">{dept.label}</span>
+                            <div className="text-right">
+                              <span className={`font-black ${over ? "text-red-600" : "text-green-700"}`}>
+                                {deptWMR.toFixed(3)} L/L
+                              </span>
+                              <span className="text-slate-400 text-xs ml-2">(bench: {benchWMR.toFixed(2)})</span>
+                            </div>
+                          </div>
+                          <div className="h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                            <div
+                              className={`h-full rounded-full ${over ? "bg-red-400" : "bg-teal-500"}`}
+                              style={{ width: `${Math.min(pct, 100)}%` }}
+                            />
+                          </div>
+                          <div className="flex justify-between text-[10px] text-slate-400">
+                            <span>{(result.deptTotals[dkey] / 1000).toFixed(1)} KL/day ({pct.toFixed(0)}% of total)</span>
+                            <span>{over ? `⚠️ +${((deptWMR - benchWMR)).toFixed(3)} above benchmark` : "✓ Within benchmark"}</span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                    <div className="border-t-2 pt-2 flex justify-between font-bold text-teal-800">
+                      <span>Total</span>
+                      <span>{(result.totalWater / 1000).toFixed(1)} KL/day · {result.wmr.toFixed(2)} L/L</span>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Top over-consuming subcategories */}
+                {result.topExcess.length > 0 && (
+                  <Card className="bg-orange-50 border-orange-200">
+                    <CardHeader className="p-3 pb-1 border-b border-orange-100">
+                      <CardTitle className="text-sm text-orange-800">🔍 Top Improvement Opportunities</CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-3 space-y-2 text-sm">
+                      {result.topExcess.map((e: any, i: number) => (
+                        <div key={i} className="flex justify-between">
+                          <span className="text-slate-700">{e.label}</span>
+                          <div className="text-right">
+                            <span className="font-bold text-orange-700">{(e.val / 1000).toFixed(1)} KL</span>
+                            <span className="text-[10px] text-orange-500 ml-1">
+                              (+{(e.excess).toFixed(3)} L/L above benchmark)
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </CardContent>
+                  </Card>
+                )}
+
+                {/* Warnings */}
+                {result.warnings.length > 0 && (
+                  <Alert className="bg-yellow-50 border-yellow-300">
+                    <AlertTriangle className="h-4 w-4 text-yellow-600" />
+                    <AlertTitle className="text-yellow-800 text-sm">Action Required</AlertTitle>
+                    <AlertDescription className="text-xs text-yellow-700 space-y-1">
+                      {result.warnings.map((w: string, i: number) => <div key={i}>⚠️ {w}</div>)}
+                    </AlertDescription>
+                  </Alert>
+                )}
+              </>
+            ) : (
+              <div className="text-center py-10 text-muted-foreground text-sm">
+                <Droplets className="h-10 w-10 mx-auto mb-3 text-teal-200" />
+                <p>Inputs bharein aur <strong>Run Audit</strong> press karein.</p>
+              </div>
+            )}
+          </TabsContent>
+
+          {/* ═════ TAB 3: SAVINGS ═══════════════════════ */}
+          <TabsContent value="savings" className="space-y-4 pt-3">
+            {result ? (
+              <>
+                {/* Savings summary */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-teal-600 text-white p-4 rounded-xl shadow-lg text-center">
+                    <div className="text-[10px] uppercase opacity-80 font-bold">Excess Water/Day</div>
+                    <div className="text-2xl font-black">{(result.excessDailyL / 1000).toFixed(1)} KL</div>
+                    <div className="text-xs opacity-70">above benchmark WMR</div>
+                  </div>
+                  <div className="bg-slate-800 text-white p-4 rounded-xl shadow-lg text-center">
+                    <div className="text-[10px] uppercase opacity-70 font-bold">Annual Savings Potential</div>
+                    <div className="text-2xl font-black text-green-300">
+                      ₹{result.excessAnnualCost.toLocaleString("en-IN", { maximumFractionDigits: 0 })}
+                    </div>
+                    <div className="text-xs opacity-60">
+                      {(result.excessAnnualL / 1000).toFixed(0)} KL/year
+                    </div>
+                  </div>
+                </div>
+
+                {/* Sub-category savings table */}
+                <Card className="bg-white border-teal-100">
+                  <CardHeader className="p-3 pb-1 border-b">
+                    <CardTitle className="text-xs font-bold text-teal-700 uppercase">Sub-Category vs Benchmark</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-3 space-y-1">
+                    {Object.values(DEPT_CATEGORIES).flatMap(d => d.subs).map(sub => {
+                      const actual = result.subWMR[sub.key];
+                      const excess = result.subExcess[sub.key];
+                      const over   = excess > 0;
+                      const savL   = excess * result.M;
+                      const savRs  = (savL / 1000) * result.wCost * result.days;
+                      return (
+                        <div key={sub.key} className={`flex justify-between items-center py-1 px-2 rounded text-xs ${over ? "bg-red-50" : ""}`}>
+                          <span className={over ? "text-red-700 font-semibold" : "text-slate-500"}>{sub.label}</span>
+                          <div className="text-right space-x-2">
+                            <span className={over ? "text-red-600 font-bold" : "text-green-600 font-semibold"}>
+                              {actual.toFixed(3)} / {sub.benchmark}
+                            </span>
+                            {over && (
+                              <span className="text-orange-600 font-bold">
+                                ₹{savRs.toLocaleString("en-IN", { maximumFractionDigits: 0 })}/yr
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </CardContent>
+                </Card>
+
+                {/* Conservation tips */}
+                <Card className="bg-green-50 border-green-200">
+                  <CardHeader className="p-3 pb-1 border-b border-green-100">
+                    <CardTitle className="text-sm text-green-800">🌿 Water Conservation Actions</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-3 space-y-2 text-xs text-green-800">
+                    {[
+                      { area: "CIP",         tip: "Optimize sequences — reduce pre-rinse. Install flow meters on CIP skid. Recover final rinse as pre-rinse for next cycle." },
+                      { area: "Crate wash",  tip: "Recirculate wash water. Use high-pressure low-volume nozzles (saves 30–50%)." },
+                      { area: "Boiler",      tip: "Increase condensate return to 80%+. Control TDS blowdown — continuous blowdown valve instead of manual." },
+                      { area: "Cooling",     tip: "Increase cycles of concentration (CoC) from 3 to 5 — reduces makeup water by 30%." },
+                      { area: "Leakages",    tip: "Monthly water audit walk. Fix dripping valves — 1 drip/sec = 30+ KL/year." },
+                    ].map((t, i) => (
+                      <div key={i} className="flex gap-2">
+                        <span className="bg-green-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded h-fit mt-0.5 whitespace-nowrap">{t.area}</span>
+                        <span>{t.tip}</span>
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
+
+                {/* Monthly/annual summary */}
+                <div className="bg-slate-50 border rounded-lg p-3 text-xs text-slate-500 space-y-1">
+                  <div className="font-bold text-slate-600 mb-1">📅 Annual Water Summary ({result.days} days)</div>
+                  <div className="flex justify-between">
+                    <span>Total water consumed</span>
+                    <span className="font-bold">{(result.totalWater * result.days / 1000000).toFixed(1)} ML/year</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Excess above benchmark</span>
+                    <span className="font-bold text-orange-600">{(result.excessAnnualL / 1000000).toFixed(2)} ML/year</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Cost @ ₹{result.wCost}/KL</span>
+                    <span className="font-bold text-red-600">₹{(result.totalWater * result.days / 1000 * result.wCost).toLocaleString("en-IN", { maximumFractionDigits: 0 })}/year</span>
+                  </div>
+                  <div className="flex justify-between font-bold text-green-700">
+                    <span>Savings if WMR → benchmark</span>
+                    <span>₹{result.excessAnnualCost.toLocaleString("en-IN", { maximumFractionDigits: 0 })}/year</span>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div className="text-center py-10 text-muted-foreground text-sm">
+                <Droplets className="h-10 w-10 mx-auto mb-3 text-teal-200" />
+                <p>Pehle audit run karein — tab savings analysis aayega.</p>
+              </div>
+            )}
+          </TabsContent>
+        </Tabs>
+
+        {/* ── CALCULATE BUTTON ─────────────────────────── */}
+        <Button
+          onClick={calculate}
+          className="w-full h-11 bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700 text-white font-bold shadow-md"
+        >
+          <Droplets className="w-4 h-4 mr-2" />
+          Run Water Audit
+        </Button>
+      </CardContent>
+    </Card>
+  );
+}
+// ════════════════════════════════════════════════════════════
+// ADVANCED DISPATCH LOGISTICS PLANNER
+// Drop-in Replacement for DispatchCalc()
+//
+// INSTRUCTIONS:
+// 1. Apni file mein purana DispatchCalc() function dhundhein
+// 2. Pura block DELETE karein
+// 3. Yeh poora code wahan PASTE karein
+// Koi naya import nahi chahiye.
+// ════════════════════════════════════════════════════════════
+
+// ── PRODUCT DATABASE ─────────────────────────────────────
+const DISPATCH_PRODUCTS = {
+  pouch_500:   { label: "🥛 Milk Pouch 500ml",      perCrate: 24,  unitWtG: 510,  crateWtKg: 14.0, category: "pouch"  },
+  pouch_1000:  { label: "🥛 Milk Pouch 1L",         perCrate: 12,  unitWtG: 1020, crateWtKg: 13.5, category: "pouch"  },
+  pouch_200:   { label: "🥛 Pouch 200ml",           perCrate: 48,  unitWtG: 210,  crateWtKg: 11.0, category: "pouch"  },
+  dahi_cup:    { label: "🫙 Dahi Cup 200g",         perCrate: 40,  unitWtG: 220,  crateWtKg: 10.0, category: "cup"    },
+  dahi_400:    { label: "🫙 Dahi Cup 400g",         perCrate: 20,  unitWtG: 420,  crateWtKg: 9.5,  category: "cup"    },
+  lassi_200:   { label: "🥤 Lassi Pouch 200ml",     perCrate: 48,  unitWtG: 215,  crateWtKg: 11.5, category: "pouch"  },
+  lassi_500:   { label: "🥤 Lassi Bottle 500ml",    perCrate: 24,  unitWtG: 540,  crateWtKg: 14.0, category: "bottle" },
+  paneer_200:  { label: "🧀 Paneer Block 200g",     perCrate: 20,  unitWtG: 220,  crateWtKg: 5.0,  category: "block"  },
+  butter_100:  { label: "🧈 Butter 100g",           perCrate: 48,  unitWtG: 110,  crateWtKg: 6.5,  category: "block"  },
+  ghee_1L:     { label: "🫙 Ghee Jar 1L",           perCrate: 12,  unitWtG: 980,  crateWtKg: 13.0, category: "jar"    },
+  can_40L:     { label: "🪣 Bulk Can 40L",          perCrate: 1,   unitWtG: 43000,crateWtKg: 43.0, category: "can"    },
+  can_20L:     { label: "🪣 Bulk Can 20L",          perCrate: 1,   unitWtG: 22000,crateWtKg: 22.0, category: "can"    },
+} as const;
+
+type ProductKey = keyof typeof DISPATCH_PRODUCTS;
+
+// ── VEHICLE DATABASE ──────────────────────────────────────
+const VEHICLES = [
+  { label: "🛵 Two-Wheeler / Auto",      maxKg: 200,   maxCrates: 20,   costPerKm: 3,   coldChain: false },
+  { label: "🚐 Small Van (Bolero/Innova)", maxKg: 700, maxCrates: 80,   costPerKm: 8,   coldChain: false },
+  { label: "🚚 Mini Truck (Canter 407)",  maxKg: 2500,  maxCrates: 300,  costPerKm: 15,  coldChain: true  },
+  { label: "🚛 Medium Truck (Eicher 1109)",maxKg: 6000, maxCrates: 750,  costPerKm: 22,  coldChain: true  },
+  { label: "🚛 Large Truck (10T Tata)",   maxKg: 10000, maxCrates: 1200, costPerKm: 32,  coldChain: true  },
+  { label: "🚛 Heavy Truck (12T+)",       maxKg: 15000, maxCrates: 1800, costPerKm: 40,  coldChain: true  },
+];
+
+// ── ROUTE PRESETS ─────────────────────────────────────────
+const ROUTE_PRESETS = {
+  "Local (15 km)":     "15",
+  "City (40 km)":      "40",
+  "District (80 km)":  "80",
+  "Inter-city (150km)":"150",
+} as const;
+
+// ── DISPATCH ITEM STATE ───────────────────────────────────
+interface DispatchItem {
+  id:      string;
+  product: ProductKey;
+  qty:     string;   // number of units (packets, cans, etc.)
+}
+
+// ── MAIN COMPONENT ────────────────────────────────────────
+function DispatchCalc() {
+  const { toast } = useToast();
+
+  const [items, setItems] = useState<DispatchItem[]>([
+    { id: "i1", product: "pouch_500",  qty: "15000" },
+    { id: "i2", product: "pouch_1000", qty: "2000"  },
+    { id: "i3", product: "dahi_cup",   qty: "1000"  },
+  ]);
+  const [routeKm,    setRouteKm]    = useState("40");
+  const [fuelRate,   setFuelRate]   = useState("12");  // km/L
+  const [fuelPrice,  setFuelPrice]  = useState("100"); // ₹/L diesel
+  const [coldChain,  setColdChain]  = useState(true);
+  const [coldCostKm, setColdCostKm] = useState("5");   // ₹/km extra for reefer
+  const [result, setResult]         = useState<any>(null);
+
+  const addItem = () => setItems(p => [
+    ...p, { id: `i${Date.now()}`, product: "pouch_500", qty: "500" },
+  ]);
+  const removeItem = (id: string) => { if (items.length > 1) setItems(p => p.filter(i => i.id !== id)); };
+  const updateItem = (id: string, key: keyof DispatchItem, val: string) =>
+    setItems(p => p.map(i => i.id === id ? { ...i, [key]: val } : i));
+
+  // ── CALCULATE ─────────────────────────────────────────
+  const calculate = useCallback(() => {
+    const km      = parseFloat(routeKm)   || 0;
+    const fuelEff = parseFloat(fuelRate)  || 12;
+    const fuelPr  = parseFloat(fuelPrice) || 100;
+    const coldCKm = coldChain ? (parseFloat(coldCostKm) || 0) : 0;
+
+    // Per-item calculation
+    const itemResults = items.map(item => {
+      const prod  = DISPATCH_PRODUCTS[item.product];
+      const qty   = parseFloat(item.qty) || 0;
+      const crates = Math.ceil(qty / prod.perCrate);
+      const wt     = qty * prod.unitWtG / 1000; // kg product
+      const crateWt= crates * 1.8;              // avg crate tare 1.8 kg
+      return {
+        label:  prod.label,
+        qty,
+        crates,
+        productWtKg: wt,
+        crateWtKg:   crateWt,
+        totalWtKg:   wt + crateWt,
+        category:    prod.category,
+        perCrate:    prod.perCrate,
+      };
+    });
+
+    const totalCrates    = itemResults.reduce((s, r) => s + r.crates,     0);
+    const totalProductKg = itemResults.reduce((s, r) => s + r.productWtKg,0);
+    const totalTareKg    = itemResults.reduce((s, r) => s + r.crateWtKg,  0);
+    const totalLoadKg    = totalProductKg + totalTareKg;
+    const totalLoadT     = totalLoadKg / 1000;
+
+    // Vehicle selection — find minimum adequate vehicle
+    const suitableVehicles = VEHICLES.filter(v =>
+      v.maxKg >= totalLoadKg &&
+      v.maxCrates >= totalCrates &&
+      (!coldChain || v.coldChain)
+    );
+    const recommended = suitableVehicles[0] ?? VEHICLES[VEHICLES.length - 1];
+
+    // How many trips needed with recommended vehicle
+    const tripsWeight = Math.ceil(totalLoadKg  / recommended.maxKg);
+    const tripsCrates = Math.ceil(totalCrates  / recommended.maxCrates);
+    const tripsNeeded = Math.max(tripsWeight, tripsCrates);
+
+    // Vehicle utilization
+    const utilWt  = (totalLoadKg  / (recommended.maxKg     * tripsNeeded)) * 100;
+    const utilCr  = (totalCrates  / (recommended.maxCrates * tripsNeeded)) * 100;
+
+    // Cost calculation
+    const fuelCostPerTrip   = (km * 2) / fuelEff * fuelPr; // return trip
+    const coldCostPerTrip   = km * 2 * coldCKm;
+    const totalCostPerTrip  = fuelCostPerTrip + coldCostPerTrip + recommended.costPerKm * km * 2;
+    const totalCostAllTrips = totalCostPerTrip * tripsNeeded;
+    const costPerCrate      = totalCostAllTrips / totalCrates;
+    const costPerKgProd     = totalProductKg > 0 ? totalCostAllTrips / totalProductKg : 0;
+
+    // Loading time estimate (1 crate/min manual loading)
+    const loadTimeMins  = Math.ceil(totalCrates * 1.2); // 1.2 min per crate
+
+    const warnings: string[] = [];
+    if (utilWt < 50)  warnings.push(`Vehicle utilization ${utilWt.toFixed(0)}% (weight) — consider smaller vehicle to reduce cost.`);
+    if (tripsNeeded > 1) warnings.push(`${tripsNeeded} trips needed — consider larger vehicle for single dispatch.`);
+    if (!coldChain && itemResults.some(r => ["pouch","cup"].includes(r.category)))
+      warnings.push("Cold chain recommended for liquid milk & dairy products!");
+    if (totalLoadT > 10) warnings.push(`Load ${totalLoadT.toFixed(1)} T — verify vehicle permit & axle load compliance.`);
+
+    setResult({
+      itemResults, totalCrates, totalProductKg, totalTareKg, totalLoadKg, totalLoadT,
+      recommended, tripsNeeded, utilWt, utilCr,
+      fuelCostPerTrip, coldCostPerTrip, totalCostPerTrip, totalCostAllTrips,
+      costPerCrate, costPerKgProd, loadTimeMins,
+      km, warnings,
+    });
+
+    toast({
+      title: "✅ Planned",
+      description: `${totalCrates} crates · ${totalLoadT.toFixed(2)}T · ${tripsNeeded} trip(s) · ₹${totalCostAllTrips.toFixed(0)}`,
+    });
+  }, [items, routeKm, fuelRate, fuelPrice, coldChain, coldCostKm, toast]);
+
+  // ── RENDER ────────────────────────────────────────────
+  return (
+    <Card className="border-indigo-200 bg-indigo-50/20">
+      <CardHeader className="pb-3 bg-gradient-to-r from-indigo-50 to-violet-50 rounded-t-lg border-b border-indigo-100">
+        <CardTitle className="flex items-center justify-between">
+          <span className="flex items-center gap-2 text-indigo-800">
+            <Truck className="w-5 h-5 text-indigo-600" />
+            Logistics & Dispatch Planner
+          </span>
+          {result && (
+            <Badge className="bg-indigo-600 text-white text-sm px-3 py-1">
+              {result.totalCrates} crates · {result.totalLoadT.toFixed(1)}T
+            </Badge>
+          )}
+        </CardTitle>
+        <CardDescription className="text-indigo-600 text-xs">
+          Multi-SKU · Vehicle sizing · Cost per crate · Trips · Loading time
+        </CardDescription>
+      </CardHeader>
+
+      <CardContent className="pt-4 space-y-4">
+
+        {/* ── PRODUCT ITEMS ──────────────────────────── */}
+        <div className="space-y-2">
+          <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">📦 Dispatch Items</Label>
+          {items.map((item, idx) => {
+            const prod = DISPATCH_PRODUCTS[item.product];
+            const qty  = parseFloat(item.qty) || 0;
+            const crates = Math.ceil(qty / prod.perCrate);
+            return (
+              <Card key={item.id} className="border-indigo-100 bg-white">
+                <CardContent className="p-3 space-y-2">
+                  <div className="flex items-center gap-2">
+                    <span className="bg-indigo-600 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shrink-0">
+                      {idx + 1}
+                    </span>
+                    <Select value={item.product} onValueChange={v => updateItem(item.id, "product", v)}>
+                      <SelectTrigger className="h-9 text-xs bg-white border-indigo-100 flex-1">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {(Object.entries(DISPATCH_PRODUCTS) as [ProductKey, any][]).map(([k, v]) => (
+                          <SelectItem key={k} value={k}>
+                            <span className="font-semibold">{v.label}</span>
+                            <span className="text-[10px] text-slate-400 ml-2">
+                              {v.perCrate}/crate · {(v.unitWtG/1000).toFixed(2)}kg/unit
+                            </span>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {items.length > 1 && (
+                      <button onClick={() => removeItem(item.id)} className="text-red-400 hover:text-red-600 text-xs font-bold shrink-0">✕</button>
+                    )}
+                  </div>
+
+                  <div className="flex gap-2 items-center">
+                    <div className="flex-1">
+                      <ValidatedInput
+                        label="Quantity (units)"
+                        value={item.qty}
+                        onChange={v => updateItem(item.id, "qty", v)}
+                        validation={{ isValid: parseFloat(item.qty) > 0, severity: "error" }}
+                        helpText={`${crates} crates · ${(qty * prod.unitWtG / 1000000).toFixed(2)}T`}
+                        colorScheme="indigo"
+                      />
+                    </div>
+                    <div className="text-center bg-indigo-50 rounded-lg px-3 py-2 border border-indigo-100 shrink-0">
+                      <div className="text-[10px] text-indigo-500 font-bold">CRATES</div>
+                      <div className="text-xl font-black text-indigo-700">{crates}</div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
+
+          <Button variant="outline" size="sm" onClick={addItem}
+            className="w-full border-dashed border-indigo-300 text-indigo-600 hover:bg-indigo-50">
+            + Add Product
+          </Button>
+        </div>
+
+        {/* ── ROUTE & LOGISTICS ────────────────────────── */}
+        <Card className="border-violet-100 bg-white">
+          <CardHeader className="p-3 pb-2 bg-violet-50 rounded-t-lg border-b border-violet-100">
+            <CardTitle className="text-xs font-bold text-violet-700 uppercase">🚚 Route & Logistics</CardTitle>
+          </CardHeader>
+          <CardContent className="p-3 space-y-3">
+            <div className="space-y-1">
+              <Label className="text-xs font-bold text-slate-500 uppercase">Route Distance</Label>
+              <div className="flex flex-wrap gap-2 mb-2">
+                {(Object.entries(ROUTE_PRESETS) as [string, string][]).map(([label, km]) => (
+                  <button key={label} onClick={() => setRouteKm(km)}
+                    className={`px-2 py-1 rounded-full text-xs font-semibold border transition-all ${
+                      routeKm === km
+                        ? "bg-violet-600 text-white border-violet-600"
+                        : "bg-white text-slate-500 border-slate-200 hover:border-violet-300"
+                    }`}>
+                    {label}
+                  </button>
+                ))}
+              </div>
+              <ValidatedInput
+                label="Distance (one way)"
+                value={routeKm}
+                onChange={setRouteKm}
+                validation={{ isValid: parseFloat(routeKm) > 0, severity: "error" }}
+                unit="km"
+                colorScheme="violet"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <ValidatedInput
+                label="Fuel Efficiency"
+                value={fuelRate}
+                onChange={setFuelRate}
+                validation={{ isValid: true, severity: "info" }}
+                unit="km/L"
+                helpText="Diesel truck: 8–14"
+                colorScheme="orange"
+              />
+              <ValidatedInput
+                label="Diesel Price"
+                value={fuelPrice}
+                onChange={setFuelPrice}
+                validation={{ isValid: true, severity: "info" }}
+                unit="₹/L"
+                colorScheme="orange"
+              />
+            </div>
+
+            {/* Cold chain toggle */}
+            <div className="flex items-center justify-between p-3 bg-blue-50 border border-blue-200 rounded-lg">
+              <div>
+                <div className="text-sm font-bold text-blue-800">🧊 Cold Chain Required</div>
+                <div className="text-xs text-blue-500">Insulated/reefer vehicle</div>
+              </div>
+              <Button
+                size="sm"
+                variant={coldChain ? "default" : "outline"}
+                onClick={() => setColdChain(!coldChain)}
+                className={coldChain ? "bg-blue-600 hover:bg-blue-700" : "border-blue-300 text-blue-600"}
+              >
+                {coldChain ? "ON ✓" : "OFF"}
+              </Button>
+            </div>
+
+            {coldChain && (
+              <ValidatedInput
+                label="Reefer Extra Cost"
+                value={coldCostKm}
+                onChange={setColdCostKm}
+                validation={{ isValid: true, severity: "info" }}
+                unit="₹/km"
+                helpText="Insulation + refrigeration cost"
+                colorScheme="blue"
+              />
+            )}
+          </CardContent>
+        </Card>
+
+        {/* ── CALCULATE ───────────────────────────────── */}
+        <Button onClick={calculate}
+          className="w-full h-11 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white font-bold shadow-md">
+          <Truck className="w-4 h-4 mr-2" />
+          Plan Dispatch
+        </Button>
+
+        {/* ── RESULTS ─────────────────────────────────── */}
+        {result && (
+          <div className="space-y-3 animate-in fade-in">
+
+            {/* Main KPIs */}
+            <div className="grid grid-cols-3 gap-2">
+              {[
+                { label: "Total Crates", value: result.totalCrates.toLocaleString("en-IN"), unit: "crates", color: "bg-indigo-600" },
+                { label: "Gross Load",   value: result.totalLoadT.toFixed(2), unit: "Tonnes", color: "bg-slate-700" },
+                { label: "Trips Needed", value: result.tripsNeeded, unit: "trips", color: result.tripsNeeded > 1 ? "bg-orange-500" : "bg-green-600" },
+              ].map((k, i) => (
+                <div key={i} className={`${k.color} text-white p-3 rounded-xl text-center shadow`}>
+                  <div className="text-[9px] uppercase opacity-80 font-bold">{k.label}</div>
+                  <div className="text-2xl font-black">{k.value}</div>
+                  <div className="text-[9px] opacity-70">{k.unit}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Vehicle recommendation */}
+            <Card className={`border-2 ${result.utilWt >= 70 ? "border-green-300 bg-green-50" : result.utilWt >= 50 ? "border-blue-300 bg-blue-50" : "border-orange-300 bg-orange-50"}`}>
+              <CardContent className="p-4">
+                <div className="text-[10px] uppercase font-bold text-slate-500 mb-1">Recommended Vehicle</div>
+                <div className="text-xl font-black text-slate-800">{result.recommended.label}</div>
+                <div className="grid grid-cols-2 gap-3 mt-3">
+                  {[
+                    { label: "Weight utilization", value: `${result.utilWt.toFixed(0)}%`, bar: result.utilWt },
+                    { label: "Crate utilization",  value: `${result.utilCr.toFixed(0)}%`, bar: result.utilCr },
+                  ].map((u, i) => (
+                    <div key={i}>
+                      <div className="flex justify-between text-xs mb-1">
+                        <span className="text-slate-500">{u.label}</span>
+                        <span className="font-bold">{u.value}</span>
+                      </div>
+                      <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                        <div
+                          className={`h-full rounded-full ${u.bar >= 70 ? "bg-green-500" : u.bar >= 50 ? "bg-blue-500" : "bg-orange-400"}`}
+                          style={{ width: `${Math.min(u.bar, 100)}%` }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Item breakdown */}
+            <Card className="bg-white border-indigo-100">
+              <CardHeader className="p-3 pb-1 border-b border-indigo-100">
+                <CardTitle className="text-xs text-indigo-700 font-bold uppercase">SKU Breakdown</CardTitle>
+              </CardHeader>
+              <CardContent className="p-3 space-y-2 text-sm">
+                {result.itemResults.map((r: any, i: number) => (
+                  <div key={i} className="flex justify-between items-center">
+                    <div>
+                      <span className="font-semibold text-slate-700 text-xs">{r.label}</span>
+                      <div className="text-[10px] text-slate-400">
+                        {r.qty.toLocaleString("en-IN")} units · {r.perCrate}/crate
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="font-black text-indigo-700">{r.crates} crates</div>
+                      <div className="text-[10px] text-slate-400">{r.totalWtKg.toFixed(1)} kg</div>
+                    </div>
+                  </div>
+                ))}
+                <div className="border-t-2 pt-2 flex justify-between font-bold text-indigo-800">
+                  <span>Total</span>
+                  <span>{result.totalCrates} crates · {result.totalLoadT.toFixed(2)} T</span>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Weight breakdown */}
+            <div className="grid grid-cols-3 gap-2 text-center text-xs">
+              {[
+                { label: "Product",    value: `${result.totalProductKg.toFixed(0)} kg`, color: "bg-blue-50 border-blue-200 text-blue-800" },
+                { label: "Crate Tare", value: `${result.totalTareKg.toFixed(0)} kg`,    color: "bg-slate-50 border-slate-200 text-slate-700" },
+                { label: "Gross Load", value: `${result.totalLoadKg.toFixed(0)} kg`,    color: "bg-indigo-50 border-indigo-200 text-indigo-800" },
+              ].map((w, i) => (
+                <div key={i} className={`p-2 rounded-lg border ${w.color}`}>
+                  <div className="text-[9px] font-bold uppercase opacity-70">{w.label}</div>
+                  <div className="text-sm font-black">{w.value}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Cost breakdown */}
+            <Card className="bg-gradient-to-br from-slate-800 to-slate-900 text-white border-none">
+              <CardHeader className="p-3 pb-1">
+                <CardTitle className="text-xs text-slate-300 font-bold uppercase">💰 Transport Cost ({result.km} km × 2)</CardTitle>
+              </CardHeader>
+              <CardContent className="p-3 space-y-2 text-sm">
+                {[
+                  { label: "Fuel cost (return)",       value: `₹ ${result.fuelCostPerTrip.toFixed(0)}`,     color: "text-yellow-300" },
+                  { label: "Vehicle hire/km",          value: `₹ ${(result.recommended.costPerKm * result.km * 2).toFixed(0)}`, color: "text-cyan-400" },
+                  coldChain ? { label: "Cold chain extra",    value: `₹ ${result.coldCostPerTrip.toFixed(0)}`,     color: "text-blue-300" } : null,
+                  { label: "Total per trip",           value: `₹ ${result.totalCostPerTrip.toFixed(0)}`,    color: "text-green-300 font-black" },
+                  result.tripsNeeded > 1 ? { label: `× ${result.tripsNeeded} trips`, value: `₹ ${result.totalCostAllTrips.toFixed(0)}`, color: "text-orange-300 font-black text-base" } : null,
+                ].filter(Boolean).map((r: any, i) => (
+                  <div key={i} className="flex justify-between">
+                    <span className="text-slate-400">{r.label}</span>
+                    <span className={`font-bold ${r.color}`}>{r.value}</span>
+                  </div>
+                ))}
+                <div className="border-t border-slate-700 pt-2 grid grid-cols-2 gap-2 mt-1">
+                  {[
+                    { label: "Cost / crate",  value: `₹ ${result.costPerCrate.toFixed(2)}`  },
+                    { label: "Cost / kg",     value: `₹ ${result.costPerKgProd.toFixed(3)}` },
+                  ].map((c, i) => (
+                    <div key={i} className="text-center bg-slate-700 p-2 rounded-lg">
+                      <div className="text-[9px] text-slate-400 font-bold">{c.label}</div>
+                      <div className="font-black text-white">{c.value}</div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Loading time */}
+            <div className="flex items-center justify-between p-3 bg-violet-50 border border-violet-200 rounded-lg text-sm">
+              <div>
+                <div className="font-bold text-violet-800">⏱️ Estimated Loading Time</div>
+                <div className="text-xs text-violet-500">{result.totalCrates} crates @ ~1.2 min/crate</div>
+              </div>
+              <div className="text-xl font-black text-violet-700">
+                {result.loadTimeMins} min
+              </div>
+            </div>
+
+            {/* Warnings */}
+            {result.warnings.length > 0 && (
+              <Alert className="bg-yellow-50 border-yellow-300">
+                <AlertTriangle className="h-4 w-4 text-yellow-600" />
+                <AlertTitle className="text-yellow-800 text-sm">Logistics Alerts</AlertTitle>
+                <AlertDescription className="text-xs text-yellow-700 space-y-1">
+                  {result.warnings.map((w: string, i: number) => <div key={i}>⚠️ {w}</div>)}
+                </AlertDescription>
+              </Alert>
+            )}
+
+          </div>
+        )}
+      </CardContent>
     </Card>
   );
 }
