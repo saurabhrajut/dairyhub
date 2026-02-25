@@ -49,7 +49,7 @@ const Section = ({
     <div className="bg-muted/30 p-4 border-b border-border">
       <h2 className="text-xl font-bold text-primary font-headline">{title}</h2>
     </div>
-    <div className="p-4 sm:p-6 text-card-foreground prose max-w-none text-gray-700 leading-relaxed break-words">
+    <div className="p-3 sm:p-6 text-card-foreground prose max-w-none text-gray-700 leading-relaxed break-words overflow-hidden">
       <div className="space-y-4">{children}</div>
     </div>
   </div>
@@ -69,11 +69,15 @@ const SubSection = ({
       <span className="w-1.5 h-1.5 rounded-full bg-primary inline-block" />
       {title}
     </h3>
-    <div className={`pl-4 border-l-2 ${accent} text-gray-700`}>{children}</div>
+    <div className={`pl-2 sm:pl-4 border-l-2 ${accent} text-gray-700 overflow-hidden`}>{children}</div>
   </div>
 );
 
-/** Generic multi-column table */
+/**
+ * Responsive DataTable:
+ * - Mobile  → each row rendered as a vertical card (label + value stacked)
+ * - Desktop → normal horizontal table
+ */
 const DataTable = ({
   headers,
   rows,
@@ -82,32 +86,66 @@ const DataTable = ({
   headers: string[];
   rows: any[];
   cells: (row: any) => React.ReactNode[];
-}) => (
-  <div className="overflow-x-auto mt-4 rounded-lg border border-gray-200">
-    <Table>
-      <TableHeader className="bg-muted/50">
-        <TableRow>
-          {headers.map((h, i) => (
-            <TableHead key={i} className="font-bold text-primary whitespace-nowrap">
-              {h}
-            </TableHead>
-          ))}
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {rows.map((row, ri) => (
-          <TableRow key={ri}>
-            {cells(row).map((cell, ci) => (
-              <TableCell key={ci} className={ci === 0 ? "font-medium" : ""}>
-                {cell}
-              </TableCell>
+}) => {
+  return (
+    <>
+      {/* ── MOBILE CARD VIEW (hidden on sm+) ─────────────────────────── */}
+      <div className="sm:hidden mt-4 space-y-3">
+        {rows.map((row, ri) => {
+          const rowCells = cells(row);
+          return (
+            <div
+              key={ri}
+              className="rounded-lg border border-gray-200 overflow-hidden"
+            >
+              {rowCells.map((cell, ci) => (
+                <div
+                  key={ci}
+                  className={`flex gap-2 px-3 py-2 text-xs ${
+                    ci % 2 === 0 ? "bg-muted/30" : "bg-white"
+                  }`}
+                >
+                  <span className="font-bold text-primary shrink-0 w-2/5 leading-tight">
+                    {headers[ci]}
+                  </span>
+                  <span className={`w-3/5 break-words ${ci === 0 ? "font-semibold text-gray-800" : "text-gray-700"}`}>
+                    {cell}
+                  </span>
+                </div>
+              ))}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* ── DESKTOP TABLE VIEW (hidden on mobile) ────────────────────── */}
+      <div className="hidden sm:block mt-4 rounded-lg border border-gray-200 overflow-x-auto">
+        <Table>
+          <TableHeader className="bg-muted/50">
+            <TableRow>
+              {headers.map((h, i) => (
+                <TableHead key={i} className="font-bold text-primary whitespace-nowrap text-sm px-4 py-2">
+                  {h}
+                </TableHead>
+              ))}
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {rows.map((row, ri) => (
+              <TableRow key={ri}>
+                {cells(row).map((cell, ci) => (
+                  <TableCell key={ci} className={`text-sm px-4 py-2 ${ci === 0 ? "font-medium" : ""}`}>
+                    {cell}
+                  </TableCell>
+                ))}
+              </TableRow>
             ))}
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  </div>
-);
+          </TableBody>
+        </Table>
+      </div>
+    </>
+  );
+};
 
 // ---------------------------------------------------------------------------
 // Topic Content Components
@@ -121,7 +159,7 @@ const topicComponents = {
     const why = intro.subsections.why_treatment;
 
     return (
-      <div className="prose prose-sm max-w-none break-words">
+      <div className="prose prose-sm max-w-none break-words overflow-hidden w-full">
         {/* Executive Summary */}
         <Section title={content.sections.executive_summary.title}>
           <div
@@ -256,7 +294,7 @@ const topicComponents = {
       comp.table.header3 !== undefined;
 
     return (
-      <div className="prose prose-sm max-w-none break-words">
+      <div className="prose prose-sm max-w-none break-words overflow-hidden w-full">
         <Section title={kf.title}>
           <div dangerouslySetInnerHTML={{ __html: kf.content }} />
 
@@ -707,8 +745,8 @@ export function EtpModal({
 
         {selectedTopic && ActiveComponent ? (
           /* ── DETAIL VIEW ─────────────────────────────────────────────────── */
-          <div className="flex-1 flex flex-col min-h-0">
-            <div className="px-4 sm:px-0">
+          <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
+            <div className="px-4 sm:px-0 shrink-0">
               <Button
                 variant="ghost"
                 onClick={handleBack}
@@ -718,8 +756,8 @@ export function EtpModal({
                 Back to Topics
               </Button>
             </div>
-            <ScrollArea className="flex-1 mt-4 sm:pr-4">
-              <div className="p-4 pt-0 sm:p-0">
+            <ScrollArea className="flex-1 mt-2 sm:pr-4">
+              <div className="p-3 pt-0 sm:p-0 max-w-full overflow-hidden">
                 <ActiveComponent content={content} />
               </div>
             </ScrollArea>
@@ -730,14 +768,15 @@ export function EtpModal({
             className="flex-1 mt-4 sm:pr-4"
             viewportRef={scrollAreaRef}
           >
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 p-4 sm:p-2">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 p-3 sm:p-2">
               {topics.map((topic) => (
                 <button
                   key={topic.value}
                   onClick={() => handleSelectTopic(topic.value)}
                   className={`
-                    relative flex items-center p-5 rounded-xl border transition-all duration-200
-                    text-left shadow-sm hover:shadow-md
+                    relative flex flex-col sm:flex-row items-center sm:items-center
+                    p-3 sm:p-5 rounded-xl border transition-all duration-200
+                    text-center sm:text-left shadow-sm hover:shadow-md w-full min-w-0
                     ${topic.bgClass} ${topic.borderClass} ${topic.hoverClass}
                     group
                   `}
@@ -746,7 +785,7 @@ export function EtpModal({
                   {topic.badge && (
                     <span
                       className={`
-                        absolute top-2 right-2 text-[10px] font-bold px-1.5 py-0.5 rounded-full
+                        absolute top-1.5 right-1.5 text-[9px] font-bold px-1.5 py-0.5 rounded-full
                         ${topic.colorClass} bg-white border ${topic.borderClass}
                       `}
                     >
@@ -754,9 +793,9 @@ export function EtpModal({
                     </span>
                   )}
                   <topic.icon
-                    className={`w-8 h-8 mr-4 shrink-0 transition-transform duration-200 group-hover:scale-110 ${topic.colorClass}`}
+                    className={`w-6 h-6 sm:w-8 sm:h-8 mb-1.5 sm:mb-0 sm:mr-4 shrink-0 transition-transform duration-200 group-hover:scale-110 ${topic.colorClass}`}
                   />
-                  <span className="font-bold font-headline text-base text-gray-800 group-hover:text-black leading-tight">
+                  <span className="font-bold font-headline text-xs sm:text-base text-gray-800 group-hover:text-black leading-tight min-w-0 break-words line-clamp-2">
                     {topic.title}
                   </span>
                 </button>
