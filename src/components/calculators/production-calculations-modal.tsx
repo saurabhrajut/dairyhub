@@ -10584,7 +10584,6 @@ function ButterYieldCalc() {
     </div>
   );
 }
-
 // ════════════════════════════════════════════════════════════
 // ADVANCED KHOA YIELD CALCULATOR
 // Drop-in Replacement for KhoaYieldCalc()
@@ -11120,1065 +11119,264 @@ function KhoaYieldCalc() {
   );
 }
 
-// ════════════════════════════════════════════════════════════
-// ADVANCED SHRIKHAND YIELD CALCULATOR
-// Drop-in Replacement for ShrikhandYieldCalc()
-//
-// INSTRUCTIONS:
-// 1. Apni file mein purana ShrikhandYieldCalc() function dhundhein
-// 2. Pura block DELETE karein
-// 3. Yeh poora code wahan PASTE karein
-// Koi naya import nahi chahiye.
-// ════════════════════════════════════════════════════════════
-
-// ── CHAKKA TYPE DATABASE ──────────────────────────────────
-const CHAKKA_DB = {
-  cow_std:     { label: "🐄 Cow Chakka (std)",      ts: "32", fat: "10", protein: "12", moisture: "68", acidityPh: "4.0" },
-  cow_rich:    { label: "🐄 Cow Chakka (rich)",     ts: "36", fat: "14", protein: "13", moisture: "64", acidityPh: "3.9" },
-  buffalo:     { label: "🐃 Buffalo Chakka",        ts: "40", fat: "20", protein: "14", moisture: "60", acidityPh: "3.8" },
-  mixed:       { label: "🐄🐃 Mixed Chakka",        ts: "36", fat: "15", protein: "13", moisture: "64", acidityPh: "3.9" },
-  low_fat:     { label: "🥛 Low-fat Chakka",        ts: "30", fat: "4",  protein: "14", moisture: "70", acidityPh: "4.1" },
-} as const;
-
-type ChakkaKey = keyof typeof CHAKKA_DB;
-
-// ── SHRIKHAND VARIETY DATABASE ────────────────────────────
-const SHRIKHAND_VARIETY_DB = {
-  plain:       { label: "🍶 Plain Shrikhand",          sugarRatio: "43", tsTarget: "70", extras: 0,    note: "Classic — sugar only"                   },
-  amrakhand:   { label: "🥭 Amrakhand (mango)",        sugarRatio: "38", tsTarget: "68", extras: 8,    note: "8% mango pulp addition"                 },
-  kesar_elaichi:{ label:"🌸 Kesar-Elaichi",            sugarRatio: "43", tsTarget: "70", extras: 0.5,  note: "Saffron + cardamom — trace addition"    },
-  dry_fruit:   { label: "🥜 Dry Fruit Shrikhand",      sugarRatio: "40", tsTarget: "70", extras: 5,    note: "5% dry fruit addition (cashew/almond)"  },
-  chocolate:   { label: "🍫 Chocolate Shrikhand",      sugarRatio: "42", tsTarget: "71", extras: 3,    note: "3% cocoa powder"                        },
-  strawberry:  { label: "🍓 Strawberry Shrikhand",     sugarRatio: "38", tsTarget: "67", extras: 8,    note: "8% strawberry pulp/crush addition"      },
-} as const;
-
-type ShrikhandVarietyKey = keyof typeof SHRIKHAND_VARIETY_DB;
-
-// ── SUGAR TYPE DATABASE ───────────────────────────────────
-const SUGAR_DB = {
-  refined:     { label: "White Sugar (refined)",   purity: 99.9, solubility: 1.0 },
-  icing:       { label: "Icing Sugar (powder)",    purity: 99.5, solubility: 1.0 },
-  mishri:      { label: "Mishri (rock candy)",     purity: 99.0, solubility: 0.95 },
-  khandsari:   { label: "Khandsari (semi-refined)",purity: 97.0, solubility: 0.98 },
-} as const;
-
-type SugarKey = keyof typeof SUGAR_DB;
-
-// ── PRESETS ───────────────────────────────────────────────
-const SHRIKHAND_PRESETS = {
-  "Small Batch (100 kg)":   { chakkaQty: "100", chakkaTS: "36", sugarAdded: "75",  batches: "3", chakkaPrice: "120", shrikhandPrice: "180", sugarPrice: "42", operDays: "26" },
-  "Medium (500 kg)":        { chakkaQty: "500", chakkaTS: "36", sugarAdded: "375", batches: "1", chakkaPrice: "115", shrikhandPrice: "175", sugarPrice: "40", operDays: "26" },
-  "Large Plant (2000 kg)":  { chakkaQty: "2000",chakkaTS: "38", sugarAdded: "1400",batches: "1", chakkaPrice: "110", shrikhandPrice: "170", sugarPrice: "38", operDays: "26" },
-  "Buffalo Premium":        { chakkaQty: "100", chakkaTS: "40", sugarAdded: "70",  batches: "3", chakkaPrice: "160", shrikhandPrice: "240", sugarPrice: "42", operDays: "26" },
-} as const;
-
-// ── MAIN COMPONENT ────────────────────────────────────────
 function ShrikhandYieldCalc() {
+  const [chakkaQty, setChakkaQty] = useState("100");
+  const [chakkaTS, setChakkaTS] = useState("35");
+  const [sugarAdded, setSugarAdded] = useState("80");
+  const [result, setResult] = useState<CalculationResult | null>(null);
+
+  const { validatePositive, validatePercentage } = useInputValidation();
   const { toast } = useToast();
-  const { validatePositive, validatePercentage, validateNumber } = useInputValidation();
 
-  const [chakkaType,  setChakkaType]  = useState<ChakkaKey>("mixed");
-  const [variety,     setVariety]     = useState<ShrikhandVarietyKey>("plain");
-  const [sugarType,   setSugarType]   = useState<SugarKey>("refined");
-
-  const [inp, setInp] = useState({
-    chakkaQty:        "1000",
-    chakkaTS:         "36",
-    chakkaFat:        "15",
-    chakkaProtein:    "13",
-    sugarAdded:       "720",    // kg
-    extraIngredient:  "0",      // kg (flavour, fruit pulp, etc.)
-    batches:          "1",
-    operDays:         "26",
-    chakkaPrice:      "115",    // ₹/kg
-    shrikhandPrice:   "175",    // ₹/kg
-    sugarPrice:       "40",     // ₹/kg
-    packCostPer100g:  "3.5",    // ₹ per 100g cup
-    packSize:         "100",    // g per pack
-  });
-
-  const [result, setResult] = useState<any>(null);
-  const setF = (k: string, v: string) => setInp(p => ({ ...p, [k]: v }));
-
-  // Apply chakka type
-  const applyChakka = (key: ChakkaKey) => {
-    const c = CHAKKA_DB[key];
-    setChakkaType(key);
-    setInp(p => ({ ...p, chakkaTS: c.ts, chakkaFat: c.fat, chakkaProtein: c.protein }));
-    setResult(null);
-  };
-
-  // Apply variety
-  const applyVariety = (key: ShrikhandVarietyKey) => {
-    const v = SHRIKHAND_VARIETY_DB[key];
-    setVariety(key);
-    // Auto-calculate sugar for 1000 kg chakka based on ratio
-    const chakka = parseFloat(inp.chakkaQty) || 1000;
-    // sugarRatio = sugar / (chakka + sugar + extras) × 100
-    // Solving: sugar = chakka × sugarRatio% / (1 - sugarRatio% / 100)
-    const sr = parseFloat(v.sugarRatio) / 100;
-    const sugAuto = Math.round(chakka * sr / (1 - sr));
-    const extAuto = Math.round(chakka * v.extras / 100);
-    setInp(p => ({ ...p, sugarAdded: String(sugAuto), extraIngredient: String(extAuto) }));
-    setResult(null);
-  };
-
-  // Apply preset
-  const applyPreset = (name: keyof typeof SHRIKHAND_PRESETS) => {
-    const pr = SHRIKHAND_PRESETS[name] as Record<string, string>;
-    setInp(p => ({ ...p, ...pr }));
-    toast({ title: "Preset Applied", description: name });
-  };
-
-  // ── CALCULATE ─────────────────────────────────────────
   const calculate = useCallback(() => {
-    const chakka   = parseFloat(inp.chakkaQty)      || 0;
-    const Tc       = parseFloat(inp.chakkaTS)   / 100;
-    const fatC     = parseFloat(inp.chakkaFat)  / 100;
-    const protC    = parseFloat(inp.chakkaProtein) / 100;
-    const sugar    = parseFloat(inp.sugarAdded)     || 0;
-    const extras   = parseFloat(inp.extraIngredient)|| 0;
-    const bat      = parseFloat(inp.batches)        || 1;
-    const days     = parseFloat(inp.operDays)       || 26;
-    const sugarPurity = SUGAR_DB[sugarType].purity / 100;
+    const validations = [
+      validatePositive(chakkaQty, "Chakka quantity"),
+      validatePercentage(chakkaTS, "Chakka total solids"),
+      validatePositive(sugarAdded, "Sugar added"),
+    ];
 
-    const chakkaPrice     = parseFloat(inp.chakkaPrice)     || 0;
-    const shrikhandPrice  = parseFloat(inp.shrikhandPrice)  || 0;
-    const sugarPrice      = parseFloat(inp.sugarPrice)      || 0;
-    const packCostPer100g = parseFloat(inp.packCostPer100g) || 0;
-    const packSizeG       = parseFloat(inp.packSize)        || 100;
-
-    if (chakka <= 0 || sugar <= 0) {
-      toast({ variant: "destructive", title: "Invalid values" }); return;
+    const invalidField = validations.find((v) => !v.isValid);
+    if (invalidField) {
+      toast({
+        title: "Validation Error",
+        description: invalidField.message,
+        variant: "destructive",
+      });
+      return;
     }
 
-    const vari = SHRIKHAND_VARIETY_DB[variety];
+    const chakka = parseFloat(chakkaQty);
+    const ts = parseFloat(chakkaTS) / 100;
+    const sugar = parseFloat(sugarAdded);
 
-    // ── 1. Yield ──────────────────────────────────────
-    // Shrikhand = Chakka + Sugar + Extras
-    const shrikhandKg    = chakka + sugar + extras;
-    const yieldPct       = (shrikhandKg / chakka) * 100; // yield vs chakka
+    const shrikhandYield = chakka + sugar;
+    const finalTS = ((chakka * ts + sugar) / shrikhandYield) * 100;
+    const sugarPercentage = (sugar / shrikhandYield) * 100;
 
-    // ── 2. Final Composition ──────────────────────────
-    // Sugar TS = sugar × purity (pure sucrose is TS)
-    const chakkaTS_kg    = chakka  * Tc;
-    const sugarTS_kg     = sugar   * sugarPurity;
-    const extrasTS_kg    = extras  * 0.15;             // avg 15% TS for fruit pulps
-    const totalTS_kg     = chakkaTS_kg + sugarTS_kg + extrasTS_kg;
-    const finalTSPct     = (totalTS_kg / shrikhandKg) * 100;
-    const finalMoisturePct = 100 - finalTSPct;
-
-    // Sugar % in final product
-    const sugarInProdPct = (sugarTS_kg / shrikhandKg) * 100;
-
-    // Fat in final product
-    const fatKg          = chakka * fatC;
-    const fatInProdPct   = (fatKg / shrikhandKg) * 100;
-
-    // Protein in final product
-    const protKg         = chakka * protC;
-    const protInProdPct  = (protKg / shrikhandKg) * 100;
-
-    // ── 3. FSSAI Compliance ───────────────────────────
-    const fssaiFatMin    = 8.5;   // % minimum fat for full fat shrikhand
-    const fssaiTSMin     = 68.0;
-    const fssaiTSMax     = 74.0;
-    const fssaiSugarMax  = 45.0;
-
-    const fssaiFatOK     = fatInProdPct >= fssaiFatMin;
-    const fssaiTSOK      = finalTSPct >= fssaiTSMin && finalTSPct <= fssaiTSMax;
-    const fssaiSugarOK   = sugarInProdPct <= fssaiSugarMax;
-
-    // ── 4. Packs ──────────────────────────────────────
-    const packsTotal     = Math.floor(shrikhandKg * 1000 / packSizeG);
-    const packCostTotal  = packsTotal * packCostPer100g * (packSizeG / 100);
-
-    // ── 5. Batch totals ───────────────────────────────
-    const shrikhandTotal = shrikhandKg * bat;
-    const packsAll       = packsTotal  * bat;
-    const packCostAll    = packCostTotal * bat;
-
-    // ── 6. Economics ─────────────────────────────────
-    const chakkaCost     = chakka * bat * chakkaPrice;
-    const sugarCost      = sugar  * bat * sugarPrice;
-    const totalInputCost = chakkaCost + sugarCost + packCostAll;
-    const revenue        = shrikhandTotal * shrikhandPrice;
-    const grossProfit    = revenue - totalInputCost;
-    const gpm            = totalInputCost > 0 ? (grossProfit / totalInputCost) * 100 : 0;
-    const costPerKg      = totalInputCost / shrikhandTotal;
-    const revenuePerKgChakka = revenue / (chakka * bat);
-
-    // Monthly
-    const monthlyShrikhand = shrikhandKg * days;
-    const monthlyRevenue   = monthlyShrikhand * shrikhandPrice;
-    const monthlyCost      = (chakka * chakkaPrice + sugar * sugarPrice) * days + packCostTotal * days;
-
-    // ── 7. Sensitivity ────────────────────────────────
-    // +1 kg sugar per 100 kg chakka → TS change
-    const dTS_dSugar = ((sugarPurity * 1) / (shrikhandKg + 1)) * 100;
-
-    // ── 8. Warnings ──────────────────────────────────
     const warnings: string[] = [];
     let confidence: "high" | "medium" | "low" = "high";
 
-    if (!fssaiTSOK)      { confidence = "medium"; warnings.push(`Final TS ${finalTSPct.toFixed(1)}% outside FSSAI range (68–74%). Adjust chakka TS or sugar ratio.`); }
-    if (!fssaiFatOK)     warnings.push(`Fat ${fatInProdPct.toFixed(1)}% below FSSAI minimum (8.5%) — use richer chakka or add cream.`);
-    if (!fssaiSugarOK)   warnings.push(`Sugar ${sugarInProdPct.toFixed(1)}% exceeds 45% — product too sweet, risk of crystallisation.`);
-    if (Tc < 0.30)       warnings.push(`Chakka TS ${(Tc*100).toFixed(0)}% is low — drain whey longer to concentrate chakka before mixing.`);
-    if (sugarInProdPct < 35) warnings.push(`Sugar ${sugarInProdPct.toFixed(1)}% below 35% — insufficient water activity control, shorter shelf life.`);
+    if (finalTS < 68 || finalTS > 74) {
+      confidence = "medium";
+      warnings.push("Final TS outside FSSAI standard range (68-74%).");
+    }
+
+    if (sugarPercentage < 35 || sugarPercentage > 45) {
+      warnings.push("Sugar content outside typical range (35-45%).");
+    }
 
     setResult({
-      shrikhandKg, yieldPct,
-      chakkaTS_kg, sugarTS_kg, totalTS_kg,
-      finalTSPct, finalMoisturePct, sugarInProdPct, fatInProdPct, protInProdPct,
-      fssaiFatOK, fssaiTSOK, fssaiSugarOK,
-      packsTotal, packCostTotal,
-      shrikhandTotal, packsAll, packCostAll,
-      chakkaCost, sugarCost, totalInputCost,
-      revenue, grossProfit, gpm, costPerKg, revenuePerKgChakka,
-      monthlyShrikhand, monthlyRevenue, monthlyCost,
-      dTS_dSugar,
-      warnings, confidence, chakka, bat, days,
+      value: shrikhandYield,
+      unit: "kg",
+      confidence,
+      warnings,
+      metadata: {
+        finalTS: finalTS.toFixed(2),
+        sugarPercentage: sugarPercentage.toFixed(2),
+      },
     });
 
     toast({
-      title: "✅ Calculated",
-      description: `Shrikhand: ${shrikhandKg.toFixed(1)} kg | TS: ${finalTSPct.toFixed(1)}% | GPM: ${gpm.toFixed(1)}%`,
+      title: "Calculation Complete",
+      description: `Shrikhand yield: ${shrikhandYield.toFixed(3)} kg`,
     });
-  }, [inp, variety, sugarType, toast]);
+  }, [
+    chakkaQty,
+    chakkaTS,
+    sugarAdded,
+    validatePositive,
+    validatePercentage,
+    toast,
+  ]);
 
-  const vari  = SHRIKHAND_VARIETY_DB[variety];
-  const sugar = SUGAR_DB[sugarType];
-
-  // ── RENDER ────────────────────────────────────────────
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 sm:space-y-6">
+      <Alert className="bg-purple-50 border-purple-200">
+        <Weight className="h-4 w-4 text-purple-600" />
+        <AlertTitle className="text-sm sm:text-base">
+          Shrikhand Yield Calculator
+        </AlertTitle>
+        <AlertDescription className="text-xs sm:text-sm">
+          Calculate shrikhand production with FSSAI compliance check
+        </AlertDescription>
+      </Alert>
 
-      {/* ── CHAKKA TYPE ──────────────────────────────── */}
-      <div className="space-y-1">
-        <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Chakka Type</Label>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-          {(Object.keys(CHAKKA_DB) as ChakkaKey[]).map(key => (
-            <button key={key} onClick={() => applyChakka(key)}
-              className={`p-2 rounded-lg border text-xs font-semibold transition-all text-left leading-tight shadow-sm
-                ${chakkaType === key
-                  ? "bg-purple-600 text-white border-purple-600 shadow-md"
-                  : "bg-white text-slate-600 border-slate-200 hover:border-purple-300"
-                }`}>
-              {CHAKKA_DB[key].label}
-              <div className={`text-[9px] mt-0.5 ${chakkaType === key ? "opacity-80" : "text-slate-400"}`}>
-                TS: {CHAKKA_DB[key].ts}% · Fat: {CHAKKA_DB[key].fat}%
-              </div>
-            </button>
-          ))}
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+        <ValidatedInput
+          label="Chakka Quantity"
+          value={chakkaQty}
+          onChange={setChakkaQty}
+          validation={validatePositive(chakkaQty)}
+          unit="kg"
+          icon={<Weight className="h-4 w-4 text-purple-500" />}
+          colorScheme="purple"
+        />
+        <ValidatedInput
+          label="Chakka Total Solids"
+          value={chakkaTS}
+          onChange={setChakkaTS}
+          validation={validatePercentage(chakkaTS)}
+          unit="%"
+          icon={<Percent className="h-4 w-4 text-purple-600" />}
+          helpText="Typical: 30-40%"
+          colorScheme="purple"
+        />
+        <ValidatedInput
+          label="Sugar Added"
+          value={sugarAdded}
+          onChange={setSugarAdded}
+          validation={validatePositive(sugarAdded)}
+          unit="kg"
+          icon={<Target className="h-4 w-4 text-pink-500" />}
+          colorScheme="pink"
+        />
       </div>
 
-      {/* ── SHRIKHAND VARIETY ────────────────────────── */}
-      <div className="space-y-1">
-        <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Shrikhand Variety</Label>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-          {(Object.keys(SHRIKHAND_VARIETY_DB) as ShrikhandVarietyKey[]).map(key => (
-            <button key={key} onClick={() => applyVariety(key)}
-              className={`p-2 rounded-lg border text-xs font-semibold transition-all text-left leading-tight shadow-sm
-                ${variety === key
-                  ? "bg-pink-600 text-white border-pink-600 shadow-md"
-                  : "bg-white text-slate-600 border-slate-200 hover:border-pink-300"
-                }`}>
-              {SHRIKHAND_VARIETY_DB[key].label}
-              <div className={`text-[9px] mt-0.5 ${variety === key ? "opacity-80" : "text-slate-400"}`}>
-                Sugar: ~{SHRIKHAND_VARIETY_DB[key].sugarRatio}% · TS: {SHRIKHAND_VARIETY_DB[key].tsTarget}%
-              </div>
-            </button>
-          ))}
-        </div>
-        <p className="text-[10px] text-pink-700 bg-pink-50 px-2 py-1 rounded border border-pink-100">
-          📌 {vari.note}
-        </p>
-      </div>
-
-      {/* ── SUGAR TYPE ───────────────────────────────── */}
-      <div className="space-y-1">
-        <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Sugar Type</Label>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-          {(Object.keys(SUGAR_DB) as SugarKey[]).map(key => (
-            <button key={key} onClick={() => setSugarType(key)}
-              className={`p-2 rounded-lg border text-xs font-semibold transition-all text-left leading-tight shadow-sm
-                ${sugarType === key
-                  ? "bg-violet-600 text-white border-violet-600 shadow-md"
-                  : "bg-white text-slate-600 border-slate-200 hover:border-violet-300"
-                }`}>
-              {SUGAR_DB[key].label}
-              <div className={`text-[9px] mt-0.5 ${sugarType === key ? "opacity-80" : "text-slate-400"}`}>
-                Purity: {SUGAR_DB[key].purity}%
-              </div>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* ── PRESETS ──────────────────────────────────── */}
-      <div className="space-y-1">
-        <Label className="text-xs font-bold text-slate-500 uppercase">Batch Presets</Label>
-        <div className="flex flex-wrap gap-2">
-          {(Object.keys(SHRIKHAND_PRESETS) as Array<keyof typeof SHRIKHAND_PRESETS>).map(name => (
-            <button key={name} onClick={() => applyPreset(name)}
-              className="px-3 py-1 rounded-full border border-purple-200 bg-white text-xs font-semibold text-purple-700 hover:bg-purple-600 hover:text-white transition-all shadow-sm">
-              {name}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* ── INPUTS ───────────────────────────────────── */}
-      <Card className="border-purple-100 bg-white">
-        <CardHeader className="p-3 pb-2 bg-purple-50 border-b border-purple-100">
-          <CardTitle className="text-xs font-bold text-purple-700 uppercase">🫙 Composition Inputs</CardTitle>
-        </CardHeader>
-        <CardContent className="p-3 grid grid-cols-2 gap-3">
-          <ValidatedInput label="Chakka Quantity" value={inp.chakkaQty} onChange={v => setF("chakkaQty", v)} validation={validatePositive(inp.chakkaQty, "Chakka")} unit="kg" colorScheme="purple" />
-          <ValidatedInput label="Batches" value={inp.batches} onChange={v => setF("batches", v)} validation={validatePositive(inp.batches, "Batches")} colorScheme="blue" />
-          <ValidatedInput label="Chakka TS %" value={inp.chakkaTS} onChange={v => setF("chakkaTS", v)} validation={validateNumber(inp.chakkaTS, 25, 50, "Chakka TS")} unit="%" helpText="Typical: 30–42%" colorScheme="purple" />
-          <ValidatedInput label="Chakka Fat %" value={inp.chakkaFat} onChange={v => setF("chakkaFat", v)} validation={validatePercentage(inp.chakkaFat, "Fat")} unit="%" colorScheme="orange" />
-          <ValidatedInput label="Chakka Protein %" value={inp.chakkaProtein} onChange={v => setF("chakkaProtein", v)} validation={validatePercentage(inp.chakkaProtein, "Protein")} unit="%" colorScheme="blue" />
-          <ValidatedInput label="Sugar Added" value={inp.sugarAdded} onChange={v => setF("sugarAdded", v)} validation={validatePositive(inp.sugarAdded, "Sugar")} unit="kg" colorScheme="pink" />
-          <ValidatedInput label="Extras (pulp/dry fruit)" value={inp.extraIngredient} onChange={v => setF("extraIngredient", v)} validation={{ isValid: true, severity: "info" }} unit="kg" helpText={`${vari.note}`} colorScheme="green" />
-          <ValidatedInput label="Operating Days/Month" value={inp.operDays} onChange={v => setF("operDays", v)} validation={{ isValid: true, severity: "info" }} colorScheme="blue" />
-        </CardContent>
-      </Card>
-
-      {/* ── PACKAGING & PRICING ──────────────────────── */}
-      <Card className="border-green-100 bg-white">
-        <CardHeader className="p-3 pb-2 bg-green-50 border-b border-green-100">
-          <CardTitle className="text-xs font-bold text-green-700 uppercase">💰 Packaging & Pricing</CardTitle>
-        </CardHeader>
-        <CardContent className="p-3 grid grid-cols-2 sm:grid-cols-3 gap-3">
-          <ValidatedInput label="Pack Size" value={inp.packSize} onChange={v => setF("packSize", v)} validation={validatePositive(inp.packSize, "Pack size")} unit="g" helpText="100g, 200g, 500g" colorScheme="slate" />
-          <ValidatedInput label="Pack Cost" value={inp.packCostPer100g} onChange={v => setF("packCostPer100g", v)} validation={{ isValid: true, severity: "info" }} unit="₹/100g" colorScheme="slate" />
-          <ValidatedInput label="Chakka Price" value={inp.chakkaPrice} onChange={v => setF("chakkaPrice", v)} validation={{ isValid: true, severity: "info" }} unit="₹/kg" colorScheme="purple" />
-          <ValidatedInput label="Sugar Price" value={inp.sugarPrice} onChange={v => setF("sugarPrice", v)} validation={{ isValid: true, severity: "info" }} unit="₹/kg" colorScheme="pink" />
-          <ValidatedInput label="Shrikhand Price" value={inp.shrikhandPrice} onChange={v => setF("shrikhandPrice", v)} validation={{ isValid: true, severity: "info" }} unit="₹/kg" colorScheme="green" />
-        </CardContent>
-      </Card>
-
-      {/* ── CALCULATE ───────────────────────────────── */}
-      <Button onClick={calculate}
-        className="w-full h-11 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold shadow-md">
-        <Calculator className="mr-2 h-4 w-4" />
+      <Button
+        onClick={calculate}
+        className="w-full h-11 sm:h-12 text-sm sm:text-lg bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+        size="lg"
+      >
+        <Calculator className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
         Calculate Shrikhand Yield
       </Button>
 
-      {/* ── RESULTS ─────────────────────────────────── */}
       {result && (
-        <div className="space-y-3 animate-in fade-in">
-
-          {/* Main KPIs */}
-          <div className="grid grid-cols-3 gap-2">
-            {[
-              { label: "Shrikhand Yield", value: result.shrikhandKg.toFixed(1),  unit: "kg/batch",  color: "bg-purple-600" },
-              { label: "Final TS %",      value: result.finalTSPct.toFixed(1),   unit: "% w/w",     color: `${result.fssaiTSOK ? "bg-green-600" : "bg-red-500"}` },
-              { label: "Total Packs",     value: result.packsTotal.toLocaleString("en-IN"), unit: `${inp.packSize}g packs`, color: "bg-pink-600" },
-            ].map((k, i) => (
-              <div key={i} className={`${k.color} text-white p-3 rounded-xl text-center shadow`}>
-                <div className="text-[9px] uppercase opacity-80 font-bold">{k.label}</div>
-                <div className="text-2xl font-black">{k.value}</div>
-                <div className="text-[9px] opacity-70">{k.unit}</div>
-              </div>
-            ))}
-          </div>
-
-          {/* FSSAI Compliance */}
-          <Card className={`border-2 ${result.fssaiTSOK && result.fssaiFatOK && result.fssaiSugarOK ? "border-green-300 bg-green-50" : "border-red-300 bg-red-50"}`}>
-            <CardHeader className="p-3 pb-1 border-b border-current/20">
-              <CardTitle className="text-sm font-bold text-slate-700">📜 FSSAI Compliance Check</CardTitle>
-            </CardHeader>
-            <CardContent className="p-3 space-y-2">
-            // ✅ SAHI CODE
-          {[
-            { label: "Total Solids",  actual: `${result.finalTSPct.toFixed(1)}%`,    ok: result.fssaiTSOK,    limit: "68–74%" },
-            { label: "Fat %",         actual: `${result.fatInProdPct.toFixed(1)}%`,  ok: result.fssaiFatOK,   limit: "≥8.5% (full fat)" },
-            { label: "Sugar %",       actual: `${result.sugarInProdPct.toFixed(1)}%`,ok: result.fssaiSugarOK, limit: "≤45%"  },
-          ].map((r, i) => (
-                <div key={i} className="flex justify-between items-center text-sm">
-                  <span className="text-slate-600">{r.label}</span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-slate-500 text-xs">(limit: {r.limit})</span>
-                    <span className={`font-bold ${r.ok ? "text-green-700" : "text-red-600"}`}>{r.actual}</span>
-                    <span>{r.ok ? "✅" : "❌"}</span>
-                  </div>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-
-          {/* Composition breakdown */}
-          <Card className="bg-white border-purple-100">
-            <CardHeader className="p-3 pb-1 border-b border-purple-100">
-              <CardTitle className="text-sm text-purple-800">🧪 Final Product Composition</CardTitle>
-            </CardHeader>
-            <CardContent className="p-3 space-y-2 text-sm">
-              {[
-                { label: "Chakka (base)",           value: `${result.chakka.toFixed(0)} kg (${(result.chakka/result.shrikhandKg*100).toFixed(1)}%)`, color: "text-purple-700" },
-                { label: "Chakka TS contributed",   value: `${result.chakkaTS_kg.toFixed(2)} kg`,  color: "text-purple-700" },
-                { label: "Sugar TS contributed",    value: `${result.sugarTS_kg.toFixed(2)} kg`,   color: "text-pink-700"   },
-                { label: "Total Solids in product", value: `${result.totalTS_kg.toFixed(2)} kg (${result.finalTSPct.toFixed(1)}%)`, color: "text-slate-800 font-black" },
-                { label: "Moisture",                value: `${result.finalMoisturePct.toFixed(1)}%`, color: "text-blue-700"  },
-                { label: "Fat in product",          value: `${result.fatInProdPct.toFixed(2)}%`,   color: "text-orange-700" },
-                { label: "Protein in product",      value: `${result.protInProdPct.toFixed(2)}%`,  color: "text-blue-700"   },
-              ].map((r, i) => (
-                <div key={i} className="flex justify-between">
-                  <span className="text-slate-500">{r.label}</span>
-                  <span className={`font-bold ${r.color}`}>{r.value}</span>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-
-          {/* Packing details */}
-          <div className="grid grid-cols-2 gap-3">
-            <Card className="bg-pink-50 border-pink-200">
-              <CardContent className="p-3 space-y-1 text-xs">
-                <div className="font-bold text-pink-700 mb-1 text-sm">📦 Packing ({inp.packSize}g cups)</div>
-                {[
-                  { label: "Packs (1 batch)",  value: result.packsTotal.toLocaleString("en-IN") },
-                  { label: "Packing cost",     value: `₹${result.packCostTotal.toFixed(0)}` },
-                  { label: "Yield vs chakka",  value: `${result.yieldPct.toFixed(1)}%` },
-                ].map((r, i) => (
-                  <div key={i} className="flex justify-between">
-                    <span className="text-slate-500">{r.label}</span>
-                    <span className="font-bold">{r.value}</span>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-
-            <Card className="bg-violet-50 border-violet-200">
-              <CardContent className="p-3 space-y-1 text-xs">
-                <div className="font-bold text-violet-700 mb-1 text-sm">📈 Sensitivity</div>
-                <div className="flex justify-between">
-                  <span className="text-slate-500">+1 kg sugar per 100 kg chakka</span>
-                  <span className="font-bold text-violet-700">+{result.dTS_dSugar.toFixed(2)}% TS</span>
-                </div>
-                <div className="text-[10px] text-violet-600 mt-1">Reduce sugar to lower TS if exceeding 74%</div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Multi-batch */}
-          {result.bat > 1 && (
-            <Card className="bg-indigo-50 border-indigo-200">
-              <CardContent className="p-3 text-sm space-y-1">
-                <div className="font-bold text-indigo-700 mb-1">{result.bat} Batches</div>
-                {[
-                  { label: "Total shrikhand", value: `${result.shrikhandTotal.toFixed(1)} kg` },
-                  { label: "Total packs",     value: result.packsAll.toLocaleString("en-IN")  },
-                  { label: "Pack cost total", value: `₹${result.packCostAll.toFixed(0)}`       },
-                ].map((r, i) => (
-                  <div key={i} className="flex justify-between">
-                    <span className="text-slate-500">{r.label}</span>
-                    <span className="font-bold text-indigo-700">{r.value}</span>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Economics */}
-          <Card className="bg-gradient-to-br from-slate-800 to-slate-900 text-white border-none">
-            <CardContent className="p-3 space-y-2 text-sm">
-              <div className="text-xs text-slate-300 font-bold uppercase mb-1">💰 Economics ({result.bat} batch{result.bat > 1 ? "es" : ""})</div>
-              {[
-                { label: "Chakka cost",    value: `-₹ ${result.chakkaCost.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,       color: "text-red-400"    },
-                { label: "Sugar cost",     value: `-₹ ${result.sugarCost.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,         color: "text-orange-400" },
-                { label: "Packing cost",   value: `-₹ ${result.packCostAll.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,       color: "text-yellow-400" },
-                { label: "Revenue",        value: `+₹ ${result.revenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,           color: "text-green-300"  },
-                { label: "Gross Profit",   value: `₹ ${result.grossProfit.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,        color: `${result.grossProfit >= 0 ? "text-green-300 font-black" : "text-red-400 font-black"}` },
-              ].map((r, i) => (
-                <div key={i} className={`flex justify-between ${i === 4 ? "border-t border-slate-700 pt-2" : ""}`}>
-                  <span className="text-slate-400">{r.label}</span>
-                  <span className={`font-bold ${r.color}`}>{r.value}</span>
-                </div>
-              ))}
-              <div className="grid grid-cols-3 gap-2 mt-2">
-                {[
-                  { label: "Gross Margin",       value: `${result.gpm.toFixed(1)}%`                              },
-                  { label: "Cost/kg shrikhand",  value: `₹${result.costPerKg.toFixed(2)}`                        },
-                  { label: "Revenue/kg chakka",  value: `₹${result.revenuePerKgChakka.toFixed(2)}`               },
-                ].map((c, i) => (
-                  <div key={i} className="bg-slate-700 rounded p-2 text-center">
-                    <div className="text-[9px] text-slate-400 font-bold">{c.label}</div>
-                    <div className="font-black text-white text-sm">{c.value}</div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Monthly */}
-          <Card className="bg-green-50 border-green-200">
-            <CardContent className="p-3 text-sm space-y-1">
-              <div className="font-bold text-green-700 text-sm mb-1">📅 Monthly ({result.days} days)</div>
-              {[
-                { label: "Shrikhand production", value: `${result.monthlyShrikhand.toFixed(0)} kg` },
-                { label: "Revenue",              value: `₹${result.monthlyRevenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}` },
-                { label: "Total cost",           value: `₹${result.monthlyCost.toLocaleString("en-IN", { maximumFractionDigits: 0 })}` },
-              ].map((r, i) => (
-                <div key={i} className="flex justify-between">
-                  <span className="text-slate-500">{r.label}</span>
-                  <span className="font-bold text-green-700">{r.value}</span>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-
-          {/* Warnings */}
-          {result.warnings.length > 0 && (
-            <Alert className="bg-yellow-50 border-yellow-300">
-              <AlertTriangle className="h-4 w-4 text-yellow-600" />
-              <AlertTitle className="text-yellow-800 text-sm">Quality / Compliance Alerts</AlertTitle>
-              <AlertDescription className="text-xs text-yellow-700 space-y-1">
-                {result.warnings.map((w: string, i: number) => <div key={i}>⚠️ {w}</div>)}
-              </AlertDescription>
-            </Alert>
-          )}
-
-          {/* Formula */}
-          <div className="bg-slate-50 border rounded-lg p-3 text-[10px] font-mono text-slate-400 space-y-1">
-            <div className="font-bold text-slate-600 text-xs mb-1">📐 Formula:</div>
-            <div>ShrikhandKg = Chakka + Sugar + Extras = {result.chakka} + {inp.sugarAdded} + {inp.extraIngredient} = {result.shrikhandKg.toFixed(2)} kg</div>
-            <div>FinalTS% = (ChakkaTS_kg + SugarTS_kg + ExtrasTS_kg) / ShrikhandKg × 100</div>
-            <div>= ({result.chakkaTS_kg.toFixed(2)} + {result.sugarTS_kg.toFixed(2)}) / {result.shrikhandKg.toFixed(2)} × 100 = {result.finalTSPct.toFixed(2)}%</div>
-          </div>
-
+        <div className="space-y-4 animate-in slide-in-from-bottom-4">
+          <ResultCard
+            title="Estimated Shrikhand Yield"
+            value={result.value}
+            unit={result.unit}
+            confidence={result.confidence}
+            icon={<Weight className="h-5 w-5" />}
+            colorScheme="purple"
+            subtitle={`Final TS: ${result.metadata?.finalTS}% | Sugar: ${result.metadata?.sugarPercentage}%`}
+            warnings={result.warnings}
+          />
         </div>
       )}
     </div>
   );
 }
 
-// ════════════════════════════════════════════════════════════
-// ADVANCED PEDHA / BURFI YIELD CALCULATOR
-// Drop-in Replacement for PedhaBurfiYieldCalc()
-//
-// INSTRUCTIONS:
-// 1. Apni file mein purana PedhaBurfiYieldCalc() function dhundhein
-// 2. Pura block DELETE karein
-// 3. Yeh poora code wahan PASTE karein
-// Koi naya import nahi chahiye.
-// ════════════════════════════════════════════════════════════
-
-// ── SWEET TYPE DATABASE ───────────────────────────────────
-const SWEET_TYPE_DB = {
-  plain_pedha:   { label: "🟤 Plain Pedha",         moistureLoss: 8,  sugarRatioMin: 25, sugarRatioMax: 35, cookTime: "20–30 min", texture: "Soft-firm", shelfDays: 5,  note: "Classic — just khoa + sugar"                   },
-  kesar_pedha:   { label: "🌸 Kesar Pedha",         moistureLoss: 8,  sugarRatioMin: 25, sugarRatioMax: 33, cookTime: "20–30 min", texture: "Soft",      shelfDays: 5,  note: "Saffron + cardamom — premium variant"           },
-  mathura_pedha: { label: "🟠 Mathura Pedha",       moistureLoss: 10, sugarRatioMin: 20, sugarRatioMax: 28, cookTime: "30–40 min", texture: "Grainy",    shelfDays: 7,  note: "Coarse sugar rubbed — distinctive texture"      },
-  plain_burfi:   { label: "🟡 Plain Milk Burfi",    moistureLoss: 6,  sugarRatioMin: 28, sugarRatioMax: 38, cookTime: "15–25 min", texture: "Firm-slab",  shelfDays: 7,  note: "Set in tray, cut into pieces"                   },
-  besan_burfi:   { label: "🟤 Besan Burfi",         moistureLoss: 5,  sugarRatioMin: 30, sugarRatioMax: 40, cookTime: "20–30 min", texture: "Firm",      shelfDays: 10, note: "Besan added — extra binding, denser texture"    },
-  coconut_burfi: { label: "🥥 Coconut Burfi",       moistureLoss: 7,  sugarRatioMin: 30, sugarRatioMax: 40, cookTime: "20–25 min", texture: "Chewy",     shelfDays: 5,  note: "Desiccated coconut added — chewy texture"       },
-  chocolate_burfi:{ label:"🍫 Chocolate Burfi",     moistureLoss: 6,  sugarRatioMin: 28, sugarRatioMax: 38, cookTime: "20–25 min", texture: "Firm",      shelfDays: 7,  note: "Cocoa/compound chocolate coating"               },
-  milk_cake:     { label: "🧱 Milk Cake (Alwar)",   moistureLoss: 12, sugarRatioMin: 22, sugarRatioMax: 30, cookTime: "45–60 min", texture: "Caramelised",shelfDays: 10, note: "High heat caramelisation — brown colour"        },
-} as const;
-
-type SweetKey = keyof typeof SWEET_TYPE_DB;
-
-// ── KHOA TYPE DATABASE ────────────────────────────────────
-const KHOA_INPUT_DB = {
-  pindi:    { label: "🟤 Pindi Khoa",     ts: "72", fat: "26", note: "Best for pedha — firm, dry"      },
-  dhap:     { label: "🟡 Dhap Khoa",      ts: "68", fat: "22", note: "Good for burfi — medium texture" },
-  batti:    { label: "⚫ Batti/Mawa",     ts: "75", fat: "28", note: "Driest — use for milk cake"      },
-  danedar:  { label: "🟠 Danedar Khoa",   ts: "65", fat: "20", note: "Grainy — Mathura pedha base"     },
-  fresh:    { label: "🫙 Fresh Khoa",     ts: "62", fat: "18", note: "Freshly made same day"           },
-} as const;
-
-type KhoaInputKey = keyof typeof KHOA_INPUT_DB;
-
-// ── ADDITIVE DATABASE ─────────────────────────────────────
-const ADDITIVES_DB = {
-  none:       { label: "None",               tsContrib: 0,   wt: 0    },
-  besan:      { label: "Besan (gram flour)",  tsContrib: 90,  wt: 0    },
-  coconut:    { label: "Desiccated Coconut",  tsContrib: 95,  wt: 0    },
-  cocoa:      { label: "Cocoa Powder",        tsContrib: 95,  wt: 0    },
-  mawa_extra: { label: "Extra Khoa",          tsContrib: 70,  wt: 0    },
-} as const;
-
-type AdditiveKey = keyof typeof ADDITIVES_DB;
-
-// ── PRESETS ───────────────────────────────────────────────
-const PEDHA_PRESETS = {
-  "Small Halwai (10 kg khoa)": { khoaQty: "10",   sugarAdded: "3",    additiveQty: "0", batches: "5",  khoaPrice: "280", sugarPrice: "42", sweetPrice: "400", packSize: "250", packCost: "8",  operDays: "26" },
-  "Medium (100 kg khoa)":      { khoaQty: "100",  sugarAdded: "32",   additiveQty: "0", batches: "2",  khoaPrice: "265", sugarPrice: "40", sweetPrice: "380", packSize: "250", packCost: "7",  operDays: "26" },
-  "Large Plant (500 kg)":      { khoaQty: "500",  sugarAdded: "160",  additiveQty: "0", batches: "1",  khoaPrice: "250", sugarPrice: "38", sweetPrice: "360", packSize: "500", packCost: "12", operDays: "26" },
-  "Festive Batch (50 kg)":     { khoaQty: "50",   sugarAdded: "15",   additiveQty: "2", batches: "4",  khoaPrice: "280", sugarPrice: "42", sweetPrice: "480", packSize: "250", packCost: "10", operDays: "10" },
-} as const;
-
-// ── MAIN COMPONENT ────────────────────────────────────────
 function PedhaBurfiYieldCalc() {
+  const [khoaQty, setKhoaQty] = useState("10");
+  const [sugarAdded, setSugarAdded] = useState("3");
+  const [result, setResult] = useState<CalculationResult | null>(null);
+
+  const { validatePositive } = useInputValidation();
   const { toast } = useToast();
-  const { validatePositive, validateNumber } = useInputValidation();
 
-  const [sweetType,  setSweetType]  = useState<SweetKey>("plain_pedha");
-  const [khoaType,   setKhoaType]   = useState<KhoaInputKey>("pindi");
-  const [additive,   setAdditive]   = useState<AdditiveKey>("none");
-
-  const [inp, setInp] = useState({
-    khoaQty:       "100",
-    khoaTS:        "72",
-    khoaFat:       "26",
-    sugarAdded:    "32",
-    additiveQty:   "0",     // kg of extra additive
-    moistureLoss:  "8",     // % moisture loss during cooking
-    batches:       "1",
-    operDays:      "26",
-    khoaPrice:     "265",
-    sugarPrice:    "40",
-    sweetPrice:    "380",
-    packSize:      "250",   // g per box/pack
-    packCost:      "8",     // ₹ per pack
-  });
-
-  const [result, setResult] = useState<any>(null);
-  const setF = (k: string, v: string) => setInp(p => ({ ...p, [k]: v }));
-
-  // Apply sweet type
-  const applySweet = (key: SweetKey) => {
-    const s = SWEET_TYPE_DB[key];
-    setSweetType(key);
-    setInp(p => ({ ...p, moistureLoss: String(s.moistureLoss) }));
-    setResult(null);
-  };
-
-  // Apply khoa type
-  const applyKhoa = (key: KhoaInputKey) => {
-    const k = KHOA_INPUT_DB[key];
-    setKhoaType(key);
-    setInp(p => ({ ...p, khoaTS: k.ts, khoaFat: k.fat }));
-    setResult(null);
-  };
-
-  // Apply preset
-  const applyPreset = (name: keyof typeof PEDHA_PRESETS) => {
-    const pr = PEDHA_PRESETS[name] as Record<string, string>;
-    setInp(p => ({ ...p, ...pr }));
-    toast({ title: "Preset Applied", description: name });
-  };
-
-  // ── CALCULATE ─────────────────────────────────────────
   const calculate = useCallback(() => {
-    const khoa     = parseFloat(inp.khoaQty)       || 0;
-    const khoaTS   = parseFloat(inp.khoaTS)    / 100;
-    const khoaFat  = parseFloat(inp.khoaFat)   / 100;
-    const sugar    = parseFloat(inp.sugarAdded)    || 0;
-    const addQty   = parseFloat(inp.additiveQty)   || 0;
-    const mlPct    = parseFloat(inp.moistureLoss)  / 100;
-    const bat      = parseFloat(inp.batches)       || 1;
-    const days     = parseFloat(inp.operDays)      || 26;
-    const sType    = SWEET_TYPE_DB[sweetType];
-    const addTS    = ADDITIVES_DB[additive].tsContrib / 100;
+    const validations = [
+      validatePositive(khoaQty, "Khoa quantity"),
+      validatePositive(sugarAdded, "Sugar added"),
+    ];
 
-    const khoaPr   = parseFloat(inp.khoaPrice)  || 0;
-    const sugarPr  = parseFloat(inp.sugarPrice) || 0;
-    const sweetPr  = parseFloat(inp.sweetPrice) || 0;
-    const packSzG  = parseFloat(inp.packSize)   || 250;
-    const packCost = parseFloat(inp.packCost)   || 0;
-
-    if (khoa <= 0 || sugar <= 0) {
-      toast({ variant: "destructive", title: "Invalid values" }); return;
+    const invalidField = validations.find((v) => !v.isValid);
+    if (invalidField) {
+      toast({
+        title: "Validation Error",
+        description: invalidField.message,
+        variant: "destructive",
+      });
+      return;
     }
 
-    // ── 1. Total mix before cooking ───────────────────
-    const totalMix      = khoa + sugar + addQty;
+    const khoa = parseFloat(khoaQty);
+    const sugar = parseFloat(sugarAdded);
+    const totalMix = khoa + sugar;
 
-    // ── 2. Moisture Loss ──────────────────────────────
-    // Moisture evaporates from the mix during cooking/roasting
-    const moistureKg    = totalMix * mlPct;
+    const moistureLoss = totalMix * 0.06;
+    const yieldAmt = totalMix - moistureLoss;
+    const sugarPercentage = (sugar / yieldAmt) * 100;
 
-    // ── 3. Final Yield ────────────────────────────────
-    const yieldKg       = totalMix - moistureKg;
-    const yieldVsMixPct = (yieldKg / totalMix) * 100;
-    const yieldVsKhoaPct= (yieldKg / khoa) * 100;
-
-    // ── 4. Composition ────────────────────────────────
-    // TS contributions
-    const khoaTS_kg     = khoa  * khoaTS;
-    const sugarTS_kg    = sugar * 0.999;      // sugar ~99.9% TS
-    const addTS_kg      = addQty * addTS;
-    const totalTS_kg    = khoaTS_kg + sugarTS_kg + addTS_kg;
-    const finalTSPct    = (totalTS_kg / yieldKg) * 100;
-    const finalMoistPct = 100 - finalTSPct;
-
-    // Sugar % in final product
-    const sugarInProdPct= (sugarTS_kg / yieldKg) * 100;
-
-    // Fat in final product
-    const fatKg         = khoa * khoaFat;
-    const fatInProdPct  = (fatKg / yieldKg) * 100;
-
-    // ── 5. Packing ────────────────────────────────────
-    const packsPerBatch = Math.floor(yieldKg * 1000 / packSzG);
-    const packCostBatch = packsPerBatch * packCost;
-
-    // ── 6. Piece yield (avg 20g/piece for pedha) ──────
-    const piecesPerBatch= Math.floor(yieldKg * 1000 / 20);
-
-    // ── 7. Batch totals ───────────────────────────────
-    const yieldTotal    = yieldKg     * bat;
-    const packsTotal    = packsPerBatch * bat;
-    const packCostTotal = packCostBatch * bat;
-
-    // ── 8. Economics ─────────────────────────────────
-    const khoaCost      = khoa  * bat * khoaPr;
-    const sugarCost     = sugar * bat * sugarPr;
-    const totalInputCost= khoaCost + sugarCost + packCostTotal;
-    const revenue       = yieldTotal * sweetPr;
-    const grossProfit   = revenue - totalInputCost;
-    const gpm           = totalInputCost > 0 ? (grossProfit / totalInputCost) * 100 : 0;
-    const costPerKg     = totalInputCost / yieldTotal;
-    const revenuePerKgKhoa = revenue / (khoa * bat);
-
-    // Monthly
-    const monthlyYield  = yieldKg * days;
-    const monthlyRev    = monthlyYield * sweetPr;
-    const monthlyCost   = (khoa * khoaPr + sugar * sugarPr) * days + packCostBatch * days;
-
-    // ── 9. Sensitivity ────────────────────────────────
-    // +1% sugar ratio → TS impact
-    const dTS_dSugar    = 0.999 / yieldKg * 10; // 1 kg more sugar → TS change
-
-    // ── 10. Warnings ─────────────────────────────────
     const warnings: string[] = [];
     let confidence: "high" | "medium" | "low" = "high";
 
-    if (sugarInProdPct < sType.sugarRatioMin) warnings.push(`Sugar ${sugarInProdPct.toFixed(1)}% below minimum (${sType.sugarRatioMin}%) for ${sType.label} — add more sugar.`);
-    if (sugarInProdPct > sType.sugarRatioMax) warnings.push(`Sugar ${sugarInProdPct.toFixed(1)}% above maximum (${sType.sugarRatioMax}%) — product too sweet, risk of graining.`);
-    if (finalTSPct < 88)  warnings.push(`Final TS ${finalTSPct.toFixed(1)}% < 88% — shelf life may be <${sType.shelfDays} days. Cook longer.`);
-    if (finalMoistPct > 14) warnings.push(`Moisture ${finalMoistPct.toFixed(1)}% > 14% — microbial risk. Extend cooking time.`);
-    if (fatInProdPct < 15)  { confidence = "medium"; warnings.push(`Fat ${fatInProdPct.toFixed(1)}% is low — use richer khoa for better mouthfeel.`); }
+    if (sugarPercentage < 25 || sugarPercentage > 35) {
+      warnings.push("Sugar content outside typical range (25-35%).");
+    }
 
     setResult({
-      totalMix, moistureKg, yieldKg, yieldVsMixPct, yieldVsKhoaPct,
-      khoaTS_kg, sugarTS_kg, addTS_kg, totalTS_kg,
-      finalTSPct, finalMoistPct, sugarInProdPct, fatInProdPct,
-      packsPerBatch, packCostBatch, piecesPerBatch,
-      yieldTotal, packsTotal, packCostTotal,
-      khoaCost, sugarCost, totalInputCost,
-      revenue, grossProfit, gpm, costPerKg, revenuePerKgKhoa,
-      monthlyYield, monthlyRev, monthlyCost,
-      dTS_dSugar,
-      warnings, confidence,
-      khoa, bat, days,
+      value: yieldAmt,
+      unit: "kg",
+      confidence,
+      warnings,
+      metadata: {
+        moistureLoss: moistureLoss.toFixed(3),
+        sugarPercentage: sugarPercentage.toFixed(2),
+        yieldPercentage: ((yieldAmt / totalMix) * 100).toFixed(2),
+      },
     });
 
     toast({
-      title: "✅ Calculated",
-      description: `${sType.label}: ${yieldKg.toFixed(1)} kg | TS: ${finalTSPct.toFixed(1)}% | GPM: ${gpm.toFixed(1)}%`,
+      title: "Calculation Complete",
+      description: `Pedha/Burfi yield: ${yieldAmt.toFixed(3)} kg`,
     });
-  }, [inp, sweetType, khoaType, additive, toast]);
+  }, [khoaQty, sugarAdded, validatePositive, toast]);
 
-  const sType = SWEET_TYPE_DB[sweetType];
-  const kType = KHOA_INPUT_DB[khoaType];
-
-  // ── RENDER ────────────────────────────────────────────
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 sm:space-y-6">
+      <Alert className="bg-pink-50 border-pink-200">
+        <PaneerIcon className="h-4 w-4 text-pink-600" />
+        <AlertTitle className="text-sm sm:text-base">
+          Pedha / Burfi Yield Calculator
+        </AlertTitle>
+        <AlertDescription className="text-xs sm:text-sm">
+          Calculate traditional sweets yield with moisture loss factor
+        </AlertDescription>
+      </Alert>
 
-      {/* ── SWEET TYPE ───────────────────────────────── */}
-      <div className="space-y-1">
-        <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Sweet Type</Label>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-          {(Object.keys(SWEET_TYPE_DB) as SweetKey[]).map(key => (
-            <button key={key} onClick={() => applySweet(key)}
-              className={`p-2 rounded-lg border text-xs font-semibold transition-all text-left leading-tight shadow-sm
-                ${sweetType === key
-                  ? "bg-pink-600 text-white border-pink-600 shadow-md"
-                  : "bg-white text-slate-600 border-slate-200 hover:border-pink-300"
-                }`}>
-              {SWEET_TYPE_DB[key].label}
-              <div className={`text-[9px] mt-0.5 ${sweetType === key ? "opacity-80" : "text-slate-400"}`}>
-                Moist loss: {SWEET_TYPE_DB[key].moistureLoss}% · Shelf: {SWEET_TYPE_DB[key].shelfDays}d
-              </div>
-            </button>
-          ))}
-        </div>
-        <p className="text-[10px] text-pink-700 bg-pink-50 px-2 py-1 rounded border border-pink-100">
-          📌 {sType.note} · Texture: {sType.texture} · Cook time: {sType.cookTime}
-        </p>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+        <ValidatedInput
+          label="Khoa Quantity"
+          value={khoaQty}
+          onChange={setKhoaQty}
+          validation={validatePositive(khoaQty)}
+          unit="kg"
+          icon={<Weight className="h-4 w-4 text-orange-500" />}
+          colorScheme="orange"
+        />
+        <ValidatedInput
+          label="Sugar Added"
+          value={sugarAdded}
+          onChange={setSugarAdded}
+          validation={validatePositive(sugarAdded)}
+          unit="kg"
+          icon={<Target className="h-4 w-4 text-pink-500" />}
+          helpText="Typical: 25-35% of khoa"
+          colorScheme="pink"
+        />
       </div>
 
-      {/* ── KHOA TYPE ────────────────────────────────── */}
-      <div className="space-y-1">
-        <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Khoa Type</Label>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-          {(Object.keys(KHOA_INPUT_DB) as KhoaInputKey[]).map(key => (
-            <button key={key} onClick={() => applyKhoa(key)}
-              className={`p-2 rounded-lg border text-xs font-semibold transition-all text-left leading-tight shadow-sm
-                ${khoaType === key
-                  ? "bg-orange-600 text-white border-orange-600 shadow-md"
-                  : "bg-white text-slate-600 border-slate-200 hover:border-orange-300"
-                }`}>
-              {KHOA_INPUT_DB[key].label}
-              <div className={`text-[9px] mt-0.5 ${khoaType === key ? "opacity-80" : "text-slate-400"}`}>
-                TS: {KHOA_INPUT_DB[key].ts}% · Fat: {KHOA_INPUT_DB[key].fat}%
-              </div>
-            </button>
-          ))}
-        </div>
-        <p className="text-[10px] text-orange-700 bg-orange-50 px-2 py-1 rounded border border-orange-100">
-          📌 {kType.note}
-        </p>
-      </div>
-
-      {/* ── ADDITIVE ─────────────────────────────────── */}
-      <div className="space-y-1">
-        <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Extra Additive</Label>
-        <div className="flex flex-wrap gap-2">
-          {(Object.keys(ADDITIVES_DB) as AdditiveKey[]).map(key => (
-            <button key={key} onClick={() => setAdditive(key)}
-              className={`px-3 py-1 rounded-full border text-xs font-semibold transition-all shadow-sm
-                ${additive === key
-                  ? "bg-rose-600 text-white border-rose-600"
-                  : "bg-white text-slate-600 border-slate-200 hover:border-rose-300"
-                }`}>
-              {ADDITIVES_DB[key].label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* ── PRESETS ──────────────────────────────────── */}
-      <div className="space-y-1">
-        <Label className="text-xs font-bold text-slate-500 uppercase">Batch Presets</Label>
-        <div className="flex flex-wrap gap-2">
-          {(Object.keys(PEDHA_PRESETS) as Array<keyof typeof PEDHA_PRESETS>).map(name => (
-            <button key={name} onClick={() => applyPreset(name)}
-              className="px-3 py-1 rounded-full border border-pink-200 bg-white text-xs font-semibold text-pink-700 hover:bg-pink-600 hover:text-white transition-all shadow-sm">
-              {name}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* ── INPUTS ───────────────────────────────────── */}
-      <Card className="border-pink-100 bg-white">
-        <CardHeader className="p-3 pb-2 bg-pink-50 border-b border-pink-100">
-          <CardTitle className="text-xs font-bold text-pink-700 uppercase">🍬 Recipe & Process Inputs</CardTitle>
-        </CardHeader>
-        <CardContent className="p-3 grid grid-cols-2 gap-3">
-          <ValidatedInput label="Khoa Quantity" value={inp.khoaQty} onChange={v => setF("khoaQty", v)} validation={validatePositive(inp.khoaQty, "Khoa")} unit="kg" colorScheme="orange" />
-          <ValidatedInput label="Batches" value={inp.batches} onChange={v => setF("batches", v)} validation={validatePositive(inp.batches, "Batches")} colorScheme="blue" />
-          <ValidatedInput label="Khoa TS %" value={inp.khoaTS} onChange={v => setF("khoaTS", v)} validation={validateNumber(inp.khoaTS, 55, 80, "Khoa TS")} unit="%" helpText={`${kType.label}: ${kType.ts}%`} colorScheme="orange" />
-          <ValidatedInput label="Khoa Fat %" value={inp.khoaFat} onChange={v => setF("khoaFat", v)} validation={validateNumber(inp.khoaFat, 10, 35, "Fat")} unit="%" colorScheme="orange" />
-          <ValidatedInput label="Sugar Added" value={inp.sugarAdded} onChange={v => setF("sugarAdded", v)} validation={validatePositive(inp.sugarAdded, "Sugar")} unit="kg" helpText={`${sType.sugarRatioMin}–${sType.sugarRatioMax}% of product`} colorScheme="pink" />
-          <ValidatedInput label="Additive Qty" value={inp.additiveQty} onChange={v => setF("additiveQty", v)} validation={{ isValid: true, severity: "info" }} unit="kg" helpText={ADDITIVES_DB[additive].label} colorScheme="rose" />
-          <ValidatedInput label="Moisture Loss %" value={inp.moistureLoss} onChange={v => setF("moistureLoss", v)} validation={validateNumber(inp.moistureLoss, 3, 20, "Moisture loss")} unit="%" helpText={`${sType.label}: ~${sType.moistureLoss}%`} colorScheme="red" />
-          <ValidatedInput label="Operating Days/Month" value={inp.operDays} onChange={v => setF("operDays", v)} validation={{ isValid: true, severity: "info" }} colorScheme="blue" />
-        </CardContent>
-      </Card>
-
-      {/* ── PRICING ──────────────────────────────────── */}
-      <Card className="border-green-100 bg-white">
-        <CardHeader className="p-3 pb-2 bg-green-50 border-b border-green-100">
-          <CardTitle className="text-xs font-bold text-green-700 uppercase">💰 Pricing & Packing</CardTitle>
-        </CardHeader>
-        <CardContent className="p-3 grid grid-cols-2 sm:grid-cols-3 gap-3">
-          <ValidatedInput label="Khoa Price"    value={inp.khoaPrice}  onChange={v => setF("khoaPrice", v)}  validation={{ isValid: true, severity: "info" }} unit="₹/kg" colorScheme="orange" />
-          <ValidatedInput label="Sugar Price"   value={inp.sugarPrice} onChange={v => setF("sugarPrice", v)} validation={{ isValid: true, severity: "info" }} unit="₹/kg" colorScheme="pink" />
-          <ValidatedInput label="Sweet Price"   value={inp.sweetPrice} onChange={v => setF("sweetPrice", v)} validation={{ isValid: true, severity: "info" }} unit="₹/kg" colorScheme="green" />
-          <ValidatedInput label="Pack Size"     value={inp.packSize}   onChange={v => setF("packSize", v)}   validation={{ isValid: true, severity: "info" }} unit="g/box" helpText="250g, 500g, 1kg" colorScheme="slate" />
-          <ValidatedInput label="Pack Cost"     value={inp.packCost}   onChange={v => setF("packCost", v)}   validation={{ isValid: true, severity: "info" }} unit="₹/box" colorScheme="slate" />
-        </CardContent>
-      </Card>
-
-      {/* ── CALCULATE ───────────────────────────────── */}
-      <Button onClick={calculate}
-        className="w-full h-11 bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-700 hover:to-rose-700 text-white font-bold shadow-md">
-        <Calculator className="mr-2 h-4 w-4" />
-        Calculate {sType.label} Yield
+      <Button
+        onClick={calculate}
+        className="w-full h-11 sm:h-12 text-sm sm:text-lg bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-700 hover:to-rose-700"
+        size="lg"
+      >
+        <Calculator className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+        Calculate Yield
       </Button>
 
-      {/* ── RESULTS ─────────────────────────────────── */}
       {result && (
-        <div className="space-y-3 animate-in fade-in">
-
-          {/* Main KPIs */}
-          <div className="grid grid-cols-3 gap-2">
-            {[
-              { label: "Sweet Yield",    value: result.yieldKg.toFixed(1),      unit: "kg/batch",  color: "bg-pink-600"   },
-              { label: "Final TS %",     value: result.finalTSPct.toFixed(1),   unit: "% w/w",     color: result.finalTSPct >= 88 ? "bg-green-600" : "bg-red-500" },
-              { label: "Packs",          value: result.packsPerBatch.toLocaleString("en-IN"), unit: `${inp.packSize}g`, color: "bg-rose-600" },
-            ].map((k, i) => (
-              <div key={i} className={`${k.color} text-white p-3 rounded-xl text-center shadow`}>
-                <div className="text-[9px] uppercase opacity-80 font-bold">{k.label}</div>
-                <div className="text-2xl font-black">{k.value}</div>
-                <div className="text-[9px] opacity-70">{k.unit}</div>
-              </div>
-            ))}
-          </div>
-
-          {/* Mass balance */}
-          <Card className="bg-pink-50 border-pink-200">
-            <CardHeader className="p-3 pb-1 border-b border-pink-100">
-              <CardTitle className="text-sm text-pink-800">⚖️ Mass Balance</CardTitle>
-            </CardHeader>
-            <CardContent className="p-3 space-y-2 text-sm">
-              {[
-                { label: "Total mix (before cooking)",   value: `${result.totalMix.toFixed(2)} kg`,     color: "" },
-                { label: "Moisture evaporated",          value: `${result.moistureKg.toFixed(2)} kg`,   color: "text-blue-600"   },
-                { label: "Final sweet yield",            value: `${result.yieldKg.toFixed(2)} kg`,      color: "text-pink-700 font-black text-base" },
-                { label: "Yield vs total mix",           value: `${result.yieldVsMixPct.toFixed(1)}%`,  color: "text-slate-700"  },
-                { label: "Yield vs khoa input",          value: `${result.yieldVsKhoaPct.toFixed(1)}%`, color: "text-slate-700"  },
-                { label: "Pieces (~20g each)",           value: `~${result.piecesPerBatch.toLocaleString("en-IN")} pcs`, color: "text-rose-700" },
-              ].map((r, i) => (
-                <div key={i} className="flex justify-between">
-                  <span className="text-slate-500">{r.label}</span>
-                  <span className={`font-bold ${r.color}`}>{r.value}</span>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-
-          {/* Composition + shelf life */}
-          <div className="grid grid-cols-2 gap-3">
-            <Card className="bg-white border-orange-100">
-              <CardContent className="p-3 space-y-1 text-xs">
-                <div className="font-bold text-orange-700 mb-1 text-sm">🍬 Composition</div>
-                {[
-                  { label: "Total Solids",   value: `${result.finalTSPct.toFixed(1)}%`,     warn: result.finalTSPct < 88  },
-                  { label: "Moisture",       value: `${result.finalMoistPct.toFixed(1)}%`,  warn: result.finalMoistPct > 14 },
-                  { label: "Sugar in prod.", value: `${result.sugarInProdPct.toFixed(1)}%`,
-                    warn: result.sugarInProdPct < sType.sugarRatioMin || result.sugarInProdPct > sType.sugarRatioMax },
-                  { label: "Fat in prod.",   value: `${result.fatInProdPct.toFixed(1)}%`,   warn: result.fatInProdPct < 15 },
-                ].map((r, i) => (
-                  <div key={i} className="flex justify-between">
-                    <span className="text-slate-500">{r.label}</span>
-                    <span className={`font-bold ${r.warn ? "text-red-600" : "text-slate-700"}`}>{r.value}</span>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-
-            <Card className="bg-rose-50 border-rose-100">
-              <CardContent className="p-3 space-y-1 text-xs">
-                <div className="font-bold text-rose-700 mb-1 text-sm">📋 Process Guide</div>
-                {[
-                  { label: "Cook time",      value: sType.cookTime     },
-                  { label: "Texture",        value: sType.texture      },
-                  { label: "Shelf life",     value: `${sType.shelfDays} days` },
-                  { label: "Sugar range",    value: `${sType.sugarRatioMin}–${sType.sugarRatioMax}%` },
-                ].map((r, i) => (
-                  <div key={i} className="flex justify-between">
-                    <span className="text-slate-500">{r.label}</span>
-                    <span className="font-bold">{r.value}</span>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Multi-batch */}
-          {result.bat > 1 && (
-            <Card className="bg-indigo-50 border-indigo-200">
-              <CardContent className="p-3 text-sm space-y-1">
-                <div className="font-bold text-indigo-700 mb-1">{result.bat} Batches Total</div>
-                {[
-                  { label: "Total sweet",   value: `${result.yieldTotal.toFixed(1)} kg`                     },
-                  { label: "Total packs",   value: result.packsTotal.toLocaleString("en-IN")                },
-                  { label: "Pack cost",     value: `₹${result.packCostTotal.toFixed(0)}`                    },
-                ].map((r, i) => (
-                  <div key={i} className="flex justify-between">
-                    <span className="text-slate-500">{r.label}</span>
-                    <span className="font-bold text-indigo-700">{r.value}</span>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Economics */}
-          <Card className="bg-gradient-to-br from-slate-800 to-slate-900 text-white border-none">
-            <CardContent className="p-3 space-y-2 text-sm">
-              <div className="text-xs text-slate-300 font-bold uppercase mb-1">💰 Economics ({result.bat} batch{result.bat > 1 ? "es" : ""})</div>
-              {[
-                { label: "Khoa cost",      value: `-₹ ${result.khoaCost.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,       color: "text-orange-400" },
-                { label: "Sugar cost",     value: `-₹ ${result.sugarCost.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,       color: "text-pink-400"   },
-                { label: "Packing cost",   value: `-₹ ${result.packCostTotal.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,   color: "text-yellow-400" },
-                { label: "Revenue",        value: `+₹ ${result.revenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,         color: "text-green-300"  },
-                { label: "Gross Profit",   value: `₹ ${result.grossProfit.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,      color: `${result.grossProfit >= 0 ? "text-green-300 font-black" : "text-red-400 font-black"}` },
-              ].map((r, i) => (
-                <div key={i} className={`flex justify-between ${i === 4 ? "border-t border-slate-700 pt-2" : ""}`}>
-                  <span className="text-slate-400">{r.label}</span>
-                  <span className={`font-bold ${r.color}`}>{r.value}</span>
-                </div>
-              ))}
-              <div className="grid grid-cols-3 gap-2 mt-2">
-                {[
-                  { label: "Gross Margin",        value: `${result.gpm.toFixed(1)}%`                           },
-                  { label: "Cost/kg sweet",        value: `₹${result.costPerKg.toFixed(2)}`                    },
-                  { label: "Revenue/kg khoa",      value: `₹${result.revenuePerKgKhoa.toFixed(2)}`             },
-                ].map((c, i) => (
-                  <div key={i} className="bg-slate-700 rounded p-2 text-center">
-                    <div className="text-[9px] text-slate-400 font-bold">{c.label}</div>
-                    <div className="font-black text-white text-sm">{c.value}</div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Monthly + Sensitivity */}
-          <div className="grid grid-cols-2 gap-3">
-            <Card className="bg-green-50 border-green-200">
-              <CardContent className="p-3 text-sm space-y-1">
-                <div className="font-bold text-green-700 text-sm mb-1">📅 Monthly ({result.days} days)</div>
-                {[
-                  { label: "Production",  value: `${result.monthlyYield.toFixed(0)} kg` },
-                  { label: "Revenue",     value: `₹${result.monthlyRev.toLocaleString("en-IN", { maximumFractionDigits: 0 })}` },
-                  { label: "Cost",        value: `₹${result.monthlyCost.toLocaleString("en-IN", { maximumFractionDigits: 0 })}` },
-                ].map((r, i) => (
-                  <div key={i} className="flex justify-between">
-                    <span className="text-slate-500">{r.label}</span>
-                    <span className="font-bold text-green-700">{r.value}</span>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-
-            <Card className="bg-rose-50 border-rose-200">
-              <CardContent className="p-3 text-sm space-y-1">
-                <div className="font-bold text-rose-700 text-sm mb-1">📈 Sensitivity</div>
-                <div className="text-xs text-slate-500">+1% moisture loss</div>
-                <div className="font-bold text-rose-700">−{(result.totalMix * 0.01).toFixed(2)} kg yield</div>
-                <div className="text-[10px] text-rose-600 mt-1">
-                  Control cook time carefully — over-cooking reduces yield
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Warnings */}
-          {result.warnings.length > 0 && (
-            <Alert className="bg-yellow-50 border-yellow-300">
-              <AlertTriangle className="h-4 w-4 text-yellow-600" />
-              <AlertTitle className="text-yellow-800 text-sm">Quality Alerts</AlertTitle>
-              <AlertDescription className="text-xs text-yellow-700 space-y-1">
-                {result.warnings.map((w: string, i: number) => <div key={i}>⚠️ {w}</div>)}
-              </AlertDescription>
-            </Alert>
-          )}
-
-          {/* Formula */}
-          <div className="bg-slate-50 border rounded-lg p-3 text-[10px] font-mono text-slate-400 space-y-1">
-            <div className="font-bold text-slate-600 text-xs mb-1">📐 Formula:</div>
-            <div>TotalMix = Khoa + Sugar + Extras = {result.khoa} + {inp.sugarAdded} + {inp.additiveQty} = {result.totalMix.toFixed(2)} kg</div>
-            <div>MoistureLoss = TotalMix × {inp.moistureLoss}% = {result.moistureKg.toFixed(2)} kg</div>
-            <div>YieldKg = TotalMix − MoistureLoss = {result.yieldKg.toFixed(2)} kg</div>
-            <div>FinalTS% = TotalTS_kg / YieldKg × 100 = {result.finalTSPct.toFixed(2)}%</div>
-          </div>
-
+        <div className="space-y-4 animate-in slide-in-from-bottom-4">
+          <ResultCard
+            title="Estimated Pedha/Burfi Yield"
+            value={result.value}
+            unit={result.unit}
+            confidence={result.confidence}
+            icon={<PaneerIcon className="h-5 w-5" />}
+            colorScheme="pink"
+            subtitle={`Moisture loss: ${result.metadata?.moistureLoss} kg | Sugar: ${result.metadata?.sugarPercentage}% | Yield: ${result.metadata?.yieldPercentage}%`}
+            warnings={result.warnings}
+          />
         </div>
       )}
     </div>
   );
 }
+
 // ==================== ENHANCED ICE CREAM CALCULATORS ====================
 function IceCreamCalculators() {
   const [activeCalc, setActiveCalc] = useState("mix-comp");
@@ -12951,133 +12149,159 @@ export const AdvancedBalancer = () => {
     </div>
   );
 };
-// ==================== BATCH SCALING & VERIFICATION CALCULATOR (UPGRADED) ====================
-// Drop-in replacement for BatchScalingCalc — same structure, extended ingredients & targets
+// ==================== BATCH SCALING & VERIFICATION CALCULATOR (UPGRADED v3) ====================
 
-// ── Ingredient Database ──────────────────────────────────────────────────────
-// fat, snf, sugar, ts = Total Solids — all in %
 const IC_INGREDIENT_DB = {
-  // Dairy Base
   "Milk (Full Fat 6%)":         { fat: 6.0,  snf: 9.0,  sugar: 0,    ts: 15.0 },
   "Milk (Toned 3%)":            { fat: 3.0,  snf: 8.5,  sugar: 0,    ts: 11.5 },
   "Milk (Buffalo 7%)":          { fat: 7.0,  snf: 9.2,  sugar: 0,    ts: 16.2 },
   "Water":                      { fat: 0,    snf: 0,    sugar: 0,    ts: 0    },
-  // Cream & Fat
   "Cream (40% fat)":            { fat: 40.0, snf: 5.4,  sugar: 0,    ts: 45.4 },
   "Cream (35% fat)":            { fat: 35.0, snf: 5.6,  sugar: 0,    ts: 40.6 },
   "Cream (25% fat)":            { fat: 25.0, snf: 6.5,  sugar: 0,    ts: 31.5 },
   "Veg Fat / Oil":              { fat: 99.5, snf: 0,    sugar: 0,    ts: 99.5 },
   "Coconut Oil":                { fat: 99.9, snf: 0,    sugar: 0,    ts: 99.9 },
   "Butter":                     { fat: 80.0, snf: 2.0,  sugar: 0,    ts: 82.0 },
-  // Milk Solids
   "SMP (Skim Milk Powder)":     { fat: 0.5,  snf: 97.0, sugar: 0,    ts: 97.5 },
   "WMP (Whole Milk Powder)":    { fat: 26.0, snf: 68.0, sugar: 0,    ts: 94.0 },
   "Condensed Milk (Sweet)":     { fat: 8.5,  snf: 20.5, sugar: 44.5, ts: 73.5 },
-  // Sweeteners
   "Sucrose":                    { fat: 0,    snf: 0,    sugar: 100,  ts: 100  },
   "Dextrose (DE 100)":          { fat: 0,    snf: 0,    sugar: 91.0, ts: 91.0 },
   "Maltodextrin (DE 18)":       { fat: 0,    snf: 0,    sugar: 10.0, ts: 95.0 },
   "Invert Sugar (syrup)":       { fat: 0,    snf: 0,    sugar: 70.0, ts: 75.0 },
   "Honey":                      { fat: 0.3,  snf: 0,    sugar: 80.0, ts: 82.0 },
   "Karo Light Corn Syrup":      { fat: 0,    snf: 0,    sugar: 75.0, ts: 80.0 },
-  // Eggs
   "Egg Yolks (fresh)":          { fat: 31.9, snf: 0,    sugar: 0,    ts: 51.0 },
   "Egg Whites (fresh)":         { fat: 0.2,  snf: 0,    sugar: 0,    ts: 12.0 },
-  // Fruits
   "Fruit 1 (Custom)":           { fat: 0,    snf: 0,    sugar: 12.0, ts: 14.0 },
   "Fruit 2 (Custom)":           { fat: 0,    snf: 0,    sugar: 12.0, ts: 14.0 },
   "Mango Pulp":                 { fat: 0.4,  snf: 0,    sugar: 14.0, ts: 17.0 },
   "Strawberry Puree":           { fat: 0.3,  snf: 0,    sugar: 7.0,  ts: 9.0  },
-  // Flavor
   "Cocoa Powder (10-12% fat)":  { fat: 11.0, snf: 0,    sugar: 0,    ts: 97.0 },
   "Dark Chocolate (70%)":       { fat: 42.0, snf: 0,    sugar: 28.0, ts: 97.0 },
-  // Stabilizers
   "Stabilizer Blend":           { fat: 0,    snf: 0,    sugar: 0,    ts: 95.0 },
   "Emulsifier (GMS)":           { fat: 0,    snf: 0,    sugar: 0,    ts: 98.0 },
-  // Custom
   "Other (Custom)":             { fat: 0,    snf: 0,    sugar: 0,    ts: 0    },
 };
 
 const IC_CATEGORIES = {
-  "🥛 Dairy Base":     ["Milk (Full Fat 6%)", "Milk (Toned 3%)", "Milk (Buffalo 7%)", "Water"],
-  "🧴 Cream & Fat":   ["Cream (40% fat)", "Cream (35% fat)", "Cream (25% fat)", "Veg Fat / Oil", "Coconut Oil", "Butter"],
-  "🥛 Milk Solids":   ["SMP (Skim Milk Powder)", "WMP (Whole Milk Powder)", "Condensed Milk (Sweet)"],
-  "🍬 Sweeteners":    ["Sucrose", "Dextrose (DE 100)", "Maltodextrin (DE 18)", "Invert Sugar (syrup)", "Honey", "Karo Light Corn Syrup"],
-  "🥚 Eggs":          ["Egg Yolks (fresh)", "Egg Whites (fresh)"],
-  "🍓 Fruits":        ["Fruit 1 (Custom)", "Fruit 2 (Custom)", "Mango Pulp", "Strawberry Puree"],
-  "🍫 Flavor":        ["Cocoa Powder (10-12% fat)", "Dark Chocolate (70%)"],
-  "⚗️ Stabilizers":  ["Stabilizer Blend", "Emulsifier (GMS)"],
-  "✏️ Custom":        ["Other (Custom)"],
+  "🥛 Dairy Base":    ["Milk (Full Fat 6%)", "Milk (Toned 3%)", "Milk (Buffalo 7%)", "Water"],
+  "🧴 Cream & Fat":  ["Cream (40% fat)", "Cream (35% fat)", "Cream (25% fat)", "Veg Fat / Oil", "Coconut Oil", "Butter"],
+  "🥛 Milk Solids":  ["SMP (Skim Milk Powder)", "WMP (Whole Milk Powder)", "Condensed Milk (Sweet)"],
+  "🍬 Sweeteners":   ["Sucrose", "Dextrose (DE 100)", "Maltodextrin (DE 18)", "Invert Sugar (syrup)", "Honey", "Karo Light Corn Syrup"],
+  "🥚 Eggs":         ["Egg Yolks (fresh)", "Egg Whites (fresh)"],
+  "🍓 Fruits":       ["Fruit 1 (Custom)", "Fruit 2 (Custom)", "Mango Pulp", "Strawberry Puree"],
+  "🍫 Flavor":       ["Cocoa Powder (10-12% fat)", "Dark Chocolate (70%)"],
+  "⚗️ Stabilizers": ["Stabilizer Blend", "Emulsifier (GMS)"],
+  "✏️ Custom":       ["Other (Custom)"],
 };
 
-// ─────────────────────────────────────────────────────────────────────────────
-// NOTE FOR INTEGRATION:
-//  This file exports a single function component: BatchScalingCalc
-//  Replace the existing BatchScalingCalc in your codebase with this one.
-//  All existing imports (useToast, UI components, icons) remain the same.
+// Optional target ingredients that user can add on demand
+const OPTIONAL_TARGET_OPTIONS = [
+  { key: "dextrose",     label: "Dextrose" },
+  { key: "maltodextrin", label: "Maltodextrin" },
+  { key: "invertSugar",  label: "Invert Sugar" },
+  { key: "honey",        label: "Honey" },
+  { key: "cornSyrup",    label: "Karo Corn Syrup" },
+  { key: "cocoa",        label: "Cocoa Powder" },
+  { key: "chocolate",    label: "Dark Chocolate" },
+  { key: "eggYolk",      label: "Egg Yolks" },
+  { key: "eggWhite",     label: "Egg Whites" },
+  { key: "mango",        label: "Mango Pulp" },
+  { key: "strawberry",   label: "Strawberry Puree" },
+  { key: "fruit1",       label: "Fruit 1 (Custom)" },
+  { key: "fruit2",       label: "Fruit 2 (Custom)" },
+  { key: "condensed",    label: "Condensed Milk" },
+  { key: "emulsifier",   label: "Emulsifier (GMS)" },
+];
+
+// Map optional key → DB ingredient name for fat/snf lookup
+const OPTIONAL_KEY_TO_DB = {
+  dextrose:     "Dextrose (DE 100)",
+  maltodextrin: "Maltodextrin (DE 18)",
+  invertSugar:  "Invert Sugar (syrup)",
+  honey:        "Honey",
+  cornSyrup:    "Karo Light Corn Syrup",
+  cocoa:        "Cocoa Powder (10-12% fat)",
+  chocolate:    "Dark Chocolate (70%)",
+  eggYolk:      "Egg Yolks (fresh)",
+  eggWhite:     "Egg Whites (fresh)",
+  mango:        "Mango Pulp",
+  strawberry:   "Strawberry Puree",
+  fruit1:       "Fruit 1 (Custom)",
+  fruit2:       "Fruit 2 (Custom)",
+  condensed:    "Condensed Milk (Sweet)",
+  emulsifier:   "Emulsifier (GMS)",
+};
+
+// Source ingredient dropdown options (for extra source rows)
+const EXTRA_SOURCE_OPTIONS = [
+  "Condensed Milk (Sweet)", "WMP (Whole Milk Powder)", "Butter",
+  "Coconut Oil", "Egg Yolks (fresh)", "Egg Whites (fresh)",
+  "Mango Pulp", "Strawberry Puree", "Fruit 1 (Custom)", "Fruit 2 (Custom)",
+  "Cocoa Powder (10-12% fat)", "Dark Chocolate (70%)",
+  "Stabilizer Blend", "Emulsifier (GMS)", "Other (Custom)",
+];
+
 // ─────────────────────────────────────────────────────────────────────────────
 
 function BatchScalingCalc() {
   const { toast } = useToast();
 
-  // ── Tabs ──
   const [activeTab, setActiveTab] = useState("solver");
   const [productType, setProductType] = useState("ice-cream");
+  const [batchSize, setBatchSize] = useState("100");
 
-  // ── Solver: Target Composition ──
-  // Extended: fat, snf, sugar, stabilizer, dextrose, maltodextrin, invertSugar, cocoa, eggYolk, fruit1, fruit2
-  const [targetComposition, setTargetComposition] = useState({
-    fat:          "10",
-    snf:          "11",
-    sugar:        "14.5",
-    stabilizer:   "0.3",
-    dextrose:     "0",
-    maltodextrin: "0",
-    invertSugar:  "0",
-    cocoa:        "0",
-    eggYolk:      "0",
-    fruit1:       "0",
-    fruit2:       "0",
+  // Core target (always visible)
+  const [coreTarget, setCoreTarget] = useState({
+    fat:        "10",
+    snf:        "11",
+    sugar:      "14.5",
+    stabilizer: "0.3",
   });
 
-  // ── Solver: Raw Materials (3-variable system stays same) ──
+  // Optional target ingredients added by user: [{ key, label, value }]
+  const [optionalTargets, setOptionalTargets] = useState([]);
+
+  // Raw materials — 3 solver variables
   const [rawMaterials, setRawMaterials] = useState({
     base:      { name: "Milk (Full Fat 6%)",     fat: "6.0",  snf: "9.0" },
     fatSource: { name: "Cream (40% fat)",        fat: "40",   snf: "5.4" },
     smp:       { name: "SMP (Skim Milk Powder)", fat: "0.5",  snf: "97"  },
   });
 
-  const [solverResult, setSolverResult]       = useState(null);
+  // Extra source ingredients added by user: [{ id, name, fat, snf, amount }]
+  const [extraSources, setExtraSources] = useState([]);
+
+  const [solverResult, setSolverResult]           = useState(null);
   const [verificationSteps, setVerificationSteps] = useState([]);
 
-  // ── Manual Scaling rows ──
+  // Manual tab rows
   const [manualRows, setManualRows] = useState([
-    { id: 1, name: "Milk (Full Fat 6%)", amount: "55", unit: "kg" },
+    { id: 1, name: "Milk (Full Fat 6%)", amount: "55" },
   ]);
 
-  // ─── Helpers ───────────────────────────────────────────────────────────────
+  // ── Optional target dropdown state ──
+  const [showOptionalDropdown, setShowOptionalDropdown] = useState(false);
+  const [showExtraSourceDropdown, setShowExtraSourceDropdown] = useState(false);
 
-  // Update a raw-material field
+  // ── Helpers ───────────────────────────────────────────────────────────────
+
   const setRM = (key, field, value) =>
     setRawMaterials(prev => ({ ...prev, [key]: { ...prev[key], [field]: value } }));
 
-  // When user picks a new ingredient from dropdown → auto-fill fat/snf
   const handleRMSelect = (key, selectedName) => {
     const db = IC_INGREDIENT_DB[selectedName] || {};
     setRawMaterials(prev => ({
       ...prev,
-      [key]: {
-        name:    selectedName,
-        fat:     String(db.fat  ?? prev[key].fat),
-        snf:     String(db.snf  ?? prev[key].snf),
-      },
+      [key]: { name: selectedName, fat: String(db.fat ?? prev[key].fat), snf: String(db.snf ?? prev[key].snf) },
     }));
   };
 
-  // Product type switch
   const handleProductTypeChange = (type) => {
     setProductType(type);
     setSolverResult(null);
+    setExtraSources([]);
     if (type === "ice-cream") {
       setRawMaterials({
         base:      { name: "Milk (Full Fat 6%)",     fat: "6.0",  snf: "9.0" },
@@ -13086,140 +12310,50 @@ function BatchScalingCalc() {
       });
     } else {
       setRawMaterials({
-        base:      { name: "Water",        fat: "0",    snf: "0"  },
-        fatSource: { name: "Veg Fat / Oil",fat: "99.5", snf: "0"  },
-        smp:       { name: "SMP (Skim Milk Powder)", fat: "0.5", snf: "97" },
+        base:      { name: "Water",                  fat: "0",    snf: "0"   },
+        fatSource: { name: "Veg Fat / Oil",          fat: "99.5", snf: "0"   },
+        smp:       { name: "SMP (Skim Milk Powder)", fat: "0.5",  snf: "97"  },
       });
     }
   };
 
-  // ─── Batch Size ────────────────────────────────────────────────────────────
-  const [batchSize, setBatchSize] = useState("100");
-
-  // ─── SOLVER LOGIC ──────────────────────────────────────────────────────────
-  // Extended targets: fixed ingredients first, then solve 3-variable system
-  const solveIceCreamMix = useCallback(() => {
-    const size = parseFloat(batchSize);
-
-    const T_Fat   = parseFloat(targetComposition.fat)          || 0;
-    const T_Snf   = parseFloat(targetComposition.snf)          || 0;
-    const T_Sugar = parseFloat(targetComposition.sugar)        || 0;
-    const T_Stab  = parseFloat(targetComposition.stabilizer)   || 0;
-    const T_Dex   = parseFloat(targetComposition.dextrose)     || 0;
-    const T_Malt  = parseFloat(targetComposition.maltodextrin) || 0;
-    const T_Inv   = parseFloat(targetComposition.invertSugar)  || 0;
-    const T_Cocoa = parseFloat(targetComposition.cocoa)        || 0;
-    const T_EggY  = parseFloat(targetComposition.eggYolk)      || 0;
-    const T_Fr1   = parseFloat(targetComposition.fruit1)       || 0;
-    const T_Fr2   = parseFloat(targetComposition.fruit2)       || 0;
-
-    const M_f = parseFloat(rawMaterials.base.fat)      / 100;
-    const M_s = parseFloat(rawMaterials.base.snf)      / 100;
-    const C_f = parseFloat(rawMaterials.fatSource.fat) / 100;
-    const C_s = parseFloat(rawMaterials.fatSource.snf) / 100;
-    const S_f = parseFloat(rawMaterials.smp.fat)       / 100;
-    const S_s = parseFloat(rawMaterials.smp.snf)       / 100;
-
-    if ([size, M_f, M_s, C_f, C_s, S_f, S_s].some(isNaN) || size <= 0) {
-      toast({ variant: "destructive", title: "Error", description: "Please fill all fields correctly." });
-      return;
-    }
-
-    // Fixed quantities (all the extra ingredients)
-    const fixedIngredients = [
-      { name: "Sucrose / Sugar",      qty: (T_Sugar / 100) * size,   db: IC_INGREDIENT_DB["Sucrose"] },
-      { name: "Stabilizer",           qty: (T_Stab  / 100) * size,   db: IC_INGREDIENT_DB["Stabilizer Blend"] },
-      { name: "Dextrose",             qty: (T_Dex   / 100) * size,   db: IC_INGREDIENT_DB["Dextrose (DE 100)"] },
-      { name: "Maltodextrin",         qty: (T_Malt  / 100) * size,   db: IC_INGREDIENT_DB["Maltodextrin (DE 18)"] },
-      { name: "Invert Sugar",         qty: (T_Inv   / 100) * size,   db: IC_INGREDIENT_DB["Invert Sugar (syrup)"] },
-      { name: "Cocoa Powder",         qty: (T_Cocoa / 100) * size,   db: IC_INGREDIENT_DB["Cocoa Powder (10-12% fat)"] },
-      { name: "Egg Yolks",            qty: (T_EggY  / 100) * size,   db: IC_INGREDIENT_DB["Egg Yolks (fresh)"] },
-      { name: "Fruit 1",              qty: (T_Fr1   / 100) * size,   db: IC_INGREDIENT_DB["Fruit 1 (Custom)"] },
-      { name: "Fruit 2",              qty: (T_Fr2   / 100) * size,   db: IC_INGREDIENT_DB["Fruit 2 (Custom)"] },
-    ].filter(i => i.qty > 0);
-
-    // Sum up what fixed ingredients contribute to fat & snf
-    let fixedTotal = 0, fixedFat = 0, fixedSnf = 0;
-    fixedIngredients.forEach(({ qty, db }) => {
-      fixedTotal += qty;
-      fixedFat   += qty * ((db?.fat ?? 0) / 100);
-      fixedSnf   += qty * ((db?.snf ?? 0) / 100);
-    });
-
-    const totalDairyMass  = size         - fixedTotal;
-    const totalFatNeeded  = (T_Fat / 100) * size - fixedFat;
-    const totalSnfNeeded  = (T_Snf / 100) * size - fixedSnf;
-
-    if (totalDairyMass <= 0) {
-      toast({ variant: "destructive", title: "Error", description: "Fixed ingredients exceed batch size. Reduce percentages." });
-      return;
-    }
-
-    // Cramer's Rule — solve for base (x), fatSource (y), smp (z)
-    const a1 = 1,   b1 = 1,   c1 = 1,   d1 = totalDairyMass;
-    const a2 = M_f, b2 = C_f, c2 = S_f, d2 = totalFatNeeded;
-    const a3 = M_s, b3 = C_s, c3 = S_s, d3 = totalSnfNeeded;
-
-    const D = a1*(b2*c3 - c2*b3) - b1*(a2*c3 - c2*a3) + c1*(a2*b3 - b2*a3);
-
-    if (Math.abs(D) < 1e-8) {
-      toast({ variant: "destructive", title: "Math Error", description: "Impossible ingredient combination. Change inputs." });
-      return;
-    }
-
-    const baseQty      = (d1*(b2*c3 - c2*b3) - b1*(d2*c3 - c2*d3) + c1*(d2*b3 - b2*d3)) / D;
-    const fatSourceQty = (a1*(d2*c3 - c2*d3) - d1*(a2*c3 - c2*a3) + c1*(a2*d3 - d2*a3)) / D;
-    const smpQty       = (a1*(b2*d3 - d2*b3) - b1*(a2*d3 - d2*a3) + d1*(a2*b3 - b2*a3)) / D;
-
-    const steps = [];
-    steps.push(`🎯 **Target Batch:** ${size} kg (${productType === "ice-cream" ? "Ice Cream" : "Frozen Dessert"})`);
-    fixedIngredients.forEach(({ name, qty }) =>
-      steps.push(`🔹 **${name}:** ${qty.toFixed(2)} kg`)
-    );
-    steps.push(`🔹 **Fixed Total:** ${fixedTotal.toFixed(2)} kg`);
-    steps.push(`🔹 **Dairy / Base Mix Required:** ${totalDairyMass.toFixed(2)} kg`);
-    steps.push(`---`);
-
-    const hasNegative = baseQty < -0.01 || fatSourceQty < -0.01 || smpQty < -0.01;
-    if (hasNegative) {
-      steps.push(`⚠️ **WARNING:** Negative values — inputs are mathematically impossible.`);
-    } else {
-      steps.push(`✅ **Solution Found:**`);
-      steps.push(`${rawMaterials.base.name}: ${Math.max(0, baseQty).toFixed(2)} kg`);
-      steps.push(`${rawMaterials.fatSource.name}: ${Math.max(0, fatSourceQty).toFixed(2)} kg`);
-      steps.push(`${rawMaterials.smp.name}: ${Math.max(0, smpQty).toFixed(2)} kg`);
-    }
-
-    setVerificationSteps(steps);
-
-    const resultRows = [
-      { name: rawMaterials.base.name,      amount: Math.max(0, baseQty),      percent: (Math.max(0, baseQty)      / size) * 100 },
-      { name: rawMaterials.fatSource.name, amount: Math.max(0, fatSourceQty), percent: (Math.max(0, fatSourceQty) / size) * 100 },
-      { name: rawMaterials.smp.name,       amount: Math.max(0, smpQty),       percent: (Math.max(0, smpQty)       / size) * 100 },
-      ...fixedIngredients.map(({ name, qty }) => ({ name, amount: qty, percent: (qty / size) * 100 })),
-    ];
-
-    setSolverResult(resultRows);
-    toast({ title: "Calculated!", description: "Result updated below." });
-  }, [batchSize, targetComposition, rawMaterials, productType, toast]);
-
-  // ─── Manual Scaling Handlers ───────────────────────────────────────────────
-  const handleManualChange = (id, field, value) =>
-    setManualRows(prev => prev.map(r => r.id === id ? { ...r, [field]: value } : r));
-
-  const handleManualNameSelect = (id, name) => {
-    setManualRows(prev => prev.map(r => r.id === id ? { ...r, name } : r));
+  // Add optional target ingredient
+  const addOptionalTarget = (option) => {
+    if (optionalTargets.find(o => o.key === option.key)) return; // already added
+    setOptionalTargets(prev => [...prev, { ...option, value: "0" }]);
+    setShowOptionalDropdown(false);
   };
 
-  const addManualRow = () =>
-    setManualRows(prev => [...prev, { id: Date.now(), name: "Milk (Full Fat 6%)", amount: "", unit: "kg" }]);
+  const removeOptionalTarget = (key) =>
+    setOptionalTargets(prev => prev.filter(o => o.key !== key));
 
-  const removeManualRow = (id) => {
-    if (manualRows.length <= 1) return;
-    setManualRows(prev => prev.filter(r => r.id !== id));
+  const updateOptionalTarget = (key, value) =>
+    setOptionalTargets(prev => prev.map(o => o.key === key ? { ...o, value } : o));
+
+  // Add extra source ingredient
+  const addExtraSource = (name) => {
+    const db = IC_INGREDIENT_DB[name] || {};
+    setExtraSources(prev => [
+      ...prev,
+      { id: Date.now(), name, fat: String(db.fat ?? 0), snf: String(db.snf ?? 0) },
+    ]);
+    setShowExtraSourceDropdown(false);
   };
 
-  // ─── Ingredient Dropdown (shared) ─────────────────────────────────────────
+  const removeExtraSource = (id) =>
+    setExtraSources(prev => prev.filter(s => s.id !== id));
+
+  const updateExtraSource = (id, field, value) =>
+    setExtraSources(prev => prev.map(s => s.id === id ? { ...s, [field]: value } : s));
+
+  const handleExtraSourceSelect = (id, name) => {
+    const db = IC_INGREDIENT_DB[name] || {};
+    setExtraSources(prev => prev.map(s =>
+      s.id === id ? { ...s, name, fat: String(db.fat ?? 0), snf: String(db.snf ?? 0) } : s
+    ));
+  };
+
+  // ── Categorized ingredient select ─────────────────────────────────────────
   const IngredientSelect = ({ value, onChange, className = "" }) => (
     <select
       value={value}
@@ -13228,72 +12362,173 @@ function BatchScalingCalc() {
     >
       {Object.entries(IC_CATEGORIES).map(([cat, items]) => (
         <optgroup key={cat} label={cat}>
-          {items.map(item => (
-            <option key={item} value={item}>{item}</option>
-          ))}
+          {items.map(item => <option key={item} value={item}>{item}</option>)}
         </optgroup>
       ))}
     </select>
   );
 
-  // ─── Target field config ───────────────────────────────────────────────────
-  const targetFields = [
-    { key: "fat",          label: "Fat",             always: true },
-    { key: "snf",          label: "SNF",             always: true },
-    { key: "sugar",        label: "Sucrose / Sugar",  always: true },
-    { key: "stabilizer",   label: "Stabilizer",      always: true },
-    { key: "dextrose",     label: "Dextrose",        always: false },
-    { key: "maltodextrin", label: "Maltodextrin",    always: false },
-    { key: "invertSugar",  label: "Invert Sugar",    always: false },
-    { key: "cocoa",        label: "Cocoa Powder",    always: false },
-    { key: "eggYolk",      label: "Egg Yolks",       always: false },
-    { key: "fruit1",       label: "Fruit 1",         always: false },
-    { key: "fruit2",       label: "Fruit 2",         always: false },
-  ];
+  // ── SOLVER LOGIC ──────────────────────────────────────────────────────────
+  const solveIceCreamMix = useCallback(() => {
+    const size = parseFloat(batchSize);
+    if (!size || size <= 0) {
+      toast({ variant: "destructive", title: "Error", description: "Invalid batch size." });
+      return;
+    }
 
-  // Raw material row keys
+    const T_Fat   = parseFloat(coreTarget.fat)        || 0;
+    const T_Snf   = parseFloat(coreTarget.snf)        || 0;
+    const T_Sugar = parseFloat(coreTarget.sugar)      || 0;
+    const T_Stab  = parseFloat(coreTarget.stabilizer) || 0;
+
+    const M_f = (parseFloat(rawMaterials.base.fat)      || 0) / 100;
+    const M_s = (parseFloat(rawMaterials.base.snf)      || 0) / 100;
+    const C_f = (parseFloat(rawMaterials.fatSource.fat) || 0) / 100;
+    const C_s = (parseFloat(rawMaterials.fatSource.snf) || 0) / 100;
+    const S_f = (parseFloat(rawMaterials.smp.fat)       || 0) / 100;
+    const S_s = (parseFloat(rawMaterials.smp.snf)       || 0) / 100;
+
+    // Build fixed ingredient list from core (sugar, stabilizer) + optional targets
+    const fixedList = [
+      { name: "Sucrose / Sugar", qty: (T_Sugar / 100) * size, dbKey: "Sucrose" },
+      { name: "Stabilizer",      qty: (T_Stab  / 100) * size, dbKey: "Stabilizer Blend" },
+      ...optionalTargets.map(o => ({
+        name:  o.label,
+        qty:   ((parseFloat(o.value) || 0) / 100) * size,
+        dbKey: OPTIONAL_KEY_TO_DB[o.key] || "Other (Custom)",
+      })),
+    ].filter(i => i.qty > 0);
+
+    // Extra source ingredients (user-added, treated as known quantities — BUT we don't
+    // have their kg amounts in the solver tab; we include them by percentage if provided.
+    // For now extra sources are informational only — solver solves the 3-var system after
+    // accounting for fixed target ingredients.)
+
+    let fixedTotal = 0, fixedFat = 0, fixedSnf = 0;
+    fixedList.forEach(({ qty, dbKey }) => {
+      const db = IC_INGREDIENT_DB[dbKey] || {};
+      fixedTotal += qty;
+      fixedFat   += qty * ((db.fat ?? 0) / 100);
+      fixedSnf   += qty * ((db.snf ?? 0) / 100);
+    });
+
+    const totalDairyMass = size         - fixedTotal;
+    const totalFatNeeded = (T_Fat / 100) * size - fixedFat;
+    const totalSnfNeeded = (T_Snf / 100) * size - fixedSnf;
+
+    if (totalDairyMass <= 0) {
+      toast({ variant: "destructive", title: "Error", description: "Fixed ingredients exceed batch size. Reduce percentages." });
+      return;
+    }
+
+    // Cramer's Rule
+    const a1=1, b1=1, c1=1, d1=totalDairyMass;
+    const a2=M_f, b2=C_f, c2=S_f, d2=totalFatNeeded;
+    const a3=M_s, b3=C_s, c3=S_s, d3=totalSnfNeeded;
+
+    const D = a1*(b2*c3-c2*b3) - b1*(a2*c3-c2*a3) + c1*(a2*b3-b2*a3);
+    if (Math.abs(D) < 1e-8) {
+      toast({ variant: "destructive", title: "Math Error", description: "Impossible ingredient combination." });
+      return;
+    }
+
+    const baseQty      = (d1*(b2*c3-c2*b3) - b1*(d2*c3-c2*d3) + c1*(d2*b3-b2*d3)) / D;
+    const fatSourceQty = (a1*(d2*c3-c2*d3) - d1*(a2*c3-c2*a3) + c1*(a2*d3-d2*a3)) / D;
+    const smpQty       = (a1*(b2*d3-d2*b3) - b1*(a2*d3-d2*a3) + d1*(a2*b3-b2*a3)) / D;
+
+    // Verification steps
+    const steps = [];
+    steps.push(`🎯 **Target Batch:** ${size} kg (${productType === "ice-cream" ? "Ice Cream" : "Frozen Dessert"})`);
+    fixedList.forEach(({ name, qty }) => steps.push(`🔹 **${name}:** ${qty.toFixed(2)} kg`));
+    steps.push(`🔹 **Fixed Total:** ${fixedTotal.toFixed(2)} kg`);
+    steps.push(`🔹 **Dairy / Base Mix Required:** ${totalDairyMass.toFixed(2)} kg`);
+    steps.push(`---`);
+
+    const neg = baseQty < -0.01 || fatSourceQty < -0.01 || smpQty < -0.01;
+    if (neg) {
+      steps.push(`⚠️ **WARNING:** Negative values — inputs are mathematically impossible.`);
+    } else {
+      steps.push(`✅ **Solution Found:**`);
+      steps.push(`${rawMaterials.base.name}: ${Math.max(0, baseQty).toFixed(2)} kg`);
+      steps.push(`${rawMaterials.fatSource.name}: ${Math.max(0, fatSourceQty).toFixed(2)} kg`);
+      steps.push(`${rawMaterials.smp.name}: ${Math.max(0, smpQty).toFixed(2)} kg`);
+      extraSources.forEach(s => steps.push(`ℹ️ ${s.name}: user-defined (add % or kg manually)`));
+    }
+
+    setVerificationSteps(steps);
+    setSolverResult([
+      { name: rawMaterials.base.name,      amount: Math.max(0, baseQty),      percent: (Math.max(0, baseQty)      / size) * 100 },
+      { name: rawMaterials.fatSource.name, amount: Math.max(0, fatSourceQty), percent: (Math.max(0, fatSourceQty) / size) * 100 },
+      { name: rawMaterials.smp.name,       amount: Math.max(0, smpQty),       percent: (Math.max(0, smpQty)       / size) * 100 },
+      ...fixedList.map(({ name, qty }) => ({ name, amount: qty, percent: (qty / size) * 100 })),
+    ]);
+
+    toast({ title: "Calculated!", description: "Result updated below." });
+  }, [batchSize, coreTarget, optionalTargets, rawMaterials, extraSources, productType, toast]);
+
+  // ── Manual tab ────────────────────────────────────────────────────────────
+  const handleManualChange   = (id, field, value) => setManualRows(p => p.map(r => r.id === id ? { ...r, [field]: value } : r));
+  const handleManualSelect   = (id, name)         => setManualRows(p => p.map(r => r.id === id ? { ...r, name } : r));
+  const addManualRow         = ()                  => setManualRows(p => [...p, { id: Date.now(), name: "Milk (Full Fat 6%)", amount: "" }]);
+  const removeManualRow      = (id)                => { if (manualRows.length > 1) setManualRows(p => p.filter(r => r.id !== id)); };
+
+  // Already-added optional keys (to hide from dropdown)
+  const addedKeys = optionalTargets.map(o => o.key);
+  const availableOptions = OPTIONAL_TARGET_OPTIONS.filter(o => !addedKeys.includes(o.key));
+
+  // Already-added extra source names
+  const addedSourceNames = extraSources.map(s => s.name);
+  const availableExtraSources = EXTRA_SOURCE_OPTIONS.filter(n => !addedSourceNames.includes(n));
+
+  // Total fixed %
+  const fixedPct = [
+    parseFloat(coreTarget.fat) || 0,
+    parseFloat(coreTarget.snf) || 0,
+    parseFloat(coreTarget.sugar) || 0,
+    parseFloat(coreTarget.stabilizer) || 0,
+    ...optionalTargets.map(o => parseFloat(o.value) || 0),
+  ].reduce((a, b) => a + b, 0);
+
   const rmKeys = [
     { key: "base",      label: "Base" },
     { key: "fatSource", label: "Fat Src" },
     { key: "smp",       label: "Solids" },
   ];
 
-  // ─── Render ────────────────────────────────────────────────────────────────
+  // ── Render ────────────────────────────────────────────────────────────────
   return (
     <div className="w-full max-w-full space-y-4 p-1 sm:p-2 overflow-x-hidden">
       <Alert className="bg-indigo-50 border-indigo-200">
         <Beaker className="h-4 w-4 text-indigo-600" />
         <AlertTitle className="text-sm font-bold">Smart Batch Solver</AlertTitle>
         <AlertDescription className="text-xs">
-          Calculate recipes for Ice Cream (Milk) or Frozen Dessert (Water/Oil). Add extra ingredients like Dextrose, Fruit, Cocoa etc. in Target Composition.
+          Calculate recipes for Ice Cream or Frozen Dessert. Add extra ingredients as needed.
         </AlertDescription>
       </Alert>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-3 h-auto p-1 bg-muted/50">
-          <TabsTrigger value="solver"        className="text-xs sm:text-sm py-2">Solver</TabsTrigger>
-          <TabsTrigger value="verification"  className="text-xs sm:text-sm py-2">Verify</TabsTrigger>
-          <TabsTrigger value="simple-scaling"className="text-xs sm:text-sm py-2">Manual</TabsTrigger>
+          <TabsTrigger value="solver"         className="text-xs sm:text-sm py-2">Solver</TabsTrigger>
+          <TabsTrigger value="verification"   className="text-xs sm:text-sm py-2">Verify</TabsTrigger>
+          <TabsTrigger value="simple-scaling" className="text-xs sm:text-sm py-2">Manual</TabsTrigger>
         </TabsList>
 
-        {/* ══════════════════════════════════════════
+        {/* ═══════════════════════════════════════
             TAB 1 — SOLVER
-        ══════════════════════════════════════════ */}
+        ═══════════════════════════════════════ */}
         <TabsContent value="solver" className="space-y-4 animate-in fade-in-50">
 
           {/* Product Type Toggle */}
           <div className="flex justify-center">
             <div className="bg-slate-100 p-1 rounded-lg flex gap-1">
-              <Button
-                size="sm"
+              <Button size="sm"
                 variant={productType === "ice-cream" ? "default" : "ghost"}
                 className={productType === "ice-cream" ? "bg-indigo-600 text-white" : "text-slate-600"}
                 onClick={() => handleProductTypeChange("ice-cream")}
               >
                 <IceCream2 className="w-4 h-4 mr-2" /> Ice Cream
               </Button>
-              <Button
-                size="sm"
+              <Button size="sm"
                 variant={productType === "frozen-dessert" ? "default" : "ghost"}
                 className={productType === "frozen-dessert" ? "bg-indigo-600 text-white" : "text-slate-600"}
                 onClick={() => handleProductTypeChange("frozen-dessert")}
@@ -13305,70 +12540,115 @@ function BatchScalingCalc() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-            {/* ── Target Composition Card (EXTENDED) ── */}
+            {/* ─── Target Composition Card ─── */}
             <Card className="border-indigo-100 shadow-sm">
               <CardHeader className="pb-2 p-3 sm:p-6">
                 <CardTitle className="text-sm font-medium flex items-center gap-2 text-indigo-700">
                   <Settings2 className="w-4 h-4" /> Target Composition (%)
                 </CardTitle>
-                <CardDescription className="text-xs">Core ingredients always shown. Extra ingredients auto-add when &gt; 0.</CardDescription>
               </CardHeader>
               <CardContent className="p-3 sm:p-6 pt-0 space-y-3">
 
-                {/* Always-visible fields */}
+                {/* Core fields — always visible */}
                 <div className="grid grid-cols-2 gap-3">
-                  {targetFields.filter(f => f.always).map(f => (
+                  {[
+                    { key: "fat",        label: "Fat"       },
+                    { key: "snf",        label: "SNF"       },
+                    { key: "sugar",      label: "Sugar"     },
+                    { key: "stabilizer", label: "Stabilizer"},
+                  ].map(f => (
                     <div key={f.key}>
                       <Label className="text-xs text-muted-foreground">{f.label}</Label>
                       <Input
                         type="number" inputMode="decimal" className="h-9 text-sm"
-                        value={targetComposition[f.key]}
-                        onChange={e => setTargetComposition(prev => ({ ...prev, [f.key]: e.target.value }))}
+                        value={coreTarget[f.key]}
+                        onChange={e => setCoreTarget(prev => ({ ...prev, [f.key]: e.target.value }))}
                       />
                     </div>
                   ))}
                 </div>
 
-                {/* Extra / Optional fields */}
-                <div className="border-t border-dashed border-indigo-200 pt-3">
-                  <p className="text-[10px] font-bold uppercase text-indigo-500 mb-2 tracking-wider">Optional / Extra Ingredients (%)</p>
-                  <div className="grid grid-cols-2 gap-3">
-                    {targetFields.filter(f => !f.always).map(f => (
-                      <div key={f.key}>
-                        <Label className="text-xs text-muted-foreground">{f.label}</Label>
+                {/* Optional added ingredients */}
+                {optionalTargets.length > 0 && (
+                  <div className="space-y-2 pt-1 border-t border-dashed border-indigo-100">
+                    {optionalTargets.map(o => (
+                      <div key={o.key} className="flex items-center gap-2">
+                        <Label className="text-xs text-muted-foreground w-28 shrink-0">{o.label}</Label>
                         <Input
-                          type="number" inputMode="decimal" className="h-9 text-sm"
+                          type="number" inputMode="decimal"
+                          className="h-8 text-sm flex-1"
                           placeholder="0"
-                          value={targetComposition[f.key]}
-                          onChange={e => setTargetComposition(prev => ({ ...prev, [f.key]: e.target.value }))}
+                          value={o.value}
+                          onChange={e => updateOptionalTarget(o.key, e.target.value)}
                         />
+                        <button
+                          onClick={() => removeOptionalTarget(o.key)}
+                          className="text-red-400 hover:text-red-600 shrink-0"
+                          title="Remove"
+                        >
+                          <XCircle className="w-4 h-4" />
+                        </button>
                       </div>
                     ))}
                   </div>
+                )}
+
+                {/* + Add Ingredient dropdown for target */}
+                <div className="relative">
+                  <button
+                    onClick={() => setShowOptionalDropdown(p => !p)}
+                    className="w-full flex items-center justify-center gap-1 text-xs text-indigo-600 font-semibold border border-dashed border-indigo-300 rounded-md py-1.5 hover:bg-indigo-50 transition-colors"
+                  >
+                    <PlusCircle className="w-3.5 h-3.5" />
+                    Add Ingredient
+                  </button>
+
+                  {showOptionalDropdown && (
+                    <div className="absolute z-30 top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-lg shadow-xl overflow-hidden">
+                      {availableOptions.length === 0 ? (
+                        <div className="text-xs text-muted-foreground p-3 text-center">All ingredients added</div>
+                      ) : (
+                        <div className="max-h-52 overflow-y-auto divide-y divide-slate-50">
+                          {availableOptions.map(opt => (
+                            <button
+                              key={opt.key}
+                              onClick={() => addOptionalTarget(opt)}
+                              className="w-full text-left px-3 py-2 text-xs hover:bg-indigo-50 hover:text-indigo-700 transition-colors"
+                            >
+                              {opt.label}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                      <button
+                        onClick={() => setShowOptionalDropdown(false)}
+                        className="w-full text-xs text-muted-foreground py-1.5 bg-slate-50 hover:bg-slate-100 border-t"
+                      >
+                        Close ✕
+                      </button>
+                    </div>
+                  )}
                 </div>
 
-                {/* Live total % indicator */}
-                {(() => {
-                  const total = Object.values(targetComposition).reduce((s, v) => s + (parseFloat(v) || 0), 0);
-                  return (
-                    <div className={`text-xs font-semibold px-2 py-1 rounded ${total > 100 ? "bg-red-50 text-red-600" : "bg-slate-50 text-slate-500"}`}>
-                      Fixed % Total: {total.toFixed(1)}% {total > 100 && "⚠️ Exceeds 100%"}
-                    </div>
-                  );
-                })()}
+                {/* Live % total */}
+                <div className={`text-xs font-semibold px-2 py-1 rounded ${fixedPct > 100 ? "bg-red-50 text-red-600" : "bg-slate-50 text-slate-500"}`}>
+                  Fixed % Total: {fixedPct.toFixed(1)}% {fixedPct > 100 && "⚠️ Exceeds 100%"}
+                </div>
               </CardContent>
             </Card>
 
-            {/* ── Source Specs Card (with Dropdown) ── */}
+            {/* ─── Source Specs Card ─── */}
             <Card className="border-indigo-100 shadow-sm">
               <CardHeader className="pb-2 p-3 sm:p-6">
                 <CardTitle className="text-sm font-medium flex items-center gap-2 text-indigo-700">
                   <Beaker className="w-4 h-4" />
                   {productType === "ice-cream" ? "Dairy Inputs (%)" : "FD Ingredients (%)"}
                 </CardTitle>
-                <CardDescription className="text-xs">Select ingredient from dropdown — Fat% & SNF% auto-fill. Edit manually if needed.</CardDescription>
+                <CardDescription className="text-xs">Dropdown se select karen — Fat% & SNF% auto-fill honge.</CardDescription>
               </CardHeader>
               <CardContent className="p-3 sm:p-6 pt-0 space-y-4">
+
+                {/* 3 solver variables */}
                 {rmKeys.map(({ key, label }) => (
                   <div key={key} className="space-y-1">
                     <Label className="text-[10px] uppercase font-bold text-slate-500">{label}</Label>
@@ -13381,8 +12661,7 @@ function BatchScalingCalc() {
                       <div>
                         <Label className="text-[9px] text-muted-foreground">Fat %</Label>
                         <Input
-                          className="h-8 text-xs bg-slate-50"
-                          type="number" inputMode="decimal"
+                          className="h-8 text-xs bg-slate-50" type="number" inputMode="decimal"
                           value={rawMaterials[key].fat}
                           onChange={e => setRM(key, "fat", e.target.value)}
                           readOnly={key === "base" && productType === "frozen-dessert"}
@@ -13391,8 +12670,7 @@ function BatchScalingCalc() {
                       <div>
                         <Label className="text-[9px] text-muted-foreground">SNF %</Label>
                         <Input
-                          className="h-8 text-xs bg-slate-50"
-                          type="number" inputMode="decimal"
+                          className="h-8 text-xs bg-slate-50" type="number" inputMode="decimal"
                           value={rawMaterials[key].snf}
                           onChange={e => setRM(key, "snf", e.target.value)}
                           readOnly={key === "base" && productType === "frozen-dessert"}
@@ -13401,6 +12679,73 @@ function BatchScalingCalc() {
                     </div>
                   </div>
                 ))}
+
+                {/* Extra source ingredients added by user */}
+                {extraSources.length > 0 && (
+                  <div className="space-y-3 pt-1 border-t border-dashed border-indigo-100">
+                    {extraSources.map(src => (
+                      <div key={src.id} className="space-y-1">
+                        <div className="flex items-center justify-between">
+                          <Label className="text-[10px] uppercase font-bold text-slate-500">Extra</Label>
+                          <button onClick={() => removeExtraSource(src.id)} className="text-red-400 hover:text-red-600">
+                            <XCircle className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                        <IngredientSelect
+                          value={src.name}
+                          onChange={name => handleExtraSourceSelect(src.id, name)}
+                          className="mb-1"
+                        />
+                        <div className="grid grid-cols-2 gap-2">
+                          <div>
+                            <Label className="text-[9px] text-muted-foreground">Fat %</Label>
+                            <Input className="h-8 text-xs" type="number" inputMode="decimal"
+                              value={src.fat} onChange={e => updateExtraSource(src.id, "fat", e.target.value)} />
+                          </div>
+                          <div>
+                            <Label className="text-[9px] text-muted-foreground">SNF %</Label>
+                            <Input className="h-8 text-xs" type="number" inputMode="decimal"
+                              value={src.snf} onChange={e => updateExtraSource(src.id, "snf", e.target.value)} />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* + Add Ingredient dropdown for sources */}
+                <div className="relative">
+                  <button
+                    onClick={() => setShowExtraSourceDropdown(p => !p)}
+                    className="w-full flex items-center justify-center gap-1 text-xs text-indigo-600 font-semibold border border-dashed border-indigo-300 rounded-md py-1.5 hover:bg-indigo-50 transition-colors"
+                  >
+                    <PlusCircle className="w-3.5 h-3.5" />
+                    Add Ingredient
+                  </button>
+
+                  {showExtraSourceDropdown && (
+                    <div className="absolute z-30 top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-lg shadow-xl overflow-hidden">
+                      <div className="max-h-52 overflow-y-auto divide-y divide-slate-50">
+                        {availableExtraSources.map(name => (
+                          <button
+                            key={name}
+                            onClick={() => addExtraSource(name)}
+                            className="w-full text-left px-3 py-2 text-xs hover:bg-indigo-50 hover:text-indigo-700 transition-colors"
+                          >
+                            {name}
+                          </button>
+                        ))}
+                      </div>
+                      <button
+                        onClick={() => setShowExtraSourceDropdown(false)}
+                        className="w-full text-xs text-muted-foreground py-1.5 bg-slate-50 hover:bg-slate-100 border-t"
+                      >
+                        Close ✕
+                      </button>
+                    </div>
+                  )}
+                </div>
+
               </CardContent>
             </Card>
           </div>
@@ -13468,9 +12813,9 @@ function BatchScalingCalc() {
           )}
         </TabsContent>
 
-        {/* ══════════════════════════════════════════
+        {/* ═══════════════════════════════════════
             TAB 2 — VERIFICATION
-        ══════════════════════════════════════════ */}
+        ═══════════════════════════════════════ */}
         <TabsContent value="verification" className="space-y-4">
           <Card className="border-2 border-dashed border-gray-300 bg-gray-50/50">
             <CardHeader className="p-4">
@@ -13482,15 +12827,12 @@ function BatchScalingCalc() {
               {verificationSteps.length > 0 ? (
                 <div className="text-xs sm:text-sm font-mono space-y-2 bg-white p-3 rounded border">
                   {verificationSteps.map((step, idx) => (
-                    <div
-                      key={idx}
-                      className={cn(
-                        "leading-relaxed",
-                        step.includes("**")             ? "font-bold text-gray-800" : "text-gray-600",
-                        step.includes("WARNING")        ? "text-red-600"            : "",
-                        step.includes("Solution Found") ? "text-green-600 text-base border-t pt-2 mt-2" : ""
-                      )}
-                    >
+                    <div key={idx} className={cn(
+                      "leading-relaxed",
+                      step.includes("**")             ? "font-bold text-gray-800"                     : "text-gray-600",
+                      step.includes("WARNING")        ? "text-red-600"                                 : "",
+                      step.includes("Solution Found") ? "text-green-600 text-base border-t pt-2 mt-2" : "",
+                    )}>
                       {step.replace(/\*\*/g, "")}
                     </div>
                   ))}
@@ -13504,69 +12846,35 @@ function BatchScalingCalc() {
           </Card>
         </TabsContent>
 
-        {/* ══════════════════════════════════════════
-            TAB 3 — MANUAL SCALING
-        ══════════════════════════════════════════ */}
+        {/* ═══════════════════════════════════════
+            TAB 3 — MANUAL
+        ═══════════════════════════════════════ */}
         <TabsContent value="simple-scaling" className="space-y-4">
           <Card className="bg-slate-50 border-slate-200">
             <CardHeader className="p-4 pb-2">
-              <CardTitle className="text-sm text-slate-600">Manual Entry & Scaling</CardTitle>
+              <CardTitle className="text-sm text-slate-600">Manual Entry</CardTitle>
             </CardHeader>
             <CardContent className="p-4 space-y-3">
               {manualRows.map(row => (
                 <div key={row.id} className="space-y-1">
-                  <IngredientSelect
-                    value={row.name}
-                    onChange={name => handleManualNameSelect(row.id, name)}
-                  />
+                  <IngredientSelect value={row.name} onChange={name => handleManualSelect(row.id, name)} />
                   <div className="flex gap-2 items-center">
                     <Input
-                      placeholder="Kg"
-                      type="number"
+                      placeholder="Kg" type="number"
                       className="h-9 text-sm"
                       value={row.amount}
                       onChange={e => handleManualChange(row.id, "amount", e.target.value)}
                     />
-                    <Button
-                      variant="ghost" size="icon"
-                      className="h-9 w-9 text-red-500"
-                      onClick={() => removeManualRow(row.id)}
-                    >
+                    <Button variant="ghost" size="icon" className="h-9 w-9 text-red-500" onClick={() => removeManualRow(row.id)}>
                       <XCircle className="w-4 h-4" />
                     </Button>
                   </div>
                 </div>
               ))}
-              <Button
-                variant="outline" size="sm"
-                onClick={addManualRow}
-                className="w-full mt-2 h-9 border-dashed border-slate-400"
-              >
+              <Button variant="outline" size="sm" onClick={addManualRow}
+                className="w-full mt-2 h-9 border-dashed border-slate-400">
                 <PlusCircle className="w-4 h-4 mr-2" /> Add Row
               </Button>
-
-              {/* Quick Totals */}
-              {(() => {
-                const total = manualRows.reduce((s, r) => s + (parseFloat(r.amount) || 0), 0);
-                if (!total) return null;
-                return (
-                  <div className="bg-indigo-50 border border-indigo-200 rounded p-3 space-y-1">
-                    <div className="flex justify-between text-xs font-bold text-indigo-800">
-                      <span>Total Weight</span><span>{total.toFixed(2)} kg</span>
-                    </div>
-                    {manualRows.filter(r => r.amount).map(row => {
-                      const db = IC_INGREDIENT_DB[row.name] || {};
-                      const amt = parseFloat(row.amount) || 0;
-                      return (
-                        <div key={row.id} className="flex justify-between text-[11px] text-indigo-600">
-                          <span>{row.name}</span>
-                          <span>{((amt / total) * 100).toFixed(1)}%</span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                );
-              })()}
             </CardContent>
           </Card>
         </TabsContent>
@@ -13896,561 +13204,563 @@ function FreezingPointCalc() {
   );
 }
 
-// ════════════════════════════════════════════════════════════
-// ADVANCED PLANT EFFICIENCY CALCULATOR
-// Drop-in Replacement for PlantEfficiencyCalc()
-//
-// INSTRUCTIONS:
-// 1. Apni file mein purana PlantEfficiencyCalc() function dhundhein
-// 2. Pura block DELETE karein
-// 3. Yeh poora code wahan PASTE karein
-// Koi naya import nahi chahiye.
-// ════════════════════════════════════════════════════════════
-
-// ── PLANT TYPE DATABASE ───────────────────────────────────
-const PLANT_TYPE_DB = {
-  liquid_milk:  { label: "🥛 Liquid Milk Plant",   energyBench: 0.12, wasteBench: 2.0, capBench: 80, timeBench: 92, note: "Pasteurisation + packing"        },
-  uht:          { label: "🫙 UHT / Tetra Pack",    energyBench: 0.18, wasteBench: 1.5, capBench: 85, timeBench: 94, note: "High-heat processing"              },
-  ghee:         { label: "🧈 Ghee / Butter Plant", energyBench: 0.22, wasteBench: 3.0, capBench: 75, timeBench: 88, note: "Clarification & packing"           },
-  paneer:       { label: "🧀 Paneer / Khoa",       energyBench: 0.20, wasteBench: 4.0, capBench: 72, timeBench: 87, note: "Coagulation + pressing"            },
-  powder:       { label: "💨 Milk Powder Plant",   energyBench: 0.55, wasteBench: 1.0, capBench: 88, timeBench: 95, note: "Evaporation + spray drying"        },
-  ice_cream:    { label: "🍦 Ice Cream Plant",     energyBench: 0.35, wasteBench: 2.5, capBench: 78, timeBench: 90, note: "Freezing + hardening"              },
-  curd_dahi:    { label: "🫙 Curd / Dahi Plant",   energyBench: 0.15, wasteBench: 2.0, capBench: 80, timeBench: 91, note: "Incubation + packing"              },
-} as const;
-
-type PlantTypeKey = keyof typeof PLANT_TYPE_DB;
-
-// ── SHIFT PRESETS ─────────────────────────────────────────
-const SHIFT_PRESETS = {
-  "Best Practice":   { actualOutput: "9200", maxCapacity: "10000", stdTime: "10", actualTime: "10.8", energyConsumed: "1200", totalOutputEnergy: "9200", totalWaste: "184", totalInput: "10000", downtime: "0.5", rejectRate: "0.3" },
-  "Typical Day":     { actualOutput: "8000", maxCapacity: "10000", stdTime: "10", actualTime: "12",   energyConsumed: "1000", totalOutputEnergy: "8000", totalWaste: "500", totalInput: "10000", downtime: "1.5", rejectRate: "1.2" },
-  "Below Average":   { actualOutput: "5500", maxCapacity: "10000", stdTime: "10", actualTime: "15",   energyConsumed: "1300", totalOutputEnergy: "5500", totalWaste: "900", totalInput: "10000", downtime: "3.0", rejectRate: "3.5" },
-  "Startup / New":   { actualOutput: "6000", maxCapacity: "10000", stdTime: "10", actualTime: "13",   energyConsumed: "1100", totalOutputEnergy: "6000", totalWaste: "700", totalInput: "10000", downtime: "2.0", rejectRate: "2.0" },
-} as const;
-
-// ── GRADE HELPERS ─────────────────────────────────────────
-const getGrade = (score: number) => {
-  if (score >= 90) return { label: "A+ World Class 🏆", color: "text-emerald-700", bg: "bg-emerald-600" };
-  if (score >= 80) return { label: "A Excellent ✅",    color: "text-green-700",   bg: "bg-green-600"   };
-  if (score >= 70) return { label: "B Good 👍",          color: "text-yellow-700",  bg: "bg-yellow-600"  };
-  if (score >= 60) return { label: "C Average ⚠️",       color: "text-orange-700",  bg: "bg-orange-500"  };
-  return                   { label: "D Poor ❌",          color: "text-red-700",     bg: "bg-red-600"     };
-};
-
-const getScoreColor = (score: number) =>
-  score >= 80 ? "text-green-600" : score >= 60 ? "text-yellow-600" : "text-red-600";
-
-// ── SCORE BAR ─────────────────────────────────────────────
-function ScoreBar({ score, label, benchmark }: { score: number; label: string; benchmark: number }) {
-  const color = score >= benchmark ? "bg-green-500" : score >= benchmark * 0.8 ? "bg-yellow-500" : "bg-red-500";
-  return (
-    <div className="space-y-1">
-      <div className="flex justify-between text-xs">
-        <span className="font-semibold text-slate-600">{label}</span>
-        <div className="flex items-center gap-1">
-          <span className={`font-black ${getScoreColor(score)}`}>{score.toFixed(1)}%</span>
-          <span className="text-slate-400 text-[10px]">(bench: {benchmark}%)</span>
-        </div>
-      </div>
-      <div className="h-2.5 bg-slate-100 rounded-full overflow-hidden relative">
-        <div className={`h-full rounded-full transition-all ${color}`} style={{ width: `${Math.min(score, 100)}%` }} />
-        {/* benchmark marker */}
-        <div className="absolute top-0 h-full w-0.5 bg-slate-500 opacity-50" style={{ left: `${benchmark}%` }} />
-      </div>
-    </div>
-  );
-}
-
-// ── MAIN COMPONENT ────────────────────────────────────────
+// ==================== ENHANCED PLANT EFFICIENCY CALCULATOR ====================
 function PlantEfficiencyCalc() {
   const { toast } = useToast();
   const { validatePositive } = useInputValidation();
 
-  const [plantType, setPlantType] = useState<PlantTypeKey>("liquid_milk");
-  const [activeTab, setActiveTab] = useState<"inputs" | "results" | "actions">("inputs");
-
   const [inputs, setInputs] = useState({
-    actualOutput:       "8000",
-    maxCapacity:        "10000",
-    stdTime:            "10",
-    actualTime:         "12",
-    energyConsumed:     "1000",
-    totalOutputEnergy:  "8000",
-    totalWaste:         "500",
-    totalInput:         "10000",
-    downtime:           "1.5",    // hours/shift
-    totalShiftHours:    "8",      // hours
-    rejectRate:         "1.2",    // % rejects/returns
-    maintenanceCost:    "5000",   // ₹/month
-    energyRate:         "8",      // ₹/kWh
+    actualOutput: "8000",
+    maxCapacity: "10000",
+    stdTime: "10",
+    actualTime: "12",
+    energyConsumed: "1000",
+    totalOutputEnergy: "8000",
+    totalWaste: "500",
+    totalInput: "10000",
   });
 
   const [weights, setWeights] = useState({
-    capacity:   30,
+    capacity: 30,
     processing: 25,
-    energy:     20,
-    waste:      15,
-    downtime:   10,
+    energy: 25,
+    waste: 20,
   });
 
-  const handleInputChange  = useCallback((field: keyof typeof inputs, value: string) => setInputs(p => ({ ...p, [field]: value })), []);
-  const handleWeightChange = useCallback((field: keyof typeof weights, value: number[]) => setWeights(p => ({ ...p, [field]: value[0] })), []);
+  const handleInputChange = useCallback(
+    (field: keyof typeof inputs, value: string) => {
+      setInputs((prev) => ({ ...prev, [field]: value }));
+    },
+    []
+  );
 
-  // Apply preset
-  const applyPreset = (name: keyof typeof SHIFT_PRESETS) => {
-    setInputs(p => ({ ...p, ...SHIFT_PRESETS[name] }));
-    toast({ title: "Preset Applied", description: name });
-  };
+  const handleWeightChange = useCallback(
+    (field: keyof typeof weights, value: number[]) => {
+      setWeights((prev) => ({ ...prev, [field]: value[0] }));
+    },
+    []
+  );
 
-  // Apply plant type
-  const applyPlantType = (key: PlantTypeKey) => {
-    setPlantType(key);
-    toast({ title: "Plant Type Set", description: PLANT_TYPE_DB[key].label });
-  };
-
-  // ── CALCULATE (live) ──────────────────────────────────
   const results = useMemo(() => {
-    const n = (v: string) => parseFloat(v) || 0;
-    const pt = PLANT_TYPE_DB[plantType];
+    const actualOut = parseFloat(inputs.actualOutput);
+    const maxCap = parseFloat(inputs.maxCapacity);
+    const stdT = parseFloat(inputs.stdTime);
+    const actT = parseFloat(inputs.actualTime);
+    const energyConsumed = parseFloat(inputs.energyConsumed);
+    const energyOutput = parseFloat(inputs.totalOutputEnergy);
+    const waste = parseFloat(inputs.totalWaste);
+    const totalIn = parseFloat(inputs.totalInput);
 
-    const actualOut  = n(inputs.actualOutput);
-    const maxCap     = n(inputs.maxCapacity);
-    const stdT       = n(inputs.stdTime);
-    const actT       = n(inputs.actualTime);
-    const energy     = n(inputs.energyConsumed);
-    const energyOut  = n(inputs.totalOutputEnergy);
-    const waste      = n(inputs.totalWaste);
-    const totalIn    = n(inputs.totalInput);
-    const downtime   = n(inputs.downtime);
-    const shiftHrs   = n(inputs.totalShiftHours);
-    const rejectRate = n(inputs.rejectRate);
-    const maintCost  = n(inputs.maintenanceCost);
-    const energyRate = n(inputs.energyRate);
+    // Calculate individual metrics
+    const capacityUtilization = maxCap > 0 ? (actualOut / maxCap) * 100 : 0;
+    const processingTimeEfficiency = actT > 0 ? (stdT / actT) * 100 : 0;
+    const energyConsumptionPerUnit =
+      energyOutput > 0 ? energyConsumed / energyOutput : 0;
+    const wasteGeneration = totalIn > 0 ? (waste / totalIn) * 100 : 0;
 
-    // ── Metric 1: Capacity Utilization ────────────────
-    const capacityUtil   = maxCap > 0 ? (actualOut / maxCap) * 100 : 0;
-    const capacityScore  = Math.min(100, Math.max(0, capacityUtil));
+    // Normalize scores (0-100, higher is better)
+    const capacityScore = Math.min(100, Math.max(0, capacityUtilization));
+    const timeScore = Math.min(100, Math.max(0, processingTimeEfficiency));
+    const wasteScore = Math.max(0, 100 - wasteGeneration);
 
-    // ── Metric 2: Processing Time Efficiency ──────────
-    const timeEff        = actT > 0 ? (stdT / actT) * 100 : 0;
-    const timeScore      = Math.min(100, Math.max(0, timeEff));
+    // Energy score: Assumes 0.125 kWh/L is optimal (100), 0.5 kWh/L is poor (0)
+    const energyScore =
+      energyConsumptionPerUnit > 0
+        ? Math.min(
+            100,
+            Math.max(0, 100 - (energyConsumptionPerUnit - 0.125) * 266.67)
+          )
+        : 0;
 
-    // ── Metric 3: Energy Efficiency ───────────────────
-    // kWh per litre — benchmark from plant type
-    const kwhPerL        = energyOut > 0 ? energy / energyOut : 0;
-    const bench_e        = pt.energyBench;
-    // Score: 100 at bench, drops linearly → 0 at 4× bench
-    const energyScore    = kwhPerL > 0
-      ? Math.min(100, Math.max(0, 100 - ((kwhPerL - bench_e) / (bench_e * 3)) * 100))
-      : 0;
+    const totalWeight = Object.values(weights).reduce((sum, w) => sum + w, 0);
 
-    // ── Metric 4: Waste ───────────────────────────────
-    const wastePct       = totalIn > 0 ? (waste / totalIn) * 100 : 0;
-    const wasteScore     = Math.max(0, 100 - wastePct * (100 / (pt.wasteBench * 4)));
+    const overallEfficiency =
+      totalWeight > 0
+        ? (capacityScore * weights.capacity +
+            timeScore * weights.processing +
+            energyScore * weights.energy +
+            wasteScore * weights.waste) /
+          totalWeight
+        : 0;
 
-    // ── Metric 5: Downtime / OEE ─────────────────────
-    const availabilityPct= shiftHrs > 0 ? ((shiftHrs - downtime) / shiftHrs) * 100 : 100;
-    const downtimeScore  = Math.min(100, Math.max(0, availabilityPct));
-
-    // ── OEE = Availability × Performance × Quality ────
-    const availability   = availabilityPct / 100;
-    const performance    = capacityUtil / 100;
-    const quality        = Math.max(0, (100 - rejectRate)) / 100;
-    const oee            = availability * performance * quality * 100;
-
-    // ── Overall Weighted Score ────────────────────────
-    const totalWeight = Object.values(weights).reduce((s, w) => s + w, 0);
-    const overallEff  = totalWeight > 0
-      ? (capacityScore * weights.capacity +
-         timeScore      * weights.processing +
-         energyScore    * weights.energy +
-         wasteScore     * weights.waste +
-         downtimeScore  * weights.downtime) / totalWeight
-      : 0;
-
-    // ── Financial ─────────────────────────────────────
-    const energyCost     = energy * energyRate;
-    const energyCostPerL = energyOut > 0 ? energyCost / energyOut : 0;
-    const wasteValue     = waste * 40; // ₹40/L avg milk value
-
-    // If capacity improved to benchmark: extra litres
-    const capacityGap    = Math.max(0, (pt.capBench - capacityUtil) / 100 * maxCap);
-    const potentialRevenue = capacityGap * 50; // ₹50/L avg revenue
-
-    // ── Warnings ─────────────────────────────────────
+    // Determine confidence and warnings
+    let confidence: "high" | "medium" | "low" = "high";
     const warnings: string[] = [];
-    if (capacityUtil < 60)      warnings.push(`Capacity ${capacityUtil.toFixed(1)}% is low (benchmark ${pt.capBench}%). Review production planning & demand forecast.`);
-    if (timeEff < 80)           warnings.push(`Time efficiency ${timeEff.toFixed(1)}% below 80%. Check bottlenecks, changeover time, and CIP scheduling.`);
-    if (kwhPerL > pt.energyBench * 1.5) warnings.push(`Energy ${kwhPerL.toFixed(3)} kWh/L is high (benchmark ${pt.energyBench} kWh/L). Audit refrigeration, heating, and compressed air.`);
-    if (wastePct > pt.wasteBench)      warnings.push(`Waste ${wastePct.toFixed(1)}% above benchmark (${pt.wasteBench}%). Review QC rejections, overfill, and cleaning losses.`);
-    if (downtime > shiftHrs * 0.15)    warnings.push(`Downtime ${downtime}h is >15% of shift. Review preventive maintenance schedule.`);
-    if (rejectRate > 2)                warnings.push(`Reject rate ${rejectRate}% is high. Check standardisation, packaging seals, and cold chain.`);
-    if (oee < 65)                      warnings.push(`OEE ${oee.toFixed(1)}% is below world class (85%). Focus on availability first.`);
+
+    if (capacityUtilization < 60) {
+      confidence = "medium";
+      warnings.push("Capacity utilization below 60%. Consider production planning.");
+    }
+    if (processingTimeEfficiency < 80) {
+      warnings.push("Processing efficiency below 80%. Review workflow optimization.");
+    }
+    if (energyConsumptionPerUnit > 0.2) {
+      warnings.push("High energy consumption. Consider energy audit.");
+    }
+    if (wasteGeneration > 5) {
+      warnings.push("Waste generation above 5%. Review quality control.");
+    }
 
     return {
-      capacityUtil, capacityScore,
-      timeEff, timeScore,
-      kwhPerL, energyScore,
-      wastePct, wasteScore,
-      availabilityPct, downtimeScore,
-      oee, quality, availability, performance,
-      overallEff,
-      energyCost, energyCostPerL, wasteValue,
-      capacityGap, potentialRevenue,
-      rejectRate,
+      capacityUtilization,
+      processingTimeEfficiency,
+      energyConsumptionPerUnit,
+      wasteGeneration,
+      capacityScore,
+      timeScore,
+      energyScore,
+      wasteScore,
+      overallEfficiency,
+      confidence,
       warnings,
     };
-  }, [inputs, weights, plantType]);
+  }, [inputs, weights]);
 
-  const pt = PLANT_TYPE_DB[plantType];
-  const totalW = Object.values(weights).reduce((s, w) => s + w, 0);
+  const getEfficiencyGrade = (score: number): string => {
+    if (score >= 90) return "A+ Excellent";
+    if (score >= 80) return "A Good";
+    if (score >= 70) return "B Average";
+    if (score >= 60) return "C Below Average";
+    return "D Poor";
+  };
 
-  // ── RENDER ────────────────────────────────────────────
+  const getScoreColor = (score: number): string => {
+    if (score >= 80) return "text-green-600";
+    if (score >= 60) return "text-yellow-600";
+    return "text-red-600";
+  };
+
   return (
-    <Card className="border-2 border-orange-200 shadow-lg">
-      <CardHeader className="bg-gradient-to-r from-orange-50 to-red-50 rounded-t-lg border-b border-orange-100">
-        <CardTitle className="flex items-center justify-between">
-          <span className="flex items-center gap-2 text-orange-800">
-            <Factory className="h-6 w-6 text-orange-600" />
-            Plant Efficiency Calculator
-          </span>
-          <div className="flex items-center gap-2">
-            <Badge className={`text-sm px-3 py-1 ${getGrade(results.overallEff).bg} text-white`}>
-              {results.overallEff.toFixed(1)}% Overall
-            </Badge>
-            <Badge variant="outline" className="text-xs text-orange-700 border-orange-300">
-              OEE: {results.oee.toFixed(1)}%
-            </Badge>
-          </div>
+    <Card className="border-2 shadow-lg">
+      <CardHeader className="bg-gradient-to-r from-orange-50 to-red-50">
+        <CardTitle className="flex items-center gap-2 text-xl sm:text-2xl">
+          <Factory className="h-6 sm:h-7 w-6 sm:w-7 text-orange-600" />
+          Plant Efficiency Calculator
         </CardTitle>
-        <CardDescription className="text-orange-600 text-xs">
-          7 plant types · 5 metrics · OEE · Custom weights · Financial impact · Action plan
+        <CardDescription className="text-xs sm:text-sm">
+          Comprehensive plant performance analysis with weighted scoring
         </CardDescription>
       </CardHeader>
+      <CardContent className="pt-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* LEFT COLUMN - Input Metrics */}
+          <div className="space-y-4">
+            <Alert className="bg-blue-50 border-blue-200">
+              <Info className="h-4 w-4 text-blue-600" />
+              <AlertTitle className="text-sm font-semibold">
+                Performance Metrics
+              </AlertTitle>
+              <AlertDescription className="text-xs">
+                Enter actual operational data for each metric
+              </AlertDescription>
+            </Alert>
 
-      <CardContent className="pt-4 space-y-4">
-
-        {/* ── PLANT TYPE ───────────────────────────────── */}
-        <div className="space-y-1">
-          <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Plant Type (auto-sets benchmarks)</Label>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-            {(Object.keys(PLANT_TYPE_DB) as PlantTypeKey[]).map(key => (
-              <button key={key} onClick={() => applyPlantType(key)}
-                className={`p-2 rounded-lg border text-xs font-semibold transition-all text-left leading-tight shadow-sm
-                  ${plantType === key
-                    ? "bg-orange-600 text-white border-orange-600 shadow-md"
-                    : "bg-white text-slate-600 border-slate-200 hover:border-orange-300"
-                  }`}>
-                {PLANT_TYPE_DB[key].label}
-                <div className={`text-[9px] mt-0.5 ${plantType === key ? "opacity-80" : "text-slate-400"}`}>
-                  {PLANT_TYPE_DB[key].energyBench} kWh/L · Cap {PLANT_TYPE_DB[key].capBench}%
-                </div>
-              </button>
-            ))}
-          </div>
-          <p className="text-[10px] text-orange-700 bg-orange-50 px-2 py-1 rounded border border-orange-100">
-            📌 {pt.note} · Energy bench: {pt.energyBench} kWh/L · Waste bench: {pt.wasteBench}%
-          </p>
-        </div>
-
-        {/* ── SHIFT PRESETS ─────────────────────────────── */}
-        <div className="space-y-1">
-          <Label className="text-xs font-bold text-slate-500 uppercase">Shift Presets</Label>
-          <div className="flex flex-wrap gap-2">
-            {(Object.keys(SHIFT_PRESETS) as Array<keyof typeof SHIFT_PRESETS>).map(name => (
-              <button key={name} onClick={() => applyPreset(name)}
-                className="px-3 py-1 rounded-full border border-orange-200 bg-white text-xs font-semibold text-orange-700 hover:bg-orange-600 hover:text-white transition-all shadow-sm">
-                {name}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* ── TABS ─────────────────────────────────────── */}
-        <Tabs value={activeTab} onValueChange={v => setActiveTab(v as any)}>
-          <TabsList className="grid grid-cols-3 bg-slate-100">
-            <TabsTrigger value="inputs"  className="text-xs">⚙️ Metrics & Weights</TabsTrigger>
-            <TabsTrigger value="results" className="text-xs">📊 Scores & OEE</TabsTrigger>
-            <TabsTrigger value="actions" className="text-xs">🎯 Action Plan</TabsTrigger>
-          </TabsList>
-
-          {/* ════ TAB 1: INPUTS ════════════════════════ */}
-          <TabsContent value="inputs" className="space-y-4 pt-3">
-
-            {/* Metric cards — 2 column grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-
-              {/* Capacity */}
-              <Card className="border-blue-200 bg-blue-50/30">
-                <CardHeader className="p-3 pb-2 bg-blue-50 border-b border-blue-100">
-                  <CardTitle className="text-xs font-bold text-blue-700 uppercase">🏭 1. Capacity Utilization</CardTitle>
-                </CardHeader>
-                <CardContent className="p-3 space-y-2">
-                  <ValidatedInput label="Actual Output" value={inputs.actualOutput} onChange={v => handleInputChange("actualOutput", v)} validation={validatePositive(inputs.actualOutput)} unit="L" colorScheme="blue" />
-                  <ValidatedInput label="Max Capacity" value={inputs.maxCapacity} onChange={v => handleInputChange("maxCapacity", v)} validation={validatePositive(inputs.maxCapacity)} unit="L" colorScheme="blue" />
-                  <div className={`text-center text-2xl font-black p-2 rounded-lg bg-white border ${getScoreColor(results.capacityScore)}`}>
-                    {results.capacityScore.toFixed(1)}%
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Time */}
-              <Card className="border-green-200 bg-green-50/30">
-                <CardHeader className="p-3 pb-2 bg-green-50 border-b border-green-100">
-                  <CardTitle className="text-xs font-bold text-green-700 uppercase">⏱️ 2. Time Efficiency</CardTitle>
-                </CardHeader>
-                <CardContent className="p-3 space-y-2">
-                  <ValidatedInput label="Standard Time" value={inputs.stdTime} onChange={v => handleInputChange("stdTime", v)} validation={validatePositive(inputs.stdTime)} unit="min" colorScheme="green" />
-                  <ValidatedInput label="Actual Time" value={inputs.actualTime} onChange={v => handleInputChange("actualTime", v)} validation={validatePositive(inputs.actualTime)} unit="min" colorScheme="green" />
-                  <div className={`text-center text-2xl font-black p-2 rounded-lg bg-white border ${getScoreColor(results.timeScore)}`}>
-                    {results.timeScore.toFixed(1)}%
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Energy */}
-              <Card className="border-yellow-200 bg-yellow-50/30">
-                <CardHeader className="p-3 pb-2 bg-yellow-50 border-b border-yellow-100">
-                  <CardTitle className="text-xs font-bold text-yellow-700 uppercase">⚡ 3. Energy Efficiency</CardTitle>
-                </CardHeader>
-                <CardContent className="p-3 space-y-2">
-                  <ValidatedInput label="Energy Consumed" value={inputs.energyConsumed} onChange={v => handleInputChange("energyConsumed", v)} validation={validatePositive(inputs.energyConsumed)} unit="kWh" colorScheme="orange" />
-                  <ValidatedInput label="Milk Output" value={inputs.totalOutputEnergy} onChange={v => handleInputChange("totalOutputEnergy", v)} validation={validatePositive(inputs.totalOutputEnergy)} unit="L" colorScheme="orange" />
-                  <ValidatedInput label="Energy Rate" value={inputs.energyRate} onChange={v => handleInputChange("energyRate", v)} validation={validatePositive(inputs.energyRate)} unit="₹/kWh" colorScheme="orange" />
-                  <div className="flex justify-between text-xs bg-white rounded-lg p-2 border border-yellow-200">
-                    <span className="text-slate-500">kWh/L:</span>
-                    <span className="font-black text-orange-700">{results.kwhPerL.toFixed(3)} <span className="text-slate-400">(bench: {pt.energyBench})</span></span>
-                  </div>
-                  <div className={`text-center text-2xl font-black p-2 rounded-lg bg-white border ${getScoreColor(results.energyScore)}`}>
-                    {results.energyScore.toFixed(1)}%
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Waste + Downtime + Reject */}
-              <Card className="border-red-200 bg-red-50/30">
-                <CardHeader className="p-3 pb-2 bg-red-50 border-b border-red-100">
-                  <CardTitle className="text-xs font-bold text-red-700 uppercase">♻️ 4 & 5. Waste & Availability</CardTitle>
-                </CardHeader>
-                <CardContent className="p-3 space-y-2">
-                  <ValidatedInput label="Total Waste" value={inputs.totalWaste} onChange={v => handleInputChange("totalWaste", v)} validation={validatePositive(inputs.totalWaste)} unit="L" colorScheme="red" />
-                  <ValidatedInput label="Total Input" value={inputs.totalInput} onChange={v => handleInputChange("totalInput", v)} validation={validatePositive(inputs.totalInput)} unit="L" colorScheme="red" />
-                  <ValidatedInput label="Downtime" value={inputs.downtime} onChange={v => handleInputChange("downtime", v)} validation={{ isValid: true, severity: "info" }} unit="hrs" helpText="Planned + unplanned" colorScheme="orange" />
-                  <ValidatedInput label="Shift Hours" value={inputs.totalShiftHours} onChange={v => handleInputChange("totalShiftHours", v)} validation={validatePositive(inputs.totalShiftHours)} unit="hrs" colorScheme="blue" />
-                  <ValidatedInput label="Reject Rate" value={inputs.rejectRate} onChange={v => handleInputChange("rejectRate", v)} validation={{ isValid: true, severity: "info" }} unit="%" helpText="Rework/returns%" colorScheme="red" />
-                  <div className={`text-center text-2xl font-black p-2 rounded-lg bg-white border ${getScoreColor(results.wasteScore)}`}>
-                    Waste: {results.wasteScore.toFixed(1)}%
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Weights */}
-            <Card className="border-purple-200 bg-purple-50/20">
-              <CardHeader className="p-3 pb-2 bg-purple-50 border-b border-purple-100">
-                <CardTitle className="text-xs font-bold text-purple-700 uppercase flex justify-between items-center">
-                  🎚️ Importance Weights (custom)
-                  <span className={`text-sm font-black ${totalW === 100 ? "text-green-600" : "text-orange-600"}`}>
-                    Total: {totalW}% {totalW !== 100 && "(should be 100)"}
-                  </span>
+            {/* 1. Capacity Utilization */}
+            <Card className="bg-gradient-to-br from-blue-50 to-cyan-50 border-2 border-blue-200">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base flex items-center gap-2">
+                  <Target className="h-5 w-5 text-blue-600" />
+                  1. Capacity Utilization
                 </CardTitle>
               </CardHeader>
-              <CardContent className="p-3 space-y-3">
-                {([
-                  { key: "capacity",   label: "Capacity Utilization",   color: "bg-blue-100"   },
-                  { key: "processing", label: "Processing Time",         color: "bg-green-100"  },
-                  { key: "energy",     label: "Energy Efficiency",       color: "bg-yellow-100" },
-                  { key: "waste",      label: "Waste Management",        color: "bg-red-100"    },
-                  { key: "downtime",   label: "Availability / Downtime", color: "bg-orange-100" },
-                ] as { key: keyof typeof weights; label: string; color: string }[]).map(({ key, label, color }) => (
-                  <div key={key}>
-                    <div className="flex justify-between mb-1">
-                      <Label className="text-xs font-semibold">{label}</Label>
-                      <Badge variant="outline" className={`${color} text-xs`}>{weights[key]}%</Badge>
-                    </div>
-                    <Slider value={[weights[key]]} max={60} min={5} step={5}
-                      onValueChange={v => handleWeightChange(key, v)}
-                      className="cursor-pointer" />
-                  </div>
-                ))}
+              <CardContent className="space-y-3">
+                <ValidatedInput
+                  label="Actual Output"
+                  value={inputs.actualOutput}
+                  onChange={(v) => handleInputChange("actualOutput", v)}
+                  validation={validatePositive(inputs.actualOutput)}
+                  unit="liters"
+                  icon={<Droplets className="h-4 w-4 text-blue-500" />}
+                  colorScheme="blue"
+                />
+                <ValidatedInput
+                  label="Maximum Capacity"
+                  value={inputs.maxCapacity}
+                  onChange={(v) => handleInputChange("maxCapacity", v)}
+                  validation={validatePositive(inputs.maxCapacity)}
+                  unit="liters"
+                  icon={<ChevronsUp className="h-4 w-4 text-blue-600" />}
+                  colorScheme="blue"
+                />
+                <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                  <span className="text-sm font-medium">Score:</span>
+                  <span
+                    className={cn(
+                      "text-2xl font-bold",
+                      getScoreColor(results.capacityScore)
+                    )}
+                  >
+                    {results.capacityScore.toFixed(1)}%
+                  </span>
+                </div>
               </CardContent>
             </Card>
-          </TabsContent>
 
-          {/* ════ TAB 2: RESULTS ════════════════════════ */}
-          <TabsContent value="results" className="space-y-4 pt-3">
-
-            {/* Overall Score */}
-            <div className={`rounded-2xl p-6 text-center text-white shadow-xl ${getGrade(results.overallEff).bg}`}>
-              <div className="text-[10px] uppercase opacity-80 font-bold mb-1">Overall Plant Efficiency</div>
-              <div className="text-7xl font-black">{results.overallEff.toFixed(1)}%</div>
-              <div className="text-sm opacity-90 font-bold mt-1">{getGrade(results.overallEff).label}</div>
-            </div>
-
-            {/* OEE Breakdown */}
-            <Card className="bg-indigo-50 border-indigo-200">
-              <CardHeader className="p-3 pb-1 border-b border-indigo-100">
-                <CardTitle className="text-sm text-indigo-800 font-bold">🏭 OEE (Overall Equipment Effectiveness)</CardTitle>
+            {/* 2. Processing Time Efficiency */}
+            <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-200">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base flex items-center gap-2">
+                  <Zap className="h-5 w-5 text-green-600" />
+                  2. Processing Time Efficiency
+                </CardTitle>
               </CardHeader>
-              <CardContent className="p-3 space-y-2">
-                <div className="grid grid-cols-3 gap-2 text-center mb-2">
-                  {[
-                    { label: "Availability",  val: results.availabilityPct, color: "bg-green-100 text-green-700"  },
-                    { label: "Performance",   val: results.capacityUtil,    color: "bg-blue-100 text-blue-700"    },
-                    { label: "Quality",       val: results.quality * 100,   color: "bg-purple-100 text-purple-700"},
-                  ].map((k, i) => (
-                    <div key={i} className={`${k.color} rounded-lg p-2`}>
-                      <div className="text-[10px] font-bold uppercase">{k.label}</div>
-                      <div className="text-xl font-black">{k.val.toFixed(1)}%</div>
-                    </div>
-                  ))}
-                </div>
-                <div className={`text-center p-3 rounded-xl font-black text-xl ${results.oee >= 85 ? "bg-green-600 text-white" : results.oee >= 65 ? "bg-yellow-500 text-white" : "bg-red-600 text-white"}`}>
-                  OEE = {results.oee.toFixed(2)}%
-                  <div className="text-[10px] opacity-80 font-normal">World Class ≥ 85% · Typical 65–75%</div>
-                </div>
-                <div className="text-[10px] font-mono text-slate-500 bg-slate-50 p-2 rounded border">
-                  OEE = Availability × Performance × Quality = {(results.availability*100).toFixed(1)}% × {results.capacityUtil.toFixed(1)}% × {(results.quality*100).toFixed(1)}% = {results.oee.toFixed(2)}%
+              <CardContent className="space-y-3">
+                <ValidatedInput
+                  label="Standard Time"
+                  value={inputs.stdTime}
+                  onChange={(v) => handleInputChange("stdTime", v)}
+                  validation={validatePositive(inputs.stdTime)}
+                  unit="minutes"
+                  icon={<Target className="h-4 w-4 text-green-500" />}
+                  colorScheme="green"
+                />
+                <ValidatedInput
+                  label="Actual Time Taken"
+                  value={inputs.actualTime}
+                  onChange={(v) => handleInputChange("actualTime", v)}
+                  validation={validatePositive(inputs.actualTime)}
+                  unit="minutes"
+                  icon={<Thermometer className="h-4 w-4 text-green-600" />}
+                  colorScheme="green"
+                />
+                <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                  <span className="text-sm font-medium">Score:</span>
+                  <span
+                    className={cn(
+                      "text-2xl font-bold",
+                      getScoreColor(results.timeScore)
+                    )}
+                  >
+                    {results.timeScore.toFixed(1)}%
+                  </span>
                 </div>
               </CardContent>
             </Card>
 
-            {/* Score bars vs benchmark */}
-            <Card className="bg-white border-slate-200">
-              <CardHeader className="p-3 pb-1 border-b border-slate-200">
-                <CardTitle className="text-xs font-bold text-slate-600 uppercase">📊 Individual Metric Scores vs Benchmark</CardTitle>
+            {/* 3. Energy Consumption */}
+            <Card className="bg-gradient-to-br from-yellow-50 to-orange-50 border-2 border-yellow-200">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base flex items-center gap-2">
+                  <Zap className="h-5 w-5 text-yellow-600" />
+                  3. Energy Efficiency
+                </CardTitle>
               </CardHeader>
-              <CardContent className="p-3 space-y-3">
-                <ScoreBar score={results.capacityScore}  label="Capacity Utilization"  benchmark={pt.capBench}  />
-                <ScoreBar score={results.timeScore}      label="Processing Time Eff."  benchmark={pt.timeBench} />
-                <ScoreBar score={results.energyScore}    label="Energy Efficiency"     benchmark={85}           />
-                <ScoreBar score={results.wasteScore}     label="Waste Management"      benchmark={80}           />
-                <ScoreBar score={results.downtimeScore}  label="Availability (Uptime)"  benchmark={90}           />
-              </CardContent>
-            </Card>
-
-            {/* Financial impact */}
-            <Card className="bg-gradient-to-br from-slate-800 to-slate-900 text-white border-none">
-              <CardContent className="p-3 space-y-2 text-sm">
-                <div className="text-xs text-slate-300 font-bold uppercase mb-1">💸 Financial Analysis</div>
-                {[
-                  { label: "Energy cost (this shift)",        value: `₹${results.energyCost.toFixed(0)}`,           color: "text-yellow-300" },
-                  { label: "Energy cost per litre",           value: `₹${results.energyCostPerL.toFixed(3)}/L`,     color: "text-yellow-300" },
-                  { label: "Waste value lost",                value: `₹${results.wasteValue.toFixed(0)}`,           color: "text-red-400"    },
-                  { label: "Capacity gap vs benchmark",       value: `${results.capacityGap.toFixed(0)} L/shift`,   color: "text-orange-300" },
-                  { label: "Potential revenue if at benchmark",value: `₹${results.potentialRevenue.toFixed(0)}/shift`, color: "text-green-300 font-black text-base" },
-                ].map((r, i) => (
-                  <div key={i} className={`flex justify-between ${i === 4 ? "border-t border-slate-700 pt-2" : ""}`}>
-                    <span className="text-slate-400">{r.label}</span>
-                    <span className={`font-bold ${r.color}`}>{r.value}</span>
+              <CardContent className="space-y-3">
+                <ValidatedInput
+                  label="Energy Consumed"
+                  value={inputs.energyConsumed}
+                  onChange={(v) => handleInputChange("energyConsumed", v)}
+                  validation={validatePositive(inputs.energyConsumed)}
+                  unit="kWh"
+                  icon={<Zap className="h-4 w-4 text-yellow-500" />}
+                  colorScheme="orange"
+                />
+                <ValidatedInput
+                  label="Total Output"
+                  value={inputs.totalOutputEnergy}
+                  onChange={(v) => handleInputChange("totalOutputEnergy", v)}
+                  validation={validatePositive(inputs.totalOutputEnergy)}
+                  unit="liters"
+                  icon={<Droplets className="h-4 w-4 text-orange-500" />}
+                  colorScheme="orange"
+                />
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                    <span className="text-sm font-medium">kWh/Liter:</span>
+                    <span className="text-lg font-bold text-orange-700">
+                      {results.energyConsumptionPerUnit.toFixed(3)}
+                    </span>
                   </div>
-                ))}
+                  <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                    <span className="text-sm font-medium">Score:</span>
+                    <span
+                      className={cn(
+                        "text-2xl font-bold",
+                        getScoreColor(results.energyScore)
+                      )}
+                    >
+                      {results.energyScore.toFixed(1)}%
+                    </span>
+                  </div>
+                </div>
               </CardContent>
             </Card>
 
-            {/* Warnings */}
+            {/* 4. Waste Generation */}
+            <Card className="bg-gradient-to-br from-red-50 to-pink-50 border-2 border-red-200">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base flex items-center gap-2">
+                  <XCircle className="h-5 w-5 text-red-600" />
+                  4. Waste Management
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <ValidatedInput
+                  label="Total Waste Generated"
+                  value={inputs.totalWaste}
+                  onChange={(v) => handleInputChange("totalWaste", v)}
+                  validation={validatePositive(inputs.totalWaste)}
+                  unit="liters"
+                  icon={<AlertTriangle className="h-4 w-4 text-red-500" />}
+                  colorScheme="pink"
+                />
+                <ValidatedInput
+                  label="Total Input"
+                  value={inputs.totalInput}
+                  onChange={(v) => handleInputChange("totalInput", v)}
+                  validation={validatePositive(inputs.totalInput)}
+                  unit="liters"
+                  icon={<Droplets className="h-4 w-4 text-pink-500" />}
+                  colorScheme="pink"
+                />
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                    <span className="text-sm font-medium">Waste %:</span>
+                    <span className="text-lg font-bold text-red-700">
+                      {results.wasteGeneration.toFixed(2)}%
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                    <span className="text-sm font-medium">Score:</span>
+                    <span
+                      className={cn(
+                        "text-2xl font-bold",
+                        getScoreColor(results.wasteScore)
+                      )}
+                    >
+                      {results.wasteScore.toFixed(1)}%
+                    </span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* RIGHT COLUMN - Weights & Results */}
+          <div className="space-y-4">
+            <Alert className="bg-purple-50 border-purple-200">
+              <Info className="h-4 w-4 text-purple-600" />
+              <AlertTitle className="text-sm font-semibold">
+                Custom Weighting
+              </AlertTitle>
+              <AlertDescription className="text-xs">
+                Adjust importance of each metric based on your priorities
+              </AlertDescription>
+            </Alert>
+
+            {/* Weights Configuration */}
+            <Card className="bg-gradient-to-br from-purple-50 to-indigo-50 border-2 border-purple-200">
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Target className="h-5 w-5 text-purple-600" />
+                  Assign Importance Weights
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-4">
+                  <div>
+                    <div className="flex justify-between mb-2">
+                      <Label className="text-sm font-medium">
+                        Capacity Utilization
+                      </Label>
+                      <Badge variant="outline" className="bg-blue-100">
+                        {weights.capacity}%
+                      </Badge>
+                    </div>
+                    <Slider
+                      value={[weights.capacity]}
+                      max={100}
+                      step={5}
+                      onValueChange={(v) => handleWeightChange("capacity", v)}
+                      className="cursor-pointer"
+                    />
+                  </div>
+
+                  <div>
+                    <div className="flex justify-between mb-2">
+                      <Label className="text-sm font-medium">
+                        Processing Time
+                      </Label>
+                      <Badge variant="outline" className="bg-green-100">
+                        {weights.processing}%
+                      </Badge>
+                    </div>
+                    <Slider
+                      value={[weights.processing]}
+                      max={100}
+                      step={5}
+                      onValueChange={(v) => handleWeightChange("processing", v)}
+                      className="cursor-pointer"
+                    />
+                  </div>
+
+                  <div>
+                    <div className="flex justify-between mb-2">
+                      <Label className="text-sm font-medium">
+                        Energy Efficiency
+                      </Label>
+                      <Badge variant="outline" className="bg-yellow-100">
+                        {weights.energy}%
+                      </Badge>
+                    </div>
+                    <Slider
+                      value={[weights.energy]}
+                      max={100}
+                      step={5}
+                      onValueChange={(v) => handleWeightChange("energy", v)}
+                      className="cursor-pointer"
+                    />
+                  </div>
+
+                  <div>
+                    <div className="flex justify-between mb-2">
+                      <Label className="text-sm font-medium">
+                        Waste Management
+                      </Label>
+                      <Badge variant="outline" className="bg-red-100">
+                        {weights.waste}%
+                      </Badge>
+                    </div>
+                    <Slider
+                      value={[weights.waste]}
+                      max={100}
+                      step={5}
+                      onValueChange={(v) => handleWeightChange("waste", v)}
+                      className="cursor-pointer"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex justify-between items-center p-3 bg-white rounded-lg border-2 border-purple-300">
+                  <span className="font-semibold">Total Weight:</span>
+                  <span
+                    className={cn(
+                      "text-xl font-bold",
+                      Object.values(weights).reduce((a, b) => a + b, 0) === 100
+                        ? "text-green-600"
+                        : "text-orange-600"
+                    )}
+                  >
+                    {Object.values(weights).reduce((a, b) => a + b, 0)}%
+                  </span>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Overall Efficiency Result */}
+            <Card className="bg-gradient-to-br from-green-100 via-emerald-100 to-teal-100 border-4 border-green-400 shadow-xl animate-in slide-in-from-bottom-4">
+              <CardHeader className="text-center pb-3">
+                <CardTitle className="text-2xl font-bold text-green-800 flex items-center justify-center gap-2">
+                  <Factory className="h-7 w-7" />
+                  Overall Plant Efficiency
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="text-center space-y-4">
+                <div className="text-7xl font-extrabold text-green-700 drop-shadow-lg">
+                  {results.overallEfficiency.toFixed(1)}%
+                </div>
+                <Badge
+                  className={cn(
+                    "text-lg px-4 py-2",
+                    results.overallEfficiency >= 80
+                      ? "bg-green-600"
+                      : results.overallEfficiency >= 60
+                      ? "bg-yellow-600"
+                      : "bg-red-600"
+                  )}
+                >
+                  {getEfficiencyGrade(results.overallEfficiency)}
+                </Badge>
+
+                <div className="grid grid-cols-2 gap-3 mt-4">
+                  <div className="p-3 bg-white rounded-lg">
+                    <div className="text-xs text-muted-foreground">Capacity</div>
+                    <div
+                      className={cn(
+                        "text-xl font-bold",
+                        getScoreColor(results.capacityScore)
+                      )}
+                    >
+                      {results.capacityScore.toFixed(0)}%
+                    </div>
+                  </div>
+                  <div className="p-3 bg-white rounded-lg">
+                    <div className="text-xs text-muted-foreground">Time</div>
+                    <div
+                      className={cn(
+                        "text-xl font-bold",
+                        getScoreColor(results.timeScore)
+                      )}
+                    >
+                      {results.timeScore.toFixed(0)}%
+                    </div>
+                  </div>
+                  <div className="p-3 bg-white rounded-lg">
+                    <div className="text-xs text-muted-foreground">Energy</div>
+                    <div
+                      className={cn(
+                        "text-xl font-bold",
+                        getScoreColor(results.energyScore)
+                      )}
+                    >
+                      {results.energyScore.toFixed(0)}%
+                    </div>
+                  </div>
+                  <div className="p-3 bg-white rounded-lg">
+                    <div className="text-xs text-muted-foreground">Waste</div>
+                    <div
+                      className={cn(
+                        "text-xl font-bold",
+                        getScoreColor(results.wasteScore)
+                      )}
+                    >
+                      {results.wasteScore.toFixed(0)}%
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Warnings & Recommendations */}
             {results.warnings.length > 0 && (
-              <Alert className="bg-orange-50 border-orange-300">
+              <Alert className="bg-gradient-to-r from-orange-50 to-red-50 border-orange-300">
                 <AlertTriangle className="h-4 w-4 text-orange-600" />
-                <AlertTitle className="text-orange-800 text-sm font-semibold">Improvement Alerts</AlertTitle>
-                <AlertDescription className="text-xs text-orange-700 space-y-1 mt-1">
-                  {results.warnings.map((w, i) => <div key={i}>⚠️ {w}</div>)}
+                <AlertTitle className="text-orange-900 font-semibold">
+                  Improvement Recommendations
+                </AlertTitle>
+                <AlertDescription className="text-orange-800">
+                  <ul className="list-disc list-inside space-y-1 text-xs sm:text-sm mt-2">
+                    {results.warnings.map((warning, idx) => (
+                      <li key={idx}>{warning}</li>
+                    ))}
+                  </ul>
                 </AlertDescription>
               </Alert>
             )}
-          </TabsContent>
 
-          {/* ════ TAB 3: ACTION PLAN ════════════════════ */}
-          <TabsContent value="actions" className="space-y-4 pt-3">
-
-            {/* Priority matrix */}
-            <Card className="bg-white border-orange-100">
-              <CardHeader className="p-3 pb-1 border-b border-orange-100">
-                <CardTitle className="text-sm font-bold text-orange-700">🎯 Priority Action Matrix</CardTitle>
-              </CardHeader>
-              <CardContent className="p-3 space-y-2">
-                {[
-                  {
-                    metric: "Capacity",
-                    score: results.capacityScore,
-                    bench: pt.capBench,
-                    actions: ["Review production schedule & demand forecast", "Check separator / homogeniser downtime", "Optimize batch changeover sequence"],
-                  },
-                  {
-                    metric: "Time Efficiency",
-                    score: results.timeScore,
-                    bench: pt.timeBench,
-                    actions: ["Map process flow — identify waiting steps", "Reduce CIP time with hot water recycling", "Pre-stage materials before shift start"],
-                  },
-                  {
-                    metric: "Energy",
-                    score: results.energyScore,
-                    bench: 85,
-                    actions: [`Target ${pt.energyBench} kWh/L (current: ${results.kwhPerL.toFixed(3)})`, "Audit compressor & refrigeration insulation", "Off-peak ice building for milk chilling"],
-                  },
-                  {
-                    metric: "Waste",
-                    score: results.wasteScore,
-                    bench: 80,
-                    actions: ["Track line losses at each stage", "Optimize startup/shutdown volumes", "Recover flush milk from CIP returns"],
-                  },
-                  {
-                    metric: "Availability",
-                    score: results.downtimeScore,
-                    bench: 90,
-                    actions: ["Implement preventive maintenance schedule", "Stock critical spare parts on-site", "Train operators on minor stoppages"],
-                  },
-                ].sort((a, b) => a.score - b.score).map((item, i) => {
-                  const gap = Math.max(0, item.bench - item.score);
-                  const priority = gap > 20 ? "🔴 High" : gap > 10 ? "🟡 Medium" : "🟢 Low";
-                  return (
-                    <div key={i} className={`p-3 rounded-lg border ${gap > 20 ? "bg-red-50 border-red-200" : gap > 10 ? "bg-yellow-50 border-yellow-200" : "bg-green-50 border-green-200"}`}>
-                      <div className="flex justify-between items-center mb-1">
-                        <span className="text-sm font-bold text-slate-700">{item.metric}</span>
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs text-slate-500">{item.score.toFixed(0)}% vs {item.bench}%</span>
-                          <span className="text-xs font-bold">{priority}</span>
-                        </div>
-                      </div>
-                      <div className="space-y-0.5">
-                        {item.actions.map((a, j) => (
-                          <div key={j} className="text-xs text-slate-600 flex gap-1">
-                            <span className="text-slate-400">→</span>{a}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  );
-                })}
-              </CardContent>
-            </Card>
-
-            {/* Benchmark reference */}
-            <Card className="bg-slate-50 border-slate-200">
-              <CardHeader className="p-3 pb-1 border-b border-slate-200">
-                <CardTitle className="text-xs font-bold text-slate-600 uppercase">📜 {pt.label} — Industry Benchmarks</CardTitle>
-              </CardHeader>
-              <CardContent className="p-3 text-xs space-y-1 text-slate-600">
-                {[
-                  { label: "Capacity utilization", target: `${pt.capBench}%`,         current: `${results.capacityUtil.toFixed(1)}%`  },
-                  { label: "Processing time eff.", target: `${pt.timeBench}%`,         current: `${results.timeEff.toFixed(1)}%`       },
-                  { label: "Energy intensity",      target: `${pt.energyBench} kWh/L`, current: `${results.kwhPerL.toFixed(3)} kWh/L`  },
-                  { label: "Waste generation",      target: `≤${pt.wasteBench}%`,      current: `${results.wastePct.toFixed(2)}%`      },
-                  { label: "OEE",                   target: "≥85% (world class)",      current: `${results.oee.toFixed(2)}%`           },
-                ].map((r, i) => (
-                  <div key={i} className="flex justify-between py-0.5 border-b border-slate-100">
-                    <span className="font-semibold">{r.label}</span>
-                    <div className="flex gap-4">
-                      <span className="text-slate-400">Target: {r.target}</span>
-                      <span className="font-bold text-slate-700">Now: {r.current}</span>
-                    </div>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-
-          </TabsContent>
-        </Tabs>
+            {/* Industry Benchmarks */}
+            <Alert className="bg-gradient-to-r from-blue-50 to-cyan-50 border-blue-200">
+              <Info className="h-4 w-4 text-blue-600" />
+              <AlertTitle className="text-blue-900 font-semibold text-sm sm:text-base">
+                Industry Benchmarks
+              </AlertTitle>
+              <AlertDescription className="text-blue-800 text-xs sm:text-sm space-y-1 mt-2">
+                <div>
+                  <strong>Capacity:</strong> 75-85% is optimal
+                </div>
+                <div>
+                  <strong>Processing:</strong> 90%+ efficiency expected
+                </div>
+                <div>
+                  <strong>Energy:</strong> 0.1-0.15 kWh/L is excellent
+                </div>
+                <div>
+                  <strong>Waste:</strong> Below 3% is industry standard
+                </div>
+              </AlertDescription>
+            </Alert>
+          </div>
+        </div>
       </CardContent>
     </Card>
   );
@@ -14981,718 +14291,432 @@ export default function PlantCostCalc() {
 
 // ... (PlantCostCalc upar khatam ho gaya)
 
-// ════════════════════════════════════════════════════════════
-// ADVANCED FAT & SNF MASS BALANCE CALCULATOR
-// Drop-in Replacement for MassBalanceCalc()
-//
-// INSTRUCTIONS:
-// 1. Apni file mein purana MemoizedInputRow + MassBalanceCalc() dhundhein
-// 2. Pura block DELETE karein
-// 3. Yeh poora code wahan PASTE karein
-// Koi naya import nahi chahiye.
-// ════════════════════════════════════════════════════════════
+// ==================== MASS BALANCE CALCULATOR ====================
 
-// ── INDUSTRY BENCHMARKS ───────────────────────────────────
-const MB_BENCHMARKS = {
-  fat: {
-    worldClass:  0.10,  // % loss
-    excellent:   0.25,
-    good:        0.50,
-    acceptable:  1.00,
-    poor:        2.00,
-  },
-  snf: {
-    worldClass:  0.15,
-    excellent:   0.35,
-    good:        0.70,
-    acceptable:  1.50,
-    poor:        3.00,
-  },
-} as const;
-
-// ── SHIFT / PERIOD PRESETS ────────────────────────────────
-const MB_PERIOD_PRESETS = {
-  "Daily Shift":      { label: "Daily",   icon: "📅" },
-  "Weekly":           { label: "Weekly",  icon: "📆" },
-  "Monthly":          { label: "Monthly", icon: "🗓️" },
-  "Custom Period":    { label: "Custom",  icon: "⚙️" },
-} as const;
-
-// ── PLANT TYPE PRESETS ────────────────────────────────────
-const MB_PLANT_PRESETS = {
-  "Small Dairy (5KL)": {
-    openingFat: "150", openingSnf: "430",
-    intakeFat: "325",  intakeSnf: "765",
-    addedFat: "0",     addedSnf: "0",
-    dispatchedFat: "410", dispatchedSnf: "1050",
-    removedFat: "52",  removedSnf: "50",
-    closingFat: "12",  closingSnf: "90",
-  },
-  "Medium Plant (25KL)": {
-    openingFat: "800",  openingSnf: "2100",
-    intakeFat: "1625",  intakeSnf: "3825",
-    addedFat: "12",     addedSnf: "85",
-    dispatchedFat: "2050", dispatchedSnf: "5400",
-    removedFat: "260",  removedSnf: "250",
-    closingFat: "110",  closingSnf: "340",
-  },
-  "Large Plant (100KL)": {
-    openingFat: "3200",  openingSnf: "8400",
-    intakeFat: "6500",   intakeSnf: "15300",
-    addedFat: "50",      addedSnf: "340",
-    dispatchedFat: "8200", dispatchedSnf: "21600",
-    removedFat: "1040",  removedSnf: "1000",
-    closingFat: "450",   closingSnf: "1360",
-  },
-} as const;
-
-// ── MEMOIZED INPUT ROW ────────────────────────────────────
-const MemoizedInputRow = memo(({
-  label, fatName, snfName, inputs, onInputChange, icon, colorScheme = "slate"
-}: {
-  label: string;
-  fatName: keyof MassBalanceInputs;
-  snfName: keyof MassBalanceInputs;
-  inputs: MassBalanceInputs;
-  onInputChange: (field: keyof MassBalanceInputs, value: string) => void;
-  icon?: string;
-  colorScheme?: "green" | "red" | "slate";
-}) => {
-  const borderColor = colorScheme === "green" ? "focus:border-green-500" : colorScheme === "red" ? "focus:border-red-500" : "focus:border-blue-400";
-  return (
-    <div className="grid grid-cols-3 gap-2 items-center">
-      <div className="flex items-center gap-1.5">
-        {icon && <span className="text-sm">{icon}</span>}
-        <Label className="text-xs sm:text-sm font-semibold text-slate-700 leading-tight">{label}</Label>
-      </div>
-      <Input
-        type="number" step="0.001" min="0"
-        value={inputs[fatName]}
-        onChange={e => onInputChange(fatName, e.target.value)}
-        placeholder="0.000"
-        className={`h-9 text-sm border-2 bg-white font-mono ${borderColor}`}
-      />
-      <Input
-        type="number" step="0.001" min="0"
-        value={inputs[snfName]}
-        onChange={e => onInputChange(snfName, e.target.value)}
-        placeholder="0.000"
-        className={`h-9 text-sm border-2 bg-white font-mono ${borderColor}`}
-      />
+// MemoizedInputRow Component
+const MemoizedInputRow = memo(({ 
+    label, 
+    fatName, 
+    snfName, 
+    inputs, 
+    onInputChange 
+}: { 
+    label: string; 
+    fatName: keyof MassBalanceInputs; 
+    snfName: keyof MassBalanceInputs; 
+    inputs: MassBalanceInputs; 
+    onInputChange: (field: keyof MassBalanceInputs, value: string) => void;
+}) => (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 items-center">
+        <Label className="text-sm md:text-base font-semibold">{label}</Label>
+        <Input 
+            type="number" 
+            step="0.001"
+            value={inputs[fatName]} 
+            onChange={(e) => onInputChange(fatName, e.target.value)} 
+            placeholder="0.000"
+            className="h-10 md:h-11 text-sm md:text-base border-2"
+        />
+        <Input 
+            type="number" 
+            step="0.001"
+            value={inputs[snfName]} 
+            onChange={(e) => onInputChange(snfName, e.target.value)} 
+            placeholder="0.000"
+            className="h-10 md:h-11 text-sm md:text-base border-2"
+        />
     </div>
-  );
-});
-MemoizedInputRow.displayName = "MemoizedInputRow";
+));
 
-// ── GAUGE COMPONENT ───────────────────────────────────────
-function LossGauge({ pct, label }: { pct: number; label: string }) {
-  const bm = label === "Fat" ? MB_BENCHMARKS.fat : MB_BENCHMARKS.snf;
-  const getColor = (p: number) => {
-    if (p <= bm.worldClass)  return { bar: "bg-emerald-500", text: "text-emerald-700", badge: "bg-emerald-100 text-emerald-700", grade: "World Class" };
-    if (p <= bm.excellent)   return { bar: "bg-green-500",   text: "text-green-700",   badge: "bg-green-100 text-green-700",   grade: "Excellent"   };
-    if (p <= bm.good)        return { bar: "bg-yellow-500",  text: "text-yellow-700",  badge: "bg-yellow-100 text-yellow-700",  grade: "Good"        };
-    if (p <= bm.acceptable)  return { bar: "bg-orange-500",  text: "text-orange-700",  badge: "bg-orange-100 text-orange-700",  grade: "Acceptable"  };
-    return                          { bar: "bg-red-500",     text: "text-red-700",     badge: "bg-red-100 text-red-700",        grade: "Poor ⚠️"     };
-  };
-  const c = getColor(Math.abs(pct));
-  const barWidth = Math.min(Math.abs(pct) / bm.poor * 100, 100);
-  return (
-    <div className="space-y-1">
-      <div className="flex justify-between items-center">
-        <span className="text-xs font-bold text-slate-600">{label} Loss %</span>
-        <div className="flex items-center gap-1">
-          <span className={`text-xs font-black ${c.text}`}>{Math.abs(pct).toFixed(4)}%</span>
-          <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-bold ${c.badge}`}>{c.grade}</span>
-        </div>
-      </div>
-      <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
-        <div className={`h-full rounded-full transition-all ${c.bar}`} style={{ width: `${barWidth}%` }} />
-      </div>
-      <div className="flex justify-between text-[9px] text-slate-400">
-        <span>0%</span>
-        <span>World Class ≤{bm.worldClass}%</span>
-        <span>Poor &gt;{bm.poor}%</span>
-      </div>
-    </div>
-  );
-}
+MemoizedInputRow.displayName = 'MemoizedInputRow';
 
-// ── MAIN COMPONENT ────────────────────────────────────────
 function MassBalanceCalc() {
-  const { toast } = useToast();
-  const reportRef = useRef<HTMLDivElement>(null);
-
-  const [period,  setPeriod]  = useState<keyof typeof MB_PERIOD_PRESETS>("Daily Shift");
-  const [activeTab, setActiveTab] = useState<"inputs" | "results" | "trend">("inputs");
-
-  const [inputs, setInputs] = useState<MassBalanceInputs>({
-    openingFat: "", openingSnf: "",
-    intakeFat:  "", intakeSnf:  "",
-    addedFat:   "", addedSnf:   "",
-    dispatchedFat: "", dispatchedSnf: "",
-    removedFat:    "", removedSnf:    "",
-    closingFat:    "", closingSnf:    "",
-  });
-
-  // Optional: TP (Third Party) cream/butter removed separately
-  const [extraRows, setExtraRows] = useState({
-    creamFat: "", creamSnf: "",
-    wasteWashFat: "", wasteWashSnf: "",
-  });
-
-  const [isDownloading, setIsDownloading] = useState(false);
-
-  const handleInputChange = useCallback((field: keyof MassBalanceInputs, value: string) => {
-    setInputs(prev => ({ ...prev, [field]: value }));
-  }, []);
-
-  // Apply plant preset
-  const applyPreset = (name: keyof typeof MB_PLANT_PRESETS) => {
-    setInputs(MB_PLANT_PRESETS[name] as MassBalanceInputs);
-    toast({ title: "Preset Applied", description: name });
-  };
-
-  // Clear all
-  const clearAll = () => {
-    setInputs({
-      openingFat: "", openingSnf: "", intakeFat: "", intakeSnf: "",
-      addedFat: "", addedSnf: "", dispatchedFat: "", dispatchedSnf: "",
-      removedFat: "", removedSnf: "", closingFat: "", closingSnf: "",
+    const [inputs, setInputs] = useState<MassBalanceInputs>({
+        openingFat: '', openingSnf: '',
+        intakeFat: '', intakeSnf: '',
+        addedFat: '', addedSnf: '',
+        dispatchedFat: '', dispatchedSnf: '',
+        removedFat: '', removedSnf: '',
+        closingFat: '', closingSnf: ''
     });
-    setExtraRows({ creamFat: "", creamSnf: "", wasteWashFat: "", wasteWashSnf: "" });
-  };
+    
+    const [calculationSteps, setCalculationSteps] = useState<string[]>([]);
+    const [isDownloading, setIsDownloading] = useState(false);
+    const reportRef = useRef<HTMLDivElement>(null);
+    // const { toast } = useToast(); // Already imported at top
 
-  // ── CALCULATE (live, useMemo) ─────────────────────────
-  const results = useMemo(() => {
-    const n = (v: string) => parseFloat(v) || 0;
+    const handleInputChange = useCallback((field: keyof MassBalanceInputs, value: string) => {
+        setInputs(prev => ({...prev, [field]: value}));
+    }, []);
 
-    // Inputs
-    const opF  = n(inputs.openingFat);    const opS  = n(inputs.openingSnf);
-    const inF  = n(inputs.intakeFat);     const inS  = n(inputs.intakeSnf);
-    const adF  = n(inputs.addedFat);      const adS  = n(inputs.addedSnf);
-    const crF  = n(extraRows.creamFat);   const crS  = n(extraRows.creamSnf);
-    const wwF  = n(extraRows.wasteWashFat); const wwS = n(extraRows.wasteWashSnf);
+    const results = useMemo(() => {
+        const opF = parseFloat(inputs.openingFat) || 0;
+        const opS = parseFloat(inputs.openingSnf) || 0;
+        const inF = parseFloat(inputs.intakeFat) || 0;
+        const inS = parseFloat(inputs.intakeSnf) || 0;
+        const adF = parseFloat(inputs.addedFat) || 0;
+        const adS = parseFloat(inputs.addedSnf) || 0;
+        const dispF = parseFloat(inputs.dispatchedFat) || 0;
+        const dispS = parseFloat(inputs.dispatchedSnf) || 0;
+        const remF = parseFloat(inputs.removedFat) || 0;
+        const remS = parseFloat(inputs.removedSnf) || 0;
+        const clF = parseFloat(inputs.closingFat) || 0;
+        const clS = parseFloat(inputs.closingSnf) || 0;
 
-    // Outputs
-    const dispF = n(inputs.dispatchedFat); const dispS = n(inputs.dispatchedSnf);
-    const remF  = n(inputs.removedFat);    const remS  = n(inputs.removedSnf);
-    const clF   = n(inputs.closingFat);    const clS   = n(inputs.closingSnf);
+        const totalInFat = opF + inF + adF;
+        const totalInSnf = opS + inS + adS;
+        
+        const totalOutFat = dispF + remF + clF;
+        const totalOutSnf = dispS + remS + clS;
 
-    // Totals
-    const totalInFat  = opF + inF + adF;
-    const totalInSnf  = opS + inS + adS;
-    const totalOutFat = dispF + remF + clF + crF + wwF;
-    const totalOutSnf = dispS + remS + clS + crS + wwS;
+        const gainLossFat = totalInFat - totalOutFat;
+        const gainLossSnf = totalInSnf - totalOutSnf;
 
-    const gainLossFat = totalInFat - totalOutFat;
-    const gainLossSnf = totalInSnf - totalOutSnf;
+        // Generate calculation steps
+        const steps: string[] = [];
+        
+        steps.push(`📊 **═══════════ MASS BALANCE CALCULATION ═══════════**`);
+        
+        steps.push(`\n\n📥 **═══════════ STEP 1: TOTAL INPUTS ═══════════**`);
+        steps.push(`\n   FAT INPUTS:`);
+        steps.push(`     Opening Balance: ${opF.toFixed(6)} kg`);
+        steps.push(`     Total Intake: ${inF.toFixed(6)} kg`);
+        steps.push(`     Added (SMP/etc): ${adF.toFixed(6)} kg`);
+        steps.push(`     ─────────────────────────────`);
+        steps.push(`     Total Fat In = ${opF.toFixed(6)} + ${inF.toFixed(6)} + ${adF.toFixed(6)}`);
+        steps.push(`                  = ${totalInFat.toFixed(8)} kg`);
+        
+        steps.push(`\n   SNF INPUTS:`);
+        steps.push(`     Opening Balance: ${opS.toFixed(6)} kg`);
+        steps.push(`     Total Intake: ${inS.toFixed(6)} kg`);
+        steps.push(`     Added (SMP/etc): ${adS.toFixed(6)} kg`);
+        steps.push(`     ─────────────────────────────`);
+        steps.push(`     Total SNF In = ${opS.toFixed(6)} + ${inS.toFixed(6)} + ${adS.toFixed(6)}`);
+        steps.push(`                  = ${totalInSnf.toFixed(8)} kg`);
 
-    const fatLossPct = totalInFat > 0 ? (Math.abs(gainLossFat) / totalInFat) * 100 : 0;
-    const snfLossPct = totalInSnf > 0 ? (Math.abs(gainLossSnf) / totalInSnf) * 100 : 0;
+        steps.push(`\n\n📤 **═══════════ STEP 2: TOTAL OUTPUTS ═══════════**`);
+        steps.push(`\n   FAT OUTPUTS:`);
+        steps.push(`     Dispatched (Products): ${dispF.toFixed(6)} kg`);
+        steps.push(`     Removed (Cream/etc): ${remF.toFixed(6)} kg`);
+        steps.push(`     Closing Balance: ${clF.toFixed(6)} kg`);
+        steps.push(`     ─────────────────────────────`);
+        steps.push(`     Total Fat Out = ${dispF.toFixed(6)} + ${remF.toFixed(6)} + ${clF.toFixed(6)}`);
+        steps.push(`                   = ${totalOutFat.toFixed(8)} kg`);
+        
+        steps.push(`\n   SNF OUTPUTS:`);
+        steps.push(`     Dispatched (Products): ${dispS.toFixed(6)} kg`);
+        steps.push(`     Removed (Cream/etc): ${remS.toFixed(6)} kg`);
+        steps.push(`     Closing Balance: ${clS.toFixed(6)} kg`);
+        steps.push(`     ─────────────────────────────`);
+        steps.push(`     Total SNF Out = ${dispS.toFixed(6)} + ${remS.toFixed(6)} + ${clS.toFixed(6)}`);
+        steps.push(`                   = ${totalOutSnf.toFixed(8)} kg`);
 
-    // Overall plant efficiency
-    const productFat    = dispF;
-    const fatEfficiency = totalInFat > 0 ? (productFat / totalInFat) * 100 : 0;
-    const productSnf    = dispS;
-    const snfEfficiency = totalInSnf > 0 ? (productSnf / totalInSnf) * 100 : 0;
+        steps.push(`\n\n⚖️ **═══════════ STEP 3: MASS BALANCE RECONCILIATION ═══════════**`);
+        steps.push(`\n   FAT RECONCILIATION:`);
+        steps.push(`     Total Fat In: ${totalInFat.toFixed(8)} kg`);
+        steps.push(`     Total Fat Out: ${totalOutFat.toFixed(8)} kg`);
+        steps.push(`     Fat Gain/Loss = In - Out`);
+        steps.push(`                   = ${totalInFat.toFixed(8)} - ${totalOutFat.toFixed(8)}`);
+        steps.push(`                   = ${gainLossFat.toFixed(8)} kg`);
+        steps.push(`     Status: ${gainLossFat >= 0 ? '✅ Gain' : '⚠️ Loss'} (${Math.abs(gainLossFat).toFixed(8)} kg)`);
+        
+        steps.push(`\n   SNF RECONCILIATION:`);
+        steps.push(`     Total SNF In: ${totalInSnf.toFixed(8)} kg`);
+        steps.push(`     Total SNF Out: ${totalOutSnf.toFixed(8)} kg`);
+        steps.push(`     SNF Gain/Loss = In - Out`);
+        steps.push(`                   = ${totalInSnf.toFixed(8)} - ${totalOutSnf.toFixed(8)}`);
+        steps.push(`                   = ${gainLossSnf.toFixed(8)} kg`);
+        steps.push(`     Status: ${gainLossSnf >= 0 ? '✅ Gain' : '⚠️ Loss'} (${Math.abs(gainLossSnf).toFixed(8)} kg)`);
 
-    // Unaccounted (wash + misc losses)
-    const unaccountedFat = gainLossFat - crF - wwF;
-    const unaccountedSnf = gainLossSnf - crS - wwS;
+        steps.push(`\n\n📈 **═══════════ STEP 4: PERCENTAGE ANALYSIS ═══════════**`);
+        const fatLossPercentage = totalInFat > 0 ? (Math.abs(gainLossFat) / totalInFat) * 100 : 0;
+        const snfLossPercentage = totalInSnf > 0 ? (Math.abs(gainLossSnf) / totalInSnf) * 100 : 0;
+        
+        steps.push(`\n   FAT LOSS/GAIN PERCENTAGE:`);
+        steps.push(`     = (|Gain/Loss| / Total In) × 100`);
+        steps.push(`     = (${Math.abs(gainLossFat).toFixed(8)} / ${totalInFat.toFixed(8)}) × 100`);
+        steps.push(`     = ${fatLossPercentage.toFixed(6)}%`);
+        
+        steps.push(`\n   SNF LOSS/GAIN PERCENTAGE:`);
+        steps.push(`     = (|Gain/Loss| / Total In) × 100`);
+        steps.push(`     = (${Math.abs(gainLossSnf).toFixed(8)} / ${totalInSnf.toFixed(8)}) × 100`);
+        steps.push(`     = ${snfLossPercentage.toFixed(6)}%`);
 
-    // Grade
-    const getFatGrade = (p: number) => {
-      const b = MB_BENCHMARKS.fat;
-      if (p <= b.worldClass)  return { grade: "World Class 🏆", color: "text-emerald-700" };
-      if (p <= b.excellent)   return { grade: "Excellent ✅",   color: "text-green-700"   };
-      if (p <= b.good)        return { grade: "Good 👍",         color: "text-yellow-700"  };
-      if (p <= b.acceptable)  return { grade: "Acceptable ⚠️",  color: "text-orange-700"  };
-      return                         { grade: "Poor ❌",         color: "text-red-700"     };
-    };
-    const getSnfGrade = (p: number) => {
-      const b = MB_BENCHMARKS.snf;
-      if (p <= b.worldClass)  return { grade: "World Class 🏆", color: "text-emerald-700" };
-      if (p <= b.excellent)   return { grade: "Excellent ✅",   color: "text-green-700"   };
-      if (p <= b.good)        return { grade: "Good 👍",         color: "text-yellow-700"  };
-      if (p <= b.acceptable)  return { grade: "Acceptable ⚠️",  color: "text-orange-700"  };
-      return                         { grade: "Poor ❌",         color: "text-red-700"     };
-    };
+        steps.push(`\n\n✨ **═══════════ FINAL SUMMARY ═══════════**`);
+        steps.push(`\n   Fat Balance:`);
+        steps.push(`     - Total In: ${totalInFat.toFixed(6)} kg`);
+        steps.push(`     - Total Out: ${totalOutFat.toFixed(6)} kg`);
+        steps.push(`     - Net: ${gainLossFat >= 0 ? 'Gain' : 'Loss'} of ${Math.abs(gainLossFat).toFixed(6)} kg (${fatLossPercentage.toFixed(4)}%)`);
+        
+        steps.push(`\n   SNF Balance:`);
+        steps.push(`     - Total In: ${totalInSnf.toFixed(6)} kg`);
+        steps.push(`     - Total Out: ${totalOutSnf.toFixed(6)} kg`);
+        steps.push(`     - Net: ${gainLossSnf >= 0 ? 'Gain' : 'Loss'} of ${Math.abs(gainLossSnf).toFixed(6)} kg (${snfLossPercentage.toFixed(4)}%)`);
 
-    const fatGrade = getFatGrade(fatLossPct);
-    const snfGrade = getSnfGrade(snfLossPct);
+        setCalculationSteps(steps);
 
-    // Financial impact (assume ₹50/kg fat, ₹30/kg SNF)
-    const fatLossVal = Math.abs(gainLossFat) * 50;
-    const snfLossVal = Math.abs(gainLossSnf) * 30;
-    const totalLossVal = fatLossVal + snfLossVal;
+        return {
+            totalInFat, totalInSnf,
+            totalOutFat, totalOutSnf,
+            gainLossFat, gainLossSnf,
+            fatLossPercentage, snfLossPercentage
+        };
+    }, [inputs]);
 
-    return {
-      opF, inF, adF, dispF, remF, clF, crF, wwF,
-      opS, inS, adS, dispS, remS, clS, crS, wwS,
-      totalInFat, totalInSnf,
-      totalOutFat, totalOutSnf,
-      gainLossFat, gainLossSnf,
-      fatLossPct, snfLossPct,
-      fatEfficiency, snfEfficiency,
-      unaccountedFat, unaccountedSnf,
-      fatGrade, snfGrade,
-      fatLossVal, snfLossVal, totalLossVal,
-    };
-  }, [inputs, extraRows]);
+    const handleDownloadPdf = async () => {
+        const reportElement = reportRef.current;
+        if (!reportElement) return;
 
-  // ── PDF DOWNLOAD ──────────────────────────────────────
-  const handleDownloadPdf = async () => {
-    const el = reportRef.current;
-    if (!el) return;
-    setIsDownloading(true);
-    try {
-      const canvas = await html2canvas(el, { scale: 2, useCORS: true, backgroundColor: "#ffffff" });
-      const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
-      const pw = pdf.internal.pageSize.getWidth();
-      const ph = pdf.internal.pageSize.getHeight();
-      const ratio = canvas.width / canvas.height;
-      let iw = pw - 20;
-      let ih = iw / ratio;
-      if (ih > ph - 20) { ih = ph - 20; iw = ih * ratio; }
-      pdf.addImage(canvas.toDataURL("image/png"), "PNG", (pw - iw) / 2, 10, iw, ih);
-      pdf.save(`mass_balance_${period.replace(/\s/g, "_")}_${new Date().toISOString().slice(0, 10)}.pdf`);
-      toast({ title: "✅ PDF Downloaded", description: "Mass balance report saved." });
-    } catch (e) {
-      toast({ variant: "destructive", title: "PDF Error", description: "Could not generate PDF." });
-    } finally {
-      setIsDownloading(false);
-    }
-  };
+        setIsDownloading(true);
+        try {
+            const canvas = await html2canvas(reportElement, {
+                scale: 2, 
+                useCORS: true,
+                backgroundColor: '#ffffff'
+            });
+            const imgData = canvas.toDataURL('image/png');
+            
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'mm',
+                format: 'a4'
+            });
 
-  // ── RENDER ────────────────────────────────────────────
-  return (
-    <Card className="border-2 border-blue-200 shadow-lg">
-      <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-t-lg border-b border-blue-100">
-        <CardTitle className="flex items-center justify-between">
-          <span className="flex items-center gap-2 text-blue-800">
-            <Scale className="h-6 w-6 text-blue-600" />
-            Fat & SNF Mass Balance Calculator
-          </span>
-          <div className="flex gap-2">
-            <Badge className={`text-xs px-2 py-1 ${results.gainLossFat < 0 ? "bg-orange-100 text-orange-700" : "bg-green-100 text-green-700"}`}>
-              Fat: {results.gainLossFat >= 0 ? "+" : ""}{results.gainLossFat.toFixed(3)} kg
-            </Badge>
-            <Badge className={`text-xs px-2 py-1 ${results.gainLossSnf < 0 ? "bg-orange-100 text-orange-700" : "bg-green-100 text-green-700"}`}>
-              SNF: {results.gainLossSnf >= 0 ? "+" : ""}{results.gainLossSnf.toFixed(3)} kg
-            </Badge>
-          </div>
-        </CardTitle>
-        <CardDescription className="text-blue-600 text-xs">
-          Live balance · 5 benchmarks · Plant efficiency · Financial impact · PDF export
-        </CardDescription>
-      </CardHeader>
-
-      <CardContent className="pt-4 space-y-4">
-
-        {/* ── PERIOD SELECTOR ──────────────────────────── */}
-        <div className="space-y-2">
-          <Label className="text-xs font-bold text-slate-500 uppercase">Period</Label>
-          <div className="flex gap-2">
-            {(Object.keys(MB_PERIOD_PRESETS) as Array<keyof typeof MB_PERIOD_PRESETS>).map(key => (
-              <button key={key} onClick={() => setPeriod(key)}
-                className={`px-3 py-1.5 rounded-full border text-xs font-semibold transition-all shadow-sm flex items-center gap-1
-                  ${period === key
-                    ? "bg-blue-600 text-white border-blue-600"
-                    : "bg-white text-slate-600 border-slate-200 hover:border-blue-300"
-                  }`}>
-                {MB_PERIOD_PRESETS[key].icon} {MB_PERIOD_PRESETS[key].label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* ── PLANT PRESETS ─────────────────────────────── */}
-        <div className="space-y-1">
-          <Label className="text-xs font-bold text-slate-500 uppercase">Plant Presets (sample data)</Label>
-          <div className="flex flex-wrap gap-2">
-            {(Object.keys(MB_PLANT_PRESETS) as Array<keyof typeof MB_PLANT_PRESETS>).map(name => (
-              <button key={name} onClick={() => applyPreset(name)}
-                className="px-3 py-1 rounded-full border border-blue-200 bg-white text-xs font-semibold text-blue-700 hover:bg-blue-600 hover:text-white transition-all shadow-sm">
-                {name}
-              </button>
-            ))}
-            <button onClick={clearAll}
-              className="px-3 py-1 rounded-full border border-red-200 bg-white text-xs font-semibold text-red-600 hover:bg-red-600 hover:text-white transition-all shadow-sm">
-              🗑️ Clear All
-            </button>
-          </div>
-        </div>
-
-        {/* ── TABS ─────────────────────────────────────── */}
-        <Tabs value={activeTab} onValueChange={v => setActiveTab(v as any)}>
-          <TabsList className="grid grid-cols-3 bg-slate-100">
-            <TabsTrigger value="inputs"  className="text-xs">📥 Inputs & Outputs</TabsTrigger>
-            <TabsTrigger value="results" className="text-xs">⚖️ Balance & Grades</TabsTrigger>
-            <TabsTrigger value="trend"   className="text-xs">📊 Analysis</TabsTrigger>
-          </TabsList>
-
-          {/* ════ TAB 1: INPUTS ════════════════════════ */}
-          <TabsContent value="inputs" className="space-y-4 pt-3">
-
-            {/* Column headers */}
-            <div className="grid grid-cols-3 gap-2 text-center text-xs font-bold rounded-lg overflow-hidden border border-slate-200">
-              <div className="bg-indigo-100 text-indigo-800 p-2">Component</div>
-              <div className="bg-yellow-100 text-yellow-800 p-2">Fat (kg)</div>
-              <div className="bg-pink-100 text-pink-800 p-2">SNF (kg)</div>
-            </div>
-
-            {/* INPUTS block */}
-            <Card className="border-green-200 bg-green-50/30">
-              <CardHeader className="p-3 pb-2 bg-green-50 border-b border-green-100">
-                <CardTitle className="text-sm text-green-700 flex items-center gap-1">
-                  <Plus className="w-4 h-4" /> Total Inputs
-                  <span className="ml-auto text-xs font-mono">
-                    F: {results.totalInFat.toFixed(3)} kg | SNF: {results.totalInSnf.toFixed(3)} kg
-                  </span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-3 space-y-3">
-                <MemoizedInputRow label="Opening Balance" icon="🏭" fatName="openingFat" snfName="openingSnf" inputs={inputs} onInputChange={handleInputChange} colorScheme="green" />
-                <MemoizedInputRow label="Total Intake (Milk)" icon="🥛" fatName="intakeFat" snfName="intakeSnf" inputs={inputs} onInputChange={handleInputChange} colorScheme="green" />
-                <MemoizedInputRow label="Added (SMP / Veg fat / WPC)" icon="➕" fatName="addedFat" snfName="addedSnf" inputs={inputs} onInputChange={handleInputChange} colorScheme="green" />
-
-                {/* Live total */}
-                <div className="grid grid-cols-3 gap-2 bg-green-100 rounded-lg p-2 border border-green-200">
-                  <span className="text-xs font-bold text-green-700">TOTAL IN</span>
-                  <span className="text-center text-sm font-black text-green-800 font-mono">{results.totalInFat.toFixed(4)}</span>
-                  <span className="text-center text-sm font-black text-green-800 font-mono">{results.totalInSnf.toFixed(4)}</span>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* OUTPUTS block */}
-            <Card className="border-red-200 bg-red-50/30">
-              <CardHeader className="p-3 pb-2 bg-red-50 border-b border-red-100">
-                <CardTitle className="text-sm text-red-700 flex items-center gap-1">
-                  <Minus className="w-4 h-4" /> Total Outputs
-                  <span className="ml-auto text-xs font-mono">
-                    F: {results.totalOutFat.toFixed(3)} kg | SNF: {results.totalOutSnf.toFixed(3)} kg
-                  </span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-3 space-y-3">
-                <MemoizedInputRow label="Dispatched (Products)" icon="🚚" fatName="dispatchedFat" snfName="dispatchedSnf" inputs={inputs} onInputChange={handleInputChange} colorScheme="red" />
-                <MemoizedInputRow label="Removed (Cream / Butter)" icon="🧈" fatName="removedFat" snfName="removedSnf" inputs={inputs} onInputChange={handleInputChange} colorScheme="red" />
-                <MemoizedInputRow label="Closing Balance" icon="🏭" fatName="closingFat" snfName="closingSnf" inputs={inputs} onInputChange={handleInputChange} colorScheme="red" />
-
-                {/* Extended outputs */}
-                <div className="border-t border-red-100 pt-2 space-y-3">
-                  <div className="text-[10px] text-red-500 font-bold uppercase tracking-wider">Optional (for detailed accounting)</div>
-                  <div className="grid grid-cols-3 gap-2 items-center">
-                    <div className="flex items-center gap-1"><span className="text-sm">🥤</span><Label className="text-xs font-semibold text-slate-600">Cream Dispatch</Label></div>
-                    <Input type="number" step="0.001" min="0" value={extraRows.creamFat}
-                      onChange={e => setExtraRows(p => ({ ...p, creamFat: e.target.value }))}
-                      placeholder="0.000" className="h-9 text-sm border-2 bg-white font-mono" />
-                    <Input type="number" step="0.001" min="0" value={extraRows.creamSnf}
-                      onChange={e => setExtraRows(p => ({ ...p, creamSnf: e.target.value }))}
-                      placeholder="0.000" className="h-9 text-sm border-2 bg-white font-mono" />
-                  </div>
-                  <div className="grid grid-cols-3 gap-2 items-center">
-                    <div className="flex items-center gap-1"><span className="text-sm">🚿</span><Label className="text-xs font-semibold text-slate-600">CIP/Wash Loss</Label></div>
-                    <Input type="number" step="0.001" min="0" value={extraRows.wasteWashFat}
-                      onChange={e => setExtraRows(p => ({ ...p, wasteWashFat: e.target.value }))}
-                      placeholder="0.000" className="h-9 text-sm border-2 bg-white font-mono" />
-                    <Input type="number" step="0.001" min="0" value={extraRows.wasteWashSnf}
-                      onChange={e => setExtraRows(p => ({ ...p, wasteWashSnf: e.target.value }))}
-                      placeholder="0.000" className="h-9 text-sm border-2 bg-white font-mono" />
-                  </div>
-                </div>
-
-                {/* Live total */}
-                <div className="grid grid-cols-3 gap-2 bg-red-100 rounded-lg p-2 border border-red-200">
-                  <span className="text-xs font-bold text-red-700">TOTAL OUT</span>
-                  <span className="text-center text-sm font-black text-red-800 font-mono">{results.totalOutFat.toFixed(4)}</span>
-                  <span className="text-center text-sm font-black text-red-800 font-mono">{results.totalOutSnf.toFixed(4)}</span>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* ════ TAB 2: RESULTS ════════════════════════ */}
-          <TabsContent value="results" className="space-y-4 pt-3">
-            <div ref={reportRef} className="space-y-4">
-
-              {/* Period label */}
-              <div className="flex items-center gap-2 text-xs text-blue-600 font-bold">
-                <span>{MB_PERIOD_PRESETS[period].icon}</span>
-                <span>{period} Mass Balance Report — {new Date().toLocaleDateString("en-IN")}</span>
-              </div>
-
-              {/* Main KPIs */}
-              <div className="grid grid-cols-2 gap-3">
-                {[
-                  { label: "Total Fat IN",   value: results.totalInFat,  color: "bg-green-600"  },
-                  { label: "Total Fat OUT",  value: results.totalOutFat, color: "bg-red-600"    },
-                  { label: "Total SNF IN",   value: results.totalInSnf,  color: "bg-green-700"  },
-                  { label: "Total SNF OUT",  value: results.totalOutSnf, color: "bg-red-700"    },
-                ].map((k, i) => (
-                  <div key={i} className={`${k.color} text-white p-4 rounded-xl text-center shadow`}>
-                    <div className="text-[10px] uppercase opacity-80 font-bold">{k.label}</div>
-                    <div className="text-3xl font-black font-mono">{k.value.toFixed(3)}</div>
-                    <div className="text-[10px] opacity-70">kg</div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Gain / Loss boxes */}
-              <div className="grid grid-cols-2 gap-3">
-                {[
-                  {
-                    label: `Fat ${results.gainLossFat >= 0 ? "Gain" : "Loss"}`,
-                    val: results.gainLossFat,
-                    pct: results.fatLossPct,
-                    grade: results.fatGrade,
-                  },
-                  {
-                    label: `SNF ${results.gainLossSnf >= 0 ? "Gain" : "Loss"}`,
-                    val: results.gainLossSnf,
-                    pct: results.snfLossPct,
-                    grade: results.snfGrade,
-                  },
-                ].map((k, i) => (
-                  <div key={i} className={`p-4 rounded-xl border-2 shadow ${
-                    k.val >= 0
-                      ? "bg-blue-50 border-blue-300"
-                      : "bg-orange-50 border-orange-300"
-                  }`}>
-                    <div className="flex items-center gap-1 text-xs font-bold text-slate-600 mb-1">
-                      {k.val >= 0 ? <CheckCircle2 className="w-3 h-3 text-blue-600" /> : <AlertTriangle className="w-3 h-3 text-orange-600" />}
-                      {k.label}
-                    </div>
-                    <div className={`text-3xl font-black font-mono ${k.val >= 0 ? "text-blue-800" : "text-orange-800"}`}>
-                      {k.val >= 0 ? "+" : ""}{k.val.toFixed(4)}
-                    </div>
-                    <div className="text-xs text-slate-500 mt-0.5">kg ({k.pct.toFixed(4)}%)</div>
-                    <div className={`text-xs font-black mt-1 ${k.grade.color}`}>{k.grade.grade}</div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Loss gauges */}
-              <Card className="bg-white border-blue-100">
-                <CardHeader className="p-3 pb-1 border-b border-blue-100">
-                  <CardTitle className="text-xs font-bold text-blue-700 uppercase">📊 Industry Benchmark Comparison</CardTitle>
-                </CardHeader>
-                <CardContent className="p-3 space-y-4">
-                  <LossGauge pct={results.fatLossPct} label="Fat" />
-                  <LossGauge pct={results.snfLossPct} label="SNF" />
-                  <div className="text-[10px] text-slate-400 flex justify-between font-mono">
-                    <span>🏆 World Class: Fat ≤{MB_BENCHMARKS.fat.worldClass}% | SNF ≤{MB_BENCHMARKS.snf.worldClass}%</span>
-                    <span>❌ Poor: Fat &gt;{MB_BENCHMARKS.fat.poor}% | SNF &gt;{MB_BENCHMARKS.snf.poor}%</span>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Plant efficiency */}
-              <Card className="bg-indigo-50 border-indigo-200">
-                <CardHeader className="p-3 pb-1 border-b border-indigo-100">
-                  <CardTitle className="text-xs font-bold text-indigo-700 uppercase">🏭 Plant Recovery Efficiency</CardTitle>
-                </CardHeader>
-                <CardContent className="p-3 space-y-2 text-sm">
-                  {[
-                    { label: "Fat recovery (dispatched/total in)", value: `${results.fatEfficiency.toFixed(2)}%`,  ok: results.fatEfficiency >= 96 },
-                    { label: "SNF recovery (dispatched/total in)", value: `${results.snfEfficiency.toFixed(2)}%`,  ok: results.snfEfficiency >= 94 },
-                  ].map((r, i) => (
-                    <div key={i} className="flex justify-between">
-                      <span className="text-slate-500">{r.label}</span>
-                      <span className={`font-black ${r.ok ? "text-green-700" : "text-orange-600"}`}>{r.value}</span>
-                    </div>
-                  ))}
-                </CardContent>
-              </Card>
-
-              {/* Financial impact */}
-              <Card className="bg-gradient-to-br from-slate-800 to-slate-900 text-white border-none">
-                <CardContent className="p-3 space-y-2 text-sm">
-                  <div className="text-xs text-slate-300 font-bold uppercase mb-2">💸 Financial Impact of Losses</div>
-                  {[
-                    { label: "Fat loss value",   value: `₹${results.fatLossVal.toFixed(0)}`,   color: "text-orange-300", note: "@ ₹50/kg fat"  },
-                    { label: "SNF loss value",   value: `₹${results.snfLossVal.toFixed(0)}`,   color: "text-yellow-300", note: "@ ₹30/kg SNF"  },
-                    { label: "Total loss value", value: `₹${results.totalLossVal.toFixed(0)}`, color: "text-red-300 font-black text-base", note: "per period"     },
-                  ].map((r, i) => (
-                    <div key={i} className={`flex justify-between ${i === 2 ? "border-t border-slate-700 pt-2" : ""}`}>
-                      <span className="text-slate-400">{r.label} <span className="text-[10px] opacity-60">({r.note})</span></span>
-                      <span className={`font-bold ${r.color}`}>{r.value}</span>
-                    </div>
-                  ))}
-                </CardContent>
-              </Card>
-
-              {/* Detailed steps */}
-              <Card className="bg-slate-50 border-slate-200">
-                <CardHeader className="p-3 pb-1 border-b border-slate-200">
-                  <CardTitle className="text-xs font-bold text-slate-600 uppercase">🧮 Step-by-Step Calculation</CardTitle>
-                </CardHeader>
-                <CardContent className="p-0">
-                  <ScrollArea className="h-72">
-                    <div className="p-3 space-y-1 font-mono text-[10px] text-slate-500">
-                      {[
-                        { h: "STEP 1: FAT INPUTS",  border: "border-green-300 bg-green-50" },
-                      ].map(() => null)}
-                      <div className="font-bold text-green-700 text-xs border-b border-green-200 pb-1 mb-1">📥 STEP 1: FAT INPUTS</div>
-                      {[
-                        `Opening: ${results.opF.toFixed(6)} kg`,
-                        `+ Intake: ${results.inF.toFixed(6)} kg`,
-                        `+ Added: ${results.adF.toFixed(6)} kg`,
-                        `= Total FAT IN: ${results.totalInFat.toFixed(8)} kg`,
-                      ].map((s, i) => <div key={i} className={i === 3 ? "font-bold text-green-700 border-t border-green-200 mt-1 pt-1" : ""}>{s}</div>)}
-
-                      <div className="font-bold text-green-700 text-xs border-b border-green-200 pb-1 mb-1 mt-3">📥 STEP 2: SNF INPUTS</div>
-                      {[
-                        `Opening: ${results.opS.toFixed(6)} kg`,
-                        `+ Intake: ${results.inS.toFixed(6)} kg`,
-                        `+ Added: ${results.adS.toFixed(6)} kg`,
-                        `= Total SNF IN: ${results.totalInSnf.toFixed(8)} kg`,
-                      ].map((s, i) => <div key={i} className={i === 3 ? "font-bold text-green-700 border-t border-green-200 mt-1 pt-1" : ""}>{s}</div>)}
-
-                      <div className="font-bold text-red-700 text-xs border-b border-red-200 pb-1 mb-1 mt-3">📤 STEP 3: FAT OUTPUTS</div>
-                      {[
-                        `Dispatched: ${results.dispF.toFixed(6)} kg`,
-                        `+ Removed: ${results.remF.toFixed(6)} kg`,
-                        `+ Closing: ${results.clF.toFixed(6)} kg`,
-                        `+ Cream: ${results.crF.toFixed(6)} kg`,
-                        `+ CIP/Wash: ${results.wwF.toFixed(6)} kg`,
-                        `= Total FAT OUT: ${results.totalOutFat.toFixed(8)} kg`,
-                      ].map((s, i) => <div key={i} className={i === 5 ? "font-bold text-red-700 border-t border-red-200 mt-1 pt-1" : ""}>{s}</div>)}
-
-                      <div className="font-bold text-red-700 text-xs border-b border-red-200 pb-1 mb-1 mt-3">📤 STEP 4: SNF OUTPUTS</div>
-                      {[
-                        `Dispatched: ${results.dispS.toFixed(6)} kg`,
-                        `+ Removed: ${results.remS.toFixed(6)} kg`,
-                        `+ Closing: ${results.clS.toFixed(6)} kg`,
-                        `+ Cream: ${results.crS.toFixed(6)} kg`,
-                        `+ CIP/Wash: ${results.wwS.toFixed(6)} kg`,
-                        `= Total SNF OUT: ${results.totalOutSnf.toFixed(8)} kg`,
-                      ].map((s, i) => <div key={i} className={i === 5 ? "font-bold text-red-700 border-t border-red-200 mt-1 pt-1" : ""}>{s}</div>)}
-
-                      <div className="font-bold text-blue-700 text-xs border-b border-blue-200 pb-1 mb-1 mt-3">⚖️ STEP 5: RECONCILIATION</div>
-                      {[
-                        `FAT: ${results.totalInFat.toFixed(8)} − ${results.totalOutFat.toFixed(8)} = ${results.gainLossFat.toFixed(8)} kg (${results.gainLossFat >= 0 ? "GAIN" : "LOSS"})`,
-                        `FAT Loss %: ${results.fatLossPct.toFixed(6)}% → ${results.fatGrade.grade}`,
-                        `SNF: ${results.totalInSnf.toFixed(8)} − ${results.totalOutSnf.toFixed(8)} = ${results.gainLossSnf.toFixed(8)} kg (${results.gainLossSnf >= 0 ? "GAIN" : "LOSS"})`,
-                        `SNF Loss %: ${results.snfLossPct.toFixed(6)}% → ${results.snfGrade.grade}`,
-                      ].map((s, i) => <div key={i} className="text-blue-700 font-bold">{s}</div>)}
-                    </div>
-                  </ScrollArea>
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-
-          {/* ════ TAB 3: ANALYSIS ═══════════════════════ */}
-          <TabsContent value="trend" className="space-y-4 pt-3">
-
-            {/* Waterfall-style flow */}
-            <Card className="bg-white border-blue-100">
-              <CardHeader className="p-3 pb-1 border-b border-blue-100">
-                <CardTitle className="text-sm font-bold text-blue-700">🌊 Flow Waterfall (Fat kg)</CardTitle>
-              </CardHeader>
-              <CardContent className="p-3 space-y-2">
-                {[
-                  { label: "Opening",    val: results.opF,                  color: "bg-slate-400",  type: "+" },
-                  { label: "Intake",     val: results.inF,                  color: "bg-green-500",  type: "+" },
-                  { label: "Added",      val: results.adF,                  color: "bg-teal-400",   type: "+" },
-                  { label: "Dispatched", val: -results.dispF,               color: "bg-red-500",    type: "−" },
-                  { label: "Removed",    val: -results.remF,                color: "bg-orange-500", type: "−" },
-                  { label: "CIP/Wash",   val: -results.wwF,                 color: "bg-yellow-500", type: "−" },
-                  { label: "Closing",    val: -results.clF,                 color: "bg-slate-600",  type: "−" },
-                  { label: "Net G/L",    val: results.gainLossFat,          color: results.gainLossFat >= 0 ? "bg-blue-500" : "bg-red-600", type: results.gainLossFat >= 0 ? "+" : "−" },
-                ].map((r, i) => {
-                  const maxVal = results.totalInFat || 1;
-                  const w = Math.min(Math.abs(r.val) / maxVal * 100, 100);
-                  return (
-                    <div key={i} className="flex items-center gap-2">
-                      <div className="w-20 text-[10px] text-slate-600 font-semibold text-right">{r.label}</div>
-                      <div className="flex-1 h-5 bg-slate-100 rounded overflow-hidden">
-                        <div className={`h-full ${r.color} flex items-center px-1 rounded`} style={{ width: `${w}%` }}>
-                          <span className="text-[9px] text-white font-bold truncate">{r.type}{Math.abs(r.val).toFixed(2)}</span>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </CardContent>
-            </Card>
-
-            {/* Unaccounted loss breakdown */}
-            <Card className="bg-amber-50 border-amber-200">
-              <CardHeader className="p-3 pb-1 border-b border-amber-100">
-                <CardTitle className="text-sm font-bold text-amber-700">🔍 Unaccounted Loss Analysis</CardTitle>
-              </CardHeader>
-              <CardContent className="p-3 space-y-2 text-sm">
-                <p className="text-xs text-amber-600">Unaccounted = Total loss − CIP/wash losses (these go unrecorded)</p>
-                {[
-                  { label: "Unaccounted Fat loss",   value: results.unaccountedFat, unit: "kg" },
-                  { label: "Unaccounted SNF loss",   value: results.unaccountedSnf, unit: "kg" },
-                ].map((r, i) => (
-                  <div key={i} className="flex justify-between">
-                    <span className="text-slate-500">{r.label}</span>
-                    <span className={`font-bold ${Math.abs(r.value) > 0.5 ? "text-red-600" : "text-green-600"}`}>
-                      {r.value.toFixed(4)} {r.unit}
-                    </span>
-                  </div>
-                ))}
-                <Alert className="bg-white border-amber-200 mt-2">
-                  <AlertDescription className="text-xs text-amber-700">
-                    💡 Common causes: Measurement error, leakage, unrecorded samples, residue in pipes, weighment variance. Audit cream separator and dispatch weighment.
-                  </AlertDescription>
-                </Alert>
-              </CardContent>
-            </Card>
-
-            {/* Benchmark table */}
-            <Card className="bg-white border-slate-200">
-              <CardHeader className="p-3 pb-1 border-b border-slate-200">
-                <CardTitle className="text-xs font-bold text-slate-600 uppercase">📜 Industry Loss Benchmarks</CardTitle>
-              </CardHeader>
-              <CardContent className="p-3">
-                <div className="grid grid-cols-4 text-[10px] font-bold text-slate-500 border-b pb-1 mb-1">
-                  <span>Grade</span><span>Fat Loss %</span><span>SNF Loss %</span><span>Status</span>
-                </div>
-                {[
-                  { grade: "World Class", fatMax: 0.10, snfMax: 0.15, icon: "🏆" },
-                  { grade: "Excellent",   fatMax: 0.25, snfMax: 0.35, icon: "✅" },
-                  { grade: "Good",        fatMax: 0.50, snfMax: 0.70, icon: "👍" },
-                  { grade: "Acceptable",  fatMax: 1.00, snfMax: 1.50, icon: "⚠️" },
-                  { grade: "Poor",        fatMax: 2.00, snfMax: 3.00, icon: "❌" },
-                ].map((b, i) => {
-                  const fatMatch = results.fatLossPct <= b.fatMax;
-                  const snfMatch = results.snfLossPct <= b.snfMax;
-                  const isCurrent = results.fatGrade.grade.includes(b.grade) || results.snfGrade.grade.includes(b.grade);
-                  return (
-                    <div key={i} className={`grid grid-cols-4 text-xs py-1.5 border-b border-slate-100 ${isCurrent ? "bg-blue-50 font-bold rounded" : ""}`}>
-                      <span className="flex items-center gap-1">{b.icon} {b.grade}</span>
-                      <span className={fatMatch && results.totalInFat > 0 ? "text-green-600 font-bold" : "text-slate-400"}>≤{b.fatMax}%</span>
-                      <span className={snfMatch && results.totalInSnf > 0 ? "text-green-600 font-bold" : "text-slate-400"}>≤{b.snfMax}%</span>
-                      <span>{isCurrent ? "◀ Current" : ""}</span>
-                    </div>
-                  );
-                })}
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
-
-        {/* ── DOWNLOAD ─────────────────────────────────── */}
-        <div className="flex gap-3">
-          <Button onClick={handleDownloadPdf} disabled={isDownloading}
-            className="flex-1 h-11 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold shadow-md">
-            {isDownloading
-              ? <><Loader2 className="mr-2 w-4 h-4 animate-spin" />Generating PDF...</>
-              : <><FileDown className="mr-2 w-4 h-4" />Download Report (PDF)</>
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
+            const imgWidth = canvas.width;
+            const imgHeight = canvas.height;
+            const ratio = imgWidth / imgHeight;
+            
+            let finalImgWidth = pdfWidth - 20;
+            let finalImgHeight = finalImgWidth / ratio;
+            
+            if (finalImgHeight > pdfHeight - 20) {
+                finalImgHeight = pdfHeight - 20;
+                finalImgWidth = finalImgHeight * ratio;
             }
-          </Button>
-          <Button variant="outline" onClick={() => setActiveTab("results")} className="h-11 px-4 border-2 border-blue-200 text-blue-700 font-bold">
-            View Report
-          </Button>
-        </div>
 
-      </CardContent>
-    </Card>
-  );
+            const x = (pdfWidth - finalImgWidth) / 2;
+            const y = 10;
+            
+            pdf.addImage(imgData, 'PNG', x, y, finalImgWidth, finalImgHeight);
+            pdf.save(`mass_balance_report_${new Date().toISOString().slice(0,10)}.pdf`);
+            
+            // toast({
+            //     title: "✅ PDF Downloaded",
+            //     description: "Mass balance report has been saved successfully."
+            // });
+        } catch (error) {
+            console.error("Failed to generate PDF", error);
+            // toast({ 
+            //     variant: "destructive", 
+            //     title: "PDF Error", 
+            //     description: "Could not generate the PDF report." 
+            // });
+        } finally {
+            setIsDownloading(false);
+        }
+    };
+    
+    return (
+        <Card className="border-2 shadow-lg">
+            <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50">
+                <CardTitle className="flex items-center gap-2 text-xl sm:text-2xl">
+                    <Scale className="h-6 sm:h-7 w-6 sm:w-7 text-blue-600" />
+                    Fat & SNF Mass Balance Calculator
+                </CardTitle>
+                <CardDescription>
+                    Track plant efficiency by calculating gain/loss of fat and SNF during processing. All values in Kilograms (kg).
+                </CardDescription>
+            </CardHeader>
+            
+            <CardContent className="pt-6">
+            {/* Input Section */}
+            <div className="space-y-6 p-4 md:p-6 bg-gradient-to-br from-gray-50 to-slate-100 rounded-xl border-2 border-gray-300 shadow-md">
+                {/* Header Row */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 font-bold text-center text-sm md:text-base bg-gradient-to-r from-indigo-100 to-purple-100 p-3 rounded-lg border-2 border-indigo-300">
+                    <span className="text-indigo-800">Component</span>
+                    <span className="text-yellow-800">Fat (kg)</span>
+                    <span className="text-pink-800">SNF (kg)</span>
+                </div>
+                
+                {/* INPUTS Section */}
+                <div className="space-y-4 bg-green-50 p-4 md:p-5 rounded-xl border-2 border-green-300">
+                    <h4 className="text-lg md:text-xl font-bold text-green-700 flex items-center gap-2">
+                        <Plus className="w-5 h-5 md:w-6 md:h-6"/>
+                        Total Inputs
+                    </h4>
+                    <MemoizedInputRow label="Opening Balance" fatName="openingFat" snfName="openingSnf" inputs={inputs} onInputChange={handleInputChange}/>
+                    <MemoizedInputRow label="Total Intake" fatName="intakeFat" snfName="intakeSnf" inputs={inputs} onInputChange={handleInputChange}/>
+                    <MemoizedInputRow label="Added (SMP/etc)" fatName="addedFat" snfName="addedSnf" inputs={inputs} onInputChange={handleInputChange}/>
+                </div>
+
+                <hr className="border-2 border-dashed border-gray-400"/>
+
+                {/* OUTPUTS Section */}
+                <div className="space-y-4 bg-red-50 p-4 md:p-5 rounded-xl border-2 border-red-300">
+                    <h4 className="text-lg md:text-xl font-bold text-red-700 flex items-center gap-2">
+                        <Minus className="w-5 h-5 md:w-6 md:h-6"/>
+                        Total Outputs
+                    </h4>
+                    <MemoizedInputRow label="Dispatched (Products)" fatName="dispatchedFat" snfName="dispatchedSnf" inputs={inputs} onInputChange={handleInputChange}/>
+                    <MemoizedInputRow label="Removed (Cream/etc)" fatName="removedFat" snfName="removedSnf" inputs={inputs} onInputChange={handleInputChange}/>
+                    <MemoizedInputRow label="Closing Balance" fatName="closingFat" snfName="closingSnf" inputs={inputs} onInputChange={handleInputChange}/>
+                </div>
+            </div>
+
+            {/* Results Section */}
+            <div ref={reportRef} className="mt-6 space-y-6">
+                <Alert className="bg-gradient-to-r from-blue-100 via-cyan-100 to-teal-100 border-3 border-blue-500 shadow-xl">
+                    <Scale className="h-6 w-6 md:h-8 md:w-8 text-blue-700" />
+                    <AlertTitle className="text-xl md:text-2xl font-extrabold text-center text-blue-900 mb-4">
+                        ⚖️ Mass Balance Reconciliation
+                    </AlertTitle>
+                    <AlertDescription>
+                        {/* In vs Out Comparison */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                            <div className="bg-gradient-to-br from-green-100 to-emerald-100 p-4 md:p-5 rounded-xl border-2 border-green-400 shadow-md">
+                                <p className="text-xs md:text-sm font-semibold text-green-700 mb-2 flex items-center gap-2">
+                                    <TrendingUp className="w-4 h-4" />
+                                    Total Fat In
+                                </p>
+                                <p className="text-3xl md:text-4xl font-extrabold text-green-800">{results.totalInFat.toFixed(4)}</p>
+                                <p className="text-sm text-green-600">kg</p>
+                            </div>
+                            
+                            <div className="bg-gradient-to-br from-red-100 to-rose-100 p-4 md:p-5 rounded-xl border-2 border-red-400 shadow-md">
+                                <p className="text-xs md:text-sm font-semibold text-red-700 mb-2 flex items-center gap-2">
+                                    <TrendingDown className="w-4 h-4" />
+                                    Total Fat Out
+                                </p>
+                                <p className="text-3xl md:text-4xl font-extrabold text-red-800">{results.totalOutFat.toFixed(4)}</p>
+                                <p className="text-sm text-red-600">kg</p>
+                            </div>
+                            
+                            <div className="bg-gradient-to-br from-green-100 to-emerald-100 p-4 md:p-5 rounded-xl border-2 border-green-400 shadow-md">
+                                <p className="text-xs md:text-sm font-semibold text-green-700 mb-2 flex items-center gap-2">
+                                    <TrendingUp className="w-4 h-4" />
+                                    Total SNF In
+                                </p>
+                                <p className="text-3xl md:text-4xl font-extrabold text-green-800">{results.totalInSnf.toFixed(4)}</p>
+                                <p className="text-sm text-green-600">kg</p>
+                            </div>
+                            
+                            <div className="bg-gradient-to-br from-red-100 to-rose-100 p-4 md:p-5 rounded-xl border-2 border-red-400 shadow-md">
+                                <p className="text-xs md:text-sm font-semibold text-red-700 mb-2 flex items-center gap-2">
+                                    <TrendingDown className="w-4 h-4" />
+                                    Total SNF Out
+                                </p>
+                                <p className="text-3xl md:text-4xl font-extrabold text-red-800">{results.totalOutSnf.toFixed(4)}</p>
+                                <p className="text-sm text-red-600">kg</p>
+                            </div>
+                        </div>
+
+                        {/* Gain/Loss Analysis */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className={cn(
+                                "p-4 md:p-5 rounded-xl border-2 shadow-md",
+                                results.gainLossFat >= 0 
+                                    ? "bg-gradient-to-br from-blue-100 to-cyan-100 border-blue-400" 
+                                    : "bg-gradient-to-br from-orange-100 to-amber-100 border-orange-400"
+                            )}>
+                                <p className="text-xs md:text-sm font-semibold mb-2 flex items-center gap-2">
+                                    {results.gainLossFat >= 0 ? (
+                                        <CheckCircle2 className="w-4 h-4 text-blue-700" />
+                                    ) : (
+                                        <AlertTriangle className="w-4 h-4 text-orange-700" />
+                                    )}
+                                    Fat {results.gainLossFat >= 0 ? 'Gain' : 'Loss'}
+                                </p>
+                                <p className={cn(
+                                    "text-3xl md:text-4xl font-extrabold",
+                                    results.gainLossFat >= 0 ? "text-blue-800" : "text-orange-800"
+                                )}>
+                                    {results.gainLossFat >= 0 ? '+' : ''}{results.gainLossFat.toFixed(4)}
+                                </p>
+                                <p className="text-sm mt-1">kg ({results.fatLossPercentage.toFixed(4)}%)</p>
+                            </div>
+                            
+                            <div className={cn(
+                                "p-4 md:p-5 rounded-xl border-2 shadow-md",
+                                results.gainLossSnf >= 0 
+                                    ? "bg-gradient-to-br from-blue-100 to-cyan-100 border-blue-400" 
+                                    : "bg-gradient-to-br from-orange-100 to-amber-100 border-orange-400"
+                            )}>
+                                <p className="text-xs md:text-sm font-semibold mb-2 flex items-center gap-2">
+                                    {results.gainLossSnf >= 0 ? (
+                                        <CheckCircle2 className="w-4 h-4 text-blue-700" />
+                                    ) : (
+                                        <AlertTriangle className="w-4 h-4 text-orange-700" />
+                                    )}
+                                    SNF {results.gainLossSnf >= 0 ? 'Gain' : 'Loss'}
+                                </p>
+                                <p className={cn(
+                                    "text-3xl md:text-4xl font-extrabold",
+                                    results.gainLossSnf >= 0 ? "text-blue-800" : "text-orange-800"
+                                )}>
+                                    {results.gainLossSnf >= 0 ? '+' : ''}{results.gainLossSnf.toFixed(4)}
+                                </p>
+                                <p className="text-sm mt-1">kg ({results.snfLossPercentage.toFixed(4)}%)</p>
+                            </div>
+                        </div>
+                    </AlertDescription>
+                </Alert>
+
+                {/* Calculation Steps */}
+                <div className="bg-gradient-to-br from-gray-100 to-slate-200 p-4 md:p-6 rounded-xl border-2 border-gray-400 shadow-xl">
+                    <h4 className="font-extrabold text-base md:text-xl mb-3 md:mb-4 flex items-center gap-2 text-gray-800">
+                        <Calculator className="w-5 h-5 md:w-6 md:h-6" />
+                        Complete Mass Balance Calculation
+                    </h4>
+                    <ScrollArea className="h-[300px] md:h-[500px] pr-2 md:pr-4">
+                        <div className="space-y-1 text-xs md:text-sm font-mono leading-relaxed">
+                            {calculationSteps.map((step, idx) => (
+                                <p 
+                                    key={idx} 
+                                    className={cn(
+                                        step.includes('**') && 'font-extrabold mt-3 text-gray-900 text-sm md:text-base',
+                                        step.includes('═══') && 'text-purple-700 font-extrabold text-base md:text-lg',
+                                        step.includes('✅') && 'text-green-700 font-bold',
+                                        step.includes('⚠️') && 'text-yellow-700 font-bold',
+                                        !step.includes('**') && !step.includes('✅') && !step.includes('⚠️') && !step.includes('═══') && 'text-gray-700'
+                                    )}
+                                >
+                                    {step.replace(/\*\*/g, '')}
+                                </p>
+                            ))}
+                        </div>
+                    </ScrollArea>
+                    <div className="mt-3 md:mt-4 p-3 md:p-4 bg-green-100 border-2 border-green-300 rounded-xl shadow-md">
+                        <p className="text-xs md:text-sm text-green-900 font-bold flex items-center gap-2">
+                            <CheckCircle2 className="w-4 h-4 md:w-5 md:h-5 flex-shrink-0" />
+                            <span>✓ Complete mass balance verification with percentage analysis!</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            {/* Download Button */}
+            <div className="text-center mt-6">
+                <Button 
+                    onClick={handleDownloadPdf} 
+                    disabled={isDownloading}
+                    className="h-12 md:h-14 px-6 md:px-8 text-base md:text-lg font-bold bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700"
+                >
+                    {isDownloading ? (
+                        <>
+                            <Loader2 className="mr-2 w-5 h-5 animate-spin" />
+                            Generating PDF...
+                        </>
+                    ) : (
+                        <>
+                            <FileDown className="mr-2 w-5 h-5" />
+                            Download Report as PDF
+                        </>
+                    )}
+                </Button>
+            </div>
+            </CardContent>
+        </Card>
+    );
 }
