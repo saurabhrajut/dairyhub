@@ -95,12 +95,11 @@ const InfoBox = ({ children, variant = "blue" }: { children: React.ReactNode; va
 
 const renderTable = (tableData: any) => {
   if (!tableData || !tableData.headers || !tableData.rows) return null;
-  const colCount = tableData.headers.length;
-  // For wide tables (3+ cols) on mobile we render a card-style stacked layout
+
   return (
     <>
-      {/* Desktop table — hidden on very small screens if many columns */}
-      <div className={`rounded-xl border border-gray-200 mt-3 mb-4 shadow-sm ${colCount >= 4 ? "hidden sm:block" : "overflow-x-auto"}`}>
+      {/* Desktop: normal table, hidden on mobile */}
+      <div className="hidden sm:block rounded-xl border border-gray-200 mt-3 mb-4 shadow-sm overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow className="bg-slate-700 hover:bg-slate-700">
@@ -127,32 +126,35 @@ const renderTable = (tableData: any) => {
         </Table>
       </div>
 
-      {/* Mobile card layout — only for wide tables (4+ columns) */}
-      {colCount >= 4 && (
-        <div className="sm:hidden space-y-3 mt-3 mb-4">
-          {tableData.rows.map((row: any, rowIndex: number) => {
-            const cells = Object.values(row) as string[];
-            return (
-              <div key={rowIndex} className="border border-gray-200 rounded-xl overflow-hidden shadow-sm">
-                {/* Row header = first cell */}
-                <div className="bg-slate-700 text-white text-xs font-bold px-3 py-2"
-                  dangerouslySetInnerHTML={{ __html: cells[0] }} />
-                {/* Remaining cells paired with their column header */}
-                <div className="divide-y divide-gray-100">
-                  {cells.slice(1).map((cell, ci) => (
-                    <div key={ci} className={`flex flex-col px-3 py-2 ${ci % 2 === 0 ? "bg-white" : "bg-slate-50"}`}>
-                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-0.5">
-                        {tableData.headers[ci + 1]}
-                      </span>
-                      <span className="text-sm text-slate-700" dangerouslySetInnerHTML={{ __html: cell }} />
-                    </div>
-                  ))}
-                </div>
+      {/* Mobile: card-per-row layout, always shown on small screens */}
+      <div className="sm:hidden space-y-3 mt-3 mb-4">
+        {tableData.rows.map((row: any, rowIndex: number) => {
+          const cells = Object.values(row) as string[];
+          return (
+            <div key={rowIndex} className="border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+              {/* First cell = row title/label */}
+              <div
+                className="bg-slate-700 text-white text-xs font-bold px-3 py-2 leading-snug"
+                dangerouslySetInnerHTML={{ __html: cells[0] }}
+              />
+              {/* Remaining cells each on their own row with column label */}
+              <div className="divide-y divide-gray-100">
+                {cells.slice(1).map((cell, ci) => (
+                  <div key={ci} className={`flex flex-col px-3 py-2 ${ci % 2 === 0 ? "bg-white" : "bg-slate-50"}`}>
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-0.5">
+                      {tableData.headers[ci + 1]}
+                    </span>
+                    <span
+                      className="text-xs text-slate-700 leading-snug break-words"
+                      dangerouslySetInnerHTML={{ __html: cell }}
+                    />
+                  </div>
+                ))}
               </div>
-            );
-          })}
-        </div>
-      )}
+            </div>
+          );
+        })}
+      </div>
     </>
   );
 };
