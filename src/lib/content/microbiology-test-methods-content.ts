@@ -3,307 +3,759 @@ export const microbiologyTestMethodsContent = {
     hi: {
         title: "Common Microbiological Test Methods",
         intro:
-          "Dairy products ki safety aur quality ensure karne ke liye kai standard microbiological tests kiye jaate hain. Yahaan kuch important test methods ka overview diya gaya hai:",
+            "Dairy products ki safety aur quality ensure karne ke liye kai standard microbiological tests kiye jaate hain. Yahaan kuch important test methods ka comprehensive scientific overview diya gaya hai:",
         tests: [
-          {
-            id: "spc",
-            title: "Standard Plate Count (SPC) of Milk",
-            principle:
-              "Classical roop se SPC procedures ka upyog Total Plate Count (TPC) ya Aerobic Plate Count (APC) ya Total Viable Count (TVC) nirdharit karne ke liye kiya jaata hai. SPC ek standard method hai jisse anya screening tests ki tulna ki jaati hai.",
-            procedure: `
-              <h4 class="font-semibold mt-4 mb-2">Diluent-Phosphate Buffer Solution taiyaar karna</h4>
-              <p><strong>Stock Solution:</strong></p>
+            {
+                id: "spc",
+                title: "Standard Plate Count (SPC) of Milk",
+                principle:
+                    "Standard Plate Count (SPC) – jise Total Plate Count (TPC), Aerobic Plate Count (APC), ya Total Viable Count (TVC) bhi kaha jaata hai – milk mein zinda aerobic bacteria ki sankhya ka anuman lagaane ke liye sabse fundamental aur widely accepted reference method hai. Iska principle simple hai: diluted milk ke known volume ko agar medium par plate kiya jaata hai; har zinda bacterium ek visible colony banata hai jo incubation ke baad count ki jaati hai. SPC fresh milk ki microbial quality ka most reliable absolute measure hai. Ye method colony enumeration par based hai, isliye sirf culturable organisms count hote hain – non-culturable viable organisms (VBNC) missed ho sakte hain, jo ek limitation hai. SPC se anya rapid screening tests (MBRT, Resazurin, impedance) calibrate kiye jaate hain.",
+                procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Step 1: Diluent – Phosphate Buffer Solution (PBS) ki Taiyari</h4>
+              <p><strong>Stock Solution (1X concentrate):</strong></p>
               <ul class="list-disc list-outside pl-5 space-y-1">
-                <li>Potassium dihydrogen phosphate: 42.5g</li>
-                <li>Distilled Water: 1000ml</li>
+                <li>Potassium dihydrogen phosphate (KH₂PO₄): 42.5 g</li>
+                <li>Distilled Water: 1000 ml</li>
               </ul>
-              <p>Salt ko 500ml distilled water mein gholen. 1N NaOH ya HCl solution ka upyog karke pH ko adjust karein taaki sterilization ke baad yeh 25°C par 7.2 ho. 1000ml tak dilute karein. Screw capped sample bottles mein distribute karein. Unhein 121°C par 15 minute ke liye sterilize karein. Stock solution ko refrigeration ke tehat store karein.</p>
-              <p><strong>Bench Solution:</strong> 1ml stock solution ko 1000ml paani mein milakar diluent ke roop mein upyog karein. 9 ml diluent ko test tube mein daalein. Tubes ko band karein aur 121°C par 15 minute ke liye autoclave karke sterilize karein.</p>
-              
-              <h4 class="font-semibold mt-4 mb-2">Medium taiyaar karna:</h4>
-              <p>Plate Count Agar ya Standard Method Agar ka upyog kiya jaata hai. Samagri ko distilled water mein gholkar medium taiyaar karein. Medium ka pH adjust karein, taaki yeh sterilization ke baad 25°C par 7.0 ± 0.2 ho.</p>
+              <p>KH₂PO₄ ko 500 ml distilled water mein dissolve karein. 1N NaOH ya 1N HCl se pH 7.2 ± 0.1 at 25°C par adjust karein (sterilization ke baad slightly decrease hoga). 1000 ml tak volume banayein. Screw-capped glass bottles mein aliquot karein. 121°C par 15 minutes autoclaving se sterilize karein. 2–8°C par store karein (maximum 3 months).</p>
+              <p><strong>Working Diluent (Bench Solution):</strong> 1 ml stock solution ko 999 ml sterile distilled water mein add karein (1:1000 dilution). Alternatively, direct preparation: 0.0425 g KH₂PO₄ / litre. 9 ml aliquots mein dispense karein clean, plugged test tubes mein. 121°C / 15 min autoclave karein.</p>
+              <p><em>Scientific Rationale:</em> Phosphate buffer isotonic conditions maintain karta hai (osmotic stress se bacterial death prevent) aur pH 7.2 par optimal survival conditions provide karta hai. Milk proteins ke chelating effect se bacterial clumping bhi prevent hoti hai.</p>
 
-              <h4 class="font-semibold mt-4 mb-2">Test samples ki taiyari:</h4>
-              <p>Raw milk ya pasteurized milk ke sample ko 25 baar tezi se ulta karke acchi tarah se hilayein taaki microorganisms samaan roop se distribute ho jaayein.</p>
+              <h4 class="font-semibold mt-4 mb-2">Step 2: Plate Count Agar (PCA) Medium ki Taiyari</h4>
+              <p>PCA ya Standard Method Agar (SMA) composition:</p>
+              <ul class="list-disc list-outside pl-5 space-y-1">
+                <li>Tryptone (peptone): 5.0 g/L</li>
+                <li>Yeast extract: 2.5 g/L</li>
+                <li>Dextrose (glucose): 1.0 g/L</li>
+                <li>Agar: 15.0 g/L</li>
+                <li>Distilled water: 1000 ml</li>
+                <li>Final pH: 7.0 ± 0.2 at 25°C</li>
+              </ul>
+              <p>Ingredients ko distilled water mein dissolve karein, gently heat karke boil aayein. 121°C / 15 min autoclave karein. Use se pehle 44–46°C water bath mein maintain karein (45°C: bacteria nahi marenge, agar set nahi hoga).</p>
+              <p><em>Scientific Rationale:</em> Tryptone aur yeast extract broad spectrum amino acids, B-vitamins aur growth factors provide karte hain. Glucose carbon source hai. Non-selective medium hai – sabhi aerobic organisms grow kar sakte hain.</p>
 
-              <h4 class="font-semibold mt-4 mb-2">Decimal dilutions ki taiyari:</h4>
-              <p>Ek pipette se 1ml test sample nikalein aur 9ml diluent mein daalein. Is primary dilution ko 5 se 10 second ke liye ek mechanical shaker ka upyog karke hilayein. Pratyek dilution ke liye ek taaza pipette ka upyog karke 10⁻², 10⁻³, aadi jaise aur dilutions taiyaar karein.</p>
+              <h4 class="font-semibold mt-4 mb-2">Step 3: Sample Preparation</h4>
+              <p>Raw ya pasteurized milk ke sample ko 25 times rapidly invert karein (5 seconds mein 25 inversions) taaki microorganisms homogeneously distribute ho jaayein. Temperature: 15–20°C (ice-cold milk mein fat solidifies aur pour plate ke saath mix nahi hoti). Sample analysis test collect hone ke 4 ghante ke andar honi chahiye, 4°C par store karein.</p>
 
-              <h4 class="font-semibold mt-4 mb-2">Inoculation aur Incubation:</h4>
-              <p>Pratyek upyukt dilution se 1ml ko do sterile Petri dish mein sthanaantarit karein. Pratyek Petri dish mein lagbhag 15ml plate-count medium (45°C par) daalein. Dhyaan se inoculum ko medium ke saath milayein aur mishran ko jamne dein. Poori tarah se jamne ke baad, taiyaar dish ko ulta karein aur 37°C par 48h ± 3h ke liye incubator mein incubate karein.</p>
+              <h4 class="font-semibold mt-4 mb-2">Step 4: Serial Decimal Dilutions</h4>
+              <p>1 ml test sample ko 9 ml PBS mein add karein = 10⁻¹ dilution. Vortex 5–10 sec. Nayi sterile pipette se 1 ml is dilution se lekar 9 ml PBS mein add karein = 10⁻² dilution. Continue: 10⁻³, 10⁻⁴, 10⁻⁵ (expected count ke anusaar). Raw milk ke liye typically 10⁻³ to 10⁻⁵ plates lagayein. Pasteurized milk ke liye 10⁻¹ to 10⁻³.</p>
+              <p><em>Critical Note:</em> Har dilution ke liye nayi calibrated pipette use karein – same pipette se serial transfer karne par mathematical error propagate hoti hai. Pipetting technique consistent (no air bubbles) honi chahiye.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Step 5: Pour Plate Technique (Inoculation)</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-1">
+                <li>Har dilution se 1 ml ko duplicate (do) labeled sterile Petri dishes (90 mm diameter) mein transfer karein.</li>
+                <li>15 ml melted PCA (45°C) turant add karein (delay se agar set ho jaata hai ya bacteria heat se mar sakte hain).</li>
+                <li>Gentle figure-8 motion se thoroughly mix karein (inoculum proper distribution ke liye).</li>
+                <li>Horizontal surface par solidify hone dein (approx. 10 min).</li>
+                <li>Solidification ke baad dishes invert karein (condensation moisture se colony spreading prevent karne ke liye).</li>
+                <li>37°C par 48 ± 3 hours incubate karein (psychrotrophs ke liye additional 7°C / 10 day plates bhi lagaayein).</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Step 6: Colony Counting</h4>
+              <p>15–300 colonies wali dishes count karein (statistical validity ke liye: &lt;15 TNTC too few to count, &gt;300 TFTC too many to count / confluent growth). Colony counter aur magnifying lens use karein. Pinpoint colonies bhi count karein (&gt;0.5 mm). Spreading colonies ko ek colony count karein.</p>
             `,
-        calculation: `
-              <h4 class="font-semibold mt-4 mb-2">Calculation aur Results ka Expression:</h4>
-              <p>Un dishes ko banaye rakhein jinmein 15 aur 300 ke beech colonies hon. Nimnalikhit equation ka upyog karke test sample mein maujood microorganisms ki sankhya N ki ganana karein:</p>
-              <code>N = ΣC / { (n1 + 0.1 n2) d }</code>
-              <p class="text-xs mt-2">Jahan ΣC = sabhi dishes par gini gayi colonies ka yog, n1 = pehle dilution mein dishes ki sankhya, n2 = doosre dilution mein dishes ki sankhya, d = pehle dilution ke anuroop dilution factor.</p>
-              <h4 class="font-semibold mt-4 mb-2">Interpretation:</h4>
-              <p>Pasteurized milk ke prati milliliter 35000 se adhik ki ginti asantoshjanak sthitiyon ko ingit karti hai. Raw milk ki grading ke liye nimnalikhit maanakon ka sujhaav diya gaya hai:</p>
-              <ul class="list-disc list-outside pl-5 space-y-1 mt-2">
-                <li><strong>Bahut Accha:</strong> 2,00,000 se adhik nahin</li>
-                <li><strong>Accha:</strong> 2,00,000 - 10,00,000</li>
-                <li><strong>Santoshjanak:</strong> 10,00,000 - 50,00,000</li>
-                <li><strong>Kharaab:</strong> 50,00,000 se adhik</li>
+                calculation: `
+              <h4 class="font-semibold mt-4 mb-2">Calculation: N Formula</h4>
+              <code class="block p-3 bg-gray-100 rounded">N = ΣC / [ (n₁ + 0.1 × n₂) × d ]</code>
+              <ul class="list-disc list-outside pl-5 space-y-1 mt-2 text-sm">
+                <li><strong>ΣC</strong> = sabhi counted dishes ki total colonies ka sum</li>
+                <li><strong>n₁</strong> = lower dilution (pehli counted dilution) mein dish count (usually 2)</li>
+                <li><strong>n₂</strong> = higher dilution mein dish count (usually 2)</li>
+                <li><strong>d</strong> = lower dilution ka dilution factor (e.g., 10⁻³ = 0.001)</li>
+              </ul>
+              <p class="mt-2"><strong>Example:</strong> 10⁻³ dilution mein 216 + 242 = 458 colonies, 10⁻⁴ dilution mein 22 + 19 = 41 colonies.</p>
+              <code class="block p-3 bg-gray-100 rounded">N = (458 + 41) / [(2 + 0.1×2) × 0.001] = 499 / 0.0022 = 2.27 × 10⁵ cfu/mL</code>
+              <p>Result do significant figures mein round off karein: 2.3 × 10⁵ cfu/mL.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Raw Milk Grading Standards</h4>
+              <div class="overflow-x-auto mt-2">
+                <table class="min-w-full text-sm border border-gray-300">
+                  <thead class="bg-gray-100"><tr><th class="border px-3 py-2">Grade</th><th class="border px-3 py-2">SPC (cfu/mL)</th><th class="border px-3 py-2">Acceptable Use</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border px-3 py-2">Bahut Accha</td><td class="border px-3 py-2">&lt; 2,00,000</td><td class="border px-3 py-2">Drinking milk, all dairy products</td></tr>
+                    <tr><td class="border px-3 py-2">Accha</td><td class="border px-3 py-2">2,00,000 – 10,00,000</td><td class="border px-3 py-2">Processed products (pasteurized, UHT)</td></tr>
+                    <tr><td class="border px-3 py-2">Santoshjanak</td><td class="border px-3 py-2">10,00,000 – 50,00,000</td><td class="border px-3 py-2">Marginal – immediate processing needed</td></tr>
+                    <tr><td class="border px-3 py-2">Kharaab</td><td class="border px-3 py-2">&gt; 50,00,000</td><td class="border px-3 py-2">Reject / non-dairy use only</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="mt-2">Pasteurized milk ke liye standard: &lt;35,000 cfu/mL (35°C/48h) – higher count indicates inadequate pasteurization ya post-pasteurization contamination (PPC).</p>
+            `,
+            },
+            {
+                id: "coliform",
+                title: "Coliform Count (VRBA Method)",
+                principle:
+                    "Coliform group ka microbiological definition: Gram-negative, non-spore forming, facultative anaerobic rods jo 30°C, 35°C ya 37°C par 48 ghante ke andar lactose ferment karke acid aur gas produce karte hain. Coliforms dairy products mein unsanitary conditions ya post-pasteurization contamination ke indicators hain. VRBA (Violet Red Bile Agar) selective aur differential medium hai: bile salts non-coliform organisms ki growth inhibit karte hain, crystal violet Gram-positive bacteria inhibit karta hai, aur neutral red pH indicator acid production se pink/red colonies indicate karta hai. Dark red/purple colonies bile precipitate se ghiri hoti hain.",
+                procedure: `
+              <h4 class="font-semibold mt-4 mb-2">VRBA Medium Composition aur Taiyari</h4>
+              <p>VRBA composition (per litre):</p>
+              <ul class="list-disc list-outside pl-5 space-y-1">
+                <li>Yeast extract: 3.0 g</li>
+                <li>Peptone: 7.0 g</li>
+                <li>Sodium chloride: 5.0 g</li>
+                <li>Bile salts No. 3 (sodium taurocholate): 1.5 g</li>
+                <li>Lactose: 10.0 g</li>
+                <li>Neutral Red: 0.03 g</li>
+                <li>Crystal Violet: 0.002 g</li>
+                <li>Agar: 15.0 g</li>
+                <li>Final pH: 7.4 ± 0.2</li>
+              </ul>
+              <p><strong>CRITICAL: VRBA ko autoclave mat karein!</strong> Overheating bile salts ko precipitate karke medium turbid bana deta hai aur selectivity reduce ho jaati hai. Ingredients dissolve karein, boil aayein, turant use karein (45°C par). Do not reuse leftover melted VRBA.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Double Layer Pour Plate Technique</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-1">
+                <li>Appropriate dilutions se 1 ml duplicate sterile Petri dishes mein transfer karein.</li>
+                <li>15 ml VRBA (45°C) add karein, mix karein, solidify hone dein.</li>
+                <li><strong>Double overlay:</strong> Set hone ke baad surface par 4 ml additional VRBA daalein (thin overlay layer). Yeh coliforms ko anaerobic-like conditions mein gas produce karne mein help karta hai aur surface contamination se protect karta hai.</li>
+                <li>37°C par 24 ± 2 hours incubate karein.</li>
+                <li>Characteristic colonies: Dark red/purplish-red, diameter &ge;0.5 mm, surrounding zone of bile precipitation. 150 se kam colonies wali plates count karein.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Confirmatory Test (Doubtful Colonies ke Liye)</h4>
+              <p>Suspect colonies ko BGLB (Brilliant Green Lactose Bile) broth mein transfer karein. 37°C / 48 h incubate karein. Gas production in Durham tube = confirmed coliform.</p>
+            `,
+                calculation: `
+              <h4 class="font-semibold mt-4 mb-2">Calculation</h4>
+              <code class="block p-3 bg-gray-100 rounded">N = ΣC / [ (n₁ + 0.1 × n₂) × d ]</code>
+              <p class="mt-2">Same formula as SPC but sirf coliform-typical colonies count karein.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Interpretation Standards</h4>
+              <div class="overflow-x-auto mt-2">
+                <table class="min-w-full text-sm border border-gray-300">
+                  <thead class="bg-gray-100"><tr><th class="border px-3 py-2">Milk Type</th><th class="border px-3 py-2">Acceptable Limit</th><th class="border px-3 py-2">Significance</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border px-3 py-2">Raw Milk</td><td class="border px-3 py-2">Absent in 0.01 mL</td><td class="border px-3 py-2">Good hygiene indicator</td></tr>
+                    <tr><td class="border px-3 py-2">Pasteurized Milk</td><td class="border px-3 py-2">Absent in 0.1 mL</td><td class="border px-3 py-2">Confirms effective pasteurization + no PPC</td></tr>
+                    <tr><td class="border px-3 py-2">UHT Milk</td><td class="border px-3 py-2">Zero tolerance</td><td class="border px-3 py-2">Commercially sterile product</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="mt-2">FSSAI regulation: Pasteurized milk mein coliform count &lt;10 cfu/mL (acceptable), absent preferred. E. coli presence ka matlab unambiguously fecal contamination hai.</p>
+            `,
+            },
+            {
+                id: "dmscc",
+                title: "Direct Microscopic Somatic Cell Count (DMSCC)",
+                principle:
+                    "Somatic cells (SC) blood cells hain (primarily neutrophils/polymorphonuclear leukocytes – PMN ~70–80%, macrophages ~10–20%, lymphocytes ~10%, epithelial cells) jo udder inflammation ke response mein milk mein invade karte hain. Raw milk mein somatic cell count (SCC) mastitis aur udder health ka direct marker hai. Normal healthy cow ka SCC &lt;200,000 cells/mL; subclinical mastitis par SCC &gt;200,000 cells/mL; clinical mastitis par &gt;1,000,000 cells/mL. High SCC economic impact: reduced milk yield (10–25% reduction per quarter), altered milk composition (higher Na, Cl; lower K, Ca, lactose), reduced cheese yield, decreased shelf life of processed products (proteolytic aur lipolytic enzymes SCC cells release karte hain).",
+                procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Single Strip Factor (SSF) Ka Anumaan</h4>
+              <p>SSF ek conversion factor hai jo strip count ko cells/mL mein convert karta hai.</p>
+              <ol class="list-decimal list-outside pl-5 space-y-1">
+                <li>Stage micrometer microscope par rakhein. Oil immersion objective (100×) focus karein.</li>
+                <li>Single strip width = diameter of microscopic field (d). Stage micrometer se mm mein measure karein.</li>
+                <li>Single strip area = d × 10 mm (kyonki milk film 1 cm × 1 cm = 10mm square area par spread ki jaati hai, aur strip 10 mm lambi hoti hai width ke direction mein d × 10 = area in mm²).</li>
+                <li><code>SSF = 100 / (strip area in mm²)</code> – yeh formula 0.01 mL film volume aur strip geometry par based hai</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Milk Film Preparation (Newman-Lampert Staining)</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-1">
+                <li>Milk sample 40°C par warm karein (15 min).</li>
+                <li>Inversion se mix karein (25 bar).</li>
+                <li>Calibrated loop (0.01 mL) ya micropipette se exactly 0.01 mL sample lein.</li>
+                <li>Pre-marked 1 cm² area (clean glass slide par marker se mark karein) par evenly spread karein. Circular motion se uniform film banayein.</li>
+                <li>40–45°C par 5 min mein dry karein (hot plate ya drying oven).</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Defatting, Fixing aur Staining</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-1">
+                <li><strong>Defatting:</strong> Xylene bath mein 5 min immerse karein. Fat dissolves → clear film milti hai. Air dry karein.</li>
+                <li><strong>Fixing:</strong> Methanol mein 2 min fix karein. Cells ko slide par bind karta hai.</li>
+                <li><strong>Staining:</strong> Newman-Lampert stain (methylene blue + eosin in isopropanol) jar mein 10 min immerse karein. Nucleus (DNA) dark blue/purple stain hoti hai, cytoplasm lighter.</li>
+                <li>Excess stain tap water se gentle wash karein. Air dry karein (heat apply nahi karein).</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Microscopic Examination</h4>
+              <p>100× oil immersion objective use karein. Traverse karo film ke ek end se dusre end tak ek complete strip mein. Count karo cells jinmein stained nucleus clearly visible ho (nuclear staining must be identifiable). Epithelial cells large aur irregular, neutrophils rounded with lobulated nucleus, macrophages large with irregular nucleus. Smudge cells count karo ya nahi – IDF guidelines: cells with recognizable nucleus hi count karein. 3 strips count karein average lene ke liye.</p>
+            `,
+                calculation: `
+              <h4 class="font-semibold mt-4 mb-2">Calculation</h4>
+              <code class="block p-3 bg-gray-100 rounded">DMSCC (cells/mL) = Average Single Strip Count × SSF</code>
+              <p class="mt-2 text-sm"><strong>Example:</strong> 3 strips mein 45, 52, 48 cells counted. Average = 48.3. SSF = 20,000. DMSCC = 48.3 × 20,000 = 9.66 × 10⁵ cells/mL ≈ 1.0 × 10⁶ cells/mL (2 significant figures).</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Interpretation Table</h4>
+              <div class="overflow-x-auto mt-2">
+                <table class="min-w-full text-sm border border-gray-300">
+                  <thead class="bg-gray-100"><tr><th class="border px-3 py-2">SCC (cells/mL)</th><th class="border px-3 py-2">Udder Health Status</th><th class="border px-3 py-2">Mastitis Probability</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border px-3 py-2">&lt; 100,000</td><td class="border px-3 py-2">Excellent</td><td class="border px-3 py-2">Very unlikely</td></tr>
+                    <tr><td class="border px-3 py-2">100,000–200,000</td><td class="border px-3 py-2">Good</td><td class="border px-3 py-2">Low</td></tr>
+                    <tr><td class="border px-3 py-2">200,000–500,000</td><td class="border px-3 py-2">Borderline / Subclinical suspicion</td><td class="border px-3 py-2">Possible subclinical mastitis</td></tr>
+                    <tr><td class="border px-3 py-2">500,000–1,000,000</td><td class="border px-3 py-2">Subclinical Mastitis</td><td class="border px-3 py-2">High – investigate</td></tr>
+                    <tr><td class="border px-3 py-2">&gt; 1,000,000</td><td class="border px-3 py-2">Severe Mastitis</td><td class="border px-3 py-2">Almost certain – clinical signs check</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="mt-2">EU Legal limit: bulk milk &lt;400,000 cells/mL. FSSAI India: &lt;500,000 cells/mL for raw milk to dairy. Automatic methods (FOSSOMATIC Flow Cytometry) DMSCC se more accurate aur faster hain for bulk milk testing.</p>
+            `,
+            },
+            {
+                id: "drug_residues",
+                title: "Veterinary Drug Residues – Delvotest aur Other Methods",
+                principle:
+                    "Dairy cows mein antibiotic treatment ke baad, antibiotic residues milk mein secreted hote hain ek certain period ke liye (withdrawal period). Inhe 'Inhibitory Substances' ya 'Antibiotic Residues' kehte hain. Milk mein antibiotic residues ki presence serious problems paida karti hai: (1) Public Health: Allergic reactions (penicillin allergy), antibiotic resistance development, gut microbiome disruption. (2) Technological: Starter culture inhibition in cheese/yoghurt making – delayed/failed acidification. (3) Legal: Regulatory non-compliance, economic penalties. Delvotest SP-NT ek internationally recognized microbiological inhibition test hai jo Bacillus stearothermophilus var. calidolactis spores ki growth inhibition par based hai. Ye beta-lactams, tetracyclines, aminoglycosides, macrolides, sulfonamides (at varying sensitivities) detect karta hai. Minimum Detection Limits (MDLs): Penicillin G ~3–4 ppb (µg/kg), Amoxicillin ~4 ppb, Tetracycline ~100 ppb.",
+                procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Delvotest SP-NT Procedure</h4>
+              <p>Delvotest kit mein microwell strips ya ampoules hote hain jisme agar gel embedded hai jisme B. stearothermophilus spores, nutrients, aur pH indicator (bromocresol purple – purple at neutral/alkaline, yellow at acidic) hote hain.</p>
+              <ol class="list-decimal list-outside pl-5 space-y-1">
+                <li>Sample preparation: Representative milk sample well-mixed. 10 min room temperature.</li>
+                <li>Inoculation: 0.1 mL milk sample ampoule/well mein pipette karein (manufacturer instructions ke anusaar).</li>
+                <li>Incubation: 63–64°C par exactly 2.5 hours (incubator temperature ±0.5°C maintain karein).</li>
+                <li>Reading: Incubation ke baad turant read karein (before cooling).</li>
+              </ol>
+              <p><strong>Control Setup:</strong> Positive control (antibiotic-spiked milk), Negative control (antibiotic-free milk), blank (diluent). Har batch mein controls run karein.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Mechanism of Action</h4>
+              <p>Antibiotic-free milk mein: B. stearothermophilus spores 63°C par germinate aur grow karte hain → Lactose ferment karke lactic acid produce karte hain → pH drop hota hai → Purple → Yellow colour change (Negative result = no inhibition).</p>
+              <p>Antibiotic-present milk mein: Antibiotics agar mein diffuse karte hain → Bacterial growth inhibit hoti hai → No acid production → pH unchanged → Purple colour remains (Positive result = inhibition = antibiotic detected).</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Other Antibiotic Detection Methods</h4>
+              <ul class="list-disc list-outside pl-5 space-y-1">
+                <li><strong>SNAP Beta-Lactam Test:</strong> Lateral flow immunoassay. Specific for beta-lactam antibiotics (penicillins, cephalosporins). 5 minutes result. Highly sensitive (Penicillin G ~2 ppb). On-farm testing possible.</li>
+                <li><strong>Charm II Radioimmuno-assay:</strong> Radiolabelled antibiotics compete with residues for antibody binding. Very sensitive. Multi-drug detection possible. Radiation hazard – specialized lab required.</li>
+                <li><strong>ELISA kits:</strong> Specific antibody-based detection. Semi-quantitative. 1–2 hour test. Multiple drug classes available.</li>
+                <li><strong>HPLC/LC-MS/MS:</strong> Gold standard confirmatory method. Simultaneous detection of multiple residues at ppb level. Expensive equipment, trained personnel needed.</li>
               </ul>
             `,
-      },
-      {
-        id: "coliform",
-        title: "Coliform Count",
-        principle:
-          "Coliform group ke bacteria mein sabhi aerobic aur facultative anaerobic, gram-negative, non-spore forming rods shaamil hain jo 30°C, 35°C ya 37°C par 48 ghanton ke bheetar acid aur gas ke utpaadan ke saath lactose ko ferment karne mein saksham hain. Dairy products mein in coliforms ki upasthiti production, processing ya storage ke dauran unsanitary conditions ya practices ka soochak hai.",
-        procedure: `
-              <h4 class="font-semibold mt-4 mb-2">Medium ki taiyari:</h4>
-              <p>Violet Red Bile Agar (VRBA) medium ka upyog kiya jaata hai. Ingredients ko distilled water mein gholkar medium taiyaar karein. Ubaal lein. Adhik garam karne se bachein. Is medium ko autoclave na karein.</p>
-              <h4 class="font-semibold mt-4 mb-2">Inoculation aur Incubation:</h4>
-              <p>Pratyek upyukt dilution se 1ml ko do sterile Petri dish mein transfer karein. Pratyek Petri dish mein lagbhag 15ml VRBA medium daalein, milayein aur jamne dein. Poori tarah se jamne ke baad, satah par lagbhag 4 ml VRBA medium daalein. Unhein 37°C par 24h ± 2h ke liye incubate karein. 150 se adhik colonies waali dish ko na rakhein. Coliform ki vishisht colonies gehre ya baingani laal rang ki hoti hain jinka diameter 0.5 mm ya usse adhik hota hai aur kabhi-kabhi pitta ke avakshepit laal rang ke kshetra se ghiri hoti hain.</p>
+                calculation: `
+              <h4 class="font-semibold mt-4 mb-2">Result Interpretation</h4>
+              <div class="overflow-x-auto mt-2">
+                <table class="min-w-full text-sm border border-gray-300">
+                  <thead class="bg-gray-100"><tr><th class="border px-3 py-2">Colour After Incubation</th><th class="border px-3 py-2">Result</th><th class="border px-3 py-2">Interpretation</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border px-3 py-2">Completely Yellow</td><td class="border px-3 py-2">NEGATIVE</td><td class="border px-3 py-2">No inhibitory substances – Milk acceptable</td></tr>
+                    <tr><td class="border px-3 py-2">Partially Yellow / Pale Yellow</td><td class="border px-3 py-2">DOUBTFUL</td><td class="border px-3 py-2">Borderline – Retest ya confirmatory test lagaayein</td></tr>
+                    <tr><td class="border px-3 py-2">Purple (unchanged)</td><td class="border px-3 py-2">POSITIVE</td><td class="border px-3 py-2">Inhibitory substances present – Milk REJECT karein</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="mt-2"><strong>False Positives:</strong> High natural antibody content (mastitis milk), neutralizers (formaldehyde, hydrogen peroxide adulterants), extremely high SCC milk. Confirmatory test (SNAP, HPLC) always run karein positive results par before rejection.</p>
+              <p><strong>Regulatory:</strong> FSSAI India mein antibiotics milk mein completely absent hone chahiye (zero tolerance). EU MRL (Maximum Residue Limit) penicillin G ke liye 4 µg/kg hai.</p>
             `,
-        calculation: `
-              <h4 class="font-semibold mt-4 mb-2">Calculation aur Result ka Expression:</h4>
-              <code>N = ΣC / { (n1 + 0.1 n2) d }</code>
-              <p class="text-xs mt-2">Jahan ΣC = sabhi dishes par gini gayi vishisht colonies ka yog, n1 = pehle dilution mein dishes ki sankhya, n2 = doosre dilution mein dishes ki sankhya, d = pehle dilution ke anuroop dilution factor.</p>
-              <h4 class="font-semibold mt-4 mb-2">Interpretation:</h4>
-              <p>Raw milk ke mamle mein 1/100 dilution (0.01 ml) aur pasteurized milk ke mamle mein 1/10 dilution (0.1 ml) mein coliform bacteria ki anupasthiti ko santoshjanak gunvatta ka maapdan maana jaata hai.</p>
+            },
+            {
+                id: "mbrt",
+                title: "Methylene Blue Reduction Test (MBRT)",
+                principle:
+                    "MBRT ek indirect bulk milk quality test hai jo bacterial metabolic activity measure karta hai by monitoring redox potential change. Methylene Blue ek redox indicator dye hai: oxidized (blue) form mein colored, reduced (leuco form) mein colorless. Milk mein bacteria (aur milk cells) aerobic respiration aur fermentation ke through oxygen consume karte hain aur reducing metabolites produce karte hain. Jaise hi oxygen depletes, Oxidation-Reduction Potential (ORP) girata hai. Enough reducing conditions pe methylene blue reduced hokar colorless ho jaata hai. Decolorization time inversely related hai bacterial count se: zyada bacteria = faster decolorization = poor quality milk. Ye test cheap, simple, equipment-free hai lekin imprecise – fat globule interference, LAB vs. Pseudomonas (different reducing power), mastitis milk (PMN cells reduce MB) variations cause kar sakte hain.",
+                procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Reagent Preparation</h4>
+              <p><strong>Methylene Blue Stock Solution:</strong> Methylene blue dye (certified) 5 mg ko 200 mL sterile distilled water mein dissolve karein (25 µg/mL = 0.025% solution). Amber bottle mein dark cool place par store karein (stable 1 month).</p>
+              <p><strong>Working Solution:</strong> Stock solution hi directly use hoti hai (some protocols 1:1000 dilution use karte hain – per laboratory standardize karein).</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Test Procedure</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-1">
+                <li>Sterile test tube mein 10 mL fresh milk lein (well-mixed sample, 15–20°C par).</li>
+                <li>1 mL methylene blue working solution add karein.</li>
+                <li>Tube ke munh ko sterilized rubber stopper ya parafilm se band karein. Mix karein (gentle inversion 3 times).</li>
+                <li>Immediately 37°C water bath mein upright position mein rakhein.</li>
+                <li>First 5 minutes ke baad read karein, phir 30 min intervals par. Record karo jab tube ki milk nearly colorless ho jaaye (top 2 mm ring ignore karein – fat layer oxygen-containing hoti hai).</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Control</h4>
+              <p>Boiled milk (bacteria-free) parallel run karein – should NOT decolorize (confirms test validity).</p>
             `,
-      },
-      {
-        id: "dmscc",
-        title: "Direct Microscopic Somatic Cell Count (DMSCC)",
-        principle:
-          "Raw milk mein somatic cells ki sankhya mastitis ya kuch anya abnormal milk secretion ki upasthiti aur seema ka ek maap pradan karti hai. DMSCC ko somatic cell count ki pushti ke liye aadhikaarik roop se maanyata praapt prakriyaon mein se ek ke roop mein laagu kiya jaata hai.",
-        procedure: `
-              <h4 class="font-semibold mt-4 mb-2">Single Strip Factor (SSF) ka anumaan:</h4>
-              <p>Ek saaf stage micrometer ko microscope ke stage par rakhein. Microscopic kshetra ke vyaas (d) ko mm mein nirdhaarit karein. SSF ki ganana karein: <code>SSF = 10000 / (single strip ka area)</code></p>
-              <h4 class="font-semibold mt-4 mb-2">Doodh film ki taiyari:</h4>
-              <p>Doodh ke sample ko 40°C tak garam karein. Acchi tarah se hilayein. Ek pipette ya calibrated loop ka upyog karke 0.01ml doodh nikalen. Doodh ko slide ke 1cm² kshetra par samaan roop se failayein. 40 se 45°C par 5 minute ke bheetar filmon ko sukhayein.</p>
-              <h4 class="font-semibold mt-4 mb-2">Smear ko defatting, fixing aur staining:</h4>
-              <p>Slideon ko das minute ke liye Newman's stain waale jar mein duboyein. Atirikt stain nikaal dein aur slideon ko acchi tarah se sookhne dein. Slides ko paani mein tab tak dhoyein jab tak ki saara atirikt dye dhul na jaaye. Microscope ke tehat film ki jaanch karne se pehle naali aur hawa mein sukhayein.</p>
-              <h4 class="font-semibold mt-4 mb-2">Stained filmon ki pariksha aur ginti:</h4>
-              <p>Oil immersion objective ke saath pratyek film ki jaanch karein. Keval un somatic cells ko ginen jinmein ek pehchaan yogya stained nucleus ho. Ek single strip count karne ke liye, doodh film ke poore diameter ko paar karein, strip ke bheetar sabhi koshikaon aur patti ke ek kinaare ko chhoone waali koshikaon ki ginti karein.</p>
+                calculation: `
+              <h4 class="font-semibold mt-4 mb-2">Interpretation</h4>
+              <div class="overflow-x-auto mt-2">
+                <table class="min-w-full text-sm border border-gray-300">
+                  <thead class="bg-gray-100"><tr><th class="border px-3 py-2">Decolorization Time</th><th class="border px-3 py-2">Milk Grade</th><th class="border px-3 py-2">Approximate Bacterial Count</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border px-3 py-2">&gt; 5.5 hours</td><td class="border px-3 py-2">Bahut Accha (Excellent)</td><td class="border px-3 py-2">&lt; 2,00,000 cfu/mL</td></tr>
+                    <tr><td class="border px-3 py-2">2–5.5 hours</td><td class="border px-3 py-2">Accha (Good)</td><td class="border px-3 py-2">2,00,000–20,00,000 cfu/mL</td></tr>
+                    <tr><td class="border px-3 py-2">30 min–2 hours</td><td class="border px-3 py-2">Mela (Fair)</td><td class="border px-3 py-2">20,00,000–2,00,00,000 cfu/mL</td></tr>
+                    <tr><td class="border px-3 py-2">&lt; 30 minutes</td><td class="border px-3 py-2">Kharab (Poor)</td><td class="border px-3 py-2">&gt; 2,00,00,000 cfu/mL</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="mt-2">Limitations: High SCC milk (mastitis) MBRT mein falsely poor grade de sakta hai. LAB high reducing power wali hoti hain, Pseudomonas kam – same bacterial count par alag MBRT result. MBRT screening ke liye use karein, final grading SPC se confirm karein.</p>
             `,
-        calculation: `
-              <h4 class="font-semibold mt-4 mb-2">Calculation aur Results ka Expression:</h4>
-              <code>DMSCC per ml = Single strip mein somatic cells ki sankhya × SSF</code>
-              <p>Result ko do mahatvapurna ankon tak round karein.</p>
-              <h4 class="font-semibold mt-4 mb-2">Interpretation:</h4>
-              <p>Doodh ke prati milliliter 500,000 se adhik somatic cells ki upasthiti mastitis ka soochak hai.</p>
+            },
+            {
+                id: "yeast_mould",
+                title: "Yeast and Mould Count",
+                principle:
+                    "Yeasts aur moulds fungi hai jo dairy products mein spoilage cause karte hain. Ye acidic pH par grow kar sakte hain (pH 3.0–6.0) aur NaCl, low water activity, low temperatures tolerate karte hain. Selective media mein: acidified media bacteria ki growth inhibit karta hai (bacteria low pH tolerate nahi karte), jabki fungi acid-tolerant hoti hain. Potato Dextrose Agar (PDA) aur Dichloran Rose Bengal Chloramphenicol Agar (DRBC) common selective media hain. Chloramphenicol (antibiotic) bacterial growth completely inhibit karta hai. Rose Bengal (dye) mold colony spread limit karta hai. Dairy products mein yeast & mould count: yoghurt, soft cheese, butter ki quality indicator, surface mold on hard cheese, aflatoxin-producing mold contamination ka risk.",
+                procedure: `
+               <h4 class="font-semibold mt-4 mb-2">Media ki Taiyari</h4>
+               <p><strong>Option 1 – Potato Dextrose Agar (PDA) Acidified:</strong></p>
+               <ul class="list-disc list-outside pl-5 space-y-1">
+                 <li>Commercially available PDA: 39 g/L in distilled water. Autoclave 121°C/15 min.</li>
+                 <li>50°C tak thanda karo. Tartaric acid solution (10%) se pH 3.5 adjust karo (approx. 1.4 mL/L).</li>
+                 <li>Plates pour karo, allow to set. Pre-poured plates 4°C par 2 weeks store kar sakte hain.</li>
+               </ul>
+               <p class="mt-2"><strong>Option 2 – DRBC Agar (Preferred for Food Samples):</strong></p>
+               <ul class="list-disc list-outside pl-5 space-y-1">
+                 <li>Peptone 5g, Glucose 10g, KH₂PO₄ 1g, MgSO₄·7H₂O 0.5g, Rose Bengal 0.025g, Dichloran 0.002g, Agar 15g, Chloramphenicol 0.1g per litre.</li>
+                 <li>pH 5.6. Autoclave 121°C/15 min. Light se bachao (rose bengal photosensitive).</li>
+               </ul>
+
+               <h4 class="font-semibold mt-4 mb-2">Plating Technique – Spread Plate (Preferred)</h4>
+               <ol class="list-decimal list-outside pl-5 space-y-1">
+                <li>Serial decimal dilutions PBS mein taiyaar karein (dairy products ke liye 10⁻¹ to 10⁻³ typically).</li>
+                <li>0.1 mL (100 µL) each dilution se pre-poured, pre-dried PDA plates par spread karein (sterile glass spreader ya disposable spreader use karein).</li>
+                <li>Alternatively 1 mL pour plate technique (pour plate equally effective).</li>
+                <li>Duplicate plates lagaayein.</li>
+                <li>Plates ko 22–25°C par 5 din ke liye incubate karein (zyada temperature fungi growth suppress kar sakta hai). Invert mat karein (mold colonies aerial mycelium se Petri dish lid se attach ho jaate hain).</li>
+                <li>Din 3 se daily observe karein. Spreading mold colonies adjacent colonies count mai interfere karte hain – note karo.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Colony Identification</h4>
+              <p>Yeasts: Generally small, convex, moist, creamy-white to pink colonies (Gram stain: large oval cells, 5–10 µm). Moulds: Fuzzy, cottony, spreading colonies with aerial hyphae. Colour depends on genus: White (<i>Mucor</i>), Green/Blue-green (<i>Penicillium, Aspergillus</i>), Black (<i>Rhizopus, Aspergillus niger</i>), Pink/Orange (<i>Fusarium</i>). Colony morphology aur microscopy (lactophenol cotton blue staining) se tentative identification karo.</p>
             `,
-      },
-      {
-        id: "drug_residues",
-        title: "Veterinary Drug Residues (Delvotest)",
-        principle:
-          "Delvotest ka upyog doodh mein dawa avasheshon ki upasthiti ka pata lagaane ke liye kiya jaata hai. Iska siddhant poshak tatvon aur doodh ke alawa agar mein embedded ek vishisht bacteria (Bacillus-stearothermophilus var. calidolactis) ke spores ke germination aur growth par aadhaarit hai. Yadi doodh inhibitory substances se mukt hai, to in spores ki growth se acid ka utpaadan hota hai, jo agar ka rang baingani se peele mein badal deta hai. Haalaanki, yadi doodh mein kuch inhibitory substances hote hain, to ye agar medium mein fail jaayenge aur bacteria ke vikas aur baad mein acid utpaadan ko rok denge aur medium baingani rang ka bana rahega.",
-        procedure: `
-              <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-              <p>Pratyek kit ke saath diye gaye manufacturer ke protocol ka paalan karein. Yadi medium ka rang peele rang mein badal jaata hai to antibiotic dawaon ke liye result ko negative ke roop mein report karein aur yadi nirdisht incubation avadhi ke baad rang baingani bana rehta hai to antibiotic dawaon ki upasthiti ke liye positive. Delvotest jhoothi positive pratikriya de sakta hai, yadi doodh mein neutralizer, formalin aur hydrogen peroxide milaaya gaya ho.</p>
+                calculation: `
+              <code class="block p-3 bg-gray-100 rounded">Yeast/Mould Count (cfu/g or cfu/mL) = Average colony count (from duplicate) × (1/volume plated) × Dilution factor</code>
+              <p class="mt-2 text-sm"><strong>Example (Spread plate, 0.1 mL):</strong> 10⁻² dilution se 45 yeast colonies (avg of duplicates). Count = 45 × (1/0.1) × 100 = 45,000 cfu/mL.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Interpretation Standards</h4>
+              <div class="overflow-x-auto mt-2">
+                <table class="min-w-full text-sm border border-gray-300">
+                  <thead class="bg-gray-100"><tr><th class="border px-3 py-2">Product</th><th class="border px-3 py-2">Acceptable Limit</th><th class="border px-3 py-2">Action Limit</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border px-3 py-2">Yoghurt / Dahi</td><td class="border px-3 py-2">&lt;100 cfu/g</td><td class="border px-3 py-2">&gt;100 cfu/g = Investigate</td></tr>
+                    <tr><td class="border px-3 py-2">Soft Cheese</td><td class="border px-3 py-2">&lt;100 cfu/g (surface)</td><td class="border px-3 py-2">Mould visible = Reject</td></tr>
+                    <tr><td class="border px-3 py-2">Butter</td><td class="border px-3 py-2">&lt;10 cfu/g</td><td class="border px-3 py-2">&gt;10 = Poor packaging/cold chain</td></tr>
+                    <tr><td class="border px-3 py-2">Milk Powder</td><td class="border px-3 py-2">&lt;100 cfu/g</td><td class="border px-3 py-2">Environmental contamination</td></tr>
+                  </tbody>
+                </table>
+              </div>
             `,
-        calculation: `
-              <h4 class="font-semibold mt-4 mb-2">Interpretation:</h4>
-              <p>0.1 milliliter doodh ka sample daalne ke baad, ampoule ko 63°C se 66°C par 2.5 ghante ke liye incubate kiya jaata hai. Antimicrobial padarthon ki anupasthiti mein, poore thos medium ka rang peela ho jaata hai (negative), jabki antibiotic dawaon ke paryaapt uchh saandrata ki upasthiti mein yah baingani bana rehta hai. Sandigdh parinaamon ke maamle mein, medium thoda peela ho jaata hai.</p>
+            },
+            {
+                id: "media_prep",
+                title: "Bacteriological Media ki Taiyari",
+                principle: `Culture media wo nutrients ka mixture hai jo controlled artificial conditions mein microorganisms ke growth aur study ke liye use hota hai. Media ki taiyari quality control ka foundation hai – improper media se galat results milte hain. Media classification: (1) Consistency basis par: Liquid (broth), Semi-solid (0.3–0.5% agar), Solid (1.5–2% agar). (2) Composition basis par: Natural (potato infusion, blood, milk), Synthetic (chemically defined composition), Semi-synthetic (peptone + yeast extract base). (3) Purpose basis par: General/Non-selective (Nutrient agar – sabhi organisms), Selective (VRBA – coliforms only, MRS – LAB), Differential (Blood agar – hemolysis pattern), Enrichment (Selenite broth – Salmonella), Indicator/Chromogenic (Chromocult – instant color identification).`,
+                procedure: `
+                <h4 class="font-semibold mt-4 mb-2">pH Adjustment: Critical Step</h4>
+                <p>pH meter calibration (pH 4.0 aur 7.0 buffers) daily karein. Temperature compensation set karein (25°C). pH adjustment: NaOH (1N ya 0.1N) se increase, HCl (1N ya 0.1N) se decrease. <strong>Critical:</strong> Autoclave karne se pH slightly decrease hota hai (CO2 release se), isliye target pH se 0.1–0.2 high set karein. Post-sterilization pH check karo (sample tube lete hue).</p>
+
+                <h4 class="font-semibold mt-4 mb-2">Nutrient Agar / Nutrient Broth</h4>
+                <p><strong>Composition (per litre):</strong> Beef extract 3g, Peptone 5g, NaCl 5g (Broth). For agar, add Agar 15g. pH 7.3 ± 0.2.</p>
+                <p><strong>Preparation:</strong> Ingredients dissolve karein. Agar ke liye boil aayein gently (agar dispersion ke liye). 121°C / 15 min autoclave. 50°C tak thanda karo (plates pour karne ke liye) ya liquid mein use karo. Sterility check: 37°C / 48h incubate karein ek tube – no turbidity = sterile.</p>
+
+                <h4 class="font-semibold mt-4 mb-2">Plate Count Agar (PCA)</h4>
+                <p>Composition (per litre): Tryptone 5g, Yeast Extract 2.5g, Glucose 1g, Agar 15g, pH 7.0. Standard agar for SPC testing.</p>
+
+                <h4 class="font-semibold mt-4 mb-2">Violet Red Bile Agar (VRBA)</h4>
+                <p>Selective for coliforms. Bile salts + Crystal Violet suppress Gram-positive aur non-fermenters. <strong>NEVER autoclave.</strong> Boil to dissolve, use at 45°C. Dark red colonies with bile halo = coliforms.</p>
+
+                <h4 class="font-semibold mt-4 mb-2">MacConkey Agar (MCA)</h4>
+                <p>Selective-differential. Bile salts + crystal violet Gram-positive inhibit karte hain. Neutral red pH indicator: Lactose fermenters = Pink/red colonies (<i>E. coli</i>, coliforms); Non-fermenters = Colorless (<i>Salmonella, Shigella</i>). pH 7.4. Autoclave 121°C/15 min.</p>
+
+                <h4 class="font-semibold mt-4 mb-2">Potato Dextrose Agar (PDA)</h4>
+                <p>Composition: Potato infusion 4g (or potato extract), Dextrose 20g, Agar 15g per litre. Low pH (3.5 with tartaric acid) bacterial growth rokata hai. Fungi ke liye optimal. Autoclave pehle (pH adjust nahin karein), phir agar cool karne ke baad tartaric acid add karein.</p>
+
+                <h4 class="font-semibold mt-4 mb-2">MRS Agar (de Man, Rogosa, Sharpe)</h4>
+                <p>Selective for Lactic Acid Bacteria. Contains: Peptone, Beef extract, Yeast extract, Glucose, Sorbitan mono-oleate, K₂HPO₄, Sodium acetate, Ammonium citrate, MgSO₄, MnSO₄, Agar. Low pH (6.2) aur acetate selective pressure. Anaerobic or 5% CO₂ incubation at 37°C or 42°C.</p>
+
+                <h4 class="font-semibold mt-4 mb-2">Blood Agar</h4>
+                <p>Blood agar base + 5–7% defibrinated sheep blood (aseptically added at 45°C). Hemolysis patterns: Alpha (partial, green zone), Beta (complete, clear zone), Gamma (no hemolysis). S. agalactiae beta-hemolytic hai – mastitis diagnosis mein use.</p>
+
+                <h4 class="font-semibold mt-4 mb-2">Media Quality Control</h4>
+                <p>Har batch ki media ke liye: (1) Sterility check (one unit 37°C/48h incubate karein), (2) Growth promotion test (reference organisms ka use), (3) pH verification, (4) Appearance check (clarity, color). ATCC reference strains maintain karein: E. coli ATCC 25922, Staphylococcus aureus ATCC 25923, etc.</p>
             `,
-      },
-      {
-        id: "yeast_mould",
-        title: "Yeast and Mould Count",
-        principle:
-          "Yeasts and moulds amliy vatavaran mein vikas kar sakte hain, isliye unki ganana ke liye ek amliy madhyam (jaise Potato Dextrose Agar, PDA) ka upyog kiya jaata hai.",
-        procedure: `
-               <ol class='list-decimal list-inside space-y-2 mt-2'>
-                <li><strong>Sample & Dilutions:</strong> TPC method ki tarah serial dilutions taiyaar karein.</li>
-                <li><strong>Plating:</strong> Pratyek dilution se 1ml ko sterile Petri plates mein transfer karein (Spread Plate method behtar hai).</li>
-                <li><strong>Media:</strong> Plates mein pehle se daala gaya Potato Dextrose Agar (PDA) hona chahiye, jiska pH ~3.5 (tartaric acid ke saath) adjust kiya gaya ho taaki bacterial growth ko roka ja sake.</li>
-                <li><strong>Incubation:</strong> Plates ko 22-25°C par 5 dino ke liye incubate karein.</li>
-                <li><strong>Counting:</strong> Yeasts (aam taur par chamakdar, gol) aur moulds (rui jaisa, failne wala) ki colonies ko alag-alag ginen.</li>
-              </ol>`,
-        calculation:
-          "<code>Yeast/Mould Count/g (ya ml) = Average no. of colonies × Dilution factor</code>",
-      },
-      {
-        id: "media_prep",
-        title: "Media ki Taiyari",
-        principle: `Bacteriological laboratory mein vibhinn culture media (liquid, semi-solid, aur solid) ka upyog microorganisms ke cultivation, unke vikas aur sharirik visheshtaon ka adhyayan karne aur viable organisms ki sankhya nirdharit karne ke liye kiya jaata hai.`,
-        procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Media ki reaction (pH) ka samayojan.</h4>
-                <p>Medium ka reaction (pH) microorganisms ke vikas ko prabhavit karne wale sabse mahatvapurna kaarakon mein se ek hai. Adhikansh bacteria prajatiyan tab acchi tarah se badhti hain jab reaction na to amliy ho aur na hi kshariy, yaani neutral (pH 7.0). Yeasts aur moulds ko unke vikas ke liye ek spasht amliy vatavaran (pH 4 se 5) ki avashyakta hoti hai. Culture media ki taiyari mein medium ke reaction (pH) ko avashyak star tak samayojit karna ek bahut hi mahatvapurna kadam hai.</p>
-                <h4 class="font-semibold mt-4 mb-2">Nutrient broth aur nutrient agar ki taiyari.</h4>
-                <p>Nutrient broth ek liquid medium hai jiska upyog aam taur par aerobic organisms ke cultivation ke liye aur vibhinn sharirik parikshanon ke liye ek basal medium ke roop mein kiya jaata hai. Broth mein agar milane se ek thos medium (nutrient agar) milta hai jiska upyog kai bacterial prajatiyon ke cultivation aur viable bacterial numbers ke nirdharan ke liye kiya jaata hai.</p>
-                <h4 class="font-semibold mt-4 mb-2">Potato dextrose agar ki taiyari.</h4>
-                <p>Potato dextrose agar ek selective medium hai jiska upyog yeasts aur molds ke cultivation ke liye kiya jaata hai. Aalu ke ras ka upyog yeasts aur molds ke vikas ko badhava deta hai, aur kam pH (3.5) bacterial vikas ko rokne mein madad karta hai jabki yeasts aur molds ke vikas ka samarthan karta hai.</p>
-                <h4 class="font-semibold mt-4 mb-2">Mac Conkey's bile salt broth aur agar aur desoxycholate agar ki taiyari.</h4>
-                <p>Yah ek selective medium hai jiska upyog coliform organisms ke cultivation ke liye kiya jaata hai. Medium mein sodium taurocholate (bile salt) ki upasthiti satah ke tanav ko kam karti hai jisse coliform bacteria ke vikas ka samarthan hota hai. Isliye yah doodh aur paani ke namoonon ke liye presumptive coliform test karne mein bahut mahatva rakhta hai.</p>
-            `,
-        calculation: "",
-      },
-      {
-        id: "bacteriology_air",
-        title: "Bacteriology of Air",
-        principle:
-          "Hawa microorganisms ke vikas aur prajanan ke liye ek prakritik vatavaran nahi hai lekin kuch prakar ke jeev (jaise aerobic spore formers, micrococci, mold spores) hawa mein suspend kiye gaye dhool kanon ke saath jude paaye ja sakte hain. Dairy, pashu shalaon aur food factories ke andar vayumandal mein maujood microorganisms ki sankhya aur prakaron ka gyan doodh, doodh utpaadon aur anya samagriyon ke contamination ko niyantrit karne ke liye bahut mahatvapurna hai.",
-        procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Procedure :-</h4>
+                calculation: "",
+            },
+            {
+                id: "bacteriology_air",
+                title: "Bacteriology of Air (Dairy Environment)",
+                principle:
+                    "Air itself microorganisms ke growth aur reproduction ke liye suitable environment nahi hai – ye desiccation, UV radiation aur lack of nutrients se deactivate ho jaate hain. Lekin bacteria, mold spores, ya yeast cells aero-sols ke through dust particles ke saath suspended rehte hain aur dairy processing environment mein contamination ka significant source ho sakte hain. Aerial microbial load ka pata lagana zaruri hai: (1) Post-pasteurization contamination (PPC) assessment, (2) CIP effectiveness monitoring, (3) New construction/renovation ke baad cleanliness verification, (4) Specific outbreak investigation. Settle plate method (passive air sampling) simplest hai – expose ki gayi plates par gravity se particles settle hote hain. Active air sampling (RCS sampler, Anderson impactor) more quantitative aur representative hain par specialized equipment ki zarurat hai.",
+                procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Settle Plate Method (Passive Air Sampling)</h4>
                 <ol class="list-decimal list-outside pl-5 space-y-1">
-                    <li>Pighle hue nutrient agar ke saath do plate aur sabouraud agar ke saath do plate daalein. Media ko set aur kathor hone dein.</li>
-                    <li>Plates se dhakkan hata dein.</li>
-                    <li>Pratyek medium ki ek plate ko milking shed aadi ke farsh par rakhein aur unhein 5 minute ke liye expose hone dein. Turant dhakkan wapas laga dein.</li>
-                    <li>Pratyek medium ki ek plate ko laboratory bench par rakhein, plates ko 15 minute ke liye expose hone dein aur turant dhakkan wapas laga dein.</li>
-                    <li>Nutrient agar plates ko 37°C par 2 din aur sabouraud agar plates ko 22°C par 3 se 4 din ke liye incubate karein.</li>
-                    <li>Incubation avadhi ke ant mein pratyek plate mein colonies ki sankhya ginen.</li>
+                    <li>Nutrient agar plates (bacteria ke liye) aur Sabouraud Dextrose Agar plates (fungi ke liye) taiyaar karein. Pre-dry plates (15 min open in laminar flow) surface condensation remove karne ke liye.</li>
+                    <li>Designated sampling locations identify karein (milking parlor, pasteurization room, filling area, cold store).</li>
+                    <li>Plates ko sampling location par rakhein (floor level aur working height dono).</li>
+                    <li>Lid open karein, designated exposure time ke liye open rakhein: Processing area: 15–30 min exposure; High-risk areas (filling lines): 15 min; Outdoor/comparative: 5 min.</li>
+                    <li>Lid replace karein, label karein (location, time, date, exposure duration).</li>
+                    <li>NA plates: 37°C / 48h incubate karein. SDA plates: 22°C / 5 days.</li>
+                    <li>Colonies count karein.</li>
                 </ol>
+
+                <h4 class="font-semibold mt-4 mb-2">Active Air Sampling (RCS Centrifugal Sampler)</h4>
+                <p>RCS sampler air ko known volumetric rate par aspirate karta hai (typically 40 L/min ya 100 L/min). Air mein suspended particles centrifugal force se agar strip par impinge hote hain. Known air volume sampled hone se cfu/m³ air calculate ki ja sakti hai. Ye settle plate se zyada accurate hai quantitative measurement ke liye.</p>
+
+                <h4 class="font-semibold mt-4 mb-2">Surface Contamination aur Contact Plates (RODAC)</h4>
+                <p>RODAC (Replicate Organism Detection and Counting) plates convex surface ke saath aate hain. Plate ko flat surface ke against firmly press karein (10 sec, uniform pressure). Ye contact plates equipment cleanliness aur personnel hand hygiene monitoring ke liye use hote hain.</p>
             `,
-        calculation: `
-                <h4 class="font-semibold mt-4 mb-2">Interpretation</h4>
-                <p>Prati c.ft. prati minute organisms ki sankhya santoshjanak vatavaran ke liye ek se adhik nahi honi chahiye.</p>
+                calculation: `
+                <h4 class="font-semibold mt-4 mb-2">Calculation – CFU/m³ (Active Sampling se)</h4>
+                <code class="block p-3 bg-gray-100 rounded">CFU/m³ = (Colony count on strip × 1000) / (Flow rate L/min × Sampling time min)</code>
+
+                <h4 class="font-semibold mt-4 mb-2">Interpretation – Settle Plate Results</h4>
+                <div class="overflow-x-auto mt-2">
+                  <table class="min-w-full text-sm border border-gray-300">
+                    <thead class="bg-gray-100"><tr><th class="border px-3 py-2">Colony Count / Plate (30 min)</th><th class="border px-3 py-2">Air Quality</th><th class="border px-3 py-2">Action</th></tr></thead>
+                    <tbody>
+                      <tr><td class="border px-3 py-2">&lt; 5</td><td class="border px-3 py-2">Excellent</td><td class="border px-3 py-2">No action needed</td></tr>
+                      <tr><td class="border px-3 py-2">5–10</td><td class="border px-3 py-2">Acceptable</td><td class="border px-3 py-2">Monitor regularly</td></tr>
+                      <tr><td class="border px-3 py-2">10–25</td><td class="border px-3 py-2">Marginal</td><td class="border px-3 py-2">Investigate sources; improve ventilation/filtration</td></tr>
+                      <tr><td class="border px-3 py-2">&gt; 25</td><td class="border px-3 py-2">Unacceptable</td><td class="border px-3 py-2">Immediate action: deep clean, air filter check</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p class="mt-2">Ye thresholds filling rooms aur pasteurized product areas ke liye hain. High-care areas (UHT filling) mein stricter standards apply hote hain. EU pharmaceutical cleanroom standards dairy industry mein sometimes reference ki jaati hain.</p>
             `,
-      },
-      {
-        id: "sterility_equipment",
-        title: "Plant aur Equipment ki Sterility ka Aakalan",
-        principle:
-          "Storage tanks, vats, coolers, pipelines, heat exchangers, agitators fittings aadi sahit plant aur equipment ki sanitary sthiti ko swab technique lagu karke parikshit kiya jaata hai. Is vidhi mein ek sterile cotton ya wire-gauge swab (buffer solution se geela) ko equipment ki satah par ragada jaata hai aur satah se hataye gaye bacterial cells ko sterile buffer solution mein sthanantarit kiya jaata hai aur unki sankhya standard plate count dwara anumanit ki jaati hai.",
-        procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Procedure :-</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-1">
-                    <li>Atirikt taral ko hatane ke liye swab ko glass tube ke kinare par ek rolling motion ke saath dabayein aur use tube se bahar nikalen.</li>
-                    <li>Swab ko parikshit kiye jaane wale kshetra par bhari dabav ke saath aage aur peeche ragaden taaki satah ke sabhi hisson ka do baar upchar kiya ja sake.</li>
-                    <li>Avashyak kshetra ko ragadne ke baad swab ko us ghol mein wapas laayein jismein ise mool roop se rakha gaya tha.</li>
-                    <li>Swab ko 5 minute ke liye taral mein dooba rehne dein aur swab ko ghol mein 6 baar jor se ghumakar milayein.</li>
-                    <li>1/10 dilution taiyar karein aur swab sample aur dilution ke 1ml hisson ko duplicate mein plate karein.</li>
-                    <li>Plates ko 37°C par 48 ghante ke liye incubate karein.</li>
-                </ol>
-            `,
-        calculation: `
-                <p>Duplicate plates mein counts ka ausat, 25 se guna karke, swab kiye gaye kul kshetra ka colony count deta hai. Parinaam ko prati 900 sq.cm kshetra ke colony count ke roop mein vyakt karein.</p>
-                <h4 class="font-semibold mt-4 mb-2">Interpretation</h4>
-                <p>Colony Count prati 900 sq.cm area | Sterility</p>
+            },
+            {
+                id: "sterility_equipment",
+                title: "Plant aur Equipment ki Sterility ka Aakalan (Swab Method)",
+                principle:
+                    "Equipment sterility assessment CIP/SIP effectiveness verify karne ke liye essential monitoring tool hai. Swab method (ISO 18593:2018) – cotton swab ya sponge swab ek defined area se bacterial cells ko physically remove karta hai. In cells ko eluent mein release karke plate count se quantify kiya jaata hai. Yeh method: heat exchangers, pipelines, tanks, valves, conveyors ki sanitary condition assess karne ke liye use hota hai. Alternative: ATP Bioluminescence swab (5 min result, quantifies both microbial and food residues). Regular swab monitoring (daily, weekly) CIP effectiveness trend tracking allow karta hai.",
+                procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Sampling Materials aur Preparation</h4>
                 <ul class="list-disc list-outside pl-5 space-y-1">
-                    <li>5,000 se kam: Santoshjanak</li>
-                    <li>5,000 se 25,000: Kafi santoshjanak</li>
-                    <li>25,000 se adhik: Asantoshjanak</li>
+                  <li>Sterile cotton-tipped swab ya pre-moistened sponge swab (Whirl-Pak sponge bags)</li>
+                  <li>Eluent: 10 mL sterile 0.1% peptone water ya phosphate buffer in tube</li>
+                  <li>Template: 10 cm × 10 cm (100 cm²) area mark karne ke liye sterile stainless steel template</li>
                 </ul>
-            `,
-      },
-      {
-        id: "sterility_bottles",
-        title: "Doodh ki Botlon ki Sterility ka Aakalan",
-        principle:
-          "Doodh ki botlon ki sanitary sthiti (sterility) ko rinse technique dwara parikshit kiya jaata hai. Is vidhi mein bottle ko ek jyat matra mein sterile Ringer's ya phosphate buffer solution se dhoya jaata hai taaki satah par bache bacterial cells ko hataya ja sake aur unki sankhya rinse solutions ke standard plate counts lekar anumanit ki jaati hai.",
-        procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Procedure :-</h4>
+
+                <h4 class="font-semibold mt-4 mb-2">Sampling Technique</h4>
                 <ol class="list-decimal list-outside pl-5 space-y-1">
-                    <li>Bottle mein 20ml Ringer's ya buffer solution daalein aur bung wapas laga dein.</li>
-                    <li>Bottle ko kshaitij roop se pakden, dheere-dheere ek disha mein 12 baar ghumayein aur poori aantarik satah ko geela karne ke liye 12 baar lambai mein bhi hilayein.</li>
-                    <li>Bottle ko 15 se 30 minute ke liye khade rehne dein aur phir se aantarik satah ko acchi tarah se geela karne ke liye 12 baar dheere-dheere ghumayein.</li>
-                    <li>Rinse solution ke 1ml aur 5ml hisson ko do set petridishes mein duplicate mein sthanantarit karein, agar medium daalein, aur plates ko 37°C par 48 ghante ke liye incubate karein.</li>
+                    <li>Swab ko tube ke edge par rolling motion se excess liquid remove karein.</li>
+                    <li>Template ko sampling surface par rakhein ya mentally 10×10 cm area mark karein.</li>
+                    <li>Swab ko 45° angle par hold karein. Firm pressure ke saath horizontal direction mein 5 stripes karein. Rotate swab 90°, vertical direction mein 5 more stripes karein (zigzag double pass technique).</li>
+                    <li>Corners include karein (bacteria wahan accumulate karte hain).</li>
+                    <li>Swab turant eluent tube mein wapas rakhein. Cap tightly karein.</li>
+                    <li>4°C par transport karein, 4 ghante ke andar test karein.</li>
+                </ol>
+
+                <h4 class="font-semibold mt-4 mb-2">Processing aur Plating</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-1">
+                    <li>Tube mein swab ko 1 min hand swirling se agitate karein (ya vortex 15 sec).</li>
+                    <li>Is solution ki 10-fold serial dilutions banayein.</li>
+                    <li>1 mL of neat aur diluted sample PCA plates par duplicate mein pour plate karein.</li>
+                    <li>37°C / 48h incubate karein.</li>
                 </ol>
             `,
-        calculation: `
-                <p>Duplicate plates mein counts ka ausat, 20 se guna karke (1ml rinse waali plates ke maamle mein) aur 4 se guna karke (yadi plates mein 5ml rinse tha), prati bottle colony count deta hai.</p>
+                calculation: `
+                <h4 class="font-semibold mt-4 mb-2">Calculation</h4>
+                <code class="block p-3 bg-gray-100 rounded">Total count/area = Average plate count × Dilution factor × (Total eluent volume / Volume plated) / Area swabbed (cm²)</code>
+                <p class="mt-1 text-sm">Example: Avg 64 colonies at 10⁻¹ dilution, 1 mL plated from 10 mL eluent, 100 cm² area swabbed = 64 × 10 × 10 / 100 = 64 cfu/cm²</p>
+
+                <h4 class="font-semibold mt-4 mb-2">Interpretation – Per 100 cm² (Standard Area)</h4>
+                <div class="overflow-x-auto mt-2">
+                  <table class="min-w-full text-sm border border-gray-300">
+                    <thead class="bg-gray-100"><tr><th class="border px-3 py-2">Colony Count per 100 cm²</th><th class="border px-3 py-2">Sanitary Status</th></tr></thead>
+                    <tbody>
+                      <tr><td class="border px-3 py-2">&lt; 50 (5000 per 900 cm²)</td><td class="border px-3 py-2">Santoshjanak (Satisfactory)</td></tr>
+                      <tr><td class="border px-3 py-2">50–250 (5000–25000 per 900 cm²)</td><td class="border px-3 py-2">Kafi Santoshjanak (Fairly Satisfactory)</td></tr>
+                      <tr><td class="border px-3 py-2">&gt; 250 (&gt;25000 per 900 cm²)</td><td class="border px-3 py-2">Asantoshjanak (Unsatisfactory) – CIP review karein</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p class="mt-2">ATP method: &lt;10 RLU/cm² = clean; 10–100 RLU = borderline; &gt;100 RLU = dirty. ATP test CIP validation aur pre-production verification ke liye faster alternative hai.</p>
+            `,
+            },
+            {
+                id: "sterility_bottles",
+                title: "Doodh ki Botlon ki Sterility ka Aakalan (Rinse Method)",
+                principle:
+                    "Milk bottles ki sterility rinse technique se assess ki jaati hai. Known volume sterile rinse solution se bottle ki internal surface se bacteria remove kiye jaate hain aur rinse solution ka SPC se bacterial count estimate kiya jaata hai. Method ISO 6887 principles follow karta hai. Glass aur plastic bottles dono ke liye applicable. Bottles mechanical washing machines (hot water, detergent, final hot rinse ya sanitizer) se cleaned honi chahiye. Inadequately cleaned bottles post-pasteurization contamination ka major source hain. Regular sampling program: 10 bottles minimum per batch, after each washing cycle check karein.",
+                procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure (Standard Rinse Method)</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-1">
+                    <li>Sterile rinse solution taiyaar karein: Ringer's solution (quarter strength: 2.25 g NaCl, 0.105 g KCl, 0.06 g CaCl₂·6H₂O per litre) ya 0.1% peptone water. Autoclave 121°C/15 min.</li>
+                    <li>20 mL sterile rinse solution bottle mein add karein (sterile pipette se).</li>
+                    <li>Sterile rubber stopper se band karein.</li>
+                    <li>Horizontal position mein hold karein, ek direction mein 12 complete gentle rotations karein, phir lengthwise 12 back-and-forth shakings (total ~30 sec). Yeh internal surface uniformly wet karta hai.</li>
+                    <li>15–30 min room temperature par stand karne dein (bacteria ka eluent mein transfer hone ke liye).</li>
+                    <li>Again 12 gentle rotations karein.</li>
+                    <li>Rinse solution sterile container mein transfer karein.</li>
+                    <li>1 mL aur 5 mL portions duplicate Petri dishes mein transfer karein, PCA pour plate method se plate karein.</li>
+                    <li>37°C / 48h incubate karein.</li>
+                </ol>
+            `,
+                calculation: `
+                <h4 class="font-semibold mt-4 mb-2">Calculation</h4>
+                <p>1 mL plates se: <code>Count/bottle = Avg colonies × 20 (total rinse volume = 20 mL)</code></p>
+                <p>5 mL plates se: <code>Count/bottle = Avg colonies × 4</code></p>
+                <p class="mt-1 text-sm">Example: 1 mL plates mein avg 3 colonies → 3 × 20 = 60 colonies/bottle. Bottle capacity 500 mL → 60/500 = 0.12 cfu/mL capacity. This is acceptable (&lt;1/mL).</p>
+
                 <h4 class="font-semibold mt-4 mb-2">Interpretation</h4>
-                <p>Bottle ki kshamata ke prati ml ek se adhik colony ki colony count asantoshjanak sterility ka sanket hai.</p>
+                <p><strong>Acceptable:</strong> &lt;1 colony per mL of bottle capacity.</p>
+                <p><strong>Example:</strong> 200 mL bottle mein &lt;200 colonies total = acceptable.</p>
+                <p><strong>Rejection criterion:</strong> &gt;1 colony/mL bottle capacity = unsatisfactory sterility. Washing cycle review, sanitizer concentration check, rinse water quality verify karein.</p>
             `,
-      },
-      {
-        id: "sterility_cans",
-        title: "Doodh ke Cans ki Sterility ka Aakalan",
-        principle:
-          "Doodh ke can ki sanitary sthiti ko rinse technique dwara parikshit kiya jaata hai.",
-        procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Procedure :-</h4>
+            },
+            {
+                id: "sterility_cans",
+                title: "Doodh ke Cans ki Sterility ka Aakalan",
+                principle:
+                    "Milk cans (aluminium ya stainless steel) ka proper cleaning dairy supply chain mein essential hai. Dirty cans milk ke contamination ka major route hain. Rinse technique se cans ki internal sterility assess kiya jaata hai – similar principle as bottle rinse method but larger volume rinse solution used kiya jaata hai. Cans ka visual inspection bhi zaruri hai (dents, scratches, loose handles jo cleaning ko difficult banate hain). India mein bulk milk collection mein 30–40L stainless steel cans widely use hote hain.",
+                procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure</h4>
                 <ol class="list-decimal list-outside pl-5 space-y-1">
-                    <li>Pratyek can ka drishy nirikshan karein.</li>
-                    <li>Can mein dhakkan ke andar se 500ml sterile Ringer's ya buffer solution daalein.</li>
-                    <li>Dhakkan wapas lagayein, can ko uski taraf se letayein aur use aage aur peeche ghumayein taaki vah 12 poore chakkar laga le.</li>
-                    <li>Can se rinse sample ko ek sterile bottle ya flask mein daalein.</li>
-                    <li>Sample ka 1/10 dilution taiyar karein aur sample aur dilution ke 1ml ko duplicate mein plate karein.</li>
-                    <li>Plates ko 37°C par 48 ghante ke liye incubate karein.</li>
+                    <li>Visual inspection: Dents, corrosion, loose lid seal, old milk residue visible toh khar karein cleaning process se.</li>
+                    <li>Can ke andar lid ki taraf se 500 mL sterile Ringer's ya phosphate buffer solution (autoclave 121°C/15 min) daalein.</li>
+                    <li>Lid tightly band karein.</li>
+                    <li>Can apni side par letao (horizontal). Aage-peeche roll karein 12 complete revolutions (poori internal surface wet ho).</li>
+                    <li>Rinse sample ko sterile bottle ya flask mein daalein.</li>
+                    <li>Rinse solution ka 1:10 dilution taiyaar karein.</li>
+                    <li>Neat sample aur dilution se 1 mL duplicate mein PCA par plate karein.</li>
+                    <li>37°C / 48h incubate karein.</li>
                 </ol>
             `,
-        calculation: `
-                <p>Duplicate plates mein counts ka ausat (1/10 dilution ke maamle mein 10 se guna karke) rinse sample ke prati ml colony count ka pratinidhitv karta hai.</p>
+                calculation: `
+                <h4 class="font-semibold mt-4 mb-2">Calculation</h4>
+                <code class="block p-3 bg-gray-100 rounded">Count per litre capacity = (Avg colonies from neat plates × 500) / Can capacity in litres</code>
+                <p class="text-sm mt-1">Or if 1:10 dilution plates used: Avg colonies × 10 (dilution factor) = count per mL rinse → multiply by 500 mL → divide by capacity.</p>
+
                 <h4 class="font-semibold mt-4 mb-2">Interpretation</h4>
-                <p>Prati litre kshamata colony count | Sterility</p>
-                <ul class="list-disc list-outside pl-5 space-y-1">
-                    <li>1,000 se kam: Santoshjanak</li>
-                    <li>1,000 se 5,000: Kafi santoshjanak</li>
-                    <li>5,000 se adhik: Asantoshjanak</li>
-                </ul>
+                <div class="overflow-x-auto mt-2">
+                  <table class="min-w-full text-sm border border-gray-300">
+                    <thead class="bg-gray-100"><tr><th class="border px-3 py-2">Count per Litre Capacity</th><th class="border px-3 py-2">Sterility Rating</th></tr></thead>
+                    <tbody>
+                      <tr><td class="border px-3 py-2">&lt; 1,000</td><td class="border px-3 py-2">Santoshjanak (Satisfactory)</td></tr>
+                      <tr><td class="border px-3 py-2">1,000 – 5,000</td><td class="border px-3 py-2">Kafi Santoshjanak (Fairly Satisfactory)</td></tr>
+                      <tr><td class="border px-3 py-2">&gt; 5,000</td><td class="border px-3 py-2">Asantoshjanak – Can reject aur re-wash karein</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              `,
+            },
+            {
+                id: "fermented_products",
+                title: "Fermented Milk Products ka Microbiological Analysis",
+                principle:
+                    "Dahi, yoghurt, cultured buttermilk, acidophilus milk aur cheese jaise fermented products ki microbiological quality ka assessment do dimensions mein hota hai: (1) Desired organisms (starter cultures – LAB) ki viability aur activity, (2) Undesirable organisms (coliforms, yeasts, moulds, pathogens) ki absence. Contamination sources mein: raw milk (if improperly pasteurized), starter culture contamination, unsterile equipment, environment, personnel shamil hain. Fermented products ka acidic pH (4.0–4.6) kuch pathogens inhibit karta hai lekin acid-tolerant organisms (yeasts, moulds, LAB, E. coli O157:H7) grow kar sakte hain.",
+                procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Sample Preparation</h4>
+                <p>10 g/mL sample lein. Dahi/yoghurt: 11 g sample + 99 mL sterile PBS = 10⁻¹ dilution. (Acidity ke kaaran pH already low hai – dilution lagbhag neutral pH par la deti hai.) Serial dilutions taiyaar karein: 10⁻², 10⁻³ as needed. Vortex karein ya stomacher se homogenize karein.</p>
+
+                <h4 class="font-semibold mt-4 mb-2">Test 1: Total Viable Count (TVC)</h4>
+                <p>PCA par standard pour plate. 37°C / 48h. Starter bacteria ki high counts (10⁸–10⁹ cfu/g) expected hain – yeh normal hai. Count mein se spoilage/pathogen differentiation ke liye selective media required hain.</p>
+
+                <h4 class="font-semibold mt-4 mb-2">Test 2: Coliform Count (Presumptive)</h4>
+                <p>VRBA method ya MacConkey broth (MPN method): 1:10, 1:100, 1:1000 dilutions se triple tubes inoculate karein MacConkey broth mein. 37°C / 48h. Gas production = presumptive positive. Confirmatory: BGLB broth at 44.5°C (fecal coliforms).</p>
+
+                <h4 class="font-semibold mt-4 mb-2">Test 3: Yeast and Mould Count</h4>
+                <p>Acidified PDA (pH 3.5) ya DRBC par spread plate method. 22°C / 5 days. Separate count karein (yeasts vs. moulds morphology se).</p>
+
+                <h4 class="font-semibold mt-4 mb-2">Test 4: Starter Culture Viability (LAB Count)</h4>
+                <p>MRS Agar (pH 6.2) par pour plate ya spread plate. 37°C / 48h anaerobic conditions mein (anaerobic jar ya 5% CO₂ incubator). Count: Lactobacillus + Lactococcus colonies. Minimum viable LAB count in probiotic dahi: 10⁶ cfu/g (FSSAI requirement for probiotic claims).</p>
+
+                <h4 class="font-semibold mt-4 mb-2">Test 5: Staphylococcus aureus (Optional – if pathogen concern)</h4>
+                <p>Baird-Parker Agar (BP Agar) par spread plate. 37°C / 48h. Black shiny colonies with halo = S. aureus. Coagulase test confirm karein. &gt;10² cfu/g = concern.</p>
             `,
-      },
-      {
-        id: "fermented_products",
-        title: "Fermented Milk Products ka Microbiological Analysis",
-        principle:
-          "Dahi aur anya fermented milk preparation ki gunvatta gambhir roop se kharab ho sakti hai yadi anichchhniy microorganisms (jaise coliform bacteria, yeasts, molds) nirmaan ke dauran doodh, starter-culture, unsterile equipment aur vatavaran se pravesh karte hain.",
-        procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Presumptive Coliform Test</h4>
+                calculation: `
+                <h4 class="font-semibold mt-4 mb-2">Interpretation Standards for Fermented Milk Products</h4>
+                <div class="overflow-x-auto mt-2">
+                  <table class="min-w-full text-sm border border-gray-300">
+                    <thead class="bg-gray-100"><tr><th class="border px-3 py-2">Test</th><th class="border px-3 py-2">Acceptable</th><th class="border px-3 py-2">Unacceptable</th></tr></thead>
+                    <tbody>
+                      <tr><td class="border px-3 py-2">Total Viable Count</td><td class="border px-3 py-2">10⁷–10⁹ cfu/g (starter bacteria)</td><td class="border px-3 py-2">Abnormal ratio or unexpected organisms</td></tr>
+                      <tr><td class="border px-3 py-2">Coliform Count</td><td class="border px-3 py-2">Absent in 0.1 g</td><td class="border px-3 py-2">Present = hygiene failure</td></tr>
+                      <tr><td class="border px-3 py-2">Yeast + Mould</td><td class="border px-3 py-2">&lt; 100 cfu/g</td><td class="border px-3 py-2">&gt; 100 cfu/g = poor quality</td></tr>
+                      <tr><td class="border px-3 py-2">LAB Count</td><td class="border px-3 py-2">&gt; 10⁶ cfu/g (probiotic products)</td><td class="border px-3 py-2">&lt; 10⁶ = dead culture</td></tr>
+                      <tr><td class="border px-3 py-2">S. aureus</td><td class="border px-3 py-2">&lt; 10 cfu/g</td><td class="border px-3 py-2">&gt; 10² = potential toxin risk</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              `,
+            },
+            {
+                id: "starter_cultures",
+                title: "Starter Cultures ki Quality aur Activity Testing",
+                principle:
+                    "Starter cultures dairy products ki quality ka heart hain. Inki regular quality assessment zaroori hai kyonki: phage contamination se activity loss ho sakta hai, subculturing se genetic mutation aur selection ho sakti hai, contamination (coliforms, yeasts) secondary flavor defects cause karte hain, over-acidification ya under-acidification product defects cause karti hai. Three types of starter culture forms hain: (1) Liquid bulk starter (dairy-prepared, highest phage risk), (2) Lyophilized (freeze-dried) direct-set culture (lower phage risk, longer shelf life), (3) Deep-frozen concentrated DVS (Direct Vat Set) culture (minimal phage risk, controlled environment).",
+                procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Test 1: Acidification Activity (Acidity Test)</h4>
                 <ol class="list-decimal list-outside pl-5 space-y-1">
-                    <li>Dahi sample ke 1:10 aur 1:100 ke dilutions taiyar karein.</li>
-                    <li>Dahi aur uske dilutions ke 1g hisson ko Mac Conkey's broth tubes mein triplicate mein sthanantarit karein.</li>
-                    <li>Tubes ko 37°C par 24 ghante ke liye incubate karein aur acid aur gas ke utpaadan ke liye avlokan karein.</li>
+                    <li>Sterile 10 mL reconstituted skim milk (10% solids) lein.</li>
+                    <li>0.3 mL (3% inoculum) starter culture add karein.</li>
+                    <li>37°C par 3.5 hours incubate karein.</li>
+                    <li>Titratable acidity measure karein: 9 mL milk + 0.5 mL phenolphthalein indicator (1% in 95% ethanol). 0.1N NaOH se titrate karein till pink color (endpoint 30 sec persistent). mL NaOH used × 0.09 = % lactic acid equivalent.</li>
                 </ol>
-                <h4 class="font-semibold mt-4 mb-2">Yeast and mold count</h4>
+
+                <h4 class="font-semibold mt-4 mb-2">Test 2: Methylene Blue Reduction (Activity Indicator)</h4>
                 <ol class="list-decimal list-outside pl-5 space-y-1">
-                    <li>10 gram dahi ko 90 ml dilution blank mein sthanantarit karein taki 1:10 dilution prapt ho sake.</li>
-                    <li>Aur dilutions taiyar karein aur Potato Dextrose Agar (pH 3.5) par plate karein.</li>
-                    <li>Plates ko 21°C ya 25°C par 5 din ke liye incubate karein.</li>
-                    <li>Colonies ki sankhya ginen aur prati gram sankhya ki ganana karein.</li>
+                    <li>10 mL sterile skim milk + 1 mL culture + 1 mL 0.05% MB solution.</li>
+                    <li>Seal, mix, 37°C water bath mein incubate.</li>
+                    <li>Decolorization time note karein. Short time (fast reduction) = highly active culture.</li>
                 </ol>
+
+                <h4 class="font-semibold mt-4 mb-2">Test 3: Diacetyl Production (Creatine Test)</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-1">
+                    <li>2 mL culture (aroma culture: <i>Leuconostoc</i>, <i>Lc. lactis</i> subsp. <i>diacetylactis</i>) test tube mein lein.</li>
+                    <li>Small amount creatine powder (1–2 mg) add karein.</li>
+                    <li>Equal volume (2 mL) 30% KOH solution add karein. Mix karein.</li>
+                    <li>15–30 min room temperature par rakhein. Surface observe karein.</li>
+                    <li>Pink/red colour band surface par = diacetyl present = active flavor culture. Acetoin + creatine + KOH → red colour (Worms reaction).</li>
+                </ol>
+
+                <h4 class="font-semibold mt-4 mb-2">Test 4: Phage Testing</h4>
+                <p>Bulk starter ko phage agar (double layer method) par test karein:</p>
+                <ol class="list-decimal list-outside pl-5 space-y-1">
+                    <li>Indicator organisms (sensitive LAB strains) ki log-phase culture 10 mL soft agar mein mix karein.</li>
+                    <li>Pre-set hard agar plates par overlay karein.</li>
+                    <li>Suspected phage sample (diluted milk, environment swab) se spots apply karein.</li>
+                    <li>37°C / 12h incubate karein. Plaque formation = phage present.</li>
+                </ol>
+                <p>Commercial phage indicator kits bhi available hain (e.g., agar-based rapid phage detection strips).</p>
             `,
-        calculation: `
+                calculation: `
                 <h4 class="font-semibold mt-4 mb-2">Interpretation</h4>
-                <p>Acchi gunvatta ke dahi mein 1/10 dilution mein coliform test negative hona chahiye. Yadi yeast aur mold count 100 prati gram se adhik hai to kharab gunvatta ka sanket hai.</p>
-            `,
-      },
-      {
-        id: "starter_cultures",
-        title: "Starter Cultures",
-        principle:
-          "Lactic acid bacteria ke chayanit strains ka upyog starter cultures ke roop mein kai doodh utpaadon jaise dahi, yoghurt, acidophilus milk, cultured milk, ripened cream butter aur cheese ke nirmaan mein kiya jaata hai. Samay-samay par cultures ki gatividhi aur acid ya swaad yaugikon ka utpaadan karne ki unki kshamata ka parikshan karna avashyak hai.",
-        procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Acidity test:</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-1">
-                    <li>0.3ml culture ko 10ml skim milk mein sthanantarit karein.</li>
-                    <li>37°C par 3.5 ghante ke liye incubate karein.</li>
-                    <li>0.1 N NaOH ghol ke khilaaf titrate karein aur acidity ki ganana karein.</li>
-                </ol>
-                <h4 class="font-semibold mt-4 mb-2">Dye Reduction Test:</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-1">
-                    <li>1ml culture ko 10ml sterile skim milk mein sthanantarit karein.</li>
-                    <li>Ek ml MBR-solution daalein aur 37°C par incubate karein. Decolourisation ka samay note karein.</li>
-                </ol>
-                 <h4 class="font-semibold mt-4 mb-2">Creatine Test (diacetyl ke liye test):</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-1">
-                    <li>Ek test tube mein lagbhag 2-2.5ml culture sthanantarit karein aur thodi matra mein creatine (1-2 mg) daalein.</li>
-                    <li>Barabar matra (2 se 2.5ml) 30% potassium hydroxide ghol daalein aur hilayein.</li>
-                    <li>Doodh ki satah par ek gulabi band ke gathan aur liye gaye samay ka avlokan karein.</li>
-                </ol>
-            `,
-        calculation: `
-                <h4 class="font-semibold mt-4 mb-2">Interpretation</h4>
-                <p>0.35% ya usse adhik ki acidity santoshjanak culture ko ingit karti hai. Methylene blue reduction time 35 minute se kam bahut accha hai. Creatine test mein gulabi band ka gathan sakriya swaad utpaadan ko ingit karta hai.</p>
-            `,
-      },
-      {
-        id: "cream_analysis",
-        title: "Bacteriological Analysis of Cream",
-        principle:
-          "Doodh cream vibhinn sroton se utpaadan ke dauran sandushan ke prati sanvedansheel hone ke kaaran, yadi ise bhandaran ke dauran garam taapman mein rakha jaata hai, to sukshmajiviyon (bacteria, yeasts aur molds) ki tezi se vriddhi hoti hai jiske parinaamasvaroop khatas aur anya dosh vikasit hote hain. Cream ke bacteriological vishleshan ke tarike aur parinamon ki vyaakhya doodh ke liye apanaye gaye tarikon ke saman hain.",
-        procedure: `
+                <div class="overflow-x-auto mt-2">
+                  <table class="min-w-full text-sm border border-gray-300">
+                    <thead class="bg-gray-100"><tr><th class="border px-3 py-2">Test</th><th class="border px-3 py-2">Good Culture</th><th class="border px-3 py-2">Investigate / Reject</th></tr></thead>
+                    <tbody>
+                      <tr><td class="border px-3 py-2">Acidity after 3.5h</td><td class="border px-3 py-2">&ge; 0.35% lactic acid</td><td class="border px-3 py-2">&lt; 0.25% = inactive culture</td></tr>
+                      <tr><td class="border px-3 py-2">MB Reduction time</td><td class="border px-3 py-2">&lt; 35 min (Excellent)</td><td class="border px-3 py-2">&gt; 60 min = weak activity</td></tr>
+                      <tr><td class="border px-3 py-2">Creatine Test</td><td class="border px-3 py-2">Pink band within 30 min</td><td class="border px-3 py-2">No colour = no diacetyl production</td></tr>
+                      <tr><td class="border px-3 py-2">Phage Test</td><td class="border px-3 py-2">No plaques</td><td class="border px-3 py-2">Any plaques = phage contamination – replace culture</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              `,
+            },
+            {
+                id: "cream_analysis",
+                title: "Bacteriological Analysis of Cream",
+                principle:
+                    "Cream milk se fat separation karke banai jaati hai (typically 35–60% fat). Cream ki microbiology milk se similar hai lekin kuch differences hain: (1) Higher fat content psychrotrophic lipase-producers ke liye zyada substrate provide karta hai. (2) Fat globules bacteria ki physical protection provide kar sakte hain (encapsulated bacteria). (3) Pasteurization temperature adjustment: Cream ki high fat content heat conductivity affect karti hai, isliye cream pasteurization slightly different time-temperature profiles use karti hai. (4) Cream ki high viscosity sampling aur dilution ko complex banati hai.",
+                procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Sample Preparation</h4>
+                <p>Cream samples high fat content ke kaaran proper dilution preparation critical hai. 40°C par warm karein (fat liquify karne ke liye). Vigorous mixing (vortex 30 sec). Liquid cream ke liye: direct dilution in PBS. Whipped/solid cream ke liye: 10g + 90mL PBS + stomacher 60 sec = 10⁻¹ dilution. Serial dilutions taiyaar karein.</p>
+
                 <h4 class="font-semibold mt-4 mb-2">Standard Plate Count of Cream</h4>
-                <p>Dilutions taiyar karein aur standard plate count agar par plate karein. 37°C par 48 ghante ke liye incubate karein.</p>
-                <h4 class="font-semibold mt-4 mb-2">Presumptive Coliform test for Cream</h4>
-                <p>Violet Red Bile Agar (VRBA) par plate karein aur 37°C par 24-48 ghante ke liye incubate karein. Vishisht colonies ki ginti karein.</p>
-                <h4 class="font-semibold mt-4 mb-2">Methylene blue reduction test for cream</h4>
-                <p>Triple concentration Methylene blue solution ka upyog karein aur 37°C par incubate karein. Decolourisation ka samay note karein.</p>
+                <p>PCA par pour plate, 37°C / 48h. Fresh cream expected count: raw &lt;5×10⁵ cfu/mL; pasteurized &lt;10⁴ cfu/mL. UHT cream: commercially sterile (&lt;10 cfu/mL).</p>
+
+                <h4 class="font-semibold mt-4 mb-2">Psychrotrophic Count</h4>
+                <p>PCA plates 7°C par 10 days incubate karein (ya 21°C / 25h as rapid method). Psychrotrophs ki count shelf life prediction ke liye critical hai. &gt;10⁴ psychrotrophs/mL = shortened shelf life even after pasteurization (enzyme residues).</p>
+
+                <h4 class="font-semibold mt-4 mb-2">Coliform Count</h4>
+                <p>VRBA method. Fresh cream: absence in 0.01 mL. Pasteurized cream: absence in 0.1 mL.</p>
+
+                <h4 class="font-semibold mt-4 mb-2">Lipolysis Assessment (Indirect – Rancidity)</h4>
+                <p>Free Fatty Acid (FFA) measurement: BDI (Fat Acidity) test ya titration method. High FFA (&gt;0.3 meq/100g fat) = rancidity from lipase activity. Also: Organoleptic assessment by trained panel (rancid, soapy, bitter odor/flavor).</p>
+
+                <h4 class="font-semibold mt-4 mb-2">Methylene Blue Reduction Test (MBRT) for Cream</h4>
+                <p>Triple concentration MB solution use karein (high fat dilutes the dye). Procedure same as milk MBRT. Interpretation slightly different due to high fat.</p>
             `,
-        calculation: `
+                calculation: `
+                <h4 class="font-semibold mt-4 mb-2">Interpretation Standards for Cream</h4>
+                <div class="overflow-x-auto mt-2">
+                  <table class="min-w-full text-sm border border-gray-300">
+                    <thead class="bg-gray-100"><tr><th class="border px-3 py-2">Parameter</th><th class="border px-3 py-2">Raw Cream</th><th class="border px-3 py-2">Pasteurized Cream</th></tr></thead>
+                    <tbody>
+                      <tr><td class="border px-3 py-2">SPC</td><td class="border px-3 py-2">&lt; 5×10⁵ cfu/mL</td><td class="border px-3 py-2">&lt; 10⁴ cfu/mL</td></tr>
+                      <tr><td class="border px-3 py-2">Coliforms</td><td class="border px-3 py-2">Absent in 0.01 mL</td><td class="border px-3 py-2">Absent in 0.1 mL</td></tr>
+                      <tr><td class="border px-3 py-2">MBRT</td><td class="border px-3 py-2">&gt; 4h (good)</td><td class="border px-3 py-2">&gt; 6h (should be better than raw)</td></tr>
+                      <tr><td class="border px-3 py-2">Yeast + Mould</td><td class="border px-3 py-2">&lt; 100 cfu/mL</td><td class="border px-3 py-2">&lt; 10 cfu/mL</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              `,
+            },
+            {
+                id: "listeria_testing",
+                title: "Listeria monocytogenes Detection",
+                principle:
+                    "Listeria monocytogenes dairy industry mein sabse feared pathogens mein se ek hai. Iska psychrotrophic nature (4°C par growth), high salt tolerance (10% NaCl), wide pH range (4.4–9.6) aur biofilm formation ability ise post-pasteurization environment mein persistent problem banati hai. Ready-to-eat (RTE) products (soft cheese, smoked salmon, deli meats) mein L. monocytogenes high-risk foods hain. Detection method: ISO 11290-1:2017 (qualitative – presence/absence) aur ISO 11290-2:2017 (quantitative – enumeration). Both methods use enrichment + selective plating.",
+                procedure: `
+                <h4 class="font-semibold mt-4 mb-2">ISO 11290-1 Qualitative Detection Method</h4>
+                <p><strong>Step 1: Primary Enrichment (24–26h)</strong></p>
+                <p>25g sample + 225 mL Half Fraser Broth (HFB) mein stomach karein 60 sec. HFB mein: nalidixic acid (Gram-negative inhibit karta hai), acriflavine (other organisms inhibit), lithium chloride. 30°C par 24–26h incubate karein.</p>
+                <p><strong>Step 2: Secondary Enrichment (24–26h)</strong></p>
+                <p>0.1 mL primary enrichment → 10 mL Full Fraser Broth. 37°C / 24–26h. Fraser Broth mein esculin + ferric ammonium citrate: L. monocytogenes esculin hydrolyze karke esculetin produce karta hai jo iron salt ke saath black complex banata hai. Black discoloration = presumptive positive.</p>
+                <p><strong>Step 3: Selective Plating</strong></p>
+                <p>ALOA (Agar Listeria ottaviani Agosti) ya PALCAM agar par plate karein. ALOA mein chromogenic substrate: L. monocytogenes blue-green colonies with opaque halo (lecithinase activity). PALCAM: grey-green colonies with black precipitate.</p>
+                <p><strong>Step 4: Confirmation</strong></p>
+                <p>TSYEA par suspect colonies subculture. Biochemical tests: Hemolysis on blood agar (beta-hemolytic), CAMP test, carbohydrate utilization, motility at 25°C (characteristic tumbling motility – umbrella pattern in semi-solid agar). API Listeria ya VITEK identification.</p>
+            `,
+                calculation: `
+                <h4 class="font-semibold mt-4 mb-2">Interpretation aur Regulatory Standards</h4>
+                <p><strong>Qualitative result:</strong> Presence/absence in 25g sample.</p>
+                <p><strong>Quantitative (ISO 11290-2):</strong> Direct plating of sample + enumeration. Log CFU/g mein express karein.</p>
+                <div class="overflow-x-auto mt-2">
+                  <table class="min-w-full text-sm border border-gray-300">
+                    <thead class="bg-gray-100"><tr><th class="border px-3 py-2">Product Category</th><th class="border px-3 py-2">L. monocytogenes Limit</th><th class="border px-3 py-2">Regulation</th></tr></thead>
+                    <tbody>
+                      <tr><td class="border px-3 py-2">Pasteurized Milk</td><td class="border px-3 py-2">Absent in 25 mL</td><td class="border px-3 py-2">EC 2073/2005</td></tr>
+                      <tr><td class="border px-3 py-2">Soft Cheese (RTE)</td><td class="border px-3 py-2">&lt;100 cfu/g (if pH &gt;4.4 aur a<sub>w</sub> &gt;0.92)</td><td class="border px-3 py-2">EC 2073/2005</td></tr>
+                      <tr><td class="border px-3 py-2">Hard/Semi-hard Cheese</td><td class="border px-3 py-2">&lt;100 cfu/g</td><td class="border px-3 py-2">EC 2073/2005</td></tr>
+                      <tr><td class="border px-3 py-2">Butter, Yoghurt</td><td class="border px-3 py-2">Absent in 25 g (zero tolerance)</td><td class="border px-3 py-2">FSSAI India</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p class="mt-2">Environmental Monitoring Program (EMP): Processing facility ki surfaces regular swab testing L. monocytogenes ke liye essential hai. "Harborage sites" (floor drains, conveyor belts, hollow rollers) identify karke eliminate karna critical hai.</p>
+              `,
+            },
+            {
+                id: "salmonella_testing",
+                title: "Salmonella Detection in Dairy",
+                principle:
+                    "Salmonella dairy products mein significant pathogen hai particularly dried/powdered products (milk powder, infant formula) mein. Salmonella ki low infectious dose (10–10³ cells) aur dried environment mein extended survival (months to years at low water activity) ise powder manufacturing mein major risk factor banati hai. Detection method: ISO 6579-1:2017. Principle: Selective enrichment → selective plating → biochemical + serological confirmation. Salmonella ki detecting lag phase ko overcome karne ke liye 2-step enrichment (non-selective + selective) use ki jaati hai kyonki injured/stressed cells direct selective media par grow nahi karte.",
+                procedure: `
+                <h4 class="font-semibold mt-4 mb-2">ISO 6579-1 Detection Procedure (5-day protocol)</h4>
+                <p><strong>Day 1: Non-selective Pre-enrichment</strong></p>
+                <p>25g sample + 225 mL Buffered Peptone Water (BPW) = 10⁻¹. 37°C / 18–24h. BPW neutral non-selective medium injured cells ko resuscitate karne ke liye. Milk powder samples: 100g in 1L BPW (1:10 ratio).</p>
+                <p><strong>Day 2: Selective Enrichment (Parallel)</strong></p>
+                <ul class="list-disc list-outside pl-5 space-y-1">
+                  <li>MKTT (Modified Kauffmann-Tetrathionate Broth) ya RVS (Rappaport-Vassiliadis Soy Peptone Broth): Tetrathionate Salmonella ko selectively enrich karta hai other organisms ko inhibit karke. RVS: 41.5°C / 24h; MKTT: 37°C / 24h.</li>
+                </ul>
+                <p><strong>Day 3: Selective Plating</strong></p>
+                <p>XLD (Xylose Lysine Desoxycholate Agar) aur MSRV (Modified Semi-solid Rappaport-Vassiliadis) ya BSA (Brilliant Green Agar). XLD par Salmonella: black centre (H₂S production) with pink/red surrounding halo (lysine decarboxylase positive).</p>
+                <p><strong>Day 4–5: Confirmation</strong></p>
+                <p>Biochemical: TSI (Triple Sugar Iron – alkaline slant/acid butt/H₂S positive), lysine decarboxylase positive, urease negative. Serological: O antigen aur H antigen agglutination. Automated identification: VITEK, API 20E, MALDI-TOF.</p>
+            `,
+                calculation: `
                 <h4 class="font-semibold mt-4 mb-2">Interpretation</h4>
-                <p>Kachhe aur pasteurized cream ke liye maanak SPC, coliform test, aur MBRT parinamon ke adhaar par sujhaye gaye hain.</p>
+                <p><strong>Result:</strong> Presence/absence in 25g sample (qualitative). Salmonella detection = <strong>ZERO TOLERANCE</strong> in all dairy products.</p>
+                <p>Dairy products mein Salmonella contamination findings mandatory recall require karta hai. Powdered products mein positive environmental monitoring = production halt aur deep cleaning protocol.</p>
+                <p><strong>Rapid PCR Methods:</strong> Real-time PCR (BAX System, GENE-UP, Salmonella PCR kits) 4–8 hours mein qualitative result dete hain enrichment ke baad. ISO 22174:2005 PCR method validated hai. Culture confirmation still needed for regulatory reporting.</p>
+              `,
+            },
+            {
+                id: "milk_adulteration_tests",
+                title: "Milk Adulteration Detection Tests",
+                principle:
+                    "Milk adulteration ek serious food fraud problem hai jisme milk ki quality/composition mein illegal manipulation ki jaati hai. Common adulterants: paani milana (dilution), urea milana (non-protein nitrogen se SNF increase), formalin milana (preservation, inhibit bacteria), hydrogen peroxide milana, ammonium sulphate/melamine (protein content artificially increase), neutralizers (NaHCO₃, Na₂CO₃ – acidity hide karna), synthetic milk (urea + detergent + refined oil). These adulterants public health risks paida karte hain aur consumer fraud hai. FSSAI India mein milk adulteration IPC section 272/273 ke under criminal offense hai.",
+                procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Rapid Field Tests for Common Adulterants</h4>
+
+                <h5 class="font-medium mt-3">1. Paani Milana (SNF/TS detection)</h5>
+                <p>Lactometer se specific gravity (1.028–1.032 for pure milk) measure karein. Cryoscopy (freezing point depression – normal: -0.530 to -0.560°C; adulterated with water: less negative).</p>
+
+                <h5 class="font-medium mt-3">2. Formalin Test (Hehner's Test)</h5>
+                <p>5 mL milk + concentrated H₂SO₄ carefully layered (do not mix). Purple/violet ring at interface = formalin present (positive). Normal milk: no colour ring.</p>
+
+                <h5 class="font-medium mt-3">3. Hydrogen Peroxide Test</h5>
+                <p>5 mL milk + few drops Vanadium pentoxide solution (0.5% in H₂SO₄). Pink colour = H₂O₂ present. Or: para-phenylenediamine test (turns blue with H₂O₂).</p>
+
+                <h5 class="font-medium mt-3">4. Urea Test (DMAB Test)</h5>
+                <p>5 mL milk + p-dimethyl amino benzaldehyde (DMAB – 1.6 g in 100 mL concentrated HCl): Yellow colour in 15 min = high urea (added urea, not normal milk urea which is &lt;70 mg/100 mL).</p>
+
+                <h5 class="font-medium mt-3">5. Detergent Test</h5>
+                <p>3 mL milk + 5 drops methylene blue solution: Blue colour = detergent present (SDS, SLES, etc.).</p>
+
+                <h5 class="font-medium mt-3">6. Neutralizer Test (Rosalic Acid Test)</h5>
+                <p>5 mL milk + 5 mL alcohol + few drops rosalic acid (1% in alcohol): Rose/red colour = sodium carbonate/bicarbonate adulterant. Normal milk: pink colour.</p>
+
+                <h5 class="font-medium mt-3">7. Melamine Detection</h5>
+                <p>Rapid test: Rapid melamine test strips (ELISA-based). Confirmatory: HPLC-UV or LC-MS/MS. Melamine artificially raises nitrogen content → false high protein readings in Kjeldahl method.</p>
+
+                <h5 class="font-medium mt-3">8. Synthetic Milk (Urea + Detergent)</h5>
+                <p>Salty/bitter taste, soapy lather on shaking, pH &gt; 7, SNF normal but TS/fat ratio abnormal. Microscopy: no fat globules of uniform size.</p>
             `,
-      },
-    ],
+                calculation: `
+                <h4 class="font-semibold mt-4 mb-2">Regulatory Standards aur Action</h4>
+                <p>FSSAI FSS (Food Standards and Safety) Regulations 2011 ke under milk composition minimum standards:</p>
+                <ul class="list-disc list-outside pl-5 space-y-1 mt-2">
+                  <li>Full cream milk: Fat &ge;6%, SNF &ge;9% (Buffalo milk)</li>
+                  <li>Toned milk: Fat &ge;3%, SNF &ge;8.5%</li>
+                  <li>Double toned milk: Fat &ge;1.5%, SNF &ge;9%</li>
+                  <li>Skim milk: Fat &le;0.5%, SNF &ge;8.7%</li>
+                </ul>
+                <p class="mt-2">Any adulterant detection = immediate product seizure, FIR, prosecution under FSS Act 2006. Repeat offenses: imprisonment up to 7 years, fine up to Rs. 10 lakh. FSSAI Food Safety Officers random milk sampling program regularly conduct karte hain.</p>
+              `,
+            },
+        ],
     },
+};
     en: {
         title: "Common Microbiological Test Methods",
         intro:
