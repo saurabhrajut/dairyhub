@@ -15170,25 +15170,35 @@ const MemoizedInputRow = memo(({
 }) => {
   const borderColor = colorScheme === "green" ? "focus:border-green-500" : colorScheme === "red" ? "focus:border-red-500" : "focus:border-blue-400";
   return (
-    <div className="grid grid-cols-3 gap-2 items-center">
+    <div className="space-y-1">
+      {/* Label — full width on its own line */}
       <div className="flex items-center gap-1.5">
         {icon && <span className="text-sm">{icon}</span>}
-        <Label className="text-xs sm:text-sm font-semibold text-slate-700 leading-tight">{label}</Label>
+        <Label className="text-xs font-semibold text-slate-700 leading-tight">{label}</Label>
       </div>
-      <Input
-        type="number" step="0.001" min="0"
-        value={inputs[fatName]}
-        onChange={e => onInputChange(fatName, e.target.value)}
-        placeholder="0.000"
-        className={`h-9 text-sm border-2 bg-white font-mono ${borderColor}`}
-      />
-      <Input
-        type="number" step="0.001" min="0"
-        value={inputs[snfName]}
-        onChange={e => onInputChange(snfName, e.target.value)}
-        placeholder="0.000"
-        className={`h-9 text-sm border-2 bg-white font-mono ${borderColor}`}
-      />
+      {/* Two inputs side by side */}
+      <div className="grid grid-cols-2 gap-2">
+        <div className="space-y-0.5">
+          <span className="text-[9px] text-yellow-700 font-bold uppercase pl-0.5">Fat (kg)</span>
+          <Input
+            type="number" step="0.001" min="0"
+            value={inputs[fatName]}
+            onChange={e => onInputChange(fatName, e.target.value)}
+            placeholder="0.000"
+            className={`h-9 text-sm border-2 bg-white ${borderColor}`}
+          />
+        </div>
+        <div className="space-y-0.5">
+          <span className="text-[9px] text-pink-700 font-bold uppercase pl-0.5">SNF (kg)</span>
+          <Input
+            type="number" step="0.001" min="0"
+            value={inputs[snfName]}
+            onChange={e => onInputChange(snfName, e.target.value)}
+            placeholder="0.000"
+            className={`h-9 text-sm border-2 bg-white ${borderColor}`}
+          />
+        </div>
+      </div>
     </div>
   );
 });
@@ -15378,20 +15388,19 @@ function MassBalanceCalc() {
   return (
     <Card className="border-2 border-blue-200 shadow-lg">
       <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-t-lg border-b border-blue-100">
-        <CardTitle className="flex items-center justify-between">
-          <span className="flex items-center gap-2 text-blue-800">
-            <Scale className="h-6 w-6 text-blue-600" />
-            Fat & SNF Mass Balance Calculator
-          </span>
-          <div className="flex gap-2">
-            <Badge className={`text-xs px-2 py-1 ${results.gainLossFat < 0 ? "bg-orange-100 text-orange-700" : "bg-green-100 text-green-700"}`}>
-              Fat: {results.gainLossFat >= 0 ? "+" : ""}{results.gainLossFat.toFixed(3)} kg
-            </Badge>
-            <Badge className={`text-xs px-2 py-1 ${results.gainLossSnf < 0 ? "bg-orange-100 text-orange-700" : "bg-green-100 text-green-700"}`}>
-              SNF: {results.gainLossSnf >= 0 ? "+" : ""}{results.gainLossSnf.toFixed(3)} kg
-            </Badge>
-          </div>
+        <CardTitle className="flex items-center gap-2 text-blue-800 text-base sm:text-xl">
+          <Scale className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600 flex-shrink-0" />
+          <span className="leading-tight">Fat & SNF Mass Balance</span>
         </CardTitle>
+        {/* Live badges — on own row, wrappable */}
+        <div className="flex flex-wrap gap-2 mt-1">
+          <Badge className={`text-xs px-2 py-1 ${results.gainLossFat < 0 ? "bg-orange-100 text-orange-700" : "bg-green-100 text-green-700"}`}>
+            Fat: {results.gainLossFat >= 0 ? "+" : ""}{results.gainLossFat.toFixed(3)} kg
+          </Badge>
+          <Badge className={`text-xs px-2 py-1 ${results.gainLossSnf < 0 ? "bg-orange-100 text-orange-700" : "bg-green-100 text-green-700"}`}>
+            SNF: {results.gainLossSnf >= 0 ? "+" : ""}{results.gainLossSnf.toFixed(3)} kg
+          </Badge>
+        </div>
         <CardDescription className="text-blue-600 text-xs">
           Live balance · 5 benchmarks · Plant efficiency · Financial impact · PDF export
         </CardDescription>
@@ -15436,29 +15445,23 @@ function MassBalanceCalc() {
         {/* ── TABS ─────────────────────────────────────── */}
         <Tabs value={activeTab} onValueChange={v => setActiveTab(v as any)}>
           <TabsList className="grid grid-cols-3 bg-slate-100">
-            <TabsTrigger value="inputs"  className="text-xs">📥 Inputs & Outputs</TabsTrigger>
-            <TabsTrigger value="results" className="text-xs">⚖️ Balance & Grades</TabsTrigger>
-            <TabsTrigger value="trend"   className="text-xs">📊 Analysis</TabsTrigger>
+            <TabsTrigger value="inputs"  className="text-[11px] px-1">📥 Inputs</TabsTrigger>
+            <TabsTrigger value="results" className="text-[11px] px-1">⚖️ Balance</TabsTrigger>
+            <TabsTrigger value="trend"   className="text-[11px] px-1">📊 Analysis</TabsTrigger>
           </TabsList>
 
           {/* ════ TAB 1: INPUTS ════════════════════════ */}
           <TabsContent value="inputs" className="space-y-4 pt-3">
 
-            {/* Column headers */}
-            <div className="grid grid-cols-3 gap-2 text-center text-xs font-bold rounded-lg overflow-hidden border border-slate-200">
-              <div className="bg-indigo-100 text-indigo-800 p-2">Component</div>
-              <div className="bg-yellow-100 text-yellow-800 p-2">Fat (kg)</div>
-              <div className="bg-pink-100 text-pink-800 p-2">SNF (kg)</div>
-            </div>
-
             {/* INPUTS block */}
             <Card className="border-green-200 bg-green-50/30">
               <CardHeader className="p-3 pb-2 bg-green-50 border-b border-green-100">
-                <CardTitle className="text-sm text-green-700 flex items-center gap-1">
+                <CardTitle className="text-sm text-green-700 flex items-center gap-1 flex-wrap">
                   <Plus className="w-4 h-4" /> Total Inputs
-                  <span className="ml-auto text-xs font-mono">
-                    F: {results.totalInFat.toFixed(3)} kg | SNF: {results.totalInSnf.toFixed(3)} kg
-                  </span>
+                  <div className="ml-auto flex gap-2 text-xs font-semibold">
+                    <span className="bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded-full">F: {results.totalInFat.toFixed(2)}</span>
+                    <span className="bg-pink-100 text-pink-800 px-2 py-0.5 rounded-full">SNF: {results.totalInSnf.toFixed(2)}</span>
+                  </div>
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-3 space-y-3">
@@ -15467,10 +15470,12 @@ function MassBalanceCalc() {
                 <MemoizedInputRow label="Added (SMP / Veg fat / WPC)" icon="➕" fatName="addedFat" snfName="addedSnf" inputs={inputs} onInputChange={handleInputChange} colorScheme="green" />
 
                 {/* Live total */}
-                <div className="grid grid-cols-3 gap-2 bg-green-100 rounded-lg p-2 border border-green-200">
+                <div className="flex justify-between items-center bg-green-100 rounded-lg p-2 border border-green-200">
                   <span className="text-xs font-bold text-green-700">TOTAL IN</span>
-                  <span className="text-center text-sm font-black text-green-800 font-mono">{results.totalInFat.toFixed(4)}</span>
-                  <span className="text-center text-sm font-black text-green-800 font-mono">{results.totalInSnf.toFixed(4)}</span>
+                  <div className="flex gap-3 text-sm font-black text-green-800">
+                    <span>F: {results.totalInFat.toFixed(3)}</span>
+                    <span>SNF: {results.totalInSnf.toFixed(3)}</span>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -15478,46 +15483,75 @@ function MassBalanceCalc() {
             {/* OUTPUTS block */}
             <Card className="border-red-200 bg-red-50/30">
               <CardHeader className="p-3 pb-2 bg-red-50 border-b border-red-100">
-                <CardTitle className="text-sm text-red-700 flex items-center gap-1">
+                <CardTitle className="text-sm text-red-700 flex items-center gap-1 flex-wrap">
                   <Minus className="w-4 h-4" /> Total Outputs
-                  <span className="ml-auto text-xs font-mono">
-                    F: {results.totalOutFat.toFixed(3)} kg | SNF: {results.totalOutSnf.toFixed(3)} kg
-                  </span>
+                  <div className="ml-auto flex gap-2 text-xs font-semibold">
+                    <span className="bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded-full">F: {results.totalOutFat.toFixed(2)}</span>
+                    <span className="bg-pink-100 text-pink-800 px-2 py-0.5 rounded-full">SNF: {results.totalOutSnf.toFixed(2)}</span>
+                  </div>
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-3 space-y-3">
                 <MemoizedInputRow label="Dispatched (Products)" icon="🚚" fatName="dispatchedFat" snfName="dispatchedSnf" inputs={inputs} onInputChange={handleInputChange} colorScheme="red" />
-                <MemoizedInputRow label="Removed (Cream / Butter)" icon="🧈" fatName="removedFat" snfName="removedSnf" inputs={inputs} onInputChange={handleInputChange} colorScheme="red" />
+                <MemoizedInputRow label="Removed (Cream/Butter)" icon="🧈" fatName="removedFat" snfName="removedSnf" inputs={inputs} onInputChange={handleInputChange} colorScheme="red" />
                 <MemoizedInputRow label="Closing Balance" icon="🏭" fatName="closingFat" snfName="closingSnf" inputs={inputs} onInputChange={handleInputChange} colorScheme="red" />
 
-                {/* Extended outputs */}
+                {/* Extended outputs — same stacked pattern */}
                 <div className="border-t border-red-100 pt-2 space-y-3">
-                  <div className="text-[10px] text-red-500 font-bold uppercase tracking-wider">Optional (for detailed accounting)</div>
-                  <div className="grid grid-cols-3 gap-2 items-center">
-                    <div className="flex items-center gap-1"><span className="text-sm">🥤</span><Label className="text-xs font-semibold text-slate-600">Cream Dispatch</Label></div>
-                    <Input type="number" step="0.001" min="0" value={extraRows.creamFat}
-                      onChange={e => setExtraRows(p => ({ ...p, creamFat: e.target.value }))}
-                      placeholder="0.000" className="h-9 text-sm border-2 bg-white font-mono" />
-                    <Input type="number" step="0.001" min="0" value={extraRows.creamSnf}
-                      onChange={e => setExtraRows(p => ({ ...p, creamSnf: e.target.value }))}
-                      placeholder="0.000" className="h-9 text-sm border-2 bg-white font-mono" />
+                  <div className="text-[10px] text-red-500 font-bold uppercase tracking-wider">Optional (detailed accounting)</div>
+
+                  {/* Cream Dispatch */}
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-sm">🥤</span>
+                      <Label className="text-xs font-semibold text-slate-600">Cream Dispatch</Label>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="space-y-0.5">
+                        <span className="text-[9px] text-yellow-700 font-bold uppercase pl-0.5">Fat (kg)</span>
+                        <Input type="number" step="0.001" min="0" value={extraRows.creamFat}
+                          onChange={e => setExtraRows(p => ({ ...p, creamFat: e.target.value }))}
+                          placeholder="0.000" className="h-9 text-sm border-2 bg-white" />
+                      </div>
+                      <div className="space-y-0.5">
+                        <span className="text-[9px] text-pink-700 font-bold uppercase pl-0.5">SNF (kg)</span>
+                        <Input type="number" step="0.001" min="0" value={extraRows.creamSnf}
+                          onChange={e => setExtraRows(p => ({ ...p, creamSnf: e.target.value }))}
+                          placeholder="0.000" className="h-9 text-sm border-2 bg-white" />
+                      </div>
+                    </div>
                   </div>
-                  <div className="grid grid-cols-3 gap-2 items-center">
-                    <div className="flex items-center gap-1"><span className="text-sm">🚿</span><Label className="text-xs font-semibold text-slate-600">CIP/Wash Loss</Label></div>
-                    <Input type="number" step="0.001" min="0" value={extraRows.wasteWashFat}
-                      onChange={e => setExtraRows(p => ({ ...p, wasteWashFat: e.target.value }))}
-                      placeholder="0.000" className="h-9 text-sm border-2 bg-white font-mono" />
-                    <Input type="number" step="0.001" min="0" value={extraRows.wasteWashSnf}
-                      onChange={e => setExtraRows(p => ({ ...p, wasteWashSnf: e.target.value }))}
-                      placeholder="0.000" className="h-9 text-sm border-2 bg-white font-mono" />
+
+                  {/* CIP/Wash */}
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-sm">🚿</span>
+                      <Label className="text-xs font-semibold text-slate-600">CIP/Wash Loss</Label>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="space-y-0.5">
+                        <span className="text-[9px] text-yellow-700 font-bold uppercase pl-0.5">Fat (kg)</span>
+                        <Input type="number" step="0.001" min="0" value={extraRows.wasteWashFat}
+                          onChange={e => setExtraRows(p => ({ ...p, wasteWashFat: e.target.value }))}
+                          placeholder="0.000" className="h-9 text-sm border-2 bg-white" />
+                      </div>
+                      <div className="space-y-0.5">
+                        <span className="text-[9px] text-pink-700 font-bold uppercase pl-0.5">SNF (kg)</span>
+                        <Input type="number" step="0.001" min="0" value={extraRows.wasteWashSnf}
+                          onChange={e => setExtraRows(p => ({ ...p, wasteWashSnf: e.target.value }))}
+                          placeholder="0.000" className="h-9 text-sm border-2 bg-white" />
+                      </div>
+                    </div>
                   </div>
                 </div>
 
                 {/* Live total */}
-                <div className="grid grid-cols-3 gap-2 bg-red-100 rounded-lg p-2 border border-red-200">
+                <div className="flex justify-between items-center bg-red-100 rounded-lg p-2 border border-red-200">
                   <span className="text-xs font-bold text-red-700">TOTAL OUT</span>
-                  <span className="text-center text-sm font-black text-red-800 font-mono">{results.totalOutFat.toFixed(4)}</span>
-                  <span className="text-center text-sm font-black text-red-800 font-mono">{results.totalOutSnf.toFixed(4)}</span>
+                  <div className="flex gap-3 text-sm font-black text-red-800">
+                    <span>F: {results.totalOutFat.toFixed(3)}</span>
+                    <span>SNF: {results.totalOutSnf.toFixed(3)}</span>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -15541,9 +15575,9 @@ function MassBalanceCalc() {
                   { label: "Total SNF IN",   value: results.totalInSnf,  color: "bg-green-700"  },
                   { label: "Total SNF OUT",  value: results.totalOutSnf, color: "bg-red-700"    },
                 ].map((k, i) => (
-                  <div key={i} className={`${k.color} text-white p-4 rounded-xl text-center shadow`}>
-                    <div className="text-[10px] uppercase opacity-80 font-bold">{k.label}</div>
-                    <div className="text-3xl font-black font-mono">{k.value.toFixed(3)}</div>
+                  <div key={i} className={`${k.color} text-white p-3 rounded-xl text-center shadow`}>
+                    <div className="text-[10px] uppercase opacity-80 font-bold leading-tight">{k.label}</div>
+                    <div className="text-2xl sm:text-3xl font-black break-all">{k.value.toFixed(2)}</div>
                     <div className="text-[10px] opacity-70">kg</div>
                   </div>
                 ))}
@@ -15605,12 +15639,15 @@ function MassBalanceCalc() {
                 </CardHeader>
                 <CardContent className="p-3 space-y-2 text-sm">
                   {[
-                    { label: "Fat recovery (dispatched/total in)", value: `${results.fatEfficiency.toFixed(2)}%`,  ok: results.fatEfficiency >= 96 },
-                    { label: "SNF recovery (dispatched/total in)", value: `${results.snfEfficiency.toFixed(2)}%`,  ok: results.snfEfficiency >= 94 },
+                    { label: "Fat recovery", sub: "dispatched / total in", value: `${results.fatEfficiency.toFixed(2)}%`,  ok: results.fatEfficiency >= 96 },
+                    { label: "SNF recovery", sub: "dispatched / total in", value: `${results.snfEfficiency.toFixed(2)}%`,  ok: results.snfEfficiency >= 94 },
                   ].map((r, i) => (
-                    <div key={i} className="flex justify-between">
-                      <span className="text-slate-500">{r.label}</span>
-                      <span className={`font-black ${r.ok ? "text-green-700" : "text-orange-600"}`}>{r.value}</span>
+                    <div key={i} className="flex justify-between items-center">
+                      <div>
+                        <div className="text-slate-700 font-semibold">{r.label}</div>
+                        <div className="text-[10px] text-slate-400">{r.sub}</div>
+                      </div>
+                      <span className={`font-black text-lg ${r.ok ? "text-green-700" : "text-orange-600"}`}>{r.value}</span>
                     </div>
                   ))}
                 </CardContent>
@@ -15640,57 +15677,78 @@ function MassBalanceCalc() {
                 </CardHeader>
                 <CardContent className="p-0">
                   <ScrollArea className="h-72">
-                    <div className="p-3 space-y-1 font-mono text-[10px] text-slate-500">
-                      {[
-                        { h: "STEP 1: FAT INPUTS",  border: "border-green-300 bg-green-50" },
-                      ].map(() => null)}
-                      <div className="font-bold text-green-700 text-xs border-b border-green-200 pb-1 mb-1">📥 STEP 1: FAT INPUTS</div>
-                      {[
-                        `Opening: ${results.opF.toFixed(6)} kg`,
-                        `+ Intake: ${results.inF.toFixed(6)} kg`,
-                        `+ Added: ${results.adF.toFixed(6)} kg`,
-                        `= Total FAT IN: ${results.totalInFat.toFixed(8)} kg`,
-                      ].map((s, i) => <div key={i} className={i === 3 ? "font-bold text-green-700 border-t border-green-200 mt-1 pt-1" : ""}>{s}</div>)}
+                    <div className="p-3 space-y-2 text-[11px]">
 
-                      <div className="font-bold text-green-700 text-xs border-b border-green-200 pb-1 mb-1 mt-3">📥 STEP 2: SNF INPUTS</div>
+                      <div className="font-bold text-green-700 text-xs border-b border-green-200 pb-1">📥 FAT INPUTS</div>
                       {[
-                        `Opening: ${results.opS.toFixed(6)} kg`,
-                        `+ Intake: ${results.inS.toFixed(6)} kg`,
-                        `+ Added: ${results.adS.toFixed(6)} kg`,
-                        `= Total SNF IN: ${results.totalInSnf.toFixed(8)} kg`,
-                      ].map((s, i) => <div key={i} className={i === 3 ? "font-bold text-green-700 border-t border-green-200 mt-1 pt-1" : ""}>{s}</div>)}
+                        { label: "Opening",    val: results.opF  },
+                        { label: "+ Intake",   val: results.inF  },
+                        { label: "+ Added",    val: results.adF  },
+                        { label: "= Total IN", val: results.totalInFat, bold: true, color: "text-green-700" },
+                      ].map((r, i) => (
+                        <div key={i} className={`flex justify-between ${(r as any).bold ? "font-bold border-t border-green-200 pt-1 " + ((r as any).color || "") : "text-slate-600"}`}>
+                          <span>{r.label}</span><span>{r.val.toFixed(3)} kg</span>
+                        </div>
+                      ))}
 
-                      <div className="font-bold text-red-700 text-xs border-b border-red-200 pb-1 mb-1 mt-3">📤 STEP 3: FAT OUTPUTS</div>
+                      <div className="font-bold text-green-700 text-xs border-b border-green-200 pb-1 mt-3">📥 SNF INPUTS</div>
                       {[
-                        `Dispatched: ${results.dispF.toFixed(6)} kg`,
-                        `+ Removed: ${results.remF.toFixed(6)} kg`,
-                        `+ Closing: ${results.clF.toFixed(6)} kg`,
-                        `+ Cream: ${results.crF.toFixed(6)} kg`,
-                        `+ CIP/Wash: ${results.wwF.toFixed(6)} kg`,
-                        `= Total FAT OUT: ${results.totalOutFat.toFixed(8)} kg`,
-                      ].map((s, i) => <div key={i} className={i === 5 ? "font-bold text-red-700 border-t border-red-200 mt-1 pt-1" : ""}>{s}</div>)}
+                        { label: "Opening",    val: results.opS  },
+                        { label: "+ Intake",   val: results.inS  },
+                        { label: "+ Added",    val: results.adS  },
+                        { label: "= Total IN", val: results.totalInSnf, bold: true, color: "text-green-700" },
+                      ].map((r, i) => (
+                        <div key={i} className={`flex justify-between ${(r as any).bold ? "font-bold border-t border-green-200 pt-1 " + ((r as any).color || "") : "text-slate-600"}`}>
+                          <span>{r.label}</span><span>{r.val.toFixed(3)} kg</span>
+                        </div>
+                      ))}
 
-                      <div className="font-bold text-red-700 text-xs border-b border-red-200 pb-1 mb-1 mt-3">📤 STEP 4: SNF OUTPUTS</div>
+                      <div className="font-bold text-red-700 text-xs border-b border-red-200 pb-1 mt-3">📤 FAT OUTPUTS</div>
                       {[
-                        `Dispatched: ${results.dispS.toFixed(6)} kg`,
-                        `+ Removed: ${results.remS.toFixed(6)} kg`,
-                        `+ Closing: ${results.clS.toFixed(6)} kg`,
-                        `+ Cream: ${results.crS.toFixed(6)} kg`,
-                        `+ CIP/Wash: ${results.wwS.toFixed(6)} kg`,
-                        `= Total SNF OUT: ${results.totalOutSnf.toFixed(8)} kg`,
-                      ].map((s, i) => <div key={i} className={i === 5 ? "font-bold text-red-700 border-t border-red-200 mt-1 pt-1" : ""}>{s}</div>)}
+                        { label: "Dispatched",  val: results.dispF },
+                        { label: "+ Removed",   val: results.remF  },
+                        { label: "+ Closing",   val: results.clF   },
+                        { label: "+ Cream",     val: results.crF   },
+                        { label: "+ CIP/Wash",  val: results.wwF   },
+                        { label: "= Total OUT", val: results.totalOutFat, bold: true, color: "text-red-700" },
+                      ].map((r, i) => (
+                        <div key={i} className={`flex justify-between ${(r as any).bold ? "font-bold border-t border-red-200 pt-1 " + ((r as any).color || "") : "text-slate-600"}`}>
+                          <span>{r.label}</span><span>{r.val.toFixed(3)} kg</span>
+                        </div>
+                      ))}
 
-                      <div className="font-bold text-blue-700 text-xs border-b border-blue-200 pb-1 mb-1 mt-3">⚖️ STEP 5: RECONCILIATION</div>
+                      <div className="font-bold text-red-700 text-xs border-b border-red-200 pb-1 mt-3">📤 SNF OUTPUTS</div>
                       {[
-                        `FAT: ${results.totalInFat.toFixed(8)} − ${results.totalOutFat.toFixed(8)} = ${results.gainLossFat.toFixed(8)} kg (${results.gainLossFat >= 0 ? "GAIN" : "LOSS"})`,
-                        `FAT Loss %: ${results.fatLossPct.toFixed(6)}% → ${results.fatGrade.grade}`,
-                        `SNF: ${results.totalInSnf.toFixed(8)} − ${results.totalOutSnf.toFixed(8)} = ${results.gainLossSnf.toFixed(8)} kg (${results.gainLossSnf >= 0 ? "GAIN" : "LOSS"})`,
-                        `SNF Loss %: ${results.snfLossPct.toFixed(6)}% → ${results.snfGrade.grade}`,
-                      ].map((s, i) => <div key={i} className="text-blue-700 font-bold">{s}</div>)}
+                        { label: "Dispatched",  val: results.dispS },
+                        { label: "+ Removed",   val: results.remS  },
+                        { label: "+ Closing",   val: results.clS   },
+                        { label: "+ Cream",     val: results.crS   },
+                        { label: "+ CIP/Wash",  val: results.wwS   },
+                        { label: "= Total OUT", val: results.totalOutSnf, bold: true, color: "text-red-700" },
+                      ].map((r, i) => (
+                        <div key={i} className={`flex justify-between ${(r as any).bold ? "font-bold border-t border-red-200 pt-1 " + ((r as any).color || "") : "text-slate-600"}`}>
+                          <span>{r.label}</span><span>{r.val.toFixed(3)} kg</span>
+                        </div>
+                      ))}
+
+                      <div className="font-bold text-blue-700 text-xs border-b border-blue-200 pb-1 mt-3">⚖️ RECONCILIATION</div>
+                      {[
+                        { label: "FAT: In − Out",  val: `${results.gainLossFat.toFixed(4)} kg`, status: results.gainLossFat >= 0 ? "GAIN" : "LOSS", color: results.gainLossFat >= 0 ? "text-blue-700" : "text-orange-700" },
+                        { label: "FAT Loss %",      val: `${results.fatLossPct.toFixed(4)}%`,   status: results.fatGrade.grade, color: results.fatGrade.color },
+                        { label: "SNF: In − Out",   val: `${results.gainLossSnf.toFixed(4)} kg`, status: results.gainLossSnf >= 0 ? "GAIN" : "LOSS", color: results.gainLossSnf >= 0 ? "text-blue-700" : "text-orange-700" },
+                        { label: "SNF Loss %",      val: `${results.snfLossPct.toFixed(4)}%`,   status: results.snfGrade.grade, color: results.snfGrade.color },
+                      ].map((r, i) => (
+                        <div key={i} className={`flex justify-between font-bold ${r.color}`}>
+                          <span>{r.label}</span>
+                          <span>{r.val} ({r.status})</span>
+                        </div>
+                      ))}
+
                     </div>
                   </ScrollArea>
                 </CardContent>
               </Card>
+
             </div>
           </TabsContent>
 
@@ -15760,10 +15818,7 @@ function MassBalanceCalc() {
               <CardHeader className="p-3 pb-1 border-b border-slate-200">
                 <CardTitle className="text-xs font-bold text-slate-600 uppercase">📜 Industry Loss Benchmarks</CardTitle>
               </CardHeader>
-              <CardContent className="p-3">
-                <div className="grid grid-cols-4 text-[10px] font-bold text-slate-500 border-b pb-1 mb-1">
-                  <span>Grade</span><span>Fat Loss %</span><span>SNF Loss %</span><span>Status</span>
-                </div>
+              <CardContent className="p-3 space-y-1">
                 {[
                   { grade: "World Class", fatMax: 0.10, snfMax: 0.15, icon: "🏆" },
                   { grade: "Excellent",   fatMax: 0.25, snfMax: 0.35, icon: "✅" },
@@ -15771,15 +15826,13 @@ function MassBalanceCalc() {
                   { grade: "Acceptable",  fatMax: 1.00, snfMax: 1.50, icon: "⚠️" },
                   { grade: "Poor",        fatMax: 2.00, snfMax: 3.00, icon: "❌" },
                 ].map((b, i) => {
-                  const fatMatch = results.fatLossPct <= b.fatMax;
-                  const snfMatch = results.snfLossPct <= b.snfMax;
                   const isCurrent = results.fatGrade.grade.includes(b.grade) || results.snfGrade.grade.includes(b.grade);
                   return (
-                    <div key={i} className={`grid grid-cols-4 text-xs py-1.5 border-b border-slate-100 ${isCurrent ? "bg-blue-50 font-bold rounded" : ""}`}>
-                      <span className="flex items-center gap-1">{b.icon} {b.grade}</span>
-                      <span className={fatMatch && results.totalInFat > 0 ? "text-green-600 font-bold" : "text-slate-400"}>≤{b.fatMax}%</span>
-                      <span className={snfMatch && results.totalInSnf > 0 ? "text-green-600 font-bold" : "text-slate-400"}>≤{b.snfMax}%</span>
-                      <span>{isCurrent ? "◀ Current" : ""}</span>
+                    <div key={i} className={`flex justify-between items-center text-xs py-1.5 px-2 border-b border-slate-100 rounded ${isCurrent ? "bg-blue-50 font-bold" : ""}`}>
+                      <span className="flex items-center gap-1 w-28">{b.icon} {b.grade}</span>
+                      <span className="text-yellow-700">Fat ≤{b.fatMax}%</span>
+                      <span className="text-pink-700">SNF ≤{b.snfMax}%</span>
+                      {isCurrent && <span className="text-blue-600 text-[10px]">◀ Now</span>}
                     </div>
                   );
                 })}
