@@ -7973,4 +7973,4 @@ other: {
         ]         // list close
       }           // contaminants close
     }             // other close
-  };              // hi close ✅
+  }                // hi close ✅
