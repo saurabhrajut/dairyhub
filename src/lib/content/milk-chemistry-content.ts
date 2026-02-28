@@ -3999,12 +3999,13 @@ other: {
         },
         { 
           name: "Radionuclides", 
-          desc: "Radioactive isotopes (like Strontium-90, Iodine-131) can enter milk if the cow ingests contaminated feed or water." 
-          }
-        ]         // list close
-      }           // contaminants close
-    }             // other close
-  },              // hi close ✅
+          desc: "Radioactive isotopes (like Strontium-90, Iodine-131) can enter milk if the cow ingests contaminated feed or water."
+          }               // <--- 1. Ye bracket missing tha (item close karne ke liye)
+        ]                 // list close
+      }                   // contaminants close
+    }                     // other close
+  }                       // hi close ✅
+},                        // <--- 2. Ye aakhri bracket aur semicolon (Main file/variable close karne ke liye)
   en: {
 mainTitle: "Advanced Dairy Chemistry, Physics & Microbiology (Analytical Chemistry and Microbiology of Milk)",
 // ... baaki english ka content
@@ -7968,9 +7969,10 @@ other: {
         },
         {
             name: "Radionuclides",
-            desc: "Radioactive isotopes (like Strontium-90, Iodine-131) can enter milk if the cow ingests contaminated feed or water." 
-          }
-        ]         // list close
-      }           // contaminants close
-    }             // other close
-  }                // hi close ✅
+            desc: "Radioactive isotopes (like Strontium-90, Iodine-131) can enter milk if the cow ingests contaminated feed or water."
+          }               // <--- 1. Ye bracket missing tha (item close karne ke liye)
+        ]                 // list close
+      }                   // contaminants close
+    }                     // other close
+  }                       // hi close ✅
+};                        // <--- 2. Ye aakhri bracket aur semicolon (Main file/variable close karne ke liye)
