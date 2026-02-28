@@ -7969,7 +7969,6 @@ other: {
         {
             name: "Radionuclides",
             desc: "Radioactive isotopes (like Strontium-90, Iodine-131) can enter milk if the cow ingests contaminated feed or water." 
-            desc: "Radioactive isotopes (like Strontium-90, Iodine-131) can enter milk if the cow ingests contaminated feed or water." 
           }
         ]         // list close
       }           // contaminants close
