@@ -281,6 +281,7 @@ const MemoizedInputField = memo(function InputField({ label, value, name, setter
     );
 });
 
+
 function FatSnfClrTsCalc() {
     const [inputs, setInputs] = useState({
         fat: '4.5',
