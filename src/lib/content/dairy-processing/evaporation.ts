@@ -3,777 +3,1053 @@ export const evaporationContent = {
     en: {
         title: "Evaporation",
         content: `
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Comprehensive Introduction to Dairy Evaporation</h3>
-            <p>Evaporation is a critical unit operation in dairy manufacturing, serving as the primary method for concentrating liquid dairy products by removing water as vapor through controlled heat application under reduced pressure [web:99][web:103]. This thermal concentration process is fundamental to producing major dairy commodities including evaporated milk, sweetened condensed milk, milk powder precursors, whey concentrates, and concentrated dairy ingredients for food manufacturing [web:99]. The technology enables dramatic reductions in product volume (50-80% water removal typical), yielding substantial economic benefits: reduced transportation costs (freight savings 3-5x per unit of solids), decreased storage requirements, extended microbial shelf life through reduced water activity (aw), and preparation of feed streams for final drying operations [web:103].</p>
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Dairy Processing mein Evaporation ka Introduction</h3>
+            <p>Evaporation dairy industry mein ek crucial unit operation hai jo milk ya whey ko water vapor ke form mein remove karke concentrate karta hai. Ye process condensed milk, evaporated milk, aur milk powders manufacturing mein primary step hai. Main goal liquid ki total solids content increase karna hai, jo transportation costs reduce karta hai, shelf life increase karta hai (water activity reduce karke), aur product ko subsequent processes jaise spray drying ke liye prepare karta hai.</p>
             
-            <p>Modern dairy evaporation systems represent sophisticated engineering integrating thermodynamic principles, fluid mechanics, heat transfer optimization, and process automation to achieve high thermal efficiency while preserving delicate milk components sensitive to heat degradation [web:99]. The evolution from simple single-effect batch evaporators to complex multi-effect continuous systems with mechanical vapor recompression has revolutionized dairy processing economics and product quality over the past century.</p>
+            <p><strong>Industrial Significance:</strong> Modern dairy industry mein evaporation ek energy-intensive operation hai jo processing cost ka 30-50% constitute karta hai. High-efficiency evaporation systems annual energy savings millions of dollars mein provide kar sakte hain large-scale operations ke liye. Example: 100 tonnes/day milk powder plant approximately 15-25 tonnes/hour steam consume karta hai evaporation ke liye alone.</p>
 
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Fundamental Principles: Vacuum Evaporation and Heat-Sensitive Dairy Products</h3>
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Vacuum Evaporation ka Principle: Thermodynamic Foundation</h3>
             
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Why Vacuum? The Boiling Point-Pressure Relationship</h4>
-            <p>At standard atmospheric pressure (101.325 kPa, 1 atm), water boils at 100°C—a temperature that would cause severe thermal damage to milk during prolonged evaporation [web:103]. The fundamental thermodynamic relationship governing evaporation is the Clausius-Clapeyron equation, which describes how vapor pressure (and thus boiling point) varies with temperature. By reducing the absolute pressure inside an evaporator vessel, the boiling point of water decreases proportionally according to established steam tables [web:99].</p>
+            <h4 class="font-semibold mt-4 mb-2">Boiling Point aur Pressure Relationship</h4>
+            <p>Water atmospheric pressure (101.325 kPa ya 1 atm) par 100°C par boil karta hai. Lekin boiling point pressure ke saath dramatically vary karta hai, jo Clausius-Clapeyron equation se describe hota hai:</p>
             
-            <p><strong>Practical Vacuum-Temperature Relationships for Water:</strong></p>
-            <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
-                <li>Atmospheric pressure (101.3 kPa): Boiling point = 100°C</li>
-                <li>70 kPa absolute: Boiling point = 90°C</li>
-                <li>47 kPa absolute: Boiling point = 80°C</li>
-                <li>31 kPa absolute: Boiling point = 70°C</li>
-                <li>20 kPa absolute: Boiling point = 60°C</li>
-                <li>12 kPa absolute: Boiling point = 50°C</li>
-                <li>7 kPa absolute: Boiling point = 40°C</li>
-            </ul>
+            <p><strong>Clausius-Clapeyron Equation:</strong></p>
+            <p>ln(P₂/P₁) = -(ΔHᵥₐₚ/R) × (1/T₂ - 1/T₁)</p>
+            <p>Jahan: P = vapor pressure, ΔHᵥₐₚ = latent heat of vaporization (~2257 kJ/kg for water), R = gas constant (8.314 J/mol·K), T = absolute temperature (K)</p>
             
-            <p><strong>Typical Dairy Evaporator Operating Conditions:</strong> Modern falling-film evaporators operate with first-effect temperatures of 65-75°C (corresponding to 25-38 kPa absolute pressure) and final-effect temperatures as low as 40-50°C (7-12 kPa absolute) [web:99]. This vacuum operation dramatically reduces thermal exposure while maintaining adequate driving force for evaporation.</p>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Heat Damage Mechanisms in Milk: Why Low Temperature Matters</h4>
-            <p>Milk is exceptionally heat-sensitive due to its complex biochemical composition [web:102][web:103]. Prolonged exposure to elevated temperatures (>80°C) causes multiple deteriorative reactions:</p>
+            <p><strong>Practical Boiling Point-Pressure Data for Water:</strong></p>
+            <table class="min-w-full border-collapse border border-gray-300 mt-3">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="border border-gray-300 px-4 py-2">Absolute Pressure (kPa)</th>
+                        <th class="border border-gray-300 px-4 py-2">Vacuum Level (kPa below atm)</th>
+                        <th class="border border-gray-300 px-4 py-2">Boiling Point (°C)</th>
+                        <th class="border border-gray-300 px-4 py-2">Typical Application</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">101.3</td>
+                        <td class="border border-gray-300 px-4 py-2">0 (atmospheric)</td>
+                        <td class="border border-gray-300 px-4 py-2">100</td>
+                        <td class="border border-gray-300 px-4 py-2">No vacuum (avoid in dairy)</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">47.4</td>
+                        <td class="border border-gray-300 px-4 py-2">53.9</td>
+                        <td class="border border-gray-300 px-4 py-2">80</td>
+                        <td class="border border-gray-300 px-4 py-2">First effect (multi-effect)</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">19.9</td>
+                        <td class="border border-gray-300 px-4 py-2">81.4</td>
+                        <td class="border border-gray-300 px-4 py-2">60</td>
+                        <td class="border border-gray-300 px-4 py-2">Second/third effect</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">7.38</td>
+                        <td class="border border-gray-300 px-4 py-2">93.9</td>
+                        <td class="border border-gray-300 px-4 py-2">40</td>
+                        <td class="border border-gray-300 px-4 py-2">Final effect (gentle processing)</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">2.34</td>
+                        <td class="border border-gray-300 px-4 py-2">99.0</td>
+                        <td class="border border-gray-300 px-4 py-2">20</td>
+                        <td class="border border-gray-300 px-4 py-2">Ultra-low temp (experimental)</td>
+                    </tr>
+                </tbody>
+            </table>
             
+            <p><strong>Key Insight:</strong> 95% vacuum level (pressure 5 kPa se kam) par, water sirf 33°C par boil karta hai—body temperature se kam! Ye gentle evaporation dairy products ke liye ideal hai.</p>
+            
+            <h4 class="font-semibold mt-4 mb-2">Heat Damage Prevention: Scientific Rationale</h4>
+            
+            <p>Extended high-temperature exposure se milk mein kai detrimental reactions occur karte hain:</p>
+            
+            <p><strong>1. Protein Denaturation (>70°C):</strong></p>
             <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
-                <li><strong>Maillard Reaction (Non-Enzymatic Browning):</strong> Lactose (reducing sugar) reacts with free amino groups of proteins (particularly lysine residues in casein and whey proteins) to form brown melanoidin pigments and hundreds of volatile flavor compounds. This produces the characteristic "cooked" or "caramel" flavor and brown discoloration unacceptable in most milk products (except intentionally in evaporated/condensed milk). Reaction rate doubles approximately every 10°C temperature increase above 60°C.</li>
-                <li><strong>Whey Protein Denaturation:</strong> β-lactoglobulin and α-lactalbumin undergo irreversible unfolding above 70-75°C, exposing hydrophobic groups and free sulfhydryl (-SH) groups. This causes: (a) Formation of protein aggregates and increased viscosity, (b) Interaction with κ-casein on micelle surfaces (reducing heat stability), (c) Loss of functional properties (foaming, gelation, water binding), (d) Development of "cooked" sulfur-off flavors from liberated -SH groups.</li>
-                <li><strong>Lactose Caramelization:</strong> Above 100°C, lactose undergoes thermal decomposition independent of proteins, forming organic acids (formic, acetic), aldehydes, and brown polymers. Increases acidity and off-flavors.</li>
-                <li><strong>Vitamin Degradation:</strong> Heat-labile vitamins suffer significant losses: Thiamin (B1) 10-30% loss, Vitamin B12 10-15%, Vitamin C 20-50%, Folic acid 10-20%. Losses are temperature and time dependent, following first-order kinetics.</li>
-                <li><strong>Lipid Oxidation (Indirect):</strong> Heat denatures native antioxidant enzymes and releases copper ions from milk serum proteins, catalyzing lipid peroxidation during subsequent storage (oxidized/cardboard flavors).</li>
+                <li><strong>Whey Protein Denaturation:</strong> β-lactoglobulin aur α-lactalbumin 70-80°C par denature hone lagte hain. Ye tertiary structure lose karte hain, exposing hydrophobic groups → protein aggregation → fouling on heat exchange surfaces → reduced heat transfer efficiency (coefficient 50-70% decrease ho sakta hai heavily fouled surfaces par).</li>
+                <li><strong>Casein Micelle Destabilization:</strong> 90°C se upar prolonged heating casein micelles ko disrupt karta hai → colloidal calcium phosphate dissolution → age gelation susceptibility increase.</li>
+                <li><strong>Functional Impact:</strong> Denatured proteins reduced solubility, altered water-binding, aur modified emulsification properties show karte hain—final product quality adversely affect karta hai.</li>
             </ul>
             
-            <p><strong>Time-Temperature Integration:</strong> Heat damage is cumulative, following kinetic principles. A product held at 80°C for 60 minutes suffers equivalent damage to 100°C for ~6 minutes (Z-value for Maillard ≈ 25-30°C). Vacuum evaporation at 50-65°C with residence times of 20-60 seconds minimizes damage compared to atmospheric boiling [web:102][web:99].</p>
+            <p><strong>2. Maillard Reaction (Non-Enzymatic Browning):</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
+                <li><strong>Mechanism:</strong> Reducing sugars (lactose) amino groups (milk proteins mein lysine residues) ke saath react karte hain forming glycosylamines → Amadori rearrangement → melanoidins (brown pigments) + heterocyclic compounds (flavor compounds).</li>
+                <li><strong>Temperature Dependence:</strong> Reaction rate temperature ke saath exponentially increase hota hai. Q₁₀ (rate increase per 10°C rise) typically 2-4 hai dairy products mein. Matlab: 80°C par rate 60°C se 4-16× higher ho sakta hai.</li>
+                <li><strong>Consequences:</strong> Undesirable brown color, cooked/caramel flavor, lysine destruction (nutritional value loss—lysine essential amino acid hai), reduced protein digestibility.</li>
+            </ul>
+            
+            <p><strong>3. Lactose Caramelization (>100°C):</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
+                <li>Atmospheric boiling temperature ke near, lactose thermal decomposition undergo karta hai forming caramel compounds, organic acids, aur bitter-tasting degradation products.</li>
+                <li>Vacuum evaporation (60°C se kam) ye completely avoid karta hai.</li>
+            </ul>
+            
+            <p><strong>4. Vitamin Degradation:</strong></p>
+            <table class="min-w-full border-collapse border border-gray-300 mt-3">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="border border-gray-300 px-4 py-2">Vitamin</th>
+                        <th class="border border-gray-300 px-4 py-2">Heat Sensitivity</th>
+                        <th class="border border-gray-300 px-4 py-2">Loss at 100°C (30 min)</th>
+                        <th class="border border-gray-300 px-4 py-2">Loss at 60°C (30 min)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">Vitamin C (Ascorbic acid)</td>
+                        <td class="border border-gray-300 px-4 py-2">Bahut high</td>
+                        <td class="border border-gray-300 px-4 py-2">80-100%</td>
+                        <td class="border border-gray-300 px-4 py-2">10-25%</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">Thiamine (B₁)</td>
+                        <td class="border border-gray-300 px-4 py-2">High</td>
+                        <td class="border border-gray-300 px-4 py-2">40-60%</td>
+                        <td class="border border-gray-300 px-4 py-2">5-15%</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">Folate (B₉)</td>
+                        <td class="border border-gray-300 px-4 py-2">Moderate</td>
+                        <td class="border border-gray-300 px-4 py-2">25-40%</td>
+                        <td class="border border-gray-300 px-4 py-2">5-10%</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">Riboflavin (B₂)</td>
+                        <td class="border border-gray-300 px-4 py-2">Low</td>
+                        <td class="border border-gray-300 px-4 py-2">10-15%</td>
+                        <td class="border border-gray-300 px-4 py-2"><5%</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <p><strong>Conclusion:</strong> Vacuum evaporation (40-70°C operating range) dramatically reduces thermal degradation compared to atmospheric boiling, preserving product quality, nutritional value, aur functional properties.</p>
 
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Boiling Point Elevation (BPE): A Critical Design Consideration</h4>
-            <p>Milk is not pure water—it contains 12-13% dissolved and suspended solids (lactose, minerals, proteins, colloidal casein). These solutes cause <strong>Boiling Point Elevation (BPE)</strong>: the solution boils at a higher temperature than pure water at the same pressure. This is a colligative property governed by Raoult's Law and van't Hoff equation.</p>
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Heat Transfer Fundamentals in Evaporators</h3>
             
-            <p><strong>BPE Formula (Simplified):</strong> ΔT<sub>b</sub> = K<sub>b</sub> × m × i</p>
-            <p>Where: ΔT<sub>b</sub> = boiling point elevation (°C), K<sub>b</sub> = ebullioscopic constant (0.512 °C·kg/mol for water), m = molality of solute, i = van't Hoff factor (ion dissociation).</p>
+            <h4 class="font-semibold mt-4 mb-2">Overall Heat Transfer Equation</h4>
+            <p>Evaporator ka heart heat transfer hai hot steam se boiling milk tak through tube wall. Quantitative relationship:</p>
             
-            <p><strong>Practical BPE Values for Dairy Products:</strong></p>
+            <p><strong>Q = U × A × ΔT<sub>m</sub></strong></p>
+            <p>Jahan:</p>
             <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
-                <li>Whole milk (12% TS): BPE ≈ 0.5-1.0°C</li>
-                <li>Concentrated milk (25% TS): BPE ≈ 1.5-2.5°C</li>
-                <li>Concentrated milk (40% TS): BPE ≈ 3-5°C</li>
-                <li>Concentrated milk (50% TS): BPE ≈ 6-10°C</li>
-                <li>Whey (6% TS): BPE ≈ 0.3-0.5°C</li>
-                <li>Concentrated whey (50% TS): BPE ≈ 8-12°C (lactose crystallization complicates)</li>
+                <li>Q = heat transfer rate (kW ya kJ/hr)</li>
+                <li>U = overall heat transfer coefficient (W/m²·K)</li>
+                <li>A = heat transfer area (m²)</li>
+                <li>ΔT<sub>m</sub> = mean temperature difference between steam aur boiling milk (K ya °C)</li>
             </ul>
             
-            <p><strong>Engineering Significance:</strong> BPE reduces the effective temperature difference (ΔT) available for heat transfer between heating steam and boiling liquid. If steam is at 110°C and vacuum corresponds to 60°C water boiling point, but milk actually boils at 62°C due to BPE, the actual ΔT is 48°C instead of 50°C—reducing evaporation rate proportionally. BPE increases exponentially as concentration increases, severely limiting final concentration achievable in evaporators (typically 45-55% TS maximum for milk) [web:99].</p>
+            <p><strong>Overall Heat Transfer Coefficient (U):</strong></p>
+            <p>U kai individual resistances ka combined effect hai:</p>
+            <p>1/U = 1/h<sub>steam</sub> + t<sub>wall</sub>/k<sub>wall</sub> + 1/h<sub>milk</sub> + R<sub>fouling</sub></p>
+            
+            <p>Jahan:</p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
+                <li>h<sub>steam</sub> = steam-side heat transfer coefficient (typically 8,000-15,000 W/m²·K for condensing steam—bahut high!)</li>
+                <li>t<sub>wall</sub> = tube wall thickness (typically 1-2 mm stainless steel)</li>
+                <li>k<sub>wall</sub> = thermal conductivity of wall material (SS 316: ~16 W/m·K)</li>
+                <li>h<sub>milk</sub> = milk-side heat transfer coefficient (1,000-3,000 W/m²·K falling film evaporators mein)</li>
+                <li>R<sub>fouling</sub> = fouling resistance (0.0001-0.0005 m²·K/W clean surface ke liye, 0.001-0.003 heavily fouled surface ke liye)</li>
+            </ul>
+            
+            <p><strong>Example Calculation:</strong></p>
+            <p>Clean falling film evaporator tube:</p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
+                <li>h<sub>steam</sub> = 10,000 W/m²·K</li>
+                <li>Wall resistance = 0.0015 m / 16 W/m·K = 0.000094 m²·K/W</li>
+                <li>h<sub>milk</sub> = 2,000 W/m²·K</li>
+                <li>R<sub>fouling</sub> = 0.0002 m²·K/W (relatively clean)</li>
+            </ul>
+            <p>1/U = 1/10000 + 0.000094 + 1/2000 + 0.0002 = 0.0001 + 0.000094 + 0.0005 + 0.0002 = 0.000794</p>
+            <p>U = 1/0.000794 = 1,259 W/m²·K</p>
+            
+            <p><strong>Fouling Impact:</strong> Agar R<sub>fouling</sub> 0.002 m²·K/W increase ho jaye (heavy fouling):</p>
+            <p>1/U = 0.000794 + 0.002 = 0.002794 → U = 358 W/m²·K (72% reduction!)</p>
+            <p>Result: Heat transfer capacity 72% drop, evaporation rate dramatically reduced, ya steam consumption proportionally increased.</p>
+            
+            <h4 class="font-semibold mt-4 mb-2">Boiling Point Elevation (BPE)</h4>
+            
+            <p>Pure water vacuum ke under ek certain temperature par boils. Lekin milk solution concentrated hone par, dissolved solids (lactose, minerals, proteins) vapor pressure reduce karte hain, boiling point increase karte hue. Ye phenomenon <strong>Boiling Point Elevation</strong> kehlata hai.</p>
+            
+            <p><strong>Dühring's Rule:</strong> BPE ka estimation:</p>
+            <p>BPE ≈ K × (% Total Solids)</p>
+            <p>Jahan K concentration aur pressure dependent constant hai (typically 0.03-0.08 for milk under typical evaporator conditions).</p>
+            
+            <p><strong>Practical Example:</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
+                <li>Pure water 20 kPa absolute pressure par: boiling point = 60°C</li>
+                <li>Milk 12% total solids (normal milk): BPE ≈ 0.05 × 12 = 0.6°C → boiling point ≈ 60.6°C</li>
+                <li>Milk 50% total solids (concentrated): BPE ≈ 0.07 × 50 = 3.5°C → boiling point ≈ 63.5°C</li>
+            </ul>
+            
+            <p><strong>Impact on Evaporator Design:</strong> BPE effective ΔT reduce karta hai. Agar steam 70°C hai aur concentrated milk 63.5°C par boiling hai, actual driving force sirf 6.5°C (instead of 10°C for pure water). Ye heat transfer rate aur evaporation capacity reduce karta hai as concentration increases.</p>
 
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Evaporator Design Types: Technology Selection and Performance</h3>
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Types of Evaporators: Detailed Engineering Analysis</h3>
             
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Falling Film Evaporators (FFE): Industry Standard</h4>
-            <p>Falling film evaporators dominate modern dairy processing due to superior heat transfer efficiency, minimal residence time, and excellent product quality [web:99][web:101][web:102]. The design principle exploits gravity-driven thin film flow for maximum heat transfer surface-to-volume ratio.</p>
+            <h4 class="font-semibold mt-4 mb-2">1. Falling Film Evaporator (FFE)</h4>
             
-            <p><strong>Construction and Operation:</strong></p>
-            <ol class="list-decimal list-outside pl-5 space-y-2">
-                <li><strong>Calandria Design:</strong> Vertical shell-and-tube heat exchanger with 6-10 meter long tubes (typically 38-50 mm internal diameter), arranged in a bundle. Heating steam circulates in the shell side at controlled pressure/temperature. Milk flows inside tubes as a thin film (~0.3-1.0 mm thickness on tube walls).</li>
-                <li><strong>Feed Distribution System:</strong> Milk is pumped to the top distribution plate with precision-machined orifices or spray nozzles ensuring uniform distribution to each tube. Critical for maintaining continuous, stable film formation. Poor distribution causes dry patches (tube burnout risk) or flooding (reduced efficiency).</li>
-                <li><strong>Film Formation and Flow:</strong> Milk enters tube tops at controlled velocity (1-3 m/s initial), immediately forming an annular film on tube walls due to surface tension and wetting. Gravity pulls the film downward at 0.5-2.0 m/s velocity. As evaporation proceeds, film thickness decreases progressively down the tube length. Vapor forms at the liquid-gas interface and flows co-currently or counter-currently in the tube center.</li>
-                <li><strong>Heat Transfer Mechanism:</strong> Steam condenses on outer tube surfaces, releasing latent heat (2257 kJ/kg at 100°C). Heat conducts through tube wall (stainless steel, k ≈ 16 W/m·K) into milk film. Water at film surface evaporates, vapor escapes, concentration increases. Overall heat transfer coefficients: 1500-3000 W/m²·K (excellent—3-5× higher than jacketed kettle).</li>
-                <li><strong>Vapor-Liquid Separation:</strong> Two-phase mixture (concentrate + vapor) exits tube bottoms at high velocity into large-diameter vapor separator vessel (cyclone or tangential entry design). Centrifugal/gravity separation occurs: Vapor rises to overhead condenser connection, concentrate collects at bottom for pumping to next effect or discharge.</li>
-                <li><strong>Residence Time:</strong> Total contact time in heating zone: 5-30 seconds typical (varies with tube length, flow rate, concentration factor). Dramatically shorter than batch evaporators (30-120 minutes), minimizing heat damage [web:102][web:99].</li>
+            <p><strong>Design aur Construction:</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
+                <li><strong>Calandria (Tube Bundle):</strong> 100-300 vertical tubes, typically 6-10 meters long, 25-50 mm internal diameter, stainless steel SS 316L. Tubes hexagonal ya square pattern mein arranged hote hain compact design ke liye.</li>
+                <li><strong>Distribution System:</strong> Top par liquid distributor milk ko uniformly sabhi tubes ki inner walls par distribute karta hai. Critical design—uneven distribution se dry patches (overheating, burning) aur wet patches (inefficient evaporation) cause hote hain.</li>
+                <li><strong>Steam Chest:</strong> Tube bundle ko surround karne wala jacket jisme heating steam flow karta hai. Steam tubes ke outer surface par condense hota hai, latent heat release karte hue.</li>
+                <li><strong>Vapor Separator:</strong> Tube bundle ke bottom par large-diameter cylindrical vessel. Centrifugal or gravity separation use karke vapor concentrate se separate hota hai.</li>
+            </ul>
+            
+            <p><strong>Operating Principle - Detailed Physics:</strong></p>
+            <ol class="list-decimal list-outside pl-5 mt-2 space-y-3">
+                <li><strong>Film Formation:</strong> Milk tube top par enter karta hai aur gravity ke under tube wall par thin film (0.1-0.5 mm thickness) ke roop mein neeche flow karta hai. Film thickness critical hai—too thick: poor heat transfer; too thin: dry spots aur burning.</li>
+                <li><strong>Heat Transfer:</strong> Steam (typically 100-150°C, 100-470 kPa gauge pressure) tube outer surface par condense hota hai → latent heat (≈2000-2100 kJ/kg) tube wall ke through milk film mein transfer hota hai → film surface par water rapidly evaporates.</li>
+                <li><strong>Vapor Generation:</strong> Evaporated water vapor milk film se separate hota hai aur upward flow karta hai (because vapor density 1000× kam milk se). Ye counter-current flow create karta hai jo mass transfer enhance karta hai.</li>
+                <li><strong>Concentrate Collection:</strong> Concentrated milk (ab higher total solids ke saath) tube bottom par collect hota hai aur vapor separator vessel mein discharge hota hai.</li>
+                <li><strong>Phase Separation:</strong> Separator mein, vapor overhead exit karta hai (next effect ko supply hone ke liye ya condenser mein), jab ki concentrate bottom se withdraw hota hai further processing ke liye.</li>
             </ol>
             
-            <p><strong>Advantages of Falling Film Design:</strong></p>
-            <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
-                <li>Extremely short residence time preserves heat-sensitive components (vitamins, proteins, flavor)</li>
-                <li>High heat transfer coefficients enable operation at low ΔT (3-10°C difference sufficient), reducing thermal stress</li>
-                <li>Suitable for low-viscosity to moderately viscous fluids (up to ~500 cP)</li>
-                <li>Low fouling tendency compared to forced-circulation or plate evaporators (continuous film renewal, low wall shear stress)</li>
-                <li>Energy-efficient (minimal pumping power, optimized for multi-effect operation)</li>
-                <li>Compact footprint relative to capacity (vertical orientation)</li>
-                <li>Easy integration with CIP (clean-in-place) systems</li>
+            <p><strong>Key Advantages of FFE:</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
+                <li><strong>Short Residence Time:</strong> Milk sirf 5-30 seconds heated surface ke contact mein rehta hai (tube length aur flow velocity ke depending). Atmospheric evaporators (30-60 min residence time) ke comparison mein, ye 100× reduction hai → minimal heat damage.</li>
+                <li><strong>High Heat Transfer Coefficient:</strong> Thin film aur turbulent flow (if vapor shear high enough) h<sub>milk</sub> = 2,000-4,000 W/m²·K achieve karte hain, vs 500-800 W/m²·K for thick-film evaporators.</li>
+                <li><strong>Low Fouling Tendency:</strong> High velocity (2-5 m/s typical) aur short residence time protein denaturation aur deposition minimize karte hain. CIP cycles typically har 8-24 hours (vs 4-8 hours older designs mein).</li>
+                <li><strong>Gentle Product Handling:</strong> Low temperature, short time, aur minimal mechanical stress product quality preserve karte hain—critical for heat-sensitive dairy products.</li>
+                <li><strong>Flexibility:</strong> Wide range of inlet concentrations (5-50% TS) aur evaporation rates (500-50,000 kg water/hr depending on size) handle kar sakta hai.</li>
             </ul>
             
             <p><strong>Limitations:</strong></p>
-            <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
-                <li>Requires precise flow distribution (maldistribution causes severe efficiency loss or tube damage)</li>
-                <li>Minimum wetting rate required (~0.15-0.3 kg/m·s per meter of tube perimeter) to maintain stable film—limits turndown ratio (minimum operating capacity ~40-50% of design)</li>
-                <li>Not suitable for highly viscous products (>1000 cP) or crystallizing solutions (film breaks, fouling)</li>
-                <li>Concentration limited to ~45-55% TS for milk (high viscosity, BPE effects)</li>
-            </ul>
-            
-            <p><strong>Variants:</strong></p>
-            <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
-                <li><strong>Recirculation Mode:</strong> Concentrate partially recycled back to feed to maintain adequate wetting rates, enabling higher final concentration (up to 60-70% TS) at cost of increased residence time [web:105].</li>
-                <li><strong>Plate Falling Film Evaporators:</strong> Replace tubes with vertical corrugated plates forming narrow channels. Progressive channel width reduction maintains film thickness despite decreasing liquid volume. Enables very low ΔT operation (2-5°C), extremely gentle treatment [web:99].</li>
-            </ul>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Rising Film Evaporators (Climbing Film)</h4>
-            <p>Historical design, now largely replaced by falling film but still used in specific applications. Milk enters tube bottoms, heated by steam. As boiling initiates, vapor bubbles form and rise, creating a two-phase slug flow that carries liquid upward as a foam/film mixture. Vapor-liquid separation occurs at tube tops.</p>
-            
-            <p><strong>Advantages:</strong> Self-pumping action (no feed pump needed once boiling starts), suitable for foaming products, tolerates some solids/particulates.</p>
-            
-            <p><strong>Disadvantages:</strong> Longer residence time (60-120 seconds), higher ΔT required (10-20°C), greater fouling tendency, less stable operation, limited to lower concentrations.</p>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Forced Circulation Evaporators</h4>
-            <p>Liquid pumped at high velocity (2-5 m/s) through external tube bundle submerged in steam chest. High circulation rate prevents boiling inside tubes (liquid temperature below boiling point due to hydrostatic pressure). Boiling occurs only in separate flash chamber at reduced pressure after exiting tubes.</p>
-            
-            <p><strong>Advantages:</strong> Handles very viscous fluids (>10,000 cP), crystallizing solutions, or fouling products. High heat transfer coefficients from turbulent flow. Used for tomato paste, fruit concentrates, molasses—not common in dairy due to high energy consumption and heat damage.</p>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Centrifugal (Conical) Evaporators</h4>
-            <p>Rotating cone or cylinder with milk fed tangentially at high velocity, forming a thin film on heated rotating surface [web:99]. Centrifugal force enhances film stability and heat transfer. Very short residence time (5-10 seconds), excellent for highly heat-sensitive products, but mechanically complex, high maintenance, and limited capacity (typically <5,000 L/h).</p>
-
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Multi-Effect Evaporation: Energy Efficiency Revolution</h3>
-            
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">The Steam Economy Problem</h4>
-            <p>A single-effect evaporator requires approximately 1.1-1.3 kg of fresh steam to evaporate 1 kg of water from milk (steam economy = 0.77-0.91 kg water/kg steam) [web:107]. This represents enormous energy consumption: evaporating 10,000 kg/h water requires 12,000+ kg/h steam input, translating to substantial fuel costs and environmental impact. The energy challenge arises because the latent heat of vaporization (2257 kJ/kg at 100°C) must be supplied entirely by condensing fresh steam—the vapor generated from milk is simply discarded to a condenser and rejected as waste heat.</p>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Multi-Effect Principle: Cascading Vapor Reuse</h4>
-            <p>Multi-effect evaporation solves this by arranging multiple evaporator bodies (effects) in series, each operating at progressively lower pressure and temperature [web:99][web:105][web:107]. The key innovation: vapor generated in one effect serves as the heating medium for the next effect, cascading thermal energy through the system.</p>
-            
-            <p><strong>Operating Sequence (Forward Feed Configuration):</strong></p>
-            <ol class="list-decimal list-outside pl-5 space-y-2">
-                <li><strong>Effect 1 (Highest Pressure/Temperature):</strong> Fresh steam (e.g., 3 bar gauge, 143°C) heats milk in calandria tubes. Milk boils at ~70°C (25 kPa absolute vacuum). Vapor generated at 70°C exits overhead.</li>
-                <li><strong>Effect 2:</strong> The 70°C vapor from Effect 1 enters the steam chest of Effect 2 as heating medium. Effect 2 operates at lower vacuum (15 kPa absolute, ~54°C boiling point). Temperature difference (70 - 54 = 16°C) drives evaporation. Vapor at 54°C generated.</li>
-                <li><strong>Effect 3:</strong> 54°C vapor from Effect 2 heats Effect 3 (10 kPa absolute, ~46°C boiling). Generates 46°C vapor.</li>
-                <li><strong>Effect 4 (Final Effect):</strong> 46°C vapor heats Effect 4 (7 kPa, ~40°C). Final vapor sent to condenser (cooled to 25-30°C, condensed to water, maintaining vacuum).</li>
-            </ol>
-            
-            <p><strong>Energy Balance and Steam Economy:</strong> Each effect evaporates approximately the same amount of water (assuming equal heat transfer area and similar conditions). Therefore, a 4-effect evaporator evaporates ~4 kg water per kg of fresh steam supplied to Effect 1—a steam economy of 4.0 compared to 0.8 for single effect [web:107]. In practice, steam economy = n × 0.85-0.90 (where n = number of effects), accounting for heat losses, BPE, and non-ideal conditions.</p>
-            
-            <p><strong>Practical Steam Economy Values:</strong></p>
-            <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
-                <li>Single effect: 0.8-0.9 kg water/kg steam</li>
-                <li>Double effect: 1.6-1.8</li>
-                <li>Triple effect: 2.4-2.7</li>
-                <li>Quadruple effect: 3.2-3.6</li>
-                <li>Five effect: 4.0-4.5</li>
-                <li>Six effect: 4.8-5.2</li>
-                <li>Seven effect: 5.5-6.0 [web:105]</li>
-            </ul>
-            
-            <p><strong>Typical Dairy Configurations:</strong> 3-7 effects most common [web:99][web:105]. Beyond 7 effects, capital cost increases steeply while incremental steam savings diminish (law of diminishing returns). Economic optimum depends on energy costs, capital costs, and plant capacity.</p>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Feed Flow Configurations</h4>
             <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
-                <li><strong>Forward Feed:</strong> Feed enters Effect 1, flows progressively through Effects 2, 3, 4, etc., with concentrate exiting final effect. Simplest pumping (pressure drops progressively through effects). Best for heat-stable products. Not ideal for heat-sensitive products (longest exposure at highest temperature).</li>
-                <li><strong>Backward Feed:</strong> Feed enters final (coldest) effect, pumped progressively backward to Effect 1 (hottest), concentrate exits Effect 1. Advantages: Feed preheated gradually (energy recovery), final heating at highest temperature accelerates concentration, suitable for viscous products (higher temperature reduces viscosity). Disadvantage: Requires inter-effect pumps (higher capital and operating cost).</li>
-                <li><strong>Mixed Feed:</strong> Feed enters middle effect, splits to forward and backward portions. Balances advantages of both configurations.</li>
-                <li><strong>Parallel Feed:</strong> Feed split equally to all effects simultaneously. Rarely used in dairy (poor energy efficiency).</li>
+                <li><strong>Minimum Wetting Rate:</strong> Film stable formation ke liye minimum liquid flow rate (typically 0.5-1.5 kg/m tube circumference·s) required hai. Highly concentrated liquids (>55% TS) ya low throughputs par, adequate wetting maintain karna difficult ho jata hai.</li>
+                <li><strong>Viscosity Limitation:</strong> High-viscosity products (>50 cP) uniform film formation disturb karte hain, heat transfer reduce karte hue. Practical limit: ~200 cP at operating temperature.</li>
+                <li><strong>Foam Formation:</strong> High-protein products (whey concentrate, skim milk) excessive foaming show kar sakte hain, vapor-liquid separation difficult banate hue. Anti-foam agents ya mechanical foam breakers required ho sakte hain.</li>
             </ul>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Temperature Profile and Pressure Staging</h4>
-            <p>Designing multi-effect systems requires careful pressure/temperature staging to maintain adequate ΔT for heat transfer while accommodating BPE and practical vacuum limitations.</p>
             
-            <p><strong>Example 5-Effect Milk Evaporator (Forward Feed):</strong></p>
+            <p><strong>Typical Performance Data:</strong></p>
+            <table class="min-w-full border-collapse border border-gray-300 mt-3">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="border border-gray-300 px-4 py-2">Parameter</th>
+                        <th class="border border-gray-300 px-4 py-2">Single Effect</th>
+                        <th class="border border-gray-300 px-4 py-2">4-Effect System</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">Operating Pressure</td>
+                        <td class="border border-gray-300 px-4 py-2">15-50 kPa abs</td>
+                        <td class="border border-gray-300 px-4 py-2">5-80 kPa (varying by effect)</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">Boiling Temperature</td>
+                        <td class="border border-gray-300 px-4 py-2">50-80°C</td>
+                        <td class="border border-gray-300 px-4 py-2">40-85°C (varying by effect)</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">Overall U (clean)</td>
+                        <td class="border border-gray-300 px-4 py-2">1,200-2,500 W/m²·K</td>
+                        <td class="border border-gray-300 px-4 py-2">800-2,000 W/m²·K (avg)</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">Steam Economy</td>
+                        <td class="border border-gray-300 px-4 py-2">0.9-1.0 kg water/kg steam</td>
+                        <td class="border border-gray-300 px-4 py-2">3.0-3.8 kg water/kg steam</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">Residence Time</td>
+                        <td class="border border-gray-300 px-4 py-2">10-30 seconds</td>
+                        <td class="border border-gray-300 px-4 py-2">40-120 seconds (total)</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h4 class="font-semibold mt-4 mb-2">2. Rising Film (Climbing Film) Evaporator</h4>
+            
+            <p><strong>Design Concept:</strong> Similar to FFE lekin film upward flow karta hai tube ke andar. Milk bottom se enter hota hai, aur rapid vapor generation se created upward momentum milk film ko tube walls par upward carry karta hai.</p>
+            
+            <p><strong>Advantages:</strong></p>
             <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
-                <li>Fresh steam: 2.5 bar gauge (140°C)</li>
-                <li>Effect 1: 38 kPa absolute, milk boils at 76°C (BPE +1°C), ΔT = 64°C, vapor 75°C</li>
-                <li>Effect 2: 25 kPa, boils 66°C (BPE +2°C), ΔT = 9°C, vapor 64°C</li>
-                <li>Effect 3: 16 kPa, boils 56°C (BPE +3°C), ΔT = 8°C, vapor 53°C</li>
-                <li>Effect 4: 10 kPa, boils 47°C (BPE +4°C), ΔT = 6°C, vapor 43°C</li>
-                <li>Effect 5: 6 kPa, boils 38°C (BPE +6°C), ΔT = 5°C, vapor 32°C</li>
-                <li>Condenser: 30°C cooling water condenses 32°C vapor</li>
+                <li>Self-circulation due to vapor lift—no recirculation pump needed for dilute feeds</li>
+                <li>Higher turbulence due to vapor bubbles → better heat transfer for low-viscosity liquids</li>
+                <li>Effective for high evaporation rates (>50% water removal in single pass possible)</li>
             </ul>
             
-            <p>Note progressive ΔT reduction and increasing BPE challenge—first effect has large ΔT (easy heat transfer), final effect minimal ΔT (requires large surface area). Heat transfer area typically increases 20-40% from first to last effect.</p>
-
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Advanced Energy-Saving Technologies</h3>
+            <p><strong>Disadvantages:</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
+                <li>Longer residence time than FFE (30-90 seconds)</li>
+                <li>Not suitable for viscous or heat-sensitive products</li>
+                <li>Difficult to control with varying feed rates</li>
+            </ul>
             
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Thermal Vapor Recompression (TVR): Thermocompressor Systems</h4>
-            <p>Thermal vapor recompression uses high-pressure motive steam in an ejector (venturi device) to entrain and compress low-pressure vapor from an evaporator effect, boosting its temperature/pressure for reuse as heating steam [web:99]. This "steam jet thermocompressor" operates without moving parts.</p>
+            <p><strong>Application:</strong> Limited use in modern dairy—primarily for preliminary evaporation of whey ya skim milk jahan heat sensitivity kam critical hai.</p>
             
-            <p><strong>Operating Principle:</strong> High-pressure steam (6-12 bar) accelerates through a converging nozzle to supersonic velocity, creating a vacuum that entrains low-pressure vapor (e.g., from Effect 2 at 0.2 bar). The mixed stream passes through a diffuser section, converting kinetic energy back to pressure, exiting at intermediate pressure (e.g., 1.5 bar) suitable for heating Effect 1.</p>
+            <h4 class="font-semibold mt-4 mb-2">3. Plate Evaporator</h4>
             
-            <p><strong>Steam Economy Improvement:</strong> A 2-effect evaporator with TVR achieves steam economy of 3.0-3.5 (equivalent to 3-4 effect without TVR), reducing fresh steam consumption by 40-50% [web:99]. Operating cost savings offset capital cost of high-pressure steam generation.</p>
+            <p><strong>Design:</strong> Gasketed plate heat exchanger design use karta hai. Corrugated plates alternating steam aur milk channels create karte hain. Milk plates ke beech thin channels (3-6 mm) mein flow karta hai jab ki steam adjacent channels mein condense hota hai.</p>
             
-            <p><strong>Typical Configuration:</strong> TVR applied to 2-3 effect systems in small/medium dairy plants (5,000-20,000 L/h capacity) where full multi-effect systems are economically impractical.</p>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Mechanical Vapor Recompression (MVR): Ultimate Energy Efficiency</h4>
-            <p>MVR employs an electrically-driven compressor (centrifugal or roots blower type) to compress the entire vapor stream from the evaporator, raising its temperature by 3-10°C and recycling it directly as heating steam to the same evaporator [web:99]. This eliminates the need for fresh steam almost entirely (only small makeup for system losses).</p>
+            <p><strong>Advantages:</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
+                <li><strong>Compact Design:</strong> Tubular evaporators se 3-5× smaller footprint for same capacity</li>
+                <li><strong>Easy Maintenance:</strong> Plates easily accessible cleaning ke liye—disassembly simple</li>
+                <li><strong>Flexible Capacity:</strong> Plates add/remove karke capacity adjust kar sakte hain</li>
+                <li><strong>High Turbulence:</strong> Corrugated plate geometry turbulence promote karta hai → high h values (2,500-4,000 W/m²·K)</li>
+            </ul>
             
-            <p><strong>Energy Advantage:</strong> Compressing vapor from 40°C/7 kPa to 50°C/12 kPa requires only ~50-80 kJ/kg electrical energy (compressor work), compared to 2257 kJ/kg thermal energy needed to generate fresh steam. Energy consumption: 25-45 kWh electrical per ton of water evaporated, versus 600-800 kWh thermal equivalent for single-effect steam evaporation—an 80-90% energy reduction.</p>
+            <p><strong>Disadvantages:</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
+                <li><strong>Gasket Limitations:</strong> Temperature limit ~140°C, pressure limit ~10 bar gauge—restricts operating conditions</li>
+                <li><strong>Fouling Sensitivity:</strong> Narrow channels clog hone prone hain high-protein feeds se</li>
+                <li><strong>Pressure Drop:</strong> Higher than tubular evaporators—pump power consumption increase</li>
+            </ul>
+            
+            <p><strong>Application:</strong> Growing use in small-to-medium scale dairy plants (500-5,000 L/hr milk) where space limited aur flexibility valued hai.</p>
+            
+            <h4 class="font-semibold mt-4 mb-2">4. Forced Circulation Evaporator</h4>
+            
+            <p><strong>Design:</strong> Liquid ko external circulation pump se high velocity (2-4 m/s) par heat exchanger (tubular calandria) ke through circulate kiya jata hai. Boiling primarily vapor separator vessel mein occur karta hai, heat exchanger mein nahi (to avoid localized overheating).</p>
             
             <p><strong>Operating Principle:</strong></p>
-            <ol class="list-decimal list-outside pl-5 space-y-2">
-                <li>Milk evaporates at 45°C/9 kPa in falling film evaporator, generating 45°C vapor</li>
-                <li>Centrifugal compressor (driven by electric motor or steam turbine) compresses vapor to 55°C/15 kPa</li>
-                <li>Compressed 55°C vapor enters steam chest, condensing and heating evaporator tubes (ΔT = 55-45 = 10°C)</li>
-                <li>Condensate returns to boiler (heat recovery), completing the cycle</li>
-            </ol>
-            
-            <p><strong>Advantages:</strong> Dramatic operating cost reduction (electricity cheaper than fuel for steam generation per unit of evaporation), environmentally superior (70-80% CO₂ reduction), compact system (no boiler or multi-effect complexity).</p>
-            
-            <p><strong>Limitations:</strong> High capital cost (compressor $500,000-2,000,000 depending on capacity), requires stable electricity supply, economically favored in regions with low electricity and high fuel costs, best suited for continuous high-volume operation (>10,000 L/h minimum).</p>
-            
-            <p><strong>Hybrid Systems:</strong> Combined multi-effect + MVR (e.g., 3-effect with MVR on final effect) optimizes capital and operating costs, achieving steam economies of 8-12 [web:99].</p>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Heat Integration and Feed Preheating</h4>
-            <p>Further energy savings achieved by recovering waste heat from various streams:</p>
             <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
-                <li><strong>Condensate Heat Recovery:</strong> Steam condensate exits at 140°C (Effect 1) contains sensible heat. Passed through plate heat exchanger to preheat incoming milk from 4°C to 50-70°C before entering evaporator, saving 10-20% energy.</li>
-                <li><strong>Vapor Condensate:</strong> Final effect vapor condenses at 40-45°C. This condensate can preheat milk to 30-40°C or provide warm water for CIP operations.</li>
-                <li><strong>Flash Cooling:</strong> Hot concentrate exiting at 60-70°C flash-cooled under vacuum, vapor used for heating or power generation (steam turbine).</li>
+                <li>Concentrate ko recirculation pump continuously heat exchanger mein pump karta hai</li>
+                <li>High velocity fouling minimize karta hai aur heat transfer enhance karta hai</li>
+                <li>Heated liquid separator vessel mein discharge hota hai jahan pressure suddenly drops → flash evaporation occurs</li>
+                <li>Vapor overhead remove hota hai, liquid recirculate hota hai (with fresh feed added)</li>
             </ul>
+            
+            <p><strong>Advantages:</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
+                <li>High-viscosity products (up to 1,000 cP) handle kar sakta hai</li>
+                <li>Crystallizing solutions (lactose crystallization applications) handle kar sakta hai bina tube blockage</li>
+                <li>Better fouling control high velocity se</li>
+            </ul>
+            
+            <p><strong>Disadvantages:</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
+                <li>High power consumption due to recirculation pump (5-15 kW per 1000 kg/hr evaporation)</li>
+                <li>Longer residence time due to recirculation (several minutes)—not suitable for very heat-sensitive products</li>
+                <li>More complex operation aur maintenance</li>
+            </ul>
+            
+            <p><strong>Application:</strong> Mainly for highly concentrated products (sweetened condensed milk final stages, whey protein concentrate >60% TS).</p>
 
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Critical Process Control and Operational Parameters</h3>
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Multi-Effect Evaporation: Energy Efficiency ka Cornerstone</h3>
             
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Key Controlled Variables</h4>
-            <ul class="list-disc list-outside pl-5 space-y-2">
-                <li><strong>Vacuum/Pressure Control:</strong> Each effect maintains precise absolute pressure (±1-2 kPa) via automated vacuum control valve and condenser capacity. Critical for stable boiling temperature and vapor temperature staging.</li>
-                <li><strong>Feed Flow Rate:</strong> Controlled by variable-speed pump or flow control valve to maintain target concentration and vapor production rate. Typical flow rates: 10,000-50,000 L/h for industrial evaporators.</li>
-                <li><strong>Concentrate Density/Total Solids:</strong> Monitored continuously by inline refractometer (measures refractive index correlating to TS%) or density meter. Automated feedback adjusts feed rate or steam to maintain target (e.g., 48% TS ±1%).</li>
-                <li><strong>Steam Pressure/Temperature:</strong> Regulating valve controls fresh steam supply to Effect 1 based on evaporation rate demand. Maintains steam chest pressure ±0.05 bar.</li>
-                <li><strong>Level Control:</strong> Liquid level in each effect vapor separator controlled by discharge pump speed or control valve to prevent flooding (reduced evaporation) or emptying (film breakdown, tube damage).</li>
-                <li><strong>Superheat Control:</strong> Temperature difference between vapor leaving evaporator and liquid in separator. Excessive superheat (>2-3°C) indicates poor vapor-liquid separation or non-condensables accumulation.</li>
+            <h4 class="font-semibold mt-4 mb-2">Concept aur Thermodynamic Principle</h4>
+            
+            <p>Single-effect evaporator mein, steam latent heat use karke water evaporate hota hai, aur generated vapor condenser mein condense hoke waste heat ban jata hai. Ye energy-wise inefficient hai—approximately 1 kg steam sirf 0.9-1.0 kg water evaporate kar sakta hai.</p>
+            
+            <p><strong>Multi-Effect Strategy:</strong> Pehle effect se generated vapor (jo still significant thermal energy contain karta hai) ko heating medium ke roop mein next effect mein use karein, jo lower pressure/temperature par operate karta hai. Ye cascading reuse same input steam se multiple times water evaporation allow karta hai.</p>
+            
+            <p><strong>Steam Economy Definition:</strong></p>
+            <p>Steam Economy = (kg water evaporated) / (kg fresh steam consumed)</p>
+            
+            <p><strong>Theoretical Steam Economy:</strong></p>
+            <p>Ideal conditions (no losses, equal ΔT per effect) ke under: Steam Economy ≈ Number of Effects</p>
+            <p>Example: 4-effect system → theoretical economy = 4.0 (4 kg water per kg steam)</p>
+            
+            <p><strong>Practical Steam Economy:</strong> Losses (BPE, heat losses, non-ideal ΔT distribution) se reduce hota hai:</p>
+            <table class="min-w-full border-collapse border border-gray-300 mt-3">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="border border-gray-300 px-4 py-2">Number of Effects</th>
+                        <th class="border border-gray-300 px-4 py-2">Theoretical Economy</th>
+                        <th class="border border-gray-300 px-4 py-2">Practical Economy</th>
+                        <th class="border border-gray-300 px-4 py-2">Efficiency (%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">1</td>
+                        <td class="border border-gray-300 px-4 py-2">1.0</td>
+                        <td class="border border-gray-300 px-4 py-2">0.90-0.95</td>
+                        <td class="border border-gray-300 px-4 py-2">90-95%</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">2</td>
+                        <td class="border border-gray-300 px-4 py-2">2.0</td>
+                        <td class="border border-gray-300 px-4 py-2">1.7-1.9</td>
+                        <td class="border border-gray-300 px-4 py-2">85-95%</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">3</td>
+                        <td class="border border-gray-300 px-4 py-2">3.0</td>
+                        <td class="border border-gray-300 px-4 py-2">2.4-2.7</td>
+                        <td class="border border-gray-300 px-4 py-2">80-90%</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">4</td>
+                        <td class="border border-gray-300 px-4 py-2">4.0</td>
+                        <td class="border border-gray-300 px-4 py-2">3.0-3.5</td>
+                        <td class="border border-gray-300 px-4 py-2">75-87%</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">5</td>
+                        <td class="border border-gray-300 px-4 py-2">5.0</td>
+                        <td class="border border-gray-300 px-4 py-2">3.5-4.2</td>
+                        <td class="border border-gray-300 px-4 py-2">70-84%</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">6-7</td>
+                        <td class="border border-gray-300 px-4 py-2">6.0-7.0</td>
+                        <td class="border border-gray-300 px-4 py-2">4.0-5.0</td>
+                        <td class="border border-gray-300 px-4 py-2">67-71%</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <p><strong>Economic Optimization:</strong> More effects = better steam economy lekin higher capital cost. Optimal design typically:</p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
+                <li>Small plants (<5,000 kg/hr evaporation): 2-3 effects</li>
+                <li>Medium plants (5,000-20,000 kg/hr): 3-4 effects</li>
+                <li>Large plants (>20,000 kg/hr): 4-6 effects</li>
+                <li>Very large plants with MVR/TVR: 6-7 effects + mechanical/thermal vapor recompression</li>
             </ul>
+            
+            <h4 class="font-semibold mt-4 mb-2">Flow Arrangements in Multi-Effect Systems</h4>
+            
+            <p><strong>1. Forward Feed (Co-current):</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
+                <li><strong>Configuration:</strong> Feed first effect mein enter karta hai (highest temperature/pressure), concentrate successive effects ke through progressively lower temperatures par flow karta hai.</li>
+                <li><strong>Advantage:</strong> Simplest design, feed pump sirf first effect pressure overcome karna hai (subsequent effects lower pressure par), no inter-effect pumps needed (pressure differential drives flow).</li>
+                <li><strong>Disadvantage:</strong> Most concentrated product (highest viscosity) sabse low temperature par hai → poorest heat transfer conditions → lowest evaporation rate in final effect → unbalanced load distribution.</li>
+                <li><strong>Application:</strong> Heat-sensitive products jahan final effect low temperature critical hai, ya products jo crystallize nahi karte (no viscosity issue).</li>
+            </ul>
+            
+            <p><strong>2. Backward Feed (Counter-current):</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
+                <li><strong>Configuration:</strong> Feed last effect (lowest temperature) mein enter karta hai, concentrate backward pumped hota hai through progressively hotter effects.</li>
+                <li><strong>Advantage:</strong> Concentrated product highest temperature par hai → lowest viscosity → best heat transfer conditions → more balanced evaporation rates across effects. Higher final concentration achievable.</li>
+                <li><strong>Disadvantage:</strong> Inter-effect pumps required (har effect ke beech because concentrate higher pressure zone mein pump karna hai)—capital cost aur complexity increase. Total heat exposure time longer (product sabhi temperatures experience karta hai).</li>
+                <li><strong>Application:</strong> High final concentration (>50% TS) required jahan viscosity dominant factor hai. Common in sweetened condensed milk production.</li>
+            </ul>
+            
+            <p><strong>3. Mixed Feed (Hybrid):</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
+                <li><strong>Configuration:</strong> Feed intermediate effect mein introduced hota hai. Pehle section forward feed, second section backward feed, ya other combinations.</li>
+                <li><strong>Advantage:</strong> Flexibility to balance heat transfer efficiency aur product quality considerations. Optimize kar sakte hain specific product requirements ke liye.</li>
+                <li><strong>Application:</strong> Specialty products with specific temperature-concentration-time profiles required.</li>
+            </ul>
+            
+            <h4 class="font-semibold mt-4 mb-2">Temperature and Pressure Profile - Example 4-Effect System</h4>
+            
+            <table class="min-w-full border-collapse border border-gray-300 mt-3">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="border border-gray-300 px-4 py-2">Effect</th>
+                        <th class="border border-gray-300 px-4 py-2">Pressure (kPa abs)</th>
+                        <th class="border border-gray-300 px-4 py-2">Boiling Temp (°C)</th>
+                        <th class="border border-gray-300 px-4 py-2">Steam Temp (°C)</th>
+                        <th class="border border-gray-300 px-4 py-2">ΔT (K)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">1st (Fresh steam input)</td>
+                        <td class="border border-gray-300 px-4 py-2">70</td>
+                        <td class="border border-gray-300 px-4 py-2">90</td>
+                        <td class="border border-gray-300 px-4 py-2">110</td>
+                        <td class="border border-gray-300 px-4 py-2">20</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">2nd</td>
+                        <td class="border border-gray-300 px-4 py-2">40</td>
+                        <td class="border border-gray-300 px-4 py-2">76</td>
+                        <td class="border border-gray-300 px-4 py-2">90</td>
+                        <td class="border border-gray-300 px-4 py-2">14</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">3rd</td>
+                        <td class="border border-gray-300 px-4 py-2">20</td>
+                        <td class="border border-gray-300 px-4 py-2">60</td>
+                        <td class="border border-gray-300 px-4 py-2">76</td>
+                        <td class="border border-gray-300 px-4 py-2">16</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">4th (Final)</td>
+                        <td class="border border-gray-300 px-4 py-2">8</td>
+                        <td class="border border-gray-300 px-4 py-2">42</td>
+                        <td class="border border-gray-300 px-4 py-2">60</td>
+                        <td class="border border-gray-300 px-4 py-2">18</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <p><strong>Note:</strong> ΔT values optimized hote hain to balance heat transfer area aur evaporation capacity across effects. BPE adjust kiya jata hai actual boiling points determine karne ke liye.</p>
 
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Fouling Mechanisms and Mitigation</h4>
-            <p>Fouling (deposit formation on heat transfer surfaces) is the primary operational challenge in dairy evaporation, progressively reducing heat transfer coefficients and increasing pressure drop, ultimately forcing shutdown for cleaning [web:100].</p>
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Vapor Recompression Technologies: Next-Level Energy Efficiency</h3>
             
-            <p><strong>Types of Dairy Evaporator Fouling:</strong></p>
-            <ul class="list-disc list-outside pl-5 space-y-2">
-                <li><strong>Type A (Protein Fouling):</strong> Occurs at temperatures >70-75°C where whey proteins denature, aggregate, and deposit on tube walls. White/gray soft deposits, high in β-lactoglobulin. Dominant in Effect 1 (highest temperature).</li>
-                <li><strong>Type B (Mineral Fouling):</strong> Calcium phosphate precipitation due to inverse solubility (solubility decreases with temperature). Hard, crystalline gray deposits. Forms gradually over hours/days. Accelerated at high pH (>6.8) and high calcium/phosphate milk.</li>
-                <li><strong>Lactose Crystallization:</strong> At high concentrations (>60% TS) and low temperatures (<40°C), lactose supersaturation causes crystallization. Sandy/grainy deposits in final effects. Controlled by maintaining temperature above 50°C and limiting concentration.</li>
+            <h4 class="font-semibold mt-4 mb-2">1. Thermal Vapor Recompression (TVR)</h4>
+            
+            <p><strong>Principle:</strong> Steam ejector use karke, high-pressure motive steam low-pressure vapor ko entrain aur compress karta hai, producing intermediate pressure steam jo evaporator heating ke liye reused ho sakta hai.</p>
+            
+            <p><strong>Operation:</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
+                <li>High-pressure steam (500-1000 kPa) nozzle se high velocity (300-500 m/s) par expand hota hai</li>
+                <li>Ye low-pressure vapor (evaporator se) suction chamber mein entrain karta hai</li>
+                <li>Mixed stream diffuser mein gradually decelerate hota hai, velocity kinetic energy pressure head mein convert hoti hai</li>
+                <li>Output: compressed vapor (intermediate pressure) jo calandria heating ke liye feed hota hai</li>
             </ul>
             
-            <p><strong>Fouling Mitigation Strategies:</strong></p>
-            <ul class="list-disc list-outside pl-5 space-y-2">
-                <li><strong>Temperature Optimization:</strong> Keep maximum temperature <72-75°C to minimize protein denaturation (MVR systems operating at 50-60°C have 2-3× longer run times than conventional evaporators).</li>
-                <li><strong>pH Control:</strong> Adjust milk pH to 6.5-6.6 (from natural 6.7) using food-grade acid (citric, phosphoric) to suppress calcium phosphate precipitation. Reduces Type B fouling 40-60%.</li>
-                <li><strong>Preheating/Destabilization:</strong> Heat milk to 75-80°C in separate preheater before evaporator, causing whey protein denaturation in controlled environment. Proteins aggregate in solution rather than on evaporator surfaces, then removed by centrifugal separator. Reduces evaporator fouling significantly but requires additional equipment.</li>
-                <li><strong>Ultrafiltration Pretreatment:</strong> Remove whey proteins by membrane filtration before evaporation (particularly for whey concentration). Produces protein-free permeate that evaporates with minimal fouling.</li>
-                <li><strong>Chemical Additives:</strong> Sequestrants (sodium hexametaphosphate 0.01-0.1%) chelate calcium, preventing precipitation. Regulatory approval required.</li>
-                <li><strong>Turbulence Promoters:</strong> Internal tube inserts (twisted tapes, wire coils) increase turbulence, reducing boundary layer thickness and fouling. Pressure drop penalty.</li>
+            <p><strong>Performance:</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
+                <li>Compression ratio: typically 1.5-3.0 (e.g., 20 kPa vapor ko 40-60 kPa compress karta hai)</li>
+                <li>Entrainment ratio: 0.3-1.5 kg vapor per kg motive steam (ejector design ke depending)</li>
+                <li>Steam economy improvement: 4-effect system mein TVR add karke 3.5 se 5.5-7.0 increase ho sakta hai</li>
             </ul>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Clean-in-Place (CIP) Systems</h4>
-            <p>Evaporators require daily cleaning to restore heat transfer performance. Automated CIP cycles circulate cleaning solutions through system without disassembly.</p>
             
-            <p><strong>Standard CIP Sequence:</strong></p>
-            <ol class="list-decimal list-outside pl-5 space-y-2">
-                <li><strong>Pre-Rinse:</strong> 10-15 min hot water (50-60°C) flush, removes bulk milk residues, recovers product (recirculate to concentrate tank).</li>
-                <li><strong>Alkaline Wash:</strong> 1.5-2.5% sodium hydroxide (NaOH) at 75-85°C, 20-30 min recirculation. Dissolves protein and fat deposits, saponifies fats. Typical caustic consumption: 0.5-1.0 kg NaOH per 1000 kg milk processed.</li>
-                <li><strong>Intermediate Rinse:</strong> Hot water flush removes alkaline residues.</li>
-                <li><strong>Acid Wash:</strong> 0.5-1.5% nitric acid (HNO₃) at 60-70°C, 15-20 min. Dissolves mineral deposits (calcium phosphate, milkstone), prevents scale buildup. Frequency: Every 2-3 alkaline cycles or when conductivity monitoring indicates mineral fouling.</li>
-                <li><strong>Final Rinse:</strong> Cold water flush to neutral pH, conductivity monitoring confirms complete removal.</li>
-                <li><strong>Sanitization (Optional):</strong> Hot water (>85°C) or chemical sanitizer (sodium hypochlorite, peracetic acid) immediately before production.</li>
+            <p><strong>Advantages:</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
+                <li>No moving parts—maintenance minimal, high reliability</li>
+                <li>Low capital cost compared to mechanical compressor</li>
+                <li>Can handle wet, dirty vapor without damage</li>
+            </ul>
+            
+            <p><strong>Disadvantages:</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
+                <li>Low compression ratio—limited ΔT boost</li>
+                <li>Requires high-pressure motive steam (additional boiler capacity/cost)</li>
+                <li>Fixed operating point—poor turndown capability (efficiency dramatically drops at part-load)</li>
+            </ul>
+            
+            <h4 class="font-semibold mt-4 mb-2">2. Mechanical Vapor Recompression (MVR)</h4>
+            
+            <p><strong>Principle:</strong> Electrically-driven centrifugal or axial compressor vapor ko mechanically compress karta hai, temperature aur pressure increase karte hue taaki ye same evaporator ko heat kar sake.</p>
+            
+            <p><strong>Thermodynamic Cycle:</strong></p>
+            <ol class="list-decimal list-outside pl-5 mt-2 space-y-2">
+                <li>Evaporator se low-pressure saturated vapor (e.g., 15 kPa, 54°C) discharge hota hai</li>
+                <li>Compressor is vapor ko higher pressure (e.g., 120 kPa, 105°C) compress karta hai—isentropic compression with electrical work input</li>
+                <li>Compressed vapor (now superheated) calandria mein steam side par supply hota hai</li>
+                <li>Condensation during heat transfer latent heat + superheat release karta hai, milk boiling karte hue</li>
+                <li>Cycle repeats—same vapor continuously reused, sirf makeup steam/vapor losses compensate karne ke liye added</li>
             </ol>
             
-            <p><strong>CIP Efficiency Monitoring:</strong> Temperature, concentration, flow rate sensors ensure effective cleaning. Conductivity measurements verify rinse completeness. Automated valve sequencing and programmable logic controllers (PLC) enable unmanned operation.</p>
-
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Major Dairy Products from Evaporation</h3>
+            <p><strong>Energy Analysis:</strong></p>
+            <p>Typical MVR system:</p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
+                <li>Compressor power: 20-30 kWh per tonne water evaporated</li>
+                <li>Equivalent thermal energy: 20-30 kWh × 3.6 MJ/kWh = 72-108 MJ/tonne</li>
+                <li>Latent heat of vaporization: ~2,300 MJ/tonne water</li>
+                <li>Effective "steam economy": 2300/90 = 25-30 kg water per kg steam equivalent!</li>
+            </ul>
             
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Evaporated Milk</h4>
-            <p><strong>Definition:</strong> Shelf-stable canned milk concentrated to 2.0-2.3× (removing ~60% water), homogenized, and sterilized in-can. Final composition: 25-28% total solids, 7.5-8.5% fat, 17-19% SNF.</p>
-            <p><strong>Process:</strong> Milk → Standardization (fat/SNF) → Preheating (95°C, 2 min, protein stabilization) → Evaporation (vacuum, 60-70°C to 27% TS) → Homogenization (15-18 MPa) → Canning → Sterilization (retort, 116-120°C, 15-20 min, F₀ = 5-8) → Cooling. Characteristic caramel color/flavor from sterilization Maillard reactions.</p>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Sweetened Condensed Milk</h4>
-            <p><strong>Definition:</strong> Concentrated milk (2.5× concentration) with added sugar (40-45% final product weight) for preservation by reduced water activity (a<sub>w</sub> = 0.83-0.85). No sterilization required. Composition: 28-30% total milk solids, 8-9% fat, 20% SNF, 42-44% sucrose.</p>
-            <p><strong>Process:</strong> Milk → Standardization → Preheating (85-95°C) → Sugar addition (before or during evaporation) → Evaporation (50-60°C to 70% TS total) → Cooling (30°C with agitation, controlled lactose crystallization seeding) → Canning/Packaging. Microbial stability from high sugar (osmotic stress) and low water activity.</p>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Milk Powder Precursor (Condensed Skim/Whole Milk)</h4>
-            <p><strong>Purpose:</strong> Pre-concentration before spray drying reduces dryer energy consumption 60-70%. Evaporation removes water cheaply (30-50 kWh/ton) compared to spray drying (300-400 kWh/ton).</p>
-            <p><strong>Target Concentration:</strong> 45-52% TS for skim milk powder production, 40-48% TS for whole milk powder (fat limits viscosity tolerance). Higher concentration = lower drying cost but increased pumping/atomization difficulty.</p>
-            <p><strong>Process:</strong> Skim milk (9% TS) → 4-7 effect evaporation → 48-50% TS concentrate → Spray drying → Powder (96-97% TS).</p>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Whey Concentrate</h4>
-            <p><strong>Challenge:</strong> High lactose content (70-75% of whey solids) causes severe crystallization fouling above 50-55% TS concentration. Requires specialized techniques.</p>
-            <p><strong>Solutions:</strong> (1) Limit concentration to 50-60% TS, finish by spray drying. (2) Maintain elevated temperature (>55°C throughout) to prevent crystallization. (3) Pre-crystallize lactose in controlled conditions, remove crystals by centrifugation, evaporate mother liquor. (4) Ultrafiltration to remove minerals and concentrate proteins before evaporation (whey protein concentrate production).</p>
-
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Process Optimization and Troubleshooting</h3>
+            <p><strong>Comparison with Conventional Multi-Effect:</strong></p>
+            <table class="min-w-full border-collapse border border-gray-300 mt-3">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="border border-gray-300 px-4 py-2">System Type</th>
+                        <th class="border border-gray-300 px-4 py-2">Energy Input</th>
+                        <th class="border border-gray-300 px-4 py-2">Equivalent Steam (kg/tonne water)</th>
+                        <th class="border border-gray-300 px-4 py-2">Operating Cost ($/tonne)*</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">Single Effect</td>
+                        <td class="border border-gray-300 px-4 py-2">1000 kg steam</td>
+                        <td class="border border-gray-300 px-4 py-2">1000</td>
+                        <td class="border border-gray-300 px-4 py-2">$25.00</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">4-Effect</td>
+                        <td class="border border-gray-300 px-4 py-2">300 kg steam</td>
+                        <td class="border border-gray-300 px-4 py-2">300</td>
+                        <td class="border border-gray-300 px-4 py-2">$7.50</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">4-Effect + TVR</td>
+                        <td class="border border-gray-300 px-4 py-2">180 kg steam</td>
+                        <td class="border border-gray-300 px-4 py-2">180</td>
+                        <td class="border border-gray-300 px-4 py-2">$4.50</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">MVR (standalone)</td>
+                        <td class="border border-gray-300 px-4 py-2">25 kWh electricity</td>
+                        <td class="border border-gray-300 px-4 py-2">40 (equivalent)</td>
+                        <td class="border border-gray-300 px-4 py-2">$2.50</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">3-Effect + MVR</td>
+                        <td class="border border-gray-300 px-4 py-2">100 kg steam + 15 kWh</td>
+                        <td class="border border-gray-300 px-4 py-2">130 (total)</td>
+                        <td class="border border-gray-300 px-4 py-2">$4.00</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p class="text-sm mt-2">*Assuming steam $25/tonne, electricity $0.10/kWh</p>
             
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Common Operating Problems</h4>
-            <ul class="list-disc list-outside pl-5 space-y-3">
-                <li><strong>Reduced Evaporation Capacity:</strong> <strong>Causes:</strong> Fouling (check ΔT increase, heat transfer coefficient drop), poor vacuum (air leaks, condenser cooling water temperature rise, vacuum pump failure), low steam pressure, product maldistribution (dry patches in tubes). <strong>Solutions:</strong> CIP cleaning, leak testing (soap solution, helium detector), condenser maintenance, distribution system inspection.</li>
-                <li><strong>High Final Product Viscosity:</strong> <strong>Causes:</strong> Over-concentration (TS too high), excessive temperature (protein denaturation/aggregation), prolonged residence time (fouling causes holdup), pH shift (mineral imbalance). <strong>Solutions:</strong> Reduce target TS, lower operating temperature (MVR systems), optimize throughput, pH adjustment.</li>
-                <li><strong>Product Burning/Caramelization:</strong> <strong>Causes:</strong> Dry patches on tubes (maldistribution), localized overheating (steam channeling, poor condensate drainage), excessive steam temperature. <strong>Solutions:</strong> Verify even distribution (visual inspection during water test runs), steam trap maintenance, temperature reduction.</li>
-                <li><strong>Foaming/Carryover:</strong> <strong>Causes:</strong> Excessive vapor velocity (overloading), protein denaturation (foam stabilization), inadequate separator design, surfactant contamination (CIP residues). <strong>Solutions:</strong> Reduce throughput, install or optimize de-foaming baffles/demister pads, ensure complete CIP rinsing, silicone antifoam additives (0.001-0.01%).</li>
-                <li><strong>Poor Vacuum/Non-Condensables Buildup:</strong> <strong>Causes:</strong> Air ingress (gasket leaks, pump seals), dissolved air in feed (deaeration needed), CO₂ release from milk (calcium carbonate equilibrium shift), inadequate vacuum pump capacity. <strong>Solutions:</strong> Systematic leak detection and repair, feed deaeration (vacuum or thermal), increased vacuum pump capacity or steam ejector addition.</li>
+            <p><strong>Advantages of MVR:</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
+                <li><strong>Dramatic Energy Savings:</strong> 85-95% steam reduction vs conventional systems</li>
+                <li><strong>Compact Design:</strong> Single-effect MVR much smaller than 4-5 effect conventional system for same capacity</li>
+                <li><strong>Lower Operating Cost:</strong> Jahan electricity relatively cheap hai (especially with renewable sources), operating cost minimal</li>
+                <li><strong>Environmental Benefits:</strong> Reduced CO₂ emissions (electricity typically cleaner than steam boilers), less water consumption (no cooling water for condenser)</li>
+                <li><strong>Operational Flexibility:</strong> Variable speed drive allow karta hai precise capacity control</li>
+            </ul>
+            
+            <p><strong>Disadvantages:</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
+                <li><strong>High Capital Cost:</strong> Compressor + controls + instrumentation typically 2-3× cost of equivalent conventional evaporator. Payback period: 2-5 years depending on energy costs</li>
+                <li><strong>Maintenance Complexity:</strong> Compressor precision equipment hai—regular maintenance critical. Bearings, seals, impellers wear subject hain. Maintenance cost: $10,000-50,000/year depending on size</li>
+                <li><strong>Electricity Dependency:</strong> Total reliance on electrical power—backup/redundancy required for critical operations</li>
+                <li><strong>Vapor Quality Requirements:</strong> Entrainment (liquid droplets in vapor) can damage compressor—effective de-misting critical</li>
+                <li><strong>Limited ΔT:</strong> Practical compression ratio limits (typically 2-4) mean limited temperature boost (15-30°C)—multi-stage compression required for larger ΔT</li>
+            </ul>
+            
+            <p><strong>Applications:</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
+                <li>New large-scale plants (>10 tonnes/hr evaporation) jahan energy cost dominant factor hai</li>
+                <li>Regions with high steam costs ya low electricity costs</li>
+                <li>Plants with environmental regulations (CO₂ emission limits)</li>
+                <li>Whey processing (high volumes, commodity product—energy cost critical)</li>
             </ul>
 
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Economic Analysis and Design Considerations</h3>
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Key Components of Evaporation System: Detailed Engineering</h3>
             
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Capital Cost Comparison (10,000 L/h Milk Evaporation Capacity)</h4>
-            <div class="overflow-x-auto mt-4">
-                <table class="w-full text-left border-collapse">
-                    <thead class="bg-muted">
-                        <tr>
-                            <th class="p-2 border">System Configuration</th>
-                            <th class="p-2 border">Capital Cost</th>
-                            <th class="p-2 border">Steam Economy</th>
-                            <th class="p-2 border">Operating Cost</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="p-2 border">Single Effect FFE</td>
-                            <td class="p-2 border">$400,000-600,000</td>
-                            <td class="p-2 border">0.85</td>
-                            <td class="p-2 border">$25-30/ton water</td>
-                        </tr>
-                        <tr>
-                            <td class="p-2 border">Double Effect FFE</td>
-                            <td class="p-2 border">$700,000-1,000,000</td>
-                            <td class="p-2 border">1.7</td>
-                            <td class="p-2 border">$13-16/ton</td>
-                        </tr>
-                        <tr>
-                            <td class="p-2 border">Triple Effect FFE</td>
-                            <td class="p-2 border">$1,200,000-1,600,000</td>
-                            <td class="p-2 border">2.5</td>
-                            <td class="p-2 border">$9-11/ton</td>
-                        </tr>
-                        <tr>
-                            <td class="p-2 border">Quadruple Effect FFE</td>
-                            <td class="p-2 border">$1,800,000-2,400,000</td>
-                            <td class="p-2 border">3.4</td>
-                            <td class="p-2 border">$6-8/ton</td>
-                        </tr>
-                        <tr>
-                            <td class="p-2 border">Five Effect FFE</td>
-                            <td class="p-2 border">$2,500,000-3,200,000</td>
-                            <td class="p-2 border">4.2</td>
-                            <td class="p-2 border">$5-7/ton</td>
-                        </tr>
-                        <tr>
-                            <td class="p-2 border">2-Effect + TVR</td>
-                            <td class="p-2 border">$1,100,000-1,500,000</td>
-                            <td class="p-2 border">3.2</td>
-                            <td class="p-2 border">$7-9/ton</td>
-                        </tr>
-                        <tr>
-                            <td class="p-2 border">Single Effect + MVR</td>
-                            <td class="p-2 border">$2,000,000-2,800,000</td>
-                            <td class="p-2 border">10-15 (elec equiv)</td>
-                            <td class="p-2 border">$3-5/ton</td>
-                        </tr>
-                        <tr>
-                            <td class="p-2 border">3-Effect + MVR</td>
-                            <td class="p-2 border">$3,500,000-4,500,000</td>
-                            <td class="p-2 border">12-18 (elec equiv)</td>
-                            <td class="p-2 border">$2-4/ton</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <h4 class="font-semibold mt-4 mb-2">1. Calandria (Heat Exchanger Core)</h4>
+            
+            <p><strong>Design Specifications:</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
+                <li><strong>Tube Material:</strong> Stainless steel SS 316L (low carbon for weld corrosion resistance), titanium (for highly corrosive applications), ya duplex stainless steel (high strength + corrosion resistance)</li>
+                <li><strong>Tube Dimensions:</strong>
+                    <ul class="list-disc list-outside pl-5 mt-1 space-y-1">
+                        <li>Length: 6-12 meters (falling film), 4-8 meters (rising film)</li>
+                        <li>Internal diameter: 25-50 mm (typically 38 mm common)</li>
+                        <li>Wall thickness: 1-2 mm (balance between heat transfer aur mechanical strength)</li>
+                        <li>Number of tubes: 100-500 depending on capacity (20,000 kg/hr plant mein ~200 tubes typical)</li>
+                    </ul>
+                </li>
+                <li><strong>Tube Arrangement:</strong> Triangular pitch (compact, high packing density) ya square pitch (easier cleaning). Pitch ratio: typically 1.25-1.5× tube OD</li>
+                <li><strong>Heat Transfer Area:</strong> 500-5,000 m² per effect (large plants mein)</li>
+            </ul>
+            
+            <p><strong>Steam Chest Design:</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
+                <li>Shell-side steam distribution system—uniform steam delivery to all tubes ensure karna</li>
+                <li>Condensate drainage—gravity drains ya steam traps condensate continuously remove karte hain to prevent flooding (which drastically reduces heat transfer)</li>
+                <li>Non-condensable gas venting—air aur other gases accumulate hote hain aur insulating blanket form karte hain. Automatic vent valves continuous purging provide karte hain</li>
+            </ul>
+            
+            <h4 class="font-semibold mt-4 mb-2">2. Vapor-Liquid Separator</h4>
+            
+            <p><strong>Function:</strong> Vapor aur entrained liquid droplets ko efficiently separate karna. Critical kyunki:</p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
+                <li>Liquid carry-over product loss hai (valuable concentrate)</li>
+                <li>Entrainment next effect ko contaminate karta hai</li>
+                <li>MVR compressor mein liquid droplets catastrophic damage cause kar sakte hain</li>
+            </ul>
+            
+            <p><strong>Design Elements:</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
+                <li><strong>Large Diameter Vessel:</strong> Low vapor velocity (typically 1-3 m/s) allow karta hai gravity settling of larger droplets. Diameter: 2-6 meters depending on capacity</li>
+                <li><strong>Cyclone Separators:</strong> Tangential vapor entry centrifugal force create karta hai → droplets wall par throw hote hain → drain down. Efficiency: 90-98% for droplets >10 μm</li>
+                <li><strong>Mesh Pad Demister:</strong> Knitted wire mesh (stainless steel ya polypropylene) fine droplets (1-10 μm) capture karta hai via impingement aur coalescence. Efficiency: 98-99.9% when properly designed aur maintained</li>
+                <li><strong>Drainage System:</strong> Separated liquid ko evaporator feed ya recirculation line mein return karna without re-entrainment</li>
+            </ul>
+            
+            <p><strong>Performance Criteria:</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
+                <li>Vapor outlet moisture content: <0.1% by weight (for compressor protection)</li>
+                <li>Pressure drop: <1-2 kPa (to maintain system vacuum)</li>
+            </ul>
+            
+            <h4 class="font-semibold mt-4 mb-2">3. Condenser</h4>
+            
+            <p><strong>Purpose:</strong> Final effect se vapor ko condense karke vacuum create aur maintain karna. Condenser performance directly evaporator efficiency affect karti hai.</p>
+            
+            <p><strong>Types:</strong></p>
+            
+            <p><strong>A) Surface Condenser:</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
+                <li><strong>Design:</strong> Shell-and-tube heat exchanger. Cooling water tubes mein flow karta hai, vapor shell side par condense hota hai</li>
+                <li><strong>Advantages:</strong> Condensate aur cooling water separate remain karte hain—condensate recovery possible (process water ke roop mein reuse), cooling water quality less critical</li>
+                <li><strong>Disadvantages:</strong> Higher capital cost, larger size, fouling on tube side (scaling from cooling water) reduce karta hai performance</li>
+                <li><strong>Cooling Water Requirement:</strong> Typically 30-50 kg cold water per kg vapor condensed (depending on inlet temperature aur desired vacuum level)</li>
+            </ul>
+            
+            <p><strong>B) Direct Contact (Barometric) Condenser:</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
+                <li><strong>Design:</strong> Vapor aur cooling water directly mix hote hain tall vertical column mein. Mixed condensate gravity se bottom par drain hota hai</li>
+                <li><strong>Advantages:</strong> Simple, compact, low cost, no fouling issues, excellent heat transfer (direct contact)</li>
+                <li><strong>Disadvantages:</strong> Condensate contaminated hai cooling water se—cannot be recovered. Large water consumption. Height requirement: typically 10-12 meters (for barometric leg to seal against vacuum)</li>
+                <li><strong>Application:</strong> Where abundant cheap water available aur condensate recovery not valued</li>
+            </ul>
+            
+            <p><strong>Vacuum Level Achievement:</strong></p>
+            <p>Condenser pressure primarily cooling water temperature se determined hota hai:</p>
+            <table class="min-w-full border-collapse border border-gray-300 mt-3">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="border border-gray-300 px-4 py-2">Cooling Water Temp (°C)</th>
+                        <th class="border border-gray-300 px-4 py-2">Achievable Vacuum (kPa abs)</th>
+                        <th class="border border-gray-300 px-4 py-2">Corresponding Boiling Point (°C)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">15</td>
+                        <td class="border border-gray-300 px-4 py-2">2-3</td>
+                        <td class="border border-gray-300 px-4 py-2">18-24</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">20</td>
+                        <td class="border border-gray-300 px-4 py-2">3-5</td>
+                        <td class="border border-gray-300 px-4 py-2">24-33</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">25</td>
+                        <td class="border border-gray-300 px-4 py-2">5-8</td>
+                        <td class="border border-gray-300 px-4 py-2">33-41</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">30</td>
+                        <td class="border border-gray-300 px-4 py-2">8-12</td>
+                        <td class="border border-gray-300 px-4 py-2">41-49</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <p><strong>Design Implication:</strong> Summer vs winter, aur geographic location dramatically vacuum performance affect karte hain. Plants tropical regions mein (cooling water 28-32°C) arctic regions (10-15°C) ke comparison mein significantly lower vacuum achieve karte hain → lower evaporation efficiency.</p>
+            
+            <h4 class="font-semibold mt-4 mb-2">4. Vacuum Pump</h4>
+            
+            <p><strong>Purpose:</strong> Non-condensable gases (air leakage, dissolved gases from feed) ko continuously remove karke vacuum maintain karna. Even small air leak (1-2 kg/hr) vacuum significantly degrade kar sakta hai agar not removed.</p>
+            
+            <p><strong>Types:</strong></p>
+            
+            <p><strong>A) Liquid Ring Vacuum Pump:</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
+                <li><strong>Principle:</strong> Eccentric rotor rotating liquid ring (typically water) create karta hai jo compression chambers form karta hai. Gas compressed aur discharged hota hai</li>
+                <li><strong>Advantages:</strong> Wet gas handle kar sakta hai, isothermal compression (cool operation), robust, low maintenance</li>
+                <li><strong>Disadvantages:</strong> Lower efficiency than dry pumps, sealing liquid requirement (water consumption), capacity limited (typically <100 m³/hr per stage)</li>
+                <li><strong>Application:</strong> Most common in dairy evaporators due to reliability aur tolerance to condensable vapors</li>
+            </ul>
+            
+            <p><strong>B) Rotary Vane Pump:</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
+                <li><strong>Principle:</strong> Spring-loaded vanes eccentric rotor mein slots se slide karte hain, compression chambers create karte hue</li>
+                <li><strong>Advantages:</strong> Higher efficiency, deeper vacuum achievable (<1 kPa), compact</li>
+                <li><strong>Disadvantages:</strong> Sensitive to liquid slugs (damage vanes), frequent oil changes needed, higher maintenance</li>
+                <li><strong>Application:</strong> High-vacuum applications, laboratory/pilot scale units</li>
+            </ul>
+            
+            <p><strong>Sizing:</strong> Pump capacity (m³/hr at operating vacuum) determined by:</p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
+                <li>Estimated air leakage: typically 0.5-2.0 kg/hr per effect (depending on system tightness)</li>
+                <li>Dissolved gases released from feed: ~0.1-0.3 kg/hr per tonne feed</li>
+                <li>Safety margin: 50-100% overcapacity to handle transients, startup surges</li>
+            </ul>
+            
+            <p><strong>Typical sizing:</strong> 4-effect evaporator (10 tonnes/hr capacity) → vacuum pump ~30-60 m³/hr capacity at 5-10 kPa suction pressure</p>
+
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Evaporator Operation: Best Practices aur Troubleshooting</h3>
+            
+            <h4 class="font-semibold mt-4 mb-2">Startup Procedure</h4>
+            
+            <ol class="list-decimal list-outside pl-5 mt-2 space-y-3">
+                <li><strong>Pre-Startup Checks:</strong>
+                    <ul class="list-disc list-outside pl-5 mt-1 space-y-1">
+                        <li>Verify sabhi valves correct positions mein hain (steam, condensate, feed, product, cooling water)</li>
+                        <li>Check vacuum system—pump lubrication, sealing liquid level</li>
+                        <li>Inspect separator mesh pads—ensure clean aur properly installed</li>
+                        <li>Verify CIP completion aur system drainage</li>
+                        <li>Check instrumentation—pressure gauges, temperature sensors, flow meters calibrated aur functioning</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Vacuum Establishment:</strong>
+                    <ul class="list-disc list-outside pl-5 mt-1 space-y-1">
+                        <li>Start cooling water flow to condenser (verify adequate flow rate—typically 80-100% design value)</li>
+                        <li>Start vacuum pump</li>
+                        <li>Monitor vacuum buildup—should reach near-design vacuum (within 10-20%) in 10-20 minutes agar no major leaks</li>
+                        <li>Agar vacuum slow to develop: check for leaks (connections, flanges, sight glasses), verify condenser cooling water temperature adequate</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Heating Up:</strong>
+                    <ul class="list-disc list-outside pl-5 mt-1 space-y-1">
+                        <li>Gradually open steam supply to first effect—avoid thermal shock (sudden temperature changes crack tubes ya damage gaskets)</li>
+                        <li>Establish steam flow aur verify condensate drainage (check steam trap operation)</li>
+                        <li>Allow system to reach thermal equilibrium—all effects at stable temperatures (typically 30-60 min depending on size)</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Feed Introduction:</strong>
+                    <ul class="list-disc list-outside pl-5 mt-1 space-y-1">
+                        <li>Pre-heat feed to near first effect temperature (to avoid sudden cooling aur capacity upset)</li>
+                        <li>Start feed pump at low flow rate (30-50% design capacity)</li>
+                        <li>Monitor vacuum, temperatures, levels—should stabilize within 10-30 minutes</li>
+                        <li>Gradually increase feed rate to design capacity while monitoring performance parameters</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Performance Optimization:</strong>
+                    <ul class="list-disc list-outside pl-5 mt-1 space-y-1">
+                        <li>Adjust steam pressure to achieve target evaporation rate</li>
+                        <li>Balance effect levels—maintain optimal liquid levels in each separator (typically 30-60% of separator height)</li>
+                        <li>Fine-tune vacuum—optimize condenser cooling water to achieve best vacuum without excessive consumption</li>
+                        <li>Monitor product concentration—adjust feed rate or steam to achieve target total solids</li>
+                    </ul>
+                </li>
+            </ol>
+            
+            <h4 class="font-semibold mt-4 mb-2">Normal Operation Monitoring</h4>
+            
+            <p><strong>Critical Parameters aur Normal Ranges:</strong></p>
+            <table class="min-w-full border-collapse border border-gray-300 mt-3">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="border border-gray-300 px-4 py-2">Parameter</th>
+                        <th class="border border-gray-300 px-4 py-2">Normal Range</th>
+                        <th class="border border-gray-300 px-4 py-2">Out-of-Range Indication</th>
+                        <th class="border border-gray-300 px-4 py-2">Corrective Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">Final effect vacuum</td>
+                        <td class="border border-gray-300 px-4 py-2">5-15 kPa abs</td>
+                        <td class="border border-gray-300 px-4 py-2">Poor condensation, air leaks</td>
+                        <td class="border border-gray-300 px-4 py-2">Increase cooling water, locate/fix leaks, check vacuum pump</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">Boiling temperatures</td>
+                        <td class="border border-gray-300 px-4 py-2">Per design profile (±3°C)</td>
+                        <td class="border border-gray-300 px-4 py-2">Fouling, vacuum loss, steam issues</td>
+                        <td class="border border-gray-300 px-4 py-2">CIP cleaning, fix vacuum, adjust steam</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">Product total solids</td>
+                        <td class="border border-gray-300 px-4 py-2">Target ±1-2%</td>
+                        <td class="border border-gray-300 px-4 py-2">Feed rate imbalance</td>
+                        <td class="border border-gray-300 px-4 py-2">Adjust feed rate or steam input</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">Steam consumption</td>
+                        <td class="border border-gray-300 px-4 py-2">Per steam economy target</td>
+                        <td class="border border-gray-300 px-4 py-2">Fouling, leaks, poor vacuum</td>
+                        <td class="border border-gray-300 px-4 py-2">Identify efficiency loss cause</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">Separator levels</td>
+                        <td class="border border-gray-300 px-4 py-2">30-60% of height</td>
+                        <td class="border border-gray-300 px-4 py-2">Imbalanced flows, plugged drains</td>
+                        <td class="border border-gray-300 px-4 py-2">Adjust control valves, clear blockages</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h4 class="font-semibold mt-4 mb-2">Common Problems aur Solutions</h4>
+            
+            <p><strong>1. Progressive Capacity Loss (Over Days/Weeks):</strong></p>
+            <p><strong>Symptom:</strong> Evaporation rate gradually decrease, steam consumption increase for same product output</p>
+            <p><strong>Cause:</strong> Tube fouling—protein denaturation, mineral scaling (calcium phosphate, lactose crystallization) heat transfer surfaces par deposit hote hain</p>
+            <p><strong>Solution:</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
+                <li>Schedule CIP (Clean-In-Place) before capacity drops >15-20%</li>
+                <li>Use alternating alkaline (1.5-2% NaOH at 75-85°C, 30-45 min) aur acid (0.5-1% HNO₃ or H₃PO₄ at 60-70°C, 20-30 min) cycles</li>
+                <li>Enzymatic cleaners for stubborn protein deposits</li>
+                <li>Preventive: operate at lower temperatures (if product allows), optimize feed pre-treatment (reduce sediment, control pH)</li>
+            </ul>
+            
+            <p><strong>2. Sudden Vacuum Loss:</strong></p>
+            <p><strong>Symptom:</strong> Vacuum pressure suddenly increase (e.g., 10 kPa se 30 kPa), boiling temperatures rise</p>
+            <p><strong>Cause:</strong> Air leak, condenser cooling water failure, vacuum pump malfunction</p>
+            <p><strong>Diagnosis & Solution:</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
+                <li><strong>Check cooling water:</strong> Flow rate, inlet temperature—agar inadequate, increase supply ya reduce load</li>
+                <li><strong>Vacuum pump:</strong> Listen for unusual noise, check seal water level (liquid ring pumps), verify discharge—agar failed, switch to backup or repair</li>
+                <li><strong>Leak detection:</strong> Close feed aur steam, monitor vacuum decay rate. Agar rapidly decays, significant leak hai. Use soap solution on flanges, valve stems, sight glasses—bubbles indicate leak location. Tighten or replace gaskets</li>
+            </ul>
+            
+            <p><strong>3. Product Quality Issues (Burnt Taste, Dark Color):</strong></p>
+            <p><strong>Cause:</strong> Localized overheating—dry patches on tubes (inadequate wetting), excessive steam temperature, prolonged residence time</p>
+            <p><strong>Solution:</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
+                <li>Verify distributor function—ensure uniform milk distribution</li>
+                <li>Reduce steam temperature/pressure agar within operational flexibility</li>
+                <li>Increase feed rate (reduces residence time, improves wetting) if product concentration allows</li>
+                <li>Check for tube blockages—mechanical cleaning ya chemical descaling</li>
+            </ul>
+            
+            <p><strong>4. Excessive Entrainment:</strong></p>
+            <p><strong>Symptom:</strong> High carryover of product in vapor (detected by conductivity/turbidity of condensate), MVR compressor fouling</p>
+            <p><strong>Cause:</strong> Excessive vapor velocity (separator overloaded), damaged demister mesh, foaming</p>
+            <p><strong>Solution:</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
+                <li>Reduce evaporation rate (lower steam input or feed rate) to design capacity</li>
+                <li>Inspect aur replace damaged mesh pads</li>
+                <li>Agar foaming issue: adjust pH (slightly acidic tends to reduce foam in milk), use anti-foam agents (food-grade silicone emulsions, 10-50 ppm), reduce feed protein content if possible</li>
+            </ul>
+            
+            <p><strong>5. Inconsistent Product Concentration:</strong></p>
+            <p><strong>Cause:</strong> Feed rate fluctuations, steam pressure variations, level control issues</p>
+            <p><strong>Solution:</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
+                <li>Install/calibrate flow control on feed pump—maintain steady feed rate</li>
+                <li>Steam pressure regulator—stabilize heating supply</li>
+                <li>Automated control system (PLC-based) linking feed rate, steam supply, aur product concentration sensors for real-time adjustment</li>
+            </ul>
+
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Energy Optimization Strategies</h3>
+            
+            <h4 class="font-semibold mt-4 mb-2">1. Heat Integration with Pasteurization</h4>
+            <p>Evaporator se hot condensate (70-100°C) valuable heat source hai. Use karein:</p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
+                <li><strong>Pre-heating Raw Milk:</strong> Cold milk (4°C) ko evaporator feed temperature (50-60°C) tak heat karne ke liye condensate heat use karein—plate heat exchanger mein. Typical savings: 50-80% of pre-heating steam</li>
+                <li><strong>Pasteurizer Regeneration:</strong> Hot side of pasteurizer regeneration section ko supplement karne ke liye condensate use karein</li>
+                <li><strong>CIP Water Heating:</strong> Cleaning solution heating ke liye condensate heat utilize karein</li>
+                <li><strong>Potential Savings:</strong> 10,000 kg/hr evaporation plant mein, condensate ~8,000 kg/hr at 80°C available. Cooling 80°C to 40°C releases: 8000 kg/hr × 4.18 kJ/kg·K × 40K = 1,338 MJ/hr. At steam cost $25/tonne (2,000 kJ/kg latent heat): savings = 1338/(2000) × $25 = ~$17/hr = $120,000/year (assuming 7000 operating hrs/year)!</li>
+            </ul>
+            
+            <h4 class="font-semibold mt-4 mb-2">2. Vapor Bleeding for Milk Preheating</h4>
+            <p>Intermediate effect se vapor (typically 2nd effect at 70-80°C) bleed karke direct contact preheater mein milk ko heat karne ke liye use kar sakte hain. Advantages:</p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
+                <li>Eliminates separate steam consumption for pre-heating</li>
+                <li>Vapor energy utilized jo otherwise waste hota condenser mein</li>
+                <li>Improves overall steam economy 5-10%</li>
+            </ul>
+            
+            <h4 class="font-semibold mt-4 mb-2">3. Optimizing Operating Pressure Profile</h4>
+            <p>Multi-effect systems mein, temperature distribution across effects optimization ke liye open hai:</p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
+                <li><strong>Equal ΔT Approach:</strong> Each effect ke liye approximately equal temperature difference maintain karein—leads to balanced evaporation rates aur optimal overall U</li>
+                <li><strong>BPE Compensation:</strong> Final effects (high concentration, high BPE) ko slightly larger ΔT allocate karein to compensate for reduced driving force</li>
+                <li><strong>Software Tools:</strong> Process simulation software (Aspen Plus, CHEMCAD) use karke optimize karein for minimum steam consumption at given product spec</li>
+            </ul>
+            
+            <h4 class="font-semibold mt-4 mb-2">4. Regular Performance Auditing</h4>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
+                <li>Monthly steam economy calculation—compare with design values. >10% deviation indicates problem (fouling, leaks, control issues)</li>
+                <li>Tube-side pressure drop monitoring—sudden increase fouling indication</li>
+                <li>Thermal imaging—hot spots on calandria exterior indicate internal fouling/blockages</li>
+                <li>Periodic performance testing under standard conditions to establish fouling rate aur CIP frequency optimization</li>
+            </ul>
+
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Safety Considerations</h3>
+            
+            <h4 class="font-semibold mt-4 mb-2">Operational Hazards</h4>
+            
+            <p><strong>1. Vacuum Collapse (Implosion):</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
+                <li><strong>Risk:</strong> Separator vessels operate at 5-20 kPa absolute (85-95 kPa below atmospheric). Sudden atmospheric pressure admission (valve malfunction, vessel breach) massive inward force create karta hai—can implode vessel</li>
+                <li><strong>Prevention:</strong> Vacuum relief valves (open at slightly sub-atmospheric pressure to prevent excessive vacuum), regular vessel inspection for corrosion/cracks, interlocks preventing steam admission without prior vacuum breaking</li>
+                <li><strong>Design:</strong> Vessels designed for full vacuum + safety factor, stiffening rings to resist buckling</li>
+            </ul>
+            
+            <p><strong>2. Steam Burns:</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
+                <li><strong>Risk:</strong> Steam lines, calandria, condensate lines 100-150°C operate karte hain. Contact severe burns cause karta hai (steam latent heat ~2000 kJ/kg—much more damaging than hot water)</li>
+                <li><strong>Prevention:</strong> Complete insulation of hot surfaces, warning labels, PPE (heat-resistant gloves, face shields) during maintenance, lockout-tagout before opening any steam system, controlled cooldown procedures</li>
+            </ul>
+            
+            <p><strong>3. Hot Product Discharge:</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
+                <li><strong>Risk:</strong> Concentrated milk 60-90°C par discharge hota hai, often pressurized. Accidental spills large-scale burns cause kar sakte hain</li>
+                <li><strong>Prevention:</strong> Enclosed piping, drip pans, emergency shower/eyewash stations, proper valve sequencing to depressurize before opening connections</li>
+            </ul>
+            
+            <p><strong>4. Confined Space Entry (for Cleaning/Maintenance):</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
+                <li><strong>Risk:</strong> Separators, steam chests confined spaces hain. Oxygen deficiency (vapor residues), toxic fumes (cleaning chemicals), heat stress risks</li>
+                <li><strong>Prevention:</strong> Confined space permits, atmospheric testing before entry, continuous ventilation, attendant outside, communication system, rescue equipment ready</li>
+            </ul>
+            
+            <h4 class="font-semibold mt-4 mb-2">Environmental Considerations</h4>
+            
+            <p><strong>Condensate Disposal:</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
+                <li>Evaporator condensate relatively clean hai (distilled water with traces of volatiles—primarily water-soluble vitamins, volatile flavor compounds, trace CO₂, NH₃)</li>
+                <li>BOD/COD typically low (50-200 mg/L) but may vary with entrainment</li>
+                <li>Options: Reuse as boiler feedwater (after treatment), process water (cooling, CIP dilution), discharge to sewer (if meets regulations), evaporation pond</li>
+            </ul>
+            
+            <p><strong>Emissions:</strong></p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
+                <li>Vapor from vent systems (vacuum pump discharge, condenser) primarily water vapor—generally benign</li>
+                <li>Trace volatiles (diacetyl, acetone, dimethyl sulfide from milk) typically <5 ppm—odor potentially noticeable downwind but not health hazard</li>
+                <li>Mitigation if needed: activated carbon adsorption, biofilter treatment</li>
+            </ul>
+
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Future Trends aur Innovations</h3>
+            
+            <h4 class="font-semibold mt-4 mb-2">1. Hybrid Evaporation-Membrane Systems</h4>
+            <p>Combining evaporation with reverse osmosis (RO) or nanofiltration (NF):</p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
+                <li><strong>Pre-concentration by RO:</strong> Milk ko 18-25% TS tak RO se concentrate karein (minimal heat, no phase change) → then evaporation to final 45-50% TS. Total energy consumption 30-50% reduced vs evaporation alone</li>
+                <li><strong>Advantages:</strong> Lower thermal load on product, reduced evaporator size, lower fouling rates (less time at high temperature)</li>
+                <li><strong>Challenges:</strong> Membrane fouling, limited concentration by RO (osmotic pressure limit ~4-5 MPa for milk), higher capital cost</li>
+                <li><strong>Status:</strong> Commercially proven, growing adoption in large whey processing plants</li>
+            </ul>
+            
+            <h4 class="font-semibold mt-4 mb-2">2. Advanced MVR with Variable Speed Control</h4>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
+                <li>Modern VFD (Variable Frequency Drive) technology allows precise compressor speed adjustment matching load variations</li>
+                <li>Benefits: 20-30% energy savings during part-load operation, extended turndown range (30-110% vs 70-100% for fixed-speed), reduced mechanical stress (soft start/stop)</li>
+                <li>Integration with AI-based control systems for predictive load management</li>
+            </ul>
+            
+            <h4 class="font-semibold mt-4 mb-2">3. Ultra-Low Temperature Evaporation (<30°C)</h4>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
+                <li>Deep vacuum systems (1-3 kPa) allowing boiling at 10-30°C</li>
+                <li>Applications: Ultra-heat-sensitive products (probiotic concentrates, bioactive peptides, whey protein isolates)</li>
+                <li>Challenges: Very low ΔT available (requires huge heat transfer area or extremely high U), vacuum system complexity, energy penalty from deep vacuum maintenance</li>
+                <li>Status: Niche applications, research stage for broader dairy use</li>
+            </ul>
+            
+            <h4 class="font-semibold mt-4 mb-2">4. Process Intensification - Spinning Cone Column</h4>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
+                <li>Rotating cone technology creating thin film under centrifugal force—residence time <1 second</li>
+                <li>Extremely gentle processing—ideal for premium products where even MVR heat exposure too much</li>
+                <li>Challenges: Limited capacity per unit (batch or semi-continuous), high capital cost, complex operation</li>
+                <li><strong>Application:</strong> High-value specialty ingredients, aroma recovery from dairy streams</li>
+            </ul>
+
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mt-6">
+                <p class="font-semibold text-blue-900">Industry Perspective:</p>
+                <p class="text-blue-800 mt-2">Modern evaporation technology represents perfect balance between thermodynamic efficiency aur product quality preservation. State-of-the-art plants combining 5-6 effect systems with MVR achieve steam economies >25-30 (equivalent), operating costs <$2 per tonne water removed, jab ki product temperature 50°C se kam maintain karte hain. Continuous innovation membrane technology, automation, aur energy recovery mein dairy evaporation ko aur sustainable aur economical bana raha hai. Future belongs to integrated systems jo minimal energy use, maximum product quality, aur operational flexibility deliver karenge.</p>
             </div>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Technology Selection Criteria</h4>
-            <ul class="list-disc list-outside pl-5 space-y-2">
-                <li><strong>Capacity:</strong> <5,000 L/h: 2-3 effect. 5,000-20,000 L/h: 3-5 effect or MVR. >20,000 L/h: 5-7 effect or multi-effect + MVR hybrid.</li>
-                <li><strong>Energy Costs:</strong> High fuel cost: Favor multi-effect or MVR. Low electricity/high fuel: MVR optimal. Balanced: Multi-effect competitive.</li>
-                <li><strong>Product Portfolio:</strong> Single product (milk powder): Optimize for continuous operation, MVR. Multiple products (frequent changeovers): Simpler multi-effect preferred (lower capital, easier cleaning).</li>
-                <li><strong>Site Constraints:</strong> Limited steam generation capacity: MVR eliminates boiler bottleneck. Space constrained: MVR more compact than equivalent multi-effect.</li>
-                <li><strong>Environmental Regulations:</strong> CO₂ emission limits: MVR reduces emissions 70-80%. Water scarcity: MVR requires less cooling water.</li>
-            </ul>
-
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Future Trends and Emerging Technologies</h3>
-            
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Membrane-Assisted Evaporation Hybrids</h4>
-            <p>Combining reverse osmosis (RO) or nanofiltration (NF) with evaporation achieves synergistic benefits. RO concentrates milk to 20-28% TS at ambient temperature (no heat damage, minimal energy ~3-5 kWh/ton water), then evaporation completes concentration to 48-50% TS. Total energy consumption reduced 40-50% versus evaporation alone, superior product quality (less protein denaturation). Growing adoption in milk powder plants globally.</p>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Advanced Process Control and AI Optimization</h4>
-            <p>Machine learning algorithms analyze real-time sensor data (temperatures, pressures, flows, viscosity, fouling indicators) to dynamically optimize operating parameters, predict fouling onset, schedule cleaning proactively, and maximize energy efficiency. Reported improvements: 5-15% energy reduction, 20-30% longer run times between CIP, improved product consistency.</p>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Novel Surface Coatings</h4>
-            <p>Research into hydrophilic polymer coatings, diamond-like carbon (DLC), and ion-implanted surfaces reducing protein adsorption and mineral scaling. Pilot studies show 50-70% fouling reduction, potentially doubling run times. Commercial implementation pending long-term durability validation and cost reduction.</p>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Electrodialysis Integration</h4>
-            <p>Selective removal of minerals (calcium, phosphate) from milk before evaporation using electrodialysis membranes dramatically reduces mineral fouling. Enables higher operating temperatures and concentrations. Adds capital cost but saves CIP frequency and downtime.</p>
-
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Practical Implementation Guidelines for Dairy Processors</h3>
-            <ol class="list-decimal list-outside pl-5 space-y-3">
-                <li><strong>Raw Milk Quality:</strong> Low bacterial counts (<50,000 cfu/ml) minimize thermophilic spore-former contamination reducing high-temperature fouling. Rapid cooling post-milking prevents psychrotroph growth (protease/lipase production causing flavor defects and fouling).</li>
-                <li><strong>Pretreatment Optimization:</strong> Consistent standardization (fat/SNF ratios), clarification (removes somatic cells, bacteria, sediment), and thermization (65°C, 15 sec—reduces microbial load without full pasteurization) improve evaporator performance.</li>
-                <li><strong>Process Validation:</strong> Commission new evaporators with comprehensive heat penetration studies, residence time distribution analysis, and fouling rate characterization under actual production conditions. Establish baseline performance metrics.</li>
-                <li><strong>Preventive Maintenance:</strong> Monthly inspection of tube bundles (video borescope), steam traps (condensate drainage efficiency), vacuum system seals, and condenser tubes (scale/biofouling). Scheduled replacement of gaskets, pump seals, and sensor calibration.</li>
-                <li><strong>Operator Training:</strong> Comprehensive understanding of vacuum principles, heat transfer concepts, fouling mechanisms, and CIP procedures essential for troubleshooting and optimization. Simulator-based training recommended.</li>
-                <li><strong>Data Monitoring:</strong> Implement continuous recording of key parameters (temperatures, pressures, flows, TS%, heat transfer coefficients). Trend analysis identifies gradual performance degradation enabling proactive intervention.</li>
-                <li><strong>Sustainability Integration:</strong> Heat recovery from condensate/vapor streams, wastewater minimization (CIP optimization, single-phase cleaning), and renewable energy integration (solar thermal for preheating, wind/hydro electricity for MVR compressors).</li>
-            </ol>
-
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Conclusion: Evaporation as the Foundation of Dairy Manufacturing Efficiency</h3>
-            <p>Evaporation technology represents the economic and technical cornerstone of modern dairy processing, enabling the concentration of billions of liters of milk globally into value-added products while minimizing energy consumption, transportation costs, and environmental footprint. The evolution from simple vacuum pans to sophisticated multi-effect falling-film systems with vapor recompression exemplifies the dairy industry's commitment to thermodynamic efficiency and product quality optimization.</p>
-            
-            <p>Successful evaporation operation requires mastery of complex interdependencies: vacuum thermodynamics, multi-phase fluid mechanics, heat transfer in thin films, milk component chemistry, fouling mitigation, and energy management. As dairy production scales to meet growing global protein demand, continued innovation in evaporation technology—through advanced materials, membrane hybrids, artificial intelligence control, and renewable energy integration—will remain essential for sustainable, economically viable dairy manufacturing in the decades ahead.</p>
         `
     },
     hi: {
-        title: "Evaporation",
+        title: "Evaporation (Vashpikaran)",
         content: `
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Dairy Evaporation ka Comprehensive Introduction</h3>
-            <p>Evaporation dairy manufacturing mein ek critical unit operation hai, jo liquid dairy products ko concentrate karne ka primary method hai. Isme controlled heat application aur reduced pressure (kam dabav) ke zariye paani ko vapor (bhaap) ke roop mein remove kiya jata hai [web:99][web:103]. Yeh thermal concentration process major dairy commodities banane ke liye fundamental hai, jinme evaporated milk, sweetened condensed milk, milk powder precursors (powder banne se pehle ka stage), whey concentrates, aur food manufacturing ke liye concentrated dairy ingredients shamil hain [web:99]. Yeh technology product ke volume mein dramatic reductions enable karti hai (aamtaur par 50-80% paani nikal diya jata hai), jisse kaafi economic benefits milte hain: transportation costs kam hona (freight savings solids ke per unit par 3-5 guna hoti hai), storage requirements kam hona, reduced water activity (aw) ke zariye microbial shelf life badhna, aur final drying operations ke liye feed streams taiyar karna [web:103].</p>
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Dairy Processing mein Evaporation ka Introduction</h3>
+            <p>Evaporation dairy industry mein ek mahatvapurna unit operation hai jiska upyog vapor ke roop mein paani hatakar milk ya whey ko concentrate karne ke liye kiya jaata hai. Yah process condensed milk, evaporated milk, aur milk powders jaise products ke nirman mein prathmik kadam hai. Mukhya lakshya liquid ke total solids content ko badhana hai, jo transportation costs ko kam karta hai, shelf life badhata hai (water activity ko kam karke), aur product ko spray drying jaise agle processes ke liye taiyar karta hai.</p>
+
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Vacuum Evaporation ka Principle</h3>
+            <p>Paani normal atmospheric pressure par 100°C par ubalta hai. Milk ko is temperature par lambe samay tak garam karne se significant heat damage hoga, jismein shamil hain:</p>
+            <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
+                <li><strong>Cooked Flavor:</strong> Protein denaturation aur Maillard reactions ke karan.</li>
+                <li><strong>Browning:</strong> Lactose ka caramelization.</li>
+                <li><strong>Nutrient Loss:</strong> Heat-sensitive vitamins ka nash.</li>
+            </ul>
+            <p class="mt-2">Isse bachne ke liye, dairy evaporation lagbhag hamesha ek <strong>vacuum</strong> ke tahat kiya jaata hai. <strong>Scientific Reason:</strong> Evaporator ke andar pressure kam karke, paani ka boiling point kafi kam ho jaata hai (jaise, 40-70°C tak). Yah bahut kam temperature par tezi se paani hatane ki anumati deta hai, jisse heat damage ko kam kiya jaata hai aur milk concentrate ki quality aur nutritional value ko sanrakshit kiya jaata hai.</p>
+
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Evaporators ke Prakar</h3>
+            <h4 class="font-semibold mt-4 mb-2">1. Falling Film Evaporator</h4>
+            <p>Yah apni high efficiency aur gentle heat treatment ke karan modern dairy plants mein sabse aam prakar hai.</p>
+            <p><strong>Working:</strong></p>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Milk ko lambe vertical tubes (calandria) ke ek bundle ke upar pump kiya jaata hai.</li>
+                <li>Ise tubes ki antarik deewaron ke saath ek patli film ke roop mein neeche behne ke liye samaan roop se distribute kiya jaata hai.</li>
+                <li>Steam tubes ke bahar ko garam karti hai. Heat tezi se tube wall ke madhyam se patli milk film mein transfer hoti hai.</li>
+                <li>Milk film mein paani evaporate ho jaata hai, aur vapor aur concentrated milk ka parinami mishran tubes ke neeche se bahar nikalta hai.</li>
+                <li>Vapor ko ek separator vessel mein concentrate se alag kiya jaata hai.</li>
+            </ol>
+            <p><strong>Advantage:</strong> Milk bahut kam samay (kuch seconds) ke liye garam satah ke sampark mein rehta hai, jo heat damage ko kam karta hai.</p>
             
-            <p>Modern dairy evaporation systems sophisticated engineering ka example hain jo thermodynamic principles, fluid mechanics, heat transfer optimization, aur process automation ko integrate karte hain taaki high thermal efficiency achieve ki ja sake, wo bhi bina milk ke delicate components ko damage kiye jo heat se kharab ho sakte hain [web:99]. Pichle 100 saalon mein simple single-effect batch evaporators se lekar mechanical vapor recompression wale complex multi-effect continuous systems tak ka evolution dairy processing economics aur product quality ke liye krantikari raha hai.</p>
+            <h4 class="font-semibold mt-4 mb-2">2. Multi-Effect Evaporators</h4>
+            <p>Energy efficiency mein sudhar karne ke liye, kai evaporators (jinhein 'effects' kaha jaata hai) ko series mein joda jaata hai. Pahle effect se utpann vapor, jo uchch temperature aur pressure par hota hai, ka upyog doosre effect ko garam karne ke liye kiya jaata hai, jo kam pressure aur temperature par kaam karta hai. Vapor ka yah cascading upyog poori prakriya ke liye avashyak steam ki kul matra ko kafi kam kar deta hai.</p>
 
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Fundamental Principles: Vacuum Evaporation aur Heat-Sensitive Dairy Products</h3>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Vacuum Kyun? Boiling Point aur Pressure ka Rishta</h4>
-            <p>Standard atmospheric pressure (101.325 kPa, 1 atm) par, paani 100°C par ubalta hai—yeh wo temperature hai jo prolonged (lambe samay tak) evaporation ke dauran milk ko severe thermal damage pahuncha sakta hai [web:103]. Evaporation ko govern karne wala fundamental thermodynamic relationship Clausius-Clapeyron equation hai, jo batata hai ki vapor pressure (aur isliye boiling point) temperature ke saath kaise badalta hai. Evaporator vessel ke andar absolute pressure kam karke, paani ka boiling point established steam tables ke hisaab se proportionally kam ho jata hai [web:99].</p>
-
-            <p><strong>Paani ke liye Practical Vacuum-Temperature Relationships:</strong></p>
-            <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
-                <li>Atmospheric pressure (101.3 kPa): Boiling point = 100°C</li>
-                <li>70 kPa absolute: Boiling point = 90°C</li>
-                <li>47 kPa absolute: Boiling point = 80°C</li>
-                <li>31 kPa absolute: Boiling point = 70°C</li>
-                <li>20 kPa absolute: Boiling point = 60°C</li>
-                <li>12 kPa absolute: Boiling point = 50°C</li>
-                <li>7 kPa absolute: Boiling point = 40°C</li>
-            </ul>
-
-            <p><strong>Typical Dairy Evaporator Operating Conditions:</strong> Modern falling-film evaporators first-effect mein 65-75°C (25-38 kPa absolute pressure) par operate karte hain aur final-effect mein temperature 40-50°C (7-12 kPa absolute) tak neeche jata hai [web:99]. Yeh vacuum operation thermal exposure ko dramatically kam kar deta hai jabki evaporation ke liye adequate driving force maintain rehti hai.</p>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Milk mein Heat Damage Mechanisms: Low Temperature Kyun Zaroori Hai</h4>
-            <p>Milk apne complex biochemical composition ki wajah se exceptionally heat-sensitive hota hai [web:102][web:103]. High temperatures (>80°C) par lamba exposure kayi kharab reactions karwa sakta hai:</p>
-
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Ek Evaporation System ke Key Components</h3>
             <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
-                <li><strong>Maillard Reaction (Non-Enzymatic Browning):</strong> Lactose (reducing sugar) proteins ke free amino groups (khas taur par casein aur whey proteins mein lysine residues) ke saath react karta hai. Isse brown melanoidin pigments aur saikdo volatile flavor compounds bante hain. Yeh characteristic "cooked" ya "caramel" flavor aur brown discoloration paida karta hai jo zyadatar milk products mein unacceptable hai (siwaye evaporated/condensed milk ke jahan yeh intentionally kiya jata hai). 60°C se upar har 10°C temperature badhne par reaction rate dugna ho jata hai.</li>
-                <li><strong>Whey Protein Denaturation:</strong> β-lactoglobulin aur α-lactalbumin 70-75°C se upar irreversible unfolding (structure kharab hona) show karte hain, jisse hydrophobic groups aur free sulfhydryl (-SH) groups expose ho jate hain. Isse hota hai: (a) Protein aggregates banna aur viscosity badhna, (b) Micelle surfaces par κ-casein ke saath interact karna (heat stability kam karna), (c) Functional properties ka loss (foaming, gelation, water binding), (d) "Cooked" sulfur-off flavors ka aana jo liberated -SH groups se aate hain.</li>
-                <li><strong>Lactose Caramelization:</strong> 100°C se upar, lactose proteins ke bina bhi thermally decompose ho jata hai, aur organic acids (formic, acetic), aldehydes, aur brown polymers banata hai. Isse acidity badhti hai aur off-flavors aate hain.</li>
-                <li><strong>Vitamin Degradation:</strong> Heat-labile vitamins ka significant loss hota hai: Thiamin (B1) 10-30% loss, Vitamin B12 10-15%, Vitamin C 20-50%, Folic acid 10-20%. Yeh losses temperature aur time par depend karte hain aur first-order kinetics follow karte hain.</li>
-                <li><strong>Lipid Oxidation (Indirect):</strong> Heat natural antioxidant enzymes ko denature kar deti hai aur milk serum proteins se copper ions release karti hai, jo baad mein storage ke dauran lipid peroxidation (oxidized/cardboard flavors) ko catalyze karte hain.</li>
+                <li><strong>Calandria:</strong> Evaporator ka heating section, jismein tubes hote hain jahan heat exchange hota hai.</li>
+                <li><strong>Vapor Separator:</strong> Ek bada chamber jahan vapor ko concentrated liquid se alag kiya jaata hai.</li>
+                <li><strong>Condenser:</strong> Ek heat exchanger jo antim effect se water vapor ko condense karta hai, system mein vacuum banata hai aur banaye rakhta hai.</li>
+                <li><strong>Vacuum Pump:</strong> Vacuum banaye rakhne ke liye system se non-condensable gases ko hatata hai.</li>
             </ul>
-
-            <p><strong>Time-Temperature Integration:</strong> Heat damage cumulative hota hai, jo kinetic principles ko follow karta hai. Ek product ko 80°C par 60 minutes rakhna almost waisa hi damage karta hai jaise 100°C par ~6 minutes rakhna (Maillard ke liye Z-value ≈ 25-30°C). Vacuum evaporation 50-65°C par 20-60 seconds ke residence time ke saath atmospheric boiling ke comparison mein damage ko minimize karta hai [web:102][web:99].</p>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Boiling Point Elevation (BPE): Ek Critical Design Consideration</h4>
-            <p>Milk pure paani nahi hai—isme 12-13% dissolved aur suspended solids (lactose, minerals, proteins, colloidal casein) hote hain. Yeh solutes <strong>Boiling Point Elevation (BPE)</strong> cause karte hain: matlab solution same pressure par pure paani se zyada temperature par ubalta hai. Yeh ek colligative property hai jo Raoult's Law aur van't Hoff equation se govern hoti hai.</p>
-
-            <p><strong>BPE Formula (Simplified):</strong> ΔT<sub>b</sub> = K<sub>b</sub> × m × i</p>
-            <p>Jahan: ΔT<sub>b</sub> = boiling point elevation (°C), K<sub>b</sub> = ebullioscopic constant (water ke liye 0.512 °C·kg/mol), m = solute ki molality, i = van't Hoff factor (ion dissociation).</p>
-
-            <p><strong>Dairy Products ke liye Practical BPE Values:</strong></p>
-            <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
-                <li>Whole milk (12% TS): BPE ≈ 0.5-1.0°C</li>
-                <li>Concentrated milk (25% TS): BPE ≈ 1.5-2.5°C</li>
-                <li>Concentrated milk (40% TS): BPE ≈ 3-5°C</li>
-                <li>Concentrated milk (50% TS): BPE ≈ 6-10°C</li>
-                <li>Whey (6% TS): BPE ≈ 0.3-0.5°C</li>
-                <li>Concentrated whey (50% TS): BPE ≈ 8-12°C (lactose crystallization ise complicate karta hai)</li>
-            </ul>
-
-            <p><strong>Engineering Significance:</strong> BPE us effective temperature difference (ΔT) ko kam kar deta hai jo heating steam aur boiling liquid ke beech heat transfer ke liye available hota hai. Agar steam 110°C par hai aur vacuum 60°C water boiling point par hai, lekin BPE ki wajah se milk actually 62°C par ubal raha hai, toh actual ΔT 50°C ke bajaye 48°C reh jayega—jisse evaporation rate proportionally kam ho jata hai. Concentration badhne par BPE exponentially badhta hai, jo evaporators mein final concentration ko severely limit karta hai (typically milk ke liye 45-55% TS maximum) [web:99].</p>
-
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Evaporator Design Types: Technology Selection aur Performance</h3>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Falling Film Evaporators (FFE): Industry Standard</h4>
-            <p>Falling film evaporators modern dairy processing mein dominate karte hain kyunki inki heat transfer efficiency superior hai, residence time minimal hai, aur product quality excellent rehti hai [web:99][web:101][web:102]. Design principle gravity-driven thin film flow ka use karta hai taaki maximum heat transfer surface-to-volume ratio mile.</p>
-
-            <p><strong>Construction aur Operation:</strong></p>
-            <ol class="list-decimal list-outside pl-5 space-y-2">
-                <li><strong>Calandria Design:</strong> Yeh ek vertical shell-and-tube heat exchanger hota hai jisme 6-10 meter lambi tubes hoti hain (typically 38-50 mm internal diameter), jo ek bundle mein arranged hoti hain. Heating steam shell side mein controlled pressure/temperature par circulate hoti hai. Milk tubes ke andar ek patli film (~0.3-1.0 mm thickness tube walls par) ke roop mein behta hai.</li>
-                <li><strong>Feed Distribution System:</strong> Milk ko top distribution plate par pump kiya jata hai jahan precision-machined orifices ya spray nozzles har tube mein uniform distribution ensure karte hain. Yeh continuous, stable film formation maintain karne ke liye critical hai. Poor distribution se dry patches (tube burnout risk) ya flooding (efficiency kam hona) ho sakti hai.</li>
-                <li><strong>Film Formation aur Flow:</strong> Milk tubes ke top mein controlled velocity (1-3 m/s initial) se enter karta hai, aur surface tension aur wetting ki wajah se tube walls par turant ek annular film banata hai. Gravity film ko 0.5-2.0 m/s velocity par neeche khinchti hai. Jaise evaporation aage badhta hai, tube ki length ke saath film thickness kam hoti jati hai. Vapor liquid-gas interface par banti hai aur tube ke center mein co-currently ya counter-currently behti hai.</li>
-                <li><strong>Heat Transfer Mechanism:</strong> Steam outer tube surfaces par condense hoti hai, aur latent heat release karti hai (100°C par 2257 kJ/kg). Heat tube wall (stainless steel, k ≈ 16 W/m·K) ke through milk film mein conduct hoti hai. Film surface par paani evaporate hota hai, vapor nikalti hai, aur concentration badhti hai. Overall heat transfer coefficients: 1500-3000 W/m²·K (jo excellent hai—jacketed kettle se 3-5 guna zyada).</li>
-                <li><strong>Vapor-Liquid Separation:</strong> Two-phase mixture (concentrate + vapor) tube bottoms se high velocity par nikalta hai aur large-diameter vapor separator vessel (cyclone ya tangential entry design) mein jata hai. Centrifugal/gravity separation hota hai: Vapor upar overhead condenser connection ki taraf uthti hai, aur concentrate pumping ke liye bottom mein collect hota hai.</li>
-                <li><strong>Residence Time:</strong> Heating zone mein total contact time: 5-30 seconds typical hota hai (ye tube length, flow rate, aur concentration factor par vary karta hai). Yeh batch evaporators (30-120 minutes) se dramatically kam hai, jisse heat damage minimize hota hai [web:102][web:99].</li>
-            </ol>
-
-            <p><strong>Falling Film Design ke Fayde:</strong></p>
-            <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
-                <li>Extremely short residence time heat-sensitive components (vitamins, proteins, flavor) ko preserve karta hai.</li>
-                <li>High heat transfer coefficients ki wajah se low ΔT (3-10°C difference kaafi hai) par operate kar sakta hai, jisse thermal stress kam hota hai.</li>
-                <li>Low-viscosity se moderately viscous fluids (up to ~500 cP) ke liye suitable hai.</li>
-                <li>Forced-circulation ya plate evaporators ke comparison mein fouling tendency kam hoti hai (continuous film renewal aur low wall shear stress ki wajah se).</li>
-                <li>Energy-efficient hai (minimal pumping power, multi-effect operation ke liye optimized).</li>
-                <li>Capacity ke hisaab se compact footprint (vertical orientation).</li>
-                <li>CIP (clean-in-place) systems ke saath easily integrate ho jata hai.</li>
-            </ul>
-
-            <p><strong>Limitations (Kamiyan):</strong></p>
-            <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
-                <li>Precise flow distribution ki zaroorat hoti hai (maldistribution se efficiency loss ya tube damage ho sakta hai).</li>
-                <li>Stable film maintain karne ke liye minimum wetting rate ki zaroorat hoti hai (~0.15-0.3 kg/m·s per meter tube perimeter)—jo turndown ratio ko limit karta hai (minimum operating capacity ~40-50% design ki).</li>
-                <li>Highly viscous products (>1000 cP) ya crystallizing solutions ke liye suitable nahi hai (film toot sakti hai, fouling ho sakti hai).</li>
-                <li>Concentration milk ke liye ~45-55% TS tak limited hoti hai (high viscosity aur BPE effects ki wajah se).</li>
-            </ul>
-
-            <p><strong>Variants:</strong></p>
-            <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
-                <li><strong>Recirculation Mode:</strong> Adequate wetting rates maintain karne ke liye concentrate ko partially wapas feed mein recycle kiya jata hai, jisse higher final concentration (60-70% TS tak) mil sakti hai lekin residence time badh jata hai [web:105].</li>
-                <li><strong>Plate Falling Film Evaporators:</strong> Tubes ki jagah vertical corrugated plates use ki jati hain jo narrow channels banati hain. Progressive channel width reduction liquid volume kam hone ke bawajood film thickness maintain karta hai. Yeh very low ΔT operation (2-5°C) aur extremely gentle treatment allow karta hai [web:99].</li>
-            </ul>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Rising Film Evaporators (Climbing Film)</h4>
-            <p>Yeh historical design hai, jo ab zyadatar falling film se replace ho chuka hai lekin abhi bhi specific applications mein use hota hai. Milk tube bottoms se enter karta hai, aur steam se heat hota hai. Jaise hi boiling shuru hoti hai, vapor bubbles bante hain aur upar uthte hain, jo ek two-phase slug flow create karte hain jo liquid ko foam/film mixture ke roop mein upar le jata hai. Vapor-liquid separation tube tops par hota hai.</p>
-
-            <p><strong>Fayde:</strong> Self-pumping action (boiling shuru hone ke baad feed pump ki zaroorat nahi), foaming products ke liye suitable, kuch solids/particulates ko tolerate kar sakta hai.</p>
-
-            <p><strong>Nuksan:</strong> Longer residence time (60-120 seconds), higher ΔT ki zaroorat (10-20°C), fouling tendency zyada hoti hai, operation kam stable hota hai, aur lower concentrations tak hi seemit hai.</p>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Forced Circulation Evaporators</h4>
-            <p>Liquid ko external tube bundle ke through high velocity (2-5 m/s) par pump kiya jata hai jo steam chest mein duba hota hai. High circulation rate tubes ke andar boiling ko rokta hai (hydrostatic pressure ki wajah se liquid temperature boiling point se neeche rehta hai). Boiling sirf tubes se nikalne ke baad separate flash chamber mein reduced pressure par hoti hai.</p>
-
-            <p><strong>Fayde:</strong> Very viscous fluids (>10,000 cP), crystallizing solutions, ya fouling products ko handle kar sakta hai. Turbulent flow ki wajah se heat transfer coefficients high hote hain. Tomato paste, fruit concentrates, molasses ke liye use hota hai—dairy mein high energy consumption aur heat damage ki wajah se common nahi hai.</p>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Centrifugal (Conical) Evaporators</h4>
-            <p>Isme rotating cone ya cylinder hota hai jahan milk ko tangentially high velocity par feed kiya jata hai, jo heated rotating surface par ek thin film banata hai [web:99]. Centrifugal force film stability aur heat transfer ko badhati hai. Very short residence time (5-10 seconds) aur highly heat-sensitive products ke liye excellent hai, lekin mechanically complex hai, maintenance zyada hai, aur capacity limited hai (typically <5,000 L/h).</p>
-
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Multi-Effect Evaporation: Energy Efficiency Revolution</h3>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Steam Economy ki Problem</h4>
-            <p>Ek single-effect evaporator mein milk se 1 kg paani evaporate karne ke liye lagbhag 1.1-1.3 kg fresh steam ki zaroorat hoti hai (steam economy = 0.77-0.91 kg water/kg steam) [web:107]. Yeh enormous energy consumption represent karta hai: 10,000 kg/h paani evaporate karne ke liye 12,000+ kg/h steam input chahiye, jo substantial fuel costs aur environmental impact mein translate hota hai. Energy challenge isliye aata hai kyunki vaporization ki latent heat (100°C par 2257 kJ/kg) poori tarah condensing fresh steam se supply karni padti hai—aur milk se generate hui vapor bas condenser mein discard hokar waste heat ban jati hai.</p>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Multi-Effect Principle: Cascading Vapor Reuse</h4>
-            <p>Multi-effect evaporation is problem ko solve karta hai multiple evaporator bodies (effects) ko series mein arrange karke, jahan har ek progressively lower pressure aur temperature par operate karta hai [web:99][web:105][web:107]. Key innovation yeh hai: Ek effect mein generate hui vapor agle effect ke liye heating medium ka kaam karti hai, jisse system ke through thermal energy cascade hoti hai.</p>
-
-            <p><strong>Operating Sequence (Forward Feed Configuration):</strong></p>
-            <ol class="list-decimal list-outside pl-5 space-y-2">
-                <li><strong>Effect 1 (Highest Pressure/Temperature):</strong> Fresh steam (e.g., 3 bar gauge, 143°C) calandria tubes mein milk ko heat karti hai. Milk ~70°C (25 kPa absolute vacuum) par ubalta hai. 70°C par generate hui vapor overhead exit hoti hai.</li>
-                <li><strong>Effect 2:</strong> Effect 1 se nikli 70°C vapor Effect 2 ke steam chest mein heating medium ke roop mein enter karti hai. Effect 2 lower vacuum par operate karta hai (15 kPa absolute, ~54°C boiling point). Temperature difference (70 - 54 = 16°C) evaporation ko drive karta hai. 54°C vapor generate hoti hai.</li>
-                <li><strong>Effect 3:</strong> Effect 2 se nikli 54°C vapor Effect 3 ko heat karti hai (10 kPa absolute, ~46°C boiling). 46°C vapor generate hoti hai.</li>
-                <li><strong>Effect 4 (Final Effect):</strong> 46°C vapor Effect 4 ko heat karti hai (7 kPa, ~40°C). Final vapor condenser mein bheji jati hai (jahan wo 25-30°C par cool hokar condense hoti hai, vacuum maintain karte hue).</li>
-            </ol>
-
-            <p><strong>Energy Balance aur Steam Economy:</strong> Har effect lagbhag same amount mein paani evaporate karta hai (agar heat transfer area aur conditions similar maani jayein). Isliye, ek 4-effect evaporator Effect 1 mein supply ki gayi har 1 kg fresh steam ke liye ~4 kg paani evaporate karta hai—yani single effect ke 0.8 ke mukable steam economy 4.0 [web:107]. Practice mein, steam economy = n × 0.85-0.90 (jahan n = number of effects), jo heat losses, BPE, aur non-ideal conditions ko account mein leta hai.</p>
-
-            <p><strong>Practical Steam Economy Values:</strong></p>
-            <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
-                <li>Single effect: 0.8-0.9 kg water/kg steam</li>
-                <li>Double effect: 1.6-1.8</li>
-                <li>Triple effect: 2.4-2.7</li>
-                <li>Quadruple effect: 3.2-3.6</li>
-                <li>Five effect: 4.0-4.5</li>
-                <li>Six effect: 4.8-5.2</li>
-                <li>Seven effect: 5.5-6.0 [web:105]</li>
-            </ul>
-
-            <p><strong>Typical Dairy Configurations:</strong> 3-7 effects sabse common hain [web:99][web:105]. 7 effects ke baad, capital cost tezi se badhti hai jabki incremental steam savings kam hoti jati hai (law of diminishing returns). Economic optimum energy costs, capital costs, aur plant capacity par depend karta hai.</p>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Feed Flow Configurations</h4>
-            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
-                <li><strong>Forward Feed:</strong> Feed Effect 1 mein enter karta hai, aur progressively Effects 2, 3, 4, etc. mein behta hai, aur concentrate final effect se nikalta hai. Simplest pumping (pressure effects ke through progressively drop hota hai). Heat-stable products ke liye best hai. Heat-sensitive products ke liye ideal nahi hai (highest temperature par longest exposure).</li>
-                <li><strong>Backward Feed:</strong> Feed final (coldest) effect mein enter karta hai, aur progressively backward Effect 1 (hottest) ki taraf pump kiya jata hai, concentrate Effect 1 se nikalta hai. Fayde: Feed gradually preheat hota hai (energy recovery), highest temperature par final heating concentration ko accelerate karti hai, viscous products ke liye suitable (higher temperature viscosity kam karta hai). Nuksan: Inter-effect pumps ki zaroorat hoti hai (higher capital aur operating cost).</li>
-                <li><strong>Mixed Feed:</strong> Feed middle effect mein enter karta hai, aur forward aur backward portions mein split hota hai. Dono configurations ke faydon ko balance karta hai.</li>
-                <li><strong>Parallel Feed:</strong> Feed sabhi effects mein simultaneously barabar split kiya jata hai. Dairy mein rarely use hota hai (poor energy efficiency).</li>
-            </ul>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Temperature Profile aur Pressure Staging</h4>
-            <p>Multi-effect systems design karne ke liye careful pressure/temperature staging ki zaroorat hoti hai taaki heat transfer ke liye adequate ΔT maintain ho sake aur saath hi BPE aur practical vacuum limitations ko accommodate kiya ja sake.</p>
-
-            <p><strong>Example 5-Effect Milk Evaporator (Forward Feed):</strong></p>
-            <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
-                <li>Fresh steam: 2.5 bar gauge (140°C)</li>
-                <li>Effect 1: 38 kPa absolute, milk 76°C par ubalta hai (BPE +1°C), ΔT = 64°C, vapor 75°C</li>
-                <li>Effect 2: 25 kPa, ubalta 66°C par (BPE +2°C), ΔT = 9°C, vapor 64°C</li>
-                <li>Effect 3: 16 kPa, ubalta 56°C par (BPE +3°C), ΔT = 8°C, vapor 53°C</li>
-                <li>Effect 4: 10 kPa, ubalta 47°C par (BPE +4°C), ΔT = 6°C, vapor 43°C</li>
-                <li>Effect 5: 6 kPa, ubalta 38°C par (BPE +6°C), ΔT = 5°C, vapor 32°C</li>
-                <li>Condenser: 30°C cooling water 32°C vapor ko condense karta hai</li>
-            </ul>
-
-            <p>Note: Progressive ΔT reduction aur increasing BPE challenge—first effect mein large ΔT hota hai (easy heat transfer), final effect mein minimal ΔT (large surface area ki zaroorat). Heat transfer area typically first se last effect tak 20-40% badhta hai.</p>
-
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Advanced Energy-Saving Technologies</h3>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Thermal Vapor Recompression (TVR): Thermocompressor Systems</h4>
-            <p>Thermal vapor recompression ek ejector (venturi device) mein high-pressure motive steam ka use karta hai taaki evaporator effect se nikli low-pressure vapor ko entrain aur compress kiya ja sake, aur uska temperature/pressure badha kar heating steam ke roop mein reuse kiya ja sake [web:99]. Yeh "steam jet thermocompressor" bina kisi moving parts ke operate karta hai.</p>
-
-            <p><strong>Operating Principle:</strong> High-pressure steam (6-12 bar) ek converging nozzle ke through supersonic velocity tak accelerate hoti hai, jo vacuum create karti hai aur low-pressure vapor (e.g., Effect 2 se 0.2 bar par) ko entrain karti hai. Mixed stream diffuser section se guzarti hai, jo kinetic energy ko wapas pressure mein convert karti hai, aur intermediate pressure (e.g., 1.5 bar) par nikalti hai jo Effect 1 ko heat karne ke liye suitable hota hai.</p>
-
-            <p><strong>Steam Economy Improvement:</strong> Ek 2-effect evaporator TVR ke saath 3.0-3.5 ki steam economy achieve karta hai (jo bina TVR ke 3-4 effect ke barabar hai), aur fresh steam consumption ko 40-50% tak kam karta hai [web:99]. Operating cost savings high-pressure steam generation ki capital cost ko offset kar deti hai.</p>
-
-            <p><strong>Typical Configuration:</strong> TVR small/medium dairy plants (5,000-20,000 L/h capacity) mein 2-3 effect systems par apply kiya jata hai jahan full multi-effect systems economically impractical hote hain.</p>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Mechanical Vapor Recompression (MVR): Ultimate Energy Efficiency</h4>
-            <p>MVR ek electrically-driven compressor (centrifugal ya roots blower type) ka use karta hai jo evaporator se nikli poori vapor stream ko compress karta hai, uska temperature 3-10°C badhata hai aur use seedhe usi evaporator mein heating steam ke roop mein recycle karta hai [web:99]. Yeh fresh steam ki zaroorat ko almost poori tarah khatam kar deta hai (sirf system losses ke liye small makeup chahiye).</p>
-
-            <p><strong>Energy Advantage:</strong> Vapor ko 40°C/7 kPa se 50°C/12 kPa tak compress karne ke liye sirf ~50-80 kJ/kg electrical energy (compressor work) ki zaroorat hoti hai, jabki fresh steam generate karne ke liye 2257 kJ/kg thermal energy lagti hai. Energy consumption: 25-45 kWh electrical per ton water evaporated, versus single-effect steam evaporation ke liye 600-800 kWh thermal equivalent—yani 80-90% energy reduction.</p>
-
-            <p><strong>Operating Principle:</strong></p>
-            <ol class="list-decimal list-outside pl-5 space-y-2">
-                <li>Milk falling film evaporator mein 45°C/9 kPa par evaporate hota hai, aur 45°C vapor generate karta hai.</li>
-                <li>Centrifugal compressor (jo electric motor ya steam turbine se chalta hai) vapor ko 55°C/15 kPa tak compress karta hai.</li>
-                <li>Compressed 55°C vapor steam chest mein enter karti hai, condense hoti hai aur evaporator tubes ko heat karti hai (ΔT = 55-45 = 10°C).</li>
-                <li>Condensate boiler mein wapas jata hai (heat recovery), aur cycle complete hota hai.</li>
-            </ol>
-
-            <p><strong>Fayde:</strong> Dramatic operating cost reduction (evaporation ke per unit ke liye electricity fuel se sasti padti hai), environmentally superior (70-80% CO₂ reduction), compact system (boiler ya multi-effect complexity nahi hoti).</p>
-
-            <p><strong>Limitations:</strong> High capital cost (capacity ke hisaab se compressor $500,000-2,000,000), stable electricity supply ki zaroorat hoti hai, un regions mein economically favored hai jahan electricity sasti aur fuel mehnga hai, continuous high-volume operation (>10,000 L/h minimum) ke liye best suited hai.</p>
-
-            <p><strong>Hybrid Systems:</strong> Combined multi-effect + MVR (e.g., final effect par MVR ke saath 3-effect) capital aur operating costs ko optimize karta hai, aur 8-12 ki steam economies achieve karta hai [web:99].</p>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Heat Integration aur Feed Preheating</h4>
-            <p>Various streams se waste heat recover karke aur energy savings achieve ki ja sakti hain:</p>
-            <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
-                <li><strong>Condensate Heat Recovery:</strong> Steam condensate jo 140°C (Effect 1) par nikalta hai usme sensible heat hoti hai. Ise plate heat exchanger se guzara jata hai taaki incoming milk ko evaporator mein enter karne se pehle 4°C se 50-70°C tak preheat kiya ja sake, jisse 10-20% energy bachti hai.</li>
-                <li><strong>Vapor Condensate:</strong> Final effect vapor 40-45°C par condense hoti hai. Yeh condensate milk ko 30-40°C tak preheat kar sakta hai ya CIP operations ke liye warm water provide kar sakta hai.</li>
-                <li><strong>Flash Cooling:</strong> Hot concentrate jo 60-70°C par nikalta hai use vacuum ke under flash-cool kiya jata hai, aur vapor ko heating ya power generation (steam turbine) ke liye use kiya jata hai.</li>
-            </ul>
-
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Critical Process Control aur Operational Parameters</h3>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Key Controlled Variables</h4>
-            <ul class="list-disc list-outside pl-5 space-y-2">
-                <li><strong>Vacuum/Pressure Control:</strong> Har effect precise absolute pressure (±1-2 kPa) maintain karta hai automated vacuum control valve aur condenser capacity ke zariye. Yeh stable boiling temperature aur vapor temperature staging ke liye critical hai.</li>
-                <li><strong>Feed Flow Rate:</strong> Variable-speed pump ya flow control valve se control kiya jata hai taaki target concentration aur vapor production rate maintain rahe. Typical flow rates: Industrial evaporators ke liye 10,000-50,000 L/h.</li>
-                <li><strong>Concentrate Density/Total Solids:</strong> Inline refractometer (jo TS% se correlate karke refractive index maapta hai) ya density meter se continuously monitor kiya jata hai. Automated feedback target maintain karne ke liye feed rate ya steam ko adjust karta hai (e.g., 48% TS ±1%).</li>
-                <li><strong>Steam Pressure/Temperature:</strong> Regulating valve evaporation rate demand ke basis par Effect 1 mein fresh steam supply ko control karta hai. Steam chest pressure ±0.05 bar maintain karta hai.</li>
-                <li><strong>Level Control:</strong> Har effect vapor separator mein liquid level discharge pump speed ya control valve se control kiya jata hai taaki flooding (reduced evaporation) ya emptying (film breakdown, tube damage) ko roka ja sake.</li>
-                <li><strong>Superheat Control:</strong> Evaporator chodne wali vapor aur separator mein liquid ke beech temperature difference. Excessive superheat (>2-3°C) poor vapor-liquid separation ya non-condensables accumulation ka sanket hai.</li>
-            </ul>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Fouling Mechanisms aur Mitigation</h4>
-            <p>Fouling (heat transfer surfaces par deposit banna) dairy evaporation mein primary operational challenge hai, jo progressively heat transfer coefficients ko kam karta hai aur pressure drop badhata hai, aur ant mein cleaning ke liye shutdown force karta hai [web:100].</p>
-
-            <p><strong>Dairy Evaporator Fouling ke Types:</strong></p>
-            <ul class="list-disc list-outside pl-5 space-y-2">
-                <li><strong>Type A (Protein Fouling):</strong> >70-75°C temperature par hota hai jahan whey proteins denature hote hain, aggregate hote hain, aur tube walls par deposit hote hain. White/gray soft deposits, jinme β-lactoglobulin high hota hai. Effect 1 (highest temperature) mein dominant hota hai.</li>
-                <li><strong>Type B (Mineral Fouling):</strong> Inverse solubility ki wajah se Calcium phosphate precipitation (solubility temperature ke saath kam hoti hai). Hard, crystalline gray deposits. Ghanto/dinon mein dheere-dheere banta hai. High pH (>6.8) aur high calcium/phosphate milk par accelerate hota hai.</li>
-                <li><strong>Lactose Crystallization:</strong> High concentrations (>60% TS) aur low temperatures (<40°C) par, lactose supersaturation crystallization cause karta hai. Final effects mein sandy/grainy deposits. Isse temperature 50°C se upar rakhkar aur concentration limit karke control kiya jata hai.</li>
-            </ul>
-
-            <p><strong>Fouling Mitigation Strategies (Roktham):</strong></p>
-            <ul class="list-disc list-outside pl-5 space-y-2">
-                <li><strong>Temperature Optimization:</strong> Maximum temperature <72-75°C rakhein taaki protein denaturation minimize ho (50-60°C par operate karne wale MVR systems ka run time conventional evaporators se 2-3× lamba hota hai).</li>
-                <li><strong>pH Control:</strong> Food-grade acid (citric, phosphoric) use karke milk pH ko 6.5-6.6 adjust karein (natural 6.7 se) taaki calcium phosphate precipitation suppress ho. Yeh Type B fouling ko 40-60% kam karta hai.</li>
-                <li><strong>Preheating/Destabilization:</strong> Evaporator se pehle separate preheater mein milk ko 75-80°C tak heat karein, taaki controlled environment mein whey protein denaturation ho. Proteins solution mein aggregate hote hain na ki evaporator surfaces par, phir centrifugal separator se remove kiye jate hain. Yeh evaporator fouling ko significantly kam karta hai lekin additional equipment ki zaroorat hoti hai.</li>
-                <li><strong>Ultrafiltration Pretreatment:</strong> Evaporation se pehle membrane filtration se whey proteins remove karein (khas taur par whey concentration ke liye). Yeh protein-free permeate produce karta hai jo minimal fouling ke saath evaporate hota hai.</li>
-                <li><strong>Chemical Additives:</strong> Sequestrants (sodium hexametaphosphate 0.01-0.1%) calcium ko chelate karte hain, precipitation rokte hain. Regulatory approval ki zaroorat hoti hai.</li>
-                <li><strong>Turbulence Promoters:</strong> Internal tube inserts (twisted tapes, wire coils) turbulence badhate hain, boundary layer thickness aur fouling kam karte hain. Pressure drop penalty hoti hai.</li>
-            </ul>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Clean-in-Place (CIP) Systems</h4>
-            <p>Evaporators ko heat transfer performance restore karne ke liye daily cleaning ki zaroorat hoti hai. Automated CIP cycles bina disassembly ke system ke through cleaning solutions circulate karte hain.</p>
-
-            <p><strong>Standard CIP Sequence:</strong></p>
-            <ol class="list-decimal list-outside pl-5 space-y-2">
-                <li><strong>Pre-Rinse:</strong> 10-15 min hot water (50-60°C) flush, bulk milk residues remove karta hai, product recover karta hai (concentrate tank mein recirculate karke).</li>
-                <li><strong>Alkaline Wash:</strong> 1.5-2.5% sodium hydroxide (NaOH) 75-85°C par, 20-30 min recirculation. Protein aur fat deposits ko dissolve karta hai, fats ko saponify karta hai. Typical caustic consumption: 0.5-1.0 kg NaOH per 1000 kg milk processed.</li>
-                <li><strong>Intermediate Rinse:</strong> Hot water flush alkaline residues ko remove karta hai.</li>
-                <li><strong>Acid Wash:</strong> 0.5-1.5% nitric acid (HNO₃) 60-70°C par, 15-20 min. Mineral deposits (calcium phosphate, milkstone) dissolve karta hai, scale buildup rokta hai. Frequency: Har 2-3 alkaline cycles ke baad ya jab conductivity monitoring mineral fouling indicate kare.</li>
-                <li><strong>Final Rinse:</strong> Cold water flush neutral pH tak, conductivity monitoring complete removal confirm karti hai.</li>
-                <li><strong>Sanitization (Optional):</strong> Production se turant pehle Hot water (>85°C) ya chemical sanitizer (sodium hypochlorite, peracetic acid).</li>
-            </ol>
-
-            <p><strong>CIP Efficiency Monitoring:</strong> Temperature, concentration, flow rate sensors effective cleaning ensure karte hain. Conductivity measurements rinse completeness verify karte hain. Automated valve sequencing aur programmable logic controllers (PLC) unmanned operation enable karte hain.</p>
-
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Evaporation se banne wale Major Dairy Products</h3>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Evaporated Milk</h4>
-            <p><strong>Definition:</strong> Shelf-stable canned milk jo 2.0-2.3× concentrate kiya gaya ho (~60% paani nikalkar), homogenized, aur in-can sterilized. Final composition: 25-28% total solids, 7.5-8.5% fat, 17-19% SNF.</p>
-            <p><strong>Process:</strong> Milk → Standardization (fat/SNF) → Preheating (95°C, 2 min, protein stabilization) → Evaporation (vacuum, 60-70°C se 27% TS tak) → Homogenization (15-18 MPa) → Canning → Sterilization (retort, 116-120°C, 15-20 min, F₀ = 5-8) → Cooling. Characteristic caramel color/flavor sterilization Maillard reactions se aata hai.</p>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Sweetened Condensed Milk</h4>
-            <p><strong>Definition:</strong> Concentrated milk (2.5× concentration) jisme added sugar (40-45% final product weight) hoti hai taaki reduced water activity (a<sub>w</sub> = 0.83-0.85) se preservation ho sake. Sterilization ki zaroorat nahi hoti. Composition: 28-30% total milk solids, 8-9% fat, 20% SNF, 42-44% sucrose.</p>
-            <p><strong>Process:</strong> Milk → Standardization → Preheating (85-95°C) → Sugar addition (evaporation se pehle ya dauran) → Evaporation (50-60°C se 70% TS total tak) → Cooling (30°C agitation ke saath, controlled lactose crystallization seeding) → Canning/Packaging. Microbial stability high sugar (osmotic stress) aur low water activity se milti hai.</p>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Milk Powder Precursor (Condensed Skim/Whole Milk)</h4>
-            <p><strong>Purpose:</strong> Spray drying se pehle Pre-concentration dryer energy consumption ko 60-70% kam kar deta hai. Evaporation paani ko saste mein nikalta hai (30-50 kWh/ton) compared to spray drying (300-400 kWh/ton).</p>
-            <p><strong>Target Concentration:</strong> Skim milk powder production ke liye 45-52% TS, whole milk powder ke liye 40-48% TS (fat viscosity tolerance ko limit karta hai). Higher concentration = lower drying cost lekin pumping/atomization difficulty badh jati hai.</p>
-            <p><strong>Process:</strong> Skim milk (9% TS) → 4-7 effect evaporation → 48-50% TS concentrate → Spray drying → Powder (96-97% TS).</p>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Whey Concentrate</h4>
-            <p><strong>Challenge:</strong> High lactose content (whey solids ka 70-75%) 50-55% TS concentration se upar severe crystallization fouling cause karta hai. Specialized techniques ki zaroorat hoti hai.</p>
-            <p><strong>Solutions:</strong> (1) Concentration ko 50-60% TS tak limit karein, spray drying se finish karein. (2) Elevated temperature (>55°C throughout) maintain karein taaki crystallization roki ja sake. (3) Controlled conditions mein lactose pre-crystallize karein, centrifugation se crystals remove karein, mother liquor evaporate karein. (4) Evaporation se pehle minerals remove karne aur proteins concentrate karne ke liye Ultrafiltration karein (whey protein concentrate production).</p>
-
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Process Optimization aur Troubleshooting</h3>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Common Operating Problems</h4>
-            <ul class="list-disc list-outside pl-5 space-y-3">
-                <li><strong>Reduced Evaporation Capacity:</strong> <strong>Causes:</strong> Fouling (check karein ΔT increase, heat transfer coefficient drop), poor vacuum (air leaks, condenser cooling water temperature rise, vacuum pump failure), low steam pressure, product maldistribution (tubes mein dry patches). <strong>Solutions:</strong> CIP cleaning, leak testing (soap solution, helium detector), condenser maintenance, distribution system inspection.</li>
-                <li><strong>High Final Product Viscosity:</strong> <strong>Causes:</strong> Over-concentration (TS bohot high), excessive temperature (protein denaturation/aggregation), prolonged residence time (fouling ki wajah se holdup), pH shift (mineral imbalance). <strong>Solutions:</strong> Target TS kam karein, operating temperature lower karein (MVR systems), throughput optimize karein, pH adjustment.</li>
-                <li><strong>Product Burning/Caramelization:</strong> <strong>Causes:</strong> Tubes par dry patches (maldistribution), localized overheating (steam channeling, poor condensate drainage), excessive steam temperature. <strong>Solutions:</strong> Even distribution verify karein (water test runs ke dauran visual inspection), steam trap maintenance, temperature reduction.</li>
-                <li><strong>Foaming/Carryover:</strong> <strong>Causes:</strong> Excessive vapor velocity (overloading), protein denaturation (foam stabilization), inadequate separator design, surfactant contamination (CIP residues). <strong>Solutions:</strong> Throughput kam karein, de-foaming baffles/demister pads install ya optimize karein, complete CIP rinsing ensure karein, silicone antifoam additives (0.001-0.01%).</li>
-                <li><strong>Poor Vacuum/Non-Condensables Buildup:</strong> <strong>Causes:</strong> Air ingress (gasket leaks, pump seals), dissolved air in feed (deaeration needed), milk se CO₂ release (calcium carbonate equilibrium shift), inadequate vacuum pump capacity. <strong>Solutions:</strong> Systematic leak detection aur repair, feed deaeration (vacuum ya thermal), increased vacuum pump capacity ya steam ejector addition.</li>
-            </ul>
-
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Economic Analysis aur Design Considerations</h3>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Capital Cost Comparison (10,000 L/h Milk Evaporation Capacity)</h4>
-            <div class="overflow-x-auto mt-4">
-                <table class="w-full text-left border-collapse">
-                    <thead class="bg-muted">
-                        <tr>
-                            <th class="p-2 border">System Configuration</th>
-                            <th class="p-2 border">Capital Cost (Laagat)</th>
-                            <th class="p-2 border">Steam Economy</th>
-                            <th class="p-2 border">Operating Cost</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="p-2 border">Single Effect FFE</td>
-                            <td class="p-2 border">$400,000-600,000</td>
-                            <td class="p-2 border">0.85</td>
-                            <td class="p-2 border">$25-30/ton water</td>
-                        </tr>
-                        <tr>
-                            <td class="p-2 border">Double Effect FFE</td>
-                            <td class="p-2 border">$700,000-1,000,000</td>
-                            <td class="p-2 border">1.7</td>
-                            <td class="p-2 border">$13-16/ton</td>
-                        </tr>
-                        <tr>
-                            <td class="p-2 border">Triple Effect FFE</td>
-                            <td class="p-2 border">$1,200,000-1,600,000</td>
-                            <td class="p-2 border">2.5</td>
-                            <td class="p-2 border">$9-11/ton</td>
-                        </tr>
-                        <tr>
-                            <td class="p-2 border">Quadruple Effect FFE</td>
-                            <td class="p-2 border">$1,800,000-2,400,000</td>
-                            <td class="p-2 border">3.4</td>
-                            <td class="p-2 border">$6-8/ton</td>
-                        </tr>
-                        <tr>
-                            <td class="p-2 border">Five Effect FFE</td>
-                            <td class="p-2 border">$2,500,000-3,200,000</td>
-                            <td class="p-2 border">4.2</td>
-                            <td class="p-2 border">$5-7/ton</td>
-                        </tr>
-                        <tr>
-                            <td class="p-2 border">2-Effect + TVR</td>
-                            <td class="p-2 border">$1,100,000-1,500,000</td>
-                            <td class="p-2 border">3.2</td>
-                            <td class="p-2 border">$7-9/ton</td>
-                        </tr>
-                        <tr>
-                            <td class="p-2 border">Single Effect + MVR</td>
-                            <td class="p-2 border">$2,000,000-2,800,000</td>
-                            <td class="p-2 border">10-15 (elec equiv)</td>
-                            <td class="p-2 border">$3-5/ton</td>
-                        </tr>
-                        <tr>
-                            <td class="p-2 border">3-Effect + MVR</td>
-                            <td class="p-2 border">$3,500,000-4,500,000</td>
-                            <td class="p-2 border">12-18 (elec equiv)</td>
-                            <td class="p-2 border">$2-4/ton</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Technology Selection Criteria</h4>
-            <ul class="list-disc list-outside pl-5 space-y-2">
-                <li><strong>Capacity:</strong> <5,000 L/h: 2-3 effect. 5,000-20,000 L/h: 3-5 effect ya MVR. >20,000 L/h: 5-7 effect ya multi-effect + MVR hybrid.</li>
-                <li><strong>Energy Costs:</strong> High fuel cost: Multi-effect ya MVR favor karein. Low electricity/high fuel: MVR optimal hai. Balanced: Multi-effect competitive hai.</li>
-                <li><strong>Product Portfolio:</strong> Single product (milk powder): Continuous operation ke liye optimize karein, MVR. Multiple products (frequent changeovers): Simpler multi-effect preferred (lower capital, easier cleaning).</li>
-                <li><strong>Site Constraints:</strong> Limited steam generation capacity: MVR boiler bottleneck ko eliminate karta hai. Space constrained: MVR equivalent multi-effect se zyada compact hota hai.</li>
-                <li><strong>Environmental Regulations:</strong> CO₂ emission limits: MVR emissions ko 70-80% kam karta hai. Water scarcity: MVR ko kam cooling water chahiye.</li>
-            </ul>
-
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Future Trends aur Emerging Technologies</h3>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Membrane-Assisted Evaporation Hybrids</h4>
-            <p>Reverse osmosis (RO) ya nanofiltration (NF) ko evaporation ke saath combine karke synergistic benefits achieve kiye jate hain. RO milk ko ambient temperature par 20-28% TS tak concentrate karta hai (no heat damage, minimal energy ~3-5 kWh/ton water), phir evaporation 48-50% TS tak concentration complete karta hai. Evaporation alone ke muqable Total energy consumption 40-50% kam hoti hai, superior product quality (less protein denaturation). Globally milk powder plants mein adoption badh raha hai.</p>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Advanced Process Control aur AI Optimization</h4>
-            <p>Machine learning algorithms real-time sensor data (temperatures, pressures, flows, viscosity, fouling indicators) ko analyze karke operating parameters ko dynamically optimize karte hain, fouling onset predict karte hain, cleaning ko proactively schedule karte hain, aur energy efficiency maximize karte hain. Reported improvements: 5-15% energy reduction, CIP ke beech 20-30% longer run times, improved product consistency.</p>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Novel Surface Coatings</h4>
-            <p>Hydrophilic polymer coatings, diamond-like carbon (DLC), aur ion-implanted surfaces par research jo protein adsorption aur mineral scaling ko kam kare. Pilot studies 50-70% fouling reduction show karti hain, jo potentially run times ko double kar sakti hain. Commercial implementation long-term durability validation aur cost reduction par pending hai.</p>
-
-            <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Electrodialysis Integration</h4>
-            <p>Evaporation se pehle electrodialysis membranes ka use karke milk se minerals (calcium, phosphate) ka selective removal mineral fouling ko dramatically kam karta hai. Yeh higher operating temperatures aur concentrations enable karta hai. Capital cost badhata hai lekin CIP frequency aur downtime bachaata hai.</p>
-
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Dairy Processors ke liye Practical Implementation Guidelines</h3>
-            <ol class="list-decimal list-outside pl-5 space-y-3">
-                <li><strong>Raw Milk Quality:</strong> Low bacterial counts (<50,000 cfu/ml) thermophilic spore-former contamination ko minimize karte hain jo high-temperature fouling kam karta hai. Milking ke baad Rapid cooling psychrotroph growth ko rokti hai (protease/lipase production jo flavor defects aur fouling cause karte hain).</li>
-                <li><strong>Pretreatment Optimization:</strong> Consistent standardization (fat/SNF ratios), clarification (somatic cells, bacteria, sediment remove karta hai), aur thermization (65°C, 15 sec—full pasteurization ke bina microbial load kam karta hai) evaporator performance improve karte hain.</li>
-                <li><strong>Process Validation:</strong> New evaporators ko comprehensive heat penetration studies, residence time distribution analysis, aur actual production conditions ke under fouling rate characterization ke saath commission karein. Baseline performance metrics establish karein.</li>
-                <li><strong>Preventive Maintenance:</strong> Tube bundles (video borescope), steam traps (condensate drainage efficiency), vacuum system seals, aur condenser tubes (scale/biofouling) ka Monthly inspection. Gaskets, pump seals, aur sensor calibration ka Scheduled replacement.</li>
-                <li><strong>Operator Training:</strong> Troubleshooting aur optimization ke liye vacuum principles, heat transfer concepts, fouling mechanisms, aur CIP procedures ki comprehensive understanding essential hai. Simulator-based training recommended hai.</li>
-                <li><strong>Data Monitoring:</strong> Key parameters (temperatures, pressures, flows, TS%, heat transfer coefficients) ki continuous recording implement karein. Trend analysis gradual performance degradation identify karta hai jo proactive intervention enable karta hai.</li>
-                <li><strong>Sustainability Integration:</strong> Condensate/vapor streams se Heat recovery, wastewater minimization (CIP optimization, single-phase cleaning), aur renewable energy integration (preheating ke liye solar thermal, MVR compressors ke liye wind/hydro electricity).</li>
-            </ol>
-
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Conclusion: Evaporation Dairy Manufacturing Efficiency ki Foundation ke roop mein</h3>
-            <p>Evaporation technology modern dairy processing ka economic aur technical cornerstone hai, jo globally billions of liters milk ko value-added products mein concentrate karne ko enable karta hai, jabki energy consumption, transportation costs, aur environmental footprint ko minimize karta hai. Simple vacuum pans se sophisticated multi-effect falling-film systems with vapor recompression tak ka evolution dairy industry ki thermodynamic efficiency aur product quality optimization ke prati commitment ko darshata hai.</p>
-
-            <p>Successful evaporation operation ke liye complex interdependencies ki mastery zaroori hai: vacuum thermodynamics, multi-phase fluid mechanics, thin films mein heat transfer, milk component chemistry, fouling mitigation, aur energy management. Jaise-jaise dairy production badhti global protein demand ko meet karne ke liye scale karegi, evaporation technology mein continued innovation—advanced materials, membrane hybrids, artificial intelligence control, aur renewable energy integration ke zariye—aane wale dashakon mein sustainable, economically viable dairy manufacturing ke liye essential bani rahegi.</p>
         `
-    },
+    }
 };
+
+    
+
