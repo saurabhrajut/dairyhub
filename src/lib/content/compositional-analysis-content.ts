@@ -2,694 +2,3529 @@
 
 export const compositionalAnalysisContent = {
     hi: {
-        main_title: "डेयरी उत्पादों का संरचनात्मक विश्लेषण",
-        main_description: "रासायनिक गुणवत्ता आश्वासन के लिए एक विस्तृत गाइड।",
-        back_to_topics: "विषयों पर वापस जाएं",
-        topics: {
-            "processed-milk": {
-                title: "दूध",
-                tests: [
-                    {
-                        title: "वसा का निर्धारण (Gerber Method)",
-                        purpose: "वसा की मात्रा का नियमित जांच परीक्षण, अपकेंद्रित्र का उपयोग करके।",
-                        reference: "IS 1479 (Part I) 1961 (Reaffirmed 2003)",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">सिद्धांत:</h4>
-                            <p>दूध को सल्फ्यूरिक एसिड और आइसो-एमाइल अल्कोहल के साथ एक विशेष Gerber ट्यूब (ब्यूटिरोमीटर) में मिलाया जाता है। एसिड प्रोटीन और अन्य ठोस पदार्थों को घोल देता है, जिससे वसा मुक्त हो जाती है। आइसो-एमाइल अल्कोहल वसा की परत को साफ-साफ अलग करने में मदद करता है। ट्यूबों को अपकेंद्रित किया जाता है, और वसा, हल्का होने के कारण, ब्यूटिरोमीटर के अंशांकित तने में ऊपर उठ जाता है, जहां इसका प्रतिशत सीधे पढ़ा जाता है।</p>
-                            <h4 class="font-semibold mt-4 mb-2">अभिकर्मक और उपकरण:</h4>
-                            <ul class="list-disc list-outside pl-5 space-y-1">
-                                <li><strong>सल्फ्यूरिक एसिड:</strong> 90-91% सांद्रता, sp. gr. 1.807-1.812 at 27°C.</li>
-                                <li><strong>एमाइल अल्कोहल:</strong> फरफुरल-मुक्त, sp. gr. 0.808-0.818 at 27°C.</li>
-                                <li><strong>Gerber ब्यूटिरोमीटर:</strong> ISI चिह्नित, उपयुक्त रेंज (जैसे, 0-10%).</li>
-                                <li><strong>पिपेट:</strong> 10.75 मिली (दूध), 10 मिली (एसिड), 1 मिली (एमाइल अल्कोहल).</li>
-                                <li><strong>जल स्नान:</strong> 65 ± 2°C पर बनाए रखा गया।</li>
-                                <li><strong>Gerber अपकेंद्रित्र:</strong> 1100-1200 rpm में सक्षम।</li>
-                            </ul>
-                            <h4 class="font-semibold mt-4 mb-2">प्रक्रिया:</h4>
-                            <ol class="list-decimal list-outside pl-5 space-y-2">
-                                <li>गर्दन को गीला किए बिना एक ब्यूटिरोमीटर ट्यूब में 10 मिली सल्फ्यूरिक एसिड मापें।</li>
-                                <li>दीवार के किनारे 10.75 मिली अच्छी तरह से मिलाया हुआ दूध ब्यूटिरोमीटर में पिपेट करें।</li>
-                                <li>1 मिली एमाइल अल्कोहल डालें।</li>
-                                <li>एक लॉक स्टॉपर से बंद करें, समरूप होने तक हिलाएं, और पूर्ण मिश्रण के लिए उल्टा करें।</li>
-                                <li>यह सुनिश्चित करने के लिए कि सभी कैसिइन कण घुल गए हैं, 5 मिनट के लिए 65±2°C पर पानी के स्नान में रखें।</li>
-                                <li>4-5 मिनट के लिए 1100-1200 rpm पर अपकेंद्रित करें।</li>
-                                <li>5 मिनट के लिए पानी के स्नान में वापस रखें।</li>
-                                <li>स्टॉपर को समायोजित करके अंशांकित तने से वसा का प्रतिशत पढ़ें। रीडिंग वसा स्तंभ मेनिस्कस के नीचे से ली जाती है।</li>
-                            </ol>
-                        `
-                    },
-                     {
-                        title: "वसा का निर्धारण (Rose-Gottlieb Method)",
-                        purpose: "वसा निर्धारण के लिए संदर्भ या मानक विधि, बहुत सटीक।",
-                        reference: "IS: 1224 (Part-II)-1977",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">सिद्धांत:</h4>
-                            <p>दूध के नमूने का अमोनिया और इथेनॉल के साथ उपचार किया जाता है। अमोनिया कैसिइन को घोलता है और वसा ग्लोब्यूल झिल्ली को बेअसर करता है। इथेनॉल प्रोटीन को अवक्षेपित करता है। वसा को फिर डायथाइल ईथर और पेट्रोलियम ईथर के मिश्रण से निकाला जाता है। सॉल्वैंट्स को वाष्पित कर दिया जाता है, और निकाले गए वसा को तौला जाता है।</p>
-                            <h4 class="font-semibold mt-4 mb-2">प्रक्रिया:</h4>
-                            <ol class="list-decimal list-outside pl-5 space-y-2">
-                                <li>एक Mojonnier निष्कर्षण फ्लास्क में लगभग 10 ग्राम दूध का नमूना सटीक रूप से तौलें।</li>
-                                <li>1.5 मिलीलीटर अमोनिया घोल डालें और अच्छी तरह मिलाएं।</li>
-                                <li>10 मिलीलीटर 95% इथेनॉल डालें और 1 मिनट के लिए हिलाएं।</li>
-                                <li>25 मिलीलीटर डायथाइल ईथर डालें, 1 मिनट के लिए जोर से हिलाएं।</li>
-                                <li>25 मिलीलीटर पेट्रोलियम ईथर डालें और 1 मिनट के लिए फिर से हिलाएं।</li>
-                                <li>मिश्रण को तब तक खड़ा रहने दें जब तक कि ऊपरी ईथर परत साफ न हो जाए, या परतों को अलग करने के लिए अपकेंद्रित करें।</li>
-                                <li>ईथर परत को एक पहले से तौले हुए फ्लास्क में सावधानी से डालें।</li>
-                                <li>जलीय परत के साथ दो बार और निष्कर्षण दोहराएं, प्रत्येक बार 15 मिलीलीटर प्रत्येक ईथर का उपयोग करें।</li>
-                                <li>एक गर्म प्लेट या पानी के स्नान पर सॉल्वैंट्स को वाष्पित करें।</li>
-                                <li>निकाले गए वसा वाले फ्लास्क को 102°C पर एक ओवन में एक स्थिर वजन पर सुखाएं।</li>
-                            </ol>
-                            <h4 class="font-semibold mt-4 mb-2">गणना:</h4>
-                            <pre><code>% वसा = (निकाले गए वसा का वजन / नमूने का वजन) * 100</code></pre>
-                        `
-                    },
-                    {
-                        title: "वसा का निर्धारण (Werner-Schmidt Method)",
-                        purpose: "खट्टे या संरक्षित दूध के लिए उपयुक्त, जहाँ कैसिइन को घोलने के लिए एसिड की आवश्यकता होती है।",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">सिद्धांत:</h4>
-                            <p>दूध को केंद्रित हाइड्रोक्लोरिक एसिड के साथ उबाला जाता है, जो प्रोटीन को पचाता है और वसा को मुक्त करता है। वसा को फिर ईथर के साथ निकाला जाता है और तौला जाता है।</p>
-                            <h4 class="font-semibold mt-4 mb-2">प्रक्रिया:</h4>
-                            <ol class="list-decimal list-outside pl-5 space-y-2">
-                                <li>एक उपयुक्त निष्कर्षण ट्यूब में लगभग 10 ग्राम दूध का नमूना सटीक रूप से तौलें।</li>
-                                <li>10 मिलीलीटर केंद्रित HCl डालें और तब तक गरम करें जब तक कि घोल गहरा भूरा न हो जाए।</li>
-                                <li>ठंडा करें, और Rose-Gottlieb विधि में वर्णित अनुसार डायथाइल और पेट्रोलियम ईथर के साथ तीन बार निकालें।</li>
-                                <li>सॉल्वैंट्स को वाष्पित करें, अवशेष को सुखाएं और तौलें।</li>
-                            </ol>
-                             <h4 class="font-semibold mt-4 mb-2">गणना:</h4>
-                            <pre><code>% वसा = (निकाले गए वसा का वजन / नमूने का वजन) * 100</code></pre>
-                        `
-                    },
-                    {
-                        title: "कुल ठोस पदार्थों का निर्धारण (Gravimetric Method)",
-                        purpose: "कुल ठोस सामग्री को सटीक रूप से निर्धारित करने के लिए मानक संदर्भ विधि।",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">सिद्धांत:</h4>
-                            <p>दूध के एक ज्ञात वजन को सारा पानी वाष्पित करने के लिए गरम किया जाता है। शेष सूखे अवशेषों का वजन कुल ठोस पदार्थों का प्रतिनिधित्व करता है।</p>
-                             <h4 class="font-semibold mt-4 mb-2">प्रक्रिया:</h4>
-                            <ol class="list-decimal list-outside pl-5 space-y-2">
-                                <li>एक खाली, साफ, सूखी फ्लैट-तल वाली डिश को उसके ढक्कन (W1) के साथ तौलें।</li>
-                                <li>डिश में लगभग 5 ग्राम तैयार दूध का नमूना डालें और फिर से तौलें (W2)।</li>
-                                <li>30 मिनट के लिए उबलते पानी के स्नान पर ढक्कन के बिना डिश को गरम करें।</li>
-                                <li>डिश को 102 ± 2°C पर 2 घंटे के लिए एक गर्म हवा के ओवन में स्थानांतरित करें।</li>
-                                <li>डिश को ढक्कन से ढक दें, एक डेसिकेटर में ठंडा करें, और तौलें (W3)।</li>
-                                <li>एक स्थिर वजन प्राप्त होने तक हीटिंग और कूलिंग प्रक्रिया को दोहराएं।</li>
-                            </ol>
-                            <h4 class="font-semibold mt-4 mb-2">गणना:</h4>
-                            <pre><code>% कुल ठोस = [ (W3 - W1) / (W2 - W1) ] * 100</code></pre>
-                        `
-                    },
-                    {
-                        title: "कुल प्रोटीन सामग्री (Kjeldahl Method)",
-                        purpose: "कुल नाइट्रोजन सामग्री का निर्धारण करने के लिए मानक संदर्भ विधि, जिसे बाद में कच्चे प्रोटीन सामग्री में परिवर्तित किया जाता है।",
-                        reference: "IDF 20B: 1993; A.O.A.C 17th edn, 2000 Official Method 991.23",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">सिद्धांत:</h4>
-                            <p>Kjeldahl विधि एक नमूने में कुल नाइट्रोजन निर्धारित करती है। प्रोटीन में नाइट्रोजन को पहले केंद्रित सल्फ्यूरिक एसिड (पाचन) का उपयोग करके अमोनियम सल्फेट में परिवर्तित किया जाता है। फिर, अमोनिया गैस को छोड़ा जाता है और नाइट्रोजन की मात्रा निर्धारित करने के लिए टाइट्रेट किया जाता है। इस नाइट्रोजन राशि को कच्चे प्रोटीन सामग्री की गणना के लिए एक कारक (दूध के लिए 6.38) से गुणा किया जाता है।</p>
-                            <h4 class="font-semibold mt-4 mb-2">प्रक्रिया:</h4>
-                             <ol class="list-decimal list-outside pl-5 space-y-2">
-                                <li><strong>पाचन:</strong> Kjeldahl फ्लास्क में ~5 ग्राम दूध तौलें। 25 मिली केंद्रित सल्फ्यूरिक एसिड और एक उत्प्रेरक मिश्रण (कॉपर सल्फेट और पोटेशियम सल्फेट) डालें। घोल साफ होने तक गरम करें।</li>
-                                <li><strong>आसवन:</strong> डाइजेस्टेट को ठंडा करें, पानी से पतला करें, और अतिरिक्त NaOH डालें। जारी अमोनिया को एक ज्ञात मात्रा मानक एसिड (जैसे, संकेतक के साथ बोरिक एसिड) में भाप-आसवित करें।</li>
-                                <li><strong>अनुमापन:</strong> फंसे हुए अमोनिया को एक मानक एसिड (जैसे, 0.1 N HCl) से तब तक अनुमापित करें जब तक कि संकेतक रंग न बदल दे। एक रिक्त निर्धारण भी किया जाता है।</li>
-                             </ol>
-                             <h4 class="font-semibold mt-4 mb-2">गणना:</h4>
-                             <pre><code>% कुल नाइट्रोजन = [ 1.4007 * (V_sample - V_blank) * N_acid ] / Weight_sample</code></pre><br/>
-                             <pre><code>% कच्चा प्रोटीन = % कुल नाइट्रोजन * 6.38</code></pre>
-                        `
-                    },
-                    {
-                        title: "कैसिइन सामग्री (Kjeldahl Method)",
-                        purpose: "कैसिइन, दूध में मुख्य प्रोटीन की मात्रा निर्धारित करने के लिए, इसे नाइट्रोजन विश्लेषण से पहले अवक्षेपित करके।",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">सिद्धांत:</h4>
-                            <p>कैसिइन को दूध से इसके आइसोइलेक्ट्रिक बिंदु (pH 4.6) पर एसिटिक एसिड का उपयोग करके अवक्षेपित किया जाता है। मट्ठा प्रोटीन निस्यंद में रहते हैं। कैसिइन अवक्षेप की नाइट्रोजन सामग्री को फिर Kjeldahl विधि द्वारा निर्धारित किया जाता है।</p>
-                            <h4 class="font-semibold mt-4 mb-2">प्रक्रिया:</h4>
-                             <ol class="list-decimal list-outside pl-5 space-y-2">
-                                <li>250 मिली बीकर में 10 ग्राम दूध तौलें। 40-42°C पर 90 मिली आसुत जल डालें।</li>
-                                <li>हिलाते हुए 10% एसिटिक एसिड घोल का 1.5 मिली बूंद-बूंद डालें।</li>
-                                <li>मिश्रण को 10 मिनट के लिए खड़ा रहने दें। सतह पर तैरनेवाला साफ होना चाहिए।</li>
-                                <li>एक फिल्टर पेपर के माध्यम से मिश्रण को फ़िल्टर करें। अवक्षेप को ठंडे पानी से धोएं।</li>
-                                <li>कुल प्रोटीन विधि में वर्णित अनुसार नाइट्रोजन निर्धारण के लिए फिल्टर पेपर और अवक्षेप को Kjeldahl फ्लास्क में स्थानांतरित करें।</li>
-                             </ol>
-                             <h4 class="font-semibold mt-4 mb-2">गणना:</h4>
-                             <pre><code>% कैसिइन = अवक्षेप में % नाइट्रोजन * 6.38</code></pre>
-                        `
-                    },
-                     {
-                        title: "अनुमापनीय अम्लता",
-                        purpose: "दूध की कुल अम्लता (प्राकृतिक + विकसित) को मापने के लिए।",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">सिद्धांत:</h4>
-                            <p>दूध की कुल अम्लता को एक मानक क्षार घोल (NaOH) के साथ एक विशिष्ट समापन बिंदु पर अनुमापित करके मापा जाता है, जो फेनोल्फथेलिन के साथ रंग परिवर्तन द्वारा इंगित किया जाता है।</p>
-                            <h4 class="font-semibold mt-4 mb-2">प्रक्रिया:</h4>
-                            <ol class="list-decimal list-outside pl-5 space-y-2">
-                                <li>एक चीनी मिट्टी के बरतन डिश में 10 मिली दूध का नमूना लें।</li>
-                                <li>1% फेनोल्फथेलिन घोल की कुछ बूँदें डालें।</li>
-                                <li>0.1 N NaOH घोल के साथ अनुमापित करें।</li>
-                                <li>जब एक हल्का गुलाबी रंग दिखाई दे (समापन बिंदु) तो अनुमापन बंद कर दें।</li>
-                                <li>उपयोग किए गए क्षार की मात्रा नोट करें।</li>
-                            </ol>
-                            <h4 class="font-semibold mt-4 mb-2">गणना:</h4>
-                            <pre><code>% अम्लता (लैक्टिक एसिड के रूप में) = (9 * V * N) / W</code></pre>
-                            <p class="text-xs">जहाँ V = NaOH की मात्रा, N = NaOH की नॉर्मलता, W = दूध के नमूने का वजन।</p>
-                        `
-                    },
-                    {
-                        title: "कुल राख का निर्धारण",
-                        purpose: "दूध में कुल खनिज सामग्री का निर्धारण करने के लिए।",
-                        reference: "IS: 1479 (Part-II)-1961",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">सिद्धांत:</h4>
-                            <p>दूध के नमूने को तब तक जलाया जाता है जब तक कि सारा कार्बनिक पदार्थ नष्ट न हो जाए, जिससे केवल अकार्बनिक खनिज (राख) रह जाते हैं।</p>
-                            <h4 class="font-semibold mt-4 mb-2">प्रक्रिया:</h4>
-                            <ol class="list-decimal list-outside pl-5 space-y-2">
-                                <li>एक पहले से तौले हुए सिलिका या प्लैटिनम क्रूसिबल (W1) में लगभग 10 ग्राम दूध का नमूना सटीक रूप से तौलें।</li>
-                                <li>नमूने को एक पानी के स्नान पर वाष्पित करें और फिर एक गर्म प्लेट पर तब तक गरम करें जब तक कि यह जलना बंद न कर दे।</li>
-                                <li>क्रूसिबल को 550°C पर एक मफल फर्नेस में तब तक गरम करें जब तक कि एक सफेद या हल्की ग्रे राख प्राप्त न हो जाए।</li>
-                                <li>एक डेसिकेटर में ठंडा करें और तौलें (W2)।</li>
-                            </ol>
-                             <h4 class="font-semibold mt-4 mb-2">गणना:</h4>
-                             <pre><code>% कुल राख = [ (W2 - W1) / नमूने का वजन ] * 100</code></pre>
-                        `
-                    },
-                    {
-                        title: "खनिजों का निर्धारण (लौ फोटोमेट्री द्वारा)",
-                        purpose: "दूध में कैल्शियम, सोडियम और पोटेशियम की मात्रा का तेजी से और सटीक रूप से निर्धारण करने के लिए।",
-                        reference: "Journal of Dairy Science Vol. 33, No. 6, 1950",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">सिद्धांत:</h4>
-                            <p>लौ फोटोमेट्री एक ऐसी तकनीक है जिसमें एक नमूने को एक लौ में जलाया जाता है और उत्सर्जित प्रकाश की तीव्रता को मापा जाता है। प्रत्येक तत्व एक विशिष्ट तरंग दैर्ध्य पर प्रकाश उत्सर्जित करता है, और उत्सर्जित प्रकाश की तीव्रता उस तत्व की सांद्रता के समानुपाती होती है।</p>
-                            <h4 class="font-semibold mt-4 mb-2">नमूना तैयार करना:</h4>
-                            <ol class="list-decimal list-outside pl-5 space-y-2">
-                                <li>एक चीनी मिट्टी के क्रूसिबल में 100 ग्राम दूध का सटीक रूप से वजन करें।</li>
-                                <li>नमूने को 100°C पर 24 घंटे के लिए सुखाएं।</li>
-                                <li>सूखे नमूने को एक मफल फर्नेस में 550°C पर राख करें।</li>
-                                <li>राख को 10 मिली 1:1 HCl और गर्म पानी से निकालें। घोल को छानें।</li>
-                                <li>पूर्ण निष्कर्षण सुनिश्चित करने के लिए राख बनाने और निकालने की प्रक्रिया को दोहराएं।</li>
-                                <li>अंतिम छाने हुए घोल को एक वॉल्यूमेट्रिक फ्लास्क में 500 मिली तक आसुत जल से पतला करें। इस स्टॉक घोल का उपयोग विश्लेषण के लिए किया जाता है।</li>
-                            </ol>
-                             <h4 class="font-semibold mt-4 mb-2">प्रक्रिया:</h4>
-                             <ol class="list-decimal list-outside pl-5 space-y-2">
-                                 <li>स्टॉक घोल का 5-मिलीलीटर भाग लें, इसे 100-मिलीलीटर वॉल्यूमेट्रिक फ्लास्क में डालें, और आसुत जल के साथ निशान तक पतला करें।</li>
-                                 <li>उपकरण (एक लौ फोटोमीटर) को कैल्शियम, सोडियम या पोटेशियम के लिए विशिष्ट तरंग दैर्ध्य पर सेट करें।</li>
-                                 <li>कैल्शियम, पोटेशियम और फास्फोरस के ज्ञात सांद्रता वाले मानक घोल तैयार करें ताकि दूध के नमूने की संरचना की नकल की जा सके, क्योंकि ये आयन एक दूसरे के माप में हस्तक्षेप कर सकते हैं।</li>
-                                 <li>अज्ञात नमूने की लौ की तीव्रता को दो मानकों (एक थोड़ा कम और एक थोड़ा अधिक सांद्रता वाला) की तीव्रता के बीच प्रक्षेपित करें।</li>
-                                 <li>एक सीधी रेखा संबंध मानकर अज्ञात की सांद्रता की गणना करें।</li>
-                             </ol>
-                             <h4 class="font-semibold mt-4 mb-2">गणना:</h4>
-                             <pre><code>C_x = C₁ + (C₂ - C₁) * (I_x - I₁) / (I₂ - I₁)</code></pre>
-                             <p class="text-xs">जहाँ C सांद्रता है, I तीव्रता है, और सबस्क्रिप्ट x, 1, और 2 क्रमशः अज्ञात, निचले मानक और उच्च मानक को दर्शाते हैं।</p>
-                        `
-                    },
-                    {
-                        title: "मेथिलीन ब्लू रिडक्शन टेस्ट (MBRT)",
-                        purpose: "कच्चे दूध की सूक्ष्मजीवविज्ञानी गुणवत्ता का शीघ्रता से आकलन करने के लिए।",
-                        reference: "IS: 1479 (भाग III) – 1977",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">सिद्धांत:</h4>
-                            <p>मेथिलीन ब्लू एक नीला रेडॉक्स डाई है। दूध में मौजूद बैक्टीरिया अपने चयापचय के दौरान इस डाई को कम करते हैं, जिससे यह रंगहीन हो जाता है। जितनी तेजी से रंग गायब होता है, दूध में उतने ही अधिक बैक्टीरिया होते हैं।</p>
-                            <h4 class="font-semibold mt-4 mb-2">प्रक्रिया:</h4>
-                            <ol class="list-decimal list-outside pl-5 space-y-2">
-                                <li>एक निष्फल टेस्ट ट्यूब में 10 मिली दूध का नमूना लें।</li>
-                                <li>एक मानक मेथिलीन ब्लू घोल का 1 मिली डालें।</li>
-                                <li>ट्यूब को एक रबर स्टॉपर से बंद करें और इसे एक बार उल्टा करके मिलाएं।</li>
-                                <li>ट्यूब को 37°C पर एक पानी के स्नान में रखें।</li>
-                                <li>समय-समय पर देखें और उस समय को रिकॉर्ड करें जब नीला रंग पूरी तरह से गायब हो जाए (मेथिलीन ब्लू रिडक्शन टाइम)।</li>
-                            </ol>
-                             <h4 class="font-semibold mt-4 mb-2">व्याख्या:</h4>
-                             <p><strong>बहुत अच्छा:</strong> 5 घंटे या उससे अधिक<br><strong>अच्छा:</strong> 2 से 4 घंटे<br><strong>संतोषजनक:</strong> 30 मिनट से 1 घंटा<br><strong>खराब:</strong> 30 मिनट से कम</p>
-                        `
-                    },
-                    {
-                        title: "क्षारीय फॉस्फेट परीक्षण",
-                        purpose: "पाश्चुरीकरण की दक्षता को सत्यापित करने के लिए।",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">सिद्धांत:</h4>
-                            <p>फॉस्फेट एक एंजाइम है जो कच्चे दूध में स्वाभाविक रूप से मौजूद होता है और पाश्चुरीकरण के दौरान नष्ट हो जाता है। यदि यह परीक्षण सकारात्मक है, तो इसका मतलब है कि दूध को ठीक से पाश्चुरीकृत नहीं किया गया था या इसे कच्चे दूध से दूषित किया गया था।</p>
-                            <h4 class="font-semibold mt-4 mb-2">प्रक्रिया:</h4>
-                            <ol class="list-decimal list-outside pl-5 space-y-2">
-                                <li>दूध के नमूने को एक बफर-सब्सट्रेट घोल (डाइसोडियम पी-नाइट्रोफेनिल फॉस्फेट) के साथ ऊष्मायन किया जाता है।</li>
-                                <li>यदि फॉस्फेट मौजूद है, तो यह सब्सट्रेट को हाइड्रोलाइज करेगा, जिससे पी-नाइट्रोफेनोल निकलेगा, जो एक क्षारीय घोल में पीला होता है।</li>
-                                <li>रंग की तीव्रता को एक स्पेक्ट्रोफोटोमीटर या तुलनित्र का उपयोग करके मापा जाता है।</li>
-                            </ol>
-                        `
-                    }
-                ]
+      main_title: "Dairy Products ka Compositional Analysis",
+      main_description: "Chemical quality assurance ke liye ek detailed guide — Scientific aur Practical Testing Methods ke saath.",
+      back_to_topics: "Topics par wapas jayein",
+      topics: {
+        "processed-milk": {
+          title: "Doodh (Milk)",
+          tests: [
+            {
+              title: "Fat ka Determination (Gerber Method)",
+              purpose: "Fat content ki routine testing, centrifuge ka use karke.",
+              reference: "IS 1479 (Part I) 1961 (Reaffirmed 2003)",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+                <p>Doodh ko sulphuric acid aur iso-amyl alcohol ke saath ek special Gerber tube (butyrometer) mein milaya jaata hai. Acid proteins aur doosre solid particles ko ghol deta hai, jisse fat free ho jaata hai. Iso-amyl alcohol fat ki layer ko saaf-saaf alag karne mein madad karta hai. Tubes ko centrifuge kiya jaata hai, aur fat, halka hone ke kaaran, butyrometer ke calibrated stem mein upar uth jaata hai, jahaan iska percentage seedha padha jaata hai.</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Reagents aur Apparatus:</h4>
+                <ul class="list-disc list-outside pl-5 space-y-1">
+                  <li><strong>Sulphuric Acid:</strong> 90-91% concentration, sp. gr. 1.807-1.812 at 27°C.</li>
+                  <li><strong>Amyl Alcohol:</strong> Furfural-free, sp. gr. 0.808-0.818 at 27°C.</li>
+                  <li><strong>Gerber Butyrometer:</strong> ISI marked, suitable range (jaise, 0-10%).</li>
+                  <li><strong>Pipette:</strong> 10.75 ml (doodh), 10 ml (acid), 1 ml (amyl alcohol).</li>
+                  <li><strong>Water Bath:</strong> 65 ± 2°C par maintain kiya gaya.</li>
+                  <li><strong>Gerber Centrifuge:</strong> 1100-1200 rpm mein capable.</li>
+                </ul>
+  
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>Butyrometer tube mein 10 ml sulphuric acid daalein bina neck ko geela kiye.</li>
+                  <li>Deewar ke kinaare 10.75 ml achchi tarah se milaya hua doodh butyrometer mein pipette karein.</li>
+                  <li>1 ml amyl alcohol daalein.</li>
+                  <li>Ek lock stopper se band karein, homogeneous hone tak hilayein, aur poora mixture ke liye ulta karein.</li>
+                  <li>Yeh ensure karne ke liye ki saare casein particles ghul gaye hain, 5 minute ke liye 65±2°C par water bath mein rakhein.</li>
+                  <li>4-5 minute ke liye 1100-1200 rpm par centrifuge karein.</li>
+                  <li>5 minute ke liye water bath mein wapas rakhein.</li>
+                  <li>Stopper ko adjust karke calibrated stem se fat ka percentage padhein. Reading fat column meniscus ke neeche se li jaati hai.</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-4 mb-2">Typical Values:</h4>
+                <p>Full cream milk: 6.0% (minimum as per FSSAI), Toned milk: 3.0%, Double toned: 1.5%, Skimmed: ≤0.5%</p>
+              `
             },
-            "cream": {
-                title: "क्रीम का विश्लेषण",
-                tests: [
-                    {
-                        title: "वसा का निर्धारण",
-                        purpose: "क्रीम में वसा सामग्री का निर्धारण करने के लिए, जो इसका प्राथमिक वाणिज्यिक मूल्य है।",
-                        reference: "IS 3509-1966",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">विधि 1: Gerber Method (क्रीम के लिए)</h4>
-                            <ol class="list-decimal list-outside pl-5 space-y-2">
-                                <li>एक विशेष क्रीम ब्यूटिरोमीटर में सीधे 5 ग्राम अच्छी तरह से मिश्रित क्रीम तौलें।</li>
-                                <li>5 मिली पानी डालें।</li>
-                                <li>10 मिली Gerber का एसिड और 1 मिली एमाइल अल्कोहल डालें।</li>
-                                <li>दूध के लिए Gerber विधि के अनुसार आगे बढ़ें (अपकेंद्रित्र, जल स्नान, पढ़ना)। रीडिंग को ब्यूटिरोमीटर के आधार पर एक कारक से गुणा किया जाता है ताकि वसा प्रतिशत प्राप्त हो सके।</li>
-                            </ol>
-                            <h4 class="font-semibold mt-4 mb-2">विधि 2: Werner-Schmidt Method</h4>
-                            <p>खट्टा या संरक्षित क्रीम के लिए उपयुक्त। लगभग 5 ग्राम क्रीम को हाइड्रोक्लोरिक एसिड से पचाया जाता है, और वसा को ईथर से निकाला जाता है और तौला जाता है।</p>
-                        `
-                    },
-                     {
-                        title: "अनुमापनीय अम्लता",
-                        purpose: "क्रीम की अम्लता का निर्धारण करने के लिए।",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">प्रक्रिया:</h4>
-                            <ol class="list-decimal list-outside pl-5 space-y-2">
-                                <li>एक चीनी मिट्टी के बरतन डिश में 10 ग्राम क्रीम तौलें।</li>
-                                <li>नमूने को फैलाने के लिए 10 मिली गर्म, तटस्थ आसुत जल डालें।</li>
-                                <li>फेनोल्फथेलिन संकेतक की कुछ बूँदें डालें।</li>
-                                <li>एक हल्के गुलाबी समापन बिंदु पर 0.1 N NaOH के साथ अनुमापित करें।</li>
-                            </ol>
-                            <h4 class="font-semibold mt-4 mb-2">गणना:</h4>
-                            <pre><code>% अम्लता = (अनुमापन मात्रा * NaOH की नॉर्मलता * 9) / नमूने का वजन</code></pre>
-                        `
-                    },
-                   {
-                        title: "क्रीम में गाढ़ा करने वालों का पता लगाना",
-                        purpose: "क्रीम को कृत्रिम रूप से गाढ़ा करने के लिए उपयोग किए जाने वाले स्टार्च या जिलेटिन जैसे अवैध योजकों का पता लगाने के लिए।",
-                        reference: "A.O.A.C. Official method 920.106",
-                        procedure: `
-                          <p><strong>स्टार्च:</strong> 10 मिली क्रीम को 10 मिली पानी से पतला करें और उबालें। ठंडा करें और आयोडीन घोल की कुछ बूँदें डालें। एक नीला रंग स्टार्च की उपस्थिति को इंगित करता है।</p>
-                          <p class="mt-2"><strong>जिलेटिन:</strong> स्टोक्स परीक्षण द्वारा पता लगाया जाता है। 10 मिली क्रीम, 20 मिली पानी, और 20 मिली स्टोक्स अभिकर्मक (एसिड मर्क्यूरिक नाइट्रेट) मिलाएं। मिश्रण को फ़िल्टर करें। निस्यंद में, संतृप्त पिक्रिक एसिड की समान मात्रा डालें। एक पीला अवक्षेप जिलेटिन को इंगित करता है।</p>
-                        `
-                    }
-                ]
+            {
+              title: "Fat ka Determination (Rose-Gottlieb Method)",
+              purpose: "Fat determination ke liye reference ya standard method, bahut accurate hai — ye arbitration aur calibration ke liye use hota hai.",
+              reference: "IS: 1224 (Part-II)-1977",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+                <p>Doodh ke sample ka ammonia aur ethanol ke saath treatment kiya jaata hai. Ammonia casein ko gholta hai aur fat globule membrane ko neutralize karta hai. Ethanol protein ko precipitate karta hai. Fat ko phir diethyl ether aur petroleum ether ke mixture se extract kiya jaata hai. Solvents ko evaporate kar diya jaata hai, aur extracted fat ko weigh kiya jaata hai. Ye gravimetric method hai — bahut precise results deta hai.</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Reagents:</h4>
+                <ul class="list-disc list-outside pl-5 space-y-1">
+                  <li>Ammonia solution (25%)</li>
+                  <li>Ethanol (95%)</li>
+                  <li>Diethyl ether (peroxide-free)</li>
+                  <li>Petroleum ether (40-60°C boiling range)</li>
+                </ul>
+  
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>Ek Mojonnier extraction flask mein lagbhag 10 gram doodh ka sample accurately weigh karein.</li>
+                  <li>1.5 ml ammonia solution daalein aur achchi tarah mix karein.</li>
+                  <li>10 ml 95% ethanol daalein aur 1 minute ke liye hilayein.</li>
+                  <li>25 ml diethyl ether daalein, 1 minute ke liye zor se hilayein.</li>
+                  <li>25 ml petroleum ether daalein aur 1 minute ke liye phir se hilayein.</li>
+                  <li>Mixture ko tab tak khada rehne dein jab tak upper ether layer clear na ho jaye, ya layers ko separate karne ke liye centrifuge karein.</li>
+                  <li>Ether layer ko ek pehle se weigh kiye hue flask mein carefully decant karein.</li>
+                  <li>Aqueous layer ke saath do baar aur extraction repeat karein, har baar 15 ml har ek ether ka use karein.</li>
+                  <li>Ek hot plate ya water bath par solvents ko evaporate karein.</li>
+                  <li>Extracted fat wale flask ko 102°C par ek oven mein constant weight par dry karein.</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>% Fat = (Extracted fat ka weight / Sample ka weight) × 100</code></pre>
+              `
             },
-            "cream-powder": {
-                title: "क्रीम पाउडर का विश्लेषण",
-                tests: [
-                   {
-                        title: "नमी का निर्धारण",
-                        purpose: "मुक्त नमी सामग्री का निर्धारण करने के लिए, जो शेल्फ जीवन के लिए महत्वपूर्ण है।",
-                        reference: "IS 16072: 2012",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">प्रक्रिया:</h4>
-                            <ol class="list-decimal list-outside pl-5 space-y-2">
-                                <li>एक साफ, सूखी, खाली नमी डिश को उसके ढक्कन (W1) के साथ तौलें।</li>
-                                <li>डिश में लगभग 1 ग्राम नमूना डालें और फिर से तौलें (W2)।</li>
-                                <li>ढक्कन के बिना डिश को 102 ± 2°C पर 2 घंटे के लिए एक गर्म हवा के ओवन में रखें।</li>
-                                <li>डिश को ढक दें, एक डेसिकेटर में ठंडा करें, और तौलें (W3)।</li>
-                                <li>1 घंटे के अंतराल पर हीटिंग दोहराएं जब तक कि एक स्थिर वजन प्राप्त न हो जाए।</li>
-                            </ol>
-                             <h4 class="font-semibold mt-4 mb-2">गणना:</h4>
-                            <pre><code>% नमी = [ (W2 - W3) / (W2 - W1) ] * 100</code></pre>
-                        `
-                    },
-                    {
-                        title: "वसा का निर्धारण",
-                        purpose: "क्रीम पाउडर में वसा सामग्री का निर्धारण करने के लिए।",
-                        reference: "A.O.A.C 932.06",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">प्रक्रिया (Rose-Gottlieb Method):</h4>
-                            <ol class="list-decimal list-outside pl-5 space-y-2">
-                                 <li>एक निष्कर्षण फ्लास्क में सटीक रूप से ~1 ग्राम पाउडर तौलें।</li>
-                                 <li>10 मिली गर्म पानी डालें और पाउडर को पुनर्गठित करने के लिए अच्छी तरह मिलाएं।</li>
-                                 <li>1.25 मिली अमोनिया घोल डालें और मिलाएं।</li>
-                                 <li>तरल दूध के लिए वर्णित अनुसार डायथाइल ईथर और पेट्रोलियम ईथर का उपयोग करके मानक Rose-Gottlieb निष्कर्षण के साथ आगे बढ़ें।</li>
-                            </ol>
-                        `
-                    },
-                    {
-                        title: "दूध प्रोटीन का निर्धारण",
-                        purpose: "Kjeldahl विधि का उपयोग करके प्रोटीन सामग्री का निर्धारण करने के लिए।",
-                        reference: "A.O.A.C 991.23, 991.20, 991.21",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">प्रक्रिया:</h4>
-                            <ol class="list-decimal list-outside pl-5 space-y-2">
-                                <li>Kjeldahl विधि का उपयोग करके पाउडर की कुल नाइट्रोजन (TN) सामग्री निर्धारित करें।</li>
-                                <li>पुनर्गठित नमूने के ट्राइक्लोरोएसेटिक एसिड (TCA) निस्यंद से गैर-प्रोटीन नाइट्रोजन (NPN) निर्धारित करें, Kjeldahl विधि का भी उपयोग करें।</li>
-                            </ol>
-                             <h4 class="font-semibold mt-4 mb-2">गणना:</h4>
-                             <pre><code>% सच्चा प्रोटीन = (% TN - % NPN) * 6.38</code></pre>
-                        `
-                    }
-                ]
+            {
+              title: "Fat ka Determination (Werner-Schmidt Method)",
+              purpose: "Sour ya preserved doodh ke liye suitable, jahaan casein ko dissolve karne ke liye acid ki zaroorat hoti hai.",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+                <p>Doodh ko concentrated hydrochloric acid ke saath boil kiya jaata hai, jo protein ko digest karta hai aur fat ko free karta hai. Fat ko phir ether ke saath extract kiya jaata hai aur weigh kiya jaata hai. Ye method tab use hota hai jab Rose-Gottlieb method mein ammonia casein ko dissolve nahi kar pata — jaise sour, fermented, ya preserved samples mein.</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>Ek suitable extraction tube mein lagbhag 10 gram doodh ka sample accurately weigh karein.</li>
+                  <li>10 ml concentrated HCl daalein aur tab tak heat karein jab tak solution dark brown na ho jaye (sab protein digest ho jaye).</li>
+                  <li>Cool karein, aur Rose-Gottlieb method mein described anusaar diethyl aur petroleum ether ke saath teen baar extract karein.</li>
+                  <li>Solvents ko evaporate karein, residue ko dry karein aur weigh karein.</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>% Fat = (Extracted fat ka weight / Sample ka weight) × 100</code></pre>
+              `
             },
-            "butter": {
-                title: "मक्खन का विश्लेषण",
-                tests: [
-                   {
-                        title: "नमी का निर्धारण",
-                        purpose: "पानी की मात्रा का निर्धारण करने के लिए, एक प्रमुख गुणवत्ता और कानूनी पैरामीटर।",
-                        reference: "IS 3507 – 1966; A.O.A.C 920.116",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">प्रक्रिया:</h4>
-                            <ol class="list-decimal list-outside pl-5 space-y-2">
-                                <li>एक पहले से तौली हुई फ्लैट-तल वाली डिश (W1) में तैयार मक्खन के नमूने का 3-4 ग्राम तौलें।</li>
-                                <li>डिश को ~20 मिनट के लिए उबलते पानी-स्नान पर गरम करें, बार-बार हिलाते हुए।</li>
-                                <li>एक स्थिर वजन (W2) पर सूखने के लिए 100 ± 1°C पर एक गर्म हवा के ओवन में स्थानांतरित करें।</li>
-                            </ol>
-                            <h4 class="font-semibold mt-4 mb-2">गणना:</h4>
-                            <pre><code>नमी % = [ (W1 - W2) / नमूने का प्रारंभिक वजन ] * 100</code></pre>
-                        `
-                    },
-                   {
-                        title: "वसा और दही (MSNF) का निर्धारण",
-                        purpose: "वसा और गैर-वसा ठोस सामग्री का निर्धारण करने के लिए।",
-                        reference: "IS 3507 – 1966",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">प्रक्रिया:</h4>
-                            <ol class="list-decimal list-outside pl-5 space-y-2">
-                                <li>नमी निर्धारण (W2) से अवशेष का उपयोग करें।</li>
-                                <li>एक वसा विलायक (पेट्रोलियम ईथर) से बार-बार अवशेष को धोकर और विलायक को छानकर वसा निकालें।</li>
-                                <li>सभी वसा निकाले जाने के बाद, शेष अवशेष को ओवन में सुखाएं ताकि सारा विलायक निकल जाए और इसे तौलें (W3)। यह दही + नमक का वजन देता है।</li>
-                                <li>दही सामग्री खोजने के लिए, नमक सामग्री को अलग से निर्धारित किया जाना चाहिए और इस मान से घटाया जाना चाहिए।</li>
-                            </ol>
-                            <h4 class="font-semibold mt-4 mb-2">गणना:</h4>
-                            <pre><code>% वसा = 100 - (%नमी + %दही और नमक)</code></pre>
-                            <pre><code>% दही = %दही और नमक - %नमक</code></pre>
-                        `
-                    },
-                   {
-                        title: "नमक (NaCl) का निर्धारण",
-                        purpose: "नमक सामग्री को मापने के लिए, स्वाद और कानूनी मानकों के लिए महत्वपूर्ण है।",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">विधि 1: Mohr's Method</h4>
-                            <p>5 ग्राम मक्खन तौलें, 100 मिली उबलता पानी डालें, और 50-55°C तक ठंडा करें। पोटेशियम क्रोमेट संकेतक डालें और मानक सिल्वर नाइट्रेट (AgNO₃) घोल के साथ तब तक अनुमापित करें जब तक कि एक भूरा रंग न बना रहे।</p>
-                            <pre><code>NaCl % = [5.844 * N_AgNO3 * (V_sample - V_blank)] / Weight_sample</code></pre>
-                            
-                            <h4 class="font-semibold mt-4 mb-2">विधि 2: Volhard's Method</h4>
-                            <p>गर्म पानी से नमक निकालें। क्लोराइड को अवक्षेपित करने के लिए अतिरिक्त मानक सिल्वर नाइट्रेट डालें। फेरिक एलम संकेतक का उपयोग करके पोटेशियम थायोसाइनेट के साथ अतिरिक्त सिल्वर नाइट्रेट का बैक-टाइट्रेट करें।</p>
-                            <pre><code>NaCl % = [23.38 * N_KCNS * (V_blank - V_sample)] / Weight_sample</code></pre>
-                        `
-                    }
-                ]
+            {
+              title: "Total Solids ka Determination (Gravimetric Method)",
+              purpose: "Total solid content ko accurately determine karne ke liye standard reference method.",
+              reference: "IS 1479 (Part II) 1961",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+                <p>Doodh ke ek known weight ko heat kiya jaata hai taaki saara paani evaporate ho jaye. Remaining dry residue ka weight total solids ko represent karta hai. Isme fat, protein, lactose, minerals — sab kuch included hota hai.</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>Ek khaali, saaf, dry flat-bottom dish ko uske dhakkan (W1) ke saath weigh karein.</li>
+                  <li>Dish mein lagbhag 5 gram prepared doodh ka sample daalein aur phir se weigh karein (W2).</li>
+                  <li>30 minute ke liye boiling water bath par dhakkan ke bina dish ko heat karein.</li>
+                  <li>Dish ko 102 ± 2°C par 2 ghante ke liye hot air oven mein transfer karein.</li>
+                  <li>Dish ko dhakkan se dhak dein, ek desiccator mein cool karein, aur weigh karein (W3).</li>
+                  <li>Ek constant weight prapt hone tak heating aur cooling process ko repeat karein (successive weights mein difference 0.5 mg se kam hona chahiye).</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>% Total Solids = [(W3 - W1) / (W2 - W1)] × 100</code></pre>
+  
+                <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+                <p>Full cream milk: ≥12.0%, Toned milk: ≥11.5%, Double toned: ≥11.0%, Skimmed: ≥8.7%</p>
+              `
             },
-            "ghee-butter-oil": {
-                title: "घी / मक्खन तेल का विश्लेषण",
-                tests: [
-                   {
-                        title: "Reichert-Meissel (RM) & Polenske Value (PV)",
-                        purpose: "घी की शुद्धता की जांच करने के लिए। RM मान दूध की वसा की विशेषता वाले छोटे-श्रृंखला फैटी एसिड को मापता है। PV मान नारियल तेल के साथ मिलावट का पता लगाने में मदद करता है।",
-                        reference: "IS 3508 – 1966",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">प्रक्रिया:</h4>
-                            <ol class="list-decimal list-outside pl-5 space-y-2">
-                                <li><strong>साबुनीकरण:</strong> 5.00 ग्राम घी को 20 ग्राम ग्लिसरॉल और 2 मिली 50% NaOH का उपयोग करके साबुनीकृत (साबुन में परिवर्तित) किया जाता है। तरल साफ होने तक गरम करें।</li>
-                                <li><strong>पतला करना और अम्लीकरण:</strong> 93 मिली उबला हुआ, ठंडा पानी डालें, और फिर 50 मिली पतला सल्फ्यूरिक एसिड डालें।</li>
-                                <li><strong>आसवन:</strong> Polenske आसवन उपकरण का उपयोग करके 19-21 मिनट में मिश्रण का 110 मिली आसवित करें।</li>
-                                <li><strong>RM मान अनुमापन:</strong> आसुत को फ़िल्टर करें और 0.1 N NaOH के साथ निस्यंद का 100 मिली अनुमापित करें।</li>
-                                <li><strong>Polenske मान अनुमापन:</strong> कंडेनसर और फिल्टर पेपर को तीन बार 15 मिली न्यूट्रलाइज्ड इथेनॉल से धोएं। 0.1 N NaOH के साथ संयुक्त धुलाई का अनुमापन करें।</li>
-                            </ol>
-                             <h4 class="font-semibold mt-4 mb-2">गणना:</h4>
-                             <pre><code>RM मान = 1.1 * (अनुमापन_नमूना - अनुमापन_रिक्त)</code></pre>
-                             <pre><code>Polenske मान = अघुलनशील एसिड का अनुमापन - रिक्त अघुलनशील का अनुमापन</code></pre>
-                        `
-                    },
-                   {
-                        title: "मुक्त फैटी एसिड (FFA)",
-                        purpose: "वसा के टूटने (हाइड्रोलिसिस) की सीमा को मापता है, जो ताजगी को इंगित करता है। उच्च FFA बासीपन की ओर ले जाता है।",
-                        reference: "IS 3508 – 1966",
-                        procedure: `
-                            <p>नमूने को गर्म न्यूट्रलाइज्ड अल्कोहल में घोला जाता है और फेनोल्फथेलिन संकेतक का उपयोग करके मानक 0.1 N NaOH घोल के साथ अनुमापित किया जाता है। अम्लता को आमतौर पर % ओलिक एसिड के रूप में व्यक्त किया जाता है।</p>
-                             <h4 class="font-semibold mt-4 mb-2">गणना:</h4>
-                             <pre><code>% FFA (ओलिक एसिड के रूप में) = [अनुमापन * N_NaOH * 28.2] / नमूने का वजन</code></pre>
-                        `
-                    },
-                   {
-                        title: "वनस्पति के लिए Baudouin परीक्षण",
-                        purpose: "घी में वनस्पति (हाइड्रोजनीकृत वनस्पति तेल) का पता लगाता है।",
-                        reference: "IS 3508 – 1966",
-                        procedure: `<p>वनस्पति में 5% तिल के तेल के अनिवार्य जोड़ पर आधारित। पिघले हुए घी (5 मिली) को 5 मिली केंद्रित HCl और 0.4 मिली 2% फरफुरल घोल के साथ 2 मिनट के लिए जोर से हिलाया जाता है। एसिड परत में एक गुलाबी या लाल रंग वनस्पति की उपस्थिति को इंगित करता है।</p>`
-                    },
-                    {
-                        title: "खनिज तेल का पता लगाना (Holde's Test)",
-                        purpose: "मिलावट के रूप में उपयोग किए जाने वाले गैर-खाद्य खनिज तेलों का पता लगाता है।",
-                        procedure: `<p>1 ग्राम वसा को 25 मिली 4% अल्कोहलिक KOH से साबुनीकृत करें। 100 मिली गर्म पानी डालें। गंदगी का दिखना खनिज तेल की उपस्थिति को इंगित करता है, जो साबुनीकृत नहीं होता है।</p>`
-                    },
-                    {
-                        title: "पेरोक्साइड मान (PV)",
-                        purpose: "ऑक्सीडेटिव बासीपन के प्रारंभिक चरणों को मापता है।",
-                        reference: "A.O.A.C 965.33",
-                        procedure: `
-                            <p>घी के नमूने को एसिटिक एसिड-क्लोरोफॉर्म मिश्रण में घोला जाता है। संतृप्त पोटेशियम आयोडाइड (KI) घोल डाला जाता है। वसा में पेरोक्साइड KI से आयोडीन मुक्त करते हैं। मुक्त आयोडीन को फिर स्टार्च को संकेतक के रूप में उपयोग करके एक मानक सोडियम थायोसल्फेट घोल के साथ अनुमापित किया जाता है।</p>
-                            <pre><code>PV (meq/kg) = (S * N * 1000) / नमूने का वजन</code></pre>
-                            <p class="text-xs">जहाँ S = Na₂S₂O₃ का मिलीलीटर (रिक्त सही) और N = Na₂S₂O₃ की नॉर्मलता</p>
-                        `
-                    }
-                ]
+            {
+              title: "Solids-Not-Fat (SNF) ka Determination",
+              purpose: "Doodh mein fat ke alawa baaki saare solids (protein, lactose, minerals) ko measure karna.",
+              reference: "IS 1479 (Part II) 1961",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+                <p>SNF = Total Solids minus Fat. Ye value doodh ki quality aur adulteration detect karne mein important hai. Paani milane se SNF kam hota hai. FSSAI ke standards mein SNF ki minimum limit define ki gayi hai.</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Method 1: By Difference</h4>
+                <pre><code>% SNF = % Total Solids - % Fat</code></pre>
+  
+                <h4 class="font-semibold mt-4 mb-2">Method 2: ISI Formula (using Lactometer)</h4>
+                <p>Jab laboratory equipment available na ho, tab lactometer reading aur fat content se SNF calculate kiya ja sakta hai:</p>
+                <pre><code>% SNF = (CLR / 4) + (0.21 × F) + 0.36</code></pre>
+                <p class="text-xs">Jahaan CLR = Corrected Lactometer Reading at 27°C, F = Fat %</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+                <p>Full cream milk: ≥9.0% (cow), ≥9.0% (buffalo). Adulterated milk mein SNF 8.5% se neeche gir sakta hai.</p>
+              `
             },
-             "cheese-paneer": {
-                title: "पनीर / चीज़ का विश्लेषण",
-                tests: [
-                   {
-                        title: "नमी और कुल ठोस पदार्थों का निर्धारण",
-                        purpose: "पानी की मात्रा को मापने के लिए, बनावट और शेल्फ जीवन को प्रभावित करता है।",
-                        reference: "IS 2785 -1979",
-                        procedure: `
-                          <h4 class="font-semibold mt-4 mb-2">प्रक्रिया:</h4>
-                          <ol class="list-decimal list-outside pl-5 space-y-2">
-                              <li>एक साफ, सूखी, खाली एल्यूमीनियम नमी डिश को रेत और एक कांच की छड़ के साथ तौलें।</li>
-                              <li>डिश में 3 ग्राम कद्दूकस किए हुए नमूने को तौलें।</li>
-                              <li>कुछ बूँदें आसुत जल डालें और नमूने को रेत के साथ मिलाएं।</li>
-                              <li>एक हॉट प्लेट पर डिश रखकर पानी को वाष्पित करें।</li>
-                              <li>डिश को 102 ± 2°C पर 4 घंटे के लिए एक गर्म हवा के ओवन में सुखाएं।</li>
-                              <li>एक डेसिकेटर में ठंडा करें और तौलें। एक स्थिर वजन प्राप्त होने तक दोहराएं।</li>
-                          </ol>
-                        `
-                    },
-                   {
-                        title: "वसा का निर्धारण (Acid Digestion - Werner-Schmidt Method)",
-                        purpose: "शुष्क पदार्थ के आधार पर वसा सामग्री का निर्धारण करने के लिए।",
-                        reference: "IS 2785 -1979",
-                        procedure: `
-                          <h4 class="font-semibold mt-4 mb-2">प्रक्रिया:</h4>
-                          <ol class="list-decimal list-outside pl-5 space-y-2">
-                              <li>एक 100 मिली बीकर में तैयार नमूने का 1-2 ग्राम तौलें।</li>
-                              <li>10 मिली केंद्रित HCl डालें और एक पानी के स्नान पर तब तक गरम करें जब तक कि सभी ठोस कण घुल न जाएं।</li>
-                              <li>घोल को ठंडा करें, 10 मिली इथेनॉल डालें, और एक Mojonnier फ्लास्क में स्थानांतरित करें।</li>
-                              <li>25 मिली डायथाइल ईथर डालें, 1 मिनट के लिए हिलाएं। फिर 25 मिली पेट्रोलियम ईथर डालें और फिर से हिलाएं।</li>
-                              <li>अपकेंद्रित करें और ईथर परत को एक पहले से तौले हुए शंक्वाकार फ्लास्क में स्थानांतरित करें।</li>
-                              <li>निष्कर्षण को दो बार दोहराएं।</li>
-                              <li>ईथर को वाष्पित करें और वसा सामग्री खोजने के लिए अवशेष को सुखाएं।</li>
-                          </ol>
-                        `
-                    },
-                    {
-                        title: "पनीर में स्टार्च का पता लगाना",
-                        purpose: "एक भराव के रूप में स्टार्च के अवैध जोड़ का पता लगाने के लिए।",
-                        procedure: `<p>एक चीनी मिट्टी के बरतन डिश में 1 ग्राम पनीर के नमूने को 1 मिली आसुत जल के साथ मैश करें। फिर आयोडीन घोल की एक बूंद डालें। एक नीला रंग स्टार्च की उपस्थिति को इंगित करता है।</p>`
-                    }
-                ]
+            {
+              title: "Specific Gravity / Lactometer Reading",
+              purpose: "Doodh ki density measure karna — paani milawat detect karne ka sabse simple aur rapid method.",
+              reference: "IS 1479 (Part I) 1961",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+                <p>Doodh ka specific gravity paani se zyada hota hai (1.028-1.034 range mein). Agar doodh mein paani milaya jaye to specific gravity kam ho jaati hai. Agar fat nikala jaye (skimming) to specific gravity badh jaati hai. Lactometer ek special hydrometer hai jo doodh ke liye calibrated hota hai.</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Apparatus:</h4>
+                <ul class="list-disc list-outside pl-5 space-y-1">
+                  <li>ISI marked Lactometer (graduated 15-40)</li>
+                  <li>Measuring cylinder (500 ml)</li>
+                  <li>Thermometer (0-50°C)</li>
+                </ul>
+  
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>Doodh ko achchi tarah mix karein bina foam banaye.</li>
+                  <li>Doodh ko measuring cylinder mein daalein (lagbhag 500 ml).</li>
+                  <li>Lactometer ko gently doodh mein lower karein aur chhod dein taaki ye freely float kare.</li>
+                  <li>Jab lactometer stable ho jaye, reading lo — meniscus ke upper surface se padhein.</li>
+                  <li>Temperature bhi note karein.</li>
+                  <li>Temperature correction apply karein: Har 1°C 27°C se upar hone par 0.2 add karein, aur har 1°C neeche hone par 0.2 subtract karein.</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>Corrected Lactometer Reading (CLR) = LR + 0.2 × (T - 27)</code></pre>
+                <pre><code>Specific Gravity = 1 + (CLR / 1000)</code></pre>
+  
+                <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+                <p>Normal cow milk: CLR 28-32, Buffalo milk: CLR 28-34. Specific gravity: 1.028-1.034</p>
+              `
             },
-            "dahi-yoghurt": {
-                title: "दही / योगहर्ट का विश्लेषण",
-                tests: [
-                   {
-                        title: "अनुमापनीय अम्लता",
-                        purpose: "किण्वन के दौरान विकसित अम्लता का निर्धारण करने के लिए।",
-                        procedure: `
-                          <ol class="list-decimal list-outside pl-5 space-y-2">
-                            <li>एक बीकर में 10 ग्राम नमूना तौलें।</li>
-                            <li>एक पेस्ट बनाने के लिए 10 मिली आसुत जल डालें।</li>
-                            <li>फेनोल्फथेलिन संकेतक की कुछ बूँदें डालें और 0.1 N NaOH के साथ तब तक अनुमापित करें जब तक कि एक हल्का गुलाबी रंग दिखाई न दे।</li>
-                          </ol>
-                          <h4 class="font-semibold mt-4 mb-2">गणना:</h4>
-                          <pre><code>% अम्लता (लैक्टिक एसिड के रूप में) = (9 * V * N) / W</code></pre>
-                          <p class="text-xs">जहाँ V = NaOH की मात्रा, N = NaOH की नॉर्मलता, W = नमूने का वजन।</p>
-                        `
-                    },
-                    {
-                        title: "कुल ठोस पदार्थों का निर्धारण",
-                        purpose: "कुल ठोस सामग्री का निर्धारण करने के लिए, अक्सर अम्लता को बेअसर करने के बाद किया जाता है।",
-                        reference: "IS 12333: 1997 / IDF 151: 1991",
-                        procedure: `
-                            <p><strong>NaOH विधि:</strong> 4-5 ग्राम नमूना तौलें, 0.1N NaOH से बेअसर करें, और फिर एक पानी के स्नान पर और फिर एक ओवन में 100±2°C पर एक स्थिर वजन पर सुखाएं। जोड़े गए NaOH का वजन अंतिम अवशेष से घटाया जाता है।</p>
-                            <p><strong>जिंक ऑक्साइड विधि:</strong> 1 ग्राम नमूना तौलें, 2 ग्राम जिंक ऑक्साइड के साथ मिलाएं, और एक स्थिर वजन पर सुखाएं। विकसित लैक्टिक एसिड को अलग से निर्धारित किया जाता है और सही कुल ठोस पदार्थ प्राप्त करने के लिए नमी मान में जोड़ा जाता है।</p>
-                        `
-                    },
-                   {
-                        title: "डायसेटाइल सामग्री",
-                        purpose: "एक प्रमुख स्वाद यौगिक को मापने के लिए।",
-                        procedure: `<p>डायसेटाइल किण्वन के दौरान उत्पादित एक विशिष्ट स्वाद यौगिक है। इसकी मात्रा को 570 एनएम पर रासायनिक प्रतिक्रियाओं की एक श्रृंखला के बाद स्पेक्ट्रोफोटोमेट्रिक रूप से मापा जाता है।</p>`
-                    }
-                ]
+            {
+              title: "Total Protein Content (Kjeldahl Method)",
+              purpose: "Total nitrogen content determine karne ke liye standard reference method, jise baad mein crude protein content mein convert kiya jaata hai.",
+              reference: "IDF 20B: 1993; A.O.A.C 17th edn, 2000 Official Method 991.23",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+                <p>Kjeldahl method ek sample mein total nitrogen determine karta hai. Protein mein nitrogen ko pehle concentrated sulphuric acid (digestion) use karke ammonium sulphate mein convert kiya jaata hai. Phir, ammonia gas ko release kiya jaata hai (distillation) aur nitrogen ki quantity determine karne ke liye titrate kiya jaata hai. Is nitrogen amount ko crude protein content calculate karne ke liye ek factor (doodh ke liye 6.38) se multiply kiya jaata hai.</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">3 Steps of Kjeldahl Method:</h4>
+  
+                <h4 class="font-semibold mt-2 mb-1">Step 1 — Digestion:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-1">
+                  <li>Kjeldahl flask mein ~5 gram doodh weigh karein.</li>
+                  <li>25 ml concentrated sulphuric acid aur ek catalyst mixture (copper sulphate + potassium sulphate — ratio 1:8) daalein.</li>
+                  <li>Fume hood mein heat karein jab tak solution clear blue-green na ho jaye (2-3 hours lag sakte hain).</li>
+                  <li>Ye step saara organic nitrogen ko (NH₄)₂SO₄ mein convert kar deta hai.</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-2 mb-1">Step 2 — Distillation:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-1">
+                  <li>Digestate ko cool karein, paani se dilute karein.</li>
+                  <li>Excess NaOH (40%) daalein — ye ammonium sulphate ko ammonia gas mein convert karta hai.</li>
+                  <li>Released ammonia ko steam-distill karein ek known amount standard acid mein (4% boric acid with mixed indicator — methyl red + bromocresol green).</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-2 mb-1">Step 3 — Titration:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-1">
+                  <li>Trapped ammonia ko 0.1 N HCl se titrate karein jab tak indicator colour change na ho jaye (green se pink).</li>
+                  <li>Ek blank determination bhi kiya jaata hai (bina sample ke saari reagents ke saath).</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>% Total Nitrogen = [1.4007 × (V_sample - V_blank) × N_acid] / Weight_sample</code></pre>
+                <pre><code>% Crude Protein = % Total Nitrogen × 6.38</code></pre>
+  
+                <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+                <p>Cow milk protein: 3.0-3.5%, Buffalo milk protein: 3.5-4.5%</p>
+              `
             },
-            "chakka-shrikhand": {
-                title: "चक्का / श्रीखंड का विश्लेषण",
-                tests: [
-                    { title: "दूध ठोस पदार्थों का निर्धारण", purpose: "कुल दूध ठोस पदार्थों का निर्धारण करने के लिए।", procedure: "<p>दही के लिए प्रक्रिया का पालन करें। श्रीखंड के लिए, सुक्रोज सामग्री को अलग से निर्धारित करें और दूध ठोस पदार्थ प्राप्त करने के लिए इसे कुल ठोस पदार्थों से घटाएं।</p>" },
-                    { title: "वसा का निर्धारण", purpose: "वसा सामग्री का निर्धारण करने के लिए।", procedure: "<p>पनीर के लिए वर्नर-श्मिट विधि का पालन करें।</p>" },
-                    { title: "प्रोटीन का निर्धारण", purpose: "प्रोटीन सामग्री का निर्धारण करने के लिए।", procedure: "<p>आइसक्रीम के लिए केल्डाल विधि का पालन करें।</p>" },
-                    { title: "अनुमापनीय अम्लता का निर्धारण", purpose: "अम्लता का निर्धारण करने के लिए।", procedure: "<p>संघनित दूध के लिए प्रक्रिया का पालन करें।</p>" },
-                    { title: "कुल राख का निर्धारण", purpose: "खनिज सामग्री का निर्धारण करने के लिए।", procedure: "<p>दूध पाउडर के लिए प्रक्रिया का पालन करें।</p>" },
-                    { title: "सुक्रोज सामग्री का निर्धारण", purpose: "जोड़ी गई चीनी का निर्धारण करने के लिए।", procedure: "<p>संघनित दूध के लिए प्रक्रिया (लेन-ईनोन विधि) का पालन करें।</p>" }
-                ]
+            {
+              title: "Casein Content (Kjeldahl Method)",
+              purpose: "Casein, doodh mein main protein ki quantity determine karna — ise nitrogen analysis se pehle precipitate karke.",
+              reference: "IS 1479 (Part II) 1961",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+                <p>Casein ko doodh se iski isoelectric point (pH 4.6) par acetic acid use karke precipitate kiya jaata hai. Whey proteins filtrate mein rehte hain. Casein precipitate ki nitrogen content ko phir Kjeldahl method dwara determine kiya jaata hai. Casein doodh ka ~80% protein hota hai.</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>250 ml beaker mein 10 gram doodh weigh karein. 40-42°C par 90 ml distilled water daalein.</li>
+                  <li>Hilate hue 10% acetic acid solution ka 1.5 ml boond-boond daalein (pH 4.6 tak lane ke liye).</li>
+                  <li>Mixture ko 10 minute ke liye khada rehne dein. Supernatant clear hona chahiye.</li>
+                  <li>Ek filter paper ke through mixture ko filter karein. Precipitate ko thande paani se dhoyein taaki whey proteins puri tarah nikal jayein.</li>
+                  <li>Total protein method mein described anusaar nitrogen determination ke liye filter paper aur precipitate ko Kjeldahl flask mein transfer karein.</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>% Casein = Precipitate mein % Nitrogen × 6.38</code></pre>
+  
+                <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+                <p>Cow milk casein: ~2.5%, Buffalo milk casein: ~3.0-3.5%</p>
+              `
             },
-            "khoa": {
-                title: "खोआ का विश्लेषण",
-                tests: [
-                    { title: "नमी का निर्धारण", purpose: "पानी की मात्रा का निर्धारण करने के लिए।", procedure: "<p>पनीर के लिए प्रक्रिया का पालन करें (रेत के साथ सुखाना)।</p>" },
-                    { title: "वसा का निर्धारण", purpose: "वसा सामग्री का निर्धारण करने के लिए।", procedure: "<p>यदि नमूने में अतिरिक्त चीनी है, तो रोज़-गॉटलीब विधि का उपयोग करें। यदि कोई चीनी मौजूद नहीं है, तो वर्नर-श्मिट एसिड पाचन विधि का उपयोग किया जा सकता है।</p>" },
-                    { title: "स्टार्च का पता लगाना", purpose: "स्टार्च के अवैध जोड़ का पता लगाने के लिए।", procedure: "<p>11 ग्राम कद्दूकस किए हुए खोआ को 50 मिली गर्म पानी में फैलाएं। इस फैलाव का 5 मिली लें, 0.2 मिली आयोडीन घोल डालें। एक नीला रंग स्टार्च को इंगित करता है।</p>" },
-                    { title: "सुक्रोज का पता लगाना", purpose: "जोड़ी गई चीनी का पता लगाने के लिए।", procedure: "<p>तैयार खोआ फैलाव का 5 मिली लें, 0.5 मिली सांद्रित HCl और 0.005 ग्राम रिसोर्सिनोल डालें। 5 मिनट के लिए उबलते पानी के स्नान में गरम करें। एक गहरा लाल रंग सुक्रोज को इंगित करता है।</p>" }
-                ]
+            {
+              title: "Lactose ka Determination (Lane-Eynon Method)",
+              purpose: "Doodh mein lactose (doodh ki shakkar) ki quantity measure karna. Lactose ek reducing sugar hai.",
+              reference: "IS 1479 (Part II) 1961; A.O.A.C Official Method 930.28",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+                <p>Lactose ek reducing sugar hai jo Fehling's solution (copper sulphate + alkaline tartrate) ko reduce kar sakta hai. Fehling's solution ka known volume liya jaata hai aur doodh ke clarified solution se titrate kiya jaata hai jab tak saara copper reduce na ho jaye. Methylene blue indicator ka use endpoint detect karne ke liye hota hai — colour blue se colourless ho jaata hai.</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Sample Preparation:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>25 ml doodh ko 250 ml volumetric flask mein lein.</li>
+                  <li>Proteins precipitate karne ke liye 10 ml lead acetate solution daalein, mix karein.</li>
+                  <li>Excess lead hataane ke liye potassium/sodium oxalate daalein.</li>
+                  <li>Volume ko 250 ml tak distilled water se make up karein.</li>
+                  <li>Filter karein — ye clear filtrate titration ke liye use hoga.</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>Ek conical flask mein 10 ml each Fehling's A aur Fehling's B solution lein.</li>
+                  <li>~15 ml distilled water daalein aur boil karein.</li>
+                  <li>Boiling mixture ko burette se doodh ke clarified solution se titrate karein.</li>
+                  <li>Jab solution ka colour halka blue ho jaye, 2-3 drops methylene blue indicator daalein.</li>
+                  <li>Boiling continue karein aur solution drop by drop add karein jab tak blue colour completely disappear na ho jaye (brick red endpoint).</li>
+                  <li>Titre value note karein.</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>Lactose (mg) = Factor from Lane-Eynon table corresponding to titre value</code></pre>
+                <pre><code>% Lactose = (Factor × Dilution) / (Titre × Sample weight) × 100</code></pre>
+  
+                <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+                <p>Normal milk lactose: 4.5-5.0%</p>
+              `
             },
-            "ice-cream": {
-                title: "आइसक्रीम का विश्लेषण",
-                tests: [
-                   {
-                        title: "वसा का निर्धारण (Rose-Gottlieb method)",
-                        purpose: "वसा सामग्री का निर्धारण करने के लिए, कानूनी मानकों और बनावट के लिए महत्वपूर्ण।",
-                        reference: "Pearson’s Composition and analysis of foods 9th edn, 1991 page 604",
-                        procedure: `
-                          <ol class="list-decimal list-outside pl-5 space-y-2">
-                            <li>एक Mojonnier ट्यूब में 4-5 ग्राम नमूना तौलें।</li>
-                            <li>10 मिली आसुत जल डालें और मिलाएं।</li>
-                            <li>2 मिली अमोनिया डालें, मिलाएं, और 60°C पर 20 मिनट के लिए पानी के स्नान में गरम करें।</li>
-                            <li>ठंडा करें, और 10 मिली इथेनॉल, 25 मिली डायथाइल ईथर डालें, और मिलाएं।</li>
-                            <li>फिर 25 मिली पेट्रोलियम ईथर डालें और मिलाएं।</li>
-                            <li>परतों को अलग होने दें, या अपकेंद्रित करें।</li>
-                            <li>ईथर परत को एक तौले हुए बर्तन में छान लें।</li>
-                            <li>निष्कर्षण को दो बार दोहराएं।</li>
-                            <li>ईथर को वाष्पित करें और अवशेष को 102 ± 2°C पर 3 घंटे के लिए सुखाएं।</li>
-                          </ol>
-                        `
-                    },
-                   {
-                        title: "ओवररन का निर्धारण",
-                        purpose: "ओवररन ठंड के दौरान हवा के समावेश के कारण आइसक्रीम के आयतन में मिश्रण के आयतन पर प्रतिशत वृद्धि है।",
-                        reference: "IS:2802: 1964",
-                        procedure: `
-                          <ol class="list-decimal list-outside pl-5 space-y-2">
-                            <li>एक इकाई आइसक्रीम (जैसे, एक पूरा कप या कार्टन) का शुद्ध वजन प्राप्त करने के लिए तौलें। इसे W_icecream होने दें।</li>
-                            <li>उसी मात्रा में आइसक्रीम को पूरी तरह से पिघलाएं, सभी हवा को हटा दें (एमाइल अल्कोहल की एक बूंद मदद कर सकती है)।</li>
-                            <li>पिघले हुए मिश्रण को तौलें। इसे W_mix होने दें।</li>
-                          </ol>
-                             <h4 class="font-semibold mt-4 mb-2">गणना:</h4>
-                             <pre><code>% ओवररन = [ (मिश्रण का वजन - आइसक्रीम का वजन) / आइसक्रीम का वजन ] * 100</code></pre>
-                        `
-                    },
-                   {
-                        title: "कुल ठोस सामग्री",
-                        purpose: "आइसक्रीम में कुल ठोस पदार्थों का निर्धारण करने के लिए।",
-                        procedure: `
-                          <ol class="list-decimal list-outside pl-5 space-y-2">
-                            <li>रेत युक्त एक तौले हुए डिश में 5 ग्राम नमूना तौलें।</li>
-                            <li>एक पेस्ट बनाने के लिए कुछ बूँदें पानी डालें।</li>
-                            <li>20-30 मिनट के लिए उबलते पानी के स्नान पर नमूने को सुखाएं।</li>
-                            <li>डिश को 100 ± 2°C पर 4 घंटे के लिए एक गर्म हवा के ओवन में सुखाएं।</li>
-                            <li>ठंडा करें और तौलें। स्थिर वजन प्राप्त होने तक दोहराएं।</li>
-                          </ol>
-                        `
-                    },
-                    {
-                        title: "प्रोटीन का निर्धारण (Kjeldahl Method)",
-                        purpose: "प्रोटीन सामग्री का निर्धारण करने के लिए।",
-                        reference: "Pearson’s Composition and Analysis of Foods,9th edn,1991 page 17",
-                        procedure: `<p>5-8 ग्राम नमूना तौलें और Kjeldahl विधि (जैसा कि तरल दूध के लिए वर्णित है) का उपयोग करके कुल नाइट्रोजन सामग्री निर्धारित करें। प्रोटीन सामग्री की गणना नाइट्रोजन प्रतिशत को डेयरी आइसक्रीम के लिए 6.38 या जमे हुए डेसर्ट के लिए 6.25 के कारक से गुणा करके की जाती है।</p>`
-                    },
-                    {
-                        title: "जोड़े गए स्टार्च का निर्धारण",
-                        purpose: "स्टार्च के अवैध जोड़ का पता लगाने के लिए।",
-                        reference: "A.O.A.C 17th edn,2000 Modified Official method- 925.50",
-                        procedure: `<p>पेट्रोलियम ईथर के साथ नमूने से वसा हटाएं। अल्कोहल के साथ स्टार्च को अवक्षेपित करें। स्टार्च को कम करने वाली शर्करा में परिवर्तित करने के लिए अवक्षेप को एसिड के साथ हाइड्रोलाइज करें। लेन-ईनोन विधि का उपयोग करके कम करने वाली शर्करा की मात्रा निर्धारित करें और स्टार्च सामग्री प्राप्त करने के लिए 0.9 से गुणा करें।</p>`
-                    }
-                ]
+            {
+              title: "Titratable Acidity",
+              purpose: "Doodh ki total acidity (natural + developed) measure karna — freshness ka indicator hai.",
+              reference: "IS 1479 (Part I) 1961",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+                <p>Doodh ki total acidity ko ek standard alkali solution (NaOH) ke saath titrate karke measure kiya jaata hai. Phenolphthalein indicator colour change (colourless se pink) endpoint indicate karta hai. Fresh doodh ki natural acidity ~0.12-0.14% hoti hai (casein, phosphates, CO₂ se). Bacterial growth se lactic acid banta hai jo acidity badhata hai.</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>Ek porcelain dish ya conical flask mein 10 ml doodh ka sample lein (ya 10 gram weigh karein).</li>
+                  <li>1% phenolphthalein solution ki kuch boondein daalein (3-4 drops).</li>
+                  <li>0.1 N NaOH solution se burette se titrate karein.</li>
+                  <li>Jab ek halka pink colour dikhaye (endpoint) — jo 15 seconds tak rehna chahiye — tab titration band kar dein.</li>
+                  <li>Use kiye gaye alkali ki volume note karein.</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>% Acidity (as lactic acid) = (9 × V × N) / W</code></pre>
+                <p class="text-xs">Jahaan V = NaOH ki volume (ml), N = NaOH ki normality, W = doodh ke sample ka weight (gram). Factor 9 isliye kyunki lactic acid ka equivalent weight 90 hai aur % ke liye 100 se multiply karna hai — 90/1000 × 100 = 9.</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+                <p>Fresh cow milk: 0.12-0.14%, Fresh buffalo milk: 0.12-0.15%. FSSAI maximum limit: 0.15% (as lactic acid) for mixed milk.</p>
+              `
             },
-            "condensed-milk": {
-                title: "संघनित दूध का विश्लेषण",
-                tests: [
-                    {
-                        title: "कुल ठोस पदार्थों का निर्धारण",
-                        purpose: "कुल ठोस सामग्री को मापने के लिए, संघनित दूध के लिए एक प्रमुख पैरामीटर।",
-                        reference: "IS 12333 – 1997 / ISO 6731 -1989",
-                        procedure: `<p>रेत युक्त एक डिश में ~2 ग्राम नमूना तौलें। एक पेस्ट बनाने के लिए 5 मिली पानी डालें। 30 मिनट के लिए पानी के स्नान पर सुखाएं, फिर एक स्थिर वजन पर 102 ± 2°C पर ओवन में सुखाएं।</p>`
-                    },
-                     {
-                        title: "वसा का निर्धारण",
-                        purpose: "वसा सामग्री को मापने के लिए।",
-                        reference: "Rose-Gottlieb Method",
-                        procedure: `<p>2-2.5 ग्राम नमूना तौलें, गर्म पानी और अमोनिया के साथ पुनर्गठित करें। तरल दूध के लिए रोज़-गॉटलीब विधि के साथ आगे बढ़ें।</p>`
-                    },
-                    {
-                        title: "सुक्रोज का निर्धारण",
-                        purpose: "मीठे संघनित दूध में एक प्रमुख घटक, जोड़ी गई चीनी की मात्रा को मापने के लिए।",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">लेन-ईनोन विधि (अनुमापनीय)</h4>
-                            <p>इस विधि में नमूने को स्पष्ट करना और एसिड उलटा होने से पहले और बाद में कम करने वाली शर्करा (लैक्टोज) का निर्धारण करना शामिल है (जो सुक्रोज को कम करने वाली शर्करा में परिवर्तित करता है)। अंतर सुक्रोज सामग्री देता है।</p>
-                            <pre><code>सुक्रोज % = (कुल कम करने वाली शर्करा % - मूल कम करने वाली शर्करा %) * 0.95</code></pre>
-                            
-                            <h4 class="font-semibold mt-4 mb-2">पोलारिमेट्रिक विधि</h4>
-                            <p>यह विधि एसिड उलटा होने से पहले और बाद में एक स्पष्ट नमूना घोल के ऑप्टिकल रोटेशन में परिवर्तन पर आधारित है। रोटेशन में परिवर्तन सुक्रोज सामग्री के समानुपाती होता है।</p>
-                        `
-                    },
-                    { title: "अनुमापनीय अम्लता का निर्धारण", purpose: "अम्लता का निर्धारण करने के लिए।", procedure: "<p>10 ग्राम नमूना तौलें, 30 मिली गर्म पानी से पतला करें, फेनोल्फथेलिन संकेतक डालें, और 0.1N NaOH के साथ अनुमापित करें।</p>" }
-                ]
+            {
+              title: "Total Ash ka Determination",
+              purpose: "Doodh mein total mineral content determine karna.",
+              reference: "IS: 1479 (Part-II)-1961",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+                <p>Doodh ke sample ko tab tak incinerate (burn) kiya jaata hai jab tak saara organic matter destroy na ho jaye, jisse sirf inorganic minerals (ash) reh jaate hain. Ash mein calcium, phosphorus, sodium, potassium, magnesium, chloride etc. included hote hain.</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>Ek pehle se weigh kiye hue silica ya platinum crucible (W1) mein lagbhag 10 gram doodh ka sample accurately weigh karein.</li>
+                  <li>Sample ko ek water bath par evaporate karein (paani hata dein).</li>
+                  <li>Phir ek hot plate par tab tak heat karein jab tak ye burn hona band na kar de (charring).</li>
+                  <li>Crucible ko 550°C par ek muffle furnace mein tab tak heat karein jab tak ek white ya light grey ash prapt na ho jaye (6-8 hours).</li>
+                  <li>Ek desiccator mein cool karein aur weigh karein (W2).</li>
+                  <li>Constant weight ke liye repeat karein.</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>% Total Ash = [(W2 - W1) / Sample ka weight] × 100</code></pre>
+  
+                <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+                <p>Normal milk ash: 0.7-0.75%. Agar ash unusually high hai to neutralizer (soda, lime) milawat ka indication hai.</p>
+              `
             },
-            "milk-powder": {
-                title: "दूध पाउडर का विश्लेषण",
-                tests: [
-                    {
-                        title: "नमी और कुल ठोस पदार्थों का निर्धारण",
-                        purpose: "मुक्त नमी सामग्री का निर्धारण करने के लिए, शेल्फ जीवन के लिए महत्वपूर्ण।",
-                        reference: "IS 16072 : 2012",
-                        procedure: `
-                           <ol class="list-decimal list-outside pl-5 space-y-2">
-                              <li>एक साफ, सूखी, खाली डिश (W1) तौलें।</li>
-                              <li>इसमें 1 ग्राम नमूना तौलें और फिर से तौलें (W2)।</li>
-                              <li>डिश को 102 ± 2°C पर 2 घंटे के लिए एक गर्म हवा के ओवन में सुखाएं।</li>
-                              <li>डिश को एक डेसिकेटर में कमरे के तापमान पर ठंडा करें।</li>
-                              <li>डिश को तौलें और वजन नोट करें (W3)।</li>
-                              <li>एक स्थिर वजन प्राप्त होने तक हीटिंग और कूलिंग दोहराएं।</li>
-                           </ol>
-                           <h4 class="font-semibold mt-4 mb-2">गणना:</h4>
-                           <pre><code>% कुल ठोस = [ (W3 - W1) / (W2 - W1) ] * 100</code></pre>
-                           <pre><code>% नमी = 100 - % कुल ठोस</code></pre>
-                        `
-                    },
-                   {
-                        title: "वसा का निर्धारण",
-                        purpose: "वसा सामग्री को मापने के लिए।",
-                        reference: "A.O.A.C 17th edn, 2000 Official method 932.06",
-                        procedure: `<p>~1 ग्राम पाउडर तौलें, इसे 10 मिली गर्म पानी से पुनर्गठित करें, अमोनिया डालें, और फिर रोज़-गॉटलीब विधि का उपयोग करके वसा निकालें।</p>`
-                    },
-                    { title: "अनुमापनीय अम्लता का निर्धारण", purpose: "अम्लता का निर्धारण करने के लिए।", procedure: "<p>10 ग्राम पाउडर को 100 मिली में पुनर्गठित करें। इस पुनर्गठित दूध का 10 मिली 0.1N NaOH के साथ फेनोल्फथेलिन का उपयोग करके अनुमापित करें, एक संदर्भ मानक (रोसानिलिन एसीटेट या कोबाल्ट सल्फेट) के साथ समापन बिंदु रंग की तुलना करें।</p>" },
-                   {
-                        title: "घुलनशीलता सूचकांक का निर्धारण",
-                        purpose: "पुनर्गठन के बाद बिना घुले पाउडर की मात्रा को मापता है, गुणवत्ता को इंगित करता है।",
-                        reference: "ISI Hand book of Food Analysis (Part XI) – 1981",
-                        procedure: `<p>एक मानक घोल तैयार किया जाता है और अपकेंद्रित किया जाता है। तलछट की मात्रा को एक अंशांकित अपकेंद्रित्र ट्यूब में मापा जाता है और मिलीलीटर में घुलनशीलता सूचकांक के रूप में रिपोर्ट किया जाता है। एक कम सूचकांक वांछनीय है।</p>`
-                    },
-                    {
-                        title: "कुल राख का निर्धारण",
-                        purpose: "खनिज सामग्री का निर्धारण करने के लिए।",
-                        reference: "IS 1165 - 2005",
-                        procedure: `<p>एक क्रूसिबल में ~3 ग्राम पाउडर तौलें। धीरे-धीरे और फिर दृढ़ता से 550 ± 20°C पर एक मफल फर्नेस में तब तक गरम करें जब तक कि ग्रे राख प्राप्त न हो जाए। अवशेष का अंतिम स्थिर वजन कुल राख है।</p>`
-                    },
-                    { title: "कच्चे फाइबर का निर्धारण", purpose: "अनाज आधारित पूरक खाद्य पदार्थों के लिए।", procedure: "<p>वसा रहित नमूने को क्रमिक रूप से पतले एसिड और फिर पतले क्षार के साथ उबाला जाता है। शेष अघुलनशील अवशेष को सुखाया जाता है, तौला जाता है, जलाया जाता है, और फिर से तौला जाता है। प्रज्वलन पर वजन में कमी कच्चे फाइबर का प्रतिनिधित्व करती है।</p>" }
-                ]
+            {
+              title: "Minerals ka Determination (Flame Photometry se)",
+              purpose: "Doodh mein calcium, sodium aur potassium ki quantity ka tezi se aur accurately determination karna.",
+              reference: "Journal of Dairy Science Vol. 33, No. 6, 1950",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+                <p>Flame photometry ek aisi technique hai jismein ek sample ko ek flame mein introduce kiya jaata hai. Har element ek specific wavelength par light emit karta hai (Na: 589 nm — yellow, K: 766 nm — violet, Ca: 622 nm — red-orange). Emitted light ki intensity us element ki concentration ke proportional hoti hai.</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Sample Preparation:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>Ek porcelain crucible mein 100 gram doodh ka accurately weight karein.</li>
+                  <li>Sample ko 100°C par 24 ghante ke liye dry karein.</li>
+                  <li>Dried sample ko muffle furnace mein 550°C par ash karein.</li>
+                  <li>Ash ko 10 ml 1:1 HCl aur garam paani se extract karein. Solution ko filter karein.</li>
+                  <li>Complete extraction ensure karne ke liye ashing aur extraction process repeat karein.</li>
+                  <li>Final filtered solution ko ek volumetric flask mein 500 ml tak distilled water se dilute karein.</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>Stock solution ka 5 ml aliquot lein, ise 100 ml volumetric flask mein daalein, aur distilled water se mark tak dilute karein.</li>
+                  <li>Flame photometer ko Ca, Na ya K ke specific wavelength par set karein.</li>
+                  <li>Known concentrations ke standard solutions tayyar karein.</li>
+                  <li>Standard solutions ki intensity measure karein aur calibration curve banayein.</li>
+                  <li>Unknown sample ki flame intensity measure karein aur calibration curve se concentration find karein.</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-4 mb-2">Calculation (Interpolation Method):</h4>
+                <pre><code>C_x = C₁ + (C₂ - C₁) × (I_x - I₁) / (I₂ - I₁)</code></pre>
+                <p class="text-xs">Jahaan C = concentration, I = intensity, subscript x = unknown, 1 = lower standard, 2 = upper standard.</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Expected Values in Milk:</h4>
+                <p>Calcium: ~120 mg/100ml, Sodium: ~50 mg/100ml, Potassium: ~150 mg/100ml</p>
+              `
             },
-            "casein": {
-                title: "खाद्य कैसिइन उत्पादों का विश्लेषण",
-                tests: [
-                    { title: "नमी का निर्धारण", purpose: "पानी की मात्रा का निर्धारण करने के लिए।", procedure: "<p>दूध पाउडर के लिए प्रक्रिया का पालन करें (102±2°C पर सुखाना)।</p>" },
-                    { title: "वसा का निर्धारण", purpose: "वसा सामग्री का निर्धारण करने के लिए।", procedure: "<p>नमूने को HCl के साथ पचाया जाता है, और वसा को Schmid-Bondzynski-Ratzlaff (SBR) सिद्धांत (वर्नर-श्मिट विधि के समान) का उपयोग करके डायथाइल ईथर और पेट्रोलियम ईथर से निकाला जाता है।</p>" },
-                    { title: "प्रोटीन का निर्धारण", purpose: "प्रोटीन सामग्री का निर्धारण करने के लिए।", procedure: "<p>कुल नाइट्रोजन को Kjeldahl विधि द्वारा निर्धारित किया जाता है। सच्चे प्रोटीन के लिए, गैर-प्रोटीन नाइट्रोजन (NPN) को TCA निस्यंद से अलग से निर्धारित किया जाता है और कुल नाइट्रोजन से घटाया जाता है।</p>" },
-                    { title: "लैक्टोज का निर्धारण", purpose: "अवशिष्ट लैक्टोज का निर्धारण करने के लिए।", procedure: "<p>एक फोटोमेट्रिक विधि का उपयोग करके। कैसिइन को अवक्षेपित किया जाता है, और निस्यंद में लैक्टोज फिनोल और सल्फ्यूरिक एसिड के साथ प्रतिक्रिया करके एक रंग उत्पन्न करता है, जिसे 490 एनएम पर मापा जाता है।</p>" },
-                    { title: "राख का निर्धारण", purpose: "खनिज सामग्री का निर्धारण करने के लिए।", procedure: "<p>नमूने को 825 ± 25°C पर तब तक जलाया जाता है जब तक कि सारा कार्बन न निकल जाए। निश्चित राख के लिए, सभी फास्फोरस को बनाए रखने के लिए भस्मीकरण से पहले मैग्नीशियम एसीटेट जोड़ा जाता है।</p>" },
-                    { title: "मुक्त अम्लता और पीएच का निर्धारण", purpose: "अम्लता का निर्धारण करने के लिए।", procedure: "<p>नमूने के एक जलीय अर्क को 0.1N NaOH (मुक्त अम्लता के लिए) के साथ अनुमापित किया जाता है या एक पीएच मीटर (पीएच के लिए) से मापा जाता है।</p>" }
-                ]
+            {
+              title: "Methylene Blue Reduction Test (MBRT)",
+              purpose: "Raw doodh ki microbiological quality ka quickly assessment karna — ye ek rapid platform test hai.",
+              reference: "IS: 1479 (Part III) – 1977",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+                <p>Methylene Blue ek blue redox dye hai. Doodh mein present bacteria apne metabolism (respiration) ke dauran is dye ko reduce karte hain, jisse ye colourless (leuco form) ho jaata hai. Jitni tezi se colour gayab hota hai, doodh mein utne hi zyada bacteria hote hain. Ye test bacteria count ka indirect measure deta hai.</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Reagents:</h4>
+                <ul class="list-disc list-outside pl-5 space-y-1">
+                  <li>Methylene Blue solution: 5 mg methylene blue per litre distilled water (autoclaved)</li>
+                </ul>
+  
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>Ek sterilized test tube mein 10 ml doodh ka sample lein (aseptic technique se).</li>
+                  <li>Ek standard methylene blue solution ka 1 ml daalein.</li>
+                  <li>Tube ko ek rubber stopper se band karein aur ise ek baar ulta karke mix karein (zyada mat hilayein).</li>
+                  <li>Tube ko 37°C par ek water bath mein rakhein.</li>
+                  <li>Samay-samay par dekhein (bina hilaye — sirf tube ko dekhein) aur us time ko record karein jab blue colour puri tarah se disappear ho jaye.</li>
+                  <li>Ek control tube bhi rakhein (doodh + dye bina incubation ke).</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-4 mb-2">Interpretation (Grading):</h4>
+                <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                  <thead><tr class="bg-gray-100"><th class="border p-2">Grade</th><th class="border p-2">MBRT</th><th class="border p-2">Approx. Bacteria Count</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border p-2"><strong>Bahut Achha (Very Good)</strong></td><td class="border p-2">5 ghante ya usse zyada</td><td class="border p-2">&lt; 5 lakh/ml</td></tr>
+                    <tr><td class="border p-2"><strong>Achha (Good)</strong></td><td class="border p-2">2 se 4 ghante</td><td class="border p-2">5-20 lakh/ml</td></tr>
+                    <tr><td class="border p-2"><strong>Santoshjanak (Fair)</strong></td><td class="border p-2">30 minute se 1 ghanta</td><td class="border p-2">20 lakh - 1 crore/ml</td></tr>
+                    <tr><td class="border p-2"><strong>Kharab (Poor)</strong></td><td class="border p-2">30 minute se kam</td><td class="border p-2">&gt; 1 crore/ml</td></tr>
+                  </tbody>
+                </table>
+              `
             },
-            "whey-powder": {
-                title: "मट्ठा पाउडर का विश्लेषण",
-                tests: [
-                    { title: "नमी का निर्धारण", purpose: "पानी की मात्रा का निर्धारण करने के लिए।", procedure: "<p>दूध पाउडर के लिए प्रक्रिया का पालन करें।</p>" },
-                    { title: "वसा का निर्धारण", purpose: "वसा सामग्री का निर्धारण करने के लिए।", procedure: "<p>दूध पाउडर के लिए रोज़-गॉटलीब विधि का पालन करें।</p>" },
-                    { title: "प्रोटीन का निर्धारण", purpose: "प्रोटीन सामग्री का निर्धारण करने के लिए।", procedure: "<p>6.38 के रूपांतरण कारक का उपयोग करके दूध पाउडर के लिए केल्डाल विधि का पालन करें।</p>" },
-                    { title: "कुल राख का निर्धारण", purpose: "खनिज सामग्री का निर्धारण करने के लिए।", procedure: "<p>दूध पाउडर के लिए प्रक्रिया का पालन करें।</p>" },
-                    { title: "पीएच का निर्धारण", purpose: "पीएच का निर्धारण करने के लिए।", procedure: "<p>मट्ठा पाउडर का 10% पुनर्गठित घोल तैयार करें और एक अंशांकित पीएच मीटर का उपयोग करके पीएच मापें।</p>" },
-                    { title: "लैक्टोज का निर्धारण", purpose: "लैक्टोज सामग्री का निर्धारण करने के लिए।", procedure: "<p>लेन-ईनोन विधि (संघनित दूध के लिए) का उपयोग करके कम करने वाली शर्करा निर्धारित करें और निर्जल लैक्टोज के रूप में गणना करें।</p>" }
-                ]
+            {
+              title: "Resazurin Test (10 Minute Test)",
+              purpose: "MBRT se bhi tez — sirf 10 minute mein doodh ki quality ka rough assessment.",
+              reference: "IS: 1479 (Part III) – 1977",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+                <p>Resazurin ek blue dye hai jo bacteria ke metabolic activity se reduce hoti hai. Blue → Purple → Pink → Colourless. 10 minute incubation ke baad colour ko ek Lovibond disc se compare karke grade diya jaata hai. Ye MBRT se zyada rapid hai aur field conditions mein useful hai.</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>Sterilized tube mein 10 ml doodh lein.</li>
+                  <li>1 ml standard resazurin solution (0.005%) daalein.</li>
+                  <li>Ek baar ulta karke mix karein.</li>
+                  <li>37°C par water bath mein rakhein.</li>
+                  <li>Exactly 10 minute baad tube nikaalein aur colour ko Lovibond comparator disc se compare karein.</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-4 mb-2">Grading (10-minute Resazurin):</h4>
+                <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                  <thead><tr class="bg-gray-100"><th class="border p-2">Disc Reading</th><th class="border p-2">Colour</th><th class="border p-2">Grade</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border p-2">6</td><td class="border p-2">Blue</td><td class="border p-2">Excellent</td></tr>
+                    <tr><td class="border p-2">5</td><td class="border p-2">Light Blue</td><td class="border p-2">Good</td></tr>
+                    <tr><td class="border p-2">4</td><td class="border p-2">Purple</td><td class="border p-2">Fair</td></tr>
+                    <tr><td class="border p-2">3</td><td class="border p-2">Purple-Pink</td><td class="border p-2">Fair</td></tr>
+                    <tr><td class="border p-2">2</td><td class="border p-2">Pink</td><td class="border p-2">Poor</td></tr>
+                    <tr><td class="border p-2">1</td><td class="border p-2">White/Colourless</td><td class="border p-2">Very Poor</td></tr>
+                  </tbody>
+                </table>
+              `
+            },
+            {
+              title: "Alkaline Phosphatase Test (ALP Test)",
+              purpose: "Pasteurization ki efficiency verify karna — sabse important quality control test.",
+              reference: "IS 1479 (Part III) 1977; A.O.A.C 946.03",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+                <p>Phosphatase ek enzyme hai jo raw doodh mein naturally present hota hai. Ye 63°C/30 min ya 72°C/15 sec par inactivate ho jaata hai — matlab proper pasteurization se yeh enzyme destroy ho jaata hai. Agar yeh test positive aaye to iska matlab hai ki doodh ko properly pasteurize nahi kiya gaya tha ya ise raw doodh se contaminate kiya gaya tha.</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Aschaffenburg and Mullen (A&M) Method:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>Doodh ke sample ko ek buffer-substrate solution (disodium p-nitrophenyl phosphate — 0.15% in buffer pH 10.2) ke saath mix karein — 5 ml doodh + 5 ml substrate.</li>
+                  <li>37°C par 2 hours ke liye incubate karein.</li>
+                  <li>Agar phosphatase present hai, to yeh substrate ko hydrolyze karega, jisse p-nitrophenol niklega — jo alkaline solution mein YELLOW hota hai.</li>
+                  <li>Colour ki intensity ko standard colour discs ya spectrophotometer (420 nm) se compare/measure karein.</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-4 mb-2">Interpretation:</h4>
+                <p><strong>Properly pasteurized milk:</strong> No yellow colour (negative test) — &lt;10 µg p-nitrophenol/ml</p>
+                <p><strong>Under-pasteurized/raw milk:</strong> Yellow colour (positive test) — &gt;10 µg p-nitrophenol/ml</p>
+              `
+            },
+            {
+              title: "Peroxidase Test (Storch Test)",
+              purpose: "Over-heating ya over-pasteurization detect karna. Peroxidase enzyme 80°C se upar destroy hota hai.",
+              reference: "IS 1479 (Part I) 1961",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+                <p>Peroxidase ek enzyme hai jo raw doodh mein present hota hai aur HTST pasteurization (72°C/15 sec) survive karta hai but 80°C se upar destroy ho jaata hai. Properly pasteurized doodh mein peroxidase POSITIVE hona chahiye. Agar negative aaye, to doodh over-heated tha.</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Procedure (Storch Test):</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>Test tube mein 5 ml doodh lein.</li>
+                  <li>5 drops of 2% paraphenylene diamine solution daalein.</li>
+                  <li>2 drops of hydrogen peroxide (0.2%) daalein.</li>
+                  <li>Mix karein aur 30 seconds observe karein.</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-4 mb-2">Interpretation:</h4>
+                <p><strong>Dark blue/indigo colour (within 30 sec):</strong> Positive — Peroxidase present — doodh properly pasteurized (72°C/15 sec) aur over-heated nahi hai.</p>
+                <p><strong>No colour change:</strong> Negative — Peroxidase destroyed — doodh 80°C se upar heat hua hai (over-pasteurized).</p>
+                <p><strong>Raw milk:</strong> Strongly positive (immediate deep colour)</p>
+              `
+            },
+            {
+              title: "pH Determination",
+              purpose: "Doodh ka hydrogen ion concentration measure karna — freshness aur quality ka indicator.",
+              reference: "IS 1479 (Part I) 1961",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>pH meter ko standard buffer solutions (pH 4.0 aur pH 7.0) se calibrate karein.</li>
+                  <li>50 ml doodh ek beaker mein lein.</li>
+                  <li>Temperature note karein (25°C ideal hai).</li>
+                  <li>Electrode ko doodh mein daalein aur stable reading le karein.</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+                <p>Fresh cow milk pH: 6.6-6.8, Fresh buffalo milk pH: 6.7-6.8</p>
+                <p>Sour/fermented milk: pH &lt; 6.0, Mastitic milk: pH &gt; 7.0</p>
+              `
+            },
+            {
+              title: "Alcohol Test (COB Test - Clot on Boiling)",
+              purpose: "Doodh ki acidity quickly check karna — developed acidity high hone par doodh alcohol/heat se clot hota hai.",
+              reference: "IS 1479 (Part I) 1961",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Method 1: Alcohol Test</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>Ek test tube mein 2 ml doodh lein.</li>
+                  <li>2 ml 68% ethanol (ya 75% ethanol for more sensitive test) daalein.</li>
+                  <li>Mix karein aur clot formation observe karein.</li>
+                </ol>
+                <p><strong>Result:</strong> Clot formation = POSITIVE = doodh ki acidity 0.20% se zyada hai ya colostrum hai. No clot = NEGATIVE = doodh normal hai.</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Method 2: Clot on Boiling (COB) Test</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>5 ml doodh ek test tube ya spoon mein lein.</li>
+                  <li>Direct flame par boil karein.</li>
+                  <li>Clot formation dekhein.</li>
+                </ol>
+                <p><strong>Result:</strong> Clot = doodh ki acidity 0.24% se zyada hai. No clot = normal.</p>
+              `
+            },
+            {
+              title: "Added Water ka Detection",
+              purpose: "Doodh mein paani milawat ka pata lagana — sabse common adulteration.",
+              reference: "IS 1479 (Part I) 1961",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+                <p>Paani milane se doodh ka SNF aur specific gravity dono kam ho jaate hain. Freezing point bhi change hota hai. Normal doodh ka freezing point -0.520 to -0.540°C hota hai. Paani milane se ye 0°C ki taraf shift hota hai.</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Method 1: Lactometer + SNF Method</h4>
+                <p>Lactometer reading aur fat % se SNF calculate karein. Agar SNF 8.5% se neeche hai aur specific gravity 1.028 se kam hai to paani milawat ka strong indication hai.</p>
+                <pre><code>% Added Water = [(Expected SNF - Observed SNF) / Expected SNF] × 100</code></pre>
+  
+                <h4 class="font-semibold mt-4 mb-2">Method 2: Cryoscopy (Freezing Point Method)</h4>
+                <p>Doodh ka freezing point ek precision cryoscope se measure karein.</p>
+                <p>Normal freezing point: -0.520 to -0.540°C (Hortvet scale)</p>
+                <pre><code>% Added Water = [(T_observed - T_normal) / T_normal] × 100</code></pre>
+                <p class="text-xs">Jahaan T = Freezing point depression</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Method 3: Nitrate Test</h4>
+                <p>Normal doodh mein nitrate absent hota hai, lekin tap water mein present hota hai. 5 ml doodh lein, carefully 1 ml conc. H₂SO₄ add karein with diphenylamine crystal. Ek blue ring at junction = nitrate present = paani mila hua hai.</p>
+              `
+            },
+            {
+              title: "Formalin ka Detection",
+              purpose: "Formalin (formaldehyde) ek illegal preservative hai — iska detection zaroori hai.",
+              reference: "FSSAI Manual Method 2.1.9",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Hehner's Test:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>Ek test tube mein 10 ml doodh lein.</li>
+                  <li>5 ml concentrated sulphuric acid (with trace of ferric chloride — 0.2 ml of 10% FeCl₃ per 100 ml acid) ko tube ki deewar se carefully neeche slide karein taaki ye doodh ke neeche settle ho jaye.</li>
+                  <li>Interface (junction) par colour observe karein.</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-4 mb-2">Result:</h4>
+                <p><strong>Violet/Purple ring at junction:</strong> Formalin PRESENT — adulterated</p>
+                <p><strong>Brown ring (normal):</strong> Formalin ABSENT — no adulteration</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Confirmatory Test (Chromotropic Acid Test):</h4>
+                <p>1 ml doodh + 1 ml chromotropic acid solution + 5 ml conc. H₂SO₄. Violet colour = formaldehyde confirmed.</p>
+              `
+            },
+            {
+              title: "Urea ka Detection",
+              purpose: "Urea ek common adulterant hai — SNF artificially badhane ke liye milaya jaata hai.",
+              reference: "FSSAI Manual Method",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Method 1: DMAB Method</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>Ek test tube mein 5 ml doodh lein.</li>
+                  <li>5 ml of DMAB reagent (para-dimethylaminobenzaldehyde — 1.6 g in 100 ml ethanol + 10 ml conc. HCl) daalein.</li>
+                  <li>Mix karein aur 10 minute observe karein.</li>
+                </ol>
+                <p><strong>Yellow colour development:</strong> Urea PRESENT (normal doodh mein bhi thoda urea hota hai ~20-70 mg/100ml, but intense yellow = added urea)</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Method 2: Urease Based Quantitative Method</h4>
+                <p>Soybean urease doodh mein add kiya jaata hai jo urea ko ammonia mein convert karta hai. Released ammonia ko Nessler's reagent se measure kiya jaata hai (yellow-brown colour at 420 nm). Normal milk urea: 20-70 mg/100 ml. Added urea: >70 mg/100 ml suspect.</p>
+              `
+            },
+            {
+              title: "Hydrogen Peroxide ka Detection",
+              purpose: "H₂O₂ ek illegal preservative hai — doodh ki shelf life artificially badhane ke liye milaya jaata hai.",
+              reference: "FSSAI Manual Method 2.1.8",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Method 1: Vanadium Pentoxide Method</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>Ek test tube mein 10 ml doodh lein.</li>
+                  <li>2-3 drops vanadium pentoxide (V₂O₅) solution daalein — ye catalyst ka kaam karta hai.</li>
+                  <li>Colour observe karein.</li>
+                </ol>
+                <p><strong>Red/Pink colour:</strong> H₂O₂ PRESENT — adulterated</p>
+                <p><strong>No colour change:</strong> H₂O₂ ABSENT</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Method 2: Potassium Iodide-Starch Method</h4>
+                <p>5 ml doodh + few drops KI solution + few drops starch solution. Blue colour = H₂O₂ present (H₂O₂ KI se iodine liberate karta hai jo starch ke saath blue deta hai).</p>
+              `
+            },
+            {
+              title: "Neutralizer ka Detection",
+              purpose: "Soda, caustic soda, sodium bicarbonate — ye sab doodh ki acidity chhupane ke liye milaaye jaate hain.",
+              reference: "IS 1479 (Part I) 1961; FSSAI Manual",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Method 1: Rosalic Acid Test (for Soda/Carbonates)</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>5 ml doodh ek test tube mein lein.</li>
+                  <li>5 ml alcohol daalein (proteins precipitate karne ke liye).</li>
+                  <li>3-4 drops rosalic acid solution (1% in alcohol) daalein.</li>
+                </ol>
+                <p><strong>Rose-red/Pink colour:</strong> Neutralizer (soda/carbonate) PRESENT</p>
+                <p><strong>Brownish/Yellow colour:</strong> ABSENT — normal doodh</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Method 2: Alizarin Test for Sodium Bicarbonate</h4>
+                <p>Equal volumes doodh + alizarin reagent (0.2% in alcohol). Deep violet = sodium bicarbonate present.</p>
+              `
+            },
+            {
+              title: "Detergent ka Detection",
+              purpose: "Doodh mein detergent milawat detect karna — ye fat percentage artificially badhane ke liye milaya jaata hai.",
+              reference: "FSSAI Manual",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Methylene Blue Method:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>10 ml doodh ek test tube mein lein.</li>
+                  <li>0.5 ml methylene blue solution daalein.</li>
+                  <li>5 ml chloroform daalein.</li>
+                  <li>Vigorously shake karein aur settle hone dein.</li>
+                </ol>
+                <p><strong>Blue colour in chloroform layer (lower):</strong> Detergent PRESENT — methylene blue detergent ke saath chloroform layer mein migrate karta hai.</p>
+                <p><strong>Colourless chloroform layer:</strong> Detergent ABSENT</p>
+              `
+            },
+            {
+              title: "Ammonium Sulphate ka Detection",
+              purpose: "Ammonium sulphate doodh ki lactometer reading badhane ke liye milaya jaata hai.",
+              reference: "FSSAI Manual",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Nessler's Reagent Method:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>5 ml doodh + 5 ml 2% NaOH solution mix karein.</li>
+                  <li>1 ml Nessler's reagent (K₂HgI₄ in NaOH) daalein.</li>
+                  <li>5 minute observe karein.</li>
+                </ol>
+                <p><strong>Orange-brown precipitate:</strong> Ammonium sulphate PRESENT (excessive ammonia)</p>
+                <p><strong>Faint yellow (normal level):</strong> Normal doodh — thoda urea naturally hota hai</p>
+              `
+            },
+            {
+              title: "Starch ka Detection in Milk",
+              purpose: "Starch ek thickener ke roop mein milaya jaata hai taaki paani milane ka pata na chale.",
+              reference: "IS 1479 (Part I) 1961",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Iodine Test:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>5 ml doodh ek test tube mein lein.</li>
+                  <li>Boil karein aur phir cool karein (starch granules ko swell karne ke liye).</li>
+                  <li>2-3 drops iodine solution (Lugol's iodine) daalein.</li>
+                </ol>
+                <p><strong>Blue/Blue-black colour:</strong> Starch PRESENT</p>
+                <p><strong>Yellow-brown colour:</strong> Starch ABSENT (normal)</p>
+              `
+            },
+            {
+              title: "Sugar (Sucrose) ka Detection in Milk",
+              purpose: "Cane sugar ka detection — ye SNF aur taste artificially badhane ke liye milaya jaata hai.",
+              reference: "FSSAI Manual",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Seliwanoff's Test (Modified Barfoed's):</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>5 ml doodh ek test tube mein lein.</li>
+                  <li>1 ml conc. HCl daalein.</li>
+                  <li>0.05 gram resorcinol add karein.</li>
+                  <li>Boiling water bath mein 5 minute heat karein.</li>
+                </ol>
+                <p><strong>Red/Rose-red colour:</strong> Sucrose (cane sugar) PRESENT</p>
+                <p><strong>No colour change:</strong> Sucrose ABSENT</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Note:</h4>
+                <p>Normal doodh mein sirf lactose hota hai, sucrose nahi. Koi bhi sucrose presence adulteration indicate karta hai.</p>
+              `
+            },
+            {
+              title: "Salt (NaCl) ka Detection in Milk",
+              purpose: "Namak milawat ka detection — ye specific gravity aur taste mask karne ke liye milaya jaata hai.",
+              reference: "FSSAI Manual",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Silver Nitrate Test:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>5 ml doodh ek test tube mein lein.</li>
+                  <li>1 ml 0.1N silver nitrate (AgNO₃) solution daalein.</li>
+                  <li>2 drops potassium chromate indicator daalein.</li>
+                </ol>
+                <p><strong>Yellow colour:</strong> Excess salt (NaCl) PRESENT — AgNO₃ saara chloride se react kar chuka aur excess AgNO₃ chromate se yellow colour de raha hai — actually means chloride kam hai aur salt normal hai.</p>
+                <p><strong>Correction:</strong> Normal milk mein 0.14-0.17% Cl hota hai. White precipitate excess indicate karta hai. Quantitative determination ke liye Mohr's method use karein (butter section mein described hai).</p>
+              `
+            },
+            {
+              title: "Turbidity Test (Lacto Test)",
+              purpose: "Doodh mein paani milawat ka ek simple qualitative test.",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>5 ml doodh ek test tube mein lein.</li>
+                  <li>5 ml trichloroacetic acid (TCA, 4%) daalein — ye proteins precipitate kar deta hai.</li>
+                  <li>Mix karein aur filter karein.</li>
+                  <li>Filtrate ko observe karein.</li>
+                </ol>
+                <p><strong>Clear filtrate:</strong> Normal doodh</p>
+                <p><strong>Turbid/Milky filtrate:</strong> Paani aur/ya synthetic milk milawat ka indication</p>
+              `
             }
+          ]
+        },
+  
+        "cream": {
+          title: "Cream ka Analysis",
+          tests: [
+            {
+              title: "Fat ka Determination",
+              purpose: "Cream mein fat content determine karna — ye iski primary commercial value hai.",
+              reference: "IS 3509-1966",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Method 1: Gerber Method (Cream ke liye)</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>Ek special cream butyrometer mein seedha 5 gram achchi tarah se mixed cream weigh karein.</li>
+                  <li>5 ml paani daalein (cream ko dilute karne ke liye).</li>
+                  <li>10 ml Gerber ka acid aur 1 ml amyl alcohol daalein.</li>
+                  <li>Doodh ke liye Gerber method ke anusaar aage badhein (centrifuge, water bath, reading). Reading ko butyrometer ke basis par ek factor se multiply kiya jaata hai taaki fat percentage prapt ho sake.</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-4 mb-2">Method 2: Rose-Gottlieb Method</h4>
+                <p>Reference/accurate method. ~5 gram cream ko ammonia, ethanol, diethyl ether aur petroleum ether se extract karein — same as milk Rose-Gottlieb but sample size adjust kiya jaata hai.</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Method 3: Werner-Schmidt Method</h4>
+                <p>Sour ya preserved cream ke liye suitable. Lagbhag 5 gram cream ko HCl se digest karein, aur fat ko ether se extract karein aur weigh karein.</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+                <p>Light cream: 25-30% fat, Heavy/Table cream: 40-50% fat, FSSAI standard: Min 25% fat</p>
+              `
+            },
+            {
+              title: "Total Solids ka Determination",
+              purpose: "Cream mein total solid content determine karna.",
+              reference: "IS 3509-1966",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>Ek pehle se weigh kiye hue dish (W1) mein ~5 gram cream ka sample weigh karein.</li>
+                  <li>Water bath par 30 min heat karein, phir oven mein 100±2°C par 3-4 hours dry karein.</li>
+                  <li>Desiccator mein cool karein, weigh karein (W2).</li>
+                  <li>Constant weight prapt hone tak repeat karein.</li>
+                </ol>
+                <pre><code>% Total Solids = [(W2 - W_empty dish) / Sample weight] × 100</code></pre>
+              `
+            },
+            {
+              title: "Titratable Acidity",
+              purpose: "Cream ki acidity determine karna.",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>Ek porcelain dish mein 10 gram cream weigh karein.</li>
+                  <li>Sample ko disperse karne ke liye 10 ml garam, neutral distilled water daalein.</li>
+                  <li>Phenolphthalein indicator ki kuch boondein daalein.</li>
+                  <li>Ek halke pink endpoint par 0.1 N NaOH ke saath titrate karein.</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>% Acidity = (Titration volume × NaOH ki Normality × 9) / Sample ka weight</code></pre>
+  
+                <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+                <p>Fresh pasteurized cream: ≤0.30% (as lactic acid)</p>
+              `
+            },
+            {
+              title: "Cream mein Thickeners ka Detection",
+              purpose: "Cream ko artificially gaadha karne ke liye use kiye jaane wale starch ya gelatin jaise illegal additives ka pata lagana.",
+              reference: "A.O.A.C. Official method 920.106",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Starch Detection:</h4>
+                <p>10 ml cream ko 10 ml paani se dilute karein aur boil karein. Cool karein aur iodine solution ki kuch boondein daalein. <strong>Blue colour = Starch PRESENT</strong></p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Gelatin Detection (Stokes Test):</h4>
+                <p>10 ml cream, 20 ml paani, aur 20 ml Stokes reagent (acid mercuric nitrate) mix karein. Mixture ko filter karein. Filtrate mein, saturated picric acid ki equal quantity daalein. <strong>Yellow precipitate = Gelatin PRESENT</strong></p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Carrageenan/Guar Gum Detection:</h4>
+                <p>Cream ko dilute acid se treat karein aur agar gel formation ya viscous behaviour dikhaye to stabilizers ka indication hai. Confirmatory testing HPLC se kiya jaata hai.</p>
+              `
+            },
+            {
+              title: "Phosphatase Test for Cream",
+              purpose: "Cream ke proper pasteurization ki verification.",
+              reference: "IS 3509-1966",
+              procedure: `
+                <p>Doodh ke phosphatase test jaisa hi procedure follow karein. Cream ke liye, pehle cream ko buffer solution se 1:10 dilute karein taaki fat interference kam ho. Baaki procedure (substrate addition, incubation at 37°C for 2 hours, colour observation) same hai.</p>
+                <p><strong>No yellow colour:</strong> Properly pasteurized cream</p>
+                <p><strong>Yellow colour:</strong> Under-pasteurized ya raw cream se contaminated</p>
+              `
+            },
+            {
+              title: "Protein Content of Cream",
+              purpose: "Cream mein protein content determine karna.",
+              reference: "A.O.A.C 991.23",
+              procedure: `
+                <p>Kjeldahl method use karein — ~5 gram cream weigh karein aur standard digestion, distillation, aur titration procedure follow karein. Conversion factor 6.38 use karein.</p>
+                <pre><code>% Protein = % Total Nitrogen × 6.38</code></pre>
+                <p>Expected: Light cream ~2.5%, Heavy cream ~1.5-2.0%</p>
+              `
+            }
+          ]
+        },
+  
+        "cream-powder": {
+          title: "Cream Powder ka Analysis",
+          tests: [
+            {
+              title: "Moisture ka Determination",
+              purpose: "Free moisture content determine karna — shelf life ke liye critical hai.",
+              reference: "IS 16072: 2012",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>Ek saaf, dry, khaali moisture dish ko uske dhakkan (W1) ke saath weigh karein.</li>
+                  <li>Dish mein lagbhag 1 gram sample daalein aur phir se weigh karein (W2).</li>
+                  <li>Dhakkan ke bina dish ko 102 ± 2°C par 2 ghante ke liye hot air oven mein rakhein.</li>
+                  <li>Dish ko dhak dein, desiccator mein cool karein, aur weigh karein (W3).</li>
+                  <li>1 ghante ke intervals par heating repeat karein jab tak constant weight prapt na ho jaye.</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>% Moisture = [(W2 - W3) / (W2 - W1)] × 100</code></pre>
+                <p>Expected: ≤ 4.0% (FSSAI standard for cream powder)</p>
+              `
+            },
+            {
+              title: "Fat ka Determination",
+              purpose: "Cream powder mein fat content determine karna.",
+              reference: "A.O.A.C 932.06",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure (Rose-Gottlieb Method):</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>Ek extraction flask mein accurately ~1 gram powder weigh karein.</li>
+                  <li>10 ml garam paani daalein aur powder ko reconstitute karne ke liye achchi tarah mix karein.</li>
+                  <li>1.25 ml ammonia solution daalein aur mix karein.</li>
+                  <li>Liquid doodh ke liye described anusaar diethyl ether aur petroleum ether use karke standard Rose-Gottlieb extraction ke saath aage badhein.</li>
+                </ol>
+                <p>Expected: Cream powder mein 42-75% fat hota hai (grade ke hisaab se).</p>
+              `
+            },
+            {
+              title: "Milk Protein ka Determination",
+              purpose: "Kjeldahl method use karke protein content determine karna.",
+              reference: "A.O.A.C 991.23, 991.20, 991.21",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>Kjeldahl method use karke powder ki Total Nitrogen (TN) content determine karein.</li>
+                  <li>Reconstituted sample ke Trichloroacetic Acid (TCA) filtrate se Non-Protein Nitrogen (NPN) determine karein, Kjeldahl method ka bhi use karein. 12% TCA proteins precipitate karta hai, NPN filtrate mein rehta hai.</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>% True Protein = (% TN - % NPN) × 6.38</code></pre>
+              `
+            },
+            {
+              title: "Titratable Acidity",
+              purpose: "Cream powder ki acidity determine karna.",
+              procedure: `
+                <p>10 gram cream powder ko 100 ml warm distilled water mein dissolve/reconstitute karein. Iske 10 ml lein, phenolphthalein indicator daalein, aur 0.1 N NaOH se titrate karein jab tak pink endpoint aaye.</p>
+                <pre><code>% Acidity = (9 × V × N) / W</code></pre>
+              `
+            },
+            {
+              title: "Scorched Particles",
+              purpose: "Manufacturing process mein excessive heat exposure ka indication — powder ki quality ka indicator.",
+              reference: "ADPI Standard",
+              procedure: `
+                <p>Reconstituted cream powder solution ko ek standard ADPI disc (15 cm² area) ke through filter karein. Filter disc par jo brown/dark particles reh jaate hain unhe standard discs (A, B, C, D grades) se compare karein. Grade A = lowest scorched particles = best quality.</p>
+              `
+            }
+          ]
+        },
+  
+        "butter": {
+          title: "Makhan (Butter) ka Analysis",
+          tests: [
+            {
+              title: "Moisture ka Determination",
+              purpose: "Paani ki quantity determine karna — ek major quality aur legal parameter.",
+              reference: "IS 3507 – 1966; A.O.A.C 920.116",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>Ek pehle se weigh ki hui flat-bottom dish (W1) mein prepared butter ke sample ka 3-4 gram weigh karein.</li>
+                  <li>Dish ko ~20 minute ke liye boiling water bath par heat karein, baar-baar stirring karein (jab tak bubbling band na ho jaye — ye indicate karta hai ki saara moisture evaporate ho gaya).</li>
+                  <li>Constant weight (W2) par dry hone ke liye 100 ± 1°C par hot air oven mein transfer karein.</li>
+                  <li>Desiccator mein cool karein, weigh karein.</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>Moisture % = [(W1 - W2) / Sample ka initial weight] × 100</code></pre>
+  
+                <h4 class="font-semibold mt-4 mb-2">FSSAI Standards:</h4>
+                <p>Table butter: Maximum 16% moisture, White butter: Maximum 20% moisture</p>
+              `
+            },
+            {
+              title: "Fat aur Curd (MSNF) ka Determination",
+              purpose: "Fat aur non-fat solid content determine karna.",
+              reference: "IS 3507 – 1966",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>Moisture determination (W2) se residue ka use karein.</li>
+                  <li>Ek fat solvent (petroleum ether) se baar-baar residue ko wash karke aur solvent ko filter karke fat extract karein.</li>
+                  <li>Saara fat extract hone ke baad, remaining residue ko oven mein dry karein taaki saara solvent nikal jaye aur ise weigh karein (W3). Ye curd + salt ka weight deta hai.</li>
+                  <li>Curd content find karne ke liye, salt content ko separately determine karna chahiye aur is value se subtract karna chahiye.</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>% Fat = 100 - (%Moisture + %Curd aur Salt)</code></pre>
+                <pre><code>% Curd (MSNF) = %Curd aur Salt - %Salt</code></pre>
+  
+                <h4 class="font-semibold mt-4 mb-2">FSSAI Standards:</h4>
+                <p>Table butter fat: Minimum 80%, Curd: Maximum 1.5%</p>
+              `
+            },
+            {
+              title: "Salt (NaCl) ka Determination",
+              purpose: "Salt content measure karna — taste aur legal standards ke liye important hai.",
+              reference: "IS 3507 – 1966",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Method 1: Mohr's Method (Direct Titration)</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>5 gram butter weigh karein ek beaker mein.</li>
+                  <li>100 ml boiling distilled water daalein — ye butter melt kar deta hai aur salt paani mein dissolve ho jaata hai.</li>
+                  <li>50-55°C tak cool karein (fat solidify ho jaata hai upper layer mein).</li>
+                  <li>Paani ki layer carefully nikaalein ya filter karein.</li>
+                  <li>Potassium chromate indicator (K₂CrO₄ — 5% solution, ~1 ml) daalein.</li>
+                  <li>Standard silver nitrate (0.1 N AgNO₃) solution se tab tak titrate karein jab tak ek permanent reddish-brown colour na ban jaye.</li>
+                </ol>
+                <pre><code>NaCl % = [5.844 × N_AgNO₃ × (V_sample - V_blank)] / Weight_sample</code></pre>
+  
+                <h4 class="font-semibold mt-4 mb-2">Method 2: Volhard's Method (Back Titration)</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>Garam paani se salt extract karein.</li>
+                  <li>Chloride ko precipitate karne ke liye excess standard silver nitrate daalein.</li>
+                  <li>Nitric acid daalein (acidify karne ke liye).</li>
+                  <li>Ferric alum indicator use karke potassium thiocyanate (KCNS) se excess silver nitrate ka back-titration karein.</li>
+                  <li>Red-brown colour at endpoint.</li>
+                </ol>
+                <pre><code>NaCl % = [23.38 × N_KCNS × (V_blank - V_sample)] / Weight_sample</code></pre>
+  
+                <h4 class="font-semibold mt-4 mb-2">FSSAI Standard:</h4>
+                <p>Table butter: Maximum 3.0% salt</p>
+              `
+            },
+            {
+              title: "Titratable Acidity of Butter Fat",
+              purpose: "Butter fat ki free acidity measure karna — staleness ka indication.",
+              reference: "IS 3507 – 1966",
+              procedure: `
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>10 gram melted, clear butter fat (curd aur moisture free) weigh karein.</li>
+                  <li>50 ml neutralized ethanol mein dissolve karein (garam karke).</li>
+                  <li>Phenolphthalein indicator ki kuch drops daalein.</li>
+                  <li>0.1 N NaOH se titrate karein jab tak pink endpoint aaye.</li>
+                </ol>
+                <pre><code>% FFA (as oleic acid) = (Titre × N × 28.2) / Sample weight</code></pre>
+                <p>Expected: Fresh butter FFA ≤ 0.3%</p>
+              `
+            },
+            {
+              title: "Peroxide Value of Butter",
+              purpose: "Oxidative rancidity ka early stage measure karna.",
+              reference: "A.O.A.C 965.33",
+              procedure: `
+                <p>Melted butter fat ko acetic acid-chloroform mixture mein dissolve karein. Saturated KI solution daalein. Fat mein peroxides KI se iodine liberate karte hain. Liberated iodine ko starch indicator use karke standard sodium thiosulphate (Na₂S₂O₃) se titrate karein.</p>
+                <pre><code>PV (meq/kg) = (S × N × 1000) / Sample weight</code></pre>
+                <p>Expected: Fresh butter PV ≤ 1.0 meq/kg. Rancid butter: > 5 meq/kg</p>
+              `
+            },
+            {
+              title: "Coliform Test (Presumptive)",
+              purpose: "Butter mein coliform contamination ka detection — hygienic quality ka indicator.",
+              reference: "IS 5401 (Part 1)",
+              procedure: `
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>11 gram butter ko 99 ml sterile warm (45°C) ringer solution mein homogenize karein — ye 1:10 dilution hai.</li>
+                  <li>Serial dilutions prepare karein (10⁻¹, 10⁻², 10⁻³).</li>
+                  <li>Har dilution ka 1 ml Violet Red Bile Agar (VRBA) plates par pour karein.</li>
+                  <li>Overlay daalein aur 37°C par 24-48 hours incubate karein.</li>
+                  <li>Dark red colonies with bile precipitate halo = presumptive coliforms.</li>
+                </ol>
+                <p>FSSAI limit: ≤ 10 cfu/gram for pasteurized butter.</p>
+              `
+            }
+          ]
+        },
+  
+        "ghee-butter-oil": {
+          title: "Ghee / Butter Oil ka Analysis",
+          tests: [
+            {
+              title: "Butyro-Refractometer (BR) Reading",
+              purpose: "Ghee ki purity check karne ka sabse simple aur rapid instrumental method.",
+              reference: "IS 3508 – 1966; FSSAI Manual",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+                <p>Jab light ek medium se doosre mein jaata hai, to ye bend hota hai (refraction). Har fat ki ek characteristic refractive index hoti hai. Ghee ki BR reading 40-44 hoti hai at 40°C. Foreign oils milane se ye reading change hoti hai — vegetable oils ki RI zyada hoti hai.</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>Ghee ko 40°C se thoda upar melt karein. Clear fat decant karein (bina moisture/curd ke).</li>
+                  <li>Butyro-refractometer ko circulating water bath se 40°C par maintain karein.</li>
+                  <li>1-2 drops melted ghee refractometer ke prism par daalein.</li>
+                  <li>Eyepiece se dekhein — light aur dark boundary line ko scale par adjust karein.</li>
+                  <li>BR reading note karein.</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+                <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                  <thead><tr class="bg-gray-100"><th class="border p-2">Sample</th><th class="border p-2">BR Reading at 40°C</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border p-2">Cow ghee</td><td class="border p-2">40.0 - 43.0</td></tr>
+                    <tr><td class="border p-2">Buffalo ghee</td><td class="border p-2">40.0 - 43.5</td></tr>
+                    <tr><td class="border p-2">Groundnut oil</td><td class="border p-2">58-60</td></tr>
+                    <tr><td class="border p-2">Coconut oil</td><td class="border p-2">35-37</td></tr>
+                  </tbody>
+                </table>
+                <p class="mt-2">Agar BR reading 44 se upar hai — vegetable oil milawat ka indication hai.</p>
+              `
+            },
+            {
+              title: "Reichert-Meissl (RM) & Polenske Value (PV)",
+              purpose: "Ghee ki purity check karne ke liye. RM value doodh ki fat ke characteristic short-chain fatty acids ko measure karta hai. PV value coconut oil ke saath adulteration detect karne mein help karta hai.",
+              reference: "IS 3508 – 1966",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+                <p>Ghee ko saponify (soap mein convert) kiya jaata hai, phir acid se acidify karke volatile fatty acids release kiye jaate hain. Ye acids distill kiye jaate hain. RM value water-soluble volatile acids ka measure hai (butyric, caproic acid — ye sirf milk fat mein significant hote hain). Polenske value water-insoluble volatile acids ka measure hai (coconut oil mein zyada hote hain).</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li><strong>Saponification:</strong> 5.00 gram ghee ko 20 gram glycerol aur 2 ml 50% NaOH use karke saponify karein. Liquid clear hone tak heat karein (250 ml round bottom flask mein).</li>
+                  <li><strong>Dilution aur Acidification:</strong> 93 ml boiled, cooled water daalein. Phir 50 ml dilute sulphuric acid (25 ml conc. H₂SO₄ in 1 litre) daalein. Pumice stone ke kuch tukde daalein (bumping prevent karne ke liye).</li>
+                  <li><strong>Distillation:</strong> Polenske distillation apparatus use karke 19-21 minute mein mixture ka 110 ml distil karein. Distillation rate consistent honi chahiye.</li>
+                  <li><strong>RM Value Titration:</strong> Distillate ko filter karein aur filtrate ka 100 ml phenolphthalein indicator ke saath 0.1 N NaOH se titrate karein.</li>
+                  <li><strong>Polenske Value Titration:</strong> Condenser aur filter paper ko teen baar 15 ml neutralized ethanol se wash karein. 0.1 N NaOH ke saath combined washings ka titration karein.</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>RM Value = 1.1 × (Titre_sample - Titre_blank)</code></pre>
+                <pre><code>Polenske Value = Insoluble acid titre - Blank insoluble titre</code></pre>
+  
+                <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+                <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                  <thead><tr class="bg-gray-100"><th class="border p-2">Sample</th><th class="border p-2">RM Value</th><th class="border p-2">Polenske Value</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border p-2">Cow ghee</td><td class="border p-2">24-34</td><td class="border p-2">1.0-2.0</td></tr>
+                    <tr><td class="border p-2">Buffalo ghee</td><td class="border p-2">26-32</td><td class="border p-2">1.0-2.0</td></tr>
+                    <tr><td class="border p-2">Coconut oil</td><td class="border p-2">6-8</td><td class="border p-2">16-18</td></tr>
+                    <tr><td class="border p-2">Groundnut oil</td><td class="border p-2">0.5-1.5</td><td class="border p-2">0.5-1.0</td></tr>
+                  </tbody>
+                </table>
+                <p class="mt-2">FSSAI minimum RM value for ghee: 28</p>
+              `
+            },
+            {
+              title: "Iodine Value (Wijs Method)",
+              purpose: "Fat mein unsaturation ki degree measure karna — foreign oil milawat detect karne mein useful.",
+              reference: "IS 3508 – 1966; A.O.A.C 993.20",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+                <p>Iodine unsaturated fatty acids ke double bonds se react karta hai. Jitne zyada double bonds, utna zyada iodine absorb hoga. Iodine value = grams of iodine absorbed per 100 grams of fat. Milk fat ka IV 26-38 hota hai, jabki vegetable oils ka bahut zyada (80-140).</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>~0.25 gram ghee ko iodine flask mein weigh karein.</li>
+                  <li>10 ml chloroform mein dissolve karein.</li>
+                  <li>25 ml Wijs solution (iodine monochloride in acetic acid) daalein — excess mein.</li>
+                  <li>Andheri jagah mein 30 minute ke liye rakhein (reaction complete hone ke liye).</li>
+                  <li>15 ml 10% KI solution daalein — unreacted iodine ko absorb karne ke liye.</li>
+                  <li>100 ml distilled water daalein.</li>
+                  <li>Starch indicator use karke 0.1 N sodium thiosulphate se titrate karein (blue colour disappear hone tak).</li>
+                  <li>Ek blank bhi run karein (bina sample ke).</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>Iodine Value = [12.69 × N × (V_blank - V_sample)] / Weight_sample</code></pre>
+  
+                <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+                <p>Cow ghee: 26-35, Buffalo ghee: 28-38, FSSAI range: 26-38</p>
+              `
+            },
+            {
+              title: "Saponification Value",
+              purpose: "Fat ke molecular weight ka indication — short chain fatty acids ki presence indicate karta hai.",
+              reference: "IS 3508 – 1966; A.O.A.C 920.160",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+                <p>Saponification value = mg of KOH required to saponify 1 gram of fat. Short chain fatty acids zyada hone par saponification value zyada hota hai. Milk fat (ghee) ka SV zyada hota hai (220-235) compared to vegetable oils (185-195) kyunki milk fat mein short chain fatty acids (butyric, caproic) zyada hote hain.</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>~2 gram ghee accurately weigh karein ek 250 ml round bottom flask mein.</li>
+                  <li>25 ml 0.5 N alcoholic KOH daalein (excess).</li>
+                  <li>Reflux condenser lagayein aur 1 hour boiling water bath par heat karein.</li>
+                  <li>Cool karein, phenolphthalein indicator daalein.</li>
+                  <li>Excess KOH ko 0.5 N HCl se back-titrate karein (pink colour disappear hone tak).</li>
+                  <li>Blank bhi run karein.</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>Saponification Value = [56.1 × N × (V_blank - V_sample)] / Weight_sample</code></pre>
+  
+                <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+                <p>Ghee: 220-235, Groundnut oil: 188-196, Coconut oil: 250-264</p>
+              `
+            },
+            {
+              title: "Unsaponifiable Matter",
+              purpose: "Fat mein non-fat components (sterols, hydrocarbons, vitamins) ka measure — mineral oil milawat detect karne mein useful.",
+              reference: "IS 3508 – 1966",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>5 gram ghee ko 50 ml alcoholic KOH se saponify karein (1 hour reflux).</li>
+                  <li>Saponified mixture ko separating funnel mein transfer karein.</li>
+                  <li>50 ml petroleum ether se 3 baar extract karein — unsaponifiable matter ether layer mein jaata hai.</li>
+                  <li>Ether extracts combine karein, 0.5N KOH se wash karein (remaining soap remove karne ke liye), phir water se wash karein.</li>
+                  <li>Ether evaporate karein, residue ko 80°C par dry karein aur weigh karein.</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+                <p>Normal ghee: ≤ 1.2% unsaponifiable matter. Mineral oil milane se ye value bahut badh jaati hai (mineral oil completely unsaponifiable hota hai).</p>
+              `
+            },
+            {
+              title: "Free Fatty Acids (FFA)",
+              purpose: "Fat ke breakdown (hydrolysis) ki extent measure karta hai — freshness indicate karta hai. High FFA rancidity ki taraf le jaata hai.",
+              reference: "IS 3508 – 1966",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>~10 gram melted ghee accurately weigh karein.</li>
+                  <li>50 ml neutralized warm ethanol mein dissolve karein.</li>
+                  <li>Phenolphthalein indicator ki kuch drops daalein.</li>
+                  <li>0.1 N NaOH se titrate karein jab tak persistent pink colour aaye.</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>% FFA (as oleic acid) = [Titre × N_NaOH × 28.2] / Sample weight</code></pre>
+  
+                <h4 class="font-semibold mt-4 mb-2">FSSAI Standard:</h4>
+                <p>Ghee FFA: Maximum 3.0% (as oleic acid). Fresh ghee: typically < 0.5%</p>
+              `
+            },
+            {
+              title: "Moisture / Volatile Matter",
+              purpose: "Ghee mein paani aur volatile compounds ki quantity — shelf life aur quality ke liye important.",
+              reference: "IS 3508 – 1966",
+              procedure: `
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>Pehle se weigh ki hui dish (W1) mein ~10 gram ghee weigh karein (W2).</li>
+                  <li>105°C par oven mein 2 hours heat karein (ya jab tak bubbling band ho jaye).</li>
+                  <li>Desiccator mein cool karein, weigh karein (W3).</li>
+                  <li>Constant weight tak repeat karein.</li>
+                </ol>
+                <pre><code>% Moisture = [(W2 - W3) / (W2 - W1)] × 100</code></pre>
+                <p>FSSAI standard: Maximum 0.3% moisture in ghee</p>
+              `
+            },
+            {
+              title: "Baudouin Test (Vanaspati Detection)",
+              purpose: "Ghee mein vanaspati (hydrogenated vegetable oil) ka pata lagata hai.",
+              reference: "IS 3508 – 1966",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+                <p>Vanaspati mein 5% sesame (til) oil ka mandatory addition hota hai (FSSAI requirement). Ye test sesame oil mein present sesamol compound detect karta hai. Furfural sesamol ke saath react karke acidic medium mein PINK/RED colour deta hai.</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>5 ml melted ghee ek test tube mein lein.</li>
+                  <li>5 ml concentrated HCl daalein.</li>
+                  <li>0.4 ml 2% furfural solution (freshly prepared in alcohol) daalein.</li>
+                  <li>2 minute ke liye vigorously shake karein.</li>
+                  <li>Layers separate hone dein.</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-4 mb-2">Result:</h4>
+                <p><strong>Pink ya Red colour in acid (lower) layer:</strong> Vanaspati PRESENT — adulterated ghee</p>
+                <p><strong>No colour ya light yellow:</strong> Vanaspati ABSENT — pure ghee</p>
+                <p class="text-xs mt-2">Sensitivity: 5% vanaspati milawat tak detect kar sakta hai.</p>
+              `
+            },
+            {
+              title: "Fiehe's Test (for Vegetable Fat)",
+              purpose: "Vanaspati ya vegetable fat milawat ka ek aur confirmatory test.",
+              reference: "IS 3508 – 1966",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Siddhant:</h4>
+                <p>Vegetable oils mein phytosterols hote hain jo modified Fiehe's reagent ke saath specific colour reaction dete hain.</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>5 ml melted ghee ko 5 ml acetic anhydride ke saath mix karein.</li>
+                  <li>1-2 drops conc. H₂SO₄ carefully add karein.</li>
+                  <li>Colour observe karein.</li>
+                </ol>
+                <p><strong>Green/Blue-green colour:</strong> Vegetable fat/oil PRESENT (phytosterol reaction — Liebermann-Burchard test)</p>
+                <p><strong>Brown colour:</strong> Pure milk fat</p>
+              `
+            },
+            {
+              title: "Mineral Oil ka Detection (Holde's Test)",
+              purpose: "Adulteration ke roop mein use kiye jaane wale non-edible mineral oils ka pata lagata hai.",
+              reference: "IS 3508 – 1966",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Siddhant:</h4>
+                <p>Mineral oil saponify (soap mein convert) nahi hota. Jab fat ko alkali se saponify kiya jaata hai aur paani dala jaata hai, to mineral oil insoluble turbidity ke roop mein dikhta hai — jabki saara saponified fat dissolve ho jaata hai.</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>1 gram ghee ko 25 ml 4% alcoholic KOH se saponify karein (heat with reflux 30 min).</li>
+                  <li>100 ml hot water daalein aur mix karein.</li>
+                </ol>
+                <p><strong>Turbidity ya oily droplets:</strong> Mineral oil PRESENT — ye saponify nahi hua</p>
+                <p><strong>Clear solution:</strong> Mineral oil ABSENT</p>
+              `
+            },
+            {
+              title: "Peroxide Value (PV)",
+              purpose: "Oxidative rancidity ke early stages measure karta hai.",
+              reference: "A.O.A.C 965.33",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Siddhant:</h4>
+                <p>Oxidation se fat mein peroxides bante hain (primary oxidation products). Ye peroxides potassium iodide (KI) se iodine liberate karte hain, jo Na₂S₂O₃ se titrate kiya jaata hai. Result meq peroxide per kg fat mein express hota hai.</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>~5 gram ghee ko 30 ml acetic acid: chloroform (3:2) mixture mein dissolve karein.</li>
+                  <li>0.5 ml saturated KI solution daalein.</li>
+                  <li>Exactly 1 minute dark mein rakhein, occasionally shake karein.</li>
+                  <li>30 ml distilled water daalein.</li>
+                  <li>Starch indicator (1%) daalein aur 0.01 N ya 0.1 N Na₂S₂O₃ se titrate karein jab tak blue colour disappear ho jaye.</li>
+                  <li>Blank bhi run karein.</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>PV (meq/kg) = [(S - B) × N × 1000] / Sample weight</code></pre>
+                <p class="text-xs">Jahaan S = sample titre, B = blank titre, N = Na₂S₂O₃ ki normality</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">FSSAI Standard:</h4>
+                <p>Maximum PV for ghee: ≤ 1.0 meq/kg (fresh). Agmark: ≤ 3.0 meq/kg</p>
+              `
+            },
+            {
+              title: "Modified Kirschner Value",
+              purpose: "Specifically butyric acid ka measure — ghee ki authenticity ka sabse reliable chemical indicator.",
+              reference: "IS 3508 – 1966",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Siddhant:</h4>
+                <p>Kirschner value specifically water-soluble, steam-volatile, silver-salt soluble acids (mainly butyric acid) ko measure karta hai. Butyric acid exclusively milk fat mein hota hai — vegetable oils mein absent. Isliye ye ghee ke adulteration detection ka sabse specific test hai.</p>
+  
+                <p>Procedure RM value test se milta julta hai, but additional silver salt precipitation step hota hai taaki specifically butyric acid isolate ho.</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+                <p>Pure cow ghee: 19-27, Pure buffalo ghee: 19-25. Adulterated ghee mein ye value proportionally kam hoti jaati hai.</p>
+              `
+            },
+            {
+              title: "Kreis Test (Rancidity Detection)",
+              purpose: "Ghee mein developed rancidity detect karna — qualitative test.",
+              reference: "IS 3508 – 1966",
+              procedure: `
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>1 ml melted ghee ek test tube mein lein.</li>
+                  <li>1 ml conc. HCl daalein.</li>
+                  <li>1 ml 1% phloroglucinol solution (in diethyl ether) daalein.</li>
+                  <li>Vigorously shake karein.</li>
+                </ol>
+                <p><strong>Pink/Red colour:</strong> Rancidity detected — epihydrinal dehyde presence (oxidation product)</p>
+                <p><strong>No colour:</strong> Not rancid</p>
+              `
+            }
+          ]
+        },
+  
+        "cheese-paneer": {
+          title: "Paneer / Cheese ka Analysis",
+          tests: [
+            {
+              title: "Moisture aur Total Solids ka Determination",
+              purpose: "Paani ki quantity measure karna — texture aur shelf life ko affect karta hai.",
+              reference: "IS 2785-1979",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>Ek saaf, dry, khaali aluminium moisture dish ko sand aur ek glass rod ke saath weigh karein (W1).</li>
+                  <li>Dish mein 3 gram grated/crumbled sample weigh karein (W2).</li>
+                  <li>Kuch boondein distilled water daalein aur sample ko sand ke saath mix karein (surface area badhane ke liye).</li>
+                  <li>Ek hot plate par dish rakhkar paani ko evaporate karein.</li>
+                  <li>Dish ko 102 ± 2°C par 4 ghante ke liye hot air oven mein dry karein.</li>
+                  <li>Desiccator mein cool karein aur weigh karein. Constant weight prapt hone tak repeat karein (W3).</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>% Moisture = [(W2 - W3) / (W2 - W1)] × 100</code></pre>
+                <pre><code>% Total Solids = 100 - % Moisture</code></pre>
+  
+                <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+                <p>Paneer: 55-60% moisture, Cheddar cheese: 35-38% moisture, Processed cheese: 42-45% moisture</p>
+              `
+            },
+            {
+              title: "Fat ka Determination (Acid Digestion - Werner-Schmidt Method)",
+              purpose: "Dry matter basis par fat content determine karna.",
+              reference: "IS 2785-1979",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>Ek 100 ml beaker mein prepared sample ka 1-2 gram weigh karein.</li>
+                  <li>10 ml concentrated HCl daalein aur water bath par tab tak heat karein jab tak saare solid particles dissolve na ho jayein (dark brown solution).</li>
+                  <li>Solution ko cool karein, 10 ml ethanol daalein, aur ek Mojonnier flask mein transfer karein.</li>
+                  <li>25 ml diethyl ether daalein, 1 minute ke liye shake karein. Phir 25 ml petroleum ether daalein aur phir se shake karein.</li>
+                  <li>Centrifuge karein aur ether layer ko pehle se weigh kiye hue conical flask mein transfer karein.</li>
+                  <li>Extraction ko do baar repeat karein.</li>
+                  <li>Ether ko evaporate karein aur fat content find karne ke liye residue ko dry karein aur weigh karein.</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>% Fat = (Extracted fat weight / Sample weight) × 100</code></pre>
+                <pre><code>% Fat on Dry Matter (FDM) = (% Fat / % Total Solids) × 100</code></pre>
+  
+                <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+                <p>Full fat paneer: 50-55% FDM, Full fat cheddar: 48-54% FDM</p>
+              `
+            },
+            {
+              title: "Protein ka Determination (Kjeldahl)",
+              purpose: "Cheese/Paneer mein protein content determine karna.",
+              reference: "A.O.A.C 991.23",
+              procedure: `
+                <p>~1-2 gram finely grated sample weigh karein. Standard Kjeldahl method follow karein (digestion, distillation, titration). Conversion factor: 6.38 for dairy products.</p>
+                <pre><code>% Protein = % Total Nitrogen × 6.38</code></pre>
+                <p>Expected: Paneer protein ~18-20%, Cheddar cheese protein ~24-26%</p>
+              `
+            },
+            {
+              title: "Titratable Acidity",
+              purpose: "Paneer/cheese ki acidity measure karna.",
+              reference: "IS 2785-1979",
+              procedure: `
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>10 gram grated sample ko mortar mein mash karein 20 ml warm distilled water ke saath.</li>
+                  <li>Phenolphthalein indicator daalein.</li>
+                  <li>0.1 N NaOH se titrate karein jab tak pink endpoint aaye (15 seconds stable).</li>
+                </ol>
+                <pre><code>% Acidity (as lactic acid) = (9 × V × N) / W</code></pre>
+                <p>Expected: Fresh paneer acidity ~0.5%, Cheddar cheese ~0.8-1.2%</p>
+              `
+            },
+            {
+              title: "Salt (NaCl) Content in Cheese",
+              purpose: "Cheese mein namak ki quantity measure karna.",
+              reference: "IS 2785-1979; A.O.A.C 935.43",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Volhard's Method:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>5 gram grated cheese ko 100 ml boiling water mein dissolve karein.</li>
+                  <li>Cool karein, 10 ml 0.1N AgNO₃ (excess) daalein.</li>
+                  <li>10 ml nitric acid daalein.</li>
+                  <li>Filter karein (AgCl precipitate hata dein).</li>
+                  <li>Filtrate mein 2 ml ferric alum indicator daalein.</li>
+                  <li>0.1N KSCN (potassium thiocyanate) se back-titrate karein jab tak persistent reddish-brown colour aaye.</li>
+                </ol>
+                <pre><code>% NaCl = [5.844 × N × (V_AgNO₃ - V_KSCN)] / Sample weight</code></pre>
+                <p>Expected: Cheddar cheese ~1.5-2.0% salt, Paneer ~0-0.5%</p>
+              `
+            },
+            {
+              title: "Total Ash",
+              purpose: "Cheese/paneer mein mineral content determine karna.",
+              reference: "IS 2785-1979",
+              procedure: `
+                <p>3-5 gram grated sample ko pehle se weigh kiye hue crucible mein lein. Pehle hot plate par char karein, phir 550°C muffle furnace mein 6-8 hours ashing karein. Cool karein, weigh karein.</p>
+                <pre><code>% Ash = (Ash weight / Sample weight) × 100</code></pre>
+                <p>Expected: Paneer ash ~1.5-2.0%, Cheddar ~3.5-4.5%</p>
+              `
+            },
+            {
+              title: "pH Determination of Cheese/Paneer",
+              purpose: "pH measure karna — ripening stage aur quality ka indicator.",
+              procedure: `
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>10 gram finely grated sample ko 10 ml distilled water ke saath homogenize karein (paste banayein).</li>
+                  <li>Calibrated pH meter ke electrode ko paste mein insert karein.</li>
+                  <li>Stable reading note karein.</li>
+                </ol>
+                <p>Expected: Fresh paneer pH ~5.5-5.8, Fresh cheddar pH ~5.0-5.3, Aged cheddar pH ~5.2-5.6</p>
+              `
+            },
+            {
+              title: "Paneer mein Starch ka Detection",
+              purpose: "Ek filler ke roop mein starch ke illegal addition ka pata lagana.",
+              reference: "FSSAI Manual",
+              procedure: `
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>Ek porcelain dish mein 1 gram paneer ke sample ko 1 ml distilled water ke saath mash karein.</li>
+                  <li>Phir iodine solution ki ek boond daalein.</li>
+                </ol>
+                <p><strong>Blue colour:</strong> Starch PRESENT — adulterated</p>
+                <p><strong>Brown colour:</strong> Starch ABSENT — normal</p>
+              `
+            },
+            {
+              title: "Paneer mein Vanaspati ka Detection",
+              purpose: "Paneer mein vanaspati (hydrogenated vegetable fat) milawat detect karna.",
+              procedure: `
+                <p>Baudouin test (ghee section mein described) use karein. Paneer se pehle fat extract karein (Werner-Schmidt method se), phir extracted fat par Baudouin test karein.</p>
+                <p><strong>Pink/Red colour in acid layer:</strong> Vanaspati PRESENT</p>
+              `
+            }
+          ]
+        },
+  
+        "dahi-yoghurt": {
+          title: "Dahi / Yoghurt ka Analysis",
+          tests: [
+            {
+              title: "Titratable Acidity",
+              purpose: "Fermentation ke dauran developed acidity determine karna — proper culture activity ka indicator.",
+              reference: "IS 12333:1997",
+              procedure: `
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>Ek beaker mein 10 gram sample weigh karein.</li>
+                  <li>Ek paste banane ke liye 10 ml distilled water daalein aur achchi tarah mix karein.</li>
+                  <li>Phenolphthalein indicator ki kuch boondein daalein.</li>
+                  <li>0.1 N NaOH se tab tak titrate karein jab tak ek halka pink colour dikhaye (15 seconds stable).</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>% Acidity (as lactic acid) = (9 × V × N) / W</code></pre>
+                <p class="text-xs">Jahaan V = NaOH ki volume, N = NaOH ki normality, W = sample ka weight.</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">FSSAI Standards:</h4>
+                <p>Dahi acidity: 0.5-1.0% (as lactic acid). Good quality dahi: 0.7-0.85%</p>
+              `
+            },
+            {
+              title: "Total Solids ka Determination",
+              purpose: "Total solid content determine karna — fermented products mein acidity neutralize karna important hai warna loss hota hai.",
+              reference: "IS 12333: 1997 / IDF 151: 1991",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Method 1: NaOH Method</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>4-5 gram sample dish mein weigh karein (W2).</li>
+                  <li>Acidity ko 0.1N NaOH se neutralize karein (phenolphthalein pink tak) — added NaOH ka weight note karein.</li>
+                  <li>Water bath par dry karein, phir oven mein 100±2°C par constant weight tak dry karein (W3).</li>
+                  <li>Added NaOH ka weight final residue se subtract karein.</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-4 mb-2">Method 2: Zinc Oxide Method</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>1 gram sample weigh karein, 2 gram zinc oxide (ZnO) ke saath achchi tarah mix karein (ZnO lactic acid ko neutralize karta hai).</li>
+                  <li>Water bath par pre-dry karein, phir oven mein 100±2°C par constant weight tak dry karein.</li>
+                  <li>Developed lactic acid ko separately determine karein (acidity test se) aur moisture value mein add karein taaki correct total solids milein.</li>
+                </ol>
+  
+                <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+                <p>Whole milk dahi TS: ≥12%, Skimmed milk dahi TS: ≥9%</p>
+              `
+            },
+            {
+              title: "Fat ka Determination",
+              purpose: "Dahi/yoghurt mein fat content determine karna.",
+              reference: "IS 12333: 1997",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Gerber Method (Modified for Dahi):</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>~5 gram dahi ko butyrometer mein weigh karein.</li>
+                  <li>~5 ml warm water daalein sample ko dissolve karne ke liye.</li>
+                  <li>10 ml sulphuric acid carefully daalein.</li>
+                  <li>1 ml amyl alcohol daalein.</li>
+                  <li>Mix karein, centrifuge karein, water bath (65°C) mein rakhein, reading lein.</li>
+                </ol>
+                <p>Note: Fermented products ke saath acid reaction zyada vigorous hoti hai — carefully mix karein.</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Alternatively: Werner-Schmidt method</h4>
+                <p>~5 gram sample + 10 ml conc. HCl se digest karein, phir ether extraction karein.</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+                <p>Full fat dahi: ≥3.0% (FSSAI), Low fat dahi: 0.5-3.0%</p>
+              `
+            },
+            {
+              title: "Protein ka Determination",
+              purpose: "Dahi mein protein content determine karna.",
+              reference: "A.O.A.C 991.23",
+              procedure: `
+                <p>Standard Kjeldahl method use karein. ~5 gram sample weigh karein, digest, distill, titrate karein. Factor 6.38 se multiply karein.</p>
+                <pre><code>% Protein = % Total Nitrogen × 6.38</code></pre>
+                <p>Expected: Whole milk dahi protein ~3.2-3.5%</p>
+              `
+            },
+            {
+              title: "Diacetyl Content",
+              purpose: "Ek important flavour compound measure karna — dahi ki characteristic aroma isse aati hai.",
+              reference: "IS 12333: 1997",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Siddhant:</h4>
+                <p>Diacetyl (2,3-butanedione) fermentation ke dauran Leuconostoc aur Lactococcus bacteria dwara produce hota hai. Ye dahi ka characteristic "buttery" flavour deta hai. Isse spectrophotometrically measure kiya jaata hai.</p>
+  
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>10 gram dahi ko 50 ml distilled water mein homogenize karein.</li>
+                  <li>Steam distillation se diacetyl extract karein.</li>
+                  <li>Distillate ko hydroxylamine aur ferric chloride ke saath react karayein — red colour develop hota hai.</li>
+                  <li>Colour intensity ko 570 nm par spectrophotometer se measure karein.</li>
+                  <li>Standard diacetyl solutions ke calibration curve se concentration determine karein.</li>
+                </ol>
+                <p>Expected: Good quality dahi mein ~1-5 ppm diacetyl hota hai.</p>
+              `
+            },
+            {
+              title: "pH Determination",
+              purpose: "Dahi ka pH measure karna — fermentation degree ka objective indicator.",
+              procedure: `
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>pH meter ko standard buffers se calibrate karein.</li>
+                  <li>10 gram dahi lein, halka mix karein (zyada nahi).</li>
+                  <li>Electrode directly dahi mein insert karein.</li>
+                  <li>Stable reading note karein.</li>
+                </ol>
+                <p>Expected: Good quality dahi pH: 4.0-4.5, Overripe dahi pH: < 3.8</p>
+              `
+            },
+            {
+              title: "Coliform Count",
+              purpose: "Hygienic quality ka assessment — post-pasteurization contamination detect karna.",
+              reference: "IS 5401 (Part 1)",
+              procedure: `
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>11 gram dahi ko 99 ml sterile ringer solution mein homogenize karein (1:10 dilution).</li>
+                  <li>Serial dilutions prepare karein.</li>
+                  <li>Violet Red Bile Agar (VRBA) plates par pour karein (1 ml each dilution).</li>
+                  <li>Overlay daalein, 37°C par 24-48 hours incubate karein.</li>
+                  <li>Typical dark red colonies count karein.</li>
+                </ol>
+                <p>FSSAI limit: ≤ 10 cfu/gram for dahi/yoghurt</p>
+              `
+            },
+            {
+              title: "Yeast & Mould Count",
+              purpose: "Spoilage organisms ka detection — dahi mein yeast aur mould growth ka assessment.",
+              reference: "IS 5403:1999",
+              procedure: `
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>Sample ko aseptically dilute karein (1:10 dilution).</li>
+                  <li>Potato Dextrose Agar (PDA) ya Rose Bengal Chloramphenicol Agar (RBCA) plates par pour/spread karein.</li>
+                  <li>25°C par 3-5 din incubate karein.</li>
+                  <li>Colonies count karein — fuzzy colonies mould hain, smooth/glossy colonies yeast hain.</li>
+                </ol>
+                <p>FSSAI limit: ≤ 100 cfu/gram for yoghurt</p>
+              `
+            }
+          ]
+        },
+  
+        "chakka-shrikhand": {
+          title: "Chakka / Shrikhand ka Analysis",
+          tests: [
+            {
+              title: "Milk Solids ka Determination",
+              purpose: "Total milk solids determine karna — sugar (sucrose) separately nikaal ke.",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>Dahi ke liye described procedure follow karein (ZnO ya NaOH method se total solids determine karein).</li>
+                  <li>Shrikhand ke liye — sucrose content separately determine karein (Lane-Eynon method se).</li>
+                  <li>Milk solids = Total Solids - Sucrose content.</li>
+                </ol>
+                <p>FSSAI: Shrikhand mein minimum 58% total solids, minimum 26% milk solids</p>
+              `
+            },
+            {
+              title: "Fat ka Determination",
+              purpose: "Fat content determine karna.",
+              procedure: `<p>Paneer ke liye Werner-Schmidt method follow karein. ~2-3 gram sample lein, HCl se digest karein, ether se fat extract karein, evaporate karein aur weigh karein.</p>
+              <p>FSSAI standard: Shrikhand mein minimum 5.0% milk fat</p>`
+            },
+            {
+              title: "Protein ka Determination",
+              purpose: "Protein content determine karna.",
+              procedure: `<p>Kjeldahl method follow karein. ~2 gram sample weigh karein, digest, distill, titrate karein. Factor 6.38 se multiply karein. Expected: Shrikhand protein ~5-7%</p>`
+            },
+            {
+              title: "Titratable Acidity ka Determination",
+              purpose: "Acidity determine karna.",
+              procedure: `
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>10 gram sample lein, 30 ml warm distilled water mein disperse karein.</li>
+                  <li>Phenolphthalein daalein, 0.1 N NaOH se titrate karein.</li>
+                </ol>
+                <pre><code>% Acidity (as lactic acid) = (9 × V × N) / W</code></pre>
+                <p>Expected: Shrikhand acidity ~1.0-1.4%</p>
+              `
+            },
+            {
+              title: "Total Ash ka Determination",
+              purpose: "Mineral content determine karna.",
+              procedure: `<p>Milk powder ke liye procedure follow karein (550°C par ashing). ~3-5 gram sample lein.</p>
+              <p>Expected: ~0.5-0.8%</p>`
+            },
+            {
+              title: "Sucrose Content ka Determination",
+              purpose: "Added sugar ki quantity determine karna — shrikhand ka major ingredient.",
+              reference: "IS 12333: 1997",
+              procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Lane-Eynon Method:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                  <li>10 gram sample ko 250 ml volumetric flask mein dissolve karein ~100 ml warm water mein.</li>
+                  <li>Proteins precipitate karein (lead acetate + sodium/potassium oxalate).</li>
+                  <li>Volume make up karein, filter karein.</li>
+                  <li><strong>Step 1:</strong> Filtrate se reducing sugars (lactose) determine karein by Fehling's titration.</li>
+                  <li><strong>Step 2:</strong> Filtrate ke 50 ml lein, 5 ml conc. HCl daalein, 30 minute incubate karein (70°C) — ye sucrose ko invert sugars (glucose + fructose) mein convert karta hai.</li>
+                  <li>Neutralize karein (NaOH se), volume make up karein.</li>
+                  <li>Inversion ke baad total reducing sugars determine karein by Fehling's titration.</li>
+                </ol>
+                <pre><code>Sucrose % = (Total reducing sugars after inversion - Original reducing sugars) × 0.95</code></pre>
+                <p>Expected: Shrikhand mein ~40-45% sucrose</p>
+              `
+            }
+          ]
+        },
+  
+        "khoa": {
+    title: "Khoa Ka Analysis",
+    tests: [
+        {
+            title: "Moisture Ka Determination (Sand Drying Method)",
+            purpose: "Khoa mein paani ki maatra determine karne ke liye, jo quality aur shelf life ke liye critical hai.",
+            reference: "IS 4883:1980 (Reaffirmed 2005)",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>Khoa ka ek weighed sample sand ke saath mix karke oven mein constant weight tak sukhaya jaata hai. Weight mein jo loss hota hai woh moisture content represent karta hai. Sand isliye use hote hain taaki sample ka surface area badhe aur moisture efficiently nikal sake.</p>
+                <h4 class="font-semibold mt-4 mb-2">Reagents aur Apparatus:</h4>
+                <ul class="list-disc list-outside pl-5 space-y-1">
+                    <li><strong>Moisture dish:</strong> Flat-bottom aluminium dish with lid.</li>
+                    <li><strong>Acid-washed sand:</strong> Pre-dried, 40-60 mesh.</li>
+                    <li><strong>Glass stirring rod:</strong> Dish mein fit hone wali.</li>
+                    <li><strong>Hot air oven:</strong> 102 ± 2°C maintain karne wala.</li>
+                    <li><strong>Desiccator:</strong> Silica gel ke saath.</li>
+                    <li><strong>Analytical balance:</strong> 0.1 mg sensitivity.</li>
+                </ul>
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Ek clean, dry aluminium dish mein ~25g acid-washed sand aur ek glass rod daalein. Dish ko lid ke saath 102±2°C par 1 hour ke liye oven mein rakhein. Desiccator mein cool karein aur weigh karein (W1).</li>
+                    <li>Dish mein approximately 3g grated/crumbled khoa ka sample accurately weigh karein (W2).</li>
+                    <li>Sample ko sand ke saath glass rod se thoroughly mix karein. Kuch drops distilled water daalein taaki uniform paste ban jaaye.</li>
+                    <li>Dish ko pehle hot plate par rakhein aur major moisture evaporate karein.</li>
+                    <li>Phir dish ko 102 ± 2°C par hot air oven mein 4 hours ke liye rakhein.</li>
+                    <li>Dish ko lid se dhakein, desiccator mein room temperature tak cool karein, aur weigh karein (W3).</li>
+                    <li>Dubara 1 hour oven mein rakhein, cool karein aur weigh karein. Jab tak constant weight na aaye, repeat karein (successive readings mein 0.5 mg se zyada difference nahi hona chahiye).</li>
+                </ol>
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>% Moisture = [(W2 - W3) / (W2 - W1)] × 100</code></pre>
+                <pre><code>% Total Solids = 100 - % Moisture</code></pre>
+                <p class="text-xs mt-2">Standard: Pindi Khoa mein max 30% moisture, Dhap Khoa mein max 40% moisture hona chahiye.</p>
+            `
+        },
+        {
+            title: "Fat Ka Determination (Werner-Schmidt / Acid Digestion Method)",
+            purpose: "Khoa mein fat content determine karne ke liye. Yeh method un samples ke liye suitable hai jinmein sugar added nahi hai.",
+            reference: "IS 4883:1980",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>Sample ko concentrated HCl se digest kiya jaata hai, jo proteins aur other solids ko dissolve kar deta hai aur fat ko free kar deta hai. Free fat ko phir diethyl ether aur petroleum ether ke mixture se extract kiya jaata hai. Solvent evaporate karne ke baad, extracted fat ko weigh kiya jaata hai.</p>
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Ek 100ml beaker mein approximately 1-2g prepared khoa sample accurately weigh karein.</li>
+                    <li>10ml concentrated HCl daalein aur water bath par tab tak heat karein jab tak sab solid particles dissolve na ho jaayein aur solution dark brown ho jaaye.</li>
+                    <li>Solution ko cool karein aur 10ml ethanol daalein.</li>
+                    <li>Mixture ko Mojonnier extraction flask mein transfer karein.</li>
+                    <li>25ml diethyl ether daalein, stopper lagaayein, aur 1 minute ke liye vigorously shake karein.</li>
+                    <li>25ml petroleum ether (40-60°C boiling range) daalein aur phir se 1 minute shake karein.</li>
+                    <li>Centrifuge karein ya layers separate hone dein.</li>
+                    <li>Upper ether layer ko carefully ek pre-weighed conical flask mein decant karein.</li>
+                    <li>Aqueous layer ke saath extraction do baar aur repeat karein (15ml each ether).</li>
+                    <li>Combined ether extracts se solvent ko water bath par evaporate karein.</li>
+                    <li>Flask ko 102°C par oven mein 1 hour rakhein, desiccator mein cool karein, aur weigh karein.</li>
+                </ol>
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>% Fat = (Weight of extracted fat / Weight of sample) × 100</code></pre>
+                <pre><code>% Fat on dry basis = (% Fat × 100) / % Total Solids</code></pre>
+            `
+        },
+        {
+            title: "Fat Ka Determination (Rose-Gottlieb Method - Sugar wale Khoa ke liye)",
+            purpose: "Jab khoa mein added sugar ho (jaise sweet dishes ke liye bana hua), tab yeh method use hota hai kyunki acid digestion mein sugar charring problem deti hai.",
+            reference: "IS 1224 (Part-II)-1977",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>Sample ko ammonia se treat kiya jaata hai jo casein ko dissolve karti hai. Ethanol protein ko precipitate karta hai. Fat ko diethyl ether aur petroleum ether ke mixture se extract kiya jaata hai bina acid digestion ke.</p>
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Mojonnier tube mein ~2g khoa sample accurately weigh karein.</li>
+                    <li>10ml garam paani daalein aur thorough mixing se dissolve karein.</li>
+                    <li>1.5ml ammonia solution (25%) daalein aur mix karein.</li>
+                    <li>10ml 95% ethanol daalein aur 1 minute shake karein.</li>
+                    <li>25ml diethyl ether daalein aur 1 minute vigorously shake karein.</li>
+                    <li>25ml petroleum ether daalein aur 1 minute phir shake karein.</li>
+                    <li>Layers separate hone dein ya centrifuge karein.</li>
+                    <li>Ether layer ko pre-weighed flask mein transfer karein.</li>
+                    <li>Do baar aur extraction repeat karein (15ml each ether).</li>
+                    <li>Solvent evaporate karein, 102°C par dry karein, aur weigh karein.</li>
+                </ol>
+            `
+        },
+        {
+            title: "Protein Ka Determination (Kjeldahl Method)",
+            purpose: "Khoa mein total protein content determine karne ke liye.",
+            reference: "IS 4883:1980; A.O.A.C 991.23",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>Kjeldahl method se total nitrogen determine hota hai. Organic nitrogen ko concentrated H₂SO₄ aur catalyst ke saath digest karke ammonium sulfate mein convert kiya jaata hai. Phir ammonia gas release ki jaati hai (NaOH se) aur standard acid mein trap karke titrate ki jaati hai.</p>
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li><strong>Digestion:</strong> Kjeldahl flask mein ~1g khoa weigh karein. 25ml concentrated H₂SO₄ aur catalyst mixture (CuSO₄:K₂SO₄ = 1:5) daalein. Fume hood mein tab tak heat karein jab tak solution clear ho jaaye (2-3 hours). Cool karein.</li>
+                    <li><strong>Distillation:</strong> Digest ko carefully 200ml distilled water se dilute karein. Excess 40% NaOH solution (~75ml) daalein. Ammonia ko steam-distill karein aur 25ml 4% boric acid + mixed indicator mein collect karein.</li>
+                    <li><strong>Titration:</strong> Collected ammonia (green colour) ko 0.1N HCl se titrate karein jab tak colour green se pink ho jaaye. Blank bhi run karein.</li>
+                </ol>
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>% Total Nitrogen = [1.4007 × (V_sample - V_blank) × N_HCl] / Weight_sample</code></pre>
+                <pre><code>% Crude Protein = % Total Nitrogen × 6.38</code></pre>
+            `
+        },
+        {
+            title: "Titratable Acidity Ka Determination",
+            purpose: "Khoa ki acidity measure karne ke liye, jo freshness aur quality indicate karti hai.",
+            reference: "IS 4883:1980",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Ek beaker mein 10g khoa sample accurately weigh karein.</li>
+                    <li>30ml garam (40°C) neutral distilled water daalein aur thorough mixing se uniform dispersion banayein.</li>
+                    <li>Phenolphthalein indicator ki kuch drops daalein.</li>
+                    <li>0.1N NaOH se titrate karein jab tak halka pink colour aaye jo 30 seconds tak rahe.</li>
+                    <li>NaOH ka volume note karein.</li>
+                </ol>
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>% Acidity (as lactic acid) = (9 × V × N) / W</code></pre>
+                <p class="text-xs">Jahaan V = NaOH ka volume (ml), N = NaOH ki normality, W = sample ka weight (g).</p>
+                <p class="text-xs mt-2">Standard: Fresh khoa ki acidity 0.5% se zyada nahi honi chahiye.</p>
+            `
+        },
+        {
+            title: "Total Ash Ka Determination",
+            purpose: "Khoa mein total mineral content determine karne ke liye.",
+            reference: "IS 4883:1980",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>Sample ko high temperature par incinerate kiya jaata hai jab tak saara organic matter destroy na ho jaaye. Jo residue bachta hai woh inorganic mineral (ash) hota hai.</p>
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Ek silica/platinum crucible ko pre-heat karein 550°C par 30 minutes ke liye. Desiccator mein cool karein aur weigh karein (W1).</li>
+                    <li>Crucible mein ~3g khoa sample accurately weigh karein (W2).</li>
+                    <li>Sample ko pehle water bath par evaporate karein, phir hot plate par char karein (smoke aana band hone tak).</li>
+                    <li>Crucible ko muffle furnace mein 550 ± 20°C par 4-6 hours tak rakhein jab tak white/light grey ash mil jaaye.</li>
+                    <li>Desiccator mein cool karein aur weigh karein (W3).</li>
+                    <li>Constant weight ke liye repeat karein.</li>
+                </ol>
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>% Total Ash = [(W3 - W1) / (W2 - W1)] × 100</code></pre>
+            `
+        },
+        {
+            title: "Starch Ka Detection (Qualitative Test)",
+            purpose: "Khoa mein adulterant ke roop mein starch ka illegal addition detect karne ke liye.",
+            reference: "FSSAI Manual of Methods",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>Starch iodine ke saath react karke ek characteristic blue-black colour deta hai. Yeh colour starch-iodine complex ki wajah se hota hai.</p>
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>11g grated khoa ko 50ml garam distilled water mein disperse karein aur achhe se mix karein.</li>
+                    <li>Is dispersion ka 5ml ek test tube mein lein.</li>
+                    <li>Ek-do drops iodine solution (0.1N I₂ in KI) daalein.</li>
+                    <li>Observe karein: <strong>Blue-black colour</strong> = Starch PRESENT (adulteration). <strong>Brown colour</strong> (iodine ka original colour) = Starch ABSENT (genuine).</li>
+                </ol>
+                <h4 class="font-semibold mt-4 mb-2">Note:</h4>
+                <p class="text-xs">Yeh ek qualitative test hai. Quantitative starch determination ke liye acid hydrolysis karke reducing sugars measure karna padta hai.</p>
+            `
+        },
+        {
+            title: "Sucrose Ka Detection (Seliwanoff's / Resorcinol Test)",
+            purpose: "Khoa mein cane sugar (sucrose) ka addition detect karne ke liye.",
+            reference: "FSSAI Manual; IS 4883:1980",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>Sucrose (ek ketose sugar) concentrated HCl ke saath furfural derivatives banata hai, jo resorcinol ke saath react karke characteristic deep red/cherry red colour deta hai.</p>
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Prepared khoa dispersion ka 5ml ek test tube mein lein.</li>
+                    <li>0.5ml concentrated HCl daalein.</li>
+                    <li>0.005g resorcinol crystals daalein.</li>
+                    <li>Mixture ko boiling water bath mein 5 minutes ke liye rakhein.</li>
+                    <li>Observe karein: <strong>Deep red/cherry red colour</strong> = Sucrose PRESENT. <strong>No significant colour change</strong> = Sucrose ABSENT.</li>
+                </ol>
+            `
+        },
+        {
+            title: "Added Vanaspati/Foreign Fat Ka Detection (Baudouin Test)",
+            purpose: "Khoa mein vanaspati ghee ya non-dairy fat ki adulteration detect karne ke liye.",
+            reference: "IS 4883:1980; FSSAI Manual",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>India mein vanaspati mein mandatorily 5% sesame oil milaya jaata hai. Sesame oil mein sesamol hota hai jo furfural aur concentrated HCl ke saath pink/crimson red colour deta hai.</p>
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>10g khoa ko 20ml petroleum ether mein dissolve karein aur filter karein fat extract nikalne ke liye.</li>
+                    <li>Solvent evaporate karein taaki pure fat mil jaaye.</li>
+                    <li>5ml melted fat ko ek test tube mein lein.</li>
+                    <li>5ml concentrated HCl daalein.</li>
+                    <li>0.4ml 2% furfural solution (in alcohol) daalein.</li>
+                    <li>2 minutes tak vigorously shake karein.</li>
+                    <li>Layers separate hone dein. Acid layer (neeche wali layer) observe karein.</li>
+                    <li><strong>Pink/Red colour</strong> acid layer mein = Vanaspati PRESENT. <strong>No colour</strong> = Vanaspati ABSENT.</li>
+                </ol>
+            `
+        },
+        {
+            title: "Lactose Ka Determination (Lane-Eynon Method)",
+            purpose: "Khoa mein lactose content determine karne ke liye.",
+            reference: "IS 1479 (Part II):1961",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>Lactose ek reducing sugar hai jo Fehling's solution ko reduce kar sakta hai. Known volume ki Fehling's solution ko sample se titrate karte hain, methylene blue indicator ke saath. Endpoint tab aata hai jab saari Fehling's solution reduce ho jaaye.</p>
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>5g khoa ko 50ml distilled water mein dissolve karein.</li>
+                    <li>Proteins precipitate karne ke liye 1ml each of potassium ferrocyanide solution aur zinc acetate solution daalein.</li>
+                    <li>Volume ko 100ml tak make up karein aur filter karein.</li>
+                    <li>Ek conical flask mein exactly 5ml each Fehling's A aur Fehling's B solution lein.</li>
+                    <li>Prepared filtrate se burette mein bharein.</li>
+                    <li>Fehling's solution ko boil karein aur boiling Fehling's mein sample ko slowly titrate karein.</li>
+                    <li>Endpoint ke paas methylene blue indicator ki 2-3 drops daalein.</li>
+                    <li>Titrate karte rahein jab tak blue colour disappear ho jaaye aur brick red precipitate dikhey.</li>
+                    <li>Lane-Eynon tables se lactose content calculate karein.</li>
+                </ol>
+            `
+        },
+        {
+            title: "Alkaline Phosphatase Test",
+            purpose: "Yeh confirm karne ke liye ki khoa banane mein use hua doodh properly pasteurized tha ya nahi.",
+            reference: "IS 4883:1980",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>Alkaline phosphatase ek enzyme hai jo raw milk mein naturally present hota hai. Agar pasteurization proper hua hai toh yeh enzyme destroy ho jaata hai. Positive test matlab doodh properly pasteurized nahi tha.</p>
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>1g khoa ko 9ml buffer substrate solution (disodium p-nitrophenyl phosphate) mein disperse karein.</li>
+                    <li>37°C par 2 hours ke liye incubate karein.</li>
+                    <li>Agar phosphatase present hai toh woh substrate ko hydrolyze karega, p-nitrophenol release karega.</li>
+                    <li>Alkaline conditions mein yellow colour develop hoga.</li>
+                    <li>Colour intensity ko spectrophotometer ya comparator se measure karein.</li>
+                    <li><strong>Yellow colour</strong> = Phosphatase positive = Improper heating. <strong>No colour</strong> = Properly heated.</li>
+                </ol>
+            `
         }
-    },
-    en: {
+    ]
+},
+"ice-cream": {
+    title: "Ice Cream Ka Analysis",
+    tests: [
+        {
+            title: "Fat Ka Determination (Rose-Gottlieb Method)",
+            purpose: "Ice cream mein fat content determine karne ke liye. Legal standards aur texture ke liye bahut important hai.",
+            reference: "Pearson's Composition and Analysis of Foods 9th edn, 1991 page 604; IS 2802:1964",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>Ice cream ko pehle melt kiya jaata hai, phir ammonia aur ethanol se treat kiya jaata hai. Fat ko diethyl ether aur petroleum ether ke mixture se extract kiya jaata hai. Solvents evaporate karne ke baad fat ko weigh kiya jaata hai.</p>
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Ice cream sample ko 40°C par completely melt karein aur achhe se mix karein.</li>
+                    <li>Ek Mojonnier tube mein 4-5g melted sample accurately weigh karein.</li>
+                    <li>10ml distilled water daalein aur achhe se mix karein.</li>
+                    <li>2ml ammonia solution daalein, mix karein, aur 60°C par 20 minutes ke liye water bath mein rakhein.</li>
+                    <li>Cool karein, aur 10ml ethanol daalein aur mix karein.</li>
+                    <li>25ml diethyl ether daalein, 1 minute vigorously shake karein.</li>
+                    <li>25ml petroleum ether daalein aur 1 minute phir shake karein.</li>
+                    <li>Layers separate hone dein ya centrifuge karein.</li>
+                    <li>Ether layer ko ek pre-weighed vessel mein carefully decant karein.</li>
+                    <li>Extraction do baar aur repeat karein (15ml each ether).</li>
+                    <li>Combined ether extracts se ether evaporate karein aur residue ko 102 ± 2°C par 3 hours ke liye dry karein.</li>
+                    <li>Desiccator mein cool karein aur weigh karein.</li>
+                </ol>
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>% Fat = (Weight of extracted fat / Weight of sample) × 100</code></pre>
+                <p class="text-xs mt-2">FSSAI Standards: Medium fat ice cream mein min 2.5% fat, Regular ice cream mein min 10% fat hona chahiye.</p>
+            `
+        },
+        {
+            title: "Overrun Ka Determination",
+            purpose: "Overrun freezing ke dauraan air incorporation ki wajah se ice cream ke volume mein mix ke volume se percentage increase hai. Yeh texture aur body ke liye critical hai.",
+            reference: "IS 2802:1964",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>Overrun ice cream aur uske melted mix ke weights ko compare karke determine kiya jaata hai. Kyunki air ka koi significant weight nahi hota, weight difference air incorporation ko indicate karta hai.</p>
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Ice cream ka ek unit (jaise ek cup ya carton) lein aur iska net weight determine karein (W_icecream).</li>
+                    <li>Usi container mein same volume ki ice cream ko completely melt karein, saari air remove karein (ek drop amyl alcohol foam todne mein help kar sakta hai).</li>
+                    <li>Melted mix ko weigh karein (W_mix). Ya phir same volume ke container mein melted mix bharein aur weigh karein.</li>
+                </ol>
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>% Overrun = [(W_mix - W_icecream) / W_icecream] × 100</code></pre>
+                <p class="text-xs mt-2">Normal range: 70-100% overrun commercial ice cream ke liye. Zyada overrun matlab zyada air = halka product.</p>
+            `
+        },
+        {
+            title: "Total Solids Content Ka Determination",
+            purpose: "Ice cream mein total solids determine karne ke liye.",
+            reference: "IS 2802:1964",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Ek weighed dish (sand ke saath) mein 5g melted ice cream sample weigh karein (W2).</li>
+                    <li>Kuch drops paani daalein aur paste banaane ke liye mix karein.</li>
+                    <li>20-30 minutes ke liye boiling water bath par sample ko dry karein.</li>
+                    <li>Dish ko 100 ± 2°C par hot air oven mein 4 hours ke liye rakhein.</li>
+                    <li>Desiccator mein cool karein aur weigh karein (W3). Constant weight tak repeat karein.</li>
+                </ol>
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>% Total Solids = [(W3 - W1) / (W2 - W1)] × 100</code></pre>
+                <p class="text-xs">FSSAI Standard: Minimum 36% total solids hona chahiye.</p>
+            `
+        },
+        {
+            title: "Protein Ka Determination (Kjeldahl Method)",
+            purpose: "Ice cream mein protein content determine karne ke liye.",
+            reference: "Pearson's Composition and Analysis of Foods, 9th edn, 1991 page 17",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>5-8g melted ice cream sample ko Kjeldahl flask mein weigh karein.</li>
+                    <li>Liquid milk ke liye described Kjeldahl method follow karein (Digestion → Distillation → Titration).</li>
+                    <li>Total nitrogen determine karein.</li>
+                </ol>
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>% Protein = % Total Nitrogen × 6.38 (dairy ice cream ke liye)</code></pre>
+                <pre><code>% Protein = % Total Nitrogen × 6.25 (frozen desserts ke liye jo vegetable protein use karte hain)</code></pre>
+                <p class="text-xs mt-2">FSSAI Standard: Minimum 3.5% protein hona chahiye.</p>
+            `
+        },
+        {
+            title: "Sucrose Ka Determination (Lane-Eynon Titration Method)",
+            purpose: "Ice cream mein total sugar (sucrose) content determine karne ke liye.",
+            reference: "IS 2802:1964; A.O.A.C Official Methods",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>Reducing sugars (lactose) ko pehle determine kiya jaata hai. Phir acid inversion se sucrose ko reducing sugars mein convert karke total reducing sugars determine kiye jaate hain. Difference se sucrose calculate hota hai.</p>
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>25g melted sample ko 250ml volumetric flask mein weigh karein.</li>
+                    <li>~150ml distilled water daalein aur mix karein.</li>
+                    <li>Protein precipitate karne ke liye 5ml potassium ferrocyanide aur 5ml zinc acetate daalein.</li>
+                    <li>250ml tak make up karein, mix karein, aur filter karein.</li>
+                    <li><strong>Before inversion:</strong> Filtrate se Fehling's solution ko titrate karein (reducing sugars = lactose).</li>
+                    <li><strong>After inversion:</strong> 50ml filtrate mein 5ml conc. HCl daalein, 69°C par 15 min heat karein, cool karein, NaOH se neutralize karein, 100ml tak dilute karein. Phir se Fehling's solution titrate karein (total reducing sugars).</li>
+                </ol>
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>% Sucrose = (Total reducing sugars after inversion - Reducing sugars before inversion) × 0.95</code></pre>
+            `
+        },
+        {
+            title: "Added Starch Ka Determination",
+            purpose: "Ice cream mein illegally added starch detect aur quantify karne ke liye.",
+            reference: "A.O.A.C 17th edn, 2000 Modified Official method 925.50",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Qualitative Test (Detection):</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>5ml melted ice cream ko boil karein aur cool karein.</li>
+                    <li>Iodine solution ki kuch drops daalein.</li>
+                    <li><strong>Blue-black colour</strong> = Starch present.</li>
+                </ol>
+                <h4 class="font-semibold mt-4 mb-2">Quantitative Test:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Sample se petroleum ether ke saath fat remove karein.</li>
+                    <li>80% alcohol se starch precipitate karein.</li>
+                    <li>Precipitate ko dilute H₂SO₄ ke saath acid hydrolysis karein (starch → glucose).</li>
+                    <li>Lane-Eynon method se reducing sugars ki amount determine karein.</li>
+                    <li>Starch content calculate karein: Starch = Glucose × 0.9</li>
+                </ol>
+            `
+        },
+        {
+            title: "Total Ash Ka Determination",
+            purpose: "Ice cream mein mineral content determine karne ke liye.",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Pre-weighed crucible mein ~5g melted sample weigh karein.</li>
+                    <li>Water bath par evaporate karein, phir hot plate par char karein.</li>
+                    <li>Muffle furnace mein 550°C par 4-6 hours rakhein jab tak white ash mil jaaye.</li>
+                    <li>Desiccator mein cool karein aur weigh karein.</li>
+                </ol>
+                <pre><code>% Ash = (Weight of ash / Weight of sample) × 100</code></pre>
+            `
+        },
+        {
+            title: "Titratable Acidity Ka Determination",
+            purpose: "Ice cream mix ki acidity measure karne ke liye.",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>10g melted sample ek beaker mein weigh karein.</li>
+                    <li>20ml neutral distilled water daalein.</li>
+                    <li>Phenolphthalein indicator ki kuch drops daalein.</li>
+                    <li>0.1N NaOH se halka pink endpoint tak titrate karein.</li>
+                </ol>
+                <pre><code>% Acidity (as lactic acid) = (9 × V × N) / W</code></pre>
+            `
+        },
+        {
+            title: "Coliform Count (Microbiological Test)",
+            purpose: "Hygienic quality assess karne ke liye. Coliforms ki presence poor sanitation indicate karti hai.",
+            reference: "IS 2802:1964; BIS Standards",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>Coliforms Violet Red Bile Agar (VRBA) par characteristic dark red colonies banate hain. Sample ka serial dilution karke pour plate method se count kiya jaata hai.</p>
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>11g melted sample ko 99ml sterile butterfield's phosphate buffer mein mix karein (1:10 dilution).</li>
+                    <li>Further serial dilutions banayein as required.</li>
+                    <li>1ml appropriate dilution ko sterile petri dish mein pipette karein.</li>
+                    <li>Cooled, molten VRBA (~45°C) pour karein, mix karein, solidify hone dein.</li>
+                    <li>VRBA ki ek overlay layer daalein.</li>
+                    <li>35°C par 24 ± 2 hours ke liye incubate karein.</li>
+                    <li>Dark red colonies (0.5mm se badi) count karein.</li>
+                </ol>
+                <pre><code>Coliform count (CFU/g) = No. of colonies × Dilution factor</code></pre>
+                <p class="text-xs">Standard: Max 10 CFU/g acceptable hai.</p>
+            `
+        }
+    ]
+},
+"condensed-milk": {
+    title: "Condensed Milk Ka Analysis",
+    tests: [
+        {
+            title: "Total Solids Ka Determination",
+            purpose: "Total solids content measure karne ke liye, condensed milk ke liye ek primary parameter.",
+            reference: "IS 12333:1997 / ISO 6731:1989",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Sand aur glass rod wali ek pre-weighed dish (W1) mein ~2g sample accurately weigh karein (W2).</li>
+                    <li>5ml distilled water daalein aur paste banayein.</li>
+                    <li>30 minutes ke liye boiling water bath par dry karein.</li>
+                    <li>Phir 102 ± 2°C par hot air oven mein constant weight (W3) tak dry karein.</li>
+                </ol>
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>% Total Solids = [(W3 - W1) / (W2 - W1)] × 100</code></pre>
+                <p class="text-xs">Standard: Sweetened condensed milk mein minimum 74% total solids hona chahiye.</p>
+            `
+        },
+        {
+            title: "Fat Ka Determination (Rose-Gottlieb Method)",
+            purpose: "Fat content measure karne ke liye.",
+            reference: "IS 1224 (Part II):1977; Rose-Gottlieb Method",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>2-2.5g sample accurately weigh karein Mojonnier tube mein.</li>
+                    <li>Garam distilled water se reconstitute karein (~10ml).</li>
+                    <li>1.5ml ammonia daalein aur mix karein.</li>
+                    <li>Standard Rose-Gottlieb extraction follow karein jaise liquid milk ke liye described hai.</li>
+                    <li>Triple extraction karein, solvents evaporate karein, aur fat weigh karein.</li>
+                </ol>
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>% Fat = (Weight of extracted fat / Weight of sample) × 100</code></pre>
+                <p class="text-xs">Standard: Sweetened condensed milk mein minimum 9% fat.</p>
+            `
+        },
+        {
+            title: "Sucrose Ka Determination",
+            purpose: "Sweetened condensed milk ka ek major component, added sugar ki quantity measure karne ke liye.",
+            reference: "IS 1166:1968",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Method 1: Lane-Eynon Method (Titrimetric)</h4>
+                <h4 class="font-semibold mt-3 mb-2">Principle:</h4>
+                <p>Is method mein sample ko clarify karna aur acid inversion se pehle aur baad mein reducing sugars (lactose) determine karna involved hai. Inversion sucrose ko reducing sugars mein convert karta hai. Difference sucrose content deta hai.</p>
+                <h4 class="font-semibold mt-3 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>~10g sample ko weigh karein, garam paani mein dissolve karein.</li>
+                    <li>Lead acetate se clarify karein (excess lead ko sodium oxalate se remove karein).</li>
+                    <li>Volume make up karein, filter karein.</li>
+                    <li><strong>Before inversion:</strong> Filtrate se Fehling's solution titrate karein (methylene blue indicator). Result = Lactose.</li>
+                    <li><strong>After inversion:</strong> 50ml filtrate + 5ml conc HCl, 69°C par 15 min heat, cool, neutralize, dilute karein. Phir se titrate karein. Result = Total reducing sugars (lactose + inverted sucrose).</li>
+                    <li>Lane-Eynon tables se sugar values calculate karein.</li>
+                </ol>
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>% Sucrose = (Total reducing sugars % - Original reducing sugars %) × 0.95</code></pre>
+                
+                <h4 class="font-semibold mt-4 mb-2">Method 2: Polarimetric Method</h4>
+                <h4 class="font-semibold mt-3 mb-2">Principle:</h4>
+                <p>Yeh method ek clarified sample solution ke optical rotation mein change par based hai acid inversion se pehle aur baad mein. Sucrose right (+) rotate karta hai, inversion ke baad mixture left (-) rotate karta hai. Rotation mein change sucrose content ke proportional hota hai.</p>
+                <h4 class="font-semibold mt-3 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Clarified solution ko polarimeter tube mein bharein.</li>
+                    <li>Optical rotation measure karein (Direct reading P₁).</li>
+                    <li>Acid inversion karein (HCl se heat karein).</li>
+                    <li>Inverted solution ka rotation measure karein (Invert reading P₂).</li>
+                </ol>
+                <pre><code>% Sucrose = (P₁ - P₂) / [132.66 - 0.0794 × (m - 13)]</code></pre>
+                <p class="text-xs">Jahaan m = total solids minus fat minus protein.</p>
+            `
+        },
+        {
+            title: "Titratable Acidity Ka Determination",
+            purpose: "Condensed milk ki acidity determine karne ke liye.",
+            reference: "IS 1166:1968",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>10g condensed milk sample ek porcelain dish mein accurately weigh karein.</li>
+                    <li>30ml garam (40°C) neutral distilled water daalein aur achhe se mix karein jab tak uniform dispersion ban jaaye.</li>
+                    <li>Phenolphthalein indicator ki kuch drops daalein.</li>
+                    <li>0.1N NaOH se titrate karein jab tak halka pink colour aaye.</li>
+                </ol>
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>% Acidity (as lactic acid) = (9 × V × N) / W</code></pre>
+            `
+        },
+        {
+            title: "Protein Ka Determination (Kjeldahl Method)",
+            purpose: "Condensed milk mein protein content determine karne ke liye.",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>~2g sample ko Kjeldahl flask mein accurately weigh karein.</li>
+                    <li>Standard Kjeldahl procedure follow karein (Digestion → Distillation → Titration).</li>
+                </ol>
+                <pre><code>% Protein = % Total Nitrogen × 6.38</code></pre>
+            `
+        },
+        {
+            title: "Total Ash Ka Determination",
+            purpose: "Mineral content determine karne ke liye.",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Pre-weighed crucible mein ~5g sample weigh karein.</li>
+                    <li>Water bath par evaporate karein, phir char karein.</li>
+                    <li>550°C par muffle furnace mein ash karein jab tak white ash mile.</li>
+                    <li>Cool karein aur weigh karein.</li>
+                </ol>
+                <pre><code>% Ash = (Weight of ash / Weight of sample) × 100</code></pre>
+            `
+        }
+    ]
+},
+"milk-powder": {
+    title: "Milk Powder Ka Analysis",
+    tests: [
+        {
+            title: "Moisture aur Total Solids Ka Determination",
+            purpose: "Free moisture content determine karne ke liye, shelf life ke liye bahut important.",
+            reference: "IS 16072:2012; IDF 26:2004",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>Ek accurately weighed sample ko hot air oven mein 102±2°C par constant weight tak dry kiya jaata hai. Weight loss moisture content represent karta hai.</p>
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Ek clean, dry, empty dish ko uske lid (W1) ke saath weigh karein.</li>
+                    <li>Usme approximately 1g milk powder accurately weigh karein aur phir se weigh karein (W2).</li>
+                    <li>Dish ko lid hatakar 102 ± 2°C par hot air oven mein 2 hours ke liye rakhein.</li>
+                    <li>Dish ko lid lagakar desiccator mein room temperature tak cool karein.</li>
+                    <li>Weigh karein aur weight note karein (W3).</li>
+                    <li>Constant weight aane tak heating aur cooling repeat karein (1 hour intervals).</li>
+                </ol>
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>% Total Solids = [(W3 - W1) / (W2 - W1)] × 100</code></pre>
+                <pre><code>% Moisture = 100 - % Total Solids</code></pre>
+                <p class="text-xs mt-2">Standard: SMP mein max 4% moisture, WMP mein max 4% moisture.</p>
+            `
+        },
+        {
+            title: "Fat Ka Determination (Rose-Gottlieb Method)",
+            purpose: "Milk powder mein fat content determine karne ke liye.",
+            reference: "A.O.A.C 17th edn, 2000 Official method 932.06",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Mojonnier tube mein ~1g powder accurately weigh karein.</li>
+                    <li>10ml garam distilled water daalein aur powder ko reconstitute karne ke liye achhe se mix karein (vortex ya vigorous shaking).</li>
+                    <li>1.25ml ammonia solution daalein aur mix karein.</li>
+                    <li>10ml ethanol daalein aur shake karein.</li>
+                    <li>25ml diethyl ether daalein, 1 minute vigorously shake karein.</li>
+                    <li>25ml petroleum ether daalein, 1 minute shake karein.</li>
+                    <li>Centrifuge karein ya layers separate hone dein.</li>
+                    <li>Ether layer decant karein pre-weighed flask mein.</li>
+                    <li>Triple extraction karein.</li>
+                    <li>Solvents evaporate karein, 102°C par dry karein, weigh karein.</li>
+                </ol>
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>% Fat = (Weight of fat / Weight of sample) × 100</code></pre>
+                <p class="text-xs">Standard: SMP mein max 1.5% fat, WMP mein min 26% fat.</p>
+            `
+        },
+        {
+            title: "Protein Ka Determination (Kjeldahl Method)",
+            purpose: "Milk powder mein protein content determine karne ke liye.",
+            reference: "A.O.A.C 991.23",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>~0.5g powder ko Kjeldahl flask mein accurately weigh karein.</li>
+                    <li>Standard Kjeldahl digestion, distillation, aur titration karein.</li>
+                </ol>
+                <pre><code>% Protein = % Total Nitrogen × 6.38</code></pre>
+                <p class="text-xs">Standard: SMP mein min 34% protein hona chahiye.</p>
+            `
+        },
+        {
+            title: "Titratable Acidity Ka Determination",
+            purpose: "Reconstituted milk powder ki acidity determine karne ke liye.",
+            reference: "IS 11623:1986",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>10g powder ko 100ml distilled water mein reconstitute karein (10% solution).</li>
+                    <li>Is reconstituted milk ka 10ml ek dish mein pipette karein.</li>
+                    <li>Phenolphthalein indicator ki kuch drops daalein.</li>
+                    <li>0.1N NaOH se titrate karein.</li>
+                    <li>Endpoint colour ko reference standard (Rosaniline acetate ya cobalt sulfate solution) se compare karein accurate endpoint ke liye.</li>
+                </ol>
+                <pre><code>% Acidity (as lactic acid) = (9 × V × N) / W</code></pre>
+                <p class="text-xs">Standard: Max 1.5% acidity (18°T) reconstituted mein.</p>
+            `
+        },
+        {
+            title: "Solubility Index Ka Determination",
+            purpose: "Reconstitution ke baad undissolved powder ki amount measure karta hai. Yeh manufacturing quality indicate karta hai.",
+            reference: "ISI Handbook of Food Analysis (Part XI) 1981; IDF 129A:1988",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>Ek standard solution banaya jaata hai aur specific conditions mein centrifuge kiya jaata hai. Sediment ka volume graduated centrifuge tube mein measure kiya jaata hai. Kam sediment = achhi solubility = better quality powder.</p>
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>13g milk powder ko 100ml distilled water (24°C) mein reconstitute karein.</li>
+                    <li>Blender mein 90 seconds ke liye mix karein.</li>
+                    <li>50ml reconstituted milk ko calibrated centrifuge tube mein daalein.</li>
+                    <li>900 rpm par 5 minutes ke liye centrifuge karein.</li>
+                    <li>Supernatant carefully decant karein.</li>
+                    <li>Tube ko phir se distilled water se 50ml tak fill karein, mix karein, aur centrifuge karein.</li>
+                    <li>Settled sediment ka volume (ml) read karein.</li>
+                </ol>
+                <h4 class="font-semibold mt-4 mb-2">Result:</h4>
+                <pre><code>Solubility Index = Volume of sediment in ml</code></pre>
+                <p class="text-xs">Standard: Extra grade SMP ke liye max 0.5 ml, Standard grade ke liye max 1.0 ml.</p>
+            `
+        },
+        {
+            title: "Total Ash Ka Determination",
+            purpose: "Mineral content determine karne ke liye.",
+            reference: "IS 1165:2005; A.O.A.C 930.30",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Pre-weighed crucible mein ~3g powder accurately weigh karein.</li>
+                    <li>Pehle dhire se hot plate par char karein (flaming se avoid karein).</li>
+                    <li>Phir muffle furnace mein 550 ± 20°C par 4-6 hours rakhein jab tak grey/white ash mil jaaye.</li>
+                    <li>Desiccator mein cool karein aur weigh karein. Constant weight tak repeat karein.</li>
+                </ol>
+                <pre><code>% Total Ash = (Weight of ash / Weight of sample) × 100</code></pre>
+                <p class="text-xs">Standard: SMP mein max 8.2% ash.</p>
+            `
+        },
+        {
+            title: "Lactose Ka Determination (Lane-Eynon Method)",
+            purpose: "Milk powder mein lactose content determine karne ke liye.",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>~5g powder ko distilled water mein dissolve karein.</li>
+                    <li>Clarifying agents (potassium ferrocyanide + zinc acetate) daalein.</li>
+                    <li>Volume make up karein aur filter karein.</li>
+                    <li>Fehling's solution (5ml A + 5ml B) ko boil karein.</li>
+                    <li>Sample filtrate se titrate karein, methylene blue indicator ke saath.</li>
+                    <li>Lane-Eynon tables se lactose calculate karein.</li>
+                </ol>
+            `
+        },
+        {
+            title: "Crude Fibre Ka Determination",
+            purpose: "Cereal-based supplementary foods ke liye important test.",
+            reference: "A.O.A.C Official Methods",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>Fat-free sample ko successively dilute acid aur phir dilute alkali se boil kiya jaata hai. Jo insoluble residue bachta hai usse dry karke weigh kiya jaata hai, phir ignite karke phir weigh kiya jaata hai. Weight loss on ignition crude fibre represent karta hai.</p>
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>2g fat-free sample weigh karein.</li>
+                    <li>200ml boiling 1.25% H₂SO₄ se 30 minutes boil karein. Filter karein aur wash karein.</li>
+                    <li>Residue ko 200ml boiling 1.25% NaOH se 30 minutes boil karein. Filter aur wash karein.</li>
+                    <li>Residue ko dry karein 105°C par aur weigh karein (W1).</li>
+                    <li>550°C par ignite karein aur weigh karein (W2).</li>
+                </ol>
+                <pre><code>% Crude Fibre = [(W1 - W2) / Weight of sample] × 100</code></pre>
+            `
+        },
+        {
+            title: "Scorched Particles Ka Determination",
+            purpose: "Manufacturing ke dauraan burn/scorch hue particles ki quantity assess karne ke liye. Powder ki appearance quality batati hai.",
+            reference: "ADPI Standards; IDF 107:1995",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>25g milk powder ko 250ml distilled water (22-25°C) mein dissolve karein.</li>
+                    <li>Solution ko ADPI standard comparison disc holder mein ek white filter disc se filter karein.</li>
+                    <li>Filter disc ko dry karein.</li>
+                    <li>Disc ko ADPI standard scorched particle discs (A, B, C, D grades) se compare karein.</li>
+                </ol>
+                <p class="text-xs">Grade A = Best (least scorched), Grade D = Worst.</p>
+            `
+        }
+    ]
+},
+"casein": {
+    title: "Edible Casein Products Ka Analysis",
+    tests: [
+        {
+            title: "Moisture Ka Determination",
+            purpose: "Casein products mein water content determine karne ke liye.",
+            reference: "IS 13313:1992; IDF 78C:1981",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Pre-weighed dish mein ~3g casein sample weigh karein.</li>
+                    <li>102 ± 2°C par hot air oven mein constant weight tak dry karein.</li>
+                    <li>Desiccator mein cool karein aur weigh karein.</li>
+                </ol>
+                <pre><code>% Moisture = [(Initial weight - Final weight) / Weight of sample] × 100</code></pre>
+                <p class="text-xs">Standard: Edible casein mein max 12% moisture.</p>
+            `
+        },
+        {
+            title: "Fat Ka Determination (SBR Method)",
+            purpose: "Casein mein residual fat content determine karne ke liye.",
+            reference: "IDF 127A:1995",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>Schmid-Bondzynski-Ratzlaff (SBR) method use hota hai. Sample ko HCl se digest kiya jaata hai protein dissolve karne ke liye, aur fat ko diethyl ether aur petroleum ether se extract kiya jaata hai. Werner-Schmidt method ka hi modified version hai.</p>
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>1g casein sample ko weigh karein.</li>
+                    <li>10ml concentrated HCl daalein aur water bath par 70-80°C tak heat karein jab tak dissolve ho jaaye.</li>
+                    <li>Cool karein, 10ml ethanol daalein.</li>
+                    <li>Diethyl ether (25ml) aur petroleum ether (25ml) se extract karein.</li>
+                    <li>Triple extraction karein.</li>
+                    <li>Solvents evaporate karein, dry karein, aur weigh karein.</li>
+                </ol>
+                <pre><code>% Fat = (Weight of fat / Weight of sample) × 100</code></pre>
+                <p class="text-xs">Standard: Edible casein mein max 2% fat.</p>
+            `
+        },
+        {
+            title: "Protein Ka Determination (Kjeldahl Method)",
+            purpose: "Casein mein protein content determine karne ke liye.",
+            reference: "IDF 92:1979; A.O.A.C 991.23",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li><strong>Total Nitrogen (TN):</strong> ~0.3g casein ko Kjeldahl method se digest, distill, aur titrate karein.</li>
+                    <li><strong>Non-Protein Nitrogen (NPN):</strong> 1g casein ko 50ml water mein disperse karein. 20ml 15% TCA daalein. Filter karein. Filtrate ki nitrogen Kjeldahl se determine karein.</li>
+                </ol>
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>% True Protein = (% TN - % NPN) × 6.38</code></pre>
+                <p class="text-xs">Standard: Edible casein mein min 84% protein (dry basis).</p>
+            `
+        },
+        {
+            title: "Lactose Ka Determination (Photometric Method)",
+            purpose: "Casein mein residual lactose determine karne ke liye.",
+            reference: "IDF 106:1982",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>Casein ko precipitate karke filtrate mein lactose ko phenol aur sulfuric acid ke saath react karaya jaata hai. Isse ek orange-yellow colour develop hota hai jo 490nm par spectrophotometrically measure hota hai.</p>
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>2g casein ko 50ml warm water mein suspend karein.</li>
+                    <li>1N HCl se pH 4.6 tak acidify karein casein precipitate karne ke liye.</li>
+                    <li>Filter karein. Filtrate mein lactose present hoga.</li>
+                    <li>1ml filtrate + 1ml 5% phenol solution + 5ml concentrated H₂SO₄ (rapidly add karein).</li>
+                    <li>Mix karein, 10 minutes stand hone dein.</li>
+                    <li>30°C par water bath mein 20 minutes rakhein.</li>
+                    <li>490nm par absorbance read karein spectrophotometer se.</li>
+                    <li>Standard lactose solutions ke calibration curve se concentration determine karein.</li>
+                </ol>
+                <p class="text-xs">Standard: Edible casein mein max 1% lactose.</p>
+            `
+        },
+        {
+            title: "Ash Ka Determination",
+            purpose: "Casein mein mineral content determine karne ke liye.",
+            reference: "IDF 90C:1989",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure (Normal Ash):</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Pre-weighed crucible mein ~3g sample weigh karein.</li>
+                    <li>825 ± 25°C par muffle furnace mein ignite karein jab tak saara carbon remove ho jaaye.</li>
+                    <li>Cool karein aur weigh karein.</li>
+                </ol>
+                <h4 class="font-semibold mt-4 mb-2">Procedure (Fixed Ash - for phosphorus retention):</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Sample mein magnesium acetate solution daalein ashing se pehle.</li>
+                    <li>Phir normally ash karein. Magnesium acetate saara phosphorus retain karta hai.</li>
+                    <li>Blank magnesium acetate bhi separately ash karein aur subtract karein.</li>
+                </ol>
+                <pre><code>% Fixed Ash = [(Ash with MgAc - Ash of blank MgAc) / Weight of sample] × 100</code></pre>
+                <p class="text-xs">Standard: Acid casein mein max 2.5% ash, Rennet casein mein max 7.5% ash.</p>
+            `
+        },
+        {
+            title: "Free Acidity aur pH Ka Determination",
+            purpose: "Casein ki acidity level check karne ke liye.",
+            reference: "IDF 91A:1983",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Free Acidity:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>2g casein ko 60ml carbon dioxide-free distilled water mein suspend karein.</li>
+                    <li>0.1N NaOH se titrate karein phenolphthalein endpoint tak.</li>
+                </ol>
+                <pre><code>Free Acidity (ml 0.1N NaOH/g) = Volume of NaOH / Weight of sample</code></pre>
+                <h4 class="font-semibold mt-4 mb-2">pH Determination:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>5g casein ko 100ml distilled water mein suspend karein.</li>
+                    <li>20 minutes tak stir karein.</li>
+                    <li>Calibrated pH meter se pH measure karein.</li>
+                </ol>
+            `
+        },
+        {
+            title: "Sediment Ka Determination",
+            purpose: "Casein mein foreign particles ya impurities detect karne ke liye.",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>25g casein ko warm sodium hydroxide solution mein dissolve karein.</li>
+                    <li>Solution ko ek standard filter disc se filter karein.</li>
+                    <li>Filter disc ko examine karein particles ke liye.</li>
+                    <li>Standard comparison discs se compare karein.</li>
+                </ol>
+            `
+        }
+    ]
+},
+"whey-powder": {
+    title: "Whey Powder Ka Analysis",
+    tests: [
+        {
+            title: "Moisture Ka Determination",
+            purpose: "Whey powder mein water content determine karne ke liye.",
+            reference: "IDF 26:2004",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Pre-weighed dish mein ~2g whey powder weigh karein.</li>
+                    <li>102 ± 2°C par hot air oven mein 2 hours ke liye dry karein.</li>
+                    <li>Desiccator mein cool karein aur weigh karein.</li>
+                    <li>Constant weight tak repeat karein.</li>
+                </ol>
+                <pre><code>% Moisture = [(W2 - W3) / (W2 - W1)] × 100</code></pre>
+                <p class="text-xs">Standard: Max 5% moisture.</p>
+            `
+        },
+        {
+            title: "Fat Ka Determination (Rose-Gottlieb Method)",
+            purpose: "Whey powder mein fat content determine karne ke liye.",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>~1g whey powder ko Mojonnier tube mein weigh karein.</li>
+                    <li>10ml garam paani se reconstitute karein.</li>
+                    <li>Milk powder ke liye described Rose-Gottlieb method follow karein.</li>
+                </ol>
+                <pre><code>% Fat = (Weight of fat / Weight of sample) × 100</code></pre>
+                <p class="text-xs">Standard: Max 1.5% fat.</p>
+            `
+        },
+        {
+            title: "Protein Ka Determination (Kjeldahl Method)",
+            purpose: "Whey powder mein protein content determine karne ke liye.",
+            reference: "A.O.A.C 991.23",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>~0.5g whey powder ko Kjeldahl flask mein weigh karein.</li>
+                    <li>Standard Kjeldahl procedure follow karein.</li>
+                </ol>
+                <pre><code>% Protein = % Total Nitrogen × 6.38</code></pre>
+                <p class="text-xs">WPC34 mein min 34% protein, WPC80 mein min 80% protein, WPI mein min 90% protein.</p>
+            `
+        },
+        {
+            title: "Total Ash Ka Determination",
+            purpose: "Whey powder mein mineral content determine karne ke liye.",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Pre-weighed crucible mein ~3g sample weigh karein.</li>
+                    <li>Hot plate par char karein.</li>
+                    <li>550 ± 20°C par muffle furnace mein ignite karein jab tak white ash mile.</li>
+                    <li>Cool karein aur weigh karein.</li>
+                </ol>
+                <pre><code>% Ash = (Weight of ash / Weight of sample) × 100</code></pre>
+                <p class="text-xs">Standard: Normal whey powder mein ~8-9% ash.</p>
+            `
+        },
+        {
+            title: "pH Ka Determination",
+            purpose: "Whey powder ka pH check karne ke liye (sweet vs acid whey).",
+            reference: "IDF Standards",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>10g whey powder ko 90ml distilled water mein dissolve karein (10% w/v solution banayein).</li>
+                    <li>Achhe se stir karein jab tak fully dissolved ho jaaye.</li>
+                    <li>Solution ko 20 ± 2°C par equilibrate karein.</li>
+                    <li>Calibrated pH meter se pH measure karein (buffer solutions pH 4.0 aur 7.0 se calibrate karke).</li>
+                </ol>
+                <p class="text-xs">Sweet whey pH: 6.0-6.5; Acid whey pH: 4.5-5.0</p>
+            `
+        },
+        {
+            title: "Lactose Ka Determination (Lane-Eynon Method)",
+            purpose: "Whey powder mein lactose content determine karne ke liye.",
+            reference: "A.O.A.C Official Methods",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>Lactose ek reducing sugar hai jo Fehling's solution reduce karta hai. Lane-Eynon titration se lactose ki amount calculate hoti hai.</p>
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>~5g whey powder ko distilled water mein dissolve karein.</li>
+                    <li>Clarifying agents daalein (K₄Fe(CN)₆ + ZnAc₂).</li>
+                    <li>250ml tak volume make up karein aur filter karein.</li>
+                    <li>5ml each Fehling's A aur B ko boil karein.</li>
+                    <li>Filtrate se titrate karein, methylene blue indicator ke saath.</li>
+                    <li>Tables se anhydrous lactose calculate karein.</li>
+                </ol>
+                <pre><code>% Lactose (anhydrous) = (Fehling's factor × Dilution) / (Titre × Weight of sample) × 100</code></pre>
+                <p class="text-xs">Normal whey powder mein ~70% lactose hota hai.</p>
+            `
+        },
+        {
+            title: "Titratable Acidity Ka Determination",
+            purpose: "Whey powder ki acidity level determine karne ke liye.",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>10g whey powder ko 100ml distilled water mein dissolve karein.</li>
+                    <li>Is solution ka 10ml pipette karein.</li>
+                    <li>Phenolphthalein indicator daalein.</li>
+                    <li>0.1N NaOH se pink endpoint tak titrate karein.</li>
+                </ol>
+                <pre><code>% Acidity (as lactic acid) = (9 × V × N) / W</code></pre>
+            `
+        }
+    ]
+},
+"lassi": {
+    title: "Lassi Ka Analysis",
+    tests: [
+        {
+            title: "Total Solids Ka Determination",
+            purpose: "Lassi mein total solids content determine karne ke liye.",
+            reference: "FSSAI Manual of Methods; IS 12333:1997",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>Lassi mein developed acidity ki wajah se, sample ko pehle NaOH se neutralize kiya jaata hai taaki drying ke dauraan volatile acid losses prevent ho sakein. Phir standard gravimetric method se total solids determine kiye jaate hain.</p>
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Pre-weighed flat bottom dish (W1) mein ~5g lassi sample accurately weigh karein (W2).</li>
+                    <li>1ml 0.1N NaOH daalein aur mix karein (acidity neutralize karne ke liye).</li>
+                    <li>Water bath par 30 minutes ke liye evaporate karein.</li>
+                    <li>Hot air oven mein 100 ± 2°C par constant weight (W3) tak dry karein.</li>
+                    <li>Added NaOH ka weight final weight se subtract karein.</li>
+                </ol>
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>% Total Solids = [(W3 - Weight of NaOH - W1) / (W2 - W1)] × 100</code></pre>
+                <p class="text-xs">FSSAI Standard: Plain lassi mein min 15% total solids.</p>
+            `
+        },
+        {
+            title: "Fat Ka Determination (Gerber Method)",
+            purpose: "Lassi mein fat content determine karne ke liye.",
+            reference: "IS 1479 (Part I):1961",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Gerber butyrometer mein 10ml sulfuric acid daalein.</li>
+                    <li>10.75ml well-mixed lassi sample ko dhire se deewar ke sahaare daalein.</li>
+                    <li>1ml amyl alcohol daalein.</li>
+                    <li>Lock stopper lagayein aur shake karein jab tak homogeneous ho jaaye.</li>
+                    <li>65 ± 2°C par water bath mein 5 minutes rakhein.</li>
+                    <li>1100-1200 rpm par 5 minutes centrifuge karein.</li>
+                    <li>Water bath mein 5 minutes wapas rakhein.</li>
+                    <li>Fat column ko calibrated stem se read karein.</li>
+                </ol>
+                <p class="text-xs">Standard: Lassi mein min 2% fat hona chahiye.</p>
+            `
+        },
+        {
+            title: "Titratable Acidity Ka Determination",
+            purpose: "Lassi mein developed acidity measure karne ke liye.",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Ek beaker mein 10g lassi sample weigh karein.</li>
+                    <li>Phenolphthalein indicator ki kuch drops daalein.</li>
+                    <li>0.1N NaOH se halka pink endpoint tak titrate karein.</li>
+                </ol>
+                <pre><code>% Acidity (as lactic acid) = (9 × V × N) / W</code></pre>
+                <p class="text-xs">Standard: Lassi ki acidity minimum 0.7% (as lactic acid) honi chahiye.</p>
+            `
+        },
+        {
+            title: "Protein Ka Determination (Kjeldahl Method)",
+            purpose: "Lassi mein protein content determine karne ke liye.",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>~5g lassi ko Kjeldahl flask mein weigh karein.</li>
+                    <li>Standard Kjeldahl method follow karein.</li>
+                </ol>
+                <pre><code>% Protein = % Total Nitrogen × 6.38</code></pre>
+            `
+        },
+        {
+            title: "Sucrose Ka Determination (Sweetened Lassi mein)",
+            purpose: "Sweetened lassi mein added sugar content determine karne ke liye.",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <p>Lane-Eynon method follow karein jaise condensed milk ke liye describe kiya gaya hai. Reducing sugars (lactose) before inversion aur total reducing sugars after acid inversion determine karein. Difference se sucrose calculate hota hai.</p>
+                <pre><code>% Sucrose = (Total reducing sugars after inversion - Reducing sugars before inversion) × 0.95</code></pre>
+            `
+        },
+        {
+            title: "Artificial Sweeteners Ka Detection",
+            purpose: "Lassi mein illegally added artificial sweeteners (saccharin, aspartame) detect karne ke liye.",
+            reference: "FSSAI Manual of Methods",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Saccharin Detection:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>50ml lassi ko 5ml conc. HCl ke saath acidify karein.</li>
+                    <li>30ml diethyl ether se 3 baar extract karein.</li>
+                    <li>Combined ether extract ko evaporate karein.</li>
+                    <li>Residue mein 0.5ml conc. H₂SO₄ aur 0.5ml resorcinol solution daalein.</li>
+                    <li>Gently heat karein aur phir excess NaOH solution mein pour karein.</li>
+                    <li><strong>Intense green fluorescence</strong> = Saccharin PRESENT.</li>
+                </ol>
+            `
+        },
+        {
+            title: "Coliform Test (Microbiological Quality)",
+            purpose: "Lassi ki hygienic quality assess karne ke liye.",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>1ml lassi ko 9ml sterile saline mein dilute karein (serial dilutions).</li>
+                    <li>1ml diluted sample ko sterile petri dish mein pour karein.</li>
+                    <li>Violet Red Bile Agar (VRBA) pour karein (~45°C).</li>
+                    <li>Solidify hone dein, overlay daalein.</li>
+                    <li>35°C par 24 hours incubate karein.</li>
+                    <li>Dark red colonies count karein.</li>
+                </ol>
+                <p class="text-xs">Standard: Max 10 CFU/ml coliforms.</p>
+            `
+        }
+    ]
+},
+"chhena-rasogolla": {
+    title: "Chhena / Rasogolla Ka Analysis",
+    tests: [
+        {
+            title: "Chhena: Moisture Ka Determination",
+            purpose: "Chhena mein water content determine karne ke liye, jo texture aur quality ke liye critical hai.",
+            reference: "IS 5162:1969",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>Paneer/cheese ke similar, chhena ko sand ke saath mix karke oven mein constant weight tak dry kiya jaata hai.</p>
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Sand aur glass rod wali pre-weighed dish (W1) mein ~3g finely crumbled chhena weigh karein (W2).</li>
+                    <li>Kuch drops distilled water daalein aur sand ke saath thorough mixing karein.</li>
+                    <li>Hot plate par initial evaporation karein.</li>
+                    <li>102 ± 2°C par hot air oven mein 5 hours ke liye dry karein.</li>
+                    <li>Desiccator mein cool karein aur weigh karein (W3). Constant weight tak repeat karein.</li>
+                </ol>
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>% Moisture = [(W2 - W3) / (W2 - W1)] × 100</code></pre>
+                <p class="text-xs">Standard: Good quality chhena mein 50-55% moisture hona chahiye.</p>
+            `
+        },
+        {
+            title: "Chhena: Fat Ka Determination (Werner-Schmidt Method)",
+            purpose: "Chhena mein fat content determine karne ke liye.",
+            reference: "IS 5162:1969",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>1-2g prepared chhena sample ko beaker mein weigh karein.</li>
+                    <li>10ml conc. HCl daalein aur water bath par heat karein jab tak dissolve ho jaaye.</li>
+                    <li>Cool karein, 10ml ethanol daalein.</li>
+                    <li>Mojonnier flask mein transfer karein.</li>
+                    <li>25ml diethyl ether + 25ml petroleum ether se extract karein.</li>
+                    <li>Triple extraction karein.</li>
+                    <li>Solvents evaporate karein, dry karein (102°C), weigh karein.</li>
+                </ol>
+                <pre><code>% Fat = (Weight of fat / Weight of sample) × 100</code></pre>
+                <pre><code>% Fat on dry basis = (% Fat / % Total Solids) × 100</code></pre>
+                <p class="text-xs">Standard: Chhena mein min 50% fat (dry basis).</p>
+            `
+        },
+        {
+            title: "Chhena: Titratable Acidity",
+            purpose: "Chhena ki acidity measure karne ke liye, jo quality aur suitability ke liye important hai.",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>10g chhena ko beaker mein weigh karein.</li>
+                    <li>20ml warm neutral distilled water daalein aur smooth paste banayein.</li>
+                    <li>Phenolphthalein indicator daalein.</li>
+                    <li>0.1N NaOH se pink endpoint tak titrate karein.</li>
+                </ol>
+                <pre><code>% Acidity (as lactic acid) = (9 × V × N) / W</code></pre>
+                <p class="text-xs">Good chhena ki acidity 0.3-0.5% honi chahiye.</p>
+            `
+        },
+        {
+            title: "Rasogolla: Total Solids Ka Determination",
+            purpose: "Rasogolla mein total solids determine karne ke liye.",
+            reference: "IS 14542:1998",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Rasogolla ko sugar syrup se nikaalein aur blotting paper se excess syrup remove karein.</li>
+                    <li>Rasogolla ko finely grate/crush karein.</li>
+                    <li>Sand wali dish mein ~3g prepared sample weigh karein.</li>
+                    <li>Sand ke saath mix karein, kuch drops paani daalein.</li>
+                    <li>Water bath par preliminary drying karein.</li>
+                    <li>Oven mein 102 ± 2°C par constant weight tak dry karein.</li>
+                </ol>
+                <pre><code>% Total Solids = [(W3 - W1) / (W2 - W1)] × 100</code></pre>
+            `
+        },
+        {
+            title: "Rasogolla: Fat Ka Determination",
+            purpose: "Rasogolla mein fat content determine karne ke liye.",
+            procedure: `<p>Werner-Schmidt acid digestion method use karein jaise chhena ke liye describe kiya gaya hai.</p>`
+        },
+        {
+            title: "Rasogolla: Sucrose Ka Determination",
+            purpose: "Rasogolla mein sugar content (syrup aur body dono) determine karne ke liye.",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Rasogolla body aur syrup ko separately analyse karein.</li>
+                    <li><strong>Syrup:</strong> Refractometer se Brix reading lein. Sucrose concentration directly read karein.</li>
+                    <li><strong>Body:</strong> Lane-Eynon method se reducing sugars before aur after acid inversion determine karein. Difference se sucrose calculate karein.</li>
+                </ol>
+                <pre><code>% Sucrose = (Total reducing sugars - Original reducing sugars) × 0.95</code></pre>
+                <p class="text-xs">Standard: Sugar syrup concentration 40-55° Brix hona chahiye.</p>
+            `
+        },
+        {
+            title: "Rasogolla: Sponge Test (Texture Assessment)",
+            purpose: "Rasogolla ki spongy texture evaluate karne ke liye - ek important quality parameter.",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Rasogolla ko sugar syrup se nikaalein.</li>
+                    <li>Blotting paper par rakhein 1 minute ke liye.</li>
+                    <li>Fingers se gently squeeze karein.</li>
+                    <li>Release karne par shape recover honi chahiye (elasticity test).</li>
+                    <li>Texture Profile Analysis (TPA) instrumentally bhi kar sakte hain texture analyzer se.</li>
+                </ol>
+                <p class="text-xs">Good rasogolla squeeze karne ke baad original shape mein wapas aa jaata hai.</p>
+            `
+        },
+        {
+            title: "Chhena/Rasogolla: Starch Detection",
+            purpose: "Adulterant ke roop mein starch ka detection.",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>1g sample ko 2ml distilled water ke saath mash karein.</li>
+                    <li>Boil karein aur cool karein.</li>
+                    <li>Iodine solution ki ek drop daalein.</li>
+                    <li><strong>Blue-black colour</strong> = Starch PRESENT (adulteration).</li>
+                </ol>
+            `
+        }
+    ]
+},
+"rabri": {
+    title: "Rabri Ka Analysis",
+    tests: [
+        {
+            title: "Total Solids Ka Determination",
+            purpose: "Rabri mein total solids content determine karne ke liye.",
+            reference: "FSSAI Manual",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Sand wali pre-weighed dish mein ~3g rabri sample weigh karein.</li>
+                    <li>Sand ke saath mix karein, kuch drops paani daalein.</li>
+                    <li>Water bath par 30 minutes dry karein.</li>
+                    <li>Hot air oven mein 100 ± 2°C par constant weight tak dry karein.</li>
+                </ol>
+                <pre><code>% Total Solids = [(W3 - W1) / (W2 - W1)] × 100</code></pre>
+            `
+        },
+        {
+            title: "Fat Ka Determination",
+            purpose: "Rabri mein fat content determine karne ke liye.",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <p>Agar rabri mein added sugar hai toh Rose-Gottlieb method use karein. Agar koi sugar nahi hai toh Werner-Schmidt acid digestion method use karein.</p>
+                <p class="mt-2">Rose-Gottlieb ke liye: ~2g sample + 10ml warm water + ammonia + ethanol + diethyl ether + petroleum ether se triple extraction.</p>
+            `
+        },
+        {
+            title: "Titratable Acidity Ka Determination",
+            purpose: "Rabri ki acidity measure karne ke liye.",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>10g rabri ko beaker mein weigh karein.</li>
+                    <li>30ml warm distilled water daalein aur mix karein.</li>
+                    <li>Phenolphthalein indicator daalein.</li>
+                    <li>0.1N NaOH se titrate karein pink endpoint tak.</li>
+                </ol>
+                <pre><code>% Acidity (as lactic acid) = (9 × V × N) / W</code></pre>
+            `
+        },
+        {
+            title: "Sucrose Ka Determination",
+            purpose: "Rabri mein added sugar content determine karne ke liye.",
+            procedure: `<p>Lane-Eynon method follow karein jaise condensed milk ke liye describe kiya gaya hai.</p>`
+        },
+        {
+            title: "Protein Ka Determination",
+            purpose: "Rabri mein protein content determine karne ke liye.",
+            procedure: `<p>Kjeldahl method follow karein. ~2g sample lein. Conversion factor 6.38 use karein.</p>`
+        },
+        {
+            title: "Starch Detection",
+            purpose: "Rabri mein adulterant ke roop mein starch detect karne ke liye.",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>5g rabri ko 10ml paani mein disperse karein.</li>
+                    <li>Boil karein aur cool karein.</li>
+                    <li>Iodine solution ki kuch drops daalein.</li>
+                    <li><strong>Blue-black colour</strong> = Starch PRESENT.</li>
+                </ol>
+            `
+        },
+        {
+            title: "Added Colour Detection",
+            purpose: "Rabri mein illegally added artificial colours detect karne ke liye.",
+            reference: "FSSAI Manual of Methods",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>10g rabri ko 20ml water mein dissolve karein.</li>
+                    <li>Mixture ko acidify karein dilute HCl se.</li>
+                    <li>White defatted wool ke ek piece ko solution mein boil karein 10-15 minutes.</li>
+                    <li>Wool ko nikaalen aur distilled water se wash karein.</li>
+                    <li>Agar wool par colour remain karta hai = <strong>Artificial colour PRESENT</strong>.</li>
+                    <li>Specific dyes identify karne ke liye thin layer chromatography (TLC) ya paper chromatography use karein.</li>
+                </ol>
+            `
+        }
+    ]
+},
+"flavoured-milk": {
+    title: "Flavoured Milk Ka Analysis",
+    tests: [
+        {
+            title: "Fat Ka Determination (Gerber Method)",
+            purpose: "Flavoured milk mein fat content determine karne ke liye.",
+            reference: "IS 1479 (Part I):1961",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Butyrometer mein 10ml H₂SO₄ daalein.</li>
+                    <li>10.75ml well-mixed flavoured milk sample daalein.</li>
+                    <li>1ml amyl alcohol daalein.</li>
+                    <li>Standard Gerber procedure follow karein (shake, water bath 65°C, centrifuge, read).</li>
+                </ol>
+                <p class="text-xs">Standard: Flavoured milk mein min 1.5-2.0% fat (variety ke according).</p>
+            `
+        },
+        {
+            title: "Total Solids Ka Determination",
+            purpose: "Flavoured milk mein total solids determine karne ke liye.",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Pre-weighed dish mein ~5g sample weigh karein.</li>
+                    <li>Water bath par evaporate karein.</li>
+                    <li>102 ± 2°C par oven mein constant weight tak dry karein.</li>
+                </ol>
+                <pre><code>% Total Solids = [(W3 - W1) / (W2 - W1)] × 100</code></pre>
+            `
+        },
+        {
+            title: "Sucrose Ka Determination",
+            purpose: "Flavoured milk mein added sugar measure karne ke liye.",
+            procedure: `<p>Lane-Eynon method follow karein. Reducing sugars (lactose) before inversion aur total reducing sugars after acid inversion determine karein. Difference se sucrose calculate karein.</p>
+            <pre><code>% Sucrose = (Total reducing sugars - Reducing sugars before inversion) × 0.95</code></pre>`
+        },
+        {
+            title: "Protein Ka Determination (Kjeldahl Method)",
+            purpose: "Flavoured milk mein protein content determine karne ke liye.",
+            procedure: `
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>~5g sample ko Kjeldahl flask mein weigh karein.</li>
+                    <li>Standard Kjeldahl procedure follow karein.</li>
+                </ol>
+                <pre><code>% Protein = % Total Nitrogen × 6.38</code></pre>
+            `
+        },
+        {
+            title: "Titratable Acidity",
+            purpose: "Acidity level check karne ke liye.",
+            procedure: `
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>10ml sample lein porcelain dish mein.</li>
+                    <li>Phenolphthalein indicator daalein.</li>
+                    <li>0.1N NaOH se titrate karein pink endpoint tak.</li>
+                </ol>
+                <pre><code>% Acidity (as lactic acid) = (9 × V × N) / W</code></pre>
+            `
+        },
+        {
+            title: "Artificial Colour Detection",
+            purpose: "Permitted aur non-permitted artificial colours detect karne ke liye.",
+            reference: "FSSAI Manual of Methods",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>50ml sample ko dilute HCl se acidify karein.</li>
+                    <li>Defatted white wool ka piece daalein aur 15 minutes boil karein.</li>
+                    <li>Wool ko nikaalen, distilled water se wash karein.</li>
+                    <li>Agar wool par colour absorb hua hai = Synthetic dye present.</li>
+                    <li>Wool ko dilute ammonia mein boil karein colour strip karne ke liye.</li>
+                    <li>Extracted colour ko TLC/Paper chromatography se identify karein.</li>
+                </ol>
+            `
+        },
+        {
+            title: "Preservatives Ka Detection (Formalin Test)",
+            purpose: "Illegally added formalin preservative detect karne ke liye.",
+            reference: "FSSAI Manual",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Hehner's Test:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Test tube mein 10ml flavoured milk lein.</li>
+                    <li>5ml concentrated H₂SO₄ (containing trace of ferric chloride) ko deewar ke sahaare slowly add karein taaki layers ban jaayein.</li>
+                    <li>Two layers ke junction par observe karein.</li>
+                    <li><strong>Violet/purple ring</strong> = Formalin PRESENT.</li>
+                    <li><strong>Brown ring</strong> (normal) = Formalin ABSENT.</li>
+                </ol>
+            `
+        },
+        {
+            title: "Cocoa/Chocolate Content (Flavoured Milk mein)",
+            purpose: "Chocolate flavoured milk mein cocoa content verify karne ke liye.",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure (Theobromine Estimation):</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>100ml sample ko acidify karein aur protein precipitate karein.</li>
+                    <li>Filter karein aur filtrate ko chloroform se extract karein.</li>
+                    <li>Chloroform ko evaporate karein.</li>
+                    <li>Residue ko spectrophotometrically 272nm par measure karein.</li>
+                    <li>Theobromine content se cocoa powder content calculate karein.</li>
+                </ol>
+            `
+        }
+    ]
+},
+"buttermilk-chaas": {
+    title: "Buttermilk / Chaas Ka Analysis",
+    tests: [
+        {
+            title: "Total Solids Ka Determination",
+            purpose: "Chaas mein total solids determine karne ke liye.",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Pre-weighed dish mein ~5g chaas sample weigh karein.</li>
+                    <li>Acidity neutralize karne ke liye NaOH daalein (dahi jaisa).</li>
+                    <li>Water bath par evaporate karein, phir 100 ± 2°C par oven mein constant weight tak dry karein.</li>
+                </ol>
+                <pre><code>% Total Solids = [(W3 - NaOH weight - W1) / (W2 - W1)] × 100</code></pre>
+            `
+        },
+        {
+            title: "Fat Ka Determination (Gerber Method)",
+            purpose: "Chaas mein fat content determine karne ke liye.",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <p>Standard Gerber method follow karein jaise liquid milk ke liye described hai. 10ml H₂SO₄ + 10.75ml sample + 1ml amyl alcohol. Centrifuge karein aur fat percentage read karein.</p>
+                <p class="text-xs mt-2">Note: Chaas ki fat content doodh se kam hoti hai, isliye low-range butyrometer use karein.</p>
+            `
+        },
+        {
+            title: "Titratable Acidity Ka Determination",
+            purpose: "Chaas ki acidity measure karne ke liye.",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>10g sample ek beaker mein weigh karein.</li>
+                    <li>Phenolphthalein indicator daalein.</li>
+                    <li>0.1N NaOH se pink endpoint tak titrate karein.</li>
+                </ol>
+                <pre><code>% Acidity (as lactic acid) = (9 × V × N) / W</code></pre>
+                <p class="text-xs">Standard: Chaas ki acidity typically 0.5-1.0% hoti hai.</p>
+            `
+        },
+        {
+            title: "SNF (Solids-Not-Fat) Ka Determination",
+            purpose: "Chaas mein non-fat solids determine karne ke liye.",
+            procedure: `
+                <pre><code>% SNF = % Total Solids - % Fat</code></pre>
+            `
+        },
+        {
+            title: "pH Ka Determination",
+            purpose: "Chaas ka pH measure karne ke liye.",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>pH meter ko standard buffer solutions (pH 4.0 aur 7.0) se calibrate karein.</li>
+                    <li>Sample ko 20 ± 2°C par equilibrate karein.</li>
+                    <li>pH meter ki electrode ko sample mein daalein.</li>
+                    <li>Stable reading note karein.</li>
+                </ol>
+                <p class="text-xs">Expected pH: 4.0 - 4.5</p>
+            `
+        },
+        {
+            title: "Added Water Ka Detection (Cryoscopy)",
+            purpose: "Chaas mein paani ki adulteration detect karne ke liye.",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>Doodh ka freezing point -0.540°C ke around hota hai. Paani milane se freezing point 0°C ki taraf shift hota hai. Cryoscope se freezing point precisely measure hota hai.</p>
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Cryoscope ko calibrate karein standard NaCl solutions se.</li>
+                    <li>2.5ml sample ko test tube mein daalein.</li>
+                    <li>Instrument mein set karein aur freezing point read karein.</li>
+                    <li>Freezing point -0.525°C se zyada (0°C ki taraf) ho toh water addition suspected.</li>
+                </ol>
+                <pre><code>% Added Water = [(FP_genuine - FP_sample) / FP_genuine] × 100</code></pre>
+            `
+        }
+    ]
+},
+"dairy-whitener": {
+    title: "Dairy Whitener Ka Analysis",
+    tests: [
+        {
+            title: "Moisture Ka Determination",
+            purpose: "Dairy whitener mein moisture content determine karne ke liye.",
+            reference: "IS 16072:2012",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Pre-weighed dish mein ~1g sample weigh karein.</li>
+                    <li>102 ± 2°C par oven mein 2 hours dry karein.</li>
+                    <li>Desiccator mein cool karein aur weigh karein.</li>
+                    <li>Constant weight tak repeat karein.</li>
+                </ol>
+                <pre><code>% Moisture = [(W2 - W3) / (W2 - W1)] × 100</code></pre>
+                <p class="text-xs">Standard: Max 4% moisture.</p>
+            `
+        },
+        {
+            title: "Fat Ka Determination (Rose-Gottlieb Method)",
+            purpose: "Dairy whitener mein fat content determine karne ke liye.",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>~1g dairy whitener ko Mojonnier tube mein weigh karein.</li>
+                    <li>10ml warm water se reconstitute karein.</li>
+                    <li>Standard Rose-Gottlieb extraction procedure follow karein.</li>
+                </ol>
+                <pre><code>% Fat = (Weight of fat / Weight of sample) × 100</code></pre>
+            `
+        },
+        {
+            title: "Total Solids Ka Determination",
+            purpose: "Dairy whitener ka total solids determine karne ke liye.",
+            procedure: `<pre><code>% Total Solids = 100 - % Moisture</code></pre>`
+        },
+        {
+            title: "Protein Ka Determination (Kjeldahl Method)",
+            purpose: "Protein content determine karne ke liye.",
+            procedure: `
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>~0.5g sample ko Kjeldahl flask mein weigh karein.</li>
+                    <li>Standard Kjeldahl procedure follow karein.</li>
+                </ol>
+                <pre><code>% Protein = % Total Nitrogen × 6.38</code></pre>
+            `
+        },
+        {
+            title: "Titratable Acidity Ka Determination",
+            purpose: "Reconstituted dairy whitener ki acidity check karne ke liye.",
+            procedure: `
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>10g powder ko 100ml distilled water mein reconstitute karein.</li>
+                    <li>10ml reconstituted solution lein.</li>
+                    <li>Phenolphthalein indicator daalein.</li>
+                    <li>0.1N NaOH se titrate karein.</li>
+                </ol>
+                <pre><code>% Acidity (as lactic acid) = (9 × V × N) / W</code></pre>
+            `
+        },
+        {
+            title: "Solubility Index Ka Determination",
+            purpose: "Reconstitution quality measure karne ke liye.",
+            procedure: `<p>Milk powder ke liye described procedure follow karein. Low sediment volume desirable hai.</p>`
+        },
+        {
+            title: "Added Sugar Ka Determination",
+            purpose: "Dairy whitener mein added sucrose ya dextrose detect aur quantify karne ke liye.",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <p>Lane-Eynon method se reducing sugars before aur after acid inversion determine karein.</p>
+                <pre><code>% Sucrose = (Total reducing sugars after inversion - Reducing sugars before inversion) × 0.95</code></pre>
+            `
+        },
+        {
+            title: "Vegetable Fat Ka Detection (Phytosterol Acetate Test)",
+            purpose: "Dairy whitener mein non-dairy (vegetable) fat ki presence detect karne ke liye.",
+            reference: "FSSAI Manual; IS 3508",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>Dairy fat mein primarily cholesterol hota hai, jabki vegetable fats mein phytosterols (sitosterol, stigmasterol) hote hain. Unsaponifiable matter se sterols isolate karke aur unke acetates banake melting point check kiya jaata hai. Cholesterol acetate (114.3°C) aur phytosterol acetate (137°C) ke melting points different hain.</p>
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Fat extract se unsaponifiable matter isolate karein (saponification + ether extraction).</li>
+                    <li>Unsaponifiable matter ko digitonin se treat karein (sterols precipitate karne ke liye).</li>
+                    <li>Precipitate ko acetic anhydride se treat karein sterol acetates banane ke liye.</li>
+                    <li>Sterol acetates ka melting point determine karein.</li>
+                    <li>Melting point > 117°C = Vegetable fat mixed hai.</li>
+                </ol>
+            `
+        }
+    ]
+},
+"uht-milk": {
+    title: "UHT Milk Ka Analysis",
+    tests: [
+        {
+            title: "Fat Ka Determination (Gerber Method)",
+            purpose: "UHT milk mein fat content determine karne ke liye.",
+            reference: "IS 1479 (Part I):1961",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <p>Standard Gerber method follow karein. UHT milk ko room temperature par laayein aur achhe se mix karein before testing.</p>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Butyrometer mein 10ml H₂SO₄ daalein.</li>
+                    <li>10.75ml UHT milk daalein deewar ke sahaare.</li>
+                    <li>1ml amyl alcohol daalein.</li>
+                    <li>Stopper lagaayein, shake karein, water bath (65°C, 5 min), centrifuge (5 min), water bath (5 min), read karein.</li>
+                </ol>
+            `
+        },
+        {
+            title: "Total Solids Ka Determination",
+            purpose: "UHT milk mein total solids determine karne ke liye.",
+            procedure: `<p>Standard gravimetric method follow karein jaise processed milk ke liye described hai.</p>`
+        },
+        {
+            title: "Protein Ka Determination (Kjeldahl Method)",
+            purpose: "UHT milk mein protein content determine karne ke liye.",
+            procedure: `<p>~5g sample lein aur standard Kjeldahl procedure follow karein.</p>
+            <pre><code>% Protein = % Total Nitrogen × 6.38</code></pre>`
+        },
+        {
+            title: "Titratable Acidity",
+            purpose: "UHT milk ki acidity measure karne ke liye.",
+            procedure: `
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>10ml sample ek dish mein lein.</li>
+                    <li>Phenolphthalein indicator daalein.</li>
+                    <li>0.1N NaOH se titrate karein.</li>
+                </ol>
+                <pre><code>% Acidity (as lactic acid) = (9 × V × N) / W</code></pre>
+            `
+        },
+        {
+            title: "Turbidity Test (Sterilization Check)",
+            purpose: "UHT processing ki adequacy check karne ke liye. Agar whey proteins completely denature nahi hue toh turbidity dikhegi.",
+            reference: "FSSAI Manual; IS 4883",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>Properly sterilized/UHT treated milk mein saare whey proteins denature ho chuke hote hain. Agar ammonium sulfate se precipitation ke baad bhi supernatant clear rahe toh sterilization proper hua hai.</p>
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>20ml UHT milk ko test tube mein lein.</li>
+                    <li>5ml saturated ammonium sulfate solution daalein.</li>
+                    <li>Mix karein aur filter karein.</li>
+                    <li>Filtrate ko 100°C par 5 minutes ke liye boil karein.</li>
+                    <li>Observe karein: <strong>Clear filtrate</strong> = Proper UHT treatment. <strong>Turbid/cloudy filtrate</strong> = Inadequate treatment (undenatured whey proteins present).</li>
+                </ol>
+            `
+        },
+        {
+            title: "Sterility Test (Microbiological)",
+            purpose: "UHT milk ki commercial sterility confirm karne ke liye.",
+            reference: "IS 4883:1980; BIS Standards",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Aseptic conditions mein UHT milk ke pack se sample collect karein.</li>
+                    <li>2 sets mein sample ko sterile tubes/bottles mein transfer karein.</li>
+                    <li>Set 1: 30°C par 15 days incubate karein (mesophilic organisms ke liye).</li>
+                    <li>Set 2: 55°C par 7 days incubate karein (thermophilic organisms ke liye).</li>
+                    <li>Incubation ke baad check karein: pH change, clotting, gas production, off-odour, colony count.</li>
+                    <li>Agar koi significant change nahi hai = <strong>Commercially sterile</strong>.</li>
+                </ol>
+            `
+        },
+        {
+            title: "Sedimentation Test",
+            purpose: "UHT milk mein sedimentation/settling detect karne ke liye, storage stability check karta hai.",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>UHT milk ke pack ko undisturbed rakhein specified storage conditions par.</li>
+                    <li>Pack kholein aur dhire se content nikaalein.</li>
+                    <li>Bottom mein koi sediment/deposit check karein.</li>
+                    <li>Sediment ko weigh karein dry weight basis par.</li>
+                </ol>
+            `
+        }
+    ]
+},
+"traditional-sweets": {
+    title: "Traditional Dairy Sweets Ka Analysis (Peda, Burfi, Gulab Jamun, Milk Cake)",
+    tests: [
+        {
+            title: "Total Solids / Moisture Ka Determination",
+            purpose: "Dairy sweets mein moisture aur total solids determine karne ke liye.",
+            reference: "FSSAI Manual; IS Standards for respective products",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure (Sand Drying Method):</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Sand + glass rod wali pre-weighed dish (W1) mein ~3g finely grated/crushed sample weigh karein (W2).</li>
+                    <li>Kuch drops distilled water daalein aur sand ke saath thoroughly mix karein.</li>
+                    <li>Hot plate par preliminary drying karein.</li>
+                    <li>Hot air oven mein 102 ± 2°C par 5 hours (ya constant weight tak) dry karein.</li>
+                    <li>Desiccator mein cool karein, weigh karein (W3).</li>
+                </ol>
+                <pre><code>% Moisture = [(W2 - W3) / (W2 - W1)] × 100</code></pre>
+                <pre><code>% Total Solids = 100 - % Moisture</code></pre>
+                <p class="text-xs mt-2">Standards: Peda mein max 20% moisture, Burfi mein max 18% moisture.</p>
+            `
+        },
+        {
+            title: "Fat Ka Determination",
+            purpose: "Dairy sweets mein fat content determine karne ke liye.",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Method Selection:</h4>
+                <ul class="list-disc list-outside pl-5 space-y-1">
+                    <li><strong>Without added sugar:</strong> Werner-Schmidt (HCl acid digestion) method use karein.</li>
+                    <li><strong>With added sugar (Peda, Burfi, Gulab Jamun):</strong> Rose-Gottlieb method use karein, kyunki sugar HCl ke saath charring problem de sakta hai.</li>
+                </ul>
+                <h4 class="font-semibold mt-4 mb-2">Rose-Gottlieb Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>~2g sample ko Mojonnier tube mein weigh karein.</li>
+                    <li>10ml warm water mein dissolve karein.</li>
+                    <li>1.5ml ammonia, 10ml ethanol, 25ml diethyl ether, 25ml petroleum ether ke saath extract karein.</li>
+                    <li>Triple extraction karein, solvents evaporate karein, fat weigh karein.</li>
+                </ol>
+            `
+        },
+        {
+            title: "Sucrose Ka Determination (Lane-Eynon Method)",
+            purpose: "Added sugar content determine karne ke liye.",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>~10g sample ko warm water mein dissolve karein.</li>
+                    <li>Clarifying agents (potassium ferrocyanide + zinc acetate) se treat karein.</li>
+                    <li>Volume make up karein (250ml) aur filter karein.</li>
+                    <li><strong>Before inversion:</strong> Fehling's solution titrate karein (Reducing sugars = Lactose).</li>
+                    <li><strong>After inversion:</strong> HCl se invert karein, neutralize karein, phir se titrate karein (Total reducing sugars).</li>
+                    <li>Difference se sucrose calculate karein.</li>
+                </ol>
+                <pre><code>% Sucrose = (Total reducing sugars - Original reducing sugars) × 0.95</code></pre>
+            `
+        },
+        {
+            title: "Protein Ka Determination (Kjeldahl Method)",
+            purpose: "Protein content determine karne ke liye.",
+            procedure: `<p>~1g sample lein, standard Kjeldahl method follow karein. % Protein = % N × 6.38</p>`
+        },
+        {
+            title: "Titratable Acidity Ka Determination",
+            purpose: "Sweet ki acidity measure karne ke liye.",
+            procedure: `
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>10g sample ko 30ml warm water mein dissolve karein.</li>
+                    <li>Phenolphthalein indicator daalein.</li>
+                    <li>0.1N NaOH se pink endpoint tak titrate karein.</li>
+                </ol>
+                <pre><code>% Acidity (as lactic acid) = (9 × V × N) / W</code></pre>
+            `
+        },
+        {
+            title: "Total Ash Ka Determination",
+            purpose: "Mineral content determine karne ke liye.",
+            procedure: `
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Pre-weighed crucible mein ~5g sample weigh karein.</li>
+                    <li>Water bath par evaporate karein, phir char karein.</li>
+                    <li>550°C par muffle furnace mein ash karein.</li>
+                    <li>Cool aur weigh karein.</li>
+                </ol>
+                <pre><code>% Ash = (Weight of ash / Weight of sample) × 100</code></pre>
+            `
+        },
+        {
+            title: "Starch Detection",
+            purpose: "Illegally added starch detect karne ke liye.",
+            procedure: `
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>2g sample ko 5ml water mein dissolve/disperse karein.</li>
+                    <li>Boil karein aur cool karein.</li>
+                    <li>Iodine solution ki kuch drops daalein.</li>
+                    <li><strong>Blue-black</strong> = Starch present.</li>
+                </ol>
+            `
+        },
+        {
+            title: "Vanaspati/Non-dairy Fat Detection (Baudouin Test)",
+            purpose: "Non-dairy fat ki adulteration detect karne ke liye.",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Sample se fat extract karein (petroleum ether se ya Rose-Gottlieb se).</li>
+                    <li>5ml melted fat + 5ml conc. HCl + 0.4ml 2% furfural solution.</li>
+                    <li>2 minutes vigorously shake karein.</li>
+                    <li><strong>Pink/Red colour</strong> in acid layer = Vanaspati present.</li>
+                </ol>
+            `
+        },
+        {
+            title: "Gulab Jamun: Sugar Syrup Ka Analysis (Brix)",
+            purpose: "Gulab Jamun ke sugar syrup ki concentration measure karne ke liye.",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Gulab jamun ko syrup se carefully nikaalen.</li>
+                    <li>Syrup ko filter karein agar particles hon.</li>
+                    <li>Refractometer ko distilled water se calibrate karein (0° Brix at 20°C).</li>
+                    <li>Syrup ki kuch drops refractometer ke prism par daalein.</li>
+                    <li>Brix reading note karein.</li>
+                </ol>
+                <p class="text-xs">Standard: Gulab Jamun syrup mein typically 55-65° Brix hona chahiye.</p>
+            `
+        },
+        {
+            title: "Gulab Jamun: Absorption Ratio",
+            purpose: "Gulab Jamun ka sugar syrup absorption ratio determine karne ke liye.",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Freshly fried gulab jamun (before soaking) ka weight lein (W_dry).</li>
+                    <li>Sugar syrup mein prescribed time tak soak karein.</li>
+                    <li>Soaked gulab jamun ka weight lein (W_soaked).</li>
+                </ol>
+                <pre><code>Absorption Ratio = W_soaked / W_dry</code></pre>
+                <p class="text-xs">Good gulab jamun ka absorption ratio typically 1.8-2.2 hota hai.</p>
+            `
+        }
+    ]
+},
+"infant-formula": {
+    title: "Infant Formula / Baby Food Ka Analysis",
+    tests: [
+        {
+            title: "Moisture Ka Determination",
+            purpose: "Infant formula mein moisture content determine karne ke liye.",
+            reference: "IS 14433:1997; Codex Stan 72",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Pre-weighed dish mein ~2g sample weigh karein.</li>
+                    <li>102 ± 2°C par oven mein 2 hours dry karein.</li>
+                    <li>Desiccator mein cool karein aur weigh karein.</li>
+                    <li>Constant weight tak repeat karein.</li>
+                </ol>
+                <pre><code>% Moisture = [(W2 - W3) / (W2 - W1)] × 100</code></pre>
+                <p class="text-xs">Standard: Max 5% moisture (powder form).</p>
+            `
+        },
+        {
+            title: "Fat Ka Determination (Rose-Gottlieb / Mojonnier Method)",
+            purpose: "Infant formula mein fat content determine karne ke liye.",
+            reference: "A.O.A.C 989.05; IDF 123:2005",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>~1g sample ko Mojonnier tube mein weigh karein.</li>
+                    <li>10ml warm water mein reconstitute karein.</li>
+                    <li>1.5ml ammonia daalein aur mix karein.</li>
+                    <li>Standard Rose-Gottlieb extraction follow karein (ethanol → diethyl ether → petroleum ether).</li>
+                    <li>Triple extraction karein.</li>
+                    <li>Solvents evaporate karein, 102°C par dry karein, weigh karein.</li>
+                </ol>
+                <pre><code>% Fat = (Weight of fat / Weight of sample) × 100</code></pre>
+                <p class="text-xs">Standard: As per declaration (typically 20-30% in powder).</p>
+            `
+        },
+        {
+            title: "Protein Ka Determination (Kjeldahl Method)",
+            purpose: "Infant formula mein protein content determine karne ke liye.",
+            reference: "A.O.A.C 991.20; IDF 20B:1993",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>~0.5g sample ko Kjeldahl flask mein accurately weigh karein.</li>
+                    <li>Standard Kjeldahl procedure follow karein.</li>
+                    <li>Conversion factor: 6.38 (dairy based) ya 6.25 (mixed/soy based).</li>
+                </ol>
+                <pre><code>% Protein = % Total Nitrogen × Conversion factor</code></pre>
+            `
+        },
+        {
+            title: "Ash Ka Determination",
+            purpose: "Total mineral content determine karne ke liye.",
+            procedure: `
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Pre-weighed crucible mein ~3g sample weigh karein.</li>
+                    <li>Char karein aur 550°C par ash karein.</li>
+                    <li>Cool karein aur weigh karein.</li>
+                </ol>
+                <pre><code>% Ash = (Weight of ash / Weight of sample) × 100</code></pre>
+            `
+        },
+        {
+            title: "Calcium Ka Determination (EDTA Titrimetric Method)",
+            purpose: "Infant formula mein calcium content determine karne ke liye, bone development ke liye essential hai.",
+            reference: "A.O.A.C 991.25",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>Sample ko ash karein. Ash ko acid mein dissolve karein. Calcium ko EDTA (ethylenediaminetetraacetic acid) se titrate karein, murexide ya calcon indicator ke saath.</p>
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>~5g sample ko ash karein 550°C par.</li>
+                    <li>Ash ko 10ml 1:1 HCl mein dissolve karein, filter karein, 100ml tak dilute karein.</li>
+                    <li>25ml aliquot lein, NaOH se pH 12-13 adjust karein.</li>
+                    <li>Murexide indicator daalein (pink colour aayega).</li>
+                    <li>0.01M EDTA se titrate karein jab tak colour pink se purple ho jaaye.</li>
+                </ol>
+                <pre><code>Ca (mg/100g) = [EDTA volume × EDTA molarity × 40.08 × Dilution factor × 100] / (Aliquot × Weight of sample)</code></pre>
+            `
+        },
+        {
+            title: "Iron Ka Determination (Spectrophotometric Method)",
+            purpose: "Infant formula mein iron content determine karne ke liye.",
+            reference: "A.O.A.C 999.11",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>Sample ko ash karke acid mein dissolve kiya jaata hai. Iron (Fe²⁺) 1,10-phenanthroline ke saath react karke orange-red complex banata hai jo 510nm par spectrophotometrically measure hota hai.</p>
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>~5g sample ko 550°C par ash karein.</li>
+                    <li>Ash ko dilute HCl mein dissolve karein.</li>
+                    <li>Hydroxylamine hydrochloride daalein (Fe³⁺ ko Fe²⁺ mein reduce karne ke liye).</li>
+                    <li>Sodium acetate buffer daalein (pH 3-5 maintain karne ke liye).</li>
+                    <li>1,10-Phenanthroline solution daalein.</li>
+                    <li>15 minutes stand hone dein colour development ke liye.</li>
+                    <li>510nm par absorbance read karein.</li>
+                    <li>Standard iron solutions ke calibration curve se concentration determine karein.</li>
+                </ol>
+            `
+        },
+        {
+            title: "Vitamin C (Ascorbic Acid) Ka Determination",
+            purpose: "Infant formula mein Vitamin C content determine karne ke liye.",
+            reference: "A.O.A.C 967.21 (DCIP Titrimetric Method)",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>Ascorbic acid ek reducing agent hai jo 2,6-dichloroindophenol (DCIP) dye ko reduce karta hai (blue → colorless). Endpoint tab aata hai jab excess DCIP pink/rose colour deta hai.</p>
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>~5g sample ko metaphosphoric acid-acetic acid solution mein extract karein.</li>
+                    <li>Volume make up karein aur filter karein.</li>
+                    <li>Filtrate ka aliquot lein.</li>
+                    <li>Standardized DCIP solution se titrate karein jab tak rose pink colour 15 seconds tak rahe.</li>
+                    <li>Standard ascorbic acid solutions se DCIP ko standardize karein.</li>
+                </ol>
+                <pre><code>Vitamin C (mg/100g) = [DCIP volume × DCIP factor × Dilution × 100] / (Aliquot × Weight of sample)</code></pre>
+            `
+        },
+        {
+            title: "Crude Fibre Ka Determination",
+            purpose: "Cereal-based infant formula mein crude fibre determine karne ke liye.",
+            procedure: `<p>Milk powder ke liye described procedure follow karein (acid-alkali digestion, drying, ignition).</p>`
+        },
+        {
+            title: "Microbiological Tests (TPC, Coliforms, Salmonella, Cronobacter)",
+            purpose: "Infant formula ki microbiological safety ensure karne ke liye - bahut strict standards hain.",
+            reference: "FSSAI Standards; Codex Stan 72",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Tests:</h4>
+                <ul class="list-disc list-outside pl-5 space-y-2">
+                    <li><strong>Total Plate Count (TPC):</strong> Serial dilutions → Pour plate on Plate Count Agar → 35°C, 48 hours → Count colonies. Standard: Max 10,000 CFU/g.</li>
+                    <li><strong>Coliform Count:</strong> Pour plate on VRBA → 35°C, 24 hours → Count red colonies. Standard: Max 10 CFU/g.</li>
+                    <li><strong>Salmonella Detection:</strong> Pre-enrichment → Selective enrichment → Selective plating → Biochemical/serological confirmation. Standard: Absent in 25g.</li>
+                    <li><strong>Cronobacter sakazakii:</strong> Enrichment in BPW → Selective plating on chromogenic agar → Confirmation. Standard: Absent in 10g.</li>
+                </ul>
+            `
+        }]
+    }
+}
+},
+en: {
         main_title: "Compositional Analysis of Dairy Products",
         main_description: "A detailed guide to chemical quality assurance.",
         back_to_topics: "Back to Topics",
