@@ -205,7 +205,17 @@ const CONTENT_STYLES = `
 
   .dairy-content * {
     max-width: 100% !important;
-    box-sizing: border-box;
+    box-sizing: border-box !important;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  /* ── FIX: IceCream / any SVG icon inside content ── */
+  .dairy-content svg {
+    display: inline-block !important;
+    overflow: visible !important;
+    max-width: none !important;
+    width: auto !important;
   }
 
   .dairy-content h3 {
@@ -547,7 +557,11 @@ const ProductContent = ({
 
   const processedHtml = processTablesForMobile(content.content || "");
 
-  if (content.subTopics) {
+  // ── FIX: only treat subTopics as real if non-empty ──
+  const hasSubTopics =
+    content.subTopics && Object.keys(content.subTopics).length > 0;
+
+  if (hasSubTopics) {
     return (
       <div className="w-full max-w-full overflow-hidden">
         <Section title={content.title} config={config}>
@@ -608,7 +622,133 @@ export function ProductsProcessingModal({
       shrikhand: t(shrikhandContent),
       "condensed-milk": t(condensedMilkContent),
       "milk-powder": t(milkPowderContent),
-      paneer: t(paneerProcessingContent),
+      paneer: (() => {
+        const raw = t(paneerProcessingContent) as any;
+        const topicsObj = raw.topics || {};
+
+        const buildTableHtml = (tbl: any): string => {
+          if (!tbl?.rows) return "";
+          const ths = (tbl.headers || []).map((h: string) => `<th>${h}</th>`).join("");
+          const rows = tbl.rows
+            .map((row: any) => {
+              const cells = Object.values(row)
+                .map((v) => `<td>${v ?? ""}</td>`)
+                .join("");
+              return `<tr>${cells}</tr>`;
+            })
+            .join("");
+          return `${tbl.title ? `<h4>${tbl.title}</h4>` : ""}<table><thead><tr>${ths}</tr></thead><tbody>${rows}</tbody></table>`;
+        };
+
+        const buildItemsHtml = (items: any[]): string =>
+          (items || [])
+            .map((it: any) => `${it.name ? `<h4>${it.name}</h4>` : ""}${it.detail || it.content || ""}`)
+            .join("");
+
+        const topicToHtml = (topic: any): string => {
+          let html = "";
+          if (topic.description) html += `<p>${topic.description}</p>`;
+
+          // sections array (microbiology, shelf_life)
+          (topic.sections || []).forEach((s: any) => {
+            if (s.title) html += `<h3>${s.title}</h3>`;
+            if (s.content) html += `<div>${s.content}</div>`;
+            if (s.table) html += buildTableHtml(s.table);
+            if (s.items) html += buildItemsHtml(s.items);
+          });
+
+          // process: table of steps
+          if (topic.table?.rows) html += buildTableHtml(topic.table);
+
+          // advanced_process_notes
+          if (topic.advanced_process_notes) {
+            html += `<h3>${topic.advanced_process_notes.title || ""}</h3>`;
+            html += `<p>${topic.advanced_process_notes.description || ""}</p>`;
+            (topic.advanced_process_notes.sections || []).forEach((s: any) => {
+              html += `<h4>${s.title}</h4><div>${s.content}</div>`;
+            });
+          }
+
+          // quality_control sub-object
+          if (topic.quality_control) {
+            const qc = topic.quality_control;
+            if (qc.description) html += `<p>${qc.description}</p>`;
+            ["raw_milk_table", "in_process_table", "finished_product_table"].forEach((k) => {
+              if (qc[k]) html += buildTableHtml(qc[k]);
+            });
+            if (qc.sensory_evaluation) {
+              html += `<h3>${qc.sensory_evaluation.title || ""}</h3>`;
+              html += `<p>${qc.sensory_evaluation.description || ""}</p>`;
+              (qc.sensory_evaluation.attributes || []).forEach((a: any) => {
+                html += `<p><strong>${a.name}:</strong> ${a.criteria}</p>`;
+              });
+            }
+          }
+
+          // coagulants mechanism + types + comparison table
+          if (topic.mechanism_detail) {
+            html += `<h3>${topic.mechanism_detail.title || ""}</h3>`;
+            html += `<div>${topic.mechanism_detail.content || ""}</div>`;
+          }
+          if (topic.types) html += buildItemsHtml(topic.types.map((t: any) => ({ name: t.name, detail: t.details })));
+          if (topic.comparison_table) html += buildTableHtml(topic.comparison_table);
+
+          // yield_texture
+          if (topic.yield) {
+            const y = topic.yield;
+            if (y.description) html += `<p>${y.description}</p>`;
+            if (y.formulas) {
+              html += `<h3>${y.formulas.title || ""}</h3><div>${y.formulas.content || ""}</div>`;
+            }
+            (y.methods || []).forEach((m: any) => {
+              html += `<h4>${m.method}</h4><div>${m.detail}</div>`;
+            });
+          }
+          if (topic.safeIncreasers) {
+            html += `<h3>${topic.safeIncreasers.title || ""}</h3>`;
+            if (topic.safeIncreasers.description) html += `<p>${topic.safeIncreasers.description}</p>`;
+            html += buildItemsHtml(topic.safeIncreasers.items || []);
+          }
+          if (topic.texture) {
+            const tx = topic.texture;
+            if (tx.description) html += `<p>${tx.description}</p>`;
+            if (tx.microstructure_note) html += `<p>${tx.microstructure_note}</p>`;
+            if (tx.table) html += buildTableHtml(tx.table);
+            if (tx.age_hardening) {
+              html += `<h3>${tx.age_hardening.title || ""}</h3><div>${tx.age_hardening.content || ""}</div>`;
+            }
+          }
+
+          // nutrition
+          if (topic.composition_table) html += buildTableHtml(topic.composition_table);
+          if (topic.amino_acid_profile) html += buildTableHtml(topic.amino_acid_profile);
+          if (topic.bioactive_compounds) {
+            html += `<h3>${topic.bioactive_compounds.title || ""}</h3>`;
+            html += buildItemsHtml(topic.bioactive_compounds.items || []);
+          }
+
+          // defects
+          if (topic.defects_table) html += buildTableHtml(topic.defects_table);
+          if (topic.process_optimization) {
+            html += `<h3>${topic.process_optimization.title || ""}</h3>`;
+            html += buildTableHtml(topic.process_optimization.table);
+          }
+
+          return html || `<p>${topic.title || ""}</p>`;
+        };
+
+        const subTopics: Record<string, { title: string; content: string }> = {};
+        Object.keys(topicsObj).forEach((key) => {
+          const topic = topicsObj[key];
+          subTopics[key] = { title: topic.title || key, content: topicToHtml(topic) };
+        });
+
+        return {
+          title: raw.mainTitle || raw.title || "Paneer",
+          content: raw.description ? `<p>${raw.description}</p>` : "",
+          subTopics: Object.keys(subTopics).length > 0 ? subTopics : undefined,
+        };
+      })(),
       cheese: t(cheeseContent),
       "flavoured-milk": t(flavouredMilkContent),
       "whey-beverage": t(wheyBeverageContent),
@@ -624,6 +764,12 @@ export function ProductsProcessingModal({
       bgLight: "bg-gray-50",
       borderColor: "border-gray-200",
     };
+
+    // ── FIX: guard against empty subTopics objects ──
+    const rawSubTopics = product.subTopics;
+    const hasValidSubTopics =
+      rawSubTopics && Object.keys(rawSubTopics).length > 0;
+
     return {
       value: key,
       title: product.title,
@@ -631,10 +777,10 @@ export function ProductsProcessingModal({
       color: cfg.color,
       bgLight: cfg.bgLight,
       borderColor: cfg.borderColor,
-      subTopics: product.subTopics
-        ? Object.keys(product.subTopics).map((subKey) => ({
+      subTopics: hasValidSubTopics
+        ? Object.keys(rawSubTopics).map((subKey) => ({
             value: subKey,
-            title: product.subTopics[subKey].title,
+            title: rawSubTopics[subKey].title,
           }))
         : null,
     };
@@ -701,7 +847,7 @@ export function ProductsProcessingModal({
         className={cn(
           "flex flex-col p-0 overflow-hidden",
           "w-[100vw] sm:w-[95vw] max-w-4xl lg:max-w-6xl",
-          "h-[100dvh] sm:h-auto sm:max-h-[90vh]",
+          "h-[100dvh] sm:h-[90vh]",
           "rounded-none sm:rounded-2xl",
           "bg-gradient-to-br from-slate-50 via-white to-indigo-50/30",
           "border-0 shadow-2xl"
@@ -753,8 +899,10 @@ export function ProductsProcessingModal({
             {/* ── Content ── */}
             <ScrollArea className="flex-1 w-full max-w-full">
               <div className="w-full max-w-full overflow-hidden px-2 pb-6 sm:px-4 sm:pb-8">
-                {/* Sub-products grid */}
-                {selectedTopic.subTopics && !activeSubProduct ? (
+                {/* ── FIX: guard subTopics length here too ── */}
+                {selectedTopic.subTopics &&
+                selectedTopic.subTopics.length > 0 &&
+                !activeSubProduct ? (
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-3 mt-3">
                     {selectedTopic.subTopics.map((subTopic) => (
                       <button
