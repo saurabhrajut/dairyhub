@@ -906,323 +906,323 @@ export const barfiContent = {
         `
     },
     hi: {
-        title: "बर्फी प्रसंस्करण",
+        title: "Barfi Processing",
         content: `
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">बर्फी का परिचय</h3>
-            <p>बर्फी (जिसे बर्फ़ी या बुर्फी भी लिखा जाता है) सबसे प्रतिष्ठित और व्यापक रूप से खपत होने वाली पारंपरिक भारतीय दूध-आधारित मिठाइयों में से एक है, जिसे अर्ध-ठोस देसी दुग्ध उत्पाद (IDP) के रूप में वर्गीकृत किया गया है। यह खोया-आधारित मिठाइयों की श्रेणी में आती है और सांद्रण तथा चीनी मिलाकर दूध संरक्षण के सबसे पुराने रूपों में से एक है। बर्फी मूल रूप से एक दूध फज है जो दूध (खोया के माध्यम से) के नियंत्रित सुखाने (desiccation) और चीनी के संयोजन से बनती है, इसके बाद सटीक शीतलन से इसकी विशिष्ट दृढ़ लेकिन चिकनी, हल्की दानेदार बनावट प्राप्त होती है।</p>
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Barfi ka Introduction</h3>
+            <p>Barfi (jise barfee ya burfee bhi likha jaata hai) sabse prestigious aur widely consumed traditional Indian milk-based sweets mein se ek hai, jise semi-solid desi dairy product (IDP) ke roop mein classify kiya gaya hai. Yeh khoya-based sweets ki category mein aati hai aur concentration aur sugar milakar milk preservation ke sabse purane forms mein se ek hai. Barfi basically ek milk fudge hai jo milk (khoya ke through) ke controlled desiccation (sukhane) aur sugar ke combination se banti hai, iske baad precise cooling se iski distinctive firm lekin smooth, halki grainy texture milti hai.</p>
 
-            <p>इसका नाम फारसी शब्द <strong>'बर्फ'</strong> (برف) से लिया गया है, जिसका अर्थ है बर्फ (snow), जो इसके पारंपरिक रूप से सफेद, अपारदर्शी स्वरूप की ओर इशारा करता है।</p>
+            <p>Iska naam Persian word <strong>'barf'</strong> (برف) se liya gaya hai, jiska matlab hai snow (barf), jo iski traditionally white, opaque appearance ki taraf point karta hai.</p>
 
-            <p><strong>बाजार संदर्भ:</strong></p>
+            <p><strong>Market Context:</strong></p>
             <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
-                <li>भारतीय पारंपरिक मिठाई बाजार: >$10 बिलियन वार्षिक (15-20% प्रति वर्ष बढ़ रहा)</li>
-                <li>भारत के कुल दूध उत्पादन (~55 मिलियन टन) का लगभग 35-40% पारंपरिक दुग्ध उत्पादों में परिवर्तित होता है</li>
-                <li>बर्फी भारत में कुल खोया खपत का ~12-15% है</li>
-                <li>जल गतिविधि (a<sub>w</sub>): 0.80-0.90 (मध्यवर्ती नमी वाला भोजन)</li>
-                <li>शेल्फ लाइफ: परिवेश तापमान (25-30°C) पर 7-15 दिन, प्रशीतन (4-7°C) पर 30-60 दिन</li>
+                <li>Indian traditional sweets market: >$10 billion annually (15-20% per year grow ho raha hai)</li>
+                <li>India ke total milk production (~55 million tonnes) ka lagbhag 35-40% traditional dairy products mein convert hota hai</li>
+                <li>Barfi India mein total khoya consumption ka ~12-15% hai</li>
+                <li>Water activity (a<sub>w</sub>): 0.80-0.90 (intermediate moisture food)</li>
+                <li>Shelf life: Ambient temperature (25-30°C) par 7-15 din, Refrigeration (4-7°C) par 30-60 din</li>
             </ul>
 
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">बर्फी के लिए FSSAI मानक</h3>
-            <p>बर्फी FSSAI के नियमों में <strong>'खोया आधारित मिठाई'</strong> की श्रेणी में आती है। मानक इसकी गुणवत्ता और संरचना सुनिश्चित करते हैं।</p>
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Barfi ke liye FSSAI Standards</h3>
+            <p>Barfi FSSAI ke regulations mein <strong>'Khoya based sweet'</strong> ki category mein aati hai. Standards iski quality aur composition ensure karte hain.</p>
             <div class="overflow-x-auto mt-4">
                 <table class="w-full text-left border-collapse">
                     <thead class="bg-muted">
                         <tr>
-                            <th class="p-2 border">पैरामीटर</th>
-                            <th class="p-2 border">आवश्यकता</th>
-                            <th class="p-2 border">वैज्ञानिक तर्क</th>
+                            <th class="p-2 border">Parameter</th>
+                            <th class="p-2 border">Requirement</th>
+                            <th class="p-2 border">Scientific Rationale</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr><td class="p-2 border"><strong>कुल ठोस (न्यूनतम, %)</strong></td><td class="p-2 border">75.0</td><td class="p-2 border">a<sub>w</sub> कम करने (<0.90) → सूक्ष्मजीवी स्थिरता, उचित बनावट विकास सुनिश्चित करता है</td></tr>
-                        <tr><td class="p-2 border"><strong>दूध वसा (सूखे आधार पर, न्यूनतम, %)</strong></td><td class="p-2 border">17.5</td><td class="p-2 border">वास्तविक दूध मूल सुनिश्चित करता है; स्वाद, माउथफील और चिकनी बनावट में योगदान देता है</td></tr>
-                        <tr><td class="p-2 border"><strong>सुक्रोज (सूखे आधार पर, अधिकतम, %)</strong></td><td class="p-2 border">35.0</td><td class="p-2 border">खराब गुणवत्ता वाले खोया को छिपाने के लिए अत्यधिक चीनी मिलाने से रोकता है</td></tr>
+                        <tr><td class="p-2 border"><strong>Total Solids (Minimum, %)</strong></td><td class="p-2 border">75.0</td><td class="p-2 border">a<sub>w</sub> kam karna (<0.90) → microbial stability, proper texture development ensure karta hai</td></tr>
+                        <tr><td class="p-2 border"><strong>Milk Fat (Dry basis par, Minimum, %)</strong></td><td class="p-2 border">17.5</td><td class="p-2 border">Genuine milk origin ensure karta hai; flavour, mouthfeel aur smooth texture mein contribute karta hai</td></tr>
+                        <tr><td class="p-2 border"><strong>Sucrose (Dry basis par, Maximum, %)</strong></td><td class="p-2 border">35.0</td><td class="p-2 border">Poor quality khoya ko chhupane ke liye excessive sugar milane se rokta hai</td></tr>
                     </tbody>
                 </table>
             </div>
 
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">बर्फी बनाने का विज्ञान: मूलभूत सिद्धांत</h3>
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Barfi Banane ka Science: Fundamental Principles</h3>
 
-            <h4 class="font-semibold mt-4 mb-2">1. आधार सामग्री के रूप में खोया की भूमिका</h4>
-            <p>खोया बर्फी का आवश्यक आधार घटक है। बर्फी के लिए <strong>पिंडी खोया</strong> (नमी: 20-25%, वसा: 25-30%) सबसे उपयुक्त है क्योंकि:</p>
+            <h4 class="font-semibold mt-4 mb-2">1. Base Material ke roop mein Khoya ki Role</h4>
+            <p>Khoya barfi ka essential base component hai. Barfi ke liye <strong>Pindi Khoya</strong> (Moisture: 20-25%, Fat: 25-30%) sabse suitable hai kyunki:</p>
             <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
-                <li><strong>कम नमी:</strong> दृढ़ शरीर प्रदान करता है; पकाने के दौरान कम पानी वाष्पित करना → बेहतर नियंत्रण</li>
-                <li><strong>चिकनी बनावट:</strong> केसीन मिसेल्स व्यापक रूप से ताप-विकृत और सांद्रित → निरंतर प्रोटीन मैट्रिक्स बनाते हैं</li>
-                <li><strong>उच्च वसा:</strong> प्रोटीन मैट्रिक्स में फंसे वसा ग्लोब्यूल्स समृद्धि, चिकनी बनावट और स्वाद में योगदान देते हैं</li>
+                <li><strong>Low Moisture:</strong> Firm body provide karta hai; cooking ke dauran kam paani evaporate karna → better control</li>
+                <li><strong>Smooth Texture:</strong> Casein micelles extensively heat-denatured aur concentrated → continuous protein matrix banate hain</li>
+                <li><strong>High Fat:</strong> Protein matrix mein trapped fat globules richness, smooth texture aur flavour mein contribute karte hain</li>
             </ul>
 
-            <h4 class="font-semibold mt-4 mb-2">2. बर्फी में चीनी का विज्ञान</h4>
-            <p>चीनी बर्फी में केवल मिठास देने वाला नहीं — यह कई महत्वपूर्ण भौतिक-रासायनिक कार्य करती है:</p>
+            <h4 class="font-semibold mt-4 mb-2">2. Barfi mein Sugar ka Science</h4>
+            <p>Sugar barfi mein sirf sweetener nahi — yeh kayi important physico-chemical functions perform karti hai:</p>
             <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
-                <li><strong>जल गतिविधि कमी:</strong> सुक्रोज अत्यधिक हाइड्रोफिलिक है → a<sub>w</sub> को 0.95 से 0.80-0.88 तक कम करता है → सूक्ष्मजीव वृद्धि को रोकता है</li>
-                <li><strong>बनावट संशोधन:</strong> शीतलन के दौरान सुक्रोज क्रिस्टलीकरण सूक्ष्म-क्रिस्टलीय नेटवर्क बनाता है → बर्फी की दृढ़ लेकिन हल्की भुरभुरी बनावट</li>
-                <li><strong>मेलार्ड प्रतिक्रिया भागीदारी:</strong> पकाने के दौरान सुक्रोज का आंशिक अम्ल-उत्प्रेरित हाइड्रोलिसिस → ग्लूकोज + फ्रुक्टोज → ये दूध प्रोटीन के साथ मेलार्ड प्रतिक्रिया करते हैं → भूरा रंग, पके हुए स्वाद</li>
-                <li><strong>परासरणी प्रभाव:</strong> उच्च चीनी सांद्रता → सूक्ष्मजीव कोशिकाओं पर परासरणी तनाव → जीवद्रव्य संकुचन → वृद्धि रोकता है</li>
+                <li><strong>Water Activity Reduction:</strong> Sucrose highly hydrophilic hai → a<sub>w</sub> ko 0.95 se 0.80-0.88 tak reduce karta hai → microbial growth rokta hai</li>
+                <li><strong>Texture Modification:</strong> Cooling ke dauran sucrose crystallization micro-crystalline network banata hai → barfi ki firm lekin halki crumbly texture</li>
+                <li><strong>Maillard Reaction Participation:</strong> Cooking ke dauran sucrose ka partial acid-catalyzed hydrolysis → Glucose + Fructose → ye milk proteins ke saath Maillard reaction karte hain → brown colour, cooked flavours</li>
+                <li><strong>Osmotic Effect:</strong> High sugar concentration → microbial cells par osmotic stress → plasmolysis → growth rokta hai</li>
             </ul>
 
-            <h4 class="font-semibold mt-4 mb-2">3. मेलार्ड प्रतिक्रिया और स्वाद विकास</h4>
-            <p>मेलार्ड प्रतिक्रिया बर्फी बनाने में सबसे महत्वपूर्ण रासायनिक प्रतिक्रिया है:</p>
+            <h4 class="font-semibold mt-4 mb-2">3. Maillard Reaction aur Flavour Development</h4>
+            <p>Maillard reaction barfi banane mein sabse important chemical reaction hai:</p>
             <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
-                <li><strong>प्रारंभिक चरण:</strong> अपचायक शर्करा (खोया में लैक्टोज) + अमीनो समूह (केसीन में लाइसिन) → शिफ बेस → अमाडोरी यौगिक</li>
-                <li><strong>उन्नत चरण:</strong> स्ट्रेकर अपघटन → एल्डिहाइड + CO<sub>2</sub> (प्रमुख स्वाद यौगिक)</li>
-                <li><strong>अंतिम चरण:</strong> मेलेनॉइडिन (भूरे बहुलक यौगिक) बनते हैं → रंग और स्वाद</li>
-                <li><strong>प्रमुख स्वाद यौगिक:</strong> डायसिटिल (मक्खन जैसा), फरफ्यूरल (कारमेल), माल्टोल (मिठाई जैसा), 2-एसिटिलपाइरोलीन (भुना हुआ)</li>
+                <li><strong>Initial Stage:</strong> Reducing sugars (khoya mein lactose) + amino groups (casein mein lysine) → Schiff base → Amadori compounds</li>
+                <li><strong>Advanced Stage:</strong> Strecker degradation → Aldehydes + CO<sub>2</sub> (major flavour compounds)</li>
+                <li><strong>Final Stage:</strong> Melanoidins (brown polymer compounds) bante hain → colour aur flavour</li>
+                <li><strong>Key Flavour Compounds:</strong> Diacetyl (buttery), Furfural (caramel), Maltol (sweet), 2-Acetylpyrroline (roasted)</li>
             </ul>
 
-            <h4 class="font-semibold mt-4 mb-2">4. चीनी क्रिस्टलीकरण विज्ञान</h4>
-            <p>शीतलन के दौरान चीनी क्रिस्टलीकरण बर्फी की बनावट निर्धारित करने वाली सबसे महत्वपूर्ण घटना है:</p>
+            <h4 class="font-semibold mt-4 mb-2">4. Sugar Crystallization Science</h4>
+            <p>Cooling ke dauran sugar crystallization barfi ki texture determine karne wali sabse important event hai:</p>
             <ul class="list-disc list-outside pl-5 mt-2 space-y-2">
-                <li><strong>क्रिस्टल आकार <10 μm:</strong> अदृश्य, अति-चिकना → उत्कृष्ट (आदर्श)</li>
-                <li><strong>10-30 μm:</strong> हल्का दाना (सुखद) → अच्छा</li>
-                <li><strong>30-50 μm:</strong> स्पष्ट रूप से दानेदार → सीमांत दोष</li>
-                <li><strong>>50 μm:</strong> रेतीला, खुरदरा → दोषपूर्ण</li>
+                <li><strong>Crystal size <10 μm:</strong> Invisible, ultra-smooth → Excellent (ideal)</li>
+                <li><strong>10-30 μm:</strong> Halka grain (pleasant) → Good</li>
+                <li><strong>30-50 μm:</strong> Clearly grainy → Marginal defect</li>
+                <li><strong>>50 μm:</strong> Sandy, rough → Defective</li>
             </ul>
-            <p><strong>सूक्ष्म क्रिस्टल के लिए:</strong> तेज़ प्रारंभिक शीतलन (80°C→55°C) + निरंतर गूंथना + 5-10% ग्लूकोज क्रिस्टल अवरोधक के रूप में</p>
+            <p><strong>Fine crystals ke liye:</strong> Fast initial cooling (80°C→55°C) + continuous kneading + 5-10% glucose as crystal inhibitor</p>
 
-            <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4 border-b-2 pb-2">खाद्य सुरक्षा नियंत्रण के साथ बर्फी की प्रसंस्करण</h2>
+            <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4 border-b-2 pb-2">Food Safety Controls ke saath Barfi ki Processing</h2>
 
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">बर्फी उत्पादन के लिए प्रसंस्करण प्रवाह संचित्र</h3>
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Barfi Production ke liye Processing Flow Diagram</h3>
             <div class="space-y-2 font-mono text-center">
-                <div class="p-3 bg-blue-100 border border-blue-300 rounded">कच्चे दूध की प्राप्ति और गुणवत्ता परीक्षण <span class="font-sans text-xs bg-gray-200 p-1 rounded">PRP</span></div>
+                <div class="p-3 bg-blue-100 border border-blue-300 rounded">Raw Milk Reception aur Quality Testing <span class="font-sans text-xs bg-gray-200 p-1 rounded">PRP</span></div>
                 <div class="text-2xl">↓</div>
-                <div class="p-3 bg-blue-100 border border-blue-300 rounded">खोया तैयार करना (खोया प्रसंस्करण देखें) <span class="font-sans text-xs bg-gray-200 p-1 rounded">PRP</span></div>
+                <div class="p-3 bg-blue-100 border border-blue-300 rounded">Khoya Preparation (Khoya Processing dekhein) <span class="font-sans text-xs bg-gray-200 p-1 rounded">PRP</span></div>
                 <div class="text-2xl">↓</div>
-                <div class="p-3 bg-green-100 border border-green-300 rounded">खोया की गुणवत्ता जांच (नमी, वसा, अम्लता, संवेदी)</div>
+                <div class="p-3 bg-green-100 border border-green-300 rounded">Khoya ki Quality Check (Moisture, Fat, Acidity, Sensory)</div>
                 <div class="text-2xl">↓</div>
-                <div class="p-3 bg-green-100 border border-green-300 rounded">खोया को गूंथना (5-10 मिनट, चिकना, गांठ-रहित होने तक)</div>
+                <div class="p-3 bg-green-100 border border-green-300 rounded">Khoya ko Kneading (5-10 min, smooth, lump-free hone tak)</div>
                 <div class="text-2xl">↓</div>
-                <div class="p-3 bg-green-100 border border-green-300 rounded">चीनी पीसना और छानना (पिसी हुई, 100-200 मेश)</div>
+                <div class="p-3 bg-green-100 border border-green-300 rounded">Sugar Grinding aur Sieving (powdered, 100-200 mesh)</div>
                 <div class="text-2xl">↓</div>
-                <div class="p-3 bg-green-100 border border-green-300 rounded">चीनी मिलाना और मिश्रण (खोया:चीनी = 3:1 से 4:1 w/w) <span class="font-sans text-xs bg-orange-200 p-1 rounded">oPRP</span></div>
+                <div class="p-3 bg-green-100 border border-green-300 rounded">Sugar Mixing aur Blending (Khoya:Sugar = 3:1 se 4:1 w/w) <span class="font-sans text-xs bg-orange-200 p-1 rounded">oPRP</span></div>
                 <div class="text-2xl">↓</div>
-                <div class="p-3 bg-yellow-100 border border-yellow-300 rounded"><strong>पकाना/निर्जलीकरण (95-120°C, 15-30 मिनट, लगातार हिलाते हुए)</strong> <span class="font-sans text-xs bg-red-200 p-1 rounded">CCP-1</span></div>
+                <div class="p-3 bg-yellow-100 border border-yellow-300 rounded"><strong>Cooking/Desiccation (95-120°C, 15-30 min, continuously stirring karte hue)</strong> <span class="font-sans text-xs bg-red-200 p-1 rounded">CCP-1</span></div>
                 <div class="text-2xl">↓</div>
-                <div class="p-3 bg-green-100 border border-green-300 rounded">स्वाद/मेवे मिलाना (इलायची, केसर, पिस्ता) <span class="font-sans text-xs bg-orange-200 p-1 rounded">oPRP</span></div>
+                <div class="p-3 bg-green-100 border border-green-300 rounded">Flavour/Nuts Addition (Elaichi, Kesar, Pista) <span class="font-sans text-xs bg-orange-200 p-1 rounded">oPRP</span></div>
                 <div class="text-2xl">↓</div>
-                <div class="p-3 bg-purple-100 border border-purple-300 rounded">गूंथने के साथ ठंडा करना (110°C → 50°C, नियंत्रित दर) <span class="font-sans text-xs bg-orange-200 p-1 rounded">oPRP</span></div>
+                <div class="p-3 bg-purple-100 border border-purple-300 rounded">Kneading ke saath Cooling (110°C → 50°C, controlled rate) <span class="font-sans text-xs bg-orange-200 p-1 rounded">oPRP</span></div>
                 <div class="text-2xl">↓</div>
-                <div class="p-3 bg-purple-100 border border-purple-300 rounded">चिकनी ट्रे में सेट करना (15-20 मिमी मोटा फैलाएं)</div>
+                <div class="p-3 bg-purple-100 border border-purple-300 rounded">Greased Tray mein Setting (15-20 mm thick spread karein)</div>
                 <div class="text-2xl">↓</div>
-                <div class="p-3 bg-purple-100 border border-purple-300 rounded">कमरे के तापमान तक पूरा ठंडा करना (25-30°C, 1-2 घंटे)</div>
+                <div class="p-3 bg-purple-100 border border-purple-300 rounded">Room Temperature tak Complete Cooling (25-30°C, 1-2 hours)</div>
                 <div class="text-2xl">↓</div>
-                <div class="p-3 bg-purple-100 border border-purple-300 rounded">सजावट (चांदी वर्क, मेवे, खाद्य सजावट)</div>
+                <div class="p-3 bg-purple-100 border border-purple-300 rounded">Decoration (Silver Vark, Nuts, Edible Decorations)</div>
                 <div class="text-2xl">↓</div>
-                <div class="p-3 bg-purple-100 border border-purple-300 rounded">टुकड़ों में काटना (वर्ग/हीरे, प्रत्येक 25-30 ग्राम)</div>
+                <div class="p-3 bg-purple-100 border border-purple-300 rounded">Pieces mein Cutting (Square/Diamond, har ek 25-30g)</div>
                 <div class="text-2xl">↓</div>
-                <div class="p-3 bg-teal-100 border border-teal-300 rounded">पैकेजिंग और भंडारण <span class="font-sans text-xs bg-gray-200 p-1 rounded">PRP</span></div>
+                <div class="p-3 bg-teal-100 border border-teal-300 rounded">Packaging aur Storage <span class="font-sans text-xs bg-gray-200 p-1 rounded">PRP</span></div>
             </div>
 
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">प्रसंस्करण चरणों का विस्तृत वैज्ञानिक विवरण</h3>
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Processing Steps ka Detailed Scientific Description</h3>
             <ol class="list-decimal list-outside pl-5 space-y-6">
                 <li>
-                    <strong>खोया तैयार करना (PRP):</strong>
-                    <p class="mt-2">उच्च गुणवत्ता वाला, ताजा पिंडी प्रकार का खोया प्राथमिक कच्चा माल है। इसकी गुणवत्ता (नमी: 20-25%, वसा: ≥25%, अम्लता: ≤0.3% लैक्टिक एसिड) सीधे अंतिम बर्फी को प्रभावित करती है। यह एक <strong>आवश्यक कार्यक्रम (PRP)</strong> है।</p>
-                    <p class="mt-2"><strong>गुणवत्ता परीक्षण:</strong> नमी (हॉट एयर ओवन), वसा (जर्बर विधि), अम्लता (अनुमापन), मिलावट (स्टार्च के लिए आयोडीन परीक्षण — नकारात्मक होना चाहिए), संवेदी (स्वच्छ, मीठा, पका हुआ दूध स्वाद)</p>
+                    <strong>Khoya Preparation (PRP):</strong>
+                    <p class="mt-2">High quality wala, fresh Pindi type ka khoya primary raw material hai. Iski quality (Moisture: 20-25%, Fat: ≥25%, Acidity: ≤0.3% Lactic Acid) directly final barfi ko affect karti hai. Yeh ek <strong>Pre-Requisite Programme (PRP)</strong> hai.</p>
+                    <p class="mt-2"><strong>Quality Testing:</strong> Moisture (Hot Air Oven), Fat (Gerber method), Acidity (Titration), Adulteration (Starch ke liye Iodine test — negative hona chahiye), Sensory (clean, sweet, cooked milk flavour)</p>
                 </li>
 
                 <li>
-                    <strong>खोया को गूंथना:</strong>
-                    <p class="mt-2">खोया को 5-10 मिनट तक गूंथा जाता है। <strong>वैज्ञानिक उद्देश्य:</strong></p>
+                    <strong>Khoya ko Kneading:</strong>
+                    <p class="mt-2">Khoya ko 5-10 minutes tak knead kiya jaata hai. <strong>Scientific Purpose:</strong></p>
                     <ul class="list-disc list-outside pl-5 mt-1 space-y-1">
-                        <li><strong>संरचनात्मक समरूपीकरण:</strong> बड़े समुच्चय तोड़ता है, वसा समान रूप से वितरित करता है</li>
-                        <li><strong>लैक्टोज क्रिस्टल क्लस्टर तोड़ना:</strong> कतरनी बलों द्वारा बड़े क्रिस्टल टूटते हैं</li>
-                        <li><strong>वायु समावेश:</strong> हल्की बनावट के लिए नियंत्रित वायु समावेश</li>
-                        <li><strong>लचीलापन विकास:</strong> प्रोटीन-वसा मैट्रिक्स का यांत्रिक कार्य → चीनी के साथ समान मिश्रण</li>
+                        <li><strong>Structural Homogenization:</strong> Bade aggregates todhta hai, fat uniformly distribute karta hai</li>
+                        <li><strong>Lactose Crystal Clusters todhna:</strong> Shear forces dwara bade crystals toothhte hain</li>
+                        <li><strong>Air Incorporation:</strong> Light texture ke liye controlled air incorporation</li>
+                        <li><strong>Pliability Development:</strong> Protein-fat matrix ka mechanical working → sugar ke saath uniform mixing</li>
                     </ul>
                 </li>
 
                 <li>
-                    <strong>चीनी मिलाना और मिश्रण (oPRP):</strong>
-                    <p class="mt-2">पिसी हुई चीनी (100-200 मेश, <150 μm) गूंथे हुए खोया में मिलाई जाती है। यह <strong>oPRP</strong> है क्योंकि समान मिश्रण सुसंगत मिठास, बनावट और क्रिस्टलीकरण के लिए आवश्यक है।</p>
-                    <p class="mt-2">खोया:चीनी = 3:1 से 4:1 (सबसे सामान्य: 3.5:1)। पिसी हुई चीनी पकाने के दौरान तेज़ी से घुलती है → बेहतर वितरण → बेहतर अंतिम बनावट।</p>
+                    <strong>Sugar Mixing aur Blending (oPRP):</strong>
+                    <p class="mt-2">Powdered sugar (100-200 mesh, <150 μm) kneaded khoya mein milayi jaati hai. Yeh <strong>oPRP</strong> hai kyunki uniform mixing consistent sweetness, texture aur crystallization ke liye zaroori hai.</p>
+                    <p class="mt-2">Khoya:Sugar = 3:1 se 4:1 (sabse common: 3.5:1). Powdered sugar cooking ke dauran jaldi dissolve hoti hai → better distribution → better final texture.</p>
                 </li>
 
                 <li>
-                    <strong>पकाना/निर्जलीकरण (CCP-1) — सबसे महत्वपूर्ण चरण:</strong>
-                    <p class="mt-2">खोया-चीनी मिश्रण को भारी तले वाले कड़ाहे या भाप-जैकेटेड केतली में नियंत्रित ताप पर लगातार हिलाते हुए पकाया जाता है। यह <strong>CCP-1</strong> है।</p>
+                    <strong>Cooking/Desiccation (CCP-1) — Sabse Important Step:</strong>
+                    <p class="mt-2">Khoya-sugar mixture ko heavy-bottomed kadhai ya steam-jacketed kettle mein controlled heat par continuously stirring karte hue cook kiya jaata hai. Yeh <strong>CCP-1</strong> hai.</p>
 
-                    <p class="mt-2"><strong>CCP-1 महत्वपूर्ण सीमाएं:</strong></p>
+                    <p class="mt-2"><strong>CCP-1 Critical Limits:</strong></p>
                     <ul class="list-disc list-outside pl-5 mt-1 space-y-1">
-                        <li>पकाने का तापमान: ≥95°C (द्रव्यमान तापमान) ≥10 मिनट के लिए</li>
-                        <li>अंतिम उत्पाद तापमान: 108-118°C (समापन बिंदु)</li>
-                        <li>पकाने का समय: 15-30 मिनट</li>
-                        <li>समापन परीक्षण: द्रव्यमान पैन के किनारे छोड़ता है, ठंडे पानी में दृढ़ गोला बनाता है</li>
+                        <li>Cooking Temperature: ≥95°C (mass temperature) ≥10 minutes ke liye</li>
+                        <li>Final Product Temperature: 108-118°C (end point)</li>
+                        <li>Cooking Time: 15-30 minutes</li>
+                        <li>End Point Test: Mass pan ke sides chhodhta hai, thande paani mein firm ball banata hai</li>
                     </ul>
 
-                    <p class="mt-2"><strong>पकाने के दौरान वैज्ञानिक प्रक्रियाएं:</strong></p>
+                    <p class="mt-2"><strong>Cooking ke Dauran Scientific Processes:</strong></p>
                     <ul class="list-disc list-outside pl-5 mt-1 space-y-2">
-                        <li><strong>नमी वाष्पीकरण:</strong> जल सामग्री ~30-35% से 18-22% तक घटती है। ऊर्जा: ~2,260 kJ/kg पानी वाष्पित</li>
-                        <li><strong>चीनी विघटन और सांद्रण:</strong> चीनी पूरी तरह घुल जाती है → सांद्र सिरप → अतिसंतृप्ति की ओर (शीतलन के दौरान क्रिस्टलीकरण के लिए)</li>
-                        <li><strong>मेलार्ड ब्राउनिंग:</strong> लैक्टोज + प्रोटीन → मेलेनॉइडिन → भूरा रंग, पके हुए स्वाद यौगिक</li>
-                        <li><strong>कारमेलीकरण:</strong> >110°C पर कुछ प्रत्यक्ष शर्करा अपघटन → बटरस्कॉच/टॉफी स्वाद</li>
-                        <li><strong>वसा पुनर्वितरण:</strong> सभी दूध वसा तरल → प्रोटीन मैट्रिक्स में स्वतंत्र रूप से स्थानांतरित → कुछ सतह पर अलग। उचित हिलाना पुनः समावेशित करता है</li>
-                        <li><strong>श्यानता परिवर्तन:</strong> 500-2,000 cP (प्रारंभिक) → 50,000-200,000 cP (अंतिम) → अत्यंत गाढ़ा</li>
+                        <li><strong>Moisture Evaporation:</strong> Water content ~30-35% se 18-22% tak ghatti hai. Energy: ~2,260 kJ/kg paani evaporate</li>
+                        <li><strong>Sugar Dissolution aur Concentration:</strong> Sugar completely dissolve hoti hai → concentrated syrup → supersaturation ki taraf (cooling ke dauran crystallization ke liye)</li>
+                        <li><strong>Maillard Browning:</strong> Lactose + Protein → Melanoidins → brown colour, cooked flavour compounds</li>
+                        <li><strong>Caramelization:</strong> >110°C par kuch direct sugar decomposition → butterscotch/toffee flavour</li>
+                        <li><strong>Fat Redistribution:</strong> Saari milk fat liquid → protein matrix mein freely move karti hai → kuch surface par separate. Proper stirring re-incorporate karta hai</li>
+                        <li><strong>Viscosity Change:</strong> 500-2,000 cP (initial) → 50,000-200,000 cP (final) → bahut thick</li>
                     </ul>
 
-                    <p class="mt-2"><strong>समापन बिंदु निर्धारण:</strong></p>
+                    <p class="mt-2"><strong>End Point Determination:</strong></p>
                     <ul class="list-disc list-outside pl-5 mt-1 space-y-1">
-                        <li><strong>पारंपरिक "पैट परीक्षण":</strong> अंगूठे और तर्जनी के बीच दबाएं → चिकनी, गैर-चिपचिपी परत बनानी चाहिए</li>
-                        <li><strong>ठंडे पानी में गोला परीक्षण:</strong> ठंडे पानी में डालें → दृढ़, लचीला गोला (112-116°C)</li>
-                        <li><strong>रिफ्रेक्टोमीटर:</strong> लक्ष्य: 78-82°Brix</li>
-                        <li><strong>तापमान:</strong> 110-118°C का द्रव्यमान तापमान ~78-82% कुल ठोस से मेल खाता है</li>
+                        <li><strong>Traditional "Pat Test":</strong> Thumb aur index finger ke beech dabayein → smooth, non-sticky layer banana chahiye</li>
+                        <li><strong>Cold Water Ball Test:</strong> Thande paani mein daalein → firm, pliable ball (112-116°C)</li>
+                        <li><strong>Refractometer:</strong> Target: 78-82°Brix</li>
+                        <li><strong>Temperature:</strong> 110-118°C ka mass temperature ~78-82% total solids se match karta hai</li>
                     </ul>
                 </li>
 
                 <li>
-                    <strong>स्वाद और मेवे मिलाना (oPRP):</strong>
+                    <strong>Flavour aur Nuts Addition (oPRP):</strong>
                     <ul class="list-disc list-outside pl-5 mt-2 space-y-1">
-                        <li><strong>इलायची:</strong> 0.2-0.5% पिसी हुई। वाष्पशील तेल (1,8-सिनियोल, लिनालूल) → मीठा, सुगंधित स्वाद। अंत में मिलाएं (वाष्पशील यौगिकों को संरक्षित करने के लिए)</li>
-                        <li><strong>केसर:</strong> 0.01-0.05% गर्म दूध में घोलकर। क्रोसिन (रंग), पिक्रोक्रोसिन (स्वाद), सफ्रानल (सुगंध)</li>
-                        <li><strong>मेवे (पिस्ता, बादाम, काजू):</strong> 3-10% कटे/कतरे हुए। कुरकुरी बनावट बनाए रखने के लिए देर से मिलाएं</li>
+                        <li><strong>Elaichi (Cardamom):</strong> 0.2-0.5% powdered. Volatile oils (1,8-Cineole, Linalool) → sweet, aromatic flavour. End mein milayein (volatile compounds preserve karne ke liye)</li>
+                        <li><strong>Kesar (Saffron):</strong> 0.01-0.05% garam doodh mein ghol kar. Crocin (colour), Picrocrocin (flavour), Safranal (aroma)</li>
+                        <li><strong>Nuts (Pista, Badam, Kaju):</strong> 3-10% chopped/sliced. Crunchy texture maintain karne ke liye late mein milayein</li>
                     </ul>
                 </li>
 
                 <li>
-                    <strong>ठंडा करना और सेट करना (oPRP) — महत्वपूर्ण बनावट विकास चरण:</strong>
-                    <p class="mt-2">पके हुए द्रव्यमान को घी लगी ट्रे में 15-20 मिमी मोटाई तक फैलाया जाता है।</p>
+                    <strong>Cooling aur Setting (oPRP) — Important Texture Development Stage:</strong>
+                    <p class="mt-2">Cooked mass ko ghee lagi tray mein 15-20 mm thickness tak spread kiya jaata hai.</p>
 
-                    <p class="mt-2"><strong>शीतलन प्रोफाइल:</strong></p>
+                    <p class="mt-2"><strong>Cooling Profile:</strong></p>
                     <ul class="list-disc list-outside pl-5 mt-1 space-y-2">
-                        <li><strong>चरण 1 (110°C→80°C, 5-10 मिनट):</strong> गूंथने के साथ तेज़ शीतलन। चीनी अतिसंतृप्ति बढ़ती है</li>
-                        <li><strong>चरण 2 (80°C→55°C, 10-20 मिनट):</strong> <strong>महत्वपूर्ण: बड़े पैमाने पर क्रिस्टल न्यूक्लिएशन क्षेत्र।</strong> इस चरण में गूंथना = सूक्ष्म क्रिस्टल। गूंथना नहीं = कम, बड़े क्रिस्टल (दोष!)</li>
-                        <li><strong>चरण 3 (55°C→35°C, 15-30 मिनट):</strong> क्रिस्टल नाभिक अंतिम आकार तक बढ़ते हैं। वसा जमना जारी। प्रोटीन मैट्रिक्स अर्ध-कठोर नेटवर्क में सेट</li>
-                        <li><strong>चरण 4 (35°C→25°C, 30-60 मिनट):</strong> अंतिम दृढ़ीकरण। वसा पूरी तरह क्रिस्टलीकृत। काटने योग्य स्थिरता</li>
+                        <li><strong>Phase 1 (110°C→80°C, 5-10 min):</strong> Kneading ke saath fast cooling. Sugar supersaturation badhti hai</li>
+                        <li><strong>Phase 2 (80°C→55°C, 10-20 min):</strong> <strong>Critical: Massive crystal nucleation zone.</strong> Is phase mein kneading = fine crystals. Kneading nahi = few, large crystals (defect!)</li>
+                        <li><strong>Phase 3 (55°C→35°C, 15-30 min):</strong> Crystal nuclei final size tak grow karte hain. Fat solidification jaari. Protein matrix semi-rigid network mein set</li>
+                        <li><strong>Phase 4 (35°C→25°C, 30-60 min):</strong> Final firming. Fat completely crystallized. Cuttable consistency</li>
                     </ul>
                 </li>
 
                 <li>
-                    <strong>सजावट और काटना:</strong>
-                    <p class="mt-2">आंशिक रूप से सेट होने पर (30-35°C) चांदी का वर्क, मेवे लगाएं। पूरी तरह सेट होने पर (25-30°C) वांछित आकार (वर्ग/हीरे, 25-30 ग्राम प्रत्येक) में काटें।</p>
+                    <strong>Decoration aur Cutting:</strong>
+                    <p class="mt-2">Partially set hone par (30-35°C) silver vark, nuts lagayein. Completely set hone par (25-30°C) desired shapes (square/diamond, 25-30g each) mein cut karein.</p>
                 </li>
 
                 <li>
-                    <strong>पैकेजिंग और भंडारण (PRP):</strong>
-                    <p class="mt-2"><strong>भंडारण शर्तें:</strong></p>
+                    <strong>Packaging aur Storage (PRP):</strong>
+                    <p class="mt-2"><strong>Storage Conditions:</strong></p>
                     <ul class="list-disc list-outside pl-5 mt-1 space-y-1">
-                        <li>परिवेश (25-30°C): शेल्फ लाइफ 7-15 दिन। मुख्य खराबी: फफूंद वृद्धि, यीस्ट किण्वन</li>
-                        <li>प्रशीतित (4-7°C): शेल्फ लाइफ 30-60 दिन। सूक्ष्मजीव वृद्धि दर 3-5× कम</li>
-                        <li>MAP (N<sub>2</sub> फ्लश): शेल्फ लाइफ 30-45 दिन (परिवेश), 60-90 दिन (प्रशीतित)</li>
+                        <li>Ambient (25-30°C): Shelf life 7-15 din. Main spoilage: mould growth, yeast fermentation</li>
+                        <li>Refrigerated (4-7°C): Shelf life 30-60 din. Microbial growth rate 3-5× kam</li>
+                        <li>MAP (N<sub>2</sub> flush): Shelf life 30-45 din (ambient), 60-90 din (refrigerated)</li>
                     </ul>
                 </li>
             </ol>
 
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">बर्फी में सामान्य दोष</h3>
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Barfi mein Common Defects</h3>
             <table class="min-w-full border-collapse border border-gray-300 mt-3">
                 <thead>
                     <tr class="bg-gray-100">
-                        <th class="border border-gray-300 px-4 py-2">दोष</th>
-                        <th class="border border-gray-300 px-4 py-2">वैज्ञानिक कारण</th>
-                        <th class="border border-gray-300 px-4 py-2">रोकथाम</th>
+                        <th class="border border-gray-300 px-4 py-2">Defect</th>
+                        <th class="border border-gray-300 px-4 py-2">Scientific Cause</th>
+                        <th class="border border-gray-300 px-4 py-2">Prevention</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="border border-gray-300 px-4 py-2"><strong>रेतीलापन</strong></td>
-                        <td class="border border-gray-300 px-4 py-2">बड़े चीनी/लैक्टोज क्रिस्टल (>50 μm) — धीमा, अनियंत्रित शीतलन</td>
-                        <td class="border border-gray-300 px-4 py-2">80-55°C पर निरंतर गूंथने के साथ नियंत्रित तेज़ शीतलन। 5-10% ग्लूकोज मिलाएं</td>
+                        <td class="border border-gray-300 px-4 py-2"><strong>Sandiness (Reteelapan)</strong></td>
+                        <td class="border border-gray-300 px-4 py-2">Bade sugar/lactose crystals (>50 μm) — slow, uncontrolled cooling</td>
+                        <td class="border border-gray-300 px-4 py-2">80-55°C par continuous kneading ke saath controlled fast cooling. 5-10% glucose milayein</td>
                     </tr>
                     <tr>
-                        <td class="border border-gray-300 px-4 py-2"><strong>कठोर/सूखी बनावट</strong></td>
-                        <td class="border border-gray-300 px-4 py-2">अधिक पकाना (>120°C → अत्यधिक नमी निष्कासन → TS >85%)</td>
-                        <td class="border border-gray-300 px-4 py-2">सटीक समापन तापमान नियंत्रण (110-116°C)। रिफ्रेक्टोमीटर से 78-82°Brix लक्ष्य</td>
+                        <td class="border border-gray-300 px-4 py-2"><strong>Hard/Dry Texture</strong></td>
+                        <td class="border border-gray-300 px-4 py-2">Over-cooking (>120°C → excessive moisture removal → TS >85%)</td>
+                        <td class="border border-gray-300 px-4 py-2">Precise end-point temperature control (110-116°C). Refractometer se 78-82°Brix target</td>
                     </tr>
                     <tr>
-                        <td class="border border-gray-300 px-4 py-2"><strong>नरम/चिपचिपा</strong></td>
-                        <td class="border border-gray-300 px-4 py-2">कम पकाना (<108°C → अपर्याप्त नमी निष्कासन → TS <75%)</td>
-                        <td class="border border-gray-300 px-4 py-2">उचित समापन बिंदु तक पकाना जारी रखें</td>
+                        <td class="border border-gray-300 px-4 py-2"><strong>Soft/Sticky</strong></td>
+                        <td class="border border-gray-300 px-4 py-2">Under-cooking (<108°C → insufficient moisture removal → TS <75%)</td>
+                        <td class="border border-gray-300 px-4 py-2">Proper end point tak cooking continue karein</td>
                     </tr>
                     <tr>
-                        <td class="border border-gray-300 px-4 py-2"><strong>तैलीय/चिकना</strong></td>
-                        <td class="border border-gray-300 px-4 py-2">पकाने के दौरान वसा पृथक्करण — अत्यधिक ताप दर, अपर्याप्त हिलाना</td>
-                        <td class="border border-gray-300 px-4 py-2">मध्यम ताप दर। निरंतर धीमा हिलाना। पकाने से पहले खोया को अच्छे से गूंथना</td>
+                        <td class="border border-gray-300 px-4 py-2"><strong>Oily/Greasy</strong></td>
+                        <td class="border border-gray-300 px-4 py-2">Cooking ke dauran fat separation — excessive heating rate, insufficient stirring</td>
+                        <td class="border border-gray-300 px-4 py-2">Moderate heating rate. Continuous slow stirring. Cooking se pehle khoya ko achhe se knead karna</td>
                     </tr>
                     <tr>
-                        <td class="border border-gray-300 px-4 py-2"><strong>गहरा/जला हुआ रंग</strong></td>
-                        <td class="border border-gray-300 px-4 py-2">अत्यधिक मेलार्ड प्रतिक्रिया। पैन संपर्क सतह पर स्थानीय अति-तापन</td>
-                        <td class="border border-gray-300 px-4 py-2">ताजा, कम अम्लता वाला खोया। पैन तल के पास निरंतर हिलाना। समान ताप वितरण के लिए भाप-जैकेटेड केतली</td>
+                        <td class="border border-gray-300 px-4 py-2"><strong>Dark/Burnt Colour</strong></td>
+                        <td class="border border-gray-300 px-4 py-2">Excessive Maillard reaction. Pan contact surface par localized overheating</td>
+                        <td class="border border-gray-300 px-4 py-2">Fresh, low acidity wala khoya. Pan bottom ke paas continuous stirring. Uniform heat distribution ke liye steam-jacketed kettle</td>
                     </tr>
                     <tr>
-                        <td class="border border-gray-300 px-4 py-2"><strong>खट्टा/दुर्गंधयुक्त स्वाद</strong></td>
-                        <td class="border border-gray-300 px-4 py-2">बासी खोया (उच्च लैक्टिक एसिड)। बासी खोया (लाइपेज → मुक्त फैटी एसिड)</td>
-                        <td class="border border-gray-300 px-4 py-2">केवल ताजा खोया उपयोग करें (अम्लता <0.3% LA)। उचित शीत श्रृंखला</td>
+                        <td class="border border-gray-300 px-4 py-2"><strong>Sour/Off-flavour</strong></td>
+                        <td class="border border-gray-300 px-4 py-2">Stale khoya (high lactic acid). Rancid khoya (lipase → free fatty acids)</td>
+                        <td class="border border-gray-300 px-4 py-2">Sirf fresh khoya use karein (acidity <0.3% LA). Proper cold chain</td>
                     </tr>
                     <tr>
-                        <td class="border border-gray-300 px-4 py-2"><strong>फफूंद वृद्धि</strong></td>
-                        <td class="border border-gray-300 px-4 py-2">उत्पादन के बाद संदूषण, सतह नमी संघनन, a<sub>w</sub> >0.80</td>
-                        <td class="border border-gray-300 px-4 py-2">स्वच्छ उत्पादन वातावरण। नमी-अवरोधक पैकेजिंग। प्रशीतित भंडारण</td>
+                        <td class="border border-gray-300 px-4 py-2"><strong>Mould Growth</strong></td>
+                        <td class="border border-gray-300 px-4 py-2">Post-production contamination, surface moisture condensation, a<sub>w</sub> >0.80</td>
+                        <td class="border border-gray-300 px-4 py-2">Hygienic production environment. Moisture-barrier packaging. Refrigerated storage</td>
                     </tr>
                 </tbody>
             </table>
 
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">बर्फी की पोषण संरचना</h3>
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Barfi ki Nutritional Composition</h3>
             <table class="min-w-full border-collapse border border-gray-300 mt-3">
                 <thead>
                     <tr class="bg-gray-100">
-                        <th class="border border-gray-300 px-4 py-2">पोषक तत्व</th>
-                        <th class="border border-gray-300 px-4 py-2">सादी बर्फी (प्रति 100g)</th>
-                        <th class="border border-gray-300 px-4 py-2">काजू बर्फी (प्रति 100g)</th>
+                        <th class="border border-gray-300 px-4 py-2">Nutrient</th>
+                        <th class="border border-gray-300 px-4 py-2">Plain Barfi (per 100g)</th>
+                        <th class="border border-gray-300 px-4 py-2">Kaju Barfi (per 100g)</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td class="border border-gray-300 px-4 py-2">ऊर्जा (kcal)</td><td class="border border-gray-300 px-4 py-2">380-420</td><td class="border border-gray-300 px-4 py-2">450-500</td></tr>
-                    <tr><td class="border border-gray-300 px-4 py-2">नमी (%)</td><td class="border border-gray-300 px-4 py-2">18-22</td><td class="border border-gray-300 px-4 py-2">12-18</td></tr>
-                    <tr><td class="border border-gray-300 px-4 py-2">कुल वसा (g)</td><td class="border border-gray-300 px-4 py-2">15-20</td><td class="border border-gray-300 px-4 py-2">22-28</td></tr>
-                    <tr><td class="border border-gray-300 px-4 py-2">प्रोटीन (g)</td><td class="border border-gray-300 px-4 py-2">10-14</td><td class="border border-gray-300 px-4 py-2">12-16</td></tr>
-                    <tr><td class="border border-gray-300 px-4 py-2">कार्बोहाइड्रेट (g)</td><td class="border border-gray-300 px-4 py-2">45-55</td><td class="border border-gray-300 px-4 py-2">40-48</td></tr>
-                    <tr><td class="border border-gray-300 px-4 py-2">कैल्शियम (mg)</td><td class="border border-gray-300 px-4 py-2">200-350</td><td class="border border-gray-300 px-4 py-2">150-250</td></tr>
+                    <tr><td class="border border-gray-300 px-4 py-2">Energy (kcal)</td><td class="border border-gray-300 px-4 py-2">380-420</td><td class="border border-gray-300 px-4 py-2">450-500</td></tr>
+                    <tr><td class="border border-gray-300 px-4 py-2">Moisture (%)</td><td class="border border-gray-300 px-4 py-2">18-22</td><td class="border border-gray-300 px-4 py-2">12-18</td></tr>
+                    <tr><td class="border border-gray-300 px-4 py-2">Total Fat (g)</td><td class="border border-gray-300 px-4 py-2">15-20</td><td class="border border-gray-300 px-4 py-2">22-28</td></tr>
+                    <tr><td class="border border-gray-300 px-4 py-2">Protein (g)</td><td class="border border-gray-300 px-4 py-2">10-14</td><td class="border border-gray-300 px-4 py-2">12-16</td></tr>
+                    <tr><td class="border border-gray-300 px-4 py-2">Carbohydrate (g)</td><td class="border border-gray-300 px-4 py-2">45-55</td><td class="border border-gray-300 px-4 py-2">40-48</td></tr>
+                    <tr><td class="border border-gray-300 px-4 py-2">Calcium (mg)</td><td class="border border-gray-300 px-4 py-2">200-350</td><td class="border border-gray-300 px-4 py-2">150-250</td></tr>
                 </tbody>
             </table>
 
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">बर्फी में मिलावट पहचान</h3>
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Barfi mein Adulteration Detection</h3>
             <table class="min-w-full border-collapse border border-gray-300 mt-3">
                 <thead>
                     <tr class="bg-gray-100">
-                        <th class="border border-gray-300 px-4 py-2">मिलावट</th>
-                        <th class="border border-gray-300 px-4 py-2">उद्देश्य</th>
-                        <th class="border border-gray-300 px-4 py-2">पहचान विधि</th>
+                        <th class="border border-gray-300 px-4 py-2">Adulterant</th>
+                        <th class="border border-gray-300 px-4 py-2">Purpose</th>
+                        <th class="border border-gray-300 px-4 py-2">Detection Method</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="border border-gray-300 px-4 py-2"><strong>स्टार्च</strong></td>
-                        <td class="border border-gray-300 px-4 py-2">मात्रा बढ़ाना, सस्ता भराव</td>
-                        <td class="border border-gray-300 px-4 py-2">आयोडीन परीक्षण: नीला-काला रंग = स्टार्च मौजूद</td>
+                        <td class="border border-gray-300 px-4 py-2"><strong>Starch</strong></td>
+                        <td class="border border-gray-300 px-4 py-2">Quantity badhana, cheap filler</td>
+                        <td class="border border-gray-300 px-4 py-2">Iodine Test: Blue-black colour = Starch present</td>
                     </tr>
                     <tr>
-                        <td class="border border-gray-300 px-4 py-2"><strong>वनस्पति/वनस्पति वसा</strong></td>
-                        <td class="border border-gray-300 px-4 py-2">महंगे दूध वसा की जगह</td>
-                        <td class="border border-gray-300 px-4 py-2">बॉडॉइन परीक्षण। HPLC फैटी एसिड प्रोफाइल। Reichert-Meissl मान <24</td>
+                        <td class="border border-gray-300 px-4 py-2"><strong>Vanaspati/Vegetable Fat</strong></td>
+                        <td class="border border-gray-300 px-4 py-2">Expensive milk fat ki jagah</td>
+                        <td class="border border-gray-300 px-4 py-2">Baudouin Test. HPLC Fatty Acid Profile. Reichert-Meissl value <24</td>
                     </tr>
                     <tr>
-                        <td class="border border-gray-300 px-4 py-2"><strong>कृत्रिम रंग (मेटानिल पीला)</strong></td>
-                        <td class="border border-gray-300 px-4 py-2">आकर्षक रंग (केसर बर्फी में केसर की नकल)</td>
-                        <td class="border border-gray-300 px-4 py-2">सांद्र HCl मिलाएं → तुरंत गुलाबी/मैजेंटा रंग = मेटानिल पीला मौजूद</td>
+                        <td class="border border-gray-300 px-4 py-2"><strong>Artificial Colour (Metanil Yellow)</strong></td>
+                        <td class="border border-gray-300 px-4 py-2">Attractive colour (Kesar barfi mein saffron ki nakal)</td>
+                        <td class="border border-gray-300 px-4 py-2">Concentrated HCl milayein → turant pink/magenta colour = Metanil Yellow present</td>
                     </tr>
                     <tr>
-                        <td class="border border-gray-300 px-4 py-2"><strong>एल्यूमीनियम वर्क (चांदी के रूप में)</strong></td>
-                        <td class="border border-gray-300 px-4 py-2">महंगे चांदी के पत्ते का सस्ता विकल्प</td>
-                        <td class="border border-gray-300 px-4 py-2">ज्वाला परीक्षण: असली चांदी बिना जले पिघलती है; एल्यूमीनियम सफेद ज्वाला से जलता है</td>
+                        <td class="border border-gray-300 px-4 py-2"><strong>Aluminium Vark (Silver ke roop mein)</strong></td>
+                        <td class="border border-gray-300 px-4 py-2">Expensive silver leaf ka cheap substitute</td>
+                        <td class="border border-gray-300 px-4 py-2">Flame Test: Asli silver bina jale pighalti hai; Aluminium white flame se jalta hai</td>
                     </tr>
                 </tbody>
             </table>
 
-            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">बर्फी की विविधताएं</h3>
+            <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-headline">Barfi ki Varieties</h3>
             <table class="min-w-full border-collapse border border-gray-300 mt-3">
                 <thead>
                     <tr class="bg-gray-100">
-                        <th class="border border-gray-300 px-4 py-2">विविधता</th>
-                        <th class="border border-gray-300 px-4 py-2">मुख्य सामग्री</th>
-                        <th class="border border-gray-300 px-4 py-2">विशेषताएं</th>
+                        <th class="border border-gray-300 px-4 py-2">Variety</th>
+                        <th class="border border-gray-300 px-4 py-2">Main Ingredients</th>
+                        <th class="border border-gray-300 px-4 py-2">Characteristics</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td class="border border-gray-300 px-4 py-2"><strong>सादी (दूध) बर्फी</strong></td><td class="border border-gray-300 px-4 py-2">खोया + चीनी</td><td class="border border-gray-300 px-4 py-2">सफेद/क्रीम रंग, शुद्ध दूध स्वाद</td></tr>
-                    <tr><td class="border border-gray-300 px-4 py-2"><strong>काजू बर्फी</strong></td><td class="border border-gray-300 px-4 py-2">काजू पेस्ट</td><td class="border border-gray-300 px-4 py-2">प्रीमियम, चिकनी, समृद्ध, हीरे आकार, चांदी वर्क</td></tr>
-                    <tr><td class="border border-gray-300 px-4 py-2"><strong>पिस्ता बर्फी</strong></td><td class="border border-gray-300 px-4 py-2">पिस्ता पेस्ट/टुकड़े</td><td class="border border-gray-300 px-4 py-2">हरा रंग (प्राकृतिक क्लोरोफिल), मेवे जैसा स्वाद</td></tr>
-                    <tr><td class="border border-gray-300 px-4 py-2"><strong>बेसन बर्फी</strong></td><td class="border border-gray-300 px-4 py-2">भुना चने का आटा</td><td class="border border-gray-300 px-4 py-2">पीला रंग, भुना स्वाद, हल्की भुरभुरी</td></tr>
-                    <tr><td class="border border-gray-300 px-4 py-2"><strong>नारियल बर्फी</strong></td><td class="border border-gray-300 px-4 py-2">सूखा/ताजा नारियल</td><td class="border border-gray-300 px-4 py-2">सफेद, नारियल सुगंध, कतरी हुई बनावट</td></tr>
-                    <tr><td class="border border-gray-300 px-4 py-2"><strong>केसर बर्फी</strong></td><td class="border border-gray-300 px-4 py-2">केसर धागे</td><td class="border border-gray-300 px-4 py-2">सुनहरा-नारंगी रंग, नाज़ुक सुगंध, प्रीमियम</td></tr>
-                    <tr><td class="border border-gray-300 px-4 py-2"><strong>चॉकलेट बर्फी</strong></td><td class="border border-gray-300 px-4 py-2">कोको पाउडर/चॉकलेट</td><td class="border border-gray-300 px-4 py-2">भूरा रंग, पारंपरिक + आधुनिक मिश्रण</td></tr>
+                    <tr><td class="border border-gray-300 px-4 py-2"><strong>Plain (Milk) Barfi</strong></td><td class="border border-gray-300 px-4 py-2">Khoya + Sugar</td><td class="border border-gray-300 px-4 py-2">White/cream colour, pure milk flavour</td></tr>
+                    <tr><td class="border border-gray-300 px-4 py-2"><strong>Kaju Barfi</strong></td><td class="border border-gray-300 px-4 py-2">Cashew Paste</td><td class="border border-gray-300 px-4 py-2">Premium, smooth, rich, diamond shape, silver vark</td></tr>
+                    <tr><td class="border border-gray-300 px-4 py-2"><strong>Pista Barfi</strong></td><td class="border border-gray-300 px-4 py-2">Pistachio Paste/Pieces</td><td class="border border-gray-300 px-4 py-2">Green colour (natural chlorophyll), nutty flavour</td></tr>
+                    <tr><td class="border border-gray-300 px-4 py-2"><strong>Besan Barfi</strong></td><td class="border border-gray-300 px-4 py-2">Roasted Gram Flour</td><td class="border border-gray-300 px-4 py-2">Yellow colour, roasted flavour, slightly crumbly</td></tr>
+                    <tr><td class="border border-gray-300 px-4 py-2"><strong>Coconut Barfi</strong></td><td class="border border-gray-300 px-4 py-2">Dry/Fresh Coconut</td><td class="border border-gray-300 px-4 py-2">White, coconut aroma, shredded texture</td></tr>
+                    <tr><td class="border border-gray-300 px-4 py-2"><strong>Kesar Barfi</strong></td><td class="border border-gray-300 px-4 py-2">Saffron Strands</td><td class="border border-gray-300 px-4 py-2">Golden-orange colour, delicate aroma, premium</td></tr>
+                    <tr><td class="border border-gray-300 px-4 py-2"><strong>Chocolate Barfi</strong></td><td class="border border-gray-300 px-4 py-2">Cocoa Powder/Chocolate</td><td class="border border-gray-300 px-4 py-2">Brown colour, traditional + modern fusion</td></tr>
                 </tbody>
             </table>
         `
