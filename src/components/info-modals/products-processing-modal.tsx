@@ -203,19 +203,33 @@ const CONTENT_STYLES = `
     .dairy-content { font-size: 0.95rem; line-height: 1.8; }
   }
 
+  /* Box-sizing only — do NOT apply word-break globally (causes vertical text on mobile) */
   .dairy-content * {
-    max-width: 100% !important;
     box-sizing: border-box !important;
-    overflow-wrap: anywhere;
-    word-break: break-word;
   }
 
-  /* ── FIX: IceCream / any SVG icon inside content ── */
+  /* Only specific text containers get overflow protection */
+  .dairy-content p,
+  .dairy-content li,
+  .dairy-content td,
+  .dairy-content th,
+  .dairy-content h3,
+  .dairy-content h4,
+  .dairy-content span {
+    overflow-wrap: break-word;
+    word-break: break-word;
+    max-width: 100%;
+  }
+
+  /* SVG icons must NEVER be constrained — critical for IceCream icon */
   .dairy-content svg {
     display: inline-block !important;
     overflow: visible !important;
     max-width: none !important;
+    min-width: unset !important;
     width: auto !important;
+    word-break: normal !important;
+    overflow-wrap: normal !important;
   }
 
   .dairy-content h3 {
@@ -434,17 +448,55 @@ const CONTENT_STYLES = `
     .dc-table-responsive td::before { display: none !important; }
   }
 
-  .dairy-content pre, .dairy-content code {
+  .dairy-content pre {
     overflow-x: auto;
     white-space: pre-wrap;
-    word-break: break-all;
+    word-break: break-word;
     overflow-wrap: anywhere;
-    font-size: 0.7rem;
-    background: #F3F4F6;
-    padding: 0.45rem;
-    border-radius: 0.35rem;
-    border: 1px solid #E5E7EB;
+    font-size: 0.72rem;
+    background: linear-gradient(135deg, #EEF2FF 0%, #F5F3FF 100%);
+    padding: 0.5rem 0.65rem;
+    border-radius: 0.5rem;
+    border: 1px solid #C7D2FE;
+    color: #3730A3;
+    font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', monospace;
+    line-height: 1.6;
     display: block;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* inline code — must NOT break characters vertically */
+  .dairy-content code {
+    display: inline;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    font-size: 0.75rem;
+    background: #EEF2FF;
+    padding: 0.1rem 0.35rem;
+    border-radius: 0.3rem;
+    border: 1px solid #C7D2FE;
+    color: #3730A3;
+    font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', monospace;
+    line-height: 1.5;
+  }
+
+  /* code inside pre stays block */
+  .dairy-content pre code {
+    display: block;
+    background: none;
+    border: none;
+    padding: 0;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+  @media (min-width: 640px) {
+    .dairy-content pre, .dairy-content code {
+      font-size: 0.82rem;
+      overflow-x: auto;
+    }
   }
 
   .dairy-content img {
@@ -455,7 +507,7 @@ const CONTENT_STYLES = `
   }
 
   .dairy-content a {
-    word-break: break-all;
+    word-break: break-word;
     overflow-wrap: anywhere;
     color: #6366F1;
     text-decoration: underline;
@@ -556,24 +608,37 @@ const ProductContent = ({
     );
 
   const processedHtml = processTablesForMobile(content.content || "");
+  const htmlIsEmpty = !processedHtml.trim();
 
-  // ── FIX: only treat subTopics as real if non-empty ──
+  // Only treat subTopics as real if non-empty object
   const hasSubTopics =
-    content.subTopics && Object.keys(content.subTopics).length > 0;
+    content.subTopics &&
+    typeof content.subTopics === "object" &&
+    Object.keys(content.subTopics).length > 0;
 
   if (hasSubTopics) {
     return (
       <div className="w-full max-w-full overflow-hidden">
-        <Section title={content.title} config={config}>
-          <div dangerouslySetInnerHTML={{ __html: processedHtml }} />
-        </Section>
+        {/* Show intro content only if non-empty */}
+        {!htmlIsEmpty && (
+          <Section title={content.title} config={config}>
+            <div dangerouslySetInnerHTML={{ __html: processedHtml }} />
+          </Section>
+        )}
         {Object.keys(content.subTopics).map((subKey) => {
           const sub = content.subTopics[subKey];
           const subHtml = processTablesForMobile(sub.content || "");
+          const subEmpty = !subHtml.trim();
           return (
             <div key={subKey} className="mt-3 w-full max-w-full overflow-hidden">
               <Section title={sub.title} config={config}>
-                <div dangerouslySetInnerHTML={{ __html: subHtml }} />
+                {subEmpty ? (
+                  <p className="text-gray-400 italic text-sm py-2">
+                    Content coming soon...
+                  </p>
+                ) : (
+                  <div dangerouslySetInnerHTML={{ __html: subHtml }} />
+                )}
               </Section>
             </div>
           );
@@ -584,7 +649,13 @@ const ProductContent = ({
 
   return (
     <Section title={content.title} config={config}>
-      <div dangerouslySetInnerHTML={{ __html: processedHtml }} />
+      {htmlIsEmpty ? (
+        <p className="text-gray-400 italic text-sm py-2">
+          Content coming soon...
+        </p>
+      ) : (
+        <div dangerouslySetInnerHTML={{ __html: processedHtml }} />
+      )}
     </Section>
   );
 };
@@ -626,121 +697,164 @@ export function ProductsProcessingModal({
         const raw = t(paneerProcessingContent) as any;
         const topicsObj = raw.topics || {};
 
+        // ── helpers ──────────────────────────────────────────────────────
+        // Skip UI-only keys so they never appear as table cells
+        const SKIP_KEYS = new Set(["colorClass", "className", "style"]);
+
         const buildTableHtml = (tbl: any): string => {
-          if (!tbl?.rows) return "";
-          const ths = (tbl.headers || []).map((h: string) => `<th>${h}</th>`).join("");
+          if (!tbl?.rows?.length) return "";
+          const headers: string[] = tbl.headers || [];
+          const ths = headers.map((h: string) => `<th>${h}</th>`).join("");
           const rows = tbl.rows
             .map((row: any) => {
-              const cells = Object.values(row)
-                .map((v) => `<td>${v ?? ""}</td>`)
+              // Only pick values whose keys are not in SKIP_KEYS
+              // and limit to header count so columns align perfectly
+              const vals = Object.entries(row)
+                .filter(([k]) => !SKIP_KEYS.has(k))
+                .slice(0, headers.length || 99)
+                .map(([, v]) => `<td>${v ?? ""}</td>`)
                 .join("");
-              return `<tr>${cells}</tr>`;
+              return `<tr>${vals}</tr>`;
             })
             .join("");
-          return `${tbl.title ? `<h4>${tbl.title}</h4>` : ""}<table><thead><tr>${ths}</tr></thead><tbody>${rows}</tbody></table>`;
+          return (
+            (tbl.title ? `<h4>${tbl.title}</h4>` : "") +
+            `<table><thead><tr>${ths}</tr></thead><tbody>${rows}</tbody></table>`
+          );
         };
 
         const buildItemsHtml = (items: any[]): string =>
           (items || [])
-            .map((it: any) => `${it.name ? `<h4>${it.name}</h4>` : ""}${it.detail || it.content || ""}`)
+            .map(
+              (it: any) =>
+                `${it.name || it.title ? `<h4>${it.name || it.title}</h4>` : ""}` +
+                `${it.detail || it.details || it.content || ""}`
+            )
             .join("");
 
+        const buildSectionsHtml = (sections: any[]): string =>
+          (sections || [])
+            .map((s: any) => {
+              let h = "";
+              if (s.title) h += `<h3>${s.title}</h3>`;
+              if (s.content) h += `<div>${s.content}</div>`;
+              if (s.table) h += buildTableHtml(s.table);
+              if (s.items?.length) h += buildItemsHtml(s.items);
+              return h;
+            })
+            .join("");
+
+        // ── topic → HTML converter ────────────────────────────────────────
         const topicToHtml = (topic: any): string => {
           let html = "";
+
+          // 1. Top-level description
           if (topic.description) html += `<p>${topic.description}</p>`;
 
-          // sections array (microbiology, shelf_life)
-          (topic.sections || []).forEach((s: any) => {
-            if (s.title) html += `<h3>${s.title}</h3>`;
-            if (s.content) html += `<div>${s.content}</div>`;
-            if (s.table) html += buildTableHtml(s.table);
-            if (s.items) html += buildItemsHtml(s.items);
-          });
+          // 2. Generic sections array  (microbiology, shelf_life, etc.)
+          if (topic.sections?.length) html += buildSectionsHtml(topic.sections);
 
-          // process: table of steps
+          // 3. Process: main step table
           if (topic.table?.rows) html += buildTableHtml(topic.table);
 
-          // advanced_process_notes
+          // 4. Advanced process notes (inside process topic)
           if (topic.advanced_process_notes) {
-            html += `<h3>${topic.advanced_process_notes.title || ""}</h3>`;
-            html += `<p>${topic.advanced_process_notes.description || ""}</p>`;
-            (topic.advanced_process_notes.sections || []).forEach((s: any) => {
-              html += `<h4>${s.title}</h4><div>${s.content}</div>`;
-            });
+            const apn = topic.advanced_process_notes;
+            if (apn.title) html += `<h3>${apn.title}</h3>`;
+            if (apn.description) html += `<p>${apn.description}</p>`;
+            html += buildSectionsHtml(apn.sections || []);
           }
 
-          // quality_control sub-object
+          // 5. Quality control (nested inside process topic)
           if (topic.quality_control) {
             const qc = topic.quality_control;
+            if (qc.title) html += `<h3>${qc.title}</h3>`;
             if (qc.description) html += `<p>${qc.description}</p>`;
-            ["raw_milk_table", "in_process_table", "finished_product_table"].forEach((k) => {
+            for (const k of ["raw_milk_table", "in_process_table", "finished_product_table"]) {
               if (qc[k]) html += buildTableHtml(qc[k]);
-            });
+            }
             if (qc.sensory_evaluation) {
-              html += `<h3>${qc.sensory_evaluation.title || ""}</h3>`;
-              html += `<p>${qc.sensory_evaluation.description || ""}</p>`;
-              (qc.sensory_evaluation.attributes || []).forEach((a: any) => {
+              const se = qc.sensory_evaluation;
+              if (se.title) html += `<h3>${se.title}</h3>`;
+              if (se.description) html += `<p>${se.description}</p>`;
+              (se.attributes || []).forEach((a: any) => {
                 html += `<p><strong>${a.name}:</strong> ${a.criteria}</p>`;
               });
             }
           }
 
-          // coagulants mechanism + types + comparison table
+          // 6. Coagulants: mechanism, types list, comparison table
           if (topic.mechanism_detail) {
             html += `<h3>${topic.mechanism_detail.title || ""}</h3>`;
             html += `<div>${topic.mechanism_detail.content || ""}</div>`;
           }
-          if (topic.types) html += buildItemsHtml(topic.types.map((t: any) => ({ name: t.name, detail: t.details })));
+          if (topic.types?.length) {
+            html += buildItemsHtml(
+              topic.types.map((tp: any) => ({ name: tp.name, detail: tp.details || tp.detail || "" }))
+            );
+          }
           if (topic.comparison_table) html += buildTableHtml(topic.comparison_table);
 
-          // yield_texture
+          // 7. Yield & Texture
           if (topic.yield) {
             const y = topic.yield;
+            if (y.title) html += `<h3>${y.title}</h3>`;
             if (y.description) html += `<p>${y.description}</p>`;
             if (y.formulas) {
-              html += `<h3>${y.formulas.title || ""}</h3><div>${y.formulas.content || ""}</div>`;
+              html += `<h4>${y.formulas.title || ""}</h4>`;
+              html += `<div>${y.formulas.content || ""}</div>`;
             }
             (y.methods || []).forEach((m: any) => {
               html += `<h4>${m.method}</h4><div>${m.detail}</div>`;
             });
           }
           if (topic.safeIncreasers) {
-            html += `<h3>${topic.safeIncreasers.title || ""}</h3>`;
-            if (topic.safeIncreasers.description) html += `<p>${topic.safeIncreasers.description}</p>`;
-            html += buildItemsHtml(topic.safeIncreasers.items || []);
+            const si = topic.safeIncreasers;
+            if (si.title) html += `<h3>${si.title}</h3>`;
+            if (si.description) html += `<p>${si.description}</p>`;
+            html += buildItemsHtml(si.items || []);
           }
           if (topic.texture) {
             const tx = topic.texture;
+            if (tx.title) html += `<h3>${tx.title}</h3>`;
             if (tx.description) html += `<p>${tx.description}</p>`;
             if (tx.microstructure_note) html += `<p>${tx.microstructure_note}</p>`;
+            // texture.table rows have colorClass — filtered by buildTableHtml SKIP_KEYS
             if (tx.table) html += buildTableHtml(tx.table);
             if (tx.age_hardening) {
-              html += `<h3>${tx.age_hardening.title || ""}</h3><div>${tx.age_hardening.content || ""}</div>`;
+              html += `<h3>${tx.age_hardening.title || ""}</h3>`;
+              html += `<div>${tx.age_hardening.content || ""}</div>`;
             }
           }
 
-          // nutrition
+          // 8. Nutrition
           if (topic.composition_table) html += buildTableHtml(topic.composition_table);
           if (topic.amino_acid_profile) html += buildTableHtml(topic.amino_acid_profile);
           if (topic.bioactive_compounds) {
-            html += `<h3>${topic.bioactive_compounds.title || ""}</h3>`;
-            html += buildItemsHtml(topic.bioactive_compounds.items || []);
+            const bc = topic.bioactive_compounds;
+            if (bc.title) html += `<h3>${bc.title}</h3>`;
+            html += buildItemsHtml(bc.items || []);
           }
 
-          // defects
+          // 9. Defects
           if (topic.defects_table) html += buildTableHtml(topic.defects_table);
           if (topic.process_optimization) {
-            html += `<h3>${topic.process_optimization.title || ""}</h3>`;
-            html += buildTableHtml(topic.process_optimization.table);
+            const po = topic.process_optimization;
+            if (po.title) html += `<h3>${po.title}</h3>`;
+            if (po.table) html += buildTableHtml(po.table);
           }
 
           return html || `<p>${topic.title || ""}</p>`;
         };
 
+        // ── Build subTopics from topics object ────────────────────────────
         const subTopics: Record<string, { title: string; content: string }> = {};
         Object.keys(topicsObj).forEach((key) => {
           const topic = topicsObj[key];
-          subTopics[key] = { title: topic.title || key, content: topicToHtml(topic) };
+          subTopics[key] = {
+            title: topic.title || key,
+            content: topicToHtml(topic),
+          };
         });
 
         return {
