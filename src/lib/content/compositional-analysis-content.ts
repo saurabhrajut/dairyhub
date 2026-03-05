@@ -3,7 +3,7 @@
 export const compositionalAnalysisContent = {
   hi: {
     main_title: "Dairy Products ka Compositional Analysis",
-    main_description: "Chemical quality assurance ke liye ek detailed guide — Scientific aur Practical Testing Methods ke saath.",
+    main_description: "Chemical quality assurance ke liye ek detailed guide — Scientific aur Practical Testing Methods ke saath. Har test mein use hone wale factors, constants aur formulas ki complete scientific explanation included hai.",
     back_to_topics: "Topics par wapas jayein",
     topics: {
       "processed-milk": {
@@ -27,16 +27,89 @@ export const compositionalAnalysisContent = {
                 <li><strong>Gerber Centrifuge:</strong> 1100-1200 rpm mein capable.</li>
               </ul>
 
+              <div class="bg-blue-50 border-l-4 border-blue-400 p-4 my-4 rounded">
+                <h4 class="font-bold text-blue-800 mb-3">🔬 Har Number Kyun? — Factors & Constants ki Complete Scientific Explanation:</h4>
+
+                <h5 class="font-semibold mt-3 mb-1 text-blue-700">❓ 10.75 ml doodh hi kyun lete hain? (Sabse Important Sawaal)</h5>
+                <p>Ye koi random number nahi hai — ye pure mathematical calculation se nikla hai:</p>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li><strong>Step 1:</strong> Doodh ki average density = ~1.032 g/ml (27°C par)</li>
+                  <li><strong>Step 2:</strong> 10.75 ml × 1.032 g/ml = <strong>11.094 g ≈ 11 g doodh</strong></li>
+                  <li><strong>Step 3:</strong> 1% fat of 11 g = 0.11 g fat</li>
+                  <li><strong>Step 4:</strong> Fat ki density at 65°C (reading temperature) = ~0.893 g/ml</li>
+                  <li><strong>Step 5:</strong> Volume of 0.11 g fat = 0.11 ÷ 0.893 = <strong>0.1232 ml ≈ 0.125 ml</strong></li>
+                  <li><strong>Step 6:</strong> Butyrometer ke stem mein har ek graduation (1%) = exactly <strong>0.125 ml</strong> capacity</li>
+                </ul>
+                <p class="font-semibold">Matlab: 10.75 ml isliye taaki fat column ka har graduation seedha percentage (%) mein padh sakein — koi conversion ki zaroorat nahi! Agar 10 ml ya 11 ml lete to butyrometer scale directly % nahi dikhata.</p>
+
+                <h5 class="font-semibold mt-4 mb-1 text-blue-700">❓ 10 ml Sulphuric Acid kyun? Concentration 90-91% hi kyun?</h5>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li><strong>Kaam:</strong> Proteins (casein, whey) ko dissolve karta hai aur fat globules ki membrane tod deta hai taaki fat free ho jaye.</li>
+                  <li><strong>10 ml kyun:</strong> 11 g doodh ke saare proteins ko completely digest karne ke liye itna amount zaroori hai — kam hone par protein adhura ghulega, reading galat aayegi.</li>
+                  <li><strong>90-91% kyun — less nahi:</strong> Agar concentration <90% ho to proteins puri tarah nahi ghulenge, fat incomplete separate hoga — reading kam aayegi.</li>
+                  <li><strong>90-91% kyun — more nahi:</strong> Agar concentration >91% ho to fat ka <strong>charring (jalana)</strong> ho jayega — dark coloured fat layer aayegi, reading galat hogi aur padh nahi paayenge.</li>
+                  <li><strong>Sp. gr. 1.807-1.812 at 27°C:</strong> Ye concentration check karne ka tarika hai. Agar sp. gr. is range se bahar hai, to acid ki concentration galat hai — replace karein.</li>
+                </ul>
+
+                <h5 class="font-semibold mt-4 mb-1 text-blue-700">❓ 1 ml Amyl Alcohol hi kyun? Zyada ya kam kyun nahi?</h5>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li><strong>Kaam 1 (Anti-foaming):</strong> Surface tension ko kam karta hai — fat aur acid layer ke beech clean separation hota hai.</li>
+                  <li><strong>Kaam 2 (Anti-charring):</strong> Acid aur organic matter ke reaction se jo dark colour aata hai, wo amyl alcohol reduce karta hai.</li>
+                  <li><strong>Kaam 3 (Clarity):</strong> Fat column ko clear aur transparent banata hai taaki reading accurately li ja sake.</li>
+                  <li><strong>1 ml se kam hone par:</strong> Fat layer clean nahi hogi, dark spots dikhenge, reading unclear aur inaccurate hogi.</li>
+                  <li><strong>1 ml se zyada hone par:</strong> Amyl alcohol khud fat column mein dissolve ho jaayega — <strong>false high reading</strong> aayegi kyunki amyl alcohol ka volume bhi fat ke saath count hoga!</li>
+                  <li><strong>Furfural-free kyun:</strong> Furfural ek impurity hai jo acid ke saath dark colour deta hai — fat column ki transparency kharab karta hai aur reading mein interfere karta hai.</li>
+                  <li><strong>Sp. gr. 0.808-0.818:</strong> Ye purity check hai — agar is range se bahar hai to alcohol mein impurities hain jo result affect karengi.</li>
+                </ul>
+
+                <h5 class="font-semibold mt-4 mb-1 text-blue-700">❓ 65 ± 2°C Water Bath hi kyun? Kam ya zyada kyun nahi?</h5>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li><strong>Core reason:</strong> Fat ko <strong>liquid state</strong> mein rakhna zaroori hai taaki column mein smoothly upar aaye aur clear meniscus bane.</li>
+                  <li><strong>Milk fat ka melting point:</strong> ~37°C hai, lekin <strong>complete liquefaction</strong> aur <strong>clear readable meniscus</strong> ke liye 65°C optimal temperature hai.</li>
+                  <li><strong>65°C se kam hone par:</strong> Fat partially jam jaata hai, fat column mein bubbles ya gaps aate hain — reading kam aayegi.</li>
+                  <li><strong>65°C se zyada hone par:</strong> Fat expand ho jaata hai (thermal expansion) — reading artificially high aayegi.</li>
+                  <li><strong>±2°C tolerance kyun:</strong> Fat ki density temperature ke saath change hoti hai. 2°C ka difference approximately 0.02% fat ka error deta hai — ye acceptable limit hai.</li>
+                  <li><strong>Butyrometer scale bhi 65°C par calibrate kiya gaya hai</strong> — isliye isi temperature par reading leni chahiye.</li>
+                </ul>
+
+                <h5 class="font-semibold mt-4 mb-1 text-blue-700">❓ 1100-1200 rpm Centrifuge kyun? Zyada fast kyun nahi?</h5>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li><strong>Kaam:</strong> Fat halka hai (density ~0.93 g/ml) vs acid-milk mixture (~1.40 g/ml). Centrifugal force fat ko butyrometer ke narrow stem mein push karta hai.</li>
+                  <li><strong>1100 rpm se kam:</strong> Fat puri tarah separate nahi hoga — reading kam aayegi, kuch fat mixture mein hi reh jayega.</li>
+                  <li><strong>1200 rpm se zyada:</strong> Glass butyrometer mein garam acid hai — high speed par <strong>tube toot sakti hai</strong> (bahut dangerous — acid splash ho sakta hai!).</li>
+                  <li><strong>4-5 minute kyun:</strong> Itna time sufficient hai complete fat separation ke liye — kam time mein incomplete separation, zyada time mein koi additional benefit nahi.</li>
+                </ul>
+
+                <h5 class="font-semibold mt-4 mb-1 text-blue-700">📊 Summary Table — Sab Ek Nazar Mein:</h5>
+                <table class="table-auto border-collapse border border-blue-300 mt-2 text-sm w-full">
+                  <thead><tr class="bg-blue-100"><th class="border border-blue-300 p-2">Parameter</th><th class="border border-blue-300 p-2">Value</th><th class="border border-blue-300 p-2">Scientific Reason</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border border-blue-300 p-2">Milk volume</td><td class="border border-blue-300 p-2">10.75 ml</td><td class="border border-blue-300 p-2">~11 g milk → 1% fat = 0.125 ml = 1 butyrometer graduation</td></tr>
+                    <tr><td class="border border-blue-300 p-2">H₂SO₄ volume</td><td class="border border-blue-300 p-2">10 ml</td><td class="border border-blue-300 p-2">11 g milk ke proteins ko fully dissolve karne ke liye sufficient</td></tr>
+                    <tr><td class="border border-blue-300 p-2">H₂SO₄ conc.</td><td class="border border-blue-300 p-2">90-91%</td><td class="border border-blue-300 p-2">Kam = incomplete digestion; Zyada = fat charring</td></tr>
+                    <tr><td class="border border-blue-300 p-2">H₂SO₄ sp. gr.</td><td class="border border-blue-300 p-2">1.807-1.812</td><td class="border border-blue-300 p-2">Concentration verify karne ka measure at 27°C</td></tr>
+                    <tr><td class="border border-blue-300 p-2">Amyl alcohol</td><td class="border border-blue-300 p-2">1 ml</td><td class="border border-blue-300 p-2">Kam = unclear; Zyada = false high reading</td></tr>
+                    <tr><td class="border border-blue-300 p-2">Amyl sp. gr.</td><td class="border border-blue-300 p-2">0.808-0.818</td><td class="border border-blue-300 p-2">Purity check — impure se error aata hai</td></tr>
+                    <tr><td class="border border-blue-300 p-2">Water bath</td><td class="border border-blue-300 p-2">65 ± 2°C</td><td class="border border-blue-300 p-2">Fat liquid + clear meniscus; scale bhi isi par calibrated</td></tr>
+                    <tr><td class="border border-blue-300 p-2">Centrifuge</td><td class="border border-blue-300 p-2">1100-1200 rpm</td><td class="border border-blue-300 p-2">Kam = incomplete separation; Zyada = tube breakage danger</td></tr>
+                    <tr><td class="border border-blue-300 p-2">Centrifuge time</td><td class="border border-blue-300 p-2">4-5 min</td><td class="border border-blue-300 p-2">Complete separation ke liye sufficient</td></tr>
+                    <tr><td class="border border-blue-300 p-2">Fat density (65°C)</td><td class="border border-blue-300 p-2">~0.893 g/ml</td><td class="border border-blue-300 p-2">Garam fat halka hota hai — isi se volume calculate hota hai</td></tr>
+                    <tr><td class="border border-blue-300 p-2">Milk density</td><td class="border border-blue-300 p-2">~1.032 g/ml</td><td class="border border-blue-300 p-2">10.75 ml × 1.032 = ~11 g</td></tr>
+                    <tr><td class="border border-blue-300 p-2">1 graduation</td><td class="border border-blue-300 p-2">0.125 ml</td><td class="border border-blue-300 p-2">Stem ki internal capacity per % mark</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
               <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
               <ol class="list-decimal list-outside pl-5 space-y-2">
-                <li>Butyrometer tube mein 10 ml sulphuric acid daalein bina neck ko geela kiye.</li>
-                <li>Deewar ke kinaare 10.75 ml achchi tarah se milaya hua doodh butyrometer mein pipette karein.</li>
-                <li>1 ml amyl alcohol daalein.</li>
-                <li>Ek lock stopper se band karein, homogeneous hone tak hilayein, aur poora mixture ke liye ulta karein.</li>
-                <li>Yeh ensure karne ke liye ki saare casein particles ghul gaye hain, 5 minute ke liye 65±2°C par water bath mein rakhein.</li>
-                <li>4-5 minute ke liye 1100-1200 rpm par centrifuge karein.</li>
-                <li>5 minute ke liye water bath mein wapas rakhein.</li>
-                <li>Stopper ko adjust karke calibrated stem se fat ka percentage padhein. Reading fat column meniscus ke neeche se li jaati hai.</li>
+                <li>Butyrometer tube mein 10 ml sulphuric acid daalein bina neck ko geela kiye. <span class="text-xs text-gray-500">(Neck geela hone par acid aur doodh ka premature reaction hoga — local charring hogi)</span></li>
+                <li>Deewar ke kinaare 10.75 ml achchi tarah se milaya hua doodh butyrometer mein pipette karein. <span class="text-xs text-gray-500">(Deewar ke kinaare isliye taaki doodh aur acid ki layers alag rahein — mixing controlled ho)</span></li>
+                <li>1 ml amyl alcohol daalein. <span class="text-xs text-gray-500">(Ye sab se last mein daalte hain taaki acid-milk reaction ke beech buffer ka kaam kare)</span></li>
+                <li>Ek lock stopper se band karein, homogeneous hone tak hilayein, aur poora mixture ke liye ulta karein. <span class="text-xs text-gray-500">(Ulta karna zaroori hai taaki stopper ke peeche trapped sample bhi mix ho jaye — warna incomplete digestion hogi)</span></li>
+                <li>5 minute ke liye 65±2°C par water bath mein rakhein. <span class="text-xs text-gray-500">(Ye ensure karta hai ki saare casein particles completely ghul jayein aur reaction complete ho)</span></li>
+                <li>4-5 minute ke liye 1100-1200 rpm par centrifuge karein. <span class="text-xs text-gray-500">(Centrifugal force fat ko stem mein push karta hai — density difference ka fayda uthata hai)</span></li>
+                <li>5 minute ke liye water bath mein wapas rakhein. <span class="text-xs text-gray-500">(Dobaara 65°C par laana zaroori hai kyunki centrifuge mein temperature gir jaata hai — sahi reading ke liye exact temperature chahiye)</span></li>
+                <li>Stopper ko adjust karke calibrated stem se fat ka percentage padhein. Reading fat column meniscus ke neeche se li jaati hai. <span class="text-xs text-gray-500">(Lower meniscus se padhein kyunki fat ki surface curved hoti hai — concave meniscus ka bottom point accurate reading deta hai)</span></li>
               </ol>
 
               <h4 class="font-semibold mt-4 mb-2">Typical Values:</h4>
@@ -59,22 +132,82 @@ export const compositionalAnalysisContent = {
                 <li>Petroleum ether (40-60°C boiling range)</li>
               </ul>
 
+              <div class="bg-green-50 border-l-4 border-green-400 p-4 my-4 rounded">
+                <h4 class="font-bold text-green-800 mb-3">🔬 Har Reagent & Number ki Scientific Explanation:</h4>
+
+                <h5 class="font-semibold mt-3 mb-1 text-green-700">❓ Ammonia 25% kyun use hota hai?</h5>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li><strong>Kaam 1:</strong> Casein proteins ko dissolve karta hai — alkaline conditions mein casein micelles toot jaate hain aur soluble ho jaate hain.</li>
+                  <li><strong>Kaam 2:</strong> Fat globule membrane (jo phospholipids + proteins se bani hai) ko disrupt karta hai — fat free ho jaata hai extraction ke liye.</li>
+                  <li><strong>25% kyun:</strong> Ye optimum concentration hai — 10 g milk ke proteins ko dissolve karne ke liye. Kam concentration mein casein adhura ghulega.</li>
+                  <li><strong>1.5 ml kyun:</strong> Exactly utna chahiye jitna 10 g milk ke liye sufficient ho — zyada ammonia se baad mein ether layer mein impurities aa sakti hain.</li>
+                </ul>
+
+                <h5 class="font-semibold mt-3 mb-1 text-green-700">❓ Ethanol 95% kyun? 100% kyun nahi?</h5>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li><strong>Kaam 1:</strong> Proteins ko <strong>dehydrate</strong> aur <strong>precipitate</strong> karta hai — ye proteins ko solid form mein la deta hai taaki wo ether layer mein na jayein.</li>
+                  <li><strong>Kaam 2:</strong> Fat aur solvent ki <strong>miscibility improve</strong> karta hai — fat extraction better hota hai.</li>
+                  <li><strong>Kaam 3:</strong> Fat globule ke around jo emulsion hai usse <strong>break</strong> karta hai — fat separate hota hai.</li>
+                  <li><strong>95% kyun, 100% nahi:</strong> Absolute (100%) ethanol mein thoda paani milana padta hai interaction ke liye. 95% naturally optimal hai — proteins dehydrate bhi hote hain aur system mein sufficient water rahta hai sahi reaction ke liye.</li>
+                  <li><strong>10 ml kyun:</strong> 10 g sample ke proteins ko completely precipitate karne ke liye sufficient volume.</li>
+                </ul>
+
+                <h5 class="font-semibold mt-3 mb-1 text-green-700">❓ Diethyl Ether + Petroleum Ether — DONO kyun? Ek se kaam nahi chalega?</h5>
+                <table class="table-auto border-collapse border border-green-300 mt-2 text-sm w-full my-2">
+                  <thead><tr class="bg-green-100"><th class="border border-green-300 p-2">Solvent</th><th class="border border-green-300 p-2">Kya Dissolve Karta Hai</th><th class="border border-green-300 p-2">Kyun Zaroori</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border border-green-300 p-2">Diethyl ether (slightly polar)</td><td class="border border-green-300 p-2">Free fatty acids, phospholipids, partial glycerides</td><td class="border border-green-300 p-2">Polar lipids extract karta hai jo petroleum ether akela nahi kar sakta</td></tr>
+                    <tr><td class="border border-green-300 p-2">Petroleum ether (non-polar)</td><td class="border border-green-300 p-2">Triglycerides (neutral fat) — doodh ka main fat</td><td class="border border-green-300 p-2">Non-polar fat ko efficiently extract karta hai</td></tr>
+                    <tr><td class="border border-green-300 p-2 font-semibold">Dono saath</td><td class="border border-green-300 p-2 font-semibold">Total fat — complete extraction</td><td class="border border-green-300 p-2 font-semibold">Akele koi bhi solvent 100% fat extract nahi kar sakta!</td></tr>
+                  </tbody>
+                </table>
+
+                <h5 class="font-semibold mt-3 mb-1 text-green-700">❓ Pehle 25 ml each, phir 15 ml each — ye pattern kyun?</h5>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li><strong>1st extraction (25+25 ml):</strong> ~95% fat nikal jaata hai — maximum fat pehli baar mein aata hai.</li>
+                  <li><strong>2nd extraction (15+15 ml):</strong> ~4% aur fat nikalta hai — jo residual fat bacha tha.</li>
+                  <li><strong>3rd extraction (15+15 ml):</strong> Remaining ~1% fat — ye last traces nikalte hain.</li>
+                  <li><strong>Teen baar kyun:</strong> Quantitative (nearly 100%) recovery ke liye zaroori hai. Do baar se ~99% aata hai, teen baar se 99.5%+ — reference method mein maximum accuracy chahiye.</li>
+                  <li><strong>Pehli baar zyada (25 ml) kyun:</strong> Maximum fat ko extract karne ke liye zyada solvent chahiye. Baad ki extractions mein kam fat bacha hai to kam solvent sufficient hai — solvent ki bhi saving hoti hai.</li>
+                </ul>
+
+                <h5 class="font-semibold mt-3 mb-1 text-green-700">❓ 102°C par drying kyun? Koi aur temperature kyun nahi?</h5>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li><strong>Diethyl ether ka boiling point:</strong> ~35°C — 102°C par completely evaporate ho jaata hai.</li>
+                  <li><strong>Petroleum ether ka boiling point:</strong> ~40-60°C — ye bhi 102°C par completely nikal jaata hai.</li>
+                  <li><strong>Paani ka boiling point:</strong> 100°C — koi bhi trapped moisture hatt jaata hai.</li>
+                  <li><strong>Fat 102°C par decompose nahi hota</strong> (short term ke liye) — safe hai.</li>
+                  <li><strong>110°C+ par risk:</strong> Fat ka oxidation start ho sakta hai — weight badh jayega (oxygen addition se) — galat result.</li>
+                  <li><strong>Constant weight ka matlab:</strong> Jab successive weighings mein difference <0.5 mg ho — tab saara solvent/moisture hatt chuka hai.</li>
+                </ul>
+
+                <h5 class="font-semibold mt-3 mb-1 text-green-700">❓ Peroxide-free diethyl ether kyun chahiye?</h5>
+                <p class="my-1">Diethyl ether hawa mein rakhne par slowly peroxides banata hai (O₂ se react karke). Ye peroxides <strong>explosive</strong> hain — garam karne par blast ho sakte hain! Isliye fresh, peroxide-free ether use karna safety ke liye zaroori hai. Testing: KI-starch paper se check karein — brown colour = peroxides present = mat use karein.</p>
+
+                <h5 class="font-semibold mt-3 mb-1 text-green-700">❓ Petroleum ether ka 40-60°C boiling range kyun specified hai?</h5>
+                <p class="my-1">Petroleum ether alag-alag grades mein aata hai (30-40°C, 40-60°C, 60-80°C). 40-60°C grade optimal hai kyunki: (1) Bahut volatile nahi — handling safe hai, (2) 102°C par completely evaporate ho jaata hai — residue nahi chhhodta, (3) Fat dissolving capacity achchi hai is range mein.</p>
+              </div>
+
               <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
               <ol class="list-decimal list-outside pl-5 space-y-2">
-                <li>Ek Mojonnier extraction flask mein lagbhag 10 gram doodh ka sample accurately weigh karein.</li>
-                <li>1.5 ml ammonia solution daalein aur achchi tarah mix karein.</li>
-                <li>10 ml 95% ethanol daalein aur 1 minute ke liye hilayein.</li>
-                <li>25 ml diethyl ether daalein, 1 minute ke liye zor se hilayein.</li>
-                <li>25 ml petroleum ether daalein aur 1 minute ke liye phir se hilayein.</li>
-                <li>Mixture ko tab tak khada rehne dein jab tak upper ether layer clear na ho jaye, ya layers ko separate karne ke liye centrifuge karein.</li>
-                <li>Ether layer ko ek pehle se weigh kiye hue flask mein carefully decant karein.</li>
-                <li>Aqueous layer ke saath do baar aur extraction repeat karein, har baar 15 ml har ek ether ka use karein.</li>
-                <li>Ek hot plate ya water bath par solvents ko evaporate karein.</li>
-                <li>Extracted fat wale flask ko 102°C par ek oven mein constant weight par dry karein.</li>
+                <li>Ek Mojonnier extraction flask mein lagbhag 10 gram doodh ka sample accurately weigh karein. <span class="text-xs text-gray-500">(Volume nahi, weight isliye lete hain kyunki gravimetric method mein weight-based calculation zyada accurate hai)</span></li>
+                <li>1.5 ml ammonia solution daalein aur achchi tarah mix karein. <span class="text-xs text-gray-500">(Casein dissolve hota hai — fat globule membrane tootati hai)</span></li>
+                <li>10 ml 95% ethanol daalein aur 1 minute ke liye hilayein. <span class="text-xs text-gray-500">(Proteins precipitate hote hain — emulsion break hota hai)</span></li>
+                <li>25 ml diethyl ether daalein, 1 minute ke liye zor se hilayein. <span class="text-xs text-gray-500">(Fat ether mein dissolve hona shuru — polar lipids bhi)</span></li>
+                <li>25 ml petroleum ether daalein aur 1 minute ke liye phir se hilayein. <span class="text-xs text-gray-500">(Neutral fat/triglycerides extract hote hain)</span></li>
+                <li>Mixture ko tab tak khada rehne dein jab tak upper ether layer clear na ho jaye, ya layers ko separate karne ke liye centrifuge karein. <span class="text-xs text-gray-500">(Ether lighter hai — upar aata hai, aqueous layer neeche — gravity separation)</span></li>
+                <li>Ether layer ko ek pehle se weigh kiye hue flask mein carefully decant karein. <span class="text-xs text-gray-500">(Pre-weighed flask zaroori hai — baad mein fat ka weight nikalna hai)</span></li>
+                <li>Aqueous layer ke saath do baar aur extraction repeat karein, har baar 15 ml har ek ether ka use karein. <span class="text-xs text-gray-500">(Residual fat nikalna — total 3 extractions se 99.5%+ recovery)</span></li>
+                <li>Ek hot plate ya water bath par solvents ko evaporate karein. <span class="text-xs text-gray-500">(Low temperature par evaporate karein — fat oxidize na ho)</span></li>
+                <li>Extracted fat wale flask ko 102°C par ek oven mein constant weight par dry karein. <span class="text-xs text-gray-500">(Last traces of solvent aur moisture hataane ke liye)</span></li>
               </ol>
 
               <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
               <pre><code>% Fat = (Extracted fat ka weight / Sample ka weight) × 100</code></pre>
+              <div class="bg-gray-50 p-3 rounded mt-2 text-sm">
+                <p><strong>Example:</strong> Flask + fat = 85.450 g, Empty flask = 85.100 g, Fat weight = 0.350 g, Sample = 10.00 g</p>
+                <p>% Fat = (0.350 / 10.00) × 100 = <strong>3.50%</strong></p>
+              </div>
             `
           },
           {
@@ -84,10 +217,29 @@ export const compositionalAnalysisContent = {
               <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
               <p>Doodh ko concentrated hydrochloric acid ke saath boil kiya jaata hai, jo protein ko digest karta hai aur fat ko free karta hai. Fat ko phir ether ke saath extract kiya jaata hai aur weigh kiya jaata hai. Ye method tab use hota hai jab Rose-Gottlieb method mein ammonia casein ko dissolve nahi kar pata — jaise sour, fermented, ya preserved samples mein.</p>
 
+              <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 my-4 rounded">
+                <h4 class="font-bold text-yellow-800 mb-3">🔬 Ye Method Kyun Alag Hai? — Scientific Explanation:</h4>
+
+                <h5 class="font-semibold mt-3 mb-1 text-yellow-700">❓ Rose-Gottlieb mein ammonia use hota hai to Werner-Schmidt mein HCl kyun?</h5>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li><strong>Normal doodh mein:</strong> Casein calcium caseinate ke roop mein hota hai — ammonia easily dissolve kar leta hai (alkaline hydrolysis).</li>
+                  <li><strong>Sour doodh mein:</strong> Lactic acid ne casein ko already pH 4.6 par precipitate kar diya hai — ye denatured casein ammonia mein properly dissolve nahi hota.</li>
+                  <li><strong>Preserved/fermented samples mein:</strong> Preservatives (formalin, etc.) ne protein ko cross-link kar diya hai — ammonia se nahi ghulega.</li>
+                  <li><strong>HCl solution:</strong> Concentrated HCl + boiling se saari proteins completely <strong>hydrolyze (digest)</strong> ho jaati hain — chahe kitni bhi denatured/cross-linked hon.</li>
+                  <li><strong>Dark brown colour:</strong> Protein ka complete hydrolysis indicate karta hai — amino acids bante hain jo acid mein soluble hain.</li>
+                </ul>
+
+                <h5 class="font-semibold mt-3 mb-1 text-yellow-700">❓ 10 ml concentrated HCl kyun?</h5>
+                <p class="my-1">10 g milk mein ~3.5% protein = ~0.35 g protein. Concentrated HCl (~37% w/w, sp. gr. ~1.18) ka 10 ml = ~4.3 g HCl — ye 0.35 g protein ko completely hydrolyze karne ke liye bahut zyada hai (excess mein — taaki reaction complete ho). Excess acid zaroori hai kyunki denatured proteins resistant hote hain.</p>
+
+                <h5 class="font-semibold mt-3 mb-1 text-yellow-700">❓ Baad ke steps Rose-Gottlieb jaisi kyun hain?</h5>
+                <p class="my-1">Fat extract karne ka mechanism same hai — ether solvent mein fat dissolve hota hai. Bas protein dissolve karne ka tarika alag hai (acid vs ammonia). Isliye extraction, evaporation, aur weighing same follow karte hain.</p>
+              </div>
+
               <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
               <ol class="list-decimal list-outside pl-5 space-y-2">
                 <li>Ek suitable extraction tube mein lagbhag 10 gram doodh ka sample accurately weigh karein.</li>
-                <li>10 ml concentrated HCl daalein aur tab tak heat karein jab tak solution dark brown na ho jaye (sab protein digest ho jaye).</li>
+                <li>10 ml concentrated HCl daalein aur tab tak heat karein jab tak solution dark brown na ho jaye (sab protein digest ho jaye). <span class="text-xs text-gray-500">(Heating time ~20-30 min — fume hood mein karein kyunki HCl fumes niklenge)</span></li>
                 <li>Cool karein, aur Rose-Gottlieb method mein described anusaar diethyl aur petroleum ether ke saath teen baar extract karein.</li>
                 <li>Solvents ko evaporate karein, residue ko dry karein aur weigh karein.</li>
               </ol>
@@ -104,13 +256,64 @@ export const compositionalAnalysisContent = {
               <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
               <p>Doodh ke ek known weight ko heat kiya jaata hai taaki saara paani evaporate ho jaye. Remaining dry residue ka weight total solids ko represent karta hai. Isme fat, protein, lactose, minerals — sab kuch included hota hai.</p>
 
+              <div class="bg-purple-50 border-l-4 border-purple-400 p-4 my-4 rounded">
+                <h4 class="font-bold text-purple-800 mb-3">🔬 Formula & Numbers ki Complete Explanation:</h4>
+
+                <h5 class="font-semibold mt-3 mb-1 text-purple-700">❓ Formula kaise kaam karta hai?</h5>
+                <pre class="bg-white p-2 rounded my-2"><code>% Total Solids = [(W3 - W1) / (W2 - W1)] × 100</code></pre>
+                <table class="table-auto border-collapse border border-purple-300 mt-2 text-sm w-full my-2">
+                  <thead><tr class="bg-purple-100"><th class="border border-purple-300 p-2">Symbol</th><th class="border border-purple-300 p-2">Kya Hai</th><th class="border border-purple-300 p-2">Kyun Chahiye</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border border-purple-300 p-2">W1</td><td class="border border-purple-300 p-2">Empty dish + lid ka weight</td><td class="border border-purple-300 p-2">Reference point — dish ka weight result mein nahi aana chahiye</td></tr>
+                    <tr><td class="border border-purple-300 p-2">W2</td><td class="border border-purple-300 p-2">Dish + milk sample ka weight</td><td class="border border-purple-300 p-2">Total weight drying se pehle</td></tr>
+                    <tr><td class="border border-purple-300 p-2">W2 - W1</td><td class="border border-purple-300 p-2">Sirf milk sample ka weight</td><td class="border border-purple-300 p-2">Kitna doodh liya — denominator hai</td></tr>
+                    <tr><td class="border border-purple-300 p-2">W3</td><td class="border border-purple-300 p-2">Dish + dried residue ka weight</td><td class="border border-purple-300 p-2">Drying ke baad — paani ud gaya, solids bache</td></tr>
+                    <tr><td class="border border-purple-300 p-2">W3 - W1</td><td class="border border-purple-300 p-2">Sirf dried residue (total solids) ka weight</td><td class="border border-purple-300 p-2">Numerator — jo bacha wo solids hain</td></tr>
+                    <tr><td class="border border-purple-300 p-2">× 100</td><td class="border border-purple-300 p-2">Percentage mein convert</td><td class="border border-purple-300 p-2">Standard practice — % mein express karna hai</td></tr>
+                  </tbody>
+                </table>
+                <div class="bg-white p-3 rounded mt-2 text-sm">
+                  <p><strong>Example:</strong> W1 = 45.000 g, W2 = 50.000 g (5 g milk), W3 = 45.625 g</p>
+                  <p>% TS = [(45.625 - 45.000) / (50.000 - 45.000)] × 100 = [0.625 / 5.000] × 100 = <strong>12.50%</strong></p>
+                </div>
+
+                <h5 class="font-semibold mt-4 mb-1 text-purple-700">❓ 102 ± 2°C kyun? Koi aur temperature kyun nahi?</h5>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li><strong>100°C se upar:</strong> Saara free water evaporate ho jaye — 100°C paani ka boiling point hai, thoda upar rakhte hain taaki bound water bhi nikle.</li>
+                  <li><strong>104°C se neeche:</strong> Lactose caramelize/decompose na ho — lactose ~160°C par decompose hota hai lekin browning (Maillard reaction) 105°C+ par start ho sakti hai.</li>
+                  <li><strong>Fat oxidize na ho:</strong> 110°C+ par fat ki oxidation hoti hai — weight badh jayega (galat result).</li>
+                  <li><strong>102°C = Sweet spot:</strong> Paani hatt jaata hai, solids intact rehte hain — no decomposition, no oxidation.</li>
+                </ul>
+
+                <h5 class="font-semibold mt-4 mb-1 text-purple-700">❓ Water bath par pehle kyun heat karte hain (30 min)?</h5>
+                <p class="my-1">Agar doodh ko seedha oven mein rakh dein to surface par ek <strong>crust (papdi)</strong> ban jaati hai. Ye crust andar ka paani bahar nahi nikalne deti — result kam aayega. Water bath par gentle heating se paani dheere-dheere evaporate hota hai bina crust banaye. Phir oven mein remaining moisture nikalta hai.</p>
+
+                <h5 class="font-semibold mt-4 mb-1 text-purple-700">❓ 5 gram sample kyun? Zyada ya kam kyun nahi?</h5>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li><strong>5 gram optimal hai:</strong> Itne mein drying uniformly hoti hai aur residue accurately weigh ho sakta hai.</li>
+                  <li><strong>Kam (1-2 g):</strong> Residue bahut kam hoga — weighing error zyada hoga (percentage error badh jaata hai).</li>
+                  <li><strong>Zyada (10-20 g):</strong> Drying mein bahut time lagega, crust banne ka zyada chance, aur dish overflow ho sakti hai.</li>
+                </ul>
+
+                <h5 class="font-semibold mt-4 mb-1 text-purple-700">❓ Constant weight kya hota hai? 0.5 mg tolerance kyun?</h5>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li><strong>Constant weight matlab:</strong> Jab oven mein rakh kar, cool kar ke, weigh karein — phir dobaara oven mein rakh kar, cool kar ke weigh karein — dono weights mein difference 0.5 mg se kam ho.</li>
+                  <li><strong>Ye confirm karta hai:</strong> "Ab aur paani/moisture nahi bacha — jo weight hai wo final hai."</li>
+                  <li><strong>0.5 mg kyun:</strong> Analytical balance ki sensitivity ~0.1 mg hoti hai. 0.5 mg = 5 readings ki uncertainty — practically negligible hai.</li>
+                  <li><strong>Agar constant weight na aaye:</strong> Aur 30 min oven mein rakhein aur phir check karein.</li>
+                </ul>
+
+                <h5 class="font-semibold mt-4 mb-1 text-purple-700">❓ Desiccator mein cool kyun karte hain? Room mein kyun nahi?</h5>
+                <p class="my-1">Desiccator mein silica gel hota hai jo moisture absorb karta hai. Agar dish ko room mein cool karein to hawa ki humidity se dish moisture absorb karegi — weight badh jayega — result galat aayega. Desiccator dry environment provide karta hai.</p>
+              </div>
+
               <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
               <ol class="list-decimal list-outside pl-5 space-y-2">
                 <li>Ek khaali, saaf, dry flat-bottom dish ko uske dhakkan (W1) ke saath weigh karein.</li>
                 <li>Dish mein lagbhag 5 gram prepared doodh ka sample daalein aur phir se weigh karein (W2).</li>
-                <li>30 minute ke liye boiling water bath par dhakkan ke bina dish ko heat karein.</li>
+                <li>30 minute ke liye boiling water bath par dhakkan ke bina dish ko heat karein. <span class="text-xs text-gray-500">(Dhakkan hataate hain taaki steam nikal sake — crust nahi bane)</span></li>
                 <li>Dish ko 102 ± 2°C par 2 ghante ke liye hot air oven mein transfer karein.</li>
-                <li>Dish ko dhakkan se dhak dein, ek desiccator mein cool karein, aur weigh karein (W3).</li>
+                <li>Dish ko dhakkan se dhak dein, ek desiccator mein cool karein, aur weigh karein (W3). <span class="text-xs text-gray-500">(Dhakkan lagaate hain cooling ke time taaki dust ya moisture na enter kare)</span></li>
                 <li>Ek constant weight prapt hone tak heating aur cooling process ko repeat karein (successive weights mein difference 0.5 mg se kam hona chahiye).</li>
               </ol>
 
@@ -133,9 +336,52 @@ export const compositionalAnalysisContent = {
               <pre><code>% SNF = % Total Solids - % Fat</code></pre>
 
               <h4 class="font-semibold mt-4 mb-2">Method 2: ISI Formula (using Lactometer)</h4>
-              <p>Jab laboratory equipment available na ho, tab lactometer reading aur fat content se SNF calculate kiya ja sakta hai:</p>
               <pre><code>% SNF = (CLR / 4) + (0.21 × F) + 0.36</code></pre>
               <p class="text-xs">Jahaan CLR = Corrected Lactometer Reading at 27°C, F = Fat %</p>
+
+              <div class="bg-indigo-50 border-l-4 border-indigo-400 p-4 my-4 rounded">
+                <h4 class="font-bold text-indigo-800 mb-3">🔬 ISI Formula ke Har Term ki Scientific Explanation:</h4>
+
+                <p class="my-2"><strong>Ye ek empirical formula hai</strong> — matlab ye theory se nahi, balki hazaaron doodh ke samples ka data analyze karke derive kiya gaya hai. Har term ka scientific reason hai:</p>
+
+                <h5 class="font-semibold mt-3 mb-1 text-indigo-700">❓ CLR / 4 — ye term kyun?</h5>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li><strong>CLR (Corrected Lactometer Reading)</strong> doodh ki density ko represent karta hai.</li>
+                  <li>SNF (protein, lactose, minerals) doodh ki density <strong>badhata</strong> hai — zyada SNF = zyada density = zyada CLR.</li>
+                  <li><strong>Division by 4:</strong> Data analysis se nikla hai ki CLR aur SNF ka ratio approximately 4:1 hai. Jaise CLR 28 → SNF contribution ≈ 7.0%. Ye linear relationship experimentally established hai.</li>
+                  <li>Ye SNF ka <strong>main contributing term</strong> hai — total SNF ka ~80% isi se aata hai.</li>
+                </ul>
+
+                <h5 class="font-semibold mt-3 mb-1 text-indigo-700">❓ 0.21 × F — fat ka correction kyun chahiye?</h5>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li><strong>Fat halka hai</strong> (density ~0.93 g/ml) — fat hone se doodh ki density KAM hoti hai.</li>
+                  <li>Matlab zyada fat = kam CLR — to CLR/4 se SNF underestimate ho jayega.</li>
+                  <li><strong>0.21 × F correction:</strong> Ye fat ke density-lowering effect ko compensate karta hai. Har 1% fat CLR ko approximately 0.84 units kam karta hai, aur 0.84/4 ≈ 0.21.</li>
+                  <li><strong>Example:</strong> Agar fat 4% hai to correction = 0.21 × 4 = 0.84%. Bina is correction ke SNF 0.84% kam aata.</li>
+                </ul>
+
+                <h5 class="font-semibold mt-3 mb-1 text-indigo-700">❓ 0.36 — ye constant kyun add hota hai?</h5>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li>Ye <strong>residual correction factor</strong> hai — dissolved gases (CO₂), minor components, aur formula ki inherent systematic error ko compensate karta hai.</li>
+                  <li>Data fitting mein jab regression line banate hain to ek intercept aata hai — wo intercept 0.36 hai.</li>
+                  <li>Iske bina formula consistently ~0.36% kam SNF deta hai.</li>
+                </ul>
+
+                <div class="bg-white p-3 rounded mt-3 text-sm">
+                  <p><strong>Example Calculation:</strong></p>
+                  <p>CLR = 28, Fat = 4.0%</p>
+                  <p>SNF = (28/4) + (0.21 × 4) + 0.36 = 7.0 + 0.84 + 0.36 = <strong>8.20%</strong></p>
+                  <p class="mt-2">CLR = 32, Fat = 6.0%</p>
+                  <p>SNF = (32/4) + (0.21 × 6) + 0.36 = 8.0 + 1.26 + 0.36 = <strong>9.62%</strong></p>
+                </div>
+
+                <h5 class="font-semibold mt-4 mb-1 text-indigo-700">❓ Ye formula kitna accurate hai?</h5>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li><strong>Accuracy:</strong> ±0.2% ke andar — field conditions ke liye sufficient hai.</li>
+                  <li><strong>Limitation:</strong> Ye formula normal, unadulterated milk ke liye hai. Agar paani, urea, sugar mila hua ho to galat result dega.</li>
+                  <li><strong>Reference method:</strong> Accurate SNF ke liye gravimetric total solids - Gerber fat use karein (Method 1).</li>
+                </ul>
+              </div>
 
               <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
               <p>Full cream milk: ≥9.0% (cow), ≥9.0% (buffalo). Adulterated milk mein SNF 8.5% se neeche gir sakta hai.</p>
@@ -156,12 +402,58 @@ export const compositionalAnalysisContent = {
                 <li>Thermometer (0-50°C)</li>
               </ul>
 
+              <div class="bg-orange-50 border-l-4 border-orange-400 p-4 my-4 rounded">
+                <h4 class="font-bold text-orange-800 mb-3">🔬 Formulas & Corrections ki Scientific Explanation:</h4>
+
+                <h5 class="font-semibold mt-3 mb-1 text-orange-700">❓ CLR = LR + 0.2 × (T - 27) — ye temperature correction kyun chahiye?</h5>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li><strong>Lactometer 27°C par calibrate hota hai</strong> (Indian standard temperature).</li>
+                  <li><strong>Temperature badhne par:</strong> Doodh expand hota hai → density KAM hoti hai → lactometer zyada doobta hai → reading KAM aati hai. Isliye add karte hain.</li>
+                  <li><strong>Temperature kam hone par:</strong> Doodh contract hota hai → density ZYADA hoti hai → lactometer kam doobta hai → reading ZYADA aati hai. Isliye subtract karte hain.</li>
+                  <li><strong>0.2 per °C kyun:</strong> Experiments se pata chala hai ki doodh ka thermal expansion coefficient aise hai ki har 1°C change se lactometer reading mein approximately 0.2 units ka change aata hai. Ye empirically determined constant hai.</li>
+                  <li><strong>27°C kyun (Indian standard):</strong> India ka average ambient temperature ~27°C hai — isliye Indian Standards Bureau ne is temperature ko reference rakha. European standards mein 15°C ya 20°C use hota hai.</li>
+                </ul>
+
+                <div class="bg-white p-3 rounded mt-2 text-sm">
+                  <p><strong>Example 1:</strong> LR = 26, Temperature = 32°C</p>
+                  <p>CLR = 26 + 0.2 × (32 - 27) = 26 + 0.2 × 5 = 26 + 1.0 = <strong>27.0</strong></p>
+                  <p class="mt-1"><strong>Example 2:</strong> LR = 30, Temperature = 22°C</p>
+                  <p>CLR = 30 + 0.2 × (22 - 27) = 30 + 0.2 × (-5) = 30 - 1.0 = <strong>29.0</strong></p>
+                </div>
+
+                <h5 class="font-semibold mt-4 mb-1 text-orange-700">❓ Specific Gravity = 1 + (CLR / 1000) — ye formula kaise nikla?</h5>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li><strong>Lactometer readings</strong> (25, 28, 30, 32 etc.) actually specific gravity ke <strong>last 3 digits</strong> hain — simplification ke liye.</li>
+                  <li>Jaise: CLR 28 matlab Sp. Gr. = 1.028, CLR 32 matlab Sp. Gr. = 1.032</li>
+                  <li><strong>Formula:</strong> Sp. Gr. = 1 + (CLR/1000) = 1 + 28/1000 = 1.028</li>
+                  <li><strong>Lactometer scale ne "1.0" hata diya</strong> aur baaki ko ×1000 kar diya — taaki chhoti graduations mein padh sakein. Agar scale par 1.028, 1.029, 1.030... likhein to bahut chhota difference hoga — padha nahi jayega!</li>
+                </ul>
+
+                <h5 class="font-semibold mt-4 mb-1 text-orange-700">❓ Lactometer scale 15-40 kyun graduated hai?</h5>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li><strong>15 (Sp. Gr. 1.015):</strong> Bahut zyada paani milaya hua doodh — lower limit.</li>
+                  <li><strong>40 (Sp. Gr. 1.040):</strong> Skimmed buffalo milk ya adulterants (salt/sugar) mila hua — upper limit.</li>
+                  <li><strong>Normal milk:</strong> 28-34 range mein — ye range scale ke beech mein hai jahaan accuracy sabse zyada hai.</li>
+                  <li>Is range se bahar koi normal doodh nahi aata — isliye ye range sufficient hai.</li>
+                </ul>
+
+                <h5 class="font-semibold mt-4 mb-1 text-orange-700">❓ 500 ml measuring cylinder kyun? Chhota kyun nahi chalega?</h5>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li><strong>Lactometer freely float karna chahiye</strong> — deewar ko touch nahi karna chahiye.</li>
+                  <li>Chhote cylinder mein lactometer deewar se touch karega — reading galat aayegi (capillary effect).</li>
+                  <li>500 ml mein sufficient clearance milta hai — lactometer centre mein float karta hai.</li>
+                </ul>
+
+                <h5 class="font-semibold mt-4 mb-1 text-orange-700">❓ Foam kyun nahi banni chahiye mixing ke time?</h5>
+                <p class="my-1">Foam (air bubbles) doodh ki density KAM kar deta hai — lactometer reading artificially kam aayegi. Gently mix karein — hilayein, mat pheintein!</p>
+              </div>
+
               <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
               <ol class="list-decimal list-outside pl-5 space-y-2">
                 <li>Doodh ko achchi tarah mix karein bina foam banaye.</li>
                 <li>Doodh ko measuring cylinder mein daalein (lagbhag 500 ml).</li>
-                <li>Lactometer ko gently doodh mein lower karein aur chhod dein taaki ye freely float kare.</li>
-                <li>Jab lactometer stable ho jaye, reading lo — meniscus ke upper surface se padhein.</li>
+                <li>Lactometer ko gently doodh mein lower karein aur chhod dein taaki ye freely float kare. <span class="text-xs text-gray-500">(Dhakka dekar nahi chhodna — natural position mein aane dein)</span></li>
+                <li>Jab lactometer stable ho jaye, reading lo — meniscus ke upper surface se padhein. <span class="text-xs text-gray-500">(Doodh opaque hai — lower meniscus dikhai nahi deta, isliye upper surface se padhte hain — ye paani se alag hai jahaan lower meniscus se padhte hain)</span></li>
                 <li>Temperature bhi note karein.</li>
                 <li>Temperature correction apply karein: Har 1°C 27°C se upar hone par 0.2 add karein, aur har 1°C neeche hone par 0.2 subtract karein.</li>
               </ol>
@@ -182,26 +474,138 @@ export const compositionalAnalysisContent = {
               <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
               <p>Kjeldahl method ek sample mein total nitrogen determine karta hai. Protein mein nitrogen ko pehle concentrated sulphuric acid (digestion) use karke ammonium sulphate mein convert kiya jaata hai. Phir, ammonia gas ko release kiya jaata hai (distillation) aur nitrogen ki quantity determine karne ke liye titrate kiya jaata hai. Is nitrogen amount ko crude protein content calculate karne ke liye ek factor (doodh ke liye 6.38) se multiply kiya jaata hai.</p>
 
+              <div class="bg-red-50 border-l-4 border-red-400 p-4 my-4 rounded">
+                <h4 class="font-bold text-red-800 mb-3">🔬 Kjeldahl Method ke Sabhi Factors & Constants ki Complete Explanation:</h4>
+
+                <h5 class="font-semibold mt-3 mb-1 text-red-700">❓ Factor 6.38 kyun? — Sabse Fundamental Sawaal</h5>
+                <p class="my-2">Ye nitrogen-to-protein conversion factor hai. Iska derivation:</p>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li><strong>Milk protein mein average nitrogen content = 15.67%</strong></li>
+                  <li>Matlab: 100 g milk protein mein 15.67 g nitrogen hai</li>
+                  <li>To: <strong>1 g nitrogen = 100 ÷ 15.67 = 6.38 g protein</strong></li>
+                  <li>Isliye: <strong>% Protein = % Nitrogen × 6.38</strong></li>
+                </ul>
+                <p class="my-2 font-semibold">Lekin 15.67% nitrogen kyun? Kyunki milk protein (casein + whey) ka amino acid composition aisa hai ki har 100 g protein mein nitrogen atoms ka total weight 15.67 g aata hai. Har protein ka amino acid composition alag hai, isliye factor bhi alag hota hai:</p>
+                <table class="table-auto border-collapse border border-red-300 mt-2 text-sm w-full my-2">
+                  <thead><tr class="bg-red-100"><th class="border border-red-300 p-2">Product</th><th class="border border-red-300 p-2">N in Protein</th><th class="border border-red-300 p-2">Factor (100/N%)</th><th class="border border-red-300 p-2">Kyun Alag?</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border border-red-300 p-2 font-semibold">Milk & dairy</td><td class="border border-red-300 p-2">15.67%</td><td class="border border-red-300 p-2 font-semibold">6.38</td><td class="border border-red-300 p-2">Casein nitrogen-rich hai</td></tr>
+                    <tr><td class="border border-red-300 p-2">Meat, eggs, general</td><td class="border border-red-300 p-2">16.00%</td><td class="border border-red-300 p-2">6.25</td><td class="border border-red-300 p-2">Average animal protein</td></tr>
+                    <tr><td class="border border-red-300 p-2">Wheat (gluten)</td><td class="border border-red-300 p-2">17.54%</td><td class="border border-red-300 p-2">5.70</td><td class="border border-red-300 p-2">Glutamic acid rich — zyada N%</td></tr>
+                    <tr><td class="border border-red-300 p-2">Soybean</td><td class="border border-red-300 p-2">17.51%</td><td class="border border-red-300 p-2">5.71</td><td class="border border-red-300 p-2">High N amino acids</td></tr>
+                    <tr><td class="border border-red-300 p-2">Rice</td><td class="border border-red-300 p-2">16.95%</td><td class="border border-red-300 p-2">5.95</td><td class="border border-red-300 p-2">Different amino acid profile</td></tr>
+                  </tbody>
+                </table>
+                <p class="text-xs my-1"><strong>Important:</strong> Agar galat factor use karein to protein content galat calculate hoga! Dairy products ke liye HAMESHA 6.38 use karein.</p>
+
+                <h5 class="font-semibold mt-4 mb-1 text-red-700">❓ Formula mein 1.4007 kahan se aaya?</h5>
+                <pre class="bg-white p-2 rounded my-2"><code>% Total Nitrogen = [1.4007 × (V_sample - V_blank) × N_acid] / Weight_sample</code></pre>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li><strong>Nitrogen ka atomic weight = 14.007 g/mol</strong></li>
+                  <li>1 ml of 1N HCl = 1 milli-equivalent = 14.007/1000 g nitrogen = 0.014007 g nitrogen</li>
+                  <li>Percentage ke liye × 100 karna hai: 0.014007 × 100 = <strong>1.4007</strong></li>
+                  <li><strong>Matlab: 1.4007 = Nitrogen ka milliequivalent weight × 100 = (14.007 × 100) / 1000</strong></li>
+                </ul>
+                <div class="bg-white p-3 rounded mt-2 text-sm">
+                  <p><strong>Example:</strong> V_sample = 25 ml, V_blank = 0.5 ml, N_acid = 0.1N, W_sample = 5 g</p>
+                  <p>% N = [1.4007 × (25 - 0.5) × 0.1] / 5 = [1.4007 × 24.5 × 0.1] / 5 = 3.4317 / 5 = <strong>0.686%</strong></p>
+                  <p>% Protein = 0.686 × 6.38 = <strong>4.38%</strong></p>
+                </div>
+
+                <h5 class="font-semibold mt-4 mb-1 text-red-700">❓ V_sample - V_blank kyun? Blank kyun chahiye?</h5>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li><strong>Blank:</strong> Saari reagents (acid, catalyst, NaOH, boric acid) mein bhi trace nitrogen ho sakta hai.</li>
+                  <li>Blank mein saari reagents daalte hain <strong>bina sample ke</strong> — aur poora procedure follow karte hain.</li>
+                  <li>Blank mein jo titre value aata hai wo reagents ki nitrogen hai — ise subtract karna padta hai warna result artificially high aayega.</li>
+                  <li><strong>V_blank usually 0.2-0.5 ml hota hai</strong> — chhota lekin ignore nahi kar sakte.</li>
+                </ul>
+
+                <h5 class="font-semibold mt-4 mb-1 text-red-700">❓ Catalyst mixture — CuSO₄:K₂SO₄ = 1:8 ratio kyun?</h5>
+                <table class="table-auto border-collapse border border-red-300 mt-2 text-sm w-full my-2">
+                  <thead><tr class="bg-red-100"><th class="border border-red-300 p-2">Catalyst</th><th class="border border-red-300 p-2">Kaam</th><th class="border border-red-300 p-2">Kyun Ye Amount</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border border-red-300 p-2">K₂SO₄ (Potassium sulphate) — ZYADA</td><td class="border border-red-300 p-2">H₂SO₄ ka boiling point badhata hai — 337°C se ~400°C+ ho jaata hai</td><td class="border border-red-300 p-2">Zyada K₂SO₄ chahiye BP sufficient raise karne ke liye — zyada temperature par digestion faster aur complete hota hai</td></tr>
+                    <tr><td class="border border-red-300 p-2">CuSO₄ (Copper sulphate) — KAM</td><td class="border border-red-300 p-2">Actual catalyst — oxidation reaction ko speed up karta hai</td><td class="border border-red-300 p-2">Catalyst thoda hi chahiye — zyada CuSO₄ se boric acid mein interference ho sakta hai (colour change affect)</td></tr>
+                  </tbody>
+                </table>
+                <p class="text-xs my-1">Note: Kuch methods mein selenium dioxide bhi catalyst ke roop mein use hota hai — lekin toxic hai aur disposal mushkil hai.</p>
+
+                <h5 class="font-semibold mt-4 mb-1 text-red-700">❓ Digestion mein concentrated H₂SO₄ kyun? Reaction kya hota hai?</h5>
+                <pre class="bg-white p-2 rounded my-2"><code>Organic N + H₂SO₄ → (NH₄)₂SO₄ + CO₂↑ + H₂O
+(Protein)     (conc.)    (Ammonium sulphate)
+
+Step by step:
+1. H₂SO₄ organic matter ko oxidize karta hai (carbon → CO₂, hydrogen → H₂O)
+2. Nitrogen amino groups (-NH₂) se nikal kar NH₃ banta hai
+3. NH₃ + H₂SO₄ → (NH₄)₂SO₄ (solution mein trap ho jaata hai)
+4. Clear blue-green colour = CuSO₄ ka colour = digestion complete</code></pre>
+                <p class="my-1"><strong>25 ml H₂SO₄ kyun:</strong> 5 g milk mein ~0.5 g organic matter hai jise oxidize karna hai — 25 ml sufficient hai excess mein rehne ke liye.</p>
+                <p class="my-1"><strong>Clear blue-green colour ka matlab:</strong> Saara organic carbon CO₂ ban kar ud gaya, sirf CuSO₄ ka blue colour bacha — digestion complete ho gayi.</p>
+
+                <h5 class="font-semibold mt-4 mb-1 text-red-700">❓ NaOH 40% distillation mein kyun? Reaction kya hai?</h5>
+                <pre class="bg-white p-2 rounded my-2"><code>(NH₄)₂SO₄ + 2NaOH → Na₂SO₄ + 2NH₃↑ + 2H₂O</code></pre>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li><strong>40% concentrated kyun:</strong> Excess NaOH ensure karta hai ki SAARA ammonium sulphate convert ho jaye ammonia mein.</li>
+                  <li><strong>Reaction exothermic hai:</strong> Bahut garmi niklti hai — isliye carefully add karein aur immediately distillation start karein warna ammonia loss ho jayega.</li>
+                  <li><strong>Dilute NaOH (10-20%) kyun nahi:</strong> Reaction incomplete rehegi — saari ammonia release nahi hogi — result kam aayega.</li>
+                </ul>
+
+                <h5 class="font-semibold mt-4 mb-1 text-red-700">❓ Boric acid 4% mein ammonia kyun trap karte hain? HCl mein kyun nahi?</h5>
+                <pre class="bg-white p-2 rounded my-2"><code>NH₃ + H₃BO₃ → NH₄H₂BO₃ (ammonium borate — weakly acidic)</code></pre>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li><strong>Boric acid weak acid hai:</strong> Ammonia ko absorb karta hai bina titration ke accuracy affect kiye.</li>
+                  <li><strong>HCl/H₂SO₄ (strong acid) mein kyun nahi trap karte:</strong> Agar strong acid use karein to EXACTLY utna hi acid chahiye jitni ammonia aayegi — agar thoda bhi zyada acid hua to ammonia ki quantity galat measure hogi. Boric acid ke saath ye problem nahi hai kyunki ye itna weak hai ki titrant (HCl) usse easily displace kar leta hai.</li>
+                  <li><strong>4% concentration kyun:</strong> Sufficient ammonia absorb karne ke liye. Zyada concentrated boric acid solution banana mushkil hai (solubility limit ~5% at room temp).</li>
+                </ul>
+
+                <h5 class="font-semibold mt-4 mb-1 text-red-700">❓ Mixed indicator — Methyl Red + Bromocresol Green kyun? Akela indicator kyun nahi?</h5>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li><strong>Akela Methyl Red:</strong> Red → Yellow change — subtle hai, dekhna mushkil hai, especially yellowish boric acid solution mein.</li>
+                  <li><strong>Akela Bromocresol Green:</strong> Yellow → Blue change — bhi subtle hai.</li>
+                  <li><strong>Dono saath milane par:</strong> <span class="font-semibold">Green → Grey → Wine-red/Pink</span> — bahut sharp, clear endpoint! Miss hone ka chance nahi.</li>
+                  <li><strong>Green kyun shuru mein:</strong> Ammonia absorbed hone ke baad boric acid solution alkaline hai — mixed indicator green dikhata hai.</li>
+                  <li><strong>Pink/wine-red endpoint:</strong> Jab HCl se titrate karte hain to pH kam hota hai — indicator green se grey (briefly) se wine-red ho jaata hai.</li>
+                </ul>
+
+                <h5 class="font-semibold mt-4 mb-1 text-red-700">❓ 0.1 N HCl kyun titration mein? 1N ya 0.01N kyun nahi?</h5>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li><strong>0.1N optimal hai:</strong> 5 g milk sample mein ~0.5-0.7% N hai → ~0.025-0.035 g N → ye ~18-25 ml 0.1N HCl ke equivalent hai.</li>
+                  <li><strong>1N (too concentrated):</strong> Sirf 1.8-2.5 ml lagega — itna kam volume accurately measure karna mushkil hai — error zyada hoga.</li>
+                  <li><strong>0.01N (too dilute):</strong> 180-250 ml lagega — burette 50 ml ki hoti hai — baar baar refill karna padega — impractical.</li>
+                  <li><strong>0.1N se 18-25 ml titre aata hai</strong> — ye 50 ml burette mein comfortably fit hota hai aur accuracy bhi achchi rehti hai.</li>
+                </ul>
+
+                <h5 class="font-semibold mt-4 mb-1 text-red-700">❓ "Crude Protein" kyun kehte hain? "True Protein" kyun nahi?</h5>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li><strong>Kjeldahl method TOTAL nitrogen measure karta hai</strong> — sirf protein nitrogen nahi.</li>
+                  <li>Doodh mein non-protein nitrogen (NPN) bhi hota hai — urea, creatinine, uric acid, free amino acids (~5% of total N).</li>
+                  <li>Ye sabhi nitrogen 6.38 se multiply ho jaata hai — isliye result "crude protein" hai, "true protein" nahi.</li>
+                  <li><strong>True protein = Crude protein - (NPN × 6.38)</strong></li>
+                  <li>Normal doodh mein: True protein ≈ 95% of crude protein.</li>
+                  <li><strong>Urea milawat ka khatra:</strong> Urea mein 46.7% nitrogen hai! Agar urea milaya ho to crude protein bahut high aayega — lekin ye fake hai.</li>
+                </ul>
+              </div>
+
               <h4 class="font-semibold mt-4 mb-2">3 Steps of Kjeldahl Method:</h4>
 
               <h4 class="font-semibold mt-2 mb-1">Step 1 — Digestion:</h4>
               <ol class="list-decimal list-outside pl-5 space-y-1">
                 <li>Kjeldahl flask mein ~5 gram doodh weigh karein.</li>
                 <li>25 ml concentrated sulphuric acid aur ek catalyst mixture (copper sulphate + potassium sulphate — ratio 1:8) daalein.</li>
-                <li>Fume hood mein heat karein jab tak solution clear blue-green na ho jaye (2-3 hours lag sakte hain).</li>
+                <li>Fume hood mein heat karein jab tak solution clear blue-green na ho jaye (2-3 hours lag sakte hain). <span class="text-xs text-gray-500">(Initially dark → brown → clear blue-green = complete digestion)</span></li>
                 <li>Ye step saara organic nitrogen ko (NH₄)₂SO₄ mein convert kar deta hai.</li>
               </ol>
 
               <h4 class="font-semibold mt-2 mb-1">Step 2 — Distillation:</h4>
               <ol class="list-decimal list-outside pl-5 space-y-1">
-                <li>Digestate ko cool karein, paani se dilute karein.</li>
+                <li>Digestate ko cool karein, ~200 ml paani se dilute karein. <span class="text-xs text-gray-500">(Dilution zaroori hai — concentrated acid + NaOH ka reaction bahut violent hoga)</span></li>
                 <li>Excess NaOH (40%) daalein — ye ammonium sulphate ko ammonia gas mein convert karta hai.</li>
-                <li>Released ammonia ko steam-distill karein ek known amount standard acid mein (4% boric acid with mixed indicator — methyl red + bromocresol green).</li>
+                <li>Released ammonia ko steam-distill karein ek known amount standard acid mein (4% boric acid with mixed indicator — methyl red + bromocresol green). <span class="text-xs text-gray-500">(Condenser ka tip boric acid mein dooba rehna chahiye — warna NH₃ gas escape kar jayegi)</span></li>
               </ol>
 
               <h4 class="font-semibold mt-2 mb-1">Step 3 — Titration:</h4>
               <ol class="list-decimal list-outside pl-5 space-y-1">
-                <li>Trapped ammonia ko 0.1 N HCl se titrate karein jab tak indicator colour change na ho jaye (green se pink).</li>
+                <li>Trapped ammonia ko 0.1 N HCl se titrate karein jab tak indicator colour change na ho jaye (green se wine-red/pink). <span class="text-xs text-gray-500">(Slowly add karein endpoint ke paas — drop by drop)</span></li>
                 <li>Ek blank determination bhi kiya jaata hai (bina sample ke saari reagents ke saath).</li>
               </ol>
 
@@ -221,6 +625,57 @@ export const compositionalAnalysisContent = {
               <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
               <p>Casein ko doodh se iski isoelectric point (pH 4.6) par acetic acid use karke precipitate kiya jaata hai. Whey proteins filtrate mein rehte hain. Casein precipitate ki nitrogen content ko phir Kjeldahl method dwara determine kiya jaata hai. Casein doodh ka ~80% protein hota hai.</p>
 
+              <div class="bg-teal-50 border-l-4 border-teal-400 p-4 my-4 rounded">
+                <h4 class="font-bold text-teal-800 mb-3">🔬 Casein Precipitation ke Factors ki Scientific Explanation:</h4>
+
+                <h5 class="font-semibold mt-3 mb-1 text-teal-700">❓ pH 4.6 — ye specific number kyun? Isoelectric Point kya hai?</h5>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li><strong>Isoelectric Point (pI):</strong> Wo pH jahaan protein ka <strong>net electrical charge ZERO</strong> hota hai.</li>
+                  <li><strong>pH > 4.6:</strong> Casein par <strong>negative charge</strong> hota hai → proteins ek doosre ko repel karte hain → <strong>soluble</strong> rehte hain (calcium caseinate ke roop mein doodh mein exist karte hain).</li>
+                  <li><strong>pH < 4.6:</strong> Casein par <strong>positive charge</strong> hota hai → phir se soluble ho jaata hai (acid casein).</li>
+                  <li><strong>pH = 4.6 (Exactly):</strong> <strong>Zero charge</strong> → proteins ek doosre ko attract karte hain → <strong>aggregate/clump</strong> ban kar <strong>precipitate</strong> ho jaata hai!</li>
+                  <li><strong>4.6 kyun ye specific number:</strong> Casein ke amino acid composition mein acidic (glutamic, aspartic) aur basic (lysine, arginine, histidine) residues ka balance aise hai ki pH 4.6 par positive aur negative charges exactly cancel ho jaate hain. Ye experimentally determined value hai.</li>
+                </ul>
+
+                <h5 class="font-semibold mt-3 mb-1 text-teal-700">❓ Acetic acid kyun? HCl kyun nahi?</h5>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li><strong>Acetic acid WEAK acid hai</strong> — pH dheere-dheere kam karta hai — controlled precipitation hoti hai.</li>
+                  <li><strong>HCl STRONG acid hai</strong> — ek drop mein pH bahut jaldi girta hai — <strong>overshoot</strong> ho sakta hai (pH 4.6 se neeche chala jayega).</li>
+                  <li>pH 4.6 se neeche jaane par casein partially re-dissolve ho jayega — result kam aayega!</li>
+                  <li><strong>10% acetic acid ka 1.5 ml:</strong> Ye carefully calculated hai ki 10 g milk (pH ~6.7) ko pH 4.6 tak lane ke liye approximately itna sufficient hai.</li>
+                  <li><strong>Drop by drop kyun daalte hain:</strong> Taaki pH gradually kam ho aur exactly 4.6 par rok sakein — overshoot na ho.</li>
+                </ul>
+
+                <h5 class="font-semibold mt-3 mb-1 text-teal-700">❓ 40-42°C temperature kyun? Room temperature par kyun nahi?</h5>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li><strong>40-42°C par casein ki structure thodi loosen hoti hai</strong> — protein unfolding better hota hai → aggregation faster aur more complete hoti hai.</li>
+                  <li><strong>Room temperature (~25°C) par:</strong> Precipitation slow aur incomplete hota hai — kuch casein solution mein reh jaata hai — result kam aayega.</li>
+                  <li><strong>50°C+ par:</strong> Whey proteins bhi denature hone lagti hain aur casein ke saath co-precipitate ho sakti hain — result zyada aayega (contamination).</li>
+                  <li><strong>40-42°C = Sweet spot:</strong> Casein fully precipitate, whey proteins solution mein — clean separation.</li>
+                </ul>
+
+                <h5 class="font-semibold mt-3 mb-1 text-teal-700">❓ 90 ml distilled water kyun daalte hain (10 g milk ko dilute karte hain)?</h5>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li>Dilution se casein precipitation <strong>better</strong> hoti hai — concentrated milk mein fat globules aur proteins ek doosre ko interfere karte hain.</li>
+                  <li>Dilute milk mein acid uniformly mix hota hai — <strong>local pH extremes</strong> nahi bante.</li>
+                  <li>Washing (filtering ke baad) bhi easy hoti hai dilute mein.</li>
+                </ul>
+
+                <h5 class="font-semibold mt-3 mb-1 text-teal-700">❓ 10 minute standing kyun? Supernatant clear kyun hona chahiye?</h5>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li><strong>10 minute:</strong> Casein clumps ko settle hone ka time chahiye — gravity se neeche jaate hain.</li>
+                  <li><strong>Clear supernatant:</strong> Agar supernatant milky/turbid hai to casein abhi fully precipitate nahi hua — thoda aur acetic acid chahiye ya zyada time dein.</li>
+                  <li><strong>Clear = whey:</strong> Whey proteins (alpha-lactalbumin, beta-lactoglobulin) solution mein rehte hain — ye precipitate nahi hone chahiye.</li>
+                </ul>
+
+                <h5 class="font-semibold mt-3 mb-1 text-teal-700">❓ Washing kyun zaroori hai filter paper par?</h5>
+                <p class="my-1">Casein precipitate ke saath whey protein ka thoda solution trapped hota hai. Thande paani se wash karne se ye whey protein nikal jaata hai — sirf casein rehta hai. Agar wash nahi karein to result overestimated aayega (whey protein bhi count hoga).</p>
+
+                <h5 class="font-semibold mt-3 mb-1 text-teal-700">❓ Calculation mein 6.38 same kyun use hota hai?</h5>
+                <pre class="bg-white p-2 rounded my-2"><code>% Casein = % Nitrogen in precipitate × 6.38</code></pre>
+                <p class="my-1">Casein ka nitrogen content bhi ~15.67% hai (milk protein average ke similar) — isliye same factor 6.38 use hota hai. Actually casein ka exact factor 6.40 hai lekin conventionally 6.38 hi use karte hain dairy industry mein.</p>
+              </div>
+
               <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
               <ol class="list-decimal list-outside pl-5 space-y-2">
                 <li>250 ml beaker mein 10 gram doodh weigh karein. 40-42°C par 90 ml distilled water daalein.</li>
@@ -234,7 +689,7 @@ export const compositionalAnalysisContent = {
               <pre><code>% Casein = Precipitate mein % Nitrogen × 6.38</code></pre>
 
               <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
-              <p>Cow milk casein: ~2.5%, Buffalo milk casein: ~3.0-3.5%</p>
+              <p>Cow milk casein: ~2.5%, Buffalo milk casein: ~3.0-3.5%. Casein = ~80% of total protein.</p>
             `
           },
           {
@@ -244,6 +699,86 @@ export const compositionalAnalysisContent = {
             procedure: `
               <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
               <p>Lactose ek reducing sugar hai jo Fehling's solution (copper sulphate + alkaline tartrate) ko reduce kar sakta hai. Fehling's solution ka known volume liya jaata hai aur doodh ke clarified solution se titrate kiya jaata hai jab tak saara copper reduce na ho jaye. Methylene blue indicator ka use endpoint detect karne ke liye hota hai — colour blue se colourless ho jaata hai.</p>
+
+              <div class="bg-amber-50 border-l-4 border-amber-400 p-4 my-4 rounded">
+                <h4 class="font-bold text-amber-800 mb-3">🔬 Lane-Eynon Method ke Sabhi Factors ki Scientific Explanation:</h4>
+
+                <h5 class="font-semibold mt-3 mb-1 text-amber-700">❓ Fehling's Solution kya hai? A aur B alag kyun hote hain?</h5>
+                <table class="table-auto border-collapse border border-amber-300 mt-2 text-sm w-full my-2">
+                  <thead><tr class="bg-amber-100"><th class="border border-amber-300 p-2">Solution</th><th class="border border-amber-300 p-2">Composition</th><th class="border border-amber-300 p-2">Kaam</th><th class="border border-amber-300 p-2">Alag kyun rakhte hain?</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border border-amber-300 p-2">Fehling's A</td><td class="border border-amber-300 p-2">CuSO₄ · 5H₂O — 69.28 g per litre</td><td class="border border-amber-300 p-2">Cu²⁺ ions provide karta hai — ye reduce honge</td><td class="border border-amber-300 p-2" rowspan="2">Agar dono ek saath mix karke rakhein to dhire-dhire Cu(OH)₂ precipitate ban jayega — solution kharab ho jayega. Alag rakhne se dono stable rehte hain — use karne se pehle mix karo.</td></tr>
+                    <tr><td class="border border-amber-300 p-2">Fehling's B</td><td class="border border-amber-300 p-2">Sodium potassium tartrate (Rochelle salt) — 346 g/L + NaOH — 100 g/L</td><td class="border border-amber-300 p-2">Tartrate Cu²⁺ ko chelate karke solution mein soluble rakhta hai; NaOH alkaline medium deta hai</td></tr>
+                  </tbody>
+                </table>
+
+                <h5 class="font-semibold mt-3 mb-1 text-amber-700">❓ Core reaction kya hoti hai?</h5>
+                <pre class="bg-white p-2 rounded my-2"><code>Lactose (reducing sugar) + 2Cu²⁺ (blue) + NaOH → Lactobionic acid + Cu₂O↓ (brick red)
+
+Step by step:
+1. Lactose ka aldehyde group Cu²⁺ ko reduce karta hai → Cu⁺ banta hai
+2. Cu⁺ alkaline medium mein Cu₂O (cuprous oxide) banata hai → BRICK RED precipitate
+3. Blue colour (Cu²⁺) → disappear → brick red (Cu₂O)</code></pre>
+
+                <h5 class="font-semibold mt-3 mb-1 text-amber-700">❓ Lead acetate se protein precipitation kyun?</h5>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li><strong>Proteins aur fat interfere karte hain:</strong> Ye Fehling's solution ke saath react kar sakte hain ya turbidity create karte hain — endpoint dekhna mushkil hoga.</li>
+                  <li><strong>Lead acetate kaise kaam karta hai:</strong> Pb²⁺ ions proteins ke saath insoluble lead-protein complex banate hain → precipitate → filter out.</li>
+                  <li><strong>Excess lead hataana (oxalate se) kyun zaroori:</strong> Lead ions bhi reducing agent ki tarah kaam kar sakte hain — Fehling's solution ko reduce kar sakte hain — <strong>false high result</strong> aayega. Potassium/sodium oxalate lead ko insoluble lead oxalate (PbC₂O₄) bana kar hata deta hai.</li>
+                </ul>
+
+                <h5 class="font-semibold mt-3 mb-1 text-amber-700">❓ 10 ml Fehling's A + 10 ml Fehling's B — kyun equal volumes?</h5>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li>Equal mixing se <strong>correct Cu²⁺ to tartrate ratio</strong> banta hai — copper puri tarah chelated rehta hai.</li>
+                  <li>Agar A zyada daalein: Excess Cu²⁺ precipitate ho jayega — unreacted copper — galat endpoint.</li>
+                  <li>Agar B zyada daalein: Solution zyada alkaline hoga — side reactions badh jayengi.</li>
+                  <li><strong>10 ml standard hai</strong> — isse known amount Cu²⁺ milta hai jiska lactose equivalent table mein diya hota hai.</li>
+                </ul>
+
+                <h5 class="font-semibold mt-3 mb-1 text-amber-700">❓ Methylene Blue indicator kyun? Ye kaise kaam karta hai?</h5>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li><strong>Problem:</strong> Solution already brick red (Cu₂O) ho rahi hai — endpoint dekhna mushkil hai.</li>
+                  <li><strong>Solution:</strong> Methylene blue ek <strong>redox indicator</strong> hai — ye Cu²⁺ se ZYADA easily reduce hota hai.</li>
+                  <li><strong>Kaise kaam karta hai:</strong>
+                    <ul class="list-disc list-outside pl-5 mt-1">
+                      <li>Jab tak Cu²⁺ bacha hai → Methylene blue oxidized (blue) rehta hai</li>
+                      <li>Jab SAARA Cu²⁺ reduce ho jaata hai → extra lactose methylene blue ko reduce karta hai → <strong>colourless (leuco form)</strong></li>
+                    </ul>
+                  </li>
+                  <li><strong>Endpoint:</strong> Blue → colourless (brick red background par — clearly dikhta hai)</li>
+                  <li><strong>2-3 drops hi kyun:</strong> Indicator ki zyada matra extra lactose consume karegi — result galat aayega.</li>
+                  <li><strong>End ke paas kyun daalte hain (pehle nahi):</strong> Agar shuru mein daalein to boiling ke dauran methylene blue decompose ho sakta hai — endpoint miss ho jayega.</li>
+                </ul>
+
+                <h5 class="font-semibold mt-3 mb-1 text-amber-700">❓ Boiling karte hue titrate kyun karna padta hai?</h5>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li>Lactose aur Cu²⁺ ki reaction <strong>sirf high temperature par fast hoti hai</strong> — room temperature par bahut slow hai.</li>
+                  <li>Boiling ensure karta hai ki reaction <strong>immediately aur completely</strong> hoti hai — har drop ke baad.</li>
+                  <li><strong>Boiling rok kar titrate nahi kar sakte</strong> — cooling hone par reaction ruk jayegi aur endpoint galat aayega.</li>
+                </ul>
+
+                <h5 class="font-semibold mt-3 mb-1 text-amber-700">❓ Lane-Eynon Table kyun use hoti hai? Direct calculation kyun nahi?</h5>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li><strong>Problem:</strong> Lactose aur Fehling's solution ka reaction <strong>exactly stoichiometric nahi hai</strong> — matlab fixed ratio mein react nahi karte. Titre value ke saath ratio slightly change hota hai.</li>
+                  <li><strong>Solution:</strong> Scientists ne experimentally determine kiya ki different titre values par kitna lactose (mg) 10 ml Fehling's A + 10 ml Fehling's B ko reduce karta hai — ye data table mein hai.</li>
+                  <li><strong>Example:</strong> Agar titre value 15.5 ml hai → table se dekhein → suppose factor = 67.2 mg lactose.</li>
+                  <li>Ye table <strong>internationally standardized</strong> hai — har lab mein same table use hoti hai.</li>
+                </ul>
+
+                <h5 class="font-semibold mt-3 mb-1 text-amber-700">❓ Dilution factor (25 ml → 250 ml = 10× dilution) — calculation mein kaise use hota hai?</h5>
+                <pre class="bg-white p-2 rounded my-2"><code>% Lactose = (Factor from table × Total dilution volume) / (Titre value × Aliquot × Sample weight) × 100
+
+Example:
+Sample = 25 ml milk, diluted to 250 ml (10× dilution)
+Factor = 67.2 mg (from table for titre value)
+Titre = 15.5 ml
+
+Lactose in 250 ml solution = 67.2 mg per 15.5 ml used
+Lactose per ml = 67.2 / 15.5 = 4.335 mg/ml
+Total in 250 ml = 4.335 × 250 = 1083.87 mg = 1.084 g
+This came from 25 ml milk
+Per 100 ml = (1.084 / 25) × 100 = 4.34% lactose</code></pre>
+              </div>
 
               <h4 class="font-semibold mt-4 mb-2">Sample Preparation:</h4>
               <ol class="list-decimal list-outside pl-5 space-y-2">
@@ -264,10 +799,6 @@ export const compositionalAnalysisContent = {
                 <li>Titre value note karein.</li>
               </ol>
 
-              <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
-              <pre><code>Lactose (mg) = Factor from Lane-Eynon table corresponding to titre value</code></pre>
-              <pre><code>% Lactose = (Factor × Dilution) / (Titre × Sample weight) × 100</code></pre>
-
               <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
               <p>Normal milk lactose: 4.5-5.0%</p>
             `
@@ -280,9 +811,77 @@ export const compositionalAnalysisContent = {
               <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
               <p>Doodh ki total acidity ko ek standard alkali solution (NaOH) ke saath titrate karke measure kiya jaata hai. Phenolphthalein indicator colour change (colourless se pink) endpoint indicate karta hai. Fresh doodh ki natural acidity ~0.12-0.14% hoti hai (casein, phosphates, CO₂ se). Bacterial growth se lactic acid banta hai jo acidity badhata hai.</p>
 
+              <div class="bg-pink-50 border-l-4 border-pink-400 p-4 my-4 rounded">
+                <h4 class="font-bold text-pink-800 mb-3">🔬 Acidity Formula ke Factor "9" ki Complete Derivation:</h4>
+
+                <h5 class="font-semibold mt-3 mb-1 text-pink-700">❓ Formula mein "9" kahan se aaya? — Step by Step Derivation</h5>
+                <pre class="bg-white p-2 rounded my-2"><code>% Acidity (as lactic acid) = (9 × V × N) / W</code></pre>
+
+                <p class="font-semibold my-2">Derivation:</p>
+                <ol class="list-decimal list-outside pl-5 space-y-1 my-2">
+                  <li><strong>Lactic acid ka formula:</strong> CH₃CHOHCOOH</li>
+                  <li><strong>Molecular weight:</strong> C₃H₆O₃ = (3×12) + (6×1) + (3×16) = 36 + 6 + 48 = <strong>90 g/mol</strong></li>
+                  <li><strong>Lactic acid monoprotic hai</strong> (ek -COOH group hai) → <strong>Equivalent weight = Molecular weight = 90 g/eq</strong></li>
+                  <li><strong>1 ml of 1N NaOH</strong> = 1 milliequivalent = neutralizes 1 milliequivalent acid = <strong>90/1000 g lactic acid = 0.090 g</strong></li>
+                  <li><strong>V ml of N normality NaOH</strong> = V × N milliequivalents = neutralizes <strong>V × N × 0.090 g</strong> lactic acid</li>
+                  <li><strong>Percentage calculation:</strong></li>
+                </ol>
+                <pre class="bg-white p-2 rounded my-2"><code>% Acidity = (V × N × 0.090 / W) × 100
+           = (V × N × 90) / (W × 1000) × 100
+           = (V × N × 90 × 100) / (W × 1000)
+           = (V × N × 9) / W
+
+Factor 9 = Equivalent weight (90) × 100 / 1000 = 90/10 = 9</code></pre>
+
+                <div class="bg-white p-3 rounded mt-2 text-sm">
+                  <p><strong>Example:</strong> V = 1.5 ml, N = 0.1, W = 10 g</p>
+                  <p>% Acidity = (9 × 1.5 × 0.1) / 10 = 1.35 / 10 = <strong>0.135%</strong> (normal range mein hai ✅)</p>
+                </div>
+
+                <h5 class="font-semibold mt-4 mb-1 text-pink-700">❓ Agar acidity doosre acid ke terms mein express karni ho to factor kya hoga?</h5>
+                <table class="table-auto border-collapse border border-pink-300 mt-2 text-sm w-full my-2">
+                  <thead><tr class="bg-pink-100"><th class="border border-pink-300 p-2">Acid</th><th class="border border-pink-300 p-2">Molecular Wt</th><th class="border border-pink-300 p-2">Eq. Wt</th><th class="border border-pink-300 p-2">Factor (Eq.Wt × 100/1000)</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border border-pink-300 p-2 font-semibold">Lactic acid (dairy standard)</td><td class="border border-pink-300 p-2">90</td><td class="border border-pink-300 p-2">90 (monoprotic)</td><td class="border border-pink-300 p-2 font-semibold">9.0</td></tr>
+                    <tr><td class="border border-pink-300 p-2">Citric acid</td><td class="border border-pink-300 p-2">192</td><td class="border border-pink-300 p-2">64 (triprotic)</td><td class="border border-pink-300 p-2">6.4</td></tr>
+                    <tr><td class="border border-pink-300 p-2">Oleic acid</td><td class="border border-pink-300 p-2">282</td><td class="border border-pink-300 p-2">282 (monoprotic)</td><td class="border border-pink-300 p-2">28.2</td></tr>
+                    <tr><td class="border border-pink-300 p-2">Sulphuric acid</td><td class="border border-pink-300 p-2">98</td><td class="border border-pink-300 p-2">49 (diprotic)</td><td class="border border-pink-300 p-2">4.9</td></tr>
+                  </tbody>
+                </table>
+                <p class="text-xs my-1">Dairy mein hamesha lactic acid ke terms mein express karte hain (factor = 9) kyunki bacteria lactose se lactic acid banate hain — developed acidity ka source lactic acid hai.</p>
+
+                <h5 class="font-semibold mt-4 mb-1 text-pink-700">❓ 0.1 N NaOH kyun? Concentration important kyun hai?</h5>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li><strong>Doodh ki acidity bahut kam hai</strong> (~0.12-0.15%) — 10 g sample mein sirf ~0.012-0.015 g lactic acid hai.</li>
+                  <li><strong>0.1N NaOH se:</strong> ~1.3-1.7 ml titre aata hai — accurately measure ho sakta hai burette se.</li>
+                  <li><strong>1N NaOH se:</strong> Sirf ~0.13-0.17 ml lagega — itna kam volume accurately measure karna bahut mushkil hai — ek drop ka error bhi significant hoga.</li>
+                  <li><strong>0.01N NaOH se:</strong> ~13-17 ml lagega — ye practical hai lekin dilute NaOH jaldi kharab (CO₂ absorb karke) ho jaata hai.</li>
+                </ul>
+
+                <h5 class="font-semibold mt-4 mb-1 text-pink-700">❓ Phenolphthalein indicator kyun? Endpoint ka pink colour kya represent karta hai?</h5>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li><strong>Phenolphthalein ka colour change range:</strong> pH 8.2-10.0 → colourless to pink.</li>
+                  <li><strong>Doodh naturally buffered hai</strong> (pH ~6.7) — jab NaOH add karte hain to pH dheere-dheere badhta hai.</li>
+                  <li><strong>Jab pH ~8.3 pahunchta hai:</strong> Phenolphthalein pink ho jaata hai — matlab saara acid (lactic acid + natural acidity) neutralize ho chuka hai.</li>
+                  <li><strong>15 seconds tak pink rehna chahiye:</strong> Kyunki CO₂ dissolved hone se temporary pink aa kar gayab ho sakta hai — stable pink = true endpoint.</li>
+                  <li><strong>Phenolphthalein kyun, methyl orange nahi:</strong> Methyl orange ka range pH 3.1-4.4 hai — doodh ka starting pH 6.7 hai — methyl orange pehle se hi ek colour mein hoga — kaam nahi karega.</li>
+                </ul>
+
+                <h5 class="font-semibold mt-4 mb-1 text-pink-700">❓ Doodh ki "Natural Acidity" vs "Developed Acidity" kya hai?</h5>
+                <table class="table-auto border-collapse border border-pink-300 mt-2 text-sm w-full my-2">
+                  <thead><tr class="bg-pink-100"><th class="border border-pink-300 p-2">Type</th><th class="border border-pink-300 p-2">Source</th><th class="border border-pink-300 p-2">Amount</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border border-pink-300 p-2"><strong>Natural Acidity</strong></td><td class="border border-pink-300 p-2">Casein (~0.05-0.08%), Phosphates (~0.03%), CO₂ (~0.01%), Citrates, Whey proteins</td><td class="border border-pink-300 p-2">~0.12-0.16%</td></tr>
+                    <tr><td class="border border-pink-300 p-2"><strong>Developed Acidity</strong></td><td class="border border-pink-300 p-2">Lactic acid (bacteria ne lactose se banaya)</td><td class="border border-pink-300 p-2">0% (fresh) se badhta jaata hai</td></tr>
+                    <tr><td class="border border-pink-300 p-2 font-semibold"><strong>Titratable Acidity</strong></td><td class="border border-pink-300 p-2 font-semibold">Natural + Developed</td><td class="border border-pink-300 p-2 font-semibold">Total jo NaOH se titrate hota hai</td></tr>
+                  </tbody>
+                </table>
+                <p class="text-xs my-1"><strong>Developed acidity = Titratable acidity - Natural acidity.</strong> Agar titratable acidity 0.18% hai aur natural acidity ~0.14% hai to developed acidity = 0.04% — bacteria ne itna lactic acid banaya.</p>
+              </div>
+
               <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
               <ol class="list-decimal list-outside pl-5 space-y-2">
-                <li>Ek porcelain dish ya conical flask mein 10 ml doodh ka sample lein (ya 10 gram weigh karein).</li>
+                <li>Ek porcelain dish ya conical flask mein 10 ml doodh ka sample lein (ya 10 gram weigh karein). <span class="text-xs text-gray-500">(Porcelain dish isliye kyunki white background par pink colour clearly dikhta hai)</span></li>
                 <li>1% phenolphthalein solution ki kuch boondein daalein (3-4 drops).</li>
                 <li>0.1 N NaOH solution se burette se titrate karein.</li>
                 <li>Jab ek halka pink colour dikhaye (endpoint) — jo 15 seconds tak rehna chahiye — tab titration band kar dein.</li>
@@ -291,7 +890,6 @@ export const compositionalAnalysisContent = {
 
               <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
               <pre><code>% Acidity (as lactic acid) = (9 × V × N) / W</code></pre>
-              <p class="text-xs">Jahaan V = NaOH ki volume (ml), N = NaOH ki normality, W = doodh ke sample ka weight (gram). Factor 9 isliye kyunki lactic acid ka equivalent weight 90 hai aur % ke liye 100 se multiply karna hai — 90/1000 × 100 = 9.</p>
 
               <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
               <p>Fresh cow milk: 0.12-0.14%, Fresh buffalo milk: 0.12-0.15%. FSSAI maximum limit: 0.15% (as lactic acid) for mixed milk.</p>
@@ -304,6 +902,49 @@ export const compositionalAnalysisContent = {
             procedure: `
               <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
               <p>Doodh ke sample ko tab tak incinerate (burn) kiya jaata hai jab tak saara organic matter destroy na ho jaye, jisse sirf inorganic minerals (ash) reh jaate hain. Ash mein calcium, phosphorus, sodium, potassium, magnesium, chloride etc. included hote hain.</p>
+
+              <div class="bg-gray-100 border-l-4 border-gray-400 p-4 my-4 rounded">
+                <h4 class="font-bold text-gray-800 mb-3">🔬 Ash Determination ke Factors ki Scientific Explanation:</h4>
+
+                <h5 class="font-semibold mt-3 mb-1 text-gray-700">❓ 550°C kyun? Kam ya zyada kyun nahi?</h5>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li><strong>< 500°C:</strong> Organic matter (carbon) puri tarah burn nahi hoga — <strong>black/dark grey ash</strong> aayegi — result overestimated (carbon bhi weigh hoga).</li>
+                  <li><strong>> 600°C:</strong> Kuch minerals volatile ho jaate hain — NaCl ~800°C par sublimate hota hai, lekin loss 600°C+ par start ho sakta hai. Potassium chloride bhi volatile hai. Carbonates decompose ho sakte hain (CaCO₃ → CaO + CO₂ at ~840°C lekin partial loss earlier hota hai).</li>
+                  <li><strong>550°C = Standard temperature:</strong> Saara organic carbon completely burn hota hai (CO₂ ban kar ud jaata hai) + saare minerals intact rehte hain.</li>
+                  <li><strong>White/light grey ash = complete ashing.</strong> Black spots = incomplete — aur time chahiye.</li>
+                </ul>
+
+                <h5 class="font-semibold mt-3 mb-1 text-gray-700">❓ 6-8 hours muffle furnace mein kyun?</h5>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li>Doodh ke solids mein fat + protein + lactose — in sab ko completely oxidize hona chahiye.</li>
+                  <li><strong>Fat slowly burn hota hai</strong> — especially charred fat ka carbon mushkil se hatta hai.</li>
+                  <li>6-8 hours mein typically complete ashing ho jaata hai. Agar ash abhi bhi dark hai to overnight rakhein.</li>
+                  <li><strong>Tip:</strong> Bhi add HNO₃ ki kuch drops agar carbon nahi hatt raha — ye oxidizing agent hai aur carbon ko CO₂ mein convert karta hai.</li>
+                </ul>
+
+                <h5 class="font-semibold mt-3 mb-1 text-gray-700">❓ Silica ya Platinum crucible kyun? Glass kyun nahi?</h5>
+                <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                  <li><strong>Glass:</strong> 550°C par melt/deform ho jayega — glass ka softening point ~500-600°C hai.</li>
+                  <li><strong>Silica (quartz):</strong> Melting point ~1700°C — 550°C par bilkul safe. Sasta hai. Commonly used.</li>
+                  <li><strong>Platinum:</strong> Melting point ~1768°C — sabse best, inert, non-reactive. Lekin bahut <strong>mehnga</strong> hai — special research labs mein use hota hai.</li>
+                  <li><strong>Porcelain:</strong> Bhi use hota hai — melting point ~1400°C — lekin absorb kar sakta hai kuch components — less accurate.</li>
+                </ul>
+
+                <h5 class="font-semibold mt-3 mb-1 text-gray-700">❓ Water bath → Hot plate → Muffle furnace — ye 3-step process kyun?</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-1 my-2">
+                  <li><strong>Water bath (100°C):</strong> Paani hataata hai — agar seedha muffle furnace mein rakhein to paani rapidly boil hoga aur sample <strong>splatter</strong> (udh) hoga — loss of material.</li>
+                  <li><strong>Hot plate (~200-300°C):</strong> Charring — organic matter partially burn hota hai. Ye smoke release karta hai. Muffle furnace mein seedha daalenge to smoke furnace ko damage karega.</li>
+                  <li><strong>Muffle furnace (550°C):</strong> Final complete ashing — remaining carbon CO₂ ban kar ud jaata hai. Clean, smoke-free combustion.</li>
+                </ol>
+
+                <h5 class="font-semibold mt-3 mb-1 text-gray-700">❓ Formula explanation:</h5>
+                <pre class="bg-white p-2 rounded my-2"><code>% Total Ash = [(W2 - W1) / Sample weight] × 100
+
+W1 = Empty crucible weight
+W2 = Crucible + ash weight (after ashing)
+W2 - W1 = Ash weight only
+Sample weight = original milk weight taken</code></pre>
+              </div>
 
               <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
               <ol class="list-decimal list-outside pl-5 space-y-2">
@@ -348,6 +989,97 @@ export const compositionalAnalysisContent = {
                 <li>Standard solutions ki intensity measure karein aur calibration curve banayein.</li>
                 <li>Unknown sample ki flame intensity measure karein aur calibration curve se concentration find karein.</li>
               </ol>
+
+              <div class="bg-cyan-50 border-l-4 border-cyan-400 p-4 mt-4 rounded">
+                <h4 class="font-bold text-cyan-800 mb-3">🔬 Factors & Constants ki Scientific Explanation:</h4>
+
+                <h5 class="font-semibold text-cyan-700 mt-3 mb-1">❓ Specific Wavelengths kyun — Na 589 nm, K 766 nm, Ca 622 nm?</h5>
+                <p class="text-sm mb-2">Har element ke <strong>electrons ka energy level unique</strong> hota hai (quantum mechanics). Jab atom flame mein excite hota hai:</p>
+                <pre class="bg-white p-2 rounded text-sm"><code>Step 1: Flame ki heat → electron ground state se excited state mein jaata hai
+Step 2: Electron wapas ground state mein aata hai
+Step 3: Energy difference = specific wavelength ki light emit hoti hai
+
+ΔE = hν = hc/λ
+Jahaan: h = Planck's constant, c = speed of light, λ = wavelength
+
+Har element ka ΔE different → λ different → colour different</code></pre>
+                <table class="table-auto border-collapse border border-cyan-300 mt-2 mb-3 text-sm w-full">
+                  <thead><tr class="bg-cyan-100"><th class="border border-cyan-300 p-2">Element</th><th class="border border-cyan-300 p-2">Wavelength</th><th class="border border-cyan-300 p-2">Colour</th><th class="border border-cyan-300 p-2">Electron Transition</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border border-cyan-300 p-2"><strong>Sodium (Na)</strong></td><td class="border border-cyan-300 p-2">589 nm (D-line)</td><td class="border border-cyan-300 p-2">Bright Yellow</td><td class="border border-cyan-300 p-2">3p → 3s transition. Ye sabse famous flame colour hai — namak jalane par yellow flame dikhti hai</td></tr>
+                    <tr><td class="border border-cyan-300 p-2"><strong>Potassium (K)</strong></td><td class="border border-cyan-300 p-2">766 nm</td><td class="border border-cyan-300 p-2">Violet/Lilac</td><td class="border border-cyan-300 p-2">4p → 4s transition. K ki electron configuration Na se different hai → different energy gap → different λ</td></tr>
+                    <tr><td class="border border-cyan-300 p-2"><strong>Calcium (Ca)</strong></td><td class="border border-cyan-300 p-2">622 nm</td><td class="border border-cyan-300 p-2">Red-Orange</td><td class="border border-cyan-300 p-2">CaOH molecular emission band. Ca diatomic molecules banata hai flame mein</td></tr>
+                  </tbody>
+                </table>
+                <p class="text-sm"><strong>Ye wavelengths "fingerprint" hain:</strong> Har element ki unique identification — isi principle par atomic spectroscopy kaam karta hai.</p>
+
+                <h5 class="font-semibold text-cyan-700 mt-4 mb-1">❓ Interpolation Formula kaise kaam karta hai?</h5>
+                <pre class="bg-white p-2 rounded text-sm"><code>C_x = C₁ + (C₂ - C₁) × (I_x - I₁) / (I₂ - I₁)
+
+Ye LINEAR INTERPOLATION hai:
+• C₁, C₂ = known standard concentrations (lower & upper)
+• I₁, I₂ = corresponding intensities (measured)
+• I_x = unknown sample ki intensity (measured)
+• C_x = unknown concentration (FIND karna hai)
+
+Assumption: C₁ aur C₂ ke beech relationship LINEAR hai
+(concentration ↑ → intensity ↑ proportionally)</code></pre>
+                <p class="text-sm mt-2"><strong>Example:</strong></p>
+                <pre class="bg-white p-2 rounded text-sm"><code>Standard 1: Na = 10 ppm, Intensity = 25
+Standard 2: Na = 20 ppm, Intensity = 50
+Sample: Intensity = 35
+
+C_x = 10 + (20-10) × (35-25) / (50-25)
+    = 10 + 10 × 10/25
+    = 10 + 4
+    = 14 ppm Na</code></pre>
+
+                <h5 class="font-semibold text-cyan-700 mt-4 mb-1">❓ Beer-Lambert Law — flame photometry ka scientific basis</h5>
+                <pre class="bg-white p-2 rounded text-sm"><code>Emission Intensity ∝ Concentration (dilute solutions mein)
+
+I = k × C
+Jahaan: I = emitted light intensity
+        k = proportionality constant (instrument + element dependent)
+        C = concentration
+
+Isliye calibration curve banana padta hai — k find karne ke liye</code></pre>
+
+                <h5 class="font-semibold text-cyan-700 mt-4 mb-1">❓ 1:1 HCl se ash extract kyun karte hain?</h5>
+                <p class="text-sm">Ashing ke baad minerals <strong>oxides aur carbonates</strong> ke form mein hote hain (jaise CaO, Na₂CO₃). Ye paani mein insoluble ya poorly soluble hain. HCl inhe <strong>soluble chlorides</strong> mein convert karta hai:</p>
+                <pre class="bg-white p-2 rounded text-sm"><code>CaO + 2HCl → CaCl₂ (soluble) + H₂O
+Na₂CO₃ + 2HCl → 2NaCl (soluble) + H₂O + CO₂↑</code></pre>
+                <p class="text-sm mt-1"><strong>1:1 HCl:</strong> Concentrated HCl (37%) ko equal volume paani mein mix kiya → ~18.5% HCl. Ye moderate strength hai — sufficient for dissolution but not too aggressive.</p>
+
+                <h5 class="font-semibold text-cyan-700 mt-4 mb-1">❓ 100 g doodh → 500 ml final volume — dilution calculations</h5>
+                <pre class="bg-white p-2 rounded text-sm"><code>100 g doodh → ash → extract → 500 ml stock solution
+Stock se 5 ml → 100 ml working solution
+
+Total dilution:
+• Stage 1: 100 g doodh → 500 ml (essentially a 1:5 factor on ash content)
+• Stage 2: 5 ml → 100 ml (20× dilution)
+• Overall dilution on the aliquot: 100 ml / 5 ml = 20× on stock
+
+Final concentration calculation:
+ppm from curve × (100/5) × (500/100) = ppm in original milk
+                
+Ye dilution isliye zaroor hai kyunki:
+1. Flame photometer dilute solutions ke liye calibrated hai
+2. Concentrated solutions mein self-absorption hota hai → non-linear response
+3. Burner clog ho sakta hai concentrated solutions se</code></pre>
+
+                <h5 class="font-semibold text-cyan-700 mt-4 mb-1">❓ Calibration Curve kyun banana padta hai?</h5>
+                <p class="text-sm">Flame photometer ki response har din, har instrument par thodi different hoti hai (flame stability, gas pressure, atomizer efficiency). Isliye <strong>har baar</strong> standards ke saath calibrate karna padta hai. Standards ke known concentrations vs measured intensities plot karke curve banate hain → unknown sample ki intensity se concentration find karte hain.</p>
+
+                <h5 class="font-semibold text-cyan-700 mt-4 mb-1">❓ Interference problems aur solutions:</h5>
+                <table class="table-auto border-collapse border border-cyan-300 mt-2 mb-3 text-sm w-full">
+                  <thead><tr class="bg-cyan-100"><th class="border border-cyan-300 p-2">Problem</th><th class="border border-cyan-300 p-2">Explanation</th><th class="border border-cyan-300 p-2">Solution</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border border-cyan-300 p-2"><strong>Na interference in K</strong></td><td class="border border-cyan-300 p-2">Na bahut strong emitter hai — K reading mein interfere karta hai</td><td class="border border-cyan-300 p-2">K standards mein bhi same Na concentration add karein</td></tr>
+                    <tr><td class="border border-cyan-300 p-2"><strong>Phosphate interference in Ca</strong></td><td class="border border-cyan-300 p-2">Phosphate Ca ke saath refractory compound banata hai flame mein</td><td class="border border-cyan-300 p-2">Lanthanum chloride add karein — phosphate ko La ke saath bind karata hai, Ca free rehta hai</td></tr>
+                    <tr><td class="border border-cyan-300 p-2"><strong>Self-absorption</strong></td><td class="border border-cyan-300 p-2">High concentration par outer flame atoms inner atoms ki light absorb karte hain</td><td class="border border-cyan-300 p-2">Sample dilute karein — calibration range mein rakhein</td></tr>
+                  </tbody>
+                </table>
+              </div>
 
               <h4 class="font-semibold mt-4 mb-2">Calculation (Interpolation Method):</h4>
               <pre><code>C_x = C₁ + (C₂ - C₁) × (I_x - I₁) / (I₂ - I₁)</code></pre>
@@ -2520,292 +3252,1136 @@ layers depends on partition coefficient</code></pre>
         },
   
         "ghee-butter-oil": {
-          title: "Ghee / Butter Oil ka Analysis",
-          tests: [
-            {
-              title: "Butyro-Refractometer (BR) Reading",
-              purpose: "Ghee ki purity check karne ka sabse simple aur rapid instrumental method.",
-              reference: "IS 3508 – 1966; FSSAI Manual",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
-                <p>Jab light ek medium se doosre mein jaata hai, to ye bend hota hai (refraction). Har fat ki ek characteristic refractive index hoti hai. Ghee ki BR reading 40-44 hoti hai at 40°C. Foreign oils milane se ye reading change hoti hai — vegetable oils ki RI zyada hoti hai.</p>
-  
-                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>Ghee ko 40°C se thoda upar melt karein. Clear fat decant karein (bina moisture/curd ke).</li>
-                  <li>Butyro-refractometer ko circulating water bath se 40°C par maintain karein.</li>
-                  <li>1-2 drops melted ghee refractometer ke prism par daalein.</li>
-                  <li>Eyepiece se dekhein — light aur dark boundary line ko scale par adjust karein.</li>
-                  <li>BR reading note karein.</li>
-                </ol>
-  
-                <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
-                <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
-                  <thead><tr class="bg-gray-100"><th class="border p-2">Sample</th><th class="border p-2">BR Reading at 40°C</th></tr></thead>
-                  <tbody>
-                    <tr><td class="border p-2">Cow ghee</td><td class="border p-2">40.0 - 43.0</td></tr>
-                    <tr><td class="border p-2">Buffalo ghee</td><td class="border p-2">40.0 - 43.5</td></tr>
-                    <tr><td class="border p-2">Groundnut oil</td><td class="border p-2">58-60</td></tr>
-                    <tr><td class="border p-2">Coconut oil</td><td class="border p-2">35-37</td></tr>
-                  </tbody>
-                </table>
-                <p class="mt-2">Agar BR reading 44 se upar hai — vegetable oil milawat ka indication hai.</p>
-              `
-            },
-            {
-              title: "Reichert-Meissl (RM) & Polenske Value (PV)",
-              purpose: "Ghee ki purity check karne ke liye. RM value doodh ki fat ke characteristic short-chain fatty acids ko measure karta hai. PV value coconut oil ke saath adulteration detect karne mein help karta hai.",
-              reference: "IS 3508 – 1966",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
-                <p>Ghee ko saponify (soap mein convert) kiya jaata hai, phir acid se acidify karke volatile fatty acids release kiye jaate hain. Ye acids distill kiye jaate hain. RM value water-soluble volatile acids ka measure hai (butyric, caproic acid — ye sirf milk fat mein significant hote hain). Polenske value water-insoluble volatile acids ka measure hai (coconut oil mein zyada hote hain).</p>
-  
-                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li><strong>Saponification:</strong> 5.00 gram ghee ko 20 gram glycerol aur 2 ml 50% NaOH use karke saponify karein. Liquid clear hone tak heat karein (250 ml round bottom flask mein).</li>
-                  <li><strong>Dilution aur Acidification:</strong> 93 ml boiled, cooled water daalein. Phir 50 ml dilute sulphuric acid (25 ml conc. H₂SO₄ in 1 litre) daalein. Pumice stone ke kuch tukde daalein (bumping prevent karne ke liye).</li>
-                  <li><strong>Distillation:</strong> Polenske distillation apparatus use karke 19-21 minute mein mixture ka 110 ml distil karein. Distillation rate consistent honi chahiye.</li>
-                  <li><strong>RM Value Titration:</strong> Distillate ko filter karein aur filtrate ka 100 ml phenolphthalein indicator ke saath 0.1 N NaOH se titrate karein.</li>
-                  <li><strong>Polenske Value Titration:</strong> Condenser aur filter paper ko teen baar 15 ml neutralized ethanol se wash karein. 0.1 N NaOH ke saath combined washings ka titration karein.</li>
-                </ol>
-  
-                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
-                <pre><code>RM Value = 1.1 × (Titre_sample - Titre_blank)</code></pre>
-                <pre><code>Polenske Value = Insoluble acid titre - Blank insoluble titre</code></pre>
-  
-                <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
-                <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
-                  <thead><tr class="bg-gray-100"><th class="border p-2">Sample</th><th class="border p-2">RM Value</th><th class="border p-2">Polenske Value</th></tr></thead>
-                  <tbody>
-                    <tr><td class="border p-2">Cow ghee</td><td class="border p-2">24-34</td><td class="border p-2">1.0-2.0</td></tr>
-                    <tr><td class="border p-2">Buffalo ghee</td><td class="border p-2">26-32</td><td class="border p-2">1.0-2.0</td></tr>
-                    <tr><td class="border p-2">Coconut oil</td><td class="border p-2">6-8</td><td class="border p-2">16-18</td></tr>
-                    <tr><td class="border p-2">Groundnut oil</td><td class="border p-2">0.5-1.5</td><td class="border p-2">0.5-1.0</td></tr>
-                  </tbody>
-                </table>
-                <p class="mt-2">FSSAI minimum RM value for ghee: 28</p>
-              `
-            },
-            {
-              title: "Iodine Value (Wijs Method)",
-              purpose: "Fat mein unsaturation ki degree measure karna — foreign oil milawat detect karne mein useful.",
-              reference: "IS 3508 – 1966; A.O.A.C 993.20",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
-                <p>Iodine unsaturated fatty acids ke double bonds se react karta hai. Jitne zyada double bonds, utna zyada iodine absorb hoga. Iodine value = grams of iodine absorbed per 100 grams of fat. Milk fat ka IV 26-38 hota hai, jabki vegetable oils ka bahut zyada (80-140).</p>
-  
-                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>~0.25 gram ghee ko iodine flask mein weigh karein.</li>
-                  <li>10 ml chloroform mein dissolve karein.</li>
-                  <li>25 ml Wijs solution (iodine monochloride in acetic acid) daalein — excess mein.</li>
-                  <li>Andheri jagah mein 30 minute ke liye rakhein (reaction complete hone ke liye).</li>
-                  <li>15 ml 10% KI solution daalein — unreacted iodine ko absorb karne ke liye.</li>
-                  <li>100 ml distilled water daalein.</li>
-                  <li>Starch indicator use karke 0.1 N sodium thiosulphate se titrate karein (blue colour disappear hone tak).</li>
-                  <li>Ek blank bhi run karein (bina sample ke).</li>
-                </ol>
-  
-                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
-                <pre><code>Iodine Value = [12.69 × N × (V_blank - V_sample)] / Weight_sample</code></pre>
-  
-                <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
-                <p>Cow ghee: 26-35, Buffalo ghee: 28-38, FSSAI range: 26-38</p>
-              `
-            },
-            {
-              title: "Saponification Value",
-              purpose: "Fat ke molecular weight ka indication — short chain fatty acids ki presence indicate karta hai.",
-              reference: "IS 3508 – 1966; A.O.A.C 920.160",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
-                <p>Saponification value = mg of KOH required to saponify 1 gram of fat. Short chain fatty acids zyada hone par saponification value zyada hota hai. Milk fat (ghee) ka SV zyada hota hai (220-235) compared to vegetable oils (185-195) kyunki milk fat mein short chain fatty acids (butyric, caproic) zyada hote hain.</p>
-  
-                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>~2 gram ghee accurately weigh karein ek 250 ml round bottom flask mein.</li>
-                  <li>25 ml 0.5 N alcoholic KOH daalein (excess).</li>
-                  <li>Reflux condenser lagayein aur 1 hour boiling water bath par heat karein.</li>
-                  <li>Cool karein, phenolphthalein indicator daalein.</li>
-                  <li>Excess KOH ko 0.5 N HCl se back-titrate karein (pink colour disappear hone tak).</li>
-                  <li>Blank bhi run karein.</li>
-                </ol>
-  
-                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
-                <pre><code>Saponification Value = [56.1 × N × (V_blank - V_sample)] / Weight_sample</code></pre>
-  
-                <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
-                <p>Ghee: 220-235, Groundnut oil: 188-196, Coconut oil: 250-264</p>
-              `
-            },
-            {
-              title: "Unsaponifiable Matter",
-              purpose: "Fat mein non-fat components (sterols, hydrocarbons, vitamins) ka measure — mineral oil milawat detect karne mein useful.",
-              reference: "IS 3508 – 1966",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>5 gram ghee ko 50 ml alcoholic KOH se saponify karein (1 hour reflux).</li>
-                  <li>Saponified mixture ko separating funnel mein transfer karein.</li>
-                  <li>50 ml petroleum ether se 3 baar extract karein — unsaponifiable matter ether layer mein jaata hai.</li>
-                  <li>Ether extracts combine karein, 0.5N KOH se wash karein (remaining soap remove karne ke liye), phir water se wash karein.</li>
-                  <li>Ether evaporate karein, residue ko 80°C par dry karein aur weigh karein.</li>
-                </ol>
-  
-                <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
-                <p>Normal ghee: ≤ 1.2% unsaponifiable matter. Mineral oil milane se ye value bahut badh jaati hai (mineral oil completely unsaponifiable hota hai).</p>
-              `
-            },
-            {
-              title: "Free Fatty Acids (FFA)",
-              purpose: "Fat ke breakdown (hydrolysis) ki extent measure karta hai — freshness indicate karta hai. High FFA rancidity ki taraf le jaata hai.",
-              reference: "IS 3508 – 1966",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>~10 gram melted ghee accurately weigh karein.</li>
-                  <li>50 ml neutralized warm ethanol mein dissolve karein.</li>
-                  <li>Phenolphthalein indicator ki kuch drops daalein.</li>
-                  <li>0.1 N NaOH se titrate karein jab tak persistent pink colour aaye.</li>
-                </ol>
-  
-                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
-                <pre><code>% FFA (as oleic acid) = [Titre × N_NaOH × 28.2] / Sample weight</code></pre>
-  
-                <h4 class="font-semibold mt-4 mb-2">FSSAI Standard:</h4>
-                <p>Ghee FFA: Maximum 3.0% (as oleic acid). Fresh ghee: typically < 0.5%</p>
-              `
-            },
-            {
-              title: "Moisture / Volatile Matter",
-              purpose: "Ghee mein paani aur volatile compounds ki quantity — shelf life aur quality ke liye important.",
-              reference: "IS 3508 – 1966",
-              procedure: `
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>Pehle se weigh ki hui dish (W1) mein ~10 gram ghee weigh karein (W2).</li>
-                  <li>105°C par oven mein 2 hours heat karein (ya jab tak bubbling band ho jaye).</li>
-                  <li>Desiccator mein cool karein, weigh karein (W3).</li>
-                  <li>Constant weight tak repeat karein.</li>
-                </ol>
-                <pre><code>% Moisture = [(W2 - W3) / (W2 - W1)] × 100</code></pre>
-                <p>FSSAI standard: Maximum 0.3% moisture in ghee</p>
-              `
-            },
-            {
-              title: "Baudouin Test (Vanaspati Detection)",
-              purpose: "Ghee mein vanaspati (hydrogenated vegetable oil) ka pata lagata hai.",
-              reference: "IS 3508 – 1966",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
-                <p>Vanaspati mein 5% sesame (til) oil ka mandatory addition hota hai (FSSAI requirement). Ye test sesame oil mein present sesamol compound detect karta hai. Furfural sesamol ke saath react karke acidic medium mein PINK/RED colour deta hai.</p>
-  
-                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>5 ml melted ghee ek test tube mein lein.</li>
-                  <li>5 ml concentrated HCl daalein.</li>
-                  <li>0.4 ml 2% furfural solution (freshly prepared in alcohol) daalein.</li>
-                  <li>2 minute ke liye vigorously shake karein.</li>
-                  <li>Layers separate hone dein.</li>
-                </ol>
-  
-                <h4 class="font-semibold mt-4 mb-2">Result:</h4>
-                <p><strong>Pink ya Red colour in acid (lower) layer:</strong> Vanaspati PRESENT — adulterated ghee</p>
-                <p><strong>No colour ya light yellow:</strong> Vanaspati ABSENT — pure ghee</p>
-                <p class="text-xs mt-2">Sensitivity: 5% vanaspati milawat tak detect kar sakta hai.</p>
-              `
-            },
-            {
-              title: "Fiehe's Test (for Vegetable Fat)",
-              purpose: "Vanaspati ya vegetable fat milawat ka ek aur confirmatory test.",
-              reference: "IS 3508 – 1966",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Siddhant:</h4>
-                <p>Vegetable oils mein phytosterols hote hain jo modified Fiehe's reagent ke saath specific colour reaction dete hain.</p>
-  
-                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>5 ml melted ghee ko 5 ml acetic anhydride ke saath mix karein.</li>
-                  <li>1-2 drops conc. H₂SO₄ carefully add karein.</li>
-                  <li>Colour observe karein.</li>
-                </ol>
-                <p><strong>Green/Blue-green colour:</strong> Vegetable fat/oil PRESENT (phytosterol reaction — Liebermann-Burchard test)</p>
-                <p><strong>Brown colour:</strong> Pure milk fat</p>
-              `
-            },
-            {
-              title: "Mineral Oil ka Detection (Holde's Test)",
-              purpose: "Adulteration ke roop mein use kiye jaane wale non-edible mineral oils ka pata lagata hai.",
-              reference: "IS 3508 – 1966",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Siddhant:</h4>
-                <p>Mineral oil saponify (soap mein convert) nahi hota. Jab fat ko alkali se saponify kiya jaata hai aur paani dala jaata hai, to mineral oil insoluble turbidity ke roop mein dikhta hai — jabki saara saponified fat dissolve ho jaata hai.</p>
-  
-                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>1 gram ghee ko 25 ml 4% alcoholic KOH se saponify karein (heat with reflux 30 min).</li>
-                  <li>100 ml hot water daalein aur mix karein.</li>
-                </ol>
-                <p><strong>Turbidity ya oily droplets:</strong> Mineral oil PRESENT — ye saponify nahi hua</p>
-                <p><strong>Clear solution:</strong> Mineral oil ABSENT</p>
-              `
-            },
-            {
-              title: "Peroxide Value (PV)",
-              purpose: "Oxidative rancidity ke early stages measure karta hai.",
-              reference: "A.O.A.C 965.33",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Siddhant:</h4>
-                <p>Oxidation se fat mein peroxides bante hain (primary oxidation products). Ye peroxides potassium iodide (KI) se iodine liberate karte hain, jo Na₂S₂O₃ se titrate kiya jaata hai. Result meq peroxide per kg fat mein express hota hai.</p>
-  
-                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>~5 gram ghee ko 30 ml acetic acid: chloroform (3:2) mixture mein dissolve karein.</li>
-                  <li>0.5 ml saturated KI solution daalein.</li>
-                  <li>Exactly 1 minute dark mein rakhein, occasionally shake karein.</li>
-                  <li>30 ml distilled water daalein.</li>
-                  <li>Starch indicator (1%) daalein aur 0.01 N ya 0.1 N Na₂S₂O₃ se titrate karein jab tak blue colour disappear ho jaye.</li>
-                  <li>Blank bhi run karein.</li>
-                </ol>
-  
-                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
-                <pre><code>PV (meq/kg) = [(S - B) × N × 1000] / Sample weight</code></pre>
-                <p class="text-xs">Jahaan S = sample titre, B = blank titre, N = Na₂S₂O₃ ki normality</p>
-  
-                <h4 class="font-semibold mt-4 mb-2">FSSAI Standard:</h4>
-                <p>Maximum PV for ghee: ≤ 1.0 meq/kg (fresh). Agmark: ≤ 3.0 meq/kg</p>
-              `
-            },
-            {
-              title: "Modified Kirschner Value",
-              purpose: "Specifically butyric acid ka measure — ghee ki authenticity ka sabse reliable chemical indicator.",
-              reference: "IS 3508 – 1966",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Siddhant:</h4>
-                <p>Kirschner value specifically water-soluble, steam-volatile, silver-salt soluble acids (mainly butyric acid) ko measure karta hai. Butyric acid exclusively milk fat mein hota hai — vegetable oils mein absent. Isliye ye ghee ke adulteration detection ka sabse specific test hai.</p>
-  
-                <p>Procedure RM value test se milta julta hai, but additional silver salt precipitation step hota hai taaki specifically butyric acid isolate ho.</p>
-  
-                <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
-                <p>Pure cow ghee: 19-27, Pure buffalo ghee: 19-25. Adulterated ghee mein ye value proportionally kam hoti jaati hai.</p>
-              `
-            },
-            {
-              title: "Kreis Test (Rancidity Detection)",
-              purpose: "Ghee mein developed rancidity detect karna — qualitative test.",
-              reference: "IS 3508 – 1966",
-              procedure: `
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>1 ml melted ghee ek test tube mein lein.</li>
-                  <li>1 ml conc. HCl daalein.</li>
-                  <li>1 ml 1% phloroglucinol solution (in diethyl ether) daalein.</li>
-                  <li>Vigorously shake karein.</li>
-                </ol>
-                <p><strong>Pink/Red colour:</strong> Rancidity detected — epihydrinal dehyde presence (oxidation product)</p>
-                <p><strong>No colour:</strong> Not rancid</p>
-              `
-            }
-          ]
+      title: "Ghee / Butter Oil ka Analysis",
+      tests: [
+        {
+          title: "Butyro-Refractometer (BR) Reading",
+          purpose: "Ghee ki purity check karne ka sabse simple aur rapid instrumental method.",
+          reference: "IS 3508 – 1966; FSSAI Manual",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+            <p>Jab light ek medium (jaise air) se doosre medium (jaise fat/oil) mein jaata hai, to ye bend hota hai — isko <strong>refraction</strong> kehte hain. Har fat ki ek characteristic refractive index (RI) hoti hai jo uski chemical composition par depend karti hai. Ghee ki BR reading 40-44 hoti hai at 40°C. Foreign oils milane se ye reading change hoti hai — vegetable oils ki RI zyada hoti hai kyunki unme zyada unsaturated (double bond wale) fatty acids hote hain.</p>
+            <p class="mt-2"><strong>Butyro-Refractometer kya hai?</strong> Ye ek special refractometer hai jo specifically fats/oils ke liye design kiya gaya hai. Iska scale "BR units" mein hota hai (normal refractometer RI value deta hai jaise 1.4524). BR scale ko fats ke narrow RI range (1.4500-1.4600) ke liye optimize kiya gaya hai taaki chhote differences bhi easily padh sakein.</p>
+
+            <h4 class="font-semibold mt-4 mb-2">BR Reading aur Refractive Index ka Relationship:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">BR Reading</th><th class="border p-2">Refractive Index (nD at 40°C)</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">40.0</td><td class="border p-2">1.4524</td></tr>
+                <tr><td class="border p-2">44.0</td><td class="border p-2">1.4545</td></tr>
+                <tr><td class="border p-2">50.0</td><td class="border p-2">1.4577</td></tr>
+                <tr><td class="border p-2">60.0</td><td class="border p-2">1.4600</td></tr>
+              </tbody>
+            </table>
+            <p class="mt-2 text-sm text-gray-600">Butyro-refractometer ka scale specifically fats ke liye design kiya gaya hai. Range 40-60 BR ≈ nD 1.4524-1.4600. Instrument mein prism ke upar sample rakh ke eyepiece se light-dark boundary directly BR scale par padh lete hain.</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Temperature Correction Formula:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>Corrected BR Reading = Observed BR + 0.55 × (T - 40)</code></pre>
+              <p class="text-sm mt-2"><strong>Har factor ka matlab:</strong></p>
+              <ul class="list-disc list-inside text-sm space-y-1">
+                <li><strong>Observed BR</strong> = Jo reading instrument par dikhi</li>
+                <li><strong>0.55</strong> = Temperature correction factor — har 1°C temperature change par BR reading 0.55 unit change hoti hai fats ke liye. Ye experimentally determine kiya gaya constant hai.</li>
+                <li><strong>T</strong> = Actual temperature (°C) jis par reading li gayi</li>
+                <li><strong>40</strong> = Standard reference temperature (°C) — sabhi BR readings 40°C par compare ki jaati hain</li>
+              </ul>
+              <p class="text-sm mt-2"><strong>Kyun correction zaroori hai?</strong> Temperature badhne se fat ki density kam hoti hai, molecules zyada spread hote hain, aur light kam bend hota hai — isliye RI (aur BR reading) kam hoti hai. Har degree ke liye 0.55 ka correction lagta hai.</p>
+              <p class="text-sm mt-2"><strong>Example:</strong> Agar 38°C par reading 42.0 aayi:</p>
+              <pre class="text-sm"><code>Corrected BR = 42.0 + 0.55 × (38 - 40) = 42.0 + 0.55 × (-2) = 42.0 - 1.1 = 40.9</code></pre>
+              <p class="text-sm">Matlab 38°C par jo 42.0 dikha, wo actually 40°C par 40.9 ke barabar hai.</p>
+              <p class="text-sm mt-2"><strong>Agar T > 40:</strong> T=42°C par reading 39.5 aayi → Corrected = 39.5 + 0.55×(42-40) = 39.5 + 1.1 = 40.6</p>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Ghee ko 40°C se thoda upar melt karein. Clear fat decant karein (bina moisture/curd ke). <em>— Moisture aur curd particles light ko scatter karte hain jo galat reading dega.</em></li>
+              <li>Butyro-refractometer ko circulating water bath se 40°C par maintain karein. <em>— Exactly 40°C par karna zaroori hai taaki temperature correction ki zaroorat na pade.</em></li>
+              <li>1-2 drops melted ghee refractometer ke prism par daalein. <em>— Sample ko prism ki poori surface par evenly spread hona chahiye, koi air bubble nahi hona chahiye.</em></li>
+              <li>Eyepiece se dekhein — light aur dark boundary line ko scale par adjust karein. <em>— Chromatic aberration se boundary thoda coloured dikh sakti hai, compensator adjust karein jab tak sharp boundary aaye.</em></li>
+              <li>BR reading note karein. Agar temperature exactly 40°C nahi hai to correction formula apply karein.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Sample</th><th class="border p-2">BR Reading at 40°C</th><th class="border p-2">Kyun aisi value?</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Cow ghee</td><td class="border p-2">40.0 - 43.0</td><td class="border p-2">Mostly saturated short-chain fatty acids</td></tr>
+                <tr><td class="border p-2">Buffalo ghee</td><td class="border p-2">40.0 - 43.5</td><td class="border p-2">Thoda zyada unsaturation cow ghee se</td></tr>
+                <tr><td class="border p-2">Groundnut oil</td><td class="border p-2">58-60</td><td class="border p-2">Highly unsaturated (oleic, linoleic acid) → high RI</td></tr>
+                <tr><td class="border p-2">Coconut oil</td><td class="border p-2">35-37</td><td class="border p-2">Mostly saturated but medium chain → ghee se bhi kam</td></tr>
+              </tbody>
+            </table>
+            <p class="mt-2"><strong>Interpretation:</strong> Agar BR reading 44 se upar hai — vegetable oil milawat ka indication hai. Agar 40 se neeche hai — coconut oil milawat ho sakti hai.</p>
+            <p class="mt-1 text-sm text-gray-600"><strong>Limitation:</strong> Agar koi is tarah mix kare ki BR reading normal range mein aaye (jaise coconut oil + groundnut oil ka mixture) to ye test alone detect nahi kar paayega — isliye doosre tests bhi zaroori hain.</p>
+          `
         },
+        {
+          title: "Reichert-Meissl (RM) & Polenske Value (PV)",
+          purpose: "Ghee ki purity check karne ke liye. RM value doodh ki fat ke characteristic short-chain fatty acids ko measure karta hai. PV value coconut oil ke saath adulteration detect karne mein help karta hai.",
+          reference: "IS 3508 – 1966",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+            <p>Ghee ko saponify (soap mein convert) kiya jaata hai, phir acid se acidify karke volatile fatty acids release kiye jaate hain. Ye acids steam distillation se distill kiye jaate hain.</p>
+            <p class="mt-2"><strong>RM value</strong> = water-SOLUBLE volatile acids ka measure (mainly butyric acid C4, caproic acid C6 — ye sirf milk fat mein significant量 mein hote hain). Pure ghee mein ye acids bahut zyada hain isliye RM value high hota hai.</p>
+            <p class="mt-1"><strong>Polenske value</strong> = water-INSOLUBLE volatile acids ka measure (mainly caprylic C8, capric C10, lauric C12 — ye coconut oil mein bahut zyada hote hain). Normal ghee mein ye kam hote hain.</p>
+
+            <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mt-3">
+              <p class="text-sm"><strong>Samajhne ke liye:</strong> Fat = Glycerol + 3 Fatty Acids. Saponification se fatty acids alag hote hain. Short-chain fatty acids (C4-C12) volatile hain — ye steam se ud sakte hain. Long-chain fatty acids (C16, C18) non-volatile hain — ye flask mein reh jaate hain.</p>
+              <p class="text-sm mt-1">Distillate mein jo acids aaye, unme se kuch paani mein dissolve hote hain (butyric, caproic = RM value measure karta hai), aur kuch paani mein dissolve nahi hote lekin condenser par jam jaate hain (caprylic, capric, lauric = Polenske value measure karta hai).</p>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li><strong>Saponification:</strong> 5.00 gram ghee ko 250 ml round bottom flask mein lein. 20 gram glycerol aur 2 ml 50% NaOH daalein. Gentle heat par liquid clear hone tak heat karein (saponification complete). <em>— Glycerol high boiling point solvent ka kaam karta hai aur saponification ko uniform banata hai.</em></li>
+              <li><strong>Dilution aur Acidification:</strong> 93 ml boiled, cooled distilled water daalein (dissolved CO₂ remove karne ke liye boiled water use hota hai). 50 ml dilute sulphuric acid (25 ml conc. H₂SO₄ per litre water) daalein — ye soap ko tod ke free fatty acids release karta hai. Pumice stone ke 2-3 tukde daalein. <em>— Pumice stone bumping prevent karta hai (sudden violent boiling).</em></li>
+              <li><strong>Distillation:</strong> Polenske distillation apparatus attach karein (condenser + receiving flask). 19-21 minute mein 110 ml distillate collect karein. <em>— Rate consistent honi chahiye (~5.5 ml/min). Bahut fast distillation se non-volatile acids bhi aa sakte hain, bahut slow se volatile acids properly nahi aayenge.</em></li>
+              <li><strong>Cooling:</strong> Distillate ko 15°C par 10 minute rakhein — insoluble fatty acids solidify ho jayenge.</li>
+              <li><strong>Filtration:</strong> Distillate ko dry filter paper se filter karein. <em>— Insoluble acids filter paper par reh jayenge, soluble acids filtrate mein jayenge.</em></li>
+              <li><strong>RM Value Titration:</strong> Filtrate ka 100 ml lein (110 ml mein se), phenolphthalein indicator daalein, 0.1 N NaOH se titrate karein jab tak persistent faint pink colour aaye.</li>
+              <li><strong>Polenske Value Titration:</strong> Condenser tube aur filter paper ko teen baar 15 ml neutralized ethanol se wash karein (total 45 ml). Combined washings ko 0.1 N NaOH se titrate karein (phenolphthalein indicator). <em>— Ethanol insoluble acids ko dissolve kar leta hai jo paani nahi kar sakta.</em></li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Formulas aur Unke Factors ki Detailed Explanation:</h4>
+            
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <h5 class="font-semibold">RM Value Formula:</h5>
+              <pre class="text-sm mt-1"><code>RM Value = 1.1 × V</code></pre>
+              <p class="text-sm mt-1">Jahaan V = ml of 0.1N NaOH used to titrate 100 ml filtrate</p>
+              
+              <p class="text-sm mt-3"><strong>Factor 1.1 kahan se aaya? Step-by-step:</strong></p>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <tbody>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">Step 1</td><td class="border p-2">Distillation mein total <strong>110 ml</strong> distillate collect kiya jaata hai</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">Step 2</td><td class="border p-2">Lekin filter paper kuch liquid absorb karta hai, isliye sirf <strong>100 ml</strong> filtrate milta hai titration ke liye</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">Step 3</td><td class="border p-2">100 ml filtrate titrate karne se jo value aati hai, wo sirf 100/110 = 90.9% acids ka represent karti hai</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">Step 4</td><td class="border p-2">Poore 110 ml ke liye result chahiye, isliye multiply karte hain: <strong>110/100 = 1.1</strong></td></tr>
+                </tbody>
+              </table>
+              <p class="text-sm mt-2"><strong>Matlab:</strong> 1.1 ek simple volume correction factor hai — hum 100 ml titrate karte hain lekin result 110 ml ke liye report karte hain.</p>
+              
+              <p class="text-sm mt-3"><strong>0.1N NaOH kyun specifically?</strong></p>
+              <p class="text-sm">RM value ki definition hi yahi hai: <em>"Number of ml of 0.1N alkali required to neutralize water-soluble, steam-volatile fatty acids from 5 grams of fat."</em> Agar kisi reason se alag normality use karein to convert karna padega:</p>
+              <pre class="text-sm"><code>RM Value = 1.1 × V × (N / 0.1)</code></pre>
+              <p class="text-sm">Jaise agar 0.05N NaOH use kiya aur 52 ml laga:</p>
+              <pre class="text-sm"><code>RM = 1.1 × 52 × (0.05/0.1) = 1.1 × 52 × 0.5 = 28.6</code></pre>
+
+              <p class="text-sm mt-3"><strong>Blank correction:</strong></p>
+              <p class="text-sm">Ideally blank negligible hota hai, lekin agar significant ho:</p>
+              <pre class="text-sm"><code>RM Value = 1.1 × (V_sample - V_blank)</code></pre>
+
+              <p class="text-sm mt-3"><strong>Example Calculation:</strong></p>
+              <pre class="text-sm"><code>5.00 g ghee liya, 110 ml distill kiya, 100 ml filtrate ko titrate kiya
+0.1N NaOH ka titre = 26.5 ml, Blank = 0.2 ml
+
+RM Value = 1.1 × (26.5 - 0.2) = 1.1 × 26.3 = 28.93
+
+FSSAI minimum 28 hai → Ye ghee PASS ✓</code></pre>
+            </div>
+
+            <div class="bg-green-50 border border-green-200 rounded p-3 mt-3">
+              <h5 class="font-semibold">Polenske Value Formula:</h5>
+              <pre class="text-sm mt-1"><code>Polenske Value = V_insoluble × (N / 0.1)</code></pre>
+              <p class="text-sm mt-1">Jahaan V_insoluble = ml of 0.1N NaOH used to titrate combined ethanol washings</p>
+              
+              <p class="text-sm mt-3"><strong>Ye kaise kaam karta hai:</strong></p>
+              <ol class="list-decimal list-inside text-sm space-y-1">
+                <li>Distillation ke baad jo fatty acids paani mein dissolve nahi hue — wo condenser wall par aur filter paper par solidify ho gaye</li>
+                <li>In solid acids ko 3 × 15 ml neutral ethanol se wash karte hain — ethanol inhe dissolve kar leta hai</li>
+                <li>Combined ethanol washings (45 ml) ko 0.1N NaOH se titrate karte hain</li>
+                <li>Titre value = Polenske Value (jab 0.1N NaOH use ho)</li>
+              </ol>
+              
+              <p class="text-sm mt-2"><strong>Blank correction kab karein:</strong></p>
+              <pre class="text-sm"><code>PV = (V_sample_insoluble - V_blank_insoluble) × (N / 0.1)</code></pre>
+              <p class="text-sm">Usually blank negligible hota hai (0.1-0.2 ml).</p>
+
+              <p class="text-sm mt-2"><strong>Coconut oil milawat mein kya hota hai:</strong> Coconut oil mein lauric acid (C12) bahut zyada hota hai — ye water-insoluble volatile acid hai. Isliye coconut oil ka PV = 16-18 (bahut high), jabki ghee ka sirf 1-2 hai. Agar ghee mein coconut oil milaya to PV badh jayegi.</p>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Sample</th><th class="border p-2">RM Value</th><th class="border p-2">Polenske Value</th><th class="border p-2">Explanation</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Cow ghee</td><td class="border p-2">24-34</td><td class="border p-2">1.0-2.0</td><td class="border p-2">High butyric acid → high RM; low insoluble volatile acids → low PV</td></tr>
+                <tr><td class="border p-2">Buffalo ghee</td><td class="border p-2">26-32</td><td class="border p-2">1.0-2.0</td><td class="border p-2">Similar to cow ghee</td></tr>
+                <tr><td class="border p-2">Coconut oil</td><td class="border p-2">6-8</td><td class="border p-2">16-18</td><td class="border p-2">Very low butyric (almost nil) → low RM; very high lauric acid → very high PV</td></tr>
+                <tr><td class="border p-2">Groundnut oil</td><td class="border p-2">0.5-1.5</td><td class="border p-2">0.5-1.0</td><td class="border p-2">Almost no short-chain volatile acids → both RM & PV very low</td></tr>
+              </tbody>
+            </table>
+            <p class="mt-2">FSSAI minimum RM value for ghee: <strong>28</strong>. Agar RM < 28, to ghee mein vegetable oil milawat ka strong indication hai.</p>
+          `
+        },
+        {
+          title: "Iodine Value (Wijs Method)",
+          purpose: "Fat mein unsaturation ki degree measure karna — kitne double bonds hain fatty acids mein. Foreign oil milawat detect karne mein bahut useful hai.",
+          reference: "IS 3508 – 1966; A.O.A.C 993.20",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+            <p>Fatty acids mein double bonds (C=C) hote hain — inhe <strong>unsaturation</strong> kehte hain. Iodine (ya iodine monochloride) in double bonds par add ho jaata hai. Jitne zyada double bonds, utna zyada iodine absorb hoga.</p>
+            <p class="mt-1"><strong>Iodine Value ki definition:</strong> Grams of iodine absorbed per 100 grams of fat.</p>
+            <p class="mt-1">Milk fat (ghee) ka IV 26-38 hota hai (mostly saturated), jabki vegetable oils ka bahut zyada hota hai (groundnut oil 80-106, mustard oil 96-112) kyunki vegetable oils mein oleic, linoleic, linolenic jaise highly unsaturated acids zyada hote hain.</p>
+
+            <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mt-3">
+              <p class="text-sm"><strong>Wijs Method ka concept:</strong></p>
+              <p class="text-sm mt-1">Hum sample mein EXCESS Wijs reagent (ICl — iodine monochloride in acetic acid) daalte hain. Kuch ICl fat ke double bonds se react karta hai (consume ho jaata hai). Jo ICl bach jaata hai (unreacted), usse KI ke saath react karwa ke I₂ (free iodine) release karte hain. Phir is I₂ ko Na₂S₂O₃ se titrate karte hain.</p>
+              <p class="text-sm mt-1">Ek blank bhi run karte hain (bina fat ke) — usme saara ICl unreacted rehta hai aur zyada Na₂S₂O₃ lagta hai. Dono ka difference = kitna iodine fat ne absorb kiya.</p>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Chemical Reactions:</h4>
+            <div class="bg-gray-50 border rounded p-3 mt-2 text-sm">
+              <p><strong>Step 1 — Iodine ka fat mein addition:</strong></p>
+              <pre><code>R-CH=CH-R' + ICl → R-CHI-CHCl-R'
+(unsaturated fat) + (Wijs reagent) → (iodine add ho gaya double bond par)</code></pre>
+              
+              <p class="mt-2"><strong>Step 2 — Excess ICl + KI:</strong></p>
+              <pre><code>ICl + KI → KCl + I₂
+(unreacted Wijs) + (potassium iodide) → free iodine release</code></pre>
+              
+              <p class="mt-2"><strong>Step 3 — Titration:</strong></p>
+              <pre><code>I₂ + 2Na₂S₂O₃ → 2NaI + Na₂S₄O₆
+(free iodine) + (sodium thiosulfate) → endpoint (blue → colourless with starch)</code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>~0.25 gram ghee ko iodine flask (glass-stoppered) mein accurately weigh karein. <em>— Kam sample isliye lete hain kyunki Wijs reagent expensive hai aur excess mein hona chahiye (sample se kam se kam 2 guna).</em></li>
+              <li>10 ml chloroform daalein aur dissolve karein. <em>— Chloroform fat ko dissolve karta hai taaki Wijs reagent uniformly react kar sake.</em></li>
+              <li>25 ml Wijs solution (ICl in glacial acetic acid) daalein — ye EXCESS mein hai. <em>— Excess isliye zaroori hai taaki saare double bonds react karein. Kam padne se result galat aayega.</em></li>
+              <li>Flask ko glass stopper se band karein, KI solution ki seal lagayein, aur andheri jagah mein 30 minute ke liye rakhein. <em>— Dark mein isliye kyunki light se side reactions ho sakti hain. 30 min = reaction complete hone ka time.</em></li>
+              <li>15 ml 10% KI solution daalein. <em>— KI unreacted ICl se react karke I₂ release karta hai jo titrate kar sakein.</em></li>
+              <li>100 ml distilled water daalein. <em>— Dilution ke liye, aur KI layer mein I₂ ko properly dissolve rakhne ke liye.</em></li>
+              <li>Starch indicator (1%) ki kuch drops daalein aur 0.1 N Na₂S₂O₃ se titrate karein jab tak blue colour completely disappear ho jaye. <em>— Starch + I₂ = blue colour. Jab saara I₂ react ho jaata hai Na₂S₂O₃ se, to blue colour disappear ho jaata hai = endpoint.</em></li>
+              <li>Ek blank bhi run karein (same procedure, bina ghee ke). <em>— Blank mein saara Wijs reagent unreacted hai, isliye zyada Na₂S₂O₃ lagega.</em></li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Formula aur Factor Derivation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>Iodine Value = [12.69 × N × (V_blank - V_sample)] / W</code></pre>
+              
+              <h5 class="font-semibold mt-3 text-sm">Factor 12.69 kahan se aaya? Detailed Derivation:</h5>
+              
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <tbody>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold w-1/3">Iodine (I₂) ka molecular weight</td><td class="border p-2">I = 126.9, so I₂ = 2 × 126.9 = <strong>253.8 g/mol</strong></td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">I₂ ki reaction with Na₂S₂O₃</td><td class="border p-2">I₂ + 2Na₂S₂O₃ → products. I₂ accept karta hai <strong>2 electrons</strong> (2I⁰ → 2I⁻)</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">I₂ ka Equivalent Weight</td><td class="border p-2">Eq.Wt = Mol.Wt / n-factor = 253.8 / 2 = <strong>126.9 g/eq</strong></td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">1 ml of 1N Na₂S₂O₃</td><td class="border p-2">= 1 milliequivalent = 126.9/1000 g = <strong>0.1269 g of I₂</strong></td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">IV ki definition</td><td class="border p-2">Grams of I₂ absorbed per <strong>100 grams</strong> of fat</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">Per 100 g ke liye</td><td class="border p-2">0.1269 × 100 = <strong>12.69</strong></td></tr>
+                </tbody>
+              </table>
+
+              <p class="text-sm mt-3"><strong>Formula ka step-by-step derivation:</strong></p>
+              <pre class="text-sm"><code>
+I₂ absorbed = (V_blank - V_sample) × N milliequivalents
+
+In grams: = (V_blank - V_sample) × N × (126.9/1000) grams
+
+Iodine Value = grams of I₂ per 100 g of fat
+
+= [(V_blank - V_sample) × N × 126.9/1000 × 100] / W
+
+= [(V_blank - V_sample) × N × 12.69] / W
+
+= [12.69 × N × (V_blank - V_sample)] / W
+              </code></pre>
+
+              <h5 class="font-semibold mt-3 text-sm">Har variable ka matlab:</h5>
+              <ul class="list-disc list-inside text-sm space-y-1 mt-1">
+                <li><strong>12.69</strong> = (Eq.Wt of I₂ / 1000) × 100 = 126.9 × 100 / 1000. Ye iodine ke equivalent weight ko per-100-gram basis par convert karta hai</li>
+                <li><strong>N</strong> = Na₂S₂O₃ ki normality (usually 0.1N). Agar 0.1N use kiya to N = 0.1</li>
+                <li><strong>V_blank</strong> = Blank titration mein kitne ml Na₂S₂O₃ lage (saara Wijs unreacted tha, isliye zyada I₂ tha, zyada thiosulfate laga)</li>
+                <li><strong>V_sample</strong> = Sample titration mein kitne ml Na₂S₂O₃ lage (kuch Wijs fat ne absorb kar liya, kam I₂ bacha, kam thiosulfate laga)</li>
+                <li><strong>(V_blank - V_sample)</strong> = Ye difference = kitna I₂ fat ne absorb kiya. Blank mein poora unreacted, sample mein kam unreacted → difference = consumed by fat</li>
+                <li><strong>W</strong> = Sample weight in grams</li>
+              </ul>
+
+              <p class="text-sm mt-3"><strong>Example Calculation:</strong></p>
+              <pre class="text-sm"><code>
+Sample weight (W) = 0.2510 g
+Na₂S₂O₃ normality (N) = 0.1 N
+Blank titre (V_blank) = 45.20 ml
+Sample titre (V_sample) = 38.50 ml
+
+Iodine Value = [12.69 × 0.1 × (45.20 - 38.50)] / 0.2510
+             = [12.69 × 0.1 × 6.70] / 0.2510
+             = [8.5023] / 0.2510
+             = 33.87
+
+Ghee ki FSSAI range 26-38 hai → Ye sample PASS ✓
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Agar IV bahut zyada aaye (>45):</strong> Vegetable oil (highly unsaturated) milaya gaya hai — groundnut oil (IV 80-106), soybean oil (IV 120-143) milane se ghee ka IV badh jaata hai.</p>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Sample</th><th class="border p-2">Iodine Value</th><th class="border p-2">Kyun?</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Cow ghee</td><td class="border p-2">26-35</td><td class="border p-2">Mostly saturated fats, kam double bonds</td></tr>
+                <tr><td class="border p-2">Buffalo ghee</td><td class="border p-2">28-38</td><td class="border p-2">Thoda zyada unsaturated cow ghee se</td></tr>
+                <tr><td class="border p-2">Coconut oil</td><td class="border p-2">7-10</td><td class="border p-2">Highly saturated (lauric, myristic)</td></tr>
+                <tr><td class="border p-2">Groundnut oil</td><td class="border p-2">80-106</td><td class="border p-2">Highly unsaturated (oleic, linoleic)</td></tr>
+                <tr><td class="border p-2">Mustard oil</td><td class="border p-2">96-112</td><td class="border p-2">Erucic acid (highly unsaturated)</td></tr>
+              </tbody>
+            </table>
+            <p class="mt-2">FSSAI range for ghee: <strong>26-38</strong></p>
+          `
+        },
+        {
+          title: "Saponification Value",
+          purpose: "Fat ke average molecular weight ka indication — short chain fatty acids ki presence indicate karta hai jo milk fat ke characteristic hain.",
+          reference: "IS 3508 – 1966; A.O.A.C 920.160",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+            <p><strong>Saponification</strong> = Fat ko alkali (KOH) ke saath heat karke soap mein convert karna.</p>
+            <pre class="text-sm bg-gray-50 p-2 rounded"><code>Fat (triglyceride) + 3KOH → Glycerol + 3 Potassium Soap (fatty acid salts)</code></pre>
+            <p class="mt-2"><strong>Saponification value ki definition:</strong> Milligrams of KOH required to completely saponify 1 gram of fat.</p>
+            <p class="mt-2"><strong>Kyun important hai?</strong></p>
+            <ul class="list-disc list-inside text-sm space-y-1">
+              <li>Short chain fatty acids (butyric C4, caproic C6) ka molecular weight CHHOTA hai</li>
+              <li>1 gram fat mein zyada molecules honge agar fatty acids short-chain hain</li>
+              <li>Har triglyceride molecule ko 3 KOH chahiye saponify hone ke liye</li>
+              <li>Zyada molecules = zyada KOH = ZYADA Saponification Value</li>
+              <li>Milk fat mein short-chain acids BAHUT hain → SV = 220-235 (high)</li>
+              <li>Vegetable oils (groundnut, soybean) mein mostly long-chain acids hain → SV = 185-195 (low)</li>
+            </ul>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>~2 gram ghee accurately weigh karein ek 250 ml round bottom flask mein. <em>— Accurately isliye kyunki formula mein weight denominator hai, galat weight = galat result.</em></li>
+              <li>25 ml 0.5 N alcoholic KOH daalein (ye EXCESS mein hai). <em>— Excess KOH zaroori hai taaki saara fat completely saponify ho jaye. Alcohol solvent ka kaam karta hai — fat paani mein dissolve nahi hota lekin alcohol mein hota hai, isliye alcoholic KOH use karte hain.</em></li>
+              <li>Reflux condenser lagayein aur 1 hour boiling water bath par heat karein. <em>— Reflux condenser isliye taaki alcohol evaporate na ho. 1 hour = saponification complete hone ka time. Water bath isliye taaki gentle, uniform heating ho — direct flame se alcohol aag pakad sakta hai.</em></li>
+              <li>Cool karein room temperature tak, phenolphthalein indicator ki 2-3 drops daalein.</li>
+              <li>Excess (unreacted) KOH ko 0.5 N HCl se back-titrate karein jab tak pink colour disappear ho jaye (colourless endpoint). <em>— Back titration isliye kyunki direct titration possible nahi — hum pehle excess KOH dete hain, phir check karte hain kitna bacha = kitna fat ne consume kiya.</em></li>
+              <li>Ek blank bhi run karein (same procedure bina fat ke — sirf 25 ml alcoholic KOH + reflux + titrate). <em>— Blank mein saara KOH unreacted hai, isliye zyada HCl lagega.</em></li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Formula aur Factor Derivation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>Saponification Value = [56.1 × N × (V_blank - V_sample)] / W</code></pre>
+              
+              <h5 class="font-semibold mt-3 text-sm">Factor 56.1 kahan se aaya? Step-by-step:</h5>
+              
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <tbody>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold w-1/3">KOH ka Molecular Weight</td><td class="border p-2">K = 39.1, O = 16.0, H = 1.0 → KOH = <strong>56.1 g/mol</strong></td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">KOH monovalent hai</td><td class="border p-2">KOH → K⁺ + OH⁻ (ek OH⁻ deta hai) → n-factor = 1 → Equivalent Weight = 56.1/1 = <strong>56.1 g/eq</strong></td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">1 ml of 1N HCl</td><td class="border p-2">= 1 milliequivalent HCl = neutralizes 1 milliequivalent KOH = <strong>56.1/1000 g = 0.0561 g = 56.1 mg</strong> KOH</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">SV ki definition</td><td class="border p-2"><strong>mg of KOH</strong> per gram of fat</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">Isliye factor</td><td class="border p-2">56.1 (mg KOH per meq) directly use hota hai — koi ×100 nahi kyunki SV "per gram" hai, "per 100 gram" nahi</td></tr>
+                </tbody>
+              </table>
+
+              <p class="text-sm mt-3"><strong>Full derivation:</strong></p>
+              <pre class="text-sm"><code>
+Back titration ka concept:
+
+Blank mein:  25 ml KOH mein se KUCH BHI use nahi hua
+  → Saara KOH bacha → V_blank ml HCl lagta hai neutralize karne mein
+
+Sample mein: 25 ml KOH mein se KUCH fat ne consume kiya
+  → Kam KOH bacha → V_sample ml HCl laga (V_sample < V_blank)
+
+KOH consumed by fat = (V_blank - V_sample) ml of N-normal HCl
+                     = (V_blank - V_sample) × N milliequivalents of KOH
+
+In mg of KOH:         = (V_blank - V_sample) × N × 56.1 mg
+
+Per gram of fat:       = [(V_blank - V_sample) × N × 56.1] / W mg KOH/g
+
+∴ Saponification Value = [56.1 × N × (V_blank - V_sample)] / W
+              </code></pre>
+
+              <h5 class="font-semibold mt-3 text-sm">Har variable ka matlab:</h5>
+              <ul class="list-disc list-inside text-sm space-y-1 mt-1">
+                <li><strong>56.1</strong> = KOH ka molecular/equivalent weight in mg per milliequivalent. Ye universal constant hai — kabhi nahi change hoga</li>
+                <li><strong>N</strong> = HCl ki normality (usually 0.5N). Agar 0.5N HCl use kiya to N = 0.5</li>
+                <li><strong>V_blank</strong> = Blank mein kitne ml HCl lage. Ye = total KOH jo initially add kiya tha (kyunki kuch consume nahi hua)</li>
+                <li><strong>V_sample</strong> = Sample mein kitne ml HCl lage. Ye = bacha hua KOH (fat ne kuch consume kar liya)</li>
+                <li><strong>(V_blank - V_sample)</strong> = KOH jo fat ne consume kiya = saponification mein use hua</li>
+                <li><strong>W</strong> = Fat sample weight in grams</li>
+              </ul>
+
+              <p class="text-sm mt-3"><strong>Example Calculation:</strong></p>
+              <pre class="text-sm"><code>
+Sample weight (W) = 2.05 g
+HCl normality (N) = 0.5 N
+Blank titre (V_blank) = 42.5 ml
+Sample titre (V_sample) = 26.3 ml
+
+SV = [56.1 × 0.5 × (42.5 - 26.3)] / 2.05
+   = [56.1 × 0.5 × 16.2] / 2.05
+   = [454.41] / 2.05
+   = 221.7 mg KOH/g
+
+Ghee ki range 220-235 → Ye sample PASS ✓
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>SV se molecular weight estimate:</strong></p>
+              <pre class="text-sm"><code>
+Average Molecular Weight of fat ≈ (3 × 56100) / SV
+
+(3 isliye kyunki triglyceride mein 3 fatty acids hain, har ek ke liye 1 KOH chahiye)
+(56100 = 56.1 × 1000 for unit conversion)
+
+For ghee (SV=225): MW ≈ 168300/225 ≈ 748 g/mol
+For groundnut oil (SV=192): MW ≈ 168300/192 ≈ 877 g/mol
+
+Ghee ka MW kam hai kyunki short-chain acids hain → confirms SV theory
+              </code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Sample</th><th class="border p-2">SV (mg KOH/g)</th><th class="border p-2">Explanation</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Ghee</td><td class="border p-2">220-235</td><td class="border p-2">Short chain acids (C4-C6) → small molecules → zyada KOH</td></tr>
+                <tr><td class="border p-2">Coconut oil</td><td class="border p-2">250-264</td><td class="border p-2">Medium chain (lauric C12) → sabse zyada SV</td></tr>
+                <tr><td class="border p-2">Groundnut oil</td><td class="border p-2">188-196</td><td class="border p-2">Long chain (oleic C18) → kam KOH needed</td></tr>
+                <tr><td class="border p-2">Soybean oil</td><td class="border p-2">189-195</td><td class="border p-2">Long chain acids</td></tr>
+              </tbody>
+            </table>
+          `
+        },
+        {
+          title: "Unsaponifiable Matter",
+          purpose: "Fat mein non-fat components (sterols, hydrocarbons, vitamins) ka measure — mineral oil milawat detect karne mein bahut useful.",
+          reference: "IS 3508 – 1966",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+            <p><strong>Unsaponifiable matter</strong> = Fat ke wo components jo KOH se saponify (soap mein convert) NAHI hote lekin fat-soluble hain aur petroleum ether mein extract ho jaate hain.</p>
+            <p class="mt-1">Isme aata hai:</p>
+            <ul class="list-disc list-inside text-sm">
+              <li><strong>Sterols</strong> — Cholesterol (animal fat), Phytosterols (plant fat)</li>
+              <li><strong>Fat-soluble vitamins</strong> — A, D, E, K</li>
+              <li><strong>Hydrocarbons</strong> — Squalene</li>
+              <li><strong>Mineral oil</strong> (agar milawat ki gayi ho) — ye 100% unsaponifiable hai!</li>
+            </ul>
+            <p class="mt-2"><strong>Kyun important:</strong> Normal ghee mein ≤ 1.2% unsaponifiable matter hota hai. Agar mineral oil (liquid paraffin, kerosene) milaya jaaye to ye value bahut badh jaati hai kyunki mineral oil completely unsaponifiable hai — ye hydrocarbons hain, fatty acids nahi.</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>5 gram ghee ko 250 ml round bottom flask mein accurately weigh karein (W_sample).</li>
+              <li>50 ml alcoholic KOH (0.5N) daalein aur reflux condenser laga kar 1 hour water bath par heat karein — saponification complete ho jayegi. <em>— Fat → soap + glycerol. Lekin sterols, vitamins, mineral oil react nahi karenge.</em></li>
+              <li>Saponified mixture ko separating funnel mein transfer karein. Thoda warm water se flask dhoyein aur wo bhi funnel mein daalein.</li>
+              <li><strong>Extraction:</strong> 50 ml petroleum ether (40-60°C fraction) daalein, stopper lagayein, gently mix karein (vigorous shaking se emulsion ban jayega), phase separation hone dein. <em>— Soap + glycerol = paani wali layer mein rehte hain. Unsaponifiable matter = petroleum ether layer mein jaata hai.</em></li>
+              <li>Ether layer (upper) ko alag flask mein collect karein. Ye extraction 3 baar repeat karein (3 × 50 ml). <em>— 3 baar isliye taaki maximum unsaponifiable matter extract ho jaye (liquid-liquid extraction efficiency).</em></li>
+              <li>Combined ether extracts ko 25 ml 0.5N aqueous KOH se 2-3 baar wash karein. <em>— Kuch soap bhi ether mein aa sakta hai — KOH wash se soap paani wali layer mein chala jaata hai, pure unsaponifiable matter ether mein bachta hai.</em></li>
+              <li>Phir distilled water se wash karein jab tak washings alkaline na hon (phenolphthalein se check karein — no pink colour means alkali-free).</li>
+              <li>Ether ko pre-weighed flask (W_flask) mein collect karein aur water bath par evaporate karein. <em>— Petroleum ether low boiling point (40-60°C) par evaporate ho jaata hai, residue reh jaata hai.</em></li>
+              <li>Residue ko 80°C par 30 min oven mein dry karein, desiccator mein cool karein, aur weigh karein (W_flask+residue).</li>
+              <li>Constant weight tak repeat karein.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Formula aur Factor Explanation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>% Unsaponifiable Matter = (W_residue / W_sample) × 100</code></pre>
+              
+              <p class="text-sm mt-2"><strong>Jahaan:</strong></p>
+              <ul class="list-disc list-inside text-sm space-y-1">
+                <li><strong>W_residue</strong> = (W_flask+residue) - (W_flask) = Sirf residue ka weight in grams. Ye unsaponifiable matter hai.</li>
+                <li><strong>W_sample</strong> = Original ghee sample ka weight in grams (5 g)</li>
+                <li><strong>× 100</strong> = Percentage mein convert karne ke liye</li>
+              </ul>
+
+              <p class="text-sm mt-3"><strong>Ye formula itna simple kyun hai?</strong></p>
+              <p class="text-sm">Kyunki ye ek <strong>gravimetric method</strong> hai — titration nahi hai. Hum directly weight measure kar rahe hain. Koi chemical conversion factor ki zaroorat nahi. Jo bacha = unsaponifiable matter.</p>
+
+              <p class="text-sm mt-3"><strong>Conceptual diagram:</strong></p>
+              <pre class="text-sm"><code>
+5 g Ghee
+  │
+  ├── Saponifiable part (98.8%+): Triglycerides → Soap + Glycerol
+  │   → Paani mein dissolve → DISCARD
+  │
+  └── Unsaponifiable part (≤1.2%): Sterols, Vitamins, Hydrocarbons
+      → Petroleum ether mein dissolve → COLLECT
+      → Ether evaporate → WEIGH = W_residue
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Example:</strong></p>
+              <pre class="text-sm"><code>
+W_sample = 5.00 g
+W_flask = 85.234 g
+W_flask+residue = 85.290 g
+
+W_residue = 85.290 - 85.234 = 0.056 g
+
+% Unsaponifiable = (0.056 / 5.00) × 100 = 1.12%
+
+FSSAI limit ≤ 1.2% → PASS ✓
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Agar mineral oil milaya ho:</strong></p>
+              <pre class="text-sm"><code>
+Suppose 10% mineral oil milaya ghee mein:
+W_sample = 5.00 g (jisme 0.50 g mineral oil hai)
+
+Mineral oil saponify nahi hota → poora 0.50 g ether mein aayega
+Plus normal unsaponifiable (0.05 g) = total 0.55 g
+
+% Unsaponifiable = (0.55/5.00) × 100 = 11.0%
+
+Ye 1.2% se bahut zyada hai → ADULTERATION DETECTED! ✗
+              </code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Sample</th><th class="border p-2">Unsaponifiable Matter</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Pure Ghee</td><td class="border p-2">≤ 1.2%</td></tr>
+                <tr><td class="border p-2">Vegetable oils</td><td class="border p-2">0.5 - 2.0%</td></tr>
+                <tr><td class="border p-2">Mineral oil added ghee</td><td class="border p-2">>> 2% (bahut zyada)</td></tr>
+              </tbody>
+            </table>
+            <p class="mt-2">FSSAI standard: Maximum <strong>1.2%</strong> unsaponifiable matter in ghee</p>
+          `
+        },
+        {
+          title: "Free Fatty Acids (FFA)",
+          purpose: "Fat ke breakdown (hydrolysis) ki extent measure karta hai — freshness aur quality indicate karta hai. High FFA rancidity ki taraf le jaata hai.",
+          reference: "IS 3508 – 1966",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+            <p>Normal fat mein fatty acids glycerol se bonded (ester bond) hote hain — ye <strong>triglycerides</strong> hain. Jab fat hydrolysis hota hai (moisture, enzymes ya heat ki wajah se), to fatty acids glycerol se toot kar FREE ho jaate hain:</p>
+            <pre class="text-sm bg-gray-50 p-2 rounded"><code>Triglyceride + H₂O → Diglyceride + Free Fatty Acid
+(moisture/enzyme/heat se ye reaction hota hai)</code></pre>
+            <p class="mt-2">Free fatty acids (FFA) directly NaOH se neutralize hote hain. Jitna zyada FFA, utna zyada NaOH lagega = utna zyada hydrolysis hua hai = fat PURANA ya kharab hai.</p>
+            <p class="mt-1">Result <strong>oleic acid</strong> ke terms mein express karte hain (convention — oleic acid sabse common fatty acid hai fats mein).</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>~10 gram melted ghee accurately weigh karein ek conical flask mein. <em>— 10 gram isliye lete hain kyunki FFA usually kam hoti hai, zyada sample se accurate titre milta hai.</em></li>
+              <li>50 ml neutralized warm ethanol daalein aur dissolve karein. <em>— Ethanol ko pehle NaOH se neutralize karte hain (phenolphthalein indicator ke saath titrate karke jab tak faint pink aaye). Agar ethanol neutral nahi hai to uski apni acidity FFA ke result mein add ho jayegi — galat answer aayega. Warm isliye ki ghee properly dissolve ho.</em></li>
+              <li>Phenolphthalein indicator ki 2-3 drops daalein.</li>
+              <li>0.1 N NaOH se titrate karein jab tak persistent faint pink colour aaye (30 seconds tak pink rahe). <em>— Ye direct titration hai, blank ki zaroorat nahi kyunki ethanol already neutralized hai.</em></li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Formula aur Factor Derivation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>% FFA (as oleic acid) = [V × N × 28.2] / W</code></pre>
+              
+              <h5 class="font-semibold mt-3 text-sm">Factor 28.2 kahan se aaya? Complete Derivation:</h5>
+              
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <tbody>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold w-1/3">Oleic Acid ka formula</td><td class="border p-2">C₁₇H₃₃COOH = C₁₈H₃₄O₂</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">Molecular Weight</td><td class="border p-2">C: 18×12 = 216, H: 34×1 = 34, O: 2×16 = 32 → Total = <strong>282 g/mol</strong></td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">Oleic acid monobasic hai</td><td class="border p-2">Sirf ek -COOH group hai → n-factor = 1 → Eq.Wt = 282/1 = <strong>282 g/eq</strong></td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">Reaction</td><td class="border p-2">C₁₇H₃₃COOH + NaOH → C₁₇H₃₃COONa + H₂O (1:1 ratio)</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">1 ml of 1N NaOH</td><td class="border p-2">= 1 meq = neutralizes 282/1000 g = <strong>0.282 g oleic acid</strong></td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">% ke liye ×100</td><td class="border p-2">0.282 × 100 = <strong>28.2</strong></td></tr>
+                </tbody>
+              </table>
+
+              <p class="text-sm mt-3"><strong>Full derivation:</strong></p>
+              <pre class="text-sm"><code>
+FFA (RCOOH) + NaOH → RCOONa + H₂O
+
+meq of FFA = V × N (V = ml of NaOH, N = normality)
+
+Grams of FFA (as oleic) = V × N × (282/1000)
+                         = V × N × 0.282 grams
+
+% FFA = (grams of FFA / sample weight) × 100
+      = [V × N × 0.282 / W] × 100
+      = [V × N × 28.2] / W
+              </code></pre>
+
+              <h5 class="font-semibold mt-3 text-sm">Har variable:</h5>
+              <ul class="list-disc list-inside text-sm space-y-1">
+                <li><strong>V</strong> = ml of NaOH used in titration (direct titre, no blank)</li>
+                <li><strong>N</strong> = NaOH ki normality (usually 0.1N)</li>
+                <li><strong>28.2</strong> = Oleic acid equivalent weight (282) × 100/1000. Ye oleic acid specific constant hai — agar doosre acid mein express karein to factor change hoga</li>
+                <li><strong>W</strong> = Sample weight in grams</li>
+              </ul>
+
+              <p class="text-sm mt-3"><strong>Agar doosre fatty acid mein express karein:</strong></p>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Acid</th><th class="border p-2">Mol.Wt</th><th class="border p-2">Factor (MW×100/1000)</th><th class="border p-2">Kab use hota hai</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2">Oleic acid</td><td class="border p-2">282</td><td class="border p-2">28.2</td><td class="border p-2">Ghee, most oils</td></tr>
+                  <tr><td class="border p-2">Lauric acid</td><td class="border p-2">200</td><td class="border p-2">20.0</td><td class="border p-2">Coconut oil</td></tr>
+                  <tr><td class="border p-2">Palmitic acid</td><td class="border p-2">256</td><td class="border p-2">25.6</td><td class="border p-2">Palm oil</td></tr>
+                  <tr><td class="border p-2">Butyric acid</td><td class="border p-2">88</td><td class="border p-2">8.8</td><td class="border p-2">Special cases</td></tr>
+                </tbody>
+              </table>
+
+              <p class="text-sm mt-3"><strong>FFA aur Acid Value ka relationship:</strong></p>
+              <pre class="text-sm"><code>
+Acid Value = mg of KOH to neutralize FFA in 1 g fat
+           = [V × N × 56.1] / W
+
+% FFA (oleic) = Acid Value × (282 / 56.1) / 10 = Acid Value × 0.503
+
+ya ulta: Acid Value = % FFA × 1.99
+              </code></pre>
+              <p class="text-sm"><strong>0.503 kahan se aaya:</strong> (Oleic eq.wt)/(KOH eq.wt × 10) = 282/(56.1×10) = 282/561 = 0.5027 ≈ 0.503</p>
+
+              <p class="text-sm mt-3"><strong>Example Calculation:</strong></p>
+              <pre class="text-sm"><code>
+Sample weight = 10.05 g
+NaOH normality = 0.1 N
+Titre = 1.42 ml
+
+% FFA = [1.42 × 0.1 × 28.2] / 10.05
+      = [4.0044] / 10.05
+      = 0.40%
+
+FSSAI limit: Max 3.0%. Fresh ghee typically < 0.5% → Ye fresh ghee hai ✓
+              </code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">FSSAI Standard:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Category</th><th class="border p-2">FFA (% as oleic)</th><th class="border p-2">Interpretation</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">FSSAI Maximum</td><td class="border p-2">3.0%</td><td class="border p-2">Legal limit</td></tr>
+                <tr><td class="border p-2">Agmark Special Grade</td><td class="border p-2">≤ 1.4%</td><td class="border p-2">Premium quality</td></tr>
+                <tr><td class="border p-2">Fresh ghee</td><td class="border p-2">< 0.5%</td><td class="border p-2">Excellent freshness</td></tr>
+                <tr><td class="border p-2">Rancid ghee</td><td class="border p-2">> 3.0%</td><td class="border p-2">Rejected — off-flavour, bad smell</td></tr>
+              </tbody>
+            </table>
+          `
+        },
+        {
+          title: "Moisture / Volatile Matter",
+          purpose: "Ghee mein paani aur volatile compounds ki quantity — shelf life, quality aur adulteration ke liye important parameter.",
+          reference: "IS 3508 – 1966",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+            <p>Ghee ko 105°C par heat karte hain — paani (boiling point 100°C) aur koi bhi volatile compound evaporate ho jaata hai. Weight loss = moisture + volatile matter. Ye ek simple <strong>gravimetric method</strong> hai (weight measurement par based).</p>
+            <p class="mt-2"><strong>Kyun important hai:</strong></p>
+            <ul class="list-disc list-inside text-sm">
+              <li>Zyada moisture → microbial growth → ghee kharab hogi jaldi</li>
+              <li>Zyada moisture → weight ke hisaab se customer ko kam ghee milta hai</li>
+              <li>Paani milawat detect ho sakti hai</li>
+              <li>FSSAI limit: Maximum 0.3%</li>
+            </ul>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Ek clean flat-bottom aluminium/porcelain dish ko 105°C par 1 hour oven mein rakhein, desiccator mein cool karein, weigh karein = <strong>W1</strong>. <em>— Pehle se dry karna zaroori hai taaki dish ki apni moisture result mein na aaye. Desiccator mein cool isliye karte hain kyunki hot dish moisture absorb karegi atmosphere se.</em></li>
+              <li>~10 gram melted ghee accurately dish mein weigh karein. Dish + ghee ka weight = <strong>W2</strong>.</li>
+              <li>Dish ko 105°C oven mein rakhein 2 hours ke liye (ya jab tak bubbling completely band ho jaye). <em>— Bubbling = paani evaporate ho raha hai. Jab bubbling band, matlab paani nikal gaya.</em></li>
+              <li>Desiccator mein cool karein (20-30 min), weigh karein = <strong>W3</strong>.</li>
+              <li>Wapas oven mein 30 min rakhein, cool karein, weigh karein. Agar weight constant hai (previous se ±0.001 g ke andar) to final weight = W3. Nahi to repeat karein. <em>— "Constant weight" ensure karta hai ki saara moisture nikal gaya.</em></li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Formula aur Factor Explanation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>% Moisture = [(W2 - W3) / (W2 - W1)] × 100</code></pre>
+              
+              <h5 class="font-semibold mt-3 text-sm">Har Factor kya hai aur kahan se aaya:</h5>
+              
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <tbody>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W1</td><td class="border p-2">Empty dry dish ka weight (grams). Ye "tare" weight hai — dish ka contribution remove karne ke liye.</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W2</td><td class="border p-2">Dish + Sample (before drying). Ye starting weight hai.</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W3</td><td class="border p-2">Dish + Sample (after drying at 105°C). Ye ending weight hai — moisture ud gaya.</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W2 - W1</td><td class="border p-2">= Pure sample weight (ghee ka weight). Dish ka weight cancel ho gaya.</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W2 - W3</td><td class="border p-2">= Weight LOSS = Jo evaporate ho gaya = Moisture + Volatile matter</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">× 100</td><td class="border p-2">= Percentage mein convert karne ke liye</td></tr>
+                </tbody>
+              </table>
+
+              <p class="text-sm mt-3"><strong>Visual representation:</strong></p>
+              <pre class="text-sm"><code>
+BEFORE DRYING (W2)              AFTER DRYING (W3)
+┌──────────────────┐           ┌──────────────────┐
+│ ☁ Moisture ☁    │    105°C  │                  │
+│   (W2 - W3)      │  ──────→ │ (moisture ud gaya)│
+│                  │   2 hrs   │                  │
+│ 🧈 Dry Fat 🧈   │           │ 🧈 Dry Fat 🧈   │
+│   (W3 - W1)      │           │   (W3 - W1)      │
+├──────────────────┤           ├──────────────────┤
+│ 🍽 Dish (W1)     │           │ 🍽 Dish (W1)     │
+└──────────────────┘           └──────────────────┘
+
+Weight loss = W2 - W3 (moisture gone!)
+Sample weight = W2 - W1 (total sample)
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Kyun 105°C?</strong></p>
+              <ul class="list-disc list-inside text-sm">
+                <li>Paani ka boiling point = 100°C</li>
+                <li>105°C ensures ki saara paani definitely nikal jaye (thoda above boiling point)</li>
+                <li>Bahut zyada temperature (>120°C) se fat decompose/oxidize ho sakta hai → galat weight loss</li>
+                <li>105°C = sweet spot — paani nikle, fat safe rahe</li>
+              </ul>
+
+              <p class="text-sm mt-3"><strong>Example Calculation:</strong></p>
+              <pre class="text-sm"><code>
+W1 (empty dish) = 45.236 g
+W2 (dish + ghee before drying) = 55.482 g
+W3 (dish + ghee after drying) = 55.456 g
+
+Sample weight = W2 - W1 = 55.482 - 45.236 = 10.246 g
+Weight loss = W2 - W3 = 55.482 - 55.456 = 0.026 g
+
+% Moisture = (0.026 / 10.246) × 100 = 0.254%
+
+FSSAI limit: Max 0.3% → PASS ✓
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Desiccator kyun use karte hain?</strong></p>
+              <p class="text-sm">Hot sample jab atmosphere mein cool hota hai to hawa ki moisture absorb karta hai. Desiccator mein silica gel ya CaCl₂ hota hai jo moisture absorb karta hai — dry environment mein sample cool hota hai bina moisture gain kiye.</p>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">FSSAI Standard:</h4>
+            <p>Maximum <strong>0.3%</strong> moisture in ghee. Fresh, well-prepared ghee mein usually 0.1-0.2% hoti hai.</p>
+          `
+        },
+        {
+          title: "Baudouin Test (Vanaspati Detection)",
+          purpose: "Ghee mein vanaspati (hydrogenated vegetable oil) milawat ka pata lagata hai. Ye ek qualitative colour test hai.",
+          reference: "IS 3508 – 1966",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+            <p>FSSAI rule ke under, India mein banne wali <strong>vanaspati</strong> (hydrogenated vegetable oil) mein <strong>5% sesame (til) oil</strong> milana mandatory hai — taaki vanaspati ko ghee se distinguish kar sakein.</p>
+            <p class="mt-1">Sesame oil mein ek unique compound hota hai: <strong>Sesamol</strong> (3,4-methylenedioxyphenol). Ye compound <strong>furfural</strong> ke saath acidic medium (conc. HCl) mein react karke <strong>PINK/RED colour</strong> ka condensation product banata hai.</p>
+            <p class="mt-1">Pure ghee mein sesamol nahi hota, isliye ye test negative aata hai. Agar ghee mein vanaspati milaya gaya hai to sesame oil automatic aayega → test POSITIVE.</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Chemical Reaction:</h4>
+            <div class="bg-gray-50 border rounded p-3 mt-2 text-sm">
+              <pre><code>Sesamol + Furfural + HCl → PINK/RED coloured condensation product
+
+Sesamol (sesame oil mein):         Furfural:
+    OH                               CHO
+    |                                 |
+    [benzene ring]—O                  [furan ring]
+                    \                 
+                     CH₂              
+                    /                 
+    [benzene ring]—O                  
+
+Conc. HCl = Catalyst + acidic medium provide karta hai
+Result = Crimson pink/red colour (condensation product)</code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>5 ml melted ghee ek clean, dry test tube mein lein.</li>
+              <li>5 ml concentrated HCl daalein carefully. <em>— HCl acidic medium provide karta hai jo reaction ke liye zaroori hai. Conc. HCl very corrosive hai — carefully handle karein.</em></li>
+              <li>0.4 ml 2% furfural solution daalein (FRESHLY prepared in alcohol). <em>— Furfural purana hone par polymerize ho jaata hai aur dark ho jaata hai — isliye fresh solution zaroori hai. 2% = 2 g furfural in 100 ml ethanol.</em></li>
+              <li>Test tube ko 2 minute ke liye vigorously shake karein (rubber stopper laga kar). <em>— Vigorous shaking se ghee aur acid layer ka contact maximum hota hai — reaction properly ho sake.</em></li>
+              <li>Test tube stand mein rakh kar layers separate hone dein (2-3 minutes).</li>
+              <li>Lower (acid) layer ka colour observe karein.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Result Interpretation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <p class="text-sm"><strong>Ye qualitative test hai — koi mathematical formula nahi hai. Result colour observation par based hai:</strong></p>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Observation (Acid Layer)</th><th class="border p-2">Interpretation</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2 text-red-600 font-semibold">Pink ya Red colour</td><td class="border p-2">Vanaspati PRESENT — Ghee ADULTERATED hai (sesame oil detected)</td></tr>
+                  <tr><td class="border p-2 text-green-600 font-semibold">No colour / pale yellow</td><td class="border p-2">Vanaspati ABSENT — Pure ghee (no sesame oil)</td></tr>
+                </tbody>
+              </table>
+              <p class="text-sm mt-2"><strong>Sensitivity:</strong> Ye test approximately 5% vanaspati milawat tak detect kar sakta hai. Kyunki vanaspati mein 5% sesame oil hai, isliye 5% vanaspati milane par effectively 0.25% sesame oil present hoga — sufficient for detection.</p>
+              <p class="text-sm mt-2"><strong>False Positive kab ho sakta hai?</strong> Agar ghee til ke tel mein fry karke banayi gayi ho (rare but possible), ya agar separately sesame oil milaya gaya ho. Isliye ye test specifically vanaspati ka conclusive nahi, balki sesame oil ka detection test hai.</p>
+              <p class="text-sm mt-2"><strong>FSSAI Logic:</strong> Vanaspati bahut sasti hai ghee ke comparison mein. Log profit ke liye vanaspati milaate hain. FSSAI ne vanaspati mein sesame oil milana mandatory kiya taaki ye adulteration detect ho sake — bahut clever regulatory strategy!</p>
+            </div>
+          `
+        },
+        {
+          title: "Fiehe's Test (for Vegetable Fat)",
+          purpose: "Ghee mein vegetable fat/oil ya vanaspati milawat ka ek aur confirmatory colour test — Liebermann-Burchard reaction par based.",
+          reference: "IS 3508 – 1966",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+            <p>Vegetable oils mein <strong>phytosterols</strong> hote hain (β-sitosterol, stigmasterol, campesterol — ye plant-specific sterols hain). Animal fats (ghee) mein <strong>cholesterol</strong> hota hai.</p>
+            <p class="mt-1">Jab sterols ko <strong>acetic anhydride + conc. H₂SO₄</strong> ke saath react karate hain, to phytosterols ek characteristic <strong>GREEN/BLUE-GREEN</strong> colour dete hain (Liebermann-Burchard reaction). Cholesterol bhi colour deta hai lekin wo initial green ke baad jaldi brownish ho jaata hai, aur intensity kam hoti hai.</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Chemical Reaction (Liebermann-Burchard):</h4>
+            <div class="bg-gray-50 border rounded p-3 mt-2 text-sm">
+              <pre><code>Phytosterol + Acetic Anhydride + Conc. H₂SO₄ 
+→ Dehydration → Conjugated unsaturated sterol derivative
+→ GREEN/BLUE-GREEN colour
+
+Step 1: H₂SO₄ acts as dehydrating agent
+        Sterol → loses water → forms unsaturated ring system
+
+Step 2: Conjugated double bonds form
+        → Absorb specific wavelength of visible light
+        → GREEN colour dikhai deta hai
+
+Step 3: Acetic anhydride provides acetylation medium
+        → Stabilizes the colour reaction</code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>5 ml melted ghee ko ek dry test tube mein lein.</li>
+              <li>5 ml acetic anhydride daalein aur mix karein. <em>— Acetic anhydride moisture-sensitive hai. Test tube bilkul dry honi chahiye, nahi to acetic anhydride paani se react karega (acetic acid banega) aur test fail hoga.</em></li>
+              <li>1-2 drops conc. H₂SO₄ carefully test tube ke side se add karein (DIRECTLY mat daalein — bahut exothermic reaction hai). <em>— Conc. H₂SO₄ bahut dangerous hai — skin par girne se severe burns hote hain. Very carefully handle karein.</em></li>
+              <li>Gently mix karein aur colour observe karein immediately aur 5 minute ke baad.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Result Interpretation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <p class="text-sm"><strong>Ye qualitative colour test hai — koi formula nahi:</strong></p>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Colour Observed</th><th class="border p-2">Interpretation</th><th class="border p-2">Kyun?</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2 text-green-600 font-semibold">Green / Blue-green</td><td class="border p-2">Vegetable fat/oil PRESENT</td><td class="border p-2">Phytosterols (β-sitosterol) ki reaction → intense green colour</td></tr>
+                  <tr><td class="border p-2 font-semibold">Brown / no green</td><td class="border p-2">Pure milk fat</td><td class="border p-2">Cholesterol ki reaction → transient greenish → quickly turns brown</td></tr>
+                </tbody>
+              </table>
+              <p class="text-sm mt-2"><strong>Limitation:</strong> Ye test semi-quantitative hai — green colour ki intensity se milawat ki approximate extent pata chal sakti hai, lekin exact percentage nahi. Cholesterol bhi slight green de sakta hai initially — isliye observation time important hai. Phytosterol ka green PERSISTENT rehta hai, cholesterol ka GREEN TRANSIENT hota hai.</p>
+              <p class="text-sm mt-2"><strong>Baudouin vs Fiehe's Test:</strong></p>
+              <ul class="list-disc list-inside text-sm">
+                <li>Baudouin test sesame oil detect karta hai → specifically vanaspati ke liye</li>
+                <li>Fiehe's test phytosterols detect karta hai → ANY vegetable oil/fat ke liye (refined oils, crude oils, vanaspati sab)</li>
+                <li>Dono complementary tests hain — ek se doosre ki confirmation hoti hai</li>
+              </ul>
+            </div>
+          `
+        },
+        {
+          title: "Mineral Oil ka Detection (Holde's Test)",
+          purpose: "Non-edible mineral oils (liquid paraffin, kerosene) ki milawat detect karta hai — ye bahut dangerous adulteration hai.",
+          reference: "IS 3508 – 1966",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+            <p><strong>Mineral oil</strong> = Petroleum se bane hydrocarbons (liquid paraffin, white oil, kerosene). Ye fatty acids ke esters NAHI hain — ye simple hydrocarbons (CₙH₂ₙ₊₂) hain.</p>
+            <p class="mt-2"><strong>Key difference:</strong></p>
+            <ul class="list-disc list-inside text-sm">
+              <li><strong>Edible fat/oil</strong> (triglyceride) = Ester of glycerol + fatty acids → KOH se react karke SOAP banta hai (saponification) → soap PAANI mein dissolve hota hai</li>
+              <li><strong>Mineral oil</strong> = Hydrocarbon → KOH se react NAHI karta (saponify nahi hota) → paani mein dissolve NAHI hota → TURBIDITY/oily droplets ke roop mein dikhai deta hai</li>
+            </ul>
+
+            <h4 class="font-semibold mt-4 mb-2">Chemical Basis:</h4>
+            <div class="bg-gray-50 border rounded p-3 mt-2 text-sm">
+              <pre><code>Normal Fat + KOH → SOAP (water soluble) + Glycerol (water soluble)
+  (saponification reaction)
+  
+  R-COO-CH₂           CH₂-OH
+  |                    |
+  R-COO-CH   + 3KOH → CH-OH    + 3R-COOK
+  |                    |          (soap - dissolves in water)
+  R-COO-CH₂           CH₂-OH
+  (triglyceride)       (glycerol)
+
+Mineral Oil + KOH → NO REACTION (kuch nahi hota!)
+  
+  CₙH₂ₙ₊₂ + KOH → CₙH₂ₙ₊₂ (unchanged!)
+  (hydrocarbon)       (remains as oily droplets)
+
+Jab hot water daalte hain:
+  Soap → dissolves → CLEAR solution
+  Mineral oil → does not dissolve → TURBIDITY / floating droplets</code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>1 gram ghee ko 250 ml round bottom flask mein lein.</li>
+              <li>25 ml 4% alcoholic KOH daalein (4 g KOH in 100 ml ethanol). <em>— Alcoholic KOH isliye kyunki fat alcohol mein dissolve hota hai, paani mein nahi. 4% sufficient hai complete saponification ke liye.</em></li>
+              <li>Reflux condenser laga kar 30 minute water bath par heat karein. <em>— 30 minute mein saara fat saponify ho jaata hai. Mineral oil wahi ka wahi rehta hai.</em></li>
+              <li>100 ml hot distilled water (70-80°C) daalein aur gently mix karein. <em>— Hot water mein soap zyada easily dissolve hota hai.</em></li>
+              <li>Solution ko observe karein.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Result Interpretation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <p class="text-sm"><strong>Ye qualitative test hai — koi formula nahi:</strong></p>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Observation</th><th class="border p-2">Interpretation</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2 text-red-600 font-semibold">Turbidity / oily droplets floating</td><td class="border p-2">Mineral oil PRESENT — dangerous adulteration!</td></tr>
+                  <tr><td class="border p-2 text-green-600 font-semibold">Completely clear solution</td><td class="border p-2">Mineral oil ABSENT — pure ghee (saara fat soap ban gaya aur dissolve ho gaya)</td></tr>
+                </tbody>
+              </table>
+              <p class="text-sm mt-2"><strong>Kyun dangerous hai mineral oil milawat?</strong></p>
+              <ul class="list-disc list-inside text-sm">
+                <li>Mineral oil body mein digest nahi hota (lipase enzyme ise break nahi kar sakta)</li>
+                <li>Intestine aur liver mein accumulate hota hai</li>
+                <li>Laxative effect hota hai (diarrhoea)</li>
+                <li>Long-term use se liver damage ho sakta hai</li>
+                <li>FSSAI ke under ye serious food adulteration offence hai</li>
+              </ul>
+              <p class="text-sm mt-2"><strong>Confirmation:</strong> Unsaponifiable matter test se bhi confirm hota hai — mineral oil milane se unsaponifiable matter > 1.2% ho jaata hai.</p>
+            </div>
+          `
+        },
+        {
+          title: "Peroxide Value (PV)",
+          purpose: "Fat mein oxidative rancidity ke early stages measure karta hai — fat ki freshness aur storage stability ka important indicator.",
+          reference: "A.O.A.C 965.33",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+            <p>Jab fat oxygen ke saath react karta hai (air exposure, light, heat se), to unsaturated fatty acids ke double bonds par <strong>peroxides</strong> (R-O-O-H) bante hain — ye <strong>primary oxidation products</strong> hain.</p>
+            <p class="mt-1">Ye peroxides <strong>potassium iodide (KI)</strong> se react karke <strong>iodine (I₂)</strong> release karte hain. Released I₂ ko <strong>sodium thiosulfate (Na₂S₂O₃)</strong> se titrate karte hain. Jitna zyada peroxide, utna zyada I₂ release, utna zyada Na₂S₂O₃ lagega.</p>
+            <p class="mt-1">Result = <strong>milliequivalents of peroxide oxygen per kilogram of fat</strong> (meq O₂/kg).</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Chemical Reactions — Step by Step:</h4>
+            <div class="bg-gray-50 border rounded p-3 mt-2 text-sm">
+              <p><strong>Step 1 — Oxidation (ye pehle se ho chuka hai storage ke during):</strong></p>
+              <pre><code>R-CH=CH-R' + O₂ → R-CH(OOH)-CH-R'  (lipid peroxide/hydroperoxide)
+(unsaturated fat)   (oxygen)   (peroxide — ye measure karna hai)</code></pre>
+              
+              <p class="mt-2"><strong>Step 2 — Peroxide + KI → Iodine release:</strong></p>
+              <pre><code>R-OOH + 2KI + 2HCl → R-OH + I₂ + 2KCl + H₂O
+(peroxide) + (KI)  → (alcohol) + (free iodine) — iodine brown colour deta hai</code></pre>
+              <p class="text-xs">Acidic medium (acetic acid) mein ye reaction hota hai. Jitni zyada peroxide, utni zyada I₂ release.</p>
+
+              <p class="mt-2"><strong>Step 3 — Titration (I₂ ka measurement):</strong></p>
+              <pre><code>I₂ + 2Na₂S₂O₃ → 2NaI + Na₂S₄O₆
+(iodine) + (thiosulfate) → products
+
+Starch indicator: I₂ ke saath BLUE colour deta hai
+Endpoint: Blue → COLOURLESS (jab saara I₂ react ho jaata hai)</code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>~5 gram ghee accurately weigh karein ek 250 ml glass-stoppered conical flask mein.</li>
+              <li>30 ml acetic acid : chloroform (3:2 v/v) mixture daalein aur dissolve karein. <em>— Chloroform fat ko dissolve karta hai. Acetic acid acidic medium provide karta hai jo reaction ke liye zaroori hai. 3:2 ratio = 18 ml acetic acid + 12 ml chloroform.</em></li>
+              <li>0.5 ml freshly prepared saturated KI solution daalein. <em>— Saturated KI mein excess KI hota hai taaki saari peroxide se react ho sake. FRESHLY prepared isliye kyunki purana KI solution oxidize ho ke I₂ bana leta hai → false high results.</em></li>
+              <li>Exactly 1 minute dark mein rakhein, occasionally shake karein. <em>— Dark mein isliye kyunki light se KI directly oxidize ho kar I₂ release kar sakta hai (bina peroxide ke) → false high result. 1 minute = standardized reaction time.</em></li>
+              <li>30 ml distilled water daalein. <em>— Reaction stop karna aur titration ke liye dilute karna.</em></li>
+              <li>Starch indicator (1% solution) ki 0.5-1 ml daalein. Solution BLUE ho jayega agar I₂ present hai.</li>
+              <li>0.01 N ya 0.1 N Na₂S₂O₃ se titrate karein jab tak blue colour COMPLETELY disappear ho jaye aur solution colourless/pale yellow rahe. <em>— 0.01N use karte hain jab PV low expected ho (fresh ghee). 0.1N use karte hain jab PV high expected ho (rancid fat).</em></li>
+              <li>Blank bhi run karein (same procedure bina ghee ke). <em>— Reagents ki background I₂ release check karne ke liye. Ideally blank 0.1 ml se kam hona chahiye.</em></li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Formula aur Factor Derivation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>PV (meq/kg) = [(S - B) × N × 1000] / W</code></pre>
+              
+              <h5 class="font-semibold mt-3 text-sm">Har Factor ki Detailed Explanation:</h5>
+              
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <tbody>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold w-1/4">S</td><td class="border p-2"><strong>Sample titre</strong> = ml of Na₂S₂O₃ used for sample titration. Zyada titre = zyada I₂ released = zyada peroxide thi sample mein.</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">B</td><td class="border p-2"><strong>Blank titre</strong> = ml of Na₂S₂O₃ used for blank (bina fat ke). Ye reagents ki apni I₂ release correct karta hai. Ideally < 0.1 ml.</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">(S - B)</td><td class="border p-2"><strong>Net titre</strong> = Sirf fat ki peroxides ki wajah se kitna Na₂S₂O₃ laga. Blank ki interference remove ho gayi.</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">N</td><td class="border p-2"><strong>Na₂S₂O₃ ki normality</strong> (0.01N ya 0.1N). Concentration factor — exact amount of thiosulfate per ml.</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">1000</td><td class="border p-2"><strong>Grams to kilograms conversion</strong>. PV ki unit meq/KG hai, lekin sample GRAMS mein weigh kiya. 1 kg = 1000 g, isliye × 1000.</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W</td><td class="border p-2"><strong>Sample weight in grams</strong></td></tr>
+                </tbody>
+              </table>
+
+              <p class="text-sm mt-3"><strong>Complete Derivation:</strong></p>
+              <pre class="text-sm"><code>
+Peroxides + KI → I₂ released
+I₂ + Na₂S₂O₃ → titrated
+
+I₂ + 2Na₂S₂O₃ → products
+(1 mole I₂ = 2 equivalents, 1 mole Na₂S₂O₃ = 1 equivalent)
+So: 1 ml of 1N Na₂S₂O₃ ≡ 1 meq of I₂ ≡ 1 meq of peroxide
+
+Net meq of peroxide = (S - B) × N milliequivalents
+
+PV = meq per KILOGRAM of fat
+
+= [(S - B) × N] meq    ÷    W grams    ×    1000 g/kg
+
+= [(S - B) × N × 1000] / W    meq/kg
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Kyun 1000 multiply karte hain — simple explanation:</strong></p>
+              <pre class="text-sm"><code>
+Agar W = 5 grams aur total meq = 0.031
+
+Per gram: 0.031/5 = 0.0062 meq/g
+Per kilogram: 0.0062 × 1000 = 6.2 meq/kg
+
+Same answer: (0.031 × 1000)/5 = 31/5 = 6.2 meq/kg
+
+Isliye formula mein × 1000 hai — unit conversion grams se kilograms mein
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Example Calculation:</strong></p>
+              <pre class="text-sm"><code>
+Sample weight (W) = 5.02 g
+Na₂S₂O₃ normality (N) = 0.01 N
+Sample titre (S) = 3.20 ml
+Blank titre (B) = 0.10 ml
+
+PV = [(3.20 - 0.10) × 0.01 × 1000] / 5.02
+   = [3.10 × 0.01 × 1000] / 5.02
+   = [31.0] / 5.02
+   = 6.17 meq/kg
+
+FSSAI limit for ghee ≤ 1.0 meq/kg → Ye ghee RANCID hai ✗
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Example 2 (Fresh ghee):</strong></p>
+              <pre class="text-sm"><code>
+W = 5.00 g, N = 0.01 N, S = 0.45 ml, B = 0.05 ml
+
+PV = [(0.45 - 0.05) × 0.01 × 1000] / 5.00
+   = [0.40 × 0.01 × 1000] / 5.00
+   = 4.0 / 5.00
+   = 0.80 meq/kg → Fresh ghee, PASS ✓
+              </code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">FSSAI Standards:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Category</th><th class="border p-2">PV (meq/kg)</th><th class="border p-2">Meaning</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Fresh ghee (FSSAI)</td><td class="border p-2">≤ 1.0</td><td class="border p-2">Excellent — minimal oxidation</td></tr>
+                <tr><td class="border p-2">Agmark limit</td><td class="border p-2">≤ 3.0</td><td class="border p-2">Acceptable</td></tr>
+                <tr><td class="border p-2">Moderately oxidized</td><td class="border p-2">5-10</td><td class="border p-2">Beginning of rancidity</td></tr>
+                <tr><td class="border p-2">Rancid</td><td class="border p-2">> 10</td><td class="border p-2">Off-flavour, unhealthy — reject</td></tr>
+              </tbody>
+            </table>
+          `
+        },
+        {
+          title: "Modified Kirschner Value",
+          purpose: "Specifically butyric acid ka measure — ghee ki authenticity ka sabse reliable aur specific chemical indicator. Butyric acid sirf milk fat mein hota hai.",
+          reference: "IS 3508 – 1966",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+            <p><strong>Kirschner value</strong> specifically <strong>butyric acid</strong> (C4) ko measure karta hai jo exclusively milk fat mein paaya jaata hai. Vegetable oils mein butyric acid ZERO hota hai. Isliye ye ghee ke adulteration detection ka <strong>sabse specific test</strong> hai.</p>
+            
+            <p class="mt-2"><strong>RM Value vs Kirschner Value — kya fark hai?</strong></p>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Parameter</th><th class="border p-2">RM Value</th><th class="border p-2">Kirschner Value</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Kya measure karta hai</td><td class="border p-2">ALL water-soluble volatile acids (butyric + caproic + formic)</td><td class="border p-2">ONLY butyric acid (silver salt separation se isolate)</td></tr>
+                <tr><td class="border p-2">Specificity</td><td class="border p-2">Less specific</td><td class="border p-2">Highly specific for milk fat</td></tr>
+                <tr><td class="border p-2">Extra step</td><td class="border p-2">Simple distillation + titration</td><td class="border p-2">Silver salt precipitation step added</td></tr>
+              </tbody>
+            </table>
+
+            <h4 class="font-semibold mt-4 mb-2">Silver Salt Separation ka Concept:</h4>
+            <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mt-2 text-sm">
+              <p><strong>Kyun silver salt use karte hain?</strong></p>
+              <p class="mt-1">RM value distillate mein butyric acid (C4) ke alaawa caproic acid (C6) bhi hota hai. Hume sirf butyric acid chahiye. Silver salt ka trick ye hai:</p>
+              <ul class="list-disc list-inside mt-1 space-y-1">
+                <li>Butyric acid ka silver salt (CH₃CH₂CH₂COOAg) → WATER SOLUBLE hai</li>
+                <li>Caproic acid ka silver salt (C₅H₁₁COOAg) → WATER INSOLUBLE hai (precipitate ban jaata hai)</li>
+                <li>Higher acids ke silver salts bhi insoluble hain</li>
+              </ul>
+              <p class="mt-2">Isliye jab AgNO₃ daalte hain:</p>
+              <pre><code>Butyric acid → Silver butyrate (SOLUBLE → stays in solution)
+Caproic acid → Silver caproate (INSOLUBLE → precipitates out → filter out)
+Higher acids → Silver salts (INSOLUBLE → precipitates out)</code></pre>
+              <p class="mt-1">Filter karne ke baad jo solution bachta hai usme sirf butyric acid ka silver salt hai. Use acidify karke butyric acid free karte hain, distill karte hain, aur titrate karte hain = KIRSCHNER VALUE.</p>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li><strong>Step 1-5:</strong> Exactly same as RM value test — 5g ghee saponify karein, acidify karein, 110 ml distill karein, filter karein.</li>
+              <li><strong>Step 6 — Neutralization:</strong> 100 ml filtrate ko 0.1N Ba(OH)₂ ya NaOH se exactly neutralize karein (phenolphthalein — faint pink endpoint).</li>
+              <li><strong>Step 7 — Silver salt precipitation:</strong> Neutralized solution mein excess AgNO₃ (silver nitrate) solution daalein. <em>— Caproic acid ka silver salt precipitate ho jayega (white precipitate), butyric acid ka silver salt dissolved rehega.</em></li>
+              <li><strong>Step 8 — Filtration:</strong> Precipitate filter karein. Clear filtrate collect karein — isme sirf silver butyrate hai.</li>
+              <li><strong>Step 9 — Acidification aur Re-distillation:</strong> Filtrate ko dilute H₂SO₄ se acidify karein (butyric acid free hoga). 110 ml distill karein again.</li>
+              <li><strong>Step 10 — Titration:</strong> Distillate ka 100 ml lein, 0.1N NaOH se titrate karein = Kirschner Value.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Formula:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>Kirschner Value = 1.1 × V</code></pre>
+              <p class="text-sm mt-1">Jahaan V = ml of 0.1N NaOH used to titrate 100 ml of the SECOND distillate (silver-soluble fraction)</p>
+              
+              <p class="text-sm mt-2"><strong>Factor 1.1</strong> = same reason as RM value (110 ml distill kiya, 100 ml titrate kiya → 110/100 = 1.1 correction)</p>
+
+              <p class="text-sm mt-3"><strong>RM aur Kirschner ka relationship:</strong></p>
+              <pre class="text-sm"><code>
+RM Value = Butyric acid + Caproic acid + other water-soluble volatile acids
+Kirschner Value = ONLY Butyric acid (after silver salt separation)
+
+Isliye: Kirschner Value < RM Value (always)
+
+For pure cow ghee:
+  RM Value: 24-34
+  Kirschner Value: 19-27
+  Difference = mainly caproic acid ka contribution
+              </code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values aur Interpretation:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Sample</th><th class="border p-2">Kirschner Value</th><th class="border p-2">Explanation</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Pure cow ghee</td><td class="border p-2">19-27</td><td class="border p-2">High butyric acid content</td></tr>
+                <tr><td class="border p-2">Pure buffalo ghee</td><td class="border p-2">19-25</td><td class="border p-2">Slightly less butyric acid than cow ghee</td></tr>
+                <tr><td class="border p-2">Vegetable oil</td><td class="border p-2">~0</td><td class="border p-2">NO butyric acid present</td></tr>
+                <tr><td class="border p-2">Ghee + 20% veg oil</td><td class="border p-2">~15-20</td><td class="border p-2">Proportionally reduced (dilution effect)</td></tr>
+              </tbody>
+            </table>
+            <p class="mt-2 text-sm"><strong>Adulteration detection:</strong> Agar 20% vegetable oil milaya ghee mein, to butyric acid bhi 20% dilute hoga → Kirschner value ~20% kam ho jayegi. Ye test <strong>proportional response</strong> deta hai — jitni milawat utna kam Kirschner value.</p>
+          `
+        },
+        {
+          title: "Kreis Test (Rancidity Detection)",
+          purpose: "Ghee mein developed rancidity (oxidative deterioration) detect karna — ye ek rapid qualitative screening test hai.",
+          reference: "IS 3508 – 1966",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+            <p>Jab fat oxidize hota hai (rancidity), to peroxides bante hain (primary products). Ye peroxides further breakdown hoke <strong>aldehydes</strong> bante hain (secondary oxidation products) — specifically <strong>epihydrinal dehyde (malondialdehyde)</strong>.</p>
+            <p class="mt-1"><strong>Phloroglucinol</strong> (1,3,5-trihydroxybenzene) in aldehydes ke saath HCl ki presence mein react karke <strong>PINK/RED colour</strong> ka condensation product banata hai.</p>
+            <p class="mt-1">Fresh fat mein aldehydes nahi hote → no colour. Rancid fat mein aldehydes present → PINK/RED colour.</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Chemical Reaction:</h4>
+            <div class="bg-gray-50 border rounded p-3 mt-2 text-sm">
+              <pre><code>Oxidation chain:
+
+Fat + O₂ → Peroxides (R-OOH) → Aldehydes (R-CHO) + other products
+ (primary oxidation)            (secondary oxidation)
+                                 ↑
+                                 Malondialdehyde (OHC-CH₂-CHO)
+                                 Epihydrinal dehyde
+
+Detection Reaction:
+
+     OH          OH                      CHO
+      \         /                         |
+       [ring]         +    CH₂     +   HCl
+      /         \                         |
+     OH          OH                      CHO
+   Phloroglucinol          Malondialdehyde
+
+         ↓ Acid-catalyzed condensation
+
+   PINK/RED coloured product (Schiff base type)</code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>1 ml melted ghee ek clean, dry test tube mein lein.</li>
+              <li>1 ml concentrated HCl daalein. <em>— HCl acidic catalyst ka kaam karta hai aur phloroglucinol-aldehyde reaction ko promote karta hai. Conc. HCl carefully handle karein.</em></li>
+              <li>1 ml 1% phloroglucinol solution (1 g phloroglucinol in 100 ml diethyl ether) daalein. <em>— Phloroglucinol ko ether mein dissolve karte hain kyunki ye paani mein kam soluble hai. Solution FRESHLY prepare karein.</em></li>
+              <li>Test tube ko rubber stopper se band karke vigorously shake karein (30 seconds). <em>— Vigorous shaking se fat, acid aur reagent ka contact maximum hota hai.</em></li>
+              <li>Layers settle hone dein aur colour observe karein.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Result Interpretation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <p class="text-sm"><strong>Ye qualitative test hai — koi mathematical formula nahi:</strong></p>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Colour</th><th class="border p-2">Interpretation</th><th class="border p-2">Action</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2 text-red-600 font-semibold">Pink / Red colour</td><td class="border p-2">RANCIDITY detected — oxidation aldehydes present</td><td class="border p-2">Ghee reject karein — off-flavour hoga, potentially harmful</td></tr>
+                  <tr><td class="border p-2 text-green-600 font-semibold">No colour change</td><td class="border p-2">NOT rancid — fresh ghee</td><td class="border p-2">Acceptable</td></tr>
+                </tbody>
+              </table>
+              
+              <p class="text-sm mt-3"><strong>Kreis Test vs Peroxide Value — kya fark hai?</strong></p>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Parameter</th><th class="border p-2">Kreis Test</th><th class="border p-2">Peroxide Value</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2">Type</td><td class="border p-2">Qualitative (haan/nahi)</td><td class="border p-2">Quantitative (exact number)</td></tr>
+                  <tr><td class="border p-2">Kya detect karta hai</td><td class="border p-2">Secondary oxidation products (aldehydes)</td><td class="border p-2">Primary oxidation products (peroxides)</td></tr>
+                  <tr><td class="border p-2">Stage of rancidity</td><td class="border p-2">Advanced rancidity</td><td class="border p-2">Early rancidity</td></tr>
+                  <tr><td class="border p-2">Time required</td><td class="border p-2">2-3 minutes</td><td class="border p-2">20-30 minutes</td></tr>
+                  <tr><td class="border p-2">Use case</td><td class="border p-2">Quick screening</td><td class="border p-2">Detailed quality control</td></tr>
+                </tbody>
+              </table>
+              <p class="text-sm mt-2">Note: Kabhi-kabhi peroxide value high hota hai lekin Kreis test negative — iska matlab rancidity initial stage mein hai (peroxides ban rahe hain lekin aldehydes abhi nahi bane). Dono tests complementary hain.</p>
+            </div>
+          `
+        }
+      ]
+    },
   
         "cheese-paneer": {
           title: "Paneer / Cheese ka Analysis",
