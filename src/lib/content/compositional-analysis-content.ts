@@ -1,703 +1,2237 @@
 
 
 export const compositionalAnalysisContent = {
-    hi: {
-      main_title: "Dairy Products ka Compositional Analysis",
-      main_description: "Chemical quality assurance ke liye ek detailed guide — Scientific aur Practical Testing Methods ke saath.",
-      back_to_topics: "Topics par wapas jayein",
-      topics: {
-        "processed-milk": {
-          title: "Doodh (Milk)",
-          tests: [
-            {
-              title: "Fat ka Determination (Gerber Method)",
-              purpose: "Fat content ki routine testing, centrifuge ka use karke.",
-              reference: "IS 1479 (Part I) 1961 (Reaffirmed 2003)",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
-                <p>Doodh ko sulphuric acid aur iso-amyl alcohol ke saath ek special Gerber tube (butyrometer) mein milaya jaata hai. Acid proteins aur doosre solid particles ko ghol deta hai, jisse fat free ho jaata hai. Iso-amyl alcohol fat ki layer ko saaf-saaf alag karne mein madad karta hai. Tubes ko centrifuge kiya jaata hai, aur fat, halka hone ke kaaran, butyrometer ke calibrated stem mein upar uth jaata hai, jahaan iska percentage seedha padha jaata hai.</p>
-  
-                <h4 class="font-semibold mt-4 mb-2">Reagents aur Apparatus:</h4>
-                <ul class="list-disc list-outside pl-5 space-y-1">
-                  <li><strong>Sulphuric Acid:</strong> 90-91% concentration, sp. gr. 1.807-1.812 at 27°C.</li>
-                  <li><strong>Amyl Alcohol:</strong> Furfural-free, sp. gr. 0.808-0.818 at 27°C.</li>
-                  <li><strong>Gerber Butyrometer:</strong> ISI marked, suitable range (jaise, 0-10%).</li>
-                  <li><strong>Pipette:</strong> 10.75 ml (doodh), 10 ml (acid), 1 ml (amyl alcohol).</li>
-                  <li><strong>Water Bath:</strong> 65 ± 2°C par maintain kiya gaya.</li>
-                  <li><strong>Gerber Centrifuge:</strong> 1100-1200 rpm mein capable.</li>
-                </ul>
-  
-                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>Butyrometer tube mein 10 ml sulphuric acid daalein bina neck ko geela kiye.</li>
-                  <li>Deewar ke kinaare 10.75 ml achchi tarah se milaya hua doodh butyrometer mein pipette karein.</li>
-                  <li>1 ml amyl alcohol daalein.</li>
-                  <li>Ek lock stopper se band karein, homogeneous hone tak hilayein, aur poora mixture ke liye ulta karein.</li>
-                  <li>Yeh ensure karne ke liye ki saare casein particles ghul gaye hain, 5 minute ke liye 65±2°C par water bath mein rakhein.</li>
-                  <li>4-5 minute ke liye 1100-1200 rpm par centrifuge karein.</li>
-                  <li>5 minute ke liye water bath mein wapas rakhein.</li>
-                  <li>Stopper ko adjust karke calibrated stem se fat ka percentage padhein. Reading fat column meniscus ke neeche se li jaati hai.</li>
-                </ol>
-  
-                <h4 class="font-semibold mt-4 mb-2">Typical Values:</h4>
-                <p>Full cream milk: 6.0% (minimum as per FSSAI), Toned milk: 3.0%, Double toned: 1.5%, Skimmed: ≤0.5%</p>
-              `
-            },
-            {
-              title: "Fat ka Determination (Rose-Gottlieb Method)",
-              purpose: "Fat determination ke liye reference ya standard method, bahut accurate hai — ye arbitration aur calibration ke liye use hota hai.",
-              reference: "IS: 1224 (Part-II)-1977",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
-                <p>Doodh ke sample ka ammonia aur ethanol ke saath treatment kiya jaata hai. Ammonia casein ko gholta hai aur fat globule membrane ko neutralize karta hai. Ethanol protein ko precipitate karta hai. Fat ko phir diethyl ether aur petroleum ether ke mixture se extract kiya jaata hai. Solvents ko evaporate kar diya jaata hai, aur extracted fat ko weigh kiya jaata hai. Ye gravimetric method hai — bahut precise results deta hai.</p>
-  
-                <h4 class="font-semibold mt-4 mb-2">Reagents:</h4>
-                <ul class="list-disc list-outside pl-5 space-y-1">
-                  <li>Ammonia solution (25%)</li>
-                  <li>Ethanol (95%)</li>
-                  <li>Diethyl ether (peroxide-free)</li>
-                  <li>Petroleum ether (40-60°C boiling range)</li>
-                </ul>
-  
-                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>Ek Mojonnier extraction flask mein lagbhag 10 gram doodh ka sample accurately weigh karein.</li>
-                  <li>1.5 ml ammonia solution daalein aur achchi tarah mix karein.</li>
-                  <li>10 ml 95% ethanol daalein aur 1 minute ke liye hilayein.</li>
-                  <li>25 ml diethyl ether daalein, 1 minute ke liye zor se hilayein.</li>
-                  <li>25 ml petroleum ether daalein aur 1 minute ke liye phir se hilayein.</li>
-                  <li>Mixture ko tab tak khada rehne dein jab tak upper ether layer clear na ho jaye, ya layers ko separate karne ke liye centrifuge karein.</li>
-                  <li>Ether layer ko ek pehle se weigh kiye hue flask mein carefully decant karein.</li>
-                  <li>Aqueous layer ke saath do baar aur extraction repeat karein, har baar 15 ml har ek ether ka use karein.</li>
-                  <li>Ek hot plate ya water bath par solvents ko evaporate karein.</li>
-                  <li>Extracted fat wale flask ko 102°C par ek oven mein constant weight par dry karein.</li>
-                </ol>
-  
-                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
-                <pre><code>% Fat = (Extracted fat ka weight / Sample ka weight) × 100</code></pre>
-              `
-            },
-            {
-              title: "Fat ka Determination (Werner-Schmidt Method)",
-              purpose: "Sour ya preserved doodh ke liye suitable, jahaan casein ko dissolve karne ke liye acid ki zaroorat hoti hai.",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
-                <p>Doodh ko concentrated hydrochloric acid ke saath boil kiya jaata hai, jo protein ko digest karta hai aur fat ko free karta hai. Fat ko phir ether ke saath extract kiya jaata hai aur weigh kiya jaata hai. Ye method tab use hota hai jab Rose-Gottlieb method mein ammonia casein ko dissolve nahi kar pata — jaise sour, fermented, ya preserved samples mein.</p>
-  
-                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>Ek suitable extraction tube mein lagbhag 10 gram doodh ka sample accurately weigh karein.</li>
-                  <li>10 ml concentrated HCl daalein aur tab tak heat karein jab tak solution dark brown na ho jaye (sab protein digest ho jaye).</li>
-                  <li>Cool karein, aur Rose-Gottlieb method mein described anusaar diethyl aur petroleum ether ke saath teen baar extract karein.</li>
-                  <li>Solvents ko evaporate karein, residue ko dry karein aur weigh karein.</li>
-                </ol>
-  
-                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
-                <pre><code>% Fat = (Extracted fat ka weight / Sample ka weight) × 100</code></pre>
-              `
-            },
-            {
-              title: "Total Solids ka Determination (Gravimetric Method)",
-              purpose: "Total solid content ko accurately determine karne ke liye standard reference method.",
-              reference: "IS 1479 (Part II) 1961",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
-                <p>Doodh ke ek known weight ko heat kiya jaata hai taaki saara paani evaporate ho jaye. Remaining dry residue ka weight total solids ko represent karta hai. Isme fat, protein, lactose, minerals — sab kuch included hota hai.</p>
-  
-                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>Ek khaali, saaf, dry flat-bottom dish ko uske dhakkan (W1) ke saath weigh karein.</li>
-                  <li>Dish mein lagbhag 5 gram prepared doodh ka sample daalein aur phir se weigh karein (W2).</li>
-                  <li>30 minute ke liye boiling water bath par dhakkan ke bina dish ko heat karein.</li>
-                  <li>Dish ko 102 ± 2°C par 2 ghante ke liye hot air oven mein transfer karein.</li>
-                  <li>Dish ko dhakkan se dhak dein, ek desiccator mein cool karein, aur weigh karein (W3).</li>
-                  <li>Ek constant weight prapt hone tak heating aur cooling process ko repeat karein (successive weights mein difference 0.5 mg se kam hona chahiye).</li>
-                </ol>
-  
-                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
-                <pre><code>% Total Solids = [(W3 - W1) / (W2 - W1)] × 100</code></pre>
-  
-                <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
-                <p>Full cream milk: ≥12.0%, Toned milk: ≥11.5%, Double toned: ≥11.0%, Skimmed: ≥8.7%</p>
-              `
-            },
-            {
-              title: "Solids-Not-Fat (SNF) ka Determination",
-              purpose: "Doodh mein fat ke alawa baaki saare solids (protein, lactose, minerals) ko measure karna.",
-              reference: "IS 1479 (Part II) 1961",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
-                <p>SNF = Total Solids minus Fat. Ye value doodh ki quality aur adulteration detect karne mein important hai. Paani milane se SNF kam hota hai. FSSAI ke standards mein SNF ki minimum limit define ki gayi hai.</p>
-  
-                <h4 class="font-semibold mt-4 mb-2">Method 1: By Difference</h4>
-                <pre><code>% SNF = % Total Solids - % Fat</code></pre>
-  
-                <h4 class="font-semibold mt-4 mb-2">Method 2: ISI Formula (using Lactometer)</h4>
-                <p>Jab laboratory equipment available na ho, tab lactometer reading aur fat content se SNF calculate kiya ja sakta hai:</p>
-                <pre><code>% SNF = (CLR / 4) + (0.21 × F) + 0.36</code></pre>
-                <p class="text-xs">Jahaan CLR = Corrected Lactometer Reading at 27°C, F = Fat %</p>
-  
-                <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
-                <p>Full cream milk: ≥9.0% (cow), ≥9.0% (buffalo). Adulterated milk mein SNF 8.5% se neeche gir sakta hai.</p>
-              `
-            },
-            {
-              title: "Specific Gravity / Lactometer Reading",
-              purpose: "Doodh ki density measure karna — paani milawat detect karne ka sabse simple aur rapid method.",
-              reference: "IS 1479 (Part I) 1961",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
-                <p>Doodh ka specific gravity paani se zyada hota hai (1.028-1.034 range mein). Agar doodh mein paani milaya jaye to specific gravity kam ho jaati hai. Agar fat nikala jaye (skimming) to specific gravity badh jaati hai. Lactometer ek special hydrometer hai jo doodh ke liye calibrated hota hai.</p>
-  
-                <h4 class="font-semibold mt-4 mb-2">Apparatus:</h4>
-                <ul class="list-disc list-outside pl-5 space-y-1">
-                  <li>ISI marked Lactometer (graduated 15-40)</li>
-                  <li>Measuring cylinder (500 ml)</li>
-                  <li>Thermometer (0-50°C)</li>
-                </ul>
-  
-                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>Doodh ko achchi tarah mix karein bina foam banaye.</li>
-                  <li>Doodh ko measuring cylinder mein daalein (lagbhag 500 ml).</li>
-                  <li>Lactometer ko gently doodh mein lower karein aur chhod dein taaki ye freely float kare.</li>
-                  <li>Jab lactometer stable ho jaye, reading lo — meniscus ke upper surface se padhein.</li>
-                  <li>Temperature bhi note karein.</li>
-                  <li>Temperature correction apply karein: Har 1°C 27°C se upar hone par 0.2 add karein, aur har 1°C neeche hone par 0.2 subtract karein.</li>
-                </ol>
-  
-                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
-                <pre><code>Corrected Lactometer Reading (CLR) = LR + 0.2 × (T - 27)</code></pre>
-                <pre><code>Specific Gravity = 1 + (CLR / 1000)</code></pre>
-  
-                <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
-                <p>Normal cow milk: CLR 28-32, Buffalo milk: CLR 28-34. Specific gravity: 1.028-1.034</p>
-              `
-            },
-            {
-              title: "Total Protein Content (Kjeldahl Method)",
-              purpose: "Total nitrogen content determine karne ke liye standard reference method, jise baad mein crude protein content mein convert kiya jaata hai.",
-              reference: "IDF 20B: 1993; A.O.A.C 17th edn, 2000 Official Method 991.23",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
-                <p>Kjeldahl method ek sample mein total nitrogen determine karta hai. Protein mein nitrogen ko pehle concentrated sulphuric acid (digestion) use karke ammonium sulphate mein convert kiya jaata hai. Phir, ammonia gas ko release kiya jaata hai (distillation) aur nitrogen ki quantity determine karne ke liye titrate kiya jaata hai. Is nitrogen amount ko crude protein content calculate karne ke liye ek factor (doodh ke liye 6.38) se multiply kiya jaata hai.</p>
-  
-                <h4 class="font-semibold mt-4 mb-2">3 Steps of Kjeldahl Method:</h4>
-  
-                <h4 class="font-semibold mt-2 mb-1">Step 1 — Digestion:</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-1">
-                  <li>Kjeldahl flask mein ~5 gram doodh weigh karein.</li>
-                  <li>25 ml concentrated sulphuric acid aur ek catalyst mixture (copper sulphate + potassium sulphate — ratio 1:8) daalein.</li>
-                  <li>Fume hood mein heat karein jab tak solution clear blue-green na ho jaye (2-3 hours lag sakte hain).</li>
-                  <li>Ye step saara organic nitrogen ko (NH₄)₂SO₄ mein convert kar deta hai.</li>
-                </ol>
-  
-                <h4 class="font-semibold mt-2 mb-1">Step 2 — Distillation:</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-1">
-                  <li>Digestate ko cool karein, paani se dilute karein.</li>
-                  <li>Excess NaOH (40%) daalein — ye ammonium sulphate ko ammonia gas mein convert karta hai.</li>
-                  <li>Released ammonia ko steam-distill karein ek known amount standard acid mein (4% boric acid with mixed indicator — methyl red + bromocresol green).</li>
-                </ol>
-  
-                <h4 class="font-semibold mt-2 mb-1">Step 3 — Titration:</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-1">
-                  <li>Trapped ammonia ko 0.1 N HCl se titrate karein jab tak indicator colour change na ho jaye (green se pink).</li>
-                  <li>Ek blank determination bhi kiya jaata hai (bina sample ke saari reagents ke saath).</li>
-                </ol>
-  
-                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
-                <pre><code>% Total Nitrogen = [1.4007 × (V_sample - V_blank) × N_acid] / Weight_sample</code></pre>
-                <pre><code>% Crude Protein = % Total Nitrogen × 6.38</code></pre>
-  
-                <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
-                <p>Cow milk protein: 3.0-3.5%, Buffalo milk protein: 3.5-4.5%</p>
-              `
-            },
-            {
-              title: "Casein Content (Kjeldahl Method)",
-              purpose: "Casein, doodh mein main protein ki quantity determine karna — ise nitrogen analysis se pehle precipitate karke.",
-              reference: "IS 1479 (Part II) 1961",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
-                <p>Casein ko doodh se iski isoelectric point (pH 4.6) par acetic acid use karke precipitate kiya jaata hai. Whey proteins filtrate mein rehte hain. Casein precipitate ki nitrogen content ko phir Kjeldahl method dwara determine kiya jaata hai. Casein doodh ka ~80% protein hota hai.</p>
-  
-                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>250 ml beaker mein 10 gram doodh weigh karein. 40-42°C par 90 ml distilled water daalein.</li>
-                  <li>Hilate hue 10% acetic acid solution ka 1.5 ml boond-boond daalein (pH 4.6 tak lane ke liye).</li>
-                  <li>Mixture ko 10 minute ke liye khada rehne dein. Supernatant clear hona chahiye.</li>
-                  <li>Ek filter paper ke through mixture ko filter karein. Precipitate ko thande paani se dhoyein taaki whey proteins puri tarah nikal jayein.</li>
-                  <li>Total protein method mein described anusaar nitrogen determination ke liye filter paper aur precipitate ko Kjeldahl flask mein transfer karein.</li>
-                </ol>
-  
-                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
-                <pre><code>% Casein = Precipitate mein % Nitrogen × 6.38</code></pre>
-  
-                <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
-                <p>Cow milk casein: ~2.5%, Buffalo milk casein: ~3.0-3.5%</p>
-              `
-            },
-            {
-              title: "Lactose ka Determination (Lane-Eynon Method)",
-              purpose: "Doodh mein lactose (doodh ki shakkar) ki quantity measure karna. Lactose ek reducing sugar hai.",
-              reference: "IS 1479 (Part II) 1961; A.O.A.C Official Method 930.28",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
-                <p>Lactose ek reducing sugar hai jo Fehling's solution (copper sulphate + alkaline tartrate) ko reduce kar sakta hai. Fehling's solution ka known volume liya jaata hai aur doodh ke clarified solution se titrate kiya jaata hai jab tak saara copper reduce na ho jaye. Methylene blue indicator ka use endpoint detect karne ke liye hota hai — colour blue se colourless ho jaata hai.</p>
-  
-                <h4 class="font-semibold mt-4 mb-2">Sample Preparation:</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>25 ml doodh ko 250 ml volumetric flask mein lein.</li>
-                  <li>Proteins precipitate karne ke liye 10 ml lead acetate solution daalein, mix karein.</li>
-                  <li>Excess lead hataane ke liye potassium/sodium oxalate daalein.</li>
-                  <li>Volume ko 250 ml tak distilled water se make up karein.</li>
-                  <li>Filter karein — ye clear filtrate titration ke liye use hoga.</li>
-                </ol>
-  
-                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>Ek conical flask mein 10 ml each Fehling's A aur Fehling's B solution lein.</li>
-                  <li>~15 ml distilled water daalein aur boil karein.</li>
-                  <li>Boiling mixture ko burette se doodh ke clarified solution se titrate karein.</li>
-                  <li>Jab solution ka colour halka blue ho jaye, 2-3 drops methylene blue indicator daalein.</li>
-                  <li>Boiling continue karein aur solution drop by drop add karein jab tak blue colour completely disappear na ho jaye (brick red endpoint).</li>
-                  <li>Titre value note karein.</li>
-                </ol>
-  
-                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
-                <pre><code>Lactose (mg) = Factor from Lane-Eynon table corresponding to titre value</code></pre>
-                <pre><code>% Lactose = (Factor × Dilution) / (Titre × Sample weight) × 100</code></pre>
-  
-                <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
-                <p>Normal milk lactose: 4.5-5.0%</p>
-              `
-            },
-            {
-              title: "Titratable Acidity",
-              purpose: "Doodh ki total acidity (natural + developed) measure karna — freshness ka indicator hai.",
-              reference: "IS 1479 (Part I) 1961",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
-                <p>Doodh ki total acidity ko ek standard alkali solution (NaOH) ke saath titrate karke measure kiya jaata hai. Phenolphthalein indicator colour change (colourless se pink) endpoint indicate karta hai. Fresh doodh ki natural acidity ~0.12-0.14% hoti hai (casein, phosphates, CO₂ se). Bacterial growth se lactic acid banta hai jo acidity badhata hai.</p>
-  
-                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>Ek porcelain dish ya conical flask mein 10 ml doodh ka sample lein (ya 10 gram weigh karein).</li>
-                  <li>1% phenolphthalein solution ki kuch boondein daalein (3-4 drops).</li>
-                  <li>0.1 N NaOH solution se burette se titrate karein.</li>
-                  <li>Jab ek halka pink colour dikhaye (endpoint) — jo 15 seconds tak rehna chahiye — tab titration band kar dein.</li>
-                  <li>Use kiye gaye alkali ki volume note karein.</li>
-                </ol>
-  
-                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+  hi: {
+    main_title: "Dairy Products ka Compositional Analysis",
+    main_description: "Chemical quality assurance ke liye ek detailed guide — Scientific aur Practical Testing Methods ke saath.",
+    back_to_topics: "Topics par wapas jayein",
+    topics: {
+      "processed-milk": {
+        title: "Doodh (Milk)",
+        tests: [
+          {
+            title: "Fat ka Determination (Gerber Method)",
+            purpose: "Fat content ki routine testing, centrifuge ka use karke.",
+            reference: "IS 1479 (Part I) 1961 (Reaffirmed 2003)",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+              <p>Doodh ko sulphuric acid aur iso-amyl alcohol ke saath ek special Gerber tube (butyrometer) mein milaya jaata hai. Acid proteins aur doosre solid particles ko ghol deta hai, jisse fat free ho jaata hai. Iso-amyl alcohol fat ki layer ko saaf-saaf alag karne mein madad karta hai. Tubes ko centrifuge kiya jaata hai, aur fat, halka hone ke kaaran, butyrometer ke calibrated stem mein upar uth jaata hai, jahaan iska percentage seedha padha jaata hai.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Reagents aur Apparatus:</h4>
+              <ul class="list-disc list-outside pl-5 space-y-1">
+                <li><strong>Sulphuric Acid:</strong> 90-91% concentration, sp. gr. 1.807-1.812 at 27°C.</li>
+                <li><strong>Amyl Alcohol:</strong> Furfural-free, sp. gr. 0.808-0.818 at 27°C.</li>
+                <li><strong>Gerber Butyrometer:</strong> ISI marked, suitable range (jaise, 0-10%).</li>
+                <li><strong>Pipette:</strong> 10.75 ml (doodh), 10 ml (acid), 1 ml (amyl alcohol).</li>
+                <li><strong>Water Bath:</strong> 65 ± 2°C par maintain kiya gaya.</li>
+                <li><strong>Gerber Centrifuge:</strong> 1100-1200 rpm mein capable.</li>
+              </ul>
+
+              <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Butyrometer tube mein 10 ml sulphuric acid daalein bina neck ko geela kiye.</li>
+                <li>Deewar ke kinaare 10.75 ml achchi tarah se milaya hua doodh butyrometer mein pipette karein.</li>
+                <li>1 ml amyl alcohol daalein.</li>
+                <li>Ek lock stopper se band karein, homogeneous hone tak hilayein, aur poora mixture ke liye ulta karein.</li>
+                <li>Yeh ensure karne ke liye ki saare casein particles ghul gaye hain, 5 minute ke liye 65±2°C par water bath mein rakhein.</li>
+                <li>4-5 minute ke liye 1100-1200 rpm par centrifuge karein.</li>
+                <li>5 minute ke liye water bath mein wapas rakhein.</li>
+                <li>Stopper ko adjust karke calibrated stem se fat ka percentage padhein. Reading fat column meniscus ke neeche se li jaati hai.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Typical Values:</h4>
+              <p>Full cream milk: 6.0% (minimum as per FSSAI), Toned milk: 3.0%, Double toned: 1.5%, Skimmed: ≤0.5%</p>
+            `
+          },
+          {
+            title: "Fat ka Determination (Rose-Gottlieb Method)",
+            purpose: "Fat determination ke liye reference ya standard method, bahut accurate hai — ye arbitration aur calibration ke liye use hota hai.",
+            reference: "IS: 1224 (Part-II)-1977",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+              <p>Doodh ke sample ka ammonia aur ethanol ke saath treatment kiya jaata hai. Ammonia casein ko gholta hai aur fat globule membrane ko neutralize karta hai. Ethanol protein ko precipitate karta hai. Fat ko phir diethyl ether aur petroleum ether ke mixture se extract kiya jaata hai. Solvents ko evaporate kar diya jaata hai, aur extracted fat ko weigh kiya jaata hai. Ye gravimetric method hai — bahut precise results deta hai.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Reagents:</h4>
+              <ul class="list-disc list-outside pl-5 space-y-1">
+                <li>Ammonia solution (25%)</li>
+                <li>Ethanol (95%)</li>
+                <li>Diethyl ether (peroxide-free)</li>
+                <li>Petroleum ether (40-60°C boiling range)</li>
+              </ul>
+
+              <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Ek Mojonnier extraction flask mein lagbhag 10 gram doodh ka sample accurately weigh karein.</li>
+                <li>1.5 ml ammonia solution daalein aur achchi tarah mix karein.</li>
+                <li>10 ml 95% ethanol daalein aur 1 minute ke liye hilayein.</li>
+                <li>25 ml diethyl ether daalein, 1 minute ke liye zor se hilayein.</li>
+                <li>25 ml petroleum ether daalein aur 1 minute ke liye phir se hilayein.</li>
+                <li>Mixture ko tab tak khada rehne dein jab tak upper ether layer clear na ho jaye, ya layers ko separate karne ke liye centrifuge karein.</li>
+                <li>Ether layer ko ek pehle se weigh kiye hue flask mein carefully decant karein.</li>
+                <li>Aqueous layer ke saath do baar aur extraction repeat karein, har baar 15 ml har ek ether ka use karein.</li>
+                <li>Ek hot plate ya water bath par solvents ko evaporate karein.</li>
+                <li>Extracted fat wale flask ko 102°C par ek oven mein constant weight par dry karein.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+              <pre><code>% Fat = (Extracted fat ka weight / Sample ka weight) × 100</code></pre>
+            `
+          },
+          {
+            title: "Fat ka Determination (Werner-Schmidt Method)",
+            purpose: "Sour ya preserved doodh ke liye suitable, jahaan casein ko dissolve karne ke liye acid ki zaroorat hoti hai.",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+              <p>Doodh ko concentrated hydrochloric acid ke saath boil kiya jaata hai, jo protein ko digest karta hai aur fat ko free karta hai. Fat ko phir ether ke saath extract kiya jaata hai aur weigh kiya jaata hai. Ye method tab use hota hai jab Rose-Gottlieb method mein ammonia casein ko dissolve nahi kar pata — jaise sour, fermented, ya preserved samples mein.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Ek suitable extraction tube mein lagbhag 10 gram doodh ka sample accurately weigh karein.</li>
+                <li>10 ml concentrated HCl daalein aur tab tak heat karein jab tak solution dark brown na ho jaye (sab protein digest ho jaye).</li>
+                <li>Cool karein, aur Rose-Gottlieb method mein described anusaar diethyl aur petroleum ether ke saath teen baar extract karein.</li>
+                <li>Solvents ko evaporate karein, residue ko dry karein aur weigh karein.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+              <pre><code>% Fat = (Extracted fat ka weight / Sample ka weight) × 100</code></pre>
+            `
+          },
+          {
+            title: "Total Solids ka Determination (Gravimetric Method)",
+            purpose: "Total solid content ko accurately determine karne ke liye standard reference method.",
+            reference: "IS 1479 (Part II) 1961",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+              <p>Doodh ke ek known weight ko heat kiya jaata hai taaki saara paani evaporate ho jaye. Remaining dry residue ka weight total solids ko represent karta hai. Isme fat, protein, lactose, minerals — sab kuch included hota hai.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Ek khaali, saaf, dry flat-bottom dish ko uske dhakkan (W1) ke saath weigh karein.</li>
+                <li>Dish mein lagbhag 5 gram prepared doodh ka sample daalein aur phir se weigh karein (W2).</li>
+                <li>30 minute ke liye boiling water bath par dhakkan ke bina dish ko heat karein.</li>
+                <li>Dish ko 102 ± 2°C par 2 ghante ke liye hot air oven mein transfer karein.</li>
+                <li>Dish ko dhakkan se dhak dein, ek desiccator mein cool karein, aur weigh karein (W3).</li>
+                <li>Ek constant weight prapt hone tak heating aur cooling process ko repeat karein (successive weights mein difference 0.5 mg se kam hona chahiye).</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+              <pre><code>% Total Solids = [(W3 - W1) / (W2 - W1)] × 100</code></pre>
+
+              <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+              <p>Full cream milk: ≥12.0%, Toned milk: ≥11.5%, Double toned: ≥11.0%, Skimmed: ≥8.7%</p>
+            `
+          },
+          {
+            title: "Solids-Not-Fat (SNF) ka Determination",
+            purpose: "Doodh mein fat ke alawa baaki saare solids (protein, lactose, minerals) ko measure karna.",
+            reference: "IS 1479 (Part II) 1961",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+              <p>SNF = Total Solids minus Fat. Ye value doodh ki quality aur adulteration detect karne mein important hai. Paani milane se SNF kam hota hai. FSSAI ke standards mein SNF ki minimum limit define ki gayi hai.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Method 1: By Difference</h4>
+              <pre><code>% SNF = % Total Solids - % Fat</code></pre>
+
+              <h4 class="font-semibold mt-4 mb-2">Method 2: ISI Formula (using Lactometer)</h4>
+              <p>Jab laboratory equipment available na ho, tab lactometer reading aur fat content se SNF calculate kiya ja sakta hai:</p>
+              <pre><code>% SNF = (CLR / 4) + (0.21 × F) + 0.36</code></pre>
+              <p class="text-xs">Jahaan CLR = Corrected Lactometer Reading at 27°C, F = Fat %</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+              <p>Full cream milk: ≥9.0% (cow), ≥9.0% (buffalo). Adulterated milk mein SNF 8.5% se neeche gir sakta hai.</p>
+            `
+          },
+          {
+            title: "Specific Gravity / Lactometer Reading",
+            purpose: "Doodh ki density measure karna — paani milawat detect karne ka sabse simple aur rapid method.",
+            reference: "IS 1479 (Part I) 1961",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+              <p>Doodh ka specific gravity paani se zyada hota hai (1.028-1.034 range mein). Agar doodh mein paani milaya jaye to specific gravity kam ho jaati hai. Agar fat nikala jaye (skimming) to specific gravity badh jaati hai. Lactometer ek special hydrometer hai jo doodh ke liye calibrated hota hai.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Apparatus:</h4>
+              <ul class="list-disc list-outside pl-5 space-y-1">
+                <li>ISI marked Lactometer (graduated 15-40)</li>
+                <li>Measuring cylinder (500 ml)</li>
+                <li>Thermometer (0-50°C)</li>
+              </ul>
+
+              <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Doodh ko achchi tarah mix karein bina foam banaye.</li>
+                <li>Doodh ko measuring cylinder mein daalein (lagbhag 500 ml).</li>
+                <li>Lactometer ko gently doodh mein lower karein aur chhod dein taaki ye freely float kare.</li>
+                <li>Jab lactometer stable ho jaye, reading lo — meniscus ke upper surface se padhein.</li>
+                <li>Temperature bhi note karein.</li>
+                <li>Temperature correction apply karein: Har 1°C 27°C se upar hone par 0.2 add karein, aur har 1°C neeche hone par 0.2 subtract karein.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+              <pre><code>Corrected Lactometer Reading (CLR) = LR + 0.2 × (T - 27)</code></pre>
+              <pre><code>Specific Gravity = 1 + (CLR / 1000)</code></pre>
+
+              <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+              <p>Normal cow milk: CLR 28-32, Buffalo milk: CLR 28-34. Specific gravity: 1.028-1.034</p>
+            `
+          },
+          {
+            title: "Total Protein Content (Kjeldahl Method)",
+            purpose: "Total nitrogen content determine karne ke liye standard reference method, jise baad mein crude protein content mein convert kiya jaata hai.",
+            reference: "IDF 20B: 1993; A.O.A.C 17th edn, 2000 Official Method 991.23",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+              <p>Kjeldahl method ek sample mein total nitrogen determine karta hai. Protein mein nitrogen ko pehle concentrated sulphuric acid (digestion) use karke ammonium sulphate mein convert kiya jaata hai. Phir, ammonia gas ko release kiya jaata hai (distillation) aur nitrogen ki quantity determine karne ke liye titrate kiya jaata hai. Is nitrogen amount ko crude protein content calculate karne ke liye ek factor (doodh ke liye 6.38) se multiply kiya jaata hai.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">3 Steps of Kjeldahl Method:</h4>
+
+              <h4 class="font-semibold mt-2 mb-1">Step 1 — Digestion:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-1">
+                <li>Kjeldahl flask mein ~5 gram doodh weigh karein.</li>
+                <li>25 ml concentrated sulphuric acid aur ek catalyst mixture (copper sulphate + potassium sulphate — ratio 1:8) daalein.</li>
+                <li>Fume hood mein heat karein jab tak solution clear blue-green na ho jaye (2-3 hours lag sakte hain).</li>
+                <li>Ye step saara organic nitrogen ko (NH₄)₂SO₄ mein convert kar deta hai.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-2 mb-1">Step 2 — Distillation:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-1">
+                <li>Digestate ko cool karein, paani se dilute karein.</li>
+                <li>Excess NaOH (40%) daalein — ye ammonium sulphate ko ammonia gas mein convert karta hai.</li>
+                <li>Released ammonia ko steam-distill karein ek known amount standard acid mein (4% boric acid with mixed indicator — methyl red + bromocresol green).</li>
+              </ol>
+
+              <h4 class="font-semibold mt-2 mb-1">Step 3 — Titration:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-1">
+                <li>Trapped ammonia ko 0.1 N HCl se titrate karein jab tak indicator colour change na ho jaye (green se pink).</li>
+                <li>Ek blank determination bhi kiya jaata hai (bina sample ke saari reagents ke saath).</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+              <pre><code>% Total Nitrogen = [1.4007 × (V_sample - V_blank) × N_acid] / Weight_sample</code></pre>
+              <pre><code>% Crude Protein = % Total Nitrogen × 6.38</code></pre>
+
+              <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+              <p>Cow milk protein: 3.0-3.5%, Buffalo milk protein: 3.5-4.5%</p>
+            `
+          },
+          {
+            title: "Casein Content (Kjeldahl Method)",
+            purpose: "Casein, doodh mein main protein ki quantity determine karna — ise nitrogen analysis se pehle precipitate karke.",
+            reference: "IS 1479 (Part II) 1961",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+              <p>Casein ko doodh se iski isoelectric point (pH 4.6) par acetic acid use karke precipitate kiya jaata hai. Whey proteins filtrate mein rehte hain. Casein precipitate ki nitrogen content ko phir Kjeldahl method dwara determine kiya jaata hai. Casein doodh ka ~80% protein hota hai.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>250 ml beaker mein 10 gram doodh weigh karein. 40-42°C par 90 ml distilled water daalein.</li>
+                <li>Hilate hue 10% acetic acid solution ka 1.5 ml boond-boond daalein (pH 4.6 tak lane ke liye).</li>
+                <li>Mixture ko 10 minute ke liye khada rehne dein. Supernatant clear hona chahiye.</li>
+                <li>Ek filter paper ke through mixture ko filter karein. Precipitate ko thande paani se dhoyein taaki whey proteins puri tarah nikal jayein.</li>
+                <li>Total protein method mein described anusaar nitrogen determination ke liye filter paper aur precipitate ko Kjeldahl flask mein transfer karein.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+              <pre><code>% Casein = Precipitate mein % Nitrogen × 6.38</code></pre>
+
+              <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+              <p>Cow milk casein: ~2.5%, Buffalo milk casein: ~3.0-3.5%</p>
+            `
+          },
+          {
+            title: "Lactose ka Determination (Lane-Eynon Method)",
+            purpose: "Doodh mein lactose (doodh ki shakkar) ki quantity measure karna. Lactose ek reducing sugar hai.",
+            reference: "IS 1479 (Part II) 1961; A.O.A.C Official Method 930.28",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+              <p>Lactose ek reducing sugar hai jo Fehling's solution (copper sulphate + alkaline tartrate) ko reduce kar sakta hai. Fehling's solution ka known volume liya jaata hai aur doodh ke clarified solution se titrate kiya jaata hai jab tak saara copper reduce na ho jaye. Methylene blue indicator ka use endpoint detect karne ke liye hota hai — colour blue se colourless ho jaata hai.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Sample Preparation:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>25 ml doodh ko 250 ml volumetric flask mein lein.</li>
+                <li>Proteins precipitate karne ke liye 10 ml lead acetate solution daalein, mix karein.</li>
+                <li>Excess lead hataane ke liye potassium/sodium oxalate daalein.</li>
+                <li>Volume ko 250 ml tak distilled water se make up karein.</li>
+                <li>Filter karein — ye clear filtrate titration ke liye use hoga.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Ek conical flask mein 10 ml each Fehling's A aur Fehling's B solution lein.</li>
+                <li>~15 ml distilled water daalein aur boil karein.</li>
+                <li>Boiling mixture ko burette se doodh ke clarified solution se titrate karein.</li>
+                <li>Jab solution ka colour halka blue ho jaye, 2-3 drops methylene blue indicator daalein.</li>
+                <li>Boiling continue karein aur solution drop by drop add karein jab tak blue colour completely disappear na ho jaye (brick red endpoint).</li>
+                <li>Titre value note karein.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+              <pre><code>Lactose (mg) = Factor from Lane-Eynon table corresponding to titre value</code></pre>
+              <pre><code>% Lactose = (Factor × Dilution) / (Titre × Sample weight) × 100</code></pre>
+
+              <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+              <p>Normal milk lactose: 4.5-5.0%</p>
+            `
+          },
+          {
+            title: "Titratable Acidity",
+            purpose: "Doodh ki total acidity (natural + developed) measure karna — freshness ka indicator hai.",
+            reference: "IS 1479 (Part I) 1961",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+              <p>Doodh ki total acidity ko ek standard alkali solution (NaOH) ke saath titrate karke measure kiya jaata hai. Phenolphthalein indicator colour change (colourless se pink) endpoint indicate karta hai. Fresh doodh ki natural acidity ~0.12-0.14% hoti hai (casein, phosphates, CO₂ se). Bacterial growth se lactic acid banta hai jo acidity badhata hai.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Ek porcelain dish ya conical flask mein 10 ml doodh ka sample lein (ya 10 gram weigh karein).</li>
+                <li>1% phenolphthalein solution ki kuch boondein daalein (3-4 drops).</li>
+                <li>0.1 N NaOH solution se burette se titrate karein.</li>
+                <li>Jab ek halka pink colour dikhaye (endpoint) — jo 15 seconds tak rehna chahiye — tab titration band kar dein.</li>
+                <li>Use kiye gaye alkali ki volume note karein.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+              <pre><code>% Acidity (as lactic acid) = (9 × V × N) / W</code></pre>
+              <p class="text-xs">Jahaan V = NaOH ki volume (ml), N = NaOH ki normality, W = doodh ke sample ka weight (gram). Factor 9 isliye kyunki lactic acid ka equivalent weight 90 hai aur % ke liye 100 se multiply karna hai — 90/1000 × 100 = 9.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+              <p>Fresh cow milk: 0.12-0.14%, Fresh buffalo milk: 0.12-0.15%. FSSAI maximum limit: 0.15% (as lactic acid) for mixed milk.</p>
+            `
+          },
+          {
+            title: "Total Ash ka Determination",
+            purpose: "Doodh mein total mineral content determine karna.",
+            reference: "IS: 1479 (Part-II)-1961",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+              <p>Doodh ke sample ko tab tak incinerate (burn) kiya jaata hai jab tak saara organic matter destroy na ho jaye, jisse sirf inorganic minerals (ash) reh jaate hain. Ash mein calcium, phosphorus, sodium, potassium, magnesium, chloride etc. included hote hain.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Ek pehle se weigh kiye hue silica ya platinum crucible (W1) mein lagbhag 10 gram doodh ka sample accurately weigh karein.</li>
+                <li>Sample ko ek water bath par evaporate karein (paani hata dein).</li>
+                <li>Phir ek hot plate par tab tak heat karein jab tak ye burn hona band na kar de (charring).</li>
+                <li>Crucible ko 550°C par ek muffle furnace mein tab tak heat karein jab tak ek white ya light grey ash prapt na ho jaye (6-8 hours).</li>
+                <li>Ek desiccator mein cool karein aur weigh karein (W2).</li>
+                <li>Constant weight ke liye repeat karein.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+              <pre><code>% Total Ash = [(W2 - W1) / Sample ka weight] × 100</code></pre>
+
+              <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+              <p>Normal milk ash: 0.7-0.75%. Agar ash unusually high hai to neutralizer (soda, lime) milawat ka indication hai.</p>
+            `
+          },
+          {
+            title: "Minerals ka Determination (Flame Photometry se)",
+            purpose: "Doodh mein calcium, sodium aur potassium ki quantity ka tezi se aur accurately determination karna.",
+            reference: "Journal of Dairy Science Vol. 33, No. 6, 1950",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+              <p>Flame photometry ek aisi technique hai jismein ek sample ko ek flame mein introduce kiya jaata hai. Har element ek specific wavelength par light emit karta hai (Na: 589 nm — yellow, K: 766 nm — violet, Ca: 622 nm — red-orange). Emitted light ki intensity us element ki concentration ke proportional hoti hai.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Sample Preparation:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Ek porcelain crucible mein 100 gram doodh ka accurately weight karein.</li>
+                <li>Sample ko 100°C par 24 ghante ke liye dry karein.</li>
+                <li>Dried sample ko muffle furnace mein 550°C par ash karein.</li>
+                <li>Ash ko 10 ml 1:1 HCl aur garam paani se extract karein. Solution ko filter karein.</li>
+                <li>Complete extraction ensure karne ke liye ashing aur extraction process repeat karein.</li>
+                <li>Final filtered solution ko ek volumetric flask mein 500 ml tak distilled water se dilute karein.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Stock solution ka 5 ml aliquot lein, ise 100 ml volumetric flask mein daalein, aur distilled water se mark tak dilute karein.</li>
+                <li>Flame photometer ko Ca, Na ya K ke specific wavelength par set karein.</li>
+                <li>Known concentrations ke standard solutions tayyar karein.</li>
+                <li>Standard solutions ki intensity measure karein aur calibration curve banayein.</li>
+                <li>Unknown sample ki flame intensity measure karein aur calibration curve se concentration find karein.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Calculation (Interpolation Method):</h4>
+              <pre><code>C_x = C₁ + (C₂ - C₁) × (I_x - I₁) / (I₂ - I₁)</code></pre>
+              <p class="text-xs">Jahaan C = concentration, I = intensity, subscript x = unknown, 1 = lower standard, 2 = upper standard.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Expected Values in Milk:</h4>
+              <p>Calcium: ~120 mg/100ml, Sodium: ~50 mg/100ml, Potassium: ~150 mg/100ml</p>
+            `
+          },
+          {
+            title: "Methylene Blue Reduction Test (MBRT)",
+            purpose: "Raw doodh ki microbiological quality ka quickly assessment karna — ye ek rapid platform test hai.",
+            reference: "IS: 1479 (Part III) – 1977",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+              <p>Methylene Blue ek blue redox dye hai. Doodh mein present bacteria apne metabolism (respiration) ke dauran is dye ko reduce karte hain, jisse ye colourless (leuco form) ho jaata hai. Jitni tezi se colour gayab hota hai, doodh mein utne hi zyada bacteria hote hain. Ye test bacteria count ka indirect measure deta hai.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Reagents:</h4>
+              <ul class="list-disc list-outside pl-5 space-y-1">
+                <li>Methylene Blue solution: 5 mg methylene blue per litre distilled water (autoclaved)</li>
+              </ul>
+
+              <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Ek sterilized test tube mein 10 ml doodh ka sample lein (aseptic technique se).</li>
+                <li>Ek standard methylene blue solution ka 1 ml daalein.</li>
+                <li>Tube ko ek rubber stopper se band karein aur ise ek baar ulta karke mix karein (zyada mat hilayein).</li>
+                <li>Tube ko 37°C par ek water bath mein rakhein.</li>
+                <li>Samay-samay par dekhein (bina hilaye — sirf tube ko dekhein) aur us time ko record karein jab blue colour puri tarah se disappear ho jaye.</li>
+                <li>Ek control tube bhi rakhein (doodh + dye bina incubation ke).</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Interpretation (Grading):</h4>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Grade</th><th class="border p-2">MBRT</th><th class="border p-2">Approx. Bacteria Count</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2"><strong>Bahut Achha (Very Good)</strong></td><td class="border p-2">5 ghante ya usse zyada</td><td class="border p-2">&lt; 5 lakh/ml</td></tr>
+                  <tr><td class="border p-2"><strong>Achha (Good)</strong></td><td class="border p-2">2 se 4 ghante</td><td class="border p-2">5-20 lakh/ml</td></tr>
+                  <tr><td class="border p-2"><strong>Santoshjanak (Fair)</strong></td><td class="border p-2">30 minute se 1 ghanta</td><td class="border p-2">20 lakh - 1 crore/ml</td></tr>
+                  <tr><td class="border p-2"><strong>Kharab (Poor)</strong></td><td class="border p-2">30 minute se kam</td><td class="border p-2">&gt; 1 crore/ml</td></tr>
+                </tbody>
+              </table>
+            `
+          },
+          {
+            title: "Resazurin Test (10 Minute Test)",
+            purpose: "MBRT se bhi tez — sirf 10 minute mein doodh ki quality ka rough assessment.",
+            reference: "IS: 1479 (Part III) – 1977",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+              <p>Resazurin ek blue dye hai jo bacteria ke metabolic activity se reduce hoti hai. Blue → Purple → Pink → Colourless. 10 minute incubation ke baad colour ko ek Lovibond disc se compare karke grade diya jaata hai. Ye MBRT se zyada rapid hai aur field conditions mein useful hai.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Sterilized tube mein 10 ml doodh lein.</li>
+                <li>1 ml standard resazurin solution (0.005%) daalein.</li>
+                <li>Ek baar ulta karke mix karein.</li>
+                <li>37°C par water bath mein rakhein.</li>
+                <li>Exactly 10 minute baad tube nikaalein aur colour ko Lovibond comparator disc se compare karein.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Grading (10-minute Resazurin):</h4>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Disc Reading</th><th class="border p-2">Colour</th><th class="border p-2">Grade</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2">6</td><td class="border p-2">Blue</td><td class="border p-2">Excellent</td></tr>
+                  <tr><td class="border p-2">5</td><td class="border p-2">Light Blue</td><td class="border p-2">Good</td></tr>
+                  <tr><td class="border p-2">4</td><td class="border p-2">Purple</td><td class="border p-2">Fair</td></tr>
+                  <tr><td class="border p-2">3</td><td class="border p-2">Purple-Pink</td><td class="border p-2">Fair</td></tr>
+                  <tr><td class="border p-2">2</td><td class="border p-2">Pink</td><td class="border p-2">Poor</td></tr>
+                  <tr><td class="border p-2">1</td><td class="border p-2">White/Colourless</td><td class="border p-2">Very Poor</td></tr>
+                </tbody>
+              </table>
+            `
+          },
+          {
+            title: "Alkaline Phosphatase Test (ALP Test)",
+            purpose: "Pasteurization ki efficiency verify karna — sabse important quality control test.",
+            reference: "IS 1479 (Part III) 1977; A.O.A.C 946.03",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+              <p>Phosphatase ek enzyme hai jo raw doodh mein naturally present hota hai. Ye 63°C/30 min ya 72°C/15 sec par inactivate ho jaata hai — matlab proper pasteurization se yeh enzyme destroy ho jaata hai. Agar yeh test positive aaye to iska matlab hai ki doodh ko properly pasteurize nahi kiya gaya tha ya ise raw doodh se contaminate kiya gaya tha.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Aschaffenburg and Mullen (A&M) Method:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Doodh ke sample ko ek buffer-substrate solution (disodium p-nitrophenyl phosphate — 0.15% in buffer pH 10.2) ke saath mix karein — 5 ml doodh + 5 ml substrate.</li>
+                <li>37°C par 2 hours ke liye incubate karein.</li>
+                <li>Agar phosphatase present hai, to yeh substrate ko hydrolyze karega, jisse p-nitrophenol niklega — jo alkaline solution mein YELLOW hota hai.</li>
+                <li>Colour ki intensity ko standard colour discs ya spectrophotometer (420 nm) se compare/measure karein.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Interpretation:</h4>
+              <p><strong>Properly pasteurized milk:</strong> No yellow colour (negative test) — &lt;10 µg p-nitrophenol/ml</p>
+              <p><strong>Under-pasteurized/raw milk:</strong> Yellow colour (positive test) — &gt;10 µg p-nitrophenol/ml</p>
+            `
+          },
+          {
+            title: "Peroxidase Test (Storch Test)",
+            purpose: "Over-heating ya over-pasteurization detect karna. Peroxidase enzyme 80°C se upar destroy hota hai.",
+            reference: "IS 1479 (Part I) 1961",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+              <p>Peroxidase ek enzyme hai jo raw doodh mein present hota hai aur HTST pasteurization (72°C/15 sec) survive karta hai but 80°C se upar destroy ho jaata hai. Properly pasteurized doodh mein peroxidase POSITIVE hona chahiye. Agar negative aaye, to doodh over-heated tha.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Procedure (Storch Test):</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Test tube mein 5 ml doodh lein.</li>
+                <li>5 drops of 2% paraphenylene diamine solution daalein.</li>
+                <li>2 drops of hydrogen peroxide (0.2%) daalein.</li>
+                <li>Mix karein aur 30 seconds observe karein.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Interpretation:</h4>
+              <p><strong>Dark blue/indigo colour (within 30 sec):</strong> Positive — Peroxidase present — doodh properly pasteurized (72°C/15 sec) aur over-heated nahi hai.</p>
+              <p><strong>No colour change:</strong> Negative — Peroxidase destroyed — doodh 80°C se upar heat hua hai (over-pasteurized).</p>
+              <p><strong>Raw milk:</strong> Strongly positive (immediate deep colour)</p>
+            `
+          },
+          {
+            title: "pH Determination",
+            purpose: "Doodh ka hydrogen ion concentration measure karna — freshness aur quality ka indicator.",
+            reference: "IS 1479 (Part I) 1961",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>pH meter ko standard buffer solutions (pH 4.0 aur pH 7.0) se calibrate karein.</li>
+                <li>50 ml doodh ek beaker mein lein.</li>
+                <li>Temperature note karein (25°C ideal hai).</li>
+                <li>Electrode ko doodh mein daalein aur stable reading le karein.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+              <p>Fresh cow milk pH: 6.6-6.8, Fresh buffalo milk pH: 6.7-6.8</p>
+              <p>Sour/fermented milk: pH &lt; 6.0, Mastitic milk: pH &gt; 7.0</p>
+            `
+          },
+          {
+            title: "Alcohol Test (COB Test - Clot on Boiling)",
+            purpose: "Doodh ki acidity quickly check karna — developed acidity high hone par doodh alcohol/heat se clot hota hai.",
+            reference: "IS 1479 (Part I) 1961",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Method 1: Alcohol Test</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Ek test tube mein 2 ml doodh lein.</li>
+                <li>2 ml 68% ethanol (ya 75% ethanol for more sensitive test) daalein.</li>
+                <li>Mix karein aur clot formation observe karein.</li>
+              </ol>
+              <p><strong>Result:</strong> Clot formation = POSITIVE = doodh ki acidity 0.20% se zyada hai ya colostrum hai. No clot = NEGATIVE = doodh normal hai.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Method 2: Clot on Boiling (COB) Test</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>5 ml doodh ek test tube ya spoon mein lein.</li>
+                <li>Direct flame par boil karein.</li>
+                <li>Clot formation dekhein.</li>
+              </ol>
+              <p><strong>Result:</strong> Clot = doodh ki acidity 0.24% se zyada hai. No clot = normal.</p>
+            `
+          },
+          {
+            title: "Added Water ka Detection",
+            purpose: "Doodh mein paani milawat ka pata lagana — sabse common adulteration.",
+            reference: "IS 1479 (Part I) 1961",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+              <p>Paani milane se doodh ka SNF aur specific gravity dono kam ho jaate hain. Freezing point bhi change hota hai. Normal doodh ka freezing point -0.520 to -0.540°C hota hai. Paani milane se ye 0°C ki taraf shift hota hai.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Method 1: Lactometer + SNF Method</h4>
+              <p>Lactometer reading aur fat % se SNF calculate karein. Agar SNF 8.5% se neeche hai aur specific gravity 1.028 se kam hai to paani milawat ka strong indication hai.</p>
+              <pre><code>% Added Water = [(Expected SNF - Observed SNF) / Expected SNF] × 100</code></pre>
+
+              <h4 class="font-semibold mt-4 mb-2">Method 2: Cryoscopy (Freezing Point Method)</h4>
+              <p>Doodh ka freezing point ek precision cryoscope se measure karein.</p>
+              <p>Normal freezing point: -0.520 to -0.540°C (Hortvet scale)</p>
+              <pre><code>% Added Water = [(T_observed - T_normal) / T_normal] × 100</code></pre>
+              <p class="text-xs">Jahaan T = Freezing point depression</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Method 3: Nitrate Test</h4>
+              <p>Normal doodh mein nitrate absent hota hai, lekin tap water mein present hota hai. 5 ml doodh lein, carefully 1 ml conc. H₂SO₄ add karein with diphenylamine crystal. Ek blue ring at junction = nitrate present = paani mila hua hai.</p>
+            `
+          },
+          {
+            title: "Formalin ka Detection",
+            purpose: "Formalin (formaldehyde) ek illegal preservative hai — iska detection zaroori hai.",
+            reference: "FSSAI Manual Method 2.1.9",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Hehner's Test:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Ek test tube mein 10 ml doodh lein.</li>
+                <li>5 ml concentrated sulphuric acid (with trace of ferric chloride — 0.2 ml of 10% FeCl₃ per 100 ml acid) ko tube ki deewar se carefully neeche slide karein taaki ye doodh ke neeche settle ho jaye.</li>
+                <li>Interface (junction) par colour observe karein.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Result:</h4>
+              <p><strong>Violet/Purple ring at junction:</strong> Formalin PRESENT — adulterated</p>
+              <p><strong>Brown ring (normal):</strong> Formalin ABSENT — no adulteration</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Confirmatory Test (Chromotropic Acid Test):</h4>
+              <p>1 ml doodh + 1 ml chromotropic acid solution + 5 ml conc. H₂SO₄. Violet colour = formaldehyde confirmed.</p>
+            `
+          },
+          {
+            title: "Urea ka Detection",
+            purpose: "Urea ek common adulterant hai — SNF artificially badhane ke liye milaya jaata hai.",
+            reference: "FSSAI Manual Method",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Method 1: DMAB Method</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Ek test tube mein 5 ml doodh lein.</li>
+                <li>5 ml of DMAB reagent (para-dimethylaminobenzaldehyde — 1.6 g in 100 ml ethanol + 10 ml conc. HCl) daalein.</li>
+                <li>Mix karein aur 10 minute observe karein.</li>
+              </ol>
+              <p><strong>Yellow colour development:</strong> Urea PRESENT (normal doodh mein bhi thoda urea hota hai ~20-70 mg/100ml, but intense yellow = added urea)</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Method 2: Urease Based Quantitative Method</h4>
+              <p>Soybean urease doodh mein add kiya jaata hai jo urea ko ammonia mein convert karta hai. Released ammonia ko Nessler's reagent se measure kiya jaata hai (yellow-brown colour at 420 nm). Normal milk urea: 20-70 mg/100 ml. Added urea: >70 mg/100 ml suspect.</p>
+            `
+          },
+          {
+            title: "Hydrogen Peroxide ka Detection",
+            purpose: "H₂O₂ ek illegal preservative hai — doodh ki shelf life artificially badhane ke liye milaya jaata hai.",
+            reference: "FSSAI Manual Method 2.1.8",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Method 1: Vanadium Pentoxide Method</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Ek test tube mein 10 ml doodh lein.</li>
+                <li>2-3 drops vanadium pentoxide (V₂O₅) solution daalein — ye catalyst ka kaam karta hai.</li>
+                <li>Colour observe karein.</li>
+              </ol>
+              <p><strong>Red/Pink colour:</strong> H₂O₂ PRESENT — adulterated</p>
+              <p><strong>No colour change:</strong> H₂O₂ ABSENT</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Method 2: Potassium Iodide-Starch Method</h4>
+              <p>5 ml doodh + few drops KI solution + few drops starch solution. Blue colour = H₂O₂ present (H₂O₂ KI se iodine liberate karta hai jo starch ke saath blue deta hai).</p>
+            `
+          },
+          {
+            title: "Neutralizer ka Detection",
+            purpose: "Soda, caustic soda, sodium bicarbonate — ye sab doodh ki acidity chhupane ke liye milaaye jaate hain.",
+            reference: "IS 1479 (Part I) 1961; FSSAI Manual",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Method 1: Rosalic Acid Test (for Soda/Carbonates)</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>5 ml doodh ek test tube mein lein.</li>
+                <li>5 ml alcohol daalein (proteins precipitate karne ke liye).</li>
+                <li>3-4 drops rosalic acid solution (1% in alcohol) daalein.</li>
+              </ol>
+              <p><strong>Rose-red/Pink colour:</strong> Neutralizer (soda/carbonate) PRESENT</p>
+              <p><strong>Brownish/Yellow colour:</strong> ABSENT — normal doodh</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Method 2: Alizarin Test for Sodium Bicarbonate</h4>
+              <p>Equal volumes doodh + alizarin reagent (0.2% in alcohol). Deep violet = sodium bicarbonate present.</p>
+            `
+          },
+          {
+            title: "Detergent ka Detection",
+            purpose: "Doodh mein detergent milawat detect karna — ye fat percentage artificially badhane ke liye milaya jaata hai.",
+            reference: "FSSAI Manual",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Methylene Blue Method:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>10 ml doodh ek test tube mein lein.</li>
+                <li>0.5 ml methylene blue solution daalein.</li>
+                <li>5 ml chloroform daalein.</li>
+                <li>Vigorously shake karein aur settle hone dein.</li>
+              </ol>
+              <p><strong>Blue colour in chloroform layer (lower):</strong> Detergent PRESENT — methylene blue detergent ke saath chloroform layer mein migrate karta hai.</p>
+              <p><strong>Colourless chloroform layer:</strong> Detergent ABSENT</p>
+            `
+          },
+          {
+            title: "Ammonium Sulphate ka Detection",
+            purpose: "Ammonium sulphate doodh ki lactometer reading badhane ke liye milaya jaata hai.",
+            reference: "FSSAI Manual",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Nessler's Reagent Method:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>5 ml doodh + 5 ml 2% NaOH solution mix karein.</li>
+                <li>1 ml Nessler's reagent (K₂HgI₄ in NaOH) daalein.</li>
+                <li>5 minute observe karein.</li>
+              </ol>
+              <p><strong>Orange-brown precipitate:</strong> Ammonium sulphate PRESENT (excessive ammonia)</p>
+              <p><strong>Faint yellow (normal level):</strong> Normal doodh — thoda urea naturally hota hai</p>
+            `
+          },
+          {
+            title: "Starch ka Detection in Milk",
+            purpose: "Starch ek thickener ke roop mein milaya jaata hai taaki paani milane ka pata na chale.",
+            reference: "IS 1479 (Part I) 1961",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Iodine Test:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>5 ml doodh ek test tube mein lein.</li>
+                <li>Boil karein aur phir cool karein (starch granules ko swell karne ke liye).</li>
+                <li>2-3 drops iodine solution (Lugol's iodine) daalein.</li>
+              </ol>
+              <p><strong>Blue/Blue-black colour:</strong> Starch PRESENT</p>
+              <p><strong>Yellow-brown colour:</strong> Starch ABSENT (normal)</p>
+            `
+          },
+          {
+            title: "Sugar (Sucrose) ka Detection in Milk",
+            purpose: "Cane sugar ka detection — ye SNF aur taste artificially badhane ke liye milaya jaata hai.",
+            reference: "FSSAI Manual",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Seliwanoff's Test (Modified Barfoed's):</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>5 ml doodh ek test tube mein lein.</li>
+                <li>1 ml conc. HCl daalein.</li>
+                <li>0.05 gram resorcinol add karein.</li>
+                <li>Boiling water bath mein 5 minute heat karein.</li>
+              </ol>
+              <p><strong>Red/Rose-red colour:</strong> Sucrose (cane sugar) PRESENT</p>
+              <p><strong>No colour change:</strong> Sucrose ABSENT</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Note:</h4>
+              <p>Normal doodh mein sirf lactose hota hai, sucrose nahi. Koi bhi sucrose presence adulteration indicate karta hai.</p>
+            `
+          },
+          {
+            title: "Salt (NaCl) ka Detection in Milk",
+            purpose: "Namak milawat ka detection — ye specific gravity aur taste mask karne ke liye milaya jaata hai.",
+            reference: "FSSAI Manual",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Silver Nitrate Test:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>5 ml doodh ek test tube mein lein.</li>
+                <li>1 ml 0.1N silver nitrate (AgNO₃) solution daalein.</li>
+                <li>2 drops potassium chromate indicator daalein.</li>
+              </ol>
+              <p><strong>Yellow colour:</strong> Excess salt (NaCl) PRESENT — AgNO₃ saara chloride se react kar chuka aur excess AgNO₃ chromate se yellow colour de raha hai — actually means chloride kam hai aur salt normal hai.</p>
+              <p><strong>Correction:</strong> Normal milk mein 0.14-0.17% Cl hota hai. White precipitate excess indicate karta hai. Quantitative determination ke liye Mohr's method use karein (butter section mein described hai).</p>
+            `
+          },
+          {
+            title: "Turbidity Test (Lacto Test)",
+            purpose: "Doodh mein paani milawat ka ek simple qualitative test.",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>5 ml doodh ek test tube mein lein.</li>
+                <li>5 ml trichloroacetic acid (TCA, 4%) daalein — ye proteins precipitate kar deta hai.</li>
+                <li>Mix karein aur filter karein.</li>
+                <li>Filtrate ko observe karein.</li>
+              </ol>
+              <p><strong>Clear filtrate:</strong> Normal doodh</p>
+              <p><strong>Turbid/Milky filtrate:</strong> Paani aur/ya synthetic milk milawat ka indication</p>
+            `
+          },
+          // ==================== SHELF LIFE TESTS ====================
+          {
+            title: "Accelerated Shelf Life Test (Moseley / Keeping Quality Test)",
+            purpose: "Pasteurized milk ki keeping quality predict karna — incubation ke through jaldi result lena.",
+            reference: "IS 1479 (Part III) 1977; BIS Standards",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+              <p>Pasteurized doodh ke sample ko elevated temperature par incubate kiya jaata hai (jaise 35-37°C) taaki bacterial growth accelerate ho. Phir incubation ke baad acidity, pH, organoleptic changes, aur bacterial count measure kiye jaate hain. Agar doodh incubation ke baad bhi acceptable limits mein rahe, to iski shelf life achhi mani jaati hai.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Method 1: Moseley Keeping Quality Test</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Pasteurized doodh ke do sets of samples lein — ek "test" set aur ek "control" set.</li>
+                <li><strong>Test samples:</strong> 37°C par incubator mein rakhein.</li>
+                <li><strong>Control samples:</strong> 4°C par refrigerator mein rakhein.</li>
+                <li>Incubation ke baad (typically 24 hours), dono sets ki titratable acidity measure karein.</li>
+                <li>Acidity ka difference calculate karein.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">📐 Formulas aur Factors ka Explanation:</h4>
+              <div class="bg-blue-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Acidity Measurement Formula (Titratable Acidity):</strong></p>
                 <pre><code>% Acidity (as lactic acid) = (9 × V × N) / W</code></pre>
-                <p class="text-xs">Jahaan V = NaOH ki volume (ml), N = NaOH ki normality, W = doodh ke sample ka weight (gram). Factor 9 isliye kyunki lactic acid ka equivalent weight 90 hai aur % ke liye 100 se multiply karna hai — 90/1000 × 100 = 9.</p>
-  
-                <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
-                <p>Fresh cow milk: 0.12-0.14%, Fresh buffalo milk: 0.12-0.15%. FSSAI maximum limit: 0.15% (as lactic acid) for mixed milk.</p>
-              `
-            },
-            {
-              title: "Total Ash ka Determination",
-              purpose: "Doodh mein total mineral content determine karna.",
-              reference: "IS: 1479 (Part-II)-1961",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
-                <p>Doodh ke sample ko tab tak incinerate (burn) kiya jaata hai jab tak saara organic matter destroy na ho jaye, jisse sirf inorganic minerals (ash) reh jaate hain. Ash mein calcium, phosphorus, sodium, potassium, magnesium, chloride etc. included hote hain.</p>
-  
-                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>Ek pehle se weigh kiye hue silica ya platinum crucible (W1) mein lagbhag 10 gram doodh ka sample accurately weigh karein.</li>
-                  <li>Sample ko ek water bath par evaporate karein (paani hata dein).</li>
-                  <li>Phir ek hot plate par tab tak heat karein jab tak ye burn hona band na kar de (charring).</li>
-                  <li>Crucible ko 550°C par ek muffle furnace mein tab tak heat karein jab tak ek white ya light grey ash prapt na ho jaye (6-8 hours).</li>
-                  <li>Ek desiccator mein cool karein aur weigh karein (W2).</li>
-                  <li>Constant weight ke liye repeat karein.</li>
-                </ol>
-  
-                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
-                <pre><code>% Total Ash = [(W2 - W1) / Sample ka weight] × 100</code></pre>
-  
-                <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
-                <p>Normal milk ash: 0.7-0.75%. Agar ash unusually high hai to neutralizer (soda, lime) milawat ka indication hai.</p>
-              `
-            },
-            {
-              title: "Minerals ka Determination (Flame Photometry se)",
-              purpose: "Doodh mein calcium, sodium aur potassium ki quantity ka tezi se aur accurately determination karna.",
-              reference: "Journal of Dairy Science Vol. 33, No. 6, 1950",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
-                <p>Flame photometry ek aisi technique hai jismein ek sample ko ek flame mein introduce kiya jaata hai. Har element ek specific wavelength par light emit karta hai (Na: 589 nm — yellow, K: 766 nm — violet, Ca: 622 nm — red-orange). Emitted light ki intensity us element ki concentration ke proportional hoti hai.</p>
-  
-                <h4 class="font-semibold mt-4 mb-2">Sample Preparation:</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>Ek porcelain crucible mein 100 gram doodh ka accurately weight karein.</li>
-                  <li>Sample ko 100°C par 24 ghante ke liye dry karein.</li>
-                  <li>Dried sample ko muffle furnace mein 550°C par ash karein.</li>
-                  <li>Ash ko 10 ml 1:1 HCl aur garam paani se extract karein. Solution ko filter karein.</li>
-                  <li>Complete extraction ensure karne ke liye ashing aur extraction process repeat karein.</li>
-                  <li>Final filtered solution ko ek volumetric flask mein 500 ml tak distilled water se dilute karein.</li>
-                </ol>
-  
-                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>Stock solution ka 5 ml aliquot lein, ise 100 ml volumetric flask mein daalein, aur distilled water se mark tak dilute karein.</li>
-                  <li>Flame photometer ko Ca, Na ya K ke specific wavelength par set karein.</li>
-                  <li>Known concentrations ke standard solutions tayyar karein.</li>
-                  <li>Standard solutions ki intensity measure karein aur calibration curve banayein.</li>
-                  <li>Unknown sample ki flame intensity measure karein aur calibration curve se concentration find karein.</li>
-                </ol>
-  
-                <h4 class="font-semibold mt-4 mb-2">Calculation (Interpolation Method):</h4>
-                <pre><code>C_x = C₁ + (C₂ - C₁) × (I_x - I₁) / (I₂ - I₁)</code></pre>
-                <p class="text-xs">Jahaan C = concentration, I = intensity, subscript x = unknown, 1 = lower standard, 2 = upper standard.</p>
-  
-                <h4 class="font-semibold mt-4 mb-2">Expected Values in Milk:</h4>
-                <p>Calcium: ~120 mg/100ml, Sodium: ~50 mg/100ml, Potassium: ~150 mg/100ml</p>
-              `
-            },
-            {
-              title: "Methylene Blue Reduction Test (MBRT)",
-              purpose: "Raw doodh ki microbiological quality ka quickly assessment karna — ye ek rapid platform test hai.",
-              reference: "IS: 1479 (Part III) – 1977",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
-                <p>Methylene Blue ek blue redox dye hai. Doodh mein present bacteria apne metabolism (respiration) ke dauran is dye ko reduce karte hain, jisse ye colourless (leuco form) ho jaata hai. Jitni tezi se colour gayab hota hai, doodh mein utne hi zyada bacteria hote hain. Ye test bacteria count ka indirect measure deta hai.</p>
-  
-                <h4 class="font-semibold mt-4 mb-2">Reagents:</h4>
+                <p class="text-xs mt-1">V = NaOH volume (ml), N = NaOH normality, W = sample weight (g)</p>
+                
+                <p class="mt-2"><strong>Factor "9" kahan se aaya?</strong></p>
+                <p class="text-sm">Lactic acid ka molecular weight = 90 g/mol. Ye monoprotic acid hai (1 H⁺ deta hai), so equivalent weight = 90. Formula derivation:</p>
+                <pre><code>% = (V × N × Eq.Wt.) / (1000 × W) × 100 = (V × N × 90 × 100) / (1000 × W) = (9 × V × N) / W</code></pre>
+                
+                <p class="mt-2"><strong>Keeping Quality Formula:</strong></p>
+                <pre><code>Acidity Difference = Incubated Acidity (37°C/24h) − Control Acidity (4°C/24h)</code></pre>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">🔑 Har Temperature/Time Factor Kyu?</h4>
+              <div class="bg-yellow-50 p-3 rounded mt-2 mb-2">
+                <p><strong>37°C kyu?</strong> — Most dairy spoilage bacteria (Lactobacillus, Streptococcus, E. coli) mesophilic hain — inka optimum growth temperature 30-40°C hai. 37°C = human body temperature ≈ fastest bacterial multiplication. Ek bacterium 37°C par har 20-30 min mein double hota hai. 24 hours mein ek bacterium → 2⁴⁸ = ~2.8 × 10¹⁴ ban sakta hai (ideal conditions mein)!</p>
+                
+                <p class="mt-2"><strong>4°C kyu (Control)?</strong> — Ye standard refrigeration temperature hai. 4°C par mesophilic bacteria lagbhag dormant rehte hain — growth negligible hoti hai. Isliye control ki acidity ~unchanged rehti hai. Ye baseline provide karta hai.</p>
+                
+                <p class="mt-2"><strong>24 hours kyu?</strong> — 37°C par 24 hours ≈ 4°C par 4-5 din ke equivalent bacterial growth. Ye "accelerated" isliye hai kyunki Q₁₀ rule ke according: <em>Temperature mein har 10°C increase se bacterial growth rate ~2-3 guna badh jaata hai.</em></p>
+                <pre><code>Q₁₀ Rule: Rate₂ / Rate₁ = Q₁₀^((T₂-T₁)/10)
+Example: Q₁₀ = 2.5, T₁ = 4°C, T₂ = 37°C
+Rate ratio = 2.5^((37-4)/10) = 2.5^3.3 = ~21×
+Matlab 37°C par 24h ≈ 4°C par 21 din ka equivalent (approximately)</code></pre>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 1 (Good Quality Milk):</h4>
+              <div class="bg-green-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Given:</strong> Pasteurized toned milk sample. 0.1N NaOH use kiya. Sample weight = 10 g each.</p>
+                <p><strong>Control sample (4°C/24h):</strong> NaOH volume used = 1.5 ml</p>
+                <pre><code>Control Acidity = (9 × 1.5 × 0.1) / 10 = 1.35 / 10 = 0.135% LA</code></pre>
+                
+                <p><strong>Test sample (37°C/24h):</strong> NaOH volume used = 1.7 ml</p>
+                <pre><code>Test Acidity = (9 × 1.7 × 0.1) / 10 = 1.53 / 10 = 0.153% LA</code></pre>
+                
+                <pre><code>Acidity Difference = 0.153 - 0.135 = 0.018% LA</code></pre>
+                
+                <p><strong>Result: 0.018% < 0.02% → ✅ EXCELLENT keeping quality!</strong></p>
+                <p>Iska matlab hai bacteria bahut kam hain pasteurized milk mein. Expected shelf life: 5+ din at 4°C.</p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 2 (Poor Quality Milk):</h4>
+              <div class="bg-red-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Given:</strong> Doosra batch. Same conditions.</p>
+                <p><strong>Control sample (4°C/24h):</strong> NaOH = 1.5 ml → Acidity = 0.135% LA</p>
+                <p><strong>Test sample (37°C/24h):</strong> NaOH = 2.9 ml</p>
+                <pre><code>Test Acidity = (9 × 2.9 × 0.1) / 10 = 2.61 / 10 = 0.261% LA</code></pre>
+                <pre><code>Acidity Difference = 0.261 - 0.135 = 0.126% LA</code></pre>
+                
+                <p><strong>Result: 0.126% > 0.10% → ❌ POOR keeping quality!</strong></p>
+                <p>Bahut zyada bacteria the — possibly post-pasteurization contamination ya under-pasteurization. Expected shelf life: < 2 din. Is batch ki investigation zaroori hai!</p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Interpretation:</h4>
+              <pre><code>Acidity Difference = Incubated Acidity - Control Acidity</code></pre>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Acidity Increase (% LA)</th><th class="border p-2">Keeping Quality</th><th class="border p-2">Expected Shelf Life at 4°C</th><th class="border p-2">Approx. Bacterial Load</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2">&lt; 0.02%</td><td class="border p-2">Excellent</td><td class="border p-2">5+ din</td><td class="border p-2">&lt; 10,000 CFU/ml</td></tr>
+                  <tr><td class="border p-2">0.02 - 0.05%</td><td class="border p-2">Good</td><td class="border p-2">3-5 din</td><td class="border p-2">10,000 - 50,000 CFU/ml</td></tr>
+                  <tr><td class="border p-2">0.05 - 0.10%</td><td class="border p-2">Fair</td><td class="border p-2">2-3 din</td><td class="border p-2">50,000 - 5,00,000 CFU/ml</td></tr>
+                  <tr><td class="border p-2">&gt; 0.10%</td><td class="border p-2">Poor</td><td class="border p-2">&lt; 2 din</td><td class="border p-2">&gt; 5,00,000 CFU/ml</td></tr>
+                </tbody>
+              </table>
+
+              <h4 class="font-semibold mt-4 mb-2">Method 2: Extended Keeping Quality at Refrigeration</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Multiple sealed samples 4-7°C par store karein.</li>
+                <li>Har 24 ghante ek sample nikaalein aur test karein — acidity, pH, sensory, coliform count.</li>
+                <li>Jab koi bhi parameter fail kare, woh din shelf life ki limit hai.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">⚠️ Critical Limits (Fail Criteria):</h4>
+              <div class="bg-gray-50 p-3 rounded mt-2">
                 <ul class="list-disc list-outside pl-5 space-y-1">
-                  <li>Methylene Blue solution: 5 mg methylene blue per litre distilled water (autoclaved)</li>
+                  <li>Acidity > 0.18% LA → doodh sour hone laga</li>
+                  <li>pH < 6.4 → significant acid production</li>
+                  <li>Acidity > 0.20% → COB test positive → market ke liye unfit</li>
+                  <li>Acidity > 0.24% → clot on boiling → completely spoiled</li>
+                  <li>Sensory score < 5 → consumer unacceptable</li>
                 </ul>
-  
-                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>Ek sterilized test tube mein 10 ml doodh ka sample lein (aseptic technique se).</li>
-                  <li>Ek standard methylene blue solution ka 1 ml daalein.</li>
-                  <li>Tube ko ek rubber stopper se band karein aur ise ek baar ulta karke mix karein (zyada mat hilayein).</li>
-                  <li>Tube ko 37°C par ek water bath mein rakhein.</li>
-                  <li>Samay-samay par dekhein (bina hilaye — sirf tube ko dekhein) aur us time ko record karein jab blue colour puri tarah se disappear ho jaye.</li>
-                  <li>Ek control tube bhi rakhein (doodh + dye bina incubation ke).</li>
-                </ol>
-  
-                <h4 class="font-semibold mt-4 mb-2">Interpretation (Grading):</h4>
+              </div>
+            `
+          },
+          {
+            title: "Turbidity Test (for UHT / Sterilized Milk)",
+            purpose: "UHT ya sterilized milk ki sterility aur completeness of heat treatment verify karna.",
+            reference: "IS 7982:1976; IDF Standard",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+              <p>Properly sterilized doodh mein saare whey proteins denature ho jaate hain. Jab is doodh ko boil kiya jaata hai, to koi turbidity ya precipitate nahi banta. Lekin agar heat treatment incomplete hai (under-processed), to undenatured whey proteins boiling par precipitate ho jaayenge — turbidity dikhegi. Ye test UHT milk ke liye ek important quality check hai.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">📐 Scientific Factors ka Explanation:</h4>
+              <div class="bg-blue-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Whey Protein Denaturation Temperature:</strong></p>
+                <ul class="list-disc list-outside pl-5 space-y-1">
+                  <li><strong>β-Lactoglobulin (β-Lg):</strong> Denaturation shuru hota hai ~65°C par, significant denaturation 72-80°C par, near-complete >90°C par</li>
+                  <li><strong>α-Lactalbumin (α-La):</strong> Zyada heat-stable, denaturation ~75-85°C par</li>
+                  <li><strong>BSA (Bovine Serum Albumin):</strong> ~70°C par denature</li>
+                </ul>
+                
+                <p class="mt-2"><strong>UHT Treatment:</strong> 135-150°C for 2-5 seconds — is temperature par >99% whey proteins denature ho jaate hain.</p>
+                <p><strong>HTST Pasteurization:</strong> 72°C/15 sec — sirf ~70-80% β-Lg denature hota hai → turbidity test FAIL karega (expected hai — ye test sirf UHT/sterilized ke liye hai).</p>
+                
+                <p class="mt-2"><strong>Denaturation ka percentage calculate kaise karein:</strong></p>
+                <pre><code>% Denaturation = [(Native WP in raw − Native WP in heated) / Native WP in raw] × 100
+
+Example: Raw milk mein β-Lg = 3.2 mg/ml
+UHT milk mein β-Lg = 0.05 mg/ml
+% Denaturation = [(3.2 − 0.05) / 3.2] × 100 = 98.4%
+→ Properly processed! Turbidity test PASS hoga.</code></pre>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">🔑 Ammonium Sulphate Method — 4 gram in 20 ml Kyu?</h4>
+              <div class="bg-yellow-50 p-3 rounded mt-2 mb-2">
+                <p><strong>4 g (NH₄)₂SO₄ in 20 ml milk = 20% (w/v) saturation</strong></p>
+                <p>Is concentration par:</p>
+                <ul class="list-disc list-outside pl-5 space-y-1">
+                  <li><strong>Casein:</strong> Precipitate ho jaata hai (removed by filtration)</li>
+                  <li><strong>Denatured whey proteins:</strong> Precipitate ho jaate hain (ye bhi removed)</li>
+                  <li><strong>Native (undenatured) whey proteins:</strong> Soluble rehte hain — filtrate mein aate hain!</li>
+                </ul>
+                <p class="mt-1">Jab filtrate ko boil karein → native whey proteins <strong>heat se denature</strong> → aggregate → <strong>TURBIDITY</strong>!</p>
+                <p class="mt-1"><strong>"Salting Out" principle:</strong> Ammonium sulphate proteins ki hydration shell hatata hai. Denatured proteins (jo already unfolded hain) ki hydrophobic surfaces exposed hain — ye easily precipitate ho jaate hain. Native proteins (folded, hydrophilic surface) soluble rehte hain at 20% saturation.</p>
+                
+                <p class="mt-2"><strong>Kyu exactly 20% saturation?</strong></p>
+                <p class="text-sm">Full saturation of (NH₄)₂SO₄ at 20°C = ~76.7 g/100 ml. 20% saturation = ~15.3 g/100 ml ≈ 3-4 g/20 ml. Is concentration par selective precipitation hoti hai — sirf denatured + casein precipitate hote hain, native whey soluble rehte hain. Agar zyada concentration use karein → native proteins bhi precipitate ho jayenge → false negative (turbidity nahi dikhegi even if under-processed).</p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Ek test tube mein 5 ml UHT/sterilized doodh lein.</li>
+                <li>Test tube ko boiling water bath mein 5 minute ke liye rakhein.</li>
+                <li>Tube ko nikaalein aur filter paper se filter karein.</li>
+                <li>Filtrate ko observe karein — clear ya turbid?</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Alternative Method (Ammonium Sulphate):</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>20 ml doodh + 4 gram ammonium sulphate daalein.</li>
+                <li>Mix karke dissolve karein.</li>
+                <li>Filter karein.</li>
+                <li>Filtrate ko boil karein.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 1 (Properly Processed UHT):</h4>
+              <div class="bg-green-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Sample:</strong> Amul Taaza UHT milk (200 ml Tetra Pak)</p>
+                <p><strong>Step 1:</strong> 20 ml milk + 4 g (NH₄)₂SO₄ → dissolve → filter</p>
+                <p><strong>Step 2:</strong> Clear filtrate obtained (casein + denatured whey removed)</p>
+                <p><strong>Step 3:</strong> Filtrate ko boil kiya 5 min</p>
+                <p><strong>Observation:</strong> Filtrate CLEAR raha — koi turbidity nahi aayi</p>
+                <p><strong>Result: ✅ PASS — UHT treatment complete. 135°C/4 sec par saare whey proteins denature ho gaye the. Expected shelf life: 3-6 months (room temp, sealed).</strong></p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 2 (Under-Processed Milk):</h4>
+              <div class="bg-red-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Sample:</strong> Ek batch jismein UHT plant ka holding tube short tha — actual temperature 125°C/2 sec raha (instead of 135°C/4 sec)</p>
+                <p><strong>Step 1:</strong> 20 ml milk + 4 g (NH₄)₂SO₄ → dissolve → filter</p>
+                <p><strong>Step 2:</strong> Filtrate obtained</p>
+                <p><strong>Step 3:</strong> Filtrate ko boil kiya</p>
+                <p><strong>Observation:</strong> Filtrate TURBID/CLOUDY ho gaya — white precipitate dikha</p>
+                <p><strong>Result: ❌ FAIL — Undenatured β-Lg aur α-La present the jo boiling par aggregate hue. Shelf life: sirf 2-3 weeks (instead of months). Batch REJECT — reprocessing required!</strong></p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Interpretation:</h4>
+              <p><strong>Clear filtrate (no turbidity after boiling):</strong> PASS — Doodh properly sterilized hai, whey proteins puri tarah denature ho gaye hain. Shelf life achhi hogi.</p>
+              <p><strong>Turbid/Cloudy filtrate:</strong> FAIL — Heat treatment incomplete tha. Undenatured whey proteins present hain. Shelf life kam hogi, reprocessing ki zaroorat hai.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Importance for Shelf Life:</h4>
+              <p>UHT milk jo turbidity test pass karti hai, woh 3-6 mahine room temperature par safe reh sakti hai. Fail hone par 2-3 hafte mein spoilage ho sakti hai.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">⚠️ Important Note:</h4>
+              <div class="bg-gray-50 p-3 rounded mt-2">
+                <p><strong>Ye test pasteurized milk par APPLY NAHI hota!</strong> Pasteurized milk (72°C/15 sec) mein whey proteins partially denature hote hain — isliye ye hamesha turbidity dikhayegi. Ye test SIRF UHT (135-150°C) aur sterilized (121°C/15 min) milk ke liye hai.</p>
+                <p class="mt-1"><strong>Boiling 5 min kyu?</strong> — 5 minute boiling ensure karta hai ki jo bhi native whey proteins hain, woh completely aggregate ho jayein aur visible turbidity de sakein. Kam time mein faint turbidity miss ho sakti hai.</p>
+              </div>
+            `
+          },
+          {
+            title: "Pre-Incubation Count (Preliminary Incubation - PI Count)",
+            purpose: "Pasteurized milk mein psychrotrophic bacteria ka assessment — ye bacteria fridge temperature par bhi grow karte hain aur shelf life reduce karte hain.",
+            reference: "Standard Methods for the Examination of Dairy Products (APHA); IDF 100B:1991",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+              <p>Pasteurized doodh ko pehle 7°C ya 13°C par ek set period ke liye pre-incubate kiya jaata hai taaki psychrotrophic (cold-loving) bacteria grow ho sakein. Phir Standard Plate Count (SPC) kiya jaata hai. Agar count bahut zyada hai, to iska matlab hai ki raw milk mein psychrotrophs zyada the ya post-pasteurization contamination hua hai — dono cases mein shelf life kam hogi.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">📐 Temperatures aur Times ka Scientific Explanation:</h4>
+              <div class="bg-blue-50 p-3 rounded mt-2 mb-2">
+                <p><strong>13°C / 18 hours KYU?</strong></p>
+                <p>Psychrotrophic bacteria ka generation time (doubling time):</p>
+                <ul class="list-disc list-outside pl-5 space-y-1">
+                  <li>At 4°C: ~8-12 hours (ek division mein 8-12 ghante)</li>
+                  <li>At 7°C: ~4-6 hours</li>
+                  <li>At 13°C: ~2-3 hours</li>
+                  <li>At 21°C: ~1-1.5 hours</li>
+                </ul>
+                <p class="mt-1"><strong>13°C par 18 hours</strong> ≈ 6-9 generations of psychrotrophs</p>
+                <p><strong>7°C par 10 din (240 hours)</strong> ≈ 20-60 generations</p>
+                <p>13°C/18h method FASTER hai but 7°C/10d method MORE REALISTIC hai (actual fridge simulation).</p>
+                
+                <p class="mt-2"><strong>Q₁₀ Calculation:</strong></p>
+                <pre><code>Growth rate at 13°C / Growth rate at 7°C ≈ Q₁₀^((13-7)/10) 
+= ~2.0^0.6 = ~1.52 times faster
+
+So: 18 hours at 13°C ≈ 18 × 1.52 = ~27 hours at 7°C (roughly)
+But with lag phase adjustment, 18h/13°C ≈ 2-3 days at 7°C</code></pre>
+                
+                <p class="mt-2"><strong>32°C / 48 hours (SPC incubation) KYU?</strong></p>
+                <p>Standard Plate Count mein 32°C use hota hai kyunki ye mesophilic bacteria ka lower optimum range hai. 48 hours sufficient hai ki colonies visible size (0.5-2 mm) tak grow ho jayein. 37°C bhi use ho sakta hai but 32°C par wider range of organisms grow karte hain including some psychrotrophs.</p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">🔑 SPC Formula aur Dilution Factor:</h4>
+              <div class="bg-yellow-50 p-3 rounded mt-2 mb-2">
+                <pre><code>PI Count (CFU/ml) = Colony Count / (Dilution Factor × Volume Plated)
+
+Where:
+- Colony Count = plates par counted colonies (30-300 range valid)
+- Dilution Factor = 10⁻¹, 10⁻², 10⁻³, etc.
+- Volume Plated = 1 ml (pour plate) ya 0.1 ml (spread plate)</code></pre>
+                
+                <p class="mt-2"><strong>30-300 colonies kyu count karte hain?</strong></p>
+                <ul class="list-disc list-outside pl-5 space-y-1">
+                  <li><strong>&lt; 30 colonies:</strong> Statistically unreliable — sampling error bahut zyada hoga</li>
+                  <li><strong>&gt; 300 colonies:</strong> Overcrowding — colonies merge ho jaati hain, nutrients ki competition hoti hai → undercount</li>
+                  <li><strong>30-300 range:</strong> Statistically valid aur practically countable</li>
+                </ul>
+                
+                <p class="mt-2"><strong>Serial Dilution kaise kaam karta hai?</strong></p>
+                <pre><code>Original milk → 1 ml + 9 ml diluent = 10⁻¹ (1/10th)
+10⁻¹ → 1 ml + 9 ml diluent = 10⁻² (1/100th)
+10⁻² → 1 ml + 9 ml diluent = 10⁻³ (1/1000th)
+... aur aage</code></pre>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Procedure (Method 1: 13°C / 18 hours):</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Pasteurized doodh ke sample ko aseptically lein.</li>
+                <li>Sample ko 13°C par 18 hours ke liye incubate karein (accelerated growth conditions).</li>
+                <li>Incubation ke baad, Standard Plate Count (SPC) perform karein — pour plate method se, PCA agar par, 32°C/48 hours.</li>
+                <li>Colony count karein.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Procedure (Method 2: 7°C / 10 days):</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Sample ko 7°C par 10 din tak store karein (real refrigeration simulation).</li>
+                <li>Har 2 din baad ek sample nikaal kar SPC karein.</li>
+                <li>Growth curve plot karein.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 1 (Excellent Quality):</h4>
+              <div class="bg-green-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Sample:</strong> Pasteurized toned milk, Brand A, Batch #2024-05-15</p>
+                <p><strong>Pre-incubation:</strong> 13°C / 18 hours</p>
+                <p><strong>Plating:</strong> 1 ml of 10⁻² dilution plated on PCA</p>
+                <p><strong>Incubation:</strong> 32°C / 48 hours</p>
+                <p><strong>Colony Count:</strong> 38 colonies on 10⁻² plate</p>
+                <pre><code>PI Count = 38 / (10⁻² × 1) = 38 / 0.01 = 3,800 CFU/ml</code></pre>
+                <p><strong>Result: 3,800 CFU/ml < 50,000 → ✅ EXCELLENT!</strong></p>
+                <p>Expected shelf life: 5+ din at 4°C. Plant hygiene achhi hai, post-pasteurization contamination negligible.</p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 2 (Poor Quality):</h4>
+              <div class="bg-red-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Sample:</strong> Pasteurized full cream milk, Brand B, Batch #2024-05-16</p>
+                <p><strong>Pre-incubation:</strong> 13°C / 18 hours</p>
+                <p><strong>Plating:</strong> Multiple dilutions plated</p>
+                <p><strong>Results:</strong></p>
+                <ul class="list-disc list-outside pl-5">
+                  <li>10⁻³ plate: TNTC (Too Numerous To Count — &gt;300)</li>
+                  <li>10⁻⁴ plate: 85 colonies</li>
+                  <li>10⁻⁵ plate: 9 colonies (too few, &lt;30)</li>
+                </ul>
+                <pre><code>PI Count = 85 / (10⁻⁴ × 1) = 85 / 0.0001 = 8,50,000 CFU/ml
+= 8.5 × 10⁵ CFU/ml</code></pre>
+                <p><strong>Result: 8,50,000 CFU/ml → range 5,00,000 - 50,00,000 → ⚠️ FAIR</strong></p>
+                <p>Expected shelf life: sirf 2-3 din at 4°C. Investigation needed — check filler machine, pipe joints, packaging material contamination.</p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Interpretation:</h4>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">PI Count (after 13°C/18h)</th><th class="border p-2">Assessment</th><th class="border p-2">Expected Shelf Life</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2">&lt; 50,000 CFU/ml</td><td class="border p-2">Excellent</td><td class="border p-2">5+ din (at 4°C)</td></tr>
+                  <tr><td class="border p-2">50,000 - 5,00,000 CFU/ml</td><td class="border p-2">Good</td><td class="border p-2">3-4 din</td></tr>
+                  <tr><td class="border p-2">5,00,000 - 50,00,000 CFU/ml</td><td class="border p-2">Fair</td><td class="border p-2">2-3 din</td></tr>
+                  <tr><td class="border p-2">&gt; 50,00,000 CFU/ml</td><td class="border p-2">Poor</td><td class="border p-2">&lt; 2 din</td></tr>
+                </tbody>
+              </table>
+
+              <h4 class="font-semibold mt-4 mb-2">Key Psychrotrophic Organisms:</h4>
+              <p>Pseudomonas spp. (sabse common — 60-70% psychrotrophic flora), Bacillus cereus, Enterobacter, Acinetobacter — ye sab fridge temperature (4-7°C) par grow karte hain aur lipases/proteases produce karte hain jo doodh ko bitter/rancid bana dete hain.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">🔑 PCA (Plate Count Agar) Composition — Kyu ye media?</h4>
+              <div class="bg-gray-50 p-3 rounded mt-2">
+                <p>PCA = Tryptone (5g) + Yeast Extract (2.5g) + Glucose (1g) + Agar (15g) per litre</p>
+                <p><strong>Ye non-selective, nutrient-poor media hai</strong> — isliye maximum variety ke bacteria grow kar sakte hain. Rich media (jaise BHI) par fast-growers dominate karte hain aur slow-growers suppress hote hain. PCA sabko equal chance deta hai.</p>
+                <p><strong>45°C par pour kyu?</strong> — Agar 45°C par molten hota hai but bacteria ko kill nahi karta (thermal death point >50°C for most). 50°C se upar pour karein → bacteria mar jayenge → count kam aayega.</p>
+              </div>
+            `
+          },
+          {
+            title: "Standard Plate Count / Total Plate Count (TPC) — Shelf Life Monitoring",
+            purpose: "Doodh mein total viable bacteria count — shelf life ke dauran microbial load monitor karna.",
+            reference: "IS 5402:2012; FSSAI Microbiological Standards; A.O.A.C 990.12",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+              <p>Doodh ke serial dilutions ko nutrient agar plates par pour kiya jaata hai aur incubate kiya jaata hai. Har viable bacterium ek visible colony banata hai. Colony count se total bacteria per ml calculate hota hai. Shelf life study mein ye test different time intervals par kiya jaata hai taaki bacterial growth curve pata chale.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">📐 TPC Formula — Detailed Breakdown:</h4>
+              <div class="bg-blue-50 p-3 rounded mt-2 mb-2">
+                <pre><code>TPC (CFU/ml) = Colony Count / (Dilution Factor × Volume Plated)</code></pre>
+                
+                <p class="mt-2"><strong>CFU ka full form:</strong> Colony Forming Unit — ye "viable bacteria" ka unit hai. Har colony ek ya ek se zyada bacteria se start hui thi.</p>
+                
+                <p class="mt-2"><strong>Dilution Factor kya hai?</strong></p>
+                <pre><code>Agar 1 ml sample + 9 ml diluent = 10 ml total
+Dilution = 1/10 = 10⁻¹
+
+Serial dilutions:
+10⁻¹ → 10⁻² → 10⁻³ → 10⁻⁴ → 10⁻⁵
+
+Dilution Factor = reciprocal of dilution
+10⁻³ ka Dilution Factor = 1000 (ya 10³)
+Alternatively: Dilution Factor = 10⁻³ = 0.001</code></pre>
+
+                <p class="mt-2"><strong>Multiple plates hone par (APHA rule):</strong></p>
+                <pre><code>TPC = Σ(all colonies from countable plates) / Σ(ml plated × dilution factor for each plate)
+
+Example: 10⁻³ plate = 256 colonies, 10⁻⁴ plate = 28 colonies
+TPC = (256 + 28) / [(1 × 10⁻³) + (1 × 10⁻⁴)]
+  = 284 / (0.001 + 0.0001)  
+  = 284 / 0.0011
+  = 2,58,182 ≈ 2.6 × 10⁵ CFU/ml</code></pre>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">🔑 Har Factor ka Explanation:</h4>
+              <div class="bg-yellow-50 p-3 rounded mt-2 mb-2">
+                <p><strong>37°C vs 32°C incubation — kaunsa use karein?</strong></p>
+                <ul class="list-disc list-outside pl-5 space-y-1">
+                  <li><strong>37°C / 48h:</strong> FSSAI standard — pathogens aur indicator organisms ke liye optimized</li>
+                  <li><strong>32°C / 48h:</strong> IDF/APHA standard — wider range of dairy organisms count hote hain, including some psychrotrophs</li>
+                  <li><strong>Dairy industry mein 32°C preferred hai</strong> kyunki ye dairy-specific flora ko better represent karta hai</li>
+                </ul>
+                
+                <p class="mt-2"><strong>~15 ml agar kyu pour karte hain?</strong></p>
+                <p>15 ml agar se plate ki thickness ~3-4 mm hoti hai. Kam agar → plate jaldi dry hogi → colonies properly nahi banegi. Zyada agar → colonies agar ke andar zyada deep hongi → count mushkil.</p>
+                
+                <p class="mt-2"><strong>0.1% Peptone Water (diluent) kyu?</strong></p>
+                <p>Plain distilled water hypotonic hai → bacteria ka osmotic lysis ho sakta hai → count kam aayega. Peptone water isotonic-like environment deta hai jo bacteria ko dilution ke dauran viable rakhta hai.</p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Doodh ke sample ko aseptically collect karein.</li>
+                <li>Serial dilutions banayein — 10⁻¹, 10⁻², 10⁻³, 10⁻⁴, 10⁻⁵ etc. (0.1% peptone water ya phosphate buffer mein).</li>
+                <li>1 ml diluted sample ko sterile petri dish mein daalein.</li>
+                <li>~15 ml molten Plate Count Agar (PCA, 45°C par cooled) pour karein.</li>
+                <li>Gently rotate karke mix karein (figure-of-8 motion). Solidify hone dein.</li>
+                <li>Plates ko 37°C par 48 hours incubate karein (ya 32°C par 48h for mesophilic count).</li>
+                <li>30-300 colonies wali plates count karein.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 1 — Day 0 (Production Day):</h4>
+              <div class="bg-green-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Sample:</strong> Freshly pasteurized toned milk</p>
+                <p><strong>Dilutions plated:</strong> 10⁻¹, 10⁻², 10⁻³ (1 ml each)</p>
+                <p><strong>After 48h at 32°C:</strong></p>
+                <ul class="list-disc list-outside pl-5">
+                  <li>10⁻¹ plate: TNTC (>300)</li>
+                  <li>10⁻² plate: 125 colonies ✓ (30-300 range mein)</li>
+                  <li>10⁻³ plate: 14 colonies (too few)</li>
+                </ul>
+                <pre><code>TPC = 125 / (10⁻² × 1 ml) = 125 / 0.01 = 12,500 CFU/ml</code></pre>
+                <p><strong>Result: 12,500 CFU/ml < 30,000 → ✅ PASS for dispatch!</strong></p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 2 — Shelf Life Monitoring (Day 3):</h4>
+              <div class="bg-orange-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Same batch, Day 3 (stored at 4°C):</strong></p>
+                <p><strong>Dilutions plated:</strong> 10⁻², 10⁻³, 10⁻⁴</p>
+                <p><strong>After 48h at 32°C:</strong></p>
+                <ul class="list-disc list-outside pl-5">
+                  <li>10⁻² plate: TNTC</li>
+                  <li>10⁻³ plate: 245 colonies ✓</li>
+                  <li>10⁻⁴ plate: 22 colonies</li>
+                </ul>
+                <pre><code>TPC = 245 / (10⁻³ × 1) = 245 / 0.001 = 2,45,000 CFU/ml</code></pre>
+                <p><strong>Result: 2,45,000 CFU/ml > 1,00,000 → ❌ Exceeds retail limit!</strong></p>
+                <p><strong>Conclusion: Is batch ki shelf life = 2 din (Day 2 tak okay tha, Day 3 par fail). Best-before date accordingly set karein.</strong></p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Bacterial Growth Curve Example (Shelf Life Study):</h4>
+              <div class="bg-gray-50 p-3 rounded mt-2 mb-2">
                 <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
-                  <thead><tr class="bg-gray-100"><th class="border p-2">Grade</th><th class="border p-2">MBRT</th><th class="border p-2">Approx. Bacteria Count</th></tr></thead>
+                  <thead><tr class="bg-gray-100"><th class="border p-2">Day</th><th class="border p-2">TPC (CFU/ml)</th><th class="border p-2">Log₁₀ TPC</th><th class="border p-2">Status</th></tr></thead>
                   <tbody>
-                    <tr><td class="border p-2"><strong>Bahut Achha (Very Good)</strong></td><td class="border p-2">5 ghante ya usse zyada</td><td class="border p-2">&lt; 5 lakh/ml</td></tr>
-                    <tr><td class="border p-2"><strong>Achha (Good)</strong></td><td class="border p-2">2 se 4 ghante</td><td class="border p-2">5-20 lakh/ml</td></tr>
-                    <tr><td class="border p-2"><strong>Santoshjanak (Fair)</strong></td><td class="border p-2">30 minute se 1 ghanta</td><td class="border p-2">20 lakh - 1 crore/ml</td></tr>
-                    <tr><td class="border p-2"><strong>Kharab (Poor)</strong></td><td class="border p-2">30 minute se kam</td><td class="border p-2">&gt; 1 crore/ml</td></tr>
+                    <tr><td class="border p-2">0</td><td class="border p-2">12,500</td><td class="border p-2">4.10</td><td class="border p-2">✅ Pass</td></tr>
+                    <tr><td class="border p-2">1</td><td class="border p-2">18,000</td><td class="border p-2">4.26</td><td class="border p-2">✅ Pass</td></tr>
+                    <tr><td class="border p-2">2</td><td class="border p-2">45,000</td><td class="border p-2">4.65</td><td class="border p-2">✅ Pass</td></tr>
+                    <tr><td class="border p-2">3</td><td class="border p-2">2,45,000</td><td class="border p-2">5.39</td><td class="border p-2">❌ Fail</td></tr>
+                    <tr><td class="border p-2">4</td><td class="border p-2">18,50,000</td><td class="border p-2">6.27</td><td class="border p-2">❌ Rejected</td></tr>
+                    <tr><td class="border p-2">5</td><td class="border p-2">4,20,00,000</td><td class="border p-2">7.62</td><td class="border p-2">❌ Sour/curdled</td></tr>
                   </tbody>
                 </table>
-              `
-            },
-            {
-              title: "Resazurin Test (10 Minute Test)",
-              purpose: "MBRT se bhi tez — sirf 10 minute mein doodh ki quality ka rough assessment.",
-              reference: "IS: 1479 (Part III) – 1977",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
-                <p>Resazurin ek blue dye hai jo bacteria ke metabolic activity se reduce hoti hai. Blue → Purple → Pink → Colourless. 10 minute incubation ke baad colour ko ek Lovibond disc se compare karke grade diya jaata hai. Ye MBRT se zyada rapid hai aur field conditions mein useful hai.</p>
-  
-                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>Sterilized tube mein 10 ml doodh lein.</li>
-                  <li>1 ml standard resazurin solution (0.005%) daalein.</li>
-                  <li>Ek baar ulta karke mix karein.</li>
-                  <li>37°C par water bath mein rakhein.</li>
-                  <li>Exactly 10 minute baad tube nikaalein aur colour ko Lovibond comparator disc se compare karein.</li>
-                </ol>
-  
-                <h4 class="font-semibold mt-4 mb-2">Grading (10-minute Resazurin):</h4>
-                <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
-                  <thead><tr class="bg-gray-100"><th class="border p-2">Disc Reading</th><th class="border p-2">Colour</th><th class="border p-2">Grade</th></tr></thead>
+                <p class="mt-2"><strong>Shelf life = Day 2 (last day TPC < 1 lakh). Best-before = Day 2 with 20% safety margin ≈ print "Use within 2 days".</strong></p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">FSSAI Standards for Market Milk:</h4>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Product</th><th class="border p-2">TPC Limit (CFU/ml)</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2">Pasteurized Milk (at dispatch)</td><td class="border p-2">≤ 30,000</td></tr>
+                  <tr><td class="border p-2">Pasteurized Milk (at retail)</td><td class="border p-2">≤ 1,00,000</td></tr>
+                  <tr><td class="border p-2">UHT Milk (commercially sterile)</td><td class="border p-2">No growth after incubation</td></tr>
+                  <tr><td class="border p-2">Sterilized Milk</td><td class="border p-2">No growth after incubation</td></tr>
+                </tbody>
+              </table>
+
+              <h4 class="font-semibold mt-4 mb-2">Shelf Life Monitoring Protocol:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-1">
+                <li>Day 0 (production day): TPC check</li>
+                <li>Day 1, 2, 3, 4, 5: Har din ek sample ka TPC karein</li>
+                <li>Jab TPC 1 lakh cross kare — wahi shelf life ki limit hai</li>
+                <li>Saath mein sensory evaluation bhi karein</li>
+              </ol>
+            `
+          },
+          {
+            title: "Coliform Count — Post-Pasteurization Contamination Check",
+            purpose: "Coliform bacteria ki presence — ye post-pasteurization contamination ka direct indicator hai aur shelf life ko drastically reduce karta hai.",
+            reference: "IS 5401 (Part 1):2012; FSSAI Standards",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+              <p>Coliform bacteria (E. coli, Klebsiella, Enterobacter) pasteurization se destroy ho jaate hain. Agar pasteurized doodh mein coliforms milein, to iska matlab hai ki doodh pasteurization ke BAAD contaminate hua hai — equipment, packaging, ya handling se. Coliforms ki presence shelf life ko bahut kam kar deti hai.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">📐 Coliform Count Formulas aur Factors:</h4>
+              <div class="bg-blue-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Method 1 Formula (VRBA Pour Plate):</strong></p>
+                <pre><code>Coliform Count (CFU/ml) = Dark red colonies with halo / (Dilution × Volume)
+
+Example: 8 typical colonies on undiluted (10⁰) 1 ml plate
+Count = 8 / (1 × 1) = 8 CFU/ml</code></pre>
+
+                <p class="mt-2"><strong>Method 2 Formula (MPN Method):</strong></p>
+                <pre><code>MPN = Most Probable Number (statistical estimate)
+3-tube method: 3 sets of 3 tubes each
+- Set 1: 10 ml sample per tube
+- Set 2: 1 ml sample per tube  
+- Set 3: 0.1 ml sample per tube
+
+Result read as: Positive tubes in each set → MPN table → Coliform/ml</code></pre>
+                
+                <p class="mt-2"><strong>VRBA Agar ke Components — Kyu ye selective hai?</strong></p>
+                <ul class="list-disc list-outside pl-5 space-y-1">
+                  <li><strong>Crystal Violet:</strong> Gram-positive bacteria ko inhibit karta hai → sirf Gram-negative grow karein</li>
+                  <li><strong>Bile Salts:</strong> Non-enteric bacteria ko inhibit karte hain → sirf intestinal-type bacteria grow karein</li>
+                  <li><strong>Neutral Red:</strong> pH indicator — acid production se red colonies banti hain</li>
+                  <li><strong>Lactose:</strong> Coliforms lactose ferment karte hain → acid + gas produce karte hain → red colonies with precipitate halo</li>
+                </ul>
+                
+                <p class="mt-2"><strong>Overlay (double layer) kyu?</strong></p>
+                <p>Second VRBA layer aerobic growth restrict karti hai. Coliforms facultative anaerobes hain — ye anaerobic conditions mein bhi grow karte hain. Surface spreading organisms (non-coliforms like Pseudomonas) ka growth rok diya jaata hai.</p>
+                
+                <p class="mt-2"><strong>FSSAI Sampling Plan ka Explanation (n=5, c=1, m=&lt;1, M=10):</strong></p>
+                <ul class="list-disc list-outside pl-5 space-y-1">
+                  <li><strong>n=5:</strong> 5 samples test karein ek batch se</li>
+                  <li><strong>c=1:</strong> Maximum 1 sample accept kar sakte hain jo m aur M ke beech ho</li>
+                  <li><strong>m=&lt;1:</strong> Acceptable level = &lt;1 CFU/ml (essentially zero)</li>
+                  <li><strong>M=10:</strong> Maximum allowable = 10 CFU/ml. Koi bhi sample isse upar → BATCH REJECT</li>
+                </ul>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Method 1: Violet Red Bile Agar (VRBA) Pour Plate</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>1 ml doodh (ya appropriate dilution) ko sterile petri dish mein daalein.</li>
+                <li>~15 ml VRBA agar (45°C) pour karein, mix karein.</li>
+                <li>Solidify hone ke baad, ek aur thin layer VRBA pour karein (overlay — anaerobic conditions ke liye).</li>
+                <li>37°C par 24 ± 2 hours incubate karein.</li>
+                <li>Dark red colonies with bile precipitate halo count karein — ye coliforms hain.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Method 2: MPN Method (LST Broth)</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>3 tubes each of 10 ml, 1 ml, aur 0.1 ml sample volumes se inoculate karein.</li>
+                <li>37°C par 24-48 hours incubate karein.</li>
+                <li>Gas production wali tubes ko positive count karein.</li>
+                <li>MPN table se coliform count determine karein.</li>
+                <li>Positive tubes ko Brilliant Green Bile Broth mein confirm karein.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 1 (VRBA Method — Good Quality):</h4>
+              <div class="bg-green-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Sample:</strong> Pasteurized toned milk, 5 packs from Batch #101</p>
+                <p><strong>1 ml undiluted sample per plate, VRBA, 37°C/24h:</strong></p>
+                <table class="table-auto border-collapse border border-gray-300 mt-1 text-sm">
+                  <tr><td class="border p-1">Pack 1</td><td class="border p-1">0 colonies</td></tr>
+                  <tr><td class="border p-1">Pack 2</td><td class="border p-1">0 colonies</td></tr>
+                  <tr><td class="border p-1">Pack 3</td><td class="border p-1">2 colonies</td></tr>
+                  <tr><td class="border p-1">Pack 4</td><td class="border p-1">0 colonies</td></tr>
+                  <tr><td class="border p-1">Pack 5</td><td class="border p-1">0 colonies</td></tr>
+                </table>
+                <p class="mt-1"><strong>Assessment:</strong> 4 samples = &lt;1 (m satisfied). 1 sample = 2 CFU/ml (between m and M). c=1 allowed.</p>
+                <p><strong>Result: ✅ BATCH ACCEPTED. Coliform level negligible. Good shelf life expected.</strong></p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 2 (MPN Method — Poor Quality):</h4>
+              <div class="bg-red-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Sample:</strong> Pasteurized milk from small dairy, Batch #55</p>
+                <p><strong>LST Broth MPN (3-tube method):</strong></p>
+                <table class="table-auto border-collapse border border-gray-300 mt-1 text-sm">
+                  <thead><tr class="bg-gray-100"><th class="border p-1">Sample Vol</th><th class="border p-1">Tube 1</th><th class="border p-1">Tube 2</th><th class="border p-1">Tube 3</th><th class="border p-1">Positive</th></tr></thead>
                   <tbody>
-                    <tr><td class="border p-2">6</td><td class="border p-2">Blue</td><td class="border p-2">Excellent</td></tr>
-                    <tr><td class="border p-2">5</td><td class="border p-2">Light Blue</td><td class="border p-2">Good</td></tr>
-                    <tr><td class="border p-2">4</td><td class="border p-2">Purple</td><td class="border p-2">Fair</td></tr>
-                    <tr><td class="border p-2">3</td><td class="border p-2">Purple-Pink</td><td class="border p-2">Fair</td></tr>
-                    <tr><td class="border p-2">2</td><td class="border p-2">Pink</td><td class="border p-2">Poor</td></tr>
-                    <tr><td class="border p-2">1</td><td class="border p-2">White/Colourless</td><td class="border p-2">Very Poor</td></tr>
+                    <tr><td class="border p-1">10 ml</td><td class="border p-1">Gas +</td><td class="border p-1">Gas +</td><td class="border p-1">Gas +</td><td class="border p-1">3</td></tr>
+                    <tr><td class="border p-1">1 ml</td><td class="border p-1">Gas +</td><td class="border p-1">Gas +</td><td class="border p-1">Gas -</td><td class="border p-1">2</td></tr>
+                    <tr><td class="border p-1">0.1 ml</td><td class="border p-1">Gas -</td><td class="border p-1">Gas +</td><td class="border p-1">Gas -</td><td class="border p-1">1</td></tr>
                   </tbody>
                 </table>
-              `
-            },
-            {
-              title: "Alkaline Phosphatase Test (ALP Test)",
-              purpose: "Pasteurization ki efficiency verify karna — sabse important quality control test.",
-              reference: "IS 1479 (Part III) 1977; A.O.A.C 946.03",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
-                <p>Phosphatase ek enzyme hai jo raw doodh mein naturally present hota hai. Ye 63°C/30 min ya 72°C/15 sec par inactivate ho jaata hai — matlab proper pasteurization se yeh enzyme destroy ho jaata hai. Agar yeh test positive aaye to iska matlab hai ki doodh ko properly pasteurize nahi kiya gaya tha ya ise raw doodh se contaminate kiya gaya tha.</p>
-  
-                <h4 class="font-semibold mt-4 mb-2">Aschaffenburg and Mullen (A&M) Method:</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>Doodh ke sample ko ek buffer-substrate solution (disodium p-nitrophenyl phosphate — 0.15% in buffer pH 10.2) ke saath mix karein — 5 ml doodh + 5 ml substrate.</li>
-                  <li>37°C par 2 hours ke liye incubate karein.</li>
-                  <li>Agar phosphatase present hai, to yeh substrate ko hydrolyze karega, jisse p-nitrophenol niklega — jo alkaline solution mein YELLOW hota hai.</li>
-                  <li>Colour ki intensity ko standard colour discs ya spectrophotometer (420 nm) se compare/measure karein.</li>
+                <p class="mt-1"><strong>MPN combination: 3-2-1</strong></p>
+                <p>MPN table se: <strong>3-2-1 = 150 MPN/ml</strong></p>
+                <p><strong>Result: 150 CFU/ml >> 10 (M value) → ❌ BATCH REJECT!</strong></p>
+                <p>Root cause: Filler machine ki O-ring damaged thi → post-pasteurization contamination. Shelf life 50% se zyada reduce ho jayegi. Machine maintenance required!</p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">FSSAI Limits:</h4>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Product</th><th class="border p-2">Coliform Limit</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2">Pasteurized Milk</td><td class="border p-2">≤ 10 CFU/ml (n=5, c=1, m=&lt;1, M=10)</td></tr>
+                  <tr><td class="border p-2">UHT Milk</td><td class="border p-2">Absent in 1 ml</td></tr>
+                  <tr><td class="border p-2">Sterilized Milk</td><td class="border p-2">Absent in 1 ml</td></tr>
+                </tbody>
+              </table>
+
+              <h4 class="font-semibold mt-4 mb-2">Impact on Shelf Life:</h4>
+              <p>Agar coliform count >10 CFU/ml hai to shelf life 50% tak reduce ho sakti hai. High coliform = post-pasteurization contamination = equipment cleaning issues.</p>
+            `
+          },
+          {
+            title: "Sterility Test (for UHT / Sterilized Milk)",
+            purpose: "UHT aur sterilized milk ki commercial sterility verify karna — ye long shelf life ka basis hai.",
+            reference: "IS 7982:1976; FSSAI Regulations; Codex Alimentarius CAC/RCP 48-2001",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+              <p>Commercially sterile doodh mein koi bhi viable microorganism nahi hona chahiye jo normal storage conditions mein grow kar sake. Ye verify karne ke liye, sealed packs ko elevated temperatures par incubate kiya jaata hai. Agar koi microbial growth nahi hota (no pH change, no gas, no off-flavour), to product commercially sterile hai.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">📐 Incubation Temperatures aur Times — Scientific Basis:</h4>
+              <div class="bg-blue-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Set A — 30-35°C / 14 din KYU?</strong></p>
+                <p>Mesophilic bacteria (jaise Bacillus subtilis, B. cereus, Enterobacteriaceae) ka optimum = 30-37°C. 14 din = sufficient time ki agar ek bhi viable organism hai (including dormant spores), woh germinate hokar detectable level tak grow kar jaye.</p>
+                <pre><code>Agar 1 spore germinate ho 30°C par, generation time ~30-60 min
+14 din = 336 hours = 336-672 generations
+1 bacterium → 2³³⁶ = astronomically high number
+Reality: Nutrients deplete ho jaate hain, so final count ~10⁸-10⁹ CFU/ml — but clearly detectable as pH drop, turbidity, gas, off-flavour</code></pre>
+                
+                <p class="mt-2"><strong>Set B — 55°C / 7 din KYU?</strong></p>
+                <p>Thermophilic spore-formers (jaise B. stearothermophilus, B. coagulans) 55°C par optimally grow karte hain. Ye organisms UHT process ke closest survivors hain (D₁₂₁ values highest). 7 din sufficient hai kyunki thermophiles fast growers hain at 55°C (generation time ~15-30 min).</p>
+                
+                <p class="mt-2"><strong>Set C — 4°C (Control) KYU?</strong></p>
+                <p>Reference — doodh mein koi natural changes (browning, fat separation) hoti hain woh control se compare karke differentiate ki ja sakti hain. 4°C par koi bacteria practically grow nahi karta.</p>
+                
+                <p class="mt-2"><strong>pH Change > 0.5 = FAIL kyu?</strong></p>
+                <p>Bacterial growth acids produce karta hai (lactic acid, acetic acid) → pH girti hai. Ya gas-producing organisms CO₂ banate hain → carbonic acid → pH drop. 0.5 pH unit change = significant acid production = substantial microbial growth.</p>
+                <pre><code>pH drop calculation:
+Fresh UHT milk pH = 6.65
+After incubation pH = 6.10
+Drop = 6.65 - 6.10 = 0.55 → > 0.5 → FAIL!</code></pre>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">🔑 D-Value aur Z-Value — UHT Sterility ka Basis:</h4>
+              <div class="bg-yellow-50 p-3 rounded mt-2 mb-2">
+                <p><strong>D-Value (Decimal Reduction Time):</strong> Woh time jo required hai ki ek specific temperature par bacterial population 90% (1 log) reduce ho jaye.</p>
+                <pre><code>D₁₂₁ of B. stearothermophilus = ~4-5 min (at 121°C)
+D₁₃₅ of same organism = ~0.3-0.5 sec (at 135°C)
+
+UHT target: 12D reduction (12 × D value)
+At 135°C: 12 × 0.4 sec = 4.8 sec
+Isliye UHT = 135°C/4-5 sec → 12-log reduction → commercially sterile</code></pre>
+                
+                <p class="mt-2"><strong>Z-Value:</strong> Temperature increase required for D-value ko 10 times reduce karne ke liye.</p>
+                <pre><code>Z-value for most spores = ~10°C
+So: D₁₂₁ = 4 min → D₁₃₁ = 0.4 min → D₁₄₁ = 0.04 min</code></pre>
+                
+                <p class="mt-2"><strong>Commercial Sterility ≠ Absolute Sterility</strong></p>
+                <p>UHT mein 100% organisms kill nahi hote — kuch extremely heat-resistant spores survive kar sakte hain. But ye itne kam hote hain ki normal conditions mein grow nahi kar paate. "Commercially sterile" = no organisms that can grow under normal storage.</p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Procedure (Incubation Method):</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Production batch se randomly sealed packs/bottles select karein (typically 5 per batch minimum).</li>
+                <li><strong>Set A (Mesophilic):</strong> 30-35°C par 14 din incubate karein.</li>
+                <li><strong>Set B (Thermophilic):</strong> 55°C par 7 din incubate karein.</li>
+                <li><strong>Set C (Control):</strong> 4°C par store karein.</li>
+                <li>Incubation ke baad examine karein:</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Examination Parameters:</h4>
+              <ul class="list-disc list-outside pl-5 space-y-1">
+                <li><strong>Visual:</strong> Pack swelling, leakage, colour change</li>
+                <li><strong>pH:</strong> Incubated vs Control ka difference — &gt;0.5 pH change = fail</li>
+                <li><strong>Acidity:</strong> Increase &gt;0.02% = suspect</li>
+                <li><strong>Sensory:</strong> Off-flavour, off-odour, sour taste</li>
+                <li><strong>Microscopic:</strong> Gram staining — bacteria dikhna = fail</li>
+                <li><strong>Plating:</strong> PCA, BHI agar par streaking — colony growth = fail</li>
+              </ul>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 1 (PASS — Commercially Sterile):</h4>
+              <div class="bg-green-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Sample:</strong> Amul Taaza UHT, Batch #UHT-2024-0515, 5 packs</p>
+                <table class="table-auto border-collapse border border-gray-300 mt-1 text-sm w-full">
+                  <thead><tr class="bg-gray-100"><th class="border p-1">Parameter</th><th class="border p-1">Control (4°C)</th><th class="border p-1">Set A (35°C/14d)</th><th class="border p-1">Set B (55°C/7d)</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border p-1">pH</td><td class="border p-1">6.62</td><td class="border p-1">6.58</td><td class="border p-1">6.60</td></tr>
+                    <tr><td class="border p-1">Acidity (%LA)</td><td class="border p-1">0.135</td><td class="border p-1">0.138</td><td class="border p-1">0.136</td></tr>
+                    <tr><td class="border p-1">Pack Swelling</td><td class="border p-1">No</td><td class="border p-1">No</td><td class="border p-1">No</td></tr>
+                    <tr><td class="border p-1">Off-flavour</td><td class="border p-1">None</td><td class="border p-1">Slight cooked (normal for UHT)</td><td class="border p-1">None</td></tr>
+                    <tr><td class="border p-1">Gram Stain</td><td class="border p-1">No bacteria</td><td class="border p-1">No bacteria</td><td class="border p-1">No bacteria</td></tr>
+                    <tr><td class="border p-1">PCA Plating</td><td class="border p-1">No growth</td><td class="border p-1">No growth</td><td class="border p-1">No growth</td></tr>
+                  </tbody>
+                </table>
+                <pre><code>pH difference (Set A vs Control) = |6.58 - 6.62| = 0.04 → < 0.5 ✓
+Acidity change = |0.138 - 0.135| = 0.003% → < 0.02% ✓</code></pre>
+                <p><strong>Result: ✅ ALL PARAMETERS PASS → Commercially Sterile → Shelf life 3-6 months at room temperature.</strong></p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 2 (FAIL — Not Sterile):</h4>
+              <div class="bg-red-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Sample:</strong> UHT milk from new plant, Batch #UHT-Trial-003</p>
+                <table class="table-auto border-collapse border border-gray-300 mt-1 text-sm w-full">
+                  <thead><tr class="bg-gray-100"><th class="border p-1">Parameter</th><th class="border p-1">Control (4°C)</th><th class="border p-1">Set A (35°C/14d)</th><th class="border p-1">Set B (55°C/7d)</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border p-1">pH</td><td class="border p-1">6.60</td><td class="border p-1">5.85</td><td class="border p-1">6.55</td></tr>
+                    <tr><td class="border p-1">Acidity (%LA)</td><td class="border p-1">0.14</td><td class="border p-1">0.28</td><td class="border p-1">0.15</td></tr>
+                    <tr><td class="border p-1">Pack Swelling</td><td class="border p-1">No</td><td class="border p-1">SLIGHT SWELLING</td><td class="border p-1">No</td></tr>
+                    <tr><td class="border p-1">Off-flavour</td><td class="border p-1">Normal</td><td class="border p-1">SOUR, BITTER</td><td class="border p-1">Normal</td></tr>
+                    <tr><td class="border p-1">Gram Stain</td><td class="border p-1">No bacteria</td><td class="border p-1">Gram + rods seen</td><td class="border p-1">No bacteria</td></tr>
+                    <tr><td class="border p-1">PCA Plating</td><td class="border p-1">No growth</td><td class="border p-1">TNTC colonies</td><td class="border p-1">No growth</td></tr>
+                  </tbody>
+                </table>
+                <pre><code>pH difference (Set A vs Control) = |5.85 - 6.60| = 0.75 → > 0.5 ❌ FAIL!
+Acidity change = |0.28 - 0.14| = 0.14% → > 0.02% ❌ FAIL!</code></pre>
+                <p><strong>Result: ❌ Set A FAILED — Mesophilic bacteria (likely Bacillus sp.) survive kiye UHT process mein. Probable cause: Holding tube mein flow rate zyada thi → actual hold time 2 sec ke bajay 1.5 sec tha → insufficient lethality.</strong></p>
+                <p><strong>Action: Batch REJECT. UHT plant ki flow meter recalibrate karein. Holding tube length verify karein.</strong></p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Interpretation:</h4>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Observation</th><th class="border p-2">Result</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2">No pH change, no growth, no swelling, no off-flavour</td><td class="border p-2"><strong>PASS — Commercially Sterile</strong></td></tr>
+                  <tr><td class="border p-2">pH drop &gt;0.5, or microbial growth, or pack swelling</td><td class="border p-2"><strong>FAIL — Not sterile, batch reject</strong></td></tr>
+                </tbody>
+              </table>
+
+              <h4 class="font-semibold mt-4 mb-2">UHT Milk ke liye Special Note:</h4>
+              <p>UHT milk jo sterility test pass karti hai — uski shelf life 3-6 mahine (room temperature, unopened) hoti hai. Open karne ke baad refrigerate karein aur 2-3 din mein consume karein.</p>
+            `
+          },
+          {
+            title: "Sensory Evaluation During Shelf Life",
+            purpose: "Doodh ki organoleptic quality (taste, smell, appearance, texture) ko shelf life ke dauran monitor karna — consumer acceptance ka direct measure.",
+            reference: "IS 6273 (Part I & II):1971; IDF Standard 99C:1997",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+              <p>Sensory evaluation mein trained panelists doodh ko taste, smell, appearance, aur mouthfeel ke basis par score karte hain. Shelf life ke dauran ye evaluation regular intervals par ki jaati hai. Jab score acceptable limit se neeche gire — wahi shelf life ki end hai. Chemical tests kabhi kabhi changes detect nahi kar paate jo human senses detect kar lete hain.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">📐 Scoring System aur Statistical Analysis:</h4>
+              <div class="bg-blue-50 p-3 rounded mt-2 mb-2">
+                <p><strong>9-Point Hedonic Scale — Kyu 9 points?</strong></p>
+                <p>Research se proven hai ki 9-point scale optimum discriminating power deta hai. 5-point scale mein zyada sensitivity nahi hoti, 15-point scale mein panelists confuse hote hain. 9 points = achha balance between sensitivity aur usability.</p>
+                
+                <p class="mt-2"><strong>Average Score Calculation:</strong></p>
+                <pre><code>Average Score = Σ(Individual Scores) / Number of Panelists
+
+Example: 5 panelists ne Day 3 par scores diye:
+Panelist 1: 7, Panelist 2: 6, Panelist 3: 7, Panelist 4: 5, Panelist 5: 6
+Average = (7+6+7+5+6) / 5 = 31/5 = 6.2</code></pre>
+                
+                <p class="mt-2"><strong>Overall Acceptability Score:</strong></p>
+                <pre><code>Overall Score = (Appearance × W₁ + Odour × W₂ + Taste × W₃ + Texture × W₄) / (W₁+W₂+W₃+W₄)
+
+Typical weights for milk:
+Appearance (W₁) = 20%, Odour (W₂) = 20%, Taste (W₃) = 40%, Texture (W₄) = 20%
+
+Example: Appearance=7, Odour=6, Taste=5, Texture=7
+Overall = (7×0.20 + 6×0.20 + 5×0.40 + 7×0.20) / 1.0
+      = (1.4 + 1.2 + 2.0 + 1.4) / 1.0 = 6.0</code></pre>
+                
+                <p class="mt-2"><strong>Minimum Panelists = 5 kyu?</strong></p>
+                <p>Statistical reliability ke liye minimum 5 trained panelists chahiye. 5 se kam = insufficient data points for meaningful average. Ideal = 8-12 panelists.</p>
+                
+                <p class="mt-2"><strong>Score < 5 = Unacceptable kyu?</strong></p>
+                <p>5 = "Neither like nor dislike" (neutral). Isse neeche = dislike territory. Consumer acceptability ke liye minimum 5 zaroori hai — commercially, score 6+ target karte hain.</p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Scoring System (9-Point Hedonic Scale):</h4>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Score</th><th class="border p-2">Description</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2">9</td><td class="border p-2">Bahut zyada pasand (Like extremely)</td></tr>
+                  <tr><td class="border p-2">8</td><td class="border p-2">Bahut pasand (Like very much)</td></tr>
+                  <tr><td class="border p-2">7</td><td class="border p-2">Moderately pasand</td></tr>
+                  <tr><td class="border p-2">6</td><td class="border p-2">Thoda pasand</td></tr>
+                  <tr><td class="border p-2">5</td><td class="border p-2">Na pasand na napasand (Neutral)</td></tr>
+                  <tr><td class="border p-2">4</td><td class="border p-2">Thoda napasand</td></tr>
+                  <tr><td class="border p-2">3</td><td class="border p-2">Moderately napasand</td></tr>
+                  <tr><td class="border p-2">2</td><td class="border p-2">Bahut napasand</td></tr>
+                  <tr><td class="border p-2">1</td><td class="border p-2">Bahut zyada napasand</td></tr>
+                </tbody>
+              </table>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example — Complete Shelf Life Sensory Data:</h4>
+              <div class="bg-green-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Product:</strong> Pasteurized Toned Milk (3% fat, 8.5% SNF), stored at 4°C</p>
+                <p><strong>Panel:</strong> 5 trained panelists. Scores shown as averages.</p>
+                <table class="table-auto border-collapse border border-gray-300 mt-1 text-sm w-full">
+                  <thead><tr class="bg-gray-100"><th class="border p-1">Day</th><th class="border p-1">Appearance</th><th class="border p-1">Odour</th><th class="border p-1">Taste</th><th class="border p-1">Texture</th><th class="border p-1">Overall*</th><th class="border p-1">Status</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border p-1">0</td><td class="border p-1">8.6</td><td class="border p-1">8.4</td><td class="border p-1">8.8</td><td class="border p-1">8.6</td><td class="border p-1">8.6</td><td class="border p-1">✅ Excellent</td></tr>
+                    <tr><td class="border p-1">1</td><td class="border p-1">8.4</td><td class="border p-1">8.2</td><td class="border p-1">8.4</td><td class="border p-1">8.4</td><td class="border p-1">8.4</td><td class="border p-1">✅ Very Good</td></tr>
+                    <tr><td class="border p-1">2</td><td class="border p-1">8.0</td><td class="border p-1">7.6</td><td class="border p-1">7.8</td><td class="border p-1">8.0</td><td class="border p-1">7.8</td><td class="border p-1">✅ Good</td></tr>
+                    <tr><td class="border p-1">3</td><td class="border p-1">7.2</td><td class="border p-1">6.4</td><td class="border p-1">6.2</td><td class="border p-1">7.0</td><td class="border p-1">6.5</td><td class="border p-1">✅ Acceptable</td></tr>
+                    <tr><td class="border p-1">4</td><td class="border p-1">6.0</td><td class="border p-1">5.2</td><td class="border p-1">4.8</td><td class="border p-1">6.2</td><td class="border p-1">5.4</td><td class="border p-1">⚠️ Marginal</td></tr>
+                    <tr><td class="border p-1">5</td><td class="border p-1">4.4</td><td class="border p-1">3.6</td><td class="border p-1">3.2</td><td class="border p-1">4.8</td><td class="border p-1">3.8</td><td class="border p-1">❌ Rejected</td></tr>
+                  </tbody>
+                </table>
+                <p class="text-xs mt-1">*Overall = Appearance×0.20 + Odour×0.20 + Taste×0.40 + Texture×0.20</p>
+                <pre><code>Day 4 Overall = (6.0×0.20)+(5.2×0.20)+(4.8×0.40)+(6.2×0.20) = 1.2+1.04+1.92+1.24 = 5.4
+Day 5 Overall = (4.4×0.20)+(3.6×0.20)+(3.2×0.40)+(4.8×0.20) = 0.88+0.72+1.28+0.96 = 3.84</code></pre>
+                <p><strong>Sensory Shelf Life = Day 3 (last day overall > 5.0 with comfortable margin). Day 4 marginal, Day 5 rejected.</strong></p>
+                <p><strong>With 20% safety margin: Best-before = Day 3 × 0.8 ≈ print "2 days" on pack.</strong></p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Evaluation Parameters:</h4>
+              <ul class="list-disc list-outside pl-5 space-y-1">
+                <li><strong>Appearance (Dikhawat):</strong> Colour (white/creamy), clarity, cream layer separation, sediment</li>
+                <li><strong>Odour (Gandh):</strong> Fresh, sour, rancid, burnt, fruity, malty, bitter, metallic</li>
+                <li><strong>Taste (Swad):</strong> Sweet (lactose), sour (acid), bitter (proteolysis), salty, metallic</li>
+                <li><strong>Texture/Mouthfeel:</strong> Smooth, watery, slimy, grainy, thick</li>
+              </ul>
+
+              <h4 class="font-semibold mt-4 mb-2">Common Defects aur Unki Causes:</h4>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Defect</th><th class="border p-2">Cause</th><th class="border p-2">Detection Threshold</th><th class="border p-2">Shelf Life Impact</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2">Sour taste/smell</td><td class="border p-2">Lactic acid bacteria (>0.18% LA)</td><td class="border p-2">~0.16-0.18% acidity</td><td class="border p-2">Shelf life over</td></tr>
+                  <tr><td class="border p-2">Bitter taste</td><td class="border p-2">Psychrotrophic proteases (casein breakdown)</td><td class="border p-2">~20% NPN increase</td><td class="border p-2">End of shelf life</td></tr>
+                  <tr><td class="border p-2">Rancid/soapy taste</td><td class="border p-2">Lipase activity (ADV > 1.0)</td><td class="border p-2">ADV ~0.5-1.0 meq/100g fat</td><td class="border p-2">Product rejected</td></tr>
+                  <tr><td class="border p-2">Fruity/Fermented smell</td><td class="border p-2">Pseudomonas, yeasts</td><td class="border p-2">Ester compounds > 5 ppm</td><td class="border p-2">Product rejected</td></tr>
+                  <tr><td class="border p-2">Malty flavour</td><td class="border p-2">S. lactis var. maltigenes</td><td class="border p-2">3-methylbutanal > 0.5 ppm</td><td class="border p-2">Quality defect</td></tr>
+                  <tr><td class="border p-2">Cream plug / separation</td><td class="border p-2">Inadequate homogenization (HI > 1.5)</td><td class="border p-2">Visible to eye</td><td class="border p-2">Visual rejection</td></tr>
+                  <tr><td class="border p-2">Gelation (UHT)</td><td class="border p-2">Heat-stable proteases</td><td class="border p-2">NPN increase > 40%</td><td class="border p-2">UHT shelf life end</td></tr>
+                </tbody>
+              </table>
+            `
+          },
+          {
+            title: "pH aur Acidity Monitoring During Shelf Life",
+            purpose: "Storage ke dauran pH aur acidity ko regular intervals par measure karna — microbial spoilage ka early indicator.",
+            reference: "IS 1479 (Part I) 1961; FSSAI Standards",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+              <p>Bacteria jab doodh mein grow karte hain, to lactose ko lactic acid mein convert karte hain. Isse pH girta hai aur titratable acidity badhti hai. pH aur acidity changes spoilage ka pehla chemical indicator hain — ye sensory changes se pehle detect ho jaate hain.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">📐 Acidity Formula — Complete Derivation:</h4>
+              <div class="bg-blue-50 p-3 rounded mt-2 mb-2">
+                <pre><code>% Acidity (as lactic acid) = (9 × V × N) / W
+
+Where:
+V = Volume of 0.1N NaOH used (ml)
+N = Normality of NaOH (typically 0.1N)
+W = Weight of milk sample (g) — typically 10g
+9 = Conversion factor</code></pre>
+
+                <p class="mt-2"><strong>Factor 9 ka Derivation:</strong></p>
+                <pre><code>Lactic acid: CH₃CHOHCOOH
+Molecular Weight = 90.08 g/mol
+Monoprotic acid → Equivalent Weight = 90 g/eq
+
+% = (meq of acid × Eq.Wt.) / (W × 1000) × 100
+= (V × N × 90) / (W × 1000) × 100
+= (V × N × 9000) / (W × 1000)
+= (V × N × 9) / W</code></pre>
+
+                <p class="mt-2"><strong>pH aur Acidity ka Relationship:</strong></p>
+                <p>pH aur acidity inversely related hain but exactly proportional nahi — kyunki doodh ka buffer capacity hai (casein aur phosphates buffer ka kaam karte hain).</p>
+                <table class="table-auto border-collapse border border-gray-300 mt-1 text-sm">
+                  <thead><tr class="bg-gray-100"><th class="border p-1">pH</th><th class="border p-1">Approx Acidity (%LA)</th><th class="border p-1">Status</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border p-1">6.8</td><td class="border p-1">0.12</td><td class="border p-1">Very fresh</td></tr>
+                    <tr><td class="border p-1">6.6</td><td class="border p-1">0.14</td><td class="border p-1">Fresh</td></tr>
+                    <tr><td class="border p-1">6.4</td><td class="border p-1">0.16-0.18</td><td class="border p-1">Acceptable limit</td></tr>
+                    <tr><td class="border p-1">6.0</td><td class="border p-1">0.20-0.22</td><td class="border p-1">Sour — rejected</td></tr>
+                    <tr><td class="border p-1">5.5</td><td class="border p-1">0.30+</td><td class="border p-1">Curdled</td></tr>
+                    <tr><td class="border p-1">4.6</td><td class="border p-1">0.60+</td><td class="border p-1">Casein precipitated (curd)</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example — Shelf Life Monitoring Data:</h4>
+              <div class="bg-green-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Product:</strong> Pasteurized Full Cream Milk (6% fat), stored at 4±1°C</p>
+                <p><strong>Acidity measured with 0.1N NaOH, 10g sample each time:</strong></p>
+                <table class="table-auto border-collapse border border-gray-300 mt-1 text-sm w-full">
+                  <thead><tr class="bg-gray-100"><th class="border p-1">Day</th><th class="border p-1">NaOH (ml)</th><th class="border p-1">Acidity Calc</th><th class="border p-1">% LA</th><th class="border p-1">pH</th><th class="border p-1">Status</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border p-1">0</td><td class="border p-1">1.50</td><td class="border p-1">(9×1.50×0.1)/10</td><td class="border p-1">0.135%</td><td class="border p-1">6.68</td><td class="border p-1">✅ Fresh</td></tr>
+                    <tr><td class="border p-1">1</td><td class="border p-1">1.55</td><td class="border p-1">(9×1.55×0.1)/10</td><td class="border p-1">0.140%</td><td class="border p-1">6.64</td><td class="border p-1">✅ Fresh</td></tr>
+                    <tr><td class="border p-1">2</td><td class="border p-1">1.65</td><td class="border p-1">(9×1.65×0.1)/10</td><td class="border p-1">0.149%</td><td class="border p-1">6.58</td><td class="border p-1">✅ Good</td></tr>
+                    <tr><td class="border p-1">3</td><td class="border p-1">1.85</td><td class="border p-1">(9×1.85×0.1)/10</td><td class="border p-1">0.167%</td><td class="border p-1">6.45</td><td class="border p-1">⚠️ Alert</td></tr>
+                    <tr><td class="border p-1">4</td><td class="border p-1">2.10</td><td class="border p-1">(9×2.10×0.1)/10</td><td class="border p-1">0.189%</td><td class="border p-1">6.28</td><td class="border p-1">❌ > 0.18%</td></tr>
+                    <tr><td class="border p-1">5</td><td class="border p-1">2.60</td><td class="border p-1">(9×2.60×0.1)/10</td><td class="border p-1">0.234%</td><td class="border p-1">5.95</td><td class="border p-1">❌ Sour/COB+</td></tr>
+                  </tbody>
+                </table>
+                
+                <p class="mt-2"><strong>Analysis:</strong></p>
+                <pre><code>Day 0 to Day 3: Acidity increase = 0.167 - 0.135 = 0.032% (gradual, normal)
+Day 3 to Day 4: Acidity increase = 0.189 - 0.167 = 0.022% (accelerating!)
+Day 4 to Day 5: Acidity increase = 0.234 - 0.189 = 0.045% (rapid spoilage!)
+
+pH drop Day 0 to Day 3 = 6.68 - 6.45 = 0.23 (< 0.3 threshold)
+pH drop Day 0 to Day 4 = 6.68 - 6.28 = 0.40 (> 0.3 → significant!)
+
+Shelf Life by acidity: Day 3 (last day < 0.18%)
+Shelf Life by pH: Day 3 (last day pH drop < 0.3 from baseline)
+Both parameters agree: Shelf life = 3 din</code></pre>
+                <p><strong>Best-before with safety margin (20%): 3 × 0.8 = 2.4 ≈ "Best before 2 days from packaging"</strong></p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Monitoring Protocol:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Production day (Day 0) par baseline pH aur acidity record karein.</li>
+                <li><strong>Pasteurized milk:</strong> Har 12-24 ghante test karein.</li>
+                <li><strong>UHT milk:</strong> Weekly ya fortnightly test karein.</li>
+                <li>Saare readings ek log sheet mein record karein.</li>
+                <li>Graph plot karein — pH vs Time, Acidity vs Time.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Critical Limits:</h4>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Parameter</th><th class="border p-2">Fresh Milk</th><th class="border p-2">Acceptable Limit</th><th class="border p-2">Rejected</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2">pH</td><td class="border p-2">6.6-6.8</td><td class="border p-2">≥ 6.4</td><td class="border p-2">&lt; 6.0</td></tr>
+                  <tr><td class="border p-2">Acidity (% LA)</td><td class="border p-2">0.12-0.14%</td><td class="border p-2">≤ 0.18%</td><td class="border p-2">&gt; 0.20%</td></tr>
+                </tbody>
+              </table>
+
+              <h4 class="font-semibold mt-4 mb-2">Interpretation:</h4>
+              <p><strong>pH drop of 0.3 or more from baseline:</strong> Significant spoilage shuru ho gayi hai.</p>
+              <p><strong>Acidity increase of 0.04% or more from baseline:</strong> Bacterial growth confirm — shelf life nearing end.</p>
+              <p><strong>Acidity &gt;0.20%:</strong> COB test positive ho jayega — doodh market ke liye unfit.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">⚠️ Why pH Change Faster Than Acidity Change?</h4>
+              <div class="bg-gray-50 p-3 rounded mt-2">
+                <p>pH <strong>logarithmic scale</strong> par hai — pH mein 0.3 unit change = hydrogen ion concentration mein ~2× increase. Jab ki acidity <strong>linear</strong> hai — direct proportion. Isliye kabhi kabhi pH change detect hota hai but acidity mein significant change nahi dikhta (buffer effect). <strong>Dono parameters saath mein monitor karein</strong> — koi ek akela sufficient nahi hai.</p>
+              </div>
+            `
+          },
+          {
+            title: "Alcohol Stability Test (for Heat Stability / UHT Suitability)",
+            purpose: "Doodh ki heat stability assess karna — ye test predict karta hai ki doodh UHT/sterilization process survive karega ya nahi.",
+            reference: "IS 1479 (Part I) 1961; IDF Standard",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+              <p>Ethanol doodh ke proteins ke hydration shell ko destabilize karta hai — jaise heat karta hai. Zyada concentrated alcohol mein stable rehne wala doodh heat treatment mein bhi stable rahega. Ye test UHT processing se pehle raw milk ki suitability check karne ke liye use hota hai, aur processed milk ki storage stability predict karne ke liye bhi.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">📐 Alcohol Concentrations ka Scientific Basis:</h4>
+              <div class="bg-blue-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Ethanol kaise destabilize karta hai?</strong></p>
+                <p>Casein micelles paani mein stable hain kyunki:</p>
+                <ol class="list-decimal list-outside pl-5 space-y-1">
+                  <li><strong>κ-Casein</strong> (surface par) negative charge rakhta hai → electrostatic repulsion</li>
+                  <li><strong>Hydration shell</strong> (paani ki layer) casein ko surround karti hai → steric stabilization</li>
                 </ol>
-  
-                <h4 class="font-semibold mt-4 mb-2">Interpretation:</h4>
-                <p><strong>Properly pasteurized milk:</strong> No yellow colour (negative test) — &lt;10 µg p-nitrophenol/ml</p>
-                <p><strong>Under-pasteurized/raw milk:</strong> Yellow colour (positive test) — &gt;10 µg p-nitrophenol/ml</p>
-              `
-            },
-            {
-              title: "Peroxidase Test (Storch Test)",
-              purpose: "Over-heating ya over-pasteurization detect karna. Peroxidase enzyme 80°C se upar destroy hota hai.",
-              reference: "IS 1479 (Part I) 1961",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
-                <p>Peroxidase ek enzyme hai jo raw doodh mein present hota hai aur HTST pasteurization (72°C/15 sec) survive karta hai but 80°C se upar destroy ho jaata hai. Properly pasteurized doodh mein peroxidase POSITIVE hona chahiye. Agar negative aaye, to doodh over-heated tha.</p>
-  
-                <h4 class="font-semibold mt-4 mb-2">Procedure (Storch Test):</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>Test tube mein 5 ml doodh lein.</li>
-                  <li>5 drops of 2% paraphenylene diamine solution daalein.</li>
-                  <li>2 drops of hydrogen peroxide (0.2%) daalein.</li>
-                  <li>Mix karein aur 30 seconds observe karein.</li>
-                </ol>
-  
-                <h4 class="font-semibold mt-4 mb-2">Interpretation:</h4>
-                <p><strong>Dark blue/indigo colour (within 30 sec):</strong> Positive — Peroxidase present — doodh properly pasteurized (72°C/15 sec) aur over-heated nahi hai.</p>
-                <p><strong>No colour change:</strong> Negative — Peroxidase destroyed — doodh 80°C se upar heat hua hai (over-pasteurized).</p>
-                <p><strong>Raw milk:</strong> Strongly positive (immediate deep colour)</p>
-              `
-            },
-            {
-              title: "pH Determination",
-              purpose: "Doodh ka hydrogen ion concentration measure karna — freshness aur quality ka indicator.",
-              reference: "IS 1479 (Part I) 1961",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>pH meter ko standard buffer solutions (pH 4.0 aur pH 7.0) se calibrate karein.</li>
-                  <li>50 ml doodh ek beaker mein lein.</li>
-                  <li>Temperature note karein (25°C ideal hai).</li>
-                  <li>Electrode ko doodh mein daalein aur stable reading le karein.</li>
-                </ol>
-  
-                <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
-                <p>Fresh cow milk pH: 6.6-6.8, Fresh buffalo milk pH: 6.7-6.8</p>
-                <p>Sour/fermented milk: pH &lt; 6.0, Mastitic milk: pH &gt; 7.0</p>
-              `
-            },
-            {
-              title: "Alcohol Test (COB Test - Clot on Boiling)",
-              purpose: "Doodh ki acidity quickly check karna — developed acidity high hone par doodh alcohol/heat se clot hota hai.",
-              reference: "IS 1479 (Part I) 1961",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Method 1: Alcohol Test</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>Ek test tube mein 2 ml doodh lein.</li>
-                  <li>2 ml 68% ethanol (ya 75% ethanol for more sensitive test) daalein.</li>
-                  <li>Mix karein aur clot formation observe karein.</li>
-                </ol>
-                <p><strong>Result:</strong> Clot formation = POSITIVE = doodh ki acidity 0.20% se zyada hai ya colostrum hai. No clot = NEGATIVE = doodh normal hai.</p>
-  
-                <h4 class="font-semibold mt-4 mb-2">Method 2: Clot on Boiling (COB) Test</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>5 ml doodh ek test tube ya spoon mein lein.</li>
-                  <li>Direct flame par boil karein.</li>
-                  <li>Clot formation dekhein.</li>
-                </ol>
-                <p><strong>Result:</strong> Clot = doodh ki acidity 0.24% se zyada hai. No clot = normal.</p>
-              `
-            },
-            {
-              title: "Added Water ka Detection",
-              purpose: "Doodh mein paani milawat ka pata lagana — sabse common adulteration.",
-              reference: "IS 1479 (Part I) 1961",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
-                <p>Paani milane se doodh ka SNF aur specific gravity dono kam ho jaate hain. Freezing point bhi change hota hai. Normal doodh ka freezing point -0.520 to -0.540°C hota hai. Paani milane se ye 0°C ki taraf shift hota hai.</p>
-  
-                <h4 class="font-semibold mt-4 mb-2">Method 1: Lactometer + SNF Method</h4>
-                <p>Lactometer reading aur fat % se SNF calculate karein. Agar SNF 8.5% se neeche hai aur specific gravity 1.028 se kam hai to paani milawat ka strong indication hai.</p>
-                <pre><code>% Added Water = [(Expected SNF - Observed SNF) / Expected SNF] × 100</code></pre>
-  
-                <h4 class="font-semibold mt-4 mb-2">Method 2: Cryoscopy (Freezing Point Method)</h4>
-                <p>Doodh ka freezing point ek precision cryoscope se measure karein.</p>
-                <p>Normal freezing point: -0.520 to -0.540°C (Hortvet scale)</p>
-                <pre><code>% Added Water = [(T_observed - T_normal) / T_normal] × 100</code></pre>
-                <p class="text-xs">Jahaan T = Freezing point depression</p>
-  
-                <h4 class="font-semibold mt-4 mb-2">Method 3: Nitrate Test</h4>
-                <p>Normal doodh mein nitrate absent hota hai, lekin tap water mein present hota hai. 5 ml doodh lein, carefully 1 ml conc. H₂SO₄ add karein with diphenylamine crystal. Ek blue ring at junction = nitrate present = paani mila hua hai.</p>
-              `
-            },
-            {
-              title: "Formalin ka Detection",
-              purpose: "Formalin (formaldehyde) ek illegal preservative hai — iska detection zaroori hai.",
-              reference: "FSSAI Manual Method 2.1.9",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Hehner's Test:</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>Ek test tube mein 10 ml doodh lein.</li>
-                  <li>5 ml concentrated sulphuric acid (with trace of ferric chloride — 0.2 ml of 10% FeCl₃ per 100 ml acid) ko tube ki deewar se carefully neeche slide karein taaki ye doodh ke neeche settle ho jaye.</li>
-                  <li>Interface (junction) par colour observe karein.</li>
-                </ol>
-  
-                <h4 class="font-semibold mt-4 mb-2">Result:</h4>
-                <p><strong>Violet/Purple ring at junction:</strong> Formalin PRESENT — adulterated</p>
-                <p><strong>Brown ring (normal):</strong> Formalin ABSENT — no adulteration</p>
-  
-                <h4 class="font-semibold mt-4 mb-2">Confirmatory Test (Chromotropic Acid Test):</h4>
-                <p>1 ml doodh + 1 ml chromotropic acid solution + 5 ml conc. H₂SO₄. Violet colour = formaldehyde confirmed.</p>
-              `
-            },
-            {
-              title: "Urea ka Detection",
-              purpose: "Urea ek common adulterant hai — SNF artificially badhane ke liye milaya jaata hai.",
-              reference: "FSSAI Manual Method",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Method 1: DMAB Method</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>Ek test tube mein 5 ml doodh lein.</li>
-                  <li>5 ml of DMAB reagent (para-dimethylaminobenzaldehyde — 1.6 g in 100 ml ethanol + 10 ml conc. HCl) daalein.</li>
-                  <li>Mix karein aur 10 minute observe karein.</li>
-                </ol>
-                <p><strong>Yellow colour development:</strong> Urea PRESENT (normal doodh mein bhi thoda urea hota hai ~20-70 mg/100ml, but intense yellow = added urea)</p>
-  
-                <h4 class="font-semibold mt-4 mb-2">Method 2: Urease Based Quantitative Method</h4>
-                <p>Soybean urease doodh mein add kiya jaata hai jo urea ko ammonia mein convert karta hai. Released ammonia ko Nessler's reagent se measure kiya jaata hai (yellow-brown colour at 420 nm). Normal milk urea: 20-70 mg/100 ml. Added urea: >70 mg/100 ml suspect.</p>
-              `
-            },
-            {
-              title: "Hydrogen Peroxide ka Detection",
-              purpose: "H₂O₂ ek illegal preservative hai — doodh ki shelf life artificially badhane ke liye milaya jaata hai.",
-              reference: "FSSAI Manual Method 2.1.8",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Method 1: Vanadium Pentoxide Method</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>Ek test tube mein 10 ml doodh lein.</li>
-                  <li>2-3 drops vanadium pentoxide (V₂O₅) solution daalein — ye catalyst ka kaam karta hai.</li>
-                  <li>Colour observe karein.</li>
-                </ol>
-                <p><strong>Red/Pink colour:</strong> H₂O₂ PRESENT — adulterated</p>
-                <p><strong>No colour change:</strong> H₂O₂ ABSENT</p>
-  
-                <h4 class="font-semibold mt-4 mb-2">Method 2: Potassium Iodide-Starch Method</h4>
-                <p>5 ml doodh + few drops KI solution + few drops starch solution. Blue colour = H₂O₂ present (H₂O₂ KI se iodine liberate karta hai jo starch ke saath blue deta hai).</p>
-              `
-            },
-            {
-              title: "Neutralizer ka Detection",
-              purpose: "Soda, caustic soda, sodium bicarbonate — ye sab doodh ki acidity chhupane ke liye milaaye jaate hain.",
-              reference: "IS 1479 (Part I) 1961; FSSAI Manual",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Method 1: Rosalic Acid Test (for Soda/Carbonates)</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>5 ml doodh ek test tube mein lein.</li>
-                  <li>5 ml alcohol daalein (proteins precipitate karne ke liye).</li>
-                  <li>3-4 drops rosalic acid solution (1% in alcohol) daalein.</li>
-                </ol>
-                <p><strong>Rose-red/Pink colour:</strong> Neutralizer (soda/carbonate) PRESENT</p>
-                <p><strong>Brownish/Yellow colour:</strong> ABSENT — normal doodh</p>
-  
-                <h4 class="font-semibold mt-4 mb-2">Method 2: Alizarin Test for Sodium Bicarbonate</h4>
-                <p>Equal volumes doodh + alizarin reagent (0.2% in alcohol). Deep violet = sodium bicarbonate present.</p>
-              `
-            },
-            {
-              title: "Detergent ka Detection",
-              purpose: "Doodh mein detergent milawat detect karna — ye fat percentage artificially badhane ke liye milaya jaata hai.",
-              reference: "FSSAI Manual",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Methylene Blue Method:</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>10 ml doodh ek test tube mein lein.</li>
-                  <li>0.5 ml methylene blue solution daalein.</li>
-                  <li>5 ml chloroform daalein.</li>
-                  <li>Vigorously shake karein aur settle hone dein.</li>
-                </ol>
-                <p><strong>Blue colour in chloroform layer (lower):</strong> Detergent PRESENT — methylene blue detergent ke saath chloroform layer mein migrate karta hai.</p>
-                <p><strong>Colourless chloroform layer:</strong> Detergent ABSENT</p>
-              `
-            },
-            {
-              title: "Ammonium Sulphate ka Detection",
-              purpose: "Ammonium sulphate doodh ki lactometer reading badhane ke liye milaya jaata hai.",
-              reference: "FSSAI Manual",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Nessler's Reagent Method:</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>5 ml doodh + 5 ml 2% NaOH solution mix karein.</li>
-                  <li>1 ml Nessler's reagent (K₂HgI₄ in NaOH) daalein.</li>
-                  <li>5 minute observe karein.</li>
-                </ol>
-                <p><strong>Orange-brown precipitate:</strong> Ammonium sulphate PRESENT (excessive ammonia)</p>
-                <p><strong>Faint yellow (normal level):</strong> Normal doodh — thoda urea naturally hota hai</p>
-              `
-            },
-            {
-              title: "Starch ka Detection in Milk",
-              purpose: "Starch ek thickener ke roop mein milaya jaata hai taaki paani milane ka pata na chale.",
-              reference: "IS 1479 (Part I) 1961",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Iodine Test:</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>5 ml doodh ek test tube mein lein.</li>
-                  <li>Boil karein aur phir cool karein (starch granules ko swell karne ke liye).</li>
-                  <li>2-3 drops iodine solution (Lugol's iodine) daalein.</li>
-                </ol>
-                <p><strong>Blue/Blue-black colour:</strong> Starch PRESENT</p>
-                <p><strong>Yellow-brown colour:</strong> Starch ABSENT (normal)</p>
-              `
-            },
-            {
-              title: "Sugar (Sucrose) ka Detection in Milk",
-              purpose: "Cane sugar ka detection — ye SNF aur taste artificially badhane ke liye milaya jaata hai.",
-              reference: "FSSAI Manual",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Seliwanoff's Test (Modified Barfoed's):</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>5 ml doodh ek test tube mein lein.</li>
-                  <li>1 ml conc. HCl daalein.</li>
-                  <li>0.05 gram resorcinol add karein.</li>
-                  <li>Boiling water bath mein 5 minute heat karein.</li>
-                </ol>
-                <p><strong>Red/Rose-red colour:</strong> Sucrose (cane sugar) PRESENT</p>
-                <p><strong>No colour change:</strong> Sucrose ABSENT</p>
-  
-                <h4 class="font-semibold mt-4 mb-2">Note:</h4>
-                <p>Normal doodh mein sirf lactose hota hai, sucrose nahi. Koi bhi sucrose presence adulteration indicate karta hai.</p>
-              `
-            },
-            {
-              title: "Salt (NaCl) ka Detection in Milk",
-              purpose: "Namak milawat ka detection — ye specific gravity aur taste mask karne ke liye milaya jaata hai.",
-              reference: "FSSAI Manual",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Silver Nitrate Test:</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>5 ml doodh ek test tube mein lein.</li>
-                  <li>1 ml 0.1N silver nitrate (AgNO₃) solution daalein.</li>
-                  <li>2 drops potassium chromate indicator daalein.</li>
-                </ol>
-                <p><strong>Yellow colour:</strong> Excess salt (NaCl) PRESENT — AgNO₃ saara chloride se react kar chuka aur excess AgNO₃ chromate se yellow colour de raha hai — actually means chloride kam hai aur salt normal hai.</p>
-                <p><strong>Correction:</strong> Normal milk mein 0.14-0.17% Cl hota hai. White precipitate excess indicate karta hai. Quantitative determination ke liye Mohr's method use karein (butter section mein described hai).</p>
-              `
-            },
-            {
-              title: "Turbidity Test (Lacto Test)",
-              purpose: "Doodh mein paani milawat ka ek simple qualitative test.",
-              procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                  <li>5 ml doodh ek test tube mein lein.</li>
-                  <li>5 ml trichloroacetic acid (TCA, 4%) daalein — ye proteins precipitate kar deta hai.</li>
-                  <li>Mix karein aur filter karein.</li>
-                  <li>Filtrate ko observe karein.</li>
-                </ol>
-                <p><strong>Clear filtrate:</strong> Normal doodh</p>
-                <p><strong>Turbid/Milky filtrate:</strong> Paani aur/ya synthetic milk milawat ka indication</p>
-              `
-            }
-          ]
-        },
+                <p class="mt-1"><strong>Ethanol</strong> dielectric constant kam karta hai → electrostatic repulsion kam hoti hai. Aur hydration shell ko remove karta hai (dehydration). Dono effects milkar casein ko destabilize karte hain → aggregation → CLOT.</p>
+                
+                <p class="mt-2"><strong>Effective Ethanol Concentration (Milk + Ethanol mix mein):</strong></p>
+                <pre><code>2 ml milk + 2 ml 68% ethanol = 4 ml total
+Effective ethanol in mixture = (2 × 68) / 4 = 34%
+
+2 ml milk + 2 ml 75% ethanol → Effective = 37.5%
+2 ml milk + 2 ml 80% ethanol → Effective = 40%</code></pre>
+                <p>Matlab effectively 34-40% ethanol concentration par protein stability test ho raha hai.</p>
+                
+                <p class="mt-2"><strong>Kyu 2 ml + 2 ml (equal volumes)?</strong></p>
+                <p>Equal volumes (1:1 ratio) isliye taaki calculation simple rahe aur results reproducible hon. Agar ratio change karein to sensitivity change hogi → comparison mushkil.</p>
+                
+                <p class="mt-2"><strong>Har concentration ka matlab:</strong></p>
+                <table class="table-auto border-collapse border border-gray-300 mt-1 text-sm w-full">
+                  <thead><tr class="bg-gray-100"><th class="border p-1">Test Ethanol %</th><th class="border p-1">Effective % in Mix</th><th class="border p-1">Kya Test Karta Hai</th><th class="border p-1">Equivalent to</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border p-1">68%</td><td class="border p-1">34%</td><td class="border p-1">Basic acidity check</td><td class="border p-1">Acidity > 0.20% detect karta hai</td></tr>
+                    <tr><td class="border p-1">72%</td><td class="border p-1">36%</td><td class="border p-1">HTST suitability</td><td class="border p-1">72°C/15s pasteurization tolerance</td></tr>
+                    <tr><td class="border p-1">75%</td><td class="border p-1">37.5%</td><td class="border p-1">UHT minimum</td><td class="border p-1">Acidity 0.14-0.16% detect</td></tr>
+                    <tr><td class="border p-1">78%</td><td class="border p-1">39%</td><td class="border p-1">Good UHT milk</td><td class="border p-1">Well-balanced minerals</td></tr>
+                    <tr><td class="border p-1">80%</td><td class="border p-1">40%</td><td class="border p-1">Excellent stability</td><td class="border p-1">Low ionic Ca, fresh milk</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Procedure (Graduated Alcohol Test):</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Different concentrations ke ethanol solutions prepare karein: 68%, 72%, 75%, 78%, 80%.</li>
+                <li>Alag-alag test tubes mein 2 ml doodh lein.</li>
+                <li>Har tube mein 2 ml respective ethanol concentration daalein.</li>
+                <li>Mix karein (gently invert karein).</li>
+                <li>Clot/flocculation formation observe karein.</li>
+                <li>Sabse highest alcohol concentration note karein jismein doodh stable rahe (no clotting).</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 1 (UHT-Suitable Milk):</h4>
+              <div class="bg-green-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Sample:</strong> Fresh cow milk from cooperative, Acidity = 0.13% LA, pH = 6.72</p>
+                <table class="table-auto border-collapse border border-gray-300 mt-1 text-sm">
+                  <thead><tr class="bg-gray-100"><th class="border p-1">Ethanol %</th><th class="border p-1">Observation</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border p-1">68%</td><td class="border p-1">No clot — smooth ✓</td></tr>
+                    <tr><td class="border p-1">72%</td><td class="border p-1">No clot — smooth ✓</td></tr>
+                    <tr><td class="border p-1">75%</td><td class="border p-1">No clot — smooth ✓</td></tr>
+                    <tr><td class="border p-1">78%</td><td class="border p-1">No clot — smooth ✓</td></tr>
+                    <tr><td class="border p-1">80%</td><td class="border p-1">Very fine flocculation (barely visible) ✓/△</td></tr>
+                  </tbody>
+                </table>
+                <p><strong>Result: Stable up to 78% → ✅ GOOD — UHT processing ke liye suitable!</strong></p>
+                <p>Is doodh ko 135-140°C UHT treatment diya ja sakta hai. Expected UHT shelf life: 3-4 months.</p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 2 (Unstable Milk):</h4>
+              <div class="bg-red-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Sample:</strong> Evening collection milk, 4 hours old without chilling, Acidity = 0.19% LA, pH = 6.35</p>
+                <table class="table-auto border-collapse border border-gray-300 mt-1 text-sm">
+                  <thead><tr class="bg-gray-100"><th class="border p-1">Ethanol %</th><th class="border p-1">Observation</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border p-1">68%</td><td class="border p-1">CLOT formed — large flakes! ✗</td></tr>
+                    <tr><td class="border p-1">72%</td><td class="border p-1">Heavy clot ✗</td></tr>
+                    <tr><td class="border p-1">75%</td><td class="border p-1">Heavy clot ✗</td></tr>
+                  </tbody>
+                </table>
+                <p><strong>Result: Clots at 68% → ❌ POOR — UHT ke liye UNSUITABLE! Even pasteurization risky hai.</strong></p>
+                <p>Developed acidity (0.19%) ne casein ko destabilize kar diya. Is doodh ko sirf paneer/chhena banane ke liye use kar sakte hain.</p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Interpretation:</h4>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Alcohol Stability</th><th class="border p-2">Suitability</th><th class="border p-2">Shelf Life Prediction</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2">Stable at 80%+ ethanol</td><td class="border p-2">Excellent — UHT ke liye ideal</td><td class="border p-2">Maximum shelf life expected</td></tr>
+                  <tr><td class="border p-2">Stable at 75-78%</td><td class="border p-2">Good — UHT suitable</td><td class="border p-2">Normal shelf life</td></tr>
+                  <tr><td class="border p-2">Stable at 72% only</td><td class="border p-2">Marginal — HTST pasteurization ok</td><td class="border p-2">Reduced shelf life possible</td></tr>
+                  <tr><td class="border p-2">Clots at 68%</td><td class="border p-2">Poor — high acidity/unstable</td><td class="border p-2">Very short shelf life</td></tr>
+                </tbody>
+              </table>
+
+              <h4 class="font-semibold mt-4 mb-2">Factors Affecting Alcohol Stability:</h4>
+              <ul class="list-disc list-outside pl-5 space-y-1">
+                <li><strong>Developed acidity (lactic acid)</strong> — stability kam karti hai (pH drop → casein charge reduce)</li>
+                <li><strong>High ionic calcium (Ca²⁺)</strong> — destabilizing effect (casein micelles ke beech calcium bridges banata hai)</li>
+                <li><strong>Low casein:whey protein ratio</strong> — kam κ-casein = kam stability</li>
+                <li><strong>Mastitic milk</strong> — poor stability (high SCC, altered mineral balance, elevated pH)</li>
+                <li><strong>Late lactation milk</strong> — variable stability (mineral imbalance, high protease activity)</li>
+              </ul>
+            `
+          },
+          {
+            title: "Psychrotrophic Bacterial Count",
+            purpose: "Fridge temperature par grow karne wale bacteria ka count — ye pasteurized milk ki shelf life ka sabse important predictor hai.",
+            reference: "IDF 101A:1991; Standard Methods for Examination of Dairy Products (APHA)",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+              <p>Psychrotrophic bacteria wo organisms hain jo 7°C ya usse neeche grow kar sakte hain (optimum temperature 20-30°C hota hai). Ye pasteurized milk ki shelf life ke sabse bade dushman hain kyunki fridge mein bhi ye grow karte rehte hain aur heat-stable enzymes (lipases, proteases) produce karte hain jo doodh ko kharab karte hain.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">📐 Incubation Conditions ka Scientific Explanation:</h4>
+              <div class="bg-blue-50 p-3 rounded mt-2 mb-2">
+                <p><strong>7°C / 10 din — Standard Method KYU?</strong></p>
+                <p>7°C typical household fridge temperature hai. 10 din = psychrotrophic bacteria ke multiple generations ko cover karta hai. Ye method sabse accurate hai kyunki actual refrigeration conditions simulate karti hai.</p>
+                <pre><code>Pseudomonas fluorescens generation time at different temperatures:
+4°C: ~8-12 hours
+7°C: ~5-7 hours  
+10°C: ~3-4 hours
+21°C: ~1-1.5 hours
+25°C: ~45-60 min (optimum)
+
+At 7°C in 10 days (240 hours):
+Generations = 240/6 = ~40 generations
+1 bacterium → 2⁴⁰ = ~1.1 × 10¹² (theoretical max)
+Actual: ~10⁷-10⁸ due to nutrient limitation</code></pre>
+                
+                <p class="mt-2"><strong>21°C / 25 hours — Rapid Method KYU?</strong></p>
+                <p>Accelerated alternative — 21°C par psychrotrophs ka growth rate ~4-6× faster hai compared to 7°C.</p>
+                <pre><code>Q₁₀ calculation for acceleration:
+Q₁₀ ≈ 2.5 for Pseudomonas
+Rate ratio = 2.5^((21-7)/10) = 2.5^1.4 = ~3.6×
+
+So 25 hours at 21°C ≈ 25 × 3.6 = ~90 hours at 7°C ≈ ~4 days at 7°C
+Ye "rapid screening" hai — full 10-day result ke liye wait nahi karna padta</code></pre>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Doodh ke sample ka serial dilution banayein.</li>
+                <li>1 ml diluted sample ko PCA plates par pour karein.</li>
+                <li>Plates ko 7°C par 10 din incubate karein (standard method).</li>
+                <li>Ya — accelerated method: 21°C par 25 hours incubate karein (rapid count).</li>
+                <li>Colonies count karein.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 1 (Excellent Plant Hygiene):</h4>
+              <div class="bg-green-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Sample:</strong> Pasteurized milk, Plant A (modern CIP system)</p>
+                <p><strong>Method:</strong> 7°C / 10 days, PCA pour plate</p>
+                <p><strong>Dilution 10⁻¹ plate:</strong> 45 colonies</p>
+                <pre><code>Psychrotrophic Count = 45 / (10⁻¹ × 1 ml) = 45 / 0.1 = 450 CFU/ml</code></pre>
+                <p><strong>Result: 450 CFU/ml = range 100-1,000 → ✅ GOOD quality!</strong></p>
+                <p>Expected shelf life: 3-5 din at 4°C. Plant sanitation achhi hai.</p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 2 (Poor Plant Hygiene):</h4>
+              <div class="bg-red-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Sample:</strong> Pasteurized milk, Plant B (manual cleaning)</p>
+                <p><strong>Method:</strong> 21°C / 25 hours (rapid method)</p>
+                <p><strong>Dilution 10⁻³ plate:</strong> 156 colonies</p>
+                <pre><code>Psychrotrophic Count = 156 / (10⁻³ × 1 ml) = 156 / 0.001 = 1,56,000 CFU/ml</code></pre>
+                <p><strong>Result: 1,56,000 ≈ 1.56 × 10⁵ CFU/ml → range > 10,000 → ❌ POOR!</strong></p>
+                <p>Expected shelf life: < 2 din at 4°C. Filler machine ke rubber gaskets mein biofilm formation ho rahi hai — deep CIP required!</p>
+                
+                <p class="mt-2"><strong>Agar ye bacteria heat-stable lipase produce karte hain, to:</strong></p>
+                <pre><code>Pseudomonas lipase activity at 7°C:
+1 CFU produces ~10⁻¹² units lipase/hour
+1,56,000 CFU/ml × 10⁻¹² × 72 hours = detectable rancidity by Day 3
+Isliye shelf life sirf 2 din!</code></pre>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Interpretation:</h4>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Psychrotrophic Count</th><th class="border p-2">Quality</th><th class="border p-2">Shelf Life Impact</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2">&lt; 100 CFU/ml</td><td class="border p-2">Excellent</td><td class="border p-2">Maximum shelf life (5-7 din at 4°C)</td></tr>
+                  <tr><td class="border p-2">100 - 1,000 CFU/ml</td><td class="border p-2">Good</td><td class="border p-2">Normal shelf life (3-5 din)</td></tr>
+                  <tr><td class="border p-2">1,000 - 10,000 CFU/ml</td><td class="border p-2">Fair</td><td class="border p-2">Reduced (2-3 din)</td></tr>
+                  <tr><td class="border p-2">&gt; 10,000 CFU/ml</td><td class="border p-2">Poor</td><td class="border p-2">Very short (&lt;2 din)</td></tr>
+                </tbody>
+              </table>
+
+              <h4 class="font-semibold mt-4 mb-2">Key Point:</h4>
+              <p>Psychrotrophic count pasteurized milk mein mainly post-pasteurization contamination (PPC) se aata hai — filler, pipes, tanks, packaging material se. Isiliye plant hygiene aur CIP (Clean-In-Place) bahut important hai. High psychrotrophic count ka matlab hai plant sanitation mein problem hai.</p>
+            `
+          },
+          {
+            title: "Spore Count (Aerobic Spore-Formers)",
+            purpose: "Heat-resistant spore-forming bacteria ka count — ye UHT aur sterilized milk ki shelf life ke liye critical hai.",
+            reference: "IDF 132A:1991; IS 1479 (Part III) 1977",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+              <p>Bacterial spores (especially Bacillus species) pasteurization survive karte hain aur kuch UHT treatment bhi survive kar sakte hain. Spore count raw milk quality ka indicator hai aur predict karta hai ki processed milk mein kitne spore-formers honge. UHT milk mein agar spores survive karein, to storage ke dauran germinate hokar spoilage cause kar sakte hain.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">📐 Heat Treatment — 80°C / 10 min KYU?</h4>
+              <div class="bg-blue-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Vegetative cells vs Spores ki heat resistance:</strong></p>
+                <table class="table-auto border-collapse border border-gray-300 mt-1 text-sm w-full">
+                  <thead><tr class="bg-gray-100"><th class="border p-1">Organism Type</th><th class="border p-1">D₈₀ Value</th><th class="border p-1">80°C/10 min ke baad</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border p-1">Vegetative bacteria (E. coli, Pseudomonas)</td><td class="border p-1">< 1 second</td><td class="border p-1">Completely destroyed</td></tr>
+                    <tr><td class="border p-1">Thermoduric bacteria (Enterococcus)</td><td class="border p-1">~30-60 sec</td><td class="border p-1">Mostly destroyed</td></tr>
+                    <tr><td class="border p-1">Bacillus spores</td><td class="border p-1">>30 min (at 80°C)</td><td class="border p-1">SURVIVE! ✓</td></tr>
+                    <tr><td class="border p-1">Clostridium spores</td><td class="border p-1">>60 min (at 80°C)</td><td class="border p-1">SURVIVE! ✓</td></tr>
+                  </tbody>
+                </table>
+                <p class="mt-1"><strong>80°C/10 min = "pasteurization++"</strong> — ye saare vegetative cells ko kill karta hai but spores ko intact rakhta hai. Jo bhi colonies ugte hain = SPORES se originated.</p>
+                
+                <p class="mt-2"><strong>Ice bath mein turant cool kyu?</strong></p>
+                <p>80°C par 10 min ke baad agar dheere cool karein → kuch spores heat-activated ho jayenge (heat shock = germination trigger) → ye vegetative cells mein convert ho jayenge → phir 80°C+ se kill nahi honge (already cool ho chuka). Rapid cooling germination rokti hai → accurate spore count milta hai.</p>
+                
+                <p class="mt-2"><strong>D-values of key spore-formers at different temperatures:</strong></p>
+                <pre><code>B. cereus spores:     D₁₀₀ = ~5 min,  D₁₂₁ = ~0.03 min
+B. subtilis spores:   D₁₀₀ = ~12 min, D₁₂₁ = ~0.5 min  
+B. stearothermophilus: D₁₀₀ = ~200 min, D₁₂₁ = ~4-5 min
+Clostridium botulinum: D₁₂₁ = ~0.2 min (reference organism for canning)
+
+UHT (135°C/4 sec) lethality:
+F₀ = t × 10^((T-121)/z) = 4 × 10^((135-121)/10) = 4 × 10^1.4 = 4 × 25.1 = ~100 sec F₀
+This gives 12D for B. stearothermophilus (12 × 5 min × 60 = 3600 sec equivalent)
+Actually: F₀ needed = 5-6 min, achieved F₀ ≈ 100 sec = sufficient for 12D of most organisms</code></pre>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>10 ml doodh ko ek sterile test tube mein lein.</li>
+                <li><strong>Heat treatment:</strong> 80°C par 10 minute heat karein (water bath mein) — ye vegetative cells ko kill karta hai, sirf spores survive karte hain.</li>
+                <li>Turant ice bath mein cool karein.</li>
+                <li>Heat-treated sample ka serial dilution banayein.</li>
+                <li>PCA plates par pour plate method se plate karein.</li>
+                <li><strong>Aerobic spores:</strong> 30-37°C par 48-72 hours incubate karein (aerobic conditions).</li>
+                <li><strong>Thermophilic spores:</strong> 55°C par 48 hours incubate karein.</li>
+                <li>Colonies count karein.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 1 (Good Raw Milk Quality):</h4>
+              <div class="bg-green-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Sample:</strong> Raw milk from cooperative (well-maintained farm, good milking hygiene)</p>
+                <p><strong>After 80°C/10 min heat treatment → dilution 10⁻¹ plated:</strong></p>
+                <p><strong>Aerobic spore count (37°C/48h):</strong> 6 colonies on 10⁻¹ plate</p>
+                <pre><code>Spore Count = 6 / (10⁻¹ × 1 ml) = 6 / 0.1 = 60 spores/ml</code></pre>
+                <p><strong>Result: 60 spores/ml < 100 → ✅ EXCELLENT raw milk quality!</strong></p>
+                <p>Is doodh se banaya UHT milk achhi shelf life dega (3-6 months). Minimal risk of sweet curdling ya gelation.</p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 2 (Poor Raw Milk — Silage-fed cows):</h4>
+              <div class="bg-red-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Sample:</strong> Raw milk from farm with poor silage quality (butyric acid bacteria contamination in feed)</p>
+                <p><strong>After 80°C/10 min heat treatment:</strong></p>
+                <p><strong>Aerobic spore count (37°C/72h):</strong> 180 colonies on 10⁻¹ plate</p>
+                <pre><code>Spore Count = 180 / (10⁻¹ × 1) = 1,800 spores/ml</code></pre>
+                <p><strong>Thermophilic spore count (55°C/48h):</strong> 25 colonies on undiluted plate</p>
+                <pre><code>Thermophilic Count = 25 / (10⁰ × 1) = 25 spores/ml</code></pre>
+                <p><strong>Result: 1,800 aerobic spores/ml > 1,000 → ❌ POOR!</strong></p>
+                <p>UHT milk se is doodh se banayi jayegi, usmein:</p>
+                <ul class="list-disc list-outside pl-5 space-y-1">
+                  <li>B. cereus: Sweet curdling 2-3 months mein possible</li>
+                  <li>B. subtilis: Gelation risk at 4-5 months</li>
+                  <li>Clostridium: Late blowing (gas) risk</li>
+                </ul>
+                <p><strong>Action: Is raw milk ko UHT ke liye REJECT karein. Sirf pasteurized milk ke liye use karein (short shelf life product).</strong></p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Interpretation:</h4>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Spore Count</th><th class="border p-2">Raw Milk Quality</th><th class="border p-2">UHT/Sterilized Milk Impact</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2">&lt; 100 spores/ml</td><td class="border p-2">Excellent</td><td class="border p-2">Good shelf life expected</td></tr>
+                  <tr><td class="border p-2">100 - 1,000 spores/ml</td><td class="border p-2">Acceptable</td><td class="border p-2">Normal processing sufficient</td></tr>
+                  <tr><td class="border p-2">&gt; 1,000 spores/ml</td><td class="border p-2">Poor</td><td class="border p-2">UHT ke liye unsuitable — gelation, sweet curdling risk</td></tr>
+                </tbody>
+              </table>
+
+              <h4 class="font-semibold mt-4 mb-2">Important Spore-Formers:</h4>
+              <ul class="list-disc list-outside pl-5 space-y-1">
+                <li><strong>Bacillus cereus:</strong> Pasteurization survive karta hai, sweet curdling, bitty cream</li>
+                <li><strong>Bacillus subtilis:</strong> UHT mein sweet curdling</li>
+                <li><strong>Bacillus stearothermophilus:</strong> Thermophilic, sterilized milk mein flat sour</li>
+                <li><strong>Clostridium spp.:</strong> Anaerobic spore-formers, gas production, late blowing (cheese mein bhi important)</li>
+              </ul>
+            `
+          },
+          {
+            title: "Proteolysis Detection (Proteolytic Activity During Storage)",
+            purpose: "Storage ke dauran protein breakdown detect karna — ye UHT milk mein gelation aur bitter taste ka karan hai.",
+            reference: "IDF Standard; Journal of Dairy Science methodologies",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+              <p>Psychrotrophic bacteria (jaise Pseudomonas) heat-stable proteases produce karte hain jo pasteurization/UHT survive karte hain. Ye enzymes storage ke dauran casein ko todte hain (proteolysis) — isse bitter peptides bante hain aur eventually doodh gel bhi ho sakta hai (UHT mein). Proteolysis measure karke shelf life predict ki ja sakti hai.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">📐 Key Formulas aur Factors:</h4>
+              <div class="bg-blue-50 p-3 rounded mt-2 mb-2">
+                <p><strong>TCA (Trichloroacetic Acid) — 24% KYU?</strong></p>
+                <p>24% TCA (final concentration 12% jab equal volumes mix hon) ek critical concentration hai:</p>
+                <ul class="list-disc list-outside pl-5 space-y-1">
+                  <li>Intact casein aur whey proteins → PRECIPITATE (TCA-insoluble)</li>
+                  <li>Small peptides (< 10 kDa) → SOLUBLE (TCA-soluble)</li>
+                  <li>Free amino acids → SOLUBLE</li>
+                  <li>Urea, NPN compounds → SOLUBLE</li>
+                </ul>
+                <p class="mt-1">Storage ke dauran jab proteases casein ko todte hain → bade proteins → chote peptides → TCA-soluble fraction BADHTA hai!</p>
+                
+                <p class="mt-2"><strong>NPN Increase Formula:</strong></p>
+                <pre><code>% NPN Increase = [(NPN_day_x - NPN_day_0) / NPN_day_0] × 100
+
+NPN = Non-Protein Nitrogen (TCA-soluble nitrogen)
+Measured by Kjeldahl method on TCA filtrate</code></pre>
+
+                <p class="mt-2"><strong>TNBS Method — Absorbance at 340 nm KYU?</strong></p>
+                <p>TNBS (trinitrobenzenesulfonic acid) free amino groups (-NH₂) ke saath react karta hai → yellow chromophore banata hai jo 340 nm par absorb karta hai. Zyada proteolysis = zyada free amino groups = zyada absorbance at 340 nm.</p>
+                <pre><code>Beer-Lambert Law: A = ε × c × l
+A = Absorbance at 340 nm
+ε = molar absorptivity of TNBS-amino complex
+c = concentration of free amino groups (proportional to proteolysis)
+l = path length (1 cm)</code></pre>
+                
+                <p class="mt-2"><strong>Leucine Standard Curve KYU?</strong></p>
+                <p>Leucine ek amino acid hai jiska -NH₂ group TNBS ke saath well-characterized reaction deta hai. Standard curve se unknown sample mein free amino groups ko "leucine equivalents" mein quantify kiya jaata hai.</p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Method 1: TNBS Method</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Doodh ke samples ko different time intervals par collect karein (Day 0, 7, 14, 30, 60, 90 — UHT ke liye).</li>
+                <li>1 ml doodh + 1 ml 24% TCA solution — mix karein, 10 min stand karein, filter karein.</li>
+                <li>Filtrate (TCA-soluble nitrogen) collect karein.</li>
+                <li>0.5 ml filtrate + 0.5 ml TNBS reagent (0.1% in pH 8.2 buffer).</li>
+                <li>50°C par 60 min incubate karein.</li>
+                <li>0.5 ml 0.1N HCl se reaction stop karein.</li>
+                <li>Absorbance at 340 nm read karein.</li>
+                <li>Standard curve (leucine) se free amino groups quantify karein.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Method 2: NPN Method (Simpler)</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>5 ml doodh + 5 ml 24% TCA — mix, stand 15 min, filter.</li>
+                <li>Filtrate ka nitrogen content Kjeldahl method se determine karein.</li>
+                <li>Ye NPN hai (normally ~5% of total N in fresh milk).</li>
+                <li>Shelf life ke dauran NPN increase = proteolysis ho rahi hai.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example — UHT Milk Shelf Life Study:</h4>
+              <div class="bg-green-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Product:</strong> UHT Toned Milk, stored at 25°C</p>
+                <p><strong>NPN measured by Kjeldahl on TCA filtrate:</strong></p>
+                <table class="table-auto border-collapse border border-gray-300 mt-1 text-sm w-full">
+                  <thead><tr class="bg-gray-100"><th class="border p-1">Day</th><th class="border p-1">NPN (mg N/100 ml)</th><th class="border p-1">% NPN Increase</th><th class="border p-1">Sensory</th><th class="border p-1">Status</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border p-1">0</td><td class="border p-1">28.5</td><td class="border p-1">0% (baseline)</td><td class="border p-1">Normal</td><td class="border p-1">✅</td></tr>
+                    <tr><td class="border p-1">30</td><td class="border p-1">30.2</td><td class="border p-1">+6.0%</td><td class="border p-1">Normal</td><td class="border p-1">✅</td></tr>
+                    <tr><td class="border p-1">60</td><td class="border p-1">33.8</td><td class="border p-1">+18.6%</td><td class="border p-1">Slight bitter hint</td><td class="border p-1">⚠️</td></tr>
+                    <tr><td class="border p-1">90</td><td class="border p-1">36.1</td><td class="border p-1">+26.7%</td><td class="border p-1">Noticeable bitter</td><td class="border p-1">❌ Bitter</td></tr>
+                    <tr><td class="border p-1">120</td><td class="border p-1">42.5</td><td class="border p-1">+49.1%</td><td class="border p-1">Very bitter + GELATION!</td><td class="border p-1">❌ Gel</td></tr>
+                  </tbody>
+                </table>
+                <pre><code>Day 90 calculation: 
+% NPN Increase = [(36.1 - 28.5) / 28.5] × 100 = [7.6 / 28.5] × 100 = 26.7%
+> 20% threshold → significant proteolysis confirmed!
+
+Day 120: 49.1% increase > 40% → GELATION occurred!
+κ-casein degradation → casein micelle destabilization → gel network formation</code></pre>
+                <p><strong>Conclusion: Shelf life = 60-75 din (last acceptable before bitter taste). Raw milk mein psychrotrophic count zyada raha hoga → heat-stable proteases survive kiye UHT mein.</strong></p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Interpretation:</h4>
+              <p><strong>NPN increase &gt;20% from baseline:</strong> Significant proteolysis — bitter taste likely develop hoga.</p>
+              <p><strong>NPN increase &gt;40%:</strong> Gelation risk high — UHT milk ki shelf life ending.</p>
+              <p><strong>For pasteurized milk:</strong> Bitter taste se pehle hi acidity develop ho jaati hai, isliye proteolysis kam relevant hai.</p>
+            `
+          },
+          {
+            title: "Lipolysis Detection (Free Fatty Acid Estimation)",
+            purpose: "Storage ke dauran fat breakdown detect karna — rancid/soapy off-flavour ka indicator.",
+            reference: "IDF 6:2004; BDL Method",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+              <p>Lipase enzymes (milk ka natural lipase ya bacterial lipases) milk fat ko hydrolyze karte hain, free fatty acids (FFA) release karte hain — especially short-chain fatty acids (butyric, caproic, caprylic) jo rancid/soapy taste dete hain. FFA level measure karke lipolysis ki extent determine hoti hai.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">📐 ADV Formula — Detailed Explanation:</h4>
+              <div class="bg-blue-50 p-3 rounded mt-2 mb-2">
+                <pre><code>Acid Degree Value (ADV) = (ml KOH × N × 100) / (ml fat in aliquot)
+
+Where:
+- ml KOH = volume of alcoholic KOH used in titration
+- N = Normality of KOH (typically 0.02N)
+- 100 = conversion factor for "per 100 g fat"
+- ml fat in aliquot = amount of fat present in the 5 ml petroleum ether aliquot</code></pre>
+
+                <p class="mt-2"><strong>Extraction Mixture Ratio — 40:10:1 KYU?</strong></p>
+                <ul class="list-disc list-outside pl-5 space-y-1">
+                  <li><strong>Isopropanol (40 parts):</strong> Proteins denature karta hai, fat globule membrane todta hai → fat free hota hai</li>
+                  <li><strong>Petroleum ether (10 parts):</strong> Fat ko dissolve karta hai — non-polar solvent</li>
+                  <li><strong>4N H₂SO₄ (1 part):</strong> Phase separation improve karta hai, proteins ko precipitate karta hai</li>
+                </ul>
+                <p>Is ratio mein petroleum ether layer cleanly separate hoti hai aur isme sirf fat + FFA hota hai.</p>
+                
+                <p class="mt-2"><strong>0.02N KOH kyu (bahut dilute)?</strong></p>
+                <p>FFA ki quantity bahut kam hoti hai (micrograms to milligrams). 0.1N KOH use karein to ek drop bahut zyada change karega → endpoint overshoot. 0.02N = 5× zyada sensitive titration → accurate results.</p>
+                
+                <p class="mt-2"><strong>Fat in aliquot kaise calculate karein?</strong></p>
+                <pre><code>Total extraction volume = 10 ml (petroleum ether added)
+Aliquot taken = 5 ml (half of upper layer)
+Original milk = 10 ml, Fat% = 3.0% (known from Gerber test)
+Fat in 10 ml milk = 10 × 0.03 × 1.032 = 0.310 g (approx)
+Fat in 5 ml aliquot = 0.310 × (5/10) = 0.155 g
+
+Note: This is approximate — actual fat distribution between 
+layers depends on partition coefficient</code></pre>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Method 1: BDL / Acid Degree Value (ADV)</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>10 ml doodh ek conical flask mein lein.</li>
+                <li>10 ml extraction mixture (isopropanol:petroleum ether:4N H₂SO₄ — 40:10:1) daalein.</li>
+                <li>Vigorously shake karein (1 minute).</li>
+                <li>Stand hone dein — upper petroleum ether layer separate hogi.</li>
+                <li>5 ml upper layer ko carefully pipette karein.</li>
+                <li>2-3 drops phenolphthalein indicator daalein.</li>
+                <li>0.02N alcoholic KOH se titrate karein — pink endpoint tak.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 1 (Fresh Milk — No Rancidity):</h4>
+              <div class="bg-green-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Sample:</strong> Pasteurized toned milk, Day 0, Fat = 3.0%</p>
+                <p><strong>Titration:</strong> 0.02N KOH used = 0.35 ml</p>
+                <p><strong>Fat in aliquot (calculated):</strong> 0.155 g = 0.155 ml (fat density ~1 for approximation)</p>
+                <pre><code>ADV = (0.35 × 0.02 × 100) / 0.155
+  = 0.70 / 0.155
+  = 0.45 meq/100g fat</code></pre>
+                <p><strong>Result: ADV = 0.45 < 0.5 → ✅ No rancidity detected. Fresh milk!</strong></p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 2 (Stored Milk — Rancid):</h4>
+              <div class="bg-red-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Sample:</strong> Same milk, Day 5 at 4°C (high psychrotrophic count batch)</p>
+                <p><strong>Titration:</strong> 0.02N KOH used = 1.25 ml</p>
+                <pre><code>ADV = (1.25 × 0.02 × 100) / 0.155
+  = 2.50 / 0.155
+  = 1.61 meq/100g fat</code></pre>
+                <p><strong>Result: ADV = 1.61 > 1.5 → ❌ Strong rancidity! Shelf life khatam!</strong></p>
+                <p>Panelists ne bhi "soapy, rancid, unpleasant" taste report kiya. Bacterial lipases (from Pseudomonas contamination) ne butyric acid aur caproic acid release kiya.</p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Interpretation for Shelf Life:</h4>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">ADV (meq/100g fat)</th><th class="border p-2">Rancidity Level</th><th class="border p-2">Consumer Acceptance</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2">&lt; 0.5</td><td class="border p-2">No rancidity</td><td class="border p-2">Acceptable</td></tr>
+                  <tr><td class="border p-2">0.5 - 1.0</td><td class="border p-2">Slight — trained panel detect</td><td class="border p-2">Marginal</td></tr>
+                  <tr><td class="border p-2">1.0 - 1.5</td><td class="border p-2">Definite rancidity</td><td class="border p-2">Unacceptable — shelf life over</td></tr>
+                  <tr><td class="border p-2">&gt; 1.5</td><td class="border p-2">Strong rancidity</td><td class="border p-2">Rejected</td></tr>
+                </tbody>
+              </table>
+
+              <h4 class="font-semibold mt-4 mb-2">🔑 Kaunse Fatty Acids Rancidity Cause Karte Hain?</h4>
+              <div class="bg-gray-50 p-3 rounded mt-2">
+                <table class="table-auto border-collapse border border-gray-300 text-sm w-full">
+                  <thead><tr class="bg-gray-100"><th class="border p-1">Fatty Acid</th><th class="border p-1">Carbon Chain</th><th class="border p-1">Flavour Threshold</th><th class="border p-1">Taste/Smell</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border p-1">Butyric acid</td><td class="border p-1">C4:0</td><td class="border p-1">Very low (~5 ppm)</td><td class="border p-1">Rancid, vomit-like</td></tr>
+                    <tr><td class="border p-1">Caproic acid</td><td class="border p-1">C6:0</td><td class="border p-1">~15 ppm</td><td class="border p-1">Goaty, sweaty</td></tr>
+                    <tr><td class="border p-1">Caprylic acid</td><td class="border p-1">C8:0</td><td class="border p-1">~20 ppm</td><td class="border p-1">Soapy, waxy</td></tr>
+                    <tr><td class="border p-1">Capric acid</td><td class="border p-1">C10:0</td><td class="border p-1">~30 ppm</td><td class="border p-1">Soapy</td></tr>
+                  </tbody>
+                </table>
+                <p class="mt-1">Milk fat mein short-chain fatty acids (C4-C10) ki proportion ~15-20% hai — ye dairy fat ko rancidity ke liye particularly susceptible banata hai compared to vegetable oils.</p>
+              </div>
+            `
+          },
+          {
+            title: "Sediment / Sedimentation Test (for UHT Milk)",
+            purpose: "UHT milk mein sediment formation check karna — ye shelf life ke dauran protein aggregation aur mineral precipitation ka indicator hai.",
+            reference: "IDF Standard; Industry practice",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+              <p>UHT milk mein storage ke dauran proteins aggregate ho sakte hain aur minerals (calcium phosphate) precipitate ho sakte hain — ye pack ke bottom mein sediment ke roop mein jam jaata hai. Excessive sediment consumer complaint ka karan banta hai aur ye processing parameters (pre-heat treatment, homogenization) ki adequacy indicate karta hai.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>UHT milk ka pack carefully kholein bina hilaye.</li>
+                <li>Doodh ko carefully decant karein, sediment pack mein rehne dein.</li>
+                <li>Sediment ko distilled water se dhoyein aur ek pre-weighed filter paper par collect karein.</li>
+                <li>102°C par dry karein constant weight tak.</li>
+                <li>Sediment ka weight record karein.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Alternative — Visual Assessment:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Pack kholein, doodh ko ek beaker mein daalein.</li>
+                <li>Pack ke bottom mein sediment observe karein.</li>
+                <li>Score karein: 0 (no sediment), 1 (slight), 2 (moderate), 3 (heavy).</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Acceptable Limits:</h4>
+              <p><strong>No sediment ya trace amount:</strong> Acceptable — normal shelf life</p>
+              <p><strong>Visible sediment &gt;0.5% of total weight:</strong> Unacceptable — processing parameters review karein</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Prevention Tips:</h4>
+              <ul class="list-disc list-outside pl-5 space-y-1">
+                <li>Proper pre-heating (85°C/30 sec before UHT) — stabilizes whey proteins</li>
+                <li>Good homogenization (200 bar 1st stage + 50 bar 2nd stage)</li>
+                <li>Raw milk quality — low SCC, balanced minerals</li>
+                <li>Citrate/phosphate addition (stabilizers) — approved by FSSAI</li>
+              </ul>
+            `
+          },
+          {
+            title: "Cream Rising / Fat Separation Test (Homogenization Efficiency)",
+            purpose: "Homogenization ki effectiveness check karna — poor homogenization se cream layer separate hoti hai jo shelf life mein visual defect hai.",
+            reference: "IS 1479 (Part I) 1961; USPH method; NIZO method",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+              <p>Homogenization mein fat globules ko chote size (1-2 micron) mein tod diya jaata hai taaki wo upar na tairein. Agar homogenization incomplete hai, to storage ke dauran fat globules upar uthte hain aur cream layer ban jaati hai — ye market milk mein unacceptable hai. Homogenization Efficiency (HE) ya Homogenization Index (HI) measure karke predict kiya ja sakta hai ki cream separation shelf life ke dauran hogi ya nahi.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Method 1: USPH (United States Public Health) Method</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>100 ml homogenized doodh ek graduated cylinder mein daalein.</li>
+                <li>48 ghante ke liye undisturbed refrigerator (4°C) mein rakhein.</li>
+                <li>Top 10 ml carefully pipette karein (upper layer).</li>
+                <li>Remaining 90 ml ko achchi tarah mix karein (lower layer).</li>
+                <li>Dono fractions ka fat content Gerber method se determine karein.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+              <pre><code>Homogenization Index (HI) = (Fat% in top layer / Fat% in bottom layer)</code></pre>
+              <pre><code>Homogenization Efficiency (HE) = [1 - (Fat_top - Fat_bottom) / Fat_original] × 100</code></pre>
+
+              <h4 class="font-semibold mt-4 mb-2">Method 2: NIZO Method (Rapid)</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>25 ml doodh centrifuge karein at 1000 rpm for 30 minutes.</li>
+                <li>Top aur bottom fractions ka fat test karein.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Interpretation:</h4>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">HI Value</th><th class="border p-2">Homogenization</th><th class="border p-2">Shelf Life Impact</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2">&lt; 1.10</td><td class="border p-2">Excellent</td><td class="border p-2">No cream separation throughout shelf life</td></tr>
+                  <tr><td class="border p-2">1.10 - 1.20</td><td class="border p-2">Good</td><td class="border p-2">Minimal separation</td></tr>
+                  <tr><td class="border p-2">1.20 - 1.50</td><td class="border p-2">Fair</td><td class="border p-2">Visible cream layer may form</td></tr>
+                  <tr><td class="border p-2">&gt; 1.50</td><td class="border p-2">Poor</td><td class="border p-2">Cream plug/line formation — consumer complaint</td></tr>
+                </tbody>
+              </table>
+
+              <h4 class="font-semibold mt-4 mb-2">FSSAI Requirement:</h4>
+              <p>Homogenized milk mein fat globule ka average diameter 2 micron se kam hona chahiye. Cluster formation nahi hona chahiye.</p>
+            `
+          },
+          {
+            title: "Pack Integrity Test (for Pouches / Tetra Paks)",
+            purpose: "Packaging ki integrity verify karna — leakage shelf life drastically reduce karti hai kyunki contamination ka raasta khul jaata hai.",
+            reference: "Industry Standard Operating Procedures; FSSAI GMP Guidelines",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Siddhant (Principle):</h4>
+              <p>Agar packaging mein koi bhi micro-leak hai to bacteria enter kar sakte hain aur product rapidly spoil ho jaata hai. UHT milk ki 3-6 mahine ki shelf life puri tarah packaging integrity par depend karti hai. Pack integrity tests production line par bhi aur shelf life study ke dauran bhi kiye jaate hain.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Method 1: Dye Penetration Test (for Pouches)</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Sealed pouch ko 0.5% methylene blue solution mein daalein.</li>
+                <li>Pouch ko gently squeeze karein aur 30 minute immerse rakhein.</li>
+                <li>Pouch nikaalein, bahar se dhoyein.</li>
+                <li>Pouch kholein aur andar doodh ki colour dekhein.</li>
+              </ol>
+              <p><strong>Blue colour inside:</strong> LEAK present — pack reject</p>
+              <p><strong>No colour change:</strong> PASS — pack intact</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Method 2: Vacuum/Pressure Test (for Tetra Paks)</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Pack ko vacuum chamber mein rakhein.</li>
+                <li>-500 mbar vacuum apply karein.</li>
+                <li>Agar pack swell kare aur air bubbles aayein = leak hai.</li>
+                <li>Ya: Pack ko underwater rakhein aur vacuum lagayein — bubbles = leak.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Method 3: Electrolytic Test (for Tetra Paks)</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Pack ko saline solution mein daalein.</li>
+                <li>Pack ke andar aur bahar ke beech electric current measure karein.</li>
+                <li>Current flow = pin-hole/micro-leak present.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Method 4: Visual Inspection</h4>
+              <ul class="list-disc list-outside pl-5 space-y-1">
+                <li>Seal integrity — proper sealing, no wrinkles</li>
+                <li>Pouch swelling — gas production = microbial growth</li>
+                <li>Leakage stains — wet spots on pack</li>
+                <li>Pin holes — hold against light</li>
+              </ul>
+
+              <h4 class="font-semibold mt-4 mb-2">Frequency:</h4>
+              <p>Production line: Every 30 minutes ek pack test karein. Shelf life study: Weekly pack integrity check karein. Ek bhi leak wali pack milne par poori batch investigate karein.</p>
+            `
+          },
+          {
+            title: "Comprehensive Shelf Life Study Protocol (Market Milk)",
+            purpose: "Complete shelf life study kaise conduct karein — production se lekar expiry determination tak ka full protocol.",
+            reference: "FSSAI Guidelines; Codex CAC/GL 46-2003; Industry Best Practices",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Shelf Life Study Design:</h4>
+              <p>Ek systematic shelf life study mein multiple parameters ko set intervals par monitor kiya jaata hai. Ye study regulatory submission, internal quality assurance, aur best-before date determination ke liye zaroori hai.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Step 1: Sample Collection</h4>
+              <ul class="list-disc list-outside pl-5 space-y-1">
+                <li>Minimum 3 different batches se samples lein (batch-to-batch variation cover karne ke liye).</li>
+                <li>Har batch se minimum 30-50 units collect karein (testing intervals cover karne ke liye).</li>
+                <li>Samples ko designated storage conditions mein rakhein.</li>
+              </ul>
+
+              <h4 class="font-semibold mt-4 mb-2">Step 2: Storage Conditions</h4>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Product</th><th class="border p-2">Storage Temp</th><th class="border p-2">Testing Intervals</th><th class="border p-2">Study Duration</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2">Pasteurized Milk</td><td class="border p-2">4 ± 1°C</td><td class="border p-2">Every 24 hours</td><td class="border p-2">7-10 din</td></tr>
+                  <tr><td class="border p-2">UHT Milk</td><td class="border p-2">25 ± 2°C (room temp)</td><td class="border p-2">Weekly for 1st month, then monthly</td><td class="border p-2">6-9 mahine</td></tr>
+                  <tr><td class="border p-2">Sterilized Milk</td><td class="border p-2">25 ± 2°C</td><td class="border p-2">Weekly</td><td class="border p-2">3-6 mahine</td></tr>
+                  <tr><td class="border p-2">Flavoured Milk</td><td class="border p-2">4 ± 1°C</td><td class="border p-2">Every 2-3 days</td><td class="border p-2">15-21 din</td></tr>
+                </tbody>
+              </table>
+
+              <h4 class="font-semibold mt-4 mb-2">Step 3: Parameters to Test at Each Interval</h4>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Category</th><th class="border p-2">Tests</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2"><strong>Microbiological</strong></td><td class="border p-2">TPC, Coliform count, Yeast & Mold count, E. coli</td></tr>
+                  <tr><td class="border p-2"><strong>Chemical</strong></td><td class="border p-2">pH, Titratable acidity, Fat %, SNF %</td></tr>
+                  <tr><td class="border p-2"><strong>Sensory</strong></td><td class="border p-2">Appearance, Odour, Taste, Texture (hedonic scale)</td></tr>
+                  <tr><td class="border p-2"><strong>Physical</strong></td><td class="border p-2">Pack integrity, Cream separation, Sediment</td></tr>
+                  <tr><td class="border p-2"><strong>Enzymatic</strong></td><td class="border p-2">ALP test, Peroxidase test (initial only)</td></tr>
+                </tbody>
+              </table>
+
+              <h4 class="font-semibold mt-4 mb-2">Step 4: Shelf Life Determination Criteria</h4>
+              <p>Shelf life us din khatam hoti hai jab <strong>koi bhi ek</strong> parameter fail kare:</p>
+              <ul class="list-disc list-outside pl-5 space-y-1">
+                <li>TPC &gt; 1,00,000 CFU/ml (pasteurized milk)</li>
+                <li>Coliform detected (UHT/sterilized)</li>
+                <li>pH &lt; 6.0 ya acidity &gt; 0.18%</li>
+                <li>Sensory score &lt; 5 (overall unacceptable)</li>
+                <li>Visible cream separation, sediment, or off-colour</li>
+                <li>Pack swelling or leakage</li>
+              </ul>
+
+              <h4 class="font-semibold mt-4 mb-2">Step 5: Safety Margin</h4>
+              <p>Determined shelf life se 20-30% kam best-before date print karein. Example: Agar study mein 6 din tak sab okay rahe, to best-before = 4-5 din rakhein. Ye safety margin temperature abuse (cold chain break) cover karta hai.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Documentation:</h4>
+              <ul class="list-disc list-outside pl-5 space-y-1">
+                <li>Har test ka result dated aur signed hona chahiye</li>
+                <li>Graph/charts banayein — trend analysis ke liye</li>
+                <li>Any deviation ya observation note karein</li>
+                <li>Final shelf life recommendation report banayein</li>
+                <li>Records minimum 2 saal retain karein</li>
+              </ul>
+            `
+          }
+        ]
+      },
   
         "cream": {
           title: "Cream ka Analysis",
