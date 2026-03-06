@@ -8503,6 +8503,112 @@ Inverted ghol mein asar-daar sample = 10 × (50/250) = 2 g per 100 ml
                 <pre><code>% Moisture = [(W2 - W3) / (W2 - W1)] × 100</code></pre>
                 <pre><code>% Total Solids = 100 - % Moisture</code></pre>
                 <p class="text-xs mt-2">Standard: Pindi Khoa mein max 30% moisture, Dhap Khoa mein max 40% moisture hona chahiye.</p>
+
+                <h4 class="font-semibold mt-6 mb-2 text-blue-700">📐 Formula Factors ki Complete Derivation:</h4>
+                <div class="bg-blue-50 p-4 rounded-lg space-y-4">
+
+                    <div class="border-l-4 border-blue-500 pl-3">
+                        <h5 class="font-bold text-blue-800">Factor: W1 — Dish + Sand + Glass Rod ka weight (pre-dried)</h5>
+                        <p><strong>Kya hai:</strong> Dish, sand aur glass rod ko pehle se 102±2°C par 1 hour dry karke, desiccator mein cool karke jo weight aata hai — woh W1 hai. Yeh "tare weight" kehlata hai.</p>
+                        <p><strong>Kahan se aaya / Kyon zaroori:</strong></p>
+                        <ul class="list-disc list-outside pl-5 space-y-1 text-sm">
+                            <li>Dish, sand aur rod mein bhi atmosphere se absorbed moisture hoti hai.</li>
+                            <li>Agar inko pehle dry nahi karenge toh inki moisture bhi sample ki moisture mein count ho jaayegi — result galat aayega.</li>
+                            <li>Pre-drying se sirf sample ki moisture measure hoti hai.</li>
+                            <li><strong>102±2°C par 1 hour kyon:</strong> 100°C paani ka boiling point hai. 102°C thoda upar hai taaki trapped moisture bhi nikal jaaye. 1 hour sand/dish ki moisture nikalne ke liye sufficient hai.</li>
+                            <li><strong>Desiccator mein cool karna kyon:</strong> Open air mein cool karenge toh atmosphere se phir moisture absorb ho jaayegi. Desiccator mein silica gel (SiO₂·nH₂O) hota hai jo andar ki hawa dry rakhta hai.</li>
+                        </ul>
+                    </div>
+
+                    <div class="border-l-4 border-blue-500 pl-3">
+                        <h5 class="font-bold text-blue-800">Factor: W2 — Dish + Sand + Rod + Sample ka weight (before drying)</h5>
+                        <p><strong>Kya hai:</strong> W1 waali same dish mein sample daalke jo weight aata hai.</p>
+                        <p><strong>Kahan se aaya:</strong></p>
+                        <ul class="list-disc list-outside pl-5 space-y-1 text-sm">
+                            <li><strong>(W2 - W1) = Sample ka original weight.</strong> Humein sample ka exact weight chahiye calculation ke liye.</li>
+                            <li><strong>~3g kyon lete hain:</strong> Bahut kam sample → moisture loss bahut kam → weighing error zyada. Bahut zyada sample → drying mein time lagega, moisture trap reh sakti hai. 3g IS 4883 ka optimum recommended amount hai.</li>
+                            <li><strong>"Accurately weigh" ka matlab:</strong> Analytical balance par 0.1mg (0.0001g) tak weigh karna. Jaise: 3.0000g, not just "3g". Precision isliye zaroori hai kyunki answer percentage mein chahiye.</li>
+                        </ul>
+                    </div>
+
+                    <div class="border-l-4 border-blue-500 pl-3">
+                        <h5 class="font-bold text-blue-800">Factor: W3 — Dish + Sand + Rod + Dried Sample ka weight (after drying)</h5>
+                        <p><strong>Kya hai:</strong> Sample ko 102±2°C par constant weight tak dry karne ke baad jo weight aata hai.</p>
+                        <ul class="list-disc list-outside pl-5 space-y-1 text-sm">
+                            <li>Drying mein sample se paani udh jaata hai. Jo bachta hai woh dry matter (fat, protein, lactose, minerals) hai.</li>
+                            <li><strong>"Constant weight" ka matlab:</strong> Jab successive weighings mein 0.5mg se kam difference aaye. 0.5mg (0.0005g) bahut chota hai jo result ko significantly affect nahi karta.</li>
+                        </ul>
+                    </div>
+
+                    <div class="border-l-4 border-green-500 pl-3">
+                        <h5 class="font-bold text-green-800">Factor: (W2 - W3) — Moisture ka Weight</h5>
+                        <p><strong>Kya hai:</strong> Drying se pehle aur baad ka weight difference = kitna paani uda.</p>
+                        <p><strong>Derivation:</strong></p>
+                        <pre class="bg-white p-2 rounded text-xs"><code>Before drying: Dish+Sand+Rod + (Dry matter + Water) = W2
+After drying:  Dish+Sand+Rod + (Dry matter only)     = W3
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Difference:    W2 - W3 = Sirf Water jo evaporate hua</code></pre>
+                        <p class="text-sm"><strong>Kyon sirf paani udhta hai 102°C par:</strong> Fat ka boiling point ~300°C, Protein decompose nahi hota, Lactose ka melting point 202°C, Minerals stable hain — sirf paani (BP 100°C) evaporate hota hai.</p>
+                    </div>
+
+                    <div class="border-l-4 border-green-500 pl-3">
+                        <h5 class="font-bold text-green-800">Factor: (W2 - W1) — Sample ka Original Weight</h5>
+                        <p><strong>Derivation:</strong></p>
+                        <pre class="bg-white p-2 rounded text-xs"><code>W2 = Dish + Sand + Rod + Sample
+W1 = Dish + Sand + Rod
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+W2 - W1 = Sample ka weight (denominator mein jaata hai)</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-green-500 pl-3">
+                        <h5 class="font-bold text-green-800">Factor: × 100 — Percentage Conversion</h5>
+                        <p><strong>Kahan se aaya:</strong> "Per cent" = "Per hundred" (Latin: per centum). Fraction ko percentage mein badalna hai.</p>
+                        <pre class="bg-white p-2 rounded text-xs"><code>Fraction = Moisture weight / Sample weight = 0.30
+Percentage = 0.30 × 100 = 30%
+Matlab: Har 100g sample mein 30g paani hai.</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-green-500 pl-3">
+                        <h5 class="font-bold text-green-800">Factor: % Total Solids = 100 - % Moisture</h5>
+                        <p><strong>Kahan se aaya:</strong> Sample mein sirf do cheezein hain — Paani (Moisture) aur Solid matter. Dono milke 100% banate hain.</p>
+                        <pre class="bg-white p-2 rounded text-xs"><code>100% = % Moisture + % Total Solids
+% Total Solids = 100 - % Moisture
+Agar 30% paani hai → 70% solid hai. (Complementary relationship)</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-purple-500 pl-3">
+                        <h5 class="font-bold text-purple-800">Factor: Sand — 25g, Acid-washed, 40-60 Mesh</h5>
+                        <ul class="list-disc list-outside pl-5 space-y-1 text-sm">
+                            <li><strong>25g kyon:</strong> Sample:Sand ratio ≈ 1:8. Zyada sand = zyada surface area = moisture jaldi nikalti hai. Khoa chipchipa (sticky) hota hai — bina sand ke crust ban jaata hai aur andar moisture trap rehti hai. Sand se surface area 10-15x badh jaata hai.</li>
+                            <li><strong>Acid-washed kyon:</strong> Regular sand mein carbonates, oxides, organic matter hota hai jo moisture absorb kar sakte hain. HCl se wash karke sab impurities nikal jaati hain. Phir distilled water se dhoke oven mein dry karte hain.</li>
+                            <li><strong>40-60 mesh ka matlab:</strong> Mesh = holes per linear inch in a sieve. 40 mesh = ~0.42mm hole, 60 mesh = ~0.25mm hole. Sand particles 0.25-0.42mm ke beech hote hain. Bahut fine sand sample se chipkti hai, bahut coarse ki surface area kam hoti hai. 40-60 mesh optimum hai.</li>
+                        </ul>
+                    </div>
+
+                    <div class="border-l-4 border-purple-500 pl-3">
+                        <h5 class="font-bold text-purple-800">Factor: 102 ± 2°C Temperature</h5>
+                        <ul class="list-disc list-outside pl-5 space-y-1 text-sm">
+                            <li><strong>Kyon 102°C:</strong> Paani ka BP = 100°C at sea level. 102°C slightly above hai taaki "bound water" (proteins/sugars se hydrogen bonded paani) bhi nikal sake. Free water 100°C par udhta hai, bound water ko thoda zyada chahiye.</li>
+                            <li><strong>Kyon 105°C se zyada nahi:</strong> Lactose caramelize ho sakta hai, fat oxidize ho sakta hai — weight change hoga jo moisture nahi hai.</li>
+                            <li><strong>±2°C kyon:</strong> Oven ka thermostat ON/OFF karta hai, exact temperature constant nahi rehta. 100-104°C range mein result par significant effect nahi padta. IS standard ne yeh tolerance accept kiya hai.</li>
+                        </ul>
+                    </div>
+
+                    <h5 class="font-bold text-red-700 mt-4">🔢 Numerical Example:</h5>
+                    <pre class="bg-white p-3 rounded text-xs"><code>Given:
+W1 = 52.3456g (Dish + Sand + Rod, pre-dried)
+W2 = 55.3456g (Dish + Sand + Rod + 3g Sample)
+W3 = 54.4453g (After drying, constant weight achieved)
+
+Step 1: Sample ka weight = W2 - W1 = 55.3456 - 52.3456 = 3.0000g
+Step 2: Moisture lost    = W2 - W3 = 55.3456 - 54.4453 = 0.9003g
+
+Step 3: % Moisture = (0.9003 / 3.0000) × 100 = 30.01%
+Step 4: % Total Solids = 100 - 30.01 = 69.99%
+
+Interpretation: Pindi Khoa limit = max 30%
+30.01% marginally above limit.</code></pre>
+                </div>
             `
         },
         {
@@ -8529,6 +8635,123 @@ Inverted ghol mein asar-daar sample = 10 × (50/250) = 2 g per 100 ml
                 <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
                 <pre><code>% Fat = (Weight of extracted fat / Weight of sample) × 100</code></pre>
                 <pre><code>% Fat on dry basis = (% Fat × 100) / % Total Solids</code></pre>
+
+                <h4 class="font-semibold mt-6 mb-2 text-blue-700">📐 Formula Factors ki Complete Derivation:</h4>
+                <div class="bg-blue-50 p-4 rounded-lg space-y-4">
+
+                    <div class="border-l-4 border-blue-500 pl-3">
+                        <h5 class="font-bold text-blue-800">Factor: Weight of Extracted Fat</h5>
+                        <p><strong>Kya hai:</strong> Fat-containing flask ka final weight (F2) minus flask ka empty weight (F1).</p>
+                        <pre class="bg-white p-2 rounded text-xs"><code>Flask empty weight (pre-weighed, oven dried) = F1
+Flask + dried fat (after solvent evaporation)  = F2
+Weight of extracted fat = F2 - F1</code></pre>
+                        <p class="text-sm"><strong>Kyon sirf fat bachta hai — "Like dissolves like" principle:</strong></p>
+                        <ul class="list-disc list-outside pl-5 space-y-1 text-sm">
+                            <li><strong>Fat:</strong> Non-polar compound → Non-polar solvents (ether) mein SOLUBLE ✓</li>
+                            <li><strong>Protein:</strong> Polar/charged → Ether mein INSOLUBLE ✗</li>
+                            <li><strong>Lactose:</strong> Highly polar → Ether mein INSOLUBLE ✗</li>
+                            <li><strong>Minerals:</strong> Ionic → Ether mein INSOLUBLE ✗</li>
+                            <li><strong>Water:</strong> Polar → Ether mein thoda soluble (isliye final oven drying 102°C zaroori hai)</li>
+                        </ul>
+                    </div>
+
+                    <div class="border-l-4 border-blue-500 pl-3">
+                        <h5 class="font-bold text-blue-800">Factor: Weight of Sample (1-2g)</h5>
+                        <p><strong>Kya hai:</strong> Kitna khoa liya analysis ke liye.</p>
+                        <ul class="list-disc list-outside pl-5 space-y-1 text-sm">
+                            <li>Khoa mein ~25-30% fat hota hai. 2g sample mein ~0.5-0.6g fat hoga — yeh accurately weigh ho sakta hai.</li>
+                            <li>Zyada sample → extraction incomplete ho sakti hai.</li>
+                            <li>Kam sample → weighing error zyada hoga (0.1mg balance par).</li>
+                        </ul>
+                    </div>
+
+                    <div class="border-l-4 border-green-500 pl-3">
+                        <h5 class="font-bold text-green-800">Factor: × 100 — Percentage Conversion</h5>
+                        <p>Fraction (fat weight ÷ sample weight) ko percentage mein badalna. Same concept jo moisture test mein tha.</p>
+                    </div>
+
+                    <div class="border-l-4 border-green-500 pl-3">
+                        <h5 class="font-bold text-green-800">Factor: % Fat on Dry Basis = (% Fat × 100) / % Total Solids</h5>
+                        <p><strong>Kahan se aaya — Detailed Derivation:</strong></p>
+                        <pre class="bg-white p-2 rounded text-xs"><code>Problem: 2 samples compare karne hain:
+Sample A: 26% fat, 30% moisture (70% TS)
+Sample B: 22% fat, 20% moisture (80% TS)
+
+Wet basis par lagta hai A mein zyada fat hai.
+Lekin fair comparison ke liye moisture ka effect hatana padega.
+
+Dry basis calculation:
+Sample A: (26 × 100) / 70 = 37.14% fat on dry basis
+Sample B: (22 × 100) / 80 = 27.50% fat on dry basis
+
+DERIVATION:
+100g sample mein:
+  Moisture = M grams, Dry matter = (100-M) grams = TS grams
+  Fat = F grams
+
+Wet basis: % Fat = F (already per 100g)
+Dry basis: Fat as % of DRY matter only = (F / TS) × 100
+         = (F / (100-M)) × 100
+         = (% Fat / % TS) × 100
+         = (% Fat × 100) / % TS</code></pre>
+                        <p class="text-sm"><strong>Kyon dry basis important hai:</strong> FSSAI standards dry basis par specify karte hain. Different moisture levels wale samples ko fairly compare kar sakte hain. Shelf life mein moisture change hota hai lekin fat amount nahi — dry basis ek "normalized" value hai.</p>
+                    </div>
+
+                    <div class="border-l-4 border-purple-500 pl-3">
+                        <h5 class="font-bold text-purple-800">Reagent Factor: Concentrated HCl (10ml)</h5>
+                        <p><strong>Role aur Chemistry:</strong></p>
+                        <pre class="bg-white p-2 rounded text-xs"><code>HCl + Protein → Amino acids (soluble)
+HCl breaks peptide bonds: -CO-NH- + H₂O → -COOH + H₂N-
+
+Fat globules Milk Fat Globule Membrane (MFGM) se ghire hote hain
+MFGM = phospholipids + proteins
+HCl in proteins ko dissolve karta hai → fat FREE hota hai
+
+Conc. HCl = ~37% w/w, ~12N
+10ml sufficient hai 1-2g sample ke proteins dissolve karne ke liye</code></pre>
+                        <p class="text-sm text-red-600"><strong>⚠️ Sugar wale samples mein kyon NAHI:</strong> Sucrose + Conc. HCl + Heat → Charring (C₁₂H₂₂O₁₁ → 12C + 11H₂O). Yeh carbon fat ke saath mix ho jaata hai → weight galat aata hai. Isliye sugar wale khoa ke liye Rose-Gottlieb method use hota hai.</p>
+                    </div>
+
+                    <div class="border-l-4 border-purple-500 pl-3">
+                        <h5 class="font-bold text-purple-800">Reagent Factor: 10ml Ethanol</h5>
+                        <ul class="list-disc list-outside pl-5 space-y-1 text-sm">
+                            <li><strong>Emulsion breaker:</strong> Fat-water emulsion ko todta hai.</li>
+                            <li><strong>Proteins ko further denature karta hai</strong> jo HCl se dissolve hue the.</li>
+                            <li><strong>Surface tension kam karta hai</strong> → layers cleanly separate hoti hain.</li>
+                            <li><strong>Amphipathic nature:</strong> CH₃CH₂- part non-polar (ether/fat compatible) + -OH part polar (water compatible) = bridge ka kaam karta hai.</li>
+                        </ul>
+                    </div>
+
+                    <div class="border-l-4 border-purple-500 pl-3">
+                        <h5 class="font-bold text-purple-800">Reagent Factor: Diethyl Ether (25ml) + Petroleum Ether (25ml)</h5>
+                        <p><strong>Dono kyon use karte hain:</strong></p>
+                        <ul class="list-disc list-outside pl-5 space-y-1 text-sm">
+                            <li><strong>Diethyl Ether (C₂H₅-O-C₂H₅):</strong> BP 34.6°C, non-polar, fat ko bahut achhe se dissolve karta hai, density 0.713 g/ml (water se halka—upar aata hai). LEKIN thoda water-soluble hai (6.9g/100ml) — yeh problem hai.</li>
+                            <li><strong>Petroleum Ether (pentane/hexane mix, BP 40-60°C):</strong> Purely non-polar, water mein bilkul insoluble, diethyl ether ki water-soluble fraction ko kam karta hai.</li>
+                            <li><strong>Dono saath:</strong> Sirf diethyl ether → thoda water dissolve karega → fat weight galat. Sirf petroleum ether → kuch polar lipids nahi nikalenge. Dono saath = Complete fat extraction + clean layer separation.</li>
+                            <li><strong>Ratio 1:1 (25ml:25ml):</strong> IS standard recommendation.</li>
+                        </ul>
+                        <p class="text-sm mt-2"><strong>3 baar extraction kyon:</strong> Ek baar se ~90-95% fat nikalti hai. Do baar se ~98-99%. Teen baar se ~99.5-99.9%. Partition coefficient ke hisaab se multiple extractions total recovery badhati hain.</p>
+                    </div>
+
+                    <div class="border-l-4 border-purple-500 pl-3">
+                        <h5 class="font-bold text-purple-800">Factor: 102°C par 1 hour final drying</h5>
+                        <p class="text-sm">Ether extracts mein thoda paani bhi aa jaata hai. 102°C par 1 hour se yeh residual moisture nikal jaati hai. Sirf pure fat bachta hai. Same logic jo moisture test mein hai.</p>
+                    </div>
+
+                    <h5 class="font-bold text-red-700 mt-4">🔢 Numerical Example:</h5>
+                    <pre class="bg-white p-3 rounded text-xs"><code>Given:
+Sample weight = 1.5000g
+Empty flask (F1) = 95.1234g
+Flask + dried fat (F2) = 95.5034g
+
+Step 1: Extracted fat = F2 - F1 = 95.5034 - 95.1234 = 0.3800g
+
+Step 2: % Fat (wet basis) = (0.3800 / 1.5000) × 100 = 25.33%
+
+Step 3: Agar moisture = 28%, toh TS = 72%
+% Fat (dry basis) = (25.33 × 100) / 72 = 35.18%</code></pre>
+                </div>
             `
         },
         {
@@ -8551,6 +8774,80 @@ Inverted ghol mein asar-daar sample = 10 × (50/250) = 2 g per 100 ml
                     <li>Do baar aur extraction repeat karein (15ml each ether).</li>
                     <li>Solvent evaporate karein, 102°C par dry karein, aur weigh karein.</li>
                 </ol>
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>% Fat = (Weight of extracted fat / Weight of sample) × 100</code></pre>
+
+                <h4 class="font-semibold mt-6 mb-2 text-blue-700">📐 Formula Factors ki Complete Derivation:</h4>
+                <div class="bg-blue-50 p-4 rounded-lg space-y-4">
+
+                    <div class="border-l-4 border-blue-500 pl-3">
+                        <h5 class="font-bold text-blue-800">Formula — Same hai Werner-Schmidt ke</h5>
+                        <pre class="bg-white p-2 rounded text-xs"><code>% Fat = (Weight of extracted fat / Weight of sample) × 100
+
+Extracted fat = Flask final weight - Flask empty weight
+Sample weight = Mojonnier tube mein dala tha (~2g)
+
+Formula SAME hai — sirf extraction PROCESS different hai.</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-green-500 pl-3">
+                        <h5 class="font-bold text-green-800">Factor: Ammonia Solution (1.5ml of 25%) — HCl ki jagah kyon?</h5>
+                        <p><strong>Problem jo solve hui:</strong></p>
+                        <pre class="bg-white p-2 rounded text-xs"><code>Werner-Schmidt mein HCl use hota hai:
+Sucrose + Conc. HCl + Heat → Carbon (CHARRING) + Water
+C₁₂H₂₂O₁₁ → 12C + 11H₂O
+❌ Carbon fat ke saath extract ho jaata hai → GALAT result
+
+Rose-Gottlieb mein Ammonia (NH₃/NH₄OH) use hota hai:
+✅ Alkaline hai, acidic nahi → Sugar ko CHAR NAHI karta
+✅ Casein protein ko dissolve karta hai:
+   Casein (insoluble) + NH₃ → Ammonium caseinate (SOLUBLE)
+✅ Fat globules free ho jaate hain
+✅ Sugar safe rehta hai — koi damage nahi</code></pre>
+                        <ul class="list-disc list-outside pl-5 space-y-1 text-sm">
+                            <li><strong>25% ammonia:</strong> Strong enough casein dissolve karne ke liye.</li>
+                            <li><strong>1.5ml:</strong> ~2g sample ke liye sufficient. Zyada ammonia emulsion formation ka risk badhata hai.</li>
+                        </ul>
+                    </div>
+
+                    <div class="border-l-4 border-green-500 pl-3">
+                        <h5 class="font-bold text-green-800">Factor: 10ml of 95% Ethanol — Yahan role DIFFERENT hai</h5>
+                        <pre class="bg-white p-2 rounded text-xs"><code>Werner-Schmidt mein Ethanol: Emulsion BREAKER
+Rose-Gottlieb mein Ethanol:  Protein PRECIPITANT
+
+Mechanism:
+Ammonia ne casein dissolve kiya → solution mein hai
+Ethanol add karne se → casein PRECIPITATE hota hai (denaturation)
+Precipitated protein ether layer mein NAHI jaata
+Sirf FAT ether mein jaata hai → clean separation
+
+95% kyon (100% nahi):
+• 95% ethanol azeotrope hai — distillation se zyada concentrate nahi hota
+• 5% water protein precipitation mein help karta hai</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-green-500 pl-3">
+                        <h5 class="font-bold text-green-800">Factor: 10ml Garam Paani</h5>
+                        <ul class="list-disc list-outside pl-5 space-y-1 text-sm">
+                            <li>Khoa ko dissolve/disperse karne ke liye.</li>
+                            <li>Garam paani mein khoa jaldi disperse hota hai — cold water mein fat solidify rehta hai.</li>
+                            <li>10ml sufficient hai 2g sample ke liye.</li>
+                        </ul>
+                    </div>
+
+                    <div class="border-l-4 border-purple-500 pl-3">
+                        <h5 class="font-bold text-purple-800">Werner-Schmidt vs Rose-Gottlieb — Comparison Table</h5>
+                        <table class="w-full text-xs mt-2 border-collapse">
+                            <tr class="bg-gray-200"><th class="border p-1">Factor</th><th class="border p-1">Werner-Schmidt</th><th class="border p-1">Rose-Gottlieb</th></tr>
+                            <tr><td class="border p-1">Dissolving Agent</td><td class="border p-1">Conc. HCl (acid)</td><td class="border p-1">NH₃ (alkali)</td></tr>
+                            <tr><td class="border p-1">Mechanism</td><td class="border p-1">Acid hydrolysis of proteins</td><td class="border p-1">Alkaline dissolution of casein</td></tr>
+                            <tr><td class="border p-1">Sugar tolerance</td><td class="border p-1">❌ Char hota hai</td><td class="border p-1">✅ Safe rehta hai</td></tr>
+                            <tr><td class="border p-1">Ethanol role</td><td class="border p-1">Emulsion breaker</td><td class="border p-1">Protein precipitant</td></tr>
+                            <tr><td class="border p-1">Extraction solvent</td><td class="border p-1">Same (ether mix)</td><td class="border p-1">Same (ether mix)</td></tr>
+                            <tr><td class="border p-1">Formula</td><td class="border p-1">Same</td><td class="border p-1">Same</td></tr>
+                        </table>
+                    </div>
+                </div>
             `
         },
         {
@@ -8569,6 +8866,215 @@ Inverted ghol mein asar-daar sample = 10 × (50/250) = 2 g per 100 ml
                 <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
                 <pre><code>% Total Nitrogen = [1.4007 × (V_sample - V_blank) × N_HCl] / Weight_sample</code></pre>
                 <pre><code>% Crude Protein = % Total Nitrogen × 6.38</code></pre>
+
+                <h4 class="font-semibold mt-6 mb-2 text-blue-700">📐 Formula Factors ki Complete Derivation:</h4>
+                <div class="bg-blue-50 p-4 rounded-lg space-y-4">
+
+                    <div class="border-l-4 border-red-500 pl-3">
+                        <h5 class="font-bold text-red-800">⭐ Factor: 1.4007 — Sabse Important Factor</h5>
+                        <p><strong>Kya hai:</strong> Yeh ek combined conversion factor hai jo milliequivalents of acid ko grams of nitrogen mein convert karta hai AUR simultaneously percentage mein bhi convert karta hai.</p>
+                        <p><strong>Step-by-step derivation:</strong></p>
+                        <pre class="bg-white p-2 rounded text-xs"><code>STEP 1: Titration mein basic concept
+  moles HCl = moles NH₃ = moles Nitrogen (1:1:1)
+
+STEP 2: Milliequivalents calculate karna
+  V ml of N normality HCl = V × N milliequivalents of HCl
+                          = V × N milliequivalents of Nitrogen
+
+STEP 3: Milliequivalents se GRAMS mein convert karna
+  Nitrogen ka atomic weight = 14.007 g/mol
+  Nitrogen monovalent hai, toh equivalent weight = 14.007 g/eq
+  Milliequivalent weight = 14.007 / 1000 = 0.014007 g/meq
+
+  Weight of Nitrogen (g) = V × N × 0.014007
+
+STEP 4: PERCENTAGE mein convert karna
+  % Nitrogen = (Weight of N / Weight of sample) × 100
+             = (V × N × 0.014007 / W) × 100
+             = (V × N × 1.4007) / W
+
+ISLIYE: 1.4007 = 14.007 / 10
+      = (Atomic weight of N) × 100 / 1000
+      = Atomic weight / 10
+
+YEH FACTOR DO KAAM EK SAATH KARTA HAI:
+  1. Milliequivalents → grams (÷ 1000)
+  2. Fraction → percentage (× 100)
+  Combined: 100/1000 = 1/10
+  So: 14.007 × (1/10) = 1.4007</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-blue-500 pl-3">
+                        <h5 class="font-bold text-blue-800">Factor: V_sample — Sample ka Titre Value (ml)</h5>
+                        <p><strong>Kya hai:</strong> Titration mein 0.1N HCl kitne ml laga sample ki ammonia ko neutralize karne mein.</p>
+                        <p><strong>Kahan se aaya:</strong></p>
+                        <pre class="bg-white p-2 rounded text-xs"><code>Chemistry chain:
+1. Digestion: Organic N → (NH₄)₂SO₄
+2. Distillation: (NH₄)₂SO₄ + NaOH → NH₃↑ (gas)
+3. Collection: NH₃ + H₃BO₃ → NH₄H₂BO₃ (boric acid mein trap)
+4. Titration: NH₄H₂BO₃ + HCl → NH₄Cl + H₃BO₃
+
+Jitna zyada nitrogen sample mein 
+→ utna zyada NH₃ release hoga 
+→ utna zyada HCl lagega 
+→ V_sample ZYADA hoga
+
+V_sample DIRECTLY PROPORTIONAL hai nitrogen content ke.</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-blue-500 pl-3">
+                        <h5 class="font-bold text-blue-800">Factor: V_blank — Blank ka Titre Value (ml)</h5>
+                        <p><strong>Kya hai:</strong> Bina sample ke poora procedure run karne par HCl kitna lagta hai.</p>
+                        <p><strong>Kyon zaroori hai:</strong></p>
+                        <ul class="list-disc list-outside pl-5 space-y-1 text-sm">
+                            <li>Reagents (H₂SO₄, catalyst) mein trace nitrogen/ammonium impurity ho sakti hai.</li>
+                            <li>Boric acid mein trace ammonia absorb ho sakti hai lab ki hawa se.</li>
+                            <li><strong>V_sample - V_blank = SIRF SAMPLE KA NITROGEN.</strong> Reagent contribution subtract ho jaata hai.</li>
+                            <li>Typically V_blank bahut kam hota hai: 0.1-0.5 ml. Agar zyada hai toh reagents impure hain.</li>
+                        </ul>
+                    </div>
+
+                    <div class="border-l-4 border-blue-500 pl-3">
+                        <h5 class="font-bold text-blue-800">Factor: N_HCl — HCl ki Normality</h5>
+                        <p><strong>Kya hai:</strong> Titrant (HCl) ki concentration — equivalents per litre.</p>
+                        <ul class="list-disc list-outside pl-5 space-y-1 text-sm">
+                            <li><strong>0.1N = 0.1 eq/L = 3.646 g HCl/L.</strong></li>
+                            <li><strong>0.1N kyon use karte hain:</strong> 1g dairy sample ke liye ~15-25 ml lagta hai — 50ml burette mein easily fit hota hai. Har drop (~0.05ml) = 0.005 meq = 0.07mg N — sufficient sensitivity.</li>
+                            <li>Bahut concentrated (1N): endpoint miss hoga. Bahut dilute (0.01N): bahut zyada volume lagega.</li>
+                        </ul>
+                    </div>
+
+                    <div class="border-l-4 border-blue-500 pl-3">
+                        <h5 class="font-bold text-blue-800">Factor: W (Weight_sample) — Sample ka Weight (grams)</h5>
+                        <ul class="list-disc list-outside pl-5 space-y-1 text-sm">
+                            <li><strong>~1g kyon:</strong> Khoa mein ~15-20% protein hai. 1g mein ~0.024-0.031g nitrogen. Yeh ~22 ml of 0.1N HCl titre dega — comfortable range hai 50ml burette ke liye.</li>
+                            <li>Agar 5g lete toh ~110ml lagta — burette se possible nahi.</li>
+                            <li>Agar 0.1g lete toh ~2.2ml lagta — precision bahut kam.</li>
+                        </ul>
+                    </div>
+
+                    <div class="border-l-4 border-red-500 pl-3">
+                        <h5 class="font-bold text-red-800">⭐ Factor: 6.38 — Nitrogen to Protein Conversion Factor</h5>
+                        <p><strong>Kya hai:</strong> Total nitrogen ko crude protein mein convert karne ka multiplier.</p>
+                        <p><strong>COMPLETE DERIVATION:</strong></p>
+                        <pre class="bg-white p-2 rounded text-xs"><code>CONCEPT: Proteins amino acids se bane hote hain, har amino acid mein N hota hai.
+
+MILK PROTEINS KA NITROGEN CONTENT:
+  Casein:            15.63% N
+  β-Lactoglobulin:   15.60% N
+  α-Lactalbumin:     15.77% N
+
+Weighted average (Casein ~80%, Whey ~20%):
+  Average N in milk protein ≈ 15.67%
+
+CONVERSION:
+  100g protein mein 15.67g nitrogen hai
+  1g nitrogen = 100/15.67 = 6.38g protein
+
+  Factor = 100 / (% N in protein) = 100 / 15.67 = 6.38
+
+DIFFERENT FOODS KE FACTORS:
+  Milk/Dairy:  15.67% N → 100/15.67 = 6.38
+  General:     16.00% N → 100/16.00 = 6.25
+  Wheat:       17.15% N → 100/17.15 = 5.83
+  Rice:        16.80% N → 100/16.80 = 5.95
+  Soybean:     17.51% N → 100/17.51 = 5.71
+  Gelatin:     18.00% N → 100/18.00 = 5.55
+
+DAIRY KE LIYE HAMESHA 6.38 USE KARNA HAI, 6.25 NAHI!</code></pre>
+                        <p class="text-sm mt-2"><strong>"CRUDE" Protein kyon kehte hain:</strong> Kjeldahl TOTAL nitrogen measure karta hai — protein nitrogen + Non-Protein Nitrogen (NPN: urea, free amino acids, nucleic acids). Milk mein ~5% total N = NPN. True protein = Crude protein - (NPN × 6.38). Lekin regulatory purposes ke liye crude protein acceptable hai.</p>
+                    </div>
+
+                    <div class="border-l-4 border-purple-500 pl-3">
+                        <h5 class="font-bold text-purple-800">Reagent Factors — Digestion Step ki Chemistry</h5>
+                        <pre class="bg-white p-2 rounded text-xs"><code>REACTION:
+Organic N + H₂SO₄ (conc, hot) → (NH₄)₂SO₄ + CO₂↑ + H₂O
+R-CH(NH₂)-COOH + H₂SO₄ → (NH₄)₂SO₄ + CO₂ + H₂O + SO₂
+
+CATALYST (CuSO₄:K₂SO₄ = 1:5):
+┌─────────────┬────────────────────────────────────────────┐
+│ CuSO₄       │ Catalyst — Cu²⁺ speeds up oxidation        │
+│ (1 part)    │ Facilitates electron transfer              │
+├─────────────┼────────────────────────────────────────────┤
+│ K₂SO₄       │ Raises H₂SO₄ boiling point:               │
+│ (5 parts)   │ Pure H₂SO₄ BP = 337°C                     │
+│             │ With K₂SO₄: BP rises to 370-400°C         │
+│             │ Higher temp = faster, complete digestion   │
+├─────────────┼────────────────────────────────────────────┤
+│ Ratio 1:5   │ Zyada K₂SO₄ = zyada BP rise, lekin bahut  │
+│             │ zyada = NH₃ loss. 1:5 = OPTIMUM balance    │
+└─────────────┴────────────────────────────────────────────┘
+
+25ml H₂SO₄: 1g organic sample ko completely oxidize karne ke liye sufficient.
+"Solution CLEAR ho jaaye": Initially dark brown/black (carbon present)
+→ gradually lightens → finally clear blue-green (CuSO₄ colour)
+= ALL organic matter destroyed. Time: 2-3 hours.</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-purple-500 pl-3">
+                        <h5 class="font-bold text-purple-800">Reagent Factors — Distillation Step</h5>
+                        <pre class="bg-white p-2 rounded text-xs"><code>REACTION:
+(NH₄)₂SO₄ + 2NaOH → Na₂SO₄ + 2NH₃↑ + 2H₂O
+
+NaOH (40%, ~75ml):
+• H₂SO₄ neutralize karna hai (25ml conc ≈ 0.45 mol)
+• NH₃ release karna hai from (NH₄)₂SO₄
+• EXCESS NaOH zaroori hai — dono kaam ke liye
+• 40% = 10M NaOH (bahut concentrated)
+
+200ml distilled water dilution:
+• Conc. H₂SO₄ + NaOH = VERY EXOTHERMIC
+• Dilution se heat controlled rehti hai, bumping prevent hota hai
+
+Steam distillation:
+• NH₃ ka BP = -33°C (gas at room temp)
+• Direct heating → local overheating risk
+• Steam distillation = gentle, uniform, saari NH₃ collect hoti hai</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-purple-500 pl-3">
+                        <h5 class="font-bold text-purple-800">Reagent Factors — Boric Acid Collection & Titration</h5>
+                        <pre class="bg-white p-2 rounded text-xs"><code>COLLECTION:
+NH₃ + H₃BO₃ → NH₄⁺ + H₂BO₃⁻ (ammonium borate)
+Solution GREEN ho jaata hai (mixed indicator: bromocresol green + methyl red)
+
+Boric acid (4%, 25ml) kyon:
+• Weak acid — NH₃ ko trap karta hai
+• Exact volume MAAYINE NAHI RAKHTA (excess OK)
+• Direct titration possible — back titration ki zarurat nahi
+• Purane method mein 0.1N H₂SO₄ mein collect karte the → complicated
+
+TITRATION:
+NH₄H₂BO₃ + HCl → NH₄Cl + H₃BO₃
+(green)                    (pink)
+
+Endpoint: Green → Grey → FIRST PERMANENT PINK = endpoint
+Each ml of 0.1N HCl = 0.1 meq NH₃ = 0.1 meq N = 0.0014007g N</code></pre>
+                    </div>
+
+                    <h5 class="font-bold text-red-700 mt-4">🔢 Numerical Example:</h5>
+                    <pre class="bg-white p-3 rounded text-xs"><code>Given:
+W = 1.0235g khoa
+V_sample = 21.4 ml (0.1N HCl)
+V_blank = 0.2 ml (0.1N HCl)
+N_HCl = 0.1N
+
+Step 1: Net titre = V_sample - V_blank = 21.4 - 0.2 = 21.2 ml
+
+Step 2: % Nitrogen = [1.4007 × 21.2 × 0.1] / 1.0235
+                   = [1.4007 × 2.12] / 1.0235
+                   = 2.9695 / 1.0235
+                   = 2.9013%
+
+VERIFICATION (long method):
+  meq N = 21.2 × 0.1 = 2.12 meq
+  Weight N = 2.12 × 0.014007 = 0.029695g
+  % N = (0.029695 / 1.0235) × 100 = 2.9013% ✓ Same answer!
+
+Step 3: % Crude Protein = 2.9013 × 6.38 = 18.51%
+
+Khoa mein typical protein: 15-22% → 18.51% acceptable ✓</code></pre>
+                </div>
             `
         },
         {
@@ -8588,6 +9094,141 @@ Inverted ghol mein asar-daar sample = 10 × (50/250) = 2 g per 100 ml
                 <pre><code>% Acidity (as lactic acid) = (9 × V × N) / W</code></pre>
                 <p class="text-xs">Jahaan V = NaOH ka volume (ml), N = NaOH ki normality, W = sample ka weight (g).</p>
                 <p class="text-xs mt-2">Standard: Fresh khoa ki acidity 0.5% se zyada nahi honi chahiye.</p>
+
+                <h4 class="font-semibold mt-6 mb-2 text-blue-700">📐 Formula Factors ki Complete Derivation:</h4>
+                <div class="bg-blue-50 p-4 rounded-lg space-y-4">
+
+                    <div class="border-l-4 border-red-500 pl-3">
+                        <h5 class="font-bold text-red-800">⭐ Factor: 9 — Sabse Important Factor (Kahan se aaya?)</h5>
+                        <p><strong>Step-by-step derivation:</strong></p>
+                        <pre class="bg-white p-2 rounded text-xs"><code>STEP 1: Lactic Acid ki details
+  Lactic acid = CH₃-CHOH-COOH
+  Molecular formula: C₃H₆O₃
+  Molecular weight = (3×12) + (6×1) + (3×16) = 36+6+48 = 90 g/mol
+
+STEP 2: Equivalent weight nikalna
+  Lactic acid MONOBASIC hai (sirf EK -COOH group)
+  Ek -COOH = ek replaceable hydrogen = ek equivalent
+  Equivalent weight = Molecular weight / No. of replaceable H
+                    = 90 / 1 = 90 g/eq
+
+STEP 3: Milliequivalent weight
+  1 milliequivalent lactic acid = 90/1000 g = 0.090g
+
+STEP 4: Titration se weight calculate karna
+  V ml × N normality NaOH use hui
+  Milliequivalents of NaOH = V × N
+  At equivalence: meq NaOH = meq Lactic acid
+  Weight of lactic acid = V × N × 0.090 g
+
+STEP 5: Percentage mein convert karna
+  % Acidity = (Weight of acid / Weight of sample) × 100
+            = (V × N × 0.090 / W) × 100
+            = (V × N × 0.090 × 100) / W
+            = (V × N × 9.0) / W
+
+ANSWER: Factor 9 = Eq. wt of lactic acid × 100 / 1000
+                  = 90 × 100 / 1000 = 9000/1000 = 9
+
+TEEN KAAM EK SAATH:
+  1. meq → grams conversion (÷1000)
+  2. Fraction → percentage (×100)
+  3. Lactic acid ka eq. wt included (90)
+  Combined: 90/1000 × 100 = 90/10 = 9</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-orange-500 pl-3">
+                        <h5 class="font-bold text-orange-800">📝 GENERAL FORMULA — Kisi bhi acid ke liye factor kaise nikaalein:</h5>
+                        <pre class="bg-white p-2 rounded text-xs"><code>Factor = (Equivalent weight of acid × 100) / 1000
+       = Equivalent weight / 10
+
+% Acidity = (Factor × V × N) / W
+
+EXAMPLES:
+┌──────────────┬────┬──────────┬────────┬───────────────────────────────┐
+│ Acid         │ MW │ Basicity │ Eq.Wt  │ Factor = Eq.Wt/10            │
+├──────────────┼────┼──────────┼────────┼───────────────────────────────┤
+│ LACTIC       │ 90 │ Mono (1) │ 90/1=90│ 90/10 = 9.0 ← DAIRY         │
+│ CITRIC       │192 │ Tri (3)  │192/3=64│ 64/10 = 6.4 ← Fruits        │
+│ ACETIC       │ 60 │ Mono (1) │ 60/1=60│ 60/10 = 6.0 ← Vinegar       │
+│ OLEIC        │282 │ Mono (1) │282/1=282│ 282/10 = 28.2 ← Fats/Oils   │
+│ SULFURIC     │ 98 │ Di (2)   │ 98/2=49│ 49/10 = 4.9 ← Industrial    │
+│ TARTARIC     │150 │ Di (2)   │150/2=75│ 75/10 = 7.5 ← Wine          │
+│ MALIC        │134 │ Di (2)   │134/2=67│ 67/10 = 6.7 ← Apples        │
+└──────────────┴────┴──────────┴────────┴───────────────────────────────┘</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-blue-500 pl-3">
+                        <h5 class="font-bold text-blue-800">Factor: V — NaOH ka Volume (ml)</h5>
+                        <p><strong>Kya hai:</strong> Titration mein kitna 0.1N NaOH laga phenolphthalein endpoint tak.</p>
+                        <pre class="bg-white p-2 rounded text-xs"><code>Reaction:
+CH₃CHOHCOOH + NaOH → CH₃CHOHCOONa + H₂O
+(lactic acid)  (base)  (sodium lactate)  (water)
+1 mole : 1 mole (1:1 stoichiometry)
+
+V zyada = zyada acidity = zyada lactic acid
+
+Typical values:
+  Fresh khoa: V ≈ 3-5 ml (of 0.1N NaOH for 10g sample)
+  Stale khoa: V ≈ 7-12 ml (bacteria ne zyada acid banayi)</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-blue-500 pl-3">
+                        <h5 class="font-bold text-blue-800">Factor: N — NaOH ki Normality</h5>
+                        <ul class="list-disc list-outside pl-5 space-y-1 text-sm">
+                            <li><strong>0.1N NaOH = 0.1 eq/L = 4g NaOH/L</strong> (NaOH MW = 40, monobasic)</li>
+                            <li><strong>1ml of 0.1N NaOH = 0.1/1000 eq = 0.0001 eq = 0.1 meq</strong></li>
+                            <li><strong>0.1N kyon:</strong> 10g dairy sample ke liye 3-12 ml range mein aata hai — precise measurement possible, 50ml burette mein fit hota hai.</li>
+                        </ul>
+                    </div>
+
+                    <div class="border-l-4 border-blue-500 pl-3">
+                        <h5 class="font-bold text-blue-800">Factor: W — Sample ka Weight (10g)</h5>
+                        <ul class="list-disc list-outside pl-5 space-y-1 text-sm">
+                            <li>Dairy products mein acidity ~0.1-0.5% range hai. 10g sample se V = 1-6 ml aata hai — comfortable range.</li>
+                            <li>Round number hai — calculation easy.</li>
+                            <li>W consistent rakhna zaroori hai standard ke saath.</li>
+                        </ul>
+                    </div>
+
+                    <div class="border-l-4 border-purple-500 pl-3">
+                        <h5 class="font-bold text-purple-800">Reagent Factor: Phenolphthalein Indicator</h5>
+                        <ul class="list-disc list-outside pl-5 space-y-1 text-sm">
+                            <li><strong>Chemical:</strong> C₂₀H₁₄O₄. pH range: 8.2-10.0.</li>
+                            <li><strong>Below pH 8.2:</strong> Colourless. <strong>Above pH 10.0:</strong> Pink/Magenta.</li>
+                            <li><strong>Kyon yeh indicator:</strong> Weak acid (lactic) + Strong base (NaOH) titration ka equivalence point pH ~8.5-9 par aata hai — Phenolphthalein ka range (8.2-10) perfectly match karta hai.</li>
+                            <li><strong>"30 seconds tak rahe":</strong> Momentary pink = endpoint nahi aaya. Permanent pink (>30 sec) = true endpoint. Zyada dark pink = over-titration.</li>
+                        </ul>
+                    </div>
+
+                    <div class="border-l-4 border-purple-500 pl-3">
+                        <h5 class="font-bold text-purple-800">Reagent Factor: 30ml Garam (40°C) Neutral Distilled Water</h5>
+                        <ul class="list-disc list-outside pl-5 space-y-1 text-sm">
+                            <li><strong>Garam kyon:</strong> Khoa room temp par solid/semi-solid hai. 40°C par soften ho jaata hai aur achhe se disperse hota hai. >60°C par lactic acid volatile ho sakta hai.</li>
+                            <li><strong>"Neutral" kyon:</strong> Normal distilled water ka pH 5.5-6.5 hota hai (dissolved CO₂: CO₂+H₂O→H₂CO₃). Yeh extra acidity interfere karegi. "Neutral" = pehle boil kiya (CO₂ nikala) phir NaOH se pH 7.0 kiya. Ab sirf sample ki acidity measure hogi.</li>
+                            <li><strong>30ml kyon:</strong> 10g khoa uniformly disperse karne ke liye sufficient. Kam paani → incomplete dispersion. Zyada paani → endpoint colour faint.</li>
+                        </ul>
+                    </div>
+
+                    <h5 class="font-bold text-red-700 mt-4">🔢 Numerical Example:</h5>
+                    <pre class="bg-white p-3 rounded text-xs"><code>Given:
+W = 10.00g khoa
+V = 4.5 ml of 0.1N NaOH
+N = 0.1
+
+% Acidity = (9 × 4.5 × 0.1) / 10.00
+          = (9 × 0.45) / 10.00
+          = 4.05 / 10.00
+          = 0.405% (as lactic acid)
+
+VERIFICATION (long method):
+  meq NaOH = 4.5 × 0.1 = 0.45 meq
+  meq lactic acid = 0.45 meq
+  Weight of lactic acid = 0.45 × 0.090 = 0.0405g
+  % Acidity = (0.0405 / 10.00) × 100 = 0.405% ✓ Same!
+
+Standard: < 0.5% → 0.405% ACCEPTABLE ✓</code></pre>
+                </div>
             `
         },
         {
@@ -8608,6 +9249,105 @@ Inverted ghol mein asar-daar sample = 10 × (50/250) = 2 g per 100 ml
                 </ol>
                 <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
                 <pre><code>% Total Ash = [(W3 - W1) / (W2 - W1)] × 100</code></pre>
+
+                <h4 class="font-semibold mt-6 mb-2 text-blue-700">📐 Formula Factors ki Complete Derivation:</h4>
+                <div class="bg-blue-50 p-4 rounded-lg space-y-4">
+
+                    <div class="border-l-4 border-blue-500 pl-3">
+                        <h5 class="font-bold text-blue-800">Factor: W1 — Empty Crucible ka Weight (pre-heated at 550°C)</h5>
+                        <ul class="list-disc list-outside pl-5 space-y-1 text-sm">
+                            <li><strong>Kya hai:</strong> 550°C par 30 min pre-heated, desiccator mein cooled crucible ka weight = Tare weight.</li>
+                            <li><strong>550°C par pre-heat kyon:</strong> Crucible mein trace moisture ya organic contamination ho sakta hai. Same temperature use karte hain jo actual ashing mein hogi — weight STABLE ho jaata hai.</li>
+                            <li><strong>Silica/Platinum crucible kyon:</strong> Silica (SiO₂) 1710°C tak stable, 550°C par koi change nahi. Platinum 1768°C melting point, chemically inert. Glass/porcelain 550°C par crack ho sakte hain ya alkali absorb karte hain.</li>
+                        </ul>
+                    </div>
+
+                    <div class="border-l-4 border-blue-500 pl-3">
+                        <h5 class="font-bold text-blue-800">Factor: W2 — Crucible + Sample ka Weight</h5>
+                        <ul class="list-disc list-outside pl-5 space-y-1 text-sm">
+                            <li><strong>(W2 - W1) = Sample ka original weight.</strong></li>
+                            <li><strong>~3g kyon:</strong> Khoa mein ~4-6% ash hota hai. 3g mein ~0.12-0.18g ash hoga — accurately weigh ho sakta hai. Kam sample → ash bahut kam → error zyada. Zyada sample → ashing time bahut lamba, incomplete ashing ka risk.</li>
+                        </ul>
+                    </div>
+
+                    <div class="border-l-4 border-blue-500 pl-3">
+                        <h5 class="font-bold text-blue-800">Factor: W3 — Crucible + Ash ka Weight (after 550°C)</h5>
+                        <p><strong>(W3 - W1) = Sirf ash ka weight.</strong></p>
+                        <p class="text-sm"><strong>Ash mein kya hota hai:</strong> Minerals in oxide/carbonate/phosphate form — CaO, Ca₃(PO₄)₂ (Calcium), Na₂O, NaCl (Sodium), K₂O (Potassium), MgO (Magnesium), Fe₂O₃ (Iron trace), ZnO (Zinc trace), P₂O₅ (Phosphorus).</p>
+                    </div>
+
+                    <div class="border-l-4 border-green-500 pl-3">
+                        <h5 class="font-bold text-green-800">Formula Structure — Same as Moisture Test</h5>
+                        <pre class="bg-white p-2 rounded text-xs"><code>% Ash = [(W3 - W1) / (W2 - W1)] × 100
+      = [Ash weight / Sample weight] × 100
+
+Compare with Moisture:
+% Moisture = [(W2 - W3) / (W2 - W1)] × 100
+           = [Moisture weight / Sample weight] × 100
+
+SAME pattern: (Component weight / Sample weight) × 100
+Sirf component different hai — ek mein paani, doosre mein minerals.</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-purple-500 pl-3">
+                        <h5 class="font-bold text-purple-800">Factor: 550 ± 20°C Temperature — Kyon EXACTLY itna?</h5>
+                        <pre class="bg-white p-2 rounded text-xs"><code>550°C = GOLDILOCKS TEMPERATURE (na zyada garam, na kam)
+
+ZYADA GARAM hone par PROBLEM:
+  >600°C: CaCO₃ → CaO + CO₂ (carbonate LOSS → ash weight KAM)
+  >700°C: NaCl sublimate hota hai (chloride LOSS)
+  >800°C: K₂O volatile ho sakta hai (potassium LOSS)
+  >900°C: Phosphates decompose ho sakte hain
+
+KAM GARAM hone par PROBLEM:
+  <500°C: Carbon completely oxidize NAHI hota
+  Ash BLACK/GREY rehta hai instead of WHITE
+  = Incomplete ashing → ash weight ZYADA → OVERESTIMATION
+
+550°C par:
+  ✅ Sab organic matter (C,H,N compounds) completely oxidize → CO₂↑
+  ✅ Koi mineral loss nahi
+  ±20°C tolerance: 530-570°C mein result practically same.</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-purple-500 pl-3">
+                        <h5 class="font-bold text-purple-800">Factor: Charring on Hot Plate — Kyon pehle char karte hain?</h5>
+                        <pre class="bg-white p-2 rounded text-xs"><code>Agar khoa SEEDHA muffle furnace mein daalein toh:
+  ❌ Fat suddenly IGNITE ho sakta hai (smoke, flame)
+  ❌ Sample SPLATTER ho sakta hai (ash loss)
+  ❌ Crucible ke bahar girne se ash loss
+
+Step-wise heating (SAFE approach):
+  1. Water bath (~100°C): Moisture evaporate (gentle)
+  2. Hot plate (~300-400°C): Fat slowly burns, proteins decompose
+     → "Smoke band" = most volatile organics gone
+     → Sample ka volume bahut KAM ho jaata hai
+  3. THEN muffle furnace (550°C): Remaining carbon → CO₂
+     → SAFE, EFFICIENT, NO LOSS</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-purple-500 pl-3">
+                        <h5 class="font-bold text-purple-800">Factor: 4-6 Hours Ashing Time</h5>
+                        <ul class="list-disc list-outside pl-5 space-y-1 text-sm">
+                            <li>Khoa mein fat zyada (~25-30%) → carbon residue zyada banta hai.</li>
+                            <li>Carbon oxidation slow hai 550°C par: C + O₂ → CO₂.</li>
+                            <li>4 hours minimum (thin layer), 6 hours (thick/large sample).</li>
+                            <li><strong>WHITE ash = complete ✓. GREY = mostly OK. BLACK specks = more time needed</strong> — few drops water daalein, dry karein, 2 hours aur ashing karein.</li>
+                        </ul>
+                    </div>
+
+                    <h5 class="font-bold text-red-700 mt-4">🔢 Numerical Example:</h5>
+                    <pre class="bg-white p-3 rounded text-xs"><code>Given:
+W1 = 22.4567g (empty crucible, pre-heated)
+W2 = 25.4567g (crucible + 3.0000g sample)
+W3 = 22.6117g (crucible + ash)
+
+Step 1: Ash weight    = W3 - W1 = 22.6117 - 22.4567 = 0.1550g
+Step 2: Sample weight = W2 - W1 = 25.4567 - 22.4567 = 3.0000g
+Step 3: % Ash = (0.1550 / 3.0000) × 100 = 5.17%
+
+Khoa mein typical ash: 4-6% → 5.17% acceptable ✓</code></pre>
+                </div>
             `
         },
         {
@@ -8626,6 +9366,77 @@ Inverted ghol mein asar-daar sample = 10 × (50/250) = 2 g per 100 ml
                 </ol>
                 <h4 class="font-semibold mt-4 mb-2">Note:</h4>
                 <p class="text-xs">Yeh ek qualitative test hai. Quantitative starch determination ke liye acid hydrolysis karke reducing sugars measure karna padta hai.</p>
+
+                <h4 class="font-semibold mt-6 mb-2 text-blue-700">📐 Reagent Factors ki Complete Derivation:</h4>
+                <div class="bg-blue-50 p-4 rounded-lg space-y-4">
+
+                    <p class="text-sm italic">⚠️ Yeh QUALITATIVE test hai — koi quantitative formula nahi hai. Sirf colour observation hoti hai. Neeche reagent factors aur reaction chemistry explain ki gayi hai.</p>
+
+                    <div class="border-l-4 border-blue-500 pl-3">
+                        <h5 class="font-bold text-blue-800">Reagent Factor: Iodine Solution (0.1N I₂ in KI)</h5>
+                        <p><strong>0.1N I₂ ka matlab:</strong></p>
+                        <pre class="bg-white p-2 rounded text-xs"><code>Iodine (I₂) ka molecular weight = 253.81 g/mol
+Equivalent weight = 253.81 / 2 = 126.9 g/eq
+(Kyunki I₂ + 2e⁻ → 2I⁻, 2 electrons transfer hote hain)
+
+0.1N I₂ = 0.1 × 126.9 = 12.69 g/L
+
+LEKIN I₂ paani mein ALMOST INSOLUBLE hai!
+Isliye KI (potassium iodide) mein dissolve karte hain:
+I₂ + KI → KI₃ (potassium triiodide) — SOLUBLE!
+I₂ + I⁻ → I₃⁻ (triiodide ion)
+
+Typically: 12.69g I₂ + 20-25g KI in 1 litre water</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-green-500 pl-3">
+                        <h5 class="font-bold text-green-800">Reaction Chemistry — Blue-Black Colour KAISE banta hai?</h5>
+                        <pre class="bg-white p-2 rounded text-xs"><code>STARCH ka structure:
+  Amylose (20-25%): LINEAR chain of glucose → forms HELIX (coil)
+  Amylopectin (75-80%): BRANCHED chain
+
+REACTION:
+  Amylose HELIX + I₂/I₃⁻/I₅⁻ (polyiodide chains)
+  = Polyiodide chains helix ke ANDAR fit ho jaate hain
+  = INCLUSION COMPLEX banta hai (host-guest chemistry)
+  = Charge transfer hota hai starch → iodine
+  = λ ~620nm absorbed → BLUE-BLACK colour transmitted
+
+  Amylose → Blue-black (strong) — helix perfect fit
+  Amylopectin → Red-violet (weak) — branches helix rok deti hain
+  Normal starch = mixed → NET BLUE-BLACK colour
+
+TEMPERATURE EFFECT:
+  Heating → helix UNCOIL → colour DISAPPEARS
+  Cooling → helix REFORM → colour RETURNS
+  (Isliye room temperature par observe karte hain)</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-purple-500 pl-3">
+                        <h5 class="font-bold text-purple-800">Factor: 11g khoa in 50ml water → 5ml taken</h5>
+                        <pre class="bg-white p-2 rounded text-xs"><code>11g in 50ml = 22% w/v dispersion
+5ml of this = 5 × (11/50) = 1.1g khoa equivalent
+
+Kyon 11g aur kyon 50ml:
+  • Sufficient concentration taaki colour change VISIBLE ho
+  • Bahut dilute → colour faint → miss ho sakta hai
+  • Bahut concentrated → khoa ka natural colour interfere karega
+  • 11g/50ml = IS standard recommendation
+
+Kyon 5ml test tube mein:
+  • Small volume sufficient hai qualitative test ke liye
+  • Iodine ki 1-2 drops bahut kam hain — concentrated solution mein better visible</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-orange-500 pl-3">
+                        <h5 class="font-bold text-orange-800">Result Interpretation</h5>
+                        <table class="w-full text-sm mt-2 border-collapse">
+                            <tr class="bg-gray-200"><th class="border p-1">Observation</th><th class="border p-1">Meaning</th><th class="border p-1">Action</th></tr>
+                            <tr><td class="border p-1">🔵 Blue-Black colour</td><td class="border p-1">Starch PRESENT</td><td class="border p-1">❌ ADULTERATED — reject</td></tr>
+                            <tr><td class="border p-1">🟤 Brown colour (iodine ka original)</td><td class="border p-1">Starch ABSENT</td><td class="border p-1">✅ GENUINE — pass</td></tr>
+                        </table>
+                    </div>
+                </div>
             `
         },
         {
@@ -8643,6 +9454,102 @@ Inverted ghol mein asar-daar sample = 10 × (50/250) = 2 g per 100 ml
                     <li>Mixture ko boiling water bath mein 5 minutes ke liye rakhein.</li>
                     <li>Observe karein: <strong>Deep red/cherry red colour</strong> = Sucrose PRESENT. <strong>No significant colour change</strong> = Sucrose ABSENT.</li>
                 </ol>
+
+                <h4 class="font-semibold mt-6 mb-2 text-blue-700">📐 Reagent Factors ki Complete Derivation:</h4>
+                <div class="bg-blue-50 p-4 rounded-lg space-y-4">
+
+                    <p class="text-sm italic">⚠️ Yeh QUALITATIVE test hai — koi quantitative formula nahi hai. Neeche reaction mechanism aur har reagent ka role detail mein hai.</p>
+
+                    <div class="border-l-4 border-green-500 pl-3">
+                        <h5 class="font-bold text-green-800">Complete Reaction Mechanism — 3 Steps</h5>
+                        <pre class="bg-white p-2 rounded text-xs"><code>STEP 1: HYDROLYSIS (HCl se)
+  Sucrose + HCl + Heat → Glucose + Fructose
+  C₁₂H₂₂O₁₁ + H₂O  →  C₆H₁₂O₆ + C₆H₁₂O₆
+  (disaccharide)         (aldose)   (KETOSE) ← key
+
+STEP 2: DEHYDRATION (Fructose ka — HCl se)
+  Fructose → HMF (5-Hydroxymethylfurfural) + 3H₂O
+  C₆H₁₂O₆ → C₆H₆O₃ + 3H₂O
+  (HCl acts as dehydrating agent)
+
+STEP 3: CONDENSATION (HMF + Resorcinol)
+  HMF + Resorcinol → COLOURED CONDENSATION PRODUCT
+  (Deep red/cherry red chromophore)</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-blue-500 pl-3">
+                        <h5 class="font-bold text-blue-800">Reagent Factor: Concentrated HCl (0.5ml)</h5>
+                        <ul class="list-disc list-outside pl-5 space-y-1 text-sm">
+                            <li><strong>Role 1 — Hydrolysis:</strong> H⁺ ions glycosidic bond todte hain. Sucrose → Glucose + Fructose.</li>
+                            <li><strong>Role 2 — Dehydration:</strong> Fructose se 3 molecules H₂O nikaalke HMF banata hai.</li>
+                            <li><strong>Concentrated kyon:</strong> Dilute HCl se reaction bahut slow → colour nahi aayega. 0.5ml concentrated = 5ml sample ke liye sufficient.</li>
+                        </ul>
+                    </div>
+
+                    <div class="border-l-4 border-blue-500 pl-3">
+                        <h5 class="font-bold text-blue-800">Reagent Factor: Resorcinol (0.005g)</h5>
+                        <pre class="bg-white p-2 rounded text-xs"><code>Resorcinol = 1,3-Benzenediol = C₆H₄(OH)₂
+Structure: Benzene ring with -OH at positions 1 and 3
+
+Role:
+  HMF ka aldehyde group (-CHO) resorcinol ke 
+  activated aromatic ring se react karta hai
+  = Electrophilic aromatic substitution/condensation
+  = Extended conjugated system banta hai → chromophore → RED colour
+
+0.005g (5mg) kyon:
+  • Bahut kam amount sufficient hai (catalyst-like role)
+  • Zyada resorcinol → background colour intense — interfere karega
+  • 5mg minute quantity hai lekin reaction ke liye kaafi hai</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-blue-500 pl-3">
+                        <h5 class="font-bold text-blue-800">Reagent Factor: Boiling Water Bath for 5 Minutes</h5>
+                        <pre class="bg-white p-2 rounded text-xs"><code>KYON HEAT ZAROORI:
+  1. Sucrose hydrolysis ke liye energy chahiye
+  2. Fructose dehydration ke liye high temperature chahiye
+  3. Condensation reaction ke liye activation energy chahiye
+
+KYON WATER BATH (100°C) aur DIRECT FLAME nahi:
+  Direct flame: uneven heating → charring → false result
+  Water bath: max 100°C → controlled, uniform heating
+
+KYON EXACTLY 5 MINUTES:
+  Kam time (<3 min): Reaction incomplete → faint colour → FALSE NEGATIVE
+  Zyada time (>10 min): Glucose (ALDOSE) bhi slowly react karega → FALSE POSITIVE
+  
+  5 min = Sweet spot:
+  ✅ Ketose (fructose) reacts → strong red colour
+  ❌ Aldose (glucose) doesn't significantly react yet</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-purple-500 pl-3">
+                        <h5 class="font-bold text-purple-800">Kyon yeh test KETOSE-specific hai?</h5>
+                        <pre class="bg-white p-2 rounded text-xs"><code>KETOSE sugars (fructose) → HMF JALDI banta hai
+ALDOSE sugars (glucose)  → Furfural DHEERE banta hai
+
+REASON:
+  Fructose mein C-2 par carbonyl hai
+  → 5-membered furanose ring READILY banta hai → fast dehydration
+  
+  Glucose mein C-1 par carbonyl hai  
+  → 6-membered pyranose ring → SLOWER dehydration
+
+TIME EFFECT:
+  5 min: Fructose → Strong red ✓ | Glucose → No colour ✗
+  15-20 min: Glucose bhi → pinkish (FALSE POSITIVE risk!)
+  ISLIYE TIME CONTROL CRITICAL HAI!</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-orange-500 pl-3">
+                        <h5 class="font-bold text-orange-800">Result Interpretation</h5>
+                        <table class="w-full text-sm mt-2 border-collapse">
+                            <tr class="bg-gray-200"><th class="border p-1">Observation</th><th class="border p-1">Meaning</th></tr>
+                            <tr><td class="border p-1">🔴 Deep red / Cherry red</td><td class="border p-1">Sucrose PRESENT — added sugar detected</td></tr>
+                            <tr><td class="border p-1">⚪ No significant colour change</td><td class="border p-1">Sucrose ABSENT — no added sugar</td></tr>
+                        </table>
+                    </div>
+                </div>
             `
         },
         {
@@ -8663,6 +9570,122 @@ Inverted ghol mein asar-daar sample = 10 × (50/250) = 2 g per 100 ml
                     <li>Layers separate hone dein. Acid layer (neeche wali layer) observe karein.</li>
                     <li><strong>Pink/Red colour</strong> acid layer mein = Vanaspati PRESENT. <strong>No colour</strong> = Vanaspati ABSENT.</li>
                 </ol>
+
+                <h4 class="font-semibold mt-6 mb-2 text-blue-700">📐 Reagent Factors ki Complete Derivation:</h4>
+                <div class="bg-blue-50 p-4 rounded-lg space-y-4">
+
+                    <p class="text-sm italic">⚠️ Yeh QUALITATIVE test hai — koi quantitative formula nahi hai. Neeche har reagent ka role aur chemistry detail mein hai.</p>
+
+                    <div class="border-l-4 border-green-500 pl-3">
+                        <h5 class="font-bold text-green-800">Background: 5% Sesame Oil in Vanaspati — Legal Requirement</h5>
+                        <pre class="bg-white p-2 rounded text-xs"><code>India mein Prevention of Food Adulteration Act ke under:
+  Vanaspati (hydrogenated vegetable fat) mein
+  5% SESAME OIL milana MANDATORY hai — yeh ek MARKER hai
+
+KYO MANDATORY:
+  Vanaspati ghee jaisa dikhta hai → consumer ko dhoka ho sakta hai
+  Sesame oil marker hai taaki vanaspati ko DETECT kiya ja sake
+
+SESAME OIL mein SESAMOL hota hai:
+  Sesamol = 3,4-Methylenedioxyphenol = C₇H₆O₃
+  Yeh UNIQUE hai sesame oil ke liye
+  Kisi aur oil mein significant amount mein nahi milta
+  = PERFECT marker for detection</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-blue-500 pl-3">
+                        <h5 class="font-bold text-blue-800">Reagent Factor: 5ml Concentrated HCl</h5>
+                        <pre class="bg-white p-2 rounded text-xs"><code>ROLES:
+1. Acidic medium provide karta hai reaction ke liye
+2. Sesamol ko protonated form mein rakhta hai
+3. Furfural ke saath condensation FACILITATE karta hai
+4. Dense liquid hai (1.18 g/ml) → fat se ALAG layer banata hai
+
+LAYER SEPARATION:
+  Fat density: ~0.9 g/ml → HALKA → UPAR aata hai
+  HCl density: ~1.18 g/ml → BHAARI → NEECHE jaata hai
+  Colour ACID LAYER (neeche wali) mein dekhte hain
+
+5ml kyon:
+  5ml fat ke equal volume — sufficient contact surface</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-blue-500 pl-3">
+                        <h5 class="font-bold text-blue-800">Reagent Factor: 0.4ml of 2% Furfural Solution (in alcohol)</h5>
+                        <pre class="bg-white p-2 rounded text-xs"><code>Furfural = Furan-2-carbaldehyde = C₅H₄O₂
+Contains: Furan ring + aldehyde group (-CHO)
+
+2% solution = 2g furfural in 100ml alcohol (ethanol)
+0.4ml of 2% = 0.008g = 8mg furfural
+
+ROLE IN REACTION:
+  Sesamol + Furfural → Condensation product → PINK/CRIMSON RED
+  
+  Mechanism:
+  1. Furfural ka -CHO (aldehyde) group
+  2. Sesamol ka activated aromatic ring (-OH activated)
+  3. Electrophilic addition of -CHO to ring
+  4. Conjugated system banta hai → CHROMOPHORE → colour
+
+IN ALCOHOL KYON:
+  Furfural paani mein limited solubility hai
+  Alcohol mein achhe se dissolve hota hai
+  Alcohol fat aur acid DONO phases mein thoda soluble hai
+  → furfural dono phases mein distribute hota hai</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-blue-500 pl-3">
+                        <h5 class="font-bold text-blue-800">Reagent Factor: 2 Minutes Vigorous Shaking</h5>
+                        <pre class="bg-white p-2 rounded text-xs"><code>Fat layer UPAR hai, Acid layer NEECHE hai
+Sesamol FAT phase mein hai (fat soluble compound)
+Furfural DONO phases mein hai
+HCl ACID phase mein hai
+
+Reaction ke liye CONTACT zaroori hai:
+  Shaking → fat aur acid phases MIX hote hain (emulsion)
+  → Sesamol + Furfural + HCl saath mein aate hain
+  → Condensation reaction hota hai
+  Phir standing → layers SEPARATE hote hain → colour observe
+
+2 min kyon:
+  Kam time → insufficient contact → FALSE NEGATIVE
+  Zyada time → unnecessary (reaction fast hai)
+  2 minutes = IS standard recommendation</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-purple-500 pl-3">
+                        <h5 class="font-bold text-purple-800">Factor: 10g Khoa → Fat Extraction → 5ml Fat</h5>
+                        <pre class="bg-white p-2 rounded text-xs"><code>Process ka logic:
+1. 10g khoa mein ~2.5-3g fat hai
+2. 20ml petroleum ether mein dissolve → fat + ether solution
+3. Filter → proteins/minerals hata dein
+4. Petroleum ether evaporate → pure fat bachta hai
+5. Fat ko melt karein (warm water bath) → liquid fat
+6. 5ml liquid fat test tube mein lein
+
+KYON pehle fat EXTRACT karte hain:
+  Khoa mein protein, sugar, water sab hai
+  Yeh sab Baudouin test mein INTERFERE kar sakte hain
+  Pure fat mein SIRF sesamol dhundna hai
+  = Clean, specific test</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-orange-500 pl-3">
+                        <h5 class="font-bold text-orange-800">Complete Reaction Summary</h5>
+                        <pre class="bg-white p-2 rounded text-xs"><code>Sesamol (from sesame oil) + Furfural + HCl 
+        → Pink/Crimson Red condensation product
+
+Sesamol (phenol) ke -OH activated ring
+  + Furfural ka -CHO (aldehyde)
+  → Condensation in acidic medium
+  → Extended conjugation = COLOUR</code></pre>
+                        <table class="w-full text-sm mt-2 border-collapse">
+                            <tr class="bg-gray-200"><th class="border p-1">Acid Layer Observation</th><th class="border p-1">Meaning</th></tr>
+                            <tr><td class="border p-1">🩷 Pink/Red colour</td><td class="border p-1">Vanaspati/Sesame oil PRESENT → ❌ ADULTERATED</td></tr>
+                            <tr><td class="border p-1">⚪ No colour</td><td class="border p-1">No vanaspati → ✅ GENUINE</td></tr>
+                        </table>
+                    </div>
+                </div>
             `
         },
         {
@@ -8684,6 +9707,256 @@ Inverted ghol mein asar-daar sample = 10 × (50/250) = 2 g per 100 ml
                     <li>Titrate karte rahein jab tak blue colour disappear ho jaaye aur brick red precipitate dikhey.</li>
                     <li>Lane-Eynon tables se lactose content calculate karein.</li>
                 </ol>
+                <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+                <pre><code>% Lactose = (F × D) / (T × W × 10)</code></pre>
+
+                <h4 class="font-semibold mt-6 mb-2 text-blue-700">📐 Formula Factors ki Complete Derivation:</h4>
+                <div class="bg-blue-50 p-4 rounded-lg space-y-4">
+
+                    <div class="border-l-4 border-green-500 pl-3">
+                        <h5 class="font-bold text-green-800">Full Formula Derivation</h5>
+                        <pre class="bg-white p-2 rounded text-xs"><code>Full form:
+% Lactose = (F × D × 100) / (T × W × 1000)
+
+Where:
+  F = Lane-Eynon Factor (mg of lactose)
+  D = Total dilution volume (ml)
+  T = Titre value (ml of sample filtrate used)
+  W = Sample weight (g)
+  100 = Percentage conversion
+  1000 = mg to g conversion
+
+Simplified: 100/1000 = 1/10
+% Lactose = (F × D) / (T × W × 10)</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-red-500 pl-3">
+                        <h5 class="font-bold text-red-800">⭐ Factor: F — Lane-Eynon Factor (mg lactose)</h5>
+                        <p><strong>Kya hai:</strong> 10ml Fehling's solution (5ml A + 5ml B) ko COMPLETELY reduce karne ke liye kitne mg lactose chahiye.</p>
+                        <pre class="bg-white p-2 rounded text-xs"><code>KAHAN SE AAYA:
+  Lane aur Eynon ne EXPERIMENTALLY determine kiya:
+  Fixed volume Fehling's + Fixed boiling conditions
+  → Different sugars ki different amounts chahiye
+
+  For LACTOSE (monohydrate):
+  10ml Fehling's (5A + 5B) ≈ 67-68 mg lactose se completely reduce
+
+  LEKIN yeh exact amount TITRE VALUE par depend karta hai!
+
+  KYO:
+  Kam titre → sugar zyada concentrated → reaction faster 
+    → thoda KAM sugar bhi Fehling's reduce kar deti hai
+  Zyada titre → sugar dilute → slower reaction
+    → thoda ZYADA sugar chahiye
+
+LANE-EYNON TABLE (Lactose ke liye):
+┌──────────────┬──────────────────────┐
+│ Titre (ml)   │ F (mg lactose)       │
+├──────────────┼──────────────────────┤
+│ 10           │ 65.5                 │
+│ 12           │ 66.0                 │
+│ 14           │ 66.5                 │
+│ 16           │ 67.0                 │
+│ 18           │ 67.5                 │
+│ 20           │ 68.0                 │
+│ 22           │ 68.5                 │
+│ 24           │ 69.0                 │
+│ 26           │ 69.5                 │
+│ 28           │ 70.0                 │
+│ 30           │ 70.5                 │
+└──────────────┴──────────────────────┘
+Yeh table EMPIRICALLY determined hai — experiments se banayi gayi
+
+F titre se kyon CHANGE hota hai:
+  Boiling ke dauran kuch Cu₂O re-oxidize hota hai (air se)
+  Zyada titre = zyada boiling time = zyada re-oxidation = zyada F
+  Lane-Eynon table yeh correction AUTOMATICALLY karti hai</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-blue-500 pl-3">
+                        <h5 class="font-bold text-blue-800">Factor: D — Dilution Volume (Total Volume = 100ml)</h5>
+                        <pre class="bg-white p-2 rounded text-xs"><code>Sample preparation: 5g khoa → dissolve → make up to 100ml
+D = 100 ml
+
+D formula mein KYO hai:
+  Burette mein total 100ml solution hai
+  Lekin sirf T ml use hua titration mein
+  Baki solution mein bhi lactose hai
+  
+  Total lactose = (Lactose per ml) × Total volume
+                = (F/T mg per ml) × D ml = (F × D)/T mg
+
+D AGAR 250ml hota toh D = 250 formula mein daalte</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-blue-500 pl-3">
+                        <h5 class="font-bold text-blue-800">Factor: T — Titre Value (ml of sample filtrate)</h5>
+                        <pre class="bg-white p-2 rounded text-xs"><code>Kya hai:
+  Boiling Fehling's ko completely reduce karne mein
+  sample filtrate ke kitne ml lage
+
+  T KAM hai → Lactose ZYADA concentrated
+  T ZYADA hai → Lactose KAM concentrated
+  INVERSE relationship: % Lactose ∝ 1/T
+
+Measurement:
+  Burette se sample slowly daalte hain
+  Fehling's boil ho rahi hai → blue colour
+  Endpoint par methylene blue decolorize → brick red
+  Burette reading = T ml</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-blue-500 pl-3">
+                        <h5 class="font-bold text-blue-800">Factor: W — Sample Weight (5g)</h5>
+                        <p class="text-sm">Formula mein W denominator mein hai — per unit sample weight percentage nikalne ke liye. 5g se manageable concentration aati hai titration mein.</p>
+                    </div>
+
+                    <div class="border-l-4 border-blue-500 pl-3">
+                        <h5 class="font-bold text-blue-800">Factor: 10 in denominator — Combined unit conversion</h5>
+                        <pre class="bg-white p-2 rounded text-xs"><code>Full formula: % = (F × D × 100) / (T × W × 1000)
+  100 = fraction → percentage
+  1000 = mg → g conversion (F is in mg)
+  100/1000 = 1/10
+
+Simplified: % = (F × D) / (T × W × 10)
+  10 = combined conversion factor</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-purple-500 pl-3">
+                        <h5 class="font-bold text-purple-800">Reagent Factor: Fehling's A Solution</h5>
+                        <pre class="bg-white p-2 rounded text-xs"><code>Composition: 34.639g CuSO₄·5H₂O in 500ml distilled water
+
+34.639g kahan se aaya:
+  CuSO₄·5H₂O MW = 249.68 g/mol
+  34.639g = 0.1388 mol in 500ml = 0.2776 mol/L ≈ 0.28M
+
+  Historically standardized by Fehling
+  Lane-Eynon factors ISI concentration ke liye calibrated hain
+  CHANGE KARNA ALLOWED NAHI — nahi toh F values galat honge
+
+Cu²⁺ ka role:
+  OXIDIZING AGENT hai
+  Lactose (reducing sugar) se electrons accept karta hai
+  Cu²⁺ (BLUE) → Cu⁺ → Cu₂O (BRICK RED precipitate)</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-purple-500 pl-3">
+                        <h5 class="font-bold text-purple-800">Reagent Factor: Fehling's B Solution</h5>
+                        <pre class="bg-white p-2 rounded text-xs"><code>Composition:
+  173g Sodium potassium tartrate (Rochelle salt) + 50g NaOH
+  in 500ml distilled water
+
+Tartrate KYON zaroori hai:
+  WITHOUT tartrate: Cu²⁺ + 2OH⁻ → Cu(OH)₂↓ (INSOLUBLE precipitate!)
+                    Cu²⁺ solution se BAHAR nikal jaata hai → NO reaction
+
+  WITH tartrate: Cu²⁺ + tartrate²⁻ + OH⁻ → [Cu(tartrate)]²⁻ complex
+                 SOLUBLE! Cu²⁺ solution mein REHTA hai
+                 Deep BLUE colour — available for reduction
+
+NaOH kyon:
+  Alkaline medium zaroori hai
+  Reducing sugars SIRF alkaline medium mein Cu²⁺ reduce karte hain
+  Sugar → enediol form (in alkali) → reduces Cu²⁺</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-purple-500 pl-3">
+                        <h5 class="font-bold text-purple-800">Reagent Factor: Methylene Blue Indicator</h5>
+                        <pre class="bg-white p-2 rounded text-xs"><code>Chemical: C₁₆H₁₈ClN₃S
+  Oxidized form: BLUE colour
+  Reduced form: COLOURLESS
+
+HOW IT WORKS:
+BEFORE endpoint:
+  Fehling's mein EXCESS Cu²⁺ hai
+  Cu²⁺ methylene blue ko OXIDIZED rakhta hai → BLUE
+  
+AT endpoint:
+  SAARA Cu²⁺ reduce ho gaya → Cu₂O (brick red)
+  Ab koi oxidizing agent nahi
+  Lactose methylene blue ko bhi REDUCE kar deta hai
+  Blue → COLOURLESS → ENDPOINT!
+
+KYON ENDPOINT KE PAAS add karte hain (shuru mein nahi):
+  Methylene blue bhi thoda Cu²⁺ consume karta hai
+  Shuru mein daalein → extra Cu²⁺ consume → ERROR
+  Endpoint ke paas = minimum interference
+  2-3 drops sufficient hain</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-purple-500 pl-3">
+                        <h5 class="font-bold text-purple-800">Reagent Factor: Clarifying Agents (Protein Removal)</h5>
+                        <pre class="bg-white p-2 rounded text-xs"><code>Potassium Ferrocyanide: K₄[Fe(CN)₆]
+Zinc Acetate: Zn(CH₃COO)₂
+
+REACTION:
+  2K₄[Fe(CN)₆] + 3Zn(CH₃COO)₂ → K₂Zn₃[Fe(CN)₆]₂↓ + 6CH₃COOK
+                                   (zinc ferrocyanide precipitate)
+
+Yeh precipitate PROTEINS ko ADSORB karta hai:
+  Protein surface charge: positive
+  Zinc ferrocyanide surface: negative
+  = Electrostatic attraction → CO-PRECIPITATION
+
+KYO PROTEINS HATANA ZAROORI:
+  1. Proteins bhi thodi reducing capacity rakhte hain
+     → Cu²⁺ reduce karenge → lactose OVER-ESTIMATED
+  2. Proteins TURBIDITY dete hain → endpoint mushkil
+  3. Proteins FOAM banate hain → titration disturb
+  4. Proteins COLOUR dete hain → indicator mask hota hai
+
+1ml each sufficient: 5g khoa mein ~1g protein → fully precipitated</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-purple-500 pl-3">
+                        <h5 class="font-bold text-purple-800">Factor: Boiling During Titration — Kyon zaroori?</h5>
+                        <pre class="bg-white p-2 rounded text-xs"><code>1. Reaction rate: Cu²⁺ + lactose reaction SLOW at room temp
+   → Boiling provides activation energy
+
+2. Specificity: Boiling par sirf REDUCING sugars react
+   → Non-reducing sugars (sucrose) NAHI react
+
+3. Consistency: Lane-Eynon factors BOILING ke liye calibrated hain
+   → Room temp par different (WRONG) result aayega
+
+4. Cu₂O precipitate boiling mein BETTER form hota hai
+
+⚠️ CAUTION: Total boiling time ≤ 3 minutes
+   Zyada boiling → sugar DECOMPOSE → over-reduction → ERROR</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-green-500 pl-3">
+                        <h5 class="font-bold text-green-800">Reaction Chemistry</h5>
+                        <pre class="bg-white p-2 rounded text-xs"><code>Lactose + 2Cu²⁺ + 5OH⁻ → Lactobionic acid + Cu₂O↓ + 3H₂O
+(reducing  (BLUE   (alkali)  (oxidized        (BRICK  (water)
+ sugar)    Fehling's)         lactose)          RED)
+
+Note: Actual ratio NOT exactly stoichiometric
+  Alkaline conditions mein sugar ka partial degradation hota hai
+  ISLIYE empirical Lane-Eynon tables use karte hain
+  Theoretical calculation se GALAT answer aayega</code></pre>
+                    </div>
+
+                    <h5 class="font-bold text-red-700 mt-4">🔢 Numerical Example:</h5>
+                    <pre class="bg-white p-3 rounded text-xs"><code>Given:
+W = 5.000g khoa
+D = 100ml (total volume after make up)
+T = 18.5 ml (titre value)
+F = 67.6 mg (from Lane-Eynon table for T = 18.5)
+
+% Lactose = (F × D) / (T × W × 10)
+          = (67.6 × 100) / (18.5 × 5.000 × 10)
+          = 6760 / 925
+          = 7.31%
+
+STEP-BY-STEP LOGIC:
+  1ml filtrate contains: F/T = 67.6/18.5 = 3.654 mg lactose/ml
+  Total 100ml mein: 3.654 × 100 = 365.4 mg = 0.3654g lactose
+  Yeh 5g khoa se aaya:
+  % = (0.3654 / 5.000) × 100 = 7.31% ✓ Same answer!
+
+Khoa mein typical lactose: 6-10% → 7.31% acceptable ✓</code></pre>
+                </div>
             `
         },
         {
@@ -8702,6 +9975,171 @@ Inverted ghol mein asar-daar sample = 10 × (50/250) = 2 g per 100 ml
                     <li>Colour intensity ko spectrophotometer ya comparator se measure karein.</li>
                     <li><strong>Yellow colour</strong> = Phosphatase positive = Improper heating. <strong>No colour</strong> = Properly heated.</li>
                 </ol>
+
+                <h4 class="font-semibold mt-6 mb-2 text-blue-700">📐 Reaction Factors ki Complete Derivation:</h4>
+                <div class="bg-blue-50 p-4 rounded-lg space-y-4">
+
+                    <p class="text-sm italic">⚠️ Yeh SEMI-QUANTITATIVE test hai — quantitative measurement spectrophotometer se hoti hai. Traditional formula nahi hai, lekin reaction factors important hain.</p>
+
+                    <div class="border-l-4 border-green-500 pl-3">
+                        <h5 class="font-bold text-green-800">Core Reaction</h5>
+                        <pre class="bg-white p-2 rounded text-xs"><code>p-Nitrophenyl phosphate + H₂O →[Alk. Phosphatase, 37°C, 2hr]→ p-Nitrophenol + Phosphate
+(COLOURLESS substrate)                                          (YELLOW in alkali, λmax=410nm)</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-blue-500 pl-3">
+                        <h5 class="font-bold text-blue-800">Factor: Disodium p-Nitrophenyl Phosphate (Substrate)</h5>
+                        <pre class="bg-white p-2 rounded text-xs"><code>Chemical: Na₂C₆H₄NO₆P
+Structure: O₂N─C₆H₄─O─PO₃²⁻ (sodium salt)
+           (p-nitrophenyl)─(phosphate ester bond)
+
+KYON yeh specific substrate:
+  1. Alk. Phosphatase ka natural substrate: phosphate esters
+  2. Yeh ek CHROMOGENIC substrate hai:
+     • Substrate itself: COLOURLESS
+     • Product (p-nitrophenol): YELLOW at alkaline pH
+  3. Colour change DIRECTLY enzyme activity indicate karta hai
+  4. Easy to detect — visual ya spectrophotometric
+
+Enzyme yeh PHOSPHATE ESTER BOND todhta hai:
+  O₂N─C₆H₄─O─PO₃²⁻ + H₂O → O₂N─C₆H₄─OH + HPO₄²⁻
+  (substrate)                   (p-nitrophenol) (phosphate)</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-blue-500 pl-3">
+                        <h5 class="font-bold text-blue-800">Factor: 37°C Incubation Temperature</h5>
+                        <pre class="bg-white p-2 rounded text-xs"><code>KYO 37°C:
+  Alkaline phosphatase ka OPTIMUM TEMPERATURE = 37°C
+  Is temperature par enzyme SABSE FAST kaam karta hai
+
+  37°C = mammalian body temperature
+  Cow ka body temp ~38.5°C
+  Enzyme EVOLVED hai is temp range ke liye
+
+AGAR temperature galat ho:
+  Kam temp (20°C) → reaction slow → FALSE NEGATIVE possible
+  Zyada temp (50°C) → enzyme DENATURE ho sakta hai
+                    → activity kam → FALSE NEGATIVE
+
+37°C = standard lab incubation temperature</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-blue-500 pl-3">
+                        <h5 class="font-bold text-blue-800">Factor: 2 Hours Incubation Time</h5>
+                        <pre class="bg-white p-2 rounded text-xs"><code>KYO 2 hours:
+  Khoa mein enzyme activity LOW ho sakti hai 
+  (partial heating during khoa making)
+  2 hours sufficient hai DETECTABLE amount p-nitrophenol banane ke liye
+
+COLOUR DEVELOPMENT over time:
+  0 hr:   Colourless
+  0.5 hr: Very faint yellow (if phosphatase present)
+  1 hr:   Light yellow
+  2 hr:   DISTINCT yellow (if positive)
+
+  Kam time → product kam → FALSE NEGATIVE
+  Zyada time → non-enzymatic hydrolysis possible → FALSE POSITIVE</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-blue-500 pl-3">
+                        <h5 class="font-bold text-blue-800">Factor: p-Nitrophenol — Yellow Colour at 410nm</h5>
+                        <pre class="bg-white p-2 rounded text-xs"><code>p-Nitrophenol: HO─C₆H₄─NO₂
+
+pH EFFECT on colour:
+  ACID mein (pH < 7):   HO─C₆H₄─NO₂ → COLOURLESS (phenol form)
+  ALKALI mein (pH > 7):  ⁻O─C₆H₄─NO₂ → YELLOW (phenoxide ion)
+
+Yellow colour KYON:
+  Phenoxide ion mein EXTENDED CONJUGATION hai
+  -O⁻ group: electrons DONATE karta hai ring mein
+  -NO₂ group: electrons WITHDRAW karta hai
+  = Poora molecule ek big conjugated system
+  = λmax = 410nm (VIOLET light absorb → YELLOW transmitted)
+
+SPECTROPHOTOMETER reading at 410nm:
+  Beer-Lambert Law: A = εlc
+  A = Absorbance (measured by instrument)
+  ε = Molar absorptivity of p-nitrophenol at 410nm
+  l = Path length (cuvette, usually 1cm)
+  c = Concentration of p-nitrophenol
+
+  Zyada absorbance = zyada p-nitrophenol 
+                   = zyada enzyme activity
+                   = zyada RAW milk used</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-blue-500 pl-3">
+                        <h5 class="font-bold text-blue-800">Factor: Buffer Solution (pH ~10)</h5>
+                        <pre class="bg-white p-2 rounded text-xs"><code>KYON alkaline pH:
+  1. Enzyme ka naam hi "ALKALINE phosphatase"
+     Optimum pH = 9.5 - 10.5
+     Acidic pH mein enzyme KAAM NAHI karta
+
+  2. p-Nitrophenol SIRF alkaline pH mein YELLOW hai
+     pH < 7: colourless → detect nahi kar sakte
+     pH > 8: yellow → detect ho jaata hai
+
+Buffer composition: typically carbonate-bicarbonate buffer
+  Ya glycine-NaOH buffer, pH 10 ± 0.1
+
+BUFFER kyon (plain NaOH kyon nahi):
+  Enzyme reaction se H⁺ release hote hain → pH DROP hota hai
+  Buffer pH ko STABLE rakhta hai throughout 2 hour incubation
+  pH drop → enzyme activity kam + colour faint → WRONG result</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-blue-500 pl-3">
+                        <h5 class="font-bold text-blue-800">Factor: 1g Khoa in 9ml Buffer = 1:10 Dilution</h5>
+                        <pre class="bg-white p-2 rounded text-xs"><code>1g + 9ml ≈ 10ml total (1g ≈ 1ml volume)
+Dilution = 1:10
+
+KYO 1:10:
+  • Sufficient enzyme (if present) for detectable colour
+  • Sufficient substrate for full 2 hour reaction
+  • Not too concentrated (would be turbid — can't read colour)
+  • IS standard recommendation</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-red-500 pl-3">
+                        <h5 class="font-bold text-red-800">⭐ Pasteurization Connection — KYON yeh test important hai?</h5>
+                        <pre class="bg-white p-2 rounded text-xs"><code>ALKALINE PHOSPHATASE (ALP) INACTIVATION:
+  ALP is MORE HEAT RESISTANT than most PATHOGENS
+
+  Pasteurization conditions:
+  HTST: 71.7°C for 15 seconds
+  LTLT: 63°C for 30 minutes
+
+  At these conditions: ALL pathogens are destroyed
+  ALP is ALSO destroyed at these conditions
+
+  LOGIC:
+  ┌────────────────────────────────────────────────────┐
+  │ If ALP is DESTROYED (negative test)               │
+  │ → Milk was heated to at least pasteurization temp  │
+  │ → ALL pathogens are ALSO destroyed                │
+  │ → Milk is SAFE ✅                                  │
+  ├────────────────────────────────────────────────────┤
+  │ If ALP is PRESENT (positive test)                 │
+  │ → Milk was NOT properly heated                    │
+  │ → Pathogens MAY still be alive                    │
+  │ → Milk is UNSAFE ❌                                │
+  └────────────────────────────────────────────────────┘
+
+  For KHOA:
+  Khoa banate waqt doodh 100°C+ tak heat hota hai
+  Agar properly bana → ALP DESTROY hona chahiye
+  Positive ALP = raw milk mila hua ya under-processed</code></pre>
+                    </div>
+
+                    <div class="border-l-4 border-orange-500 pl-3">
+                        <h5 class="font-bold text-orange-800">Result Interpretation</h5>
+                        <table class="w-full text-sm mt-2 border-collapse">
+                            <tr class="bg-gray-200"><th class="border p-1">Observation</th><th class="border p-1">Meaning</th><th class="border p-1">Conclusion</th></tr>
+                            <tr><td class="border p-1">🟡 Yellow colour</td><td class="border p-1">Phosphatase POSITIVE (active)</td><td class="border p-1">❌ Improper heating / raw milk mixed</td></tr>
+                            <tr><td class="border p-1">⚪ No colour (colourless)</td><td class="border p-1">Phosphatase NEGATIVE (destroyed)</td><td class="border p-1">✅ Properly heated — safe</td></tr>
+                        </table>
+                    </div>
+                </div>
             `
         }
     ]
