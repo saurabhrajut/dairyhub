@@ -29864,351 +29864,5511 @@ KEY DIFFERENCE from milk powder:
             purpose: "UHT milk mein fat content determine karne ke liye.",
             reference: "IS 1479 (Part I):1961",
             procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>Sulphuric acid milk ke proteins ko dissolve kar deta hai (casein ko digest karta hai), jisse fat free ho jaata hai. Amyl alcohol surface tension kam karta hai jisse fat clearly separate hota hai. Centrifugation se fat upar aa jaata hai butyrometer ki calibrated neck mein.</p>
+
                 <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                <p>Standard Gerber method follow karein. UHT milk ko room temperature par laayein aur achhe se mix karein before testing.</p>
                 <ol class="list-decimal list-outside pl-5 space-y-2">
-                    <li>Butyrometer mein 10ml H₂SO₄ daalein.</li>
-                    <li>10.75ml UHT milk daalein deewar ke sahaare.</li>
-                    <li>1ml amyl alcohol daalein.</li>
-                    <li>Stopper lagaayein, shake karein, water bath (65°C, 5 min), centrifuge (5 min), water bath (5 min), read karein.</li>
+                    <li>UHT milk ko room temperature (27±2°C) par laayein aur pack ko 4-5 baar ulta-seedha karke achhe se mix karein.</li>
+                    <li>Milk butyrometer mein 10ml H₂SO₄ (density 1.807-1.812 g/ml at 27°C) daalein.</li>
+                    <li>10.75ml UHT milk daalein deewar ke sahaare (dheere dheere, acid ke upar layer bane).</li>
+                    <li>1ml amyl alcohol (iso-amyl alcohol, density 0.814-0.816) daalein.</li>
+                    <li>Stopper lagaayein aur lock karein.</li>
+                    <li>Achhe se shake karein jab tak mixture uniform brown ho jaaye (saara casein dissolve ho jaaye).</li>
+                    <li>Water bath mein rakhein: 65±2°C par 5 minutes.</li>
+                    <li>Centrifuge mein rakhein: 1100 rpm par 5 minutes.</li>
+                    <li>Wapas water bath mein: 65±2°C par 5 minutes.</li>
+                    <li>Butyrometer ki graduated scale se fat % directly read karein.</li>
                 </ol>
+
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 my-4">
+                    <h4 class="font-bold text-blue-800">📐 Reading Kaise Lein:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>Fat % = Upper Meniscus Reading - Lower Meniscus Reading
+
+Example:
+Upper reading = 4.5
+Lower reading = 0.5
+Fat % = 4.5 - 0.5 = 4.0%</code></pre>
+                </div>
+
+                <div class="bg-green-50 border-l-4 border-green-500 p-4 my-4">
+                    <h4 class="font-bold text-green-800">🔬 Reagents Ka Role (Factors Kaise Kaam Karte Hain):</h4>
+                    <table class="w-full mt-2 border-collapse border border-green-300">
+                        <thead>
+                            <tr class="bg-green-100">
+                                <th class="border border-green-300 p-2 text-left">Reagent</th>
+                                <th class="border border-green-300 p-2 text-left">Volume</th>
+                                <th class="border border-green-300 p-2 text-left">Kyun Use Hota Hai</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="border border-green-300 p-2">H₂SO₄ (conc.)</td>
+                                <td class="border border-green-300 p-2">10 ml</td>
+                                <td class="border border-green-300 p-2">Proteins (casein) ko digest/dissolve karta hai → fat release hota hai. Density 1.807-1.812 honi chahiye warna wrong results aayenge.</td>
+                            </tr>
+                            <tr>
+                                <td class="border border-green-300 p-2">Milk Sample</td>
+                                <td class="border border-green-300 p-2">10.75 ml</td>
+                                <td class="border border-green-300 p-2">Standard volume jo butyrometer ki calibration se match karta hai. 10.75 ml isliye kyunki milk ki density ~1.03 hoti hai, toh 10.75 ml ≈ 11.07g sample.</td>
+                            </tr>
+                            <tr>
+                                <td class="border border-green-300 p-2">Amyl Alcohol</td>
+                                <td class="border border-green-300 p-2">1 ml</td>
+                                <td class="border border-green-300 p-2">Surface tension reducer - fat ko cleanly separate karta hai acid se. Iske bina fat column mein dark particles aa jaate hain (charred matter).</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 my-4">
+                    <h4 class="font-bold text-yellow-800">⚠️ 10.75 ml Kyun? (Volume Factor Explanation):</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>Butyrometer ek specific weight ke liye calibrated hai:
+→ 10.75 ml × ~1.03 (milk density) ≈ 11.07 g milk
+
+Gerber butyrometer ki scale ISI ke according:
+- Each small division = 0.1% fat
+- Total scale = 0 to 10% (ya 0 to 8%)
+- Scale directly % fat deta hai FOR 10.75 ml sample
+
+Agar volume change karoge → reading galat hogi!
+
+Temperature Factor:
+- 65°C par fat liquid state mein hota hai
+- Is temperature par fat ka volume consistent hota hai
+- Butyrometer bhi isi temperature ke liye calibrated hai</code></pre>
+                </div>
+
+                <div class="bg-purple-50 border-l-4 border-purple-500 p-4 my-4">
+                    <h4 class="font-bold text-purple-800">📋 UHT Milk Ke Liye FSSAI Standards:</h4>
+                    <table class="w-full mt-2 border-collapse border border-purple-300">
+                        <thead>
+                            <tr class="bg-purple-100">
+                                <th class="border border-purple-300 p-2 text-left">UHT Milk Type</th>
+                                <th class="border border-purple-300 p-2 text-left">Minimum Fat %</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td class="border border-purple-300 p-2">Full Cream</td><td class="border border-purple-300 p-2">≥ 6.0%</td></tr>
+                            <tr><td class="border border-purple-300 p-2">Standardised</td><td class="border border-purple-300 p-2">≥ 4.5%</td></tr>
+                            <tr><td class="border border-purple-300 p-2">Toned</td><td class="border border-purple-300 p-2">≥ 3.0%</td></tr>
+                            <tr><td class="border border-purple-300 p-2">Double Toned</td><td class="border border-purple-300 p-2">≥ 1.5%</td></tr>
+                            <tr><td class="border border-purple-300 p-2">Skimmed</td><td class="border border-purple-300 p-2">≤ 0.5%</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             `
         },
         {
-            title: "Total Solids Ka Determination",
-            purpose: "UHT milk mein total solids determine karne ke liye.",
-            procedure: `<p>Standard gravimetric method follow karein jaise processed milk ke liye described hai.</p>`
+            title: "Total Solids Ka Determination (Gravimetric Method)",
+            purpose: "UHT milk mein total solids (TS) determine karne ke liye - yeh fat + SNF (proteins, lactose, minerals) sab milake hota hai.",
+            reference: "IS 1479 (Part II):1961; IS 12333:1997",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>Known weight ka milk sample leke usse constant temperature par dry karte hain jab tak saara moisture evaporate na ho jaaye. Jo residue bachta hai woh Total Solids hai.</p>
+
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Clean flat-bottom dish ko oven mein 100±2°C par 1 hour rakhein → desiccator mein cool karein → weigh karein = <strong>W₁</strong></li>
+                    <li>Dish mein ~5g UHT milk sample accurately weigh karke daalein → weight note karein = <strong>W₂</strong></li>
+                    <li>Pehle water bath par rakhein jab tak mostly dry na ho jaaye (skin na bane isliye thoda hilate rahein).</li>
+                    <li>Phir oven mein rakhein 100±2°C par 3 hours (ya 98-100°C par 2 hours under partial vacuum).</li>
+                    <li>Desiccator mein cool karein → weigh karein.</li>
+                    <li>Repeat heating (1 hour) → cooling → weighing jab tak constant weight na aa jaaye (difference < 0.5mg) = <strong>W₃</strong></li>
+                </ol>
+
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 my-4">
+                    <h4 class="font-bold text-blue-800">📐 Formula:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>                    (W₃ - W₁)
+% Total Solids = ─────────── × 100
+                    (W₂ - W₁)
+
+Where:
+W₁ = Empty dish ka weight (g)
+W₂ = Dish + milk sample ka weight (g)  
+W₃ = Dish + dried residue ka weight (g)
+
+(W₃ - W₁) = Dried residue ka weight (Total Solids)
+(W₂ - W₁) = Original milk sample ka weight</code></pre>
+                </div>
+
+                <div class="bg-green-50 border-l-4 border-green-500 p-4 my-4">
+                    <h4 class="font-bold text-green-800">🔢 Numerical Example:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>Given:
+W₁ (empty dish) = 35.250 g
+W₂ (dish + milk) = 40.250 g  → Sample weight = 40.250 - 35.250 = 5.000 g
+W₃ (dish + dried residue) = 35.890 g → Residue weight = 35.890 - 35.250 = 0.640 g
+
+Calculation:
+% Total Solids = (0.640 / 5.000) × 100
+% Total Solids = 0.128 × 100
+% Total Solids = 12.80%
+
+% Moisture = 100 - 12.80 = 87.20%</code></pre>
+                </div>
+
+                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 my-4">
+                    <h4 class="font-bold text-yellow-800">📊 Formula Kahan Se Aaya (Derivation):</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>Basic Concept:
+Milk = Water (Moisture) + Solids (Fat + SNF)
+
+Jab hum milk ko dry karte hain:
+→ Water evaporate ho jaata hai
+→ Jo bachta hai = Total Solids
+
+Percentage nikalne ka basic formula:
+% = (Part / Whole) × 100
+
+Yahan:
+Part = Residue weight = W₃ - W₁
+Whole = Sample weight = W₂ - W₁
+
+Isliye:
+% TS = [(W₃ - W₁) / (W₂ - W₁)] × 100
+
+SNF (Solids Not Fat) nikalna ho toh:
+% SNF = % Total Solids - % Fat
+
+Example: TS = 12.80%, Fat = 4.0%
+SNF = 12.80 - 4.0 = 8.80%</code></pre>
+                </div>
+
+                <div class="bg-orange-50 border-l-4 border-orange-500 p-4 my-4">
+                    <h4 class="font-bold text-orange-800">🧮 Quick Method - Lactometer Formula (Richmond's Formula):</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>Agar gravimetric method possible na ho toh approximate formula:
+
+% Total Solids = (0.25 × L) + (1.21 × F) + 0.66
+
+Where:
+L = Lactometer reading (corrected CLR)
+F = Fat % (Gerber method se)
+0.25 = Lactometer correction factor (empirical)
+1.21 = Fat contribution factor (empirical)
+0.66 = Constant (accounts for dissolved salts, etc.)
+
+Yeh factors kahan se aaye:
+- Richmond ne experiments karke derive kiye
+- L ka factor 0.25 isliye kyunki CLR aur SNF ka 
+  relationship approximately linear hai
+- F ka factor 1.21 kyunki fat, TS mein 
+  proportionally zyada contribute karta hai 
+  (density difference ki wajah se)
+- 0.66 constant correction factor hai
+
+Note: UHT milk ke liye gravimetric method preferred 
+hai kyunki UHT processing se density change ho 
+sakti hai.</code></pre>
+                </div>
+
+                <div class="bg-purple-50 border-l-4 border-purple-500 p-4 my-4">
+                    <h4 class="font-bold text-purple-800">📋 FSSAI Standards for UHT Milk Total Solids:</h4>
+                    <table class="w-full mt-2 border-collapse border border-purple-300">
+                        <thead>
+                            <tr class="bg-purple-100">
+                                <th class="border border-purple-300 p-2">Type</th>
+                                <th class="border border-purple-300 p-2">Min TS %</th>
+                                <th class="border border-purple-300 p-2">Min SNF %</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td class="border border-purple-300 p-2">Full Cream</td><td class="border border-purple-300 p-2">14.5</td><td class="border border-purple-300 p-2">8.5</td></tr>
+                            <tr><td class="border border-purple-300 p-2">Toned</td><td class="border border-purple-300 p-2">11.5</td><td class="border border-purple-300 p-2">8.5</td></tr>
+                            <tr><td class="border border-purple-300 p-2">Double Toned</td><td class="border border-purple-300 p-2">10.0</td><td class="border border-purple-300 p-2">8.5</td></tr>
+                            <tr><td class="border border-purple-300 p-2">Skimmed</td><td class="border border-purple-300 p-2">8.7</td><td class="border border-purple-300 p-2">8.7</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            `
         },
         {
             title: "Protein Ka Determination (Kjeldahl Method)",
-            purpose: "UHT milk mein protein content determine karne ke liye.",
-            procedure: `<p>~5g sample lein aur standard Kjeldahl procedure follow karein.</p>
-            <pre><code>% Protein = % Total Nitrogen × 6.38</code></pre>`
-        },
-        {
-            title: "Titratable Acidity",
-            purpose: "UHT milk ki acidity measure karne ke liye.",
-            procedure: `
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                    <li>10ml sample ek dish mein lein.</li>
-                    <li>Phenolphthalein indicator daalein.</li>
-                    <li>0.1N NaOH se titrate karein.</li>
-                </ol>
-                <pre><code>% Acidity (as lactic acid) = (9 × V × N) / W</code></pre>
-            `
-        },
-        {
-            title: "Turbidity Test (Sterilization Check)",
-            purpose: "UHT processing ki adequacy check karne ke liye. Agar whey proteins completely denature nahi hue toh turbidity dikhegi.",
-            reference: "FSSAI Manual; IS 4883",
+            purpose: "UHT milk mein protein content determine karne ke liye. Yeh method nitrogen measure karta hai aur usse protein mein convert karta hai.",
+            reference: "IS 1479 (Part II):1961; AOAC 991.20",
             procedure: `
                 <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
-                <p>Properly sterilized/UHT treated milk mein saare whey proteins denature ho chuke hote hain. Agar ammonium sulfate se precipitation ke baad bhi supernatant clear rahe toh sterilization proper hua hai.</p>
-                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <p>Milk sample ko concentrated H₂SO₄ ke saath digest karte hain → saara organic nitrogen (NH₄)₂SO₄ mein convert hota hai → NaOH se NH₃ release hota hai → NH₃ ko boric acid mein absorb karte hain → HCl se titrate karte hain → Nitrogen calculate karte hain → Factor 6.38 se multiply karke Protein milta hai.</p>
+
+                <h4 class="font-semibold mt-4 mb-2">3 Steps of Kjeldahl:</h4>
+
+                <h5 class="font-semibold mt-3 mb-1">Step 1: DIGESTION</h5>
                 <ol class="list-decimal list-outside pl-5 space-y-2">
-                    <li>20ml UHT milk ko test tube mein lein.</li>
-                    <li>5ml saturated ammonium sulfate solution daalein.</li>
-                    <li>Mix karein aur filter karein.</li>
-                    <li>Filtrate ko 100°C par 5 minutes ke liye boil karein.</li>
-                    <li>Observe karein: <strong>Clear filtrate</strong> = Proper UHT treatment. <strong>Turbid/cloudy filtrate</strong> = Inadequate treatment (undenatured whey proteins present).</li>
+                    <li>~5g UHT milk sample accurately weigh karein Kjeldahl flask mein.</li>
+                    <li>Add: 0.7g HgO (catalyst) + 15g K₂SO₄ (boiling point raiser) + 25ml conc. H₂SO₄</li>
+                    <li>Gently heat karein pehle (frothing se bachne ke liye), phir strongly heat karein.</li>
+                    <li>Jab tak solution clear/pale green na ho jaaye tab tak heat karein (2-3 hours).</li>
+                    <li>Cool karein.</li>
                 </ol>
+
+                <h5 class="font-semibold mt-3 mb-1">Step 2: DISTILLATION</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Cooled digest mein ~200ml distilled water daalein.</li>
+                    <li>25ml 4% boric acid solution receiving flask mein lein + 2-3 drops mixed indicator (methyl red + bromocresol green).</li>
+                    <li>Kjeldahl flask mein 50ml 40% NaOH daalein (excess mein).</li>
+                    <li>Immediately connect karein distillation apparatus se.</li>
+                    <li>Distill karein jab tak ~150ml distillate collect na ho jaaye boric acid mein.</li>
+                    <li>Boric acid solution ka colour pink se green ho jaayega (NH₃ absorb hone par).</li>
+                </ol>
+
+                <h5 class="font-semibold mt-3 mb-1">Step 3: TITRATION</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Boric acid + absorbed NH₃ ko 0.1N HCl (ya 0.1N H₂SO₄) se titrate karein.</li>
+                    <li>End point: Green se wapas pink colour (original colour).</li>
+                    <li>Volume of HCl used note karein = V ml.</li>
+                    <li>Blank bhi run karein (bina sample ke) = V₀ ml.</li>
+                </ol>
+
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 my-4">
+                    <h4 class="font-bold text-blue-800">📐 Formulas:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>STEP 1 - Nitrogen Calculate Karo:
+
+                    (V - V₀) × N × 14.007
+% Nitrogen = ──────────────────────── × 100
+                      W × 1000
+
+OR Simplified:
+
+                    (V - V₀) × N × 1.4007
+% Nitrogen = ────────────────────────
+                          W
+
+Where:
+V  = Volume of HCl used for sample (ml)
+V₀ = Volume of HCl used for blank (ml)
+N  = Normality of HCl (usually 0.1N)
+W  = Weight of milk sample taken (g)
+14.007 = Atomic weight of Nitrogen
+1000 = ml to L conversion
+× 100 = percentage ke liye
+
+1.4007 = (14.007/1000) × 100 = simplified factor
+
+
+STEP 2 - Protein Calculate Karo:
+
+% Protein = % Nitrogen × 6.38
+
+Final Combined Formula:
+
+                    (V - V₀) × N × 1.4007 × 6.38
+% Protein = ──────────────────────────────
+                              W
+
+                    (V - V₀) × N × 8.9365
+% Protein = ──────────────────────────
+                          W</code></pre>
+                </div>
+
+                <div class="bg-green-50 border-l-4 border-green-500 p-4 my-4">
+                    <h4 class="font-bold text-green-800">🔬 Factor 6.38 Kahan Se Aaya? (Most Important!):</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>MILK PROTEIN mein Nitrogen ka percentage:
+
+Milk ka major protein = Casein
+Casein mein Nitrogen = approximately 15.67%
+
+Conversion Factor = 100 / % Nitrogen in protein
+                   = 100 / 15.67
+                   = 6.38
+
+Matlab: Agar 1g Nitrogen mila →
+        toh protein = 1 × 6.38 = 6.38g
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Different foods ke liye DIFFERENT factors hain:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Food Item          | N%      | Factor
+───────────────────|─────────|────────
+Milk & Dairy       | 15.67%  | 6.38
+General/Meat/Fish  | 16.00%  | 6.25
+Wheat/Flour        | 17.54%  | 5.70
+Rice               | 16.78%  | 5.95
+Soybean            | 17.54%  | 5.71
+Gelatin            | 18.00%  | 5.55
+Nuts               | 18.52%  | 5.40
+
+Har protein mein nitrogen ka % different hota hai 
+kyunki amino acid composition alag hota hai.
+
+Milk mein specifically 6.38 isliye use hota hai kyunki:
+- Casein (80% of milk protein) → N = 15.63%
+- Whey proteins (20%) → N = 15.77%  
+- Weighted average ≈ 15.67%
+- 100/15.67 ≈ 6.38</code></pre>
+                </div>
+
+                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 my-4">
+                    <h4 class="font-bold text-yellow-800">🔢 Numerical Example:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>Given:
+Sample weight (W) = 5.000 g UHT milk
+HCl Normality (N) = 0.1N
+HCl for sample (V) = 23.5 ml
+HCl for blank (V₀) = 0.2 ml
+
+Step 1: % Nitrogen
+= (23.5 - 0.2) × 0.1 × 1.4007 / 5.000
+= 23.3 × 0.1 × 1.4007 / 5.000
+= 23.3 × 0.14007 / 5.000  
+= 3.2636 / 5.000
+= 0.6527%
+
+Step 2: % Protein
+= 0.6527 × 6.38
+= 4.164%
+≈ 4.16% Protein
+
+(UHT Toned milk mein typically 3.0-3.2% protein 
+hota hai, Full cream mein ~3.5%)</code></pre>
+                </div>
+
+                <div class="bg-red-50 border-l-4 border-red-500 p-4 my-4">
+                    <h4 class="font-bold text-red-800">⚗️ Chemical Reactions (Kya ho raha hai):</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>DIGESTION:
+Organic N + H₂SO₄ ──catalyst──→ (NH₄)₂SO₄ + CO₂ + H₂O
+(protein)    (conc.)  (heat)    (ammonium sulfate)
+
+K₂SO₄ ka role: Boiling point badhata hai 
+(from 337°C to ~400°C) → faster digestion
+
+HgO/CuSO₄ ka role: Catalyst - reaction speed badhata hai
+
+DISTILLATION:
+(NH₄)₂SO₄ + 2NaOH → Na₂SO₄ + 2NH₃↑ + 2H₂O
+                              (ammonia gas)
+
+NH₃ + H₃BO₃ → NH₄H₂BO₃
+(ammonia) (boric acid) (ammonium borate)
+
+TITRATION:
+NH₄H₂BO₃ + HCl → NH₄Cl + H₃BO₃
+(amm. borate) (std acid) (amm. chloride) (boric acid restored)
+
+1 ml of 0.1N HCl ≡ 0.0014007 g Nitrogen
+Kyunki: N × Eq.Wt = 0.1 × 14.007/1000 = 0.0014007g</code></pre>
+                </div>
+
+                <div class="bg-purple-50 border-l-4 border-purple-500 p-4 my-4">
+                    <h4 class="font-bold text-purple-800">📊 14.007 Factor Explanation:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>14.007 = Atomic Mass of Nitrogen
+
+Equivalent weight of N in this reaction = 14.007
+(kyunki N ki valency = 1 in NH₃)
+
+Meq concept se:
+meq of HCl used = meq of NH₃ = meq of N
+
+V(ml) × N(HCl) = meq of N
+
+Weight of N = meq × Eq.wt / 1000
+            = V × N × 14.007 / 1000 (in grams)
+
+% N = (weight of N / weight of sample) × 100
+    = (V × N × 14.007) / (W × 1000) × 100
+    = (V × N × 14.007 × 100) / (W × 1000)
+    = (V × N × 1.4007) / W</code></pre>
+                </div>
             `
         },
         {
-            title: "Sterility Test (Microbiological)",
-            purpose: "UHT milk ki commercial sterility confirm karne ke liye.",
-            reference: "IS 4883:1980; BIS Standards",
+            title: "Titratable Acidity Ka Determination",
+            purpose: "UHT milk ki acidity measure karne ke liye. Freshness aur quality indicator hai. UHT milk ki acidity low honi chahiye kyunki yeh sterile product hai.",
+            reference: "IS 1479 (Part I):1961; FSSAI Manual Method",
             procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>Milk mein naturally lactic acid hota hai (casein, phosphates, CO₂ se bhi acidity aati hai). NaOH se titrate karke total titratable acidity measure karte hain. Phenolphthalein indicator use hota hai jo acid mein colourless aur alkali mein pink hota hai.</p>
+
                 <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
                 <ol class="list-decimal list-outside pl-5 space-y-2">
-                    <li>Aseptic conditions mein UHT milk ke pack se sample collect karein.</li>
-                    <li>2 sets mein sample ko sterile tubes/bottles mein transfer karein.</li>
-                    <li>Set 1: 30°C par 15 days incubate karein (mesophilic organisms ke liye).</li>
-                    <li>Set 2: 55°C par 7 days incubate karein (thermophilic organisms ke liye).</li>
-                    <li>Incubation ke baad check karein: pH change, clotting, gas production, off-odour, colony count.</li>
-                    <li>Agar koi significant change nahi hai = <strong>Commercially sterile</strong>.</li>
+                    <li>Pipette se 10ml (ya accurately weigh ~10g) UHT milk sample ek clean conical flask/porcelain dish mein lein.</li>
+                    <li>10ml distilled water daalein (dilution for better endpoint visibility, optional but recommended).</li>
+                    <li>0.5ml (5-6 drops) phenolphthalein indicator (1% in ethanol) daalein.</li>
+                    <li>Burette se 0.1N NaOH solution dheere dheere daalein, continuously mix karte rahein.</li>
+                    <li>Jab faint pink colour aaye jo 30 seconds tak rahe = END POINT.</li>
+                    <li>NaOH ka volume note karein = V ml.</li>
                 </ol>
+
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 my-4">
+                    <h4 class="font-bold text-blue-800">📐 Formula:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>                              V × N × 9
+% Acidity (as Lactic Acid) = ──────────
+                                  W
+
+OR (agar volume mein liya hai):
+
+                              V × N × 0.09
+% Acidity (as Lactic Acid) = ──────────── × 100
+                                  V_sample
+
+Where:
+V = Volume of NaOH used (ml)
+N = Normality of NaOH (0.1N)
+W = Weight of milk sample (g)
+9 = Equivalent weight factor of Lactic Acid (simplified)
+V_sample = Volume of milk sample (ml)</code></pre>
+                </div>
+
+                <div class="bg-green-50 border-l-4 border-green-500 p-4 my-4">
+                    <h4 class="font-bold text-green-800">🔬 Factor "9" Kahan Se Aaya? (DETAILED DERIVATION):</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Step-by-Step Derivation of Factor 9:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Lactic Acid = CH₃CHOHCOOH
+Molecular Weight = C₃H₆O₃ = (3×12) + (6×1) + (3×16)
+                 = 36 + 6 + 48 = 90 g/mol
+
+Lactic acid ek monobasic acid hai (1 replaceable H⁺)
+Equivalent Weight = Molecular Weight / Basicity
+                  = 90 / 1 = 90
+
+Ab basic titration formula:
+meq of acid = meq of base
+Weight of acid = meq × Eq.Wt / 1000
+
+Weight of Lactic Acid = V(NaOH) × N(NaOH) × 90/1000
+
+% Acidity = (Weight of Lactic acid / Weight of sample) × 100
+
+% Acidity = [V × N × 90/1000] / W × 100
+
+% Acidity = [V × N × 90 × 100] / [W × 1000]
+
+% Acidity = (V × N × 9) / W
+
+━━━━━━━━━━━━━━━━━━━━━━━
+9 = 90 × 100 / 1000 = 9
+━━━━━━━━━━━━━━━━━━━━━━━
+
+90 → Equivalent weight of lactic acid
+100 → Percentage ke liye multiply
+1000 → meq to eq conversion (ml × N = meq)
+
+In teeno ka combined simplified factor = 9</code></pre>
+                </div>
+
+                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 my-4">
+                    <h4 class="font-bold text-yellow-800">🔢 Numerical Example:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>Given:
+Sample weight (W) = 10 g UHT milk
+NaOH Normality (N) = 0.1N
+NaOH Volume used (V) = 1.5 ml
+
+Calculation:
+% Acidity = (V × N × 9) / W
+          = (1.5 × 0.1 × 9) / 10
+          = 1.35 / 10
+          = 0.135% Lactic Acid
+
+UHT Milk standard: ≤ 0.15% (as lactic acid)
+Result: 0.135% → PASS ✅
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+% Acidity ko °Dornic mein convert:
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+1°D = 0.01% lactic acid
+°Dornic = % Acidity × 100
+        = 0.135 × 100 = 13.5°D
+
+Also:
+°SH (Soxhlet-Henkel) = °D / 2.25
+                      = 13.5 / 2.25 = 6.0°SH</code></pre>
+                </div>
+
+                <div class="bg-red-50 border-l-4 border-red-500 p-4 my-4">
+                    <h4 class="font-bold text-red-800">⚗️ Chemical Reaction:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>CH₃CHOHCOOH + NaOH → CH₃CHOHCOONa + H₂O
+(Lactic Acid)  (Base)  (Sodium Lactate)  (Water)
+
+1 mole acid reacts with 1 mole NaOH
+90g acid ≡ 40g NaOH
+
+Phenolphthalein:
+- pH < 8.2 → Colourless (acidic side)
+- pH 8.2-10 → Pink (alkaline side)
+- End point at pH ≈ 8.3</code></pre>
+                </div>
+
+                <div class="bg-orange-50 border-l-4 border-orange-500 p-4 my-4">
+                    <h4 class="font-bold text-orange-800">📊 Agar Different Acid Mein Express Karna Ho:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>Different acids ke liye factor change hoga:
+
+Acid              | Mol.Wt | Eq.Wt | Factor
+──────────────────|────────|───────|────────
+Lactic Acid       | 90     | 90    | 9.0
+Citric Acid       | 192    | 64    | 6.4
+Acetic Acid       | 60     | 60    | 6.0
+Sulphuric Acid    | 98     | 49    | 4.9
+Oleic Acid        | 282    | 282   | 28.2
+
+Factor = Eq.Wt × 100 / 1000 = Eq.Wt / 10
+
+Milk mein hamesha LACTIC ACID mein express karte hain
+isliye factor 9 use hota hai (90/10 = 9)</code></pre>
+                </div>
+
+                <div class="bg-purple-50 border-l-4 border-purple-500 p-4 my-4">
+                    <h4 class="font-bold text-purple-800">📋 UHT Milk Acidity Standards:</h4>
+                    <table class="w-full mt-2 border-collapse border border-purple-300">
+                        <thead>
+                            <tr class="bg-purple-100">
+                                <th class="border border-purple-300 p-2">Parameter</th>
+                                <th class="border border-purple-300 p-2">Standard Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td class="border border-purple-300 p-2">Max Acidity (as lactic acid)</td><td class="border border-purple-300 p-2">≤ 0.15%</td></tr>
+                            <tr><td class="border border-purple-300 p-2">In °Dornic</td><td class="border border-purple-300 p-2">≤ 15°D</td></tr>
+                            <tr><td class="border border-purple-300 p-2">Normal fresh UHT milk</td><td class="border border-purple-300 p-2">0.10 - 0.14%</td></tr>
+                            <tr><td class="border border-purple-300 p-2">If acidity increases on storage</td><td class="border border-purple-300 p-2">Possible contamination!</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            `
+        },
+        {
+            title: "Turbidity Test (Sterilization Adequacy Check)",
+            purpose: "UHT processing ki adequacy check karne ke liye. Agar whey proteins completely denature nahi hue toh turbidity dikhegi - matlab sterilization incomplete hai.",
+            reference: "FSSAI Manual; IS 4883:1980; Aschaffenburg's Turbidity Test",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>Properly sterilized/UHT treated milk mein saare whey proteins (mainly β-lactoglobulin aur α-lactalbumin) heat se denature ho chuke hote hain. Ammonium sulfate se casein precipitate hota hai, aur agar filtrate ko boil karein:</p>
+                <ul class="list-disc pl-5 my-2">
+                    <li><strong>Clear filtrate</strong> = Saare whey proteins denature ho gaye = Proper UHT ✅</li>
+                    <li><strong>Turbid/cloudy filtrate</strong> = Undenatured whey proteins abhi present hain = Inadequate treatment ❌</li>
+                </ul>
+
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>20ml UHT milk ek test tube/beaker mein lein.</li>
+                    <li>5ml saturated ammonium sulfate solution daalein [(NH₄)₂SO₄ saturated solution].</li>
+                    <li>Achhe se mix karein.</li>
+                    <li>Whatman No. 42 filter paper se filter karein.</li>
+                    <li>Filtrate ko boiling water bath mein 5 minutes ke liye rakhein (ya directly boil karein).</li>
+                    <li>Cool karein aur observe karein.</li>
+                </ol>
+
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 my-4">
+                    <h4 class="font-bold text-blue-800">📐 Yeh Test Qualitative Hai - Koi Mathematical Formula Nahi:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>Result Interpretation:
+
+┌─────────────────────────────────────────────┐
+│  OBSERVATION        │  INFERENCE             │
+├─────────────────────┼────────────────────────┤
+│  Clear filtrate     │  PASS - Proper UHT     │
+│  (transparent)      │  Sterilization OK ✅    │
+├─────────────────────┼────────────────────────┤
+│  Slightly turbid    │  BORDERLINE - Marginal │
+│                     │  treatment              │
+├─────────────────────┼────────────────────────┤
+│  Turbid/cloudy      │  FAIL - Inadequate     │
+│  (white precipitate)│  UHT treatment ❌       │
+└─────────────────────┴────────────────────────┘</code></pre>
+                </div>
+
+                <div class="bg-green-50 border-l-4 border-green-500 p-4 my-4">
+                    <h4 class="font-bold text-green-800">🔬 Science Behind This Test:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>Milk Proteins:
+├── Casein (~80%) → Heat resistant (stable upto 140°C)
+│   └── Precipitated by (NH₄)₂SO₄ → goes to filter paper
+│
+└── Whey Proteins (~20%) → Heat SENSITIVE
+    ├── β-Lactoglobulin (denaturation starts at 70°C)
+    ├── α-Lactalbumin (denaturation starts at 65°C)
+    └── BSA, Immunoglobulins, etc.
+
+UHT Treatment: 135-150°C for 2-5 seconds
+
+What happens:
+1. (NH₄)₂SO₄ precipitates CASEIN → filter par ruk jaata hai
+2. Filtrate mein sirf WHEY PROTEINS hone chahiye
+
+IF PROPER UHT:
+→ Whey proteins already denatured + coagulated 
+   during UHT processing
+→ They got precipitated/aggregated with casein
+→ Filtrate mein kuch nahi bachta
+→ Boiling par koi turbidity nahi → CLEAR ✅
+
+IF IMPROPER UHT:
+→ Whey proteins still NATIVE (undenatured)
+→ They pass through filter (soluble)
+→ Jab filtrate boil karte hain → they denature NOW
+→ Denatured proteins precipitate → TURBID ❌
+
+Saturated (NH₄)₂SO₄ Solution Preparation:
+→ ~76.7g (NH₄)₂SO₄ in 100ml water at 20°C
+→ Ya 100g in 100ml at room temp (excess salt settle hoga)</code></pre>
+                </div>
+
+                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 my-4">
+                    <h4 class="font-bold text-yellow-800">📊 Quantitative Version (Optional - Turbidity Index):</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>Agar spectrophotometer available ho toh:
+
+1. Filtrate ka absorbance measure karein at 420nm 
+   (boiling ke baad)
+2. Turbidity Index = Absorbance reading
+
+Interpretation:
+Absorbance < 0.01  → Properly sterilized
+Absorbance 0.01-0.05 → Marginal
+Absorbance > 0.05  → Inadequately treated
+
+Yeh quantitative measurement IS 4883 mein 
+described hai for sterility assessment.
+
+Whey Protein Nitrogen Index (WPNI):
+WPNI = mg undenatured whey protein N per g powder
+- UHT milk mein WPNI bahut low hona chahiye
+- High WPNI = Under-processing</code></pre>
+                </div>
+            `
+        },
+        {
+            title: "Sterility Test (Microbiological - Commercial Sterility)",
+            purpose: "UHT milk ki commercial sterility confirm karne ke liye. Yeh check karta hai ki product mein koi viable microorganism present hai ya nahi jo normal storage conditions mein grow kar sake.",
+            reference: "IS 4883:1980; BIS Standards; FSSAI Microbiological Standards",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>UHT milk commercially sterile honi chahiye - matlab koi microorganism present nahi hona chahiye jo normal storage conditions mein grow kar sake. Yeh test sample ko different temperatures par incubate karke check karta hai ki microbial growth hoti hai ya nahi.</p>
+
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Aseptic conditions mein (laminar air flow hood mein) UHT milk pack se sample collect karein.</li>
+                    <li>Pack ki surface ko 70% ethanol se sanitize karein before opening.</li>
+                    <li>2 sets mein sample ko sterile tubes/bottles mein transfer karein.</li>
+                    <li><strong>Set 1:</strong> 30±1°C par 15 days incubate karein (mesophilic organisms ke liye).</li>
+                    <li><strong>Set 2:</strong> 55±1°C par 7 days incubate karein (thermophilic organisms ke liye).</li>
+                    <li>Incubation ke baad following checks karein:</li>
+                </ol>
+
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 my-4">
+                    <h4 class="font-bold text-blue-800">📐 Assessment Parameters (Koi Mathematical Formula Nahi - Observational):</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>Check karein incubation ke BAAD:
+
+┌──────────────────────────────────────────────────┐
+│  PARAMETER        │ STERILE (OK) │ NOT STERILE   │
+├───────────────────┼──────────────┼───────────────┤
+│  pH change        │ < 0.5 unit   │ > 0.5 unit    │
+│  (from original)  │ change       │ change        │
+├───────────────────┼──────────────┼───────────────┤
+│  Appearance       │ Normal,      │ Curdled,      │
+│                   │ homogeneous  │ separated     │
+├───────────────────┼──────────────┼───────────────┤
+│  Gas production   │ No gas       │ Gas bubbles   │
+│                   │              │ visible       │
+├───────────────────┼──────────────┼───────────────┤
+│  Odour           │ Normal       │ Off-odour,    │
+│                   │              │ sour, putrid  │
+├───────────────────┼──────────────┼───────────────┤
+│  Clot on boiling  │ No clot      │ Clot forms    │
+│                   │              │               │
+├───────────────────┼──────────────┼───────────────┤
+│  Colony count     │ No colonies  │ Colonies      │
+│  (if plated)      │              │ present       │
+└──────────────────────────────────────────────────┘
+
+VERDICT:
+✅ All parameters normal = COMMERCIALLY STERILE
+❌ Any abnormality = NOT STERILE → Reject batch</code></pre>
+                </div>
+
+                <div class="bg-green-50 border-l-4 border-green-500 p-4 my-4">
+                    <h4 class="font-bold text-green-800">🔬 Science Behind Incubation Temperatures:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>WHY TWO TEMPERATURES?
+
+30°C (15 days) - Mesophilic Organisms:
+├── Grow at moderate temperatures (20-45°C)
+├── Examples: Bacillus subtilis, B. cereus, 
+│   Staphylococcus, Enterobacteriaceae
+├── 15 days isliye kyunki inhe grow hone mein 
+│   time lagta hai (especially agar kam numbers mein hain)
+└── Agar post-process contamination hua → yahan detect hoga
+
+55°C (7 days) - Thermophilic Organisms:
+├── Grow at high temperatures (45-65°C)
+├── Examples: Bacillus stearothermophilus, 
+│   Geobacillus, Clostridium thermosaccharolyticum
+├── 7 days sufficient hai kyunki thermophiles 
+│   fast grow karte hain at their optimal temp
+└── Yeh organisms heat-resistant spores banate hain
+    jo UHT treatment survive kar sakte hain
+
+UHT Process Parameters:
+├── Temperature: 135-150°C
+├── Time: 2-5 seconds  
+├── F₀ value: ≥ 3 minutes (equivalent)
+└── Target: Eliminate ALL vegetative cells + 
+    most spores (12-log reduction of C. botulinum)</code></pre>
+                </div>
+
+                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 my-4">
+                    <h4 class="font-bold text-yellow-800">📊 pH Measurement Formula (for sterility assessment):</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>pH Change Calculation:
+
+ΔpH = pH(after incubation) - pH(before incubation)
+
+Example:
+pH before incubation = 6.60
+pH after 30°C/15 days = 6.45
+ΔpH = 6.45 - 6.60 = -0.15
+
+|ΔpH| = 0.15 → Less than 0.5 → PASS ✅
+
+If pH after = 5.80
+ΔpH = 5.80 - 6.60 = -0.80
+|ΔpH| = 0.80 → Greater than 0.5 → FAIL ❌
+(Acid-producing bacteria have grown)
+
+Normal UHT Milk pH: 6.4 - 6.8
+Spoiled UHT Milk pH: < 6.0 (acid) or > 7.0 (alkaline)
+
+Colony Count (if plating done):
+- Pour plate method with Plate Count Agar (PCA)
+- Incubate at 30°C/72 hours AND 55°C/48 hours
+- Count colonies
+
+Standard: 0 CFU/ml for commercial sterility
+(Some standards allow < 10 CFU/ml)</code></pre>
+                </div>
+
+                <div class="bg-red-50 border-l-4 border-red-500 p-4 my-4">
+                    <h4 class="font-bold text-red-800">🔥 F₀ Value (Thermal Process Lethality):</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>F₀ Value kya hai?
+→ Equivalent processing time at 121.1°C 
+  (reference temperature)
+→ Z value = 10°C (for C. botulinum)
+
+Formula:
+F₀ = Δt × Σ 10^((T-121.1)/z)
+
+Where:
+Δt = time interval (minutes)
+T = actual temperature (°C) 
+z = temperature sensitivity factor (10°C)
+
+UHT Example:
+T = 140°C, time = 4 seconds = 0.0667 min
+
+F₀ = 0.0667 × 10^((140-121.1)/10)
+   = 0.0667 × 10^(18.9/10)
+   = 0.0667 × 10^1.89
+   = 0.0667 × 77.62
+   = 5.18 minutes
+
+Required F₀ ≥ 3 minutes (12D of C. botulinum)
+Achieved F₀ = 5.18 → Adequate processing ✅
+
+D-value concept:
+D₁₂₁.₁°C for C. botulinum = 0.21 min
+12D process = 12 × 0.21 = 2.52 min
+Safety margin included → F₀ ≥ 3 min</code></pre>
+                </div>
             `
         },
         {
             title: "Sedimentation Test",
-            purpose: "UHT milk mein sedimentation/settling detect karne ke liye, storage stability check karta hai.",
+            purpose: "UHT milk mein sedimentation/settling detect karne ke liye. Storage stability check karta hai - protein destabilization ya mineral precipitation detect hota hai.",
+            reference: "IS 4883:1980; IDF Standard",
             procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>UHT processing ke dauran high temperature se proteins denature hote hain aur calcium phosphate insoluble ho sakta hai. Storage mein yeh particles settle ho sakte hain as sediment. Excessive sedimentation poor product quality indicate karta hai.</p>
+
                 <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
                 <ol class="list-decimal list-outside pl-5 space-y-2">
-                    <li>UHT milk ke pack ko undisturbed rakhein specified storage conditions par.</li>
-                    <li>Pack kholein aur dhire se content nikaalein.</li>
-                    <li>Bottom mein koi sediment/deposit check karein.</li>
-                    <li>Sediment ko weigh karein dry weight basis par.</li>
+                    <li>UHT milk ke pack ko undisturbed rakhein specified storage conditions par (25°C ya 37°C accelerated storage).</li>
+                    <li>Specified time ke baad (30, 60, 90, 120 days) pack kholein.</li>
+                    <li>Dheere se content nikaalein bina bottom ko disturb kiye.</li>
+                    <li>Bottom mein remaining sediment ko distilled water se carefully wash karein.</li>
+                    <li>Sediment ko pre-weighed filter paper/dish par collect karein.</li>
+                    <li>102±2°C par dry karein until constant weight.</li>
+                    <li>Weigh karein aur sediment calculate karein.</li>
                 </ol>
+
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 my-4">
+                    <h4 class="font-bold text-blue-800">📐 Formula:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>METHOD 1: Weight Basis (Simple)
+
+                        (W₂ - W₁)
+Sediment (mg/L) = ────────────── × 1000 × 1000
+                      V_sample
+
+OR
+
+                    (W₂ - W₁)
+Sediment (mg/L) = ────────── × 10⁶
+                    V_sample
+
+Where:
+W₁ = Weight of empty dry filter/dish (g)
+W₂ = Weight of filter/dish + dried sediment (g)
+V_sample = Volume of milk in pack (ml)
+
+(W₂ - W₁) = Weight of sediment (g)
+× 1000 = g to mg conversion
+× 1000 = ml to L conversion
+
+
+METHOD 2: Percentage Basis
+
+                    (W₂ - W₁)
+% Sediment = ──────────── × 100
+              Total weight 
+               of milk in pack
+
+Where:
+Total weight ≈ Volume × density ≈ V × 1.03</code></pre>
+                </div>
+
+                <div class="bg-green-50 border-l-4 border-green-500 p-4 my-4">
+                    <h4 class="font-bold text-green-800">🔢 Numerical Example:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>Given:
+W₁ (empty dish) = 25.3000 g
+W₂ (dish + dried sediment) = 25.3045 g
+Volume of UHT milk in pack = 200 ml
+
+Calculation:
+Sediment weight = 25.3045 - 25.3000 = 0.0045 g = 4.5 mg
+
+Sediment (mg/L) = (0.0045 × 10⁶) / 200
+                = 4500 / 200
+                = 22.5 mg/L
+
+OR: = (4.5 mg / 200 ml) × 1000 ml/L
+    = 22.5 mg/L
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+Standards:
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+Acceptable: < 50 mg/L (0.005%)
+Borderline: 50-100 mg/L
+Unacceptable: > 100 mg/L
+
+Result: 22.5 mg/L → ACCEPTABLE ✅</code></pre>
+                </div>
+
+                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 my-4">
+                    <h4 class="font-bold text-yellow-800">📊 Sedimentation Score Method (Visual):</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>Visual Scoring System (Alternative):
+
+Score 0: No visible sediment → Excellent ✅
+Score 1: Thin film, easily dispersible → Good ✅
+Score 2: Definite sediment layer, dispersible → Fair ⚠️
+Score 3: Thick layer, hard to disperse → Poor ❌
+Score 4: Very thick, compact sediment → Very Poor ❌
+
+Stokes' Law (Settling rate of particles):
+
+v = (2r²(ρp - ρf)g) / (9η)
+
+Where:
+v = settling velocity (m/s)
+r = particle radius (m)
+ρp = particle density (kg/m³)
+ρf = fluid density (kg/m³)
+g = gravitational acceleration (9.81 m/s²)
+η = fluid viscosity (Pa·s)
+
+Yeh formula explain karta hai KI:
+- Bade particles faster settle hote hain (r² term)
+- Dense particles faster settle hote hain (ρp - ρf)
+- Viscous milk mein slow settling hoti hai (η)
+
+UHT processing conditions optimize karne mein
+yeh understanding help karti hai:
+- Smaller protein aggregates → less sedimentation
+- Proper homogenization → smaller fat globules
+- Optimal heat treatment → controlled denaturation</code></pre>
+                </div>
+
+                <div class="bg-orange-50 border-l-4 border-orange-500 p-4 my-4">
+                    <h4 class="font-bold text-orange-800">🔬 Causes of Sedimentation in UHT Milk:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>Sediment Composition & Causes:
+
+1. PROTEIN SEDIMENT:
+   - κ-casein dissociation at high temp
+   - Whey protein-casein complexes
+   - Maillard reaction products
+   Factor: Higher temp → More protein sediment
+
+2. MINERAL SEDIMENT:
+   - Calcium phosphate (Ca₃(PO₄)₂) precipitation
+   - At high temp, Ca²⁺ + PO₄³⁻ → insoluble salt
+   - Appears as white gritty sediment
+   
+3. FAT SEPARATION (Creaming):
+   - Not exactly sedimentation (fat rises UP)
+   - But indicates poor homogenization
+   - Homogenization pressure should be 200-250 bar
+
+Prevention:
+├── Proper forewarming (72°C/15s before UHT)
+├── Optimal UHT temperature (137-140°C)
+├── Adequate homogenization (downstream preferred)
+├── pH adjustment (if needed, pH 6.65-6.70)
+└── Addition of stabilizers (Na₃PO₄, Na₃C₆H₅O₇)
+    as permitted by FSSAI</code></pre>
+                </div>
+
+                <div class="bg-purple-50 border-l-4 border-purple-500 p-4 my-4">
+                    <h4 class="font-bold text-purple-800">📋 Accelerated Storage Test:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>Shelf Life Prediction:
+
+Real-time storage: 25°C for 6 months (180 days)
+Accelerated test: 37°C for 30-45 days
+
+Q₁₀ Rule:
+- Rate doubles for every 10°C increase
+- 37°C vs 25°C = 12°C difference
+- Acceleration factor ≈ 2^(12/10) ≈ 2.3
+
+Matlab:
+30 days at 37°C ≈ 30 × 2.3 ≈ 69 days at 25°C
+45 days at 37°C ≈ 45 × 2.3 ≈ 103 days at 25°C
+
+Sedimentation ko har time point par measure 
+karke trend plot karte hain:
+
+Time (days) | Sediment (mg/L) | Status
+──────────--|─────────────────|──────
+0           | 0               | OK
+30          | 10              | OK
+60          | 18              | OK  
+90          | 30              | OK
+120         | 45              | OK
+150         | 70              | Borderline
+180         | 110             | Fail
+
+Shelf life = last acceptable time point = 120 days</code></pre>
+                </div>
+            `
+        },
+        // ==================== NEW TESTS ADDED BELOW ====================
+        {
+            title: "Ash Content Ka Determination (Mineral Content)",
+            purpose: "UHT milk mein total mineral/ash content determine karne ke liye. Yeh total inorganic matter (Ca, P, K, Na, Mg, Cl etc.) ka measure hai.",
+            reference: "IS 1479 (Part II):1961; AOAC 945.46",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>Milk sample ko high temperature (550°C) par muffle furnace mein ignite karte hain jab tak saara organic matter (fat, protein, lactose) jal kar khatam na ho jaaye. Jo white/grey residue bachta hai woh ASH hai — yani total minerals.</p>
+
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Silica/porcelain crucible ko muffle furnace mein 550°C par 1 hour rakhein → desiccator mein cool karein → weigh karein = <strong>W₁</strong></li>
+                    <li>Crucible mein ~5g UHT milk sample accurately weigh karke daalein = <strong>W₂</strong></li>
+                    <li>Pehle water bath par evaporate karein (moisture hataane ke liye).</li>
+                    <li>Phir low flame par (hot plate/burner) char karein jab tak smoking band na ho jaaye (carbonization).</li>
+                    <li>Muffle furnace mein rakhein: 550±20°C par 4-6 hours (ya overnight) jab tak ash white/light grey na ho jaaye.</li>
+                    <li>Agar ash dark ho toh thoda distilled water daalein → re-dry → re-ignite at 550°C.</li>
+                    <li>Furnace off karein → ~200°C par aane do → desiccator mein transfer → cool karein → weigh = <strong>W₃</strong></li>
+                    <li>Repeat ignition (30 min) → cool → weigh until constant weight.</li>
+                </ol>
+
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 my-4">
+                    <h4 class="font-bold text-blue-800">📐 Formula:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>                (W₃ - W₁)
+% Ash = ─────────── × 100
+                (W₂ - W₁)
+
+Where:
+W₁ = Empty crucible ka weight (g)
+W₂ = Crucible + milk sample ka weight (g)
+W₃ = Crucible + ash ka weight (g)
+
+(W₃ - W₁) = Ash ka weight
+(W₂ - W₁) = Original sample ka weight</code></pre>
+                </div>
+
+                <div class="bg-green-50 border-l-4 border-green-500 p-4 my-4">
+                    <h4 class="font-bold text-green-800">🔢 Numerical Example:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>Given:
+W₁ (empty crucible) = 22.4500 g
+W₂ (crucible + milk) = 27.4500 g → Sample = 5.0000 g
+W₃ (crucible + ash) = 22.4860 g → Ash = 0.0360 g
+
+Calculation:
+% Ash = (0.0360 / 5.0000) × 100
+      = 0.0072 × 100
+      = 0.72%
+
+Normal UHT milk ash: 0.70 - 0.80%
+Result: 0.72% → NORMAL ✅
+
+━━━━━━━━━━━━━━━━━━━━━━━━━
+Ash Composition of Milk (approximately):
+━━━━━━━━━━━━━━━━━━━━━━━━━
+Mineral    | mg/100ml | % of total ash
+───────────|──────────|──────────────
+Potassium  | 150      | ~21%
+Calcium    | 120      | ~17%
+Phosphorus | 95       | ~13%
+Sodium     | 50       | ~7%
+Chloride   | 100      | ~14%
+Magnesium  | 12       | ~2%
+Others     | -        | ~26%</code></pre>
+                </div>
+
+                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 my-4">
+                    <h4 class="font-bold text-yellow-800">⚠️ Why 550°C? Temperature Factor:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>Temperature Selection Logic:
+
+< 500°C → Incomplete combustion, carbon remains 
+           (ash dark/black hogi)
+
+550°C → OPTIMAL
+        - Saara organic matter jal jaata hai
+        - Carbonates decompose nahi hote
+        - Na₂CO₃, K₂CO₃ stable rahte hain
+        - CaCO₃ bhi stable at 550°C 
+          (decomposes at ~840°C)
+
+> 600°C → Some volatile minerals lost
+          - NaCl volatile ho sakta hai at 600°C+
+          - K compounds bhi loss ho sakte hain
+          - Phosphates may fuse with crucible
+          - Results kam aayenge (underestimation)
+
+Isliye 550±20°C STANDARD temperature hai
+for milk ash determination.</code></pre>
+                </div>
+
+                <div class="bg-orange-50 border-l-4 border-orange-500 p-4 my-4">
+                    <h4 class="font-bold text-orange-800">🔬 Adulteration Detection through Ash:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>Ash content se adulteration detect ho sakti hai:
+
+Normal Milk Ash: 0.70 - 0.80%
+
+HIGH ASH (> 0.80%):
+→ Addition of neutralizers (NaHCO₃, Na₂CO₃)
+→ Added to mask acidity in spoiled milk
+→ Alkalinity of Ash test se confirm karein
+
+LOW ASH (< 0.70%):
+→ Water adulteration (dilution)
+→ Ash % kam ho jaata hai proportionally
+
+Alkalinity of Ash Test:
+- Ash ko distilled water mein dissolve karein
+- 0.1N HCl se titrate karein
+- Phenolphthalein indicator
+
+Normal alkalinity: 1.0-1.2 ml 0.1N HCl per g ash
+High alkalinity: > 1.5 ml → Neutralizer added!</code></pre>
+                </div>
+
+                <div class="bg-purple-50 border-l-4 border-purple-500 p-4 my-4">
+                    <h4 class="font-bold text-purple-800">📋 FSSAI Standard:</h4>
+                    <table class="w-full mt-2 border-collapse border border-purple-300">
+                        <thead>
+                            <tr class="bg-purple-100">
+                                <th class="border border-purple-300 p-2">Parameter</th>
+                                <th class="border border-purple-300 p-2">Standard Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td class="border border-purple-300 p-2">Ash Content (Cow milk)</td><td class="border border-purple-300 p-2">0.70 - 0.75%</td></tr>
+                            <tr><td class="border border-purple-300 p-2">Ash Content (Buffalo milk)</td><td class="border border-purple-300 p-2">0.75 - 0.80%</td></tr>
+                            <tr><td class="border border-purple-300 p-2">Ash Content (Mixed/UHT)</td><td class="border border-purple-300 p-2">0.70 - 0.80%</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            `
+        },
+        {
+            title: "Lactose (Reducing Sugar) Ka Determination (Lane-Eynon Method)",
+            purpose: "UHT milk mein lactose content determine karne ke liye. Lactose milk ka main carbohydrate hai (~4.5-5.0% in normal milk).",
+            reference: "IS 1479 (Part II):1961; AOAC 930.28",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>Lactose ek reducing sugar hai jo Fehling's solution (alkaline copper sulfate) ko reduce karta hai. Cu²⁺ (blue) → Cu₂O (red precipitate). Known volume Fehling's solution ko completely reduce karne ke liye kitna milk sample chahiye — yeh measure karke lactose calculate karte hain. Methylene blue indicator use hota hai endpoint ke liye.</p>
+
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Protein precipitation: 25ml UHT milk lein → 0.5ml acetic acid daalein → boil karein 5 min → cool → filter karein → volume make up 100ml = <strong>Clarified Solution</strong></li>
+                    <li>Pipette se 5ml Fehling's A + 5ml Fehling's B lein ek conical flask mein (ya pre-mixed 10ml).</li>
+                    <li>Burette mein clarified milk solution bharein.</li>
+                    <li>Fehling's solution ko boil karein (constant boiling maintain karein).</li>
+                    <li>Boiling Fehling's mein burette se dheere dheere clarified milk solution daalein.</li>
+                    <li>Jab blue colour almost khatam ho jaaye → 2-3 drops methylene blue indicator daalein.</li>
+                    <li>Continue adding milk solution dropwise until blue colour of methylene blue disappears → brick red endpoint.</li>
+                    <li>Volume note karein = <strong>V ml (Titre)</strong></li>
+                    <li>Rough titration pehle karein, phir accurate titration (total boiling time 3 min se zyada na ho).</li>
+                </ol>
+
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 my-4">
+                    <h4 class="font-bold text-blue-800">📐 Formula:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>                    F × D × 100
+% Lactose = ─────────────────────
+                  V × W
+
+Where:
+F = Fehling's Factor (mg of lactose that reduces 
+    10ml mixed Fehling's solution)
+    Standard F for Lactose = 67.0 mg (from table)
+    
+D = Dilution factor (total volume made up / original 
+    volume taken)
+    = 100 ml / 25 ml = 4
+
+V = Titre value (ml of clarified solution used)
+W = Weight of milk sample in the diluted solution (g)
+    If 25 ml milk taken, W = 25 × 1.03 ≈ 25.75 g
+    (or use actual weight)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Simplified (if 25ml milk → 100ml made up):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+                    F × 100
+% Lactose = ─────────────────
+              V × W_per_ml × 25
+
+OR more commonly:
+
+% Lactose = (F / V) × (Dilution Volume / Sample Volume) × (100 / 1000)
+
+Since F is in mg:
+
+                    F × 100 × 100
+% Lactose = ─────────────────────
+               V × W × 1000
+
+                    F × 10
+% Lactose = ─────────────
+                V × W_original
+
+W_original = weight of milk in 
+original 25ml = 25 × density</code></pre>
+                </div>
+
+                <div class="bg-green-50 border-l-4 border-green-500 p-4 my-4">
+                    <h4 class="font-bold text-green-800">🔢 Numerical Example:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>Given:
+Milk taken = 25 ml (density 1.03, so weight = 25.75g)
+Made up to 100 ml after protein precipitation
+Fehling's Factor (F) for lactose = 67.0 mg
+Titre (V) = 27.5 ml of clarified solution
+
+Step 1: Weight of lactose that reduced Fehling's:
+= F = 67.0 mg = 0.067 g
+
+Step 2: This 0.067g lactose was present in 27.5ml 
+of clarified solution
+
+Step 3: 100ml clarified solution was made from 25ml milk
+So 27.5ml clarified solution = (27.5/100) × 25 
+                              = 6.875 ml original milk
+                              = 6.875 × 1.03 = 7.08g milk
+
+Step 4: % Lactose = (0.067 / 7.08) × 100
+                   = 0.946%... 
+
+Wait, let me recalculate properly:
+
+Actually in 27.5ml clarified solution:
+Equivalent milk = 27.5 × (25/100) = 6.875 ml
+Weight of this milk = 6.875 × 1.03 = 7.081 g
+
+67.0 mg lactose is in 7.081 g milk
+
+% Lactose = (67.0 / 7081) × 100
+          = (0.067 / 7.081) × 100
+          = 0.946 × 100... 
+
+Hmm, let me use the direct formula:
+
+% Lactose = F × Dilution / (V × W_total) × 100
+
+= (67 × 4) / (27.5 × 25.75) × 100 / 1000
+= 268 / 708.125 × 0.1
+= 0.3784 × 10  
+= Nahi, let me think step by step:
+
+CORRECT CALCULATION:
+━━━━━━━━━━━━━━━━━━
+100 ml solution has 25.75 g milk solids equivalent
+27.5 ml solution has (27.5/100) × 25.75 = 7.081 g milk
+This 7.081 g milk contains 67.0 mg = 0.067 g lactose
+
+% Lactose = (0.067 / 7.081) × 100 = 0.946%
+
+Hmm that seems low. Let me check F value:
+F for lactose (hydrate) with 10ml Fehling's = 67.0 mg
+But for ANHYDROUS lactose = 64.0 mg
+
+Let me redo with correct understanding:
+F = 67.0 mg means 10ml mixed Fehling's ≡ 67mg lactose
+
+If V = 13.5 ml (more realistic titre):
+Milk equivalent = (13.5/100) × 25.75 = 3.476 g
+% Lactose = (0.067/3.476) × 100 = 1.927%
+
+Hmm still low. Standard is ~4.5%.
+
+CORRECTED: Taking 10g milk → 250ml
+F = 67mg, V = 14.8 ml
+
+Milk in 14.8ml = (14.8/250) × 10 = 0.592 g
+% Lactose = (67/592) × 100 = 11.3%... too high
+
+Actually the standard procedure uses:
+25g milk → 250ml → clarify → titrate
+
+If V = 36 ml:
+Milk in 36ml = (36/250) × 25 = 3.6 g
+% Lactose = (67/3600) × 100 = 1.86%... 
+
+THE STANDARD WAY:
+% Lactose = (67 × 250) / (V × W × 1000) × 100
+= (67 × 250 × 100) / (36 × 25 × 1000)
+= 1675000 / 900000
+= 1.86%
+
+For getting ~4.5%:
+V should be around 14.8 ml
+= (67 × 250 × 100) / (14.8 × 25 × 1000)
+= 1675000 / 370000
+= 4.53% ✅ 
+
+━━━━━━━━━━━━━━━━━━━━━━━
+CLEAN EXAMPLE:
+━━━━━━━━━━━━━━━━━━━━━━━
+Sample: 25g UHT milk → made up to 250ml
+F = 67.0 mg (Fehling's factor for lactose)
+V = 14.6 ml (titre)
+
+% Lactose = (F × Total Volume × 100) / (V × W × 1000)
+          = (67 × 250 × 100) / (14.6 × 25 × 1000)
+          = 1,675,000 / 365,000
+          = 4.59%
+
+Normal UHT milk lactose: 4.4 - 5.0%
+Result: 4.59% → NORMAL ✅</code></pre>
+                </div>
+
+                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 my-4">
+                    <h4 class="font-bold text-yellow-800">🔬 Fehling's Factor (F) Kahan Se Aaya?</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>Fehling's Factor Explanation:
+
+Fehling's A = CuSO₄ solution (69.28g/L)
+Fehling's B = Alkaline tartrate (NaOH + KNa tartrate)
+
+Mixed: Cu²⁺ in alkaline tartrate complex
+→ Deep blue colour
+
+Reducing sugar (Lactose) reduces Cu²⁺ → Cu⁺:
+
+Lactose + 2Cu²⁺ + 5OH⁻ → Cu₂O↓ + Lactobionic acid
+(reducing)  (blue)         (red ppt)
+
+F = 67.0 mg means:
+"10ml mixed Fehling's solution ko completely 
+reduce karne ke liye exactly 67.0 mg LACTOSE 
+chahiye"
+
+Yeh experimentally determine hota hai:
+- Standard lactose solution se Fehling's ko 
+  titrate karke
+- Har batch of Fehling's solution ki apni 
+  F value hoti hai
+- Isliye STANDARDIZATION zaroori hai!
+
+Different sugars ke liye F values:
+Sugar        | F value (mg per 10ml Fehling's)
+─────────────|────────────────────────────────
+Glucose      | 49.7 mg
+Fructose     | 54.0 mg  
+Invert Sugar | 51.8 mg
+Lactose      | 67.0 mg (monohydrate)
+Maltose      | 73.0 mg
+Sucrose      | NOT reducing (F = 0)
+
+Lactose ka F zyada hai kyunki:
+- Lactose weak reducing sugar hai
+- Molecular weight bhi zyada hai (360 vs 180)
+- Zyada amount chahiye same Cu²⁺ reduce karne mein</code></pre>
+                </div>
+
+                <div class="bg-red-50 border-l-4 border-red-500 p-4 my-4">
+                    <h4 class="font-bold text-red-800">⚗️ Chemical Reactions:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>Fehling's Solution Preparation:
+
+Fehling's A: CuSO₄·5H₂O (69.28g) dissolved in 
+             1000ml distilled water
+
+Fehling's B: KNaC₄H₄O₆·4H₂O (346g, Rochelle salt)
+             + NaOH (100g)
+             dissolved in 1000ml water
+
+When A + B mixed:
+CuSO₄ + 2NaOH → Cu(OH)₂↓ + Na₂SO₄
+Cu(OH)₂ + KNaC₄H₄O₆ → Cu-Tartrate Complex (soluble, blue)
+
+Reduction by Lactose:
+Cu-Tartrate²⁺ + Lactose → Cu₂O↓ + Oxidized Lactose
+(blue complex)              (red precipitate)
+
+Methylene Blue Indicator:
+- Blue in oxidized form (when Cu²⁺ present)
+- Colorless in reduced form (when Cu²⁺ finished)
+- Acts as redox indicator
+- More sensitive than relying on blue→red color change
+
+Endpoint: Last drop of milk solution decolorizes 
+methylene blue → all Cu²⁺ reduced → no more blue</code></pre>
+                </div>
+
+                <div class="bg-purple-50 border-l-4 border-purple-500 p-4 my-4">
+                    <h4 class="font-bold text-purple-800">📋 UHT Milk Lactose Standards:</h4>
+                    <table class="w-full mt-2 border-collapse border border-purple-300">
+                        <thead>
+                            <tr class="bg-purple-100">
+                                <th class="border border-purple-300 p-2">Parameter</th>
+                                <th class="border border-purple-300 p-2">Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td class="border border-purple-300 p-2">Normal Lactose in Cow Milk</td><td class="border border-purple-300 p-2">4.6 - 5.0%</td></tr>
+                            <tr><td class="border border-purple-300 p-2">Normal Lactose in Buffalo Milk</td><td class="border border-purple-300 p-2">4.5 - 5.0%</td></tr>
+                            <tr><td class="border border-purple-300 p-2">UHT Processing Effect</td><td class="border border-purple-300 p-2">Slight Maillard reaction → 0.1-0.2% decrease possible</td></tr>
+                            <tr><td class="border border-purple-300 p-2">Low lactose = </td><td class="border border-purple-300 p-2">Water adulteration suspected</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            `
+        },
+        {
+            title: "Phosphatase Test (Pasteurization Check - Negative for UHT)",
+            purpose: "UHT milk mein alkaline phosphatase enzyme ki absence confirm karne ke liye. Agar phosphatase present hai toh heat treatment adequate nahi tha. UHT milk mein yeh test HAMESHA NEGATIVE hona chahiye.",
+            reference: "IS 1479 (Part I):1961; IS 5765:1970; FSSAI Manual",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>Alkaline Phosphatase (ALP) enzyme naturally milk mein hota hai. Yeh enzyme disodium p-nitrophenyl phosphate (substrate) ko hydrolyze karta hai → p-nitrophenol release hota hai jo YELLOW colour deta hai alkaline pH par. Agar milk properly heat-treated hai (pasteurized: 63°C/30min ya 72°C/15sec; UHT: 135-150°C/2-5sec) toh ALP completely destroy ho jaata hai → NO yellow colour → NEGATIVE test.</p>
+
+                <h4 class="font-semibold mt-4 mb-2">Procedure (Aschaffenburg & Mullen Method):</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Buffer substrate solution banayein: Dissolve 0.15g disodium p-nitrophenyl phosphate + sodium carbonate-bicarbonate buffer (pH 10.0) in 100ml.</li>
+                    <li>5ml buffer substrate solution ek test tube mein lein.</li>
+                    <li>1ml UHT milk sample daalein.</li>
+                    <li>Mix karein gently.</li>
+                    <li>37°C water bath mein rakhein for 2 hours.</li>
+                    <li>Observe colour:</li>
+                </ol>
+
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 my-4">
+                    <h4 class="font-bold text-blue-800">📐 Result Interpretation (Qualitative):</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>Colour After 2 Hours at 37°C:
+
+┌──────────────────────────────────────────────────────┐
+│  COLOUR             │  RESULT    │  INFERENCE         │
+├─────────────────────┼────────────┼────────────────────┤
+│  No colour change   │  NEGATIVE  │  Proper UHT ✅     │
+│  (greyish/white)    │  (Pass)    │  ALP destroyed     │
+├─────────────────────┼────────────┼────────────────────┤
+│  Faint yellow       │  DOUBTFUL  │  Marginal treatment│
+│  (barely visible)   │            │  Re-test needed    │
+├─────────────────────┼────────────┼────────────────────┤
+│  Definite yellow    │  POSITIVE  │  Inadequate UHT ❌  │
+│  (clearly visible)  │  (Fail)    │  ALP still active  │
+├─────────────────────┼────────────┼────────────────────┤
+│  Bright/deep yellow │  STRONGLY  │  RAW milk mixed OR │
+│                     │  POSITIVE  │  no heat treatment │
+└──────────────────────────────────────────────────────┘
+
+For UHT milk: MUST be NEGATIVE
+(Even for pasteurized milk it should be negative)
+
+Quantitative measurement (if spectrophotometer available):
+Absorbance at 410-420 nm
+< 2 μg p-nitrophenol/ml = NEGATIVE (adequately treated)
+> 10 μg/ml = POSITIVE (under-processed)</code></pre>
+                </div>
+
+                <div class="bg-green-50 border-l-4 border-green-500 p-4 my-4">
+                    <h4 class="font-bold text-green-800">🔬 Science Behind Phosphatase Test:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>WHY PHOSPHATASE?
+
+Alkaline Phosphatase (ALP) Properties:
+├── Present in RAW milk naturally
+├── Heat sensitivity SIMILAR to pathogens
+│   ├── ALP inactivation: 63°C/30 min or 72°C/15 sec
+│   └── M. tuberculosis killed: 63°C/30 min
+│       (most heat resistant non-spore pathogen)
+├── So if ALP destroyed → pathogens also destroyed
+└── UHT (135-150°C) → ALP 100% destroyed
+
+Chemical Reaction:
+Disodium p-nitrophenyl phosphate
+          │
+          │ Alkaline Phosphatase (if active)
+          │ pH 10.0, 37°C
+          ▼
+p-Nitrophenol + Na₂HPO₄
+(YELLOW at pH>7)   (phosphate)
+
+If ALP destroyed (proper UHT):
+→ No hydrolysis occurs
+→ No p-nitrophenol released
+→ No yellow colour
+→ NEGATIVE ✅
+
+UHT temperature is SO HIGH (135-150°C) that:
+- ALP is completely irreversibly denatured
+- Even reactivation (which can happen with 
+  pasteurized milk) does NOT occur with UHT
+- This is because at UHT temperatures, protein 
+  is completely unfolded and aggregated</code></pre>
+                </div>
+
+                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 my-4">
+                    <h4 class="font-bold text-yellow-800">⚠️ Phosphatase Reactivation Issue:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>IMPORTANT for HTST Pasteurized Milk:
+(Not relevant for UHT but good to know)
+
+Phosphatase REACTIVATION can occur:
+- In pasteurized milk (72°C/15sec)
+- After 1-2 days storage
+- Especially in cream/high-fat products
+- Gives FALSE POSITIVE result
+
+WHY REACTIVATION?
+At 72°C → ALP partially unfolded but not destroyed
+Some subunits can RE-FOLD → enzyme becomes active again
+
+HOW TO DIFFERENTIATE:
+→ Reactivated ALP: Shows activity with Mg²⁺ added
+→ Native ALP (raw milk): Shows activity without Mg²⁺
+
+FOR UHT MILK:
+→ NO REACTIVATION EVER occurs
+→ 135-150°C completely destroys ALP irreversibly
+→ If positive → definitely post-process contamination
+   with raw milk or inadequate UHT processing
+
+Peroxidase Test (Storch Test):
+Another enzyme test, BUT:
+- Peroxidase more heat resistant than ALP
+- Destroyed at 80°C/2 sec
+- For HTST pasteurized milk: 
+  Phosphatase (-), Peroxidase (+) = Correct
+- For UHT milk:
+  Phosphatase (-), Peroxidase (-) = Correct
+  (Both destroyed at UHT temperatures)</code></pre>
+                </div>
+
+                <div class="bg-red-50 border-l-4 border-red-500 p-4 my-4">
+                    <h4 class="font-bold text-red-800">📊 Comparison Table:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>Heat Treatment vs Enzyme Status:
+
+Treatment          | ALP      | Peroxidase | Status
+───────────────────|──────────|────────────|────────
+Raw Milk           | +ve      | +ve        | Not safe
+Under-pasteurized  | +ve      | +ve        | Not safe
+LTLT (63°C/30min)  | -ve      | +ve        | Safe ✅
+HTST (72°C/15sec)  | -ve      | +ve        | Safe ✅
+Over-pasteurized   | -ve      | -ve        | Over-done
+  (>80°C)          |          |            |
+UHT (135-150°C)    | -ve      | -ve        | Safe ✅
+Sterilized (121°C) | -ve      | -ve        | Safe ✅
+
+For UHT Milk Quality Check:
+✅ ALP negative + Peroxidase negative = Proper UHT
+❌ ALP positive = Under-processed or contaminated
+⚠️ ALP negative + Peroxidase positive = NOT UHT 
+   (only pasteurized, labelling issue)</code></pre>
+                </div>
+            `
+        },
+        {
+            title: "Colour & Browning Index (Maillard Reaction Assessment)",
+            purpose: "UHT milk mein browning extent measure karne ke liye. UHT processing mein Maillard reaction hoti hai (lactose + protein → brown compounds). Excessive browning over-processing indicate karta hai.",
+            reference: "IDF Standard; IS 12333:1997; Research Methods",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>UHT processing ke dauran Maillard reaction hoti hai: Lactose (reducing sugar) + Lysine (amino acid in casein/whey proteins) → Amadori compounds → HMF (Hydroxymethylfurfural) → Melanoidins (brown pigments). Yeh browning spectrophotometrically measure ki jaati hai. Zyada browning = Over-processing ya prolonged storage.</p>
+
+                <h4 class="font-semibold mt-4 mb-2">Method 1: HMF (Hydroxymethylfurfural) Determination</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>10ml UHT milk lein ek test tube mein.</li>
+                    <li>5ml 0.3N oxalic acid daalein (protein precipitate karne ke liye).</li>
+                    <li>Mix karein aur filter karein (Whatman No. 42).</li>
+                    <li>2ml filtrate lein ek test tube mein.</li>
+                    <li>2ml 1% thiobarbituric acid (TBA) solution daalein.</li>
+                    <li>Water bath mein boil karein exactly 40 minutes.</li>
+                    <li>Cool karein aur absorbance read karein at <strong>443 nm</strong>.</li>
+                    <li>Compare with HMF standard curve.</li>
+                </ol>
+
+                <h4 class="font-semibold mt-4 mb-2">Method 2: Browning Index (Simple)</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>UHT milk ko pH 4.6 par adjust karein (acetic acid/sodium acetate buffer).</li>
+                    <li>Centrifuge karein (3000 rpm, 15 min) → supernatant (whey) collect karein.</li>
+                    <li>Whey ka absorbance measure karein at <strong>420 nm</strong>.</li>
+                    <li>Higher absorbance = More browning.</li>
+                </ol>
+
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 my-4">
+                    <h4 class="font-bold text-blue-800">📐 Formulas:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>METHOD 1: HMF Content
+
+From standard curve:
+HMF (μmol/L) = (Absorbance at 443nm × Factor from curve)
+
+Standard curve se:
+Plot: Known HMF concentrations vs Absorbance
+Linear equation: y = mx + c
+Where y = absorbance, x = HMF concentration
+
+Typical calculation:
+If standard curve gives: y = 0.025x + 0.005
+And sample absorbance = 0.255
+
+0.255 = 0.025x + 0.005
+x = (0.255 - 0.005) / 0.025
+x = 10.0 μmol/L HMF
+
+━━━━━━━━━━━━━━━━━━━━━━
+METHOD 2: Browning Index (BI)
+━━━━━━━━━━━━━━━━━━━━━━
+
+Browning Index = Absorbance at 420 nm × Dilution Factor
+
+Example:
+A₄₂₀ = 0.085 (undiluted whey)
+BI = 0.085
+
+OR with dilution:
+If whey diluted 1:5
+A₄₂₀ = 0.035
+BI = 0.035 × 5 = 0.175
+
+━━━━━━━━━━━━━━━━━━━━━━
+LACTULOSE Method (Alternative):
+━━━━━━━━━━━━━━━━━━━━━━
+During UHT, Lactose → Lactulose (isomerization)
+Lactulose content indicates heat treatment severity
+
+UHT milk: 100-800 mg/L lactulose (typically)
+In-container sterilized: 800-2000 mg/L
+Pasteurized: < 50 mg/L</code></pre>
+                </div>
+
+                <div class="bg-green-50 border-l-4 border-green-500 p-4 my-4">
+                    <h4 class="font-bold text-green-800">🔬 Maillard Reaction Science:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>MAILLARD REACTION in UHT Milk (Step by Step):
+
+Stage 1: EARLY (No colour change)
+Lactose + ε-NH₂ of Lysine → Schiff Base → Amadori Product
+(Lactulosyllysine)
+- Nutritional loss: Available lysine decreases
+- No visible change
+
+Stage 2: INTERMEDIATE (Slight yellowish)
+Amadori Products → Dehydration → HMF + other furfurals
+                 → Fission → Reductones, aldehydes
+- HMF measurable at 443nm with TBA
+- Slight flavour change
+
+Stage 3: ADVANCED (Brown colour)
+HMF + Amines → Melanoidins (brown polymers)
+- Visible browning
+- Cooked/caramel flavour
+- Significant nutritional loss
+
+FACTORS AFFECTING BROWNING:
+─────────────────────────────
+Factor          | More Browning When
+────────────────|──────────────────
+Temperature     | Higher (>140°C direct UHT 
+                | gives less than indirect)
+Time            | Longer holding time
+pH              | Higher pH (alkaline)
+Storage temp    | Higher (37°C vs 25°C)
+Storage time    | Longer storage
+Sugar type      | More reducing sugars
+Protein type    | More lysine residues
+
+UHT Direct vs Indirect:
+Direct: Steam injection → faster heating/cooling
+        → LESS browning → better colour
+Indirect: Plate/tubular HE → slower
+        → MORE browning → slight colour change</code></pre>
+                </div>
+
+                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 my-4">
+                    <h4 class="font-bold text-yellow-800">📊 Standards & Interpretation:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>UHT Milk Browning Standards:
+
+HMF Content:
+┌──────────────────────────────────────────┐
+│ Treatment        │ HMF (μmol/L) │ Status │
+├──────────────────┼──────────────┼────────┤
+│ Pasteurized      │ < 2          │ Normal │
+│ UHT (proper)     │ 4 - 12       │ OK ✅  │
+│ UHT (over)       │ 12 - 25      │ High ⚠️│
+│ Sterilized (IST) │ 25 - 100     │ Normal │
+│ for IST          │              │ for IST│
+└──────────────────────────────────────────┘
+
+Browning Index (A₄₂₀):
+Fresh UHT milk: 0.04 - 0.08
+3 months storage (25°C): 0.06 - 0.12
+6 months storage (25°C): 0.08 - 0.18
+Unacceptable: > 0.25
+
+Available Lysine Loss:
+Pasteurized: < 2% loss
+UHT (proper): 2 - 8% loss
+UHT (over-processed): 8 - 15% loss
+Sterilized: 15 - 30% loss
+
+EU Standard (for differentiating UHT from sterilized):
+Lactulose < 600 mg/L → UHT ✅
+Lactulose > 600 mg/L → In-container sterilized
+
+This helps detect fraudulent labelling:
+If product labeled "UHT" but lactulose > 600 → 
+it was actually sterilized (cheaper process)</code></pre>
+                </div>
+
+                <div class="bg-orange-50 border-l-4 border-orange-500 p-4 my-4">
+                    <h4 class="font-bold text-orange-800">🔬 Practical Hunter Lab Colour Measurement:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>Instrumental Colour Measurement (if available):
+
+Using Hunter Lab Colorimeter / Spectrophotometer:
+
+L* = Lightness (0=black, 100=white)
+a* = Red-Green axis (+ve=red, -ve=green)  
+b* = Yellow-Blue axis (+ve=yellow, -ve=blue)
+
+UHT Milk Typical Values:
+L* = 78-82 (white-ish)
+a* = -2 to -4 (slightly greenish)
+b* = 6 to 12 (slightly yellowish)
+
+ΔE (Total colour difference from raw milk):
+
+ΔE = √[(ΔL*)² + (Δa*)² + (Δb*)²]
+
+Example:
+Raw milk: L*=82, a*=-2, b*=6
+UHT milk: L*=79, a*=-3, b*=10
+
+ΔE = √[(79-82)² + (-3-(-2))² + (10-6)²]
+   = √[9 + 1 + 16]
+   = √26
+   = 5.1
+
+Interpretation:
+ΔE < 3: Not noticeable by eye
+ΔE 3-6: Slightly noticeable → Acceptable for UHT
+ΔE 6-12: Noticeable → Borderline
+ΔE > 12: Very obvious → Over-processed</code></pre>
+                </div>
+            `
+        },
+        {
+            title: "Viscosity Measurement (Flow Consistency)",
+            purpose: "UHT milk ki viscosity measure karne ke liye. Age gelation aur storage stability assess karne mein helpful hai. Viscosity increase hona gelation ka early sign hai.",
+            reference: "IS 1479 (Part I):1961; IDF Standard 110",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>Viscosity fluid ke flow resistance ka measure hai. UHT milk Newtonian fluid ki tarah behave karta hai (normal conditions mein). Ostwald viscometer ya rotational viscometer se measure karte hain. Storage ke dauran viscosity increase hona protein aggregation/gelation indicate karta hai.</p>
+
+                <h4 class="font-semibold mt-4 mb-2">Method 1: Ostwald Viscometer (Capillary Method)</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Ostwald viscometer ko clean karein aur 25±0.1°C water bath mein fix karein.</li>
+                    <li>Pehle distilled water ka flow time measure karein: Water daalein → upper bulb mein suction se bharen → release → stopwatch se time note karein = <strong>t₀ (seconds)</strong></li>
+                    <li>Viscometer clean karein, UHT milk sample daalein (same volume).</li>
+                    <li>Temperature equilibrate hone dein (10 min).</li>
+                    <li>Same procedure se milk ka flow time measure karein = <strong>t (seconds)</strong></li>
+                    <li>3 readings lein aur average karein.</li>
+                </ol>
+
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 my-4">
+                    <h4 class="font-bold text-blue-800">📐 Formulas:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>RELATIVE VISCOSITY:
+
+η_rel = t / t₀
+
+Where:
+η_rel = Relative viscosity (dimensionless)
+t = Flow time of milk (seconds)
+t₀ = Flow time of water (seconds)
+
+━━━━━━━━━━━━━━━━━━━━━━━
+ABSOLUTE/DYNAMIC VISCOSITY:
+━━━━━━━━━━━━━━━━━━━━━━━
+
+η_milk = η_water × (t × ρ_milk) / (t₀ × ρ_water)
+
+Where:
+η_water at 25°C = 0.8904 mPa·s (or cP)
+ρ_milk = density of milk (~1.030 g/ml)
+ρ_water = density of water (~0.997 g/ml at 25°C)
+
+Simplified:
+η_milk = 0.8904 × (t/t₀) × (1.030/0.997)
+η_milk = 0.8904 × (t/t₀) × 1.033
+
+━━━━━━━━━━━━━━━━━━━━━━━
+KINEMATIC VISCOSITY:
+━━━━━━━━━━━━━━━━━━━━━━━
+
+ν = η / ρ (in mm²/s or centistokes, cSt)
+
+Where:
+ν = kinematic viscosity
+η = dynamic viscosity (mPa·s)
+ρ = density (g/ml)
+
+For milk:
+ν = η_milk / ρ_milk</code></pre>
+                </div>
+
+                <div class="bg-green-50 border-l-4 border-green-500 p-4 my-4">
+                    <h4 class="font-bold text-green-800">🔢 Numerical Example:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>Given:
+Water flow time (t₀) = 45.2 seconds
+UHT milk flow time (t) = 68.5 seconds
+Temperature = 25°C
+ρ_milk = 1.032 g/ml
+η_water at 25°C = 0.8904 mPa·s
+
+Step 1: Relative Viscosity
+η_rel = 68.5 / 45.2 = 1.516
+
+Step 2: Dynamic Viscosity
+η_milk = 0.8904 × (68.5/45.2) × (1.032/0.997)
+       = 0.8904 × 1.516 × 1.035
+       = 0.8904 × 1.569
+       = 1.397 mPa·s (or cP)
+
+Step 3: Kinematic Viscosity
+ν = 1.397 / 1.032
+  = 1.354 mm²/s (cSt)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+Normal Values at 25°C:
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+Water: 0.89 mPa·s
+Skimmed milk: 1.2 - 1.5 mPa·s
+Whole milk: 1.5 - 2.0 mPa·s
+UHT milk (fresh): 1.5 - 2.0 mPa·s
+UHT milk (3 months): 1.6 - 2.2 mPa·s
+UHT milk (gelation starting): > 3.0 mPa·s
+UHT milk (gelled): > 10 mPa·s
+
+Result: 1.397 mPa·s → NORMAL ✅ (skimmed/toned)</code></pre>
+                </div>
+
+                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 my-4">
+                    <h4 class="font-bold text-yellow-800">🔬 Poiseuille's Law (Viscometer Ka Basis):</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>Ostwald viscometer Poiseuille's equation par based hai:
+
+η = (π × P × r⁴ × t) / (8 × V × L)
+
+Where:
+η = viscosity (Pa·s)
+P = pressure difference (Pa) = ρ × g × h
+r = radius of capillary (m)
+t = flow time (s)
+V = volume of liquid (m³)
+L = length of capillary (m)
+
+Since r, V, L, h are CONSTANT for a given viscometer:
+
+η = K × ρ × t
+
+Where K = π × g × h × r⁴ / (8 × V × L) = Viscometer constant
+
+For TWO liquids in SAME viscometer:
+η₁ / η₂ = (ρ₁ × t₁) / (ρ₂ × t₂)
+
+Using water as reference:
+η_milk = η_water × (ρ_milk × t_milk) / (ρ_water × t_water)
+
+THIS is where the formula comes from!</code></pre>
+                </div>
+
+                <div class="bg-red-50 border-l-4 border-red-500 p-4 my-4">
+                    <h4 class="font-bold text-red-800">⚠️ Age Gelation in UHT Milk:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>AGE GELATION - Major UHT Milk Problem:
+
+What is it?
+→ UHT milk gradually thickens during storage
+→ Eventually forms a GEL (semi-solid)
+→ Product becomes unusable
+
+Viscosity Pattern During Storage:
+Time (months) | Viscosity (mPa·s) | Status
+──────────────|───────────────────|──────────
+0 (fresh)     | 1.7               | Normal
+1             | 1.8               | Normal
+2             | 1.9               | Normal
+3             | 2.1               | Normal
+4             | 2.5               | ⚠️ Increasing
+5             | 4.0               | ⚠️⚠️ High
+6             | 12.0              | ❌ GELLED
+
+Causes of Age Gelation:
+1. Proteolysis by heat-stable enzymes:
+   - Plasmin (native milk enzyme)
+   - Bacterial proteases (from psychrotrophs)
+   - These enzymes survive UHT!
+   - They slowly break down casein
+   - Destabilized casein aggregates → gel
+
+2. Chemical changes:
+   - Maillard reaction → cross-linking
+   - β-lactoglobulin-κ-casein complexes
+   - Calcium bridge formation
+
+Prevention:
+├── Low psychrotrophic count in raw milk (< 5000/ml)
+├── Pre-heat treatment (90°C/30s before UHT)
+│   → inactivates plasmin
+├── Proper UHT temperature (137-140°C ideal)
+├── Addition of polyphosphates (stabilizers)
+└── Store at < 25°C (lower temp = slower gelation)</code></pre>
+                </div>
+
+                <div class="bg-purple-50 border-l-4 border-purple-500 p-4 my-4">
+                    <h4 class="font-bold text-purple-800">📋 Method 2: Brookfield Viscometer (Rotational):</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>For higher viscosity samples (gelling milk):
+
+Brookfield Viscometer:
+- Spindle rotates in the sample
+- Measures torque required
+- Directly gives viscosity reading
+
+Settings for UHT milk:
+- Spindle: LV-1 or RV-1
+- Speed: 60 RPM
+- Temperature: 25°C
+- Volume: 500ml in 600ml beaker
+
+Reading:
+η (mPa·s) = Dial Reading × Factor
+
+Factor depends on spindle number and RPM
+(given in instrument manual)
+
+Advantages over Ostwald:
++ Can measure higher viscosities
++ Non-Newtonian fluids bhi measure kar sakte hain
++ Faster measurement
++ Can detect gelation onset better
+
+Disadvantage:
+- More expensive
+- Requires more sample volume</code></pre>
+                </div>
+            `
+        },
+        {
+            title: "Alcohol Stability Test (Heat Stability Indicator)",
+            purpose: "UHT milk ki heat stability predict karne ke liye. Milk ko different concentrations ke ethanol ke saath mix karke dekhte hain ki casein coagulate/flocculate hota hai ya nahi. Yeh test raw milk ki UHT suitability check karne ke liye bhi use hota hai.",
+            reference: "IS 1479 (Part I):1961; IDF Standard; Dairy Processing Manuals",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>Ethanol milk proteins ki stability kam karta hai by reducing the dielectric constant of the medium aur dehydrating protein micelles. Unstable milk mein casein jaldi coagulate hota hai low ethanol concentration par. Stable milk zyada ethanol concentration bhi tolerate kar leta hai bina coagulation ke. UHT processing ke liye milk ki alcohol stability kam se kam 72-75% ethanol par negative honi chahiye.</p>
+
+                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Different concentrations ka ethanol solution prepare karein: 68%, 70%, 72%, 74%, 76%, 78%, 80%</li>
+                    <li>Clean test tubes mein 2ml UHT milk sample lein (har concentration ke liye alag tube).</li>
+                    <li>Har tube mein 2ml corresponding ethanol solution daalein (equal volume).</li>
+                    <li>Tube ko 2-3 baar invert karke mix karein (shake mat karo).</li>
+                    <li>Immediately observe karein flocculation/clotting ke liye.</li>
+                    <li>Woh HIGHEST ethanol concentration note karein jis par koi flocculation NAHI hui = <strong>Alcohol Stability</strong></li>
+                </ol>
+
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 my-4">
+                    <h4 class="font-bold text-blue-800">📐 Result Interpretation:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>ALCOHOL STABILITY TEST RESULTS:
+
+Ethanol % | Observation      | Interpretation
+──────────|──────────────────|─────────────────
+68%       | No coagulation   | 
+70%       | No coagulation   |
+72%       | No coagulation   | Minimum for UHT
+74%       | No coagulation   | ← This is the
+76%       | COAGULATION ✗    |    alcohol stability
+78%       | COAGULATION ✗    |    = 74%
+80%       | COAGULATION ✗    |
+
+Alcohol Stability = 74% ethanol
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Standards:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+For UHT processing suitability:
+  Raw milk should withstand ≥ 72% ethanol
+  Ideally ≥ 75% for good UHT stability
+
+For already processed UHT milk:
+  Should withstand ≥ 68% ethanol
+  If < 68% → protein destabilization has occurred
+  → gelation may be approaching
+
+Classification:
+Stability ≥ 78% → Excellent (ideal for UHT)
+Stability 74-76% → Good (suitable for UHT)
+Stability 72% → Acceptable (marginal)
+Stability 68-70% → Poor (not suitable for UHT/unstable)
+Stability < 68% → Very Poor (will coagulate in UHT)
+
+NOTE: No mathematical formula - this is a 
+semi-quantitative observational test.</code></pre>
+                </div>
+
+                <div class="bg-green-50 border-l-4 border-green-500 p-4 my-4">
+                    <h4 class="font-bold text-green-800">🔬 Science Behind Alcohol Stability:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>WHY DOES ETHANOL CAUSE COAGULATION?
+
+Casein Micelle Stability depends on:
+1. κ-casein layer (hairy layer) on surface
+2. Negative charge (zeta potential ≈ -20mV)
+3. Steric repulsion between micelles
+4. Hydration shell (water layer)
+
+Ethanol disrupts ALL of these:
+
+1. DEHYDRATION:
+   Ethanol removes water from casein micelles
+   → Hydration shell shrinks
+   → Micelles come closer
+
+2. DIELECTRIC CONSTANT REDUCTION:
+   Water: ε = 80
+   Ethanol: ε = 24
+   Mixture: ε decreases
+   → Electrostatic repulsion between micelles 
+     decreases (Coulomb's law: F ∝ 1/ε)
+   → Micelles aggregate more easily
+
+3. CHARGE REDUCTION:
+   Lower ε → effective charge screening changes
+   → Zeta potential effectively reduced
+   → Less repulsion
+
+4. κ-CASEIN COLLAPSE:
+   Ethanol causes conformational change
+   → Hairy layer collapses
+   → Steric stabilization lost
+
+RESULT: Micelles aggregate → FLOCCULATION visible
+
+FACTORS THAT REDUCE ALCOHOL STABILITY:
+──────────────────────────────────────
+Factor              | Effect
+────────────────────|──────────────────
+High acidity        | ↓ Stability (most important)
+High ionic Ca²⁺     | ↓ Stability
+Low pH              | ↓ Stability
+Low κ-casein        | ↓ Stability
+High SCC            | ↓ Stability
+Late lactation milk | ↓ Stability
+Mastitic milk       | ↓ Stability
+UHT processing      | Initially ↑ then ↓ with storage</code></pre>
+                </div>
+
+                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 my-4">
+                    <h4 class="font-bold text-yellow-800">📊 Alcohol Stability vs Acidity Relationship:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>Acidity aur Alcohol Stability INVERSELY related hain:
+
+Acidity (% LA) | Alcohol Stability (%)
+───────────────|────────────────────
+0.10           | 80+ (excellent)
+0.12           | 76-78
+0.14           | 74-76
+0.15           | 72-74
+0.16           | 70-72
+0.18           | 68-70
+0.20           | < 68 (will coagulate even at 68%)
+0.22+          | Sour milk (coagulates even without alcohol)
+
+For UHT processing:
+Raw milk acidity should be ≤ 0.14% LA
+AND alcohol stability should be ≥ 72%
+
+If milk fails alcohol test, options:
+1. Reject the milk (best option)
+2. Adjust pH to 6.65-6.70 (NaOH/Na₂HPO₄)
+3. Add stabilizing salts:
+   - Trisodium citrate (Na₃C₆H₅O₇)
+   - Disodium hydrogen phosphate (Na₂HPO₄)
+   These chelate Ca²⁺ → improve stability
+   
+⚠️ FSSAI allows limited addition of stabilizers
+   (check current regulations for permissible limits)</code></pre>
+                </div>
+
+                <div class="bg-red-50 border-l-4 border-red-500 p-4 my-4">
+                    <h4 class="font-bold text-red-800">⚗️ Reading/Scoring Method (Detailed):</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>HOW TO READ THE RESULT:
+
+After mixing milk + ethanol, look at the inner 
+wall of test tube (tilt and observe):
+
+Score 0: Completely SMOOTH liquid film
+         → NO coagulation → NEGATIVE ✅
+
+Score 1: Very FINE particles barely visible
+         → Borderline → Observe carefully
+
+Score 2: DEFINITE fine clots/particles visible
+         → POSITIVE → Coagulation occurred ❌
+
+Score 3: LARGE clots, clearly visible
+         → STRONGLY POSITIVE ❌❌
+
+Alternative: Glass slide method
+- Put 1 drop milk + 1 drop ethanol on glass slide
+- Mix with glass rod
+- Observe under good light
+- Coagulation shows as granular/clotted appearance
+
+For UHT quality control:
+Test with 68% ethanol monthly during storage
+If positive at 68% → product approaching instability
+→ May gel soon → reduce remaining shelf life</code></pre>
+                </div>
+            `
+        },
+        {
+            title: "Coliform & Total Plate Count (Post-Packaging Contamination Check)",
+            purpose: "UHT milk mein post-packaging microbial contamination detect karne ke liye. UHT milk commercially sterile honi chahiye lekin aseptic packaging mein defect ho toh contamination aa sakta hai.",
+            reference: "IS 5402:2012; IS 5401 (Part 1):2012; FSSAI Microbiological Standards",
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+                <p>UHT milk commercially sterile product hai, isliye ideally koi viable microorganism nahi hona chahiye. Lekin packaging seal defect, pin-hole contamination ya filling machine mein issue ho toh bacteria enter ho sakte hain. Total Plate Count (TPC) overall contamination measure karta hai aur Coliform test specifically faecal/environmental contamination detect karta hai.</p>
+
+                <h4 class="font-semibold mt-4 mb-2">Test A: Total Plate Count (TPC/SPC)</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Aseptic conditions mein (LAF hood) UHT pack open karein (surface sanitize with 70% ethanol).</li>
+                    <li>1ml UHT milk sample lein sterile pipette se.</li>
+                    <li>Pour plate method: 1ml sample → sterile petri dish → pour 15-20ml molten Plate Count Agar (PCA, 45°C) → gently swirl → solidify hone dein.</li>
+                    <li>Serial dilutions banayein (10⁻¹, 10⁻²) agar expected count high ho.</li>
+                    <li>For UHT milk → usually undiluted sample use karein (expect very low/zero count).</li>
+                    <li>Incubate: 30±1°C for 72 hours (mesophilic count).</li>
+                    <li>Also incubate one set: 55±1°C for 48 hours (thermophilic count).</li>
+                    <li>Count colonies.</li>
+                </ol>
+
+                <h4 class="font-semibold mt-4 mb-2">Test B: Coliform Count</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>1ml UHT milk sample → pour Violet Red Bile Agar (VRBA) ya MacConkey Agar.</li>
+                    <li>Pour double layer of same agar (oxygen restrict karne ke liye, for VRBA).</li>
+                    <li>Incubate: 37±1°C for 24-48 hours.</li>
+                    <li>Count dark red colonies with bile precipitate halo (on VRBA) = Coliforms.</li>
+                    <li>For E. coli specifically: Incubate at 44.5°C (faecal coliforms).</li>
+                </ol>
+
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 my-4">
+                    <h4 class="font-bold text-blue-800">📐 Colony Count Formula:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>                  Σ C
+CFU/ml = ────────────────────
+          (n₁ × 1 + n₂ × 0.1) × d
+
+Where:
+Σ C = Sum of colonies counted on ALL plates
+n₁ = Number of plates at FIRST dilution counted
+n₂ = Number of plates at SECOND dilution counted
+d = Dilution factor of first dilution counted
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+For UHT Milk (Usually Undiluted):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Simple count (since usually undiluted, d = 1):
+
+CFU/ml = Number of colonies on plate / Volume plated
+
+If duplicate plates:
+CFU/ml = Average colony count / 1 ml
+       = (Plate 1 + Plate 2) / 2
+
+Example:
+Plate 1 = 0 colonies
+Plate 2 = 0 colonies
+CFU/ml = 0/1 = 0 CFU/ml = COMMERCIALLY STERILE ✅
+
+Another Example (contaminated pack):
+Plate 1 = 45 colonies
+Plate 2 = 52 colonies
+CFU/ml = (45+52)/(2×1) = 48.5 ≈ 49 CFU/ml
+= 4.9 × 10¹ CFU/ml → CONTAMINATED ❌</code></pre>
+                </div>
+
+                <div class="bg-green-50 border-l-4 border-green-500 p-4 my-4">
+                    <h4 class="font-bold text-green-800">🔢 Detailed Counting Rules (Important!):</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>ISO 7218 Colony Counting Rules:
+
+COUNTABLE RANGE: 30-300 colonies per plate (for TPC)
+                 15-150 colonies per plate (for coliforms)
+
+If colony count < 30 (undiluted):
+Report as: "Estimated count = X CFU/ml"
+
+If colony count = 0 (all plates):
+Report as: "< 1 CFU/ml" (for 1ml plated)
+OR "< 10 CFU/ml" (for 0.1ml plated)
+
+For UHT milk, expected result = 0 CFU/ml
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SERIAL DILUTION EXAMPLE:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+If contaminated UHT milk (hypothetical):
+
+Original (10⁰) → 1ml plated → TNTC (too numerous)
+10⁻¹ dilution → 1ml plated → 285 colonies
+10⁻² dilution → 1ml plated → 32 colonies
+
+Using formula:
+Σ C = 285 + 32 = 317
+n₁ = 1 (plate at 10⁻¹)
+n₂ = 1 (plate at 10⁻²)  
+d = 10⁻¹
+
+CFU/ml = 317 / [(1×1 + 1×0.1) × 10⁻¹]
+       = 317 / [1.1 × 0.1]
+       = 317 / 0.11
+       = 2882
+       ≈ 2.9 × 10³ CFU/ml → HEAVILY CONTAMINATED ❌</code></pre>
+                </div>
+
+                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 my-4">
+                    <h4 class="font-bold text-yellow-800">📋 FSSAI Microbiological Standards for UHT Milk:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>FSSAI Standards (FSS Regulations):
+
+┌────────────────────────────────────────────────────┐
+│ Parameter           │ Standard          │ Class    │
+├─────────────────────┼───────────────────┼──────────┤
+│ Total Plate Count   │ Should satisfy    │ n=5      │
+│ (after incubation   │ commercial        │ c=1      │
+│  at 30°C/15 days)   │ sterility test    │ m=0      │
+│                     │                   │ M=10     │
+├─────────────────────┼───────────────────┼──────────┤
+│ Coliform Count      │ Absent in         │          │
+│                     │ 0.1ml             │          │
+├─────────────────────┼───────────────────┼──────────┤
+│ E. coli             │ Absent in 1ml     │          │
+├─────────────────────┼───────────────────┼──────────┤
+│ Salmonella          │ Absent in 25ml    │          │
+├─────────────────────┼───────────────────┼──────────┤
+│ Listeria            │ Absent in 25ml    │          │
+│ monocytogenes       │                   │          │
+├─────────────────────┼───────────────────┼──────────┤
+│ S. aureus coagulase │ Absent in 1ml     │          │
+│ positive            │                   │          │
+└────────────────────────────────────────────────────┘
+
+Sampling Plan (n, c, m, M):
+n = Number of units to test (5 packs)
+c = Maximum allowed units between m and M (1 pack)
+m = Microbiological limit (acceptable) = 0
+M = Maximum limit (marginally acceptable) = 10 CFU/ml
+
+Interpretation:
+- If ALL 5 packs show 0 CFU/ml → PASS ✅
+- If 1 pack shows 1-10 CFU/ml, rest 0 → Still PASS ✅
+- If 2+ packs show >0 → FAIL ❌
+- If any pack shows >10 → FAIL ❌</code></pre>
+                </div>
+
+                <div class="bg-red-50 border-l-4 border-red-500 p-4 my-4">
+                    <h4 class="font-bold text-red-800">🔬 Types of Contamination in UHT Milk:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>Post-Process Contamination Sources:
+
+1. PIN-HOLE in packaging:
+   - Microscopic holes in laminate
+   - Allows air + bacteria entry
+   - Detection: Dye penetration test
+   → Random microorganism types found
+
+2. SEAL DEFECT:
+   - Top/bottom seal not proper
+   - Transverse/longitudinal seal weak
+   → Contamination usually at seal area
+   → Mixed flora found
+
+3. FILLING MACHINE contamination:
+   - Aseptic chamber not properly sterilized
+   - H₂O₂ concentration low
+   → Specific organisms repeatedly found
+   → Usually thermophiles or spore formers
+
+4. RAW MATERIAL (surviving organisms):
+   - Heat resistant spores survived UHT
+   - Very rare with proper F₀
+   → Usually Bacillus species
+   → Detected at 55°C incubation
+
+Detection Method for Pin-holes:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Dye Test: Submerge pack in 0.5% rhodamine B
+   solution under vacuum → squeeze → check 
+   inside for dye penetration
+   
+2. Electrolytic test: Pack in electrolyte solution
+   → measure current → current flow = leak present
+
+3. Pressure test: Apply positive/negative pressure
+   → observe bubbles (underwater)
+
+4. Bio-burden test: Spray pack surface with 
+   bacteria → incubate → check inside for growth</code></pre>
+                </div>
+
+                <div class="bg-orange-50 border-l-4 border-orange-500 p-4 my-4">
+                    <h4 class="font-bold text-orange-800">📊 Aseptic Packaging Process Parameters to Monitor:</h4>
+                    <pre class="bg-white p-3 rounded mt-2 overflow-x-auto"><code>UHT + Aseptic Packaging Quality Points:
+
+PACKAGING MATERIAL STERILIZATION:
+- H₂O₂ concentration: 30-35% (v/v)
+- Contact time: > 6 seconds
+- Drying temperature: 125-140°C
+- UV light: 254 nm (some systems)
+
+FILLING CHAMBER:
+- Positive air pressure maintained
+- HEPA filtered air
+- Sterile barriers functional
+- Regular bio-validation (monthly)
+
+SEAL INTEGRITY:
+- Seal temperature: As per material spec
+- Seal pressure: Optimized
+- Jaw alignment: Checked every shift
+- Visual inspection: Every pack
+
+ROUTINE MONITORING:
+Daily: 
+  → Visual seal check (every pack)
+  → Incubation test (random 2-3 packs per shift)
+
+Weekly:
+  → Dye penetration test (5-10 packs)
+  → Microbiological plating (5 packs)
+
+Monthly:
+  → Full sterility test (30°C/15 days + 55°C/7 days)
+  → Bio-burden validation of aseptic zone
+  → Package integrity comprehensive test</code></pre>
+                </div>
             `
         }
     ]
 },
 "traditional-sweets": {
-    title: "Traditional Dairy Sweets Ka Analysis (Peda, Burfi, Gulab Jamun, Milk Cake)",
+    title: "Traditional Dairy Sweets Ka Complete Analysis (Peda, Burfi, Gulab Jamun, Milk Cake, Chhena Sweets)",
+    introduction: `
+        <div class="bg-gradient-to-r from-orange-50 to-yellow-50 p-6 rounded-xl border border-orange-200 mb-6">
+            <h3 class="text-xl font-bold text-orange-800 mb-4">📚 Traditional Dairy Sweets Testing Overview</h3>
+            <p class="text-gray-700 mb-4">
+                Traditional dairy sweets ki quality testing mein multiple parameters check kiye jaate hain 
+                jo product ki safety, nutritional value, aur authenticity ensure karte hain.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                <div class="bg-white p-4 rounded-lg shadow-sm">
+                    <h4 class="font-semibold text-orange-700">🧈 Khoya-based</h4>
+                    <p class="text-sm text-gray-600">Peda, Burfi, Milk Cake, Kalakand</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-sm">
+                    <h4 class="font-semibold text-orange-700">🧀 Chhena-based</h4>
+                    <p class="text-sm text-gray-600">Rasgulla, Rasmalai, Sandesh</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-sm">
+                    <h4 class="font-semibold text-orange-700">🍩 Fried Sweets</h4>
+                    <p class="text-sm text-gray-600">Gulab Jamun, Balushahi, Jalebi</p>
+                </div>
+            </div>
+        </div>
+    `,
     tests: [
         {
-            title: "Total Solids / Moisture Ka Determination",
-            purpose: "Dairy sweets mein moisture aur total solids determine karne ke liye.",
-            reference: "FSSAI Manual; IS Standards for respective products",
+            title: "Total Solids / Moisture Ka Determination (Gravimetric Method)",
+            purpose: "Dairy sweets mein moisture aur total solids determine karne ke liye - ye shelf life aur quality ka important indicator hai.",
+            reference: "FSSAI Manual of Methods; IS:2687 (Khoya); IS:5753 (Burfi); IS:5424 (Peda); IS:12898 (Gulab Jamun)",
+            formulaExplanation: `
+                <div class="bg-blue-50 p-5 rounded-xl border border-blue-200 mb-4">
+                    <h4 class="font-bold text-blue-800 mb-3">📐 Formula Derivation & Factor Explanation</h4>
+                    
+                    <div class="bg-white p-4 rounded-lg mb-4">
+                        <h5 class="font-semibold text-blue-700 mb-2">Basic Formula:</h5>
+                        <pre class="bg-gray-100 p-3 rounded text-lg"><code>% Moisture = [(W2 - W3) / (W2 - W1)] × 100</code></pre>
+                        
+                        <div class="mt-4 space-y-3">
+                            <div class="flex items-start gap-3">
+                                <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded font-mono text-sm">W1</span>
+                                <div>
+                                    <p class="font-medium">Empty dish + sand + glass rod ka weight (grams)</p>
+                                    <p class="text-sm text-gray-600">Sand isliye use hota hai kyunki ye surface area badhata hai aur uniform drying ensure karta hai</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded font-mono text-sm">W2</span>
+                                <div>
+                                    <p class="font-medium">Dish + sand + sample ka weight before drying (grams)</p>
+                                    <p class="text-sm text-gray-600">(W2 - W1) = Actual sample weight</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded font-mono text-sm">W3</span>
+                                <div>
+                                    <p class="font-medium">Dish + sand + dried sample ka weight after drying (grams)</p>
+                                    <p class="text-sm text-gray-600">(W2 - W3) = Weight of moisture lost</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-4 rounded-lg mb-4">
+                        <h5 class="font-semibold text-blue-700 mb-2">Formula Logic:</h5>
+                        <div class="text-gray-700 space-y-2">
+                            <p><strong>Step 1:</strong> Weight of sample = W2 - W1</p>
+                            <p><strong>Step 2:</strong> Weight of moisture = W2 - W3 (kyunki sirf moisture evaporate hua)</p>
+                            <p><strong>Step 3:</strong> % Moisture = (Moisture weight / Sample weight) × 100</p>
+                            <p><strong>Step 4:</strong> % Total Solids = 100 - % Moisture</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                        <h5 class="font-semibold text-yellow-800 mb-2">⚠️ Why 102 ± 2°C Temperature?</h5>
+                        <ul class="text-sm text-gray-700 space-y-1">
+                            <li>• 100°C se thoda zyada taaki free + bound water dono remove ho</li>
+                            <li>• 105°C se zyada hone par sugar caramelization aur decomposition ho sakti hai</li>
+                            <li>• Dairy products mein lactose heat sensitive hai</li>
+                        </ul>
+                    </div>
+                </div>
+            `,
             procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Procedure (Sand Drying Method):</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                    <li>Sand + glass rod wali pre-weighed dish (W1) mein ~3g finely grated/crushed sample weigh karein (W2).</li>
-                    <li>Kuch drops distilled water daalein aur sand ke saath thoroughly mix karein.</li>
-                    <li>Hot plate par preliminary drying karein.</li>
-                    <li>Hot air oven mein 102 ± 2°C par 5 hours (ya constant weight tak) dry karein.</li>
-                    <li>Desiccator mein cool karein, weigh karein (W3).</li>
+                <h4 class="font-semibold mt-4 mb-2">🔬 Sand Drying Method Procedure:</h4>
+                
+                <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                    <h5 class="font-semibold mb-2">Required Materials:</h5>
+                    <ul class="grid grid-cols-2 gap-2 text-sm">
+                        <li>✓ Flat bottom dish (70mm dia, 30mm height)</li>
+                        <li>✓ Acid-washed sand (20-30 mesh)</li>
+                        <li>✓ Short glass rod</li>
+                        <li>✓ Hot air oven (102 ± 2°C)</li>
+                        <li>✓ Desiccator with silica gel</li>
+                        <li>✓ Analytical balance (0.0001g)</li>
+                    </ul>
+                </div>
+
+                <ol class="list-decimal list-outside pl-5 space-y-3">
+                    <li>
+                        <strong>Dish Preparation:</strong>
+                        <ul class="list-disc pl-5 text-sm mt-1">
+                            <li>Dish mein 20-30g acid-washed sand lein</li>
+                            <li>Short glass rod add karein</li>
+                            <li>102°C par 1 hour dry karein</li>
+                            <li>Desiccator mein cool karein</li>
+                            <li>Weight note karein = <strong>W1</strong></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Sample Addition:</strong>
+                        <ul class="list-disc pl-5 text-sm mt-1">
+                            <li>3-5g finely grated/crushed sample accurately weigh karein</li>
+                            <li>Sample ko sand par evenly spread karein</li>
+                            <li>Immediately weigh karein = <strong>W2</strong></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Mixing:</strong>
+                        <ul class="list-disc pl-5 text-sm mt-1">
+                            <li>5-10ml distilled water daalein (helps in dispersing fatty sample)</li>
+                            <li>Glass rod se thoroughly mix karein</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Pre-drying:</strong>
+                        <ul class="list-disc pl-5 text-sm mt-1">
+                            <li>Water bath (80-90°C) par rakh kar major moisture remove karein</li>
+                            <li>Tab tak heat karein jab tak almost dry na ho</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Final Drying:</strong>
+                        <ul class="list-disc pl-5 text-sm mt-1">
+                            <li>Hot air oven mein 102 ± 2°C par rakhein</li>
+                            <li>3 hours dry karein</li>
+                            <li>Cool karein, weigh karein</li>
+                            <li>1 hour aur dry karein</li>
+                            <li>Jab tak constant weight na aaye (±0.5mg difference)</li>
+                            <li>Final weight = <strong>W3</strong></li>
+                        </ul>
+                    </li>
                 </ol>
-                <pre><code>% Moisture = [(W2 - W3) / (W2 - W1)] × 100</code></pre>
-                <pre><code>% Total Solids = 100 - % Moisture</code></pre>
-                <p class="text-xs mt-2">Standards: Peda mein max 20% moisture, Burfi mein max 18% moisture.</p>
+
+                <div class="mt-6 bg-green-50 p-4 rounded-lg border border-green-200">
+                    <h5 class="font-semibold text-green-800 mb-2">📊 Calculation Example:</h5>
+                    <div class="font-mono text-sm bg-white p-3 rounded">
+                        <p>W1 (empty dish + sand) = 45.2345 g</p>
+                        <p>W2 (dish + sand + sample) = 48.5678 g</p>
+                        <p>W3 (dish + sand + dried sample) = 47.8654 g</p>
+                        <p class="mt-2">Sample weight = 48.5678 - 45.2345 = <strong>3.3333 g</strong></p>
+                        <p>Moisture lost = 48.5678 - 47.8654 = <strong>0.7024 g</strong></p>
+                        <p class="mt-2">% Moisture = (0.7024 / 3.3333) × 100 = <strong>21.07%</strong></p>
+                        <p>% Total Solids = 100 - 21.07 = <strong>78.93%</strong></p>
+                    </div>
+                </div>
+            `,
+            standards: `
+                <div class="mt-4 bg-orange-50 p-4 rounded-lg border border-orange-200">
+                    <h5 class="font-semibold text-orange-800 mb-2">📋 FSSAI Standards for Moisture Content:</h5>
+                    <table class="w-full text-sm">
+                        <thead class="bg-orange-100">
+                            <tr>
+                                <th class="p-2 text-left">Product</th>
+                                <th class="p-2 text-left">Maximum Moisture</th>
+                                <th class="p-2 text-left">Minimum Total Solids</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b"><td class="p-2">Peda</td><td class="p-2">≤ 20%</td><td class="p-2">≥ 80%</td></tr>
+                            <tr class="border-b"><td class="p-2">Burfi (Plain)</td><td class="p-2">≤ 18%</td><td class="p-2">≥ 82%</td></tr>
+                            <tr class="border-b"><td class="p-2">Milk Cake</td><td class="p-2">≤ 20%</td><td class="p-2">≥ 80%</td></tr>
+                            <tr class="border-b"><td class="p-2">Gulab Jamun (solid part)</td><td class="p-2">≤ 45%</td><td class="p-2">≥ 55%</td></tr>
+                            <tr class="border-b"><td class="p-2">Kalakand</td><td class="p-2">≤ 25%</td><td class="p-2">≥ 75%</td></tr>
+                            <tr><td class="p-2">Khoya</td><td class="p-2">≤ 30%</td><td class="p-2">≥ 70%</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             `
         },
         {
-            title: "Fat Ka Determination",
-            purpose: "Dairy sweets mein fat content determine karne ke liye.",
+            title: "Fat Determination - Gerber Method (10.75ml Butyrometer)",
+            purpose: "Dairy sweets mein fat content quickly determine karne ke liye - ye adulteration detection aur nutritional labeling ke liye important hai.",
+            reference: "IS:1224 (Part I & II); FSSAI Manual; IDF Standard 105",
+            formulaExplanation: `
+                <div class="bg-purple-50 p-5 rounded-xl border border-purple-200 mb-4">
+                    <h4 class="font-bold text-purple-800 mb-3">📐 Gerber Method - Formula & Factor Explanation</h4>
+                    
+                    <div class="bg-white p-4 rounded-lg mb-4">
+                        <h5 class="font-semibold text-purple-700 mb-2">10.75ml Butyrometer Ka Origin:</h5>
+                        <div class="text-gray-700 space-y-2">
+                            <p><strong>Why 10.75ml?</strong></p>
+                            <ul class="list-disc pl-5 text-sm space-y-1">
+                                <li>Milk ka specific gravity ≈ 1.030</li>
+                                <li>10.75ml × 1.030 = 11.0725g ≈ <strong>11g milk</strong></li>
+                                <li>Butyrometer scale is calibrated for 11g sample</li>
+                                <li>Each division on scale = 0.1% fat by weight</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-lg mb-4">
+                        <h5 class="font-semibold text-purple-700 mb-2">Direct Reading for Liquid Milk:</h5>
+                        <pre class="bg-gray-100 p-3 rounded"><code>% Fat = Butyrometer reading (direct)</code></pre>
+                        <p class="text-sm text-gray-600 mt-2">Kyunki butyrometer scale hi calibrated hai 11g sample ke liye</p>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-lg mb-4">
+                        <h5 class="font-semibold text-purple-700 mb-2">For Solid/Semi-solid Sweets (Modified Gerber):</h5>
+                        <pre class="bg-gray-100 p-3 rounded"><code>% Fat = BR × (Wt + W) / W</code></pre>
+                        
+                        <div class="mt-3 space-y-2 text-sm">
+                            <div class="flex items-start gap-3">
+                                <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded font-mono">BR</span>
+                                <p>Butyrometer Reading (divisions)</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded font-mono">W</span>
+                                <p>Sample weight (grams)</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded font-mono">Wt</span>
+                                <p>Water added to make up volume (grams)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                        <h5 class="font-semibold text-yellow-800 mb-2">⚠️ Reagent Functions:</h5>
+                        <table class="w-full text-sm">
+                            <tr class="border-b">
+                                <td class="p-2 font-medium">H₂SO₄ (10ml)</td>
+                                <td class="p-2">
+                                    • Specific gravity 1.820-1.825<br>
+                                    • Digests proteins (casein)<br>
+                                    • Generates heat for fat separation<br>
+                                    • Chars lactose (prevents interference)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 font-medium">Amyl Alcohol (1ml)</td>
+                                <td class="p-2">
+                                    • Reduces surface tension<br>
+                                    • Prevents charring of fat<br>
+                                    • Facilitates fat column separation<br>
+                                    • Gives clear fat/acid interface
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            `,
             procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Method Selection:</h4>
-                <ul class="list-disc list-outside pl-5 space-y-1">
-                    <li><strong>Without added sugar:</strong> Werner-Schmidt (HCl acid digestion) method use karein.</li>
-                    <li><strong>With added sugar (Peda, Burfi, Gulab Jamun):</strong> Rose-Gottlieb method use karein, kyunki sugar HCl ke saath charring problem de sakta hai.</li>
-                </ul>
-                <h4 class="font-semibold mt-4 mb-2">Rose-Gottlieb Procedure:</h4>
+                <h4 class="font-semibold mt-4 mb-2">🔬 Gerber Method for Sweets (Modified Procedure):</h4>
+                
+                <div class="bg-red-50 p-4 rounded-lg mb-4 border border-red-200">
+                    <h5 class="font-semibold text-red-800 mb-2">⚠️ Important Note:</h5>
+                    <p class="text-sm text-gray-700">
+                        Sugar-rich sweets (Peda, Burfi, Gulab Jamun) ke liye <strong>Gerber method suitable nahi hai</strong> 
+                        kyunki concentrated H₂SO₄ se sugar char hota hai jo reading mein error deta hai. 
+                        Aise products ke liye <strong>Rose-Gottlieb method recommended</strong> hai.
+                    </p>
+                </div>
+
+                <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                    <h5 class="font-semibold mb-2">Required Equipment:</h5>
+                    <ul class="grid grid-cols-2 gap-2 text-sm">
+                        <li>✓ Butyrometer (0-8% or 0-40% scale)</li>
+                        <li>✓ 10.75ml milk pipette (for milk)</li>
+                        <li>✓ Gerber centrifuge</li>
+                        <li>✓ Water bath (65 ± 2°C)</li>
+                        <li>✓ H₂SO₄ (sp. gr. 1.820-1.825)</li>
+                        <li>✓ Amyl alcohol (iso-amyl alcohol)</li>
+                    </ul>
+                </div>
+
+                <h5 class="font-semibold mt-4 mb-2">For Khoya/Low-Sugar Sweets:</h5>
                 <ol class="list-decimal list-outside pl-5 space-y-2">
-                    <li>~2g sample ko Mojonnier tube mein weigh karein.</li>
-                    <li>10ml warm water mein dissolve karein.</li>
-                    <li>1.5ml ammonia, 10ml ethanol, 25ml diethyl ether, 25ml petroleum ether ke saath extract karein.</li>
-                    <li>Triple extraction karein, solvents evaporate karein, fat weigh karein.</li>
+                    <li>3-5g accurately weighed sample ko beaker mein lein</li>
+                    <li>30-40ml warm water (60°C) mein completely dissolve karein</li>
+                    <li>Solution cool hone dein</li>
+                    <li>Butyrometer mein 10ml H₂SO₄ daalein (carefully, along the wall)</li>
+                    <li>Sample solution 10.75ml daalein</li>
+                    <li>1ml amyl alcohol daalein</li>
+                    <li>Rubber stopper lagakar thoroughly mix karein (inverte 4-5 times)</li>
+                    <li>65°C water bath mein 5 minutes rakhein</li>
+                    <li>Centrifuge mein 1100 rpm par 5 minutes centrifuge karein</li>
+                    <li>Wapas water bath mein 5 minutes</li>
+                    <li>Fat column reading lein</li>
+                </ol>
+
+                <div class="mt-6 bg-green-50 p-4 rounded-lg border border-green-200">
+                    <h5 class="font-semibold text-green-800 mb-2">📊 Calculation Example (Khoya):</h5>
+                    <div class="font-mono text-sm bg-white p-3 rounded">
+                        <p>Sample weight (W) = 3.5 g</p>
+                        <p>Water added for dissolution = 35 ml ≈ 35 g</p>
+                        <p>Total volume (Wt + W) = 38.5 g</p>
+                        <p>Butyrometer reading (BR) = 2.8</p>
+                        <p class="mt-2">% Fat = 2.8 × (38.5 / 3.5)</p>
+                        <p>% Fat = 2.8 × 11 = <strong>30.8%</strong></p>
+                    </div>
+                </div>
+            `,
+            alternativeMethod: `
+                <div class="mt-6 bg-indigo-50 p-5 rounded-xl border border-indigo-200">
+                    <h4 class="font-bold text-indigo-800 mb-3">🔬 Rose-Gottlieb Method (Recommended for Sugar-Rich Sweets)</h4>
+                    
+                    <div class="bg-white p-4 rounded-lg mb-4">
+                        <h5 class="font-semibold text-indigo-700 mb-2">Formula:</h5>
+                        <pre class="bg-gray-100 p-3 rounded"><code>% Fat = [(W2 - W1) / W] × 100</code></pre>
+                        
+                        <div class="mt-3 space-y-2 text-sm">
+                            <p><strong>W1</strong> = Empty flask weight</p>
+                            <p><strong>W2</strong> = Flask + extracted fat weight</p>
+                            <p><strong>W</strong> = Sample weight taken</p>
+                        </div>
+                    </div>
+
+                    <h5 class="font-semibold mb-2">Procedure:</h5>
+                    <ol class="list-decimal list-outside pl-5 space-y-2 text-sm">
+                        <li>2g sample ko Mojonnier tube mein accurately weigh karein</li>
+                        <li>10ml warm water mein dissolve karein</li>
+                        <li>1.5ml ammonia solution (25%) daalein, mix karein</li>
+                        <li>10ml ethanol (95%) daalein, shake karein</li>
+                        <li>25ml diethyl ether daalein, 1 minute vigorously shake karein</li>
+                        <li>25ml petroleum ether (40-60°C) daalein, 30 seconds shake karein</li>
+                        <li>Centrifuge ya stand karke layers separate hone dein</li>
+                        <li>Upper ether layer ko pre-weighed flask mein decant karein</li>
+                        <li>Extraction 2 more times repeat karein (15ml + 15ml each solvent)</li>
+                        <li>Combined ether extract ko evaporate karein</li>
+                        <li>103°C par 1 hour dry karein</li>
+                        <li>Cool aur weigh karein</li>
+                    </ol>
+
+                    <div class="mt-4 bg-yellow-50 p-3 rounded border border-yellow-200">
+                        <p class="text-sm"><strong>Why Rose-Gottlieb?</strong></p>
+                        <ul class="text-xs list-disc pl-5 mt-1">
+                            <li>Ammonia casein ko dissolve karta hai</li>
+                            <li>Ethanol proteins precipitate karta hai</li>
+                            <li>Ether fat extract karta hai</li>
+                            <li>No charring of sugar</li>
+                            <li>Reference method for all dairy products</li>
+                        </ul>
+                    </div>
+                </div>
+            `
+        },
+        {
+            title: "Fat Determination - Werner-Schmidt (Acid Digestion) Method",
+            purpose: "Non-sugar containing dairy products aur khoya ke liye fat determination.",
+            reference: "AOAC 989.05; IS:1224 Part 2",
+            formulaExplanation: `
+                <div class="bg-teal-50 p-5 rounded-xl border border-teal-200 mb-4">
+                    <h4 class="font-bold text-teal-800 mb-3">📐 Werner-Schmidt Method Formula</h4>
+                    
+                    <div class="bg-white p-4 rounded-lg mb-4">
+                        <pre class="bg-gray-100 p-3 rounded text-lg"><code>% Fat = [(W2 - W1) / W] × 100</code></pre>
+                        
+                        <div class="mt-4 space-y-3">
+                            <div class="flex items-start gap-3">
+                                <span class="bg-teal-100 text-teal-800 px-2 py-1 rounded font-mono text-sm">W</span>
+                                <p>Sample weight (grams)</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="bg-teal-100 text-teal-800 px-2 py-1 rounded font-mono text-sm">W1</span>
+                                <p>Empty beaker/flask weight (grams)</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="bg-teal-100 text-teal-800 px-2 py-1 rounded font-mono text-sm">W2</span>
+                                <p>Beaker + extracted fat weight (grams)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                        <h5 class="font-semibold text-yellow-800 mb-2">⚠️ HCl Digestion Ka Purpose:</h5>
+                        <ul class="text-sm space-y-1">
+                            <li>• <strong>8N HCl</strong> proteins ko hydrolyze karta hai</li>
+                            <li>• Fat globule membrane break hoti hai</li>
+                            <li>• Fat free ho jata hai extraction ke liye</li>
+                            <li>• ⚠️ Sugar presence mein charring hoti hai - avoid for sweet products</li>
+                        </ul>
+                    </div>
+                </div>
+            `,
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">🔬 Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>3-5g sample ko Mojonnier tube ya 100ml beaker mein lein</li>
+                    <li>10ml 8N HCl daalein</li>
+                    <li>Water bath par boil karein jab tak completely dissolved (10-15 min)</li>
+                    <li>Brown to dark brown colour aayega</li>
+                    <li>Cool karein</li>
+                    <li>25ml diethyl ether se extract karein (3 times)</li>
+                    <li>Ether layer ko pre-weighed flask mein collect karein</li>
+                    <li>Ether evaporate karein</li>
+                    <li>103°C par 1 hour dry karein</li>
+                    <li>Cool aur weigh karein</li>
                 </ol>
             `
         },
         {
-            title: "Sucrose Ka Determination (Lane-Eynon Method)",
-            purpose: "Added sugar content determine karne ke liye.",
+            title: "Sucrose Ka Determination (Lane-Eynon Titration Method)",
+            purpose: "Dairy sweets mein added sugar (sucrose) content determine karne ke liye.",
+            reference: "FSSAI Manual; IS:1479 Part II; AOAC 923.09",
+            formulaExplanation: `
+                <div class="bg-pink-50 p-5 rounded-xl border border-pink-200 mb-4">
+                    <h4 class="font-bold text-pink-800 mb-3">📐 Lane-Eynon Method - Complete Formula Derivation</h4>
+                    
+                    <div class="bg-white p-4 rounded-lg mb-4">
+                        <h5 class="font-semibold text-pink-700 mb-2">Step 1: Reducing Sugars (Before Inversion)</h5>
+                        <pre class="bg-gray-100 p-3 rounded"><code>% Reducing Sugars = (F × D × 100) / (T × W)</code></pre>
+                        
+                        <div class="mt-3 space-y-2 text-sm">
+                            <div class="flex items-start gap-3">
+                                <span class="bg-pink-100 text-pink-800 px-2 py-1 rounded font-mono">F</span>
+                                <div>
+                                    <p>Fehling's Factor (mg of invert sugar reduced by 10ml mixed Fehling's)</p>
+                                    <p class="text-xs text-gray-500">Usually 49-52mg, determined by standardization with pure glucose</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="bg-pink-100 text-pink-800 px-2 py-1 rounded font-mono">D</span>
+                                <p>Total dilution volume (ml) - usually 250ml</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="bg-pink-100 text-pink-800 px-2 py-1 rounded font-mono">T</span>
+                                <p>Titre value - sample solution required to reduce Fehling's (ml)</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="bg-pink-100 text-pink-800 px-2 py-1 rounded font-mono">W</span>
+                                <p>Sample weight (grams)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-lg mb-4">
+                        <h5 class="font-semibold text-pink-700 mb-2">Step 2: Total Reducing Sugars (After Inversion)</h5>
+                        <pre class="bg-gray-100 p-3 rounded"><code>% Total Reducing Sugars = (F × D × 100) / (T' × W)</code></pre>
+                        <p class="text-sm mt-2">T' = Titre after inversion</p>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-lg mb-4">
+                        <h5 class="font-semibold text-pink-700 mb-2">Step 3: Sucrose Calculation</h5>
+                        <pre class="bg-gray-100 p-3 rounded"><code>% Sucrose = (% Total RS - % Original RS) × 0.95</code></pre>
+                        
+                        <div class="mt-3 bg-yellow-50 p-3 rounded border border-yellow-200">
+                            <h6 class="font-semibold text-yellow-800 mb-1">Why 0.95 Factor?</h6>
+                            <div class="text-sm text-gray-700">
+                                <p>Sucrose (C₁₂H₂₂O₁₁) + H₂O → Glucose (C₆H₁₂O₆) + Fructose (C₆H₁₂O₆)</p>
+                                <p class="mt-2">
+                                    <strong>MW Sucrose = 342</strong><br>
+                                    <strong>MW (Glucose + Fructose) = 180 + 180 = 360</strong><br>
+                                    <strong>Ratio = 342/360 = 0.95</strong>
+                                </p>
+                                <p class="mt-2 text-xs">
+                                    Matlab: 360g invert sugar 342g sucrose se aata hai<br>
+                                    So invert sugar × 0.95 = equivalent sucrose
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-lg">
+                        <h5 class="font-semibold text-pink-700 mb-2">For Dairy Sweets (Lactose Correction):</h5>
+                        <pre class="bg-gray-100 p-3 rounded"><code>% Sucrose = [(Total RS - Lactose as RS) × 0.95]</code></pre>
+                        <p class="text-sm mt-2 text-gray-600">
+                            Dairy products mein lactose bhi reducing sugar hai, so:<br>
+                            Original RS = mainly Lactose<br>
+                            After inversion: Total RS = Lactose + Inverted Sucrose
+                        </p>
+                    </div>
+                </div>
+            `,
             procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <h4 class="font-semibold mt-4 mb-2">🔬 Detailed Procedure:</h4>
+                
+                <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                    <h5 class="font-semibold mb-2">Reagents Required:</h5>
+                    <ul class="grid grid-cols-2 gap-2 text-sm">
+                        <li>✓ Fehling's A (CuSO₄ solution)</li>
+                        <li>✓ Fehling's B (Alkaline tartrate)</li>
+                        <li>✓ Methylene blue indicator (1%)</li>
+                        <li>✓ Neutral lead acetate (10%)</li>
+                        <li>✓ Potassium oxalate (10%)</li>
+                        <li>✓ HCl (conc.) for inversion</li>
+                        <li>✓ NaOH (20%) for neutralization</li>
+                    </ul>
+                </div>
+
+                <h5 class="font-semibold mt-4 mb-2">A. Sample Preparation:</h5>
                 <ol class="list-decimal list-outside pl-5 space-y-2">
-                    <li>~10g sample ko warm water mein dissolve karein.</li>
-                    <li>Clarifying agents (potassium ferrocyanide + zinc acetate) se treat karein.</li>
-                    <li>Volume make up karein (250ml) aur filter karein.</li>
-                    <li><strong>Before inversion:</strong> Fehling's solution titrate karein (Reducing sugars = Lactose).</li>
-                    <li><strong>After inversion:</strong> HCl se invert karein, neutralize karein, phir se titrate karein (Total reducing sugars).</li>
-                    <li>Difference se sucrose calculate karein.</li>
+                    <li>10g accurately weighed sample ko 100ml warm water mein dissolve karein</li>
+                    <li>250ml volumetric flask mein transfer karein</li>
+                    <li>5ml neutral lead acetate daalein (to precipitate proteins)</li>
+                    <li>Mix karein, 5 minutes stand karein</li>
+                    <li>5ml potassium oxalate daalein (to remove excess lead)</li>
+                    <li>Volume make up karein with distilled water</li>
+                    <li>Filter through Whatman No. 1</li>
                 </ol>
-                <pre><code>% Sucrose = (Total reducing sugars - Original reducing sugars) × 0.95</code></pre>
+
+                <h5 class="font-semibold mt-4 mb-2">B. Before Inversion (Original Reducing Sugars):</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>5ml Fehling's A + 5ml Fehling's B ko 250ml conical flask mein lein</li>
+                    <li>15ml distilled water daalein</li>
+                    <li>Burette mein clarified sample solution lein</li>
+                    <li>Flask ko wire gauze par rakh kar boil karein</li>
+                    <li>Boiling maintain karte hue sample titrate karein (fast addition, almost to endpoint)</li>
+                    <li>Near endpoint par 3-4 drops methylene blue daalein</li>
+                    <li>Brick red endpoint tak dropwise titrate karein</li>
+                    <li>Blue colour completely disappear honi chahiye</li>
+                    <li>Note titre value = T₁</li>
+                </ol>
+
+                <h5 class="font-semibold mt-4 mb-2">C. Inversion Process:</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>50ml filtered sample solution ko 100ml volumetric flask mein lein</li>
+                    <li>5ml conc. HCl daalein</li>
+                    <li>Water bath par 70°C mein 10 minutes heat karein (inversion)</li>
+                    <li>Cool karein to room temperature</li>
+                    <li>Phenolphthalein 2-3 drops daalein</li>
+                    <li>20% NaOH se neutralize karein (pink colour)</li>
+                    <li>1-2 drops HCl se just decolorize karein</li>
+                    <li>Volume 100ml make up karein</li>
+                </ol>
+
+                <h5 class="font-semibold mt-4 mb-2">D. After Inversion (Total Reducing Sugars):</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Same Fehling's titration repeat karein</li>
+                    <li>Note titre value = T₂</li>
+                </ol>
+
+                <div class="mt-6 bg-green-50 p-4 rounded-lg border border-green-200">
+                    <h5 class="font-semibold text-green-800 mb-2">📊 Calculation Example:</h5>
+                    <div class="font-mono text-sm bg-white p-3 rounded">
+                        <p>Sample weight (W) = 10 g</p>
+                        <p>Dilution (D) = 250 ml</p>
+                        <p>Fehling's Factor (F) = 50 mg</p>
+                        <p>Titre before inversion (T₁) = 12.5 ml</p>
+                        <p>Titre after inversion (T₂) = 8.2 ml (inverted solution diluted to 100, so DF = 2)</p>
+                        <p class="mt-2 border-t pt-2">
+                            <strong>Before Inversion RS:</strong><br>
+                            = (50 × 250 × 100) / (12.5 × 10 × 1000) = <strong>10%</strong> (mainly lactose)
+                        </p>
+                        <p class="mt-2">
+                            <strong>After Inversion Total RS:</strong><br>
+                            = (50 × 100 × 100) / (8.2 × 5 × 1000) = <strong>12.2%</strong>
+                        </p>
+                        <p class="mt-2">
+                            <strong>Sucrose:</strong><br>
+                            = (12.2 - 10) × 0.95 = <strong>2.09%</strong>
+                        </p>
+                    </div>
+                </div>
             `
         },
         {
-            title: "Protein Ka Determination (Kjeldahl Method)",
-            purpose: "Protein content determine karne ke liye.",
-            procedure: `<p>~1g sample lein, standard Kjeldahl method follow karein. % Protein = % N × 6.38</p>`
+            title: "Protein Determination (Kjeldahl Method)",
+            purpose: "Dairy sweets mein protein content determine karne ke liye - nutritional labeling aur milk solid verification ke liye important.",
+            reference: "FSSAI Manual; IS:1479 Part II; AOAC 991.20",
+            formulaExplanation: `
+                <div class="bg-emerald-50 p-5 rounded-xl border border-emerald-200 mb-4">
+                    <h4 class="font-bold text-emerald-800 mb-3">📐 Kjeldahl Method - Formula & Factors</h4>
+                    
+                    <div class="bg-white p-4 rounded-lg mb-4">
+                        <h5 class="font-semibold text-emerald-700 mb-2">Basic Formula:</h5>
+                        <pre class="bg-gray-100 p-3 rounded text-lg"><code>% Nitrogen = [(V₁ - V₂) × N × 14.007 × 100] / (W × 1000)</code></pre>
+                        <pre class="bg-gray-100 p-3 rounded text-lg mt-2"><code>% Protein = % N × 6.38</code></pre>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-lg mb-4">
+                        <h5 class="font-semibold text-emerald-700 mb-2">Variable Explanation:</h5>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex items-start gap-3">
+                                <span class="bg-emerald-100 text-emerald-800 px-2 py-1 rounded font-mono">V₁</span>
+                                <p>Titre volume of HCl/H₂SO₄ for sample (ml)</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="bg-emerald-100 text-emerald-800 px-2 py-1 rounded font-mono">V₂</span>
+                                <p>Titre volume for blank (ml)</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="bg-emerald-100 text-emerald-800 px-2 py-1 rounded font-mono">N</span>
+                                <p>Normality of acid (usually 0.1N)</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="bg-emerald-100 text-emerald-800 px-2 py-1 rounded font-mono">14.007</span>
+                                <div>
+                                    <p>Atomic weight of Nitrogen</p>
+                                    <p class="text-xs text-gray-500">1ml 1N acid ≡ 14.007 mg N</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="bg-emerald-100 text-emerald-800 px-2 py-1 rounded font-mono">W</span>
+                                <p>Sample weight (grams)</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="bg-emerald-100 text-emerald-800 px-2 py-1 rounded font-mono">6.38</span>
+                                <div>
+                                    <p><strong>Protein-Nitrogen Conversion Factor for Dairy</strong></p>
+                                    <p class="text-xs text-gray-500">
+                                        Milk proteins contain avg 15.67% nitrogen<br>
+                                        100/15.67 = 6.38
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                        <h5 class="font-semibold text-yellow-800 mb-2">⚠️ Why 6.38 for Dairy? (Not 6.25)</h5>
+                        <table class="w-full text-sm mt-2">
+                            <thead class="bg-yellow-100">
+                                <tr>
+                                    <th class="p-2 text-left">Protein Type</th>
+                                    <th class="p-2 text-left">N Content (%)</th>
+                                    <th class="p-2 text-left">Factor</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="p-1">General food proteins</td><td class="p-1">16%</td><td class="p-1">6.25</td></tr>
+                                <tr><td class="p-1">Milk proteins (casein)</td><td class="p-1">15.67%</td><td class="p-1"><strong>6.38</strong></td></tr>
+                                <tr><td class="p-1">Wheat (gluten)</td><td class="p-1">17.54%</td><td class="p-1">5.70</td></tr>
+                                <tr><td class="p-1">Gelatin</td><td class="p-1">18.0%</td><td class="p-1">5.55</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `,
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">🔬 Kjeldahl Procedure (Three Stages):</h4>
+                
+                <h5 class="font-semibold mt-4 mb-2 text-red-700">Stage 1: Digestion</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>1-2g accurately weighed sample ko Kjeldahl flask (500ml) mein lein</li>
+                    <li>Add: 10g K₂SO₄ (or Na₂SO₄) + 0.5g CuSO₄ (catalyst)</li>
+                    <li>25ml conc. H₂SO₄ carefully add karein</li>
+                    <li>Heat gently at first, then strongly</li>
+                    <li>Digest until clear bluish-green solution (2-3 hours)</li>
+                    <li>Cool to room temperature</li>
+                </ol>
+                <div class="bg-blue-50 p-3 rounded mt-2 text-sm">
+                    <strong>Reaction:</strong> Organic N → NH₄HSO₄ (ammonium bisulfate)
+                </div>
+
+                <h5 class="font-semibold mt-4 mb-2 text-blue-700">Stage 2: Distillation</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Digested sample ko distillation flask mein transfer karein</li>
+                    <li>150ml distilled water se rinse karein</li>
+                    <li>Receiving flask mein: 25ml boric acid (4%) + mixed indicator</li>
+                    <li>Slowly add: 80ml 40% NaOH (caustic soda)</li>
+                    <li>Immediately connect to condenser</li>
+                    <li>Distill until ~150ml distillate collected</li>
+                    <li>Solution green colour hogi (ammonia absorbed in boric acid)</li>
+                </ol>
+                <div class="bg-blue-50 p-3 rounded mt-2 text-sm">
+                    <strong>Reaction:</strong> NH₄⁺ + OH⁻ → NH₃↑ + H₂O<br>
+                    NH₃ + H₃BO₃ → NH₄⁺ + H₂BO₃⁻
+                </div>
+
+                <h5 class="font-semibold mt-4 mb-2 text-green-700">Stage 3: Titration</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>0.1N HCl ya H₂SO₄ se titrate karein</li>
+                    <li>Endpoint: Green → Original pink</li>
+                    <li>Note titre volume</li>
+                    <li>Run blank similarly</li>
+                </ol>
+
+                <div class="mt-6 bg-green-50 p-4 rounded-lg border border-green-200">
+                    <h5 class="font-semibold text-green-800 mb-2">📊 Calculation Example:</h5>
+                    <div class="font-mono text-sm bg-white p-3 rounded">
+                        <p>Sample weight (W) = 1.0523 g</p>
+                        <p>Titre - Sample (V₁) = 18.5 ml</p>
+                        <p>Titre - Blank (V₂) = 0.2 ml</p>
+                        <p>Normality of HCl (N) = 0.1</p>
+                        <p class="mt-2 border-t pt-2">
+                            <strong>% N = [(18.5 - 0.2) × 0.1 × 14.007] / (1.0523 × 10)</strong><br>
+                            <strong>% N = 25.64 / 10.523 = 2.44%</strong>
+                        </p>
+                        <p class="mt-2">
+                            <strong>% Protein = 2.44 × 6.38 = 15.57%</strong>
+                        </p>
+                    </div>
+                </div>
+            `
         },
         {
             title: "Titratable Acidity Ka Determination",
-            purpose: "Sweet ki acidity measure karne ke liye.",
+            purpose: "Sweet ki acidity measure karna - freshness aur fermentation indicator.",
+            reference: "IS:1479 Part I; FSSAI Manual",
+            formulaExplanation: `
+                <div class="bg-amber-50 p-5 rounded-xl border border-amber-200 mb-4">
+                    <h4 class="font-bold text-amber-800 mb-3">📐 Acidity Formula Derivation</h4>
+                    
+                    <div class="bg-white p-4 rounded-lg mb-4">
+                        <h5 class="font-semibold text-amber-700 mb-2">Formula:</h5>
+                        <pre class="bg-gray-100 p-3 rounded text-lg"><code>% Lactic Acid = (V × N × 0.090 × 100) / W</code></pre>
+                        <p class="mt-2 text-sm">Simplified: <code>% Lactic Acid = (9 × V × N) / W</code></p>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-lg mb-4">
+                        <h5 class="font-semibold text-amber-700 mb-2">Factor Explanation:</h5>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex items-start gap-3">
+                                <span class="bg-amber-100 text-amber-800 px-2 py-1 rounded font-mono">V</span>
+                                <p>Volume of NaOH used in titration (ml)</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="bg-amber-100 text-amber-800 px-2 py-1 rounded font-mono">N</span>
+                                <p>Normality of NaOH (usually 0.1N)</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="bg-amber-100 text-amber-800 px-2 py-1 rounded font-mono">0.090</span>
+                                <div>
+                                    <p><strong>Milliequivalent weight of Lactic Acid</strong></p>
+                                    <p class="text-xs text-gray-500">
+                                        Lactic Acid MW = 90.08 g/mol<br>
+                                        Equivalent weight = 90.08 (monoprotic acid)<br>
+                                        Milliequivalent = 90.08/1000 = 0.09008 ≈ 0.090
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="bg-amber-100 text-amber-800 px-2 py-1 rounded font-mono">W</span>
+                                <p>Sample weight (grams)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                        <h5 class="font-semibold text-yellow-800 mb-2">⚠️ Chemistry Behind:</h5>
+                        <div class="text-sm">
+                            <p><strong>Reaction:</strong></p>
+                            <p class="font-mono bg-white p-2 rounded mt-1">
+                                CH₃-CHOH-COOH + NaOH → CH₃-CHOH-COONa + H₂O
+                            </p>
+                            <p class="mt-2">
+                                1 mole NaOH neutralizes 1 mole Lactic Acid<br>
+                                1 ml of 1N NaOH ≡ 0.090g Lactic Acid
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            `,
             procedure: `
+                <h4 class="font-semibold mt-4 mb-2">🔬 Procedure:</h4>
                 <ol class="list-decimal list-outside pl-5 space-y-2">
-                    <li>10g sample ko 30ml warm water mein dissolve karein.</li>
-                    <li>Phenolphthalein indicator daalein.</li>
-                    <li>0.1N NaOH se pink endpoint tak titrate karein.</li>
+                    <li>10g sample ko beaker mein accurately weigh karein</li>
+                    <li>30ml warm distilled water (40°C) mein dissolve karein</li>
+                    <li>Glass rod se thorough mixing karein</li>
+                    <li>Cool to room temperature</li>
+                    <li>0.5ml phenolphthalein indicator (1%) daalein</li>
+                    <li>0.1N NaOH se titrate karein</li>
+                    <li>Endpoint: First persistent pink colour (30 seconds)</li>
+                    <li>Note titre volume (V)</li>
                 </ol>
-                <pre><code>% Acidity (as lactic acid) = (9 × V × N) / W</code></pre>
+
+                <div class="mt-6 bg-green-50 p-4 rounded-lg border border-green-200">
+                    <h5 class="font-semibold text-green-800 mb-2">📊 Calculation Example:</h5>
+                    <div class="font-mono text-sm bg-white p-3 rounded">
+                        <p>Sample weight (W) = 10 g</p>
+                        <p>Titre (V) = 2.5 ml</p>
+                        <p>NaOH Normality (N) = 0.1</p>
+                        <p class="mt-2 border-t pt-2">
+                            <strong>% Acidity = (9 × 2.5 × 0.1) / 10</strong><br>
+                            <strong>% Acidity = 0.225%</strong>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-4 bg-orange-50 p-4 rounded-lg border border-orange-200">
+                    <h5 class="font-semibold text-orange-800 mb-2">📋 Standards:</h5>
+                    <table class="w-full text-sm">
+                        <tr class="border-b"><td class="p-2">Fresh Khoya</td><td class="p-2">≤ 0.3%</td></tr>
+                        <tr class="border-b"><td class="p-2">Peda/Burfi</td><td class="p-2">≤ 0.5%</td></tr>
+                        <tr><td class="p-2">Milk Cake</td><td class="p-2">≤ 0.6%</td></tr>
+                    </table>
+                </div>
             `
         },
         {
             title: "Total Ash Ka Determination",
-            purpose: "Mineral content determine karne ke liye.",
+            purpose: "Mineral content determine karna - adulteration (chalk, calcium carbonate) detection mein helpful.",
+            reference: "FSSAI Manual; IS:1479 Part II",
+            formulaExplanation: `
+                <div class="bg-gray-100 p-5 rounded-xl border border-gray-300 mb-4">
+                    <h4 class="font-bold text-gray-800 mb-3">📐 Ash Formula</h4>
+                    
+                    <div class="bg-white p-4 rounded-lg mb-4">
+                        <pre class="bg-gray-50 p-3 rounded text-lg"><code>% Ash = [(W2 - W1) / (W3 - W1)] × 100</code></pre>
+                        
+                        <div class="mt-4 space-y-2 text-sm">
+                            <p><strong>W1</strong> = Empty crucible weight (g)</p>
+                            <p><strong>W3</strong> = Crucible + sample weight before ashing (g)</p>
+                            <p><strong>W2</strong> = Crucible + ash weight after ashing (g)</p>
+                            <p class="mt-2 text-gray-600">
+                                <strong>Or simply:</strong> (Weight of ash / Weight of sample) × 100
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                        <h5 class="font-semibold text-yellow-800 mb-2">⚠️ Why 550°C?</h5>
+                        <ul class="text-sm space-y-1">
+                            <li>• Below 500°C: Incomplete ashing, carbon remains</li>
+                            <li>• 550°C: Optimal for complete organic matter destruction</li>
+                            <li>• Above 600°C: Some minerals (alkali) may volatilize</li>
+                            <li>• Carbonates stable at this temperature</li>
+                        </ul>
+                    </div>
+                </div>
+            `,
             procedure: `
+                <h4 class="font-semibold mt-4 mb-2">🔬 Procedure:</h4>
                 <ol class="list-decimal list-outside pl-5 space-y-2">
-                    <li>Pre-weighed crucible mein ~5g sample weigh karein.</li>
-                    <li>Water bath par evaporate karein, phir char karein.</li>
-                    <li>550°C par muffle furnace mein ash karein.</li>
-                    <li>Cool aur weigh karein.</li>
+                    <li>Silica/porcelain crucible ko 550°C muffle furnace mein 30 min heat karein</li>
+                    <li>Desiccator mein cool karein, weigh karein = <strong>W1</strong></li>
+                    <li>5g sample accurately weigh karein, crucible mein transfer</li>
+                    <li>Total weight = <strong>W3</strong></li>
+                    <li>Water bath par evaporate karein (moisture remove)</li>
+                    <li>Hot plate par char karein (smokeless hone tak)</li>
+                    <li>Muffle furnace mein 550°C par 4-6 hours rakhein</li>
+                    <li>Ash white-grey colour ki honi chahiye</li>
+                    <li>Agar black specks hon, cool karein, few drops water + H₂O₂ daalein, phir se ash karein</li>
+                    <li>Desiccator mein cool karein, weigh karein = <strong>W2</strong></li>
                 </ol>
-                <pre><code>% Ash = (Weight of ash / Weight of sample) × 100</code></pre>
+
+                <div class="mt-4 bg-orange-50 p-4 rounded-lg border border-orange-200">
+                    <h5 class="font-semibold text-orange-800 mb-2">📋 Expected Ash Content:</h5>
+                    <table class="w-full text-sm">
+                        <tr class="border-b"><td class="p-2">Khoya</td><td class="p-2">3.5 - 4.5%</td></tr>
+                        <tr class="border-b"><td class="p-2">Peda</td><td class="p-2">2.0 - 3.0%</td></tr>
+                        <tr class="border-b"><td class="p-2">Burfi</td><td class="p-2">2.0 - 3.0%</td></tr>
+                        <tr><td class="p-2">Gulab Jamun (solid)</td><td class="p-2">1.5 - 2.5%</td></tr>
+                    </table>
+                    <p class="text-xs mt-2 text-gray-600">Higher ash may indicate mineral adulteration</p>
+                </div>
             `
         },
         {
-            title: "Starch Detection",
-            purpose: "Illegally added starch detect karne ke liye.",
+            title: "Acid Insoluble Ash (Sand/Silica Detection)",
+            purpose: "Earth, sand, dirt contamination detect karna.",
+            reference: "FSSAI Manual; IS:1479 Part II",
+            formulaExplanation: `
+                <div class="bg-red-50 p-5 rounded-xl border border-red-200 mb-4">
+                    <h4 class="font-bold text-red-800 mb-3">📐 Acid Insoluble Ash Formula</h4>
+                    
+                    <div class="bg-white p-4 rounded-lg mb-4">
+                        <pre class="bg-gray-50 p-3 rounded text-lg"><code>% Acid Insoluble Ash = [(W2 - W1) / W] × 100</code></pre>
+                        
+                        <div class="mt-4 space-y-2 text-sm">
+                            <p><strong>W</strong> = Original sample weight (g)</p>
+                            <p><strong>W1</strong> = Empty crucible weight (g)</p>
+                            <p><strong>W2</strong> = Crucible + acid insoluble residue (g)</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                        <h5 class="font-semibold text-yellow-800 mb-2">⚠️ What Remains Insoluble in HCl:</h5>
+                        <ul class="text-sm space-y-1">
+                            <li>• Silica (SiO₂) - from sand/earth</li>
+                            <li>• Silicates - clay minerals</li>
+                            <li>• Some heavy metal compounds</li>
+                        </ul>
+                        <p class="mt-2 text-sm font-medium">Normal dairy ash mein acid insoluble ash negligible hona chahiye!</p>
+                    </div>
+                </div>
+            `,
             procedure: `
+                <h4 class="font-semibold mt-4 mb-2">🔬 Procedure:</h4>
                 <ol class="list-decimal list-outside pl-5 space-y-2">
-                    <li>2g sample ko 5ml water mein dissolve/disperse karein.</li>
-                    <li>Boil karein aur cool karein.</li>
-                    <li>Iodine solution ki kuch drops daalein.</li>
-                    <li><strong>Blue-black</strong> = Starch present.</li>
+                    <li>Total ash (previous test se) ko crucible mein rakhein</li>
+                    <li>25ml dilute HCl (1:1 with water) daalein</li>
+                    <li>Watch glass se cover karein</li>
+                    <li>Water bath par 30 minutes heat karein</li>
+                    <li>Ashless filter paper (Whatman 41) se filter karein</li>
+                    <li>Hot distilled water se wash karein (acid-free hone tak)</li>
+                    <li>Filter paper ko same crucible mein rakhein</li>
+                    <li>Char karein, phir 550°C par ash karein</li>
+                    <li>Cool aur weigh karein</li>
                 </ol>
+
+                <div class="mt-4 bg-red-50 p-4 rounded-lg border border-red-200">
+                    <h5 class="font-semibold text-red-800 mb-2">⚠️ FSSAI Limit:</h5>
+                    <p class="font-bold text-lg">Acid Insoluble Ash ≤ 0.1%</p>
+                    <p class="text-sm mt-2">Higher value indicates contamination with earth/sand</p>
+                </div>
             `
         },
         {
-            title: "Vanaspati/Non-dairy Fat Detection (Baudouin Test)",
-            purpose: "Non-dairy fat ki adulteration detect karne ke liye.",
+            title: "Starch Detection (Qualitative Test)",
+            purpose: "Illegal starch adulteration detect karna - sweets mein weight badhane ke liye starch milaya jaata hai.",
+            reference: "FSSAI Manual; ISI Handbook",
             procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <h4 class="font-semibold mt-4 mb-2">🔬 Iodine Test Procedure:</h4>
                 <ol class="list-decimal list-outside pl-5 space-y-2">
-                    <li>Sample se fat extract karein (petroleum ether se ya Rose-Gottlieb se).</li>
-                    <li>5ml melted fat + 5ml conc. HCl + 0.4ml 2% furfural solution.</li>
-                    <li>2 minutes vigorously shake karein.</li>
-                    <li><strong>Pink/Red colour</strong> in acid layer = Vanaspati present.</li>
+                    <li>2g crushed sample ko test tube mein lein</li>
+                    <li>5ml distilled water daalein</li>
+                    <li>Boil karein, cool karein</li>
+                    <li>2-3 drops dilute iodine solution (0.1N I₂ in KI) daalein</li>
+                    <li>Colour observe karein</li>
                 </ol>
+
+                <div class="mt-4 grid grid-cols-2 gap-4">
+                    <div class="bg-green-50 p-4 rounded-lg border border-green-200 text-center">
+                        <div class="text-3xl mb-2">✅</div>
+                        <p class="font-semibold text-green-800">Yellow-Brown Colour</p>
+                        <p class="text-sm text-green-700">Starch ABSENT</p>
+                    </div>
+                    <div class="bg-red-50 p-4 rounded-lg border border-red-200 text-center">
+                        <div class="text-3xl mb-2">❌</div>
+                        <p class="font-semibold text-red-800">Blue-Black Colour</p>
+                        <p class="text-sm text-red-700">Starch PRESENT (Adulterated)</p>
+                    </div>
+                </div>
+
+                <div class="mt-4 bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                    <h5 class="font-semibold text-yellow-800 mb-2">⚠️ Chemistry:</h5>
+                    <p class="text-sm">
+                        Iodine molecules (I₂) amylose ke helical structure mein trap ho jaate hain, 
+                        forming a blue-black charge-transfer complex. Intensity starch concentration par depend karti hai.
+                    </p>
+                </div>
             `
         },
         {
-            title: "Gulab Jamun: Sugar Syrup Ka Analysis (Brix)",
-            purpose: "Gulab Jamun ke sugar syrup ki concentration measure karne ke liye.",
+            title: "Vanaspati/Non-Dairy Fat Detection",
+            purpose: "Pure ghee ki jagah vanaspati (hydrogenated vegetable oil) milawat detect karna.",
+            reference: "FSSAI Manual; IS:3508",
+            tests: [
+                {
+                    name: "Baudouin Test (Primary Test)",
+                    procedure: `
+                        <h5 class="font-semibold mt-4 mb-2">Baudouin Test Procedure:</h5>
+                        <ol class="list-decimal list-outside pl-5 space-y-2">
+                            <li>Sample se fat extract karein (petroleum ether extraction)</li>
+                            <li>5ml melted fat ko test tube mein lein</li>
+                            <li>5ml conc. HCl daalein</li>
+                            <li>0.4ml furfural solution (2% in alcohol) daalein</li>
+                            <li>Rubber stopper lagakar 2 minutes vigorously shake karein</li>
+                            <li>Stand karke layers separate hone dein</li>
+                            <li>Lower acid layer ka colour observe karein</li>
+                        </ol>
+
+                        <div class="mt-4 grid grid-cols-2 gap-4">
+                            <div class="bg-green-50 p-4 rounded-lg border border-green-200 text-center">
+                                <div class="text-3xl mb-2">✅</div>
+                                <p class="font-semibold text-green-800">Colourless/Light Yellow</p>
+                                <p class="text-sm text-green-700">Pure Milk Fat</p>
+                            </div>
+                            <div class="bg-red-50 p-4 rounded-lg border border-red-200 text-center">
+                                <div class="text-3xl mb-2">❌</div>
+                                <p class="font-semibold text-red-800">Pink/Red Colour</p>
+                                <p class="text-sm text-red-700">Vanaspati Present</p>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                            <h5 class="font-semibold text-yellow-800 mb-2">⚠️ Chemistry:</h5>
+                            <p class="text-sm">
+                                Vanaspati mein sesamol/sesame oil marker hota hai (FSSAI requirement).
+                                Furfural + Sesamol + HCl → Pink coloured complex
+                            </p>
+                        </div>
+                    `
+                },
+                {
+                    name: "Phytosterol Acetate Test (Confirmatory)",
+                    procedure: `
+                        <h5 class="font-semibold mt-4 mb-2">Procedure:</h5>
+                        <ol class="list-decimal list-outside pl-5 space-y-2">
+                            <li>5g fat sample ko saponify karein (KOH + alcohol)</li>
+                            <li>Unsaponifiable matter extract karein (petroleum ether)</li>
+                            <li>Acetylate karein (acetic anhydride)</li>
+                            <li>Recrystallize from alcohol</li>
+                            <li>Melting point determine karein</li>
+                        </ol>
+                        <div class="mt-4 bg-blue-50 p-4 rounded-lg">
+                            <p class="font-semibold">Result Interpretation:</p>
+                            <p class="text-sm mt-2">
+                                Pure milk fat: Cholesterol acetate - MP 114-115°C<br>
+                                Vanaspati: Phytosterol (sitosterol) acetate - MP 126-137°C
+                            </p>
+                        </div>
+                    `
+                }
+            ]
+        },
+        {
+            title: "Artificial Colour Detection",
+            purpose: "Synthetic food colours ki illegal presence detect karna.",
+            reference: "FSSAI Manual; IS:5886",
             procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <h4 class="font-semibold mt-4 mb-2">🔬 Wool Dyeing Method:</h4>
                 <ol class="list-decimal list-outside pl-5 space-y-2">
-                    <li>Gulab jamun ko syrup se carefully nikaalen.</li>
-                    <li>Syrup ko filter karein agar particles hon.</li>
-                    <li>Refractometer ko distilled water se calibrate karein (0° Brix at 20°C).</li>
-                    <li>Syrup ki kuch drops refractometer ke prism par daalein.</li>
-                    <li>Brix reading note karein.</li>
+                    <li>10g sample ko 50ml water mein dissolve karein</li>
+                    <li>2ml dilute HCl daalein</li>
+                    <li>Small piece of white wool thread daalein</li>
+                    <li>Boil for 10-15 minutes</li>
+                    <li>Wool nikaalen, water se wash karein</li>
+                    <li>Colour observe karein</li>
                 </ol>
-                <p class="text-xs">Standard: Gulab Jamun syrup mein typically 55-65° Brix hona chahiye.</p>
+
+                <div class="mt-4 grid grid-cols-2 gap-4">
+                    <div class="bg-green-50 p-4 rounded-lg border border-green-200 text-center">
+                        <p class="font-semibold text-green-800">White/Cream Wool</p>
+                        <p class="text-sm text-green-700">No synthetic colour</p>
+                    </div>
+                    <div class="bg-red-50 p-4 rounded-lg border border-red-200 text-center">
+                        <p class="font-semibold text-red-800">Coloured Wool</p>
+                        <p class="text-sm text-red-700">Synthetic colour present</p>
+                    </div>
+                </div>
+
+                <h4 class="font-semibold mt-6 mb-2">Confirmatory Test (Colour Stripping):</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Dyed wool ko dilute ammonia (1:1) mein boil karein</li>
+                    <li>Agar colour strip ho jaye → Synthetic acid dye confirmed</li>
+                    <li>Paper chromatography se specific dye identify karein</li>
+                </ol>
+
+                <div class="mt-4 bg-orange-50 p-4 rounded-lg border border-orange-200">
+                    <h5 class="font-semibold text-orange-800 mb-2">📋 Permitted Natural Colours:</h5>
+                    <ul class="text-sm grid grid-cols-2 gap-2">
+                        <li>✓ Saffron (Kesar)</li>
+                        <li>✓ Turmeric (Haldi)</li>
+                        <li>✓ Annatto</li>
+                        <li>✓ Caramel</li>
+                    </ul>
+                    <p class="text-xs mt-2 text-red-600">Metanil Yellow, Lead Chromate - BANNED</p>
+                </div>
             `
         },
         {
-            title: "Gulab Jamun: Absorption Ratio",
-            purpose: "Gulab Jamun ka sugar syrup absorption ratio determine karne ke liye.",
+            title: "Preservatives Detection (Sulphur Dioxide - SO₂)",
+            purpose: "Illegal sulphite preservative presence detect karna.",
+            reference: "FSSAI Manual; IS:5886",
+            formulaExplanation: `
+                <div class="bg-purple-50 p-5 rounded-xl border border-purple-200 mb-4">
+                    <h4 class="font-bold text-purple-800 mb-3">📐 SO₂ Calculation (Quantitative)</h4>
+                    
+                    <div class="bg-white p-4 rounded-lg mb-4">
+                        <pre class="bg-gray-100 p-3 rounded"><code>SO₂ (ppm) = [(V × N × 32 × 1000) / W] × (250/50)</code></pre>
+                        
+                        <div class="mt-4 space-y-2 text-sm">
+                            <p><strong>V</strong> = Iodine titre (ml)</p>
+                            <p><strong>N</strong> = Normality of iodine (0.01N)</p>
+                            <p><strong>32</strong> = Equivalent weight of SO₂</p>
+                            <p><strong>W</strong> = Sample weight (g)</p>
+                            <p><strong>250/50</strong> = Dilution factor</p>
+                        </div>
+                    </div>
+                </div>
+            `,
             procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <h4 class="font-semibold mt-4 mb-2">🔬 Qualitative Test (Malachite Green):</h4>
                 <ol class="list-decimal list-outside pl-5 space-y-2">
-                    <li>Freshly fried gulab jamun (before soaking) ka weight lein (W_dry).</li>
-                    <li>Sugar syrup mein prescribed time tak soak karein.</li>
-                    <li>Soaked gulab jamun ka weight lein (W_soaked).</li>
+                    <li>5g sample + 20ml water mein disperse karein</li>
+                    <li>10ml dilute HCl daalein</li>
+                    <li>Filter paper ko malachite green solution mein dip karein, dry karein</li>
+                    <li>Paper ko test tube ke mouth par rakhein</li>
+                    <li>Sample ko gently heat karein</li>
+                    <li>Agar SO₂ present → Green paper becomes colourless</li>
                 </ol>
-                <pre><code>Absorption Ratio = W_soaked / W_dry</code></pre>
-                <p class="text-xs">Good gulab jamun ka absorption ratio typically 1.8-2.2 hota hai.</p>
+
+                <h4 class="font-semibold mt-6 mb-2">Quantitative Method (Distillation + Iodimetry):</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>25g sample + dilute HCl ko distillation apparatus mein lein</li>
+                    <li>N₂ gas pass karte hue distill karein</li>
+                    <li>Distillate ko H₂O₂ solution mein collect karein (SO₂ → H₂SO₄)</li>
+                    <li>0.01N NaOH se titrate karein</li>
+                </ol>
+
+                <div class="mt-4 bg-red-50 p-4 rounded-lg border border-red-200">
+                    <h5 class="font-semibold text-red-800 mb-2">⚠️ FSSAI Limit:</h5>
+                    <p class="text-sm">Dairy sweets mein SO₂ <strong>NOT PERMITTED</strong></p>
+                </div>
+            `
+        },
+        {
+            title: "Gulab Jamun - Sugar Syrup Analysis (Brix)",
+            purpose: "Syrup concentration measure karna - quality aur consistency ke liye.",
+            reference: "FSSAI Manual; IS:12898",
+            formulaExplanation: `
+                <div class="bg-cyan-50 p-5 rounded-xl border border-cyan-200 mb-4">
+                    <h4 class="font-bold text-cyan-800 mb-3">📐 Brix Measurement</h4>
+                    
+                    <div class="bg-white p-4 rounded-lg mb-4">
+                        <h5 class="font-semibold text-cyan-700 mb-2">What is °Brix?</h5>
+                        <p class="text-sm">
+                            1°Brix = 1 gram sucrose per 100 gram solution at 20°C<br>
+                            It measures the sugar content as percentage by weight.
+                        </p>
+                        
+                        <h5 class="font-semibold text-cyan-700 mt-4 mb-2">Temperature Correction:</h5>
+                        <pre class="bg-gray-100 p-3 rounded"><code>Corrected Brix = Observed Brix + Correction Factor</code></pre>
+                        <table class="w-full text-sm mt-2">
+                            <tr><td>Below 20°C</td><td>Subtract correction</td></tr>
+                            <tr><td>Above 20°C</td><td>Add correction</td></tr>
+                            <tr><td>At 25°C</td><td>Add ~0.25°Brix</td></tr>
+                            <tr><td>At 30°C</td><td>Add ~0.55°Brix</td></tr>
+                        </table>
+                    </div>
+                </div>
+            `,
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">🔬 Refractometer Method:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Gulab jamun ko carefully syrup se nikaalen</li>
+                    <li>Syrup ko filter karein agar particles hon</li>
+                    <li>Refractometer ko distilled water se calibrate karein (0°Brix at 20°C)</li>
+                    <li>Prism ko clean, dry karein</li>
+                    <li>2-3 drops syrup prism par rakhein</li>
+                    <li>Cover plate close karein</li>
+                    <li>Light source ki taraf dekhein</li>
+                    <li>Boundary line ko crosshair par adjust karein</li>
+                    <li>Scale reading note karein</li>
+                    <li>Temperature correction apply karein</li>
+                </ol>
+
+                <div class="mt-4 bg-cyan-50 p-4 rounded-lg border border-cyan-200">
+                    <h5 class="font-semibold text-cyan-800 mb-2">📋 Standards:</h5>
+                    <table class="w-full text-sm">
+                        <tr class="border-b"><td class="p-2">Gulab Jamun Syrup</td><td class="p-2">55-65°Brix</td></tr>
+                        <tr class="border-b"><td class="p-2">Jalebi Syrup</td><td class="p-2">65-70°Brix</td></tr>
+                        <tr><td class="p-2">Rasgulla Syrup</td><td class="p-2">45-55°Brix</td></tr>
+                    </table>
+                </div>
+            `
+        },
+        {
+            title: "Gulab Jamun - Absorption Ratio & Physical Tests",
+            purpose: "Physical quality parameters measure karna.",
+            reference: "IS:12898",
+            formulaExplanation: `
+                <div class="bg-rose-50 p-5 rounded-xl border border-rose-200 mb-4">
+                    <h4 class="font-bold text-rose-800 mb-3">📐 Absorption Ratio Formula</h4>
+                    
+                    <div class="bg-white p-4 rounded-lg mb-4">
+                        <pre class="bg-gray-100 p-3 rounded text-lg"><code>Absorption Ratio = W_soaked / W_dry</code></pre>
+                        
+                        <div class="mt-4 space-y-2 text-sm">
+                            <p><strong>W_dry</strong> = Weight of freshly fried Gulab Jamun (before soaking)</p>
+                            <p><strong>W_soaked</strong> = Weight after complete soaking in syrup</p>
+                        </div>
+
+                        <div class="mt-4 bg-yellow-50 p-3 rounded border border-yellow-200">
+                            <p class="text-sm">
+                                <strong>Ideal Ratio: 1.8 - 2.2</strong><br>
+                                Low ratio = Less syrup absorption = Hard texture<br>
+                                High ratio = Over-soaking = Too soft/mushy
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-lg">
+                        <h5 class="font-semibold text-rose-700 mb-2">Drained Weight Ratio:</h5>
+                        <pre class="bg-gray-100 p-3 rounded"><code>% Drained Weight = (Drained solid weight / Total weight) × 100</code></pre>
+                        <p class="text-sm mt-2">Standard: Minimum 40% drained weight</p>
+                    </div>
+                </div>
+            `,
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">🔬 Physical Analysis:</h4>
+                
+                <h5 class="font-semibold mt-4 mb-2">1. Absorption Ratio:</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Freshly fried gulab jamun (immediately after frying) weigh karein = W_dry</li>
+                    <li>Hot syrup (60-65°C) mein soak karein</li>
+                    <li>24 hours ya complete saturation tak rakhein</li>
+                    <li>Drip excess syrup</li>
+                    <li>Weigh karein = W_soaked</li>
+                    <li>Calculate ratio</li>
+                </ol>
+
+                <h5 class="font-semibold mt-4 mb-2">2. Size Uniformity:</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>10 random pieces select karein</li>
+                    <li>Vernier caliper se diameter measure karein</li>
+                    <li>Average aur standard deviation calculate karein</li>
+                    <li>Coefficient of variation < 10% acceptable</li>
+                </ol>
+
+                <h5 class="font-semibold mt-4 mb-2">3. Color Assessment:</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Visual inspection under standard lighting</li>
+                    <li>Color: Golden brown to dark brown</li>
+                    <li>Uniform color preferred</li>
+                    <li>No burnt spots</li>
+                </ol>
+
+                <h5 class="font-semibold mt-4 mb-2">4. Texture Test:</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Cross-section cutting se internal texture check</li>
+                    <li>Uniform porosity - no large air pockets</li>
+                    <li>Soft, spongy texture - not rubbery</li>
+                    <li>Syrup penetration throughout</li>
+                </ol>
+
+                <div class="mt-4 bg-rose-50 p-4 rounded-lg border border-rose-200">
+                    <h5 class="font-semibold text-rose-800 mb-2">📋 FSSAI Standards (IS:12898):</h5>
+                    <table class="w-full text-sm">
+                        <tr class="border-b"><td class="p-2">Total Solids (solid part)</td><td class="p-2">≥ 55%</td></tr>
+                        <tr class="border-b"><td class="p-2">Fat (on dry basis)</td><td class="p-2">≥ 10%</td></tr>
+                        <tr class="border-b"><td class="p-2">Drained weight</td><td class="p-2">≥ 40%</td></tr>
+                        <tr><td class="p-2">Syrup Brix</td><td class="p-2">55-65°</td></tr>
+                    </table>
+                </div>
+            `
+        },
+        {
+            title: "Peroxide Value & Rancidity Tests",
+            purpose: "Fat rancidity check karna - shelf life aur storage quality indicator.",
+            reference: "FSSAI Manual; IS:548",
+            formulaExplanation: `
+                <div class="bg-orange-50 p-5 rounded-xl border border-orange-200 mb-4">
+                    <h4 class="font-bold text-orange-800 mb-3">📐 Peroxide Value Formula</h4>
+                    
+                    <div class="bg-white p-4 rounded-lg mb-4">
+                        <pre class="bg-gray-100 p-3 rounded text-lg"><code>PV (meq O₂/kg) = [(V₁ - V₂) × N × 1000] / W</code></pre>
+                        
+                        <div class="mt-4 space-y-2 text-sm">
+                            <p><strong>V₁</strong> = Titre for sample (ml of Na₂S₂O₃)</p>
+                            <p><strong>V₂</strong> = Titre for blank (ml)</p>
+                            <p><strong>N</strong> = Normality of Na₂S₂O₃ (usually 0.01N)</p>
+                            <p><strong>W</strong> = Weight of fat sample (g)</p>
+                            <p><strong>1000</strong> = Conversion factor (g to kg)</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                        <h5 class="font-semibold text-yellow-800 mb-2">⚠️ Chemistry:</h5>
+                        <p class="text-sm">
+                            Peroxides + KI → I₂ (liberated)<br>
+                            I₂ + Na₂S₂O₃ → NaI + Na₂S₄O₆<br>
+                            Amount of I₂ = Amount of peroxides present
+                        </p>
+                    </div>
+                </div>
+            `,
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">🔬 A. Peroxide Value Test:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Sample se fat extract karein (5g fat needed)</li>
+                    <li>Fat ko 250ml conical flask mein weigh karein</li>
+                    <li>30ml acetic acid-chloroform mixture (3:2) mein dissolve karein</li>
+                    <li>0.5ml saturated KI solution daalein</li>
+                    <li>Dark mein 1 minute rakhein (swirl occasionally)</li>
+                    <li>30ml distilled water daalein</li>
+                    <li>0.01N Na₂S₂O₃ se titrate karein</li>
+                    <li>Starch indicator (1%) near endpoint add karein</li>
+                    <li>Blue colour disappear hone tak titrate karein</li>
+                </ol>
+
+                <h4 class="font-semibold mt-6 mb-2">🔬 B. Kreis Test (Qualitative Rancidity):</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>1ml melted fat + 1ml conc. HCl + 1ml 0.1% phloroglucinol in ether</li>
+                    <li>Shake vigorously</li>
+                    <li>Let layers separate</li>
+                    <li>Pink/red colour in acid layer = Rancid fat (positive test)</li>
+                </ol>
+
+                <div class="mt-4 bg-orange-50 p-4 rounded-lg border border-orange-200">
+                    <h5 class="font-semibold text-orange-800 mb-2">📋 Standards:</h5>
+                    <table class="w-full text-sm">
+                        <tr class="border-b"><td class="p-2">Fresh fat</td><td class="p-2">PV < 1 meq/kg</td></tr>
+                        <tr class="border-b"><td class="p-2">Acceptable</td><td class="p-2">PV < 10 meq/kg</td></tr>
+                        <tr><td class="p-2">Rancid/Rejected</td><td class="p-2">PV > 10 meq/kg</td></tr>
+                    </table>
+                </div>
+            `
+        },
+        {
+            title: "Microbiological Analysis",
+            purpose: "Microbial safety aur hygiene quality assess karna.",
+            reference: "FSSAI Microbiological Standards; IS:5550",
+            testsIncluded: `
+                <div class="bg-blue-50 p-5 rounded-xl border border-blue-200 mb-4">
+                    <h4 class="font-bold text-blue-800 mb-3">🦠 Microbiological Tests Overview</h4>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-white p-4 rounded-lg">
+                            <h5 class="font-semibold text-blue-700 mb-2">1. Total Plate Count (TPC)</h5>
+                            <p class="text-sm">Standard Plate Count agar, 37°C, 48 hrs</p>
+                            <p class="text-xs text-gray-500">Limit: < 50,000 CFU/g</p>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg">
+                            <h5 class="font-semibold text-blue-700 mb-2">2. Coliform Count</h5>
+                            <p class="text-sm">VRBA/MacConkey agar, 37°C, 24-48 hrs</p>
+                            <p class="text-xs text-gray-500">Limit: < 10 CFU/g</p>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg">
+                            <h5 class="font-semibold text-blue-700 mb-2">3. E. coli</h5>
+                            <p class="text-sm">EMB agar, 37°C, 24 hrs</p>
+                            <p class="text-xs text-gray-500">Limit: Absent/g</p>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg">
+                            <h5 class="font-semibold text-blue-700 mb-2">4. Yeast & Mold</h5>
+                            <p class="text-sm">PDA/SDA, 25°C, 5-7 days</p>
+                            <p class="text-xs text-gray-500">Limit: < 50 CFU/g</p>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg">
+                            <h5 class="font-semibold text-blue-700 mb-2">5. S. aureus</h5>
+                            <p class="text-sm">Baird Parker agar, 37°C, 48 hrs</p>
+                            <p class="text-xs text-gray-500">Limit: < 100 CFU/g</p>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg">
+                            <h5 class="font-semibold text-blue-700 mb-2">6. Salmonella</h5>
+                            <p class="text-sm">XLD/HE agar after enrichment</p>
+                            <p class="text-xs text-gray-500">Limit: Absent/25g</p>
+                        </div>
+                    </div>
+                </div>
+            `,
+            samplePreparation: `
+                <h4 class="font-semibold mt-4 mb-2">🔬 Sample Preparation:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Aseptically 10g sample weigh karein</li>
+                    <li>90ml sterile peptone water mein homogenize karein (10⁻¹ dilution)</li>
+                    <li>Serial dilutions prepare karein (10⁻², 10⁻³, etc.)</li>
+                    <li>Pour plate ya spread plate method use karein</li>
+                    <li>Appropriate media aur temperature par incubate karein</li>
+                    <li>Colonies count karein</li>
+                </ol>
+
+                <div class="mt-4 bg-green-50 p-4 rounded-lg border border-green-200">
+                    <h5 class="font-semibold text-green-800 mb-2">📊 CFU Calculation:</h5>
+                    <pre class="bg-white p-3 rounded font-mono text-sm"><code>CFU/g = (No. of colonies × Dilution factor) / Volume plated</code></pre>
+                </div>
             `
         }
-    ]
+    ],
+    qualityChecklist: `
+        <div class="mt-8 bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-xl border border-green-200">
+            <h3 class="text-xl font-bold text-green-800 mb-4">✅ Traditional Sweets Quality Checklist</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-white p-4 rounded-lg">
+                    <h4 class="font-semibold text-green-700 mb-2">Chemical Parameters</h4>
+                    <ul class="text-sm space-y-1">
+                        <li>☐ Moisture within limits</li>
+                        <li>☐ Fat content as per standard</li>
+                        <li>☐ Protein content adequate</li>
+                        <li>☐ Sucrose within range</li>
+                        <li>☐ Acidity acceptable</li>
+                        <li>☐ Ash content normal</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white p-4 rounded-lg">
+                    <h4 class="font-semibold text-green-700 mb-2">Adulteration Tests</h4>
+                    <ul class="text-sm space-y-1">
+                        <li>☐ No starch added</li>
+                        <li>☐ No vanaspati (Baudouin -ve)</li>
+                        <li>☐ No artificial colours</li>
+                        <li>☐ No preservatives (SO₂ -ve)</li>
+                        <li>☐ Acid insoluble ash normal</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white p-4 rounded-lg">
+                    <h4 class="font-semibold text-green-700 mb-2">Physical Parameters</h4>
+                    <ul class="text-sm space-y-1">
+                        <li>☐ Proper colour/appearance</li>
+                        <li>☐ Acceptable texture</li>
+                        <li>☐ No off-odour</li>
+                        <li>☐ Proper size uniformity</li>
+                        <li>☐ Rancidity tests negative</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white p-4 rounded-lg">
+                    <h4 class="font-semibold text-green-700 mb-2">Microbiological</h4>
+                    <ul class="text-sm space-y-1">
+                        <li>☐ TPC within limits</li>
+                        <li>☐ Coliforms acceptable</li>
+                        <li>☐ E. coli absent</li>
+                        <li>☐ Yeast/Mold within limits</li>
+                        <li>☐ Pathogens absent</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    `
 },
 "infant-formula": {
-    title: "Infant Formula / Baby Food Ka Analysis",
+    title: "Infant Formula / Baby Food Ka Complete Analysis",
+    introduction: `
+        <div class="bg-gradient-to-r from-blue-50 to-cyan-50 p-6 rounded-xl border border-blue-200 mb-6">
+            <h3 class="text-xl font-bold text-blue-800 mb-4">👶 Infant Formula Testing - Critical Overview</h3>
+            <p class="text-gray-700 mb-4">
+                Infant formula ki testing sabse critical hai kyunki ye babies ki sole nutrition source ho sakti hai. 
+                FSSAI, Codex Alimentarius, aur WHO/FAO guidelines strictly follow hoti hain. 
+                Testing mein nutritional adequacy, safety, aur microbiological purity ensure karni hoti hai.
+            </p>
+            
+            <div class="bg-red-50 p-4 rounded-lg border border-red-300 mb-4">
+                <h4 class="font-bold text-red-800 mb-2">⚠️ Critical Safety Note</h4>
+                <p class="text-sm text-red-700">
+                    Infant formula testing mein <strong>zero tolerance</strong> hai harmful contaminants ke liye:
+                    Cronobacter sakazakii, Salmonella, Melamine, Heavy Metals. 
+                    Testing sirf accredited laboratories mein hi honi chahiye.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                <div class="bg-white p-4 rounded-lg shadow-sm">
+                    <h4 class="font-semibold text-blue-700">📦 Starter Formula</h4>
+                    <p class="text-sm text-gray-600">0-6 months, Stage 1</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-sm">
+                    <h4 class="font-semibold text-blue-700">📦 Follow-up Formula</h4>
+                    <p class="text-sm text-gray-600">6-12 months, Stage 2</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-sm">
+                    <h4 class="font-semibold text-blue-700">🍼 Specialized Formula</h4>
+                    <p class="text-sm text-gray-600">Lactose-free, Hypoallergenic</p>
+                </div>
+            </div>
+        </div>
+    `,
     tests: [
         {
-            title: "Moisture Ka Determination",
-            purpose: "Infant formula mein moisture content determine karne ke liye.",
-            reference: "IS 14433:1997; Codex Stan 72",
+            title: "Moisture Ka Determination (Gravimetric Method)",
+            purpose: "Infant formula powder mein moisture determine karna - stability, shelf-life, aur microbial growth prevention ke liye critical parameter.",
+            reference: "IS 14433:1997; Codex Stan 72-1981; AOAC 927.05; IDF 26:2004",
+            formulaExplanation: `
+                <div class="bg-blue-50 p-5 rounded-xl border border-blue-200 mb-4">
+                    <h4 class="font-bold text-blue-800 mb-3">📐 Formula Derivation & Factor Explanation</h4>
+                    
+                    <div class="bg-white p-4 rounded-lg mb-4">
+                        <h5 class="font-semibold text-blue-700 mb-2">Basic Formula:</h5>
+                        <pre class="bg-gray-100 p-3 rounded text-lg"><code>% Moisture = [(W2 - W3) / (W2 - W1)] × 100</code></pre>
+                        
+                        <div class="mt-4 space-y-3">
+                            <div class="flex items-start gap-3">
+                                <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded font-mono text-sm">W1</span>
+                                <div>
+                                    <p class="font-medium">Empty dish + lid ka weight (grams)</p>
+                                    <p class="text-sm text-gray-600">Flat-bottom aluminium dish (≥50mm dia) use karein</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded font-mono text-sm">W2</span>
+                                <div>
+                                    <p class="font-medium">Dish + sample ka weight before drying (grams)</p>
+                                    <p class="text-sm text-gray-600">Sample weight = W2 - W1 (typically 2-3g)</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded font-mono text-sm">W3</span>
+                                <div>
+                                    <p class="font-medium">Dish + dried sample ka weight after drying (grams)</p>
+                                    <p class="text-sm text-gray-600">Constant weight = two consecutive readings ±0.5mg</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-4 rounded-lg mb-4">
+                        <h5 class="font-semibold text-blue-700 mb-2">Alternative Formula (Direct):</h5>
+                        <pre class="bg-gray-100 p-3 rounded"><code>% Moisture = [(Sample wt - Dried wt) / Sample wt] × 100</code></pre>
+                        <pre class="bg-gray-100 p-3 rounded mt-2"><code>% Total Solids = 100 - % Moisture</code></pre>
+                    </div>
+                    
+                    <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                        <h5 class="font-semibold text-yellow-800 mb-2">⚠️ Why 102 ± 2°C Temperature?</h5>
+                        <ul class="text-sm text-gray-700 space-y-1">
+                            <li>• 100°C se thoda zyada taaki all free water evaporate ho</li>
+                            <li>• Infant formula mein lactose heat-sensitive hai - 105°C se zyada par browning hoti hai</li>
+                            <li>• Fat oxidation avoid karne ke liye excessive heat avoid</li>
+                            <li>• IDF method mein 102 ± 2°C for 2 hours specified hai</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-green-50 p-4 rounded-lg border border-green-200 mt-4">
+                        <h5 class="font-semibold text-green-800 mb-2">✅ Vacuum Oven Method (Alternative):</h5>
+                        <p class="text-sm">70°C at ≤100 mmHg vacuum pressure for 5 hours</p>
+                        <p class="text-xs text-gray-600 mt-1">
+                            Better for heat-sensitive samples; prevents Maillard reaction between 
+                            lactose aur proteins
+                        </p>
+                    </div>
+                </div>
+            `,
             procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                    <li>Pre-weighed dish mein ~2g sample weigh karein.</li>
-                    <li>102 ± 2°C par oven mein 2 hours dry karein.</li>
-                    <li>Desiccator mein cool karein aur weigh karein.</li>
-                    <li>Constant weight tak repeat karein.</li>
+                <h4 class="font-semibold mt-4 mb-2">🔬 Detailed Procedure:</h4>
+                
+                <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                    <h5 class="font-semibold mb-2">Required Materials:</h5>
+                    <ul class="grid grid-cols-2 gap-2 text-sm">
+                        <li>✓ Aluminium dish with lid (≥50mm dia)</li>
+                        <li>✓ Hot air oven (102 ± 2°C)</li>
+                        <li>✓ Desiccator with silica gel</li>
+                        <li>✓ Analytical balance (0.0001g precision)</li>
+                        <li>✓ Tongs/crucible holder</li>
+                        <li>✓ Timer</li>
+                    </ul>
+                </div>
+
+                <ol class="list-decimal list-outside pl-5 space-y-3">
+                    <li>
+                        <strong>Dish Preparation:</strong>
+                        <ul class="list-disc pl-5 text-sm mt-1">
+                            <li>Aluminium dish + lid ko 102°C par 30 min heat karein</li>
+                            <li>Desiccator mein 30 min cool karein</li>
+                            <li>Weight note karein = <strong>W1</strong></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Sample Addition:</strong>
+                        <ul class="list-disc pl-5 text-sm mt-1">
+                            <li>2-3g powder sample accurately weigh karein (±0.0001g)</li>
+                            <li>Sample ko dish mein evenly spread karein (thin layer)</li>
+                            <li>Immediately weigh karein = <strong>W2</strong></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Drying:</strong>
+                        <ul class="list-disc pl-5 text-sm mt-1">
+                            <li>Lid partially open rakh kar oven mein rakhein</li>
+                            <li>102 ± 2°C par 2 hours heat karein</li>
+                            <li>Lid close karein (inside oven)</li>
+                            <li>Desiccator mein transfer karke 30 min cool karein</li>
+                            <li>Weigh karein</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Constant Weight:</strong>
+                        <ul class="list-disc pl-5 text-sm mt-1">
+                            <li>Further 1 hour heat karein</li>
+                            <li>Cool aur weigh karein</li>
+                            <li>Repeat jab tak difference ≤0.5mg ho = <strong>W3</strong></li>
+                        </ul>
+                    </li>
                 </ol>
-                <pre><code>% Moisture = [(W2 - W3) / (W2 - W1)] × 100</code></pre>
-                <p class="text-xs">Standard: Max 5% moisture (powder form).</p>
+
+                <div class="mt-6 bg-green-50 p-4 rounded-lg border border-green-200">
+                    <h5 class="font-semibold text-green-800 mb-2">📊 Calculation Example:</h5>
+                    <div class="font-mono text-sm bg-white p-3 rounded">
+                        <p>W1 (empty dish + lid) = 25.4523 g</p>
+                        <p>W2 (dish + sample) = 27.5234 g</p>
+                        <p>W3 (dish + dried sample) = 27.4412 g</p>
+                        <p class="mt-2">Sample weight = 27.5234 - 25.4523 = <strong>2.0711 g</strong></p>
+                        <p>Moisture lost = 27.5234 - 27.4412 = <strong>0.0822 g</strong></p>
+                        <p class="mt-2">% Moisture = (0.0822 / 2.0711) × 100 = <strong>3.97%</strong></p>
+                        <p>% Total Solids = 100 - 3.97 = <strong>96.03%</strong></p>
+                    </div>
+                </div>
+            `,
+            standards: `
+                <div class="mt-4 bg-orange-50 p-4 rounded-lg border border-orange-200">
+                    <h5 class="font-semibold text-orange-800 mb-2">📋 FSSAI/Codex Standards:</h5>
+                    <table class="w-full text-sm">
+                        <thead class="bg-orange-100">
+                            <tr>
+                                <th class="p-2 text-left">Product Type</th>
+                                <th class="p-2 text-left">Maximum Moisture</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b"><td class="p-2">Infant Formula Powder</td><td class="p-2">≤ 5.0%</td></tr>
+                            <tr class="border-b"><td class="p-2">Follow-up Formula Powder</td><td class="p-2">≤ 5.0%</td></tr>
+                            <tr class="border-b"><td class="p-2">Infant Cereal</td><td class="p-2">≤ 5.0%</td></tr>
+                            <tr><td class="p-2">Liquid/Ready-to-feed</td><td class="p-2">Not applicable</td></tr>
+                        </tbody>
+                    </table>
+                    <p class="text-xs mt-2 text-red-600">
+                        ⚠️ High moisture promotes Cronobacter sakazakii growth - critical safety parameter!
+                    </p>
+                </div>
             `
         },
         {
-            title: "Fat Ka Determination (Rose-Gottlieb / Mojonnier Method)",
-            purpose: "Infant formula mein fat content determine karne ke liye.",
-            reference: "A.O.A.C 989.05; IDF 123:2005",
+            title: "Fat Determination - Rose-Gottlieb/Mojonnier Method",
+            purpose: "Infant formula mein total fat accurately determine karna - energy content aur essential fatty acids ke liye critical parameter.",
+            reference: "AOAC 989.05; IDF 123:2005; ISO 8381; Codex Stan 72",
+            formulaExplanation: `
+                <div class="bg-purple-50 p-5 rounded-xl border border-purple-200 mb-4">
+                    <h4 class="font-bold text-purple-800 mb-3">📐 Rose-Gottlieb Method - Formula & Factors</h4>
+                    
+                    <div class="bg-white p-4 rounded-lg mb-4">
+                        <h5 class="font-semibold text-purple-700 mb-2">Primary Formula:</h5>
+                        <pre class="bg-gray-100 p-3 rounded text-lg"><code>% Fat = [(W2 - W1) / W] × 100</code></pre>
+                        
+                        <div class="mt-4 space-y-3">
+                            <div class="flex items-start gap-3">
+                                <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded font-mono text-sm">W</span>
+                                <p>Sample weight (grams) - typically 1-2g powder</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded font-mono text-sm">W1</span>
+                                <p>Empty receiving flask weight (grams)</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded font-mono text-sm">W2</span>
+                                <p>Flask + extracted fat weight (grams)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-lg mb-4">
+                        <h5 class="font-semibold text-purple-700 mb-2">Why Rose-Gottlieb for Infant Formula?</h5>
+                        <ul class="text-sm space-y-2">
+                            <li>✅ <strong>Reference method</strong> - Most accurate for dairy-based products</li>
+                            <li>✅ Recovers <strong>all fat types</strong> including bound lipids</li>
+                            <li>✅ No heat decomposition of heat-sensitive fatty acids (DHA, ARA)</li>
+                            <li>✅ Suitable for products with <strong>added vegetable oils</strong></li>
+                            <li>✅ Works with <strong>sugars present</strong> (no charring like Gerber)</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                        <h5 class="font-semibold text-yellow-800 mb-2">⚠️ Reagent Functions:</h5>
+                        <table class="w-full text-sm">
+                            <tr class="border-b">
+                                <td class="p-2 font-medium">Ammonia (NH₄OH)</td>
+                                <td class="p-2">
+                                    • 25% conc., 1.5ml use<br>
+                                    • Dissolves casein proteins<br>
+                                    • Breaks fat-protein complex<br>
+                                    • Saponifies some lipids for better extraction
+                                </td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="p-2 font-medium">Ethanol (95%)</td>
+                                <td class="p-2">
+                                    • 10ml use<br>
+                                    • Precipitates proteins<br>
+                                    • Breaks emulsion<br>
+                                    • Facilitates phase separation
+                                </td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="p-2 font-medium">Diethyl Ether</td>
+                                <td class="p-2">
+                                    • 25ml use (BP 34.6°C)<br>
+                                    • Primary fat solvent<br>
+                                    • Extracts neutral lipids<br>
+                                    • Low boiling - easy evaporation
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 font-medium">Petroleum Ether (40-60°C)</td>
+                                <td class="p-2">
+                                    • 25ml use<br>
+                                    • Secondary fat solvent<br>
+                                    • Washes out residual fat<br>
+                                    • Reduces diethyl ether use
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            `,
             procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                <ol class="list-decimal list-outside pl-5 space-y-2">
-                    <li>~1g sample ko Mojonnier tube mein weigh karein.</li>
-                    <li>10ml warm water mein reconstitute karein.</li>
-                    <li>1.5ml ammonia daalein aur mix karein.</li>
-                    <li>Standard Rose-Gottlieb extraction follow karein (ethanol → diethyl ether → petroleum ether).</li>
-                    <li>Triple extraction karein.</li>
-                    <li>Solvents evaporate karein, 102°C par dry karein, weigh karein.</li>
+                <h4 class="font-semibold mt-4 mb-2">🔬 Detailed Rose-Gottlieb Procedure:</h4>
+                
+                <div class="bg-red-50 p-4 rounded-lg mb-4 border border-red-200">
+                    <h5 class="font-semibold text-red-800 mb-2">⚠️ Safety Precautions:</h5>
+                    <ul class="text-sm text-red-700 space-y-1">
+                        <li>• Diethyl ether highly flammable - fume hood mein work karein</li>
+                        <li>• No open flames nearby</li>
+                        <li>• Ground all equipment (static electricity hazard)</li>
+                        <li>• Ammonia fumes - ventilation ensure karein</li>
+                    </ul>
+                </div>
+
+                <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                    <h5 class="font-semibold mb-2">Required Equipment:</h5>
+                    <ul class="grid grid-cols-2 gap-2 text-sm">
+                        <li>✓ Mojonnier extraction tubes</li>
+                        <li>✓ Round bottom flask (250ml)</li>
+                        <li>✓ Rotary evaporator/Water bath</li>
+                        <li>✓ Hot air oven (102°C)</li>
+                        <li>✓ Analytical balance (0.0001g)</li>
+                        <li>✓ Desiccator</li>
+                    </ul>
+                </div>
+
+                <h5 class="font-semibold mt-4 mb-2">Step-by-Step Procedure:</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-3">
+                    <li>
+                        <strong>Sample Preparation:</strong>
+                        <ul class="list-disc pl-5 text-sm mt-1">
+                            <li>1-2g infant formula powder ko Mojonnier tube mein accurately weigh karein</li>
+                            <li>10ml warm water (40-50°C) daalein</li>
+                            <li>Gently mix until completely dissolved</li>
+                            <li>Cool to room temperature</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Ammonia Treatment:</strong>
+                        <ul class="list-disc pl-5 text-sm mt-1">
+                            <li>1.5ml concentrated ammonia (25%) daalein</li>
+                            <li>Gently mix (5-10 inversions)</li>
+                            <li>Let stand 2-3 minutes</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Ethanol Addition:</strong>
+                        <ul class="list-disc pl-5 text-sm mt-1">
+                            <li>10ml 95% ethanol daalein</li>
+                            <li>Stopper lagakar vigorously shake (30 seconds)</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>First Extraction:</strong>
+                        <ul class="list-disc pl-5 text-sm mt-1">
+                            <li>25ml diethyl ether daalein</li>
+                            <li>Stopper lagakar 1 minute vigorously shake</li>
+                            <li>25ml petroleum ether daalein</li>
+                            <li>30 seconds shake karein</li>
+                            <li>Stand until clear layer separation (15-20 min)</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Ether Layer Collection:</strong>
+                        <ul class="list-disc pl-5 text-sm mt-1">
+                            <li>Upper ether layer ko pre-weighed flask mein carefully decant/siphon karein</li>
+                            <li>Interface disturb na karein</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Second Extraction:</strong>
+                        <ul class="list-disc pl-5 text-sm mt-1">
+                            <li>5ml ethanol daalein (optional)</li>
+                            <li>15ml diethyl ether + 15ml petroleum ether</li>
+                            <li>Shake aur separate</li>
+                            <li>Collect ether layer</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Third Extraction:</strong>
+                        <ul class="list-disc pl-5 text-sm mt-1">
+                            <li>15ml diethyl ether + 15ml petroleum ether</li>
+                            <li>Shake aur separate</li>
+                            <li>Collect ether layer</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Solvent Evaporation:</strong>
+                        <ul class="list-disc pl-5 text-sm mt-1">
+                            <li>Combined ether extracts ko water bath (60°C) par evaporate karein</li>
+                            <li>Ya rotary evaporator use karein</li>
+                            <li>Solvent completely remove karein</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Final Drying:</strong>
+                        <ul class="list-disc pl-5 text-sm mt-1">
+                            <li>Flask ko 102°C oven mein 1 hour rakhein</li>
+                            <li>Desiccator mein cool karein</li>
+                            <li>Weigh karein</li>
+                            <li>Repeat 30 min heating until constant weight</li>
+                        </ul>
+                    </li>
                 </ol>
-                <pre><code>% Fat = (Weight of fat / Weight of sample) × 100</code></pre>
-                <p class="text-xs">Standard: As per declaration (typically 20-30% in powder).</p>
+
+                <div class="mt-6 bg-green-50 p-4 rounded-lg border border-green-200">
+                    <h5 class="font-semibold text-green-800 mb-2">📊 Calculation Example:</h5>
+                    <div class="font-mono text-sm bg-white p-3 rounded">
+                        <p>Sample weight (W) = 1.5023 g</p>
+                        <p>Empty flask (W1) = 85.4521 g</p>
+                        <p>Flask + fat (W2) = 85.8345 g</p>
+                        <p class="mt-2 border-t pt-2">
+                            <strong>Fat weight = 85.8345 - 85.4521 = 0.3824 g</strong>
+                        </p>
+                        <p class="mt-2">
+                            <strong>% Fat = (0.3824 / 1.5023) × 100 = 25.45%</strong>
+                        </p>
+                    </div>
+                </div>
+            `,
+            standards: `
+                <div class="mt-4 bg-orange-50 p-4 rounded-lg border border-orange-200">
+                    <h5 class="font-semibold text-orange-800 mb-2">📋 Fat Standards (per 100 kcal):</h5>
+                    <table class="w-full text-sm">
+                        <thead class="bg-orange-100">
+                            <tr>
+                                <th class="p-2 text-left">Parameter</th>
+                                <th class="p-2 text-left">Minimum</th>
+                                <th class="p-2 text-left">Maximum</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b"><td class="p-2">Total Fat</td><td class="p-2">4.4 g</td><td class="p-2">6.0 g</td></tr>
+                            <tr class="border-b"><td class="p-2">Linoleic Acid</td><td class="p-2">300 mg</td><td class="p-2">1200 mg</td></tr>
+                            <tr class="border-b"><td class="p-2">α-Linolenic Acid</td><td class="p-2">50 mg</td><td class="p-2">NS</td></tr>
+                            <tr><td class="p-2">Lauric + Myristic</td><td class="p-2">NS</td><td class="p-2">≤20% total fat</td></tr>
+                        </tbody>
+                    </table>
+                    <p class="text-xs mt-2 text-gray-600">
+                        Typical powder: 20-30% fat on dry basis<br>
+                        Essential fatty acids (LA, ALA) critical for brain development
+                    </p>
+                </div>
             `
         },
         {
-            title: "Protein Ka Determination (Kjeldahl Method)",
-            purpose: "Infant formula mein protein content determine karne ke liye.",
-            reference: "A.O.A.C 991.20; IDF 20B:1993",
+            title: "Protein Determination - Kjeldahl Method",
+            purpose: "Infant formula mein total protein determine karna - growth aur development ke liye critical nutrient.",
+            reference: "AOAC 991.20; IDF 20B:1993; ISO 8968-1; Codex Stan 72",
+            formulaExplanation: `
+                <div class="bg-emerald-50 p-5 rounded-xl border border-emerald-200 mb-4">
+                    <h4 class="font-bold text-emerald-800 mb-3">📐 Kjeldahl Method - Formula & Conversion Factors</h4>
+                    
+                    <div class="bg-white p-4 rounded-lg mb-4">
+                        <h5 class="font-semibold text-emerald-700 mb-2">Step 1: Nitrogen Calculation</h5>
+                        <pre class="bg-gray-100 p-3 rounded text-lg"><code>% Nitrogen = [(V₁ - V₂) × N × 14.007 × 100] / (W × 1000)</code></pre>
+                        
+                        <div class="mt-4 space-y-2 text-sm">
+                            <div class="flex items-start gap-3">
+                                <span class="bg-emerald-100 text-emerald-800 px-2 py-1 rounded font-mono">V₁</span>
+                                <p>Titre for sample (ml of standard acid)</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="bg-emerald-100 text-emerald-800 px-2 py-1 rounded font-mono">V₂</span>
+                                <p>Titre for blank (ml)</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="bg-emerald-100 text-emerald-800 px-2 py-1 rounded font-mono">N</span>
+                                <p>Normality of acid (0.1N HCl/H₂SO₄)</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="bg-emerald-100 text-emerald-800 px-2 py-1 rounded font-mono">14.007</span>
+                                <p>Atomic weight of Nitrogen</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="bg-emerald-100 text-emerald-800 px-2 py-1 rounded font-mono">W</span>
+                                <p>Sample weight (grams)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-lg mb-4">
+                        <h5 class="font-semibold text-emerald-700 mb-2">Step 2: Protein Calculation</h5>
+                        <pre class="bg-gray-100 p-3 rounded text-lg"><code>% Protein = % Nitrogen × Conversion Factor</code></pre>
+                    </div>
+
+                    <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                        <h5 class="font-semibold text-yellow-800 mb-2">⚠️ Conversion Factor Selection - CRITICAL!</h5>
+                        <table class="w-full text-sm">
+                            <thead class="bg-yellow-100">
+                                <tr>
+                                    <th class="p-2 text-left">Formula Type</th>
+                                    <th class="p-2 text-left">Factor</th>
+                                    <th class="p-2 text-left">Reasoning</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b">
+                                    <td class="p-2 font-medium">Milk-based</td>
+                                    <td class="p-2"><strong>6.38</strong></td>
+                                    <td class="p-2">Casein/whey contain 15.67% N; 100/15.67 = 6.38</td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="p-2 font-medium">Soy-based</td>
+                                    <td class="p-2"><strong>6.25</strong></td>
+                                    <td class="p-2">Soy protein contains 16% N; 100/16 = 6.25</td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="p-2 font-medium">Mixed (milk+soy)</td>
+                                    <td class="p-2"><strong>6.25</strong></td>
+                                    <td class="p-2">Conservative estimate used</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2 font-medium">Hydrolyzed</td>
+                                    <td class="p-2"><strong>6.25</strong></td>
+                                    <td class="p-2">Peptides may have different N content</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="bg-red-50 p-4 rounded-lg border border-red-200 mt-4">
+                        <h5 class="font-semibold text-red-800 mb-2">⚠️ Important Note - Non-Protein Nitrogen (NPN)</h5>
+                        <p class="text-sm">
+                            Kjeldahl measures <strong>total nitrogen</strong> including:
+                        </p>
+                        <ul class="text-sm mt-2 space-y-1">
+                            <li>• True protein nitrogen (~95%)</li>
+                            <li>• Non-protein nitrogen: urea, ammonia, free amino acids (~5%)</li>
+                        </ul>
+                        <p class="text-sm mt-2 text-red-700">
+                            <strong>Melamine fraud:</strong> Melamine (66% N) was added to artificially inflate protein readings - 
+                            now banned and actively monitored.
+                        </p>
+                    </div>
+                </div>
+            `,
             procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <h4 class="font-semibold mt-4 mb-2">🔬 Kjeldahl Procedure (Macro Method):</h4>
+                
+                <h5 class="font-semibold mt-4 mb-2 text-red-700">Stage 1: DIGESTION</h5>
                 <ol class="list-decimal list-outside pl-5 space-y-2">
-                    <li>~0.5g sample ko Kjeldahl flask mein accurately weigh karein.</li>
-                    <li>Standard Kjeldahl procedure follow karein.</li>
-                    <li>Conversion factor: 6.38 (dairy based) ya 6.25 (mixed/soy based).</li>
+                    <li>0.5-1.0g sample accurately weigh karein Kjeldahl flask (500ml) mein</li>
+                    <li>Add catalyst mixture: 10g K₂SO₄ + 0.5g CuSO₄ (or catalyst tablet)</li>
+                    <li>25ml conc. H₂SO₄ carefully add karein</li>
+                    <li>Glass beads/boiling chips add karein</li>
+                    <li>Fume hood mein initially gentle heat karein</li>
+                    <li>Frothing subsides hone ke baad strong heat</li>
+                    <li>Digest until clear bluish-green (2-3 hours)</li>
+                    <li>Further 30 min digest karein to ensure completion</li>
+                    <li>Cool to room temperature</li>
                 </ol>
-                <pre><code>% Protein = % Total Nitrogen × Conversion factor</code></pre>
+                <div class="bg-blue-50 p-3 rounded mt-2 text-sm">
+                    <strong>Chemistry:</strong><br>
+                    Organic N + H₂SO₄ → (NH₄)₂SO₄ + CO₂ + H₂O<br>
+                    K₂SO₄ raises boiling point (digestion temp ↑)<br>
+                    CuSO₄ = catalyst for oxidation
+                </div>
+
+                <h5 class="font-semibold mt-4 mb-2 text-blue-700">Stage 2: DISTILLATION</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Cooled digest mein 200ml distilled water carefully add karein</li>
+                    <li>Anti-bumping granules add karein</li>
+                    <li>Receiving flask prepare karein:
+                        <ul class="list-disc pl-5 text-sm">
+                            <li>Option A: 25ml 4% boric acid + mixed indicator</li>
+                            <li>Option B: 25ml 0.1N H₂SO₄ (excess standard acid)</li>
+                        </ul>
+                    </li>
+                    <li>Condenser tip ko receiving solution mein submerge karein</li>
+                    <li>80ml 40% NaOH slowly add karein (flask ko tilt karke)</li>
+                    <li>Immediately connect to distillation apparatus</li>
+                    <li>Heat aur distill until 150-200ml distillate collected</li>
+                    <li>Test with red litmus - if still blue, continue distillation</li>
+                </ol>
+                <div class="bg-blue-50 p-3 rounded mt-2 text-sm">
+                    <strong>Chemistry:</strong><br>
+                    (NH₄)₂SO₄ + 2NaOH → Na₂SO₄ + 2NH₃↑ + 2H₂O<br>
+                    NH₃ + H₃BO₃ → NH₄⁺ + H₂BO₃⁻ (boric acid absorbs ammonia)
+                </div>
+
+                <h5 class="font-semibold mt-4 mb-2 text-green-700">Stage 3: TITRATION</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li><strong>If boric acid used:</strong>
+                        <ul class="list-disc pl-5 text-sm">
+                            <li>Green solution obtained</li>
+                            <li>Titrate with 0.1N HCl ya H₂SO₄</li>
+                            <li>Endpoint: Green → Grey → Pink</li>
+                        </ul>
+                    </li>
+                    <li><strong>If excess acid used:</strong>
+                        <ul class="list-disc pl-5 text-sm">
+                            <li>Add methyl red indicator</li>
+                            <li>Back-titrate excess acid with 0.1N NaOH</li>
+                            <li>Endpoint: Red → Yellow</li>
+                        </ul>
+                    </li>
+                    <li>Note titre value (V₁)</li>
+                    <li>Run blank determination (V₂)</li>
+                </ol>
+
+                <div class="mt-6 bg-green-50 p-4 rounded-lg border border-green-200">
+                    <h5 class="font-semibold text-green-800 mb-2">📊 Calculation Example (Milk-based Formula):</h5>
+                    <div class="font-mono text-sm bg-white p-3 rounded">
+                        <p>Sample weight (W) = 0.5234 g</p>
+                        <p>Titre - Sample (V₁) = 12.45 ml of 0.1N HCl</p>
+                        <p>Titre - Blank (V₂) = 0.15 ml</p>
+                        <p class="mt-2 border-t pt-2">
+                            <strong>Net titre = 12.45 - 0.15 = 12.30 ml</strong>
+                        </p>
+                        <p class="mt-2">
+                            <strong>% N = (12.30 × 0.1 × 14.007 × 100) / (0.5234 × 1000)</strong><br>
+                            <strong>% N = 172.29 / 523.4 = 3.29%</strong>
+                        </p>
+                        <p class="mt-2">
+                            <strong>% Protein = 3.29 × 6.38 = 20.99%</strong>
+                        </p>
+                    </div>
+                </div>
+            `,
+            standards: `
+                <div class="mt-4 bg-orange-50 p-4 rounded-lg border border-orange-200">
+                    <h5 class="font-semibold text-orange-800 mb-2">📋 Protein Standards (Codex Stan 72):</h5>
+                    <table class="w-full text-sm">
+                        <thead class="bg-orange-100">
+                            <tr>
+                                <th class="p-2 text-left">Parameter</th>
+                                <th class="p-2 text-left">per 100 kcal</th>
+                                <th class="p-2 text-left">per 100 kJ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b">
+                                <td class="p-2">Minimum (milk-based)</td>
+                                <td class="p-2">1.8 g</td>
+                                <td class="p-2">0.45 g</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="p-2">Minimum (soy-based)</td>
+                                <td class="p-2">2.25 g</td>
+                                <td class="p-2">0.56 g</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2">Maximum</td>
+                                <td class="p-2">3.0 g</td>
+                                <td class="p-2">0.7 g</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p class="text-xs mt-2 text-gray-600">
+                        Typical powder: 10-15% protein on dry basis<br>
+                        Whey:Casein ratio important for digestibility
+                    </p>
+                </div>
+            `
+        },
+        {
+            title: "Total Carbohydrates / Lactose Determination",
+            purpose: "Infant formula mein carbohydrate content determine karna - primary energy source.",
+            reference: "AOAC 930.28; Lane-Eynon Method; Codex Stan 72",
+            formulaExplanation: `
+                <div class="bg-pink-50 p-5 rounded-xl border border-pink-200 mb-4">
+                    <h4 class="font-bold text-pink-800 mb-3">📐 Carbohydrate Determination Methods</h4>
+                    
+                    <div class="bg-white p-4 rounded-lg mb-4">
+                        <h5 class="font-semibold text-pink-700 mb-2">Method 1: By Difference</h5>
+                        <pre class="bg-gray-100 p-3 rounded text-lg"><code>% Carbohydrate = 100 - (% Moisture + % Protein + % Fat + % Ash)</code></pre>
+                        <p class="text-sm mt-2 text-gray-600">Quick screening method, but includes fiber</p>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-lg mb-4">
+                        <h5 class="font-semibold text-pink-700 mb-2">Method 2: Lane-Eynon (Lactose)</h5>
+                        <pre class="bg-gray-100 p-3 rounded text-lg"><code>% Lactose = (F × D × 100) / (T × W)</code></pre>
+                        
+                        <div class="mt-3 space-y-2 text-sm">
+                            <div class="flex items-start gap-3">
+                                <span class="bg-pink-100 text-pink-800 px-2 py-1 rounded font-mono">F</span>
+                                <p>Fehling's Factor (mg lactose per 10ml Fehling's) - typically 67-72mg</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="bg-pink-100 text-pink-800 px-2 py-1 rounded font-mono">D</span>
+                                <p>Total dilution (ml)</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="bg-pink-100 text-pink-800 px-2 py-1 rounded font-mono">T</span>
+                                <p>Titre value (ml sample solution)</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="bg-pink-100 text-pink-800 px-2 py-1 rounded font-mono">W</span>
+                                <p>Sample weight (g)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-lg mb-4">
+                        <h5 class="font-semibold text-pink-700 mb-2">Method 3: Polarimetric Method</h5>
+                        <pre class="bg-gray-100 p-3 rounded"><code>% Lactose = (100 × α × V) / (l × [α]D × W)</code></pre>
+                        <div class="mt-2 text-sm">
+                            <p><strong>α</strong> = Observed rotation (degrees)</p>
+                            <p><strong>l</strong> = Polarimeter tube length (dm)</p>
+                            <p><strong>[α]D</strong> = Specific rotation of lactose (+52.5°)</p>
+                            <p><strong>V</strong> = Volume (ml)</p>
+                            <p><strong>W</strong> = Sample weight (g)</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                        <h5 class="font-semibold text-yellow-800 mb-2">⚠️ Why Lactose is Important:</h5>
+                        <ul class="text-sm space-y-1">
+                            <li>• Primary carbohydrate in breast milk (~7%)</li>
+                            <li>• Promotes calcium absorption</li>
+                            <li>• Supports beneficial gut bacteria (Bifidobacteria)</li>
+                            <li>• Some formulas use maltodextrin, corn syrup solids as partial replacement</li>
+                        </ul>
+                    </div>
+                </div>
+            `,
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">🔬 Lane-Eynon Method for Lactose:</h4>
+                
+                <h5 class="font-semibold mt-4 mb-2">A. Sample Preparation:</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>5g sample ko beaker mein accurately weigh karein</li>
+                    <li>50ml warm water mein dissolve karein</li>
+                    <li>1ml acetic acid add karein (proteins precipitate)</li>
+                    <li>5ml lead acetate (neutral) solution add karein</li>
+                    <li>Mix karein, 5 min stand</li>
+                    <li>Excess lead remove: 5ml potassium oxalate solution</li>
+                    <li>250ml volumetric flask mein transfer, volume makeup</li>
+                    <li>Filter through Whatman No. 1</li>
+                </ol>
+
+                <h5 class="font-semibold mt-4 mb-2">B. Fehling's Standardization:</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>5ml Fehling's A + 5ml Fehling's B = 10ml mixed Fehling's</li>
+                    <li>Standard lactose solution (0.5%) se titrate karein</li>
+                    <li>Boiling maintain karke, methylene blue indicator near endpoint</li>
+                    <li>Fehling's Factor calculate karein</li>
+                </ol>
+
+                <h5 class="font-semibold mt-4 mb-2">C. Sample Titration:</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>10ml mixed Fehling's + 15ml water mein lein</li>
+                    <li>Boil karein</li>
+                    <li>Sample solution se titrate karein (preliminary: fast)</li>
+                    <li>Repeat accurately: add most volume before boiling</li>
+                    <li>Final endpoint: brick red, no blue</li>
+                </ol>
+
+                <div class="mt-4 bg-green-50 p-4 rounded-lg border border-green-200">
+                    <h5 class="font-semibold text-green-800 mb-2">📊 Calculation Example:</h5>
+                    <div class="font-mono text-sm bg-white p-3 rounded">
+                        <p>Sample weight = 5.00 g</p>
+                        <p>Dilution = 250 ml</p>
+                        <p>Fehling's Factor = 68 mg lactose</p>
+                        <p>Titre = 9.5 ml</p>
+                        <p class="mt-2 border-t pt-2">
+                            <strong>% Lactose = (68 × 250 × 100) / (9.5 × 5 × 1000)</strong><br>
+                            <strong>% Lactose = 1700000 / 47500 = 35.79%</strong>
+                        </p>
+                    </div>
+                </div>
+            `,
+            standards: `
+                <div class="mt-4 bg-orange-50 p-4 rounded-lg border border-orange-200">
+                    <h5 class="font-semibold text-orange-800 mb-2">📋 Carbohydrate Standards:</h5>
+                    <table class="w-full text-sm">
+                        <tr class="border-b"><td class="p-2">Available Carbohydrates</td><td class="p-2">9.0 - 14.0 g/100 kcal</td></tr>
+                        <tr class="border-b"><td class="p-2">Lactose (if added)</td><td class="p-2">As declared</td></tr>
+                        <tr><td class="p-2">Added Sugars (sucrose)</td><td class="p-2">≤ 20% of total carbs</td></tr>
+                    </table>
+                </div>
             `
         },
         {
             title: "Ash Ka Determination",
-            purpose: "Total mineral content determine karne ke liye.",
+            purpose: "Total mineral content determine karna - nutritional adequacy indicator.",
+            reference: "AOAC 945.46; IDF 27:2010; ISO 5545",
+            formulaExplanation: `
+                <div class="bg-gray-100 p-5 rounded-xl border border-gray-300 mb-4">
+                    <h4 class="font-bold text-gray-800 mb-3">📐 Ash Formula</h4>
+                    
+                    <div class="bg-white p-4 rounded-lg mb-4">
+                        <pre class="bg-gray-50 p-3 rounded text-lg"><code>% Ash = [(W3 - W1) / (W2 - W1)] × 100</code></pre>
+                        
+                        <div class="mt-4 space-y-2 text-sm">
+                            <p><strong>W1</strong> = Empty crucible weight (g)</p>
+                            <p><strong>W2</strong> = Crucible + sample weight before ashing (g)</p>
+                            <p><strong>W3</strong> = Crucible + ash weight after ashing (g)</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                        <h5 class="font-semibold text-yellow-800 mb-2">⚠️ Temperature Selection:</h5>
+                        <ul class="text-sm space-y-1">
+                            <li>• <strong>550°C:</strong> Standard for dairy products</li>
+                            <li>• 6 hours minimum for complete ashing</li>
+                            <li>• White/grey ash indicates completion</li>
+                            <li>• If black specks remain: cool, add few drops HNO₃, re-ash</li>
+                        </ul>
+                    </div>
+                </div>
+            `,
             procedure: `
+                <h4 class="font-semibold mt-4 mb-2">🔬 Procedure:</h4>
                 <ol class="list-decimal list-outside pl-5 space-y-2">
-                    <li>Pre-weighed crucible mein ~3g sample weigh karein.</li>
-                    <li>Char karein aur 550°C par ash karein.</li>
-                    <li>Cool karein aur weigh karein.</li>
+                    <li>Silica/porcelain crucible ko 550°C par 30 min pre-heat karein</li>
+                    <li>Desiccator mein cool karein, weigh = W1</li>
+                    <li>3-5g sample accurately weigh karein = W2</li>
+                    <li>Low flame par slowly char karein (no burning)</li>
+                    <li>Muffle furnace mein 550°C, 6 hours</li>
+                    <li>Furnace off karein, 200°C tak cool hone dein</li>
+                    <li>Desiccator mein complete cooling</li>
+                    <li>Weigh = W3</li>
                 </ol>
-                <pre><code>% Ash = (Weight of ash / Weight of sample) × 100</code></pre>
+            `,
+            standards: `
+                <div class="mt-4 bg-orange-50 p-4 rounded-lg border border-orange-200">
+                    <h5 class="font-semibold text-orange-800 mb-2">📋 Typical Ash Content:</h5>
+                    <table class="w-full text-sm">
+                        <tr class="border-b"><td class="p-2">Infant Formula Powder</td><td class="p-2">2.0 - 4.0%</td></tr>
+                        <tr><td class="p-2">Follow-up Formula</td><td class="p-2">2.5 - 4.5%</td></tr>
+                    </table>
+                </div>
             `
         },
         {
-            title: "Calcium Ka Determination (EDTA Titrimetric Method)",
-            purpose: "Infant formula mein calcium content determine karne ke liye, bone development ke liye essential hai.",
-            reference: "A.O.A.C 991.25",
+            title: "Calcium Determination - EDTA Complexometric Titration",
+            purpose: "Infant formula mein calcium determine karna - bone aur teeth development ke liye essential mineral.",
+            reference: "AOAC 991.25; IDF 119:2007; IS 1479 Part II",
+            formulaExplanation: `
+                <div class="bg-cyan-50 p-5 rounded-xl border border-cyan-200 mb-4">
+                    <h4 class="font-bold text-cyan-800 mb-3">📐 Calcium EDTA Titration - Formula & Factors</h4>
+                    
+                    <div class="bg-white p-4 rounded-lg mb-4">
+                        <h5 class="font-semibold text-cyan-700 mb-2">Primary Formula:</h5>
+                        <pre class="bg-gray-100 p-3 rounded text-lg"><code>Ca (mg/100g) = [V × M × 40.08 × (Vt/Va) × 100] / W</code></pre>
+                        
+                        <div class="mt-4 space-y-3">
+                            <div class="flex items-start gap-3">
+                                <span class="bg-cyan-100 text-cyan-800 px-2 py-1 rounded font-mono text-sm">V</span>
+                                <p>Volume of EDTA used (ml)</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="bg-cyan-100 text-cyan-800 px-2 py-1 rounded font-mono text-sm">M</span>
+                                <p>Molarity of EDTA (usually 0.01M)</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="bg-cyan-100 text-cyan-800 px-2 py-1 rounded font-mono text-sm">40.08</span>
+                                <div>
+                                    <p class="font-medium">Atomic weight of Calcium</p>
+                                    <p class="text-xs text-gray-500">1ml 0.01M EDTA ≡ 0.4008 mg Ca</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="bg-cyan-100 text-cyan-800 px-2 py-1 rounded font-mono text-sm">Vt/Va</span>
+                                <p>Total volume / Aliquot volume (dilution factor)</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="bg-cyan-100 text-cyan-800 px-2 py-1 rounded font-mono text-sm">W</span>
+                                <p>Sample weight (g)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-lg mb-4">
+                        <h5 class="font-semibold text-cyan-700 mb-2">Simplified Formula:</h5>
+                        <pre class="bg-gray-100 p-3 rounded"><code>Ca (mg/100g) = [(V × F × D) / W] × 100</code></pre>
+                        <p class="text-sm mt-2">
+                            Where F = Factor (mg Ca per ml EDTA) = M × 40.08<br>
+                            For 0.01M EDTA: F = 0.4008 mg/ml
+                        </p>
+                    </div>
+
+                    <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                        <h5 class="font-semibold text-yellow-800 mb-2">⚠️ Chemistry Behind EDTA Titration:</h5>
+                        <div class="text-sm space-y-2">
+                            <p><strong>Reaction:</strong></p>
+                            <p class="font-mono bg-white p-2 rounded">
+                                Ca²⁺ + H₂Y²⁻ → CaY²⁻ + 2H⁺
+                            </p>
+                            <p class="mt-2">
+                                <strong>EDTA</strong> (Ethylenediaminetetraacetic acid) forms stable 1:1 complex with Ca²⁺<br>
+                                <strong>pH 12-13:</strong> Ensures complete reaction, Mg(OH)₂ precipitates (no interference)
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-purple-50 p-4 rounded-lg border border-purple-200 mt-4">
+                        <h5 class="font-semibold text-purple-800 mb-2">🎨 Indicator Color Changes:</h5>
+                        <table class="w-full text-sm">
+                            <tr class="border-b">
+                                <td class="p-2 font-medium">Murexide</td>
+                                <td class="p-2">Pink (Ca-complex) → Purple (free indicator)</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="p-2 font-medium">Calcon (Patton-Reeder)</td>
+                                <td class="p-2">Wine red → Pure blue</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 font-medium">Cal-red</td>
+                                <td class="p-2">Red → Blue</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            `,
             procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
-                <p>Sample ko ash karein. Ash ko acid mein dissolve karein. Calcium ko EDTA (ethylenediaminetetraacetic acid) se titrate karein, murexide ya calcon indicator ke saath.</p>
-                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <h4 class="font-semibold mt-4 mb-2">🔬 Detailed Procedure:</h4>
+                
+                <h5 class="font-semibold mt-4 mb-2">A. Sample Preparation (Dry Ashing):</h5>
                 <ol class="list-decimal list-outside pl-5 space-y-2">
-                    <li>~5g sample ko ash karein 550°C par.</li>
-                    <li>Ash ko 10ml 1:1 HCl mein dissolve karein, filter karein, 100ml tak dilute karein.</li>
-                    <li>25ml aliquot lein, NaOH se pH 12-13 adjust karein.</li>
-                    <li>Murexide indicator daalein (pink colour aayega).</li>
-                    <li>0.01M EDTA se titrate karein jab tak colour pink se purple ho jaaye.</li>
+                    <li>5g sample accurately weigh karein silica crucible mein</li>
+                    <li>Slowly char karein low flame par</li>
+                    <li>550°C muffle furnace mein 4-6 hours ash karein</li>
+                    <li>Cool karein</li>
+                    <li>10ml dilute HCl (1+1) daalein, warm water bath par dissolve</li>
+                    <li>100ml volumetric flask mein filter karein</li>
+                    <li>Washings collect karein, volume makeup</li>
                 </ol>
-                <pre><code>Ca (mg/100g) = [EDTA volume × EDTA molarity × 40.08 × Dilution factor × 100] / (Aliquot × Weight of sample)</code></pre>
+
+                <h5 class="font-semibold mt-4 mb-2">B. EDTA Titration:</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>25ml aliquot ko 250ml conical flask mein lein</li>
+                    <li>20ml distilled water daalein</li>
+                    <li>2ml 8% NaOH solution daalein (pH ~12)</li>
+                    <li>Check pH with pH paper (should be 12-13)</li>
+                    <li>~0.1g murexide indicator powder daalein (pink color)</li>
+                    <li>0.01M EDTA se titrate karein</li>
+                    <li>Endpoint: Pink → Purple (stable 30 sec)</li>
+                    <li>Note EDTA volume (V)</li>
+                </ol>
+
+                <h5 class="font-semibold mt-4 mb-2">C. Blank Determination:</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Same procedure without sample</li>
+                    <li>Blank titre should be negligible</li>
+                </ol>
+
+                <div class="mt-6 bg-green-50 p-4 rounded-lg border border-green-200">
+                    <h5 class="font-semibold text-green-800 mb-2">📊 Calculation Example:</h5>
+                    <div class="font-mono text-sm bg-white p-3 rounded">
+                        <p>Sample weight (W) = 5.00 g</p>
+                        <p>Total volume (Vt) = 100 ml</p>
+                        <p>Aliquot taken (Va) = 25 ml</p>
+                        <p>EDTA molarity (M) = 0.01 M</p>
+                        <p>EDTA titre (V) = 18.5 ml</p>
+                        <p class="mt-2 border-t pt-2">
+                            <strong>Dilution factor = 100/25 = 4</strong>
+                        </p>
+                        <p class="mt-2">
+                            <strong>Ca (mg) = 18.5 × 0.01 × 40.08 × 4 = 29.66 mg</strong>
+                        </p>
+                        <p class="mt-2">
+                            <strong>Ca (mg/100g) = (29.66 / 5.00) × 100 = 593.2 mg/100g</strong>
+                        </p>
+                    </div>
+                </div>
+            `,
+            standards: `
+                <div class="mt-4 bg-orange-50 p-4 rounded-lg border border-orange-200">
+                    <h5 class="font-semibold text-orange-800 mb-2">📋 Calcium Standards (Codex):</h5>
+                    <table class="w-full text-sm">
+                        <thead class="bg-orange-100">
+                            <tr>
+                                <th class="p-2 text-left">Parameter</th>
+                                <th class="p-2 text-left">per 100 kcal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b"><td class="p-2">Minimum</td><td class="p-2">50 mg</td></tr>
+                            <tr class="border-b"><td class="p-2">Maximum</td><td class="p-2">140 mg</td></tr>
+                            <tr><td class="p-2">Ca:P Ratio</td><td class="p-2">1:1 to 2:1</td></tr>
+                        </tbody>
+                    </table>
+                    <p class="text-xs mt-2 text-gray-600">
+                        Typical: 400-700 mg/100g powder
+                    </p>
+                </div>
             `
         },
         {
-            title: "Iron Ka Determination (Spectrophotometric Method)",
-            purpose: "Infant formula mein iron content determine karne ke liye.",
-            reference: "A.O.A.C 999.11",
+            title: "Phosphorus Determination - Colorimetric Method",
+            purpose: "Infant formula mein phosphorus determine karna - bone development aur energy metabolism ke liye essential.",
+            reference: "AOAC 995.11; IDF 42:2006",
+            formulaExplanation: `
+                <div class="bg-indigo-50 p-5 rounded-xl border border-indigo-200 mb-4">
+                    <h4 class="font-bold text-indigo-800 mb-3">📐 Phosphorus Determination - Formula</h4>
+                    
+                    <div class="bg-white p-4 rounded-lg mb-4">
+                        <h5 class="font-semibold text-indigo-700 mb-2">Calculation from Calibration Curve:</h5>
+                        <pre class="bg-gray-100 p-3 rounded text-lg"><code>P (mg/100g) = [(C × V × D) / W] × 100</code></pre>
+                        
+                        <div class="mt-4 space-y-2 text-sm">
+                            <p><strong>C</strong> = Concentration from standard curve (mg/ml)</p>
+                            <p><strong>V</strong> = Final volume of sample solution (ml)</p>
+                            <p><strong>D</strong> = Dilution factor (if any)</p>
+                            <p><strong>W</strong> = Sample weight (g)</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                        <h5 class="font-semibold text-yellow-800 mb-2">⚠️ Principle (Molybdenum Blue):</h5>
+                        <p class="text-sm">
+                            PO₄³⁻ + Ammonium molybdate → Phosphomolybdate complex<br>
+                            Phosphomolybdate + Reducing agent → Molybdenum blue (λmax = 660-700nm)
+                        </p>
+                        <p class="text-xs mt-2">
+                            Color intensity ∝ Phosphorus concentration (Beer-Lambert Law)
+                        </p>
+                    </div>
+                </div>
+            `,
             procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
-                <p>Sample ko ash karke acid mein dissolve kiya jaata hai. Iron (Fe²⁺) 1,10-phenanthroline ke saath react karke orange-red complex banata hai jo 510nm par spectrophotometrically measure hota hai.</p>
-                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <h4 class="font-semibold mt-4 mb-2">🔬 Procedure (Vanadomolybdate Method):</h4>
+                
+                <h5 class="font-semibold mt-4 mb-2">A. Standard Curve Preparation:</h5>
                 <ol class="list-decimal list-outside pl-5 space-y-2">
-                    <li>~5g sample ko 550°C par ash karein.</li>
-                    <li>Ash ko dilute HCl mein dissolve karein.</li>
-                    <li>Hydroxylamine hydrochloride daalein (Fe³⁺ ko Fe²⁺ mein reduce karne ke liye).</li>
-                    <li>Sodium acetate buffer daalein (pH 3-5 maintain karne ke liye).</li>
-                    <li>1,10-Phenanthroline solution daalein.</li>
-                    <li>15 minutes stand hone dein colour development ke liye.</li>
-                    <li>510nm par absorbance read karein.</li>
-                    <li>Standard iron solutions ke calibration curve se concentration determine karein.</li>
+                    <li>Standard P solution: 1.0 mg P/ml (from KH₂PO₄)</li>
+                    <li>Prepare working standards: 0, 0.1, 0.2, 0.3, 0.4, 0.5 mg P/ml</li>
+                    <li>Each standard mein color reagent add karein</li>
+                    <li>10 min stand karein</li>
+                    <li>420 nm par absorbance read karein</li>
+                    <li>Calibration curve plot karein</li>
                 </ol>
+
+                <h5 class="font-semibold mt-4 mb-2">B. Sample Preparation:</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Ash solution (from Ca determination) use karein</li>
+                    <li>Ya fresh: 2g sample + wet digestion (HNO₃ + H₂SO₄)</li>
+                    <li>Appropriate dilution karein</li>
+                </ol>
+
+                <h5 class="font-semibold mt-4 mb-2">C. Color Development:</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>5ml diluted sample solution lein</li>
+                    <li>5ml vanadomolybdate reagent add karein</li>
+                    <li>Mix karein, 10 min stand</li>
+                    <li>Yellow color develop hoga</li>
+                    <li>420 nm par absorbance read karein</li>
+                    <li>Standard curve se concentration determine karein</li>
+                </ol>
+            `,
+            standards: `
+                <div class="mt-4 bg-orange-50 p-4 rounded-lg border border-orange-200">
+                    <h5 class="font-semibold text-orange-800 mb-2">📋 Phosphorus Standards:</h5>
+                    <table class="w-full text-sm">
+                        <tr class="border-b"><td class="p-2">Minimum</td><td class="p-2">25 mg/100 kcal</td></tr>
+                        <tr class="border-b"><td class="p-2">Maximum</td><td class="p-2">100 mg/100 kcal</td></tr>
+                        <tr><td class="p-2">Typical in powder</td><td class="p-2">250-450 mg/100g</td></tr>
+                    </table>
+                </div>
             `
         },
         {
-            title: "Vitamin C (Ascorbic Acid) Ka Determination",
-            purpose: "Infant formula mein Vitamin C content determine karne ke liye.",
-            reference: "A.O.A.C 967.21 (DCIP Titrimetric Method)",
+            title: "Iron Determination - Spectrophotometric Method",
+            purpose: "Infant formula mein iron determine karna - anemia prevention ke liye critical nutrient.",
+            reference: "AOAC 999.11; IDF 103:1998",
+            formulaExplanation: `
+                <div class="bg-red-50 p-5 rounded-xl border border-red-200 mb-4">
+                    <h4 class="font-bold text-red-800 mb-3">📐 Iron Determination - Formula & Principle</h4>
+                    
+                    <div class="bg-white p-4 rounded-lg mb-4">
+                        <h5 class="font-semibold text-red-700 mb-2">Calculation Formula:</h5>
+                        <pre class="bg-gray-100 p-3 rounded text-lg"><code>Fe (mg/100g) = [(C × V × D) / (W × 1000)] × 100</code></pre>
+                        
+                        <div class="mt-4 space-y-2 text-sm">
+                            <p><strong>C</strong> = Concentration from calibration curve (μg/ml)</p>
+                            <p><strong>V</strong> = Total volume (ml)</p>
+                            <p><strong>D</strong> = Dilution factor</p>
+                            <p><strong>W</strong> = Sample weight (g)</p>
+                            <p><strong>1000</strong> = μg to mg conversion</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                        <h5 class="font-semibold text-yellow-800 mb-2">⚠️ Chemistry (1,10-Phenanthroline Method):</h5>
+                        <div class="text-sm space-y-2">
+                            <p><strong>Step 1 - Reduction:</strong></p>
+                            <p class="font-mono bg-white p-2 rounded">
+                                Fe³⁺ + Hydroxylamine → Fe²⁺
+                            </p>
+                            <p><strong>Step 2 - Complex Formation:</strong></p>
+                            <p class="font-mono bg-white p-2 rounded">
+                                Fe²⁺ + 3(1,10-phenanthroline) → [Fe(phen)₃]²⁺ (Orange-red)
+                            </p>
+                            <p class="mt-2">
+                                <strong>λmax = 510 nm</strong><br>
+                                ε (molar absorptivity) = 11,100 L/mol·cm<br>
+                                Beer's Law valid: 0.1 - 5 μg Fe/ml
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            `,
             procedure: `
-                <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
-                <p>Ascorbic acid ek reducing agent hai jo 2,6-dichloroindophenol (DCIP) dye ko reduce karta hai (blue → colorless). Endpoint tab aata hai jab excess DCIP pink/rose colour deta hai.</p>
-                <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+                <h4 class="font-semibold mt-4 mb-2">🔬 Procedure (1,10-Phenanthroline Method):</h4>
+
+                <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                    <h5 class="font-semibold mb-2">Reagents Required:</h5>
+                    <ul class="text-sm space-y-1">
+                        <li>✓ Standard iron solution (100 μg Fe/ml from FAS)</li>
+                        <li>✓ 1,10-Phenanthroline (0.1% in water)</li>
+                        <li>✓ Hydroxylamine HCl (10%)</li>
+                        <li>✓ Sodium acetate buffer (pH 4-5)</li>
+                        <li>✓ Conc. HCl & HNO₃</li>
+                    </ul>
+                </div>
+
+                <h5 class="font-semibold mt-4 mb-2">A. Standard Curve:</h5>
                 <ol class="list-decimal list-outside pl-5 space-y-2">
-                    <li>~5g sample ko metaphosphoric acid-acetic acid solution mein extract karein.</li>
-                    <li>Volume make up karein aur filter karein.</li>
-                    <li>Filtrate ka aliquot lein.</li>
-                    <li>Standardized DCIP solution se titrate karein jab tak rose pink colour 15 seconds tak rahe.</li>
-                    <li>Standard ascorbic acid solutions se DCIP ko standardize karein.</li>
+                    <li>Working standard: Dilute to 10 μg Fe/ml</li>
+                    <li>Prepare: 0, 0.5, 1.0, 2.0, 3.0, 4.0, 5.0 μg/ml in 25ml flasks</li>
+                    <li>Add 1ml hydroxylamine HCl, mix</li>
+                    <li>Add 2ml sodium acetate buffer</li>
+                    <li>Add 2ml phenanthroline solution</li>
+                    <li>Volume make up, mix, 10 min stand</li>
+                    <li>Read at 510 nm against reagent blank</li>
                 </ol>
-                <pre><code>Vitamin C (mg/100g) = [DCIP volume × DCIP factor × Dilution × 100] / (Aliquot × Weight of sample)</code></pre>
+
+                <h5 class="font-semibold mt-4 mb-2">B. Sample Preparation:</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>5g sample → dry ash at 550°C</li>
+                    <li>Dissolve ash in 10ml 6N HCl, warm</li>
+                    <li>Filter into 100ml volumetric flask</li>
+                    <li>Make up volume</li>
+                    <li>Take appropriate aliquot (5-10ml)</li>
+                </ol>
+
+                <h5 class="font-semibold mt-4 mb-2">C. Color Development & Reading:</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Sample aliquot mein reagents add (same as standards)</li>
+                    <li>Read absorbance at 510 nm</li>
+                    <li>Concentration from calibration curve determine karein</li>
+                </ol>
+
+                <div class="mt-6 bg-green-50 p-4 rounded-lg border border-green-200">
+                    <h5 class="font-semibold text-green-800 mb-2">📊 Calculation Example:</h5>
+                    <div class="font-mono text-sm bg-white p-3 rounded">
+                        <p>Sample weight = 5.0 g</p>
+                        <p>Total volume = 100 ml</p>
+                        <p>Aliquot = 10 ml (diluted to 25 ml for color)</p>
+                        <p>Conc. from curve = 2.5 μg/ml</p>
+                        <p class="mt-2 border-t pt-2">
+                            <strong>Fe in aliquot = 2.5 × 25 = 62.5 μg</strong>
+                        </p>
+                        <p class="mt-2">
+                            <strong>Fe in total = 62.5 × (100/10) = 625 μg</strong>
+                        </p>
+                        <p class="mt-2">
+                            <strong>Fe (mg/100g) = (625/5) × (100/1000) × 100</strong><br>
+                            <strong>= 12.5 mg/100g</strong>
+                        </p>
+                    </div>
+                </div>
+            `,
+            standards: `
+                <div class="mt-4 bg-orange-50 p-4 rounded-lg border border-orange-200">
+                    <h5 class="font-semibold text-orange-800 mb-2">📋 Iron Standards (Codex):</h5>
+                    <table class="w-full text-sm">
+                        <tr class="border-b"><td class="p-2">Minimum</td><td class="p-2">0.45 mg/100 kcal</td></tr>
+                        <tr class="border-b"><td class="p-2">Maximum</td><td class="p-2">2.0 mg/100 kcal</td></tr>
+                        <tr><td class="p-2">Typical in powder</td><td class="p-2">8-15 mg/100g</td></tr>
+                    </table>
+                </div>
             `
         },
         {
-            title: "Crude Fibre Ka Determination",
-            purpose: "Cereal-based infant formula mein crude fibre determine karne ke liye.",
-            procedure: `<p>Milk powder ke liye described procedure follow karein (acid-alkali digestion, drying, ignition).</p>`
+            title: "Vitamin C (Ascorbic Acid) - DCIP Titrimetric Method",
+            purpose: "Infant formula mein Vitamin C determine karna - immune function aur iron absorption ke liye essential.",
+            reference: "AOAC 967.21; IS 5838",
+            formulaExplanation: `
+                <div class="bg-orange-50 p-5 rounded-xl border border-orange-200 mb-4">
+                    <h4 class="font-bold text-orange-800 mb-3">📐 Vitamin C (DCIP Method) - Formula</h4>
+                    
+                    <div class="bg-white p-4 rounded-lg mb-4">
+                        <h5 class="font-semibold text-orange-700 mb-2">Primary Formula:</h5>
+                        <pre class="bg-gray-100 p-3 rounded text-lg"><code>Vit C (mg/100g) = [(V × F × D) / (A × W)] × 100</code></pre>
+                        
+                        <div class="mt-4 space-y-3">
+                            <div class="flex items-start gap-3">
+                                <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded font-mono text-sm">V</span>
+                                <p>DCIP titre for sample (ml)</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded font-mono text-sm">F</span>
+                                <div>
+                                    <p>DCIP Factor (mg ascorbic acid per ml DCIP)</p>
+                                    <p class="text-xs text-gray-500">Determined by standardization with pure ascorbic acid</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded font-mono text-sm">D</span>
+                                <p>Total dilution volume (ml)</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded font-mono text-sm">A</span>
+                                <p>Aliquot taken for titration (ml)</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded font-mono text-sm">W</span>
+                                <p>Sample weight (g)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                        <h5 class="font-semibold text-yellow-800 mb-2">⚠️ DCIP Reaction Principle:</h5>
+                        <div class="text-sm space-y-2">
+                            <p class="font-mono bg-white p-2 rounded">
+                                Ascorbic Acid + DCIP (Blue) → Dehydroascorbic Acid + DCIP-H₂ (Colorless)
+                            </p>
+                            <p class="mt-2">
+                                <strong>DCIP:</strong> 2,6-Dichloroindophenol (Sodium salt)<br>
+                                <strong>Endpoint:</strong> Rose pink color persists 15 seconds<br>
+                                <strong>pH requirement:</strong> Acidic (metaphosphoric acid)
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-red-50 p-4 rounded-lg border border-red-200 mt-4">
+                        <h5 class="font-semibold text-red-800 mb-2">⚠️ Precautions:</h5>
+                        <ul class="text-sm space-y-1">
+                            <li>• Vitamin C oxidation fast - work quickly</li>
+                            <li>• Keep solution cold (ice bath)</li>
+                            <li>• Protect from light</li>
+                            <li>• Fresh extraction daily</li>
+                            <li>• Metaphosphoric acid stabilizes ascorbic acid</li>
+                        </ul>
+                    </div>
+                </div>
+            `,
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">🔬 Procedure:</h4>
+
+                <h5 class="font-semibold mt-4 mb-2">A. DCIP Standardization:</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>100mg pure L-ascorbic acid ko 100ml 3% metaphosphoric acid mein dissolve (1mg/ml)</li>
+                    <li>10ml aliquot lein + 5ml metaphosphoric acid</li>
+                    <li>DCIP solution se titrate karein until rose pink (15 sec)</li>
+                    <li>Calculate: F = 10 mg / DCIP volume</li>
+                </ol>
+
+                <h5 class="font-semibold mt-4 mb-2">B. Sample Extraction:</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>5g sample + 50ml 3% metaphosphoric acid (HPO₃)</li>
+                    <li>Homogenize/blend for 2 min</li>
+                    <li>Transfer to 100ml volumetric flask</li>
+                    <li>Rinse blender with more HPO₃</li>
+                    <li>Make up volume, mix well</li>
+                    <li>Filter through Whatman No. 1</li>
+                    <li>Keep filtrate cold</li>
+                </ol>
+
+                <h5 class="font-semibold mt-4 mb-2">C. Titration:</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>10ml filtrate ko conical flask mein lein</li>
+                    <li>DCIP se titrate karein</li>
+                    <li>Blue → Colorless → Faint rose pink (endpoint)</li>
+                    <li>Note titre volume</li>
+                    <li>Run blank (HPO₃ only)</li>
+                </ol>
+
+                <div class="mt-6 bg-green-50 p-4 rounded-lg border border-green-200">
+                    <h5 class="font-semibold text-green-800 mb-2">📊 Calculation Example:</h5>
+                    <div class="font-mono text-sm bg-white p-3 rounded">
+                        <p>Sample weight = 5.0 g</p>
+                        <p>Total volume = 100 ml</p>
+                        <p>Aliquot = 10 ml</p>
+                        <p>DCIP Factor = 0.5 mg/ml</p>
+                        <p>DCIP titre = 4.2 ml</p>
+                        <p>Blank titre = 0.1 ml</p>
+                        <p class="mt-2 border-t pt-2">
+                            <strong>Net titre = 4.2 - 0.1 = 4.1 ml</strong>
+                        </p>
+                        <p class="mt-2">
+                            <strong>Vit C = [(4.1 × 0.5 × 100) / (10 × 5.0)] × 100</strong><br>
+                            <strong>= (205 / 50) × 100 = 410 mg/100g</strong>
+                        </p>
+                    </div>
+                </div>
+            `,
+            standards: `
+                <div class="mt-4 bg-orange-50 p-4 rounded-lg border border-orange-200">
+                    <h5 class="font-semibold text-orange-800 mb-2">📋 Vitamin C Standards:</h5>
+                    <table class="w-full text-sm">
+                        <tr class="border-b"><td class="p-2">Minimum</td><td class="p-2">10 mg/100 kcal</td></tr>
+                        <tr class="border-b"><td class="p-2">Maximum</td><td class="p-2">70 mg/100 kcal</td></tr>
+                        <tr><td class="p-2">Typical in powder</td><td class="p-2">50-100 mg/100g</td></tr>
+                    </table>
+                    <p class="text-xs mt-2 text-gray-600">
+                        Overage added during manufacturing due to storage losses
+                    </p>
+                </div>
+            `
+        },
+        {
+            title: "Sodium & Potassium - Flame Photometry",
+            purpose: "Infant formula mein sodium aur potassium determine karna - electrolyte balance ke liye critical.",
+            reference: "AOAC 985.35; IDF 119",
+            formulaExplanation: `
+                <div class="bg-violet-50 p-5 rounded-xl border border-violet-200 mb-4">
+                    <h4 class="font-bold text-violet-800 mb-3">📐 Flame Photometry - Principle & Formula</h4>
+                    
+                    <div class="bg-white p-4 rounded-lg mb-4">
+                        <h5 class="font-semibold text-violet-700 mb-2">Calculation:</h5>
+                        <pre class="bg-gray-100 p-3 rounded text-lg"><code>Metal (mg/100g) = [(C × V × D) / W] × 100</code></pre>
+                        
+                        <div class="mt-4 space-y-2 text-sm">
+                            <p><strong>C</strong> = Concentration from calibration (mg/ml)</p>
+                            <p><strong>V</strong> = Total volume (ml)</p>
+                            <p><strong>D</strong> = Dilution factor</p>
+                            <p><strong>W</strong> = Sample weight (g)</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                        <h5 class="font-semibold text-yellow-800 mb-2">⚠️ Flame Photometry Principle:</h5>
+                        <div class="text-sm space-y-2">
+                            <p>
+                                Sample aspirated into flame → Metal atoms excited → 
+                                Emit characteristic wavelength light → Intensity measured
+                            </p>
+                            <table class="w-full mt-2">
+                                <tr class="border-b">
+                                    <td class="p-2 font-medium">Sodium (Na)</td>
+                                    <td class="p-2">589 nm (Yellow)</td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="p-2 font-medium">Potassium (K)</td>
+                                    <td class="p-2">766 nm (Violet)</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2 font-medium">Calcium (Ca)</td>
+                                    <td class="p-2">622 nm (Orange-red)</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `,
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">🔬 Procedure:</h4>
+
+                <h5 class="font-semibold mt-4 mb-2">A. Sample Preparation:</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>5g sample ko dry ash karein (550°C)</li>
+                    <li>Ash ko 10ml dilute HCl mein dissolve</li>
+                    <li>100ml volumetric flask mein filter karein</li>
+                    <li>Make up volume with deionized water</li>
+                    <li>Further dilute if necessary (flame photometer range)</li>
+                </ol>
+
+                <h5 class="font-semibold mt-4 mb-2">B. Standard Preparation:</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Na standard: NaCl → Na 1000 ppm stock</li>
+                    <li>K standard: KCl → K 1000 ppm stock</li>
+                    <li>Working standards: 0, 5, 10, 20, 40, 60 ppm</li>
+                </ol>
+
+                <h5 class="font-semibold mt-4 mb-2">C. Measurement:</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Flame photometer stabilize karein (10 min)</li>
+                    <li>Set wavelength (Na: 589nm, K: 766nm)</li>
+                    <li>Calibrate with standards</li>
+                    <li>Aspirate sample solution</li>
+                    <li>Read emission intensity</li>
+                    <li>Calculate concentration from standard curve</li>
+                </ol>
+            `,
+            standards: `
+                <div class="mt-4 bg-orange-50 p-4 rounded-lg border border-orange-200">
+                    <h5 class="font-semibold text-orange-800 mb-2">📋 Sodium & Potassium Standards:</h5>
+                    <table class="w-full text-sm">
+                        <tr class="border-b">
+                            <td class="p-2 font-medium">Sodium</td>
+                            <td class="p-2">Min: 20 mg, Max: 60 mg per 100 kcal</td>
+                        </tr>
+                        <tr>
+                            <td class="p-2 font-medium">Potassium</td>
+                            <td class="p-2">Min: 60 mg, Max: 180 mg per 100 kcal</td>
+                        </tr>
+                    </table>
+                    <p class="text-xs mt-2 text-red-600">
+                        ⚠️ Excess Na can stress immature kidneys - critical parameter
+                    </p>
+                </div>
+            `
+        },
+        {
+            title: "Melamine Detection - HPLC Method",
+            purpose: "Infant formula mein melamine contamination detect karna - strictly prohibited adulterant.",
+            reference: "AOAC 2008.01; FDA LIB 4422; FSSAI",
+            formulaExplanation: `
+                <div class="bg-red-50 p-5 rounded-xl border border-red-200 mb-4">
+                    <h4 class="font-bold text-red-800 mb-3">⚠️ CRITICAL TEST - Melamine Detection</h4>
+                    
+                    <div class="bg-white p-4 rounded-lg mb-4">
+                        <h5 class="font-semibold text-red-700 mb-2">Background:</h5>
+                        <p class="text-sm">
+                            <strong>2008 China Milk Scandal:</strong> Melamine added to inflate protein readings<br>
+                            <strong>Result:</strong> 300,000+ affected, 6 infant deaths<br>
+                            <strong>Now:</strong> Zero tolerance, mandatory testing
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-lg mb-4">
+                        <h5 class="font-semibold text-red-700 mb-2">Why Melamine Works as Adulterant:</h5>
+                        <ul class="text-sm space-y-1">
+                            <li>• Melamine: C₃H₆N₆ (66.67% Nitrogen)</li>
+                            <li>• Milk protein: ~16% Nitrogen</li>
+                            <li>• Kjeldahl measures total N - can't distinguish</li>
+                            <li>• Adding melamine artificially increases "protein"</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                        <h5 class="font-semibold text-yellow-800 mb-2">HPLC Calculation:</h5>
+                        <pre class="bg-white p-3 rounded text-sm"><code>Melamine (mg/kg) = (As × Cs × V × D) / (Astd × W × 1000)</code></pre>
+                        <div class="mt-2 text-xs">
+                            <p>As = Sample peak area</p>
+                            <p>Astd = Standard peak area</p>
+                            <p>Cs = Standard concentration (μg/ml)</p>
+                            <p>V = Final volume, D = Dilution factor, W = Weight (g)</p>
+                        </div>
+                    </div>
+                </div>
+            `,
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">🔬 HPLC Procedure:</h4>
+
+                <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                    <h5 class="font-semibold mb-2">HPLC Conditions:</h5>
+                    <ul class="text-sm space-y-1">
+                        <li>✓ Column: C18 (150 × 4.6mm, 5μm)</li>
+                        <li>✓ Mobile phase: Buffer:Acetonitrile (90:10)</li>
+                        <li>✓ Flow rate: 1.0 ml/min</li>
+                        <li>✓ Detection: UV at 240 nm</li>
+                        <li>✓ Injection: 20 μl</li>
+                        <li>✓ RT (Melamine): ~3-4 min</li>
+                    </ul>
+                </div>
+
+                <h5 class="font-semibold mt-4 mb-2">Sample Preparation:</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>2g sample + 15ml extraction solvent (acetonitrile:water:NH₄OH)</li>
+                    <li>Vortex 2 min</li>
+                    <li>Add 5ml dichloromethane (fat removal)</li>
+                    <li>Centrifuge 10000 rpm, 10 min</li>
+                    <li>Filter upper aqueous layer through 0.45μm</li>
+                    <li>SPE cleanup (optional for cleaner chromatogram)</li>
+                    <li>Inject into HPLC</li>
+                </ol>
+
+                <h5 class="font-semibold mt-4 mb-2">Screening Test (Qualitative):</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>1g sample + 5ml 1% TCA (trichloroacetic acid)</li>
+                    <li>Vortex, centrifuge</li>
+                    <li>Add Bratton-Marshall reagent</li>
+                    <li>Yellow-orange color = Suspected positive</li>
+                    <li>Confirm by HPLC/LC-MS</li>
+                </ol>
+            `,
+            standards: `
+                <div class="mt-4 bg-red-100 p-4 rounded-lg border border-red-300">
+                    <h5 class="font-bold text-red-800 mb-2">⛔ FSSAI/Codex Limits:</h5>
+                    <table class="w-full text-sm">
+                        <tr class="border-b bg-red-50">
+                            <td class="p-2 font-bold">Infant Formula</td>
+                            <td class="p-2 font-bold text-red-700">NOT DETECTABLE (< 1 mg/kg)</td>
+                        </tr>
+                        <tr class="border-b">
+                            <td class="p-2">Other foods</td>
+                            <td class="p-2">2.5 mg/kg maximum</td>
+                        </tr>
+                        <tr>
+                            <td class="p-2">Animal feed</td>
+                            <td class="p-2">2.5 mg/kg maximum</td>
+                        </tr>
+                    </table>
+                    <p class="text-xs mt-2 text-red-700 font-semibold">
+                        ⚠️ Any detection in infant formula = Product recall + Legal action
+                    </p>
+                </div>
+            `
+        },
+        {
+            title: "Microbiological Analysis - Complete Panel",
+            purpose: "Infant formula ki microbiological safety ensure karna - babies ke immature immune system ke liye critical.",
+            reference: "FSSAI; Codex Stan 72; ISO 4833; ISO 21528; ISO 6579; ISO 22964",
+            testsOverview: `
+                <div class="bg-blue-50 p-5 rounded-xl border border-blue-200 mb-4">
+                    <h4 class="font-bold text-blue-800 mb-3">🦠 Critical Microbiological Tests</h4>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-white p-4 rounded-lg border-l-4 border-red-500">
+                            <h5 class="font-semibold text-red-700 mb-2">🚨 Cronobacter sakazakii</h5>
+                            <p class="text-sm">Formerly Enterobacter sakazakii</p>
+                            <p class="text-xs text-gray-600 mt-1">
+                                Causes meningitis, necrotizing enterocolitis in neonates<br>
+                                Mortality rate: 40-80%<br>
+                                <strong class="text-red-600">Limit: Absent in 10g</strong>
+                            </p>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border-l-4 border-red-500">
+                            <h5 class="font-semibold text-red-700 mb-2">🚨 Salmonella spp.</h5>
+                            <p class="text-sm">All serovars</p>
+                            <p class="text-xs text-gray-600 mt-1">
+                                Severe gastroenteritis, septicemia<br>
+                                Especially dangerous for infants<br>
+                                <strong class="text-red-600">Limit: Absent in 25g</strong>
+                            </p>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border-l-4 border-yellow-500">
+                            <h5 class="font-semibold text-yellow-700 mb-2">⚠️ Enterobacteriaceae</h5>
+                            <p class="text-sm">Indicator organisms</p>
+                            <p class="text-xs text-gray-600 mt-1">
+                                Indicates process hygiene<br>
+                                Includes coliforms, E. coli, etc.<br>
+                                <strong class="text-yellow-600">Limit: &lt;10 CFU/g</strong>
+                            </p>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border-l-4 border-yellow-500">
+                            <h5 class="font-semibold text-yellow-700 mb-2">⚠️ Total Plate Count</h5>
+                            <p class="text-sm">Aerobic mesophiles</p>
+                            <p class="text-xs text-gray-600 mt-1">
+                                General microbial quality<br>
+                                <strong class="text-yellow-600">Limit: &lt;10,000 CFU/g</strong>
+                            </p>
+                        </div>
+
+                        <div class="bg-white p-4 rounded-lg border-l-4 border-orange-500">
+                            <h5 class="font-semibold text-orange-700 mb-2">⚠️ Bacillus cereus</h5>
+                            <p class="text-sm">Spore-forming toxin producer</p>
+                            <p class="text-xs text-gray-600 mt-1">
+                                Survives pasteurization<br>
+                                <strong class="text-orange-600">Limit: &lt;100 CFU/g</strong>
+                            </p>
+                        </div>
+
+                        <div class="bg-white p-4 rounded-lg border-l-4 border-orange-500">
+                            <h5 class="font-semibold text-orange-700 mb-2">⚠️ Staphylococcus aureus</h5>
+                            <p class="text-sm">Enterotoxin producer</p>
+                            <p class="text-xs text-gray-600 mt-1">
+                                Post-process contamination indicator<br>
+                                <strong class="text-orange-600">Limit: &lt;10 CFU/g</strong>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            `,
+            cronobacterProcedure: `
+                <h4 class="font-semibold mt-4 mb-2">🔬 Cronobacter sakazakii Detection (ISO 22964):</h4>
+                
+                <div class="bg-red-50 p-4 rounded-lg mb-4 border border-red-200">
+                    <h5 class="font-semibold text-red-800 mb-2">⚠️ Critical Pathogen - Handle with Care!</h5>
+                    <p class="text-sm">BSL-2 practices required</p>
+                </div>
+
+                <h5 class="font-semibold mt-4 mb-2">Day 1 - Pre-enrichment:</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Aseptically weigh 10g sample</li>
+                    <li>Add to 90ml Buffered Peptone Water (BPW)</li>
+                    <li>Homogenize in stomacher (2 min)</li>
+                    <li>Incubate 37°C for 18 ± 2 hours</li>
+                </ol>
+
+                <h5 class="font-semibold mt-4 mb-2">Day 2 - Selective Enrichment:</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Transfer 0.1ml pre-enrichment to 10ml mLST/vancomycin broth</li>
+                    <li>Incubate 44°C for 24 ± 2 hours</li>
+                </ol>
+
+                <h5 class="font-semibold mt-4 mb-2">Day 3 - Selective Plating:</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Streak loopful on Chromogenic Cronobacter Isolation Agar (CCIA)</li>
+                    <li>Also streak on DFI agar (backup)</li>
+                    <li>Incubate 44°C for 24 hours</li>
+                </ol>
+
+                <h5 class="font-semibold mt-4 mb-2">Day 4 - Confirmation:</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Typical colonies: Blue-green/blue-black on CCIA</li>
+                    <li>Yellow colonies on DFI</li>
+                    <li>Pick 5 typical colonies</li>
+                    <li>Streak on TSA for purity</li>
+                    <li>Biochemical tests: API 20E, oxidase (-), catalase (+)</li>
+                    <li>PCR confirmation if available</li>
+                </ol>
+            `,
+            salmonellaProcedure: `
+                <h4 class="font-semibold mt-4 mb-2">🔬 Salmonella Detection (ISO 6579):</h4>
+
+                <h5 class="font-semibold mt-4 mb-2">Day 1:</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>25g sample + 225ml BPW</li>
+                    <li>Incubate 37°C, 18-24 hours</li>
+                </ol>
+
+                <h5 class="font-semibold mt-4 mb-2">Day 2:</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>0.1ml → 10ml RVS broth (42°C, 24h)</li>
+                    <li>1ml → 10ml MKTTn broth (37°C, 24h)</li>
+                </ol>
+
+                <h5 class="font-semibold mt-4 mb-2">Day 3:</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Streak on XLD agar + another selective agar</li>
+                    <li>Incubate 37°C, 24 hours</li>
+                </ol>
+
+                <h5 class="font-semibold mt-4 mb-2">Day 4-5:</h5>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Typical colonies: Red with black center (XLD)</li>
+                    <li>Biochemical confirmation (TSI, LIA, Urease)</li>
+                    <li>Serological confirmation (O & H antigens)</li>
+                </ol>
+            `,
+            calculationFormula: `
+                <div class="bg-green-50 p-4 rounded-lg border border-green-200 mt-4">
+                    <h5 class="font-semibold text-green-800 mb-2">📊 TPC/Coliform Calculation:</h5>
+                    <pre class="bg-white p-3 rounded font-mono text-sm"><code>CFU/g = (Total colonies counted) / (Volume plated × Dilution factor)</code></pre>
+                    <p class="text-sm mt-2">
+                        Example: 45 colonies on 10⁻³ dilution plate (0.1ml plated)<br>
+                        CFU/g = 45 / (0.1 × 0.001) = 450,000 CFU/g
+                    </p>
+                </div>
+            `,
+            standards: `
+                <div class="mt-4 bg-orange-50 p-4 rounded-lg border border-orange-200">
+                    <h5 class="font-semibold text-orange-800 mb-2">📋 FSSAI Microbiological Standards:</h5>
+                    <table class="w-full text-sm">
+                        <thead class="bg-orange-100">
+                            <tr>
+                                <th class="p-2 text-left">Test</th>
+                                <th class="p-2 text-left">Limit</th>
+                                <th class="p-2 text-left">Method</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b bg-red-50"><td class="p-2 font-medium">Cronobacter</td><td class="p-2 text-red-700 font-bold">Absent/10g</td><td class="p-2">ISO 22964</td></tr>
+                            <tr class="border-b bg-red-50"><td class="p-2 font-medium">Salmonella</td><td class="p-2 text-red-700 font-bold">Absent/25g</td><td class="p-2">ISO 6579</td></tr>
+                            <tr class="border-b"><td class="p-2">TPC</td><td class="p-2">&lt;10,000 CFU/g</td><td class="p-2">ISO 4833</td></tr>
+                            <tr class="border-b"><td class="p-2">Enterobacteriaceae</td><td class="p-2">&lt;10 CFU/g</td><td class="p-2">ISO 21528</td></tr>
+                            <tr class="border-b"><td class="p-2">B. cereus</td><td class="p-2">&lt;100 CFU/g</td><td class="p-2">ISO 7932</td></tr>
+                            <tr><td class="p-2">S. aureus</td><td class="p-2">&lt;10 CFU/g</td><td class="p-2">ISO 6888</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            `
+        },
+        {
+            title: "Heavy Metals Testing - Lead, Arsenic, Cadmium, Mercury",
+            purpose: "Infant formula mein heavy metal contamination check karna - neurotoxic effects prevent karna.",
+            reference: "AOAC 999.10; FSSAI; Codex Stan 193",
+            methods: `
+                <div class="bg-gray-50 p-5 rounded-xl border border-gray-200 mb-4">
+                    <h4 class="font-bold text-gray-800 mb-3">🔬 Heavy Metals Analysis Methods</h4>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-white p-4 rounded-lg">
+                            <h5 class="font-semibold text-gray-700 mb-2">AAS (Atomic Absorption)</h5>
+                            <p class="text-sm">Flame AAS / Graphite Furnace AAS</p>
+                            <p class="text-xs text-gray-600 mt-1">LOD: 0.01-0.1 ppm (FAAS), ppb (GFAAS)</p>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg">
+                            <h5 class="font-semibold text-gray-700 mb-2">ICP-MS</h5>
+                            <p class="text-sm">Most sensitive multi-element</p>
+                            <p class="text-xs text-gray-600 mt-1">LOD: ppt level, gold standard</p>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg">
+                            <h5 class="font-semibold text-gray-700 mb-2">ICP-OES</h5>
+                            <p class="text-sm">Multi-element, good throughput</p>
+                            <p class="text-xs text-gray-600 mt-1">LOD: ppb level</p>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg">
+                            <h5 class="font-semibold text-gray-700 mb-2">Hydride Generation AAS</h5>
+                            <p class="text-sm">For As, Se, Sb</p>
+                            <p class="text-xs text-gray-600 mt-1">LOD: ppb level</p>
+                        </div>
+                    </div>
+                </div>
+            `,
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">🔬 Sample Preparation (Microwave Digestion):</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>0.5g sample accurately weigh</li>
+                    <li>Add 5ml conc. HNO₃ + 2ml H₂O₂</li>
+                    <li>Microwave digestion program:
+                        <ul class="list-disc pl-5 text-sm">
+                            <li>Ramp to 180°C over 15 min</li>
+                            <li>Hold at 180°C for 20 min</li>
+                            <li>Cool to room temp</li>
+                        </ul>
+                    </li>
+                    <li>Transfer to 25ml volumetric flask</li>
+                    <li>Make up with deionized water</li>
+                    <li>Analyze by AAS/ICP-MS</li>
+                </ol>
+            `,
+            standards: `
+                <div class="mt-4 bg-red-50 p-4 rounded-lg border border-red-200">
+                    <h5 class="font-semibold text-red-800 mb-2">📋 Heavy Metal Limits (FSSAI/Codex):</h5>
+                    <table class="w-full text-sm">
+                        <thead class="bg-red-100">
+                            <tr>
+                                <th class="p-2 text-left">Metal</th>
+                                <th class="p-2 text-left">Maximum Limit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b"><td class="p-2 font-medium">Lead (Pb)</td><td class="p-2">0.02 mg/kg (20 ppb)</td></tr>
+                            <tr class="border-b"><td class="p-2 font-medium">Arsenic (As)</td><td class="p-2">0.1 mg/kg</td></tr>
+                            <tr class="border-b"><td class="p-2 font-medium">Cadmium (Cd)</td><td class="p-2">0.02 mg/kg</td></tr>
+                            <tr><td class="p-2 font-medium">Mercury (Hg)</td><td class="p-2">0.02 mg/kg</td></tr>
+                        </tbody>
+                    </table>
+                    <p class="text-xs mt-2 text-red-700">
+                        ⚠️ Heavy metals accumulate - even small amounts dangerous for developing brain
+                    </p>
+                </div>
+            `
+        },
+        {
+            title: "Physical Tests - Solubility, Dispersibility, Wettability",
+            purpose: "Infant formula powder ki reconstitution quality assess karna.",
+            reference: "IDF 129A:1988; IS 14433",
+            tests: `
+                <div class="bg-cyan-50 p-5 rounded-xl border border-cyan-200 mb-4">
+                    <h4 class="font-bold text-cyan-800 mb-3">📋 Physical Quality Tests</h4>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-white p-4 rounded-lg">
+                            <h5 class="font-semibold text-cyan-700 mb-2">1. Solubility Index</h5>
+                            <pre class="bg-gray-100 p-2 rounded text-sm"><code>Solubility Index = ml sediment in 50ml centrifuge tube</code></pre>
+                            <p class="text-sm mt-2">
+                                <strong>Procedure:</strong> 10g powder + 100ml water (24°C) → mix 10 sec → 
+                                centrifuge 1500 rpm, 5 min → read sediment<br>
+                                <strong>Standard:</strong> ≤1.0 ml (good quality)
+                            </p>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg">
+                            <h5 class="font-semibold text-cyan-700 mb-2">2. Dispersibility</h5>
+                            <pre class="bg-gray-100 p-2 rounded text-sm"><code>% Dispersibility = [(A - B) / A] × 100</code></pre>
+                            <p class="text-sm mt-2">
+                                A = Initial powder weight<br>
+                                B = Weight of undispersed lumps (on sieve)<br>
+                                <strong>Standard:</strong> ≥85%
+                            </p>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg">
+                            <h5 class="font-semibold text-cyan-700 mb-2">3. Wettability</h5>
+                            <p class="text-sm">
+                                <strong>Test:</strong> Time for powder (13g) to sink in water (100ml at 25°C)<br>
+                                <strong>Procedure:</strong> Sprinkle powder on water surface, start timer<br>
+                                <strong>Standard:</strong> ≤60 seconds to completely wet
+                            </p>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg">
+                            <h5 class="font-semibold text-cyan-700 mb-2">4. Bulk Density</h5>
+                            <pre class="bg-gray-100 p-2 rounded text-sm"><code>Bulk Density (g/ml) = Weight of powder / Volume occupied</code></pre>
+                            <p class="text-sm mt-2">
+                                Pour powder into graduated cylinder → tap 100 times → read volume<br>
+                                <strong>Typical:</strong> 0.4-0.6 g/ml
+                            </p>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg">
+                            <h5 class="font-semibold text-cyan-700 mb-2">5. Scorched Particles</h5>
+                            <p class="text-sm">
+                                <strong>Test:</strong> Dissolve 25g in 100ml water, filter through filter disc<br>
+                                Compare with standard disc A (no particles) to D (many particles)<br>
+                                <strong>Standard:</strong> Disc A or B acceptable
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            `
+        },
+        {
+            title: "Aflatoxin Testing",
+            purpose: "Infant formula mein aflatoxin M1 contamination detect karna - carcinogenic mycotoxin.",
+            reference: "AOAC 2000.08; FSSAI",
+            formulaExplanation: `
+                <div class="bg-yellow-50 p-5 rounded-xl border border-yellow-200 mb-4">
+                    <h4 class="font-bold text-yellow-800 mb-3">⚠️ Aflatoxin M1 Testing</h4>
+                    
+                    <div class="bg-white p-4 rounded-lg mb-4">
+                        <h5 class="font-semibold text-yellow-700 mb-2">Background:</h5>
+                        <p class="text-sm">
+                            <strong>Source:</strong> Aflatoxin B1 in animal feed → Metabolized to M1 in liver → Excreted in milk<br>
+                            <strong>Carcinogenicity:</strong> Group 1 carcinogen (IARC)<br>
+                            <strong>Stability:</strong> Heat stable - survives pasteurization, spray drying
+                        </p>
+                    </div>
+
+                    <div class="bg-yellow-100 p-4 rounded-lg">
+                        <h5 class="font-semibold text-yellow-800 mb-2">Methods:</h5>
+                        <ul class="text-sm space-y-1">
+                            <li>✓ <strong>ELISA:</strong> Screening, fast, LOD ~10-50 ppt</li>
+                            <li>✓ <strong>HPLC-Fluorescence:</strong> Confirmatory, LOD ~5 ppt</li>
+                            <li>✓ <strong>LC-MS/MS:</strong> Most accurate, LOD ~1 ppt</li>
+                            <li>✓ <strong>Immunoaffinity cleanup:</strong> Sample preparation</li>
+                        </ul>
+                    </div>
+                </div>
+            `,
+            procedure: `
+                <h4 class="font-semibold mt-4 mb-2">🔬 ELISA Screening Procedure:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>Reconstitute powder sample (12.5g/100ml)</li>
+                    <li>Centrifuge to remove fat</li>
+                    <li>Use skim portion for test</li>
+                    <li>Follow ELISA kit protocol</li>
+                    <li>Read at 450nm</li>
+                    <li>Calculate from standard curve</li>
+                </ol>
+
+                <h4 class="font-semibold mt-4 mb-2">HPLC Confirmatory:</h4>
+                <ol class="list-decimal list-outside pl-5 space-y-2">
+                    <li>IAC (Immunoaffinity column) cleanup</li>
+                    <li>HPLC with fluorescence detection</li>
+                    <li>Excitation: 365nm, Emission: 435nm</li>
+                    <li>Or post-column derivatization with Br₂</li>
+                </ol>
+            `,
+            standards: `
+                <div class="mt-4 bg-red-50 p-4 rounded-lg border border-red-200">
+                    <h5 class="font-semibold text-red-800 mb-2">📋 Aflatoxin M1 Limits:</h5>
+                    <table class="w-full text-sm">
+                        <tr class="border-b"><td class="p-2 font-medium">FSSAI (India)</td><td class="p-2">0.5 μg/kg (ppb)</td></tr>
+                        <tr class="border-b"><td class="p-2 font-medium">EU</td><td class="p-2">0.025 μg/kg for infant formula</td></tr>
+                        <tr><td class="p-2 font-medium">Codex</td><td class="p-2">0.5 μg/kg</td></tr>
+                    </table>
+                    <p class="text-xs mt-2 text-red-700">
+                        EU has strictest limits for infant formula due to vulnerability of infants
+                    </p>
+                </div>
+            `
         },
         {
             title: "Microbiological Tests (TPC, Coliforms, Salmonella, Cronobacter)",
@@ -30228,334 +35388,4094 @@ KEY DIFFERENCE from milk powder:
 }
 },
 en: {
-        main_title: "Compositional Analysis of Dairy Products",
-        main_description: "A detailed guide to chemical quality assurance.",
-        back_to_topics: "Back to Topics",
-        topics: {
-            "processed-milk": {
-                title: "Milk",
-                tests: [
-                    {
-                        title: "Determination of Fat (Gerber Method)",
-                        purpose: "A routine screening test for fat content using a centrifuge.",
-                        reference: "IS 1479 (Part I) 1961 (Reaffirmed 2003)",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
-                            <p>The milk is mixed with sulphuric acid and iso-amyl alcohol in a special Gerber tube (butyrometer). The acid dissolves the protein and other solids, releasing the fat. The iso-amyl alcohol helps in a clear separation of the fat layer. The tubes are centrifuged, and the fat, being lighter, rises into the calibrated stem of the butyrometer, where its percentage is directly read.</p>
-                            <h4 class="font-semibold mt-4 mb-2">Reagents & Apparatus:</h4>
-                            <ul class="list-disc list-outside pl-5 space-y-1">
-                                <li><strong>Sulphuric acid:</strong> 90-91% concentration, sp. gr. 1.807-1.812 at 27°C.</li>
-                                <li><strong>Amyl alcohol:</strong> Furfural-free, sp. gr. 0.808-0.818 at 27°C.</li>
-                                <li><strong>Gerber Butyrometers:</strong> ISI marked, appropriate range (e.g., 0-10%).</li>
-                                <li><strong>Pipettes:</strong> 10.75 ml (milk), 10 ml (acid), 1 ml (amyl alcohol).</li>
-                                <li><strong>Water Bath:</strong> Maintained at 65 ± 2°C.</li>
-                                <li><strong>Gerber Centrifuge:</strong> Capable of 1100-1200 rpm.</li>
-                            </ul>
-                            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                            <ol class="list-decimal list-outside pl-5 space-y-2">
-                                <li>Measure 10 ml of sulphuric acid into a butyrometer tube without wetting the neck.</li>
-                                <li>Pipette 10.75 ml of well-mixed milk into the butyrometer along the side wall.</li>
-                                <li>Add 1 ml of Amyl alcohol.</li>
-                                <li>Close with a lock stopper, shake until homogeneous, and invert for complete mixing.</li>
-                                <li>Place in a water bath at 65±2°C for 5 minutes to ensure all casein particles are dissolved.</li>
-                                <li>Centrifuge for 4-5 minutes at 1100-1200 rpm.</li>
-                                <li>Place back in the water bath for 5 minutes.</li>
-                                <li>Read the percentage of fat from the calibrated stem by adjusting the stopper. The reading is taken from the bottom of the fat column meniscus.</li>
-                            </ol>
-                        `
-                    },
-                    {
-                        title: "Determination of Fat (Rose-Gottlieb Method)",
-                        purpose: "The reference or standard method for fat determination, very accurate.",
-                        reference: "IS: 1224 (Part-II)-1977",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
-                            <p>The milk sample is treated with ammonia and ethanol. Ammonia dissolves the casein and neutralizes the fat globule membrane. Ethanol precipitates the protein. The fat is then extracted with a mixture of diethyl ether and petroleum ether. The solvents are evaporated, and the extracted fat is weighed.</p>
-                            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                            <ol class="list-decimal list-outside pl-5 space-y-2">
-                                <li>Accurately weigh about 10g of milk sample into a Mojonnier extraction flask.</li>
-                                <li>Add 1.5 ml of ammonia solution and mix well.</li>
-                                <li>Add 10 ml of 95% ethanol and shake for 1 minute.</li>
-                                <li>Add 25 ml of diethyl ether, shake vigorously for 1 minute.</li>
-                                <li>Add 25 ml of petroleum ether and shake again for 1 minute.</li>
-                                <li>Let the mixture stand until the upper ether layer is clear, or centrifuge to separate the layers.</li>
-                                <li>Carefully decant the ether layer into a pre-weighed flask.</li>
-                                <li>Repeat the extraction twice more with the aqueous layer, using 15 ml of each ether each time.</li>
-                                <li>Evaporate the solvents on a hot plate or water bath.</li>
-                                <li>Dry the flask with the extracted fat in an oven at 102°C to a constant weight.</li>
-                            </ol>
-                            <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
-                            <pre><code>% Fat = (Weight of extracted fat / Weight of sample) * 100</code></pre>
-                        `
-                    },
-                    {
-                        title: "Determination of Fat (Werner-Schmidt Method)",
-                        purpose: "Suitable for soured or preserved milk, where acid is needed to dissolve the casein.",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
-                            <p>The milk is boiled with concentrated hydrochloric acid, which digests the protein and liberates the fat. The fat is then extracted with ether and weighed.</p>
-                            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                            <ol class="list-decimal list-outside pl-5 space-y-2">
-                                <li>Accurately weigh about 10g of milk sample into a suitable extraction tube.</li>
-                                <li>Add 10 ml of concentrated HCl and heat until the solution turns dark brown.</li>
-                                <li>Cool, and extract three times with diethyl and petroleum ether as described in the Rose-Gottlieb method.</li>
-                                <li>Evaporate the solvents, dry the residue, and weigh.</li>
-                            </ol>
-                             <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
-                            <pre><code>% Fat = (Weight of extracted fat / Weight of sample) * 100</code></pre>
-                        `
-                    },
-                    {
-                        title: "Determination of Total Solids (Gravimetric Method)",
-                        purpose: "The standard reference method for accurately determining the total solids content.",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
-                            <p>A known weight of milk is heated to evaporate all the water. The weight of the remaining dry residue represents the total solids.</p>
-                             <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                            <ol class="list-decimal list-outside pl-5 space-y-2">
-                                <li>Weigh an empty, clean, dry flat-bottomed dish with its lid (W1).</li>
-                                <li>Add about 5g of prepared milk sample into the dish and weigh again (W2).</li>
-                                <li>Heat the dish without the lid on a boiling water bath for 30 minutes.</li>
-                                <li>Transfer the dish to a hot air oven at 102 ± 2°C for 2 hours.</li>
-                                <li>Cover the dish with the lid, cool in a desiccator, and weigh (W3).</li>
-                                <li>Repeat the heating and cooling process until a constant weight is achieved.</li>
-                            </ol>
-                            <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
-                            <pre><code>% Total Solids = [ (W3 - W1) / (W2 - W1) ] * 100</code></pre>
-                        `
-                    },
-                    {
-                        title: "Total Protein Content (Kjeldahl Method)",
-                        purpose: "The standard reference method for determining the total nitrogen content, which is then converted to crude protein content.",
-                        reference: "IDF 20B: 1993; A.O.A.C 17th edn, 2000 Official Method 991.23",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
-                            <p>The Kjeldahl method determines the total nitrogen in a sample. The nitrogen in the protein is first converted to ammonium sulfate using concentrated sulfuric acid (digestion). Then, ammonia gas is released and titrated to determine the amount of nitrogen. This nitrogen amount is multiplied by a factor (6.38 for milk) to calculate the crude protein content.</p>
-                            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                             <ol class="list-decimal list-outside pl-5 space-y-2">
-                                <li><strong>Digestion:</strong> Weigh ~5 g of milk into a Kjeldahl flask. Add 25 ml concentrated sulfuric acid and a catalyst mixture (copper sulfate & potassium sulfate). Heat until the solution is clear.</li>
-                                <li><strong>Distillation:</strong> Cool the digestate, dilute with water, and add excess NaOH. Steam-distill the released ammonia into a known volume of standard acid (e.g., boric acid with indicator).</li>
-                                <li><strong>Titration:</strong> Titrate the trapped ammonia with a standard acid (e.g., 0.1 N HCl) until the indicator changes color. A blank determination is also performed.</li>
-                             </ol>
-                             <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
-                             <pre><code>% Total Nitrogen = [ 1.4007 * (V_sample - V_blank) * N_acid ] / Weight_sample</code></pre><br/>
-                             <pre><code>% Crude Protein = % Total Nitrogen * 6.38</code></pre>
-                        `
-                    },
-                    {
-                        title: "Casein Content (Kjeldahl Method)",
-                        purpose: "To determine the amount of casein, the main protein in milk, by precipitating it before nitrogen analysis.",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
-                            <p>Casein is precipitated from milk at its isoelectric point (pH 4.6) using acetic acid. The whey proteins remain in the filtrate. The nitrogen content of the casein precipitate is then determined by the Kjeldahl method.</p>
-                            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                             <ol class="list-decimal list-outside pl-5 space-y-2">
-                                <li>Weigh 10g of milk into a 250ml beaker. Add 90ml distilled water at 40-42°C.</li>
-                                <li>Add 1.5ml of 10% acetic acid solution drop by drop while stirring.</li>
-                                <li>Let the mixture stand for 10 minutes. The supernatant should be clear.</li>
-                                <li>Filter the mixture through a filter paper. Wash the precipitate with cold water.</li>
-                                <li>Transfer the filter paper and precipitate into a Kjeldahl flask for nitrogen determination as described in the Total Protein method.</li>
-                             </ol>
-                             <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
-                             <pre><code>% Casein = % Nitrogen in Precipitate * 6.38</code></pre>
-                        `
-                    },
-                     {
-                        title: "Titratable Acidity",
-                        purpose: "To measure the total acidity (natural + developed) of milk.",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
-                            <p>The total acidity of milk is measured by titrating it with a standard alkali solution (NaOH) to a specific endpoint, indicated by a color change with phenolphthalein.</p>
-                            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                            <ol class="list-decimal list-outside pl-5 space-y-2">
-                                <li>Take 10 ml of milk sample in a porcelain dish.</li>
-                                <li>Add a few drops of 1% phenolphthalein solution.</li>
-                                <li>Titrate with 0.1 N NaOH solution.</li>
-                                <li>Stop the titration when a faint pink color appears (endpoint).</li>
-                                <li>Note the volume of alkali used.</li>
-                            </ol>
-                            <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
-                            <pre><code>% Acidity (as Lactic Acid) = (9 * V * N) / W</code></pre>
-                            <p class="text-xs">Where V = volume of NaOH, N = normality of NaOH, W = weight of milk sample.</p>
-                        `
-                    },
-                    {
-                        title: "Determination of Total Ash",
-                        purpose: "To determine the total mineral content in milk.",
-                        reference: "IS: 1479 (Part-II)-1961",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
-                            <p>The milk sample is incinerated until all organic matter is destroyed, leaving only the inorganic minerals (ash).</p>
-                            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                            <ol class="list-decimal list-outside pl-5 space-y-2">
-                                <li>Accurately weigh about 10g of milk sample into a pre-weighed silica or platinum crucible (W1).</li>
-                                <li>Evaporate the sample on a water bath and then heat on a hot plate until it ceases to fume.</li>
-                                <li>Ignite the crucible in a muffle furnace at 550°C until a white or light grey ash is obtained.</li>
-                                <li>Cool in a desiccator and weigh (W2).</li>
-                            </ol>
-                             <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
-                             <pre><code>% Total Ash = [ (W2 - W1) / Weight of Sample ] * 100</code></pre>
-                        `
-                    },
-                    {
-                        title: "Determination of Minerals (by Flame Photometry)",
-                        purpose: "For the rapid and accurate determination of calcium, sodium, and potassium in milk.",
-                        reference: "Journal of Dairy Science Vol. 33, No. 6, 1950",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
-                            <p>Flame photometry is a technique where a sample is atomized into a flame and the intensity of the light emitted is measured. Each element emits light at a specific wavelength, and the intensity of the light emitted is proportional to the concentration of that element.</p>
-                            <h4 class="font-semibold mt-4 mb-2">Sample Preparation:</h4>
-                            <ol class="list-decimal list-outside pl-5 space-y-2">
-                                <li>Accurately weigh 100g of milk into a porcelain crucible.</li>
-                                <li>Dry the sample at 100°C for 24 hours.</li>
-                                <li>Ash the dried sample in a muffle furnace at 550°C.</li>
-                                <li>Extract the ash with 10 ml of 1:1 HCl and hot water. Filter the solution.</li>
-                                <li>Repeat the ashing and extraction process to ensure complete extraction.</li>
-                                <li>Dilute the final filtered solution to 500 ml with distilled water in a volumetric flask. This stock solution is used for analysis.</li>
-                            </ol>
-                             <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                             <ol class="list-decimal list-outside pl-5 space-y-2">
-                                 <li>Take a 5-ml aliquot of the stock solution, place it in a 100-ml volumetric flask, and dilute to the mark with distilled water.</li>
-                                 <li>Set the instrument (a flame photometer) to the specific wavelength for calcium, sodium, or potassium.</li>
-                                 <li>Prepare standard solutions with known concentrations of Ca, K, and P to mimic the composition of the milk sample, as these ions can interfere with each other's measurement.</li>
-                                 <li>Interpolate the flame intensity of the unknown sample between the intensities of two standards (one of slightly lower and one of slightly higher concentration).</li>
-                                 <li>Calculate the concentration of the unknown assuming a straight-line relationship.</li>
-                             </ol>
-                             <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
-                             <pre><code>C_x = C₁ + (C₂ - C₁) * (I_x - I₁) / (I₂ - I₁)</code></pre>
-                             <p class="text-xs">Where C is concentration, I is intensity, and the subscripts x, 1, and 2 denote the unknown, lower standard, and higher standard, respectively.</p>
-                        `
-                    },
-                    {
-                        title: "Methylene Blue Reduction Test (MBRT)",
-                        purpose: "To quickly assess the microbiological quality of raw milk.",
-                        reference: "IS: 1479 (Part III) – 1977",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
-                            <p>Methylene blue is a blue redox dye. Bacteria present in the milk reduce this dye during their metabolism, causing it to become colorless. The faster the color disappears, the more bacteria are present in the milk.</p>
-                            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                            <ol class="list-decimal list-outside pl-5 space-y-2">
-                                <li>Take 10 ml of milk sample in a sterile test tube.</li>
-                                <li>Add 1 ml of a standard Methylene Blue solution.</li>
-                                <li>Stopper the tube with a rubber stopper and mix by inverting it once.</li>
-                                <li>Place the tube in a water bath at 37°C.</li>
-                                <li>Observe periodically and record the time it takes for the blue color to completely disappear (Methylene Blue Reduction Time).</li>
-                            </ol>
-                             <h4 class="font-semibold mt-4 mb-2">Interpretation:</h4>
-                             <p><strong>Very Good:</strong> 5 hours or more<br><strong>Good:</strong> 2 to 4 hours<br><strong>Satisfactory:</strong> 30 minutes to 1 hour<br><strong>Poor:</strong> Less than 30 minutes</p>
-                        `
-                    },
-                    {
-                        title: "Alkaline Phosphatase Test",
-                        purpose: "To verify the efficiency of pasteurization.",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
-                            <p>Phosphatase is an enzyme naturally present in raw milk that is destroyed during pasteurization. If this test is positive, it means the milk was not properly pasteurized or was contaminated with raw milk.</p>
-                            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                            <ol class="list-decimal list-outside pl-5 space-y-2">
-                                <li>The milk sample is incubated with a buffer-substrate solution (disodium p-nitrophenyl phosphate).</li>
-                                <li>If phosphatase is present, it will hydrolyze the substrate, releasing p-nitrophenol, which is yellow in an alkaline solution.</li>
-                                <li>The intensity of the color is measured using a spectrophotometer or a comparator.</li>
-                            </ol>
-                        `
-                    }
-                ]
-            },
+  main_title: "Compositional Analysis of Dairy Products",
+  main_description: "A detailed guide for chemical quality assurance — with Scientific and Practical Testing Methods. Complete scientific explanation of factors, constants, and formulas used in each test is included.",
+  back_to_topics: "Back to Topics",
+  topics: {
+    "processed-milk": {
+      title: "Milk",
+      tests: [
+        {
+          title: "Determination of Fat (Gerber Method)",
+          purpose: "Routine testing of fat content using a centrifuge.",
+          reference: "IS 1479 (Part I) 1961 (Reaffirmed 2003)",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>Milk is mixed with sulphuric acid and iso-amyl alcohol in a special Gerber tube (butyrometer). The acid dissolves proteins and other solid particles, thereby freeing the fat. Iso-amyl alcohol helps in clearly separating the fat layer. The tubes are centrifuged, and the fat, being lighter, rises into the calibrated stem of the butyrometer, where its percentage can be read directly.</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Reagents and Apparatus:</h4>
+            <ul class="list-disc list-outside pl-5 space-y-1">
+              <li><strong>Sulphuric Acid:</strong> 90-91% concentration, sp. gr. 1.807-1.812 at 27°C.</li>
+              <li><strong>Amyl Alcohol:</strong> Furfural-free, sp. gr. 0.808-0.818 at 27°C.</li>
+              <li><strong>Gerber Butyrometer:</strong> ISI marked, suitable range (e.g., 0-10%).</li>
+              <li><strong>Pipette:</strong> 10.75 ml (milk), 10 ml (acid), 1 ml (amyl alcohol).</li>
+              <li><strong>Water Bath:</strong> Maintained at 65 ± 2°C.</li>
+              <li><strong>Gerber Centrifuge:</strong> Capable of 1100-1200 rpm.</li>
+            </ul>
+
+            <div class="bg-blue-50 border-l-4 border-blue-400 p-4 my-4 rounded">
+              <h4 class="font-bold text-blue-800 mb-3">🔬 Why Each Number? — Complete Scientific Explanation of Factors & Constants:</h4>
+
+              <h5 class="font-semibold mt-3 mb-1 text-blue-700">❓ Why exactly 10.75 ml of milk? (The Most Important Question)</h5>
+              <p>This is not a random number — it is derived from pure mathematical calculation:</p>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li><strong>Step 1:</strong> Average density of milk = ~1.032 g/ml (at 27°C)</li>
+                <li><strong>Step 2:</strong> 10.75 ml × 1.032 g/ml = <strong>11.094 g ≈ 11 g of milk</strong></li>
+                <li><strong>Step 3:</strong> 1% fat of 11 g = 0.11 g fat</li>
+                <li><strong>Step 4:</strong> Density of fat at 65°C (reading temperature) = ~0.893 g/ml</li>
+                <li><strong>Step 5:</strong> Volume of 0.11 g fat = 0.11 ÷ 0.893 = <strong>0.1232 ml ≈ 0.125 ml</strong></li>
+                <li><strong>Step 6:</strong> Each graduation (1%) in the butyrometer stem = exactly <strong>0.125 ml</strong> capacity</li>
+              </ul>
+              <p class="font-semibold">Meaning: 10.75 ml is chosen so that each graduation of the fat column can be read directly as a percentage (%) — no conversion needed! If 10 ml or 11 ml were taken, the butyrometer scale would not directly show %.</p>
+
+              <h5 class="font-semibold mt-4 mb-1 text-blue-700">❓ Why 10 ml Sulphuric Acid? Why 90-91% concentration specifically?</h5>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li><strong>Function:</strong> Dissolves proteins (casein, whey) and breaks open fat globule membranes so that fat is freed.</li>
+                <li><strong>Why 10 ml:</strong> This amount is necessary to completely digest all proteins in 11 g of milk — if less, protein will dissolve incompletely and the reading will be inaccurate.</li>
+                <li><strong>Why 90-91% — not less:</strong> If concentration is <90%, proteins will not fully dissolve and fat separation will be incomplete — reading will be low.</li>
+                <li><strong>Why 90-91% — not more:</strong> If concentration is >91%, <strong>charring (burning)</strong> of fat will occur — a dark-coloured fat layer will appear, the reading will be incorrect and unreadable.</li>
+                <li><strong>Sp. gr. 1.807-1.812 at 27°C:</strong> This is a method to verify the concentration. If sp. gr. is outside this range, the acid concentration is incorrect — replace it.</li>
+              </ul>
+
+              <h5 class="font-semibold mt-4 mb-1 text-blue-700">❓ Why exactly 1 ml of Amyl Alcohol? Why not more or less?</h5>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li><strong>Function 1 (Anti-foaming):</strong> Reduces surface tension — enabling clean separation between the fat and acid layers.</li>
+                <li><strong>Function 2 (Anti-charring):</strong> Reduces the dark colour that comes from the reaction between acid and organic matter.</li>
+                <li><strong>Function 3 (Clarity):</strong> Makes the fat column clear and transparent so that the reading can be taken accurately.</li>
+                <li><strong>If less than 1 ml:</strong> The fat layer will not be clean, dark spots will appear, and the reading will be unclear and inaccurate.</li>
+                <li><strong>If more than 1 ml:</strong> Amyl alcohol itself will dissolve into the fat column — a <strong>false high reading</strong> will result because the amyl alcohol volume will also be counted along with the fat!</li>
+                <li><strong>Why furfural-free:</strong> Furfural is an impurity that produces a dark colour with acid — it spoils the transparency of the fat column and interferes with the reading.</li>
+                <li><strong>Sp. gr. 0.808-0.818:</strong> This is a purity check — if outside this range, impurities are present in the alcohol that will affect the result.</li>
+              </ul>
+
+              <h5 class="font-semibold mt-4 mb-1 text-blue-700">❓ Why a 65 ± 2°C Water Bath? Why not lower or higher?</h5>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li><strong>Core reason:</strong> It is essential to keep the fat in a <strong>liquid state</strong> so that it rises smoothly into the column and forms a clear meniscus.</li>
+                <li><strong>Melting point of milk fat:</strong> ~37°C, but for <strong>complete liquefaction</strong> and a <strong>clear readable meniscus</strong>, 65°C is the optimal temperature.</li>
+                <li><strong>If below 65°C:</strong> Fat will partially solidify, bubbles or gaps will appear in the fat column — the reading will be low.</li>
+                <li><strong>If above 65°C:</strong> Fat will expand (thermal expansion) — the reading will be artificially high.</li>
+                <li><strong>Why ±2°C tolerance:</strong> The density of fat changes with temperature. A 2°C difference gives approximately 0.02% fat error — this is the acceptable limit.</li>
+                <li><strong>The butyrometer scale is also calibrated at 65°C</strong> — therefore the reading must be taken at this temperature.</li>
+              </ul>
+
+              <h5 class="font-semibold mt-4 mb-1 text-blue-700">❓ Why 1100-1200 rpm Centrifuge? Why not faster?</h5>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li><strong>Function:</strong> Fat is lighter (density ~0.93 g/ml) compared to the acid-milk mixture (~1.40 g/ml). Centrifugal force pushes the fat into the narrow stem of the butyrometer.</li>
+                <li><strong>Below 1100 rpm:</strong> Fat will not separate completely — the reading will be low, and some fat will remain in the mixture.</li>
+                <li><strong>Above 1200 rpm:</strong> The glass butyrometer contains hot acid — at high speed, the <strong>tube can break</strong> (very dangerous — acid splash can occur!).</li>
+                <li><strong>Why 4-5 minutes:</strong> This time is sufficient for complete fat separation — less time means incomplete separation, and more time provides no additional benefit.</li>
+              </ul>
+
+              <h5 class="font-semibold mt-4 mb-1 text-blue-700">📊 Summary Table — Everything at a Glance:</h5>
+              <table class="table-auto border-collapse border border-blue-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-blue-100"><th class="border border-blue-300 p-2">Parameter</th><th class="border border-blue-300 p-2">Value</th><th class="border border-blue-300 p-2">Scientific Reason</th></tr></thead>
+                <tbody>
+                  <tr><td class="border border-blue-300 p-2">Milk volume</td><td class="border border-blue-300 p-2">10.75 ml</td><td class="border border-blue-300 p-2">~11 g milk → 1% fat = 0.125 ml = 1 butyrometer graduation</td></tr>
+                  <tr><td class="border border-blue-300 p-2">H₂SO₄ volume</td><td class="border border-blue-300 p-2">10 ml</td><td class="border border-blue-300 p-2">Sufficient to fully dissolve proteins in 11 g milk</td></tr>
+                  <tr><td class="border border-blue-300 p-2">H₂SO₄ conc.</td><td class="border border-blue-300 p-2">90-91%</td><td class="border border-blue-300 p-2">Less = incomplete digestion; More = fat charring</td></tr>
+                  <tr><td class="border border-blue-300 p-2">H₂SO₄ sp. gr.</td><td class="border border-blue-300 p-2">1.807-1.812</td><td class="border border-blue-300 p-2">Measure to verify concentration at 27°C</td></tr>
+                  <tr><td class="border border-blue-300 p-2">Amyl alcohol</td><td class="border border-blue-300 p-2">1 ml</td><td class="border border-blue-300 p-2">Less = unclear; More = false high reading</td></tr>
+                  <tr><td class="border border-blue-300 p-2">Amyl sp. gr.</td><td class="border border-blue-300 p-2">0.808-0.818</td><td class="border border-blue-300 p-2">Purity check — impurities cause errors</td></tr>
+                  <tr><td class="border border-blue-300 p-2">Water bath</td><td class="border border-blue-300 p-2">65 ± 2°C</td><td class="border border-blue-300 p-2">Fat liquid + clear meniscus; scale also calibrated at this temp</td></tr>
+                  <tr><td class="border border-blue-300 p-2">Centrifuge</td><td class="border border-blue-300 p-2">1100-1200 rpm</td><td class="border border-blue-300 p-2">Less = incomplete separation; More = tube breakage danger</td></tr>
+                  <tr><td class="border border-blue-300 p-2">Centrifuge time</td><td class="border border-blue-300 p-2">4-5 min</td><td class="border border-blue-300 p-2">Sufficient for complete separation</td></tr>
+                  <tr><td class="border border-blue-300 p-2">Fat density (65°C)</td><td class="border border-blue-300 p-2">~0.893 g/ml</td><td class="border border-blue-300 p-2">Hot fat is lighter — volume is calculated from this</td></tr>
+                  <tr><td class="border border-blue-300 p-2">Milk density</td><td class="border border-blue-300 p-2">~1.032 g/ml</td><td class="border border-blue-300 p-2">10.75 ml × 1.032 = ~11 g</td></tr>
+                  <tr><td class="border border-blue-300 p-2">1 graduation</td><td class="border border-blue-300 p-2">0.125 ml</td><td class="border border-blue-300 p-2">Internal capacity of stem per % mark</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Pour 10 ml sulphuric acid into the butyrometer tube without wetting the neck. <span class="text-xs text-gray-500">(If the neck gets wet, premature reaction between acid and milk will occur — causing local charring)</span></li>
+              <li>Pipette 10.75 ml of well-mixed milk along the wall of the butyrometer. <span class="text-xs text-gray-500">(Along the wall so that the milk and acid layers remain separate — ensuring controlled mixing)</span></li>
+              <li>Add 1 ml amyl alcohol. <span class="text-xs text-gray-500">(This is added last so that it acts as a buffer between the acid-milk reaction)</span></li>
+              <li>Close with a lock stopper, shake until homogeneous, and invert to mix the entire contents. <span class="text-xs text-gray-500">(Inversion is necessary so that the sample trapped behind the stopper also gets mixed — otherwise incomplete digestion will occur)</span></li>
+              <li>Place in a water bath at 65±2°C for 5 minutes. <span class="text-xs text-gray-500">(This ensures that all casein particles dissolve completely and the reaction is complete)</span></li>
+              <li>Centrifuge at 1100-1200 rpm for 4-5 minutes. <span class="text-xs text-gray-500">(Centrifugal force pushes the fat into the stem — exploiting the density difference)</span></li>
+              <li>Return to the water bath for 5 minutes. <span class="text-xs text-gray-500">(Returning to 65°C is necessary because the temperature drops during centrifugation — the exact temperature is needed for an accurate reading)</span></li>
+              <li>Adjust the stopper and read the fat percentage from the calibrated stem. The reading is taken at the bottom of the fat column meniscus. <span class="text-xs text-gray-500">(Read from the lower meniscus because the fat surface is curved — the bottom point of the concave meniscus gives the accurate reading)</span></li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Typical Values:</h4>
+            <p>Full cream milk: 6.0% (minimum as per FSSAI), Toned milk: 3.0%, Double toned: 1.5%, Skimmed: ≤0.5%</p>
+          `
+        },
+        {
+          title: "Determination of Fat (Rose-Gottlieb Method)",
+          purpose: "Reference or standard method for fat determination, highly accurate — used for arbitration and calibration.",
+          reference: "IS: 1224 (Part-II)-1977",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>The milk sample is treated with ammonia and ethanol. Ammonia dissolves casein and neutralizes the fat globule membrane. Ethanol precipitates the protein. The fat is then extracted with a mixture of diethyl ether and petroleum ether. The solvents are evaporated, and the extracted fat is weighed. This is a gravimetric method — it gives very precise results.</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Reagents:</h4>
+            <ul class="list-disc list-outside pl-5 space-y-1">
+              <li>Ammonia solution (25%)</li>
+              <li>Ethanol (95%)</li>
+              <li>Diethyl ether (peroxide-free)</li>
+              <li>Petroleum ether (40-60°C boiling range)</li>
+            </ul>
+
+            <div class="bg-green-50 border-l-4 border-green-400 p-4 my-4 rounded">
+              <h4 class="font-bold text-green-800 mb-3">🔬 Scientific Explanation of Each Reagent & Number:</h4>
+
+              <h5 class="font-semibold mt-3 mb-1 text-green-700">❓ Why is 25% Ammonia used?</h5>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li><strong>Function 1:</strong> Dissolves casein proteins — under alkaline conditions, casein micelles break apart and become soluble.</li>
+                <li><strong>Function 2:</strong> Disrupts the fat globule membrane (which is made of phospholipids + proteins) — freeing the fat for extraction.</li>
+                <li><strong>Why 25%:</strong> This is the optimum concentration — sufficient to dissolve the proteins in 10 g of milk. At lower concentrations, casein will dissolve incompletely.</li>
+                <li><strong>Why 1.5 ml:</strong> Exactly the amount needed that is sufficient for 10 g of milk — excess ammonia can cause impurities to enter the ether layer.</li>
+              </ul>
+
+              <h5 class="font-semibold mt-3 mb-1 text-green-700">❓ Why 95% Ethanol? Why not 100%?</h5>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li><strong>Function 1:</strong> <strong>Dehydrates</strong> and <strong>precipitates</strong> proteins — converts proteins to solid form so they do not pass into the ether layer.</li>
+                <li><strong>Function 2:</strong> <strong>Improves the miscibility</strong> of fat and solvent — better fat extraction occurs.</li>
+                <li><strong>Function 3:</strong> <strong>Breaks</strong> the emulsion surrounding the fat globules — allowing the fat to separate.</li>
+                <li><strong>Why 95%, not 100%:</strong> Absolute (100%) ethanol would require some water to be added for interaction. 95% is naturally optimal — proteins are dehydrated and sufficient water remains in the system for the proper reaction.</li>
+                <li><strong>Why 10 ml:</strong> Sufficient volume to completely precipitate the proteins in a 10 g sample.</li>
+              </ul>
+
+              <h5 class="font-semibold mt-3 mb-1 text-green-700">❓ Diethyl Ether + Petroleum Ether — Why BOTH? Won't one suffice?</h5>
+              <table class="table-auto border-collapse border border-green-300 mt-2 text-sm w-full my-2">
+                <thead><tr class="bg-green-100"><th class="border border-green-300 p-2">Solvent</th><th class="border border-green-300 p-2">What It Dissolves</th><th class="border border-green-300 p-2">Why It's Necessary</th></tr></thead>
+                <tbody>
+                  <tr><td class="border border-green-300 p-2">Diethyl ether (slightly polar)</td><td class="border border-green-300 p-2">Free fatty acids, phospholipids, partial glycerides</td><td class="border border-green-300 p-2">Extracts polar lipids that petroleum ether alone cannot</td></tr>
+                  <tr><td class="border border-green-300 p-2">Petroleum ether (non-polar)</td><td class="border border-green-300 p-2">Triglycerides (neutral fat) — the main fat in milk</td><td class="border border-green-300 p-2">Efficiently extracts non-polar fat</td></tr>
+                  <tr><td class="border border-green-300 p-2 font-semibold">Both together</td><td class="border border-green-300 p-2 font-semibold">Total fat — complete extraction</td><td class="border border-green-300 p-2 font-semibold">Neither solvent alone can extract 100% of the fat!</td></tr>
+                </tbody>
+              </table>
+
+              <h5 class="font-semibold mt-3 mb-1 text-green-700">❓ First 25 ml each, then 15 ml each — why this pattern?</h5>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li><strong>1st extraction (25+25 ml):</strong> ~95% of the fat is extracted — the maximum fat comes out in the first extraction.</li>
+                <li><strong>2nd extraction (15+15 ml):</strong> ~4% more fat is extracted — the residual fat that remained.</li>
+                <li><strong>3rd extraction (15+15 ml):</strong> The remaining ~1% fat — the last traces are extracted.</li>
+                <li><strong>Why three times:</strong> This is necessary for quantitative (nearly 100%) recovery. Two extractions give ~99%, three extractions give 99.5%+ — maximum accuracy is required in a reference method.</li>
+                <li><strong>Why more (25 ml) the first time:</strong> More solvent is needed to extract the maximum amount of fat. In subsequent extractions, less fat remains, so less solvent is sufficient — also saving solvent.</li>
+              </ul>
+
+              <h5 class="font-semibold mt-3 mb-1 text-green-700">❓ Why drying at 102°C? Why not some other temperature?</h5>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li><strong>Boiling point of diethyl ether:</strong> ~35°C — completely evaporates at 102°C.</li>
+                <li><strong>Boiling point of petroleum ether:</strong> ~40-60°C — also completely removed at 102°C.</li>
+                <li><strong>Boiling point of water:</strong> 100°C — any trapped moisture is also removed.</li>
+                <li><strong>Fat does not decompose at 102°C</strong> (for short term) — it is safe.</li>
+                <li><strong>Risk at 110°C+:</strong> Fat oxidation can begin — weight will increase (due to oxygen addition) — incorrect result.</li>
+                <li><strong>Meaning of constant weight:</strong> When the difference between successive weighings is <0.5 mg — all solvent/moisture has been removed.</li>
+              </ul>
+
+              <h5 class="font-semibold mt-3 mb-1 text-green-700">❓ Why must diethyl ether be peroxide-free?</h5>
+              <p class="my-1">Diethyl ether slowly forms peroxides when exposed to air (by reacting with O₂). These peroxides are <strong>explosive</strong> — they can detonate when heated! Therefore, using fresh, peroxide-free ether is essential for safety. Testing: Check with KI-starch paper — brown colour = peroxides present = do not use.</p>
+
+              <h5 class="font-semibold mt-3 mb-1 text-green-700">❓ Why is the 40-60°C boiling range specified for petroleum ether?</h5>
+              <p class="my-1">Petroleum ether comes in different grades (30-40°C, 40-60°C, 60-80°C). The 40-60°C grade is optimal because: (1) It is not too volatile — handling is safe, (2) It completely evaporates at 102°C — leaving no residue, (3) It has good fat dissolving capacity in this range.</p>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Accurately weigh approximately 10 grams of milk sample into a Mojonnier extraction flask. <span class="text-xs text-gray-500">(Weight, not volume, is taken because weight-based calculation is more accurate in a gravimetric method)</span></li>
+              <li>Add 1.5 ml ammonia solution and mix well. <span class="text-xs text-gray-500">(Casein dissolves — fat globule membrane breaks)</span></li>
+              <li>Add 10 ml of 95% ethanol and shake for 1 minute. <span class="text-xs text-gray-500">(Proteins precipitate — emulsion breaks)</span></li>
+              <li>Add 25 ml diethyl ether and shake vigorously for 1 minute. <span class="text-xs text-gray-500">(Fat begins dissolving in ether — including polar lipids)</span></li>
+              <li>Add 25 ml petroleum ether and shake again for 1 minute. <span class="text-xs text-gray-500">(Neutral fat/triglycerides are extracted)</span></li>
+              <li>Allow the mixture to stand until the upper ether layer clears, or centrifuge to separate the layers. <span class="text-xs text-gray-500">(Ether is lighter — it rises to the top, aqueous layer stays below — gravity separation)</span></li>
+              <li>Carefully decant the ether layer into a pre-weighed flask. <span class="text-xs text-gray-500">(A pre-weighed flask is necessary — the weight of the fat will be determined later)</span></li>
+              <li>Repeat the extraction two more times with the aqueous layer, using 15 ml of each ether per extraction. <span class="text-xs text-gray-500">(Extracting residual fat — a total of 3 extractions gives 99.5%+ recovery)</span></li>
+              <li>Evaporate the solvents on a hot plate or water bath. <span class="text-xs text-gray-500">(Evaporate at low temperature — so that the fat does not oxidize)</span></li>
+              <li>Dry the flask containing the extracted fat in an oven at 102°C to constant weight. <span class="text-xs text-gray-500">(To remove the last traces of solvent and moisture)</span></li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+            <pre><code>% Fat = (Weight of extracted fat / Weight of sample) × 100</code></pre>
+            <div class="bg-gray-50 p-3 rounded mt-2 text-sm">
+              <p><strong>Example:</strong> Flask + fat = 85.450 g, Empty flask = 85.100 g, Fat weight = 0.350 g, Sample = 10.00 g</p>
+              <p>% Fat = (0.350 / 10.00) × 100 = <strong>3.50%</strong></p>
+            </div>
+          `
+        },
+        {
+          title: "Determination of Fat (Werner-Schmidt Method)",
+          purpose: "Suitable for sour or preserved milk, where acid is needed to dissolve casein.",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>Milk is boiled with concentrated hydrochloric acid, which digests the protein and frees the fat. The fat is then extracted with ether and weighed. This method is used when ammonia in the Rose-Gottlieb method cannot dissolve the casein — such as in sour, fermented, or preserved samples.</p>
+
+            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 my-4 rounded">
+              <h4 class="font-bold text-yellow-800 mb-3">🔬 Why Is This Method Different? — Scientific Explanation:</h4>
+
+              <h5 class="font-semibold mt-3 mb-1 text-yellow-700">❓ Rose-Gottlieb uses ammonia, so why does Werner-Schmidt use HCl?</h5>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li><strong>In normal milk:</strong> Casein exists as calcium caseinate — ammonia easily dissolves it (alkaline hydrolysis).</li>
+                <li><strong>In sour milk:</strong> Lactic acid has already precipitated casein at pH 4.6 — this denatured casein does not dissolve properly in ammonia.</li>
+                <li><strong>In preserved/fermented samples:</strong> Preservatives (formalin, etc.) have cross-linked the protein — it will not dissolve with ammonia.</li>
+                <li><strong>HCl solution:</strong> Concentrated HCl + boiling completely <strong>hydrolyzes (digests)</strong> all proteins — regardless of how denatured or cross-linked they are.</li>
+                <li><strong>Dark brown colour:</strong> Indicates complete hydrolysis of protein — amino acids are formed that are soluble in acid.</li>
+              </ul>
+
+              <h5 class="font-semibold mt-3 mb-1 text-yellow-700">❓ Why 10 ml of concentrated HCl?</h5>
+              <p class="my-1">10 g of milk contains ~3.5% protein = ~0.35 g protein. 10 ml of concentrated HCl (~37% w/w, sp. gr. ~1.18) = ~4.3 g HCl — this is far more than enough to completely hydrolyze 0.35 g protein (in excess — to ensure the reaction is complete). Excess acid is necessary because denatured proteins are resistant.</p>
+
+              <h5 class="font-semibold mt-3 mb-1 text-yellow-700">❓ Why are the subsequent steps similar to Rose-Gottlieb?</h5>
+              <p class="my-1">The mechanism of fat extraction is the same — fat dissolves in the ether solvent. Only the method of dissolving the protein is different (acid vs ammonia). Therefore, the extraction, evaporation, and weighing follow the same procedure.</p>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Accurately weigh approximately 10 grams of milk sample into a suitable extraction tube.</li>
+              <li>Add 10 ml concentrated HCl and heat until the solution turns dark brown (all protein is digested). <span class="text-xs text-gray-500">(Heating time ~20-30 min — do this in a fume hood as HCl fumes will be released)</span></li>
+              <li>Cool and extract three times with diethyl and petroleum ether as described in the Rose-Gottlieb method.</li>
+              <li>Evaporate the solvents, dry the residue, and weigh.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+            <pre><code>% Fat = (Weight of extracted fat / Weight of sample) × 100</code></pre>
+          `
+        },
+        {
+          title: "Determination of Total Solids (Gravimetric Method)",
+          purpose: "Standard reference method to accurately determine total solid content.",
+          reference: "IS 1479 (Part II) 1961",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>A known weight of milk is heated so that all the water evaporates. The weight of the remaining dry residue represents the total solids. This includes fat, protein, lactose, minerals — everything.</p>
+
+            <div class="bg-purple-50 border-l-4 border-purple-400 p-4 my-4 rounded">
+              <h4 class="font-bold text-purple-800 mb-3">🔬 Complete Explanation of the Formula & Numbers:</h4>
+
+              <h5 class="font-semibold mt-3 mb-1 text-purple-700">❓ How does the formula work?</h5>
+              <pre class="bg-white p-2 rounded my-2"><code>% Total Solids = [(W3 - W1) / (W2 - W1)] × 100</code></pre>
+              <table class="table-auto border-collapse border border-purple-300 mt-2 text-sm w-full my-2">
+                <thead><tr class="bg-purple-100"><th class="border border-purple-300 p-2">Symbol</th><th class="border border-purple-300 p-2">What It Is</th><th class="border border-purple-300 p-2">Why It's Needed</th></tr></thead>
+                <tbody>
+                  <tr><td class="border border-purple-300 p-2">W1</td><td class="border border-purple-300 p-2">Weight of empty dish + lid</td><td class="border border-purple-300 p-2">Reference point — the dish weight should not be included in the result</td></tr>
+                  <tr><td class="border border-purple-300 p-2">W2</td><td class="border border-purple-300 p-2">Weight of dish + milk sample</td><td class="border border-purple-300 p-2">Total weight before drying</td></tr>
+                  <tr><td class="border border-purple-300 p-2">W2 - W1</td><td class="border border-purple-300 p-2">Weight of the milk sample only</td><td class="border border-purple-300 p-2">How much milk was taken — this is the denominator</td></tr>
+                  <tr><td class="border border-purple-300 p-2">W3</td><td class="border border-purple-300 p-2">Weight of dish + dried residue</td><td class="border border-purple-300 p-2">After drying — water has evaporated, solids remain</td></tr>
+                  <tr><td class="border border-purple-300 p-2">W3 - W1</td><td class="border border-purple-300 p-2">Weight of the dried residue (total solids) only</td><td class="border border-purple-300 p-2">Numerator — what remains is the solids</td></tr>
+                  <tr><td class="border border-purple-300 p-2">× 100</td><td class="border border-purple-300 p-2">Convert to percentage</td><td class="border border-purple-300 p-2">Standard practice — result needs to be expressed in %</td></tr>
+                </tbody>
+              </table>
+              <div class="bg-white p-3 rounded mt-2 text-sm">
+                <p><strong>Example:</strong> W1 = 45.000 g, W2 = 50.000 g (5 g milk), W3 = 45.625 g</p>
+                <p>% TS = [(45.625 - 45.000) / (50.000 - 45.000)] × 100 = [0.625 / 5.000] × 100 = <strong>12.50%</strong></p>
+              </div>
+
+              <h5 class="font-semibold mt-4 mb-1 text-purple-700">❓ Why 102 ± 2°C? Why not some other temperature?</h5>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li><strong>Above 100°C:</strong> All free water should evaporate — 100°C is the boiling point of water, so slightly above is used to also remove bound water.</li>
+                <li><strong>Below 104°C:</strong> Lactose should not caramelize/decompose — lactose decomposes at ~160°C but browning (Maillard reaction) can start at 105°C+.</li>
+                <li><strong>Fat should not oxidize:</strong> Fat oxidation occurs at 110°C+ — weight will increase (incorrect result).</li>
+                <li><strong>102°C = Sweet spot:</strong> Water is removed, solids remain intact — no decomposition, no oxidation.</li>
+              </ul>
+
+              <h5 class="font-semibold mt-4 mb-1 text-purple-700">❓ Why heat on a water bath first (30 min)?</h5>
+              <p class="my-1">If milk is placed directly in the oven, a <strong>crust (skin)</strong> forms on the surface. This crust prevents the water inside from escaping — the result will be low. Gentle heating on a water bath allows water to evaporate slowly without crust formation. Then the oven removes the remaining moisture.</p>
+
+              <h5 class="font-semibold mt-4 mb-1 text-purple-700">❓ Why a 5-gram sample? Why not more or less?</h5>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li><strong>5 grams is optimal:</strong> Drying occurs uniformly and the residue can be accurately weighed.</li>
+                <li><strong>Less (1-2 g):</strong> The residue will be very small — weighing error will be greater (percentage error increases).</li>
+                <li><strong>More (10-20 g):</strong> Drying will take much longer, there is a greater chance of crust formation, and the dish may overflow.</li>
+              </ul>
+
+              <h5 class="font-semibold mt-4 mb-1 text-purple-700">❓ What is constant weight? Why a 0.5 mg tolerance?</h5>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li><strong>Constant weight means:</strong> When you place it in the oven, cool it, and weigh it — then put it back in the oven, cool it, and weigh it again — the difference between both weights is less than 0.5 mg.</li>
+                <li><strong>This confirms:</strong> "No more water/moisture remains — the weight is final."</li>
+                <li><strong>Why 0.5 mg:</strong> The sensitivity of an analytical balance is ~0.1 mg. 0.5 mg = 5 readings of uncertainty — practically negligible.</li>
+                <li><strong>If constant weight is not achieved:</strong> Keep in the oven for another 30 minutes and check again.</li>
+              </ul>
+
+              <h5 class="font-semibold mt-4 mb-1 text-purple-700">❓ Why cool in a desiccator? Why not in the open room?</h5>
+              <p class="my-1">A desiccator contains silica gel which absorbs moisture. If the dish is cooled in the open room, it will absorb moisture from the air humidity — the weight will increase — the result will be incorrect. A desiccator provides a dry environment.</p>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Weigh an empty, clean, dry flat-bottom dish with its lid (W1).</li>
+              <li>Add approximately 5 grams of the prepared milk sample to the dish and weigh again (W2).</li>
+              <li>Heat the dish without the lid on a boiling water bath for 30 minutes. <span class="text-xs text-gray-500">(The lid is removed so that steam can escape — preventing crust formation)</span></li>
+              <li>Transfer the dish to a hot air oven at 102 ± 2°C for 2 hours.</li>
+              <li>Cover the dish with the lid, cool in a desiccator, and weigh (W3). <span class="text-xs text-gray-500">(The lid is placed during cooling so that dust or moisture does not enter)</span></li>
+              <li>Repeat the heating and cooling process until a constant weight is obtained (the difference between successive weights should be less than 0.5 mg).</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+            <pre><code>% Total Solids = [(W3 - W1) / (W2 - W1)] × 100</code></pre>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+            <p>Full cream milk: ≥12.0%, Toned milk: ≥11.5%, Double toned: ≥11.0%, Skimmed: ≥8.7%</p>
+          `
+        },
+        {
+          title: "Determination of Solids-Not-Fat (SNF)",
+          purpose: "To measure all the solids in milk other than fat (protein, lactose, minerals).",
+          reference: "IS 1479 (Part II) 1961",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>SNF = Total Solids minus Fat. This value is important in assessing milk quality and detecting adulteration. Adding water reduces SNF. The minimum limit for SNF is defined in FSSAI standards.</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Method 1: By Difference</h4>
+            <pre><code>% SNF = % Total Solids - % Fat</code></pre>
+
+            <h4 class="font-semibold mt-4 mb-2">Method 2: ISI Formula (using Lactometer)</h4>
+            <pre><code>% SNF = (CLR / 4) + (0.21 × F) + 0.36</code></pre>
+            <p class="text-xs">Where CLR = Corrected Lactometer Reading at 27°C, F = Fat %</p>
+
+            <div class="bg-indigo-50 border-l-4 border-indigo-400 p-4 my-4 rounded">
+              <h4 class="font-bold text-indigo-800 mb-3">🔬 Scientific Explanation of Each Term in the ISI Formula:</h4>
+
+              <p class="my-2"><strong>This is an empirical formula</strong> — meaning it was not derived from theory, but by analyzing data from thousands of milk samples. Each term has a scientific reason:</p>
+
+              <h5 class="font-semibold mt-3 mb-1 text-indigo-700">❓ CLR / 4 — why this term?</h5>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li><strong>CLR (Corrected Lactometer Reading)</strong> represents the density of milk.</li>
+                <li>SNF (protein, lactose, minerals) <strong>increases</strong> the density of milk — more SNF = higher density = higher CLR.</li>
+                <li><strong>Division by 4:</strong> Data analysis has shown that the ratio of CLR to SNF is approximately 4:1. For example, CLR 28 → SNF contribution ≈ 7.0%. This linear relationship has been experimentally established.</li>
+                <li>This is the <strong>main contributing term</strong> for SNF — approximately 80% of total SNF comes from this term.</li>
+              </ul>
+
+              <h5 class="font-semibold mt-3 mb-1 text-indigo-700">❓ 0.21 × F — why is a fat correction needed?</h5>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li><strong>Fat is light</strong> (density ~0.93 g/ml) — the presence of fat REDUCES the density of milk.</li>
+                <li>This means more fat = lower CLR — so CLR/4 will underestimate SNF.</li>
+                <li><strong>0.21 × F correction:</strong> This compensates for the density-lowering effect of fat. Each 1% fat reduces CLR by approximately 0.84 units, and 0.84/4 ≈ 0.21.</li>
+                <li><strong>Example:</strong> If fat is 4%, the correction = 0.21 × 4 = 0.84%. Without this correction, SNF would be 0.84% lower.</li>
+              </ul>
+
+              <h5 class="font-semibold mt-3 mb-1 text-indigo-700">❓ 0.36 — why is this constant added?</h5>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li>This is a <strong>residual correction factor</strong> — it compensates for dissolved gases (CO₂), minor components, and the inherent systematic error of the formula.</li>
+                <li>When creating a regression line during data fitting, an intercept is obtained — that intercept is 0.36.</li>
+                <li>Without it, the formula consistently gives ~0.36% lower SNF.</li>
+              </ul>
+
+              <div class="bg-white p-3 rounded mt-3 text-sm">
+                <p><strong>Example Calculation:</strong></p>
+                <p>CLR = 28, Fat = 4.0%</p>
+                <p>SNF = (28/4) + (0.21 × 4) + 0.36 = 7.0 + 0.84 + 0.36 = <strong>8.20%</strong></p>
+                <p class="mt-2">CLR = 32, Fat = 6.0%</p>
+                <p>SNF = (32/4) + (0.21 × 6) + 0.36 = 8.0 + 1.26 + 0.36 = <strong>9.62%</strong></p>
+              </div>
+
+              <h5 class="font-semibold mt-4 mb-1 text-indigo-700">❓ How accurate is this formula?</h5>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li><strong>Accuracy:</strong> Within ±0.2% — sufficient for field conditions.</li>
+                <li><strong>Limitation:</strong> This formula is for normal, unadulterated milk. If water, urea, or sugar has been added, it will give incorrect results.</li>
+                <li><strong>Reference method:</strong> For accurate SNF, use gravimetric total solids - Gerber fat (Method 1).</li>
+              </ul>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+            <p>Full cream milk: ≥9.0% (cow), ≥9.0% (buffalo). In adulterated milk, SNF can drop below 8.5%.</p>
+          `
+        },
+        {
+          title: "Specific Gravity / Lactometer Reading",
+          purpose: "To measure the density of milk — the simplest and most rapid method to detect water adulteration.",
+          reference: "IS 1479 (Part I) 1961",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>The specific gravity of milk is higher than that of water (in the range of 1.028-1.034). If water is added to milk, the specific gravity decreases. If fat is removed (skimming), the specific gravity increases. A lactometer is a special hydrometer calibrated for milk.</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Apparatus:</h4>
+            <ul class="list-disc list-outside pl-5 space-y-1">
+              <li>ISI marked Lactometer (graduated 15-40)</li>
+              <li>Measuring cylinder (500 ml)</li>
+              <li>Thermometer (0-50°C)</li>
+            </ul>
+
+            <div class="bg-orange-50 border-l-4 border-orange-400 p-4 my-4 rounded">
+              <h4 class="font-bold text-orange-800 mb-3">🔬 Scientific Explanation of Formulas & Corrections:</h4>
+
+              <h5 class="font-semibold mt-3 mb-1 text-orange-700">❓ CLR = LR + 0.2 × (T - 27) — why is this temperature correction needed?</h5>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li><strong>The lactometer is calibrated at 27°C</strong> (Indian standard temperature).</li>
+                <li><strong>When temperature increases:</strong> Milk expands → density DECREASES → lactometer sinks deeper → reading is LOWER. Therefore, we add.</li>
+                <li><strong>When temperature decreases:</strong> Milk contracts → density INCREASES → lactometer sinks less → reading is HIGHER. Therefore, we subtract.</li>
+                <li><strong>Why 0.2 per °C:</strong> Experiments have shown that the thermal expansion coefficient of milk is such that every 1°C change causes approximately 0.2 units of change in the lactometer reading. This is an empirically determined constant.</li>
+                <li><strong>Why 27°C (Indian standard):</strong> India's average ambient temperature is ~27°C — therefore the Indian Standards Bureau adopted this temperature as the reference. European standards use 15°C or 20°C.</li>
+              </ul>
+
+              <div class="bg-white p-3 rounded mt-2 text-sm">
+                <p><strong>Example 1:</strong> LR = 26, Temperature = 32°C</p>
+                <p>CLR = 26 + 0.2 × (32 - 27) = 26 + 0.2 × 5 = 26 + 1.0 = <strong>27.0</strong></p>
+                <p class="mt-1"><strong>Example 2:</strong> LR = 30, Temperature = 22°C</p>
+                <p>CLR = 30 + 0.2 × (22 - 27) = 30 + 0.2 × (-5) = 30 - 1.0 = <strong>29.0</strong></p>
+              </div>
+
+              <h5 class="font-semibold mt-4 mb-1 text-orange-700">❓ Specific Gravity = 1 + (CLR / 1000) — how was this formula derived?</h5>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li><strong>Lactometer readings</strong> (25, 28, 30, 32, etc.) are actually the <strong>last 3 digits</strong> of the specific gravity — simplified for convenience.</li>
+                <li>For example: CLR 28 means Sp. Gr. = 1.028, CLR 32 means Sp. Gr. = 1.032</li>
+                <li><strong>Formula:</strong> Sp. Gr. = 1 + (CLR/1000) = 1 + 28/1000 = 1.028</li>
+                <li><strong>The lactometer scale removed "1.0"</strong> and multiplied the remainder by 1000 — so that small graduations can be easily read. If the scale showed 1.028, 1.029, 1.030... the differences would be too tiny to read!</li>
+              </ul>
+
+              <h5 class="font-semibold mt-4 mb-1 text-orange-700">❓ Why is the lactometer scale graduated from 15-40?</h5>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li><strong>15 (Sp. Gr. 1.015):</strong> Heavily watered-down milk — lower limit.</li>
+                <li><strong>40 (Sp. Gr. 1.040):</strong> Skimmed buffalo milk or milk with adulterants (salt/sugar) added — upper limit.</li>
+                <li><strong>Normal milk:</strong> Falls in the 28-34 range — this range is in the middle of the scale where accuracy is greatest.</li>
+                <li>No normal milk falls outside this range — therefore this range is sufficient.</li>
+              </ul>
+
+              <h5 class="font-semibold mt-4 mb-1 text-orange-700">❓ Why a 500 ml measuring cylinder? Why won't a smaller one work?</h5>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li><strong>The lactometer must float freely</strong> — it should not touch the walls.</li>
+                <li>In a smaller cylinder, the lactometer will touch the wall — the reading will be incorrect (capillary effect).</li>
+                <li>A 500 ml cylinder provides sufficient clearance — the lactometer floats in the centre.</li>
+              </ul>
+
+              <h5 class="font-semibold mt-4 mb-1 text-orange-700">❓ Why should foam not form during mixing?</h5>
+              <p class="my-1">Foam (air bubbles) REDUCES the density of milk — the lactometer reading will be artificially low. Mix gently — stir, do not whisk!</p>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Mix the milk thoroughly without creating foam.</li>
+              <li>Pour the milk into the measuring cylinder (approximately 500 ml).</li>
+              <li>Gently lower the lactometer into the milk and release it to float freely. <span class="text-xs text-gray-500">(Do not push it down — let it come to its natural position)</span></li>
+              <li>When the lactometer stabilizes, take the reading — read from the upper surface of the meniscus. <span class="text-xs text-gray-500">(Milk is opaque — the lower meniscus is not visible, so we read from the upper surface — this is different from water where the lower meniscus is used)</span></li>
+              <li>Also note the temperature.</li>
+              <li>Apply the temperature correction: Add 0.2 for every 1°C above 27°C, and subtract 0.2 for every 1°C below 27°C.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+            <pre><code>Corrected Lactometer Reading (CLR) = LR + 0.2 × (T - 27)</code></pre>
+            <pre><code>Specific Gravity = 1 + (CLR / 1000)</code></pre>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+            <p>Normal cow milk: CLR 28-32, Buffalo milk: CLR 28-34. Specific gravity: 1.028-1.034</p>
+          `
+        },
+        {
+          title: "Total Protein Content (Kjeldahl Method)",
+          purpose: "Standard reference method for determining total nitrogen content, which is then converted to crude protein content.",
+          reference: "IDF 20B: 1993; A.O.A.C 17th edn, 2000 Official Method 991.23",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>The Kjeldahl method determines total nitrogen in a sample. Nitrogen in protein is first converted to ammonium sulphate using concentrated sulphuric acid (digestion). Then, ammonia gas is released (distillation) and titrated to determine the quantity of nitrogen. This nitrogen amount is multiplied by a factor (6.38 for milk) to calculate the crude protein content.</p>
+
+            <div class="bg-red-50 border-l-4 border-red-400 p-4 my-4 rounded">
+              <h4 class="font-bold text-red-800 mb-3">🔬 Complete Explanation of All Factors & Constants in the Kjeldahl Method:</h4>
+
+              <h5 class="font-semibold mt-3 mb-1 text-red-700">❓ Why factor 6.38? — The Most Fundamental Question</h5>
+              <p class="my-2">This is the nitrogen-to-protein conversion factor. Its derivation:</p>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li><strong>Average nitrogen content in milk protein = 15.67%</strong></li>
+                <li>This means: 100 g of milk protein contains 15.67 g of nitrogen</li>
+                <li>Therefore: <strong>1 g nitrogen = 100 ÷ 15.67 = 6.38 g protein</strong></li>
+                <li>Hence: <strong>% Protein = % Nitrogen × 6.38</strong></li>
+              </ul>
+              <p class="my-2 font-semibold">But why 15.67% nitrogen? Because the amino acid composition of milk protein (casein + whey) is such that in every 100 g of protein, the total weight of nitrogen atoms equals 15.67 g. Since the amino acid composition of each protein is different, the factor is also different:</p>
+              <table class="table-auto border-collapse border border-red-300 mt-2 text-sm w-full my-2">
+                <thead><tr class="bg-red-100"><th class="border border-red-300 p-2">Product</th><th class="border border-red-300 p-2">N in Protein</th><th class="border border-red-300 p-2">Factor (100/N%)</th><th class="border border-red-300 p-2">Why Different?</th></tr></thead>
+                <tbody>
+                  <tr><td class="border border-red-300 p-2 font-semibold">Milk & dairy</td><td class="border border-red-300 p-2">15.67%</td><td class="border border-red-300 p-2 font-semibold">6.38</td><td class="border border-red-300 p-2">Casein is nitrogen-rich</td></tr>
+                  <tr><td class="border border-red-300 p-2">Meat, eggs, general</td><td class="border border-red-300 p-2">16.00%</td><td class="border border-red-300 p-2">6.25</td><td class="border border-red-300 p-2">Average animal protein</td></tr>
+                  <tr><td class="border border-red-300 p-2">Wheat (gluten)</td><td class="border border-red-300 p-2">17.54%</td><td class="border border-red-300 p-2">5.70</td><td class="border border-red-300 p-2">Rich in glutamic acid — higher N%</td></tr>
+                  <tr><td class="border border-red-300 p-2">Soybean</td><td class="border border-red-300 p-2">17.51%</td><td class="border border-red-300 p-2">5.71</td><td class="border border-red-300 p-2">High N amino acids</td></tr>
+                  <tr><td class="border border-red-300 p-2">Rice</td><td class="border border-red-300 p-2">16.95%</td><td class="border border-red-300 p-2">5.95</td><td class="border border-red-300 p-2">Different amino acid profile</td></tr>
+                </tbody>
+              </table>
+              <p class="text-xs my-1"><strong>Important:</strong> If the wrong factor is used, the protein content will be calculated incorrectly! ALWAYS use 6.38 for dairy products.</p>
+
+              <h5 class="font-semibold mt-4 mb-1 text-red-700">❓ Where does 1.4007 in the formula come from?</h5>
+              <pre class="bg-white p-2 rounded my-2"><code>% Total Nitrogen = [1.4007 × (V_sample - V_blank) × N_acid] / Weight_sample</code></pre>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li><strong>Atomic weight of nitrogen = 14.007 g/mol</strong></li>
+                <li>1 ml of 1N HCl = 1 milli-equivalent = 14.007/1000 g nitrogen = 0.014007 g nitrogen</li>
+                <li>For percentage, multiply by 100: 0.014007 × 100 = <strong>1.4007</strong></li>
+                <li><strong>Meaning: 1.4007 = Milliequivalent weight of nitrogen × 100 = (14.007 × 100) / 1000</strong></li>
+              </ul>
+              <div class="bg-white p-3 rounded mt-2 text-sm">
+                <p><strong>Example:</strong> V_sample = 25 ml, V_blank = 0.5 ml, N_acid = 0.1N, W_sample = 5 g</p>
+                <p>% N = [1.4007 × (25 - 0.5) × 0.1] / 5 = [1.4007 × 24.5 × 0.1] / 5 = 3.4317 / 5 = <strong>0.686%</strong></p>
+                <p>% Protein = 0.686 × 6.38 = <strong>4.38%</strong></p>
+              </div>
+
+              <h5 class="font-semibold mt-4 mb-1 text-red-700">❓ Why V_sample - V_blank? Why is a blank needed?</h5>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li><strong>Blank:</strong> All reagents (acid, catalyst, NaOH, boric acid) may contain trace nitrogen.</li>
+                <li>In the blank, all reagents are added <strong>without the sample</strong> — and the entire procedure is followed.</li>
+                <li>The titre value obtained from the blank represents the nitrogen from reagents — this must be subtracted, otherwise the result will be artificially high.</li>
+                <li><strong>V_blank is usually 0.2-0.5 ml</strong> — small but cannot be ignored.</li>
+              </ul>
+
+              <h5 class="font-semibold mt-4 mb-1 text-red-700">❓ Catalyst mixture — CuSO₄:K₂SO₄ = 1:8 ratio — why?</h5>
+              <table class="table-auto border-collapse border border-red-300 mt-2 text-sm w-full my-2">
+                <thead><tr class="bg-red-100"><th class="border border-red-300 p-2">Catalyst</th><th class="border border-red-300 p-2">Function</th><th class="border border-red-300 p-2">Why This Amount</th></tr></thead>
+                <tbody>
+                  <tr><td class="border border-red-300 p-2">K₂SO₄ (Potassium sulphate) — MORE</td><td class="border border-red-300 p-2">Raises the boiling point of H₂SO₄ — from 337°C to ~400°C+</td><td class="border border-red-300 p-2">More K₂SO₄ is needed to sufficiently raise the BP — higher temperature makes digestion faster and more complete</td></tr>
+                  <tr><td class="border border-red-300 p-2">CuSO₄ (Copper sulphate) — LESS</td><td class="border border-red-300 p-2">Actual catalyst — speeds up the oxidation reaction</td><td class="border border-red-300 p-2">Only a small amount of catalyst is needed — excess CuSO₄ can interfere with the boric acid (affecting the colour change)</td></tr>
+                </tbody>
+              </table>
+              <p class="text-xs my-1">Note: Some methods also use selenium dioxide as a catalyst — but it is toxic and disposal is difficult.</p>
+
+              <h5 class="font-semibold mt-4 mb-1 text-red-700">❓ Why concentrated H₂SO₄ in digestion? What reaction occurs?</h5>
+              <pre class="bg-white p-2 rounded my-2"><code>Organic N + H₂SO₄ → (NH₄)₂SO₄ + CO₂↑ + H₂O
+(Protein)     (conc.)    (Ammonium sulphate)
+
+Step by step:
+1. H₂SO₄ oxidizes the organic matter (carbon → CO₂, hydrogen → H₂O)
+2. Nitrogen is released from amino groups (-NH₂) and forms NH₃
+3. NH₃ + H₂SO₄ → (NH₄)₂SO₄ (trapped in solution)
+4. Clear blue-green colour = colour of CuSO₄ = digestion complete</code></pre>
+              <p class="my-1"><strong>Why 25 ml H₂SO₄:</strong> 5 g of milk contains ~0.5 g of organic matter to be oxidized — 25 ml is sufficient to remain in excess.</p>
+              <p class="my-1"><strong>Meaning of clear blue-green colour:</strong> All organic carbon has escaped as CO₂, only the blue colour of CuSO₄ remains — digestion is complete.</p>
+
+              <h5 class="font-semibold mt-4 mb-1 text-red-700">❓ Why 40% NaOH in distillation? What reaction occurs?</h5>
+              <pre class="bg-white p-2 rounded my-2"><code>(NH₄)₂SO₄ + 2NaOH → Na₂SO₄ + 2NH₃↑ + 2H₂O</code></pre>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li><strong>Why 40% concentrated:</strong> Excess NaOH ensures that ALL ammonium sulphate is converted to ammonia.</li>
+                <li><strong>The reaction is exothermic:</strong> A lot of heat is generated — add carefully and start distillation immediately, otherwise ammonia will be lost.</li>
+                <li><strong>Why not dilute NaOH (10-20%):</strong> The reaction will be incomplete — not all ammonia will be released — the result will be low.</li>
+              </ul>
+
+              <h5 class="font-semibold mt-4 mb-1 text-red-700">❓ Why is ammonia trapped in 4% boric acid? Why not in HCl?</h5>
+              <pre class="bg-white p-2 rounded my-2"><code>NH₃ + H₃BO₃ → NH₄H₂BO₃ (ammonium borate — weakly acidic)</code></pre>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li><strong>Boric acid is a weak acid:</strong> It absorbs ammonia without affecting the accuracy of the titration.</li>
+                <li><strong>Why not trap in HCl/H₂SO₄ (strong acid):</strong> If strong acid is used, EXACTLY the same amount of acid as the ammonia would be needed — if even slightly more acid is present, the ammonia quantity will be measured incorrectly. With boric acid, this problem does not arise because it is so weak that the titrant (HCl) easily displaces it.</li>
+                <li><strong>Why 4% concentration:</strong> Sufficient to absorb the ammonia. Making a more concentrated boric acid solution is difficult (solubility limit ~5% at room temperature).</li>
+              </ul>
+
+              <h5 class="font-semibold mt-4 mb-1 text-red-700">❓ Mixed indicator — Methyl Red + Bromocresol Green — why? Why not a single indicator?</h5>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li><strong>Methyl Red alone:</strong> Red → Yellow change — subtle, difficult to see, especially in the yellowish boric acid solution.</li>
+                <li><strong>Bromocresol Green alone:</strong> Yellow → Blue change — also subtle.</li>
+                <li><strong>Both mixed together:</strong> <span class="font-semibold">Green → Grey → Wine-red/Pink</span> — a very sharp, clear endpoint! No chance of missing it.</li>
+                <li><strong>Why green initially:</strong> After ammonia is absorbed, the boric acid solution is alkaline — the mixed indicator shows green.</li>
+                <li><strong>Pink/wine-red endpoint:</strong> When titrating with HCl, the pH decreases — the indicator changes from green to grey (briefly) to wine-red.</li>
+              </ul>
+
+              <h5 class="font-semibold mt-4 mb-1 text-red-700">❓ Why 0.1 N HCl for titration? Why not 1N or 0.01N?</h5>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li><strong>0.1N is optimal:</strong> 5 g milk sample contains ~0.5-0.7% N → ~0.025-0.035 g N → this is equivalent to ~18-25 ml of 0.1N HCl.</li>
+                <li><strong>1N (too concentrated):</strong> Only 1.8-2.5 ml would be needed — accurately measuring such a small volume is difficult — error will be greater.</li>
+                <li><strong>0.01N (too dilute):</strong> 180-250 ml would be needed — a burette holds 50 ml — repeated refilling would be necessary — impractical.</li>
+                <li><strong>0.1N gives a titre of 18-25 ml</strong> — this fits comfortably in a 50 ml burette and accuracy is also good.</li>
+              </ul>
+
+              <h5 class="font-semibold mt-4 mb-1 text-red-700">❓ Why is it called "Crude Protein"? Why not "True Protein"?</h5>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li><strong>The Kjeldahl method measures TOTAL nitrogen</strong> — not just protein nitrogen.</li>
+                <li>Milk also contains non-protein nitrogen (NPN) — urea, creatinine, uric acid, free amino acids (~5% of total N).</li>
+                <li>All this nitrogen gets multiplied by 6.38 — therefore the result is "crude protein," not "true protein."</li>
+                <li><strong>True protein = Crude protein - (NPN × 6.38)</strong></li>
+                <li>In normal milk: True protein ≈ 95% of crude protein.</li>
+                <li><strong>Risk of urea adulteration:</strong> Urea contains 46.7% nitrogen! If urea has been added, crude protein will be very high — but it is fake.</li>
+              </ul>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">3 Steps of the Kjeldahl Method:</h4>
+
+            <h4 class="font-semibold mt-2 mb-1">Step 1 — Digestion:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-1">
+              <li>Weigh ~5 grams of milk into a Kjeldahl flask.</li>
+              <li>Add 25 ml concentrated sulphuric acid and a catalyst mixture (copper sulphate + potassium sulphate — ratio 1:8).</li>
+              <li>Heat in a fume hood until the solution becomes clear blue-green (may take 2-3 hours). <span class="text-xs text-gray-500">(Initially dark → brown → clear blue-green = complete digestion)</span></li>
+              <li>This step converts all organic nitrogen to (NH₄)₂SO₄.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-2 mb-1">Step 2 — Distillation:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-1">
+              <li>Cool the digestate and dilute with ~200 ml water. <span class="text-xs text-gray-500">(Dilution is necessary — the reaction of concentrated acid + NaOH will be very violent)</span></li>
+              <li>Add excess NaOH (40%) — this converts ammonium sulphate to ammonia gas.</li>
+              <li>Steam-distil the released ammonia into a known amount of standard acid (4% boric acid with mixed indicator — methyl red + bromocresol green). <span class="text-xs text-gray-500">(The condenser tip must remain submerged in the boric acid — otherwise NH₃ gas will escape)</span></li>
+            </ol>
+
+            <h4 class="font-semibold mt-2 mb-1">Step 3 — Titration:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-1">
+              <li>Titrate the trapped ammonia with 0.1 N HCl until the indicator colour changes (green to wine-red/pink). <span class="text-xs text-gray-500">(Add slowly near the endpoint — drop by drop)</span></li>
+              <li>A blank determination is also performed (all reagents without the sample).</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+            <pre><code>% Total Nitrogen = [1.4007 × (V_sample - V_blank) × N_acid] / Weight_sample</code></pre>
+            <pre><code>% Crude Protein = % Total Nitrogen × 6.38</code></pre>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+            <p>Cow milk protein: 3.0-3.5%, Buffalo milk protein: 3.5-4.5%</p>
+          `
+        },
+        {
+          title: "Casein Content (Kjeldahl Method)",
+          purpose: "To determine the quantity of casein, the main protein in milk — by precipitating it before nitrogen analysis.",
+          reference: "IS 1479 (Part II) 1961",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>Casein is precipitated from milk at its isoelectric point (pH 4.6) using acetic acid. Whey proteins remain in the filtrate. The nitrogen content of the casein precipitate is then determined by the Kjeldahl method. Casein constitutes ~80% of the protein in milk.</p>
+
+            <div class="bg-teal-50 border-l-4 border-teal-400 p-4 my-4 rounded">
+              <h4 class="font-bold text-teal-800 mb-3">🔬 Scientific Explanation of Casein Precipitation Factors:</h4>
+
+              <h5 class="font-semibold mt-3 mb-1 text-teal-700">❓ pH 4.6 — why this specific number? What is the Isoelectric Point?</h5>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li><strong>Isoelectric Point (pI):</strong> The pH at which the <strong>net electrical charge of the protein is ZERO</strong>.</li>
+                <li><strong>pH > 4.6:</strong> Casein carries a <strong>negative charge</strong> → proteins repel each other → they remain <strong>soluble</strong> (existing as calcium caseinate in milk).</li>
+                <li><strong>pH < 4.6:</strong> Casein carries a <strong>positive charge</strong> → it becomes soluble again (as acid casein).</li>
+                <li><strong>pH = 4.6 (Exactly):</strong> <strong>Zero charge</strong> → proteins attract each other → they <strong>aggregate/clump</strong> and <strong>precipitate</strong>!</li>
+                <li><strong>Why specifically 4.6:</strong> The balance of acidic (glutamic, aspartic) and basic (lysine, arginine, histidine) residues in the amino acid composition of casein is such that at pH 4.6, the positive and negative charges exactly cancel out. This is an experimentally determined value.</li>
+              </ul>
+
+              <h5 class="font-semibold mt-3 mb-1 text-teal-700">❓ Why acetic acid? Why not HCl?</h5>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li><strong>Acetic acid is a WEAK acid</strong> — it reduces pH gradually — resulting in controlled precipitation.</li>
+                <li><strong>HCl is a STRONG acid</strong> — a single drop causes the pH to drop very rapidly — <strong>overshoot</strong> can occur (pH may go below 4.6).</li>
+                <li>Going below pH 4.6, casein will partially re-dissolve — the result will be low!</li>
+                <li><strong>1.5 ml of 10% acetic acid:</strong> This is carefully calculated to be approximately sufficient to bring 10 g of milk (pH ~6.7) to pH 4.6.</li>
+                <li><strong>Why add drop by drop:</strong> So that the pH decreases gradually and can be stopped exactly at 4.6 — avoiding overshoot.</li>
+              </ul>
+
+              <h5 class="font-semibold mt-3 mb-1 text-teal-700">❓ Why 40-42°C temperature? Why not room temperature?</h5>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li><strong>At 40-42°C, the structure of casein loosens slightly</strong> — protein unfolding is better → aggregation is faster and more complete.</li>
+                <li><strong>At room temperature (~25°C):</strong> Precipitation is slow and incomplete — some casein remains in solution — the result will be low.</li>
+                <li><strong>At 50°C+:</strong> Whey proteins also begin to denature and may co-precipitate with casein — the result will be high (contamination).</li>
+                <li><strong>40-42°C = Sweet spot:</strong> Casein fully precipitates, whey proteins remain in solution — clean separation.</li>
+              </ul>
+
+              <h5 class="font-semibold mt-3 mb-1 text-teal-700">❓ Why add 90 ml distilled water (diluting 10 g milk)?</h5>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li>Dilution results in <strong>better</strong> casein precipitation — in concentrated milk, fat globules and proteins interfere with each other.</li>
+                <li>In dilute milk, the acid mixes uniformly — <strong>local pH extremes</strong> do not form.</li>
+                <li>Washing (after filtering) is also easier in dilute conditions.</li>
+              </ul>
+
+              <h5 class="font-semibold mt-3 mb-1 text-teal-700">❓ Why 10 minutes of standing? Why must the supernatant be clear?</h5>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li><strong>10 minutes:</strong> Casein clumps need time to settle — they settle by gravity.</li>
+                <li><strong>Clear supernatant:</strong> If the supernatant is milky/turbid, casein has not fully precipitated — a little more acetic acid may be needed or more time should be given.</li>
+                <li><strong>Clear = whey:</strong> Whey proteins (alpha-lactalbumin, beta-lactoglobulin) remain in solution — they should not precipitate.</li>
+              </ul>
+
+              <h5 class="font-semibold mt-3 mb-1 text-teal-700">❓ Why is washing on the filter paper essential?</h5>
+              <p class="my-1">Some whey protein solution is trapped within the casein precipitate. Washing with cold water removes this whey protein — leaving only casein. If not washed, the result will be overestimated (whey protein will also be counted).</p>
+
+              <h5 class="font-semibold mt-3 mb-1 text-teal-700">❓ Why is the same 6.38 used in the calculation?</h5>
+              <pre class="bg-white p-2 rounded my-2"><code>% Casein = % Nitrogen in precipitate × 6.38</code></pre>
+              <p class="my-1">The nitrogen content of casein is also ~15.67% (similar to the milk protein average) — therefore the same factor 6.38 is used. Actually, the exact factor for casein is 6.40, but conventionally 6.38 is used in the dairy industry.</p>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Weigh 10 grams of milk in a 250 ml beaker. Add 90 ml distilled water at 40-42°C.</li>
+              <li>While stirring, add 1.5 ml of 10% acetic acid solution drop by drop (to bring pH to 4.6).</li>
+              <li>Allow the mixture to stand for 10 minutes. The supernatant should be clear.</li>
+              <li>Filter the mixture through a filter paper. Wash the precipitate with cold water so that whey proteins are completely removed.</li>
+              <li>Transfer the filter paper and precipitate to a Kjeldahl flask for nitrogen determination as described in the total protein method.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+            <pre><code>% Casein = % Nitrogen in precipitate × 6.38</code></pre>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+            <p>Cow milk casein: ~2.5%, Buffalo milk casein: ~3.0-3.5%. Casein = ~80% of total protein.</p>
+          `
+        },
+        {
+          title: "Determination of Lactose (Lane-Eynon Method)",
+          purpose: "To measure the quantity of lactose (milk sugar) in milk. Lactose is a reducing sugar.",
+          reference: "IS 1479 (Part II) 1961; A.O.A.C Official Method 930.28",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>Lactose is a reducing sugar that can reduce Fehling's solution (copper sulphate + alkaline tartrate). A known volume of Fehling's solution is taken and titrated with the clarified solution of milk until all the copper is reduced. Methylene blue indicator is used to detect the endpoint — the colour changes from blue to colourless.</p>
+
+            <div class="bg-amber-50 border-l-4 border-amber-400 p-4 my-4 rounded">
+              <h4 class="font-bold text-amber-800 mb-3">🔬 Complete Scientific Explanation of All Factors in the Lane-Eynon Method:</h4>
+
+              <h5 class="font-semibold mt-3 mb-1 text-amber-700">❓ What is Fehling's Solution? Why are A and B kept separate?</h5>
+              <table class="table-auto border-collapse border border-amber-300 mt-2 text-sm w-full my-2">
+                <thead><tr class="bg-amber-100"><th class="border border-amber-300 p-2">Solution</th><th class="border border-amber-300 p-2">Composition</th><th class="border border-amber-300 p-2">Function</th><th class="border border-amber-300 p-2">Why kept separate?</th></tr></thead>
+                <tbody>
+                  <tr><td class="border border-amber-300 p-2">Fehling's A</td><td class="border border-amber-300 p-2">CuSO₄ · 5H₂O — 69.28 g per litre</td><td class="border border-amber-300 p-2">Provides Cu²⁺ ions — these will be reduced</td><td class="border border-amber-300 p-2" rowspan="2">If both are mixed and stored together, Cu(OH)₂ will gradually precipitate — the solution will be ruined. Keeping them separate ensures both remain stable — mix just before use.</td></tr>
+                  <tr><td class="border border-amber-300 p-2">Fehling's B</td><td class="border border-amber-300 p-2">Sodium potassium tartrate (Rochelle salt) — 346 g/L + NaOH — 100 g/L</td><td class="border border-amber-300 p-2">Tartrate chelates Cu²⁺ to keep it soluble; NaOH provides the alkaline medium</td></tr>
+                </tbody>
+              </table>
+
+              <h5 class="font-semibold mt-3 mb-1 text-amber-700">❓ What is the core reaction?</h5>
+              <pre class="bg-white p-2 rounded my-2"><code>Lactose (reducing sugar) + 2Cu²⁺ (blue) + NaOH → Lactobionic acid + Cu₂O↓ (brick red)
+
+Step by step:
+1. The aldehyde group of lactose reduces Cu²⁺ → Cu⁺ is formed
+2. Cu⁺ in alkaline medium forms Cu₂O (cuprous oxide) → BRICK RED precipitate
+3. Blue colour (Cu²⁺) → disappears → brick red (Cu₂O)</code></pre>
+
+              <h5 class="font-semibold mt-3 mb-1 text-amber-700">❓ Why protein precipitation with lead acetate?</h5>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li><strong>Proteins and fat interfere:</strong> They can react with Fehling's solution or create turbidity — making the endpoint difficult to see.</li>
+                <li><strong>How lead acetate works:</strong> Pb²⁺ ions form insoluble lead-protein complexes with proteins → precipitate → filter out.</li>
+                <li><strong>Why removing excess lead (with oxalate) is necessary:</strong> Lead ions can also act as a reducing agent — they can reduce Fehling's solution — giving a <strong>false high result</strong>. Potassium/sodium oxalate removes lead by forming insoluble lead oxalate (PbC₂O₄).</li>
+              </ul>
+
+              <h5 class="font-semibold mt-3 mb-1 text-amber-700">❓ 10 ml Fehling's A + 10 ml Fehling's B — why equal volumes?</h5>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li>Equal mixing creates the <strong>correct Cu²⁺ to tartrate ratio</strong> — copper remains fully chelated.</li>
+                <li>If more A is added: Excess Cu²⁺ will precipitate — unreacted copper — incorrect endpoint.</li>
+                <li>If more B is added: The solution will be too alkaline — side reactions will increase.</li>
+                <li><strong>10 ml is the standard</strong> — it provides a known amount of Cu²⁺ whose lactose equivalent is given in the table.</li>
+              </ul>
+
+              <h5 class="font-semibold mt-3 mb-1 text-amber-700">❓ Why Methylene Blue indicator? How does it work?</h5>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li><strong>Problem:</strong> The solution is already turning brick red (Cu₂O) — making the endpoint difficult to see.</li>
+                <li><strong>Solution:</strong> Methylene blue is a <strong>redox indicator</strong> — it is reduced MORE easily than Cu²⁺.</li>
+                <li><strong>How it works:</strong>
+                  <ul class="list-disc list-outside pl-5 mt-1">
+                    <li>As long as Cu²⁺ remains → Methylene blue stays oxidized (blue)</li>
+                    <li>When ALL Cu²⁺ is reduced → excess lactose reduces the methylene blue → <strong>colourless (leuco form)</strong></li>
+                  </ul>
+                </li>
+                <li><strong>Endpoint:</strong> Blue → colourless (on a brick red background — clearly visible)</li>
+                <li><strong>Why only 2-3 drops:</strong> Too much indicator will consume extra lactose — the result will be incorrect.</li>
+                <li><strong>Why added near the end (not at the start):</strong> If added at the beginning, methylene blue may decompose during boiling — the endpoint will be missed.</li>
+              </ul>
+
+              <h5 class="font-semibold mt-3 mb-1 text-amber-700">❓ Why must titration be done while boiling?</h5>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li>The reaction between lactose and Cu²⁺ is <strong>fast only at high temperature</strong> — at room temperature it is very slow.</li>
+                <li>Boiling ensures that the reaction occurs <strong>immediately and completely</strong> — after each drop.</li>
+                <li><strong>You cannot stop boiling and then titrate</strong> — upon cooling the reaction will stop and the endpoint will be incorrect.</li>
+              </ul>
+
+              <h5 class="font-semibold mt-3 mb-1 text-amber-700">❓ Why is the Lane-Eynon Table used? Why not a direct calculation?</h5>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li><strong>Problem:</strong> The reaction between lactose and Fehling's solution is <strong>not exactly stoichiometric</strong> — meaning they do not react in a fixed ratio. The ratio changes slightly with the titre value.</li>
+                <li><strong>Solution:</strong> Scientists experimentally determined how much lactose (mg) reduces 10 ml Fehling's A + 10 ml Fehling's B at different titre values — this data is in the table.</li>
+                <li><strong>Example:</strong> If the titre value is 15.5 ml → look up the table → suppose the factor = 67.2 mg lactose.</li>
+                <li>This table is <strong>internationally standardized</strong> — the same table is used in every laboratory.</li>
+              </ul>
+
+              <h5 class="font-semibold mt-3 mb-1 text-amber-700">❓ Dilution factor (25 ml → 250 ml = 10× dilution) — how is it used in the calculation?</h5>
+              <pre class="bg-white p-2 rounded my-2"><code>% Lactose = (Factor from table × Total dilution volume) / (Titre value × Aliquot × Sample weight) × 100
+
+Example:
+Sample = 25 ml milk, diluted to 250 ml (10× dilution)
+Factor = 67.2 mg (from table for titre value)
+Titre = 15.5 ml
+
+Lactose in 250 ml solution = 67.2 mg per 15.5 ml used
+Lactose per ml = 67.2 / 15.5 = 4.335 mg/ml
+Total in 250 ml = 4.335 × 250 = 1083.87 mg = 1.084 g
+This came from 25 ml milk
+Per 100 ml = (1.084 / 25) × 100 = 4.34% lactose</code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Sample Preparation:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Take 25 ml of milk in a 250 ml volumetric flask.</li>
+              <li>Add 10 ml lead acetate solution to precipitate proteins, and mix.</li>
+              <li>Add potassium/sodium oxalate to remove excess lead.</li>
+              <li>Make up the volume to 250 ml with distilled water.</li>
+              <li>Filter — this clear filtrate will be used for titration.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Take 10 ml each of Fehling's A and Fehling's B solution in a conical flask.</li>
+              <li>Add ~15 ml distilled water and bring to a boil.</li>
+              <li>Titrate the boiling mixture with the clarified milk solution from a burette.</li>
+              <li>When the colour of the solution becomes light blue, add 2-3 drops of methylene blue indicator.</li>
+              <li>Continue boiling and add the solution drop by drop until the blue colour completely disappears (brick red endpoint).</li>
+              <li>Note the titre value.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+            <p>Normal milk lactose: 4.5-5.0%</p>
+          `
+        },
+        {
+          title: "Titratable Acidity",
+          purpose: "To measure the total acidity of milk (natural + developed) — an indicator of freshness.",
+          reference: "IS 1479 (Part I) 1961",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>The total acidity of milk is measured by titrating with a standard alkali solution (NaOH). Phenolphthalein indicator signals the endpoint with a colour change (colourless to pink). Fresh milk has a natural acidity of ~0.12-0.14% (from casein, phosphates, CO₂). Bacterial growth produces lactic acid, which increases the acidity.</p>
+
+            <div class="bg-pink-50 border-l-4 border-pink-400 p-4 my-4 rounded">
+              <h4 class="font-bold text-pink-800 mb-3">🔬 Complete Derivation of the Factor "9" in the Acidity Formula:</h4>
+
+              <h5 class="font-semibold mt-3 mb-1 text-pink-700">❓ Where does "9" in the formula come from? — Step by Step Derivation</h5>
+              <pre class="bg-white p-2 rounded my-2"><code>% Acidity (as lactic acid) = (9 × V × N) / W</code></pre>
+
+              <p class="font-semibold my-2">Derivation:</p>
+              <ol class="list-decimal list-outside pl-5 space-y-1 my-2">
+                <li><strong>Formula of lactic acid:</strong> CH₃CHOHCOOH</li>
+                <li><strong>Molecular weight:</strong> C₃H₆O₃ = (3×12) + (6×1) + (3×16) = 36 + 6 + 48 = <strong>90 g/mol</strong></li>
+                <li><strong>Lactic acid is monoprotic</strong> (one -COOH group) → <strong>Equivalent weight = Molecular weight = 90 g/eq</strong></li>
+                <li><strong>1 ml of 1N NaOH</strong> = 1 milli-equivalent = neutralizes 1 milli-equivalent of acid = <strong>90/1000 g lactic acid = 0.090 g</strong></li>
+                <li><strong>V ml of N normality NaOH</strong> = V × N milliequivalents = neutralizes <strong>V × N × 0.090 g</strong> lactic acid</li>
+                <li><strong>Percentage calculation:</strong></li>
+              </ol>
+              <pre class="bg-white p-2 rounded my-2"><code>% Acidity = (V × N × 0.090 / W) × 100
+         = (V × N × 90) / (W × 1000) × 100
+         = (V × N × 90 × 100) / (W × 1000)
+         = (V × N × 9) / W
+
+Factor 9 = Equivalent weight (90) × 100 / 1000 = 90/10 = 9</code></pre>
+
+              <div class="bg-white p-3 rounded mt-2 text-sm">
+                <p><strong>Example:</strong> V = 1.5 ml, N = 0.1, W = 10 g</p>
+                <p>% Acidity = (9 × 1.5 × 0.1) / 10 = 1.35 / 10 = <strong>0.135%</strong> (within the normal range ✅)</p>
+              </div>
+
+              <h5 class="font-semibold mt-4 mb-1 text-pink-700">❓ If acidity is to be expressed in terms of another acid, what would the factor be?</h5>
+              <table class="table-auto border-collapse border border-pink-300 mt-2 text-sm w-full my-2">
+                <thead><tr class="bg-pink-100"><th class="border border-pink-300 p-2">Acid</th><th class="border border-pink-300 p-2">Molecular Wt</th><th class="border border-pink-300 p-2">Eq. Wt</th><th class="border border-pink-300 p-2">Factor (Eq.Wt × 100/1000)</th></tr></thead>
+                <tbody>
+                  <tr><td class="border border-pink-300 p-2 font-semibold">Lactic acid (dairy standard)</td><td class="border border-pink-300 p-2">90</td><td class="border border-pink-300 p-2">90 (monoprotic)</td><td class="border border-pink-300 p-2 font-semibold">9.0</td></tr>
+                  <tr><td class="border border-pink-300 p-2">Citric acid</td><td class="border border-pink-300 p-2">192</td><td class="border border-pink-300 p-2">64 (triprotic)</td><td class="border border-pink-300 p-2">6.4</td></tr>
+                  <tr><td class="border border-pink-300 p-2">Oleic acid</td><td class="border border-pink-300 p-2">282</td><td class="border border-pink-300 p-2">282 (monoprotic)</td><td class="border border-pink-300 p-2">28.2</td></tr>
+                  <tr><td class="border border-pink-300 p-2">Sulphuric acid</td><td class="border border-pink-300 p-2">98</td><td class="border border-pink-300 p-2">49 (diprotic)</td><td class="border border-pink-300 p-2">4.9</td></tr>
+                </tbody>
+              </table>
+              <p class="text-xs my-1">In dairy, acidity is always expressed in terms of lactic acid (factor = 9) because bacteria produce lactic acid from lactose — lactic acid is the source of developed acidity.</p>
+
+              <h5 class="font-semibold mt-4 mb-1 text-pink-700">❓ Why 0.1 N NaOH? Why is the concentration important?</h5>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li><strong>Milk's acidity is very low</strong> (~0.12-0.15%) — a 10 g sample contains only ~0.012-0.015 g lactic acid.</li>
+                <li><strong>With 0.1N NaOH:</strong> A titre of ~1.3-1.7 ml is obtained — which can be accurately measured from a burette.</li>
+                <li><strong>With 1N NaOH:</strong> Only ~0.13-0.17 ml would be needed — accurately measuring such a small volume is very difficult — even a single drop error will be significant.</li>
+                <li><strong>With 0.01N NaOH:</strong> ~13-17 ml would be needed — this is practical but dilute NaOH deteriorates quickly (by absorbing CO₂).</li>
+              </ul>
+
+              <h5 class="font-semibold mt-4 mb-1 text-pink-700">❓ Why Phenolphthalein indicator? What does the pink colour endpoint represent?</h5>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li><strong>Colour change range of phenolphthalein:</strong> pH 8.2-10.0 → colourless to pink.</li>
+                <li><strong>Milk is naturally buffered</strong> (pH ~6.7) — as NaOH is added, the pH gradually increases.</li>
+                <li><strong>When pH reaches ~8.3:</strong> Phenolphthalein turns pink — meaning all the acid (lactic acid + natural acidity) has been neutralized.</li>
+                <li><strong>The pink colour must persist for 15 seconds:</strong> Because dissolved CO₂ can cause a temporary pink that disappears — a stable pink = true endpoint.</li>
+                <li><strong>Why phenolphthalein, not methyl orange:</strong> Methyl orange has a range of pH 3.1-4.4 — milk's starting pH is 6.7 — methyl orange would already be at one colour — it would not work.</li>
+              </ul>
+
+              <h5 class="font-semibold mt-4 mb-1 text-pink-700">❓ What is "Natural Acidity" vs "Developed Acidity" in milk?</h5>
+              <table class="table-auto border-collapse border border-pink-300 mt-2 text-sm w-full my-2">
+                <thead><tr class="bg-pink-100"><th class="border border-pink-300 p-2">Type</th><th class="border border-pink-300 p-2">Source</th><th class="border border-pink-300 p-2">Amount</th></tr></thead>
+                <tbody>
+                  <tr><td class="border border-pink-300 p-2"><strong>Natural Acidity</strong></td><td class="border border-pink-300 p-2">Casein (~0.05-0.08%), Phosphates (~0.03%), CO₂ (~0.01%), Citrates, Whey proteins</td><td class="border border-pink-300 p-2">~0.12-0.16%</td></tr>
+                  <tr><td class="border border-pink-300 p-2"><strong>Developed Acidity</strong></td><td class="border border-pink-300 p-2">Lactic acid (produced by bacteria from lactose)</td><td class="border border-pink-300 p-2">0% (fresh) and increases over time</td></tr>
+                  <tr><td class="border border-pink-300 p-2 font-semibold"><strong>Titratable Acidity</strong></td><td class="border border-pink-300 p-2 font-semibold">Natural + Developed</td><td class="border border-pink-300 p-2 font-semibold">Total that is titrated with NaOH</td></tr>
+                </tbody>
+              </table>
+              <p class="text-xs my-1"><strong>Developed acidity = Titratable acidity - Natural acidity.</strong> If titratable acidity is 0.18% and natural acidity is ~0.14%, then developed acidity = 0.04% — bacteria produced that much lactic acid.</p>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Take 10 ml of the milk sample in a porcelain dish or conical flask (or weigh 10 grams). <span class="text-xs text-gray-500">(A porcelain dish is used because the pink colour is clearly visible against the white background)</span></li>
+              <li>Add a few drops (3-4 drops) of 1% phenolphthalein solution.</li>
+              <li>Titrate with 0.1 N NaOH solution from a burette.</li>
+              <li>When a faint pink colour appears (endpoint) — which should persist for 15 seconds — stop the titration.</li>
+              <li>Note the volume of alkali used.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+            <pre><code>% Acidity (as lactic acid) = (9 × V × N) / W</code></pre>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+            <p>Fresh cow milk: 0.12-0.14%, Fresh buffalo milk: 0.12-0.15%. FSSAI maximum limit: 0.15% (as lactic acid) for mixed milk.</p>
+          `
+        },
+        {
+          title: "Determination of Total Ash",
+          purpose: "To determine the total mineral content in milk.",
+          reference: "IS: 1479 (Part-II)-1961",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>The milk sample is incinerated (burned) until all organic matter is destroyed, leaving only the inorganic minerals (ash). Ash includes calcium, phosphorus, sodium, potassium, magnesium, chloride, etc.</p>
+
+            <div class="bg-gray-100 border-l-4 border-gray-400 p-4 my-4 rounded">
+              <h4 class="font-bold text-gray-800 mb-3">🔬 Scientific Explanation of Factors in Ash Determination:</h4>
+
+              <h5 class="font-semibold mt-3 mb-1 text-gray-700">❓ Why 550°C? Why not lower or higher?</h5>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li><strong>< 500°C:</strong> Organic matter (carbon) will not burn completely — <strong>black/dark grey ash</strong> will result — the result will be overestimated (carbon will also be weighed).</li>
+                <li><strong>> 600°C:</strong> Some minerals become volatile — NaCl sublimes at ~800°C, but loss can start at 600°C+. Potassium chloride is also volatile. Carbonates may decompose (CaCO₃ → CaO + CO₂ at ~840°C but partial loss occurs earlier).</li>
+                <li><strong>550°C = Standard temperature:</strong> All organic carbon burns completely (escapes as CO₂) + all minerals remain intact.</li>
+                <li><strong>White/light grey ash = complete ashing.</strong> Black spots = incomplete — more time is needed.</li>
+              </ul>
+
+              <h5 class="font-semibold mt-3 mb-1 text-gray-700">❓ Why 6-8 hours in the muffle furnace?</h5>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li>The solids in milk contain fat + protein + lactose — all of these must be completely oxidized.</li>
+                <li><strong>Fat burns slowly</strong> — especially the carbon from charred fat is difficult to remove.</li>
+                <li>In 6-8 hours, complete ashing is typically achieved. If the ash is still dark, keep it overnight.</li>
+                <li><strong>Tip:</strong> You can also add a few drops of HNO₃ if the carbon is not being removed — it is an oxidizing agent and converts carbon to CO₂.</li>
+              </ul>
+
+              <h5 class="font-semibold mt-3 mb-1 text-gray-700">❓ Why a silica or platinum crucible? Why not glass?</h5>
+              <ul class="list-disc list-outside pl-5 space-y-1 my-2">
+                <li><strong>Glass:</strong> Will melt/deform at 550°C — the softening point of glass is ~500-600°C.</li>
+                <li><strong>Silica (quartz):</strong> Melting point ~1700°C — completely safe at 550°C. Inexpensive. Commonly used.</li>
+                <li><strong>Platinum:</strong> Melting point ~1768°C — the best, inert, non-reactive. However, it is very <strong>expensive</strong> — used in special research labs.</li>
+                <li><strong>Porcelain:</strong> Also used — melting point ~1400°C — but it can absorb some components — less accurate.</li>
+              </ul>
+
+              <h5 class="font-semibold mt-3 mb-1 text-gray-700">❓ Water bath → Hot plate → Muffle furnace — why this 3-step process?</h5>
+              <ol class="list-decimal list-outside pl-5 space-y-1 my-2">
+                <li><strong>Water bath (100°C):</strong> Removes water — if placed directly in the muffle furnace, the water will boil rapidly and the sample will <strong>splatter</strong> (spray) — causing loss of material.</li>
+                <li><strong>Hot plate (~200-300°C):</strong> Charring — organic matter is partially burned. This releases smoke. Placing it directly in the muffle furnace would cause the smoke to damage the furnace.</li>
+                <li><strong>Muffle furnace (550°C):</strong> Final complete ashing — remaining carbon escapes as CO₂. Clean, smoke-free combustion.</li>
+              </ol>
+
+              <h5 class="font-semibold mt-3 mb-1 text-gray-700">❓ Formula explanation:</h5>
+              <pre class="bg-white p-2 rounded my-2"><code>% Total Ash = [(W2 - W1) / Sample weight] × 100
+
+W1 = Empty crucible weight
+W2 = Crucible + ash weight (after ashing)
+W2 - W1 = Ash weight only
+Sample weight = original milk weight taken</code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Accurately weigh approximately 10 grams of milk sample into a pre-weighed silica or platinum crucible (W1).</li>
+              <li>Evaporate the sample on a water bath (to remove water).</li>
+              <li>Then heat on a hot plate until it stops burning (charring).</li>
+              <li>Heat the crucible in a muffle furnace at 550°C until a white or light grey ash is obtained (6-8 hours).</li>
+              <li>Cool in a desiccator and weigh (W2).</li>
+              <li>Repeat for constant weight.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+            <pre><code>% Total Ash = [(W2 - W1) / Sample weight] × 100</code></pre>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+            <p>Normal milk ash: 0.7-0.75%. If ash is unusually high, it indicates adulteration with neutralizers (soda, lime).</p>
+          `
+        },
+        {
+          title: "Determination of Minerals (by Flame Photometry)",
+          purpose: "Rapid and accurate determination of the quantity of calcium, sodium, and potassium in milk.",
+          reference: "Journal of Dairy Science Vol. 33, No. 6, 1950",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>Flame photometry is a technique in which a sample is introduced into a flame. Each element emits light at a specific wavelength (Na: 589 nm — yellow, K: 766 nm — violet, Ca: 622 nm — red-orange). The intensity of the emitted light is proportional to the concentration of that element.</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Sample Preparation:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Accurately weigh 100 grams of milk into a porcelain crucible.</li>
+              <li>Dry the sample at 100°C for 24 hours.</li>
+              <li>Ash the dried sample in a muffle furnace at 550°C.</li>
+              <li>Extract the ash with 10 ml of 1:1 HCl and hot water. Filter the solution.</li>
+              <li>Repeat the ashing and extraction process to ensure complete extraction.</li>
+              <li>Dilute the final filtered solution to 500 ml with distilled water in a volumetric flask.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Take a 5 ml aliquot of the stock solution, transfer it to a 100 ml volumetric flask, and dilute to the mark with distilled water.</li>
+              <li>Set the flame photometer to the specific wavelength for Ca, Na, or K.</li>
+              <li>Prepare standard solutions of known concentrations.</li>
+              <li>Measure the intensity of the standard solutions and plot a calibration curve.</li>
+              <li>Measure the flame intensity of the unknown sample and find the concentration from the calibration curve.</li>
+            </ol>
+
+            <div class="bg-cyan-50 border-l-4 border-cyan-400 p-4 mt-4 rounded">
+              <h4 class="font-bold text-cyan-800 mb-3">🔬 Scientific Explanation of Factors & Constants:</h4>
+
+              <h5 class="font-semibold text-cyan-700 mt-3 mb-1">❓ Why specific wavelengths — Na 589 nm, K 766 nm, Ca 622 nm?</h5>
+              <p class="text-sm mb-2">The <strong>energy levels of electrons in each element are unique</strong> (quantum mechanics). When an atom is excited in a flame:</p>
+              <pre class="bg-white p-2 rounded text-sm"><code>Step 1: Heat from the flame → electron moves from the ground state to an excited state
+Step 2: Electron returns to the ground state
+Step 3: The energy difference = light emitted at a specific wavelength
+
+ΔE = hν = hc/λ
+Where: h = Planck's constant, c = speed of light, λ = wavelength
+
+Each element has a different ΔE → different λ → different colour</code></pre>
+              <table class="table-auto border-collapse border border-cyan-300 mt-2 mb-3 text-sm w-full">
+                <thead><tr class="bg-cyan-100"><th class="border border-cyan-300 p-2">Element</th><th class="border border-cyan-300 p-2">Wavelength</th><th class="border border-cyan-300 p-2">Colour</th><th class="border border-cyan-300 p-2">Electron Transition</th></tr></thead>
+                <tbody>
+                  <tr><td class="border border-cyan-300 p-2"><strong>Sodium (Na)</strong></td><td class="border border-cyan-300 p-2">589 nm (D-line)</td><td class="border border-cyan-300 p-2">Bright Yellow</td><td class="border border-cyan-300 p-2">3p → 3s transition. This is the most famous flame colour — a yellow flame is seen when burning salt</td></tr>
+                  <tr><td class="border border-cyan-300 p-2"><strong>Potassium (K)</strong></td><td class="border border-cyan-300 p-2">766 nm</td><td class="border border-cyan-300 p-2">Violet/Lilac</td><td class="border border-cyan-300 p-2">4p → 4s transition. K's electron configuration differs from Na → different energy gap → different λ</td></tr>
+                  <tr><td class="border border-cyan-300 p-2"><strong>Calcium (Ca)</strong></td><td class="border border-cyan-300 p-2">622 nm</td><td class="border border-cyan-300 p-2">Red-Orange</td><td class="border border-cyan-300 p-2">CaOH molecular emission band. Ca forms diatomic molecules in the flame</td></tr>
+                </tbody>
+              </table>
+              <p class="text-sm"><strong>These wavelengths are "fingerprints":</strong> Each element has a unique identification — this is the principle on which atomic spectroscopy works.</p>
+
+              <h5 class="font-semibold text-cyan-700 mt-4 mb-1">❓ How does the Interpolation Formula work?</h5>
+              <pre class="bg-white p-2 rounded text-sm"><code>C_x = C₁ + (C₂ - C₁) × (I_x - I₁) / (I₂ - I₁)
+
+This is LINEAR INTERPOLATION:
+• C₁, C₂ = known standard concentrations (lower & upper)
+• I₁, I₂ = corresponding intensities (measured)
+• I_x = intensity of the unknown sample (measured)
+• C_x = unknown concentration (TO BE FOUND)
+
+Assumption: The relationship between C₁ and C₂ is LINEAR
+(concentration ↑ → intensity ↑ proportionally)</code></pre>
+              <p class="text-sm mt-2"><strong>Example:</strong></p>
+              <pre class="bg-white p-2 rounded text-sm"><code>Standard 1: Na = 10 ppm, Intensity = 25
+Standard 2: Na = 20 ppm, Intensity = 50
+Sample: Intensity = 35
+
+C_x = 10 + (20-10) × (35-25) / (50-25)
+  = 10 + 10 × 10/25
+  = 10 + 4
+  = 14 ppm Na</code></pre>
+
+              <h5 class="font-semibold text-cyan-700 mt-4 mb-1">❓ Beer-Lambert Law — the scientific basis of flame photometry</h5>
+              <pre class="bg-white p-2 rounded text-sm"><code>Emission Intensity ∝ Concentration (in dilute solutions)
+
+I = k × C
+Where: I = emitted light intensity
+      k = proportionality constant (instrument + element dependent)
+      C = concentration
+
+This is why a calibration curve must be plotted — to find k</code></pre>
+
+              <h5 class="font-semibold text-cyan-700 mt-4 mb-1">❓ Why is ash extracted with 1:1 HCl?</h5>
+              <p class="text-sm">After ashing, minerals are in the form of <strong>oxides and carbonates</strong> (such as CaO, Na₂CO₃). These are insoluble or poorly soluble in water. HCl converts them into <strong>soluble chlorides</strong>:</p>
+              <pre class="bg-white p-2 rounded text-sm"><code>CaO + 2HCl → CaCl₂ (soluble) + H₂O
+Na₂CO₃ + 2HCl → 2NaCl (soluble) + H₂O + CO₂↑</code></pre>
+              <p class="text-sm mt-1"><strong>1:1 HCl:</strong> Concentrated HCl (37%) mixed with an equal volume of water → ~18.5% HCl. This is a moderate strength — sufficient for dissolution but not too aggressive.</p>
+
+              <h5 class="font-semibold text-cyan-700 mt-4 mb-1">❓ 100 g milk → 500 ml final volume — dilution calculations</h5>
+              <pre class="bg-white p-2 rounded text-sm"><code>100 g milk → ash → extract → 500 ml stock solution
+5 ml from stock → 100 ml working solution
+
+Total dilution:
+• Stage 1: 100 g milk → 500 ml (essentially a 1:5 factor on ash content)
+• Stage 2: 5 ml → 100 ml (20× dilution)
+• Overall dilution on the aliquot: 100 ml / 5 ml = 20× on stock
+
+Final concentration calculation:
+ppm from curve × (100/5) × (500/100) = ppm in original milk
+              
+This dilution is essential because:
+1. The flame photometer is calibrated for dilute solutions
+2. Concentrated solutions cause self-absorption → non-linear response
+3. The burner can clog with concentrated solutions</code></pre>
+
+              <h5 class="font-semibold text-cyan-700 mt-4 mb-1">❓ Why must a calibration curve be plotted?</h5>
+              <p class="text-sm">The response of a flame photometer varies slightly each day and with each instrument (due to flame stability, gas pressure, atomizer efficiency). Therefore, it must be calibrated with standards <strong>every time</strong>. By plotting known concentrations of standards vs measured intensities, a curve is created → the concentration of the unknown sample is found from its intensity.</p>
+
+              <h5 class="font-semibold text-cyan-700 mt-4 mb-1">❓ Interference problems and solutions:</h5>
+              <table class="table-auto border-collapse border border-cyan-300 mt-2 mb-3 text-sm w-full">
+                <thead><tr class="bg-cyan-100"><th class="border border-cyan-300 p-2">Problem</th><th class="border border-cyan-300 p-2">Explanation</th><th class="border border-cyan-300 p-2">Solution</th></tr></thead>
+                <tbody>
+                  <tr><td class="border border-cyan-300 p-2"><strong>Na interference in K</strong></td><td class="border border-cyan-300 p-2">Na is a very strong emitter — it interferes with the K reading</td><td class="border border-cyan-300 p-2">Add the same Na concentration to the K standards as well</td></tr>
+                  <tr><td class="border border-cyan-300 p-2"><strong>Phosphate interference in Ca</strong></td><td class="border border-cyan-300 p-2">Phosphate forms a refractory compound with Ca in the flame</td><td class="border border-cyan-300 p-2">Add lanthanum chloride — it binds phosphate to La, keeping Ca free</td></tr>
+                  <tr><td class="border border-cyan-300 p-2"><strong>Self-absorption</strong></td><td class="border border-cyan-300 p-2">At high concentrations, outer flame atoms absorb light from inner atoms</td><td class="border border-cyan-300 p-2">Dilute the sample — keep it within the calibration range</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Calculation (Interpolation Method):</h4>
+            <pre><code>C_x = C₁ + (C₂ - C₁) × (I_x - I₁) / (I₂ - I₁)</code></pre>
+            <p class="text-xs">Where C = concentration, I = intensity, subscript x = unknown, 1 = lower standard, 2 = upper standard.</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values in Milk:</h4>
+            <p>Calcium: ~120 mg/100ml, Sodium: ~50 mg/100ml, Potassium: ~150 mg/100ml</p>
+          `
+        },
+        {
+          title: "Methylene Blue Reduction Test (MBRT)",
+          purpose: "To quickly assess the microbiological quality of raw milk — this is a rapid platform test.",
+          reference: "IS: 1479 (Part III) – 1977",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>Methylene Blue is a blue redox dye. Bacteria present in milk reduce this dye during their metabolism (respiration), causing it to become colourless (leuco form). The faster the colour disappears, the more bacteria are present in the milk. This test provides an indirect measure of bacterial count.</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Reagents:</h4>
+            <ul class="list-disc list-outside pl-5 space-y-1">
+              <li>Methylene Blue solution: 5 mg methylene blue per litre of distilled water (autoclaved)</li>
+            </ul>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Take 10 ml of the milk sample in a sterilized test tube (using aseptic technique).</li>
+              <li>Add 1 ml of the standard methylene blue solution.</li>
+              <li>Close the tube with a rubber stopper and invert once to mix (do not shake excessively).</li>
+              <li>Place the tube in a water bath at 37°C.</li>
+              <li>Check at regular intervals (without shaking — only observe the tube) and record the time when the blue colour completely disappears.</li>
+              <li>Also keep a control tube (milk + dye without incubation).</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Interpretation (Grading):</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Grade</th><th class="border p-2">MBRT</th><th class="border p-2">Approx. Bacteria Count</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2"><strong>Very Good</strong></td><td class="border p-2">5 hours or more</td><td class="border p-2">&lt; 5 lakh/ml</td></tr>
+                <tr><td class="border p-2"><strong>Good</strong></td><td class="border p-2">2 to 4 hours</td><td class="border p-2">5-20 lakh/ml</td></tr>
+                <tr><td class="border p-2"><strong>Fair</strong></td><td class="border p-2">30 minutes to 1 hour</td><td class="border p-2">20 lakh - 1 crore/ml</td></tr>
+                <tr><td class="border p-2"><strong>Poor</strong></td><td class="border p-2">Less than 30 minutes</td><td class="border p-2">&gt; 1 crore/ml</td></tr>
+              </tbody>
+            </table>
+          `
+        },
+        {
+          title: "Resazurin Test (10 Minute Test)",
+          purpose: "Even faster than MBRT — a rough assessment of milk quality in just 10 minutes.",
+          reference: "IS: 1479 (Part III) – 1977",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>Resazurin is a blue dye that is reduced by the metabolic activity of bacteria. Blue → Purple → Pink → Colourless. After 10 minutes of incubation, the colour is compared with a Lovibond disc and a grade is assigned. It is more rapid than MBRT and useful under field conditions.</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Take 10 ml of milk in a sterilized tube.</li>
+              <li>Add 1 ml of standard resazurin solution (0.005%).</li>
+              <li>Invert once to mix.</li>
+              <li>Place in a water bath at 37°C.</li>
+              <li>Remove the tube after exactly 10 minutes and compare the colour with a Lovibond comparator disc.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Grading (10-minute Resazurin):</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Disc Reading</th><th class="border p-2">Colour</th><th class="border p-2">Grade</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">6</td><td class="border p-2">Blue</td><td class="border p-2">Excellent</td></tr>
+                <tr><td class="border p-2">5</td><td class="border p-2">Light Blue</td><td class="border p-2">Good</td></tr>
+                <tr><td class="border p-2">4</td><td class="border p-2">Purple</td><td class="border p-2">Fair</td></tr>
+                <tr><td class="border p-2">3</td><td class="border p-2">Purple-Pink</td><td class="border p-2">Fair</td></tr>
+                <tr><td class="border p-2">2</td><td class="border p-2">Pink</td><td class="border p-2">Poor</td></tr>
+                <tr><td class="border p-2">1</td><td class="border p-2">White/Colourless</td><td class="border p-2">Very Poor</td></tr>
+              </tbody>
+            </table>
+          `
+        },
+        {
+          title: "Alkaline Phosphatase Test (ALP Test)",
+          purpose: "To verify the efficiency of pasteurization — the most important quality control test.",
+          reference: "IS 1479 (Part III) 1977; A.O.A.C 946.03",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>Phosphatase is an enzyme naturally present in raw milk. It is inactivated at 63°C/30 min or 72°C/15 sec — meaning proper pasteurization destroys this enzyme. If this test is positive, it means the milk was not properly pasteurized or it was contaminated with raw milk.</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Aschaffenburg and Mullen (A&M) Method:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Mix the milk sample with a buffer-substrate solution (disodium p-nitrophenyl phosphate — 0.15% in buffer pH 10.2) — 5 ml milk + 5 ml substrate.</li>
+              <li>Incubate at 37°C for 2 hours.</li>
+              <li>If phosphatase is present, it will hydrolyze the substrate, releasing p-nitrophenol — which is YELLOW in alkaline solution.</li>
+              <li>Compare/measure the intensity of the colour with standard colour discs or a spectrophotometer (420 nm).</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Interpretation:</h4>
+            <p><strong>Properly pasteurized milk:</strong> No yellow colour (negative test) — &lt;10 µg p-nitrophenol/ml</p>
+            <p><strong>Under-pasteurized/raw milk:</strong> Yellow colour (positive test) — &gt;10 µg p-nitrophenol/ml</p>
+          `
+        },
+        {
+          title: "Peroxidase Test (Storch Test)",
+          purpose: "To detect over-heating or over-pasteurization. The peroxidase enzyme is destroyed above 80°C.",
+          reference: "IS 1479 (Part I) 1961",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>Peroxidase is an enzyme present in raw milk that survives HTST pasteurization (72°C/15 sec) but is destroyed above 80°C. In properly pasteurized milk, peroxidase should be POSITIVE. If it is negative, the milk was over-heated.</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure (Storch Test):</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Take 5 ml of milk in a test tube.</li>
+              <li>Add 5 drops of 2% paraphenylene diamine solution.</li>
+              <li>Add 2 drops of hydrogen peroxide (0.2%).</li>
+              <li>Mix and observe for 30 seconds.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Interpretation:</h4>
+            <p><strong>Dark blue/indigo colour (within 30 sec):</strong> Positive — Peroxidase present — milk is properly pasteurized (72°C/15 sec) and has not been over-heated.</p>
+            <p><strong>No colour change:</strong> Negative — Peroxidase destroyed — milk was heated above 80°C (over-pasteurized).</p>
+            <p><strong>Raw milk:</strong> Strongly positive (immediate deep colour)</p>
+          `
+        },
+        {
+          title: "pH Determination",
+          purpose: "To measure the hydrogen ion concentration of milk — an indicator of freshness and quality.",
+          reference: "IS 1479 (Part I) 1961",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Calibrate the pH meter with standard buffer solutions (pH 4.0 and pH 7.0).</li>
+              <li>Take 50 ml of milk in a beaker.</li>
+              <li>Note the temperature (25°C is ideal).</li>
+              <li>Immerse the electrode in the milk and take a stable reading.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+            <p>Fresh cow milk pH: 6.6-6.8, Fresh buffalo milk pH: 6.7-6.8</p>
+            <p>Sour/fermented milk: pH &lt; 6.0, Mastitic milk: pH &gt; 7.0</p>
+          `
+        },
+        {
+          title: "Alcohol Test (COB Test - Clot on Boiling)",
+          purpose: "To quickly check the acidity of milk — when developed acidity is high, milk clots with alcohol/heat.",
+          reference: "IS 1479 (Part I) 1961",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Method 1: Alcohol Test</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Take 2 ml of milk in a test tube.</li>
+              <li>Add 2 ml of 68% ethanol (or 75% ethanol for a more sensitive test).</li>
+              <li>Mix and observe for clot formation.</li>
+            </ol>
+            <p><strong>Result:</strong> Clot formation = POSITIVE = milk acidity is more than 0.20% or it is colostrum. No clot = NEGATIVE = milk is normal.</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Method 2: Clot on Boiling (COB) Test</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Take 5 ml of milk in a test tube or spoon.</li>
+              <li>Boil on a direct flame.</li>
+              <li>Observe for clot formation.</li>
+            </ol>
+            <p><strong>Result:</strong> Clot = milk acidity is more than 0.24%. No clot = normal.</p>
+          `
+        },
+        {
+          title: "Detection of Added Water",
+          purpose: "To detect water adulteration in milk — the most common adulteration.",
+          reference: "IS 1479 (Part I) 1961",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>Adding water reduces both the SNF and specific gravity of milk. The freezing point also changes. The normal freezing point of milk is -0.520 to -0.540°C. Adding water shifts it towards 0°C.</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Method 1: Lactometer + SNF Method</h4>
+            <p>Calculate SNF from the lactometer reading and fat %. If SNF is below 8.5% and specific gravity is less than 1.028, there is a strong indication of water adulteration.</p>
+            <pre><code>% Added Water = [(Expected SNF - Observed SNF) / Expected SNF] × 100</code></pre>
+
+            <h4 class="font-semibold mt-4 mb-2">Method 2: Cryoscopy (Freezing Point Method)</h4>
+            <p>Measure the freezing point of milk with a precision cryoscope.</p>
+            <p>Normal freezing point: -0.520 to -0.540°C (Hortvet scale)</p>
+            <pre><code>% Added Water = [(T_observed - T_normal) / T_normal] × 100</code></pre>
+            <p class="text-xs">Where T = Freezing point depression</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Method 3: Nitrate Test</h4>
+            <p>Normal milk does not contain nitrate, but tap water does. Take 5 ml of milk, carefully add 1 ml of conc. H₂SO₄ with a diphenylamine crystal. A blue ring at the junction = nitrate present = water has been added.</p>
+          `
+        },
+        {
+          title: "Detection of Formalin",
+          purpose: "Formalin (formaldehyde) is an illegal preservative — its detection is essential.",
+          reference: "FSSAI Manual Method 2.1.9",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Hehner's Test:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Take 10 ml of milk in a test tube.</li>
+              <li>Carefully slide 5 ml of concentrated sulphuric acid (with a trace of ferric chloride — 0.2 ml of 10% FeCl₃ per 100 ml acid) down the wall of the tube so that it settles below the milk.</li>
+              <li>Observe the colour at the interface (junction).</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Result:</h4>
+            <p><strong>Violet/Purple ring at junction:</strong> Formalin PRESENT — adulterated</p>
+            <p><strong>Brown ring (normal):</strong> Formalin ABSENT — no adulteration</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Confirmatory Test (Chromotropic Acid Test):</h4>
+            <p>1 ml milk + 1 ml chromotropic acid solution + 5 ml conc. H₂SO₄. Violet colour = formaldehyde confirmed.</p>
+          `
+        },
+        {
+          title: "Detection of Urea",
+          purpose: "Urea is a common adulterant — added to artificially increase SNF.",
+          reference: "FSSAI Manual Method",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Method 1: DMAB Method</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Take 5 ml of milk in a test tube.</li>
+              <li>Add 5 ml of DMAB reagent (para-dimethylaminobenzaldehyde — 1.6 g in 100 ml ethanol + 10 ml conc. HCl).</li>
+              <li>Mix and observe for 10 minutes.</li>
+            </ol>
+            <p><strong>Yellow colour development:</strong> Urea PRESENT (normal milk also contains some urea ~20-70 mg/100ml, but intense yellow = added urea)</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Method 2: Urease Based Quantitative Method</h4>
+            <p>Soybean urease is added to the milk, which converts urea to ammonia. The released ammonia is measured with Nessler's reagent (yellow-brown colour at 420 nm). Normal milk urea: 20-70 mg/100 ml. Added urea: >70 mg/100 ml is suspect.</p>
+          `
+        },
+        {
+          title: "Detection of Hydrogen Peroxide",
+          purpose: "H₂O₂ is an illegal preservative — added to artificially extend the shelf life of milk.",
+          reference: "FSSAI Manual Method 2.1.8",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Method 1: Vanadium Pentoxide Method</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Take 10 ml of milk in a test tube.</li>
+              <li>Add 2-3 drops of vanadium pentoxide (V₂O₅) solution — this acts as a catalyst.</li>
+              <li>Observe the colour.</li>
+            </ol>
+            <p><strong>Red/Pink colour:</strong> H₂O₂ PRESENT — adulterated</p>
+            <p><strong>No colour change:</strong> H₂O₂ ABSENT</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Method 2: Potassium Iodide-Starch Method</h4>
+            <p>5 ml milk + a few drops of KI solution + a few drops of starch solution. Blue colour = H₂O₂ present (H₂O₂ liberates iodine from KI, which gives a blue colour with starch).</p>
+          `
+        },
+        {
+          title: "Detection of Neutralizers",
+          purpose: "Soda, caustic soda, sodium bicarbonate — all of these are added to mask the acidity of milk.",
+          reference: "IS 1479 (Part I) 1961; FSSAI Manual",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Method 1: Rosalic Acid Test (for Soda/Carbonates)</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Take 5 ml of milk in a test tube.</li>
+              <li>Add 5 ml of alcohol (to precipitate proteins).</li>
+              <li>Add 3-4 drops of rosalic acid solution (1% in alcohol).</li>
+            </ol>
+            <p><strong>Rose-red/Pink colour:</strong> Neutralizer (soda/carbonate) PRESENT</p>
+            <p><strong>Brownish/Yellow colour:</strong> ABSENT — normal milk</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Method 2: Alizarin Test for Sodium Bicarbonate</h4>
+            <p>Equal volumes of milk + alizarin reagent (0.2% in alcohol). Deep violet = sodium bicarbonate present.</p>
+          `
+        },
+        {
+          title: "Detection of Detergent",
+          purpose: "To detect detergent adulteration in milk — added to artificially increase the fat percentage.",
+          reference: "FSSAI Manual",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Methylene Blue Method:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Take 10 ml of milk in a test tube.</li>
+              <li>Add 0.5 ml of methylene blue solution.</li>
+              <li>Add 5 ml of chloroform.</li>
+              <li>Shake vigorously and allow to settle.</li>
+            </ol>
+            <p><strong>Blue colour in the chloroform layer (lower):</strong> Detergent PRESENT — methylene blue migrates with the detergent into the chloroform layer.</p>
+            <p><strong>Colourless chloroform layer:</strong> Detergent ABSENT</p>
+          `
+        },
+        {
+          title: "Detection of Ammonium Sulphate",
+          purpose: "Ammonium sulphate is added to increase the lactometer reading of milk.",
+          reference: "FSSAI Manual",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Nessler's Reagent Method:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Mix 5 ml milk + 5 ml of 2% NaOH solution.</li>
+              <li>Add 1 ml of Nessler's reagent (K₂HgI₄ in NaOH).</li>
+              <li>Observe for 5 minutes.</li>
+            </ol>
+            <p><strong>Orange-brown precipitate:</strong> Ammonium sulphate PRESENT (excessive ammonia)</p>
+            <p><strong>Faint yellow (normal level):</strong> Normal milk — a small amount of urea is naturally present</p>
+          `
+        },
+        {
+          title: "Detection of Starch in Milk",
+          purpose: "Starch is added as a thickener so that water adulteration is not detected.",
+          reference: "IS 1479 (Part I) 1961",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Iodine Test:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Take 5 ml of milk in a test tube.</li>
+              <li>Boil and then cool (to swell the starch granules).</li>
+              <li>Add 2-3 drops of iodine solution (Lugol's iodine).</li>
+            </ol>
+            <p><strong>Blue/Blue-black colour:</strong> Starch PRESENT</p>
+            <p><strong>Yellow-brown colour:</strong> Starch ABSENT (normal)</p>
+          `
+        },
+        {
+          title: "Detection of Sugar (Sucrose) in Milk",
+          purpose: "Detection of cane sugar — added to artificially increase SNF and taste.",
+          reference: "FSSAI Manual",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Seliwanoff's Test (Modified Barfoed's):</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Take 5 ml of milk in a test tube.</li>
+              <li>Add 1 ml of conc. HCl.</li>
+              <li>Add 0.05 gram of resorcinol.</li>
+              <li>Heat in a boiling water bath for 5 minutes.</li>
+            </ol>
+            <p><strong>Red/Rose-red colour:</strong> Sucrose (cane sugar) PRESENT</p>
+            <p><strong>No colour change:</strong> Sucrose ABSENT</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Note:</h4>
+            <p>Normal milk contains only lactose, not sucrose. Any presence of sucrose indicates adulteration.</p>
+          `
+        },
+        {
+          title: "Detection of Salt (NaCl) in Milk",
+          purpose: "Detection of salt adulteration — added to mask specific gravity and taste.",
+          reference: "FSSAI Manual",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Silver Nitrate Test:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Take 5 ml of milk in a test tube.</li>
+              <li>Add 1 ml of 0.1N silver nitrate (AgNO₃) solution.</li>
+              <li>Add 2 drops of potassium chromate indicator.</li>
+            </ol>
+            <p><strong>Yellow colour:</strong> Excess salt (NaCl) PRESENT — AgNO₃ has reacted with all the chloride, and the excess AgNO₃ is giving a yellow colour with the chromate — this actually means chloride is low and salt is normal.</p>
+            <p><strong>Correction:</strong> Normal milk contains 0.14-0.17% Cl. A white precipitate in excess indicates added salt. For quantitative determination, use Mohr's method (described in the butter section).</p>
+          `
+        },
+        {
+          title: "Turbidity Test (Lacto Test)",
+          purpose: "A simple qualitative test for water adulteration in milk.",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Take 5 ml of milk in a test tube.</li>
+              <li>Add 5 ml of trichloroacetic acid (TCA, 4%) — this precipitates proteins.</li>
+              <li>Mix and filter.</li>
+              <li>Observe the filtrate.</li>
+            </ol>
+            <p><strong>Clear filtrate:</strong> Normal milk</p>
+            <p><strong>Turbid/Milky filtrate:</strong> Indication of water and/or synthetic milk adulteration</p>
+          `
+        },
+          // ==================== SHELF LIFE TESTS ====================
+          {
+            title: "Accelerated Shelf Life Test (Moseley / Keeping Quality Test)",
+            purpose: "To predict the keeping quality of pasteurized milk — obtaining quick results through incubation.",
+            reference: "IS 1479 (Part III) 1977; BIS Standards",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+              <p>Pasteurized milk samples are incubated at an elevated temperature (such as 35-37°C) to accelerate bacterial growth. After incubation, acidity, pH, organoleptic changes, and bacterial count are measured. If the milk remains within acceptable limits after incubation, its shelf life is considered good.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Method 1: Moseley Keeping Quality Test</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Take two sets of pasteurized milk samples — one "test" set and one "control" set.</li>
+                <li><strong>Test samples:</strong> Place in an incubator at 37°C.</li>
+                <li><strong>Control samples:</strong> Place in a refrigerator at 4°C.</li>
+                <li>After incubation (typically 24 hours), measure the titratable acidity of both sets.</li>
+                <li>Calculate the difference in acidity.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">📐 Explanation of Formulas and Factors:</h4>
+              <div class="bg-blue-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Acidity Measurement Formula (Titratable Acidity):</strong></p>
+                <pre><code>% Acidity (as lactic acid) = (9 × V × N) / W</code></pre>
+                <p class="text-xs mt-1">V = NaOH volume (ml), N = NaOH normality, W = sample weight (g)</p>
+                
+                <p class="mt-2"><strong>Where does the factor "9" come from?</strong></p>
+                <p class="text-sm">The molecular weight of lactic acid = 90 g/mol. It is a monoprotic acid (donates 1 H⁺), so the equivalent weight = 90. Formula derivation:</p>
+                <pre><code>% = (V × N × Eq.Wt.) / (1000 × W) × 100 = (V × N × 90 × 100) / (1000 × W) = (9 × V × N) / W</code></pre>
+                
+                <p class="mt-2"><strong>Keeping Quality Formula:</strong></p>
+                <pre><code>Acidity Difference = Incubated Acidity (37°C/24h) − Control Acidity (4°C/24h)</code></pre>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">🔑 Why Each Temperature/Time Factor?</h4>
+              <div class="bg-yellow-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Why 37°C?</strong> — Most dairy spoilage bacteria (Lactobacillus, Streptococcus, E. coli) are mesophilic — their optimum growth temperature is 30-40°C. 37°C = human body temperature ≈ fastest bacterial multiplication. A single bacterium doubles every 20-30 minutes at 37°C. In 24 hours, one bacterium can become → 2⁴⁸ = ~2.8 × 10¹⁴ (under ideal conditions)!</p>
+                
+                <p class="mt-2"><strong>Why 4°C (Control)?</strong> — This is the standard refrigeration temperature. At 4°C, mesophilic bacteria remain nearly dormant — growth is negligible. Therefore, the control's acidity remains ~unchanged. It provides a baseline.</p>
+                
+                <p class="mt-2"><strong>Why 24 hours?</strong> — 24 hours at 37°C ≈ equivalent bacterial growth to 4-5 days at 4°C. It is "accelerated" because according to the Q₁₀ rule: <em>For every 10°C increase in temperature, the bacterial growth rate increases ~2-3 fold.</em></p>
+                <pre><code>Q₁₀ Rule: Rate₂ / Rate₁ = Q₁₀^((T₂-T₁)/10)
+Example: Q₁₀ = 2.5, T₁ = 4°C, T₂ = 37°C
+Rate ratio = 2.5^((37-4)/10) = 2.5^3.3 = ~21×
+Meaning 24h at 37°C ≈ equivalent to 21 days at 4°C (approximately)</code></pre>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 1 (Good Quality Milk):</h4>
+              <div class="bg-green-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Given:</strong> Pasteurized toned milk sample. 0.1N NaOH used. Sample weight = 10 g each.</p>
+                <p><strong>Control sample (4°C/24h):</strong> NaOH volume used = 1.5 ml</p>
+                <pre><code>Control Acidity = (9 × 1.5 × 0.1) / 10 = 1.35 / 10 = 0.135% LA</code></pre>
+                
+                <p><strong>Test sample (37°C/24h):</strong> NaOH volume used = 1.7 ml</p>
+                <pre><code>Test Acidity = (9 × 1.7 × 0.1) / 10 = 1.53 / 10 = 0.153% LA</code></pre>
+                
+                <pre><code>Acidity Difference = 0.153 - 0.135 = 0.018% LA</code></pre>
+                
+                <p><strong>Result: 0.018% < 0.02% → ✅ EXCELLENT keeping quality!</strong></p>
+                <p>This means bacteria are very few in the pasteurized milk. Expected shelf life: 5+ days at 4°C.</p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 2 (Poor Quality Milk):</h4>
+              <div class="bg-red-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Given:</strong> Another batch. Same conditions.</p>
+                <p><strong>Control sample (4°C/24h):</strong> NaOH = 1.5 ml → Acidity = 0.135% LA</p>
+                <p><strong>Test sample (37°C/24h):</strong> NaOH = 2.9 ml</p>
+                <pre><code>Test Acidity = (9 × 2.9 × 0.1) / 10 = 2.61 / 10 = 0.261% LA</code></pre>
+                <pre><code>Acidity Difference = 0.261 - 0.135 = 0.126% LA</code></pre>
+                
+                <p><strong>Result: 0.126% > 0.10% → ❌ POOR keeping quality!</strong></p>
+                <p>Bacteria were very high — possibly due to post-pasteurization contamination or under-pasteurization. Expected shelf life: < 2 days. Investigation of this batch is necessary!</p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Interpretation:</h4>
+              <pre><code>Acidity Difference = Incubated Acidity - Control Acidity</code></pre>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Acidity Increase (% LA)</th><th class="border p-2">Keeping Quality</th><th class="border p-2">Expected Shelf Life at 4°C</th><th class="border p-2">Approx. Bacterial Load</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2">&lt; 0.02%</td><td class="border p-2">Excellent</td><td class="border p-2">5+ days</td><td class="border p-2">&lt; 10,000 CFU/ml</td></tr>
+                  <tr><td class="border p-2">0.02 - 0.05%</td><td class="border p-2">Good</td><td class="border p-2">3-5 days</td><td class="border p-2">10,000 - 50,000 CFU/ml</td></tr>
+                  <tr><td class="border p-2">0.05 - 0.10%</td><td class="border p-2">Fair</td><td class="border p-2">2-3 days</td><td class="border p-2">50,000 - 5,00,000 CFU/ml</td></tr>
+                  <tr><td class="border p-2">&gt; 0.10%</td><td class="border p-2">Poor</td><td class="border p-2">&lt; 2 days</td><td class="border p-2">&gt; 5,00,000 CFU/ml</td></tr>
+                </tbody>
+              </table>
+
+              <h4 class="font-semibold mt-4 mb-2">Method 2: Extended Keeping Quality at Refrigeration</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Store multiple sealed samples at 4-7°C.</li>
+                <li>Remove one sample every 24 hours and test — acidity, pH, sensory, coliform count.</li>
+                <li>The day when any parameter fails is the limit of the shelf life.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">⚠️ Critical Limits (Fail Criteria):</h4>
+              <div class="bg-gray-50 p-3 rounded mt-2">
+                <ul class="list-disc list-outside pl-5 space-y-1">
+                  <li>Acidity > 0.18% LA → milk is beginning to sour</li>
+                  <li>pH < 6.4 → significant acid production</li>
+                  <li>Acidity > 0.20% → COB test positive → unfit for market</li>
+                  <li>Acidity > 0.24% → clot on boiling → completely spoiled</li>
+                  <li>Sensory score < 5 → consumer unacceptable</li>
+                </ul>
+              </div>
+            `
+          },
+          {
+            title: "Turbidity Test (for UHT / Sterilized Milk)",
+            purpose: "To verify the sterility and completeness of heat treatment of UHT or sterilized milk.",
+            reference: "IS 7982:1976; IDF Standard",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+              <p>In properly sterilized milk, all whey proteins are denatured. When this milk is boiled, no turbidity or precipitate forms. However, if the heat treatment is incomplete (under-processed), undenatured whey proteins will precipitate upon boiling — turbidity will be visible. This test is an important quality check for UHT milk.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">📐 Explanation of Scientific Factors:</h4>
+              <div class="bg-blue-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Whey Protein Denaturation Temperature:</strong></p>
+                <ul class="list-disc list-outside pl-5 space-y-1">
+                  <li><strong>β-Lactoglobulin (β-Lg):</strong> Denaturation begins at ~65°C, significant denaturation at 72-80°C, near-complete at >90°C</li>
+                  <li><strong>α-Lactalbumin (α-La):</strong> More heat-stable, denaturation at ~75-85°C</li>
+                  <li><strong>BSA (Bovine Serum Albumin):</strong> Denatures at ~70°C</li>
+                </ul>
+                
+                <p class="mt-2"><strong>UHT Treatment:</strong> 135-150°C for 2-5 seconds — at this temperature >99% of whey proteins are denatured.</p>
+                <p><strong>HTST Pasteurization:</strong> 72°C/15 sec — only ~70-80% of β-Lg is denatured → the turbidity test will FAIL (this is expected — this test is only for UHT/sterilized milk).</p>
+                
+                <p class="mt-2"><strong>How to calculate the percentage of denaturation:</strong></p>
+                <pre><code>% Denaturation = [(Native WP in raw − Native WP in heated) / Native WP in raw] × 100
+
+Example: β-Lg in raw milk = 3.2 mg/ml
+β-Lg in UHT milk = 0.05 mg/ml
+% Denaturation = [(3.2 − 0.05) / 3.2] × 100 = 98.4%
+→ Properly processed! Turbidity test will PASS.</code></pre>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">🔑 Ammonium Sulphate Method — Why 4 grams in 20 ml?</h4>
+              <div class="bg-yellow-50 p-3 rounded mt-2 mb-2">
+                <p><strong>4 g (NH₄)₂SO₄ in 20 ml milk = 20% (w/v) saturation</strong></p>
+                <p>At this concentration:</p>
+                <ul class="list-disc list-outside pl-5 space-y-1">
+                  <li><strong>Casein:</strong> Precipitates (removed by filtration)</li>
+                  <li><strong>Denatured whey proteins:</strong> Precipitate (also removed)</li>
+                  <li><strong>Native (undenatured) whey proteins:</strong> Remain soluble — they come through in the filtrate!</li>
+                </ul>
+                <p class="mt-1">When the filtrate is boiled → native whey proteins <strong>denature from the heat</strong> → aggregate → <strong>TURBIDITY</strong>!</p>
+                <p class="mt-1"><strong>"Salting Out" principle:</strong> Ammonium sulphate removes the hydration shell of proteins. Denatured proteins (already unfolded) have exposed hydrophobic surfaces — they precipitate easily. Native proteins (folded, hydrophilic surface) remain soluble at 20% saturation.</p>
+                
+                <p class="mt-2"><strong>Why exactly 20% saturation?</strong></p>
+                <p class="text-sm">Full saturation of (NH₄)₂SO₄ at 20°C = ~76.7 g/100 ml. 20% saturation = ~15.3 g/100 ml ≈ 3-4 g/20 ml. Selective precipitation occurs at this concentration — only denatured + casein precipitate, while native whey remains soluble. If a higher concentration is used → native proteins will also precipitate → false negative (no turbidity will be seen even if under-processed).</p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Take 5 ml of UHT/sterilized milk in a test tube.</li>
+                <li>Place the test tube in a boiling water bath for 5 minutes.</li>
+                <li>Remove the tube and filter through filter paper.</li>
+                <li>Observe the filtrate — clear or turbid?</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Alternative Method (Ammonium Sulphate):</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Add 4 grams of ammonium sulphate to 20 ml milk.</li>
+                <li>Mix and dissolve.</li>
+                <li>Filter.</li>
+                <li>Boil the filtrate.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 1 (Properly Processed UHT):</h4>
+              <div class="bg-green-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Sample:</strong> Amul Taaza UHT milk (200 ml Tetra Pak)</p>
+                <p><strong>Step 1:</strong> 20 ml milk + 4 g (NH₄)₂SO₄ → dissolve → filter</p>
+                <p><strong>Step 2:</strong> Clear filtrate obtained (casein + denatured whey removed)</p>
+                <p><strong>Step 3:</strong> Filtrate boiled for 5 min</p>
+                <p><strong>Observation:</strong> Filtrate remained CLEAR — no turbidity appeared</p>
+                <p><strong>Result: ✅ PASS — UHT treatment complete. All whey proteins were denatured at 135°C/4 sec. Expected shelf life: 3-6 months (room temp, sealed).</strong></p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 2 (Under-Processed Milk):</h4>
+              <div class="bg-red-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Sample:</strong> A batch where the UHT plant's holding tube was too short — actual temperature was 125°C/2 sec (instead of 135°C/4 sec)</p>
+                <p><strong>Step 1:</strong> 20 ml milk + 4 g (NH₄)₂SO₄ → dissolve → filter</p>
+                <p><strong>Step 2:</strong> Filtrate obtained</p>
+                <p><strong>Step 3:</strong> Filtrate boiled</p>
+                <p><strong>Observation:</strong> Filtrate became TURBID/CLOUDY — white precipitate visible</p>
+                <p><strong>Result: ❌ FAIL — Undenatured β-Lg and α-La were present, which aggregated upon boiling. Shelf life: only 2-3 weeks (instead of months). Batch REJECT — reprocessing required!</strong></p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Interpretation:</h4>
+              <p><strong>Clear filtrate (no turbidity after boiling):</strong> PASS — Milk is properly sterilized, whey proteins are fully denatured. Good shelf life is expected.</p>
+              <p><strong>Turbid/Cloudy filtrate:</strong> FAIL — Heat treatment was incomplete. Undenatured whey proteins are present. Shelf life will be short, reprocessing is needed.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Importance for Shelf Life:</h4>
+              <p>UHT milk that passes the turbidity test can safely last 3-6 months at room temperature. If it fails, spoilage may occur within 2-3 weeks.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">⚠️ Important Note:</h4>
+              <div class="bg-gray-50 p-3 rounded mt-2">
+                <p><strong>This test does NOT apply to pasteurized milk!</strong> In pasteurized milk (72°C/15 sec), whey proteins are only partially denatured — so it will always show turbidity. This test is ONLY for UHT (135-150°C) and sterilized (121°C/15 min) milk.</p>
+                <p class="mt-1"><strong>Why boil for 5 minutes?</strong> — 5 minutes of boiling ensures that whatever native whey proteins are present completely aggregate and produce visible turbidity. With less time, faint turbidity may be missed.</p>
+              </div>
+            `
+          },
+          {
+            title: "Pre-Incubation Count (Preliminary Incubation - PI Count)",
+            purpose: "Assessment of psychrotrophic bacteria in pasteurized milk — these bacteria grow even at refrigeration temperatures and reduce shelf life.",
+            reference: "Standard Methods for the Examination of Dairy Products (APHA); IDF 100B:1991",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+              <p>Pasteurized milk is first pre-incubated at 7°C or 13°C for a set period to allow psychrotrophic (cold-loving) bacteria to grow. Then a Standard Plate Count (SPC) is performed. If the count is very high, it means either the raw milk had too many psychrotrophs or post-pasteurization contamination occurred — in both cases, the shelf life will be reduced.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">📐 Scientific Explanation of Temperatures and Times:</h4>
+              <div class="bg-blue-50 p-3 rounded mt-2 mb-2">
+                <p><strong>WHY 13°C / 18 hours?</strong></p>
+                <p>Generation time (doubling time) of psychrotrophic bacteria:</p>
+                <ul class="list-disc list-outside pl-5 space-y-1">
+                  <li>At 4°C: ~8-12 hours (one division takes 8-12 hours)</li>
+                  <li>At 7°C: ~4-6 hours</li>
+                  <li>At 13°C: ~2-3 hours</li>
+                  <li>At 21°C: ~1-1.5 hours</li>
+                </ul>
+                <p class="mt-1"><strong>18 hours at 13°C</strong> ≈ 6-9 generations of psychrotrophs</p>
+                <p><strong>10 days at 7°C (240 hours)</strong> ≈ 20-60 generations</p>
+                <p>The 13°C/18h method is FASTER but the 7°C/10d method is MORE REALISTIC (actual fridge simulation).</p>
+                
+                <p class="mt-2"><strong>Q₁₀ Calculation:</strong></p>
+                <pre><code>Growth rate at 13°C / Growth rate at 7°C ≈ Q₁₀^((13-7)/10) 
+= ~2.0^0.6 = ~1.52 times faster
+
+So: 18 hours at 13°C ≈ 18 × 1.52 = ~27 hours at 7°C (roughly)
+But with lag phase adjustment, 18h/13°C ≈ 2-3 days at 7°C</code></pre>
+                
+                <p class="mt-2"><strong>WHY 32°C / 48 hours (SPC incubation)?</strong></p>
+                <p>32°C is used in Standard Plate Count because it is in the lower optimum range for mesophilic bacteria. 48 hours is sufficient for colonies to grow to visible size (0.5-2 mm). 37°C can also be used but at 32°C a wider range of organisms grow, including some psychrotrophs.</p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">🔑 SPC Formula and Dilution Factor:</h4>
+              <div class="bg-yellow-50 p-3 rounded mt-2 mb-2">
+                <pre><code>PI Count (CFU/ml) = Colony Count / (Dilution Factor × Volume Plated)
+
+Where:
+- Colony Count = colonies counted on plates (30-300 range is valid)
+- Dilution Factor = 10⁻¹, 10⁻², 10⁻³, etc.
+- Volume Plated = 1 ml (pour plate) or 0.1 ml (spread plate)</code></pre>
+                
+                <p class="mt-2"><strong>Why count only 30-300 colonies?</strong></p>
+                <ul class="list-disc list-outside pl-5 space-y-1">
+                  <li><strong>&lt; 30 colonies:</strong> Statistically unreliable — sampling error will be too high</li>
+                  <li><strong>&gt; 300 colonies:</strong> Overcrowding — colonies merge, nutrient competition occurs → undercount</li>
+                  <li><strong>30-300 range:</strong> Statistically valid and practically countable</li>
+                </ul>
+                
+                <p class="mt-2"><strong>How does serial dilution work?</strong></p>
+                <pre><code>Original milk → 1 ml + 9 ml diluent = 10⁻¹ (1/10th)
+10⁻¹ → 1 ml + 9 ml diluent = 10⁻² (1/100th)
+10⁻² → 1 ml + 9 ml diluent = 10⁻³ (1/1000th)
+... and so on</code></pre>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Procedure (Method 1: 13°C / 18 hours):</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Aseptically collect the pasteurized milk sample.</li>
+                <li>Incubate the sample at 13°C for 18 hours (accelerated growth conditions).</li>
+                <li>After incubation, perform a Standard Plate Count (SPC) — using the pour plate method, on PCA agar, at 32°C/48 hours.</li>
+                <li>Count the colonies.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Procedure (Method 2: 7°C / 10 days):</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Store the sample at 7°C for 10 days (real refrigeration simulation).</li>
+                <li>Remove a sample every 2 days and perform SPC.</li>
+                <li>Plot a growth curve.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 1 (Excellent Quality):</h4>
+              <div class="bg-green-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Sample:</strong> Pasteurized toned milk, Brand A, Batch #2024-05-15</p>
+                <p><strong>Pre-incubation:</strong> 13°C / 18 hours</p>
+                <p><strong>Plating:</strong> 1 ml of 10⁻² dilution plated on PCA</p>
+                <p><strong>Incubation:</strong> 32°C / 48 hours</p>
+                <p><strong>Colony Count:</strong> 38 colonies on the 10⁻² plate</p>
+                <pre><code>PI Count = 38 / (10⁻² × 1) = 38 / 0.01 = 3,800 CFU/ml</code></pre>
+                <p><strong>Result: 3,800 CFU/ml < 50,000 → ✅ EXCELLENT!</strong></p>
+                <p>Expected shelf life: 5+ days at 4°C. Plant hygiene is good, post-pasteurization contamination is negligible.</p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 2 (Poor Quality):</h4>
+              <div class="bg-red-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Sample:</strong> Pasteurized full cream milk, Brand B, Batch #2024-05-16</p>
+                <p><strong>Pre-incubation:</strong> 13°C / 18 hours</p>
+                <p><strong>Plating:</strong> Multiple dilutions plated</p>
+                <p><strong>Results:</strong></p>
+                <ul class="list-disc list-outside pl-5">
+                  <li>10⁻³ plate: TNTC (Too Numerous To Count — &gt;300)</li>
+                  <li>10⁻⁴ plate: 85 colonies</li>
+                  <li>10⁻⁵ plate: 9 colonies (too few, &lt;30)</li>
+                </ul>
+                <pre><code>PI Count = 85 / (10⁻⁴ × 1) = 85 / 0.0001 = 8,50,000 CFU/ml
+= 8.5 × 10⁵ CFU/ml</code></pre>
+                <p><strong>Result: 8,50,000 CFU/ml → range 5,00,000 - 50,00,000 → ⚠️ FAIR</strong></p>
+                <p>Expected shelf life: only 2-3 days at 4°C. Investigation needed — check the filler machine, pipe joints, packaging material contamination.</p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Interpretation:</h4>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">PI Count (after 13°C/18h)</th><th class="border p-2">Assessment</th><th class="border p-2">Expected Shelf Life</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2">&lt; 50,000 CFU/ml</td><td class="border p-2">Excellent</td><td class="border p-2">5+ days (at 4°C)</td></tr>
+                  <tr><td class="border p-2">50,000 - 5,00,000 CFU/ml</td><td class="border p-2">Good</td><td class="border p-2">3-4 days</td></tr>
+                  <tr><td class="border p-2">5,00,000 - 50,00,000 CFU/ml</td><td class="border p-2">Fair</td><td class="border p-2">2-3 days</td></tr>
+                  <tr><td class="border p-2">&gt; 50,00,000 CFU/ml</td><td class="border p-2">Poor</td><td class="border p-2">&lt; 2 days</td></tr>
+                </tbody>
+              </table>
+
+              <h4 class="font-semibold mt-4 mb-2">Key Psychrotrophic Organisms:</h4>
+              <p>Pseudomonas spp. (most common — 60-70% of psychrotrophic flora), Bacillus cereus, Enterobacter, Acinetobacter — all of these grow at refrigeration temperatures (4-7°C) and produce lipases/proteases that make milk bitter/rancid.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">🔑 PCA (Plate Count Agar) Composition — Why this media?</h4>
+              <div class="bg-gray-50 p-3 rounded mt-2">
+                <p>PCA = Tryptone (5g) + Yeast Extract (2.5g) + Glucose (1g) + Agar (15g) per litre</p>
+                <p><strong>This is a non-selective, nutrient-poor media</strong> — so the maximum variety of bacteria can grow. On rich media (such as BHI), fast-growers dominate and slow-growers are suppressed. PCA gives everyone an equal chance.</p>
+                <p><strong>Why pour at 45°C?</strong> — Agar is molten at 45°C but does not kill bacteria (thermal death point for most is >50°C). If poured above 50°C → bacteria will die → count will be lower.</p>
+              </div>
+            `
+          },
+          {
+            title: "Standard Plate Count / Total Plate Count (TPC) — Shelf Life Monitoring",
+            purpose: "Total viable bacteria count in milk — monitoring microbial load during shelf life.",
+            reference: "IS 5402:2012; FSSAI Microbiological Standards; A.O.A.C 990.12",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+              <p>Serial dilutions of milk are poured onto nutrient agar plates and incubated. Each viable bacterium forms a visible colony. The total bacteria per ml is calculated from the colony count. In shelf life studies, this test is performed at different time intervals to determine the bacterial growth curve.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">📐 TPC Formula — Detailed Breakdown:</h4>
+              <div class="bg-blue-50 p-3 rounded mt-2 mb-2">
+                <pre><code>TPC (CFU/ml) = Colony Count / (Dilution Factor × Volume Plated)</code></pre>
+                
+                <p class="mt-2"><strong>Full form of CFU:</strong> Colony Forming Unit — this is the unit for "viable bacteria." Each colony originated from one or more bacteria.</p>
+                
+                <p class="mt-2"><strong>What is the Dilution Factor?</strong></p>
+                <pre><code>If 1 ml sample + 9 ml diluent = 10 ml total
+Dilution = 1/10 = 10⁻¹
+
+Serial dilutions:
+10⁻¹ → 10⁻² → 10⁻³ → 10⁻⁴ → 10⁻⁵
+
+Dilution Factor = reciprocal of dilution
+Dilution Factor of 10⁻³ = 1000 (or 10³)
+Alternatively: Dilution Factor = 10⁻³ = 0.001</code></pre>
+
+                <p class="mt-2"><strong>When multiple plates are available (APHA rule):</strong></p>
+                <pre><code>TPC = Σ(all colonies from countable plates) / Σ(ml plated × dilution factor for each plate)
+
+Example: 10⁻³ plate = 256 colonies, 10⁻⁴ plate = 28 colonies
+TPC = (256 + 28) / [(1 × 10⁻³) + (1 × 10⁻⁴)]
+  = 284 / (0.001 + 0.0001)  
+  = 284 / 0.0011
+  = 2,58,182 ≈ 2.6 × 10⁵ CFU/ml</code></pre>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">🔑 Explanation of Each Factor:</h4>
+              <div class="bg-yellow-50 p-3 rounded mt-2 mb-2">
+                <p><strong>37°C vs 32°C incubation — which to use?</strong></p>
+                <ul class="list-disc list-outside pl-5 space-y-1">
+                  <li><strong>37°C / 48h:</strong> FSSAI standard — optimized for pathogens and indicator organisms</li>
+                  <li><strong>32°C / 48h:</strong> IDF/APHA standard — a wider range of dairy organisms are counted, including some psychrotrophs</li>
+                  <li><strong>32°C is preferred in the dairy industry</strong> because it better represents the dairy-specific flora</li>
+                </ul>
+                
+                <p class="mt-2"><strong>Why pour ~15 ml agar?</strong></p>
+                <p>15 ml agar gives a plate thickness of ~3-4 mm. Less agar → plate dries out quickly → colonies will not form properly. More agar → colonies will be too deep inside the agar → difficult to count.</p>
+                
+                <p class="mt-2"><strong>Why 0.1% Peptone Water (diluent)?</strong></p>
+                <p>Plain distilled water is hypotonic → osmotic lysis of bacteria can occur → count will be low. Peptone water provides an isotonic-like environment that keeps bacteria viable during dilution.</p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Aseptically collect the milk sample.</li>
+                <li>Prepare serial dilutions — 10⁻¹, 10⁻², 10⁻³, 10⁻⁴, 10⁻⁵ etc. (in 0.1% peptone water or phosphate buffer).</li>
+                <li>Add 1 ml of the diluted sample to a sterile petri dish.</li>
+                <li>Pour ~15 ml of molten Plate Count Agar (PCA, cooled to 45°C).</li>
+                <li>Gently rotate to mix (figure-of-8 motion). Allow to solidify.</li>
+                <li>Incubate plates at 37°C for 48 hours (or 32°C for 48h for mesophilic count).</li>
+                <li>Count plates with 30-300 colonies.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 1 — Day 0 (Production Day):</h4>
+              <div class="bg-green-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Sample:</strong> Freshly pasteurized toned milk</p>
+                <p><strong>Dilutions plated:</strong> 10⁻¹, 10⁻², 10⁻³ (1 ml each)</p>
+                <p><strong>After 48h at 32°C:</strong></p>
+                <ul class="list-disc list-outside pl-5">
+                  <li>10⁻¹ plate: TNTC (>300)</li>
+                  <li>10⁻² plate: 125 colonies ✓ (within the 30-300 range)</li>
+                  <li>10⁻³ plate: 14 colonies (too few)</li>
+                </ul>
+                <pre><code>TPC = 125 / (10⁻² × 1 ml) = 125 / 0.01 = 12,500 CFU/ml</code></pre>
+                <p><strong>Result: 12,500 CFU/ml < 30,000 → ✅ PASS for dispatch!</strong></p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 2 — Shelf Life Monitoring (Day 3):</h4>
+              <div class="bg-orange-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Same batch, Day 3 (stored at 4°C):</strong></p>
+                <p><strong>Dilutions plated:</strong> 10⁻², 10⁻³, 10⁻⁴</p>
+                <p><strong>After 48h at 32°C:</strong></p>
+                <ul class="list-disc list-outside pl-5">
+                  <li>10⁻² plate: TNTC</li>
+                  <li>10⁻³ plate: 245 colonies ✓</li>
+                  <li>10⁻⁴ plate: 22 colonies</li>
+                </ul>
+                <pre><code>TPC = 245 / (10⁻³ × 1) = 245 / 0.001 = 2,45,000 CFU/ml</code></pre>
+                <p><strong>Result: 2,45,000 CFU/ml > 1,00,000 → ❌ Exceeds retail limit!</strong></p>
+                <p><strong>Conclusion: This batch's shelf life = 2 days (it was okay until Day 2, failed on Day 3). Set the best-before date accordingly.</strong></p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Bacterial Growth Curve Example (Shelf Life Study):</h4>
+              <div class="bg-gray-50 p-3 rounded mt-2 mb-2">
+                <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                  <thead><tr class="bg-gray-100"><th class="border p-2">Day</th><th class="border p-2">TPC (CFU/ml)</th><th class="border p-2">Log₁₀ TPC</th><th class="border p-2">Status</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border p-2">0</td><td class="border p-2">12,500</td><td class="border p-2">4.10</td><td class="border p-2">✅ Pass</td></tr>
+                    <tr><td class="border p-2">1</td><td class="border p-2">18,000</td><td class="border p-2">4.26</td><td class="border p-2">✅ Pass</td></tr>
+                    <tr><td class="border p-2">2</td><td class="border p-2">45,000</td><td class="border p-2">4.65</td><td class="border p-2">✅ Pass</td></tr>
+                    <tr><td class="border p-2">3</td><td class="border p-2">2,45,000</td><td class="border p-2">5.39</td><td class="border p-2">❌ Fail</td></tr>
+                    <tr><td class="border p-2">4</td><td class="border p-2">18,50,000</td><td class="border p-2">6.27</td><td class="border p-2">❌ Rejected</td></tr>
+                    <tr><td class="border p-2">5</td><td class="border p-2">4,20,00,000</td><td class="border p-2">7.62</td><td class="border p-2">❌ Sour/curdled</td></tr>
+                  </tbody>
+                </table>
+                <p class="mt-2"><strong>Shelf life = Day 2 (last day TPC < 1 lakh). Best-before = Day 2 with 20% safety margin ≈ print "Use within 2 days".</strong></p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">FSSAI Standards for Market Milk:</h4>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Product</th><th class="border p-2">TPC Limit (CFU/ml)</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2">Pasteurized Milk (at dispatch)</td><td class="border p-2">≤ 30,000</td></tr>
+                  <tr><td class="border p-2">Pasteurized Milk (at retail)</td><td class="border p-2">≤ 1,00,000</td></tr>
+                  <tr><td class="border p-2">UHT Milk (commercially sterile)</td><td class="border p-2">No growth after incubation</td></tr>
+                  <tr><td class="border p-2">Sterilized Milk</td><td class="border p-2">No growth after incubation</td></tr>
+                </tbody>
+              </table>
+
+              <h4 class="font-semibold mt-4 mb-2">Shelf Life Monitoring Protocol:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-1">
+                <li>Day 0 (production day): TPC check</li>
+                <li>Day 1, 2, 3, 4, 5: Perform TPC on one sample each day</li>
+                <li>When TPC crosses 1 lakh — that is the shelf life limit</li>
+                <li>Conduct sensory evaluation alongside</li>
+              </ol>
+            `
+          },
+          {
+            title: "Coliform Count — Post-Pasteurization Contamination Check",
+            purpose: "Presence of coliform bacteria — a direct indicator of post-pasteurization contamination that drastically reduces shelf life.",
+            reference: "IS 5401 (Part 1):2012; FSSAI Standards",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+              <p>Coliform bacteria (E. coli, Klebsiella, Enterobacter) are destroyed by pasteurization. If coliforms are found in pasteurized milk, it means the milk was contaminated AFTER pasteurization — from equipment, packaging, or handling. The presence of coliforms greatly reduces shelf life.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">📐 Coliform Count Formulas and Factors:</h4>
+              <div class="bg-blue-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Method 1 Formula (VRBA Pour Plate):</strong></p>
+                <pre><code>Coliform Count (CFU/ml) = Dark red colonies with halo / (Dilution × Volume)
+
+Example: 8 typical colonies on undiluted (10⁰) 1 ml plate
+Count = 8 / (1 × 1) = 8 CFU/ml</code></pre>
+
+                <p class="mt-2"><strong>Method 2 Formula (MPN Method):</strong></p>
+                <pre><code>MPN = Most Probable Number (statistical estimate)
+3-tube method: 3 sets of 3 tubes each
+- Set 1: 10 ml sample per tube
+- Set 2: 1 ml sample per tube  
+- Set 3: 0.1 ml sample per tube
+
+Result read as: Positive tubes in each set → MPN table → Coliform/ml</code></pre>
+                
+                <p class="mt-2"><strong>Components of VRBA Agar — Why is it selective?</strong></p>
+                <ul class="list-disc list-outside pl-5 space-y-1">
+                  <li><strong>Crystal Violet:</strong> Inhibits Gram-positive bacteria → only Gram-negative organisms grow</li>
+                  <li><strong>Bile Salts:</strong> Inhibit non-enteric bacteria → only intestinal-type bacteria grow</li>
+                  <li><strong>Neutral Red:</strong> pH indicator — acid production results in red colonies</li>
+                  <li><strong>Lactose:</strong> Coliforms ferment lactose → produce acid + gas → red colonies with precipitate halo</li>
+                </ul>
+                
+                <p class="mt-2"><strong>Why an overlay (double layer)?</strong></p>
+                <p>The second VRBA layer restricts aerobic growth. Coliforms are facultative anaerobes — they grow under anaerobic conditions as well. Growth of surface-spreading organisms (non-coliforms like Pseudomonas) is prevented.</p>
+                
+                <p class="mt-2"><strong>Explanation of the FSSAI Sampling Plan (n=5, c=1, m=&lt;1, M=10):</strong></p>
+                <ul class="list-disc list-outside pl-5 space-y-1">
+                  <li><strong>n=5:</strong> Test 5 samples from one batch</li>
+                  <li><strong>c=1:</strong> A maximum of 1 sample between m and M can be accepted</li>
+                  <li><strong>m=&lt;1:</strong> Acceptable level = &lt;1 CFU/ml (essentially zero)</li>
+                  <li><strong>M=10:</strong> Maximum allowable = 10 CFU/ml. Any sample above this → BATCH REJECT</li>
+                </ul>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Method 1: Violet Red Bile Agar (VRBA) Pour Plate</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Add 1 ml of milk (or appropriate dilution) to a sterile petri dish.</li>
+                <li>Pour ~15 ml VRBA agar (45°C), and mix.</li>
+                <li>After solidification, pour another thin layer of VRBA (overlay — for anaerobic conditions).</li>
+                <li>Incubate at 37°C for 24 ± 2 hours.</li>
+                <li>Count dark red colonies with bile precipitate halo — these are coliforms.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Method 2: MPN Method (LST Broth)</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Inoculate 3 tubes each with sample volumes of 10 ml, 1 ml, and 0.1 ml.</li>
+                <li>Incubate at 37°C for 24-48 hours.</li>
+                <li>Count tubes showing gas production as positive.</li>
+                <li>Determine the coliform count from the MPN table.</li>
+                <li>Confirm positive tubes in Brilliant Green Bile Broth.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 1 (VRBA Method — Good Quality):</h4>
+              <div class="bg-green-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Sample:</strong> Pasteurized toned milk, 5 packs from Batch #101</p>
+                <p><strong>1 ml undiluted sample per plate, VRBA, 37°C/24h:</strong></p>
+                <table class="table-auto border-collapse border border-gray-300 mt-1 text-sm">
+                  <tr><td class="border p-1">Pack 1</td><td class="border p-1">0 colonies</td></tr>
+                  <tr><td class="border p-1">Pack 2</td><td class="border p-1">0 colonies</td></tr>
+                  <tr><td class="border p-1">Pack 3</td><td class="border p-1">2 colonies</td></tr>
+                  <tr><td class="border p-1">Pack 4</td><td class="border p-1">0 colonies</td></tr>
+                  <tr><td class="border p-1">Pack 5</td><td class="border p-1">0 colonies</td></tr>
+                </table>
+                <p class="mt-1"><strong>Assessment:</strong> 4 samples = &lt;1 (m satisfied). 1 sample = 2 CFU/ml (between m and M). c=1 allowed.</p>
+                <p><strong>Result: ✅ BATCH ACCEPTED. Coliform level negligible. Good shelf life expected.</strong></p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 2 (MPN Method — Poor Quality):</h4>
+              <div class="bg-red-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Sample:</strong> Pasteurized milk from a small dairy, Batch #55</p>
+                <p><strong>LST Broth MPN (3-tube method):</strong></p>
+                <table class="table-auto border-collapse border border-gray-300 mt-1 text-sm">
+                  <thead><tr class="bg-gray-100"><th class="border p-1">Sample Vol</th><th class="border p-1">Tube 1</th><th class="border p-1">Tube 2</th><th class="border p-1">Tube 3</th><th class="border p-1">Positive</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border p-1">10 ml</td><td class="border p-1">Gas +</td><td class="border p-1">Gas +</td><td class="border p-1">Gas +</td><td class="border p-1">3</td></tr>
+                    <tr><td class="border p-1">1 ml</td><td class="border p-1">Gas +</td><td class="border p-1">Gas +</td><td class="border p-1">Gas -</td><td class="border p-1">2</td></tr>
+                    <tr><td class="border p-1">0.1 ml</td><td class="border p-1">Gas -</td><td class="border p-1">Gas +</td><td class="border p-1">Gas -</td><td class="border p-1">1</td></tr>
+                  </tbody>
+                </table>
+                <p class="mt-1"><strong>MPN combination: 3-2-1</strong></p>
+                <p>From the MPN table: <strong>3-2-1 = 150 MPN/ml</strong></p>
+                <p><strong>Result: 150 CFU/ml >> 10 (M value) → ❌ BATCH REJECT!</strong></p>
+                <p>Root cause: The O-ring of the filler machine was damaged → post-pasteurization contamination. Shelf life will be reduced by more than 50%. Machine maintenance required!</p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">FSSAI Limits:</h4>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Product</th><th class="border p-2">Coliform Limit</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2">Pasteurized Milk</td><td class="border p-2">≤ 10 CFU/ml (n=5, c=1, m=&lt;1, M=10)</td></tr>
+                  <tr><td class="border p-2">UHT Milk</td><td class="border p-2">Absent in 1 ml</td></tr>
+                  <tr><td class="border p-2">Sterilized Milk</td><td class="border p-2">Absent in 1 ml</td></tr>
+                </tbody>
+              </table>
+
+              <h4 class="font-semibold mt-4 mb-2">Impact on Shelf Life:</h4>
+              <p>If the coliform count is >10 CFU/ml, shelf life can be reduced by up to 50%. High coliforms = post-pasteurization contamination = equipment cleaning issues.</p>
+            `
+          },
+          {
+            title: "Sterility Test (for UHT / Sterilized Milk)",
+            purpose: "To verify the commercial sterility of UHT and sterilized milk — this is the basis for long shelf life.",
+            reference: "IS 7982:1976; FSSAI Regulations; Codex Alimentarius CAC/RCP 48-2001",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+              <p>Commercially sterile milk should contain no viable microorganisms that can grow under normal storage conditions. To verify this, sealed packs are incubated at elevated temperatures. If no microbial growth occurs (no pH change, no gas, no off-flavour), the product is commercially sterile.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">📐 Incubation Temperatures and Times — Scientific Basis:</h4>
+              <div class="bg-blue-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Set A — WHY 30-35°C / 14 days?</strong></p>
+                <p>The optimum for mesophilic bacteria (such as Bacillus subtilis, B. cereus, Enterobacteriaceae) = 30-37°C. 14 days = sufficient time for even a single viable organism (including dormant spores) to germinate and grow to a detectable level.</p>
+                <pre><code>If 1 spore germinates at 30°C, generation time ~30-60 min
+14 days = 336 hours = 336-672 generations
+1 bacterium → 2³³⁶ = astronomically high number
+Reality: Nutrients become depleted, so final count ~10⁸-10⁹ CFU/ml — but clearly detectable as pH drop, turbidity, gas, off-flavour</code></pre>
+                
+                <p class="mt-2"><strong>Set B — WHY 55°C / 7 days?</strong></p>
+                <p>Thermophilic spore-formers (such as B. stearothermophilus, B. coagulans) grow optimally at 55°C. These organisms are the closest survivors of the UHT process (highest D₁₂₁ values). 7 days is sufficient because thermophiles are fast growers at 55°C (generation time ~15-30 min).</p>
+                
+                <p class="mt-2"><strong>Set C — WHY 4°C (Control)?</strong></p>
+                <p>Reference — any natural changes in milk (browning, fat separation) can be differentiated by comparing with the control. Practically no bacteria grow at 4°C.</p>
+                
+                <p class="mt-2"><strong>WHY pH Change > 0.5 = FAIL?</strong></p>
+                <p>Bacterial growth produces acids (lactic acid, acetic acid) → pH drops. Or gas-producing organisms form CO₂ → carbonic acid → pH drop. A 0.5 pH unit change = significant acid production = substantial microbial growth.</p>
+                <pre><code>pH drop calculation:
+Fresh UHT milk pH = 6.65
+After incubation pH = 6.10
+Drop = 6.65 - 6.10 = 0.55 → > 0.5 → FAIL!</code></pre>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">🔑 D-Value and Z-Value — The Basis of UHT Sterility:</h4>
+              <div class="bg-yellow-50 p-3 rounded mt-2 mb-2">
+                <p><strong>D-Value (Decimal Reduction Time):</strong> The time required at a specific temperature to reduce the bacterial population by 90% (1 log).</p>
+                <pre><code>D₁₂₁ of B. stearothermophilus = ~4-5 min (at 121°C)
+D₁₃₅ of same organism = ~0.3-0.5 sec (at 135°C)
+
+UHT target: 12D reduction (12 × D value)
+At 135°C: 12 × 0.4 sec = 4.8 sec
+Therefore UHT = 135°C/4-5 sec → 12-log reduction → commercially sterile</code></pre>
+                
+                <p class="mt-2"><strong>Z-Value:</strong> The temperature increase required to reduce the D-value by 10 times.</p>
+                <pre><code>Z-value for most spores = ~10°C
+So: D₁₂₁ = 4 min → D₁₃₁ = 0.4 min → D₁₄₁ = 0.04 min</code></pre>
+                
+                <p class="mt-2"><strong>Commercial Sterility ≠ Absolute Sterility</strong></p>
+                <p>Not 100% of organisms are killed in UHT — some extremely heat-resistant spores may survive. But they are so few that they cannot grow under normal conditions. "Commercially sterile" = no organisms that can grow under normal storage.</p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Procedure (Incubation Method):</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Randomly select sealed packs/bottles from the production batch (typically minimum 5 per batch).</li>
+                <li><strong>Set A (Mesophilic):</strong> Incubate at 30-35°C for 14 days.</li>
+                <li><strong>Set B (Thermophilic):</strong> Incubate at 55°C for 7 days.</li>
+                <li><strong>Set C (Control):</strong> Store at 4°C.</li>
+                <li>Examine after incubation:</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Examination Parameters:</h4>
+              <ul class="list-disc list-outside pl-5 space-y-1">
+                <li><strong>Visual:</strong> Pack swelling, leakage, colour change</li>
+                <li><strong>pH:</strong> Difference between incubated and control — &gt;0.5 pH change = fail</li>
+                <li><strong>Acidity:</strong> Increase &gt;0.02% = suspect</li>
+                <li><strong>Sensory:</strong> Off-flavour, off-odour, sour taste</li>
+                <li><strong>Microscopic:</strong> Gram staining — visible bacteria = fail</li>
+                <li><strong>Plating:</strong> Streaking on PCA, BHI agar — colony growth = fail</li>
+              </ul>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 1 (PASS — Commercially Sterile):</h4>
+              <div class="bg-green-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Sample:</strong> Amul Taaza UHT, Batch #UHT-2024-0515, 5 packs</p>
+                <table class="table-auto border-collapse border border-gray-300 mt-1 text-sm w-full">
+                  <thead><tr class="bg-gray-100"><th class="border p-1">Parameter</th><th class="border p-1">Control (4°C)</th><th class="border p-1">Set A (35°C/14d)</th><th class="border p-1">Set B (55°C/7d)</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border p-1">pH</td><td class="border p-1">6.62</td><td class="border p-1">6.58</td><td class="border p-1">6.60</td></tr>
+                    <tr><td class="border p-1">Acidity (%LA)</td><td class="border p-1">0.135</td><td class="border p-1">0.138</td><td class="border p-1">0.136</td></tr>
+                    <tr><td class="border p-1">Pack Swelling</td><td class="border p-1">No</td><td class="border p-1">No</td><td class="border p-1">No</td></tr>
+                    <tr><td class="border p-1">Off-flavour</td><td class="border p-1">None</td><td class="border p-1">Slight cooked (normal for UHT)</td><td class="border p-1">None</td></tr>
+                    <tr><td class="border p-1">Gram Stain</td><td class="border p-1">No bacteria</td><td class="border p-1">No bacteria</td><td class="border p-1">No bacteria</td></tr>
+                    <tr><td class="border p-1">PCA Plating</td><td class="border p-1">No growth</td><td class="border p-1">No growth</td><td class="border p-1">No growth</td></tr>
+                  </tbody>
+                </table>
+                <pre><code>pH difference (Set A vs Control) = |6.58 - 6.62| = 0.04 → < 0.5 ✓
+Acidity change = |0.138 - 0.135| = 0.003% → < 0.02% ✓</code></pre>
+                <p><strong>Result: ✅ ALL PARAMETERS PASS → Commercially Sterile → Shelf life 3-6 months at room temperature.</strong></p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 2 (FAIL — Not Sterile):</h4>
+              <div class="bg-red-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Sample:</strong> UHT milk from a new plant, Batch #UHT-Trial-003</p>
+                <table class="table-auto border-collapse border border-gray-300 mt-1 text-sm w-full">
+                  <thead><tr class="bg-gray-100"><th class="border p-1">Parameter</th><th class="border p-1">Control (4°C)</th><th class="border p-1">Set A (35°C/14d)</th><th class="border p-1">Set B (55°C/7d)</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border p-1">pH</td><td class="border p-1">6.60</td><td class="border p-1">5.85</td><td class="border p-1">6.55</td></tr>
+                    <tr><td class="border p-1">Acidity (%LA)</td><td class="border p-1">0.14</td><td class="border p-1">0.28</td><td class="border p-1">0.15</td></tr>
+                    <tr><td class="border p-1">Pack Swelling</td><td class="border p-1">No</td><td class="border p-1">SLIGHT SWELLING</td><td class="border p-1">No</td></tr>
+                    <tr><td class="border p-1">Off-flavour</td><td class="border p-1">Normal</td><td class="border p-1">SOUR, BITTER</td><td class="border p-1">Normal</td></tr>
+                    <tr><td class="border p-1">Gram Stain</td><td class="border p-1">No bacteria</td><td class="border p-1">Gram + rods seen</td><td class="border p-1">No bacteria</td></tr>
+                    <tr><td class="border p-1">PCA Plating</td><td class="border p-1">No growth</td><td class="border p-1">TNTC colonies</td><td class="border p-1">No growth</td></tr>
+                  </tbody>
+                </table>
+                <pre><code>pH difference (Set A vs Control) = |5.85 - 6.60| = 0.75 → > 0.5 ❌ FAIL!
+Acidity change = |0.28 - 0.14| = 0.14% → > 0.02% ❌ FAIL!</code></pre>
+                <p><strong>Result: ❌ Set A FAILED — Mesophilic bacteria (likely Bacillus sp.) survived the UHT process. Probable cause: The flow rate through the holding tube was too high → actual hold time was 1.5 sec instead of 2 sec → insufficient lethality.</strong></p>
+                <p><strong>Action: Batch REJECT. Recalibrate the UHT plant's flow meter. Verify the holding tube length.</strong></p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Interpretation:</h4>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Observation</th><th class="border p-2">Result</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2">No pH change, no growth, no swelling, no off-flavour</td><td class="border p-2"><strong>PASS — Commercially Sterile</strong></td></tr>
+                  <tr><td class="border p-2">pH drop &gt;0.5, or microbial growth, or pack swelling</td><td class="border p-2"><strong>FAIL — Not sterile, batch reject</strong></td></tr>
+                </tbody>
+              </table>
+
+              <h4 class="font-semibold mt-4 mb-2">Special Note for UHT Milk:</h4>
+              <p>UHT milk that passes the sterility test has a shelf life of 3-6 months (room temperature, unopened). After opening, refrigerate and consume within 2-3 days.</p>
+            `
+          },
+          {
+            title: "Sensory Evaluation During Shelf Life",
+            purpose: "To monitor the organoleptic quality (taste, smell, appearance, texture) of milk during shelf life — a direct measure of consumer acceptance.",
+            reference: "IS 6273 (Part I & II):1971; IDF Standard 99C:1997",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+              <p>In sensory evaluation, trained panelists score milk based on taste, smell, appearance, and mouthfeel. This evaluation is conducted at regular intervals during shelf life. When the score drops below the acceptable limit — that marks the end of shelf life. Chemical tests sometimes cannot detect changes that human senses can detect.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">📐 Scoring System and Statistical Analysis:</h4>
+              <div class="bg-blue-50 p-3 rounded mt-2 mb-2">
+                <p><strong>9-Point Hedonic Scale — Why 9 points?</strong></p>
+                <p>Research has proven that a 9-point scale provides optimum discriminating power. A 5-point scale lacks sufficient sensitivity, while a 15-point scale confuses panelists. 9 points = a good balance between sensitivity and usability.</p>
+                
+                <p class="mt-2"><strong>Average Score Calculation:</strong></p>
+                <pre><code>Average Score = Σ(Individual Scores) / Number of Panelists
+
+Example: 5 panelists gave scores on Day 3:
+Panelist 1: 7, Panelist 2: 6, Panelist 3: 7, Panelist 4: 5, Panelist 5: 6
+Average = (7+6+7+5+6) / 5 = 31/5 = 6.2</code></pre>
+                
+                <p class="mt-2"><strong>Overall Acceptability Score:</strong></p>
+                <pre><code>Overall Score = (Appearance × W₁ + Odour × W₂ + Taste × W₃ + Texture × W₄) / (W₁+W₂+W₃+W₄)
+
+Typical weights for milk:
+Appearance (W₁) = 20%, Odour (W₂) = 20%, Taste (W₃) = 40%, Texture (W₄) = 20%
+
+Example: Appearance=7, Odour=6, Taste=5, Texture=7
+Overall = (7×0.20 + 6×0.20 + 5×0.40 + 7×0.20) / 1.0
+      = (1.4 + 1.2 + 2.0 + 1.4) / 1.0 = 6.0</code></pre>
+                
+                <p class="mt-2"><strong>Why minimum 5 panelists?</strong></p>
+                <p>A minimum of 5 trained panelists is needed for statistical reliability. Fewer than 5 = insufficient data points for a meaningful average. Ideal = 8-12 panelists.</p>
+                
+                <p class="mt-2"><strong>Why is Score < 5 = Unacceptable?</strong></p>
+                <p>5 = "Neither like nor dislike" (neutral). Below this = dislike territory. A minimum of 5 is necessary for consumer acceptability — commercially, a score of 6+ is the target.</p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Scoring System (9-Point Hedonic Scale):</h4>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Score</th><th class="border p-2">Description</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2">9</td><td class="border p-2">Like extremely</td></tr>
+                  <tr><td class="border p-2">8</td><td class="border p-2">Like very much</td></tr>
+                  <tr><td class="border p-2">7</td><td class="border p-2">Like moderately</td></tr>
+                  <tr><td class="border p-2">6</td><td class="border p-2">Like slightly</td></tr>
+                  <tr><td class="border p-2">5</td><td class="border p-2">Neither like nor dislike (Neutral)</td></tr>
+                  <tr><td class="border p-2">4</td><td class="border p-2">Dislike slightly</td></tr>
+                  <tr><td class="border p-2">3</td><td class="border p-2">Dislike moderately</td></tr>
+                  <tr><td class="border p-2">2</td><td class="border p-2">Dislike very much</td></tr>
+                  <tr><td class="border p-2">1</td><td class="border p-2">Dislike extremely</td></tr>
+                </tbody>
+              </table>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example — Complete Shelf Life Sensory Data:</h4>
+              <div class="bg-green-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Product:</strong> Pasteurized Toned Milk (3% fat, 8.5% SNF), stored at 4°C</p>
+                <p><strong>Panel:</strong> 5 trained panelists. Scores shown as averages.</p>
+                <table class="table-auto border-collapse border border-gray-300 mt-1 text-sm w-full">
+                  <thead><tr class="bg-gray-100"><th class="border p-1">Day</th><th class="border p-1">Appearance</th><th class="border p-1">Odour</th><th class="border p-1">Taste</th><th class="border p-1">Texture</th><th class="border p-1">Overall*</th><th class="border p-1">Status</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border p-1">0</td><td class="border p-1">8.6</td><td class="border p-1">8.4</td><td class="border p-1">8.8</td><td class="border p-1">8.6</td><td class="border p-1">8.6</td><td class="border p-1">✅ Excellent</td></tr>
+                    <tr><td class="border p-1">1</td><td class="border p-1">8.4</td><td class="border p-1">8.2</td><td class="border p-1">8.4</td><td class="border p-1">8.4</td><td class="border p-1">8.4</td><td class="border p-1">✅ Very Good</td></tr>
+                    <tr><td class="border p-1">2</td><td class="border p-1">8.0</td><td class="border p-1">7.6</td><td class="border p-1">7.8</td><td class="border p-1">8.0</td><td class="border p-1">7.8</td><td class="border p-1">✅ Good</td></tr>
+                    <tr><td class="border p-1">3</td><td class="border p-1">7.2</td><td class="border p-1">6.4</td><td class="border p-1">6.2</td><td class="border p-1">7.0</td><td class="border p-1">6.5</td><td class="border p-1">✅ Acceptable</td></tr>
+                    <tr><td class="border p-1">4</td><td class="border p-1">6.0</td><td class="border p-1">5.2</td><td class="border p-1">4.8</td><td class="border p-1">6.2</td><td class="border p-1">5.4</td><td class="border p-1">⚠️ Marginal</td></tr>
+                    <tr><td class="border p-1">5</td><td class="border p-1">4.4</td><td class="border p-1">3.6</td><td class="border p-1">3.2</td><td class="border p-1">4.8</td><td class="border p-1">3.8</td><td class="border p-1">❌ Rejected</td></tr>
+                  </tbody>
+                </table>
+                <p class="text-xs mt-1">*Overall = Appearance×0.20 + Odour×0.20 + Taste×0.40 + Texture×0.20</p>
+                <pre><code>Day 4 Overall = (6.0×0.20)+(5.2×0.20)+(4.8×0.40)+(6.2×0.20) = 1.2+1.04+1.92+1.24 = 5.4
+Day 5 Overall = (4.4×0.20)+(3.6×0.20)+(3.2×0.40)+(4.8×0.20) = 0.88+0.72+1.28+0.96 = 3.84</code></pre>
+                <p><strong>Sensory Shelf Life = Day 3 (last day overall > 5.0 with comfortable margin). Day 4 marginal, Day 5 rejected.</strong></p>
+                <p><strong>With 20% safety margin: Best-before = Day 3 × 0.8 ≈ print "2 days" on pack.</strong></p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Evaluation Parameters:</h4>
+              <ul class="list-disc list-outside pl-5 space-y-1">
+                <li><strong>Appearance:</strong> Colour (white/creamy), clarity, cream layer separation, sediment</li>
+                <li><strong>Odour:</strong> Fresh, sour, rancid, burnt, fruity, malty, bitter, metallic</li>
+                <li><strong>Taste:</strong> Sweet (lactose), sour (acid), bitter (proteolysis), salty, metallic</li>
+                <li><strong>Texture/Mouthfeel:</strong> Smooth, watery, slimy, grainy, thick</li>
+              </ul>
+
+              <h4 class="font-semibold mt-4 mb-2">Common Defects and Their Causes:</h4>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Defect</th><th class="border p-2">Cause</th><th class="border p-2">Detection Threshold</th><th class="border p-2">Shelf Life Impact</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2">Sour taste/smell</td><td class="border p-2">Lactic acid bacteria (>0.18% LA)</td><td class="border p-2">~0.16-0.18% acidity</td><td class="border p-2">Shelf life over</td></tr>
+                  <tr><td class="border p-2">Bitter taste</td><td class="border p-2">Psychrotrophic proteases (casein breakdown)</td><td class="border p-2">~20% NPN increase</td><td class="border p-2">End of shelf life</td></tr>
+                  <tr><td class="border p-2">Rancid/soapy taste</td><td class="border p-2">Lipase activity (ADV > 1.0)</td><td class="border p-2">ADV ~0.5-1.0 meq/100g fat</td><td class="border p-2">Product rejected</td></tr>
+                  <tr><td class="border p-2">Fruity/Fermented smell</td><td class="border p-2">Pseudomonas, yeasts</td><td class="border p-2">Ester compounds > 5 ppm</td><td class="border p-2">Product rejected</td></tr>
+                  <tr><td class="border p-2">Malty flavour</td><td class="border p-2">S. lactis var. maltigenes</td><td class="border p-2">3-methylbutanal > 0.5 ppm</td><td class="border p-2">Quality defect</td></tr>
+                  <tr><td class="border p-2">Cream plug / separation</td><td class="border p-2">Inadequate homogenization (HI > 1.5)</td><td class="border p-2">Visible to the eye</td><td class="border p-2">Visual rejection</td></tr>
+                  <tr><td class="border p-2">Gelation (UHT)</td><td class="border p-2">Heat-stable proteases</td><td class="border p-2">NPN increase > 40%</td><td class="border p-2">UHT shelf life end</td></tr>
+                </tbody>
+              </table>
+            `
+          },
+          {
+            title: "pH and Acidity Monitoring During Shelf Life",
+            purpose: "To measure pH and acidity at regular intervals during storage — an early indicator of microbial spoilage.",
+            reference: "IS 1479 (Part I) 1961; FSSAI Standards",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+              <p>When bacteria grow in milk, they convert lactose to lactic acid. This causes the pH to drop and titratable acidity to increase. pH and acidity changes are the first chemical indicators of spoilage — they are detected before sensory changes.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">📐 Acidity Formula — Complete Derivation:</h4>
+              <div class="bg-blue-50 p-3 rounded mt-2 mb-2">
+                <pre><code>% Acidity (as lactic acid) = (9 × V × N) / W
+
+Where:
+V = Volume of 0.1N NaOH used (ml)
+N = Normality of NaOH (typically 0.1N)
+W = Weight of milk sample (g) — typically 10g
+9 = Conversion factor</code></pre>
+
+                <p class="mt-2"><strong>Derivation of Factor 9:</strong></p>
+                <pre><code>Lactic acid: CH₃CHOHCOOH
+Molecular Weight = 90.08 g/mol
+Monoprotic acid → Equivalent Weight = 90 g/eq
+
+% = (meq of acid × Eq.Wt.) / (W × 1000) × 100
+= (V × N × 90) / (W × 1000) × 100
+= (V × N × 9000) / (W × 1000)
+= (V × N × 9) / W</code></pre>
+
+                <p class="mt-2"><strong>Relationship between pH and Acidity:</strong></p>
+                <p>pH and acidity are inversely related but not exactly proportional — because milk has buffer capacity (casein and phosphates act as buffers).</p>
+                <table class="table-auto border-collapse border border-gray-300 mt-1 text-sm">
+                  <thead><tr class="bg-gray-100"><th class="border p-1">pH</th><th class="border p-1">Approx Acidity (%LA)</th><th class="border p-1">Status</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border p-1">6.8</td><td class="border p-1">0.12</td><td class="border p-1">Very fresh</td></tr>
+                    <tr><td class="border p-1">6.6</td><td class="border p-1">0.14</td><td class="border p-1">Fresh</td></tr>
+                    <tr><td class="border p-1">6.4</td><td class="border p-1">0.16-0.18</td><td class="border p-1">Acceptable limit</td></tr>
+                    <tr><td class="border p-1">6.0</td><td class="border p-1">0.20-0.22</td><td class="border p-1">Sour — rejected</td></tr>
+                    <tr><td class="border p-1">5.5</td><td class="border p-1">0.30+</td><td class="border p-1">Curdled</td></tr>
+                    <tr><td class="border p-1">4.6</td><td class="border p-1">0.60+</td><td class="border p-1">Casein precipitated (curd)</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example — Shelf Life Monitoring Data:</h4>
+              <div class="bg-green-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Product:</strong> Pasteurized Full Cream Milk (6% fat), stored at 4±1°C</p>
+                <p><strong>Acidity measured with 0.1N NaOH, 10g sample each time:</strong></p>
+                <table class="table-auto border-collapse border border-gray-300 mt-1 text-sm w-full">
+                  <thead><tr class="bg-gray-100"><th class="border p-1">Day</th><th class="border p-1">NaOH (ml)</th><th class="border p-1">Acidity Calc</th><th class="border p-1">% LA</th><th class="border p-1">pH</th><th class="border p-1">Status</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border p-1">0</td><td class="border p-1">1.50</td><td class="border p-1">(9×1.50×0.1)/10</td><td class="border p-1">0.135%</td><td class="border p-1">6.68</td><td class="border p-1">✅ Fresh</td></tr>
+                    <tr><td class="border p-1">1</td><td class="border p-1">1.55</td><td class="border p-1">(9×1.55×0.1)/10</td><td class="border p-1">0.140%</td><td class="border p-1">6.64</td><td class="border p-1">✅ Fresh</td></tr>
+                    <tr><td class="border p-1">2</td><td class="border p-1">1.65</td><td class="border p-1">(9×1.65×0.1)/10</td><td class="border p-1">0.149%</td><td class="border p-1">6.58</td><td class="border p-1">✅ Good</td></tr>
+                    <tr><td class="border p-1">3</td><td class="border p-1">1.85</td><td class="border p-1">(9×1.85×0.1)/10</td><td class="border p-1">0.167%</td><td class="border p-1">6.45</td><td class="border p-1">⚠️ Alert</td></tr>
+                    <tr><td class="border p-1">4</td><td class="border p-1">2.10</td><td class="border p-1">(9×2.10×0.1)/10</td><td class="border p-1">0.189%</td><td class="border p-1">6.28</td><td class="border p-1">❌ > 0.18%</td></tr>
+                    <tr><td class="border p-1">5</td><td class="border p-1">2.60</td><td class="border p-1">(9×2.60×0.1)/10</td><td class="border p-1">0.234%</td><td class="border p-1">5.95</td><td class="border p-1">❌ Sour/COB+</td></tr>
+                  </tbody>
+                </table>
+                
+                <p class="mt-2"><strong>Analysis:</strong></p>
+                <pre><code>Day 0 to Day 3: Acidity increase = 0.167 - 0.135 = 0.032% (gradual, normal)
+Day 3 to Day 4: Acidity increase = 0.189 - 0.167 = 0.022% (accelerating!)
+Day 4 to Day 5: Acidity increase = 0.234 - 0.189 = 0.045% (rapid spoilage!)
+
+pH drop Day 0 to Day 3 = 6.68 - 6.45 = 0.23 (< 0.3 threshold)
+pH drop Day 0 to Day 4 = 6.68 - 6.28 = 0.40 (> 0.3 → significant!)
+
+Shelf Life by acidity: Day 3 (last day < 0.18%)
+Shelf Life by pH: Day 3 (last day pH drop < 0.3 from baseline)
+Both parameters agree: Shelf life = 3 days</code></pre>
+                <p><strong>Best-before with safety margin (20%): 3 × 0.8 = 2.4 ≈ "Best before 2 days from packaging"</strong></p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Monitoring Protocol:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Record baseline pH and acidity on production day (Day 0).</li>
+                <li><strong>Pasteurized milk:</strong> Test every 12-24 hours.</li>
+                <li><strong>UHT milk:</strong> Test weekly or fortnightly.</li>
+                <li>Record all readings on a log sheet.</li>
+                <li>Plot graphs — pH vs Time, Acidity vs Time.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Critical Limits:</h4>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Parameter</th><th class="border p-2">Fresh Milk</th><th class="border p-2">Acceptable Limit</th><th class="border p-2">Rejected</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2">pH</td><td class="border p-2">6.6-6.8</td><td class="border p-2">≥ 6.4</td><td class="border p-2">&lt; 6.0</td></tr>
+                  <tr><td class="border p-2">Acidity (% LA)</td><td class="border p-2">0.12-0.14%</td><td class="border p-2">≤ 0.18%</td><td class="border p-2">&gt; 0.20%</td></tr>
+                </tbody>
+              </table>
+
+              <h4 class="font-semibold mt-4 mb-2">Interpretation:</h4>
+              <p><strong>pH drop of 0.3 or more from baseline:</strong> Significant spoilage has begun.</p>
+              <p><strong>Acidity increase of 0.04% or more from baseline:</strong> Bacterial growth confirmed — shelf life nearing end.</p>
+              <p><strong>Acidity &gt;0.20%:</strong> COB test will be positive — milk is unfit for market.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">⚠️ Why Does pH Change Faster Than Acidity Change?</h4>
+              <div class="bg-gray-50 p-3 rounded mt-2">
+                <p>pH is on a <strong>logarithmic scale</strong> — a 0.3 unit change in pH = ~2× increase in hydrogen ion concentration. Whereas acidity is <strong>linear</strong> — in direct proportion. Therefore, sometimes a pH change is detected but no significant change appears in acidity (buffer effect). <strong>Monitor both parameters together</strong> — neither one alone is sufficient.</p>
+              </div>
+            `
+          },
+          {
+            title: "Alcohol Stability Test (for Heat Stability / UHT Suitability)",
+            purpose: "To assess the heat stability of milk — this test predicts whether milk will survive the UHT/sterilization process or not.",
+            reference: "IS 1479 (Part I) 1961; IDF Standard",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+              <p>Ethanol destabilizes the hydration shell of milk proteins — similar to what heat does. Milk that remains stable in higher concentrations of alcohol will also be stable during heat treatment. This test is used to check the suitability of raw milk before UHT processing, and also to predict the storage stability of processed milk.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">📐 Scientific Basis of Alcohol Concentrations:</h4>
+              <div class="bg-blue-50 p-3 rounded mt-2 mb-2">
+                <p><strong>How does ethanol destabilize?</strong></p>
+                <p>Casein micelles are stable in water because:</p>
+                <ol class="list-decimal list-outside pl-5 space-y-1">
+                  <li><strong>κ-Casein</strong> (on the surface) carries a negative charge → electrostatic repulsion</li>
+                  <li><strong>Hydration shell</strong> (a layer of water) surrounds the casein → steric stabilization</li>
+                </ol>
+                <p class="mt-1"><strong>Ethanol</strong> reduces the dielectric constant → electrostatic repulsion decreases. It also removes the hydration shell (dehydration). Both effects together destabilize casein → aggregation → CLOT.</p>
+                
+                <p class="mt-2"><strong>Effective Ethanol Concentration (in the milk + ethanol mixture):</strong></p>
+                <pre><code>2 ml milk + 2 ml 68% ethanol = 4 ml total
+Effective ethanol in mixture = (2 × 68) / 4 = 34%
+
+2 ml milk + 2 ml 75% ethanol → Effective = 37.5%
+2 ml milk + 2 ml 80% ethanol → Effective = 40%</code></pre>
+                <p>This means effectively a protein stability test is being conducted at 34-40% ethanol concentration.</p>
+                
+                <p class="mt-2"><strong>Why 2 ml + 2 ml (equal volumes)?</strong></p>
+                <p>Equal volumes (1:1 ratio) are used to keep the calculation simple and results reproducible. If the ratio is changed, the sensitivity will change → comparison becomes difficult.</p>
+                
+                <p class="mt-2"><strong>What each concentration means:</strong></p>
+                <table class="table-auto border-collapse border border-gray-300 mt-1 text-sm w-full">
+                  <thead><tr class="bg-gray-100"><th class="border p-1">Test Ethanol %</th><th class="border p-1">Effective % in Mix</th><th class="border p-1">What It Tests</th><th class="border p-1">Equivalent to</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border p-1">68%</td><td class="border p-1">34%</td><td class="border p-1">Basic acidity check</td><td class="border p-1">Detects acidity > 0.20%</td></tr>
+                    <tr><td class="border p-1">72%</td><td class="border p-1">36%</td><td class="border p-1">HTST suitability</td><td class="border p-1">72°C/15s pasteurization tolerance</td></tr>
+                    <tr><td class="border p-1">75%</td><td class="border p-1">37.5%</td><td class="border p-1">UHT minimum</td><td class="border p-1">Detects acidity 0.14-0.16%</td></tr>
+                    <tr><td class="border p-1">78%</td><td class="border p-1">39%</td><td class="border p-1">Good UHT milk</td><td class="border p-1">Well-balanced minerals</td></tr>
+                    <tr><td class="border p-1">80%</td><td class="border p-1">40%</td><td class="border p-1">Excellent stability</td><td class="border p-1">Low ionic Ca, fresh milk</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Procedure (Graduated Alcohol Test):</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Prepare ethanol solutions of different concentrations: 68%, 72%, 75%, 78%, 80%.</li>
+                <li>Take 2 ml of milk in separate test tubes.</li>
+                <li>Add 2 ml of the respective ethanol concentration to each tube.</li>
+                <li>Mix (gently invert).</li>
+                <li>Observe for clot/flocculation formation.</li>
+                <li>Note the highest alcohol concentration at which the milk remains stable (no clotting).</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 1 (UHT-Suitable Milk):</h4>
+              <div class="bg-green-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Sample:</strong> Fresh cow milk from a cooperative, Acidity = 0.13% LA, pH = 6.72</p>
+                <table class="table-auto border-collapse border border-gray-300 mt-1 text-sm">
+                  <thead><tr class="bg-gray-100"><th class="border p-1">Ethanol %</th><th class="border p-1">Observation</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border p-1">68%</td><td class="border p-1">No clot — smooth ✓</td></tr>
+                    <tr><td class="border p-1">72%</td><td class="border p-1">No clot — smooth ✓</td></tr>
+                    <tr><td class="border p-1">75%</td><td class="border p-1">No clot — smooth ✓</td></tr>
+                    <tr><td class="border p-1">78%</td><td class="border p-1">No clot — smooth ✓</td></tr>
+                    <tr><td class="border p-1">80%</td><td class="border p-1">Very fine flocculation (barely visible) ✓/△</td></tr>
+                  </tbody>
+                </table>
+                <p><strong>Result: Stable up to 78% → ✅ GOOD — Suitable for UHT processing!</strong></p>
+                <p>This milk can be given 135-140°C UHT treatment. Expected UHT shelf life: 3-4 months.</p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 2 (Unstable Milk):</h4>
+              <div class="bg-red-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Sample:</strong> Evening collection milk, 4 hours old without chilling, Acidity = 0.19% LA, pH = 6.35</p>
+                <table class="table-auto border-collapse border border-gray-300 mt-1 text-sm">
+                  <thead><tr class="bg-gray-100"><th class="border p-1">Ethanol %</th><th class="border p-1">Observation</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border p-1">68%</td><td class="border p-1">CLOT formed — large flakes! ✗</td></tr>
+                    <tr><td class="border p-1">72%</td><td class="border p-1">Heavy clot ✗</td></tr>
+                    <tr><td class="border p-1">75%</td><td class="border p-1">Heavy clot ✗</td></tr>
+                  </tbody>
+                </table>
+                <p><strong>Result: Clots at 68% → ❌ POOR — UNSUITABLE for UHT! Even pasteurization is risky.</strong></p>
+                <p>Developed acidity (0.19%) has destabilized the casein. This milk can only be used for making paneer/chhena.</p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Interpretation:</h4>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Alcohol Stability</th><th class="border p-2">Suitability</th><th class="border p-2">Shelf Life Prediction</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2">Stable at 80%+ ethanol</td><td class="border p-2">Excellent — ideal for UHT</td><td class="border p-2">Maximum shelf life expected</td></tr>
+                  <tr><td class="border p-2">Stable at 75-78%</td><td class="border p-2">Good — UHT suitable</td><td class="border p-2">Normal shelf life</td></tr>
+                  <tr><td class="border p-2">Stable at 72% only</td><td class="border p-2">Marginal — HTST pasteurization ok</td><td class="border p-2">Reduced shelf life possible</td></tr>
+                  <tr><td class="border p-2">Clots at 68%</td><td class="border p-2">Poor — high acidity/unstable</td><td class="border p-2">Very short shelf life</td></tr>
+                </tbody>
+              </table>
+
+              <h4 class="font-semibold mt-4 mb-2">Factors Affecting Alcohol Stability:</h4>
+              <ul class="list-disc list-outside pl-5 space-y-1">
+                <li><strong>Developed acidity (lactic acid)</strong> — reduces stability (pH drop → casein charge reduces)</li>
+                <li><strong>High ionic calcium (Ca²⁺)</strong> — destabilizing effect (forms calcium bridges between casein micelles)</li>
+                <li><strong>Low casein:whey protein ratio</strong> — less κ-casein = less stability</li>
+                <li><strong>Mastitic milk</strong> — poor stability (high SCC, altered mineral balance, elevated pH)</li>
+                <li><strong>Late lactation milk</strong> — variable stability (mineral imbalance, high protease activity)</li>
+              </ul>
+            `
+          },
+          {
+            title: "Psychrotrophic Bacterial Count",
+            purpose: "Count of bacteria that grow at refrigeration temperatures — the most important predictor of pasteurized milk shelf life.",
+            reference: "IDF 101A:1991; Standard Methods for Examination of Dairy Products (APHA)",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+              <p>Psychrotrophic bacteria are organisms that can grow at 7°C or below (their optimum temperature is 20-30°C). They are the biggest enemies of pasteurized milk shelf life because they continue to grow even in the fridge and produce heat-stable enzymes (lipases, proteases) that spoil milk.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">📐 Scientific Explanation of Incubation Conditions:</h4>
+              <div class="bg-blue-50 p-3 rounded mt-2 mb-2">
+                <p><strong>7°C / 10 days — WHY is this the Standard Method?</strong></p>
+                <p>7°C is a typical household fridge temperature. 10 days = covers multiple generations of psychrotrophic bacteria. This method is the most accurate because it simulates actual refrigeration conditions.</p>
+                <pre><code>Pseudomonas fluorescens generation time at different temperatures:
+4°C: ~8-12 hours
+7°C: ~5-7 hours  
+10°C: ~3-4 hours
+21°C: ~1-1.5 hours
+25°C: ~45-60 min (optimum)
+
+At 7°C in 10 days (240 hours):
+Generations = 240/6 = ~40 generations
+1 bacterium → 2⁴⁰ = ~1.1 × 10¹² (theoretical max)
+Actual: ~10⁷-10⁸ due to nutrient limitation</code></pre>
+                
+                <p class="mt-2"><strong>21°C / 25 hours — WHY a Rapid Method?</strong></p>
+                <p>An accelerated alternative — the growth rate of psychrotrophs at 21°C is ~4-6× faster compared to 7°C.</p>
+                <pre><code>Q₁₀ calculation for acceleration:
+Q₁₀ ≈ 2.5 for Pseudomonas
+Rate ratio = 2.5^((21-7)/10) = 2.5^1.4 = ~3.6×
+
+So 25 hours at 21°C ≈ 25 × 3.6 = ~90 hours at 7°C ≈ ~4 days at 7°C
+This is a "rapid screening" — no need to wait for the full 10-day result</code></pre>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Prepare serial dilutions of the milk sample.</li>
+                <li>Pour 1 ml of the diluted sample onto PCA plates.</li>
+                <li>Incubate plates at 7°C for 10 days (standard method).</li>
+                <li>Or — accelerated method: Incubate at 21°C for 25 hours (rapid count).</li>
+                <li>Count the colonies.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 1 (Excellent Plant Hygiene):</h4>
+              <div class="bg-green-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Sample:</strong> Pasteurized milk, Plant A (modern CIP system)</p>
+                <p><strong>Method:</strong> 7°C / 10 days, PCA pour plate</p>
+                <p><strong>Dilution 10⁻¹ plate:</strong> 45 colonies</p>
+                <pre><code>Psychrotrophic Count = 45 / (10⁻¹ × 1 ml) = 45 / 0.1 = 450 CFU/ml</code></pre>
+                <p><strong>Result: 450 CFU/ml = range 100-1,000 → ✅ GOOD quality!</strong></p>
+                <p>Expected shelf life: 3-5 days at 4°C. Plant sanitation is good.</p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 2 (Poor Plant Hygiene):</h4>
+              <div class="bg-red-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Sample:</strong> Pasteurized milk, Plant B (manual cleaning)</p>
+                <p><strong>Method:</strong> 21°C / 25 hours (rapid method)</p>
+                <p><strong>Dilution 10⁻³ plate:</strong> 156 colonies</p>
+                <pre><code>Psychrotrophic Count = 156 / (10⁻³ × 1 ml) = 156 / 0.001 = 1,56,000 CFU/ml</code></pre>
+                <p><strong>Result: 1,56,000 ≈ 1.56 × 10⁵ CFU/ml → range > 10,000 → ❌ POOR!</strong></p>
+                <p>Expected shelf life: < 2 days at 4°C. Biofilm formation is occurring in the rubber gaskets of the filler machine — deep CIP required!</p>
+                
+                <p class="mt-2"><strong>If these bacteria produce heat-stable lipase, then:</strong></p>
+                <pre><code>Pseudomonas lipase activity at 7°C:
+1 CFU produces ~10⁻¹² units lipase/hour
+1,56,000 CFU/ml × 10⁻¹² × 72 hours = detectable rancidity by Day 3
+Therefore shelf life is only 2 days!</code></pre>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Interpretation:</h4>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Psychrotrophic Count</th><th class="border p-2">Quality</th><th class="border p-2">Shelf Life Impact</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2">&lt; 100 CFU/ml</td><td class="border p-2">Excellent</td><td class="border p-2">Maximum shelf life (5-7 days at 4°C)</td></tr>
+                  <tr><td class="border p-2">100 - 1,000 CFU/ml</td><td class="border p-2">Good</td><td class="border p-2">Normal shelf life (3-5 days)</td></tr>
+                  <tr><td class="border p-2">1,000 - 10,000 CFU/ml</td><td class="border p-2">Fair</td><td class="border p-2">Reduced (2-3 days)</td></tr>
+                  <tr><td class="border p-2">&gt; 10,000 CFU/ml</td><td class="border p-2">Poor</td><td class="border p-2">Very short (&lt;2 days)</td></tr>
+                </tbody>
+              </table>
+
+              <h4 class="font-semibold mt-4 mb-2">Key Point:</h4>
+              <p>The psychrotrophic count in pasteurized milk mainly comes from post-pasteurization contamination (PPC) — from the filler, pipes, tanks, and packaging material. This is why plant hygiene and CIP (Clean-In-Place) are very important. A high psychrotrophic count means there is a problem with plant sanitation.</p>
+            `
+          },
+          {
+            title: "Spore Count (Aerobic Spore-Formers)",
+            purpose: "Count of heat-resistant spore-forming bacteria — critical for the shelf life of UHT and sterilized milk.",
+            reference: "IDF 132A:1991; IS 1479 (Part III) 1977",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+              <p>Bacterial spores (especially Bacillus species) survive pasteurization and some can even survive UHT treatment. Spore count is an indicator of raw milk quality and predicts how many spore-formers will be present in processed milk. If spores survive in UHT milk, they can germinate during storage and cause spoilage.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">📐 Heat Treatment — WHY 80°C / 10 min?</h4>
+              <div class="bg-blue-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Heat resistance of vegetative cells vs spores:</strong></p>
+                <table class="table-auto border-collapse border border-gray-300 mt-1 text-sm w-full">
+                  <thead><tr class="bg-gray-100"><th class="border p-1">Organism Type</th><th class="border p-1">D₈₀ Value</th><th class="border p-1">After 80°C/10 min</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border p-1">Vegetative bacteria (E. coli, Pseudomonas)</td><td class="border p-1">< 1 second</td><td class="border p-1">Completely destroyed</td></tr>
+                    <tr><td class="border p-1">Thermoduric bacteria (Enterococcus)</td><td class="border p-1">~30-60 sec</td><td class="border p-1">Mostly destroyed</td></tr>
+                    <tr><td class="border p-1">Bacillus spores</td><td class="border p-1">>30 min (at 80°C)</td><td class="border p-1">SURVIVE! ✓</td></tr>
+                    <tr><td class="border p-1">Clostridium spores</td><td class="border p-1">>60 min (at 80°C)</td><td class="border p-1">SURVIVE! ✓</td></tr>
+                  </tbody>
+                </table>
+                <p class="mt-1"><strong>80°C/10 min = "pasteurization++"</strong> — this kills all vegetative cells but keeps spores intact. Any colonies that grow = originated from SPORES.</p>
+                
+                <p class="mt-2"><strong>Why cool immediately in an ice bath?</strong></p>
+                <p>If cooled slowly after 80°C/10 min → some spores will be heat-activated (heat shock = germination trigger) → they will convert to vegetative cells → then they will not be killed by 80°C+ (it has already cooled down). Rapid cooling prevents germination → an accurate spore count is obtained.</p>
+                
+                <p class="mt-2"><strong>D-values of key spore-formers at different temperatures:</strong></p>
+                <pre><code>B. cereus spores:     D₁₀₀ = ~5 min,  D₁₂₁ = ~0.03 min
+B. subtilis spores:   D₁₀₀ = ~12 min, D₁₂₁ = ~0.5 min  
+B. stearothermophilus: D₁₀₀ = ~200 min, D₁₂₁ = ~4-5 min
+Clostridium botulinum: D₁₂₁ = ~0.2 min (reference organism for canning)
+
+UHT (135°C/4 sec) lethality:
+F₀ = t × 10^((T-121)/z) = 4 × 10^((135-121)/10) = 4 × 10^1.4 = 4 × 25.1 = ~100 sec F₀
+This gives 12D for B. stearothermophilus (12 × 5 min × 60 = 3600 sec equivalent)
+Actually: F₀ needed = 5-6 min, achieved F₀ ≈ 100 sec = sufficient for 12D of most organisms</code></pre>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Take 10 ml of milk in a sterile test tube.</li>
+                <li><strong>Heat treatment:</strong> Heat at 80°C for 10 minutes (in a water bath) — this kills vegetative cells, only spores survive.</li>
+                <li>Cool immediately in an ice bath.</li>
+                <li>Prepare serial dilutions of the heat-treated sample.</li>
+                <li>Plate on PCA plates using the pour plate method.</li>
+                <li><strong>Aerobic spores:</strong> Incubate at 30-37°C for 48-72 hours (aerobic conditions).</li>
+                <li><strong>Thermophilic spores:</strong> Incubate at 55°C for 48 hours.</li>
+                <li>Count the colonies.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 1 (Good Raw Milk Quality):</h4>
+              <div class="bg-green-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Sample:</strong> Raw milk from a cooperative (well-maintained farm, good milking hygiene)</p>
+                <p><strong>After 80°C/10 min heat treatment → dilution 10⁻¹ plated:</strong></p>
+                <p><strong>Aerobic spore count (37°C/48h):</strong> 6 colonies on the 10⁻¹ plate</p>
+                <pre><code>Spore Count = 6 / (10⁻¹ × 1 ml) = 6 / 0.1 = 60 spores/ml</code></pre>
+                <p><strong>Result: 60 spores/ml < 100 → ✅ EXCELLENT raw milk quality!</strong></p>
+                <p>UHT milk made from this will have good shelf life (3-6 months). Minimal risk of sweet curdling or gelation.</p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 2 (Poor Raw Milk — Silage-fed cows):</h4>
+              <div class="bg-red-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Sample:</strong> Raw milk from a farm with poor silage quality (butyric acid bacteria contamination in feed)</p>
+                <p><strong>After 80°C/10 min heat treatment:</strong></p>
+                <p><strong>Aerobic spore count (37°C/72h):</strong> 180 colonies on the 10⁻¹ plate</p>
+                <pre><code>Spore Count = 180 / (10⁻¹ × 1) = 1,800 spores/ml</code></pre>
+                <p><strong>Thermophilic spore count (55°C/48h):</strong> 25 colonies on the undiluted plate</p>
+                <pre><code>Thermophilic Count = 25 / (10⁰ × 1) = 25 spores/ml</code></pre>
+                <p><strong>Result: 1,800 aerobic spores/ml > 1,000 → ❌ POOR!</strong></p>
+                <p>UHT milk made from this milk will have:</p>
+                <ul class="list-disc list-outside pl-5 space-y-1">
+                  <li>B. cereus: Sweet curdling possible within 2-3 months</li>
+                  <li>B. subtilis: Gelation risk at 4-5 months</li>
+                  <li>Clostridium: Late blowing (gas) risk</li>
+                </ul>
+                <p><strong>Action: REJECT this raw milk for UHT. Use only for pasteurized milk (short shelf life product).</strong></p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Interpretation:</h4>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Spore Count</th><th class="border p-2">Raw Milk Quality</th><th class="border p-2">UHT/Sterilized Milk Impact</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2">&lt; 100 spores/ml</td><td class="border p-2">Excellent</td><td class="border p-2">Good shelf life expected</td></tr>
+                  <tr><td class="border p-2">100 - 1,000 spores/ml</td><td class="border p-2">Acceptable</td><td class="border p-2">Normal processing sufficient</td></tr>
+                  <tr><td class="border p-2">&gt; 1,000 spores/ml</td><td class="border p-2">Poor</td><td class="border p-2">Unsuitable for UHT — gelation, sweet curdling risk</td></tr>
+                </tbody>
+              </table>
+
+              <h4 class="font-semibold mt-4 mb-2">Important Spore-Formers:</h4>
+              <ul class="list-disc list-outside pl-5 space-y-1">
+                <li><strong>Bacillus cereus:</strong> Survives pasteurization, causes sweet curdling, bitty cream</li>
+                <li><strong>Bacillus subtilis:</strong> Causes sweet curdling in UHT milk</li>
+                <li><strong>Bacillus stearothermophilus:</strong> Thermophilic, causes flat sour in sterilized milk</li>
+                <li><strong>Clostridium spp.:</strong> Anaerobic spore-formers, gas production, late blowing (also important in cheese)</li>
+              </ul>
+            `
+          },
+          {
+            title: "Proteolysis Detection (Proteolytic Activity During Storage)",
+            purpose: "To detect protein breakdown during storage — the cause of gelation and bitter taste in UHT milk.",
+            reference: "IDF Standard; Journal of Dairy Science methodologies",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+              <p>Psychrotrophic bacteria (such as Pseudomonas) produce heat-stable proteases that survive pasteurization/UHT. These enzymes break down casein during storage (proteolysis) — producing bitter peptides, and the milk can eventually gel (in UHT). Measuring proteolysis helps predict shelf life.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">📐 Key Formulas and Factors:</h4>
+              <div class="bg-blue-50 p-3 rounded mt-2 mb-2">
+                <p><strong>TCA (Trichloroacetic Acid) — WHY 24%?</strong></p>
+                <p>24% TCA (final concentration 12% when equal volumes are mixed) is a critical concentration:</p>
+                <ul class="list-disc list-outside pl-5 space-y-1">
+                  <li>Intact casein and whey proteins → PRECIPITATE (TCA-insoluble)</li>
+                  <li>Small peptides (< 10 kDa) → SOLUBLE (TCA-soluble)</li>
+                  <li>Free amino acids → SOLUBLE</li>
+                  <li>Urea, NPN compounds → SOLUBLE</li>
+                </ul>
+                <p class="mt-1">During storage, as proteases break down casein → large proteins → small peptides → the TCA-soluble fraction INCREASES!</p>
+                
+                <p class="mt-2"><strong>NPN Increase Formula:</strong></p>
+                <pre><code>% NPN Increase = [(NPN_day_x - NPN_day_0) / NPN_day_0] × 100
+
+NPN = Non-Protein Nitrogen (TCA-soluble nitrogen)
+Measured by the Kjeldahl method on the TCA filtrate</code></pre>
+
+                <p class="mt-2"><strong>TNBS Method — WHY Absorbance at 340 nm?</strong></p>
+                <p>TNBS (trinitrobenzenesulfonic acid) reacts with free amino groups (-NH₂) → forming a yellow chromophore that absorbs at 340 nm. More proteolysis = more free amino groups = higher absorbance at 340 nm.</p>
+                <pre><code>Beer-Lambert Law: A = ε × c × l
+A = Absorbance at 340 nm
+ε = molar absorptivity of the TNBS-amino complex
+c = concentration of free amino groups (proportional to proteolysis)
+l = path length (1 cm)</code></pre>
+                
+                <p class="mt-2"><strong>WHY a Leucine Standard Curve?</strong></p>
+                <p>Leucine is an amino acid whose -NH₂ group gives a well-characterized reaction with TNBS. The standard curve is used to quantify free amino groups in the unknown sample as "leucine equivalents."</p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Method 1: TNBS Method</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Collect milk samples at different time intervals (Day 0, 7, 14, 30, 60, 90 — for UHT).</li>
+                <li>Mix 1 ml milk + 1 ml 24% TCA solution — mix, stand for 10 min, filter.</li>
+                <li>Collect the filtrate (TCA-soluble nitrogen).</li>
+                <li>Add 0.5 ml filtrate + 0.5 ml TNBS reagent (0.1% in pH 8.2 buffer).</li>
+                <li>Incubate at 50°C for 60 min.</li>
+                <li>Stop the reaction with 0.5 ml 0.1N HCl.</li>
+                <li>Read the absorbance at 340 nm.</li>
+                <li>Quantify free amino groups from the standard curve (leucine).</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Method 2: NPN Method (Simpler)</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Mix 5 ml milk + 5 ml 24% TCA — mix, stand for 15 min, filter.</li>
+                <li>Determine the nitrogen content of the filtrate by the Kjeldahl method.</li>
+                <li>This is NPN (normally ~5% of total N in fresh milk).</li>
+                <li>An NPN increase during shelf life = proteolysis is occurring.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example — UHT Milk Shelf Life Study:</h4>
+              <div class="bg-green-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Product:</strong> UHT Toned Milk, stored at 25°C</p>
+                <p><strong>NPN measured by Kjeldahl on TCA filtrate:</strong></p>
+                <table class="table-auto border-collapse border border-gray-300 mt-1 text-sm w-full">
+                  <thead><tr class="bg-gray-100"><th class="border p-1">Day</th><th class="border p-1">NPN (mg N/100 ml)</th><th class="border p-1">% NPN Increase</th><th class="border p-1">Sensory</th><th class="border p-1">Status</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border p-1">0</td><td class="border p-1">28.5</td><td class="border p-1">0% (baseline)</td><td class="border p-1">Normal</td><td class="border p-1">✅</td></tr>
+                    <tr><td class="border p-1">30</td><td class="border p-1">30.2</td><td class="border p-1">+6.0%</td><td class="border p-1">Normal</td><td class="border p-1">✅</td></tr>
+                    <tr><td class="border p-1">60</td><td class="border p-1">33.8</td><td class="border p-1">+18.6%</td><td class="border p-1">Slight bitter hint</td><td class="border p-1">⚠️</td></tr>
+                    <tr><td class="border p-1">90</td><td class="border p-1">36.1</td><td class="border p-1">+26.7%</td><td class="border p-1">Noticeable bitter</td><td class="border p-1">❌ Bitter</td></tr>
+                    <tr><td class="border p-1">120</td><td class="border p-1">42.5</td><td class="border p-1">+49.1%</td><td class="border p-1">Very bitter + GELATION!</td><td class="border p-1">❌ Gel</td></tr>
+                  </tbody>
+                </table>
+                <pre><code>Day 90 calculation: 
+% NPN Increase = [(36.1 - 28.5) / 28.5] × 100 = [7.6 / 28.5] × 100 = 26.7%
+> 20% threshold → significant proteolysis confirmed!
+
+Day 120: 49.1% increase > 40% → GELATION occurred!
+κ-casein degradation → casein micelle destabilization → gel network formation</code></pre>
+                <p><strong>Conclusion: Shelf life = 60-75 days (last acceptable before bitter taste). The raw milk likely had a high psychrotrophic count → heat-stable proteases survived the UHT process.</strong></p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Interpretation:</h4>
+              <p><strong>NPN increase &gt;20% from baseline:</strong> Significant proteolysis — bitter taste is likely to develop.</p>
+              <p><strong>NPN increase &gt;40%:</strong> High gelation risk — UHT milk shelf life is ending.</p>
+              <p><strong>For pasteurized milk:</strong> Acidity develops before bitterness, so proteolysis is less relevant.</p>
+            `
+          },
+          {
+            title: "Lipolysis Detection (Free Fatty Acid Estimation)",
+            purpose: "To detect fat breakdown during storage — an indicator of rancid/soapy off-flavour.",
+            reference: "IDF 6:2004; BDL Method",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+              <p>Lipase enzymes (milk's natural lipase or bacterial lipases) hydrolyze milk fat, releasing free fatty acids (FFA) — especially short-chain fatty acids (butyric, caproic, caprylic) that give a rancid/soapy taste. Measuring FFA levels determines the extent of lipolysis.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">📐 ADV Formula — Detailed Explanation:</h4>
+              <div class="bg-blue-50 p-3 rounded mt-2 mb-2">
+                <pre><code>Acid Degree Value (ADV) = (ml KOH × N × 100) / (ml fat in aliquot)
+
+Where:
+- ml KOH = volume of alcoholic KOH used in titration
+- N = Normality of KOH (typically 0.02N)
+- 100 = conversion factor for "per 100 g fat"
+- ml fat in aliquot = amount of fat present in the 5 ml petroleum ether aliquot</code></pre>
+
+                <p class="mt-2"><strong>Extraction Mixture Ratio — WHY 40:10:1?</strong></p>
+                <ul class="list-disc list-outside pl-5 space-y-1">
+                  <li><strong>Isopropanol (40 parts):</strong> Denatures proteins, breaks open fat globule membranes → fat is freed</li>
+                  <li><strong>Petroleum ether (10 parts):</strong> Dissolves the fat — non-polar solvent</li>
+                  <li><strong>4N H₂SO₄ (1 part):</strong> Improves phase separation, precipitates proteins</li>
+                </ul>
+                <p>With this ratio, the petroleum ether layer separates cleanly and contains only fat + FFA.</p>
+                
+                <p class="mt-2"><strong>WHY 0.02N KOH (very dilute)?</strong></p>
+                <p>The quantity of FFA is very small (micrograms to milligrams). If 0.1N KOH were used, one drop would cause too much change → endpoint overshoot. 0.02N = 5× more sensitive titration → accurate results.</p>
+                
+                <p class="mt-2"><strong>How to calculate fat in the aliquot?</strong></p>
+                <pre><code>Total extraction volume = 10 ml (petroleum ether added)
+Aliquot taken = 5 ml (half of upper layer)
+Original milk = 10 ml, Fat% = 3.0% (known from Gerber test)
+Fat in 10 ml milk = 10 × 0.03 × 1.032 = 0.310 g (approx)
+Fat in 5 ml aliquot = 0.310 × (5/10) = 0.155 g
+
+Note: This is approximate — actual fat distribution between 
+layers depends on partition coefficient</code></pre>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Method 1: BDL / Acid Degree Value (ADV)</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Take 10 ml of milk in a conical flask.</li>
+                <li>Add 10 ml of extraction mixture (isopropanol:petroleum ether:4N H₂SO₄ — 40:10:1).</li>
+                <li>Shake vigorously (1 minute).</li>
+                <li>Allow to stand — the upper petroleum ether layer will separate.</li>
+                <li>Carefully pipette 5 ml of the upper layer.</li>
+                <li>Add 2-3 drops of phenolphthalein indicator.</li>
+                <li>Titrate with 0.02N alcoholic KOH — to a pink endpoint.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 1 (Fresh Milk — No Rancidity):</h4>
+              <div class="bg-green-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Sample:</strong> Pasteurized toned milk, Day 0, Fat = 3.0%</p>
+                <p><strong>Titration:</strong> 0.02N KOH used = 0.35 ml</p>
+                <p><strong>Fat in aliquot (calculated):</strong> 0.155 g = 0.155 ml (fat density ~1 for approximation)</p>
+                <pre><code>ADV = (0.35 × 0.02 × 100) / 0.155
+  = 0.70 / 0.155
+  = 0.45 meq/100g fat</code></pre>
+                <p><strong>Result: ADV = 0.45 < 0.5 → ✅ No rancidity detected. Fresh milk!</strong></p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">📊 Worked Example 2 (Stored Milk — Rancid):</h4>
+              <div class="bg-red-50 p-3 rounded mt-2 mb-2">
+                <p><strong>Sample:</strong> Same milk, Day 5 at 4°C (high psychrotrophic count batch)</p>
+                <p><strong>Titration:</strong> 0.02N KOH used = 1.25 ml</p>
+                <pre><code>ADV = (1.25 × 0.02 × 100) / 0.155
+  = 2.50 / 0.155
+  = 1.61 meq/100g fat</code></pre>
+                <p><strong>Result: ADV = 1.61 > 1.5 → ❌ Strong rancidity! Shelf life is over!</strong></p>
+                <p>Panelists also reported a "soapy, rancid, unpleasant" taste. Bacterial lipases (from Pseudomonas contamination) released butyric acid and caproic acid.</p>
+              </div>
+
+              <h4 class="font-semibold mt-4 mb-2">Interpretation for Shelf Life:</h4>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">ADV (meq/100g fat)</th><th class="border p-2">Rancidity Level</th><th class="border p-2">Consumer Acceptance</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2">&lt; 0.5</td><td class="border p-2">No rancidity</td><td class="border p-2">Acceptable</td></tr>
+                  <tr><td class="border p-2">0.5 - 1.0</td><td class="border p-2">Slight — trained panel detects</td><td class="border p-2">Marginal</td></tr>
+                  <tr><td class="border p-2">1.0 - 1.5</td><td class="border p-2">Definite rancidity</td><td class="border p-2">Unacceptable — shelf life over</td></tr>
+                  <tr><td class="border p-2">&gt; 1.5</td><td class="border p-2">Strong rancidity</td><td class="border p-2">Rejected</td></tr>
+                </tbody>
+              </table>
+
+              <h4 class="font-semibold mt-4 mb-2">🔑 Which Fatty Acids Cause Rancidity?</h4>
+              <div class="bg-gray-50 p-3 rounded mt-2">
+                <table class="table-auto border-collapse border border-gray-300 text-sm w-full">
+                  <thead><tr class="bg-gray-100"><th class="border p-1">Fatty Acid</th><th class="border p-1">Carbon Chain</th><th class="border p-1">Flavour Threshold</th><th class="border p-1">Taste/Smell</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border p-1">Butyric acid</td><td class="border p-1">C4:0</td><td class="border p-1">Very low (~5 ppm)</td><td class="border p-1">Rancid, vomit-like</td></tr>
+                    <tr><td class="border p-1">Caproic acid</td><td class="border p-1">C6:0</td><td class="border p-1">~15 ppm</td><td class="border p-1">Goaty, sweaty</td></tr>
+                    <tr><td class="border p-1">Caprylic acid</td><td class="border p-1">C8:0</td><td class="border p-1">~20 ppm</td><td class="border p-1">Soapy, waxy</td></tr>
+                    <tr><td class="border p-1">Capric acid</td><td class="border p-1">C10:0</td><td class="border p-1">~30 ppm</td><td class="border p-1">Soapy</td></tr>
+                  </tbody>
+                </table>
+                <p class="mt-1">The proportion of short-chain fatty acids (C4-C10) in milk fat is ~15-20% — this makes dairy fat particularly susceptible to rancidity compared to vegetable oils.</p>
+              </div>
+            `
+          },
+          {
+            title: "Sediment / Sedimentation Test (for UHT Milk)",
+            purpose: "To check sediment formation in UHT milk — an indicator of protein aggregation and mineral precipitation during shelf life.",
+            reference: "IDF Standard; Industry practice",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+              <p>In UHT milk during storage, proteins can aggregate and minerals (calcium phosphate) can precipitate — these accumulate at the bottom of the pack as sediment. Excessive sediment causes consumer complaints and indicates the adequacy of processing parameters (pre-heat treatment, homogenization).</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Carefully open the UHT milk pack without shaking.</li>
+                <li>Carefully decant the milk, leaving the sediment in the pack.</li>
+                <li>Wash the sediment with distilled water and collect it on a pre-weighed filter paper.</li>
+                <li>Dry at 102°C to constant weight.</li>
+                <li>Record the weight of the sediment.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Alternative — Visual Assessment:</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Open the pack, pour the milk into a beaker.</li>
+                <li>Observe sediment at the bottom of the pack.</li>
+                <li>Score: 0 (no sediment), 1 (slight), 2 (moderate), 3 (heavy).</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Acceptable Limits:</h4>
+              <p><strong>No sediment or trace amount:</strong> Acceptable — normal shelf life</p>
+              <p><strong>Visible sediment &gt;0.5% of total weight:</strong> Unacceptable — review processing parameters</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Prevention Tips:</h4>
+              <ul class="list-disc list-outside pl-5 space-y-1">
+                <li>Proper pre-heating (85°C/30 sec before UHT) — stabilizes whey proteins</li>
+                <li>Good homogenization (200 bar 1st stage + 50 bar 2nd stage)</li>
+                <li>Raw milk quality — low SCC, balanced minerals</li>
+                <li>Citrate/phosphate addition (stabilizers) — approved by FSSAI</li>
+              </ul>
+            `
+          },
+          {
+            title: "Cream Rising / Fat Separation Test (Homogenization Efficiency)",
+            purpose: "To check the effectiveness of homogenization — poor homogenization causes cream layer separation, which is a visual defect during shelf life.",
+            reference: "IS 1479 (Part I) 1961; USPH method; NIZO method",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+              <p>In homogenization, fat globules are broken down to a smaller size (1-2 microns) so that they do not rise to the top. If homogenization is incomplete, fat globules rise during storage and form a cream layer — which is unacceptable in market milk. By measuring Homogenization Efficiency (HE) or Homogenization Index (HI), it can be predicted whether cream separation will occur during shelf life.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Method 1: USPH (United States Public Health) Method</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Pour 100 ml of homogenized milk into a graduated cylinder.</li>
+                <li>Leave undisturbed in a refrigerator (4°C) for 48 hours.</li>
+                <li>Carefully pipette the top 10 ml (upper layer).</li>
+                <li>Thoroughly mix the remaining 90 ml (lower layer).</li>
+                <li>Determine the fat content of both fractions by the Gerber method.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+              <pre><code>Homogenization Index (HI) = (Fat% in top layer / Fat% in bottom layer)</code></pre>
+              <pre><code>Homogenization Efficiency (HE) = [1 - (Fat_top - Fat_bottom) / Fat_original] × 100</code></pre>
+
+              <h4 class="font-semibold mt-4 mb-2">Method 2: NIZO Method (Rapid)</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Centrifuge 25 ml of milk at 1000 rpm for 30 minutes.</li>
+                <li>Test the fat in the top and bottom fractions.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Interpretation:</h4>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">HI Value</th><th class="border p-2">Homogenization</th><th class="border p-2">Shelf Life Impact</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2">&lt; 1.10</td><td class="border p-2">Excellent</td><td class="border p-2">No cream separation throughout shelf life</td></tr>
+                  <tr><td class="border p-2">1.10 - 1.20</td><td class="border p-2">Good</td><td class="border p-2">Minimal separation</td></tr>
+                  <tr><td class="border p-2">1.20 - 1.50</td><td class="border p-2">Fair</td><td class="border p-2">Visible cream layer may form</td></tr>
+                  <tr><td class="border p-2">&gt; 1.50</td><td class="border p-2">Poor</td><td class="border p-2">Cream plug/line formation — consumer complaint</td></tr>
+                </tbody>
+              </table>
+
+              <h4 class="font-semibold mt-4 mb-2">FSSAI Requirement:</h4>
+              <p>In homogenized milk, the average fat globule diameter should be less than 2 microns. There should be no cluster formation.</p>
+            `
+          },
+          {
+            title: "Pack Integrity Test (for Pouches / Tetra Paks)",
+            purpose: "To verify the integrity of packaging — leakage drastically reduces shelf life because it opens a pathway for contamination.",
+            reference: "Industry Standard Operating Procedures; FSSAI GMP Guidelines",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+              <p>If there is any micro-leak in the packaging, bacteria can enter and the product will spoil rapidly. The 3-6 month shelf life of UHT milk depends entirely on packaging integrity. Pack integrity tests are performed both on the production line and during shelf life studies.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Method 1: Dye Penetration Test (for Pouches)</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Immerse the sealed pouch in a 0.5% methylene blue solution.</li>
+                <li>Gently squeeze the pouch and keep it immersed for 30 minutes.</li>
+                <li>Remove the pouch and wash the outside.</li>
+                <li>Open the pouch and check the colour of the milk inside.</li>
+              </ol>
+              <p><strong>Blue colour inside:</strong> LEAK present — pack reject</p>
+              <p><strong>No colour change:</strong> PASS — pack intact</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Method 2: Vacuum/Pressure Test (for Tetra Paks)</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Place the pack in a vacuum chamber.</li>
+                <li>Apply -500 mbar vacuum.</li>
+                <li>If the pack swells and air bubbles appear = leak is present.</li>
+                <li>Or: Place the pack underwater and apply vacuum — bubbles = leak.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Method 3: Electrolytic Test (for Tetra Paks)</h4>
+              <ol class="list-decimal list-outside pl-5 space-y-2">
+                <li>Immerse the pack in a saline solution.</li>
+                <li>Measure the electric current between the inside and outside of the pack.</li>
+                <li>Current flow = pin-hole/micro-leak present.</li>
+              </ol>
+
+              <h4 class="font-semibold mt-4 mb-2">Method 4: Visual Inspection</h4>
+              <ul class="list-disc list-outside pl-5 space-y-1">
+                <li>Seal integrity — proper sealing, no wrinkles</li>
+                <li>Pouch swelling — gas production = microbial growth</li>
+                <li>Leakage stains — wet spots on the pack</li>
+                <li>Pin holes — hold against light</li>
+              </ul>
+
+              <h4 class="font-semibold mt-4 mb-2">Frequency:</h4>
+              <p>Production line: Test one pack every 30 minutes. Shelf life study: Perform a weekly pack integrity check. If even a single leaking pack is found, investigate the entire batch.</p>
+            `
+          },
+          {
+            title: "Comprehensive Shelf Life Study Protocol (Market Milk)",
+            purpose: "How to conduct a complete shelf life study — the full protocol from production to expiry determination.",
+            reference: "FSSAI Guidelines; Codex CAC/GL 46-2003; Industry Best Practices",
+            procedure: `
+              <h4 class="font-semibold mt-4 mb-2">Shelf Life Study Design:</h4>
+              <p>In a systematic shelf life study, multiple parameters are monitored at set intervals. This study is necessary for regulatory submission, internal quality assurance, and best-before date determination.</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Step 1: Sample Collection</h4>
+              <ul class="list-disc list-outside pl-5 space-y-1">
+                <li>Collect samples from a minimum of 3 different batches (to cover batch-to-batch variation).</li>
+                <li>Collect a minimum of 30-50 units from each batch (to cover testing intervals).</li>
+                <li>Store samples under designated storage conditions.</li>
+              </ul>
+
+              <h4 class="font-semibold mt-4 mb-2">Step 2: Storage Conditions</h4>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Product</th><th class="border p-2">Storage Temp</th><th class="border p-2">Testing Intervals</th><th class="border p-2">Study Duration</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2">Pasteurized Milk</td><td class="border p-2">4 ± 1°C</td><td class="border p-2">Every 24 hours</td><td class="border p-2">7-10 days</td></tr>
+                  <tr><td class="border p-2">UHT Milk</td><td class="border p-2">25 ± 2°C (room temp)</td><td class="border p-2">Weekly for 1st month, then monthly</td><td class="border p-2">6-9 months</td></tr>
+                  <tr><td class="border p-2">Sterilized Milk</td><td class="border p-2">25 ± 2°C</td><td class="border p-2">Weekly</td><td class="border p-2">3-6 months</td></tr>
+                  <tr><td class="border p-2">Flavoured Milk</td><td class="border p-2">4 ± 1°C</td><td class="border p-2">Every 2-3 days</td><td class="border p-2">15-21 days</td></tr>
+                </tbody>
+              </table>
+
+              <h4 class="font-semibold mt-4 mb-2">Step 3: Parameters to Test at Each Interval</h4>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Category</th><th class="border p-2">Tests</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2"><strong>Microbiological</strong></td><td class="border p-2">TPC, Coliform count, Yeast & Mold count, E. coli</td></tr>
+                  <tr><td class="border p-2"><strong>Chemical</strong></td><td class="border p-2">pH, Titratable acidity, Fat %, SNF %</td></tr>
+                  <tr><td class="border p-2"><strong>Sensory</strong></td><td class="border p-2">Appearance, Odour, Taste, Texture (hedonic scale)</td></tr>
+                  <tr><td class="border p-2"><strong>Physical</strong></td><td class="border p-2">Pack integrity, Cream separation, Sediment</td></tr>
+                  <tr><td class="border p-2"><strong>Enzymatic</strong></td><td class="border p-2">ALP test, Peroxidase test (initial only)</td></tr>
+                </tbody>
+              </table>
+
+              <h4 class="font-semibold mt-4 mb-2">Step 4: Shelf Life Determination Criteria</h4>
+              <p>Shelf life ends on the day when <strong>any single</strong> parameter fails:</p>
+              <ul class="list-disc list-outside pl-5 space-y-1">
+                <li>TPC &gt; 1,00,000 CFU/ml (pasteurized milk)</li>
+                <li>Coliform detected (UHT/sterilized)</li>
+                <li>pH &lt; 6.0 or acidity &gt; 0.18%</li>
+                <li>Sensory score &lt; 5 (overall unacceptable)</li>
+                <li>Visible cream separation, sediment, or off-colour</li>
+                <li>Pack swelling or leakage</li>
+              </ul>
+
+              <h4 class="font-semibold mt-4 mb-2">Step 5: Safety Margin</h4>
+              <p>Print the best-before date 20-30% less than the determined shelf life. Example: If everything remains okay for 6 days in the study, set the best-before as 4-5 days. This safety margin covers temperature abuse (cold chain breaks).</p>
+
+              <h4 class="font-semibold mt-4 mb-2">Documentation:</h4>
+              <ul class="list-disc list-outside pl-5 space-y-1">
+                <li>Every test result must be dated and signed</li>
+                <li>Prepare graphs/charts — for trend analysis</li>
+                <li>Note any deviation or observation</li>
+                <li>Prepare a final shelf life recommendation report</li>
+                <li>Retain records for a minimum of 2 years</li>
+              </ul>
+            `
+          }
+        ]
+      },
             "cream": {
-                title: "Analysis of Cream",
-                tests: [
-                    {
-                        title: "Determination of Fat",
-                        purpose: "To determine the fat content in cream, which is its primary commercial value.",
-                        reference: "IS 3509-1966",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">Method 1: Gerber Method (for Cream)</h4>
-                            <ol class="list-decimal list-outside pl-5 space-y-2">
-                                <li>Weigh 5g of well-mixed cream directly into a special cream butyrometer.</li>
-                                <li>Add 5ml of water.</li>
-                                <li>Add 10ml of Gerber's acid and 1ml of amyl alcohol.</li>
-                                <li>Proceed as for the Gerber method for milk (centrifugation, water bath, reading). The reading is multiplied by a factor depending on the butyrometer to get the fat percentage.</li>
-                            </ol>
-                            <h4 class="font-semibold mt-4 mb-2">Method 2: Werner-Schmidt Method</h4>
-                            <p>Suitable for soured or preserved cream. Approximately 5g of cream is digested with hydrochloric acid, and the fat is extracted with ether and weighed.</p>
-                        `
-                    },
-                     {
-                        title: "Titratable Acidity",
-                        purpose: "To determine the acidity of cream.",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                            <ol class="list-decimal list-outside pl-5 space-y-2">
-                                <li>Weigh 10g of cream into a porcelain dish.</li>
-                                <li>Add 10ml of hot, neutral distilled water to disperse the sample.</li>
-                                <li>Add a few drops of phenolphthalein indicator.</li>
-                                <li>Titrate with 0.1 N NaOH to a faint pink endpoint.</li>
-                            </ol>
-                            <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
-                            <pre><code>% Acidity = (Titre volume * Normality of NaOH * 9) / Weight of sample</code></pre>
-                        `
-                    },
-                   {
-                        title: "Detection of Thickeners in Cream",
-                        purpose: "To detect illegal additives like starch or gelatine used to artificially thicken cream.",
-                        reference: "A.O.A.C. Official method 920.106",
-                        procedure: `
-                          <p><strong>Starch:</strong> Dilute 10ml of cream with 10ml water and boil. Cool and add a few drops of iodine solution. A blue color indicates the presence of starch.</p>
-                          <p class="mt-2"><strong>Gelatine:</strong> Detected by Stokes Test. Mix 10ml cream, 20ml water, and 20ml of Stokes reagent (acid mercuric nitrate). Filter the mixture. To the filtrate, add an equal volume of saturated picric acid. A yellow precipitate indicates gelatine.</p>
-                        `
-                    }
-                ]
-            },
+      title: "Cream Analysis",
+      tests: [
+        {
+          title: "Fat Determination",
+          purpose: "To determine the fat content in cream — this is its primary commercial value. Cream is graded based on fat percentage (light cream, heavy cream, etc.).",
+          reference: "IS 3509-1966; A.O.A.C 995.19",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle — Why Are There Three Methods?</h4>
+            <p>Cream has a very high fat content (25-50%) compared to milk (3-5%). Therefore, the normal Gerber butyrometer used for milk cannot be directly used — modified procedures are needed for cream. There are three main methods:</p>
+            <ul class="list-disc list-inside text-sm space-y-1 mt-2">
+              <li><strong>Gerber Method (Cream)</strong> — For rapid, routine testing</li>
+              <li><strong>Rose-Gottlieb Method</strong> — Reference/accurate method, used in disputes</li>
+              <li><strong>Werner-Schmidt Method</strong> — Suitable for sour/preserved cream</li>
+            </ul>
+
+            <h4 class="font-semibold mt-4 mb-2">Method 1: Gerber Method (Modified for Cream)</h4>
+            
+            <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mt-2 text-sm">
+              <p><strong>Why can't the milk Gerber method be directly used for cream?</strong></p>
+              <ul class="list-disc list-inside space-y-1 mt-1">
+                <li>The milk butyrometer scale reads 0-8% or 0-10% — cream fat is 25-50%, it won't fit on the scale</li>
+                <li>Taking 10.75 ml of cream is not feasible — such a thick sample won't flow through a pipette</li>
+                <li>Therefore, cream is WEIGHED (5 grams), diluted, and a special cream butyrometer (0-70% scale) is used</li>
+              </ul>
+            </div>
+
+            <h5 class="font-semibold mt-3">Procedure:</h5>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Mix the cream thoroughly — fat tends to float to the top, so a homogeneous sample is essential. <em>— Gently warm to 40°C and mix; excessive heat will cause fat separation.</em></li>
+              <li>Accurately weigh <strong>5 grams</strong> of well-mixed cream directly into a special <strong>cream butyrometer</strong> (0-70% scale). <em>— Cream is weighed (not pipetted volumetrically) because cream is viscous and each cream has a different density depending on its fat content.</em></li>
+              <li>Add 5 ml of water — to dilute the cream. <em>— Dilution is necessary because acid reacts very violently with concentrated cream. Water provides a buffering effect and ensures uniform protein digestion.</em></li>
+              <li>Carefully add 10 ml of Gerber's sulphuric acid (density 1.807-1.812 g/ml at 20°C) along the side. <em>— The acid digests the proteins and releases the fat. This is a highly exothermic reaction — add carefully.</em></li>
+              <li>Add 1 ml of amyl alcohol. <em>— It reduces surface tension so that the fat layer separates cleanly. Amyl alcohol mixes with the fat to form a clear fat column.</em></li>
+              <li>Insert the stopper and mix thoroughly by inverting (wear gloves! — it will be very hot). Mix carefully — no dark particles should remain.</li>
+              <li>Place in a 65°C water bath for 5 minutes, then spin in a centrifuge at 1200 rpm for 5 minutes.</li>
+              <li>Place back in the 65°C water bath for 5 minutes.</li>
+              <li>Read the fat column on the butyrometer.</li>
+            </ol>
+
+            <h5 class="font-semibold mt-3">Calculation:</h5>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>% Fat (cream) = Butyrometer Reading × Correction Factor</code></pre>
+              
+              <p class="text-sm mt-2"><strong>Why is a correction needed in the Cream Gerber method?</strong></p>
+              <p class="text-sm mt-1">In the normal milk Gerber method, 10.75 ml of milk is used, which is exactly calibrated so that 1 small division = 0.1% fat. However, in cream we use only 5 grams + 5 ml water = total 10 ml. The density and volume do not match the milk butyrometer — that is why the cream butyrometer has a different scale.</p>
+              
+              <p class="text-sm mt-2">If using a normal milk butyrometer for cream (not recommended, but done in some labs):</p>
+              <pre class="text-sm"><code>% Fat = Reading × (10.75 / Weight of cream taken) × (1 / density correction)
+
+Approximate: % Fat ≈ Reading × 2.15  (when 5 g cream is taken in a normal butyrometer)</code></pre>
+
+              <p class="text-sm mt-2"><strong>Where the factor 2.15 comes from:</strong></p>
+              <pre class="text-sm"><code>
+Normal milk Gerber: 10.75 ml milk (density ~1.030) ≈ 11.07 g milk
+Cream Gerber: 5 g cream
+
+Ratio = 11.07 / 5 ≈ 2.21 (approximate, ~2.15 with density correction)
+
+This is a rough factor — use a cream butyrometer for accurate results
+              </code></pre>
+              
+              <p class="text-sm mt-2"><strong>Note:</strong> A cream butyrometer directly reads % fat — no calculation is required. The scale is already calibrated for a 5 g cream sample.</p>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Method 2: Rose-Gottlieb Method (Reference/Gravimetric)</h4>
+            
+            <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mt-2 text-sm">
+              <p><strong>When is this method used?</strong></p>
+              <ul class="list-disc list-inside space-y-1 mt-1">
+                <li>When a very accurate result is needed (legal disputes, calibration)</li>
+                <li>When the Gerber method result is doubtful</li>
+                <li>This is the standard reference method — all other methods are compared against it</li>
+              </ul>
+            </div>
+
+            <h5 class="font-semibold mt-3">Procedure:</h5>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Accurately weigh ~1-2 grams of cream into a Mojonnier flask or extraction flask (cream has high fat, so a smaller sample is taken compared to the 10 g used for milk). <em>— A smaller sample = a proportional extraction volume is sufficient.</em></li>
+              <li>Add 5 ml of warm distilled water and uniformly disperse the cream.</li>
+              <li>Add 1.5 ml of concentrated ammonia (NH₃, density 0.88) and mix. <em>— Ammonia dissolves the casein protein (converts casein to ammonium caseinate) which surrounds the fat globules. The fat globules are thus released.</em></li>
+              <li>Add 3 ml of ethanol (95%) and mix. <em>— Ethanol breaks the emulsion and improves fat extraction. It also precipitates denatured protein.</em></li>
+              <li>Add 25 ml of diethyl ether, stopper, and shake vigorously for 1 minute. <em>— Diethyl ether is the primary fat solvent — fat dissolves in the ether.</em></li>
+              <li>Add 25 ml of petroleum ether (40-60°C boiling range) and mix gently. <em>— Petroleum ether provides additional fat extraction and prevents emulsion formation.</em></li>
+              <li>Allow to stand until the layers clearly separate (upper = ether + fat, lower = aqueous).</li>
+              <li>Carefully siphon/pour the upper ether layer into a pre-weighed flask.</li>
+              <li>Repeat the extraction 2 more times (total 3 extractions). <em>— Three times because 100% fat is not extracted in a single pass — multiple extractions recover >99.5% of the fat.</em></li>
+              <li>Evaporate the combined ether extracts on a water bath (the ether evaporates, fat remains).</li>
+              <li>Place the flask in a 102°C oven for 1 hour (to remove residual ether/moisture).</li>
+              <li>Cool in a desiccator, then weigh. Repeat until constant weight is achieved.</li>
+            </ol>
+
+            <h5 class="font-semibold mt-3">Calculation:</h5>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>% Fat = [(W_flask+fat - W_empty flask) / W_sample] × 100</code></pre>
+              
+              <p class="text-sm mt-2"><strong>Each factor:</strong></p>
+              <ul class="list-disc list-inside text-sm space-y-1">
+                <li><strong>W_flask+fat</strong> = Weight of the flask after drying (with fat residue) — grams</li>
+                <li><strong>W_empty flask</strong> = Weight of the empty pre-dried flask — grams</li>
+                <li><strong>(W_flask+fat - W_empty flask)</strong> = Weight of fat alone — grams</li>
+                <li><strong>W_sample</strong> = Weight of the cream sample — grams</li>
+                <li><strong>× 100</strong> = Percentage conversion</li>
+              </ul>
+
+              <p class="text-sm mt-2"><strong>This is a gravimetric method — fat weight is measured directly. No chemical conversion factor is needed — what is weighed is the fat.</strong></p>
+
+              <p class="text-sm mt-3"><strong>Example:</strong></p>
+              <pre class="text-sm"><code>
+W_sample = 1.52 g cream
+W_empty flask = 105.234 g
+W_flask+fat = 105.912 g
+
+Fat weight = 105.912 - 105.234 = 0.678 g
+
+% Fat = (0.678 / 1.52) × 100 = 44.6%
+
+Within the heavy cream range (40-50%) ✓
+              </code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Method 3: Werner-Schmidt Method (Acid Hydrolysis)</h4>
+            
+            <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mt-2 text-sm">
+              <p><strong>When is this method used?</strong></p>
+              <ul class="list-disc list-inside space-y-1 mt-1">
+                <li>Sour cream (high acidity) where the Gerber method does not work properly</li>
+                <li>Preserved cream (with added preservatives)</li>
+                <li>Processed cream products such as cheese sauce, cream-based desserts</li>
+                <li>In the ammonia-based Rose-Gottlieb method, the casein of sour cream does not dissolve properly — hence HCl is used</li>
+              </ul>
+            </div>
+
+            <h5 class="font-semibold mt-3">Procedure:</h5>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Accurately weigh ~5 grams of cream into a Mojonnier flask or test tube.</li>
+              <li>Add 10 ml of concentrated HCl. <em>— HCl completely digests the proteins (acid hydrolysis) — even the clumped proteins of sour cream are digested. In the ammonia method, the acid-precipitated casein of sour cream does not dissolve.</em></li>
+              <li>Heat on a water bath until a dark brown colour develops (15-20 minutes). Shake occasionally. <em>— Dark brown = proteins are completely hydrolyzed (broken down into amino acids). The fat is now released.</em></li>
+              <li>Cool.</li>
+              <li>Add 25 ml of diethyl ether, shake, and allow the layers to separate.</li>
+              <li>Collect the ether layer (fat + ether) into a pre-weighed flask.</li>
+              <li>Perform a second extraction with 25 ml of petroleum ether. Total 3 extractions.</li>
+              <li>Evaporate the ether, dry at 102°C, and weigh.</li>
+            </ol>
+
+            <h5 class="font-semibold mt-3">Calculation:</h5>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>% Fat = [(Weight of extracted fat) / (Weight of cream sample)] × 100</code></pre>
+              <p class="text-sm mt-1">Same as Rose-Gottlieb — it is a gravimetric method. Only the extraction procedure differs (acid vs ammonia).</p>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values — Cream Fat Content:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Cream Type</th><th class="border p-2">Fat %</th><th class="border p-2">Use</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Light/Table cream</td><td class="border p-2">25-30%</td><td class="border p-2">Coffee, pouring</td></tr>
+                <tr><td class="border p-2">Medium cream</td><td class="border p-2">30-40%</td><td class="border p-2">Cooking, sauces</td></tr>
+                <tr><td class="border p-2">Heavy/Whipping cream</td><td class="border p-2">40-50%</td><td class="border p-2">Whipping, pastry</td></tr>
+                <tr><td class="border p-2">Malai (desi cream)</td><td class="border p-2">50-70%</td><td class="border p-2">Ghee making, traditional</td></tr>
+              </tbody>
+            </table>
+            <p class="mt-2">FSSAI standard: Minimum <strong>25% fat</strong> for cream</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Comparison of All Three Methods:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Feature</th><th class="border p-2">Gerber</th><th class="border p-2">Rose-Gottlieb</th><th class="border p-2">Werner-Schmidt</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Type</td><td class="border p-2">Volumetric (read from scale)</td><td class="border p-2">Gravimetric (weight)</td><td class="border p-2">Gravimetric (weight)</td></tr>
+                <tr><td class="border p-2">Accuracy</td><td class="border p-2">±0.5%</td><td class="border p-2">±0.1% (best)</td><td class="border p-2">±0.2%</td></tr>
+                <tr><td class="border p-2">Time</td><td class="border p-2">30 min</td><td class="border p-2">3-4 hours</td><td class="border p-2">2-3 hours</td></tr>
+                <tr><td class="border p-2">Sour cream</td><td class="border p-2">Difficult</td><td class="border p-2">Difficult</td><td class="border p-2">Best suited ✓</td></tr>
+                <tr><td class="border p-2">Use case</td><td class="border p-2">Routine/daily</td><td class="border p-2">Reference/legal</td><td class="border p-2">Problem samples</td></tr>
+              </tbody>
+            </table>
+          `
+        },
+        {
+          title: "Total Solids Determination",
+          purpose: "To determine the total solid content in cream — fat + protein + lactose + minerals combined. The ratio of water content to solid content determines the quality and grade of the cream.",
+          reference: "IS 3509-1966",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>Cream is heated at a controlled temperature (100±2°C) — all the water evaporates and the solid residue that remains is the <strong>Total Solids (TS)</strong>. This is a simple <strong>gravimetric method</strong>.</p>
+            <p class="mt-2"><strong>Total Solids include:</strong></p>
+            <ul class="list-disc list-inside text-sm">
+              <li><strong>Fat</strong> — the most major component in cream (25-50%)</li>
+              <li><strong>Protein</strong> — casein + whey proteins (~2-3%)</li>
+              <li><strong>Lactose</strong> — milk sugar (~3-4%)</li>
+              <li><strong>Minerals</strong> — ash (~0.5%)</li>
+            </ul>
+            <p class="mt-1"><strong>Why it is important:</strong> Total solids = the "real value" of cream. Water is just a filler. Higher TS = better quality cream (and usually higher fat as well).</p>
+
+            <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mt-2 text-sm">
+              <p><strong>Special challenge in drying cream:</strong></p>
+              <p>Cream has a very high fat content. Fat forms a protective layer on top of the water — the water gets trapped inside and does not evaporate easily. Therefore:</p>
+              <ul class="list-disc list-inside mt-1 space-y-1">
+                <li>First, partial drying is done on a water bath — to prevent surface crust formation</li>
+                <li>Then complete drying is done in an oven</li>
+                <li>Placing directly in an oven would cause the fat layer to seal the surface, trapping moisture inside → incorrect (low) result</li>
+              </ul>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Dry a clean flat-bottom aluminium/porcelain dish in an oven at 100°C for 1 hour, cool in a desiccator, and weigh = <strong>W1</strong> (empty dish weight). <em>— Pre-drying removes the dish's own moisture. Cooling in a desiccator is essential — a hot dish will absorb atmospheric moisture.</em></li>
+              <li>Accurately weigh ~5 grams of well-mixed cream into the dish. Dish + cream = <strong>W2</strong>. <em>— 5 grams is sufficient for cream. Warm the cream gently to 38-40°C and mix — without creating air bubbles.</em></li>
+              <li><strong>Water bath drying (pre-drying):</strong> Place the dish on a boiling water bath for 30 minutes. <em>— This step is very important for cream! The gentle heat of the water bath gradually evaporates the water without the fat layer sealing the surface. Surface crust formation is prevented.</em></li>
+              <li><strong>Oven drying:</strong> Then place the dish in a hot air oven at 100±2°C for 3-4 hours. <em>— For complete removal of remaining moisture. The temperature should not exceed 100°C because lactose can caramelize and fat can oxidize — both would cause weight changes.</em></li>
+              <li>Cool in a desiccator (20-30 min) and weigh = <strong>W3</strong>.</li>
+              <li>Place back in the oven for 1 hour, cool, and weigh again. If the weight is within ±0.5 mg of the previous weight, constant weight has been achieved. If not, repeat. <em>— Constant weight confirms that all moisture has been removed.</em></li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Formula and Factor Explanation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>% Total Solids = [(W3 - W1) / (W2 - W1)] × 100</code></pre>
+              
+              <h5 class="font-semibold mt-3 text-sm">Explanation of Each Factor:</h5>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <tbody>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold w-1/4">W1</td><td class="border p-2">Weight of the empty dry dish (grams) — baseline weight, used to remove the dish's contribution</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W2</td><td class="border p-2">Dish + Cream (before drying) — starting point</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W3</td><td class="border p-2">Dish + Dried residue (after drying) — ending point</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W2 - W1</td><td class="border p-2">= Sample weight (weight of cream) — goes in the denominator</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W3 - W1</td><td class="border p-2">= Dried residue weight (weight of total solids) — goes in the numerator</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">× 100</td><td class="border p-2">Percentage conversion</td></tr>
+                </tbody>
+              </table>
+
+              <p class="text-sm mt-3"><strong>Moisture % can also be calculated:</strong></p>
+              <pre class="text-sm"><code>% Moisture = 100 - % Total Solids
+
+or directly:
+% Moisture = [(W2 - W3) / (W2 - W1)] × 100
+(W2-W3 = weight loss = moisture that evaporated)</code></pre>
+
+              <p class="text-sm mt-3"><strong>Visual Diagram:</strong></p>
+              <pre class="text-sm"><code>
+BEFORE DRYING (W2)              AFTER DRYING (W3)
+┌──────────────────┐           ┌──────────────────┐
+│ ☁ Water (55-75%) │   100°C  │                  │
+│   evaporates      │ ──────→ │  (water gone!)    │
+│                   │  3-4 hrs │                  │
+│ 🧈 Fat (25-50%)  │          │ 🧈 Fat           │
+│ 🥛 Protein (2-3%)│          │ 🥛 Protein       │
+│ 🍬 Lactose (3-4%)│          │ 🍬 Lactose       │
+│ 🧂 Ash (0.5%)   │          │ 🧂 Ash           │
+├──────────────────┤          ├──────────────────┤
+│  Dish (W1)       │          │  Dish (W1)        │
+└──────────────────┘          └──────────────────┘
+
+Total Solids = W3 - W1 (dried residue weight)
+Sample = W2 - W1 (original cream weight)
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Example Calculation:</strong></p>
+              <pre class="text-sm"><code>
+W1 (empty dish) = 52.345 g
+W2 (dish + cream) = 57.512 g
+W3 (dish + dried residue) = 54.678 g
+
+Sample weight = W2 - W1 = 57.512 - 52.345 = 5.167 g
+Dried residue = W3 - W1 = 54.678 - 52.345 = 2.333 g
+
+% Total Solids = (2.333 / 5.167) × 100 = 45.15%
+% Moisture = 100 - 45.15 = 54.85%
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>SNF (Solids-Not-Fat) can also be calculated:</strong></p>
+              <pre class="text-sm"><code>% SNF = % Total Solids - % Fat
+
+Example: TS = 45.15%, Fat = 40.5%
+SNF = 45.15 - 40.5 = 4.65% (protein + lactose + minerals)
+              </code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Cream Type</th><th class="border p-2">Fat %</th><th class="border p-2">Total Solids %</th><th class="border p-2">Moisture %</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Light cream (25% fat)</td><td class="border p-2">25</td><td class="border p-2">~32-35</td><td class="border p-2">~65-68</td></tr>
+                <tr><td class="border p-2">Heavy cream (40% fat)</td><td class="border p-2">40</td><td class="border p-2">~47-52</td><td class="border p-2">~48-53</td></tr>
+                <tr><td class="border p-2">Malai (50%+ fat)</td><td class="border p-2">50+</td><td class="border p-2">~55-65</td><td class="border p-2">~35-45</td></tr>
+              </tbody>
+            </table>
+          `
+        },
+        {
+          title: "Titratable Acidity",
+          purpose: "To determine the acidity of cream — an indicator of freshness and microbial quality. High acidity = bacterial action (lactic acid production) = the cream is old or has been mishandled.",
+          reference: "IS 3509-1966; A.O.A.C 947.05",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>Cream naturally has some acidity (due to phosphates, citrates, and casein — this is "natural acidity"). When bacteria grow in cream, they <strong>convert lactose (milk sugar) into lactic acid</strong> — this is "developed acidity".</p>
+            <pre class="text-sm bg-gray-50 p-2 rounded"><code>Lactose → (bacteria - Lactobacillus) → Lactic Acid
+(milk sugar)                            (sour taste)</code></pre>
+            <p class="mt-2">Lactic acid is an acid — it is neutralized by NaOH (alkali). The more lactic acid present, the more NaOH will be required during titration.</p>
+            <p class="mt-1">The result is expressed as <strong>% lactic acid</strong>.</p>
+
+            <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mt-2 text-sm">
+              <p><strong>Cream acidity vs Milk acidity — what is the difference?</strong></p>
+              <p>Cream has more fat and less serum (aqueous portion) compared to milk. Acidity is mostly in the serum (lactic acid dissolves in water). Therefore:</p>
+              <ul class="list-disc list-inside mt-1 space-y-1">
+                <li>Cream of the same freshness will show LOWER acidity than milk on a per-gram basis — because the fat portion is neutral</li>
+                <li>Acidity can also be expressed on a serum basis: Serum acidity = Cream acidity × 100/(100-fat%)</li>
+                <li>Therefore, diluting cream with warm water is necessary — to soften the fat and ensure uniform mixing</li>
+              </ul>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Accurately weigh <strong>10 grams</strong> of cream into a clean porcelain dish (white — so the colour change is visible). <em>— 10 grams is the standard sample size for cream acidity.</em></li>
+              <li>Add 10 ml of warm (40-50°C), neutral distilled water and disperse the cream thoroughly. <em>— Warm water softens the cream and ensures uniform dispersion. Neutral water = water that has been pre-neutralized with NaOH (using phenolphthalein) so that the water's own acidity/alkalinity does not affect the result.</em></li>
+              <li>Add 3-4 drops of phenolphthalein indicator. <em>— Phenolphthalein is colourless in acidic/neutral conditions and turns PINK in alkaline conditions. Endpoint = first persistent pink colour.</em></li>
+              <li>Titrate slowly with <strong>0.1 N NaOH</strong> from a burette. Mix thoroughly after each addition. When a <strong>light pink colour persists for 30 seconds</strong> — that is the endpoint. <em>— Titrate slowly because cream is thick and needs mixing time. Adding too quickly will overshoot the endpoint.</em></li>
+              <li>Note the titre (ml of 0.1N NaOH used).</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Formula and Factor Derivation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>% Acidity (as lactic acid) = [V × N × 9] / W</code></pre>
+              
+              <h5 class="font-semibold mt-3 text-sm">Where does the factor 9 come from? Complete Derivation:</h5>
+              
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <tbody>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold w-1/3">Lactic Acid formula</td><td class="border p-2">CH₃-CHOH-COOH = C₃H₆O₃</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">Molecular Weight</td><td class="border p-2">C: 3×12=36, H: 6×1=6, O: 3×16=48 → Total = <strong>90 g/mol</strong></td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">Lactic acid is monobasic</td><td class="border p-2">Only 1 -COOH group → n-factor = 1 → Eq.Wt = 90/1 = <strong>90 g/eq</strong></td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">Reaction</td><td class="border p-2">CH₃CHOHCOOH + NaOH → CH₃CHOHCOONa + H₂O (1:1 ratio)</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">1 ml of 1N NaOH</td><td class="border p-2">= 1 meq = neutralizes 90/1000 g = <strong>0.090 g lactic acid</strong></td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">×100 for percentage</td><td class="border p-2">0.090 × 100 = <strong>9.0</strong></td></tr>
+                </tbody>
+              </table>
+
+              <p class="text-sm mt-3"><strong>Full derivation:</strong></p>
+              <pre class="text-sm"><code>
+Lactic Acid + NaOH → Sodium Lactate + H₂O
+
+meq of lactic acid = V × N
+
+Grams of lactic acid = V × N × (90/1000) = V × N × 0.090
+
+% Lactic acid = (grams of lactic acid / sample weight) × 100
+              = [V × N × 0.090 / W] × 100
+              = [V × N × 9.0] / W
+              = [V × N × 9] / W
+              </code></pre>
+
+              <h5 class="font-semibold mt-3 text-sm">Each Variable:</h5>
+              <ul class="list-disc list-inside text-sm space-y-1">
+                <li><strong>V</strong> = ml of NaOH used in titration (note directly — no blank is needed since neutral water was used)</li>
+                <li><strong>N</strong> = Normality of NaOH (0.1N standard). If 0.1N is used, then N = 0.1</li>
+                <li><strong>9</strong> = (Lactic acid eq.wt × 100) / 1000 = (90 × 100) / 1000 = 9.0. This is the conversion factor for expressing the equivalent weight of lactic acid as a percentage</li>
+                <li><strong>W</strong> = Sample weight in grams (typically 10 g)</li>
+              </ul>
+
+              <p class="text-sm mt-3"><strong>Example Calculation:</strong></p>
+              <pre class="text-sm"><code>
+W = 10.0 g cream
+N = 0.1 N NaOH
+V = 2.8 ml
+
+% Acidity = [2.8 × 0.1 × 9] / 10.0
+          = [2.52] / 10.0
+          = 0.252%
+
+Fresh pasteurized cream limit ≤ 0.30% → PASS ✓
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Serum Acidity can also be calculated:</strong></p>
+              <pre class="text-sm"><code>
+% Serum Acidity = (% Cream Acidity × 100) / (100 - % Fat)
+
+Example: Cream acidity = 0.252%, Fat = 40%
+Serum Acidity = (0.252 × 100) / (100-40) = 25.2/60 = 0.42%
+
+This is comparable to milk acidity (milk ≤ 0.14% typically)
+because acidity is concentrated in the serum
+              </code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Cream Type</th><th class="border p-2">Acidity (% lactic acid)</th><th class="border p-2">Interpretation</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Fresh pasteurized cream</td><td class="border p-2">≤ 0.30%</td><td class="border p-2">Good quality, fresh</td></tr>
+                <tr><td class="border p-2">Fresh raw cream</td><td class="border p-2">0.10-0.20%</td><td class="border p-2">Natural acidity</td></tr>
+                <tr><td class="border p-2">Slightly sour cream</td><td class="border p-2">0.30-0.60%</td><td class="border p-2">Beginning of souring</td></tr>
+                <tr><td class="border p-2">Sour cream (cultured)</td><td class="border p-2">0.50-0.80%</td><td class="border p-2">Intentionally fermented</td></tr>
+              </tbody>
+            </table>
+          `
+        },
+        {
+          title: "Detection of Thickeners in Cream",
+          purpose: "To detect illegal additives such as starch, gelatin, and carrageenan used to artificially thicken cream. This is adulteration — real cream is naturally thick due to its fat content.",
+          reference: "A.O.A.C. Official method 920.106",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Why Are Thickeners Added?</h4>
+            <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mt-2 text-sm">
+              <p>Cheap cream has low fat (15-20%) — it is thin. To make it appear thick (so it looks like heavy cream and can be sold at a higher price), some people add starch, gelatin, or gums. This is adulteration and is illegal under FSSAI (unless specifically permitted).</p>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Test 1: Starch Detection (Iodine Test)</h4>
+            
+            <h5 class="font-semibold mt-3">Principle:</h5>
+            <p class="text-sm">Starch (its amylose component) forms a characteristic <strong>BLUE-BLACK coloured</strong> complex with iodine. This is a very sensitive test — even trace amounts can be detected.</p>
+            <div class="bg-gray-50 border rounded p-3 mt-2 text-sm">
+              <pre><code>Amylose (starch) + I₂ → Blue-black coloured inclusion complex
+(helical structure)  (iodine fits inside the amylose helix)
+
+This complex forms when starch is gelatinized (by boiling)
+That is why boiling is done first — starch granules swell 
+and amylose becomes available for iodine</code></pre>
+            </div>
+
+            <h5 class="font-semibold mt-3">Procedure:</h5>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Take 10 ml of cream in a test tube.</li>
+              <li>Add 10 ml of distilled water and mix — the cream will be diluted.</li>
+              <li>Boil for 2-3 minutes. <em>— Boiling swells the starch granules and gelatinizes them. Ungelatinized starch does not react properly with iodine.</em></li>
+              <li>Cool to room temperature. <em>— The iodine-starch complex is unstable when hot — a stable blue colour develops in a cooled sample.</em></li>
+              <li>Add 2-3 drops of <strong>iodine solution</strong> (I₂/KI solution or Lugol's iodine) and mix.</li>
+              <li>Observe the colour.</li>
+            </ol>
+
+            <h5 class="font-semibold mt-3">Result:</h5>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Colour</th><th class="border p-2">Interpretation</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2 text-blue-800 font-semibold">Blue / Blue-black</td><td class="border p-2">STARCH PRESENT — adulterated cream!</td></tr>
+                  <tr><td class="border p-2 text-yellow-700 font-semibold">Yellowish-brown (iodine's own colour)</td><td class="border p-2">Starch ABSENT — no starch adulteration</td></tr>
+                </tbody>
+              </table>
+              <p class="text-sm mt-2"><strong>Sensitivity:</strong> Can detect up to 0.01% starch — a very sensitive test.</p>
+              <p class="text-sm mt-1"><strong>Note:</strong> This is a qualitative test — there is no formula. Detection is based on colour observation.</p>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Test 2: Gelatin Detection (Stokes Test)</h4>
+            
+            <h5 class="font-semibold mt-3">Principle:</h5>
+            <p class="text-sm">Gelatin is a <strong>protein</strong> (derived from collagen). When treated with acid mercuric nitrate, the amino acids of gelatin remain dissolved while milk proteins precipitate. If gelatin is present in the filtrate, it reacts with <strong>picric acid</strong> to form a <strong>YELLOW PRECIPITATE</strong> (protein-picrate complex).</p>
+            <div class="bg-gray-50 border rounded p-3 mt-2 text-sm">
+              <pre><code>Step 1: Acid mercuric nitrate + Cream
+        → Milk proteins PRECIPITATE (casein, whey protein — complex with mercury)
+        → Gelatin stays DISSOLVED (gelatin reacts differently with mercury)
+
+Step 2: Filter → Filtrate contains gelatin (if it was added)
+
+Step 3: Filtrate + Picric acid
+        → Gelatin + Picric acid → YELLOW PRECIPITATE
+        (protein-picrate complex — amino groups of gelatin bind with nitro groups of picric acid)
+
+If gelatin is absent → Filtrate remains clear → No precipitate with picric acid</code></pre>
+            </div>
+
+            <h5 class="font-semibold mt-3">Stokes Reagent Preparation:</h5>
+            <div class="bg-gray-50 border rounded p-3 mt-2 text-sm">
+              <p><strong>Acid Mercuric Nitrate:</strong> Dissolve mercury in dilute nitric acid until a slight excess of mercury remains. Filter. <em>— This reagent is toxic — handle carefully, use gloves and a fume hood.</em></p>
+            </div>
+
+            <h5 class="font-semibold mt-3">Procedure:</h5>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Take 10 ml of cream in a beaker.</li>
+              <li>Add 20 ml of distilled water and mix.</li>
+              <li>Add 20 ml of Stokes reagent (acid mercuric nitrate) and mix thoroughly. <em>— Mercury will precipitate milk proteins (heavy metal protein denaturation). Gelatin will remain dissolved.</em></li>
+              <li>Allow to stand for 10 minutes, then filter (Whatman No. 1 filter paper). <em>— Precipitate = milk proteins + fat (discard). Filtrate = clear liquid that may contain gelatin.</em></li>
+              <li>Add an equal volume of <strong>saturated picric acid solution</strong> to the filtrate. <em>— Picric acid (2,4,6-trinitrophenol) is a protein detection reagent.</em></li>
+              <li>Observe for 10-15 minutes.</li>
+            </ol>
+
+            <h5 class="font-semibold mt-3">Result:</h5>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Observation</th><th class="border p-2">Interpretation</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2 text-yellow-600 font-semibold">Yellow precipitate</td><td class="border p-2">GELATIN PRESENT — adulterated cream!</td></tr>
+                  <tr><td class="border p-2 text-green-600 font-semibold">Clear solution (no precipitate)</td><td class="border p-2">Gelatin ABSENT — pure cream</td></tr>
+                </tbody>
+              </table>
+              <p class="text-sm mt-2"><strong>Note:</strong> This is also a qualitative test — there is no formula. A mercury-based reagent is used — proper disposal is essential (hazardous waste).</p>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Test 3: Carrageenan / Guar Gum Detection</h4>
+            
+            <h5 class="font-semibold mt-3">Principle:</h5>
+            <p class="text-sm">Carrageenan (extracted from seaweed) and guar gum (from guar beans) are hydrocolloids — they dissolve in water to form very viscous solutions. They artificially thicken cream.</p>
+
+            <h5 class="font-semibold mt-3">Screening Procedure:</h5>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Treat the cream with dilute acid (0.1N HCl) and heat gently.</li>
+              <li>Cool and observe:</li>
+            </ol>
+            <ul class="list-disc list-inside text-sm space-y-1 ml-5">
+              <li><strong>Gel formation or unusual viscous behaviour</strong> → Indicates carrageenan/gum PRESENT</li>
+              <li><strong>Normal fluid behaviour</strong> → Likely absent</li>
+            </ul>
+            <p class="text-sm mt-2"><strong>Confirmatory testing:</strong> Specific hydrocolloids are identified and quantified by HPLC (High Performance Liquid Chromatography). This is an advanced instrumental method available in specialized laboratories.</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Summary — Thickener Detection:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Thickener</th><th class="border p-2">Test</th><th class="border p-2">Reagent</th><th class="border p-2">Positive Result</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Starch</td><td class="border p-2">Iodine test</td><td class="border p-2">I₂/KI solution</td><td class="border p-2">Blue-black colour</td></tr>
+                <tr><td class="border p-2">Gelatin</td><td class="border p-2">Stokes test</td><td class="border p-2">Acid HgNO₃ + Picric acid</td><td class="border p-2">Yellow precipitate</td></tr>
+                <tr><td class="border p-2">Carrageenan/Gum</td><td class="border p-2">Acid + heat</td><td class="border p-2">Dilute HCl</td><td class="border p-2">Gel formation</td></tr>
+              </tbody>
+            </table>
+          `
+        },
+        {
+          title: "Phosphatase Test for Cream",
+          purpose: "To verify proper pasteurization of cream — the alkaline phosphatase enzyme test determines whether the cream was properly heat-treated or not.",
+          reference: "IS 3509-1966; IS 5765-1970",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p><strong>Alkaline Phosphatase (ALP)</strong> is an enzyme naturally present in raw milk/cream. This enzyme is <strong>completely destroyed</strong> at pasteurization temperature (72°C/15 sec or 63°C/30 min).</p>
+            <p class="mt-1">If ALP is still active after pasteurization → pasteurization was INCOMPLETE or raw cream has been mixed in.</p>
+            
+            <div class="bg-gray-50 border rounded p-3 mt-2 text-sm">
+              <pre><code>ALP enzyme reaction:
+Para-nitrophenyl phosphate (substrate) + ALP enzyme → Para-nitrophenol (YELLOW) + Phosphate
+
+If enzyme is active (raw/under-pasteurized):
+  Substrate → YELLOW colour = POSITIVE = improperly pasteurized
+
+If enzyme is destroyed (properly pasteurized):
+  Substrate → NO colour change = NEGATIVE = properly pasteurized</code></pre>
+            </div>
+
+            <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mt-2 text-sm">
+              <p><strong>Special consideration for cream:</strong></p>
+              <p>Cream has a very high fat content (25-50%). Fat <strong>interferes</strong> with the phosphatase test because:</p>
+              <ul class="list-disc list-inside mt-1 space-y-1">
+                <li>The fat layer blocks access to the substrate</li>
+                <li>Fat can impart a yellow colour that may cause a false positive</li>
+                <li>Therefore, cream is first <strong>diluted 1:10</strong> with buffer solution — to reduce fat interference</li>
+              </ul>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li><strong>Cream Dilution:</strong> Add 1 ml of cream to 9 ml of buffer solution (pH 10.0, sodium carbonate-bicarbonate buffer) = 1:10 dilution. Mix thoroughly. <em>— 1:10 dilution reduces fat interference. pH 10 is used because alkaline phosphatase works optimally at pH 10.</em></li>
+              <li><strong>Substrate Addition:</strong> Mix 1 ml of diluted cream + 5 ml of substrate solution (para-nitrophenyl phosphate, 1.5 mg/ml in buffer) in a test tube. <em>— The substrate is the chemical on which the enzyme will act. If the enzyme is active, it will break down the substrate.</em></li>
+              <li><strong>Incubation:</strong> Place in a water bath or incubator at 37°C for <strong>2 hours</strong>. <em>— 37°C = optimal temperature for the enzyme. 2 hours = sufficient time for even low levels of enzyme activity to show colour.</em></li>
+              <li><strong>Colour Observation:</strong> Remove the tubes and observe the colour.</li>
+              <li>Also run a <strong>positive control</strong> (diluted raw cream — should turn yellow) and a <strong>negative control</strong> (boiled cream — should stay colourless) simultaneously.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Result Interpretation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <p class="text-sm"><strong>This is a qualitative test — there is no formula (semi-quantitative visual comparison):</strong></p>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Observation</th><th class="border p-2">ALP Status</th><th class="border p-2">Pasteurization Status</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2 font-semibold">No yellow colour (colourless/very faint)</td><td class="border p-2">Destroyed</td><td class="border p-2 text-green-600 font-semibold">Properly pasteurized ✓</td></tr>
+                  <tr><td class="border p-2 text-yellow-600 font-semibold">Distinct yellow colour</td><td class="border p-2">Active (present)</td><td class="border p-2 text-red-600 font-semibold">Under-pasteurized / raw cream mixed ✗</td></tr>
+                </tbody>
+              </table>
+              
+              <p class="text-sm mt-3"><strong>Quantitative measurement (optional):</strong></p>
+              <p class="text-sm">The intensity of the yellow colour can be measured using a spectrophotometer at 405-420 nm. The exact ALP activity (µg p-nitrophenol/ml/hr) is calculated from a standard curve.</p>
+              <pre class="text-sm"><code>
+FSSAI standard: ALP activity ≤ 4 µg p-nitrophenol/ml in properly pasteurized cream
+(should be practically zero)
+              </code></pre>
+
+              <p class="text-sm mt-2"><strong>Risk of false positives:</strong> Some bacteria also produce phosphatase-like enzymes (microbial phosphatase). These can give a positive result even after pasteurization. To distinguish this, a <strong>reactivation test</strong> is performed — the properly pasteurized cream is held at 34°C for 24 hours and retested. Microbial phosphatase will give a positive result, and reactivated milk phosphatase may also test positive — but the patterns are different.</p>
+            </div>
+          `
+        },
+        {
+          title: "Protein Content of Cream (Kjeldahl Method)",
+          purpose: "To determine the protein content of cream — for nutritional labelling and quality assessment.",
+          reference: "A.O.A.C 991.23; IS 3509-1966",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>In the Kjeldahl method, the sample is digested with concentrated H₂SO₄ — all organic nitrogen (in proteins, amino acids) is converted to ammonium sulfate [(NH₄)₂SO₄]. Then ammonia is released with alkali, distilled, and titrated.</p>
+            <pre class="text-sm bg-gray-50 p-2 rounded"><code>Step 1 — Digestion:
+Protein (C, H, O, N, S) + H₂SO₄ → (NH₄)₂SO₄ + CO₂ + H₂O + SO₂
+                                    (nitrogen converted to ammonia)
+
+Step 2 — Distillation:
+(NH₄)₂SO₄ + 2NaOH → 2NH₃↑ + Na₂SO₄ + 2H₂O
+                      (ammonia gas released — distilled and collected)
+
+Step 3 — Absorption + Titration:
+NH₃ + H₃BO₃ → NH₄⁺ + H₂BO₃⁻ (boric acid absorbs ammonia)
+H₂BO₃⁻ + HCl → H₃BO₃ + Cl⁻ (back-titrated with HCl)</code></pre>
+
+            <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mt-2 text-sm">
+              <p><strong>Special considerations for cream protein testing:</strong></p>
+              <ul class="list-disc list-inside space-y-1 mt-1">
+                <li>Cream has a very high fat content — digestion takes longer</li>
+                <li>Fat does not contain nitrogen — but it will slow down digestion (foaming, bumping)</li>
+                <li>Anti-bumping granules (pumice/glass beads) must be added</li>
+                <li>Cream has lower protein (1.5-3%) compared to milk (3.3%) due to the fat dilution effect</li>
+              </ul>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li><strong>Sample Preparation:</strong> Accurately weigh ~5 grams of cream into a Kjeldahl digestion flask. <em>— 5 grams is taken because cream has low protein (1.5-3%). A larger sample = measurable nitrogen will be obtained.</em></li>
+              <li><strong>Digestion:</strong>
+                <ul class="list-disc list-inside ml-5 mt-1 space-y-1 text-sm">
+                  <li>Add 15-20 ml of concentrated H₂SO₄</li>
+                  <li>Add catalyst tablets (K₂SO₄ + CuSO₄ or Se). <em>— K₂SO₄ raises the boiling point (faster digestion). CuSO₄/Se = catalyst that speeds up the reaction.</em></li>
+                  <li>Add 2-3 glass beads (anti-bumping)</li>
+                  <li>Heat gently in a fume hood — initially at low heat (to control foaming), then increase</li>
+                  <li>Heat until the solution becomes <strong>clear blue-green</strong> and continue heating for an additional 30 minutes. <em>— Clear = all organic matter has been digested. Blue-green = colour of CuSO₄. Dark brown/black = digestion is still in progress.</em></li>
+                  <li>Cool</li>
+                </ul>
+              </li>
+              <li><strong>Distillation:</strong>
+                <ul class="list-disc list-inside ml-5 mt-1 space-y-1 text-sm">
+                  <li>Carefully add 50-60 ml of distilled water to the cooled digest (dilution)</li>
+                  <li>Connect to the distillation apparatus</li>
+                  <li>Place 25 ml of 2% boric acid + mixed indicator (methyl red + bromocresol green) in the receiving flask</li>
+                  <li>Add 40-50 ml of 40% NaOH to the digestion flask (ammonia will be released)</li>
+                  <li>Carry out steam distillation — ammonia will be absorbed into the boric acid</li>
+                  <li>Collect ~150 ml of distillate (15-20 minutes)</li>
+                </ul>
+              </li>
+              <li><strong>Titration:</strong> Titrate the boric acid solution (which has absorbed ammonia) with <strong>0.1 N HCl</strong>. Endpoint: Green → Grey → Pink. <em>— Mixed indicator: when ammonia is absorbed in boric acid the colour turns green. When titrated with HCl it turns pink.</em></li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Formulas and Factor Derivation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <h5 class="font-semibold text-sm">Step 1: Calculate % Nitrogen:</h5>
+              <pre class="text-sm"><code>% Nitrogen = [V × N × 1.4] / W</code></pre>
+              
+              <h5 class="font-semibold mt-3 text-sm">Where does the factor 1.4 come from? Complete Derivation:</h5>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <tbody>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold w-1/3">Atomic Weight of Nitrogen</td><td class="border p-2">N = <strong>14 g/mol</strong></td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">NH₃ behaves as monovalent</td><td class="border p-2">NH₃ + HCl → NH₄Cl (1:1 ratio) → n-factor = 1 → Eq.Wt of N = <strong>14 g/eq</strong></td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">1 ml of 1N HCl</td><td class="border p-2">= 1 meq = reacts with 14/1000 g N = <strong>0.014 g N</strong></td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">×100 for percentage</td><td class="border p-2">0.014 × 100 = <strong>1.4</strong></td></tr>
+                </tbody>
+              </table>
+
+              <pre class="text-sm mt-2"><code>
+meq of N = V × N (V = ml HCl, N = normality)
+
+Grams of N = V × N × (14/1000) = V × N × 0.014
+
+% N = (V × N × 0.014 / W) × 100 = [V × N × 1.4] / W
+              </code></pre>
+
+              <h5 class="font-semibold mt-3 text-sm">Step 2: Calculate % Protein:</h5>
+              <pre class="text-sm"><code>% Protein = % Nitrogen × 6.38</code></pre>
+
+              <h5 class="font-semibold mt-3 text-sm">Where does the factor 6.38 come from?</h5>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <tbody>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold w-1/3">N content in milk protein</td><td class="border p-2">Average milk protein contains <strong>15.67%</strong> nitrogen</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">Conversion factor</td><td class="border p-2">100 / 15.67 = <strong>6.38</strong></td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">Meaning</td><td class="border p-2">If there is 1 g of nitrogen, then there is 6.38 g of milk protein</td></tr>
+                </tbody>
+              </table>
+
+              <p class="text-sm mt-2"><strong>Note:</strong> 6.38 is specific to <strong>milk proteins</strong>. Different factors are used for other foods:</p>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Food</th><th class="border p-2">N% in protein</th><th class="border p-2">Conversion Factor</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2">Milk/Cream/Cheese</td><td class="border p-2">15.67%</td><td class="border p-2"><strong>6.38</strong></td></tr>
+                  <tr><td class="border p-2">General/most foods</td><td class="border p-2">16.00%</td><td class="border p-2">6.25</td></tr>
+                  <tr><td class="border p-2">Wheat/cereals</td><td class="border p-2">17.54%</td><td class="border p-2">5.70</td></tr>
+                  <tr><td class="border p-2">Soybean</td><td class="border p-2">17.54%</td><td class="border p-2">5.71</td></tr>
+                </tbody>
+              </table>
+
+              <h5 class="font-semibold mt-3 text-sm">Complete Formula (combined):</h5>
+              <pre class="text-sm"><code>% Protein = [V × N × 1.4 × 6.38] / W = [V × N × 8.932] / W</code></pre>
+
+              <p class="text-sm mt-3"><strong>Example Calculation:</strong></p>
+              <pre class="text-sm"><code>
+Sample weight (W) = 5.10 g cream
+HCl normality (N) = 0.1 N
+Titre (V) = 18.5 ml
+
+% N = [18.5 × 0.1 × 1.4] / 5.10
+    = [2.59] / 5.10
+    = 0.508%
+
+% Protein = 0.508 × 6.38 = 3.24%
+
+(If this is 25% fat cream → expected ~2.5-3.0% protein — slightly high but within acceptable range)
+              </code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Cream Type</th><th class="border p-2">Fat %</th><th class="border p-2">Protein %</th><th class="border p-2">Why?</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Light cream (25% fat)</td><td class="border p-2">25</td><td class="border p-2">~2.5-3.0</td><td class="border p-2">More serum = more protein per gram</td></tr>
+                <tr><td class="border p-2">Heavy cream (40% fat)</td><td class="border p-2">40</td><td class="border p-2">~1.5-2.0</td><td class="border p-2">Less serum (fat dilutes protein)</td></tr>
+                <tr><td class="border p-2">Malai (60% fat)</td><td class="border p-2">60</td><td class="border p-2">~1.0-1.5</td><td class="border p-2">Mostly fat, very little serum</td></tr>
+              </tbody>
+            </table>
+            <p class="mt-2 text-sm"><strong>Inverse relationship between Protein and Fat:</strong> As fat % increases, protein % decreases — because the fat portion contains no protein. Protein is present only in the serum (aqueous) portion. More fat = less serum = less protein.</p>
+          `
+        }
+      ]
+    },
             "cream-powder": {
-                title: "Analysis of Cream Powder",
-                tests: [
-                   {
-                        title: "Determination of Moisture",
-                        purpose: "To determine the free moisture content, which is critical for shelf life.",
-                        reference: "IS 16072: 2012",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                            <ol class="list-decimal list-outside pl-5 space-y-2">
-                                <li>Weigh a clean, dry, empty moisture dish with its lid (W1).</li>
-                                <li>Add about 1g of sample into the dish and weigh again (W2).</li>
-                                <li>Place the dish without the lid in a hot air oven at 102 ± 2°C for 2 hours.</li>
-                                <li>Cover the dish, cool in a desiccator, and weigh (W3).</li>
-                                <li>Repeat heating for 1-hour intervals until a constant weight is achieved.</li>
-                            </ol>
-                             <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
-                            <pre><code>% Moisture = [ (W2 - W3) / (W2 - W1) ] * 100</code></pre>
-                        `
-                    },
-                    {
-                        title: "Determination of Fat",
-                        purpose: "To determine the fat content in cream powder.",
-                        reference: "A.O.A.C 932.06",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">Procedure (Rose-Gottlieb Method):</h4>
-                            <ol class="list-decimal list-outside pl-5 space-y-2">
-                                 <li>Accurately weigh ~1g of powder into an extraction flask.</li>
-                                 <li>Add 10ml of warm water and mix well to reconstitute the powder.</li>
-                                 <li>Add 1.25ml of ammonia solution and mix.</li>
-                                 <li>Proceed with the standard Rose-Gottlieb extraction using diethyl ether and petroleum ether, as described for liquid milk.</li>
-                            </ol>
-                        `
-                    },
-                    {
-                        title: "Determination of Milk Protein",
-                        purpose: "To determine the protein content using the Kjeldahl method.",
-                        reference: "A.O.A.C 991.23, 991.20, 991.21",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                            <ol class="list-decimal list-outside pl-5 space-y-2">
-                                <li>Determine Total Nitrogen (TN) content of the powder using the Kjeldahl method.</li>
-                                <li>Determine Non-Protein Nitrogen (NPN) from a trichloroacetic acid (TCA) filtrate of the reconstituted sample, also using the Kjeldahl method.</li>
-                            </ol>
-                             <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
-                             <pre><code>% True Protein = (% TN - % NPN) * 6.38</code></pre>
-                        `
-                    }
-                ]
-            },
+      title: "Cream Powder Analysis",
+      tests: [
+        {
+          title: "Moisture Determination",
+          purpose: "To determine the free moisture content in cream powder — a critical parameter for shelf life, caking, and microbial stability.",
+          reference: "IS 16072: 2012; A.O.A.C 927.05",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>Cream powder is heated in an oven at 102±2°C — all free moisture evaporates. Weight loss = moisture content. This is a standard <strong>gravimetric method</strong> — the same as used for milk powder, ghee, etc.</p>
+            
+            <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mt-2 text-sm">
+              <p><strong>Why is moisture critical in cream powder?</strong></p>
+              <ul class="list-disc list-inside space-y-1 mt-1">
+                <li>Cream powder has a very high fat content (42-75%). High moisture + high fat = <strong>oxidative rancidity</strong> occurs very quickly</li>
+                <li>When moisture exceeds 4%, the powder <strong>cakes</strong> (forms lumps) — it no longer remains free-flowing</li>
+                <li>High moisture = risk of <strong>microbial growth</strong> (moulds, bacteria)</li>
+                <li>Moisture directly affects shelf life — lower moisture = longer shelf life</li>
+                <li>FSSAI limit: ≤ 4.0%</li>
+              </ul>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Dry a clean, dry moisture dish (aluminium or glass, flat-bottom with lid) along with its lid in an oven at 102°C for 1 hour. Cool in a desiccator. Weigh with the lid on = <strong>W1</strong>. <em>— Pre-drying removes the dish's own moisture. It is weighed with the lid because the sample will also be handled with the lid on.</em></li>
+              <li>Accurately weigh approximately <strong>1 gram</strong> of cream powder into the dish (analytical balance, 0.001 g precision). Weigh with lid on = <strong>W2</strong>. <em>— 1 gram is sufficient for powder (powder is concentrated; 1 g contains measurable moisture). Taking more sample would significantly increase drying time.</em></li>
+              <li><strong>Remove the lid</strong> and place the dish in a hot air oven at 102±2°C. Place the lid in the oven as well (next to the dish). <em>— The lid is removed so that moisture can escape freely. The lid is placed in the oven so that it also remains dry — to prevent moisture from condensing on it when the dish is covered later.</em></li>
+              <li>After <strong>2 hours</strong>, cover the dish with its lid (cover it inside the oven itself — while hot). Transfer to a desiccator, cool (20-30 min), and weigh = <strong>W3</strong>. <em>— Covering while hot is essential — if removed from the oven and then covered, the sample will absorb atmospheric moisture in those few seconds.</em></li>
+              <li>Place back in the oven for <strong>1 hour</strong> (with lid removed), cool, and weigh. If the weight is within ±0.001 g of the previous weight = constant weight. If not, repeat. <em>— Constant weight = all moisture has been removed; further drying will not change the weight.</em></li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Formula and Factor Explanation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>% Moisture = [(W2 - W3) / (W2 - W1)] × 100</code></pre>
+              
+              <h5 class="font-semibold mt-3 text-sm">Each Factor:</h5>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <tbody>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold w-1/4">W1</td><td class="border p-2">Weight of empty dry dish + lid (grams). Baseline weight — to remove the dish's contribution.</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W2</td><td class="border p-2">Dish + lid + Sample (before drying) = starting weight</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W3</td><td class="border p-2">Dish + lid + Sample (after drying) = ending weight. Moisture has evaporated.</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W2 - W1</td><td class="border p-2">= Sample weight (weight of powder). Goes in the denominator.</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W2 - W3</td><td class="border p-2">= Weight LOSS = Moisture + volatile matter that evaporated. Goes in the numerator.</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">× 100</td><td class="border p-2">To convert to percentage.</td></tr>
+                </tbody>
+              </table>
+
+              <p class="text-sm mt-3"><strong>Why 102°C (and different from 105°C used for ghee)?</strong></p>
+              <ul class="list-disc list-inside text-sm space-y-1">
+                <li>Cream powder contains <strong>lactose</strong> — lactose caramelizes (browns) at 110°C+ → extra weight loss → falsely high moisture reading</li>
+                <li>Cream powder has a very high <strong>milk fat</strong> content — fat can oxidize at high temperatures → weight change</li>
+                <li>102°C = sufficient for moisture removal but gentle enough to avoid decomposition</li>
+                <li>Ghee contains only fat (no lactose/protein concern) → 105°C can be used</li>
+              </ul>
+
+              <p class="text-sm mt-3"><strong>Example Calculation:</strong></p>
+              <pre class="text-sm"><code>
+W1 (empty dish + lid) = 35.456 g
+W2 (dish + lid + powder) = 36.478 g
+W3 (dish + lid + dried powder) = 36.445 g
+
+Sample weight = W2 - W1 = 36.478 - 35.456 = 1.022 g
+Weight loss = W2 - W3 = 36.478 - 36.445 = 0.033 g
+
+% Moisture = (0.033 / 1.022) × 100 = 3.23%
+
+FSSAI limit ≤ 4.0% → PASS ✓
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Total Solids can also be calculated:</strong></p>
+              <pre class="text-sm"><code>% Total Solids = 100 - % Moisture = 100 - 3.23 = 96.77%</code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Parameter</th><th class="border p-2">Standard</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">FSSAI Maximum Moisture</td><td class="border p-2">≤ 4.0%</td></tr>
+                <tr><td class="border p-2">Good quality cream powder</td><td class="border p-2">2.0 - 3.5%</td></tr>
+                <tr><td class="border p-2">Freshly produced</td><td class="border p-2">2.0 - 2.5%</td></tr>
+              </tbody>
+            </table>
+          `
+        },
+        {
+          title: "Fat Determination (Rose-Gottlieb Method)",
+          purpose: "To accurately determine the fat content in cream powder — this is the product's primary quality parameter. Cream powder is also graded based on fat percentage.",
+          reference: "A.O.A.C 932.06; IS 16072: 2012",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>The Rose-Gottlieb method is a <strong>gravimetric reference method</strong>. Cream powder is first reconstituted in water, then proteins are dissolved with ammonia, and fat is extracted with organic solvents (diethyl ether + petroleum ether). The residue remaining after solvent evaporation = FAT.</p>
+            
+            <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mt-2 text-sm">
+              <p><strong>Special considerations for cream powder:</strong></p>
+              <ul class="list-disc list-inside space-y-1 mt-1">
+                <li>Cream powder has 42-75% fat — very high! Therefore, a smaller sample size is taken (~1 g)</li>
+                <li>The powder must be properly reconstituted first — if lumps remain, fat will not be fully extracted</li>
+                <li>In high-fat powder, the fat is encapsulated (trapped within the protein matrix) — ammonia breaks the protein matrix so that the fat becomes accessible</li>
+                <li>Multiple extractions are necessary (3 times) because not all fat is extracted in a single pass</li>
+              </ul>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li><strong>Reconstitution:</strong> Accurately weigh ~1 gram of cream powder (W_sample) into a Mojonnier flask or extraction tube. Add 10 ml of hot distilled water (60-70°C). Mix thoroughly with a glass rod until all lumps are dissolved. <em>— Hot water helps the powder dissolve quickly. Fat remains trapped in lumps — if lumps are present, fat will be underestimated.</em></li>
+              <li><strong>Ammonia treatment:</strong> Add 1.25 ml of concentrated ammonia (NH₃, density 0.88) and mix gently. <em>— Ammonia dissolves casein (milk protein) — casein surrounds the fat globules. Ammonia dissolves the protein → fat globules are freed. Ammonia also maintains an alkaline pH at which the emulsion breaks.</em></li>
+              <li><strong>Ethanol addition:</strong> Add 10 ml of ethanol (95%) and mix. <em>— Ethanol precipitates protein, breaks the emulsion, and is miscible with ether — improving extraction.</em></li>
+              <li><strong>First extraction:</strong> Add 25 ml of diethyl ether, stopper, and shake vigorously for 1 minute. Then add 25 ml of petroleum ether and shake gently. Allow to stand until clear layer separation occurs. <em>— Diethyl ether is the primary fat solvent. Petroleum ether provides additional extraction capacity and prevents emulsion formation.</em></li>
+              <li>Carefully transfer the upper ether layer to a pre-weighed flask (W_flask) (by siphoning or careful pouring).</li>
+              <li><strong>Second and Third extraction:</strong> To the lower aqueous layer, add 15 ml of diethyl ether + 15 ml of petroleum ether, shake, and separate. Repeat this 2 more times. <em>— A total of 3 extractions achieves >99.5% fat recovery.</em></li>
+              <li>Carefully evaporate the combined ether extracts (in the flask) on a water bath. <em>— Ether is volatile (boiling point ~35°C) — it evaporates easily. NO FLAME near ether — highly flammable!</em></li>
+              <li>Place the flask in an oven at 102°C for 1 hour (to remove residual ether/moisture).</li>
+              <li>Cool in a desiccator and weigh (W_flask+fat). Repeat until constant weight is achieved.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Formula and Factor Explanation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>% Fat = [(W_flask+fat - W_flask) / W_sample] × 100</code></pre>
+              
+              <h5 class="font-semibold mt-3 text-sm">Each Factor:</h5>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <tbody>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold w-1/3">W_flask+fat</td><td class="border p-2">Weight of the flask after drying (with fat residue) — grams</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W_flask</td><td class="border p-2">Weight of the empty pre-dried flask — grams</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">(W_flask+fat - W_flask)</td><td class="border p-2">= Weight of pure fat — grams. The residue remaining after ether evaporation = fat</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W_sample</td><td class="border p-2">Original cream powder sample weight — grams (~1 g)</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">× 100</td><td class="border p-2">Percentage conversion</td></tr>
+                </tbody>
+              </table>
+
+              <p class="text-sm mt-3"><strong>This is a gravimetric method — fat weight is measured directly:</strong></p>
+              <pre class="text-sm"><code>
+Cream powder (1 g)
+    ↓ Reconstitute + Ammonia + Ethanol
+    ↓ Ether extraction (3 times)
+    ↓
+┌────────────────────┐     ┌────────────────────┐
+│ Aqueous layer      │     │ Ether layer         │
+│ (protein, lactose, │     │ (fat dissolved in   │
+│  minerals, water)  │     │  ether)             │
+│ → DISCARD          │     │ → COLLECT           │
+└────────────────────┘     └────────────────────┘
+                                    ↓
+                           Evaporate ether
+                                    ↓
+                           Pure FAT residue
+                                    ↓
+                           WEIGH = fat weight
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Example Calculation:</strong></p>
+              <pre class="text-sm"><code>
+W_sample = 1.005 g cream powder
+W_flask = 105.234 g
+W_flask+fat = 105.782 g
+
+Fat weight = 105.782 - 105.234 = 0.548 g
+
+% Fat = (0.548 / 1.005) × 100 = 54.5%
+
+(Standard cream powder range 42-75% → PASS ✓)
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Why is no chemical conversion factor needed?</strong></p>
+              <p class="text-sm">Because we are directly measuring the weight of fat — there is no titration or chemical reaction involved. What remains in the ether extract after evaporation = fat. A simple weight ratio = percentage. This is why gravimetric methods are also called "absolute methods".</p>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values — Cream Powder Fat Content:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Grade</th><th class="border p-2">Fat %</th><th class="border p-2">Use</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Low-fat cream powder</td><td class="border p-2">42-50%</td><td class="border p-2">Bakery, confectionery</td></tr>
+                <tr><td class="border p-2">Medium-fat cream powder</td><td class="border p-2">50-65%</td><td class="border p-2">Ice cream, beverages</td></tr>
+                <tr><td class="border p-2">High-fat cream powder</td><td class="border p-2">65-75%</td><td class="border p-2">Premium applications</td></tr>
+              </tbody>
+            </table>
+            <p class="mt-2 text-sm">FSSAI: Fat content must be declared on the label with a ± 5% tolerance.</p>
+          `
+        },
+        {
+          title: "Milk Protein Determination (True Protein — Kjeldahl Method)",
+          purpose: "To determine the protein content of cream powder. To determine True Protein, Non-Protein Nitrogen (NPN) is subtracted from Total Nitrogen (TN).",
+          reference: "A.O.A.C 991.23, 991.20, 991.21; IS 16072: 2012",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>Nitrogen in cream powder exists in two forms:</p>
+            <ul class="list-disc list-inside text-sm space-y-1 mt-1">
+              <li><strong>Protein Nitrogen</strong> — nitrogen bound in casein, whey proteins</li>
+              <li><strong>Non-Protein Nitrogen (NPN)</strong> — urea, amino acids, creatinine, etc. These are not proteins but contain nitrogen</li>
+            </ul>
+            <p class="mt-2"><strong>Total Nitrogen (TN)</strong> = Protein N + Non-Protein N</p>
+            <p><strong>True Protein</strong> = (TN - NPN) × 6.38</p>
+
+            <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mt-2 text-sm">
+              <p><strong>Crude Protein vs True Protein:</strong></p>
+              <ul class="list-disc list-inside space-y-1 mt-1">
+                <li><strong>Crude Protein</strong> = TN × 6.38 (calculating by assuming all nitrogen is protein — an overestimate)</li>
+                <li><strong>True Protein</strong> = (TN - NPN) × 6.38 (counting only protein nitrogen — accurate)</li>
+                <li>NPN is typically 5-8% of total nitrogen in milk</li>
+                <li>In melamine adulteration, NPN increases dramatically (melamine = 66% nitrogen!) — the true protein test is useful for detecting melamine fraud</li>
+              </ul>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure — Part A: Total Nitrogen (TN)</h4>
+            <p class="text-sm">Standard Kjeldahl method (same as the cream protein test described above):</p>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Accurately weigh ~1 gram of cream powder into a Kjeldahl flask.</li>
+              <li>Add 15 ml of concentrated H₂SO₄ + catalyst tablet (K₂SO₄ + CuSO₄) + glass beads.</li>
+              <li>Digest until a clear blue-green solution is obtained (+ 30 min extra).</li>
+              <li>Cool, dilute, and make alkaline with 40% NaOH.</li>
+              <li>Steam distill — collect the ammonia in 2% boric acid.</li>
+              <li>Titrate with 0.1N HCl = V₁ ml</li>
+            </ol>
+            <pre class="text-sm mt-2 bg-gray-50 p-2 rounded"><code>% TN = [V₁ × N_HCl × 1.4] / W₁</code></pre>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure — Part B: Non-Protein Nitrogen (NPN)</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Dissolve ~1 gram of cream powder in 10 ml of warm water (reconstitute).</li>
+              <li>Add 10 ml of <strong>12% Trichloroacetic Acid (TCA)</strong> solution and mix. <em>— TCA is a strong protein precipitant. At 12% concentration, ALL proteins precipitate (casein + whey proteins). However, NPN (urea, amino acids, creatinine) remains dissolved because these are small molecules that are not precipitated by TCA.</em></li>
+              <li>Allow to stand for 30 minutes (for complete precipitation).</li>
+              <li>Filter (Whatman No. 42 filter paper). <em>— Precipitate = proteins (discarded for the NPN test). Filtrate = NPN fraction (collected).</em></li>
+              <li>Take an aliquot (measured volume) of the filtrate and perform the standard Kjeldahl digestion-distillation-titration.</li>
+              <li>Titre = V₂ ml of 0.1N HCl</li>
+            </ol>
+            <pre class="text-sm mt-2 bg-gray-50 p-2 rounded"><code>% NPN = [V₂ × N_HCl × 1.4] / W₂ (adjusted for dilution)</code></pre>
+
+            <h4 class="font-semibold mt-4 mb-2">Final Calculation and Factor Explanation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>% True Protein = (% TN - % NPN) × 6.38</code></pre>
+              
+              <h5 class="font-semibold mt-3 text-sm">Each Factor:</h5>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <tbody>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold w-1/4">% TN</td><td class="border p-2">Total Nitrogen — all nitrogen (both protein and non-protein)</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">% NPN</td><td class="border p-2">Non-Protein Nitrogen — urea, amino acids, etc. (these are not real protein)</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">(% TN - % NPN)</td><td class="border p-2">= Only Protein Nitrogen — the nitrogen from actual proteins</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">6.38</td><td class="border p-2">Nitrogen-to-protein conversion factor for milk. Meaning: 1 g nitrogen = 6.38 g milk protein. <br><br><strong>How it was derived:</strong> Average milk protein contains 15.67% nitrogen → 100/15.67 = 6.38. This is an empirically determined constant based on milk protein composition (casein 15.63% N, β-lactoglobulin 15.60% N, α-lactalbumin 15.78% N → average ≈ 15.67%).</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">1.4</td><td class="border p-2">(Used in individual TN/NPN calculations) = Atomic weight of nitrogen (14) × 100/1000 = 1.4. This converts meq of nitrogen to % nitrogen.</td></tr>
+                </tbody>
+              </table>
+
+              <p class="text-sm mt-3"><strong>Detailed Example Calculation:</strong></p>
+              <pre class="text-sm"><code>
+--- Part A: Total Nitrogen ---
+W₁ = 1.005 g cream powder
+V₁ = 10.2 ml of 0.1N HCl
+% TN = [10.2 × 0.1 × 1.4] / 1.005 = 1.428 / 1.005 = 1.421%
+
+--- Part B: Non-Protein Nitrogen ---
+W₂ = 1.010 g (reconstituted + TCA filtered)
+V₂ = 0.85 ml of 0.1N HCl (very small — NPN is a minor fraction)
+% NPN = [0.85 × 0.1 × 1.4] / 1.010 = 0.119 / 1.010 = 0.118%
+
+--- True Protein ---
+% True Protein = (1.421 - 0.118) × 6.38
+               = 1.303 × 6.38
+               = 8.31%
+
+--- For comparison ---
+% Crude Protein = 1.421 × 6.38 = 9.07%
+Difference = 9.07 - 8.31 = 0.76% (the overestimate effect of NPN)
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Why specifically 12% TCA?</strong></p>
+              <pre class="text-sm"><code>
+TCA Concentration:   Effect:
+< 6%                 Incomplete protein precipitation — some whey protein remains dissolved
+6-10%                Most proteins precipitate, but some glycomacropeptide may not
+12%                  ALL milk proteins COMPLETELY precipitate ✓ — standard concentration
+> 15%                Some NPN compounds may also precipitate — NPN will be underestimated
+              </code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Cream Powder Type</th><th class="border p-2">Fat %</th><th class="border p-2">True Protein %</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">High-fat cream powder (75% fat)</td><td class="border p-2">75</td><td class="border p-2">~5-8%</td></tr>
+                <tr><td class="border p-2">Medium-fat cream powder (50% fat)</td><td class="border p-2">50</td><td class="border p-2">~12-16%</td></tr>
+                <tr><td class="border p-2">Low-fat cream powder (42% fat)</td><td class="border p-2">42</td><td class="border p-2">~16-20%</td></tr>
+              </tbody>
+            </table>
+            <p class="mt-2 text-sm"><strong>Inverse relationship:</strong> As fat % increases, protein % decreases — same as liquid cream. More fat = a lower proportion of protein/lactose/minerals.</p>
+          `
+        },
+        {
+          title: "Titratable Acidity",
+          purpose: "To determine the acidity of cream powder — an indicator of the powder's freshness, manufacturing quality, and storage stability.",
+          reference: "IS 16072: 2012",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>Cream powder is first reconstituted (dissolved) in water to bring it to a liquid cream-like state. Then a portion is titrated with NaOH — the same principle as liquid cream acidity.</p>
+            <p class="mt-1">The acidity of the powder indicates:</p>
+            <ul class="list-disc list-inside text-sm">
+              <li>Quality of the source cream (how fresh it was)</li>
+              <li>Any deterioration during processing</li>
+              <li>Changes during storage</li>
+            </ul>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li><strong>Reconstitution:</strong> Add 10 grams of cream powder to 100 ml of warm (40°C) distilled water. Stir thoroughly until completely dissolved. <em>— 10 g in 100 ml = 10% solution. Warm water helps the powder dissolve quickly. Complete dissolution is essential — undissolved particles will not release acid properly.</em></li>
+              <li>Take <strong>10 ml</strong> of the reconstituted solution in a porcelain dish or white-tiled conical flask. <em>— 10 ml of a 10% solution = equivalent to 1 gram of cream powder.</em></li>
+              <li>Add 3-4 drops of phenolphthalein indicator.</li>
+              <li>Titrate with <strong>0.1 N NaOH</strong> until a persistent light pink colour appears (30 seconds).</li>
+              <li>Note the titre = V ml.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Formula and Factor Explanation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>% Acidity (as lactic acid) = [9 × V × N] / W</code></pre>
+              
+              <p class="text-sm mt-2"><strong>Each Factor (same as liquid cream — the principle is identical):</strong></p>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <tbody>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold w-1/4">9</td><td class="border p-2">Lactic acid equivalent factor = (Mol.Wt of lactic acid × 100) / 1000 = (90 × 100)/1000 = 9. This converts meq of lactic acid to percentage lactic acid.</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">V</td><td class="border p-2">ml of NaOH used in titration</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">N</td><td class="border p-2">Normality of NaOH (0.1N)</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W</td><td class="border p-2">Weight of cream powder equivalent in the aliquot titrated. If 10 ml of a 10% solution was taken, then W = 1.0 g. If 10 g of powder was dissolved in 100 ml and the entire 100 ml was titrated, then W = 10 g.</td></tr>
+                </tbody>
+              </table>
+
+              <p class="text-sm mt-3"><strong>Important note about W:</strong></p>
+              <pre class="text-sm"><code>
+Reconstitution: 10 g powder in 100 ml water (total ≈ 110 ml considering powder volume)
+
+If a 10 ml aliquot was taken:
+  Powder in 10 ml = 10 × (10/100) = 1.0 g (approximately)
+  W = 1.0 g
+
+% Acidity = [9 × V × 0.1] / 1.0 = 0.9 × V
+
+Example: V = 1.5 ml
+% Acidity = 0.9 × 1.5 = 1.35% (as lactic acid in reconstituted solution)
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Acidity on a dry powder basis:</strong></p>
+              <pre class="text-sm"><code>
+The acidity of the reconstituted 10% solution = acidity of the cream powder at 10% concentration
+
+If comparing with the original liquid cream:
+Remember cream was ~30-50% solids, powder is 96%+ solids
+So the powder's acidity cannot be directly compared to cream
+
+Report as "% acidity of reconstituted solution at 10% concentration"
+              </code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Quality</th><th class="border p-2">Acidity (% lactic acid, reconstituted)</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Good quality</td><td class="border p-2">≤ 1.5%</td></tr>
+                <tr><td class="border p-2">Acceptable</td><td class="border p-2">1.5 - 2.0%</td></tr>
+                <tr><td class="border p-2">Poor/old powder</td><td class="border p-2">> 2.0%</td></tr>
+              </tbody>
+            </table>
+          `
+        },
+        {
+          title: "Scorched Particles",
+          purpose: "An indication of excessive heat exposure during the manufacturing process — an indicator of the powder's visual quality and processing conditions. Scorched particles = brown/dark particles formed due to overheating.",
+          reference: "ADPI Standard (American Dairy Products Institute); IS 16072: 2012",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>During spray drying or roller drying, if cream remains at high temperature for too long, some particles become <strong>scorched</strong> (burnt). These turn into brown/black particles that degrade the powder's quality:</p>
+            <ul class="list-disc list-inside text-sm mt-1">
+              <li>Visual appearance is poor — dark specks are visible in white powder</li>
+              <li>A burnt taste/smell develops</li>
+              <li>Solubility decreases — scorched particles do not dissolve properly</li>
+              <li>This indicates that the dryer's temperature control or cleaning is not being done properly</li>
+            </ul>
+
+            <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mt-2 text-sm">
+              <p><strong>How does scorching occur?</strong></p>
+              <pre><code>In a Spray Dryer:
+Hot air (180-200°C) + Cream droplets → Quick drying → Powder
+
+If droplets stick to the dryer wall → prolonged heat exposure on the wall
+→ Maillard reaction (sugar + protein → brown compounds)
+→ Caramelization (sugar breakdown → dark compounds)  
+→ Fat oxidation → dark compounds
+→ SCORCHED PARTICLES (dark brown/black)</code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li><strong>Solution preparation:</strong> Reconstitute cream powder — typically dissolve 25-32.5 grams of powder in a specified volume of water (as per the ADPI standard). <em>— The exact amount varies according to the standard. The goal is to have a consistent concentration so that results are comparable.</em></li>
+              <li><strong>Filtration:</strong> Filter the reconstituted solution through a standard ADPI filter disc. ADPI disc = a white filter paper disc with a <strong>15 cm² filtration area</strong> (standard size). <em>— These are specialized discs that are standard in the dairy industry. All dissolved components pass through; only insoluble scorched particles are retained on the filter.</em></li>
+              <li><strong>Comparison:</strong> Dry the filter disc and compare it against ADPI standard comparison discs.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">ADPI Grading System:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <p class="text-sm"><strong>This is a qualitative/visual comparison test — there is no mathematical formula. A grade is assigned by matching against standard discs:</strong></p>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Grade</th><th class="border p-2">Scorched Particles</th><th class="border p-2">mg maximum</th><th class="border p-2">Quality</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2 text-green-600 font-semibold">A (Extra Grade)</td><td class="border p-2">Very few / almost none</td><td class="border p-2">≤ 7.5 mg</td><td class="border p-2">BEST — premium quality</td></tr>
+                  <tr><td class="border p-2 font-semibold">B (Standard Grade)</td><td class="border p-2">Few scattered particles</td><td class="border p-2">7.5 - 15.0 mg</td><td class="border p-2">Good — acceptable for most uses</td></tr>
+                  <tr><td class="border p-2 text-yellow-600 font-semibold">C (Sub-standard)</td><td class="border p-2">Moderate number</td><td class="border p-2">15.0 - 22.5 mg</td><td class="border p-2">Average — process improvement needed</td></tr>
+                  <tr><td class="border p-2 text-red-600 font-semibold">D (Rejected)</td><td class="border p-2">Many / heavily scorched</td><td class="border p-2">> 22.5 mg</td><td class="border p-2">POOR — rejected, dryer needs maintenance</td></tr>
+                </tbody>
+              </table>
+
+              <p class="text-sm mt-3"><strong>Practical tip:</strong> Grade A dairy powders are in the highest demand. Export quality = Grade A is mandatory. For the domestic market, Grade B is also acceptable.</p>
+              
+              <p class="text-sm mt-3"><strong>What affects scorched particle count:</strong></p>
+              <ul class="list-disc list-inside text-sm space-y-1">
+                <li>Inlet air temperature (higher temperature = greater scorching risk)</li>
+                <li>Dryer wall cleanliness (buildup on dirty walls gets burnt)</li>
+                <li>Feed concentration (more concentrated = more viscous = wall sticking)</li>
+                <li>Atomizer condition (improper atomization = large droplets = uneven drying)</li>
+                <li>Drying time (longer time = more heat exposure)</li>
+              </ul>
+            </div>
+          `
+        }
+      ]
+    },
             "butter": {
                 title: "Analysis of Butter",
                 tests: [
