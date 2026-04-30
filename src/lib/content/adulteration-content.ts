@@ -2629,57 +2629,717 @@ export const adulterationContent = {
                 </div>
             `
         },
-             {
-                title: 'दूध में सोया दूध',
-                content: `
-                    <div class="prose max-w-none prose-green">
-                        <p>दूध की प्रोटीन सामग्री और एसएनएफ रीडिंग को अवैध रूप से बढ़ाने के लिए कभी-कभी सोया दूध मिलाया जाता है। इसके पता लगाने के लिए कई विधियाँ मौजूद हैं।</p>
-                        <h4 class="mt-4">विधि I: पोलारिमेट्रिक विधि</h4>
-                        <p>शर्करा के विभिन्न ऑप्टिकल रोटेशन के आधार पर। सोया दूध में सुक्रोज, रैफिनोज और स्टैचियोज होते हैं, जबकि गोजातीय दूध में लैक्टोज होता है। एक प्रोटीन-मुक्त निस्यंद के ऑप्टिकल रोटेशन में एक महत्वपूर्ण परिवर्तन सोया दूध के अतिरिक्त का संकेत दे सकता है।</p>
-                        <h4 class="mt-4">विधि II: आइसोइलेक्ट्रिक वर्षा विधि</h4>
-                        <p>सोया प्रोटीन दूध कैसिइन (पीएच 4.6) की तुलना में उच्च पीएच (~ 5.7) पर अवक्षेपित होते हैं। दूध के पीएच को 5.7 पर समायोजित करके और गर्म करके, यदि सोया दूध मौजूद है तो जमावट होगी।</p>
-                         <h4 class="mt-4">विधि III: एसडीएस-पेज विधि</h4>
-                        <p>यह वैद्युतकणसंचलन तकनीक आणविक भार के आधार पर प्रोटीन को अलग करती है। सोया प्रोटीन में दूध प्रोटीन की तुलना में अलग-अलग आणविक भार होते हैं और जेल पर अलग, अतिरिक्त बैंड के रूप में दिखाई देंगे, जिससे मिलावट की पुष्टि होती है।</p>
-                        <h4 class="mt-4">विधि IV: इम्यूनोडिफ्यूजन विधि</h4>
-                        <p>सोया प्रोटीन के लिए विशिष्ट एंटीबॉडी का उपयोग करता है। यदि दूध में सोया प्रोटीन मौजूद है, तो यह एंटीबॉडी के साथ प्रतिक्रिया करके एक अगर जेल में एक दृश्यमान वर्षा रेखा बनाएगा।</p>
-                        <h4 class="mt-4">विधि V: एचपीएलसी आधारित विधि</h4>
-                        <p>उच्च-प्रदर्शन तरल क्रोमैटोग्राफी विभिन्न शर्कराओं को अलग और मात्रा निर्धारित कर सकती है। स्टैचियोज की उपस्थिति, सोयाबीन में पाई जाने वाली लेकिन दूध में नहीं, सोया दूध मिलावट के लिए एक निश्चित मार्कर है।</p>
-                        <h4 class="mt-4">विधि VI: तीव्र विधि (ट्रिप्सिन निषेध)</h4>
-                        <p>सोया दूध में ट्रिप्सिन अवरोधक होते हैं। यह परीक्षण एंजाइम ट्रिप्सिन की गतिविधि को मापता है। यदि सोया दूध मौजूद है, तो ट्रिप्सिन को बाधित किया जाएगा, जिससे शुद्ध दूध के नमूने की तुलना में एक विशिष्ट रासायनिक प्रतिक्रिया में रंग परिवर्तन कम होगा।</p>
-                    </div>
-                `
-            },
-             {
-                title: 'दूध में पनीर मट्ठा',
-                content: `
-                    <div class="prose max-w-none prose-green">
-                        <h4>निनहाइड्रिन आधारित स्पेक्ट्रोफोटोमेट्रिक विधि</h4>
-                        <p><strong>सिद्धांत:</strong> जब पनीर बनाने के लिए रेनेट का उपयोग किया जाता है, तो यह कप्पा-कैसिइन के एक विशिष्ट भाग को तोड़ता है जिसे ग्लाइकोमैक्रोपेप्टाइड (जीएमपी) कहा जाता है, जो मट्ठे में चला जाता है। इस जीएमपी में सियालिक एसिड होता है। परीक्षण दूध के नमूने से जीएमपी को चुनिंदा रूप से अवक्षेपित करता है और फिर सियालिक एसिड सामग्री को मापता है। सियालिक एसिड का एक उच्च स्तर अतिरिक्त पनीर मट्ठे की उपस्थिति को इंगित करता है।</p>
-                        <ol>
-                            <li>ग्लाइकोमैक्रोपेप्टाइड (जीएमपी) को दूध के नमूने से ट्राइक्लोरोएसिटिक एसिड (टीसीए) का उपयोग करके चुनिंदा रूप से अवक्षेपित किया जाता है।</li>
-                            <li>अवक्षेप को फिर एक अम्लीय निनहाइड्रिन अभिकर्मक से उपचारित किया जाता है और गर्म किया जाता है।</li>
-                            <li>जीएमपी से बंधा सियालिक एसिड एक स्थिर पीला-भूरा रंग उत्पन्न करता है, जिसे 470 एनएम पर एक स्पेक्ट्रोफोटोमीटर से मापा जाता है।</li>
-                            <li>शुद्ध दूध की तुलना में काफी अधिक अवशोषण मान पनीर मट्ठे के साथ मिलावट को इंगित करता है।</li>
-                        </ol>
-                    </div>
-                `
-            },
-            {
-                title: 'जिलेटिन',
-                content: `
-                    <div class="prose max-w-none prose-green">
-                        <p><strong>उद्देश्य:</strong> दूध की मोटाई और एसएनएफ सामग्री को बढ़ाने के लिए।</p>
-                        <p><strong>सिद्धांत:</strong> जिलेटिन पिक्रिक एसिड के साथ एक पीला अवक्षेप बनाता है।</p>
-                        <ol>
-                            <li>10 मिली दूध लें और 20 मिली स्टोक्स अभिकर्मक (एसिड मर्क्यूरिक नाइट्रेट) डालें।</li>
-                            <li>अच्छी तरह हिलाएं और फ़िल्टर करें।</li>
-                            <li>निस्यंद में, संतृप्त पिक्रिक एसिड घोल की समान मात्रा डालें।</li>
-                            <li>एक <strong>पीला अवक्षेप</strong> जिलेटिन की उपस्थिति को इंगित करता है।</li>
-                        </ol>
-                    </div>
-                `
-            }
-        ]
+        {
+          title: 'Doodh mein Soya Doodh (Soy Milk Adulteration)',
+    content: `
+        <div class="prose max-w-none prose-green">
+            <div class="bg-green-50 border-l-4 border-green-500 p-4 mb-4">
+                <h4 class="text-green-800 font-bold">🔬 Scientific Overview</h4>
+                <p class="text-green-700"><strong>Soya milk (soy milk)</strong> doodh mein isliye milaya jaata hai kyunki yeh <strong>protein content aur SNF reading ko artificially badha deta hai</strong> at very low cost. Soya milk plant-based protein source hai jo soybeans se banta hai. Bovine (cow/buffalo) milk aur soy milk ke biochemical composition mein fundamental differences hain.</p>
+                <p class="text-green-700 mt-2"><strong>Key Compositional Differences:</strong></p>
+                <ul class="text-green-700">
+                    <li><strong>Proteins:</strong> Cow milk mein <strong>caseins (α-casein, β-casein, κ-casein)</strong> aur whey proteins (α-lactalbumin, β-lactoglobulin) hote hain. Soy milk mein <strong>glycinin (11S globulin) aur β-conglycinin (7S globulin)</strong> dominant proteins hain.</li>
+                    <li><strong>Carbohydrates:</strong> Cow milk mein <strong>lactose (glucose + galactose disaccharide)</strong> hota hai. Soy milk mein <strong>sucrose, raffinose (trisaccharide), aur stachyose (tetrasaccharide)</strong> hote hain — lactose absent hota hai.</li>
+                    <li><strong>Bioactive Compounds:</strong> Soy milk mein <strong>trypsin inhibitors (Kunitz aur Bowman-Birk inhibitors)</strong> aur <strong>isoflavones (genistein, daidzein)</strong> present hote hain jo cow milk mein nahi hote.</li>
+                </ul>
+            </div>
+
+            <h4 class="font-bold text-lg mt-6 mb-3 text-green-800">🧪 Detection Methods (विधियाँ)</h4>
+            
+            <!-- Method I: Polarimetric -->
+            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                <h5 class="font-semibold text-green-700">Method I: Polarimetric Method</h5>
+                <p><strong>Principle:</strong> Different sugars ka different <strong>specific optical rotation</strong> hota hai. <strong>Lactose ka specific rotation [α]²⁰ᴅ = +52.6°</strong> hai, jabki <strong>sucrose ka [α]²⁰ᴅ = +66.5°</strong> hai, aur <strong>raffinose aur stachyose ka +105° to +148°</strong> tak. Polarimeter mein plane-polarized light ko sample se pass karte hain — sugar molecules light plane ko rotate karte hain. Agar soy milk present hai toh optical rotation value significantly change ho jayegi.</p>
+                
+                <h6 class="font-semibold mt-3">Procedure:</h6>
+                <ol>
+                    <li>Doodh se <strong>protein-free filtrate</strong> prepare karein:
+                        <ul>
+                            <li>10 ml doodh + 5 ml distilled water mix karein</li>
+                            <li><strong>Acetic acid (1-2 drops)</strong> add karke proteins precipitate karein</li>
+                            <li>70°C tak warm karein (complete coagulation ke liye)</li>
+                            <li><strong>Whatman No. 1 filter paper</strong> se filter karein — clear filtrate milega (sugar solution)</li>
+                        </ul>
+                    </li>
+                    <li>Filtrate ko <strong>polarimeter tube</strong> mein bharein (usually 200 mm path length tube).</li>
+                    <li><strong>Optical rotation (degrees)</strong> measure karein sodium D-line light (589 nm) use karke.</li>
+                    <li>Pure cow milk ka rotation <strong>+26° to +30°</strong> range mein hota hai.</li>
+                    <li><strong>Significantly higher rotation (+35° ya above)</strong> soy milk presence indicate karta hai.</li>
+                </ol>
+                
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-3 mt-3">
+                    <p><strong>📊 Calculation Example:</strong> Agar filtrate ka rotation +38° hai instead of normal +28°, toh soy sugar mix hone ka strong indication hai.</p>
+                </div>
+            </div>
+
+            <!-- Method II: Isoelectric Precipitation -->
+            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                <h5 class="font-semibold text-green-700">Method II: Isoelectric Precipitation Method</h5>
+                <p><strong>Principle:</strong> Har protein ka ek specific <strong>isoelectric point (pI)</strong> hota hai — yeh wo pH hai jahan protein ka net charge zero hota hai aur wo least soluble rehta hai (precipitate hota hai). <strong>Cow milk casein ka pI = 4.6</strong> hai, jabki <strong>soy proteins (glycinin, β-conglycinin) ka pI ≈ 5.7-6.0</strong> hai. Agar doodh ko pH 5.7 par adjust karke heat karein, toh soy proteins coagulate honge lekin casein dissolved rahega (kyunki wo apne pI se dur hai).</p>
+                
+                <h6 class="font-semibold mt-3">Procedure:</h6>
+                <ol>
+                    <li>10 ml doodh sample ko <strong>beaker mein lein</strong>.</li>
+                    <li><strong>0.1 N HCl</strong> dropwise add karke pH ko <strong>5.7-5.8</strong> par adjust karein (pH meter ya pH paper use karein).</li>
+                    <li>Beaker ko <strong>water bath mein 80-90°C par 5 minutes heat</strong> karein.</li>
+                    <li>Observe karein coagulation/precipitation.</li>
+                </ol>
+                
+                <h6 class="font-semibold mt-3">Result Interpretation:</h6>
+                <ul>
+                    <li><strong>No coagulation/minimal precipitation:</strong> Pure cow milk — soy milk absent</li>
+                    <li><strong>Visible coagulation/curd formation at pH 5.7:</strong> Soy milk PRESENT — soy proteins precipitated at their pI</li>
+                </ul>
+            </div>
+
+            <!-- Method III: SDS-PAGE -->
+            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                <h5 class="font-semibold text-green-700">Method III: SDS-PAGE (Electrophoresis) Method</h5>
+                <p><strong>Principle:</strong> <strong>Sodium Dodecyl Sulfate - Polyacrylamide Gel Electrophoresis (SDS-PAGE)</strong> proteins ko unke <strong>molecular weight</strong> ke basis par separate karta hai. SDS (anionic detergent) proteins ko denature karke uniformly negative charge deta hai. Electric field mein, proteins gel matrix ke through migrate karte hain — smaller proteins fast migrate karte hain, larger proteins slow. Cow milk aur soy milk ke proteins ki molecular weights different hain, isliye gel par distinct bands banenge.</p>
+                
+                <p class="mt-2"><strong>Molecular Weight Reference:</strong></p>
+                <table class="w-full border-collapse border mt-2 text-sm">
+                    <thead>
+                        <tr class="bg-green-100">
+                            <th class="border p-2">Protein Source</th>
+                            <th class="border p-2">Major Proteins</th>
+                            <th class="border p-2">Molecular Weight (kDa)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="border p-2">Cow Milk</td><td class="border p-2">α-casein, β-casein, κ-casein, β-lactoglobulin</td><td class="border p-2">19-25 kDa</td></tr>
+                        <tr class="bg-blue-50"><td class="border p-2">Soy Milk</td><td class="border p-2">Glycinin (11S), β-conglycinin (7S)</td><td class="border p-2">50-70 kDa (subunits: 35-70 kDa)</td></tr>
+                    </tbody>
+                </table>
+                
+                <h6 class="font-semibold mt-3">Procedure (Simplified):</h6>
+                <ol>
+                    <li>Doodh sample ko <strong>SDS sample buffer</strong> mein dilute karein (contains SDS, reducing agent DTT/β-mercaptoethanol, glycerol, bromophenol blue dye).</li>
+                    <li><strong>95-100°C par 5 minutes boil</strong> karein (complete denaturation ke liye).</li>
+                    <li>Sample ko <strong>polyacrylamide gel wells</strong> mein load karein (typically 12-15% gel concentration).</li>
+                    <li><strong>Electric field apply</strong> karein (100-150 V constant voltage) — proteins migrate karenge towards anode.</li>
+                    <li>Gel ko <strong>Coomassie Brilliant Blue stain</strong> se stain karein — protein bands visible honge.</li>
+                    <li>Gel ko destain karein (excess dye remove karne ke liye).</li>
+                </ol>
+                
+                <h6 class="font-semibold mt-3">Result:</h6>
+                <ul>
+                    <li><strong>Pure cow milk:</strong> Gel par bands 19-25 kDa region mein dikhenge (casein aur whey proteins).</li>
+                    <li><strong>Soy milk adulterated:</strong> <strong>Additional distinct bands 35-70 kDa region mein</strong> dikhenge (glycinin aur β-conglycinin subunits) — yeh cow milk mein absent hote hain.</li>
+                </ul>
+                
+                <div class="bg-blue-50 border-l-4 border-blue-400 p-3 mt-3">
+                    <p><strong>🔬 Advanced Variant:</strong> <strong>Western Blotting</strong> use karke soy-specific antibodies se confirm kar sakte hain — highly specific detection.</p>
+                </div>
+            </div>
+
+            <!-- Method IV: Immunodiffusion -->
+            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                <h5 class="font-semibold text-green-700">Method IV: Immunodiffusion Method (Ouchterlony Double Diffusion)</h5>
+                <p><strong>Principle:</strong> Yeh <strong>antigen-antibody interaction</strong> par based hai. Soy proteins ke liye specific <strong>polyclonal/monoclonal antibodies</strong> commercially available hain. Agar doodh mein soy proteins present hain, toh antibodies unse bind karke agar gel mein ek <strong>visible white precipitation line</strong> banayenge (immune complex formation).</p>
+                
+                <h6 class="font-semibold mt-3">Procedure:</h6>
+                <ol>
+                    <li><strong>1% agar gel</strong> prepare karein aur petri dish mein pour karein.</li>
+                    <li>Gel mein <strong>wells cut</strong> karein (typically hexagonal pattern — center mein antiserum, periphery mein samples).</li>
+                    <li>Center well mein <strong>anti-soy protein antibody</strong> add karein.</li>
+                    <li>Peripheral wells mein:
+                        <ul>
+                            <li>Test doodh sample (diluted/treated)</li>
+                            <li>Positive control (pure soy milk dilution)</li>
+                            <li>Negative control (pure cow milk)</li>
+                        </ul>
+                    </li>
+                    <li>Petri dish ko <strong>humid chamber mein 24-48 hours incubate</strong> karein at room temperature.</li>
+                    <li>Diffusion hone par antigens aur antibodies gel mein meet karte hain aur precipitate karte hain.</li>
+                </ol>
+                
+                <h6 class="font-semibold mt-3">Result:</h6>
+                <ul>
+                    <li><strong>Precipitation line visible between antibody well aur test sample well:</strong> Soy milk PRESENT</li>
+                    <li><strong>No precipitation line:</strong> Soy milk ABSENT</li>
+                    <li><strong>Line of identity:</strong> Agar test sample ki line positive control ki line se merge karti hai toh confirm ho jaata hai ki same antigen (soy protein) present hai.</li>
+                </ul>
+            </div>
+
+            <!-- Method V: HPLC -->
+            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                <h5 class="font-semibold text-green-700">Method V: HPLC-Based Method (Sugar Profiling)</h5>
+                <p><strong>Principle:</strong> <strong>High-Performance Liquid Chromatography (HPLC)</strong> ek highly sensitive analytical technique hai jo complex mixtures ke individual components ko separate aur quantify karta hai. Soy milk mein <strong>stachyose</strong> hota hai jo cow milk mein completely absent hota hai — yeh ek definitive marker hai. HPLC carbohydrates ko <strong>retention time</strong> ke basis par identify karta hai.</p>
+                
+                <h6 class="font-semibold mt-3">Procedure (Outline):</h6>
+                <ol>
+                    <li>Doodh sample se <strong>deproteinized filtrate</strong> prepare karein (acetonitrile precipitation ya Carrez reagent method).</li>
+                    <li>Filtrate ko <strong>0.45 μm syringe filter</strong> se filter karein.</li>
+                    <li><strong>HPLC system setup:</strong>
+                        <ul>
+                            <li><strong>Column:</strong> Amino column (e.g., NH₂-bonded silica) ya carbohydrate analysis column</li>
+                            <li><strong>Mobile phase:</strong> Acetonitrile:Water (75:25 to 80:20 v/v)</li>
+                            <li><strong>Flow rate:</strong> 1.0-1.5 ml/min</li>
+                            <li><strong>Detector:</strong> Refractive Index Detector (RID) ya Evaporative Light Scattering Detector (ELSD)</li>
+                            <li><strong>Injection volume:</strong> 10-20 μl</li>
+                        </ul>
+                    </li>
+                    <li>Standard solutions run karein: lactose, sucrose, raffinose, stachyose — retention times note karein.</li>
+                    <li>Test sample inject karein aur chromatogram analyze karein.</li>
+                </ol>
+                
+                <h6 class="font-semibold mt-3">Result Interpretation:</h6>
+                <table class="w-full border-collapse border mt-2 text-sm">
+                    <thead>
+                        <tr class="bg-green-100">
+                            <th class="border p-2">Sugar Detected</th>
+                            <th class="border p-2">Typical Retention Time</th>
+                            <th class="border p-2">Inference</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="border p-2">Lactose only</td><td class="border p-2">~6-8 min</td><td class="border p-2">Pure cow milk</td></tr>
+                        <tr class="bg-red-50"><td class="border p-2"><strong>Stachyose peak present</strong></td><td class="border p-2">~12-15 min</td><td class="border p-2"><strong>Soy milk PRESENT</strong></td></tr>
+                        <tr><td class="border p-2">Raffinose + Sucrose peaks</td><td class="border p-2">~9-11 min</td><td class="border p-2">Supportive evidence of soy</td></tr>
+                    </tbody>
+                </table>
+                
+                <div class="bg-green-50 border-l-4 border-green-500 p-3 mt-3">
+                    <p><strong>✅ Advantage:</strong> HPLC extremely sensitive hai — <strong>even 1-2% soy milk contamination</strong> detect kar sakta hai. Quantitative analysis bhi possible hai (exact % adulteration calculate kar sakte hain).</p>
+                </div>
+            </div>
+
+            <!-- Method VI: Trypsin Inhibition -->
+            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                <h5 class="font-semibold text-green-700">Method VI: Rapid Method — Trypsin Inhibition Assay</h5>
+                <p><strong>Principle:</strong> Soybeans mein naturally <strong>trypsin inhibitors</strong> present hote hain — yeh anti-nutritional factors hain jo digestive enzyme trypsin ko inhibit karte hain. Main inhibitors hain <strong>Kunitz Trypsin Inhibitor (KTI, ~20 kDa)</strong> aur <strong>Bowman-Birk Inhibitor (BBI, ~8 kDa)</strong>. Yeh proteins trypsin ke active site se tightly bind karte hain aur usko inactive kar dete hain. Cow milk mein yeh inhibitors naturally absent hote hain. Test mein trypsin enzyme ki proteolytic activity measure karte hain — agar activity reduce hui toh inhibitors present hain = soy milk milaya gaya hai.</p>
+                
+                <p class="mt-2"><strong>Trypsin Activity Measurement:</strong> Trypsin ek specific synthetic substrate <strong>BAEE (Benzoyl-L-Arginine Ethyl Ester)</strong> ya <strong>casein</strong> ko cleave karta hai. Cleavage se ek measurable product banta hai (absorbance change ya color change).</p>
+                
+                <h6 class="font-semibold mt-3">Procedure (Using BAEE Substrate):</h6>
+                <ol>
+                    <li><strong>Sample preparation:</strong> 
+                        <ul>
+                            <li>5 ml doodh sample ko <strong>pH 8.0 Tris-HCl buffer</strong> mein dilute karein</li>
+                            <li>Centrifuge karke fat remove karein</li>
+                        </ul>
+                    </li>
+                    <li><strong>Trypsin solution prepare:</strong> 0.1 mg/ml trypsin in pH 8.0 buffer</li>
+                    <li><strong>Test tubes setup:</strong>
+                        <ul>
+                            <li><strong>Control tube:</strong> 1 ml buffer + 0.5 ml trypsin solution + 1 ml BAEE substrate (0.001 M)</li>
+                            <li><strong>Test tube:</strong> 1 ml treated doodh sample + 0.5 ml trypsin solution + incubate 10 min (inhibitor ko trypsin se bind hone ka time) + 1 ml BAEE substrate</li>
+                        </ul>
+                    </li>
+                    <li><strong>37°C par 10 minutes incubate</strong> karein.</li>
+                    <li><strong>Absorbance measure</strong> karein at 253 nm (BAEE hydrolysis product absorbs UV light).</li>
+                </ol>
+                
+                <h6 class="font-semibold mt-3">Alternative Simplified Method (Casein-Ninhydrin):</h6>
+                <ol>
+                    <li>2 ml doodh sample + 1 ml trypsin solution (1 mg/ml) mix karein.</li>
+                    <li>1 ml <strong>casein solution (1%)</strong> add karein as substrate.</li>
+                    <li><strong>37°C par 30 minutes incubate</strong>.</li>
+                    <li><strong>TCA (Trichloroacetic Acid, 10%)</strong> 2 ml add karke reaction stop karein — undigested casein precipitate ho jayega.</li>
+                    <li>Centrifuge aur clear supernatant lein.</li>
+                    <li>Supernatant mein <strong>ninhydrin reagent</strong> add karein aur boil karein — free amino acids (casein digestion product) se <strong>purple color</strong> develop hoga.</li>
+                    <li>Absorbance measure karein at 570 nm.</li>
+                </ol>
+                
+                <h6 class="font-semibold mt-3">Result:</h6>
+                <div class="overflow-x-auto">
+                    <table class="w-full border-collapse border text-sm">
+                        <thead>
+                            <tr class="bg-green-100">
+                                <th class="border p-2">Observation</th>
+                                <th class="border p-2">Trypsin Activity</th>
+                                <th class="border p-2">Inference</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td class="border p-2">High absorbance (intense purple color)</td><td class="border p-2">Normal/High — trypsin actively digesting substrate</td><td class="border p-2">Pure cow milk — no inhibitors</td></tr>
+                            <tr class="bg-red-50"><td class="border p-2"><strong>Significantly reduced absorbance</strong> (pale color)</td><td class="border p-2"><strong>Inhibited</strong> — trypsin blocked by inhibitors</td><td class="border p-2"><strong>Soy milk PRESENT</strong></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="bg-orange-50 border-l-4 border-orange-400 p-3 mt-3">
+                    <p><strong>⚡ Speed Advantage:</strong> Yeh method 30-45 minutes mein complete ho jaata hai — field testing ke liye suitable. No expensive equipment required except spectrophotometer.</p>
+                </div>
+            </div>
+
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mt-4">
+                <h5 class="font-semibold text-blue-800">📚 References:</h5>
+                <ul class="text-sm text-blue-700">
+                    <li>Journal of Dairy Science, Vol. 85(2002) - "Detection of Soy Protein in Milk"</li>
+                    <li>Food Chemistry, Vol. 158(2014) - "HPLC determination of oligosaccharides in soy-adulterated milk"</li>
+                    <li>International Dairy Journal, Vol. 22(2012) - "Immunological methods for milk adulteration"</li>
+                </ul>
+            </div>
+        </div>
+    `
+},
+{
+    title: 'Doodh mein Paneer Mattha (Cheese Whey Adulteration)',
+    content: `
+        <div class="prose max-w-none prose-green">
+            <div class="bg-green-50 border-l-4 border-green-500 p-4 mb-4">
+                <h4 class="text-green-800 font-bold">🔬 Scientific Overview</h4>
+                <p class="text-green-700"><strong>Cheese whey (paneer mattha)</strong> cheese/paneer manufacturing ka by-product hai. Jab doodh se paneer banate hain toh milk proteins do fractions mein separate ho jaate hain:</p>
+                <ul class="text-green-700">
+                    <li><strong>Curd/Paneer (80% milk protein):</strong> Mainly <strong>casein</strong> — yeh coagulate hokar solid paneer banta hai</li>
+                    <li><strong>Whey (20% milk protein):</strong> Liquid portion — isme mainly <strong>whey proteins (α-lactalbumin, β-lactoglobulin, BSA, immunoglobulins)</strong>, lactose, minerals, aur thoda fat hota hai</li>
+                </ul>
+                
+                <p class="text-green-700 mt-2"><strong>Why Whey is Added to Milk?</strong></p>
+                <ul class="text-green-700">
+                    <li>Whey disposal problem hai — environmental pollution cause karta hai (high BOD/COD)</li>
+                    <li>Whey addition se doodh ka <strong>volume increase</strong> hota hai without obvious detection</li>
+                    <li>Whey mein lactose aur proteins present hain jo <strong>lactometer reading ko maintain</strong> karte hain</li>
+                    <li>Economic benefit — whey is cheaper than milk</li>
+                </ul>
+                
+                <p class="text-green-700 mt-2"><strong>The Marker: Glycomacropeptide (GMP)</strong></p>
+                <p class="text-green-700">Jab paneer banate waqt <strong>rennet enzyme (chymosin)</strong> use karte hain, yeh enzyme κ-casein molecule ko specific site par cleave karta hai:</p>
+                
+                <pre class="bg-gray-100 p-3 rounded text-xs mt-2"><code>κ-Casein (Phe₁₀₅-Met₁₀₆ bond cleavage)
+    ↓ Rennet (Chymosin)
+Para-κ-casein (residue 1-105) → Remains in curd
+        +
+Glycomacropeptide/GMP (residue 106-169) → Goes into WHEY</code></pre>
+                
+                <p class="text-green-700 mt-2"><strong>GMP Structure & Uniqueness:</strong></p>
+                <ul class="text-green-700">
+                    <li>GMP ek <strong>64 amino acid peptide</strong> hai (molecular weight ~6.8 kDa)</li>
+                    <li>Isme <strong>N-acetylneuraminic acid (NANA, yeh sialic acid ka ek form hai)</strong> attached hota hai as glycan chains</li>
+                    <li><strong>Normal fresh milk mein GMP absent</strong> hota hai (κ-casein intact form mein hota hai)</li>
+                    <li><strong>Cheese whey mein GMP abundant</strong> hota hai</li>
+                    <li>GMP detection = rennet-treated whey ka indicator = cheese whey adulteration</li>
+                </ul>
+            </div>
+
+            <h4 class="font-bold text-lg mt-6 mb-3 text-green-800">🧪 Ninhydrin-Based Spectrophotometric Method</h4>
+            
+            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                <h5 class="font-semibold text-green-700">Scientific Principle (Detailed)</h5>
+                <p>Yeh method <strong>sialic acid content measurement</strong> par based hai jo GMP se attached hota hai. Method ke 3 major steps hain:</p>
+                
+                <p class="mt-3"><strong>Step 1: Selective Precipitation of GMP</strong></p>
+                <p>Doodh sample ko <strong>Trichloroacetic Acid (TCA, 12-15%)</strong> se treat karte hain. TCA ek strong protein precipitant hai lekin <strong>GMP ko precipitate nahi karta</strong> kyunki:</p>
+                <ul>
+                    <li>GMP ek relatively small, highly charged peptide hai</li>
+                    <li>Attached sialic acid residues negative charge dete hain → TCA-acidic condition mein soluble rehta hai</li>
+                    <li>Large proteins (caseins, whey proteins) precipitate ho jaate hain</li>
+                </ul>
+                <p>Result: TCA supernatant mein sirf GMP dissolved rehta hai.</p>
+                
+                <p class="mt-3"><strong>Step 2: Sialic Acid Release</strong></p>
+                <p>GMP-containing supernatant ko <strong>acidic conditions (dilute HCl/H₂SO₄) mein heat (80-100°C)</strong> karte hain. Yeh hydrolysis reaction hota hai:</p>
+                <pre class="bg-gray-100 p-2 rounded text-xs mt-1"><code>GMP-Sialic Acid (glycosidic bond) + H⁺ + Heat 
+    → Free Sialic Acid (NANA) + Peptide backbone</code></pre>
+                <p>Glycosidic bonds cleave ho jaate hain aur <strong>free N-acetylneuraminic acid (NANA)</strong> release hota hai.</p>
+                
+                <p class="mt-3"><strong>Step 3: Ninhydrin Reaction (Color Development)</strong></p>
+                <p><strong>Ninhydrin (1,2,3-indanetrione monohydrate)</strong> amino acids aur amines ke saath react karke colored products banata hai. Sialic acid (NANA) mein ek <strong>free amino group</strong> present hota hai (N-acetyl group ki wajah se partially exposed). Acidic ninhydrin reagent mein heating par:</p>
+                
+                <pre class="bg-gray-100 p-3 rounded text-xs mt-2"><code>NANA + Ninhydrin (in acidic solution) + Heat
+    ↓
+Oxidative decarboxylation + Schiff base formation
+    ↓
+Yellow-brown colored complex (λmax ≈ 470 nm)
+(Different from classic Ruhemann's purple at 570 nm for amino acids)</code></pre>
+                
+                <p class="mt-2">Sialic acid ka ninhydrin reaction amino acids se slightly different hai — yeh <strong>yellow-brown chromophore</strong> deta hai instead of purple, jo <strong>470 nm wavelength par maximum absorbance</strong> deta hai.</p>
+            </div>
+
+            <h5 class="font-semibold mt-4 text-green-700">Detailed Procedure</h5>
+            <div class="bg-white border border-gray-300 p-4 rounded-lg">
+                <p><strong>A. Sample Preparation & GMP Isolation:</strong></p>
+                <ol>
+                    <li><strong>10 ml doodh sample</strong> ek test tube mein lein.</li>
+                    <li><strong>15 ml TCA solution (15% w/v)</strong> add karein — proteins precipitate honge.</li>
+                    <li>Tube ko <strong>vigorously shake</strong> karein aur <strong>room temperature par 10 minutes</strong> stand hone dein (complete precipitation ke liye).</li>
+                    <li><strong>Whatman No. 1 filter paper</strong> se filter karein — clear filtrate collect karein (yeh GMP-containing fraction hai).</li>
+                </ol>
+                
+                <p class="mt-3"><strong>B. Sialic Acid Hydrolysis:</strong></p>
+                <ol start="5">
+                    <li>Filtrate mein se <strong>5 ml portion</strong> lein aur clean test tube mein transfer karein.</li>
+                    <li><strong>0.5 ml 0.1 N HCl</strong> add karein (acidic pH maintain karne ke liye).</li>
+                    <li>Tube ko <strong>boiling water bath mein 15-20 minutes</strong> heat karein (glycosidic bond hydrolysis).</li>
+                    <li>Room temperature tak <strong>cool</strong> karein.</li>
+                </ol>
+                
+                <p class="mt-3"><strong>C. Ninhydrin Color Reaction:</strong></p>
+                <ol start="9">
+                    <li><strong>Ninhydrin reagent prepare:</strong>
+                        <ul>
+                            <li>0.2 g ninhydrin powder ko</li>
+                            <li>100 ml glacial acetic acid + conc. HCl (95:5 v/v) mixture mein dissolve karein</li>
+                            <li>Fresh prepare karein before use (reagent stable nahi hota)</li>
+                        </ul>
+                    </li>
+                    <li>Cooled hydrolysate mein <strong>2 ml ninhydrin reagent</strong> add karein.</li>
+                    <li>Tube ko again <strong>boiling water bath mein 10-12 minutes</strong> heat karein.</li>
+                    <li>Remove karke <strong>ice-cold water mein immediately cool</strong> karein (color stabilize hota hai).</li>
+                </ol>
+                
+                <p class="mt-3"><strong>D. Spectrophotometric Measurement:</strong></p>
+                <ol start="13">
+                    <li>Solution ko <strong>cuvette mein transfer</strong> karein (1 cm path length).</li>
+                    <li><strong>Spectrophotometer ko 470 nm</strong> wavelength par set karein.</li>
+                    <li><strong>Blank solution</strong> use karke instrument zero karein (blank = reagent blank — pure milk ki jagah distilled water use karke same procedure follow karein).</li>
+                    <li>Test sample ka <strong>absorbance (A₄₇₀)</strong> read karein.</li>
+                </ol>
+            </div>
+
+            <h5 class="font-semibold mt-4 text-green-700">Result Interpretation</h5>
+            <div class="overflow-x-auto mt-3">
+                <table class="w-full border-collapse border">
+                    <thead>
+                        <tr class="bg-green-100">
+                            <th class="border p-2">Absorbance at 470 nm</th>
+                            <th class="border p-2">Visual Color</th>
+                            <th class="border p-2">GMP Content</th>
+                            <th class="border p-2">Inference</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="border p-2"><strong>< 0.100</strong></td>
+                            <td class="border p-2">Very pale yellow / Colorless</td>
+                            <td class="border p-2">Absent/Trace</td>
+                            <td class="border p-2"><strong>Pure milk</strong> — No whey added</td>
+                        </tr>
+                        <tr class="bg-yellow-50">
+                            <td class="border p-2"><strong>0.100 - 0.250</strong></td>
+                            <td class="border p-2">Light yellow</td>
+                            <td class="border p-2">Low GMP</td>
+                            <td class="border p-2">Borderline — possible <strong>5-10% whey</strong></td>
+                        </tr>
+                        <tr class="bg-orange-50">
+                            <td class="border p-2"><strong>0.250 - 0.500</strong></td>
+                            <td class="border p-2">Yellow-brown</td>
+                            <td class="border p-2">Moderate GMP</td>
+                            <td class="border p-2"><strong>10-20% whey added</strong></td>
+                        </tr>
+                        <tr class="bg-red-50">
+                            <td class="border p-2"><strong>> 0.500</strong></td>
+                            <td class="border p-2">Intense brown</td>
+                            <td class="border p-2">High GMP</td>
+                            <td class="border p-2"><strong>Heavy adulteration (>20% whey)</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mt-4">
+                <h5 class="font-semibold text-blue-800">📊 Quantitative Analysis (Optional)</h5>
+                <p class="text-blue-700">Standard curve prepare karke exact GMP concentration calculate kar sakte hain:</p>
+                <ol class="text-sm text-blue-700 mt-2">
+                    <li>Pure sialic acid (NANA) standards prepare karein (0, 10, 20, 30, 40, 50 μg/ml concentrations)</li>
+                    <li>Har standard ko ninhydrin reagent se treat karke absorbance measure karein</li>
+                    <li>Graph plot karein: X-axis = NANA concentration (μg/ml), Y-axis = Absorbance (A₄₇₀)</li>
+                    <li>Test sample ka absorbance graph par match karke GMP/sialic acid concentration calculate karein</li>
+                    <li>Whey percentage estimate karein using formula (based on typical GMP content in cheese whey ~ 0.6-1.2 g/L)</li>
+                </ol>
+            </div>
+
+            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                <h5 class="font-semibold text-yellow-800">⚠️ Important Notes & Precautions</h5>
+                <ul class="text-sm text-yellow-700">
+                    <li><strong>Acid-set paneer whey:</strong> Agar paneer citric acid/lemon juice se banaya gaya hai (not rennet), toh GMP release nahi hoga — yeh test negative rahega even if whey added hai. Is case mein alternate methods chahiye (e.g., lactose:protein ratio analysis).</li>
+                    <li><strong>Timing critical:</strong> Ninhydrin reaction ka color time-dependent hai — exactly recommended time follow karein.</li>
+                    <li><strong>Temperature control:</strong> Boiling time aur temperature variations results ko affect karte hain — consistent heating maintain karein.</li>
+                    <li><strong>Reagent quality:</strong> Ninhydrin light-sensitive hai — amber bottles mein store karein. Old/degraded ninhydrin weak color deta hai.</li>
+                    <li><strong>Interference:</strong> Kuch preservatives (benzoic acid, sorbic acid) absorbance ko slightly affect kar sakte hain.</li>
+                </ul>
+            </div>
+
+            <div class="bg-gray-50 border-l-4 border-gray-400 p-4 mt-4">
+                <h5 class="font-semibold text-gray-800">🔬 Alternative/Confirmatory Methods</h5>
+                <ul class="text-sm text-gray-700">
+                    <li><strong>HPLC Method:</strong> Direct GMP quantification — highly accurate, gold standard method</li>
+                    <li><strong>Capillary Electrophoresis:</strong> GMP separation based on charge-to-mass ratio</li>
+                    <li><strong>Immunoassay (ELISA):</strong> Anti-GMP antibodies use karke detection — very specific</li>
+                    <li><strong>Lactose:Casein Ratio:</strong> Whey addition se ratio disturb hota hai (whey mein high lactose, low casein)</li>
+                </ul>
+            </div>
+
+            <p class="text-xs mt-4 text-gray-600"><strong>References:</strong> Journal of Food Science and Technology, Vol 22 (1985); International Dairy Journal, Vol 18 (2008); Food Chemistry, Vol 113 (2009)</p>
+        </div>
+    `
+},
+{
+    title: 'Doodh mein Gelatin (Gelatin Adulteration)',
+    content: `
+        <div class="prose max-w-none prose-green">
+            <div class="bg-green-50 border-l-4 border-green-500 p-4 mb-4">
+                <h4 class="text-green-800 font-bold">🔬 Scientific Overview</h4>
+                <p class="text-green-700"><strong>Gelatin</strong> ek protein-rich substance hai jo animal tissues (mainly bones, skin, connective tissues) se collagen ko partial hydrolysis karke extract kiya jaata hai. Yeh economically cheap aur easily available hai, isliye unethical traders isko doodh mein milate hain.</p>
+                
+                <p class="text-green-700 mt-2"><strong>Why Gelatin is Added to Milk?</strong></p>
+                <ul class="text-green-700">
+                    <li><strong>Viscosity increase:</strong> Gelatin solution viscous/thick hota hai — watered-down milk ko thick appearance deta hai, natural doodh jaisa lagta hai</li>
+                    <li><strong>SNF content artificially increase:</strong> Gelatin protein hai (contains nitrogen) — Kjeldahl method se SNF reading badh jaati hai</li>
+                    <li><strong>Mouthfeel enhancement:</strong> Diluted doodh ka thin texture mask ho jaata hai</li>
+                    <li><strong>Economic fraud:</strong> Cheap gelatin (₹200-400/kg) se expensive milk solids replace karte hain</li>
+                </ul>
+                
+                <p class="text-green-700 mt-2"><strong>Gelatin Structure & Composition:</strong></p>
+                <p class="text-green-700">Gelatin <strong>denatured collagen</strong> hai. Collagen ek triple-helix protein hai jo mainly connective tissues mein hota hai. Jab collagen ko controlled heat aur partial acid/alkali hydrolysis se treat karte hain, toh triple helix break ho jaata hai aur gelatin banta hai.</p>
+                
+                <ul class="text-green-700 mt-2">
+                    <li><strong>Amino Acid Composition:</strong> Gelatin mein <strong>glycine (33%), proline (12%), hydroxyproline (10%)</strong> abundant hote hain. Especially <strong>hydroxyproline</strong> gelatin ka unique marker hai — yeh milk proteins mein virtually absent hota hai.</li>
+                    <li><strong>Molecular Weight:</strong> 20-250 kDa range (depending on hydrolysis extent)</li>
+                    <li><strong>Isoelectric Point:</strong> pH 4.7-5.0 (acidic side)</li>
+                </ul>
+                
+                <p class="text-green-700 mt-2"><strong>Detection Strategy:</strong></p>
+                <p class="text-green-700">Gelatin ko doodh se isolate karke kisi specific reagent se react karate hain jo gelatin ke liye characteristic color/precipitate de. <strong>Picric acid (2,4,6-trinitrophenol)</strong> gelatin ke saath specific interaction karta hai.</p>
+            </div>
+
+            <h4 class="font-bold text-lg mt-6 mb-3 text-green-800">🧪 Picric Acid Precipitation Test</h4>
+            
+            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                <h5 class="font-semibold text-green-700">Scientific Principle (Detailed)</h5>
+                
+                <p><strong>Picric Acid (C₆H₂(NO₂)₃OH) — Structure aur Properties:</strong></p>
+                <ul>
+                    <li>Picric acid ek <strong>aromatic compound</strong> hai with <strong>three nitro groups (-NO₂)</strong> aur ek hydroxyl group (-OH) attached to benzene ring</li>
+                    <li>Yeh <strong>strong acid</strong> hai (pKa ≈ 0.4) — phenolic -OH group ke adjacent nitro groups ke electron-withdrawing effect ki wajah se</li>
+                    <li>Bright <strong>yellow crystalline solid</strong> — highly colored due to conjugated system</li>
+                    <li>Water-soluble (saturated solution ~1.4% w/v at room temperature)</li>
+                </ul>
+                
+                <p class="mt-3"><strong>Mechanism of Gelatin-Picric Acid Interaction:</strong></p>
+                <p>Gelatin ka picric acid ke saath reaction <strong>electrostatic interaction aur hydrogen bonding</strong> par based hai:</p>
+                
+                <div class="bg-white border border-gray-300 p-3 rounded mt-2">
+                    <p class="font-semibold">Step-by-Step Interaction:</p>
+                    <ol>
+                        <li><strong>Protonation of Gelatin:</strong> Acidic medium (mercuric nitrate + acetic acid ka Stokes reagent) mein gelatin ke basic amino acid residues (lysine, arginine, histidine) protonated ho jaate hain:
+                            <pre class="bg-gray-100 p-2 rounded text-xs mt-1"><code>-NH₂ (gelatin) + H⁺ → -NH₃⁺ (positively charged)</code></pre>
+                        </li>
+                        <li><strong>Picrate Ion Formation:</strong> Picric acid dissociate hoke picrate anion banata hai:
+                            <pre class="bg-gray-100 p-2 rounded text-xs mt-1"><code>C₆H₂(NO₂)₃OH ⇌ C₆H₂(NO₂)₃O⁻ + H⁺
+(Picric acid)     (Picrate ion - YELLOW)</code></pre>
+                        </li>
+                        <li><strong>Electrostatic Complex Formation:</strong> Positively charged gelatin amino groups aur negatively charged picrate ions attract hote hain:
+                            <pre class="bg-gray-100 p-2 rounded text-xs mt-1"><code>Gelatin-NH₃⁺ + ⁻O-C₆H₂(NO₂)₃ → 
+    [Gelatin-NH₃⁺ ··· ⁻O-C₆H₂(NO₂)₃]
+    (Gelatin-picrate COMPLEX - YELLOW PRECIPITATE)</code></pre>
+                        </li>
+                        <li><strong>Additional H-Bonding:</strong> Gelatin ke -OH groups (from serine, threonine, hydroxyproline) aur -NH groups (peptide backbone) bhi picric acid ke nitro groups (-NO₂) aur phenolic -OH ke saath hydrogen bonds banate hain — complex ko stabilize karte hain.</li>
+                    </ol>
+                </div>
+                
+                <p class="mt-3"><strong>Why Milk Proteins Don't React Similarly?</strong></p>
+                <ul>
+                    <li>Milk caseins aur whey proteins ka amino acid composition gelatin se different hai</li>
+                    <li>Caseins already acidic medium mein precipitate ho jaate hain (Stokes reagent mein) aur filtrate mein nahi aate</li>
+                    <li>Small amount of residual milk proteins picric acid se weak interaction karte hain — no significant yellow precipitate</li>
+                    <li>Gelatin ka <strong>high glycine, proline, hydroxyproline content</strong> unique structural conformation deta hai jo picric acid ke saath strong multi-point interaction facilitate karta hai</li>
+                </ul>
+            </div>
+
+            <h5 class="font-semibold mt-4 text-green-700">Reagents Required</h5>
+            <div class="bg-white border border-gray-300 p-4 rounded-lg">
+                <p><strong>1. Stokes Reagent (Acid Mercuric Nitrate Solution):</strong></p>
+                <ul class="text-sm">
+                    <li><strong>Composition:</strong> Mercuric nitrate [Hg(NO₃)₂] in acidified water</li>
+                    <li><strong>Preparation:</strong>
+                        <ul>
+                            <li>Dissolve <strong>5 g mercuric nitrate</strong> in <strong>100 ml distilled water</strong></li>
+                            <li>Add <strong>2-3 ml glacial acetic acid</strong> (pH ~3-4 maintain karne ke liye)</li>
+                            <li>Mix thoroughly — clear solution milega</li>
+                        </ul>
+                    </li>
+                    <li><strong>Function:</strong> 
+                        <ul>
+                            <li>Milk proteins (casein, whey proteins) ko precipitate karta hai — mercury cations protein amino groups se coordinate bonding karte hain</li>
+                            <li>Acidic environment maintain karta hai</li>
+                            <li>Gelatin ko precipitate NAHI karta (gelatin mercury ke saath weak interaction karta hai, soluble rehta hai)</li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                <p class="mt-3"><strong>2. Saturated Picric Acid Solution:</strong></p>
+                <ul class="text-sm">
+                    <li><strong>Preparation:</strong>
+                        <ul>
+                            <li><strong>1.4 g picric acid powder</strong> ko <strong>100 ml warm distilled water (40-50°C)</strong> mein dissolve karein</li>
+                            <li>Cool to room temperature — saturated solution ban jayega</li>
+                            <li>Undissolved crystals ko settle hone dein, clear supernatant use karein</li>
+                        </ul>
+                    </li>
+                    <li><strong>Storage:</strong> Amber/dark glass bottle mein (light-sensitive hai). Room temperature par stable.</li>
+                </ul>
+            </div>
+
+            <h5 class="font-semibold mt-4 text-green-700">Detailed Procedure</h5>
+            <div class="bg-white border border-gray-300 p-4 rounded-lg">
+                <p><strong>Step 1: Milk Sample Conditioning</strong></p>
+                <ol>
+                    <li><strong>10 ml doodh sample</strong> ek clean test tube mein lein.</li>
+                    <li>Agar doodh thanda hai toh <strong>room temperature (20-25°C)</strong> tak warm karein — gelatin solubility improve hogi.</li>
+                    <li>Fat layer present hai toh gently mix karein (uniform sample chahiye).</li>
+                </ol>
+                
+                <p class="mt-3"><strong>Step 2: Protein Precipitation (Deproteinization)</strong></p>
+                <ol start="4">
+                    <li>Doodh sample mein <strong>20 ml Stokes reagent</strong> add karein (ratio 1:2 — milk:reagent).</li>
+                    <li>Stopper se test tube ko close karke <strong>vigorously shake</strong> karein for 30 seconds — proteins precipitate honge (whitish curd formation).</li>
+                    <li>Tube ko <strong>5-10 minutes stand</strong> hone dein at room temperature — complete precipitation aur settling ke liye.</li>
+                    <li>Precipitate agar loose hai toh gentle centrifugation (2000 rpm, 3-5 min) kar sakte hain.</li>
+                </ol>
+                
+                <p class="mt-3"><strong>Step 3: Filtration</strong></p>
+                <ol start="8">
+                    <li><strong>Whatman No. 1 filter paper</strong> aur funnel use karke filtrate collect karein.</li>
+                    <li>Filtrate <strong>clear aur colorless/slightly yellowish</strong> hona chahiye.</li>
+                    <li>Agar filtrate cloudy hai toh re-filter karein — clear filtrate essential hai accurate results ke liye.</li>
+                </ol>
+                
+                <p class="mt-3"><strong>Step 4: Picric Acid Test</strong></p>
+                <ol start="11">
+                    <li>Clear filtrate mein se <strong>5 ml portion</strong> fresh clean test tube mein lein.</li>
+                    <li>Filtrate mein <strong>equal volume (5 ml) saturated picric acid solution</strong> add karein.</li>
+                    <li>Test tube ko gently shake karke <strong>mix</strong> karein.</li>
+                    <li><strong>5-10 minutes</strong> stand hone dein at room temperature.</li>
+                    <li>Tube ko <strong>transmitted light against dark background</strong> observe karein — precipitation clearly visible hogi.</li>
+                </ol>
+            </div>
+
+            <h5 class="font-semibold mt-4 text-green-700">Result Interpretation</h5>
+            <div class="overflow-x-auto mt-3">
+                <table class="w-full border-collapse border">
+                    <thead>
+                        <tr class="bg-green-100">
+                            <th class="border p-2">Observation</th>
+                            <th class="border p-2">Description</th>
+                            <th class="border p-2">Inference</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="bg-red-50">
+                            <td class="border p-2"><strong>Bright YELLOW Precipitate</strong></td>
+                            <td class="border p-2">
+                                <ul class="text-sm mb-0">
+                                    <li>Heavy yellow sediment bottom mein settle hoti hai</li>
+                                    <li>Supernatant clear/pale yellow</li>
+                                    <li>Precipitate flocculent/granular appearance</li>
+                                </ul>
+                            </td>
+                            <td class="border p-2"><strong>GELATIN PRESENT</strong><br><span class="text-xs">Gelatin-picrate complex formed</span></td>
+                        </tr>
+                        <tr>
+                            <td class="border p-2"><strong>NO Yellow Precipitate</strong></td>
+                            <td class="border p-2">
+                                <ul class="text-sm mb-0">
+                                    <li>Solution clear rehta hai ya slightly yellow color (picric acid ka own color)</li>
+                                    <li>No sediment formation</li>
+                                    <li>Possible faint turbidity (non-specific) but no yellow ppt</li>
+                                </ul>
+                            </td>
+                            <td class="border p-2"><strong>Gelatin ABSENT</strong><br><span class="text-xs">Pure milk — no adulteration</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                <h5 class="font-semibold text-yellow-800">⚠️ Safety Precautions</h5>
+                <ul class="text-sm text-yellow-700">
+                    <li><strong>Mercuric nitrate:</strong> Highly TOXIC heavy metal salt. Handle with gloves. Avoid skin contact aur inhalation. Disposal proper waste protocol ke according karein.</li>
+                    <li><strong>Picric acid:</strong> EXPLOSIVE when dry. Hamesha aqueous solution mein handle karein. Never allow to dry out completely. Avoid friction aur shock.</li>
+                    <li><strong>Acetic acid:</strong> Corrosive aur pungent odor. Well-ventilated area mein use karein.</li>
+                    <li><strong>Eye protection aur lab coat mandatory.</strong></li>
+                    <li><strong>Waste disposal:</strong> Heavy metal waste aur picric acid waste ko separate designated containers mein collect karein — municipal drain mein NEVER dispose.</li>
+                </ul>
+            </div>
+
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mt-4">
+                <h5 class="font-semibold text-blue-800">🔬 Advanced/Alternative Methods for Gelatin Detection</h5>
+                
+                <p class="text-sm text-blue-700 mt-2"><strong>1. Hydroxyproline Quantification (Chemical Method):</strong></p>
+                <ul class="text-sm text-blue-700">
+                    <li>Gelatin mein <strong>hydroxyproline ~10%</strong> hota hai; milk proteins mein virtually absent</li>
+                    <li>Sample ko acid hydrolysis karke amino acids release karte hain</li>
+                    <li><strong>Ehrlich's reagent (p-dimethylaminobenzaldehyde)</strong> se react karte hain — hydroxyproline se <strong>red-purple color (λmax = 558 nm)</strong> develop hota hai</li>
+                    <li>Spectrophotometry se quantify karte hain</li>
+                    <li><strong>Detection limit:</strong> ~0.01% gelatin in milk</li>
+                </ul>
+                
+                <p class="text-sm text-blue-700 mt-3"><strong>2. ELISA (Enzyme-Linked Immunosorbent Assay):</strong></p>
+                <ul class="text-sm text-blue-700">
+                    <li>Anti-gelatin antibodies use karte hain</li>
+                    <li>Highly specific aur sensitive — <strong>ppb (parts per billion) level detection</strong></li>
+                    <li>Commercial ELISA kits available hain</li>
+                    <li>Quantitative results — exact gelatin concentration calculate ho sakta hai</li>
+                </ul>
+                
+                <p class="text-sm text-blue-700 mt-3"><strong>3. PCR-Based Detection (for source identification):</strong></p>
+                <ul class="text-sm text-blue-700">
+                    <li>Gelatin animal-derived hai — trace DNA present ho sakta hai</li>
+                    <li><strong>Species-specific PCR</strong> se identify kar sakte hain gelatin bovine/porcine/fish source se aaya hai</li>
+                    <li>Halal/Kosher compliance verification ke liye important</li>
+                </ul>
+                
+                <p class="text-sm text-blue-700 mt-3"><strong>4. FTIR Spectroscopy:</strong></p>
+                <ul class="text-sm text-blue-700">
+                    <li>Fourier Transform Infrared Spectroscopy</li>
+                    <li>Gelatin ki characteristic absorption bands (amide I, amide II, amide III regions mein) identify karte hain</li>
+                    <li>Non-destructive, rapid method</li>
+                    <li>Chemometric analysis se quantification possible</li>
+                </ul>
+            </div>
+
+            <div class="bg-gray-50 border-l-4 border-gray-400 p-4 mt-4">
+                <h5 class="font-semibold text-gray-800">📋 Quality Control & Troubleshooting</h5>
+                
+                <p class="text-sm text-gray-700 mt-2"><strong>Common Issues & Solutions:</strong></p>
+                <table class="w-full border-collapse border mt-2 text-xs">
+                    <thead>
+                        <tr class="bg-gray-200">
+                            <th class="border p-2">Problem</th>
+                            <th class="border p-2">Possible Cause</th>
+                            <th class="border p-2">Solution</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="border p-2">Filtrate cloudy/turbid</td>
+                            <td class="border p-2">Incomplete protein precipitation</td>
+                            <td class="border p-2">Add more Stokes reagent; wait longer; re-filter</td>
+                        </tr>
+                        <tr>
+                            <td class="border p-2">Faint yellow color but no precipitate</td>
+                            <td class="border p-2">Very low gelatin concentration (&lt;0.1%)</td>
+                            <td class="border p-2">Concentrate sample; use larger volume; wait longer (15-20 min)</td>
+                        </tr>
+                        <tr>
+                            <td class="border p-2">Dark yellow solution without ppt</td>
+                            <td class="border p-2">Excess picric acid</td>
+                            <td class="border p-2">Normal — picric acid ka own color hai. No gelatin present.</td>
+                        </tr>
+                        <tr>
+                            <td class="border p-2">White precipitate instead of yellow</td>
+                            <td class="border p-2">Residual milk proteins not removed</td>
+                            <td class="border p-2">Filtration step repeat karein; fresh Stokes reagent use karein</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <p class="text-sm text-gray-700 mt-3"><strong>Controls for Validation:</strong></p>
+                <ul class="text-sm text-gray-700">
+                    <li><strong>Positive control:</strong> Pure milk mein 0.5-1% food-grade gelatin milake test karein — clear yellow precipitate milna chahiye</li>
+                    <li><strong>Negative control:</strong> Pure fresh milk (gelatin-free confirmed) test karein — no precipitate</li>
+                    <li><strong>Reagent blank:</strong> Distilled water Stokes reagent se treat karke picric acid add karein — no precipitate (reagent contamination check)</li>
+                </ul>
+            </div>
+
+            <p class="text-xs mt-4 text-gray-600"><strong>References:</strong> Indian Standards IS:1479 (Part II) - Methods of Test for Dairy Industry; Food Analytical Methods, Vol 5 (2012); Journal of Food Science and Technology, Vol 48(6), 2011</p>
+        </div>
+    `
+}
+    ]
     },
     en: {
         main_title: "Raw Milk Quality & Adulteration",
