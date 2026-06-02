@@ -3336,12 +3336,13 @@ Yellow-brown colored complex (λmax ≈ 470 nm)
             </div>
 
             <p class="text-xs mt-4 text-gray-600"><strong>References:</strong> Indian Standards IS:1479 (Part II) - Methods of Test for Dairy Industry; Food Analytical Methods, Vol 5 (2012); Journal of Food Science and Technology, Vol 48(6), 2011</p>
-        </div>
+       </div>
     `
 }
     ]
-    },
-    export const adulterationContent = {
+}; // ✅ Comma hatakar yahan semi-colon lagayein (pichla block close karne ke liye)
+
+export const adulterationContent = {
     en: {
       main_title: "Raw Milk Quality and Adulteration",
       main_description: "A comprehensive scientific guide for platform testing and adulteration detection in milk. This guide covers all standard tests, chemical reactions, health hazards, and FSSAI/BIS standards in detail.",
