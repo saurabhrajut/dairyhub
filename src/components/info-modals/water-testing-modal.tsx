@@ -205,63 +205,74 @@ const Formula = ({ children }: { children: React.ReactNode }) => (
 const WaterTestSection = ({ test }: { test: any }) => {
     return (
         <section className="p-1">
-            {/* Introduction */}
-            {test.intro && (
-                <div className="bg-gradient-to-br from-blue-50 to-cyan-50 border-l-4 border-blue-500 p-4 rounded-lg mb-6">
-                    <div className="prose max-w-none text-gray-700 text-sm sm:text-base break-words" 
-                         dangerouslySetInnerHTML={{ __html: test.intro }} />
-                </div>
-            )}
-            
-            {/* Apparatus */}
-            {test.apparatus && (
-                <div className="mt-6">
-                    <h3 className="text-lg font-bold mb-3 text-primary flex items-center gap-2 font-headline">
-                        <TestTube className="w-5 h-5 text-blue-600" />
-                        Apparatus
-                    </h3>
-                    <div className="bg-white p-4 rounded-xl border shadow-sm prose max-w-none text-gray-600 text-sm sm:text-base"
-                         dangerouslySetInnerHTML={{ __html: test.apparatus }} />
-                </div>
-            )}
-            
-            {/* Reagents */}
-            {test.reagents && (
-                <div className="mt-6">
-                    <h3 className="text-lg font-bold mb-3 text-primary flex items-center gap-2 font-headline">
-                        <FlaskRound className="w-5 h-5 text-green-600" />
-                        Reagents
-                    </h3>
-                    <div className="bg-white p-4 rounded-xl border shadow-sm prose max-w-none text-gray-600 text-sm sm:text-base"
-                         dangerouslySetInnerHTML={{ __html: test.reagents }} />
-                </div>
-            )}
-            
-            {/* Procedure */}
-            {test.procedure && test.procedure.length > 0 && (
-                <div className="mt-6">
-                    <h3 className="text-lg font-bold mb-3 text-primary flex items-center gap-2 font-headline">
-                        <FlaskConical className="w-5 h-5 text-purple-600" />
-                        Procedure
-                    </h3>
-                    <ol className="list-decimal list-inside space-y-3 mt-2 text-gray-600 text-sm sm:text-base bg-white p-4 rounded-xl border shadow-sm">
-                        {test.procedure.map((step: any, i: number) => (
-                            <li key={i} className="break-words pl-1 marker:font-bold marker:text-primary" 
-                                dangerouslySetInnerHTML={{__html: step}}/>
-                        ))}
-                    </ol>
-                </div>
-            )}
+            {/* ✅ NAYA CHECK: Agar test mein 'content' hai, toh usko render karo */}
+            {test.content ? (
+                <div 
+                    className="bg-white p-4 sm:p-6 rounded-xl border shadow-sm w-full"
+                    dangerouslySetInnerHTML={{ __html: test.content }} 
+                />
+            ) : (
+                /* Agar content nahi hai, toh purana structure render karo */
+                <>
+                    {/* Introduction */}
+                    {test.intro && (
+                        <div className="bg-gradient-to-br from-blue-50 to-cyan-50 border-l-4 border-blue-500 p-4 rounded-lg mb-6">
+                            <div className="prose max-w-none text-gray-700 text-sm sm:text-base break-words" 
+                                 dangerouslySetInnerHTML={{ __html: test.intro }} />
+                        </div>
+                    )}
+                    
+                    {/* Apparatus */}
+                    {test.apparatus && (
+                        <div className="mt-6">
+                            <h3 className="text-lg font-bold mb-3 text-primary flex items-center gap-2 font-headline">
+                                <TestTube className="w-5 h-5 text-blue-600" />
+                                Apparatus
+                            </h3>
+                            <div className="bg-white p-4 rounded-xl border shadow-sm prose max-w-none text-gray-600 text-sm sm:text-base"
+                                 dangerouslySetInnerHTML={{ __html: test.apparatus }} />
+                        </div>
+                    )}
+                    
+                    {/* Reagents */}
+                    {test.reagents && (
+                        <div className="mt-6">
+                            <h3 className="text-lg font-bold mb-3 text-primary flex items-center gap-2 font-headline">
+                                <FlaskRound className="w-5 h-5 text-green-600" />
+                                Reagents
+                            </h3>
+                            <div className="bg-white p-4 rounded-xl border shadow-sm prose max-w-none text-gray-600 text-sm sm:text-base"
+                                 dangerouslySetInnerHTML={{ __html: test.reagents }} />
+                        </div>
+                    )}
+                    
+                    {/* Procedure */}
+                    {test.procedure && test.procedure.length > 0 && (
+                        <div className="mt-6">
+                            <h3 className="text-lg font-bold mb-3 text-primary flex items-center gap-2 font-headline">
+                                <FlaskConical className="w-5 h-5 text-purple-600" />
+                                Procedure
+                            </h3>
+                            <ol className="list-decimal list-inside space-y-3 mt-2 text-gray-600 text-sm sm:text-base bg-white p-4 rounded-xl border shadow-sm">
+                                {test.procedure.map((step: any, i: number) => (
+                                    <li key={i} className="break-words pl-1 marker:font-bold marker:text-primary" 
+                                        dangerouslySetInnerHTML={{__html: step}}/>
+                                ))}
+                            </ol>
+                        </div>
+                    )}
 
-            {/* Calculation */}
-            {test.calculation && (
-                <div className="mt-6">
-                    <h3 className="text-lg font-bold mb-3 text-primary flex items-center gap-2 font-headline">
-                        <Calculator className="w-5 h-5 text-orange-500" />
-                        Calculation
-                    </h3>
-                    <Formula>{test.calculation}</Formula>
-                </div>
+                    {/* Calculation */}
+                    {test.calculation && (
+                        <div className="mt-6">
+                            <h3 className="text-lg font-bold mb-3 text-primary flex items-center gap-2 font-headline">
+                                <Calculator className="w-5 h-5 text-orange-500" />
+                                Calculation
+                            </h3>
+                            <Formula>{test.calculation}</Formula>
+                        </div>
+                    )}
+                </>
             )}
         </section>
     );
