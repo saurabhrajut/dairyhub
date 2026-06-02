@@ -4355,325 +4355,1880 @@ Reporting precision:
                 calculation: 'TSS (mg/L) = [ (W₂ - W₁) in mg &times; 1000 ] / Volume of Sample (mL)'
             },
             {
-                id: 'fluoride',
-                title: 'Fluoride',
-                intro: 'Determination of fluoride using SPADNS spectrophotometric method or Ion Selective Electrode method.',
-                apparatus: '<p>Spectrophotometer (570 nm) or Ion Selective Electrode setup.</p>',
-                reagents: `
-                    <h4>Reagents for SPADNS Method</h4>
-                    <ul class="list-disc list-outside pl-5 space-y-1">
-                        <li><strong>Standard fluoride solution.</strong></li>
-                        <li><strong>SPADNS solution.</strong></li>
-                        <li><strong>Zirconyl-acid reagent.</strong></li>
+    id: 'fluoride',
+    title: 'Fluoride Detection in Water',
+    intro: 'Determination of fluoride using SPADNS spectrophotometric method or Ion Selective Electrode (ISE) method. Fluoride is an essential micronutrient but excessive levels cause dental and skeletal fluorosis.',
+    
+    content: `
+        <div class="prose max-w-none prose-blue">
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-4">
+                <h4 class="text-blue-800 font-bold">🔬 Scientific Overview</h4>
+                <p class="text-blue-700"><strong>Fluoride (F⁻)</strong> is a naturally occurring anion in water that comes from weathering of fluoride-bearing minerals (fluorite-CaF₂, fluorapatite-Ca₅(PO₄)₃F, cryolite-Na₃AlF₆). Industrial sources include aluminum smelting, phosphate fertilizer plants, and glass/ceramic manufacturing.</p>
+                
+                <p class="text-blue-700 mt-2"><strong>Health Significance:</strong></p>
+                <ul class="text-blue-700">
+                    <li><strong>Optimal range (0.5-1.0 mg/L):</strong> Prevents dental caries — promotes enamel fluorapatite formation</li>
+                    <li><strong>Deficiency (&lt;0.5 mg/L):</strong> Increased risk of tooth decay</li>
+                    <li><strong>Excess (1.5-4.0 mg/L):</strong> <strong>Dental fluorosis</strong> — enamel mottling, white/brown stains</li>
+                    <li><strong>High levels (&gt;4.0 mg/L):</strong> <strong>Skeletal fluorosis</strong> — bone deformities, stiffness, pain; neurological effects</li>
+                </ul>
+                
+                <p class="text-blue-700 mt-2"><strong>WHO Guideline:</strong> 1.5 mg/L maximum permissible limit for drinking water</p>
+            </div>
+
+            <h4 class="font-bold text-lg mt-6 mb-3 text-blue-800">🧪 Method 1: SPADNS Spectrophotometric Method</h4>
+            
+            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                <h5 class="font-semibold text-blue-700">Scientific Principle</h5>
+                <p><strong>SPADNS</strong> stands for <strong>Sodium 2-(parasulfophenylazo)-1,8-dihydroxy-3,6-naphthalene disulfonate</strong>. It is a red-colored azo dye.</p>
+                
+                <p class="mt-2"><strong>Reaction Mechanism:</strong></p>
+                <p>SPADNS dye reacts with <strong>zirconium (Zr⁴⁺)</strong> to form an <strong>intense red-colored lake complex</strong>:</p>
+                
+                <pre class="bg-gray-100 p-3 rounded text-xs mt-2"><code>Zr⁴⁺ + SPADNS (red dye) → [Zr-SPADNS]⁴⁺ Complex (DEEP RED)
+    λmax = 570 nm</code></pre>
+                
+                <p class="mt-2">When <strong>fluoride ions are present</strong> in the sample, fluoride binds preferentially to zirconium (forming very strong Zr-F bonds):</p>
+                
+                <pre class="bg-gray-100 p-3 rounded text-xs mt-2"><code>Zr⁴⁺ + 6F⁻ → [ZrF₆]²⁻ (Hexafluorozirconate complex)
+(Colorless, very stable, K_formation ≈ 10³⁵)</code></pre>
+                
+                <p class="mt-2">Result: Zirconium moves into the fluoride complex → free SPADNS dye is released → red color <strong>intensity DECREASES</strong>. Higher the fluoride concentration, lower the red color.</p>
+                
+                <p class="mt-2"><strong>Beer's Law Application:</strong> Fluoride concentration is directly proportional to the decrease in absorbance at 570 nm.</p>
+            </div>
+
+            <h5 class="font-semibold mt-4 text-blue-700">Apparatus Required</h5>
+            <ul class="list-disc list-outside pl-5 space-y-1">
+                <li><strong>Spectrophotometer</strong> capable of 570 nm wavelength measurement</li>
+                <li><strong>Distillation apparatus</strong> (if interfering ions are high — Al³⁺, Fe³⁺, PO₄³⁻)</li>
+                <li>Cuvettes (1 cm path length)</li>
+                <li>Volumetric flasks (50 ml)</li>
+                <li>Pipettes</li>
+            </ul>
+
+            <h5 class="font-semibold mt-4 text-blue-700">Reagents</h5>
+            <div class="bg-white border border-gray-300 p-4 rounded-lg">
+                <p><strong>1. SPADNS Solution:</strong></p>
+                <ul class="text-sm">
+                    <li>958 mg commercial SPADNS powder</li>
+                    <li>Dissolve in distilled water and make up to 1 liter</li>
+                    <li>Store in amber bottle (light-sensitive)</li>
+                    <li>Stable for 2 years</li>
+                </ul>
+                
+                <p class="mt-3"><strong>2. Zirconyl-Acid Reagent (Zirconyl Chloride Octahydrate):</strong></p>
+                <ul class="text-sm">
+                    <li>ZrOCl₂·8H₂O: 133 mg</li>
+                    <li>Concentrated HCl: 350 ml</li>
+                    <li>Make up to 1 liter with distilled water</li>
+                    <li>pH ≈ 0.0-0.5 (highly acidic)</li>
+                </ul>
+                
+                <p class="mt-3"><strong>3. Acid-SPADNS Mixed Reagent:</strong></p>
+                <ul class="text-sm">
+                    <li>Mix SPADNS solution and zirconyl-acid reagent in <strong>equal volumes</strong></li>
+                    <li>Prepare fresh before use (daily preparation)</li>
+                    <li>Final solution should be deep red in color</li>
+                </ul>
+                
+                <p class="mt-3"><strong>4. Standard Fluoride Solution:</strong></p>
+                <ul class="text-sm">
+                    <li><strong>Stock (100 mg F/L):</strong> Dissolve 221 mg anhydrous NaF in 1 L distilled water</li>
+                    <li><strong>Working standards:</strong> Dilute stock to prepare 0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4 mg/L standards</li>
+                </ul>
+                
+                <p class="mt-3"><strong>5. Distillation Reagents (if required):</strong></p>
+                <ul class="text-sm">
+                    <li>Sulfuric acid solution (1:1 v/v with water)</li>
+                    <li>Silver sulfate-sulfuric acid solution (for chloride removal)</li>
+                </ul>
+            </div>
+
+            <h5 class="font-semibold mt-4 text-blue-700">Detailed Procedure</h5>
+            <div class="bg-white border border-gray-300 p-4 rounded-lg">
+                <p><strong>A. Sample Pretreatment (if necessary):</strong></p>
+                <ol class="text-sm">
+                    <li><strong>Distillation criterion:</strong> If sample contains Al³⁺ &gt;0.25 mg/L, Fe³⁺ &gt;10 mg/L, or PO₄³⁻ &gt;25 mg/L, distillation is required.</li>
+                    <li>Take 400 ml sample in distillation apparatus</li>
+                    <li>Add 50 ml H₂SO₄ (1:1) — creates acidic environment</li>
+                    <li>Heat and distill, collect first 300 ml distillate</li>
+                    <li>Cool distillate to room temperature</li>
+                </ol>
+                
+                <p class="mt-3"><strong>B. Color Development:</strong></p>
+                <ol class="text-sm" start="6">
+                    <li>Pipette <strong>10.0 ml sample</strong> (or distillate) into <strong>50 ml volumetric flask</strong></li>
+                    <li>Add <strong>10.0 ml SPADNS mixed reagent</strong></li>
+                    <li>Make up volume to 50 ml with distilled water</li>
+                    <li>Close with stopper and invert to <strong>mix thoroughly</strong></li>
+                    <li><strong>Wait 1 minute</strong> (for complete color development)</li>
+                </ol>
+                
+                <p class="mt-3"><strong>C. Spectrophotometric Measurement:</strong></p>
+                <ol class="text-sm" start="11">
+                    <li>Set spectrophotometer to <strong>570 nm wavelength</strong></li>
+                    <li>Zero instrument using <strong>blank solution</strong> (blank = distilled water + mixed reagent, no fluoride)</li>
+                    <li>Measure absorbance of standards and <strong>plot calibration curve</strong> (X-axis: F⁻ mg/L, Y-axis: Absorbance)</li>
+                    <li>Read sample absorbance <strong>within 1 hour</strong> (color remains stable for limited time)</li>
+                    <li>Determine fluoride concentration from calibration curve</li>
+                </ol>
+            </div>
+
+            <h5 class="font-semibold mt-4 text-blue-700">Calculation</h5>
+            <div class="bg-gray-100 p-3 rounded">
+                <pre class="text-sm"><code>Fluoride (mg F/L) = [mg F from calibration curve] × (Total volume / Sample volume)
+
+Example:
+- Sample volume taken = 10 ml
+- Final volume = 50 ml
+- Reading from calibration curve = 0.6 mg F
+- Fluoride concentration = 0.6 × (50/10) = 0.6 × 5 = 3.0 mg/L
+
+If distillation was performed:
+Fluoride in original sample = [Reading × Distillate volume] / Original sample volume</code></pre>
+            </div>
+
+            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                <h5 class="font-semibold text-yellow-800">⚠️ Interferences & Precautions</h5>
+                <ul class="text-sm text-yellow-700">
+                    <li><strong>Aluminum (Al³⁺):</strong> &gt;0.25 mg/L causes positive error (fluoride reading will be high) — remove by distillation</li>
+                    <li><strong>Iron (Fe³⁺):</strong> &gt;10 mg/L interferes</li>
+                    <li><strong>Phosphate (PO₄³⁻):</strong> &gt;25 mg/L causes negative error</li>
+                    <li><strong>Chloride:</strong> Low levels tolerable; if very high, use silver sulfate treatment</li>
+                    <li><strong>Sulfate:</strong> &gt;200 mg/L causes slight interference — minimize by dilution</li>
+                    <li><strong>pH:</strong> Method works optimally at pH 0.0-1.4 (maintained by reagent acidity)</li>
+                    <li><strong>Temperature:</strong> Take readings at room temperature (20-25°C) — color intensity is temperature-dependent</li>
+                </ul>
+            </div>
+
+            <h4 class="font-bold text-lg mt-6 mb-3 text-blue-800">🧪 Method 2: Ion Selective Electrode (ISE) Method</h4>
+            
+            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                <h5 class="font-semibold text-blue-700">Scientific Principle</h5>
+                <p>The Fluoride Ion Selective Electrode is a <strong>solid-state electrode</strong> whose sensing membrane is made of <strong>lanthanum fluoride (LaF₃) single crystal</strong>, which is selectively permeable to fluoride ions.</p>
+                
+                <p class="mt-2"><strong>Nernst Equation Application:</strong></p>
+                <pre class="bg-gray-100 p-2 rounded text-xs mt-2"><code>E = E₀ - (2.303RT/nF) × log[F⁻]
+At 25°C: E = E₀ - 59.16 × log[F⁻]
+
+Where:
+E = Measured electrode potential (mV)
+E₀ = Standard electrode potential
+R = Gas constant, T = Temperature (K)
+n = Charge on ion (1 for F⁻)
+F = Faraday constant</code></pre>
+                
+                <p class="mt-2">When the LaF₃ membrane comes in contact with fluoride solution, fluoride ions adsorb on the membrane surface and develop a <strong>potential difference</strong> that is directly proportional to the logarithm of fluoride concentration. This potential is measured using a pH meter or ion meter.</p>
+            </div>
+
+            <h5 class="font-semibold mt-4 text-blue-700">Apparatus</h5>
+            <ul class="list-disc list-outside pl-5 space-y-1">
+                <li><strong>Fluoride Ion Selective Electrode</strong> (LaF₃ crystal-based)</li>
+                <li><strong>Reference electrode</strong> (Ag/AgCl double junction preferred)</li>
+                <li><strong>pH/Ion meter</strong> with mV scale (expanded scale mode)</li>
+                <li>Magnetic stirrer with Teflon-coated stir bar</li>
+                <li>Polyethylene beakers (glass can leach fluoride)</li>
+            </ul>
+
+            <h5 class="font-semibold mt-4 text-blue-700">Reagents for ISE Method</h5>
+            <ul class="list-disc list-outside pl-5 space-y-1 text-sm">
+                <li><strong>TISAB (Total Ionic Strength Adjustment Buffer):</strong>
+                    <ul class="ml-5 list-circle">
+                        <li>Glacial acetic acid: 57 ml</li>
+                        <li>NaCl: 58 g</li>
+                        <li>Sodium citrate (Na₃C₆H₅O₇·2H₂O): 4 g</li>
+                        <li>Make up to 1 L with distilled water</li>
+                        <li>Adjust pH to 5.0-5.5 with NaOH</li>
+                        <li><strong>Function:</strong> (1) Maintains constant ionic strength, (2) Buffers pH, (3) Complexes and masks interfering ions (Al³⁺, Fe³⁺)</li>
                     </ul>
-                `,
-                procedure: [
-                    'Distill sample if necessary.',
-                    'Add SPADNS and Zirconyl-acid reagent to the sample.',
-                    'Read absorbance at 570 nm and calculate concentration from calibration curve.',
-                ],
-                calculation: 'Read fluoride concentration (mg/L) from the calibration curve.'
-            },
+                </li>
+                <li><strong>Standard fluoride solutions:</strong> 0.1, 1.0, 10, 100 mg F/L</li>
+            </ul>
+
+            <h5 class="font-semibold mt-4 text-blue-700">Procedure (ISE Method)</h5>
+            <ol class="list-decimal list-outside pl-5 space-y-1 text-sm">
+                <li><strong>Pre-condition</strong> electrode: Soak in 10⁻⁴ M NaF solution for 1 hour</li>
+                <li><strong>Calibration:</strong> Mix 50 ml standard + 50 ml TISAB in polyethylene beaker</li>
+                <li>Measure standards in low to high concentration order (10⁻⁶ to 10⁻¹ M range)</li>
+                <li>Dip electrode and stir bar in beaker, apply gentle stirring</li>
+                <li>Wait for stable reading (usually 3-5 minutes) — ±0.2 mV drift acceptable</li>
+                <li>Note mV readings, plot semi-log graph (log [F⁻] vs mV)</li>
+                <li><strong>Sample measurement:</strong> Mix 50 ml sample + 50 ml TISAB, take reading</li>
+                <li>Read fluoride concentration from graph or direct concentration mode</li>
+            </ol>
+
+            <h5 class="font-semibold mt-4 text-blue-700">Calculation (ISE)</h5>
+            <pre class="bg-gray-100 p-3 rounded text-sm"><code>Fluoride (mg/L) = [Meter reading or concentration from calibration graph] × Dilution factor
+
+Dilution factor = Total volume / Sample volume = (50+50)/50 = 2
+
+If 25 ml sample and 25 ml TISAB were used, dilution factor = 2</code></pre>
+
+            <div class="bg-green-50 border-l-4 border-green-500 p-4 mt-4">
+                <h5 class="font-semibold text-green-800">✅ Advantages of ISE Method</h5>
+                <ul class="text-sm text-green-700">
+                    <li>Wide working range (0.02 to 2000 mg/L)</li>
+                    <li>Rapid analysis — 3-5 minutes per sample</li>
+                    <li>Minimal sample preparation</li>
+                    <li>TISAB automatically handles many interferences</li>
+                    <li>Non-destructive — sample can be recovered</li>
+                </ul>
+            </div>
+
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mt-4">
+                <h5 class="font-semibold text-blue-800">📚 References</h5>
+                <ul class="text-xs text-blue-700">
+                    <li><strong>APHA 4500-F⁻ B:</strong> Standard Methods for the Examination of Water and Wastewater, 23rd Edition — SPADNS Method</li>
+                    <li><strong>APHA 4500-F⁻ C:</strong> Ion Selective Electrode Method</li>
+                    <li><strong>IS 10500:2012:</strong> Indian Standard for Drinking Water Specification (BIS)</li>
+                    <li><strong>WHO Guidelines for Drinking-water Quality, 4th Edition (2017):</strong> Fluoride in Drinking Water</li>
+                    <li>Fawell J. et al. (2006). "Fluoride in Drinking-water", WHO/IWA Publishing</li>
+                </ul>
+            </div>
+        </div>
+    `
+},
+
+{
+    id: 'iron',
+    title: 'Iron Detection in Water',
+    intro: 'Spectrophotometric determination of iron using the Phenanthroline method. Iron is an essential trace element but excess levels cause taste, staining, and health issues.',
+    
+    content: `
+        <div class="prose max-w-none prose-red">
+            <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
+                <h4 class="text-red-800 font-bold">🔬 Scientific Overview</h4>
+                <p class="text-red-700"><strong>Iron (Fe)</strong> in water comes naturally from leaching of soil and rock minerals (hematite-Fe₂O₃, magnetite-Fe₃O₄, pyrite-FeS₂, siderite-FeCO₃). Industrial sources include steel industry, mining, acid mine drainage, and corrosion of iron pipes.</p>
+                
+                <p class="text-red-700 mt-2"><strong>Forms of Iron in Water:</strong></p>
+                <ul class="text-red-700 text-sm">
+                    <li><strong>Ferrous iron (Fe²⁺):</strong> Soluble, present in clear water, stable under anaerobic/reducing conditions</li>
+                    <li><strong>Ferric iron (Fe³⁺):</strong> Insoluble (forms Fe(OH)₃ precipitate), forms from ferrous iron under aerobic conditions, causes rust/turbidity</li>
+                    <li><strong>Organically bound iron:</strong> Complexed with humic/fulvic acids</li>
+                    <li><strong>Particulate iron:</strong> Suspended iron oxide/hydroxide particles</li>
+                </ul>
+                
+                <p class="text-red-700 mt-2"><strong>Problems due to Excess Iron:</strong></p>
+                <ul class="text-red-700 text-sm">
+                    <li><strong>Aesthetic issues:</strong> Metallic taste (threshold ~0.3 mg/L), rust-colored stains on fixtures/laundry</li>
+                    <li><strong>Operational problems:</strong> Pipe corrosion, bacterial growth (iron bacteria - <em>Gallionella, Leptothrix</em>)</li>
+                    <li><strong>Health:</strong> Generally non-toxic, but &gt;10 mg/L can cause gastric distress; harmful for hemochromatosis patients</li>
+                </ul>
+                
+                <p class="text-red-700 mt-2"><strong>Standards:</strong> WHO guideline = 0.3 mg/L (aesthetic), IS 10500:2012 acceptable limit = 0.3 mg/L, permissible = 1.0 mg/L</p>
+            </div>
+
+            <h4 class="font-bold text-lg mt-6 mb-3 text-red-800">🧪 Phenanthroline Method (Ferrous Iron Measurement)</h4>
+            
+            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                <h5 class="font-semibold text-red-700">Scientific Principle</h5>
+                <p><strong>1,10-Phenanthroline (Orthophenanthroline, C₁₂H₈N₂)</strong> is a heterocyclic organic compound that forms a highly specific and stable colored complex with <strong>ferrous iron (Fe²⁺)</strong>.</p>
+                
+                <p class="mt-2"><strong>Complex Formation Reaction:</strong></p>
+                <pre class="bg-gray-100 p-3 rounded text-xs mt-2"><code>Fe²⁺ + 3 (C₁₂H₈N₂) → [Fe(C₁₂H₈N₂)₃]²⁺
+(Ferrous ion) + (Phenanthroline) → (Ferroin Complex - ORANGE-RED)
+
+Complex structure: Octahedral geometry, coordination number = 6
+Color: Intense orange-red
+λmax = 510 nm
+Molar absorptivity (ε) = 11,000 L·mol⁻¹·cm⁻¹ (very sensitive)</code></pre>
+                
+                <p class="mt-2"><strong>Specificity:</strong></p>
+                <ul class="text-sm">
+                    <li>Phenanthroline <strong>specifically reacts with Fe²⁺</strong> — Fe³⁺ does not react directly</li>
+                    <li>To measure Fe³⁺, first <strong>reduction to Fe²⁺ is required</strong> (using hydroxylamine)</li>
+                    <li>Complex formation is quantitative in pH range 3-9, optimal at pH 3.2-3.3</li>
+                    <li>Complex is extremely stable — color remains stable for 6 months</li>
+                </ul>
+                
+                <p class="mt-2"><strong>Total Iron Determination Strategy:</strong></p>
+                <ol class="text-sm">
+                    <li>Reduce Fe³⁺ present in sample to Fe²⁺ using <strong>hydroxylamine (NH₂OH·HCl)</strong></li>
+                    <li>Now total iron (original Fe²⁺ + Fe²⁺ from reduced Fe³⁺) complexes with phenanthroline</li>
+                    <li>Measure absorbance at 510 nm</li>
+                </ol>
+            </div>
+
+            <h5 class="font-semibold mt-4 text-red-700">Apparatus Required</h5>
+            <ul class="list-disc list-outside pl-5 space-y-1 text-sm">
+                <li><strong>Spectrophotometer</strong> — 510 nm wavelength</li>
+                <li>Cuvettes (1 cm or 5 cm path length, depending on iron concentration)</li>
+                <li>Volumetric flasks (50 ml, 100 ml)</li>
+                <li>Pipettes (volumetric and graduated)</li>
+                <li>pH meter</li>
+                <li>Acid-washed glassware (to avoid trace iron contamination)</li>
+            </ul>
+
+            <h5 class="font-semibold mt-4 text-red-700">Reagents</h5>
+            <div class="bg-white border border-gray-300 p-4 rounded-lg">
+                <p><strong>1. Hydroxylamine Hydrochloride Solution (Reducing Agent):</strong></p>
+                <ul class="text-sm">
+                    <li><strong>10% w/v solution:</strong> Dissolve 10 g NH₂OH·HCl powder in 100 ml distilled water</li>
+                    <li><strong>Function:</strong> Reduces Fe³⁺ to Fe²⁺:
+                        <pre class="bg-gray-100 p-2 rounded text-xs mt-1"><code>2Fe³⁺ + 2NH₂OH + 2OH⁻ → 2Fe²⁺ + N₂ + 4H₂O</code></pre>
+                    </li>
+                    <li>Prepare fresh (can oxidize over time)</li>
+                </ul>
+                
+                <p class="mt-3"><strong>2. 1,10-Phenanthroline Solution:</strong></p>
+                <ul class="text-sm">
+                    <li><strong>0.1% (1 g/L) solution:</strong> 
+                        <ul class="ml-5 list-circle">
+                            <li>100 mg 1,10-phenanthroline monohydrate</li>
+                            <li>Dissolve in 80°C hot distilled water</li>
+                            <li>Cool and make up to 100 ml</li>
+                        </ul>
+                    </li>
+                    <li>Alternative: 0.5 g phenanthroline + 0.2 g ascorbic acid (reducing agent already included)</li>
+                    <li>Store in amber bottle (light-sensitive)</li>
+                    <li>Shelf life: 6 months</li>
+                </ul>
+                
+                <p class="mt-3"><strong>3. Ammonium Acetate Buffer Solution:</strong></p>
+                <ul class="text-sm">
+                    <li>Dissolve 250 g ammonium acetate (CH₃COONH₄) in 150 ml distilled water</li>
+                    <li>Add 700 ml glacial acetic acid</li>
+                    <li><strong>Final pH 3.5 maintained</strong> — optimal for phenanthroline complex formation</li>
+                </ul>
+                
+                <p class="mt-3"><strong>4. Hydrochloric Acid (1+1):</strong></p>
+                <ul class="text-sm">
+                    <li>Mix equal volumes of concentrated HCl and distilled water</li>
+                    <li>Used to acidify sample (keeps iron in solution, prevents precipitation)</li>
+                </ul>
+                
+                <p class="mt-3"><strong>5. Standard Iron Solution:</strong></p>
+                <ul class="text-sm">
+                    <li><strong>Stock (1000 mg Fe/L):</strong>
+                        <ul class="ml-5 list-circle">
+                            <li>Dissolve 1.404 g ferrous ammonium sulfate [(NH₄)₂Fe(SO₄)₂·6H₂O] in distilled water</li>
+                            <li>Add 20 ml conc. H₂SO₄ (prevents oxidation)</li>
+                            <li>Make up to 1 liter</li>
+                        </ul>
+                    </li>
+                    <li><strong>Working standards:</strong> Dilute stock to prepare 0, 0.1, 0.2, 0.5, 1.0, 2.0, 5.0 mg Fe/L</li>
+                </ul>
+            </div>
+
+            <h5 class="font-semibold mt-4 text-red-700">Detailed Procedure</h5>
+            <div class="bg-white border border-gray-300 p-4 rounded-lg">
+                <p><strong>A. Sample Preservation (At time of collection):</strong></p>
+                <ol class="text-sm">
+                    <li>When collecting sample, <strong>pre-acidify container with HNO₃</strong> (pH &lt;2) — prevents iron precipitation</li>
+                    <li><strong>Analyze immediately</strong> or refrigerate and store up to 6 months</li>
+                </ol>
+                
+                <p class="mt-3"><strong>B. Total Iron Measurement:</strong></p>
+                <ol class="text-sm" start="3">
+                    <li>Take <strong>50 ml sample</strong> in volumetric flask (if iron concentration is high, dilute)</li>
+                    <li>Add <strong>2 ml HCl (1+1)</strong> — maintains acidic pH</li>
+                    <li>Add <strong>1 ml hydroxylamine solution</strong> — for Fe³⁺ reduction</li>
+                    <li>Mix and <strong>wait 5 minutes</strong> — for complete reduction</li>
+                    <li>Add <strong>10 ml ammonium acetate buffer</strong> — adjusts pH to 3.5</li>
+                    <li>Add <strong>4 ml phenanthroline solution</strong></li>
+                    <li>Make up to <strong>50 ml volume</strong> with distilled water</li>
+                    <li>Mix thoroughly and <strong>stand for 10-15 minutes</strong> — complete color development</li>
+                </ol>
+                
+                <p class="mt-3"><strong>C. Spectrophotometric Reading:</strong></p>
+                <ol class="text-sm" start="12">
+                    <li>Set spectrophotometer to <strong>510 nm</strong></li>
+                    <li>Prepare <strong>blank</strong> (distilled water + all reagents except sample)</li>
+                    <li>Run standards and <strong>plot calibration curve</strong></li>
+                    <li>Measure sample absorbance</li>
+                    <li>Read iron concentration from curve</li>
+                </ol>
+                
+                <p class="mt-3"><strong>D. Ferrous Iron (Fe²⁺) Only — Separate Measurement:</strong></p>
+                <ol class="text-sm">
+                    <li><strong>Skip hydroxylamine</strong> — add phenanthroline directly</li>
+                    <li>This reading measures only originally present Fe²⁺</li>
+                    <li>Ferric iron (Fe³⁺) = Total Iron - Ferrous Iron</li>
+                </ol>
+            </div>
+
+            <h5 class="font-semibold mt-4 text-red-700">Calculation</h5>
+            <div class="bg-gray-100 p-3 rounded">
+                <pre class="text-sm"><code><strong>Total Iron (mg Fe/L) = [mg Fe from calibration curve] × (Final volume / Sample volume) × Dilution factor</strong>
+
+Example:
+- Sample volume = 50 ml (no dilution)
+- Final volume = 50 ml
+- Calibration curve reading = 0.8 mg Fe
+- Iron concentration = 0.8 × (50/50) × 1 = 0.8 mg/L
+
+If 10 ml sample was taken and made up to 50 ml:
+Iron = 0.8 × (50/10) = 4.0 mg/L
+
+<strong>Ferric Iron calculation:</strong>
+Fe³⁺ (mg/L) = Total Iron (mg/L) - Ferrous Iron (Fe²⁺, mg/L)</code></pre>
+            </div>
+
+            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                <h5 class="font-semibold text-yellow-800">⚠️ Interferences & Troubleshooting</h5>
+                <table class="w-full border-collapse border mt-2 text-xs">
+                    <thead>
+                        <tr class="bg-yellow-100">
+                            <th class="border p-2">Interfering Substance</th>
+                            <th class="border p-2">Effect</th>
+                            <th class="border p-2">Remedy</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="border p-2"><strong>Copper (Cu²⁺)</strong></td>
+                            <td class="border p-2">Forms blue complex (λmax 435 nm)</td>
+                            <td class="border p-2">If &gt;10 mg/L, interference minimal at 510 nm; or mask with potassium cyanide (toxic!)</td>
+                        </tr>
+                        <tr>
+                            <td class="border p-2"><strong>Nickel (Ni²⁺)</strong></td>
+                            <td class="border p-2">&gt;5 mg/L causes positive error</td>
+                            <td class="border p-2">Complex with citrate or tartrate</td>
+                        </tr>
+                        <tr>
+                            <td class="border p-2"><strong>Cobalt (Co²⁺)</strong></td>
+                            <td class="border p-2">Forms yellow complex</td>
+                            <td class="border p-2">Usually &lt;1 mg/L in natural waters — negligible</td>
+                        </tr>
+                        <tr>
+                            <td class="border p-2"><strong>Color/Turbidity</strong></td>
+                            <td class="border p-2">High background absorbance</td>
+                            <td class="border p-2">Filter sample (0.45 μm); for true color, use separate blank without phenanthroline</td>
+                        </tr>
+                        <tr>
+                            <td class="border p-2"><strong>Strong oxidizing agents</strong></td>
+                            <td class="border p-2">Can oxidize phenanthroline</td>
+                            <td class="border p-2">Use excess hydroxylamine (scavenges oxidants)</td>
+                        </tr>
+                        <tr>
+                            <td class="border p-2"><strong>Polyphosphates</strong></td>
+                            <td class="border p-2">Sequester iron → low reading</td>
+                            <td class="border p-2">Acid digestion required (boil sample with HNO₃/H₂SO₄ to release organic matter and complexed iron)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mt-4">
+                <h5 class="font-semibold text-blue-800">📚 References</h5>
+                <ul class="text-xs text-blue-700">
+                    <li><strong>APHA 3500-Fe B:</strong> Standard Methods for the Examination of Water and Wastewater, 23rd Ed. — Phenanthroline Method</li>
+                    <li><strong>IS 3025 (Part 53):2003:</strong> Methods of Sampling and Test for Water - Iron</li>
+                    <li><strong>EPA Method 200.7:</strong> Determination of Metals by ICP</li>
+                    <li><strong>WHO Guidelines (2017):</strong> Iron in Drinking-water, Background document</li>
+                    <li>Saywell, L.G. and Cunningham, B.B. (1937). "Determination of Iron: Colorimetric o-Phenanthroline Method", <em>Ind. Eng. Chem. Anal. Ed.</em>, 9, 67-69</li>
+                </ul>
+            </div>
+        </div>
+    `
+},
             {
-                id: 'iron',
-                title: 'Iron',
-                intro: 'Spectrophotometric determination of iron using the Phenanthroline method.',
-                 apparatus: '<p>Spectrophotometer (510 nm).</p>',
-                reagents: `
-                    <h4>Reagents</h4>
-                    <ul class="list-disc list-outside pl-5 space-y-1">
-                        <li><strong>Hydroxylamine solution.</strong></li>
-                        <li><strong>Phenanthroline solution.</strong></li>
-                        <li><strong>Standard iron solution.</strong></li>
-                    </ul>
-                `,
-                procedure: [
-                    'Add hydrochloric acid and hydroxylamine solution to the sample.',
-                    'Add buffer and phenanthroline solution.',
-                    'Read absorbance at 510 nm.',
-                ],
-                calculation: 'Read iron concentration (mg/L) from the calibration curve.'
-            },
+    id: 'magnesium',
+    title: 'Magnesium Detection in Water',
+    intro: 'Determination of magnesium by calculation method using Total Hardness and Calcium Hardness data. This is an indirect but accurate method widely used in routine water analysis.',
+    
+    content: `
+        <div class="prose max-w-none prose-purple">
+            <div class="bg-purple-50 border-l-4 border-purple-500 p-4 mb-4">
+                <h4 class="text-purple-800 font-bold">🔬 Scientific Overview</h4>
+                <p class="text-purple-700"><strong>Magnesium (Mg²⁺)</strong> is a naturally occurring divalent cation in water that comes from weathering of magnesium-bearing minerals (dolomite-CaMg(CO₃)₂, magnesite-MgCO₃, serpentine minerals). In seawater, magnesium concentration is ~1300 mg/L (second most abundant cation after sodium).</p>
+                
+                <p class="text-purple-700 mt-2"><strong>Role & Significance:</strong></p>
+                <ul class="text-purple-700 text-sm">
+                    <li><strong>Water hardness contributor:</strong> Along with calcium, magnesium causes water hardness (reduces soap lather, causes scale formation)</li>
+                    <li><strong>Health benefits:</strong> Essential mineral — regulates enzyme activation, protein synthesis, nerve/muscle function</li>
+                    <li><strong>Taste effect:</strong> &gt;125 mg/L develops bitter taste</li>
+                    <li><strong>Laxative effect:</strong> High concentration (especially magnesium sulfate ~500 mg/L) can cause diarrhea</li>
+                </ul>
+                
+                <p class="text-purple-700 mt-2"><strong>Standards:</strong> WHO — No health-based guideline value; IS 10500:2012 — Acceptable 30 mg/L, Permissible 100 mg/L</p>
+            </div>
+
+            <h4 class="font-bold text-lg mt-6 mb-3 text-purple-800">🧮 Calculation Method (Indirect Determination)</h4>
+            
+            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                <h5 class="font-semibold text-purple-700">Scientific Principle</h5>
+                <p><strong>Water hardness</strong> is mainly caused by calcium and magnesium ions. Using conventional EDTA titration method, we determine:</p>
+                
+                <ol class="text-sm mt-2">
+                    <li><strong>Total Hardness (TH):</strong> Combined measurement of Ca²⁺ + Mg²⁺ (as CaCO₃ equivalent)</li>
+                    <li><strong>Calcium Hardness (CH):</strong> Measurement of Ca²⁺ only (as CaCO₃ equivalent)</li>
+                </ol>
+                
+                <p class="mt-2"><strong>Logical Derivation:</strong></p>
+                <pre class="bg-gray-100 p-3 rounded text-xs mt-2"><code>Total Hardness = Calcium Hardness + Magnesium Hardness
+Therefore:
+<strong>Magnesium Hardness = Total Hardness - Calcium Hardness</strong> (all in mg/L as CaCO₃)
+
+To convert magnesium hardness to actual Mg²⁺ concentration:
+<strong>Mg²⁺ (mg/L) = Magnesium Hardness (mg/L as CaCO₃) × Conversion Factor</strong></code></pre>
+                
+                <p class="mt-2"><strong>Conversion Factor Derivation:</strong></p>
+                <pre class="bg-gray-100 p-3 rounded text-xs mt-2"><code>Hardness "as CaCO₃" is a conventional expression based on calcium carbonate equivalent weight.
+
+Equivalent weight of CaCO₃ = Molecular weight / Valence = 100 / 2 = 50
+Equivalent weight of Mg²⁺ = Atomic weight / Valence = 24.3 / 2 = 12.15
+
+Conversion factor = Equivalent weight of Mg / Equivalent weight of CaCO₃
+                  = 12.15 / 50 = <strong>0.243</strong>
+
+Therefore:
+<strong>Mg²⁺ (mg/L) = Magnesium Hardness (mg/L as CaCO₃) × 0.243</strong></code></pre>
+            </div>
+
+            <h5 class="font-semibold mt-4 text-purple-700">Prerequisites (Required Data)</h5>
+            <div class="bg-white border border-gray-300 p-4 rounded-lg">
+                <p class="text-sm">To use this method, you must first determine:</p>
+                
+                <p class="mt-3"><strong>1. Total Hardness (EDTA Titration with EBT indicator):</strong></p>
+                <ul class="text-sm ml-5 list-disc">
+                    <li>Treat sample with pH 10 buffer</li>
+                    <li>Add Eriochrome Black T (EBT) indicator — wine-red color</li>
+                    <li>Titrate with standard EDTA solution until blue endpoint</li>
+                    <li>Calculate Total Hardness (mg/L as CaCO₃)</li>
+                    <li><em>Detailed procedure → see "Total Hardness" test section</em></li>
+                </ul>
+                
+                <p class="mt-3"><strong>2. Calcium Hardness (EDTA Titration with Murexide/Patton-Reeder indicator):</strong></p>
+                <ul class="text-sm ml-5 list-disc">
+                    <li>Adjust sample to highly alkaline condition pH 12-13 (using NaOH or KOH)</li>
+                    <li>At high pH, Mg(OH)₂ precipitates → only Ca²⁺ remains in solution</li>
+                    <li>Add Murexide indicator — pink color</li>
+                    <li>Titrate with EDTA until purple endpoint</li>
+                    <li>Calculate Calcium Hardness (mg/L as CaCO₃)</li>
+                    <li><em>Detailed procedure → see "Calcium" test section</em></li>
+                </ul>
+            </div>
+
+            <h5 class="font-semibold mt-4 text-purple-700">Calculation Formula (Complete)</h5>
+            <div class="bg-gray-100 p-4 rounded">
+                <pre class="text-sm"><code><strong>Step 1: Calculate Magnesium Hardness</strong>
+Magnesium Hardness (mg/L as CaCO₃) = Total Hardness - Calcium Hardness
+
+<strong>Step 2: Convert to Mg²⁺ concentration</strong>
+Mg²⁺ (mg/L) = Magnesium Hardness (mg/L as CaCO₃) × 0.243
+
+<strong>Alternative formula (direct):</strong>
+<strong>Mg²⁺ (mg/L) = [Total Hardness - Calcium Hardness] × 0.243</strong>
+
+---
+<strong>Example Calculation:</strong>
+
+Given data:
+- Total Hardness = 250 mg/L as CaCO₃
+- Calcium Hardness = 150 mg/L as CaCO₃
+
+Solution:
+Magnesium Hardness = 250 - 150 = 100 mg/L as CaCO₃
+Mg²⁺ = 100 × 0.243 = <strong>24.3 mg/L</strong>
+
+---
+<strong>Verification (Mass Balance Check):</strong>
+Ca²⁺ from Calcium Hardness = 150 × 0.4 = 60 mg/L (conversion factor for Ca = 20/50 = 0.4)
+Mg²⁺ calculated = 24.3 mg/L
+
+Recalculate TH from individual ions:
+TH = (Ca²⁺/0.4) + (Mg²⁺/0.243) = (60/0.4) + (24.3/0.243) = 150 + 100 = 250 ✓ (matches)</code></pre>
+            </div>
+
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mt-4">
+                <h5 class="font-semibold text-blue-800">📊 Interpretation Guide</h5>
+                <table class="w-full border-collapse border mt-2 text-xs">
+                    <thead>
+                        <tr class="bg-blue-100">
+                            <th class="border p-2">Mg²⁺ Concentration</th>
+                            <th class="border p-2">Classification</th>
+                            <th class="border p-2">Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="border p-2">&lt; 30 mg/L</td>
+                            <td class="border p-2">Low</td>
+                            <td class="border p-2">Acceptable for drinking, no taste issues</td>
+                        </tr>
+                        <tr class="bg-yellow-50">
+                            <td class="border p-2">30-100 mg/L</td>
+                            <td class="border p-2">Moderate</td>
+                            <td class="border p-2">Permissible, possible slight bitter taste</td>
+                        </tr>
+                        <tr class="bg-orange-50">
+                            <td class="border p-2">100-150 mg/L</td>
+                            <td class="border p-2">High</td>
+                            <td class="border p-2">Bitter taste, laxative effect possible</td>
+                        </tr>
+                        <tr class="bg-red-50">
+                            <td class="border p-2">&gt; 150 mg/L</td>
+                            <td class="border p-2">Very High</td>
+                            <td class="border p-2">Unacceptable taste, health concerns</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                <h5 class="font-semibold text-yellow-800">⚠️ Limitations & Precautions</h5>
+                <ul class="text-sm text-yellow-700">
+                    <li><strong>Assumes only Ca & Mg contribute to hardness:</strong> If water contains significant amounts of Sr²⁺, Ba²⁺, Fe²⁺ (rare in natural waters), errors may occur</li>
+                    <li><strong>Accuracy depends on TH and CH measurements:</strong> Titration errors propagate — careful technique required</li>
+                    <li><strong>Negative values:</strong> Sometimes calculation gives negative Mg²⁺ if:
+                        <ul class="ml-5 list-circle">
+                            <li>Calcium Hardness &gt; Total Hardness (error in titration)</li>
+                            <li>Murexide endpoint overshot (excess EDTA added)</li>
+                            <li>Solution: Repeat both titrations carefully</li>
+                        </ul>
+                    </li>
+                    <li><strong>Interference in Ca titration:</strong> If Mg(OH)₂ did not completely precipitate at high pH, some Mg²⁺ will be counted as Ca²⁺ → underestimated Mg²⁺</li>
+                </ul>
+            </div>
+
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mt-4">
+                <h5 class="font-semibold text-blue-800">📚 References</h5>
+                <ul class="text-xs text-blue-700">
+                    <li><strong>APHA 2340 B:</strong> Standard Methods, 23rd Ed. — Hardness by Calculation</li>
+                    <li><strong>APHA 3500-Mg B:</strong> Magnesium by Calculation Method</li>
+                    <li><strong>IS 3025 (Part 46):2005:</strong> Methods for Sampling and Test - Magnesium (Calculation)</li>
+                    <li><strong>WHO Guidelines (2009):</strong> Calcium and Magnesium in Drinking-water</li>
+                    <li><strong>EPA Method 200.7:</strong> Determination of Metals by ICP-OES (Direct Mg measurement)</li>
+                </ul>
+            </div>
+        </div>
+    `
+},
+
+{
+    id: 'manganese',
+    title: 'Manganese Detection in Water',
+    intro: 'Spectrophotometric determination of dissolved manganese using persulphate oxidation method. Manganese causes staining and taste issues even at trace concentrations.',
+    
+    content: `
+        <div class="prose max-w-none prose-pink">
+            <div class="bg-pink-50 border-l-4 border-pink-500 p-4 mb-4">
+                <h4 class="text-pink-800 font-bold">🔬 Scientific Overview</h4>
+                <p class="text-pink-700"><strong>Manganese (Mn)</strong> is a naturally occurring transition metal in water that comes from leaching of manganese-bearing minerals (pyrolusite-MnO₂, rhodochrosite-MnCO₃, manganite-MnOOH) and reduction in anaerobic groundwater conditions. Industrial sources include steel manufacturing, mining, and battery production.</p>
+                
+                <p class="text-pink-700 mt-2"><strong>Oxidation States in Water:</strong></p>
+                <ul class="text-pink-700 text-sm">
+                    <li><strong>Mn²⁺ (Manganous):</strong> Soluble, colorless, stable under reducing conditions</li>
+                    <li><strong>Mn³⁺:</strong> Unstable, rapidly disproportionates</li>
+                    <li><strong>Mn⁴⁺ (Manganic):</strong> Forms MnO₂ (black precipitate) under oxidizing conditions</li>
+                    <li><strong>Mn⁷⁺ (Permanganate, MnO₄⁻):</strong> Intense purple color, strong oxidizing agent — chromophore in this test</li>
+                </ul>
+                
+                <p class="text-pink-700 mt-2"><strong>Problems due to Manganese:</strong></p>
+                <ul class="text-pink-700 text-sm">
+                    <li><strong>Aesthetic issues:</strong> &gt;0.05 mg/L causes black/brown stains on fixtures, laundry; metallic taste (threshold ~0.05 mg/L)</li>
+                    <li><strong>Bacterial growth:</strong> Manganese-oxidizing bacteria (Leptothrix, Crenothrix) cause black slime, pipe clogging</li>
+                    <li><strong>Health effects:</strong> High levels (&gt;0.4 mg/L long-term) cause neurotoxicity — Parkinson's-like symptoms; developmental issues in infants</li>
+                </ul>
+                
+                <p class="text-pink-700 mt-2"><strong>Standards:</strong> WHO guideline = 0.4 mg/L (health-based), 0.1 mg/L (aesthetic); IS 10500:2012 acceptable = 0.1 mg/L, permissible = 0.3 mg/L</p>
+            </div>
+
+            <h4 class="font-bold text-lg mt-6 mb-3 text-pink-800">🧪 Persulphate Oxidation Method</h4>
+            
+            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                <h5 class="font-semibold text-pink-700">Scientific Principle</h5>
+                <p>In this method, Mn²⁺ (colorless, soluble form) is oxidized to <strong>Mn⁷⁺ permanganate ion (MnO₄⁻, intense purple color)</strong> using the strong oxidizing agent <strong>ammonium persulphate (NH₄)₂S₂O₈</strong> and <strong>silver nitrate (AgNO₃) catalyst</strong>.</p>
+                
+                <p class="mt-2"><strong>Oxidation Reaction:</strong></p>
+                <pre class="bg-gray-100 p-3 rounded text-xs mt-2"><code>2Mn²⁺ + 5S₂O₈²⁻ + 8H₂O → 2MnO₄⁻ + 10SO₄²⁻ + 16H⁺
+(Colorless)   (Persulphate)      (PURPLE permanganate)
+
+Complete oxidation pathway:
+Mn²⁺ → Mn³⁺ → Mn⁴⁺ (MnO₂) → Mn⁶⁺ → Mn⁷⁺ (MnO₄⁻)
+
+AgNO₃ acts as catalyst — Ag⁺ temporarily oxidized to Ag²⁺ which accelerates the reaction</code></pre>
+                
+                <p class="mt-2"><strong>Reaction Conditions:</strong></p>
+                <ul class="text-sm">
+                    <li><strong>Acidic medium required:</strong> Use H₃PO₄ and HNO₃ — provides H⁺ for reaction and complexes/suppresses interfering ions</li>
+                    <li><strong>Boiling essential:</strong> Reaction is kinetically slow at room temperature; boiling achieves complete oxidation in 1-2 minutes</li>
+                    <li><strong>Color measurement:</strong> Permanganate has λmax = 525 nm (characteristic purple color absorption)</li>
+                    <li><strong>Molar absorptivity:</strong> ε = 2350 L·mol⁻¹·cm⁻¹ (moderate sensitivity)</li>
+                </ul>
+            </div>
+
+            <h5 class="font-semibold mt-4 text-pink-700">Apparatus Required</h5>
+            <ul class="list-disc list-outside pl-5 space-y-1 text-sm">
+                <li><strong>Spectrophotometer</strong> — 525 nm wavelength</li>
+                <li><strong>Hot plate</strong> or boiling water bath</li>
+                <li>Erlenmeyer flasks (250 ml)</li>
+                <li>Cuvettes (1 cm or 5 cm path length)</li>
+                <li>Volumetric flasks (100 ml)</li>
+                <li>Pipettes</li>
+                <li>Acid-washed glassware</li>
+            </ul>
+
+            <h5 class="font-semibold mt-4 text-pink-700">Reagents</h5>
+            <div class="bg-white border border-gray-300 p-4 rounded-lg">
+                <p><strong>1. Special Reagent (Mixed Acid Solution):</strong></p>
+                <ul class="text-sm">
+                    <li><strong>Composition:</strong>
+                        <ul class="ml-5 list-circle">
+                            <li>Mercuric sulfate (HgSO₄): 75 g</li>
+                            <li>Concentrated nitric acid (HNO₃): 400 ml</li>
+                            <li>Concentrated phosphoric acid (H₃PO₄, 85%): 400 ml</li>
+                            <li>Silver nitrate (AgNO₃): 200 mg</li>
+                            <li>Make total volume 1 liter with distilled water</li>
+                        </ul>
+                    </li>
+                    <li><strong>Functions:</strong>
+                        <ul class="ml-5 list-circle">
+                            <li><strong>HNO₃:</strong> Maintains acidic medium, oxidizes organic matter</li>
+                            <li><strong>H₃PO₄:</strong> Masks iron (Fe³⁺) by forming colorless phosphate complex — prevents Fe interference</li>
+                            <li><strong>HgSO₄:</strong> Complexes chloride ions (forms HgCl₄²⁻) — chloride would otherwise consume persulphate</li>
+                            <li><strong>AgNO₃:</strong> Catalyst for Mn oxidation</li>
+                        </ul>
+                    </li>
+                    <li><strong>Preparation note:</strong> First dissolve HgSO₄ in small amount of distilled water, then add acids — exothermic reaction, cool continuously</li>
+                </ul>
+                
+                <p class="mt-3"><strong>2. Ammonium Persulphate (Solid):</strong></p>
+                <ul class="text-sm">
+                    <li>(NH₄)₂S₂O₈ powder — use in solid form, must be fresh</li>
+                    <li>Do not prepare solution (persulphate solution is unstable, decomposes)</li>
+                    <li>Store in cool, dark place</li>
+                    <li>Approximately <strong>0.5 g per sample</strong> will be used</li>
+                </ul>
+                
+                <p class="mt-3"><strong>3. Standard Manganese Solution:</strong></p>
+                <ul class="text-sm">
+                    <li><strong>Stock (1000 mg Mn/L):</strong>
+                        <ul class="ml-5 list-circle">
+                            <li>Dissolve 1.000 g electrolytic manganese metal (99.9% pure) in</li>
+                            <li>10 ml concentrated HNO₃ + 10 ml distilled water</li>
+                            <li>Heat gently until completely dissolved</li>
+                            <li>Cool and make up to 1 liter</li>
+                        </ul>
+                    </li>
+                    <li><strong>Alternative:</strong> Can also prepare from 3.076 g MnSO₄·H₂O</li>
+                    <li><strong>Working standards:</strong> Dilute stock to prepare 0, 0.01, 0.05, 0.1, 0.2, 0.5, 1.0 mg Mn/L</li>
+                </ul>
+            </div>
+
+            <h5 class="font-semibold mt-4 text-pink-700">Detailed Procedure</h5>
+            <div class="bg-white border border-gray-300 p-4 rounded-lg">
+                <p><strong>A. Sample Preparation:</strong></p>
+                <ol class="text-sm">
+                    <li><strong>Volume selection:</strong> Choose sample volume based on expected Mn concentration:
+                        <ul class="ml-5 list-circle">
+                            <li>Low Mn (&lt;0.1 mg/L): 100 ml sample</li>
+                            <li>Moderate (0.1-1.0 mg/L): 50 ml sample</li>
+                            <li>High (&gt;1.0 mg/L): 10-25 ml sample, dilute to 100 ml</li>
+                        </ul>
+                    </li>
+                    <li>Take sample in <strong>Erlenmeyer flask</strong></li>
+                    <li>If sample is colored or turbid, perform <strong>acid digestion</strong> first:
+                        <ul class="ml-5 list-circle">
+                            <li>Add 5 ml conc. HNO₃</li>
+                            <li>Boil to reduce volume to 20-25 ml</li>
+                            <li>Cool and filter</li>
+                        </ul>
+                    </li>
+                </ol>
+                
+                <p class="mt-3"><strong>B. Oxidation Reaction:</strong></p>
+                <ol class="text-sm" start="4">
+                    <li>Take sample/treated sample in Erlenmeyer flask, make up volume to <strong>~90 ml</strong> with distilled water</li>
+                    <li>Pipette and add <strong>5 ml special reagent</strong></li>
+                    <li>Mix — solution will become acidic</li>
+                    <li>Add <strong>0.5 g (spatula tip) ammonium persulphate</strong></li>
+                    <li><strong>Boil</strong> flask on hot plate (or place in boiling water bath)</li>
+                    <li><strong>1-2 minutes vigorous boiling</strong> — purple color will develop (if Mn is present)</li>
+                    <li>Stop boiling and <strong>immediately cool to room temperature</strong> (use cold water bath)</li>
+                </ol>
+                
+                <p class="mt-3"><strong>C. Volume Make-up & Measurement:</strong></p>
+                <ol class="text-sm" start="12">
+                    <li>Transfer cooled solution to <strong>100 ml volumetric flask</strong></li>
+                    <li>Make up to exactly <strong>100 ml volume</strong> with distilled water</li>
+                    <li>Mix thoroughly</li>
+                    <li><strong>Wait 5-10 minutes</strong> — for color stabilization</li>
+                    <li>Set spectrophotometer to <strong>525 nm</strong></li>
+                    <li>Prepare <strong>blank</strong> (distilled water + all reagents, no Mn)</li>
+                    <li>Run standards and <strong>plot calibration curve</strong></li>
+                    <li>Measure sample absorbance</li>
+                </ol>
+            </div>
+
+            <h5 class="font-semibold mt-4 text-pink-700">Calculation</h5>
+            <div class="bg-gray-100 p-3 rounded">
+                <pre class="text-sm"><code><strong>Manganese (mg Mn/L) = [mg Mn from calibration curve] × (100 / Sample volume in ml)</strong>
+
+Example 1:
+- Sample volume taken = 100 ml
+- Final volume = 100 ml
+- Calibration curve reading = 0.08 mg Mn
+- Mn concentration = 0.08 × (100/100) = <strong>0.08 mg/L</strong>
+
+Example 2 (diluted sample):
+- Sample volume = 25 ml (diluted to 100 ml before treatment)
+- After oxidation, final volume = 100 ml
+- Calibration reading = 0.15 mg Mn
+- Mn concentration = 0.15 × (100/25) = <strong>0.60 mg/L</strong>
+
+<strong>Detection Range:</strong> 0.01 - 1.0 mg Mn/L (optimal)
+For higher concentrations, dilute sample appropriately</code></pre>
+            </div>
+
+            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                <h5 class="font-semibold text-yellow-800">⚠️ Interferences & Solutions</h5>
+                <table class="w-full border-collapse border mt-2 text-xs">
+                    <thead>
+                        <tr class="bg-yellow-100">
+                            <th class="border p-2">Interfering Substance</th>
+                            <th class="border p-2">Effect</th>
+                            <th class="border p-2">Remedy (Built-in Special Reagent)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="border p-2"><strong>Iron (Fe³⁺)</strong></td>
+                            <td class="border p-2">Yellow color interferes</td>
+                            <td class="border p-2">H₃PO₄ forms colorless FeH₂PO₄²⁺ complex — up to 20 mg/L Fe tolerable</td>
+                        </tr>
+                        <tr>
+                            <td class="border p-2"><strong>Chloride (Cl⁻)</strong></td>
+                            <td class="border p-2">Consumes persulphate, prevents Mn oxidation</td>
+                            <td class="border p-2">HgSO₄ forms HgCl₄²⁻ complex — up to 500 mg/L Cl⁻ manageable</td>
+                        </tr>
+                        <tr>
+                            <td class="border p-2"><strong>Organic matter</strong></td>
+                            <td class="border p-2">Reduces permanganate (color fades)</td>
+                            <td class="border p-2">HNO₃ oxidizes organics during boiling; if excessive, pre-digestion required</td>
+                        </tr>
+                        <tr>
+                            <td class="border p-2"><strong>Chromium (Cr)</strong></td>
+                            <td class="border p-2">Cr³⁺ oxidizes to Cr₂O₇²⁻ (orange color)</td>
+                            <td class="border p-2">Usually &lt;0.05 mg/L in natural waters — negligible. If high, use ICP/AAS method</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mt-4">
+                <h5 class="font-semibold text-blue-800">📚 References</h5>
+                <ul class="text-xs text-blue-700">
+                    <li><strong>APHA 3500-Mn B:</strong> Standard Methods, 23rd Ed. — Persulphate Method</li>
+                    <li><strong>IS 3025 (Part 54):2003:</strong> Methods for Sampling and Test - Manganese (Persulphate)</li>
+                    <li><strong>EPA Method 200.7:</strong> ICP-OES for Mn</li>
+                    <li><strong>WHO Guidelines (2017):</strong> Manganese in Drinking-water, Background document</li>
+                    <li>Willard & Greathouse (1917). "The Colorimetric Determination of Manganese by Oxidation with Periodate", <em>J. Am. Chem. Soc.</em> 39, 2366</li>
+                </ul>
+            </div>
+        </div>
+    `
+},
+
+{
+    id: 'ammonia',
+    title: 'Ammonia Nitrogen Detection (NH₃-N)',
+    intro: 'Determination of ammonia using Distillation-Titrimetric method, Phenate colorimetric method, or Ion Selective Electrode method. Ammonia is an important indicator of water pollution.',
+    
+    content: `
+        <div class="prose max-w-none prose-teal">
+            <div class="bg-teal-50 border-l-4 border-teal-500 p-4 mb-4">
+                <h4 class="text-teal-800 font-bold">🔬 Scientific Overview</h4>
+                <p class="text-teal-700"><strong>Ammonia (NH₃)</strong> and <strong>ammonium ion (NH₄⁺)</strong> are the reduced forms of nitrogen in water. They mainly come from sewage discharge, agricultural runoff (fertilizers), industrial waste, and decomposition of organic matter.</p>
+                
+                <p class="text-teal-700 mt-2"><strong>Chemistry in Water:</strong></p>
+                <pre class="bg-gray-100 p-2 rounded text-xs mt-1"><code>NH₃ (ammonia, uncharged) + H₂O ⇌ NH₄⁺ (ammonium ion) + OH⁻
+
+pH-dependent equilibrium:
+- pH &lt; 7: NH₄⁺ is dominant form (99% at pH 7)
+- pH 9.25: 50% NH₃, 50% NH₄⁺ (pKa value)
+- pH &gt; 11: NH₃ is dominant (free ammonia, toxic form)
+
+Conventionally reported as: <strong>NH₃-N (ammonia-nitrogen)</strong> or <strong>NH₄-N (ammonium-nitrogen)</strong></code></pre>
+                
+                <p class="text-teal-700 mt-2"><strong>Environmental & Health Significance:</strong></p>
+                <ul class="text-teal-700 text-sm">
+                    <li><strong>Pollution indicator:</strong> High NH₃-N = recent sewage contamination (organic pollution)</li>
+                    <li><strong>Toxicity to aquatic life:</strong> Free NH₃ (un-ionized) highly toxic to fish — damages gills, LC₅₀ ~0.2-2 mg NH₃/L</li>
+                    <li><strong>Chlorination problem:</strong> NH₃ reacts with chlorine forming chloramines (bad taste/odor, weak disinfection)</li>
+                    <li><strong>Nitrification:</strong> NH₄⁺ → NO₂⁻ → NO₃⁻ by bacteria (consumes dissolved oxygen in water bodies)</li>
+                    <li><strong>Drinking water:</strong> No health-based guideline (odor threshold ~1.5 mg/L), but presence indicates fecal contamination</li>
+                </ul>
+                
+                <p class="text-teal-700 mt-2"><strong>Standards:</strong> IS 10500:2012 — No relaxation for NH₃-N in drinking water (should be absent); EPA secondary standard (non-enforceable) ~0.5 mg/L</p>
+            </div>
+
+            <h4 class="font-bold text-lg mt-6 mb-3 text-teal-800">🧪 Method 1: Preliminary Distillation + Titrimetric Method</h4>
+            
+            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                <h5 class="font-semibold text-teal-700">Scientific Principle</h5>
+                <p><strong>Step 1: Distillation</strong> — Sample is boiled under <strong>alkaline conditions (pH &gt;9.5)</strong>. At high pH, NH₄⁺ ions convert to NH₃ gas:</p>
+                <pre class="bg-gray-100 p-2 rounded text-xs mt-1"><code>NH₄⁺ + OH⁻ → NH₃↑ (gas) + H₂O</code></pre>
+                
+                <p class="mt-2">The liberated NH₃ gas is passed through condenser via <strong>steam distillation</strong> and absorbed in <strong>boric acid (H₃BO₃) solution</strong>:</p>
+                <pre class="bg-gray-100 p-2 rounded text-xs mt-1"><code>NH₃ + H₃BO₃ → NH₄⁺ + H₂BO₃⁻
+(Ammonia trapped as ammonium borate)</code></pre>
+                
+                <p class="mt-2"><strong>Step 2: Titration</strong> — Trapped ammonia is titrated with <strong>standard sulfuric acid (H₂SO₄)</strong>:</p>
+                <pre class="bg-gray-100 p-2 rounded text-xs mt-1"><code>2NH₄⁺ + H₂SO₄ → (NH₄)₂SO₄
+Endpoint detection: Mixed indicator (Methyl red + Methylene blue) — Green → Pink/Violet</code></pre>
+                
+                <p class="mt-2"><strong>Calculation basis:</strong> 1 ml of 0.02N H₂SO₄ ≡ 0.28 mg NH₃-N</p>
+            </div>
+
+            <h5 class="font-semibold mt-4 text-teal-700">Reagents (Titrimetric Method)</h5>
+            <div class="bg-white border border-gray-300 p-4 rounded-lg">
+                <p><strong>1. Borate Buffer Solution (pH 9.5):</strong></p>
+                <ul class="text-sm">
+                    <li>Mix 88 ml of 0.1M boric acid (H₃BO₃, 6.2 g/L) +</li>
+                    <li>12 ml of 0.1M NaOH in distilled water, make 100 ml</li>
+                    <li>Check pH = 9.5 ± 0.1</li>
+                    <li><strong>Function:</strong> Raises sample pH to convert NH₄⁺ → NH₃ for distillation</li>
+                </ul>
+                
+                <p class="mt-3"><strong>2. Indicating Boric Acid Solution (Absorbing solution):</strong></p>
+                <ul class="text-sm">
+                    <li>20 g boric acid (H₃BO₃) in 1 L distilled water</li>
+                    <li>Add <strong>mixed indicator:</strong>
+                        <ul class="ml-5 list-circle">
+                            <li>20 ml methyl red solution (0.2% in 95% ethanol)</li>
+                            <li>10 ml methylene blue solution (0.2% in 95% ethanol)</li>
+                        </ul>
+                    </li>
+                    <li>Final color: Pale greenish-blue</li>
+                </ul>
+                
+                <p class="mt-3"><strong>3. Standard Sulfuric Acid (0.02N H₂SO₄):</strong></p>
+                <ul class="text-sm">
+                    <li>Dilute 0.556 ml conc. H₂SO₄ to 1 liter with distilled water</li>
+                    <li>Standardize against 0.02N Na₂CO₃ solution</li>
+                    <li>Store in glass-stoppered bottle</li>
+                </ul>
+            </div>
+
+            <h5 class="font-semibold mt-4 text-teal-700">Procedure (Distillation-Titration)</h5>
+            <div class="bg-white border border-gray-300 p-4 rounded-lg">
+                <p><strong>A. Distillation:</strong></p>
+                <ol class="text-sm">
+                    <li>Transfer <strong>500 ml sample</strong> to distillation flask</li>
+                    <li>Add <strong>25 ml borate buffer</strong> — pH becomes 9.5</li>
+                    <li>Add anti-bumping granules</li>
+                    <li>Assemble distillation apparatus</li>
+                    <li>Dip condenser outlet tube below <strong>50 ml indicating boric acid solution</strong></li>
+                    <li>Start heating — maintain gentle boiling</li>
+                    <li>Collect <strong>200 ml distillate</strong> (~30-40 minutes)</li>
+                    <li>Boric acid solution color shifts <strong>greenish → blue/purple</strong> (ammonia absorption)</li>
+                </ol>
+                
+                <p class="mt-3"><strong>B. Titration:</strong></p>
+                <ol class="text-sm" start="9">
+                    <li>Titrate distillate with <strong>0.02N H₂SO₄</strong></li>
+                    <li>Endpoint: Blue/purple → <strong>Pale pink/violet</strong></li>
+                    <li>Volume consumed = <strong>A ml</strong></li>
+                    <li><strong>Blank:</strong> Titrate 50 ml boric acid (without distillate) = <strong>B ml</strong></li>
+                </ol>
+            </div>
+
+            <h5 class="font-semibold mt-4 text-teal-700">Calculation</h5>
+            <pre class="bg-gray-100 p-3 rounded text-sm"><code><strong>NH₃-N (mg/L) = [(A - B) × 280] / Sample volume (ml)</strong>
+
+Example: Sample 500 ml, A = 8.5 ml, B = 0.2 ml
+NH₃-N = [(8.5 - 0.2) × 280] / 500 = <strong>4.65 mg/L</strong>
+
+To convert: NH₃ (mg/L) = NH₃-N × 1.214</code></pre>
+
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mt-4">
+                <h5 class="font-semibold text-blue-800">📚 References</h5>
+                <ul class="text-xs text-blue-700">
+                    <li><strong>APHA 4500-NH₃ B, C:</strong> Standard Methods, 23rd Ed. — Distillation, Phenate methods</li>
+                    <li><strong>IS 3025 (Part 34):1988:</strong> Nitrogen - Ammonia (Distillation-Titration)</li>
+                    <li><strong>EPA Method 350.1:</strong> Nitrogen, Ammonia (Colorimetric, Automated Phenate)</li>
+                </ul>
+            </div>
+        </div>
+    `
+},
             {
-                id: 'magnesium',
-                title: 'Magnesium',
-                intro: 'Calculation from total hardness and calcium hardness.',
-                apparatus: '<p>Not required.</p>',
-                reagents: '<p>Not required.</p>',
-                procedure: [
-                    'Determine Total Hardness.',
-                    'Determine Calcium Hardness.',
-                ],
-                calculation: 'Mg (mg/L) = [Total Hardness (mg/L as CaCO₃) - Calcium Hardness (mg/L as CaCO₃)] x 0.243'
-            },
-            {
-                id: 'manganese',
-                title: 'Manganese',
-                intro: 'Spectrophotometric determination of manganese using the Persulphate method.',
-                apparatus: '<p>Spectrophotometer (525 nm).</p>',
-                reagents: `
-                    <h4>Reagents</h4>
-                    <ul class="list-disc list-outside pl-5 space-y-1">
-                        <li><strong>Special reagent (HgSO₄, HNO₃, H₃PO₄, AgNO₃).</strong></li>
-                        <li><strong>Ammonium persulphate.</strong></li>
-                        <li><strong>Standard manganese solution.</strong></li>
+    id: 'nitrate',
+    title: 'Nitrate Nitrogen (NO₃-N)',
+    intro: 'Determination of nitrate using UV Spectrophotometric method, Ion Selective Electrode, or calculation method (TON - NO₂-N). Nitrate is a major indicator of groundwater contamination.',
+    
+    content: `
+        <div class="prose max-w-none prose-indigo">
+            <div class="bg-indigo-50 border-l-4 border-indigo-500 p-4 mb-4">
+                <h4 class="text-indigo-800 font-bold">🔬 Overview</h4>
+                <p class="text-indigo-700 text-sm"><strong>Nitrate (NO₃⁻)</strong> is the oxidized form of nitrogen — comes from agricultural fertilizers, sewage, and animal waste. <strong>Health Risk:</strong> Infant methemoglobinemia (Blue Baby Syndrome); WHO limit = 50 mg NO₃/L or 11.3 mg NO₃-N/L.</p>
+            </div>
+
+            <h4 class="font-bold text-lg mt-4 mb-2 text-indigo-800">UV Spectrophotometric Screening Method</h4>
+            <div class="bg-gray-50 p-3 rounded-lg mb-3">
+                <p class="text-sm"><strong>Principle:</strong> Nitrate ions absorb UV light at <strong>220 nm</strong>. Organic matter also absorbs at 220 nm, therefore a <strong>correction reading at 275 nm</strong> is taken.</p>
+                <pre class="bg-gray-100 p-2 rounded text-xs mt-1"><code>Corrected Abs₂₂₀ = Abs₂₂₀ - (2 × Abs₂₇₅)
+NO₃-N concentration determined from calibration curve</code></pre>
+            </div>
+
+            <p class="text-sm"><strong>Reagents:</strong> HCl (1N), Standard NO₃⁻ solution (0-7 mg N/L range)</p>
+            
+            <p class="text-sm mt-2"><strong>Procedure:</strong></p>
+            <ol class="text-sm space-y-1">
+                <li>50 ml sample + 1 ml HCl (1N) → acidify</li>
+                <li>Read absorbance at <strong>220 nm</strong> (nitrate) and <strong>275 nm</strong> (organic correction)</li>
+                <li>Calculate: Corrected A₂₂₀ = A₂₂₀ - (2 × A₂₇₅)</li>
+                <li>Prepare calibration curve with standards, read NO₃-N value</li>
+            </ol>
+
+            <p class="text-sm mt-3"><strong>Calculation:</strong></p>
+            <pre class="bg-gray-100 p-2 rounded text-xs">NO₃-N (mg/L) = [Curve reading] × Dilution factor
+To convert: NO₃ (mg/L) = NO₃-N × 4.43</pre>
+
+            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-3 mt-3">
+                <p class="text-xs text-yellow-800"><strong>⚠️ Limitation:</strong> If organic matter is high (A₂₇₅ &gt; 0.1), use cadmium reduction method.</p>
+            </div>
+
+            <h4 class="font-bold text-lg mt-4 mb-2 text-indigo-800">Alternative: Calculation Method</h4>
+            <p class="text-sm">If you have measured <strong>TON (Total Oxidized Nitrogen)</strong> and <strong>NO₂-N (Nitrite)</strong>:</p>
+            <pre class="bg-gray-100 p-2 rounded text-sm mt-1"><code><strong>NO₃-N (mg/L) = TON (mg/L) - NO₂-N (mg/L)</strong></code></pre>
+
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-3 mt-3">
+                <p class="text-xs text-blue-700"><strong>📚 References:</strong> APHA 4500-NO₃⁻ B (UV method); IS 3025 (Part 34):1988; EPA Method 352.1</p>
+            </div>
+        </div>
+    `
+},
+
+{
+    id: 'nitrite',
+    title: 'Nitrite Nitrogen (NO₂-N)',
+    intro: 'Colorimetric diazotization method (Griess reaction) for nitrite detection. Nitrite is an intermediate oxidation state — unstable and toxic.',
+    
+    content: `
+        <div class="prose max-w-none prose-rose">
+            <div class="bg-rose-50 border-l-4 border-rose-500 p-4 mb-4">
+                <h4 class="text-rose-800 font-bold">🔬 Overview</h4>
+                <p class="text-rose-700 text-sm"><strong>Nitrite (NO₂⁻)</strong> is an intermediate product of ammonia oxidation (in nitrification process). <strong>Highly toxic</strong> — causes methemoglobinemia; WHO guideline = 3 mg NO₂/L (0.9 mg NO₂-N/L). Presence in drinking water = incomplete treatment or bacterial contamination.</p>
+            </div>
+
+            <h4 class="font-bold text-lg mt-4 mb-2 text-rose-800">Colorimetric Method (Griess Diazotization)</h4>
+            <div class="bg-gray-50 p-3 rounded-lg mb-3">
+                <p class="text-sm"><strong>Principle:</strong> Nitrite reacts with <strong>sulfanilamide</strong> under acidic conditions to form a diazonium compound, which couples with <strong>N-(1-naphthyl)-ethylenediamine (NED)</strong> to produce a <strong>reddish-purple azo dye</strong>.</p>
+                <pre class="bg-gray-100 p-2 rounded text-xs mt-1"><code>NO₂⁻ + Sulfanilamide (acidic) → Diazonium salt
+Diazonium salt + NED → Reddish-purple azo dye (λmax = 543 nm)</code></pre>
+            </div>
+
+            <p class="text-sm"><strong>Reagents:</strong></p>
+            <ul class="text-xs space-y-1">
+                <li><strong>Color Reagent:</strong> Mix equal volumes of:
+                    <ul class="ml-4 list-circle">
+                        <li>Solution A: 2 g sulfanilamide in 100 ml (1+9) HCl</li>
+                        <li>Solution B: 0.1 g NED dihydrochloride in 100 ml water</li>
                     </ul>
-                `,
-                procedure: [
-                    'Add special reagent to the sample and boil.',
-                    'Add ammonium persulphate and boil.',
-                    'Read absorbance at 525 nm.',
-                ],
-                calculation: 'Read manganese concentration (mg/L) from the calibration curve.'
-            },
-            {
-                id: 'ammonia',
-                title: 'Nitrogen, Ammonia',
-                intro: 'Determination of ammonia by distillation and titration, phenate, or ion selective electrode methods.',
-                 apparatus: '<p>Distillation apparatus, Spectrophotometer (640 nm), or Ion Selective Electrode setup.</p>',
-                reagents: `
-                    <h4>Reagents for Titrimetric Method</h4>
-                    <ul class="list-disc list-outside pl-5 space-y-1">
-                        <li><strong>Borate buffer.</strong></li>
-                        <li><strong>Indicating boric acid solution.</strong></li>
-                        <li><strong>Standard sulphuric acid, 0.02N.</strong></li>
+                </li>
+                <li><strong>Standard NO₂⁻:</strong> 0.246 g NaNO₂ in 1 L (100 mg NO₂-N/L stock)</li>
+            </ul>
+
+            <p class="text-sm mt-2"><strong>Procedure:</strong></p>
+            <ol class="text-sm space-y-1">
+                <li>Take <strong>50 ml sample</strong> in volumetric flask</li>
+                <li>Add <strong>2 ml color reagent</strong>, mix</li>
+                <li><strong>Wait 10 min - 2 hours</strong> (color remains stable)</li>
+                <li>Read absorbance at <strong>543 nm</strong></li>
+                <li>Read concentration from calibration curve (0-0.5 mg NO₂-N/L)</li>
+            </ol>
+
+            <p class="text-sm mt-3"><strong>Calculation:</strong></p>
+            <pre class="bg-gray-100 p-2 rounded text-xs">NO₂-N (mg/L) = [Curve reading mg N] × (1000 / Sample ml)
+Detection range: 0.001 - 0.5 mg NO₂-N/L</pre>
+
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-3 mt-3">
+                <p class="text-xs text-blue-700"><strong>📚 References:</strong> APHA 4500-NO₂⁻ B; IS 3025 (Part 34); EPA Method 354.1</p>
+            </div>
+        </div>
+    `
+},
+
+{
+    id: 'organic_nitrogen',
+    title: 'Organic Nitrogen (Organic-N)',
+    intro: 'Determination of organic nitrogen by Kjeldahl digestion method — measures nitrogen from proteins, amino acids, and urea.',
+    
+    content: `
+        <div class="prose max-w-none prose-amber">
+            <div class="bg-amber-50 border-l-4 border-amber-500 p-4 mb-4">
+                <h4 class="text-amber-800 font-bold">🔬 Overview</h4>
+                <p class="text-amber-700 text-sm"><strong>Organic Nitrogen</strong> is nitrogen bound in proteins, amino acids, and urea. Comes from sewage, agricultural runoff, and decaying organic matter. Measurement = <strong>Total Kjeldahl Nitrogen (TKN) - Ammonia Nitrogen</strong></p>
+            </div>
+
+            <h4 class="font-bold text-lg mt-4 mb-2 text-amber-800">Kjeldahl Method</h4>
+            <div class="bg-gray-50 p-3 rounded-lg mb-3">
+                <p class="text-sm"><strong>Principle:</strong></p>
+                <ol class="text-xs space-y-1">
+                    <li><strong>Digestion:</strong> Organic-N converts to NH₄⁺ with conc. H₂SO₄ + catalyst (CuSO₄, K₂SO₄) under heat</li>
+                    <li><strong>Distillation:</strong> NH₄⁺ liberated as NH₃ gas with NaOH</li>
+                    <li><strong>Titration:</strong> Trapped NH₃ titrated with standard acid</li>
+                </ol>
+                <pre class="bg-gray-100 p-2 rounded text-xs mt-1"><code>Organic-N + H₂SO₄ (heat, catalyst) → (NH₄)₂SO₄
+NH₄⁺ + OH⁻ → NH₃ ↑ → Trapped in H₃BO₃ → Titrate with H₂SO₄</code></pre>
+            </div>
+
+            <p class="text-sm"><strong>Reagents:</strong></p>
+            <ul class="text-xs">
+                <li><strong>Digestion reagent:</strong> K₂SO₄ (133g) + CuSO₄ (7.3g) powder blend</li>
+                <li><strong>Conc. H₂SO₄</strong> (sulfuric acid)</li>
+                <li><strong>NaOH-Na₂S₂O₃ reagent:</strong> 500g NaOH + 25g Na₂S₂O₃·5H₂O per liter</li>
+                <li>Indicating boric acid, 0.02N H₂SO₄ (same as ammonia method)</li>
+            </ul>
+
+            <p class="text-sm mt-2"><strong>Procedure:</strong></p>
+            <ol class="text-sm space-y-1">
+                <li><strong>Pre-treatment:</strong> Remove free ammonia from sample (distill without digestion, discard distillate)</li>
+                <li><strong>Digestion:</strong> Remaining sample (100-500 ml) + 10g digestion reagent + 25 ml conc. H₂SO₄ → digest in flask until clear (~30 min)</li>
+                <li><strong>Distillation:</strong> Cooled digest + 25 ml NaOH reagent → distill into 50 ml boric acid</li>
+                <li><strong>Titration:</strong> Titrate distillate with 0.02N H₂SO₄</li>
+            </ol>
+
+            <p class="text-sm mt-3"><strong>Calculation:</strong></p>
+            <pre class="bg-gray-100 p-2 rounded text-xs">Organic-N (mg/L) = [(A - B) × 280] / Sample ml
+
+A = ml H₂SO₄ for sample, B = blank
+280 = factor for 0.02N acid
+
+<strong>Alternative:</strong>
+Organic-N = TKN - NH₃-N (both measured separately)</pre>
+
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-3 mt-3">
+                <p class="text-xs text-blue-700"><strong>📚 References:</strong> APHA 4500-N org B; IS 3025 (Part 34); EPA Method 351.2</p>
+            </div>
+        </div>
+    `
+},
+
+{
+    id: 'ton',
+    title: 'Total Oxidized Nitrogen (TON = NO₂⁻ + NO₃⁻)',
+    intro: 'Determination by cadmium reduction method — converts nitrate to nitrite, then measures total oxidized nitrogen.',
+    
+    content: `
+        <div class="prose max-w-none prose-cyan">
+            <div class="bg-cyan-50 border-l-4 border-cyan-500 p-4 mb-4">
+                <h4 class="text-cyan-800 font-bold">🔬 Overview</h4>
+                <p class="text-cyan-700 text-sm"><strong>TON (Total Oxidized Nitrogen)</strong> = NO₂-N + NO₃-N combined. The cadmium reduction column converts NO₃⁻ → NO₂⁻, then total NO₂⁻ is measured colorimetrically.</p>
+            </div>
+
+            <h4 class="font-bold text-lg mt-4 mb-2 text-cyan-800">Cadmium Reduction Method</h4>
+            <div class="bg-gray-50 p-3 rounded-lg mb-3">
+                <p class="text-sm"><strong>Principle:</strong> <strong>Copper-cadmium granules</strong> reduce nitrate to nitrite on the metallic Cd surface:</p>
+                <pre class="bg-gray-100 p-2 rounded text-xs mt-1"><code>NO₃⁻ + Cd (copper-activated) → NO₂⁻
+(Total NO₂⁻ = Original NO₂⁻ + Reduced NO₃⁻)
+Then measure by Griess reaction (pink color at 543 nm)</code></pre>
+            </div>
+
+            <p class="text-sm"><strong>Apparatus:</strong> Reduction column (glass column packed with Cu-Cd granules)</p>
+
+            <p class="text-sm"><strong>Reagents:</strong></p>
+            <ul class="text-xs">
+                <li><strong>Copper-cadmium granules:</strong> Cd filings coated with Cu (activation: Cd + CuSO₄ → Cu-Cd)</li>
+                <li><strong>NH₄Cl-EDTA solution:</strong> Buffer + complexing agent (prevents Cd, Cu interference)</li>
+                <li><strong>Color reagent:</strong> Same as nitrite method (sulfanilamide + NED)</li>
+            </ul>
+
+            <p class="text-sm mt-2"><strong>Procedure:</strong></p>
+            <ol class="text-sm space-y-1">
+                <li>Prepare reduction column: Pack Cu-Cd granules, condition with 200 ml NH₄Cl-EDTA</li>
+                <li>Mix <strong>25 ml sample</strong> + 75 ml NH₄Cl-EDTA → pass through column (flow rate ~5 ml/min)</li>
+                <li>Discard first 50 ml eluate, collect next <strong>25 ml</strong></li>
+                <li>Add <strong>1 ml color reagent</strong> to collected eluate</li>
+                <li>Wait 10 min, read at <strong>543 nm</strong></li>
+            </ol>
+
+            <p class="text-sm mt-3"><strong>Calculation:</strong></p>
+            <pre class="bg-gray-100 p-2 rounded text-xs">TON (mg N/L) = [Calibration curve reading]
+
+To get NO₃-N separately:
+NO₃-N = TON - NO₂-N (measure NO₂ separately without reduction)</pre>
+
+            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-3 mt-3">
+                <p class="text-xs text-yellow-800"><strong>⚠️ Note:</strong> Verify column efficiency regularly — reduction efficiency should be &gt;90% (test with NO₃⁻ standards)</p>
+            </div>
+
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-3 mt-3">
+                <p class="text-xs text-blue-700"><strong>📚 References:</strong> APHA 4500-NO₃⁻ E; EPA Method 353.2</p>
+            </div>
+        </div>
+    `
+},
+
+{
+    id: 'odour',
+    title: 'Odour Detection',
+    intro: 'Qualitative sensory analysis — detection and characterization of odour using human olfactory receptors.',
+    
+    content: `
+        <div class="prose max-w-none prose-gray">
+            <div class="bg-gray-50 border-l-4 border-gray-500 p-4 mb-4">
+                <h4 class="text-gray-800 font-bold">🔬 Overview</h4>
+                <p class="text-gray-700 text-sm"><strong>Odour</strong> is an organoleptic quality of water — comes from volatile organic compounds, hydrogen sulfide, chlorine, and algae metabolites. It is an aesthetic parameter, not a direct health risk, but may indicate contamination.</p>
+            </div>
+
+            <h4 class="font-bold text-lg mt-4 mb-2 text-gray-800">Qualitative Test</h4>
+            <p class="text-sm"><strong>Apparatus:</strong> Clean, odourless glass bottle (250 ml) with stopper</p>
+            
+            <p class="text-sm mt-2"><strong>Procedure:</strong></p>
+            <ol class="text-sm space-y-1">
+                <li>Rinse bottle with sample (to remove residual odours)</li>
+                <li><strong>Half-fill (125 ml)</strong> the bottle with sample</li>
+                <li>Close with stopper, <strong>shake vigorously for 2-3 seconds</strong></li>
+                <li>Immediately open stopper and <strong>smell/sniff</strong> (just above bottle opening)</li>
+                <li>Note the odour type and intensity</li>
+            </ol>
+
+            <p class="text-sm mt-3"><strong>Odour Types (Classification):</strong></p>
+            <ul class="text-sm grid grid-cols-2 gap-1">
+                <li>✓ Odourless (No smell)</li>
+                <li>✓ Earthy (soil-like)</li>
+                <li>✓ Fishy</li>
+                <li>✓ Musty (moldy)</li>
+                <li>✓ Septic/Sewage</li>
+                <li>✓ Rotten egg (H₂S)</li>
+                <li>✓ Chlorinous (chlorine)</li>
+                <li>✓ Aromatic (fragrant)</li>
+                <li>✓ Chemical/Phenolic</li>
+                <li>✓ Grassy/Vegetable</li>
+            </ul>
+
+            <p class="text-sm mt-3"><strong>Reporting:</strong></p>
+            <pre class="bg-gray-100 p-2 rounded text-xs">Example: "Septic odour detected" or "Mild chlorinous odour"
+Intensity scale (optional): None, Faint, Distinct, Strong, Very Strong</pre>
+
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-3 mt-3">
+                <h5 class="font-semibold text-sm text-blue-800">Quantitative Method (Threshold Odour Number - TON)</h5>
+                <p class="text-xs text-blue-700">Dilution series method: Sample is progressively diluted until odour just disappears. TON = Total volume / Sample volume at threshold.</p>
+            </div>
+
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-3 mt-3">
+                <p class="text-xs text-blue-700"><strong>📚 References:</strong> APHA 2150 B; IS 3025 (Part 15):1984; WHO Guidelines</p>
+            </div>
+        </div>
+    `
+},
+
+{
+    id: 'orthophosphate',
+    title: 'Orthophosphate (PO₄³⁻)',
+    intro: 'Determination by ascorbic acid reduction method — molybdate complex formation for orthophosphate measurement.',
+    
+    content: `
+        <div class="prose max-w-none prose-lime">
+            <div class="bg-lime-50 border-l-4 border-lime-500 p-4 mb-4">
+                <h4 class="text-lime-800 font-bold">🔬 Overview</h4>
+                <p class="text-lime-700 text-sm"><strong>Orthophosphate (o-PO₄, HPO₄²⁻, H₂PO₄⁻)</strong> is dissolved reactive phosphorus. Comes from detergents, fertilizers, and sewage. <strong>Eutrophication</strong> cause karta hai (algal blooms).</p>
+            </div>
+
+            <h4 class="font-bold text-lg mt-4 mb-2 text-lime-800">Ascorbic Acid Method</h4>
+            <div class="bg-gray-50 p-3 rounded-lg mb-3">
+                <p class="text-sm"><strong>Principle:</strong> In acidic medium, orthophosphate + ammonium molybdate → phosphomolybdate complex (yellow). Ascorbic acid reduces it to <strong>molybdenum blue</strong> (intense blue, λmax = 880 nm).</p>
+                <pre class="bg-gray-100 p-2 rounded text-xs mt-1"><code>PO₄³⁻ + Mo(VI) → Phosphomolybdate (yellow)
++ Ascorbic acid → Molybdenum Blue (λ880nm)</code></pre>
+            </div>
+
+            <p class="text-sm"><strong>Reagents:</strong></p>
+            <ul class="text-xs">
+                <li><strong>Combined Reagent (mix in order):</strong>
+                    <ul class="ml-4 list-circle">
+                        <li>50 ml H₂SO₄ (5N)</li>
+                        <li>5 ml Potassium antimonyl tartrate (1.3715 g/500 ml)</li>
+                        <li>15 ml Ammonium molybdate (20 g/500 ml)</li>
+                        <li>30 ml Ascorbic acid (17.6 g/200 ml, fresh daily)</li>
                     </ul>
-                `,
-                procedure: [
-                    'Buffer the sample and distill the ammonia.',
-                    'Collect the distillate in boric acid.',
-                    'Titrate with standard sulfuric acid.',
-                ],
-                calculation: 'NH₃-N (mg/L) = [ (A - B) &times; 280 ] / mL of sample'
-            },
-            {
-                id: 'nitrate',
-                title: 'Nitrogen, Nitrate',
-                intro: 'Determination by calculation from TON and NO₂-N, or by ion selective electrode, or UV spectrophotometric methods.',
-                apparatus: '<p>Spectrophotometer or Ion Selective Electrode setup.</p>',
-                reagents: `
-                    <h4>Reagents for UV Method</h4>
-                    <ul class="list-disc list-outside pl-5 space-y-1">
-                        <li><strong>Standard Nitrate solution.</strong></li>
-                        <li><strong>Hydrochloric acid solution, 1N.</strong></li>
+                </li>
+                <li><strong>Standard PO₄:</strong> 0.2197 g KH₂PO₄ → 1 L (50 mg P/L stock)</li>
+            </ul>
+
+            <p class="text-sm mt-2"><strong>Procedure:</strong></p>
+            <ol class="text-sm space-y-1">
+                <li>Take <strong>50 ml sample</strong> (clear, filtered if turbid) in Erlenmeyer flask</li>
+                <li>Add <strong>8 ml combined reagent</strong>, mix</li>
+                <li><strong>Wait 10-30 min</strong> (color stable up to 2 hours)</li>
+                <li>Read absorbance at <strong>880 nm</strong></li>
+                <li>Plot standards curve (0-2 mg P/L), determine concentration</li>
+            </ol>
+
+            <p class="text-sm mt-3"><strong>Calculation:</strong></p>
+            <pre class="bg-gray-100 p-2 rounded text-xs">o-PO₄ (mg P/L) = [mg P from curve × 1000] / Sample ml
+To convert: PO₄ (mg/L) = P (mg/L) × 3.06</pre>
+
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-3 mt-3">
+                <p class="text-xs text-blue-700"><strong>📚 References:</strong> APHA 4500-P E; IS 3025 (Part 44):1993; EPA Method 365.1</p>
+            </div>
+        </div>
+    `
+},
+
+{
+    id: 'total_phosphorus',
+    title: 'Total Phosphorus (Total-P)',
+    intro: 'Persulphate digestion + ascorbic acid method — measures all forms of phosphorus (ortho + polyphosphates + organic-P).',
+    
+    content: `
+        <div class="prose max-w-none prose-emerald">
+            <div class="bg-emerald-50 border-l-4 border-emerald-500 p-4 mb-4">
+                <h4 class="text-emerald-800 font-bold">🔬 Overview</h4>
+                <p class="text-emerald-700 text-sm"><strong>Total Phosphorus</strong> = Orthophosphate + Polyphosphates + Organic Phosphorus. Digestion converts all forms to orthophosphate, which is then measured.</p>
+            </div>
+
+            <h4 class="font-bold text-lg mt-4 mb-2 text-emerald-800">Persulphate Digestion Method</h4>
+            <div class="bg-gray-50 p-3 rounded-lg mb-3">
+                <p class="text-sm"><strong>Principle:</strong> Strong oxidizing agent (K₂S₂O₈) + heat → all P-forms convert to PO₄³⁻. Then measure as orthophosphate.</p>
+            </div>
+
+            <p class="text-sm"><strong>Reagents:</strong></p>
+            <ul class="text-xs">
+                <li><strong>Persulphate:</strong> 25 g K₂S₂O₈ per 100 ml</li>
+                <li><strong>H₂SO₄ (10N):</strong> For acidification</li>
+                <li><strong>Combined reagent:</strong> Same as orthophosphate method</li>
+            </ul>
+
+            <p class="text-sm mt-2"><strong>Procedure:</strong></p>
+            <ol class="text-sm space-y-1">
+                <li>Take <strong>50 ml sample</strong> + 1 ml H₂SO₄ (10N) in Erlenmeyer flask</li>
+                <li>Add <strong>0.5 g persulphate</strong> (solid powder)</li>
+                <li><strong>Boil on hot plate for 30-40 min</strong> (gentle boiling, reduce volume to ~10 ml)</li>
+                <li>Cool, neutralize with phenolphthalein indicator</li>
+                <li>Make up volume to 50 ml</li>
+                <li>Proceed as orthophosphate: add <strong>8 ml combined reagent</strong></li>
+                <li>Wait 10-30 min, read at <strong>880 nm</strong></li>
+            </ol>
+
+            <p class="text-sm mt-3"><strong>Calculation:</strong></p>
+            <pre class="bg-gray-100 p-2 rounded text-xs">Total P (mg/L) = [mg P from curve × 1000] / Sample ml</pre>
+
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-3 mt-3">
+                <p class="text-xs text-blue-700"><strong>📚 References:</strong> APHA 4500-P B,E; IS 3025 (Part 44); EPA Method 365.3</p>
+            </div>
+        </div>
+    `
+},
+
+{
+    id: 'potassium',
+    title: 'Potassium (K⁺)',
+    intro: 'Flame photometry — detection by emission spectroscopy of potassium atoms.',
+    
+    content: `
+        <div class="prose max-w-none prose-violet">
+            <div class="bg-violet-50 border-l-4 border-violet-500 p-4 mb-4">
+                <h4 class="text-violet-800 font-bold">🔬 Overview</h4>
+                <p class="text-violet-700 text-sm"><strong>Potassium (K⁺)</strong> is an essential mineral — comes from fertilizers and soil erosion. Generally safe; high levels (>12 mg/L) may cause bitter taste.</p>
+            </div>
+
+            <h4 class="font-bold text-lg mt-4 mb-2 text-violet-800">Flame Emission Photometry</h4>
+            <div class="bg-gray-50 p-3 rounded-lg mb-3">
+                <p class="text-sm"><strong>Principle:</strong> K⁺ ions excited in flame → emit violet light at <strong>766.5 nm</strong>. Emission intensity ∝ K concentration.</p>
+            </div>
+
+            <p class="text-sm"><strong>Apparatus:</strong> Flame photometer with K filter (766.5 nm)</p>
+            
+            <p class="text-sm"><strong>Reagents:</strong> Standard K solution (1000 mg K/L stock from KCl)</p>
+
+            <p class="text-sm mt-2"><strong>Procedure:</strong></p>
+            <ol class="text-sm space-y-1">
+                <li>Set instrument to 766.5 nm, warm-up for 15 min</li>
+                <li>Prepare standards (0, 1, 2, 5, 10 mg K/L)</li>
+                <li>Zero with distilled water blank</li>
+                <li>Aspirate standards and plot calibration curve</li>
+                <li>Aspirate sample, read emission intensity</li>
+                <li>Read K concentration from curve</li>
+            </ol>
+
+            <p class="text-sm mt-3"><strong>Calculation:</strong></p>
+            <pre class="bg-gray-100 p-2 rounded text-xs">K (mg/L) = Calibration curve reading × Dilution factor</pre>
+
+            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-3 mt-3">
+                <p class="text-xs text-yellow-800"><strong>⚠️ Interference:</strong> High Na (>10x K level) may suppress signal — minimize by dilution.</p>
+            </div>
+
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-3 mt-3">
+                <p class="text-xs text-blue-700"><strong>📚 References:</strong> APHA 3500-K B; IS 3025 (Part 47):1987; EPA Method 258.1</p>
+            </div>
+        </div>
+    `
+},
+
+{
+    id: 'silicate',
+    title: 'Silicate (SiO₂)',
+    intro: 'Molybdosilicate colorimetric method for determination of reactive silica (dissolved SiO₂).',
+    
+    content: `
+        <div class="prose max-w-none prose-sky">
+            <div class="bg-sky-50 border-l-4 border-sky-500 p-4 mb-4">
+                <h4 class="text-sky-800 font-bold">🔬 Overview</h4>
+                <p class="text-sky-700 text-sm"><strong>Silicate (SiO₂)</strong> comes from natural weathering of silicate minerals. Causes scale formation in boiler water. Generally harmless in drinking water (typical range 1-30 mg/L).</p>
+            </div>
+
+            <h4 class="font-bold text-lg mt-4 mb-2 text-sky-800">Heteropoly Blue Method</h4>
+            <div class="bg-gray-50 p-3 rounded-lg mb-3">
+                <p class="text-sm"><strong>Principle:</strong> In acidic solution, silicate + ammonium molybdate → yellow silicomolybdate complex. Oxalic acid removes phosphate interference. Reducing agent → <strong>molybdenum blue</strong> (λmax = 815 nm).</p>
+                <pre class="bg-gray-100 p-2 rounded text-xs mt-1"><code>SiO₂ + Mo(VI) (acidic) → Silicomolybdic acid (yellow)
++ Reducing agent → Heteropoly blue (815 nm)</code></pre>
+            </div>
+
+            <p class="text-sm"><strong>Reagents:</strong></p>
+            <ul class="text-xs">
+                <li><strong>Ammonium molybdate (10%):</strong> 100 g (NH₄)₆Mo₇O₂₄·4H₂O in 1 L</li>
+                <li><strong>Oxalic acid (10%):</strong> 100 g H₂C₂O₄ in 1 L (removes PO₄ interference)</li>
+                <li><strong>Reducing agent:</strong> 
+                    <ul class="ml-4 list-circle">
+                        <li>Sodium sulfite (Na₂SO₃) 40 g</li>
+                        <li>1-amino-2-naphthol-4-sulfonic acid 0.5 g</li>
+                        <li>Sodium bisulfite (NaHSO₃) 30 g in 500 ml</li>
                     </ul>
-                `,
-                procedure: [
-                    'Add HCl to the sample.',
-                    'Read absorbance at 220 nm (for nitrate) and 275 nm (for organic interference).',
-                ],
-                calculation: 'Read nitrate concentration (mg N/L) from the calibration curve.'
-            },
-             {
-                id: 'nitrite',
-                title: 'Nitrogen, Nitrite',
-                intro: 'Spectrophotometric determination of nitrite using the Sulphanilamide method.',
-                apparatus: '<p>Spectrophotometer (543 nm).</p>',
-                reagents: `
-                    <h4>Reagents</h4>
-                    <ul class="list-disc list-outside pl-5 space-y-1">
-                        <li><strong>Colour reagent.</strong></li>
-                        <li><strong>Standard nitrite solution.</strong></li>
+                </li>
+                <li><strong>HCl (1+1):</strong> Equal volumes conc. HCl + water</li>
+                <li><strong>Standard SiO₂:</strong> Dissolve sodium metasilicate (Na₂SiO₃) for stock solution</li>
+            </ul>
+
+            <p class="text-sm mt-2"><strong>Procedure:</strong></p>
+            <ol class="text-sm space-y-1">
+                <li>Take <strong>50 ml sample</strong> in volumetric flask</li>
+                <li>Add <strong>1 ml HCl (1+1)</strong> — acidify</li>
+                <li>Add <strong>2 ml ammonium molybdate</strong>, mix, <strong>wait 5 min</strong></li>
+                <li>Add <strong>2 ml oxalic acid</strong> (destroys phosphate interference), mix, <strong>wait 2 min</strong></li>
+                <li>Add <strong>5 ml reducing agent</strong>, make up to 100 ml</li>
+                <li><strong>Wait 10 min</strong> for color development (stable up to 30 min)</li>
+                <li>Read absorbance at <strong>815 nm</strong></li>
+                <li>Plot standards curve (0-5 mg SiO₂/L), read concentration</li>
+            </ol>
+
+            <p class="text-sm mt-3"><strong>Calculation:</strong></p>
+            <pre class="bg-gray-100 p-2 rounded text-xs">SiO₂ (mg/L) = [mg SiO₂ from curve × 1000] / Sample ml
+Detection range: 0.1 - 5 mg SiO₂/L</pre>
+
+            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-3 mt-3">
+                <p class="text-xs text-yellow-800"><strong>⚠️ Interference:</strong> Phosphate (>10 mg/L) interferes — oxalic acid treatment removes. High color/turbidity — filter sample (0.45 μm).</p>
+            </div>
+
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-3 mt-3">
+                <p class="text-xs text-blue-700"><strong>📚 References:</strong> APHA 4500-SiO₂ C; IS 3025 (Part 55):2003; EPA Method 370.1</p>
+            </div>
+        </div>
+    `
+},
+
+{
+    id: 'sodium',
+    title: 'Sodium (Na⁺)',
+    intro: 'Flame emission photometry — determination by characteristic yellow emission of sodium ions.',
+    
+    content: `
+        <div class="prose max-w-none prose-orange">
+            <div class="bg-orange-50 border-l-4 border-orange-500 p-4 mb-4">
+                <h4 class="text-orange-800 font-bold">🔬 Overview</h4>
+                <p class="text-orange-700 text-sm"><strong>Sodium (Na⁺)</strong> is the most abundant cation in water — comes from halite (NaCl) dissolution, seawater intrusion, road salt, and industrial discharge. High Na (>200 mg/L) causes salty taste and is harmful for hypertension patients. WHO guideline = 200 mg/L (taste threshold).</p>
+            </div>
+
+            <h4 class="font-bold text-lg mt-4 mb-2 text-orange-800">Flame Photometry Method</h4>
+            <div class="bg-gray-50 p-3 rounded-lg mb-3">
+                <p class="text-sm"><strong>Principle:</strong> Na⁺ atoms excited in flame emit characteristic <strong>yellow light (589 nm — D-line)</strong>. Emission intensity directly proportional to Na concentration.</p>
+                <pre class="bg-gray-100 p-2 rounded text-xs mt-1"><code>Na⁺ (ground state) + Flame heat → Na* (excited)
+Na* → Na⁺ + hν (yellow light, 589 nm)
+Intensity measured by photometer</code></pre>
+            </div>
+
+            <p class="text-sm"><strong>Apparatus:</strong> Flame photometer with sodium filter (589 nm wavelength)</p>
+            
+            <p class="text-sm"><strong>Reagents:</strong></p>
+            <ul class="text-xs">
+                <li><strong>Stock Na solution (1000 mg Na/L):</strong> 
+                    <ul class="ml-4 list-circle">
+                        <li>Dissolve 2.542 g anhydrous NaCl (dried at 140°C) in distilled water</li>
+                        <li>Make up to 1 liter</li>
                     </ul>
-                `,
-                procedure: [
-                    'Add colour reagent to the sample.',
-                    'Read absorbance at 543 nm between 10 min and 2 h.',
-                ],
-                calculation: 'Read nitrite concentration (mg N/L) from the calibration curve.'
-            },
-             {
-                id: 'organic_nitrogen',
-                title: 'Nitrogen, Organic',
-                intro: 'Determination of organic nitrogen by the Kjeldahl method.',
-                apparatus: '<p>Digestion and Distillation apparatus.</p>',
-                reagents: `
-                    <h4>Reagents</h4>
-                    <ul class="list-disc list-outside pl-5 space-y-1">
-                        <li><strong>Digestion reagent (K₂SO₄, CuSO₄, H₂SO₄).</strong></li>
-                        <li><strong>Sodium hydroxide thiosulphate reagent.</strong></li>
-                        <li><strong>Indicating boric acid solution.</strong></li>
+                </li>
+                <li><strong>Working standards:</strong> Dilute stock to prepare 0, 1, 5, 10, 20, 50, 100 mg Na/L series</li>
+            </ul>
+
+            <p class="text-sm mt-2"><strong>Procedure:</strong></p>
+            <ol class="text-sm space-y-1">
+                <li>Set flame photometer to <strong>589 nm</strong></li>
+                <li>Warm-up instrument for 15-20 minutes</li>
+                <li><strong>Zero</strong> with distilled water (blank) aspiration</li>
+                <li>Aspirate standards in low to high order, note readings</li>
+                <li>Plot <strong>calibration curve</strong> (Na concentration vs emission intensity)</li>
+                <li><strong>Aspirate sample</strong> (if high concentration expected, dilute 1:10 or 1:100)</li>
+                <li>Match emission reading to curve, read concentration</li>
+            </ol>
+
+            <p class="text-sm mt-3"><strong>Calculation:</strong></p>
+            <pre class="bg-gray-100 p-2 rounded text-xs">Na (mg/L) = [Calibration curve reading] × Dilution factor
+
+Example:
+- Sample diluted 1:10 (1 ml sample + 9 ml water)
+- Curve reading = 8 mg Na/L
+- Actual Na = 8 × 10 = 80 mg/L</pre>
+
+            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-3 mt-3">
+                <p class="text-xs text-yellow-800"><strong>⚠️ Interferences:</strong></p>
+                <ul class="text-xs text-yellow-700">
+                    <li>High hardness (Ca, Mg &gt;1000 mg/L) — minimize by dilution</li>
+                    <li>Viscosity differences — match sample and standards matrix</li>
+                    <li>Ionization interference — usually negligible for Na</li>
+                </ul>
+            </div>
+
+            <div class="bg-green-50 border-l-4 border-green-500 p-3 mt-3">
+                <h5 class="font-semibold text-sm text-green-800">Alternative: Calculation Method</h5>
+                <p class="text-xs text-green-700">If complete cation-anion analysis is done (Ca, Mg, K, Cl, SO₄, HCO₃), Na can be calculated by <strong>ion balance equation</strong>:</p>
+                <pre class="bg-gray-100 p-2 rounded text-xs mt-1"><code>Na (meq/L) = Total anions (meq/L) - [Ca + Mg + K] (meq/L)
+Na (mg/L) = Na (meq/L) × 23</code></pre>
+            </div>
+
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-3 mt-3">
+                <p class="text-xs text-blue-700"><strong>📚 References:</strong> APHA 3500-Na B; IS 3025 (Part 48):2002; EPA Method 273.1; WHO Guidelines (2003) — Sodium in Drinking-water</p>
+            </div>
+        </div>
+    `
+},
+
+{
+    id: 'sulphate',
+    title: 'Sulphate (SO₄²⁻)',
+    intro: 'Turbidimetric/Nephelometric method — determination by barium sulphate precipitation.',
+    
+    content: `
+        <div class="prose max-w-none prose-fuchsia">
+            <div class="bg-fuchsia-50 border-l-4 border-fuchsia-500 p-4 mb-4">
+                <h4 class="text-fuchsia-800 font-bold">🔬 Overview</h4>
+                <p class="text-fuchsia-700 text-sm"><strong>Sulphate (SO₄²⁻)</strong> comes from natural minerals (gypsum-CaSO₄, barite-BaSO₄) dissolution, acid mine drainage, and industrial waste. High levels (&gt;500 mg/L) cause laxative effect (diarrhea) and bitter taste. WHO guideline = 500 mg/L; IS 10500 acceptable = 200 mg/L, permissible = 400 mg/L.</p>
+            </div>
+
+            <h4 class="font-bold text-lg mt-4 mb-2 text-fuchsia-800">Turbidimetric Method</h4>
+            <div class="bg-gray-50 p-3 rounded-lg mb-3">
+                <p class="text-sm"><strong>Principle:</strong> Under acidic conditions, sulphate ions are treated with <strong>barium chloride (BaCl₂)</strong> → <strong>barium sulphate (BaSO₄)</strong> white precipitate forms. BaSO₄ particles are suspended uniformly (stabilized by conditioning reagent) and turbidity is measured.</p>
+                <pre class="bg-gray-100 p-2 rounded text-xs mt-1"><code>SO₄²⁻ + Ba²⁺ → BaSO₄↓ (white precipitate, uniform suspension)
+Turbidity (NTU) ∝ SO₄²⁻ concentration
+Measurement: 420 nm (spectrophotometer) or nephelometer</code></pre>
+            </div>
+
+            <p class="text-sm"><strong>Apparatus:</strong></p>
+            <ul class="text-xs">
+                <li>Nephelometric turbidity meter (preferred) OR</li>
+                <li>Spectrophotometer at 420 nm</li>
+                <li>Magnetic stirrer</li>
+                <li>Stopwatch/timer</li>
+            </ul>
+
+            <p class="text-sm"><strong>Reagents:</strong></p>
+            <ul class="text-xs">
+                <li><strong>Buffer solution (MgCl₂ + Sodium acetate + Acetic acid):</strong>
+                    <ul class="ml-4 list-circle">
+                        <li>30 g MgCl₂·6H₂O + 5 g CH₃COONa·3H₂O + 1 ml glacial acetic acid in 500 ml</li>
+                        <li>pH ~4.2, stabilizes BaSO₄ crystal size</li>
                     </ul>
-                `,
-                procedure: [
-                    'Remove ammonia from the sample.',
-                    'Digest the remaining sample with digestion reagent.',
-                    'Distill the ammonia and titrate with standard acid.',
-                ],
-                calculation: 'Organic N (mg/L) = [ (A - B) &times; 280 ] / mL of sample'
-            },
-             {
-                id: 'ton',
-                title: 'Nitrogen, Total Oxidised (NO₂ + NO₃)',
-                intro: 'Determination of total oxidized nitrogen by cadmium reduction and spectrophotometric method.',
-                 apparatus: '<p>Reduction column, Spectrophotometer (543 nm).</p>',
-                reagents: `
-                    <h4>Reagents</h4>
-                    <ul class="list-disc list-outside pl-5 space-y-1">
-                        <li><strong>Copper-cadmium granules.</strong></li>
-                        <li><strong>Ammonium chloride-EDTA solution.</strong></li>
-                        <li><strong>Colour reagent.</strong></li>
+                </li>
+                <li><strong>Barium chloride crystals (20-30 mesh):</strong> BaCl₂·2H₂O powder</li>
+                <li><strong>Standard SO₄ solution:</strong>
+                    <ul class="ml-4 list-circle">
+                        <li>Stock (1000 mg SO₄/L): 1.479 g anhydrous Na₂SO₄ in 1 L</li>
+                        <li>Working standards: 0, 5, 10, 20, 30, 40 mg SO₄/L</li>
                     </ul>
-                `,
-                procedure: [
-                    'Pass sample through a cadmium reduction column to convert nitrate to nitrite.',
-                    'Follow the spectrophotometric method for nitrite.',
-                ],
-                calculation: 'Read TON concentration (mg N/L) from the calibration curve.'
-            },
-            {
-                id: 'odour',
-                title: 'Odour',
-                intro: 'Qualitative human receptor method.',
-                apparatus: '<p>Odourless glass bottle.</p>',
-                reagents: '<p>Not required.</p>',
-                procedure: [
-                    'Fill a cleaned odourless bottle half - full of sample, insert stopper, shake vigorously for 2 to 3 seconds and then quickly observe the odour.',
-                ],
-                calculation: 'Report the odour as: odour free, rotten egg, burnt sugar, soapy, fishy, septic, aromatic, chlorinous, alcoholic odour or any other specific odour.'
-            },
-             {
-                id: 'orthophosphate',
-                title: 'Phosphorus, Ortho Phosphate',
-                intro: 'Spectrophotometric determination of orthophosphate using the Ascorbic Acid method.',
-                 apparatus: '<p>Spectrophotometer (880 nm).</p>',
-                reagents: `
-                    <h4>Reagents</h4>
-                    <ul class="list-disc list-outside pl-5 space-y-1">
-                        <li><strong>Sulphuric acid, 5N.</strong></li>
-                        <li><strong>Potassium antimonyl tartrate solution.</strong></li>
-                        <li><strong>Ammonium molybdate solution.</strong></li>
-                        <li><strong>Ascorbic acid, 0.1M.</strong></li>
-                        <li><strong>Combined reagent (mixture of all four reagents).</strong></li>
+                </li>
+            </ul>
+
+            <p class="text-sm mt-2"><strong>Procedure:</strong></p>
+            <ol class="text-sm space-y-1">
+                <li>Take <strong>100 ml sample</strong> (clear, filter if turbid) in Erlenmeyer flask</li>
+                <li>Add <strong>20 ml buffer solution</strong>, mix</li>
+                <li>Place flask on <strong>magnetic stirrer</strong>, start stirring (constant speed)</li>
+                <li>While stirring, add <strong>spatula tip BaCl₂ crystals (approx. 0.3 g)</strong></li>
+                <li>Maintain <strong>exactly 60 seconds vigorous stirring</strong> (critical timing!)</li>
+                <li>Stop stirring, immediately transfer solution to <strong>cuvette/nephelometer cell</strong></li>
+                <li>Read turbidity/absorbance <strong>5 minutes after BaCl₂ addition</strong> (not before, not after — timing critical)</li>
+                <li>Prepare calibration curve with standards using same procedure</li>
+            </ol>
+
+            <p class="text-sm mt-3"><strong>Calculation:</strong></p>
+            <pre class="bg-gray-100 p-2 rounded text-xs">SO₄²⁻ (mg/L) = [Calibration curve reading] × Dilution factor
+
+Detection range: 1-40 mg SO₄/L (if higher, dilute 1:10 or 1:50)
+
+Example:
+- Sample diluted 1:10
+- Turbidity reading matches 25 mg/L on curve
+- Actual SO₄²⁻ = 25 × 10 = 250 mg/L</pre>
+
+            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-3 mt-3">
+                <h5 class="font-semibold text-xs text-yellow-800">⚠️ Critical Factors for Accuracy</h5>
+                <ul class="text-xs text-yellow-700">
+                    <li><strong>Timing crucial:</strong> Read exactly 5 min after BaCl₂ addition — BaSO₄ particles settle with time</li>
+                    <li><strong>Stirring speed:</strong> Constant vigorous stirring for 60 sec ensures uniform crystal size</li>
+                    <li><strong>Temperature:</strong> Maintain 25°C ± 3°C — affects precipitation kinetics</li>
+                    <li><strong>Interferences:</strong>
+                        <ul class="ml-4 list-circle">
+                            <li>Color/Turbidity in sample — pre-filter (0.45 μm)</li>
+                            <li>Suspended solids — centrifuge or settle overnight</li>
+                            <li>High silica (&gt;500 mg SiO₂/L) — may co-precipitate, dilution recommended</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="bg-green-50 border-l-4 border-green-500 p-3 mt-3">
+                <h5 class="font-semibold text-sm text-green-800">🔬 Alternative: Gravimetric Method (High Accuracy)</h5>
+                <p class="text-xs text-green-700">For precise measurement (standards, reference samples):</p>
+                <ol class="text-xs text-green-700">
+                    <li>Acidify 100-250 ml sample with HCl, boil</li>
+                    <li>Slowly add hot BaCl₂ solution — BaSO₄ precipitates</li>
+                    <li>Digest on hot plate for 2 hours, cool overnight</li>
+                    <li>Filter through ashless filter paper, wash</li>
+                    <li>Ignite at 800°C, weigh BaSO₄ residue</li>
+                    <li>SO₄²⁻ (mg/L) = [BaSO₄ weight (mg) × 0.4116 × 1000] / Sample ml</li>
+                </ol>
+            </div>
+
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-3 mt-3">
+                <p class="text-xs text-blue-700"><strong>📚 References:</strong> APHA 4500-SO₄²⁻ E (Turbidimetric), D (Gravimetric); IS 3025 (Part 24):1986; EPA Method 375.4; WHO Guidelines (2004) — Sulfate in Drinking-water</p>
+            </div>
+        </div>
+    `
+},
+
+{
+    id: 'temperature',
+    title: 'Temperature Measurement',
+    intro: 'Direct measurement by mercury/digital thermometer — fundamental physical parameter influencing chemical/biological reactions.',
+    
+    content: `
+        <div class="prose max-w-none prose-red">
+            <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
+                <h4 class="text-red-800 font-bold">🔬 Overview</h4>
+                <p class="text-red-700 text-sm"><strong>Temperature</strong> is a fundamental water quality parameter affecting: (1) Dissolved oxygen solubility (high temp → low DO), (2) Chemical reaction rates, (3) Aquatic organism metabolism, (4) Bacterial growth, (5) pH, conductivity readings. Measurement <strong>in-situ (field)</strong> preferred — samples cool down with time.</p>
+            </div>
+
+            <h4 class="font-bold text-lg mt-4 mb-2 text-red-800">Mercury Thermometer Method</h4>
+            <div class="bg-gray-50 p-3 rounded-lg mb-3">
+                <p class="text-sm"><strong>Principle:</strong> Mercury liquid thermal expansion — temperature increase → volume expands → column rises in calibrated glass tube.</p>
+            </div>
+
+            <p class="text-sm"><strong>Apparatus:</strong></p>
+            <ul class="text-xs">
+                <li><strong>Mercury thermometer:</strong> 
+                    <ul class="ml-4 list-circle">
+                        <li>Range: -10°C to +110°C (or appropriate for expected temp)</li>
+                        <li>Accuracy: ± 0.5°C or better</li>
+                        <li>Subdivision: 0.1°C or 1°C</li>
+                        <li>Immersion type: Total immersion or partial immersion (check marking)</li>
                     </ul>
-                `,
-                procedure: [
-                    'Add combined reagent to the sample.',
-                    'Wait for 10 to 30 minutes and read absorbance at 880 nm.',
-                ],
-                calculation: 'o-PO₄ (mg P/L) = [mg P from calibration curve &times; 1000] / mL of sample'
-            },
-             {
-                id: 'total_phosphorus',
-                title: 'Phosphorus, Total',
-                intro: 'Determination of total phosphorus by digestion and ascorbic acid spectrophotometric method.',
-                apparatus: '<p>Hot plate, Spectrophotometer (880 nm).</p>',
-                reagents: `
-                    <h4>Reagents</h4>
-                    <ul class="list-disc list-outside pl-5 space-y-1">
-                        <li><strong>Persulphate.</strong></li>
-                        <li><strong>Sulphuric acid, 10N.</strong></li>
-                        <li><strong>Combined reagent (as for orthophosphate).</strong></li>
+                </li>
+                <li><strong>Alternative:</strong> Digital thermometer (thermocouple/RTD probe) — faster response, ±0.1°C accuracy</li>
+            </ul>
+
+            <p class="text-sm mt-2"><strong>Procedure:</strong></p>
+            <ol class="text-sm space-y-1">
+                <li><strong>In-situ (field) measurement:</strong>
+                    <ul class="ml-4 list-circle">
+                        <li>Immerse thermometer directly in water body at sampling site</li>
+                        <li>Dip to manufacturer-specified immersion depth (usually mercury bulb + 5-7 cm stem)</li>
+                        <li><strong>Wait 2-3 minutes</strong> — for thermal equilibrium</li>
+                        <li>Take reading while thermometer is in water (don't remove — air temperature will affect it)</li>
                     </ul>
-                `,
-                procedure: [
-                    'Digest the sample with persulphate and sulfuric acid.',
-                    'Neutralize and follow the procedure for orthophosphate.',
-                ],
-                calculation: 'Total P (mg/L) = [mg P from calibration curve &times; 1000] / mL of sample'
-            },
-            {
-                id: 'potassium',
-                title: 'Potassium',
-                intro: 'Determination of potassium by flame emission photometric method.',
-                 apparatus: '<p>Flame photometer.</p>',
-                reagents: `
-                    <h4>Reagents</h4>
-                    <ul class="list-disc list-outside pl-5 space-y-1">
-                        <li><strong>Stock potassium solution (1000 mg K/L).</strong></li>
+                </li>
+                <li><strong>Laboratory (sample):</strong>
+                    <ul class="ml-4 list-circle">
+                        <li>Gently swirl sample container without opening (to make temperature uniform)</li>
+                        <li>Immediately open container and insert thermometer</li>
+                        <li>Wait 1-2 min for equilibration, read at eye level (avoid parallax error)</li>
+                        <li><strong>Note:</strong> Lab temperature does not reflect actual field temperature — always record field temp separately</li>
                     </ul>
-                `,
-                procedure: [
-                    'Set instrument at 766.5 nm.',
-                    'Prepare a calibration curve using standards.',
-                    'Measure emission intensity in the sample.',
-                ],
-                calculation: 'Read potassium concentration (mg/L) from the calibration curve.'
-            },
-            {
-                id: 'silicate',
-                title: 'Silicate',
-                intro: 'Spectrophotometric determination of silicate by the ammonium molybdate method.',
-                apparatus: '<p>Spectrophotometer (815 nm).</p>',
-                reagents: `
-                    <h4>Reagents</h4>
-                    <ul class="list-disc list-outside pl-5 space-y-1">
-                        <li><strong>Ammonium molybdate reagent.</strong></li>
-                        <li><strong>Oxalic acid solution.</strong></li>
-                        <li><strong>Reducing agent.</strong></li>
+                </li>
+            </ol>
+
+            <p class="text-sm mt-3"><strong>Reading & Reporting:</strong></p>
+            <pre class="bg-gray-100 p-2 rounded text-xs">Temperature reading: Read directly from thermometer scale
+Report: XX.X °C (e.g., 25.5°C)
+
+Conversion (if required):
+°F = (°C × 9/5) + 32
+K = °C + 273.15</pre>
+
+            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-3 mt-3">
+                <h5 class="font-semibold text-xs text-yellow-800">⚠️ Precautions</h5>
+                <ul class="text-xs text-yellow-700">
+                    <li><strong>Thermal shock:</strong> Protect mercury thermometer from sudden extreme temp changes — may crack</li>
+                    <li><strong>Parallax error:</strong> Read at eye level, see top edge of meniscus</li>
+                    <li><strong>Calibration:</strong> Verify thermometer at ice point (0°C) and boiling point (100°C at 1 atm)</li>
+                    <li><strong>Mercury hazard:</strong> If thermometer breaks, carefully clean mercury spill (droplets are toxic)</li>
+                </ul>
+            </div>
+
+            <div class="bg-green-50 border-l-4 border-green-500 p-3 mt-3">
+                <h5 class="font-semibold text-sm text-green-800">💡 Digital Thermometer Advantages</h5>
+                <ul class="text-xs text-green-700">
+                    <li>Faster response time (10-30 seconds)</li>
+                    <li>No mercury — environmentally safer</li>
+                    <li>Digital display — no parallax error</li>
+                    <li>Data logging capability (some models)</li>
+                    <li>Wide range (-50°C to +300°C possible)</li>
+                </ul>
+            </div>
+
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-3 mt-3">
+                <h5 class="font-semibold text-sm text-blue-800">📊 Temperature Significance in Water Quality</h5>
+                <table class="w-full border-collapse border mt-2 text-xs">
+                    <thead>
+                        <tr class="bg-blue-100">
+                            <th class="border p-2">Parameter Affected</th>
+                            <th class="border p-2">Temperature Effect</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="border p-2">Dissolved Oxygen</td><td class="border p-2">↑ Temp → ↓ DO solubility (e.g., 25°C: 8.3 mg/L; 30°C: 7.6 mg/L at 1 atm)</td></tr>
+                        <tr><td class="border p-2">pH</td><td class="border p-2">↑ Temp → slight ↓ pH (water ionization increases)</td></tr>
+                        <tr><td class="border p-2">Conductivity</td><td class="border p-2">↑ Temp → ↑ Conductivity (~2% per °C) — instruments auto-compensate to 25°C</td></tr>
+                        <tr><td class="border p-2">Chemical reactions</td><td class="border p-2">↑ Temp → reaction rates double every 10°C (van't Hoff rule)</td></tr>
+                        <tr><td class="border p-2">Bacterial growth</td><td class="border p-2">Optimal 20-37°C; &gt;60°C inhibits most organisms</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-3 mt-3">
+                <p class="text-xs text-blue-700"><strong>📚 References:</strong> APHA 2550 B; IS 3025 (Part 12):1987; WHO Guidelines — Temperature has no health-based limit, but is an operational parameter for disinfection/treatment</p>
+            </div>
+        </div>
+    `
+},
+
+{
+    id: 'turbidity',
+    title: 'Turbidity Measurement',
+    intro: 'Nephelometric method — measurement by light scattering from suspended particles.',
+    
+    content: `
+        <div class="prose max-w-none prose-slate">
+            <div class="bg-slate-50 border-l-4 border-slate-500 p-4 mb-4">
+                <h4 class="text-slate-800 font-bold">🔬 Overview</h4>
+                <p class="text-slate-700 text-sm"><strong>Turbidity</strong> measures optical clarity of water — suspended particles (clay, silt, organic matter, microorganisms) scatter light. High turbidity: (1) Aesthetic problem (cloudy appearance), (2) Interferes with disinfection (particles shield bacteria), (3) Indicates contamination. <strong>WHO guideline:</strong> &lt;5 NTU (ideally &lt;1 NTU); IS 10500: Acceptable 1 NTU, Permissible 5 NTU.</p>
+            </div>
+
+            <h4 class="font-bold text-lg mt-4 mb-2 text-slate-800">Nephelometric Method</h4>
+            <div class="bg-gray-50 p-3 rounded-lg mb-3">
+                <p class="text-sm"><strong>Principle:</strong> White light (tungsten lamp) is shone on the sample. Suspended particles scatter light at <strong>90° angle</strong>. The scattered light intensity is measured by a photodetector — intensity is directly proportional to turbidity. Unit: <strong>NTU (Nephelometric Turbidity Units)</strong> or FTU/FNU.</p>
+                <pre class="bg-gray-100 p-2 rounded text-xs mt-1"><code>Light scattering ∝ Particle concentration × Particle size
+90° detector optimizes sensitivity for fine particles
+Rayleigh scattering principle applies</code></pre>
+            </div>
+
+            <p class="text-sm"><strong>Apparatus:</strong></p>
+            <ul class="text-xs">
+                <li><strong>Nephelometric turbidity meter:</strong>
+                    <ul class="ml-4 list-circle">
+                        <li>Light source: Tungsten lamp (wavelength 400-680 nm, centered ~550 nm)</li>
+                        <li>Detector: measures scattered light at 90°</li>
+                        <li>Sample cell: Optically clear glass/plastic tube</li>
+                        <li>Range: 0-1000 NTU (auto-ranging)</li>
+                        <li>Accuracy: ±2% or ±0.01 NTU (whichever greater)</li>
                     </ul>
-                `,
-                procedure: [
-                    'Add HCl and ammonium molybdate to sample, followed by oxalic acid and reducing agent.',
-                    'Read absorbance at 815 nm.',
-                ],
-                calculation: 'Read silicate concentration (mg SiO₂/L) from the calibration curve.'
-            },
-            {
-                id: 'sodium',
-                title: 'Sodium',
-                intro: 'Determination of sodium by flame emission photometric method.',
-                apparatus: '<p>Flame photometer.</p>',
-                reagents: `
-                    <h4>Reagents</h4>
-                    <ul class="list-disc list-outside pl-5 space-y-1">
-                        <li><strong>Stock sodium solution (1000 mg Na/L).</strong></li>
+                </li>
+                <li><strong>Sample cells:</strong> Matched pair, scratch-free, clean</li>
+            </ul>
+
+            <p class="text-sm"><strong>Reagents:</strong></p>
+            <ul class="text-xs">
+                <li><strong>Primary Standard (Formazin Polymer Suspension):</strong>
+                    <ul class="ml-4 list-circle">
+                        <li><strong>Stock 4000 NTU:</strong> Mix equal volumes (5 ml each) of:
+                            <ul class="ml-4">
+                                <li>Solution I: 1.0 g hydrazine sulfate [(NH₂)₂·H₂SO₄] in 100 ml water</li>
+                                <li>Solution II: 10.0 g hexamethylenetetramine [(CH₂)₆N₄] in 100 ml water</li>
+                            </ul>
+                        </li>
+                        <li>Mix, stand 24 hours at 25°C — white polymer suspension forms</li>
+                        <li>Dilute to 100 ml = 400 NTU stock</li>
+                        <li><strong>Caution:</strong> Hydrazine sulfate is carcinogenic — handle with care, use commercial formazin standards preferred</li>
                     </ul>
-                `,
-                procedure: [
-                    'Set instrument at 589 nm.',
-                    'Prepare a calibration curve using standards.',
-                    'Measure emission intensity in the sample.',
-                ],
-                calculation: 'Read sodium concentration (mg/L) from the calibration curve.'
-            },
-            {
-                id: 'sulphate',
-                title: 'Sulphate',
-                intro: 'Determination of sulphate by the nephelometric method.',
-                 apparatus: '<p>Nephelometric turbidity meter or spectrophotometer (420 nm).</p>',
-                reagents: `
-                    <h4>Reagents</h4>
-                    <ul class="list-disc list-outside pl-5 space-y-1">
-                        <li><strong>Buffer solution.</strong></li>
-                        <li><strong>Barium chloride crystals.</strong></li>
+                </li>
+                <li><strong>Working standards:</strong> Dilute 400 NTU stock to prepare 0, 5, 10, 20, 40, 100 NTU standards</li>
+            </ul>
+
+            <p class="text-sm mt-2"><strong>Procedure:</strong></p>
+            <ol class="text-sm space-y-1">
+                <li><strong>Instrument calibration:</strong>
+                    <ul class="ml-4 list-circle">
+                        <li>Warm-up nephelometer as per manufacturer instructions (typically 10-15 min)</li>
+                        <li>Rinse sample cell with distilled water, wipe with lint-free tissue (no scratches)</li>
+                        <li><strong>Zero standard (0 NTU):</strong> Calibrate zero with particle-free distilled water</li>
+                        <li><strong>High standard (e.g., 100 NTU):</strong> Adjust span with Formazin standard</li>
+                        <li>Verify intermediate standards (10, 40 NTU) — should be within ±5%</li>
                     </ul>
-                `,
-                procedure: [
-                    'Add buffer solution to the sample.',
-                    'Add barium chloride crystals and stir for 60 seconds.',
-                    'Measure turbidity after 5 minutes.',
-                ],
-                calculation: 'Read sulphate concentration (mg/L) from the calibration curve.'
-            },
-             {
-                id: 'temperature',
-                title: 'Temperature',
-                intro: 'Mercury thermometer method.',
-                apparatus: '<p>Mercury thermometer.</p>',
-                reagents: '<p>Not required.</p>',
-                procedure: [
-                    'Immerse thermometer in the sample up to the mark specified by the manufacturer and read temperature after equilibration.',
-                ],
-                calculation: 'Read directly from the thermometer.'
-            },
-            {
-                id: 'turbidity',
-                title: 'Turbidity',
-                intro: 'Nephelometric method.',
-                apparatus: '<p>Nephelometric turbidity meter.</p>',
-                reagents: `
-                    <h4>Reagents</h4>
-                    <ul class="list-disc list-outside pl-5 space-y-1">
-                        <li><strong>Formazin polymer suspension (4000 NTU stock).</strong></li>
+                </li>
+                <li><strong>Sample measurement:</strong>
+                    <ul class="ml-4 list-circle">
+                        <li><strong>Gently invert</strong> sample to mix (avoid bubbles — they scatter light)</li>
+                        <li>Fill clean cell with sample (up to meniscus, no air bubbles)</li>
+                        <li>Wipe outer surface of cell with clean tissue (remove fingerprints/water droplets)</li>
+                        <li>Insert cell in instrument, maintain <strong>same orientation</strong> (align cell mark)</li>
+                        <li>Wait for stable reading (usually 10-30 seconds)</li>
+                        <li>Note reading — display shows NTU directly</li>
                     </ul>
-                `,
-                procedure: [
-                    'Calibrate nephelometer according to manufacturer’s operating instructions.',
-                    'Gently agitate sample. Wait until air bubbles disappear and pour sample into cell. Read turbidity directly from instrument display.',
-                ],
-                calculation: 'Read directly from the instrument display.'
-            }
+                </li>
+                <li><strong>Repeat measurement:</strong> Take duplicate reading of same sample — difference &lt;5% acceptable</li>
+            </ol>
+
+            <p class="text-sm mt-3"><strong>Reading & Reporting:</strong></p>
+            <pre class="bg-gray-100 p-2 rounded text-xs">Turbidity: Read directly from instrument display
+Report: XX.X NTU (e.g., 2.3 NTU)
+
+Reporting precision:
+0-1 NTU: Report to 0.01 NTU
+1-10 NTU: Report to 0.1 NTU
+10-100 NTU: Report to 1 NTU
+>100 NTU: Report to nearest 10 NTU</pre>
+
+            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-3 mt-3">
+                <h5 class="font-semibold text-xs text-yellow-800">⚠️ Precautions & Sources of Error</h5>
+                <ul class="text-xs text-yellow-700">
+                    <li><strong>Air bubbles:</strong> Avoid bubbles while filling sample — scatter light causing high reading</li>
+                    <li><strong>Dirty cells:</strong> Scratches, fingerprints, water droplets outside cell — false high readings; always clean with lint-free tissue</li>
+                    <li><strong>Sample aging:</strong> Turbidity can change with time (particles settle or coagulate); measure immediately after collection</li>
+                    <li><strong>Temperature:</strong> Maintain samples at constant temp (±1°C) — affects particle suspension</li>
+                    <li><strong>Color interference:</strong> Highly colored samples (true color >500 Pt-Co units) absorb light — may give low turbidity reading; dilution or color correction required</li>
+                    <li><strong>Stray light:</strong> External light should not enter instrument — keep lid closed</li>
+                </ul>
+            </div>
+
+            <div class="bg-green-50 border-l-4 border-green-500 p-3 mt-3">
+                <h5 class="font-semibold text-sm text-green-800">💡 Quality Control</h5>
+                <ul class="text-xs text-green-700">
+                    <li><strong>Daily checks:</strong> Run zero and span standard before sample analysis</li>
+                    <li><strong>Cell maintenance:</strong> Clean weekly with non-abrasive detergent, rinse thoroughly; replace if scratched</li>
+                    <li><strong>Formazin stability:</strong> Stock solution stable for 1 year (dark bottle, 4°C); prepare working standards monthly</li>
+                    <li><strong>Commercial standards:</strong> Pre-made formazin/polymer standards available (safer than preparing hydrazine-based formazin)</li>
+                    <li><strong>Alternative standards:</strong> AMCO-AEPA polymer beads, Styrene-divinylbenzene copolymer suspensions</li>
+                </ul>
+            </div>
+
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-3 mt-3">
+                <h5 class="font-semibold text-sm text-blue-800">📊 Turbidity Interpretation</h5>
+                <table class="w-full border-collapse border mt-2 text-xs">
+                    <thead>
+                        <tr class="bg-blue-100">
+                            <th class="border p-2">Turbidity (NTU)</th>
+                            <th class="border p-2">Visual Appearance</th>
+                            <th class="border p-2">Drinking Water Quality</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="border p-2">&lt; 1</td><td class="border p-2">Crystal clear</td><td class="border p-2"><strong>Excellent</strong> — Ideal for drinking</td></tr>
+                        <tr><td class="border p-2">1-5</td><td class="border p-2">Slight haze</td><td class="border p-2"><strong>Acceptable</strong> — Disinfection effective</td></tr>
+                        <tr class="bg-yellow-50"><td class="border p-2">5-25</td><td class="border p-2">Cloudy</td><td class="border p-2"><strong>Marginal</strong> — Treatment required</td></tr>
+                        <tr class="bg-orange-50"><td class="border p-2">25-100</td><td class="border p-2">Very cloudy</td><td class="border p-2"><strong>Unacceptable</strong> — Filtration essential</td></tr>
+                        <tr class="bg-red-50"><td class="border p-2">&gt; 100</td><td class="border p-2">Opaque, muddy</td><td class="border p-2"><strong>Highly polluted</strong> — Unfit for drinking</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-3 mt-3">
+                <p class="text-xs text-blue-700"><strong>📚 References:</strong> APHA 2130 B; IS 3025 (Part 10):1984 (Reaffirmed 2021); EPA Method 180.1; ISO 7027:2016; WHO Guidelines for Drinking-water Quality, 4th Ed. (2017)</p>
+            </div>
+        </div>
+    `
+}
         ]
     }
 }
