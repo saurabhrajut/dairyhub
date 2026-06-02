@@ -401,3 +401,16 @@ body.theme-cream .background-animations .animated-icon {
   }
 }
 /* ===== END: Animated Background ===== */
+
+
+/* ===== NEW: Custom Styled Scrollbar ===== */
+.styled-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.styled-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.styled-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 10px;
+}
