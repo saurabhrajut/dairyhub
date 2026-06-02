@@ -3340,10 +3340,9 @@ Yellow-brown colored complex (λmax ≈ 470 nm)
     `
 }
     ]
-}; // ✅ Comma hatakar yahan semi-colon lagayein (pichla block close karne ke liye)
+  }, // <-- Semicolon hatakar yahan }, lagayein kyunki 'hi' ka section khatam hua hai.
 
-export const adulterationContent = {
-    en: {
+  en: { // <-- Dobara 'export const...' nahi likhna hai, sirf 'en:' likhna hai.
       main_title: "Raw Milk Quality and Adulteration",
       main_description: "A comprehensive scientific guide for platform testing and adulteration detection in milk. This guide covers all standard tests, chemical reactions, health hazards, and FSSAI/BIS standards in detail.",
       back_to_categories: "Back to Categories",
