@@ -4042,318 +4042,1857 @@ Reporting precision:
     },
     en: {
         title: "Water Testing Guide",
-        description: "A guide to common parameters for checking water quality, their simplified procedures, and calculation methods.",
+        description: "A comprehensive guide to common water quality parameters, their detailed scientific procedures, reagents, and calculation methods. This guide is prepared according to BIS, APHA, and WHO standards.",
         backToTopics: "Back to Topics",
         important_note: {
-            title: "Important Note:",
-            text: "Always follow safety rules and wear appropriate protective gear (PPE) when working in the lab. For accurate results, it is better to follow certified labs and standard methods."
+            title: "⚠️ Important Note:",
+            text: `Always follow safety protocols and wear appropriate Personal Protective Equipment (PPE) such as lab coat, gloves, and safety goggles when working in the laboratory. For accurate results, it is recommended to follow certified laboratories and standard methods.
+            
+            Reference Standards:
+            • BIS 3025 (Bureau of Indian Standards) - Methods of Sampling and Test for Water and Wastewater
+            • APHA Standard Methods for the Examination of Water and Wastewater (23rd Edition)
+            • WHO Guidelines for Drinking-water Quality (4th Edition)
+            • IS 10500:2012 - Drinking Water Specifications`
         },
         tests: [
             {
                 id: 'alkalinity_p',
                 title: 'Alkalinity, Phenolphthalein (pH 8.3)',
-                intro: 'This test measures hydroxide and carbonate alkalinity in water.',
-                apparatus: '<p>Standard laboratory glassware such as burettes, volumetric flasks, conical flasks and beakers.</p>',
-                reagents: `
-                    <h4>Reagents</h4>
-                    <ul class="list-disc list-outside pl-5 space-y-1">
-                        <li><strong>Standard sodium carbonate, approximately 0.05 N:</strong> Dry 3 to 5 g sodium carbonate, Na₂CO₃, at 250°C for 4h and cool in a desiccator. Accurately weigh 2.5±0.2 g to the nearest mg, dissolve in distilled water and make to 1 L.</li>
-                        <li><strong>Standard H₂SO₄, approximately 0.1N:</strong> Dilute 2.8 mL conc. sulphuric acid to 1 L. Standardise against 40.00 mL 0.05N Na₂CO₃.</li>
-                        <li><strong>Standard sulphuric acid, 0.02 N:</strong> Prepare by calculation from the above 0.1N solution.</li>
-                        <li><strong>Phenolphthalein indicator solution, alcoholic, pH 8.3:</strong> Dissolve 5 g phenolphthalein in 500 mL 95% ethyl alcohol. Add 500 mL distilled water.</li>
-                    </ul>
-                `,
-                procedure: [
-                    'Take 25 to 50 mL sample in a conical flask.',
-                    'Add 2 to 3 drops of phenolphthalein indicator.',
-                    'If it turns pink (pH > 8.3), titrate with 0.02 N H₂SO₄ to disappearance of the colour.',
-                    'Record mL titrant used.',
-                ],
-                calculation: `Phenolphthalein Alkalinity (as mg/L CaCO₃) = (A &times; Normality of Acid &times; 50000) / mL of sample<br/><p class="text-xs mt-2">where A = mL titrant used to phenolphthalein end point.</p>`
-            },
-            {
-                id: 'alkalinity_t',
-                title: 'Alkalinity, Total (pH 4.5)',
-                intro: 'This test measures the total alkalinity of water.',
-                 apparatus: '<p>Standard laboratory glassware such as burettes, volumetric flasks and beakers.</p>',
-                reagents: `
-                    <h4>Reagents</h4>
-                     <ul class="list-disc list-outside pl-5 space-y-1">
-                        <li><strong>Standard sulphuric acid, 0.02 N:</strong> As prepared for phenolphthalein alkalinity.</li>
-                        <li><strong>Bromcresol green indicator, pH 4.5:</strong> Dissolve 100mg bromcresol green sodium salt in 100 mL distilled water.</li>
-                    </ul>
-                `,
-                procedure: [
-                    'Add 2 to 3 drops of bromcresol green indicator.',
-                    'Titrate until change in colour (blue to yellow, pH 4.9 to 4.3) is observed.',
-                    'Record total mL titrant used.',
-                ],
-                calculation: `Total Alkalinity (as mg/L CaCO₃) = (B &times; Normality of Acid &times; 50000) / mL of sample<br/><p class="text-xs mt-2">where B = total mL of titrant used to bromcresol green end point.</p>`
-            },
-            {
-                id: 'aluminum',
-                title: 'Aluminum',
-                intro: 'Spectrophotometric determination of aluminum using Eriochrome Cyanine R method.',
+                intro: `This test measures hydroxide (OH⁻) and carbonate (CO₃²⁻) alkalinity in water.
+                
+                🔬 Scientific Background:
+                Phenolphthalein alkalinity represents alkalinity above pH 8.3. At this pH:
+                • All hydroxide (OH⁻) is neutralized
+                • All carbonate (CO₃²⁻) is converted to bicarbonate (HCO₃⁻)
+                
+                Reactions:
+                OH⁻ + H⁺ → H₂O
+                CO₃²⁻ + H⁺ → HCO₃⁻
+                
+                📊 Permissible Limits:
+                • Drinking Water (IS 10500): No specific limit, but pH should typically be 6.5-8.5
+                • Test conducted as per BIS 3025 (Part 23): 1984
+                
+                💡 Practical Significance:
+                • High P-alkalinity indicates scaling potential in industrial water treatment
+                • Its control is essential in swimming pools and boiler water`,
+                
                 apparatus: `
-                    <ul class="list-disc list-outside pl-5 space-y-1">
-                        <li><strong>Spectrophotometer:</strong> For use at 535 nm with light path of 1 cm or longer.</li>
-                        <li><strong>Glassware:</strong> Treat all glassware with 1 + 1 warm HCl and rinse with aluminium free distilled water.</li>
-                    </ul>
-                `,
+                <ul class="list-disc list-outside pl-5 space-y-1">
+                    <li><strong>Burette (50 mL):</strong> With 0.1 mL accuracy, preferably class A</li>
+                    <li><strong>Conical Flask (250 mL):</strong> Erlenmeyer type</li>
+                    <li><strong>Volumetric Flask (1000 mL):</strong> Class A</li>
+                    <li><strong>Pipette (25 mL, 50 mL):</strong> Class A volumetric pipettes</li>
+                    <li><strong>Magnetic Stirrer:</strong> For accurate titration endpoint detection</li>
+                    <li><strong>White Tile:</strong> Place under burette to clearly see color change</li>
+                </ul>`,
+                
                 reagents: `
                     <h4>Reagents</h4>
                     <ul class="list-disc list-outside pl-5 space-y-1">
-                        <li><strong>Stock aluminum solution:</strong> Dissolve 8.791 g aluminum potassium sulphate, AlK(SO₄)₂.12H₂O, in water and dilute to 1 L.</li>
-                        <li><strong>Standard aluminum solution:</strong> Dilute 10 mL stock aluminum solution to 1000 mL with distilled water; 1.00 mL = 5.00 µg Al. Prepare daily.</li>
-                        <li><strong>Sulphuric acid, H₂SO₄, 0.02 N and 6 N.</strong></li>
-                        <li><strong>Ascorbic acid solution:</strong> Dissolve 0.1 g ascorbic acid in water and make up to 100 mL in a volumetric flask. Prepare fresh daily.</li>
-                        <li><strong>Buffer reagent:</strong> Dissolve 136 g sodium acetate, NaC₂H₃O₂.3H₂O, in water, add 40 mL 1N acetic acid and dilute to 1 L.</li>
-                        <li><strong>Working dye solution (Eriochrome Cyanine R):</strong> Dilute 10.0 mL of stock dye solution to 100 mL in a volumetric flask with water.</li>
+                        <li>
+                            <strong>Standard Sodium Carbonate, ~0.05 N (Primary Standard):</strong>
+                            <br/>Preparation method:
+                            <ul class="list-disc list-outside pl-5 mt-1">
+                                <li>Dry Na₂CO₃ at 250°C for 4 hours in muffle furnace (to remove moisture and CO₂)</li>
+                                <li>Cool in desiccator with silica gel (approx. 30 min)</li>
+                                <li>Accurately weigh 2.5±0.2 g on analytical balance (to 4 decimal places)</li>
+                                <li>Dissolve in small amount of distilled water, then transfer to 1000 mL volumetric flask</li>
+                                <li>Make up to mark with distilled water and mix thoroughly</li>
+                            </ul>
+                            <br/><em>Normality = (Weight in g × 1000) / (Equivalent weight × Volume in mL)</em>
+                            <br/><em>Equivalent weight of Na₂CO₃ = 53 g/eq</em>
+                        </li>
+                        <li>
+                            <strong>Standard H₂SO₄, ~0.1N:</strong>
+                            <br/>Preparation method:
+                            <ul class="list-disc list-outside pl-5 mt-1">
+                                <li>Carefully add 2.8 mL concentrated H₂SO₄ (specific gravity 1.84) to distilled water (always add acid to water, never water to acid)</li>
+                                <li>Dilute to 1 liter</li>
+                                <li>Standardization: Take 40.00 mL 0.05N Na₂CO₃ in conical flask, add 2-3 drops methyl orange indicator, titrate with H₂SO₄ until orange color appears</li>
+                                <li>Normality = (mL Na₂CO₃ × N of Na₂CO₃) / mL H₂SO₄</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>Standard H₂SO₄, 0.02N (Working Standard):</strong>
+                            <br/>Prepare from 0.1N H₂SO₄ solution by calculation:
+                            <br/>Use V₁N₁ = V₂N₂ formula
+                            <br/>Example: To make 1000 mL 0.02N from 200 mL 0.1N
+                        </li>
+                        <li>
+                            <strong>Phenolphthalein Indicator Solution (pH range 8.2-10.0):</strong>
+                            <ul class="list-disc list-outside pl-5 mt-1">
+                                <li>Dissolve 5 g phenolphthalein powder in 500 mL 95% ethyl alcohol</li>
+                                <li>Add 500 mL CO₂-free distilled water</li>
+                                <li>If solution turns pink, add 0.02N NaOH drop-wise until color just disappears</li>
+                                <li>Store in dark bottle (degrades in light)</li>
+                            </ul>
+                        </li>
                     </ul>
+                    <p class="text-xs mt-2 bg-yellow-50 p-2 rounded">⚠️ <strong>Quality Check:</strong> Verify each new batch of reagent with certified reference material (CRM).</p>
                 `,
+                
                 procedure: [
-                    'Prepare a series of standards containing 0 to 7 µg aluminum.',
-                    'To each standard and sample, add 1 mL 0.02N H₂SO₄, 1 mL ascorbic acid, 10 mL buffer, and 5 mL working dye reagent.',
-                    'Make up the total volume to 50 mL and read absorbance at 535 nm within 5-15 minutes.',
-                    'Determine sample concentration from the calibration curve.',
+                    `Sample Collection and Preparation:
+                    • Collect sample in polyethylene or glass container
+                    • Test should be conducted as soon as possible (within 24 hours)
+                    • Do not filter, shake, or dilute sample unless necessary`,
+                    
+                    `Pipette 25-50 mL sample into conical flask (use smaller volume if alkalinity is high):
+                    • Criterion for choosing sample volume: Based on expected alkalinity
+                    • <500 mg/L: 50 mL sample
+                    • 500-1000 mg/L: 25 mL sample
+                    • >1000 mg/L: Dilute and test`,
+                    
+                    `Add 2-3 drops phenolphthalein indicator:
+                    • If solution remains colorless: P-alkalinity = zero (pH already below 8.3)
+                    • If solution turns pink/red: Continue titration`,
+                    
+                    `Carefully titrate with 0.02N H₂SO₄ until pink color completely disappears:
+                    • Add acid drop by drop from burette, continuously mixing on magnetic stirrer
+                    • Near endpoint, make half-drop additions
+                    • Color change should be permanent (stable for 30 seconds)`,
+                    
+                    `Note burette reading (V₁ mL) - this is the volume for P-alkalinity`,
+                    
+                    `Perform blank titration: Follow same procedure with distilled water and subtract blank value`
                 ],
-                calculation: 'Read aluminum concentration (mg/L) from the calibration curve.'
-            },
-            {
-                id: 'bod',
-                title: 'Biochemical Oxygen Demand (BOD)',
-                intro: 'This test is based on the bottle incubation method for 3 days at 27°C.',
-                apparatus: `<ul class="list-disc list-outside pl-5 space-y-1">
-                    <li>300 mL BOD bottles, narrow mouth, flared lip, with tapered and pointed ground glass stoppers.</li>
-                    <li>Air incubator or water bath, thermostatically controlled at 27 ± 1 °C. Light entry must be prevented in order to avoid photosynthetic oxygen production.</li>
-                    <li>Accessories: plastic tube, screw-pin and a 5-10 L water container.</li>
-                    </ul>`,
-                reagents: `<h4>Reagents</h4>
-                    <ul class="list-disc list-outside pl-5 space-y-1">
-                        <li><strong>Phosphate buffer solution:</strong> Dissolve 8.5 g KH₂PO₄, 21.75 g K₂HPO₄, 33.4 g Na₂HPO₄·7H₂O and 1.7 g NH₄Cl in 1 L distilled water.</li>
-                        <li><strong>Magnesium sulphate solution:</strong> Dissolve 22.5 g MgSO₄·7H₂O in 1 L distilled water.</li>
-                        <li><strong>Calcium chloride solution:</strong> Dissolve 27.5 g CaCl₂ in 1 L distilled water.</li>
-                        <li><strong>Ferric chloride solution:</strong> Dissolve 0.25 g FeCl₃·6H₂O in 1 L distilled water.</li>
-                        <li><strong>Acid and alkali solution:</strong> 1N NaOH and 1N H₂SO₄. Use for neutralising samples.</li>
-                        <li><strong>Glucose-glutamic acid solution (prepare fresh):</strong> Dissolve 150 mg dry reagent grade glucose and 150 mg dry reagent grade glutamic acid in 1 L distilled water.</li>
-                        <li><strong>Sample dilution water:</strong> Add 1 mL each of phosphate buffer, MgSO₄, CaCl₂, and FeCl₃ solutions per litre distilled water.</li>
-                    </ul>`,
-                procedure: [
-                    'Prepare required amount of dilution water at the rate of 1000 to 1200 mL per sample per dilution. Bring the diluted water temperature to 27 °C. Saturate with air by shaking in a partially filled bottle, by bubbling with organic free filtered air or by storing in cotton-plugged bottles for a day.',
-                    'Some samples do not contain sufficient microbial population (for example, some industrial wastes, high temperature wastes, or wastes with extreme pH values). For such wastes, the dilution water is seeded using effluent from a biological treatment system processing the waste. Where this is not available, use supernatant from domestic wastewater after settling for at least 1 h but not more than 36 h. Seed from a surface water body receiving the waste may also be suitable. Add enough seed volume such that the DO uptake of the seeded dilution water is between 0.6 and 1.0 mg/L. For domestic wastewater seed, usually 4 to 6 mL seed / L of dilution water is required. Surface water samples usually do not require seeding.',
-                    `Dilution of sample. Dilutions must result in a sample with a residual DO (after 3 days of incubation) of at least 1 mg/L and a DO uptake of at least 2 mg/L. Make several dilutions using the Table and experience with the particular sample source. Polluted surface waters may have 5 to 25 mg/L BOD.<br/><table class="w-full text-left border-collapse mt-2"><thead><tr><th class="border p-2" colspan="2">Using percent mixture</th><th class="border p-2" colspan="2">By direct pipetting into 300mL bottles</th></tr><tr><th class="border p-2">Range of BOD</th><th class="border p-2">% mixture</th><th class="border p-2">Range of BOD</th><th class="border p-2">mL Sample</th></tr></thead><tbody><tr><td class="border p-2">1,000 - 3,500</td><td class="border p-2">0.2</td><td class="border p-2">1,200 - 4,200</td><td class="border p-2">0.5</td></tr><tr><td class="border p-2">400 - 1,400</td><td class="border p-2">0.5</td><td class="border p-2">600 - 2,100</td><td class="border p-2">1.0</td></tr><tr><td class="border p-2">200 - 700</td><td class="border p-2">1.0</td><td class="border p-2">300 - 1,050</td><td class="border p-2">2.0</td></tr><tr><td class="border p-2">100 - 350</td><td class="border p-2">2.0</td><td class="border p-2">120 - 420</td><td class="border p-2">5.0</td></tr><tr><td class="border p-2">40 - 140</td><td class="border p-2">5.0</td><td class="border p-2">60 - 210</td><td class="border p-2">10.0</td></tr><tr><td class="border p-2">20 - 70</td><td class="border p-2">10.0</td><td class="border p-2">30 - 105</td><td class="border p-2">20.0</td></tr><tr><td class="border p-2">10 - 35</td><td class="border p-2">20.0</td><td class="border p-2">12 - 42</td><td class="border p-2">50.0</td></tr><tr><td class="border p-2">4 - 14</td><td class="border p-2">50.0</td><td class="border p-2">6 - 21</td><td class="border p-2">100.0</td></tr><tr><td class="border p-2">0 - 7</td><td class="border p-2">100.0</td><td class="border p-2">0 - 7</td><td class="border p-2">300.0</td></tr></tbody></table><br/>For preparing dilution in graduated cylinders, siphon dilution water, seeded if necessary, into a 1 to 2 L capacity cylinder. Siphoning should always be done slowly without bubbling, use a screw-pin on the tube to regulate the flow. Keep the tip of the tube just below the water surface as it rises. Fill cylinder half full, add desired quantity of sample and dilute to appropriate level, mix with plunger type mixing rod. Siphon mixed diluted sample in three BOD bottles, stopper without entraining any air. Determine initial DO (method 1.9) on one bottle and incubate the other two at 27 °C. Determine final DO (method 1.9) in duplicate after 3 days.<br/>For direct pipetting, siphon the desired sample volume to individual bottles and fill with enough dilution water. Complete the test as in the earlier case.`,
-                    'Dilution water blank. Find the DO consumption of unseeded dilution water by determining initial and final DO as in c above. It should not be more than 0.2 mg/L.',
-                    'Seed control. Determine the DO uptake by seeding material according to the procedure in c above.',
-                ],
+                
                 calculation: `
-                  <p><strong>When dilution water is not seeded:</strong></p>
-                  <code>BOD₃,₂₇ (mg/L) = (D₀ - D₃) / P</code>
-                  <p class="mt-4"><strong>When dilution water is seeded:</strong></p>
-                  <code>BOD₃,₂₇ (mg/L) = [ (D₀ - D₃) - f &times; (B₀ - B₃) ] / P</code>
-                  <p class="text-xs mt-2">where: D₀=initial DO, D₃=DO after 3 days, P=decimal volumetric fraction of sample, B₀=initial DO of seed, B₃=final DO of seed, f=ratio of seed.</p>
-                  <p class="mt-4"><strong>Notes:</strong></p>
-                  <ul class="list-disc list-outside pl-5 space-y-1 text-xs">
-                    <li>Report average results of duplicates if both dilutions are correct.</li>
-                    <li>Formula does not correct for BOD of dilution water which is only valid for dilution water meeting the criteria. BOD of dilution water should not be more than 0.2 mg/L, preferably lower than 0.1 mg/L.</li>
-                    <li>The standard glucose-glutamic acid should have BOD of 198 ± 37 mg/L (BIS3025 (part 44): 1993). Check procedure otherwise.</li>
-                    <li>Report BOD values lower than 0.5mg/L or 2 times the measured BOD of the dilution water (whichever is lower) as lower than detection limit.</li>
-                  </ul>
-                `
+                <div class="bg-blue-50 p-3 rounded">
+                <strong>Formula:</strong><br/>
+                Phenolphthalein Alkalinity (mg/L as CaCO₃) = (A × N × 50,000) / V
+                
+                <br/><br/>Where:
+                <ul class="list-disc list-outside pl-5 text-sm">
+                    <li>A = mL of titrant used to P-endpoint (blank corrected)</li>
+                    <li>N = Exact normality of H₂SO₄</li>
+                    <li>50,000 = Equivalent weight of CaCO₃ (50) × 1000</li>
+                    <li>V = Sample volume (mL)</li>
+                </ul>
+                
+                <br/><strong>Example Calculation:</strong>
+                <br/>If A = 3.5 mL, N = 0.0200, V = 50 mL
+                <br/>P-Alkalinity = (3.5 × 0.0200 × 50,000) / 50 = 70 mg/L as CaCO₃
+                
+                <br/><br/><strong>Interpretation of Alkalinity Forms:</strong>
+                <table class="w-full text-left border-collapse mt-2 text-xs">
+                    <thead>
+                        <tr>
+                            <th class="border p-1">Condition</th>
+                            <th class="border p-1">Hydroxide Alk.</th>
+                            <th class="border p-1">Carbonate Alk.</th>
+                            <th class="border p-1">Bicarbonate Alk.</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="border p-1">P = 0</td><td class="border p-1">0</td><td class="border p-1">0</td><td class="border p-1">T</td></tr>
+                        <tr><td class="border p-1">P < T/2</td><td class="border p-1">0</td><td class="border p-1">2P</td><td class="border p-1">T-2P</td></tr>
+                        <tr><td class="border p-1">P = T/2</td><td class="border p-1">0</td><td class="border p-1">2P</td><td class="border p-1">0</td></tr>
+                        <tr><td class="border p-1">P > T/2</td><td class="border p-1">2P-T</td><td class="border p-1">2(T-P)</td><td class="border p-1">0</td></tr>
+                        <tr><td class="border p-1">P = T</td><td class="border p-1">T</td><td class="border p-1">0</td><td class="border p-1">0</td></tr>
+                    </tbody>
+                </table>
+                <p class="text-xs mt-1">P = Phenolphthalein Alkalinity, T = Total Alkalinity</p>
+                </div>`
             },
             {
-                id: 'boron',
-                title: 'Boron',
-                intro: 'Spectrophotometric determination of boron using Curcumin method.',
-                 apparatus: `
-                    <ul class="list-disc list-outside pl-5 space-y-1">
-                        <li><strong>Spectrophotometer:</strong> For use at 540 nm.</li>
-                        <li><strong>Evaporating dishes:</strong> High-silica glass or porcelain.</li>
-                        <li><strong>Water-bath:</strong> Set at 55°C.</li>
-                    </ul>
-                `,
-                reagents: `
-                    <h4>Reagents</h4>
-                    <ul class="list-disc list-outside pl-5 space-y-1">
-                        <li><strong>Stock boron solution:</strong> Dissolve 571.6 mg anhydrous boric acid in distilled water and dilute to 1 L.</li>
-                        <li><strong>Curcumin reagent:</strong> Dissolve 40 mg curcumin and 5 g oxalic acid in 80 mL 95% ethyl alcohol, add 4.2 mL conc. HCl, make to 100 mL.</li>
-                        <li><strong>Ethyl alcohol, 95%.</strong></li>
-                    </ul>
-                `,
-                procedure: [
-                    'To standards and samples in evaporating dishes, add 4 mL of Curcumin reagent.',
-                    'Heat on water bath at 55°C for 80 min until dry.',
-                    'Cool, dissolve residue in 10 mL ethyl alcohol.',
-                    'Read absorbance at 540 nm and determine concentration using calibration curve.',
-                ],
-                calculation: 'Read boron concentration (mg/L) from the calibration curve.'
-            },
+    id: 'alkalinity_t',
+    title: 'Alkalinity, Total (pH 4.5)',
+    intro: `This test measures total alkalinity of water, including hydroxide, carbonate, and bicarbonate alkalinity.
+    
+    🔬 Scientific Background:
+    Total alkalinity titration is carried out to pH 4.5 (methyl orange endpoint) or pH 4.3 (bromcresol green endpoint). At this pH, all carbonate and bicarbonate species are neutralized:
+    
+    Reactions at pH 4.5:
+    HCO₃⁻ + H⁺ → H₂CO₃ (→ H₂O + CO₂)
+    CO₃²⁻ + 2H⁺ → H₂CO₃
+    OH⁻ + H⁺ → H₂O
+    
+    📊 Permissible Limits:
+    • WHO: No health-based guideline (aesthetic limit suggested: 200 mg/L as CaCO₃)
+    • IS 10500:2012: No prescribed limit for alkalinity
+    • Ideal range for drinking water: 20-200 mg/L as CaCO₃
+    
+    💡 Practical Significance:
+    • Low alkalinity (<20 mg/L): Corrosive water, risk of pipe degradation
+    • High alkalinity (>500 mg/L): Bitter taste, scaling problems
+    • Buffer capacity: Higher alkalinity = better pH buffering`,
+    
+    apparatus: `
+    <ul class="list-disc list-outside pl-5 space-y-1">
+        <li><strong>Burette (50 mL):</strong> 0.05 mL readable, Class A</li>
+        <li><strong>Conical Flask (250 mL):</strong> Borosilicate glass</li>
+        <li><strong>Volumetric Pipettes (25 mL, 50 mL):</strong> Class A</li>
+        <li><strong>pH Meter:</strong> For electrometric endpoint detection (potentiometric titration)</li>
+        <li><strong>Magnetic Stirrer with Hotplate</strong></li>
+    </ul>`,
+    
+    reagents: `
+        <h4>Reagents</h4>
+        <ul class="list-disc list-outside pl-5 space-y-1">
+            <li>
+                <strong>Standard H₂SO₄, 0.02N:</strong>
+                Use the same solution prepared for phenolphthalein alkalinity.
+            </li>
+            <li>
+                <strong>Bromcresol Green Indicator (pH range 3.8-5.4):</strong>
+                <ul class="list-disc list-outside pl-5 mt-1">
+                    <li>Dissolve 100 mg bromcresol green sodium salt in 100 mL distilled water</li>
+                    <li>Color change: Blue (pH >5.4) → Yellow (pH <3.8)</li>
+                    <li>Endpoint: Change from blue to yellow-green (pH ~4.5)</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Mixed Indicator (Bromcresol Green + Methyl Red):</strong>
+                <ul class="list-disc list-outside pl-5 mt-1">
+                    <li>For sharper endpoint: 3 parts bromcresol green + 1 part methyl red</li>
+                    <li>Gray-purple → Pink endpoint (pH 4.5)</li>
+                </ul>
+            </li>
+        </ul>
+    `,
+    
+    procedure: [
+        `Take 25-50 mL sample in flask (can continue from same sample used in P-alkalinity test)`,
+        
+        `Add 2-3 drops bromcresol green indicator or mixed indicator`,
+        
+        `Titrate with 0.02N H₂SO₄:
+        • Until blue color changes to yellow-green (pH ~4.5)
+        • If CO₂ interferes, briefly heat at end of titration (to remove CO₂), cool and re-titrate`,
+        
+        `Note total volume of acid used (V₂ mL)`,
+        
+        `Electrometric Endpoint Detection (Preferred Method):
+        • Use pH meter to stop titration exactly at pH 4.5
+        • This method is more accurate, especially for low alkalinity samples`
+    ],
+    
+    calculation: `
+    <div class="bg-blue-50 p-3 rounded">
+    <strong>Formula:</strong><br/>
+    Total Alkalinity (mg/L as CaCO₃) = (B × N × 50,000) / V
+    
+    <br/><br/>Where:
+    <ul class="list-disc list-outside pl-5 text-sm">
+        <li>B = Total mL of titrant used to bromcresol green endpoint (blank corrected)</li>
+        <li>N = Exact normality of H₂SO₄</li>
+        <li>50,000 = Equivalent weight of CaCO₃ (50) × 1000</li>
+        <li>V = Sample volume (mL)</li>
+    </ul>
+    
+    <br/><strong>Example Calculation:</strong>
+    <br/>If B = 8.2 mL, N = 0.0200, V = 50 mL
+    <br/>Total Alkalinity = (8.2 × 0.0200 × 50,000) / 50 = 164 mg/L as CaCO₃
+    
+    <br/><br/>⚠️ <strong>Precision and Accuracy:</strong>
+    <ul class="list-disc list-outside pl-5 text-xs">
+        <li>Difference between duplicate titrations should be ≤ 0.05 mL</li>
+        <li>Always apply blank correction</li>
+        <li>Use electrometric endpoint for low alkalinity samples (<10 mg/L)</li>
+    </ul>
+    </div>`
+},
+
+{
+    id: 'aluminum',
+    title: 'Aluminum - Al',
+    intro: `Spectrophotometric determination of aluminum using Eriochrome Cyanine R (ECR) method.
+    
+    🔬 Scientific Background:
+    Aluminum is a trivalent metal (Al³⁺) found in water from natural sources (clay minerals, aluminosilicates) and anthropogenic sources (water treatment using alum - Al₂(SO₄)₃).
+    
+    ECR Method Principle:
+    Al³⁺ + ECR dye → Red-purple colored complex (pH 6.0)
+    Absorbance measured at 535 nm
+    Follows Beer-Lambert Law: A = εlc
+    
+    Interfering Species:
+    • Fe³⁺, Cr³⁺, Cu²⁺, Mn²⁺ - reduced or masked by ascorbic acid
+    • Fluoride - complexes Al and reduces response
+    • Polyphosphates - chelate Al
+    
+    📊 Permissible Limits:
+    • WHO Guideline: 0.2 mg/L (drinking water)
+    • IS 10500:2012: 0.03 mg/L (desirable), 0.2 mg/L (permissible)
+    • USEPA MCL: 0.05-0.2 mg/L
+    
+    💡 Health Significance:
+    • High aluminum exposure linked to Alzheimer's disease (though controversial)
+    • Risk of encephalopathy in dialysis patients
+    • Neurotoxic effects in children`,
+    
+    apparatus: `
+        <ul class="list-disc list-outside pl-5 space-y-1">
+            <li><strong>Spectrophotometer:</strong> At 535 nm wavelength, with 1 cm path length cuvette</li>
+            <li><strong>Analytical Balance:</strong> 0.1 mg readability</li>
+            <li><strong>Volumetric Glassware:</strong> Class A, all washed with aluminum-free distilled water</li>
+            <li><strong>Pre-treatment of Glassware:</strong> Treat all glassware with 1+1 hot HCl first, then rinse with aluminum-free distilled water</li>
+            <li><strong>pH Meter</strong></li>
+        </ul>
+    `,
+    
+    reagents: `
+        <h4>Reagents</h4>
+        <ul class="list-disc list-outside pl-5 space-y-1">
+            <li>
+                <strong>Stock Aluminum Solution (200 mg Al/L):</strong>
+                <ul class="list-disc list-outside pl-5 mt-1">
+                    <li>Dissolve 8.791 g aluminum potassium sulfate [AlK(SO₄)₂·12H₂O] in distilled water</li>
+                    <li>Dilute to 1000 mL → 1 mL = 1 mg Al</li>
+                    <li>Alternate: Dissolve 1.000 g pure aluminum metal in HCl</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Standard Aluminum Solution (0.5 mg Al/L):</strong>
+                <ul class="list-disc list-outside pl-5 mt-1">
+                    <li>Dilute 10 mL stock solution to 2000 mL → 1 mL = 5.0 µg Al</li>
+                    <li>Prepare daily fresh (aluminum solutions degrade by hydrolysis)</li>
+                </ul>
+            </li>
+            <li>
+                <strong>H₂SO₄, 0.02N:</strong> Standard preparation as described
+            </li>
+            <li>
+                <strong>H₂SO₄, 6N:</strong> Add 1 volume conc. H₂SO₄ to 5 volumes distilled water
+            </li>
+            <li>
+                <strong>Ascorbic Acid Solution (1% w/v):</strong>
+                <ul class="list-disc list-outside pl-5 mt-1">
+                    <li>Dissolve 1.0 g ascorbic acid in 100 mL distilled water</li>
+                    <li>Prepare daily fresh (easily oxidizes)</li>
+                    <li>Function: Reduces Fe³⁺ to Fe²⁺ (removes interference)</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Acetate Buffer Solution (pH 6.0):</strong>
+                <ul class="list-disc list-outside pl-5 mt-1">
+                    <li>Dissolve 136 g sodium acetate (NaC₂H₃O₂·3H₂O) in 700 mL distilled water</li>
+                    <li>Add 40 mL glacial acetic acid</li>
+                    <li>Dilute to 1000 mL</li>
+                    <li>Check pH: should be 6.0 ± 0.1</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Eriochrome Cyanine R (ECR) Stock Dye Solution:</strong>
+                <ul class="list-disc list-outside pl-5 mt-1">
+                    <li>Dissolve 300 mg ECR dye in distilled water</li>
+                    <li>Dilute to 1000 mL</li>
+                    <li>Store in amber bottle, stable for 1 year</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Working Dye Solution:</strong>
+                <ul class="list-disc list-outside pl-5 mt-1">
+                    <li>Dilute 10.0 mL stock dye solution to 100 mL</li>
+                    <li>Prepare fresh weekly</li>
+                </ul>
+            </li>
+        </ul>
+    `,
+    
+    procedure: [
+        `Calibration Standard Preparation (0-7 µg Al range):
+        Prepare standards: 0, 0.5, 1.0, 2.0, 3.0, 5.0, 7.0 µg Al per 50 mL
+        Take appropriate volumes from working standard and dilute in 50 mL volumetric flasks`,
+        
+        `Add reagents to each standard and sample in following sequence (in 50 mL flask):
+        1. Sample/standard (appropriate volume)
+        2. 1 mL 0.02N H₂SO₄ (pH adjustment)
+        3. 1 mL ascorbic acid solution (interference masking)
+        4. 10 mL acetate buffer solution (pH stabilization)
+        5. 5 mL working ECR dye solution`,
+        
+        `Dilute to 50 mL with distilled water and mix thoroughly`,
+        
+        `Wait 5-15 minutes (color development time):
+        • Color development is temperature-dependent
+        • 10 minutes is optimal at 25°C`,
+        
+        `Read absorbance at 535 nm:
+        • Measure against reagent blank (zero standard)
+        • Rinse cuvette with sample first`,
+        
+        `Plot Calibration Curve:
+        • X-axis: µg Al per 50 mL
+        • Y-axis: Absorbance
+        • Linear regression with R² ≥ 0.999 expected`
+    ],
+    
+    calculation: `
+    <div class="bg-blue-50 p-3 rounded">
+    <strong>From Calibration Curve:</strong><br/>
+    Al concentration (µg/50 mL) → Al (mg/L) = (µg from curve) / (sample volume in mL)
+    
+    <br/><br/><strong>Beer-Lambert Law:</strong>
+    <br/>A = ε × l × c
+    <br/>Where ε = molar absorptivity, l = path length, c = concentration
+    
+    <br/><br/><strong>Method Detection Limit (MDL):</strong> ~0.01 mg/L
+    <br/><strong>Practical Quantitation Limit (PQL):</strong> ~0.05 mg/L
+    
+    <br/><br/>⚠️ <strong>QC Requirements:</strong>
+    <ul class="list-disc list-outside pl-5 text-xs">
+        <li>Duplicate analysis in each batch (RPD ≤ 10%)</li>
+        <li>Matrix spike recovery: 80-120%</li>
+        <li>Calibration check standard after every 10 samples</li>
+    </ul>
+    </div>`
+},
+
+{
+    id: 'bod',
+    title: 'Biochemical Oxygen Demand (BOD)',
+    intro: `BOD test based on 3-day bottle incubation method at 27°C (Indian Standard - BIS 3025 Part 44).
+    
+    🔬 Scientific Background:
+    BOD (Biochemical Oxygen Demand) is the amount of oxygen required by microorganisms to decompose organic matter at a specified temperature and time period.
+    
+    BOD Reaction:
+    Organic Matter + O₂ → (microbial action) → CO₂ + H₂O + New Cell Biomass
+    
+    Two-Stage BOD:
+    1. Carbonaceous BOD (CBOD): Oxidation of organic carbon (~10-20 days)
+    2. Nitrogenous BOD (NBOD): Oxidation of NH₃ (~starts after day 6-10)
+       NH₄⁺ → NO₂⁻ → NO₃⁻ (Nitrification)
+    
+    BOD₃ vs BOD₅:
+    • India (IS): BOD₃ at 27°C
+    • International (APHA): BOD₅ at 20°C
+    • Conversion: BOD₅(20°C) ≈ 1.5 × BOD₃(27°C) (approximate)
+    
+    Rate Constant Relationship:
+    BODₜ = BOD_ultimate × (1 - e^(-k×t))
+    k at 27°C ≈ 0.23/day (approximate)
+    
+    📊 Permissible Limits:
+    • WHO/CPCB: Drinking water - not applicable (BOD is for wastewater)
+    • Inland surface water discharge (IS 2490): ≤ 30 mg/L
+    • Municipal sewage discharge to rivers (CPCB): ≤ 30 mg/L
+    • Class A rivers (drinking water source): ≤ 2 mg/L
+    • Bathing ghats: ≤ 3 mg/L
+    
+    💡 Practical Significance:
+    • BOD indicates organic pollution load
+    • High BOD → Low DO → Fish kill and aquatic life damage
+    • Key parameter for measuring sewage treatment plant efficiency`,
+    
+    apparatus: `
+    <ul class="list-disc list-outside pl-5 space-y-1">
+        <li><strong>BOD Bottles (300 mL):</strong> Narrow mouth, flared lip, with tapered and pointed ground glass stoppers. Must be numbered or labeled.</li>
+        <li><strong>Incubator:</strong> Thermostatically controlled air incubator or water bath at 27 ± 1°C. Light entry should be prevented (to avoid DO production by photosynthesis).</li>
+        <li><strong>DO Measurement Setup:</strong> Winkler titration apparatus or DO meter (electrode method)</li>
+        <li><strong>Graduated Cylinders (1-2 L):</strong> For dilution preparation</li>
+        <li><strong>Siphon Setup:</strong> Plastic tubing + screw pin, for turbulence-free filling</li>
+        <li><strong>Aeration Device:</strong> Oil-free compressed air supply, cotton-plugged aeration stone</li>
+    </ul>`,
+    
+    reagents: `
+    <h4>Reagents</h4>
+    <ul class="list-disc list-outside pl-5 space-y-1">
+        <li>
+            <strong>Phosphate Buffer Solution (pH 7.2):</strong>
+            <ul class="list-disc list-outside pl-5 mt-1">
+                <li>8.5 g KH₂PO₄ (monopotassium phosphate)</li>
+                <li>21.75 g K₂HPO₄ (dipotassium phosphate)</li>
+                <li>33.4 g Na₂HPO₄·7H₂O (disodium phosphate)</li>
+                <li>1.7 g NH₄Cl (ammonium chloride - nitrogen source)</li>
+                <li>Dissolve all in 900 mL distilled water, check pH (7.2), dilute to 1000 mL</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Magnesium Sulphate Solution:</strong>
+            Dissolve 22.5 g MgSO₄·7H₂O in 1 L distilled water (for microorganism growth)
+        </li>
+        <li>
+            <strong>Calcium Chloride Solution:</strong>
+            Dissolve 27.5 g CaCl₂ (anhydrous) in 1 L distilled water (Ca²⁺ essential for microorganisms)
+        </li>
+        <li>
+            <strong>Ferric Chloride Solution:</strong>
+            Dissolve 0.25 g FeCl₃·6H₂O in 1 L distilled water (trace element)
+        </li>
+        <li>
+            <strong>Acid and Alkali Solution:</strong>
+            1N H₂SO₄ and 1N NaOH - to neutralize extreme pH samples (neutral pH: 6.5-7.5)
+        </li>
+        <li>
+            <strong>Glucose-Glutamic Acid (GGA) Check Solution:</strong>
+            <ul class="list-disc list-outside pl-5 mt-1">
+                <li>150 mg anhydrous reagent-grade glucose (dried at 103°C for 1 hr)</li>
+                <li>150 mg anhydrous reagent-grade glutamic acid</li>
+                <li>Dissolve in 1000 mL distilled water</li>
+                <li>Prepare fresh daily (microbial degradation occurs)</li>
+                <li><strong>Expected BOD₃: 198 ± 37 mg/L at 27°C (BIS 3025 Part 44:1993)</strong></li>
+            </ul>
+        </li>
+        <li>
+            <strong>Dilution Water (for sample dilution):</strong>
+            <ul class="list-disc list-outside pl-5 mt-1">
+                <li>Add each solution to 1 L distilled water: 1 mL phosphate buffer, 1 mL MgSO₄, 1 mL CaCl₂, 1 mL FeCl₃</li>
+                <li>Saturate with oxygen at 27°C (by aeration)</li>
+                <li>BOD of dilution water should be ≤ 0.2 mg/L (preferably <0.1 mg/L)</li>
+            </ul>
+        </li>
+    </ul>`,
+    
+    procedure: [
+        `Dilution Water Preparation and Aeration:
+        • Calculate required volume: (Number of dilutions × 2 bottles + blanks) × 300 mL
+        • Aerate dilution water at 27°C for 8+ hours with oil-free compressed air
+        • Storing in cotton-plugged bottles for 24 hours is also effective
+        • Check DO: Should be ≥ 7 mg/L`,
+        
+        `Seeding Requirement:
+        Some samples lack sufficient microbial population - they need to be seeded:
+        
+        Seeds required for:
+        • Industrial effluents (particularly chemical industry)
+        • High temperature wastes (>40°C)
+        • Extreme pH wastes (pH <6 or >9)
+        • Highly chlorinated samples
+        
+        Seed Sources (preference order):
+        1. Secondary treated effluent from effluent treatment plant (ETP)
+        2. Domestic sewage (settled for 1+ hours, <36 hours old, use supernatant)
+        3. Surface water from receiving water body
+        
+        Seed Amount:
+        • Domestic sewage seed: 4-6 mL/L dilution water
+        • Seeded dilution water DO uptake: 0.6-1.0 mg/L in 3 days
+        
+        Must prepare seed control:
+        Incubate bottles of seeded dilution water (without sample)`,
+        
+        `Sample Dilution Selection:
+        Choose dilution based on expected BOD:
+        
+        <table class="w-full text-left border-collapse mt-2 text-xs">
+            <thead>
+                <tr>
+                    <th class="border p-2" colspan="2">% Mixture Method (in 1000 mL cylinder)</th>
+                    <th class="border p-2" colspan="2">Direct Pipetting into 300 mL bottles</th>
+                </tr>
+                <tr>
+                    <th class="border p-1">BOD Range (mg/L)</th>
+                    <th class="border p-1">% Mixture</th>
+                    <th class="border p-1">BOD Range (mg/L)</th>
+                    <th class="border p-1">Sample (mL)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td class="border p-1">1,000-3,500</td><td class="border p-1">0.2%</td><td class="border p-1">1,200-4,200</td><td class="border p-1">0.5</td></tr>
+                <tr><td class="border p-1">400-1,400</td><td class="border p-1">0.5%</td><td class="border p-1">600-2,100</td><td class="border p-1">1.0</td></tr>
+                <tr><td class="border p-1">200-700</td><td class="border p-1">1.0%</td><td class="border p-1">300-1,050</td><td class="border p-1">2.0</td></tr>
+                <tr><td class="border p-1">100-350</td><td class="border p-1">2.0%</td><td class="border p-1">120-420</td><td class="border p-1">5.0</td></tr>
+                <tr><td class="border p-1">40-140</td><td class="border p-1">5.0%</td><td class="border p-1">60-210</td><td class="border p-1">10.0</td></tr>
+                <tr><td class="border p-1">20-70</td><td class="border p-1">10.0%</td><td class="border p-1">30-105</td><td class="border p-1">20.0</td></tr>
+                <tr><td class="border p-1">10-35</td><td class="border p-1">20.0%</td><td class="border p-1">12-42</td><td class="border p-1">50.0</td></tr>
+                <tr><td class="border p-1">4-14</td><td class="border p-1">50.0%</td><td class="border p-1">6-21</td><td class="border p-1">100.0</td></tr>
+                <tr><td class="border p-1">0-7</td><td class="border p-1">100%</td><td class="border p-1">0-7</td><td class="border p-1">300.0</td></tr>
+            </tbody>
+        </table>`,
+        
+        `Dilution Preparation and BOD Bottle Filling:
+        
+        Graduated Cylinder Method:
+        1. Add dilution water into 1-2 L graduated cylinder with siphon (avoid turbulence)
+        2. Keep siphon tube tip just below water surface
+        3. Pipette required volume of sample
+        4. Dilute to appropriate level with distilled water
+        5. Mix gently with plunger-type mixing rod (avoid air bubbles)
+        
+        BOD Bottle Filling:
+        • Fill 3 BOD bottles with siphon tube (no air bubbles)
+        • No air should enter while placing stopper
+        • Measure initial DO immediately in one bottle
+        • Incubate remaining two bottles at 27°C
+        
+        Direct Pipetting Method:
+        • Pipette required sample volume directly into bottle
+        • Fill with seeded dilution water
+        • Same as above`,
+        
+        `Incubation and Final DO Measurement:
+        • Keep in incubator at 27 ± 1°C for exactly 3 days (72 hours)
+        • Prevent light exposure
+        • After 3 days, measure DO in duplicate bottles
+        • Also measure DO of dilution water blank`,
+        
+        `Acceptance Criteria:
+        • Residual DO after 3 days: ≥ 1 mg/L
+        • DO depletion: ≥ 2 mg/L
+        • If these criteria are not met, retest with different dilution`
+    ],
+    
+    calculation: `
+    <div class="bg-blue-50 p-3 rounded">
+    <strong>Case 1 - When Dilution Water is Not Seeded:</strong>
+    <br/>BOD₃,₂₇ (mg/L) = (D₀ - D₃) / P
+    
+    <br/><br/><strong>Case 2 - When Dilution Water is Seeded:</strong>
+    <br/>BOD₃,₂₇ (mg/L) = [(D₀ - D₃) - f × (B₀ - B₃)] / P
+    
+    <br/><br/>Where:
+    <ul class="list-disc list-outside pl-5 text-sm">
+        <li>D₀ = Initial DO of diluted sample (mg/L)</li>
+        <li>D₃ = Final DO of diluted sample after 3 days (mg/L)</li>
+        <li>P = Decimal fraction of sample used (sample volume / total volume)</li>
+        <li>B₀ = Initial DO of seed control (mg/L)</li>
+        <li>B₃ = Final DO of seed control after 3 days (mg/L)</li>
+        <li>f = Ratio of seed in diluted sample to seed in control</li>
+    </ul>
+    
+    <br/><strong>Example Calculation (Seeded):</strong>
+    <ul class="list-disc list-outside pl-5 text-sm">
+        <li>Sample volume = 10 mL in 300 mL → P = 10/300 = 0.0333</li>
+        <li>D₀ = 7.8 mg/L, D₃ = 3.2 mg/L</li>
+        <li>B₀ = 7.6 mg/L, B₃ = 6.8 mg/L (seed control)</li>
+        <li>Seed in diluted sample = 5 mL/300 mL = 0.0167</li>
+        <li>Seed in control = 5 mL/300 mL = 0.0167 → f = 1.0</li>
+        <li>BOD₃ = [(7.8-3.2) - 1.0×(7.6-6.8)] / 0.0333</li>
+        <li>BOD₃ = [4.6 - 0.8] / 0.0333 = 3.8/0.0333 = <strong>114 mg/L</strong></li>
+    </ul>
+    
+    <br/><strong>Quality Control Notes:</strong>
+    <ul class="list-disc list-outside pl-5 text-xs">
+        <li>GGA check solution BOD₃: Should be 198 ± 37 mg/L (BIS 3025 Part 44:1993)</li>
+        <li>Dilution water BOD: ≤ 0.2 mg/L (preferably < 0.1 mg/L)</li>
+        <li>Seed control DO uptake: 0.6-1.0 mg/L</li>
+        <li>Report BOD values < 0.5 mg/L as "Below Detection Limit"</li>
+        <li>Report average of duplicates if both are valid</li>
+    </ul>
+    </div>`
+},
+
+{
+    id: 'boron',
+    title: 'Boron - B',
+    intro: `Spectrophotometric determination of boron using curcumin method (540 nm).
+    
+    🔬 Scientific Background:
+    Boron in water is naturally found as boric acid [B(OH)₃] and borate [B(OH)₄⁻]. It comes from agricultural runoff, industrial effluents (glass, ceramics, detergents manufacturing) and geothermal activity.
+    
+    Curcumin Method Principle:
+    In acidic medium, boron reacts with curcumin to form an orange-red colored rosocyanine complex
+    B(OH)₃ + Curcumin → (H₂SO₄/oxalic acid) → Rosocyanine (λmax = 540 nm)
+    
+    Carminic acid method is also used (585 nm)
+    
+    Interference:
+    • Nitrate (>20 mg/L) - interferes
+    • Strong alkalinity - neutralizes acid
+    
+    📊 Permissible Limits:
+    • WHO Guideline: 2.4 mg/L (2022 update)
+    • IS 10500:2012: 5 mg/L (permissible limit)
+    • Irrigation water: 0.5-6.0 mg/L (crop dependent)
+    
+    💡 Health Significance:
+    • Boron is an essential micronutrient (for plants)
+    • High doses: Reproductive toxicity, developmental effects
+    • Tolerable upper intake level (adults): 20 mg/day`,
+    
+    apparatus: `
+        <ul class="list-disc list-outside pl-5 space-y-1">
+            <li><strong>Spectrophotometer:</strong> At 540 nm wavelength</li>
+            <li><strong>Evaporating Dishes:</strong> High-silica glass or porcelain (avoid regular glass - boron can leach)</li>
+            <li><strong>Water Bath:</strong> Precisely maintained at 55 ± 2°C</li>
+            <li><strong>Desiccator:</strong> With silica gel</li>
+            <li><strong>Boron-free Glassware:</strong> All glassware must be boron-free (avoid Pyrex glass)</li>
+        </ul>
+    `,
+    
+    reagents: `
+        <h4>Reagents</h4>
+        <ul class="list-disc list-outside pl-5 space-y-1">
+            <li>
+                <strong>Stock Boron Solution (100 mg B/L):</strong>
+                <ul class="list-disc list-outside pl-5 mt-1">
+                    <li>Dissolve 571.6 mg anhydrous boric acid (H₃BO₃) in distilled water</li>
+                    <li>Dilute to 1000 mL → 1 mL = 100 µg B</li>
+                    <li>Use boron-free distilled water</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Intermediate Standard (10 mg B/L):</strong>
+                Dilute 100 mL stock to 1000 mL
+            </li>
+            <li>
+                <strong>Working Standard (1 mg B/L):</strong>
+                Dilute 100 mL intermediate to 1000 mL
+            </li>
+            <li>
+                <strong>Curcumin Reagent:</strong>
+                <ul class="list-disc list-outside pl-5 mt-1">
+                    <li>Dissolve 40 mg curcumin (diferuloylmethane - yellow pigment from turmeric) in 80 mL 95% ethyl alcohol</li>
+                    <li>Add 5.0 g oxalic acid and dissolve completely</li>
+                    <li>Add 4.2 mL concentrated HCl</li>
+                    <li>Dilute to 100 mL with 95% ethyl alcohol</li>
+                    <li>Store in dark bottle at 4°C (stable for 4 weeks)</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Ethyl Alcohol, 95%</strong> (for residue dissolution)
+            </li>
+        </ul>
+    `,
+    
+    procedure: [
+        `Standards Preparation (0-10 µg B range):
+        0, 0.5, 1.0, 2.0, 4.0, 6.0, 8.0, 10.0 µg B
+        Take appropriate volumes from working standard`,
+        
+        `Take sample/standard (2 mL) in evaporating dish and add 4.0 mL curcumin reagent`,
+        
+        `Evaporate on water bath at 55 ± 2°C for exactly 80 minutes:
+        • Temperature control is critical - variation beyond ± 2°C affects rosocyanine formation
+        • Wait until completely dry`,
+        
+        `Cool at room temperature for 15-20 minutes (not in desiccator, as it will absorb moisture)`,
+        
+        `Carefully dissolve dry residue in 10.0 mL 95% ethyl alcohol:
+        • Dissolve with gentle swirling
+        • Ensure complete dissolution`,
+        
+        `Measure absorbance at 540 nm within 1 hour:
+        • Blank: Reagent blank (distilled water instead of sample)
+        • If color did not develop, prepare fresh reagent`,
+        
+        `Plot calibration curve and determine sample concentration`
+    ],
+    
+    calculation: `
+    <div class="bg-blue-50 p-3 rounded">
+    <strong>From Calibration Curve:</strong>
+    <br/>B (mg/L) = (µg B from curve) / (sample volume in mL)
+    
+    <br/><br/><strong>Method Performance:</strong>
+    <ul class="list-disc list-outside pl-5 text-sm">
+        <li>Detection Limit: 0.1 mg/L</li>
+        <li>Optimal Range: 0.2-1.0 mg/L</li>
+        <li>Recovery: 95-105%</li>
+    </ul>
+    
+    <br/>⚠️ <strong>Important Notes:</strong>
+    <ul class="list-disc list-outside pl-5 text-xs">
+        <li>High boron samples (>1 mg/L) need to be diluted</li>
+        <li>Nitrate interference: Pre-treat sample with Ba(OH)₂ if nitrate >20 mg/L</li>
+        <li>All operations must be conducted in a boron-free environment</li>
+    </ul>
+    </div>`
+},
             {
-                id: 'calcium',
-                title: 'Calcium',
-                intro: 'Determination of calcium using the EDTA titrimetric method.',
-                 apparatus: '<p>Standard laboratory glassware.</p>',
-                reagents: `
-                    <h4>Reagents</h4>
-                    <ul class="list-disc list-outside pl-5 space-y-1">
-                        <li><strong>Sodium hydroxide, NaOH, 1N.</strong></li>
-                        <li><strong>Murexide (ammonium purpurate) indicator:</strong> Mix 0.2 g of dye with 100 g of solid NaCl.</li>
-                        <li><strong>Standard EDTA titrant, 0.01M:</strong> Dissolve 3.723 g of disodium salt of EDTA in distilled water and dilute to 1000 mL.</li>
-                        <li><strong>Standard calcium solution:</strong> Dissolve 1.000 g of anhydrous CaCO₃ in 1+1 HCl and dilute to 1000 mL.</li>
-                    </ul>
-                `,
-                procedure: [
-                    'Take 50 mL sample, add 2 mL NaOH to produce pH of 12 to 13.',
-                    'Add 0.1 to 0.2 g Murexide indicator.',
-                    'Titrate with EDTA solution until the colour changes from pink to purple.',
-                ],
-                calculation: 'Calcium (mg/L) = (A &times; B &times; 400.8) / mL of sample<br/> <p class="text-xs mt-2">where A = mL of titrant for sample, B = mg CaCO₃ equivalent to 1 mL EDTA.</p>'
-            },
-             {
-                id: 'cod',
-                title: 'Chemical Oxygen Demand (COD)',
-                intro: 'COD measures the total amount of oxygen required to oxidize both organic and inorganic pollutants using a strong chemical oxidant (potassium dichromate).',
-                apparatus: `
-                    <ul class="list-disc list-outside pl-5 space-y-1">
-                        <li><strong>Reflux flasks:</strong> 250 mL capacity, with 24/29 ground glass neck.</li>
-                        <li><strong>Condensers:</strong> Leibig or equivalent.</li>
-                        <li><strong>Hot plate or gas burner.</strong></li>
-                    </ul>
-                `,
-                reagents: `
-                    <h4>Reagents</h4>
-                    <ul class="list-disc list-outside pl-5 space-y-1">
-                        <li><strong>Standard potassium dichromate solution, 0.0417M (0.25N):</strong> Dissolve 12.259 g K₂Cr₂O₇ (primary standard grade, previously dried at 103 °C for 2 hours) in distilled water and dilute to 1 L.</li>
-                        <li><strong>Sulphuric acid reagent:</strong> Add 5.5 g Ag₂SO₄ per kg of conc. H₂SO₄. Let it stand for a day or two to dissolve.</li>
-                        <li><strong>Ferroin indicator solution:</strong> Dissolve 1.485 g 1, 10-phenanthroline monohydrate and 695 mg FeSO₄·7H₂O in distilled water and dilute to 100 mL.</li>
-                        <li><strong>Standard ferrous ammonium sulphate (FAS), titrant, 0.25M:</strong> Dissolve 98 g Fe(NH₄)₂(SO₄)₂·6H₂O in distilled water, add 20 mL conc. H₂SO₄, cool and dilute to 1 L. Standardise daily.</li>
-                        <li><strong>Mercuric Sulphate, HgSO₄, powder.</strong></li>
-                        <li><strong>Potassium hydrogen phthalate (KHP) standard:</strong> Weigh 425 mg KHP in distilled water and dilute to 1 L. This solution has a theoretical COD of 500 µgO₂/mL.</li>
-                    </ul>
-                `,
-                procedure: [
-                    'Add 50 mL of sample or an aliquot diluted to 50 mL with distilled water in a 500 mL refluxing flask. Add 1g HgSO₄, few glass beads, and 5 mL sulphuric acid reagent, mix, cool. Add 25 mL of 0.0417M K₂Cr₂O₇ solution, mix.',
-                    'Connect the flask to the condenser and turn on cooling water, add additional 70 mL of sulphuric acid reagent through open end of condenser, with swirling and mixing.',
-                    'Reflux for 2 hours; cool, wash down condenser with distilled water to double the volume of contents, cool.',
-                    'Add 2 drops of Ferroin indicator, titrate with FAS the remaining potassium dichromate, until a colour change from bluish green to reddish brown. Also reflux and titrate a distilled water blank with reagents.',
-                    'Use standard 0.00417M K₂Cr₂O₇, and 0.025M FAS, when analysing very low COD samples.',
-                    'Evaluate the technique and reagents by conducting the test on potassium hydrogen phthalate solution.',
-                ],
-                calculation: 'COD (mg/L) = [ (A - B) &times; M &times; 8000 ] / mL of sample<br/><p class="text-xs mt-2">where: A = mL of FAS for blank, B = mL of FAS for sample, M = Molarity of FAS.</p><p class="text-sm mt-2"><b>Note:</b> Use smaller sample volumes and proportionally reduce quantities of chemicals as given in the following table.</p><table class="w-full text-left border-collapse mt-2"><thead><tr><th class="border p-2">Sample size (mL)</th><th class="border p-2">K₂Cr₂O₇ (mL)</th><th class="border p-2">H₂SO₄ (mL)</th><th class="border p-2">HgSO₄ (g)</th><th class="border p-2">FAS (mole/L)</th><th class="border p-2">Final volume (mL)</th></tr></thead><tbody><tr><td class="border p-2">10.0</td><td class="border p-2">5.0</td><td class="border p-2">15</td><td class="border p-2">0.2</td><td class="border p-2">0.05</td><td class="border p-2">70</td></tr><tr><td class="border p-2">20.0</td><td class="border p-2">10.0</td><td class="border p-2">30</td><td class="border p-2">0.4</td><td class="border p-2">0.10</td><td class="border p-2">140</td></tr><tr><td class="border p-2">30.0</td><td class="border p-2">15.0</td><td class="border p-2">45</td><td class="border p-2">0.6</td><td class="border p-2">0.15</td><td class="border p-2">210</td></tr><tr><td class="border p-2">40.0</td><td class="border p-2">20.0</td><td class="border p-2">60</td><td class="border p-2">0.8</td><td class="border p-2">0.20</td><td class="border p-2">280</td></tr><tr><td class="border p-2">50.0</td><td class="border p-2">25.0</td><td class="border p-2">75</td><td class="border p-2">1.0</td><td class="border p-2">0.25</td><td class="border p-2">350</td></tr></tbody></table>'
-            },
+    id: 'calcium',
+    title: 'Calcium - Ca',
+    intro: `Determination of calcium by EDTA Complexometric Titration method.
+    
+    🔬 Scientific Background:
+    Calcium in water comes naturally from dissolution of limestone (CaCO₃), dolomite [CaMg(CO₃)₂], and gypsum (CaSO₄). It is the primary cause of hardness.
+    
+    EDTA Titration Principle:
+    Ethylenediaminetetraacetic acid (EDTA) - a chelating agent that forms stable complexes with metal ions.
+    
+    At pH 12-13, magnesium hydroxide precipitates [Mg(OH)₂↓], and only calcium reacts with EDTA:
+    Ca²⁺ + EDTA⁴⁻ → [Ca-EDTA]²⁻ (stable complex)
+    
+    Murexide Indicator:
+    • Free indicator: Pink/orange
+    • Ca-indicator complex: Red/wine
+    • Endpoint: Red → Purple (when Ca is freed)
+    
+    📊 Permissible Limits:
+    • WHO: No health-based guideline
+    • IS 10500:2012: 75 mg/L (desirable), 200 mg/L (permissible)
+    • High calcium: Scale formation in pipes, boilers
+    
+    💡 Health Significance:
+    • Essential mineral for bones, teeth, muscle function
+    • Calcium deficiency: Osteoporosis
+    • High calcium: Risk of kidney stones (especially with high oxalate)
+    • Hard water calcium may reduce cardiovascular disease risk`,
+    
+    apparatus: `
+    <ul class="list-disc list-outside pl-5 space-y-1">
+        <li>Burette (25 mL) - Class A</li>
+        <li>Conical Flask (250 mL)</li>
+        <li>Volumetric Pipettes</li>
+        <li>pH Meter (for pH verification)</li>
+    </ul>`,
+    
+    reagents: `
+        <h4>Reagents</h4>
+        <ul class="list-disc list-outside pl-5 space-y-1">
+            <li>
+                <strong>Sodium Hydroxide Solution, 1N:</strong>
+                Dissolve 40 g NaOH in CO₂-free distilled water, dilute to 1000 mL
+            </li>
+            <li>
+                <strong>Murexide (Ammonium Purpurate) Indicator:</strong>
+                <ul class="list-disc list-outside pl-5 mt-1">
+                    <li>Solid mixture: 0.2 g murexide + 100 g NaCl, grind to fine powder</li>
+                    <li>Or liquid: Dissolve 0.5 g murexide in 100 mL water (prepare fresh daily)</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Inhibitor Solutions (for interference removal):</strong>
+                <ul class="list-disc list-outside pl-5 mt-1">
+                    <li>1% Sodium cyanide (NaCN) - Masks Zn, Cu, Ni, Co (Caution: Highly toxic!)</li>
+                    <li>1% Hydroxylamine HCl - Reduces Fe, Mn</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Standard EDTA Titrant, 0.01M:</strong>
+                <ul class="list-disc list-outside pl-5 mt-1">
+                    <li>Dissolve 3.723 g EDTA disodium salt (Na₂EDTA·2H₂O) in distilled water</li>
+                    <li>Dilute to 1000 mL</li>
+                    <li>Standardize with standard calcium solution</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Standard Calcium Solution (Primary Standard):</strong>
+                <ul class="list-disc list-outside pl-5 mt-1">
+                    <li>Suspend 1.000 g anhydrous CaCO₃ (ACS reagent grade, dried at 180°C) in 50 mL distilled water</li>
+                    <li>Add dilute HCl (1+1) dropwise until completely dissolved</li>
+                    <li>Dilute to 1000 mL → 1 mL = 1 mg CaCO₃ = 0.4 mg Ca</li>
+                </ul>
+            </li>
+        </ul>
+    `,
+    
+    procedure: [
+        `Take 50 mL sample or appropriate volume in conical flask`,
+        
+        `Add 1-2 mL NaOH (1N) to adjust pH to 12-13:
+        • At this pH, Mg(OH)₂ precipitates
+        • Verify with pH meter`,
+        
+        `If Fe, Mn, Cu are present, add appropriate inhibitors`,
+        
+        `Add 0.1-0.2 g murexide indicator:
+        • Solution should turn pink/red-orange
+        • If color does not develop, use fresh indicator`,
+        
+        `Titrate with EDTA until color changes:
+        Red/wine color → Pure purple
+        • Endpoint should be permanent (30 seconds)
+        • Complete titration within 5 minutes (Mg(OH)₂ slowly dissolves)`,
+        
+        `Perform blank titration (with distilled water)`,
+        
+        `EDTA Standardization:
+        • Take 20 mL standard Ca solution (= 20 mg CaCO₃)
+        • Follow same procedure
+        • EDTA molarity = mg CaCO₃ / (mL EDTA × 100.09)`
+    ],
+    
+    calculation: `
+    <div class="bg-blue-50 p-3 rounded">
+    <strong>Formula:</strong>
+    <br/>Calcium (mg/L as Ca) = (A × B × 400.8) / V
+    
+    <br/><br/>Where:
+    <ul class="list-disc list-outside pl-5 text-sm">
+        <li>A = mL of EDTA titrant for sample - blank corrected</li>
+        <li>B = mg CaCO₃ equivalent to 1 mL EDTA (from standardization)</li>
+        <li>400.8 = Atomic weight of Ca (40.08) × 10 (conversion factor)</li>
+        <li>V = Sample volume (mL)</li>
+    </ul>
+    
+    <br/><strong>Alternative - Direct from EDTA Molarity:</strong>
+    <br/>Ca (mg/L) = (mL EDTA × Molarity × 40,080) / Sample volume (mL)
+    
+    <br/><br/><strong>Example:</strong>
+    <br/>EDTA = 7.2 mL, Molarity = 0.01M, Sample = 50 mL
+    <br/>Ca = (7.2 × 0.01 × 40,080) / 50 = 57.7 mg/L
+    
+    <br/><br/><strong>Ca Hardness (as CaCO₃):</strong>
+    <br/>Ca hardness = Ca (mg/L) × 2.497
+    </div>`
+},
+
+{
+    id: 'cod',
+    title: 'Chemical Oxygen Demand (COD)',
+    intro: `COD determination by potassium dichromate open reflux method.
+    
+    🔬 Scientific Background:
+    COD (Chemical Oxygen Demand) is the amount of oxygen required to chemically oxidize all oxidizable material (both organic and inorganic) in water.
+    
+    Reaction Principle:
+    Organic Matter + K₂Cr₂O₇ + H₂SO₄ → (Ag₂SO₄ catalyst) → CO₂ + H₂O + Cr³⁺
+    
+    Dichromate reduction:
+    Cr₂O₇²⁻ + 14H⁺ + 6e⁻ → 2Cr³⁺ + 7H₂O (orange → green)
+    
+    Back-titration with FAS:
+    6Fe²⁺ + Cr₂O₇²⁻ + 14H⁺ → 6Fe³⁺ + 2Cr³⁺ + 7H₂O
+    
+    COD vs BOD:
+    • COD typically 1.2-2.5 × BOD₅ for domestic wastewater
+    • BOD/COD ratio: Biodegradability indicator
+      - >0.5: Easily biodegradable
+      - 0.3-0.5: Partially biodegradable
+      - <0.3: Non-biodegradable (industrial effluent)
+    
+    Chloride Interference:
+    Cl⁻ + Cr₂O₇²⁻ → Cl₂ (false high COD)
+    Masking: HgSO₄ + Cl⁻ → HgCl₂ (poorly ionized - eliminates interference)
+    Ratio: 10:1 (HgSO₄:Cl⁻, w/w)
+    
+    📊 Permissible Limits:
+    • Inland surface water discharge (CPCB/IS 2490): ≤ 250 mg/L
+    • CETP effluent: ≤ 250 mg/L
+    • Domestic sewage: 250-400 mg/L typical
+    • Industrial effluent: Can be 1000-5000 mg/L
+    
+    💡 Applications:
+    • ETP efficiency monitoring
+    • Environmental compliance
+    • BOD estimation (when BOD test is too slow)
+    • Organic load characterization`,
+    
+    apparatus: `
+        <ul class="list-disc list-outside pl-5 space-y-1">
+            <li><strong>Reflux Apparatus:</strong> 500 mL round-bottom flask or 250 mL Erlenmeyer flask, with 24/29 ground glass neck</li>
+            <li><strong>Condenser:</strong> Liebig condenser (minimum 30 cm)</li>
+            <li><strong>Hot Plate:</strong> For even heating, or heating mantle</li>
+            <li><strong>Analytical Balance:</strong> 0.1 mg readability</li>
+            <li><strong>Burette (25 mL):</strong> Class A</li>
+            <li><strong>Safety Equipment:</strong> Fume hood (H₂SO₄ and dichromate vapors), splash-proof goggles, acid-resistant gloves</li>
+        </ul>
+    `,
+    
+    reagents: `
+        <h4>Reagents</h4>
+        <ul class="list-disc list-outside pl-5 space-y-1">
+            <li>
+                <strong>Standard Potassium Dichromate (K₂Cr₂O₇), 0.0417M (0.25N):</strong>
+                <ul class="list-disc list-outside pl-5 mt-1">
+                    <li>Dry 12.259 g K₂Cr₂O₇ (primary standard grade) at 103°C for 2 hours</li>
+                    <li>Cool in desiccator, dissolve in distilled water, dilute to 1000 mL</li>
+                    <li>Primary standard - no standardization needed</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Sulphuric Acid Reagent (with Ag₂SO₄ catalyst):</strong>
+                <ul class="list-disc list-outside pl-5 mt-1">
+                    <li>Dissolve 5.5 g silver sulphate (Ag₂SO₄) in 1 kg concentrated H₂SO₄</li>
+                    <li>Store for 1-2 days to dissolve (stir continuously)</li>
+                    <li>Ag₂SO₄ function: Helps oxidize aromatic compounds</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Ferroin Indicator Solution:</strong>
+                <ul class="list-disc list-outside pl-5 mt-1">
+                    <li>Dissolve 1.485 g 1,10-phenanthroline monohydrate in 100 mL distilled water</li>
+                    <li>Add 695 mg FeSO₄·7H₂O</li>
+                    <li>Mix well - forms orange solution</li>
+                    <li>Store in dark bottle (stable for 1 month)</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Standard FAS (Ferrous Ammonium Sulphate) Titrant, ~0.25M:</strong>
+                <ul class="list-disc list-outside pl-5 mt-1">
+                    <li>Dissolve 98 g Fe(NH₄)₂(SO₄)₂·6H₂O in distilled water</li>
+                    <li>Add 20 mL concentrated H₂SO₄ (carefully, with cooling)</li>
+                    <li>Cool and dilute to 1000 mL</li>
+                    <li>Standardize daily: 10 mL K₂Cr₂O₇ (0.0417M) + 90 mL water + 30 mL H₂SO₄, cool, titrate with FAS to ferroin endpoint</li>
+                    <li>FAS Molarity = 0.250 × (10 mL K₂Cr₂O₇ / mL FAS used)</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Mercuric Sulphate (HgSO₄), powder:</strong>
+                For chloride masking (10:1 ratio over chloride)
+            </li>
+            <li>
+                <strong>KHP Check Standard (500 mg COD/L):</strong>
+                Dissolve 425 mg potassium hydrogen phthalate in 1000 mL distilled water
+                Theoretical COD = 1.176 g O₂/g KHP → 500 mg/L
+            </li>
+        </ul>
+    `,
+    
+    procedure: [
+        `Sample Pre-treatment:
+        • Adjust pH to 6-7 if not in range
+        • Turbid samples: Blending or filtering optional
+        • Preserve: 4°C, pH <2 with H₂SO₄, analyze within 28 days`,
+        
+        `Flask Setup (for 500 mL reflux flask):
+        1. Add 50 mL sample or diluted sample to flask
+        2. Add 1.0 g HgSO₄ (if Cl⁻ > 2000 mg/L, add more)
+        3. Add boiling chips/glass beads (to prevent bumping)
+        4. Carefully add 5 mL H₂SO₄ reagent, gently swirl and cool
+        5. Add 25 mL 0.0417M K₂Cr₂O₇, mix`,
+        
+        `Connect Condenser:
+        • Start cooling water flow
+        • Add remaining 70 mL H₂SO₄ reagent through open end of condenser
+        • Add while swirling from one side (for mixing and cooling)`,
+        
+        `2 Hours Reflux:
+        • Heat on hot plate - maintain gentle boiling
+        • Avoid over-boiling (bumping)
+        • Reflux for exactly 2 hours (BIS standard)`,
+        
+        `Cooling and Dilution:
+        • Cool to room temperature
+        • Wash condenser with 25-50 mL distilled water (into flask)
+        • Total volume should be approximately 140-150 mL
+        • Cool again to room temperature`,
+        
+        `Titration:
+        • Add 2-3 drops ferroin indicator
+        • Titrate excess dichromate with FAS
+        • Endpoint: Blue-green → Reddish-brown (sharp color change)
+        • Make half-drop additions near endpoint
+        • Run blank in parallel (distilled water + all reagents)`,
+        
+        `KHP Verification:
+        • Testing 500 mg/L KHP standard is mandatory
+        • Measured COD should be within ±5% of 500 mg/L`
+    ],
+    
+    calculation: `
+    <div class="bg-blue-50 p-3 rounded">
+    <strong>Main Formula:</strong>
+    <br/>COD (mg/L) = [(A - B) × M × 8000] / V
+    
+    <br/><br/>Where:
+    <ul class="list-disc list-outside pl-5 text-sm">
+        <li>A = FAS for blank (mL)</li>
+        <li>B = FAS for sample (mL)</li>
+        <li>M = Exact molarity of FAS (daily standardized)</li>
+        <li>8000 = Milliequivalent weight of oxygen (8) × 1000</li>
+        <li>V = Sample volume (mL)</li>
+    </ul>
+    
+    <br/><strong>Example Calculation:</strong>
+    <ul class="list-disc list-outside pl-5 text-sm">
+        <li>A (blank) = 23.5 mL FAS</li>
+        <li>B (sample) = 15.8 mL FAS</li>
+        <li>M = 0.248 mol/L (standardized)</li>
+        <li>V = 50 mL</li>
+        <li>COD = [(23.5-15.8) × 0.248 × 8000] / 50</li>
+        <li>COD = [7.7 × 0.248 × 8000] / 50 = <strong>307 mg/L</strong></li>
+    </ul>
+    
+    <br/><strong>Reagent Scaling for Different Sample Volumes:</strong>
+    <table class="w-full text-left border-collapse mt-2 text-xs">
+        <thead>
+            <tr>
+                <th class="border p-1">Sample (mL)</th>
+                <th class="border p-1">K₂Cr₂O₇ (mL)</th>
+                <th class="border p-1">H₂SO₄ Reagent (mL)</th>
+                <th class="border p-1">HgSO₄ (g)</th>
+                <th class="border p-1">FAS Conc. (M)</th>
+                <th class="border p-1">Final Vol. (mL)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td class="border p-1">10.0</td><td class="border p-1">5.0</td><td class="border p-1">15</td><td class="border p-1">0.2</td><td class="border p-1">0.05</td><td class="border p-1">70</td></tr>
+            <tr><td class="border p-1">20.0</td><td class="border p-1">10.0</td><td class="border p-1">30</td><td class="border p-1">0.4</td><td class="border p-1">0.10</td><td class="border p-1">140</td></tr>
+            <tr><td class="border p-1">30.0</td><td class="border p-1">15.0</td><td class="border p-1">45</td><td class="border p-1">0.6</td><td class="border p-1">0.15</td><td class="border p-1">210</td></tr>
+            <tr><td class="border p-1">40.0</td><td class="border p-1">20.0</td><td class="border p-1">60</td><td class="border p-1">0.8</td><td class="border p-1">0.20</td><td class="border p-1">280</td></tr>
+            <tr><td class="border p-1">50.0</td><td class="border p-1">25.0</td><td class="border p-1">75</td><td class="border p-1">1.0</td><td class="border p-1">0.25</td><td class="border p-1">350</td></tr>
+        </tbody>
+    </table>
+    </div>`
+},
+
+{
+    id: 'chloride',
+    title: 'Chloride - Cl⁻',
+    intro: `Chloride determination by Mohr Method (Silver Nitrate Argentometric Titration).
+    
+    🔬 Scientific Background:
+    Chloride (Cl⁻) in water is naturally found as sodium chloride (NaCl), potassium chloride (KCl), calcium chloride (CaCl₂). Also comes from industrial effluents, seawater intrusion, and road salt.
+    
+    Mohr Method Principle:
+    AgNO₃ + Cl⁻ → AgCl↓ (white precipitate)
+    
+    Endpoint Indicator:
+    AgNO₃ + CrO₄²⁻ → Ag₂CrO₄↓ (brick-red precipitate)
+    When all Cl⁻ is precipitated, excess Ag⁺ reacts with chromate
+    
+    pH Range: 6-10 (optimal) - In acidic conditions, Ag₂CrO₄ dissolves; in alkaline, Ag₂O precipitates
+    
+    Volhard Method (Back Titration) - for high Cl⁻ samples
+    
+    📊 Permissible Limits:
+    • WHO: 250 mg/L (taste threshold)
+    • IS 10500:2012: 250 mg/L (desirable), 1000 mg/L (permissible)
+    • CPCB (inland surface water discharge): 1000 mg/L
+    
+    💡 Significance:
+    • >250 mg/L: Salty taste
+    • >1000 mg/L: Corrosive to metals and concrete
+    • High Cl⁻ with high Na⁺: Seawater intrusion indicator
+    • Chloride doesn't react in body - kidney function indicator`,
+    
+    apparatus: `
+    <ul class="list-disc list-outside pl-5 space-y-1">
+        <li>Burette (25 mL) - Class A, preferably amber colored (AgNO₃ is light sensitive)</li>
+        <li>Conical Flask (250 mL) - white or light colored (for endpoint visibility)</li>
+        <li>Magnetic Stirrer</li>
+        <li>pH Meter (for pH adjustment)</li>
+    </ul>`,
+    
+    reagents: `
+        <h4>Reagents</h4>
+        <ul class="list-disc list-outside pl-5 space-y-1">
+            <li>
+                <strong>Potassium Chromate Indicator, K₂CrO₄ (5% w/v):</strong>
+                <ul class="list-disc list-outside pl-5 mt-1">
+                    <li>Dissolve 50 g K₂CrO₄ in distilled water</li>
+                    <li>Add AgNO₃ until red precipitate is permanent</li>
+                    <li>Filter and dilute to 1000 mL</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Standard Silver Nitrate (AgNO₃), 0.0141N:</strong>
+                <ul class="list-disc list-outside pl-5 mt-1">
+                    <li>Dissolve 2.395 g AgNO₃ in distilled water and dilute to 1000 mL</li>
+                    <li>Store in amber bottle (light-sensitive)</li>
+                    <li>Standardize with standard NaCl</li>
+                    <li>1 mL = 0.5 mg Cl⁻</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Standard Sodium Chloride (NaCl), 0.0141N (Primary Standard):</strong>
+                <ul class="list-disc list-outside pl-5 mt-1">
+                    <li>Dry NaCl at 600°C for 1 hour (it is hygroscopic)</li>
+                    <li>Dissolve 824.0 mg NaCl in distilled water, dilute to 1000 mL</li>
+                    <li>1 mL = 0.5 mg Cl⁻</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Dilute HNO₃ and NaOH:</strong> For pH adjustment
+            </li>
+        </ul>
+    `,
+    
+    procedure: [
+        `Sample Preparation:
+        • Take 100 mL sample or dilute to 100 mL
+        • If pH not between 6-10, adjust (with HNO₃ or NaOH)
+        • Colored/turbid samples: May require pre-treatment (alum flocculation or activated carbon)`,
+        
+        `Add 1.0 mL K₂CrO₄ indicator:
+        • Solution should turn yellow
+        • If already orange/red, adjust pH`,
+        
+        `Titrate with AgNO₃ (0.0141N):
+        • Endpoint: Transient brick-red/salmon pink precipitate becomes permanent
+        • Add last few drops very carefully
+        • Vigorous swirling important for endpoint accuracy`,
+        
+        `Blank Titration:
+        • Same procedure with distilled water
+        • Subtract blank volume (usually 0.1-0.3 mL)`,
+        
+        `AgNO₃ Standardization:
+        • Use 20 mL standard NaCl (0.0141N)
+        • Follow same procedure
+        • Calculate AgNO₃ normality`
+    ],
+    
+    calculation: `
+    <div class="bg-blue-50 p-3 rounded">
+    <strong>Formula:</strong>
+    <br/>Chloride (mg/L as Cl⁻) = [(A - B) × N × 35,450] / V
+    
+    <br/><br/>Where:
+    <ul class="list-disc list-outside pl-5 text-sm">
+        <li>A = mL of AgNO₃ titrant for sample</li>
+        <li>B = mL of AgNO₃ for blank</li>
+        <li>N = Normality of AgNO₃</li>
+        <li>35,450 = Atomic weight of Cl (35.45) × 1000</li>
+        <li>V = Sample volume (mL)</li>
+    </ul>
+    
+    <br/><strong>Example:</strong>
+    <br/>A = 14.2 mL, B = 0.2 mL, N = 0.0141, V = 100 mL
+    <br/>Cl⁻ = [(14.2-0.2) × 0.0141 × 35,450] / 100 = 70.0 mg/L
+    
+    <br/><br/>⚠️ <strong>Interferences:</strong>
+    <ul class="list-disc list-outside pl-5 text-xs">
+        <li>Bromide, iodide, cyanide: Titrate like Cl⁻ (false high)</li>
+        <li>Sulfide, sulfite: Form precipitates with AgNO₃ (false high)</li>
+        <li>Orthophosphate >25 mg/L: Forms Ag₃PO₄ precipitate (interference)</li>
+        <li>Fe >10 mg/L: Impairs endpoint visibility</li>
+    </ul>
+    </div>`
+},
+
+{
+    id: 'hardness',
+    title: 'Total Hardness',
+    intro: `Total hardness determination by EDTA Complexometric Titration (Eriochrome Black T indicator).
+    
+    🔬 Scientific Background:
+    Water hardness is primarily caused by calcium (Ca²⁺) and magnesium (Mg²⁺) ions, and partly by Fe²⁺, Mn²⁺, Sr²⁺. Expressed as CaCO₃ equivalent.
+    
+    Types of Hardness:
+    1. Temporary (Carbonate) Hardness: Removed by boiling
+       Ca(HCO₃)₂ → CaCO₃↓ + H₂O + CO₂
+       Mg(HCO₃)₂ → Mg(OH)₂↓ + 2CO₂
+    
+    2. Permanent (Non-carbonate) Hardness: From CaSO₄, CaCl₂, MgSO₄ - not removed by boiling
+    
+    EDTA Titration Principle:
+    At pH 10 (NH₄Cl/NH₄OH buffer):
+    Ca²⁺ + EDTA → [Ca-EDTA]²⁻
+    Mg²⁺ + EDTA → [Mg-EDTA]²⁻
+    
+    Eriochrome Black T (EBT) Indicator:
+    • Metal-EBT complex: Wine red
+    • Free EBT: Blue
+    • Endpoint: Wine red → Blue (pure)
+    
+    Hardness Classification:
+    • Soft: <75 mg/L CaCO₃
+    • Moderately hard: 75-150 mg/L
+    • Hard: 150-300 mg/L
+    • Very hard: >300 mg/L
+    
+    📊 Permissible Limits:
+    • WHO: No health-based guideline (200 mg/L aesthetic)
+    • IS 10500:2012: 200 mg/L (desirable), 600 mg/L (permissible)
+    
+    💡 Significance:
+    • Hard water + soap → Scum formation (CaSt₂ - calcium stearate)
+    • Scale in boilers/pipes (CaCO₃, CaSO₄)
+    • High hardness: Increased detergent use
+    • Inverse relationship with cardiovascular disease`,
+    
+    apparatus: `
+    <ul class="list-disc list-outside pl-5 space-y-1">
+        <li>Burette (25 mL) - Class A</li>
+        <li>Conical Flask (250 mL)</li>
+        <li>Magnetic Stirrer (recommended for endpoint detection)</li>
+        <li>pH Meter</li>
+        <li>Timer (for 5-minute titration limit)</li>
+    </ul>`,
+    
+    reagents: `
+        <h4>Reagents</h4>
+        <ul class="list-disc list-outside pl-5 space-y-1">
+            <li>
+                <strong>Buffer Solution, pH 10.0 ± 0.1:</strong>
+                <ul class="list-disc list-outside pl-5 mt-1">
+                    <li>Dissolve 16.9 g NH₄Cl in 143 mL concentrated NH₄OH (ammonia)</li>
+                    <li>Add 1.25 g magnesium EDTA disodium salt (MgEDTA)</li>
+                    <li>Dilute to 250 mL with distilled water</li>
+                    <li>Check pH: should be 10.0 ± 0.1</li>
+                    <li>Store in amber bottle (ammonia is volatile)</li>
+                </ul>
+                <p class="text-xs mt-1"><em>Note: If MgEDTA unavailable, mix 1.179 g Na₂EDTA + 780 mg MgSO₄·7H₂O + 16.9 g NH₄Cl + 143 mL NH₄OH</em></p>
+            </li>
+            <li>
+                <strong>Eriochrome Black T (EBT) Indicator:</strong>
+                <ul class="list-disc list-outside pl-5 mt-1">
+                    <li>Solid: 0.5 g EBT + 100 g NaCl, grind to powder (stable for 6 months)</li>
+                    <li>Liquid: 0.5 g EBT + 0.5 g hydroxylamine HCl dissolved in 100 mL 95% ethanol (stable for 1 week)</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Inhibitor Solutions:</strong>
+                <ul class="list-disc list-outside pl-5 mt-1">
+                    <li>1% NaCN (0.5 mL) - Inhibits Cu, Zn, Ni [⚠️ HIGHLY TOXIC - use in fume hood]</li>
+                    <li>1% Hydroxylamine HCl (1 mL) - Reduces Fe, Mn</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Standard EDTA Titrant, 0.01M:</strong>
+                Dissolve 3.723 g EDTA disodium salt in distilled water, dilute to 1000 mL
+            </li>
+            <li>
+                <strong>Standard Calcium Solution (Primary Standard):</strong>
+                Dissolve 1.000 g CaCO₃ (dried) in HCl, dilute to 1000 mL
+                → 1 mL = 1 mg CaCO₃ = 1 mg/L hardness (at 1000 mL sample)
+            </li>
+        </ul>`,
+    
+    procedure: [
+        `Sample Preparation:
+        • Take 25 mL sample (high hardness: Dilute with distilled water and take total 50 mL)
+        • Very high hardness (>1000 mg/L): 10 mL sample + 40 mL distilled water`,
+        
+        `Interference Removal (if required):
+        • For Fe/Mn: Add 1 mL hydroxylamine HCl
+        • For Cu/Zn: Add 0.5 mL NaCN (in fume hood!)`,
+        
+        `Add 1-2 mL buffer solution:
+        • pH should become 10.0-10.1 (verify with meter)
+        • Excess buffer causes poor color change`,
+        
+        `Add indicator:
+        • Solid EBT: 0.1-0.2 g
+        • Liquid EBT: 2-3 drops
+        • Solution should turn wine red (if not, metal ions may be absent)`,
+        
+        `Titrate with EDTA until color changes wine red → Pure blue:
+        • Endpoint should be stable for 30 seconds after last drop
+        • Complete within 5 minutes of adding buffer (Mg(OH)₂ slowly dissolves)
+        • Near endpoint: Make half-drop additions`,
+        
+        `EDTA Standardization (for each batch):
+        • Take 20 mL standard Ca solution
+        • Follow same procedure
+        • Verify EDTA molarity`
+    ],
+    
+    calculation: `
+    <div class="bg-blue-50 p-3 rounded">
+    <strong>Formula:</strong>
+    <br/>Total Hardness (mg/L as CaCO₃) = (A × B × 1000) / V
+    
+    <br/><br/>Where:
+    <ul class="list-disc list-outside pl-5 text-sm">
+        <li>A = mL of EDTA titrant for sample</li>
+        <li>B = mg CaCO₃ equivalent to 1 mL EDTA - calculated from standardization</li>
+        <li>1000 = L to mL conversion</li>
+        <li>V = Sample volume (mL)</li>
+    </ul>
+    
+    <br/><strong>Alternative Formula (using EDTA molarity directly):</strong>
+    <br/>Hardness (mg/L CaCO₃) = (mL EDTA × Molarity × 100,090) / V
+    
+    <br/><br/><strong>Example:</strong>
+    <br/>EDTA used = 12.5 mL, Molarity = 0.01M, Sample = 25 mL
+    <br/>Hardness = (12.5 × 0.01 × 100,090) / 25 = 500 mg/L CaCO₃
+    
+    <br/><br/><strong>Hardness Classification:</strong>
+    <table class="w-full text-left border-collapse mt-2 text-xs">
+        <thead>
+            <tr><th class="border p-1">Classification</th><th class="border p-1">mg/L CaCO₃</th><th class="border p-1">Remarks</th></tr>
+        </thead>
+        <tbody>
+            <tr><td class="border p-1">Soft</td><td class="border p-1">&lt;75</td><td class="border p-1">Corrosive, good lather</td></tr>
+            <tr><td class="border p-1">Moderately Hard</td><td class="border p-1">75-150</td><td class="border p-1">Acceptable</td></tr>
+            <tr><td class="border p-1">Hard</td><td class="border p-1">150-300</td><td class="border p-1">Scaling begins</td></tr>
+            <tr><td class="border p-1">Very Hard</td><td class="border p-1">&gt;300</td><td class="border p-1">Significant scaling</td></tr>
+        </tbody>
+    </table>
+    </div>`
+},
+
+{
+    id: 'do',
+    title: 'Dissolved Oxygen (DO)',
+    intro: `DO determination by Winkler (Azide Modification) Iodometric Titration method.
+    
+    🔬 Scientific Background:
+    Dissolved Oxygen (DO) is oxygen dissolved in water, essential for survival of aquatic organisms. DO saturation is temperature-dependent:
+    
+    DO Saturation at Different Temperatures (sea level, 0 salinity):
+    • 0°C: 14.62 mg/L
+    • 10°C: 11.33 mg/L
+    • 20°C: 9.09 mg/L
+    • 25°C: 8.26 mg/L
+    • 30°C: 7.54 mg/L
+    • 37°C: 6.59 mg/L
+    
+    Winkler Method Reactions:
+    Step 1: Mn²⁺ + 2OH⁻ → Mn(OH)₂↓ (white)
+            Mn(OH)₂ + ½O₂ → MnO(OH)↓ (brown) [oxidized by DO]
+    
+    Step 2: MnO(OH) + 2I⁻ + 3H⁺ → Mn²⁺ + I₂ + 2H₂O (acidification)
+            (I₂ released proportional to DO)
+    
+    Step 3: I₂ + 2S₂O₃²⁻ → 2I⁻ + S₄O₆²⁻ (thiosulfate titration)
+    
+    Azide Modification: NaN₃ removes nitrite interference
+    2NO₂⁻ + 2I⁻ + 2H⁺ → N₂ + I₂ + 2H₂O (without azide, false high DO)
+    NaN₃ + H⁺ → HN₃; 2HN₃ + NO₂⁻ → N₂O + N₂ + H₂O + 2N₂ (nitrite destroyed)
+    
+    📊 Permissible Limits:
+    • WHO/CPCB for rivers:
+      - Class A (drinking water): ≥ 6 mg/L
+      - Class B (bathing): ≥ 5 mg/L
+      - Class C (drinking after treatment): ≥ 4 mg/L
+      - Class D (wildlife): ≥ 4 mg/L
+      - Class E (irrigation): ≥ 0 mg/L
+    • ETP discharge: ≥ 5 mg/L (CPCB)
+    
+    💡 Ecological Significance:
+    • DO <4 mg/L: Fish start dying (hypoxia)
+    • DO <2 mg/L: Most species cannot survive
+    • DO = 0 mg/L: Anaerobic conditions, H₂S production
+    • DO >10 mg/L: Supersaturation (algal bloom indicator)`,
+    
+    apparatus: `
+    <ul class="list-disc list-outside pl-5 space-y-1">
+        <li><strong>DO Sampler:</strong> For field sampling (bottle filling device)</li>
+        <li><strong>BOD Bottles (300 mL):</strong> With glass stopper, no air pocket</li>
+        <li><strong>Burette (25 mL)</strong> - Class A</li>
+        <li><strong>Volumetric Flask, Pipettes</strong></li>
+        <li><strong>DO Meter (Optional):</strong> For field measurement (membrane electrode method)</li>
+    </ul>`,
+    
+    reagents: `
+        <h4>Reagents</h4>
+        <ul class="list-disc list-outside pl-5 space-y-1">
+            <li>
+                <strong>Manganous Sulphate Solution:</strong>
+                Dissolve 480 g MnSO₄·4H₂O (or 364 g MnSO₄·H₂O) in distilled water, dilute to 1000 mL.
+                Filter if turbid.
+            </li>
+            <li>
+                <strong>Alkali-Iodide-Azide Reagent:</strong>
+                <ul class="list-disc list-outside pl-5 mt-1">
+                    <li>Dissolve 500 g NaOH in 300-400 mL distilled water (generates heat - careful!)</li>
+                    <li>Add and dissolve 135 g NaI (or 150 g KI)</li>
+                    <li>Dissolve 10 g NaN₃ (sodium azide) in 40 mL distilled water and add</li>
+                    <li>⚠️ Azide: Highly toxic, releases HN₃ gas on acidification - work in fume hood</li>
+                    <li>Dilute to 1000 mL</li>
+                    <li>Test: Diluted solution should not turn starch-iodide paper blue</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Concentrated Sulphuric Acid (H₂SO₄)</strong>
+            </li>
+            <li>
+                <strong>Starch Indicator Solution (0.5% w/v):</strong>
+                <ul class="list-disc list-outside pl-5 mt-1">
+                    <li>Make paste of 5 g soluble starch with cold water</li>
+                    <li>Add to boiling 1000 mL distilled water and boil until clear</li>
+                    <li>Add small amount of salicylic acid or 1 mL chloroform as preservative</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Standard Sodium Thiosulfate Titrant, 0.025N:</strong>
+                <ul class="list-disc list-outside pl-5 mt-1">
+                    <li>Dissolve 6.205 g Na₂S₂O₃·5H₂O in recently boiled cooled distilled water</li>
+                    <li>Add 0.4 g NaOH or 2 mL 6N NaOH (for stabilization)</li>
+                    <li>Dilute to 1000 mL</li>
+                    <li>Standardize: K₂Cr₂O₇ + KI → I₂ → titrate with thiosulfate</li>
+                </ul>
+            </li>
+        </ul>
+    `,
+    
+    procedure: [
+        `Sample Collection (Critical Step):
+        • Fill BOD bottle to overflow - no air bubble
+        • Use DO sampler or siphon tube
+        • Add reagents immediately after collection (on-site or within 5 minutes)`,
+        
+        `Manganese Addition:
+        • Remove stopper, add 2 mL MnSO₄ solution separately inside bottle (below liquid surface)
+        • White precipitate forms [Mn(OH)₂]`,
+        
+        `Alkali-Iodide-Azide Reagent:
+        • Add 2 mL alkali-iodide-azide reagent same way
+        • Replace stopper, making water seal (inversion stopper method)
+        • Gently invert 20 times - uniform brown precipitate forms [MnO(OH)]
+        • Let settle (15 minutes)`,
+        
+        `Acidification:
+        • Remove stopper, add 2 mL concentrated H₂SO₄ (below liquid surface)
+        • Replace stopper, mix gently until precipitate completely dissolves
+        • Yellow-brown solution forms (I₂ released)`,
+        
+        `Titration:
+        • Measure 201 mL (300 mL bottle - 2 mL MnSO₄ - 2 mL alkali reagent - correction for displaced volume) or defined volume
+        • Titrate with 0.025N Na₂S₂O₃ until pale yellow
+        • Add 1-2 mL starch indicator (solution turns blue)
+        • Titrate until blue color completely disappears (endpoint)
+        • Note mL thiosulfate`,
+        
+        `Field DO Measurement (Alternative):
+        • Calibrate membrane electrode DO meter
+        • Insert probe in sample
+        • Take reading after stabilization`
+    ],
+    
+    calculation: `
+    <div class="bg-blue-50 p-3 rounded">
+    <strong>Formula:</strong>
+    <br/>DO (mg/L) = (V_titrant × N × 8000) / V_sample
+    
+    <br/><br/><strong>Standard Formula for 300 mL Bottle (200 mL titrated):</strong>
+    <br/>DO (mg/L) = (mL Na₂S₂O₃ × 0.025 × 8000) / 200
+    <br/>DO (mg/L) = mL Na₂S₂O₃ × 1.0 (when N = 0.025 and 200 mL titrated)
+    
+    <br/><br/><strong>Example:</strong>
+    <br/>Na₂S₂O₃ used = 7.2 mL, N = 0.025, Volume titrated = 200 mL
+    <br/>DO = (7.2 × 0.025 × 8000) / 200 = 7.2 mg/L
+    
+    <br/><br/><strong>DO Saturation % Calculation:</strong>
+    <br/>DO Saturation % = (Measured DO / Saturation DO at that temp.) × 100
+    
+    <br/><br/><strong>DO Deficit:</strong>
+    <br/>DO Deficit = Saturation DO - Measured DO
+    
+    <br/><br/>⚠️ <strong>Common Errors:</strong>
+    <ul class="list-disc list-outside pl-5 text-xs">
+        <li>Air bubble entrainment during sampling - most common error</li>
+        <li>Delay between sampling and fixation - DO changes in minutes</li>
+        <li>Nitrite interference - use azide modification</li>
+        <li>Fe²⁺ >1 mg/L - blank correction required</li>
+    </ul>
+    </div>`
+},
             {
-                id: 'chloride',
-                title: 'Chloride',
-                intro: 'Chloride ions are naturally present in water but high concentrations can indicate pollution from industrial wastes or sewage. The test is performed using Mohr\'s method.',
-                apparatus: '<p>Standard laboratory glassware.</p>',
-                reagents: `
-                    <h4>Reagents</h4>
-                    <ul class="list-disc list-outside pl-5 space-y-1">
-                        <li><strong>Potassium chromate indicator solution.</strong></li>
-                        <li><strong>Standard silver nitrate titrant, 0.0141N:</strong> Dissolve 2.395 g AgNO₃ to 1 L.</li>
-                        <li><strong>Standard sodium chloride, 0.0141N:</strong> Dissolve 824.0 mg NaCl to 1 L.</li>
-                    </ul>
-                `,
-                procedure: [
-                    'Use a 100 mL sample or a suitable portion diluted to 100 mL.',
-                    'Add 1 mL K₂CrO₄ indicator, titrate with AgNO₃ titrant to a pinkish yellow end point.',
-                    'Also perform a blank titration.',
-                ],
-                calculation: 'Chloride (mg/L) = [ (A - B) &times; N &times; 35450 ] / mL of sample<br/><p class="text-xs mt-2">where A = mL titration for sample, B = mL titration for blank, N = normality of AgNO₃.</p>'
-            },
-            {
-                id: 'hardness',
-                title: 'Total Hardness',
-                intro: 'Water hardness is mainly due to calcium and magnesium ions. It is tested using the EDTA titration method.',
-                apparatus: '<p>Standard laboratory glassware.</p>',
-                reagents: `<h4>Reagents</h4>
-                    <ul class="list-disc list-outside pl-5 space-y-1">
-                        <li><strong>Buffer solution:</strong> Dissolve 16.9 g NH₄Cl in 143 mL conc. NH₄OH. Add 1.25 g magnesium salt of EDTA and dilute to 250 mL with distilled water.</li>
-                        <li><strong>Indicator:</strong> Eriochrome Black T sodium salt. Grind 0.5 g dye with 100 g NaCl.</li>
-                        <li><strong>Standard EDTA titrant, 0.01M:</strong> Dissolve 3.723 g of disodium salt of EDTA in distilled water and dilute to 1000 mL.</li>
-                        <li><strong>Standard Calcium Solution:</strong> Dissolve 1.000 g CaCO₃ in HCl and dilute to 1000 mL.</li>
-                    </ul>
-                    <p class="text-xs mt-2"><strong>Note:</strong> If the Mg salt of EDTA is unavailable, prepare buffer by mixing 1.179g disodium EDTA, 780mg MgSO₄·7H₂O, 16.9g NH₄Cl, and 143ml conc. NH₄OH.</p>`,
-                procedure: [
-                    'Dilute 25 mL sample to 50 mL with distilled water.',
-                    'Add 1 to 2 mL buffer solution to give a pH of 10.0 to 10.1.',
-                    'Add 1 to 2 drops of indicator solution and titrate with EDTA titrant to change in colour from reddish tinge to blue.',
-                    'Complete titration within 5 min after buffer addition.',
-                    'Standardise the EDTA titrant against standard calcium solution.',
-                ],
-                calculation: 'Total Hardness (as mg/L CaCO₃) = (A &times; B &times; 1000) / mL of sample<br/><p class="text-xs mt-2">where A = mL EDTA titrated for sample, B = mg CaCO₃ equivalent to 1.00 mL EDTA titrant.</p>'
-            },
-            {
-                id: 'do',
-                title: 'Dissolved Oxygen (DO)',
-                intro: 'Dissolved oxygen is essential for aquatic life and is a key indicator of water quality. It is tested using the Winkler method.',
-                apparatus: '<ul class="list-disc list-outside pl-5 space-y-1"><li>DO sampler.</li><li>BOD bottles, 300 mL.</li></ul>',
-                reagents: `
-                    <h4>Reagents</h4>
-                    <ul class="list-disc list-outside pl-5 space-y-1">
-                        <li><strong>Manganous sulphate solution:</strong> Dissolve 480 g MnSO₄·4H₂O to 1 L.</li>
-                        <li><strong>Alkali-iodide-azide reagent:</strong> Dissolve 500 g NaOH, 135 g NaI, and 10 g NaN₃ to 1 L.</li>
-                        <li><strong>Sulphuric acid, conc.</strong></li>
-                        <li><strong>Starch indicator.</strong></li>
-                        <li><strong>Standard sodium thiosulphate titrant, 0.025N:</strong> Dissolve 6.205 g Na₂S₂O₃·5H₂O to 1 L.</li>
-                    </ul>
-                `,
-                procedure: [
-                    'Carefully fill a 300 mL BOD bottle with water, avoiding air bubbles.',
-                    'Add 2 mL of <strong>manganese sulfate solution</strong>, then 2 mL of <strong>alkali-iodide-azide reagent</strong>. Stopper and mix.',
-                    'Allow the precipitate to settle.',
-                    'Add 2 mL of <strong>concentrated sulfuric acid</strong> and mix until completely dissolved.',
-                    'Titrate a specific volume (e.g., 201 mL) with standard <strong>sodium thiosulfate (0.025N)</strong> until a pale straw color remains.',
-                    'Add 1-2 mL of <strong>starch indicator</strong> (the solution will turn blue).',
-                    'Continue titrating until the blue color disappears completely. Note the volume.',
-                ],
-                calculation: 'DO (mg/L) = (V of Titrant &times; Molarity of Titrant &times; 8000) / 200'
-            },
-            {
-                id: 'ph',
-                title: 'pH',
-                intro: 'Potentiometric method.',
-                apparatus: '<ul class="list-disc list-outside pl-5 space-y-1"><li>pH meter with temperature compensation.</li><li>Reference and Glass electrodes.</li></ul>',
-                reagents: `
-                    <h4>Reagents</h4>
-                    <ul class="list-disc list-outside pl-5 space-y-1">
-                        <li><strong>Buffer solutions:</strong> Commercially available or prepared for pH 4.00, 6.86, and 9.18.</li>
-                    </ul>
-                `,
-                procedure: [
-                  'Calibrate pH meter using two buffer solutions (typically pH 4 and 7) according to manufacturer’s instructions.',
-                  'Rinse electrodes with distilled water, blot dry, and immerse in the sample.',
-                  'Read the pH after equilibrium is established.',
-                ],
-                calculation: 'Read directly from the meter.'
-            },
-             {
-                id: 'tds',
-                title: 'Total Dissolved Solids (TDS)',
-                intro: 'TDS is the total amount of all dissolved organic and inorganic solids in water. It is tested using the gravimetric method.',
-                apparatus: '<ul class="list-disc list-outside pl-5 space-y-1"><li>Evaporating dishes.</li><li>Drying oven, 180±2°C.</li><li>Desiccator.</li><li>Analytical balance.</li></ul>',
-                reagents: '<p>Not required.</p>',
-                procedure: [
-                    'Take a clean, dry, pre-weighed beaker (W₁).',
-                    'Place a known volume (e.g., 100 mL) of filtered water into the beaker.',
-                    'Evaporate the water completely on a hot plate or water bath.',
-                    'Dry the beaker in a hot air oven at 180°C for one hour.',
-                    'Cool the beaker in a desiccator and weigh it again (W₂).',
-                ],
-                calculation: 'TDS (mg/L) = [ (W₂ - W₁) in mg &times; 1000 ] / Volume of Sample (mL)'
-            },
-             {
-                id: 'tss',
-                title: 'Total Suspended Solids (TSS)',
-                intro: 'TSS is a measure of solid particles that remain on a filter paper.',
-                apparatus: '<ul class="list-disc list-outside pl-5 space-y-1"><li>Glass-fibre filter disk.</li><li>Filtration apparatus.</li><li>Drying oven, 103–105°C.</li><li>Analytical balance.</li></ul>',
-                reagents: '<p>Not required.</p>',
-                procedure: [
-                    'Filter a known volume of water through a pre-weighed glass fiber filter paper (W₁).',
-                    'Dry the filter paper with the retained solids in a hot air oven at 103-105°C for one hour.',
-                    'Cool in a desiccator and weigh again (W₂).',
-                ],
-                calculation: 'TSS (mg/L) = [ (W₂ - W₁) in mg &times; 1000 ] / Volume of Sample (mL)'
-            },
+    id: 'ph',
+    title: 'pH - Potentiometric Method',
+    intro: `pH measurement using glass electrode potentiometric method.
+    
+    🔬 Scientific Background:
+    pH is a measure of water's acidity or alkalinity, based on hydrogen ion activity:
+    pH = -log₁₀[H⁺] = -log₁₀(aH₊)
+    
+    pH Scale:
+    • 0-7: Acidic (H⁺ > OH⁻)
+    • 7: Neutral (H⁺ = OH⁻) [pure water at 25°C]
+    • 7-14: Alkaline/Basic (OH⁻ > H⁺)
+    
+    Note: Water's neutral pH is temperature-dependent:
+    • 0°C: pH 7.47
+    • 25°C: pH 7.00
+    • 60°C: pH 6.51
+    
+    Glass Electrode Working Principle:
+    Special glass membrane is selectively permeable to H⁺
+    EMF generated = const + 0.0592 × pH (at 25°C) [Nernst Equation]
+    
+    Nernst Equation:
+    E = E° - (RT/nF) × ln[H⁺]
+    Where: R = 8.314 J/mol·K, T = Temperature (K), n = 1, F = 96,485 C/mol
+    
+    Temperature Effect (Nernst factor):
+    • 15°C: 57.17 mV/pH unit
+    • 25°C: 59.16 mV/pH unit
+    • 35°C: 61.14 mV/pH unit
+    → ATC (Automatic Temperature Compensation) is important
+    
+    📊 Permissible Limits:
+    • WHO: 6.5-8.5 (no health guideline, operational parameter)
+    • IS 10500:2012: 6.5-8.5
+    • CPCB inland surface water discharge: 6.0-9.0
+    
+    💡 Significance:
+    • pH <6.5: Corrosive (leaches metals from pipes - lead, copper)
+    • pH >8.5: Scale formation, bitter taste, reduced chlorination efficiency
+    • Aquatic life: Most species thrive at pH 6.5-8.5
+    • Disinfection: Chlorination less effective at high pH`,
+    
+    apparatus: `
+    <ul class="list-disc list-outside pl-5 space-y-1">
+        <li><strong>pH Meter:</strong> ±0.01 pH unit resolution, with ATC (Automatic Temperature Compensation)</li>
+        <li><strong>Glass Electrode + Reference Electrode:</strong> Or combination electrode</li>
+        <li><strong>Temperature Probe</strong></li>
+        <li><strong>Calibration Buffer Solutions:</strong> NIST traceable standards</li>
+        <li><strong>Magnetic Stirrer</strong></li>
+    </ul>`,
+    
+    reagents: `
+        <h4>Buffer Solutions (NIST Standard)</h4>
+        <ul class="list-disc list-outside pl-5 space-y-1">
+            <li>
+                <strong>pH 4.00 Buffer (Phthalate):</strong>
+                Dissolve 10.12 g potassium hydrogen phthalate (KHC₈H₄O₄) in CO₂-free distilled water, dilute to 1000 mL
+            </li>
+            <li>
+                <strong>pH 6.86 Buffer (Phosphate):</strong>
+                Dissolve 3.39 g KH₂PO₄ + 3.53 g Na₂HPO₄ in 1000 mL distilled water
+            </li>
+            <li>
+                <strong>pH 9.18 Buffer (Borate):</strong>
+                Dissolve 3.80 g sodium tetraborate (Na₂B₄O₇·10H₂O) in 1000 mL distilled water
+            </li>
+            <li>
+                <strong>Or use commercially prepared certified buffer solutions</strong>
+            </li>
+        </ul>
+    `,
+    
+    procedure: [
+        `pH Meter Calibration (2-point or 3-point):
+        • Rinse electrode with distilled water, gently blot with soft tissue
+        • Immerse electrode in first buffer (pH 7 or near expected sample pH)
+        • Press "Calibrate" or "Standardize" button, wait for stable reading
+        • Immerse electrode in second buffer (after rinsing)
+        • Check slope: should be 95-105% (ideal: 100% = 59.16 mV/pH at 25°C)
+        • If slope out of range: Clean/replace electrode`,
+        
+        `Sample Measurement:
+        • Rinse electrode with distilled water
+        • Immerse electrode in sample container (or beaker)
+        • Maintain gentle stirring (magnetic stirrer - low speed)
+        • Allow 30-60 seconds to stabilize
+        • Note temperature (check ATC)
+        • Note pH reading (to 2 decimal places)`,
+        
+        `Post-measurement:
+        • Rinse electrode
+        • Store in storage solution (3M KCl)`,
+        
+        `QC Requirements:
+        • Calibration before each run (minimum 2 buffers)
+        • Mid-range buffer check after every 20 samples
+        • Calibration valid: ±0.05 pH units of true value`
+    ],
+    
+    calculation: `
+    <div class="bg-blue-50 p-3 rounded">
+    <strong>Direct Reading:</strong> Read directly from pH meter
+    
+    <br/><br/><strong>pH Interpretation:</strong>
+    <table class="w-full text-left border-collapse mt-2 text-xs">
+        <thead>
+            <tr><th class="border p-1">pH Range</th><th class="border p-1">Classification</th><th class="border p-1">H⁺ Conc.</th></tr>
+        </thead>
+        <tbody>
+            <tr><td class="border p-1">0-3</td><td class="border p-1">Strongly Acidic</td><td class="border p-1">1 - 0.001 mol/L</td></tr>
+            <tr><td class="border p-1">3-6</td><td class="border p-1">Weakly Acidic</td><td class="border p-1">10⁻³ - 10⁻⁶ mol/L</td></tr>
+            <tr><td class="border p-1">6-7</td><td class="border p-1">Mildly Acidic</td><td class="border p-1">10⁻⁶ - 10⁻⁷ mol/L</td></tr>
+            <tr><td class="border p-1">7</td><td class="border p-1">Neutral</td><td class="border p-1">10⁻⁷ mol/L</td></tr>
+            <tr><td class="border p-1">7-8.5</td><td class="border p-1">Slightly Alkaline</td><td class="border p-1">10⁻⁷ - 10⁻⁸·⁵ mol/L</td></tr>
+            <tr><td class="border p-1">8.5-11</td><td class="border p-1">Alkaline</td><td class="border p-1">Very low</td></tr>
+            <tr><td class="border p-1">11-14</td><td class="border p-1">Strongly Alkaline</td><td class="border p-1">Extremely low</td></tr>
+        </tbody>
+    </table>
+    
+    <br/><strong>Reporting:</strong>
+    pH = X.XX (2 decimal places), at Y°C
+    Example: pH = 7.42 at 25°C
+    </div>`
+},
+
+{
+    id: 'tds',
+    title: 'Total Dissolved Solids (TDS)',
+    intro: `TDS determination by gravimetric method (180°C drying).
+    
+    🔬 Scientific Background:
+    TDS is the total measure of all inorganic salts (calcium, magnesium, sodium, potassium, bicarbonates, chlorides, sulfates) dissolved in water and small amounts of organic matter.
+    
+    TDS ≠ TSS:
+    • TDS: Passes through 0.45 µm filter
+    • TSS: Retained on 0.45 µm filter
+    
+    TDS Drying Temperature:
+    • 103-105°C: Includes crystal water (total residue)
+    • 180°C: Volatile salts removed, only stable salts remain (BIS standard for TDS)
+    
+    TDS and Conductivity Relationship:
+    TDS (mg/L) ≈ EC (µS/cm) × 0.55-0.70 (empirical factor)
+    More precise: TDS = EC × 0.64 (general drinking water)
+    
+    📊 Permissible Limits:
+    • WHO: 600 mg/L (aesthetic), no health guideline
+    • IS 10500:2012: 500 mg/L (desirable), 2000 mg/L (permissible)
+    • CPCB inland surface water: 2100 mg/L
+    
+    💡 Significance:
+    • >1000 mg/L: Unacceptable taste
+    • >2000 mg/L: Corrosive, scale-forming
+    • <100 mg/L: Tasteless, may be corrosive (low buffering)
+    • Irrigation: Depending on crop, 1000-3000 mg/L (varies)`,
+    
+    apparatus: `
+    <ul class="list-disc list-outside pl-5 space-y-1">
+        <li><strong>Evaporating Dish:</strong> Platinum, borosilicate glass, or porcelain (100 mL capacity), pre-numbered</li>
+        <li><strong>Hot Air Oven:</strong> 180 ± 2°C</li>
+        <li><strong>Hot Plate/Steam Bath:</strong> For initial evaporation</li>
+        <li><strong>Desiccator:</strong> With anhydrous silica gel (not CaCl₂ - it reacts)</li>
+        <li><strong>Analytical Balance:</strong> ±0.1 mg readability</li>
+        <li><strong>Glass Fibre Filter:</strong> 0.45 µm (for TDS filtration)</li>
+        <li><strong>Vacuum Filtration Assembly</strong></li>
+    </ul>`,
+    
+    reagents: `
+    <p>No chemical reagents required.</p>
+    <p><strong>Note:</strong> Use distilled water (conductivity <2 µS/cm) for glassware rinsing.</p>`,
+    
+    procedure: [
+        `Dish Preparation:
+        • Place evaporating dish in oven at 180°C for 1 hour
+        • Cool in desiccator for 30 minutes
+        • Weigh on analytical balance (W₁) - record to 0.1 mg
+        • Use immediately after cooling (may become hygroscopic)`,
+        
+        `Sample Filtration:
+        • Filter sample through 0.45 µm glass fibre filter (to remove suspended solids)
+        • First rinse filter with 50-100 mL distilled water
+        • Discard filter rinse water
+        • Measure appropriate sample volume (V mL)`,
+        
+        `Evaporation:
+        • Add measured volume (100 mL recommended, adjust based on TDS) to dish
+        • Evaporate gently on hot plate or steam bath until dry
+        • Avoid spattering (use low heat near end)`,
+        
+        `Drying:
+        • Place dish in 180 ± 2°C oven for 1 hour
+        • Cool in desiccator for 30 minutes
+        • Weigh immediately (W₂)
+        • Repeat weighing until consistent weight (±0.5 mg)`,
+        
+        `High TDS Samples:
+        • If residue >200 mg, repeat analysis with smaller volume`,
+        
+        `Low TDS Samples (<10 mg/L):
+        • Use larger volume (500 mL or 1000 mL)
+        • Multiple additions by refilling dish during evaporation`
+    ],
+    
+    calculation: `
+    <div class="bg-blue-50 p-3 rounded">
+    <strong>Formula:</strong>
+    <br/>TDS (mg/L) = [(W₂ - W₁) × 1000 × 1000] / V
+    
+    <br/><br/>Where:
+    <ul class="list-disc list-outside pl-5 text-sm">
+        <li>W₂ = Weight of dish with residue (g)</li>
+        <li>W₁ = Weight of empty dish (g)</li>
+        <li>V = Sample volume (mL)</li>
+        <li>1,000,000 (or 10⁶) = g to mg and mL to L conversion</li>
+    </ul>
+    
+    <br/><strong>Simplified (W in mg):</strong>
+    <br/>TDS (mg/L) = [(W₂ - W₁) in mg × 1000] / V (mL)
+    
+    <br/><br/><strong>Example:</strong>
+    <br/>W₁ = 50.2145 g, W₂ = 50.2695 g, V = 100 mL
+    <br/>Residue = (50.2695 - 50.2145) × 1000 = 55 mg
+    <br/>TDS = (55 × 1000) / 100 = <strong>550 mg/L</strong>
+    
+    <br/><br/>⚠️ <strong>Precision:</strong>
+    <ul class="list-disc list-outside pl-5 text-xs">
+        <li>Duplicate analysis: Results within ±10% (for TDS >10 mg/L)</li>
+        <li>Blank correction: Run reagent blank, subtract if significant</li>
+    </ul>
+    </div>`
+},
+
+{
+    id: 'tss',
+    title: 'Total Suspended Solids (TSS)',
+    intro: `TSS determination by gravimetric method (glass fibre filter, 103-105°C drying).
+    
+    🔬 Scientific Background:
+    TSS are solid particles suspended in water that are retained on a 0.45 µm (or 1.2 µm glass fibre) filter when sample is filtered.
+    
+    TSS Components:
+    • Settleable Solids: Settle within 1 hour (in Imhoff cone)
+    • Colloidal Solids: Suspended, do not settle (0.001-1 µm)
+    • Filterable (Dissolved) Solids: Pass through filter (= TDS)
+    
+    Total Solids (TS) = TSS + TDS
+    
+    Fixed vs Volatile Suspended Solids:
+    • FSS (Fixed Suspended Solids): Remains after ignition at 550°C (inorganic)
+    • VSS (Volatile Suspended Solids): Burns off at 550°C (organic)
+    • VSS/TSS ratio: Biological activity indicator
+    
+    📊 Permissible Limits:
+    • CPCB inland surface water discharge: 100 mg/L
+    • WHO for drinking water: No standard (turbidity preferred)
+    • Rivers (Class B - bathing): ≤ 20 mg/L (additional above natural level)
+    
+    💡 Significance:
+    • High TSS: Increases turbidity, decreases light penetration
+    • Affects photosynthesis in aquatic plants
+    • Fish gills damage (>80 mg/L)
+    • Carries adsorbed pollutants (heavy metals, organics)
+    • Drinking water: Treatment efficiency indicator`,
+    
+    apparatus: `
+    <ul class="list-disc list-outside pl-5 space-y-1">
+        <li><strong>Glass Fibre Filter Disk:</strong> 47 mm or 55 mm diameter, 0.45 µm nominal pore size (Whatman GF/C or equivalent)</li>
+        <li><strong>Filtration Apparatus:</strong> Gooch crucible or vacuum filtration unit</li>
+        <li><strong>Vacuum Pump</strong></li>
+        <li><strong>Drying Oven:</strong> 103-105°C (precisely controlled)</li>
+        <li><strong>Desiccator</strong></li>
+        <li><strong>Analytical Balance:</strong> ±0.1 mg readability</li>
+        <li><strong>Aluminium Weighing Dishes or Crucibles</strong></li>
+    </ul>`,
+    
+    reagents: `<p>No chemical reagents required.</p>`,
+    
+    procedure: [
+        `Filter Preparation:
+        • Rinse glass fibre filter with distilled water (in vacuum filtration assembly)
+        • Dry in 103-105°C oven for 1 hour
+        • Cool in desiccator for 30 minutes
+        • Weigh (W₁) - to 0.1 mg precision
+        • Keep filter in weighing dish and ready in oven/desiccator`,
+        
+        `Sample Volume Selection:
+        • TSS <100 mg/L: 1000 mL sample
+        • TSS 100-500 mg/L: 250 mL
+        • TSS 500-2000 mg/L: 100 mL
+        • TSS >2000 mg/L: 25-50 mL (or dilute)
+        • Final residue: 10-200 mg optimal range`,
+        
+        `Filtration:
+        • Place pre-weighed filter in assembly
+        • Pass measured volume sample through filter
+        • Keep vacuum pressure moderate (excessive vacuum allows fine particles to pass)
+        • Wash filter with 3 × 10 mL distilled water (to remove salts)
+        • Ensure complete drainage`,
+        
+        `Drying and Weighing:
+        • Dry filter in dish (or with dish) at 103-105°C for 1 hour
+        • Cool in desiccator for 30 minutes
+        • Weigh immediately (W₂)
+        • Repeat until constant weight (±0.5 mg between successive weighings)`,
+        
+        `VSS Determination (Optional):
+        • After W₂, ignite filter in muffle furnace at 550°C for 15 minutes
+        • Cool in desiccator, weigh (W₃)
+        • VSS = [(W₂-W₁) - (W₃-W₁)] × 1000/V = (W₂-W₃) × 1000/V`
+    ],
+    
+    calculation: `
+    <div class="bg-blue-50 p-3 rounded">
+    <strong>TSS Formula:</strong>
+    <br/>TSS (mg/L) = [(W₂ - W₁) × 1,000,000] / V
+    
+    <br/><strong>Simplified:</strong>
+    <br/>TSS (mg/L) = [(W₂ - W₁) in mg × 1000] / V (mL)
+    
+    <br/><br/>Where:
+    <ul class="list-disc list-outside pl-5 text-sm">
+        <li>W₁ = Initial weight of filter (g or mg)</li>
+        <li>W₂ = Weight of filter + residue after drying (g or mg)</li>
+        <li>V = Sample volume (mL)</li>
+    </ul>
+    
+    <br/><strong>Example:</strong>
+    <br/>W₁ = 0.4521 g, W₂ = 0.4891 g, V = 500 mL
+    <br/>TSS = [(0.4891 - 0.4521) × 1000 × 1000] / 500 = 74 mg/L
+    
+    <br/><br/><strong>VSS (Volatile Suspended Solids):</strong>
+    <br/>VSS (mg/L) = [(W₂ - W₃) × 1000] / V (mL)
+    <br/>Where W₃ = filter + ash weight after 550°C ignition
+    
+    <br/><br/><strong>FSS (Fixed Suspended Solids):</strong>
+    <br/>FSS (mg/L) = TSS - VSS
+    
+    <br/><br/>⚠️ <strong>Common Errors:</strong>
+    <ul class="list-disc list-outside pl-5 text-xs">
+        <li>Filter pre-treatment is essential (rinse + dry + weigh)</li>
+        <li>Excessive vacuum: Fine particles pass through filter</li>
+        <li>Insufficient washing: Salt crystals remain (false high)</li>
+        <li>Incomplete drying: Moisture retained (false high)</li>
+        <li>Filter handling: Use forceps, avoid finger contact (oil contamination)</li>
+    </ul>
+    
+    <br/><br/><strong>Quality Control:</strong>
+    <ul class="list-disc list-outside pl-5 text-xs">
+        <li>Duplicate analysis: RPD ≤ 20% for TSS >10 mg/L</li>
+        <li>Blank filter: Process blank filter through entire procedure - should show ±0.5 mg change</li>
+        <li>Known standard: Use certified TSS standard for verification (e.g., kaolin suspension)</li>
+    </ul>
+    </div>`
+},
             {
     id: 'fluoride',
     title: 'Fluoride Detection in Water',
