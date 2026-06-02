@@ -2565,9 +2565,10 @@ TH = (Ca²⁺/0.4) + (Mg²⁺/0.243) = (60/0.4) + (24.3/0.243) = 150 + 100 = 250
                 </ul>
             </div>
         </div>
-    `
-}
-            {
+   `
+}, // ✅ Yahan comma (,) lagayein!
+
+{
     id: 'manganese',
     title: 'Manganese Detection (Paani mein Manganese ka Pata Lagana)',
     intro: 'Persulphate oxidation method ka use karke paani mein dissolved manganese ka spectrophotometric determination. Manganese trace concentrations mein bhi staining aur taste issues cause karta hai.',
