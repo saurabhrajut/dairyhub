@@ -31,7 +31,6 @@ import {
     Atom,
     Factory,
     Wind,
-    Flask,
     Pipette,
     FlaskRound,
     Leaf,
@@ -200,7 +199,7 @@ const testsConfig: Record<string, { icon: any, color: string }> = {
 
 const Formula = ({ children }: { children: React.ReactNode }) => (
     <div className="p-4 bg-muted/50 rounded-lg text-center font-mono text-sm my-4 text-primary border border-primary/10 overflow-x-auto"
-     dangerouslySetInnerHTML={{ __html: children as string }} />
+         dangerouslySetInnerHTML={{ __html: children as string }} />
 );
 
 const WaterTestSection = ({ test }: { test: any }) => {
@@ -230,7 +229,7 @@ const WaterTestSection = ({ test }: { test: any }) => {
             {test.reagents && (
                 <div className="mt-6">
                     <h3 className="text-lg font-bold mb-3 text-primary flex items-center gap-2 font-headline">
-                        <Flask className="w-5 h-5 text-green-600" />
+                        <FlaskRound className="w-5 h-5 text-green-600" />
                         Reagents
                     </h3>
                     <div className="bg-white p-4 rounded-xl border shadow-sm prose max-w-none text-gray-600 text-sm sm:text-base"
