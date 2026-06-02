@@ -3155,7 +3155,7 @@ NH₃-N = 0.3 × (50/25) = 0.6 mg/L</code></pre>
             </div>
         </div>
     `
-}
+},
             {
     id: 'nitrate',
     title: 'Nitrate Nitrogen (NO₃-N)',
@@ -3558,7 +3558,7 @@ To convert: PO₄ (mg/L) = P (mg/L) × 3.06</pre>
             </div>
         </div>
     `
-}
+},
             {
     id: 'silicate',
     title: 'Silicate (SiO₂)',
