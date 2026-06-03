@@ -98,7 +98,6 @@ const renderTable = (tableData: any) => {
 
   return (
     <>
-      {/* Desktop: normal table, hidden on mobile */}
       <div className="hidden sm:block rounded-xl border border-gray-200 mt-3 mb-4 shadow-sm overflow-x-auto">
         <Table>
           <TableHeader>
@@ -126,18 +125,15 @@ const renderTable = (tableData: any) => {
         </Table>
       </div>
 
-      {/* Mobile: card-per-row layout, always shown on small screens */}
       <div className="sm:hidden space-y-3 mt-3 mb-4">
         {tableData.rows.map((row: any, rowIndex: number) => {
           const cells = Object.values(row) as string[];
           return (
             <div key={rowIndex} className="border border-gray-200 rounded-xl overflow-hidden shadow-sm">
-              {/* First cell = row title/label */}
               <div
                 className="bg-slate-700 text-white text-xs font-bold px-3 py-2 leading-snug"
                 dangerouslySetInnerHTML={{ __html: cells[0] }}
               />
-              {/* Remaining cells each on their own row with column label */}
               <div className="divide-y divide-gray-100">
                 {cells.slice(1).map((cell, ci) => (
                   <div key={ci} className={`flex flex-col px-3 py-2 ${ci % 2 === 0 ? "bg-white" : "bg-slate-50"}`}>
@@ -159,7 +155,6 @@ const renderTable = (tableData: any) => {
   );
 };
 
-// Handles both p1+p2 text blocks and list items flexibly
 const renderDescription = (desc: any) => {
   if (!desc) return null;
   return (
@@ -752,9 +747,10 @@ export function FssaiStandardsModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+      {/* 🔴 FIXED: Removed sm:h-auto and sm:max-h-[92vh], added exact sm:h-[92vh] to enforce Scroll Area boundaries */}
       <DialogContent className="
         w-full max-w-none h-[100dvh] rounded-none
-        sm:max-w-4xl sm:lg:max-w-6xl sm:w-[95vw] sm:h-auto sm:max-h-[92vh] sm:rounded-2xl
+        sm:max-w-4xl sm:lg:max-w-6xl sm:w-[95vw] sm:h-[92vh] sm:rounded-2xl
         flex flex-col p-0 overflow-hidden
         sm:top-[50%] sm:translate-y-[-50%]
       ">
@@ -776,14 +772,15 @@ export function FssaiStandardsModal({
 
         {/* ---- Topic Detail View ---- */}
         {selectedTopic && ActiveComponent ? (
-          <div className="flex-1 flex flex-col min-h-0 bg-gray-50">
+          <div className="flex-1 flex flex-col min-h-0 overflow-hidden bg-gray-50">
             <div className="px-4 pt-3 pb-1 bg-white border-b border-gray-100 shrink-0">
               <Button variant="ghost" onClick={handleBack} className="hover:bg-slate-100 text-slate-700">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 {content.backToTopics}
               </Button>
             </div>
-            <ScrollArea className="flex-1">
+            {/* 🔴 FIXED: Added min-h-0 and h-full to flex-1 container to lock the scroll boundary */}
+            <ScrollArea className="flex-1 h-full min-h-0 w-full">
               <div className="p-3 sm:p-6 max-w-5xl mx-auto">
                 <ActiveComponent content={content} />
               </div>
@@ -791,7 +788,7 @@ export function FssaiStandardsModal({
           </div>
         ) : (
           /* ---- Topic Grid View ---- */
-          <div className="flex-1 flex flex-col min-h-0 bg-gray-50">
+          <div className="flex-1 flex flex-col min-h-0 overflow-hidden bg-gray-50">
             {/* Search bar */}
             <div className="px-4 pt-3 pb-2 bg-white border-b border-gray-100 shrink-0">
               <div className="relative">
@@ -809,7 +806,8 @@ export function FssaiStandardsModal({
               <p className="text-xs text-gray-400 mt-1 text-right">{filteredTopics.length} topics</p>
             </div>
 
-            <ScrollArea className="flex-1" viewportRef={scrollAreaRef}>
+            {/* 🔴 FIXED: Added min-h-0 and h-full to the scroll wrapper */}
+            <ScrollArea className="flex-1 h-full min-h-0 w-full" viewportRef={scrollAreaRef}>
               <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 p-3 sm:p-4">
                 {filteredTopics.map(topic => {
                   const topicTitle = getTopicTitle(topic.value);
