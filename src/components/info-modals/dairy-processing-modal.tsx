@@ -683,7 +683,7 @@ export function DairyProcessingModal({
         className={cn(
           "flex flex-col p-0 overflow-hidden",
           "w-[100vw] sm:w-[95vw] max-w-4xl lg:max-w-6xl",
-          "h-[100dvh] sm:h-auto sm:max-h-[90vh]",
+          "h-[100dvh] sm:h-[90vh]", // 🔴 FIXED: Removed sm:h-auto and max-h
           "rounded-none sm:rounded-2xl",
           "bg-gradient-to-br from-slate-50 via-white to-indigo-50/30",
           "border-0 shadow-2xl"
@@ -724,7 +724,8 @@ export function DairyProcessingModal({
             </DialogHeader>
 
             {/* ── Content ── */}
-            <ScrollArea className="flex-1 w-full max-w-full">
+            {/* 🔴 FIXED: Added min-h-0 and h-full */}
+            <ScrollArea className="flex-1 h-full min-h-0 w-full max-w-full">
               <div className="w-full max-w-full overflow-hidden px-2 pb-6 sm:px-4 sm:pb-8">
                 <TopicContent
                   content={selectedTopic}
@@ -734,7 +735,8 @@ export function DairyProcessingModal({
             </ScrollArea>
           </div>
         ) : (
-          <>
+          /* 🔴 FIXED: Added a flex-col div to wrap the fragment and enforce boundaries */
+          <div className="flex-1 flex flex-col min-h-0 w-full overflow-hidden">
             {/* ── Grid Header ── */}
             <DialogHeader className="px-4 pt-4 pb-2 sm:px-6 sm:pt-6 sm:pb-3 shrink-0 border-b border-gray-100/50">
               <div className="flex flex-col items-center">
@@ -756,7 +758,8 @@ export function DairyProcessingModal({
             </DialogHeader>
 
             {/* ── Topic Grid ── */}
-            <ScrollArea className="flex-1" viewportRef={scrollAreaRef}>
+            {/* 🔴 FIXED: Added min-h-0 and h-full */}
+            <ScrollArea className="flex-1 h-full min-h-0 w-full" viewportRef={scrollAreaRef}>
               <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-2 sm:gap-3 p-3 sm:p-4">
                 {topics.map((topic) => (
                   <button
@@ -800,7 +803,7 @@ export function DairyProcessingModal({
               </div>
               <div className="h-3 sm:h-4" />
             </ScrollArea>
-          </>
+          </div>
         )}
       </DialogContent>
     </Dialog>
