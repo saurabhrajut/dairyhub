@@ -9,7 +9,8 @@ import {
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Image from "next/image";
-import { GraduationCap, Quote, Target, HeartHandshake } from "lucide-react"; 
+// Share2 icon import kiya gaya hai
+import { GraduationCap, Quote, Target, HeartHandshake, Share2 } from "lucide-react"; 
 import { useLanguage } from "@/context/language-context";
 import { aboutUsContent } from "@/lib/content/about-us-content";
 
@@ -22,6 +23,27 @@ export function AboutUsModal({
 }) {
   const { t } = useLanguage();
   const content = t(aboutUsContent);
+
+  // App share karne ka function
+  const handleShare = async () => {
+    const shareData = {
+      title: "Check out this App!",
+      text: "I found this amazing app, you should check it out!",
+      url: window.location.origin, // App ka root URL jayega
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        console.error("Error sharing:", err);
+      }
+    } else {
+      // Fallback: Agar browser Web Share API support nahi karta
+      navigator.clipboard.writeText(shareData.url);
+      alert("Link copied to clipboard!");
+    }
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -121,12 +143,21 @@ export function AboutUsModal({
                   </div>
                 </div>
                 
-                {/* 5. Call to Action & Footer */}
+                {/* 5. Call to Action, Share Button & Footer */}
                 <div className="bg-slate-900 text-white rounded-3xl p-8 sm:p-12 text-center shadow-2xl relative overflow-hidden mt-8">
                   <div className="absolute top-0 left-0 w-full h-full bg-grid-white/[0.05]" />
                   <div className="relative z-10">
                       <h2 className="text-2xl sm:text-3xl font-bold font-headline mb-4">{content.callToAction.title}</h2>
-                      <p className="text-slate-300 text-lg max-w-2xl mx-auto leading-relaxed">{content.callToAction.text}</p>
+                      <p className="text-slate-300 text-lg max-w-2xl mx-auto leading-relaxed mb-8">{content.callToAction.text}</p>
+                      
+                      {/* NEW SHARE BUTTON ADDED HERE */}
+                      <button 
+                        onClick={handleShare}
+                        className="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold py-3 px-8 rounded-full transition-all transform hover:scale-105 shadow-lg mb-4"
+                      >
+                        <Share2 className="w-5 h-5" />
+                        Share with Friends
+                      </button>
                       
                       <div className="mt-8 pt-8 border-t border-slate-800">
                         <p className="text-sm text-slate-500 font-mono">
