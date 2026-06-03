@@ -39477,185 +39477,3373 @@ If droplets stick to the dryer wall → prolonged heat exposure on the wall
       ]
     },
             "butter": {
-                title: "Analysis of Butter",
-                tests: [
-                   {
-                        title: "Determination of Moisture",
-                        purpose: "To determine the water content, a key quality and legal parameter.",
-                        reference: "IS 3507 – 1966; A.O.A.C 920.116",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                            <ol class="list-decimal list-outside pl-5 space-y-2">
-                                <li>Weigh 3-4 g of prepared butter sample into a pre-weighed flat-bottomed dish (W1).</li>
-                                <li>Heat the dish on a boiling water-bath for ~20 min, stirring frequently.</li>
-                                <li>Transfer to a hot air oven at 100 ± 1°C and dry to a constant weight (W2).</li>
-                            </ol>
-                            <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
-                            <pre><code>Moisture % = [ (W1 - W2) / Initial Weight of sample ] * 100</code></pre>
-                        `
-                    },
-                   {
-                        title: "Determination of Fat and Curd (MSNF)",
-                        purpose: "To determine fat and non-fat solids content.",
-                        reference: "IS 3507 – 1966",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                            <ol class="list-decimal list-outside pl-5 space-y-2">
-                                <li>Use the residue from the moisture determination (W2).</li>
-                                <li>Extract the fat by repeatedly washing the residue with a fat solvent (petroleum ether) and decanting the solvent.</li>
-                                <li>After all fat is extracted, dry the remaining residue in the oven to remove all solvent and weigh it (W3). This gives the weight of Curd + Salt.</li>
-                                <li>To find the curd content, the salt content must be determined separately and subtracted from this value.</li>
-                            </ol>
-                            <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
-                            <pre><code>% Fat = 100 - (%Moisture + %Curd&Salt)</code></pre>
-                            <pre><code>% Curd = %Curd&Salt - %Salt</code></pre>
-                        `
-                    },
-                   {
-                        title: "Determination of Salt (NaCl)",
-                        purpose: "To measure the salt content, important for flavor and legal standards.",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">Method 1: Mohr's Method</h4>
-                            <p>Weigh 5g of butter, add 100ml boiling water, and cool to 50-55°C. Add potassium chromate indicator and titrate with standard silver nitrate (AgNO₃) solution until a brownish color persists.</p>
-                            <pre><code>NaCl % = [5.844 * N_AgNO3 * (V_sample - V_blank)] / Weight_sample</code></pre>
-                            
-                            <h4 class="font-semibold mt-4 mb-2">Method 2: Volhard's Method</h4>
-                            <p>Extract salt with hot water. Add excess standard silver nitrate to precipitate chlorides. Back-titrate the excess silver nitrate with potassium thiocyanate using ferric alum indicator.</p>
-                            <pre><code>NaCl % = [23.38 * N_KCNS * (V_blank - V_sample)] / Weight_sample</code></pre>
-                        `
-                    }
+      title: "Butter (Makhan) Analysis",
+      tests: [
+        {
+          title: "Determination of Moisture",
+          purpose: "To determine the quantity of water in butter — this is a major quality, legal, and economic parameter. Higher moisture = lower fat = consumer receiving less value. FSSAI has set maximum limits.",
+          reference: "IS 3507 – 1966; A.O.A.C 920.116",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>Butter is subjected to controlled heat to evaporate all water. Weight loss = moisture content. This is a <strong>gravimetric method</strong>.</p>
+            <p class="mt-2"><strong>Understanding Butter Composition:</strong></p>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Component</th><th class="border p-2">Table Butter</th><th class="border p-2">White Butter (Desi)</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Fat</td><td class="border p-2">≥ 80%</td><td class="border p-2">≥ 76%</td></tr>
+                <tr><td class="border p-2">Moisture</td><td class="border p-2">≤ 16%</td><td class="border p-2">≤ 20%</td></tr>
+                <tr><td class="border p-2">Curd (MSNF)</td><td class="border p-2">≤ 1.5%</td><td class="border p-2">≤ 1.5%</td></tr>
+                <tr><td class="border p-2">Salt (NaCl)</td><td class="border p-2">≤ 3.0%</td><td class="border p-2">Usually unsalted</td></tr>
+              </tbody>
+            </table>
+            <p class="mt-2 text-sm">This means butter = mostly fat + some water + very little protein/lactose (curd) + salt. The moisture test is most important because where water is present, fat should be instead.</p>
+
+            <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mt-2 text-sm">
+              <p><strong>Special challenge in butter moisture testing:</strong></p>
+              <ul class="list-disc list-inside space-y-1 mt-1">
+                <li>In butter, water exists trapped as <strong>tiny droplets</strong> inside fat (water-in-oil emulsion)</li>
+                <li>If placed directly in oven, fat will seal and water will remain trapped inside</li>
+                <li>Therefore, <strong>heating + stirring on water bath</strong> is performed first — fat melts, water droplets merge, and evaporate with bubbling</li>
+                <li>When bubbling stops completely = all water has been expelled</li>
+                <li>Then final drying is done in oven — for residual traces</li>
+              </ul>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li><strong>Dish preparation:</strong> Dry a clean, flat-bottom aluminium or nickel dish (with stirring rod inside) in a 100°C oven for 1 hour. Cool in desiccator. Weight of dish + rod = <strong>W_dish</strong>. <em>— The stirring rod is weighed with the dish because it will also be used in the procedure. Pre-drying removes the dish's own moisture.</em></li>
+              <li><strong>Sample weighing:</strong> Mix the butter sample thoroughly first (moisture may vary in different portions). Accurately weigh 3-4 grams into the dish. Dish + rod + butter = <strong>W_initial</strong>. <em>— 3-4 grams is optimal — too little sample means weight loss cannot be accurately measured, too much sample greatly increases drying time.</em></li>
+              <li><strong>Water bath heating:</strong> Place the dish on a <strong>boiling water bath</strong>. Stir continuously with the <strong>stirring rod</strong>. <em>— Stirring is very important! Stirring causes:</em>
+                <ul class="list-disc list-inside ml-5 text-sm">
+                  <li>Trapped water droplets to rise to the fat surface</li>
+                  <li>Uniform heating — no spot gets excessively hot</li>
+                  <li>Prevention of spattering (fat splashes)</li>
+                  <li>This process takes approximately 20 minutes</li>
+                </ul>
+              </li>
+              <li><strong>Bubbling observation:</strong> Continue stirring until <strong>bubbling completely stops</strong>. <em>— Bubbles = water vapour escaping from melted fat. When bubbles stop = water has been expelled. Very fine bubbles appear in the final stage — wait for these to stop.</em></li>
+              <li><strong>Oven drying:</strong> Transfer the dish to an oven at <strong>100±1°C</strong>. Keep for 1 hour. <em>— Final traces of moisture not removed on the water bath are removed in the oven. Not exceeding 100°C because fat may decompose and milk solids may brown.</em></li>
+              <li><strong>Cooling and weighing:</strong> Cool in desiccator (20-30 min). Weigh = <strong>W_final</strong>.</li>
+              <li><strong>Constant weight check:</strong> Return to oven for 30 min, cool, weigh. If within ±0.5 mg of W_final = constant weight achieved.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Formula and Factor Explanation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>% Moisture = [(W_initial - W_final) / (W_initial - W_dish)] × 100</code></pre>
+              
+              <h5 class="font-semibold mt-3 text-sm">Detail of Each Factor:</h5>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <tbody>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold w-1/4">W_dish</td><td class="border p-2">Weight of empty dish + stirring rod (pre-dried) — grams. This is the baseline.</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W_initial</td><td class="border p-2">Dish + rod + butter BEFORE drying — grams. Starting point.</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W_final</td><td class="border p-2">Dish + rod + dried residue AFTER drying — grams. Ending point. Moisture has evaporated.</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W_initial - W_dish</td><td class="border p-2">= Sample weight (actual weight of butter) — denominator</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W_initial - W_final</td><td class="border p-2">= Weight LOSS = Moisture that evaporated — numerator</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">× 100</td><td class="border p-2">Percentage conversion</td></tr>
+                </tbody>
+              </table>
+
+              <p class="text-sm mt-3"><strong>Visual Diagram:</strong></p>
+              <pre class="text-sm"><code>
+BEFORE DRYING (W_initial)          AFTER DRYING (W_final)
+┌─────────────────────┐           ┌─────────────────────┐
+│ 💧 Water droplets   │   100°C  │                     │
+│   trapped in fat    │  ─────→  │  (water evaporated!) │
+│   (W_initial-W_final)│  stir   │                     │
+│                     │          │                     │
+│ 🧈 Fat (~80%)      │          │ 🧈 Fat (~80%)       │
+│ 🥛 Curd (~1.5%)    │          │ 🥛 Curd (~1.5%)     │
+│ 🧂 Salt (~2%)      │          │ 🧂 Salt (~2%)       │
+├─────────────────────┤          ├─────────────────────┤
+│ 🍽 Dish + Rod       │          │ 🍽 Dish + Rod        │
+│   (W_dish)          │          │   (W_dish)           │
+└─────────────────────┘          └─────────────────────┘
+
+Moisture = Weight loss = W_initial - W_final
+Sample = W_initial - W_dish
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Example Calculation:</strong></p>
+              <pre class="text-sm"><code>
+W_dish (empty dish + rod) = 48.235 g
+W_initial (dish + rod + butter) = 51.876 g
+W_final (dish + rod + dried residue) = 51.298 g
+
+Sample weight = 51.876 - 48.235 = 3.641 g
+Weight loss (moisture) = 51.876 - 51.298 = 0.578 g
+
+% Moisture = (0.578 / 3.641) × 100 = 15.88%
+
+Table butter FSSAI limit: Max 16% → PASS ✓ (barely!)
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Can it be done with water bath alone (without oven)?</strong></p>
+              <p class="text-sm">Yes, some rapid methods use only a water bath — moisture is considered removed when bubbling completely stops and slight browning appears. However, oven drying is more accurate because it removes the last traces as well. The standard method includes both steps.</p>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">FSSAI Standards:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Butter Type</th><th class="border p-2">Max Moisture</th><th class="border p-2">Reason</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Table butter (pasteurized)</td><td class="border p-2">16%</td><td class="border p-2">Commercial standard — premium product, more fat</td></tr>
+                <tr><td class="border p-2">White butter (desi makhan)</td><td class="border p-2">20%</td><td class="border p-2">Traditional product — greater moisture tolerance, less processed</td></tr>
+                <tr><td class="border p-2">Cooking butter</td><td class="border p-2">20%</td><td class="border p-2">Lower grade, used for making ghee</td></tr>
+              </tbody>
+            </table>
+          `
+        },
+        {
+          title: "Determination of Fat and Curd (MSNF)",
+          purpose: "To determine fat content and non-fat solids (curd = protein + lactose + minerals) in butter. Fat is butter's primary value — FSSAI mandates a minimum of 80% fat for table butter.",
+          reference: "IS 3507 – 1966",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>Butter = Fat + Moisture + Curd (MSNF) + Salt. If we individually measure moisture, curd, and salt, then fat can be calculated <strong>by difference</strong>:</p>
+            <pre class="text-sm bg-gray-50 p-2 rounded"><code>% Fat = 100 - (% Moisture + % Curd + % Salt)</code></pre>
+            <p class="mt-2"><strong>MSNF (Milk Solids Not Fat)</strong> = Curd = Protein (casein + whey) + Lactose + Minerals. The solid remaining after removing fat and moisture (minus salt) = curd.</p>
+
+            <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mt-2 text-sm">
+              <p><strong>Why is this "by difference" method used?</strong></p>
+              <ul class="list-disc list-inside space-y-1 mt-1">
+                <li>Fat in butter is 80%+ — direct gravimetric fat extraction would use excessive solvent</li>
+                <li>Measuring moisture and salt is straightforward — calculating fat by difference is practical</li>
+                <li>Alternatively, the Gerber method can also be used — but the by-difference method is standard for butter</li>
+                <li>Rose-Gottlieb can also be performed but is time-consuming for such high-fat samples</li>
+              </ul>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure — Curd (MSNF) Determination:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li><strong>Starting point:</strong> Use the dried residue remaining after the moisture test (the dish contains fat + curd + salt — moisture has already been removed). <em>— This is sequential testing — moisture was first removed, now curd will be extracted from the same sample. Both time and sample are conserved.</em></li>
+              <li><strong>Fat extraction:</strong> Add <strong>petroleum ether (boiling range 40-60°C)</strong> to the dried residue — sufficient amount (20-30 ml). Gently swirl. <em>— Petroleum ether is a non-polar solvent — it dissolves fat but does NOT dissolve protein, lactose, or salt. Therefore fat goes into the ether, and the rest remains.</em></li>
+              <li>Carefully decant (pour off) the ether through a small filter paper into a waste container. <em>— Careful pouring keeps the solid residue in the dish. Any fine particles are also caught by the filter paper.</em></li>
+              <li>Repeat this extraction <strong>3-4 times</strong> with fresh petroleum ether each time. <em>— Multiple washings ensure complete fat extraction. If the ether is appearing clear (no yellow colour) = fat has been completely extracted.</em></li>
+              <li><strong>Drying:</strong> After extraction, place the dish in a <strong>100°C oven for 30 minutes</strong>. <em>— Residual petroleum ether evaporates (boiling point 40-60°C). What remains = curd + salt.</em></li>
+              <li>Cool in desiccator, weigh = <strong>W_curd+salt</strong>.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Calculation and Formula Explanation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <h5 class="font-semibold text-sm">Step 1: Curd + Salt Percentage</h5>
+              <pre class="text-sm"><code>% Curd+Salt = [(W_curd+salt - W_dish) / (W_initial - W_dish)] × 100</code></pre>
+              
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <tbody>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold w-1/3">W_curd+salt</td><td class="border p-2">Dish + rod + residue after fat extraction and drying = weight of curd and salt</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W_dish</td><td class="border p-2">Empty dish + rod (same as used in moisture test)</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">(W_curd+salt - W_dish)</td><td class="border p-2">= Pure curd + salt weight in grams</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">(W_initial - W_dish)</td><td class="border p-2">= Original butter sample weight (denominator — same as moisture test)</td></tr>
+                </tbody>
+              </table>
+
+              <h5 class="font-semibold text-sm mt-3">Step 2: Curd (MSNF) Percentage</h5>
+              <pre class="text-sm"><code>% Curd (MSNF) = % Curd+Salt - % Salt</code></pre>
+              <p class="text-sm mt-1">(Salt is determined separately — described in the next test)</p>
+
+              <h5 class="font-semibold text-sm mt-3">Step 3: Fat Percentage (by difference)</h5>
+              <pre class="text-sm"><code>% Fat = 100 - (% Moisture + % Curd+Salt)</code></pre>
+              <p class="text-sm mt-1">Or if salt has been determined separately:</p>
+              <pre class="text-sm"><code>% Fat = 100 - (% Moisture + % Curd + % Salt)</code></pre>
+
+              <p class="text-sm mt-3"><strong>Complete Flow Diagram:</strong></p>
+              <pre class="text-sm"><code>
+Original Butter Sample (W_initial - W_dish = sample weight)
+│
+│ = Fat + Moisture + Curd + Salt
+│ = 100%
+│
+├── STEP 1: Heat on water bath + oven
+│   → Moisture evaporates (W_initial - W_final)
+│   → Residue = Fat + Curd + Salt
+│
+├── STEP 2: Wash residue with petroleum ether (3-4 times)
+│   → Fat dissolves in ether (removed)
+│   → Residue = Curd + Salt (W_curd+salt - W_dish)
+│
+├── STEP 3: Salt separately determined (Mohr's method)
+│   → % Salt known
+│
+└── CALCULATIONS:
+    % Moisture = [(W_initial - W_final) / sample weight] × 100
+    % Curd+Salt = [(W_curd+salt - W_dish) / sample weight] × 100
+    % Curd = % Curd+Salt - % Salt
+    % Fat = 100 - % Moisture - % Curd+Salt
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Example Calculation:</strong></p>
+              <pre class="text-sm"><code>
+W_dish = 48.235 g
+W_initial = 51.876 g → Sample wt = 3.641 g
+W_final (after moisture removal) = 51.298 g → Moisture = 0.578 g
+W_curd+salt (after fat extraction) = 48.382 g → Curd+Salt = 48.382-48.235 = 0.147 g
+Salt (from separate test) = 2.1%
+
+% Moisture = (0.578/3.641) × 100 = 15.88%
+% Curd+Salt = (0.147/3.641) × 100 = 4.04%
+% Salt = 2.1%
+% Curd (MSNF) = 4.04 - 2.1 = 1.94%  ← exceeds FSSAI limit of 1.5%!
+% Fat = 100 - 15.88 - 4.04 = 80.08%  ← barely meets 80% minimum
+
+FSSAI check:
+  Fat ≥ 80% → 80.08% → PASS ✓ (marginally)
+  Curd ≤ 1.5% → 1.94% → FAIL ✗
+  Moisture ≤ 16% → 15.88% → PASS ✓
+              </code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">FSSAI Standards:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Parameter</th><th class="border p-2">Table Butter</th><th class="border p-2">White Butter</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Fat (minimum)</td><td class="border p-2">80%</td><td class="border p-2">76%</td></tr>
+                <tr><td class="border p-2">Moisture (maximum)</td><td class="border p-2">16%</td><td class="border p-2">20%</td></tr>
+                <tr><td class="border p-2">Curd / MSNF (maximum)</td><td class="border p-2">1.5%</td><td class="border p-2">1.5%</td></tr>
+                <tr><td class="border p-2">Salt (maximum)</td><td class="border p-2">3.0%</td><td class="border p-2">Usually nil</td></tr>
+              </tbody>
+            </table>
+            <p class="mt-2 text-sm"><strong>Why is there a curd limit?</strong> More curd = more protein + lactose = greater potential for microbial growth = shorter shelf life. Also, where curd is present, fat should be instead — the consumer is paying for fat.</p>
+          `
+        },
+        {
+          title: "Determination of Salt (NaCl)",
+          purpose: "To measure salt (sodium chloride) content in butter — important for taste, preservation, and legal standards. Excess salt also raises health concerns.",
+          reference: "IS 3507 – 1966; A.O.A.C 920.119",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle — Why Are There Two Methods?</h4>
+            <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mt-2 text-sm">
+              <p><strong>Mohr's Method (Direct Titration):</strong> Simple, fast, works at neutral pH. Chloride is directly titrated with AgNO₃. Endpoint = brick-red colour with K₂CrO₄ indicator.</p>
+              <p class="mt-1"><strong>Volhard's Method (Back Titration):</strong> Works in acidic medium. Excess AgNO₃ is added, then back-titrated with KSCN. More accurate when solutions are coloured/turbid. Both are acceptable for butter.</p>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Method 1: Mohr's Method (Direct Titration)</h4>
+            
+            <h5 class="font-semibold mt-3">Principle:</h5>
+            <p class="text-sm">Chloride ions (Cl⁻) react with silver nitrate (AgNO₃) to form a <strong>white AgCl precipitate</strong>. As long as Cl⁻ is present, AgNO₃ will react with it. When all Cl⁻ has been consumed, excess AgNO₃ reacts with the potassium chromate indicator (K₂CrO₄) to form <strong>brick-red Ag₂CrO₄</strong> — this is the ENDPOINT.</p>
+            <div class="bg-gray-50 border rounded p-3 mt-2 text-sm">
+              <pre><code>DURING TITRATION (while Cl⁻ is present):
+NaCl + AgNO₃ → AgCl↓ (white precipitate) + NaNO₃
+Cl⁻ + Ag⁺ → AgCl↓ (white curdy precipitate)
+
+AT ENDPOINT (all Cl⁻ has reacted):
+Extra AgNO₃ + K₂CrO₄ → Ag₂CrO₄↓ (brick-red precipitate) + 2KNO₃
+2Ag⁺ + CrO₄²⁻ → Ag₂CrO₄↓ (reddish-brown colour appears)
+
+Why does AgCl precipitate BEFORE Ag₂CrO₄?
+AgCl Ksp = 1.8 × 10⁻¹⁰ (very INSOLUBLE — precipitates first)
+Ag₂CrO₄ Ksp = 1.1 × 10⁻¹² (also insoluble, but chromate indicator 
+concentration is kept low so it precipitates LATER)</code></pre>
+            </div>
+
+            <h5 class="font-semibold mt-3">Procedure:</h5>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li><strong>Salt extraction:</strong> Accurately weigh 5 grams of butter into a beaker. Add 100 ml boiling distilled water. <em>— Boiling water melts the butter (melting point ~32°C) and salt dissolves into the water. Fat becomes liquid and floats on top (fat density < water density).</em></li>
+              <li>Gently stir and cool to 50-55°C. <em>— At 50-55°C, fat begins to solidify and forms a layer on top. At this temperature, fat is semi-solid — it can be easily separated.</em></li>
+              <li><strong>Fat separation:</strong> Carefully remove the upper fat layer or filter the solution (through pre-wetted filter paper). Collect the salt solution (filtrate). <em>— Fat removal is necessary because fat will cause turbidity and make the endpoint difficult to observe.</em></li>
+              <li>Wash the beaker 2-3 times with hot water and add the washings to the filtrate (to prevent any salt loss).</li>
+              <li>Note the total filtrate volume or make up to 250 ml in a volumetric flask. <em>— Volume must be accurate — needed for taking an aliquot.</em></li>
+              <li>Take a suitable aliquot of the filtrate (25 ml or 50 ml) into a conical flask.</li>
+              <li>Add <strong>1 ml of 5% potassium chromate (K₂CrO₄)</strong> indicator. Solution will turn pale yellow. <em>— K₂CrO₄ provides chromate ions that will form Ag₂CrO₄ (red) at the endpoint. 1 ml of 5% solution = sufficient indicator concentration.</em></li>
+              <li>Titrate slowly with <strong>0.1 N AgNO₃</strong> — initially a white precipitate (AgCl) will form, solution will become milky. Endpoint = first persistent <strong>reddish-brown colour</strong> (Ag₂CrO₄ formation). <em>— Stir continuously. Add slowly near the endpoint as the colour change is subtle.</em></li>
+              <li>Note the titre. Also run a blank (100 ml distilled water + indicator + titrate).</li>
+            </ol>
+
+            <h5 class="font-semibold mt-3">Formula and Factor Derivation:</h5>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>% NaCl = [5.844 × N × (V_sample - V_blank)] / W</code></pre>
+              
+              <h5 class="font-semibold mt-3 text-sm">Where Does the Factor 5.844 Come From? Complete Derivation:</h5>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <tbody>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold w-1/3">NaCl Molecular Weight</td><td class="border p-2">Na = 23.0, Cl = 35.45 → NaCl = <strong>58.44 g/mol</strong></td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">NaCl is monovalent</td><td class="border p-2">NaCl → Na⁺ + Cl⁻ (one Cl⁻ reacts with one Ag⁺) → n-factor = 1 → Eq.Wt = <strong>58.44 g/eq</strong></td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">Reaction stoichiometry</td><td class="border p-2">Cl⁻ + Ag⁺ → AgCl↓ (1:1 ratio)</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">1 ml of 1N AgNO₃</td><td class="border p-2">= 1 meq = reacts with 1 meq NaCl = 58.44/1000 g = <strong>0.05844 g NaCl</strong></td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">× 100 for percentage</td><td class="border p-2">0.05844 × 100 = <strong>5.844</strong></td></tr>
+                </tbody>
+              </table>
+
+              <p class="text-sm mt-3"><strong>Full Derivation:</strong></p>
+              <pre class="text-sm"><code>
+NaCl + AgNO₃ → AgCl↓ + NaNO₃
+
+meq of NaCl = meq of AgNO₃ used
+            = (V_sample - V_blank) × N
+
+(V_blank is subtracted because the indicator consumes a small amount 
+of AgNO₃ — blank correction)
+
+Grams of NaCl = (V_sample - V_blank) × N × (58.44/1000)
+              = (V_sample - V_blank) × N × 0.05844
+
+% NaCl = [(V_sample - V_blank) × N × 0.05844 / W] × 100
+       = [(V_sample - V_blank) × N × 5.844] / W
+       = [5.844 × N × (V_sample - V_blank)] / W
+              </code></pre>
+
+              <h5 class="font-semibold mt-3 text-sm">Each Variable:</h5>
+              <ul class="list-disc list-inside text-sm space-y-1">
+                <li><strong>5.844</strong> = NaCl eq.wt (58.44) × 100/1000. This is a NaCl-specific constant. If testing KCl, the factor would be different (KCl MW = 74.55 → factor = 7.455)</li>
+                <li><strong>N</strong> = Normality of AgNO₃ (typically 0.1N)</li>
+                <li><strong>V_sample</strong> = ml AgNO₃ used for sample aliquot titration</li>
+                <li><strong>V_blank</strong> = ml AgNO₃ used for blank (usually 0.1-0.3 ml)</li>
+                <li><strong>W</strong> = Weight of butter equivalent in the aliquot taken for titration</li>
+              </ul>
+
+              <p class="text-sm mt-3"><strong>Calculating W (for aliquot):</strong></p>
+              <pre class="text-sm"><code>
+5 g butter → salt extracted in total ~105 ml water
+Made up to 250 ml in volumetric flask
+Took 50 ml aliquot for titration
+
+W = 5 × (50/250) = 1.0 g butter equivalent in 50 ml aliquot
+
+Or if volume was not made up and the entire filtrate was titrated:
+W = 5 g (full amount)
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Example Calculation:</strong></p>
+              <pre class="text-sm"><code>
+5 g butter → extracted in water → made up to 250 ml
+50 ml aliquot taken → W = 5 × 50/250 = 1.0 g
+N_AgNO₃ = 0.1 N
+V_sample = 3.65 ml
+V_blank = 0.15 ml
+
+% NaCl = [5.844 × 0.1 × (3.65 - 0.15)] / 1.0
+       = [5.844 × 0.1 × 3.50] / 1.0
+       = [2.045] / 1.0
+       = 2.05%
+
+FSSAI limit: Max 3.0% → PASS ✓
+              </code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Method 2: Volhard's Method (Back Titration)</h4>
+            
+            <h5 class="font-semibold mt-3">Principle:</h5>
+            <p class="text-sm"><strong>EXCESS AgNO₃</strong> is added to the salt extract of butter — all Cl⁻ precipitates (AgCl). The remaining (unreacted) AgNO₃ is then <strong>back-titrated with potassium thiocyanate (KSCN)</strong>. Ferric alum indicator is used — endpoint shows <strong>red-brown colour</strong>.</p>
+            <div class="bg-gray-50 border rounded p-3 mt-2 text-sm">
+              <pre><code>Step 1 — Excess AgNO₃ + Chloride:
+Cl⁻ + Ag⁺ → AgCl↓ (white) — all chloride precipitates
++ excess Ag⁺ remains in solution
+
+Step 2 — Acidify:
+Add dilute HNO₃ — acidic medium is required for Volhard method
+
+Step 3 — Back titrate excess Ag⁺ with KSCN:
+Ag⁺(excess) + SCN⁻ → AgSCN↓ (white precipitate)
+
+Step 4 — Endpoint:
+When all excess Ag⁺ has reacted:
+Extra SCN⁻ + Fe³⁺ → [Fe(SCN)]²⁺ (RED-BROWN colour)
+(ferric alum indicator)
+
+Difference = AgNO₃ consumed by Cl⁻ = NaCl amount</code></pre>
+            </div>
+
+            <h5 class="font-semibold mt-3">Procedure:</h5>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Extract salt the same way as Mohr's method (5g butter + boiling water → filter → collect).</li>
+              <li>Take an aliquot (25-50 ml) into a conical flask.</li>
+              <li>Add a measured volume of <strong>excess</strong> 0.1 N AgNO₃ (say 25 ml — this should be more than the expected amount of NaCl). <em>— Note the exact volume — this is V_AgNO₃.</em></li>
+              <li>Add 5 ml dilute nitric acid (HNO₃, ~6N). <em>— Acidic medium is essential for the Volhard reaction. HNO₃ is specifically used because HCl would be wrong (it would add more Cl⁻!) and H₂SO₄ could cause Ag₂SO₄ to precipitate.</em></li>
+              <li>Filter the AgCl precipitate or coat it with a few drops of nitrobenzene. <em>— Removing/coating AgCl is necessary because KSCN can also react with AgCl (AgCl + SCN⁻ → AgSCN + Cl⁻) — this would give an incorrect endpoint. Nitrobenzene coats the AgCl and protects it from KSCN.</em></li>
+              <li>Add 1-2 ml of <strong>ferric alum indicator</strong> (ferric ammonium sulfate, 5% solution).</li>
+              <li>Titrate with <strong>0.1 N KSCN (potassium thiocyanate)</strong> until a persistent <strong>red-brown colour</strong> appears. Titre = V_KSCN.</li>
+            </ol>
+
+            <h5 class="font-semibold mt-3">Formula and Factor Derivation:</h5>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>% NaCl = [5.844 × N_KSCN × (V_AgNO₃ × N_AgNO₃/N_KSCN - V_KSCN)] / W</code></pre>
+              
+              <p class="text-sm mt-1">If both AgNO₃ and KSCN have the SAME normality (0.1N), simplified to:</p>
+              <pre class="text-sm"><code>% NaCl = [5.844 × N × (V_AgNO₃ - V_KSCN)] / W</code></pre>
+
+              <p class="text-sm mt-3"><strong>Logic:</strong></p>
+              <pre class="text-sm"><code>
+Total AgNO₃ added = V_AgNO₃ × N_AgNO₃ meq
+Excess AgNO₃ (unreacted) = V_KSCN × N_KSCN meq
+
+AgNO₃ consumed by NaCl = Total - Excess
+                        = (V_AgNO₃ × N_AgNO₃) - (V_KSCN × N_KSCN) meq
+
+When both N = 0.1:
+meq NaCl = 0.1 × (V_AgNO₃ - V_KSCN)
+
+% NaCl = [meq × 58.44/1000 / W] × 100 = [5.844 × 0.1 × (V_AgNO₃-V_KSCN)] / W
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Factor 5.844 is the same in both methods</strong> — because the equivalent weight of NaCl is the same in both (58.44). Only the titre calculation method differs (direct vs back titration).</p>
+
+              <p class="text-sm mt-3"><strong>Example Calculation (Volhard):</strong></p>
+              <pre class="text-sm"><code>
+5 g butter → salt extracted → made up to 250 ml → 50 ml aliquot
+W = 5 × 50/250 = 1.0 g
+25 ml of 0.1N AgNO₃ added (excess)
+V_KSCN = 21.20 ml of 0.1N KSCN
+
+AgNO₃ consumed = 25.00 - 21.20 = 3.80 ml equivalent
+
+% NaCl = [5.844 × 0.1 × 3.80] / 1.0
+       = [2.221] / 1.0
+       = 2.22%
+
+FSSAI limit: Max 3.0% → PASS ✓
+              </code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Mohr's vs Volhard's — Comparison:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Feature</th><th class="border p-2">Mohr's Method</th><th class="border p-2">Volhard's Method</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Type</td><td class="border p-2">Direct titration</td><td class="border p-2">Back titration</td></tr>
+                <tr><td class="border p-2">pH requirement</td><td class="border p-2">Neutral (pH 6.5-10)</td><td class="border p-2">Acidic (HNO₃ added)</td></tr>
+                <tr><td class="border p-2">Indicator</td><td class="border p-2">K₂CrO₄ (yellow → brick-red)</td><td class="border p-2">Ferric alum (colourless → red-brown)</td></tr>
+                <tr><td class="border p-2">Endpoint clarity</td><td class="border p-2">Good in clear solutions</td><td class="border p-2">Better — works in turbid solutions too</td></tr>
+                <tr><td class="border p-2">Interference</td><td class="border p-2">Coloured solutions interfere</td><td class="border p-2">Less interference (acidic medium)</td></tr>
+                <tr><td class="border p-2">Simplicity</td><td class="border p-2">Simpler ✓</td><td class="border p-2">More steps (extra AgCl removal)</td></tr>
+                <tr><td class="border p-2">For butter</td><td class="border p-2">Usually sufficient</td><td class="border p-2">Better when fat traces cause turbidity</td></tr>
+              </tbody>
+            </table>
+
+            <h4 class="font-semibold mt-4 mb-2">FSSAI Standard:</h4>
+            <p>Table butter: Maximum <strong>3.0% salt (NaCl)</strong>. Unsalted butter: ≤ 1.0% (trace from milk's natural sodium).</p>
+          `
+        },
+        {
+          title: "Titratable Acidity of Butter Fat",
+          purpose: "To measure free acidity in butter fat — an indicator of staleness, hydrolysis, and lipolytic rancidity. High FFA = butter is old or was improperly stored.",
+          reference: "IS 3507 – 1966; A.O.A.C 940.28",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>When hydrolysis occurs in butter fat (due to moisture, enzymes, or heat), triglycerides break down and release <strong>free fatty acids (FFA)</strong>:</p>
+            <pre class="text-sm bg-gray-50 p-2 rounded"><code>Triglyceride + H₂O → Diglyceride + Free Fatty Acid
+(this reaction occurs via lipase enzyme or heat — "lipolysis")</code></pre>
+            <p class="mt-2">These free fatty acids are neutralized with NaOH. Results are expressed as <strong>% oleic acid</strong>.</p>
+            
+            <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mt-2 text-sm">
+              <p><strong>Special note for butter FFA test:</strong></p>
+              <ul class="list-disc list-inside space-y-1 mt-1">
+                <li>Test is performed only on <strong>clear butter fat</strong> — moisture and curd must be removed</li>
+                <li>Butter is melted and filtered through muslin cloth or filter paper — clear golden fat separates</li>
+                <li>Curd (protein) has its own acidity which would interfere with the result — therefore only fat is tested</li>
+                <li>Butter fat = essentially ghee (minus moisture and curd)</li>
+              </ul>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li><strong>Fat preparation:</strong> Melt butter at 60-70°C. Filter through muslin cloth or dry filter paper — collect clear, golden fat. <em>— Moisture and curd (protein particles) will be filtered out. Only pure butter fat will remain.</em></li>
+              <li>Accurately weigh <strong>10 grams</strong> of clear melted butter fat into a conical flask.</li>
+              <li>Add 50 ml <strong>neutralized warm ethanol</strong> and dissolve. <em>— Pre-neutralize the ethanol with NaOH (titrate with phenolphthalein until faint pink). Ethanol is a solvent for fat — fat does not dissolve in water. Neutralized ethanol is used so that ethanol's own acidity does not appear in the result. Fat dissolves quickly in warm ethanol.</em></li>
+              <li>Add 3-4 drops of phenolphthalein indicator.</li>
+              <li>Titrate with <strong>0.1 N NaOH</strong> until a persistent light pink colour appears (30 seconds). <em>— Free fatty acids react with NaOH: RCOOH + NaOH → RCOONa + H₂O. Endpoint = all free acids neutralized.</em></li>
+              <li>Note the titre (V).</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Formula and Factor Derivation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>% FFA (as oleic acid) = [V × N × 28.2] / W</code></pre>
+              
+              <h5 class="font-semibold mt-3 text-sm">Factor 28.2 — Complete Derivation:</h5>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <tbody>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold w-1/3">Oleic acid (C₁₈H₃₄O₂)</td><td class="border p-2">Molecular weight = 282 g/mol</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">Oleic acid is monobasic</td><td class="border p-2">1 COOH group → n-factor = 1 → Eq.Wt = 282 g/eq</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">1 ml of 1N NaOH</td><td class="border p-2">= 1 meq = neutralizes 282/1000 g = 0.282 g oleic acid</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">× 100 for percentage</td><td class="border p-2">0.282 × 100 = <strong>28.2</strong></td></tr>
+                </tbody>
+              </table>
+
+              <pre class="text-sm mt-2"><code>
+FFA + NaOH → Sodium salt + H₂O
+
+meq FFA = V × N
+
+Grams FFA (as oleic) = V × N × (282/1000) = V × N × 0.282
+
+% FFA = (V × N × 0.282 / W) × 100
+      = [V × N × 28.2] / W
+              </code></pre>
+
+              <h5 class="font-semibold mt-3 text-sm">Each Variable:</h5>
+              <ul class="list-disc list-inside text-sm space-y-1">
+                <li><strong>V</strong> = ml of NaOH used (direct titre — no blank needed because neutralized ethanol was used)</li>
+                <li><strong>N</strong> = Normality of NaOH (0.1N)</li>
+                <li><strong>28.2</strong> = Oleic acid conversion factor. It fits the equivalent weight of oleic acid (282) into the percentage formula: (282 × 100)/1000 = 28.2</li>
+                <li><strong>W</strong> = Butter fat sample weight in grams (10 g)</li>
+              </ul>
+
+              <p class="text-sm mt-3"><strong>Conversion from Acid Value:</strong></p>
+              <pre class="text-sm"><code>
+Acid Value = mg KOH to neutralize FFA in 1 g fat
+           = [V × N × 56.1] / W
+
+Relationship:
+% FFA (oleic) = Acid Value × 0.503
+Acid Value = % FFA × 1.99
+
+0.503 = 282/(56.1×10) = oleic eq.wt / (KOH eq.wt × 10)
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Example Calculation:</strong></p>
+              <pre class="text-sm"><code>
+W = 10.05 g butter fat
+N = 0.1 N NaOH
+V = 0.95 ml
+
+% FFA = [0.95 × 0.1 × 28.2] / 10.05
+      = [2.679] / 10.05
+      = 0.267%
+
+Fresh butter limit ≤ 0.3% → PASS ✓ (fresh butter!)
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Example 2 (old butter):</strong></p>
+              <pre class="text-sm"><code>
+V = 4.2 ml, W = 10.00 g, N = 0.1
+
+% FFA = [4.2 × 0.1 × 28.2] / 10.00 = 11.844/10.00 = 1.18%
+
+This is very high → butter is STALE/RANCID — reject
+              </code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values and Interpretation:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Quality</th><th class="border p-2">FFA (% as oleic acid)</th><th class="border p-2">Interpretation</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2 text-green-600">Fresh butter</td><td class="border p-2">≤ 0.3%</td><td class="border p-2">Excellent — minimal hydrolysis</td></tr>
+                <tr><td class="border p-2">Acceptable</td><td class="border p-2">0.3 - 0.5%</td><td class="border p-2">OK — beginning of aging</td></tr>
+                <tr><td class="border p-2 text-yellow-600">Borderline</td><td class="border p-2">0.5 - 1.0%</td><td class="border p-2">Off-flavour may be detectable</td></tr>
+                <tr><td class="border p-2 text-red-600">Stale/Rancid</td><td class="border p-2">> 1.0%</td><td class="border p-2">Reject — sour/rancid taste, unacceptable</td></tr>
+              </tbody>
+            </table>
+            <p class="mt-2 text-sm"><strong>Why does FFA increase more rapidly in butter than ghee?</strong> Butter contains moisture (~16%) and curd (~1.5%) — moisture provides the medium for the hydrolysis reaction and curd contains lipase enzyme. Ghee contains neither (moisture ~0.3%, curd ~0%). Therefore ghee is more stable than butter.</p>
+          `
+        },
+        {
+          title: "Peroxide Value (PV) of Butter",
+          purpose: "Measures early stages of oxidative rancidity in butter fat. Peroxides = primary oxidation products. The higher the PV, the greater the oxidation = the older/more degraded the butter.",
+          reference: "A.O.A.C 965.33; IS 3507 – 1966",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>When unsaturated fatty acids in butter fat react with oxygen (due to exposure to air, light, or heat), <strong>peroxides (R-OOH)</strong> are formed — these are primary oxidation products.</p>
+            <pre class="text-sm bg-gray-50 p-2 rounded"><code>R-CH=CH-R' + O₂ → R-CH(OOH)-CH-R' (lipid hydroperoxide)</code></pre>
+            <p class="mt-1">These peroxides react with <strong>KI</strong> to release <strong>I₂</strong>. The I₂ is titrated with <strong>Na₂S₂O₃</strong>.</p>
+
+            <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mt-2 text-sm">
+              <p><strong>Sample preparation for PV test in butter:</strong></p>
+              <ul class="list-disc list-inside space-y-1 mt-1">
+                <li>Clear butter fat must be used (free from moisture and curd)</li>
+                <li>Melt butter at 50-60°C and filter</li>
+                <li>Moisture can interfere in the PV test (side reactions with KI may occur)</li>
+                <li>Curd contains proteins that can absorb iodine → falsely high PV</li>
+              </ul>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Chemical Reactions — Step by Step:</h4>
+            <div class="bg-gray-50 border rounded p-3 mt-2 text-sm">
+              <p><strong>Step 1 — Peroxide + KI → Iodine:</strong></p>
+              <pre><code>R-OOH + 2KI + 2H⁺ → R-OH + I₂ + 2K⁺ + H₂O
+(peroxide)  (KI)       (alcohol)(iodine released — brown colour)</code></pre>
+              <p class="mt-1"><strong>Step 2 — Titration:</strong></p>
+              <pre><code>I₂ + 2Na₂S₂O₃ → 2NaI + Na₂S₄O₆
+(iodine)(thiosulfate)    (products)
+
+Starch indicator: I₂ + Starch = BLUE
+Endpoint: Blue → COLOURLESS (all I₂ reacted)</code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Accurately weigh ~5 grams of clear melted butter fat into a glass-stoppered conical flask (250 ml).</li>
+              <li>Add 30 ml of <strong>acetic acid : chloroform (3:2 v/v)</strong> mixture and dissolve. <em>— Chloroform dissolves the fat. Acetic acid provides the acidic medium. 3:2 = 18 ml acetic acid + 12 ml chloroform. Acetic acid is in excess — this keeps HI (formed from KI + acid) stable.</em></li>
+              <li>Add 0.5 ml of <strong>freshly prepared saturated KI solution</strong>. <em>— Fresh KI is essential — old KI oxidizes and forms I₂ → falsely high PV. Saturated = excess KI to ensure all peroxide reacts.</em></li>
+              <li>Keep in the <strong>dark for exactly 1 minute</strong>, shaking occasionally. <em>— 1 minute is the standardized time. Dark conditions are required because light can directly oxidize KI (photochemical reaction) → falsely high PV. Longer exposure also allows atmospheric O₂ to react with KI.</em></li>
+              <li>Immediately add 30 ml distilled water. <em>— Stops the reaction and dilutes for titration.</em></li>
+              <li>Add 1 ml of <strong>1% starch indicator</strong> — solution will turn blue if I₂ is present.</li>
+              <li>Titrate with <strong>0.01N Na₂S₂O₃</strong> (or 0.1N if high PV is expected) until the blue colour completely disappears. = <strong>S</strong> ml</li>
+              <li>Also run a <strong>blank</strong> (same procedure without fat). = <strong>B</strong> ml. <em>— The blank corrects for background I₂ from reagents. Ideally B < 0.5 ml. If B is excessive, reagents are old — prepare fresh ones.</em></li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Formula and Factor Derivation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>PV (meq/kg) = [(S - B) × N × 1000] / W</code></pre>
+              
+              <h5 class="font-semibold mt-3 text-sm">Detail of Each Factor:</h5>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <tbody>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold w-1/4">S</td><td class="border p-2"><strong>Sample titre</strong> (ml Na₂S₂O₃). The sample contained peroxide → I₂ was released → reacted with thiosulfate.</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">B</td><td class="border p-2"><strong>Blank titre</strong> (ml Na₂S₂O₃). Reagent background — ideally close to zero.</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">(S - B)</td><td class="border p-2"><strong>Net titre</strong> — I₂ released solely due to fat peroxides. Blank interference removed.</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">N</td><td class="border p-2"><strong>Normality of Na₂S₂O₃</strong>. 0.01N = for low PV (fresh), 0.1N = for high PV (rancid).</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">1000</td><td class="border p-2"><strong>Grams to kg conversion</strong>. PV unit = meq per KG. Sample is in GRAMS. 1 kg = 1000 g → multiply by 1000.</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W</td><td class="border p-2"><strong>Sample weight</strong> in grams (~5 g).</td></tr>
+                </tbody>
+              </table>
+
+              <p class="text-sm mt-3"><strong>Derivation:</strong></p>
+              <pre class="text-sm"><code>
+Peroxide + 2KI → I₂ + products
+I₂ + 2Na₂S₂O₃ → products
+
+1 ml of 1N Na₂S₂O₃ = 1 meq I₂ = 1 meq peroxide oxygen
+
+Net meq peroxide = (S - B) × N
+
+PV = meq per kg = [(S - B) × N] / W(g) × 1000(g/kg)
+   = [(S - B) × N × 1000] / W
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Why is 0.01N used for fresh butter?</strong></p>
+              <pre class="text-sm"><code>
+Fresh butter PV = 0.5-1.0 meq/kg expected
+W = 5 g
+
+Using 0.1N: S - B = (PV × W)/(N × 1000) = (1.0 × 5)/(0.1 × 1000) = 0.05 ml
+→ Very small titre — cannot be accurately measured!
+
+Using 0.01N: S - B = (1.0 × 5)/(0.01 × 1000) = 0.5 ml
+→ Measurable titre ✓
+
+For rancid butter (PV = 10):
+Using 0.01N: S - B = (10 × 5)/(0.01 × 1000) = 5.0 ml ✓
+Using 0.1N: S - B = (10 × 5)/(0.1 × 1000) = 0.5 ml ← possible but less accurate
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Example Calculation (Fresh butter):</strong></p>
+              <pre class="text-sm"><code>
+W = 5.05 g
+N = 0.01 N Na₂S₂O₃
+S = 0.40 ml
+B = 0.05 ml
+
+PV = [(0.40 - 0.05) × 0.01 × 1000] / 5.05
+   = [0.35 × 0.01 × 1000] / 5.05
+   = 3.5 / 5.05
+   = 0.69 meq/kg → Fresh butter ✓
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Example Calculation (Rancid butter):</strong></p>
+              <pre class="text-sm"><code>
+W = 5.00 g
+N = 0.01 N
+S = 4.20 ml
+B = 0.05 ml
+
+PV = [(4.20 - 0.05) × 0.01 × 1000] / 5.00
+   = [4.15 × 0.01 × 1000] / 5.00
+   = 41.5 / 5.00
+   = 8.3 meq/kg → Rancid butter ✗ (> 5 meq/kg)
+              </code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values and Interpretation:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Category</th><th class="border p-2">PV (meq/kg)</th><th class="border p-2">Interpretation</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2 text-green-600">Fresh butter</td><td class="border p-2">≤ 1.0</td><td class="border p-2">Excellent — minimal oxidation</td></tr>
+                <tr><td class="border p-2">Acceptable</td><td class="border p-2">1.0 - 3.0</td><td class="border p-2">OK — acceptable with proper cold storage</td></tr>
+                <tr><td class="border p-2 text-yellow-600">Borderline</td><td class="border p-2">3.0 - 5.0</td><td class="border p-2">Off-flavour developing — use soon</td></tr>
+                <tr><td class="border p-2 text-red-600">Rancid</td><td class="border p-2">> 5.0</td><td class="border p-2">Reject — oxidized, unhealthy, off-taste</td></tr>
+              </tbody>
+            </table>
+            <p class="mt-2 text-sm"><strong>Note:</strong> Butter's PV increases more rapidly than ghee because butter contains moisture (water promotes oxidation) and butter oxidizes with light exposure even in the refrigerator (the yellow colour is light-sensitive). Proper packaging (aluminium foil wrap) and cold storage (4°C) slows PV increase.</p>
+          `
+        },
+        {
+          title: "Coliform Test (Presumptive)",
+          purpose: "To detect the presence of coliform bacteria in butter — an indicator of hygienic quality and pasteurization effectiveness. Coliforms indicate fecal contamination.",
+          reference: "IS 5401 (Part 1); A.O.A.C 986.33",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p><strong>Coliforms</strong> are a group of bacteria (E. coli, Enterobacter, Klebsiella, Citrobacter) that:</p>
+            <ul class="list-disc list-inside text-sm">
+              <li>Are Gram-negative, rod-shaped, non-spore forming</li>
+              <li><strong>Ferment lactose</strong> at 37°C within 24-48 hours → producing acid + gas</li>
+              <li>Are INDICATOR organisms for fecal contamination (not necessarily direct pathogens, but found alongside them)</li>
+              <li>Should not be present in properly pasteurized dairy products</li>
+            </ul>
+            
+            <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mt-2 text-sm">
+              <p><strong>Significance of coliform testing in butter:</strong></p>
+              <ul class="list-disc list-inside space-y-1 mt-1">
+                <li>Butter is made from pasteurized cream — coliforms should be killed during pasteurization</li>
+                <li>If coliforms are present → <strong>post-pasteurization contamination</strong> (dirty equipment, handler hygiene, environment)</li>
+                <li>Or <strong>inadequate pasteurization</strong> has occurred</li>
+                <li>FSSAI limit: ≤ 10 cfu/gram for pasteurized butter</li>
+              </ul>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">How VRBA (Violet Red Bile Agar) Works:</h4>
+            <div class="bg-gray-50 border rounded p-3 mt-2 text-sm">
+              <pre><code>VRBA Medium Components and Their Role:
+
+1. Lactose — Carbon source (coliforms ferment this → acid)
+2. Bile salts — INHIBIT Gram-positive bacteria (selects only Gram-negative)
+3. Crystal violet dye — Further Gram-positive inhibition
+4. Neutral red indicator — COLOUR CHANGE from acid production
+   (neutral red = red at pH < 6.8)
+
+Colony appearance:
+Coliforms → Ferment lactose → Produce acid → 
+→ DARK RED colonies (2-3 mm) with BILE PRECIPITATE HALO
+(precipitate = bile salts precipitate from acid environment)
+
+Non-coliforms → Do NOT ferment lactose → 
+→ No acid → No colour change → Colourless/pale colonies</code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li><strong>Sample Preparation:</strong> Accurately weigh 11 grams of butter into a sterile container. <em>— 11 grams is used because when added to 99 ml diluent, 11/(11+99) = 11/110 ≈ 1/10 dilution is achieved. Sterile technique is essential — contamination would give false positives.</em></li>
+              <li>Add 99 ml of <strong>sterile warm (45°C) Ringer solution</strong> (or 0.1% peptone water). <em>— At 45°C the butter will melt and mix properly. Ringer solution is isotonic (no osmotic shock to bacteria). This is a 1:10 dilution (10⁻¹).</em></li>
+              <li><strong>Homogenize</strong> — in a stomacher or sterile blender for 1-2 minutes. <em>— Butter is a water-in-oil emulsion. Bacteria are mostly present in the water phase. Homogenization distributes bacteria uniformly.</em></li>
+              <li><strong>Serial Dilutions:</strong>
+                <ul class="list-disc list-inside ml-5 text-sm">
+                  <li>1 ml of 10⁻¹ + 9 ml Ringer = <strong>10⁻²</strong> dilution</li>
+                  <li>1 ml of 10⁻² + 9 ml Ringer = <strong>10⁻³</strong> dilution</li>
+                </ul>
+                <em>— Multiple dilutions are needed so that plates fall within the countable range (15-300 colonies). If undiluted sample is plated and bacteria are very numerous, the result will be TNTC (Too Numerous To Count).</em>
+              </li>
+              <li><strong>Pour Plate Technique:</strong> Pipette <strong>1 ml</strong> of each dilution separately into sterile petri dishes (duplicate plates recommended). <em>— Pipette 1 ml accurately — this directly enters the calculation.</em></li>
+              <li>Add approximately 15-18 ml of <strong>molten VRBA (45-48°C)</strong> to each dish. Gently swirl to mix (figure-of-eight motion). <em>— VRBA is liquid at 45°C and will solidify at room temperature. If too hot (>50°C), bacteria will be killed → falsely low count. If too cold, agar will set before mixing.</em></li>
+              <li>Allow to solidify (10 min at room temperature). Then pour a thin <strong>overlay</strong> of VRBA (~5 ml) on top. <em>— The overlay creates an anaerobic/microaerophilic environment that enhances coliform growth. Without overlay, surface colonies grow differently.</em></li>
+              <li>Incubate at <strong>37°C for 24±2 hours</strong> (in inverted position). <em>— 37°C = human body temperature = optimal growth for coliforms. Inverted = condensation water will not drip onto colonies. 24 hours = sufficient for coliform colony development.</em></li>
+              <li>Also check at 48 hours if results are doubtful at 24 hours.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Colony Observation and Counting:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <p class="text-sm"><strong>Typical Coliform Colony on VRBA:</strong></p>
+              <ul class="list-disc list-inside text-sm space-y-1">
+                <li>Size: 1-3 mm diameter</li>
+                <li>Colour: <strong>DARK RED / PURPLE-RED</strong> (neutral red indicator turns red from acid)</li>
+                <li>Halo: <strong>Bile precipitate zone</strong> (reddish halo around colony) — this is the confirmatory feature</li>
+                <li>Shape: Round, slightly raised</li>
+              </ul>
+              <p class="text-sm mt-2">Count only dark red colonies WITH bile precipitate halo. Do NOT count pale, colourless, or colonies without halo.</p>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>Coliform count (cfu/g) = Number of typical colonies / (Volume plated × Dilution factor)</code></pre>
+              
+              <h5 class="font-semibold mt-3 text-sm">Each Factor:</h5>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <tbody>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold w-1/3">Number of typical colonies</td><td class="border p-2">Dark red colonies with halo counted on plates. Should be within countable range of 15-300.</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">Volume plated</td><td class="border p-2">1 ml (standard in pour plate technique)</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">Dilution factor</td><td class="border p-2">The fraction by which the sample was diluted. 10⁻¹ = 0.1, 10⁻² = 0.01, 10⁻³ = 0.001</td></tr>
+                </tbody>
+              </table>
+
+              <p class="text-sm mt-3"><strong>What is CFU?</strong></p>
+              <p class="text-sm"><strong>Colony Forming Unit (CFU)</strong> — each viable (living) bacterium forms one colony on the plate. 1 colony = 1 CFU = originally 1 bacterium (or 1 cluster of bacteria) was present.</p>
+
+              <p class="text-sm mt-3"><strong>Example Calculation:</strong></p>
+              <pre class="text-sm"><code>
+Dilution 10⁻¹: TNTC (too many to count)
+Dilution 10⁻²: 85 typical colonies on plate 1, 78 on plate 2
+Dilution 10⁻³: 8 typical colonies (too few for accuracy)
+
+Best dilution = 10⁻² (countable range 15-300)
+Average colonies = (85 + 78) / 2 = 81.5
+
+Coliform count = 81.5 / (1 ml × 10⁻²)
+               = 81.5 / 0.01
+               = 8,150 cfu/g
+               = 8.15 × 10³ cfu/g
+
+FSSAI limit: ≤ 10 cfu/g → 8150 >> 10 → FAIL ✗ (severely contaminated!)
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Example 2 (Good quality butter):</strong></p>
+              <pre class="text-sm"><code>
+Dilution 10⁻¹: 5 typical colonies
+Dilution 10⁻²: 0 colonies
+Dilution 10⁻³: 0 colonies
+
+Use 10⁻¹ (even though < 15, lowest dilution with colonies)
+
+Coliform count = 5 / (1 × 10⁻¹) = 5 / 0.1 = 50 cfu/g
+
+Note — still > 10 cfu/g. Not ideal but better.
+
+Best case: 0 colonies on all dilutions → Coliforms = < 10 cfu/g → PASS ✓
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Understanding dilution factors:</strong></p>
+              <pre class="text-sm"><code>
+Original butter: 11 g in 110 ml = 10⁻¹ dilution (0.1 g/ml equivalent)
+
+10⁻¹ plate with 1 ml = 0.1 g butter equivalent
+  → 1 colony = 1/0.1 = 10 cfu/g
+
+10⁻² plate with 1 ml = 0.01 g butter equivalent
+  → 1 colony = 1/0.01 = 100 cfu/g
+
+10⁻³ plate with 1 ml = 0.001 g butter equivalent
+  → 1 colony = 1/0.001 = 1000 cfu/g
+              </code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Presumptive vs Confirmed Test:</h4>
+            <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mt-2 text-sm">
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Stage</th><th class="border p-2">Method</th><th class="border p-2">Purpose</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2 font-semibold">Presumptive</td><td class="border p-2">VRBA plates (described above)</td><td class="border p-2">Screening — dark red colonies = PROBABLY coliforms</td></tr>
+                  <tr><td class="border p-2 font-semibold">Confirmed</td><td class="border p-2">Pick suspicious colonies → Brilliant Green Bile Lactose Broth (BGLB) → 37°C/48h → Gas production</td><td class="border p-2">Gas in Durham tube = CONFIRMED coliform</td></tr>
+                  <tr><td class="border p-2 font-semibold">Completed</td><td class="border p-2">Streak on EMB agar → Check colony morphology + Gram stain</td><td class="border p-2">Metallic green sheen on EMB = E. coli</td></tr>
+                </tbody>
+              </table>
+              <p class="mt-2">Generally in dairy laboratories, the presumptive count is sufficient for routine quality control. Confirmed/completed tests are performed when the presumptive result is positive and further investigation is required.</p>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">FSSAI Standards:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Product</th><th class="border p-2">Coliform limit</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Pasteurized butter</td><td class="border p-2">≤ 10 cfu/g</td></tr>
+                <tr><td class="border p-2">Pasteurized milk</td><td class="border p-2">≤ 10 cfu/ml</td></tr>
+                <tr><td class="border p-2">E. coli specifically</td><td class="border p-2">Absent in 1 g (zero tolerance)</td></tr>
+              </tbody>
+            </table>
+            <p class="mt-2 text-sm"><strong>If coliforms are detected:</strong> The entire batch is suspect. Conduct investigation — check pasteurizer, handler hygiene, equipment sanitation, packaging line contamination. Re-pasteurization is possible but not ideal.</p>
+          `
+        }
                 ]
             },
             "ghee-butter-oil": {
-                title: "Analysis of Ghee / Butter Oil",
-                tests: [
-                   {
-                        title: "Reichert-Meissel (RM) & Polenske Value (PV)",
-                        purpose: "To check the purity of ghee. RM value measures short-chain fatty acids characteristic of milk fat. PV value helps detect adulteration with coconut oil.",
-                        reference: "IS 3508 – 1966",
-                        procedure: `
-                            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                            <ol class="list-decimal list-outside pl-5 space-y-2">
-                                <li><strong>Saponification:</strong> 5.00 g of ghee is saponified (turned into soap) using 20g glycerol and 2 ml 50% NaOH. Heat until the liquid is clear.</li>
-                                <li><strong>Dilution & Acidification:</strong> Add 93 ml of boiled, cooled water, and then 50 ml of dilute sulfuric acid.</li>
-                                <li><strong>Distillation:</strong> Distill 110 ml of the mixture in 19-21 minutes using a Polenske distillation apparatus.</li>
-                                <li><strong>RM Value Titration:</strong> Filter the distillate and titrate 100 ml of the filtrate with 0.1 N NaOH.</li>
-                                <li><strong>Polenske Value Titration:</strong> Wash the condenser and filter paper three times with 15 ml of neutralized ethanol. Titrate the combined washings with 0.1 N NaOH.</li>
-                            </ol>
-                             <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
-                             <pre><code>RM Value = 1.1 * (Titration_Sample - Titration_Blank)</code></pre>
-                             <pre><code>Polenske Value = Titration_Insoluble_Acids - Titration_Blank_Insoluble</code></pre>
-                        `
-                    },
-                   {
-                        title: "Free Fatty Acids (FFA)",
-                        purpose: "Measures the extent of fat breakdown (hydrolysis), which indicates freshness. High FFA leads to rancidity.",
-                        reference: "IS 3508 – 1966",
-                        procedure: `
-                            <p>The sample is dissolved in hot neutralized alcohol and titrated with standard 0.1 N NaOH solution using phenolphthalein indicator. Acidity is usually expressed as % oleic acid.</p>
-                             <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
-                             <pre><code>% FFA (as Oleic acid) = [Titre * N_NaOH * 28.2] / Weight_sample</code></pre>
-                        `
-                    },
-                   {
-                        title: "Baudouin Test for Vanaspati",
-                        purpose: "Detects vanaspati (hydrogenated vegetable oil) in ghee.",
-                        reference: "IS 3508 – 1966",
-                        procedure: `<p>Based on the mandatory addition of 5% sesame oil to vanaspati. Melted ghee (5ml) is shaken vigorously for 2 mins with 5ml of concentrated HCl and 0.4ml of 2% furfural solution. A pink or red color in the acid layer indicates the presence of vanaspati.</p>`
-                    },
-                    {
-                        title: "Detection of Mineral Oil (Holde's Test)",
-                        purpose: "Detects non-edible mineral oils used as adulterants.",
-                        procedure: `<p>Saponify 1g of fat with 25ml of 4% alcoholic KOH. Add 100ml of hot water. The appearance of turbidity indicates the presence of mineral oil, which does not saponify.</p>`
-                    },
-                    {
-                        title: "Peroxide Value (PV)",
-                        purpose: "Measures the initial stages of oxidative rancidity.",
-                        reference: "A.O.A.C 965.33",
-                        procedure: `
-                            <p>The ghee sample is dissolved in an acetic acid-chloroform mixture. Saturated potassium iodide (KI) solution is added. Peroxides in the fat liberate iodine from KI. The liberated iodine is then titrated with a standard sodium thiosulphate solution using starch as an indicator.</p>
-                            <pre><code>PV (meq/kg) = (S * N * 1000) / Weight of Sample</code></pre>
-                            <p class="text-xs">Where S = ml of Na₂S₂O₃ (blank corrected) and N = Normality of Na₂S₂O₃</p>
-                        `
-                    }
+      title: "Ghee / Butter Oil Analysis",
+      tests: [
+        {
+          title: "Butyro-Refractometer (BR) Reading",
+          purpose: "The simplest and most rapid instrumental method for checking the purity of ghee.",
+          reference: "IS 3508 – 1966; FSSAI Manual",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>When light travels from one medium (such as air) into another medium (such as fat/oil), it bends — this is called <strong>refraction</strong>. Each fat has a characteristic refractive index (RI) that depends on its chemical composition. The BR reading of ghee is 40–44 at 40°C. Adding foreign oils changes this reading — vegetable oils have a higher RI because they contain more unsaturated (double-bonded) fatty acids.</p>
+            <p class="mt-2"><strong>What is a Butyro-Refractometer?</strong> It is a special refractometer designed specifically for fats and oils. Its scale is graduated in "BR units" (a standard refractometer gives RI values such as 1.4524). The BR scale is optimized for the narrow RI range of fats (1.4500–1.4600) so that small differences can be read easily.</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Relationship Between BR Reading and Refractive Index:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">BR Reading</th><th class="border p-2">Refractive Index (nD at 40°C)</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">40.0</td><td class="border p-2">1.4524</td></tr>
+                <tr><td class="border p-2">44.0</td><td class="border p-2">1.4545</td></tr>
+                <tr><td class="border p-2">50.0</td><td class="border p-2">1.4577</td></tr>
+                <tr><td class="border p-2">60.0</td><td class="border p-2">1.4600</td></tr>
+              </tbody>
+            </table>
+            <p class="mt-2 text-sm text-gray-600">The butyro-refractometer scale is specifically designed for fats. The range 40–60 BR corresponds approximately to nD 1.4524–1.4600. The sample is placed on the prism and the light-dark boundary is read directly on the BR scale through the eyepiece.</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Temperature Correction Formula:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>Corrected BR Reading = Observed BR + 0.55 × (T - 40)</code></pre>
+              <p class="text-sm mt-2"><strong>Meaning of each factor:</strong></p>
+              <ul class="list-disc list-inside text-sm space-y-1">
+                <li><strong>Observed BR</strong> = The reading shown on the instrument</li>
+                <li><strong>0.55</strong> = Temperature correction factor — for fats, the BR reading changes by 0.55 units for every 1°C change in temperature. This is an experimentally determined constant.</li>
+                <li><strong>T</strong> = Actual temperature (°C) at which the reading was taken</li>
+                <li><strong>40</strong> = Standard reference temperature (°C) — all BR readings are compared at 40°C</li>
+              </ul>
+              <p class="text-sm mt-2"><strong>Why is correction necessary?</strong> As temperature increases, the density of fat decreases, molecules spread further apart, and light bends less — so the RI (and BR reading) decreases. A correction of 0.55 per degree is applied.</p>
+              <p class="text-sm mt-2"><strong>Example:</strong> If the reading at 38°C is 42.0:</p>
+              <pre class="text-sm"><code>Corrected BR = 42.0 + 0.55 × (38 - 40) = 42.0 + 0.55 × (-2) = 42.0 - 1.1 = 40.9</code></pre>
+              <p class="text-sm">This means a reading of 42.0 at 38°C is equivalent to 40.9 at 40°C.</p>
+              <p class="text-sm mt-2"><strong>If T > 40:</strong> Reading of 39.5 at T = 42°C → Corrected = 39.5 + 0.55 × (42 - 40) = 39.5 + 1.1 = 40.6</p>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Melt the ghee slightly above 40°C. Decant the clear fat (free from moisture and curd). <em>— Moisture and curd particles scatter light, which will give an incorrect reading.</em></li>
+              <li>Maintain the butyro-refractometer at 40°C using a circulating water bath. <em>— It is essential to work exactly at 40°C so that no temperature correction is needed.</em></li>
+              <li>Place 1–2 drops of melted ghee on the prism of the refractometer. <em>— The sample must be spread evenly over the entire prism surface with no air bubbles.</em></li>
+              <li>Look through the eyepiece — adjust the light-dark boundary line onto the scale. <em>— Due to chromatic aberration, the boundary may appear slightly coloured; adjust the compensator until a sharp boundary is obtained.</em></li>
+              <li>Note the BR reading. If the temperature is not exactly 40°C, apply the correction formula.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Sample</th><th class="border p-2">BR Reading at 40°C</th><th class="border p-2">Reason for this value</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Cow ghee</td><td class="border p-2">40.0 – 43.0</td><td class="border p-2">Mostly saturated short-chain fatty acids</td></tr>
+                <tr><td class="border p-2">Buffalo ghee</td><td class="border p-2">40.0 – 43.5</td><td class="border p-2">Slightly more unsaturation than cow ghee</td></tr>
+                <tr><td class="border p-2">Groundnut oil</td><td class="border p-2">58–60</td><td class="border p-2">Highly unsaturated (oleic, linoleic acid) → high RI</td></tr>
+                <tr><td class="border p-2">Coconut oil</td><td class="border p-2">35–37</td><td class="border p-2">Mostly saturated but medium-chain → even lower than ghee</td></tr>
+              </tbody>
+            </table>
+            <p class="mt-2"><strong>Interpretation:</strong> If the BR reading is above 44 — it indicates adulteration with vegetable oil. If below 40 — coconut oil adulteration may be present.</p>
+            <p class="mt-1 text-sm text-gray-600"><strong>Limitation:</strong> If someone mixes oils in such a way that the BR reading falls within the normal range (e.g., a mixture of coconut oil and groundnut oil), this test alone cannot detect it — which is why other tests are also necessary.</p>
+          `
+        },
+        {
+          title: "Reichert-Meissl (RM) Value & Polenske Value (PV)",
+          purpose: "For checking the purity of ghee. The RM value measures the characteristic short-chain fatty acids of milk fat. The PV helps detect adulteration with coconut oil.",
+          reference: "IS 3508 – 1966",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>The ghee is saponified (converted into soap), then acidified to release volatile fatty acids. These acids are collected by steam distillation.</p>
+            <p class="mt-2"><strong>RM value</strong> = A measure of water-SOLUBLE volatile acids (mainly butyric acid C4 and caproic acid C6 — these are present in significant amounts only in milk fat). Pure ghee contains these acids in large amounts, so the RM value is high.</p>
+            <p class="mt-1"><strong>Polenske value</strong> = A measure of water-INSOLUBLE volatile acids (mainly caprylic C8, capric C10, and lauric C12 — these are present in large amounts in coconut oil). Normal ghee contains very few of these.</p>
+
+            <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mt-3">
+              <p class="text-sm"><strong>For understanding:</strong> Fat = Glycerol + 3 Fatty Acids. Saponification separates the fatty acids. Short-chain fatty acids (C4–C12) are volatile — they can be carried over by steam. Long-chain fatty acids (C16, C18) are non-volatile — they remain in the flask.</p>
+              <p class="text-sm mt-1">Of the acids collected in the distillate, some dissolve in water (butyric, caproic = measured by RM value), and some do not dissolve in water but solidify on the condenser (caprylic, capric, lauric = measured by Polenske value).</p>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li><strong>Saponification:</strong> Take 5.00 grams of ghee in a 250 ml round-bottom flask. Add 20 grams of glycerol and 2 ml of 50% NaOH. Heat gently until the liquid becomes clear (saponification is complete). <em>— Glycerol acts as a high boiling-point solvent and ensures uniform saponification.</em></li>
+              <li><strong>Dilution and Acidification:</strong> Add 93 ml of boiled, cooled distilled water (boiled water is used to remove dissolved CO₂). Add 50 ml of dilute sulphuric acid (25 ml conc. H₂SO₄ per litre of water) — this breaks the soap and releases the free fatty acids. Add 2–3 pieces of pumice stone. <em>— Pumice stone prevents bumping (sudden violent boiling).</em></li>
+              <li><strong>Distillation:</strong> Attach the Polenske distillation apparatus (condenser + receiving flask). Collect 110 ml of distillate in 19–21 minutes. <em>— The rate must be consistent (~5.5 ml/min). Distilling too fast may carry over non-volatile acids; too slow and volatile acids may not distil properly.</em></li>
+              <li><strong>Cooling:</strong> Keep the distillate at 15°C for 10 minutes — the insoluble fatty acids will solidify.</li>
+              <li><strong>Filtration:</strong> Filter the distillate through dry filter paper. <em>— Insoluble acids will be retained on the filter paper; soluble acids will pass into the filtrate.</em></li>
+              <li><strong>RM Value Titration:</strong> Take 100 ml of the filtrate (from the 110 ml), add phenolphthalein indicator, and titrate with 0.1 N NaOH until a persistent faint pink colour appears.</li>
+              <li><strong>Polenske Value Titration:</strong> Wash the condenser tube and filter paper three times with 15 ml of neutralized ethanol each time (total 45 ml). Titrate the combined washings with 0.1 N NaOH (phenolphthalein indicator). <em>— Ethanol dissolves the insoluble acids that water cannot.</em></li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Formulas and Detailed Explanation of Each Factor:</h4>
+            
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <h5 class="font-semibold">RM Value Formula:</h5>
+              <pre class="text-sm mt-1"><code>RM Value = 1.1 × V</code></pre>
+              <p class="text-sm mt-1">Where V = ml of 0.1N NaOH used to titrate 100 ml of filtrate</p>
+              
+              <p class="text-sm mt-3"><strong>Where does the factor 1.1 come from? Step-by-step:</strong></p>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <tbody>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">Step 1</td><td class="border p-2">A total of <strong>110 ml</strong> of distillate is collected during distillation</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">Step 2</td><td class="border p-2">However, the filter paper absorbs some liquid, so only <strong>100 ml</strong> of filtrate is available for titration</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">Step 3</td><td class="border p-2">Titrating 100 ml of filtrate represents only 100/110 = 90.9% of the acids</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">Step 4</td><td class="border p-2">To report the result for the full 110 ml, multiply by: <strong>110/100 = 1.1</strong></td></tr>
+                </tbody>
+              </table>
+              <p class="text-sm mt-2"><strong>In brief:</strong> 1.1 is a simple volume correction factor — we titrate 100 ml but report the result for 110 ml.</p>
+              
+              <p class="text-sm mt-3"><strong>Why specifically 0.1N NaOH?</strong></p>
+              <p class="text-sm">The definition of RM value is: <em>"Number of ml of 0.1N alkali required to neutralize water-soluble, steam-volatile fatty acids from 5 grams of fat."</em> If a different normality is used for any reason, a conversion is needed:</p>
+              <pre class="text-sm"><code>RM Value = 1.1 × V × (N / 0.1)</code></pre>
+              <p class="text-sm">For example, if 0.05N NaOH was used and 52 ml was consumed:</p>
+              <pre class="text-sm"><code>RM = 1.1 × 52 × (0.05/0.1) = 1.1 × 52 × 0.5 = 28.6</code></pre>
+
+              <p class="text-sm mt-3"><strong>Blank correction:</strong></p>
+              <p class="text-sm">The blank is ideally negligible, but if significant:</p>
+              <pre class="text-sm"><code>RM Value = 1.1 × (V_sample - V_blank)</code></pre>
+
+              <p class="text-sm mt-3"><strong>Example Calculation:</strong></p>
+              <pre class="text-sm"><code>5.00 g ghee taken, 110 ml distilled, 100 ml filtrate titrated
+0.1N NaOH titre = 26.5 ml, Blank = 0.2 ml
+
+RM Value = 1.1 × (26.5 - 0.2) = 1.1 × 26.3 = 28.93
+
+FSSAI minimum is 28 → This ghee PASSES ✓</code></pre>
+            </div>
+
+            <div class="bg-green-50 border border-green-200 rounded p-3 mt-3">
+              <h5 class="font-semibold">Polenske Value Formula:</h5>
+              <pre class="text-sm mt-1"><code>Polenske Value = V_insoluble × (N / 0.1)</code></pre>
+              <p class="text-sm mt-1">Where V_insoluble = ml of 0.1N NaOH used to titrate the combined ethanol washings</p>
+              
+              <p class="text-sm mt-3"><strong>How it works:</strong></p>
+              <ol class="list-decimal list-inside text-sm space-y-1">
+                <li>After distillation, fatty acids that did not dissolve in water solidify on the condenser walls and on the filter paper</li>
+                <li>These solid acids are washed with 3 × 15 ml of neutral ethanol — ethanol dissolves them</li>
+                <li>The combined ethanol washings (45 ml) are titrated with 0.1N NaOH</li>
+                <li>The titre value = Polenske Value (when 0.1N NaOH is used)</li>
+              </ol>
+              
+              <p class="text-sm mt-2"><strong>When to apply blank correction:</strong></p>
+              <pre class="text-sm"><code>PV = (V_sample_insoluble - V_blank_insoluble) × (N / 0.1)</code></pre>
+              <p class="text-sm">The blank is usually negligible (0.1–0.2 ml).</p>
+
+              <p class="text-sm mt-2"><strong>What happens with coconut oil adulteration:</strong> Coconut oil contains a large amount of lauric acid (C12) — a water-insoluble volatile acid. Therefore, coconut oil has a PV of 16–18 (very high), whereas ghee has only 1–2. If coconut oil is added to ghee, the PV will increase.</p>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Sample</th><th class="border p-2">RM Value</th><th class="border p-2">Polenske Value</th><th class="border p-2">Explanation</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Cow ghee</td><td class="border p-2">24–34</td><td class="border p-2">1.0–2.0</td><td class="border p-2">High butyric acid → high RM; low insoluble volatile acids → low PV</td></tr>
+                <tr><td class="border p-2">Buffalo ghee</td><td class="border p-2">26–32</td><td class="border p-2">1.0–2.0</td><td class="border p-2">Similar to cow ghee</td></tr>
+                <tr><td class="border p-2">Coconut oil</td><td class="border p-2">6–8</td><td class="border p-2">16–18</td><td class="border p-2">Very low butyric (almost nil) → low RM; very high lauric acid → very high PV</td></tr>
+                <tr><td class="border p-2">Groundnut oil</td><td class="border p-2">0.5–1.5</td><td class="border p-2">0.5–1.0</td><td class="border p-2">Almost no short-chain volatile acids → both RM & PV very low</td></tr>
+              </tbody>
+            </table>
+            <p class="mt-2">FSSAI minimum RM value for ghee: <strong>28</strong>. If RM < 28, it is a strong indication of vegetable oil adulteration in the ghee.</p>
+          `
+        },
+        {
+          title: "Iodine Value (Wijs Method)",
+          purpose: "To measure the degree of unsaturation in a fat — how many double bonds are present in the fatty acids. Very useful for detecting foreign oil adulteration.",
+          reference: "IS 3508 – 1966; A.O.A.C 993.20",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>Fatty acids contain double bonds (C=C) — these are called <strong>unsaturation</strong>. Iodine (or iodine monochloride) adds across these double bonds. The more double bonds present, the more iodine is absorbed.</p>
+            <p class="mt-1"><strong>Definition of Iodine Value:</strong> Grams of iodine absorbed per 100 grams of fat.</p>
+            <p class="mt-1">Milk fat (ghee) has an IV of 26–38 (mostly saturated), whereas vegetable oils have much higher values (groundnut oil 80–106, mustard oil 96–112) because they contain greater amounts of highly unsaturated acids such as oleic, linoleic, and linolenic acid.</p>
+
+            <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mt-3">
+              <p class="text-sm"><strong>Concept of the Wijs Method:</strong></p>
+              <p class="text-sm mt-1">An EXCESS of Wijs reagent (ICl — iodine monochloride in acetic acid) is added to the sample. Some of the ICl reacts with (is consumed by) the double bonds in the fat. The remaining unreacted ICl is then treated with KI to release free iodine (I₂). This I₂ is then titrated with Na₂S₂O₃.</p>
+              <p class="text-sm mt-1">A blank is also run (without fat) — in the blank, all ICl remains unreacted and more Na₂S₂O₃ is required. The difference between the two gives how much iodine was absorbed by the fat.</p>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Chemical Reactions:</h4>
+            <div class="bg-gray-50 border rounded p-3 mt-2 text-sm">
+              <p><strong>Step 1 — Addition of iodine to fat:</strong></p>
+              <pre><code>R-CH=CH-R' + ICl → R-CHI-CHCl-R'
+(unsaturated fat) + (Wijs reagent) → (iodine added across double bond)</code></pre>
+              
+              <p class="mt-2"><strong>Step 2 — Excess ICl + KI:</strong></p>
+              <pre><code>ICl + KI → KCl + I₂
+(unreacted Wijs) + (potassium iodide) → free iodine released</code></pre>
+              
+              <p class="mt-2"><strong>Step 3 — Titration:</strong></p>
+              <pre><code>I₂ + 2Na₂S₂O₃ → 2NaI + Na₂S₄O₆
+(free iodine) + (sodium thiosulfate) → endpoint (blue → colourless with starch)</code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Accurately weigh approximately 0.25 grams of ghee into an iodine flask (glass-stoppered). <em>— A small sample is taken because Wijs reagent is expensive and must be present in excess (at least twice the amount consumed by the sample).</em></li>
+              <li>Add 10 ml of chloroform and dissolve. <em>— Chloroform dissolves the fat so that the Wijs reagent can react uniformly.</em></li>
+              <li>Add 25 ml of Wijs solution (ICl in glacial acetic acid) — this is in EXCESS. <em>— Excess is essential to ensure all double bonds react. An insufficient amount will give an incorrect result.</em></li>
+              <li>Stopper the flask, seal with KI solution, and keep in the dark for 30 minutes. <em>— Dark conditions are required because light promotes side reactions. 30 min = the time needed for the reaction to go to completion.</em></li>
+              <li>Add 15 ml of 10% KI solution. <em>— KI reacts with the unreacted ICl to release I₂ which can then be titrated.</em></li>
+              <li>Add 100 ml of distilled water. <em>— For dilution and to keep I₂ properly dissolved in the KI layer.</em></li>
+              <li>Add a few drops of starch indicator (1%) and titrate with 0.1 N Na₂S₂O₃ until the blue colour completely disappears. <em>— Starch + I₂ = blue colour. When all the I₂ has reacted with Na₂S₂O₃, the blue colour disappears = endpoint.</em></li>
+              <li>Run a blank as well (same procedure, without ghee). <em>— In the blank, all Wijs reagent is unreacted, so more Na₂S₂O₃ will be required.</em></li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Formula and Factor Derivation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>Iodine Value = [12.69 × N × (V_blank - V_sample)] / W</code></pre>
+              
+              <h5 class="font-semibold mt-3 text-sm">Where does the factor 12.69 come from? Detailed Derivation:</h5>
+              
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <tbody>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold w-1/3">Molecular weight of iodine (I₂)</td><td class="border p-2">I = 126.9, so I₂ = 2 × 126.9 = <strong>253.8 g/mol</strong></td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">Reaction of I₂ with Na₂S₂O₃</td><td class="border p-2">I₂ + 2Na₂S₂O₃ → products. I₂ accepts <strong>2 electrons</strong> (2I⁰ → 2I⁻)</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">Equivalent weight of I₂</td><td class="border p-2">Eq.Wt = Mol.Wt / n-factor = 253.8 / 2 = <strong>126.9 g/eq</strong></td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">1 ml of 1N Na₂S₂O₃</td><td class="border p-2">= 1 milliequivalent = 126.9/1000 g = <strong>0.1269 g of I₂</strong></td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">Definition of IV</td><td class="border p-2">Grams of I₂ absorbed per <strong>100 grams</strong> of fat</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">For per 100 g basis</td><td class="border p-2">0.1269 × 100 = <strong>12.69</strong></td></tr>
+                </tbody>
+              </table>
+
+              <p class="text-sm mt-3"><strong>Step-by-step derivation of the formula:</strong></p>
+              <pre class="text-sm"><code>
+I₂ absorbed = (V_blank - V_sample) × N milliequivalents
+
+In grams: = (V_blank - V_sample) × N × (126.9/1000) grams
+
+Iodine Value = grams of I₂ per 100 g of fat
+
+= [(V_blank - V_sample) × N × 126.9/1000 × 100] / W
+
+= [(V_blank - V_sample) × N × 12.69] / W
+
+= [12.69 × N × (V_blank - V_sample)] / W
+              </code></pre>
+
+              <h5 class="font-semibold mt-3 text-sm">Meaning of each variable:</h5>
+              <ul class="list-disc list-inside text-sm space-y-1 mt-1">
+                <li><strong>12.69</strong> = (Eq.Wt of I₂ / 1000) × 100 = 126.9 × 100 / 1000. This converts the equivalent weight of iodine to a per-100-gram basis</li>
+                <li><strong>N</strong> = Normality of Na₂S₂O₃ (usually 0.1N). If 0.1N is used, N = 0.1</li>
+                <li><strong>V_blank</strong> = Volume of Na₂S₂O₃ used in the blank titration (all Wijs was unreacted, so more I₂ was present, requiring more thiosulfate)</li>
+                <li><strong>V_sample</strong> = Volume of Na₂S₂O₃ used in the sample titration (some Wijs was absorbed by the fat, so less I₂ remained, requiring less thiosulfate)</li>
+                <li><strong>(V_blank - V_sample)</strong> = This difference = how much I₂ was absorbed by the fat. The blank was fully unreacted, the sample was partially reacted → the difference = consumed by fat</li>
+                <li><strong>W</strong> = Sample weight in grams</li>
+              </ul>
+
+              <p class="text-sm mt-3"><strong>Example Calculation:</strong></p>
+              <pre class="text-sm"><code>
+Sample weight (W) = 0.2510 g
+Na₂S₂O₃ normality (N) = 0.1 N
+Blank titre (V_blank) = 45.20 ml
+Sample titre (V_sample) = 38.50 ml
+
+Iodine Value = [12.69 × 0.1 × (45.20 - 38.50)] / 0.2510
+             = [12.69 × 0.1 × 6.70] / 0.2510
+             = [8.5023] / 0.2510
+             = 33.87
+
+FSSAI range for ghee is 26–38 → This sample PASSES ✓
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>If the IV is very high (>45):</strong> A highly unsaturated vegetable oil has been added — adding groundnut oil (IV 80–106) or soybean oil (IV 120–143) will raise the IV of ghee.</p>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Sample</th><th class="border p-2">Iodine Value</th><th class="border p-2">Reason</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Cow ghee</td><td class="border p-2">26–35</td><td class="border p-2">Mostly saturated fats, few double bonds</td></tr>
+                <tr><td class="border p-2">Buffalo ghee</td><td class="border p-2">28–38</td><td class="border p-2">Slightly more unsaturated than cow ghee</td></tr>
+                <tr><td class="border p-2">Coconut oil</td><td class="border p-2">7–10</td><td class="border p-2">Highly saturated (lauric, myristic)</td></tr>
+                <tr><td class="border p-2">Groundnut oil</td><td class="border p-2">80–106</td><td class="border p-2">Highly unsaturated (oleic, linoleic)</td></tr>
+                <tr><td class="border p-2">Mustard oil</td><td class="border p-2">96–112</td><td class="border p-2">Erucic acid (highly unsaturated)</td></tr>
+              </tbody>
+            </table>
+            <p class="mt-2">FSSAI range for ghee: <strong>26–38</strong></p>
+          `
+        },
+        {
+          title: "Saponification Value",
+          purpose: "An indication of the average molecular weight of a fat — indicates the presence of short-chain fatty acids characteristic of milk fat.",
+          reference: "IS 3508 – 1966; A.O.A.C 920.160",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p><strong>Saponification</strong> = Converting fat into soap by heating with an alkali (KOH).</p>
+            <pre class="text-sm bg-gray-50 p-2 rounded"><code>Fat (triglyceride) + 3KOH → Glycerol + 3 Potassium Soap (fatty acid salts)</code></pre>
+            <p class="mt-2"><strong>Definition of Saponification Value:</strong> Milligrams of KOH required to completely saponify 1 gram of fat.</p>
+            <p class="mt-2"><strong>Why is it important?</strong></p>
+            <ul class="list-disc list-inside text-sm space-y-1">
+              <li>Short-chain fatty acids (butyric C4, caproic C6) have a SMALL molecular weight</li>
+              <li>If fatty acids are short-chain, there will be more molecules per gram of fat</li>
+              <li>Each triglyceride molecule requires 3 KOH to saponify</li>
+              <li>More molecules = more KOH = HIGHER Saponification Value</li>
+              <li>Milk fat contains a large amount of short-chain acids → SV = 220–235 (high)</li>
+              <li>Vegetable oils (groundnut, soybean) mostly contain long-chain acids → SV = 185–195 (low)</li>
+            </ul>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Accurately weigh approximately 2 grams of ghee into a 250 ml round-bottom flask. <em>— Accuracy is essential because weight is in the denominator of the formula; an incorrect weight gives an incorrect result.</em></li>
+              <li>Add 25 ml of 0.5 N alcoholic KOH (this is in EXCESS). <em>— Excess KOH is necessary to ensure complete saponification of all the fat. Alcohol acts as the solvent — fat does not dissolve in water but does in alcohol, which is why alcoholic KOH is used.</em></li>
+              <li>Attach a reflux condenser and heat on a boiling water bath for 1 hour. <em>— The reflux condenser prevents evaporation of the alcohol. 1 hour = the time needed for saponification to go to completion. A water bath is used for gentle, uniform heating — direct flame risks igniting the alcohol.</em></li>
+              <li>Cool to room temperature and add 2–3 drops of phenolphthalein indicator.</li>
+              <li>Back-titrate the excess (unreacted) KOH with 0.5 N HCl until the pink colour disappears (colourless endpoint). <em>— Back titration is used because direct titration is not possible — we first add excess KOH, then determine how much remains = how much the fat consumed.</em></li>
+              <li>Run a blank as well (same procedure without fat — just 25 ml of alcoholic KOH + reflux + titrate). <em>— In the blank, all the KOH is unreacted, so more HCl will be required.</em></li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Formula and Factor Derivation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>Saponification Value = [56.1 × N × (V_blank - V_sample)] / W</code></pre>
+              
+              <h5 class="font-semibold mt-3 text-sm">Where does the factor 56.1 come from? Step-by-step:</h5>
+              
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <tbody>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold w-1/3">Molecular weight of KOH</td><td class="border p-2">K = 39.1, O = 16.0, H = 1.0 → KOH = <strong>56.1 g/mol</strong></td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">KOH is monovalent</td><td class="border p-2">KOH → K⁺ + OH⁻ (provides one OH⁻) → n-factor = 1 → Equivalent Weight = 56.1/1 = <strong>56.1 g/eq</strong></td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">1 ml of 1N HCl</td><td class="border p-2">= 1 milliequivalent HCl = neutralizes 1 milliequivalent KOH = <strong>56.1/1000 g = 0.0561 g = 56.1 mg</strong> KOH</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">Definition of SV</td><td class="border p-2"><strong>mg of KOH</strong> per gram of fat</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">Therefore the factor</td><td class="border p-2">56.1 (mg KOH per meq) is used directly — no ×100 because SV is "per gram," not "per 100 grams"</td></tr>
+                </tbody>
+              </table>
+
+              <p class="text-sm mt-3"><strong>Full derivation:</strong></p>
+              <pre class="text-sm"><code>
+Back titration concept:
+
+Blank:  None of the 25 ml KOH was consumed
+  → All KOH remains → V_blank ml HCl required to neutralize
+
+Sample: Some of the 25 ml KOH was consumed by the fat
+  → Less KOH remains → V_sample ml HCl required (V_sample < V_blank)
+
+KOH consumed by fat = (V_blank - V_sample) ml of N-normal HCl
+                     = (V_blank - V_sample) × N milliequivalents of KOH
+
+In mg of KOH:         = (V_blank - V_sample) × N × 56.1 mg
+
+Per gram of fat:       = [(V_blank - V_sample) × N × 56.1] / W mg KOH/g
+
+∴ Saponification Value = [56.1 × N × (V_blank - V_sample)] / W
+              </code></pre>
+
+              <h5 class="font-semibold mt-3 text-sm">Meaning of each variable:</h5>
+              <ul class="list-disc list-inside text-sm space-y-1 mt-1">
+                <li><strong>56.1</strong> = Molecular/equivalent weight of KOH in mg per milliequivalent. This is a universal constant — it never changes</li>
+                <li><strong>N</strong> = Normality of HCl (usually 0.5N). If 0.5N HCl is used, N = 0.5</li>
+                <li><strong>V_blank</strong> = ml of HCl used in the blank. This equals the total KOH added initially (since none was consumed)</li>
+                <li><strong>V_sample</strong> = ml of HCl used in the sample. This equals the remaining KOH (the fat consumed some)</li>
+                <li><strong>(V_blank - V_sample)</strong> = KOH consumed by the fat = used in saponification</li>
+                <li><strong>W</strong> = Fat sample weight in grams</li>
+              </ul>
+
+              <p class="text-sm mt-3"><strong>Example Calculation:</strong></p>
+              <pre class="text-sm"><code>
+Sample weight (W) = 2.05 g
+HCl normality (N) = 0.5 N
+Blank titre (V_blank) = 42.5 ml
+Sample titre (V_sample) = 26.3 ml
+
+SV = [56.1 × 0.5 × (42.5 - 26.3)] / 2.05
+   = [56.1 × 0.5 × 16.2] / 2.05
+   = [454.41] / 2.05
+   = 221.7 mg KOH/g
+
+Range for ghee is 220–235 → This sample PASSES ✓
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Estimating molecular weight from SV:</strong></p>
+              <pre class="text-sm"><code>
+Average Molecular Weight of fat ≈ (3 × 56100) / SV
+
+(3 because a triglyceride has 3 fatty acids, each requiring 1 KOH)
+(56100 = 56.1 × 1000 for unit conversion)
+
+For ghee (SV=225): MW ≈ 168300/225 ≈ 748 g/mol
+For groundnut oil (SV=192): MW ≈ 168300/192 ≈ 877 g/mol
+
+Ghee has a lower MW because it contains short-chain acids → confirms SV theory
+              </code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Sample</th><th class="border p-2">SV (mg KOH/g)</th><th class="border p-2">Explanation</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Ghee</td><td class="border p-2">220–235</td><td class="border p-2">Short-chain acids (C4–C6) → small molecules → more KOH required</td></tr>
+                <tr><td class="border p-2">Coconut oil</td><td class="border p-2">250–264</td><td class="border p-2">Medium-chain (lauric C12) → highest SV</td></tr>
+                <tr><td class="border p-2">Groundnut oil</td><td class="border p-2">188–196</td><td class="border p-2">Long-chain (oleic C18) → less KOH needed</td></tr>
+                <tr><td class="border p-2">Soybean oil</td><td class="border p-2">189–195</td><td class="border p-2">Long-chain acids</td></tr>
+              </tbody>
+            </table>
+          `
+        },
+        {
+          title: "Unsaponifiable Matter",
+          purpose: "A measure of non-fat components (sterols, hydrocarbons, vitamins) in fat — very useful for detecting mineral oil adulteration.",
+          reference: "IS 3508 – 1966",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p><strong>Unsaponifiable matter</strong> = Components of fat that do NOT saponify (convert into soap) with KOH but are fat-soluble and can be extracted into petroleum ether.</p>
+            <p class="mt-1">This includes:</p>
+            <ul class="list-disc list-inside text-sm">
+              <li><strong>Sterols</strong> — Cholesterol (animal fat), Phytosterols (plant fat)</li>
+              <li><strong>Fat-soluble vitamins</strong> — A, D, E, K</li>
+              <li><strong>Hydrocarbons</strong> — Squalene</li>
+              <li><strong>Mineral oil</strong> (if added as an adulterant) — this is 100% unsaponifiable!</li>
+            </ul>
+            <p class="mt-2"><strong>Why it is important:</strong> Normal ghee contains ≤ 1.2% unsaponifiable matter. If mineral oil (liquid paraffin, kerosene) is added, this value increases greatly because mineral oil is completely unsaponifiable — it consists of hydrocarbons, not fatty acids.</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Accurately weigh 5 grams of ghee into a 250 ml round-bottom flask (W_sample).</li>
+              <li>Add 50 ml of alcoholic KOH (0.5N) and heat on a water bath with a reflux condenser for 1 hour — saponification will be complete. <em>— Fat → soap + glycerol. However, sterols, vitamins, and mineral oil will not react.</em></li>
+              <li>Transfer the saponified mixture to a separating funnel. Rinse the flask with a little warm water and add these washings to the funnel as well.</li>
+              <li><strong>Extraction:</strong> Add 50 ml of petroleum ether (40–60°C fraction), stopper the funnel, gently mix (vigorous shaking will cause an emulsion), and allow the phases to separate. <em>— Soap + glycerol remain in the aqueous layer. Unsaponifiable matter passes into the petroleum ether layer.</em></li>
+              <li>Collect the ether layer (upper) in a separate flask. Repeat this extraction 3 times (3 × 50 ml). <em>— Three extractions are performed to ensure maximum recovery of unsaponifiable matter (liquid-liquid extraction efficiency).</em></li>
+              <li>Wash the combined ether extracts 2–3 times with 25 ml of 0.5N aqueous KOH. <em>— Some soap may have entered the ether layer — the KOH wash transfers the soap back into the aqueous layer, leaving pure unsaponifiable matter in the ether.</em></li>
+              <li>Then wash with distilled water until the washings are no longer alkaline (check with phenolphthalein — no pink colour means alkali-free).</li>
+              <li>Collect the ether into a pre-weighed flask (W_flask) and evaporate on a water bath. <em>— Petroleum ether evaporates at its low boiling point (40–60°C), leaving the residue behind.</em></li>
+              <li>Dry the residue in an oven at 80°C for 30 minutes, cool in a desiccator, and weigh (W_flask+residue).</li>
+              <li>Repeat until constant weight is achieved.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Formula and Factor Explanation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>% Unsaponifiable Matter = (W_residue / W_sample) × 100</code></pre>
+              
+              <p class="text-sm mt-2"><strong>Where:</strong></p>
+              <ul class="list-disc list-inside text-sm space-y-1">
+                <li><strong>W_residue</strong> = (W_flask+residue) − (W_flask) = Weight of residue only, in grams. This is the unsaponifiable matter.</li>
+                <li><strong>W_sample</strong> = Weight of the original ghee sample in grams (5 g)</li>
+                <li><strong>× 100</strong> = To convert to a percentage</li>
+              </ul>
+
+              <p class="text-sm mt-3"><strong>Why is this formula so simple?</strong></p>
+              <p class="text-sm">Because this is a <strong>gravimetric method</strong> — not a titration. We are directly measuring weight. No chemical conversion factor is needed. What remains = unsaponifiable matter.</p>
+
+              <p class="text-sm mt-3"><strong>Conceptual diagram:</strong></p>
+              <pre class="text-sm"><code>
+5 g Ghee
+  │
+  ├── Saponifiable part (98.8%+): Triglycerides → Soap + Glycerol
+  │   → Dissolves in water → DISCARD
+  │
+  └── Unsaponifiable part (≤1.2%): Sterols, Vitamins, Hydrocarbons
+      → Dissolves in petroleum ether → COLLECT
+      → Evaporate ether → WEIGH = W_residue
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Example:</strong></p>
+              <pre class="text-sm"><code>
+W_sample = 5.00 g
+W_flask = 85.234 g
+W_flask+residue = 85.290 g
+
+W_residue = 85.290 - 85.234 = 0.056 g
+
+% Unsaponifiable = (0.056 / 5.00) × 100 = 1.12%
+
+FSSAI limit ≤ 1.2% → PASSES ✓
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>If mineral oil has been added:</strong></p>
+              <pre class="text-sm"><code>
+Suppose 10% mineral oil is added to ghee:
+W_sample = 5.00 g (containing 0.50 g mineral oil)
+
+Mineral oil does not saponify → all 0.50 g passes into ether
+Plus normal unsaponifiable (0.05 g) = total 0.55 g
+
+% Unsaponifiable = (0.55/5.00) × 100 = 11.0%
+
+This is far above 1.2% → ADULTERATION DETECTED! ✗
+              </code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Sample</th><th class="border p-2">Unsaponifiable Matter</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Pure Ghee</td><td class="border p-2">≤ 1.2%</td></tr>
+                <tr><td class="border p-2">Vegetable oils</td><td class="border p-2">0.5 – 2.0%</td></tr>
+                <tr><td class="border p-2">Ghee adulterated with mineral oil</td><td class="border p-2">>> 2% (very high)</td></tr>
+              </tbody>
+            </table>
+            <p class="mt-2">FSSAI standard: Maximum <strong>1.2%</strong> unsaponifiable matter in ghee</p>
+          `
+        },
+        {
+          title: "Free Fatty Acids (FFA)",
+          purpose: "Measures the extent of fat breakdown (hydrolysis) — an important indicator of freshness and quality. High FFA leads towards rancidity.",
+          reference: "IS 3508 – 1966",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>In normal fat, fatty acids are bonded to glycerol (ester bond) — these are <strong>triglycerides</strong>. When fat undergoes hydrolysis (due to moisture, enzymes, or heat), the fatty acids break away from glycerol and become FREE:</p>
+            <pre class="text-sm bg-gray-50 p-2 rounded"><code>Triglyceride + H₂O → Diglyceride + Free Fatty Acid
+(this reaction occurs due to moisture/enzyme/heat)</code></pre>
+            <p class="mt-2">Free fatty acids (FFA) are neutralized directly by NaOH. The more FFA present, the more NaOH is required = the more hydrolysis has occurred = the fat is OLD or has deteriorated.</p>
+            <p class="mt-1">The result is expressed in terms of <strong>oleic acid</strong> (by convention — oleic acid is the most common fatty acid in fats).</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Accurately weigh approximately 10 grams of melted ghee into a conical flask. <em>— 10 grams is taken because FFA is usually present in small amounts; a larger sample gives a more accurate titre.</em></li>
+              <li>Add 50 ml of neutralized warm ethanol and dissolve. <em>— The ethanol must first be neutralized with NaOH (titrate with phenolphthalein indicator until a faint pink colour appears). If the ethanol is not neutral, its own acidity will be added to the FFA result — giving an incorrect answer. Warm ethanol is used so that ghee dissolves properly.</em></li>
+              <li>Add 2–3 drops of phenolphthalein indicator.</li>
+              <li>Titrate with 0.1 N NaOH until a persistent faint pink colour appears (pink remains for 30 seconds). <em>— This is a direct titration; no blank is needed because the ethanol has already been neutralized.</em></li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Formula and Factor Derivation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>% FFA (as oleic acid) = [V × N × 28.2] / W</code></pre>
+              
+              <h5 class="font-semibold mt-3 text-sm">Where does the factor 28.2 come from? Complete Derivation:</h5>
+              
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <tbody>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold w-1/3">Formula of oleic acid</td><td class="border p-2">C₁₇H₃₃COOH = C₁₈H₃₄O₂</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">Molecular weight</td><td class="border p-2">C: 18×12 = 216, H: 34×1 = 34, O: 2×16 = 32 → Total = <strong>282 g/mol</strong></td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">Oleic acid is monobasic</td><td class="border p-2">Only one –COOH group → n-factor = 1 → Eq.Wt = 282/1 = <strong>282 g/eq</strong></td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">Reaction</td><td class="border p-2">C₁₇H₃₃COOH + NaOH → C₁₇H₃₃COONa + H₂O (1:1 ratio)</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">1 ml of 1N NaOH</td><td class="border p-2">= 1 meq = neutralizes 282/1000 g = <strong>0.282 g of oleic acid</strong></td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">For % multiply by 100</td><td class="border p-2">0.282 × 100 = <strong>28.2</strong></td></tr>
+                </tbody>
+              </table>
+
+              <p class="text-sm mt-3"><strong>Full derivation:</strong></p>
+              <pre class="text-sm"><code>
+FFA (RCOOH) + NaOH → RCOONa + H₂O
+
+meq of FFA = V × N (V = ml of NaOH, N = normality)
+
+Grams of FFA (as oleic) = V × N × (282/1000)
+                         = V × N × 0.282 grams
+
+% FFA = (grams of FFA / sample weight) × 100
+      = [V × N × 0.282 / W] × 100
+      = [V × N × 28.2] / W
+              </code></pre>
+
+              <h5 class="font-semibold mt-3 text-sm">Each variable:</h5>
+              <ul class="list-disc list-inside text-sm space-y-1">
+                <li><strong>V</strong> = ml of NaOH used in titration (direct titre, no blank)</li>
+                <li><strong>N</strong> = Normality of NaOH (usually 0.1N)</li>
+                <li><strong>28.2</strong> = Oleic acid equivalent weight (282) × 100/1000. This is an oleic acid-specific constant — if expressed in terms of a different acid, the factor changes</li>
+                <li><strong>W</strong> = Sample weight in grams</li>
+              </ul>
+
+              <p class="text-sm mt-3"><strong>If expressed in terms of other fatty acids:</strong></p>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Acid</th><th class="border p-2">Mol.Wt</th><th class="border p-2">Factor (MW×100/1000)</th><th class="border p-2">When used</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2">Oleic acid</td><td class="border p-2">282</td><td class="border p-2">28.2</td><td class="border p-2">Ghee, most oils</td></tr>
+                  <tr><td class="border p-2">Lauric acid</td><td class="border p-2">200</td><td class="border p-2">20.0</td><td class="border p-2">Coconut oil</td></tr>
+                  <tr><td class="border p-2">Palmitic acid</td><td class="border p-2">256</td><td class="border p-2">25.6</td><td class="border p-2">Palm oil</td></tr>
+                  <tr><td class="border p-2">Butyric acid</td><td class="border p-2">88</td><td class="border p-2">8.8</td><td class="border p-2">Special cases</td></tr>
+                </tbody>
+              </table>
+
+              <p class="text-sm mt-3"><strong>Relationship between FFA and Acid Value:</strong></p>
+              <pre class="text-sm"><code>
+Acid Value = mg of KOH to neutralize FFA in 1 g fat
+           = [V × N × 56.1] / W
+
+% FFA (oleic) = Acid Value × (282 / 56.1) / 10 = Acid Value × 0.503
+
+or conversely: Acid Value = % FFA × 1.99
+              </code></pre>
+              <p class="text-sm"><strong>Where 0.503 comes from:</strong> (Oleic eq.wt)/(KOH eq.wt × 10) = 282/(56.1×10) = 282/561 = 0.5027 ≈ 0.503</p>
+
+              <p class="text-sm mt-3"><strong>Example Calculation:</strong></p>
+              <pre class="text-sm"><code>
+Sample weight = 10.05 g
+NaOH normality = 0.1 N
+Titre = 1.42 ml
+
+% FFA = [1.42 × 0.1 × 28.2] / 10.05
+      = [4.0044] / 10.05
+      = 0.40%
+
+FSSAI limit: Max 3.0%. Fresh ghee typically < 0.5% → This is fresh ghee ✓
+              </code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">FSSAI Standard:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Category</th><th class="border p-2">FFA (% as oleic)</th><th class="border p-2">Interpretation</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">FSSAI Maximum</td><td class="border p-2">3.0%</td><td class="border p-2">Legal limit</td></tr>
+                <tr><td class="border p-2">Agmark Special Grade</td><td class="border p-2">≤ 1.4%</td><td class="border p-2">Premium quality</td></tr>
+                <tr><td class="border p-2">Fresh ghee</td><td class="border p-2">< 0.5%</td><td class="border p-2">Excellent freshness</td></tr>
+                <tr><td class="border p-2">Rancid ghee</td><td class="border p-2">> 3.0%</td><td class="border p-2">Rejected — off-flavour, bad smell</td></tr>
+              </tbody>
+            </table>
+          `
+        },
+        {
+          title: "Moisture / Volatile Matter",
+          purpose: "The quantity of water and volatile compounds in ghee — an important parameter for shelf life, quality, and adulteration.",
+          reference: "IS 3508 – 1966",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>Ghee is heated at 105°C — water (boiling point 100°C) and any volatile compounds evaporate. The loss in weight = moisture + volatile matter. This is a simple <strong>gravimetric method</strong> (based on weight measurement).</p>
+            <p class="mt-2"><strong>Why it is important:</strong></p>
+            <ul class="list-disc list-inside text-sm">
+              <li>Excess moisture → microbial growth → ghee deteriorates quickly</li>
+              <li>Excess moisture → customer receives less ghee by weight</li>
+              <li>Water adulteration can be detected</li>
+              <li>FSSAI limit: Maximum 0.3%</li>
+            </ul>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Place a clean flat-bottom aluminium/porcelain dish in an oven at 105°C for 1 hour, cool in a desiccator, and weigh = <strong>W1</strong>. <em>— Pre-drying is necessary so that the dish's own moisture does not appear in the result. Cool in a desiccator because a hot dish will absorb atmospheric moisture.</em></li>
+              <li>Accurately weigh approximately 10 grams of melted ghee into the dish. Weight of dish + ghee = <strong>W2</strong>.</li>
+              <li>Place the dish in the oven at 105°C for 2 hours (or until bubbling has completely stopped). <em>— Bubbling = water is evaporating. When bubbling stops, the water has been driven off.</em></li>
+              <li>Cool in a desiccator (20–30 min), weigh = <strong>W3</strong>.</li>
+              <li>Return to oven for 30 minutes, cool, and weigh again. If weight is constant (within ±0.001 g of the previous weighing), W3 is the final weight. Otherwise, repeat. <em>— "Constant weight" ensures that all moisture has been removed.</em></li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Formula and Factor Explanation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>% Moisture = [(W2 - W3) / (W2 - W1)] × 100</code></pre>
+              
+              <h5 class="font-semibold mt-3 text-sm">What each factor means and where it comes from:</h5>
+              
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <tbody>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W1</td><td class="border p-2">Weight of empty dry dish (grams). This is the "tare" weight — to remove the contribution of the dish.</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W2</td><td class="border p-2">Weight of dish + sample before drying. This is the starting weight.</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W3</td><td class="border p-2">Weight of dish + sample after drying at 105°C. This is the final weight — moisture has evaporated.</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W2 - W1</td><td class="border p-2">= Net sample weight (weight of ghee). The weight of the dish cancels out.</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W2 - W3</td><td class="border p-2">= LOSS in weight = what evaporated = Moisture + Volatile matter</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">× 100</td><td class="border p-2">= To convert to a percentage</td></tr>
+                </tbody>
+              </table>
+
+              <p class="text-sm mt-3"><strong>Visual representation:</strong></p>
+              <pre class="text-sm"><code>
+BEFORE DRYING (W2)              AFTER DRYING (W3)
+┌──────────────────┐           ┌──────────────────┐
+│ ☁ Moisture ☁    │    105°C  │                  │
+│   (W2 - W3)      │  ──────→ │ (moisture gone)   │
+│                  │   2 hrs   │                  │
+│ 🧈 Dry Fat 🧈   │           │ 🧈 Dry Fat 🧈   │
+│   (W3 - W1)      │           │   (W3 - W1)      │
+├──────────────────┤           ├──────────────────┤
+│ 🍽 Dish (W1)     │           │ 🍽 Dish (W1)     │
+└──────────────────┘           └──────────────────┘
+
+Weight loss = W2 - W3 (moisture gone!)
+Sample weight = W2 - W1 (total sample)
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Why 105°C?</strong></p>
+              <ul class="list-disc list-inside text-sm">
+                <li>Boiling point of water = 100°C</li>
+                <li>105°C ensures all water is definitely driven off (slightly above boiling point)</li>
+                <li>Too high a temperature (>120°C) may decompose or oxidize the fat → incorrect weight loss</li>
+                <li>105°C = the sweet spot — water is removed, fat remains safe</li>
+              </ul>
+
+              <p class="text-sm mt-3"><strong>Example Calculation:</strong></p>
+              <pre class="text-sm"><code>
+W1 (empty dish) = 45.236 g
+W2 (dish + ghee before drying) = 55.482 g
+W3 (dish + ghee after drying) = 55.456 g
+
+Sample weight = W2 - W1 = 55.482 - 45.236 = 10.246 g
+Weight loss = W2 - W3 = 55.482 - 55.456 = 0.026 g
+
+% Moisture = (0.026 / 10.246) × 100 = 0.254%
+
+FSSAI limit: Max 0.3% → PASSES ✓
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Why is a desiccator used?</strong></p>
+              <p class="text-sm">When a hot sample cools in the open atmosphere, it absorbs atmospheric moisture. The desiccator contains silica gel or CaCl₂ which absorbs moisture — the sample cools in a dry environment without gaining moisture.</p>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">FSSAI Standard:</h4>
+            <p>Maximum <strong>0.3%</strong> moisture in ghee. Fresh, well-prepared ghee usually contains 0.1–0.2%.</p>
+          `
+        },
+        {
+          title: "Baudouin Test (Vanaspati Detection)",
+          purpose: "Detects the adulteration of ghee with vanaspati (hydrogenated vegetable oil). This is a qualitative colour test.",
+          reference: "IS 3508 – 1966",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>Under FSSAI regulations, <strong>vanaspati</strong> (hydrogenated vegetable oil) manufactured in India must mandatorily contain <strong>5% sesame (til) oil</strong> — so that vanaspati can be distinguished from ghee.</p>
+            <p class="mt-1">Sesame oil contains a unique compound: <strong>Sesamol</strong> (3,4-methylenedioxyphenol). This compound reacts with <strong>furfural</strong> in an acidic medium (conc. HCl) to form a <strong>PINK/RED</strong> condensation product.</p>
+            <p class="mt-1">Pure ghee does not contain sesamol, so this test gives a negative result. If vanaspati has been added to ghee, sesame oil will automatically be present → test is POSITIVE.</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Chemical Reaction:</h4>
+            <div class="bg-gray-50 border rounded p-3 mt-2 text-sm">
+              <pre><code>Sesamol + Furfural + HCl → PINK/RED coloured condensation product
+
+Sesamol (in sesame oil):           Furfural:
+    OH                               CHO
+    |                                 |
+    [benzene ring]—O                  [furan ring]
+                    \                 
+                     CH₂              
+                    /                 
+    [benzene ring]—O                  
+
+Conc. HCl = acts as catalyst + provides acidic medium
+Result = Crimson pink/red colour (condensation product)</code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Place 5 ml of melted ghee in a clean, dry test tube.</li>
+              <li>Carefully add 5 ml of concentrated HCl. <em>— HCl provides the acidic medium required for the reaction. Conc. HCl is highly corrosive — handle with care.</em></li>
+              <li>Add 0.4 ml of 2% furfural solution (FRESHLY prepared in alcohol). <em>— Old furfural solution polymerizes and darkens — which is why a fresh solution is essential. 2% = 2 g furfural in 100 ml ethanol.</em></li>
+              <li>Stopper the test tube with a rubber stopper and shake vigorously for 2 minutes. <em>— Vigorous shaking maximizes contact between the ghee, acid, and reagent — ensuring the reaction proceeds properly.</em></li>
+              <li>Place in a test tube stand and allow the layers to separate (2–3 minutes).</li>
+              <li>Observe the colour of the lower (acid) layer.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Result Interpretation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <p class="text-sm"><strong>This is a qualitative test — there is no mathematical formula. The result is based on colour observation:</strong></p>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Observation (Acid Layer)</th><th class="border p-2">Interpretation</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2 text-red-600 font-semibold">Pink or Red colour</td><td class="border p-2">Vanaspati PRESENT — Ghee is ADULTERATED (sesame oil detected)</td></tr>
+                  <tr><td class="border p-2 text-green-600 font-semibold">No colour / pale yellow</td><td class="border p-2">Vanaspati ABSENT — Pure ghee (no sesame oil)</td></tr>
+                </tbody>
+              </table>
+              <p class="text-sm mt-2"><strong>Sensitivity:</strong> This test can detect approximately 5% vanaspati adulteration. Since vanaspati contains 5% sesame oil, adding 5% vanaspati results in an effective sesame oil content of 0.25% — sufficient for detection.</p>
+              <p class="text-sm mt-2"><strong>When can a false positive occur?</strong> If ghee was made from butter fried in sesame oil (rare but possible), or if sesame oil was separately added. Therefore this test is not conclusive proof of vanaspati specifically — it is a detection test for sesame oil.</p>
+              <p class="text-sm mt-2"><strong>The FSSAI Logic:</strong> Vanaspati is much cheaper than ghee. People add vanaspati for profit. FSSAI made it mandatory to add sesame oil to vanaspati so that this adulteration can be detected — a very clever regulatory strategy!</p>
+            </div>
+          `
+        },
+        {
+          title: "Fiehe's Test (for Vegetable Fat)",
+          purpose: "Another confirmatory colour test for adulteration of ghee with vegetable fat/oil or vanaspati — based on the Liebermann-Burchard reaction.",
+          reference: "IS 3508 – 1966",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>Vegetable oils contain <strong>phytosterols</strong> (β-sitosterol, stigmasterol, campesterol — these are plant-specific sterols). Animal fats (ghee) contain <strong>cholesterol</strong>.</p>
+            <p class="mt-1">When sterols are reacted with <strong>acetic anhydride + conc. H₂SO₄</strong>, phytosterols produce a characteristic <strong>GREEN/BLUE-GREEN</strong> colour (Liebermann-Burchard reaction). Cholesterol also produces a colour, but it quickly turns brownish after an initial green, and the intensity is lower.</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Chemical Reaction (Liebermann-Burchard):</h4>
+            <div class="bg-gray-50 border rounded p-3 mt-2 text-sm">
+              <pre><code>Phytosterol + Acetic Anhydride + Conc. H₂SO₄ 
+→ Dehydration → Conjugated unsaturated sterol derivative
+→ GREEN/BLUE-GREEN colour
+
+Step 1: H₂SO₄ acts as dehydrating agent
+        Sterol → loses water → forms unsaturated ring system
+
+Step 2: Conjugated double bonds form
+        → Absorb specific wavelength of visible light
+        → GREEN colour is observed
+
+Step 3: Acetic anhydride provides the acetylation medium
+        → Stabilizes the colour reaction</code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Place 5 ml of melted ghee in a dry test tube.</li>
+              <li>Add 5 ml of acetic anhydride and mix. <em>— Acetic anhydride is moisture-sensitive. The test tube must be completely dry; otherwise acetic anhydride will react with water (forming acetic acid) and the test will fail.</em></li>
+              <li>Carefully add 1–2 drops of conc. H₂SO₄ down the side of the test tube (do NOT add directly — the reaction is highly exothermic). <em>— Conc. H₂SO₄ is very dangerous — it causes severe burns on skin. Handle with extreme care.</em></li>
+              <li>Gently mix and observe the colour immediately and after 5 minutes.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Result Interpretation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <p class="text-sm"><strong>This is a qualitative colour test — there is no formula:</strong></p>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Colour Observed</th><th class="border p-2">Interpretation</th><th class="border p-2">Reason</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2 text-green-600 font-semibold">Green / Blue-green</td><td class="border p-2">Vegetable fat/oil PRESENT</td><td class="border p-2">Reaction of phytosterols (β-sitosterol) → intense green colour</td></tr>
+                  <tr><td class="border p-2 font-semibold">Brown / no green</td><td class="border p-2">Pure milk fat</td><td class="border p-2">Reaction of cholesterol → transient greenish → quickly turns brown</td></tr>
+                </tbody>
+              </table>
+              <p class="text-sm mt-2"><strong>Limitation:</strong> This test is semi-quantitative — the intensity of the green colour can give an approximate idea of the extent of adulteration, but not an exact percentage. Cholesterol can also give a slight initial green — so the time of observation is important. The green from phytosterols is PERSISTENT; the green from cholesterol is TRANSIENT.</p>
+              <p class="text-sm mt-2"><strong>Baudouin Test vs Fiehe's Test:</strong></p>
+              <ul class="list-disc list-inside text-sm">
+                <li>The Baudouin test detects sesame oil → specifically for vanaspati</li>
+                <li>Fiehe's test detects phytosterols → for ANY vegetable oil/fat (refined oils, crude oils, vanaspati, all)</li>
+                <li>Both tests are complementary — one provides confirmation of the other</li>
+              </ul>
+            </div>
+          `
+        },
+        {
+          title: "Detection of Mineral Oil (Holde's Test)",
+          purpose: "Detects adulteration with non-edible mineral oils (liquid paraffin, kerosene) — this is a very dangerous form of adulteration.",
+          reference: "IS 3508 – 1966",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p><strong>Mineral oil</strong> = Hydrocarbons derived from petroleum (liquid paraffin, white oil, kerosene). These are NOT esters of fatty acids — they are simple hydrocarbons (CₙH₂ₙ₊₂).</p>
+            <p class="mt-2"><strong>Key difference:</strong></p>
+            <ul class="list-disc list-inside text-sm">
+              <li><strong>Edible fat/oil</strong> (triglyceride) = Ester of glycerol + fatty acids → reacts with KOH to form SOAP (saponification) → soap DISSOLVES in water</li>
+              <li><strong>Mineral oil</strong> = Hydrocarbon → does NOT react with KOH (does not saponify) → does NOT dissolve in water → appears as TURBIDITY/oily droplets</li>
+            </ul>
+
+            <h4 class="font-semibold mt-4 mb-2">Chemical Basis:</h4>
+            <div class="bg-gray-50 border rounded p-3 mt-2 text-sm">
+              <pre><code>Normal Fat + KOH → SOAP (water soluble) + Glycerol (water soluble)
+  (saponification reaction)
+  
+  R-COO-CH₂           CH₂-OH
+  |                    |
+  R-COO-CH   + 3KOH → CH-OH    + 3R-COOK
+  |                    |          (soap - dissolves in water)
+  R-COO-CH₂           CH₂-OH
+  (triglyceride)       (glycerol)
+
+Mineral Oil + KOH → NO REACTION (nothing happens!)
+  
+  CₙH₂ₙ₊₂ + KOH → CₙH₂ₙ₊₂ (unchanged!)
+  (hydrocarbon)       (remains as oily droplets)
+
+When hot water is added:
+  Soap → dissolves → CLEAR solution
+  Mineral oil → does not dissolve → TURBIDITY / floating droplets</code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Place 1 gram of ghee in a 250 ml round-bottom flask.</li>
+              <li>Add 25 ml of 4% alcoholic KOH (4 g KOH in 100 ml ethanol). <em>— Alcoholic KOH is used because fat dissolves in alcohol, not in water. 4% is sufficient for complete saponification.</em></li>
+              <li>Attach a reflux condenser and heat on a water bath for 30 minutes. <em>— All fat saponifies within 30 minutes. Mineral oil remains unchanged.</em></li>
+              <li>Add 100 ml of hot distilled water (70–80°C) and gently mix. <em>— Soap dissolves more easily in hot water.</em></li>
+              <li>Observe the solution.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Result Interpretation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <p class="text-sm"><strong>This is a qualitative test — there is no formula:</strong></p>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Observation</th><th class="border p-2">Interpretation</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2 text-red-600 font-semibold">Turbidity / oily droplets floating</td><td class="border p-2">Mineral oil PRESENT — dangerous adulteration!</td></tr>
+                  <tr><td class="border p-2 text-green-600 font-semibold">Completely clear solution</td><td class="border p-2">Mineral oil ABSENT — pure ghee (all fat converted to soap and dissolved)</td></tr>
+                </tbody>
+              </table>
+              <p class="text-sm mt-2"><strong>Why is mineral oil adulteration dangerous?</strong></p>
+              <ul class="list-disc list-inside text-sm">
+                <li>Mineral oil is not digested by the body (the lipase enzyme cannot break it down)</li>
+                <li>It accumulates in the intestine and liver</li>
+                <li>It has a laxative effect (diarrhoea)</li>
+                <li>Long-term use can cause liver damage</li>
+                <li>Under FSSAI, this is a serious food adulteration offence</li>
+              </ul>
+              <p class="text-sm mt-2"><strong>Confirmation:</strong> The unsaponifiable matter test also confirms this — adding mineral oil causes unsaponifiable matter to exceed 1.2%.</p>
+            </div>
+          `
+        },
+        {
+          title: "Peroxide Value (PV)",
+          purpose: "Measures the early stages of oxidative rancidity in fat — an important indicator of the freshness and storage stability of fat.",
+          reference: "A.O.A.C 965.33",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>When fat reacts with oxygen (due to air exposure, light, or heat), <strong>peroxides</strong> (R-O-O-H) form at the double bonds of unsaturated fatty acids — these are <strong>primary oxidation products</strong>.</p>
+            <p class="mt-1">These peroxides react with <strong>potassium iodide (KI)</strong> to release <strong>iodine (I₂)</strong>. The released I₂ is then titrated with <strong>sodium thiosulfate (Na₂S₂O₃)</strong>. The more peroxide present, the more I₂ released, and the more Na₂S₂O₃ is required.</p>
+            <p class="mt-1">The result is expressed as <strong>milliequivalents of peroxide oxygen per kilogram of fat</strong> (meq O₂/kg).</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Chemical Reactions — Step by Step:</h4>
+            <div class="bg-gray-50 border rounded p-3 mt-2 text-sm">
+              <p><strong>Step 1 — Oxidation (this has already occurred during storage):</strong></p>
+              <pre><code>R-CH=CH-R' + O₂ → R-CH(OOH)-CH-R'  (lipid peroxide/hydroperoxide)
+(unsaturated fat)   (oxygen)   (peroxide — this is what we measure)</code></pre>
+              
+              <p class="mt-2"><strong>Step 2 — Peroxide + KI → iodine release:</strong></p>
+              <pre><code>R-OOH + 2KI + 2HCl → R-OH + I₂ + 2KCl + H₂O
+(peroxide) + (KI)  → (alcohol) + (free iodine) — iodine gives a brown colour</code></pre>
+              <p class="text-xs">This reaction occurs in an acidic medium (acetic acid). More peroxide = more I₂ released.</p>
+
+              <p class="mt-2"><strong>Step 3 — Titration (measurement of I₂):</strong></p>
+              <pre><code>I₂ + 2Na₂S₂O₃ → 2NaI + Na₂S₄O₆
+(iodine) + (thiosulfate) → products
+
+Starch indicator: gives BLUE colour with I₂
+Endpoint: Blue → COLOURLESS (when all I₂ has reacted)</code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Accurately weigh approximately 5 grams of ghee into a 250 ml glass-stoppered conical flask.</li>
+              <li>Add 30 ml of acetic acid : chloroform (3:2 v/v) mixture and dissolve. <em>— Chloroform dissolves the fat. Acetic acid provides the acidic medium required for the reaction. 3:2 ratio = 18 ml acetic acid + 12 ml chloroform.</em></li>
+              <li>Add 0.5 ml of freshly prepared saturated KI solution. <em>— Saturated KI contains excess KI to ensure it can react with all the peroxides present. FRESHLY prepared because old KI solution oxidizes and releases I₂ on its own → false high results.</em></li>
+              <li>Keep in the dark for exactly 1 minute, shaking occasionally. <em>— Dark conditions are required because light can directly oxidize KI to release I₂ (without peroxide) → false high result. 1 minute = a standardized reaction time.</em></li>
+              <li>Add 30 ml of distilled water. <em>— To stop the reaction and dilute for titration.</em></li>
+              <li>Add 0.5–1 ml of starch indicator (1% solution). The solution will turn BLUE if I₂ is present.</li>
+              <li>Titrate with 0.01 N or 0.1 N Na₂S₂O₃ until the blue colour COMPLETELY disappears and the solution remains colourless/pale yellow. <em>— 0.01N is used when a low PV is expected (fresh ghee). 0.1N is used when a high PV is expected (rancid fat).</em></li>
+              <li>Also run a blank (same procedure without ghee). <em>— To check for background I₂ release from the reagents. The blank titre should ideally be less than 0.1 ml.</em></li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Formula and Factor Derivation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>PV (meq/kg) = [(S - B) × N × 1000] / W</code></pre>
+              
+              <h5 class="font-semibold mt-3 text-sm">Detailed Explanation of Each Factor:</h5>
+              
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <tbody>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold w-1/4">S</td><td class="border p-2"><strong>Sample titre</strong> = ml of Na₂S₂O₃ used for the sample titration. A higher titre = more I₂ released = more peroxide was present in the sample.</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">B</td><td class="border p-2"><strong>Blank titre</strong> = ml of Na₂S₂O₃ used for the blank (without fat). This corrects for the reagents' own I₂ release. Ideally < 0.1 ml.</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">(S - B)</td><td class="border p-2"><strong>Net titre</strong> = How much Na₂S₂O₃ was used solely because of the fat's peroxides. The blank interference has been removed.</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">N</td><td class="border p-2"><strong>Normality of Na₂S₂O₃</strong> (0.01N or 0.1N). Concentration factor — exact amount of thiosulfate per ml.</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">1000</td><td class="border p-2"><strong>Grams to kilograms conversion.</strong> PV is in units of meq/KG, but the sample was weighed in grams. 1 kg = 1000 g, so × 1000.</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W</td><td class="border p-2"><strong>Sample weight in grams</strong></td></tr>
+                </tbody>
+              </table>
+
+              <p class="text-sm mt-3"><strong>Complete Derivation:</strong></p>
+              <pre class="text-sm"><code>
+Peroxides + KI → I₂ released
+I₂ + Na₂S₂O₃ → titrated
+
+I₂ + 2Na₂S₂O₃ → products
+(1 mole I₂ = 2 equivalents, 1 mole Na₂S₂O₃ = 1 equivalent)
+So: 1 ml of 1N Na₂S₂O₃ ≡ 1 meq of I₂ ≡ 1 meq of peroxide
+
+Net meq of peroxide = (S - B) × N milliequivalents
+
+PV = meq per KILOGRAM of fat
+
+= [(S - B) × N] meq    ÷    W grams    ×    1000 g/kg
+
+= [(S - B) × N × 1000] / W    meq/kg
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Why multiply by 1000 — simple explanation:</strong></p>
+              <pre class="text-sm"><code>
+If W = 5 grams and total meq = 0.031
+
+Per gram: 0.031/5 = 0.0062 meq/g
+Per kilogram: 0.0062 × 1000 = 6.2 meq/kg
+
+Same answer: (0.031 × 1000)/5 = 31/5 = 6.2 meq/kg
+
+Hence the formula contains × 1000 — unit conversion from grams to kilograms
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Example Calculation:</strong></p>
+              <pre class="text-sm"><code>
+Sample weight (W) = 5.02 g
+Na₂S₂O₃ normality (N) = 0.01 N
+Sample titre (S) = 3.20 ml
+Blank titre (B) = 0.10 ml
+
+PV = [(3.20 - 0.10) × 0.01 × 1000] / 5.02
+   = [3.10 × 0.01 × 1000] / 5.02
+   = [31.0] / 5.02
+   = 6.17 meq/kg
+
+FSSAI limit for ghee ≤ 1.0 meq/kg → This ghee is RANCID ✗
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Example 2 (Fresh ghee):</strong></p>
+              <pre class="text-sm"><code>
+W = 5.00 g, N = 0.01 N, S = 0.45 ml, B = 0.05 ml
+
+PV = [(0.45 - 0.05) × 0.01 × 1000] / 5.00
+   = [0.40 × 0.01 × 1000] / 5.00
+   = 4.0 / 5.00
+   = 0.80 meq/kg → Fresh ghee, PASSES ✓
+              </code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">FSSAI Standards:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Category</th><th class="border p-2">PV (meq/kg)</th><th class="border p-2">Meaning</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Fresh ghee (FSSAI)</td><td class="border p-2">≤ 1.0</td><td class="border p-2">Excellent — minimal oxidation</td></tr>
+                <tr><td class="border p-2">Agmark limit</td><td class="border p-2">≤ 3.0</td><td class="border p-2">Acceptable</td></tr>
+                <tr><td class="border p-2">Moderately oxidized</td><td class="border p-2">5–10</td><td class="border p-2">Beginning of rancidity</td></tr>
+                <tr><td class="border p-2">Rancid</td><td class="border p-2">> 10</td><td class="border p-2">Off-flavour, unhealthy — reject</td></tr>
+              </tbody>
+            </table>
+          `
+        },
+        {
+          title: "Modified Kirschner Value",
+          purpose: "A specific measure of butyric acid — the most reliable and specific chemical indicator of ghee authenticity. Butyric acid is found exclusively in milk fat.",
+          reference: "IS 3508 – 1966",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>The <strong>Kirschner value</strong> specifically measures <strong>butyric acid</strong> (C4), which is found exclusively in milk fat. Vegetable oils contain ZERO butyric acid. This makes it the <strong>most specific test</strong> for detecting adulteration of ghee.</p>
+            
+            <p class="mt-2"><strong>RM Value vs Kirschner Value — what is the difference?</strong></p>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Parameter</th><th class="border p-2">RM Value</th><th class="border p-2">Kirschner Value</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">What it measures</td><td class="border p-2">ALL water-soluble volatile acids (butyric + caproic + formic)</td><td class="border p-2">ONLY butyric acid (isolated by silver salt separation)</td></tr>
+                <tr><td class="border p-2">Specificity</td><td class="border p-2">Less specific</td><td class="border p-2">Highly specific for milk fat</td></tr>
+                <tr><td class="border p-2">Extra step</td><td class="border p-2">Simple distillation + titration</td><td class="border p-2">Silver salt precipitation step added</td></tr>
+              </tbody>
+            </table>
+
+            <h4 class="font-semibold mt-4 mb-2">Concept of Silver Salt Separation:</h4>
+            <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mt-2 text-sm">
+              <p><strong>Why are silver salts used?</strong></p>
+              <p class="mt-1">The RM value distillate contains not only butyric acid (C4) but also caproic acid (C6). We require only butyric acid. The silver salt trick works as follows:</p>
+              <ul class="list-disc list-inside mt-1 space-y-1">
+                <li>Silver salt of butyric acid (CH₃CH₂CH₂COOAg) → WATER SOLUBLE</li>
+                <li>Silver salt of caproic acid (C₅H₁₁COOAg) → WATER INSOLUBLE (precipitates)</li>
+                <li>Silver salts of higher acids are also insoluble</li>
+              </ul>
+              <p class="mt-2">Therefore when AgNO₃ is added:</p>
+              <pre><code>Butyric acid → Silver butyrate (SOLUBLE → stays in solution)
+Caproic acid → Silver caproate (INSOLUBLE → precipitates → filtered off)
+Higher acids → Silver salts (INSOLUBLE → precipitate out)</code></pre>
+              <p class="mt-1">After filtration, the remaining solution contains only the silver salt of butyric acid. This is acidified to release free butyric acid, which is then distilled and titrated = KIRSCHNER VALUE.</p>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li><strong>Steps 1–5:</strong> Exactly the same as the RM value test — saponify 5 g of ghee, acidify, collect 110 ml distillate, and filter.</li>
+              <li><strong>Step 6 — Neutralization:</strong> Exactly neutralize 100 ml of the filtrate with 0.1N Ba(OH)₂ or NaOH (phenolphthalein — faint pink endpoint).</li>
+              <li><strong>Step 7 — Silver salt precipitation:</strong> Add excess AgNO₃ (silver nitrate) solution to the neutralized solution. <em>— The silver salt of caproic acid will precipitate (white precipitate); the silver salt of butyric acid remains dissolved.</em></li>
+              <li><strong>Step 8 — Filtration:</strong> Filter off the precipitate. Collect the clear filtrate — this contains only silver butyrate.</li>
+              <li><strong>Step 9 — Acidification and re-distillation:</strong> Acidify the filtrate with dilute H₂SO₄ (free butyric acid is released). Distil again to collect 110 ml.</li>
+              <li><strong>Step 10 — Titration:</strong> Take 100 ml of the distillate and titrate with 0.1N NaOH = Kirschner Value.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Formula:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>Kirschner Value = 1.1 × V</code></pre>
+              <p class="text-sm mt-1">Where V = ml of 0.1N NaOH used to titrate 100 ml of the SECOND distillate (silver-soluble fraction)</p>
+              
+              <p class="text-sm mt-2"><strong>Factor 1.1</strong> = same reason as for RM value (110 ml distilled, 100 ml titrated → 110/100 = 1.1 correction)</p>
+
+              <p class="text-sm mt-3"><strong>Relationship between RM and Kirschner values:</strong></p>
+              <pre class="text-sm"><code>
+RM Value = Butyric acid + Caproic acid + other water-soluble volatile acids
+Kirschner Value = ONLY Butyric acid (after silver salt separation)
+
+Therefore: Kirschner Value < RM Value (always)
+
+For pure cow ghee:
+  RM Value: 24–34
+  Kirschner Value: 19–27
+  Difference = mainly the contribution of caproic acid
+              </code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values and Interpretation:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Sample</th><th class="border p-2">Kirschner Value</th><th class="border p-2">Explanation</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Pure cow ghee</td><td class="border p-2">19–27</td><td class="border p-2">High butyric acid content</td></tr>
+                <tr><td class="border p-2">Pure buffalo ghee</td><td class="border p-2">19–25</td><td class="border p-2">Slightly less butyric acid than cow ghee</td></tr>
+                <tr><td class="border p-2">Vegetable oil</td><td class="border p-2">~0</td><td class="border p-2">NO butyric acid present</td></tr>
+                <tr><td class="border p-2">Ghee + 20% vegetable oil</td><td class="border p-2">~15–20</td><td class="border p-2">Proportionally reduced (dilution effect)</td></tr>
+              </tbody>
+            </table>
+            <p class="mt-2 text-sm"><strong>Adulteration detection:</strong> If 20% vegetable oil is added to ghee, the butyric acid is also diluted by 20% → the Kirschner value decreases by approximately 20%. This test gives a <strong>proportional response</strong> — the greater the adulteration, the lower the Kirschner value.</p>
+          `
+        },
+        {
+          title: "Kreis Test (Rancidity Detection)",
+          purpose: "Detects developed rancidity (oxidative deterioration) in ghee — a rapid qualitative screening test.",
+          reference: "IS 3508 – 1966",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>When fat oxidizes (rancidity), peroxides are formed (primary products). These peroxides break down further to form <strong>aldehydes</strong> (secondary oxidation products) — specifically <strong>epihyd rinal dehyde (malondialdehyde)</strong>.</p>
+            <p class="mt-1"><strong>Phloroglucinol</strong> (1,3,5-trihydroxybenzene) reacts with these aldehydes in the presence of HCl to produce a <strong>PINK/RED</strong> condensation product.</p>
+            <p class="mt-1">Fresh fat contains no aldehydes → no colour. Rancid fat contains aldehydes → PINK/RED colour.</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Chemical Reaction:</h4>
+            <div class="bg-gray-50 border rounded p-3 mt-2 text-sm">
+              <pre><code>Oxidation chain:
+
+Fat + O₂ → Peroxides (R-OOH) → Aldehydes (R-CHO) + other products
+ (primary oxidation)            (secondary oxidation)
+                                 ↑
+                                 Malondialdehyde (OHC-CH₂-CHO)
+                                 Epihyd rinal dehyde
+
+Detection Reaction:
+
+     OH          OH                      CHO
+      \         /                         |
+       [ring]         +    CH₂     +   HCl
+      /         \                         |
+     OH          OH                      CHO
+   Phloroglucinol          Malondialdehyde
+
+         ↓ Acid-catalyzed condensation
+
+   PINK/RED coloured product (Schiff base type)</code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Place 1 ml of melted ghee in a clean, dry test tube.</li>
+              <li>Add 1 ml of concentrated HCl. <em>— HCl acts as an acid catalyst and promotes the phloroglucinol-aldehyde reaction. Handle conc. HCl with care.</em></li>
+              <li>Add 1 ml of 1% phloroglucinol solution (1 g phloroglucinol in 100 ml diethyl ether). <em>— Phloroglucinol is dissolved in ether because it has low solubility in water. Prepare the solution FRESHLY.</em></li>
+              <li>Stopper the test tube with a rubber stopper and shake vigorously for 30 seconds. <em>— Vigorous shaking maximizes contact between the fat, acid, and reagent.</em></li>
+              <li>Allow the layers to settle and observe the colour.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Result Interpretation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <p class="text-sm"><strong>This is a qualitative test — there is no mathematical formula:</strong></p>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Colour</th><th class="border p-2">Interpretation</th><th class="border p-2">Action</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2 text-red-600 font-semibold">Pink / Red colour</td><td class="border p-2">RANCIDITY detected — oxidation aldehydes present</td><td class="border p-2">Reject the ghee — it will have off-flavour and may be harmful</td></tr>
+                  <tr><td class="border p-2 text-green-600 font-semibold">No colour change</td><td class="border p-2">NOT rancid — fresh ghee</td><td class="border p-2">Acceptable</td></tr>
+                </tbody>
+              </table>
+              
+              <p class="text-sm mt-3"><strong>Kreis Test vs Peroxide Value — what is the difference?</strong></p>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Parameter</th><th class="border p-2">Kreis Test</th><th class="border p-2">Peroxide Value</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2">Type</td><td class="border p-2">Qualitative (yes/no)</td><td class="border p-2">Quantitative (exact number)</td></tr>
+                  <tr><td class="border p-2">What it detects</td><td class="border p-2">Secondary oxidation products (aldehydes)</td><td class="border p-2">Primary oxidation products (peroxides)</td></tr>
+                  <tr><td class="border p-2">Stage of rancidity</td><td class="border p-2">Advanced rancidity</td><td class="border p-2">Early rancidity</td></tr>
+                  <tr><td class="border p-2">Time required</td><td class="border p-2">2–3 minutes</td><td class="border p-2">20–30 minutes</td></tr>
+                  <tr><td class="border p-2">Use case</td><td class="border p-2">Quick screening</td><td class="border p-2">Detailed quality control</td></tr>
+                </tbody>
+              </table>
+              <p class="text-sm mt-2">Note: Sometimes the peroxide value is high but the Kreis test is negative — this means rancidity is in the initial stage (peroxides are forming but aldehydes have not yet been produced). Both tests are complementary.</p>
+            </div>
+          `
+        }
                 ]
             },
              "cheese-paneer": {
-                title: "Analysis of Paneer / Cheese",
-                tests: [
-                   {
-                        title: "Determination of Moisture & Total Solids",
-                        purpose: "To measure the water content, affecting texture and shelf life.",
-                        reference: "IS 2785 -1979",
-                        procedure: `
-                          <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                          <ol class="list-decimal list-outside pl-5 space-y-2">
-                              <li>Weigh a clean, dry, empty aluminum moisture dish with sand and a glass rod.</li>
-                              <li>Weigh 3g of grated sample into the dish.</li>
-                              <li>Add a few drops of distilled water and mix the sample with the sand.</li>
-                              <li>Evaporate the water by placing the dish on a hot plate.</li>
-                              <li>Dry the dish in a hot air oven at 102 ± 2°C for 4 hours.</li>
-                              <li>Cool in a desiccator and weigh. Repeat until a constant weight is achieved.</li>
-                          </ol>
-                        `
-                    },
-                   {
-                        title: "Determination of Fat (Acid Digestion - Werner-Schmidt Method)",
-                        purpose: "To determine the fat content on a dry matter basis.",
-                        reference: "IS 2785 -1979",
-                        procedure: `
-                          <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
-                          <ol class="list-decimal list-outside pl-5 space-y-2">
-                              <li>Weigh 1-2g of the prepared sample into a 100 ml beaker.</li>
-                              <li>Add 10 ml of concentrated HCl and heat on a water bath until all solid particles dissolve.</li>
-                              <li>Cool the solution, add 10 ml of ethanol, and transfer to a Mojonnier flask.</li>
-                              <li>Add 25 ml of diethyl ether, shake for 1 minute. Then add 25 ml of petroleum ether and shake again.</li>
-                              <li>Centrifuge and transfer the ethereal layer to a pre-weighed conical flask.</li>
-                              <li>Repeat the extraction twice.</li>
-                              <li>Evaporate the ether and dry the residue to find the fat content.</li>
-                          </ol>
-                        `
-                    },
-                    {
-                        title: "Detection of Starch in Paneer",
-                        purpose: "To detect illegal addition of starch as a filler.",
-                        procedure: `<p>Macerate 1g of the paneer sample with 1ml of distilled water in a porcelain dish. Then add a drop of iodine solution. A blue color indicates the presence of starch.</p>`
-                    }
-                ]
-            },
+      title: "Paneer / Cheese Analysis",
+      tests: [
+        {
+          title: "Determination of Moisture and Total Solids",
+          purpose: "To measure the quantity of water in paneer/cheese — a critical parameter for texture, shelf life, grading, and legal compliance. Cheese is also classified based on moisture percentage.",
+          reference: "IS 2785-1979; A.O.A.C 926.08",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>The sample is heated at 102±2°C — all water evaporates. The loss in weight = moisture. What remains = Total Solids (TS). This is a <strong>gravimetric method</strong>.</p>
+
+            <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mt-2 text-sm">
+              <p><strong>Special challenge in the cheese/paneer moisture test — why is SAND used?</strong></p>
+              <ul class="list-disc list-inside space-y-1 mt-1">
+                <li>Paneer/cheese is a <strong>semi-solid, sticky</strong> product — when placed directly in an oven, a hard crust (like a papad layer) forms on the surface</li>
+                <li>This crust <strong>TRAPS</strong> moisture inside — water cannot escape → falsely LOW moisture result</li>
+                <li>Adding <strong>sand</strong> (acid-washed, ignited quartz sand) creates gaps between sample particles — GREATLY increasing the surface area</li>
+                <li>Sand creates a porous structure through which moisture can freely escape</li>
+                <li>A glass rod is used to mix the sand and sample uniformly</li>
+                <li>A few drops of water are added so that the sample softens initially and disperses properly through the sand — this water also evaporates subsequently</li>
+              </ul>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li><strong>Dish preparation:</strong> Place approximately 20–25 grams of <strong>acid-washed dry sand</strong> and a <strong>short glass stirring rod</strong> in a clean flat-bottom aluminium dish. Dry the dish + sand + rod in an oven at 102°C for 1 hour. Cool in a desiccator. Weigh = <strong>W1</strong>. <em>— Acid-washed sand is used because regular sand contains impurities that may cause a change in weight. Sand is prepared as pure silica sand by washing with HCl and then igniting at 550°C.</em></li>
+              <li><strong>Sample weighing:</strong> Grate the paneer/cheese using a fine grater or crumble very finely with a knife. Accurately weigh 3 grams into the dish (on top of the sand) = <strong>W2</strong> (dish + sand + rod + sample). <em>— Grating increases the surface area of the sample = faster drying. 3 grams is optimal for cheese — a larger amount will result in very slow drying.</em></li>
+              <li><strong>Mixing with sand:</strong> Add a few drops (2–3 ml) of distilled water onto the sample. Mix the sample thoroughly with the sand using the glass rod — form a uniform mixture. <em>— Adding water before mixing softens the sample and allows it to disperse evenly through the sand. Without water, dried cheese will not mix properly with the sand.</em></li>
+              <li><strong>Pre-drying:</strong> Place the dish on a <strong>hot plate or water bath</strong> — first evaporate the bulk moisture (10–15 min). <em>— This step prevents crust formation. Gentle heat allows water to escape gradually without sealing the surface.</em></li>
+              <li><strong>Oven drying:</strong> Place the dish in an oven at <strong>102±2°C</strong> for <strong>4 hours</strong>. <em>— 4 hours is necessary for cheese because the protein matrix holds moisture tightly — more time is required than for milk/cream. 102°C is used because higher temperatures would cause lactose caramelization and protein decomposition.</em></li>
+              <li><strong>Cooling and weighing:</strong> Cool in a desiccator (20–30 min). Weigh = <strong>W3</strong>.</li>
+              <li><strong>Constant weight check:</strong> Return to the oven for 1 hour, cool, and weigh again. If the result is within ±0.5 mg of the previous weighing = constant weight. Otherwise, repeat. <em>— Cheese contains bound water that is released slowly — constant weight confirms that all removable moisture has been driven off.</em></li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Formula and Factor Explanation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>% Moisture = [(W2 - W3) / (W2 - W1)] × 100</code></pre>
+              <pre class="text-sm"><code>% Total Solids = 100 - % Moisture</code></pre>
+              
+              <h5 class="font-semibold mt-3 text-sm">Each Factor:</h5>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <tbody>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold w-1/4">W1</td><td class="border p-2">Empty dish + sand + rod (pre-dried) — grams. This is the baseline. The weight of sand and rod is included because they remain with the dish throughout the entire process.</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W2</td><td class="border p-2">Dish + sand + rod + sample (BEFORE drying) — grams. Starting point.</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W3</td><td class="border p-2">Dish + sand + rod + dried sample (AFTER drying) — grams. Moisture has evaporated.</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W2 - W1</td><td class="border p-2">= Sample weight (actual weight of cheese/paneer). Sand and rod cancel out.</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W2 - W3</td><td class="border p-2">= LOSS in weight = Moisture that evaporated. The weight of sand does not change (inert material).</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">× 100</td><td class="border p-2">Percentage conversion</td></tr>
+                </tbody>
+              </table>
+
+              <p class="text-sm mt-3"><strong>Visual Diagram:</strong></p>
+              <pre class="text-sm"><code>
+BEFORE DRYING (W2)                    AFTER DRYING (W3)
+┌───────────────────────┐            ┌───────────────────────┐
+│ 💧 Moisture (55-60%)  │   102°C   │                       │
+│   trapped in protein  │  ──────→  │  (moisture escaped!)   │
+│   matrix              │   4 hrs   │                       │
+│ ·····················│            │ ·····················│
+│ 🧀 Cheese crumbles   │   SAND    │ 🧀 Dried cheese       │
+│   mixed with SAND    │   helps   │   + SAND (unchanged)  │
+│ ⚙ Glass Rod          │   escape  │ ⚙ Glass Rod           │
+├───────────────────────┤            ├───────────────────────┤
+│ 🍽 Dish (W1 includes  │            │ 🍽 Dish               │
+│   dish+sand+rod)      │            │                       │
+└───────────────────────┘            └───────────────────────┘
+
+Sand weight = CONSTANT (does not change with drying)
+Therefore (W2-W3) reflects only the weight of moisture
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Example Calculation:</strong></p>
+              <pre class="text-sm"><code>
+W1 (dish + sand + rod) = 72.456 g
+W2 (dish + sand + rod + paneer) = 75.501 g
+W3 (dish + sand + rod + dried residue) = 73.779 g
+
+Sample weight = W2 - W1 = 75.501 - 72.456 = 3.045 g
+Weight loss = W2 - W3 = 75.501 - 73.779 = 1.722 g
+
+% Moisture = (1.722 / 3.045) × 100 = 56.55%
+% Total Solids = 100 - 56.55 = 43.45%
+
+Expected moisture for paneer: 55–60% → 56.55% → PASSES ✓
+              </code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values and Cheese Classification:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Product</th><th class="border p-2">Moisture %</th><th class="border p-2">Total Solids %</th><th class="border p-2">Classification</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Paneer (fresh)</td><td class="border p-2">55–60</td><td class="border p-2">40–45</td><td class="border p-2">Soft, unripened</td></tr>
+                <tr><td class="border p-2">Mozzarella</td><td class="border p-2">45–52</td><td class="border p-2">48–55</td><td class="border p-2">Semi-soft</td></tr>
+                <tr><td class="border p-2">Cheddar</td><td class="border p-2">35–38</td><td class="border p-2">62–65</td><td class="border p-2">Hard</td></tr>
+                <tr><td class="border p-2">Processed cheese</td><td class="border p-2">42–45</td><td class="border p-2">55–58</td><td class="border p-2">Processed</td></tr>
+                <tr><td class="border p-2">Parmesan</td><td class="border p-2">28–32</td><td class="border p-2">68–72</td><td class="border p-2">Very hard</td></tr>
+              </tbody>
+            </table>
+            <p class="mt-2 text-sm"><strong>FSSAI classification:</strong> Soft cheese (>55% moisture), Semi-hard (45–55%), Hard (35–45%), Very hard (<35%)</p>
+          `
+        },
+        {
+          title: "Fat Determination (Acid Digestion — Werner-Schmidt Method)",
+          purpose: "To determine the fat content of cheese/paneer. Fat is reported on a Fat on Dry Matter (FDM) basis — this is the standard parameter for cheese grading.",
+          reference: "IS 2785-1979; A.O.A.C 933.05",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>In cheese/paneer, fat is tightly trapped inside a <strong>protein matrix</strong> — it cannot be extracted directly with a solvent. First, the protein matrix must be broken down by <strong>acid digestion</strong> (conc. HCl) to release the fat. The free fat is then extracted with organic solvents (ether).</p>
+
+            <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mt-2 text-sm">
+              <p><strong>Why is the Werner-Schmidt method BEST for cheese?</strong></p>
+              <ul class="list-disc list-inside space-y-1 mt-1">
+                <li><strong>Rose-Gottlieb</strong> (ammonia-based) is not ideal for cheese — aged/denatured casein in cheese does not dissolve properly in ammonia</li>
+                <li><strong>Gerber method</strong> is tricky for cheese — accurately measuring a solid sample is difficult</li>
+                <li><strong>Werner-Schmidt (acid digestion)</strong> is the most reliable — HCl completely digests all proteins (breaking them down to amino acids), releasing all the fat</li>
+                <li>This method works on sour, aged, processed, or any type of cheese</li>
+              </ul>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Chemical Basis:</h4>
+            <div class="bg-gray-50 border rounded p-3 mt-2 text-sm">
+              <pre><code>CHEESE STRUCTURE:
+┌──────────────────────────────────┐
+│  Protein Matrix (casein network) │
+│  ┌──────┐  ┌──────┐  ┌──────┐  │
+│  │ FAT  │  │ FAT  │  │ FAT  │  │  ← Fat globules trapped 
+│  │ glob │  │ glob │  │ glob │  │     inside protein network
+│  └──────┘  └──────┘  └──────┘  │
+│  💧 moisture in between         │
+└──────────────────────────────────┘
+
+AFTER HCl DIGESTION:
+┌──────────────────────────────────┐
+│  Protein → Amino acids (dissolved in acid)
+│  ┌──────┐  ┌──────┐  ┌──────┐  │
+│  │ FAT  │  │ FAT  │  │ FAT  │  │  ← Fat globules now FREE
+│  │ FREE │  │ FREE │  │ FREE │  │     (can be extracted by ether)
+│  └──────┘  └──────┘  └──────┘  │
+└──────────────────────────────────┘
+
+HCl Reaction:
+Protein + HCl + H₂O → Amino Acids (soluble)
+(casein network breaks down completely → dark brown solution)</code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li><strong>Sample preparation:</strong> Grate the cheese/paneer using a fine grater or cut into very small pieces with a knife. Accurately weigh 1–2 grams into a 100 ml beaker (<strong>W_sample</strong>). <em>— Fine pieces allow faster acid digestion. 1–2 grams is sufficient because cheese has a high fat percentage (20–30%).</em></li>
+              <li><strong>Acid digestion:</strong> Add 10 ml of <strong>concentrated HCl</strong>. Place the beaker on a <strong>boiling water bath</strong>. Stir occasionally with a glass rod. <em>— Conc. HCl hydrolyzes the proteins (breaking peptide bonds). Gentle heating on a water bath = uniform digestion; direct flame would generate excessive HCl fumes and may char the sample.</em></li>
+              <li>Heat until <strong>all solid particles have dissolved</strong> and a <strong>dark brown homogeneous solution</strong> is obtained (15–30 min). <em>— Dark brown = proteins completely hydrolyzed (Maillard reaction products). If any solid remains, fat extraction will be incomplete. Fat will be visible as liquid droplets floating on the surface.</em></li>
+              <li><strong>Cool</strong> to room temperature.</li>
+              <li>Add 10 ml of <strong>ethanol (95%)</strong> and mix. <em>— Ethanol breaks the emulsion, causes fat droplets to coalesce, and improves transfer into the ether phase.</em></li>
+              <li>Transfer the solution into a <strong>Mojonnier flask</strong> or separating funnel. Rinse the beaker with 10 ml of ether and add the rinsings to the flask as well.</li>
+              <li><strong>First extraction:</strong> Add 25 ml of <strong>diethyl ether</strong>, stopper, and shake vigorously for 1 minute. Then add 25 ml of <strong>petroleum ether</strong> and shake gently. <em>— Diethyl ether is the primary fat solvent. Petroleum ether provides additional extraction capacity and acts as an anti-emulsion agent.</em></li>
+              <li>Allow layers to separate (or centrifuge for 2 min at 600 rpm). Carefully transfer the upper ether layer into a <strong>pre-weighed flask (W_flask)</strong>.</li>
+              <li><strong>Second and third extraction:</strong> Add 15 ml diethyl ether + 15 ml petroleum ether to the lower acid layer, shake, separate, and collect. Total of 3 extractions. <em>— Three extractions achieve >99% fat recovery.</em></li>
+              <li>Evaporate the combined ether extracts on a <strong>water bath</strong> (NO FLAME — ether is highly flammable!). Place the flask in a <strong>102°C oven</strong> for 1 hour. Cool in a desiccator. Weigh = <strong>W_flask+fat</strong>. Repeat until constant weight.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Formulas and Factor Explanation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <h5 class="font-semibold text-sm">Formula 1: % Fat (as-is basis)</h5>
+              <pre class="text-sm"><code>% Fat = [(W_flask+fat - W_flask) / W_sample] × 100</code></pre>
+              
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <tbody>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold w-1/3">W_flask+fat</td><td class="border p-2">Weight of flask after ether evaporation and drying — with fat residue (grams)</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W_flask</td><td class="border p-2">Weight of empty pre-dried flask (grams)</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">(W_flask+fat - W_flask)</td><td class="border p-2">= Pure fat weight (grams). This is a gravimetric determination — what dissolved in ether and remained as residue = fat.</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W_sample</td><td class="border p-2">Original cheese/paneer sample weight (grams). Typically 1–2 g.</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">× 100</td><td class="border p-2">Percentage conversion</td></tr>
+                </tbody>
+              </table>
+
+              <h5 class="font-semibold text-sm mt-3">Formula 2: Fat on Dry Matter (FDM) — IMPORTANT!</h5>
+              <pre class="text-sm"><code>% FDM = (% Fat / % Total Solids) × 100</code></pre>
+              
+              <p class="text-sm mt-2"><strong>Why is FDM necessary? Why not just report % Fat?</strong></p>
+              <pre class="text-sm"><code>
+Problem: Two cheese samples:
+  Cheese A: 50% moisture, 25% fat
+  Cheese B: 35% moisture, 25% fat
+
+Both have the same fat (25%) — but are they the same quality? NO!
+
+Cheese A (50% moisture): Dry matter = 50%, FDM = (25/50)×100 = 50%
+Cheese B (35% moisture): Dry matter = 65%, FDM = (25/65)×100 = 38.5%
+
+Cheese A has 50% fat in its dry matter (rich!)
+Cheese B has only 38.5% fat in its dry matter (leaner)
+
+FDM ELIMINATES moisture from the comparison
+— which is why cheese grading is based on FDM, not plain % fat
+              </code></pre>
+
+              <p class="text-sm mt-2"><strong>Factor breakdown:</strong></p>
+              <ul class="list-disc list-inside text-sm space-y-1">
+                <li><strong>% Fat</strong> = Percentage of fat in the original sample (wet basis)</li>
+                <li><strong>% Total Solids</strong> = 100 − % Moisture = percentage of dry matter</li>
+                <li><strong>% FDM</strong> = Percentage of fat in the dry matter ONLY (ignoring moisture)</li>
+              </ul>
+
+              <p class="text-sm mt-3"><strong>Example Calculation:</strong></p>
+              <pre class="text-sm"><code>
+--- Fat Extraction Data ---
+W_sample = 1.505 g paneer
+W_flask = 105.234 g
+W_flask+fat = 105.587 g
+
+Fat weight = 105.587 - 105.234 = 0.353 g
+
+% Fat = (0.353 / 1.505) × 100 = 23.46%
+
+--- From Moisture Test ---
+% Moisture = 56.55%
+% Total Solids = 100 - 56.55 = 43.45%
+
+--- FDM ---
+% FDM = (23.46 / 43.45) × 100 = 53.99%
+
+Full fat paneer FDM standard: 50–55% → 54.0% → PASSES ✓
+              </code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Product</th><th class="border p-2">Fat % (as is)</th><th class="border p-2">FDM %</th><th class="border p-2">FSSAI Classification</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Full fat paneer</td><td class="border p-2">22–26</td><td class="border p-2">50–55</td><td class="border p-2">Full fat (≥45% FDM)</td></tr>
+                <tr><td class="border p-2">Cheddar cheese</td><td class="border p-2">30–35</td><td class="border p-2">48–54</td><td class="border p-2">Full fat</td></tr>
+                <tr><td class="border p-2">Mozzarella</td><td class="border p-2">18–22</td><td class="border p-2">40–45</td><td class="border p-2">Medium fat (25–45% FDM)</td></tr>
+                <tr><td class="border p-2">Cottage cheese</td><td class="border p-2">4–5</td><td class="border p-2">15–20</td><td class="border p-2">Low fat (<25% FDM)</td></tr>
+              </tbody>
+            </table>
+          `
+        },
+        {
+          title: "Protein Determination (Kjeldahl Method)",
+          purpose: "To determine the protein content of cheese/paneer — essential for nutritional labelling, quality assessment, and standardization. Protein is the second major component of cheese (after fat).",
+          reference: "A.O.A.C 991.23; IS 2785-1979",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>The Kjeldahl method measures ALL nitrogen in the sample. The sample is digested with conc. H₂SO₄ — nitrogen is converted to ammonium sulfate. Ammonia is then released with alkali, distilled, and titrated.</p>
+            <pre class="text-sm bg-gray-50 p-2 rounded"><code>Digestion: Protein-N + H₂SO₄ → (NH₄)₂SO₄ + CO₂ + H₂O
+Distillation: (NH₄)₂SO₄ + 2NaOH → 2NH₃↑ + Na₂SO₄ + 2H₂O
+Absorption: NH₃ + H₃BO₃ → NH₄H₂BO₃
+Titration: NH₄H₂BO₃ + HCl → NH₄Cl + H₃BO₃</code></pre>
+
+            <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mt-2 text-sm">
+              <p><strong>Special considerations for Kjeldahl analysis of cheese:</strong></p>
+              <ul class="list-disc list-inside space-y-1 mt-1">
+                <li>Cheese has a very high fat content — digestion will produce significant foaming. Start with <strong>LOW heat</strong> initially</li>
+                <li>Cheese protein is CONCENTRATED (18–26%) compared to milk (3.3%) — adjust sample size accordingly</li>
+                <li>1–2 grams is sufficient — a larger sample will take very long to digest</li>
+                <li>In aged cheese, some protein has already been converted to amino acids (ripening) — Kjeldahl will count these as well (total N)</li>
+              </ul>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li><strong>Sample preparation:</strong> Finely grate the cheese/paneer. Accurately weigh approximately 1–2 grams (<strong>W</strong>) into a Kjeldahl digestion flask (use nitrogen-free weighing paper). <em>— Nitrogen-free paper is essential — regular paper contains nitrogen which will give a falsely high result.</em></li>
+              <li><strong>Digestion:</strong>
+                <ul class="list-disc list-inside ml-5 text-sm space-y-1">
+                  <li>Add 15–20 ml conc. H₂SO₄</li>
+                  <li>Add a catalyst tablet (typically K₂SO₄ 7g + CuSO₄ 0.8g). <em>K₂SO₄ raises the boiling point (up to 380°C) = faster digestion. CuSO₄ = catalyst.</em></li>
+                  <li>Add 2–3 glass beads (anti-bumping)</li>
+                  <li>Heat in a fume hood: first at LOW heat for 15–20 min (to control foaming — cheese fat will foam considerably), then increase to MEDIUM-HIGH heat</li>
+                  <li>Continue until a <strong>clear blue-green solution</strong> is obtained + 30 min extra</li>
+                  <li>Total digestion time: 1.5–3 hours (cheese protein is dense)</li>
+                </ul>
+              </li>
+              <li><strong>Distillation:</strong>
+                <ul class="list-disc list-inside ml-5 text-sm space-y-1">
+                  <li>Cool, dilute with 50–60 ml distilled water</li>
+                  <li>Place 25 ml of 2% boric acid + mixed indicator in the receiving flask</li>
+                  <li>Add 40–50 ml of 40% NaOH to the digestion flask (to release ammonia)</li>
+                  <li>Steam distil — collect approximately 150 ml of distillate</li>
+                </ul>
+              </li>
+              <li><strong>Titration:</strong> Titrate the boric acid solution with <strong>0.1N HCl</strong>. Green → Grey → Pink = endpoint. Titre = <strong>V</strong> ml.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Formulas and Factor Derivation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <h5 class="font-semibold text-sm">Step 1: % Nitrogen</h5>
+              <pre class="text-sm"><code>% Nitrogen = [V × N × 1.4] / W</code></pre>
+
+              <h5 class="font-semibold mt-3 text-sm">Derivation of the factor 1.4:</h5>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <tbody>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold w-1/3">Atomic weight of nitrogen</td><td class="border p-2">N = 14 g/mol</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">NH₃ + HCl → NH₄Cl</td><td class="border p-2">1:1 reaction, n-factor = 1, Eq.Wt of N = 14</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">1 ml of 1N HCl</td><td class="border p-2">= 1 meq = 14/1000 g N = 0.014 g N</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">× 100 for %</td><td class="border p-2">0.014 × 100 = <strong>1.4</strong></td></tr>
+                </tbody>
+              </table>
+
+              <h5 class="font-semibold text-sm mt-3">Step 2: % Protein</h5>
+              <pre class="text-sm"><code>% Protein = % Nitrogen × 6.38</code></pre>
+
+              <h5 class="font-semibold mt-3 text-sm">Derivation of the factor 6.38:</h5>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <tbody>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold w-1/3">% N in milk protein</td><td class="border p-2">Milk protein contains an average of 15.67% nitrogen</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">Conversion</td><td class="border p-2">100 / 15.67 = <strong>6.38</strong></td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">Meaning</td><td class="border p-2">1 g nitrogen ≈ 6.38 g milk protein</td></tr>
+                </tbody>
+              </table>
+              <p class="text-sm mt-2"><strong>Note:</strong> Since cheese/paneer is a dairy product, 6.38 is used (not 6.25, which is for general foods).</p>
+
+              <p class="text-sm mt-3"><strong>Example Calculation:</strong></p>
+              <pre class="text-sm"><code>
+W = 1.502 g paneer
+V = 19.8 ml of 0.1N HCl
+N = 0.1
+
+% Nitrogen = [19.8 × 0.1 × 1.4] / 1.502
+           = [2.772] / 1.502
+           = 1.845%
+
+% Protein = 1.845 × 6.38 = 11.77%
+
+Hmm — paneer expected 18–20%. This seems low!
+Check: Was the sample properly grated? Was digestion complete?
+(If 2.502 g sample had been taken and V = 33.0 ml:
+ %N = [33×0.1×1.4]/2.502 = 4.62/2.502 = 1.847%
+ %Protein = 1.847 × 6.38 = 11.78% — still low)
+
+Actually paneer composition varies — some paneer has 
+high moisture (55–60%) so protein is diluted:
+If moisture = 58%, TS = 42%
+Protein on dry basis = 11.77/0.42 = 28.0% — that's about right!
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Protein can also be reported on a dry matter basis:</strong></p>
+              <pre class="text-sm"><code>% Protein (dry basis) = (% Protein / % Total Solids) × 100</code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Product</th><th class="border p-2">Protein % (as is)</th><th class="border p-2">Protein % (dry basis)</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Paneer</td><td class="border p-2">12–18</td><td class="border p-2">28–35</td></tr>
+                <tr><td class="border p-2">Cheddar cheese</td><td class="border p-2">24–26</td><td class="border p-2">38–42</td></tr>
+                <tr><td class="border p-2">Mozzarella</td><td class="border p-2">18–22</td><td class="border p-2">38–42</td></tr>
+                <tr><td class="border p-2">Cottage cheese</td><td class="border p-2">11–14</td><td class="border p-2">40–50</td></tr>
+              </tbody>
+            </table>
+          `
+        },
+        {
+          title: "Titratable Acidity",
+          purpose: "To measure the acidity of paneer/cheese — an indicator of freshness (paneer), stage of ripening (cheese), and quality. Acidity develops through lactic acid fermentation.",
+          reference: "IS 2785-1979; A.O.A.C 920.124",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>The acidity in paneer/cheese is primarily due to <strong>lactic acid</strong> — produced by bacterial fermentation. Acidity also changes during cheese ripening (proteolysis releases amino acids which can be acidic or basic).</p>
+            <p class="mt-1">Since solid cheese does not dissolve directly in water, the sample is first mashed with water into a paste, then titrated with NaOH.</p>
+
+            <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mt-2 text-sm">
+              <p><strong>Challenges of measuring acidity in cheese:</strong></p>
+              <ul class="list-disc list-inside space-y-1 mt-1">
+                <li>Cheese is SOLID — it cannot be titrated directly. A paste must be prepared first</li>
+                <li>Fat interference — fat is neutral but can obscure the endpoint. Using warm water softens the fat</li>
+                <li>Protein also exerts a buffering effect — the endpoint is sluggish (slow). Therefore a stable pink colour for 15 seconds is required</li>
+                <li>Acidity in cheese is NOT UNIFORM — the surface and core may differ. Grating and taking a representative sample is therefore essential</li>
+              </ul>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li><strong>Sample preparation:</strong> Finely grate the cheese/paneer. Accurately weigh 10 grams (<strong>W</strong>) into a mortar. <em>— 10 grams is the standard sample size for solid dairy products. Mashing in a mortar produces a uniform paste.</em></li>
+              <li>Add 20 ml of <strong>warm (40–45°C) distilled water</strong> into the mortar. Mash thoroughly with the pestle until a smooth paste is formed. <em>— Warm water softens the cheese and allows lactic acid to dissolve in the water. Mashing with the pestle breaks down the protein matrix, making the acids accessible. Cheese remains hard in cold water and does not mix properly.</em></li>
+              <li>Transfer the paste to a beaker or porcelain dish. Rinse the mortar with 10 ml of warm water and add the rinsings to the beaker as well. <em>— No sample should be lost — transfer everything.</em></li>
+              <li>Add 3–4 drops of <strong>phenolphthalein indicator</strong>.</li>
+              <li>Titrate slowly with <strong>0.1 N NaOH</strong>. Stir thoroughly after each addition. Endpoint = a light pink colour that remains <strong>stable for 15 seconds</strong>. Titre = <strong>V</strong> ml. <em>— 15 seconds are required because the protein in cheese exerts a buffering effect — pink colour appears initially then fades. Stable for 15 sec = true endpoint.</em></li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Formula and Factor Derivation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>% Acidity (as lactic acid) = [9 × V × N] / W</code></pre>
+              
+              <h5 class="font-semibold mt-3 text-sm">Derivation of the factor 9 (same as all dairy acidity tests):</h5>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <tbody>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold w-1/3">Formula of lactic acid</td><td class="border p-2">CH₃CHOHCOOH = C₃H₆O₃, MW = 90 g/mol</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">Monobasic acid</td><td class="border p-2">1 COOH → n-factor = 1 → Eq.Wt = 90</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">1 ml of 1N NaOH</td><td class="border p-2">= 1 meq = 90/1000 g = 0.090 g lactic acid</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">× 100 for %</td><td class="border p-2">0.090 × 100 = <strong>9.0</strong></td></tr>
+                </tbody>
+              </table>
+
+              <pre class="text-sm mt-2"><code>
+Lactic acid + NaOH → Sodium lactate + H₂O
+
+meq lactic acid = V × N
+g lactic acid = V × N × 0.090
+% = (V × N × 0.090 / W) × 100 = [V × N × 9] / W = [9 × V × N] / W
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Example Calculation:</strong></p>
+              <pre class="text-sm"><code>
+W = 10.0 g paneer, N = 0.1, V = 6.2 ml
+
+% Acidity = [9 × 6.2 × 0.1] / 10.0
+          = [5.58] / 10.0
+          = 0.558%
+
+Fresh paneer expected ~0.5% → PASSES ✓ (fresh paneer)
+              </code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Product</th><th class="border p-2">Acidity (% lactic acid)</th><th class="border p-2">Interpretation</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Fresh paneer</td><td class="border p-2">0.3 – 0.5</td><td class="border p-2">Made with citric acid, minimal fermentation</td></tr>
+                <tr><td class="border p-2">Slightly old paneer</td><td class="border p-2">0.5 – 0.8</td><td class="border p-2">Some bacterial action has begun</td></tr>
+                <tr><td class="border p-2">Fresh cheddar (young)</td><td class="border p-2">0.8 – 1.0</td><td class="border p-2">Normal for starter culture cheese</td></tr>
+                <tr><td class="border p-2">Aged cheddar</td><td class="border p-2">1.0 – 1.5</td><td class="border p-2">Ripening process — normal</td></tr>
+                <tr><td class="border p-2">Swiss/Emmental</td><td class="border p-2">0.6 – 0.9</td><td class="border p-2">Propionic acid fermentation — milder acidity</td></tr>
+              </tbody>
+            </table>
+          `
+        },
+        {
+          title: "Salt (NaCl) Content in Cheese (Volhard's Method)",
+          purpose: "To measure the quantity of salt in cheese — important for flavour, preservation, texture, and safety. Salt also controls cheese ripening.",
+          reference: "IS 2785-1979; A.O.A.C 935.43",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p><strong>Volhard's back titration method</strong> is used for cheese. Excess AgNO₃ is added to the salt extract of cheese — all Cl⁻ is precipitated. The remaining AgNO₃ is back-titrated with KSCN. A ferric alum indicator provides the endpoint.</p>
+            
+            <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mt-2 text-sm">
+              <p><strong>Why is salt added to cheese?</strong></p>
+              <ul class="list-disc list-inside space-y-1 mt-1">
+                <li><strong>Flavour</strong> — provides a salty taste</li>
+                <li><strong>Preservation</strong> — inhibits microbial growth (reduces water activity)</li>
+                <li><strong>Texture</strong> — controls protein hydration and helps develop the body of the cheese</li>
+                <li><strong>Ripening control</strong> — regulates enzyme activity, preventing ripening that is too fast or too slow</li>
+                <li><strong>Moisture control</strong> — osmotic effect drains excess whey</li>
+              </ul>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Chemical Reactions:</h4>
+            <div class="bg-gray-50 border rounded p-3 mt-2 text-sm">
+              <pre><code>Step 1 — Add excess AgNO₃ (all chloride precipitates):
+Cl⁻ + Ag⁺(excess) → AgCl↓ (white) + leftover Ag⁺
+
+Step 2 — Acidify with HNO₃ (Volhard method requires acidic medium)
+
+Step 3 — Filter out AgCl (or coat with nitrobenzene)
+
+Step 4 — Back-titrate excess Ag⁺ with KSCN:
+Ag⁺(excess) + SCN⁻ → AgSCN↓ (white)
+
+Step 5 — Endpoint (all excess Ag⁺ consumed):
+Fe³⁺ + SCN⁻ → [FeSCN]²⁺ (RED-BROWN colour)
+(ferric alum indicator)</code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li><strong>Salt extraction:</strong> Accurately weigh 5 grams of finely grated cheese (<strong>W</strong>). Add to 100 ml of <strong>boiling distilled water</strong>. Stir with a glass rod and keep at a boil for 5–10 minutes. <em>— Boiling water softens the cheese protein matrix and dissolves all NaCl. Fat melts and floats to the top.</em></li>
+              <li>Cool to 50–55°C. Remove the fat layer (with a spoon or by filtration). Filter the solution into a 250 ml volumetric flask. <em>— Removing the fat is necessary because fat can interfere with the AgNO₃ reaction.</em></li>
+              <li>Wash the beaker 2–3 times with hot water and add the washings to the flask as well. Make the volume up to the 250 ml mark with distilled water. <em>— The volume must be accurately 250 ml — the aliquot calculation is based on this.</em></li>
+              <li><strong>Take an aliquot:</strong> Pipette 50 ml of the solution into a conical flask.</li>
+              <li><strong>Excess AgNO₃:</strong> Add 10 ml of <strong>0.1 N AgNO₃</strong> (exactly measured from a burette). <em>— This is in excess — it will react with all the Cl⁻ and some will remain. Note exactly how much was added.</em></li>
+              <li>Add 10 ml of <strong>dilute nitric acid (~6N HNO₃)</strong>. <em>— Acidic medium is required for the Volhard reaction. HNO₃ specifically — not HCl (would introduce extra Cl⁻!), not H₂SO₄ (Ag₂SO₄ could precipitate).</em></li>
+              <li>Mix thoroughly and allow the AgCl precipitate to settle. <strong>Filter</strong> (Whatman No. 42) or add 2–3 drops of <strong>nitrobenzene</strong> and shake. <em>— Removing or coating the AgCl is necessary because KSCN will undergo an exchange reaction with AgCl (AgCl + SCN⁻ → AgSCN + Cl⁻) — giving a wrong endpoint. Nitrobenzene coats the AgCl particles.</em></li>
+              <li>Add 2 ml of <strong>ferric alum indicator</strong> (saturated ferric ammonium sulfate solution).</li>
+              <li>Titrate with <strong>0.1 N KSCN</strong>. Initially there will be no colour change (KSCN reacts with excess Ag⁺ → AgSCN white precipitate). Endpoint = first persistent <strong>reddish-brown colour</strong> (Fe³⁺ + SCN⁻ complex). Titre = <strong>V_KSCN</strong>.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Formula and Factor Derivation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>% NaCl = [5.844 × N × (V_AgNO₃ - V_KSCN)] / W_aliquot</code></pre>
+              
+              <h5 class="font-semibold mt-3 text-sm">Derivation of the factor 5.844:</h5>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <tbody>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold w-1/3">Molecular weight of NaCl</td><td class="border p-2">Na(23.0) + Cl(35.45) = <strong>58.44 g/mol</strong></td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">Monovalent</td><td class="border p-2">Cl⁻ + Ag⁺ → AgCl (1:1) → n-factor = 1 → Eq.Wt = 58.44</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">1 meq NaCl</td><td class="border p-2">= 58.44/1000 = 0.05844 g</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">× 100 for %</td><td class="border p-2">0.05844 × 100 = <strong>5.844</strong></td></tr>
+                </tbody>
+              </table>
+
+              <p class="text-sm mt-3"><strong>Back titration logic:</strong></p>
+              <pre class="text-sm"><code>
+Total AgNO₃ added = V_AgNO₃ × N meq
+Excess AgNO₃ (unreacted with Cl⁻) = V_KSCN × N meq
+
+AgNO₃ consumed by NaCl = Total - Excess
+= (V_AgNO₃ - V_KSCN) × N meq
+
+(When both AgNO₃ and KSCN have the same normality)
+
+g NaCl = (V_AgNO₃ - V_KSCN) × N × 0.05844
+% NaCl = [(V_AgNO₃ - V_KSCN) × N × 5.844] / W_aliquot
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>W_aliquot calculation (important!):</strong></p>
+              <pre class="text-sm"><code>
+5 g cheese → dissolved in water → made up to 250 ml
+50 ml aliquot taken for titration
+
+Cheese equivalent in 50 ml = 5 × (50/250) = 1.0 g
+
+∴ W_aliquot = 1.0 g
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Example Calculation:</strong></p>
+              <pre class="text-sm"><code>
+W = 5.0 g cheese, made to 250 ml, 50 ml aliquot taken
+W_aliquot = 5.0 × 50/250 = 1.0 g
+V_AgNO₃ = 10.00 ml of 0.1N (added as excess)
+V_KSCN = 6.85 ml of 0.1N (back-titrated)
+N = 0.1
+
+AgNO₃ consumed = 10.00 - 6.85 = 3.15 ml equivalent
+
+% NaCl = [5.844 × 0.1 × 3.15] / 1.0
+       = [1.841] / 1.0
+       = 1.84%
+
+Cheddar expected 1.5–2.0% → PASSES ✓
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Salt in Moisture phase (S/M ratio) — a cheese quality indicator:</strong></p>
+              <pre class="text-sm"><code>
+% Salt in Moisture phase = (% Salt / % Moisture) × 100
+
+Example: Salt = 1.84%, Moisture = 37%
+S/M = (1.84/37) × 100 = 4.97%
+
+Ideal S/M for cheddar: 4.0–6.0% 
+(controls bacterial growth and enzyme activity during ripening)
+Too low (<4%) → too fast ripening, off-flavours
+Too high (>6%) → too slow ripening, overly salty taste
+              </code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Product</th><th class="border p-2">Salt %</th><th class="border p-2">Note</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Paneer</td><td class="border p-2">0 – 0.5</td><td class="border p-2">Usually unsalted, trace amounts from milk</td></tr>
+                <tr><td class="border p-2">Cheddar</td><td class="border p-2">1.5 – 2.0</td><td class="border p-2">Dry salted during cheddaring</td></tr>
+                <tr><td class="border p-2">Mozzarella</td><td class="border p-2">1.0 – 1.5</td><td class="border p-2">Brine salted</td></tr>
+                <tr><td class="border p-2">Feta</td><td class="border p-2">3.0 – 7.0</td><td class="border p-2">Stored in brine — high salt</td></tr>
+                <tr><td class="border p-2">Processed cheese</td><td class="border p-2">2.0 – 3.0</td><td class="border p-2">Emulsifying salts added</td></tr>
+              </tbody>
+            </table>
+          `
+        },
+        {
+          title: "Total Ash (Mineral Content)",
+          purpose: "To determine the total mineral content of cheese/paneer. Ash includes calcium, phosphorus, sodium, potassium, and other minerals. Also provides a rough estimate of salt content.",
+          reference: "IS 2785-1979; A.O.A.C 935.42",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>The sample is heated at a very high temperature (550°C) in a <strong>muffle furnace</strong> — all organic matter (fat, protein, lactose) burns away as CO₂ and H₂O. The white/grey residue that remains = <strong>ASH</strong> = inorganic minerals (mainly calcium phosphate and sodium chloride).</p>
+            <pre class="text-sm bg-gray-50 p-2 rounded"><code>Organic matter (C, H, O, N, S) + O₂ → CO₂↑ + H₂O↑ + SO₂↑ + N₂↑
+                                          (all driven off at 550°C)
+Inorganic minerals → REMAIN as oxides, chlorides, phosphates
+                     (these do not volatilize — remain as residue)</code></pre>
+
+            <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mt-2 text-sm">
+              <p><strong>What is found in cheese ash?</strong></p>
+              <ul class="list-disc list-inside space-y-1 mt-1">
+                <li><strong>Calcium phosphate (Ca₃(PO₄)₂)</strong> — major component, from milk</li>
+                <li><strong>Sodium chloride (NaCl)</strong> — added salt</li>
+                <li><strong>Potassium</strong> — naturally present in milk</li>
+                <li><strong>Magnesium</strong> — trace amounts</li>
+                <li><strong>Iron, Zinc</strong> — trace amounts</li>
+                <li>Aged cheese has a higher ash % because moisture is lower (concentration effect)</li>
+              </ul>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li><strong>Crucible preparation:</strong> Place a clean porcelain/silica crucible in a muffle furnace at 550°C for 1 hour. Cool in a desiccator. Weigh = <strong>W_crucible</strong>. <em>— Pre-ignition burns off any impurities in the crucible. Achieving constant weight is essential.</em></li>
+              <li><strong>Sample:</strong> Accurately weigh 3–5 grams of finely grated cheese/paneer into the crucible = <strong>W_sample+crucible</strong>. Sample weight (W_sample) = W_sample+crucible − W_crucible. <em>— 3–5 grams is sufficient. A larger sample will take much longer to ash and risks incomplete ashing.</em></li>
+              <li><strong>Pre-charring:</strong> Place the crucible on a <strong>hot plate or low Bunsen flame</strong>. The sample will first melt (fat), then smoke, then <strong>char</strong> (turn black). <em>— Pre-charring is necessary because placing the sample directly in the furnace will cause the fat to ignite and produce a flame, resulting in sample loss (spattering). Slow charring produces controlled combustion.</em></li>
+              <li>When smoking has ceased and the sample is completely black (charred), place the crucible in a <strong>muffle furnace at 550±20°C</strong>. <em>— 550°C is optimal: high enough to burn all organic matter, but not so high that some minerals volatilize (NaCl volatilizes above 600°C → salt loss → falsely low ash).</em></li>
+              <li>Keep in the furnace for <strong>6–8 hours</strong> (or overnight). <em>— Cheese has a very high fat content — complete ashing takes time. Check: ash should be white or light grey. If black specks remain = incomplete ashing → leave for more time.</em></li>
+              <li>Switch off the furnace, allow to cool slightly (to about 200°C inside the furnace), then remove with tongs and place in a desiccator. Weigh when completely cool = <strong>W_ash+crucible</strong>.</li>
+              <li>Constant weight check: return to furnace for 1 hour, cool, weigh. Within ±0.5 mg = constant.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Formula and Factor Explanation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>% Ash = [(W_ash+crucible - W_crucible) / W_sample] × 100</code></pre>
+              
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <tbody>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold w-1/3">W_ash+crucible</td><td class="border p-2">Weight of crucible + ash residue after ashing (grams)</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W_crucible</td><td class="border p-2">Weight of empty crucible (pre-ignited) (grams)</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">(W_ash+crucible - W_crucible)</td><td class="border p-2">= Pure ash weight (grams) — minerals only</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W_sample</td><td class="border p-2">Original cheese sample weight (grams)</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">× 100</td><td class="border p-2">Percentage conversion</td></tr>
+                </tbody>
+              </table>
+
+              <p class="text-sm mt-3"><strong>This is a gravimetric method — no chemical conversion factor is required:</strong></p>
+              <pre class="text-sm"><code>
+Original cheese (3–5 g)
+    ↓ 550°C, 6–8 hours
+    ↓
+Fat → burned → CO₂ + H₂O (gone)
+Protein → burned → CO₂ + H₂O + N₂ + SO₂ (gone)
+Lactose → burned → CO₂ + H₂O (gone)
+Water → evaporated (gone)
+    ↓
+MINERALS remain = ASH (white/grey powder)
+= CaCO₃, Ca₃(PO₄)₂, NaCl, K₂O, MgO, etc.
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Example Calculation:</strong></p>
+              <pre class="text-sm"><code>
+W_crucible = 22.456 g
+W_sample+crucible = 26.321 g → W_sample = 3.865 g
+W_ash+crucible = 22.612 g
+
+Ash weight = 22.612 - 22.456 = 0.156 g
+
+% Ash = (0.156 / 3.865) × 100 = 4.04%
+
+Cheddar expected 3.5–4.5% → PASSES ✓
+              </code></pre>
+
+              <p class="text-sm mt-3"><strong>Salt-free ash can also be calculated:</strong></p>
+              <pre class="text-sm"><code>
+% Salt-free ash = % Total ash - % NaCl
+Example: 4.04% - 1.84% = 2.20% (mainly Ca, P from milk)
+              </code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Product</th><th class="border p-2">Total Ash %</th><th class="border p-2">Salt-free Ash %</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Paneer</td><td class="border p-2">1.5 – 2.0</td><td class="border p-2">1.5 – 2.0 (no added salt)</td></tr>
+                <tr><td class="border p-2">Cheddar</td><td class="border p-2">3.5 – 4.5</td><td class="border p-2">2.0 – 2.5</td></tr>
+                <tr><td class="border p-2">Mozzarella</td><td class="border p-2">2.5 – 3.5</td><td class="border p-2">1.5 – 2.0</td></tr>
+                <tr><td class="border p-2">Processed cheese</td><td class="border p-2">5.0 – 7.0</td><td class="border p-2">3.0 – 4.0 (extra emulsifying salts)</td></tr>
+              </tbody>
+            </table>
+          `
+        },
+        {
+          title: "pH Determination of Cheese/Paneer",
+          purpose: "To measure pH — a direct objective indicator of ripening stage, quality, safety, and shelf life. pH controls bacterial growth and enzyme activity.",
+          reference: "IS 2785-1979; A.O.A.C 981.12",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p><strong>pH</strong> = a measure of hydrogen ion concentration (logarithmic scale). The pH meter electrode is inserted into the sample — the electrode senses the H⁺ ion concentration and gives a digital reading.</p>
+            <p class="mt-1">pH = −log[H⁺]. pH 7 = neutral, <7 = acidic, >7 = alkaline.</p>
+
+            <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mt-2 text-sm">
+              <p><strong>pH vs Titratable Acidity — what is the difference?</strong></p>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Parameter</th><th class="border p-2">pH</th><th class="border p-2">Titratable Acidity</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2">What it measures</td><td class="border p-2">Free H⁺ ions (strength of acid)</td><td class="border p-2">TOTAL acid (free + undissociated)</td></tr>
+                  <tr><td class="border p-2">Method</td><td class="border p-2">pH meter (instrumental)</td><td class="border p-2">Titration with NaOH (chemical)</td></tr>
+                  <tr><td class="border p-2">Speed</td><td class="border p-2">Instant (30 seconds)</td><td class="border p-2">10–15 minutes</td></tr>
+                  <tr><td class="border p-2">What it reflects</td><td class="border p-2">How acidic it TASTES/FEELS</td><td class="border p-2">How much acid is PRESENT</td></tr>
+                </tbody>
+              </table>
+              <p class="mt-1">During cheese ripening, pH rises (less acidic) because proteolysis releases ammonia (alkaline). However, acidity may remain stable because the total amount of acid has not increased — only the ionization has changed.</p>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li><strong>pH meter calibration:</strong> Calibrate the pH meter using <strong>2 standard buffer solutions</strong> — pH 4.0 and pH 7.0 (or pH 9.0). <em>— Two-point calibration corrects the electrode slope. Cheese pH is typically in the range 4.5–5.8, so pH 4 and pH 7 buffers are ideal.</em></li>
+              <li><strong>Sample preparation:</strong> Take 10 grams of finely grated cheese/paneer. Add 10 ml of distilled water. <em>— Mixing equal amounts (1:1) of cheese and water allows the electrode to make proper contact. Inserting an electrode into pure solid cheese is difficult and gives inconsistent readings.</em></li>
+              <li>Homogenize — use a mortar and pestle or a homogenizer to produce a smooth paste. <em>— pH is uniform throughout a smooth paste. A lumpy sample will give different readings at different points of contact with the electrode.</em></li>
+              <li>Insert the calibrated pH meter's <strong>glass electrode</strong> into the paste. <em>— The electrode tip must be fully submerged in the paste. There must be no air bubbles near the tip.</em></li>
+              <li>Note the <strong>stable reading</strong> (wait 30–60 seconds). <em>— The digital display takes a moment to stabilize — note the reading when it becomes constant.</em></li>
+              <li>Wash the electrode with distilled water and take a duplicate reading.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">No Formula — Direct Instrumental Reading:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <p class="text-sm">The pH meter gives a numerical value directly — no calculation is needed. However, it is important to understand:</p>
+              <pre class="text-sm"><code>
+pH = -log₁₀[H⁺]
+
+pH 4.0 → [H⁺] = 10⁻⁴ = 0.0001 mol/L
+pH 5.0 → [H⁺] = 10⁻⁵ = 0.00001 mol/L
+pH 6.0 → [H⁺] = 10⁻⁶ = 0.000001 mol/L
+
+Each one-unit change in pH = 10× change in H⁺ concentration
+pH 4 → pH 5 = 10 times LESS acidic
+pH 5 → pH 6 = 10 times LESS acidic
+              </code></pre>
+              <p class="text-sm mt-2"><strong>What pH tells us in cheese:</strong></p>
+              <ul class="list-disc list-inside text-sm space-y-1">
+                <li>pH < 4.6 → Most pathogens cannot grow (safe zone)</li>
+                <li>pH 4.6–5.0 → Some pathogens survive but grow slowly</li>
+                <li>pH > 5.0 → Greater risk of pathogen growth — proper refrigeration is essential</li>
+                <li>Paneer pH ~5.5–5.8 → relatively high → which is why paneer spoils quickly (refrigeration is critical!)</li>
+              </ul>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Product</th><th class="border p-2">pH Range</th><th class="border p-2">Explanation</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Fresh paneer</td><td class="border p-2">5.5 – 5.8</td><td class="border p-2">Acid coagulated (citric/lactic acid) — relatively high pH</td></tr>
+                <tr><td class="border p-2">Cheddar (young, 1 month)</td><td class="border p-2">5.0 – 5.3</td><td class="border p-2">Starter culture acidity</td></tr>
+                <tr><td class="border p-2">Cheddar (aged, 6+ months)</td><td class="border p-2">5.2 – 5.6</td><td class="border p-2">pH rises slightly during ripening (proteolysis → NH₃)</td></tr>
+                <tr><td class="border p-2">Swiss/Emmental</td><td class="border p-2">5.5 – 5.8</td><td class="border p-2">Propionic acid fermentation — milder</td></tr>
+                <tr><td class="border p-2">Cottage cheese</td><td class="border p-2">4.5 – 5.0</td><td class="border p-2">High acid, fresh product</td></tr>
+                <tr><td class="border p-2">Processed cheese</td><td class="border p-2">5.4 – 5.8</td><td class="border p-2">Emulsifying salts adjust pH</td></tr>
+              </tbody>
+            </table>
+          `
+        },
+        {
+          title: "Detection of Starch in Paneer",
+          purpose: "To detect starch adulteration in paneer. Starch is a cheap filler — it is illegally added to increase weight and alter texture.",
+          reference: "FSSAI Manual; A.O.A.C 920.106",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>Starch (amylose component) forms a characteristic <strong>BLUE-BLACK colour</strong> inclusion complex with <strong>iodine (I₂)</strong>. This is a very sensitive test — even trace amounts can be detected.</p>
+            <div class="bg-gray-50 border rounded p-3 mt-2 text-sm">
+              <pre><code>Starch structure: Amylose = helical (spiral) chain of glucose units
+
+Iodine (I₂ + I⁻ → I₃⁻ polyiodide) fits INSIDE the amylose helix
+
+       ╔══════════════╗
+       ║  I-I-I-I-I   ║  ← Iodine chain inside
+       ║  ┌────────┐  ║
+       ║  │amylose │  ║  ← Amylose helix wraps around
+       ║  │ helix  │  ║
+       ║  └────────┘  ║
+       ╚══════════════╝
+       
+= BLUE-BLACK colour (charge-transfer complex)
+
+Pure paneer contains NO starch — only milk protein (casein) and fat
+Iodine + casein = brownish-yellow (iodine's own colour) — NO blue</code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Place 1 gram of paneer sample in a clean white porcelain dish.</li>
+              <li>Add 1 ml of distilled water and mash with a glass rod to form a smooth paste. <em>— A white dish is used so that the colour change is clearly visible. Making a paste with water is necessary — iodine reacts with starch in a liquid medium.</em></li>
+              <li>Add 1–2 drops of <strong>iodine solution</strong> (I₂/KI — Lugol's iodine) onto the paste. <em>— Lugol's iodine = I₂ dissolved in KI solution (KI makes iodine soluble: I₂ + KI → KI₃).</em></li>
+              <li>Observe the colour immediately.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Result Interpretation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <p class="text-sm"><strong>This is a qualitative test — there is no formula:</strong></p>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Colour</th><th class="border p-2">Interpretation</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2 text-blue-800 font-semibold">Blue / Blue-black</td><td class="border p-2">STARCH PRESENT — paneer is ADULTERATED! Starch has been illegally added.</td></tr>
+                  <tr><td class="border p-2 text-yellow-700 font-semibold">Brown / yellowish-brown</td><td class="border p-2">Starch ABSENT — pure paneer (this is iodine's own colour).</td></tr>
+                </tbody>
+              </table>
+              <p class="text-sm mt-2"><strong>Sensitivity:</strong> Can detect as little as 0.01% starch — very sensitive.</p>
+              <p class="text-sm mt-2"><strong>Why is starch added?</strong> Starch is cheap (₹30–40/kg), while paneer is expensive (₹300–400/kg). Adding starch increases weight and makes the texture appear firmer. Under FSSAI, this constitutes illegal adulteration.</p>
+            </div>
+          `
+        },
+        {
+          title: "Detection of Vanaspati in Paneer (Baudouin Test)",
+          purpose: "To detect adulteration of paneer with vanaspati (hydrogenated vegetable oil). Cost is cut by adding cheap fat, but the consumer is deceived.",
+          reference: "FSSAI Manual; IS 3508-1966",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>Under FSSAI regulations, <strong>5% sesame oil</strong> must mandatorily be added to vanaspati. Sesame oil contains the compound <strong>sesamol</strong>, which gives a <strong>PINK/RED</strong> colour with <strong>furfural + HCl</strong> (Baudouin reaction). The fat must first be extracted from the paneer, and the test is then performed on the extracted fat.</p>
+
+            <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mt-2 text-sm">
+              <p><strong>Process flow:</strong></p>
+              <pre><code>Paneer → Fat extract (Werner-Schmidt method) → Baudouin Test on fat
+
+Step 1: Extract fat from paneer
+        Paneer + HCl → digest → ether extraction → pure fat
+        
+Step 2: Baudouin test
+        Fat + Conc. HCl + Furfural → shake → observe colour
+        
+        Pink/Red = Sesame oil present = Vanaspati added = ADULTERATED
+        No colour = No sesame oil = Pure milk fat = PURE paneer</code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li><strong>Fat extraction:</strong> Extract the fat from paneer using the Werner-Schmidt method (described in the fat determination test — HCl digestion + ether extraction). Collect the clear melted fat.</li>
+              <li><strong>Baudouin test:</strong> Place 5 ml of the extracted melted fat into a test tube.</li>
+              <li>Add 5 ml of <strong>concentrated HCl</strong>.</li>
+              <li>Add 0.4 ml of <strong>2% furfural solution</strong> (freshly prepared in ethanol).</li>
+              <li>Shake vigorously for 2 minutes (with a rubber stopper).</li>
+              <li>Allow the layers to separate. Observe the colour of the lower (acid) layer.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Result:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <thead><tr class="bg-gray-100"><th class="border p-2">Observation</th><th class="border p-2">Interpretation</th></tr></thead>
+                <tbody>
+                  <tr><td class="border p-2 text-red-600 font-semibold">Pink/Red colour in acid layer</td><td class="border p-2">Vanaspati PRESENT — vegetable fat has been added to paneer = ADULTERATED</td></tr>
+                  <tr><td class="border p-2 text-green-600 font-semibold">No colour / pale yellow</td><td class="border p-2">Vanaspati ABSENT — pure milk fat paneer</td></tr>
+                </tbody>
+              </table>
+              <p class="text-sm mt-2"><strong>This is a qualitative test — there is no formula. Detection is based on colour observation.</strong></p>
+              <p class="text-sm mt-2"><strong>Additional test:</strong> Fiehe's test (Liebermann-Burchard) can also be performed on the extracted fat — a green colour indicates phytosterols are present = vegetable fat has been added. This serves as a complementary/confirmatory test to the Baudouin test.</p>
+            </div>
+          `
+        }
+      ]
+    },
             "dahi-yoghurt": {
-                title: "Analysis of Dahi / Yoghurt",
-                tests: [
-                   {
-                        title: "Titratable Acidity",
-                        purpose: "To determine the acidity developed during fermentation.",
-                        procedure: `
-                          <ol class="list-decimal list-outside pl-5 space-y-2">
-                            <li>Weigh 10g of sample in a beaker.</li>
-                            <li>Add 10 ml of distilled water to make a paste.</li>
-                            <li>Add a few drops of phenolphthalein indicator and titrate with 0.1 N NaOH until a faint pink color appears.</li>
-                          </ol>
-                          <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
-                          <pre><code>% Acidity (as Lactic Acid) = (9 * V * N) / W</code></pre>
-                          <p class="text-xs">Where V = volume of NaOH, N = normality of NaOH, W = weight of sample.</p>
-                        `
-                    },
-                    {
-                        title: "Determination of Total Solids",
-                        purpose: "To determine the total solids content, often done after neutralizing acidity.",
-                        reference: "IS 12333: 1997 / IDF 151: 1991",
-                        procedure: `
-                            <p><strong>NaOH Method:</strong> Weigh 4-5g of sample, neutralize with 0.1N NaOH, and then dry on a water bath followed by an oven at 100±2°C to a constant weight. The weight of added NaOH is subtracted from the final residue.</p>
-                            <p><strong>Zinc Oxide Method:</strong> Weigh 1g of sample, mix with 2g of zinc oxide, and dry to a constant weight. The developed lactic acid is determined separately and added to the moisture value to get the correct total solids.</p>
-                        `
-                    },
-                   {
-                        title: "Diacetyl Content",
-                        purpose: "To measure a key flavor compound.",
-                        procedure: `<p>Diacetyl is a characteristic flavor compound produced during fermentation. Its quantity is measured spectrophotometrically at 570 nm after a series of chemical reactions.</p>`
-                    }
-                ]
-            },
+      title: "Dahi / Yoghurt Analysis",
+      tests: [
+        {
+          title: "Titratable Acidity",
+          purpose: "To determine the acidity developed during fermentation — the primary indicator of proper culture activity, product consistency, and quality. The characteristic sour taste of dahi comes from lactic acid.",
+          reference: "IS 12333:1997; A.O.A.C 947.05",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>In dahi, <strong>Lactobacillus delbrueckii subsp. bulgaricus</strong> and <strong>Streptococcus thermophilus</strong> bacteria convert lactose (milk sugar) into <strong>lactic acid</strong>:</p>
+            <pre class="text-sm bg-gray-50 p-2 rounded"><code>C₁₂H₂₂O₁₁ + H₂O → 4 CH₃CHOHCOOH
+(Lactose)           (4 Lactic acid molecules)
+                    
+This is a FERMENTATION reaction — occurs via bacterial enzymes
+Temperature: 37-43°C optimum
+Time: Dahi sets within 4-8 hours</code></pre>
+            <p class="mt-2">Lactic acid is an organic acid — it is neutralized by NaOH. The more lactic acid present, the more NaOH required. Acidity = a measure of the extent of fermentation.</p>
+
+            <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mt-2 text-sm">
+              <p><strong>Significance of dahi acidity:</strong></p>
+              <ul class="list-disc list-inside space-y-1 mt-1">
+                <li><strong>Too low acidity (&lt;0.5%)</strong> → Fermentation incomplete, culture weak, product may not set properly</li>
+                <li><strong>Optimal acidity (0.7-0.85%)</strong> → Good set, pleasant sour taste, smooth texture</li>
+                <li><strong>Too high acidity (&gt;1.0%)</strong> → Over-fermented, excessively sour, may show whey separation (syneresis)</li>
+                <li>Acidity continues to increase during storage (post-acidification) — this is why dahi is kept refrigerated (cold temperature slows bacteria)</li>
+              </ul>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Accurately weigh <strong>10 grams</strong> of dahi/yoghurt into a beaker or porcelain dish. <em>— Carefully take dahi with a spoon — take both the top whey (water) and bottom thick portion proportionally. A well-mixed sample is essential.</em></li>
+              <li>Add 10 ml of <strong>warm distilled water</strong> (40°C) and mix thoroughly with a glass rod until a smooth paste forms. <em>— Adding water and mixing breaks the gel structure of dahi to create a uniform sample. Without mixing, NaOH will not properly penetrate thick dahi. Warm water aids in mixing.</em></li>
+              <li>Add 3-4 drops of <strong>phenolphthalein indicator</strong>.</li>
+              <li>Titrate slowly with <strong>0.1 N NaOH</strong> from a burette. Stir after each addition. Endpoint = <strong>faint pink colour that remains stable for 15 seconds</strong>. <em>— Dahi is thick and requires mixing time. 15 seconds stable because dahi has protein buffer capacity — initial pink may fade. The true endpoint remains stable for 15 sec.</em> Titre = <strong>V</strong> ml.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Formula and Factor Derivation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>% Acidity (as lactic acid) = [9 × V × N] / W</code></pre>
+              
+              <h5 class="font-semibold mt-3 text-sm">Factor 9 — Detailed Derivation:</h5>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <tbody>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold w-1/3">Lactic acid formula</td><td class="border p-2">CH₃CHOHCOOH = C₃H₆O₃</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">Molecular weight</td><td class="border p-2">C: 3×12=36, H: 6×1=6, O: 3×16=48 → Total = <strong>90 g/mol</strong></td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">Monobasic (1 COOH)</td><td class="border p-2">n-factor = 1 → Equivalent weight = 90/1 = <strong>90 g/eq</strong></td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">Neutralization</td><td class="border p-2">CH₃CHOHCOOH + NaOH → CH₃CHOHCOONa + H₂O (1:1 ratio)</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">1 ml of 1N NaOH</td><td class="border p-2">= 1 meq = neutralizes 90/1000 g = 0.090 g lactic acid</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">% conversion (×100)</td><td class="border p-2">0.090 × 100 = <strong>9.0</strong></td></tr>
+                </tbody>
+              </table>
+
+              <pre class="text-sm mt-2"><code>
+Full derivation:
+meq lactic acid = V × N
+g lactic acid = V × N × (90/1000) = V × N × 0.090
+% = (V × N × 0.090 / W) × 100 = [V × N × 9] / W = [9 × V × N] / W
+              </code></pre>
+
+              <h5 class="font-semibold mt-3 text-sm">Each Variable:</h5>
+              <ul class="list-disc list-inside text-sm space-y-1">
+                <li><strong>9</strong> = (Lactic acid MW / 1000) × 100 = 90×100/1000 = 9. Universal constant for all dairy acidity tests (lactic acid basis)</li>
+                <li><strong>V</strong> = ml of NaOH used (direct titre)</li>
+                <li><strong>N</strong> = Normality of NaOH (standard 0.1N)</li>
+                <li><strong>W</strong> = Sample weight in grams (typically 10 g)</li>
+              </ul>
+
+              <p class="text-sm mt-3"><strong>Example Calculation:</strong></p>
+              <pre class="text-sm"><code>
+W = 10.0 g dahi, N = 0.1, V = 8.5 ml
+
+% Acidity = [9 × 8.5 × 0.1] / 10.0
+          = [7.65] / 10.0
+          = 0.765%
+
+FSSAI range: 0.5-1.0% → 0.765% → PASS ✓ (good quality dahi!)
+              </code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">FSSAI Standards and Interpretation:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Category</th><th class="border p-2">Acidity (% lactic acid)</th><th class="border p-2">Quality</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">FSSAI minimum</td><td class="border p-2">0.5%</td><td class="border p-2">Minimum acceptable fermentation</td></tr>
+                <tr><td class="border p-2">Good quality</td><td class="border p-2">0.7 - 0.85%</td><td class="border p-2">Optimal taste and texture ✓</td></tr>
+                <tr><td class="border p-2">FSSAI maximum</td><td class="border p-2">1.0%</td><td class="border p-2">Maximum before too sour</td></tr>
+                <tr><td class="border p-2">Over-fermented</td><td class="border p-2">> 1.2%</td><td class="border p-2">Very sour, whey separation, rejected</td></tr>
+              </tbody>
+            </table>
+          `
+        },
+        {
+          title: "Determination of Total Solids",
+          purpose: "To determine total solid content in dahi. Fermented products require a special procedure because lactic acid is volatile during drying — if not corrected, loss of lactic acid will give a falsely LOW total solids result.",
+          reference: "IS 12333: 1997; IDF 151: 1991",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>Normal drying (oven method) evaporates water. However, dahi has a problem: <strong>lactic acid is also partially volatile</strong> at 100°C. If lactic acid also evaporates, the weight loss will appear greater → moisture overestimated → total solids UNDERESTIMATED.</p>
+            <p class="mt-2">Therefore, in dahi TS determination, <strong>lactic acid is first neutralized</strong> (with NaOH or ZnO). The neutralized salt (sodium lactate or zinc lactate) is <strong>non-volatile</strong> — it will not evaporate during drying.</p>
+
+            <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mt-2 text-sm">
+              <p><strong>Visual explanation of the problem:</strong></p>
+              <pre><code>WITHOUT neutralization (INCORRECT method):
+Dahi = Water + Fat + Protein + Lactose + LACTIC ACID + Minerals
+                                          ↑
+Heat at 100°C → Water evaporates ✓
+             → Lactic acid ALSO partially evaporates ✗
+             → Weight loss = Water + Some lactic acid
+             → Moisture appears HIGH → TS appears LOW (WRONG!)
+
+WITH neutralization (CORRECT method):
+Lactic acid + NaOH → Sodium lactate (non-volatile)
+                      or
+Lactic acid + ZnO → Zinc lactate (non-volatile)
+
+Now heat at 100°C → Only water evaporates ✓
+                  → Sodium/zinc lactate stays ✓
+                  → Weight loss = Only water (CORRECT!)</code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Method 1: NaOH Neutralization Method</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Weigh pre-dried dish + sand + rod = <strong>W1</strong>.</li>
+              <li>Accurately weigh 4-5 grams of dahi into the dish = <strong>W2</strong>.</li>
+              <li>Add phenolphthalein indicator. Neutralize with <strong>0.1N NaOH</strong> until a faint pink colour appears. Note the weight of NaOH added = <strong>W_NaOH</strong>. <em>— NaOH converts lactic acid to sodium lactate — which is non-volatile. Note the exact weight of NaOH because it must be subtracted later.</em></li>
+              <li>Pre-dry on water bath for 30 min, then place in <strong>100±2°C oven</strong> until constant weight (3-4 hours). <em>— Now only water will evaporate, sodium lactate will remain in the residue.</em></li>
+              <li>Cool in desiccator, weigh = <strong>W3</strong>.</li>
+            </ol>
+
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <h5 class="font-semibold text-sm">Calculation (NaOH Method):</h5>
+              <pre class="text-sm"><code>% Total Solids = [(W3 - W1 - W_NaOH) / (W2 - W1)] × 100</code></pre>
+              
+              <p class="text-sm mt-2"><strong>Each Factor:</strong></p>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <tbody>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold w-1/3">W1</td><td class="border p-2">Empty dish + sand + rod weight</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W2</td><td class="border p-2">Dish + sand + rod + dahi (before drying)</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W3</td><td class="border p-2">Dish + sand + rod + dried residue + NaOH salt (after drying)</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">W_NaOH</td><td class="border p-2">Weight of NaOH solution added for neutralization. This is SUBTRACTED because NaOH is not an original component of dahi — we added it.</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">(W3 - W1 - W_NaOH)</td><td class="border p-2">= True total solids weight (dried residue minus dish minus added NaOH)</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">(W2 - W1)</td><td class="border p-2">= Original dahi sample weight</td></tr>
+                </tbody>
+              </table>
+
+              <p class="text-sm mt-3"><strong>Note:</strong> W_NaOH = weight of NaOH SOLUTION added (not just NaOH). If 2 ml 0.1N NaOH was added then W_NaOH ≈ 2 g (density of dilute NaOH ≈ 1 g/ml). Actually NaOH solution is mostly water — the water will evaporate and only NaOH solid will remain. For accuracy: NaOH solid added = V × N × 0.040 g (NaOH MW=40, 1 ml 1N = 0.040 g NaOH). However, for simplification the total solution weight is subtracted and the formula is adjusted. Different labs use different approaches.</p>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Method 2: Zinc Oxide (ZnO) Method</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Weigh pre-dried dish = <strong>W1</strong>.</li>
+              <li>Add <strong>2 grams ZnO</strong> to the dish and weigh = <strong>W1_ZnO</strong> (dish + ZnO). <em>— ZnO will neutralize lactic acid: 2CH₃CHOHCOOH + ZnO → Zn(CH₃CHOHCOO)₂ + H₂O. Zinc lactate is non-volatile.</em></li>
+              <li>Accurately add 1 gram of dahi on top of the ZnO = <strong>W2</strong>. Mix thoroughly with a glass rod with the ZnO. <em>— Thorough mixing ensures ZnO and lactic acid react properly. 1 gram of dahi contains ~9 mg lactic acid (for 0.9% acidity), 2 g ZnO is in large excess — complete neutralization is guaranteed.</em></li>
+              <li>Pre-dry on water bath (30 min), then in <strong>100±2°C oven</strong> until constant weight.</li>
+              <li>Cool, weigh = <strong>W3</strong>.</li>
+            </ol>
+
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <h5 class="font-semibold text-sm">Calculation (ZnO Method):</h5>
+              <pre class="text-sm"><code>% Total Solids = [(W3 - W1_ZnO) / (W2 - W1_ZnO)] × 100</code></pre>
+              
+              <p class="text-sm mt-2"><strong>However, this is approximate because:</strong></p>
+              <ul class="list-disc list-inside text-sm space-y-1">
+                <li>ZnO reacts with lactic acid to form zinc lactate + water</li>
+                <li>The reaction water also evaporates — slightly overestimates TS</li>
+                <li>More accurate method: first measure acidity separately, then use the lactic acid weight in the correction</li>
+              </ul>
+
+              <p class="text-sm mt-3"><strong>Corrected formula:</strong></p>
+              <pre class="text-sm"><code>
+% True TS = Apparent TS + (lactic acid loss correction)
+
+Lactic acid loss correction = 
+  Separately determined % acidity × correction factor
+
+In practice, the NaOH method is preferred for accuracy.
+ZnO method is simpler but less precise.
+              </code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Product</th><th class="border p-2">Total Solids %</th><th class="border p-2">FSSAI Min</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Whole milk dahi</td><td class="border p-2">14-16</td><td class="border p-2">≥ 12%</td></tr>
+                <tr><td class="border p-2">Skimmed milk dahi</td><td class="border p-2">9-12</td><td class="border p-2">≥ 9%</td></tr>
+                <tr><td class="border p-2">Set yoghurt</td><td class="border p-2">14-18</td><td class="border p-2">≥ 12%</td></tr>
+                <tr><td class="border p-2">Greek yoghurt</td><td class="border p-2">20-25</td><td class="border p-2">Concentrated — higher solids</td></tr>
+              </tbody>
+            </table>
+          `
+        },
+        {
+          title: "Determination of Fat",
+          purpose: "To determine fat content in dahi/yoghurt — for grading (full fat, low fat, skimmed), nutritional labelling, and FSSAI compliance.",
+          reference: "IS 12333: 1997; A.O.A.C 905.02",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>Dahi is a <strong>fermented product</strong> — its gel structure (set curd) does not break down properly in the normal Gerber method. The acid reaction is also more <strong>vigorous</strong> because dahi is already acidic (lactic acid + Gerber's sulphuric acid = very high acid = violent reaction).</p>
+            <p class="mt-1">Therefore, a <strong>modified Gerber</strong> or <strong>Werner-Schmidt method</strong> is used for dahi.</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Method 1: Modified Gerber Method</h4>
+
+            <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mt-2 text-sm">
+              <p><strong>What is different from normal Gerber?</strong></p>
+              <ul class="list-disc list-inside space-y-1 mt-1">
+                <li>Dahi is <strong>WEIGHED</strong> (not measured by pipette — it is too thick)</li>
+                <li><strong>Warm water</strong> is added to dilute it (to break down the gel structure)</li>
+                <li>Acid reaction is more vigorous — mix <strong>SLOWLY</strong>, otherwise spattering will occur</li>
+                <li>Special cream butyrometer or modified milk butyrometer is used</li>
+              </ul>
+            </div>
+
+            <h5 class="font-semibold mt-3">Procedure:</h5>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Accurately weigh <strong>~5 grams</strong> of dahi into a butyrometer (W). <em>— Dahi is thick, pipetting is impossible. Weigh directly on an analytical balance. 5 grams is standard.</em></li>
+              <li>Add ~5 ml of <strong>warm (40°C) distilled water</strong> and gently mix. <em>— Water dilutes the dahi gel so that the acid reaction is uniform. Warm water improves mixing.</em></li>
+              <li>Carefully add 10 ml of <strong>Gerber sulphuric acid</strong> (density 1.807-1.812) along the side. <em>— Add SLOWLY! Dahi is already acidic + Gerber acid = very exothermic. Violent bubbling may occur — do not tighten the stopper yet.</em></li>
+              <li>Add 1 ml of <strong>amyl alcohol</strong>. <em>— For clean separation of the fat layer.</em></li>
+              <li>Apply stopper and carefully invert to mix — initially slowly, then vigorously. <em>— A dark brown colour should appear = protein has been digested. If white lumps remain, more mixing is needed.</em></li>
+              <li>Place in <strong>65°C water bath</strong> for 5 min. <strong>Centrifuge</strong> 5 min at 1200 rpm. Return to water bath 5 min.</li>
+              <li>Read the fat column.</li>
+            </ol>
+
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <h5 class="font-semibold text-sm">Calculation:</h5>
+              <pre class="text-sm"><code>% Fat ≈ Butyrometer reading × (10.75 / W) × correction</code></pre>
+              <p class="text-sm mt-1">However, if a cream butyrometer calibrated for 5g sample is used, the direct reading = % fat (approximately).</p>
+              <p class="text-sm mt-2"><strong>More accurate: Werner-Schmidt method (below).</strong></p>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Method 2: Werner-Schmidt Method (Acid Digestion)</h4>
+
+            <h5 class="font-semibold mt-3">Procedure:</h5>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Accurately weigh ~5 grams of dahi (W_sample) into a Mojonnier flask.</li>
+              <li>Add 10 ml of <strong>concentrated HCl</strong>. Heat on water bath until a homogeneous dark brown solution forms (15-20 min). <em>— HCl digests all proteins. In fermented products, protein is partially denatured/aggregated — HCl effectively dissolves it.</em></li>
+              <li>Cool. Add 10 ml ethanol.</li>
+              <li>Extract with 25 ml diethyl ether + 25 ml petroleum ether. Repeat 3 times.</li>
+              <li>Evaporate ether, dry at 102°C, weigh = fat.</li>
+            </ol>
+
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>% Fat = [(W_flask+fat - W_flask) / W_sample] × 100</code></pre>
+              <p class="text-sm mt-1">Same gravimetric calculation as cheese fat test — directly measuring the weight of fat.</p>
+              
+              <p class="text-sm mt-3"><strong>Example:</strong></p>
+              <pre class="text-sm"><code>
+W_sample = 5.02 g dahi
+W_flask = 105.234 g
+W_flask+fat = 105.395 g
+
+Fat weight = 0.161 g
+% Fat = (0.161/5.02) × 100 = 3.21%
+
+FSSAI full fat dahi: ≥ 3.0% → PASS ✓
+              </code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Dahi Type</th><th class="border p-2">Fat %</th><th class="border p-2">FSSAI</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Full fat dahi</td><td class="border p-2">≥ 3.0</td><td class="border p-2">Made from whole milk</td></tr>
+                <tr><td class="border p-2">Low fat dahi</td><td class="border p-2">0.5 - 3.0</td><td class="border p-2">Made from partly skimmed milk</td></tr>
+                <tr><td class="border p-2">Skimmed milk dahi</td><td class="border p-2">≤ 0.5</td><td class="border p-2">Made from skimmed milk</td></tr>
+              </tbody>
+            </table>
+          `
+        },
+        {
+          title: "Determination of Protein (Kjeldahl Method)",
+          purpose: "To determine protein content in dahi — an important parameter for nutritional value. Fermentation does not significantly change protein content (proteolysis is minimal in yoghurt compared to cheese).",
+          reference: "A.O.A.C 991.23; IS 12333:1997",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>Standard Kjeldahl method — digest the sample to measure nitrogen, then multiply by 6.38 to obtain protein. Protein in dahi is essentially milk protein (casein + whey proteins) — fermentation causes some partial hydrolysis but total nitrogen does not change.</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>Accurately weigh ~5 grams of well-mixed dahi (W) into a Kjeldahl flask. <em>— 5 grams is sufficient for dahi (protein ~3.2-3.5%, similar to milk). Mix dahi well — take whey and curd proportionally.</em></li>
+              <li><strong>Digestion:</strong> 15-20 ml conc. H₂SO₄ + catalyst tablet + glass beads. Heat in fume hood until clear blue-green. <em>— Dahi already contains acid (lactic acid) — foaming will initially be more vigorous. Start with low heat.</em></li>
+              <li><strong>Distillation:</strong> Cool, dilute, add 40% NaOH. Steam distill into boric acid + indicator.</li>
+              <li><strong>Titration:</strong> Titrate with 0.1N HCl. Green → Pink. Titre = V ml.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Formula:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>% Nitrogen = [V × N × 1.4] / W</code></pre>
+              <pre class="text-sm"><code>% Protein = % Nitrogen × 6.38</code></pre>
+              
+              <p class="text-sm mt-2"><strong>Factors (same as all dairy Kjeldahl):</strong></p>
+              <ul class="list-disc list-inside text-sm space-y-1">
+                <li><strong>1.4</strong> = (N atomic wt × 100) / 1000 = (14 × 100)/1000</li>
+                <li><strong>6.38</strong> = 100 / (% N in milk protein) = 100/15.67</li>
+              </ul>
+
+              <p class="text-sm mt-3"><strong>Example:</strong></p>
+              <pre class="text-sm"><code>
+W = 5.05 g, V = 18.8 ml, N = 0.1
+
+%N = [18.8 × 0.1 × 1.4] / 5.05 = 2.632/5.05 = 0.521%
+%Protein = 0.521 × 6.38 = 3.32% → Correct for whole milk dahi ✓
+              </code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Product</th><th class="border p-2">Protein %</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Whole milk dahi</td><td class="border p-2">3.2 - 3.5</td></tr>
+                <tr><td class="border p-2">Skimmed milk dahi</td><td class="border p-2">3.5 - 4.0 (concentrated)</td></tr>
+                <tr><td class="border p-2">Greek yoghurt</td><td class="border p-2">8 - 12 (strained, concentrated)</td></tr>
+              </tbody>
+            </table>
+            <p class="mt-2 text-sm">FSSAI minimum protein for dahi: <strong>3.0%</strong></p>
+          `
+        },
+        {
+          title: "Diacetyl Content",
+          purpose: "To measure the flavour compound responsible for the characteristic 'buttery' aroma of dahi. Diacetyl is an indicator of fermentation quality — good culture = good diacetyl level.",
+          reference: "IS 12333: 1997",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p><strong>Diacetyl (2,3-butanedione, CH₃COCOCH₃)</strong> is an important flavour compound produced in dahi/yoghurt by <strong>Leuconostoc</strong> and <strong>Lactococcus diacetylactis</strong> bacteria.</p>
+            <pre class="text-sm bg-gray-50 p-2 rounded"><code>Citric acid → (bacteria) → Diacetyl + CO₂ + Acetic acid
+(naturally present in milk)    (buttery flavour)
+
+Diacetyl structure:
+  O    O
+  ‖    ‖
+CH₃-C--C-CH₃  (two adjacent carbonyl groups)
+
+MW = 86 g/mol, boiling point = 88°C (volatile! — can be extracted by steam distillation)</code></pre>
+
+            <p class="mt-2"><strong>Detection method:</strong> Diacetyl is extracted by steam distillation. Then it is reacted with <strong>hydroxylamine + ferric chloride</strong> — a hydroxamic acid intermediate forms which creates a <strong>RED colour</strong> complex with Fe³⁺. Colour intensity is measured by spectrophotometer.</p>
+
+            <div class="bg-gray-50 border rounded p-3 mt-2 text-sm">
+              <pre><code>Chemical Reactions:
+
+Step 1 — Hydroxamic acid formation:
+CH₃COCOCH₃ + 2NH₂OH → CH₃C(=NOH)C(=NOH)CH₃ + 2H₂O
+(diacetyl)  (hydroxylamine)  (dimethylglyoxime/hydroxamic acid)
+
+Step 2 — Colour formation with Fe³⁺:
+3 Hydroxamic acid + Fe³⁺ → [Fe(hydroxamate)₃] 
+                            (RED-BROWN complex)
+                            λmax = 520-570 nm
+
+More diacetyl → more hydroxamic acid → more red colour → higher absorbance</code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li><strong>Steam distillation:</strong> Homogenize 10 grams of dahi in 50 ml distilled water. Transfer to steam distillation apparatus. Collect approximately 25-30 ml distillate. <em>— Steam distillation extracts volatile compounds (diacetyl, acetaldehyde, etc.). Diacetyl has a boiling point of 88°C — it comes across easily with steam.</em></li>
+              <li><strong>Colour development:</strong> Take 10 ml distillate in a test tube. Add 2 ml of <strong>hydroxylamine hydrochloride solution (2%)</strong>. Stand for 5 minutes. <em>— Hydroxylamine reacts with diacetyl to form hydroxamic acid.</em></li>
+              <li>Add 1 ml of <strong>ferric chloride solution (5% FeCl₃ in 0.1N HCl)</strong>. <em>— Fe³⁺ forms a red complex with hydroxamic acid.</em></li>
+              <li>Mix and allow colour to develop for <strong>5 minutes</strong>.</li>
+              <li>Measure absorbance at <strong>570 nm</strong> in a <strong>spectrophotometer</strong> against a blank (distilled water + reagents). <em>— 570 nm = wavelength at which this red complex maximally absorbs light.</em></li>
+              <li>Determine concentration from a <strong>standard curve</strong> — plot absorbance values of known diacetyl standards (0, 1, 2, 5, 10 ppm) to construct a calibration curve. Read diacetyl concentration from the sample absorbance.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>Diacetyl (ppm) = [C_from_curve × Total distillate volume × Dilution factor] / Sample weight</code></pre>
+              
+              <p class="text-sm mt-2"><strong>Standard Curve Method — how it works:</strong></p>
+              <pre class="text-sm"><code>
+Standards prepared:
+0 ppm → Absorbance = 0.000
+1 ppm → Absorbance = 0.052
+2 ppm → Absorbance = 0.105
+5 ppm → Absorbance = 0.260
+10 ppm → Absorbance = 0.520
+
+Plot: Concentration (x-axis) vs Absorbance (y-axis)
+→ Straight line (Beer-Lambert Law: A = εlc)
+
+Sample absorbance = 0.175
+From curve: Concentration = ~3.4 ppm (in distillate)
+
+Adjust for dilution:
+If 10 g dahi → 30 ml distillate → 10 ml used
+Diacetyl in total distillate = 3.4 × 30/10 = 10.2 µg
+Diacetyl per gram dahi = 10.2/10 = ~1.0 ppm ≈ 1 mg/kg
+              </code></pre>
+              
+              <p class="text-sm mt-2"><strong>Beer-Lambert Law:</strong> A = εlc</p>
+              <ul class="list-disc list-inside text-sm space-y-1">
+                <li><strong>A</strong> = Absorbance (measured by spectrophotometer)</li>
+                <li><strong>ε</strong> = Molar absorptivity (constant for this complex at 570 nm)</li>
+                <li><strong>l</strong> = Path length of cuvette (usually 1 cm)</li>
+                <li><strong>c</strong> = Concentration (what we want to find)</li>
+              </ul>
+              <p class="text-sm mt-1">Therefore A is directly proportional to c — a straight line graph is obtained. The concentration c is read from the curve using the sample's absorbance A.</p>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Quality</th><th class="border p-2">Diacetyl (ppm)</th><th class="border p-2">Aroma</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Good dahi</td><td class="border p-2">1 - 5</td><td class="border p-2">Pleasant buttery aroma ✓</td></tr>
+                <tr><td class="border p-2">Bland dahi</td><td class="border p-2">< 0.5</td><td class="border p-2">Weak flavour — culture may be weak</td></tr>
+                <tr><td class="border p-2">Excessive</td><td class="border p-2">> 10</td><td class="border p-2">Overpowering — may indicate specific culture imbalance</td></tr>
+              </tbody>
+            </table>
+          `
+        },
+        {
+          title: "pH Determination",
+          purpose: "To measure the pH of dahi — a rapid, objective indicator of degree of fermentation, shelf life prediction, and quality.",
+          reference: "IS 12333: 1997; A.O.A.C 981.12",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>The pH meter electrode senses hydrogen ion concentration and provides a digital reading. Dahi is acidic (pH 4-5) because lactic acid is present.</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li><strong>Calibration:</strong> Calibrate the pH meter with pH 4.0 and pH 7.0 buffers. <em>— 2-point calibration. The pH of dahi is ~4.0-4.5, so the pH 4 buffer is essential (close to sample pH = more accurate).</em></li>
+              <li>Take 10 grams of dahi in a beaker. <strong>Gently mix</strong> with a glass rod (do not mix vigorously — it will break down the structure and release CO₂ which affects pH). <em>— Gentle mixing provides a representative sample without gas release.</em></li>
+              <li>Insert the electrode <strong>directly into the dahi</strong>. <em>— Dahi is semi-liquid, there is no need to add water (unlike cheese). The electrode tip should be fully submerged in dahi.</em></li>
+              <li>Note the <strong>stable reading</strong> (wait 30-60 sec). <em>— Dahi is viscous — the electrode takes some time to equilibrate.</em></li>
+              <li>Wash electrode with distilled water. Take duplicate readings.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Result — Direct Reading:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <p class="text-sm"><strong>No formula required — the pH meter gives the value directly.</strong></p>
+              <p class="text-sm mt-2"><strong>Relationship between pH and acidity (in dahi):</strong></p>
+              <pre class="text-sm"><code>
+pH ↓ (lower) = More H⁺ ions = More ACIDIC = More fermentation
+
+pH 4.6 → ~0.5% lactic acid
+pH 4.3 → ~0.7% lactic acid  
+pH 4.0 → ~0.9% lactic acid
+pH 3.8 → ~1.2% lactic acid (over-fermented!)
+
+Note: Relationship is NOT linear — it's logarithmic
+pH 4.0 → 4.3 = much larger acid change than pH 4.3 → 4.6
+              </code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Expected Values:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Product</th><th class="border p-2">pH</th><th class="border p-2">Interpretation</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Fresh dahi (just set)</td><td class="border p-2">4.4 - 4.6</td><td class="border p-2">Optimal set point</td></tr>
+                <tr><td class="border p-2">Good quality dahi</td><td class="border p-2">4.0 - 4.5</td><td class="border p-2">Pleasant sour taste</td></tr>
+                <tr><td class="border p-2">Over-ripe dahi</td><td class="border p-2">< 3.8</td><td class="border p-2">Too sour, whey separation</td></tr>
+                <tr><td class="border p-2">Under-fermented</td><td class="border p-2">> 4.8</td><td class="border p-2">Weak set, bland taste, culture problem</td></tr>
+              </tbody>
+            </table>
+          `
+        },
+        {
+          title: "Coliform Count",
+          purpose: "To detect the presence of coliform bacteria in dahi — an indicator of hygienic quality and post-pasteurization contamination. The acidic pH of dahi inhibits coliforms — if present, serious contamination has occurred.",
+          reference: "IS 5401 (Part 1); A.O.A.C 986.33",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p>Coliforms ferment lactose to produce acid + gas. On VRBA (Violet Red Bile Agar), they form dark red colonies with bile precipitate halos. Coliforms should not be present in normal dahi because:</p>
+            <ul class="list-disc list-inside text-sm">
+              <li>Milk is pasteurized (coliforms should have been killed)</li>
+              <li>The low pH of dahi (4.0-4.5) inhibits coliforms</li>
+              <li>Starter culture bacteria compete with coliforms</li>
+              <li>If still present → post-pasteurization contamination (dirty containers, hands, environment)</li>
+            </ul>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li>11 grams dahi + 99 ml sterile Ringer solution (45°C) → homogenize = <strong>10⁻¹ dilution</strong>.</li>
+              <li>Serial dilutions: 10⁻², 10⁻³.</li>
+              <li>Pour 1 ml of each dilution into VRBA plates (duplicate). Add overlay.</li>
+              <li>Incubate at 37°C, 24-48 hours (inverted).</li>
+              <li>Count dark red colonies with bile precipitate halo.</li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>Coliform count (cfu/g) = Colonies counted / (Volume plated × Dilution factor)</code></pre>
+              
+              <p class="text-sm mt-2"><strong>Example:</strong></p>
+              <pre class="text-sm"><code>
+10⁻¹ dilution plate: 3 typical colonies
+10⁻² dilution plate: 0 colonies
+
+Count = 3 / (1 ml × 10⁻¹) = 3 / 0.1 = 30 cfu/g
+
+FSSAI limit ≤ 10 cfu/g → 30 > 10 → FAIL ✗
+              </code></pre>
+              <p class="text-sm mt-2">Ideal: 0 colonies on all dilutions → &lt;10 cfu/g (reported as) → PASS ✓</p>
+            </div>
+
+            <p class="mt-2 text-sm">FSSAI limit: ≤ <strong>10 cfu/gram</strong> for dahi/yoghurt</p>
+          `
+        },
+        {
+          title: "Yeast & Mould Count",
+          purpose: "Detection and counting of yeasts and moulds (spoilage organisms) in dahi. These organisms grow on the surface of dahi — causing off-flavour, gas production, and visible growth.",
+          reference: "IS 5403:1999; A.O.A.C 997.02",
+          procedure: `
+            <h4 class="font-semibold mt-4 mb-2">Principle:</h4>
+            <p><strong>Yeasts</strong> (single-celled fungi) and <strong>moulds</strong> (filamentous fungi) can grow in acidic environments — the low pH of dahi (4.0-4.5) inhibits bacteria but not fungi. These are spoilage organisms:</p>
+            <ul class="list-disc list-inside text-sm mt-1">
+              <li><strong>Yeast:</strong> Produces gas (CO₂) → bloating, off-flavour, fermented taste</li>
+              <li><strong>Mould:</strong> Coloured growth on surface → black/green/white fuzzy patches, mycotoxins</li>
+            </ul>
+
+            <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mt-2 text-sm">
+              <p><strong>Medium selection — PDA vs RBCA:</strong></p>
+              <ul class="list-disc list-inside space-y-1 mt-1">
+                <li><strong>PDA (Potato Dextrose Agar):</strong> General fungal medium. Acidified to pH 3.5 with tartaric acid → bacteria inhibited, fungi grow freely. Simple and widely used.</li>
+                <li><strong>RBCA (Rose Bengal Chloramphenicol Agar):</strong> More selective — Rose Bengal dye restricts mould colony spreading (making counting easier), Chloramphenicol antibiotic kills bacteria. Better for dairy samples.</li>
+              </ul>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Procedure:</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-2">
+              <li><strong>Sample dilution:</strong> 11 grams dahi + 99 ml sterile peptone water = <strong>10⁻¹ dilution</strong>. Mix gently. Further dilutions if required. <em>— Follow aseptic technique — environmental mould contamination is very common. Work in a laminar flow hood.</em></li>
+              <li><strong>Plating:</strong> Spread 0.1 ml (spread plate) or pour 1 ml (pour plate) of each dilution onto RBCA or acidified PDA plates. <em>— Spread plate is preferred for moulds because surface growth is more visible.</em></li>
+              <li><strong>Incubation:</strong> <strong>25°C for 3-5 days</strong>. <em>— 25°C = optimal fungal growth temperature (lower than bacterial 37°C). 3-5 days = fungi grow slowly (bacteria appear within 24-48 hours, fungi take 3-5 days). Do not keep beyond 5 days — moulds will spread so much that counting becomes impossible.</em></li>
+              <li><strong>Colony counting and identification:</strong>
+                <ul class="list-disc list-inside ml-5 text-sm space-y-1">
+                  <li><strong>Yeast colonies:</strong> Smooth, glossy, cream/white, raised, round — look like bacteria but usually larger (2-5 mm)</li>
+                  <li><strong>Mould colonies:</strong> Fuzzy/fluffy/cottony, coloured (green Penicillium, black Aspergillus, white Mucor), spreading, irregular edges</li>
+                </ul>
+              </li>
+            </ol>
+
+            <h4 class="font-semibold mt-4 mb-2">Calculation:</h4>
+            <div class="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+              <pre class="text-sm"><code>Yeast/Mould count (cfu/g) = Number of colonies / (Volume plated × Dilution factor)</code></pre>
+              
+              <p class="text-sm mt-2"><strong>Each factor:</strong></p>
+              <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+                <tbody>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold w-1/3">Number of colonies</td><td class="border p-2">From countable plates (ideal range for fungi is 10-150 colonies — fewer than bacteria because fungi are larger)</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">Volume plated</td><td class="border p-2">0.1 ml (spread plate) or 1 ml (pour plate)</td></tr>
+                  <tr><td class="border p-2 bg-gray-50 font-semibold">Dilution factor</td><td class="border p-2">10⁻¹ = 0.1 etc.</td></tr>
+                </tbody>
+              </table>
+
+              <p class="text-sm mt-3"><strong>Example:</strong></p>
+              <pre class="text-sm"><code>
+10⁻¹ dilution, 0.1 ml spread plated
+Yeast colonies: 12, Mould colonies: 3
+
+Yeast count = 12 / (0.1 × 0.1) = 12 / 0.01 = 1200 cfu/g
+Mould count = 3 / (0.1 × 0.1) = 3 / 0.01 = 300 cfu/g
+Total Y&M = 1200 + 300 = 1500 cfu/g
+
+FSSAI limit: ≤ 100 cfu/g → FAIL ✗ (very high contamination!)
+              </code></pre>
+
+              <p class="text-sm mt-2"><strong>Note on volume plated calculation:</strong></p>
+              <pre class="text-sm"><code>
+Spread plate: 0.1 ml plated at 10⁻¹ dilution
+  = 0.1 ml × 0.1 g/ml equivalent = 0.01 g dahi equivalent per plate
+  1 colony = 1/0.01 = 100 cfu/g
+
+Pour plate: 1 ml plated at 10⁻¹ dilution
+  = 1 ml × 0.1 g/ml = 0.1 g dahi equivalent
+  1 colony = 1/0.1 = 10 cfu/g
+              </code></pre>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">FSSAI Standards and Sources:</h4>
+            <table class="table-auto border-collapse border border-gray-300 mt-2 text-sm w-full">
+              <thead><tr class="bg-gray-100"><th class="border p-2">Product</th><th class="border p-2">Yeast & Mould limit</th></tr></thead>
+              <tbody>
+                <tr><td class="border p-2">Dahi/Yoghurt</td><td class="border p-2">≤ 100 cfu/g</td></tr>
+                <tr><td class="border p-2">Flavoured yoghurt</td><td class="border p-2">≤ 100 cfu/g</td></tr>
+              </tbody>
+            </table>
+            <p class="mt-2 text-sm"><strong>Common sources of Y&M in dahi:</strong> Fruit additions (flavoured yoghurt), packaging material, air contamination during filling, added sugar (if any). Proper pasteurization of fruit base and clean-room filling provides control.</p>
+          `
+        }
+      ]
+    },
             "chakka-shrikhand": {
   title: "Chakka / Shrikhand ka Analysis",
   tests: [
