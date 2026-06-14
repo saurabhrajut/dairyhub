@@ -43,12 +43,14 @@ const Section = ({
 }) => (
   <div className="bg-card border border-border rounded-xl shadow-sm mb-6 overflow-hidden">
     <div className="bg-muted/30 p-3 sm:p-4 border-b border-border">
-      <h2 className="text-lg sm:text-xl font-bold text-primary font-headline leading-tight">
+      <h2 className="text-base sm:text-lg font-bold text-primary font-headline leading-tight break-words">
         {title}
       </h2>
     </div>
-    <div className="p-3 sm:p-5 text-card-foreground text-gray-700 leading-relaxed">
-      <div className="space-y-3">{children}</div>
+    <div className="p-3 sm:p-5 text-card-foreground text-gray-700 leading-relaxed overflow-hidden">
+      <div className="space-y-3 text-sm sm:text-base break-words overflow-wrap-anywhere">
+        {children}
+      </div>
     </div>
   </div>
 );
@@ -61,14 +63,61 @@ const SubSection = ({
   children: React.ReactNode;
 }) => (
   <div className="mt-4 mb-3">
-    <h3 className="text-base sm:text-lg font-bold text-gray-800 mb-2 font-headline flex items-center gap-2">
-      <span className="w-2 h-2 rounded-full bg-primary inline-block shrink-0"></span>
-      <span>{title}</span>
+    <h3 className="text-sm sm:text-base font-bold text-gray-800 mb-2 font-headline flex items-start gap-2">
+      <span className="w-2 h-2 rounded-full bg-primary inline-block shrink-0 mt-1.5"></span>
+      <span className="break-words">{title}</span>
     </h3>
-    <div className="pl-3 sm:pl-4 border-l-2 border-gray-100 text-gray-700 text-sm sm:text-base">
+    <div className="pl-3 sm:pl-4 border-l-2 border-gray-100 text-gray-700 text-sm sm:text-base break-words">
       {children}
     </div>
   </div>
+);
+
+// --- Shared prose styles injected via a wrapper ---
+// These target the raw HTML coming from dangerouslySetInnerHTML
+const proseClass = [
+  "[&_p]:mb-3",
+  "[&_p]:leading-relaxed",
+  "[&_p]:break-words",
+  "[&_ul]:pl-4",
+  "[&_ul]:list-disc",
+  "[&_ul]:space-y-1",
+  "[&_ul]:mb-3",
+  "[&_ol]:pl-4",
+  "[&_ol]:list-decimal",
+  "[&_ol]:space-y-1",
+  "[&_ol]:mb-3",
+  "[&_li]:break-words",
+  "[&_li]:leading-relaxed",
+  "[&_table]:w-full",
+  "[&_table]:border-collapse",
+  "[&_table]:text-xs",
+  "[&_table]:sm:text-sm",
+  "[&_th]:border",
+  "[&_th]:border-gray-300",
+  "[&_th]:p-2",
+  "[&_th]:text-left",
+  "[&_th]:bg-gray-100",
+  "[&_th]:break-words",
+  "[&_td]:border",
+  "[&_td]:border-gray-300",
+  "[&_td]:p-2",
+  "[&_td]:break-words",
+  "[&_b]:font-semibold",
+  "[&_h4]:text-sm",
+  "[&_h4]:sm:text-base",
+  "[&_h4]:font-semibold",
+  "[&_h4]:text-gray-700",
+  "[&_h4]:mt-3",
+  "[&_h4]:mb-2",
+].join(" ");
+
+// Wrapper that applies prose styles to raw HTML
+const RawHTML = ({ html }: { html: string }) => (
+  <div
+    className={proseClass}
+    dangerouslySetInnerHTML={{ __html: html }}
+  />
 );
 
 // --- Content Components ---
@@ -76,34 +125,26 @@ const SubSection = ({
 const topicComponents = {
   intro: function IntroContent({ content }: { content: any }) {
     return (
-      <div className="text-sm sm:text-base">
+      <div>
         <Section title={content.sections.executive_summary.title}>
-          <div
-            className="bg-blue-50 p-3 sm:p-4 rounded-lg border border-blue-100 italic text-blue-900 text-sm sm:text-base"
-            dangerouslySetInnerHTML={{
-              __html: content.sections.executive_summary.content,
-            }}
-          />
+          <div className="bg-blue-50 p-3 sm:p-4 rounded-lg border border-blue-100 italic text-blue-900">
+            <RawHTML html={content.sections.executive_summary.content} />
+          </div>
         </Section>
+
         <Section title={content.sections.introduction.title}>
-          <div
-            className="text-sm sm:text-base"
-            dangerouslySetInnerHTML={{
-              __html: content.sections.introduction.content,
-            }}
-          />
+          <RawHTML html={content.sections.introduction.content} />
           <SubSection
             title={
               content.sections.introduction.subsections.purpose_and_benefits
                 .title
             }
           >
-            <div
-              dangerouslySetInnerHTML={{
-                __html:
-                  content.sections.introduction.subsections.purpose_and_benefits
-                    .content,
-              }}
+            <RawHTML
+              html={
+                content.sections.introduction.subsections.purpose_and_benefits
+                  .content
+              }
             />
           </SubSection>
           <SubSection
@@ -111,12 +152,11 @@ const topicComponents = {
               content.sections.introduction.subsections.distinction_audits.title
             }
           >
-            <div
-              dangerouslySetInnerHTML={{
-                __html:
-                  content.sections.introduction.subsections.distinction_audits
-                    .content,
-              }}
+            <RawHTML
+              html={
+                content.sections.introduction.subsections.distinction_audits
+                  .content
+              }
             />
           </SubSection>
         </Section>
@@ -126,15 +166,11 @@ const topicComponents = {
 
   regulatory: function RegulatoryContent({ content }: { content: any }) {
     return (
-      <div className="text-sm sm:text-base">
+      <div>
         <Section title={content.sections.regulatory_frameworks.title}>
-          <div
-            dangerouslySetInnerHTML={{
-              __html: content.sections.regulatory_frameworks.content,
-            }}
-          />
+          <RawHTML html={content.sections.regulatory_frameworks.content} />
           <div className="grid gap-3 mt-3">
-            {["fssai", "iso22000", "haccp"].map((key) => (
+            {(["fssai", "iso22000", "haccp"] as const).map((key) => (
               <div
                 key={key}
                 className="bg-purple-50 p-3 sm:p-4 rounded-lg border border-purple-100"
@@ -145,12 +181,11 @@ const topicComponents = {
                       .title
                   }
                 >
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html:
-                        content.sections.regulatory_frameworks.subsections[key]
-                          .content,
-                    }}
+                  <RawHTML
+                    html={
+                      content.sections.regulatory_frameworks.subsections[key]
+                        .content
+                    }
                   />
                 </SubSection>
               </div>
@@ -163,33 +198,28 @@ const topicComponents = {
 
   internal: function InternalAuditsContent({ content }: { content: any }) {
     return (
-      <div className="text-sm sm:text-base">
+      <div>
         <Section title={content.sections.internal_audits.title}>
-          <div
-            dangerouslySetInnerHTML={{
-              __html: content.sections.internal_audits.content,
-            }}
-          />
+          <RawHTML html={content.sections.internal_audits.content} />
           <SubSection
             title={content.sections.internal_audits.subsections.purpose.title}
           >
-            <div
-              dangerouslySetInnerHTML={{
-                __html:
-                  content.sections.internal_audits.subsections.purpose.content,
-              }}
+            <RawHTML
+              html={
+                content.sections.internal_audits.subsections.purpose.content
+              }
             />
           </SubSection>
           <SubSection
             title={content.sections.internal_audits.subsections.process.title}
           >
-            <div
-              className="bg-yellow-50 p-3 sm:p-4 rounded-lg border border-yellow-100"
-              dangerouslySetInnerHTML={{
-                __html:
-                  content.sections.internal_audits.subsections.process.content,
-              }}
-            />
+            <div className="bg-yellow-50 p-3 sm:p-4 rounded-lg border border-yellow-100">
+              <RawHTML
+                html={
+                  content.sections.internal_audits.subsections.process.content
+                }
+              />
+            </div>
           </SubSection>
         </Section>
       </div>
@@ -198,82 +228,71 @@ const topicComponents = {
 
   external: function ExternalAuditsContent({ content }: { content: any }) {
     return (
-      <div className="text-sm sm:text-base">
+      <div>
         <Section title={content.sections.external_audits.title}>
-          <div
-            dangerouslySetInnerHTML={{
-              __html: content.sections.external_audits.content,
-            }}
-          />
+          <RawHTML html={content.sections.external_audits.content} />
+
           <SubSection
             title={content.sections.external_audits.subsections.types.title}
           >
-            <div
-              dangerouslySetInnerHTML={{
-                __html:
-                  content.sections.external_audits.subsections.types.content,
-              }}
+            <RawHTML
+              html={content.sections.external_audits.subsections.types.content}
             />
           </SubSection>
+
           <SubSection
             title={content.sections.external_audits.subsections.process.title}
           >
-            <div
-              dangerouslySetInnerHTML={{
-                __html:
-                  content.sections.external_audits.subsections.process.content,
-              }}
+            <RawHTML
+              html={
+                content.sections.external_audits.subsections.process.content
+              }
             />
           </SubSection>
+
           <SubSection
             title={
               content.sections.external_audits.subsections.fssai_system.title
             }
           >
-            <div
-              dangerouslySetInnerHTML={{
-                __html:
-                  content.sections.external_audits.subsections.fssai_system
-                    .content,
-              }}
+            <RawHTML
+              html={
+                content.sections.external_audits.subsections.fssai_system
+                  .content
+              }
             />
-            {/* Responsive table wrapper */}
-            <div className="overflow-x-auto mt-3 rounded-lg border border-gray-200 -mx-1">
-              <Table className="min-w-[320px]">
+
+            {/* Responsive table — scrolls horizontally if needed */}
+            <div className="overflow-x-auto mt-3 rounded-lg border border-gray-200 max-w-full">
+              <Table className="min-w-[280px] text-xs sm:text-sm">
                 <TableHeader className="bg-muted/50">
                   <TableRow>
-                    <TableHead className="font-bold text-primary text-xs sm:text-sm whitespace-nowrap">
+                    <TableHead className="font-bold text-primary whitespace-nowrap">
                       Audit Score Range
                     </TableHead>
-                    <TableHead className="font-bold text-primary text-xs sm:text-sm">
+                    <TableHead className="font-bold text-primary">
                       Recommended Audit Frequency (Dairy)
                     </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   <TableRow>
-                    <TableCell className="font-medium text-green-600 text-xs sm:text-sm">
-                      81-100%
+                    <TableCell className="font-medium text-green-600 whitespace-nowrap">
+                      81–100%
                     </TableCell>
-                    <TableCell className="text-xs sm:text-sm">
-                      Once in 12 months
-                    </TableCell>
+                    <TableCell>Once in 12 months</TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell className="font-medium text-yellow-600 text-xs sm:text-sm">
-                      51-80%
+                    <TableCell className="font-medium text-yellow-600 whitespace-nowrap">
+                      51–80%
                     </TableCell>
-                    <TableCell className="text-xs sm:text-sm">
-                      Once in 9 months
-                    </TableCell>
+                    <TableCell>Once in 9 months</TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell className="font-medium text-red-600 text-xs sm:text-sm">
+                    <TableCell className="font-medium text-red-600 whitespace-nowrap">
                       &lt;50%
                     </TableCell>
-                    <TableCell className="text-xs sm:text-sm">
-                      Once in 6 months
-                    </TableCell>
+                    <TableCell>Once in 6 months</TableCell>
                   </TableRow>
                 </TableBody>
               </Table>
@@ -286,13 +305,9 @@ const topicComponents = {
 
   focus_areas: function FocusAreasContent({ content }: { content: any }) {
     return (
-      <div className="text-sm sm:text-base">
+      <div>
         <Section title={content.sections.focus_areas.title}>
-          <div
-            dangerouslySetInnerHTML={{
-              __html: content.sections.focus_areas.content,
-            }}
-          />
+          <RawHTML html={content.sections.focus_areas.content} />
         </Section>
       </div>
     );
@@ -300,7 +315,7 @@ const topicComponents = {
 
   challenges: function ChallengesContent({ content }: { content: any }) {
     return (
-      <div className="text-sm sm:text-base">
+      <div>
         <Section title={content.sections.challenges.title}>
           <div className="grid gap-3">
             <div className="bg-red-50 p-3 sm:p-4 rounded-lg border border-red-100">
@@ -310,41 +325,40 @@ const topicComponents = {
                     .title
                 }
               >
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html:
-                      content.sections.challenges.subsections.common_challenges
-                        .content,
-                  }}
+                <RawHTML
+                  html={
+                    content.sections.challenges.subsections.common_challenges
+                      .content
+                  }
                 />
               </SubSection>
             </div>
+
             <div className="bg-green-50 p-3 sm:p-4 rounded-lg border border-green-100">
               <SubSection
                 title={
                   content.sections.challenges.subsections.best_practices.title
                 }
               >
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html:
-                      content.sections.challenges.subsections.best_practices
-                        .content,
-                  }}
+                <RawHTML
+                  html={
+                    content.sections.challenges.subsections.best_practices
+                      .content
+                  }
                 />
               </SubSection>
             </div>
+
             <SubSection
               title={
                 content.sections.challenges.subsections.fostering_culture.title
               }
             >
-              <div
-                dangerouslySetInnerHTML={{
-                  __html:
-                    content.sections.challenges.subsections.fostering_culture
-                      .content,
-                }}
+              <RawHTML
+                html={
+                  content.sections.challenges.subsections.fostering_culture
+                    .content
+                }
               />
             </SubSection>
           </div>
@@ -355,14 +369,11 @@ const topicComponents = {
 
   conclusion: function ConclusionContent({ content }: { content: any }) {
     return (
-      <div className="text-sm sm:text-base">
+      <div>
         <Section title={content.sections.conclusion.title}>
-          <div
-            className="bg-emerald-50 p-4 sm:p-6 rounded-lg border border-emerald-100 text-emerald-900 font-medium"
-            dangerouslySetInnerHTML={{
-              __html: content.sections.conclusion.content,
-            }}
-          />
+          <div className="bg-emerald-50 p-3 sm:p-5 rounded-lg border border-emerald-100 text-emerald-900 font-medium">
+            <RawHTML html={content.sections.conclusion.content} />
+          </div>
         </Section>
       </div>
     );
@@ -374,13 +385,9 @@ const topicComponents = {
     content: any;
   }) {
     return (
-      <div className="text-sm sm:text-base">
+      <div>
         <Section title={content.sections.recommendations.title}>
-          <div
-            dangerouslySetInnerHTML={{
-              __html: content.sections.recommendations.content,
-            }}
-          />
+          <RawHTML html={content.sections.recommendations.content} />
         </Section>
       </div>
     );
@@ -518,27 +525,27 @@ export function AuditsModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      {/*
-        KEY FIXES:
-        1. Fixed height using dvh units for mobile browser chrome
-        2. overflow-hidden on DialogContent to prevent outer scroll
-        3. Proper flex column layout with min-h-0 at each level
-      */}
       <DialogContent
         className="
-          max-w-4xl lg:max-w-6xl
-          w-[95vw]
-          h-[92dvh] sm:h-[90dvh]
-          max-h-[92dvh] sm:max-h-[90dvh]
           flex flex-col
+          w-[95vw] max-w-4xl lg:max-w-6xl
+          h-[90dvh]
           p-0
-          overflow-hidden
           gap-0
+          overflow-hidden
         "
       >
-        {/* ── Fixed Header ── */}
-        <DialogHeader className="shrink-0 px-4 pt-4 pb-3 sm:px-6 sm:pt-5 border-b border-border">
-          <DialogTitle className="text-xl sm:text-2xl md:text-3xl font-bold text-center text-primary font-headline leading-tight">
+        {/* ── FIXED HEADER — never scrolls ── */}
+        <DialogHeader
+          className="
+            shrink-0
+            px-4 pt-4 pb-3
+            sm:px-6 sm:pt-5
+            border-b border-border
+            bg-background
+          "
+        >
+          <DialogTitle className="text-lg sm:text-2xl md:text-3xl font-bold text-center text-primary font-headline leading-tight">
             {content.title}
           </DialogTitle>
           <DialogDescription className="text-center text-sm sm:text-base text-muted-foreground mt-1">
@@ -546,11 +553,16 @@ export function AuditsModal({
           </DialogDescription>
         </DialogHeader>
 
-        {/* ── Scrollable Body ── */}
+        {/* ── BODY — takes all remaining height ── */}
         {selectedTopic && ActiveComponent ? (
-          /* Content View */
+          /*
+           * Content view
+           * The outer div is a flex column that fills the remaining height.
+           * The back-button strip is fixed (shrink-0).
+           * The ScrollArea fills the rest and scrolls internally.
+           */
           <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
-            {/* Back button — fixed, not scrolling */}
+            {/* Back button strip — does NOT scroll */}
             <div className="shrink-0 px-3 sm:px-5 py-2 border-b border-border bg-background">
               <Button
                 variant="ghost"
@@ -563,24 +575,28 @@ export function AuditsModal({
               </Button>
             </div>
 
-            {/* Actual scrollable content */}
-            <ScrollArea className="flex-1 min-h-0">
-              <div className="p-3 sm:p-5">
+            {/*
+             * ScrollArea must have a definite height.
+             * flex-1 + min-h-0 gives it the remaining height of the flex parent.
+             * "h-full" on the inner viewport is handled by Radix internally.
+             */}
+            <ScrollArea className="flex-1 min-h-0 w-full">
+              <div className="p-3 sm:p-5 max-w-full">
                 <ActiveComponent content={content} />
               </div>
             </ScrollArea>
           </div>
         ) : (
-          /* Topics Grid View */
-          <ScrollArea className="flex-1 min-h-0" viewportRef={scrollAreaRef}>
+          /* Topics grid view */
+          <ScrollArea
+            className="flex-1 min-h-0 w-full"
+            viewportRef={scrollAreaRef}
+          >
             <div
               className="
                 grid
-                grid-cols-2
-                sm:grid-cols-2
-                lg:grid-cols-3
-                xl:grid-cols-4
-                gap-3
+                grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4
+                gap-3 sm:gap-4
                 p-3 sm:p-5
               "
             >
@@ -590,7 +606,7 @@ export function AuditsModal({
                   onClick={() => handleSelectTopic(topic.value)}
                   className={`
                     flex items-center gap-3
-                    p-3 sm:p-4
+                    p-4 sm:p-5
                     rounded-xl border
                     transition-all duration-200
                     text-left shadow-sm hover:shadow-md
@@ -598,18 +614,16 @@ export function AuditsModal({
                     group
                   `}
                 >
-                  {/* Icon */}
                   <topic.icon
                     className={`
-                      w-6 h-6 sm:w-7 sm:h-7
+                      w-7 h-7 sm:w-8 sm:h-8
                       shrink-0
                       transition-transform duration-200
                       group-hover:scale-110
                       ${topic.colorClass}
                     `}
                   />
-                  {/* Label */}
-                  <span className="font-semibold font-headline text-sm sm:text-base text-gray-800 group-hover:text-black leading-tight">
+                  <span className="font-bold font-headline text-base sm:text-lg text-gray-800 group-hover:text-black leading-tight">
                     {topic.title}
                   </span>
                 </button>
