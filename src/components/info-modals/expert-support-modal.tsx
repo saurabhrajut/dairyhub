@@ -45,7 +45,8 @@ import {
   where, 
   orderBy, 
   serverTimestamp,
-  updateDoc
+  updateDoc,
+  deleteDoc
 } from 'firebase/firestore';
 import {
   Select,
@@ -70,6 +71,138 @@ interface Expert {
   phone?: string;
   email?: string;
 }
+
+const PRESET_SPECIALIST_TAGS = [
+  "HACCP",
+  "ISO 22000",
+  "FSSC 22000",
+  "BRCGS",
+  "Pasteurization",
+  "UHT Processing",
+  "CIP Systems",
+  "Milk Testing",
+  "Adulteration Detection",
+  "Cheese Making",
+  "Paneer Processing",
+  "Yogurt & Dahi",
+  "Ghee Production",
+  "Butter Making",
+  "Ice Cream Formulation",
+  "Evaporators & Dryers",
+  "Membrane Filtration (RO/UF)",
+  "Cold Chain Management",
+  "Silo & Storage Hygiene",
+  "Laboratory Analysis",
+  "Microbiology Testing",
+  "Chemical Testing",
+  "Sensory Evaluation",
+  "Packaging Materials",
+  "ETP & Waste Management",
+  "Pest Control Protocols",
+  "Audits & Compliance",
+  "FSSAI Regulations",
+  "Dairy Farm Management",
+  "Animal Nutrition",
+  "Clean Milk Production",
+  "Mastitis Control",
+  "Calibrations & Verification",
+  "PLC & Automation",
+  "Energy Audits",
+  // Food Technology Tags
+  "Food Packaging & Preservation",
+  "Food Chemistry & Analysis",
+  "Food Biotechnology",
+  "Sensory Science",
+  "Thermal Processing & Canning",
+  "Dehydration & Drying",
+  "Freezing & Cold Storage",
+  "Fermentation Technology",
+  "Bakery & Confectionery",
+  "Beverage Technology",
+  "Fruit & Vegetable Processing",
+  "Meat, Poultry & Fish Processing",
+  "Food Additives & Ingredients",
+  "Nutraceuticals & Functional Foods",
+  "Food Product Development",
+  "Shelf Life Studies",
+  "Food Rheology & Texture",
+  "Extrusion Technology",
+  "Non-Thermal Preservation",
+  "Food Traceability",
+  "GMP & GHP",
+  "Allergen Management",
+  "Post-Harvest Technology"
+];
+
+const COUNTRY_CODES = [
+  { code: "+91", country: "India (IN)" },
+  { code: "+1", country: "United States/Canada (US/CA)" },
+  { code: "+44", country: "United Kingdom (UK)" },
+  { code: "+61", country: "Australia (AU)" },
+  { code: "+971", country: "United Arab Emirates (AE)" },
+  { code: "+966", country: "Saudi Arabia (SA)" },
+  { code: "+65", country: "Singapore (SG)" },
+  { code: "+49", country: "Germany (DE)" },
+  { code: "+33", country: "France (FR)" },
+  { code: "+81", country: "Japan (JP)" },
+  { code: "+86", country: "China (CN)" },
+  { code: "+7", country: "Russia (RU)" },
+  { code: "+55", country: "Brazil (BR)" },
+  { code: "+27", country: "South Africa (ZA)" },
+  { code: "+92", country: "Pakistan (PK)" },
+  { code: "+880", country: "Bangladesh (BD)" },
+  { code: "+977", country: "Nepal (NP)" },
+  { code: "+94", country: "Sri Lanka (LK)" },
+  { code: "+64", country: "New Zealand (NZ)" },
+  { code: "+31", country: "Netherlands (NL)" },
+  { code: "+39", country: "Italy (IT)" },
+  { code: "+34", country: "Spain (ES)" },
+  { code: "+41", country: "Switzerland (CH)" },
+  { code: "+46", country: "Sweden (SE)" },
+  { code: "+62", country: "Indonesia (ID)" },
+  { code: "+60", country: "Malaysia (MY)" },
+  { code: "+66", country: "Thailand (TH)" },
+  { code: "+84", country: "Vietnam (VN)" },
+  { code: "+63", country: "Philippines (PH)" },
+  { code: "+90", country: "Turkey (TR)" },
+  { code: "+20", country: "Egypt (EG)" },
+  { code: "+234", country: "Nigeria (NG)" },
+  { code: "+254", country: "Kenya (KE)" },
+  { code: "+52", country: "Mexico (MX)" },
+  { code: "+54", country: "Argentina (AR)" },
+  { code: "+57", country: "Colombia (CO)" },
+  { code: "+353", country: "Ireland (IE)" },
+  { code: "+32", country: "Belgium (BE)" },
+  { code: "+43", country: "Austria (AT)" },
+  { code: "+45", country: "Denmark (DK)" },
+  { code: "+47", country: "Norway (NO)" },
+  { code: "+358", country: "Finland (FI)" },
+  { code: "+48", country: "Poland (PL)" },
+  { code: "+351", country: "Portugal (PT)" },
+  { code: "+30", country: "Greece (GR)" },
+  { code: "+965", country: "Kuwait (KW)" },
+  { code: "+968", country: "Oman (OM)" },
+  { code: "+974", country: "Qatar (QA)" },
+  { code: "+973", country: "Bahrain (BH)" },
+];
+
+const parsePhoneNumber = (fullNumber: string) => {
+  if (!fullNumber) return { countryCode: "+91", localNumber: "" };
+  
+  // Sort country codes by length of code descending to match longer codes first
+  const sortedCodes = [...COUNTRY_CODES].sort((a, b) => b.code.length - a.code.length);
+  
+  for (const item of sortedCodes) {
+    if (fullNumber.startsWith(item.code)) {
+      return {
+        countryCode: item.code,
+        localNumber: fullNumber.slice(item.code.length)
+      };
+    }
+  }
+  
+  return { countryCode: "+91", localNumber: fullNumber };
+};
 
 interface ChatRoom {
   id: string;
@@ -556,7 +689,7 @@ function RealChatView({ expert, onBack }: { expert: Expert, onBack: () => void }
               size="icon" 
               variant="outline" 
               className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg hover:border-emerald-300 hover:text-emerald-600"
-              onClick={() => window.open(`https://wa.me/${expert.phone}?text=Hello%20Dr.%20${expert.name},%20I%20need%20a%20consultation%20about%20dairy%20processing.`)}
+              onClick={() => window.open(`https://wa.me/${expert.phone ? expert.phone.replace('+', '') : ''}?text=Hello%20Dr.%20${expert.name},%20I%20need%20a%20consultation%20about%20dairy%20processing.`)}
               title="Connect via WhatsApp"
             >
               <MessageCircle className="w-3.5 h-3.5 fill-current" />
@@ -662,8 +795,26 @@ function RegisterView({ onBack }: { onBack: () => void }) {
   const [experience, setExperience] = useState("");
   const [fee, setFee] = useState("");
   const [specialization, setSpecialization] = useState("Dairy Technology");
-  const [phone, setPhone] = useState("");
-  const [tagsInput, setTagsInput] = useState("");
+  const [countryCode, setCountryCode] = useState("+91");
+  const [localPhone, setLocalPhone] = useState("");
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [customTagInput, setCustomTagInput] = useState("");
+
+  const handleToggleTag = (tag: string) => {
+    if (selectedTags.includes(tag)) {
+      setSelectedTags(prev => prev.filter(t => t !== tag));
+    } else {
+      setSelectedTags(prev => [...prev, tag]);
+    }
+  };
+
+  const handleAddCustomTag = () => {
+    const trimmed = customTagInput.trim();
+    if (trimmed && !selectedTags.includes(trimmed)) {
+      setSelectedTags(prev => [...prev, trimmed]);
+      setCustomTagInput("");
+    }
+  };
 
   const db = useMemo(() => {
     try {
@@ -694,7 +845,6 @@ function RegisterView({ onBack }: { onBack: () => void }) {
     }
 
     setIsLoading(true);
-    const tags = tagsInput.split(',').map(t => t.trim()).filter(Boolean);
 
     try {
       const expertDocRef = doc(db, "experts", user.uid);
@@ -706,8 +856,8 @@ function RegisterView({ onBack }: { onBack: () => void }) {
         role: "Certified Consultant",
         photo: user.photoURL || `https://placehold.co/150x150/E2E8F0/1e293b?text=${name.charAt(0)}`,
         status: 'online',
-        tags: tags.length > 0 ? tags : [specialization],
-        phone: phone,
+        tags: selectedTags.length > 0 ? selectedTags : [specialization],
+        phone: countryCode + localPhone.trim().replace(/\D/g, ''),
         email: user.email,
         createdAt: new Date().toISOString()
       });
@@ -799,13 +949,93 @@ function RegisterView({ onBack }: { onBack: () => void }) {
             </div>
 
             <div className="space-y-1">
-              <label className="text-[10px] font-semibold text-slate-700">WhatsApp / Contact Number (Format: +91...)</label>
-              <Input required type="tel" value={phone} onChange={e => setPhone(e.target.value)} placeholder="+919999999999" className="text-xs h-9 border-slate-200" />
+              <label className="text-[10px] font-semibold text-slate-700 block">WhatsApp / Contact Number</label>
+              <div className="flex gap-2">
+                <Select value={countryCode} onValueChange={setCountryCode}>
+                  <SelectTrigger className="w-[120px] text-xs h-9 border-slate-200 shrink-0 bg-white">
+                    <SelectValue placeholder="Code" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white text-xs max-h-56">
+                    {COUNTRY_CODES.map((item) => (
+                      <SelectItem key={item.code} value={item.code}>
+                        {item.code} ({item.country.split(' (')[0]})
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Input 
+                  required 
+                  type="tel" 
+                  value={localPhone} 
+                  onChange={e => setLocalPhone(e.target.value.replace(/\D/g, ''))} 
+                  placeholder="9999999999" 
+                  className="text-xs h-9 border-slate-200 flex-1" 
+                />
+              </div>
             </div>
 
-            <div className="space-y-1">
-              <label className="text-[10px] font-semibold text-slate-700">Specialist Tags (Comma Separated)</label>
-              <Input value={tagsInput} onChange={e => setTagsInput(e.target.value)} placeholder="HACCP, ISO 22000, Cheese, Milk Testing" className="text-xs h-9 border-slate-200" />
+            <div className="space-y-2">
+              <label className="text-[10px] font-semibold text-slate-700 block">Specialist Tags</label>
+              
+              {/* Selected Tags list */}
+              {selectedTags.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 p-2 bg-slate-50 border border-dashed rounded-lg min-h-9 items-center">
+                  {selectedTags.map(tag => (
+                    <Badge key={tag} className="bg-indigo-600 hover:bg-indigo-700 text-white text-[10px] flex items-center gap-1.5 py-0.5 px-2">
+                      {tag}
+                      <X className="w-3 h-3 cursor-pointer shrink-0" onClick={() => handleToggleTag(tag)} />
+                    </Badge>
+                  ))}
+                </div>
+              )}
+
+              {/* Preset tags grid */}
+              <div className="border border-slate-100 rounded-xl p-3 bg-slate-50/50">
+                <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-wider mb-2">Popular Dairy & Food Safety Tags (Select to add)</p>
+                <div className="flex flex-wrap gap-1.5 max-h-36 overflow-y-auto pr-1">
+                  {PRESET_SPECIALIST_TAGS.map(tag => {
+                    const isSelected = selectedTags.includes(tag);
+                    return (
+                      <button
+                        key={tag}
+                        type="button"
+                        onClick={() => handleToggleTag(tag)}
+                        className={cn(
+                          "text-[10px] px-2.5 py-1 rounded-lg border transition-all font-medium",
+                          isSelected 
+                            ? "bg-indigo-50 border-indigo-200 text-indigo-700 shadow-sm" 
+                            : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
+                        )}
+                      >
+                        {tag}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Custom tag input */}
+              <div className="flex gap-2">
+                <Input 
+                  value={customTagInput} 
+                  onChange={e => setCustomTagInput(e.target.value)} 
+                  placeholder="Or enter a custom tag (e.g. Aflatoxin Testing)" 
+                  className="text-xs h-9 border-slate-200 flex-1"
+                  onKeyDown={e => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      handleAddCustomTag();
+                    }
+                  }}
+                />
+                <Button 
+                  type="button" 
+                  onClick={handleAddCustomTag} 
+                  className="bg-slate-900 hover:bg-blue-600 text-white text-xs h-9 px-3 font-semibold"
+                >
+                  Add
+                </Button>
+              </div>
             </div>
 
             <div className="bg-slate-50 border border-slate-100 p-3 rounded-xl text-[10px] sm:text-xs text-slate-600 flex gap-2.5 shadow-inner">
@@ -837,9 +1067,16 @@ function ExpertDashboardView({
   const [activeChats, setActiveChats] = useState<ChatRoom[]>([]);
   const [status, setStatus] = useState<boolean>(currentExpert?.status === 'online');
   const [fee, setFee] = useState<string>(currentExpert?.fee.toString() || "0");
-  const [phone, setPhone] = useState<string>(currentExpert?.phone || "");
+  const [countryCode, setCountryCode] = useState<string>("+91");
+  const [localPhone, setLocalPhone] = useState<string>("");
   const [specialization, setSpecialization] = useState<string>(currentExpert?.specialization || "");
+  const [name, setName] = useState<string>(currentExpert?.name || "");
+  const [experience, setExperience] = useState<string>(currentExpert?.experience.toString() || "0");
+  const [selectedTags, setSelectedTags] = useState<string[]>(currentExpert?.tags || []);
+  const [customTagInput, setCustomTagInput] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   
   // Tab for mobile layout
   const [dashboardTab, setDashboardTab] = useState<'chats' | 'profile'>('chats');
@@ -858,8 +1095,13 @@ function ExpertDashboardView({
     if (currentExpert) {
       setStatus(currentExpert.status === 'online');
       setFee(currentExpert.fee.toString());
-      setPhone(currentExpert.phone || "");
+      const parsed = parsePhoneNumber(currentExpert.phone || "");
+      setCountryCode(parsed.countryCode);
+      setLocalPhone(parsed.localNumber);
       setSpecialization(currentExpert.specialization);
+      setName(currentExpert.name);
+      setExperience(currentExpert.experience.toString());
+      setSelectedTags(currentExpert.tags || []);
     }
   }, [currentExpert]);
 
@@ -918,6 +1160,45 @@ function ExpertDashboardView({
     }
   };
 
+  const handleToggleTag = (tag: string) => {
+    if (selectedTags.includes(tag)) {
+      setSelectedTags(prev => prev.filter(t => t !== tag));
+    } else {
+      setSelectedTags(prev => [...prev, tag]);
+    }
+  };
+
+  const handleAddCustomTag = () => {
+    const trimmed = customTagInput.trim();
+    if (trimmed && !selectedTags.includes(trimmed)) {
+      setSelectedTags(prev => [...prev, trimmed]);
+      setCustomTagInput("");
+    }
+  };
+
+  const handleDeleteProfile = async () => {
+    if (!db || !currentExpert) return;
+    setIsDeleting(true);
+    try {
+      const docRef = doc(db, "experts", currentExpert.id);
+      await deleteDoc(docRef);
+      toast({
+        title: "Profile Deleted",
+        description: "Your expert profile has been permanently removed."
+      });
+      onBack();
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Deletion Failed",
+        description: error?.message || "Failed to delete expert profile."
+      });
+    } finally {
+      setIsDeleting(false);
+      setShowDeleteConfirm(false);
+    }
+  };
+
   const handleUpdateProfile = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!db || !currentExpert) return;
@@ -925,9 +1206,12 @@ function ExpertDashboardView({
     try {
       const docRef = doc(db, "experts", currentExpert.id);
       await updateDoc(docRef, {
+        name: name,
+        experience: Number(experience),
         fee: Number(fee),
-        phone: phone,
-        specialization: specialization
+        phone: countryCode + localPhone.trim().replace(/\D/g, ''),
+        specialization: specialization,
+        tags: selectedTags.length > 0 ? selectedTags : [specialization]
       });
       toast({
         title: "Profile Updated",
@@ -1033,6 +1317,29 @@ function ExpertDashboardView({
           <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Quick Profile Edit</h4>
           
           <div className="space-y-1">
+            <label className="text-[10px] font-bold text-slate-600">Display Name</label>
+            <Input 
+              type="text" 
+              required
+              value={name} 
+              onChange={e => setName(e.target.value)} 
+              className="text-xs h-9 border-slate-200 bg-slate-50"
+            />
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-[10px] font-bold text-slate-600">Experience (Years)</label>
+            <Input 
+              type="number" 
+              required
+              min="1"
+              value={experience} 
+              onChange={e => setExperience(e.target.value)} 
+              className="text-xs h-9 border-slate-200 bg-slate-50"
+            />
+          </div>
+
+          <div className="space-y-1">
             <label className="text-[10px] font-bold text-slate-600">Consultation Fee (₹/hr)</label>
             <Input 
               type="number" 
@@ -1044,14 +1351,28 @@ function ExpertDashboardView({
           </div>
 
           <div className="space-y-1">
-            <label className="text-[10px] font-bold text-slate-600">WhatsApp / Phone Number</label>
-            <Input 
-              type="tel" 
-              value={phone} 
-              onChange={e => setPhone(e.target.value)} 
-              placeholder="+919999999999"
-              className="text-xs h-9 border-slate-200 bg-slate-50"
-            />
+            <label className="text-[10px] font-bold text-slate-600 block">WhatsApp / Phone Number</label>
+            <div className="flex gap-2">
+              <Select value={countryCode} onValueChange={setCountryCode}>
+                <SelectTrigger className="w-[110px] text-xs h-9 border-slate-200 shrink-0 bg-slate-50">
+                  <SelectValue placeholder="Code" />
+                </SelectTrigger>
+                <SelectContent className="bg-white text-xs max-h-56">
+                  {COUNTRY_CODES.map((item) => (
+                    <SelectItem key={item.code} value={item.code}>
+                      {item.code} ({item.country.split(' (')[0]})
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Input 
+                type="tel" 
+                value={localPhone} 
+                onChange={e => setLocalPhone(e.target.value.replace(/\D/g, ''))} 
+                placeholder="9999999999"
+                className="text-xs h-9 border-slate-200 bg-slate-50 flex-1"
+              />
+            </div>
           </div>
 
           <div className="space-y-1">
@@ -1070,9 +1391,113 @@ function ExpertDashboardView({
             </Select>
           </div>
 
+          <div className="space-y-2">
+            <label className="text-[10px] font-bold text-slate-600 block">Specialist Tags</label>
+            
+            {/* Selected Tags list */}
+            {selectedTags.length > 0 && (
+              <div className="flex flex-wrap gap-1 p-1.5 bg-slate-50 border border-dashed rounded-lg min-h-9 items-center">
+                {selectedTags.map(tag => (
+                  <Badge key={tag} className="bg-indigo-600 hover:bg-indigo-700 text-white text-[9px] flex items-center gap-1 py-0.5 px-1.5">
+                    {tag}
+                    <X className="w-2.5 h-2.5 cursor-pointer shrink-0" onClick={() => handleToggleTag(tag)} />
+                  </Badge>
+                ))}
+              </div>
+            )}
+
+            {/* Preset tags wrap */}
+            <div className="border border-slate-100 rounded-lg p-2.5 bg-slate-50/50">
+              <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Popular Tags (Click to toggle)</p>
+              <div className="flex flex-wrap gap-1 max-h-28 overflow-y-auto pr-1">
+                {PRESET_SPECIALIST_TAGS.map(tag => {
+                  const isSelected = selectedTags.includes(tag);
+                  return (
+                    <button
+                      key={tag}
+                      type="button"
+                      onClick={() => handleToggleTag(tag)}
+                      className={cn(
+                        "text-[9px] px-2 py-0.5 rounded border transition-all font-medium",
+                        isSelected 
+                          ? "bg-indigo-50 border-indigo-200 text-indigo-700 shadow-sm" 
+                          : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
+                      )}
+                    >
+                      {tag}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Custom tag input */}
+            <div className="flex gap-1.5">
+              <Input 
+                value={customTagInput} 
+                onChange={e => setCustomTagInput(e.target.value)} 
+                placeholder="Custom tag" 
+                className="text-xs h-8 border-slate-200 flex-1 bg-white"
+                onKeyDown={e => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleAddCustomTag();
+                  }
+                }}
+              />
+              <Button 
+                type="button" 
+                onClick={handleAddCustomTag} 
+                className="bg-slate-900 hover:bg-blue-600 text-white text-[10px] h-8 px-2 font-semibold"
+              >
+                Add
+              </Button>
+            </div>
+          </div>
+
           <Button type="submit" disabled={isUpdating} className="w-full text-xs h-9 bg-slate-900 hover:bg-blue-600 font-semibold transition-colors">
             {isUpdating ? <Loader2 className="w-3.5 h-3.5 animate-spin mx-auto" /> : 'Save Profile Changes'}
           </Button>
+
+          {/* Delete Profile Segment */}
+          <div className="border-t border-slate-200 mt-6 pt-5">
+            {!showDeleteConfirm ? (
+              <Button 
+                type="button" 
+                variant="destructive" 
+                onClick={() => setShowDeleteConfirm(true)}
+                className="w-full text-xs h-9 bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 font-semibold"
+              >
+                Delete Expert Profile
+              </Button>
+            ) : (
+              <div className="bg-red-50 border border-red-100 p-3 rounded-xl space-y-2">
+                <p className="text-[10px] font-bold text-red-700">Are you absolutely sure?</p>
+                <p className="text-[9px] text-red-600">This will permanently delete your consultation profile and you will no longer appear in the expert directory.</p>
+                <div className="flex gap-2">
+                  <Button 
+                    type="button" 
+                    size="sm" 
+                    variant="outline" 
+                    onClick={() => setShowDeleteConfirm(false)}
+                    className="flex-1 text-[10px] h-7 border-slate-200 bg-white"
+                  >
+                    Cancel
+                  </Button>
+                  <Button 
+                    type="button" 
+                    size="sm" 
+                    variant="destructive" 
+                    disabled={isDeleting}
+                    onClick={handleDeleteProfile}
+                    className="flex-1 text-[10px] h-7 bg-red-600 text-white font-semibold"
+                  >
+                    {isDeleting ? 'Deleting...' : 'Yes, Delete'}
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
         </form>
       </div>
 
