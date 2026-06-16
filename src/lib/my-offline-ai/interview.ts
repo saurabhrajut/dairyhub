@@ -33,6 +33,36 @@ export const OFFLINE_INTERVIEW_DB: OfflineQuestion[] = [
     keyTerms: ["nutrition", "public health", "quality", "safety", "processing", "career"]
   },
   {
+    id: "strength_weakness",
+    category: "General / HR",
+    keywords: ["strength", "weakness", "improve", "challenge", "skill"],
+    q_en: "What is your greatest strength and one area you are actively working to improve?",
+    a_en: "Choose a strength relevant to the role (e.g., analytical thinking, attention to detail in QA, or teamwork in shift operations). For weakness, mention a genuine area with concrete steps you are taking to improve it (e.g., 'I am improving my data analysis speed by practicing Excel/Power BI').",
+    q_hinglish: "Aapki sabse badi strength kya hai aur ek aisa area batayein jisme aap abhi improve kar rahe hain?",
+    a_hinglish: "Strength me koi relevant skill batayein jaise QA me attention to detail ya production me teamwork. Weakness me honest rehkar batayein ki aap actively kya kar rahe hain usse improve karne ke liye, jaise 'Excel skills badhane ke liye daily practice kar raha/rahi hoon'.",
+    keyTerms: ["analytical", "attention to detail", "teamwork", "data", "improve", "practice"]
+  },
+  {
+    id: "salary_expectation",
+    category: "General / HR",
+    keywords: ["salary", "package", "ctc", "expectation", "compensation"],
+    q_en: "What are your salary expectations for this role?",
+    a_en: "Research industry benchmarks for the role and experience level. Give a range rather than a fixed number (e.g., 'Based on my research and skills, I am expecting between X and Y LPA, though I am open to discussion based on the overall package and growth opportunities'). Never undersell yourself.",
+    q_hinglish: "Is role ke liye aapki salary expectation kya hai?",
+    a_hinglish: "Pehle industry standard research karein. Fixed number ki jagah range dein, jaise 'Mere skills aur research ke basis par mujhe X se Y LPA ki expectation hai, lekin overall package aur growth opportunities dekhkar negotiate karne me mujhe khushi hogi'. Khud ko undervalue mat karein.",
+    keyTerms: ["range", "lpa", "negotiate", "research", "benchmark", "package"]
+  },
+  {
+    id: "where_5years",
+    category: "General / HR",
+    keywords: ["5 years", "future", "goal", "vision", "ambition"],
+    q_en: "Where do you see yourself in 5 years in this industry?",
+    a_en: "Align your answer with the company's growth path. For example: 'In 5 years, I see myself as a senior production/QA manager, having led cross-functional teams, contributed to plant efficiency projects, and possibly obtained additional certifications like FSSC Lead Auditor or Six Sigma.'",
+    q_hinglish: "5 saal baad aap khud ko is industry me kahan dekhte hain?",
+    a_hinglish: "Company ke growth path se align karke jawab dein, jaise 'Main chahta/chahti hoon ki 5 saal me main ek senior QA/Production Manager ban sakoon, team lead kiya ho, plant efficiency projects me contribute kiya ho, aur FSSC Lead Auditor ya Six Sigma certification bhi le li ho'.",
+    keyTerms: ["manager", "certification", "lead", "efficiency", "cross-functional", "growth"]
+  },
+  {
     id: "htst_uht",
     category: "Dairy Technology",
     keywords: ["pasteurization", "uht", "htst", "thermal", "processing", "milk"],
@@ -61,6 +91,66 @@ export const OFFLINE_INTERVIEW_DB: OfflineQuestion[] = [
     q_hinglish: "Dairy plant me standard 5-step CIP cycle kaunse hote hain?",
     a_hinglish: "CIP cycle ke steps hain: 1) Pre-rinse (normal water se dhulai), 2) Caustic wash (NaOH solution 1.5-2% at 75-80°C fats/proteins hatane ke liye), 3) Intermediate rinse, 4) Acid wash (0.5-1% acid solution at 60°C milk stone clean karne ke liye), aur 5) Final sanitize-rinse.",
     keyTerms: ["rinse", "caustic", "naoh", "acid", "nitric", "phosphoric", "milkstone", "sanitize"]
+  },
+  {
+    id: "plate_heat_exchanger",
+    category: "Dairy Technology",
+    keywords: ["phe", "plate heat exchanger", "regeneration", "heating", "cooling"],
+    q_en: "How does a Plate Heat Exchanger (PHE) work in a milk pasteurization line and what is regeneration efficiency?",
+    a_en: "A PHE uses thin corrugated metal plates with hot and cold fluids flowing in alternate channels. In a pasteurizer, incoming cold raw milk is pre-heated by outgoing hot pasteurized milk in the regeneration section (saving 70-95% energy). Then it passes through heating and cooling sections for final treatment.",
+    q_hinglish: "Pasteurization line me Plate Heat Exchanger (PHE) kaise kaam karta hai aur regeneration efficiency kya hoti hai?",
+    a_hinglish: "PHE me thin corrugated plates ke beech alternately hot aur cold fluids flow karte hain. Pasteurizer me incoming raw cold milk, bahar ja rahi hot pasteurized milk se preheat hoti hai — ise regeneration kehte hain jo 70-95% energy bachata hai. Phir heating aur cooling sections se gujarti hai.",
+    keyTerms: ["regeneration", "corrugated", "efficiency", "preheat", "channel", "energy saving"]
+  },
+  {
+    id: "standardization",
+    category: "Dairy Technology",
+    keywords: ["standardization", "fat", "pearson", "toned", "double toned"],
+    q_en: "How is milk standardized to achieve a target fat percentage using Pearson's Square method?",
+    a_en: "Pearson's Square is used to calculate mixing ratios of high-fat and low-fat milk streams. Place the target fat in the center, richest fat top-left, skimmest fat bottom-left. Subtract diagonally to get mixing proportions. For example, mixing 4% fat milk and 0.5% skim to achieve 3% toned milk.",
+    q_hinglish: "Milk standardization me Pearson's Square method kaise use hota hai?",
+    a_hinglish: "Pearson's Square ek quick calculation method hai. Center me desired fat %, top-left me rich milk fat %, bottom-left me skim milk fat % rakho. Diagonal subtract karne par mixing ratio milta hai. Jaise 4% fat milk aur 0.5% skim milk ko mix karke 3% toned milk banana.",
+    keyTerms: ["pearson square", "mixing ratio", "toned", "skim", "fat", "standardize"]
+  },
+  {
+    id: "uht_fouling",
+    category: "Dairy Technology",
+    keywords: ["fouling", "uht", "scale", "cleaning", "heat exchanger"],
+    q_en: "What causes fouling in UHT heat exchangers, and how is it addressed?",
+    a_en: "Fouling is the deposition of milk components (whey proteins at lower temps, mineral salts like calcium phosphate at higher temps) on heat exchanger surfaces. It reduces heat transfer efficiency and is cleaned using targeted caustic-acid-caustic CIP cycles.",
+    q_hinglish: "UHT heat exchangers me fouling kyun hoti hai aur ise kaise saf kiya jata hai?",
+    a_hinglish: "UHT pipes par milk components (low temp par beta-lactoglobulin whey protein, aur high temp par calcium phosphate minerals) jam jate hain, jisse heat transfer inefficient ho jata hai. Ise deep CIP caustic aur acid wash se clean kiya jata hai.",
+    keyTerms: ["protein", "calcium phosphate", "fouling", "deposit", "heat transfer", "cip"]
+  },
+  {
+    id: "evaporator_vacuum",
+    category: "Dairy Technology",
+    keywords: ["evaporator", "vacuum", "boiling", "concentration", "steam"],
+    q_en: "Why do milk evaporators operate under vacuum conditions?",
+    a_en: "Operating under vacuum lowers the boiling point of milk (typically to 50-60°C instead of 100°C). This prevents thermal damage, protein denaturation, cooked flavors, and browning (Maillard reaction) while saving energy.",
+    q_hinglish: "Milk evaporators vacuum condition me kyun chalaye jate hain?",
+    a_hinglish: "Vacuum pressure badhane se milk ka boiling point kam (50-60°C) ho jata hai. Isse milk proteins damage nahi hote, cooked flavor ya yellow color (Maillard browning) nahi aata aur energy consumption bhi kaafi save hoti hai.",
+    keyTerms: ["boiling point", "vacuum", "50", "60", "protein denaturation", "browning"]
+  },
+  {
+    id: "membrane_filtration",
+    category: "Dairy Technology",
+    keywords: ["membrane", "filtration", "reverse osmosis", "ro", "ultrafiltration"],
+    q_en: "Compare Ultrafiltration (UF) and Reverse Osmosis (RO) applications in dairy processing.",
+    a_en: "Ultrafiltration (UF) has a larger pore size, retaining proteins and fats while letting lactose and minerals pass (used for protein concentration). Reverse Osmosis (RO) has the tightest pores, retaining all solids and letting only water pass (used for concentration and water recovery).",
+    q_hinglish: "Ultrafiltration (UF) aur Reverse Osmosis (RO) me kya difference hai?",
+    a_hinglish: "Ultrafiltration (UF) ka pore size bada hota hai, ye protein aur fats ko hold karta hai par lactose/water ko pass hone deta hai. Reverse Osmosis (RO) sabse barik filter hai, ye saare solids (protein, fat, lactose) ko rokkar keval paani ko pass hone deta hai.",
+    keyTerms: ["pore size", "protein", "lactose", "solids", "water recovery", "filtration"]
+  },
+  {
+    id: "microfiltration",
+    category: "Dairy Technology",
+    keywords: ["microfiltration", "mf", "spore", "bacteria", "cold", "filtration"],
+    q_en: "What is Microfiltration (MF) and what is its advantage over heat treatment in dairy?",
+    a_en: "Microfiltration uses membranes with 1.4 micron pore size to physically remove bacteria and spores from skim milk without heat. This 'cold pasteurization' technique extends shelf life, minimizes heat damage to proteins and flavors, and is used in extended shelf life (ESL) milk production.",
+    q_hinglish: "Microfiltration (MF) kya hai aur dairy me heat treatment ke mukable iska kya faida hai?",
+    a_hinglish: "Microfiltration ek 1.4 micron pore size membrane hai jo bina heat ke bacteria aur spores ko physically filter kar deti hai. Ise 'cold pasteurization' bolte hain. Isse milk ka flavor aur protein damage nahi hota aur ESL (Extended Shelf Life) milk banane me use hota hai.",
+    keyTerms: ["1.4 micron", "spore", "cold pasteurization", "ESL", "bacteria removal", "membrane"]
   },
   {
     id: "haccp_ccp",
@@ -93,6 +183,46 @@ export const OFFLINE_INTERVIEW_DB: OfflineQuestion[] = [
     keyTerms: ["fat", "snf", "cow", "buffalo", "3.2", "8.3", "5.0", "9.0"]
   },
   {
+    id: "allergen_control",
+    category: "Food Safety & QA",
+    keywords: ["allergen", "cross contamination", "labeling", "cleaning"],
+    q_en: "What are the core components of an effective allergen control program in a food plant?",
+    a_en: "Components include: 1) Identification of all allergen ingredients, 2) Dedicated storage and color-coded utensils, 3) Production scheduling (non-allergenic first), 4) Validated wet cleaning to remove allergen proteins, and 5) Accurate product packaging labeling.",
+    q_hinglish: "Food manufacturing plant me allergen control program ke main points kya hote hain?",
+    a_hinglish: "Main controls hain: 1) Allergenic items ko separate storage dena, 2) dedicated/color-coded utensils, 3) scheduling (bina allergen waala batch pehle aur allergen waala baad me run karna), 4) CIP check to clean protein traces, aur 5) Packaging par allergen warnings.",
+    keyTerms: ["storage", "cleaning", "scheduling", "labeling", "cross contamination", "utensils"]
+  },
+  {
+    id: "traceability_recall",
+    category: "Food Safety & QA",
+    keywords: ["traceability", "recall", "forward", "backward", "tracking"],
+    q_en: "What is the difference between forward and backward traceability in a food plant?",
+    a_en: "Backward traceability tracks a finished product back to its raw material sources and suppliers. Forward traceability tracks raw materials or batches forward to the specific distributors, shipments, and retail locations for recalls.",
+    q_hinglish: "Food manufacturing plant me forward aur backward traceability kya hoti hai?",
+    a_hinglish: "Backward traceability me finish goods se shuru karke raw material aur supplier tak ka data nikala jata hai. Forward traceability me raw material batch number se lekar distributor, shop aur customer shipment ki details track ki jati hain takki recall easy ho.",
+    keyTerms: ["forward", "backward", "supplier", "distributor", "recall", "track"]
+  },
+  {
+    id: "corrective_action",
+    category: "Food Safety & QA",
+    keywords: ["corrective action", "capa", "ncr", "non-conformance", "deviation", "root cause"],
+    q_en: "What is the difference between a Corrective Action and a Preventive Action (CAPA)?",
+    a_en: "A Corrective Action addresses an existing non-conformance — it identifies the root cause (using tools like 5-Why or Fishbone diagram) and eliminates it to prevent recurrence. A Preventive Action (PA) is proactive — it identifies potential problems before they occur and puts controls in place. Together they form CAPA.",
+    q_hinglish: "Corrective Action aur Preventive Action (CAPA) me kya farq hai?",
+    a_hinglish: "Corrective Action ek already hue problem ke liye hoti hai — pehle root cause dhundhte hain (5-Why ya Fishbone se), phir ise permanently fix karte hain. Preventive Action proactive hoti hai — wo potential problem ko pehle se rokne ke liye controls lagati hai. Dono milkar CAPA banate hain.",
+    keyTerms: ["root cause", "5-why", "fishbone", "non-conformance", "proactive", "recurrence"]
+  },
+  {
+    id: "internal_audit",
+    category: "Food Safety & QA",
+    keywords: ["internal audit", "audit", "checklist", "gap analysis", "compliance"],
+    q_en: "How do you prepare for and conduct a food safety internal audit?",
+    a_en: "Preparation includes reviewing the audit scope, previous audit findings, and relevant standards (HACCP, FSSC 22000). During the audit, use checklists, interview personnel, observe practices, and collect objective evidence. Document all findings as conformance or non-conformance. Prepare a report and follow up on CAPA closure.",
+    q_hinglish: "Food safety internal audit ki preparation aur conduction kaise karte hain?",
+    a_hinglish: "Pehle scope aur previous findings review karo, phir checklist banao based on HACCP/FSSC 22000 requirements. Audit me employees se baat karo, actual practices observe karo aur objective evidence collect karo. Saari findings document karo — conformance ya NCR ke roop me. Baad me CAPA follow-up karo.",
+    keyTerms: ["checklist", "objective evidence", "NCR", "observation", "CAPA", "conformance"]
+  },
+  {
     id: "mbrt_test",
     category: "Lab & Testing",
     keywords: ["mbrt", "methylene", "blue", "dye", "microbial", "quality"],
@@ -123,6 +253,46 @@ export const OFFLINE_INTERVIEW_DB: OfflineQuestion[] = [
     keyTerms: ["aflatoxin", "mycotoxin", "ppb", "limit", "fluorescence", "chromatography"]
   },
   {
+    id: "sensory_test",
+    category: "Lab & Testing",
+    keywords: ["sensory", "organoleptic", "triangle", "taste", "flavor"],
+    q_en: "What is a Triangle Test in sensory evaluation, and when is it used?",
+    a_en: "A Triangle Test is a discriminative method where panelists are presented with three coded samples (two identical, one different). They must identify the odd sample. It is used to detect if minor process or ingredient changes alter product flavor.",
+    q_hinglish: "Sensory evaluation me Triangle Test kya hota hai aur ye kab kaam aata hai?",
+    a_hinglish: "Triangle Test ek difference test hai jisme panels ko 3 coded samples diye jate hain (2 same hote hain aur 1 different). Panelist ko odd sample identify karna hota hai. Ye tab use hota hai jab quality me subtle change ya raw material badla gaya ho.",
+    keyTerms: ["triangle", "panelist", "sample", "odd", "discriminative", "flavor"]
+  },
+  {
+    id: "adulteration_starch",
+    category: "Lab & Testing",
+    keywords: ["adulteration", "starch", "iodine", "urea", "milk"],
+    q_en: "How do you detect starch and excess urea adulteration in milk?",
+    a_en: "Starch is detected by adding Iodine solution, which turns milk intense blue. Urea is detected using DMAB reagent (p-Dimethylaminobenzaldehyde), which turns milk yellow in the presence of added urea (natural urea gives a very light yellow).",
+    q_hinglish: "Milk me starch aur urea ki milaawat (adulteration) kaise check ki jaati hai?",
+    a_hinglish: "Starch check karne ke liye Iodine test kiya jata hai, milk blue color me badal jata hai. Urea test ke liye DMAB reagent daala jata hai, chemical react hone par milk dark yellow ho jata hai (natural milk yellow nahi padta).",
+    keyTerms: ["iodine", "blue", "urea", "dmab", "yellow", "reagent", "adulteration"]
+  },
+  {
+    id: "adulteration_snf",
+    category: "Lab & Testing",
+    keywords: ["adulteration", "water", "snf", "lactometer", "density", "added water"],
+    q_en: "How is water adulteration in milk detected at a procurement or reception level?",
+    a_en: "Water adulteration is detected using a Lactometer, which measures milk density (CLR - Corrected Lactometer Reading). Pure cow milk CLR is 26-30°. Added water dilutes solids and lowers CLR and SNF%. A Milk Analyzer (Gerber/FTIR) can simultaneously check fat, SNF, and protein to confirm dilution.",
+    q_hinglish: "Milk reception par pani ki milaawat (water adulteration) kaise pakdi jati hai?",
+    a_hinglish: "Pani milana Lactometer se pakda jata hai — ye milk ki density (CLR) measure karta hai. Pure cow milk ka CLR 26-30° hota hai; pani milne par CLR aur SNF% gir jata hai. Milk Analyzer (FTIR) se fat, SNF, aur protein ek saath check karte hain jo dilution confirm karta hai.",
+    keyTerms: ["lactometer", "CLR", "density", "SNF", "FTIR", "dilution", "water"]
+  },
+  {
+    id: "pcr_pathogen",
+    category: "Lab & Testing",
+    keywords: ["pcr", "dna", "pathogen", "salmonella", "listeria", "rapid", "detection"],
+    q_en: "How is PCR (Polymerase Chain Reaction) used for rapid pathogen detection in food safety labs?",
+    a_en: "PCR amplifies specific DNA sequences of target pathogens (e.g., Salmonella, Listeria, E. coli O157:H7) from food samples. Real-time PCR (qPCR) can detect and quantify pathogens in 3-5 hours compared to 3-5 days for traditional culture methods, enabling faster recall decisions.",
+    q_hinglish: "Food safety lab me PCR technique se pathogens kaise detect karte hain?",
+    a_hinglish: "PCR technique target pathogen (jaise Salmonella, Listeria) ke specific DNA sequence ko amplify karke detect karti hai. Real-time PCR (qPCR) se result sirf 3-5 ghante me aata hai, jabki traditional culture method me 3-5 din lagte hain. Isse fast recall decisions lene me madad milti hai.",
+    keyTerms: ["DNA", "amplify", "qPCR", "Salmonella", "Listeria", "rapid", "culture method"]
+  },
+  {
     id: "ghee_clarify",
     category: "Products Processing",
     keywords: ["ghee", "moisture", "clarification", "shelf", "rancidity"],
@@ -141,86 +311,6 @@ export const OFFLINE_INTERVIEW_DB: OfflineQuestion[] = [
     q_hinglish: "Cheese production me syneresis kya hota hai aur curds se paani kaise control kiya jata hai?",
     a_hinglish: "Syneresis cheese curd gel ke sikudne se whey (whey protein aur paani) ke bahar nikalne ki process ko kehte hain. Isko cutting size (chota size = fast syneresis), high temperature, pH level aur stirring speed se control kiya jata hai.",
     keyTerms: ["whey", "expulsion", "cutting size", "temperature", "pH", "stirring"]
-  },
-  {
-    id: "mastitis_detect",
-    category: "Procurement & Farm",
-    keywords: ["mastitis", "cmt", "somatic", "scc", "california"],
-    q_en: "How do you test for subclinical mastitis at the farm or reception level?",
-    a_en: "Subclinical mastitis is detected using the California Mastitis Test (CMT), where reagent mixes with milk DNA to form a gel. Somatic Cell Count (SCC) analysis is also used, where counts over 200,000 cells/ml indicate infection.",
-    q_hinglish: "Farm ya procurement level par subclinical mastitis disease kaise check karte hain?",
-    a_hinglish: "Iske liye California Mastitis Test (CMT) kiya jata hai, jahan chemical reagent milk somatic cells ke DNA ke sath link hokar gel/slime banata hai. Iske alawa Somatic Cell Count (SCC) agar 2 lakh cells/ml se zyada ho to infection mana jata hai.",
-    keyTerms: ["cmt", "california", "somatic", "scc", "gel", "dna", "infection"]
-  },
-  {
-    id: "cold_chain",
-    category: "Procurement & Farm",
-    keywords: ["cold chain", "chilling", "bulk milk", "bmc", "temperature"],
-    q_en: "Why is it critical to chill raw milk to 4°C within 2 hours of milking?",
-    a_en: "Milk leaves the udder at 37°C, which is ideal for rapid bacterial multiplication. Chilling milk to 4°C within 2 hours induces a bacteriostatic state, halting the growth of mesophilic pathogens and preventing souring/lactic acid production.",
-    q_hinglish: "Milking ke baad raw milk ko 2 ghante ke andar 4°C par cooling karna kyun compulsory hai?",
-    a_hinglish: "Cow se milk 37°C body temp par nikalta hai, jo bacteria ke double hone ke liye perfect hai. 2 ghante ke andar milk ko 4°C ya usse kam chill karne se bacterial growth freeze ho jati hai, jisse milk fata ya khatta nahi hota.",
-    keyTerms: ["37", "4", "2 hours", "bacteriostatic", "chill", "procurement"]
-  },
-  {
-    id: "uht_fouling",
-    category: "Dairy Technology",
-    keywords: ["fouling", "uht", "scale", "cleaning", "heat exchanger"],
-    q_en: "What causes fouling in UHT heat exchangers, and how is it addressed?",
-    a_en: "Fouling is the deposition of milk components (whey proteins at lower temps, mineral salts like calcium phosphate at higher temps) on heat exchanger surfaces. It reduces heat transfer efficiency and is cleaned using targeted caustic-acid-caustic CIP cycles.",
-    q_hinglish: "UHT heat exchangers me fouling kyun hoti hai aur ise kaise saf kiya jata hai?",
-    a_hinglish: "UHT pipes par milk components (low temp par beta-lactoglobulin whey protein, aur high temp par calcium phosphate minerals) jam jate hain, jisse heat transfer inefficient ho jata hai. Ise deep CIP caustic aur acid wash se clean kiya jata hai.",
-    keyTerms: ["protein", "calcium phosphate", "fouling", "deposit", "heat transfer", "cip"]
-  },
-  {
-    id: "sensory_test",
-    category: "Lab & Testing",
-    keywords: ["sensory", "organoleptic", "triangle", "taste", "flavor"],
-    q_en: "What is a Triangle Test in sensory evaluation, and when is it used?",
-    a_en: "A Triangle Test is a discriminative method where panelists are presented with three coded samples (two identical, one different). They must identify the odd sample. It is used to detect if minor process or ingredient changes alter product flavor.",
-    q_hinglish: "Sensory evaluation me Triangle Test kya hota hai aur ye kab kaam aata hai?",
-    a_hinglish: "Triangle Test ek difference test hai jisme panels ko 3 coded samples diye jate hain (2 same hote hain aur 1 different). Panelist ko odd sample identify karna hota hai. Ye tab use hota hai jab quality me subtle change ya raw material badla gaya ho.",
-    keyTerms: ["triangle", "panelist", "sample", "odd", "discriminative", "flavor"]
-  },
-  {
-    id: "spray_drying",
-    category: "Products Processing",
-    keywords: ["spray", "drying", "powder", "solubility", "atomizer"],
-    q_en: "How does the atomization step in spray drying impact milk powder quality?",
-    a_en: "Atomization breaks concentrated liquid milk into fine droplets using a wheel or nozzle, maximizing surface area in the drying chamber. Correct atomization ensures uniform particle size, low moisture, high solubility index, and prevents scorched particles.",
-    q_hinglish: "Spray drying me atomization step milk powder ki solubility aur quality ko kaise impact karta hai?",
-    a_hinglish: "Atomizer (nozzle or disc) concentrated milk ko bohot barik droplets me badal deta hai jisse dry hot air me contact area maximum ho jata hai. Sahi atomization se uniform particles banenge, dry timing kam hogi, aur solubility index high rahega.",
-    keyTerms: ["atomizer", "droplets", "solubility", "moisture", "nozzle", "particles"]
-  },
-  {
-    id: "evaporator_vacuum",
-    category: "Dairy Technology",
-    keywords: ["evaporator", "vacuum", "boiling", "concentration", "steam"],
-    q_en: "Why do milk evaporators operate under vacuum conditions?",
-    a_en: "Operating under vacuum lowers the boiling point of milk (typically to 50-60°C instead of 100°C). This prevents thermal damage, protein denaturation, cooked flavors, and browning (Maillard reaction) while saving energy.",
-    q_hinglish: "Milk evaporators vacuum condition me kyun chalaye jate hain?",
-    a_hinglish: "Vacuum pressure badhane se milk ka boiling point kam (50-60°C) ho jata hai. Isse milk proteins damage nahi hote, cooked flavor ya yellow color (Maillard browning) nahi aata aur energy consumption bhi kaafi save hoti hai.",
-    keyTerms: ["boiling point", "vacuum", "50", "60", "protein denaturation", "browning"]
-  },
-  {
-    id: "allergen_control",
-    category: "Food Safety & QA",
-    keywords: ["allergen", "cross contamination", "labeling", "cleaning"],
-    q_en: "What are the core components of an effective allergen control program in a food plant?",
-    a_en: "Components include: 1) Identification of all allergen ingredients, 2) Dedicated storage and color-coded utensils, 3) Production scheduling (non-allergenic first), 4) Validated wet cleaning to remove allergen proteins, and 5) Accurate product packaging labeling.",
-    q_hinglish: "Food manufacturing plant me allergen control program ke main points kya hote hain?",
-    a_hinglish: "Main controls hain: 1) Allergenic items ko separate storage dena, 2) dedicated/color-coded utensils, 3) scheduling (bina allergen waala batch pehle aur allergen waala baad me run karna), 4) CIP check to clean protein traces, aur 5) Packaging par allergen warnings.",
-    keyTerms: ["storage", "cleaning", "scheduling", "labeling", "cross contamination", "utensils"]
-  },
-  {
-    id: "adulteration_starch",
-    category: "Lab & Testing",
-    keywords: ["adulteration", "starch", "iodine", "urea", "milk"],
-    q_en: "How do you detect starch and excess urea adulteration in milk?",
-    a_en: "Starch is detected by adding Iodine solution, which turns milk intense blue. Urea is detected using DMAB reagent (p-Dimethylaminobenzaldehyde), which turns milk yellow in the presence of added urea (natural urea gives a very light yellow).",
-    q_hinglish: "Milk me starch aur urea ki milaawat (adulteration) kaise check ki jaati hai?",
-    a_hinglish: "Starch check karne ke liye Iodine test kiya jata hai, milk blue color me badal jata hai. Urea test ke liye DMAB reagent daala jata hai, chemical react hone par milk dark yellow ho jata hai (natural milk yellow nahi padta).",
-    keyTerms: ["iodine", "blue", "urea", "dmab", "yellow", "reagent", "adulteration"]
   },
   {
     id: "icecream_sandiness",
@@ -253,24 +343,74 @@ export const OFFLINE_INTERVIEW_DB: OfflineQuestion[] = [
     keyTerms: ["membrane", "fat globules", "granules", "buttermilk", "churning", "cream"]
   },
   {
-    id: "traceability_recall",
-    category: "Food Safety & QA",
-    keywords: ["traceability", "recall", "forward", "backward", "tracking"],
-    q_en: "What is the difference between forward and backward traceability in a food plant?",
-    a_en: "Backward traceability tracks a finished product back to its raw material sources and suppliers. Forward traceability tracks raw materials or batches forward to the specific distributors, shipments, and retail locations for recalls.",
-    q_hinglish: "Food manufacturing plant me forward aur backward traceability kya hoti hai?",
-    a_hinglish: "Backward traceability me finish goods se shuru karke raw material aur supplier tak ka data nikala jata hai. Forward traceability me raw material batch number se lekar distributor, shop aur customer shipment ki details track ki jati hain takki recall easy ho.",
-    keyTerms: ["forward", "backward", "supplier", "distributor", "recall", "track"]
+    id: "spray_drying",
+    category: "Products Processing",
+    keywords: ["spray", "drying", "powder", "solubility", "atomizer"],
+    q_en: "How does the atomization step in spray drying impact milk powder quality?",
+    a_en: "Atomization breaks concentrated liquid milk into fine droplets using a wheel or nozzle, maximizing surface area in the drying chamber. Correct atomization ensures uniform particle size, low moisture, high solubility index, and prevents scorched particles.",
+    q_hinglish: "Spray drying me atomization step milk powder ki solubility aur quality ko kaise impact karta hai?",
+    a_hinglish: "Atomizer (nozzle or disc) concentrated milk ko bohot barik droplets me badal deta hai jisse dry hot air me contact area maximum ho jata hai. Sahi atomization se uniform particles banenge, dry timing kam hogi, aur solubility index high rahega.",
+    keyTerms: ["atomizer", "droplets", "solubility", "moisture", "nozzle", "particles"]
   },
   {
-    id: "membrane_filtration",
-    category: "Dairy Technology",
-    keywords: ["membrane", "filtration", "reverse osmosis", "ro", "ultrafiltration"],
-    q_en: "Compare Ultrafiltration (UF) and Reverse Osmosis (RO) applications in dairy processing.",
-    a_en: "Ultrafiltration (UF) has a larger pore size, retaining proteins and fats while letting lactose and minerals pass (used for protein concentration). Reverse Osmosis (RO) has the tightest pores, retaining all solids and letting only water pass (used for concentration and water recovery).",
-    q_hinglish: "Ultrafiltration (UF) aur Reverse Osmosis (RO) me kya difference hai?",
-    a_hinglish: "Ultrafiltration (UF) ka pore size bada hota hai, ye protein aur fats ko hold karta hai par lactose/water ko pass hone deta hai. Reverse Osmosis (RO) sabse barik filter hai, ye saare solids (protein, fat, lactose) ko rokkar keval paani ko pass hone deta hai.",
-    keyTerms: ["pore size", "protein", "lactose", "solids", "water recovery", "filtration"]
+    id: "paneer_yield",
+    category: "Products Processing",
+    keywords: ["paneer", "yield", "coagulant", "citric", "acid", "protein"],
+    q_en: "What factors affect the yield of paneer during manufacturing?",
+    a_en: "Paneer yield depends on: 1) Milk fat and protein content (higher = more yield), 2) Coagulant type and concentration (citric acid, lactic acid — affects protein network), 3) Coagulation temperature (70-80°C optimal), 4) pH at coagulation (5.3-5.5 optimal), and 5) Pressing pressure and time.",
+    q_hinglish: "Paneer manufacturing me yield ko kaun se factors affect karte hain?",
+    a_hinglish: "Paneer yield depend karta hai: 1) Milk fat aur protein content par (jyada = jyada yield), 2) Coagulant type aur concentration par (citric/lactic acid), 3) Coagulation temperature 70-80°C, 4) pH 5.3-5.5 optimal hona chahiye, aur 5) Pressing pressure aur time par.",
+    keyTerms: ["yield", "citric acid", "coagulation", "protein", "pH", "pressing", "temperature"]
+  },
+  {
+    id: "cheese_rennet",
+    category: "Products Processing",
+    keywords: ["rennet", "coagulation", "casein", "kappa", "chymosin"],
+    q_en: "How does rennet (chymosin) induce milk coagulation during cheese making?",
+    a_en: "Rennet specifically cleaves the phe105-met106 bond of kappa-casein on the surface of casein micelles. This removes the hydrophilic glycomacropeptide layer, destroying micelle stability and causing them to aggregate into a curd gel in the presence of calcium ions.",
+    q_hinglish: "Cheese making me rennet enzyme curd aggregation kaise karta hai?",
+    a_hinglish: "Rennet (chymosin) milk me present kappa-casein protein molecule ko split kar deta hai. Isse casein micelle ki stability chali jaati hai aur calcium ions ki presence me micelles aapas me group banakar dahi (curd gel) banate hain.",
+    keyTerms: ["chymosin", "kappa-casein", "micelle", "coagulation", "calcium", "curd"]
+  },
+  {
+    id: "mastitis_detect",
+    category: "Procurement & Farm",
+    keywords: ["mastitis", "cmt", "somatic", "scc", "california"],
+    q_en: "How do you test for subclinical mastitis at the farm or reception level?",
+    a_en: "Subclinical mastitis is detected using the California Mastitis Test (CMT), where reagent mixes with milk DNA to form a gel. Somatic Cell Count (SCC) analysis is also used, where counts over 200,000 cells/ml indicate infection.",
+    q_hinglish: "Farm ya procurement level par subclinical mastitis disease kaise check karte hain?",
+    a_hinglish: "Iske liye California Mastitis Test (CMT) kiya jata hai, jahan chemical reagent milk somatic cells ke DNA ke sath link hokar gel/slime banata hai. Iske alawa Somatic Cell Count (SCC) agar 2 lakh cells/ml se zyada ho to infection mana jata hai.",
+    keyTerms: ["cmt", "california", "somatic", "scc", "gel", "dna", "infection"]
+  },
+  {
+    id: "cold_chain",
+    category: "Procurement & Farm",
+    keywords: ["cold chain", "chilling", "bulk milk", "bmc", "temperature"],
+    q_en: "Why is it critical to chill raw milk to 4°C within 2 hours of milking?",
+    a_en: "Milk leaves the udder at 37°C, which is ideal for rapid bacterial multiplication. Chilling milk to 4°C within 2 hours induces a bacteriostatic state, halting the growth of mesophilic pathogens and preventing souring/lactic acid production.",
+    q_hinglish: "Milking ke baad raw milk ko 2 ghante ke andar 4°C par cooling karna kyun compulsory hai?",
+    a_hinglish: "Cow se milk 37°C body temp par nikalta hai, jo bacteria ke double hone ke liye perfect hai. 2 ghante ke andar milk ko 4°C ya usse kam chill karne se bacterial growth freeze ho jati hai, jisse milk fata ya khatta nahi hota.",
+    keyTerms: ["37", "4", "2 hours", "bacteriostatic", "chill", "procurement"]
+  },
+  {
+    id: "mastitis_prevent",
+    category: "Procurement & Farm",
+    keywords: ["mastitis", "teat", "dipping", "post", "pre", "hygiene"],
+    q_en: "Why is post-milking teat dipping considered the most effective mastitis prevention method?",
+    a_en: "After milking, the teat canal remains open for 30-40 minutes. Post-milking dipping coats the teat in sanitizer (e.g., iodine), killing pathogens present on the skin and preventing them from entering the open canal before it closes.",
+    q_hinglish: "Post-milking teat dipping mastitis disease ko rokne ke liye sabse effective method kyun hai?",
+    a_hinglish: "Milking ke baad cow ke teat ka pipe (canal) lagbhag 30-40 minutes tak open rehta hai. Post-dipping me teat ko sanitizer (iodine) me dubaya jata hai, jisse skin par present pathogens khatam hote hain aur open canal me infection enter nahi kar pata.",
+    keyTerms: ["teat canal", "iodine", "sanitizer", "canal open", "infection", "prevention"]
+  },
+  {
+    id: "milk_reception_tests",
+    category: "Procurement & Farm",
+    keywords: ["reception", "platform test", "can", "raw milk", "acceptance", "rejection"],
+    q_en: "What are the key platform tests performed on raw milk at reception before acceptance?",
+    a_en: "Platform tests at reception include: 1) Organoleptic check (smell, color, appearance), 2) Clot-on-Boiling (COB) test for acidity, 3) Alcohol test (68% alcohol for UHT milk), 4) Lactometer reading (CLR for density/added water), 5) Fat and SNF by milk analyzer, and 6) Temperature check (<8°C acceptable).",
+    q_hinglish: "Raw milk reception par acceptance se pehle kaunse platform tests kiye jate hain?",
+    a_hinglish: "Platform tests me shamil hain: 1) Organoleptic check (smell, color, look), 2) Clot-on-Boiling (COB) test acidity ke liye, 3) Alcohol test (68% alcohol UHT milk ke liye), 4) Lactometer CLR reading, 5) Fat aur SNF milk analyzer se, aur 6) Temperature check (<8°C).",
+    keyTerms: ["organoleptic", "COB", "alcohol test", "CLR", "milk analyzer", "temperature", "platform"]
   },
   {
     id: "etp_bod_cod",
@@ -293,26 +433,81 @@ export const OFFLINE_INTERVIEW_DB: OfflineQuestion[] = [
     keyTerms: ["exclusion", "sanitation", "trap", "moisture", "air curtain", "pest"]
   },
   {
-    id: "cheese_rennet",
-    category: "Products Processing",
-    keywords: ["rennet", "coagulation", "casein", "kappa", "chymosin"],
-    q_en: "How does rennet (chymosin) induce milk coagulation during cheese making?",
-    a_en: "Rennet specifically cleaves the phe105-met106 bond of kappa-casein on the surface of casein micelles. This removes the hydrophilic glycomacropeptide layer, destroying micelle stability and causing them to aggregate into a curd gel in the presence of calcium ions.",
-    q_hinglish: "Cheese making me rennet enzyme curd aggregation kaise karta hai?",
-    a_hinglish: "Rennet (chymosin) milk me present kappa-casein protein molecule ko split kar deta hai. Isse casein micelle ki stability chali jaati hai aur calcium ions ki presence me micelles aapas me group banakar dahi (curd gel) banate hain.",
-    keyTerms: ["chymosin", "kappa-casein", "micelle", "coagulation", "calcium", "curd"]
+    id: "gmp_ghp",
+    category: "Environment & Safety",
+    keywords: ["gmp", "ghp", "good manufacturing", "hygiene", "personal hygiene", "plant"],
+    q_en: "What are Good Manufacturing Practices (GMP) and how are they implemented in a dairy plant?",
+    a_en: "GMP are documented practices ensuring products are consistently produced and controlled to quality standards. In dairy plants, GMP covers: 1) Personal hygiene (handwashing, PPE, no jewellery), 2) Premises design (smooth washable surfaces, drainage), 3) Equipment maintenance, 4) Pest control, and 5) Waste management.",
+    q_hinglish: "Good Manufacturing Practices (GMP) kya hoti hain aur dairy plant me kaise implement hoti hain?",
+    a_hinglish: "GMP aise documented practices hain jo ensure karte hain ki products consistently quality standards ke according banein. Dairy plant me GMP cover karta hai: 1) Personal hygiene (handwashing, PPE, jewelry nahi), 2) Plant design (smooth washable surfaces), 3) Equipment maintenance, 4) Pest control, aur 5) Waste management.",
+    keyTerms: ["personal hygiene", "PPE", "premises", "washable", "maintenance", "documentation"]
   },
   {
-    id: "mastitis_prevent",
-    category: "Procurement & Farm",
-    keywords: ["mastitis", "teat", "dipping", "post", "pre", "hygiene"],
-    q_en: "Why is post-milking teat dipping considered the most effective mastitis prevention method?",
-    a_en: "After milking, the teat canal remains open for 30-40 minutes. Post-milking dipping coats the teat in sanitizer (e.g., iodine), killing pathogens present on the skin and preventing them from entering the open canal before it closes.",
-    q_hinglish: "Post-milking teat dipping mastitis disease ko rokne ke liye sabse effective method kyun hai?",
-    a_hinglish: "Milking ke baad cow ke teat ka pipe (canal) lagbhag 30-40 minutes tak open rehta hai. Post-dipping me teat ko sanitizer (iodine) me dubaya jata hai, jisse skin par present pathogens khatam hote hain aur open canal me infection enter nahi kar pata.",
-    keyTerms: ["teat canal", "iodine", "sanitizer", "canal open", "infection", "prevention"]
+    id: "energy_audit",
+    category: "Environment & Safety",
+    keywords: ["energy", "audit", "steam", "refrigeration", "efficiency", "saving"],
+    q_en: "What are the major energy consuming areas in a dairy plant and how can energy efficiency be improved?",
+    a_en: "Major energy consumers are: 1) Refrigeration (compressors for chilling/freezing), 2) Steam generation (boilers for pasteurization/evaporation), 3) CIP pumps, and 4) Spray dryers. Efficiency improvements include heat recovery (regeneration in PHE), insulation of steam lines, variable speed drives on pumps, and condensate return systems.",
+    q_hinglish: "Dairy plant me sabse zyada energy kaun consume karta hai aur efficiency kaise badhayi ja sakti hai?",
+    a_hinglish: "Sabse zyada energy use hoti hai: 1) Refrigeration compressors, 2) Steam boilers (pasteurization/evaporation ke liye), 3) CIP pumps, aur 4) Spray dryers. Efficiency ke liye PHE regeneration, steam line insulation, variable speed drives on pumps, aur condensate return systems lagane chahiye.",
+    keyTerms: ["refrigeration", "boiler", "steam", "regeneration", "insulation", "variable speed drive"]
+  },
+  {
+    id: "six_sigma",
+    category: "Production & Operations",
+    keywords: ["six sigma", "lean", "oee", "efficiency", "dmaic", "waste"],
+    q_en: "How can Six Sigma DMAIC methodology be applied to reduce defects in a dairy production line?",
+    a_en: "DMAIC stands for: Define (identify the problem, e.g., high fat loss in cream separator), Measure (collect baseline data), Analyze (identify root causes using Fishbone/Pareto), Improve (pilot solutions, e.g., optimize separator speed), Control (implement SOP and SPC charts to sustain improvement).",
+    q_hinglish: "Six Sigma DMAIC methodology dairy production line me defects kaise reduce karta hai?",
+    a_hinglish: "DMAIC ka matlab hai: Define (problem identify karo, jaise cream separator me fat loss), Measure (baseline data collect karo), Analyze (root cause dhundho — Fishbone/Pareto se), Improve (solution pilot karo — separator speed optimize), Control (SOP aur SPC charts se improvement sustain karo).",
+    keyTerms: ["DMAIC", "define", "measure", "analyze", "improve", "control", "SPC", "Pareto"]
+  },
+  {
+    id: "oee_calculation",
+    category: "Production & Operations",
+    keywords: ["oee", "overall equipment effectiveness", "availability", "performance", "quality"],
+    q_en: "How is OEE (Overall Equipment Effectiveness) calculated and why is it important in a dairy plant?",
+    a_en: "OEE = Availability × Performance × Quality. Availability = (Run Time / Planned Production Time). Performance = (Ideal Cycle Time × Total Count / Run Time). Quality = (Good Count / Total Count). World-class OEE is 85%. It helps identify losses from breakdowns, speed loss, and defects to improve plant efficiency.",
+    q_hinglish: "OEE (Overall Equipment Effectiveness) kaise calculate karte hain aur dairy plant me iska importance kya hai?",
+    a_hinglish: "OEE = Availability × Performance × Quality. Availability = Run Time / Planned Time. Performance = Ideal Speed / Actual Speed. Quality = Good Output / Total Output. World-class OEE 85% hota hai. Ye breakdowns, speed losses aur defects identify karne me help karta hai.",
+    keyTerms: ["availability", "performance", "quality", "85%", "breakdown", "losses", "world-class"]
+  },
+  {
+    id: "sop_writing",
+    category: "Production & Operations",
+    keywords: ["sop", "standard operating procedure", "document", "work instruction", "control"],
+    q_en: "What are the key elements of a well-written Standard Operating Procedure (SOP) in a food plant?",
+    a_en: "A good SOP includes: 1) Title, SOP number, version, effective date, 2) Purpose and scope, 3) Responsibilities (who does what), 4) Equipment and materials needed, 5) Step-by-step procedure with critical parameters, 6) Safety precautions, 7) Reference documents, and 8) Review/approval signatures.",
+    q_hinglish: "Food plant me ek effective SOP (Standard Operating Procedure) ke main elements kya hone chahiye?",
+    a_hinglish: "Achhe SOP me hona chahiye: 1) Title, SOP number, version, date, 2) Purpose aur scope, 3) Responsibilities (kaun kya karega), 4) Equipment aur materials, 5) Step-by-step procedure with critical parameters, 6) Safety precautions, 7) Reference documents, aur 8) Review/approval signatures.",
+    keyTerms: ["title", "scope", "responsibility", "step-by-step", "critical parameter", "approval", "version"]
+  },
+  {
+    id: "cold_storage",
+    category: "Production & Operations",
+    keywords: ["cold storage", "temperature", "refrigeration", "product", "storage", "fifo"],
+    q_en: "What temperature zones are used for different dairy product storage and why?",
+    a_en: "Dairy product storage zones: 1) Chilled store (0-4°C) for fresh milk, paneer, curd, dahi, 2) Frozen store (-18°C or below) for ice cream and frozen dairy, 3) Ambient store (cool, dry) for UHT milk, ghee, milk powder. FIFO (First In First Out) must be strictly followed in all zones to manage shelf life.",
+    q_hinglish: "Different dairy products ke liye storage temperature zones kya hote hain?",
+    a_hinglish: "Dairy storage zones hain: 1) Chilled store (0-4°C) — fresh milk, paneer, curd ke liye, 2) Frozen store (-18°C ya neeche) — ice cream aur frozen dairy ke liye, 3) Ambient store — UHT milk, ghee, powder ke liye. Saare zones me FIFO (First In First Out) strictly follow karna zaroori hai.",
+    keyTerms: ["0-4°C", "-18°C", "ambient", "FIFO", "shelf life", "chilled", "frozen"]
+  },
+  {
+    id: "statistical_process_control",
+    category: "Production & Operations",
+    keywords: ["spc", "control chart", "ucl", "lcl", "process", "variation"],
+    q_en: "How is Statistical Process Control (SPC) used to monitor dairy production quality?",
+    a_en: "SPC uses control charts to monitor process parameters (e.g., pasteurization temperature, fat%, fill weight) over time. UCL (Upper Control Limit) and LCL (Lower Control Limit) are set at ±3 sigma from the mean. Points outside limits or trending patterns indicate process instability requiring investigation.",
+    q_hinglish: "Dairy production quality monitor karne ke liye SPC (Statistical Process Control) ka use kaise hota hai?",
+    a_hinglish: "SPC me control charts use hote hain jo process parameters (jaise pasteurization temp, fat%, fill weight) ko continuously monitor karte hain. UCL aur LCL mean se ±3 sigma par set hote hain. Agar koi point bahar jaye ya trend dikhe, toh process investigation zaroori hai.",
+    keyTerms: ["control chart", "UCL", "LCL", "3 sigma", "mean", "trending", "instability"]
   }
 ];
+
+
+
+
+
 
 // Helper to select questions based on keywords from resume
 export function selectOfflineQuestions(resumeText: string, experienceLevel: string): OfflineQuestion[] {
