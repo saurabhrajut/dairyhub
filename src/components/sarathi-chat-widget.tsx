@@ -17,7 +17,8 @@ import {
   FileCheck, 
   Sparkles,
   GraduationCap,
-  FileText
+  FileText,
+  Settings
 } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import { useToast } from '@/hooks/use-toast';
@@ -111,13 +112,67 @@ async function parseResumeOffline(file: File): Promise<string> {
   }
 }
 
+// --- Direct Gemini API Call ---
+async function callGeminiAPI(
+  messages: Array<{ role: string; content: string }>,
+  systemPrompt: string,
+  apiKey: string
+): Promise<string> {
+  const contents = messages.map(msg => {
+    const role = msg.role === 'assistant' ? 'model' : 'user';
+    return {
+      role: role,
+      parts: [{ text: msg.content }]
+    };
+  });
+
+  const response = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        contents: contents,
+        systemInstruction: {
+          parts: [{ text: systemPrompt }]
+        },
+        generationConfig: {
+          temperature: 0.7,
+          maxOutputTokens: 1500,
+        }
+      })
+    }
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    const errMsg = errorData.error?.message || response.statusText;
+    throw new Error(`Gemini API Error: ${errMsg}`);
+  }
+
+  const result = await response.json();
+  const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!text) {
+    throw new Error("No response generated from Gemini.");
+  }
+  return text;
+}
+
 // --- NEW OFFLINE LOGIC ---
-// Yeh ab Internet use nahi karega, seedha aapke folder se jawab layega
 async function callClaudeAPI(
     messages: Array<{ role: string; content: string }>,
     systemPrompt: string
   ): Promise<string> {
-    return await generateOfflineResponse(messages, systemPrompt);
+    const savedKey = typeof window !== 'undefined' ? localStorage.getItem('dairyhub_gemini_api_key') : null;
+    const apiKey = savedKey || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+
+    if (!apiKey) {
+      throw new Error("API_KEY_MISSING");
+    }
+    
+    return await callGeminiAPI(messages, systemPrompt, apiKey);
   }
 
 // Sarathi AI - Career Navigator
@@ -311,7 +366,7 @@ export function SarathiChatWidget() {
       )}>
         <Button 
           size="icon" 
-          className="rounded-full w-14 h-14 shadow-2xl bg-gradient-to-tr from-orange-500 via-orange-400 to-blue-600 hover:scale-110 transition-all duration-300 border-4 border-white/90 backdrop-blur-sm" 
+          className="rounded-full w-14 h-14 shadow-2xl bg-gradient-to-tr from-orange-500 via-orange-400 to-blue-600 hover:scale-110 transition-all duration-300 border-4 border-white/90" 
           onClick={handleOpenChat}
         >
           <MessageCircle className="w-7 h-7 text-white drop-shadow-sm" />
@@ -321,7 +376,7 @@ export function SarathiChatWidget() {
 
       {/* Chat Container */}
       <div className={cn(
-        "fixed bottom-4 right-4 z-50 w-[92vw] sm:w-[400px] h-[85vh] sm:h-[70vh] max-h-[85vh] bg-white/95 backdrop-blur-xl border border-slate-200/50 rounded-3xl shadow-2xl flex flex-col transition-all duration-500 origin-bottom-right overflow-hidden",
+        "fixed bottom-4 right-4 z-50 w-[92vw] sm:w-[400px] h-[85vh] sm:h-[70vh] max-h-[85vh] bg-white border border-slate-200/50 rounded-3xl shadow-2xl flex flex-col transition-all duration-500 origin-bottom-right overflow-hidden",
         isOpen ? 'scale-100 opacity-100 translate-y-0' : 'scale-90 opacity-0 translate-y-12 pointer-events-none'
       )}>
         <ChatInterface 
@@ -356,6 +411,16 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
   const [fileName, setFileName] = useState("");
   const [isProcessingResume, setIsProcessingResume] = useState(false);
   const [resumeText, setResumeText] = useState("");
+  const [showSettings, setShowSettings] = useState(false);
+  const [settingsApiKey, setSettingsApiKey] = useState("");
+
+  // Sync API Key from localStorage
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const key = localStorage.getItem('dairyhub_gemini_api_key') || "";
+      setSettingsApiKey(key);
+    }
+  }, [isOpen]);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const languageRef = useRef(language);
@@ -402,7 +467,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
             const welcomeMsg: UIMessage = {
                 id: 'welcome',
                 role: 'assistant',
-                text: `Namaste ${user.displayName?.split(' ')[0] || 'Champion'}! 🚀 I am **Sarathi** - your ultimate career navigator powered by offline AI. Ready to conquer your goals?`,
+                text: `Namaste ${user.displayName?.split(' ')[0] || 'Champion'}! 🚀 I am **Sarathi** - your ultimate career navigator powered by Gemini AI. Ready to conquer your goals?`,
                 timestamp: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
             };
             setMessages([welcomeMsg]);
@@ -512,10 +577,15 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
     } catch (error: any) {
         console.error('AI Error:', error);
         const errorMessage = error.message || 'Unknown error';
+        let displayErrorText = `⚠️ AI Error: ${errorMessage.includes('API') ? 'Please check your API setup and internet connection.' : errorMessage}`;
+        if (errorMessage === "API_KEY_MISSING") {
+            displayErrorText = `⚠️ **Gemini API Key Missing**\n\nReal tasks aur problems ko solve karne ke liye aapko Settings me **Gemini API Key** daalna hoga.\n\nUpar right corner me **⚙️ (Settings)** icon par click karein aur apni key save karein.`;
+            setShowSettings(true);
+        }
         setMessages(prev => [...prev, {
-            id: 'error',
+            id: `error-${Date.now()}`,
             role: 'assistant',
-            text: `⚠️ AI Error: ${errorMessage.includes('API') ? 'Please check your Claude API setup and internet connection.' : errorMessage}`,
+            text: displayErrorText,
             timestamp: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
         }]);
     } finally {
@@ -626,10 +696,15 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
 
       } catch (err: any) {
           console.error('Interview setup error:', err);
+          let errMsg = err.message || "Resume analysis failed. Ensure file is readable and try again.";
+          if (err.message === "API_KEY_MISSING") {
+              errMsg = "Real-time AI features require a Gemini API Key. Please click the Settings (gear) icon in the header to enter your API key.";
+              setShowSettings(true);
+          }
           toast({ 
             variant: "destructive", 
             title: "⚠️ Setup Error", 
-            description: err.message || "Resume analysis failed. Ensure file is readable and try again.",
+            description: errMsg,
           });
       } finally {
           setIsProcessingResume(false);
@@ -672,10 +747,15 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
           }]);
       } catch (e: any) {
           console.error(e);
+          let errMsg = e.message || "Failed to initialize expert. Check your internet connection.";
+          if (e.message === "API_KEY_MISSING") {
+              errMsg = "Real-time AI features require a Gemini API Key. Please click the Settings (gear) icon in the header to enter your API key.";
+              setShowSettings(true);
+          }
           toast({
               variant: "destructive",
               title: "Connection Error",
-              description: e.message || "Failed to initialize expert. Check your internet connection."
+              description: errMsg
           });
       } finally {
           setIsLoading(false);
@@ -689,10 +769,97 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
 
   return (
     <div className="flex flex-col h-full bg-gradient-to-br from-slate-50 via-white to-indigo-50 relative">
+        {/* Settings Overlay */}
+        {showSettings && (
+            <div className="absolute inset-0 bg-white z-30 flex flex-col p-6 transition-all duration-300">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
+                    <h3 className="text-xl font-bold text-slate-800 flex items-center gap-2">
+                        <Settings className="w-5 h-5 text-indigo-600 animate-spin" style={{ animationDuration: '6s' }} />
+                        API Key Settings
+                    </h3>
+                    <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        onClick={() => setShowSettings(false)}
+                        className="rounded-full"
+                    >
+                        <X className="w-5 h-5 text-slate-500" />
+                    </Button>
+                </div>
+                
+                <div className="flex-1 space-y-4">
+                    <p className="text-sm text-slate-600 leading-relaxed">
+                        To enable real-time features, enter your <strong>Google Gemini API Key</strong>. 
+                        Your key is saved securely on your device locally and is never shared.
+                    </p>
+                    
+                    <div className="space-y-2">
+                        <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">
+                            Gemini API Key
+                        </label>
+                        <Input 
+                            type="password"
+                            placeholder="AIzaSy..."
+                            value={settingsApiKey}
+                            onChange={(e) => setSettingsApiKey(e.target.value)}
+                            className="h-12 border-slate-200 focus-visible:ring-indigo-500"
+                        />
+                    </div>
+                    
+                    <div className="text-xs text-slate-500 bg-slate-50 p-3 rounded-2xl border border-slate-100 space-y-1">
+                        <span className="font-semibold block text-slate-700">How to get a key?</span>
+                        <a 
+                            href="https://aistudio.google.com/" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="text-indigo-600 hover:underline inline-block font-semibold"
+                        >
+                            Get a free API key from Google AI Studio ↗
+                        </a>
+                    </div>
+                </div>
+                
+                <div className="pt-4 border-t border-slate-100 flex gap-2">
+                    <Button
+                        variant="outline"
+                        onClick={() => {
+                            if (typeof window !== 'undefined') {
+                                localStorage.removeItem('dairyhub_gemini_api_key');
+                                setSettingsApiKey("");
+                                toast({
+                                    title: "Settings Reset",
+                                    description: "Gemini API key has been removed.",
+                                });
+                            }
+                        }}
+                        className="flex-1 h-12 rounded-2xl"
+                    >
+                        Clear Key
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            if (typeof window !== 'undefined') {
+                                localStorage.setItem('dairyhub_gemini_api_key', settingsApiKey.trim());
+                                toast({
+                                    title: "Settings Saved",
+                                    description: "Gemini API key saved successfully! 🎉",
+                                    className: "bg-emerald-50 border-emerald-200"
+                                });
+                                setShowSettings(false);
+                            }
+                        }}
+                        className="flex-1 h-12 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold shadow-lg shadow-indigo-600/20"
+                    >
+                        Save Settings
+                    </Button>
+                </div>
+            </div>
+        )}
+
         {/* Header */}
         <div className={cn(
-            "px-5 py-4 flex items-center justify-between shrink-0 shadow-lg backdrop-blur-sm transition-all duration-500 border-b border-slate-200/50",
-            activeMode === 'sarathi' ? "bg-white/90" : "bg-gradient-to-r from-indigo-600 to-purple-600 text-white"
+            "px-5 py-4 flex items-center justify-between shrink-0 shadow-lg transition-all duration-500 border-b border-slate-200/50",
+            activeMode === 'sarathi' ? "bg-white" : "bg-gradient-to-r from-indigo-600 to-purple-600 text-white"
         )}>
             <div className="flex items-center gap-3 flex-1">
                 {activeMode === 'gyan-ai' && (
@@ -711,7 +878,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                 
                 <div className="relative flex items-center gap-3">
                     <div className={cn(
-                        "p-2 rounded-2xl shadow-lg backdrop-blur-sm flex-shrink-0",
+                        "p-2 rounded-2xl shadow-lg flex-shrink-0",
                         activeMode === 'sarathi' 
                           ? "bg-gradient-to-br from-orange-400 to-orange-500" 
                           : "bg-white/30"
@@ -728,7 +895,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                         <p className={cn("text-xs font-medium opacity-90 leading-tight", 
                             activeMode === 'sarathi' ? "text-slate-600" : "text-indigo-100"
                         )}>
-                            {activeMode === 'sarathi' ? 'Offline Career Navigator' : 'Offline Domain Expert'}
+                            {activeMode === 'sarathi' ? 'AI Career Navigator' : 'AI Domain Expert'}
                         </p>
                     </div>
                     <div className="w-2 h-2 bg-emerald-400 border-2 border-white rounded-full animate-pulse ml-auto"></div>
@@ -741,7 +908,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                         size="sm" 
                         variant="ghost" 
                         onClick={() => setActiveMode('gyan-ai')}
-                        className="h-9 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white border-white/20 text-xs px-3 rounded-2xl shadow-lg font-semibold transition-all"
+                        className="h-9 bg-white/20 hover:bg-white/30 text-white border-white/20 text-xs px-3 rounded-2xl shadow-lg font-semibold transition-all"
                     >
                         <Sparkles className="w-4 h-4 mr-1" />
                         Experts
@@ -750,9 +917,20 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                 <Button 
                     variant="ghost" 
                     size="icon" 
+                    onClick={() => setShowSettings(!showSettings)} 
+                    className={cn(
+                        "h-10 w-10 rounded-2xl shadow-lg transition-all",
+                        activeMode === 'gyan-ai' ? "hover:bg-white/30 text-white" : "hover:bg-slate-100 text-slate-600"
+                    )}
+                >
+                    <Settings className="w-5 h-5" />
+                </Button>
+                <Button 
+                    variant="ghost" 
+                    size="icon" 
                     onClick={onClose} 
                     className={cn(
-                        "h-10 w-10 rounded-2xl backdrop-blur-sm shadow-lg transition-all",
+                        "h-10 w-10 rounded-2xl shadow-lg transition-all",
                         activeMode === 'gyan-ai' ? "hover:bg-white/30 text-white" : "hover:bg-slate-100 text-slate-600"
                     )}
                 >
@@ -773,7 +951,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                                 Choose Your Expert
                             </h2>
                             <p className="text-sm text-slate-500 max-w-sm mx-auto leading-relaxed">
-                                Offline AI-powered specialized knowledge for your career journey
+                                Gemini AI-powered specialized knowledge for your career journey
                             </p>
                         </div>
                         <div className="grid grid-cols-1 gap-4 max-w-sm mx-auto">
@@ -788,12 +966,12 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                                     <div className="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-10 transition-opacity" 
                                          style={{background: `linear-gradient(135deg, ${topic.gradient})`}} />
                                     <div className="relative flex flex-col items-center justify-center h-full p-6 gap-3">
-                                        <div className={cn("p-4 rounded-3xl shadow-2xl backdrop-blur-sm border", topic.bg)}>
+                                        <div className={cn("p-4 rounded-3xl shadow-2xl border", topic.bg)}>
                                             <topic.icon className={cn("w-8 h-8", topic.color)} />
                                         </div>
                                         <div>
                                             <span className="block text-lg font-bold text-slate-800 leading-tight">{topic.id.split(' in ')[0]}</span>
-                                            <span className="text-xs text-emerald-600 font-semibold bg-emerald-100 px-2 py-0.5 rounded-full mt-1">Offline Expert</span>
+                                            <span className="text-xs text-emerald-600 font-semibold bg-emerald-100 px-2 py-0.5 rounded-full mt-1">Gemini AI Expert</span>
                                         </div>
                                     </div>
                                 </button>
@@ -804,13 +982,13 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                             onClick={() => setSelectedTopic('Interview Preparation')}
                             className="w-full group relative overflow-hidden bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-600 rounded-3xl shadow-2xl hover:shadow-3xl hover:scale-[1.02] transition-all duration-300 h-24"
                         >
-                            <div className="absolute inset-0 bg-white/10 backdrop-blur-sm" />
+                            <div className="absolute inset-0 bg-white/10" />
                             <div className="relative flex items-center h-full px-6 gap-4">
-                                <div className="p-4 bg-white/20 rounded-3xl backdrop-blur-sm shadow-2xl">
+                                <div className="p-4 bg-white/20 rounded-3xl shadow-2xl">
                                     <FileText className="w-8 h-8 text-white drop-shadow-lg" />
                                 </div>
                                 <div className="flex-1 text-left text-white">
-                                    <h3 className="text-xl font-black leading-tight">Offline Mock Interview</h3>
+                                    <h3 className="text-xl font-black leading-tight">Gemini Mock Interview</h3>
                                     <p className="text-sm opacity-90 leading-tight">Upload resume → AI interview practice</p>
                                 </div>
                                 <ArrowLeft className="w-6 h-6 text-white drop-shadow-lg group-hover:translate-x-2 transition-transform duration-300 rotate-[-20deg]" />
@@ -828,9 +1006,9 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                             <FileText className="w-10 h-10 text-white drop-shadow-lg" />
                         </div>
                         <div>
-                            <h2 className="text-2xl font-black text-slate-800 mb-1">🎯 Offline Interview Prep</h2>
+                            <h2 className="text-2xl font-black text-slate-800 mb-1">🎯 Gemini AI Interview Prep</h2>
                             <p className="text-lg text-slate-600 max-w-md mx-auto leading-relaxed">
-                                AI analyzes your PDF/DOC resume offline and simulates real interviews
+                                AI analyzes your PDF/DOC resume and simulates real interviews
                             </p>
                         </div>
                     </div>
@@ -840,10 +1018,10 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                          <div className="space-y-2">
                             <label className="text-sm font-bold text-slate-700 block mb-1">Experience Level</label>
                             <Select value={experienceLevel} onValueChange={(v: any) => setExperienceLevel(v)}>
-                                <SelectTrigger className="w-full h-12 bg-white/70 backdrop-blur-sm border-slate-200 shadow-lg hover:shadow-xl">
+                                <SelectTrigger className="w-full h-12 bg-white border-slate-200 shadow-lg hover:shadow-xl">
                                     <SelectValue />
                                 </SelectTrigger>
-                                <SelectContent className="bg-white/95 backdrop-blur-sm border-slate-200 shadow-2xl">
+                                <SelectContent className="bg-white border-slate-200 shadow-2xl">
                                     <SelectItem value="Fresher Student">🎓 Fresher Student</SelectItem>
                                     <SelectItem value="Experienced Person">💼 Experienced Professional</SelectItem>
                                 </SelectContent>
@@ -856,8 +1034,8 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                             className={cn(
                                 "group relative border-3 border-dashed rounded-3xl p-8 h-32 transition-all cursor-pointer overflow-hidden shadow-xl hover:shadow-2xl flex-shrink-0",
                                 fileName 
-                                  ? "border-emerald-400 bg-emerald-50/80 backdrop-blur-sm" 
-                                  : "border-slate-200/50 hover:border-indigo-400 bg-white/70 hover:bg-indigo-50/50"
+                                  ? "border-emerald-400 bg-emerald-50" 
+                                  : "border-slate-200/50 hover:border-indigo-400 bg-white hover:bg-indigo-50/50"
                             )}
                         >
                             <input 
@@ -882,7 +1060,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                                     </>
                                 ) : (
                                     <>
-                                        <div className="w-16 h-16 bg-white/50 p-4 rounded-3xl group-hover:bg-indigo-100/80 shadow-xl transition-all backdrop-blur-sm border-2 border-white/50">
+                                        <div className="w-16 h-16 bg-white/50 p-4 rounded-3xl group-hover:bg-indigo-100/80 shadow-xl transition-all border-2 border-white/50">
                                             <Upload className="w-8 h-8 text-slate-400 group-hover:text-indigo-500 transition-colors drop-shadow-sm" />
                                         </div>
                                         <div className="space-y-1">
@@ -897,7 +1075,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                         {/* Start Button */}
                         <Button 
                             className={cn(
-                                "w-full h-14 text-lg font-bold shadow-2xl backdrop-blur-sm transition-all duration-300 rounded-3xl flex-shrink-0",
+                                "w-full h-14 text-lg font-bold shadow-2xl transition-all duration-300 rounded-3xl flex-shrink-0",
                                 resumeFile 
                                   ? "bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-emerald-500/50 hover:shadow-emerald-500/75 hover:scale-[1.02]" 
                                   : "bg-slate-200/70 text-slate-400 cursor-not-allowed shadow-none"
@@ -908,7 +1086,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                             {isProcessingResume ? (
                                 <>
                                     <Loader2 className="animate-spin mr-3 w-6 h-6" />
-                                    Analyzing Offline...
+                                    Analyzing Resume...
                                 </>
                             ) : (
                                 <>
@@ -931,7 +1109,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                                 variant="outline" 
                                 size="sm"
                                 onClick={resetInterview}
-                                className="w-full h-10 bg-white/80 backdrop-blur-sm hover:bg-red-50 hover:border-red-300 hover:text-red-600 transition-all rounded-2xl shadow-lg font-semibold text-slate-600 border-slate-200"
+                                className="w-full h-10 bg-white hover:bg-red-50 hover:border-red-300 hover:text-red-600 transition-all rounded-2xl shadow-lg font-semibold text-slate-600 border-slate-200"
                             >
                                 <X className="w-4 h-4 mr-2" />
                                 🔄 Reset Interview
@@ -944,14 +1122,14 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                             {messages.length === 0 && (
                                 <div className="flex flex-col items-center justify-center h-48 text-center text-slate-400 space-y-2">
                                     <Bot className="w-16 h-16 opacity-40 mx-auto" />
-                                    <p className="text-lg font-semibold text-slate-600">Ready for offline chat!</p>
+                                    <p className="text-lg font-semibold text-slate-600">Ready to chat with Gemini AI!</p>
                                     <p className="text-sm">Ask anything about your career</p>
                                 </div>
                             )}
                             {messages.map((msg) => {
                                 if (msg.isQuestionAnswer) {
                                     return (
-                                        <div key={msg.id} className="bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-3xl border-2 border-indigo-200/50 shadow-xl ml-4 max-w-[95%] backdrop-blur-sm">
+                                        <div key={msg.id} className="bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-3xl border-2 border-indigo-200/50 shadow-xl ml-4 max-w-[95%]">
                                             <div className="flex gap-3 items-start mb-4">
                                                 <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-2.5 rounded-2xl shadow-2xl flex-shrink-0 mt-0.5">
                                                     <BrainCircuit className="w-5 h-5 text-white" />
@@ -1001,10 +1179,10 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                                             )}
                                         </Avatar>
                                         <div className={cn(
-                                            "py-4 px-6 rounded-3xl shadow-xl backdrop-blur-sm relative group max-w-[85%]",
+                                            "py-4 px-6 rounded-3xl shadow-xl relative group max-w-[85%]",
                                             msg.role === 'user' 
                                                 ? "bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 text-white rounded-br-none shadow-blue-500/30" 
-                                                : "bg-white/80 border border-slate-100/50 text-slate-800 rounded-bl-none shadow-slate-100/50"
+                                                : "bg-white border border-slate-100/50 text-slate-800 rounded-bl-none shadow-slate-100/50"
                                         )}>
                                             <p className="text-base leading-relaxed" dangerouslySetInnerHTML={{ __html: msg.text.replace(/\n/g, '<br />') }} />
                                             <span className={cn(
@@ -1018,7 +1196,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                             
                             {isLoading && (
                                 <div className="self-start flex gap-2 ml-14">
-                                    <div className="bg-white/80 backdrop-blur-sm border p-4 rounded-3xl rounded-bl-none shadow-xl flex gap-1.5 items-center pr-8 relative overflow-hidden">
+                                    <div className="bg-white border p-4 rounded-3xl rounded-bl-none shadow-xl flex gap-1.5 items-center pr-8 relative overflow-hidden">
                                         <div className="absolute inset-0 bg-gradient-to-r from-slate-200 to-slate-300 animate-pulse opacity-30 rounded-3xl" />
                                         <span className="w-2 h-2 bg-slate-400 rounded-full animate-bounce [animation-delay:0s]"></span>
                                         <span className="w-2 h-2 bg-slate-400 rounded-full animate-bounce [animation-delay:150ms]"></span>
@@ -1030,13 +1208,13 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                     </ScrollArea>
 
                     {/* Input Area */}
-                    <div className="px-5 pt-3 pb-2 bg-gradient-to-r from-white/90 via-slate-50 to-indigo-50/90 border-t border-slate-200/50 backdrop-blur-sm shadow-inner shrink-0">
+                    <div className="px-5 pt-3 pb-2 bg-gradient-to-r from-white via-slate-50 to-indigo-50 border-t border-slate-200/50 shadow-inner shrink-0">
                         <div className="flex items-center justify-between mb-2 px-1">
                             <Select value={language} onValueChange={setLanguage}>
-                                <SelectTrigger className="h-8 text-xs bg-white/70 backdrop-blur-sm border-slate-200 shadow-sm hover:shadow-md rounded-2xl px-2 w-28">
+                                <SelectTrigger className="h-8 text-xs bg-white border-slate-200 shadow-sm hover:shadow-md rounded-2xl px-2 w-28">
                                     <SelectValue />
                                 </SelectTrigger>
-                                <SelectContent className="bg-white/95 backdrop-blur-sm border-slate-200 shadow-2xl">
+                                <SelectContent className="bg-white border-slate-200 shadow-2xl">
                                     <SelectItem value="English">🇬🇧 English</SelectItem>
                                     <SelectItem value="Hinglish">🇮🇳 Hinglish</SelectItem>
                                 </SelectContent>
@@ -1044,7 +1222,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                         </div>
                         <form 
                             onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }} 
-                            className="flex items-stretch gap-2 bg-white/80 backdrop-blur-xl p-2 rounded-3xl border-2 border-slate-200/50 shadow-xl hover:shadow-2xl focus-within:shadow-3xl focus-within:border-blue-400/70 hover:border-slate-300/70 transition-all duration-300 group"
+                            className="flex items-stretch gap-2 bg-white p-2 rounded-3xl border-2 border-slate-200/50 shadow-xl hover:shadow-2xl focus-within:shadow-3xl focus-within:border-blue-400/70 hover:border-slate-300/70 transition-all duration-300 group"
                         >
                             <Input 
                                 ref={inputRef}
@@ -1058,7 +1236,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                                 type="submit" 
                                 size="icon" 
                                 className={cn(
-                                    "h-12 w-12 rounded-3xl shrink-0 transition-all duration-300 shadow-2xl backdrop-blur-sm group-hover:shadow-3xl",
+                                    "h-12 w-12 rounded-3xl shrink-0 transition-all duration-300 shadow-2xl group-hover:shadow-3xl",
                                     !input.trim() || isLoading 
                                       ? "bg-slate-200/70 text-slate-400 shadow-md cursor-not-allowed" 
                                       : "bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-blue-500/40 hover:shadow-blue-500/60 hover:scale-105 active:scale-95"
