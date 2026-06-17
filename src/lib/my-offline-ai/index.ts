@@ -6,7 +6,10 @@ import { handleInterviewSession } from './interview';
 // Yeh function aapke UI widget se call hoga
 export async function generateOfflineResponse(
   messages: Array<{ role: string; content: string }>,
-  systemPrompt: string
+  systemPrompt: string,
+  userName: string = "User",
+  gender: 'male' | 'female' | 'other' = 'other',
+  language: string = "English"
 ): Promise<string> {
   
   // 1. Fake Delay (1 second) - Real AI feel ke liye
@@ -31,5 +34,5 @@ export async function generateOfflineResponse(
   }
 
   // C. Default Sarathi Mode
-  return handleSarathiChat(lastUserMessage);
+  return handleSarathiChat(lastUserMessage, userName, gender, language);
 }
