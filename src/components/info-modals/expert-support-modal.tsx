@@ -70,7 +70,26 @@ interface Expert {
   tags: string[];
   phone?: string;
   email?: string;
+  qualification?: string;
+  designation?: string;
+  companyName?: string;
+  introduceYourself?: string;
 }
+
+const AVAILABLE_SPECIALIZATIONS = [
+  "Dairy Technology",
+  "Food Safety & Quality",
+  "Food Processing",
+  "Milk Procurement",
+  "Lab Analysis & Equipment",
+  "Dairy Chemistry",
+  "Dairy Microbiology",
+  "Dairy Engineering",
+  "Product Development (R&D)",
+  "FSSAI Licensing & Compliance",
+  "Supply Chain & Logistics",
+  "ETP & Environmental Safety"
+];
 
 const PRESET_SPECIALIST_TAGS = [
   "HACCP",
@@ -270,7 +289,11 @@ export function ExpertSupportModal({ isOpen, setIsOpen }: { isOpen: boolean; set
           fee: Number(data.fee) || 0,
           tags: data.tags || [],
           phone: data.phone || "",
-          email: data.email || ""
+          email: data.email || "",
+          qualification: data.qualification || "",
+          designation: data.designation || "",
+          companyName: data.companyName || "",
+          introduceYourself: data.introduceYourself || ""
         });
       });
       setRealExperts(list);
@@ -310,7 +333,7 @@ export function ExpertSupportModal({ isOpen, setIsOpen }: { isOpen: boolean; set
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-5xl w-[95vw] h-[90vh] max-h-[90vh] flex flex-col p-0 overflow-hidden bg-slate-50 border border-slate-200 shadow-2xl rounded-2xl">
+      <DialogContent className="max-w-5xl w-[95vw] h-[90vh] max-h-[90vh] flex flex-col p-0 overflow-hidden bg-slate-50 border border-slate-200 shadow-2xl rounded-2xl [&>button]:text-red-500 hover:[&>button]:text-red-700 [&>button]:opacity-100 hover:[&>button]:opacity-100 [&>button]:bg-red-50 hover:[&>button]:bg-red-100 [&>button]:p-1.5 [&>button]:rounded-full [&>button]:border [&>button]:border-red-200 [&>button]:transition-all">
         <div className="flex-1 w-full h-full flex flex-col min-h-0">
           
           {/* Main Top Header Banner */}
@@ -416,96 +439,165 @@ function ExpertListView({
   onGoToDashboard: () => void
 }) {
   const { user } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredExperts = useMemo(() => {
+    if (!searchQuery.trim()) return expertsList;
+    const query = searchQuery.toLowerCase().trim();
+    return expertsList.filter(e => {
+      const nameMatch = e.name.toLowerCase().includes(query);
+      const specMatch = e.specialization.toLowerCase().includes(query);
+      const tagsMatch = e.tags.some(tag => tag.toLowerCase().includes(query));
+      const roleMatch = e.role.toLowerCase().includes(query);
+      const designationMatch = e.designation?.toLowerCase().includes(query);
+      const companyMatch = e.companyName?.toLowerCase().includes(query);
+      const qualMatch = e.qualification?.toLowerCase().includes(query);
+      const bioMatch = e.introduceYourself?.toLowerCase().includes(query);
+      return nameMatch || specMatch || tagsMatch || roleMatch || designationMatch || companyMatch || qualMatch || bioMatch;
+    });
+  }, [searchQuery, expertsList]);
   
   return (
     <div className="flex flex-col h-full bg-white min-h-0">
       <div className="p-4 sm:p-6 border-b bg-gradient-to-b from-slate-50 to-white shrink-0">
-        <div className="text-center max-w-xl mx-auto">
+        <div className="text-center max-w-xl mx-auto mb-4">
           <h2 className="text-lg sm:text-2xl font-bold text-slate-800 mb-0.5 sm:mb-1">Get Professional Guidance</h2>
           <p className="text-slate-500 text-[11px] sm:text-sm leading-normal">
             Consult real-time industry experts for professional support.
           </p>
         </div>
+
+        {/* Modern Search Input Container */}
+        <div className="max-w-md mx-auto relative">
+          <Input 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search experts by name, specialization, tags, or company..."
+            className="w-full pl-9 pr-8 text-xs h-9 border-slate-200 focus-visible:ring-indigo-600 bg-white shadow-sm rounded-full"
+          />
+          <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-search"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          </span>
+          {searchQuery && (
+            <button 
+              onClick={() => setSearchQuery("")}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          )}
+        </div>
       </div>
 
       <ScrollArea className="flex-1 bg-slate-50/50 min-h-0">
         <div className="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-5xl mx-auto">
-          {expertsList.map((expert) => {
-            const isSelf = user && expert.id === user.uid;
+          {filteredExperts.length === 0 ? (
+            <div className="col-span-full text-center py-16 text-slate-400 flex flex-col items-center max-w-xs mx-auto">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-slate-300 mb-2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><path d="m8 11 6-6"/><path d="m14 11-6-6"/></svg>
+              <p className="text-xs font-semibold text-slate-700">No experts found</p>
+              <p className="text-[10px] text-slate-400 mt-1 leading-normal">
+                Try searching for other terms like "Dairy Chemistry", "FSSAI", or check spelling.
+              </p>
+            </div>
+          ) : (
+            filteredExperts.map((expert) => {
+              const isSelf = user && expert.id === user.uid;
 
-            return (
-              <Card 
-                key={expert.id} 
-                className="group hover:shadow-xl hover:border-slate-300 transition-all duration-300 border-slate-200 cursor-pointer overflow-hidden flex flex-col"
-                onClick={() => onSelectExpert(expert)}
-              >
-                <div className="absolute top-0 left-0 w-full h-1 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left bg-gradient-to-r from-emerald-500 to-teal-500" />
-                
-                <CardHeader className="flex flex-row items-start gap-3 sm:gap-4 pb-2.5 sm:pb-3">
-                  <div className="relative shrink-0">
-                    <Avatar className="w-14 h-14 sm:w-16 sm:h-16 border-2 border-white shadow-md">
-                      <AvatarImage src={expert.photo} />
-                      <AvatarFallback className="bg-slate-100 text-slate-700 font-bold text-base sm:text-lg">
-                        {expert.name.charAt(0)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <span className={cn(
-                      "absolute bottom-0 right-0 w-3.5 h-3.5 sm:w-4.5 sm:h-4.5 border-2 border-white rounded-full shadow",
-                      expert.status === 'online' ? "bg-green-500" : "bg-slate-300"
-                    )}></span>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-1">
-                      <h3 className="font-bold text-sm sm:text-base text-slate-900 group-hover:text-blue-600 transition-colors truncate">
-                        {expert.name}
-                      </h3>
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 fill-emerald-100 shrink-0" />
-                    </div>
-                    <p className="text-[10px] sm:text-xs text-slate-500 font-medium truncate">{expert.role}</p>
-                    <div className="flex items-center gap-1 mt-0.5 text-slate-600 text-[10px] sm:text-xs font-semibold">
-                      <Star className="w-3 h-3 text-amber-500 fill-amber-500 shrink-0" />
-                      <span>{expert.experience}+ Yrs Exp.</span>
-                    </div>
-                  </div>
-                </CardHeader>
-                
-                <CardContent className="pb-3 flex-1">
-                  <p className="text-[11px] sm:text-xs text-slate-600 mb-2.5 line-clamp-2">
-                    Specialist in <span className="font-semibold text-slate-800">{expert.specialization}</span>. 
-                    Ask about {expert.tags.join(', ')}.
-                  </p>
+              return (
+                <Card 
+                  key={expert.id} 
+                  className="group hover:shadow-xl hover:border-slate-300 transition-all duration-300 border-slate-200 cursor-pointer overflow-hidden flex flex-col"
+                  onClick={() => onSelectExpert(expert)}
+                >
+                  <div className="absolute top-0 left-0 w-full h-1 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left bg-gradient-to-r from-emerald-500 to-teal-500" />
                   
-                  <div className="flex flex-wrap gap-1.5 mb-2">
-                    {expert.tags.slice(0, 3).map(tag => (
-                      <Badge key={tag} variant="secondary" className="text-[9px] font-medium bg-slate-100/80 text-slate-600">
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
+                  <CardHeader className="flex flex-row items-start gap-3 sm:gap-4 pb-2.5 sm:pb-3">
+                    <div className="relative shrink-0">
+                      <Avatar className="w-14 h-14 sm:w-16 sm:h-16 border-2 border-white shadow-md">
+                        <AvatarImage src={expert.photo} />
+                        <AvatarFallback className="bg-slate-100 text-slate-700 font-bold text-base sm:text-lg">
+                          {expert.name.charAt(0)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <span className={cn(
+                        "absolute bottom-0 right-0 w-3.5 h-3.5 sm:w-4.5 sm:h-4.5 border-2 border-white rounded-full shadow",
+                        expert.status === 'online' ? "bg-green-500" : "bg-slate-300"
+                      )}></span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-1">
+                        <h3 className="font-bold text-sm sm:text-base text-slate-900 group-hover:text-blue-600 transition-colors truncate">
+                          {expert.name}
+                        </h3>
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 fill-emerald-100 shrink-0" />
+                      </div>
+                      <p className="text-[10px] sm:text-xs text-slate-500 font-medium truncate">
+                        {expert.designation && expert.companyName 
+                          ? `${expert.designation} at ${expert.companyName}` 
+                          : expert.designation || expert.companyName || expert.role}
+                      </p>
+                      {expert.qualification && (
+                        <p className="text-[9px] text-slate-400 font-medium truncate mt-0.5">
+                          {expert.qualification}
+                        </p>
+                      )}
+                      <div className="flex items-center gap-1 mt-0.5 text-slate-600 text-[10px] sm:text-xs font-semibold">
+                        <Star className="w-3 h-3 text-amber-500 fill-amber-500 shrink-0" />
+                        <span>{expert.experience}+ Yrs Exp.</span>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  
+                  <CardContent className="pb-3 flex-1 flex flex-col justify-between">
+                    <div>
+                      <p className="text-[11px] sm:text-xs text-slate-600 mb-2 line-clamp-2">
+                        Specialist in <span className="font-semibold text-slate-800">{expert.specialization}</span>.
+                      </p>
+                      {expert.introduceYourself ? (
+                        <p className="text-[10px] sm:text-[11px] text-slate-500 italic mb-2.5 line-clamp-2 bg-slate-50 p-1.5 rounded border border-slate-100">
+                          "{expert.introduceYourself}"
+                        </p>
+                      ) : (
+                        <p className="text-[10px] sm:text-[11px] text-slate-400 mb-2.5 line-clamp-2">
+                          Ask about {expert.tags.join(', ')}.
+                        </p>
+                      )}
+                    </div>
+                    
+                    <div>
+                      <div className="flex flex-wrap gap-1.5 mb-2">
+                        {expert.tags.slice(0, 3).map(tag => (
+                          <Badge key={tag} variant="secondary" className="text-[9px] font-medium bg-slate-100/80 text-slate-600">
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
 
-                  {/* Consultation Pricing Badge */}
-                  <div className="mt-3 flex items-center justify-between border-t pt-2 text-[10px] sm:text-xs">
-                    <span className="text-slate-400 font-medium">Consultation Fee:</span>
-                    <span className="font-bold px-2 py-0.5 rounded-full border shadow-sm text-emerald-600 bg-emerald-50 border-emerald-100">
-                      {`₹${expert.fee}/hr`}
-                    </span>
-                  </div>
-                </CardContent>
-                
-                <CardFooter className="pt-0 shrink-0 mt-auto">
-                  <Button className={cn(
-                    "w-full transition-colors gap-2 font-semibold text-xs sm:text-sm h-8 sm:h-9 shadow-sm",
-                    isSelf 
-                      ? "bg-slate-100 text-slate-600 hover:bg-slate-200 border" 
-                      : "bg-slate-900 text-white hover:bg-blue-600"
-                  )}>
-                    {isSelf ? "My Profile" : "Chat Now"} 
-                    <Send className="w-3 h-3" />
-                  </Button>
-                </CardFooter>
-              </Card>
-            );
-          })}
+                      {/* Consultation Pricing Badge */}
+                      <div className="mt-3 flex items-center justify-between border-t pt-2 text-[10px] sm:text-xs">
+                        <span className="text-slate-400 font-medium">Consultation Fee:</span>
+                        <span className="font-bold px-2 py-0.5 rounded-full border shadow-sm text-emerald-600 bg-emerald-50 border-emerald-100">
+                          {`₹${expert.fee}/hr`}
+                        </span>
+                      </div>
+                    </div>
+                  </CardContent>
+                  
+                  <CardFooter className="pt-0 shrink-0 mt-auto">
+                    <Button className={cn(
+                      "w-full transition-colors gap-2 font-semibold text-xs sm:text-sm h-8 sm:h-9 shadow-sm",
+                      isSelf 
+                        ? "bg-slate-100 text-slate-600 hover:bg-slate-200 border" 
+                        : "bg-slate-900 text-white hover:bg-blue-600"
+                    )}>
+                      {isSelf ? "My Profile" : "Chat Now"} 
+                      <Send className="w-3 h-3" />
+                    </Button>
+                  </CardFooter>
+                </Card>
+              );
+            })
+          )}
         </div>
       </ScrollArea>
 
@@ -571,10 +663,31 @@ function RealChatView({ expert, onBack }: { expert: Expert, onBack: () => void }
     
     const unsub = onSnapshot(q, (snapshot) => {
       const msgs: FirestoreMessage[] = [];
+      const now = Date.now();
+      const cutoff = now - 24 * 60 * 60 * 1000; // 24 hours ago
+      
       snapshot.forEach((docSnap) => {
         const data = docSnap.data();
+        const docId = docSnap.id;
+        
+        let msgTimeMs = now;
+        if (data.timestamp) {
+          try {
+            msgTimeMs = data.timestamp.toDate().getTime();
+          } catch {
+            // fallback
+          }
+        }
+        
+        // If message is older than 24 hours, delete it from Firestore automatically
+        if (data.timestamp && msgTimeMs < cutoff) {
+          const docRef = doc(db, "chats", chatId, "messages", docId);
+          deleteDoc(docRef).catch(err => console.error("Error deleting old message", err));
+          return; // Skip adding to the UI
+        }
+
         msgs.push({
-          id: docSnap.id,
+          id: docId,
           senderId: data.senderId,
           senderName: data.senderName,
           text: data.text,
@@ -794,11 +907,17 @@ function RegisterView({ onBack }: { onBack: () => void }) {
   const [name, setName] = useState(user?.displayName || "");
   const [experience, setExperience] = useState("");
   const [fee, setFee] = useState("");
-  const [specialization, setSpecialization] = useState("Dairy Technology");
+  const [selectedSpecs, setSelectedSpecs] = useState<string[]>(["Dairy Technology"]);
   const [countryCode, setCountryCode] = useState("+91");
   const [localPhone, setLocalPhone] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [customTagInput, setCustomTagInput] = useState("");
+  
+  // Optional fields
+  const [qualification, setQualification] = useState("");
+  const [designation, setDesignation] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [introduceYourself, setIntroduceYourself] = useState("");
 
   const handleToggleTag = (tag: string) => {
     if (selectedTags.includes(tag)) {
@@ -852,14 +971,18 @@ function RegisterView({ onBack }: { onBack: () => void }) {
         name: name,
         experience: Number(experience),
         fee: Number(fee),
-        specialization: specialization,
+        specialization: selectedSpecs.join(', '),
         role: "Certified Consultant",
         photo: user.photoURL || `https://placehold.co/150x150/E2E8F0/1e293b?text=${name.charAt(0)}`,
         status: 'online',
-        tags: selectedTags.length > 0 ? selectedTags : [specialization],
+        tags: selectedTags.length > 0 ? selectedTags : selectedSpecs,
         phone: countryCode + localPhone.trim().replace(/\D/g, ''),
         email: user.email,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
+        qualification: qualification.trim(),
+        designation: designation.trim(),
+        companyName: companyName.trim(),
+        introduceYourself: introduceYourself.trim()
       });
 
       toast({
@@ -920,6 +1043,22 @@ function RegisterView({ onBack }: { onBack: () => void }) {
               <label className="text-[10px] font-semibold text-slate-700">Display Name</label>
               <Input required value={name} onChange={e => setName(e.target.value)} placeholder="Dr. Aditi Verma" className="text-xs h-9 border-slate-200" />
             </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1">
+                <label className="text-[10px] font-semibold text-slate-700">Designation (Optional)</label>
+                <Input value={designation} onChange={e => setDesignation(e.target.value)} placeholder="e.g. Senior Quality Manager" className="text-xs h-9 border-slate-200" />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[10px] font-semibold text-slate-700">Company Name (Optional)</label>
+                <Input value={companyName} onChange={e => setCompanyName(e.target.value)} placeholder="e.g. Amul Dairy" className="text-xs h-9 border-slate-200" />
+              </div>
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-[10px] font-semibold text-slate-700">Qualification (Optional)</label>
+              <Input value={qualification} onChange={e => setQualification(e.target.value)} placeholder="e.g. M.Tech in Dairy Technology, Ph.D" className="text-xs h-9 border-slate-200" />
+            </div>
             
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1">
@@ -932,20 +1071,56 @@ function RegisterView({ onBack }: { onBack: () => void }) {
               </div>
             </div>
 
-            <div className="space-y-1">
-              <label className="text-[10px] font-semibold text-slate-700">Specialization</label>
-              <Select value={specialization} onValueChange={setSpecialization}>
-                <SelectTrigger className="text-xs h-9 border-slate-200">
-                  <SelectValue placeholder="Select Domain" />
+            <div className="space-y-2">
+              <label className="text-[10px] font-semibold text-slate-700 block">Specializations (Select one or more)</label>
+              
+              <Select onValueChange={(val) => {
+                if (val && !selectedSpecs.includes(val)) {
+                  setSelectedSpecs(prev => [...prev, val]);
+                }
+              }}>
+                <SelectTrigger className="text-xs h-9 border-slate-200 bg-white">
+                  <SelectValue placeholder="Add Specialization..." />
                 </SelectTrigger>
-                <SelectContent className="bg-white text-xs">
-                  <SelectItem value="Dairy Technology">Dairy Technology</SelectItem>
-                  <SelectItem value="Food Safety & Quality">Food Safety & Quality</SelectItem>
-                  <SelectItem value="Food Processing">Food Processing</SelectItem>
-                  <SelectItem value="Milk Procurement">Milk Procurement</SelectItem>
-                  <SelectItem value="Lab Analysis">Lab Analysis & Equipment</SelectItem>
+                <SelectContent className="bg-white text-xs max-h-56">
+                  {AVAILABLE_SPECIALIZATIONS.map(spec => (
+                    <SelectItem key={spec} value={spec} disabled={selectedSpecs.includes(spec)}>
+                      {spec}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
+
+              {selectedSpecs.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 p-2 bg-slate-50 border border-dashed rounded-lg min-h-9 items-center">
+                  {selectedSpecs.map(spec => (
+                    <Badge key={spec} className="bg-blue-600 hover:bg-blue-700 text-white text-[10px] flex items-center gap-1.5 py-0.5 px-2">
+                      {spec}
+                      <X className="w-3 h-3 cursor-pointer shrink-0" onClick={() => {
+                        if (selectedSpecs.length > 1) {
+                          setSelectedSpecs(prev => prev.filter(s => s !== spec));
+                        } else {
+                          toast({
+                            title: "Required",
+                            description: "At least one specialization is required.",
+                            duration: 1500
+                          });
+                        }
+                      }} />
+                    </Badge>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-[10px] font-semibold text-slate-700">Introduce Yourself (Optional)</label>
+              <textarea 
+                value={introduceYourself} 
+                onChange={e => setIntroduceYourself(e.target.value)} 
+                placeholder="Briefly describe your career, projects, and consultancies to attract jobs and clients..." 
+                className="w-full min-h-[80px] p-2.5 text-xs border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-900 bg-white"
+              />
             </div>
 
             <div className="space-y-1">
@@ -975,9 +1150,25 @@ function RegisterView({ onBack }: { onBack: () => void }) {
             </div>
 
             <div className="space-y-2">
-              <label className="text-[10px] font-semibold text-slate-700 block">Specialist Tags</label>
+              <label className="text-[10px] font-semibold text-slate-700 block">Specialist Tags (Select tags)</label>
               
-              {/* Selected Tags list */}
+              <Select onValueChange={(val) => {
+                if (val && !selectedTags.includes(val)) {
+                  setSelectedTags(prev => [...prev, val]);
+                }
+              }}>
+                <SelectTrigger className="text-xs h-9 border-slate-200 bg-white">
+                  <SelectValue placeholder="Select popular tag to add..." />
+                </SelectTrigger>
+                <SelectContent className="bg-white text-xs max-h-56">
+                  {PRESET_SPECIALIST_TAGS.map(tag => (
+                    <SelectItem key={tag} value={tag} disabled={selectedTags.includes(tag)}>
+                      {tag}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
               {selectedTags.length > 0 && (
                 <div className="flex flex-wrap gap-1.5 p-2 bg-slate-50 border border-dashed rounded-lg min-h-9 items-center">
                   {selectedTags.map(tag => (
@@ -988,54 +1179,29 @@ function RegisterView({ onBack }: { onBack: () => void }) {
                   ))}
                 </div>
               )}
+            </div>
 
-              {/* Preset tags grid */}
-              <div className="border border-slate-100 rounded-xl p-3 bg-slate-50/50">
-                <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-wider mb-2">Popular Dairy & Food Safety Tags (Select to add)</p>
-                <div className="flex flex-wrap gap-1.5 max-h-36 overflow-y-auto pr-1">
-                  {PRESET_SPECIALIST_TAGS.map(tag => {
-                    const isSelected = selectedTags.includes(tag);
-                    return (
-                      <button
-                        key={tag}
-                        type="button"
-                        onClick={() => handleToggleTag(tag)}
-                        className={cn(
-                          "text-[10px] px-2.5 py-1 rounded-lg border transition-all font-medium",
-                          isSelected 
-                            ? "bg-indigo-50 border-indigo-200 text-indigo-700 shadow-sm" 
-                            : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
-                        )}
-                      >
-                        {tag}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Custom tag input */}
-              <div className="flex gap-2">
-                <Input 
-                  value={customTagInput} 
-                  onChange={e => setCustomTagInput(e.target.value)} 
-                  placeholder="Or enter a custom tag (e.g. Aflatoxin Testing)" 
-                  className="text-xs h-9 border-slate-200 flex-1"
-                  onKeyDown={e => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      handleAddCustomTag();
-                    }
-                  }}
-                />
-                <Button 
-                  type="button" 
-                  onClick={handleAddCustomTag} 
-                  className="bg-slate-900 hover:bg-blue-600 text-white text-xs h-9 px-3 font-semibold"
-                >
-                  Add
-                </Button>
-              </div>
+            {/* Custom tag input */}
+            <div className="flex gap-2">
+              <Input 
+                value={customTagInput} 
+                onChange={e => setCustomTagInput(e.target.value)} 
+                placeholder="Or enter a custom tag (e.g. Aflatoxin Testing)" 
+                className="text-xs h-9 border-slate-200 flex-1"
+                onKeyDown={e => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleAddCustomTag();
+                  }
+                }}
+              />
+              <Button 
+                type="button" 
+                onClick={handleAddCustomTag} 
+                className="bg-slate-900 hover:bg-blue-600 text-white text-xs h-9 px-3 font-semibold"
+              >
+                Add
+              </Button>
             </div>
 
             <div className="bg-slate-50 border border-slate-100 p-3 rounded-xl text-[10px] sm:text-xs text-slate-600 flex gap-2.5 shadow-inner">
@@ -1069,7 +1235,9 @@ function ExpertDashboardView({
   const [fee, setFee] = useState<string>(currentExpert?.fee.toString() || "0");
   const [countryCode, setCountryCode] = useState<string>("+91");
   const [localPhone, setLocalPhone] = useState<string>("");
-  const [specialization, setSpecialization] = useState<string>(currentExpert?.specialization || "");
+  const [selectedSpecs, setSelectedSpecs] = useState<string[]>(
+    currentExpert?.specialization ? currentExpert.specialization.split(', ').map(s => s.trim()) : ["Dairy Technology"]
+  );
   const [name, setName] = useState<string>(currentExpert?.name || "");
   const [experience, setExperience] = useState<string>(currentExpert?.experience.toString() || "0");
   const [selectedTags, setSelectedTags] = useState<string[]>(currentExpert?.tags || []);
@@ -1077,6 +1245,12 @@ function ExpertDashboardView({
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
+  // Optional Fields
+  const [qualification, setQualification] = useState(currentExpert?.qualification || "");
+  const [designation, setDesignation] = useState(currentExpert?.designation || "");
+  const [companyName, setCompanyName] = useState(currentExpert?.companyName || "");
+  const [introduceYourself, setIntroduceYourself] = useState(currentExpert?.introduceYourself || "");
   
   // Tab for mobile layout
   const [dashboardTab, setDashboardTab] = useState<'chats' | 'profile'>('chats');
@@ -1098,10 +1272,14 @@ function ExpertDashboardView({
       const parsed = parsePhoneNumber(currentExpert.phone || "");
       setCountryCode(parsed.countryCode);
       setLocalPhone(parsed.localNumber);
-      setSpecialization(currentExpert.specialization);
+      setSelectedSpecs(currentExpert.specialization ? currentExpert.specialization.split(', ').map(s => s.trim()) : ["Dairy Technology"]);
       setName(currentExpert.name);
       setExperience(currentExpert.experience.toString());
       setSelectedTags(currentExpert.tags || []);
+      setQualification(currentExpert.qualification || "");
+      setDesignation(currentExpert.designation || "");
+      setCompanyName(currentExpert.companyName || "");
+      setIntroduceYourself(currentExpert.introduceYourself || "");
     }
   }, [currentExpert]);
 
@@ -1210,8 +1388,12 @@ function ExpertDashboardView({
         experience: Number(experience),
         fee: Number(fee),
         phone: countryCode + localPhone.trim().replace(/\D/g, ''),
-        specialization: specialization,
-        tags: selectedTags.length > 0 ? selectedTags : [specialization]
+        specialization: selectedSpecs.join(', '),
+        tags: selectedTags.length > 0 ? selectedTags : selectedSpecs,
+        qualification: qualification.trim(),
+        designation: designation.trim(),
+        companyName: companyName.trim(),
+        introduceYourself: introduceYourself.trim()
       });
       toast({
         title: "Profile Updated",
@@ -1277,7 +1459,7 @@ function ExpertDashboardView({
 
       {/* Profile Settings Left Column (Sidebar on Desktop) */}
       <div className={cn(
-        "w-full md:w-80 border-r bg-white p-4 sm:p-6 flex flex-col shrink-0 overflow-y-auto min-h-0",
+        "w-full md:w-80 border-r bg-white p-4 sm:p-6 flex flex-col flex-1 md:flex-none md:shrink-0 overflow-y-auto min-h-0",
         dashboardTab === 'profile' ? 'flex' : 'hidden md:flex'
       )}>
         <div className="text-center mb-5 shrink-0">
@@ -1375,28 +1557,114 @@ function ExpertDashboardView({
             </div>
           </div>
 
-          <div className="space-y-1">
-            <label className="text-[10px] font-bold text-slate-600">Specialization</label>
-            <Select value={specialization} onValueChange={setSpecialization}>
+          <div className="space-y-2">
+            <label className="text-[10px] font-bold text-slate-600 block">Specializations (Select one or more)</label>
+            
+            <Select onValueChange={(val) => {
+              if (val && !selectedSpecs.includes(val)) {
+                setSelectedSpecs(prev => [...prev, val]);
+              }
+            }}>
               <SelectTrigger className="text-xs h-9 border-slate-200 bg-slate-50">
-                <SelectValue placeholder="Select Domain" />
+                <SelectValue placeholder="Add Specialization..." />
               </SelectTrigger>
-              <SelectContent className="bg-white text-xs">
-                <SelectItem value="Dairy Technology">Dairy Technology</SelectItem>
-                <SelectItem value="Food Safety & Quality">Food Safety & Quality</SelectItem>
-                <SelectItem value="Food Processing">Food Processing</SelectItem>
-                <SelectItem value="Milk Procurement">Milk Procurement</SelectItem>
-                <SelectItem value="Lab Analysis">Lab Analysis & Equipment</SelectItem>
+              <SelectContent className="bg-white text-xs max-h-56">
+                {AVAILABLE_SPECIALIZATIONS.map(spec => (
+                  <SelectItem key={spec} value={spec} disabled={selectedSpecs.includes(spec)}>
+                    {spec}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
+
+            {selectedSpecs.length > 0 && (
+              <div className="flex flex-wrap gap-1 p-1 bg-slate-50 border border-dashed rounded-lg min-h-9 items-center mt-1">
+                {selectedSpecs.map(spec => (
+                  <Badge key={spec} className="bg-blue-600 hover:bg-blue-700 text-white text-[9px] flex items-center gap-1 py-0.5 px-1.5">
+                    {spec}
+                    <X className="w-2.5 h-2.5 cursor-pointer shrink-0" onClick={() => {
+                      if (selectedSpecs.length > 1) {
+                        setSelectedSpecs(prev => prev.filter(s => s !== spec));
+                      } else {
+                        toast({
+                          title: "Required",
+                          description: "At least one specialization is required.",
+                          duration: 1500
+                        });
+                      }
+                    }} />
+                  </Badge>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1">
+              <label className="text-[10px] font-bold text-slate-600">Designation (Optional)</label>
+              <Input 
+                type="text" 
+                value={designation} 
+                onChange={e => setDesignation(e.target.value)} 
+                placeholder="e.g. Quality Analyst"
+                className="text-xs h-9 border-slate-200 bg-slate-50"
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="text-[10px] font-bold text-slate-600">Company Name (Optional)</label>
+              <Input 
+                type="text" 
+                value={companyName} 
+                onChange={e => setCompanyName(e.target.value)} 
+                placeholder="e.g. Mother Dairy"
+                className="text-xs h-9 border-slate-200 bg-slate-50"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-[10px] font-bold text-slate-600">Qualification (Optional)</label>
+            <Input 
+              type="text" 
+              value={qualification} 
+              onChange={e => setQualification(e.target.value)} 
+              placeholder="e.g. B.Tech in Food Tech"
+              className="text-xs h-9 border-slate-200 bg-slate-50"
+            />
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-[10px] font-bold text-slate-600">Introduce Yourself (Optional)</label>
+            <textarea 
+              value={introduceYourself} 
+              onChange={e => setIntroduceYourself(e.target.value)} 
+              placeholder="Brief introduction..." 
+              className="w-full min-h-[70px] p-2 text-xs border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-900 bg-slate-50"
+            />
           </div>
 
           <div className="space-y-2">
-            <label className="text-[10px] font-bold text-slate-600 block">Specialist Tags</label>
+            <label className="text-[10px] font-bold text-slate-600 block">Specialist Tags (Select tags)</label>
             
-            {/* Selected Tags list */}
+            <Select onValueChange={(val) => {
+              if (val && !selectedTags.includes(val)) {
+                setSelectedTags(prev => [...prev, val]);
+              }
+            }}>
+              <SelectTrigger className="text-xs h-9 border-slate-200 bg-slate-50">
+                <SelectValue placeholder="Add popular tag..." />
+              </SelectTrigger>
+              <SelectContent className="bg-white text-xs max-h-56">
+                {PRESET_SPECIALIST_TAGS.map(tag => (
+                  <SelectItem key={tag} value={tag} disabled={selectedTags.includes(tag)}>
+                    {tag}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
             {selectedTags.length > 0 && (
-              <div className="flex flex-wrap gap-1 p-1.5 bg-slate-50 border border-dashed rounded-lg min-h-9 items-center">
+              <div className="flex flex-wrap gap-1 p-1.5 bg-slate-50 border border-dashed rounded-lg min-h-9 items-center mt-1">
                 {selectedTags.map(tag => (
                   <Badge key={tag} className="bg-indigo-600 hover:bg-indigo-700 text-white text-[9px] flex items-center gap-1 py-0.5 px-1.5">
                     {tag}
@@ -1405,54 +1673,29 @@ function ExpertDashboardView({
                 ))}
               </div>
             )}
+          </div>
 
-            {/* Preset tags wrap */}
-            <div className="border border-slate-100 rounded-lg p-2.5 bg-slate-50/50">
-              <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Popular Tags (Click to toggle)</p>
-              <div className="flex flex-wrap gap-1 max-h-28 overflow-y-auto pr-1">
-                {PRESET_SPECIALIST_TAGS.map(tag => {
-                  const isSelected = selectedTags.includes(tag);
-                  return (
-                    <button
-                      key={tag}
-                      type="button"
-                      onClick={() => handleToggleTag(tag)}
-                      className={cn(
-                        "text-[9px] px-2 py-0.5 rounded border transition-all font-medium",
-                        isSelected 
-                          ? "bg-indigo-50 border-indigo-200 text-indigo-700 shadow-sm" 
-                          : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
-                      )}
-                    >
-                      {tag}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Custom tag input */}
-            <div className="flex gap-1.5">
-              <Input 
-                value={customTagInput} 
-                onChange={e => setCustomTagInput(e.target.value)} 
-                placeholder="Custom tag" 
-                className="text-xs h-8 border-slate-200 flex-1 bg-white"
-                onKeyDown={e => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault();
-                    handleAddCustomTag();
-                  }
-                }}
-              />
-              <Button 
-                type="button" 
-                onClick={handleAddCustomTag} 
-                className="bg-slate-900 hover:bg-blue-600 text-white text-[10px] h-8 px-2 font-semibold"
-              >
-                Add
-              </Button>
-            </div>
+          {/* Custom tag input */}
+          <div className="flex gap-1.5">
+            <Input 
+              value={customTagInput} 
+              onChange={e => setCustomTagInput(e.target.value)} 
+              placeholder="Custom tag" 
+              className="text-xs h-8 border-slate-200 flex-1 bg-white"
+              onKeyDown={e => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  handleAddCustomTag();
+                }
+              }}
+            />
+            <Button 
+              type="button" 
+              onClick={handleAddCustomTag} 
+              className="bg-slate-900 hover:bg-blue-600 text-white text-[10px] h-8 px-2 font-semibold"
+            >
+              Add
+            </Button>
           </div>
 
           <Button type="submit" disabled={isUpdating} className="w-full text-xs h-9 bg-slate-900 hover:bg-blue-600 font-semibold transition-colors">
@@ -1588,10 +1831,31 @@ function ExpertChatView({ chat, onBack }: { chat: ChatRoom, onBack: () => void }
     
     const unsub = onSnapshot(q, (snapshot) => {
       const msgs: FirestoreMessage[] = [];
+      const now = Date.now();
+      const cutoff = now - 24 * 60 * 60 * 1000; // 24 hours ago
+      
       snapshot.forEach((docSnap) => {
         const data = docSnap.data();
+        const docId = docSnap.id;
+        
+        let msgTimeMs = now;
+        if (data.timestamp) {
+          try {
+            msgTimeMs = data.timestamp.toDate().getTime();
+          } catch {
+            // fallback
+          }
+        }
+        
+        // If message is older than 24 hours, delete it from Firestore automatically
+        if (data.timestamp && msgTimeMs < cutoff) {
+          const docRef = doc(db, "chats", chat.id, "messages", docId);
+          deleteDoc(docRef).catch(err => console.error("Error deleting old message", err));
+          return; // Skip adding to the UI
+        }
+
         msgs.push({
-          id: docSnap.id,
+          id: docId,
           senderId: data.senderId,
           senderName: data.senderName,
           text: data.text,
