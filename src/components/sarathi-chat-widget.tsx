@@ -476,6 +476,36 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
     });
   }, []);
 
+  const triggerWelcomeMessage = useCallback(() => {
+    if (!user) return;
+    const isHinglish = languageRef.current === 'Hinglish';
+    const gender = user.gender || 'other';
+    let genderTerm = '';
+    if (isHinglish) {
+      if (gender === 'male') genderTerm = 'Bhai';
+      else if (gender === 'female') genderTerm = 'Behen';
+      else genderTerm = 'Dost';
+    } else {
+      if (gender === 'male') genderTerm = 'bro';
+      else if (gender === 'female') genderTerm = 'dear';
+      else genderTerm = 'friend';
+    }
+    
+    const welcomeText = isHinglish 
+      ? `Namaste ${user.displayName?.split(' ')[0] || 'Champion'} ${genderTerm}! 🚀 Main hoon **Sarathi** - aapka friendly AI companion. Batao aaj kya chill chat karein? 😉`
+      : `Hello ${user.displayName?.split(' ')[0] || 'Champion'} ${genderTerm}! 🚀 I am **Sarathi** - your friendly AI companion. Ready to chat? 😉`;
+
+    const welcomeMsg: UIMessage = {
+        id: 'welcome',
+        role: 'assistant',
+        text: welcomeText,
+        timestamp: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+    };
+    setMessages([welcomeMsg]);
+    setHistory([]);
+    setTimeout(scrollToBottom, 100);
+  }, [user, scrollToBottom]);
+
   // --- Effects ---
 
   useEffect(() => {
@@ -493,46 +523,45 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
 
     // Don't restore cache for interview mode
     if (cached && !(activeMode === 'gyan-ai' && selectedTopic === 'Interview Preparation')) {
-        const data = JSON.parse(cached);
-        setMessages(data.messages);
-        setHistory(data.history);
-        setTimeout(scrollToBottom, 100);
-    } else if (activeMode === 'sarathi') {
-         setTimeout(() => {
-            const isHinglish = languageRef.current === 'Hinglish';
-            const gender = user.gender || 'other';
-            let genderTerm = '';
-            if (isHinglish) {
-              if (gender === 'male') genderTerm = 'Bhai';
-              else if (gender === 'female') genderTerm = 'Behen';
-              else genderTerm = 'Dost';
-            } else {
-              if (gender === 'male') genderTerm = 'bro';
-              else if (gender === 'female') genderTerm = 'dear';
-              else genderTerm = 'friend';
-            }
+        try {
+            const data = JSON.parse(cached);
+            const savedTime = data.timestamp || 0;
+            const now = Date.now();
+            const twentyFourHours = 24 * 60 * 60 * 1000;
             
-            const welcomeText = isHinglish 
-              ? `Namaste ${user.displayName?.split(' ')[0] || 'Champion'} ${genderTerm}! 🚀 Main hoon **Sarathi** - aapka friendly AI companion. Batao aaj kya chill chat karein? 😉`
-              : `Hello ${user.displayName?.split(' ')[0] || 'Champion'} ${genderTerm}! 🚀 I am **Sarathi** - your friendly AI companion. Ready to chat? 😉`;
-
-            const welcomeMsg: UIMessage = {
-                id: 'welcome',
-                role: 'assistant',
-                text: welcomeText,
-                timestamp: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
-            };
-            setMessages([welcomeMsg]);
-            scrollToBottom();
-         }, 400);
+            if (now - savedTime > twentyFourHours) {
+                // Expired! Clear the cache key and start fresh
+                if (cacheKey) localStorage.removeItem(cacheKey);
+                if (activeMode === 'sarathi') {
+                    setTimeout(triggerWelcomeMessage, 400);
+                } else if (selectedTopic) {
+                    setTimeout(() => startTopicChat(selectedTopic), 400);
+                }
+            } else {
+                setMessages(data.messages || []);
+                setHistory(data.history || []);
+                setTimeout(scrollToBottom, 100);
+            }
+        } catch (e) {
+            console.error('Error parsing cached chat:', e);
+            if (activeMode === 'sarathi') {
+                setTimeout(triggerWelcomeMessage, 400);
+            }
+        }
+    } else if (activeMode === 'sarathi') {
+         setTimeout(triggerWelcomeMessage, 400);
     }
-  }, [isOpen, activeMode, selectedTopic, user, getCacheKey, scrollToBottom]);
+  }, [isOpen, activeMode, selectedTopic, user, getCacheKey, scrollToBottom, triggerWelcomeMessage]);
 
   useEffect(() => {
     const cacheKey = getCacheKey();
     // Don't cache interview sessions
     if (cacheKey && messages.length > 0 && !(activeMode === 'gyan-ai' && selectedTopic === 'Interview Preparation')) {
-        localStorage.setItem(cacheKey, JSON.stringify({ messages, history }));
+        localStorage.setItem(cacheKey, JSON.stringify({ 
+            messages, 
+            history,
+            timestamp: Date.now()
+        }));
     }
   }, [messages, history, getCacheKey, activeMode, selectedTopic]);
 
