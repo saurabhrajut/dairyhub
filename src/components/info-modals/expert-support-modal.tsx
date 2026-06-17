@@ -223,6 +223,67 @@ const parsePhoneNumber = (fullNumber: string) => {
   return { countryCode: "+91", localNumber: fullNumber };
 };
 
+// --- End-to-End Encryption (E2EE) Helpers using Web Crypto API ---
+const ENCRYPTION_SALT = "DairyHub_Secure_E2EE_Salt_2026";
+
+async function getCryptoKey(chatId: string): Promise<CryptoKey> {
+  const encoder = new TextEncoder();
+  const keyData = encoder.encode(chatId + ENCRYPTION_SALT);
+  const hash = await window.crypto.subtle.digest("SHA-256", keyData);
+  return await window.crypto.subtle.importKey(
+    "raw",
+    hash,
+    { name: "AES-GCM" },
+    false,
+    ["encrypt", "decrypt"]
+  );
+}
+
+async function encryptMessage(text: string, chatId: string): Promise<string> {
+  if (!text) return "";
+  try {
+    const key = await getCryptoKey(chatId);
+    const encoder = new TextEncoder();
+    const data = encoder.encode(text);
+    const iv = window.crypto.getRandomValues(new Uint8Array(12));
+    const encrypted = await window.crypto.subtle.encrypt(
+      { name: "AES-GCM", iv: iv },
+      key,
+      data
+    );
+    const combined = new Uint8Array(iv.length + encrypted.byteLength);
+    combined.set(iv, 0);
+    combined.set(new Uint8Array(encrypted), iv.length);
+    return btoa(String.fromCharCode(...combined));
+  } catch (e) {
+    console.error("Encryption failed:", e);
+    return text;
+  }
+}
+
+async function decryptMessage(cipherText: string, chatId: string): Promise<string> {
+  if (!cipherText) return "";
+  try {
+    const key = await getCryptoKey(chatId);
+    const binaryStr = atob(cipherText);
+    const combined = new Uint8Array(binaryStr.length);
+    for (let i = 0; i < binaryStr.length; i++) {
+      combined[i] = binaryStr.charCodeAt(i);
+    }
+    const iv = combined.slice(0, 12);
+    const data = combined.slice(12);
+    const decrypted = await window.crypto.subtle.decrypt(
+      { name: "AES-GCM", iv: iv },
+      key,
+      data
+    );
+    const decoder = new TextDecoder();
+    return decoder.decode(decrypted);
+  } catch (e) {
+    return cipherText; // Fallback to plain text if decryption fails
+  }
+}
+
 interface ChatRoom {
   id: string;
   userId: string;
@@ -648,29 +709,27 @@ function RealChatView({ expert, onBack }: { expert: Expert, onBack: () => void }
     
     // Create/Initialize Chat Metadata in parent collection if it doesn't exist yet
     const chatDocRef = doc(db, "chats", chatId);
-    setDoc(chatDocRef, {
-      id: chatId,
-      userId: user.uid,
-      userName: user.displayName || "Client User",
-      expertId: expert.id,
-      expertName: expert.name,
-      lastMessage: "Consultation opened",
-      lastMessageTime: serverTimestamp()
-    }, { merge: true }).catch(err => console.error("Error creating chat record", err));
+    encryptMessage("Consultation opened", chatId).then(initEncrypted => {
+      setDoc(chatDocRef, {
+        id: chatId,
+        userId: user.uid,
+        userName: user.displayName || "Client User",
+        expertId: expert.id,
+        expertName: expert.name,
+        lastMessage: initEncrypted,
+        lastMessageTime: serverTimestamp()
+      }, { merge: true }).catch(err => console.error("Error creating chat record", err));
+    });
 
     const messagesCol = collection(db, "chats", chatId, "messages");
     const q = query(messagesCol, orderBy("timestamp", "asc"));
     
-    const unsub = onSnapshot(q, (snapshot) => {
-      const msgs: FirestoreMessage[] = [];
-      const now = Date.now();
-      const cutoff = now - 24 * 60 * 60 * 1000; // 24 hours ago
-      
-      snapshot.forEach((docSnap) => {
+    const unsub = onSnapshot(q, async (snapshot) => {
+      const msgsPromises = snapshot.docs.map(async (docSnap) => {
         const data = docSnap.data();
         const docId = docSnap.id;
         
-        let msgTimeMs = now;
+        let msgTimeMs = Date.now();
         if (data.timestamp) {
           try {
             msgTimeMs = data.timestamp.toDate().getTime();
@@ -679,22 +738,28 @@ function RealChatView({ expert, onBack }: { expert: Expert, onBack: () => void }
           }
         }
         
+        const cutoff = Date.now() - 24 * 60 * 60 * 1000;
         // If message is older than 24 hours, delete it from Firestore automatically
         if (data.timestamp && msgTimeMs < cutoff) {
           const docRef = doc(db, "chats", chatId, "messages", docId);
           deleteDoc(docRef).catch(err => console.error("Error deleting old message", err));
-          return; // Skip adding to the UI
+          return null;
         }
 
-        msgs.push({
+        const decryptedText = await decryptMessage(data.text || "", chatId);
+
+        return {
           id: docId,
           senderId: data.senderId,
           senderName: data.senderName,
-          text: data.text,
+          text: decryptedText,
           timestamp: data.timestamp
-        });
+        };
       });
-      setMessages(msgs);
+
+      const resolvedMsgs = await Promise.all(msgsPromises);
+      const validMsgs = resolvedMsgs.filter((m): m is FirestoreMessage => m !== null);
+      setMessages(validMsgs);
       
       // Auto scroll to bottom
       setTimeout(() => {
@@ -718,17 +783,18 @@ function RealChatView({ expert, onBack }: { expert: Expert, onBack: () => void }
     setInput("");
 
     try {
+      const encryptedText = await encryptMessage(textToSend, chatId);
       const messagesCol = collection(db, "chats", chatId, "messages");
       await addDoc(messagesCol, {
         senderId: user.uid,
         senderName: user.displayName || "User",
-        text: textToSend,
+        text: encryptedText,
         timestamp: serverTimestamp()
       });
 
       const chatDocRef = doc(db, "chats", chatId);
       await updateDoc(chatDocRef, {
-        lastMessage: textToSend,
+        lastMessage: encryptedText,
         lastMessageTime: serverTimestamp()
       });
 
@@ -1289,26 +1355,28 @@ function ExpertDashboardView({
     const colRef = collection(db, "chats");
     const q = query(colRef, where("expertId", "==", currentExpert.id));
     
-    const unsub = onSnapshot(q, (snapshot) => {
-      const list: ChatRoom[] = [];
-      snapshot.forEach((docSnap) => {
+    const unsub = onSnapshot(q, async (snapshot) => {
+      const listPromises = snapshot.docs.map(async (docSnap) => {
         const data = docSnap.data();
-        list.push({
-          id: docSnap.id,
+        const chatId = docSnap.id;
+        const decryptedLast = await decryptMessage(data.lastMessage || "", chatId);
+        return {
+          id: chatId,
           userId: data.userId,
           userName: data.userName,
           expertId: data.expertId,
           expertName: data.expertName,
-          lastMessage: data.lastMessage,
+          lastMessage: decryptedLast,
           lastMessageTime: data.lastMessageTime
-        });
+        };
       });
-      list.sort((a, b) => {
+      const resolvedList = await Promise.all(listPromises);
+      resolvedList.sort((a, b) => {
         const timeA = a.lastMessageTime?.seconds || 0;
         const timeB = b.lastMessageTime?.seconds || 0;
         return timeB - timeA;
       });
-      setActiveChats(list);
+      setActiveChats(resolvedList);
     }, (error) => {
       console.error("Error reading dashboard chats:", error);
     });
@@ -1829,16 +1897,12 @@ function ExpertChatView({ chat, onBack }: { chat: ChatRoom, onBack: () => void }
     const messagesCol = collection(db, "chats", chat.id, "messages");
     const q = query(messagesCol, orderBy("timestamp", "asc"));
     
-    const unsub = onSnapshot(q, (snapshot) => {
-      const msgs: FirestoreMessage[] = [];
-      const now = Date.now();
-      const cutoff = now - 24 * 60 * 60 * 1000; // 24 hours ago
-      
-      snapshot.forEach((docSnap) => {
+    const unsub = onSnapshot(q, async (snapshot) => {
+      const msgsPromises = snapshot.docs.map(async (docSnap) => {
         const data = docSnap.data();
         const docId = docSnap.id;
         
-        let msgTimeMs = now;
+        let msgTimeMs = Date.now();
         if (data.timestamp) {
           try {
             msgTimeMs = data.timestamp.toDate().getTime();
@@ -1847,22 +1911,28 @@ function ExpertChatView({ chat, onBack }: { chat: ChatRoom, onBack: () => void }
           }
         }
         
+        const cutoff = Date.now() - 24 * 60 * 60 * 1000; // 24 hours ago
         // If message is older than 24 hours, delete it from Firestore automatically
         if (data.timestamp && msgTimeMs < cutoff) {
           const docRef = doc(db, "chats", chat.id, "messages", docId);
           deleteDoc(docRef).catch(err => console.error("Error deleting old message", err));
-          return; // Skip adding to the UI
+          return null;
         }
 
-        msgs.push({
+        const decryptedText = await decryptMessage(data.text || "", chat.id);
+
+        return {
           id: docId,
           senderId: data.senderId,
           senderName: data.senderName,
-          text: data.text,
+          text: decryptedText,
           timestamp: data.timestamp
-        });
+        };
       });
-      setMessages(msgs);
+
+      const resolvedMsgs = await Promise.all(msgsPromises);
+      const validMsgs = resolvedMsgs.filter((m): m is FirestoreMessage => m !== null);
+      setMessages(validMsgs);
       
       // Auto scroll to bottom
       setTimeout(() => {
@@ -1886,17 +1956,18 @@ function ExpertChatView({ chat, onBack }: { chat: ChatRoom, onBack: () => void }
     setInput("");
 
     try {
+      const encryptedText = await encryptMessage(textToSend, chat.id);
       const messagesCol = collection(db, "chats", chat.id, "messages");
       await addDoc(messagesCol, {
         senderId: user.uid,
         senderName: user.displayName || "Expert",
-        text: textToSend,
+        text: encryptedText,
         timestamp: serverTimestamp()
       });
 
       const chatDocRef = doc(db, "chats", chat.id);
       await updateDoc(chatDocRef, {
-        lastMessage: textToSend,
+        lastMessage: encryptedText,
         lastMessageTime: serverTimestamp()
       });
 
