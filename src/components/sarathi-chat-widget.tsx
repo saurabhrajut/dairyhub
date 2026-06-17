@@ -178,23 +178,47 @@ async function callClaudeAPI(
     return await callGeminiAPI(messages, systemPrompt, apiKey);
   }
 
-// Sarathi AI - Career Navigator
+// Sarathi AI - Friendly Assistant
 async function sarathiAIOffline(
   userName: string,
+  gender: string,
   question: string,
   language: string,
   history: Array<{ role: string; content: string }>
 ): Promise<string> {
-  const systemPrompt = `You are Sarathi - an enthusiastic career navigator AI assistant for the food industry. 
+  const isHinglish = language === 'Hinglish';
   
-Your role:
-- Help users with career guidance, job search, skill development
-- Be friendly, motivating, and use emojis appropriately
-- Response language: ${language}
-- Keep responses concise (2-3 paragraphs max)
-- Use bullet points for actionable advice
+  let genderInstruction = "";
+  if (isHinglish) {
+    if (gender === 'male') {
+      genderInstruction = `Address the user in a very friendly manner as "Bhai", "Bhaiya", or "Yaar".`;
+    } else if (gender === 'female') {
+      genderInstruction = `Address the user in a very friendly manner as "Behen", "Didi", or "Dear".`;
+    } else {
+      genderInstruction = `Address the user in a very friendly manner as "Dost" or "Yaar".`;
+    }
+  } else {
+    if (gender === 'male') {
+      genderInstruction = `Address the user in a very friendly manner as "bro", "brother", or "buddy".`;
+    } else if (gender === 'female') {
+      genderInstruction = `Address the user in a very friendly manner as "sister", "didi", or "dear".`;
+    } else {
+      genderInstruction = `Address the user in a very friendly manner as "friend" or "champion".`;
+    }
+  }
 
-User's name: ${userName}`;
+  const systemPrompt = `You are Sarathi - a friendly, super witty, and slightly comedic AI companion for the dairy and food industry.
+  
+Your character & guidelines:
+- You are a close friend (dost/yaar) to the user.
+- ${genderInstruction}
+- Talk like a real friend, using a casual, warm, and highly engaging tone.
+- Crack light jokes, funny comments, or witty remarks ("beech beech me comedy type baat") in between your conversation, but always maintain a helpful and supportive attitude.
+- Answer user queries with useful and informative information about dairy technology, food processing, quality, industry practices, etc.
+- Response language: ${language}.
+- Keep responses relatively brief, conversational, and use emojis to make it lively.
+- User's name: ${userName}
+- User's gender: ${gender}`;
 
   const messages = [
     ...history.map(h => ({ role: h.role, content: h.content })),
@@ -423,6 +447,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
   const [resumeText, setResumeText] = useState("");
   const [showSettings, setShowSettings] = useState(false);
   const [settingsApiKey, setSettingsApiKey] = useState("");
+  const [sarathiMode, setSarathiMode] = useState<'online' | 'offline'>('offline');
 
   // Sync API Key from localStorage
   useEffect(() => {
@@ -474,10 +499,27 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
         setTimeout(scrollToBottom, 100);
     } else if (activeMode === 'sarathi') {
          setTimeout(() => {
+            const isHinglish = languageRef.current === 'Hinglish';
+            const gender = user.gender || 'other';
+            let genderTerm = '';
+            if (isHinglish) {
+              if (gender === 'male') genderTerm = 'Bhai';
+              else if (gender === 'female') genderTerm = 'Behen';
+              else genderTerm = 'Dost';
+            } else {
+              if (gender === 'male') genderTerm = 'bro';
+              else if (gender === 'female') genderTerm = 'dear';
+              else genderTerm = 'friend';
+            }
+            
+            const welcomeText = isHinglish 
+              ? `Namaste ${user.displayName?.split(' ')[0] || 'Champion'} ${genderTerm}! 🚀 Main hoon **Sarathi** - aapka friendly AI companion. Batao aaj kya chill chat karein? 😉`
+              : `Hello ${user.displayName?.split(' ')[0] || 'Champion'} ${genderTerm}! 🚀 I am **Sarathi** - your friendly AI companion. Ready to chat? 😉`;
+
             const welcomeMsg: UIMessage = {
                 id: 'welcome',
                 role: 'assistant',
-                text: `Namaste ${user.displayName?.split(' ')[0] || 'Champion'}! 🚀 I am **Sarathi** - your ultimate career navigator. Ready to conquer your goals?`,
+                text: welcomeText,
                 timestamp: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
             };
             setMessages([welcomeMsg]);
@@ -521,12 +563,23 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
         let followUpText = '';
         
         if (activeMode === 'sarathi') {
-            responseText = await sarathiAIOffline(
-                user?.displayName || 'User',
-                query,
-                languageRef.current,
-                newHistory
-            );
+            if (sarathiMode === 'offline') {
+                responseText = await generateOfflineResponse(
+                    newHistory,
+                    "Sarathi friendly assistant",
+                    user?.displayName || 'User',
+                    user?.gender || 'other',
+                    languageRef.current
+                );
+            } else {
+                responseText = await sarathiAIOffline(
+                    user?.displayName || 'User',
+                    user?.gender || 'other',
+                    query,
+                    languageRef.current,
+                    newHistory
+                );
+            }
         } else {
             if (selectedTopic === 'Interview Preparation') {
                 if (interviewMode === 'offline') {
@@ -958,8 +1011,8 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                         variant="ghost" 
                         size="icon" 
                         onClick={() => {
-                            if (selectedTopic) setSelectedTopic(null);
-                            else setActiveMode('sarathi');
+                            setSelectedTopic(null);
+                            setActiveMode('sarathi');
                         }} 
                         className="h-9 w-9 -ml-1 hover:bg-white/20 transition-all"
                     >
@@ -982,7 +1035,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                         <p className={cn("text-xs font-medium opacity-90 leading-tight", 
                             activeMode === 'sarathi' ? "text-slate-600" : "text-indigo-100"
                         )}>
-                            {activeMode === 'sarathi' ? 'Career Navigator' : 'Domain Expert'}
+                            {activeMode === 'sarathi' ? 'Friendly Companion' : 'Domain Expert'}
                         </p>
                     </div>
                     <div className="w-2 h-2 bg-emerald-400 border-2 border-white rounded-full animate-pulse ml-auto"></div>
@@ -994,7 +1047,10 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                     <Button 
                         size="sm" 
                         variant="ghost" 
-                        onClick={() => setActiveMode('gyan-ai')}
+                        onClick={() => {
+                            setActiveMode('gyan-ai');
+                            setSelectedTopic('Interview Preparation');
+                        }}
                         className="h-9 bg-white/20 hover:bg-white/30 text-white border-white/20 text-xs px-3 rounded-2xl shadow-lg font-semibold transition-all"
                     >
                         <Sparkles className="w-4 h-4 mr-1" />
@@ -1233,7 +1289,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                                     </div>
                                     <div className="space-y-1">
                                         <p className="text-lg font-bold text-slate-700">Ready to chat with Sarathi!</p>
-                                        <p className="text-sm text-slate-500">Ask anything about your dairy industry career</p>
+                                        <p className="text-sm text-slate-500">Let's chat like a friend about dairy tech, jokes, and more!</p>
                                     </div>
                                 </div>
                             )}
@@ -1326,6 +1382,18 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                                     <SelectItem value="Hinglish">🇮🇳 Hinglish</SelectItem>
                                 </SelectContent>
                             </Select>
+
+                            {activeMode === 'sarathi' && (
+                                <Select value={sarathiMode} onValueChange={(v: any) => setSarathiMode(v)}>
+                                    <SelectTrigger className="h-8 text-xs bg-white border-slate-200 shadow-sm hover:shadow-md rounded-2xl px-2 w-32">
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent className="bg-white border-slate-200 shadow-2xl">
+                                        <SelectItem value="offline">📴 Offline (Local)</SelectItem>
+                                        <SelectItem value="online">🌐 Online (AI)</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            )}
                         </div>
                         <form 
                             onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }} 
@@ -1335,7 +1403,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                                 ref={inputRef}
                                 value={input} 
                                 onChange={(e) => setInput(e.target.value)} 
-                                placeholder={activeMode === 'sarathi' ? "💭 Ask Sarathi..." : "🧠 Ask expert..."}
+                                placeholder={activeMode === 'sarathi' ? "💬 Chat with Sarathi..." : "🧠 Ask expert..."}
                                 className="flex-1 border-none bg-transparent shadow-none focus-visible:ring-0 min-h-[44px] text-base px-4 placeholder-slate-400 group-focus-within:placeholder-slate-500"
                                 disabled={isLoading}
                             />
