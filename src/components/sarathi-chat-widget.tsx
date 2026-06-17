@@ -373,7 +373,7 @@ export function SarathiChatWidget() {
           onClick={handleOpenChat}
         >
           <img 
-              src="/user-avatar.jpg"
+              src="https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/IMG_6535%20(2).jpg?alt=media&token=5843169c-b4d5-4e04-b2be-3ab1a49af457"
               alt="Sarathi Chat Bot"
               className="w-full h-full object-cover"
           />
@@ -970,7 +970,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                 <div className="relative flex items-center gap-3">
                     <div className="w-11 h-11 rounded-2xl border-2 border-white/80 shadow-md flex-shrink-0 overflow-hidden bg-white/20">
                         <img 
-                            src="/user-avatar.jpg"
+                            src="https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/IMG_6535%20(2).jpg?alt=media&token=5843169c-b4d5-4e04-b2be-3ab1a49af457"
                             alt="Sarathi Avatar"
                             className="w-full h-full object-cover"
                         />
@@ -1226,7 +1226,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                                 <div className="flex flex-col items-center justify-center h-52 text-center text-slate-400 space-y-3">
                                     <div className="w-20 h-20 rounded-3xl border-4 border-white shadow-xl overflow-hidden bg-indigo-50 mx-auto">
                                         <img 
-                                            src="/user-avatar.jpg"
+                                            src="https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/IMG_6535%20(2).jpg?alt=media&token=5843169c-b4d5-4e04-b2be-3ab1a49af457"
                                             alt="Sarathi Avatar"
                                             className="w-full h-full object-cover"
                                         />
@@ -1279,7 +1279,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                                         ) : (
                                             <div className="w-11 h-11 rounded-2xl border-2 border-white shadow-md mt-1 flex-shrink-0 overflow-hidden bg-indigo-50">
                                                 <img 
-                                                    src="/user-avatar.jpg"
+                                                    src="https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/IMG_6535%20(2).jpg?alt=media&token=5843169c-b4d5-4e04-b2be-3ab1a49af457"
                                                     alt="Sarathi Avatar"
                                                     className="w-full h-full object-cover"
                                                 />
