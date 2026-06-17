@@ -205,13 +205,12 @@ const COUNTRY_CODES = [
   { code: "+973", country: "Bahrain (BH)" },
 ];
 
+const SORTED_COUNTRY_CODES = [...COUNTRY_CODES].sort((a, b) => b.code.length - a.code.length);
+
 const parsePhoneNumber = (fullNumber: string) => {
   if (!fullNumber) return { countryCode: "+91", localNumber: "" };
   
-  // Sort country codes by length of code descending to match longer codes first
-  const sortedCodes = [...COUNTRY_CODES].sort((a, b) => b.code.length - a.code.length);
-  
-  for (const item of sortedCodes) {
+  for (const item of SORTED_COUNTRY_CODES) {
     if (fullNumber.startsWith(item.code)) {
       return {
         countryCode: item.code,
@@ -221,6 +220,24 @@ const parsePhoneNumber = (fullNumber: string) => {
   }
   
   return { countryCode: "+91", localNumber: fullNumber };
+};
+
+const playNotificationSound = () => {
+  try {
+    const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
+    gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.3);
+    osc.start(audioCtx.currentTime);
+    osc.stop(audioCtx.currentTime + 0.3);
+  } catch (e) {
+    console.error("Failed to play sound", e);
+  }
 };
 
 // --- End-to-End Encryption (E2EE) Helpers using Web Crypto API ---
@@ -292,6 +309,9 @@ interface ChatRoom {
   expertName: string;
   lastMessage: string;
   lastMessageTime: any;
+  lastMessageSenderId?: string;
+  lastReadTimeByExpert?: any;
+  lastReadTimeByUser?: any;
 }
 
 interface UIMessage { 
@@ -315,10 +335,12 @@ export function ExpertSupportModal({ isOpen, setIsOpen }: { isOpen: boolean; set
   const [activeView, setActiveView] = useState<ViewState>('list');
   const [selectedExpert, setSelectedExpert] = useState<Expert | null>(null);
   const [selectedChat, setSelectedChat] = useState<ChatRoom | null>(null);
+  const [clientChats, setClientChats] = useState<ChatRoom[]>([]);
   
   // Real experts from Firestore
   const [realExperts, setRealExperts] = useState<Expert[]>([]);
   const { user } = useAuth();
+  const { toast } = useToast();
   
   const db = useMemo(() => {
     try {
@@ -364,6 +386,154 @@ export function ExpertSupportModal({ isOpen, setIsOpen }: { isOpen: boolean; set
 
     return () => unsub();
   }, [db]);
+
+  // Load client's chats to show unread indicators on the expert cards
+  useEffect(() => {
+    if (!db || !user || user.isAnonymous) {
+      setClientChats([]);
+      return;
+    }
+    const colRef = collection(db, "chats");
+    const q = query(colRef, where("userId", "==", user.uid));
+    
+    const unsub = onSnapshot(q, async (snapshot) => {
+      const listPromises = snapshot.docs.map(async (docSnap) => {
+        const data = docSnap.data();
+        const chatId = docSnap.id;
+        const decryptedLast = await decryptMessage(data.lastMessage || "", chatId);
+        return {
+          id: chatId,
+          userId: data.userId,
+          userName: data.userName,
+          expertId: data.expertId,
+          expertName: data.expertName,
+          lastMessage: decryptedLast,
+          lastMessageTime: data.lastMessageTime,
+          lastMessageSenderId: data.lastMessageSenderId || "",
+          lastReadTimeByExpert: data.lastReadTimeByExpert || null,
+          lastReadTimeByUser: data.lastReadTimeByUser || null
+        };
+      });
+      const resolvedList = await Promise.all(listPromises);
+      setClientChats(resolvedList);
+    }, (error) => {
+      console.error("Error reading client chats:", error);
+    });
+
+    return () => unsub();
+  }, [db, user]);
+
+  // Check and request browser Notification permissions
+  useEffect(() => {
+    if (typeof window !== "undefined" && "Notification" in window) {
+      if (Notification.permission === "default") {
+        Notification.requestPermission();
+      }
+    }
+  }, []);
+
+  // Background Chat Notifications Listener
+  useEffect(() => {
+    if (!db || !user || user.isAnonymous) return;
+
+    const initialLoads = { client: true, expert: true };
+
+    const triggerNotification = async (title: string, encryptedBody: string, chatId: string) => {
+      playNotificationSound();
+
+      let bodyText = "New message received";
+      try {
+        bodyText = await decryptMessage(encryptedBody, chatId);
+      } catch (e) {
+        // fallback
+      }
+
+      // 1. Browser Push Notification
+      if (typeof window !== "undefined" && "Notification" in window) {
+        if (Notification.permission === "granted") {
+          new Notification(title, {
+            body: bodyText,
+            icon: "/logo.png"
+          });
+        }
+      }
+
+      // 2. In-App Toast Alert
+      toast({
+        title: title,
+        description: bodyText,
+        variant: "default",
+        className: "bg-blue-600 text-white font-semibold shadow-xl border-none hover:bg-blue-700 cursor-pointer"
+      });
+    };
+
+    // Client-side listener: notify client when expert replies
+    const qClient = query(collection(db, "chats"), where("userId", "==", user.uid));
+    const unsubClient = onSnapshot(qClient, (snapshot) => {
+      if (initialLoads.client) {
+        initialLoads.client = false;
+        return;
+      }
+      snapshot.docChanges().forEach((change) => {
+        if (change.type === "modified") {
+          const data = change.doc.data();
+          const chatId = change.doc.id;
+          
+          if (data.lastMessageSenderId && data.lastMessageSenderId !== user.uid) {
+            const lastRead = data.lastReadTimeByUser;
+            const lastMsgTime = data.lastMessageTime;
+            
+            if (lastMsgTime && (!lastRead || lastMsgTime.toDate().getTime() > lastRead.toDate().getTime())) {
+              const isActivelyChatting = activeView === 'real-chat' && selectedExpert?.id === data.expertId && isOpen;
+              if (!isActivelyChatting) {
+                triggerNotification(
+                  `DairyHub: Message from ${data.expertName || "Expert"}`,
+                  data.lastMessage || "",
+                  chatId
+                );
+              }
+            }
+          }
+        }
+      });
+    });
+
+    // Expert-side listener: notify expert when client sends message
+    const qExpert = query(collection(db, "chats"), where("expertId", "==", user.uid));
+    const unsubExpert = onSnapshot(qExpert, (snapshot) => {
+      if (initialLoads.expert) {
+        initialLoads.expert = false;
+        return;
+      }
+      snapshot.docChanges().forEach((change) => {
+        if (change.type === "modified") {
+          const data = change.doc.data();
+          const chatId = change.doc.id;
+          
+          if (data.lastMessageSenderId && data.lastMessageSenderId !== user.uid) {
+            const lastRead = data.lastReadTimeByExpert;
+            const lastMsgTime = data.lastMessageTime;
+            
+            if (lastMsgTime && (!lastRead || lastMsgTime.toDate().getTime() > lastRead.toDate().getTime())) {
+              const isActivelyChatting = activeView === 'expert-chat' && selectedChat?.id === chatId && isOpen;
+              if (!isActivelyChatting) {
+                triggerNotification(
+                  `DairyHub: Message from ${data.userName || "Client"}`,
+                  data.lastMessage || "",
+                  chatId
+                );
+              }
+            }
+          }
+        }
+      });
+    });
+
+    return () => {
+      unsubClient();
+      unsubExpert();
+    };
+  }, [db, user, activeView, selectedExpert, selectedChat, isOpen]);
 
   // Real Experts List
   const combinedExpertsList = useMemo(() => {
@@ -445,6 +615,7 @@ export function ExpertSupportModal({ isOpen, setIsOpen }: { isOpen: boolean; set
             {activeView === 'list' && (
               <ExpertListView 
                 expertsList={combinedExpertsList}
+                clientChats={clientChats}
                 onSelectExpert={handleSelectExpert} 
                 onRegister={() => setActiveView('register')} 
                 currentExpertProfile={currentExpertProfile}
@@ -488,12 +659,14 @@ export function ExpertSupportModal({ isOpen, setIsOpen }: { isOpen: boolean; set
 // --- List View Component ---
 function ExpertListView({ 
   expertsList, 
+  clientChats = [],
   onSelectExpert, 
   onRegister,
   currentExpertProfile,
   onGoToDashboard
 }: { 
   expertsList: Expert[], 
+  clientChats?: ChatRoom[],
   onSelectExpert: (e: Expert) => void, 
   onRegister: () => void,
   currentExpertProfile: Expert | null,
@@ -564,6 +737,15 @@ function ExpertListView({
             filteredExperts.map((expert) => {
               const isSelf = user && expert.id === user.uid;
 
+              // Check if there are unread messages from this expert
+              const correspondingChat = clientChats.find(c => c.expertId === expert.id);
+              const isUnread = correspondingChat && 
+                correspondingChat.lastMessageSenderId && 
+                correspondingChat.lastMessageSenderId !== user?.uid && 
+                (!correspondingChat.lastReadTimeByUser || 
+                 (correspondingChat.lastMessageTime && 
+                  (correspondingChat.lastMessageTime.seconds || 0) > (correspondingChat.lastReadTimeByUser?.seconds || 0)));
+
               return (
                 <Card 
                   key={expert.id} 
@@ -591,6 +773,11 @@ function ExpertListView({
                           {expert.name}
                         </h3>
                         <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 fill-emerald-100 shrink-0" />
+                        {isUnread && (
+                          <span className="ml-1 px-1.5 py-0.5 text-[8px] font-bold bg-blue-600 text-white rounded-full animate-pulse shrink-0">
+                            NEW
+                          </span>
+                        )}
                       </div>
                       <p className="text-[10px] sm:text-xs text-slate-500 font-medium truncate">
                         {expert.designation && expert.companyName 
@@ -703,6 +890,45 @@ function RealChatView({ expert, onBack }: { expert: Expert, onBack: () => void }
     return `${user.uid}_${expert.id}`;
   }, [user, expert]);
 
+  // Clean up old messages in Firestore once on mount/chatId change
+  useEffect(() => {
+    if (!db || !chatId) return;
+
+    const cleanupOldMessages = async () => {
+      try {
+        const messagesCol = collection(db, "chats", chatId, "messages");
+        const snapshot = await getDocs(messagesCol);
+        const cutoff = Date.now() - 24 * 60 * 60 * 1000;
+        const deletePromises: Promise<void>[] = [];
+
+        snapshot.forEach((docSnap) => {
+          const data = docSnap.data();
+          let msgTimeMs = Date.now();
+          if (data.timestamp) {
+            try {
+              msgTimeMs = data.timestamp.toDate().getTime();
+            } catch {
+              // fallback
+            }
+            if (msgTimeMs < cutoff) {
+              const docRef = doc(db, "chats", chatId, "messages", docSnap.id);
+              deletePromises.push(deleteDoc(docRef));
+            }
+          }
+        });
+
+        if (deletePromises.length > 0) {
+          await Promise.all(deletePromises);
+          console.log(`[RealChatView] Cleaned up ${deletePromises.length} old messages.`);
+        }
+      } catch (error) {
+        console.error("[RealChatView] Error cleaning up old messages:", error);
+      }
+    };
+
+    cleanupOldMessages();
+  }, [db, chatId]);
+
   // Read message list from Firestore in real-time
   useEffect(() => {
     if (!db || !chatId || !user) return;
@@ -717,7 +943,9 @@ function RealChatView({ expert, onBack }: { expert: Expert, onBack: () => void }
         expertId: expert.id,
         expertName: expert.name,
         lastMessage: initEncrypted,
-        lastMessageTime: serverTimestamp()
+        lastMessageTime: serverTimestamp(),
+        lastMessageSenderId: user.uid,
+        lastReadTimeByUser: serverTimestamp()
       }, { merge: true }).catch(err => console.error("Error creating chat record", err));
     });
 
@@ -739,10 +967,8 @@ function RealChatView({ expert, onBack }: { expert: Expert, onBack: () => void }
         }
         
         const cutoff = Date.now() - 24 * 60 * 60 * 1000;
-        // If message is older than 24 hours, delete it from Firestore automatically
+        // If message is older than 24 hours, filter it out locally
         if (data.timestamp && msgTimeMs < cutoff) {
-          const docRef = doc(db, "chats", chatId, "messages", docId);
-          deleteDoc(docRef).catch(err => console.error("Error deleting old message", err));
           return null;
         }
 
@@ -774,6 +1000,20 @@ function RealChatView({ expert, onBack }: { expert: Expert, onBack: () => void }
     return () => unsub();
   }, [db, chatId, user, expert]);
 
+  // Mark incoming messages as read
+  useEffect(() => {
+    if (!db || !chatId || !user) return;
+    if (messages.length > 0) {
+      const lastMsg = messages[messages.length - 1];
+      if (lastMsg.senderId !== user.uid) {
+        const chatDocRef = doc(db, "chats", chatId);
+        updateDoc(chatDocRef, {
+          lastReadTimeByUser: serverTimestamp()
+        }).catch(() => {});
+      }
+    }
+  }, [db, chatId, messages, user?.uid]);
+
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || !db || !user) return;
@@ -795,7 +1035,8 @@ function RealChatView({ expert, onBack }: { expert: Expert, onBack: () => void }
       const chatDocRef = doc(db, "chats", chatId);
       await updateDoc(chatDocRef, {
         lastMessage: encryptedText,
-        lastMessageTime: serverTimestamp()
+        lastMessageTime: serverTimestamp(),
+        lastMessageSenderId: user.uid
       });
 
     } catch (error: any) {
@@ -1296,6 +1537,7 @@ function ExpertDashboardView({
   onOpenChat: (chat: ChatRoom) => void
 }) {
   const { toast } = useToast();
+  const { user } = useAuth();
   const [activeChats, setActiveChats] = useState<ChatRoom[]>([]);
   const [status, setStatus] = useState<boolean>(currentExpert?.status === 'online');
   const [fee, setFee] = useState<string>(currentExpert?.fee.toString() || "0");
@@ -1367,7 +1609,10 @@ function ExpertDashboardView({
           expertId: data.expertId,
           expertName: data.expertName,
           lastMessage: decryptedLast,
-          lastMessageTime: data.lastMessageTime
+          lastMessageTime: data.lastMessageTime,
+          lastMessageSenderId: data.lastMessageSenderId || "",
+          lastReadTimeByExpert: data.lastReadTimeByExpert || null,
+          lastReadTimeByUser: data.lastReadTimeByUser || null
         };
       });
       const resolvedList = await Promise.all(listPromises);
@@ -1847,7 +2092,16 @@ function ExpertDashboardView({
                       </AvatarFallback>
                     </Avatar>
                     <div className="min-w-0">
-                      <h4 className="font-bold text-xs sm:text-sm text-slate-900 truncate">{chat.userName}</h4>
+                      <div className="flex items-center gap-1.5">
+                        <h4 className="font-bold text-xs sm:text-sm text-slate-900 truncate">{chat.userName}</h4>
+                        {chat.lastMessageSenderId && 
+                         chat.lastMessageSenderId !== user?.uid && 
+                         (!chat.lastReadTimeByExpert || 
+                          (chat.lastMessageTime && 
+                           (chat.lastMessageTime.seconds || 0) > (chat.lastReadTimeByExpert?.seconds || 0))) && (
+                          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" title="New message" />
+                        )}
+                      </div>
                       <p className="text-[10px] sm:text-xs text-slate-500 truncate mt-0.5 max-w-[120px] sm:max-w-xs md:max-w-md">
                         {chat.lastMessage}
                       </p>
@@ -1891,6 +2145,45 @@ function ExpertChatView({ chat, onBack }: { chat: ChatRoom, onBack: () => void }
     }
   }, []);
 
+  // Clean up old messages in Firestore once on mount/chat.id change
+  useEffect(() => {
+    if (!db || !chat.id) return;
+
+    const cleanupOldMessages = async () => {
+      try {
+        const messagesCol = collection(db, "chats", chat.id, "messages");
+        const snapshot = await getDocs(messagesCol);
+        const cutoff = Date.now() - 24 * 60 * 60 * 1000;
+        const deletePromises: Promise<void>[] = [];
+
+        snapshot.forEach((docSnap) => {
+          const data = docSnap.data();
+          let msgTimeMs = Date.now();
+          if (data.timestamp) {
+            try {
+              msgTimeMs = data.timestamp.toDate().getTime();
+            } catch {
+              // fallback
+            }
+            if (msgTimeMs < cutoff) {
+              const docRef = doc(db, "chats", chat.id, "messages", docSnap.id);
+              deletePromises.push(deleteDoc(docRef));
+            }
+          }
+        });
+
+        if (deletePromises.length > 0) {
+          await Promise.all(deletePromises);
+          console.log(`[ExpertChatView] Cleaned up ${deletePromises.length} old messages.`);
+        }
+      } catch (error) {
+        console.error("[ExpertChatView] Error cleaning up old messages:", error);
+      }
+    };
+
+    cleanupOldMessages();
+  }, [db, chat.id]);
+
   // Listen to messages of the chat in real-time
   useEffect(() => {
     if (!db || !chat.id || !user) return;
@@ -1912,10 +2205,8 @@ function ExpertChatView({ chat, onBack }: { chat: ChatRoom, onBack: () => void }
         }
         
         const cutoff = Date.now() - 24 * 60 * 60 * 1000; // 24 hours ago
-        // If message is older than 24 hours, delete it from Firestore automatically
+        // If message is older than 24 hours, filter it out locally
         if (data.timestamp && msgTimeMs < cutoff) {
-          const docRef = doc(db, "chats", chat.id, "messages", docId);
-          deleteDoc(docRef).catch(err => console.error("Error deleting old message", err));
           return null;
         }
 
@@ -1947,6 +2238,20 @@ function ExpertChatView({ chat, onBack }: { chat: ChatRoom, onBack: () => void }
     return () => unsub();
   }, [db, chat.id, user]);
 
+  // Mark incoming messages as read
+  useEffect(() => {
+    if (!db || !chat.id || !user) return;
+    if (messages.length > 0) {
+      const lastMsg = messages[messages.length - 1];
+      if (lastMsg.senderId !== user.uid) {
+        const chatDocRef = doc(db, "chats", chat.id);
+        updateDoc(chatDocRef, {
+          lastReadTimeByExpert: serverTimestamp()
+        }).catch(() => {});
+      }
+    }
+  }, [db, chat.id, messages, user?.uid]);
+
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || !db || !user) return;
@@ -1968,7 +2273,8 @@ function ExpertChatView({ chat, onBack }: { chat: ChatRoom, onBack: () => void }
       const chatDocRef = doc(db, "chats", chat.id);
       await updateDoc(chatDocRef, {
         lastMessage: encryptedText,
-        lastMessageTime: serverTimestamp()
+        lastMessageTime: serverTimestamp(),
+        lastMessageSenderId: user.uid
       });
 
     } catch (error: any) {
