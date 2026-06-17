@@ -34,5 +34,5 @@ export async function generateOfflineResponse(
   }
 
   // C. Default Sarathi Mode
-  return handleSarathiChat(lastUserMessage, userName, gender, language);
+  return handleSarathiChat(lastUserMessage, userName, gender, language, messages.length);
 }
