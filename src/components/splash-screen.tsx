@@ -712,9 +712,9 @@ export default function SplashScreen() {
         {/* 👇👇 YAHAN APNA CHATBOT ICON ADD KAREIN 👇👇 */}
         <div className="fixed bottom-6 right-6 z-[9999] animate-bounce hover:animate-none">
             <img 
-              src="https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/IMG_6535%20(2).jpg?alt=media&token=YAHAN_APNA_TOKEN_DAALEIN" 
+              src="https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/IMG_6535%20(2).jpg?alt=media&token=5843169c-b4d5-4e04-b2be-3ab1a49af457" 
               alt="Chatbot Icon" 
-              className="w-16 h-16 rounded-full shadow-[0_0_15px_rgba(59,130,246,0.6)] border-2 border-white cursor-pointer hover:scale-110 transition-transform duration-300" 
+              className="w-16 h-16 rounded-full shadow-[0_0_15px_rgba(59,130,246,0.6)] border-2 border-white cursor-pointer hover:scale-110 transition-transform duration-300 object-cover" 
             />
         </div>
         {/* 👆👆 YAHAN TAK 👆👆 */}
