@@ -156,14 +156,16 @@ interface ValidationResult {
     closingSnf: string;
   }
   
-  // ✅ UPDATED: Added mass-balance
+  // ✅ UPDATED: Added mass-balance, production-process, and utility-infra
   type CalculatorType =
     | "yields"
     | "paneer-yield"
     | "ice-cream"
     | "plant-efficiency"
     | "plant-cost"
-    | "mass-balance"; 
+    | "mass-balance"
+    | "production-process"
+    | "utility-infra";
 // ==================== VALIDATION UTILITIES ====================
 const useInputValidation = () => {
   const validateNumber = useCallback(
@@ -405,6 +407,8 @@ function YieldsCalc() {
     'khoa': { title: "Khoa Yield (खोया यील्ड)", component: <KhoaYieldCalc /> },
     'shrikhand': { title: "Shrikhand Yield (श्रीखंड यील्ड)", component: <ShrikhandYieldCalc /> },
     'pedha': { title: "Pedha/Burfi Yield (पेड़ा/बर्फी यील्ड)", component: <PedhaBurfiYieldCalc /> },
+    'cheese': { title: "Cheese Yield (चीज़ यील्ड)", component: <CheeseYieldCalc /> },
+    'ghee': { title: "Ghee Recovery (घी रिकवरी)", component: <GheeRecoveryCalc /> },
   };
 
   const renderCalculator = () => {
@@ -419,6 +423,96 @@ function YieldsCalc() {
       <CardContent className="pt-4">
         <div className="mb-4">
           <Label className="text-xs font-semibold mb-2 block">कैलकुलेटर चुनें (Select Yield Calculator)</Label>
+          <Select value={activeCalc} onValueChange={setActiveCalc}>
+            <SelectTrigger className="w-full h-10 bg-white">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {Object.entries(calculators).map(([key, { title }]) => (
+                <SelectItem key={key} value={key} className="text-xs">{title}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="mt-4 border-t pt-4">
+          {renderCalculator()}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function ProductionProcessCalc() {
+  const [activeCalc, setActiveCalc] = useState('pasteurization');
+
+  const calculators = {
+    'pasteurization': { title: "Pasteurization Validation (पाश्चुरीकरण सत्यापन)", component: <PasteurizationCalc /> },
+    'evaporator': { title: "Evaporation & Condensing (इवेपोरेटर/कंडेंसिंग)", component: <EvaporatorCalc /> },
+    'drying': { title: "Spray Drying (स्प्रे ड्रायर)", component: <SprayDryerCalc /> },
+    'coagulant': { title: "Paneer Coagulant (पनीर कोएगुलेंट)", component: <PaneerCoagulantCalc /> },
+    'culture': { title: "Culture Dosing (स्टार्टर/कल्चर डोजिंग)", component: <CultureDosingCalc /> },
+    'cip': { title: "CIP Chemical Dosing (CIP केमिकल डोजिंग)", component: <CIPChemicalCalc /> },
+    'tank': { title: "Tank Volume & Dipstick (टैंक वॉल्यूम / धारिता)", component: <TankVolumeCalc /> },
+    'pipeline': { title: "Pipeline Loss & Volume (पाइपलाइन वॉल्यूम और नुकसान)", component: <PipelineLossCalc /> },
+    'packaging': { title: "Packaging Film/Foil (पैकेजिंग फिल्म / फॉयल)", component: <PackagingFilmCalc /> },
+    'storage': { title: "Storage & Inventory (भंडारण और इन्वेंट्री)", component: <StorageCalc /> },
+    'dispatch': { title: "Milk Dispatch / Tanker (दूध डिस्पैच / टैंकर)", component: <DispatchCalc /> },
+  };
+
+  const renderCalculator = () => {
+    return calculators[activeCalc as keyof typeof calculators]?.component || null;
+  };
+
+  return (
+    <Card className="border shadow-md">
+      <CardHeader className="bg-slate-50/50 pb-3">
+        <CardTitle className="text-sm font-bold text-slate-700 uppercase">Production Process Calculators (उत्पादन प्रक्रिया कैलकुलेटर)</CardTitle>
+      </CardHeader>
+      <CardContent className="pt-4">
+        <div className="mb-4">
+          <Label className="text-xs font-semibold mb-2 block">कैलकुलेटर चुनें (Select Process Calculator)</Label>
+          <Select value={activeCalc} onValueChange={setActiveCalc}>
+            <SelectTrigger className="w-full h-10 bg-white">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {Object.entries(calculators).map(([key, { title }]) => (
+                <SelectItem key={key} value={key} className="text-xs">{title}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="mt-4 border-t pt-4">
+          {renderCalculator()}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function UtilityInfraCalc() {
+  const [activeCalc, setActiveCalc] = useState('chilling');
+
+  const calculators = {
+    'chilling': { title: "Chilling Load (चिलिंग लोड और रेफ्रिजरेशन)", component: <ChillingLoadCalc /> },
+    'boiler': { title: "Boiler Steam & Cost (बॉयलर स्टीम और ईंधन लागत)", component: <BoilerCostCalc /> },
+    'ibt': { title: "Ice Build Tank (IBT क्षमता और बर्फ संचय)", component: <IbtCalc /> },
+    'wmr': { title: "Water Monitoring Ratio (WMR / पानी की खपत)", component: <WmrCalc /> },
+    'etp': { title: "Effluent Treatment Plant (ETP वेस्ट वाटर लोड)", component: <EtpLoadCalc /> },
+  };
+
+  const renderCalculator = () => {
+    return calculators[activeCalc as keyof typeof calculators]?.component || null;
+  };
+
+  return (
+    <Card className="border shadow-md">
+      <CardHeader className="bg-slate-50/50 pb-3">
+        <CardTitle className="text-sm font-bold text-slate-700 uppercase">Utility & Infrastructure Calculators (उपयोगिता और बुनियादी ढांचा कैलकुलेटर)</CardTitle>
+      </CardHeader>
+      <CardContent className="pt-4">
+        <div className="mb-4">
+          <Label className="text-xs font-semibold mb-2 block">कैलकुलेटर चुनें (Select Utility Calculator)</Label>
           <Select value={activeCalc} onValueChange={setActiveCalc}>
             <SelectTrigger className="w-full h-10 bg-white">
               <SelectValue />
@@ -457,6 +551,18 @@ const calculatorsInfo = {
       icon: IceCreamIcon,
       component: IceCreamCalculators,
       color: "from-pink-500 to-rose-500", // ✅ Gradient Pink
+    },
+    "production-process": {
+      title: "Production Process",
+      icon: Activity,
+      component: ProductionProcessCalc,
+      color: "from-amber-500 to-orange-600", // ✅ Gradient Orange
+    },
+    "utility-infra": {
+      title: "Utility & Infra",
+      icon: Factory,
+      component: UtilityInfraCalc,
+      color: "from-indigo-500 to-purple-600", // ✅ Gradient Purple
     },
     "plant-efficiency": {
       title: "Plant Efficiency",
@@ -11715,7 +11821,7 @@ function ShrikhandYieldCalc() {
     <div className="space-y-4 w-full">
       {/* Header */}
       <Alert className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
-        <Droplet className="h-4 w-4 text-blue-600" />
+        <Droplets className="h-4 w-4 text-blue-600" />
         <AlertTitle className="text-blue-800 font-bold">श्रीखंड यील्ड और मिश्रण ट्रैकर (Shrikhand Yield & Blending Tracker)</AlertTitle>
         <AlertDescription className="text-xs text-blue-700">
           चक्का, चीनी और अन्य अतिरिक्त घटकों (mango pulp/dry fruits) के आधार पर श्रीखंड उत्पादन, अंतिम वसा/ठोस संतुलन और लागत अनुमान।<br/>
