@@ -65,7 +65,8 @@ import {
   Truck,         // Dispatch Logistics
   Activity,      // Suite Header
   FlaskConical,  // Lab SNF
-  Banknote       // Rate Calculation
+  Banknote,      // Rate Calculation
+  Coins
 } from "lucide-react";
 import {
   Select,
