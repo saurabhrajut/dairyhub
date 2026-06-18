@@ -96,6 +96,7 @@ import {
 } from "@/components/ui/table";
 import { Slider } from "@/components/ui/slider";
 import { Progress } from "@/components/ui/progress";
+import { Checkbox } from "@/components/ui/checkbox";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
@@ -2955,115 +2956,83 @@ export function GheeRecoveryCalc() {
 
 // ════════════════════════════════════════════════════════════
 // ADVANCED CHEESE YIELD CALCULATOR (VAN SLYKE FORMULA)
-// Drop-in Replacement for CheeseYieldCalc()
-//
-// INSTRUCTIONS:
-// 1. Apni file mein purana CheeseYieldCalc() function dhundhein
-// 2. Pura block DELETE karein
-// 3. Yeh poora code wahan PASTE karein
-// Koi naya import nahi chahiye.
 // ════════════════════════════════════════════════════════════
 
-// ── CHEESE TYPE DATABASE ─────────────────────────────────
-const CHEESE_DB = {
-  cheddar:     { label: "🧀 Cheddar",           moisture: 37, fatRet: 93, caseinRet: 96, salt: 1.8, caseinRatio: 78, solidsFactor: 1.09, color: "orange", fssai: "≤39% moisture, ≥48% FDM" },
-  mozzarella:  { label: "🍕 Mozzarella (LMPS)", moisture: 48, fatRet: 90, caseinRet: 95, salt: 1.2, caseinRatio: 78, solidsFactor: 1.07, color: "yellow", fssai: "45–52% moisture, ≥40% FDM" },
-  processed:   { label: "🧀 Processed Cheese",  moisture: 42, fatRet: 91, caseinRet: 94, salt: 2.5, caseinRatio: 78, solidsFactor: 1.11, color: "amber",  fssai: "≤45% moisture" },
-  paneer_ch:   { label: "🧀 Cottage / Queso",   moisture: 55, fatRet: 85, caseinRet: 90, salt: 0.5, caseinRatio: 76, solidsFactor: 1.04, color: "lime",   fssai: "Fresh cheese — <7 days" },
-  gouda:       { label: "🧀 Gouda",             moisture: 40, fatRet: 92, caseinRet: 95, salt: 2.0, caseinRatio: 78, solidsFactor: 1.09, color: "orange", fssai: "≤42% moisture, ≥48% FDM" },
-  feta:        { label: "🧀 Feta-style",        moisture: 55, fatRet: 82, caseinRet: 88, salt: 3.5, caseinRatio: 77, solidsFactor: 1.12, color: "slate",  fssai: "Brine-ripened" },
-  ricotta:     { label: "🫙 Ricotta (Whey)",    moisture: 72, fatRet: 60, caseinRet: 50, salt: 0.5, caseinRatio: 78, solidsFactor: 1.02, color: "blue",   fssai: "From whey solids recovery" },
-} as const;
-
-type CheeseKey = keyof typeof CHEESE_DB;
-
-// ── MILK COMPOSITION PRESETS ──────────────────────────────
-const MILK_PRESETS = {
-  "HF Cow (3.5% fat)":     { fat: "3.5", protein: "3.2", caseinRatio: "78" },
-  "Jersey Cow (5.0% fat)": { fat: "5.0", protein: "3.8", caseinRatio: "78" },
-  "Buffalo (7.5% fat)":    { fat: "7.5", protein: "4.0", caseinRatio: "80" },
-  "Mixed Herd (4.2% fat)": { fat: "4.2", protein: "3.4", caseinRatio: "78" },
-  "Standardised (4.0%F)":  { fat: "4.0", protein: "3.3", caseinRatio: "78" },
-} as const;
-
-// ── MAIN COMPONENT ────────────────────────────────────────
 export function CheeseYieldCalc() {
   const { toast } = useToast();
+  const { validatePositive, validateNumber } = useInputValidation();
 
-  const [cheeseType, setCheeseType] = useState<CheeseKey>("cheddar");
-  const [inp, setInp] = useState({
+  const [activeCalc, setActiveCalc] = useState<"theoretical" | "actual">("theoretical");
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [enableCosting, setEnableCosting] = useState(false);
+
+  // ── Theoretical Inputs (Predictor) ──
+  const [theo, setTheo] = useState({
+    milkQty:          "1000",   // kg raw milk
+    fat:              "4.0",    // % milk fat
+    protein:          "3.3",    // % milk protein
+    targetMoisture:   "37",     // % target cheese moisture
+    // Advanced
+    caseinRatio:      "78",     // % casein in total protein (typical 76-80)
+    fatRetention:     "93",     // % fat retention in curd (typical 90-94)
+    caseinRetention:  "96",     // % casein retention in curd (typical 94-97)
+    saltPct:          "1.8",    // % salt in final cheese
+    solidsFactor:     "1.09",   // solids factor (typically 1.09)
+    // Costing
+    milkPrice:        "45",     // ₹/kg raw milk
+    cheesePrice:      "450",    // ₹/kg selling price of cheese
+    wheyPrice:        "2",      // ₹/kg whey selling price
+    batches:          "1",
+    operDays:         "26",
+  });
+
+  // ── Actual Inputs (Tracker) ──
+  const [actual, setActual] = useState({
     milkQty:          "1000",
     fat:              "4.0",
     protein:          "3.3",
-    caseinRatio:      "78",
     targetMoisture:   "37",
-    fatRetention:     "93",
-    caseinRetention:  "96",
-    saltPct:          "1.8",
-    milkPrice:        "40",   // ₹/kg milk
-    cheesePrice:      "500",  // ₹/kg cheese
-    wheyPrice:        "2",    // ₹/kg whey
-    batches:          "1",
+    cheeseObtained:   "",
   });
-  const [result, setResult] = useState<any>(null);
-  const [activeTab, setActiveTab] = useState<"inputs" | "results" | "economics">("inputs");
 
-  const setF = (k: string, v: string) => setInp(p => ({ ...p, [k]: v }));
-  const { validatePositive, validateNumber } = useInputValidation();
+  const [theoResult, setTheoResult]     = useState<any>(null);
+  const [actualResult, setActualResult] = useState<any>(null);
 
-  // Apply cheese type
-  const applyCheeseType = (key: CheeseKey) => {
-    const c = CHEESE_DB[key];
-    setCheeseType(key);
-    setInp(p => ({
-      ...p,
-      targetMoisture:  String(c.moisture),
-      fatRetention:    String(c.fatRet),
-      caseinRetention: String(c.caseinRet),
-      saltPct:         String(c.salt),
-      caseinRatio:     String(c.caseinRatio),
-    }));
-    setResult(null);
-  };
+  const setT = (k: string, v: string) => setTheo(p => ({ ...p, [k]: v }));
+  const setA = (k: string, v: string) => setActual(p => ({ ...p, [k]: v }));
 
-  // Apply milk preset
-  const applyMilkPreset = (name: keyof typeof MILK_PRESETS) => {
-    const m = MILK_PRESETS[name];
-    setInp(p => ({ ...p, ...m }));
-    toast({ title: "Milk Preset Applied", description: name });
-  };
-
-  // ── CALCULATE ─────────────────────────────────────────
-  const calculate = useCallback(() => {
-    const M   = parseFloat(inp.milkQty)          || 0;
-    const F   = parseFloat(inp.fat)         / 100;
-    const P   = parseFloat(inp.protein)     / 100;
-    const CR  = parseFloat(inp.caseinRatio) / 100;
-    const W   = parseFloat(inp.targetMoisture) / 100;
-    const RF  = parseFloat(inp.fatRetention)   / 100;
-    const RC  = parseFloat(inp.caseinRetention)/ 100;
-    const S   = parseFloat(inp.saltPct)    / 100;
-    const SF  = CHEESE_DB[cheeseType].solidsFactor;
-    const bat = parseFloat(inp.batches) || 1;
+  // ══════════════════════════════════════════════════════════
+  // THEORETICAL CALCULATION (Predictor)
+  // ══════════════════════════════════════════════════════════
+  const calculateTheo = useCallback(() => {
+    const M   = parseFloat(theo.milkQty)          || 0;
+    const F   = parseFloat(theo.fat)         / 100;
+    const P   = parseFloat(theo.protein)     / 100;
+    const W   = parseFloat(theo.targetMoisture) / 100;
+    const CR  = parseFloat(theo.caseinRatio) / 100;
+    const RF  = parseFloat(theo.fatRetention)   / 100;
+    const RC  = parseFloat(theo.caseinRetention)/ 100;
+    const S   = parseFloat(theo.saltPct)    / 100;
+    const SF  = parseFloat(theo.solidsFactor)  || 1.09;
+    const bat = parseFloat(theo.batches) || 1;
+    const days = parseFloat(theo.operDays) || 26;
 
     if (M <= 0 || F <= 0 || P <= 0) {
-      toast({ variant: "destructive", title: "Invalid values" }); return;
+      toast({ variant: "destructive", title: "त्रुटि (Error)", description: "कृपया दूध की मात्रा, फैट% और प्रोटीन% सही दर्ज करें।" });
+      return;
     }
 
-    // ── VAN SLYKE FORMULA ──────────────────────────────
-    // Cheese Yield% = [ (RF × F) + (RC × Casein) ] × SolidsFactor / (1 − W)
-    // where Casein = P × CR
-
+    // ── VAN SLYKE FORMULA ──
     const casein        = P * CR;                           // decimal
-    const recoveredFat  = M * F * RF;                       // kg
-    const recoveredCas  = M * casein * RC;                  // kg
+    const recoveredFat  = M * F * RF;                       // kg fat in curd
+    const recoveredCas  = M * casein * RC;                  // kg casein in curd
     const otherSolids   = (recoveredFat + recoveredCas) * (SF - 1); // salt, whey proteins, etc.
     const totalSolids   = recoveredFat + recoveredCas + otherSolids;
 
-    const cheeseKg      = totalSolids / (1 - W);            // Van Slyke result
+    const cheeseKg      = totalSolids / (1 - W);            // Van Slyke yield kg per batch
     const yieldPct      = (cheeseKg / M) * 100;
 
-    // Whey
+    // Whey details
     const wheyKg        = M - cheeseKg;
     const wheyFatKg     = M * F * (1 - RF);                 // fat lost to whey
     const wheyProteinKg = M * P * (1 - RC);
@@ -3074,450 +3043,562 @@ export function CheeseYieldCalc() {
     const cheeseFatDM      = cheeseKg > 0 ? (cheeseFatKg / (cheeseKg - cheeseWaterKg)) * 100 : 0;
     const cheeseSaltKg     = cheeseKg * S;
 
-    // Milk equivalent (kg milk needed per kg cheese)
+    // Milk equivalent
     const milkPerKgCheese  = yieldPct > 0 ? 100 / yieldPct : 0;
 
-    // Batch results
-    const cheeseKgBatch    = cheeseKg * bat;
-    const wheyKgBatch      = wheyKg   * bat;
+    // Batch and economics
+    const cheeseKgTotal   = cheeseKg * bat;
+    const wheyKgTotal     = wheyKg * bat;
+    const milkCost        = M * bat * (parseFloat(theo.milkPrice) || 0);
+    const cheeseRevenue   = cheeseKgTotal * (parseFloat(theo.cheesePrice) || 0);
+    const wheyRevenue     = wheyKgTotal * (parseFloat(theo.wheyPrice) || 0);
+    const totalRevenue    = cheeseRevenue + wheyRevenue;
+    const grossProfit     = totalRevenue - milkCost;
+    const gpm             = milkCost > 0 ? (grossProfit / milkCost) * 100 : 0;
 
-    // Economics
-    const milkCost     = M * bat * (parseFloat(inp.milkPrice) || 0);
-    const cheeseRevenue= cheeseKgBatch * (parseFloat(inp.cheesePrice) || 0);
-    const wheyRevenue  = wheyKgBatch   * (parseFloat(inp.wheyPrice) || 0);
-    const totalRevenue = cheeseRevenue + wheyRevenue;
-    const grossProfit  = totalRevenue - milkCost;
-    const gpm          = milkCost > 0 ? (grossProfit / milkCost) * 100 : 0;
+    // Monthly projections
+    const monthlyCheeseKg = cheeseKgTotal * days;
+    const monthlyRevenue  = totalRevenue * days;
+    const monthlyCost     = milkCost * days;
+    const monthlyProfit   = grossProfit * days;
 
-    // Sensitivity: +0.1% fat → change in yield
+    // Sensitivity: +0.1% fat -> change in yield
     const dYield_dF = RF * SF / (1 - W) * 0.001 * 100; // kg per +0.1% fat per 100kg milk
 
     const warnings: string[] = [];
-    if (W > 0.55)         warnings.push(`Moisture ${(W*100).toFixed(0)}% is high — check pressing pressure and duration.`);
-    if (RF < 0.88)        warnings.push(`Fat retention ${(RF*100).toFixed(0)}% is low — check cutting size and cooking temperature.`);
-    if (yieldPct < 8)     warnings.push(`Yield ${yieldPct.toFixed(1)}% seems low — verify milk composition and coagulation.`);
-    if (wheyFatKg > 2)    warnings.push(`${wheyFatKg.toFixed(2)} kg fat lost to whey — check curd fineness.`);
+    if (W > 0.55)         warnings.push(`नमी ${(W*100).toFixed(0)}% अधिक है - गुणवत्ता और सेल्फ-लाइफ प्रभावित हो सकती है। (Moisture ${(W*100).toFixed(0)}% is high — check pressing.)`);
+    if (RF < 0.88)        warnings.push(`फैट रिटेंशन ${(RF*100).toFixed(0)}% कम है - कर्ड काटने और पकाने का तापमान जांचें। (Fat retention ${(RF*100).toFixed(0)}% is low.)`);
+    if (yieldPct < 8)     warnings.push(`यील्ड ${yieldPct.toFixed(1)}% कम लग रही है - कृपया दूध की संरचना जांचें। (Yield seems low.)`);
+    if (wheyFatKg > (M * F * 0.15)) warnings.push(`व्हे (whey) में वसा की कमी अधिक है - कर्ड की कटाई की सटीकता सुधारें। (High fat loss to whey.)`);
 
-    setResult({
-      cheeseKg, yieldPct, wheyKg, cheeseKgBatch, wheyKgBatch,
+    setTheoResult({
+      cheeseKg, yieldPct, wheyKg,
       recoveredFat, recoveredCas, otherSolids, totalSolids,
       cheeseWaterKg, cheeseFatKg, cheeseFatDM, cheeseSaltKg,
       wheyFatKg, wheyProteinKg,
       milkPerKgCheese, dYield_dF,
       milkCost, cheeseRevenue, wheyRevenue, totalRevenue, grossProfit, gpm,
-      warnings, M, bat,
+      monthlyCheeseKg, monthlyRevenue, monthlyCost, monthlyProfit,
+      warnings, M, bat, days
     });
-    setActiveTab("results");
+
     toast({
-      title: "✅ Calculated",
-      description: `Yield: ${yieldPct.toFixed(2)}% · ${cheeseKg.toFixed(1)} kg cheese · GPM: ${gpm.toFixed(1)}%`,
+      title: "🧮 गणना पूरी (Calculated)",
+      description: `चीज उत्पादन: ${cheeseKg.toFixed(1)} kg (${yieldPct.toFixed(2)}% yield)`,
     });
-  }, [inp, cheeseType, toast]);
+  }, [theo, toast]);
 
-  const cheese = CHEESE_DB[cheeseType];
+  // ══════════════════════════════════════════════════════════
+  // ACTUAL CALCULATION (Tracker)
+  // ══════════════════════════════════════════════════════════
+  const calculateActual = useCallback(() => {
+    const M            = parseFloat(actual.milkQty)          || 0;
+    const F            = parseFloat(actual.fat)         / 100;
+    const P            = parseFloat(actual.protein)     / 100;
+    const W            = parseFloat(actual.targetMoisture) / 100;
+    const cheeseObtained = parseFloat(actual.cheeseObtained) || 0;
 
-  // ── RENDER ────────────────────────────────────────────
+    if (M <= 0 || F <= 0 || P <= 0 || cheeseObtained <= 0) {
+      toast({ variant: "destructive", title: "त्रुटि", description: "कृपया सभी इनपुट सही भरें।" });
+      return;
+    }
+
+    // Theoretical ideal (at typical standards: CR=0.78, RF=0.93, RC=0.96, SF=1.09)
+    const idealCR = 0.78;
+    const idealRF = 0.93;
+    const idealRC = 0.96;
+    const idealSF = 1.09;
+    
+    const casein        = P * idealCR;
+    const recoveredFat  = M * F * idealRF;
+    const recoveredCas  = M * casein * idealRC;
+    const otherSolids   = (recoveredFat + recoveredCas) * (idealSF - 1);
+    const totalSolids   = recoveredFat + recoveredCas + otherSolids;
+    const idealCheeseKg = totalSolids / (1 - W);
+    const idealYieldPct = (idealCheeseKg / M) * 100;
+
+    // Actual metrics
+    const actualYieldPct = (cheeseObtained / M) * 100;
+    const recoveryEffPct = idealCheeseKg > 0 ? (cheeseObtained / idealCheeseKg) * 100 : 0;
+    const deviationKg    = cheeseObtained - idealCheeseKg;
+    const deviationPct   = idealCheeseKg > 0 ? (deviationKg / idealCheeseKg) * 100 : 0;
+
+    // Efficiency grade
+    let grade = "", gradeColor = "", gradeEmoji = "";
+    if (recoveryEffPct >= 98) {
+      grade = "Excellent (उत्कृष्ट)"; gradeColor = "text-green-700 bg-green-50 border-green-300"; gradeEmoji = "🏆";
+    } else if (recoveryEffPct >= 94) {
+      grade = "Good (अच्छा)"; gradeColor = "text-blue-700 bg-blue-50 border-blue-300"; gradeEmoji = "👍";
+    } else if (recoveryEffPct >= 88) {
+      grade = "Needs Improvement (सुधार ज़रूरी)"; gradeColor = "text-yellow-700 bg-yellow-50 border-yellow-300"; gradeEmoji = "⚠️";
+    } else {
+      grade = "Action Required (कार्रवाई ज़रूरी)"; gradeColor = "text-red-700 bg-red-50 border-red-300"; gradeEmoji = "🔴";
+    }
+
+    const warnings: string[] = [];
+    if (recoveryEffPct < 94) warnings.push(`रिकवरी ${recoveryEffPct.toFixed(1)}% काफी कम है। कटिंग, पकाने या कर्ड हैंडलिंग में होने वाले नुकसान की जांच करें।`);
+    if (deviationPct > 5) warnings.push(`वास्तविक यील्ड आदर्श यील्ड से 5% से अधिक है। चीज में अतिरिक्त नमी या गलत फैट% की जांच करें।`);
+
+    setActualResult({
+      idealCheeseKg, idealYieldPct,
+      actualYieldPct, recoveryEffPct, deviationKg, deviationPct,
+      grade, gradeColor, gradeEmoji,
+      warnings, M, cheeseObtained
+    });
+
+    toast({
+      title: "📋 ट्रैकर गणना पूरी",
+      description: `रिकवरी: ${recoveryEffPct.toFixed(1)}% — ${grade}`,
+    });
+  }, [actual, toast]);
+
   return (
-    <Card className="border-orange-200 bg-orange-50/20">
-      <CardHeader className="pb-3 bg-gradient-to-r from-orange-50 to-amber-50 rounded-t-lg border-b border-orange-100">
-        <CardTitle className="flex items-center justify-between">
-          <span className="flex items-center gap-2 text-orange-800">
-            <Milk className="w-5 h-5 text-orange-600" />
-            Cheese Yield (Van Slyke)
-          </span>
-          {result && (
-            <Badge className="bg-orange-600 text-white text-sm px-3 py-1">
-              {result.yieldPct.toFixed(2)}% yield
-            </Badge>
-          )}
-        </CardTitle>
-        <CardDescription className="text-orange-600 text-xs">
-          Van Slyke formula · 7 cheese types · Composition · Economics · Sensitivity
-        </CardDescription>
-      </CardHeader>
+    <div className="space-y-4 w-full">
+      {/* Header */}
+      <Alert className="bg-gradient-to-r from-orange-50 to-amber-50 border-orange-200">
+        <Target className="h-4 w-4 text-orange-600" />
+        <AlertTitle className="text-orange-800 font-bold">चीज यील्ड (Van Slyke) और दक्षता ट्रैकर</AlertTitle>
+        <AlertDescription className="text-xs text-orange-700">
+          वैन स्लीक फॉर्मूला आधारित चीज यील्ड अनुमान, बाइ-प्रोडक्ट व्हे रिकवरी, आर्थिक विश्लेषण और दक्षता ट्रैकिंग।<br/>
+          <span className="text-orange-500">Van Slyke formula-based Cheese yield prediction, whey recovery, economics & efficiency tracking.</span>
+        </AlertDescription>
+      </Alert>
 
-      <CardContent className="pt-4 space-y-4">
+      {/* ── Tab Toggle ── */}
+      <Tabs value={activeCalc} onValueChange={v => setActiveCalc(v as "theoretical" | "actual")}>
+        <TabsList className="grid grid-cols-2 bg-orange-100">
+          <TabsTrigger value="theoretical" className="text-xs font-bold data-[state=active]:bg-orange-600 data-[state=active]:text-white">
+            🧮 Predictor (अनुमान)
+          </TabsTrigger>
+          <TabsTrigger value="actual" className="text-xs font-bold data-[state=active]:bg-amber-600 data-[state=active]:text-white">
+            📋 Tracker (वास्तविक)
+          </TabsTrigger>
+        </TabsList>
 
-        {/* ── CHEESE TYPE GRID ─────────────────────────── */}
-        <div className="space-y-1">
-          <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Cheese Type</Label>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
-            {(Object.keys(CHEESE_DB) as CheeseKey[]).map(key => (
-              <button key={key} onClick={() => applyCheeseType(key)}
-                className={`p-2 rounded-lg border text-xs font-semibold transition-all text-left leading-tight shadow-sm
-                  ${cheeseType === key
-                    ? "bg-orange-600 text-white border-orange-600 shadow-md"
-                    : "bg-white text-slate-600 border-slate-200 hover:border-orange-300 hover:text-orange-700"
-                  }`}>
-                {CHEESE_DB[key].label}
-                <div className={`text-[9px] mt-0.5 ${cheeseType === key ? "opacity-80" : "text-slate-400"}`}>
-                  {CHEESE_DB[key].moisture}% moisture
-                </div>
-              </button>
-            ))}
+        {/* ══════════════════════════════════════════════════════════
+            TAB 1: THEORETICAL PREDICTOR
+            ══════════════════════════════════════════════════════════ */}
+        <TabsContent value="theoretical" className="space-y-4 pt-3">
+          {/* Core Inputs */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <ValidatedInput
+              label="दूध की मात्रा (Milk Qty)"
+              value={theo.milkQty}
+              onChange={v => setT("milkQty", v)}
+              validation={validatePositive(theo.milkQty, "Quantity")}
+              unit="kg"
+              colorScheme="orange"
+            />
+            <ValidatedInput
+              label="वसा प्रतिशत (Milk Fat %)"
+              value={theo.fat}
+              onChange={v => setT("fat", v)}
+              validation={validateNumber(theo.fat, 0.5, 15, "Fat")}
+              unit="%"
+              colorScheme="orange"
+            />
+            <ValidatedInput
+              label="प्रोटीन प्रतिशत (Protein %)"
+              value={theo.protein}
+              onChange={v => setT("protein", v)}
+              validation={validateNumber(theo.protein, 1, 10, "Protein")}
+              unit="%"
+              colorScheme="blue"
+            />
+            <ValidatedInput
+              label="टारगेट नमी % (Target Moisture)"
+              value={theo.targetMoisture}
+              onChange={v => setT("targetMoisture", v)}
+              validation={validateNumber(theo.targetMoisture, 15, 80, "Target Moisture")}
+              unit="%"
+              colorScheme="orange"
+            />
           </div>
-          {/* FSSAI note */}
-          <p className="text-[10px] text-orange-600 bg-orange-50 px-2 py-1 rounded border border-orange-100">
-            📜 FSSAI: {cheese.fssai}
-          </p>
-        </div>
 
-        {/* ── TABS ─────────────────────────────────────── */}
-        <Tabs value={activeTab} onValueChange={v => setActiveTab(v as any)}>
-          <TabsList className="grid grid-cols-3 bg-slate-100">
-            <TabsTrigger value="inputs"    className="text-xs">⚙️ Inputs</TabsTrigger>
-            <TabsTrigger value="results"   className="text-xs">📊 Results</TabsTrigger>
-            <TabsTrigger value="economics" className="text-xs">💰 Economics</TabsTrigger>
-          </TabsList>
+          {/* Advanced Drawer Toggle */}
+          <Button
+            variant="ghost"
+            onClick={() => setShowAdvanced(!showAdvanced)}
+            className="w-full flex justify-between items-center text-xs font-semibold py-2 px-3 border border-orange-100 hover:bg-orange-50/50 rounded-lg"
+          >
+            <span className="flex items-center gap-1.5 text-slate-700">
+              <Settings2 className="w-3.5 h-3.5" /> एडवांस्ड प्रोसेस सेटिंग्स (Advanced Settings)
+            </span>
+            <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${showAdvanced ? "rotate-180" : ""}`} />
+          </Button>
 
-          {/* ═════ TAB 1: INPUTS ════════════════════════ */}
-          <TabsContent value="inputs" className="space-y-4 pt-3">
+          {showAdvanced && (
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-3 p-3 bg-slate-50 rounded-xl border border-slate-100">
+              <ValidatedInput
+                label="केसीन/प्रोटीन % (Casein Ratio)"
+                value={theo.caseinRatio}
+                onChange={v => setT("caseinRatio", v)}
+                validation={validateNumber(theo.caseinRatio, 60, 90, "Casein ratio")}
+                unit="%"
+                colorScheme="blue"
+              />
+              <ValidatedInput
+                label="फैट रिटेंशन (Fat Ret %)"
+                value={theo.fatRetention}
+                onChange={v => setT("fatRetention", v)}
+                validation={validateNumber(theo.fatRetention, 50, 99.9, "Fat retention")}
+                unit="%"
+                colorScheme="orange"
+              />
+              <ValidatedInput
+                label="केसीन रिटेंशन (Casein Ret %)"
+                value={theo.caseinRetention}
+                onChange={v => setT("caseinRetention", v)}
+                validation={validateNumber(theo.caseinRetention, 50, 99.9, "Casein retention")}
+                unit="%"
+                colorScheme="blue"
+              />
+              <ValidatedInput
+                label="नमक % (Salt in Cheese %)"
+                value={theo.saltPct}
+                onChange={v => setT("saltPct", v)}
+                validation={validateNumber(theo.saltPct, 0, 10, "Salt %")}
+                unit="%"
+                colorScheme="orange"
+              />
+              <ValidatedInput
+                label="सॉलिड फैक्टर (Solids Factor)"
+                value={theo.solidsFactor}
+                onChange={v => setT("solidsFactor", v)}
+                validation={validateNumber(theo.solidsFactor, 0.8, 1.5, "Solids Factor")}
+                unit="x"
+                colorScheme="orange"
+              />
+            </div>
+          )}
 
-            {/* Milk presets */}
-            <div className="space-y-1">
-              <Label className="text-xs font-bold text-slate-500 uppercase">Milk Composition Presets</Label>
-              <div className="flex flex-wrap gap-2">
-                {(Object.keys(MILK_PRESETS) as Array<keyof typeof MILK_PRESETS>).map(name => (
-                  <button key={name} onClick={() => applyMilkPreset(name)}
-                    className="px-3 py-1 rounded-full border border-orange-200 bg-white text-xs font-semibold text-orange-700 hover:bg-orange-600 hover:text-white transition-all shadow-sm">
-                    {name}
-                  </button>
-                ))}
+          {/* Costing Checkbox */}
+          <div className="flex items-center gap-2">
+            <Checkbox id="cheese-costing" checked={enableCosting} onCheckedChange={(c) => setEnableCosting(!!c)} />
+            <Label htmlFor="cheese-costing" className="text-xs font-semibold cursor-pointer text-slate-700 flex items-center gap-1">
+              <Coins className="w-3.5 h-3.5 text-green-600" /> कॉस्टिंग और प्रॉफिटेबिलिटी शामिल करें (Enable Costing & Profitability)
+            </Label>
+          </div>
+
+          {enableCosting && (
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-3 p-3 bg-green-50/30 rounded-xl border border-green-100">
+              <ValidatedInput
+                label="दूध का मूल्य (Milk Price)"
+                value={theo.milkPrice}
+                onChange={v => setT("milkPrice", v)}
+                validation={validatePositive(theo.milkPrice, "Milk price")}
+                unit="₹/kg"
+                colorScheme="green"
+              />
+              <ValidatedInput
+                label="चीज का मूल्य (Cheese Price)"
+                value={theo.cheesePrice}
+                onChange={v => setT("cheesePrice", v)}
+                validation={validatePositive(theo.cheesePrice, "Cheese price")}
+                unit="₹/kg"
+                colorScheme="green"
+              />
+              <ValidatedInput
+                label="व्हे का मूल्य (Whey Price)"
+                value={theo.wheyPrice}
+                onChange={v => setT("wheyPrice", v)}
+                validation={validatePositive(theo.wheyPrice, "Whey price")}
+                unit="₹/kg"
+                colorScheme="green"
+              />
+              <ValidatedInput
+                label="बैचेस (Batches)"
+                value={theo.batches}
+                onChange={v => setT("batches", v)}
+                validation={validatePositive(theo.batches, "Batches")}
+                unit="qty"
+                colorScheme="blue"
+              />
+              <ValidatedInput
+                label="कार्य दिवस (Operating Days)"
+                value={theo.operDays}
+                onChange={v => setT("operDays", v)}
+                validation={validatePositive(theo.operDays, "Days")}
+                unit="days"
+                colorScheme="blue"
+              />
+            </div>
+          )}
+
+          <Button onClick={calculateTheo} className="w-full h-11 bg-orange-600 hover:bg-orange-700 text-white font-bold shadow-md">
+            🧮 यील्ड और मास बैलेंस गणना करें (Calculate Yield & Mass Balance)
+          </Button>
+
+          {/* Results Display */}
+          {theoResult && (
+            <div className="space-y-4">
+              {/* KPIs */}
+              <div className="grid grid-cols-3 gap-2">
+                <div className="bg-orange-600 text-white p-3.5 rounded-xl shadow-sm text-center">
+                  <div className="text-[10px] uppercase opacity-80 font-bold">चीज उत्पादन (Cheese Yield)</div>
+                  <div className="text-xl font-extrabold">{theoResult.cheeseKg.toFixed(1)} kg</div>
+                  <div className="text-[9px] opacity-75">प्रति बैच / Per batch</div>
+                </div>
+                <div className="bg-green-600 text-white p-3.5 rounded-xl shadow-sm text-center">
+                  <div className="text-[10px] uppercase opacity-80 font-bold">यील्ड प्रतिशत (Yield %)</div>
+                  <div className="text-xl font-extrabold">{theoResult.yieldPct.toFixed(2)}%</div>
+                  <div className="text-[9px] opacity-75">भार के अनुसार / w/w basis</div>
+                </div>
+                <div className="bg-blue-600 text-white p-3.5 rounded-xl shadow-sm text-center">
+                  <div className="text-[10px] uppercase opacity-80 font-bold">व्हे मात्रा (Whey Output)</div>
+                  <div className="text-xl font-extrabold">{theoResult.wheyKg.toFixed(0)} kg</div>
+                  <div className="text-[9px] opacity-75">प्रति बैच / Per batch</div>
+                </div>
+              </div>
+
+              {/* Solids & Composition Balance */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Card className="bg-amber-50/50 border-amber-200">
+                  <CardHeader className="p-3 pb-1 border-b border-amber-100">
+                    <CardTitle className="text-xs font-bold text-amber-800 uppercase">🔬 कर्ड सॉलिड्स बैलेंस (Curd Solids & Composition)</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-3 space-y-2 text-xs">
+                    {[
+                      { label: "रिकवर वसा (Fat recovered)", value: `${theoResult.recoveredFat.toFixed(2)} kg`, color: "text-orange-700" },
+                      { label: "रिकवर केसीन (Casein recovered)", value: `${theoResult.recoveredCas.toFixed(2)} kg`, color: "text-blue-700" },
+                      { label: "अन्य ठोस (Other solids in cheese)", value: `${theoResult.otherSolids.toFixed(2)} kg`, color: "text-slate-600" },
+                      { label: "कुल ठोस मात्रा (Total cheese solids)", value: `${theoResult.totalSolids.toFixed(2)} kg`, color: "text-amber-800 font-bold" },
+                      { label: "चीज में नमी (Cheese moisture)", value: `${theoResult.cheeseWaterKg.toFixed(2)} kg (${theo.targetMoisture}%)`, color: "text-cyan-700" },
+                      { label: "शुष्क पदार्थ में वसा (Fat in Dry Matter - FDM)", value: `${theoResult.cheeseFatDM.toFixed(1)}%`, color: "text-orange-800 font-bold" },
+                    ].map((r, i) => (
+                      <div key={i} className="flex justify-between border-b border-amber-100/40 pb-1">
+                        <span className="text-slate-500">{r.label}</span>
+                        <span className={`font-semibold ${r.color}`}>{r.value}</span>
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-blue-50/50 border-blue-200">
+                  <CardHeader className="p-3 pb-1 border-b border-blue-100">
+                    <CardTitle className="text-xs font-bold text-blue-800 uppercase">🫧 व्हे हानि विवरण (Whey Losses & Composition)</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-3 space-y-2 text-xs">
+                    {[
+                      { label: "व्हे की कुल मात्रा (Total whey)", value: `${theoResult.wheyKg.toFixed(1)} kg` },
+                      { label: "व्हे में वसा की हानि (Fat lost to whey)", value: `${theoResult.wheyFatKg.toFixed(2)} kg`, warn: theoResult.wheyFatKg > (theoResult.M * 0.04 * 0.1) },
+                      { label: "व्हे में प्रोटीन (Soluble proteins)", value: `${theoResult.wheyProteinKg.toFixed(2)} kg` },
+                      { label: "प्रति किग्रा चीज के लिए दूध (Milk per kg cheese)", value: `${theoResult.milkPerKgCheese.toFixed(2)} kg` },
+                      { label: "+0.1% फैट बढ़ाने पर अतिरिक्त यील्ड", value: `+${theoResult.dYield_dF.toFixed(3)}% (+${(theoResult.dYield_dF * theoResult.M / 100).toFixed(2)} kg)`, color: "text-green-700 font-bold" },
+                    ].map((r, i) => (
+                      <div key={i} className="flex justify-between border-b border-blue-100/40 pb-1">
+                        <span className="text-slate-500">{r.label}</span>
+                        <span className={`font-semibold ${r.warn ? "text-red-600" : r.color || "text-blue-700"}`}>{r.value}</span>
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Economics */}
+              {enableCosting && (
+                <Card className="bg-gradient-to-br from-slate-900 to-slate-950 text-white border-none">
+                  <CardHeader className="p-3 pb-1 border-b border-slate-800">
+                    <CardTitle className="text-xs font-bold text-slate-400 uppercase">💰 आर्थिक विश्लेषण (Economics Projections)</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-3 space-y-3">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
+                      <div className="p-2 bg-slate-800/60 rounded-lg">
+                        <div className="text-[10px] text-slate-400 font-medium">कुल दूध की लागत (Milk Cost)</div>
+                        <div className="text-sm font-bold text-red-300">₹ {theoResult.milkCost.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</div>
+                      </div>
+                      <div className="p-2 bg-slate-800/60 rounded-lg">
+                        <div className="text-[10px] text-slate-400 font-medium">चीज राजस्व (Cheese Revenue)</div>
+                        <div className="text-sm font-bold text-green-300">₹ {theoResult.cheeseRevenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</div>
+                      </div>
+                      <div className="p-2 bg-slate-800/60 rounded-lg">
+                        <div className="text-[10px] text-slate-400 font-medium">व्हे राजस्व (Whey Revenue)</div>
+                        <div className="text-sm font-bold text-cyan-300">₹ {theoResult.wheyRevenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</div>
+                      </div>
+                      <div className="p-2 bg-slate-800/60 rounded-lg">
+                        <div className="text-[10px] text-slate-400 font-medium">कुल राजस्व (Total Revenue)</div>
+                        <div className="text-sm font-bold text-green-400">₹ {theoResult.totalRevenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</div>
+                      </div>
+                    </div>
+
+                    <div className="bg-slate-850 rounded-xl p-3 flex justify-between items-center border border-slate-800">
+                      <div>
+                        <div className="text-xs font-bold text-green-400">सकल लाभ (Gross Profit)</div>
+                        <div className="text-[10px] text-slate-400">({theo.batches} बैच हेतु / For {theo.batches} batches)</div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-lg font-black text-green-300">₹ {theoResult.grossProfit.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</div>
+                        <div className="text-[11px] text-slate-400">मार्जिन (Margin): {theoResult.gpm.toFixed(1)}%</div>
+                      </div>
+                    </div>
+
+                    {theoResult.days > 1 && (
+                      <div className="grid grid-cols-3 gap-2 border-t border-slate-800 pt-2.5 text-center text-xs">
+                        <div>
+                          <span className="text-slate-400 block text-[10px]">मासिक उत्पादन (Monthly Cheese)</span>
+                          <span className="font-semibold text-slate-200">{theoResult.monthlyCheeseKg.toFixed(0)} kg</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-400 block text-[10px]">मासिक टर्नओवर (Monthly Revenue)</span>
+                          <span className="font-semibold text-green-300">₹ {theoResult.monthlyRevenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-400 block text-[10px]">मासिक सकल लाभ (Monthly Profit)</span>
+                          <span className="font-bold text-green-400">₹ {theoResult.monthlyProfit.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</span>
+                        </div>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Quality & Warning Alerts */}
+              {theoResult.warnings.length > 0 && (
+                <Alert className="bg-yellow-50 border-yellow-200">
+                  <AlertTriangle className="h-4 w-4 text-yellow-600" />
+                  <AlertTitle className="text-yellow-800 text-xs font-bold">गुणवत्ता चेतावनियाँ (Process Warning Alerts)</AlertTitle>
+                  <AlertDescription className="text-[11px] text-yellow-700 space-y-1">
+                    {theoResult.warnings.map((w: string, i: number) => <div key={i}>• {w}</div>)}
+                  </AlertDescription>
+                </Alert>
+              )}
+
+              {/* Formula & Reference */}
+              <div className="bg-slate-50 border rounded-lg p-3 text-[10px] font-mono text-slate-500">
+                <span className="font-bold text-slate-700 block mb-1">📐 वैन स्लीक गणना विधि (Van Slyke Method):</span>
+                <span>Cheese Yield kg = [ (RF × MilkFat) + (RC × Casein) ] × SolidsFactor / (1 − Target Moisture)</span>
               </div>
             </div>
+          )}
+        </TabsContent>
 
-            {/* Milk inputs */}
-            <Card className="border-orange-100 bg-white">
-              <CardHeader className="p-3 pb-2 bg-orange-50 rounded-t-lg border-b border-orange-100">
-                <CardTitle className="text-xs font-bold text-orange-700 uppercase">🥛 Milk Parameters</CardTitle>
-              </CardHeader>
-              <CardContent className="p-3 grid grid-cols-2 gap-3">
-                <ValidatedInput
-                  label="Milk Quantity"
-                  value={inp.milkQty}
-                  onChange={v => setF("milkQty", v)}
-                  validation={validatePositive(inp.milkQty, "Milk qty")}
-                  unit="kg"
-                  colorScheme="orange"
-                />
-                <ValidatedInput
-                  label="Batches"
-                  value={inp.batches}
-                  onChange={v => setF("batches", v)}
-                  validation={validatePositive(inp.batches, "Batches")}
-                  helpText="For monthly planning"
-                  colorScheme="blue"
-                />
-                <ValidatedInput
-                  label="Fat %"
-                  value={inp.fat}
-                  onChange={v => setF("fat", v)}
-                  validation={validateNumber(inp.fat, 0.5, 12, "Fat")}
-                  unit="%"
-                  colorScheme="orange"
-                />
-                <ValidatedInput
-                  label="Protein %"
-                  value={inp.protein}
-                  onChange={v => setF("protein", v)}
-                  validation={validateNumber(inp.protein, 1, 7, "Protein")}
-                  unit="%"
-                  colorScheme="blue"
-                />
-                <ValidatedInput
-                  label="Casein / Total Protein"
-                  value={inp.caseinRatio}
-                  onChange={v => setF("caseinRatio", v)}
-                  validation={validateNumber(inp.caseinRatio, 60, 85, "Casein ratio")}
-                  unit="%"
-                  helpText="Typically 76–80%"
-                  colorScheme="blue"
-                />
-              </CardContent>
-            </Card>
+        {/* ══════════════════════════════════════════════════════════
+            TAB 2: ACTUAL TRACKER
+            ══════════════════════════════════════════════════════════ */}
+        <TabsContent value="actual" className="space-y-4 pt-3">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+            <ValidatedInput
+              label="दूध की मात्रा (Milk Qty)"
+              value={actual.milkQty}
+              onChange={v => setA("milkQty", v)}
+              validation={validatePositive(actual.milkQty, "Quantity")}
+              unit="kg"
+              colorScheme="orange"
+            />
+            <ValidatedInput
+              label="वसा प्रतिशत (Milk Fat %)"
+              value={actual.fat}
+              onChange={v => setA("fat", v)}
+              validation={validateNumber(actual.fat, 0.5, 15, "Fat")}
+              unit="%"
+              colorScheme="orange"
+            />
+            <ValidatedInput
+              label="प्रोटीन प्रतिशत (Protein %)"
+              value={actual.protein}
+              onChange={v => setA("protein", v)}
+              validation={validateNumber(actual.protein, 1, 10, "Protein")}
+              unit="%"
+              colorScheme="blue"
+            />
+            <ValidatedInput
+              label="चीज नमी % (Cheese Moisture %)"
+              value={actual.targetMoisture}
+              onChange={v => setA("targetMoisture", v)}
+              validation={validateNumber(actual.targetMoisture, 15, 80, "Moisture")}
+              unit="%"
+              colorScheme="orange"
+            />
+            <ValidatedInput
+              label="वास्तविक चीज प्राप्त (Cheese Obtained)"
+              value={actual.cheeseObtained}
+              onChange={v => setA("cheeseObtained", v)}
+              validation={validatePositive(actual.cheeseObtained, "Cheese obtained")}
+              unit="kg"
+              colorScheme="green"
+            />
+          </div>
 
-            {/* Process inputs */}
-            <Card className="border-amber-100 bg-white">
-              <CardHeader className="p-3 pb-2 bg-amber-50 rounded-t-lg border-b border-amber-100">
-                <CardTitle className="text-xs font-bold text-amber-700 uppercase">⚙️ Process Parameters</CardTitle>
-              </CardHeader>
-              <CardContent className="p-3 grid grid-cols-2 gap-3">
-                <ValidatedInput
-                  label="Target Moisture"
-                  value={inp.targetMoisture}
-                  onChange={v => setF("targetMoisture", v)}
-                  validation={validateNumber(inp.targetMoisture, 20, 80, "Moisture")}
-                  unit="%"
-                  helpText={`${cheese.label}: ~${cheese.moisture}%`}
-                  colorScheme="orange"
-                />
-                <ValidatedInput
-                  label="Salt %"
-                  value={inp.saltPct}
-                  onChange={v => setF("saltPct", v)}
-                  validation={validateNumber(inp.saltPct, 0, 6, "Salt")}
-                  unit="% w/w"
-                  helpText={`Typical: ${cheese.salt}%`}
-                  colorScheme="orange"
-                />
-                <ValidatedInput
-                  label="Fat Retention"
-                  value={inp.fatRetention}
-                  onChange={v => setF("fatRetention", v)}
-                  validation={validateNumber(inp.fatRetention, 50, 99, "Fat retention")}
-                  unit="%"
-                  helpText="Typical: 90–94%"
-                  colorScheme="red"
-                />
-                <ValidatedInput
-                  label="Casein Retention"
-                  value={inp.caseinRetention}
-                  onChange={v => setF("caseinRetention", v)}
-                  validation={validateNumber(inp.caseinRetention, 50, 99, "Casein retention")}
-                  unit="%"
-                  helpText="Typical: 94–97%"
-                  colorScheme="blue"
-                />
-              </CardContent>
-            </Card>
-          </TabsContent>
+          <Button onClick={calculateActual} className="w-full h-11 bg-amber-600 hover:bg-amber-700 text-white font-bold shadow-md">
+            📊 वास्तविक दक्षता की तुलना करें (Compare Actual Efficiency)
+          </Button>
 
-          {/* ═════ TAB 2: RESULTS ═══════════════════════ */}
-          <TabsContent value="results" className="space-y-4 pt-3">
-            {result ? (
-              <>
-                {/* Main KPIs */}
-                <div className="grid grid-cols-3 gap-2">
-                  <div className="bg-orange-600 text-white p-4 rounded-xl shadow-lg text-center">
-                    <div className="text-[9px] uppercase opacity-80 font-bold">Cheese Output</div>
-                    <div className="text-2xl font-black">{result.cheeseKg.toFixed(1)}</div>
-                    <div className="text-xs opacity-70">kg / batch</div>
-                  </div>
-                  <div className="bg-green-600 text-white p-4 rounded-xl shadow-lg text-center">
-                    <div className="text-[9px] uppercase opacity-80 font-bold">Yield %</div>
-                    <div className="text-2xl font-black">{result.yieldPct.toFixed(2)}</div>
-                    <div className="text-xs opacity-70">% w/w</div>
-                  </div>
-                  <div className="bg-blue-600 text-white p-4 rounded-xl shadow-lg text-center">
-                    <div className="text-[9px] uppercase opacity-80 font-bold">Whey</div>
-                    <div className="text-2xl font-black">{result.wheyKg.toFixed(0)}</div>
-                    <div className="text-xs opacity-70">kg / batch</div>
-                  </div>
+          {actualResult && (
+            <div className="space-y-4">
+              {/* Grade Badge */}
+              <div className={`p-4 rounded-xl border flex flex-col items-center justify-center text-center transition-all ${actualResult.gradeColor}`}>
+                <div className="text-4xl mb-1">{actualResult.gradeEmoji}</div>
+                <div className="text-xs uppercase tracking-wider font-bold opacity-85">बैच ग्रेड (Batch Efficiency Grade)</div>
+                <div className="text-xl font-extrabold">{actualResult.grade}</div>
+                <div className="text-sm font-bold mt-1">
+                  दक्षता दर (Recovery Rate): {actualResult.recoveryEffPct.toFixed(1)}%
                 </div>
-
-                {/* Van Slyke breakdown */}
-                <Card className="bg-amber-50 border-amber-200">
-                  <CardHeader className="p-3 pb-1 border-b border-amber-100">
-                    <CardTitle className="text-sm text-amber-800">🔬 Van Slyke Mass Balance</CardTitle>
-                  </CardHeader>
-                  <CardContent className="p-3 space-y-2 text-sm">
-                    {[
-                      { label: "Fat recovered into curd",      value: `${result.recoveredFat.toFixed(2)} kg`,    color: "text-orange-700" },
-                      { label: "Casein recovered into curd",   value: `${result.recoveredCas.toFixed(2)} kg`,    color: "text-blue-700"   },
-                      { label: "Other solids (salt + whey prot)",value:`${result.otherSolids.toFixed(2)} kg`,    color: "text-slate-600"  },
-                      { label: "Total cheese solids",          value: `${result.totalSolids.toFixed(2)} kg`,     color: "text-amber-800 font-black" },
-                      { label: "Moisture content",             value: `${result.cheeseWaterKg.toFixed(2)} kg (${inp.targetMoisture}%)`, color: "text-cyan-700" },
-                      { label: "Fat in Dry Matter (FDM)",      value: `${result.cheeseFatDM.toFixed(1)}%`,       color: "text-orange-800 font-bold" },
-                    ].map((r, i) => (
-                      <div key={i} className="flex justify-between">
-                        <span className="text-slate-500">{r.label}</span>
-                        <span className={r.color}>{r.value}</span>
-                      </div>
-                    ))}
-                  </CardContent>
-                </Card>
-
-                {/* Whey composition */}
-                <Card className="bg-blue-50 border-blue-200">
-                  <CardHeader className="p-3 pb-1 border-b border-blue-100">
-                    <CardTitle className="text-sm text-blue-800">🫧 Whey Composition</CardTitle>
-                  </CardHeader>
-                  <CardContent className="p-3 space-y-1 text-sm">
-                    {[
-                      { label: "Whey volume",             value: `${result.wheyKg.toFixed(1)} kg` },
-                      { label: "Fat lost to whey",        value: `${result.wheyFatKg.toFixed(2)} kg`, warn: result.wheyFatKg > 1.5 },
-                      { label: "Whey protein (soluble)",  value: `${result.wheyProteinKg.toFixed(2)} kg` },
-                    ].map((r, i) => (
-                      <div key={i} className="flex justify-between">
-                        <span className="text-slate-500">{r.label}</span>
-                        <span className={`font-bold ${r.warn ? "text-red-600" : "text-blue-700"}`}>{r.value}</span>
-                      </div>
-                    ))}
-                  </CardContent>
-                </Card>
-
-                {/* Milk per kg cheese + sensitivity */}
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="bg-white border-2 border-orange-200 rounded-xl p-4 text-center">
-                    <div className="text-[10px] text-orange-500 font-bold uppercase">Milk / kg Cheese</div>
-                    <div className="text-2xl font-black text-orange-800">{result.milkPerKgCheese.toFixed(2)}</div>
-                    <div className="text-[10px] text-slate-400">kg milk per kg cheese</div>
-                  </div>
-                  <div className="bg-white border-2 border-green-200 rounded-xl p-4 text-center">
-                    <div className="text-[10px] text-green-600 font-bold uppercase">+0.1% Fat → Yield</div>
-                    <div className="text-2xl font-black text-green-700">+{result.dYield_dF.toFixed(2)}</div>
-                    <div className="text-[10px] text-slate-400">kg cheese per 100kg milk</div>
-                  </div>
-                </div>
-
-                {/* Batch summary (if multiple batches) */}
-                {result.bat > 1 && (
-                  <Card className="bg-indigo-50 border-indigo-200">
-                    <CardHeader className="p-3 pb-1 border-b border-indigo-100">
-                      <CardTitle className="text-xs text-indigo-700 font-bold uppercase">
-                        📅 {result.bat} Batch Summary
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="p-3 grid grid-cols-2 gap-2 text-sm">
-                      {[
-                        { label: "Total cheese",   value: `${result.cheeseKgBatch.toFixed(1)} kg` },
-                        { label: "Total whey",     value: `${result.wheyKgBatch.toFixed(0)} kg` },
-                        { label: "Total milk",     value: `${(result.M * result.bat).toFixed(0)} kg` },
-                      ].map((r, i) => (
-                        <div key={i} className="flex justify-between">
-                          <span className="text-slate-500">{r.label}</span>
-                          <span className="font-bold text-indigo-700">{r.value}</span>
-                        </div>
-                      ))}
-                    </CardContent>
-                  </Card>
-                )}
-
-                {/* Warnings */}
-                {result.warnings.length > 0 && (
-                  <Alert className="bg-yellow-50 border-yellow-300">
-                    <AlertTriangle className="h-4 w-4 text-yellow-600" />
-                    <AlertTitle className="text-yellow-800 text-sm">Quality Alerts</AlertTitle>
-                    <AlertDescription className="text-xs text-yellow-700 space-y-1">
-                      {result.warnings.map((w: string, i: number) => <div key={i}>⚠️ {w}</div>)}
-                    </AlertDescription>
-                  </Alert>
-                )}
-
-                {/* Formula */}
-                <div className="bg-slate-50 border rounded-lg p-3 text-[10px] font-mono text-slate-400 space-y-1">
-                  <div className="font-bold text-slate-600 text-xs mb-1">📐 Van Slyke Formula:</div>
-                  <div>Casein = Protein × CaseinRatio = {inp.protein}% × {inp.caseinRatio}% = {(parseFloat(inp.protein)*parseFloat(inp.caseinRatio)/100).toFixed(3)}%</div>
-                  <div>TotalSolids = (RF×Fat) + (RC×Casein) + OtherSolids</div>
-                  <div>CheeseYield = TotalSolids / (1 − Moisture%) = {result.totalSolids.toFixed(2)} / {(1 - parseFloat(inp.targetMoisture)/100).toFixed(2)} = {result.cheeseKg.toFixed(2)} kg</div>
-                  <div>Yield% = CheeseKg / MilkKg × 100 = {result.yieldPct.toFixed(3)}%</div>
-                </div>
-              </>
-            ) : (
-              <div className="text-center py-10 text-muted-foreground text-sm">
-                <Milk className="h-10 w-10 mx-auto mb-3 text-orange-200" />
-                <p>Inputs bharein aur <strong>Calculate</strong> press karein.</p>
               </div>
-            )}
-          </TabsContent>
 
-          {/* ═════ TAB 3: ECONOMICS ═════════════════════ */}
-          <TabsContent value="economics" className="space-y-4 pt-3">
-            {result ? (
-              <>
-                {/* Price inputs */}
-                <Card className="border-green-100 bg-white">
-                  <CardHeader className="p-3 pb-2 bg-green-50 border-b border-green-100">
-                    <CardTitle className="text-xs font-bold text-green-700 uppercase">💰 Market Prices</CardTitle>
-                  </CardHeader>
-                  <CardContent className="p-3 grid grid-cols-3 gap-3">
-                    <ValidatedInput
-                      label="Milk Cost"
-                      value={inp.milkPrice}
-                      onChange={v => setF("milkPrice", v)}
-                      validation={{ isValid: true, severity: "info" }}
-                      unit="₹/kg"
-                      colorScheme="orange"
-                    />
-                    <ValidatedInput
-                      label="Cheese Price"
-                      value={inp.cheesePrice}
-                      onChange={v => setF("cheesePrice", v)}
-                      validation={{ isValid: true, severity: "info" }}
-                      unit="₹/kg"
-                      colorScheme="green"
-                    />
-                    <ValidatedInput
-                      label="Whey Price"
-                      value={inp.wheyPrice}
-                      onChange={v => setF("wheyPrice", v)}
-                      validation={{ isValid: true, severity: "info" }}
-                      unit="₹/kg"
-                      colorScheme="blue"
-                    />
-                  </CardContent>
-                </Card>
-
-                {/* P&L */}
-                <Card className="bg-gradient-to-br from-slate-800 to-slate-900 text-white border-none">
-                  <CardHeader className="p-3 pb-1">
-                    <CardTitle className="text-xs text-slate-300 font-bold uppercase">
-                      📊 P&L ({result.bat} batch{result.bat > 1 ? "es" : ""})
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="p-3 space-y-2 text-sm">
-                    {[
-                      { label: "Milk cost",        value: `-₹ ${result.milkCost.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,   color: "text-red-400"   },
-                      { label: "Cheese revenue",   value: `+₹ ${result.cheeseRevenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`, color: "text-green-300" },
-                      { label: "Whey revenue",     value: `+₹ ${result.wheyRevenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,   color: "text-cyan-300"  },
-                      { label: "Gross Profit",     value: `₹ ${result.grossProfit.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,    color: `${result.grossProfit >= 0 ? "text-green-300 font-black text-base" : "text-red-400 font-black text-base"}` },
-                    ].map((r, i) => (
-                      <div key={i} className={`flex justify-between ${i === 3 ? "border-t border-slate-700 pt-2" : ""}`}>
-                        <span className="text-slate-400">{r.label}</span>
-                        <span className={`font-bold ${r.color}`}>{r.value}</span>
-                      </div>
-                    ))}
-                    <div className="bg-slate-700 rounded-lg p-2 mt-2 text-center">
-                      <div className="text-[10px] text-slate-400 font-bold">GROSS MARGIN</div>
-                      <div className={`text-2xl font-black ${result.gpm >= 0 ? "text-green-300" : "text-red-400"}`}>
-                        {result.gpm.toFixed(1)}%
-                      </div>
-                      <div className="text-[10px] text-slate-400">(excl. processing & overhead costs)</div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Sensitivity insight */}
-                <Card className="bg-green-50 border-green-200">
-                  <CardHeader className="p-3 pb-1 border-b border-green-100">
-                    <CardTitle className="text-sm text-green-800">📈 Yield Sensitivity Analysis</CardTitle>
-                  </CardHeader>
-                  <CardContent className="p-3 space-y-1 text-xs text-green-800">
-                    {[
-                      { scenario: "+0.1% milk fat",     delta: result.dYield_dF,   unit: "kg cheese / 100kg milk" },
-                      { scenario: "+1% fat retention",  delta: result.cheeseKg * 0.01, unit: "kg more cheese" },
-                      { scenario: "-1% target moisture", delta: result.cheeseKg * (-0.01) / (1 - parseFloat(inp.targetMoisture)/100), unit: "kg cheese change" },
-                    ].map((s, i) => (
-                      <div key={i} className="flex justify-between p-1">
-                        <span className="font-semibold">{s.scenario}</span>
-                        <span className={s.delta >= 0 ? "text-green-700 font-bold" : "text-red-600 font-bold"}>
-                          {s.delta >= 0 ? "+" : ""}{s.delta.toFixed(2)} {s.unit}
-                        </span>
-                      </div>
-                    ))}
-                    <p className="text-[10px] text-green-600 mt-2">
-                      Milk standardization to higher fat → directly increases cheese output without additional milk.
-                    </p>
-                  </CardContent>
-                </Card>
-              </>
-            ) : (
-              <div className="text-center py-10 text-muted-foreground text-sm">
-                <Milk className="h-10 w-10 mx-auto mb-3 text-orange-200" />
-                <p>Pehle Results tab mein calculate karein.</p>
+              {/* Progress bar */}
+              <div className="w-full bg-slate-200 rounded-full h-3.5 dark:bg-slate-700 overflow-hidden shadow-inner">
+                <div
+                  className={`h-full rounded-full transition-all duration-500 ${
+                    actualResult.recoveryEffPct >= 98 ? "bg-green-600" :
+                    actualResult.recoveryEffPct >= 94 ? "bg-blue-600" :
+                    actualResult.recoveryEffPct >= 88 ? "bg-yellow-500" : "bg-red-600"
+                  }`}
+                  style={{ width: `${Math.min(100, actualResult.recoveryEffPct)}%` }}
+                />
               </div>
-            )}
-          </TabsContent>
-        </Tabs>
 
-        {/* ── CALCULATE ───────────────────────────────── */}
-        <Button onClick={calculate}
-          className="w-full h-11 bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white font-bold shadow-md">
-          <Milk className="w-4 h-4 mr-2" />
-          Predict Cheese Yield
-        </Button>
-      </CardContent>
-    </Card>
+              {/* Comparison table */}
+              <Card className="border-slate-200">
+                <CardHeader className="p-3 pb-1 border-b">
+                  <CardTitle className="text-xs font-bold text-slate-700 uppercase">📊 आदर्श बनाम वास्तविक (Ideal vs Actual Yield)</CardTitle>
+                </CardHeader>
+                <CardContent className="p-0 text-xs">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 font-semibold">
+                        <th className="p-2.5">पैरामीटर (Parameter)</th>
+                        <th className="p-2.5 text-right">आदर्श (Ideal)</th>
+                        <th className="p-2.5 text-right">वास्तविक (Actual)</th>
+                        <th className="p-2.5 text-right">अंतर (Variance)</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      <tr>
+                        <td className="p-2.5 font-medium text-slate-700">चीज मात्रा (Cheese Yield)</td>
+                        <td className="p-2.5 text-right text-slate-600">{actualResult.idealCheeseKg.toFixed(1)} kg</td>
+                        <td className="p-2.5 text-right text-slate-900 font-bold">{actualResult.cheeseObtained.toFixed(1)} kg</td>
+                        <td className={`p-2.5 text-right font-bold ${actualResult.deviationKg >= 0 ? "text-green-600" : "text-red-600"}`}>
+                          {actualResult.deviationKg >= 0 ? "+" : ""}{actualResult.deviationKg.toFixed(1)} kg ({actualResult.deviationPct.toFixed(1)}%)
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="p-2.5 font-medium text-slate-700">यील्ड प्रतिशत (Yield %)</td>
+                        <td className="p-2.5 text-right text-slate-600">{actualResult.idealYieldPct.toFixed(2)}%</td>
+                        <td className="p-2.5 text-right text-slate-900 font-bold">{actualResult.actualYieldPct.toFixed(2)}%</td>
+                        <td className={`p-2.5 text-right font-bold ${actualResult.deviationKg >= 0 ? "text-green-600" : "text-red-600"}`}>
+                          {actualResult.deviationKg >= 0 ? "+" : ""}{(actualResult.actualYieldPct - actualResult.idealYieldPct).toFixed(2)}%
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </CardContent>
+              </Card>
+
+              {/* Alerts */}
+              {actualResult.warnings.length > 0 && (
+                <Alert className="bg-yellow-50 border-yellow-200">
+                  <AlertTriangle className="h-4 w-4 text-yellow-600" />
+                  <AlertTitle className="text-yellow-800 text-xs font-bold">सुधार बिंदु (Actionable Points)</AlertTitle>
+                  <AlertDescription className="text-xs text-yellow-700 space-y-1">
+                    {actualResult.warnings.map((w: string, i: number) => <div key={i}>• {w}</div>)}
+                  </AlertDescription>
+                </Alert>
+              )}
+            </div>
+          )}
+        </TabsContent>
+      </Tabs>
+    </div>
   );
 }
 
@@ -9347,20 +9428,18 @@ function DispatchCalc() {
   const updateItem = (id: string, key: keyof DispatchItem, val: string) =>
     setItems(p => p.map(i => i.id === id ? { ...i, [key]: val } : i));
 
-  // ── CALCULATE ─────────────────────────────────────────
   const calculate = useCallback(() => {
     const km      = parseFloat(routeKm)   || 0;
     const fuelEff = parseFloat(fuelRate)  || 12;
     const fuelPr  = parseFloat(fuelPrice) || 100;
     const coldCKm = coldChain ? (parseFloat(coldCostKm) || 0) : 0;
 
-    // Per-item calculation
     const itemResults = items.map(item => {
       const prod  = DISPATCH_PRODUCTS[item.product];
       const qty   = parseFloat(item.qty) || 0;
       const crates = Math.ceil(qty / prod.perCrate);
-      const wt     = qty * prod.unitWtG / 1000; // kg product
-      const crateWt= crates * 1.8;              // avg crate tare 1.8 kg
+      const wt     = qty * prod.unitWtG / 1000;
+      const crateWt= crates * 1.8; // avg crate tare 1.8 kg
       return {
         label:  prod.label,
         qty,
@@ -9379,7 +9458,6 @@ function DispatchCalc() {
     const totalLoadKg    = totalProductKg + totalTareKg;
     const totalLoadT     = totalLoadKg / 1000;
 
-    // Vehicle selection — find minimum adequate vehicle
     const suitableVehicles = VEHICLES.filter(v =>
       v.maxKg >= totalLoadKg &&
       v.maxCrates >= totalCrates &&
@@ -9387,2477 +9465,2729 @@ function DispatchCalc() {
     );
     const recommended = suitableVehicles[0] ?? VEHICLES[VEHICLES.length - 1];
 
-    // How many trips needed with recommended vehicle
     const tripsWeight = Math.ceil(totalLoadKg  / recommended.maxKg);
     const tripsCrates = Math.ceil(totalCrates  / recommended.maxCrates);
-    const tripsNeeded = Math.max(tripsWeight, tripsCrates);
+    const tripsNeeded = Math.max(tripsWeight, tripsCrates, 1);
 
-    // Vehicle utilization
     const utilWt  = (totalLoadKg  / (recommended.maxKg     * tripsNeeded)) * 100;
-    const utilCr  = (totalCrates  / (recommended.maxCrates * tripsNeeded)) * 100;
+    const utilCrt = (totalCrates  / (recommended.maxCrates  * tripsNeeded)) * 100;
+    const avgUtil = (utilWt + utilCrt) / 2;
 
-    // Cost calculation
-    const fuelCostPerTrip   = (km * 2) / fuelEff * fuelPr; // return trip
-    const coldCostPerTrip   = km * 2 * coldCKm;
-    const totalCostPerTrip  = fuelCostPerTrip + coldCostPerTrip + recommended.costPerKm * km * 2;
-    const totalCostAllTrips = totalCostPerTrip * tripsNeeded;
-    const costPerCrate      = totalCostAllTrips / totalCrates;
-    const costPerKgProd     = totalProductKg > 0 ? totalCostAllTrips / totalProductKg : 0;
-
-    // Loading time estimate (1 crate/min manual loading)
-    const loadTimeMins  = Math.ceil(totalCrates * 1.2); // 1.2 min per crate
-
-    const warnings: string[] = [];
-    if (utilWt < 50)  warnings.push(`Vehicle utilization ${utilWt.toFixed(0)}% (weight) — consider smaller vehicle to reduce cost.`);
-    if (tripsNeeded > 1) warnings.push(`${tripsNeeded} trips needed — consider larger vehicle for single dispatch.`);
-    if (!coldChain && itemResults.some(r => ["pouch","cup"].includes(r.category)))
-      warnings.push("Cold chain recommended for liquid milk & dairy products!");
-    if (totalLoadT > 10) warnings.push(`Load ${totalLoadT.toFixed(1)} T — verify vehicle permit & axle load compliance.`);
+    const fuelCost = fuelEff > 0 ? (km / fuelEff) * fuelPr * tripsNeeded : 0;
+    const transportCost = recommended.costPerKm * km * tripsNeeded;
+    const coldCost = coldChain ? coldCKm * km * tripsNeeded : 0;
+    const totalCost = fuelCost + transportCost + coldCost;
 
     setResult({
-      itemResults, totalCrates, totalProductKg, totalTareKg, totalLoadKg, totalLoadT,
-      recommended, tripsNeeded, utilWt, utilCr,
-      fuelCostPerTrip, coldCostPerTrip, totalCostPerTrip, totalCostAllTrips,
-      costPerCrate, costPerKgProd, loadTimeMins,
-      km, warnings,
+      itemResults,
+      totalCrates,
+      totalProductKg,
+      totalTareKg,
+      totalLoadKg,
+      totalLoadT,
+      recommended,
+      tripsNeeded,
+      utilWt,
+      utilCrt,
+      avgUtil,
+      fuelCost,
+      transportCost,
+      coldCost,
+      totalCost,
     });
 
     toast({
-      title: "✅ Planned",
-      description: `${totalCrates} crates · ${totalLoadT.toFixed(2)}T · ${tripsNeeded} trip(s) · ₹${totalCostAllTrips.toFixed(0)}`,
+      title: "🚛 लॉजिस्टिक्स योजना तैयार (Logistics Planned)",
+      description: `वाहन (Vehicle): ${recommended.label} | फेरे (Trips): ${tripsNeeded}`,
     });
   }, [items, routeKm, fuelRate, fuelPrice, coldChain, coldCostKm, toast]);
 
-  // ── RENDER ────────────────────────────────────────────
   return (
-    <Card className="border-indigo-200 bg-indigo-50/20">
-      <CardHeader className="pb-3 bg-gradient-to-r from-indigo-50 to-violet-50 rounded-t-lg border-b border-indigo-100">
-        <CardTitle className="flex items-center justify-between">
-          <span className="flex items-center gap-2 text-indigo-800">
-            <Truck className="w-5 h-5 text-indigo-600" />
-            Logistics & Dispatch Planner
-          </span>
-          {result && (
-            <Badge className="bg-indigo-600 text-white text-sm px-3 py-1">
-              {result.totalCrates} crates · {result.totalLoadT.toFixed(1)}T
-            </Badge>
-          )}
-        </CardTitle>
-        <CardDescription className="text-indigo-600 text-xs">
-          Multi-SKU · Vehicle sizing · Cost per crate · Trips · Loading time
-        </CardDescription>
-      </CardHeader>
-
-      <CardContent className="pt-4 space-y-4">
-
-        {/* ── PRODUCT ITEMS ──────────────────────────── */}
-        <div className="space-y-2">
-          <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">📦 Dispatch Items</Label>
-          {items.map((item, idx) => {
-            const prod = DISPATCH_PRODUCTS[item.product];
-            const qty  = parseFloat(item.qty) || 0;
-            const crates = Math.ceil(qty / prod.perCrate);
-            return (
-              <Card key={item.id} className="border-indigo-100 bg-white">
-                <CardContent className="p-3 space-y-2">
-                  <div className="flex items-center gap-2">
-                    <span className="bg-indigo-600 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shrink-0">
-                      {idx + 1}
-                    </span>
-                    <Select value={item.product} onValueChange={v => updateItem(item.id, "product", v)}>
-                      <SelectTrigger className="h-9 text-xs bg-white border-indigo-100 flex-1">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {(Object.entries(DISPATCH_PRODUCTS) as [ProductKey, any][]).map(([k, v]) => (
-                          <SelectItem key={k} value={k}>
-                            <span className="font-semibold">{v.label}</span>
-                            <span className="text-[10px] text-slate-400 ml-2">
-                              {v.perCrate}/crate · {(v.unitWtG/1000).toFixed(2)}kg/unit
-                            </span>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    {items.length > 1 && (
-                      <button onClick={() => removeItem(item.id)} className="text-red-400 hover:text-red-600 text-xs font-bold shrink-0">✕</button>
-                    )}
-                  </div>
-
-                  <div className="flex gap-2 items-center">
-                    <div className="flex-1">
-                      <ValidatedInput
-                        label="Quantity (units)"
-                        value={item.qty}
-                        onChange={v => updateItem(item.id, "qty", v)}
-                        validation={{ isValid: parseFloat(item.qty) > 0, severity: "error" }}
-                        helpText={`${crates} crates · ${(qty * prod.unitWtG / 1000000).toFixed(2)}T`}
-                        colorScheme="indigo"
-                      />
-                    </div>
-                    <div className="text-center bg-indigo-50 rounded-lg px-3 py-2 border border-indigo-100 shrink-0">
-                      <div className="text-[10px] text-indigo-500 font-bold">CRATES</div>
-                      <div className="text-xl font-black text-indigo-700">{crates}</div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
-
-          <Button variant="outline" size="sm" onClick={addItem}
-            className="w-full border-dashed border-indigo-300 text-indigo-600 hover:bg-indigo-50">
-            + Add Product
-          </Button>
-        </div>
-
-        {/* ── ROUTE & LOGISTICS ────────────────────────── */}
-        <Card className="border-violet-100 bg-white">
-          <CardHeader className="p-3 pb-2 bg-violet-50 rounded-t-lg border-b border-violet-100">
-            <CardTitle className="text-xs font-bold text-violet-700 uppercase">🚚 Route & Logistics</CardTitle>
-          </CardHeader>
-          <CardContent className="p-3 space-y-3">
-            <div className="space-y-1">
-              <Label className="text-xs font-bold text-slate-500 uppercase">Route Distance</Label>
-              <div className="flex flex-wrap gap-2 mb-2">
-                {(Object.entries(ROUTE_PRESETS) as [string, string][]).map(([label, km]) => (
-                  <button key={label} onClick={() => setRouteKm(km)}
-                    className={`px-2 py-1 rounded-full text-xs font-semibold border transition-all ${
-                      routeKm === km
-                        ? "bg-violet-600 text-white border-violet-600"
-                        : "bg-white text-slate-500 border-slate-200 hover:border-violet-300"
-                    }`}>
-                    {label}
-                  </button>
-                ))}
-              </div>
-              <ValidatedInput
-                label="Distance (one way)"
-                value={routeKm}
-                onChange={setRouteKm}
-                validation={{ isValid: parseFloat(routeKm) > 0, severity: "error" }}
-                unit="km"
-                colorScheme="violet"
-              />
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              <ValidatedInput
-                label="Fuel Efficiency"
-                value={fuelRate}
-                onChange={setFuelRate}
-                validation={{ isValid: true, severity: "info" }}
-                unit="km/L"
-                helpText="Diesel truck: 8–14"
-                colorScheme="orange"
-              />
-              <ValidatedInput
-                label="Diesel Price"
-                value={fuelPrice}
-                onChange={setFuelPrice}
-                validation={{ isValid: true, severity: "info" }}
-                unit="₹/L"
-                colorScheme="orange"
-              />
-            </div>
-
-            {/* Cold chain toggle */}
-            <div className="flex items-center justify-between p-3 bg-blue-50 border border-blue-200 rounded-lg">
-              <div>
-                <div className="text-sm font-bold text-blue-800">🧊 Cold Chain Required</div>
-                <div className="text-xs text-blue-500">Insulated/reefer vehicle</div>
-              </div>
-              <Button
-                size="sm"
-                variant={coldChain ? "default" : "outline"}
-                onClick={() => setColdChain(!coldChain)}
-                className={coldChain ? "bg-blue-600 hover:bg-blue-700" : "border-blue-300 text-blue-600"}
-              >
-                {coldChain ? "ON ✓" : "OFF"}
-              </Button>
-            </div>
-
-            {coldChain && (
-              <ValidatedInput
-                label="Reefer Extra Cost"
-                value={coldCostKm}
-                onChange={setColdCostKm}
-                validation={{ isValid: true, severity: "info" }}
-                unit="₹/km"
-                helpText="Insulation + refrigeration cost"
-                colorScheme="blue"
-              />
-            )}
-          </CardContent>
-        </Card>
-
-        {/* ── CALCULATE ───────────────────────────────── */}
-        <Button onClick={calculate}
-          className="w-full h-11 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white font-bold shadow-md">
-          <Truck className="w-4 h-4 mr-2" />
-          Plan Dispatch
-        </Button>
-
-        {/* ── RESULTS ─────────────────────────────────── */}
-        {result && (
-          <div className="space-y-3 animate-in fade-in">
-
-            {/* Main KPIs */}
-            <div className="grid grid-cols-3 gap-2">
-              {[
-                { label: "Total Crates", value: result.totalCrates.toLocaleString("en-IN"), unit: "crates", color: "bg-indigo-600" },
-                { label: "Gross Load",   value: result.totalLoadT.toFixed(2), unit: "Tonnes", color: "bg-slate-700" },
-                { label: "Trips Needed", value: result.tripsNeeded, unit: "trips", color: result.tripsNeeded > 1 ? "bg-orange-500" : "bg-green-600" },
-              ].map((k, i) => (
-                <div key={i} className={`${k.color} text-white p-3 rounded-xl text-center shadow`}>
-                  <div className="text-[9px] uppercase opacity-80 font-bold">{k.label}</div>
-                  <div className="text-2xl font-black">{k.value}</div>
-                  <div className="text-[9px] opacity-70">{k.unit}</div>
-                </div>
-              ))}
-            </div>
-
-            {/* Vehicle recommendation */}
-            <Card className={`border-2 ${result.utilWt >= 70 ? "border-green-300 bg-green-50" : result.utilWt >= 50 ? "border-blue-300 bg-blue-50" : "border-orange-300 bg-orange-50"}`}>
-              <CardContent className="p-4">
-                <div className="text-[10px] uppercase font-bold text-slate-500 mb-1">Recommended Vehicle</div>
-                <div className="text-xl font-black text-slate-800">{result.recommended.label}</div>
-                <div className="grid grid-cols-2 gap-3 mt-3">
-                  {[
-                    { label: "Weight utilization", value: `${result.utilWt.toFixed(0)}%`, bar: result.utilWt },
-                    { label: "Crate utilization",  value: `${result.utilCr.toFixed(0)}%`, bar: result.utilCr },
-                  ].map((u, i) => (
-                    <div key={i}>
-                      <div className="flex justify-between text-xs mb-1">
-                        <span className="text-slate-500">{u.label}</span>
-                        <span className="font-bold">{u.value}</span>
-                      </div>
-                      <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
-                        <div
-                          className={`h-full rounded-full ${u.bar >= 70 ? "bg-green-500" : u.bar >= 50 ? "bg-blue-500" : "bg-orange-400"}`}
-                          style={{ width: `${Math.min(u.bar, 100)}%` }}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Item breakdown */}
-            <Card className="bg-white border-indigo-100">
-              <CardHeader className="p-3 pb-1 border-b border-indigo-100">
-                <CardTitle className="text-xs text-indigo-700 font-bold uppercase">SKU Breakdown</CardTitle>
-              </CardHeader>
-              <CardContent className="p-3 space-y-2 text-sm">
-                {result.itemResults.map((r: any, i: number) => (
-                  <div key={i} className="flex justify-between items-center">
-                    <div>
-                      <span className="font-semibold text-slate-700 text-xs">{r.label}</span>
-                      <div className="text-[10px] text-slate-400">
-                        {r.qty.toLocaleString("en-IN")} units · {r.perCrate}/crate
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="font-black text-indigo-700">{r.crates} crates</div>
-                      <div className="text-[10px] text-slate-400">{r.totalWtKg.toFixed(1)} kg</div>
-                    </div>
-                  </div>
-                ))}
-                <div className="border-t-2 pt-2 flex justify-between font-bold text-indigo-800">
-                  <span>Total</span>
-                  <span>{result.totalCrates} crates · {result.totalLoadT.toFixed(2)} T</span>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Weight breakdown */}
-            <div className="grid grid-cols-3 gap-2 text-center text-xs">
-              {[
-                { label: "Product",    value: `${result.totalProductKg.toFixed(0)} kg`, color: "bg-blue-50 border-blue-200 text-blue-800" },
-                { label: "Crate Tare", value: `${result.totalTareKg.toFixed(0)} kg`,    color: "bg-slate-50 border-slate-200 text-slate-700" },
-                { label: "Gross Load", value: `${result.totalLoadKg.toFixed(0)} kg`,    color: "bg-indigo-50 border-indigo-200 text-indigo-800" },
-              ].map((w, i) => (
-                <div key={i} className={`p-2 rounded-lg border ${w.color}`}>
-                  <div className="text-[9px] font-bold uppercase opacity-70">{w.label}</div>
-                  <div className="text-sm font-black">{w.value}</div>
-                </div>
-              ))}
-            </div>
-
-            {/* Cost breakdown */}
-            <Card className="bg-gradient-to-br from-slate-800 to-slate-900 text-white border-none">
-              <CardHeader className="p-3 pb-1">
-                <CardTitle className="text-xs text-slate-300 font-bold uppercase">💰 Transport Cost ({result.km} km × 2)</CardTitle>
-              </CardHeader>
-              <CardContent className="p-3 space-y-2 text-sm">
-                {[
-                  { label: "Fuel cost (return)",       value: `₹ ${result.fuelCostPerTrip.toFixed(0)}`,     color: "text-yellow-300" },
-                  { label: "Vehicle hire/km",          value: `₹ ${(result.recommended.costPerKm * result.km * 2).toFixed(0)}`, color: "text-cyan-400" },
-                  coldChain ? { label: "Cold chain extra",    value: `₹ ${result.coldCostPerTrip.toFixed(0)}`,     color: "text-blue-300" } : null,
-                  { label: "Total per trip",           value: `₹ ${result.totalCostPerTrip.toFixed(0)}`,    color: "text-green-300 font-black" },
-                  result.tripsNeeded > 1 ? { label: `× ${result.tripsNeeded} trips`, value: `₹ ${result.totalCostAllTrips.toFixed(0)}`, color: "text-orange-300 font-black text-base" } : null,
-                ].filter(Boolean).map((r: any, i) => (
-                  <div key={i} className="flex justify-between">
-                    <span className="text-slate-400">{r.label}</span>
-                    <span className={`font-bold ${r.color}`}>{r.value}</span>
-                  </div>
-                ))}
-                <div className="border-t border-slate-700 pt-2 grid grid-cols-2 gap-2 mt-1">
-                  {[
-                    { label: "Cost / crate",  value: `₹ ${result.costPerCrate.toFixed(2)}`  },
-                    { label: "Cost / kg",     value: `₹ ${result.costPerKgProd.toFixed(3)}` },
-                  ].map((c, i) => (
-                    <div key={i} className="text-center bg-slate-700 p-2 rounded-lg">
-                      <div className="text-[9px] text-slate-400 font-bold">{c.label}</div>
-                      <div className="font-black text-white">{c.value}</div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Loading time */}
-            <div className="flex items-center justify-between p-3 bg-violet-50 border border-violet-200 rounded-lg text-sm">
-              <div>
-                <div className="font-bold text-violet-800">⏱️ Estimated Loading Time</div>
-                <div className="text-xs text-violet-500">{result.totalCrates} crates @ ~1.2 min/crate</div>
-              </div>
-              <div className="text-xl font-black text-violet-700">
-                {result.loadTimeMins} min
-              </div>
-            </div>
-
-            {/* Warnings */}
-            {result.warnings.length > 0 && (
-              <Alert className="bg-yellow-50 border-yellow-300">
-                <AlertTriangle className="h-4 w-4 text-yellow-600" />
-                <AlertTitle className="text-yellow-800 text-sm">Logistics Alerts</AlertTitle>
-                <AlertDescription className="text-xs text-yellow-700 space-y-1">
-                  {result.warnings.map((w: string, i: number) => <div key={i}>⚠️ {w}</div>)}
-                </AlertDescription>
-              </Alert>
-            )}
-
-          </div>
-        )}
-      </CardContent>
-    </Card>
-  );
-}
-
-function YieldsCalc() {
-  const [activeCalc, setActiveCalc] = useState("cream-sep");
-
-  // ── 1. Grouped Keys for Dropdown Sections (Cleaned) ──
-  
-  // A. Product Yields (Basic + New Ghee/Cheese)
-  const yieldKeys = [
-    "cream-sep", 
-    "butter", 
-    "ghee-recovery", 
-    "cheese-yield", 
-    "khoa", 
-    "shrikhand", 
-    "pedha"
-  ];
-
-  // B. Production & Processing (Only Essential Process Tools)
-  const processKeys = [
-    "pasteurization", 
-    "culture-dose",    // Culture Dosing
-    "paneer-coag",     // Paneer Coagulant
-    "cip-dosing", 
-    "evaporator", 
-    "spray-dryer"
-  ];
-
-  // C. Utility, Engineering & Store (All Industrial Tools)
-  const utilityKeys = [
-    "tank-vol",      // Dipstick
-    "pipe-vol",      // Pipeline Loss
-    "pack-film",     // Packaging Film
-    "chilling-load", // Refrigeration
-    "ibt-calc",      // Ice Bank
-    "boiler-cost",   // Steam Cost
-    "storage-cap",   // Cold Room
-    "etp-load",      // ETP Waste
-    "wmr-calc",      // Water:Milk Ratio
-    "dispatch-plan"  // Logistics
-  ];
-
-  // ── 2. Component Mapping ──
-  const calculators: Record<string, {
-    title: string;
-    component: React.ReactNode;
-    icon: React.ElementType;
-    color: string;
-  }> = {
-    // === YIELDS ===
-    "cream-sep": { title: "Cream Separation", component: <CreamSeparationCalc />, icon: Droplets, color: "text-blue-600" },
-    butter: { title: "Butter Yield", component: <ButterYieldCalc />, icon: Target, color: "text-yellow-600" },
-    "ghee-recovery": { title: "Ghee Recovery", component: <GheeRecoveryCalc />, icon: Target, color: "text-yellow-700" },
-    "cheese-yield": { title: "Cheese Yield (Van Slyke)", component: <CheeseYieldCalc />, icon: Milk, color: "text-orange-500" },
-    khoa: { title: "Khoa Yield", component: <KhoaYieldCalc />, icon: Thermometer, color: "text-orange-600" },
-    shrikhand: { title: "Shrikhand Yield", component: <ShrikhandYieldCalc />, icon: Weight, color: "text-purple-600" },
-    pedha: { title: "Pedha/Burfi Yield", component: <PedhaBurfiYieldCalc />, icon: PaneerIcon, color: "text-pink-600" },
-
-    // === PROCESS ===
-    pasteurization: { title: "Pasteurization Validation", component: <PasteurizationCalc />, icon: CheckCircle2, color: "text-rose-600" },
-    "culture-dose": { title: "Culture Dosing", component: <CultureDosingCalc />, icon: Pipette, color: "text-pink-600" },
-    "paneer-coag": { title: "Paneer Coagulant", component: <PaneerCoagulantCalc />, icon: Beaker, color: "text-green-600" },
-    "cip-dosing": { title: "CIP Chemical Dosing", component: <CIPChemicalCalc />, icon: Beaker, color: "text-orange-600" },
-    evaporator: { title: "Evaporator / Concentrator", component: <EvaporatorCalc />, icon: Thermometer, color: "text-amber-600" },
-    "spray-dryer": { title: "Spray Dryer Yield", component: <SprayDryerCalc />, icon: Zap, color: "text-sky-600" },
-
-    // === UTILITY ===
-    "tank-vol": { title: "Tank Volume (Dipstick)", component: <TankVolumeCalc />, icon: Ruler, color: "text-slate-600" },
-    "pipe-vol": { title: "Pipeline Loss/Vol", component: <PipelineLossCalc />, icon: Cylinder, color: "text-orange-600" },
-    "pack-film": { title: "Packaging Film Calc", component: <PackagingFilmCalc />, icon: PackageOpen, color: "text-purple-600" },
-    "chilling-load": { title: "Chilling Load (TR)", component: <ChillingLoadCalc />, icon: Snowflake, color: "text-blue-700" },
-    "ibt-calc": { title: "IBT Ice Capacity", component: <IbtCalc />, icon: Snowflake, color: "text-cyan-600" },
-    "boiler-cost": { title: "Boiler Steam Cost", component: <BoilerCostCalc />, icon: Flame, color: "text-red-600" },
-    "storage-cap": { title: "Cold Room Capacity", component: <StorageCalc />, icon: Box, color: "text-slate-700" },
-    "etp-load": { title: "ETP Waste Load", component: <EtpLoadCalc />, icon: Trash2, color: "text-stone-600" },
-    "wmr-calc": { title: "Water:Milk Ratio", component: <WmrCalc />, icon: Droplets, color: "text-teal-600" },
-    "dispatch-plan": { title: "Dispatch Planner", component: <DispatchCalc />, icon: Truck, color: "text-indigo-600" },
-  };
-
-  const active = calculators[activeCalc];
-
-  return (
-    <Card className="border-2 shadow-lg">
-      <CardHeader className="bg-gradient-to-r from-blue-50 to-purple-50">
-        <CardTitle className="flex items-center gap-2 text-xl sm:text-2xl">
-          <Activity className="h-6 sm:h-7 w-6 sm:w-7 text-blue-600" />
-          Industrial Production Suite
-        </CardTitle>
-        <CardDescription className="text-xs sm:text-sm">
-          Advanced tools for Yields, Process, and Plant Utility management
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="pt-6">
-        <div className="mb-6">
-          <Label className="text-sm sm:text-base font-semibold mb-3 block">
-            Select Management Tool
-          </Label>
-          <Select value={activeCalc} onValueChange={setActiveCalc}>
-            <SelectTrigger className="w-full h-12 bg-white">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent className="max-h-[350px]">
-              
-              <div className="px-2 py-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-widest bg-slate-50 border-b">
-                📊 Product Yields
-              </div>
-              {yieldKeys.map((key) => {
-                const item = calculators[key];
-                return (
-                  <SelectItem key={key} value={key}>
-                    <div className="flex items-center gap-2">
-                      <div className={item.color}>{React.createElement(item.icon, { className: "w-4 h-4" })}</div>
-                      <span>{item.title}</span>
-                    </div>
-                  </SelectItem>
-                );
-              })}
-
-              <div className="px-2 py-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-widest bg-slate-50 border-y mt-1">
-                ⚡ Production Process
-              </div>
-              {processKeys.map((key) => {
-                const item = calculators[key];
-                return (
-                  <SelectItem key={key} value={key}>
-                    <div className="flex items-center gap-2">
-                      <div className={item.color}>{React.createElement(item.icon, { className: "w-4 h-4" })}</div>
-                      <span>{item.title}</span>
-                    </div>
-                  </SelectItem>
-                );
-              })}
-
-              <div className="px-2 py-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-widest bg-slate-50 border-y mt-1">
-                🛠️ Utility & Infrastructure
-              </div>
-              {utilityKeys.map((key) => {
-                const item = calculators[key];
-                return (
-                  <SelectItem key={key} value={key}>
-                    <div className="flex items-center gap-2">
-                      <div className={item.color}>{React.createElement(item.icon, { className: "w-4 h-4" })}</div>
-                      <span>{item.title}</span>
-                    </div>
-                  </SelectItem>
-                );
-              })}
-
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="border-t pt-6">
-          {active?.component}
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
-
-// ==================== SUB-CALCULATORS (same as before) ====================
-function CreamSeparationCalc() {
-  const [milkQty, setMilkQty] = useState("100");
-  const [milkFat, setMilkFat] = useState("4.5");
-  const [creamFat, setCreamFat] = useState("40");
-  const [skimFat, setSkimFat] = useState("0.05");
-  const [result, setResult] = useState<{
-    cream: number;
-    skim: number;
-    efficiency: number;
-  } | null>(null);
-
-  const { validatePositive, validatePercentage } = useInputValidation();
-  const { toast } = useToast();
-
-  const calculate = useCallback(() => {
-    const validations = [
-      validatePositive(milkQty, "Milk quantity"),
-      validatePercentage(milkFat, "Milk fat"),
-      validatePercentage(creamFat, "Cream fat"),
-      validatePercentage(skimFat, "Skim fat"),
-    ];
-
-    const invalidField = validations.find((v) => !v.isValid);
-    if (invalidField) {
-      toast({
-        title: "Validation Error",
-        description: invalidField.message,
-        variant: "destructive",
-      });
-      return;
-    }
-
-    const M = parseFloat(milkQty);
-    const Fm = parseFloat(milkFat);
-    const Fc = parseFloat(creamFat);
-    const Fs = parseFloat(skimFat);
-
-    if (Fc <= Fm || Fm <= Fs) {
-      toast({
-        title: "Invalid Parameters",
-        description: "Cream fat must be > Milk fat > Skim milk fat",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    const C = (M * (Fm - Fs)) / (Fc - Fs);
-    const S = M - C;
-    const efficiency = ((C * Fc + S * Fs) / (M * Fm)) * 100;
-
-    setResult({ cream: C, skim: S, efficiency });
-
-    toast({
-      title: "Calculation Complete",
-      description: `Cream: ${C.toFixed(3)} kg, Skim: ${S.toFixed(3)} kg`,
-    });
-  }, [
-    milkQty,
-    milkFat,
-    creamFat,
-    skimFat,
-    validatePositive,
-    validatePercentage,
-    toast,
-  ]);
-
-  return (
-    <div className="space-y-4 sm:space-y-6">
-      <Alert className="bg-blue-50 border-blue-200">
-        <Droplets className="h-4 w-4 text-blue-600" />
-        <AlertTitle className="text-sm sm:text-base">
-          Cream Separation Calculator
-        </AlertTitle>
-        <AlertDescription className="text-xs sm:text-sm">
-          Calculate cream and skim milk yields using Pearson Square method
+    <div className="space-y-4 w-full">
+      {/* Header */}
+      <Alert className="bg-gradient-to-r from-indigo-50 to-blue-50 border-indigo-200">
+        <Truck className="h-4 w-4 text-indigo-600" />
+        <AlertTitle className="text-indigo-800 font-bold">डिस्पैच लॉजिस्टिक्स प्लानर (Dispatch Logistics Planner)</AlertTitle>
+        <AlertDescription className="text-xs text-indigo-700">
+          उत्पादों की मात्रा और क्रेट्स के आधार पर वाहन क्षमता चयन, फेरे और ईंधन लागत विश्लेषण।<br/>
+          <span className="text-indigo-500 font-medium">Optimize vehicle capacity, trips & route cost based on total dispatch weight and crates.</span>
         </AlertDescription>
       </Alert>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-        <ValidatedInput
-          label="Milk Quantity"
-          value={milkQty}
-          onChange={setMilkQty}
-          validation={validatePositive(milkQty)}
-          unit="kg"
-          icon={<Weight className="h-4 w-4 text-blue-500" />}
-          colorScheme="blue"
-        />
-        <ValidatedInput
-          label="Milk Fat"
-          value={milkFat}
-          onChange={setMilkFat}
-          validation={validatePercentage(milkFat)}
-          unit="%"
-          icon={<Percent className="h-4 w-4 text-green-500" />}
-          colorScheme="green"
-        />
-        <ValidatedInput
-          label="Target Cream Fat"
-          value={creamFat}
-          onChange={setCreamFat}
-          validation={validatePercentage(creamFat)}
-          unit="%"
-          icon={<Target className="h-4 w-4 text-yellow-500" />}
-          helpText="Typical: 35-45%"
-          colorScheme="orange"
-        />
-        <ValidatedInput
-          label="Skim Milk Fat"
-          value={skimFat}
-          onChange={setSkimFat}
-          validation={validatePercentage(skimFat)}
-          unit="%"
-          icon={<Droplets className="h-4 w-4 text-cyan-500" />}
-          helpText="Typical: 0.03-0.1%"
-          colorScheme="blue"
-        />
+      {/* Item Planner Section */}
+      <Card className="border-indigo-100 bg-white">
+        <CardHeader className="p-3 pb-2 bg-indigo-50/50 border-b border-indigo-100 flex flex-row justify-between items-center">
+          <CardTitle className="text-xs font-bold text-indigo-800 uppercase">📦 डिस्पैच उत्पाद सूची (Dispatch Product List)</CardTitle>
+          <Button variant="outline" size="sm" onClick={addItem} className="h-7 text-xs border-indigo-300 text-indigo-700 hover:bg-indigo-50">
+            + उत्पाद जोड़ें (Add Item)
+          </Button>
+        </CardHeader>
+        <CardContent className="p-3 space-y-2.5">
+          {items.map((item) => (
+            <div key={item.id} className="grid grid-cols-1 sm:grid-cols-[2fr_1fr_auto] gap-2 items-end border-b border-slate-100 pb-2.5 last:border-0 last:pb-0">
+              <div className="space-y-1">
+                <Label className="text-[10px] text-slate-500 font-semibold uppercase">उत्पाद (Product)</Label>
+                <Select value={item.product} onValueChange={(val) => updateItem(item.id, "product", val as ProductKey)}>
+                  <SelectTrigger className="h-9 bg-white border-slate-200 text-xs">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.entries(DISPATCH_PRODUCTS).map(([key, p]) => (
+                      <SelectItem key={key} value={key} className="text-xs">
+                        {p.label} (Crate: {p.perCrate} qty)
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-1">
+                <Label className="text-[10px] text-slate-500 font-semibold uppercase">मात्रा पैकेट्स/नग (Qty Packs/Units)</Label>
+                <Input
+                  type="number"
+                  value={item.qty}
+                  onChange={(e) => updateItem(item.id, "qty", e.target.value)}
+                  className="h-9 text-xs"
+                />
+              </div>
+
+              <Button
+                variant="ghost"
+                size="icon"
+                disabled={items.length <= 1}
+                onClick={() => removeItem(item.id)}
+                className="h-9 w-9 text-red-500 hover:text-red-700 hover:bg-red-50"
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </div>
+          ))}
+        </CardContent>
+      </Card>
+
+      {/* Parameters */}
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-3 p-3.5 bg-slate-50 rounded-xl border border-slate-100">
+        <div>
+          <Label className="text-[10px] text-slate-500 font-bold uppercase">दूरी (Route Distance)</Label>
+          <div className="flex gap-1.5 mt-1">
+            <Input
+              type="number"
+              value={routeKm}
+              onChange={(e) => setRouteKm(e.target.value)}
+              className="h-9 text-xs bg-white"
+            />
+            <span className="text-[10px] text-slate-400 self-center font-semibold">km</span>
+          </div>
+        </div>
+
+        <div>
+          <Label className="text-[10px] text-slate-500 font-bold uppercase">ईंधन माइलेज (Mileage)</Label>
+          <div className="flex gap-1.5 mt-1">
+            <Input
+              type="number"
+              value={fuelRate}
+              onChange={(e) => setFuelRate(e.target.value)}
+              className="h-9 text-xs bg-white"
+            />
+            <span className="text-[10px] text-slate-400 self-center font-semibold">km/L</span>
+          </div>
+        </div>
+
+        <div>
+          <Label className="text-[10px] text-slate-500 font-bold uppercase">ईंधन दर (Fuel Price)</Label>
+          <div className="flex gap-1.5 mt-1">
+            <Input
+              type="number"
+              value={fuelPrice}
+              onChange={(e) => setFuelPrice(e.target.value)}
+              className="h-9 text-xs bg-white"
+            />
+            <span className="text-[10px] text-slate-400 self-center font-semibold">₹/L</span>
+          </div>
+        </div>
+
+        <div>
+          <Label className="text-[10px] text-slate-500 font-bold uppercase">रीफर एक्स्ट्रा (Reefer Addon)</Label>
+          <div className="flex gap-1.5 mt-1">
+            <Input
+              type="number"
+              value={coldCostKm}
+              onChange={(e) => setColdCostKm(e.target.value)}
+              disabled={!coldChain}
+              className="h-9 text-xs bg-white disabled:opacity-60"
+            />
+            <span className="text-[10px] text-slate-400 self-center font-semibold">₹/km</span>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 pt-5">
+          <Checkbox id="cold-chain" checked={coldChain} onCheckedChange={(c) => setColdChain(!!c)} />
+          <Label htmlFor="cold-chain" className="text-xs font-semibold cursor-pointer text-slate-700 flex items-center gap-1">
+            <Snowflake className="w-3.5 h-3.5 text-blue-500" /> कोल्ड चेन (Cold Chain)
+          </Label>
+        </div>
       </div>
 
-      <Button
-        onClick={calculate}
-        className="w-full h-11 sm:h-12 text-sm sm:text-lg bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700"
-        size="lg"
-      >
-        <Calculator className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
-        Calculate Separation
+      {/* Preset Route Buttons */}
+      <div className="flex flex-wrap gap-2 items-center">
+        <span className="text-[10px] text-slate-500 font-bold uppercase">दूरी प्रीसेट (Route Presets):</span>
+        {Object.entries(ROUTE_PRESETS).map(([label, km]) => (
+          <button
+            key={label}
+            onClick={() => setRouteKm(km)}
+            className="px-2.5 py-1 text-[10px] font-bold rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 border transition-all"
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
+      <Button onClick={calculate} className="w-full h-11 bg-indigo-600 hover:bg-indigo-700 text-white font-bold shadow-md">
+        🚛 लॉजिस्टिक्स मार्ग प्लान करें (Plan Dispatch Route)
       </Button>
 
+      {/* Results */}
       {result && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 animate-in slide-in-from-bottom-4">
-          <ResultCard
-            title="Cream Yield"
-            value={result.cream}
-            unit="kg"
-            confidence="high"
-            icon={<Droplets className="h-5 w-5" />}
-            colorScheme="orange"
-          />
-          <ResultCard
-            title="Skim Milk"
-            value={result.skim}
-            unit="kg"
-            confidence="high"
-            icon={<Droplets className="h-5 w-5" />}
-            colorScheme="blue"
-          />
-          <ResultCard
-            title="Efficiency"
-            value={result.efficiency}
-            unit="%"
-            confidence="high"
-            icon={<CheckCircle2 className="h-5 w-5" />}
-            colorScheme="green"
-          />
+        <div className="space-y-4 animate-in fade-in">
+          {/* Main KPIs */}
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+            <div className="bg-indigo-600 text-white p-3 rounded-xl shadow-sm text-center">
+              <div className="text-[9px] uppercase opacity-80 font-bold">अनुशंसित वाहन (Vehicle)</div>
+              <div className="text-sm font-extrabold truncate">{result.recommended.label}</div>
+              <div className="text-[9px] opacity-75">Max: {result.recommended.maxKg} kg</div>
+            </div>
+            <div className="bg-blue-600 text-white p-3 rounded-xl shadow-sm text-center">
+              <div className="text-[9px] uppercase opacity-80 font-bold">कुल फेरे (Trips Needed)</div>
+              <div className="text-xl font-extrabold">{result.tripsNeeded}</div>
+              <div className="text-[9px] opacity-75">trips</div>
+            </div>
+            <div className="bg-violet-600 text-white p-3 rounded-xl shadow-sm text-center">
+              <div className="text-[9px] uppercase opacity-80 font-bold">कुल क्रेट्स (Total Crates)</div>
+              <div className="text-xl font-extrabold">{result.totalCrates}</div>
+              <div className="text-[9px] opacity-75">crates</div>
+            </div>
+            <div className="bg-purple-600 text-white p-3 rounded-xl shadow-sm text-center">
+              <div className="text-[9px] uppercase opacity-80 font-bold">कुल लोड (Total Weight)</div>
+              <div className="text-xl font-extrabold">{result.totalLoadKg.toFixed(0)} kg</div>
+              <div className="text-[9px] opacity-75">{(result.totalLoadT).toFixed(2)} tons</div>
+            </div>
+            <div className="bg-green-600 text-white p-3 rounded-xl shadow-sm text-center col-span-2 md:col-span-1">
+              <div className="text-[9px] uppercase opacity-80 font-bold">कुल अनुमानित लागत (Est. Cost)</div>
+              <div className="text-xl font-extrabold">₹ {result.totalCost.toFixed(0)}</div>
+              <div className="text-[9px] opacity-75">Fuel + Toll + Addon</div>
+            </div>
+          </div>
+
+          {/* Utilization & Cost Breakdown */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <Card className="border-slate-100">
+              <CardHeader className="p-3 pb-1 border-b">
+                <CardTitle className="text-xs font-bold text-slate-600 uppercase">📊 वाहन क्षमता उपयोग (Vehicle Capacity Utilization)</CardTitle>
+              </CardHeader>
+              <CardContent className="p-3 space-y-3.5">
+                <div className="space-y-1">
+                  <div className="flex justify-between text-xs font-medium">
+                    <span className="text-slate-500">वजन उपयोग (Weight Utilization)</span>
+                    <span className="font-bold">{result.utilWt.toFixed(1)}%</span>
+                  </div>
+                  <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden shadow-inner">
+                    <div
+                      className={`h-full rounded-full transition-all ${result.utilWt > 100 ? "bg-red-500" : "bg-indigo-600"}`}
+                      style={{ width: `${Math.min(100, result.utilWt)}%` }}
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <div className="flex justify-between text-xs font-medium">
+                    <span className="text-slate-500">क्रेट्स उपयोग (Crates Utilization)</span>
+                    <span className="font-bold">{result.utilCrt.toFixed(1)}%</span>
+                  </div>
+                  <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden shadow-inner">
+                    <div
+                      className={`h-full rounded-full transition-all ${result.utilCrt > 100 ? "bg-red-500" : "bg-indigo-600"}`}
+                      style={{ width: `${Math.min(100, result.utilCrt)}%` }}
+                    />
+                  </div>
+                </div>
+
+                <div className="flex justify-between border-t border-slate-100 pt-2 text-xs">
+                  <span className="text-slate-500 font-semibold">औसत क्षमता उपयोग (Avg Utilization):</span>
+                  <span className="font-bold text-indigo-700">{result.avgUtil.toFixed(1)}%</span>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-slate-100">
+              <CardHeader className="p-3 pb-1 border-b">
+                <CardTitle className="text-xs font-bold text-slate-600 uppercase">💰 लागत का विवरण (Cost Breakdown)</CardTitle>
+              </CardHeader>
+              <CardContent className="p-3 space-y-2 text-xs">
+                <div className="flex justify-between border-b border-slate-100 pb-1.5">
+                  <span className="text-slate-500">ईंधन लागत (Fuel Cost)</span>
+                  <span className="font-semibold text-slate-700">₹ {result.fuelCost.toFixed(0)}</span>
+                </div>
+                <div className="flex justify-between border-b border-slate-100 pb-1.5">
+                  <span className="text-slate-500">परिवहन बेस किराया (Base Vehicle Fare)</span>
+                  <span className="font-semibold text-slate-700">₹ {result.transportCost.toFixed(0)}</span>
+                </div>
+                <div className="flex justify-between border-b border-slate-100 pb-1.5">
+                  <span className="text-slate-500">कोल्ड चेन अधिभार (Cold Chain Addon)</span>
+                  <span className="font-semibold text-slate-700">₹ {result.coldCost.toFixed(0)}</span>
+                </div>
+                <div className="flex justify-between pt-1 font-bold text-green-700 text-sm">
+                  <span>कुल अनुमानित लागत (Total Logistics Cost)</span>
+                  <span>₹ {result.totalCost.toFixed(0)}</span>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       )}
     </div>
   );
 }
 
-// ════════════════════════════════════════════════════════════
-// ADVANCED BUTTER YIELD CALCULATOR
-// Drop-in Replacement for ButterYieldCalc()
-//
-// INSTRUCTIONS:
-// 1. Apni file mein purana ButterYieldCalc() function dhundhein
-// 2. Pura block DELETE karein
-// 3. Yeh poora code wahan PASTE karein
-// Koi naya import nahi chahiye.
-// ════════════════════════════════════════════════════════════
+function CreamSeparationCalc() {
+  const { toast } = useToast();
+  const { validatePositive, validateNumber } = useInputValidation();
 
-// ── CREAM TYPE DATABASE ───────────────────────────────────
-const BUTTER_CREAM_DB = {
-  cream_35:   { label: "🫙 Cream 35% (separator)",  fat: "35", moisture: "62", snf: "3", temp: "8–10°C",  note: "Low fat cream — lower yield/kg, good flavour" },
-  cream_40:   { label: "🫙 Cream 40% (standard)",   fat: "40", moisture: "57", snf: "3", temp: "8–10°C",  note: "Most common plant input. Balanced yield."      },
-  cream_50:   { label: "🫙 Cream 50% (rich)",       fat: "50", moisture: "47", snf: "3", temp: "10–12°C", note: "Rich cream — higher yield, easier churning."    },
-  malai:      { label: "🥛 Malai (farm collected)", fat: "55", moisture: "38", snf: "7", temp: "10–12°C", note: "Variable SNF — watch buttermilk fat loss."      },
-  wpmp_recon: { label: "🧴 Recombined Cream (WMP)", fat: "40", moisture: "57", snf: "3", temp: "8–10°C",  note: "From WMP reconstitution — consistent quality."  },
-} as const;
+  const [activeCalc, setActiveCalc] = useState<"theoretical" | "actual">("theoretical");
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [enableCosting, setEnableCosting] = useState(false);
 
-type ButterCreamKey = keyof typeof BUTTER_CREAM_DB;
-
-// ── BUTTER TYPE DATABASE ──────────────────────────────────
-const BUTTER_TYPE_DB = {
-  white:      { label: "🧈 White Butter (unsalted)", fat: "80", moisture: "16", salt: "0",   snf: "4",  standard: "FSSAI: ≥80% fat" },
-  table:      { label: "🧈 Table Butter (salted)",   fat: "80", moisture: "15", salt: "2.5", snf: "2.5",standard: "FSSAI: ≥80% fat, ≤3% salt" },
-  desi:       { label: "🧈 Desi/Creamery Butter",    fat: "78", moisture: "17", salt: "0",   snf: "5",  standard: "FSSAI: ≥78% fat" },
-  ghee_grade: { label: "🧈 Ghee-grade Butter",       fat: "82", moisture: "15", salt: "0",   snf: "3",  standard: "High fat for ghee making" },
-  cultured:   { label: "🫙 Cultured Butter",         fat: "80", moisture: "16", salt: "0",   snf: "4",  standard: "Fermented cream — distinct flavour" },
-} as const;
-
-type ButterTypeKey = keyof typeof BUTTER_TYPE_DB;
-
-// ── CHURN METHOD DATABASE ─────────────────────────────────
-const CHURN_METHOD_DB = {
-  batch:      { label: "🪣 Batch Churn (cylinder)", fatLossDefault: "1.5", efficiency_adj:  0, note: "Standard method — 35–45 min churn time" },
-  continuous: { label: "⚙️ Continuous Churn",       fatLossDefault: "0.8", efficiency_adj:  0.5, note: "Industrial — lower fat loss, consistent output" },
-  fritz:      { label: "🔩 Fritz / Scrape Surface", fatLossDefault: "0.6", efficiency_adj:  0.8, note: "High-shear — best fat recovery, premium quality" },
-  traditional:{ label: "🧺 Traditional (bilona)",   fatLossDefault: "2.5", efficiency_adj: -1.0, note: "Artisan — higher fat loss but distinct flavour" },
-} as const;
-
-type ChurnMethodKey = keyof typeof CHURN_METHOD_DB;
-
-// ── PRESETS ───────────────────────────────────────────────
-const BUTTER_PRESETS = {
-  "Small Dairy (200L cream)": { creamQty: "200",  creamFat: "40", butterFat: "80", fatLoss: "1.5", batches: "2",  creamPrice: "50", butterPrice: "450", buttermilkPrice: "8"  },
-  "Medium (1000L cream)":     { creamQty: "1000", creamFat: "40", butterFat: "80", fatLoss: "1.2", batches: "1",  creamPrice: "48", butterPrice: "440", buttermilkPrice: "8"  },
-  "Large Plant (5000L)":      { creamQty: "5000", creamFat: "42", butterFat: "80", fatLoss: "0.8", batches: "1",  creamPrice: "45", butterPrice: "430", buttermilkPrice: "7"  },
-} as const;
-
-// ── MAIN COMPONENT ────────────────────────────────────────
-function ButterYieldCalc() {
-  const { toast }  = useToast();
-  const { validatePositive, validatePercentage, validateNumber } = useInputValidation();
-
-  const [creamType,  setCreamType]  = useState<ButterCreamKey>("cream_40");
-  const [butterType, setButterType] = useState<ButterTypeKey>("white");
-  const [churnMethod,setChurnMethod]= useState<ChurnMethodKey>("batch");
-
-  const [inp, setInp] = useState({
-    creamQty:        "1000",
-    creamFat:        "40",
-    creamMoisture:   "57",
-    creamSNF:        "3",
-    butterFat:       "80",
-    butterMoisture:  "16",
-    butterSalt:      "0",
-    fatLoss:         "1.5",
-    churnTemp:       "9",    // °C
-    batches:         "1",
-    operDays:        "26",
-    creamPrice:      "48",   // ₹/kg
-    butterPrice:     "440",  // ₹/kg
-    buttermilkPrice: "8",    // ₹/kg
+  // ── Theoretical Inputs (Predictor) ──
+  const [theo, setTheo] = useState({
+    milkQty:          "1000",   // kg milk input
+    milkFat:          "4.5",    // % milk fat
+    creamFat:         "40",     // % target cream fat
+    skimFat:          "0.05",   // % skim milk fat
+    // Advanced
+    processLoss:      "0.1",    // % process spill/sludge loss
+    // Costing
+    milkPrice:        "45",     // ₹/kg raw milk
+    creamPrice:       "350",    // ₹/kg cream sale price
+    skimPrice:        "25",     // ₹/kg skim milk sale price
+    batches:          "1",
+    operDays:         "26",
   });
 
-  const [result, setResult] = useState<any>(null);
-  const setF = (k: string, v: string) => setInp(p => ({ ...p, [k]: v }));
+  // ── Actual Inputs (Tracker) ──
+  const [actual, setActual] = useState({
+    milkQty:          "1000",
+    milkFat:          "4.5",
+    creamFat:         "40",
+    skimFat:          "0.05",
+    creamObtained:    "",
+    skimObtained:     "",
+  });
 
-  // Apply cream type
-  const applyCream = (key: ButterCreamKey) => {
-    const c = BUTTER_CREAM_DB[key];
-    setCreamType(key);
-    setInp(p => ({ ...p, creamFat: c.fat, creamMoisture: c.moisture, creamSNF: c.snf }));
-    setResult(null);
-  };
+  const [theoResult, setTheoResult]     = useState<any>(null);
+  const [actualResult, setActualResult] = useState<any>(null);
 
-  // Apply butter type
-  const applyButter = (key: ButterTypeKey) => {
-    const b = BUTTER_TYPE_DB[key];
-    setButterType(key);
-    setInp(p => ({ ...p, butterFat: b.fat, butterMoisture: b.moisture, butterSalt: b.salt }));
-    setResult(null);
-  };
+  const setT = (k: string, v: string) => setTheo(p => ({ ...p, [k]: v }));
+  const setA = (k: string, v: string) => setActual(p => ({ ...p, [k]: v }));
 
-  // Apply churn method
-  const applyChurn = (key: ChurnMethodKey) => {
-    setChurnMethod(key);
-    setInp(p => ({ ...p, fatLoss: CHURN_METHOD_DB[key].fatLossDefault }));
-    setResult(null);
-  };
+  // ══════════════════════════════════════════════════════════
+  // THEORETICAL CALCULATION (Predictor)
+  // ══════════════════════════════════════════════════════════
+  const calculateTheo = useCallback(() => {
+    const M   = parseFloat(theo.milkQty)   || 0;
+    const Fm  = parseFloat(theo.milkFat)  / 100;
+    const Fc  = parseFloat(theo.creamFat) / 100;
+    const Fs  = parseFloat(theo.skimFat)  / 100;
+    const loss = parseFloat(theo.processLoss) / 100;
+    const bat = parseFloat(theo.batches) || 1;
+    const days = parseFloat(theo.operDays) || 26;
 
-  // Apply preset
-  const applyPreset = (name: keyof typeof BUTTER_PRESETS) => {
-    const pr = BUTTER_PRESETS[name] as Record<string, string>;
-    setInp(p => ({ ...p, ...pr }));
-    toast({ title: "Preset Applied", description: name });
-  };
+    const milkPrice  = parseFloat(theo.milkPrice)  || 0;
+    const creamPrice = parseFloat(theo.creamPrice) || 0;
+    const skimPrice  = parseFloat(theo.skimPrice)  || 0;
 
-  // ── CALCULATE ─────────────────────────────────────────
-  const calculate = useCallback(() => {
-    const C    = parseFloat(inp.creamQty)       || 0;
-    const Fc   = parseFloat(inp.creamFat)  / 100;
-    const Mc   = parseFloat(inp.creamMoisture) / 100;
-    const SNFc = parseFloat(inp.creamSNF)  / 100;
-    const Fb   = parseFloat(inp.butterFat) / 100;
-    const Mb   = parseFloat(inp.butterMoisture) / 100;
-    const Sb   = parseFloat(inp.butterSalt) / 100;
-    const L    = parseFloat(inp.fatLoss)   / 100;
-    const bat  = parseFloat(inp.batches)   || 1;
-    const days = parseFloat(inp.operDays)  || 26;
-    const churn = CHURN_METHOD_DB[churnMethod];
-
-    const cprice   = parseFloat(inp.creamPrice)      || 0;
-    const bprice   = parseFloat(inp.butterPrice)     || 0;
-    const bmlkPr   = parseFloat(inp.buttermilkPrice) || 0;
-
-    if (C <= 0 || Fc <= 0 || Fb <= 0) {
-      toast({ variant: "destructive", title: "Invalid values" }); return;
+    if (M <= 0 || Fm <= 0 || Fc <= 0) {
+      toast({ variant: "destructive", title: "त्रुटि (Error)", description: "कृपया सभी इनपुट मान सही भरें।" });
+      return;
+    }
+    if (Fc <= Fm || Fm <= Fs) {
+      toast({ variant: "destructive", title: "त्रुटि (Error)", description: "क्रीम वसा > दूध वसा > स्किम वसा होना चाहिए।" });
+      return;
     }
 
-    // ── 1. Cream Mass Balance ─────────────────────────
+    // Pearson Square Calculation
+    let cream = (M * (Fm - Fs)) / (Fc - Fs);
+    let skim = M - cream;
+
+    // Apply process loss
+    cream = cream * (1 - loss);
+    skim = skim * (1 - loss);
+
+    const creamYieldPct = (cream / M) * 100;
+    const skimYieldPct = (skim / M) * 100;
+    
+    // Fat recovery
+    const totalInputFat = M * Fm;
+    const fatInCream = cream * Fc;
+    const fatInSkim = skim * Fs;
+    const fatLossKg = totalInputFat - (fatInCream + fatInSkim);
+    const fatRecoveryPct = totalInputFat > 0 ? (fatInCream / totalInputFat) * 100 : 0;
+
+    // Economics
+    const totalMilkQty = M * bat;
+    const milkCost = totalMilkQty * milkPrice;
+    const creamRev = cream * bat * creamPrice;
+    const skimRev = skim * bat * skimPrice;
+    const totalRev = creamRev + skimRev;
+    const grossProfit = totalRev - milkCost;
+    const gpm = milkCost > 0 ? (grossProfit / milkCost) * 100 : 0;
+
+    // Projections
+    const monthlyCream = cream * bat * days;
+    const monthlySkim = skim * bat * days;
+    const monthlyRev = totalRev * days;
+    const monthlyCost = milkCost * days;
+    const monthlyProfit = grossProfit * days;
+
+    const warnings: string[] = [];
+    if (Fs > 0.001) warnings.push(`स्किम मिल्क में फैट प्रतिशत (${theo.skimFat}%) अधिक है। सेपरेटर डिस्क की सफाई या गति की जांच करें। (Skim milk fat is high. Check separator cleanliness or RPM.)`);
+    if (Fc > 0.50) warnings.push(`क्रीम फैट ${theo.creamFat}% बहुत अधिक है। इतनी गाढ़ी क्रीम सेपरेशन लाइन में जाम का कारण बन सकती है। (Cream fat % is high, risk of choking the separator.)`);
+
+    setTheoResult({
+      cream, skim, creamYieldPct, skimYieldPct,
+      fatInCream, fatInSkim, fatLossKg, fatRecoveryPct,
+      milkCost, creamRev, skimRev, totalRev, grossProfit, gpm,
+      monthlyCream, monthlySkim, monthlyRev, monthlyCost, monthlyProfit,
+      warnings, M, bat, days
+    });
+
+    toast({
+      title: "🧮 गणना पूरी (Calculated)",
+      description: `क्रीम: ${cream.toFixed(1)} kg, स्किम: ${skim.toFixed(1)} kg`,
+    });
+  }, [theo, toast]);
+
+  // ══════════════════════════════════════════════════════════
+  // ACTUAL CALCULATION (Tracker)
+  // ══════════════════════════════════════════════════════════
+  const calculateActual = useCallback(() => {
+    const M        = parseFloat(actual.milkQty)   || 0;
+    const Fm       = parseFloat(actual.milkFat)  / 100;
+    const Fc       = parseFloat(actual.creamFat) / 100;
+    const Fs       = parseFloat(actual.skimFat)  / 100;
+    const creamObt = parseFloat(actual.creamObtained) || 0;
+    const skimObt  = parseFloat(actual.skimObtained)  || 0;
+
+    if (M <= 0 || Fm <= 0 || creamObt <= 0) {
+      toast({ variant: "destructive", title: "त्रुटि (Error)", description: "कृपया आवश्यक इनपुट भरें।" });
+      return;
+    }
+
+    // Pearson Square Ideal
+    const idealCream = (M * (Fm - Fs)) / (Fc - Fs);
+    const idealSkim  = M - idealCream;
+
+    // Actual recoveries
+    const creamRecoveryPct = idealCream > 0 ? (creamObt / idealCream) * 100 : 0;
+    const totalActualMass = creamObt + skimObt;
+    const massLossKg = M - totalActualMass;
+    const massLossPct = (massLossKg / M) * 100;
+
+    // Efficiency grade
+    let grade = "", gradeColor = "", gradeEmoji = "";
+    if (creamRecoveryPct >= 99 && massLossPct <= 0.5) {
+      grade = "Excellent (उत्कृष्ट)"; gradeColor = "text-green-700 bg-green-50 border-green-300"; gradeEmoji = "🏆";
+    } else if (creamRecoveryPct >= 97 && massLossPct <= 1) {
+      grade = "Good (अच्छा)"; gradeColor = "text-blue-700 bg-blue-50 border-blue-300"; gradeEmoji = "👍";
+    } else if (creamRecoveryPct >= 94 && massLossPct <= 2) {
+      grade = "Needs Improvement (सुधार ज़रूरी)"; gradeColor = "text-yellow-700 bg-yellow-50 border-yellow-300"; gradeEmoji = "⚠️";
+    } else {
+      grade = "Action Required (कार्रवाई ज़रूरी)"; gradeColor = "text-red-700 bg-red-50 border-red-300"; gradeEmoji = "🔴";
+    }
+
+    const warnings: string[] = [];
+    if (creamRecoveryPct < 97) warnings.push(`क्रीम रिकवरी ${creamRecoveryPct.toFixed(1)}% कम है। सेपरेटर में फैट बायपास या असंतुलन की जांच करें। (Cream recovery is low. Check separator bypass.)`);
+    if (massLossPct > 1.5) warnings.push(`दूध का कुल नुकसान ${massLossPct.toFixed(1)}% अधिक है। पाइपलाइन लीकेज या स्पिलेज की जांच करें। (Mass loss is high. Check for leaks or spillages.)`);
+
+    setActualResult({
+      idealCream, idealSkim,
+      creamRecoveryPct, massLossKg, massLossPct,
+      grade, gradeColor, gradeEmoji,
+      warnings, M, creamObt, skimObt
+    });
+
+    toast({
+      title: "📋 ट्रैकर गणना पूरी (Tracker Calculated)",
+      description: `दक्षता (Efficiency): ${creamRecoveryPct.toFixed(1)}% — ${grade}`,
+    });
+  }, [actual, toast]);
+
+  return (
+    <div className="space-y-4 w-full">
+      {/* Header */}
+      <Alert className="bg-gradient-to-r from-blue-50 to-cyan-50 border-blue-200">
+        <Droplets className="h-4 w-4 text-blue-600" />
+        <AlertTitle className="text-blue-800 font-bold">क्रीम सेपरेशन (Pearson Square) और दक्षता ट्रैकर</AlertTitle>
+        <AlertDescription className="text-xs text-blue-700">
+          पियर्सन स्क्वायर विधि द्वारा क्रीम और स्किम मिल्क यील्ड, वसा रिकवरी दक्षता और आर्थिक विश्लेषण।<br/>
+          <span className="text-blue-500 font-medium">Pearson Square method for Cream & Skim yields, fat recovery efficiency & economics.</span>
+        </AlertDescription>
+      </Alert>
+
+      {/* ── Tab Toggle ── */}
+      <Tabs value={activeCalc} onValueChange={v => setActiveCalc(v as "theoretical" | "actual")}>
+        <TabsList className="grid grid-cols-2 bg-blue-100/55 p-1 rounded-lg">
+          <TabsTrigger value="theoretical" className="text-xs font-bold data-[state=active]:bg-blue-600 data-[state=active]:text-white">
+            🧮 Predictor (अनुमान)
+          </TabsTrigger>
+          <TabsTrigger value="actual" className="text-xs font-bold data-[state=active]:bg-cyan-600 data-[state=active]:text-white">
+            📋 Tracker (वास्तविक)
+          </TabsTrigger>
+        </TabsList>
+
+        {/* ══════════════════════════════════════════════════════════
+            TAB 1: THEORETICAL PREDICTOR
+            ══════════════════════════════════════════════════════════ */}
+        <TabsContent value="theoretical" className="space-y-4 pt-3">
+          {/* Core Inputs */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <ValidatedInput
+              label="दूध की मात्रा (Milk Qty)"
+              value={theo.milkQty}
+              onChange={v => setT("milkQty", v)}
+              validation={validatePositive(theo.milkQty, "Milk quantity")}
+              unit="kg"
+              colorScheme="blue"
+            />
+            <ValidatedInput
+              label="दूध वसा प्रतिशत (Milk Fat %)"
+              value={theo.milkFat}
+              onChange={v => setT("milkFat", v)}
+              validation={validateNumber(theo.milkFat, 0.5, 15, "Milk fat")}
+              unit="%"
+              colorScheme="blue"
+            />
+            <ValidatedInput
+              label="टारगेट क्रीम वसा (Cream Fat %)"
+              value={theo.creamFat}
+              onChange={v => setT("creamFat", v)}
+              validation={validateNumber(theo.creamFat, 15, 65, "Cream fat")}
+              unit="%"
+              colorScheme="orange"
+            />
+            <ValidatedInput
+              label="स्किम वसा प्रतिशत (Skim Fat %)"
+              value={theo.skimFat}
+              onChange={v => setT("skimFat", v)}
+              validation={validateNumber(theo.skimFat, 0.01, 2, "Skim fat")}
+              unit="%"
+              colorScheme="blue"
+            />
+          </div>
+
+          {/* Advanced Drawer Toggle */}
+          <Button
+            variant="ghost"
+            onClick={() => setShowAdvanced(!showAdvanced)}
+            className="w-full flex justify-between items-center text-xs font-semibold py-2 px-3 border border-blue-100 hover:bg-blue-50/50 rounded-lg"
+          >
+            <span className="flex items-center gap-1.5 text-slate-700">
+              <Settings2 className="w-3.5 h-3.5" /> एडवांस्ड सेटिंग्स (Advanced Settings)
+            </span>
+            <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${showAdvanced ? "rotate-180" : ""}`} />
+          </Button>
+
+          {showAdvanced && (
+            <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 max-w-sm">
+              <ValidatedInput
+                label="प्रोसेस वेस्ट/नुकसान % (Process Loss %)"
+                value={theo.processLoss}
+                onChange={v => setT("processLoss", v)}
+                validation={validateNumber(theo.processLoss, 0, 5, "Process loss")}
+                unit="%"
+                colorScheme="red"
+              />
+            </div>
+          )}
+
+          {/* Costing Checkbox */}
+          <div className="flex items-center gap-2">
+            <Checkbox id="cream-costing" checked={enableCosting} onCheckedChange={(c) => setEnableCosting(!!c)} />
+            <Label htmlFor="cream-costing" className="text-xs font-semibold cursor-pointer text-slate-700 flex items-center gap-1">
+              <Coins className="w-3.5 h-3.5 text-green-600" /> कॉस्टिंग और प्रॉफिटेबिलिटी शामिल करें (Enable Costing & Profitability)
+            </Label>
+          </div>
+
+          {enableCosting && (
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-3 p-3 bg-green-50/30 rounded-xl border border-green-100">
+              <ValidatedInput
+                label="दूध का मूल्य (Milk Price)"
+                value={theo.milkPrice}
+                onChange={v => setT("milkPrice", v)}
+                validation={validatePositive(theo.milkPrice, "Milk price")}
+                unit="₹/kg"
+                colorScheme="green"
+              />
+              <ValidatedInput
+                label="क्रीम का मूल्य (Cream Price)"
+                value={theo.creamPrice}
+                onChange={v => setT("creamPrice", v)}
+                validation={validatePositive(theo.creamPrice, "Cream price")}
+                unit="₹/kg"
+                colorScheme="green"
+              />
+              <ValidatedInput
+                label="स्किम का मूल्य (Skim Price)"
+                value={theo.skimPrice}
+                onChange={v => setT("skimPrice", v)}
+                validation={validatePositive(theo.skimPrice, "Skim price")}
+                unit="₹/kg"
+                colorScheme="green"
+              />
+              <ValidatedInput
+                label="बैचेस (Batches)"
+                value={theo.batches}
+                onChange={v => setT("batches", v)}
+                validation={validatePositive(theo.batches, "Batches")}
+                unit="qty"
+                colorScheme="blue"
+              />
+              <ValidatedInput
+                label="कार्य दिवस (Operating Days)"
+                value={theo.operDays}
+                onChange={v => setT("operDays", v)}
+                validation={validatePositive(theo.operDays, "Days")}
+                unit="days"
+                colorScheme="blue"
+              />
+            </div>
+          )}
+
+          <Button onClick={calculateTheo} className="w-full h-11 bg-blue-600 hover:bg-blue-700 text-white font-bold shadow-md">
+            🧮 यील्ड गणना करें (Calculate Separation Yields)
+          </Button>
+
+          {/* Results Display */}
+          {theoResult && (
+            <div className="space-y-4">
+              {/* KPIs */}
+              <div className="grid grid-cols-3 gap-2">
+                <div className="bg-orange-600 text-white p-3.5 rounded-xl shadow-sm text-center">
+                  <div className="text-[10px] uppercase opacity-80 font-bold">क्रीम उत्पादन (Cream Output)</div>
+                  <div className="text-xl font-extrabold">{theoResult.cream.toFixed(1)} kg</div>
+                  <div className="text-[9px] opacity-75">{theoResult.creamYieldPct.toFixed(1)}% yield</div>
+                </div>
+                <div className="bg-blue-600 text-white p-3.5 rounded-xl shadow-sm text-center">
+                  <div className="text-[10px] uppercase opacity-80 font-bold">स्किम मिल्क (Skim Milk)</div>
+                  <div className="text-xl font-extrabold">{theoResult.skim.toFixed(1)} kg</div>
+                  <div className="text-[9px] opacity-75">{theoResult.skimYieldPct.toFixed(1)}% yield</div>
+                </div>
+                <div className="bg-green-600 text-white p-3.5 rounded-xl shadow-sm text-center">
+                  <div className="text-[10px] uppercase opacity-80 font-bold">वसा रिकवरी (Fat Recovery)</div>
+                  <div className="text-xl font-extrabold">{theoResult.fatRecoveryPct.toFixed(2)}%</div>
+                  <div className="text-[9px] opacity-75">क्रीम में सुरक्षित / in Cream</div>
+                </div>
+              </div>
+
+              {/* Composition Breakdown */}
+              <Card className="bg-blue-50/30 border-blue-200">
+                <CardHeader className="p-3 pb-1 border-b border-blue-100">
+                  <CardTitle className="text-xs font-bold text-blue-800 uppercase">🔬 वसा संतुलन (Fat Balance Breakdown)</CardTitle>
+                </CardHeader>
+                <CardContent className="p-3 space-y-2 text-xs">
+                  {[
+                    { label: "दूध में कुल वसा (Total input fat in milk)", value: `${(theoResult.M * parseFloat(theo.milkFat) / 100).toFixed(2)} kg` },
+                    { label: "क्रीम में कुल वसा (Fat recovered in cream)", value: `${theoResult.fatInCream.toFixed(2)} kg`, color: "text-orange-700" },
+                    { label: "स्किम में कुल वसा (Fat lost to skim milk)", value: `${theoResult.fatInSkim.toFixed(2)} kg`, color: "text-blue-700" },
+                    { label: "प्रोसेसिंग फैट वेस्ट (Process fat loss/waste)", value: `${theoResult.fatLossKg.toFixed(3)} kg`, color: "text-red-600" },
+                  ].map((r, i) => (
+                    <div key={i} className="flex justify-between border-b border-blue-100/40 pb-1">
+                      <span className="text-slate-500">{r.label}</span>
+                      <span className={`font-semibold ${r.color || "text-slate-800"}`}>{r.value}</span>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+
+              {/* Economics */}
+              {enableCosting && (
+                <Card className="bg-gradient-to-br from-slate-900 to-slate-950 text-white border-none">
+                  <CardHeader className="p-3 pb-1 border-b border-slate-800">
+                    <CardTitle className="text-xs font-bold text-slate-400 uppercase">💰 आर्थिक विश्लेषण (Economics Projections)</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-3 space-y-3">
+                    <div className="grid grid-cols-3 gap-2 text-center text-xs">
+                      <div className="p-2 bg-slate-800/60 rounded-lg">
+                        <span className="text-slate-400 block text-[9px]">कुल इनपुट दूध लागत</span>
+                        <span className="font-semibold text-red-300">₹ {theoResult.milkCost.toLocaleString("en-IN")}</span>
+                      </div>
+                      <div className="p-2 bg-slate-800/60 rounded-lg">
+                        <span className="text-slate-400 block text-[9px]">क्रीम बिक्री राजस्व</span>
+                        <span className="font-semibold text-green-300">₹ {theoResult.creamRev.toLocaleString("en-IN")}</span>
+                      </div>
+                      <div className="p-2 bg-slate-800/60 rounded-lg">
+                        <span className="text-slate-400 block text-[9px]">स्किम बिक्री राजस्व</span>
+                        <span className="font-semibold text-cyan-300">₹ {theoResult.skimRev.toLocaleString("en-IN")}</span>
+                      </div>
+                    </div>
+
+                    <div className="bg-slate-850 rounded-xl p-3 flex justify-between items-center border border-slate-800">
+                      <div>
+                        <div className="text-xs font-bold text-green-400">सकल लाभ (Gross Profit)</div>
+                        <div className="text-[10px] text-slate-400">({theo.batches} बैच हेतु / For {theo.batches} batches)</div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-base font-black text-green-300">₹ {theoResult.grossProfit.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</div>
+                        <div className="text-[11px] text-slate-400">मार्जिन (Margin): {theoResult.gpm.toFixed(1)}%</div>
+                      </div>
+                    </div>
+
+                    {theoResult.days > 1 && (
+                      <div className="grid grid-cols-3 gap-2 border-t border-slate-800 pt-2.5 text-center text-[11px]">
+                        <div>
+                          <span className="text-slate-400 block text-[9px]">मासिक क्रीम (Monthly Cream)</span>
+                          <span className="font-semibold text-slate-200">{theoResult.monthlyCream.toFixed(0)} kg</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-400 block text-[9px]">मासिक टर्नओवर</span>
+                          <span className="font-semibold text-green-300">₹ {theoResult.monthlyRev.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-400 block text-[9px]">मासिक लाभ (Net profit)</span>
+                          <span className="font-bold text-green-400">₹ {theoResult.monthlyProfit.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</span>
+                        </div>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Quality & Warning Alerts */}
+              {theoResult.warnings.length > 0 && (
+                <Alert className="bg-yellow-50 border-yellow-200">
+                  <AlertTriangle className="h-4 w-4 text-yellow-600" />
+                  <AlertTitle className="text-yellow-800 text-xs font-bold">गुणवत्ता चेतावनियाँ (Process Warning Alerts)</AlertTitle>
+                  <AlertDescription className="text-[11px] text-yellow-700 space-y-1">
+                    {theoResult.warnings.map((w: string, i: number) => <div key={i}>• {w}</div>)}
+                  </AlertDescription>
+                </Alert>
+              )}
+            </div>
+          )}
+        </TabsContent>
+
+        {/* ══════════════════════════════════════════════════════════
+            TAB 2: ACTUAL TRACKER
+            ══════════════════════════════════════════════════════════ */}
+        <TabsContent value="actual" className="space-y-4 pt-3">
+          <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
+            <ValidatedInput
+              label="दूध की मात्रा (Milk Qty)"
+              value={actual.milkQty}
+              onChange={v => setA("milkQty", v)}
+              validation={validatePositive(actual.milkQty, "Quantity")}
+              unit="kg"
+              colorScheme="blue"
+            />
+            <ValidatedInput
+              label="दूध वसा प्रतिशत (Milk Fat %)"
+              value={actual.milkFat}
+              onChange={v => setA("milkFat", v)}
+              validation={validateNumber(actual.milkFat, 0.5, 15, "Fat")}
+              unit="%"
+              colorScheme="blue"
+            />
+            <ValidatedInput
+              label="टारगेट क्रीम वसा (Cream Fat %)"
+              value={actual.creamFat}
+              onChange={v => setA("creamFat", v)}
+              validation={validateNumber(actual.creamFat, 15, 65, "Cream fat")}
+              unit="%"
+              colorScheme="orange"
+            />
+            <ValidatedInput
+              label="स्किम वसा प्रतिशत (Skim Fat %)"
+              value={actual.skimFat}
+              onChange={v => setA("skimFat", v)}
+              validation={validateNumber(actual.skimFat, 0.01, 2, "Skim fat")}
+              unit="%"
+              colorScheme="blue"
+            />
+            <ValidatedInput
+              label="वास्तविक क्रीम (Cream Obtained)"
+              value={actual.creamObtained}
+              onChange={v => setA("creamObtained", v)}
+              validation={validatePositive(actual.creamObtained, "Cream obtained")}
+              unit="kg"
+              colorScheme="orange"
+            />
+            <ValidatedInput
+              label="वास्तविक स्किम (Skim Obtained)"
+              value={actual.skimObtained}
+              onChange={v => setA("skimObtained", v)}
+              validation={validatePositive(actual.skimObtained, "Skim obtained")}
+              unit="kg"
+              colorScheme="blue"
+            />
+          </div>
+
+          <Button onClick={calculateActual} className="w-full h-11 bg-cyan-600 hover:bg-cyan-700 text-white font-bold shadow-md">
+            📊 वास्तविक दक्षता की तुलना करें (Compare Actual Efficiency)
+          </Button>
+
+          {actualResult && (
+            <div className="space-y-4">
+              {/* Grade Badge */}
+              <div className={`p-4 rounded-xl border flex flex-col items-center justify-center text-center transition-all ${actualResult.gradeColor}`}>
+                <div className="text-4xl mb-1">{actualResult.gradeEmoji}</div>
+                <div className="text-xs uppercase tracking-wider font-bold opacity-85">बैच ग्रेड (Batch Efficiency Grade)</div>
+                <div className="text-xl font-extrabold">{actualResult.grade}</div>
+                <div className="text-sm font-bold mt-1">
+                  दक्षता दर (Recovery Rate): {actualResult.creamRecoveryPct.toFixed(1)}%
+                </div>
+              </div>
+
+              {/* Progress bar */}
+              <div className="w-full bg-slate-200 rounded-full h-3.5 overflow-hidden shadow-inner">
+                <div
+                  className={`h-full rounded-full transition-all duration-500 ${
+                    actualResult.creamRecoveryPct >= 99 ? "bg-green-600" :
+                    actualResult.creamRecoveryPct >= 97 ? "bg-blue-600" :
+                    actualResult.creamRecoveryPct >= 94 ? "bg-yellow-500" : "bg-red-600"
+                  }`}
+                  style={{ width: `${Math.min(100, actualResult.creamRecoveryPct)}%` }}
+                />
+              </div>
+
+              {/* Comparison table */}
+              <Card className="border-slate-200">
+                <CardHeader className="p-3 pb-1 border-b">
+                  <CardTitle className="text-xs font-bold text-slate-700 uppercase">📊 आदर्श बनाम वास्तविक (Ideal vs Actual Separation)</CardTitle>
+                </CardHeader>
+                <CardContent className="p-0 text-xs">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 font-semibold">
+                        <th className="p-2.5">पैरामीटर (Parameter)</th>
+                        <th className="p-2.5 text-right">आदर्श (Ideal)</th>
+                        <th className="p-2.5 text-right">वास्तविक (Actual)</th>
+                        <th className="p-2.5 text-right">हानि/नुकसान (Loss)</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      <tr>
+                        <td className="p-2.5 font-medium text-slate-700">क्रीम मात्रा (Cream Yield)</td>
+                        <td className="p-2.5 text-right text-slate-600">{actualResult.idealCream.toFixed(1)} kg</td>
+                        <td className="p-2.5 text-right text-slate-900 font-bold">{actualResult.creamObt.toFixed(1)} kg</td>
+                        <td className={`p-2.5 text-right font-bold ${actualResult.creamObt >= actualResult.idealCream ? "text-green-600" : "text-red-600"}`}>
+                          {(actualResult.creamObt - actualResult.idealCream).toFixed(1)} kg
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="p-2.5 font-medium text-slate-700">स्किम मिल्क (Skim Yield)</td>
+                        <td className="p-2.5 text-right text-slate-600">{actualResult.idealSkim.toFixed(1)} kg</td>
+                        <td className="p-2.5 text-right text-slate-900 font-bold">{actualResult.skimObt.toFixed(1)} kg</td>
+                        <td className="p-2.5 text-right text-slate-600">{(actualResult.skimObt - actualResult.idealSkim).toFixed(1)} kg</td>
+                      </tr>
+                      <tr className="bg-slate-50/50">
+                        <td className="p-2.5 font-semibold text-slate-700">कुल प्रोसेसिंग द्रव्यमान हानि (Mass Loss)</td>
+                        <td className="p-2.5 text-right text-slate-600">0.0 kg</td>
+                        <td className="p-2.5 text-right text-slate-600">{(actualResult.M - actualResult.creamObt - actualResult.skimObt).toFixed(1)} kg</td>
+                        <td className="p-2.5 text-right text-red-600 font-bold">{actualResult.massLossKg.toFixed(1)} kg ({actualResult.massLossPct.toFixed(2)}%)</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </CardContent>
+              </Card>
+
+              {/* Alerts */}
+              {actualResult.warnings.length > 0 && (
+                <Alert className="bg-yellow-50 border-yellow-200">
+                  <AlertTriangle className="h-4 w-4 text-yellow-600" />
+                  <AlertTitle className="text-yellow-800 text-xs font-bold">सुधार बिंदु (Actionable Points)</AlertTitle>
+                  <AlertDescription className="text-xs text-yellow-700 space-y-1">
+                    {actualResult.warnings.map((w: string, i: number) => <div key={i}>• {w}</div>)}
+                  </AlertDescription>
+                </Alert>
+              )}
+            </div>
+          )}
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+}
+
+
+function ButterYieldCalc() {
+  const { toast } = useToast();
+  const { validatePositive, validatePercentage, validateNumber } = useInputValidation();
+
+  const [activeCalc, setActiveCalc] = useState<"theoretical" | "actual">("theoretical");
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [enableCosting, setEnableCosting] = useState(false);
+
+  // ── Theoretical Inputs (Predictor) ──
+  const [theo, setTheo] = useState({
+    creamQty:        "1000",   // kg cream input
+    creamFat:        "40",     // % cream fat
+    butterFat:       "80",     // % target butter fat
+    // Advanced
+    fatLoss:         "1.5",    // % fat loss in buttermilk
+    butterMoisture:  "16",     // % target butter moisture
+    butterSalt:      "2.0",    // % target butter salt
+    churnTemp:       "9",      // °C churning temp
+    creamMoisture:   "57",     // % cream moisture
+    creamSNF:        "3",      // % cream SNF
+    // Costing
+    creamPrice:      "250",    // ₹/kg cream
+    butterPrice:     "450",    // ₹/kg butter sale price
+    buttermilkPrice: "8",      // ₹/kg buttermilk sale price
+    batches:         "1",
+    operDays:        "26",
+  });
+
+  // ── Actual Inputs (Tracker) ──
+  const [actual, setActual] = useState({
+    creamQty:        "1000",
+    creamFat:        "40",
+    butterFat:       "80",
+    butterObtained:  "",
+    buttermilkObt:   "",
+  });
+
+  const [theoResult, setTheoResult]     = useState<any>(null);
+  const [actualResult, setActualResult] = useState<any>(null);
+
+  const setT = (k: string, v: string) => setTheo(p => ({ ...p, [k]: v }));
+  const setA = (k: string, v: string) => setActual(p => ({ ...p, [k]: v }));
+
+  // ══════════════════════════════════════════════════════════
+  // THEORETICAL CALCULATION (Predictor)
+  // ══════════════════════════════════════════════════════════
+  const calculateTheo = useCallback(() => {
+    const C        = parseFloat(theo.creamQty)       || 0;
+    const Fc       = parseFloat(theo.creamFat)  / 100;
+    const Fb       = parseFloat(theo.butterFat) / 100;
+    const L        = parseFloat(theo.fatLoss)   / 100;
+    const Mb       = parseFloat(theo.butterMoisture) / 100;
+    const Sb       = parseFloat(theo.butterSalt) / 100;
+    const churnTemp= parseFloat(theo.churnTemp) || 9;
+    const Mc       = parseFloat(theo.creamMoisture) / 100;
+    const SNFc     = parseFloat(theo.creamSNF)  / 100;
+
+    const cprice   = parseFloat(theo.creamPrice)      || 0;
+    const bprice   = parseFloat(theo.butterPrice)     || 0;
+    const bmlkPr   = parseFloat(theo.buttermilkPrice) || 0;
+    const bat      = parseFloat(theo.batches)   || 1;
+    const days     = parseFloat(theo.operDays)  || 26;
+
+    if (C <= 0 || Fc <= 0 || Fb <= 0) {
+      toast({ variant: "destructive", title: "त्रुटि (Error)", description: "कृपया क्रीम मात्रा, क्रीम फैट% और मक्खन फैट% सही दर्ज करें।" });
+      return;
+    }
+
     const totalFatKg     = C * Fc;
-    const totalMoistKg   = C * Mc;
     const totalSNFKg     = C * SNFc;
+    const recoveredFatKg = totalFatKg * (1 - L);
+    const fatLostKg      = totalFatKg * L;
 
-    // ── 2. Fat Recovery ───────────────────────────────
-    const effectiveLoss  = Math.max(0, L - churn.efficiency_adj / 100);
-    const recoveredFatKg = totalFatKg * (1 - effectiveLoss);
-    const fatLostKg      = totalFatKg * effectiveLoss;
-
-    // ── 3. Butter Yield ───────────────────────────────
-    // Butter composition: Fat + Moisture + Salt + SNF = 100%
-    // ButterKg = RecoveredFat / Fat%
+    // Butter yield (fat balance basis)
     const butterKg       = recoveredFatKg / Fb;
     const yieldPct       = (butterKg / C) * 100;
     const butterMoistKg  = butterKg * Mb;
     const butterSaltKg   = butterKg * Sb;
     const butterSNFKg    = butterKg * (1 - Fb - Mb - Sb);
 
-    // ── 4. Buttermilk ─────────────────────────────────
+    // Buttermilk
     const buttermilkKg   = C - butterKg;
-    // Buttermilk fat = fat lost (diluted in buttermilk volume)
     const buttermilkFatPct = buttermilkKg > 0 ? (fatLostKg / buttermilkKg) * 100 : 0;
-    const buttermilkSNFKg  = totalSNFKg * 0.85; // most SNF goes to buttermilk
+    const buttermilkSNFKg  = totalSNFKg * 0.85;
 
-    // ── 5. Efficiency ─────────────────────────────────
-    const fatEfficiency  = ((recoveredFatKg / totalFatKg) * 100);
-    const milkPerKgButter= C / butterKg;
+    const fatEfficiency  = (recoveredFatKg / totalFatKg) * 100;
+    const creamPerKgButter = C / butterKg;
 
-    // ── 6. Churn factor check ─────────────────────────
-    // Optimal churn fill: 40–50% of churn volume
-    // Churning temp check: 8–12°C for winter, 9–13°C summer
-    const churnTemp = parseFloat(inp.churnTemp);
-    const tempOK = churnTemp >= 7 && churnTemp <= 14;
-
-    // ── 7. Batch totals ───────────────────────────────
+    // Batch and operating totals
     const butterTotal     = butterKg   * bat;
     const buttermilkTotal = buttermilkKg * bat;
 
-    // ── 8. Economics ─────────────────────────────────
+    // Economics
     const creamCost      = C * bat * cprice;
     const butterRevenue  = butterTotal     * bprice;
     const bmlkRevenue    = buttermilkTotal * bmlkPr;
     const totalRevenue   = butterRevenue + bmlkRevenue;
     const grossProfit    = totalRevenue - creamCost;
     const gpm            = creamCost > 0 ? (grossProfit / creamCost) * 100 : 0;
-    const costPerKgButter= creamCost / butterTotal;
 
-    // Monthly
-    const monthlyButter  = butterKg  * days;
-    const monthlyRevenue = monthlyButter * bprice + (buttermilkKg * days) * bmlkPr;
+    const monthlyButter  = butterKg  * bat * days;
+    const monthlyRevenue = totalRevenue * days;
+    const monthlyCost    = creamCost * days;
+    const monthlyProfit  = grossProfit * days;
 
-    // ── 9. Yield sensitivity ─────────────────────────
-    // +1% cream fat → change in butter yield
-    const dYield_dFc     = (C * 0.01 * (1 - effectiveLoss)) / Fb;
-
-    // ── 10. Warnings ─────────────────────────────────
     const warnings: string[] = [];
-    let confidence: "high" | "medium" | "low" = "high";
+    if (L > 0.02) warnings.push(`वसा हानि (${(L * 100).toFixed(1)}%) अधिक है। मंथन (churning) गति और तापमान को संतुलित करें। (Fat loss in buttermilk is high. Optimize churn speed & temp.)`);
+    if (Fb < 0.80) warnings.push(`मक्खन में वसा (${(Fb * 100).toFixed(0)}%) FSSAI मानक (कम से कम 80%) से कम है। (Butter fat % is less than FSSAI standard of min 80%.)`);
+    if (Mb > 0.16) warnings.push(`नमी (${(Mb * 100).toFixed(0)}%) FSSAI मानक (अधिकतम 16%) से अधिक है। (Moisture is above FSSAI standard of max 16%.)`);
+    const tempOK = churnTemp >= 7 && churnTemp <= 14;
+    if (!tempOK) warnings.push(`मंथन तापमान (${churnTemp}°C) अनुकूल सीमा (7–14°C) से बाहर है। (Churning temp is outside optimal 7-14°C range.)`);
+    if (buttermilkFatPct > 0.7) warnings.push(`मट्ठा (Buttermilk) में वसा (${buttermilkFatPct.toFixed(2)}%) अधिक है। (Buttermilk fat % is high.)`);
 
-    if (effectiveLoss * 100 > 2)   warnings.push(`Fat loss ${(effectiveLoss*100).toFixed(1)}% > 2% — optimize churn speed (1800–2200 rpm) and temp.`);
-    if (Fb < 0.78 || Fb > 0.84)   { confidence = "medium"; warnings.push(`Butter fat ${(Fb*100).toFixed(0)}% outside FSSAI range (78–82%). Verify.`); }
-    if (Mb > 0.18)                 warnings.push(`Butter moisture ${(Mb*100).toFixed(0)}% > 18% — may fail FSSAI standard (≤16%). Increase working time.`);
-    if (!tempOK)                   warnings.push(`Churn temp ${churnTemp}°C is outside optimal range (7–14°C). Adjust cooling.`);
-    if (buttermilkFatPct > 0.7)    warnings.push(`Buttermilk fat ${buttermilkFatPct.toFixed(2)}% is high — excess fat loss in churn.`);
-    if (yieldPct < 35)             { confidence = "low"; warnings.push(`Yield ${yieldPct.toFixed(1)}% is low — typical range is 38–45% for 40% cream.`); }
-
-    setResult({
-      totalFatKg, recoveredFatKg, fatLostKg, effectiveLoss,
+    setTheoResult({
+      totalFatKg, recoveredFatKg, fatLostKg,
       butterKg, yieldPct, butterMoistKg, butterSaltKg, butterSNFKg,
       buttermilkKg, buttermilkFatPct, buttermilkSNFKg,
-      fatEfficiency, milkPerKgButter,
+      fatEfficiency, creamPerKgButter,
       butterTotal, buttermilkTotal,
-      creamCost, butterRevenue, bmlkRevenue, totalRevenue, grossProfit, gpm, costPerKgButter,
-      monthlyButter, monthlyRevenue,
-      dYield_dFc,
-      warnings, confidence,
-      C, bat, days,
+      creamCost, butterRevenue, bmlkRevenue, totalRevenue, grossProfit, gpm,
+      monthlyButter, monthlyRevenue, monthlyCost, monthlyProfit,
+      warnings, C, bat, days
     });
 
     toast({
-      title: "✅ Calculated",
-      description: `Butter: ${butterKg.toFixed(1)} kg (${yieldPct.toFixed(1)}%) | GPM: ${gpm.toFixed(1)}%`,
+      title: "🧮 गणना पूरी (Calculated)",
+      description: `मक्खन: ${butterKg.toFixed(1)} kg, यील्ड: ${yieldPct.toFixed(1)}%`,
     });
-  }, [inp, churnMethod, toast]);
+  }, [theo, toast]);
 
-  const cream  = BUTTER_CREAM_DB[creamType];
-  const butter = BUTTER_TYPE_DB[butterType];
-  const churn  = CHURN_METHOD_DB[churnMethod];
+  // ══════════════════════════════════════════════════════════
+  // ACTUAL CALCULATION (Tracker)
+  // ══════════════════════════════════════════════════════════
+  const calculateActual = useCallback(() => {
+    const C        = parseFloat(actual.creamQty)       || 0;
+    const Fc       = parseFloat(actual.creamFat)  / 100;
+    const Fb       = parseFloat(actual.butterFat) / 100;
+    const butterObt= parseFloat(actual.butterObtained) || 0;
+    const bmlkObt  = parseFloat(actual.buttermilkObt) || 0;
 
-  // ── RENDER ────────────────────────────────────────────
+    // Use default process values for ideal comparison
+    const L = parseFloat(theo.fatLoss) / 100;
+    const Mb = parseFloat(theo.butterMoisture) / 100;
+
+    if (C <= 0 || Fc <= 0 || butterObt <= 0) {
+      toast({ variant: "destructive", title: "त्रुटि (Error)", description: "कृपया क्रीम मात्रा, वसा% और वास्तविक प्राप्त मक्खन सही दर्ज करें।" });
+      return;
+    }
+
+    // Ideal yield
+    const idealRecoveredFatKg = (C * Fc) * (1 - L);
+    const idealButter = idealRecoveredFatKg / Fb;
+    const idealButtermilk = C - idealButter;
+
+    // Actual recoveries
+    const butterRecoveryPct = idealButter > 0 ? (butterObt / idealButter) * 100 : 0;
+    const totalActualMass = butterObt + bmlkObt;
+    const massLossKg = C - totalActualMass;
+    const massLossPct = (massLossKg / C) * 100;
+
+    // Efficiency grade
+    let grade = "", gradeColor = "", gradeEmoji = "";
+    if (butterRecoveryPct >= 99 && massLossPct <= 0.5) {
+      grade = "Excellent (उत्कृष्ट)"; gradeColor = "text-green-700 bg-green-50 border-green-300"; gradeEmoji = "🏆";
+    } else if (butterRecoveryPct >= 97 && massLossPct <= 1) {
+      grade = "Good (अच्छा)"; gradeColor = "text-blue-700 bg-blue-50 border-blue-300"; gradeEmoji = "👍";
+    } else if (butterRecoveryPct >= 94 && massLossPct <= 2) {
+      grade = "Needs Improvement (सुधार ज़रूरी)"; gradeColor = "text-yellow-700 bg-yellow-50 border-yellow-300"; gradeEmoji = "⚠️";
+    } else {
+      grade = "Action Required (कार्रवाई ज़रूरी)"; gradeColor = "text-red-700 bg-red-50 border-red-300"; gradeEmoji = "🔴";
+    }
+
+    const warnings: string[] = [];
+    if (butterRecoveryPct < 97) warnings.push(`मक्खन रिकवरी ${butterRecoveryPct.toFixed(1)}% कम है। मंथन (churning) दक्षता की जांच करें। (Butter recovery is low. Check churning efficiency.)`);
+    if (massLossPct > 1.5) warnings.push(`बैच में कुल द्रव्यमान हानि ${massLossPct.toFixed(1)}% अधिक है। (Mass loss is high.)`);
+
+    setActualResult({
+      idealButter, idealButtermilk,
+      butterRecoveryPct, massLossKg, massLossPct,
+      grade, gradeColor, gradeEmoji,
+      warnings, C, butterObt, bmlkObt
+    });
+
+    toast({
+      title: "📋 ट्रैकर गणना पूरी (Tracker Calculated)",
+      description: `रिकवरी (Recovery): ${butterRecoveryPct.toFixed(1)}% — ${grade}`,
+    });
+  }, [actual, theo.fatLoss, theo.butterMoisture, toast]);
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 w-full">
+      {/* Header */}
+      <Alert className="bg-gradient-to-r from-amber-50 to-yellow-50 border-amber-200">
+        <Percent className="h-4 w-4 text-amber-600" />
+        <AlertTitle className="text-amber-800 font-bold">मक्खन यील्ड और फैट बैलेंस ट्रैकर (Butter Yield & Fat Balance)</AlertTitle>
+        <AlertDescription className="text-xs text-amber-700">
+          क्रीम फैट और मंथन हानि के आधार पर मक्खन (Butter) एवं छाछ (Buttermilk) उत्पादकता, दक्षता और आर्थिक लाभ का आकलन।<br/>
+          <span className="text-amber-600 font-medium">Butter & Buttermilk yield projection, churning efficiency, fat recovery & economics.</span>
+        </AlertDescription>
+      </Alert>
 
-      {/* ── CREAM TYPE ───────────────────────────────── */}
-      <div className="space-y-1">
-        <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Cream Type</Label>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-          {(Object.keys(BUTTER_CREAM_DB) as ButterCreamKey[]).map(key => (
-            <button key={key} onClick={() => applyCream(key)}
-              className={`p-2 rounded-lg border text-xs font-semibold transition-all text-left leading-tight shadow-sm
-                ${creamType === key
-                  ? "bg-yellow-500 text-white border-yellow-500 shadow-md"
-                  : "bg-white text-slate-600 border-slate-200 hover:border-yellow-300"
-                }`}>
-              {BUTTER_CREAM_DB[key].label}
-              <div className={`text-[9px] mt-0.5 ${creamType === key ? "opacity-80" : "text-slate-400"}`}>
-                Fat: {BUTTER_CREAM_DB[key].fat}%
-              </div>
-            </button>
-          ))}
-        </div>
-        <p className="text-[10px] text-yellow-700 bg-yellow-50 px-2 py-1 rounded border border-yellow-100">
-          📌 {cream.note} · Optimal churn temp: {cream.temp}
-        </p>
-      </div>
+      {/* Tabs */}
+      <Tabs value={activeCalc} onValueChange={v => setActiveCalc(v as "theoretical" | "actual")}>
+        <TabsList className="grid grid-cols-2 bg-amber-100/55 p-1 rounded-lg">
+          <TabsTrigger value="theoretical" className="text-xs font-bold data-[state=active]:bg-amber-600 data-[state=active]:text-white">
+            🧮 Predictor (अनुमान)
+          </TabsTrigger>
+          <TabsTrigger value="actual" className="text-xs font-bold data-[state=active]:bg-yellow-600 data-[state=active]:text-white">
+            📋 Tracker (वास्तविक)
+          </TabsTrigger>
+        </TabsList>
 
-      {/* ── BUTTER TYPE ──────────────────────────────── */}
-      <div className="space-y-1">
-        <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Butter Type</Label>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-          {(Object.keys(BUTTER_TYPE_DB) as ButterTypeKey[]).map(key => (
-            <button key={key} onClick={() => applyButter(key)}
-              className={`p-2 rounded-lg border text-xs font-semibold transition-all text-left leading-tight shadow-sm
-                ${butterType === key
-                  ? "bg-orange-500 text-white border-orange-500 shadow-md"
-                  : "bg-white text-slate-600 border-slate-200 hover:border-orange-300"
-                }`}>
-              {BUTTER_TYPE_DB[key].label}
-              <div className={`text-[9px] mt-0.5 ${butterType === key ? "opacity-80" : "text-slate-400"}`}>
-                {BUTTER_TYPE_DB[key].fat}% fat · {BUTTER_TYPE_DB[key].standard}
-              </div>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* ── CHURN METHOD ─────────────────────────────── */}
-      <div className="space-y-1">
-        <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Churn Method</Label>
-        <div className="grid grid-cols-2 gap-2">
-          {(Object.keys(CHURN_METHOD_DB) as ChurnMethodKey[]).map(key => (
-            <button key={key} onClick={() => applyChurn(key)}
-              className={`p-2 rounded-lg border text-xs font-semibold transition-all text-left leading-tight shadow-sm
-                ${churnMethod === key
-                  ? "bg-amber-600 text-white border-amber-600 shadow-md"
-                  : "bg-white text-slate-600 border-slate-200 hover:border-amber-300"
-                }`}>
-              {CHURN_METHOD_DB[key].label}
-              <div className={`text-[9px] mt-0.5 ${churnMethod === key ? "opacity-80" : "text-slate-400"}`}>
-                Fat loss: ~{CHURN_METHOD_DB[key].fatLossDefault}%
-              </div>
-            </button>
-          ))}
-        </div>
-        <p className="text-[10px] text-amber-700 bg-amber-50 px-2 py-1 rounded border border-amber-100">
-          📌 {churn.note}
-        </p>
-      </div>
-
-      {/* ── PRESETS ──────────────────────────────────── */}
-      <div className="space-y-1">
-        <Label className="text-xs font-bold text-slate-500 uppercase">Batch Presets</Label>
-        <div className="flex flex-wrap gap-2">
-          {(Object.keys(BUTTER_PRESETS) as Array<keyof typeof BUTTER_PRESETS>).map(name => (
-            <button key={name} onClick={() => applyPreset(name)}
-              className="px-3 py-1 rounded-full border border-yellow-200 bg-white text-xs font-semibold text-yellow-700 hover:bg-yellow-500 hover:text-white transition-all shadow-sm">
-              {name}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* ── INPUTS ───────────────────────────────────── */}
-      <Card className="border-yellow-100 bg-white">
-        <CardHeader className="p-3 pb-2 bg-yellow-50 border-b border-yellow-100">
-          <CardTitle className="text-xs font-bold text-yellow-700 uppercase">⚙️ Process Parameters</CardTitle>
-        </CardHeader>
-        <CardContent className="p-3 grid grid-cols-2 gap-3">
-          <ValidatedInput label="Cream Quantity" value={inp.creamQty} onChange={v => setF("creamQty", v)} validation={validatePositive(inp.creamQty, "Cream")} unit="kg" colorScheme="orange" />
-          <ValidatedInput label="Batches" value={inp.batches} onChange={v => setF("batches", v)} validation={validatePositive(inp.batches, "Batches")} colorScheme="blue" />
-          <ValidatedInput label="Cream Fat %" value={inp.creamFat} onChange={v => setF("creamFat", v)} validation={validatePercentage(inp.creamFat, "Cream fat")} unit="%" helpText="Typical: 35–50%" colorScheme="orange" />
-          <ValidatedInput label="Cream Moisture %" value={inp.creamMoisture} onChange={v => setF("creamMoisture", v)} validation={validatePercentage(inp.creamMoisture, "Moisture")} unit="%" colorScheme="blue" />
-          <ValidatedInput label="Cream SNF %" value={inp.creamSNF} onChange={v => setF("creamSNF", v)} validation={{ isValid: true, severity: "info" }} unit="%" colorScheme="purple" />
-          <ValidatedInput label="Butter Fat %" value={inp.butterFat} onChange={v => setF("butterFat", v)} validation={validatePercentage(inp.butterFat, "Butter fat")} unit="%" helpText="FSSAI: 78–82%" colorScheme="yellow" />
-          <ValidatedInput label="Butter Moisture %" value={inp.butterMoisture} onChange={v => setF("butterMoisture", v)} validation={validatePercentage(inp.butterMoisture, "Moisture")} unit="%" helpText="FSSAI: ≤16%" colorScheme="blue" />
-          <ValidatedInput label="Salt %" value={inp.butterSalt} onChange={v => setF("butterSalt", v)} validation={{ isValid: true, severity: "info" }} unit="%" helpText="0 = unsalted" colorScheme="slate" />
-          <ValidatedInput label="Fat Loss (buttermilk)" value={inp.fatLoss} onChange={v => setF("fatLoss", v)} validation={validateNumber(inp.fatLoss, 0.1, 5, "Fat loss")} unit="%" helpText={`${churn.label}: ~${churn.fatLossDefault}%`} colorScheme="red" />
-          <ValidatedInput label="Churn Temp" value={inp.churnTemp} onChange={v => setF("churnTemp", v)} validation={validateNumber(inp.churnTemp, 5, 20, "Temp")} unit="°C" helpText="Optimal: 7–14°C" colorScheme="blue" />
-        </CardContent>
-      </Card>
-
-      {/* ── PRICING ──────────────────────────────────── */}
-      <Card className="border-green-100 bg-white">
-        <CardHeader className="p-3 pb-2 bg-green-50 border-b border-green-100">
-          <CardTitle className="text-xs font-bold text-green-700 uppercase">💰 Pricing (optional)</CardTitle>
-        </CardHeader>
-        <CardContent className="p-3 grid grid-cols-3 gap-3">
-          <ValidatedInput label="Cream Cost" value={inp.creamPrice} onChange={v => setF("creamPrice", v)} validation={{ isValid: true, severity: "info" }} unit="₹/kg" colorScheme="orange" />
-          <ValidatedInput label="Butter Price" value={inp.butterPrice} onChange={v => setF("butterPrice", v)} validation={{ isValid: true, severity: "info" }} unit="₹/kg" colorScheme="green" />
-          <ValidatedInput label="Buttermilk Price" value={inp.buttermilkPrice} onChange={v => setF("buttermilkPrice", v)} validation={{ isValid: true, severity: "info" }} unit="₹/kg" colorScheme="blue" />
-          <ValidatedInput label="Operating Days/Month" value={inp.operDays} onChange={v => setF("operDays", v)} validation={{ isValid: true, severity: "info" }} colorScheme="blue" />
-        </CardContent>
-      </Card>
-
-      {/* ── CALCULATE ───────────────────────────────── */}
-      <Button onClick={calculate}
-        className="w-full h-11 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-bold shadow-md">
-        <Calculator className="mr-2 h-4 w-4" />
-        Calculate Butter Yield
-      </Button>
-
-      {/* ── RESULTS ─────────────────────────────────── */}
-      {result && (
-        <div className="space-y-3 animate-in fade-in">
-
-          {/* Main KPIs */}
-          <div className="grid grid-cols-3 gap-2">
-            {[
-              { label: "Butter Yield",  value: result.butterKg.toFixed(1),    unit: "kg/batch",  color: "bg-yellow-500"  },
-              { label: "Yield %",       value: result.yieldPct.toFixed(1),     unit: "% w/w",     color: "bg-orange-600"  },
-              { label: "Buttermilk",    value: result.buttermilkKg.toFixed(0), unit: "kg",        color: "bg-blue-600"    },
-            ].map((k, i) => (
-              <div key={i} className={`${k.color} text-white p-3 rounded-xl text-center shadow`}>
-                <div className="text-[9px] uppercase opacity-80 font-bold">{k.label}</div>
-                <div className="text-2xl font-black">{k.value}</div>
-                <div className="text-[9px] opacity-70">{k.unit}</div>
-              </div>
-            ))}
+        {/* TAB 1: PREDICTOR */}
+        <TabsContent value="theoretical" className="space-y-4 pt-3">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <ValidatedInput
+              label="क्रीम की मात्रा (Cream Qty)"
+              value={theo.creamQty}
+              onChange={v => setT("creamQty", v)}
+              validation={validatePositive(theo.creamQty, "Cream quantity")}
+              unit="kg"
+              colorScheme="yellow"
+            />
+            <ValidatedInput
+              label="क्रीम वसा प्रतिशत (Cream Fat %)"
+              value={theo.creamFat}
+              onChange={v => setT("creamFat", v)}
+              validation={validateNumber(theo.creamFat, 20, 60, "Cream fat")}
+              unit="%"
+              colorScheme="yellow"
+            />
+            <ValidatedInput
+              label="टारगेट मक्खन वसा (Target Butter Fat %)"
+              value={theo.butterFat}
+              onChange={v => setT("butterFat", v)}
+              validation={validateNumber(theo.butterFat, 75, 85, "Butter fat")}
+              unit="%"
+              colorScheme="orange"
+            />
           </div>
 
-          {/* Mass balance */}
-          <Card className="bg-amber-50 border-amber-200">
-            <CardHeader className="p-3 pb-1 border-b border-amber-100">
-              <CardTitle className="text-sm text-amber-800">⚖️ Mass Balance</CardTitle>
-            </CardHeader>
-            <CardContent className="p-3 space-y-2 text-sm">
-              {[
-                { label: "Total cream fat",          value: `${result.totalFatKg.toFixed(2)} kg`,      color: "text-yellow-700 font-bold" },
-                { label: "Fat recovered into butter", value: `${result.recoveredFatKg.toFixed(2)} kg`,  color: "text-green-700"  },
-                { label: "Fat lost to buttermilk",    value: `${result.fatLostKg.toFixed(2)} kg`,       color: "text-red-600 font-bold"    },
-                { label: "Fat efficiency",            value: `${result.fatEfficiency.toFixed(2)}%`,     color: "text-green-800 font-black" },
-                { label: "Cream → butter conversion", value: `${result.milkPerKgButter.toFixed(2)} kg cream / kg butter`, color: "" },
-              ].map((r, i) => (
-                <div key={i} className="flex justify-between">
-                  <span className="text-slate-500">{r.label}</span>
-                  <span className={`font-bold ${r.color}`}>{r.value}</span>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
+          {/* Advanced Drawer */}
+          <Button
+            variant="ghost"
+            onClick={() => setShowAdvanced(!showAdvanced)}
+            className="w-full flex justify-between items-center text-xs font-semibold py-2 px-3 border border-amber-100 hover:bg-amber-50/50 rounded-lg"
+          >
+            <span className="flex items-center gap-1.5 text-slate-700">
+              <Settings2 className="w-3.5 h-3.5" /> एडवांस्ड सेटिंग्स (Advanced Settings)
+            </span>
+            <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${showAdvanced ? "rotate-180" : ""}`} />
+          </Button>
 
-          {/* Butter & Buttermilk composition */}
-          <div className="grid grid-cols-2 gap-3">
-            <Card className="bg-white border-yellow-100">
-              <CardContent className="p-3 space-y-1 text-xs">
-                <div className="font-bold text-yellow-700 mb-1 text-sm">🧈 Butter Composition</div>
-                {[
-                  { label: "Fat",      value: `${inp.butterFat}% (${result.recoveredFatKg.toFixed(1)} kg)` },
-                  { label: "Moisture", value: `${inp.butterMoisture}% (${result.butterMoistKg.toFixed(1)} kg)` },
-                  { label: "Salt",     value: `${inp.butterSalt}% (${result.butterSaltKg.toFixed(2)} kg)` },
-                  { label: "FSSAI",    value: butter.standard },
-                ].map((r, i) => (
-                  <div key={i} className="flex justify-between">
-                    <span className="text-slate-500">{r.label}</span>
-                    <span className="font-bold text-slate-700 text-right max-w-[55%]">{r.value}</span>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-
-            <Card className="bg-blue-50 border-blue-100">
-              <CardContent className="p-3 space-y-1 text-xs">
-                <div className="font-bold text-blue-700 mb-1 text-sm">🫙 Buttermilk Quality</div>
-                {[
-                  { label: "Volume",    value: `${result.buttermilkKg.toFixed(1)} kg` },
-                  { label: "Fat %",     value: `${result.buttermilkFatPct.toFixed(2)}%`, warn: result.buttermilkFatPct > 0.7 },
-                  { label: "SNF",       value: `~${result.buttermilkSNFKg.toFixed(1)} kg` },
-                  { label: "Grade",     value: result.buttermilkFatPct < 0.5 ? "✅ Low fat" : "⚠️ Check fat loss" },
-                ].map((r, i) => (
-                  <div key={i} className="flex justify-between">
-                    <span className="text-slate-500">{r.label}</span>
-                    <span className={`font-bold ${(r as any).warn ? "text-red-600" : ""}`}>{r.value}</span>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Multi-batch summary */}
-          {result.bat > 1 && (
-            <Card className="bg-indigo-50 border-indigo-200">
-              <CardContent className="p-3 text-sm space-y-1">
-                <div className="font-bold text-indigo-700 mb-1">{result.bat} Batches Total</div>
-                {[
-                  { label: "Total butter",     value: `${result.butterTotal.toFixed(1)} kg` },
-                  { label: "Total buttermilk", value: `${result.buttermilkTotal.toFixed(0)} kg` },
-                ].map((r, i) => (
-                  <div key={i} className="flex justify-between">
-                    <span className="text-slate-500">{r.label}</span>
-                    <span className="font-bold text-indigo-700">{r.value}</span>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
+          {showAdvanced && (
+            <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-100 grid grid-cols-2 md:grid-cols-3 gap-3">
+              <ValidatedInput
+                label="छाछ में वसा हानि % (Buttermilk Fat Loss %)"
+                value={theo.fatLoss}
+                onChange={v => setT("fatLoss", v)}
+                validation={validateNumber(theo.fatLoss, 0.1, 5, "Fat loss")}
+                unit="%"
+                colorScheme="red"
+              />
+              <ValidatedInput
+                label="मक्खन नमी प्रतिशत (Butter Moisture %)"
+                value={theo.butterMoisture}
+                onChange={v => setT("butterMoisture", v)}
+                validation={validateNumber(theo.butterMoisture, 10, 25, "Butter moisture")}
+                unit="%"
+                colorScheme="blue"
+              />
+              <ValidatedInput
+                label="मक्खन नमक प्रतिशत (Butter Salt %)"
+                value={theo.butterSalt}
+                onChange={v => setT("butterSalt", v)}
+                validation={validateNumber(theo.butterSalt, 0, 5, "Butter salt")}
+                unit="%"
+                colorScheme="blue"
+              />
+              <ValidatedInput
+                label="मंथन तापमान (Churn Temp)"
+                value={theo.churnTemp}
+                onChange={v => setT("churnTemp", v)}
+                validation={validateNumber(theo.churnTemp, 4, 20, "Churn temperature")}
+                unit="°C"
+                colorScheme="yellow"
+              />
+              <ValidatedInput
+                label="क्रीम नमी प्रतिशत (Cream Moisture %)"
+                value={theo.creamMoisture}
+                onChange={v => setT("creamMoisture", v)}
+                validation={validateNumber(theo.creamMoisture, 30, 75, "Cream moisture")}
+                unit="%"
+                colorScheme="yellow"
+              />
+              <ValidatedInput
+                label="क्रीम एसएनएफ (Cream SNF %)"
+                value={theo.creamSNF}
+                onChange={v => setT("creamSNF", v)}
+                validation={validateNumber(theo.creamSNF, 1, 10, "Cream SNF")}
+                unit="%"
+                colorScheme="yellow"
+              />
+            </div>
           )}
 
-          {/* Economics */}
-          <Card className="bg-gradient-to-br from-slate-800 to-slate-900 text-white border-none">
-            <CardContent className="p-3 space-y-2 text-sm">
-              <div className="text-xs text-slate-300 font-bold uppercase mb-1">💰 Economics ({result.bat} batch{result.bat > 1 ? "es" : ""})</div>
-              {[
-                { label: "Cream cost",        value: `-₹ ${result.creamCost.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,    color: "text-red-400"    },
-                { label: "Butter revenue",    value: `+₹ ${result.butterRevenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,  color: "text-yellow-300" },
-                { label: "Buttermilk revenue",value: `+₹ ${result.bmlkRevenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,   color: "text-cyan-300"   },
-                { label: "Gross Profit",      value: `₹ ${result.grossProfit.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,    color: `${result.grossProfit >= 0 ? "text-green-300 font-black" : "text-red-400 font-black"}` },
-              ].map((r, i) => (
-                <div key={i} className={`flex justify-between ${i === 3 ? "border-t border-slate-700 pt-2" : ""}`}>
-                  <span className="text-slate-400">{r.label}</span>
-                  <span className={`font-bold ${r.color}`}>{r.value}</span>
-                </div>
-              ))}
-              <div className="grid grid-cols-2 gap-2 mt-2">
-                {[
-                  { label: "Gross Margin",       value: `${result.gpm.toFixed(1)}%`                    },
-                  { label: "Cream cost/kg butter",value: `₹${result.costPerKgButter.toFixed(2)}`       },
-                ].map((c, i) => (
-                  <div key={i} className="bg-slate-700 rounded p-2 text-center">
-                    <div className="text-[9px] text-slate-400 font-bold">{c.label}</div>
-                    <div className="font-black text-white">{c.value}</div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Monthly + Sensitivity */}
-          <div className="grid grid-cols-2 gap-3">
-            <Card className="bg-green-50 border-green-200">
-              <CardContent className="p-3 text-sm space-y-1">
-                <div className="font-bold text-green-700 text-sm mb-1">📅 Monthly ({result.days} days)</div>
-                <div className="flex justify-between">
-                  <span className="text-slate-500">Butter</span>
-                  <span className="font-bold">{result.monthlyButter.toFixed(0)} kg</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-500">Revenue</span>
-                  <span className="font-bold text-green-700">₹{result.monthlyRevenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</span>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-orange-50 border-orange-200">
-              <CardContent className="p-3 text-sm space-y-1">
-                <div className="font-bold text-orange-700 text-sm mb-1">📈 Sensitivity</div>
-                <div className="flex justify-between">
-                  <span className="text-slate-500">+1% cream fat</span>
-                  <span className="font-bold text-green-700">+{result.dYield_dFc.toFixed(2)} kg butter</span>
-                </div>
-                <div className="text-[10px] text-orange-600 mt-1">
-                  Standardize cream fat → direct yield gain
-                </div>
-              </CardContent>
-            </Card>
+          {/* Costing Toggle */}
+          <div className="flex items-center gap-2">
+            <Checkbox id="butter-costing" checked={enableCosting} onCheckedChange={(c) => setEnableCosting(!!c)} />
+            <Label htmlFor="butter-costing" className="text-xs font-semibold cursor-pointer text-slate-700 flex items-center gap-1">
+              <Coins className="w-3.5 h-3.5 text-green-600" /> कॉस्टिंग और प्रॉफिटेबिलिटी शामिल करें (Enable Costing & Profitability)
+            </Label>
           </div>
 
-          {/* Warnings */}
-          {result.warnings.length > 0 && (
-            <Alert className="bg-yellow-50 border-yellow-300">
-              <AlertTriangle className="h-4 w-4 text-yellow-600" />
-              <AlertTitle className="text-yellow-800 text-sm">Process Alerts</AlertTitle>
-              <AlertDescription className="text-xs text-yellow-700 space-y-1">
-                {result.warnings.map((w: string, i: number) => <div key={i}>⚠️ {w}</div>)}
-              </AlertDescription>
-            </Alert>
+          {enableCosting && (
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-3 p-3 bg-green-50/30 rounded-xl border border-green-100">
+              <ValidatedInput
+                label="क्रीम का मूल्य (Cream Price)"
+                value={theo.creamPrice}
+                onChange={v => setT("creamPrice", v)}
+                validation={validatePositive(theo.creamPrice, "Cream price")}
+                unit="₹/kg"
+                colorScheme="green"
+              />
+              <ValidatedInput
+                label="मक्खन मूल्य (Butter Price)"
+                value={theo.butterPrice}
+                onChange={v => setT("butterPrice", v)}
+                validation={validatePositive(theo.butterPrice, "Butter price")}
+                unit="₹/kg"
+                colorScheme="green"
+              />
+              <ValidatedInput
+                label="छाछ का मूल्य (Buttermilk Price)"
+                value={theo.buttermilkPrice}
+                onChange={v => setT("buttermilkPrice", v)}
+                validation={validatePositive(theo.buttermilkPrice, "Buttermilk price")}
+                unit="₹/kg"
+                colorScheme="green"
+              />
+              <ValidatedInput
+                label="बैचेस (Batches)"
+                value={theo.batches}
+                onChange={v => setT("batches", v)}
+                validation={validatePositive(theo.batches, "Batches")}
+                unit="qty"
+                colorScheme="blue"
+              />
+              <ValidatedInput
+                label="कार्य दिवस (Operating Days)"
+                value={theo.operDays}
+                onChange={v => setT("operDays", v)}
+                validation={validatePositive(theo.operDays, "Days")}
+                unit="days"
+                colorScheme="blue"
+              />
+            </div>
           )}
 
-          {/* Formula */}
-          <div className="bg-slate-50 border rounded-lg p-3 text-[10px] font-mono text-slate-400 space-y-1">
-            <div className="font-bold text-slate-600 text-xs mb-1">📐 Formulas:</div>
-            <div>TotalFat = Cream × Fat% = {result.C} × {inp.creamFat}% = {result.totalFatKg.toFixed(2)} kg</div>
-            <div>RecoveredFat = TotalFat × (1 − FatLoss%) = {result.recoveredFatKg.toFixed(2)} kg</div>
-            <div>ButterKg = RecoveredFat / ButterFat% = {result.butterKg.toFixed(2)} kg</div>
-            <div>Buttermilk = Cream − Butter = {result.buttermilkKg.toFixed(2)} kg</div>
-            <div>Yield% = Butter / Cream × 100 = {result.yieldPct.toFixed(2)}%</div>
+          <Button onClick={calculateTheo} className="w-full h-11 bg-amber-600 hover:bg-amber-700 text-white font-bold shadow-md">
+            🧮 मक्खन यील्ड की गणना करें (Calculate Butter Yields)
+          </Button>
+
+          {/* Results */}
+          {theoResult && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-3 gap-2">
+                <div className="bg-amber-600 text-white p-3 rounded-xl shadow-sm text-center">
+                  <div className="text-[10px] uppercase opacity-80 font-bold">मक्खन उत्पादन (Butter Output)</div>
+                  <div className="text-xl font-extrabold">{theoResult.butterKg.toFixed(1)} kg</div>
+                  <div className="text-[9px] opacity-75">{theoResult.yieldPct.toFixed(1)}% yield</div>
+                </div>
+                <div className="bg-orange-600 text-white p-3 rounded-xl shadow-sm text-center">
+                  <div className="text-[10px] uppercase opacity-80 font-bold">मट्ठा (Buttermilk)</div>
+                  <div className="text-xl font-extrabold">{theoResult.buttermilkKg.toFixed(1)} kg</div>
+                  <div className="text-[9px] opacity-75">Fat: {theoResult.buttermilkFatPct.toFixed(2)}%</div>
+                </div>
+                <div className="bg-yellow-600 text-white p-3 rounded-xl shadow-sm text-center">
+                  <div className="text-[10px] uppercase opacity-80 font-bold">वसा उपयोगिता (Fat Recovery)</div>
+                  <div className="text-xl font-extrabold">{theoResult.fatEfficiency.toFixed(2)}%</div>
+                  <div className="text-[9px] opacity-75">Efficiency rate</div>
+                </div>
+              </div>
+
+              {/* Composition Breakdown */}
+              <Card className="bg-amber-50/20 border-amber-200">
+                <CardHeader className="p-3 pb-1 border-b border-amber-100">
+                  <CardTitle className="text-xs font-bold text-amber-800 uppercase">🔬 वसा संतुलन और संरचना (Fat Balance & Composition)</CardTitle>
+                </CardHeader>
+                <CardContent className="p-3 space-y-2 text-xs">
+                  {[
+                    { label: "इनपुट क्रीम में कुल वसा (Total fat in input cream)", value: `${theoResult.totalFatKg.toFixed(2)} kg` },
+                    { label: "मक्खन में प्राप्त वsa (Fat recovered in butter)", value: `${theoResult.recoveredFatKg.toFixed(2)} kg`, color: "text-amber-700" },
+                    { label: "मट्ठा (buttermilk) में वसा हानि (Fat lost in buttermilk)", value: `${theoResult.fatLostKg.toFixed(2)} kg`, color: "text-red-600" },
+                    { label: "मक्खन घटक (Butter Moisture + Salt + SNF)", value: `Moist: ${theoResult.butterMoistKg.toFixed(1)} kg | Salt: ${theoResult.butterSaltKg.toFixed(1)} kg | SNF: ${theoResult.butterSNFKg.toFixed(1)} kg` },
+                    { label: "मक्खन उत्पादन हेतु आवश्यक क्रीम (Cream required per kg butter)", value: `${theoResult.creamPerKgButter.toFixed(2)} kg` },
+                  ].map((r, i) => (
+                    <div key={i} className="flex justify-between border-b border-amber-100/40 pb-1.5 last:border-none">
+                      <span className="text-slate-500">{r.label}</span>
+                      <span className={`font-semibold ${r.color || "text-slate-800"}`}>{r.value}</span>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+
+              {/* Economics */}
+              {enableCosting && (
+                <Card className="bg-gradient-to-br from-slate-900 to-slate-950 text-white border-none">
+                  <CardHeader className="p-3 pb-1 border-b border-slate-800">
+                    <CardTitle className="text-xs font-bold text-slate-400 uppercase">💰 आर्थिक विश्लेषण (Economics Projections)</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-3 space-y-3">
+                    <div className="grid grid-cols-3 gap-2 text-center text-xs">
+                      <div className="p-2 bg-slate-800/60 rounded-lg">
+                        <span className="text-slate-400 block text-[9px]">क्रीम कुल लागत (Cream Cost)</span>
+                        <span className="font-semibold text-red-300">₹ {theoResult.creamCost.toLocaleString("en-IN")}</span>
+                      </div>
+                      <div className="p-2 bg-slate-800/60 rounded-lg">
+                        <span className="text-slate-400 block text-[9px]">मक्खन राजस्व (Butter Revenue)</span>
+                        <span className="font-semibold text-green-300">₹ {theoResult.butterRevenue.toLocaleString("en-IN")}</span>
+                      </div>
+                      <div className="p-2 bg-slate-800/60 rounded-lg">
+                        <span className="text-slate-400 block text-[9px]">छाछ राजस्व (Buttermilk Rev)</span>
+                        <span className="font-semibold text-cyan-300">₹ {theoResult.bmlkRevenue.toLocaleString("en-IN")}</span>
+                      </div>
+                    </div>
+
+                    <div className="bg-slate-850 rounded-xl p-3 flex justify-between items-center border border-slate-800">
+                      <div>
+                        <div className="text-xs font-bold text-green-400">सकल लाभ (Gross Profit)</div>
+                        <div className="text-[10px] text-slate-400">({theo.batches} बैच हेतु / For {theo.batches} batches)</div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-base font-black text-green-300">₹ {theoResult.grossProfit.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</div>
+                        <div className="text-[11px] text-slate-400">मार्जिन (Margin): {theoResult.gpm.toFixed(1)}%</div>
+                      </div>
+                    </div>
+
+                    {theoResult.days > 1 && (
+                      <div className="grid grid-cols-3 gap-2 border-t border-slate-800 pt-2.5 text-center text-[11px]">
+                        <div>
+                          <span className="text-slate-400 block text-[9px]">मासिक मक्खन (Monthly Butter)</span>
+                          <span className="font-semibold text-slate-200">{theoResult.monthlyButter.toFixed(0)} kg</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-400 block text-[9px]">मासिक लागत (Monthly Cost)</span>
+                          <span className="font-semibold text-red-300">₹ {theoResult.monthlyCost.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-400 block text-[9px]">मासिक लाभ (Net profit)</span>
+                          <span className="font-bold text-green-400">₹ {theoResult.monthlyProfit.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</span>
+                        </div>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Quality & Warning Alerts */}
+              {theoResult.warnings.length > 0 && (
+                <Alert className="bg-yellow-50 border-yellow-200">
+                  <AlertTriangle className="h-4 w-4 text-yellow-600" />
+                  <AlertTitle className="text-yellow-800 text-xs font-bold">मक्खन गुणवत्ता चेतावनियाँ (Process Warnings)</AlertTitle>
+                  <AlertDescription className="text-[11px] text-yellow-700 space-y-1">
+                    {theoResult.warnings.map((w: string, i: number) => <div key={i}>• {w}</div>)}
+                  </AlertDescription>
+                </Alert>
+              )}
+            </div>
+          )}
+        </TabsContent>
+
+        {/* TAB 2: TRACKER */}
+        <TabsContent value="actual" className="space-y-4 pt-3">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+            <ValidatedInput
+              label="क्रीम की मात्रा (Cream Qty)"
+              value={actual.creamQty}
+              onChange={v => setA("creamQty", v)}
+              validation={validatePositive(actual.creamQty, "Cream quantity")}
+              unit="kg"
+              colorScheme="yellow"
+            />
+            <ValidatedInput
+              label="क्रीम वसा प्रतिशत (Cream Fat %)"
+              value={actual.creamFat}
+              onChange={v => setA("creamFat", v)}
+              validation={validateNumber(actual.creamFat, 20, 60, "Cream fat")}
+              unit="%"
+              colorScheme="yellow"
+            />
+            <ValidatedInput
+              label="टारगेट मक्खन वसा (Target Butter Fat %)"
+              value={actual.butterFat}
+              onChange={v => setA("butterFat", v)}
+              validation={validateNumber(actual.butterFat, 75, 85, "Butter fat")}
+              unit="%"
+              colorScheme="orange"
+            />
+            <ValidatedInput
+              label="वास्तविक मक्खन (Actual Butter Obt)"
+              value={actual.butterObtained}
+              onChange={v => setA("butterObtained", v)}
+              validation={validatePositive(actual.butterObtained, "Butter obtained")}
+              unit="kg"
+              colorScheme="orange"
+            />
+            <ValidatedInput
+              label="वास्तविक मट्ठा (Actual Buttermilk Obt)"
+              value={actual.buttermilkObt}
+              onChange={v => setA("buttermilkObt", v)}
+              validation={validatePositive(actual.buttermilkObt, "Buttermilk obtained")}
+              unit="kg"
+              colorScheme="yellow"
+            />
           </div>
 
-        </div>
-      )}
+          <Button onClick={calculateActual} className="w-full h-11 bg-yellow-600 hover:bg-yellow-700 text-white font-bold shadow-md">
+            📊 वास्तविक बैच दक्षता की तुलना करें (Compare Batch Efficiency)
+          </Button>
+
+          {actualResult && (
+            <div className="space-y-4">
+              {/* Grade Badge */}
+              <div className={`p-4 rounded-xl border flex flex-col items-center justify-center text-center transition-all ${actualResult.gradeColor}`}>
+                <div className="text-4xl mb-1">{actualResult.gradeEmoji}</div>
+                <div className="text-xs uppercase tracking-wider font-bold opacity-85">बैच ग्रेड (Batch Efficiency Grade)</div>
+                <div className="text-xl font-extrabold">{actualResult.grade}</div>
+                <div className="text-sm font-bold mt-1">
+                  रिकवरी दर (Recovery Rate): {actualResult.butterRecoveryPct.toFixed(1)}%
+                </div>
+              </div>
+
+              {/* Progress bar */}
+              <div className="w-full bg-slate-200 rounded-full h-3.5 overflow-hidden shadow-inner">
+                <div
+                  className={`h-full rounded-full transition-all duration-500 ${
+                    actualResult.butterRecoveryPct >= 99 ? "bg-green-600" :
+                    actualResult.butterRecoveryPct >= 97 ? "bg-blue-600" :
+                    actualResult.butterRecoveryPct >= 94 ? "bg-yellow-500" : "bg-red-600"
+                  }`}
+                  style={{ width: `${Math.min(100, actualResult.butterRecoveryPct)}%` }}
+                />
+              </div>
+
+              {/* Comparison table */}
+              <Card className="border-slate-200">
+                <CardHeader className="p-3 pb-1 border-b">
+                  <CardTitle className="text-xs font-bold text-slate-700 uppercase">📊 आदर्श बनाम वास्तविक (Ideal vs Actual Yields)</CardTitle>
+                </CardHeader>
+                <CardContent className="p-0 text-xs">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 font-semibold">
+                        <th className="p-2.5">पैरामीटर (Parameter)</th>
+                        <th className="p-2.5 text-right">आदर्श (Ideal)</th>
+                        <th className="p-2.5 text-right">वास्तविक (Actual)</th>
+                        <th className="p-2.5 text-right">हानि/नुकसान (Loss)</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      <tr>
+                        <td className="p-2.5 font-medium text-slate-700">मक्खन मात्रा (Butter Obtained)</td>
+                        <td className="p-2.5 text-right text-slate-600">{actualResult.idealButter.toFixed(1)} kg</td>
+                        <td className="p-2.5 text-right text-slate-900 font-bold">{actualResult.butterObt.toFixed(1)} kg</td>
+                        <td className={`p-2.5 text-right font-bold ${actualResult.butterObt >= actualResult.idealButter ? "text-green-600" : "text-red-600"}`}>
+                          {(actualResult.butterObt - actualResult.idealButter).toFixed(1)} kg
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="p-2.5 font-medium text-slate-700">छाछ मात्रा (Buttermilk Obtained)</td>
+                        <td className="p-2.5 text-right text-slate-600">{actualResult.idealButtermilk.toFixed(1)} kg</td>
+                        <td className="p-2.5 text-right text-slate-900 font-bold">{actualResult.bmlkObt.toFixed(1)} kg</td>
+                        <td className="p-2.5 text-right text-slate-600">{(actualResult.bmlkObt - actualResult.idealButtermilk).toFixed(1)} kg</td>
+                      </tr>
+                      <tr className="bg-slate-50/50">
+                        <td className="p-2.5 font-semibold text-slate-700">कुल प्रोसेसिंग द्रव्यमान हानि (Mass Loss)</td>
+                        <td className="p-2.5 text-right text-slate-600">0.0 kg</td>
+                        <td className="p-2.5 text-right text-slate-600">{(actualResult.C - actualResult.butterObt - actualResult.bmlkObt).toFixed(1)} kg</td>
+                        <td className="p-2.5 text-right text-red-600 font-bold">{actualResult.massLossKg.toFixed(1)} kg ({actualResult.massLossPct.toFixed(2)}%)</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </CardContent>
+              </Card>
+
+              {/* Alerts */}
+              {actualResult.warnings.length > 0 && (
+                <Alert className="bg-yellow-50 border-yellow-200">
+                  <AlertTriangle className="h-4 w-4 text-yellow-600" />
+                  <AlertTitle className="text-yellow-800 text-xs font-bold">सुधार बिंदु (Actionable Points)</AlertTitle>
+                  <AlertDescription className="text-xs text-yellow-700 space-y-1">
+                    {actualResult.warnings.map((w: string, i: number) => <div key={i}>• {w}</div>)}
+                  </AlertDescription>
+                </Alert>
+              )}
+            </div>
+          )}
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
-// ════════════════════════════════════════════════════════════
-// ADVANCED KHOA YIELD CALCULATOR
-// Drop-in Replacement for KhoaYieldCalc()
-//
-// INSTRUCTIONS:
-// 1. Apni file mein purana KhoaYieldCalc() function dhundhein
-// 2. Pura block DELETE karein
-// 3. Yeh poora code wahan PASTE karein
-// Koi naya import nahi chahiye.
-// ════════════════════════════════════════════════════════════
 
-// ── MILK TYPE DATABASE ────────────────────────────────────
-const KHOA_MILK_DB = {
-  cow_std:    { label: "🐄 Cow Milk (std)",      ts: "13.5", fat: "3.5", snf: "8.5", density: "1.030" },
-  cow_rich:   { label: "🐄 Cow Milk (rich)",     ts: "15.0", fat: "4.5", snf: "9.0", density: "1.031" },
-  buffalo:    { label: "🐃 Buffalo Milk",        ts: "17.5", fat: "7.5", snf: "9.5", density: "1.033" },
-  mixed:      { label: "🐄🐃 Mixed (50:50)",     ts: "15.5", fat: "5.0", snf: "9.0", density: "1.031" },
-  toned:      { label: "🥛 Toned Milk (1.5%F)",  ts: "11.5", fat: "1.5", snf: "9.0", density: "1.029" },
-  condensed:  { label: "🫙 Pre-condensed (conc)",ts: "28.0", fat: "8.0", snf: "18.0",density: "1.060" },
-} as const;
-
-type KhoaMilkKey = keyof typeof KHOA_MILK_DB;
-
-// ── KHOA VARIETY DATABASE ─────────────────────────────────
-const KHOA_VARIETY_DB = {
-  pindi:    { label: "🟤 Pindi Khoa",        ts: "72", fat: "26", moisture: "28", use: "Barfi, Peda",       note: "Hard texture, cooked longest"         },
-  dhap:     { label: "🟡 Dhap Khoa",         ts: "68", fat: "22", moisture: "32", use: "Gulab Jamun",       note: "Moderate moisture, grainy texture"    },
-  danedar:  { label: "🟠 Danedar Khoa",      ts: "65", fat: "20", moisture: "35", use: "Kalakand, Karachi", note: "Granular, coagulated texture"         },
-  batti:    { label: "⚫ Batti/Mawa",        ts: "75", fat: "28", moisture: "25", use: "Milk cake, premium",note: "Driest variety, ball/cake shape"      },
-  hariyali: { label: "🟢 Hariyali (soft)",   ts: "62", fat: "18", moisture: "38", use: "Halwa, fresh use",  note: "Soft & wet — shelf life <24h"         },
-} as const;
-
-type KhoaVarietyKey = keyof typeof KHOA_VARIETY_DB;
-
-// ── EVAPORATOR TYPE DATABASE ──────────────────────────────
-const KHOA_EVAP_DB = {
-  open_pan:   { label: "🔥 Open Karahi (direct)",   steamKg: 1.10, timeHrPer100kg: 2.5,  fuelType: "LPG/Wood",   evapEff: 0.88 },
-  tilting:    { label: "⚙️ Tilting Pan (steam)",    steamKg: 1.05, timeHrPer100kg: 2.0,  fuelType: "Steam",      evapEff: 0.91 },
-  scraped:    { label: "🔩 Scraped Surface (SSHEx)", steamKg: 0.95, timeHrPer100kg: 0.5,  fuelType: "Steam",      evapEff: 0.96 },
-  vfe:        { label: "🏭 Vacuum Flash Evaporator", steamKg: 0.70, timeHrPer100kg: 0.25, fuelType: "Steam+Vacuum",evapEff: 0.98 },
-} as const;
-
-type KhoaEvapKey = keyof typeof KHOA_EVAP_DB;
-
-// ── PRESETS ───────────────────────────────────────────────
-const KHOA_PRESETS = {
-  "Small Halwai (100L)":   { milkQty: "103", milkTS: "13.5", khoaTS: "70", batches: "3",  milkPrice: "40", khoaPrice: "280", steamPrice: "2.5", operDays: "26" },
-  "Medium Plant (500L)":   { milkQty: "515", milkTS: "14.0", khoaTS: "70", batches: "2",  milkPrice: "38", khoaPrice: "270", steamPrice: "2.0", operDays: "26" },
-  "Large Plant (2000L)":   { milkQty: "2060",milkTS: "15.0", khoaTS: "72", batches: "1",  milkPrice: "36", khoaPrice: "260", steamPrice: "1.8", operDays: "26" },
-  "Buffalo Special (100L)":{ milkQty: "103", milkTS: "17.5", khoaTS: "72", batches: "3",  milkPrice: "55", khoaPrice: "340", steamPrice: "2.5", operDays: "26" },
-} as const;
-
-// ── MAIN COMPONENT ────────────────────────────────────────
 function KhoaYieldCalc() {
   const { toast } = useToast();
   const { validatePositive, validatePercentage, validateNumber } = useInputValidation();
 
-  const [milkType,   setMilkType]   = useState<KhoaMilkKey>("mixed");
-  const [variety,    setVariety]    = useState<KhoaVarietyKey>("pindi");
-  const [evapType,   setEvapType]   = useState<KhoaEvapKey>("open_pan");
+  const [activeCalc, setActiveCalc] = useState<"theoretical" | "actual">("theoretical");
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [enableCosting, setEnableCosting] = useState(false);
 
-  const [inp, setInp] = useState({
-    milkQty:    "1000",
-    milkTS:     "15.5",
-    milkFat:    "5.0",
-    milkSNF:    "9.0",
-    khoaTS:     "72",
-    batches:    "1",
-    operDays:   "26",
-    milkPrice:  "40",
-    khoaPrice:  "280",
-    steamPrice: "2.0",   // ₹/kg steam
+  // ── Theoretical Inputs (Predictor) ──
+  const [theo, setTheo] = useState({
+    milkQty:          "1000",   // kg milk input
+    milkFat:          "4.5",    // % milk fat
+    milkSNF:          "8.5",    // % milk SNF
+    khoaTS:           "70",     // % target Khoa TS
+    // Advanced
+    steamKgPerKgWater:"1.1",    // steam consumed (kg) per kg of water evaporated
+    timeHrPer100kg:   "2.5",    // hours taken per 100kg milk
+    processLoss:      "0.5",    // % process spill/solids loss
+    steamPrice:       "2.0",    // ₹/kg steam
+    // Costing
+    milkPrice:        "45",     // ₹/kg milk
+    khoaPrice:        "300",    // ₹/kg khoa sale price
+    batches:          "1",
+    operDays:         "26",
   });
 
-  const [result, setResult] = useState<any>(null);
-  const setF = (k: string, v: string) => setInp(p => ({ ...p, [k]: v }));
+  // ── Actual Inputs (Tracker) ──
+  const [actual, setActual] = useState({
+    milkQty:          "1000",
+    milkFat:          "4.5",
+    milkSNF:          "8.5",
+    khoaTS:           "70",
+    khoaObtained:     "",
+  });
 
-  // Apply milk preset
-  const applyMilk = (key: KhoaMilkKey) => {
-    const m = KHOA_MILK_DB[key];
-    setMilkType(key);
-    setInp(p => ({ ...p, milkTS: m.ts, milkFat: m.fat, milkSNF: m.snf }));
-    setResult(null);
-  };
+  const [theoResult, setTheoResult]     = useState<any>(null);
+  const [actualResult, setActualResult] = useState<any>(null);
 
-  // Apply variety
-  const applyVariety = (key: KhoaVarietyKey) => {
-    setVariety(key);
-    setInp(p => ({ ...p, khoaTS: KHOA_VARIETY_DB[key].ts }));
-    setResult(null);
-  };
+  const setT = (k: string, v: string) => setTheo(p => ({ ...p, [k]: v }));
+  const setA = (k: string, v: string) => setActual(p => ({ ...p, [k]: v }));
 
-  // Apply preset
-  const applyPreset = (name: keyof typeof KHOA_PRESETS) => {
-    const pr = KHOA_PRESETS[name] as Record<string, string>;
-    setInp(p => ({ ...p, ...pr }));
-    toast({ title: "Preset Applied", description: name });
-  };
+  // ══════════════════════════════════════════════════════════
+  // THEORETICAL CALCULATION (Predictor)
+  // ══════════════════════════════════════════════════════════
+  const calculateTheo = useCallback(() => {
+    const M       = parseFloat(theo.milkQty)       || 0;
+    const fat     = parseFloat(theo.milkFat)       || 0;
+    const snf     = parseFloat(theo.milkSNF)       || 0;
+    const khoaTS  = parseFloat(theo.khoaTS)        || 0;
 
-  // ── CALCULATE ─────────────────────────────────────────
-  const calculate = useCallback(() => {
-    const M      = parseFloat(inp.milkQty)    || 0;
-    const Tm     = parseFloat(inp.milkTS)  / 100;
-    const Tk     = parseFloat(inp.khoaTS)  / 100;
-    const fat    = parseFloat(inp.milkFat) / 100;
-    const snf    = parseFloat(inp.milkSNF) / 100;
-    const bat    = parseFloat(inp.batches)    || 1;
-    const days   = parseFloat(inp.operDays)   || 26;
-    const evap   = KHOA_EVAP_DB[evapType];
-    const vari   = KHOA_VARIETY_DB[variety];
+    const steamFact= parseFloat(theo.steamKgPerKgWater)|| 1.1;
+    const timeFact = parseFloat(theo.timeHrPer100kg)   || 2.5;
+    const loss     = parseFloat(theo.processLoss)    / 100;
+    const steamPr  = parseFloat(theo.steamPrice)     || 0;
 
-    const milkPr  = parseFloat(inp.milkPrice)  || 0;
-    const khoaPr  = parseFloat(inp.khoaPrice)  || 0;
-    const steamPr = parseFloat(inp.steamPrice) || 0;
+    const milkPrice= parseFloat(theo.milkPrice)      || 0;
+    const khoaPrice= parseFloat(theo.khoaPrice)      || 0;
+    const bat      = parseFloat(theo.batches)        || 1;
+    const days     = parseFloat(theo.operDays)       || 26;
 
-    if (M <= 0 || Tm <= 0 || Tk <= 0 || Tk <= Tm) {
-      toast({ variant: "destructive", title: "Invalid values", description: "Khoa TS must be greater than Milk TS." }); return;
+    const milkTS = fat + snf;
+    const Tm = milkTS / 100;
+    const Tk = khoaTS / 100;
+
+    if (M <= 0 || milkTS <= 0 || khoaTS <= 0) {
+      toast({ variant: "destructive", title: "त्रुटि (Error)", description: "कृपया दूध की मात्रा, फैट/SNF प्रतिशत और टारगेट खोया TS% सही दर्ज करें।" });
+      return;
+    }
+    if (khoaTS <= milkTS) {
+      toast({ variant: "destructive", title: "त्रुटि (Error)", description: "टारगेट खोया TS%, इनपुट दूध TS% से अधिक होना चाहिए।" });
+      return;
     }
 
-    // ── 1. Yield (Total Solids Balance) ──────────────
-    // M × Tm = KhoaKg × Tk → KhoaKg = M × Tm / Tk
-    const khoaKg        = (M * Tm) / Tk;
-    const yieldPct      = (khoaKg / M) * 100;
+    // Yield (Total Solids Balance with process loss)
+    const idealKhoaKg = (M * Tm) / Tk;
+    const khoaKg = idealKhoaKg * (1 - loss);
+    const yieldPct = (khoaKg / M) * 100;
 
-    // ── 2. Water Evaporation ──────────────────────────
-    const waterEvapKg   = M - khoaKg;
-    const evapRatio     = waterEvapKg / M * 100;
+    // Water Evaporation
+    const waterEvapKg = M - khoaKg;
+    const evapRatio = (waterEvapKg / M) * 100;
 
-    // ── 3. Khoa Composition (estimated) ──────────────
-    // Fat in khoa = milk fat × concentration factor (Tm/Tk)
-    const concFactor    = Tm / Tk;  // how much milk concentrates
-    const khoaFatPct    = fat / concFactor * 100;
-    const khoaSNFPct    = snf / concFactor * 100;
-    const khoaMoisturePct = (1 - Tk) * 100;
+    // Composition
+    const concFactor = Tm / Tk;
+    const khoaFatPct = concFactor > 0 ? (fat / concFactor) : 0;
+    const khoaSNFPct = concFactor > 0 ? (snf / concFactor) : 0;
+    const khoaMoisturePct = 100 - khoaTS;
 
-    // ── 4. Steam / Fuel Consumption ───────────────────
-    // Steam needed ≈ steamKg per kg water evaporated
-    const steamKg       = waterEvapKg * evap.steamKg;
-    const steamCost     = steamKg * steamPr;
-    const processTimeHr = (M / 100) * evap.timeHrPer100kg;
+    // Energy & Process details
+    const steamKg = waterEvapKg * steamFact;
+    const steamCost = steamKg * steamPr;
+    const processTimeHr = (M / 100) * timeFact;
+    const evapRateKgHr = processTimeHr > 0 ? waterEvapKg / processTimeHr : 0;
 
-    // ── 5. Evaporation rate ───────────────────────────
-    const evapRateKgHr  = processTimeHr > 0 ? waterEvapKg / processTimeHr : 0;
+    // Operating & Economics
+    const khoaTotal = khoaKg * bat;
+    const steamTotal = steamKg * bat;
+    const steamCostTotal = steamCost * bat;
 
-    // ── 6. Batch totals ───────────────────────────────
-    const khoaTotal     = khoaKg * bat;
-    const steamTotal    = steamKg * bat;
-    const steamCostTotal= steamCost * bat;
+    const milkCost = M * bat * milkPrice;
+    const khoaRevenue = khoaTotal * khoaPrice;
+    const grossProfit = khoaRevenue - milkCost - steamCostTotal;
+    const gpm = (milkCost + steamCostTotal) > 0 ? (grossProfit / (milkCost + steamCostTotal)) * 100 : 0;
 
-    // ── 7. Economics (per batch × batches) ───────────
-    const milkCost      = M * bat * milkPr;
-    const khoaRevenue   = khoaTotal * khoaPr;
-    const totalRevenue  = khoaRevenue;
-    const grossProfit   = khoaRevenue - milkCost - steamCostTotal;
-    const gpm           = milkCost > 0 ? (grossProfit / (milkCost + steamCostTotal)) * 100 : 0;
-    const milkCostPerKgKhoa = milkCost / khoaTotal;
-    const steamCostPerKgKhoa = steamCostTotal / khoaTotal;
-    const totalCostPerKgKhoa = milkCostPerKgKhoa + steamCostPerKgKhoa;
+    const monthlyKhoa = khoaKg * bat * days;
+    const monthlyRevenue = monthlyKhoa * khoaPrice;
+    const monthlyCost = (M * milkPrice + steamKg * steamPr) * bat * days;
+    const monthlyProfit = grossProfit * days;
 
-    // Monthly
-    const monthlyKhoa   = khoaKg  * days;
-    const monthlyRevenue= monthlyKhoa * khoaPr;
-    const monthlyCost   = M * days * milkPr + steamKg * days * steamPr;
-
-    // ── 8. Energy intensity ───────────────────────────
-    // kCal to evaporate water: ~540 kcal/kg at ~100°C
-    const thermalKcal   = waterEvapKg * 540;
-    const thermalMcal   = thermalKcal / 1000;
-
-    // ── 9. Milk per kg khoa ───────────────────────────
-    const milkPerKgKhoa = M / khoaKg;
-
-    // ── 10. Sensitivity ──────────────────────────────
-    // If milk TS increases by 0.5% → yield change
-    const dYield_dTS    = M * 0.005 / Tk;
-
-    // ── 11. Warnings ─────────────────────────────────
     const warnings: string[] = [];
-    let confidence: "high" | "medium" | "low" = "high";
+    if (khoaTS < 62 || khoaTS > 78) warnings.push(`खोया कुल ठोस (TS) ${khoaTS}% सामान्य सीमा (62–78%) से बाहर है। (Khoa TS is outside typical 62–78% range.)`);
+    if (khoaMoisturePct > 38) warnings.push(`नमी प्रतिशत (${khoaMoisturePct.toFixed(0)}%) अधिक है। बैक्टीरिया वृद्धि रोकने के लिए तुरंत प्रशीतित (refrigerate) करें। (Moisture is high, risk of microbial growth.)`);
+    if (khoaFatPct < 20) warnings.push(`FSSAI मानक के अनुसार खोया (सूखे पदार्थ पर) में कम से कम 30% वसा होनी चाहिए। (Fat on dry matter must be min 30% per FSSAI.)`);
+    if (processTimeHr > 4) warnings.push(`मंथन समय (${processTimeHr.toFixed(1)} घंटे) बहुत अधिक है। स्क्रैपड सरफेस हीट एक्सचेंजर (SSHE) का उपयोग करने पर विचार करें। (Process time is long. Consider SSHE.)`);
 
-    if (Tk < 0.62 || Tk > 0.78)  { confidence = "medium"; warnings.push(`Khoa TS ${(Tk*100).toFixed(0)}% outside typical range (62–78%). Check variety.`); }
-    if (Tm > Tk)                  warnings.push("Milk TS cannot exceed Khoa TS — check inputs.");
-    if (khoaFatPct > 30)          warnings.push(`Fat in khoa ~${khoaFatPct.toFixed(1)}% is high — risk of fat separation during cooking.`);
-    if (khoaMoisturePct > 40)     warnings.push(`Moisture ${khoaMoisturePct.toFixed(0)}% > 40% — shelf life <12h at ambient. Refrigerate immediately.`);
-    if (processTimeHr > 5)        warnings.push(`Process time ~${processTimeHr.toFixed(1)}h is long. Consider scraped surface/vacuum evaporator.`);
-    if (evapRatio > 90)           warnings.push(`${evapRatio.toFixed(0)}% water must be evaporated — high energy cost. Consider pre-condensing milk.`);
-
-    setResult({
-      khoaKg, yieldPct, waterEvapKg, evapRatio,
+    setTheoResult({
+      milkTS, khoaKg, yieldPct, waterEvapKg, evapRatio,
       khoaFatPct, khoaSNFPct, khoaMoisturePct,
       steamKg, steamCost, processTimeHr, evapRateKgHr,
       khoaTotal, steamTotal, steamCostTotal,
       milkCost, khoaRevenue, grossProfit, gpm,
-      milkCostPerKgKhoa, steamCostPerKgKhoa, totalCostPerKgKhoa,
-      monthlyKhoa, monthlyRevenue, monthlyCost,
-      thermalMcal, milkPerKgKhoa, dYield_dTS,
-      warnings, confidence, M, bat, days,
+      monthlyKhoa, monthlyRevenue, monthlyCost, monthlyProfit,
+      warnings, M, bat, days
     });
 
     toast({
-      title: "✅ Calculated",
-      description: `Khoa: ${khoaKg.toFixed(1)} kg (${yieldPct.toFixed(1)}%) | Process: ${processTimeHr.toFixed(1)}h | GPM: ${gpm.toFixed(1)}%`,
+      title: "🧮 गणना पूरी (Calculated)",
+      description: `खोया यील्ड: ${khoaKg.toFixed(1)} kg (${yieldPct.toFixed(1)}%)`,
     });
-  }, [inp, variety, evapType, toast]);
+  }, [theo, toast]);
 
-  const vari = KHOA_VARIETY_DB[variety];
-  const evap = KHOA_EVAP_DB[evapType];
+  // ══════════════════════════════════════════════════════════
+  // ACTUAL CALCULATION (Tracker)
+  // ══════════════════════════════════════════════════════════
+  const calculateActual = useCallback(() => {
+    const M       = parseFloat(actual.milkQty)       || 0;
+    const fat     = parseFloat(actual.milkFat)       || 0;
+    const snf     = parseFloat(actual.milkSNF)       || 0;
+    const khoaTS  = parseFloat(actual.khoaTS)        || 0;
+    const khoaObt = parseFloat(actual.khoaObtained)  || 0;
 
-  // ── RENDER ────────────────────────────────────────────
+    const loss = parseFloat(theo.processLoss) / 100;
+    const milkTS = fat + snf;
+    const Tm = milkTS / 100;
+    const Tk = khoaTS / 100;
+
+    if (M <= 0 || milkTS <= 0 || khoaTS <= 0 || khoaObt <= 0) {
+      toast({ variant: "destructive", title: "त्रुटि (Error)", description: "कृपया दूध मात्रा, वसा/SNF% और वास्तविक प्राप्त खोया सही दर्ज करें।" });
+      return;
+    }
+
+    // Ideal yield
+    const idealKhoa = ((M * Tm) / Tk) * (1 - loss);
+
+    // Actual recoveries
+    const khoaRecoveryPct = idealKhoa > 0 ? (khoaObt / idealKhoa) * 100 : 0;
+    const massLossKg = M - khoaObt;
+    const massLossPct = (massLossKg / M) * 100;
+
+    // Efficiency grade
+    let grade = "", gradeColor = "", gradeEmoji = "";
+    if (khoaRecoveryPct >= 99 && massLossPct <= 85) {
+      grade = "Excellent (उत्कृष्ट)"; gradeColor = "text-green-700 bg-green-50 border-green-300"; gradeEmoji = "🏆";
+    } else if (khoaRecoveryPct >= 97) {
+      grade = "Good (अच्छा)"; gradeColor = "text-blue-700 bg-blue-50 border-blue-300"; gradeEmoji = "👍";
+    } else if (khoaRecoveryPct >= 94) {
+      grade = "Needs Improvement (सुधार ज़रूरी)"; gradeColor = "text-yellow-700 bg-yellow-50 border-yellow-300"; gradeEmoji = "⚠️";
+    } else {
+      grade = "Action Required (कार्रवाई ज़रूरी)"; gradeColor = "text-red-700 bg-red-50 border-red-300"; gradeEmoji = "🔴";
+    }
+
+    const warnings: string[] = [];
+    if (khoaRecoveryPct < 96) warnings.push(`खोया रिकवरी ${khoaRecoveryPct.toFixed(1)}% कम है। बर्तन की सतह पर चिपके रहने के कारण हुए नुकसान की जांच करें। (Khoa recovery is low. Check for pan-sticking losses.)`);
+
+    setActualResult({
+      idealKhoa,
+      khoaRecoveryPct, massLossKg, massLossPct,
+      grade, gradeColor, gradeEmoji,
+      warnings, M, khoaObt
+    });
+
+    toast({
+      title: "📋 ट्रैकर गणना पूरी (Tracker Calculated)",
+      description: `रिकवरी (Recovery): ${khoaRecoveryPct.toFixed(1)}% — ${grade}`,
+    });
+  }, [actual, theo.processLoss, toast]);
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 w-full">
+      {/* Header */}
+      <Alert className="bg-gradient-to-r from-amber-50 to-orange-50 border-amber-200">
+        <Scale className="h-4 w-4 text-amber-600" />
+        <AlertTitle className="text-amber-800 font-bold">खोया / मावा यील्ड और ऊर्जा ट्रैकर (Khoa/Mawa Yield & Energy Tracker)</AlertTitle>
+        <AlertDescription className="text-xs text-amber-700">
+          इनपुट दूध के कुल ठोस (TS), वसा और एसएनएफ के आधार पर खोया उत्पादन, वाष्पीकरण जल हानि और हीटिंग लागत विश्लेषण।<br/>
+          <span className="text-amber-600 font-medium">Khoa yield projection based on Total Solids (TS), water evaporation, steam cost & processing efficiency.</span>
+        </AlertDescription>
+      </Alert>
 
-      {/* ── MILK TYPE ────────────────────────────────── */}
-      <div className="space-y-1">
-        <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Milk Type</Label>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-          {(Object.keys(KHOA_MILK_DB) as KhoaMilkKey[]).map(key => (
-            <button key={key} onClick={() => applyMilk(key)}
-              className={`p-2 rounded-lg border text-xs font-semibold transition-all text-left leading-tight shadow-sm
-                ${milkType === key
-                  ? "bg-orange-600 text-white border-orange-600 shadow-md"
-                  : "bg-white text-slate-600 border-slate-200 hover:border-orange-300"
-                }`}>
-              {KHOA_MILK_DB[key].label}
-              <div className={`text-[9px] mt-0.5 ${milkType === key ? "opacity-80" : "text-slate-400"}`}>
-                TS: {KHOA_MILK_DB[key].ts}% · F: {KHOA_MILK_DB[key].fat}%
-              </div>
-            </button>
-          ))}
-        </div>
-      </div>
+      {/* Tabs */}
+      <Tabs value={activeCalc} onValueChange={v => setActiveCalc(v as "theoretical" | "actual")}>
+        <TabsList className="grid grid-cols-2 bg-amber-100/55 p-1 rounded-lg">
+          <TabsTrigger value="theoretical" className="text-xs font-bold data-[state=active]:bg-amber-600 data-[state=active]:text-white">
+            🧮 Predictor (अनुमान)
+          </TabsTrigger>
+          <TabsTrigger value="actual" className="text-xs font-bold data-[state=active]:bg-orange-600 data-[state=active]:text-white">
+            📋 Tracker (वास्तविक)
+          </TabsTrigger>
+        </TabsList>
 
-      {/* ── KHOA VARIETY ─────────────────────────────── */}
-      <div className="space-y-1">
-        <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Khoa Variety</Label>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-          {(Object.keys(KHOA_VARIETY_DB) as KhoaVarietyKey[]).map(key => (
-            <button key={key} onClick={() => applyVariety(key)}
-              className={`p-2 rounded-lg border text-xs font-semibold transition-all text-left leading-tight shadow-sm
-                ${variety === key
-                  ? "bg-red-600 text-white border-red-600 shadow-md"
-                  : "bg-white text-slate-600 border-slate-200 hover:border-red-300"
-                }`}>
-              {KHOA_VARIETY_DB[key].label}
-              <div className={`text-[9px] mt-0.5 ${variety === key ? "opacity-80" : "text-slate-400"}`}>
-                TS: {KHOA_VARIETY_DB[key].ts}% · {KHOA_VARIETY_DB[key].use}
-              </div>
-            </button>
-          ))}
-        </div>
-        <p className="text-[10px] text-orange-700 bg-orange-50 px-2 py-1 rounded border border-orange-100">
-          📌 {vari.note} — Best for: {vari.use}
-        </p>
-      </div>
-
-      {/* ── EVAPORATOR TYPE ──────────────────────────── */}
-      <div className="space-y-1">
-        <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Evaporator / Equipment</Label>
-        <div className="grid grid-cols-2 gap-2">
-          {(Object.keys(KHOA_EVAP_DB) as KhoaEvapKey[]).map(key => (
-            <button key={key} onClick={() => setEvapType(key)}
-              className={`p-2 rounded-lg border text-xs font-semibold transition-all text-left leading-tight shadow-sm
-                ${evapType === key
-                  ? "bg-amber-700 text-white border-amber-700 shadow-md"
-                  : "bg-white text-slate-600 border-slate-200 hover:border-amber-400"
-                }`}>
-              {KHOA_EVAP_DB[key].label}
-              <div className={`text-[9px] mt-0.5 ${evapType === key ? "opacity-80" : "text-slate-400"}`}>
-                {KHOA_EVAP_DB[key].steamKg} kg steam/kg water · {KHOA_EVAP_DB[key].timeHrPer100kg}h per 100kg
-              </div>
-            </button>
-          ))}
-        </div>
-        <p className="text-[10px] text-amber-700 bg-amber-50 px-2 py-1 rounded border border-amber-100">
-          🔥 Fuel: {evap.fuelType} · Evap. efficiency: {(evap.evapEff * 100).toFixed(0)}%
-        </p>
-      </div>
-
-      {/* ── PRESETS ──────────────────────────────────── */}
-      <div className="space-y-1">
-        <Label className="text-xs font-bold text-slate-500 uppercase">Batch Presets</Label>
-        <div className="flex flex-wrap gap-2">
-          {(Object.keys(KHOA_PRESETS) as Array<keyof typeof KHOA_PRESETS>).map(name => (
-            <button key={name} onClick={() => applyPreset(name)}
-              className="px-3 py-1 rounded-full border border-orange-200 bg-white text-xs font-semibold text-orange-700 hover:bg-orange-600 hover:text-white transition-all shadow-sm">
-              {name}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* ── INPUTS ───────────────────────────────────── */}
-      <Card className="border-orange-100 bg-white">
-        <CardHeader className="p-3 pb-2 bg-orange-50 border-b border-orange-100">
-          <CardTitle className="text-xs font-bold text-orange-700 uppercase">🥛 Milk & Process Parameters</CardTitle>
-        </CardHeader>
-        <CardContent className="p-3 grid grid-cols-2 gap-3">
-          <ValidatedInput label="Milk Quantity" value={inp.milkQty} onChange={v => setF("milkQty", v)} validation={validatePositive(inp.milkQty, "Milk qty")} unit="kg" colorScheme="blue" />
-          <ValidatedInput label="Batches" value={inp.batches} onChange={v => setF("batches", v)} validation={validatePositive(inp.batches, "Batches")} colorScheme="blue" />
-          <ValidatedInput label="Milk Total Solids %" value={inp.milkTS} onChange={v => setF("milkTS", v)} validation={validateNumber(inp.milkTS, 8, 35, "Milk TS")} unit="%" helpText="Typical: 11–18%" colorScheme="green" />
-          <ValidatedInput label="Milk Fat %" value={inp.milkFat} onChange={v => setF("milkFat", v)} validation={validatePercentage(inp.milkFat, "Fat")} unit="%" colorScheme="orange" />
-          <ValidatedInput label="Milk SNF %" value={inp.milkSNF} onChange={v => setF("milkSNF", v)} validation={validatePercentage(inp.milkSNF, "SNF")} unit="%" colorScheme="purple" />
-          <ValidatedInput label="Khoa Total Solids %" value={inp.khoaTS} onChange={v => setF("khoaTS", v)} validation={validateNumber(inp.khoaTS, 55, 80, "Khoa TS")} unit="%" helpText={`${vari.label}: ${vari.ts}%`} colorScheme="red" />
-          <ValidatedInput label="Operating Days/Month" value={inp.operDays} onChange={v => setF("operDays", v)} validation={{ isValid: true, severity: "info" }} colorScheme="blue" />
-        </CardContent>
-      </Card>
-
-      {/* ── PRICING ──────────────────────────────────── */}
-      <Card className="border-green-100 bg-white">
-        <CardHeader className="p-3 pb-2 bg-green-50 border-b border-green-100">
-          <CardTitle className="text-xs font-bold text-green-700 uppercase">💰 Pricing</CardTitle>
-        </CardHeader>
-        <CardContent className="p-3 grid grid-cols-3 gap-3">
-          <ValidatedInput label="Milk Price" value={inp.milkPrice} onChange={v => setF("milkPrice", v)} validation={{ isValid: true, severity: "info" }} unit="₹/kg" colorScheme="blue" />
-          <ValidatedInput label="Khoa Price" value={inp.khoaPrice} onChange={v => setF("khoaPrice", v)} validation={{ isValid: true, severity: "info" }} unit="₹/kg" colorScheme="orange" />
-          <ValidatedInput label="Steam Price" value={inp.steamPrice} onChange={v => setF("steamPrice", v)} validation={{ isValid: true, severity: "info" }} unit="₹/kg" helpText="LPG equiv." colorScheme="red" />
-        </CardContent>
-      </Card>
-
-      {/* ── CALCULATE ───────────────────────────────── */}
-      <Button onClick={calculate}
-        className="w-full h-11 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white font-bold shadow-md">
-        <Calculator className="mr-2 h-4 w-4" />
-        Calculate Khoa Yield
-      </Button>
-
-      {/* ── RESULTS ─────────────────────────────────── */}
-      {result && (
-        <div className="space-y-3 animate-in fade-in">
-
-          {/* Main KPIs */}
-          <div className="grid grid-cols-3 gap-2">
-            {[
-              { label: "Khoa Yield",      value: result.khoaKg.toFixed(1),       unit: "kg/batch",  color: "bg-orange-600" },
-              { label: "Yield %",         value: result.yieldPct.toFixed(1),      unit: "% w/w",     color: "bg-red-600"    },
-              { label: "Water Evapd.",    value: result.waterEvapKg.toFixed(0),   unit: "kg",        color: "bg-blue-600"   },
-            ].map((k, i) => (
-              <div key={i} className={`${k.color} text-white p-3 rounded-xl text-center shadow`}>
-                <div className="text-[9px] uppercase opacity-80 font-bold">{k.label}</div>
-                <div className="text-2xl font-black">{k.value}</div>
-                <div className="text-[9px] opacity-70">{k.unit}</div>
-              </div>
-            ))}
+        {/* TAB 1: PREDICTOR */}
+        <TabsContent value="theoretical" className="space-y-4 pt-3">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <ValidatedInput
+              label="दूध की मात्रा (Milk Qty)"
+              value={theo.milkQty}
+              onChange={v => setT("milkQty", v)}
+              validation={validatePositive(theo.milkQty, "Milk quantity")}
+              unit="kg"
+              colorScheme="yellow"
+            />
+            <ValidatedInput
+              label="दूध वसा प्रतिशत (Milk Fat %)"
+              value={theo.milkFat}
+              onChange={v => setT("milkFat", v)}
+              validation={validateNumber(theo.milkFat, 1, 15, "Milk fat")}
+              unit="%"
+              colorScheme="yellow"
+            />
+            <ValidatedInput
+              label="दूध एसएनएफ % (Milk SNF %)"
+              value={theo.milkSNF}
+              onChange={v => setT("milkSNF", v)}
+              validation={validateNumber(theo.milkSNF, 5, 12, "Milk SNF")}
+              unit="%"
+              colorScheme="yellow"
+            />
+            <ValidatedInput
+              label="खोया टारगेट ठोस % (Khoa Target TS %)"
+              value={theo.khoaTS}
+              onChange={v => setT("khoaTS", v)}
+              validation={validateNumber(theo.khoaTS, 55, 80, "Khoa TS")}
+              unit="%"
+              colorScheme="orange"
+            />
           </div>
 
-          {/* Mass balance */}
-          <Card className="bg-orange-50 border-orange-200">
-            <CardHeader className="p-3 pb-1 border-b border-orange-100">
-              <CardTitle className="text-sm text-orange-800">⚖️ Mass Balance (Total Solids Method)</CardTitle>
-            </CardHeader>
-            <CardContent className="p-3 space-y-2 text-sm">
-              {[
-                { label: "Milk quantity",            value: `${result.M} kg`,                              color: "" },
-                { label: "Milk total solids",        value: `${inp.milkTS}% → ${(result.M * parseFloat(inp.milkTS)/100).toFixed(2)} kg TS`, color: "text-green-700" },
-                { label: "Khoa TS target",           value: `${inp.khoaTS}%`,                              color: "text-orange-700" },
-                { label: "Khoa yield",               value: `${result.khoaKg.toFixed(2)} kg`,              color: "text-red-700 font-black text-base" },
-                { label: "Water to evaporate",       value: `${result.waterEvapKg.toFixed(2)} kg (${result.evapRatio.toFixed(1)}%)`, color: "text-blue-700" },
-                { label: "Milk per kg khoa",         value: `${result.milkPerKgKhoa.toFixed(2)} kg`,       color: "text-slate-700 font-bold" },
-              ].map((r, i) => (
-                <div key={i} className="flex justify-between">
-                  <span className="text-slate-500">{r.label}</span>
-                  <span className={`font-bold ${r.color}`}>{r.value}</span>
-                </div>
-              ))}
-              <div className="text-[10px] text-slate-400 font-mono mt-1 bg-white rounded p-2 border">
-                Formula: KhoaKg = Milk × MilkTS% / KhoaTS% = {result.M} × {inp.milkTS}% / {inp.khoaTS}% = {result.khoaKg.toFixed(2)} kg
-              </div>
-            </CardContent>
-          </Card>
+          {/* Advanced Settings */}
+          <Button
+            variant="ghost"
+            onClick={() => setShowAdvanced(!showAdvanced)}
+            className="w-full flex justify-between items-center text-xs font-semibold py-2 px-3 border border-amber-100 hover:bg-amber-50/50 rounded-lg"
+          >
+            <span className="flex items-center gap-1.5 text-slate-700">
+              <Settings2 className="w-3.5 h-3.5" /> एडवांस्ड सेटिंग्स (Advanced Settings)
+            </span>
+            <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${showAdvanced ? "rotate-180" : ""}`} />
+          </Button>
 
-          {/* Khoa composition + variety check */}
-          <div className="grid grid-cols-2 gap-3">
-            <Card className="bg-white border-orange-100">
-              <CardContent className="p-3 space-y-1 text-xs">
-                <div className="font-bold text-orange-700 mb-1 text-sm">🍬 Khoa Composition</div>
-                {[
-                  { label: "Total Solids", value: `${inp.khoaTS}%` },
-                  { label: "Moisture",     value: `${result.khoaMoisturePct.toFixed(1)}%`, warn: result.khoaMoisturePct > 40 },
-                  { label: "Est. Fat",     value: `${result.khoaFatPct.toFixed(1)}%` },
-                  { label: "Est. SNF",     value: `${result.khoaSNFPct.toFixed(1)}%` },
-                  { label: "FSSAI",        value: result.khoaMoisturePct <= 40 ? `✅ Moisture OK` : "⚠️ High moisture" },
-                ].map((r, i) => (
-                  <div key={i} className="flex justify-between">
-                    <span className="text-slate-500">{r.label}</span>
-                    <span className={`font-bold ${(r as any).warn ? "text-red-600" : ""}`}>{r.value}</span>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-
-            <Card className="bg-amber-50 border-amber-100">
-              <CardContent className="p-3 space-y-1 text-xs">
-                <div className="font-bold text-amber-700 mb-1 text-sm">🔥 Process Data</div>
-                {[
-                  { label: "Steam needed",     value: `${result.steamKg.toFixed(1)} kg` },
-                  { label: "Steam cost",       value: `₹${result.steamCost.toFixed(0)}` },
-                  { label: "Process time",     value: `${result.processTimeHr.toFixed(1)} hrs` },
-                  { label: "Evap. rate",       value: `${result.evapRateKgHr.toFixed(0)} kg/hr` },
-                  { label: "Thermal load",     value: `${result.thermalMcal.toFixed(0)} Mcal` },
-                ].map((r, i) => (
-                  <div key={i} className="flex justify-between">
-                    <span className="text-slate-500">{r.label}</span>
-                    <span className="font-bold">{r.value}</span>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Multi-batch */}
-          {result.bat > 1 && (
-            <Card className="bg-indigo-50 border-indigo-200">
-              <CardContent className="p-3 text-sm space-y-1">
-                <div className="font-bold text-indigo-700 mb-1">{result.bat} Batches</div>
-                {[
-                  { label: "Total khoa",   value: `${result.khoaTotal.toFixed(1)} kg` },
-                  { label: "Total steam",  value: `${result.steamTotal.toFixed(0)} kg` },
-                  { label: "Steam cost",   value: `₹${result.steamCostTotal.toFixed(0)}` },
-                ].map((r, i) => (
-                  <div key={i} className="flex justify-between">
-                    <span className="text-slate-500">{r.label}</span>
-                    <span className="font-bold text-indigo-700">{r.value}</span>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
+          {showAdvanced && (
+            <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-100 grid grid-cols-2 md:grid-cols-4 gap-3">
+              <ValidatedInput
+                label="भाप खपत कारक (Steam Kg/Kg Water)"
+                value={theo.steamKgPerKgWater}
+                onChange={v => setT("steamKgPerKgWater", v)}
+                validation={validateNumber(theo.steamKgPerKgWater, 0.5, 2.0, "Steam ratio")}
+                unit="kg"
+                colorScheme="blue"
+              />
+              <ValidatedInput
+                label="भाप दर (Steam Price)"
+                value={theo.steamPrice}
+                onChange={v => setT("steamPrice", v)}
+                validation={validatePositive(theo.steamPrice, "Steam price")}
+                unit="₹/kg"
+                colorScheme="green"
+              />
+              <ValidatedInput
+                label="समय प्रति 100kg दूध (Time/100kg milk)"
+                value={theo.timeHrPer100kg}
+                onChange={v => setT("timeHrPer100kg", v)}
+                validation={validateNumber(theo.timeHrPer100kg, 0.1, 5, "Time ratio")}
+                unit="hrs"
+                colorScheme="blue"
+              />
+              <ValidatedInput
+                label="प्रोसेसिंग नुकसान % (Process Loss %)"
+                value={theo.processLoss}
+                onChange={v => setT("processLoss", v)}
+                validation={validateNumber(theo.processLoss, 0, 5, "Process loss")}
+                unit="%"
+                colorScheme="red"
+              />
+            </div>
           )}
 
-          {/* Economics */}
-          <Card className="bg-gradient-to-br from-slate-800 to-slate-900 text-white border-none">
-            <CardContent className="p-3 space-y-2 text-sm">
-              <div className="text-xs text-slate-300 font-bold uppercase mb-1">💰 Economics ({result.bat} batch{result.bat > 1 ? "es" : ""})</div>
-              {[
-                { label: "Milk cost",       value: `-₹ ${result.milkCost.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,       color: "text-red-400"    },
-                { label: "Steam cost",      value: `-₹ ${result.steamCostTotal.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,   color: "text-orange-400" },
-                { label: "Khoa revenue",    value: `+₹ ${result.khoaRevenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,      color: "text-yellow-300" },
-                { label: "Gross Profit",    value: `₹ ${result.grossProfit.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,       color: `${result.grossProfit >= 0 ? "text-green-300 font-black" : "text-red-400 font-black"}` },
-              ].map((r, i) => (
-                <div key={i} className={`flex justify-between ${i === 3 ? "border-t border-slate-700 pt-2" : ""}`}>
-                  <span className="text-slate-400">{r.label}</span>
-                  <span className={`font-bold ${r.color}`}>{r.value}</span>
-                </div>
-              ))}
-              <div className="grid grid-cols-3 gap-2 mt-2">
-                {[
-                  { label: "Gross Margin",    value: `${result.gpm.toFixed(1)}%`                            },
-                  { label: "Milk cost/kg",    value: `₹${result.milkCostPerKgKhoa.toFixed(2)}`             },
-                  { label: "Total cost/kg",   value: `₹${result.totalCostPerKgKhoa.toFixed(2)}`            },
-                ].map((c, i) => (
-                  <div key={i} className="bg-slate-700 rounded p-2 text-center">
-                    <div className="text-[9px] text-slate-400 font-bold">{c.label}</div>
-                    <div className="font-black text-white text-sm">{c.value}</div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Monthly + Sensitivity */}
-          <div className="grid grid-cols-2 gap-3">
-            <Card className="bg-green-50 border-green-200">
-              <CardContent className="p-3 text-sm space-y-1">
-                <div className="font-bold text-green-700 text-sm mb-1">📅 Monthly ({result.days} days)</div>
-                {[
-                  { label: "Khoa production",value: `${result.monthlyKhoa.toFixed(0)} kg` },
-                  { label: "Revenue",        value: `₹${result.monthlyRevenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}` },
-                  { label: "Total cost",     value: `₹${result.monthlyCost.toLocaleString("en-IN", { maximumFractionDigits: 0 })}` },
-                ].map((r, i) => (
-                  <div key={i} className="flex justify-between">
-                    <span className="text-slate-500">{r.label}</span>
-                    <span className="font-bold text-green-700">{r.value}</span>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-
-            <Card className="bg-orange-50 border-orange-200">
-              <CardContent className="p-3 text-sm space-y-1">
-                <div className="font-bold text-orange-700 text-sm mb-1">📈 Sensitivity</div>
-                <div className="flex justify-between text-xs">
-                  <span className="text-slate-500">+0.5% Milk TS</span>
-                  <span className="font-bold text-green-700">+{result.dYield_dTS.toFixed(2)} kg khoa</span>
-                </div>
-                <div className="text-[10px] text-orange-600 mt-1">
-                  Higher TS milk → more yield per kg input
-                </div>
-                <div className="flex justify-between text-xs mt-1">
-                  <span className="text-slate-500">Evap. intensity</span>
-                  <span className="font-bold">{result.evapRatio.toFixed(0)}% water removed</span>
-                </div>
-              </CardContent>
-            </Card>
+          {/* Costing Toggle */}
+          <div className="flex items-center gap-2">
+            <Checkbox id="khoa-costing" checked={enableCosting} onCheckedChange={(c) => setEnableCosting(!!c)} />
+            <Label htmlFor="khoa-costing" className="text-xs font-semibold cursor-pointer text-slate-700 flex items-center gap-1">
+              <Coins className="w-3.5 h-3.5 text-green-600" /> कॉस्टिंग और प्रॉफिटेबिलिटी शामिल करें (Enable Costing & Profitability)
+            </Label>
           </div>
 
-          {/* FSSAI Standards */}
-          <Card className="bg-slate-50 border-slate-200">
-            <CardHeader className="p-3 pb-1 border-b">
-              <CardTitle className="text-xs font-bold uppercase text-slate-600">📜 FSSAI Khoa Standards</CardTitle>
-            </CardHeader>
-            <CardContent className="p-3 space-y-1 text-xs text-slate-600">
-              {[
-                { variety: "Pindi",    ts: "≥72%", fat: "≥25% FDM", moisture: "≤28%" },
-                { variety: "Dhap",     ts: "≥68%", fat: "≥20% FDM", moisture: "≤32%" },
-                { variety: "Danedar",  ts: "≥65%", fat: "≥18% FDM", moisture: "≤35%" },
-              ].map((s, i) => (
-                <div key={i} className="flex justify-between py-0.5">
-                  <span className="font-semibold">{s.variety}</span>
-                  <div className="flex gap-3 text-slate-500">
-                    <span>TS {s.ts}</span>
-                    <span>{s.fat}</span>
-                    <span>Moisture {s.moisture}</span>
-                  </div>
-                </div>
-              ))}
-              <p className="text-[10px] text-slate-400 mt-1">All varieties: No added starch/fat. Acidity ≤0.6% (as lactic acid).</p>
-            </CardContent>
-          </Card>
-
-          {/* Warnings */}
-          {result.warnings.length > 0 && (
-            <Alert className="bg-yellow-50 border-yellow-300">
-              <AlertTriangle className="h-4 w-4 text-yellow-600" />
-              <AlertTitle className="text-yellow-800 text-sm">Process Alerts</AlertTitle>
-              <AlertDescription className="text-xs text-yellow-700 space-y-1">
-                {result.warnings.map((w: string, i: number) => <div key={i}>⚠️ {w}</div>)}
-              </AlertDescription>
-            </Alert>
+          {enableCosting && (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 p-3 bg-green-50/30 rounded-xl border border-green-100">
+              <ValidatedInput
+                label="दूध का मूल्य (Milk Price)"
+                value={theo.milkPrice}
+                onChange={v => setT("milkPrice", v)}
+                validation={validatePositive(theo.milkPrice, "Milk price")}
+                unit="₹/kg"
+                colorScheme="green"
+              />
+              <ValidatedInput
+                label="खोया मूल्य (Khoa Price)"
+                value={theo.khoaPrice}
+                onChange={v => setT("khoaPrice", v)}
+                validation={validatePositive(theo.khoaPrice, "Khoa price")}
+                unit="₹/kg"
+                colorScheme="green"
+              />
+              <ValidatedInput
+                label="बैचेस (Batches)"
+                value={theo.batches}
+                onChange={v => setT("batches", v)}
+                validation={validatePositive(theo.batches, "Batches")}
+                unit="qty"
+                colorScheme="blue"
+              />
+              <ValidatedInput
+                label="कार्य दिवस (Operating Days)"
+                value={theo.operDays}
+                onChange={v => setT("operDays", v)}
+                validation={validatePositive(theo.operDays, "Days")}
+                unit="days"
+                colorScheme="blue"
+              />
+            </div>
           )}
 
-        </div>
-      )}
+          <Button onClick={calculateTheo} className="w-full h-11 bg-amber-600 hover:bg-amber-700 text-white font-bold shadow-md">
+            🧮 खोया यील्ड की गणना करें (Calculate Khoa Yield)
+          </Button>
+
+          {/* Results */}
+          {theoResult && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-3 gap-2">
+                <div className="bg-amber-600 text-white p-3 rounded-xl shadow-sm text-center">
+                  <div className="text-[10px] uppercase opacity-80 font-bold">खोया उत्पादन (Khoa Output)</div>
+                  <div className="text-xl font-extrabold">{theoResult.khoaKg.toFixed(1)} kg</div>
+                  <div className="text-[9px] opacity-75">{theoResult.yieldPct.toFixed(1)}% yield</div>
+                </div>
+                <div className="bg-blue-600 text-white p-3 rounded-xl shadow-sm text-center">
+                  <div className="text-[10px] uppercase opacity-80 font-bold">वाष्पीकृत पानी (Water Evaporated)</div>
+                  <div className="text-xl font-extrabold">{theoResult.waterEvapKg.toFixed(1)} kg</div>
+                  <div className="text-[9px] opacity-75">{theoResult.evapRatio.toFixed(1)}% evaporation</div>
+                </div>
+                <div className="bg-orange-600 text-white p-3 rounded-xl shadow-sm text-center">
+                  <div className="text-[10px] uppercase opacity-80 font-bold">प्रोसेसिंग समय (Process Time)</div>
+                  <div className="text-xl font-extrabold">{theoResult.processTimeHr.toFixed(1)} hrs</div>
+                  <div className="text-[9px] opacity-75">Rate: {theoResult.evapRateKgHr.toFixed(1)} kg/hr</div>
+                </div>
+              </div>
+
+              {/* Composition */}
+              <Card className="bg-amber-50/20 border-amber-200">
+                <CardHeader className="p-3 pb-1 border-b border-amber-100">
+                  <CardTitle className="text-xs font-bold text-amber-800 uppercase">🔬 खोया संरचना और घटक (Khoa Composition Estimate)</CardTitle>
+                </CardHeader>
+                <CardContent className="p-3 space-y-2 text-xs">
+                  {[
+                    { label: "दूध का कुल ठोस % (Input Milk TS %)", value: `${theoResult.milkTS.toFixed(2)}% (Fat: ${theo.milkFat}%, SNF: ${theo.milkSNF}%)` },
+                    { label: "खोया में अनुमानित वसा (Estimated Fat in Khoa)", value: `${theoResult.khoaFatPct.toFixed(1)}%`, color: "text-amber-700" },
+                    { label: "खोया में एसएनएफ (Estimated SNF in Khoa)", value: `${theoResult.khoaSNFPct.toFixed(1)}%` },
+                    { label: "नमी प्रतिशत (Estimated Moisture in Khoa)", value: `${theoResult.khoaMoisturePct.toFixed(1)}%` },
+                    { label: "कुल भाप आवश्यकता (Total Steam Required)", value: `${theoResult.steamKg.toFixed(1)} kg` },
+                  ].map((r, i) => (
+                    <div key={i} className="flex justify-between border-b border-amber-100/40 pb-1.5 last:border-none">
+                      <span className="text-slate-500">{r.label}</span>
+                      <span className={`font-semibold ${r.color || "text-slate-800"}`}>{r.value}</span>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+
+              {/* Economics */}
+              {enableCosting && (
+                <Card className="bg-gradient-to-br from-slate-900 to-slate-950 text-white border-none">
+                  <CardHeader className="p-3 pb-1 border-b border-slate-800">
+                    <CardTitle className="text-xs font-bold text-slate-400 uppercase">💰 आर्थिक विश्लेषण (Economics Projections)</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-3 space-y-3">
+                    <div className="grid grid-cols-3 gap-2 text-center text-xs">
+                      <div className="p-2 bg-slate-800/60 rounded-lg">
+                        <span className="text-slate-400 block text-[9px]">दूध कुल लागत (Milk Cost)</span>
+                        <span className="font-semibold text-red-300">₹ {theoResult.milkCost.toLocaleString("en-IN")}</span>
+                      </div>
+                      <div className="p-2 bg-slate-800/60 rounded-lg">
+                        <span className="text-slate-400 block text-[9px]">भाप की कुल लागत (Steam Cost)</span>
+                        <span className="font-semibold text-amber-300">₹ {theoResult.steamCostTotal.toLocaleString("en-IN")}</span>
+                      </div>
+                      <div className="p-2 bg-slate-800/60 rounded-lg">
+                        <span className="text-slate-400 block text-[9px]">खोया बिक्री राजस्व (Revenue)</span>
+                        <span className="font-semibold text-green-300">₹ {theoResult.khoaRevenue.toLocaleString("en-IN")}</span>
+                      </div>
+                    </div>
+
+                    <div className="bg-slate-850 rounded-xl p-3 flex justify-between items-center border border-slate-800">
+                      <div>
+                        <div className="text-xs font-bold text-green-400">सकल लाभ (Gross Profit)</div>
+                        <div className="text-[10px] text-slate-400">({theo.batches} बैच हेतु / For {theo.batches} batches)</div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-base font-black text-green-300">₹ {theoResult.grossProfit.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</div>
+                        <div className="text-[11px] text-slate-400">मार्जिन (Margin): {theoResult.gpm.toFixed(1)}%</div>
+                      </div>
+                    </div>
+
+                    {theoResult.days > 1 && (
+                      <div className="grid grid-cols-3 gap-2 border-t border-slate-800 pt-2.5 text-center text-[11px]">
+                        <div>
+                          <span className="text-slate-400 block text-[9px]">मासिक खोया (Monthly Khoa)</span>
+                          <span className="font-semibold text-slate-200">{theoResult.monthlyKhoa.toFixed(0)} kg</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-400 block text-[9px]">मासिक लागत (Monthly Cost)</span>
+                          <span className="font-semibold text-red-300">₹ {theoResult.monthlyCost.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-400 block text-[9px]">मासिक लाभ (Net profit)</span>
+                          <span className="font-bold text-green-400">₹ {theoResult.monthlyProfit.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</span>
+                        </div>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Warnings */}
+              {theoResult.warnings.length > 0 && (
+                <Alert className="bg-yellow-50 border-yellow-200">
+                  <AlertTriangle className="h-4 w-4 text-yellow-600" />
+                  <AlertTitle className="text-yellow-800 text-xs font-bold">खोया गुणवत्ता चेतावनियाँ (Process Warnings)</AlertTitle>
+                  <AlertDescription className="text-[11px] text-yellow-700 space-y-1">
+                    {theoResult.warnings.map((w: string, i: number) => <div key={i}>• {w}</div>)}
+                  </AlertDescription>
+                </Alert>
+              )}
+            </div>
+          )}
+        </TabsContent>
+
+        {/* TAB 2: TRACKER */}
+        <TabsContent value="actual" className="space-y-4 pt-3">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+            <ValidatedInput
+              label="दूध की मात्रा (Milk Qty)"
+              value={actual.milkQty}
+              onChange={v => setA("milkQty", v)}
+              validation={validatePositive(actual.milkQty, "Milk quantity")}
+              unit="kg"
+              colorScheme="yellow"
+            />
+            <ValidatedInput
+              label="दूध वसा प्रतिशत (Milk Fat %)"
+              value={actual.milkFat}
+              onChange={v => setA("milkFat", v)}
+              validation={validateNumber(actual.milkFat, 1, 15, "Milk fat")}
+              unit="%"
+              colorScheme="yellow"
+            />
+            <ValidatedInput
+              label="दूध एसएनएफ % (Milk SNF %)"
+              value={actual.milkSNF}
+              onChange={v => setA("milkSNF", v)}
+              validation={validateNumber(actual.milkSNF, 5, 12, "Milk SNF")}
+              unit="%"
+              colorScheme="yellow"
+            />
+            <ValidatedInput
+              label="खोया टारगेट ठोस % (Khoa Target TS %)"
+              value={actual.khoaTS}
+              onChange={v => setA("khoaTS", v)}
+              validation={validateNumber(actual.khoaTS, 55, 80, "Khoa TS")}
+              unit="%"
+              colorScheme="orange"
+            />
+            <ValidatedInput
+              label="वास्तविक खोया प्राप्त (Actual Khoa Obt)"
+              value={actual.khoaObtained}
+              onChange={v => setA("khoaObtained", v)}
+              validation={validatePositive(actual.khoaObtained, "Khoa obtained")}
+              unit="kg"
+              colorScheme="orange"
+            />
+          </div>
+
+          <Button onClick={calculateActual} className="w-full h-11 bg-amber-600 hover:bg-amber-700 text-white font-bold shadow-md">
+            📊 वास्तविक बैच दक्षता की तुलना करें (Compare Batch Efficiency)
+          </Button>
+
+          {actualResult && (
+            <div className="space-y-4">
+              {/* Grade Badge */}
+              <div className={`p-4 rounded-xl border flex flex-col items-center justify-center text-center transition-all ${actualResult.gradeColor}`}>
+                <div className="text-4xl mb-1">{actualResult.gradeEmoji}</div>
+                <div className="text-xs uppercase tracking-wider font-bold opacity-85">बैच ग्रेड (Batch Efficiency Grade)</div>
+                <div className="text-xl font-extrabold">{actualResult.grade}</div>
+                <div className="text-sm font-bold mt-1">
+                  खोया रिकवरी दर (Recovery Rate): {actualResult.khoaRecoveryPct.toFixed(1)}%
+                </div>
+              </div>
+
+              {/* Comparison table */}
+              <Card className="border-slate-200">
+                <CardHeader className="p-3 pb-1 border-b">
+                  <CardTitle className="text-xs font-bold text-slate-700 uppercase">📊 आदर्श बनाम वास्तविक (Ideal vs Actual Yield)</CardTitle>
+                </CardHeader>
+                <CardContent className="p-0 text-xs">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 font-semibold">
+                        <th className="p-2.5">पैरामीटर (Parameter)</th>
+                        <th className="p-2.5 text-right">आदर्श (Ideal)</th>
+                        <th className="p-2.5 text-right">वास्तविक (Actual)</th>
+                        <th className="p-2.5 text-right">हानि/नुकसान (Difference)</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      <tr>
+                        <td className="p-2.5 font-medium text-slate-700">खोया मात्रा (Khoa Yield)</td>
+                        <td className="p-2.5 text-right text-slate-600">{actualResult.idealKhoa.toFixed(1)} kg</td>
+                        <td className="p-2.5 text-right text-slate-900 font-bold">{actualResult.khoaObt.toFixed(1)} kg</td>
+                        <td className={`p-2.5 text-right font-bold ${actualResult.khoaObt >= actualResult.idealKhoa ? "text-green-600" : "text-red-600"}`}>
+                          {(actualResult.khoaObt - actualResult.idealKhoa).toFixed(1)} kg
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="p-2.5 font-semibold text-slate-700">अनुमानित वाष्पीकृत पानी (Est. Evaporated Water)</td>
+                        <td className="p-2.5 text-right text-slate-600">{(actualResult.M - actualResult.idealKhoa).toFixed(1)} kg</td>
+                        <td className="p-2.5 text-right text-slate-600">{(actualResult.M - actualResult.khoaObt).toFixed(1)} kg</td>
+                        <td className="p-2.5 text-right text-slate-600">{(actualResult.idealKhoa - actualResult.khoaObt).toFixed(1)} kg</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </CardContent>
+              </Card>
+
+              {/* Alerts */}
+              {actualResult.warnings.length > 0 && (
+                <Alert className="bg-yellow-50 border-yellow-200">
+                  <AlertTriangle className="h-4 w-4 text-yellow-600" />
+                  <AlertTitle className="text-yellow-800 text-xs font-bold">सुधार बिंदु (Actionable Points)</AlertTitle>
+                  <AlertDescription className="text-xs text-yellow-700 space-y-1">
+                    {actualResult.warnings.map((w: string, i: number) => <div key={i}>• {w}</div>)}
+                  </AlertDescription>
+                </Alert>
+              )}
+            </div>
+          )}
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
 
-// ════════════════════════════════════════════════════════════
-// ADVANCED SHRIKHAND YIELD CALCULATOR
-// Drop-in Replacement for ShrikhandYieldCalc()
-//
-// INSTRUCTIONS:
-// 1. Apni file mein purana ShrikhandYieldCalc() function dhundhein
-// 2. Pura block DELETE karein
-// 3. Yeh poora code wahan PASTE karein
-// Koi naya import nahi chahiye.
-// ════════════════════════════════════════════════════════════
 
-// ── CHAKKA TYPE DATABASE ──────────────────────────────────
-const CHAKKA_DB = {
-  cow_std:     { label: "🐄 Cow Chakka (std)",      ts: "32", fat: "10", protein: "12", moisture: "68", acidityPh: "4.0" },
-  cow_rich:    { label: "🐄 Cow Chakka (rich)",     ts: "36", fat: "14", protein: "13", moisture: "64", acidityPh: "3.9" },
-  buffalo:     { label: "🐃 Buffalo Chakka",        ts: "40", fat: "20", protein: "14", moisture: "60", acidityPh: "3.8" },
-  mixed:       { label: "🐄🐃 Mixed Chakka",        ts: "36", fat: "15", protein: "13", moisture: "64", acidityPh: "3.9" },
-  low_fat:     { label: "🥛 Low-fat Chakka",        ts: "30", fat: "4",  protein: "14", moisture: "70", acidityPh: "4.1" },
-} as const;
-
-type ChakkaKey = keyof typeof CHAKKA_DB;
-
-// ── SHRIKHAND VARIETY DATABASE ────────────────────────────
-const SHRIKHAND_VARIETY_DB = {
-  plain:       { label: "🍶 Plain Shrikhand",          sugarRatio: "43", tsTarget: "70", extras: 0,    note: "Classic — sugar only"                   },
-  amrakhand:   { label: "🥭 Amrakhand (mango)",        sugarRatio: "38", tsTarget: "68", extras: 8,    note: "8% mango pulp addition"                 },
-  kesar_elaichi:{ label:"🌸 Kesar-Elaichi",            sugarRatio: "43", tsTarget: "70", extras: 0.5,  note: "Saffron + cardamom — trace addition"    },
-  dry_fruit:   { label: "🥜 Dry Fruit Shrikhand",      sugarRatio: "40", tsTarget: "70", extras: 5,    note: "5% dry fruit addition (cashew/almond)"  },
-  chocolate:   { label: "🍫 Chocolate Shrikhand",      sugarRatio: "42", tsTarget: "71", extras: 3,    note: "3% cocoa powder"                        },
-  strawberry:  { label: "🍓 Strawberry Shrikhand",     sugarRatio: "38", tsTarget: "67", extras: 8,    note: "8% strawberry pulp/crush addition"      },
-} as const;
-
-type ShrikhandVarietyKey = keyof typeof SHRIKHAND_VARIETY_DB;
-
-// ── SUGAR TYPE DATABASE ───────────────────────────────────
-const SUGAR_DB = {
-  refined:     { label: "White Sugar (refined)",   purity: 99.9, solubility: 1.0 },
-  icing:       { label: "Icing Sugar (powder)",    purity: 99.5, solubility: 1.0 },
-  mishri:      { label: "Mishri (rock candy)",     purity: 99.0, solubility: 0.95 },
-  khandsari:   { label: "Khandsari (semi-refined)",purity: 97.0, solubility: 0.98 },
-} as const;
-
-type SugarKey = keyof typeof SUGAR_DB;
-
-// ── PRESETS ───────────────────────────────────────────────
-const SHRIKHAND_PRESETS = {
-  "Small Batch (100 kg)":   { chakkaQty: "100", chakkaTS: "36", sugarAdded: "75",  batches: "3", chakkaPrice: "120", shrikhandPrice: "180", sugarPrice: "42", operDays: "26" },
-  "Medium (500 kg)":        { chakkaQty: "500", chakkaTS: "36", sugarAdded: "375", batches: "1", chakkaPrice: "115", shrikhandPrice: "175", sugarPrice: "40", operDays: "26" },
-  "Large Plant (2000 kg)":  { chakkaQty: "2000",chakkaTS: "38", sugarAdded: "1400",batches: "1", chakkaPrice: "110", shrikhandPrice: "170", sugarPrice: "38", operDays: "26" },
-  "Buffalo Premium":        { chakkaQty: "100", chakkaTS: "40", sugarAdded: "70",  batches: "3", chakkaPrice: "160", shrikhandPrice: "240", sugarPrice: "42", operDays: "26" },
-} as const;
-
-// ── MAIN COMPONENT ────────────────────────────────────────
 function ShrikhandYieldCalc() {
   const { toast } = useToast();
   const { validatePositive, validatePercentage, validateNumber } = useInputValidation();
 
-  const [chakkaType,  setChakkaType]  = useState<ChakkaKey>("mixed");
-  const [variety,     setVariety]     = useState<ShrikhandVarietyKey>("plain");
-  const [sugarType,   setSugarType]   = useState<SugarKey>("refined");
+  const [activeCalc, setActiveCalc] = useState<"theoretical" | "actual">("theoretical");
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [enableCosting, setEnableCosting] = useState(false);
 
-  const [inp, setInp] = useState({
+  // ── Theoretical Inputs (Predictor) ──
+  const [theo, setTheo] = useState({
+    chakkaQty:        "1000",   // kg Chakka input
+    chakkaTS:         "36",     // % Chakka total solids
+    chakkaFat:        "15",     // % Chakka fat
+    sugarAdded:       "720",    // kg sugar added
+    // Advanced
+    chakkaProtein:    "13",     // % Chakka protein
+    sugarPurity:      "99.9",   // % sugar purity (sucrose content)
+    extraIngredient:  "0",      // kg extras (mango pulp, dry fruits, etc.)
+    // Costing
+    chakkaPrice:      "120",    // ₹/kg Chakka
+    sugarPrice:       "42",     // ₹/kg sugar
+    shrikhandPrice:   "180",    // ₹/kg Shrikhand sale price
+    packSize:         "100",    // g pack size
+    packCostPerPack:  "3.5",    // ₹ packaging cost per pack
+    batches:          "1",
+    operDays:         "26",
+  });
+
+  // ── Actual Inputs (Tracker) ──
+  const [actual, setActual] = useState({
     chakkaQty:        "1000",
     chakkaTS:         "36",
     chakkaFat:        "15",
-    chakkaProtein:    "13",
-    sugarAdded:       "720",    // kg
-    extraIngredient:  "0",      // kg (flavour, fruit pulp, etc.)
-    batches:          "1",
-    operDays:         "26",
-    chakkaPrice:      "115",    // ₹/kg
-    shrikhandPrice:   "175",    // ₹/kg
-    sugarPrice:       "40",     // ₹/kg
-    packCostPer100g:  "3.5",    // ₹ per 100g cup
-    packSize:         "100",    // g per pack
+    sugarAdded:       "720",
+    shrikhandObtained:"",
   });
 
-  const [result, setResult] = useState<any>(null);
-  const setF = (k: string, v: string) => setInp(p => ({ ...p, [k]: v }));
+  const [theoResult, setTheoResult]     = useState<any>(null);
+  const [actualResult, setActualResult] = useState<any>(null);
 
-  // Apply chakka type
-  const applyChakka = (key: ChakkaKey) => {
-    const c = CHAKKA_DB[key];
-    setChakkaType(key);
-    setInp(p => ({ ...p, chakkaTS: c.ts, chakkaFat: c.fat, chakkaProtein: c.protein }));
-    setResult(null);
-  };
+  const setT = (k: string, v: string) => setTheo(p => ({ ...p, [k]: v }));
+  const setA = (k: string, v: string) => setActual(p => ({ ...p, [k]: v }));
 
-  // Apply variety
-  const applyVariety = (key: ShrikhandVarietyKey) => {
-    const v = SHRIKHAND_VARIETY_DB[key];
-    setVariety(key);
-    // Auto-calculate sugar for 1000 kg chakka based on ratio
-    const chakka = parseFloat(inp.chakkaQty) || 1000;
-    // sugarRatio = sugar / (chakka + sugar + extras) × 100
-    // Solving: sugar = chakka × sugarRatio% / (1 - sugarRatio% / 100)
-    const sr = parseFloat(v.sugarRatio) / 100;
-    const sugAuto = Math.round(chakka * sr / (1 - sr));
-    const extAuto = Math.round(chakka * v.extras / 100);
-    setInp(p => ({ ...p, sugarAdded: String(sugAuto), extraIngredient: String(extAuto) }));
-    setResult(null);
-  };
+  // ══════════════════════════════════════════════════════════
+  // THEORETICAL CALCULATION (Predictor)
+  // ══════════════════════════════════════════════════════════
+  const calculateTheo = useCallback(() => {
+    const chakka      = parseFloat(theo.chakkaQty)      || 0;
+    const Tc          = parseFloat(theo.chakkaTS)   / 100;
+    const fatC        = parseFloat(theo.chakkaFat)  / 100;
+    const sugar       = parseFloat(theo.sugarAdded)     || 0;
 
-  // Apply preset
-  const applyPreset = (name: keyof typeof SHRIKHAND_PRESETS) => {
-    const pr = SHRIKHAND_PRESETS[name] as Record<string, string>;
-    setInp(p => ({ ...p, ...pr }));
-    toast({ title: "Preset Applied", description: name });
-  };
+    const protC       = parseFloat(theo.chakkaProtein) / 100;
+    const sugarPurity = parseFloat(theo.sugarPurity)  / 100;
+    const extras      = parseFloat(theo.extraIngredient)|| 0;
 
-  // ── CALCULATE ─────────────────────────────────────────
-  const calculate = useCallback(() => {
-    const chakka   = parseFloat(inp.chakkaQty)      || 0;
-    const Tc       = parseFloat(inp.chakkaTS)   / 100;
-    const fatC     = parseFloat(inp.chakkaFat)  / 100;
-    const protC    = parseFloat(inp.chakkaProtein) / 100;
-    const sugar    = parseFloat(inp.sugarAdded)     || 0;
-    const extras   = parseFloat(inp.extraIngredient)|| 0;
-    const bat      = parseFloat(inp.batches)        || 1;
-    const days     = parseFloat(inp.operDays)       || 26;
-    const sugarPurity = SUGAR_DB[sugarType].purity / 100;
-
-    const chakkaPrice     = parseFloat(inp.chakkaPrice)     || 0;
-    const shrikhandPrice  = parseFloat(inp.shrikhandPrice)  || 0;
-    const sugarPrice      = parseFloat(inp.sugarPrice)      || 0;
-    const packCostPer100g = parseFloat(inp.packCostPer100g) || 0;
-    const packSizeG       = parseFloat(inp.packSize)        || 100;
+    const chakkaPrice = parseFloat(theo.chakkaPrice)     || 0;
+    const sugarPrice  = parseFloat(theo.sugarPrice)      || 0;
+    const shrikhandPrice = parseFloat(theo.shrikhandPrice)|| 0;
+    const packSizeG   = parseFloat(theo.packSize)        || 100;
+    const packCost    = parseFloat(theo.packCostPerPack) || 0;
+    const bat         = parseFloat(theo.batches)        || 1;
+    const days        = parseFloat(theo.operDays)       || 26;
 
     if (chakka <= 0 || sugar <= 0) {
-      toast({ variant: "destructive", title: "Invalid values" }); return;
+      toast({ variant: "destructive", title: "त्रुटि (Error)", description: "कृपया चक्का की मात्रा और चीनी की मात्रा सही दर्ज करें।" });
+      return;
     }
 
-    const vari = SHRIKHAND_VARIETY_DB[variety];
+    // Yield
+    const shrikhandKg = chakka + sugar + extras;
+    const yieldPct = (shrikhandKg / chakka) * 100;
 
-    // ── 1. Yield ──────────────────────────────────────
-    // Shrikhand = Chakka + Sugar + Extras
-    const shrikhandKg    = chakka + sugar + extras;
-    const yieldPct       = (shrikhandKg / chakka) * 100; // yield vs chakka
-
-    // ── 2. Final Composition ──────────────────────────
-    // Sugar TS = sugar × purity (pure sucrose is TS)
-    const chakkaTS_kg    = chakka  * Tc;
-    const sugarTS_kg     = sugar   * sugarPurity;
-    const extrasTS_kg    = extras  * 0.15;             // avg 15% TS for fruit pulps
-    const totalTS_kg     = chakkaTS_kg + sugarTS_kg + extrasTS_kg;
-    const finalTSPct     = (totalTS_kg / shrikhandKg) * 100;
+    // Composition
+    const chakkaTS_kg = chakka * Tc;
+    const sugarTS_kg = sugar * sugarPurity;
+    const extrasTS_kg = extras * 0.15; // default 15% TS for pulps
+    const totalTS_kg = chakkaTS_kg + sugarTS_kg + extrasTS_kg;
+    const finalTSPct = (totalTS_kg / shrikhandKg) * 100;
     const finalMoisturePct = 100 - finalTSPct;
 
-    // Sugar % in final product
     const sugarInProdPct = (sugarTS_kg / shrikhandKg) * 100;
+    const fatInProdPct = ((chakka * fatC) / shrikhandKg) * 100;
+    const protInProdPct = ((chakka * protC) / shrikhandKg) * 100;
 
-    // Fat in final product
-    const fatKg          = chakka * fatC;
-    const fatInProdPct   = (fatKg / shrikhandKg) * 100;
+    // Packaging
+    const packsTotal = Math.floor(shrikhandKg * 1000 / packSizeG);
+    const packCostTotal = packsTotal * packCost;
 
-    // Protein in final product
-    const protKg         = chakka * protC;
-    const protInProdPct  = (protKg / shrikhandKg) * 100;
-
-    // ── 3. FSSAI Compliance ───────────────────────────
-    const fssaiFatMin    = 8.5;   // % minimum fat for full fat shrikhand
-    const fssaiTSMin     = 68.0;
-    const fssaiTSMax     = 74.0;
-    const fssaiSugarMax  = 45.0;
-
-    const fssaiFatOK     = fatInProdPct >= fssaiFatMin;
-    const fssaiTSOK      = finalTSPct >= fssaiTSMin && finalTSPct <= fssaiTSMax;
-    const fssaiSugarOK   = sugarInProdPct <= fssaiSugarMax;
-
-    // ── 4. Packs ──────────────────────────────────────
-    const packsTotal     = Math.floor(shrikhandKg * 1000 / packSizeG);
-    const packCostTotal  = packsTotal * packCostPer100g * (packSizeG / 100);
-
-    // ── 5. Batch totals ───────────────────────────────
-    const shrikhandTotal = shrikhandKg * bat;
-    const packsAll       = packsTotal  * bat;
-    const packCostAll    = packCostTotal * bat;
-
-    // ── 6. Economics ─────────────────────────────────
-    const chakkaCost     = chakka * bat * chakkaPrice;
-    const sugarCost      = sugar  * bat * sugarPrice;
+    // Economics
+    const chakkaCost = chakka * bat * chakkaPrice;
+    const sugarCost = sugar * bat * sugarPrice;
+    const packCostAll = packCostTotal * bat;
     const totalInputCost = chakkaCost + sugarCost + packCostAll;
-    const revenue        = shrikhandTotal * shrikhandPrice;
-    const grossProfit    = revenue - totalInputCost;
-    const gpm            = totalInputCost > 0 ? (grossProfit / totalInputCost) * 100 : 0;
-    const costPerKg      = totalInputCost / shrikhandTotal;
-    const revenuePerKgChakka = revenue / (chakka * bat);
+    const shrikhandTotal = shrikhandKg * bat;
+    const revenue = shrikhandTotal * shrikhandPrice;
+    const grossProfit = revenue - totalInputCost;
+    const gpm = totalInputCost > 0 ? (grossProfit / totalInputCost) * 100 : 0;
 
-    // Monthly
-    const monthlyShrikhand = shrikhandKg * days;
-    const monthlyRevenue   = monthlyShrikhand * shrikhandPrice;
-    const monthlyCost      = (chakka * chakkaPrice + sugar * sugarPrice) * days + packCostTotal * days;
+    const monthlyShrikhand = shrikhandKg * bat * days;
+    const monthlyRevenue = monthlyShrikhand * shrikhandPrice;
+    const monthlyCost = totalInputCost * days;
+    const monthlyProfit = grossProfit * days;
 
-    // ── 7. Sensitivity ────────────────────────────────
-    // +1 kg sugar per 100 kg chakka → TS change
-    const dTS_dSugar = ((sugarPurity * 1) / (shrikhandKg + 1)) * 100;
+    // FSSAI checks
+    const fssaiFatMin = 8.5; // for full fat
+    const fssaiTSMin = 60.0; // standard limit
+    const fssaiSugarMax = 42.0;
 
-    // ── 8. Warnings ──────────────────────────────────
     const warnings: string[] = [];
-    let confidence: "high" | "medium" | "low" = "high";
+    if (finalTSPct < fssaiTSMin) warnings.push(`श्रीखंड कुल ठोस (TS) ${finalTSPct.toFixed(1)}% FSSAI सीमा (कम से कम 60%) से कम है। चक्का में नमी कम करें। (Total solids is below FSSAI min 60%.)`);
+    if (fatInProdPct < fssaiFatMin) warnings.push(`वसा प्रतिशत (${fatInProdPct.toFixed(1)}%) मानक (कम से कम 8.5%) से कम है। अधिक वसा वाले चक्का का उपयोग करें। (Fat is below FSSAI min 8.5%.)`);
+    if (sugarInProdPct > fssaiSugarMax) warnings.push(`चीनी की मात्रा (${sugarInProdPct.toFixed(1)}%) अनुशंसित सीमा से अधिक है, उत्पाद अधिक मीठा हो सकता है। (Sugar is high, exceeds 42%.)`);
+    if (Tc < 0.32) warnings.push(`चक्का में कुल ठोस (${(Tc*100).toFixed(0)}%) कम है। पानी निकालने (straining) का समय बढ़ाएं। (Chakka TS is low. Increase whey drainage.)`);
 
-    if (!fssaiTSOK)      { confidence = "medium"; warnings.push(`Final TS ${finalTSPct.toFixed(1)}% outside FSSAI range (68–74%). Adjust chakka TS or sugar ratio.`); }
-    if (!fssaiFatOK)     warnings.push(`Fat ${fatInProdPct.toFixed(1)}% below FSSAI minimum (8.5%) — use richer chakka or add cream.`);
-    if (!fssaiSugarOK)   warnings.push(`Sugar ${sugarInProdPct.toFixed(1)}% exceeds 45% — product too sweet, risk of crystallisation.`);
-    if (Tc < 0.30)       warnings.push(`Chakka TS ${(Tc*100).toFixed(0)}% is low — drain whey longer to concentrate chakka before mixing.`);
-    if (sugarInProdPct < 35) warnings.push(`Sugar ${sugarInProdPct.toFixed(1)}% below 35% — insufficient water activity control, shorter shelf life.`);
-
-    setResult({
-      shrikhandKg, yieldPct,
-      chakkaTS_kg, sugarTS_kg, totalTS_kg,
-      finalTSPct, finalMoisturePct, sugarInProdPct, fatInProdPct, protInProdPct,
-      fssaiFatOK, fssaiTSOK, fssaiSugarOK,
+    setTheoResult({
+      shrikhandKg, yieldPct, finalTSPct, finalMoisturePct,
+      sugarInProdPct, fatInProdPct, protInProdPct,
       packsTotal, packCostTotal,
-      shrikhandTotal, packsAll, packCostAll,
-      chakkaCost, sugarCost, totalInputCost,
-      revenue, grossProfit, gpm, costPerKg, revenuePerKgChakka,
-      monthlyShrikhand, monthlyRevenue, monthlyCost,
-      dTS_dSugar,
-      warnings, confidence, chakka, bat, days,
+      chakkaCost, sugarCost, packCostAll, totalInputCost, shrikhandTotal, revenue, grossProfit, gpm,
+      monthlyShrikhand, monthlyRevenue, monthlyCost, monthlyProfit,
+      warnings, chakka, bat, days
     });
 
     toast({
-      title: "✅ Calculated",
-      description: `Shrikhand: ${shrikhandKg.toFixed(1)} kg | TS: ${finalTSPct.toFixed(1)}% | GPM: ${gpm.toFixed(1)}%`,
+      title: "🧮 गणना पूरी (Calculated)",
+      description: `श्रीखंड यील्ड: ${shrikhandKg.toFixed(1)} kg (${yieldPct.toFixed(0)}%)`,
     });
-  }, [inp, variety, sugarType, toast]);
+  }, [theo, toast]);
 
-  const vari  = SHRIKHAND_VARIETY_DB[variety];
-  const sugar = SUGAR_DB[sugarType];
+  // ══════════════════════════════════════════════════════════
+  // ACTUAL CALCULATION (Tracker)
+  // ══════════════════════════════════════════════════════════
+  const calculateActual = useCallback(() => {
+    const chakka      = parseFloat(actual.chakkaQty)      || 0;
+    const sugar       = parseFloat(actual.sugarAdded)     || 0;
+    const shrikhandObt= parseFloat(actual.shrikhandObtained) || 0;
 
-  // ── RENDER ────────────────────────────────────────────
+    const extras      = parseFloat(theo.extraIngredient)  || 0;
+
+    if (chakka <= 0 || sugar <= 0 || shrikhandObt <= 0) {
+      toast({ variant: "destructive", title: "त्रुटि (Error)", description: "कृपया चक्का, चीनी और वास्तविक श्रीखंड मात्रा दर्ज करें।" });
+      return;
+    }
+
+    const idealShrikhand = chakka + sugar + extras;
+    const shrikhandRecoveryPct = idealShrikhand > 0 ? (shrikhandObt / idealShrikhand) * 100 : 0;
+    const massLossKg = idealShrikhand - shrikhandObt;
+    const massLossPct = (massLossKg / idealShrikhand) * 100;
+
+    // Efficiency grade
+    let grade = "", gradeColor = "", gradeEmoji = "";
+    if (shrikhandRecoveryPct >= 99 && massLossPct <= 0.5) {
+      grade = "Excellent (उत्कृष्ट)"; gradeColor = "text-green-700 bg-green-50 border-green-300"; gradeEmoji = "🏆";
+    } else if (shrikhandRecoveryPct >= 97) {
+      grade = "Good (अच्छा)"; gradeColor = "text-blue-700 bg-blue-50 border-blue-300"; gradeEmoji = "👍";
+    } else if (shrikhandRecoveryPct >= 94) {
+      grade = "Needs Improvement (सुधार ज़रूरी)"; gradeColor = "text-yellow-700 bg-yellow-50 border-yellow-300"; gradeEmoji = "⚠️";
+    } else {
+      grade = "Action Required (कार्रवाई ज़रूरी)"; gradeColor = "text-red-700 bg-red-50 border-red-300"; gradeEmoji = "🔴";
+    }
+
+    const warnings: string[] = [];
+    if (shrikhandRecoveryPct < 96) warnings.push(`श्रीखंड रिकवरी ${shrikhandRecoveryPct.toFixed(1)}% कम है। बर्तन की दीवार पर चिपके रहने से हुए नुकसान की जांच करें। (Shrikhand recovery is low. Check for process wastage.)`);
+
+    setActualResult({
+      idealShrikhand,
+      shrikhandRecoveryPct, massLossKg, massLossPct,
+      grade, gradeColor, gradeEmoji,
+      warnings, chakka, shrikhandObt
+    });
+
+    toast({
+      title: "📋 ट्रैकर गणना पूरी (Tracker Calculated)",
+      description: `रिकवरी (Recovery): ${shrikhandRecoveryPct.toFixed(1)}% — ${grade}`,
+    });
+  }, [actual, theo.extraIngredient, toast]);
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 w-full">
+      {/* Header */}
+      <Alert className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+        <Droplet className="h-4 w-4 text-blue-600" />
+        <AlertTitle className="text-blue-800 font-bold">श्रीखंड यील्ड और मिश्रण ट्रैकर (Shrikhand Yield & Blending Tracker)</AlertTitle>
+        <AlertDescription className="text-xs text-blue-700">
+          चक्का, चीनी और अन्य अतिरिक्त घटकों (mango pulp/dry fruits) के आधार पर श्रीखंड उत्पादन, अंतिम वसा/ठोस संतुलन और लागत अनुमान।<br/>
+          <span className="text-blue-600 font-medium">Shrikhand blending yield, fat & total solids composition, packaging cost & profit margin.</span>
+        </AlertDescription>
+      </Alert>
 
-      {/* ── CHAKKA TYPE ──────────────────────────────── */}
-      <div className="space-y-1">
-        <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Chakka Type</Label>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-          {(Object.keys(CHAKKA_DB) as ChakkaKey[]).map(key => (
-            <button key={key} onClick={() => applyChakka(key)}
-              className={`p-2 rounded-lg border text-xs font-semibold transition-all text-left leading-tight shadow-sm
-                ${chakkaType === key
-                  ? "bg-purple-600 text-white border-purple-600 shadow-md"
-                  : "bg-white text-slate-600 border-slate-200 hover:border-purple-300"
-                }`}>
-              {CHAKKA_DB[key].label}
-              <div className={`text-[9px] mt-0.5 ${chakkaType === key ? "opacity-80" : "text-slate-400"}`}>
-                TS: {CHAKKA_DB[key].ts}% · Fat: {CHAKKA_DB[key].fat}%
-              </div>
-            </button>
-          ))}
-        </div>
-      </div>
+      {/* Tabs */}
+      <Tabs value={activeCalc} onValueChange={v => setActiveCalc(v as "theoretical" | "actual")}>
+        <TabsList className="grid grid-cols-2 bg-blue-100/55 p-1 rounded-lg">
+          <TabsTrigger value="theoretical" className="text-xs font-bold data-[state=active]:bg-blue-600 data-[state=active]:text-white">
+            🧮 Predictor (अनुमान)
+          </TabsTrigger>
+          <TabsTrigger value="actual" className="text-xs font-bold data-[state=active]:bg-indigo-600 data-[state=active]:text-white">
+            📋 Tracker (वास्तविक)
+          </TabsTrigger>
+        </TabsList>
 
-      {/* ── SHRIKHAND VARIETY ────────────────────────── */}
-      <div className="space-y-1">
-        <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Shrikhand Variety</Label>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-          {(Object.keys(SHRIKHAND_VARIETY_DB) as ShrikhandVarietyKey[]).map(key => (
-            <button key={key} onClick={() => applyVariety(key)}
-              className={`p-2 rounded-lg border text-xs font-semibold transition-all text-left leading-tight shadow-sm
-                ${variety === key
-                  ? "bg-pink-600 text-white border-pink-600 shadow-md"
-                  : "bg-white text-slate-600 border-slate-200 hover:border-pink-300"
-                }`}>
-              {SHRIKHAND_VARIETY_DB[key].label}
-              <div className={`text-[9px] mt-0.5 ${variety === key ? "opacity-80" : "text-slate-400"}`}>
-                Sugar: ~{SHRIKHAND_VARIETY_DB[key].sugarRatio}% · TS: {SHRIKHAND_VARIETY_DB[key].tsTarget}%
-              </div>
-            </button>
-          ))}
-        </div>
-        <p className="text-[10px] text-pink-700 bg-pink-50 px-2 py-1 rounded border border-pink-100">
-          📌 {vari.note}
-        </p>
-      </div>
-
-      {/* ── SUGAR TYPE ───────────────────────────────── */}
-      <div className="space-y-1">
-        <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Sugar Type</Label>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-          {(Object.keys(SUGAR_DB) as SugarKey[]).map(key => (
-            <button key={key} onClick={() => setSugarType(key)}
-              className={`p-2 rounded-lg border text-xs font-semibold transition-all text-left leading-tight shadow-sm
-                ${sugarType === key
-                  ? "bg-violet-600 text-white border-violet-600 shadow-md"
-                  : "bg-white text-slate-600 border-slate-200 hover:border-violet-300"
-                }`}>
-              {SUGAR_DB[key].label}
-              <div className={`text-[9px] mt-0.5 ${sugarType === key ? "opacity-80" : "text-slate-400"}`}>
-                Purity: {SUGAR_DB[key].purity}%
-              </div>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* ── PRESETS ──────────────────────────────────── */}
-      <div className="space-y-1">
-        <Label className="text-xs font-bold text-slate-500 uppercase">Batch Presets</Label>
-        <div className="flex flex-wrap gap-2">
-          {(Object.keys(SHRIKHAND_PRESETS) as Array<keyof typeof SHRIKHAND_PRESETS>).map(name => (
-            <button key={name} onClick={() => applyPreset(name)}
-              className="px-3 py-1 rounded-full border border-purple-200 bg-white text-xs font-semibold text-purple-700 hover:bg-purple-600 hover:text-white transition-all shadow-sm">
-              {name}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* ── INPUTS ───────────────────────────────────── */}
-      <Card className="border-purple-100 bg-white">
-        <CardHeader className="p-3 pb-2 bg-purple-50 border-b border-purple-100">
-          <CardTitle className="text-xs font-bold text-purple-700 uppercase">🫙 Composition Inputs</CardTitle>
-        </CardHeader>
-        <CardContent className="p-3 grid grid-cols-2 gap-3">
-          <ValidatedInput label="Chakka Quantity" value={inp.chakkaQty} onChange={v => setF("chakkaQty", v)} validation={validatePositive(inp.chakkaQty, "Chakka")} unit="kg" colorScheme="purple" />
-          <ValidatedInput label="Batches" value={inp.batches} onChange={v => setF("batches", v)} validation={validatePositive(inp.batches, "Batches")} colorScheme="blue" />
-          <ValidatedInput label="Chakka TS %" value={inp.chakkaTS} onChange={v => setF("chakkaTS", v)} validation={validateNumber(inp.chakkaTS, 25, 50, "Chakka TS")} unit="%" helpText="Typical: 30–42%" colorScheme="purple" />
-          <ValidatedInput label="Chakka Fat %" value={inp.chakkaFat} onChange={v => setF("chakkaFat", v)} validation={validatePercentage(inp.chakkaFat, "Fat")} unit="%" colorScheme="orange" />
-          <ValidatedInput label="Chakka Protein %" value={inp.chakkaProtein} onChange={v => setF("chakkaProtein", v)} validation={validatePercentage(inp.chakkaProtein, "Protein")} unit="%" colorScheme="blue" />
-          <ValidatedInput label="Sugar Added" value={inp.sugarAdded} onChange={v => setF("sugarAdded", v)} validation={validatePositive(inp.sugarAdded, "Sugar")} unit="kg" colorScheme="pink" />
-          <ValidatedInput label="Extras (pulp/dry fruit)" value={inp.extraIngredient} onChange={v => setF("extraIngredient", v)} validation={{ isValid: true, severity: "info" }} unit="kg" helpText={`${vari.note}`} colorScheme="green" />
-          <ValidatedInput label="Operating Days/Month" value={inp.operDays} onChange={v => setF("operDays", v)} validation={{ isValid: true, severity: "info" }} colorScheme="blue" />
-        </CardContent>
-      </Card>
-
-      {/* ── PACKAGING & PRICING ──────────────────────── */}
-      <Card className="border-green-100 bg-white">
-        <CardHeader className="p-3 pb-2 bg-green-50 border-b border-green-100">
-          <CardTitle className="text-xs font-bold text-green-700 uppercase">💰 Packaging & Pricing</CardTitle>
-        </CardHeader>
-        <CardContent className="p-3 grid grid-cols-2 sm:grid-cols-3 gap-3">
-          <ValidatedInput label="Pack Size" value={inp.packSize} onChange={v => setF("packSize", v)} validation={validatePositive(inp.packSize, "Pack size")} unit="g" helpText="100g, 200g, 500g" colorScheme="slate" />
-          <ValidatedInput label="Pack Cost" value={inp.packCostPer100g} onChange={v => setF("packCostPer100g", v)} validation={{ isValid: true, severity: "info" }} unit="₹/100g" colorScheme="slate" />
-          <ValidatedInput label="Chakka Price" value={inp.chakkaPrice} onChange={v => setF("chakkaPrice", v)} validation={{ isValid: true, severity: "info" }} unit="₹/kg" colorScheme="purple" />
-          <ValidatedInput label="Sugar Price" value={inp.sugarPrice} onChange={v => setF("sugarPrice", v)} validation={{ isValid: true, severity: "info" }} unit="₹/kg" colorScheme="pink" />
-          <ValidatedInput label="Shrikhand Price" value={inp.shrikhandPrice} onChange={v => setF("shrikhandPrice", v)} validation={{ isValid: true, severity: "info" }} unit="₹/kg" colorScheme="green" />
-        </CardContent>
-      </Card>
-
-      {/* ── CALCULATE ───────────────────────────────── */}
-      <Button onClick={calculate}
-        className="w-full h-11 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold shadow-md">
-        <Calculator className="mr-2 h-4 w-4" />
-        Calculate Shrikhand Yield
-      </Button>
-
-      {/* ── RESULTS ─────────────────────────────────── */}
-      {result && (
-        <div className="space-y-3 animate-in fade-in">
-
-          {/* Main KPIs */}
-          <div className="grid grid-cols-3 gap-2">
-            {[
-              { label: "Shrikhand Yield", value: result.shrikhandKg.toFixed(1),  unit: "kg/batch",  color: "bg-purple-600" },
-              { label: "Final TS %",      value: result.finalTSPct.toFixed(1),   unit: "% w/w",     color: `${result.fssaiTSOK ? "bg-green-600" : "bg-red-500"}` },
-              { label: "Total Packs",     value: result.packsTotal.toLocaleString("en-IN"), unit: `${inp.packSize}g packs`, color: "bg-pink-600" },
-            ].map((k, i) => (
-              <div key={i} className={`${k.color} text-white p-3 rounded-xl text-center shadow`}>
-                <div className="text-[9px] uppercase opacity-80 font-bold">{k.label}</div>
-                <div className="text-2xl font-black">{k.value}</div>
-                <div className="text-[9px] opacity-70">{k.unit}</div>
-              </div>
-            ))}
+        {/* TAB 1: PREDICTOR */}
+        <TabsContent value="theoretical" className="space-y-4 pt-3">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <ValidatedInput
+              label="चक्का की मात्रा (Chakka Qty)"
+              value={theo.chakkaQty}
+              onChange={v => setT("chakkaQty", v)}
+              validation={validatePositive(theo.chakkaQty, "Chakka quantity")}
+              unit="kg"
+              colorScheme="blue"
+            />
+            <ValidatedInput
+              label="चक्का ठोस प्रतिशत (Chakka TS %)"
+              value={theo.chakkaTS}
+              onChange={v => setT("chakkaTS", v)}
+              validation={validateNumber(theo.chakkaTS, 25, 45, "Chakka TS")}
+              unit="%"
+              colorScheme="blue"
+            />
+            <ValidatedInput
+              label="चक्का वसा प्रतिशत (Chakka Fat %)"
+              value={theo.chakkaFat}
+              onChange={v => setT("chakkaFat", v)}
+              validation={validateNumber(theo.chakkaFat, 2, 25, "Chakka fat")}
+              unit="%"
+              colorScheme="blue"
+            />
+            <ValidatedInput
+              label="चीनी की मात्रा (Sugar Added)"
+              value={theo.sugarAdded}
+              onChange={v => setT("sugarAdded", v)}
+              validation={validatePositive(theo.sugarAdded, "Sugar added")}
+              unit="kg"
+              colorScheme="orange"
+            />
           </div>
 
-          {/* FSSAI Compliance */}
-          <Card className={`border-2 ${result.fssaiTSOK && result.fssaiFatOK && result.fssaiSugarOK ? "border-green-300 bg-green-50" : "border-red-300 bg-red-50"}`}>
-            <CardHeader className="p-3 pb-1 border-b border-current/20">
-              <CardTitle className="text-sm font-bold text-slate-700">📜 FSSAI Compliance Check</CardTitle>
-            </CardHeader>
-            <CardContent className="p-3 space-y-2">
-            // ✅ SAHI CODE
-          {[
-            { label: "Total Solids",  actual: `${result.finalTSPct.toFixed(1)}%`,    ok: result.fssaiTSOK,    limit: "68–74%" },
-            { label: "Fat %",         actual: `${result.fatInProdPct.toFixed(1)}%`,  ok: result.fssaiFatOK,   limit: "≥8.5% (full fat)" },
-            { label: "Sugar %",       actual: `${result.sugarInProdPct.toFixed(1)}%`,ok: result.fssaiSugarOK, limit: "≤45%"  },
-          ].map((r, i) => (
-                <div key={i} className="flex justify-between items-center text-sm">
-                  <span className="text-slate-600">{r.label}</span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-slate-500 text-xs">(limit: {r.limit})</span>
-                    <span className={`font-bold ${r.ok ? "text-green-700" : "text-red-600"}`}>{r.actual}</span>
-                    <span>{r.ok ? "✅" : "❌"}</span>
-                  </div>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
+          {/* Advanced Settings */}
+          <Button
+            variant="ghost"
+            onClick={() => setShowAdvanced(!showAdvanced)}
+            className="w-full flex justify-between items-center text-xs font-semibold py-2 px-3 border border-blue-100 hover:bg-blue-50/50 rounded-lg"
+          >
+            <span className="flex items-center gap-1.5 text-slate-700">
+              <Settings2 className="w-3.5 h-3.5" /> एडवांस्ड सेटिंग्स (Advanced Settings)
+            </span>
+            <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${showAdvanced ? "rotate-180" : ""}`} />
+          </Button>
 
-          {/* Composition breakdown */}
-          <Card className="bg-white border-purple-100">
-            <CardHeader className="p-3 pb-1 border-b border-purple-100">
-              <CardTitle className="text-sm text-purple-800">🧪 Final Product Composition</CardTitle>
-            </CardHeader>
-            <CardContent className="p-3 space-y-2 text-sm">
-              {[
-                { label: "Chakka (base)",           value: `${result.chakka.toFixed(0)} kg (${(result.chakka/result.shrikhandKg*100).toFixed(1)}%)`, color: "text-purple-700" },
-                { label: "Chakka TS contributed",   value: `${result.chakkaTS_kg.toFixed(2)} kg`,  color: "text-purple-700" },
-                { label: "Sugar TS contributed",    value: `${result.sugarTS_kg.toFixed(2)} kg`,   color: "text-pink-700"   },
-                { label: "Total Solids in product", value: `${result.totalTS_kg.toFixed(2)} kg (${result.finalTSPct.toFixed(1)}%)`, color: "text-slate-800 font-black" },
-                { label: "Moisture",                value: `${result.finalMoisturePct.toFixed(1)}%`, color: "text-blue-700"  },
-                { label: "Fat in product",          value: `${result.fatInProdPct.toFixed(2)}%`,   color: "text-orange-700" },
-                { label: "Protein in product",      value: `${result.protInProdPct.toFixed(2)}%`,  color: "text-blue-700"   },
-              ].map((r, i) => (
-                <div key={i} className="flex justify-between">
-                  <span className="text-slate-500">{r.label}</span>
-                  <span className={`font-bold ${r.color}`}>{r.value}</span>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-
-          {/* Packing details */}
-          <div className="grid grid-cols-2 gap-3">
-            <Card className="bg-pink-50 border-pink-200">
-              <CardContent className="p-3 space-y-1 text-xs">
-                <div className="font-bold text-pink-700 mb-1 text-sm">📦 Packing ({inp.packSize}g cups)</div>
-                {[
-                  { label: "Packs (1 batch)",  value: result.packsTotal.toLocaleString("en-IN") },
-                  { label: "Packing cost",     value: `₹${result.packCostTotal.toFixed(0)}` },
-                  { label: "Yield vs chakka",  value: `${result.yieldPct.toFixed(1)}%` },
-                ].map((r, i) => (
-                  <div key={i} className="flex justify-between">
-                    <span className="text-slate-500">{r.label}</span>
-                    <span className="font-bold">{r.value}</span>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-
-            <Card className="bg-violet-50 border-violet-200">
-              <CardContent className="p-3 space-y-1 text-xs">
-                <div className="font-bold text-violet-700 mb-1 text-sm">📈 Sensitivity</div>
-                <div className="flex justify-between">
-                  <span className="text-slate-500">+1 kg sugar per 100 kg chakka</span>
-                  <span className="font-bold text-violet-700">+{result.dTS_dSugar.toFixed(2)}% TS</span>
-                </div>
-                <div className="text-[10px] text-violet-600 mt-1">Reduce sugar to lower TS if exceeding 74%</div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Multi-batch */}
-          {result.bat > 1 && (
-            <Card className="bg-indigo-50 border-indigo-200">
-              <CardContent className="p-3 text-sm space-y-1">
-                <div className="font-bold text-indigo-700 mb-1">{result.bat} Batches</div>
-                {[
-                  { label: "Total shrikhand", value: `${result.shrikhandTotal.toFixed(1)} kg` },
-                  { label: "Total packs",     value: result.packsAll.toLocaleString("en-IN")  },
-                  { label: "Pack cost total", value: `₹${result.packCostAll.toFixed(0)}`       },
-                ].map((r, i) => (
-                  <div key={i} className="flex justify-between">
-                    <span className="text-slate-500">{r.label}</span>
-                    <span className="font-bold text-indigo-700">{r.value}</span>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
+          {showAdvanced && (
+            <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-100 grid grid-cols-2 md:grid-cols-3 gap-3">
+              <ValidatedInput
+                label="चक्का प्रोटीन प्रतिशत (Chakka Protein %)"
+                value={theo.chakkaProtein}
+                onChange={v => setT("chakkaProtein", v)}
+                validation={validateNumber(theo.chakkaProtein, 5, 20, "Chakka protein")}
+                unit="%"
+                colorScheme="blue"
+              />
+              <ValidatedInput
+                label="चीनी शुद्धता (Sugar Purity %)"
+                value={theo.sugarPurity}
+                onChange={v => setT("sugarPurity", v)}
+                validation={validateNumber(theo.sugarPurity, 95, 100, "Sugar purity")}
+                unit="%"
+                colorScheme="blue"
+              />
+              <ValidatedInput
+                label="अन्य अतिरिक्त सामग्री (Extras Pulp/Nuts)"
+                value={theo.extraIngredient}
+                onChange={v => setT("extraIngredient", v)}
+                validation={validatePositive(theo.extraIngredient, "Extra ingredient")}
+                unit="kg"
+                colorScheme="orange"
+              />
+            </div>
           )}
 
-          {/* Economics */}
-          <Card className="bg-gradient-to-br from-slate-800 to-slate-900 text-white border-none">
-            <CardContent className="p-3 space-y-2 text-sm">
-              <div className="text-xs text-slate-300 font-bold uppercase mb-1">💰 Economics ({result.bat} batch{result.bat > 1 ? "es" : ""})</div>
-              {[
-                { label: "Chakka cost",    value: `-₹ ${result.chakkaCost.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,       color: "text-red-400"    },
-                { label: "Sugar cost",     value: `-₹ ${result.sugarCost.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,         color: "text-orange-400" },
-                { label: "Packing cost",   value: `-₹ ${result.packCostAll.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,       color: "text-yellow-400" },
-                { label: "Revenue",        value: `+₹ ${result.revenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,           color: "text-green-300"  },
-                { label: "Gross Profit",   value: `₹ ${result.grossProfit.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,        color: `${result.grossProfit >= 0 ? "text-green-300 font-black" : "text-red-400 font-black"}` },
-              ].map((r, i) => (
-                <div key={i} className={`flex justify-between ${i === 4 ? "border-t border-slate-700 pt-2" : ""}`}>
-                  <span className="text-slate-400">{r.label}</span>
-                  <span className={`font-bold ${r.color}`}>{r.value}</span>
-                </div>
-              ))}
-              <div className="grid grid-cols-3 gap-2 mt-2">
-                {[
-                  { label: "Gross Margin",       value: `${result.gpm.toFixed(1)}%`                              },
-                  { label: "Cost/kg shrikhand",  value: `₹${result.costPerKg.toFixed(2)}`                        },
-                  { label: "Revenue/kg chakka",  value: `₹${result.revenuePerKgChakka.toFixed(2)}`               },
-                ].map((c, i) => (
-                  <div key={i} className="bg-slate-700 rounded p-2 text-center">
-                    <div className="text-[9px] text-slate-400 font-bold">{c.label}</div>
-                    <div className="font-black text-white text-sm">{c.value}</div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Monthly */}
-          <Card className="bg-green-50 border-green-200">
-            <CardContent className="p-3 text-sm space-y-1">
-              <div className="font-bold text-green-700 text-sm mb-1">📅 Monthly ({result.days} days)</div>
-              {[
-                { label: "Shrikhand production", value: `${result.monthlyShrikhand.toFixed(0)} kg` },
-                { label: "Revenue",              value: `₹${result.monthlyRevenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}` },
-                { label: "Total cost",           value: `₹${result.monthlyCost.toLocaleString("en-IN", { maximumFractionDigits: 0 })}` },
-              ].map((r, i) => (
-                <div key={i} className="flex justify-between">
-                  <span className="text-slate-500">{r.label}</span>
-                  <span className="font-bold text-green-700">{r.value}</span>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-
-          {/* Warnings */}
-          {result.warnings.length > 0 && (
-            <Alert className="bg-yellow-50 border-yellow-300">
-              <AlertTriangle className="h-4 w-4 text-yellow-600" />
-              <AlertTitle className="text-yellow-800 text-sm">Quality / Compliance Alerts</AlertTitle>
-              <AlertDescription className="text-xs text-yellow-700 space-y-1">
-                {result.warnings.map((w: string, i: number) => <div key={i}>⚠️ {w}</div>)}
-              </AlertDescription>
-            </Alert>
-          )}
-
-          {/* Formula */}
-          <div className="bg-slate-50 border rounded-lg p-3 text-[10px] font-mono text-slate-400 space-y-1">
-            <div className="font-bold text-slate-600 text-xs mb-1">📐 Formula:</div>
-            <div>ShrikhandKg = Chakka + Sugar + Extras = {result.chakka} + {inp.sugarAdded} + {inp.extraIngredient} = {result.shrikhandKg.toFixed(2)} kg</div>
-            <div>FinalTS% = (ChakkaTS_kg + SugarTS_kg + ExtrasTS_kg) / ShrikhandKg × 100</div>
-            <div>= ({result.chakkaTS_kg.toFixed(2)} + {result.sugarTS_kg.toFixed(2)}) / {result.shrikhandKg.toFixed(2)} × 100 = {result.finalTSPct.toFixed(2)}%</div>
+          {/* Costing Toggle */}
+          <div className="flex items-center gap-2">
+            <Checkbox id="shrikhand-costing" checked={enableCosting} onCheckedChange={(c) => setEnableCosting(!!c)} />
+            <Label htmlFor="shrikhand-costing" className="text-xs font-semibold cursor-pointer text-slate-700 flex items-center gap-1">
+              <Coins className="w-3.5 h-3.5 text-green-600" /> कॉस्टिंग और प्रॉफिटेबिलिटी शामिल करें (Enable Costing & Profitability)
+            </Label>
           </div>
 
-        </div>
-      )}
+          {enableCosting && (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 p-3 bg-green-50/30 rounded-xl border border-green-100">
+              <ValidatedInput
+                label="चक्का का मूल्य (Chakka Price)"
+                value={theo.chakkaPrice}
+                onChange={v => setT("chakkaPrice", v)}
+                validation={validatePositive(theo.chakkaPrice, "Chakka price")}
+                unit="₹/kg"
+                colorScheme="green"
+              />
+              <ValidatedInput
+                label="चीनी का मूल्य (Sugar Price)"
+                value={theo.sugarPrice}
+                onChange={v => setT("sugarPrice", v)}
+                validation={validatePositive(theo.sugarPrice, "Sugar price")}
+                unit="₹/kg"
+                colorScheme="green"
+              />
+              <ValidatedInput
+                label="श्रीखंड मूल्य (Shrikhand Price)"
+                value={theo.shrikhandPrice}
+                onChange={v => setT("shrikhandPrice", v)}
+                validation={validatePositive(theo.shrikhandPrice, "Shrikhand price")}
+                unit="₹/kg"
+                colorScheme="green"
+              />
+              <ValidatedInput
+                label="पैकेजिंग साइज (Pack Size)"
+                value={theo.packSize}
+                onChange={v => setT("packSize", v)}
+                validation={validatePositive(theo.packSize, "Pack size")}
+                unit="g"
+                colorScheme="blue"
+              />
+              <ValidatedInput
+                label="पैकेट पैके. लागत (Pack Packaging Cost)"
+                value={theo.packCostPerPack}
+                onChange={v => setT("packCostPerPack", v)}
+                validation={validatePositive(theo.packCostPerPack, "Pack cost")}
+                unit="₹/pack"
+                colorScheme="green"
+              />
+              <ValidatedInput
+                label="बैचेस (Batches)"
+                value={theo.batches}
+                onChange={v => setT("batches", v)}
+                validation={validatePositive(theo.batches, "Batches")}
+                unit="qty"
+                colorScheme="blue"
+              />
+              <ValidatedInput
+                label="कार्य दिवस (Operating Days)"
+                value={theo.operDays}
+                onChange={v => setT("operDays", v)}
+                validation={validatePositive(theo.operDays, "Days")}
+                unit="days"
+                colorScheme="blue"
+              />
+            </div>
+          )}
+
+          <Button onClick={calculateTheo} className="w-full h-11 bg-blue-600 hover:bg-blue-700 text-white font-bold shadow-md">
+            🧮 श्रीखंड यील्ड की गणना करें (Calculate Shrikhand Yield)
+          </Button>
+
+          {/* Results */}
+          {theoResult && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-3 gap-2">
+                <div className="bg-blue-600 text-white p-3 rounded-xl shadow-sm text-center">
+                  <div className="text-[10px] uppercase opacity-80 font-bold">श्रीखंड उत्पादन (Shrikhand Output)</div>
+                  <div className="text-xl font-extrabold">{theoResult.shrikhandKg.toFixed(1)} kg</div>
+                  <div className="text-[9px] opacity-75">{theoResult.yieldPct.toFixed(1)}% yield vs chakka</div>
+                </div>
+                <div className="bg-indigo-600 text-white p-3 rounded-xl shadow-sm text-center">
+                  <div className="text-[10px] uppercase opacity-80 font-bold">कुल पैकेट्स (Packs Output)</div>
+                  <div className="text-xl font-extrabold">{theoResult.packsTotal} packs</div>
+                  <div className="text-[9px] opacity-75">Size: {theo.packSize}g</div>
+                </div>
+                <div className="bg-cyan-600 text-white p-3 rounded-xl shadow-sm text-center">
+                  <div className="text-[10px] uppercase opacity-80 font-bold">फाइनल वसा % (Final Fat %)</div>
+                  <div className="text-xl font-extrabold">{theoResult.fatInProdPct.toFixed(2)}%</div>
+                  <div className="text-[9px] opacity-75">TS: {theoResult.finalTSPct.toFixed(1)}%</div>
+                </div>
+              </div>
+
+              {/* Composition */}
+              <Card className="bg-blue-50/20 border-blue-200">
+                <CardHeader className="p-3 pb-1 border-b border-blue-100">
+                  <CardTitle className="text-xs font-bold text-blue-800 uppercase">🔬 श्रीखंड संरचना विवरण (Shrikhand Composition)</CardTitle>
+                </CardHeader>
+                <CardContent className="p-3 space-y-2 text-xs">
+                  {[
+                    { label: "कुल ठोस मात्रा (Total solids in Shrikhand)", value: `${theoResult.finalTSPct.toFixed(2)}% (Moisture: ${theoResult.finalMoisturePct.toFixed(1)}%)` },
+                    { label: "श्रीखंड में कुल वसा प्रतिशत (Final Fat %)", value: `${theoResult.fatInProdPct.toFixed(2)}%`, color: "text-blue-700" },
+                    { label: "श्रीखंड में कुल प्रोटीन % (Final Protein %)", value: `${theoResult.protInProdPct.toFixed(2)}%` },
+                    { label: "अंतिम चीनी प्रतिशत (Estimated Sugar %)", value: `${theoResult.sugarInProdPct.toFixed(1)}%` },
+                    { label: "पैकेजिंग कुल लागत (Packaging cost)", value: `₹ ${theoResult.packCostTotal.toFixed(0)}` },
+                  ].map((r, i) => (
+                    <div key={i} className="flex justify-between border-b border-blue-100/40 pb-1.5 last:border-none">
+                      <span className="text-slate-500">{r.label}</span>
+                      <span className={`font-semibold ${r.color || "text-slate-800"}`}>{r.value}</span>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+
+              {/* Economics */}
+              {enableCosting && (
+                <Card className="bg-gradient-to-br from-slate-900 to-slate-950 text-white border-none">
+                  <CardHeader className="p-3 pb-1 border-b border-slate-800">
+                    <CardTitle className="text-xs font-bold text-slate-400 uppercase">💰 आर्थिक विश्लेषण (Economics Projections)</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-3 space-y-3">
+                    <div className="grid grid-cols-3 gap-2 text-center text-xs">
+                      <div className="p-2 bg-slate-800/60 rounded-lg">
+                        <span className="text-slate-400 block text-[9px]">चक्का कुल लागत (Chakka Cost)</span>
+                        <span className="font-semibold text-red-300">₹ {theoResult.chakkaCost.toLocaleString("en-IN")}</span>
+                      </div>
+                      <div className="p-2 bg-slate-800/60 rounded-lg">
+                        <span className="text-slate-400 block text-[9px]">चीनी की लागत (Sugar Cost)</span>
+                        <span className="font-semibold text-amber-300">₹ {theoResult.sugarCost.toLocaleString("en-IN")}</span>
+                      </div>
+                      <div className="p-2 bg-slate-800/60 rounded-lg">
+                        <span className="text-slate-400 block text-[9px]">श्रीखंड राजस्व (Revenue)</span>
+                        <span className="font-semibold text-green-300">₹ {theoResult.revenue.toLocaleString("en-IN")}</span>
+                      </div>
+                    </div>
+
+                    <div className="bg-slate-850 rounded-xl p-3 flex justify-between items-center border border-slate-800">
+                      <div>
+                        <div className="text-xs font-bold text-green-400">सकल लाभ (Gross Profit)</div>
+                        <div className="text-[10px] text-slate-400">({theo.batches} बैच हेतु / For {theo.batches} batches)</div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-base font-black text-green-300">₹ {theoResult.grossProfit.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</div>
+                        <div className="text-[11px] text-slate-400">मार्जिन (Margin): {theoResult.gpm.toFixed(1)}%</div>
+                      </div>
+                    </div>
+
+                    {theoResult.days > 1 && (
+                      <div className="grid grid-cols-3 gap-2 border-t border-slate-800 pt-2.5 text-center text-[11px]">
+                        <div>
+                          <span className="text-slate-400 block text-[9px]">मासिक श्रीखंड (Monthly Yield)</span>
+                          <span className="font-semibold text-slate-200">{theoResult.monthlyShrikhand.toFixed(0)} kg</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-400 block text-[9px]">मासिक लागत (Monthly Cost)</span>
+                          <span className="font-semibold text-red-300">₹ {theoResult.monthlyCost.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-400 block text-[9px]">मासिक लाभ (Net profit)</span>
+                          <span className="font-bold text-green-400">₹ {theoResult.monthlyProfit.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</span>
+                        </div>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Warnings */}
+              {theoResult.warnings.length > 0 && (
+                <Alert className="bg-yellow-50 border-yellow-200">
+                  <AlertTriangle className="h-4 w-4 text-yellow-600" />
+                  <AlertTitle className="text-yellow-800 text-xs font-bold">श्रीखंड गुणवत्ता चेतावनियाँ (Process Warnings)</AlertTitle>
+                  <AlertDescription className="text-[11px] text-yellow-700 space-y-1">
+                    {theoResult.warnings.map((w: string, i: number) => <div key={i}>• {w}</div>)}
+                  </AlertDescription>
+                </Alert>
+              )}
+            </div>
+          )}
+        </TabsContent>
+
+        {/* TAB 2: TRACKER */}
+        <TabsContent value="actual" className="space-y-4 pt-3">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+            <ValidatedInput
+              label="चक्का की मात्रा (Chakka Qty)"
+              value={actual.chakkaQty}
+              onChange={v => setA("chakkaQty", v)}
+              validation={validatePositive(actual.chakkaQty, "Chakka quantity")}
+              unit="kg"
+              colorScheme="blue"
+            />
+            <ValidatedInput
+              label="चक्का ठोस प्रतिशत (Chakka TS %)"
+              value={actual.chakkaTS}
+              onChange={v => setA("chakkaTS", v)}
+              validation={validateNumber(actual.chakkaTS, 25, 45, "Chakka TS")}
+              unit="%"
+              colorScheme="blue"
+            />
+            <ValidatedInput
+              label="चक्का वसा प्रतिशत (Chakka Fat %)"
+              value={actual.chakkaFat}
+              onChange={v => setA("chakkaFat", v)}
+              validation={validateNumber(actual.chakkaFat, 2, 25, "Chakka fat")}
+              unit="%"
+              colorScheme="blue"
+            />
+            <ValidatedInput
+              label="चीनी की मात्रा (Sugar Added)"
+              value={actual.sugarAdded}
+              onChange={v => setA("sugarAdded", v)}
+              validation={validatePositive(actual.sugarAdded, "Sugar added")}
+              unit="kg"
+              colorScheme="orange"
+            />
+            <ValidatedInput
+              label="वास्तविक श्रीखंड प्राप्त (Actual Shrikhand Obt)"
+              value={actual.shrikhandObtained}
+              onChange={v => setA("shrikhandObtained", v)}
+              validation={validatePositive(actual.shrikhandObtained, "Shrikhand obtained")}
+              unit="kg"
+              colorScheme="orange"
+            />
+          </div>
+
+          <Button onClick={calculateActual} className="w-full h-11 bg-indigo-600 hover:bg-indigo-700 text-white font-bold shadow-md">
+            📊 वास्तविक बैच दक्षता की तुलना करें (Compare Batch Efficiency)
+          </Button>
+
+          {actualResult && (
+            <div className="space-y-4">
+              {/* Grade Badge */}
+              <div className={`p-4 rounded-xl border flex flex-col items-center justify-center text-center transition-all ${actualResult.gradeColor}`}>
+                <div className="text-4xl mb-1">{actualResult.gradeEmoji}</div>
+                <div className="text-xs uppercase tracking-wider font-bold opacity-85">बैच ग्रेड (Batch Efficiency Grade)</div>
+                <div className="text-xl font-extrabold">{actualResult.grade}</div>
+                <div className="text-sm font-bold mt-1">
+                  श्रीखंड रिकवरी दर (Recovery Rate): {actualResult.shrikhandRecoveryPct.toFixed(1)}%
+                </div>
+              </div>
+
+              {/* Comparison table */}
+              <Card className="border-slate-200">
+                <CardHeader className="p-3 pb-1 border-b">
+                  <CardTitle className="text-xs font-bold text-slate-700 uppercase">📊 आदर्श बनाम वास्तविक (Ideal vs Actual Yield)</CardTitle>
+                </CardHeader>
+                <CardContent className="p-0 text-xs">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 font-semibold">
+                        <th className="p-2.5">पैरामीटर (Parameter)</th>
+                        <th className="p-2.5 text-right">आदर्श (Ideal)</th>
+                        <th className="p-2.5 text-right">वास्तविक (Actual)</th>
+                        <th className="p-2.5 text-right">हानि/नुकसान (Difference)</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      <tr>
+                        <td className="p-2.5 font-medium text-slate-700">श्रीखंड मात्रा (Shrikhand Yield)</td>
+                        <td className="p-2.5 text-right text-slate-600">{actualResult.idealShrikhand.toFixed(1)} kg</td>
+                        <td className="p-2.5 text-right text-slate-900 font-bold">{actualResult.shrikhandObt.toFixed(1)} kg</td>
+                        <td className={`p-2.5 text-right font-bold ${actualResult.shrikhandObt >= actualResult.idealShrikhand ? "text-green-600" : "text-red-600"}`}>
+                          {(actualResult.shrikhandObt - actualResult.idealShrikhand).toFixed(1)} kg
+                        </td>
+                      </tr>
+                      <tr className="bg-slate-50/50">
+                        <td className="p-2.5 font-semibold text-slate-700">प्रोसेसिंग द्रव्यमान हानि (Mass Loss)</td>
+                        <td className="p-2.5 text-right text-slate-600">0.0 kg</td>
+                        <td className="p-2.5 text-right text-slate-600">{actualResult.massLossKg.toFixed(1)} kg</td>
+                        <td className="p-2.5 text-right text-red-600 font-bold">{actualResult.massLossKg.toFixed(1)} kg ({actualResult.massLossPct.toFixed(2)}%)</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </CardContent>
+              </Card>
+
+              {/* Alerts */}
+              {actualResult.warnings.length > 0 && (
+                <Alert className="bg-yellow-50 border-yellow-200">
+                  <AlertTriangle className="h-4 w-4 text-yellow-600" />
+                  <AlertTitle className="text-yellow-800 text-xs font-bold">सुधार बिंदु (Actionable Points)</AlertTitle>
+                  <AlertDescription className="text-xs text-yellow-700 space-y-1">
+                    {actualResult.warnings.map((w: string, i: number) => <div key={i}>• {w}</div>)}
+                  </AlertDescription>
+                </Alert>
+              )}
+            </div>
+          )}
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
 
-// ════════════════════════════════════════════════════════════
-// ADVANCED PEDHA / BURFI YIELD CALCULATOR
-// Drop-in Replacement for PedhaBurfiYieldCalc()
-//
-// INSTRUCTIONS:
-// 1. Apni file mein purana PedhaBurfiYieldCalc() function dhundhein
-// 2. Pura block DELETE karein
-// 3. Yeh poora code wahan PASTE karein
-// Koi naya import nahi chahiye.
-// ════════════════════════════════════════════════════════════
-
-// ── SWEET TYPE DATABASE ───────────────────────────────────
-const SWEET_TYPE_DB = {
-  plain_pedha:   { label: "🟤 Plain Pedha",         moistureLoss: 8,  sugarRatioMin: 25, sugarRatioMax: 35, cookTime: "20–30 min", texture: "Soft-firm", shelfDays: 5,  note: "Classic — just khoa + sugar"                   },
-  kesar_pedha:   { label: "🌸 Kesar Pedha",         moistureLoss: 8,  sugarRatioMin: 25, sugarRatioMax: 33, cookTime: "20–30 min", texture: "Soft",      shelfDays: 5,  note: "Saffron + cardamom — premium variant"           },
-  mathura_pedha: { label: "🟠 Mathura Pedha",       moistureLoss: 10, sugarRatioMin: 20, sugarRatioMax: 28, cookTime: "30–40 min", texture: "Grainy",    shelfDays: 7,  note: "Coarse sugar rubbed — distinctive texture"      },
-  plain_burfi:   { label: "🟡 Plain Milk Burfi",    moistureLoss: 6,  sugarRatioMin: 28, sugarRatioMax: 38, cookTime: "15–25 min", texture: "Firm-slab",  shelfDays: 7,  note: "Set in tray, cut into pieces"                   },
-  besan_burfi:   { label: "🟤 Besan Burfi",         moistureLoss: 5,  sugarRatioMin: 30, sugarRatioMax: 40, cookTime: "20–30 min", texture: "Firm",      shelfDays: 10, note: "Besan added — extra binding, denser texture"    },
-  coconut_burfi: { label: "🥥 Coconut Burfi",       moistureLoss: 7,  sugarRatioMin: 30, sugarRatioMax: 40, cookTime: "20–25 min", texture: "Chewy",     shelfDays: 5,  note: "Desiccated coconut added — chewy texture"       },
-  chocolate_burfi:{ label:"🍫 Chocolate Burfi",     moistureLoss: 6,  sugarRatioMin: 28, sugarRatioMax: 38, cookTime: "20–25 min", texture: "Firm",      shelfDays: 7,  note: "Cocoa/compound chocolate coating"               },
-  milk_cake:     { label: "🧱 Milk Cake (Alwar)",   moistureLoss: 12, sugarRatioMin: 22, sugarRatioMax: 30, cookTime: "45–60 min", texture: "Caramelised",shelfDays: 10, note: "High heat caramelisation — brown colour"        },
-} as const;
-
-type SweetKey = keyof typeof SWEET_TYPE_DB;
-
-// ── KHOA TYPE DATABASE ────────────────────────────────────
-const KHOA_INPUT_DB = {
-  pindi:    { label: "🟤 Pindi Khoa",     ts: "72", fat: "26", note: "Best for pedha — firm, dry"      },
-  dhap:     { label: "🟡 Dhap Khoa",      ts: "68", fat: "22", note: "Good for burfi — medium texture" },
-  batti:    { label: "⚫ Batti/Mawa",     ts: "75", fat: "28", note: "Driest — use for milk cake"      },
-  danedar:  { label: "🟠 Danedar Khoa",   ts: "65", fat: "20", note: "Grainy — Mathura pedha base"     },
-  fresh:    { label: "🫙 Fresh Khoa",     ts: "62", fat: "18", note: "Freshly made same day"           },
-} as const;
-
-type KhoaInputKey = keyof typeof KHOA_INPUT_DB;
-
-// ── ADDITIVE DATABASE ─────────────────────────────────────
-const ADDITIVES_DB = {
-  none:       { label: "None",               tsContrib: 0,   wt: 0    },
-  besan:      { label: "Besan (gram flour)",  tsContrib: 90,  wt: 0    },
-  coconut:    { label: "Desiccated Coconut",  tsContrib: 95,  wt: 0    },
-  cocoa:      { label: "Cocoa Powder",        tsContrib: 95,  wt: 0    },
-  mawa_extra: { label: "Extra Khoa",          tsContrib: 70,  wt: 0    },
-} as const;
-
-type AdditiveKey = keyof typeof ADDITIVES_DB;
-
-// ── PRESETS ───────────────────────────────────────────────
-const PEDHA_PRESETS = {
-  "Small Halwai (10 kg khoa)": { khoaQty: "10",   sugarAdded: "3",    additiveQty: "0", batches: "5",  khoaPrice: "280", sugarPrice: "42", sweetPrice: "400", packSize: "250", packCost: "8",  operDays: "26" },
-  "Medium (100 kg khoa)":      { khoaQty: "100",  sugarAdded: "32",   additiveQty: "0", batches: "2",  khoaPrice: "265", sugarPrice: "40", sweetPrice: "380", packSize: "250", packCost: "7",  operDays: "26" },
-  "Large Plant (500 kg)":      { khoaQty: "500",  sugarAdded: "160",  additiveQty: "0", batches: "1",  khoaPrice: "250", sugarPrice: "38", sweetPrice: "360", packSize: "500", packCost: "12", operDays: "26" },
-  "Festive Batch (50 kg)":     { khoaQty: "50",   sugarAdded: "15",   additiveQty: "2", batches: "4",  khoaPrice: "280", sugarPrice: "42", sweetPrice: "480", packSize: "250", packCost: "10", operDays: "10" },
-} as const;
-
-// ── MAIN COMPONENT ────────────────────────────────────────
 function PedhaBurfiYieldCalc() {
   const { toast } = useToast();
   const { validatePositive, validateNumber } = useInputValidation();
 
-  const [sweetType,  setSweetType]  = useState<SweetKey>("plain_pedha");
-  const [khoaType,   setKhoaType]   = useState<KhoaInputKey>("pindi");
-  const [additive,   setAdditive]   = useState<AdditiveKey>("none");
+  const [activeCalc, setActiveCalc] = useState<"theoretical" | "actual">("theoretical");
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [enableCosting, setEnableCosting] = useState(false);
 
-  const [inp, setInp] = useState({
+  // ── Theoretical Inputs (Predictor) ──
+  const [theo, setTheo] = useState({
+    khoaQty:       "100",     // kg Khoa input
+    khoaTS:        "72",      // % Khoa total solids
+    khoaFat:       "26",      // % Khoa fat content
+    sugarAdded:    "32",      // kg sugar added
+    // Advanced
+    additiveQty:   "0",       // kg extra additives (besan, coconut, etc.)
+    additiveTS:    "90",      // % additive TS
+    moistureLoss:  "8",       // % moisture loss during cooking
+    // Costing
+    khoaPrice:     "265",     // ₹/kg Khoa
+    sugarPrice:    "40",      // ₹/kg sugar
+    sweetPrice:    "380",     // ₹/kg final sweet sale price
+    packSize:      "250",     // g packaging box size
+    packCost:      "8",       // ₹ per packaging box
+    batches:       "1",
+    operDays:      "26",
+  });
+
+  // ── Actual Inputs (Tracker) ──
+  const [actual, setActual] = useState({
     khoaQty:       "100",
     khoaTS:        "72",
     khoaFat:       "26",
     sugarAdded:    "32",
-    additiveQty:   "0",     // kg of extra additive
-    moistureLoss:  "8",     // % moisture loss during cooking
-    batches:       "1",
-    operDays:      "26",
-    khoaPrice:     "265",
-    sugarPrice:    "40",
-    sweetPrice:    "380",
-    packSize:      "250",   // g per box/pack
-    packCost:      "8",     // ₹ per pack
+    sweetObtained: "",
   });
 
-  const [result, setResult] = useState<any>(null);
-  const setF = (k: string, v: string) => setInp(p => ({ ...p, [k]: v }));
+  const [theoResult, setTheoResult]     = useState<any>(null);
+  const [actualResult, setActualResult] = useState<any>(null);
 
-  // Apply sweet type
-  const applySweet = (key: SweetKey) => {
-    const s = SWEET_TYPE_DB[key];
-    setSweetType(key);
-    setInp(p => ({ ...p, moistureLoss: String(s.moistureLoss) }));
-    setResult(null);
-  };
+  const setT = (k: string, v: string) => setTheo(p => ({ ...p, [k]: v }));
+  const setA = (k: string, v: string) => setActual(p => ({ ...p, [k]: v }));
 
-  // Apply khoa type
-  const applyKhoa = (key: KhoaInputKey) => {
-    const k = KHOA_INPUT_DB[key];
-    setKhoaType(key);
-    setInp(p => ({ ...p, khoaTS: k.ts, khoaFat: k.fat }));
-    setResult(null);
-  };
+  // ══════════════════════════════════════════════════════════
+  // THEORETICAL CALCULATION (Predictor)
+  // ══════════════════════════════════════════════════════════
+  const calculateTheo = useCallback(() => {
+    const khoa     = parseFloat(theo.khoaQty)       || 0;
+    const khoaTS   = parseFloat(theo.khoaTS)    / 100;
+    const khoaFat  = parseFloat(theo.khoaFat)   / 100;
+    const sugar    = parseFloat(theo.sugarAdded)    || 0;
 
-  // Apply preset
-  const applyPreset = (name: keyof typeof PEDHA_PRESETS) => {
-    const pr = PEDHA_PRESETS[name] as Record<string, string>;
-    setInp(p => ({ ...p, ...pr }));
-    toast({ title: "Preset Applied", description: name });
-  };
+    const addQty   = parseFloat(theo.additiveQty)   || 0;
+    const addTS    = parseFloat(theo.additiveTS)    / 100;
+    const mlPct    = parseFloat(theo.moistureLoss)  / 100;
 
-  // ── CALCULATE ─────────────────────────────────────────
-  const calculate = useCallback(() => {
-    const khoa     = parseFloat(inp.khoaQty)       || 0;
-    const khoaTS   = parseFloat(inp.khoaTS)    / 100;
-    const khoaFat  = parseFloat(inp.khoaFat)   / 100;
-    const sugar    = parseFloat(inp.sugarAdded)    || 0;
-    const addQty   = parseFloat(inp.additiveQty)   || 0;
-    const mlPct    = parseFloat(inp.moistureLoss)  / 100;
-    const bat      = parseFloat(inp.batches)       || 1;
-    const days     = parseFloat(inp.operDays)      || 26;
-    const sType    = SWEET_TYPE_DB[sweetType];
-    const addTS    = ADDITIVES_DB[additive].tsContrib / 100;
-
-    const khoaPr   = parseFloat(inp.khoaPrice)  || 0;
-    const sugarPr  = parseFloat(inp.sugarPrice) || 0;
-    const sweetPr  = parseFloat(inp.sweetPrice) || 0;
-    const packSzG  = parseFloat(inp.packSize)   || 250;
-    const packCost = parseFloat(inp.packCost)   || 0;
+    const khoaPr   = parseFloat(theo.khoaPrice)  || 0;
+    const sugarPr  = parseFloat(theo.sugarPrice) || 0;
+    const sweetPr  = parseFloat(theo.sweetPrice) || 0;
+    const packSzG  = parseFloat(theo.packSize)   || 250;
+    const pCost    = parseFloat(theo.packCost)   || 0;
+    const bat      = parseFloat(theo.batches)       || 1;
+    const days     = parseFloat(theo.operDays)      || 26;
 
     if (khoa <= 0 || sugar <= 0) {
-      toast({ variant: "destructive", title: "Invalid values" }); return;
+      toast({ variant: "destructive", title: "त्रुटि (Error)", description: "कृपया खोया की मात्रा और चीनी की मात्रा सही दर्ज करें।" });
+      return;
     }
 
-    // ── 1. Total mix before cooking ───────────────────
-    const totalMix      = khoa + sugar + addQty;
+    // Total mix before cooking
+    const totalMix = khoa + sugar + addQty;
 
-    // ── 2. Moisture Loss ──────────────────────────────
-    // Moisture evaporates from the mix during cooking/roasting
-    const moistureKg    = totalMix * mlPct;
+    // Moisture Loss during cooking
+    const moistureKg = totalMix * mlPct;
 
-    // ── 3. Final Yield ────────────────────────────────
-    const yieldKg       = totalMix - moistureKg;
+    // Final Yield
+    const yieldKg = totalMix - moistureKg;
     const yieldVsMixPct = (yieldKg / totalMix) * 100;
-    const yieldVsKhoaPct= (yieldKg / khoa) * 100;
+    const yieldVsKhoaPct = (yieldKg / khoa) * 100;
 
-    // ── 4. Composition ────────────────────────────────
-    // TS contributions
-    const khoaTS_kg     = khoa  * khoaTS;
-    const sugarTS_kg    = sugar * 0.999;      // sugar ~99.9% TS
-    const addTS_kg      = addQty * addTS;
-    const totalTS_kg    = khoaTS_kg + sugarTS_kg + addTS_kg;
-    const finalTSPct    = (totalTS_kg / yieldKg) * 100;
+    // TS Contributions & Final Composition
+    const khoaTS_kg = khoa * khoaTS;
+    const sugarTS_kg = sugar * 0.999; // sugar ~99.9% TS
+    const addTS_kg = addQty * addTS;
+    const totalTS_kg = khoaTS_kg + sugarTS_kg + addTS_kg;
+    const finalTSPct = (totalTS_kg / yieldKg) * 100;
     const finalMoistPct = 100 - finalTSPct;
 
-    // Sugar % in final product
-    const sugarInProdPct= (sugarTS_kg / yieldKg) * 100;
+    const sugarInProdPct = (sugarTS_kg / yieldKg) * 100;
+    const fatInProdPct = ((khoa * khoaFat) / yieldKg) * 100;
 
-    // Fat in final product
-    const fatKg         = khoa * khoaFat;
-    const fatInProdPct  = (fatKg / yieldKg) * 100;
-
-    // ── 5. Packing ────────────────────────────────────
+    // Packing & Pieces
     const packsPerBatch = Math.floor(yieldKg * 1000 / packSzG);
-    const packCostBatch = packsPerBatch * packCost;
+    const packCostBatch = packsPerBatch * pCost;
+    const piecesPerBatch = Math.floor(yieldKg * 1000 / 20); // 20g pedha
 
-    // ── 6. Piece yield (avg 20g/piece for pedha) ──────
-    const piecesPerBatch= Math.floor(yieldKg * 1000 / 20);
-
-    // ── 7. Batch totals ───────────────────────────────
-    const yieldTotal    = yieldKg     * bat;
-    const packsTotal    = packsPerBatch * bat;
+    // Batch and Operating totals
+    const yieldTotal = yieldKg * bat;
+    const packsTotal = packsPerBatch * bat;
     const packCostTotal = packCostBatch * bat;
 
-    // ── 8. Economics ─────────────────────────────────
-    const khoaCost      = khoa  * bat * khoaPr;
-    const sugarCost     = sugar * bat * sugarPr;
-    const totalInputCost= khoaCost + sugarCost + packCostTotal;
-    const revenue       = yieldTotal * sweetPr;
-    const grossProfit   = revenue - totalInputCost;
-    const gpm           = totalInputCost > 0 ? (grossProfit / totalInputCost) * 100 : 0;
-    const costPerKg     = totalInputCost / yieldTotal;
+    // Economics
+    const khoaCost = khoa * bat * khoaPr;
+    const sugarCost = sugar * bat * sugarPr;
+    const totalInputCost = khoaCost + sugarCost + packCostTotal;
+    const revenue = yieldTotal * sweetPr;
+    const grossProfit = revenue - totalInputCost;
+    const gpm = totalInputCost > 0 ? (grossProfit / totalInputCost) * 100 : 0;
+    const costPerKg = totalInputCost / yieldTotal;
     const revenuePerKgKhoa = revenue / (khoa * bat);
 
-    // Monthly
-    const monthlyYield  = yieldKg * days;
-    const monthlyRev    = monthlyYield * sweetPr;
-    const monthlyCost   = (khoa * khoaPr + sugar * sugarPr) * days + packCostBatch * days;
+    const monthlyYield = yieldTotal * days;
+    const monthlyRev = revenue * days;
+    const monthlyCost = totalInputCost * days;
+    const monthlyProfit = grossProfit * days;
 
-    // ── 9. Sensitivity ────────────────────────────────
-    // +1% sugar ratio → TS impact
-    const dTS_dSugar    = 0.999 / yieldKg * 10; // 1 kg more sugar → TS change
-
-    // ── 10. Warnings ─────────────────────────────────
     const warnings: string[] = [];
-    let confidence: "high" | "medium" | "low" = "high";
+    if (finalTSPct < 85) warnings.push(`स्वीट कुल ठोस (TS) ${finalTSPct.toFixed(1)}% कम है। सेल्फ लाइफ कम हो सकती है, अधिक पकाएं। (Final TS is low. Shelf life may be reduced.)`);
+    if (finalMoistPct > 15) warnings.push(`नमी (${finalMoistPct.toFixed(1)}%) अनुशंसित सीमा (14% से कम) से अधिक है। (Moisture is above recommended limit of 14%.)`);
+    if (sugarInProdPct > 35) warnings.push(`चीनी की मात्रा (${sugarInProdPct.toFixed(1)}%) अधिक है, मिठाई बहुत मीठी हो सकती है। (Sugar content is high.)`);
+    if (fatInProdPct < 15) warnings.push(`वसा प्रतिशत (${fatInProdPct.toFixed(1)}%) कम है, बेहतर स्वाद के लिए उच्च फैट वाले खोया का प्रयोग करें। (Fat % is low for premium mouthfeel.)`);
 
-    if (sugarInProdPct < sType.sugarRatioMin) warnings.push(`Sugar ${sugarInProdPct.toFixed(1)}% below minimum (${sType.sugarRatioMin}%) for ${sType.label} — add more sugar.`);
-    if (sugarInProdPct > sType.sugarRatioMax) warnings.push(`Sugar ${sugarInProdPct.toFixed(1)}% above maximum (${sType.sugarRatioMax}%) — product too sweet, risk of graining.`);
-    if (finalTSPct < 88)  warnings.push(`Final TS ${finalTSPct.toFixed(1)}% < 88% — shelf life may be <${sType.shelfDays} days. Cook longer.`);
-    if (finalMoistPct > 14) warnings.push(`Moisture ${finalMoistPct.toFixed(1)}% > 14% — microbial risk. Extend cooking time.`);
-    if (fatInProdPct < 15)  { confidence = "medium"; warnings.push(`Fat ${fatInProdPct.toFixed(1)}% is low — use richer khoa for better mouthfeel.`); }
-
-    setResult({
+    setTheoResult({
       totalMix, moistureKg, yieldKg, yieldVsMixPct, yieldVsKhoaPct,
       khoaTS_kg, sugarTS_kg, addTS_kg, totalTS_kg,
       finalTSPct, finalMoistPct, sugarInProdPct, fatInProdPct,
@@ -11865,323 +12195,464 @@ function PedhaBurfiYieldCalc() {
       yieldTotal, packsTotal, packCostTotal,
       khoaCost, sugarCost, totalInputCost,
       revenue, grossProfit, gpm, costPerKg, revenuePerKgKhoa,
-      monthlyYield, monthlyRev, monthlyCost,
-      dTS_dSugar,
-      warnings, confidence,
-      khoa, bat, days,
+      monthlyYield, monthlyRev, monthlyCost, monthlyProfit,
+      warnings, khoa, bat, days
     });
 
     toast({
-      title: "✅ Calculated",
-      description: `${sType.label}: ${yieldKg.toFixed(1)} kg | TS: ${finalTSPct.toFixed(1)}% | GPM: ${gpm.toFixed(1)}%`,
+      title: "🧮 गणना पूरी (Calculated)",
+      description: `मिठाई उत्पादन: ${yieldKg.toFixed(1)} kg (${yieldVsKhoaPct.toFixed(0)}% yield vs khoa)`,
     });
-  }, [inp, sweetType, khoaType, additive, toast]);
+  }, [theo, toast]);
 
-  const sType = SWEET_TYPE_DB[sweetType];
-  const kType = KHOA_INPUT_DB[khoaType];
+  // ══════════════════════════════════════════════════════════
+  // ACTUAL CALCULATION (Tracker)
+  // ══════════════════════════════════════════════════════════
+  const calculateActual = useCallback(() => {
+    const khoa     = parseFloat(actual.khoaQty)       || 0;
+    const sugar    = parseFloat(actual.sugarAdded)    || 0;
+    const sweetObt = parseFloat(actual.sweetObtained) || 0;
 
-  // ── RENDER ────────────────────────────────────────────
+    const addQty   = parseFloat(theo.additiveQty)   || 0;
+    const mlPct    = parseFloat(theo.moistureLoss)  / 100;
+
+    if (khoa <= 0 || sugar <= 0 || sweetObt <= 0) {
+      toast({ variant: "destructive", title: "त्रुटि (Error)", description: "कृपया खोया, चीनी और वास्तविक मिठाई मात्रा दर्ज करें।" });
+      return;
+    }
+
+    const totalMix = khoa + sugar + addQty;
+    const idealYield = totalMix * (1 - mlPct);
+
+    const sweetRecoveryPct = idealYield > 0 ? (sweetObt / idealYield) * 100 : 0;
+    const massLossKg = idealYield - sweetObt;
+    const massLossPct = (massLossKg / idealYield) * 100;
+
+    // Efficiency grade
+    let grade = "", gradeColor = "", gradeEmoji = "";
+    if (sweetRecoveryPct >= 99 && massLossPct <= 0.5) {
+      grade = "Excellent (उत्कृष्ट)"; gradeColor = "text-green-700 bg-green-50 border-green-300"; gradeEmoji = "🏆";
+    } else if (sweetRecoveryPct >= 97) {
+      grade = "Good (अच्छा)"; gradeColor = "text-blue-700 bg-blue-50 border-blue-300"; gradeEmoji = "👍";
+    } else if (sweetRecoveryPct >= 94) {
+      grade = "Needs Improvement (सुधार ज़रूरी)"; gradeColor = "text-yellow-700 bg-yellow-50 border-yellow-300"; gradeEmoji = "⚠️";
+    } else {
+      grade = "Action Required (कार्रवाई ज़रूरी)"; gradeColor = "text-red-700 bg-red-50 border-red-300"; gradeEmoji = "🔴";
+    }
+
+    const warnings: string[] = [];
+    if (sweetRecoveryPct < 96) warnings.push(`मिठाई रिकवरी ${sweetRecoveryPct.toFixed(1)}% कम है। कड़ाही में चिपकने या हैंडलिंग नुकसान की जांच करें। (Sweet recovery is low.)`);
+
+    setActualResult({
+      idealYield,
+      sweetRecoveryPct, massLossKg, massLossPct,
+      grade, gradeColor, gradeEmoji,
+      warnings, khoa, sweetObt
+    });
+
+    toast({
+      title: "📋 ट्रैकर गणना पूरी (Tracker Calculated)",
+      description: `रिकवरी (Recovery): ${sweetRecoveryPct.toFixed(1)}% — ${grade}`,
+    });
+  }, [actual, theo.additiveQty, theo.moistureLoss, toast]);
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 w-full">
+      {/* Header */}
+      <Alert className="bg-gradient-to-r from-rose-50 to-pink-50 border-rose-200">
+        <Scale className="h-4 w-4 text-rose-600" />
+        <AlertTitle className="text-rose-800 font-bold">पेड़ा और बर्फी यील्ड कैलकुलेटर (Pedha & Burfi Yield & Blending)</AlertTitle>
+        <AlertDescription className="text-xs text-rose-700">
+          खोया, चीनी और अतिरिक्त सामग्री के आधार पर बर्फी/पेड़ा का कुल उत्पादन, नमी की कमी, कुल ठोस और आर्थिक मार्जिन आकलन।<br/>
+          <span className="text-rose-600 font-medium">Pedha/Burfi batch yield, moisture loss during cooking, packaging cost & profit margin.</span>
+        </AlertDescription>
+      </Alert>
 
-      {/* ── SWEET TYPE ───────────────────────────────── */}
-      <div className="space-y-1">
-        <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Sweet Type</Label>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-          {(Object.keys(SWEET_TYPE_DB) as SweetKey[]).map(key => (
-            <button key={key} onClick={() => applySweet(key)}
-              className={`p-2 rounded-lg border text-xs font-semibold transition-all text-left leading-tight shadow-sm
-                ${sweetType === key
-                  ? "bg-pink-600 text-white border-pink-600 shadow-md"
-                  : "bg-white text-slate-600 border-slate-200 hover:border-pink-300"
-                }`}>
-              {SWEET_TYPE_DB[key].label}
-              <div className={`text-[9px] mt-0.5 ${sweetType === key ? "opacity-80" : "text-slate-400"}`}>
-                Moist loss: {SWEET_TYPE_DB[key].moistureLoss}% · Shelf: {SWEET_TYPE_DB[key].shelfDays}d
-              </div>
-            </button>
-          ))}
-        </div>
-        <p className="text-[10px] text-pink-700 bg-pink-50 px-2 py-1 rounded border border-pink-100">
-          📌 {sType.note} · Texture: {sType.texture} · Cook time: {sType.cookTime}
-        </p>
-      </div>
+      {/* Tabs */}
+      <Tabs value={activeCalc} onValueChange={v => setActiveCalc(v as "theoretical" | "actual")}>
+        <TabsList className="grid grid-cols-2 bg-rose-100/55 p-1 rounded-lg">
+          <TabsTrigger value="theoretical" className="text-xs font-bold data-[state=active]:bg-rose-600 data-[state=active]:text-white">
+            🧮 Predictor (अनुमान)
+          </TabsTrigger>
+          <TabsTrigger value="actual" className="text-xs font-bold data-[state=active]:bg-pink-600 data-[state=active]:text-white">
+            📋 Tracker (वास्तविक)
+          </TabsTrigger>
+        </TabsList>
 
-      {/* ── KHOA TYPE ────────────────────────────────── */}
-      <div className="space-y-1">
-        <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Khoa Type</Label>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-          {(Object.keys(KHOA_INPUT_DB) as KhoaInputKey[]).map(key => (
-            <button key={key} onClick={() => applyKhoa(key)}
-              className={`p-2 rounded-lg border text-xs font-semibold transition-all text-left leading-tight shadow-sm
-                ${khoaType === key
-                  ? "bg-orange-600 text-white border-orange-600 shadow-md"
-                  : "bg-white text-slate-600 border-slate-200 hover:border-orange-300"
-                }`}>
-              {KHOA_INPUT_DB[key].label}
-              <div className={`text-[9px] mt-0.5 ${khoaType === key ? "opacity-80" : "text-slate-400"}`}>
-                TS: {KHOA_INPUT_DB[key].ts}% · Fat: {KHOA_INPUT_DB[key].fat}%
-              </div>
-            </button>
-          ))}
-        </div>
-        <p className="text-[10px] text-orange-700 bg-orange-50 px-2 py-1 rounded border border-orange-100">
-          📌 {kType.note}
-        </p>
-      </div>
-
-      {/* ── ADDITIVE ─────────────────────────────────── */}
-      <div className="space-y-1">
-        <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Extra Additive</Label>
-        <div className="flex flex-wrap gap-2">
-          {(Object.keys(ADDITIVES_DB) as AdditiveKey[]).map(key => (
-            <button key={key} onClick={() => setAdditive(key)}
-              className={`px-3 py-1 rounded-full border text-xs font-semibold transition-all shadow-sm
-                ${additive === key
-                  ? "bg-rose-600 text-white border-rose-600"
-                  : "bg-white text-slate-600 border-slate-200 hover:border-rose-300"
-                }`}>
-              {ADDITIVES_DB[key].label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* ── PRESETS ──────────────────────────────────── */}
-      <div className="space-y-1">
-        <Label className="text-xs font-bold text-slate-500 uppercase">Batch Presets</Label>
-        <div className="flex flex-wrap gap-2">
-          {(Object.keys(PEDHA_PRESETS) as Array<keyof typeof PEDHA_PRESETS>).map(name => (
-            <button key={name} onClick={() => applyPreset(name)}
-              className="px-3 py-1 rounded-full border border-pink-200 bg-white text-xs font-semibold text-pink-700 hover:bg-pink-600 hover:text-white transition-all shadow-sm">
-              {name}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* ── INPUTS ───────────────────────────────────── */}
-      <Card className="border-pink-100 bg-white">
-        <CardHeader className="p-3 pb-2 bg-pink-50 border-b border-pink-100">
-          <CardTitle className="text-xs font-bold text-pink-700 uppercase">🍬 Recipe & Process Inputs</CardTitle>
-        </CardHeader>
-        <CardContent className="p-3 grid grid-cols-2 gap-3">
-          <ValidatedInput label="Khoa Quantity" value={inp.khoaQty} onChange={v => setF("khoaQty", v)} validation={validatePositive(inp.khoaQty, "Khoa")} unit="kg" colorScheme="orange" />
-          <ValidatedInput label="Batches" value={inp.batches} onChange={v => setF("batches", v)} validation={validatePositive(inp.batches, "Batches")} colorScheme="blue" />
-          <ValidatedInput label="Khoa TS %" value={inp.khoaTS} onChange={v => setF("khoaTS", v)} validation={validateNumber(inp.khoaTS, 55, 80, "Khoa TS")} unit="%" helpText={`${kType.label}: ${kType.ts}%`} colorScheme="orange" />
-          <ValidatedInput label="Khoa Fat %" value={inp.khoaFat} onChange={v => setF("khoaFat", v)} validation={validateNumber(inp.khoaFat, 10, 35, "Fat")} unit="%" colorScheme="orange" />
-          <ValidatedInput label="Sugar Added" value={inp.sugarAdded} onChange={v => setF("sugarAdded", v)} validation={validatePositive(inp.sugarAdded, "Sugar")} unit="kg" helpText={`${sType.sugarRatioMin}–${sType.sugarRatioMax}% of product`} colorScheme="pink" />
-          <ValidatedInput label="Additive Qty" value={inp.additiveQty} onChange={v => setF("additiveQty", v)} validation={{ isValid: true, severity: "info" }} unit="kg" helpText={ADDITIVES_DB[additive].label} colorScheme="rose" />
-          <ValidatedInput label="Moisture Loss %" value={inp.moistureLoss} onChange={v => setF("moistureLoss", v)} validation={validateNumber(inp.moistureLoss, 3, 20, "Moisture loss")} unit="%" helpText={`${sType.label}: ~${sType.moistureLoss}%`} colorScheme="red" />
-          <ValidatedInput label="Operating Days/Month" value={inp.operDays} onChange={v => setF("operDays", v)} validation={{ isValid: true, severity: "info" }} colorScheme="blue" />
-        </CardContent>
-      </Card>
-
-      {/* ── PRICING ──────────────────────────────────── */}
-      <Card className="border-green-100 bg-white">
-        <CardHeader className="p-3 pb-2 bg-green-50 border-b border-green-100">
-          <CardTitle className="text-xs font-bold text-green-700 uppercase">💰 Pricing & Packing</CardTitle>
-        </CardHeader>
-        <CardContent className="p-3 grid grid-cols-2 sm:grid-cols-3 gap-3">
-          <ValidatedInput label="Khoa Price"    value={inp.khoaPrice}  onChange={v => setF("khoaPrice", v)}  validation={{ isValid: true, severity: "info" }} unit="₹/kg" colorScheme="orange" />
-          <ValidatedInput label="Sugar Price"   value={inp.sugarPrice} onChange={v => setF("sugarPrice", v)} validation={{ isValid: true, severity: "info" }} unit="₹/kg" colorScheme="pink" />
-          <ValidatedInput label="Sweet Price"   value={inp.sweetPrice} onChange={v => setF("sweetPrice", v)} validation={{ isValid: true, severity: "info" }} unit="₹/kg" colorScheme="green" />
-          <ValidatedInput label="Pack Size"     value={inp.packSize}   onChange={v => setF("packSize", v)}   validation={{ isValid: true, severity: "info" }} unit="g/box" helpText="250g, 500g, 1kg" colorScheme="slate" />
-          <ValidatedInput label="Pack Cost"     value={inp.packCost}   onChange={v => setF("packCost", v)}   validation={{ isValid: true, severity: "info" }} unit="₹/box" colorScheme="slate" />
-        </CardContent>
-      </Card>
-
-      {/* ── CALCULATE ───────────────────────────────── */}
-      <Button onClick={calculate}
-        className="w-full h-11 bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-700 hover:to-rose-700 text-white font-bold shadow-md">
-        <Calculator className="mr-2 h-4 w-4" />
-        Calculate {sType.label} Yield
-      </Button>
-
-      {/* ── RESULTS ─────────────────────────────────── */}
-      {result && (
-        <div className="space-y-3 animate-in fade-in">
-
-          {/* Main KPIs */}
-          <div className="grid grid-cols-3 gap-2">
-            {[
-              { label: "Sweet Yield",    value: result.yieldKg.toFixed(1),      unit: "kg/batch",  color: "bg-pink-600"   },
-              { label: "Final TS %",     value: result.finalTSPct.toFixed(1),   unit: "% w/w",     color: result.finalTSPct >= 88 ? "bg-green-600" : "bg-red-500" },
-              { label: "Packs",          value: result.packsPerBatch.toLocaleString("en-IN"), unit: `${inp.packSize}g`, color: "bg-rose-600" },
-            ].map((k, i) => (
-              <div key={i} className={`${k.color} text-white p-3 rounded-xl text-center shadow`}>
-                <div className="text-[9px] uppercase opacity-80 font-bold">{k.label}</div>
-                <div className="text-2xl font-black">{k.value}</div>
-                <div className="text-[9px] opacity-70">{k.unit}</div>
-              </div>
-            ))}
+        {/* TAB 1: PREDICTOR */}
+        <TabsContent value="theoretical" className="space-y-4 pt-3">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <ValidatedInput
+              label="खोया की मात्रा (Khoa Qty)"
+              value={theo.khoaQty}
+              onChange={v => setT("khoaQty", v)}
+              validation={validatePositive(theo.khoaQty, "Khoa quantity")}
+              unit="kg"
+              colorScheme="rose"
+            />
+            <ValidatedInput
+              label="खोया ठोस प्रतिशत (Khoa TS %)"
+              value={theo.khoaTS}
+              onChange={v => setT("khoaTS", v)}
+              validation={validateNumber(theo.khoaTS, 55, 80, "Khoa TS")}
+              unit="%"
+              colorScheme="rose"
+            />
+            <ValidatedInput
+              label="खोया वसा प्रतिशत (Khoa Fat %)"
+              value={theo.khoaFat}
+              onChange={v => setT("khoaFat", v)}
+              validation={validateNumber(theo.khoaFat, 10, 35, "Khoa fat")}
+              unit="%"
+              colorScheme="rose"
+            />
+            <ValidatedInput
+              label="चीनी की मात्रा (Sugar Added)"
+              value={theo.sugarAdded}
+              onChange={v => setT("sugarAdded", v)}
+              validation={validatePositive(theo.sugarAdded, "Sugar added")}
+              unit="kg"
+              colorScheme="orange"
+            />
           </div>
 
-          {/* Mass balance */}
-          <Card className="bg-pink-50 border-pink-200">
-            <CardHeader className="p-3 pb-1 border-b border-pink-100">
-              <CardTitle className="text-sm text-pink-800">⚖️ Mass Balance</CardTitle>
-            </CardHeader>
-            <CardContent className="p-3 space-y-2 text-sm">
-              {[
-                { label: "Total mix (before cooking)",   value: `${result.totalMix.toFixed(2)} kg`,     color: "" },
-                { label: "Moisture evaporated",          value: `${result.moistureKg.toFixed(2)} kg`,   color: "text-blue-600"   },
-                { label: "Final sweet yield",            value: `${result.yieldKg.toFixed(2)} kg`,      color: "text-pink-700 font-black text-base" },
-                { label: "Yield vs total mix",           value: `${result.yieldVsMixPct.toFixed(1)}%`,  color: "text-slate-700"  },
-                { label: "Yield vs khoa input",          value: `${result.yieldVsKhoaPct.toFixed(1)}%`, color: "text-slate-700"  },
-                { label: "Pieces (~20g each)",           value: `~${result.piecesPerBatch.toLocaleString("en-IN")} pcs`, color: "text-rose-700" },
-              ].map((r, i) => (
-                <div key={i} className="flex justify-between">
-                  <span className="text-slate-500">{r.label}</span>
-                  <span className={`font-bold ${r.color}`}>{r.value}</span>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
+          {/* Advanced Settings */}
+          <Button
+            variant="ghost"
+            onClick={() => setShowAdvanced(!showAdvanced)}
+            className="w-full flex justify-between items-center text-xs font-semibold py-2 px-3 border border-rose-100 hover:bg-rose-50/50 rounded-lg"
+          >
+            <span className="flex items-center gap-1.5 text-slate-700">
+              <Settings2 className="w-3.5 h-3.5" /> एडवांस्ड सेटिंग्स (Advanced Settings)
+            </span>
+            <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${showAdvanced ? "rotate-180" : ""}`} />
+          </Button>
 
-          {/* Composition + shelf life */}
-          <div className="grid grid-cols-2 gap-3">
-            <Card className="bg-white border-orange-100">
-              <CardContent className="p-3 space-y-1 text-xs">
-                <div className="font-bold text-orange-700 mb-1 text-sm">🍬 Composition</div>
-                {[
-                  { label: "Total Solids",   value: `${result.finalTSPct.toFixed(1)}%`,     warn: result.finalTSPct < 88  },
-                  { label: "Moisture",       value: `${result.finalMoistPct.toFixed(1)}%`,  warn: result.finalMoistPct > 14 },
-                  { label: "Sugar in prod.", value: `${result.sugarInProdPct.toFixed(1)}%`,
-                    warn: result.sugarInProdPct < sType.sugarRatioMin || result.sugarInProdPct > sType.sugarRatioMax },
-                  { label: "Fat in prod.",   value: `${result.fatInProdPct.toFixed(1)}%`,   warn: result.fatInProdPct < 15 },
-                ].map((r, i) => (
-                  <div key={i} className="flex justify-between">
-                    <span className="text-slate-500">{r.label}</span>
-                    <span className={`font-bold ${r.warn ? "text-red-600" : "text-slate-700"}`}>{r.value}</span>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-
-            <Card className="bg-rose-50 border-rose-100">
-              <CardContent className="p-3 space-y-1 text-xs">
-                <div className="font-bold text-rose-700 mb-1 text-sm">📋 Process Guide</div>
-                {[
-                  { label: "Cook time",      value: sType.cookTime     },
-                  { label: "Texture",        value: sType.texture      },
-                  { label: "Shelf life",     value: `${sType.shelfDays} days` },
-                  { label: "Sugar range",    value: `${sType.sugarRatioMin}–${sType.sugarRatioMax}%` },
-                ].map((r, i) => (
-                  <div key={i} className="flex justify-between">
-                    <span className="text-slate-500">{r.label}</span>
-                    <span className="font-bold">{r.value}</span>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Multi-batch */}
-          {result.bat > 1 && (
-            <Card className="bg-indigo-50 border-indigo-200">
-              <CardContent className="p-3 text-sm space-y-1">
-                <div className="font-bold text-indigo-700 mb-1">{result.bat} Batches Total</div>
-                {[
-                  { label: "Total sweet",   value: `${result.yieldTotal.toFixed(1)} kg`                     },
-                  { label: "Total packs",   value: result.packsTotal.toLocaleString("en-IN")                },
-                  { label: "Pack cost",     value: `₹${result.packCostTotal.toFixed(0)}`                    },
-                ].map((r, i) => (
-                  <div key={i} className="flex justify-between">
-                    <span className="text-slate-500">{r.label}</span>
-                    <span className="font-bold text-indigo-700">{r.value}</span>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
+          {showAdvanced && (
+            <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-100 grid grid-cols-2 md:grid-cols-3 gap-3">
+              <ValidatedInput
+                label="अतिरिक्त सामग्री मात्रा (Additive Qty)"
+                value={theo.additiveQty}
+                onChange={v => setT("additiveQty", v)}
+                validation={validatePositive(theo.additiveQty, "Additive qty")}
+                unit="kg"
+                colorScheme="rose"
+              />
+              <ValidatedInput
+                label="अतिरिक्त सामग्री ठोस (Additive TS %)"
+                value={theo.additiveTS}
+                onChange={v => setT("additiveTS", v)}
+                validation={validateNumber(theo.additiveTS, 50, 100, "Additive TS")}
+                unit="%"
+                colorScheme="rose"
+              />
+              <ValidatedInput
+                label="खाना पकाने में नमी की कमी % (Cooking Moisture Loss %)"
+                value={theo.moistureLoss}
+                onChange={v => setT("moistureLoss", v)}
+                validation={validateNumber(theo.moistureLoss, 2, 20, "Moisture loss")}
+                unit="%"
+                colorScheme="red"
+              />
+            </div>
           )}
 
-          {/* Economics */}
-          <Card className="bg-gradient-to-br from-slate-800 to-slate-900 text-white border-none">
-            <CardContent className="p-3 space-y-2 text-sm">
-              <div className="text-xs text-slate-300 font-bold uppercase mb-1">💰 Economics ({result.bat} batch{result.bat > 1 ? "es" : ""})</div>
-              {[
-                { label: "Khoa cost",      value: `-₹ ${result.khoaCost.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,       color: "text-orange-400" },
-                { label: "Sugar cost",     value: `-₹ ${result.sugarCost.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,       color: "text-pink-400"   },
-                { label: "Packing cost",   value: `-₹ ${result.packCostTotal.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,   color: "text-yellow-400" },
-                { label: "Revenue",        value: `+₹ ${result.revenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,         color: "text-green-300"  },
-                { label: "Gross Profit",   value: `₹ ${result.grossProfit.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,      color: `${result.grossProfit >= 0 ? "text-green-300 font-black" : "text-red-400 font-black"}` },
-              ].map((r, i) => (
-                <div key={i} className={`flex justify-between ${i === 4 ? "border-t border-slate-700 pt-2" : ""}`}>
-                  <span className="text-slate-400">{r.label}</span>
-                  <span className={`font-bold ${r.color}`}>{r.value}</span>
-                </div>
-              ))}
-              <div className="grid grid-cols-3 gap-2 mt-2">
-                {[
-                  { label: "Gross Margin",        value: `${result.gpm.toFixed(1)}%`                           },
-                  { label: "Cost/kg sweet",        value: `₹${result.costPerKg.toFixed(2)}`                    },
-                  { label: "Revenue/kg khoa",      value: `₹${result.revenuePerKgKhoa.toFixed(2)}`             },
-                ].map((c, i) => (
-                  <div key={i} className="bg-slate-700 rounded p-2 text-center">
-                    <div className="text-[9px] text-slate-400 font-bold">{c.label}</div>
-                    <div className="font-black text-white text-sm">{c.value}</div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Monthly + Sensitivity */}
-          <div className="grid grid-cols-2 gap-3">
-            <Card className="bg-green-50 border-green-200">
-              <CardContent className="p-3 text-sm space-y-1">
-                <div className="font-bold text-green-700 text-sm mb-1">📅 Monthly ({result.days} days)</div>
-                {[
-                  { label: "Production",  value: `${result.monthlyYield.toFixed(0)} kg` },
-                  { label: "Revenue",     value: `₹${result.monthlyRev.toLocaleString("en-IN", { maximumFractionDigits: 0 })}` },
-                  { label: "Cost",        value: `₹${result.monthlyCost.toLocaleString("en-IN", { maximumFractionDigits: 0 })}` },
-                ].map((r, i) => (
-                  <div key={i} className="flex justify-between">
-                    <span className="text-slate-500">{r.label}</span>
-                    <span className="font-bold text-green-700">{r.value}</span>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-
-            <Card className="bg-rose-50 border-rose-200">
-              <CardContent className="p-3 text-sm space-y-1">
-                <div className="font-bold text-rose-700 text-sm mb-1">📈 Sensitivity</div>
-                <div className="text-xs text-slate-500">+1% moisture loss</div>
-                <div className="font-bold text-rose-700">−{(result.totalMix * 0.01).toFixed(2)} kg yield</div>
-                <div className="text-[10px] text-rose-600 mt-1">
-                  Control cook time carefully — over-cooking reduces yield
-                </div>
-              </CardContent>
-            </Card>
+          {/* Costing Toggle */}
+          <div className="flex items-center gap-2">
+            <Checkbox id="pedha-costing" checked={enableCosting} onCheckedChange={(c) => setEnableCosting(!!c)} />
+            <Label htmlFor="pedha-costing" className="text-xs font-semibold cursor-pointer text-slate-700 flex items-center gap-1">
+              <Coins className="w-3.5 h-3.5 text-green-600" /> कॉस्टिंग और प्रॉफिटेबिलिटी शामिल करें (Enable Costing & Profitability)
+            </Label>
           </div>
 
-          {/* Warnings */}
-          {result.warnings.length > 0 && (
-            <Alert className="bg-yellow-50 border-yellow-300">
-              <AlertTriangle className="h-4 w-4 text-yellow-600" />
-              <AlertTitle className="text-yellow-800 text-sm">Quality Alerts</AlertTitle>
-              <AlertDescription className="text-xs text-yellow-700 space-y-1">
-                {result.warnings.map((w: string, i: number) => <div key={i}>⚠️ {w}</div>)}
-              </AlertDescription>
-            </Alert>
+          {enableCosting && (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 p-3 bg-green-50/30 rounded-xl border border-green-100">
+              <ValidatedInput
+                label="खोया का मूल्य (Khoa Price)"
+                value={theo.khoaPrice}
+                onChange={v => setT("khoaPrice", v)}
+                validation={validatePositive(theo.khoaPrice, "Khoa price")}
+                unit="₹/kg"
+                colorScheme="green"
+              />
+              <ValidatedInput
+                label="चीनी का मूल्य (Sugar Price)"
+                value={theo.sugarPrice}
+                onChange={v => setT("sugarPrice", v)}
+                validation={validatePositive(theo.sugarPrice, "Sugar price")}
+                unit="₹/kg"
+                colorScheme="green"
+              />
+              <ValidatedInput
+                label="मिठाई मूल्य (Sweet Price)"
+                value={theo.sweetPrice}
+                onChange={v => setT("sweetPrice", v)}
+                validation={validatePositive(theo.sweetPrice, "Sweet price")}
+                unit="₹/kg"
+                colorScheme="green"
+              />
+              <ValidatedInput
+                label="पैकेजिंग साइज (Pack Box Size)"
+                value={theo.packSize}
+                onChange={v => setT("packSize", v)}
+                validation={validatePositive(theo.packSize, "Pack size")}
+                unit="g"
+                colorScheme="blue"
+              />
+              <ValidatedInput
+                label="पैकेट बॉक्स लागत (Pack Box Cost)"
+                value={theo.packCost}
+                onChange={v => setT("packCost", v)}
+                validation={validatePositive(theo.packCost, "Pack cost")}
+                unit="₹/box"
+                colorScheme="green"
+              />
+              <ValidatedInput
+                label="बैचेस (Batches)"
+                value={theo.batches}
+                onChange={v => setT("batches", v)}
+                validation={validatePositive(theo.batches, "Batches")}
+                unit="qty"
+                colorScheme="blue"
+              />
+              <ValidatedInput
+                label="कार्य दिवस (Operating Days)"
+                value={theo.operDays}
+                onChange={v => setT("operDays", v)}
+                validation={validatePositive(theo.operDays, "Days")}
+                unit="days"
+                colorScheme="blue"
+              />
+            </div>
           )}
 
-          {/* Formula */}
-          <div className="bg-slate-50 border rounded-lg p-3 text-[10px] font-mono text-slate-400 space-y-1">
-            <div className="font-bold text-slate-600 text-xs mb-1">📐 Formula:</div>
-            <div>TotalMix = Khoa + Sugar + Extras = {result.khoa} + {inp.sugarAdded} + {inp.additiveQty} = {result.totalMix.toFixed(2)} kg</div>
-            <div>MoistureLoss = TotalMix × {inp.moistureLoss}% = {result.moistureKg.toFixed(2)} kg</div>
-            <div>YieldKg = TotalMix − MoistureLoss = {result.yieldKg.toFixed(2)} kg</div>
-            <div>FinalTS% = TotalTS_kg / YieldKg × 100 = {result.finalTSPct.toFixed(2)}%</div>
+          <Button onClick={calculateTheo} className="w-full h-11 bg-rose-600 hover:bg-rose-700 text-white font-bold shadow-md">
+            🧮 मिठाई यील्ड की गणना करें (Calculate Sweet Yield)
+          </Button>
+
+          {/* Results */}
+          {theoResult && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-3 gap-2">
+                <div className="bg-rose-600 text-white p-3 rounded-xl shadow-sm text-center">
+                  <div className="text-[10px] uppercase opacity-80 font-bold">मिठाई उत्पादन (Sweet Output)</div>
+                  <div className="text-xl font-extrabold">{theoResult.yieldKg.toFixed(1)} kg</div>
+                  <div className="text-[9px] opacity-75">{theoResult.yieldVsKhoaPct.toFixed(0)}% vs Khoa</div>
+                </div>
+                <div className="bg-pink-600 text-white p-3 rounded-xl shadow-sm text-center">
+                  <div className="text-[10px] uppercase opacity-80 font-bold">अनुमानित पीस (Estimated Pieces)</div>
+                  <div className="text-xl font-extrabold">{theoResult.piecesPerBatch} pcs</div>
+                  <div className="text-[9px] opacity-75">~20g per piece</div>
+                </div>
+                <div className="bg-amber-600 text-white p-3 rounded-xl shadow-sm text-center">
+                  <div className="text-[10px] uppercase opacity-80 font-bold">फाइनल वसा % (Final Fat %)</div>
+                  <div className="text-xl font-extrabold">{theoResult.fatInProdPct.toFixed(2)}%</div>
+                  <div className="text-[9px] opacity-75">TS: {theoResult.finalTSPct.toFixed(1)}%</div>
+                </div>
+              </div>
+
+              {/* Composition */}
+              <Card className="bg-rose-50/20 border-rose-200">
+                <CardHeader className="p-3 pb-1 border-b border-rose-100">
+                  <CardTitle className="text-xs font-bold text-rose-800 uppercase">🔬 मिठाई घटक और संरचना (Pedha/Burfi Composition)</CardTitle>
+                </CardHeader>
+                <CardContent className="p-3 space-y-2 text-xs">
+                  {[
+                    { label: "कुल मिक्स पकाने से पहले (Total mix before cooking)", value: `${theoResult.totalMix.toFixed(1)} kg` },
+                    { label: "वाष्पीकृत पानी (Moisture evaporated)", value: `${theoResult.moistureKg.toFixed(1)} kg`, color: "text-red-600" },
+                    { label: "स्वीट कुल ठोस % (Final Sweet TS %)", value: `${theoResult.finalTSPct.toFixed(2)}% (Moisture: ${theoResult.finalMoistPct.toFixed(1)}%)` },
+                    { label: "चीनी प्रतिशत (Sucrose %)", value: `${theoResult.sugarInProdPct.toFixed(1)}%` },
+                    { label: "कुल बॉक्स आउटपुट (Box packaging output)", value: `${theoResult.packsTotal} boxes` },
+                  ].map((r, i) => (
+                    <div key={i} className="flex justify-between border-b border-rose-100/40 pb-1.5 last:border-none">
+                      <span className="text-slate-500">{r.label}</span>
+                      <span className={`font-semibold ${r.color || "text-slate-800"}`}>{r.value}</span>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+
+              {/* Economics */}
+              {enableCosting && (
+                <Card className="bg-gradient-to-br from-slate-900 to-slate-950 text-white border-none">
+                  <CardHeader className="p-3 pb-1 border-b border-slate-800">
+                    <CardTitle className="text-xs font-bold text-slate-400 uppercase">💰 आर्थिक विश्लेषण (Economics Projections)</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-3 space-y-3">
+                    <div className="grid grid-cols-3 gap-2 text-center text-xs">
+                      <div className="p-2 bg-slate-800/60 rounded-lg">
+                        <span className="text-slate-400 block text-[9px]">खोया कुल लागत (Khoa Cost)</span>
+                        <span className="font-semibold text-red-300">₹ {theoResult.khoaCost.toLocaleString("en-IN")}</span>
+                      </div>
+                      <div className="p-2 bg-slate-800/60 rounded-lg">
+                        <span className="text-slate-400 block text-[9px]">चीनी कुल लागत (Sugar Cost)</span>
+                        <span className="font-semibold text-amber-300">₹ {theoResult.sugarCost.toLocaleString("en-IN")}</span>
+                      </div>
+                      <div className="p-2 bg-slate-800/60 rounded-lg">
+                        <span className="text-slate-400 block text-[9px]">मिठाई राजस्व (Revenue)</span>
+                        <span className="font-semibold text-green-300">₹ {theoResult.revenue.toLocaleString("en-IN")}</span>
+                      </div>
+                    </div>
+
+                    <div className="bg-slate-850 rounded-xl p-3 flex justify-between items-center border border-slate-800">
+                      <div>
+                        <div className="text-xs font-bold text-green-400">सकल लाभ (Gross Profit)</div>
+                        <div className="text-[10px] text-slate-400">({theo.batches} बैच हेतु / For {theo.batches} batches)</div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-base font-black text-green-300">₹ {theoResult.grossProfit.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</div>
+                        <div className="text-[11px] text-slate-400">मार्जिन (Margin): {theoResult.gpm.toFixed(1)}%</div>
+                      </div>
+                    </div>
+
+                    {theoResult.days > 1 && (
+                      <div className="grid grid-cols-3 gap-2 border-t border-slate-800 pt-2.5 text-center text-[11px]">
+                        <div>
+                          <span className="text-slate-400 block text-[9px]">मासिक उत्पादन (Monthly Yield)</span>
+                          <span className="font-semibold text-slate-200">{theoResult.monthlyYield.toFixed(0)} kg</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-400 block text-[9px]">मासिक लागत (Monthly Cost)</span>
+                          <span className="font-semibold text-red-300">₹ {theoResult.monthlyCost.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-400 block text-[9px]">मासिक लाभ (Net profit)</span>
+                          <span className="font-bold text-green-400">₹ {theoResult.monthlyProfit.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</span>
+                        </div>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Warnings */}
+              {theoResult.warnings.length > 0 && (
+                <Alert className="bg-yellow-50 border-yellow-200">
+                  <AlertTriangle className="h-4 w-4 text-yellow-600" />
+                  <AlertTitle className="text-yellow-800 text-xs font-bold">मिठाई गुणवत्ता चेतावनियाँ (Process Warnings)</AlertTitle>
+                  <AlertDescription className="text-[11px] text-yellow-700 space-y-1">
+                    {theoResult.warnings.map((w: string, i: number) => <div key={i}>• {w}</div>)}
+                  </AlertDescription>
+                </Alert>
+              )}
+            </div>
+          )}
+        </TabsContent>
+
+        {/* TAB 2: TRACKER */}
+        <TabsContent value="actual" className="space-y-4 pt-3">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+            <ValidatedInput
+              label="खोया की मात्रा (Khoa Qty)"
+              value={actual.khoaQty}
+              onChange={v => setA("khoaQty", v)}
+              validation={validatePositive(actual.khoaQty, "Khoa quantity")}
+              unit="kg"
+              colorScheme="rose"
+            />
+            <ValidatedInput
+              label="खोया ठोस प्रतिशत (Khoa TS %)"
+              value={actual.khoaTS}
+              onChange={v => setA("khoaTS", v)}
+              validation={validateNumber(actual.khoaTS, 55, 80, "Khoa TS")}
+              unit="%"
+              colorScheme="rose"
+            />
+            <ValidatedInput
+              label="खोया वसा प्रतिशत (Khoa Fat %)"
+              value={actual.khoaFat}
+              onChange={v => setA("khoaFat", v)}
+              validation={validateNumber(actual.khoaFat, 10, 35, "Khoa fat")}
+              unit="%"
+              colorScheme="rose"
+            />
+            <ValidatedInput
+              label="चीनी की मात्रा (Sugar Added)"
+              value={actual.sugarAdded}
+              onChange={v => setA("sugarAdded", v)}
+              validation={validatePositive(actual.sugarAdded, "Sugar added")}
+              unit="kg"
+              colorScheme="orange"
+            />
+            <ValidatedInput
+              label="वास्तविक प्राप्त मिठाई (Actual Sweet Obt)"
+              value={actual.sweetObtained}
+              onChange={v => setA("sweetObtained", v)}
+              validation={validatePositive(actual.sweetObtained, "Sweet obtained")}
+              unit="kg"
+              colorScheme="orange"
+            />
           </div>
 
-        </div>
-      )}
+          <Button onClick={calculateActual} className="w-full h-11 bg-rose-600 hover:bg-rose-700 text-white font-bold shadow-md">
+            📊 वास्तविक बैच दक्षता की तुलना करें (Compare Batch Efficiency)
+          </Button>
+
+          {actualResult && (
+            <div className="space-y-4">
+              {/* Grade Badge */}
+              <div className={`p-4 rounded-xl border flex flex-col items-center justify-center text-center transition-all ${actualResult.gradeColor}`}>
+                <div className="text-4xl mb-1">{actualResult.gradeEmoji}</div>
+                <div className="text-xs uppercase tracking-wider font-bold opacity-85">बैच ग्रेड (Batch Efficiency Grade)</div>
+                <div className="text-xl font-extrabold">{actualResult.grade}</div>
+                <div className="text-sm font-bold mt-1">
+                  मिठाई रिकवरी दर (Recovery Rate): {actualResult.sweetRecoveryPct.toFixed(1)}%
+                </div>
+              </div>
+
+              {/* Comparison table */}
+              <Card className="border-slate-200">
+                <CardHeader className="p-3 pb-1 border-b">
+                  <CardTitle className="text-xs font-bold text-slate-700 uppercase">📊 आदर्श बनाम वास्तविक (Ideal vs Actual Yield)</CardTitle>
+                </CardHeader>
+                <CardContent className="p-0 text-xs">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 font-semibold">
+                        <th className="p-2.5">पैरामीटर (Parameter)</th>
+                        <th className="p-2.5 text-right">आदर्श (Ideal)</th>
+                        <th className="p-2.5 text-right">वास्तविक (Actual)</th>
+                        <th className="p-2.5 text-right">हानि/नुकसान (Difference)</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      <tr>
+                        <td className="p-2.5 font-medium text-slate-700">मिठाई मात्रा (Sweet Yield)</td>
+                        <td className="p-2.5 text-right text-slate-600">{actualResult.idealYield.toFixed(1)} kg</td>
+                        <td className="p-2.5 text-right text-slate-900 font-bold">{actualResult.sweetObt.toFixed(1)} kg</td>
+                        <td className={`p-2.5 text-right font-bold ${actualResult.sweetObt >= actualResult.idealYield ? "text-green-600" : "text-red-600"}`}>
+                          {(actualResult.sweetObt - actualResult.idealYield).toFixed(1)} kg
+                        </td>
+                      </tr>
+                      <tr className="bg-slate-50/50">
+                        <td className="p-2.5 font-semibold text-slate-700">प्रोसेसिंग द्रव्यमान हानि (Mass Loss)</td>
+                        <td className="p-2.5 text-right text-slate-600">0.0 kg</td>
+                        <td className="p-2.5 text-right text-slate-600">{actualResult.massLossKg.toFixed(1)} kg</td>
+                        <td className="p-2.5 text-right text-red-600 font-bold">{actualResult.massLossKg.toFixed(1)} kg ({actualResult.massLossPct.toFixed(2)}%)</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </CardContent>
+              </Card>
+
+              {/* Alerts */}
+              {actualResult.warnings.length > 0 && (
+                <Alert className="bg-yellow-50 border-yellow-200">
+                  <AlertTriangle className="h-4 w-4 text-yellow-600" />
+                  <AlertTitle className="text-yellow-800 text-xs font-bold">सुधार बिंदु (Actionable Points)</AlertTitle>
+                  <AlertDescription className="text-xs text-yellow-700 space-y-1">
+                    {actualResult.warnings.map((w: string, i: number) => <div key={i}>• {w}</div>)}
+                  </AlertDescription>
+                </Alert>
+              )}
+            </div>
+          )}
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
+
 
 // ==================== ENHANCED ICE CREAM CALCULATORS ====================
 function IceCreamCalculators() {
