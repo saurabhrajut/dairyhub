@@ -395,6 +395,48 @@ const ResultCard = memo(
 
 ResultCard.displayName = "ResultCard";
 
+function YieldsCalc() {
+  const [activeCalc, setActiveCalc] = useState('cream-sep');
+
+  const calculators = {
+    'cream-sep': { title: "Cream Separation (क्रीम सेपरेशन)", component: <CreamSeparationCalc /> },
+    'butter': { title: "Butter Yield (मक्खन यील्ड)", component: <ButterYieldCalc /> },
+    'khoa': { title: "Khoa Yield (खोया यील्ड)", component: <KhoaYieldCalc /> },
+    'shrikhand': { title: "Shrikhand Yield (श्रीखंड यील्ड)", component: <ShrikhandYieldCalc /> },
+    'pedha': { title: "Pedha/Burfi Yield (पेड़ा/बर्फी यील्ड)", component: <PedhaBurfiYieldCalc /> },
+  };
+
+  const renderCalculator = () => {
+    return calculators[activeCalc as keyof typeof calculators]?.component || null;
+  };
+
+  return (
+    <Card className="border shadow-md">
+      <CardHeader className="bg-slate-50/50 pb-3">
+        <CardTitle className="text-sm font-bold text-slate-700 uppercase">Product Yield Calculators (उत्पाद यील्ड कैलकुलेटर)</CardTitle>
+      </CardHeader>
+      <CardContent className="pt-4">
+        <div className="mb-4">
+          <Label className="text-xs font-semibold mb-2 block">कैलकुलेटर चुनें (Select Yield Calculator)</Label>
+          <Select value={activeCalc} onValueChange={setActiveCalc}>
+            <SelectTrigger className="w-full h-10 bg-white">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {Object.entries(calculators).map(([key, { title }]) => (
+                <SelectItem key={key} value={key} className="text-xs">{title}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="mt-4 border-t pt-4">
+          {renderCalculator()}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
 // ==================== MAIN CALCULATOR MODAL ====================
 const calculatorsInfo = {
     yields: {
